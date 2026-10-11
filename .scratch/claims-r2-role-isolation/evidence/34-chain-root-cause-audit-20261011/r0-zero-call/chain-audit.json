@@ -1,0 +1,815 @@
+{
+  "schema_version": "items-chain-root-cause-audit-1",
+  "created_on": "2026-10-11",
+  "inputs": {
+    "frozen_gold": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    "scoring_contract": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
+    "workbench": "sha256:e00d8ae65536bf662101ba1d53b8c3e9f80189e2be6b8172472abd02ea489777",
+    "run2_post_check": "sha256:17833585aa3819ba473bf6b5867954a75dbe04ad7ba80648515cf843d445d624",
+    "residual_attribution": "sha256:4197d1a4e43839eb060e7a4d21a57689ecbdabdc13a3bc6efafc6222825ea4c7"
+  },
+  "layers": {
+    "L1_L2_source_to_slots": {
+      "per_source": {
+        "industrial-fulian-md": {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "units": 10,
+          "packets": 10,
+          "candidate_slots": 76,
+          "gold_this_source": 22,
+          "per_gold": [
+            {
+              "record_id": "NT-I01",
+              "locators": [
+                "char:146-469"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_dccec44c385534fa"
+              ],
+              "critical": false,
+              "statement_role": "evidence"
+            },
+            {
+              "record_id": "NT-I02",
+              "locators": [
+                "char:146-469"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_de31fca8eb3a0b26"
+              ],
+              "critical": false,
+              "statement_role": "claim"
+            },
+            {
+              "record_id": "NT-I03",
+              "locators": [
+                "char:146-469"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_63a469c9fe86142d"
+              ],
+              "critical": false,
+              "statement_role": "evidence"
+            },
+            {
+              "record_id": "NT-I04",
+              "locators": [
+                "char:2405-2625"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_99063943ec604797"
+              ],
+              "critical": false,
+              "statement_role": "risk"
+            },
+            {
+              "record_id": "NT-I05",
+              "locators": [
+                "char:1393-1655"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_40ee124742e4d80d"
+              ],
+              "critical": false,
+              "statement_role": "evidence"
+            },
+            {
+              "record_id": "NT-I06",
+              "locators": [
+                "char:1393-1655"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_6ad5e01d7d38f35a"
+              ],
+              "critical": false,
+              "statement_role": "claim"
+            },
+            {
+              "record_id": "NT-I07",
+              "locators": [
+                "char:1393-1655"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_fce46d8dd0c9fbde"
+              ],
+              "critical": false,
+              "statement_role": "evidence"
+            },
+            {
+              "record_id": "NT-I08",
+              "locators": [
+                "char:1393-1655"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_fce46d8dd0c9fbde"
+              ],
+              "critical": false,
+              "statement_role": "claim"
+            },
+            {
+              "record_id": "NT-I09",
+              "locators": [
+                "char:3925-4239"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_b4343e8b16dfe42c"
+              ],
+              "critical": false,
+              "statement_role": "condition"
+            },
+            {
+              "record_id": "NT-I10",
+              "locators": [
+                "char:3925-4239"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_b4343e8b16dfe42c"
+              ],
+              "critical": false,
+              "statement_role": "risk"
+            },
+            {
+              "record_id": "NT-I11",
+              "locators": [
+                "char:4659-4907"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_e1cc134434cdc458"
+              ],
+              "critical": false,
+              "statement_role": "evidence"
+            },
+            {
+              "record_id": "NT-I12",
+              "locators": [
+                "char:4659-4907"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_1496a1c1b2a0bda1"
+              ],
+              "critical": false,
+              "statement_role": "risk"
+            },
+            {
+              "record_id": "NT-I13",
+              "locators": [
+                "char:5246-5537"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_3e8965b10d203f0b"
+              ],
+              "critical": true,
+              "statement_role": "condition"
+            },
+            {
+              "record_id": "NT-I14",
+              "locators": [
+                "char:5246-5537"
+              ],
+              "covering_slot_count": 2,
+              "covering_slot_ids": [
+                "slot_7b2c716720ace1aa",
+                "slot_998e49ccab85bdb7"
+              ],
+              "critical": true,
+              "statement_role": "claim"
+            },
+            {
+              "record_id": "NT-I15",
+              "locators": [
+                "char:5246-5537"
+              ],
+              "covering_slot_count": 2,
+              "covering_slot_ids": [
+                "slot_ff5db383726f84c7",
+                "slot_a0285709c19e993e"
+              ],
+              "critical": true,
+              "statement_role": "condition"
+            },
+            {
+              "record_id": "NT-I16",
+              "locators": [
+                "char:5246-5537"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_ff5db383726f84c7"
+              ],
+              "critical": true,
+              "statement_role": "claim"
+            },
+            {
+              "record_id": "NT-I17",
+              "locators": [
+                "char:5246-5537"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_a0285709c19e993e"
+              ],
+              "critical": true,
+              "statement_role": "condition"
+            },
+            {
+              "record_id": "NT-I19",
+              "locators": [
+                "char:4385-4657"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_499ce1615b28e781"
+              ],
+              "critical": true,
+              "statement_role": "condition"
+            },
+            {
+              "record_id": "NT-I20",
+              "locators": [
+                "char:4385-4657"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_499ce1615b28e781"
+              ],
+              "critical": true,
+              "statement_role": "risk"
+            },
+            {
+              "record_id": "NT-I41",
+              "locators": [
+                "char:5055-5071"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_5e0a114ed8b5d2a6"
+              ],
+              "critical": false,
+              "statement_role": "claim"
+            },
+            {
+              "record_id": "NT-I42",
+              "locators": [
+                "char:5246-5537"
+              ],
+              "covering_slot_count": 2,
+              "covering_slot_ids": [
+                "slot_998e49ccab85bdb7",
+                "slot_8a33a8aadc6a6490"
+              ],
+              "critical": true,
+              "statement_role": "condition"
+            },
+            {
+              "record_id": "NT-I43",
+              "locators": [
+                "char:5246-5537"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_3e8965b10d203f0b"
+              ],
+              "critical": true,
+              "statement_role": "condition"
+            }
+          ]
+        },
+        "optical-module-docx": {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "units": 14,
+          "packets": 14,
+          "candidate_slots": 114,
+          "gold_this_source": 26,
+          "per_gold": [
+            {
+              "record_id": "NT-I21",
+              "locators": [
+                "body[3]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_5a0b1357f70ac191"
+              ],
+              "critical": false,
+              "statement_role": "evidence"
+            },
+            {
+              "record_id": "NT-I22",
+              "locators": [
+                "body[3]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_776ac63e6ec4f893"
+              ],
+              "critical": false,
+              "statement_role": "claim"
+            },
+            {
+              "record_id": "NT-I23",
+              "locators": [
+                "body[63]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_0d013b6aa424d46b"
+              ],
+              "critical": false,
+              "statement_role": "risk"
+            },
+            {
+              "record_id": "NT-I24",
+              "locators": [
+                "body[63]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_0d013b6aa424d46b"
+              ],
+              "critical": false,
+              "statement_role": "claim"
+            },
+            {
+              "record_id": "NT-I25",
+              "locators": [
+                "body[72]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_27d50c619ef56e33"
+              ],
+              "critical": false,
+              "statement_role": "risk"
+            },
+            {
+              "record_id": "NT-I26",
+              "locators": [
+                "body[72]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_55331bf3a01983de"
+              ],
+              "critical": false,
+              "statement_role": "claim"
+            },
+            {
+              "record_id": "NT-I27",
+              "locators": [
+                "body[43]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_2091f42de4ab38dd"
+              ],
+              "critical": false,
+              "statement_role": "evidence"
+            },
+            {
+              "record_id": "NT-I28",
+              "locators": [
+                "body[43]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_89b483fa86b2d06f"
+              ],
+              "critical": false,
+              "statement_role": "claim"
+            },
+            {
+              "record_id": "NT-I29",
+              "locators": [
+                "body[29]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_843fc9c8dd1863db"
+              ],
+              "critical": false,
+              "statement_role": "condition"
+            },
+            {
+              "record_id": "NT-I30",
+              "locators": [
+                "body[29]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_5fa264cca17d9f52"
+              ],
+              "critical": false,
+              "statement_role": "claim"
+            },
+            {
+              "record_id": "NT-I31",
+              "locators": [
+                "body[37]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_0a70fdb4d56e5c74"
+              ],
+              "critical": false,
+              "statement_role": "risk"
+            },
+            {
+              "record_id": "NT-I32",
+              "locators": [
+                "body[37]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_0a70fdb4d56e5c74"
+              ],
+              "critical": false,
+              "statement_role": "risk"
+            },
+            {
+              "record_id": "NT-I33",
+              "locators": [
+                "body[32]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_072c0a2c468a109b"
+              ],
+              "critical": false,
+              "statement_role": "evidence"
+            },
+            {
+              "record_id": "NT-I34",
+              "locators": [
+                "body[37]"
+              ],
+              "covering_slot_count": 2,
+              "covering_slot_ids": [
+                "slot_76e76b155a099629",
+                "slot_cfc23b06a16f1c9b"
+              ],
+              "critical": true,
+              "statement_role": "claim"
+            },
+            {
+              "record_id": "NT-I35",
+              "locators": [
+                "body[115]"
+              ],
+              "covering_slot_count": 2,
+              "covering_slot_ids": [
+                "slot_363180e19a472989",
+                "slot_14047aa305743ea2"
+              ],
+              "critical": false,
+              "statement_role": "condition"
+            },
+            {
+              "record_id": "NT-I36",
+              "locators": [
+                "body[115]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_6161b380836506af"
+              ],
+              "critical": false,
+              "statement_role": "risk"
+            },
+            {
+              "record_id": "NT-I37",
+              "locators": [
+                "body[51]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_7a807ec94a33b129"
+              ],
+              "critical": false,
+              "statement_role": "evidence"
+            },
+            {
+              "record_id": "NT-I38",
+              "locators": [
+                "body[51]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_a6adcde0451323ff"
+              ],
+              "critical": false,
+              "statement_role": "claim"
+            },
+            {
+              "record_id": "NT-I39",
+              "locators": [
+                "body[26]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_0528ef3b34e98b5f"
+              ],
+              "critical": false,
+              "statement_role": "condition"
+            },
+            {
+              "record_id": "NT-I40",
+              "locators": [
+                "body[26]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_df7f86f7cada8987"
+              ],
+              "critical": true,
+              "statement_role": "risk"
+            },
+            {
+              "record_id": "NT-I44",
+              "locators": [
+                "body[1]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_8bf48871bb2b4891"
+              ],
+              "critical": true,
+              "statement_role": "claim"
+            },
+            {
+              "record_id": "NT-I45",
+              "locators": [
+                "body[1]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_fdbaf8887e7c481b"
+              ],
+              "critical": false,
+              "statement_role": "claim"
+            },
+            {
+              "record_id": "NT-I46",
+              "locators": [
+                "body[1]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_bd82be33101583eb"
+              ],
+              "critical": false,
+              "statement_role": "claim"
+            },
+            {
+              "record_id": "NT-I47",
+              "locators": [
+                "body[1]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_b7377f203f0b6c06"
+              ],
+              "critical": false,
+              "statement_role": "claim"
+            },
+            {
+              "record_id": "NT-I48",
+              "locators": [
+                "body[26]"
+              ],
+              "covering_slot_count": 2,
+              "covering_slot_ids": [
+                "slot_a8f8888f41383869",
+                "slot_c86346a0c45bfbf9"
+              ],
+              "critical": false,
+              "statement_role": "claim"
+            },
+            {
+              "record_id": "NT-I49",
+              "locators": [
+                "body[63]"
+              ],
+              "covering_slot_count": 1,
+              "covering_slot_ids": [
+                "slot_24b72c4dd4de8247"
+              ],
+              "critical": false,
+              "statement_role": "evidence"
+            }
+          ]
+        }
+      },
+      "gold_covering_slot_count_distribution": {
+        "1": 42,
+        "2": 6
+      },
+      "reading": "Granularity is essentially aligned: 42 of 48 gold records sit inside exactly one candidate slot and 6 span two, none span zero. The slot/atom design is therefore not the root cause; the mismatch lives in the field contract, not in the split."
+    },
+    "L3_field_contract": {
+      "candidate_record_fields": [
+        "behavior_status",
+        "candidate_id",
+        "candidate_slot_id",
+        "evidence_locator",
+        "evidence_quote",
+        "origin",
+        "perspective",
+        "polarity",
+        "role",
+        "semantic_type",
+        "source_id",
+        "source_slug",
+        "speech_role",
+        "statement_role",
+        "temporal_frame",
+        "text",
+        "unknown_fields",
+        "value"
+      ],
+      "candidate_semantic_fields": [
+        "text",
+        "semantic_type",
+        "statement_role",
+        "speech_role",
+        "perspective",
+        "polarity",
+        "value",
+        "behavior_status",
+        "temporal_frame",
+        "unknown_fields",
+        "speaker_ref"
+      ],
+      "contract_required_fields": [
+        "proposition",
+        "semantic_type",
+        "statement_role",
+        "speech_role",
+        "perspective",
+        "speaker_ref",
+        "polarity",
+        "attribution",
+        "source_stance"
+      ],
+      "gold_semantic_field_keys": [
+        "attribution",
+        "behavior_status",
+        "condition",
+        "estimate_status",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speaker_ref",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "contract_fields_missing_in_candidate": [
+        "attribution",
+        "proposition",
+        "source_stance"
+      ],
+      "candidate_fields_not_required_by_contract": [
+        "behavior_status",
+        "temporal_frame",
+        "text",
+        "unknown_fields",
+        "value"
+      ],
+      "gold_keys_not_required_by_contract": [
+        "behavior_status",
+        "condition",
+        "estimate_status",
+        "temporal_frame"
+      ],
+      "condition_read_path": "当 `condition` 为复合（含 AND/OR 连接多个子条件）时，scorer 必须按子条件计分：各子条件均可匹配，命中任一子条件计为部分命中；复合项不得作为单一原子命题整体匹配。NT-I09（`condition=\"毛利率继续下降或Rubin延期\"`，二元析取、无 `condition_logic`）落此项；NT-I17/NT-I42 已有 `condition_logic` 显式承载复合结构。",
+      "reading": "the contract's required items fields (proposition/attribution/source_stance, plus condition for condition-role records) do not exist in the selector candidate schema"
+    },
+    "L4_L5_protocol_and_validator": {
+      "treatment_protocol_violations": {
+        "control": {
+          "industrial-fulian-md": 3,
+          "optical-module-docx": 8
+        },
+        "treatment": {
+          "industrial-fulian-md": 0,
+          "optical-module-docx": 0
+        }
+      },
+      "validator_relaxed": false,
+      "reading": "v6 removed the prompt contradiction; fail-closed validation stayed intact"
+    },
+    "L6_assembly": {
+      "candidates_total": 222,
+      "by_source": {
+        "industrial-fulian-md": 88,
+        "optical-module-docx": 134
+      },
+      "unproduced_slots": {
+        "infrastructure": 7,
+        "model_behavior": 0,
+        "our_contract_signal_overlabelling": 2,
+        "unclassified": 0
+      },
+      "unproduced_collateral_items": 2,
+      "reading": "assembly works; the losses are one transport event plus our over-strong signals"
+    },
+    "L7_scoring_contract_vs_scorer": {
+      "contract_schema": "non-table-selected-target-scoring-contract-v3",
+      "scorer_match_mode": "strict identity equality on (role, source_id, origin, semantic_fields)",
+      "contract_match_mode": "human_adjudicated_semantic_equivalence_then_one_to_one_mapping",
+      "contract_requirements_not_implemented_in_scorer": [
+        "condition_role_read_path (condition field as the atomic proposition carrier)",
+        "compound_condition sub-condition scoring",
+        "proposition / attribution / source_stance handling"
+      ],
+      "reading": "v3 was signed after the items protocol existed and added read-path rules the scorer never implemented; the scorer still demands field-identical records"
+    },
+    "L8_gold_composition": {
+      "records": 48,
+      "critical": 12,
+      "risk_or_condition": 21,
+      "condition_role": 10,
+      "condition_groups": [
+        {
+          "group_id": "opening_watch_position",
+          "target": "NT-I14",
+          "conditions": [
+            "NT-I42",
+            "NT-I13",
+            "NT-I43"
+          ],
+          "locator": "char:5246-5537"
+        },
+        {
+          "group_id": "stop_loss",
+          "target": "NT-I16",
+          "conditions": [
+            "NT-I15",
+            "NT-I17"
+          ],
+          "locator": "char:5246-5537"
+        }
+      ]
+    },
+    "L9_executable_field_shape_test": {
+      "question": "does an identical-meaning candidate match when its field shape differs?",
+      "same_fields_as_gold": {
+        "tp": 19,
+        "fp": 0,
+        "fn": 29,
+        "matched_gold": 19,
+        "recall": "19/48",
+        "precision": "1/1"
+      },
+      "candidate_native_fields": {
+        "tp": 0,
+        "fp": 19,
+        "fn": 48,
+        "matched_gold": 0,
+        "recall": "0/1",
+        "precision": "0/1"
+      },
+      "reading": "The scorer matches only field-identical records: the same 19 candidates score 19/48 when expressed in the gold field shape and 0/48 when expressed in the candidate's own schema. So adjudication is not 'confirm equivalence' but 'rewrite the candidate into the contract field set' first — and the fields that rewrite needs (proposition, condition, attribution, source_stance) do not exist on the candidate at all."
+    }
+  },
+  "root_cause": {
+    "statement": "Not every layer is broken. Sources, snapshots, slot splitting, the v6 prompt, the fail-closed validator and the assembly all check out (42/48 gold records even sit inside a single candidate slot). The break is at exactly one seam: the extraction schema and the scoring contract describe different records. Candidates carry text/semantic_type/statement_role/speech_role/perspective/polarity/speaker_ref; the contract requires proposition/attribution/source_stance and, for condition-role records, a condition carrier. Contract v3 was signed on 2026-10-11, after the selector protocol had frozen, and it added read-path rules (condition carrier, compound_condition sub-condition scoring) that the scorer never implemented — it still matches on exact field equality. Because the required fields are absent, the human step cannot be a field mapping either: it becomes rewriting propositions from raw text, which is what the contract explicitly forbids doing by hand-off.",
+    "contributing_factors": [
+      "extraction schema lacks proposition / condition / attribution / source_stance",
+      "scorer implements none of the v3 read path (condition carrier, compound_condition)",
+      "gold is condition/risk weighted (10 condition role, 12 critical, 21 risk_or_condition) so the missing condition carrier bites the most valuable records",
+      "seven critical gold records lost to one transport outcome-unknown event (their slot text is the same unit char:5246-5537)",
+      "two slots lost to our own over-strong signal labelling, taking 2 items with them",
+      "the Stage-1 advice algorithm (numbers + character bigrams) is weak, so 19/48 measures the helper, not the extraction"
+    ],
+    "not_root_causes": [
+      "slot/atom granularity (42/48 gold records map to exactly one slot)",
+      "model capability (v6 produced zero protocol violations)",
+      "prompt wording (fixed and validated in gate 32)",
+      "validator strictness (fail-closed by design and unchanged)",
+      "token configuration (reasoning disabled, -83% total tokens)"
+    ],
+    "fix_order": [
+      "1) settle the field-carrier question: either sign a read-path rule that lets candidate text be canonicalised into the contract's proposition/condition carriers (cheap, but must state how equivalence is evidenced), or extend the items protocol with those fields and re-extract (costlier, produces contract-shaped data)",
+      "2) implement the v3 read path in the scorer (condition carrier + compound_condition sub-conditions), otherwise condition-role gold can never match",
+      "3) fix the Stage-1 helper (or accept that adjudication is manual) before reading anything into the 19/48 number",
+      "4) only then adjudicate and score; precision stays N/A until unresolved is zero",
+      "5) re-run the single lost packet under a new gate if the seven critical gold records matter for the decision"
+    ]
+  }
+}

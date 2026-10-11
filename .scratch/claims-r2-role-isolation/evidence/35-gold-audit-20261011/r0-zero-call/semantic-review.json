@@ -1,0 +1,108 @@
+{
+  "schema_version": "items-gold-semantic-review-1",
+  "created_on": "2026-10-11",
+  "author": "agent draft, pending xyl confirmation",
+  "method": "manual reading of all 48 propositions against their quotes and surrounding unit text; numeric/comparator/period consistency and condition_logic agreement checked mechanically; context evidence taken from the signed snapshot units",
+  "cross_reference": {
+    "issue_29_audit": "gold_meaning_sound=true was confirmed earlier; F1/F2 resolved by contract v3, F3/F4 left open",
+    "this_review": "independent second pass; re-verifies F4 leftovers and adds fidelity findings"
+  },
+  "summary": {
+    "records": 48,
+    "numeric_or_factual_errors": 0,
+    "condition_logic_inconsistent_with_condition_text": 0,
+    "concern": 1,
+    "advisory": 11,
+    "ok": 36,
+    "verdict": "no factual or numeric errors found; one proposition drops a material qualifier; eleven advisory items are paraphrase-fidelity or label questions that do not break meaning"
+  },
+  "concern": [
+    {
+      "record_id": "NT-I34",
+      "level": "medium",
+      "kind": "proposition_drops_qualifier",
+      "quote": "预计到29年30年在材料取得重大突破前，可插拔仍然是主流",
+      "proposition": "到2029至2030年可插拔方案仍将是主流",
+      "detail": "原文是条件性预测：『在材料取得重大突破前』。该限定被移入 condition 字段（'材料尚未取得重大突破'），而 statement_role=claim 的读路径不读取 condition 字段，因此按 claim 命题匹配时这句会变成无条件断言，语义被弱化。",
+      "suggestion": "adjudicate this record as edited, folding the qualifier back into the proposition, or treat it as a compound record"
+    }
+  ],
+  "advisory": [
+    {
+      "record_id": "NT-I08",
+      "kind": "paraphrase_shift",
+      "detail": "quote 说『并表 7% 的加工费没有变成「系统商」』，proposition 改述为『当前毛利率没有证明…』。上下文（前句 Q2 毛利率环比 −0.36pct）支持该读法，但命题丢掉了『7% 加工费』这个具体表述。"
+    },
+    {
+      "record_id": "NT-I09",
+      "kind": "known_leftover_f1",
+      "detail": "condition='毛利率继续下降或Rubin延期' 是『或』二元析取且无 condition_logic；契约 compound_condition 已点名 NT-I09 需拆分或定义析取读法（Issue 29 F1 例外项，仍开放）。"
+    },
+    {
+      "record_id": "NT-I17",
+      "kind": "known_ambiguity_tension",
+      "detail": "condition 文本写 'AND'、condition_logic 写 op=all，而冻结裁决是『并列项内部逻辑未明、保留 unknown』（known_ambiguities）。文本/机器形态已隐含 AND，与『不猜测』的裁决存在张力。"
+    },
+    {
+      "record_id": "NT-I21",
+      "kind": "subject_from_context",
+      "detail": "quote 仅『市场成熟度不高』，proposition 补出主体 CPO；主体来自所在 unit 的上下文（未逐字复核该 unit）。"
+    },
+    {
+      "record_id": "NT-I22",
+      "kind": "near_duplicate",
+      "detail": "与 NT-I33（CPO 尚无实际出货）语义高度重叠，一条是预测口径、一条是现状口径；同时接受两条可能造成 correct_extra/FP 判定纠缠。"
+    },
+    {
+      "record_id": "NT-I25",
+      "kind": "evaluative_labelled_fact",
+      "detail": "『良率仍然不乐观』是评价性表述，semantic_type=fact；Issue 29 F4 已列，复核仍在。"
+    },
+    {
+      "record_id": "NT-I30",
+      "kind": "cross_record_condition",
+      "detail": "proposition 把 NT-I29 的条件（政策导致成本上升）并进了本条（『成本上升时计划与客户协商提价10%至20%』），单条 item 携带了跨句条件。"
+    },
+    {
+      "record_id": "NT-I31",
+      "kind": "context_inferred_subject",
+      "detail": "quote『北美的这些电力短缺』中的『这些』指代不明；proposition 具体化为『北美数据中心存在电力短缺』，依据是紧随其后的『对数据中心客户来说…影响出货节奏』，属语境推断而非逐字对应。"
+    },
+    {
+      "record_id": "NT-I33",
+      "kind": "near_duplicate",
+      "detail": "同 NT-I22。"
+    },
+    {
+      "record_id": "NT-I39",
+      "kind": "cross_paragraph_context",
+      "detail": "quote『这里面税率加上去』未提『海外产能』；condition 补『海外产能税率增加』，依据是更前一段的台湾海鸥基地免税到期（NT-I48 语境），属跨段语境补全。"
+    },
+    {
+      "record_id": "NT-I48",
+      "kind": "cause_omitted",
+      "detail": "proposition 只保留『税负可转嫁、对竞争力和毛利影响不大』，省略了原因『台湾海鸥基地有免税政策』；省略不改变结论但丢了一个可核字段。"
+    }
+  ],
+  "mechanical_checks": {
+    "quote_verbatim_from_source": "48/48",
+    "numeric_consistency": "all proposition numbers trace back to the quote or its unit context (229.84, 97%, 0.32, 75.7%, 0.36pct, 62%, 0.6, 0.5, 6.99%, 1pp, 10-20%, 52-58, 15%, 1-1.5y, five tape-outs, 10%/30%/70%)",
+    "condition_logic_vs_condition_text": "5/5 records with condition_logic agree with their condition text (NT-I13 >=0.6 Q3, NT-I15 <0.5 next_quarter, NT-I17 all-of[<-1pp from 6.99%, source_clause], NT-I42 range 52-58 CNY + source_clause, NT-I43 >=6.99%)",
+    "polarity_spot_check": "negated records (NT-I08/I20/I23/I33/I40/I44) all carry genuine negation in the source",
+    "exact_quote_hits_in_candidates": "39/48 (12 records hit by 2 candidates, 27 by 1, 9 by none — 7 of those are the lost packet, 2 are signal-rule losses)"
+  },
+  "per_record": {
+    "ok": [
+      "NT-I01", "NT-I02", "NT-I03", "NT-I04", "NT-I05", "NT-I06", "NT-I07", "NT-I10",
+      "NT-I11", "NT-I12", "NT-I13", "NT-I14", "NT-I15", "NT-I16", "NT-I19", "NT-I20",
+      "NT-I23", "NT-I24", "NT-I26", "NT-I27", "NT-I28", "NT-I29", "NT-I32", "NT-I36",
+      "NT-I37", "NT-I38", "NT-I40", "NT-I41", "NT-I42", "NT-I43", "NT-I44", "NT-I45",
+      "NT-I46", "NT-I47", "NT-I49"
+    ],
+    "advisory": ["NT-I08", "NT-I09", "NT-I17", "NT-I21", "NT-I22", "NT-I25", "NT-I30", "NT-I31", "NT-I33", "NT-I39", "NT-I48"],
+    "concern": ["NT-I34"]
+  },
+  "boundary": "this is a reviewer-aid draft: final semantic acceptance stays with the adjudicator (xyl); nothing in the frozen gold was changed",
+  "model_requests": 0,
+  "production_database_access": 0
+}

@@ -1,0 +1,1844 @@
+{
+  "schema_version": "non-table-gold-audit-1",
+  "created_on": "2026-10-11",
+  "scope": "material_items 切片（48 条）；claims/relations 不在本次核查范围",
+  "bookkeeping": {
+    "frozen_gold": {
+      "schema_version": "corpus-structured-non-table-gold-freeze-v2",
+      "status": "frozen",
+      "formal_gold_frozen": true,
+      "frozen_on": "2026-10-08",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "evaluation_scope": "selected_target_recall_not_exhaustive_document_gold",
+      "table_content_included": false,
+      "holdout_accessed": false,
+      "candidate_outputs_observed_before_freeze": false,
+      "counts": {
+        "claims": 20,
+        "material_items": 48,
+        "material_relations": 24
+      }
+    },
+    "freeze_state": {
+      "status": "frozen_ready_for_candidate_evaluation",
+      "quality_gate_passed": false,
+      "candidate_execution_authorized": true,
+      "authorization_provenance": [
+        "user_chat_2026-10-08_model_calls_unlimited_no_infinite_loop",
+        "user_chat_2026-10-08_r2_documents_signed"
+      ]
+    },
+    "freeze_manifest": {
+      "status": "frozen",
+      "quality_gate_passed": false,
+      "input_hash_checks": [
+        {
+          "recorded_path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review-candidates.json",
+          "exists": true,
+          "recorded": "sha256:f8feaf96168c1a068d6e0c0e1a1f6b34113765ed5a76058c3d9f02ea730ccc59",
+          "actual": "sha256:f8feaf96168c1a068d6e0c0e1a1f6b34113765ed5a76058c3d9f02ea730ccc59",
+          "match": true
+        },
+        {
+          "recorded_path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review.md",
+          "exists": true,
+          "recorded": "sha256:71cac53f319d5f6cd940840819cb8dd35765f685b4ab24437d066eabd74e563b",
+          "actual": "sha256:71cac53f319d5f6cd940840819cb8dd35765f685b4ab24437d066eabd74e563b",
+          "match": true
+        },
+        {
+          "recorded_path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/scoring-contract.json",
+          "exists": true,
+          "recorded": "sha256:2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe",
+          "actual": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
+          "match": false
+        },
+        {
+          "recorded_path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/validation-report.json",
+          "exists": true,
+          "recorded": "sha256:139cfc222eb4688dccdce5c0116b00c84b87401e01e22427658c3dcfa6d5bc52",
+          "actual": "sha256:139cfc222eb4688dccdce5c0116b00c84b87401e01e22427658c3dcfa6d5bc52",
+          "match": true
+        },
+        {
+          "recorded_path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/draft-manifest.json",
+          "exists": true,
+          "recorded": "sha256:e8cd173761d2908864fa90388e2910462cca8f87901e0618f5f1fd9ab88fa87b",
+          "actual": "sha256:e8cd173761d2908864fa90388e2910462cca8f87901e0618f5f1fd9ab88fa87b",
+          "match": true
+        },
+        {
+          "recorded_path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/source-prose-units.json",
+          "exists": true,
+          "recorded": "sha256:58aa7c997376c9d7f5a84766725cf2fadddc649c7e9f73ff7309727048a37436",
+          "actual": "sha256:58aa7c997376c9d7f5a84766725cf2fadddc649c7e9f73ff7309727048a37436",
+          "match": true
+        },
+        {
+          "recorded_path": "data/corpus/工业富联_投委会决策报告_20260829.md",
+          "exists": true,
+          "recorded": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "actual": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "match": true
+        },
+        {
+          "recorded_path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+          "exists": true,
+          "recorded": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "actual": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "match": true
+        }
+      ]
+    },
+    "validation_report": {
+      "status": "valid_review_draft",
+      "errors": [],
+      "human_accepted_counts": {},
+      "risk_record_counts_by_role": {
+        "claims": 0,
+        "material_items": 21,
+        "material_relations": 12
+      },
+      "mechanical_checks_prove_semantic_correctness": false,
+      "unresolved_semantic_ambiguities": [
+        {
+          "record_id": "NT-I17",
+          "fields": [
+            "condition_inner_boolean"
+          ]
+        }
+      ]
+    },
+    "contract_binding": {
+      "recorded_in_frozen_gold": "sha256:2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe",
+      "actual_scoring_contract": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
+      "contract_schema_now": "non-table-selected-target-scoring-contract-v3",
+      "match": false,
+      "note": "frozen-gold still binds the v2 contract digest while the signed contract file is now v3; the re-binding was recorded in gate 28 but not written back into the gold"
+    }
+  },
+  "summary": {
+    "records": 48,
+    "review_status": {
+      "accepted": 48
+    },
+    "adjudication_present": 48,
+    "critical": 12,
+    "risk_or_condition": 21,
+    "condition_role": 10,
+    "in_scoped_snapshot": 48,
+    "touching_lost_unit": 7,
+    "quote_verbatim_ok": 48,
+    "quote_not_verbatim": [],
+    "records_missing_contract_fields": 0,
+    "records_missing_contract_field_names": [],
+    "condition_role_without_condition": [],
+    "records_with_exact_candidate_quote": 39
+  },
+  "condition_groups": [
+    {
+      "group_id": "opening_watch_position",
+      "target": "NT-I14",
+      "conditions": [
+        "NT-I42",
+        "NT-I13",
+        "NT-I43"
+      ],
+      "locator": "char:5246-5537",
+      "touches_lost_unit": true,
+      "members_critical": [
+        "NT-I13",
+        "NT-I14",
+        "NT-I42",
+        "NT-I43"
+      ]
+    },
+    {
+      "group_id": "stop_loss",
+      "target": "NT-I16",
+      "conditions": [
+        "NT-I15",
+        "NT-I17"
+      ],
+      "locator": "char:5246-5537",
+      "touches_lost_unit": true,
+      "members_critical": [
+        "NT-I15",
+        "NT-I16",
+        "NT-I17"
+      ]
+    }
+  ],
+  "records": [
+    {
+      "record_id": "NT-I01",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "evidence",
+      "locators": [
+        "char:146-469"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:146-469",
+          "verbatim": true,
+          "recorded_quote": "扣非 229.84 亿同比 +97%",
+          "resolved_span": "扣非 229.84 亿同比 +97%",
+          "length_recorded": 18,
+          "length_resolved": 18
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 2
+    },
+    {
+      "record_id": "NT-I02",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "claim",
+      "locators": [
+        "char:146-469"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:146-469",
+          "verbatim": true,
+          "recorded_quote": "中报的利润几乎是真的",
+          "resolved_span": "中报的利润几乎是真的",
+          "length_recorded": 10,
+          "length_resolved": 10
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I03",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "evidence",
+      "locators": [
+        "char:146-469"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:146-469",
+          "verbatim": true,
+          "recorded_quote": "经营现金流 73.91 亿只盖住扣非的 0.32 倍",
+          "resolved_span": "经营现金流 73.91 亿只盖住扣非的 0.32 倍",
+          "length_recorded": 26,
+          "length_resolved": 26
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 2
+    },
+    {
+      "record_id": "NT-I04",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": true,
+      "statement_role": "risk",
+      "locators": [
+        "char:2405-2625"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:2405-2625",
+          "verbatim": true,
+          "recorded_quote": "现金质量相对扣非是差的",
+          "resolved_span": "现金质量相对扣非是差的",
+          "length_recorded": 11,
+          "length_resolved": 11
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 2
+    },
+    {
+      "record_id": "NT-I05",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "evidence",
+      "locators": [
+        "char:1393-1655"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:1393-1655",
+          "verbatim": true,
+          "recorded_quote": "云计算 +75.7%",
+          "resolved_span": "云计算 +75.7%",
+          "length_recorded": 10,
+          "length_resolved": 10
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I06",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "claim",
+      "locators": [
+        "char:1393-1655"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:1393-1655",
+          "verbatim": true,
+          "recorded_quote": "中报验证了量",
+          "resolved_span": "中报验证了量",
+          "length_recorded": 6,
+          "length_resolved": 6
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 0
+    },
+    {
+      "record_id": "NT-I07",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "evidence",
+      "locators": [
+        "char:1393-1655"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:1393-1655",
+          "verbatim": true,
+          "recorded_quote": "Q2 毛利率环比 −0.36pct",
+          "resolved_span": "Q2 毛利率环比 −0.36pct",
+          "length_recorded": 17,
+          "length_resolved": 17
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 2
+    },
+    {
+      "record_id": "NT-I08",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "claim",
+      "locators": [
+        "char:1393-1655"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:1393-1655",
+          "verbatim": true,
+          "recorded_quote": "并表 7% 的加工费没有变成「系统商」",
+          "resolved_span": "并表 7% 的加工费没有变成「系统商」",
+          "length_recorded": 19,
+          "length_resolved": 19
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 2
+    },
+    {
+      "record_id": "NT-I09",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": true,
+      "statement_role": "condition",
+      "locators": [
+        "char:3925-4239"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:3925-4239",
+          "verbatim": true,
+          "recorded_quote": "一旦毛利率再掉或 Rubin 延期",
+          "resolved_span": "一旦毛利率再掉或 Rubin 延期",
+          "length_recorded": 17,
+          "length_resolved": 17
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 2
+    },
+    {
+      "record_id": "NT-I10",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": true,
+      "statement_role": "risk",
+      "locators": [
+        "char:3925-4239"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:3925-4239",
+          "verbatim": true,
+          "recorded_quote": "弹性会先打在倍数上",
+          "resolved_span": "弹性会先打在倍数上",
+          "length_recorded": 9,
+          "length_resolved": 9
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 2
+    },
+    {
+      "record_id": "NT-I11",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "evidence",
+      "locators": [
+        "char:4659-4907"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:4659-4907",
+          "verbatim": true,
+          "recorded_quote": "2025 年前五大 62%",
+          "resolved_span": "2025 年前五大 62%",
+          "length_recorded": 13,
+          "length_resolved": 13
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I12",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": true,
+      "statement_role": "risk",
+      "locators": [
+        "char:4659-4907"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:4659-4907",
+          "verbatim": true,
+          "recorded_quote": "客户集中是结构风险",
+          "resolved_span": "客户集中是结构风险",
+          "length_recorded": 9,
+          "length_resolved": 9
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I13",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": true,
+      "risk_or_condition": true,
+      "statement_role": "condition",
+      "locators": [
+        "char:5246-5537"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": true,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:5246-5537",
+          "verbatim": true,
+          "recorded_quote": "Q3 OCF/扣非回到 0.6 以上",
+          "resolved_span": "Q3 OCF/扣非回到 0.6 以上",
+          "length_recorded": 18,
+          "length_resolved": 18
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 0
+    },
+    {
+      "record_id": "NT-I14",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": true,
+      "risk_or_condition": false,
+      "statement_role": "claim",
+      "locators": [
+        "char:5246-5537"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": true,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:5246-5537",
+          "verbatim": true,
+          "recorded_quote": "若从零开一个观察仓：等两件事至少中一件再议",
+          "resolved_span": "若从零开一个观察仓：等两件事至少中一件再议",
+          "length_recorded": 21,
+          "length_resolved": 21
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 0
+    },
+    {
+      "record_id": "NT-I15",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": true,
+      "risk_or_condition": true,
+      "statement_role": "condition",
+      "locators": [
+        "char:5246-5537"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": true,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:5246-5537",
+          "verbatim": true,
+          "recorded_quote": "止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5）",
+          "resolved_span": "止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5）",
+          "length_recorded": 37,
+          "length_resolved": 37
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 0
+    },
+    {
+      "record_id": "NT-I16",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": true,
+      "risk_or_condition": false,
+      "statement_role": "claim",
+      "locators": [
+        "char:5246-5537"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": true,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:5246-5537",
+          "verbatim": true,
+          "recorded_quote": "止损看两条硬的",
+          "resolved_span": "止损看两条硬的",
+          "length_recorded": 7,
+          "length_resolved": 7
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 0
+    },
+    {
+      "record_id": "NT-I17",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": true,
+      "risk_or_condition": true,
+      "statement_role": "condition",
+      "locators": [
+        "char:5246-5537"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": true,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:5246-5537",
+          "verbatim": true,
+          "recorded_quote": "毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期",
+          "resolved_span": "毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期",
+          "length_recorded": 46,
+          "length_resolved": 46
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 0
+    },
+    {
+      "record_id": "NT-I19",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": true,
+      "risk_or_condition": true,
+      "statement_role": "condition",
+      "locators": [
+        "char:4385-4657"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:4385-4657",
+          "verbatim": true,
+          "recorded_quote": "出口管制一旦打到 GPU 系统集成",
+          "resolved_span": "出口管制一旦打到 GPU 系统集成",
+          "length_recorded": 17,
+          "length_resolved": 17
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I20",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": true,
+      "risk_or_condition": true,
+      "statement_role": "risk",
+      "locators": [
+        "char:4385-4657"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:4385-4657",
+          "verbatim": true,
+          "recorded_quote": "墨西哥 / 美国厂是地理对冲，救不了出口管制",
+          "resolved_span": "墨西哥 / 美国厂是地理对冲，救不了出口管制",
+          "length_recorded": 22,
+          "length_resolved": 22
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I21",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "evidence",
+      "locators": [
+        "body[3]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[3]",
+          "verbatim": true,
+          "recorded_quote": "市场成熟度不高",
+          "resolved_span": "市场成熟度不高",
+          "length_recorded": 7,
+          "length_resolved": 7
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 2
+    },
+    {
+      "record_id": "NT-I22",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "claim",
+      "locators": [
+        "body[3]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[3]",
+          "verbatim": true,
+          "recorded_quote": "预计26年很少，26年就忽略不计",
+          "resolved_span": "预计26年很少，26年就忽略不计",
+          "length_recorded": 16,
+          "length_resolved": 16
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 2
+    },
+    {
+      "record_id": "NT-I23",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": true,
+      "statement_role": "risk",
+      "locators": [
+        "body[63]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[63]",
+          "verbatim": true,
+          "recorded_quote": "尚无固定的客户",
+          "resolved_span": "尚无固定的客户",
+          "length_recorded": 7,
+          "length_resolved": 7
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I24",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "claim",
+      "locators": [
+        "body[63]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[63]",
+          "verbatim": true,
+          "recorded_quote": "德科立将其视为一个过渡型的产品",
+          "resolved_span": "德科立将其视为一个过渡型的产品",
+          "length_recorded": 15,
+          "length_resolved": 15
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I25",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": true,
+      "statement_role": "risk",
+      "locators": [
+        "body[72]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[72]",
+          "verbatim": true,
+          "recorded_quote": "128的光波导经过五个批次的流片后，良率仍然不乐观",
+          "resolved_span": "128的光波导经过五个批次的流片后，良率仍然不乐观",
+          "length_recorded": 25,
+          "length_resolved": 25
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I26",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "claim",
+      "locators": [
+        "body[72]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[72]",
+          "verbatim": true,
+          "recorded_quote": "说明设计上仍然存在缺陷",
+          "resolved_span": "说明设计上仍然存在缺陷",
+          "length_recorded": 11,
+          "length_resolved": 11
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I27",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "evidence",
+      "locators": [
+        "body[43]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[43]",
+          "verbatim": true,
+          "recorded_quote": "为期六个月的实验室认证",
+          "resolved_span": "为期六个月的实验室认证",
+          "length_recorded": 11,
+          "length_resolved": 11
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I28",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "claim",
+      "locators": [
+        "body[43]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[43]",
+          "verbatim": true,
+          "recorded_quote": "最终拿到订单可能需要1年到1年半时间",
+          "resolved_span": "最终拿到订单可能需要1年到1年半时间",
+          "length_recorded": 18,
+          "length_resolved": 18
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I29",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": true,
+      "statement_role": "condition",
+      "locators": [
+        "body[29]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[29]",
+          "verbatim": true,
+          "recorded_quote": "因为政策原因导致成本的上升",
+          "resolved_span": "因为政策原因导致成本的上升",
+          "length_recorded": 13,
+          "length_resolved": 13
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I30",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "claim",
+      "locators": [
+        "body[29]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[29]",
+          "verbatim": true,
+          "recorded_quote": "会与客户协商，提价幅度在10%到20%之间",
+          "resolved_span": "会与客户协商，提价幅度在10%到20%之间",
+          "length_recorded": 21,
+          "length_resolved": 21
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I31",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": true,
+      "statement_role": "risk",
+      "locators": [
+        "body[37]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[37]",
+          "verbatim": true,
+          "recorded_quote": "北美的这些电力短缺",
+          "resolved_span": "北美的这些电力短缺",
+          "length_recorded": 9,
+          "length_resolved": 9
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 2
+    },
+    {
+      "record_id": "NT-I32",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": true,
+      "statement_role": "risk",
+      "locators": [
+        "body[37]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[37]",
+          "verbatim": true,
+          "recorded_quote": "会影响到公司出货节奏",
+          "resolved_span": "会影响到公司出货节奏",
+          "length_recorded": 10,
+          "length_resolved": 10
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 2
+    },
+    {
+      "record_id": "NT-I33",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "evidence",
+      "locators": [
+        "body[32]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[32]",
+          "verbatim": true,
+          "recorded_quote": "CPO目前可以理解为还没有实际的出货",
+          "resolved_span": "CPO目前可以理解为还没有实际的出货",
+          "length_recorded": 18,
+          "length_resolved": 18
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I34",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": true,
+      "risk_or_condition": true,
+      "statement_role": "claim",
+      "locators": [
+        "body[37]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[37]",
+          "verbatim": true,
+          "recorded_quote": "预计到29年30年在材料取得重大突破前，可插拔仍然是主流",
+          "resolved_span": "预计到29年30年在材料取得重大突破前，可插拔仍然是主流",
+          "length_recorded": 28,
+          "length_resolved": 28
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 0
+    },
+    {
+      "record_id": "NT-I35",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": true,
+      "statement_role": "condition",
+      "locators": [
+        "body[115]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[115]",
+          "verbatim": true,
+          "recorded_quote": "如果你所有的都选择相信，公司所有说的话每个公司你都选择相信",
+          "resolved_span": "如果你所有的都选择相信，公司所有说的话每个公司你都选择相信",
+          "length_recorded": 29,
+          "length_resolved": 29
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I36",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": true,
+      "statement_role": "risk",
+      "locators": [
+        "body[115]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[115]",
+          "verbatim": true,
+          "recorded_quote": "像当年机器人份额加起来超过100%",
+          "resolved_span": "像当年机器人份额加起来超过100%",
+          "length_recorded": 17,
+          "length_resolved": 17
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I37",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "evidence",
+      "locators": [
+        "body[51]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[51]",
+          "verbatim": true,
+          "recorded_quote": "因为1.6T拉胯了",
+          "resolved_span": "因为1.6T拉胯了",
+          "length_recorded": 9,
+          "length_resolved": 9
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I38",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "claim",
+      "locators": [
+        "body[51]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[51]",
+          "verbatim": true,
+          "recorded_quote": "Q2 800G其实是超预期的，肯定是超预期的。但这也不叫超预期",
+          "resolved_span": "Q2 800G其实是超预期的，肯定是超预期的。但这也不叫超预期",
+          "length_recorded": 31,
+          "length_resolved": 31
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 2
+    },
+    {
+      "record_id": "NT-I39",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": true,
+      "statement_role": "condition",
+      "locators": [
+        "body[26]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[26]",
+          "verbatim": true,
+          "recorded_quote": "这里面税率加上去",
+          "resolved_span": "这里面税率加上去",
+          "length_recorded": 8,
+          "length_resolved": 8
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I40",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": true,
+      "risk_or_condition": true,
+      "statement_role": "risk",
+      "locators": [
+        "body[26]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[26]",
+          "verbatim": true,
+          "recorded_quote": "你转嫁给客户不一定能够很好地转嫁的",
+          "resolved_span": "你转嫁给客户不一定能够很好地转嫁的",
+          "length_recorded": 17,
+          "length_resolved": 17
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I41",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "claim",
+      "locators": [
+        "char:5055-5071"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:5055-5071",
+          "verbatim": true,
+          "recorded_quote": "持有 + 观望",
+          "resolved_span": "持有 + 观望",
+          "length_recorded": 7,
+          "length_resolved": 7
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I42",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": true,
+      "risk_or_condition": true,
+      "statement_role": "condition",
+      "locators": [
+        "char:5246-5537"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": true,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:5246-5537",
+          "verbatim": true,
+          "recorded_quote": "回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）",
+          "resolved_span": "回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）",
+          "length_recorded": 56,
+          "length_resolved": 56
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 0
+    },
+    {
+      "record_id": "NT-I43",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": true,
+      "risk_or_condition": true,
+      "statement_role": "condition",
+      "locators": [
+        "char:5246-5537"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": true,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "char:5246-5537",
+          "verbatim": true,
+          "recorded_quote": "毛利率较 Q2 的 6.99% 不再回吐",
+          "resolved_span": "毛利率较 Q2 的 6.99% 不再回吐",
+          "length_recorded": 20,
+          "length_resolved": 20
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 0
+    },
+    {
+      "record_id": "NT-I44",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": true,
+      "risk_or_condition": false,
+      "statement_role": "claim",
+      "locators": [
+        "body[1]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[1]",
+          "verbatim": true,
+          "recorded_quote": "渗透率反正都是吹牛的，都没准数的",
+          "resolved_span": "渗透率反正都是吹牛的，都没准数的",
+          "length_recorded": 16,
+          "length_resolved": 16
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I45",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "claim",
+      "locators": [
+        "body[1]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[1]",
+          "verbatim": true,
+          "recorded_quote": "29年NPO到10%",
+          "resolved_span": "29年NPO到10%",
+          "length_recorded": 10,
+          "length_resolved": 10
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I46",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "claim",
+      "locators": [
+        "body[1]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[1]",
+          "verbatim": true,
+          "recorded_quote": "CPO到30%",
+          "resolved_span": "CPO到30%",
+          "length_recorded": 7,
+          "length_resolved": 7
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I47",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "claim",
+      "locators": [
+        "body[1]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[1]",
+          "verbatim": true,
+          "recorded_quote": "可插拔主导70%",
+          "resolved_span": "可插拔主导70%",
+          "length_recorded": 8,
+          "length_resolved": 8
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I48",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "claim",
+      "locators": [
+        "body[26]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[26]",
+          "verbatim": true,
+          "recorded_quote": "由于台湾海鸥基地有免税政策，这部分会转嫁给客户，因此对竞争力和毛利影响不大",
+          "resolved_span": "由于台湾海鸥基地有免税政策，这部分会转嫁给客户，因此对竞争力和毛利影响不大",
+          "length_recorded": 37,
+          "length_resolved": 37
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    },
+    {
+      "record_id": "NT-I49",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "review_status": "accepted",
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "statement_role": "evidence",
+      "locators": [
+        "body[63]"
+      ],
+      "in_scoped_snapshot": true,
+      "touches_lost_unit": false,
+      "contract_fields_missing": [],
+      "condition_role_has_condition": true,
+      "quote_checks": [
+        {
+          "locator": "body[63]",
+          "verbatim": true,
+          "recorded_quote": "因为mems主要是要用300",
+          "resolved_span": "因为mems主要是要用300",
+          "length_recorded": 14,
+          "length_resolved": 14
+        }
+      ],
+      "quote_verbatim_ok": true,
+      "candidate_exact_quote_hits": 1
+    }
+  ],
+  "lost_packet": {
+    "unit_locator": [
+      "char:5246-5537"
+    ],
+    "gold_records_touching_it": [
+      "NT-I13",
+      "NT-I14",
+      "NT-I15",
+      "NT-I16",
+      "NT-I17",
+      "NT-I42",
+      "NT-I43"
+    ],
+    "unproduced_slots": {
+      "infrastructure": 7,
+      "model_behavior": 0,
+      "our_contract_signal_overlabelling": 2,
+      "unclassified": 0
+    },
+    "collateral_items": 2
+  },
+  "files_for_review": [
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json",
+      "sha256": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+      "role": "48 条非表格金标（material_items 切片在本审计中核验）"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-state.json",
+      "sha256": "sha256:08703b8dad9fc6c130872899741534c940787c29a15423db19d398999b237d85",
+      "role": "冻结状态与授权来源"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-manifest.json",
+      "sha256": "sha256:da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
+      "role": "冻结清单与输入哈希（含 quality_gate_passed 标记）"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze_signed_gold.py",
+      "sha256": "sha256:80e6453018edfb23b9fe9444ad4df40461f02d785134ebb1271a27201469c6b6",
+      "role": "冻结脚本（生成 frozen-gold 的代码）"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review-candidates.json",
+      "sha256": "sha256:f8feaf96168c1a068d6e0c0e1a1f6b34113765ed5a76058c3d9f02ea730ccc59",
+      "role": "人工评审草稿（含逐条 review_status/adjudication 的原始录入）"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review.md",
+      "sha256": "sha256:71cac53f319d5f6cd940840819cb8dd35765f685b4ab24437d066eabd74e563b",
+      "role": "由 JSON 生成的评审可读稿（1616 行，可逐条对照）"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/validation-report.json",
+      "sha256": "sha256:139cfc222eb4688dccdce5c0116b00c84b87401e01e22427658c3dcfa6d5bc52",
+      "role": "机械校验报告（human_accepted_counts 现状见审计结论）"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/draft-manifest.json",
+      "sha256": "sha256:e8cd173761d2908864fa90388e2910462cca8f87901e0618f5f1fd9ab88fa87b",
+      "role": "草稿清单与输入哈希"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/scoring-contract.json",
+      "sha256": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
+      "role": "评分契约 v3（当前签认版本）"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/review_pack.py",
+      "sha256": "sha256:fe5c84587873b1032c3c3b2a6b5acf4b16f4c53090b37c924c9915374b06eb81",
+      "role": "评审包生成脚本"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/source-prose-units.json",
+      "sha256": "sha256:58aa7c997376c9d7f5a84766725cf2fadddc649c7e9f73ff7309727048a37436",
+      "role": "候选输入范围的源单元导出（locator/文本哈希）"
+    },
+    {
+      "path": "data/corpus/工业富联_投委会决策报告_20260829.md",
+      "sha256": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "role": "md 源文件（人工回取原文用）"
+    }
+  ],
+  "model_requests": 0,
+  "production_database_access": 0
+}

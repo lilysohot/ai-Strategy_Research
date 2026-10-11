@@ -1,0 +1,136 @@
+{
+  "schema_version": "items-quality-draft-preview-1",
+  "status": "provisional_not_a_gate_result",
+  "created_on": "2026-10-11",
+  "inputs": {
+    "workbench": "sha256:e00d8ae65536bf662101ba1d53b8c3e9f80189e2be6b8172472abd02ea489777",
+    "frozen_gold": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    "scoring_contract": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce"
+  },
+  "draft_recall_upper_bound": {
+    "matched_gold": 19,
+    "gold_total": 48,
+    "fraction": "19/48",
+    "decimal": 0.3958,
+    "note": "upper bound only: it assumes every high/medium draft is confirmed and no pending candidate matches an unmatched gold record"
+  },
+  "critical_coverage": {
+    "critical_gold_total": 12,
+    "critical_matched": 1,
+    "critical_missing": [
+      "NT-I13",
+      "NT-I14",
+      "NT-I15",
+      "NT-I16",
+      "NT-I17",
+      "NT-I19",
+      "NT-I34",
+      "NT-I40",
+      "NT-I42",
+      "NT-I43",
+      "NT-I44"
+    ]
+  },
+  "risk_condition_coverage": {
+    "total": 21,
+    "matched": 5,
+    "missing": [
+      "NT-I04",
+      "NT-I09",
+      "NT-I10",
+      "NT-I13",
+      "NT-I15",
+      "NT-I17",
+      "NT-I19",
+      "NT-I23",
+      "NT-I29",
+      "NT-I31",
+      "NT-I34",
+      "NT-I35",
+      "NT-I39",
+      "NT-I40",
+      "NT-I42",
+      "NT-I43"
+    ]
+  },
+  "precision_status": {
+    "value": null,
+    "status": "N/A",
+    "reason": "203 candidate(s) still unresolved; contract v3 requires N/A instead of reporting a precision that excludes them",
+    "threshold_reference": {
+      "target_recall_overall_min": 0.85,
+      "candidate_precision_min": 0.8,
+      "source": "non-table-selected-target-scoring-contract-v3"
+    }
+  },
+  "unmatched_gold": [
+    "NT-I02",
+    "NT-I04",
+    "NT-I06",
+    "NT-I08",
+    "NT-I09",
+    "NT-I10",
+    "NT-I13",
+    "NT-I14",
+    "NT-I15",
+    "NT-I16",
+    "NT-I17",
+    "NT-I19",
+    "NT-I23",
+    "NT-I24",
+    "NT-I26",
+    "NT-I29",
+    "NT-I31",
+    "NT-I34",
+    "NT-I35",
+    "NT-I38",
+    "NT-I39",
+    "NT-I40",
+    "NT-I41",
+    "NT-I42",
+    "NT-I43",
+    "NT-I44",
+    "NT-I46",
+    "NT-I47",
+    "NT-I49"
+  ],
+  "unproduced_slots": {
+    "infrastructure": 7,
+    "model_behavior": 0,
+    "our_contract_signal_overlabelling": 2,
+    "unclassified": 0
+  },
+  "unproduced_collateral_items": 2,
+  "assertions_status": {
+    "count": 24,
+    "status": "pending_human_adjudication",
+    "ids": [
+      "NT-C11",
+      "NT-C12",
+      "NT-C13",
+      "NT-I09",
+      "NT-I13",
+      "NT-I15",
+      "NT-I17",
+      "NT-I19",
+      "NT-I29",
+      "NT-I35",
+      "NT-I37",
+      "NT-I38",
+      "NT-I39",
+      "NT-I42",
+      "NT-I43",
+      "NT-I45",
+      "NT-I46",
+      "NT-I47",
+      "NT-I48",
+      "NT-R09",
+      "NT-R10",
+      "NT-R12",
+      "NT-R19",
+      "NT-R20"
+    ]
+  },
+  "model_requests": 0,
+  "production_database_access": 0
+}

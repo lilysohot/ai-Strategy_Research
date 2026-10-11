@@ -1,0 +1,109 @@
+{
+  "schema_version": "items-l9-redo-preregistration-1",
+  "created_on": "2026-10-11",
+  "status": "preregistered_before_run",
+  "purpose": "把 issue-34 §7-8 判据写死：用留出记录重做 L9，禁止把金标字段注入候选；并固化当前评分器的 control 基线。",
+  "zero_call": true,
+  "production_database_access": false,
+  "authorization": {
+    "granted_by": "user",
+    "granted_on": "2026-10-11",
+    "scope": "零调用只读；不改金标、不改契约、不改评分器、不放宽阈值"
+  },
+
+  "known_corrections_to_issue34_report": [
+    {
+      "claim_in_report": "§3 L3 / §5.2：候选语义字段含 speaker_ref；契约有、候选没有 = 3 个（proposition/attribution/source_stance）",
+      "measured": "候选 222 条中 speaker_ref 的 key_present = 0；金标 48/48 非空 speaker_ref",
+      "correction": "契约 material_items 的 9 个必需字段中有 4 个在候选上零载体：proposition / attribution / source_stance / speaker_ref",
+      "origin": "audit_chain.py:181-193 把 speaker_ref 硬编码进了候选侧字段清单，未从数据读取",
+      "disposition": "本预注册以实测为准；报告 §3/§5.2 需按 result 修订（不回流本次判据，见 EC-5）"
+    }
+  ],
+
+  "contamination_declaration": {
+    "principle": "规则表只允许依据 ①候选记录自身字段名与取值 ②契约 role_required_fields 文本 推导；不得依据金标取值。",
+    "disclosed_exposure": "在写本规则表之前，我已看过金标 attribution 取值分布与 source_stance 分布（issue-34 §5.5）。",
+    "mitigation": "凡可能受该暴露影响的字段一律不计为 derivable：attribution 直接记 no_carrier；其余字段（proposition/condition/speaker_ref/source_stance/estimate_status）的判定不依赖金标取值分布，只依据候选侧 key_present 实测与语义轴是否相同。",
+    "residual_risk": "proposition 的载体选择（text）可能受'金标 proposition 是改写句'这一先前印象影响。为消除该影响，proposition 臂的所有统计只计'载体是否存在'，不依赖任何与金标比对的结果；与金标比对的那一项单独列为 D 臂的诊断量。"
+  },
+
+  "split": {
+    "basis": "按源切分（source-level held-out），因为源是真实的泛化轴且不被挑选。",
+    "development": {
+      "source_slug": "optical-module-docx",
+      "gold_records": 26,
+      "candidates": 134
+    },
+    "held_out": {
+      "source_slug": "industrial-fulian-md",
+      "gold_records": 22,
+      "candidates": 88
+    },
+    "both_directions_reported": true,
+    "note": "规则表在测量前固定；两个方向只是同一张规则表的两次应用，不是调参。"
+  },
+
+  "gold_to_candidate_association": {
+    "rule": "只用槽位跨度重叠（复用 issue-34 L1/L2 的 locator→unit→packet→slot rebasing），不读金标 semantic_fields。",
+    "declared_not_gold_injection": "跨度重叠是输入侧事实（原文区间），不是金标答案注入；判定该候选是否'在正确槽位'仍属人工裁定。",
+    "fallback": "某金标记录若在覆盖槽位内无任何候选，记 corpus_absent=true（该包未产出）。"
+  },
+
+  "projection_rule_table": [
+    {"contract_field": "proposition", "candidate_carrier": "text", "rule": "norm(text)：去首尾空白、去尾部中英文句号/分号", "status": "derivable_carrier", "requires": "atomic_items_only"},
+    {"contract_field": "semantic_type", "candidate_carrier": "semantic_type", "rule": "identity", "status": "derivable_carrier"},
+    {"contract_field": "statement_role", "candidate_carrier": "statement_role", "rule": "identity", "status": "derivable_carrier"},
+    {"contract_field": "speech_role", "candidate_carrier": "speech_role", "rule": "identity", "status": "derivable_carrier"},
+    {"contract_field": "perspective", "candidate_carrier": "perspective", "rule": "identity", "status": "derivable_carrier"},
+    {"contract_field": "polarity", "candidate_carrier": "polarity", "rule": "identity", "status": "derivable_carrier"},
+    {"contract_field": "condition", "candidate_carrier": "text", "rule": "仅 statement_role == 'condition' 的候选：norm(text) 即条件句载体", "status": "derivable_carrier_conditional", "applies_to": "statement_role == 'condition'"},
+    {"contract_field": "speaker_ref", "candidate_carrier": null, "rule": "候选无该字段（key_present=0）", "status": "no_carrier"},
+    {"contract_field": "attribution", "candidate_carrier": null, "rule": "候选无该字段；perspective 是另一条轴（source_explicit/quoted_other/unknown），不能给出金标归属分类词表取值", "status": "no_carrier", "contaminated": true},
+    {"contract_field": "source_stance", "candidate_carrier": null, "rule": "候选无该字段；NT-I45 的 challenged 只能从 context_evidence 原文读出", "status": "no_carrier"},
+    {"contract_field": "estimate_status", "candidate_carrier": null, "rule": "候选无该字段（非 material_items 必需字段，金标 3 条有值）", "status": "no_carrier", "contract_required_for_material_items": false}
+  ],
+
+  "arms": [
+    {"id": "A_native", "definition": "222 条候选的原生字段形态（非空子集，sorted）送入现有评分器", "kind": "control_baseline"},
+    {"id": "B_gold_injected", "definition": "复现 issue-34 L9 的'金标字段形态'臂：accepted 草案候选的 semantic_fields := 其被指派金标记录的 semantic_fields", "kind": "circularity_repro"},
+    {"id": "C_route_a_projection", "definition": "按上表把候选投影为契约字段集（无金标输入），送入现有评分器", "kind": "route_a_deterministic"},
+    {"id": "D_field_alignment", "definition": "对称投影金标与候选到共有字段集 {semantic_type, statement_role, speech_role, perspective, polarity, proposition}，proposition 两侧都过 norm()，测量 tp", "kind": "diagnostic_lexical_upper_bound", "must_not_be_called": "recall"},
+    {"id": "D2_lexical_containment", "definition": "同 D，但 proposition 判定改为'任一方是另一方子串'，测量 tp", "kind": "exploratory_secondary", "not_part_of_exit_criteria": true, "must_not_be_called": "recall", "note": "在本次运行前补入，仍属预注册；不得用于任何 EC 判定，只用于判断 text 与 proposition 是否落在同一语义区间。"}
+  ],
+
+  "metrics": {
+    "carrier_availability": "每个契约字段在 48 条金标记录上的'有载体'计数（按记录，不按候选数）；另给分源切片",
+    "per_record_contract_shape_reachable": "该记录的全部必需字段都有载体时为 true；比例即 route a 的记录级上界（诊断口径）",
+    "corpus_absence": "覆盖槽位内无任何候选的记录（即传输事件丢包），单独列出，不计入 route a 可及范围",
+    "arm_scores": "A/B/C 三臂的 tp/fp/fn/precision/recall，取自 score_structured_quality 的 MATERIAL_ITEMS 切片",
+    "D_upper_bound": "D 臂 tp；明确命名为 field_alignment_upper_bound，禁止表述为召回",
+    "gate_blockers": "A 臂在 PILOT_CANDIDATE_POLICY（0.95/0.90）与门 28 权威阈值（0.85/0.80/20）两套口径下的 blockers，用于量化'阈值双源'"
+  },
+
+  "exit_criteria": {
+    "EC-1": "任一 material_items 必需字段 carrier_availability == 0 ⇒ 该字段记 requires_reextraction；route a 无法产出契约形态记录（与 §5.5 一致则为确认，不一致则以实测为准）。",
+    "EC-2": "若 B_gold_injected.tp == 19 且 C_route_a_projection.tp == 0，则'旧 L9 的 19/48 全部来自金标注入'成立（循环量结论成立）。",
+    "EC-3": "held-out（md）相对 development（docx）的任一字段 carrier 率差 > 10 个百分点 ⇒ 该规则不具跨源普遍性，不得写入契约 v4。",
+    "EC-4": "per_record_contract_shape_reachable 的比例即为 route a 的记录级上界；须同时给出 corpus_absent 记录数，两者不得合并表述。",
+    "EC-5": "本表之外的新发现一律进 backlog，不回流本次判据；本预注册文件在运行后不得改写（write-once）。",
+    "EC-6": "任何与 issue-34 §3/§5.2/§5.5 冲突的实测结果以实测为准，并在 result 中列出待修订条目。"
+  },
+
+  "out_of_scope": [
+    "不做语义等价裁定（契约要求人工裁定，本轮零调用无人裁定）",
+    "不改评分器、不改契约、不改金标、不放宽阈值",
+    "不报 target_recall / precision 作为生产口径；D 臂不得称召回",
+    "不发起任何模型调用、不访问生产库、不发布"
+  ],
+
+  "artifacts": [
+    "r0-zero-call/preregistered-l9-redo.json (本文件, write-once)",
+    "r0-zero-call/l9_redo.py (支持 --no-write, 幂等)",
+    "r0-zero-call/l9-redo.json",
+    "r0-zero-call/l9-redo.md",
+    "r0-zero-call/baseline-control.json",
+    "r0-zero-call/baseline-control.md",
+    "r0-zero-call/MANIFEST.json (输入/输出 sha256)"
+  ]
+}

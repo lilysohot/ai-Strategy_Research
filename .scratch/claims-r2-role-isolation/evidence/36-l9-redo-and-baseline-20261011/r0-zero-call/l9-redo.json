@@ -1,0 +1,2493 @@
+{
+  "schema_version": "items-l9-redo-1",
+  "created_on": "2026-10-11",
+  "zero_call": true,
+  "association_caveat": "载体可得性按'设计意图的覆盖槽位'统计（与 issue-34 L1/L2 的 locator→unit→packet→slot rebasing 同法）。这不是评分器的约束：identity 匹配不含槽位，因此 39/48 是**受限口径**；不受限口径（源内任一候选）下 proposition 与 5 个枚举字段均有候选（text 非空 222/222）。两份口径都不改变 EC-1：4 个字段在两份口径下都是 0/48。",
+  "preregistration": {
+    "path": "preregistered-l9-redo.json",
+    "sha256": "sha256:d1c5672ee70509c362e6a7ff10a40006a0edfd4510a0452d45ecdb3e985f74fd"
+  },
+  "split": {
+    "development": "optical-module-docx",
+    "held_out": "industrial-fulian-md",
+    "both_directions": true
+  },
+  "carrier_availability": {
+    "industrial-fulian-md.proposition": {
+      "hits": 13,
+      "denominator": 22,
+      "rate": 0.5909
+    },
+    "industrial-fulian-md.semantic_type": {
+      "hits": 13,
+      "denominator": 22,
+      "rate": 0.5909
+    },
+    "industrial-fulian-md.statement_role": {
+      "hits": 13,
+      "denominator": 22,
+      "rate": 0.5909
+    },
+    "industrial-fulian-md.speech_role": {
+      "hits": 13,
+      "denominator": 22,
+      "rate": 0.5909
+    },
+    "industrial-fulian-md.perspective": {
+      "hits": 13,
+      "denominator": 22,
+      "rate": 0.5909
+    },
+    "industrial-fulian-md.speaker_ref": {
+      "hits": 0,
+      "denominator": 22,
+      "rate": 0.0
+    },
+    "industrial-fulian-md.polarity": {
+      "hits": 13,
+      "denominator": 22,
+      "rate": 0.5909
+    },
+    "industrial-fulian-md.attribution": {
+      "hits": 0,
+      "denominator": 22,
+      "rate": 0.0
+    },
+    "industrial-fulian-md.source_stance": {
+      "hits": 0,
+      "denominator": 22,
+      "rate": 0.0
+    },
+    "industrial-fulian-md.condition": {
+      "hits": 0,
+      "denominator": 7,
+      "rate": 0.0
+    },
+    "industrial-fulian-md.estimate_status": {
+      "hits": 0,
+      "denominator": 22,
+      "rate": 0.0
+    },
+    "optical-module-docx.proposition": {
+      "hits": 26,
+      "denominator": 26,
+      "rate": 1.0
+    },
+    "optical-module-docx.semantic_type": {
+      "hits": 26,
+      "denominator": 26,
+      "rate": 1.0
+    },
+    "optical-module-docx.statement_role": {
+      "hits": 26,
+      "denominator": 26,
+      "rate": 1.0
+    },
+    "optical-module-docx.speech_role": {
+      "hits": 26,
+      "denominator": 26,
+      "rate": 1.0
+    },
+    "optical-module-docx.perspective": {
+      "hits": 26,
+      "denominator": 26,
+      "rate": 1.0
+    },
+    "optical-module-docx.speaker_ref": {
+      "hits": 0,
+      "denominator": 26,
+      "rate": 0.0
+    },
+    "optical-module-docx.polarity": {
+      "hits": 26,
+      "denominator": 26,
+      "rate": 1.0
+    },
+    "optical-module-docx.attribution": {
+      "hits": 0,
+      "denominator": 26,
+      "rate": 0.0
+    },
+    "optical-module-docx.source_stance": {
+      "hits": 0,
+      "denominator": 26,
+      "rate": 0.0
+    },
+    "optical-module-docx.condition": {
+      "hits": 1,
+      "denominator": 3,
+      "rate": 0.3333
+    },
+    "optical-module-docx.estimate_status": {
+      "hits": 0,
+      "denominator": 26,
+      "rate": 0.0
+    },
+    "overall.proposition": {
+      "hits": 39,
+      "denominator": 48,
+      "rate": 0.8125
+    },
+    "overall.semantic_type": {
+      "hits": 39,
+      "denominator": 48,
+      "rate": 0.8125
+    },
+    "overall.statement_role": {
+      "hits": 39,
+      "denominator": 48,
+      "rate": 0.8125
+    },
+    "overall.speech_role": {
+      "hits": 39,
+      "denominator": 48,
+      "rate": 0.8125
+    },
+    "overall.perspective": {
+      "hits": 39,
+      "denominator": 48,
+      "rate": 0.8125
+    },
+    "overall.speaker_ref": {
+      "hits": 0,
+      "denominator": 48,
+      "rate": 0.0
+    },
+    "overall.polarity": {
+      "hits": 39,
+      "denominator": 48,
+      "rate": 0.8125
+    },
+    "overall.attribution": {
+      "hits": 0,
+      "denominator": 48,
+      "rate": 0.0
+    },
+    "overall.source_stance": {
+      "hits": 0,
+      "denominator": 48,
+      "rate": 0.0
+    },
+    "overall.condition": {
+      "hits": 1,
+      "denominator": 10,
+      "rate": 0.1
+    },
+    "overall.estimate_status": {
+      "hits": 0,
+      "denominator": 48,
+      "rate": 0.0
+    }
+  },
+  "per_record": {
+    "NT-I01": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 2,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I02": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I03": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 2,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I04": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 2,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I05": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I06": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 0,
+      "corpus_absent": true,
+      "covering_slot_count": 1,
+      "carrier_fields": [],
+      "missing_fields": [
+        "proposition",
+        "semantic_type",
+        "statement_role",
+        "speech_role",
+        "perspective",
+        "speaker_ref",
+        "polarity",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": false
+    },
+    "NT-I07": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 2,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I08": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 2,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I09": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 2,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance",
+        "condition"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": false
+    },
+    "NT-I10": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 2,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I11": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame",
+        "value"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I12": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I13": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 0,
+      "corpus_absent": true,
+      "covering_slot_count": 1,
+      "carrier_fields": [],
+      "missing_fields": [
+        "proposition",
+        "semantic_type",
+        "statement_role",
+        "speech_role",
+        "perspective",
+        "speaker_ref",
+        "polarity",
+        "attribution",
+        "source_stance",
+        "condition"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": false
+    },
+    "NT-I14": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 0,
+      "corpus_absent": true,
+      "covering_slot_count": 2,
+      "carrier_fields": [],
+      "missing_fields": [
+        "proposition",
+        "semantic_type",
+        "statement_role",
+        "speech_role",
+        "perspective",
+        "speaker_ref",
+        "polarity",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": false
+    },
+    "NT-I15": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 0,
+      "corpus_absent": true,
+      "covering_slot_count": 2,
+      "carrier_fields": [],
+      "missing_fields": [
+        "proposition",
+        "semantic_type",
+        "statement_role",
+        "speech_role",
+        "perspective",
+        "speaker_ref",
+        "polarity",
+        "attribution",
+        "source_stance",
+        "condition"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": false
+    },
+    "NT-I16": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 0,
+      "corpus_absent": true,
+      "covering_slot_count": 1,
+      "carrier_fields": [],
+      "missing_fields": [
+        "proposition",
+        "semantic_type",
+        "statement_role",
+        "speech_role",
+        "perspective",
+        "speaker_ref",
+        "polarity",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": false
+    },
+    "NT-I17": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 0,
+      "corpus_absent": true,
+      "covering_slot_count": 1,
+      "carrier_fields": [],
+      "missing_fields": [
+        "proposition",
+        "semantic_type",
+        "statement_role",
+        "speech_role",
+        "perspective",
+        "speaker_ref",
+        "polarity",
+        "attribution",
+        "source_stance",
+        "condition"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": false
+    },
+    "NT-I19": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance",
+        "condition"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": false
+    },
+    "NT-I20": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I41": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 0,
+      "corpus_absent": true,
+      "covering_slot_count": 1,
+      "carrier_fields": [],
+      "missing_fields": [
+        "proposition",
+        "semantic_type",
+        "statement_role",
+        "speech_role",
+        "perspective",
+        "speaker_ref",
+        "polarity",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": false
+    },
+    "NT-I42": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 0,
+      "corpus_absent": true,
+      "covering_slot_count": 2,
+      "carrier_fields": [],
+      "missing_fields": [
+        "proposition",
+        "semantic_type",
+        "statement_role",
+        "speech_role",
+        "perspective",
+        "speaker_ref",
+        "polarity",
+        "attribution",
+        "source_stance",
+        "condition"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": false
+    },
+    "NT-I43": {
+      "source_slug": "industrial-fulian-md",
+      "candidate_count": 0,
+      "corpus_absent": true,
+      "covering_slot_count": 1,
+      "carrier_fields": [],
+      "missing_fields": [
+        "proposition",
+        "semantic_type",
+        "statement_role",
+        "speech_role",
+        "perspective",
+        "speaker_ref",
+        "polarity",
+        "attribution",
+        "source_stance",
+        "condition"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": false
+    },
+    "NT-I21": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 2,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I22": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 2,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I23": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I24": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I25": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I26": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I27": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I28": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I29": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance",
+        "condition"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": false
+    },
+    "NT-I30": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I31": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 2,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I32": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 2,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I33": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I34": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 2,
+      "corpus_absent": false,
+      "covering_slot_count": 2,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I35": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 2,
+      "corpus_absent": false,
+      "covering_slot_count": 2,
+      "carrier_fields": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I36": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I37": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I38": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 2,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I39": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance",
+        "condition"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": false
+    },
+    "NT-I40": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I44": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I45": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I46": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I47": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I48": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 2,
+      "corpus_absent": false,
+      "covering_slot_count": 2,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    },
+    "NT-I49": {
+      "source_slug": "optical-module-docx",
+      "candidate_count": 1,
+      "corpus_absent": false,
+      "covering_slot_count": 1,
+      "carrier_fields": [
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "speech_role",
+        "statement_role",
+        "temporal_frame"
+      ],
+      "missing_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance"
+      ],
+      "contract_shape_reachable_strict": false,
+      "contract_shape_reachable_carrier_only": true
+    }
+  },
+  "coverage": {
+    "industrial-fulian-md": {
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "slots": 76,
+      "units": 10,
+      "packets": 10,
+      "per_gold": {
+        "NT-I01": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_dccec44c385534fa"
+          ],
+          "candidate_ids": [
+            "itm_45c20faff776385b",
+            "itm_db11557f55262ac8"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I02": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_de31fca8eb3a0b26"
+          ],
+          "candidate_ids": [
+            "itm_a0a574b4fa573aea"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I03": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_63a469c9fe86142d"
+          ],
+          "candidate_ids": [
+            "itm_7c8488b09e1c5443",
+            "itm_7ba3125d387514f9"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I04": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_99063943ec604797"
+          ],
+          "candidate_ids": [
+            "itm_99362251f6fe0d54",
+            "itm_7e31e390e92488a5"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I05": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_40ee124742e4d80d"
+          ],
+          "candidate_ids": [
+            "itm_abebb2a7163927e9"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I06": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_6ad5e01d7d38f35a"
+          ],
+          "candidate_ids": [],
+          "carrier_fields": []
+        },
+        "NT-I07": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_fce46d8dd0c9fbde"
+          ],
+          "candidate_ids": [
+            "itm_d0e9f3a0a75f5157",
+            "itm_9960b6f5d20e37ed"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I08": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_fce46d8dd0c9fbde"
+          ],
+          "candidate_ids": [
+            "itm_d0e9f3a0a75f5157",
+            "itm_9960b6f5d20e37ed"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I09": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_b4343e8b16dfe42c"
+          ],
+          "candidate_ids": [
+            "itm_36692d3ea29613ba",
+            "itm_2f60038387b4ea72"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I10": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_b4343e8b16dfe42c"
+          ],
+          "candidate_ids": [
+            "itm_36692d3ea29613ba",
+            "itm_2f60038387b4ea72"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I11": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_e1cc134434cdc458"
+          ],
+          "candidate_ids": [
+            "itm_02fab19d63fdcb92"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame",
+            "value"
+          ]
+        },
+        "NT-I12": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_1496a1c1b2a0bda1"
+          ],
+          "candidate_ids": [
+            "itm_fcbb5794e46a985a"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I13": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_3e8965b10d203f0b"
+          ],
+          "candidate_ids": [],
+          "carrier_fields": []
+        },
+        "NT-I14": {
+          "covering_slot_count": 2,
+          "covering_slot_ids": [
+            "slot_7b2c716720ace1aa",
+            "slot_998e49ccab85bdb7"
+          ],
+          "candidate_ids": [],
+          "carrier_fields": []
+        },
+        "NT-I15": {
+          "covering_slot_count": 2,
+          "covering_slot_ids": [
+            "slot_a0285709c19e993e",
+            "slot_ff5db383726f84c7"
+          ],
+          "candidate_ids": [],
+          "carrier_fields": []
+        },
+        "NT-I16": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_ff5db383726f84c7"
+          ],
+          "candidate_ids": [],
+          "carrier_fields": []
+        },
+        "NT-I17": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_a0285709c19e993e"
+          ],
+          "candidate_ids": [],
+          "carrier_fields": []
+        },
+        "NT-I19": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_499ce1615b28e781"
+          ],
+          "candidate_ids": [
+            "itm_659e7d6382f5fd02"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I20": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_499ce1615b28e781"
+          ],
+          "candidate_ids": [
+            "itm_659e7d6382f5fd02"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I41": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_5e0a114ed8b5d2a6"
+          ],
+          "candidate_ids": [],
+          "carrier_fields": []
+        },
+        "NT-I42": {
+          "covering_slot_count": 2,
+          "covering_slot_ids": [
+            "slot_8a33a8aadc6a6490",
+            "slot_998e49ccab85bdb7"
+          ],
+          "candidate_ids": [],
+          "carrier_fields": []
+        },
+        "NT-I43": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_3e8965b10d203f0b"
+          ],
+          "candidate_ids": [],
+          "carrier_fields": []
+        }
+      }
+    },
+    "optical-module-docx": {
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "slots": 114,
+      "units": 14,
+      "packets": 14,
+      "per_gold": {
+        "NT-I21": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_5a0b1357f70ac191"
+          ],
+          "candidate_ids": [
+            "itm_bd6cd536f1fc2c56",
+            "itm_e6a5f468d81f21ac"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I22": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_776ac63e6ec4f893"
+          ],
+          "candidate_ids": [
+            "itm_ed3a149d2a52ec22",
+            "itm_64a666c2efc4b5d8"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I23": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_0d013b6aa424d46b"
+          ],
+          "candidate_ids": [
+            "itm_703720fdd5630e8b"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I24": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_0d013b6aa424d46b"
+          ],
+          "candidate_ids": [
+            "itm_703720fdd5630e8b"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I25": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_27d50c619ef56e33"
+          ],
+          "candidate_ids": [
+            "itm_5de2e5ebfaa12f38"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I26": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_55331bf3a01983de"
+          ],
+          "candidate_ids": [
+            "itm_a41addfcb6696346"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I27": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_2091f42de4ab38dd"
+          ],
+          "candidate_ids": [
+            "itm_a361a20c875bf147"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I28": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_89b483fa86b2d06f"
+          ],
+          "candidate_ids": [
+            "itm_bc0b1219e6a3fc7b"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I29": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_843fc9c8dd1863db"
+          ],
+          "candidate_ids": [
+            "itm_e295d711292b83a2"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I30": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_5fa264cca17d9f52"
+          ],
+          "candidate_ids": [
+            "itm_85ac32c15bf2636d"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I31": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_0a70fdb4d56e5c74"
+          ],
+          "candidate_ids": [
+            "itm_7b0cfc4d08a27730",
+            "itm_cf8baa3c797556e2"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I32": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_0a70fdb4d56e5c74"
+          ],
+          "candidate_ids": [
+            "itm_7b0cfc4d08a27730",
+            "itm_cf8baa3c797556e2"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I33": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_072c0a2c468a109b"
+          ],
+          "candidate_ids": [
+            "itm_71bbd42cf3522bea"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I34": {
+          "covering_slot_count": 2,
+          "covering_slot_ids": [
+            "slot_76e76b155a099629",
+            "slot_cfc23b06a16f1c9b"
+          ],
+          "candidate_ids": [
+            "itm_15c17f04855a28b3",
+            "itm_898045d75c1c3ef3"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I35": {
+          "covering_slot_count": 2,
+          "covering_slot_ids": [
+            "slot_14047aa305743ea2",
+            "slot_363180e19a472989"
+          ],
+          "candidate_ids": [
+            "itm_4083fb6b1acaaad6",
+            "itm_c8690f1bdde8846d"
+          ],
+          "carrier_fields": [
+            "condition",
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I36": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_6161b380836506af"
+          ],
+          "candidate_ids": [
+            "itm_ec18c38405c7e17f"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I37": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_7a807ec94a33b129"
+          ],
+          "candidate_ids": [
+            "itm_fc120f1f696e575a"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I38": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_a6adcde0451323ff"
+          ],
+          "candidate_ids": [
+            "itm_bf5fa66fb7be5a02",
+            "itm_7a4789de164cf58a"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I39": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_0528ef3b34e98b5f"
+          ],
+          "candidate_ids": [
+            "itm_a79b0be05f3456c3"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I40": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_df7f86f7cada8987"
+          ],
+          "candidate_ids": [
+            "itm_a8be3a946325fa22"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I44": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_8bf48871bb2b4891"
+          ],
+          "candidate_ids": [
+            "itm_65bce9c3c706dbf2"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I45": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_fdbaf8887e7c481b"
+          ],
+          "candidate_ids": [
+            "itm_42ffb8cedfa8d7ff"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I46": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_bd82be33101583eb"
+          ],
+          "candidate_ids": [
+            "itm_09fc1a90e71fe5bf"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I47": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_b7377f203f0b6c06"
+          ],
+          "candidate_ids": [
+            "itm_f2e29952886293c0"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I48": {
+          "covering_slot_count": 2,
+          "covering_slot_ids": [
+            "slot_a8f8888f41383869",
+            "slot_c86346a0c45bfbf9"
+          ],
+          "candidate_ids": [
+            "itm_d96a4e7b052a89c7",
+            "itm_356f9d9b23c78892"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        },
+        "NT-I49": {
+          "covering_slot_count": 1,
+          "covering_slot_ids": [
+            "slot_24b72c4dd4de8247"
+          ],
+          "candidate_ids": [
+            "itm_98e6854ddb408a76"
+          ],
+          "carrier_fields": [
+            "perspective",
+            "polarity",
+            "proposition",
+            "semantic_type",
+            "speech_role",
+            "statement_role",
+            "temporal_frame"
+          ]
+        }
+      }
+    }
+  },
+  "arms": {
+    "A_native": {
+      "tp": 0,
+      "fp": 222,
+      "fn": 48,
+      "duplicate_fp": 0,
+      "precision": "0",
+      "recall": "0",
+      "matched": 0,
+      "matched_gold_ids": [],
+      "missing_gold_ids": [
+        "NT-I01",
+        "NT-I02",
+        "NT-I03",
+        "NT-I04",
+        "NT-I05",
+        "NT-I06",
+        "NT-I07",
+        "NT-I08",
+        "NT-I09",
+        "NT-I10",
+        "NT-I11",
+        "NT-I12",
+        "NT-I13",
+        "NT-I14",
+        "NT-I15",
+        "NT-I16",
+        "NT-I17",
+        "NT-I19",
+        "NT-I20",
+        "NT-I21",
+        "NT-I22",
+        "NT-I23",
+        "NT-I24",
+        "NT-I25",
+        "NT-I26",
+        "NT-I27",
+        "NT-I28",
+        "NT-I29",
+        "NT-I30",
+        "NT-I31",
+        "NT-I32",
+        "NT-I33",
+        "NT-I34",
+        "NT-I35",
+        "NT-I36",
+        "NT-I37",
+        "NT-I38",
+        "NT-I39",
+        "NT-I40",
+        "NT-I41",
+        "NT-I42",
+        "NT-I43",
+        "NT-I44",
+        "NT-I45",
+        "NT-I46",
+        "NT-I47",
+        "NT-I48",
+        "NT-I49"
+      ],
+      "gate": {
+        "rate_gate_passed": false,
+        "live_trial_ready": false,
+        "risk_condition_recall": "0",
+        "rate_blockers": [
+          "zero_denominator:claims:precision",
+          "zero_denominator:claims:recall",
+          "below_threshold:material_items:precision:0<19/20",
+          "below_threshold:material_items:recall:0<9/10",
+          "zero_denominator:material_relations:precision",
+          "zero_denominator:material_relations:recall",
+          "below_threshold:risk_or_condition:recall:0<19/20",
+          "zero_denominator:report_support",
+          "critical_gold_missing:NT-I13",
+          "critical_gold_missing:NT-I14",
+          "critical_gold_missing:NT-I15",
+          "critical_gold_missing:NT-I16",
+          "critical_gold_missing:NT-I17",
+          "critical_gold_missing:NT-I19",
+          "critical_gold_missing:NT-I20",
+          "critical_gold_missing:NT-I34",
+          "critical_gold_missing:NT-I40",
+          "critical_gold_missing:NT-I42",
+          "critical_gold_missing:NT-I43",
+          "critical_gold_missing:NT-I44"
+        ],
+        "readiness_blockers": [
+          "insufficient_sample:claims:0/20",
+          "insufficient_sample:material_relations:0/20",
+          "development_gold_not_frozen",
+          "gold_not_frozen_before_candidates",
+          "adjudications_unresolved",
+          "thresholds_not_signed_off"
+        ]
+      }
+    },
+    "B_gold_injected": {
+      "tp": 19,
+      "fp": 0,
+      "fn": 29,
+      "duplicate_fp": 0,
+      "precision": "1",
+      "recall": "19/48",
+      "matched": 19,
+      "matched_gold_ids": [
+        "NT-I05",
+        "NT-I07",
+        "NT-I01",
+        "NT-I03",
+        "NT-I20",
+        "NT-I12",
+        "NT-I11",
+        "NT-I36",
+        "NT-I37",
+        "NT-I45",
+        "NT-I48",
+        "NT-I30",
+        "NT-I33",
+        "NT-I32",
+        "NT-I21",
+        "NT-I22",
+        "NT-I27",
+        "NT-I28",
+        "NT-I25"
+      ],
+      "missing_gold_ids": [
+        "NT-I02",
+        "NT-I04",
+        "NT-I06",
+        "NT-I08",
+        "NT-I09",
+        "NT-I10",
+        "NT-I13",
+        "NT-I14",
+        "NT-I15",
+        "NT-I16",
+        "NT-I17",
+        "NT-I19",
+        "NT-I23",
+        "NT-I24",
+        "NT-I26",
+        "NT-I29",
+        "NT-I31",
+        "NT-I34",
+        "NT-I35",
+        "NT-I38",
+        "NT-I39",
+        "NT-I40",
+        "NT-I41",
+        "NT-I42",
+        "NT-I43",
+        "NT-I44",
+        "NT-I46",
+        "NT-I47",
+        "NT-I49"
+      ],
+      "gate": {
+        "rate_gate_passed": false,
+        "live_trial_ready": false,
+        "risk_condition_recall": "5/21",
+        "rate_blockers": [
+          "zero_denominator:claims:precision",
+          "zero_denominator:claims:recall",
+          "below_threshold:material_items:recall:19/48<9/10",
+          "zero_denominator:material_relations:precision",
+          "zero_denominator:material_relations:recall",
+          "below_threshold:risk_or_condition:recall:5/21<19/20",
+          "zero_denominator:report_support",
+          "critical_gold_missing:NT-I13",
+          "critical_gold_missing:NT-I14",
+          "critical_gold_missing:NT-I15",
+          "critical_gold_missing:NT-I16",
+          "critical_gold_missing:NT-I17",
+          "critical_gold_missing:NT-I19",
+          "critical_gold_missing:NT-I34",
+          "critical_gold_missing:NT-I40",
+          "critical_gold_missing:NT-I42",
+          "critical_gold_missing:NT-I43",
+          "critical_gold_missing:NT-I44"
+        ],
+        "readiness_blockers": [
+          "insufficient_sample:claims:0/20",
+          "insufficient_sample:material_relations:0/20",
+          "development_gold_not_frozen",
+          "gold_not_frozen_before_candidates",
+          "adjudications_unresolved",
+          "thresholds_not_signed_off"
+        ]
+      }
+    },
+    "C_route_a_projection": {
+      "tp": 0,
+      "fp": 222,
+      "fn": 48,
+      "duplicate_fp": 0,
+      "precision": "0",
+      "recall": "0",
+      "matched": 0,
+      "matched_gold_ids": [],
+      "missing_gold_ids": [
+        "NT-I01",
+        "NT-I02",
+        "NT-I03",
+        "NT-I04",
+        "NT-I05",
+        "NT-I06",
+        "NT-I07",
+        "NT-I08",
+        "NT-I09",
+        "NT-I10",
+        "NT-I11",
+        "NT-I12",
+        "NT-I13",
+        "NT-I14",
+        "NT-I15",
+        "NT-I16",
+        "NT-I17",
+        "NT-I19",
+        "NT-I20",
+        "NT-I21",
+        "NT-I22",
+        "NT-I23",
+        "NT-I24",
+        "NT-I25",
+        "NT-I26",
+        "NT-I27",
+        "NT-I28",
+        "NT-I29",
+        "NT-I30",
+        "NT-I31",
+        "NT-I32",
+        "NT-I33",
+        "NT-I34",
+        "NT-I35",
+        "NT-I36",
+        "NT-I37",
+        "NT-I38",
+        "NT-I39",
+        "NT-I40",
+        "NT-I41",
+        "NT-I42",
+        "NT-I43",
+        "NT-I44",
+        "NT-I45",
+        "NT-I46",
+        "NT-I47",
+        "NT-I48",
+        "NT-I49"
+      ],
+      "gate": {
+        "rate_gate_passed": false,
+        "live_trial_ready": false,
+        "risk_condition_recall": "0",
+        "rate_blockers": [
+          "zero_denominator:claims:precision",
+          "zero_denominator:claims:recall",
+          "below_threshold:material_items:precision:0<19/20",
+          "below_threshold:material_items:recall:0<9/10",
+          "zero_denominator:material_relations:precision",
+          "zero_denominator:material_relations:recall",
+          "below_threshold:risk_or_condition:recall:0<19/20",
+          "zero_denominator:report_support",
+          "critical_gold_missing:NT-I13",
+          "critical_gold_missing:NT-I14",
+          "critical_gold_missing:NT-I15",
+          "critical_gold_missing:NT-I16",
+          "critical_gold_missing:NT-I17",
+          "critical_gold_missing:NT-I19",
+          "critical_gold_missing:NT-I20",
+          "critical_gold_missing:NT-I34",
+          "critical_gold_missing:NT-I40",
+          "critical_gold_missing:NT-I42",
+          "critical_gold_missing:NT-I43",
+          "critical_gold_missing:NT-I44"
+        ],
+        "readiness_blockers": [
+          "insufficient_sample:claims:0/20",
+          "insufficient_sample:material_relations:0/20",
+          "development_gold_not_frozen",
+          "gold_not_frozen_before_candidates",
+          "adjudications_unresolved",
+          "thresholds_not_signed_off"
+        ]
+      }
+    },
+    "D_field_alignment_tp": 0,
+    "D2_lexical_containment_tp": 0
+  },
+  "ec_verdicts": {
+    "EC-1": {
+      "measured_zero_carrier_required_fields": [
+        "speaker_ref",
+        "attribution",
+        "source_stance",
+        "estimate_status"
+      ],
+      "verdict": "触发：契约 material_items 必需字段中 4 个在候选上零载体（含 speaker_ref），其余非必需字段 estimate_status 亦为 0。route a 无法产出契约形态记录。",
+      "conflict_with_issue34": "§3 L3 / §5.2 记 3 个（proposition/attribution/source_stance）；实测为 4 个（+ speaker_ref）。以实测为准。"
+    },
+    "EC-2": {
+      "B_gold_injected_tp": 19,
+      "C_route_a_projection_tp": 0,
+      "verdict": "成立：B=19 且 C=0 ⇒ 旧 L9 的 19/48 全部来自金标注入，该数不构成路线 a 的可行性证据。"
+    },
+    "EC-3": {
+      "literal": {
+        "proposition": {
+          "literal_diff_pp": 40.9,
+          "restricted_to_records_with_candidates": {
+            "md": 1.0,
+            "docx": 1.0
+          }
+        },
+        "semantic_type": {
+          "literal_diff_pp": 40.9,
+          "restricted_to_records_with_candidates": {
+            "md": 1.0,
+            "docx": 1.0
+          }
+        },
+        "statement_role": {
+          "literal_diff_pp": 40.9,
+          "restricted_to_records_with_candidates": {
+            "md": 1.0,
+            "docx": 1.0
+          }
+        },
+        "speech_role": {
+          "literal_diff_pp": 40.9,
+          "restricted_to_records_with_candidates": {
+            "md": 1.0,
+            "docx": 1.0
+          }
+        },
+        "perspective": {
+          "literal_diff_pp": 40.9,
+          "restricted_to_records_with_candidates": {
+            "md": 1.0,
+            "docx": 1.0
+          }
+        },
+        "polarity": {
+          "literal_diff_pp": 40.9,
+          "restricted_to_records_with_candidates": {
+            "md": 1.0,
+            "docx": 1.0
+          }
+        }
+      },
+      "verdict": "字面触发（多项差 > 10pp），但差异 100% 由 corpus_absent 解释：剔除覆盖槽位内无候选的记录后，md 与 docx 同为 1.0 ⇒ 规则本身跨源成立。判据字面结论与可归因结论相反，属预注册时未预见，记 backlog。"
+    },
+    "EC-4": {
+      "strict_reachable": 0,
+      "carrier_only_reachable": 35,
+      "corpus_absent_by_source": {
+        "industrial-fulian-md": 9,
+        "optical-module-docx": 0
+      },
+      "verdict": "route a 的记录级上界 = 0/48（strict 口径）；仅按候选有载体的字段计 = 35/48，其中 9 条为覆盖槽位内无候选（全部属 md）。两个数字不得合并表述。"
+    },
+    "EC-5": {
+      "backlog": [
+        {
+          "id": "B-1",
+          "finding": "覆盖槽位内无候选的 md 记录为 9 条，而非 issue-34 §6 假定的 7 条：除丢包区 char:5246-5537 的 7 条外，另有 NT-I06（char:1393-1655）与 NT-I41（char:5055-5071）。这两条未出现在 residual-attribution 的 9 个未产出槽位归因里。",
+          "not_decided": "本项不改动任何 EC 判定；需单独裁定其性质（模型判 no_supported_item / 另一次未登记损失 / 关联方法差异）。",
+          "caveat": "identity 匹配不含槽位，故'覆盖槽位内无候选'不等于'该记录不可匹配'。"
+        },
+        {
+          "id": "B-2",
+          "finding": "arm D / D2 均为 0，但两臂要求 5 个枚举字段逐字相等，故 0 无法区分'枚举值不一致'与'命题文本不一致'两种原因。",
+          "next_measurement": "逐记录比较 covering-slot 候选中是否存在与金标逐字相同的 (semantic_type, statement_role, speech_role, perspective, polarity) 元组；该测量未预注册，须在新一轮预注册后进行。"
+        },
+        {
+          "id": "B-3",
+          "finding": "条件载体在实践上近乎不存在：10 条 condition 角色金标中仅 1 条（docx）的覆盖槽位内存在 statement_role=condition 的候选。契约 v3 新增的 condition_role_read_path 因此几乎没有可读数据。"
+        }
+      ],
+      "verdict": "判据外新发现已登记为 backlog，不回流本次判据。"
+    },
+    "EC-6": {
+      "conflicts": [
+        "§3 L3 / §5.2：3 个缺失必需字段 → 实测 4 个（含 speaker_ref）",
+        "§6：md 天花板 15/22 = 0.682（按丢 7 条算）→ 实测覆盖槽位内有候选的 md 记录为 13/22"
+      ],
+      "confirmed": [
+        "§5.5：source_stance 不可由候选字段派生（0/48 载体）"
+      ],
+      "verdict": "冲突项以实测为准并留待报告修订；本产物即修订依据。"
+    }
+  },
+  "gate28_comparison": {
+    "authority": "issue28 preregistered-gate.json quality_requirements (signed)",
+    "target_recall_overall_min": 0.85,
+    "target_recall_per_source_min": 0.8,
+    "candidate_precision_min": 0.8,
+    "accepted_records_per_source_min": 20,
+    "measured": {
+      "material_items_precision": "0",
+      "material_items_recall": "0",
+      "risk_or_condition_recall": "0",
+      "critical_gold_missing": 12,
+      "accepted_records_per_source": "N/A (requires Stage 2 adjudication)"
+    },
+    "out_of_scope_for_this_gate": [
+      "claims / material_relations thresholds (items-only gate)",
+      "report_support (no conclusions supplied)"
+    ],
+    "note": "本地比较即诊断口径；不得表述为'门 28 通过/未通过'（门 28 判据另有其被测对象与流程）。"
+  },
+  "candidate_side": {
+    "records": 222,
+    "fields_present": {
+      "proposition": 0,
+      "semantic_type": 222,
+      "statement_role": 222,
+      "speech_role": 222,
+      "perspective": 222,
+      "speaker_ref": 0,
+      "polarity": 222,
+      "attribution": 0,
+      "source_stance": 0,
+      "condition": 0,
+      "estimate_status": 0
+    },
+    "key_present": {
+      "proposition": 0,
+      "semantic_type": 222,
+      "statement_role": 222,
+      "speech_role": 222,
+      "perspective": 222,
+      "speaker_ref": 0,
+      "polarity": 222,
+      "attribution": 0,
+      "source_stance": 0,
+      "condition": 0,
+      "estimate_status": 0
+    }
+  },
+  "totals": {
+    "gold_records": 48,
+    "corpus_absent": 9,
+    "contract_shape_reachable_strict": 0,
+    "contract_shape_reachable_carrier_only": 35
+  }
+}

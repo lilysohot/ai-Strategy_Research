@@ -39,6 +39,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import contextlib
 import json
 import os
 import time
@@ -129,6 +130,46 @@ async def _wait_run(
     return None
 
 
+async def _auto_approve(
+    orchestrator: Any, run_id: str, decision: str, seen: list[dict[str, Any]]
+) -> None:
+    """Emulate the browser's verdict for every confirm-level tool call.
+
+    Without this, an unattended run parks on the approval gate for the gate's full
+    fail-closed timeout (``server/approval.py: DEFAULT_TIMEOUT_S``) *per gated
+    call* — correct product behaviour, but it costs five minutes per ``bash`` and
+    looks like a hang. This sends the same stdin frame the
+    ``POST /runs/{run_id}/approve`` route sends; ``session_all`` approves the rest
+    of the run so later gated calls do not park again.
+    """
+    queue = orchestrator.subscribe(run_id)
+    try:
+        while True:
+            frame = await queue.get()
+            if frame is None:
+                return
+            if frame.get("type") != "approval_requested":
+                continue
+            approval_id = str(frame.get("approval_id") or "")
+            delivered = await orchestrator.approve(run_id, approval_id, decision)
+            seen.append(
+                {
+                    "approval_id": approval_id,
+                    "tool_name": frame.get("tool_name"),
+                    "target": frame.get("target"),
+                    "decision": decision,
+                    "delivered": bool(delivered),
+                }
+            )
+            print(
+                f"[auto-approve] {frame.get('tool_name')} {approval_id} -> {decision} "
+                f"delivered={delivered}",
+                flush=True,
+            )
+    finally:
+        orchestrator.unsubscribe(run_id, queue)
+
+
 async def _delete_carrier(session_uuid: uuid.UUID) -> int:
     """Drop the session's stored conversation (the control arm's only difference)."""
     from sqlalchemy import text
@@ -202,9 +243,21 @@ async def run_turn(args: argparse.Namespace) -> int:
         turn_index=args.turn,
         backfill_turn=True,
     )
-    row = await _wait_run(store, run_uuid, user_id, timeout=300.0)
+    approvals: list[dict[str, Any]] = []
+    watcher: asyncio.Task[None] | None = None
+    if args.auto_approve != "off":
+        watcher = asyncio.create_task(
+            _auto_approve(orchestrator, run_hex, args.auto_approve, approvals)
+        )
+    try:
+        row = await _wait_run(store, run_uuid, user_id, timeout=args.wait)
+    finally:
+        if watcher is not None:
+            watcher.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await watcher
     if row is None:
-        raise SystemExit("timeout waiting for a terminal status")
+        raise SystemExit(f"timeout after {args.wait}s waiting for a terminal status")
 
     usage = row.usage_json or {}
     payload = await read_session_conversation(session_id=session_uuid)
@@ -243,6 +296,8 @@ async def run_turn(args: argparse.Namespace) -> int:
         "stored_turns_used": revision,
         "control_rows_deleted": rows_deleted,
         "run_root": str(run_root),
+        "auto_approve": args.auto_approve,
+        "approvals": approvals,
     }
     turn_file.write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
     print(
@@ -356,6 +411,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--turn", type=int, choices=(1, 2, 3))
     parser.add_argument("--model", default="")
     parser.add_argument("--verdict", action="store_true")
+    # A confirm-level tool call parks the loop on the approval gate until a human
+    # decides (or the gate's 300s fail-closed timeout expires), so an unattended
+    # run needs either a longer wait or a verdict. ``session_all`` is the browser's
+    # "approve the rest of this run" button.
+    parser.add_argument("--wait", type=float, default=300.0)
+    parser.add_argument(
+        "--auto-approve",
+        choices=("off", "once", "session_bash", "session_all"),
+        default="off",
+    )
     args = parser.parse_args(argv)
 
     os.chdir(REPO_ROOT)

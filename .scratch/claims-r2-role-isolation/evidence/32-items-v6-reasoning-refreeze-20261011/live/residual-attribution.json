@@ -1,0 +1,447 @@
+{
+  "schema_version": "items-v6-residual-attribution-1",
+  "created_on": "2026-10-11",
+  "gate_sha256": "sha256:6fb47e7945ce133dbdea7b73c6bb3b5e7266856cf6d956dbb9d191303783fba8",
+  "post_run_check_sha256": "sha256:17833585aa3819ba473bf6b5867954a75dbe04ad7ba80648515cf843d445d624",
+  "sources": {
+    "industrial-fulian-md": {
+      "batch_id": "batch:efc4b28488baeee2fae1f8a1ee27964d009045e9eaad631ef5cd95d3127bd138",
+      "expected_attempts": 10,
+      "attempts": 10,
+      "attempt_status": {
+        "outcome_unknown": 1,
+        "succeeded": 9
+      },
+      "unproduced_slots": 7,
+      "clean_slots": 69,
+      "total_slots": 76,
+      "residuals": [
+        {
+          "candidate_slot_id": "slot_7b2c716720ace1aa",
+          "status": "failed",
+          "reason_codes": [
+            "items_error:LlmCallError"
+          ],
+          "ledger_item_refs": [],
+          "payload_items_kept": 0,
+          "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+          "section": [],
+          "signal_types": [
+            "claim"
+          ],
+          "hard_signals": [],
+          "slot_text": "若从零开一个观察仓：",
+          "batch_index": 8,
+          "attempt_number": 9,
+          "attempt_status": "outcome_unknown",
+          "attempt_usage": null,
+          "verdict": {
+            "category": "infrastructure",
+            "basis": "the whole batch aborted with LlmCallError (transport outcome unknown, zero automatic retry); no model verdict exists for these slots",
+            "response_object_retained": false,
+            "same_batch_contrast": [],
+            "automated_category": "infrastructure"
+          }
+        },
+        {
+          "candidate_slot_id": "slot_998e49ccab85bdb7",
+          "status": "failed",
+          "reason_codes": [
+            "items_error:LlmCallError"
+          ],
+          "ledger_item_refs": [],
+          "payload_items_kept": 0,
+          "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+          "section": [],
+          "signal_types": [
+            "claim"
+          ],
+          "hard_signals": [],
+          "slot_text": "等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，",
+          "batch_index": 8,
+          "attempt_number": 9,
+          "attempt_status": "outcome_unknown",
+          "attempt_usage": null,
+          "verdict": {
+            "category": "infrastructure",
+            "basis": "the whole batch aborted with LlmCallError (transport outcome unknown, zero automatic retry); no model verdict exists for these slots",
+            "response_object_retained": false,
+            "same_batch_contrast": [],
+            "automated_category": "infrastructure"
+          }
+        },
+        {
+          "candidate_slot_id": "slot_8a33a8aadc6a6490",
+          "status": "failed",
+          "reason_codes": [
+            "items_error:LlmCallError"
+          ],
+          "ledger_item_refs": [],
+          "payload_items_kept": 0,
+          "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+          "section": [],
+          "signal_types": [
+            "evidence"
+          ],
+          "hard_signals": [
+            "evidence"
+          ],
+          "slot_text": "且无新的大额负面管制公告）；",
+          "batch_index": 8,
+          "attempt_number": 9,
+          "attempt_status": "outcome_unknown",
+          "attempt_usage": null,
+          "verdict": {
+            "category": "infrastructure",
+            "basis": "the whole batch aborted with LlmCallError (transport outcome unknown, zero automatic retry); no model verdict exists for these slots",
+            "response_object_retained": false,
+            "same_batch_contrast": [],
+            "automated_category": "infrastructure"
+          }
+        },
+        {
+          "candidate_slot_id": "slot_3e8965b10d203f0b",
+          "status": "failed",
+          "reason_codes": [
+            "items_error:LlmCallError"
+          ],
+          "ledger_item_refs": [],
+          "payload_items_kept": 0,
+          "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+          "section": [],
+          "signal_types": [
+            "claim"
+          ],
+          "hard_signals": [],
+          "slot_text": "（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。",
+          "batch_index": 8,
+          "attempt_number": 9,
+          "attempt_status": "outcome_unknown",
+          "attempt_usage": null,
+          "verdict": {
+            "category": "infrastructure",
+            "basis": "the whole batch aborted with LlmCallError (transport outcome unknown, zero automatic retry); no model verdict exists for these slots",
+            "response_object_retained": false,
+            "same_batch_contrast": [],
+            "automated_category": "infrastructure"
+          }
+        },
+        {
+          "candidate_slot_id": "slot_06028a3f339dfe73",
+          "status": "failed",
+          "reason_codes": [
+            "items_error:LlmCallError"
+          ],
+          "ledger_item_refs": [],
+          "payload_items_kept": 0,
+          "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+          "section": [],
+          "signal_types": [
+            "claim"
+          ],
+          "hard_signals": [],
+          "slot_text": "单票不超过组合的合理上限。",
+          "batch_index": 8,
+          "attempt_number": 9,
+          "attempt_status": "outcome_unknown",
+          "attempt_usage": null,
+          "verdict": {
+            "category": "infrastructure",
+            "basis": "the whole batch aborted with LlmCallError (transport outcome unknown, zero automatic retry); no model verdict exists for these slots",
+            "response_object_retained": false,
+            "same_batch_contrast": [],
+            "automated_category": "infrastructure"
+          }
+        },
+        {
+          "candidate_slot_id": "slot_ff5db383726f84c7",
+          "status": "failed",
+          "reason_codes": [
+            "items_error:LlmCallError"
+          ],
+          "ledger_item_refs": [],
+          "payload_items_kept": 0,
+          "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+          "section": [],
+          "signal_types": [
+            "claim"
+          ],
+          "hard_signals": [],
+          "slot_text": "止损看两条硬的：",
+          "batch_index": 8,
+          "attempt_number": 9,
+          "attempt_status": "outcome_unknown",
+          "attempt_usage": null,
+          "verdict": {
+            "category": "infrastructure",
+            "basis": "the whole batch aborted with LlmCallError (transport outcome unknown, zero automatic retry); no model verdict exists for these slots",
+            "response_object_retained": false,
+            "same_batch_contrast": [],
+            "automated_category": "infrastructure"
+          }
+        },
+        {
+          "candidate_slot_id": "slot_a0285709c19e993e",
+          "status": "failed",
+          "reason_codes": [
+            "items_error:LlmCallError"
+          ],
+          "ledger_item_refs": [],
+          "payload_items_kept": 0,
+          "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+          "section": [],
+          "signal_types": [
+            "claim"
+          ],
+          "hard_signals": [],
+          "slot_text": "下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+          "batch_index": 8,
+          "attempt_number": 9,
+          "attempt_status": "outcome_unknown",
+          "attempt_usage": null,
+          "verdict": {
+            "category": "infrastructure",
+            "basis": "the whole batch aborted with LlmCallError (transport outcome unknown, zero automatic retry); no model verdict exists for these slots",
+            "response_object_retained": false,
+            "same_batch_contrast": [],
+            "automated_category": "infrastructure"
+          }
+        }
+      ],
+      "category_counts": {
+        "infrastructure": 7,
+        "model_behavior": 0,
+        "our_contract_signal_overlabelling": 0,
+        "unclassified": 0
+      }
+    },
+    "optical-module-docx": {
+      "batch_id": "batch:13addce0122108317a555d8ae751c519acd6732568759805a61ed39944c8a232",
+      "expected_attempts": 14,
+      "attempts": 14,
+      "attempt_status": {
+        "succeeded": 14
+      },
+      "unproduced_slots": 2,
+      "clean_slots": 112,
+      "total_slots": 114,
+      "residuals": [
+        {
+          "candidate_slot_id": "slot_c1712c2b5d649478",
+          "status": "failed",
+          "reason_codes": [
+            "controller_semantic_validation_failed",
+            "commentary_only",
+            "detected_signal_rejected:forecast",
+            "missing_signal:forecast"
+          ],
+          "ledger_item_refs": [],
+          "payload_items_kept": 0,
+          "packet_id": "1f9dd608812752c23163e848359ffb7a06ee4ccdbb8f8fa2c2d0c2be953c7051",
+          "section": [],
+          "signal_types": [
+            "forecast"
+          ],
+          "hard_signals": [
+            "forecast"
+          ],
+          "slot_text": "但是的确有一些可能性，这些前沿东西得关注，那些才是更重要的东西。",
+          "batch_index": 10,
+          "attempt_number": 11,
+          "attempt_status": "succeeded",
+          "attempt_usage": {
+            "completion_tokens": 814,
+            "prompt_tokens": 2063,
+            "reasoning_tokens": null,
+            "total_tokens": 2877
+          },
+          "verdict": {
+            "category": "our_contract_signal_overlabelling",
+            "basis": "reviewer: '预测说不上，确实更像是评论' — the forecast signal on this fragment is too strong; the model's commentary_only terminal is the better read",
+            "controller_signals_rejected": [
+              "detected_signal_rejected:forecast"
+            ],
+            "controller_signals_missing": [
+              "missing_signal:forecast"
+            ],
+            "hard_signal_axes": [
+              "forecast"
+            ],
+            "model_terminal_seen": {
+              "model_row_for_slot": {
+                "record_type": "obligation_result",
+                "obligation_index": 0,
+                "status": "no_supported_item",
+                "reason_code": "commentary_only",
+                "items": []
+              },
+              "status": "no_supported_item",
+              "reason_code": "commentary_only",
+              "item_roles": [],
+              "item_semantic_types": []
+            },
+            "response_object_retained": true,
+            "same_batch_contrast": [
+              {
+                "position": 5,
+                "candidate_slot_id": "slot_7ed0989bddc91d87",
+                "signal_types": [
+                  "forecast"
+                ],
+                "shared_hard_signals": [
+                  "forecast"
+                ],
+                "model_row": {
+                  "status": "items",
+                  "reason_code": null,
+                  "item_roles": [
+                    "claim"
+                  ],
+                  "item_semantic_types": [
+                    "forecast"
+                  ]
+                }
+              }
+            ],
+            "automated_category": "model_behavior",
+            "adjudicated_by": "xyl",
+            "adjudicated_on": "2026-10-11"
+          }
+        },
+        {
+          "candidate_slot_id": "slot_1cf7098f1c258900",
+          "status": "failed",
+          "reason_codes": [
+            "controller_semantic_validation_failed",
+            "missing_signal:evidence"
+          ],
+          "ledger_item_refs": [
+            "itm_82f621b00c342721",
+            "itm_a6783e858a8b34f7"
+          ],
+          "payload_items_kept": 0,
+          "packet_id": "1f9dd608812752c23163e848359ffb7a06ee4ccdbb8f8fa2c2d0c2be953c7051",
+          "section": [],
+          "signal_types": [
+            "evidence"
+          ],
+          "hard_signals": [
+            "evidence"
+          ],
+          "slot_text": "目前反正是有新客户了，这些新的云不知道是什么原因。",
+          "batch_index": 10,
+          "attempt_number": 11,
+          "attempt_status": "succeeded",
+          "attempt_usage": {
+            "completion_tokens": 814,
+            "prompt_tokens": 2063,
+            "reasoning_tokens": null,
+            "total_tokens": 2877
+          },
+          "verdict": {
+            "category": "our_contract_signal_overlabelling",
+            "basis": "reviewer: '更偏向是事实…更多是说明当前的情况' — the evidence signal is too strong; the model's fact/claim reading fits the text better",
+            "controller_signals_rejected": [],
+            "controller_signals_missing": [
+              "missing_signal:evidence"
+            ],
+            "hard_signal_axes": [
+              "evidence"
+            ],
+            "model_terminal_seen": {
+              "model_row_for_slot": {
+                "record_type": "obligation_result",
+                "obligation_index": 1,
+                "status": "items",
+                "reason_code": null,
+                "items": [
+                  {
+                    "text": "目前反正是有新客户了",
+                    "semantic_type": "fact",
+                    "statement_role": "claim",
+                    "speech_role": "statement",
+                    "perspective": "source_explicit",
+                    "polarity": "affirmed",
+                    "value": null,
+                    "behavior_status": null,
+                    "temporal_frame": "contemporaneous",
+                    "evidence_selector": "slot",
+                    "unknown_fields": [
+                      "value"
+                    ]
+                  },
+                  {
+                    "text": "这些新的云不知道是什么原因",
+                    "semantic_type": "unknown",
+                    "statement_role": "other",
+                    "speech_role": "statement",
+                    "perspective": "source_explicit",
+                    "polarity": "unknown",
+                    "value": null,
+                    "behavior_status": null,
+                    "temporal_frame": "contemporaneous",
+                    "evidence_selector": "slot",
+                    "unknown_fields": [
+                      "semantic_type",
+                      "polarity",
+                      "value"
+                    ]
+                  }
+                ]
+              },
+              "status": "items",
+              "reason_code": null,
+              "item_roles": [
+                "claim",
+                "other"
+              ],
+              "item_semantic_types": [
+                "fact",
+                "unknown"
+              ]
+            },
+            "response_object_retained": true,
+            "same_batch_contrast": [],
+            "automated_category": "model_behavior",
+            "adjudicated_by": "xyl",
+            "adjudicated_on": "2026-10-11",
+            "collateral_item_loss": 2,
+            "collateral_note": "the ledger kept item_refs for this slot while the payload items list dropped them, so two model-produced items were discarded together with the slot"
+          }
+        }
+      ],
+      "category_counts": {
+        "infrastructure": 0,
+        "model_behavior": 0,
+        "our_contract_signal_overlabelling": 2,
+        "unclassified": 0
+      }
+    }
+  },
+  "model_requests_during_attribution": 0,
+  "store_mutations": 0,
+  "totals": {
+    "infrastructure": 7,
+    "model_behavior": 0,
+    "our_contract_signal_overlabelling": 2,
+    "unclassified": 0
+  },
+  "conclusion": {
+    "contract_defects_found": 2,
+    "summary": "7 slot(s) lost to one transport outcome-unknown event (no model verdict exists); 2 slot(s) adjudicated by the reviewer as our own over-strong signal labelling, not model behaviour; 0 slot(s) left attributed to the model",
+    "collateral_item_loss": 2,
+    "automated_vs_adjudicated": "the automated layer had classed both docx slots as model behaviour; the reviewer read the fragments and reassigned them to our signal rule. Both verdicts are kept in every residual as automated_category and category",
+    "gate_32_unmet_nature": {
+      "protocol_status_valid": "not reached because the items task never succeeded",
+      "failed_partial_batches": "1 partial packet per source",
+      "execution_status_succeeded": "1 outcome-unknown attempt (md) + 2 slots rejected by our own signal rule (docx)"
+    },
+    "quality_gate_input": "score the produced items with the 9 unproduced slots disclosed as coverage gaps: 7 are an infrastructure loss, 2 are our own signal-rule loss (one of them took 2 model-produced items down with it)",
+    "nuance": {
+      "slot_c1712c2b5d649478": "reviewer: the fragment reads as commentary, not a forecast; the model's commentary_only terminal was the better judgement, our forecast signal was too strong",
+      "slot_1cf7098f1c258900": "reviewer: the fragment states the current situation rather than serving as evidence; the model's fact/claim reading fits, our evidence signal was too strong, and two already-produced items were discarded with the slot"
+    },
+    "evidence_indexing": "raw responses are stored under objects/sha256 as {content, diagnostics} objects keyed by diagnostics.attempt_id, not by the response_sha256 ledger column",
+    "boundary": "no rule, prompt, threshold or gold was changed on the basis of this attribution; the signal-rule question is recorded for a separate decision"
+  }
+}
