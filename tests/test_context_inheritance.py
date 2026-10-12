@@ -375,6 +375,57 @@ def test_the_token_budget_drops_older_turns_when_a_turn_count_is_not_a_size() ->
     assert validate_messages(kept) is None
 
 
+def test_the_token_budget_drops_the_only_oversized_turn() -> None:
+    """A single huge turn must not make the next run's first request fail.
+
+    There is no older turn to evict in this shape.  The continuity carrier must
+    therefore degrade to a non-replayable system-only document instead of
+    preserving an over-budget last turn.
+    """
+    from frontier_agent.core.runtime.loop.context_budget import estimate_tokens
+
+    messages = [
+        system_msg(_SYSTEM),
+        user_msg("Q " + "填" * 8_000),
+        assistant_msg("A " + "答" * 8_000),
+    ]
+    budget = estimate_tokens(canonical_json([messages[0]])) + 10
+
+    document = _dump(messages=messages, max_replay_tokens=budget)
+
+    assert document["messages"] == [messages[0]]
+    assert document["messages_est_tokens"] <= budget
+    assert document["trim"]["dropped_turns"] == 1
+    assert document["trim"]["kept_turns"] == 0
+    assert document["trim"]["dropped_for_tokens"] == 1
+    replay, decision = _select(document)
+    assert replay is None
+    assert decision["reason"] == "no prior turn to replay"
+
+
+def test_the_token_budget_can_drop_an_oversized_summary_too() -> None:
+    """A protected summary is memory, but the size guard still wins."""
+    from frontier_agent.core.runtime.loop.context_budget import estimate_tokens
+
+    system = system_msg(_SYSTEM)
+    messages = [
+        system,
+        user_msg(render_summary_content("记" * 8_000)),
+        user_msg("Q " + "填" * 8_000),
+        assistant_msg("A"),
+    ]
+    budget = estimate_tokens(canonical_json([system])) + 10
+
+    kept, trim = trim_to_turns(messages, 0, max_tokens=budget, head=2)
+
+    assert kept == [system]
+    assert trim is not None
+    assert trim["est_tokens"] <= budget
+    assert trim["dropped_turns"] == 1
+    assert trim["kept_turns"] == 0
+    assert trim["dropped_summary_for_tokens"] is True
+
+
 # ── the observer ─────────────────────────────────────────────────────
 
 
@@ -1402,8 +1453,13 @@ def test_the_summary_block_is_not_counted_as_a_real_turn() -> None:
 
     kept, trim = trim_to_turns(messages, 2, head=2)
     assert trim is not None and trim["cut_at"] == 4
+    assert trim["dropped_turns"] == 1
+    assert trim["kept_turns"] == 2
     assert kept[0] == messages[0] and kept[1] == block
     assert kept[2:] == [*_turn("Q2"), *_turn("Q3")]
+
+    _, decision = _select(_dump(messages=messages, max_replay_turns=2))
+    assert decision["prior_turns"] == 2
 
     dropped_memory, _ = trim_to_turns(messages, 2, head=1)
     assert dropped_memory[1] != block, "head=1 loses the memory (the bug this prevents)"

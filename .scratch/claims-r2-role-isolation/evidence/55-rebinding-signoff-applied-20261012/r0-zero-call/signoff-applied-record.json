@@ -1,0 +1,63 @@
+{
+  "schema_version": "items-rebinding-signoff-applied-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "signed_by": "xyl",
+  "signed_on": "2026-10-12",
+  "instrument": {
+    "path": ".scratch/claims-r2-role-isolation/evidence/48-rebinding-and-basis-proposals-20261012/r0-zero-call/rebinding-signoff-review.md",
+    "sha256": "sha256:06ca527990c0b0c8fe864ff07fb3d7f47601e0fd56c65880337363309999f501",
+    "superseded_unsigned_sha256": "sha256:3fa1385fcab6a3b1abb500a97c7de4479bf51a35dba6c3d9ac7ae8a33670039c",
+    "reviewer_remark": "",
+    "remark_note": "备注为空 ⇒ §二/§三 的推荐处置按**原样接受**（含 P12 第 3 条『内嵌 v2 快照保留字节不改』与第 2 条『路径绑定只钉哈希、路径改哈希留后续』）。这是对空备注的解释，不等同逐条确认。"
+  },
+  "decisions": {
+    "P12": "3 处绑定点，按签认件 §二 处置",
+    "P13": "2 处绑定点，值推进至 v4.1，阈值数值逐字不变"
+  },
+  "created_records": {
+    "P12": {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/rebinding-v4.1-20261012.json",
+      "sha256": "sha256:565a680b5bc6294eaa17300f872d07786723fc9c87e4fa82d05f6d087bd6309f"
+    },
+    "P13": {
+      "path": ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate-v2.json",
+      "sha256": "sha256:8cc11bccc912ea7b123b6e769728c9076046d526c16c8a1218e27a2a692270f6",
+      "internal_revision": 5
+    }
+  },
+  "write_actions": {
+    "rebinding-v4.1-20261012.json": "sha256:565a680b5bc6294eaa17300f872d07786723fc9c87e4fa82d05f6d087bd6309f",
+    "preregistered-gate-v2.json": "sha256:8cc11bccc912ea7b123b6e769728c9076046d526c16c8a1218e27a2a692270f6"
+  },
+  "frozen_originals_untouched": {
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-manifest.json": {
+      "sha256": "sha256:da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
+      "state": "signed"
+    },
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-state.json": {
+      "sha256": "sha256:08703b8dad9fc6c130872899741534c940787c29a15423db19d398999b237d85",
+      "state": "plain"
+    },
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json": {
+      "sha256": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+      "state": "signed"
+    },
+    ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate.json": {
+      "sha256": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
+      "state": "signed"
+    }
+  },
+  "in_place_edits": 0,
+  "outstanding_after_signoff": [
+    "P03 阈值单源落地：评分器改为读契约（OPEN-1=A 的兑现）——代码未改",
+    "P14 validation-report.human_accepted_counts 由 {} 对齐 48/48",
+    "P16 冻结链校验器（任何契约/金标/manifest 修订须校验绑定一致）",
+    "P04/P05 口径归一化实现与回归",
+    "route a/b 边际裁定与缺口 1/2"
+  ],
+  "not_claimed": [
+    "本件不产生任何门分数。",
+    "本件不改任何既有字节；P12 的『路径改哈希』与 P13 之外的其它记账项均未处置。"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": "items-rebinding-scope-extension-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "why": "起草签认件时对 P12 的绑定点做完整实测，发现原机器提案只覆盖 1 处；另 2 处在 freeze-state.json。本件记录该范围扩展，不修改既有提案字节。",
+  "authoritative_instrument": {
+    "path": ".scratch/claims-r2-role-isolation/evidence/48-rebinding-and-basis-proposals-20261012/r0-zero-call/rebinding-signoff-review.md",
+    "sha256": "sha256:3fa1385fcab6a3b1abb500a97c7de4479bf51a35dba6c3d9ac7ae8a33670039c",
+    "status": "pending_human_signature"
+  },
+  "existing_proposals": {
+    "gold-freeze-rebinding-proposal.json": {
+      "sha256": "sha256:3a99d6ad0d2262ae74ead140d0fd79c1b91edacdd8be9e357a80604873d4c773",
+      "scope_now": "superseded_for_p12（只覆盖 1 处绑定；完整范围见签认件 §二）"
+    },
+    "gate28-metric-basis-proposal.json": {
+      "sha256": "sha256:2f0de079b339031b05eb6916fa4565fbd34b64aa41bb2e058ec8c0d479e93d25",
+      "scope_now": "unchanged_for_p13（覆盖门 28 两处，完整）"
+    }
+  },
+  "newly_found_binding_sites": [
+    {
+      "site": "freeze-state.json.scoring_contract",
+      "kind": "path_binding（弱绑定：记的是路径不是哈希）",
+      "observed_value": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/scoring-contract.json",
+      "resolved_content_sha256_now": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
+      "resolved_version": "v3",
+      "recommended_disposition": "新记录钉住解析后的哈希；「路径改哈希」属改字节，留作后续单独裁定",
+      "evidence_source": "evidence/10-quality-gold-freeze-20261008-r2/freeze-state.json"
+    },
+    {
+      "site": "freeze-state.json.contract_snapshot",
+      "kind": "embedded_snapshot（内嵌契约全文）",
+      "embedded_schema_version": "non-table-selected-target-scoring-contract-v2",
+      "embedded_status": "draft_pending_human_review",
+      "recommended_disposition": "保留字节（冻结当时的真实记录）；由新记录声明「它是历史，不是当前绑定」",
+      "why_not_edited": "改它等于伪造历史：快照的价值正在于记录当时生效的东西",
+      "evidence_source": "evidence/10-quality-gold-freeze-20261008-r2/freeze-state.json"
+    }
+  ],
+  "recorded_hashes_at_drafting_time": {
+    ".scratch/claims-r2-role-isolation/evidence/47-scoring-contract-v41-signed-20261012/r0-zero-call/scoring-contract-v4.1.json": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-manifest.json": "sha256:da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-state.json": "sha256:08703b8dad9fc6c130872899741534c940787c29a15423db19d398999b237d85",
+    ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate.json": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/validation-report.json": "sha256:139cfc222eb4688dccdce5c0116b00c84b87401e01e22427658c3dcfa6d5bc52"
+  },
+  "in_place_edits": 0,
+  "pending": "U 具名签认签认件 §五"
+}

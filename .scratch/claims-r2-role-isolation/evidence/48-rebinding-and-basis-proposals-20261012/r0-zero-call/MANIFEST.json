@@ -12,10 +12,24 @@
     ".scratch/claims-r2-role-isolation/evidence/41-items-chain-accounting-20261012/r3-signoff-apply/freeze-rebinding-record.json": "sha256:b197ece9e41879139096459647aa8fb51af98a360352422e4f81b383b3ce98d1"
   },
   "outputs": {
-    "gold-freeze-rebinding-proposal.json": "sha256:3a99d6ad0d2262ae74ead140d0fd79c1b91edacdd8be9e357a80604873d4c773",
-    "gate28-metric-basis-proposal.json": "sha256:2f0de079b339031b05eb6916fa4565fbd34b64aa41bb2e058ec8c0d479e93d25",
     "README.md": "sha256:cc311cb11cae4ab2d66fa620a6ddd0a5dbf7ea2e96f6059fbe266124d7236026",
-    "propose_rebinding.py": "sha256:309a535357086eb520a4ccccfbff052c3299097bee93258779d2cb5f576af624"
+    "gate28-metric-basis-proposal.json": "sha256:2f0de079b339031b05eb6916fa4565fbd34b64aa41bb2e058ec8c0d479e93d25",
+    "gold-freeze-rebinding-proposal.json": "sha256:3a99d6ad0d2262ae74ead140d0fd79c1b91edacdd8be9e357a80604873d4c773",
+    "propose_rebinding.py": "sha256:309a535357086eb520a4ccccfbff052c3299097bee93258779d2cb5f576af624",
+    "rebinding-scope-extension.json": "sha256:438cbca321e80fc9ab651dababa14f7a36c2f902b60b5d16d8347dd33e0f92eb",
+    "rebinding-signoff-review.md": "sha256:3fa1385fcab6a3b1abb500a97c7de4479bf51a35dba6c3d9ac7ae8a33670039c"
   },
-  "in_place_edits": 0
+  "in_place_edits": 0,
+  "scope_extension": {
+    "authoritative_instrument": {
+      "path": ".scratch/claims-r2-role-isolation/evidence/48-rebinding-and-basis-proposals-20261012/r0-zero-call/rebinding-signoff-review.md",
+      "sha256": "sha256:3fa1385fcab6a3b1abb500a97c7de4479bf51a35dba6c3d9ac7ae8a33670039c",
+      "status": "pending_human_signature"
+    },
+    "newly_found_binding_sites": [
+      "freeze-state.json.scoring_contract",
+      "freeze-state.json.contract_snapshot"
+    ],
+    "status": "pending_human_signature"
+  }
 }

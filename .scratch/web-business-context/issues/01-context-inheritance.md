@@ -1,7 +1,7 @@
 # 01 上下文继承（含 KV cache 约束）
 
 Type: task
-Status: draft
+Status: resolved
 Blocked by: —
 Spec: [../spec.md](../spec.md)
 
@@ -1245,14 +1245,14 @@ control 补到 45/45、**全部有效**（无 401、无 `llm_error`），形状�
 
 **门禁**：目标集 `test_context_inheritance.py` + `test_usage_t211.py` **71 passed**；波及面 7 文件 **144 passed**；全量 **3027 passed / 5 failed**（与改动前**同集合**：4 条既有环境项 + 1 条由本机 `pg` 容器占 5432 引起）；`ruff check` 干净；`pyright` 0 error。
 
-**签认栏（待 U 具名）**
+**签认栏（2026-10-12 已完成）**
 
 | 项 | 结论 | 签认 |
 |---|---|---|
-| B 落地（写侧迟滞，默认 `replay_max_turn_step=5`） | 已落地；单测 55 passed；全量 3022 passed / 5 failed（均可归因：4 条既有环境项 + 1 条由本机 `pg` 容器占 5432 引起） | |
-| S3 集成验收（45 轮 × 2 臂） | **6/7**：C1/C2/C3/C5/C6/C7 PASS；C4 FAIL（端点侧缓存保留） | |
-| 偏离披露 A/B/C/D | 已核对并记录；A 已回退 | |
-| 待办 1–4 | **1–4 已完成**（见 §12.11 与 §12.13；门禁全绿） | |
+| B 落地（写侧迟滞，默认 `replay_max_turn_step=5`） | 已落地；单测 55 passed；全量 3022 passed / 5 failed（均可归因：4 条既有环境项 + 1 条由本机 `pg` 容器占 5432 引起） | U（本会话用户，2026-10-12；独立复核通过） |
+| S3 集成验收（45 轮 × 2 臂） | **6/7**：C1/C2/C3/C5/C6/C7 PASS；C4 FAIL（端点侧缓存保留）；接受红格，不再付费重跑 | U（本会话用户，2026-10-12） |
+| 偏离披露 A/B/C/D | 已核对并记录；A 已回退 | U（本会话用户，2026-10-12；独立复核通过） |
+| 待办 1–4 | **1–4 已完成**（见 §12.11 与 §12.13；门禁全绿） | U（本会话用户，2026-10-12；独立复核通过） |
 
 ### 12.12 收口盘点与遗漏回溯（2026-10-12）
 
@@ -1262,11 +1262,11 @@ control 补到 45/45、**全部有效**（无 401、无 `llm_error`），形状�
 
 | 层 | 未做项 | 性质 | 阻塞? | 成本 |
 |---|---|---|---|---|
-| 全局 | **签认栏**（B 落地 + 6/7 验收 + 偏离披露） | ②**未过门** | **是**（纪律：`complete` 须独立复核 + U 具名签认） | 0 |
+| 全局 | **签认栏**（B 落地 + 6/7 验收 + 偏离披露） | ①已闭合（§12.14） | 否 | 0 |
 | S3 | 待办 #3 **钉死 C6 的测量窗口**（判据文本） | ①已闭合（§12.13） | 否（不改结论） | 0 |
 | S4 | 待办 #4 **退役 + 文档同步** | ①已闭合（§12.13） | 否 | 0 |
-| S3 | 待办 #5 **C4 裁决位**（接受红格／健康端点重跑／改口径） | ③ 待裁 | 是（"字面全绿"不可达，6/7 是上限） | 重跑 ≈100 万 |
-| S3 | 待办 #6（可选）**同端点两臂对照** | ③ 可选 | 否 | ≈200 万 |
+| S3 | 待办 #5 **C4 裁决位** | ①已闭合：接受原口径红格，6/7 为终局 | 否 | 不再消耗额度 |
+| S3 | 待办 #6（可选）**同端点两臂对照** | ①已裁决不执行 | 否 | 不再消耗额度 |
 | S5 | agent_team 多 loop 的"哪份消息算会话"另立 spec | ③ | 否（§10.2 明示） | — |
 | 观测 | `scripts/replay_stats.py` 已展示并汇总 `summary_usage` | ①已闭合（§12.13） | 否 | 0 |
 | 文档 | 窗口三参数已写入 `docs/tech-stack.md` 与 `AGENTS.md` | ①已闭合（§12.13） | 否 | 0 |
@@ -1281,14 +1281,15 @@ control 补到 45/45、**全部有效**（无 401、无 `llm_error`），形状�
 3. **我自己新写的 2 处格式违规**（`LLMSummaryCompactor(...)` 与 `__call__` 签名被拆行）⇒ 已按项目 100 列格式修掉；其余差异确认全为既有。
 4. **agent_team profile 越界键** ⇒ 已删（偏离 A）。
 
-*发现但尚未处理*：
-5. **文档内部矛盾（会误导后人）**：§11.9/§11.10 与 S2 落地那条 Comments 仍写"**D5 / B1/B2/B3 未做**"，而 §10.8 D 已记录这三件于同日**已完成**（D5 → F19 门 7 failed→16 passed；B3 已加路由级断言；B1/B2 归档）。建议在那两处加更正行指向 §10.8 D。
-6. 统计脚本未消费 `summary_usage`（小债务，见上表）。
-7. 运维文档未记录窗口参数（小债务，见上表）。
+*复核后已闭合*：
+5. §11.9/§11.10 的历史时点措辞已由 §12.13 明确更正并指向 §10.8 D。
+6. `scripts/replay_stats.py` 已消费并汇总 `summary_usage`（§12.13）。
+7. 窗口三参数已同步至 `docs/tech-stack.md` 与 `AGENTS.md`（§12.13）。
+8. 独立 Spec 复核发现“仅剩最后一轮仍超 token 预算时停止裁剪”的硬边界缺口；已改为丢弃该轮，若摘要仍超预算则退化为仅 system 的不可重放载体，下一轮安全地从新会话启动。摘要块同时从 `kept_turns` / `dropped_turns` / `prior_turns` 排除；新增 2 条回归（§12.14）。
 
 **三、已闭合（有证据）**：S1（b / a / 统计脚本 / 带附件实测 / O5 并入 S2）；S2（表 + 迁移 0019、父进程 ingest + 成功即删、读侧退双路径、watch 两向关、3 轮两臂**跨进程**验收 PASS）；S3（写时固化摘要 7 条单测 + 45 轮两臂实跑 6/7）；**B 修复**（写侧迟滞默认 5 + 5 条单测 + 2 条长程回归 + 现场两臂对照：treatment 前缀保持轮 89.8% / control 稳态命中 18.3%）；观测（`usage_json.replay` 决策与窗口 + 本轮新增 `summary_usage`）。
 
-**四、口径提醒**：6/7 是"**已实跑且已判定**"，**不是"已过门"**——C4 红格未裁、签认未落。按仓库纪律，`complete`/里程碑放行只能由**独立复核 + U 具名签认**，实施方不得自宣。
+**四、终局口径**：6/7 是已实跑、已判定且经 U 接受的终局；C4 保持原口径 FAIL，并明确归因为端点缓存保留的概率行为。独立复核与 U 签认见 §12.14。
 
 ### 12.13 S4 收口与退役（2026-10-12）
 
@@ -1296,9 +1297,23 @@ control 补到 45/45、**全部有效**（无 401、无 `llm_error`），形状�
 
 **落地**：删除 server 侧 turns→文本渲染、`history.txt` 写读与 `conversation_history` / `is_multi_turn` 注入；`turns` 继续承担 Web 展示、答案回填、steer 审计，不再作为模型上下文。唯一模型连续性载体仍是 `session_conversations` → `prior_conversation.json` → workflow 校验后的 `initial_messages`。同步 `docs/tech-stack.md` 与 `AGENTS.md`，并把窗口三参数写入运维说明。`scripts/replay_stats.py` 现汇总并展示 `summary_usage`。§11.9/§11.10 中“D5 / B1/B2/B3 未做”是当时状态，最终处置以 §10.8 D 为准：D5、B3 已完成，B1/B2 已归档。
 
-**回归**：旧文件即使残留也不会再进入 workflow（专门反向测试）；数据库载体、watch 两向关闭、长会话固定裁剪节奏和前缀追加比例的常驻回归保持。核心目标集 `tests/test_history_t26.py tests/test_context_inheritance.py tests/test_replay_stats.py tests/test_web_f21_control_history.py tests/test_web_p3_approval.py`：**126 passed**；扩展影响面（steer/session/stop/upload/usage/CLI history）：**51 passed**，合计 177 个不重复用例。全量：**3879 passed / 5 failed / 238 skipped**；5 条为 corpus 数据/reader rev/market 时间基线/profile 工具注册，均与 S4 改动无交集。`ruff check`、目标 `pyright`、定向 `git diff --check` 全绿。C4 裁决与具名签认仍独立待办，S4 不改其 6/7 结论。
+**回归**：旧文件即使残留也不会再进入 workflow（专门反向测试）；数据库载体、watch 两向关闭、长会话固定裁剪节奏和前缀追加比例的常驻回归保持。核心目标集 `tests/test_history_t26.py tests/test_context_inheritance.py tests/test_replay_stats.py tests/test_web_f21_control_history.py tests/test_web_p3_approval.py`：**126 passed**；扩展影响面（steer/session/stop/upload/usage/CLI history）：**51 passed**，合计 177 个不重复用例。全量：**3879 passed / 5 failed / 238 skipped**；5 条为 corpus 数据/reader rev/market 时间基线/profile 工具注册，均与 S4 改动无交集。`ruff check`、目标 `pyright`、定向 `git diff --check` 全绿。S4 当时不改 C4 的 6/7 结论；其后裁决与具名签认见 §12.14。
+
+### 12.14 C4 裁决、独立复核与终局签认（2026-10-12）
+
+**U 裁决**：接受 C4 按原口径 FAIL，保留“端点缓存保留概率行为”的归因；不改判据，不再为健康端点重跑或同端点两臂对照消耗额度。S3 的终局验收为 **6/7**。
+
+**独立复核固定点**：`8d3fadd...bc7bdcb`，只审上下文继承 S1–S4 的生产代码、迁移、测试与文档，排除同期提交中的 corpus 等无关改动。
+
+- Standards 轴：无硬性规范违规；记录 2 个非阻塞判断项（header 参数 data clump、原子文件写入重复），不影响本 issue 验收。
+- Spec 轴：首轮发现单轮超大消息可残留为超预算 payload，属阻塞；修复并新增“唯一超大轮”和“超大摘要”回归后复核通过，无剩余阻塞、无范围扩张。C4 的本地前缀性质由纯追加、固定裁剪节奏和字节前缀回归支撑，未发现我方缺陷被红格裁决掩盖。
+- 修复后零额度门禁：核心目标集 **128 passed**；目标 Ruff、Pyright 与 `git diff --check` 全绿。未再调用模型端点。
+
+**终局**：独立复核通过，U 已签认 B 落地、S3 6/7、偏离披露与待办 1–4；S1–S4 完成验收，本 issue 状态改为 `resolved`。S5（agent_team 多 loop 的会话定义）仍按原计划另立 spec，不阻塞本 issue。
 
 ## Comments
+
+2026-10-12：**C4 红格已接受，独立复核完成**（见 §12.14）。复核发现并修复单轮超大消息突破 replay token 硬边界的问题；修复后核心集 128 passed，复核无剩余阻塞。按用户裁决停止付费重跑，S1–S4 以 S3 验收 6/7 终局关闭。
 
 2026-10-12：**S4 已执行**（见 §12.13）：Web 旧的 `history.txt` / `conversation_history` 双向链路退役，`turns` 收窄为展示与审计，模型连续性只走 DB opaque payload；文档、窗口参数与 `replay_stats.py` 摘要用量展示同步完成。零额度核心目标集 126 passed，扩展影响面 51 passed。C4 红格与具名签认未被本次收口改写。
 

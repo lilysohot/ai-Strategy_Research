@@ -18,6 +18,9 @@
 - 修订：r11（2026-10-12，零调用）：**契约 v4.1 已签认并落地**（`evidence/47-scoring-contract-v41-signed-20261012/`）；并行草案标 superseded；出 **P12/P13 记账提案**（`evidence/48-rebinding-and-basis-proposals-20261012/`，零就地改动）。详见 §5.13.4。
 - 修订：r12（2026-10-12，零调用）：**Wave 0 开工**——P01 装配器已实现并通过证据运行（`evidence/49-p01-assembler-20261012/`）；P02 设计说明待 U 审阅（`evidence/50-p02-matcher-design-20261012/`）。详见 §5.14。
 - 修订：r13（2026-10-12，零调用）：**P02 评分器匹配改造已完成**（legacy 四臂逐字段不变；`evidence/53-…`）；**P07 编号歧义已收敛**（41 归 Issue 41；`evidence/52-…`）。详见 §5.14。
+- 修订：r14（2026-10-12，零调用）：**P08 已完成 ⇒ Wave 0 收口**（32/33/34/35 的 r0 回填 MANIFEST；41 声明不补；`evidence/54-…`）。详见 §5.14。
+- 修订：r15（2026-10-12，零调用）：出 **P12/P13 签认件**（`48-…/rebinding-signoff-review.md`，`3fa1385f…`），并扩展 P12 范围至 3 处绑定点（新查 `freeze-state.json` 两处）。详见 §5.13.4。
+- 修订：r16（2026-10-12，零调用）：**P12/P13 已签认并落地**（U 签 `06ca5279…`；新增记录 `565a680b…`／`8cc11bcc…`）；**P14 已落地**（新增对齐记录，`validation-report.json` 字节不变）；**P16 冻结链校验器已建成并首跑**（`drift 0`，1 项待 U 裁定）。详见 §5.13.4。
 
 ## 0. 口径声明（先声明谓词，再看数字）
 
@@ -467,6 +470,35 @@ L9 是对 L3∩L7 的**测量**。把它计入节点数会重复计算同一处�
 - **P12**：金标冻结链 8 条输入实测 **漂移 1 条**（`scoring-contract.json` 记 v2 `2eb24be7…`，实际 v4.1 `c76ac13e…`；经 v3、v4），其余 7 条匹配。须以**新文件**记录再绑定，`freeze-manifest.json` 字节不变（实测 `da85e293…` 未变）。并行会话的同类记录针对 v2→v3，**不能沿用**。
 - **P13**：门 28 有**两处**绑定过期（此前只记了一处）：`quality_requirements.metric_basis = …-v3` 与 **`gold.scoring_contract_sha256 = d9bc51f2…`（v3）**；与契约 v4.1 形成**循环引用**（契约阈值取自门 28，门 28 的基准/绑定又落后于契约）。须同轮推进为 `…-v4.1` 并再绑定；**阈值数值逐字不变**。门 28 自身已有 v2→v3 的同类先例（`revision_history[1]`），故本次是沿用既有手续。门 28 文件字节不变（实测 `987772e9…` 未变）。
 - 两项均 `proposal_pending_signoff`，改的只是记账，不改语义。
+- **签认件已就绪（r15）**：`48-…/r0-zero-call/rebinding-signoff-review.md`（`3fa1385f…`，待 U 签）。起草该件时对 P12 做完整实测，**又查出 2 处原提案未覆盖的绑定点**（`48-…/rebinding-scope-extension.json`，`438cbca1…`）：① `freeze-state.json.scoring_contract` 记的是**路径而非哈希**（弱绑定，现解析为 v3）；② `freeze-state.json.contract_snapshot` 是**内嵌的 v2 草案全文**（`status: draft_pending_human_review`）。处置建议：①新记录钉住解析哈希、"路径改哈希"留后续；②**保留字节**（改它即伪造历史），由新记录声明"是历史、非当前绑定"。故 P12 完整范围为 **3 处**、P13 为 **2 处**；签认件已声明"本件为准"，原两份机器提案字节未改。
+
+#### 5.13.5 P12/P13 已签认落地；P14/P16 完成；1 项待裁定（r16 补记）
+
+**签认与落地**（`evidence/55-rebinding-signoff-applied-20261012/`）
+
+- U 签认件：`48-…/rebinding-signoff-review.md` = `06ca5279…`（空白版 `3fa1385f…`；`复核人 xyl／2026-10-12 10:00`，结论已勾"P12 三处 + P13 两处"，**备注为空** ⇒ §二/§三 推荐处置按原样接受，已显式记录该解释）。
+- **新增两个记录，既有字节零改动**（`in_place_edits = 0`；经 `tools/evidence_guard.write_once` 写入）：
+
+| 记录 | sha256 | 内容 |
+|---|---|---|
+| P12 `10-quality-gold-freeze-20261008-r2/rebinding-v4.1-20261012.json` | `565a680b…` | 3 处绑定点（manifest 输入再绑定 v2→v4.1；路径绑定钉解析哈希；内嵌快照声明为历史） |
+| P13 `28-…/r0-zero-call/preregistered-gate-v2.json` | `8cc11bcc…` | 门内 `revision 5`；`metric_basis → …-v4.1`；`gold.scoring_contract_sha256 → c76ac13e…`；**阈值六项逐字不变**（实测 `threshold_values_unchanged = true`） |
+
+- 冻结原件字节未变（实测）：`freeze-manifest.json` `da85e293…`、`freeze-state.json` `08703b8d…`、`frozen-gold.json` `603de5e6…`、门 28 v1 `987772e9…`。
+- 复跑幂等（两件均被护栏识别为 `already_signed_skipped`）。
+
+**P14 已落地**（`10-quality-gold-expansion-20261008-r2/validation-report-alignment-20261012.json`，`e7fe7aec…`）
+
+- **关键发现：不能就地改。** `validation-report.json` 是冻结链的记录输入且当前 `match`（`139cfc22…`）；改它会使 `freeze-manifest.json` **和** `draft-manifest.json` **两处**记录输入同时漂移。故与 P12 同法走**新增记录**。
+- 原件字节不变（`status: valid_review_draft`／`human_accepted_counts: {}` 是冻结当时的草案态，属历史真值）；对齐后的计数（claims 20 / material_items 48 / material_relations 24，源自 `freeze-state.json.counts`）由新记录承载。
+
+**P16 冻结链校验器已建成并首跑**（`tools/check_freeze_chain.py` + `evidence/56-freeze-chain-validator-20261012/`）
+
+- 落实契约 `bookkeeping_requirements.freeze_chain_validator_required`（"现无"→ 有）。只读、零调用、有问题即非零退出。
+- 首跑：`ok 13 / covered_by_record 3 / drift 0 / needs_ruling 1 / exit 1`。3 处 `covered_by_record` 分别由 P12/P13 覆盖。
+- **1 项待 U 具名裁定**：契约 v4.1 的 `authority_source.sha256` 仍钉门 28 **v1**（`987772e9…`），而 P13 已产生继任记录 **v2**（`8cc11bcc…`）——阈值数值实测逐字相同，不影响口径，但"哪份门是权威"需裁定：(a) 契约出新版本改钉 v2；**(b) 明确 v1=冻结执行门、v2=基准持有记录**（本会话倾向 b）。裁定前校验器保持非零退出。
+
+**记账四条至此的状态**：绑定同步（P12）✅、validation-report 一致性（P14）✅、冻结链校验器（P16）✅、门 28 基准同步（P13）✅。**剩余**：P03 评分器读契约（已解锁，代码未改）；上述 1 项裁定；`freeze-state.json.scoring_contract` 的"路径改哈希"（需改字节，单独裁定）。
 
 **C. 仍未完成（不得读成已过门）**：P01 装配器、P02 匹配改造、P03 评分器读契约/阈值、P04/P05 口径实现与回归、P12/P13 签认、route a/b 与缺口 1/2。
 
@@ -516,6 +548,25 @@ L9 是对 L3∩L7 的**测量**。把它计入节点数会重复计算同一处�
 - 全树 grep 出 5 处旧路径：2 处**历史记载**（保留）、3 处活引用断裂。其中跨并行目录的 `41-…/r2-proposals/contract-v4-draft.md:80` 经 U 同意已修正（`f8a8edf1…` → `620bc6cc…`，单行路径，非签认件）。
 - 另 2 处（`45/MANIFEST.json` 的 1 条过期输入键、`45/draft_contract_v4.py:10` 用法注释）**刻意不就地修**：45 的脚本自带签认护栏，重跑会被拒；`--force` 会抹掉 U 的签认。按 write-once 登记，待该目录出新版本时一并修。
 - **连带发现（D9 的起因）**：`45/draft_contract_v4.py:281-283` 记载——重跑该脚本**曾静默抹掉 U 在 `contract-v4-review.md`（`753532e8…`）上的签认**。⇒ D9 不是抽象风险，本项目已真实发生过一次；P06 的方向（机制 + 执行器 + 例外登记）与该教训一致。P06 扫描器**未漏报**此项（`guarded = 3` 中即含该脚本）。
+
+**P08 r0 目录 MANIFEST：已完成 ⇒ Wave 0 收口**（`evidence/54-p08-manifest-backfill-20261012/`）。
+
+- 判定规则：本工作流目录 ⇒ **回填 MANIFEST**（哈希可核）；**并行会话目录 ⇒ 声明不补**（避免形成第二个相互竞争的真相源，延续既有跨目录边界）。
+- 回填（**只新增文件，`in_place_edits = 0`**；经 `tools/evidence_guard.write_once` 写入，故禁止覆盖）：
+
+| 目录 | 域产物 | 声明输入 | 见证文件 | MANIFEST sha256 |
+|---|---|---|---|---|
+| `32-…/r0-zero-call` | `freeze-manifest.json` | 7（域产物自声明） | 9 | `21e6ec68…` |
+| `33-…/r0-zero-call` | `workbench.json` | 3（域产物自声明） | 7 | `285984d6…` |
+| `34-…/r0-zero-call` | `chain-audit.json` | 5（域产物自声明） | 3 | `229ecffd…` |
+| `35-…/r0-zero-call` | `gold-audit.json` | **0（显式"不推断"）** | 5 | `f834a610…` |
+
+- `35` 的 `gold-audit.json` 未声明 `inputs`：**不推断**输入清单（产物内的 sha256 多为记录级引用，当作输入即为编造），只保证输出侧可核。
+- **声明不补**：`41-…/r0-zero-call`（并行会话目录；其 `accounting-checks.json` 已含 14 条 inputs 与 checks，即为该会话真相源）。
+- 回填件效力边界（已写入每件）：`kind = retro_manifest`，证明的是**回填当日**字节，**不**证明该目录自创建以来字节未变；不是该目录诞生时的清单。
+- 复跑幂等（全 `already_present_skipped`）；P06 护栏扫描仍 `violations = 0`；回归 80 项全通过。
+
+> **Wave 0 至此全部完成**（`evidence/44-replan-20261012` 的退出判据：P01/P02/P06/P08 全部产出且回归通过；P07 已由 U 决定）：P01 装配器 ✅、P02 匹配改造 ✅、P06 护栏推广 ✅、P07 编号收敛 ✅、P08 MANIFEST ✅。**但 Wave 0 完成不等于门 33 有分数**——真实裁定数仍为 0，卡点已从"工程缺失"转为"① Stage 2 真实裁定（222 条）、② 补跑授权（7 条 critical）"两件需 U/人手的事。
 
 ### 5.14 Stage-1 助手 v2（r7 补记，§7-5 已完成）
 

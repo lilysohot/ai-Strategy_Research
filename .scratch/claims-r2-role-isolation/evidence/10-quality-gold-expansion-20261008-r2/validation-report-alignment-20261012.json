@@ -1,0 +1,36 @@
+{
+  "schema_version": "items-validation-report-alignment-1",
+  "kind": "alignment_record",
+  "status": "agent_recorded",
+  "created_on": "2026-10-12",
+  "issue": "P14 / 记账4条",
+  "authorised_by": "evidence/44-replan-20261012（P14：audit / agent / 零调用，无需 U 签认；若需升格为签认件由 U 裁定）",
+  "requirement_source": {
+    "contract": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+    "clause": "bookkeeping_requirements.validation_report_consistency",
+    "text": "validation-report 的 human_accepted_counts 须与 frozen-gold 的 48/48 accepted 一致（现为空 {}）"
+  },
+  "aligned_counts": {
+    "claims": 20,
+    "material_items": 48,
+    "material_relations": 24
+  },
+  "aligned_counts_source": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-state.json.counts（reviewer=xyl）",
+  "target_artifact": {
+    "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/validation-report.json",
+    "sha256": "sha256:139cfc222eb4688dccdce5c0116b00c84b87401e01e22427658c3dcfa6d5bc52",
+    "observed_status": "valid_review_draft",
+    "observed_human_accepted_counts": {},
+    "bytes_changed": false
+  },
+  "why_in_place_edit_is_forbidden": {
+    "reason": "就地修改会使冻结链的两处记录输入同时漂移",
+    "drifting_records": {
+      ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-manifest.json": "139cfc222eb4688dccdce5c0116b00c84b87401e01e22427658c3dcfa6d5bc52",
+      ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/draft-manifest.json": "draft-manifest.json.inputs 亦引用该文件"
+    },
+    "verified_now": "两处记录与文件实际哈希当前一致（match）；改字节即制造两处新漂移"
+  },
+  "disposition": "原 validation-report.json 保持字节不变，继续作为冻结链的历史输入（其 status=valid_review_draft 与 human_accepted_counts={} 是**冻结当时的草案态**）；一致性要求由本记录承载：frozen-gold 的人工接受计数即 aligned_counts。",
+  "in_place_edits": 0
+}

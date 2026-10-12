@@ -1,0 +1,27 @@
+{
+  "kind": "retro_manifest",
+  "schema_version": "items-retro-manifest-1",
+  "attested_on": "2026-10-12",
+  "attested_by": "agent（P08 / D11 scan-MANIFEST-missing）",
+  "directory": ".scratch/claims-r2-role-isolation/evidence/35-gold-audit-20261011/r0-zero-call",
+  "purpose": "该目录此前无 MANIFEST（D11）。本件在其**创建之后**回填，用于哈希可核；它不是该目录诞生时的清单。",
+  "domain_artifact": {
+    "name": "gold-audit.json",
+    "sha256": "sha256:2802b614f4d7511500d39dad2b80c2fae23ad276a53f7a7694159381834c2bca"
+  },
+  "declared_inputs": {},
+  "declared_inputs_source": "gold-audit.json 未声明 inputs",
+  "declared_inputs_note": "该域产物未声明 inputs。本回填**不推断**输入清单——产物内部的 sha256 值多为记录级引用，若当作输入即为编造。仅输出侧哈希可核。",
+  "files": {
+    "audit_gold.py": "sha256:8e9f96fc491997d066dd0231eed040175be335a44cfaff743e3f781b73cbc378",
+    "gold-audit.json": "sha256:2802b614f4d7511500d39dad2b80c2fae23ad276a53f7a7694159381834c2bca",
+    "gold-audit.md": "sha256:54f1c5e10263afd1b81b5a87d4be85d8ec5ab9cb819e39f8792bd9bb2ae1ef18",
+    "semantic-review.json": "sha256:7275c8f910d5d2cb49856d0f4f9222a44db9fc25ca9f1651ab993cfacba85282",
+    "semantic-review.md": "sha256:5d00c590bfa8e7530b3c55bf98a64d2e7d9ed35a72599c05b20bd882a6699270"
+  },
+  "guard": "由 tools/evidence_guard.write_once 写入 ⇒ 已存在或已签认时拒绝覆盖。",
+  "caveats": [
+    "回填件：证明的是**回填当日**的字节，不证明该目录自创建以来字节未变。",
+    "本目录不含 MANIFEST.json 的自身哈希；其值见 .scratch/claims-r2-role-isolation/evidence/54-p08-manifest-backfill-20261012/r0-zero-call/MANIFEST.json。"
+  ]
+}

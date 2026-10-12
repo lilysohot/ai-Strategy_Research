@@ -1,0 +1,39 @@
+{
+  "kind": "retro_manifest",
+  "schema_version": "items-retro-manifest-1",
+  "attested_on": "2026-10-12",
+  "attested_by": "agent（P08 / D11 scan-MANIFEST-missing）",
+  "directory": ".scratch/claims-r2-role-isolation/evidence/32-items-v6-reasoning-refreeze-20261011/r0-zero-call",
+  "purpose": "该目录此前无 MANIFEST（D11）。本件在其**创建之后**回填，用于哈希可核；它不是该目录诞生时的清单。",
+  "domain_artifact": {
+    "name": "freeze-manifest.json",
+    "sha256": "sha256:1a0e008ad2af5835910cfe7d62918936f557dc377dd353e6a6dfea0f9df142f5"
+  },
+  "declared_inputs": {
+    "issue28_freeze_manifest": "sha256:8240c45c50b04c37f76ae82260a984a978c206c58050114c1611f2a02385b292",
+    "issue28_preregistered_gate": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
+    "material_semantics_module": "sha256:1305dba1f9fa074d0d5b0a662346d58168741bd27f78e96cb55bff2b46167a5e",
+    "structured_config_module": "sha256:3202c70cca56e11e45b758a5d5f9b4f70c9f9313532dcdb59cfb4d10ba65b73f",
+    "structured_adapter_module": "sha256:a534e2a3031bdc45fc8f463bed87015793189dd423dcef4d9e8ed47be9b598c2",
+    "source_prose_units": "sha256:58aa7c997376c9d7f5a84766725cf2fadddc649c7e9f73ff7309727048a37436",
+    "scoring_contract": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce"
+  },
+  "declared_inputs_source": "freeze-manifest.json.inputs（域产物自己声明的输入）",
+  "declared_inputs_note": "",
+  "files": {
+    "freeze-manifest.json": "sha256:1a0e008ad2af5835910cfe7d62918936f557dc377dd353e6a6dfea0f9df142f5",
+    "freeze_two_arms.py": "sha256:0e5f476f176c880d27e938b1e370047c0053849ba99e5d8ec28af774e3568085",
+    "plan-control-industrial-fulian-md.json": "sha256:c8aadb4e62bb59ae1c9e66b342a6a22dba9feabbe3d31f254228c19f2e1017a0",
+    "plan-control-optical-module-docx.json": "sha256:74f9e38e56f17a7b60767d641a61a4ae95850f36b9b989daafe4540f4d085c32",
+    "plan-treatment-industrial-fulian-md.json": "sha256:c2a085a32358b72b37eede509806c1dcde568dc8a95868f4e3b877ede2eecd3a",
+    "plan-treatment-optical-module-docx.json": "sha256:e7099a37679dd286bae3426c9350ed567a590548fff6e15a0d0853e0184f820c",
+    "preregistered-gate.json": "sha256:6fb47e7945ce133dbdea7b73c6bb3b5e7266856cf6d956dbb9d191303783fba8",
+    "verification-summary.json": "sha256:10ecc11cad3bdf16e64b8edf6daa55359d555fe650c5fe3544c4b9b5ef0192a7",
+    "verify_two_arms.py": "sha256:073b7dd932262096bd0824a722c69a6d8b78aac77845ab236867751e2b5d1616"
+  },
+  "guard": "由 tools/evidence_guard.write_once 写入 ⇒ 已存在或已签认时拒绝覆盖。",
+  "caveats": [
+    "回填件：证明的是**回填当日**的字节，不证明该目录自创建以来字节未变。",
+    "本目录不含 MANIFEST.json 的自身哈希；其值见 .scratch/claims-r2-role-isolation/evidence/54-p08-manifest-backfill-20261012/r0-zero-call/MANIFEST.json。"
+  ]
+}

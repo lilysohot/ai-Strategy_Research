@@ -1,0 +1,22 @@
+{
+  "schema_version": "items-rebinding-signoff-applied-manifest-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/48-rebinding-and-basis-proposals-20261012/r0-zero-call/rebinding-signoff-review.md": "sha256:06ca527990c0b0c8fe864ff07fb3d7f47601e0fd56c65880337363309999f501",
+    ".scratch/claims-r2-role-isolation/evidence/47-scoring-contract-v41-signed-20261012/r0-zero-call/scoring-contract-v4.1.json": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-manifest.json": "sha256:da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-state.json": "sha256:08703b8dad9fc6c130872899741534c940787c29a15423db19d398999b237d85",
+    ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate.json": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
+    ".scratch/claims-r2-role-isolation/evidence/48-rebinding-and-basis-proposals-20261012/r0-zero-call/rebinding-scope-extension.json": "sha256:438cbca321e80fc9ab651dababa14f7a36c2f902b60b5d16d8347dd33e0f92eb"
+  },
+  "outputs": {
+    "apply_rebinding_signoff.py": "sha256:759347bcafc5080c61408e5da0b8ba383030e835d0aa8f1241837723804b47f1",
+    "signoff-applied-record.json": "sha256:ad7bc89e8ad97aff90b4c556fb19079b79399180916a8d3de4de21332966fd18"
+  },
+  "created_elsewhere": {
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/rebinding-v4.1-20261012.json": "sha256:565a680b5bc6294eaa17300f872d07786723fc9c87e4fa82d05f6d087bd6309f",
+    ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate-v2.json": "sha256:8cc11bccc912ea7b123b6e769728c9076046d526c16c8a1218e27a2a692270f6"
+  },
+  "in_place_edits": 0
+}

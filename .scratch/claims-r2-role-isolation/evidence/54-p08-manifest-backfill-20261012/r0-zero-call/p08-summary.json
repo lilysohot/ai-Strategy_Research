@@ -1,0 +1,48 @@
+{
+  "schema_version": "items-p08-manifest-backfill-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "model_requests": 0,
+  "decision_rule": "本会话工作流的目录 ⇒ 回填 MANIFEST（哈希可核）；并行会话的目录 ⇒ 声明不补（避免形成第二个相互竞争的真相源，亦遵循既有跨目录边界）。",
+  "in_place_edits": 0,
+  "new_files_only": true,
+  "results": [
+    {
+      "directory": "32-items-v6-reasoning-refreeze-20261011/r0-zero-call",
+      "status": "written",
+      "domain_artifact": "freeze-manifest.json",
+      "declared_inputs": 7,
+      "files_attested": 9,
+      "manifest_sha256": "sha256:21e6ec68e90c391b943f1520709fc357acfbb3f7cb47913660c5acf932cdd12c"
+    },
+    {
+      "directory": "33-items-quality-scoring-20261011/r0-zero-call",
+      "status": "written",
+      "domain_artifact": "workbench.json",
+      "declared_inputs": 3,
+      "files_attested": 7,
+      "manifest_sha256": "sha256:285984d693f3cfbd710680b12708da9293305b5b38dcd2ebf2fe32c5a7d91f86"
+    },
+    {
+      "directory": "34-chain-root-cause-audit-20261011/r0-zero-call",
+      "status": "written",
+      "domain_artifact": "chain-audit.json",
+      "declared_inputs": 5,
+      "files_attested": 3,
+      "manifest_sha256": "sha256:229ecffdcbf83075e48f233908fadf200643cedf1658d9e7afe589821731d33d"
+    },
+    {
+      "directory": "35-gold-audit-20261011/r0-zero-call",
+      "status": "written",
+      "domain_artifact": "gold-audit.json",
+      "declared_inputs": 0,
+      "files_attested": 5,
+      "manifest_sha256": "sha256:f834a61088d5374fa0e005beed2e09a9a5714f0c689d8acbcea387ace39a5cb7"
+    },
+    {
+      "directory": "41-items-chain-accounting-20261012/r0-zero-call",
+      "status": "declared_not_added",
+      "reason": "并行会话目录：其自身的会计记录（accounting-checks.json 已含 14 条 inputs 与 checks）即该会话的真相源；本会话另写一份 MANIFEST 会形成第二个相互竞争的真相源。且本会话此前已多次遵循「不写入并行目录」的边界（见 45/rename-record.json 的同条规定）。"
+    }
+  ]
+}

@@ -218,24 +218,50 @@ def trim_to_turns(
         cut = starts[len(starts) - max_turns]
         cut_for_turns = True
     dropped_for_tokens = 0
+    dropped_summary_for_tokens = False
     if max_tokens > 0:
         while True:
             if estimate_tokens(canonical_json(_keep_from(messages, cut, head))) <= max_tokens:
                 break
             following = next((idx for idx in starts if idx > cut), None)
             if following is None:
+                # The newest (or only) turn can itself exceed the replay budget.
+                # The size bound is a hard safety limit, so continuity must
+                # degrade to the protected head instead of making the next run's
+                # first request too large to execute.
+                if cut < len(messages):
+                    cut = len(messages)
+                    dropped_for_tokens += 1
+                    continue
                 break
             cut = following
             dropped_for_tokens += 1
-    if cut == head and dropped_for_tokens == 0:
-        return messages, None
 
     kept = _keep_from(messages, cut, head)
-    kept_turns = sum(1 for message in kept if message.get("role") == "user")
+    # A generated or previous summary also counts against the token budget. If
+    # it cannot fit after every real turn has gone, drop it and persist only the
+    # system message. The reader rejects that shape as having no prior turn, so
+    # the next run starts fresh instead of replaying an oversized prefix.
+    if (
+        max_tokens > 0
+        and head > 1
+        and estimate_tokens(canonical_json(kept)) > max_tokens
+    ):
+        kept = messages[:1]
+        dropped_summary_for_tokens = True
+
+    if cut == head and dropped_for_tokens == 0 and not dropped_summary_for_tokens:
+        return messages, None
+
+    kept_turns = sum(
+        1
+        for idx, message in enumerate(kept)
+        if idx >= head and message.get("role") == "user"
+    )
     reasons = []
     if cut_for_turns:
         reasons.append(f"max_replay_turns={max_turns}")
-    if dropped_for_tokens:
+    if dropped_for_tokens or dropped_summary_for_tokens:
         reasons.append(f"replay_max_tokens={max_tokens}")
     trim: dict[str, Any] = {
         "dropped_turns": len(starts) - kept_turns,
@@ -247,6 +273,8 @@ def trim_to_turns(
         trim["token_budget"] = max_tokens
         trim["est_tokens"] = estimate_tokens(canonical_json(kept))
         trim["dropped_for_tokens"] = dropped_for_tokens
+        if dropped_summary_for_tokens:
+            trim["dropped_summary_for_tokens"] = True
     return kept, trim
 
 
@@ -389,11 +417,16 @@ def select_replay(
         decision["reason"] = "system message bytes differ"
         return None, decision
 
+    head, _ = summary_from(messages)
     decision.update(
         {
             "decision": "used",
             "messages": len(messages),
-            "prior_turns": sum(1 for m in messages if m.get("role") == "user"),
+            "prior_turns": sum(
+                1
+                for idx, message in enumerate(messages)
+                if idx >= head and message.get("role") == "user"
+            ),
             # Window size, reported next to the field's own counters so a reader
             # can tell "replayed a 9k-token window" from "started fresh" (S1-a).
             # ``est_tokens`` is 0 for dumps written before the writer recorded it.
