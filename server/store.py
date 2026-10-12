@@ -1522,6 +1522,44 @@ class SessionOwnershipError(Exception):
     """
 
 
+async def _inherit_recent_account_link(session: AsyncSession, row: Session) -> None:
+    """Carry the user's most recently selected account into a new research.
+
+    Plans remain research-owned and are never inherited. An archived account is
+    also excluded. This turns the last explicit research/account binding into
+    the user's practical main account without guessing from an account name.
+    """
+    account_id = (
+        await session.execute(
+            select(ResearchInvestmentLink.account_id)
+            .join(
+                InvestmentAccount,
+                InvestmentAccount.id == ResearchInvestmentLink.account_id,
+            )
+            .where(
+                ResearchInvestmentLink.user_id == row.user_id,
+                ResearchInvestmentLink.account_id.is_not(None),
+                InvestmentAccount.archived.is_(False),
+            )
+            .order_by(
+                ResearchInvestmentLink.updated_at.desc(),
+                ResearchInvestmentLink.research_id.desc(),
+            )
+            .limit(1)
+        )
+    ).scalar_one_or_none()
+    if account_id is None:
+        return
+    session.add(
+        ResearchInvestmentLink(
+            research_id=row.id,
+            user_id=row.user_id,
+            account_id=account_id,
+            primary_plan_id=None,
+        )
+    )
+
+
 async def ensure_session(*, session_id: uuid.UUID, user_id: uuid.UUID, title: str) -> Session:
     """Idempotently obtain a session row, creating it if absent.
 
@@ -1540,6 +1578,8 @@ async def ensure_session(*, session_id: uuid.UUID, user_id: uuid.UUID, title: st
         if row is None:
             row = Session(id=session_id, user_id=user_id, title=title)
             session.add(row)
+            await session.flush()
+            await _inherit_recent_account_link(session, row)
             await session.commit()
             return row
         if row.user_id != user_id:
@@ -1557,16 +1597,20 @@ async def ensure_session_in(
     is one all-or-nothing commit instead of four.
     """
     row = await session.get(Session, session_id, with_for_update=True)
+    created = False
     if row is None:
         try:
             async with session.begin_nested():
                 row = Session(id=session_id, user_id=user_id, title=title)
                 session.add(row)
                 await session.flush()
+                created = True
         except IntegrityError:
             row = await session.get(Session, session_id, with_for_update=True)
     if row is None or row.user_id != user_id or row.deleted_at is not None:
         raise SessionOwnershipError(str(session_id))
+    if created:
+        await _inherit_recent_account_link(session, row)
     return row
 
 
@@ -1715,6 +1759,8 @@ async def create_session(*, user_id: uuid.UUID, title: str | None = None) -> Ses
     async with get_sessionmaker()() as session:
         row = Session(user_id=user_id, title=title or "新对话")
         session.add(row)
+        await session.flush()
+        await _inherit_recent_account_link(session, row)
         await session.commit()
         await session.refresh(row)
         return row
