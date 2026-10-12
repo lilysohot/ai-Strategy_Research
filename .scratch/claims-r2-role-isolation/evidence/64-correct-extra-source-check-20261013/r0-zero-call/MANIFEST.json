@@ -1,0 +1,42 @@
+{
+  "schema_version": "correct-extra-source-check-manifest-1",
+  "created_on": "2026-10-13",
+  "zero_model_calls": true,
+  "read_only": true,
+  "purpose": "Verify adjudicated candidates against the source text: is each candidate's claim actually present in the document (no hallucination), and are its condition/factuality labels consistent with the source?",
+  "method": {
+    "source_text": "The extraction run's own input segments, carried by the v6 payload `structure.segments` (10 segments, industrial-fulian-md).",
+    "why_not_corpus_db": "The snapshot build `f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314` has 0 rows in `e6_holdout_corpus.corpus.corpus_units` (35 other builds present); probing for segment text across all builds also returns nothing. The corpus DB therefore cannot serve as the reference for this run.",
+    "lookup_validated_by_control": "Before drawing conclusions, `coverage_by_judgement.py` showed `matched` quotes also failed to resolve in the corpus DB (1/26), proving the miss was an artefact of the reference source, not of the candidates."
+  },
+  "inputs": {
+    "worksheet": "../adjudication/worksheet.json",
+    "workbench_v2": "../38-gate33-workbench-rebuild-20261012/r0-zero-call/workbench-v2.json",
+    "segments_object": "../32-items-v6-reasoning-refreeze-20261011/live/treatment-store/industrial-fulian-md/objects/sha256/51/5164a8c10df8cbad70a04cd6b223c8ff6aaef2f9c74e43523596734ec9b040c0.json"
+  },
+  "outputs": {
+    "check_correct_extra_in_source.py": "first attempt (corpus-DB based); kept as the record of the rejected lookup",
+    "coverage_by_judgement.py": "control: quote coverage grouped by judgement, proves the DB lookup was invalid",
+    "locate_source_units.py": "probes for the source document across all corpus builds (0 hits)",
+    "verify_quotes_against_segments.py": "authoritative check: quote-in-segment for all 222 candidates"
+  },
+  "findings": {
+    "sample_15_all_supported": true,
+    "sample_15_note": "All 15 mechanically-suspicious `correct_extra` records have their evidence quote literally present in a source segment; none is a hallucination.",
+    "quote_coverage_222": {
+      "industrial-fulian-md": "88/88 hit (100%)",
+      "optical-module-docx": "0 hit — docx source segments were not available, so these 134 records are UNVERIFIED, not proven wrong"
+    },
+    "systemic_labelling_defect": {
+      "segment": 5,
+      "segment_note": "the 最坏情景/次坏/再坏 hypothetical block",
+      "count": 16,
+      "defect": "all 16 carry condition=unconditional and semantic_type=forecast although the source frames them as hypothetical scenarios (最坏情景/次坏/再坏) or disjunctive (或)",
+      "disposition": "content is true; the condition/qualifier label is wrong. This is a production-side labelling defect to record, NOT a reason to rewrite candidate text."
+    }
+  },
+  "not_claimed": [
+    "No candidate text was modified; this pass is read-only verification.",
+    "The 134 docx-source records are unverified here for lack of their source segments."
+  ]
+}
