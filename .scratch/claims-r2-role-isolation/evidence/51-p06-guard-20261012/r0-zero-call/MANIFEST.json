@@ -10,10 +10,17 @@
     "tests/test_evidence_guard.py": "sha256:dfab413249e9726af72ef8dca53daeb1ebb5792e8de3b49613682c7361afa487"
   },
   "outputs": {
-    "guard-inventory.json": "sha256:42a40e788b0ff62e7989fe4583ba8b1808897cbbb5ba4e9bd9dec2a273cb44d7",
+    "guard-fix-record.json": "sha256:d0195faaf4158ba00cc98ab3de0752bb62f43bf316d40ea56dfbd36f08825f49",
+    "guard-inventory.json": "sha256:f72d3c6b02595c67eafd9743df18761a68bc4c53db185ecab4f530ad532731d6",
     "p06-guard.md": "sha256:260cab1c5c2a097c72f3586f1d8638b225335a1a91f3117ea98a1eb9e3e3bb23"
   },
   "in_place_edits": 0,
   "historical_scripts_modified": 0,
-  "note": "P06 只加机制与登记，不改历史脚本。"
+  "note": "P06 只加机制与登记，不改历史脚本。",
+  "guard_fix": {
+    "superseded_input": "tools/evidence_guard.py",
+    "record": "guard-fix-record.json",
+    "guard_sha256_now": "sha256:bbe4bacdd6d06d2d673d58c3eff6d90dfd94c62fcb99902b1b926d4fd54fa985",
+    "manifest_bytes_unchanged": true
+  }
 }

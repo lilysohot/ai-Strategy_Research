@@ -30,11 +30,10 @@ Definitions, so the arithmetic cannot drift:
 * ``summary_usage`` is reported separately from the main loop counters because
   the write-time summary call runs in an observer outside the trajectory.
 
-The directory source takes each run's session id from its own conversation dump,
-so a runs root holding several conversations still gets per-conversation
-arithmetic rather than a root-wide average. A run with no dump has no verifiable
-session, so it is treated as its own group — a wrong denominator is worse than no
-number.
+The directory source takes each run's session id from summary.json, with the
+conversation dump as a fallback for older runs. Ingestion deletes that dump,
+so the summary is the durable source. An older run with neither identifier is
+treated as its own group rather than borrowing another conversation's prompt.
 
 Control arms legitimately reuse the shared prefix (system prompt + tool
 schemas), so a non-zero ``reuse%`` on a run that never replayed is expected, not
@@ -217,7 +216,7 @@ def load_from_runs_root(runs_root: Path) -> list[TurnStat]:
     restored copy) with no database at all — the same numbers, read from the
     files the run itself wrote.
     """
-    from server.usage import aggregate_usage
+    from server.usage import aggregate_usage, replay_block_from_summary
 
     candidates: list[tuple[float, Path]] = []
     for entry in runs_root.iterdir() if runs_root.is_dir() else []:
@@ -258,9 +257,9 @@ def load_from_runs_root(runs_root: Path) -> list[TurnStat]:
                 index,
                 run_id=run_dir.name,
                 source="dir",
-                session_id=_session_from_dump(run_dir),
+                session_id=str(summary.get("session_id") or _session_from_dump(run_dir)),
                 usage=usage,
-                replay=_replay_of(summary),
+                replay=replay_block_from_summary(summary),
                 error=str(summary.get("error") or ""),
             )
         )

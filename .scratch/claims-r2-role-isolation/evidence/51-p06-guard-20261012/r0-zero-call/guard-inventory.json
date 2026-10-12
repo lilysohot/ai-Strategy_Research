@@ -1,11 +1,11 @@
 {
   "root": ".scratch/claims-r2-role-isolation/evidence",
-  "scripts_scanned": 116,
-  "guarded": 3,
-  "unguarded": 113,
+  "scripts_scanned": 120,
+  "guarded": 6,
+  "unguarded": 114,
   "violations": 0,
   "legacy_exempt": 4,
-  "signed_targets_protected": 7,
+  "signed_targets_protected": 4,
   "signature_markers": [
     "☑ 认可并签认",
     "☑ 认可本口径",
@@ -911,9 +911,7 @@
         "proposed-scoring-contract-v4.json"
       ],
       "signed_targets_written": [
-        "contract-v4-diff.md",
-        "contract-v4-review.md",
-        "proposed-scoring-contract-v4.json"
+        "contract-v4-review.md"
       ],
       "verdict": "ok"
     },
@@ -928,7 +926,6 @@
         "proposed-scoring-contract-v4.1.json"
       ],
       "signed_targets_written": [
-        "contract-v4.1-diff.md",
         "proposed-scoring-contract-v4.1.json"
       ],
       "verdict": "ok"
@@ -967,6 +964,39 @@
         "MANIFEST.json",
         "p01-evidence.json",
         "p01-evidence.md"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/53-p02-legacy-invariance-20261012/r0-zero-call/verify_legacy_invariance.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "MANIFEST.json",
+        "legacy-invariance.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/54-p08-manifest-backfill-20261012/r0-zero-call/backfill_manifests.py",
+      "guarded": "shared_guard",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/55-rebinding-signoff-applied-20261012/r0-zero-call/apply_rebinding_signoff.py",
+      "guarded": "shared_guard",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/57-contract-v42-draft-20261012/r0-zero-call/draft_v42.py",
+      "guarded": "shared_guard",
+      "write_targets": [
+        "MANIFEST.json"
       ],
       "signed_targets_written": [],
       "verdict": "ok"

@@ -191,6 +191,10 @@ server/runs/<run_id>/
 
 S4 已退役 `history.txt` / `conversation_history`：`turns` 只服务 Web 展示和审计，不再被重新渲染进模型输入。重放窗口由 `REPLAY_MAX_TURNS`（保留的最近用户轮数，默认 10）、`REPLAY_MAX_TOKENS`（消息估算 token 上限；未设置时取模型输入上限的一半）和 `REPLAY_MAX_TURN_STEP`（轮数迟滞带，默认 5；设为 0 恢复逐轮硬裁剪）控制。token 上限始终是硬约束；迟滞只减少轮数窗口滑动造成的缓存失效。
 
+2026-10-12 回溯修复：发生裁剪且启用摘要时，写侧先为摘要预留最多 2048 个估算 token（不超过窗口预算的 1/4），固定被裁消息后只调用一次摘要器；摘要过长时截短摘要并记录 `trim.summary_status=truncated`，不再删除未进入摘要输入的轮次。摘要失败或无空间时回普通裁剪并记录 `failed` / `no_space`；未裁剪轮保持字节前缀。读侧重新估算载体消息的 token 大小，不信任旧的 `messages_est_tokens`；超出当前预算则记录 `replay token budget exceeded` 并跳过重放，预算内不做读时裁剪。此预算约束的是估算的历史消息窗口，不是包含本轮输入、工具 schema 等在内的完整请求 token 承诺。
+
+worker 的 `summary.json` 保留 `session_id` 与顶层 `summary_usage`。目录统计按该会话标识分组，并复用数据库入库侧的摘要用量解析；即使 ingest 已删除 `conversation.json` 也能统计。旧产物仅在仍有 dump 时回退读取会话标识；两者都缺失则保持 unknown，不猜会话。
+
 7. **上传不走 `_sandbox_mounts`**：native/container 分支直接读 `resolve_mount_dirs()`，bind mount 只在 bwrap 分支构造（`main_agent.py:841-848`）。上传文件**落进 `FRONTIER_AGENT_INPUTS_DIR` 即可**，路径由 **worker 拼进本轮 instruction 的尾部**告知（issue 01 S1-b）：该说明每轮含本 run 自己的 inputs 路径，放进 system prompt 会翻转 KV cache 前缀，使带附件的那一轮整段重算；`metadata['_sys_prompt_addendum']` 只保留跨轮恒定的文本（常量说明、业务策略、缺料策略）。
 
 ### 5.2 事件与控制（v1.2 重写：持久化不自建）

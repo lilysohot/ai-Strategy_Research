@@ -145,6 +145,93 @@ def test_a_dump_replays_byte_for_byte() -> None:
     ]
 
 
+@pytest.mark.parametrize("stored_estimate", [None, 0, 1])
+def test_old_payload_is_rejected_against_current_budget(stored_estimate) -> None:
+    document = _dump(messages=[system_msg(_SYSTEM), user_msg("x " * 8_000)])
+    if stored_estimate is None:
+        document.pop("messages_est_tokens")
+    else:
+        document["messages_est_tokens"] = stored_estimate
+    replay, decision = _select(document, max_replay_tokens=100)
+    assert replay is None
+    assert decision["reason"] == "replay token budget exceeded"
+    assert decision["est_tokens"] > decision["token_budget"] == 100
+
+
+def test_read_budget_change_rejects_without_rewriting_valid_payload() -> None:
+    from frontier_agent.core.runtime.loop.context_budget import estimate_tokens
+
+    document = _dump()
+    original = canonical_json(document)
+    size = estimate_tokens(canonical_json(document["messages"]))
+    replay, decision = _select(document, max_replay_tokens=size)
+    assert replay == document["messages"]
+    assert decision["decision"] == "used"
+    assert _select(document, max_replay_tokens=size - 1)[0] is None
+    assert _select(document, max_replay_tokens=0)[0] == document["messages"]
+    assert canonical_json(document) == original
+
+
+@pytest.mark.parametrize("budget", [100, 0])
+async def test_node_enforces_read_budget_before_starting_the_loop(tmp_path, monkeypatch, budget):
+    from types import SimpleNamespace
+
+    from workflows.stateful_react_agent.nodes import main_agent as node
+
+    # Exercise real node wiring through select_replay, stopping at the loop
+    # boundary so no LLM or observer can make a model request.
+    monkeypatch.setattr(
+        node,
+        "_resolve_llm_and_profile",
+        lambda *args, **kwargs: (
+            SimpleNamespace(model_name="mock"),
+            {"agent": {"direct": True, "replay_max_tokens": budget}},
+            None,
+        ),
+    )
+    monkeypatch.setattr(
+        node, "registry", SimpleNamespace(get=lambda _: None, get_optional=lambda _: None)
+    )
+    monkeypatch.setattr(node, "_tools_for_stateful_react", lambda *args: [])
+    monkeypatch.setattr(node, "get_direct_system_prompt", lambda: _SYSTEM)
+    monkeypatch.setattr(node, "resolve_sandbox_mode", lambda _: "bwrap")
+    monkeypatch.setattr(node, "_resolve_worktree_root", lambda *args: tmp_path)
+    monkeypatch.setattr(node, "_resolve_sandbox_binds", lambda *args: ((), tmp_path / "outputs"))
+    monkeypatch.setattr(node, "_resolve_trajectory_dir", lambda *args: tmp_path / "trace")
+    monkeypatch.setattr(
+        node, "_resolve_conversation_path", lambda *args: tmp_path / "conversation.json"
+    )
+    document = _dump(
+        messages=[system_msg(_SYSTEM), user_msg("large " * 8_000)],
+        tool_names=[],
+        tools_hash=tool_schema_sha256([]),
+        node_id="react_agent",
+    )
+
+    class LoopReached(Exception):
+        pass
+
+    async def loop(**kwargs):
+        expected = None if budget else document["messages"]
+        assert kwargs["initial_messages"] == expected
+        raise LoopReached
+
+    monkeypatch.setattr(node, "run_agent_loop", loop)
+    # The node supports a CLI compatibility override when apodex is imported.
+    import apodex.session
+
+    monkeypatch.setattr(apodex.session, "run_agent_loop", loop)
+    with pytest.raises(LoopReached):
+        await node.react_agent_node(
+            {
+                "original_question": "next",
+                "replay_payload": canonical_json(document),
+                "metadata": {"session_id": _SESSION},
+            },
+            SimpleNamespace(task_id="budget-test"),
+        )
+
+
 def test_the_dump_carries_the_header_the_reader_matches_on() -> None:
     document = _dump()
 
@@ -178,6 +265,8 @@ def test_the_dump_measures_the_window_it_will_send() -> None:
 
 def test_a_dump_from_before_the_window_measurement_still_replays() -> None:
     """The field is informational: its absence must not refuse a valid dump."""
+    from frontier_agent.core.runtime.loop.context_budget import estimate_tokens
+
     document = _dump()
     document.pop("messages_est_tokens")
 
@@ -185,7 +274,7 @@ def test_a_dump_from_before_the_window_measurement_still_replays() -> None:
 
     assert messages is not None
     assert decision["decision"] == "used"
-    assert decision["est_tokens"] == 0
+    assert decision["est_tokens"] == estimate_tokens(canonical_json(messages))
 
 
 def test_non_wire_keys_never_reach_the_dump() -> None:
@@ -1115,6 +1204,16 @@ async def test_worker_hands_the_dump_to_the_workflow_verbatim(db, tmp_path, monk
     # §12.11 待办 2: the write-time summary's own tokens survive the state hop, so
     # ``usage_json.replay.summary_usage`` can be filled from the run row alone.
     assert summary["summary_usage"] == {"calls": 1, "prompt_tokens": 300, "cache_read_tokens": 64}
+    assert summary["session_id"] == args.session_id
+    # Read the actual worker artifact, not a hand-built approximation. No dump
+    # exists after normal ingestion; summary must suffice for both fields.
+    from scripts.replay_stats import load_from_runs_root
+
+    stat = next(row for row in load_from_runs_root(run_root.parent) if row.run_id == run_id)
+    assert stat.session_id == args.session_id
+    assert stat.summary_calls == 1
+    assert stat.summary_prompt_tokens == 300
+    assert stat.summary_cache_read_tokens == 64
 
 
 @pytest.mark.asyncio
@@ -1350,6 +1449,58 @@ async def test_a_trim_summarizes_what_it_drops_into_one_block(tmp_path) -> None:
     assert summary_from(document["messages"]) == (2, "第一轮的记忆")
     assert len(_tagged(document["messages"])) == 1
     assert document["messages"][2] == user_msg("Q3"), "the kept turn follows the block"
+
+
+@pytest.mark.parametrize("reply_size", [200, 4_000])
+@pytest.mark.parametrize("old_memory", [None, "old memory"])
+async def test_final_evictions_all_reach_the_single_summary_call(
+    tmp_path, monkeypatch, reply_size, old_memory
+) -> None:
+    """Reserve memory before deciding the cut, including existing summaries."""
+    import frontier_agent.components.observers.conversation_snapshot as snapshots
+
+    # Freeze the estimator so background tokenizer loading cannot change the
+    # reproducer's tight budget between the probe and the final write.
+    monkeypatch.setattr(snapshots, "estimate_tokens", lambda text: len(text) // 4)
+    messages = [system_msg(_SYSTEM)]
+    if old_memory:
+        messages.append(user_msg(render_summary_content(old_memory)))
+    turns = []
+    for i in range(3):
+        turns.extend([user_msg(f"Q{i}:" + "q" * 200), assistant_msg(f"A{i}:" + "a" * 200)])
+    messages.extend(turns)
+    calls = []
+
+    async def summarize(old, dropped):
+        calls.append((old, list(dropped)))
+        return "s" * reply_size
+
+    document = await _dump_with(tmp_path, messages, summarizer=summarize, max_replay_tokens=300)
+    assert len(calls) == 1
+    assert calls[0][0] == old_memory
+    kept = document["messages"][2:]
+    assert kept, "reserve should leave the newest small turn intact"
+    assert calls[0][1] + kept == turns
+    assert len(_tagged(document["messages"])) == 1
+    assert document["messages_est_tokens"] <= 300
+    assert document["trim"]["dropped_turns"] == len(calls[0][1]) // 2
+    assert document["trim"]["kept_turns"] == len(kept) // 2
+    assert validate_messages(document["messages"]) is None
+
+
+async def test_summary_failure_does_not_apply_reserved_extra_evictions(tmp_path, monkeypatch):
+    import frontier_agent.components.observers.conversation_snapshot as snapshots
+
+    monkeypatch.setattr(snapshots, "estimate_tokens", lambda text: len(text) // 4)
+    messages = [system_msg(_SYSTEM)]
+    for i in range(3):
+        messages.extend([user_msg(f"Q{i}" + "q" * 200), assistant_msg("a" * 200)])
+    fallback, _ = trim_to_turns(messages, 0, max_tokens=300)
+    document = await _dump_with(
+        tmp_path, messages, summarizer=_RecordingSummarizer(None), max_replay_tokens=300
+    )
+    assert document["messages"] == fallback
+    assert document["trim"]["summary_status"] == "failed"
 
 
 async def test_a_second_trim_replaces_the_block_and_feeds_the_old_one_back(tmp_path) -> None:

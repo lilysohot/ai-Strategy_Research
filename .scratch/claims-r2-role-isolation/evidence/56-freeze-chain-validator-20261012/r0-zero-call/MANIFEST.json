@@ -3,15 +3,16 @@
   "created_on": "2026-10-12",
   "zero_call": true,
   "inputs": {
-    "tools/check_freeze_chain.py": "sha256:e55036a4e541a41bffe4ecc263099e360d3d2487a396f744c1744a772a37fb1f",
+    "tools/check_freeze_chain.py": "sha256:f1754de88a747db9380868301908c5b7bcce9340450194754f07ea84d2584d0f",
     ".scratch/claims-r2-role-isolation/evidence/47-scoring-contract-v41-signed-20261012/r0-zero-call/scoring-contract-v4.1.json": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
     "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate.json": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
     "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate-v2.json": "sha256:8cc11bccc912ea7b123b6e769728c9076046d526c16c8a1218e27a2a692270f6",
-    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-manifest.json": "sha256:da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e"
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-manifest.json": "sha256:da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/rebinding-v4.2-20261012.json": "sha256:8fa7f8bb503522d2ccd612f8542b9c8889e8f0fe79deab404637052463ba946a"
   },
   "outputs": {
     "README.md": "sha256:366c6ba9ad3989e926c827e36ccac2eef26359683c28db4eaff422a1a623609b",
-    "freeze-chain-check.json": "sha256:a6fc691e1c5ad646a4abd4efd506e892b232340d610b47a9b55a19e3a41505b5"
+    "freeze-chain-check.json": "sha256:ed205b2a073f6bca288fd5df8969a86bc574289f150bf8aac7924c55ddb10255"
   },
   "first_run": {
     "ok": 13,
@@ -25,5 +26,17 @@
     "drift": 0,
     "needs_ruling": 1,
     "note": "新增 README 与 P14 记录后复跑，drift 仍为 0"
+  },
+  "validator_updates": [
+    "CONTRACT_CURRENT 改指 58-…/scoring-contract-v4.2.json（v4.2 已签）",
+    "authority-pin 检查改为「命中任一已知门记录即 ok」",
+    "再绑定记录改为取 glob 最新一条（rebinding-v4.2-…）"
+  ],
+  "final_run": {
+    "ok": 11,
+    "covered_by_record": 5,
+    "drift": 0,
+    "needs_ruling": 0,
+    "exit_code": 0
   }
 }

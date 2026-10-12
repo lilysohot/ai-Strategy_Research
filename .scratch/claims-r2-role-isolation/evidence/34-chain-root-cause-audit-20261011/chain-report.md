@@ -21,6 +21,8 @@
 - 修订：r14（2026-10-12，零调用）：**P08 已完成 ⇒ Wave 0 收口**（32/33/34/35 的 r0 回填 MANIFEST；41 声明不补；`evidence/54-…`）。详见 §5.14。
 - 修订：r15（2026-10-12，零调用）：出 **P12/P13 签认件**（`48-…/rebinding-signoff-review.md`，`3fa1385f…`），并扩展 P12 范围至 3 处绑定点（新查 `freeze-state.json` 两处）。详见 §5.13.4。
 - 修订：r16（2026-10-12，零调用）：**P12/P13 已签认并落地**（U 签 `06ca5279…`；新增记录 `565a680b…`／`8cc11bcc…`）；**P14 已落地**（新增对齐记录，`validation-report.json` 字节不变）；**P16 冻结链校验器已建成并首跑**（`drift 0`，1 项待 U 裁定）。详见 §5.13.4。
+- 修订：r17（2026-10-12，零调用）：U 对校验器拦下项裁定 **(a)** ⇒ 出 **契约 v4.2 草案**（只改 3 处 authority pin，`unexpected_changed = 0`，阈值逐字不变；`evidence/57-…`，待签）；**P06 护栏修两处机制误报**（空白模板/空 signoff 占位被误判已签，`51-…/guard-fix-record.json`）。详见 §5.13.6。
+- 修订：r18（2026-10-12，零调用）：**契约 v4.2 已签认并落地**（U 签 `215a3490…`；`58-…/scoring-contract-v4.2.json`）；**P12 同轮再绑定 v4.2**（`rebinding-v4.2-20261012.json`，`8fa7f8bb…`）；**冻结链校验器全绿**（`ok 11 / covered 5 / drift 0 / needs_ruling 0 / exit 0`）。详见 §5.13.7。
 
 ## 0. 口径声明（先声明谓词，再看数字）
 
@@ -499,6 +501,59 @@ L9 是对 L3∩L7 的**测量**。把它计入节点数会重复计算同一处�
 - **1 项待 U 具名裁定**：契约 v4.1 的 `authority_source.sha256` 仍钉门 28 **v1**（`987772e9…`），而 P13 已产生继任记录 **v2**（`8cc11bcc…`）——阈值数值实测逐字相同，不影响口径，但"哪份门是权威"需裁定：(a) 契约出新版本改钉 v2；**(b) 明确 v1=冻结执行门、v2=基准持有记录**（本会话倾向 b）。裁定前校验器保持非零退出。
 
 **记账四条至此的状态**：绑定同步（P12）✅、validation-report 一致性（P14）✅、冻结链校验器（P16）✅、门 28 基准同步（P13）✅。**剩余**：P03 评分器读契约（已解锁，代码未改）；上述 1 项裁定；`freeze-state.json.scoring_contract` 的"路径改哈希"（需改字节，单独裁定）。
+
+#### 5.13.6 U 裁定 (a) ⇒ 契约 v4.2 草案（r17 补记）
+
+U 对 §5.13.5 的待裁定项选 **(a)：契约出新版本、把权威门改钉 v2**。落地：`evidence/57-contract-v42-draft-20261012/`（零调用）。
+
+- **改动（机器 diff 证明）**：`changed = 9` 个叶子、**`unexpected_changed = 0`**、**`threshold_values_unchanged = true`**。实质只有 3 处：`threshold_source.authority_source.{sha256, where}` 与 `threshold_source.effective.source` 改指门 28 **v2**（`preregistered-gate-v2.json`，`8cc11bcc…`）；其余为 `schema_version`/`status`/`supersedes`/`revision_history`/`signoff` 的版本推进。
+- `status = draft_pending_human_signature`；**签认前不生效**，v4.1 字节不变（`c76ac13e…`）。
+- 全契约 grep 复核：钉门 28 哈希/文件名的位置**仅 3 处**，其余"门 28"均为概念性散文引用（保留）。
+
+| 产物 | sha256 |
+|---|---|
+| `proposed-scoring-contract-v4.2.json`（草案） | 见 `57-…/MANIFEST.json` |
+| `contract-v4.2-diff.json`（机器 diff） | 同上 |
+| **`contract-v4.2-review.md`（签认件，待签）** | 同上 |
+
+**连带：P06 护栏修两处机制误报**（`51-…/guard-fix-record.json`）
+
+生成 v4.2 草稿时护栏**拒绝写入**，原因是两处误报——把"签认槽位的字样"当成"签认本身"：
+
+1. **md**：空白模板含"复核人：""☐ 认可并签认"即判已签 → 改为：复核人行须有实际姓名（剥日期标签）、或有 ☑、或结论行有 x 标记。
+2. **json**：存在 `signoff` 键即判已签 → 改为：`signoff` 须实际携带 `signed_by` 或 `instrument`。
+
+修复后自检：已签契约/已签审阅件仍判 `signed`，空白模板与带空占位的草案判 `plain`；`tests/test_evidence_guard.py` 增至 **17 项**全过；P06 扫描器仍 `violations = 0`。护栏哈希 `0396923e…` → `bbe4bacd…`（`51/MANIFEST.json` 字节未改，由 `guard-fix-record.json` 作取代声明）。
+
+**待办**：U 签 `57-…/contract-v4.2-review.md` ⇒ v4.2 生效 ⇒ **P03（评分器读契约）以 v4.2 为准开工**。
+
+#### 5.13.7 契约 v4.2 已签认落地；冻结链校验器全绿（r18 补记）
+
+**签认与落地**（`evidence/58-contract-v42-signed-20261012/`）
+
+- U 签认件：`57-…/contract-v4.2-review.md` = `215a3490…`（空白版 `759e89c2…`；`复核人 xyl／2026-10-12`，`☑ 认可并签认 v4.2`，备注空 ⇒ 草案按原样接受，已显式记录该解释）。
+- **新增**：`58-…/scoring-contract-v4.2.json`（`status = frozen_signed`；`authority_source` 改钉门 28 **v2** `8cc11bcc…`）+ `signoff-record.json` + README + MANIFEST。
+- 上游字节未变（实测）：v4.1 `c76ac13e…`、门 28 v2 `8cc11bcc…`、签认件 `215a3490…`。复跑被护栏拒（已签件不可覆盖）。
+
+**P12 同轮再绑定 v4.2**（`10-quality-gold-freeze-20261008-r2/rebinding-v4.2-20261012.json`，`8fa7f8bb…`）
+
+- 依据：已签契约 v4.2 的 `bookkeeping_requirements.contract_binding_sync`（"契约修订必须同轮更新 frozen-gold 侧记录的契约绑定哈希"）。校验器在 v4.2 落地后立即拦下这一点（P12 v4.1 记录绑定的是 v4.1 ⇒ drift），证明该机制有效。
+- 三处站点处置与 v4.1 再绑定记录完全一致；冻结链三文件与上一条记录字节未动（`in_place_edits = 0`）。
+
+**冻结链校验器全绿**（`tools/check_freeze_chain.py`，`56-…/freeze-chain-check.json`）
+
+```
+ok 11 · covered_by_record 5 · drift 0 · needs_ruling 0 · exit 0
+```
+
+- 校验器三处更新：`CONTRACT_CURRENT` 改指 v4.2；authority-pin 检查改为"命中任一已知门记录即 ok"；再绑定记录取 glob 最新一条。
+- 5 处 `covered_by_record` 均为"落后但已被新版本记录覆盖"，不得读成 ok。
+
+**一条须记录在案的机制性事实（backlog，不阻塞）**
+
+契约钉门哈希、门的 `metric_basis` 又钉契约版本 ⇒ **两者会相互追逐**：本轮 v4.2 落地后，门 v2 的 `metric_basis`（`…-v4.1`）已落后于契约，若按 `gate28_basis_sync` 再推进门，门哈希变化又会使契约的 pin 过期。**打破追逐的不变量是"阈值数值恒等"**（校验器已逐字核查 v1/v2 与契约三方一致）。建议后续以该不变量为权威、门版本推进只作簿记；是否把此规则写成条款属 U 裁定。
+
+**剩余**：P03 评分器读契约（以 **v4.2** 为准，已解锁）；P04/P05 口径实现与回归；route a/b 与缺口 1/2；Stage 2 真实裁定 222 条；补跑授权。
 
 **C. 仍未完成（不得读成已过门）**：P01 装配器、P02 匹配改造、P03 评分器读契约/阈值、P04/P05 口径实现与回归、P12/P13 签认、route a/b 与缺口 1/2。
 

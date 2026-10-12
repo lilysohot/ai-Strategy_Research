@@ -74,6 +74,7 @@ def _write_run(
     dump: bool = True,
     summary_in_run_dir: bool = False,
     summary_usage: dict | None = None,
+    legacy_summary: bool = False,
 ) -> None:
     """Lay out one run the way ``build_run_paths`` does.
 
@@ -85,10 +86,12 @@ def _write_run(
     run = runs_root / name / "run"
     (run / "agent" / "trajectories").mkdir(parents=True)
     summary: dict = {"final_answer": "ok"}
+    if not legacy_summary:
+        summary["session_id"] = session_id
     if replay is not None:
         summary["replay"] = dict(replay)
-        if summary_usage is not None:
-            summary["replay"]["summary_usage"] = summary_usage
+    if summary_usage is not None:
+        summary["summary_usage"] = summary_usage
     summary_path = (run if summary_in_run_dir else runs_root / name) / "summary.json"
     summary_path.write_text(json.dumps(summary), encoding="utf-8")
     (run / "agent" / "trajectories" / "react_agent.jsonl").write_text(
@@ -286,6 +289,65 @@ def test_a_run_without_a_summary_is_skipped_not_guessed(tmp_path) -> None:
     # A bare directory (no summary.json) is not a run this board can read.
     (tmp_path / "not-a-run").mkdir()
     assert load_from_runs_root(tmp_path) == []
+
+
+async def test_directory_reuse_survives_ingestion_removing_the_dumps(db, tmp_path, monkeypatch):
+    import server.orchestrator as orchestrator
+    from server.store import create_run, ensure_session, read_session_conversation
+
+    user_id = await _new_user_id()
+    a, b = uuid.uuid4(), uuid.uuid4()
+    for sid in (a, b):
+        await ensure_session(session_id=sid, user_id=user_id, title="stats")
+    monkeypatch.setattr(orchestrator, "run_dir_for", lambda rid: tmp_path / rid)
+    orch = orchestrator.Orchestrator()
+    for index, (sid, prompt, cache) in enumerate([(a, 1000, 0), (b, 2000, 0), (a, 1200, 900)]):
+        run_id = uuid.uuid4()
+        name = run_id.hex
+        await create_run(
+            run_id=run_id,
+            session_id=sid,
+            user_id=user_id,
+            prompt="stats",
+            pipeline_id="stateful-react-agent",
+            run_dir=str(tmp_path / name),
+            status="completed",
+        )
+        _write_run(
+            tmp_path,
+            name,
+            prompt=prompt,
+            cache=cache,
+            replay={"decision": "used"},
+            session_id=sid.hex,
+            mtime=1_700_000_000 + index,
+            summary_usage={"calls": 1, "prompt_tokens": 300},
+        )
+        await orch._ingest_conversation(name, session_uuid=sid)
+        assert await read_session_conversation(session_id=sid)
+        assert not (tmp_path / name / "run" / "conversation.json").exists()
+    board = summarise(load_from_runs_root(tmp_path))
+    assert [row["reuse"] for row in board["turns"]] == [None, None, 0.9]
+    assert len(board["summary"]["sessions"]) == 2
+    assert board["summary"]["summary_usage"]["calls"] == 3
+    assert board["summary"]["summary_usage"]["prompt_tokens"] == 900
+
+
+@pytest.mark.parametrize("dump", [False, True])
+def test_old_directory_artifacts_only_group_with_a_known_session(tmp_path, dump) -> None:
+    for index in range(2):
+        _write_run(
+            tmp_path,
+            f"old-{index}",
+            prompt=1000,
+            cache=900,
+            replay={"decision": "used"},
+            mtime=1_700_000_000 + index,
+            dump=dump,
+            legacy_summary=True,
+        )
+    board = summarise(load_from_runs_root(tmp_path))
+    assert board["turns"][1]["reuse"] == (0.9 if dump else None)
 
 
 def test_a_run_with_no_trajectory_is_flagged_unmetered(tmp_path) -> None:

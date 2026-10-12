@@ -189,7 +189,8 @@ def trim_to_turns(
 
     Cutting on a ``user`` boundary (never mid-turn) keeps tool pairing intact, and
     the protected head — index 0 (the system prompt), plus index 1 when it holds
-    the summary block (issue 01 §12.2) — is never dropped. ``<= 0`` disables a
+    the summary block (issue 01 §12.2) — is protected unless the head alone
+    exceeds the token budget. ``<= 0`` disables a
     bound, mirroring the repo's "0 disables the bound" convention.
 
     Two bounds, because a turn count is not a size. A run may legally end just
@@ -307,11 +308,10 @@ def build_dump(
     (An earlier sketch had "keep the dropped turns too when both fit", which is
     incoherent: the turns were dropped *because* they did not fit.)
 
-    ``messages_est_tokens`` is informational only — the writer measures the kept
-    window once, and the reader copies it into the replay decision so the run's
-    ``usage_json`` can report how big the replayed context was without
-    re-tokenising it. It is additive to ``SCHEMA``: readers ignore keys they do
-    not know, and no replay decision depends on it.
+    ``messages_est_tokens`` is informational only: the writer records the kept
+    window's size for inspection. The reader re-estimates messages against the
+    current budget rather than trusting this field, so older dumps without it
+    remain readable and cannot bypass the size check.
     """
     wire = for_wire(_wire_copy(messages))
     if summary_block:
@@ -351,6 +351,7 @@ def select_replay(
     pipeline_id: str = "",
     node_id: str = "",
     session_id: str = "",
+    max_replay_tokens: int = 0,
 ) -> tuple[list[Message] | None, dict[str, Any]]:
     """Validate a transported dump; return ``(messages, decision)``.
 
@@ -417,6 +418,18 @@ def select_replay(
         decision["reason"] = "system message bytes differ"
         return None, decision
 
+    # Old writers and a subsequently reduced profile budget can leave an
+    # oversized carrier in the DB. Reject it before the first model call;
+    # never trust the stored estimate or slide the window on the read path.
+    measured_tokens = estimate_tokens(canonical_json(messages))
+    if max_replay_tokens > 0 and measured_tokens > max_replay_tokens:
+        decision.update(
+            reason="replay token budget exceeded",
+            est_tokens=measured_tokens,
+            token_budget=max_replay_tokens,
+        )
+        return None, decision
+
     head, _ = summary_from(messages)
     decision.update(
         {
@@ -429,8 +442,8 @@ def select_replay(
             ),
             # Window size, reported next to the field's own counters so a reader
             # can tell "replayed a 9k-token window" from "started fresh" (S1-a).
-            # ``est_tokens`` is 0 for dumps written before the writer recorded it.
-            "est_tokens": int(doc.get("messages_est_tokens") or 0),
+            # Recomputed against the current estimator, including old dumps.
+            "est_tokens": measured_tokens,
             "payload_bytes": len(payload.encode("utf-8")),
             "trim": doc.get("trim"),
             "stopped_by": str(doc.get("stopped_by") or ""),
@@ -634,10 +647,10 @@ class ConversationSnapshotObserver(BaseObserver):
             # always correct — replaying a half-answered turn would 400 upstream.
             logger.warning("conversation snapshot skipped: %s", invalid)
             return
-        summary_block = await self._summarize_dropped(wire)
+        prepared, trim = await self._prepare_snapshot(wire)
         self._report_summary_usage(result)
         document = build_dump(
-            messages=wire,
+            messages=prepared,
             system_prompt=self._system_prompt,
             tool_names=self._tool_names,
             tools_hash=self._tools_hash,
@@ -650,10 +663,10 @@ class ConversationSnapshotObserver(BaseObserver):
             model_name=self._model_name,
             turns_used=int(getattr(result, "turns_used", 0) or 0),
             stopped_by=str(getattr(result, "stopped_by", "") or ""),
-            max_replay_turns=self._effective_max_turns(wire),
-            max_replay_tokens=self._max_replay_tokens,
-            summary_block=summary_block,
         )
+        # The cut was fixed before the summary call. Do not trim again after
+        # adding memory: that could discard turns the summarizer never saw.
+        document["trim"] = trim
         self._atomic_write(document)
 
     def _effective_max_turns(self, wire: list[Message]) -> int:
@@ -675,8 +688,8 @@ class ConversationSnapshotObserver(BaseObserver):
         as a pure append. The prefix then survives ``step`` turns per cut instead
         of zero, and the summary is rewritten once per cut instead of per turn.
 
-        This is the *only* place the decision is made: ``_write`` and
-        ``_summarize_dropped`` must agree on it, or a write would cut without
+        This is the *only* place the turn-bound decision is made: the ordinary
+        trim and the summary reservation must agree on it, or a write would cut without
         updating the memory (or rewrite the summary without cutting, which alone
         resets the cache). The token bound is deliberately not part of the
         hysteresis — it is the guard that keeps a replay from becoming a request
@@ -719,21 +732,35 @@ class ConversationSnapshotObserver(BaseObserver):
         if isinstance(metadata, dict):
             metadata["summary_usage"] = report
 
-    async def _summarize_dropped(self, wire: list[Message]) -> str | None:
-        """The summary block to write, updated only when turns are being dropped.
+    async def _prepare_snapshot(
+        self, wire: list[Message]
+    ) -> tuple[list[Message], dict[str, Any] | None]:
+        """Fix the cut before one summary call; fit memory without cutting again.
 
-        Returning the *existing* block untouched when nothing is dropped is what
-        keeps the prefix byte-stable between trims: the block is part of the
-        cached prefix, so rewriting it every turn would reset the cache on every
-        turn — the very failure this whole feature exists to avoid.
+        Reserve up to 2048 estimated tokens (at most a quarter of the window)
+        for the summary including its envelope. Only reserve on an actual cut,
+        so an untouched prefix remains byte-identical. A failed summary uses
+        the ordinary trim, without dropping the extra turns reserved for it.
         """
         head, old_summary = summary_from(wire)
-        _, probe = trim_to_turns(
+        fallback, probe = trim_to_turns(
             wire, self._effective_max_turns(wire), max_tokens=self._max_replay_tokens, head=head
         )
         if probe is None or self._summarizer is None:
-            return old_summary
-        dropped = wire[head : int(probe["cut_at"])]
+            return fallback, probe
+        cut = int(probe["cut_at"])
+        budget = self._max_replay_tokens
+        if budget > 0:
+            reserve = min(2048, max(1, budget // 4))
+            # Remove the old summary for planning: the new one replaces it.
+            _, reserved_trim = trim_to_turns(
+                [wire[0], *wire[head:]],
+                self._effective_max_turns(wire),
+                max_tokens=max(1, budget - reserve),
+            )
+            if reserved_trim:
+                cut = max(cut, int(reserved_trim["cut_at"]) + head - 1)
+        dropped = wire[head:cut]
         # Counted here, not read off the summarizer: the observer is the only one
         # that knows a call is being made, and a plain callable cannot report it.
         self._summary_calls += 1
@@ -743,10 +770,47 @@ class ConversationSnapshotObserver(BaseObserver):
             )
         except Exception:
             logger.warning("conversation summary failed; the trim stands alone", exc_info=True)
-            return old_summary
-        # A ``None``/empty result keeps the previous memory rather than dropping
-        # it: a failed update must not lose what an earlier trim paid for.
-        return summary or old_summary
+            summary = None
+        if not summary or not summary.strip():
+            return fallback, {**probe, "summary_status": "failed"}
+
+        suffix = wire[cut:]
+
+        def assembled(text: str) -> list[Message]:
+            return [wire[0], user_msg(render_summary_content(text)), *suffix]
+
+        prepared = assembled(summary)
+        status = "updated"
+        if budget > 0 and estimate_tokens(canonical_json(prepared)) > budget:
+            # Bound the summary, not the suffix. Even an unexpectedly verbose
+            # provider cannot silently evict an additional unsummarized turn.
+            marker = "\n[summary truncated to fit replay budget]"
+            if estimate_tokens(canonical_json(assembled(marker))) > budget:
+                return fallback, {**probe, "summary_status": "no_space"}
+            lo, hi = 0, len(summary)
+            while lo < hi:
+                mid = (lo + hi + 1) // 2
+                if estimate_tokens(canonical_json(assembled(summary[:mid] + marker))) <= budget:
+                    lo = mid
+                else:
+                    hi = mid - 1
+            prepared = assembled(summary[:lo] + marker)
+            status = "truncated"
+        trim = {
+            **probe,
+            "cut_at": cut,
+            "dropped_turns": sum(m.get("role") == "user" for m in dropped),
+            "kept_turns": sum(m.get("role") == "user" for m in suffix),
+            "summary_status": status,
+        }
+        if budget > 0:
+            trim["est_tokens"] = estimate_tokens(canonical_json(prepared))
+            extra_turns = sum(m.get("role") == "user" for m in wire[int(probe["cut_at"]) : cut])
+            trim["dropped_for_tokens"] = int(probe.get("dropped_for_tokens", 0)) + extra_turns
+            if extra_turns and "replay_max_tokens" not in str(trim["reason"]):
+                trim["reason"] += f" and replay_max_tokens={budget}"
+            trim.pop("dropped_summary_for_tokens", None)
+        return prepared, trim
 
     def _atomic_write(self, document: dict[str, Any]) -> None:
         self._path.parent.mkdir(parents=True, exist_ok=True)

@@ -641,6 +641,9 @@ async def run_once(args: argparse.Namespace) -> int:
     _stopped_by = stop.stopped_by or bridge.stopped_by
     summary = {
         "run_id": args.run_id,
+        # Survives ingestion, which deletes run/conversation.json. Directory
+        # statistics must not need the continuity carrier to identify a run.
+        "session_id": args.session_id,
         "final_answer": final_answer[:50_000],
         "error": error,
         "stopped_by": _stopped_by,

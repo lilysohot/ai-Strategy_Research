@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import tempfile
 from pathlib import Path
 from typing import Any
@@ -67,9 +68,43 @@ _COUNTERSIGNATURE_KEYS = (
 
 _TEXT_SUFFIXES = (".md", ".txt", ".markdown")
 
+# A blank review *template* also contains the words "复核人：" and an unchecked "☐ 认可并签认",
+# so a plain substring match misclassifies every empty template as signed (found 2026-10-12
+# while regenerating the v4.2 draft). A text file counts as signed only when a signature was
+# actually filled in: a reviewer name, a checked box, or an explicit x-mark on the conclusion line.
+_REVIEWER_LINE = re.compile(r"复核人：([^\n]*)")
+_DATE_LABEL = re.compile(r"日期[:：]?.*$", re.DOTALL)
+
+
+def _reviewer_name_filled(text: str) -> bool:
+    """True when at least one 复核人 line carries a name rather than only a date label."""
+    for tail in _REVIEWER_LINE.findall(text):
+        remainder = _DATE_LABEL.sub("", tail.strip()).strip(" ：:\u3000")
+        if remainder:
+            return True
+    return False
+
+
+_TEXT_SIGNATURE_PATTERNS = (
+    re.compile(r"☑"),
+    re.compile(r"(?m)^\s*-\s*结论：\s*x\s"),
+)
+
 
 class SignedArtifactError(RuntimeError):
     """Raised when a write would overwrite a signed or frozen artifact."""
+
+
+def _signoff_block_filled(payload: dict[str, Any]) -> bool:
+    """True only when a ``signoff`` block actually carries a signature.
+
+    A draft may legitimately contain an empty ``signoff`` placeholder; treating its mere
+    presence as a signature misclassified the v4.2 draft as signed (found 2026-10-12).
+    """
+    signoff = payload.get("signoff")
+    if not isinstance(signoff, dict):
+        return bool(signoff)
+    return bool(str(signoff.get("signed_by") or "").strip()) or bool(signoff.get("instrument"))
 
 
 def artifact_state(path: Path) -> str:
@@ -85,7 +120,13 @@ def artifact_state(path: Path) -> str:
         return "plain"
     text = path.read_text(encoding="utf-8", errors="replace")
     if path.suffix.lower() in _TEXT_SUFFIXES:
-        return "signed" if any(marker in text for marker in SIGNATURE_MARKERS) else "plain"
+        if _reviewer_name_filled(text):
+            return "signed"
+        return (
+            "signed"
+            if any(pattern.search(text) for pattern in _TEXT_SIGNATURE_PATTERNS)
+            else "plain"
+        )
     try:
         payload: Any = json.loads(text)
     except json.JSONDecodeError:
@@ -94,7 +135,13 @@ def artifact_state(path: Path) -> str:
         return "plain"
     if str(payload.get("status") or "") in SIGNED_STATUSES:
         return "signed"
-    return "signed" if any(payload.get(key) for key in _COUNTERSIGNATURE_KEYS) else "plain"
+    for key in _COUNTERSIGNATURE_KEYS:
+        if key == "signoff":
+            if _signoff_block_filled(payload):
+                return "signed"
+        elif payload.get(key):
+            return "signed"
+    return "plain"
 
 
 def assert_writable(path: Path, *, reason: str = "") -> None:

@@ -68,6 +68,29 @@ def test_markdown_review_sheet_is_signed_by_marker(tmp_path: Path) -> None:
     assert artifact_state(other) == "plain"
 
 
+def test_blank_review_template_is_not_signed(tmp_path: Path) -> None:
+    """A template carries the *words* of a signature slot; that is not a signature."""
+    template = tmp_path / "review.md"
+    template.write_text(
+        "# 审阅件（待签）\n\n"
+        "## 五、签认栏\n\n"
+        "- 复核人：　　　　　　日期：\n"
+        "- 结论：☐ 认可并签认　　☐ 退回修改\n"
+        "- 备注：\n",
+        encoding="utf-8",
+    )
+    assert artifact_state(template) == "plain"
+
+
+def test_checked_box_counts_as_signed(tmp_path: Path) -> None:
+    sheet = tmp_path / "review.md"
+    sheet.write_text("- 结论：☑ 认可并签认 v4\n", encoding="utf-8")
+    assert artifact_state(sheet) == "signed"
+    xmark = tmp_path / "xmark.md"
+    xmark.write_text("- 结论：x 认可并签认 v4　　☐ 退回修改\n", encoding="utf-8")
+    assert artifact_state(xmark) == "signed"
+
+
 def test_write_once_refuses_existing_file(tmp_path: Path) -> None:
     target = tmp_path / "artifact.json"
     write_once(target, {"a": 1})
@@ -105,3 +128,34 @@ def test_conformance_scanner_passes_on_the_real_tree() -> None:
         check=False,
     )
     assert result.returncode == 0, result.stdout + result.stderr
+
+
+def test_empty_signoff_placeholder_is_not_signed(tmp_path: Path) -> None:
+    """A draft may carry an empty signoff block; only a filled one counts (P06 guard fix)."""
+    draft = tmp_path / "draft.json"
+    draft.write_text(
+        json.dumps(
+            {
+                "schema_version": "x",
+                "status": "draft_pending_human_signature",
+                "signoff": {"signed_by": None, "signed_on": None, "instrument": None},
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert artifact_state(draft) == "plain"
+
+
+def test_filled_signoff_block_is_signed(tmp_path: Path) -> None:
+    signed = tmp_path / "signed.json"
+    signed.write_text(
+        json.dumps(
+            {
+                "schema_version": "x",
+                "status": "draft_pending_human_signature",
+                "signoff": {"signed_by": "xyl", "instrument": {"sha256": "sha256:" + "a" * 64}},
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert artifact_state(signed) == "signed"

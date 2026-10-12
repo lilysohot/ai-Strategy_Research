@@ -1,0 +1,37 @@
+{
+  "schema_version": "items-p06-guard-fix-record-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "why": "起草契约 v4.2 草案时，护栏把**空白审阅模板**与**带空 signoff 占位的草案**误判为已签，拒绝重新生成。两处均为机制误报（把\"签认槽位的字样\"当成\"签认本身\"），已修复并加回归测试。",
+  "guard_sha256_before": "sha256:0396923e4371817dd47da10e570c38250efe862de4e4ffba31acbac4354f7951",
+  "guard_sha256_after": "sha256:bbe4bacdd6d06d2d673d58c3eff6d90dfd94c62fcb99902b1b926d4fd54fa985",
+  "fixes": [
+    {
+      "class": "md 误报",
+      "was": "纯文本标记（复核人：/认可并签认）出现在空白模板里即判已签",
+      "now": "复核人行须有实际姓名（剥掉日期标签后非空）、或有 ☑、或结论行有 x 标记",
+      "test": "test_blank_review_template_is_not_signed / test_checked_box_counts_as_signed"
+    },
+    {
+      "class": "json 误报",
+      "was": "存在 signoff 键即判已签",
+      "now": "signoff 块须实际携带 signed_by 或 instrument",
+      "test": "test_empty_signoff_placeholder_is_not_signed / test_filled_signoff_block_is_signed"
+    }
+  ],
+  "supersession": {
+    "manifest_inputs_stale": [
+      "tools/evidence_guard.py（本清单记录的是修复前哈希）"
+    ],
+    "policy": "51/MANIFEST.json 字节不改（write-once）；本件即取代声明"
+  },
+  "self_check_after_fix": {
+    "47 已签 v4.1 契约": "signed",
+    "46 已签 v4.1 审阅件": "signed",
+    "57 空白 v4.2 模板": "plain",
+    "57 v4.2 草案（空 signoff 占位）": "plain",
+    "scanner_exit": 0
+  },
+  "tests": "tests/test_evidence_guard.py 17 项全过",
+  "in_place_edits": 0
+}

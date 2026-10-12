@@ -31,14 +31,21 @@ from typing import Any
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 EV = REPO_ROOT / ".scratch/claims-r2-role-isolation/evidence"
-CONTRACT_V4_1 = (
-    EV / "47-scoring-contract-v41-signed-20261012/r0-zero-call/scoring-contract-v4.1.json"
-)
+# The currently signed contract; newer versions replace this path as they are signed.
+CONTRACT_CURRENT = EV / "58-contract-v42-signed-20261012/r0-zero-call/scoring-contract-v4.2.json"
+if not CONTRACT_CURRENT.exists():  # keeps the validator usable before v4.2 is signed
+    CONTRACT_CURRENT = (
+        EV / "47-scoring-contract-v41-signed-20261012/r0-zero-call/scoring-contract-v4.1.json"
+    )
 GOLD_FREEZE = EV / "10-quality-gold-freeze-20261008-r2"
 FREEZE_MANIFEST = GOLD_FREEZE / "freeze-manifest.json"
 FREEZE_STATE = GOLD_FREEZE / "freeze-state.json"
 FROZEN_GOLD = GOLD_FREEZE / "frozen-gold.json"
-P12_RECORD = GOLD_FREEZE / "rebinding-v4.1-20261012.json"
+_REBINDING_RECORDS = sorted(GOLD_FREEZE.glob("rebinding-v*.json"))
+# The latest rebinding record is the one that must bind the currently signed contract.
+P12_RECORD = (
+    _REBINDING_RECORDS[-1] if _REBINDING_RECORDS else (GOLD_FREEZE / "rebinding-v4.1-20261012.json")
+)
 GATE_V1 = EV / "28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate.json"
 GATE_V2 = EV / "28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate-v2.json"
 
@@ -114,38 +121,45 @@ def main() -> int:
     parser.add_argument("--quiet", action="store_true")
     args = parser.parse_args()
 
-    contract = load(CONTRACT_V4_1)
+    contract = load(CONTRACT_CURRENT)
     gate_v1 = load(GATE_V1)
     gate_v2 = load(GATE_V2) if GATE_V2.exists() else None
     report = Report()
 
-    contract_hash = sha256(CONTRACT_V4_1)
+    contract_hash = sha256(CONTRACT_CURRENT)
     gate_v1_hash = sha256(GATE_V1)
+    gate_v2_hash = sha256(GATE_V2) if GATE_V2.exists() else None
+    known_gates = {
+        "gate v1 (preregistered-gate.json)": gate_v1_hash,
+        "gate v2 (preregistered-gate-v2.json)": gate_v2_hash,
+    }
 
-    # 1. The contract's pinned authority gate.
+    # 1. The contract's pinned authority gate must be one of the known gate records.
     authority = contract["threshold_source"]["authority_source"]
+    pinned_label = next(
+        (label for label, digest in known_gates.items() if digest == authority["sha256"]), None
+    )
     report.add(
         Binding(
-            claim="contract v4.1 → authority gate (threshold_source.authority_source.sha256)",
+            claim="current contract → authority gate (threshold_source.authority_source.sha256)",
             expected=authority["sha256"],
-            actual=gate_v1_hash,
-            verdict="ok" if authority["sha256"] == gate_v1_hash else "drift",
+            actual=pinned_label or "no known gate record matches",
+            verdict="ok" if pinned_label else "drift",
             detail=str(GATE_V1.relative_to(REPO_ROOT)),
         )
     )
-    # ... and whether a successor gate record exists that the pin does not name.
-    if gate_v2 is not None:
+    # ... and whether a newer gate record exists that the pin does not name.
+    if gate_v2_hash is not None and authority["sha256"] == gate_v1_hash:
         report.add(
             Binding(
-                claim="contract v4.1 authority pin vs successor gate record",
+                claim="contract authority pin vs successor gate record",
                 expected=gate_v1_hash,
-                actual=sha256(GATE_V2),
+                actual=gate_v2_hash,
                 verdict="needs_ruling",
                 detail=(
-                    "门 28 已按 P13 产生继任记录 preregistered-gate-v2.json，但已签契约 v4.1 的 "
-                    "authority_source.sha256 仍钉在 v1 上。阈值数值经实测逐字相同，故不影响口径；"
-                    "但『哪一份门是权威』需具名裁定：(a) 契约出新版本改钉 v2，或 (b) 明确 v1 为"
-                    "『冻结执行门』、v2 为『基准持有记录』。"
+                    "门 28 已产生继任记录 preregistered-gate-v2.json，而契约的 authority_source.sha256 "
+                    "仍钉在 v1 上。阈值数值经实测逐字相同，故不影响口径；但『哪一份门是权威』需具名裁定："
+                    "(a) 契约出新版本改钉 v2，或 (b) 明确 v1 为『冻结执行门』、v2 为『基准持有记录』。"
                 ),
             )
         )

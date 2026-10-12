@@ -1,0 +1,53 @@
+{
+  "schema_version": "items-gold-freeze-contract-rebinding-1",
+  "kind": "rebinding_record",
+  "status": "agent_recorded",
+  "created_on": "2026-10-12",
+  "issue": "P12 后续 / contract_binding_sync",
+  "authorised_by": "已签契约 v4.2 的 bookkeeping_requirements.contract_binding_sync（「契约修订必须同轮更新 frozen-gold 侧记录的契约绑定哈希」）；U 2026-10-12 指令「落 v4.2 签认版 + 复跑冻结链校验器」。",
+  "binds_contract": {
+    "schema_version": "non-table-selected-target-scoring-contract-v4.2",
+    "sha256": "sha256:67537eadcb2074d5bb47c19d20177bd400a8850fce560aa6b1f969409d42b943",
+    "path": ".scratch/claims-r2-role-isolation/evidence/58-contract-v42-signed-20261012/r0-zero-call/scoring-contract-v4.2.json"
+  },
+  "supersedes_record": {
+    "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/rebinding-v4.1-20261012.json",
+    "sha256": "sha256:565a680b5bc6294eaa17300f872d07786723fc9c87e4fa82d05f6d087bd6309f",
+    "bound_version": "v4.1",
+    "note": "上一条再绑定记录钉的是 v4.1；契约现已推进 v4.2（仅 3 处 authority pin 变更，阈值逐字不变），故须同轮再绑定。"
+  },
+  "binding_sites": [
+    {
+      "site": "freeze-manifest.json.inputs[scoring-contract.json]",
+      "before": "2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe",
+      "after": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+      "disposition": "rebound by this record"
+    },
+    {
+      "site": "freeze-state.json.scoring_contract",
+      "before_kind": "path_binding",
+      "observed_value": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/scoring-contract.json",
+      "resolved_content_sha256_at_signing": "d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
+      "resolved_version_at_signing": "v3",
+      "after": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+      "disposition": "本记录钉住解析后的哈希；『把路径改成哈希』属改字节，留作后续单独裁定（路径式绑定为弱绑定：会静默跟随路径内容）"
+    },
+    {
+      "site": "freeze-state.json.contract_snapshot",
+      "embedded_schema_version": "non-table-selected-target-scoring-contract-v2",
+      "embedded_status": "draft_pending_human_review",
+      "disposition": "**保留字节，不改**：它是冻结当时实际生效的契约的历史记录，改它即伪造历史。本记录声明：该快照是历史，**不是**当前绑定；当前绑定即本记录的 binds_contract"
+    }
+  ],
+  "binding_sites_note": "三处站点的处置与 v4.1 再绑定记录完全一致（manifest 输入再绑定 / 路径绑定钉解析哈希 / 内嵌快照保留字节声明为历史）。",
+  "bytes_left_untouched": {
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-manifest.json": "sha256:da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-state.json": "sha256:08703b8dad9fc6c130872899741534c940787c29a15423db19d398999b237d85",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/rebinding-v4.1-20261012.json": "sha256:565a680b5bc6294eaa17300f872d07786723fc9c87e4fa82d05f6d087bd6309f"
+  },
+  "gold_bytes_unchanged": true,
+  "threshold_values_changed": false,
+  "in_place_edits": 0,
+  "note": "本件是**新增记录**；冻结链三个文件与上一条再绑定记录的字节一律未动。"
+}

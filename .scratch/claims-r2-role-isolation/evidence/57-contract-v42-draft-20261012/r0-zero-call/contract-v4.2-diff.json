@@ -1,0 +1,37 @@
+{
+  "schema_version": "items-contract-diff-1",
+  "from": {
+    "schema_version": "non-table-selected-target-scoring-contract-v4.1",
+    "sha256": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b"
+  },
+  "to": {
+    "schema_version": "non-table-selected-target-scoring-contract-v4.2",
+    "sha256": null
+  },
+  "changed": [
+    "revision_history",
+    "schema_version",
+    "status",
+    "supersedes.note",
+    "supersedes.schema_version",
+    "supersedes.sha256",
+    "threshold_source.authority_source.sha256",
+    "threshold_source.authority_source.where",
+    "threshold_source.effective.source"
+  ],
+  "changed_allowed": [
+    "revision_history",
+    "schema_version",
+    "status",
+    "threshold_source.authority_source.sha256",
+    "threshold_source.authority_source.where",
+    "threshold_source.effective.source",
+    "signoff.",
+    "supersedes."
+  ],
+  "added": [],
+  "removed": [],
+  "revision_history_note": "revision_history 追加 v4.2 条目（含未签认态），不计入 changed。",
+  "unexpected_changed": [],
+  "threshold_values_unchanged": true
+}

@@ -4,18 +4,11 @@
   "zero_call": true,
   "checks": [
     {
-      "claim": "contract v4.1 → authority gate (threshold_source.authority_source.sha256)",
-      "expected": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
-      "actual": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
+      "claim": "current contract → authority gate (threshold_source.authority_source.sha256)",
+      "expected": "sha256:8cc11bccc912ea7b123b6e769728c9076046d526c16c8a1218e27a2a692270f6",
+      "actual": "gate v2 (preregistered-gate-v2.json)",
       "verdict": "ok",
       "detail": ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate.json"
-    },
-    {
-      "claim": "contract v4.1 authority pin vs successor gate record",
-      "expected": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
-      "actual": "sha256:8cc11bccc912ea7b123b6e769728c9076046d526c16c8a1218e27a2a692270f6",
-      "verdict": "needs_ruling",
-      "detail": "门 28 已按 P13 产生继任记录 preregistered-gate-v2.json，但已签契约 v4.1 的 authority_source.sha256 仍钉在 v1 上。阈值数值经实测逐字相同，故不影响口径；但『哪一份门是权威』需具名裁定：(a) 契约出新版本改钉 v2，或 (b) 明确 v1 为『冻结执行门』、v2 为『基准持有记录』。"
     },
     {
       "claim": "contract authority values vs gate v1.quality_requirements",
@@ -76,13 +69,13 @@
     {
       "claim": "gate v1.gold.scoring_contract_sha256 → contract v4.1",
       "expected": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
-      "actual": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+      "actual": "sha256:67537eadcb2074d5bb47c19d20177bd400a8850fce560aa6b1f969409d42b943",
       "verdict": "covered_by_record",
       "detail": "该版本钉在更早的契约上；其推进由 P13 新版本记录覆盖"
     },
     {
       "claim": "gate v1.quality_requirements.metric_basis",
-      "expected": "non-table-selected-target-scoring-contract-v4.1",
+      "expected": "non-table-selected-target-scoring-contract-v4.2",
       "actual": "non-table-selected-target-scoring-contract-v3",
       "verdict": "covered_by_record",
       "detail": "版本落后于已签契约"
@@ -90,16 +83,16 @@
     {
       "claim": "gate v2.gold.scoring_contract_sha256 → contract v4.1",
       "expected": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
-      "actual": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
-      "verdict": "ok",
-      "detail": ""
+      "actual": "sha256:67537eadcb2074d5bb47c19d20177bd400a8850fce560aa6b1f969409d42b943",
+      "verdict": "covered_by_record",
+      "detail": "该版本钉在更早的契约上；其推进由 P13 新版本记录覆盖"
     },
     {
       "claim": "gate v2.quality_requirements.metric_basis",
-      "expected": "non-table-selected-target-scoring-contract-v4.1",
+      "expected": "non-table-selected-target-scoring-contract-v4.2",
       "actual": "non-table-selected-target-scoring-contract-v4.1",
-      "verdict": "ok",
-      "detail": ""
+      "verdict": "covered_by_record",
+      "detail": "版本落后于已签契约"
     },
     {
       "claim": "freeze-manifest.json inputs (8 files, bare digests)",
@@ -110,10 +103,10 @@
     },
     {
       "claim": "P12 record binds the current signed contract",
-      "expected": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
-      "actual": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+      "expected": "sha256:67537eadcb2074d5bb47c19d20177bd400a8850fce560aa6b1f969409d42b943",
+      "actual": "sha256:67537eadcb2074d5bb47c19d20177bd400a8850fce560aa6b1f969409d42b943",
       "verdict": "ok",
-      "detail": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/rebinding-v4.1-20261012.json"
+      "detail": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/rebinding-v4.2-20261012.json"
     },
     {
       "claim": "freeze-state.json.contract_snapshot declared historical (not edited)",
@@ -123,9 +116,9 @@
       "detail": "**保留字节，不改**：它是冻结当时实际生效的契约的历史记录，改它即伪造历史。本记录声明：该快照是历史，**不是**当前绑定；当前绑定即本记录的 binds_contract"
     }
   ],
-  "ok": 13,
-  "covered_by_record": 3,
+  "ok": 11,
+  "covered_by_record": 5,
   "drift": 0,
-  "needs_ruling": 1,
-  "exit_ok": false
+  "needs_ruling": 0,
+  "exit_ok": true
 }

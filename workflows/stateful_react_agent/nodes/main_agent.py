@@ -1191,6 +1191,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
             pipeline_id="stateful-react-agent",
             node_id="react_agent",
             session_id=str(metadata.get("session_id") or ""),
+            max_replay_tokens=replay_max_tokens,
         )
     else:
         replay_messages = None
