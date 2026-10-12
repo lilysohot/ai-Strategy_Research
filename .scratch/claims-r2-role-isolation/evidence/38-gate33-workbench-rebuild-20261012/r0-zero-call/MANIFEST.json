@@ -1,0 +1,19 @@
+{
+  "schema_version": "items-workbench-rebuild-manifest-1",
+  "created_on": "2026-10-12",
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/38-gate33-workbench-rebuild-20261012/r0-zero-call/preregistered-workbench-rebuild.json": "sha256:72c7cb1c5af7d0ed784e00f52955b4e0952b389c50715d030ccc4ecd6b4d9538",
+    ".scratch/claims-r2-role-isolation/evidence/33-items-quality-scoring-20261011/r0-zero-call/workbench.json": "sha256:e00d8ae65536bf662101ba1d53b8c3e9f80189e2be6b8172472abd02ea489777",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/scoring-contract.json": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
+    "plugins/corpus/structured/store.py": "sha256:9db2bb5d663b028b7d7a38c53a1ceca1000c088b8a2a56144b0bcd64bdb7a8b7",
+    "store_object::industrial-fulian-md": "sha256:5164a8c10df8cbad70a04cd6b223c8ff6aaef2f9c74e43523596734ec9b040c0",
+    "store_object::optical-module-docx": "sha256:08fe8d9e46210fd84c65e6ec3e4dcbecb4af94f1444a67692996c2e5a67cf8bd"
+  },
+  "outputs": {
+    "preregistered-workbench-rebuild.json": "sha256:72c7cb1c5af7d0ed784e00f52955b4e0952b389c50715d030ccc4ecd6b4d9538",
+    "workbench-v2.json": "sha256:0bd9e66072b08f9f30267112ee505789dcee4d0825359e632cdbaac670736558",
+    "workbench-v2.md": "sha256:6acda8a7a80959508295899270a8bf34d6538363e269a327a61b3a4481b72f6e",
+    "rebuild_workbench.py": "sha256:fb7aca19d384c8bbeb92fa3d6de1995debc408a4163642d3ab292731f4f11d0e"
+  }
+}

@@ -7,6 +7,8 @@
 - 覆盖票号：Issue 28（门）、29（金标审计）、30（契约补签）、31（run-1/run-2）、32（v6 重冻结门）、33（评分门 Stage 1）、34（链路审计）、35（金标回溯）
 - 修订：r1（2026-10-11，**签认前**补记，同样零调用只读）：新增 §1 第 6–8 条、§2 五条实测输入哈希、§3 L9 补记、§5.4–§5.7、§6 末段限定、§7 第 7–9 项、§9 两行裁定项。既有结论、既有输入哈希与 §8 范围外清单**未改动**。
 - 修订：r2（2026-10-11，**签认前**补记，零调用）：据 `evidence/36-l9-redo-and-baseline-20261011/` 实测修订 §3 L3 行、§5.2 表第 2 行、§6 与 §7-8 状态，新增 §5.8。修订依据为产物哈希，见 §5.8 表。
+- 修订：r3（2026-10-12，**签认前**补记，零调用）：据 `evidence/37-store-baseline-and-route-decision-20261012/` 实测**收回 r2 的 EC-1 与「route a 无法产出契约形态记录」两条**（其候选基线取自门 33 工作台投影，非生产端产物），新增 §5.9 与 §7-10，§9 增路线裁定行。
+- 修订：r4（2026-10-12，**签认前**补记，零调用）：执行 §7-10，产出 `evidence/38-gate33-workbench-rebuild-20261012/`（工作台 v2 严格超集），新增 §5.10，§7-10 标为已完成。
 
 ## 0. 口径声明（先声明谓词，再看数字）
 
@@ -74,6 +76,19 @@
 > `36-…/r0-zero-call/l9-redo.json` = `acd268f2…93f99`；
 > `36-…/r0-zero-call/baseline-control.json` = `fc4a47cb…cb93`；
 > `36-…/r0-zero-call/l9_redo.py` = `12fc694f…9187`（11 条输入哈希见其 `MANIFEST.json`）。
+
+> r3 补记新增产物（零调用只读，sha256 实测）：
+> `37-…/r0-zero-call/preregistered-store-baseline.json` = `54195990…2ad00`；
+> `37-…/r0-zero-call/store-baseline.json` = `e5133654…a3fc0`；
+> `37-…/r0-zero-call/route-decision.json` = `4760e199…351747`；
+> `37-…/r0-zero-call/store_baseline.py` = `3227d132…9fb4c`；
+> 输入含 store 运行对象 `5164a8c1…`（md）与 `08fe8d9e…`（docx），见其 `MANIFEST.json`。
+
+> r4 补记新增产物（零调用只读，sha256 实测；取代门 33 `workbench.json` `e00d8ae6…a489777`，后者字节未变）：
+> `38-…/r0-zero-call/preregistered-workbench-rebuild.json` = `72c7cb1c…d9538`；
+> `38-…/r0-zero-call/workbench-v2.json` = `0bd9e660…36558`；
+> `38-…/r0-zero-call/workbench-v2.md` = `6acda8a7…b72f6e`；
+> `38-…/r0-zero-call/rebuild_workbench.py` = `fb7aca19…11d0e`。
 
 > 记账：`evidence/34-chain-root-cause-audit-20261011/` 与 `evidence/35-gold-audit-20261011/` 当前**未入库**（`git status` 为 `??`）。
 
@@ -190,6 +205,8 @@ L9 是对 L3∩L7 的**测量**。把它计入节点数会重复计算同一处�
 
 ### 5.8 L9 重做与基线实测结果（r2 补记）
 
+> **r3 收回声明**：本节的候选基线取自**门 33 工作台投影**，不是生产端产物。故本节的 EC-1（"4 个字段零载体"）与"route a 无法产出契约形态记录"两条**已由 §5.9 收回/限定**。本节其余结论（EC-2 循环量、EC-3/EC-4 口径、B-1~B-3）不受影响。
+
 产物：`evidence/36-l9-redo-and-baseline-20261011/r0-zero-call/`（零调用只读；幂等可重跑、支持 `--no-write`；预注册先于运行落盘）。
 
 | 产物 | sha256 |
@@ -218,6 +235,66 @@ L9 是对 L3∩L7 的**测量**。把它计入节点数会重复计算同一处�
 - **B-3**：条件载体在实践上近乎不存在（1/10），契约 v3 新增的 `condition_role_read_path` 几乎没有可读数据。
 
 **基线（control 臂，诊断口径）**：现状评分器在原生候选上 `rate_gate_passed=False`、`live_trial_ready=False`、`risk_condition_recall=0`、12 条 critical 全缺；评分器硬编码策略（0.95/0.90）与门 28 权威阈值（0.85/0.80/20）两套 blockers 已分别落档。
+
+### 5.9 store 层基线：收回 EC-1，给出路线 a/b 的裁定依据（r3 补记）
+
+产物：`evidence/37-store-baseline-and-route-decision-20261012/r0-zero-call/`（零调用只读；幂等、支持 `--no-write`；预注册先于运行落盘）。候选基线改用**生产 store 产物**：`32-…/live/treatment-store/<slug>/objects/…`（`material-semantics-32`，md 88 items/76 slots、docx 134/114；item→slot 按证据跨度包含，与门 33 的分配一致 222/222，未可归属 0）。
+
+**收回 1：零载体必需字段不是 4 个，是 1 个。** store 有两层：
+
+| 层 | 内容 | 语义字段 |
+|---|---|---|
+| layer A | `understanding.items`（生产端产物） | 11，**含 `speaker_ref`** |
+| layer B | `structured/store.py::_material_records`（store 自身投影，实测调用） | 7，**含 `attribution`、`condition`** |
+| 门 33 工作台投影 | 裁定用工作台 | 10，**丢 `speaker_ref`** |
+
+契约 9 个必需字段的载体：`proposition`（`text` 承载）、`semantic_type`/`statement_role`/`speech_role`/`perspective`/`speaker_ref`/`polarity`（layer A）、`attribution`（layer B，**口径过粗**：值域仅 `document_voice`/None）、**`source_stance` 无载体**。
+⇒ **零载体必需字段 = `{source_stance}`。** r2 的"4 个"是把门 33 投影当成了生产端。
+
+**收回 2：`route a 无法产出契约形态记录`不成立。** layer B 已具备契约形态所需的 `attribution`/`condition` 派生（我方代码，零调用可复用）。
+
+**新结论：口径差是主因，不是字段缺失。** 逐字段「任一覆盖槽位候选与金标相等」的记录数（raw → 归一化后）：
+
+| 字段 | raw | 归一化后 | 口径差可消 | 抽取差剩余 |
+|---|---|---|---|---|
+| `perspective` | **0**/48 | 32/48 | **+32** | 16 |
+| `speech_role` | 34/48 | 39/48 | +5 | 9 |
+| `polarity` | 32/48 | 32/48 | 0 | 16 |
+| `semantic_type` | 27/48 | 27/48 | 0 | 21 |
+| `statement_role` | 21/48 | 21/48 | 0 | 27 |
+
+金标 `perspective` 为 `unknown`41/`quoted_other`7（**无 `source_explicit`**），store 为 `source_explicit`220/`quoted_other`2（**无 `unknown`**）——**同一轴两侧默认值相反**。金标 `speech_role` 全 `statement`，store 有 question/answer。
+
+⇒ **归一化后 5 元组对齐仅 7/48**（md 3 / docx 4）；2 元组（`semantic_type`+`statement_role`）14/48。**路线 a 结构上可行，但自动化只能覆盖 15% 的记录，其余须人工裁定或重抽。**
+
+**`attribution`/`speaker_ref` 不可派生（粒度不足）**：gold 需 5 类区分（且 gold 内 `attribution` 与 `speaker_ref` **1:1 冗余**），store 侧只有 `document_voice`/`quoted_source` 共 2 类、`display_name` 全空；layer B `attribution` 与金标 raw 一致 **0/48**。
+
+**门 33 工作台缺陷（新增）**：工作台相对 store 丢 `speaker_ref`，**影响全部 222 条**；⇒ Stage 2 裁定者读不到该轴，**人工裁定同样不可执行**，报分前必须先重建工作台（零调用）。
+
+> **预注册弱阈值声明**：EC-A6a 的触发条件是"对齐记录数 ≥ 1"（偏弱），故"branch = EC-A6a"只表示**结构可行**，不表示够用；实质数字是 **7/48**。此点与 r1 的 EC-3 同属预注册设计不足，记 backlog。
+
+### 5.10 门 33 工作台 v2：Stage 2 重新可执行（r4 补记，§7-10 已完成）
+
+产物：`evidence/38-gate33-workbench-rebuild-20261012/r0-zero-call/`（零调用只读；幂等、支持 `--no-write`；预注册先于运行落盘）。
+
+| 产物 | sha256 |
+|---|---|
+| 预注册 `preregistered-workbench-rebuild.json` | `72c7cb1c…d9538` |
+| `workbench-v2.json` | `0bd9e660…36558` |
+| `workbench-v2.md` | `6acda8a7…b72f6e` |
+| 脚本 `rebuild_workbench.py` | `fb7aca19…11d0e` |
+
+**做法**：以门 33 `workbench.json`（`e00d8ae6…a489777`）逐条为基准**增强**（join key = `item_id`），不重新生成候选、不重算 Stage-1 建议。
+
+**超集自检（全部通过）**：`candidate_id` 集合与顺序一致 = **True**；v1 既有字段逐条不一致 = **0**；槽位分配交叉校验分歧 = **0**（v1 slot ↔ 证据跨度包含 ↔ store `coverage.slot_ledger` 三方一致）；序列化后建议与候选仍逐条 == v1 = **True**；门 33 目录字节未变（`workbench.json` 哈希不变）。
+
+**补齐的字段覆盖（/222）**：`speaker_ref` **222**、`attribution` 220、`condition`（layer B 开关）221、`factuality` 222。
+
+**契约视图覆盖（/222）**：`proposition` 222、`semantic_type`/`statement_role`/`speech_role`/`perspective`/`polarity` 各 222、`speaker_ref` 222、`attribution` 220、`condition` 6、**`source_stance` 0（显式标 `requires=source_read`，非留空）**。
+
+**每个契约字段的前置条款**（取自 §5.9 实测）：`proposition`→`normalization`；`semantic_type`/`statement_role`/`speech_role`/`perspective`/`attribution`/`condition`→`caliber_clause`；`speaker_ref`→`id_mapping_or_exclusion`；`polarity`→`none`；`source_stance`→`source_read`。
+
+⇒ **Stage 2 的"读不到字段"这一阻塞已解除**；剩下的阻塞是 §7-11 的口径条款与 §9 的路线裁定，不是工具问题。
 
 ## 6. 量化天花板（诊断口径，非生产报分口径）
 
@@ -252,6 +329,8 @@ L9 是对 L3∩L7 的**测量**。把它计入节点数会重复计算同一处�
 | 7 | 读路径规则写成**与记录 ID 无关**的字段语义规则，并逐字段给出"候选字段 → 契约字段"映射 + 不可派生反例清单（§5.5） | 否则修复只对本批 19 条成立、不可推广（§5.7） | 契约 v4 条款 | 需裁定 |
 | 8 ✔ | **已完成（2026-10-11，授权后）**：用留出记录重做 L9、禁止金标注入；结论见 §5.8 | 现行 `19/48` 是循环量，不能作为路线 a 的可行性证据（§5.4） | 零调用 | 否 |
 | 9 | 对 `claims` / `material_relations` 做同型 L3 零调用审计 | 另两角色的同型接缝未验证，不得以 items 单角色推断（§5.6） | 零调用 | 否 |
+| 10 ✔ | **已完成（2026-10-12）**：重建门 33 工作台 v2（严格超集，补回 `speaker_ref` 与 layer B 字段），结论见 §5.10 | 现行工作台缺该字段（影响 222/222 条），Stage 2 人工裁定**不可执行**（§5.9） | 零调用，工具 | 否 |
+| 11 | 定枚举**口径归一化条款**（`perspective`／`speech_role` 等） | 金标与生产端同轴默认值相反；不立此条款，任何匹配恒为 0（§5.9） | 契约条款 | 需具名签认 |
 
 1 与 3 是同一处契约修订的两面，应合并为一轮；2 独立于 1，可并行。第 6 项中的阈值统一**必须具名签认**（阈值/粒度变更的既有约定）。**第 7 项应并入第 1/3 那一轮**（同一份契约 v4）；第 8、9 项为零调用，可在该轮内先做，其中第 8 项是判定第 1 项是否成立的前置。
 
@@ -277,7 +356,8 @@ L9 是对 L3∩L7 的**测量**。把它计入节点数会重复计算同一处�
 | 读路径普遍性（§5.7 三条硬要求） | ☐ 接受三条并写入契约 v4　☐ 只修本批数据 | | |
 | 跨角色范围 | ☐ items-only　☐ 每角色各建读路径（先做 §7-9 审计） | | |
 | B-1 两条 md 记录（NT-I06／NT-I41） | ☐ 纳入补跑范围　☐ 判为模型 `no_supported_item`　☐ 关联方法差异（非损失） | | |
-| EC-1 后的路线 re 判定 | ☐ 路线 a 需配人工裁定（无法确定性闭合）　☐ 转路线 b　☐ 其他 | | |
+| 路线 a/b 最终裁定（r3 依据） | ☐ route a（零调用：修投影 + 复用 layer B 派生 + 口径归一化条款；自动对齐 7/48，余靠人工）　☐ route b（重抽统一口径，作废门 32 冻结）　☐ a + 定向补跑 | | |
+| 枚举口径归一化条款（§7-11） | ☐ 以金标口径为准（`source_explicit→unknown` 等）　☐ 维持生产端口径并改金标　　须具名签认 | | |
 
 ## 10. 签认栏
 

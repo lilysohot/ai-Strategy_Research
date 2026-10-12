@@ -1,0 +1,55 @@
+{
+  "schema_version": "items-workbench-rebuild-preregistration-1",
+  "created_on": "2026-10-12",
+  "status": "preregistered_before_run",
+  "purpose": "执行 issue-34 §7-10：重建门 33 Stage 1 工作台，使 Stage 2 人工裁定可执行。零调用、只读、不覆盖既有产物。",
+  "authorization": {"granted_by": "user", "granted_on": "2026-10-12", "scope": "零调用只读；不改金标、契约、评分器、门 33 既有产物，不重跑模型"},
+  "defect_being_fixed": {
+    "found_in": "evidence/37-store-baseline-and-route-decision-20261012（§5.9 / EC-A5）",
+    "statement": "门 33 工作台候选丢 speaker_ref（layer A 字段，222/222 条受影响），且不含 layer B 的 attribution/condition ⇒ Stage 2 裁定者读不到这些轴，人工裁定不可执行。",
+    "root_cause": "build_adjudication_workbench.py:117-139 逐字段手写候选投影，未包含 speaker_ref；也未接入 layer B。"
+  },
+
+  "method": {
+    "superset_not_regeneration": "以门 33 v1 workbench.json 的候选为**基准逐条增强**（join key = item_id），不重新生成候选值、不重算 Stage-1 建议。",
+    "layer_a": "32-…/live/treatment-store/<slug>/objects/… 的 understanding.items（含 speaker_ref）",
+    "layer_b": "plugins/corpus/structured/store.py::_material_records（含 attribution/condition/factuality），实测调用真实函数",
+    "slot_assignment": "沿用 v1 的 candidate_slot_id；并用证据跨度包含独立复算一次作为交叉校验",
+    "additions_per_candidate": [
+      "speaker_ref（layer A）",
+      "attribution（layer B）",
+      "condition（layer B）",
+      "factuality（layer B，= semantic_type 的口径名）",
+      "contract_view：契约 9 个必需字段 + condition 各自的 {value, carrier, requires}",
+      "field_provenance：每个新增字段的来源层"
+    ],
+    "suggestions": "**逐字节照搬 v1**，不重算（Stage-1 助手是否修改属 §7-5，另案裁定）"
+  },
+
+  "exit_criteria": {
+    "AC-1": "候选集合一致：candidate_id 集合与顺序、以及 source_id / source_slug / origin / candidate_slot_id 与 v1 逐条相同。",
+    "AC-2": "既有字段不变：v1 候选的每个既有字段（text/semantic_type/statement_role/speech_role/perspective/polarity/value/behavior_status/temporal_frame/unknown_fields/evidence_quote/evidence_locator）值与 v1 逐条相同；任何不一致即失败并列出。",
+    "AC-3": "Stage-1 建议（suggestions 数组）与 v1 深度相等（逐字节）。",
+    "AC-4": "新增字段可追溯：每个新增字段的值与来源层写入 field_provenance；来源对象哈希进 MANIFEST。",
+    "AC-5": "不触碰金标：不写入任何金标文件；契约与金标输入哈希与 v1 记载一致。",
+    "AC-6": "幂等：连续两次运行输出逐字节相同；支持 --no-write 且 --no-write 下不写任何文件。",
+    "AC-7": "不覆盖：输出只落在 evidence/38-…/r0-zero-call/，门 33 目录字节不变。",
+    "AC-8": "契约覆盖自检：输出候选的 contract_view 必须覆盖全部 9 个必需字段；无载体的字段须显式标 requires=source_read，不得留空。",
+    "AC-9": "判据外新发现进 backlog，不回流本次。"
+  },
+
+  "out_of_scope": [
+    "不修改 Stage-1 建议算法（§7-5 另案）",
+    "不改金标、契约、评分器、阈值；不重跑模型",
+    "不产出任何评分输入或报分；本批只修 Stage 2 的可执行性",
+    "不覆盖门 33 既有产物（workbench.json / adjudications.json / workbench.md 字节不变）"
+  ],
+
+  "artifacts": [
+    "r0-zero-call/preregistered-workbench-rebuild.json（本文件，write-once）",
+    "r0-zero-call/rebuild_workbench.py（支持 --no-write，幂等）",
+    "r0-zero-call/workbench-v2.json",
+    "r0-zero-call/workbench-v2.md",
+    "r0-zero-call/MANIFEST.json"
+  ]
+}

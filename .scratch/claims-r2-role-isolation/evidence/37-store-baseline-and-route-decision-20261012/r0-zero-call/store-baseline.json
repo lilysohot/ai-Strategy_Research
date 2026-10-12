@@ -1,0 +1,470 @@
+{
+  "schema_version": "items-store-baseline-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "preregistration": {
+    "path": "preregistered-store-baseline.json",
+    "sha256": "sha256:54195990ff317829c14dc8b75e489f0adaadb6c43b719f61a3876b165502ad00"
+  },
+  "store_runs": {
+    "industrial-fulian-md": {
+      "run_id": "13a01c7bf4d0fe50447cf8e2e689233ecf34a15edbc896b3eb8e88fdd1fc5f52",
+      "extractor_version": "material-semantics-32",
+      "contract_version": "material-understanding-v1",
+      "object_sha256": "sha256:5164a8c10df8cbad70a04cd6b223c8ff6aaef2f9c74e43523596734ec9b040c0",
+      "items": 88,
+      "slots": 76,
+      "speakers": 1,
+      "unassignable_items": []
+    },
+    "optical-module-docx": {
+      "run_id": "868bb6531bf3d37835d02aa0294d130b1398d48106f7b935c1c6294d0f606199",
+      "extractor_version": "material-semantics-32",
+      "contract_version": "material-understanding-v1",
+      "object_sha256": "sha256:08fe8d9e46210fd84c65e6ec3e4dcbecb4af94f1444a67692996c2e5a67cf8bd",
+      "items": 134,
+      "slots": 114,
+      "speakers": 2,
+      "unassignable_items": []
+    }
+  },
+  "ec_a1_field_carriers": {
+    "contract_required": [
+      "proposition",
+      "semantic_type",
+      "statement_role",
+      "speech_role",
+      "perspective",
+      "speaker_ref",
+      "polarity",
+      "attribution",
+      "source_stance"
+    ],
+    "store_item_keys": [
+      "behavior_status",
+      "perspective",
+      "polarity",
+      "semantic_type",
+      "speaker_ref",
+      "speech_role",
+      "statement_role",
+      "temporal_frame",
+      "text",
+      "unknown_fields",
+      "value"
+    ],
+    "classification": {
+      "proposition": "text_carried",
+      "semantic_type": "item_field",
+      "statement_role": "item_field",
+      "speech_role": "item_field",
+      "perspective": "item_field",
+      "speaker_ref": "item_field",
+      "polarity": "item_field",
+      "attribution": "item_field_layer_b_coarse",
+      "source_stance": "absent",
+      "condition": "item_field_layer_b_coarse"
+    },
+    "absent_required_fields": [
+      "source_stance"
+    ],
+    "coarse_carrier_required_fields": [
+      "attribution"
+    ],
+    "layer_b_note": "layer B = `plugins/corpus/structured/store.py::_material_records`（store 自身的结构化投影），由 layer A + snapshot 确定性派生，实测调用真实函数得到；attribution 值域仅 document_voice/None，condition 值域为 conditional/unconditional，与金标口径不同。"
+  },
+  "ec_a1_layer_b": {
+    "industrial-fulian-md": {
+      "records": 88,
+      "value_distributions": {
+        "attribution": {
+          "document_voice": 88
+        },
+        "condition": {
+          "unconditional": 87,
+          "conditional": 1
+        },
+        "factuality": {
+          "fact": 49,
+          "opinion": 18,
+          "forecast": 21
+        },
+        "polarity": {
+          "affirmed": 67,
+          "negated": 17,
+          "mixed": 4
+        },
+        "value": {
+          "null": 86,
+          "62%": 1,
+          "68.52%": 1
+        }
+      },
+      "gold_raw_agreement": {
+        "attribution": 0,
+        "condition": 0,
+        "semantic_type": 10
+      }
+    },
+    "optical-module-docx": {
+      "records": 134,
+      "value_distributions": {
+        "attribution": {
+          "document_voice": 132,
+          "null": 2
+        },
+        "condition": {
+          "conditional": 5,
+          "unconditional": 128,
+          "null": 1
+        },
+        "factuality": {
+          "fact": 49,
+          "opinion": 30,
+          "unknown": 24,
+          "forecast": 31
+        },
+        "polarity": {
+          "affirmed": 77,
+          "null": 26,
+          "negated": 30,
+          "mixed": 1
+        },
+        "value": {
+          "null": 127,
+          "500万只": 1,
+          "1800美元左右": 1,
+          "200万只": 1,
+          "300至500万只": 2,
+          "4比6": 1,
+          "65%比35%": 1
+        }
+      },
+      "gold_raw_agreement": {
+        "attribution": 0,
+        "condition": 0,
+        "semantic_type": 17
+      }
+    }
+  },
+  "ec_a2_field_agreement": {
+    "semantic_type": {
+      "gold_distribution": {
+        "fact": 10,
+        "opinion": 18,
+        "forecast": 17,
+        "behavior": 3
+      },
+      "store_distribution": {
+        "fact": 98,
+        "opinion": 48,
+        "forecast": 52,
+        "unknown": 24
+      },
+      "records_with_raw_agreement": 27,
+      "records_with_normalized_agreement": 27,
+      "denominator_all_gold": 48,
+      "denominator_records_with_candidates": 39,
+      "normalized_agreement_rate_of_all_gold": 0.5625,
+      "normalized_agreement_rate_of_available": 0.6923,
+      "caliber_gap_removed_by_normalization": 0,
+      "extraction_gap_remaining": 21,
+      "below_half_ambiguous_denominator": {
+        "of_all_gold": false,
+        "of_available": false
+      }
+    },
+    "statement_role": {
+      "gold_distribution": {
+        "evidence": 10,
+        "claim": 18,
+        "risk": 10,
+        "condition": 10
+      },
+      "store_distribution": {
+        "claim": 137,
+        "evidence": 30,
+        "condition": 6,
+        "risk": 12,
+        "other": 3,
+        "question": 26,
+        "answer": 8
+      },
+      "records_with_raw_agreement": 21,
+      "records_with_normalized_agreement": 21,
+      "denominator_all_gold": 48,
+      "denominator_records_with_candidates": 39,
+      "normalized_agreement_rate_of_all_gold": 0.4375,
+      "normalized_agreement_rate_of_available": 0.5385,
+      "caliber_gap_removed_by_normalization": 0,
+      "extraction_gap_remaining": 27,
+      "below_half_ambiguous_denominator": {
+        "of_all_gold": true,
+        "of_available": false
+      }
+    },
+    "speech_role": {
+      "gold_distribution": {
+        "statement": 48
+      },
+      "store_distribution": {
+        "statement": 183,
+        "unknown": 3,
+        "question": 26,
+        "answer": 10
+      },
+      "records_with_raw_agreement": 34,
+      "records_with_normalized_agreement": 39,
+      "denominator_all_gold": 48,
+      "denominator_records_with_candidates": 39,
+      "normalized_agreement_rate_of_all_gold": 0.8125,
+      "normalized_agreement_rate_of_available": 1.0,
+      "caliber_gap_removed_by_normalization": 5,
+      "extraction_gap_remaining": 9,
+      "below_half_ambiguous_denominator": {
+        "of_all_gold": false,
+        "of_available": false
+      }
+    },
+    "perspective": {
+      "gold_distribution": {
+        "unknown": 41,
+        "quoted_other": 7
+      },
+      "store_distribution": {
+        "source_explicit": 220,
+        "quoted_other": 2
+      },
+      "records_with_raw_agreement": 0,
+      "records_with_normalized_agreement": 32,
+      "denominator_all_gold": 48,
+      "denominator_records_with_candidates": 39,
+      "normalized_agreement_rate_of_all_gold": 0.6667,
+      "normalized_agreement_rate_of_available": 0.8205,
+      "caliber_gap_removed_by_normalization": 32,
+      "extraction_gap_remaining": 16,
+      "below_half_ambiguous_denominator": {
+        "of_all_gold": false,
+        "of_available": false
+      }
+    },
+    "polarity": {
+      "gold_distribution": {
+        "affirmed": 41,
+        "negated": 6,
+        "mixed": 1
+      },
+      "store_distribution": {
+        "affirmed": 144,
+        "negated": 47,
+        "mixed": 5,
+        "unknown": 26
+      },
+      "records_with_raw_agreement": 32,
+      "records_with_normalized_agreement": 32,
+      "denominator_all_gold": 48,
+      "denominator_records_with_candidates": 39,
+      "normalized_agreement_rate_of_all_gold": 0.6667,
+      "normalized_agreement_rate_of_available": 0.8205,
+      "caliber_gap_removed_by_normalization": 0,
+      "extraction_gap_remaining": 16,
+      "below_half_ambiguous_denominator": {
+        "of_all_gold": false,
+        "of_available": false
+      }
+    }
+  },
+  "ec_a3_tuple_alignment": {
+    "5tuple": {
+      "fields": [
+        "semantic_type",
+        "statement_role",
+        "speech_role",
+        "perspective",
+        "polarity"
+      ],
+      "records": 7,
+      "record_ids": [
+        "NT-I01",
+        "NT-I02",
+        "NT-I05",
+        "NT-I22",
+        "NT-I26",
+        "NT-I28",
+        "NT-I44"
+      ],
+      "by_source": {
+        "industrial-fulian-md": 3,
+        "optical-module-docx": 4
+      }
+    },
+    "4tuple_no_polarity": {
+      "fields": [
+        "semantic_type",
+        "statement_role",
+        "speech_role",
+        "perspective"
+      ],
+      "records": 10,
+      "record_ids": [
+        "NT-I01",
+        "NT-I02",
+        "NT-I03",
+        "NT-I05",
+        "NT-I07",
+        "NT-I22",
+        "NT-I26",
+        "NT-I28",
+        "NT-I38",
+        "NT-I44"
+      ],
+      "by_source": {
+        "industrial-fulian-md": 5,
+        "optical-module-docx": 5
+      }
+    },
+    "3tuple_no_speech_role": {
+      "fields": [
+        "semantic_type",
+        "statement_role",
+        "perspective"
+      ],
+      "records": 10,
+      "record_ids": [
+        "NT-I01",
+        "NT-I02",
+        "NT-I03",
+        "NT-I05",
+        "NT-I07",
+        "NT-I22",
+        "NT-I26",
+        "NT-I28",
+        "NT-I38",
+        "NT-I44"
+      ],
+      "by_source": {
+        "industrial-fulian-md": 5,
+        "optical-module-docx": 5
+      }
+    },
+    "2tuple_core": {
+      "fields": [
+        "semantic_type",
+        "statement_role"
+      ],
+      "records": 14,
+      "record_ids": [
+        "NT-I01",
+        "NT-I02",
+        "NT-I03",
+        "NT-I05",
+        "NT-I07",
+        "NT-I22",
+        "NT-I26",
+        "NT-I28",
+        "NT-I38",
+        "NT-I44",
+        "NT-I45",
+        "NT-I46",
+        "NT-I47",
+        "NT-I48"
+      ],
+      "by_source": {
+        "industrial-fulian-md": 5,
+        "optical-module-docx": 9
+      }
+    }
+  },
+  "ec_a4_speaker_granularity": {
+    "gold_distinct_attribution": 5,
+    "gold_distinct_speaker_ref": 5,
+    "store_distinct_speaker_ref": {
+      "industrial-fulian-md": 1,
+      "optical-module-docx": 2
+    },
+    "store_speakers_detail": {
+      "industrial-fulian-md": {
+        "spk_544d7167e8a5": 88
+      },
+      "optical-module-docx": {
+        "spk_544d7167e8a5": 132,
+        "spk_6c0e0ffe1a8f": 2
+      }
+    },
+    "store_speaker_records": {
+      "industrial-fulian-md": [
+        {
+          "display_name": null,
+          "identity_status": "unknown",
+          "role": "document_voice",
+          "speaker_id": "spk_544d7167e8a5"
+        }
+      ],
+      "optical-module-docx": [
+        {
+          "display_name": null,
+          "identity_status": "unknown",
+          "role": "document_voice",
+          "speaker_id": "spk_544d7167e8a5"
+        },
+        {
+          "display_name": null,
+          "identity_status": "unknown",
+          "role": "quoted_source",
+          "speaker_id": "spk_6c0e0ffe1a8f"
+        }
+      ]
+    },
+    "attribution_speaker_ref_are_one_to_one_in_gold": true,
+    "derivable": false,
+    "reason": "store 侧只有 document_voice/quoted_source 两个说话人且 display_name 为空，gold 侧需 5 类区分（其中 attribution 与 speaker_ref 在 gold 内 1:1 冗余）⇒ 粒度不足，不可派生。"
+  },
+  "ec_a5_projection_defect": {
+    "workbench_candidate_fields": [
+      "behavior_status",
+      "candidate_id",
+      "candidate_slot_id",
+      "evidence_locator",
+      "evidence_quote",
+      "origin",
+      "perspective",
+      "polarity",
+      "role",
+      "semantic_type",
+      "source_id",
+      "source_slug",
+      "speech_role",
+      "statement_role",
+      "temporal_frame",
+      "text",
+      "unknown_fields",
+      "value"
+    ],
+    "store_item_fields": [
+      "behavior_status",
+      "perspective",
+      "polarity",
+      "semantic_type",
+      "speaker_ref",
+      "speech_role",
+      "statement_role",
+      "temporal_frame",
+      "text",
+      "unknown_fields",
+      "value"
+    ],
+    "store_fields_missing_in_workbench": [
+      "speaker_ref"
+    ],
+    "affected_items": {
+      "speaker_ref": 222
+    },
+    "affects_gate33_stage2": true,
+    "note": "门 33 Stage 2 的裁定者看不到 store 层已存在的字段 ⇒ 即使人工裁定也无法读取该轴；报分前须先重建工作台（零调用）。"
+  },
+  "conflicts_with_r2": [
+    "EC-1（『4 个字段在候选上零载体』）须**收回重写**：零载体必需字段实测为 ['source_stance']；proposition 由 text 承载、speaker_ref 在 layer A 有载体、attribution 在 layer B 有载体（口径过粗）。",
+    "§5.2/§3 L3 的候选字段数：layer A 语义字段 11（含 speaker_ref），门 33 投影 10，layer B 为 7。",
+    "§5.8 的『route a 无法产出契约形态记录』：该结论只在门 33 投影口径下成立。"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "schema_version": "items-route-decision-1",
+  "created_on": "2026-10-12",
+  "branch": "EC-A6a",
+  "verdict": "路线 a 存在可执行路径（absent=['source_stance']，归一化后 5 元组对齐 7/48）；route b 不必为『字段缺失』而行。",
+  "inputs": {
+    "absent_required_fields": [
+      "source_stance"
+    ],
+    "coarse_carrier_required_fields": [
+      "attribution"
+    ],
+    "ra_5tuple": 7,
+    "ra_5tuple_held_out": 3,
+    "ra_2tuple_core": 14,
+    "fields_below_50pct_after_normalization": [
+      "statement_role"
+    ],
+    "fields_below_50pct_after_normalization_of_available": [],
+    "pre_registration_ambiguity": "EC-A6c 未写明 <50% 的分母（全体 48 还是覆盖槽位内有候选的 39）。按全体触发项为 ['statement_role']，按可判分口径触发项为 （无）；两种口径都已列出，裁定前不得只取其一。",
+    "corpus_absent_records": 9
+  },
+  "cost_comparison": {
+    "route_a": "零模型调用：重建工作台（修投影，补 speaker_ref）+ 复用 store 自身已实现的 condition/attribution 派生（`structured/store.py:487-499`）+ 定枚举口径归一化条款 + 定 source_stance 条款；自动对齐记录数 = 7/48（见 ra_5tuple），其余靠人工裁定。零载体必需字段 = ['source_stance']；载体存在但口径过粗 = ['attribution']。",
+    "route_b": "改协议/口径后重抽：作废门 32 冻结 + 新门 + 真实调用（222 条候选重生）+ 重冻结；另需覆盖 9 条覆盖槽位内无候选的记录。其唯一不可替代之处是把口径写进协议而非事后映射。"
+  },
+  "ec_a4": "store 侧只有 document_voice/quoted_source 两个说话人且 display_name 为空，gold 侧需 5 类区分（其中 attribution 与 speaker_ref 在 gold 内 1:1 冗余）⇒ 粒度不足，不可派生。",
+  "ec_a5": "门 33 Stage 2 的裁定者看不到 store 层已存在的字段 ⇒ 即使人工裁定也无法读取该轴；报分前须先重建工作台（零调用）。"
+}

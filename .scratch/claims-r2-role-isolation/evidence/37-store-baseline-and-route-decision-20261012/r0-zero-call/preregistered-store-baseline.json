@@ -1,0 +1,71 @@
+{
+  "schema_version": "items-store-baseline-preregistration-1",
+  "created_on": "2026-10-12",
+  "status": "preregistered_before_run",
+  "purpose": "把 L3/L9 的候选基线从门 33 工作台投影换成 store 层真实产物，重算字段对照与载体可得性，并据此给出「路线 a vs 路线 b」的判据化结论。零调用、只读。",
+  "authorization": {"granted_by": "user", "granted_on": "2026-10-12", "scope": "零调用只读；不改金标、契约、评分器、不放宽阈值、不重跑模型"},
+  "supersedes_baseline_of": "evidence/36-l9-redo-and-baseline-20261011（其候选基线取自门 33 workbench 投影）",
+
+  "baseline_correction_declared_in_advance": {
+    "why": "门 33 的 workbench/候选投影不是生产端产物：它由 candidates.json + 装配层再投影而来。r2 的 EC-1（'4 个字段在候选上零载体'）因此只在投影上成立，不是抽取端结论。",
+    "expected": "store 层 items 含 speaker_ref（已探明，见下），故 r2 的 EC-1 预计需收回或限定为'投影丢字段'。若实测与预期不符，以实测为准。"
+  },
+
+  "inputs": {
+    "store_run_objects": "32-…/live/treatment-store/<slug>/objects/sha256/**/*.json（含 understanding 的那一个对象，extractor_version 见 result）",
+    "workbench": "33-…/r0-zero-call/workbench.json",
+    "gold": "10-quality-gold-freeze-20261008-r2/frozen-gold.json",
+    "contract": "10-quality-gold-expansion-20261008-r2/scoring-contract.json",
+    "covering_slot_logic": "复用 evidence/36-…/r0-zero-call/l9_redo.py 的 covering_slots（保证关联口径与前一轮一致，避免口径漂移）"
+  },
+
+  "method": {
+    "item_to_slot": "按证据跨度包含（packet_id 相同且 slot.start <= ev.start 且 ev.end <= slot.end）。运行前已探明：与 workbench 的 candidate_slot_id 分配一致 222/222（agree 88/88 + 134/134，disagree 0，unassignable 0）。",
+    "store_layer_semantic_fields": "understanding.items 的字段键（除 item_id 与 evidence）",
+    "field_carrier_classification": [
+      "item_field：store item 直接有该键且有非空值",
+      "text_carried：可由 text 确定性承载（proposition = norm(text)；condition = norm(text) 且 statement_role == condition）",
+      "absent：store item 无该键，且无确定性承载"
+    ],
+    "normalization_rules_5tuple": {
+      "perspective": "source_explicit -> unknown",
+      "speech_role": "question|answer|unknown -> statement",
+      "note": "两条规则固定写死，不按数据调整；依据是 gold 侧分布不含 source_explicit 且 speech_role 全为 statement。"
+    },
+    "split": {"development": "optical-module-docx", "held_out": "industrial-fulian-md", "note": "映射规则不按源调整，只在两源上分别报告；不做拟合。"}
+  },
+
+  "contamination_declaration": {
+    "disclosed": "写本预注册前已看过 gold 的 perspective/speech_role/attribution 分布，故上述两条归一化规则不是盲选的。",
+    "mitigation": "两条规则各自只有 1 个目标值（不是拟合出的映射表）；且必须同时报告 held-out（md）上的结果。若 held-out 无改善，则规则不成立。"
+  },
+
+  "exit_criteria": {
+    "EC-A1": "输出契约 9 个必需字段（+ condition）在 store 层的载体分类。若 absent 集合 ⊆ {attribution, source_stance}，则本批不得再以'字段缺失'为由否定路线 a。",
+    "EC-A2": "逐字段给出：金标值 vs store 值分布；覆盖槽位内'任一候选与金标在该单字段上相等'的金标记录数（raw 与 归一化后 两栏）。两栏之差 = 口径型可消量；剩余 = 抽取型差异。",
+    "EC-A3": "5 元组（semantic_type, statement_role, speech_role, perspective, polarity）归一化后在覆盖槽位内对齐的金标记录数 Ra；分源报告（dev / held-out）。并给 4 元组（去 polarity）与 3 元组（去 speech_role）作敏感性。",
+    "EC-A4": "speaker_ref / attribution 的可派生性：比较 store 侧不同说话人取值数与 gold 侧不同类别数；若 store 粒度更粗，记 requires_reextraction，并记录 gold 侧 attribution 与 speaker_ref 是否 1:1 冗余。",
+    "EC-A5": "门 33 投影缺陷量化：workbench 候选字段集相对 store item 字段集的差集、受影响 item 数，以及是否影响门 33 Stage 2 的可执行性。",
+    "EC-A6": "路线判据（按此规则输出结论，不改判据）：",
+    "EC-A6a": "若 Ra（归一化后，全体）≥ 1 且 absent ⊆ {attribution, source_stance} ⇒ 路线 a 存在可执行路径（枚举口径零调用归一 + text 承载命题），route b 不必为'字段缺失'而行。",
+    "EC-A6b": "若 Ra 归一化后仍为 0 ⇒ 路线 a 无法以'字段对齐'闭合；须在'缩到 semantic_type+statement_role 并接受大量人工裁定'与'改协议口径并重抽（route b）'之间裁定，本产物须给出两者的量化代价。",
+    "EC-A6c": "任一必需字段在归一化后一致性 < 50% ⇒ 该字段记 requires_reextraction，进入 route b 必要性清单。",
+    "EC-A7": "判据外新发现一律进 backlog，不回流本次判据。",
+    "EC-A8": "与本报告 r2 / EC-1 冲突者以实测为准，并在 result 中列出待修订条目。"
+  },
+
+  "out_of_scope": [
+    "不做语义等价裁定；不重跑模型；不访问生产库；不改任何冻结物",
+    "不报 target_recall / precision 作为生产口径；本批所有比对数均为诊断口径",
+    "不因本批结果自动修改契约或评分器"
+  ],
+
+  "artifacts": [
+    "r0-zero-call/preregistered-store-baseline.json（本文件，write-once）",
+    "r0-zero-call/store_baseline.py（支持 --no-write，幂等）",
+    "r0-zero-call/store-baseline.json",
+    "r0-zero-call/store-baseline.md",
+    "r0-zero-call/route-decision.json",
+    "r0-zero-call/MANIFEST.json"
+  ]
+}
