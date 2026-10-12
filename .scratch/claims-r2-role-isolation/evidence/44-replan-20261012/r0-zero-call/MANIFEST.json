@@ -1,0 +1,16 @@
+{
+  "schema_version": "items-replan-manifest-1",
+  "created_on": "2026-10-12",
+  "inputs": {
+    "report": "sha256:851bac6bdca95dfbd70863233e9376666d041b562538dd6b30ef0a657b8ada24",
+    "contract_v4_review_signed": "sha256:753532e8074aa0bf8a9f9cddf2b0e97b9b19519ed95b154407fdfac2e6c0ccd7",
+    "scoring_contract_v4_signed": "sha256:6806f1399e3bbf5ace41264598f6228998f706dd082f20d580d5303a48ab712d",
+    "gate32_v2_criteria_proposed": "sha256:c4675ecff72b64c1124957be2122d0f8719928fdb80bbfa13d2e3f8f322a2df8"
+  },
+  "outputs": {
+    "preregistered-replan.json": "sha256:8557711f069ae2e78d8b8c92b31445d63858fc28c3ce631c51b5921b992aaf0e",
+    "replan.json": "sha256:2cdd3506bcb460f463b22e33570593ea06f55ff97c0d37e6e1145345dfc71ccb",
+    "replan.md": "sha256:2a2cae2e394c3018da4a01bc2ee30174bb64ee5fa2cf728c01547ea9833a9a03",
+    "build_replan.py": "sha256:faa7161ce10299151918966d8f74aeecf295f7481a1a29a58ea49f86ea833f59"
+  }
+}

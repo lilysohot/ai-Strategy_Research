@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from enum import StrEnum
 from fractions import Fraction
+from typing import Protocol, runtime_checkable
 
 
 class ScoringInputError(ValueError):
@@ -18,6 +19,39 @@ class Role(StrEnum):
     CLAIMS = "claims"
     MATERIAL_ITEMS = "material_items"
     MATERIAL_RELATIONS = "material_relations"
+
+
+class MatchingMode(StrEnum):
+    """How candidates are matched to gold.
+
+    ``ADJUDICATED`` is the contract path (read_path.equivalence_judgement.scorer_contract:
+    身份相等不得作为匹配前提) — the scorer consumes a finished human mapping and only
+    validates it. ``LEGACY_IDENTITY`` keeps the historical strict-equality matcher and must be
+    requested explicitly, so it can never be reached by omission.
+    """
+
+    ADJUDICATED = "adjudicated"
+    LEGACY_IDENTITY = "legacy_identity"
+
+
+@runtime_checkable
+class AdjudicatedMappingLike(Protocol):
+    """Structural contract for one adjudication mapping, as consumed by the scorer."""
+
+    candidate_id: str
+    gold_record_id: str | None
+    judgement: str
+
+
+class AdjudicationJudgement(StrEnum):
+    """The only judgements the scorer accepts (contract ``candidate_judgements``)."""
+
+    MATCHED = "matched"
+    CORRECT_EXTRA = "correct_extra"
+    INCORRECT = "incorrect"
+    DUPLICATE = "duplicate"
+    UNRESOLVED = "unresolved"
+    OUT_OF_SCOPE = "out_of_scope"
 
 
 class RecordOrigin(StrEnum):
@@ -144,22 +178,31 @@ class CandidateRecord:
 
 @dataclass(frozen=True)
 class RoleMetrics:
-    """One role's exact TP/FP/FN ledger."""
+    """One role's exact TP/FP/FN ledger.
+
+    ``correct_extra`` keeps the contract's ``metrics.candidate_precision`` numerator
+    (``matched + correct_extra``) exact without inflating target recall: extraneous but
+    correct output is neither a target hit nor an error. Defaulting to 0 keeps the formula
+    identical to the historical ``tp / (tp + fp)``.
+    """
 
     role: Role
     tp: int
     fp: int
     fn: int
     duplicate_fp: int
+    correct_extra: int = 0
 
     @property
     def precision(self) -> Fraction | None:
         """Precision, or ``None`` when no candidate was produced."""
-        return Fraction(self.tp, self.tp + self.fp) if self.tp + self.fp else None
+        numerator = self.tp + self.correct_extra
+        denominator = numerator + self.fp
+        return Fraction(numerator, denominator) if denominator else None
 
     @property
     def recall(self) -> Fraction | None:
-        """Recall, or ``None`` for a zero gold denominator."""
+        """Recall, or ``None`` for a zero gold denominator (correct_extra never counts)."""
         return Fraction(self.tp, self.tp + self.fn) if self.tp + self.fn else None
 
 
@@ -172,11 +215,14 @@ class OriginMetrics:
     tp: int
     fp: int
     fn: int
+    correct_extra: int = 0
 
     @property
     def precision(self) -> Fraction | None:
         """Precision, or ``None`` when the slice produced no candidates."""
-        return Fraction(self.tp, self.tp + self.fp) if self.tp + self.fp else None
+        numerator = self.tp + self.correct_extra
+        denominator = numerator + self.fp
+        return Fraction(numerator, denominator) if denominator else None
 
     @property
     def recall(self) -> Fraction | None:
@@ -386,8 +432,18 @@ def score_structured_quality(
     conclusions: tuple[ReportConclusion, ...] = (),
     policy: QualityPolicy = PILOT_CANDIDATE_POLICY,
     readiness: EvaluationReadiness = DEFAULT_EVALUATION_READINESS,
+    matching_mode: MatchingMode = MatchingMode.ADJUDICATED,
+    raw_mappings: Sequence[AdjudicatedMappingLike] | None = None,
+    validated_mappings: Sequence[AdjudicatedMappingLike] | None = None,
 ) -> StructuredQualityReport:
-    """Score raw and validated candidates independently against frozen gold."""
+    """Score raw and validated candidates independently against frozen gold.
+
+    Under ``MatchingMode.ADJUDICATED`` (the default) every candidate must carry a mapping
+    produced by human adjudication; the scorer only validates it. Under
+    ``MatchingMode.LEGACY_IDENTITY`` the historical strict-equality matcher runs and mappings
+    must be absent — the two paths are never mixed.
+    """
+    _check_matching_mode(matching_mode, raw_mappings, validated_mappings)
     _unique(gold, lambda item: item.record_id, "gold record_id")
     _unique(gold, lambda item: item.identity, "gold semantic identity")
     _unique(raw_candidates, lambda item: item.candidate_id, "raw candidate_id")
@@ -405,8 +461,12 @@ def score_structured_quality(
             raise ScoringInputError(
                 f"validated candidate must be an unchanged raw candidate: {item.candidate_id}"
             )
-    raw = _score_candidates(gold, raw_candidates)
-    validated = _score_candidates(gold, validated_candidates)
+    raw = _score_candidates(
+        gold, raw_candidates, matching_mode=matching_mode, mappings=raw_mappings
+    )
+    validated = _score_candidates(
+        gold, validated_candidates, matching_mode=matching_mode, mappings=validated_mappings
+    )
     by_id = {item.record_id: item for item in gold}
     sources = tuple(sorted({by_id[item].source_id for item in validated.matched_gold_ids}))
     coverage = _score_coverage(coverage_targets, coverage_observations)
@@ -440,13 +500,112 @@ def _unique[T](values: tuple[T, ...], key: Callable[[T], object], label: str) ->
         seen.add(current)
 
 
+def _check_matching_mode(
+    matching_mode: MatchingMode,
+    raw_mappings: Sequence[AdjudicatedMappingLike] | None,
+    validated_mappings: Sequence[AdjudicatedMappingLike] | None,
+) -> None:
+    """Reject the two ways of getting matching wrong: a silent fallback and a mixed run."""
+    if matching_mode is MatchingMode.ADJUDICATED:
+        if raw_mappings is None or validated_mappings is None:
+            raise ScoringInputError(
+                "MatchingMode.ADJUDICATED requires raw_mappings and validated_mappings; "
+                "the scorer never falls back to identity equality "
+                "(read_path.equivalence_judgement.scorer_contract)"
+            )
+    elif raw_mappings is not None or validated_mappings is not None:
+        raise ScoringInputError(
+            "MatchingMode.LEGACY_IDENTITY must not be combined with adjudication mappings"
+        )
+
+
+@dataclass(frozen=True)
+class _MatchOutcome:
+    """Which candidates matched which gold, under one matching mode."""
+
+    matched_ids: tuple[str, ...]
+    false_positive_ids: tuple[str, ...]
+    duplicate_ids: frozenset[str]
+    correct_extra_ids: frozenset[str]
+
+
 def _score_candidates(
-    gold: tuple[GoldRecord, ...], candidates: tuple[CandidateRecord, ...]
+    gold: tuple[GoldRecord, ...],
+    candidates: tuple[CandidateRecord, ...],
+    *,
+    matching_mode: MatchingMode,
+    mappings: Sequence[AdjudicatedMappingLike] | None,
 ) -> CandidateScore:
+    if matching_mode is MatchingMode.LEGACY_IDENTITY:
+        outcome = _match_by_identity(gold, candidates)
+    else:
+        outcome = _match_by_adjudication(gold, candidates, mappings or ())
+    matched = set(outcome.matched_ids)
+    false_positive_ids = set(outcome.false_positive_ids)
+    remaining = {item.record_id: item for item in gold if item.record_id not in matched}
+    metrics: list[RoleMetrics] = []
+    origin_metrics: list[OriginMetrics] = []
+    for role in Role:
+        tp = sum(1 for item in gold if item.record_id in matched and item.role is role)
+        fp = sum(
+            1
+            for candidate in candidates
+            if candidate.candidate_id in false_positive_ids and candidate.role is role
+        )
+        fn = sum(1 for item in remaining.values() if item.role is role)
+        duplicates = sum(
+            1
+            for candidate in candidates
+            if candidate.candidate_id in outcome.duplicate_ids and candidate.role is role
+        )
+        extra = sum(
+            1
+            for candidate in candidates
+            if candidate.candidate_id in outcome.correct_extra_ids and candidate.role is role
+        )
+        metrics.append(RoleMetrics(role, tp, fp, fn, duplicates, extra))
+        for origin in RecordOrigin:
+            origin_tp = sum(
+                1
+                for item in gold
+                if item.record_id in matched and item.role is role and item.origin is origin
+            )
+            origin_fp = sum(
+                1
+                for candidate in candidates
+                if candidate.candidate_id in false_positive_ids
+                and candidate.role is role
+                and candidate.origin is origin
+            )
+            origin_fn = sum(
+                1 for item in remaining.values() if item.role is role and item.origin is origin
+            )
+            origin_extra = sum(
+                1
+                for candidate in candidates
+                if candidate.candidate_id in outcome.correct_extra_ids
+                and candidate.role is role
+                and candidate.origin is origin
+            )
+            origin_metrics.append(
+                OriginMetrics(role, origin, origin_tp, origin_fp, origin_fn, origin_extra)
+            )
+    return CandidateScore(
+        roles=tuple(metrics),
+        origins=tuple(origin_metrics),
+        matched_gold_ids=tuple(outcome.matched_ids),
+        missing_gold_ids=tuple(remaining),
+    )
+
+
+def _match_by_identity(
+    gold: tuple[GoldRecord, ...], candidates: tuple[CandidateRecord, ...]
+) -> _MatchOutcome:
+    """Historical strict-equality matcher, kept for diagnostics and control arms only."""
     remaining = {item.record_id: item for item in gold}
     matched: list[str] = []
+    false_positives: list[str] = []
     duplicate_ids: set[str] = set()
-    false_positive_roles: list[Role] = []
     seen_candidate_identities: set[tuple[object, ...]] = set()
     for candidate in candidates:
         if candidate.identity in seen_candidate_identities:
@@ -457,46 +616,102 @@ def _score_candidates(
             (item for item in remaining.values() if item.identity == candidate.identity), None
         )
         if match is None:
-            false_positive_roles.append(candidate.role)
+            false_positives.append(candidate.candidate_id)
             continue
         matched.append(match.record_id)
         remaining.pop(match.record_id)
-    metrics: list[RoleMetrics] = []
-    origin_metrics: list[OriginMetrics] = []
-    for role in Role:
-        tp = sum(1 for item in gold if item.record_id in matched and item.role is role)
-        fp = false_positive_roles.count(role)
-        fn = sum(1 for item in remaining.values() if item.role is role)
-        duplicates = sum(
-            1
-            for candidate in candidates
-            if candidate.candidate_id in duplicate_ids and candidate.role is role
-        )
-        metrics.append(RoleMetrics(role, tp, fp, fn, duplicates))
-        for origin in RecordOrigin:
-            origin_tp = sum(
-                1
-                for item in gold
-                if item.record_id in matched and item.role is role and item.origin is origin
-            )
-            origin_fp = (
-                sum(
-                    1
-                    for candidate in candidates
-                    if candidate.role is role and candidate.origin is origin
-                )
-                - origin_tp
-            )
-            origin_fn = sum(
-                1 for item in remaining.values() if item.role is role and item.origin is origin
-            )
-            origin_metrics.append(OriginMetrics(role, origin, origin_tp, origin_fp, origin_fn))
-    return CandidateScore(
-        roles=tuple(metrics),
-        origins=tuple(origin_metrics),
-        matched_gold_ids=tuple(matched),
-        missing_gold_ids=tuple(remaining),
+    return _MatchOutcome(
+        matched_ids=tuple(matched),
+        false_positive_ids=tuple(false_positives),
+        duplicate_ids=frozenset(duplicate_ids),
+        correct_extra_ids=frozenset(),
     )
+
+
+def _match_by_adjudication(
+    gold: tuple[GoldRecord, ...],
+    candidates: tuple[CandidateRecord, ...],
+    mappings: Sequence[AdjudicatedMappingLike],
+) -> _MatchOutcome:
+    """Consume the finished human mapping; validate it, never re-derive it from fields."""
+    gold_by_id = {item.record_id: item for item in gold}
+    by_candidate: dict[str, AdjudicatedMappingLike] = {}
+    for mapping in mappings:
+        candidate_id = str(getattr(mapping, "candidate_id", "") or "")
+        if not candidate_id:
+            raise ScoringInputError("adjudication mapping is missing candidate_id")
+        if candidate_id in by_candidate:
+            raise ScoringInputError(f"duplicate adjudication mapping: {candidate_id}")
+        by_candidate[candidate_id] = mapping
+    matched: list[str] = []
+    false_positives: list[str] = []
+    duplicate_ids: set[str] = set()
+    correct_extra_ids: set[str] = set()
+    claimed_by: dict[str, str] = {}
+    for candidate in candidates:
+        mapping = by_candidate.get(candidate.candidate_id)
+        if mapping is None:
+            raise ScoringInputError(
+                f"{candidate.candidate_id}: no adjudication mapping; "
+                "unresolved_candidates_max = 0 forbids scoring an unmapped candidate"
+            )
+        judgement = _adjudication_judgement(candidate.candidate_id, mapping)
+        gold_record_id = getattr(mapping, "gold_record_id", None)
+        if judgement is AdjudicationJudgement.MATCHED:
+            record = gold_by_id.get(str(gold_record_id or ""))
+            if record is None:
+                raise ScoringInputError(
+                    f"{candidate.candidate_id}: mapped gold record {gold_record_id!r} is not "
+                    "in the frozen gold"
+                )
+            if record.role is not candidate.role or record.source_id != candidate.source_id:
+                raise ScoringInputError(
+                    f"{candidate.candidate_id}: mapped gold {record.record_id} carries "
+                    f"{record.role}/{record.source_id}, outside the candidate's "
+                    f"{candidate.role}/{candidate.source_id}"
+                )
+            owner = claimed_by.get(record.record_id)
+            if owner is not None:
+                raise ScoringInputError(
+                    f"gold {record.record_id} matched twice: {owner} and {candidate.candidate_id}"
+                )
+            claimed_by[record.record_id] = candidate.candidate_id
+            matched.append(record.record_id)
+        elif judgement is AdjudicationJudgement.CORRECT_EXTRA:
+            correct_extra_ids.add(candidate.candidate_id)
+        elif judgement is AdjudicationJudgement.DUPLICATE:
+            duplicate_ids.add(candidate.candidate_id)
+            false_positives.append(candidate.candidate_id)
+        elif judgement is AdjudicationJudgement.INCORRECT:
+            false_positives.append(candidate.candidate_id)
+        elif judgement is AdjudicationJudgement.UNRESOLVED:
+            raise ScoringInputError(
+                f"{candidate.candidate_id}: unresolved adjudication violates "
+                "unresolved_candidates_max = 0"
+            )
+        else:
+            raise ScoringInputError(
+                f"{candidate.candidate_id}: out_of_scope candidates must be filtered before "
+                "scoring (adjudication_clause.scope_rules)"
+            )
+    return _MatchOutcome(
+        matched_ids=tuple(matched),
+        false_positive_ids=tuple(false_positives),
+        duplicate_ids=frozenset(duplicate_ids),
+        correct_extra_ids=frozenset(correct_extra_ids),
+    )
+
+
+def _adjudication_judgement(
+    candidate_id: str, mapping: AdjudicatedMappingLike
+) -> AdjudicationJudgement:
+    raw = getattr(mapping, "judgement", "")
+    try:
+        return AdjudicationJudgement(str(raw))
+    except ValueError as error:
+        raise ScoringInputError(
+            f"{candidate_id}: judgement {raw!r} is outside candidate_judgements"
+        ) from error
 
 
 def _score_coverage(

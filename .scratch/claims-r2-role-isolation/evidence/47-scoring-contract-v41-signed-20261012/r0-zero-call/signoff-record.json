@@ -1,0 +1,74 @@
+{
+  "schema_version": "items-contract-v41-signoff-record-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "signed_by": "xyl",
+  "signed_on": "2026-10-12",
+  "instrument": {
+    "path": ".scratch/claims-r2-role-isolation/evidence/46-contract-v41-draft-20261012/r0-zero-call/contract-v4.1-review.md",
+    "sha256": "sha256:1d01218210388acf49f7c15a41301631d0631db6b1cf5e6e87ecc1ccf3b94bdc",
+    "reviewer_remark": "",
+    "reviewer_remark_note": "备注为空。两处 open_for_reviewer 项（R-1/R-2）因此按**原样接受**处理；这是对空备注的解释，已显式记录，不视为对具体条文的逐条确认。"
+  },
+  "signed_contract": {
+    "path": "scoring-contract-v4.1.json",
+    "schema_version": "non-table-selected-target-scoring-contract-v4.1",
+    "status": "frozen_signed",
+    "supersedes": "sha256:6806f1399e3bbf5ace41264598f6228998f706dd082f20d580d5303a48ab712d"
+  },
+  "decisions_carried": {
+    "OPEN-1": "A（门 28 为单一口径 0.85/0.80/20；评分器须改为读契约——代码未改）",
+    "OPEN-2": "C（material_relations 本轮不纳入评分）",
+    "FORCED-1": "以金标口径为准、读时归一化（由 §8 硬约束推定）"
+  },
+  "open_for_reviewer_disposition": [
+    {
+      "id": "R-1",
+      "path": "threshold_source.decision_history",
+      "content": "由 donor 的 pending_signoff_detail 改名而来，历史说明已更新为『该分叉已由 OPEN-1=A 裁定』。",
+      "disposition": "as_is_accepted",
+      "basis": "签署件备注为空 ⇒ 按原样接受（未提出修改）"
+    },
+    {
+      "id": "R-2",
+      "path": "read_path.absent_required_fields.alignment_with_caliber_rules",
+      "content": "由 agent 撰写的调和句：先按 caliber_rules 决定参与匹配的字段，再对不参与者显式记 absent 以备审。",
+      "disposition": "as_is_accepted",
+      "basis": "签署件备注为空 ⇒ 按原样接受（未提出修改）"
+    }
+  ],
+  "supersession": {
+    "superseded_by_v41": [
+      {
+        "path": ".scratch/claims-r2-role-isolation/evidence/43-scoring-contract-v4-signed-20261012/r0-zero-call/scoring-contract-v4.json",
+        "sha256": "sha256:6806f1399e3bbf5ace41264598f6228998f706dd082f20d580d5303a48ab712d",
+        "note": "已签 v4：其内容被 v4.1 只增不删地包含；v4 字节不变、留存可追溯。"
+      }
+    ],
+    "donor_draft": {
+      "path": ".scratch/claims-r2-role-isolation/evidence/41-items-chain-accounting-20261012/r3-signoff-apply/scoring-contract-v4.proposed.json",
+      "sha256": "sha256:b3f88649e9eca70cf21b95c466ea4a4950ef6a316aa521e2b42822c4eae7818f",
+      "status_in_file": "proposed_pending_signoff",
+      "action": "superseded_by v4.1（该草案从未签认；其独有叶子已并入 v4.1）",
+      "note": "本会话不写入 donor 所属目录；本条即为取代声明。"
+    }
+  },
+  "outstanding_after_signoff": [
+    "评分器读契约/阈值对齐（P03/§7-6）：代码未改，OPEN-1=A 尚无实现",
+    "评分器匹配机制不得以身份相等为前提（P02）：代码未改",
+    "裁定→评分输入装配器（P01）：代码不存在",
+    "契约绑定再绑定 v2→v3→v4.1（P12）：待落记录",
+    "门 28 metric_basis 推进至 v4.1（P13）：待提案（不得就地改）",
+    "口径归一化实现与回归（P04/P05）：未实施",
+    "route a/b 边际裁定与缺口 1/2（§5.12）：仍缺"
+  ],
+  "gate28_metric_basis_now": {
+    "gate28_recorded": null,
+    "note": "门 28 记录的度量基准仍指向 v3；v4.1 已签 ⇒ 该项过期，须按 P13 出新版本记录（不得就地改）。"
+  },
+  "gold_freeze_binding_now": {
+    "recorded_contract_in_freeze_manifest": "2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe",
+    "note": "冻结链记录的契约哈希仍为 v2；实际已签为 v4.1（经 v3、v4）⇒ 须按 P12 出再绑定记录。"
+  },
+  "note": "签认只签契约条款；不等于 items-only 真实复验通过，也不等于门 33 出分。"
+}

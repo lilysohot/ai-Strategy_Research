@@ -1,0 +1,335 @@
+{
+  "schema_version": "items-p01-assembler-evidence-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "model_requests": 0,
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/47-scoring-contract-v41-signed-20261012/r0-zero-call/scoring-contract-v4.1.json": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+    ".scratch/claims-r2-role-isolation/evidence/38-gate33-workbench-rebuild-20261012/r0-zero-call/workbench-v2.json": "sha256:0bd9e66072b08f9f30267112ee505789dcee4d0825359e632cdbaac670736558",
+    ".scratch/claims-r2-role-isolation/evidence/33-items-quality-scoring-20261011/r0-zero-call/adjudications.draft.json": "sha256:972acca8d0375d3e5686f08f20cae1b55967abdd3203d4d0fac6c1708f54e89e",
+    ".scratch/claims-r2-role-isolation/evidence/33-items-quality-scoring-20261011/r0-zero-call/build_adjudication_draft.py": "sha256:7d839413dd0770ef0f277b762432b3618c0cb92dffd1e8f0117523e7d94998a6"
+  },
+  "contract_binding": {
+    "schema_version": "non-table-selected-target-scoring-contract-v4.1",
+    "status": "frozen_signed",
+    "signed_by": "xyl",
+    "carriers_implemented": [
+      "attribution",
+      "condition",
+      "perspective",
+      "polarity",
+      "proposition",
+      "semantic_type",
+      "source_stance",
+      "speaker_ref",
+      "speech_role",
+      "statement_role"
+    ],
+    "role_required_fields": [
+      "proposition",
+      "semantic_type",
+      "statement_role",
+      "speech_role",
+      "perspective",
+      "speaker_ref",
+      "polarity",
+      "attribution",
+      "source_stance"
+    ]
+  },
+  "catalog": {
+    "source": ".scratch/claims-r2-role-isolation/evidence/38-gate33-workbench-rebuild-20261012/r0-zero-call/workbench-v2.json",
+    "candidates": 222,
+    "sources": [
+      "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb"
+    ]
+  },
+  "draft_adjudications": {
+    "total": 222,
+    "by_judgement": {
+      "pending": 203,
+      "accepted": 19
+    },
+    "by_stage": {
+      "raw": 222
+    },
+    "contract_enum_violations": {
+      "accepted": "adjudication_clause.candidate_judgements has no 'accepted' (record_states are a separate vocabulary and are not judgements)"
+    },
+    "required_per_record_fields_absent_in_draft": []
+  },
+  "faithful_run": {
+    "accepted_records_submitted": 19,
+    "assembled": 0,
+    "rejected": 19,
+    "first_violation_examples": [
+      {
+        "candidate_id": "itm_abebb2a7163927e9",
+        "rejected": "itm_abebb2a7163927e9: reviewer is required (adjudication_clause.responsible_party)"
+      },
+      {
+        "candidate_id": "itm_d0e9f3a0a75f5157",
+        "rejected": "itm_d0e9f3a0a75f5157: reviewer is required (adjudication_clause.responsible_party)"
+      },
+      {
+        "candidate_id": "itm_45c20faff776385b",
+        "rejected": "itm_45c20faff776385b: reviewer is required (adjudication_clause.responsible_party)"
+      }
+    ],
+    "verdict": "0 assembled: every gate-33 draft 'accepted' record violates contract v4.1"
+  },
+  "independent_rule_probe": {
+    "violation_tally": {
+      "reviewer_missing": 19,
+      "evidence_missing": 19,
+      "judgement_outside_contract_enum": 19,
+      "proposition_rewritten_or_copied": 19,
+      "field_filled_from_outside_candidate::attribution": 19,
+      "field_filled_from_outside_candidate::speaker_ref": 19,
+      "field_filled_from_outside_candidate::source_stance": 19,
+      "deterministic_field_declared_differently::perspective": 3
+    },
+    "records_with_any_violation": 19,
+    "records_with_no_violation": 0,
+    "per_record": [
+      {
+        "candidate_id": "itm_abebb2a7163927e9",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      },
+      {
+        "candidate_id": "itm_d0e9f3a0a75f5157",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      },
+      {
+        "candidate_id": "itm_45c20faff776385b",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      },
+      {
+        "candidate_id": "itm_7ba3125d387514f9",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      },
+      {
+        "candidate_id": "itm_659e7d6382f5fd02",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      },
+      {
+        "candidate_id": "itm_fcbb5794e46a985a",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      },
+      {
+        "candidate_id": "itm_02fab19d63fdcb92",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      },
+      {
+        "candidate_id": "itm_ec18c38405c7e17f",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      },
+      {
+        "candidate_id": "itm_5e44b07c386a6c1e",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      },
+      {
+        "candidate_id": "itm_42ffb8cedfa8d7ff",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "deterministic_field_declared_differently::perspective",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      },
+      {
+        "candidate_id": "itm_356f9d9b23c78892",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "deterministic_field_declared_differently::perspective",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      },
+      {
+        "candidate_id": "itm_85ac32c15bf2636d",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "deterministic_field_declared_differently::perspective",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      },
+      {
+        "candidate_id": "itm_71bbd42cf3522bea",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      },
+      {
+        "candidate_id": "itm_7b0cfc4d08a27730",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      },
+      {
+        "candidate_id": "itm_e6a5f468d81f21ac",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      },
+      {
+        "candidate_id": "itm_ed3a149d2a52ec22",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      },
+      {
+        "candidate_id": "itm_a361a20c875bf147",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      },
+      {
+        "candidate_id": "itm_bc0b1219e6a3fc7b",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      },
+      {
+        "candidate_id": "itm_5de2e5ebfaa12f38",
+        "violations": [
+          "reviewer_missing",
+          "evidence_missing",
+          "judgement_outside_contract_enum",
+          "proposition_rewritten_or_copied",
+          "field_filled_from_outside_candidate::attribution",
+          "field_filled_from_outside_candidate::speaker_ref",
+          "field_filled_from_outside_candidate::source_stance"
+        ]
+      }
+    ]
+  },
+  "blocking_conclusion": "契约合法裁定数 = 0 ⇒ 装配器输出为空 ⇒ 门 33 的 0 分是**装配缺口**造成的，不是抽取质量问题。这以可执行形式证实了 §5.13.2『链路末端两处缺环』：P01 装配器此前不存在，且现有草案裁定不是契约形态（含金标注入）。",
+  "not_claimed": [
+    "本产物不评价抽取质量，不产生任何门分数。",
+    "本产物不修改 draft；draft 仍是其原样（其金标注入见 evidence/33 build_adjudication_draft.py:98-100）。",
+    "『19 条被拒』不等于『19 条都真的不对』；它只说明其 canonical_observed_fields 非契约可接受形态。"
+  ]
+}

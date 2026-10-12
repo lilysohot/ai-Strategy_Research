@@ -1,0 +1,19 @@
+{
+  "schema_version": "items-p06-guard-manifest-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "model_requests": 0,
+  "inputs": {
+    "tools/evidence_guard.py": "sha256:0396923e4371817dd47da10e570c38250efe862de4e4ffba31acbac4354f7951",
+    "tools/check_evidence_guard.py": "sha256:be70c944f127d86a1c38396e17552c89d4425d29f9187e58c082c80dd1541705",
+    "tools/evidence_guard_exceptions.json": "sha256:fd0f179684136718f3b2600a6ec4cabd502c939494f0c8263680f6bf168080f2",
+    "tests/test_evidence_guard.py": "sha256:dfab413249e9726af72ef8dca53daeb1ebb5792e8de3b49613682c7361afa487"
+  },
+  "outputs": {
+    "guard-inventory.json": "sha256:42a40e788b0ff62e7989fe4583ba8b1808897cbbb5ba4e9bd9dec2a273cb44d7",
+    "p06-guard.md": "sha256:260cab1c5c2a097c72f3586f1d8638b225335a1a91f3117ea98a1eb9e3e3bb23"
+  },
+  "in_place_edits": 0,
+  "historical_scripts_modified": 0,
+  "note": "P06 只加机制与登记，不改历史脚本。"
+}

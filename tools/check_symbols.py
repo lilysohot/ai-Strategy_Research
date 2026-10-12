@@ -20,6 +20,7 @@ Only sees `from X import name`. Attribute access (`mod.name`) is invisible, so
 this narrows the risk rather than eliminating it — `tools/import_smoke.py`
 covers what actually resolves at import time.
 """
+
 from __future__ import annotations
 
 import ast
@@ -64,7 +65,8 @@ def top_level_names(path: Path) -> set[str]:
                     isinstance(t, ast.Name) and t.id == "__all__" for t in m.targets
                 ):
                     names |= {
-                        e.value for e in getattr(m.value, "elts", [])
+                        e.value
+                        for e in getattr(m.value, "elts", [])
                         if isinstance(e, ast.Constant) and isinstance(e.value, str)
                     }
     for n in tree.body:
@@ -126,15 +128,19 @@ def main() -> int:
             targets += sorted(p.rglob("*.py")) if p.is_dir() else [p]
     else:
         targets = [
-            p for r in ROOTS if (AH / r).exists()
+            p
+            for r in ROOTS
+            if (AH / r).exists()
             for p in sorted((AH / r).rglob("*.py"))
             if "__pycache__" not in p.parts
         ]
     bad = scan([p for p in targets if "__pycache__" not in p.parts])
     for b in bad:
         print(b)
-    print(f"\n{'FAIL' if bad else 'OK'}: {len(bad)} missing-symbol import(s) "
-          f"across {len(targets)} file(s)")
+    print(
+        f"\n{'FAIL' if bad else 'OK'}: {len(bad)} missing-symbol import(s) "
+        f"across {len(targets)} file(s)"
+    )
     return 1 if bad else 0
 
 

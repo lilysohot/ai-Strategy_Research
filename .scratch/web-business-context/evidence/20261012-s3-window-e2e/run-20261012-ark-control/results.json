@@ -1,22 +1,22 @@
 {
   "checks": {
-    "C1_complete_both_arms": false,
+    "C1_complete_both_arms": true,
     "C2_carrier_moved_every_turn": true,
     "C3_prompt_within_budget": true,
     "C4_cut_flaps_once": false,
     "C5_memory_written_once_per_cut": true,
-    "C6_arms_differ": false,
+    "C6_arms_differ": true,
     "C7_prompt_plateaus": true
   },
   "blocked": [],
   "detail": {
     "turns": {
       "treatment": 45,
-      "control": 16
+      "control": 45
     },
     "mean_reuse": {
       "treatment": 0.8297,
-      "control": 0.7002
+      "control": 0.3677
     },
     "miss_turns_treatment": [
       17,
@@ -102,14 +102,14 @@
       "control_dump_left": []
     },
     "carrier_audit": {
-      "checked_at": "2026-10-12 10:24:06",
+      "checked_at": "2026-10-12 11:03:40",
       "arms": {
         "treatment": {
           "turns": 45,
           "dumps_left": []
         },
         "control": {
-          "turns": 16,
+          "turns": 45,
           "dumps_left": []
         }
       }
@@ -179,7 +179,36 @@
         22249,
         22389,
         22554,
-        22603
+        22603,
+        22689,
+        22696,
+        22731,
+        22749,
+        22671,
+        22687,
+        22736,
+        22811,
+        22875,
+        22888,
+        22893,
+        22806,
+        22796,
+        22815,
+        22802,
+        22784,
+        22818,
+        22836,
+        22837,
+        22842,
+        22832,
+        22834,
+        22818,
+        22810,
+        22982,
+        22956,
+        22952,
+        22943,
+        22909
       ]
     },
     "cache_read_tokens": {
@@ -246,7 +275,36 @@
         0,
         0,
         0,
-        11776
+        11776,
+        0,
+        0,
+        11776,
+        11776,
+        11776,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        11776,
+        11776,
+        0,
+        0,
+        0,
+        0,
+        11776,
+        11776,
+        0,
+        0,
+        11776,
+        11776,
+        0,
+        11776,
+        11776,
+        0,
+        0
       ]
     },
     "stopped_by": {

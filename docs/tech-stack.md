@@ -180,7 +180,6 @@ server/runs/<run_id>/
 │   └── outputs/         FRONTIER_AGENT_OUTPUTS_DIR   ← 产物，run 结束扫描入 artifacts 表
 ├── inputs/              FRONTIER_AGENT_INPUTS_DIR    ← 上传文件，只读，在 ws 之外
 ├── spill/               APODEX_SPILL_DIR
-├── history.txt          服务端渲染的历史稿（presentation；模型不读）
 ├── prior_conversation.json  本会话存储的 payload 落下的**本轮 staging 副本**（server 只搬运、不解析）
 └── run/                 _trial_dir
     ├── agent/trajectories/react_agent.{json,jsonl}   ← 运行时自写，含参数/用量
@@ -189,6 +188,8 @@ server/runs/<run_id>/
 ```
 
 **跨轮上下文（2026-10-10 阶段 1；2026-10-11 S1 补注、S2 归位）**：`run/conversation.json` 由节点在 loop 结束时原子写入（`ConversationSnapshotObserver`），字段含 messages / system_prompt / tool_names / tool_schema_sha256 / thinking_format / messages_est_tokens（最后一项是写侧一次估算，供 `runs.usage_json` 报告重放窗口大小，**不参与任何判定**，旧 dump 读作 0）。**权威源是会话行 `session_conversations`**（迁移 0019，issue 01 §11）：run 收尾时由**父进程**（唯一持库凭据的一侧）把 dump 的**原字节** ingest 入库、成功后删除该文件；下一轮 `_spawn` 按 `session_id` **一次主键读**，由 `_stage_prior_payload` 原子写成 `run/prior_conversation.json`（本轮的 staging 副本），再由该轮 workflow 校验（逐字比对 system prompt、工具集指纹等）后决定是否作为 `initial_messages` 重放。**watch_event 自动分析不参与，两个方向都关**（读侧不看库、写侧不入库，见 `server/store.py::is_watch_run` 与 `orchestrator._ingest_conversation`）。重放决策与窗口可经 `runs.usage_json.replay` 读取（`server/orchestrator.py::_usage_with_replay`），逐轮命中率由只读脚本 `scripts/replay_stats.py` 出板。`/readyz` 的 schema 门要求库停在迁移 head（现为 0019）。
+
+S4 已退役 `history.txt` / `conversation_history`：`turns` 只服务 Web 展示和审计，不再被重新渲染进模型输入。重放窗口由 `REPLAY_MAX_TURNS`（保留的最近用户轮数，默认 10）、`REPLAY_MAX_TOKENS`（消息估算 token 上限；未设置时取模型输入上限的一半）和 `REPLAY_MAX_TURN_STEP`（轮数迟滞带，默认 5；设为 0 恢复逐轮硬裁剪）控制。token 上限始终是硬约束；迟滞只减少轮数窗口滑动造成的缓存失效。
 
 7. **上传不走 `_sandbox_mounts`**：native/container 分支直接读 `resolve_mount_dirs()`，bind mount 只在 bwrap 分支构造（`main_agent.py:841-848`）。上传文件**落进 `FRONTIER_AGENT_INPUTS_DIR` 即可**，路径由 **worker 拼进本轮 instruction 的尾部**告知（issue 01 S1-b）：该说明每轮含本 run 自己的 inputs 路径，放进 system prompt 会翻转 KV cache 前缀，使带附件的那一轮整段重算；`metadata['_sys_prompt_addendum']` 只保留跨轮恒定的文本（常量说明、业务策略、缺料策略）。
 
@@ -354,7 +355,7 @@ CREATE TABLE runs (
   llm_calls INT, usage_json JSONB,                    -- PR-GOV-03，聚合自 trajectory；可含 replay 块
                                                       --（跨轮决策 + 窗口，issue 01 S1-a）
   run_dir TEXT NOT NULL,                              -- run/agent/trajectories/、run/engine.log、ws/outputs/、
-                                                      -- history.txt、prior_conversation.json（跨轮重放输入）
+                                                      -- prior_conversation.json（跨轮重放 staging 输入）
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   started_at TIMESTAMPTZ, finished_at TIMESTAMPTZ);
 CREATE INDEX idx_runs_session ON runs(session_id, created_at);
@@ -488,7 +489,7 @@ server/        app.py config.py orchestrator.py worker.py
                bridge.py relay.py history.py store.py security.py profile.py
                approval.py steer.py diff.py artifacts.py usage.py
                routes/{auth,models,sessions,runs,artifacts}.py  alembic/
-               runs/<run_id>/{ws/{outputs/}, inputs/, spill/, history.txt, prior_conversation.json,
+               runs/<run_id>/{ws/{outputs/}, inputs/, spill/, prior_conversation.json,
                             run/{agent/trajectories/,engine.log,conversation.json}}
 plugins/corpus/ PostgreSQL 语料、Claims、审计与服务层
 plugins/market/ ports.py service.py factory.py sink.py trace_store.py adapters/ transport/

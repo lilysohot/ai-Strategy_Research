@@ -25,6 +25,7 @@ from frontier_agent.components.observers.conversation_snapshot import (
     SUMMARY_TAG,
     ConversationSnapshotObserver,
     build_dump,
+    build_summarizer,
     canonical_json,
     render_summary_content,
     select_replay,
@@ -822,7 +823,7 @@ async def test_a_watch_run_skips_the_continuity_carrier(db, tmp_path, monkeypatc
 
     captured: dict[str, dict] = {}
 
-    async def fake_launch(self, run_id, params, *, history=""):
+    async def fake_launch(self, run_id, params):
         captured[run_id] = dict(params)
         proc = SimpleNamespace(returncode=0, stdout=None, pid=0)
         return orch_mod.RunHandle(
@@ -1012,7 +1013,12 @@ async def test_worker_hands_the_dump_to_the_workflow_verbatim(db, tmp_path, monk
         async def run(self, instruction, *, meta=None, pipeline_id="", extra_input=None):
             captured["extra_input"] = extra_input or {}
             captured["meta"] = meta or {}
-            return {"final_answer": "ok", "replay_decision": {"decision": "used"}}
+            return {
+                "final_answer": "ok",
+                "replay_decision": {"decision": "used"},
+                # Rides the pipeline state into the run summary (§12.11 待办 2).
+                "summary_usage": {"calls": 1, "prompt_tokens": 300, "cache_read_tokens": 64},
+            }
 
     monkeypatch.setattr(
         "benchmarks.public.core.kernel_adapter.BenchmarkSession",
@@ -1055,6 +1061,9 @@ async def test_worker_hands_the_dump_to_the_workflow_verbatim(db, tmp_path, monk
     assert "BUSINESS CONTEXT POLICY" in captured["meta"]["_sys_prompt_addendum"]
     summary = json.loads((run_root / "summary.json").read_text(encoding="utf-8"))
     assert summary["replay"] == {"decision": "used"}
+    # §12.11 待办 2: the write-time summary's own tokens survive the state hop, so
+    # ``usage_json.replay.summary_usage`` can be filled from the run row alone.
+    assert summary["summary_usage"] == {"calls": 1, "prompt_tokens": 300, "cache_read_tokens": 64}
 
 
 @pytest.mark.asyncio
@@ -1551,6 +1560,159 @@ async def test_step_zero_is_byte_identical_to_the_pre_hysteresis_writes(tmp_path
             tmp_path, _conversation(turns), max_replay_turns=2, max_replay_turn_step=0
         )
         assert canonical_json(implicit) == canonical_json(explicit), f"diverged at {turns} turns"
+
+
+async def test_a_long_conversation_cuts_on_a_fixed_cadence(tmp_path) -> None:
+    """The standing regression for the band (issue 01 §12.11 待办 1).
+
+    The unit tests above check single decisions. This one drives a whole
+    conversation through the real write path and states the property in the shape
+    a reader can check at a glance: cuts land on a fixed cadence, and **every turn
+    in between is a pure append** — which is exactly what the provider's prefix
+    cache can reuse and what a per-turn cut destroys.
+
+    ``max_turns=2, step=2`` keeps it fast: the bound is ``turns > 4``, so the cuts
+    fall on turns 5, 8, 11, 14, 17 (one every ``step + 1`` turns).
+    """
+    documents = await _chain(
+        tmp_path,
+        turns=18,
+        summarizer=_CountingSummarizer(),
+        max_replay_turns=2,
+        max_replay_turn_step=2,
+    )
+
+    cut_turns = [index for index, doc in enumerate(documents, 1) if doc["trim"]]
+    assert cut_turns == [5, 8, 11, 14, 17]
+
+    appended = 0
+    for previous, current in itertools.pairwise(documents):
+        real = [
+            m
+            for m in current["messages"][1:]
+            if m.get("role") == "user" and SUMMARY_TAG not in str(m.get("content") or "")
+        ]
+        if current["trim"]:
+            assert len(real) == 2, "a cut lands back on the bound, not one turn past it"
+        else:
+            assert len(real) <= 4, "an uncut write stays inside max_turns + step"
+            assert current["messages"][: len(previous["messages"])] == previous["messages"], (
+                "an uncut turn must be a pure append"
+            )
+            appended += 1
+
+    assert appended == 12, "17 transitions, 5 of them cuts"
+    assert len([m for m in documents[-1]["messages"] if SUMMARY_TAG in str(m.get("content") or "")]) == 1
+
+
+async def test_the_hysteresis_buys_back_the_cacheable_prefix(tmp_path) -> None:
+    """The value regression: band on ⇒ most transitions reuse the prefix.
+
+    Without the band the window slides every turn, so *no* transition can reuse
+    anything (issue 01 §12.6/§12.10 measured 0.0% reuse live). This asserts the
+    side of the trade the feature was bought for, in the only currency a prefix
+    cache understands: how many transitions leave the previous message list intact
+    as a prefix.
+    """
+
+    async def append_share(step: int) -> float:
+        documents = await _chain(
+            tmp_path,
+            turns=18,
+            summarizer=_CountingSummarizer(),
+            max_replay_turns=2,
+            max_replay_turn_step=step,
+        )
+        pairs = list(itertools.pairwise(documents))
+        appended = sum(
+            1
+            for previous, current in pairs
+            if current["messages"][: len(previous["messages"])] == previous["messages"]
+        )
+        return appended / len(pairs)
+
+    banded = await append_share(5)
+    unbanded = await append_share(0)
+
+    assert banded >= 0.75, f"band on: expected most transitions to be appends, got {banded:.0%}"
+    assert unbanded <= 0.5, f"band off: expected the window to slide, got {unbanded:.0%} appends"
+
+
+async def test_the_summary_call_reports_its_own_tokens(tmp_path) -> None:
+    """The write-time summary's tokens reach the loop result (issue 01 §12.11 #2).
+
+    This call runs after the loop's own usage was accounted and inside an observer
+    the trajectory never sees, so without an explicit channel it is unbilled
+    everywhere — which is how a 45-turn run's summary calls went uncounted.
+    """
+    seen: dict[str, Any] = {}
+
+    class _UsageLLM:
+        async def chat(self, messages: Any) -> Any:
+            return SimpleNamespace(
+                content="S",
+                usage={"prompt_tokens": 120, "completion_tokens": 30, "cached_tokens": 64},
+            )
+
+    summarizer = build_summarizer(_UsageLLM())
+    observer = ConversationSnapshotObserver(
+        tmp_path / "conversation.json",
+        system_prompt=_SYSTEM,
+        tools=_TOOLS,
+        tool_names=_TOOL_NAMES,
+        thinking_format="none",
+        pipeline_id=_PIPELINE,
+        node_id=_NODE,
+        max_replay_turns=1,
+        max_replay_turn_step=0,
+        summarizer=summarizer,
+    )
+    result = AgentLoopResult(
+        messages=[system_msg(_SYSTEM), *_turn("Q1"), *_turn("Q2")],
+        turns_used=2,
+        stopped_by="no_tool",
+    )
+    await observer.on_loop_end(result)
+    seen.update(result.metadata)
+
+    assert summarizer.calls == 1
+    assert summarizer.usage == {
+        "prompt_tokens": 120,
+        "completion_tokens": 30,
+        "cache_read_tokens": 64,
+    }, "the compactor's call must be counted, with cached_tokens normalised"
+    assert seen["summary_usage"] == {"calls": 1, **summarizer.usage}
+
+
+async def test_a_summarizer_without_usage_still_reports_the_call(tmp_path) -> None:
+    """A plain callable (many tests pass one) reports the count, not fake tokens."""
+
+    class _Bare:
+        calls = 1
+
+        async def __call__(self, old_summary: str | None, dropped: list[dict]) -> str:
+            return "S"
+
+    observer = ConversationSnapshotObserver(
+        tmp_path / "conversation.json",
+        system_prompt=_SYSTEM,
+        tools=_TOOLS,
+        tool_names=_TOOL_NAMES,
+        thinking_format="none",
+        pipeline_id=_PIPELINE,
+        node_id=_NODE,
+        max_replay_turns=1,
+        max_replay_turn_step=0,
+        summarizer=_Bare(),
+    )
+    result = AgentLoopResult(
+        messages=[system_msg(_SYSTEM), *_turn("Q1"), *_turn("Q2")],
+        turns_used=2,
+        stopped_by="no_tool",
+    )
+    await observer.on_loop_end(result)
+
+    assert result.metadata["summary_usage"] == {"calls": 1}
 
 
 async def test_the_token_budget_keeps_biting_inside_the_band(tmp_path) -> None:

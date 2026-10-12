@@ -24,6 +24,7 @@ so a 1-question benchmark run stays the actual gate. The judge layer once
 imported pandas eagerly through an optional dependency, which killed every
 worker in a real run while this smoke stayed green.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -52,7 +53,9 @@ class _Blocked:
         self.names = names
 
     def find_module(
-        self, fullname: str, path: Sequence[str] | None = None,
+        self,
+        fullname: str,
+        path: Sequence[str] | None = None,
     ) -> None:  # legacy hook, still consulted
         return self.find_spec(fullname, path)
 
@@ -113,6 +116,7 @@ def main() -> int:
         return min(run_stage("eval", FRAMEWORK + EVAL, ()), 1)
 
     import subprocess
+
     rc = 0
     for stage in (1, 2):
         r = subprocess.run([sys.executable, __file__, "--stage", str(stage)], cwd=AH)

@@ -371,7 +371,11 @@ def _fact(
         "implicit_company_coordinate",
         "product_coordinate_in_claim",
     }
-    if record.scope == "company" and record.subject != document.subject and not trusted_subject_basis:
+    if (
+        record.scope == "company"
+        and record.subject != document.subject
+        and not trusted_subject_basis
+    ):
         reasons.append("subject_not_anchored")
     if record.period_raw and re.sub(r"\s+", "", record.period_raw) not in re.sub(
         r"\s+", "", packet.text

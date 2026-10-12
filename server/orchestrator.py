@@ -40,7 +40,6 @@ from server.history import (
     CONVERSATION_DUMP_RELPATH,
     STEER_TURN_PREFIX,
     extract_final_answer,
-    render_session_history,
 )
 from server.investment_context import InvestmentContextResolver, materialize_context
 from server.store import (
@@ -113,33 +112,12 @@ def _signal_worker(proc: asyncio.subprocess.Process, sig: int) -> None:
         killpg(getpgid(proc.pid), sig)
 
 
-def _turns_as_of_submission(turns: list[Any], *, current_run_id: uuid.UUID | None) -> list[Any]:
-    """The conversation as it stood when ``current_run_id`` was submitted (F14.
-
-    Subtraction — "every turn except mine" — was not the same thing: a run is
-    created ``queued`` and its worker may start much later, while the user keeps
-    talking. Those later messages are already in ``turns``, so the model could be
-    handed a question the user had not asked yet and answer it, or take a
-    message that belonged to a run still waiting in the queue.
-
-    ``submit`` writes this run's own user turn BEFORE enqueueing it, so turns
-    ahead of that one are exactly the conversation the run was submitted against;
-    everything after it belongs to a later submission. A run with no turn on
-    record (a resumed or externally driven run) falls back to excluding only its
-    own turns, which is the previous behaviour.
-    """
-    my_index = next((i for i, turn in enumerate(turns) if turn.run_id == current_run_id), None)
-    if my_index is None:
-        return [turn for turn in turns if turn.run_id != current_run_id]
-    return [turn for i, turn in enumerate(turns) if i < my_index and turn.run_id != current_run_id]
-
-
 def _stage_prior_payload(run_dir: Path, payload: str | None) -> None:
     """Write the session's stored conversation into *run_dir* (issue 01 §11.4).
 
     The bytes come from the session store (``session_conversations``), not from
-    the previous run's directory, and land next to ``history.txt`` so the worker
-    and the workflow keep the contract they already have: they read
+    the previous run's directory, and land in the run root so the worker and the
+    workflow keep the contract they already have: they read
     ``prior_conversation.json`` and validate it themselves. The server still only
     transports bytes — ``server.history`` states the boundary.
 
@@ -307,10 +285,10 @@ class Orchestrator:
         config, nothing is injected and the worker falls back to the server's own
         ``.env`` — the "all present or all absent" rule from tech-stack §5.3.
 
-        Multi-turn backfill (T2.6): the user's prompt is written as a ``user`` turn
-        immediately, and the prior turns of the session are rendered into the
-        worker's history input so the next run sees the full conversation. The
-        assistant's reply is back-filled once the worker emits ``run_finished``.
+        The user's prompt is written as a ``user`` turn immediately for Web
+        presentation and audit. Model continuity comes from the session's opaque
+        conversation payload; the assistant's reply is back-filled into ``turns``
+        once the worker emits ``run_finished``.
         """
         # Normalise the session id to a UUID. The M1 API accepts a free-form
         # string (e.g. "default"); we synthesise a stable UUID from it so the
@@ -744,20 +722,10 @@ class Orchestrator:
     async def _spawn(self, **params: Any) -> None:
         run_id = params["run_id"]
         session_uuid = params.get("session_uuid")
-        # Render the prior turns of this session as history for the worker. We
-        # deliberately use the turns table (user/assistant transcript) and NEVER
-        # the workflow's internal messages — the pipeline state stays opaque.
-        # The current run's own turn (the user prompt we just wrote) is excluded
-        # so the worker's prompt carries the live question and history holds only
-        # the prior conversation — no duplication.
-        history = ""
         prior_payload: str | None = None
         continuity = "on"
         if session_uuid is not None:
             current = uuid.UUID(run_id) if _looks_like_uuid(run_id) else None
-            turns = await list_turns(session_id=session_uuid)
-            prior_turns = _turns_as_of_submission(turns, current_run_id=current)
-            history = render_session_history(prior_turns)
             # Watch-triggered runs neither read nor write the continuity carrier
             # (issue 01 §9.18 #1): the auto-analysis is rules-driven, so it keeps a
             # clean, bounded context — and because it stores nothing, a later chat
@@ -785,7 +753,7 @@ class Orchestrator:
         params["_continuity"] = continuity
         handle: RunHandle | None = None
         try:
-            handle = await self._launch(run_id, params, history=history)
+            handle = await self._launch(run_id, params)
             handle._params = params  # keep session_uuid for assistant backfill
             self._handles[run_id] = handle
             await self._pump_frames(handle)
@@ -949,8 +917,9 @@ class Orchestrator:
         """Mark a steer as adopted and write it into the transcript (F21).
 
         Both halves are written together, because either alone is a half-truth:
-        the record says the direction took effect, and the turn is what makes the
-        *next* run see it (``server/history.py`` renders history from ``turns``).
+        the control record says the direction took effect, while the turn keeps
+        the Web presentation and audit transcript complete. The workflow's own
+        final message list carries the adopted direction into the next run.
         The turn goes first — its ``seq`` is the adoption position stored on the
         record. A re-delivered frame is a no-op: a record that already has an
         ``adopted_turn_seq`` must not produce a second message (the F15 duplicate
@@ -1135,7 +1104,7 @@ class Orchestrator:
             # Never propagate a bookkeeping failure into the run lifecycle.
             return
 
-    async def _launch(self, run_id: str, params: dict[str, Any], *, history: str = "") -> RunHandle:
+    async def _launch(self, run_id: str, params: dict[str, Any]) -> RunHandle:
         # Resolve the immutable business snapshot in the authenticated parent.
         # The worker receives only this Run's minimal materialized context, not
         # database credentials or access to another user's ledger.
@@ -1180,11 +1149,7 @@ class Orchestrator:
         llm_env = await self._resolve_llm_env(params.get("user_id"))
         # Gate cross-session parallelism at worker_pool_size.
         await self._acquire_slot()
-        # Persist the rendered history next to the run so the worker can read it
-        # back (keeps long transcripts out of argv). Empty file == no history.
         run_dir.mkdir(parents=True, exist_ok=True)
-        history_path = run_dir / "history.txt"
-        history_path.write_text(history, encoding="utf-8")
         _stage_prior_payload(run_dir, params.get("_prior_payload"))
         cmd = [
             sys.executable,

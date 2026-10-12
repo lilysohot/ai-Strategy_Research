@@ -12,6 +12,8 @@
 | 上游要求 | [产品需求](../product-requirements.md)：PR-RUN-02/04、PR-GOV-01/02/03/05/06、PR-BIZ-04/05/06 |
 | 本地任务入口 | [修复任务规格](../../.scratch/web-runtime-trace-hardening/spec.md)；每项状态仅在对应 issue 的 `Status:` 行维护 |
 
+> **后续架构更新（2026-10-12）**：本报告中的 F14 文本历史截止机制属于当时实现，已由 [上下文继承 issue 01](../../.scratch/web-business-context/issues/01-context-inheritance.md) S2/S4 取代。当前同会话上下文来自数据库中的完整消息 payload；`_turns_as_of_submission`、`history.txt` 与 `conversation_history` 已退役。
+
 ## 1. 结论与证据边界
 
 Web 已有按 Run 保存模型响应、工具结果和上下文压缩记录的基础，JSONL 文件本身不是错误选型。

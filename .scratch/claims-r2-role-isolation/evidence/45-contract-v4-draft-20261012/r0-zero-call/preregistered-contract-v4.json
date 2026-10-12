@@ -1,0 +1,61 @@
+{
+  "schema_version": "items-contract-v4-draft-preregistration-1",
+  "created_on": "2026-10-12",
+  "status": "preregistered_before_run",
+  "purpose": "把 issue-34 §7-11（口径条款）／§7-6（记账与阈值单源）／§7-3（Stage 2 阻塞条款）／§7-1 与 §7-7（读路径）／§7-12（relations 契约缺陷）合成**一份可签认的契约 v4 草案**，把 U 需要做的分散裁定压缩为一次审阅。零调用、只读。",
+  "authorization": {"granted_by": "user", "granted_on": "2026-10-12", "scope": "零调用只读；只产出草案；不改契约 v3、不改金标、不改评分器、不放宽阈值"},
+
+  "binding_constraints": {
+    "no_gold_edit": "issue-34 §8：`frozen-gold.json` / `freeze-state.json` 字节不变 ⇒ 『维持生产端口径并改金标』这一选项与硬约束冲突，口径方向事实上只剩『以金标口径为准、读时归一化』一条可行路径。本草案据此写成该方向，但仍标注为**待签认**，不自行生效。",
+    "user_decision_20261012": "U 已裁定：222 条候选**全量裁定**（维持门 28 `unresolved_candidates_max = 0`）。故 Stage 2 条款须定义全量裁定的责任人与凭据，不得引入抽样替代。"
+  },
+
+  "method": {
+    "draft_is_not_delivery": "本草案是决策载体，**不是交付物、不入冻结链**（U 口径：纯文本/草案不算交付物）。落点在独立证据目录，v3 字节不变。",
+    "diff_is_computed": "v3→v4 的差异由脚本对两份 JSON 做递归 diff 计算得出，**不得手写**，以保证审阅对象与产物一致。",
+    "no_silent_picks": "凡 U 尚未裁定的项（阈值方向、relations 修正方式）一律以 `OPEN_DECISION` 承载并列出全部选项与后果；**不得在草案里预设结论**。",
+    "status_never_self_signed": "草案的 `status` 必须为 `draft_pending_human_signature`；`signoff` 与 `revision_history` 中不得出现 signer。"
+  },
+
+  "declared_changes": [
+    {"id": "D1", "path": "schema_version", "op": "replace", "basis": "版本推进"},
+    {"id": "D2", "path": "status", "op": "replace", "value": "draft_pending_human_signature", "basis": "草案不得自称已签"},
+    {"id": "D3", "path": "supersedes", "op": "replace", "basis": "指向 v3 哈希，旧版留存"},
+    {"id": "D4", "path": "revision_history", "op": "append", "basis": "记本次修订与依据；无 signer"},
+    {"id": "D5", "path": "signoff", "op": "reset_to_pending", "basis": "待具名签认"},
+    {"id": "D6", "path": "caliber_rules", "op": "add", "basis": "issue-34 §5.9（evidence/37）逐字段口径差实测"},
+    {"id": "D7", "path": "read_path", "op": "add", "basis": "evidence/37 EC-A1 + evidence/38 contract_view；机制角色通用、本期只落 items"},
+    {"id": "D8", "path": "adjudication_clause", "op": "add", "basis": "issue-34 §7-3 与 U 2026-10-12 全量裁定裁定"},
+    {"id": "D9", "path": "threshold_source", "op": "add", "basis": "门 28 权威阈值 vs 评分器硬编码双源（含 OPEN_DECISION）"},
+    {"id": "D10", "path": "relation_matching", "op": "add", "basis": "issue-34 §5.11 / §7-12（含 OPEN_DECISION）"},
+    {"id": "D11", "path": "bookkeeping_requirements", "op": "add", "basis": "issue-34 §5.3 四条记账缺陷"},
+    {"id": "D12", "path": "matching.projection", "op": "append", "basis": "归一化不得覆盖原值，原始候选字段必须留存"}
+  ],
+
+  "exit_criteria": {
+    "EC-C1": "产出 v4 草案 JSON、机器计算的 v3→v4 diff、以及 OPEN_DECISION 清单；三者必须一致（diff 覆盖全部 declared_changes）。",
+    "EC-C2": "草案中 `status` = `draft_pending_human_signature`，且全文无任何 signer 字段被填。",
+    "EC-C3": "凡未裁定项必须为 OPEN_DECISION 且列全选项；不得出现预设结论。",
+    "EC-C4": "口径条款必须逐字段给出 rule + 依据测量值 + 是否自动归一化；对不可自动归一的字段（statement_role/semantic_type/source_stance）必须显式标 `human_only`。",
+    "EC-C5": "读路径必须声明『与记录 ID 无关』，并明确 `review_assertions` 的逐条 ID 仅作回归防退化、**不得作为匹配规则**。",
+    "EC-C6": "v3 契约文件字节不变（哈希与 evidence/37 记载一致）。",
+    "EC-C7": "幂等 + `--no-write`；判据外新发现进 backlog。"
+  },
+
+  "out_of_scope": [
+    "不签认、不生效、不写回 10-… 证据目录",
+    "不改金标、评分器、门 28/32/33 产物；不放宽阈值",
+    "不代替 U 对阈值方向与 relations 修正方式的裁定"
+  ],
+
+  "artifacts": [
+    "r0-zero-call/preregistered-contract-v4.json（本文件，write-once）",
+    "r0-zero-call/draft_contract_v4.py（支持 --no-write，幂等）",
+    "r0-zero-call/proposed-scoring-contract-v4.json",
+    "r0-zero-call/contract-v4-diff.json",
+    "r0-zero-call/contract-v4-diff.md",
+    "r0-zero-call/contract-v4-open-decisions.json",
+    "r0-zero-call/contract-v4-review.md",
+    "r0-zero-call/MANIFEST.json"
+  ]
+}

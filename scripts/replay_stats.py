@@ -27,6 +27,8 @@ Definitions, so the arithmetic cannot drift:
   provider claim; ``est_tokens`` is 0 for dumps written before that field existed.
 * A turn whose usage could not be metered is flagged and excluded from the mean
   (``server.usage`` reports ``status`` for exactly this reason).
+* ``summary_usage`` is reported separately from the main loop counters because
+  the write-time summary call runs in an observer outside the trajectory.
 
 The directory source takes each run's session id from its own conversation dump,
 so a runs root holding several conversations still gets per-conversation
@@ -79,6 +81,10 @@ class TurnStat:
     est_tokens: int
     payload_bytes: int
     stopped_by: str
+    summary_calls: int
+    summary_prompt_tokens: int
+    summary_completion_tokens: int
+    summary_cache_read_tokens: int
     error: str = ""
 
     @property
@@ -104,6 +110,9 @@ def _turn_stat(
     replay: dict[str, Any],
     error: str = "",
 ) -> TurnStat:
+    summary_usage = replay.get("summary_usage")
+    if not isinstance(summary_usage, dict):
+        summary_usage = {}
     return TurnStat(
         turn=index,
         run_id=run_id,
@@ -120,6 +129,10 @@ def _turn_stat(
         est_tokens=int(replay.get("est_tokens", 0) or 0),
         payload_bytes=int(replay.get("payload_bytes", 0) or 0),
         stopped_by=str(replay.get("stopped_by") or ""),
+        summary_calls=int(summary_usage.get("calls", 0) or 0),
+        summary_prompt_tokens=int(summary_usage.get("prompt_tokens", 0) or 0),
+        summary_completion_tokens=int(summary_usage.get("completion_tokens", 0) or 0),
+        summary_cache_read_tokens=int(summary_usage.get("cache_read_tokens", 0) or 0),
         error=error,
     )
 
@@ -322,6 +335,12 @@ def summarise(turns: list[TurnStat]) -> dict[str, Any]:
             "sessions": sessions,
             "total_prompt_tokens": sum(t.prompt_tokens for t in turns),
             "total_cache_read_tokens": sum(t.cache_read_tokens for t in turns),
+            "summary_usage": {
+                "calls": sum(t.summary_calls for t in turns),
+                "prompt_tokens": sum(t.summary_prompt_tokens for t in turns),
+                "completion_tokens": sum(t.summary_completion_tokens for t in turns),
+                "cache_read_tokens": sum(t.summary_cache_read_tokens for t in turns),
+            },
             "unmetered": [t.run_id for t in turns if t.usage_status not in ("complete", "")],
         },
     }
@@ -376,6 +395,13 @@ def render(board: dict[str, Any]) -> str:
             )
     lines.append(
         f"prompt {summary['total_prompt_tokens']} / cache_read {summary['total_cache_read_tokens']}"
+    )
+    summary_usage = summary["summary_usage"]
+    lines.append(
+        "summary calls "
+        f"{summary_usage['calls']} / prompt {summary_usage['prompt_tokens']} / "
+        f"completion {summary_usage['completion_tokens']} / "
+        f"cache_read {summary_usage['cache_read_tokens']}"
     )
     if summary["skip_reasons"]:
         lines.append("skip reasons:")

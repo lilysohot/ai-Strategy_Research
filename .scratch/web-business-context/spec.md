@@ -57,7 +57,7 @@ Run `c3ec40b4-ed23-4c16-87ac-e29c15aec211`（研究 `c3646e12-cb2b-4756-988c-2e1
 **产出分工**（本次裁决）：
 
 - 服务端出**事实**（版本化原值）与**静态契约**（字段全集、分组、单位配对、每个用途的必需项、哪些字段性质上只能用户提供）；
-- **实例级欠缺由 agent 判断**——因为 `agent_declarable` 服务端原理上算不出来：`request_investment_input` 只有 `use_case + reason`（`plugins/tools/investment_input_request.py:42-58`），落地的 `input-request.json` 也只有这两项（`server/worker.py:173-177`）；对话历史 `conversation_history` 传入 `extra_input` 后**全仓无消费方**（仅 `server/worker.py:539-541`）；且 PRD 明确禁止用关键词判语义（docs/design/web-business-data-prd.md:165-168）；
+- **实例级欠缺由 agent 判断**——因为 `agent_declarable` 服务端原理上算不出来：`request_investment_input` 只有 `use_case + reason`（`plugins/tools/investment_input_request.py:42-58`），落地的 `input-request.json` 也只有这两项（`server/worker.py:173-177`）；旧的 `conversation_history` 无消费方并已随 issue 01 S4 退役，不能承担语义判定；且 PRD 明确禁止用关键词判语义（docs/design/web-business-data-prd.md:165-168）；
 - 关键：现有 `evaluate_purpose` 只输出 `missing: 字段 → 说明`，**没有归属维度**（`server/business_service.py:441-495`）。`plan.symbol/market/direction` 因此和 `plan.allocated_capital` 混在一起被当成"要问用户"，这是弹窗链路走不通的根因之一。
 
 ### 2.3 形态
@@ -133,7 +133,7 @@ Run `c3ec40b4-ed23-4c16-87ac-e29c15aec211`（研究 `c3646e12-cb2b-4756-988c-2e1
 
 - **无绑定研究的自由问答**：不注入业务资料（本次范围裁决 B 的另一面）。
 - **弹窗实现**（字段能力、渲染方式、是否保留模态）：另行讨论。本 spec 只约定：弹窗的输入是"`ask_user` 类的待补字段"，不得依赖 `agent_declarable` 字段。
-- **多轮会话历史**（`conversation_history` 在 server 侧无人消费）：独立缺陷，不在本次主线内 —— 已立项为 [issue 01](issues/01-context-inheritance.md)：跨轮重放的**阶段 1 已落地并实测 PASS**（轮 3 复用上一轮 prompt 96.1%、轮 4 94.6%），**阶段 2（会话状态归位服务端，迁移 0019）已落地并实测验收 PASS**（两臂各 3 轮、每轮独立进程；轮 3 复用轮 2 prompt 的 99.4%，control 臂无载体）。本 spec 仍不承载它的实现，只回填约束它主线的两条口径（§2.3 前缀恒定、§3.1 判据第二用途）。
+- **多轮会话历史**：独立缺陷，不在本次主线内 —— 已立项为 [issue 01](issues/01-context-inheritance.md)：跨轮重放、服务端 DB 载体（迁移 0019）、窗口与固化摘要、旧 `history.txt` / `conversation_history` 退役均已落地；实跑仍保留 C4 红格与签认待办。轮 3 复用轮 2 prompt 的 99.4%，control 臂无载体。本 spec 仍不承载它的实现，只回填约束它主线的两条口径（§2.3 前缀恒定、§3.1 判据第二用途）。
 - **`plan` 对象的创建流程改造**：只要求"不把已知事实判成缺失"与"agent 声明的事实不得冒充用户资料"，不改计划的写入契约。
 
 ## 6. 本次采用的口径（可改，未定即按此写实现）

@@ -1,0 +1,64 @@
+{
+  "schema_version": "items-contract-v41-merge-reconciliation-1",
+  "created_on": "2026-10-12",
+  "base": {
+    "path": ".scratch/claims-r2-role-isolation/evidence/43-scoring-contract-v4-signed-20261012/r0-zero-call/scoring-contract-v4.json",
+    "sha256": "sha256:6806f1399e3bbf5ace41264598f6228998f706dd082f20d580d5303a48ab712d"
+  },
+  "donor": {
+    "path": ".scratch/claims-r2-role-isolation/evidence/41-items-chain-accounting-20261012/r3-signoff-apply/scoring-contract-v4.proposed.json",
+    "sha256": "sha256:b3f88649e9eca70cf21b95c466ea4a4950ef6a316aa521e2b42822c4eae7818f",
+    "status_in_file": "proposed_pending_signoff",
+    "note": "donor 从未签认（signoff.signed_by 为空）；并入后由 v4.1 一并取代。"
+  },
+  "added_leaf_paths": [
+    "read_path.absent_required_fields.alignment_with_caliber_rules",
+    "read_path.absent_required_fields.condition_role_addition",
+    "read_path.absent_required_fields.evidence",
+    "read_path.absent_required_fields.list[0]",
+    "read_path.absent_required_fields.list[1]",
+    "read_path.absent_required_fields.list[2]",
+    "read_path.absent_required_fields.rule",
+    "read_path.applies_to",
+    "read_path.audit_reference",
+    "read_path.authoritative_side",
+    "read_path.carrier_mapping.forbidden",
+    "read_path.carrier_mapping.recording",
+    "read_path.carrier_mapping.rule",
+    "read_path.condition_role",
+    "read_path.equivalence_judgement.evidence",
+    "read_path.equivalence_judgement.owner",
+    "read_path.equivalence_judgement.rule",
+    "read_path.equivalence_judgement.scorer_contract",
+    "threshold_source.already_verified.gate28_contract_binding",
+    "threshold_source.already_verified.gate28_high_risk_assertions",
+    "threshold_source.conflict_resolution",
+    "threshold_source.rule"
+  ],
+  "resolved_leaf_paths": [
+    {
+      "path": "threshold_source.required_alignment",
+      "action": "resolve_by_signed_decision",
+      "why": "donor 记为 PENDING_SIGNOFF，但该分叉已由 U 于 2026-10-12 签认（OPEN-1=A）；保留 pending 会与已签状态矛盾。"
+    },
+    {
+      "path": "threshold_source.pending_signoff_detail",
+      "action": "rename_subtree",
+      "moved_to": "threshold_source.decision_history",
+      "why": "该叶子描述分叉本身，仍有追溯价值；但名称含 pending，故改名为 decision_history 并更新说明，避免与已签状态冲突。"
+    }
+  ],
+  "conflicts_kept_base_value": [],
+  "consistency": {
+    "base_removals": [],
+    "base_leaf_changes": [],
+    "status_is_draft": true,
+    "no_signer_filled": true,
+    "donor_has_no_signoff": true,
+    "add_only": true
+  },
+  "open_for_reviewer": [
+    "threshold_source.decision_history：由 donor 的 pending_signoff_detail 改名而来，其 why_not_chosen 描述的是决策前的状态，已签 OPEN-1=A；请确认该历史条目保留与否。",
+    "read_path.absent_required_fields.alignment_with_caliber_rules：由本脚本撰写，用于调和 donor「记 absent」与 base「移出匹配基」两种表述，属可质疑项。"
+  ]
+}

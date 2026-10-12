@@ -1,0 +1,137 @@
+{
+  "schema_version": "items-v6-reasoning-gate-criteria-v2-proposed",
+  "created_on": "2026-10-12",
+  "status": "proposed_pending_signoff",
+  "signoff_basis": "user_chat_2026-10-12: 已在 issues/41-items-chain-accounting-freeze.md §10 签认「认可口径并准予继续」（复核人 xyl）；§6 逐项勾选未填",
+  "issue": "41-items-chain-accounting-freeze",
+  "check": "AC-8",
+  "supersedes_criteria_of": {
+    "path": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/32-items-v6-reasoning-refreeze-20261011/r0-zero-call/preregistered-gate.json",
+    "sha256": "sha256:6fb47e7945ce133dbdea7b73c6bb3b5e7266856cf6d956dbb9d191303783fba8",
+    "note": "原判据与判定文件留存可追溯；本文件只重排分组，不改任何判据内容与阈值。"
+  },
+  "defect": "门 32 的 verdict=structural_fail 与 root_cause_status=eliminated 并列，且未规定哪个代表本次执行结论；protocol_status_valid 因 items task 未成功而 not_checked ⇒ 一次与协议无关的传输事件即可使『协议修复』无法被单独确认",
+  "decision_evidence": {
+    "path": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/32-items-v6-reasoning-refreeze-20261011/live/gate-decision.json",
+    "sha256": "sha256:669464116e58217962ba092ad98f07a81dfc082db56be1a716d62070c8c33a65",
+    "verdict": "structural_fail",
+    "criteria_unmet": [
+      "protocol_status_valid",
+      "failed_partial_invalid_duplicate_batches_max_0",
+      "completed_min",
+      "execution_status_succeeded"
+    ],
+    "protocol_violation_batches": {
+      "control": {
+        "industrial-fulian-md": 3,
+        "optical-module-docx": 8
+      },
+      "treatment": {
+        "industrial-fulian-md": 0,
+        "optical-module-docx": 0
+      }
+    },
+    "root_cause_status": "eliminated: zero 'unsupported JSONL record' batches under the v6 prompt, against 11 batches under the v5 control arm"
+  },
+  "group_g1_measured_object": {
+    "question": "协议修复是否成立（被测对象）",
+    "criteria_keys": [
+      "protocol_status",
+      "reasoning_tokens_must_be_zero_or_absent",
+      "control_arm_must_reproduce_failure"
+    ],
+    "criteria": {
+      "protocol_status": "valid",
+      "reasoning_tokens_must_be_zero_or_absent": true,
+      "control_arm_must_reproduce_failure": true
+    },
+    "conclusion_rule": "G1 独立出结论：control 臂协议违规批次数 > 0 且 treatment 臂 == 0 且校验器未放宽，即记 protocol_fix_confirmed 并附两臂数字；不因 G2 未满足而被否决。"
+  },
+  "group_g2_structural_completeness": {
+    "question": "本次执行在结构上是否完整（与协议无关的通过条件）",
+    "criteria_keys": [
+      "attempts_match_plan",
+      "no_http_429",
+      "no_automatic_retries",
+      "failed_partial_invalid_duplicate_batches_max",
+      "completed_min",
+      "execution_status",
+      "context_status"
+    ],
+    "criteria": {
+      "attempts_match_plan": true,
+      "no_http_429": true,
+      "no_automatic_retries": true,
+      "failed_partial_invalid_duplicate_batches_max": 0,
+      "completed_min": {
+        "industrial-fulian-md": 10,
+        "optical-module-docx": 14
+      },
+      "execution_status": "succeeded",
+      "context_status": "complete"
+    },
+    "conclusion_rule": "任一项未满足记 structural_incomplete，并逐项归因 infrastructure / our_rule / model；放行仍要求 G1+G2 同时满足。"
+  },
+  "original_exit_criteria": {
+    "attempts_match_plan": true,
+    "no_http_429": true,
+    "no_automatic_retries": true,
+    "protocol_status": "valid",
+    "failed_partial_invalid_duplicate_batches_max": 0,
+    "completed_min": {
+      "industrial-fulian-md": 10,
+      "optical-module-docx": 14
+    },
+    "execution_status": "succeeded",
+    "context_status": "complete",
+    "reasoning_tokens_must_be_zero_or_absent": true,
+    "control_arm_must_reproduce_failure": true
+  },
+  "gate_key_to_decision_key": {
+    "protocol_status": "protocol_status_valid",
+    "reasoning_tokens_must_be_zero_or_absent": "reasoning_tokens_zero_or_absent",
+    "control_arm_must_reproduce_failure": "control_arm_reproduced_failure",
+    "failed_partial_invalid_duplicate_batches_max": "failed_partial_invalid_duplicate_batches_max_0",
+    "execution_status": "execution_status_succeeded",
+    "context_status": "context_status_complete"
+  },
+  "observed_values_in_this_run": {
+    "protocol_status": {
+      "industrial-fulian-md": "not_checked",
+      "optical-module-docx": "not_checked"
+    },
+    "failed_partial_invalid_duplicate_batches_max": {
+      "industrial-fulian-md": {
+        "completed": 9,
+        "partial": 1
+      },
+      "optical-module-docx": {
+        "completed": 13,
+        "partial": 1
+      }
+    },
+    "execution_status": {
+      "industrial-fulian-md": "outcome_unknown",
+      "optical-module-docx": "failed"
+    },
+    "control_arm": {
+      "control_protocol_violation_batches": {
+        "industrial-fulian-md": 3,
+        "optical-module-docx": 8
+      },
+      "control_failed_slots": {
+        "industrial-fulian-md": 22,
+        "optical-module-docx": 60
+      }
+    },
+    "treatment_protocol_violations": {
+      "industrial-fulian-md": 0,
+      "optical-module-docx": 0
+    }
+  },
+  "unchanged_guarantees": [
+    "阈值、授权四项、终态判定文本未改",
+    "放行条件未放宽（G1+G2 同时满足）",
+    "原门哈希与判定文件未修改"
+  ]
+}

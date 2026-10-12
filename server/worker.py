@@ -531,18 +531,13 @@ async def run_once(args: argparse.Namespace) -> int:
     # Cross-turn replay outcome, surfaced in summary.json so the acceptance run
     # can show "used"/"skipped + reason" per turn without reading engine.log.
     replay_decision: dict[str, Any] = {}
+    # The write-time summary call's own tokens (issue 01 §12.11 待办 2). Defaulted
+    # here for the same reason as the decision above: the pipeline call below can
+    # fail before ever producing a state.
+    summary_usage: dict[str, Any] = {}
 
-    # Multi-turn backfill (T2.6): the orchestrator rendered the prior turns of
-    # this session into history.txt. We feed it back as the conversation context
-    # for this run — the only cross-turn signal the server is allowed to inject.
-    # We do NOT read the workflow's internal messages.
-    history_path = run_root / "history.txt"
-    history_text = ""
-    if history_path.exists():
-        history_text = history_path.read_text(encoding="utf-8").strip()
-
-    # Cross-turn continuity (issue 01 §9.4): the orchestrator copied the previous
-    # run's conversation dump next to history.txt. The worker never parses it —
+    # Cross-turn continuity (issue 01 §9.4): the orchestrator stages the session's
+    # stored conversation dump in this run root. The worker never parses it —
     # it is handed to the workflow as an opaque payload, and the workflow
     # validates it before replaying anything.
     replay_payload = ""
@@ -573,8 +568,6 @@ async def run_once(args: argparse.Namespace) -> int:
                     meta=metadata,
                     pipeline_id=args.pipeline_id,
                     extra_input={
-                        "conversation_history": history_text,
-                        "is_multi_turn": bool(history_text),
                         # Watch-triggered runs are told to keep the carrier out
                         # (issue 01 §9.18 #1); everyone else leaves it on.
                         "continuity_enabled": (
@@ -586,6 +579,7 @@ async def run_once(args: argparse.Namespace) -> int:
                 timeout=args.wall_time + 30,
             )
         replay_decision = state.get("replay_decision") or {}
+        summary_usage = state.get("summary_usage") or {}
         for key in ("final_answer", "final_content", "report", "answer", "output"):
             value = state.get(key)
             if isinstance(value, dict):
@@ -653,6 +647,10 @@ async def run_once(args: argparse.Namespace) -> int:
         "duration_s": round(time.time() - started, 2),
         # Cross-turn replay outcome (issue 01 §9.8): "used" / "skipped" + reason.
         "replay": replay_decision,
+        # The write-time summary call's own tokens (issue 01 §12.11 待办 2). Its own
+        # key rather than folded into the run's counters: this call happens in an
+        # observer the trajectory never sees, so it was previously unmetered.
+        "summary_usage": summary_usage,
     }
     # F22 / F06-RUN-3 + F06 power durability: atomic + fsynced persist (see
     # persist_summary). A write failure is logged but must never mask the outcome.

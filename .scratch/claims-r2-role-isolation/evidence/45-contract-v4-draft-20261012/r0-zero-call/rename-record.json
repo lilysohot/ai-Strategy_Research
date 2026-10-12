@@ -1,0 +1,50 @@
+{
+  "schema_version": "items-evidence-dir-rename-record-1",
+  "created_on": "2026-10-12",
+  "purpose": "P07 消编号歧义：本证据目录由 41 改为 45。记录改名事实、文件字节不变性、以及受影响引用的处置。",
+  "rename": {
+    "old": ".scratch/claims-r2-role-isolation/evidence/41-contract-v4-draft-20261012",
+    "new": ".scratch/claims-r2-role-isolation/evidence/45-contract-v4-draft-20261012",
+    "reason": "编号 41 与并行会话的 Issue 41（evidence/41-items-chain-accounting-20261012）冲突，导致引用歧义。",
+    "numbering_rule": "整数编号按创建顺序唯一；本目录原编 41 与并行 Issue 41 撞号，故顺延至下一个空号 45。"
+  },
+  "byte_invariance": {
+    "claim": "改名只移动路径，不修改任何文件字节。",
+    "signed_instrument_sha256_unchanged": "sha256:753532e8074aa0bf8a9f9cddf2b0e97b9b19519ed95b154407fdfac2e6c0ccd7",
+    "note": "contract-v4-review.md 是 U 的签署工具；改名后哈希不变，签名效力不受影响。"
+  },
+  "references_disposition": [
+    {
+      "ref": "evidence/34-chain-root-cause-audit-20261011/chain-report.md（§2 r7 行、§5.13、§5.13.1、§5.13.2）",
+      "action": "已改为新路径；文中记载的本目录产物哈希未变（文件字节未改）",
+      "owner": "agent",
+      "status": "done"
+    },
+    {
+      "ref": "evidence/43-scoring-contract-v4-signed-20261012/r0-zero-call/apply_v4_signoff.py（DRAFT_DIR 常量与文档串）",
+      "action": "已改为新路径并重跑；该目录产物哈希随之更新（signoff-record / scoring-contract-v4 / README / 脚本）",
+      "owner": "agent",
+      "status": "done"
+    },
+    {
+      "ref": "evidence/44-replan-20261012/r0-zero-call/build_replan.py（REVIEW 常量）",
+      "action": "已改为新路径并重跑；replan.json 哈希随之更新",
+      "owner": "agent",
+      "status": "done"
+    },
+    {
+      "ref": "evidence/41-items-chain-accounting-20261012/r2-proposals/contract-v4-draft.md",
+      "action": "**未改**：该文件属并行会话，不由本会话写入。其中对本目录旧路径的引用**已失效**，须由该会话或 U 决定是否更新。",
+      "owner": "parallel-session / U",
+      "status": "open"
+    }
+  ],
+  "post_rename_hashes": {
+    "scoring-contract-v4.json": "sha256:6806f1399e3bbf5ace41264598f6228998f706dd082f20d580d5303a48ab712d",
+    "signoff-record.json": "sha256:5e8737f46bb92127f96183d52f4a416d1780a7f67ec74ca1a41688fe2f92d9ff",
+    "README.md": "sha256:37fad0a6dfed404df9591505f219c2b22ec2daf06e7f3a0e61a83b2d855ab3af",
+    "apply_v4_signoff.py": "sha256:6ab89b3100bc19baf07b02fc4897d925fbc759956aa0a411a72367bb4d09f7c9",
+    "replan.json": "sha256:2cdd3506bcb460f463b22e33570593ea06f55ff97c0d37e6e1145345dfc71ccb"
+  },
+  "note": "本记录本身不改变任何签名；它的作用是让旧引用在新路径下仍可追溯。"
+}

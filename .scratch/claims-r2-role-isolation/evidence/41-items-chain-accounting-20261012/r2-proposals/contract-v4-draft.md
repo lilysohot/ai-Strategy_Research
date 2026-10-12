@@ -3,8 +3,9 @@
 - 日期：2026-10-12
 - 状态：**提案**。本文不修改任何既有契约文件；签认后另行落地为
   `non-table-selected-target-scoring-contract-v4` 并保留 v3 哈希与内容可追溯（禁止就地覆盖）。
-- 依据：Issue 34 `chain-report.md`、Issue 36 `accounting-checks.json`（AC-1/AC-3/AC-4/AC-5/AC-6）、
-  `contract-gap-report.json`
+- 依据：Issue 34 `chain-report.md`、Issue 41（原编 36）`../r0-zero-call/accounting-checks.json`
+  （AC-1/AC-3/AC-4/AC-5/AC-6）、`../r1-stage2-v2/contract-gap-report.json`；
+  **签认前复核修订（2026-10-12）**：缺失字段结论按 37 号路线裁定与 38 号工作台 v2 实测更正（见 §0）。
 - 零调用：本文为文本提案，未发起任何模型调用
 
 ## 0. 为什么需要 v4
@@ -13,10 +14,11 @@ v3 新增的 `condition_role_read_path` 方向正确（以 `condition` 作为 co
 但没有回答三个已被实测证明必须回答的问题：
 
 1. **载体映射由谁做、允许做什么**：候选只携带 `text`，不携带 `proposition`；人工若"改写"命题即违反
-   `matching.projection`，而不改写则该记录无法裁定。Stage 2 因此在结构上不可执行（机读证据：
-   `contract-gap-report.json.blocking_decision_required`）。
-2. **缺失字段如何表示**：候选缺 `attribution` / `source_stance` / `speaker_ref`（实测 4 项）。
-   未规定时必须记什么，人工只能自由发挥，结果不可复现。
+   `matching.projection`，而不改写则该记录无法裁定。（「读不到字段」的结构阻塞已由 38 号工作台 v2
+   解除；本条款保留，固化载体映射口径，防止同类阻塞复发。）
+2. **缺失字段如何表示**：经 37/38 号实测**更正**——工作台 v2 下 `speaker_ref` 222/222、
+   `attribution` 220/222 有载体，真零载体仅 `source_stance`（本草案原依据 v1 投影误报三项全缺）。
+   未规定缺失时必须记什么，人工只能自由发挥，结果不可复现。
 3. **阈值与判据的单一来源**：门 28（已签认）为 `0.85 / 0.80`，评分器实现为 `0.95 / 0.90`
    （`structured_scoring.py:334-339`），两者不读彼此。
 
@@ -32,7 +34,8 @@ v3 新增的 `condition_role_read_path` 方向正确（以 `condition` 作为 co
     "recording": "映射后的字段集记入 `canonical_observed_fields`；未映射的契约必需字段必须显式记为 absent，不得留空、不得猜测。"
   },
   "absent_required_fields": {
-    "list": ["attribution", "source_stance", "speaker_ref"],
+    "list": ["source_stance"],
+    "note": "37 号裁定 absent=[source_stance]；attribution 在工作台 v2 为 220/222，个别缺失同样按本条 absent 处理（2026-10-12 修订，原 v1 投影误报三项全缺）",
     "rule": "候选未携带上述字段时，`canonical_observed_fields` 记 absent，等价性判定按契约 `unknowns` 条款处理；不得因缺字段直接判不匹配，也不得补造。",
     "condition_role_addition": "statement_role == 'condition' 且候选无 condition 载体时，裁定人须逐条判定候选 `text` 是否表达了该条件，并在 `reason` 记录判据。"
   },
@@ -73,5 +76,8 @@ v3 新增的 `condition_role_read_path` 方向正确（以 `condition` 作为 co
 
 ## 4. 待签认
 
-- 签名人：　　xyl　　日期： 2026-10-12
-- 选项：☐ 采纳 v4 草案　☐ 改为仅扩抽取协议字段（路线 b）　☐ 退回修改
+- **（2026-10-12 关闭）**：本草案已并入合并版
+  `../45-contract-v4-draft-20261012/r0-zero-call/contract-v4-review.md` 并随其签认流程生效，
+  本栏不再单独签（避免两份 v4 并存）。本草案的事实层修订（absent=[source_stance] 等）
+  已被合并版吸收。
+- 选项：☐ 采纳 v4 草案　☐ 改为仅扩抽取协议字段（路线 b，已由 37 号裁定排除）　☐ 退回修改

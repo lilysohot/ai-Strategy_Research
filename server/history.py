@@ -1,25 +1,16 @@
-"""Multi-turn history backfill (T2.6).
+"""Web conversation persistence helpers.
 
-Responsibilities:
-  * ``render_session_history`` — turn a list of prior turns into a compact text
-    block the next run's prompt is prefixed with, so the agent sees the whole
-    conversation instead of a single isolated question.
-  * ``turns_to_dicts`` — project SQLAlchemy ``Turn`` rows into plain dicts (role
-    + content) so the renderer and callers never depend on the ORM model.
+Cross-turn model continuity has one carrier: the previous run's message list.
+Since issue 01 §11 (S2), the authoritative copy is the session row in
+``session_conversations``. The orchestrator writes it when a run ends and reads
+it by primary key for the next turn; ``prior_conversation.json`` is only a
+per-run staging copy. The server transports the payload without parsing or
+depending on the workflow's internal message shape. The workflow validates it
+and decides whether to replay it.
 
-Design note: cross-turn continuity rides on two carriers, and the server's role
-differs for each.
-
-  * **presentation** — the rendered transcript above; plain text the next run's
-    prompt shows as "conversation so far".
-  * **continuity** — the previous run's own message list. Since issue 01 §11 (S2)
-    the authoritative copy is the session's row in ``session_conversations``
-    (``server/store.py``), written by the orchestrator when a run ends and read
-    back by primary key next turn; the file staged inside a run directory
-    (``prior_conversation.json``) is only that turn's copy. The server still never
-    parses the payload, never reads the runtime's ``state['messages']``, and never
-    depends on the pipeline's internal message shape: the next run's workflow
-    validates the payload and decides whether to replay it.
+The ``turns`` table remains the Web presentation and audit transcript. It is not
+rendered back into model input: the old ``history.txt`` / ``conversation_history``
+carrier was retired in issue 01 S4.
 
 The assistant turn written after a run is still taken solely from the worker's
 ``final_answer`` (with ``final_content`` / partial handling), never from inside
@@ -31,77 +22,17 @@ from __future__ import annotations
 
 from typing import Any
 
-# Roles we render. Anything else (system, tool) is excluded from the visible
-# conversation — the history is a user<->assistant transcript.
-_USER_ROLE = "user"
-_ASSISTANT_ROLE = "assistant"
-
-_ROLE_LABELS = {
-    _USER_ROLE: "User",
-    _ASSISTANT_ROLE: "Assistant",
-}
-
 #: Prefix marking a transcript row that was not a submitted question but a
 #: mid-run direction the user injected through ``POST /api/runs/{id}/steer``
 #: (F21). It is written only when the steer was actually adopted, and it is the
-#: reason a later run sees the user's correction at all: history is rendered
-#: from ``turns``, so an adopted steer that never became a turn would be
-#: invisible to every subsequent run.
+#: presentation/audit record for the direction. Model continuity is carried by
+#: the workflow's complete message list in ``session_conversations``.
 #:
 #: Deliberately a plain content prefix rather than a new column: the transcript
 #: schema stays as it is, the text is still literally what the user wrote, and
 #: the structured facts (who, when, adopted at which turn) live in
 #: ``control_records``.
 STEER_TURN_PREFIX = "[运行中补充方向] "
-
-
-def turns_to_dicts(turns: list[Any]) -> list[dict[str, str]]:
-    """Project ``Turn`` rows (or dicts) to ``[{"role", "content"}]`` in seq order."""
-    out: list[dict[str, str]] = []
-    for t in turns:
-        role = t.role if hasattr(t, "role") else t.get("role")
-        content = t.content if hasattr(t, "content") else t.get("content")
-        if role is None or content is None:
-            continue
-        out.append({"role": str(role), "content": str(content)})
-    return out
-
-
-def render_session_history(
-    turns: list[Any],
-    *,
-    limit: int | None = None,
-) -> str:
-    """Render prior turns as a transcript block for the next run's prompt.
-
-    The output is a plain markdown-ish transcript::
-
-        ## Conversation so far
-        User: <message>
-        Assistant: <answer>
-        ...
-
-    Returns ``""`` when there are no user/assistant turns (the caller then skips
-    prefixing the prompt entirely). ``limit`` keeps only the most recent N turns
-    when the thread is long.
-    """
-    dicts = turns_to_dicts(turns)
-    if limit is not None and len(dicts) > limit:
-        dicts = dicts[-limit:]
-
-    lines: list[str] = []
-    for entry in dicts:
-        label = _ROLE_LABELS.get(entry["role"])
-        if label is None:
-            continue
-        text = entry["content"].strip()
-        if not text:
-            continue
-        lines.append(f"{label}: {text}")
-
-    if not lines:
-        return ""
-    return "## Conversation so far\n" + "\n".join(lines)
 
 
 def extract_final_answer(state_or_summary: dict[str, Any]) -> str:

@@ -1,0 +1,44 @@
+{
+  "schema_version": "items-gold-freeze-contract-rebinding-1",
+  "created_on": "2026-10-12",
+  "signoff_basis": "user_chat_2026-10-12: 已在 issues/41-items-chain-accounting-freeze.md §10 签认「认可口径并准予继续」（复核人 xyl）；§6 逐项勾选未填",
+  "issue": "41-items-chain-accounting-freeze",
+  "check": "AC-1",
+  "finding": "the gold freeze chain recorded the pre-signoff contract v2 hash while the signed contract is v3; gate 28 was rebound to v3 by issue 30 but the freeze chain was not",
+  "frozen_records": {
+    "freeze_manifest": {
+      "path": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-manifest.json",
+      "sha256": "sha256:da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
+      "recorded_contract_sha256": "2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe"
+    },
+    "freeze_state": {
+      "path": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-state.json",
+      "sha256": "sha256:08703b8dad9fc6c130872899741534c940787c29a15423db19d398999b237d85",
+      "embedded_contract_schema_version": "non-table-selected-target-scoring-contract-v2",
+      "embedded_contract_status": "draft_pending_human_review"
+    },
+    "frozen_gold": {
+      "path": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json",
+      "sha256": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+      "self_recorded_contract_sha256": "2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe"
+    }
+  },
+  "actual_signed_contract": {
+    "path": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/scoring-contract.json",
+    "sha256": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
+    "schema_version": "non-table-selected-target-scoring-contract-v3",
+    "status": "frozen_signed"
+  },
+  "rebinding": {
+    "effective_binding": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
+    "supersedes_recorded_binding": "2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe",
+    "scope": "bookkeeping only: the frozen gold bytes, the freeze manifest and the freeze state are NOT modified; this record is the traceable successor binding",
+    "consequence_to_state_explicitly": "the gold was frozen against the v2 required-field list (proposition required, no condition read path); v3 added the read path and v4 adds the carrier mapping, so any statement of the form 'the gold is bound to the scoring contract' must cite this record, not the freeze manifest alone"
+  },
+  "not_modified": [
+    "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-manifest.json",
+    "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-state.json",
+    "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json",
+    "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/scoring-contract.json"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": "items-suggester-v2-report-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "preregistration": {
+    "path": "preregistered-suggester-v2.json",
+    "sha256": "sha256:96fb234fcc8bbd95e636516ee24a3ef999da91062b33465edbb0b644b56b16d2"
+  },
+  "R1_candidates_with_suggestion": 217,
+  "R1_gold_reachable_top3": 44,
+  "R2_gold_with_verbatim_chain": 41,
+  "R2_gold_with_verbatim_chain_quote_only": 39,
+  "R2_cross_check_issue35": 39,
+  "R2_matches_issue35": false,
+  "R2_matches_issue35_quote_only": true,
+  "EC_S1_explanation": "口径差定位：助手 v2 的 verbatim 信号同时使用金标 `quote` 与 `context_evidence` 引文（更宽），而 issue-35 只用 `quote`；限定为 quote-only 后应与 39 对齐。二者差异必须显式披露，不得用其中一个数字替代另一个。",
+  "R1_gold_reachable_by_slot": 39,
+  "R3_confidence_v2": {
+    "medium": 129,
+    "high": 46,
+    "none": 39,
+    "low": 8
+  },
+  "R3_confidence_v1_or_v2_old": {
+    "low": 146,
+    "medium": 17,
+    "high": 3,
+    "none": 56
+  },
+  "R4_top1_changed": 161,
+  "EC_S3_chain_present_ratio": 1.0,
+  "EC_S5_candidates_untouched": true,
+  "EC_S2_accuracy_reported": false,
+  "notes": [
+    "本报告不报准确率/召回：无人工裁定真值（EC-S2）。",
+    "R2 与 issue-35 的 39/48 交叉校验用于验证引文信号口径一致（EC-S1）。"
+  ]
+}

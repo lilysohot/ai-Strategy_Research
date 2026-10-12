@@ -65,9 +65,9 @@ class RequestOptions(BaseModel):
     timeout_seconds: float = Field(default=300.0, gt=0, allow_inf_nan=False)
     max_output_tokens: int = Field(default=4096, gt=0, strict=True)
     token_parameter: Literal["max_tokens", "max_completion_tokens"] = "max_tokens"
-    reasoning_effort: Literal[
-        "none", "minimal", "low", "medium", "high", "xhigh", "max"
-    ] | None = None
+    reasoning_effort: Literal["none", "minimal", "low", "medium", "high", "xhigh", "max"] | None = (
+        None
+    )
     # Official DeepSeek chat-completions switch, sent as {"type": thinking}. Exactly one of
     # reasoning_effort / thinking may be set; None keeps the provider default either way.
     thinking: Literal["enabled", "disabled"] | None = None

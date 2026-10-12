@@ -161,5 +161,25 @@ sizing_counterfactual_matches = 0  （反事实，非契约合法、非分数、
 ## 10. 签认栏
 
 - 复核人：　　xyl　　日期：2026-10-12
-- 结论： 认可口径并准予继续　☐ 退回修改
+- 结论： x 认可口径并准予继续　☐ 退回修改
 - 待签认项（§6）逐项：☐ 口径 ☐ 阈值 ☐ 门 32 判据 ☐ 契约 v4（并入 `40` C1/C2） ☐ 评分器改造（`40` C3）
+- **agent 记录的落地状态（2026-10-12）**：文件级"准予继续"已生效；§6 逐项框未勾选，故按下列口径执行：
+  - 已落地（**方向无关**项）：口径冻结采纳、AC-1 再绑定记录、AC-7 验收记录投影、契约 v4 提案、门 32 判据拆分提案（见 §11）；
+  - **仍未决、不代选**：阈值方向 —— A：以门 28 为权威（0.85 / 0.80）改评分器；B：维持评分器现值（0.95 / 0.90）并改门。
+- 授权依据：`user_chat_2026-10-12` 指令「已签认签 issues/41-items-chain-accounting-freeze.md」。
+
+## 11. 签认落地（零调用，实跑，幂等）
+
+| 产物 | sha256 | 落地内容 |
+|---|---|---|
+| `../evidence/41-items-chain-accounting-20261012/r3-signoff-apply/apply_signoff_41.py` | `66d5db72…60286ecf` | 本次落地脚本（只读输入、`--no-write` 语义由只写本目录保证、重复运行逐字节一致） |
+| `…/r3-signoff-apply/freeze-rebinding-record.json` | `b197ece9…3ce98d1` | **AC-1**：金标冻结链记录的契约哈希 `2eb24be7…`（v2）→ 有效绑定 `d9bc51f2…`（v3）的再绑定记录；三个冻结构件字节未动 |
+| `…/r3-signoff-apply/gold-acceptance-record.json` | `154178d4…11ac1acf` | **AC-7**：从 `frozen-gold.json` 自身 `review_status`/`adjudication` 确定性投影出验收计数 `claims 20 / material_items 48 / material_relations 24 = 92`，逐条有裁定；不新增任何断言 |
+| `…/r3-signoff-apply/scoring-contract-v4.proposed.json` | `b3f88649…ae7818f` | **C1/C2**：契约 v4 提案。差分实测：**新增 2 键**（`items_field_carrier_read_path`、`threshold_single_source`）、**删除 0 键**、变更仅限 6 个元数据键；`status=proposed_pending_signoff`；`threshold_single_source.required_alignment = PENDING_SIGNOFF` |
+| `…/r3-signoff-apply/gate-32-v2-criteria.proposed.json` | `c4675ecf…322a2df8` | **AC-8**：门 32 判据拆为 G1（`protocol_status`/`reasoning_tokens_*`/`control_arm_must_reproduce_failure`）与 G2（其余 7 项）；原判据与判定文件逐字保留；附门内键名↔判定文件键名对照表 |
+
+**未改动**：`frozen-gold.json`、`freeze-manifest.json`、`freeze-state.json`、`scoring-contract.json`(v3)、
+`preregistered-gate.json`(28/32)、门 33 既有产物 —— 落地后哈希逐一复核为原值。
+
+**v4 仍需你签**：① 是否采纳 v4（替代 route b）；② 阈值方向 A/B；③ 是否裁决 39 号 §7-11 的
+"每角色通用读路径机制、先只落 items"。

@@ -1,0 +1,47 @@
+{
+  "schema_version": "items-gold-acceptance-record-1",
+  "created_on": "2026-10-12",
+  "signoff_basis": "user_chat_2026-10-12: 已在 issues/41-items-chain-accounting-freeze.md §10 签认「认可口径并准予继续」（复核人 xyl）；§6 逐项勾选未填",
+  "issue": "41-items-chain-accounting-freeze",
+  "check": "AC-7",
+  "finding": "the draft validation report still reads status=valid_review_draft with human_accepted_counts={} and formal_gold_frozen=false, while the freeze state declares formal_gold_frozen=true; the freeze chain has no machine-readable acceptance record",
+  "method": "deterministic projection of frozen-gold's own per-record review_status and adjudication fields; nothing is asserted that the frozen gold does not already carry",
+  "source": {
+    "frozen_gold": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json",
+    "sha256": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    "records": 92,
+    "formal_gold_frozen": true,
+    "reviewer": "xyl",
+    "adjudicator": "xyl",
+    "frozen_on": "2026-10-08",
+    "signoff_evidence": [
+      ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review-candidates.json",
+      ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review.md"
+    ]
+  },
+  "projected_human_accepted_counts": {
+    "claims": {
+      "accepted": 20
+    },
+    "material_items": {
+      "accepted": 48
+    },
+    "material_relations": {
+      "accepted": 24
+    }
+  },
+  "projected_human_accepted_total": 92,
+  "records_with_adjudication": 92,
+  "draft_validation_report": {
+    "path": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/validation-report.json",
+    "sha256": "sha256:139cfc222eb4688dccdce5c0116b00c84b87401e01e22427658c3dcfa6d5bc52",
+    "status": "valid_review_draft",
+    "human_accepted_counts": {},
+    "formal_gold_frozen": false,
+    "note": "that report is the pre-freeze draft; it is not modified here. This record is the successor acceptance view, derived from the frozen gold itself."
+  },
+  "does_not_modify": [
+    "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json",
+    "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/validation-report.json"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "items-contract-v4-open-decisions-1",
+  "created_on": "2026-10-12",
+  "items": [
+    {
+      "id": "OPEN-1",
+      "question": "阈值以哪个源为单一口径？",
+      "options": [
+        {
+          "option": "A",
+          "text": "以门 28 为权威（0.85/0.80/20），评分器改为读契约",
+          "consequence": "判定评分器现值（0.95/0.90）为『未经签认的偏离』；数值方向为放宽，须具名签认并记录理由"
+        },
+        {
+          "option": "B",
+          "text": "维持评分器现值（0.95/0.90）并改门 28",
+          "consequence": "门槛提高；须重算 §6 全部天花板，且与已签认的门 28 冲突，需重新签认门 28"
+        }
+      ],
+      "requires": "具名签认（阈值变更的既有约定）"
+    },
+    {
+      "id": "OPEN-2",
+      "question": "material_relations 如何修正？",
+      "options": [
+        {
+          "option": "A",
+          "text": "改由裁定映射承载（候选只带 item_id，金标主键由 matched_gold_id 提供）",
+          "consequence": "契约条款改动；该角色可评分，但仍需人工裁定"
+        },
+        {
+          "option": "B",
+          "text": "从必需字段删去两个金标主键字段",
+          "consequence": "字段清单缩短；匹配基改为 relation + provenance"
+        },
+        {
+          "option": "C",
+          "text": "本轮不纳入 material_relations 评分",
+          "consequence": "范围显式缩小并披露；不产生该角色报分"
+        }
+      ],
+      "requires": "具名签认"
+    }
+  ],
+  "forced_by_constraint": [
+    {
+      "id": "FORCED-1",
+      "item": "口径方向（§7-11）",
+      "forced_to": "以金标口径为准、读时归一化",
+      "why": "另一选项『维持生产端口径并改金标』与 issue-34 §8（金标字节不变）冲突",
+      "still_requires": "具名签认（方向已定，条款仍须签）"
+    }
+  ],
+  "notes": [
+    "OPEN-1 与 OPEN-2 在草案中以并列选项承载，未预设结论（preregistration: no_silent_picks）。"
+  ]
+}

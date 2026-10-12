@@ -1,0 +1,1017 @@
+{
+  "root": ".scratch/claims-r2-role-isolation/evidence",
+  "scripts_scanned": 116,
+  "guarded": 3,
+  "unguarded": 113,
+  "violations": 0,
+  "legacy_exempt": 4,
+  "signed_targets_protected": 7,
+  "signature_markers": [
+    "☑ 认可并签认",
+    "☑ 认可本口径",
+    "☑ 认可",
+    "认可并签认",
+    "复核人：",
+    "human_signed",
+    "signed_by"
+  ],
+  "scripts": [
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-freeze-20261008-r1/run_quality_score.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/build_draft_manifest.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/export_non_table_units.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/inventory_non_table_sources.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/validate_and_render_review.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/review_pack.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "draft-manifest.json",
+        "gold-review.md",
+        "validation-report.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/test_review_pack.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze_signed_gold.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "freeze-manifest.json",
+        "freeze-state.json",
+        "frozen-gold.json"
+      ],
+      "signed_targets_written": [
+        "freeze-manifest.json",
+        "frozen-gold.json"
+      ],
+      "verdict": "legacy_exempt"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/11-live-20261004-r1/audit_preflight.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/11-live-20261004-r1/inspect_config.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/11-live-20261004-r1/inspect_source.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/11-live-20261004-r1/live_preflight.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/11-live-20261004-r1/prepare_reader.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/11-live-20261007-final/audit_and_export.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/11-live-20261007-r2/execute_material_segment.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/11-live-20261007-r2/prepare_material_round.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/11-live-20261007-r3/run_material_round.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/11-live-20261007-r4/run.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/11-live-20261007-r6/audit_and_export.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/11-live-20261008-non-table-gold-r2/adjudicate_candidates.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/11-live-20261008-non-table-gold-r2/freeze_signed_candidate_adjudications.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/11-live-20261008-optimized/audit_and_export.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/adjudicate_p1r5_claims.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "summary.agent-draft.md"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/evaluate_p1_claims_gate.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/execute_copper_p1.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/execute_p1r2_claims.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/execute_p1r3_claims.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/execute_p1r4_claims_replay.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/execute_p1r_claims.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/freeze_signed_p1r5_claims.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/prepare_p1_plans.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/prepare_p1r2_claims_plan.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/prepare_p1r3_claims_plan.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/prepare_p1r4_claims_replay.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/prepare_p1r_claims_plan.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/17-structured-extraction-convergence-closure-20261009/run_p1r5_claims_replay.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/18-material-extractor-replacement-20261009/p10-accepted-items-import-live/evaluate_live.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/18-material-extractor-replacement-20261009/p11-relation-precision-sample/adjudicate_sample.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/18-material-extractor-replacement-20261009/p11-relation-precision-sample/build_sample.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/18-material-extractor-replacement-20261009/p12-relation-selector-v2-zero-call/build_counterfactual.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/18-material-extractor-replacement-20261009/p12-relation-selector-v2-zero-call/evaluate_live.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/18-material-extractor-replacement-20261009/p12-relation-selector-v2-zero-call/verify_plan.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "plan-diff-summary.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/18-material-extractor-replacement-20261009/p13-question-group-answer-selector-zero-call/build_zero_call.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/18-material-extractor-replacement-20261009/p14-question-group-live-plan/audit_live.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/18-material-extractor-replacement-20261009/p14-question-group-live-plan/verify_plan.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "plan-diff-summary.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/18-material-extractor-replacement-20261009/p8-copper-relation-selector-live/counterfactual_v4.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "candidate-v4-counterfactual.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/18-material-extractor-replacement-20261009/p8-copper-relation-selector-live/counterfactual_v5.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "candidate-v5-counterfactual.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/18-material-extractor-replacement-20261009/p8-copper-relation-selector-live/evaluate_relation_gate.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "evaluation-summary.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/18-material-extractor-replacement-20261009/p8-copper-relation-selector-live/run_relation_gate.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/19-relation-selection-successor-20261010/r0-p14-counterfactual/audit_counterfactual.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/20-relation-model-replacement-20261010/p0-glm-5-3-flash-bounded-live/audit_live.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/20-relation-model-replacement-20261010/p0-glm-5-3-flash-bounded-live/verify_plan.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "plan-diff-summary.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/21-glm-token-compatibility-20261010/p0-16384-bounded-live/audit_live.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/21-glm-token-compatibility-20261010/p0-16384-bounded-live/execute_plan.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/21-glm-token-compatibility-20261010/p0-16384-bounded-live/freeze_plan.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/21-glm-token-compatibility-20261010/p0-16384-bounded-live/verify_plan.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "plan-diff-summary.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/22-doubao-lite-provider-ceiling-20261010/p0-256k-minimal-live/audit_live.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/22-doubao-lite-provider-ceiling-20261010/p0-256k-minimal-live/counterfactual_score.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "counterfactual-summary.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/22-doubao-lite-provider-ceiling-20261010/p0-256k-minimal-live/execute_plan.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/22-doubao-lite-provider-ceiling-20261010/p0-256k-minimal-live/freeze_plan.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/23-relation-adjudication-correction-20261010/r0-zero-call/audit_full_cohort.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "full-cohort-review.md"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/23-relation-adjudication-correction-20261010/r0-zero-call/reassess_boundaries.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "corrected-sensitivity-score.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/24-relation-boolean-protocol-20261010/r0-zero-call/replay_boolean_protocol.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "README.md",
+        "replay-summary.json",
+        "transformed-responses.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/25-final-relation-live-compliance-20261010/r0-live/audit_and_score.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/25-final-relation-live-compliance-20261010/r0-live/execute_plan.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/25-final-relation-live-compliance-20261010/r0-live/freeze_plan.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/25-final-relation-live-compliance-20261010/r0-live/verify_plan.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "plan-diff-summary.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/26-relation-layer-value-validation-20261010/r0-preflight/preflight.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/26-relation-layer-value-validation-20261010/r1-live/audit_and_prepare_review.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "blind-human-review.md",
+        "blind-key.json",
+        "protocol-audit.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/26-relation-layer-value-validation-20261010/r1-live/execute_plan.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "execution-summary.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/26-relation-layer-value-validation-20261010/r1-live/freeze_plan.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "freeze-manifest.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/26-relation-layer-value-validation-20261010/r1-live/unblind_and_decide.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "final-decision.json",
+        "final-decision.md",
+        "unblinded-adjudication.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/27-challenges-rule-20261010/r0-zero-call/replay.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "replay-summary.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/freeze_items_only_plan.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "freeze-manifest.json",
+        "preregistered-gate.json"
+      ],
+      "signed_targets_written": [
+        "preregistered-gate.json"
+      ],
+      "verdict": "legacy_exempt"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/verify_items_only_plan.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "verification-summary.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r1-live/execute_items_only.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r1-live/preflight_runtime_batches.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "preflight-runtime-batches.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r1-live/verify_pre_execution.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "pre-execution-verification.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r2-live/execute_items_only_paced.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r2-live/post_run_check_r2.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "post-run-check.json",
+        "run2-candidates.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r2-live/replan_items_only.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "replan-manifest.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r2-live/verify_pre_execution_r2.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "pre-execution-verification.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/29-items-gold-semantic-audit-20261010/r0-zero-call/audit_items_semantic.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/29-items-gold-semantic-audit-20261010/r0-zero-call/dump_gold_detail.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/32-items-v6-reasoning-refreeze-20261011/live/execute_arm.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/32-items-v6-reasoning-refreeze-20261011/live/finalize_decision.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "gate-decision.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/32-items-v6-reasoning-refreeze-20261011/live/post_run_check.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "candidates.json",
+        "post-run-check.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/32-items-v6-reasoning-refreeze-20261011/live/residual_attribution.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "residual-attribution.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/32-items-v6-reasoning-refreeze-20261011/r0-zero-call/freeze_two_arms.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "freeze-manifest.json",
+        "preregistered-gate.json"
+      ],
+      "signed_targets_written": [
+        "preregistered-gate.json"
+      ],
+      "verdict": "legacy_exempt"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/32-items-v6-reasoning-refreeze-20261011/r0-zero-call/verify_two_arms.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "verification-summary.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/33-items-quality-scoring-20261011/r0-zero-call/build_adjudication_draft.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "adjudications.draft.json",
+        "draft-preview.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/33-items-quality-scoring-20261011/r0-zero-call/build_adjudication_workbench.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "adjudications.json",
+        "workbench.json",
+        "workbench.md"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/34-chain-root-cause-audit-20261011/r0-zero-call/audit_chain.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "chain-audit.json",
+        "chain-audit.md"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/35-gold-audit-20261011/r0-zero-call/audit_gold.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "gold-audit.json",
+        "gold-audit.md"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/36-l9-redo-and-baseline-20261011/r0-zero-call/l9_redo.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "MANIFEST.json",
+        "baseline-control.json",
+        "baseline-control.md",
+        "l9-redo.json",
+        "l9-redo.md"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/37-store-baseline-and-route-decision-20261012/r0-zero-call/store_baseline.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "MANIFEST.json",
+        "route-decision.json",
+        "store-baseline.json",
+        "store-baseline.md"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/38-gate33-workbench-rebuild-20261012/r0-zero-call/rebuild_workbench.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "MANIFEST.json",
+        "workbench-v2.json",
+        "workbench-v2.md"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/39-roles-l3-audit-20261012/r0-zero-call/roles_l3_audit.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "MANIFEST.json",
+        "roles-l3-audit.json",
+        "roles-l3-audit.md"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/40-route-ab-decision-inputs-20261012/r0-zero-call/build_ab_inputs.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "MANIFEST.json",
+        "ab-cost-benefit.json",
+        "ab-cost-benefit.md",
+        "freeze-impact.json",
+        "freeze-impact.md",
+        "route-b-experiment-protocol.json",
+        "route-b-experiment-protocol.md"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/41-items-chain-accounting-20261012/r0-zero-call/audit_accounting.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "accounting-checks.json",
+        "accounting-checks.md"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/41-items-chain-accounting-20261012/r1-stage2-v2/build_adjudication_draft_v2.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "adjudications.v2.json",
+        "contract-gap-report.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/41-items-chain-accounting-20261012/r3-signoff-apply/apply_signoff_41.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/42-stage1-suggester-upgrade-20261012/r0-zero-call/suggester_v2.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "MANIFEST.json",
+        "suggester-v2-report.json",
+        "suggester-v2-report.md",
+        "suggestions-v2.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/43-scoring-contract-v4-signed-20261012/r0-zero-call/apply_v4_signoff.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "MANIFEST.json",
+        "README.md",
+        "scoring-contract-v4.json",
+        "signoff-record.json"
+      ],
+      "signed_targets_written": [
+        "scoring-contract-v4.json",
+        "signoff-record.json"
+      ],
+      "verdict": "legacy_exempt"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/44-replan-20261012/r0-zero-call/build_replan.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "MANIFEST.json",
+        "replan.json",
+        "replan.md"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/45-contract-v4-draft-20261012/r0-zero-call/draft_contract_v4.py",
+      "guarded": "inline_guard",
+      "write_targets": [
+        "MANIFEST.json",
+        "contract-v4-diff.json",
+        "contract-v4-diff.md",
+        "contract-v4-open-decisions.json",
+        "contract-v4-review.md",
+        "proposed-scoring-contract-v4.json"
+      ],
+      "signed_targets_written": [
+        "contract-v4-diff.md",
+        "contract-v4-review.md",
+        "proposed-scoring-contract-v4.json"
+      ],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/46-contract-v41-draft-20261012/r0-zero-call/draft_v41_merge.py",
+      "guarded": "inline_guard",
+      "write_targets": [
+        "MANIFEST.json",
+        "contract-v4.1-diff.json",
+        "contract-v4.1-diff.md",
+        "merge-reconciliation.json",
+        "proposed-scoring-contract-v4.1.json"
+      ],
+      "signed_targets_written": [
+        "contract-v4.1-diff.md",
+        "proposed-scoring-contract-v4.1.json"
+      ],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/47-scoring-contract-v41-signed-20261012/r0-zero-call/apply_v41_signoff.py",
+      "guarded": "inline_guard",
+      "write_targets": [
+        "MANIFEST.json",
+        "README.md",
+        "scoring-contract-v4.1.json",
+        "signoff-record.json"
+      ],
+      "signed_targets_written": [
+        "scoring-contract-v4.1.json",
+        "signoff-record.json"
+      ],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/48-rebinding-and-basis-proposals-20261012/r0-zero-call/propose_rebinding.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "MANIFEST.json",
+        "README.md",
+        "gate28-metric-basis-proposal.json",
+        "gold-freeze-rebinding-proposal.json"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/49-p01-assembler-20261012/r0-zero-call/run_p01_evidence.py",
+      "guarded": "unguarded",
+      "write_targets": [
+        "MANIFEST.json",
+        "p01-evidence.json",
+        "p01-evidence.md"
+      ],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/replay_r4_items_under_r5.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/run_frozen_non_table_gold_trial.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/run_frozen_non_table_gold_trial_r2.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/run_frozen_non_table_gold_trial_r3.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/run_frozen_non_table_gold_trial_r4.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    },
+    {
+      "path": ".scratch/claims-r2-role-isolation/evidence/run_segmented_material_round.py",
+      "guarded": "unguarded",
+      "write_targets": [],
+      "signed_targets_written": [],
+      "verdict": "ok"
+    }
+  ]
+}

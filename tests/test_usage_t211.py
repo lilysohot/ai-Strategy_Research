@@ -143,6 +143,24 @@ def test_aggregate_empty_is_zeroed():
     assert agg["models"] == []
 
 
+def test_replay_block_carries_the_write_side_summary_usage() -> None:
+    """§12.11 #2: the summary call's tokens ride next to the verdict.
+
+    They are kept as their own block, never summed into the run's counters: the
+    run's prompt/cache figures have to stay comparable with the numbers recorded
+    before this cost was visible.
+    """
+    decided = {"decision": "used", "prior_turns": 2}
+    usage = {"calls": 1, "prompt_tokens": 120, "completion_tokens": 30}
+
+    block = replay_block_from_summary({"replay": decided, "summary_usage": usage})
+
+    assert block == {**decided, "summary_usage": usage}
+    # An empty (or absent) block adds nothing — no shape change for old runs.
+    assert replay_block_from_summary({"replay": decided, "summary_usage": {}}) == decided
+    assert replay_block_from_summary({"replay": decided, "summary_usage": "n/a"}) == decided
+
+
 def test_replay_block_is_copied_only_when_the_worker_decided() -> None:
     """S1-a: the replay verdict is copied verbatim, never invented or half-shaped."""
     decided = {"decision": "used", "prior_turns": 2, "est_tokens": 950}

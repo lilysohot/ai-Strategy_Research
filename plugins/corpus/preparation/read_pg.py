@@ -921,8 +921,7 @@ def chunk_order_for_build(
             cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
             cur.execute(_BAND_CHUNK_ORDER_SQL, {"build_ids": [build_id]})
             chunks = [
-                (str(row[1]), tuple(str(ref) for ref in (row[2] or ())))
-                for row in cur.fetchall()
+                (str(row[1]), tuple(str(ref) for ref in (row[2] or ()))) for row in cur.fetchall()
             ]
             cur.execute(_BAND_CHUNK_UNITS_ORDINAL_SQL, {"build_ids": [build_id]})
             ordinal_by_unit: dict[str, int] = {}
@@ -987,9 +986,7 @@ def fetch_chunk_structures(
         chunk_id = str(row[1])
         decision = row[10]
         if decision and decision != "in_scope":
-            raise WithdrawnError(
-                f"来源当前准入为 {decision!r}，活动版本已撤下，不得继续服务该句柄"
-            )
+            raise WithdrawnError(f"来源当前准入为 {decision!r}，活动版本已撤下，不得继续服务该句柄")
         unit_ids = refs_by_chunk.get(chunk_id, [])
         missing = [uid for uid in unit_ids if uid not in unit_rows]
         if missing:

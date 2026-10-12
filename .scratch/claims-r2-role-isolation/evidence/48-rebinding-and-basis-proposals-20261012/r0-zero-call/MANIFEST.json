@@ -1,0 +1,21 @@
+{
+  "schema_version": "items-rebinding-proposals-manifest-1",
+  "created_on": "2026-10-12",
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/47-scoring-contract-v41-signed-20261012/r0-zero-call/scoring-contract-v4.1.json": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+    ".scratch/claims-r2-role-isolation/evidence/47-scoring-contract-v41-signed-20261012/r0-zero-call/signoff-record.json": "sha256:32dc784e496268d13e9f6338549d268cfec4446a1feadb0172e97a3ec5770677",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-manifest.json": "sha256:da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-state.json": "sha256:08703b8dad9fc6c130872899741534c940787c29a15423db19d398999b237d85",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/validation-report.json": "sha256:139cfc222eb4688dccdce5c0116b00c84b87401e01e22427658c3dcfa6d5bc52",
+    ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate.json": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
+    ".scratch/claims-r2-role-isolation/evidence/32-items-v6-reasoning-refreeze-20261011/r0-zero-call/freeze-manifest.json": "sha256:1a0e008ad2af5835910cfe7d62918936f557dc377dd353e6a6dfea0f9df142f5",
+    ".scratch/claims-r2-role-isolation/evidence/41-items-chain-accounting-20261012/r3-signoff-apply/freeze-rebinding-record.json": "sha256:b197ece9e41879139096459647aa8fb51af98a360352422e4f81b383b3ce98d1"
+  },
+  "outputs": {
+    "gold-freeze-rebinding-proposal.json": "sha256:3a99d6ad0d2262ae74ead140d0fd79c1b91edacdd8be9e357a80604873d4c773",
+    "gate28-metric-basis-proposal.json": "sha256:2f0de079b339031b05eb6916fa4565fbd34b64aa41bb2e058ec8c0d479e93d25",
+    "README.md": "sha256:cc311cb11cae4ab2d66fa620a6ddd0a5dbf7ea2e96f6059fbe266124d7236026",
+    "propose_rebinding.py": "sha256:309a535357086eb520a4ccccfbff052c3299097bee93258779d2cb5f576af624"
+  },
+  "in_place_edits": 0
+}

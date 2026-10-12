@@ -226,9 +226,7 @@ def _read_accepted_material_items(
             artifact=RoleArtifact.model_validate_json(
                 Path(artifact_path).read_text(encoding="utf-8")
             ),
-            payload=MaterialRun.model_validate_json(
-                Path(payload_path).read_text(encoding="utf-8")
-            ),
+            payload=MaterialRun.model_validate_json(Path(payload_path).read_text(encoding="utf-8")),
         )
     except (OSError, UnicodeError, ValidationError, ValueError) as exc:
         raise StructuredExecutionError("CS_INPUT_INVALID", "items_import_invalid") from exc

@@ -1,0 +1,19 @@
+{
+  "schema_version": "items-suggester-v2-manifest-1",
+  "created_on": "2026-10-12",
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/42-stage1-suggester-upgrade-20261012/r0-zero-call/preregistered-suggester-v2.json": "sha256:96fb234fcc8bbd95e636516ee24a3ef999da91062b33465edbb0b644b56b16d2",
+    ".scratch/claims-r2-role-isolation/evidence/38-gate33-workbench-rebuild-20261012/r0-zero-call/workbench-v2.json": "sha256:0bd9e66072b08f9f30267112ee505789dcee4d0825359e632cdbaac670736558",
+    ".scratch/claims-r2-role-isolation/evidence/33-items-quality-scoring-20261011/r0-zero-call/workbench.json": "sha256:e00d8ae65536bf662101ba1d53b8c3e9f80189e2be6b8172472abd02ea489777",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    ".scratch/claims-r2-role-isolation/evidence/35-gold-audit-20261011/r0-zero-call/gold-audit.json": "sha256:2802b614f4d7511500d39dad2b80c2fae23ad276a53f7a7694159381834c2bca"
+  },
+  "outputs": {
+    "preregistered-suggester-v2.json": "sha256:96fb234fcc8bbd95e636516ee24a3ef999da91062b33465edbb0b644b56b16d2",
+    "suggestions-v2.json": "sha256:7fa2fdc97dae573b7eb014dc89ff793a4c76878a1bdc65a53fc0d2d7a603a4bb",
+    "suggester-v2-report.json": "sha256:2fc2896d6187be9824097cc1066fda06b7196e50c572ec014992dd2d26c1a970",
+    "suggester-v2-report.md": "sha256:2b7a0a2bee2782e27d98c64f5d742a10fc814254cf7943cf763f8108dba4bc2b",
+    "suggester_v2.py": "sha256:f9f8cb781c088dae6edec2e6f5e75192432684a37009c3fff45210d04ecfcf64"
+  },
+  "workbench_v2_unchanged": true
+}

@@ -1,0 +1,107 @@
+"""Wave 0 · P06: the shared signature guard refuses to overwrite signed artifacts."""
+
+from __future__ import annotations
+
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+import pytest
+
+from tools.evidence_guard import (
+    SignedArtifactError,
+    artifact_state,
+    assert_writable,
+    write_once,
+)
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_missing_and_plain(tmp_path: Path) -> None:
+    assert artifact_state(tmp_path / "absent.json") == "missing"
+    plain = tmp_path / "plain.json"
+    plain.write_text(json.dumps({"status": "draft"}), encoding="utf-8")
+    assert artifact_state(plain) == "plain"
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        {"status": "frozen"},
+        {"status": "frozen_signed"},
+        {"status": "human_signed"},
+        {"countersignature": {"status": "signed"}},
+        {"signoff": {"signed_by": "xyl"}},
+        {"signed_by": "xyl"},
+    ],
+)
+def test_structured_signals_are_signed(tmp_path: Path, payload: dict[str, object]) -> None:
+    target = tmp_path / "signed.json"
+    target.write_text(json.dumps(payload), encoding="utf-8")
+    assert artifact_state(target) == "signed"
+
+
+def test_quoting_a_signature_does_not_make_a_file_signed(tmp_path: Path) -> None:
+    """A report that merely *cites* a signer must stay writable (no false positive)."""
+    target = tmp_path / "report.json"
+    target.write_text(
+        json.dumps(
+            {
+                "schema_version": "x",
+                "contract_binding": {"signed_by": "xyl", "status": "frozen_signed"},
+                "nested": [{"signoff": "被引用"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert artifact_state(target) == "plain"
+
+
+def test_markdown_review_sheet_is_signed_by_marker(tmp_path: Path) -> None:
+    sheet = tmp_path / "review.md"
+    sheet.write_text("# 审阅\n\n- 复核人：　xyl\n", encoding="utf-8")
+    assert artifact_state(sheet) == "signed"
+    other = tmp_path / "notes.md"
+    other.write_text("# 随笔\n", encoding="utf-8")
+    assert artifact_state(other) == "plain"
+
+
+def test_write_once_refuses_existing_file(tmp_path: Path) -> None:
+    target = tmp_path / "artifact.json"
+    write_once(target, {"a": 1})
+    assert json.loads(target.read_text(encoding="utf-8")) == {"a": 1}
+    with pytest.raises(SignedArtifactError, match="write-once"):
+        write_once(target, {"a": 2})
+    write_once(target, {"a": 3}, allow_overwrite=True)
+    assert json.loads(target.read_text(encoding="utf-8")) == {"a": 3}
+
+
+def test_write_once_refuses_signed_target_even_with_allow_overwrite(tmp_path: Path) -> None:
+    target = tmp_path / "preregistered-gate.json"
+    target.write_text(json.dumps({"status": "frozen_before_execution"}), encoding="utf-8")
+    with pytest.raises(SignedArtifactError, match="已含签认/冻结标记"):
+        write_once(target, {"status": "draft"}, allow_overwrite=True, reason="test")
+    with pytest.raises(SignedArtifactError, match="已含签认/冻结标记"):
+        assert_writable(target, reason="test")
+    # The signed bytes are untouched.
+    assert json.loads(target.read_text(encoding="utf-8"))["status"] == "frozen_before_execution"
+
+
+def test_write_once_is_atomic_and_leaves_no_temp_files(tmp_path: Path) -> None:
+    target = tmp_path / "artifact.json"
+    write_once(target, {"a": 1})
+    assert [item.name for item in tmp_path.iterdir()] == ["artifact.json"]
+
+
+def test_conformance_scanner_passes_on_the_real_tree() -> None:
+    """The scanner must be usable as a gate: zero violations, only registered exceptions."""
+    result = subprocess.run(
+        [sys.executable, "tools/check_evidence_guard.py", "--quiet"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr

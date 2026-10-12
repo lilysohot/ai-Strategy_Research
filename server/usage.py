@@ -162,13 +162,23 @@ def replay_block_from_summary(summary: dict[str, Any] | None) -> dict[str, Any]:
     Best-effort by design: anything unexpected yields ``{}``, so a malformed
     summary can never give the metering payload a wrong shape. Older runs
     (no ``replay`` key) simply carry none.
+
+    ``summary_usage`` rides along when the writer reported it: the write-time
+    summary call runs inside an observer the trajectory never sees, so its tokens
+    reach no counter at all unless they are carried here (issue 01 §12.11 待办 2).
+    Kept as its own nested block — reporting it is the point, and folding it into
+    the run's counters would redefine every historical prompt/cache figure.
     """
     if not isinstance(summary, dict):
         return {}
     replay = summary.get("replay")
     if not isinstance(replay, dict) or not replay.get("decision"):
         return {}
-    return dict(replay)
+    block = dict(replay)
+    summary_usage = summary.get("summary_usage")
+    if isinstance(summary_usage, dict) and summary_usage:
+        block["summary_usage"] = dict(summary_usage)
+    return block
 
 
 def usage_summary_for_runs(runs: Iterable[Any]) -> dict[str, Any]:

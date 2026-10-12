@@ -8,6 +8,8 @@
 | 关联 | [修复报告 v1.4](web-runtime-trace-repair-report.md)；[21 项任务](../../.scratch/web-runtime-trace-hardening/spec.md)；[环境准备与执行边界](web-storage-validation-environment.md) |
 | 基线 | 当前非干净工作区；本轮记录时 HEAD `1770155a9c1227562a31044c8ca9fbcfee37e2c7`；上轮报告基线不同，核验文件哈希见 [source-manifest.json](../../.scratch/web-runtime-trace-hardening/audit/source-manifest.json) |
 
+> **后续架构更新（2026-10-12）**：本文的 `history.txt` 链路是 2026-09-29 的审计快照，已由 [上下文继承 issue 01](../../.scratch/web-business-context/issues/01-context-inheritance.md) S2/S4 取代。当前模型连续性权威源为 `session_conversations`，经 `prior_conversation.json` staging 后由 workflow 校验重放；`turns` 只用于 Web 展示和审计。
+
 ## 结论
 
 目录移出源码树仍是必交付项，但单独迁移不能修好整条存储链路。本轮补充 F15—F21，

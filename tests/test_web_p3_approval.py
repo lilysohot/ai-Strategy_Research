@@ -525,7 +525,7 @@ async def test_completed_run_releases_worker_slot(monkeypatch) -> None:
 
     launches: list[str] = []
 
-    async def fake_launch(run_id: str, params: dict, *, history: str = ""):
+    async def fake_launch(run_id: str, params: dict):
         launches.append(run_id)
         proc = SimpleNamespace(returncode=0, pid=0)  # already-exited worker
         return orch_mod.RunHandle(run_id=run_id, session_id="s", proc=proc)

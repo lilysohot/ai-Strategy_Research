@@ -1,0 +1,44 @@
+{
+  "schema_version": "evidence-guard-exceptions-1",
+  "created_on": "2026-10-12",
+  "item": "P06 / D9",
+  "policy": "已执行且产出已签认/已冻结产物的历史脚本**一律不原地修改**（改其字节=改写历史，会使其被引用的脚本哈希失效，违反 issue-34 §8 与 write-once 约定）。这些脚本登记为例外：不得原地重跑；其产物修订须换新目录/新版本记录。守则的强制执行由 tools/check_evidence_guard.py 承担——任何**新增**的未加护栏、且可写已签认产物的脚本都会使其以非零退出码失败。",
+  "exemptions": [
+    {
+      "script": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze_signed_gold.py",
+      "can_overwrite": ["freeze-manifest.json", "frozen-gold.json"],
+      "produces": "已冻结金标（48 条，xyl 签认，Issue 29 判 gold_meaning_sound=true）",
+      "why_exempt": "其产物是全部下游测量的分母；原地加护栏会改脚本哈希，使 README.md 与 35/gold-audit.md 中记录的出处失效。",
+      "referenced_in": [
+        "10-quality-gold-freeze-20261008-r2/README.md",
+        "35-gold-audit-20261011/r0-zero-call/gold-audit.md"
+      ],
+      "must_not": "原地重跑"
+    },
+    {
+      "script": ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/freeze_items_only_plan.py",
+      "can_overwrite": ["preregistered-gate.json"],
+      "produces": "门 28 冻结门（status=frozen_before_execution，阈值权威源）",
+      "why_exempt": "同上；且门 28 是 OPEN-1=A 选定的唯一权威阈值源，其冻结字节是阈值口径的依据。",
+      "referenced_in": ["28-items-only-quality-gate-20261010/README.md"],
+      "must_not": "原地重跑；基准推进见 P13（新版本门记录）"
+    },
+    {
+      "script": ".scratch/claims-r2-role-isolation/evidence/32-items-v6-reasoning-refreeze-20261011/r0-zero-call/freeze_two_arms.py",
+      "can_overwrite": ["preregistered-gate.json"],
+      "produces": "门 32 重冻结门（含 countersignature）",
+      "why_exempt": "同上；门 32 判据与被测对象同轴问题另见 P15（新版本判据提案）。",
+      "referenced_in": ["32-items-v6-reasoning-refreeze-20261011/README.md"],
+      "must_not": "原地重跑"
+    },
+    {
+      "script": ".scratch/claims-r2-role-isolation/evidence/43-scoring-contract-v4-signed-20261012/r0-zero-call/apply_v4_signoff.py",
+      "can_overwrite": ["scoring-contract-v4.json", "signoff-record.json"],
+      "produces": "已签契约 v4",
+      "why_exempt": "该脚本**已被 47/apply_v41_signoff.py 取代**（v4 已 superseded_by v4.1，且 47 的脚本自带护栏）。原地补护栏会使其在 43/MANIFEST.json 中记录的哈希失效。",
+      "referenced_in": ["43-scoring-contract-v4-signed-20261012/r0-zero-call/MANIFEST.json"],
+      "must_not": "原地重跑；后续签认一律用 47 的带护栏脚本或统一改用 tools.evidence_guard.write_once"
+    }
+  ],
+  "forward_rule": "任何**新增**脚本若写入已签认/已冻结产物，必须 `from tools.evidence_guard import write_once`（或等价内联护栏），否则 tools/check_evidence_guard.py 以非零退出码失败。"
+}

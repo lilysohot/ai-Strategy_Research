@@ -106,9 +106,10 @@ def bind_claim_coordinates(
         if len(candidates) == 1:
             lower, upper, unit = candidates[0]
             unscaled = parse_value_range(record.value_text, record.unit_raw)
-            current_is_unscaled_match = unscaled is not None and (
-                format(unscaled[0], "f"), format(unscaled[1], "f")
-            ) == current_bounds
+            current_is_unscaled_match = (
+                unscaled is not None
+                and (format(unscaled[0], "f"), format(unscaled[1], "f")) == current_bounds
+            )
             if current_is_unscaled_match or current_bounds != (
                 format(lower, "f"),
                 format(upper, "f"),
@@ -125,7 +126,8 @@ def bind_claim_coordinates(
         statuses = [
             (phrase, value)
             for phrase, value in _CATEGORICAL_STATUS.items()
-            if phrase in quote and (not record.metric or phrase in record.metric or record.metric in phrase)
+            if phrase in quote
+            and (not record.metric or phrase in record.metric or record.metric in phrase)
         ]
         if len(statuses) == 1:
             phrase, value = statuses[0]
@@ -149,7 +151,9 @@ def bind_claim_coordinates(
         and (record.metric or "") in {"量", "占比", "渗透率"}
     ):
         metric = f"{record.subject}{'出货量' if record.metric == '量' else record.metric}"
-        updates.update(subject_raw=document.subject, subject=document.subject, metric_raw=metric, metric=metric)
+        updates.update(
+            subject_raw=document.subject, subject=document.subject, metric_raw=metric, metric=metric
+        )
         qualifiers["subject_basis"] = "document_industry_for_product_metric"
 
     if industry_subject and record.subject in {"行业", "整个行业", "全行业"}:

@@ -1,0 +1,85 @@
+{
+  "schema_version": "items-contract-v4-signoff-record-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "signed_by": "xyl",
+  "signed_on": "2026-10-12",
+  "instrument": {
+    "path": ".scratch/claims-r2-role-isolation/evidence/45-contract-v4-draft-20261012/r0-zero-call/contract-v4-review.md",
+    "sha256": "sha256:753532e8074aa0bf8a9f9cddf2b0e97b9b19519ed95b154407fdfac2e6c0ccd7"
+  },
+  "decisions": {
+    "OPEN-1": {
+      "chosen": "A",
+      "effect": "门 28 为单一口径；评分器须改为读契约（未执行）"
+    },
+    "OPEN-2": {
+      "chosen": "C",
+      "effect": "material_relations 本轮不纳入评分（显式披露）"
+    },
+    "FORCED-1": {
+      "resolved_to": "以金标口径为准、读时归一化（由 §8 硬约束推定）"
+    }
+  },
+  "signed_contract": {
+    "path": "scoring-contract-v4.json",
+    "schema_version": "non-table-selected-target-scoring-contract-v4",
+    "status": "frozen_signed",
+    "supersedes": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce"
+  },
+  "parallel_draft": {
+    "path": ".scratch/claims-r2-role-isolation/evidence/41-items-chain-accounting-20261012/r3-signoff-apply/scoring-contract-v4.proposed.json",
+    "sha256": "sha256:b3f88649e9eca70cf21b95c466ea4a4950ef6a316aa521e2b42822c4eae7818f",
+    "status_in_file": "proposed_pending_signoff",
+    "relation_to_signed": "superseded_by this signed contract（其签认栏为空，从未签认）",
+    "reconciliation": [
+      {
+        "their_root": "items_field_carrier_read_path",
+        "mapped_to": "read_path",
+        "their_leaf_count": 17,
+        "unreconciled_paths": [
+          "read_path.applies_to",
+          "read_path.authoritative_side",
+          "read_path.carrier_mapping.rule",
+          "read_path.carrier_mapping.forbidden",
+          "read_path.carrier_mapping.recording",
+          "read_path.absent_required_fields.rule",
+          "read_path.absent_required_fields.condition_role_addition",
+          "read_path.absent_required_fields.evidence",
+          "read_path.equivalence_judgement.owner",
+          "read_path.equivalence_judgement.rule",
+          "read_path.equivalence_judgement.scorer_contract",
+          "read_path.equivalence_judgement.evidence",
+          "read_path.condition_role",
+          "read_path.audit_reference"
+        ],
+        "verdict": "UNRECONCILED_CONTENT_PRESENT"
+      },
+      {
+        "their_root": "threshold_single_source",
+        "mapped_to": "threshold_source",
+        "their_leaf_count": 9,
+        "unreconciled_paths": [
+          "threshold_source.rule",
+          "threshold_source.conflict_resolution",
+          "threshold_source.required_alignment",
+          "threshold_source.pending_signoff_detail.fork",
+          "threshold_source.pending_signoff_detail.options[0]",
+          "threshold_source.pending_signoff_detail.options[1]",
+          "threshold_source.pending_signoff_detail.why_not_chosen",
+          "threshold_source.already_verified.gate28_contract_binding",
+          "threshold_source.already_verified.gate28_high_risk_assertions"
+        ],
+        "verdict": "UNRECONCILED_CONTENT_PRESENT"
+      }
+    ],
+    "parallel_only_roots": []
+  },
+  "outstanding_after_signoff": [
+    "评分器读契约/阈值对齐（§7-6 C3）：代码改动，未执行",
+    "金标冻结链契约绑定再绑定（v2→v3→v4）：须与本次签认同轮落地",
+    "口径归一化（caliber_rules）的实现与回归测试（§7-7 A1/A2）：未执行",
+    "route a/b 边际裁定与缺口 1/2：仍缺（§5.12）"
+  ],
+  "note": "本次签认只签契约条款；**不等于** items-only 真实复验通过，也不等于门 33 出分。"
+}

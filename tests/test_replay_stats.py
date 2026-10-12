@@ -53,6 +53,10 @@ def _stat(**overrides) -> TurnStat:
         est_tokens=0,
         payload_bytes=0,
         stopped_by="",
+        summary_calls=0,
+        summary_prompt_tokens=0,
+        summary_completion_tokens=0,
+        summary_cache_read_tokens=0,
     )
     base.update(overrides)
     return TurnStat(**base)
@@ -69,6 +73,7 @@ def _write_run(
     session_id: str = _SESSION,
     dump: bool = True,
     summary_in_run_dir: bool = False,
+    summary_usage: dict | None = None,
 ) -> None:
     """Lay out one run the way ``build_run_paths`` does.
 
@@ -81,7 +86,9 @@ def _write_run(
     (run / "agent" / "trajectories").mkdir(parents=True)
     summary: dict = {"final_answer": "ok"}
     if replay is not None:
-        summary["replay"] = replay
+        summary["replay"] = dict(replay)
+        if summary_usage is not None:
+            summary["replay"]["summary_usage"] = summary_usage
     summary_path = (run if summary_in_run_dir else runs_root / name) / "summary.json"
     summary_path.write_text(json.dumps(summary), encoding="utf-8")
     (run / "agent" / "trajectories" / "react_agent.jsonl").write_text(
@@ -223,6 +230,12 @@ def test_the_board_reads_counters_window_and_decision_from_run_artifacts(tmp_pat
             "stopped_by": "final",
         },
         mtime=1_700_000_100,
+        summary_usage={
+            "calls": 1,
+            "prompt_tokens": 300,
+            "completion_tokens": 20,
+            "cache_read_tokens": 64,
+        },
     )
 
     turns = load_from_runs_root(tmp_path)
@@ -234,6 +247,13 @@ def test_the_board_reads_counters_window_and_decision_from_run_artifacts(tmp_pat
     assert turns[1].prompt_tokens == 1200 and turns[1].cache_read_tokens == 900
     assert turns[1].decision == "used" and turns[1].est_tokens == 950
     assert turns[1].prior_turns == 2 and turns[1].stopped_by == "final"
+    assert turns[1].summary_calls == 1 and turns[1].summary_prompt_tokens == 300
+    assert summarise(turns)["summary"]["summary_usage"] == {
+        "calls": 1,
+        "prompt_tokens": 300,
+        "completion_tokens": 20,
+        "cache_read_tokens": 64,
+    }
     assert summarise(turns)["turns"][1]["reuse"] == 0.9
 
 
@@ -381,6 +401,7 @@ async def test_the_db_source_scopes_to_one_session_and_reads_usage_json(db):
                 "replay": {
                     "decision": "skipped" if index == 0 else "used",
                     "reason": "no_payload" if index == 0 else "",
+                    "summary_usage": {"calls": index, "prompt_tokens": 250 * index},
                 },
             },
         )
@@ -418,6 +439,7 @@ async def test_the_db_source_scopes_to_one_session_and_reads_usage_json(db):
     assert turns[0].reason == "no_payload"
     assert turns[1].prompt_tokens == 1001 and turns[1].cache_read_tokens == 900
     assert turns[1].decision == "used"
+    assert turns[1].summary_calls == 1 and turns[1].summary_prompt_tokens == 250
     assert summarise(turns)["turns"][1]["reuse"] == 0.9
 
 
@@ -438,6 +460,7 @@ def test_cli_prints_the_table_and_exits_zero(tmp_path, capsys) -> None:
     assert "reuse" in out
     assert "run-one" in out
     assert "used (1 turns)" in out
+    assert "summary calls 0" in out
 
 
 def test_cli_json_output_is_machine_readable(tmp_path, capsys) -> None:

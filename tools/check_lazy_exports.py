@@ -16,6 +16,7 @@ import-smoke stages were all green.
 
 Exits non-zero on the first unresolvable name, listing all of them.
 """
+
 from __future__ import annotations
 
 import ast
@@ -33,16 +34,15 @@ def lazy_names(init: Path) -> list[str]:
         tree = ast.parse(init.read_text(encoding="utf-8"))
     except SyntaxError:
         return []
-    if not any(
-        isinstance(n, ast.FunctionDef) and n.name == "__getattr__" for n in tree.body
-    ):
+    if not any(isinstance(n, ast.FunctionDef) and n.name == "__getattr__" for n in tree.body):
         return []
     for n in tree.body:
         if isinstance(n, ast.Assign) and any(
             isinstance(t, ast.Name) and t.id == "__all__" for t in n.targets
         ):
             return [
-                e.value for e in getattr(n.value, "elts", [])
+                e.value
+                for e in getattr(n.value, "elts", [])
                 if isinstance(e, ast.Constant) and isinstance(e.value, str)
             ]
     return []

@@ -1947,8 +1947,8 @@ async def mark_run_failed_if_active(*, run_id: uuid.UUID, error: str) -> bool:
     """Close a run that failed to launch (F22 / F06-RUN-1).
 
     A submission is accepted and queued *before* the worker starts. When the
-    launch itself fails — e.g. the run-data root is full and writing
-    ``history.txt`` raises ENOSPC — the row must not be left ``queued`` forever
+    launch itself fails — e.g. the run-data root is full and staging run inputs
+    raises ENOSPC — the row must not be left ``queued`` forever
     with no worker and no terminal state. Only an ACTIVE run is closed: a run
     that already reached a terminal state is left alone, so a late launch error
     can never overwrite a real outcome. Returns True when it closed a run.

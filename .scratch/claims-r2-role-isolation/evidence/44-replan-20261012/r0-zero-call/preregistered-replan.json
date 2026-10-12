@@ -1,0 +1,35 @@
+{
+  "schema_version": "items-replan-preregistration-1",
+  "created_on": "2026-10-12",
+  "status": "preregistered_before_run",
+  "purpose": "全链路重规划：把剩余所有未闭合项（含链路末端两处代码缺环）汇总为一份可执行的计划，并附机器可核的遗漏自检。零调用、只读。",
+  "authorization": {"granted_by": "user", "granted_on": "2026-10-12", "scope": "零调用只读；只产出计划；不改任何已签认产物、不改金标/评分器/门产物"},
+
+  "method": {
+    "single_source_of_inventory": "计划项只在本目录脚本内声明一处，所有视图（按 Wave、缺陷映射、关键路径）由它派生。",
+    "coverage_check_is_machine_run": "逐源核对：报告 §7 全 14 行、§9 全 16 项、缺陷 D1–D12、扫描命中（并行提案 / 缺失 MANIFEST / 签认栏）。任一未映射即 complete=false 且脚本以非零退出。",
+    "not_scanned_must_be_declared": "未覆盖范围必须显式列出；未核项不得被当作已闭合。",
+    "no_signoff_touched": "不修改 chain-report.md、contract-v4-review.md、scoring-contract-v4.json 等任何已签认或已撤销留痕的产物。"
+  },
+
+  "exit_criteria": {
+    "EC-R1": "coverage_check.complete 必须为 true；否则脚本拒绝写出并以非零退出。",
+    "EC-R2": "计划必须含：Wave 划分与每 Wave 退出判据、关键路径、缺陷→计划项映射、未覆盖范围声明。",
+    "EC-R3": "链路末端两处缺环（P01 裁定→评分装配器、P02 匹配机制改造）必须出现在 Wave 0 且标注为「零裁定可立刻做」。",
+    "EC-R4": "并行会话的未采纳提案必须各有归属（采纳或否决），不得静默并存。",
+    "EC-R5": "幂等 + `--no-write`。"
+  },
+
+  "out_of_scope": [
+    "不执行计划中的任何项（本次只出计划）",
+    "不改已签认产物、不改金标/评分器/门产物；不发起模型调用"
+  ],
+
+  "artifacts": [
+    "r0-zero-call/preregistered-replan.json（本文件，write-once）",
+    "r0-zero-call/build_replan.py（支持 --no-write，幂等）",
+    "r0-zero-call/replan.json",
+    "r0-zero-call/replan.md",
+    "r0-zero-call/MANIFEST.json"
+  ]
+}

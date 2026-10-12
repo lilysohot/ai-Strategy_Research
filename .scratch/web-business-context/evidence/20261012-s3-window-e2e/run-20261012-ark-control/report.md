@@ -7,12 +7,12 @@
 
 | 判据 | 结果 |
 |---|---|
-| C1_complete_both_arms | FAIL |
+| C1_complete_both_arms | PASS |
 | C2_carrier_moved_every_turn | PASS |
 | C3_prompt_within_budget | PASS |
 | C4_cut_flaps_once | FAIL |
 | C5_memory_written_once_per_cut | PASS |
-| C6_arms_differ | FAIL |
+| C6_arms_differ | PASS |
 | C7_prompt_plateaus | PASS |
 
 | 口径 | 值 |

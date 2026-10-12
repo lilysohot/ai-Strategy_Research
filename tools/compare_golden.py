@@ -7,6 +7,7 @@ Aggregate accuracy matching is necessary but not sufficient — the same score c
 hide a set of questions flipping both ways. This reports per-question flips,
 which is what actually tells you whether the kernel refresh changed behaviour.
 """
+
 from __future__ import annotations
 
 import json
@@ -63,8 +64,10 @@ def main() -> int:
         if gold[q].get("reward") != new[q].get("reward")
     ]
     regressions = [f for f in flips if f[1] == 1]
-    print(f"\nflipped: {len(flips)}  ({len(regressions)} correct->wrong, "
-          f"{len(flips) - len(regressions)} wrong->correct)")
+    print(
+        f"\nflipped: {len(flips)}  ({len(regressions)} correct->wrong, "
+        f"{len(flips) - len(regressions)} wrong->correct)"
+    )
     for q, g, n in flips:
         arrow = "REGRESSION" if g == 1 else "improved  "
         print(f"  {arrow}  {q}  reward {g} -> {n}")

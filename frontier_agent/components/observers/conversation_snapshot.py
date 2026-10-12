@@ -406,9 +406,7 @@ def select_replay(
     return cast("list[Message]", [dict(message) for message in messages]), decision
 
 
-def build_summarizer(
-    llm: Any,
-) -> Callable[[str | None, list[Message]], Awaitable[str | None]]:
+def build_summarizer(llm: Any) -> _Summarizer:
     """Summarize the turns a write-time trim drops (issue 01 §12.3).
 
     Built on ``LLMSummaryCompactor`` — the same summarizer the in-run compaction
@@ -419,12 +417,49 @@ def build_summarizer(
     llm (D-S3-2), which keeps the feature free of new configuration. Every
     failure turns into ``None``, and the caller then writes the plain trim:
     losing memory is acceptable, failing a run is not.
+
+    The returned object is both the callable the observer awaits *and* the place
+    the extra call's tokens are reported (``.usage`` / ``.calls``): this call runs
+    after the loop's own usage has been accounted, inside an observer the
+    trajectory never sees, so without it a cut costs an LLM call that no counter
+    anywhere records (issue 01 §12.11 待办 2).
     """
-    from frontier_agent.core.runtime.loop.compact_llm import LLMSummaryCompactor
+    return _Summarizer(llm)
 
-    compactor = LLMSummaryCompactor(summary_llm=llm)
 
-    async def summarize(old_summary: str | None, dropped: list[Message]) -> str | None:
+class _UsageCapturingChat:
+    """The summariser's LLM, with the response's ``usage`` copied out.
+
+    Keeps the compactor's contract exactly (``await llm.chat(messages)``) and adds
+    nothing the provider would see — it only reads what came back.
+    """
+
+    def __init__(self, inner: Any, usage: dict[str, int]) -> None:
+        self._inner = inner
+        self._usage = usage
+
+    async def chat(self, messages: Any, *args: Any, **kwargs: Any) -> Any:
+        response = await self._inner.chat(messages, *args, **kwargs)
+        merge_usage(self._usage, getattr(response, "usage", None))
+        return response
+
+
+class _Summarizer:
+    """``build_summarizer``'s product: callable, plus the side-channel counters."""
+
+    def __init__(self, llm: Any) -> None:
+        from frontier_agent.core.runtime.loop.compact_llm import LLMSummaryCompactor
+
+        self.usage: dict[str, int] = {}
+        self.calls = 0
+        self._compactor = LLMSummaryCompactor(summary_llm=_UsageCapturingChat(llm, self.usage))
+
+    async def __call__(self, old_summary: str | None, dropped: list[Message]) -> str | None:
+        self.calls += 1
+        return await self._summarize(old_summary, dropped)
+
+    async def _summarize(self, old_summary: str | None, dropped: list[Message]) -> str | None:
+        compactor = self._compactor
         seed: list[Message] = []
         if old_summary:
             # The previous summary is fed back in, so the new one covers the whole
@@ -447,7 +482,26 @@ def build_summarizer(
             return None
         return text
 
-    return summarize
+
+def merge_usage(target: dict[str, int], usage: Any) -> None:
+    """Add one response's ``usage`` into *target*, normalising provider spellings.
+
+    Provider field names differ for the same quantity (``cached_tokens`` on
+    OpenAI-compatible endpoints vs the repo's own ``cache_read_tokens``), and a
+    usage block may carry non-int fields. Only ints whose names are known are
+    summed, so a malformed block cannot poison the totals with a string.
+    """
+    if not isinstance(usage, dict):
+        return
+    for key, alias in (
+        ("prompt_tokens", "prompt_tokens"),
+        ("completion_tokens", "completion_tokens"),
+        ("cached_tokens", "cache_read_tokens"),
+        ("cache_read_tokens", "cache_read_tokens"),
+    ):
+        value = usage.get(key)
+        if isinstance(value, int) and not isinstance(value, bool):
+            target[alias] = target.get(alias, 0) + value
 
 
 class ConversationSnapshotObserver(BaseObserver):
@@ -521,6 +575,9 @@ class ConversationSnapshotObserver(BaseObserver):
         self._max_replay_tokens = max_replay_tokens
         self._max_replay_turn_step = max_replay_turn_step
         self._summarizer = summarizer
+        #: How many write-time summary calls this observer made (see
+        #: :meth:`_report_summary_usage`).
+        self._summary_calls = 0
 
     async def on_loop_end(self, result: AgentLoopResult) -> None:
         try:
@@ -545,6 +602,7 @@ class ConversationSnapshotObserver(BaseObserver):
             logger.warning("conversation snapshot skipped: %s", invalid)
             return
         summary_block = await self._summarize_dropped(wire)
+        self._report_summary_usage(result)
         document = build_dump(
             messages=wire,
             system_prompt=self._system_prompt,
@@ -602,6 +660,32 @@ class ConversationSnapshotObserver(BaseObserver):
         )
         return self._max_replay_turns if turns > self._max_replay_turns + step else 0
 
+    def _report_summary_usage(self, result: AgentLoopResult) -> None:
+        """Publish the write-time summary call's tokens on the loop result.
+
+        The figures travel ``result.metadata`` → the pipeline's state → the worker's
+        ``summary.json`` → ``runs.usage_json.replay.summary_usage`` (issue 01
+        §12.11 待办 2). They are reported as their *own* block instead of being
+        folded into the run's counters: folding would silently redefine every
+        historical prompt/cache number, and the point of the block is precisely
+        that this cost was invisible before.
+
+        The call count is the observer's own (it is the only thing that knows how
+        often it invoked the summarizer); the token figures come from the
+        summarizer when it can report them. A plain async function — which several
+        callers and tests pass — therefore still reports "a summary ran", which is
+        worth knowing even without its price.
+        """
+        if not self._summary_calls:
+            return
+        usage = getattr(self._summarizer, "usage", None)
+        report: dict[str, int] = {"calls": self._summary_calls}
+        if isinstance(usage, dict):
+            report.update({key: value for key, value in usage.items() if isinstance(value, int)})
+        metadata = getattr(result, "metadata", None)
+        if isinstance(metadata, dict):
+            metadata["summary_usage"] = report
+
     async def _summarize_dropped(self, wire: list[Message]) -> str | None:
         """The summary block to write, updated only when turns are being dropped.
 
@@ -617,6 +701,9 @@ class ConversationSnapshotObserver(BaseObserver):
         if probe is None or self._summarizer is None:
             return old_summary
         dropped = wire[head : int(probe["cut_at"])]
+        # Counted here, not read off the summarizer: the observer is the only one
+        # that knows a call is being made, and a plain callable cannot report it.
+        self._summary_calls += 1
         try:
             summary = await asyncio.wait_for(
                 self._summarizer(old_summary, dropped), timeout=SUMMARY_TIMEOUT_S

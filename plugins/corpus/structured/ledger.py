@@ -241,8 +241,7 @@ class AcceptedMaterialItems(BaseModel):
             or self.artifact.protocol_status != "valid"
             or self.artifact.context_status != "complete"
             or self.artifact.quality_status != "accepted"
-            or self.artifact.payload_sha256
-            != canonical_hash(self.payload.model_dump(mode="json"))
+            or self.artifact.payload_sha256 != canonical_hash(self.payload.model_dump(mode="json"))
             or self.payload.understanding.relations
         ):
             raise ValueError("material items artifact is not accepted and items-only")
@@ -254,9 +253,7 @@ class BatchPlan(BaseModel):
 
     model_config = ConfigDict(frozen=True, extra="forbid")
 
-    schema_version: Literal["corpus-batch-plan-v1", "corpus-batch-plan-v2"] = (
-        PLAN_SCHEMA_VERSION
-    )
+    schema_version: Literal["corpus-batch-plan-v1", "corpus-batch-plan-v2"] = PLAN_SCHEMA_VERSION
     batch_id: str
     plan_sha256: str
     snapshot: EvidenceSnapshot
@@ -777,11 +774,7 @@ def plan_batch(
         or ("material_relations" in selected and "material_items" not in selected)
     ):
         raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_enabled_roles")
-    if (
-        "material_items" in selected
-        and selector_protocol
-        and imported_material_items is None
-    ):
+    if "material_items" in selected and selector_protocol and imported_material_items is None:
         try:
             item_options = item_options or MaterialItemsPlanOptions(
                 max_items_per_packet=64,
@@ -2032,9 +2025,7 @@ def _live_dispatch(
     return dispatch
 
 
-def _import_material_items_execution(
-    plan: BatchPlan, task: PlannedTask
-) -> RoleExecution:
+def _import_material_items_execution(plan: BatchPlan, task: PlannedTask) -> RoleExecution:
     """Bridge one accepted upstream artifact into this batch without a model attempt."""
     imported = plan.imported_material_items
     if imported is None or task.role != "material_items" or task.method != "imported":
@@ -2205,9 +2196,7 @@ def execute_batch(
 ) -> BatchCheck:
     """Execute live adapters only after explicit authority and frozen config matching."""
     plan.verify_identity()
-    required_roles: set[Role] = {
-        task.role for task in plan.tasks if task.method == "model"
-    }
+    required_roles: set[Role] = {task.role for task in plan.tasks if task.method == "model"}
     if plan.relations.enabled:
         required_roles.add("material_relations")
     roles: tuple[Role, ...] = tuple(role for role in ALL_ROLES if role in required_roles)
@@ -2215,8 +2204,7 @@ def execute_batch(
         role: (role_configs or {}).get(role, config) for role in roles
     }
     config_error = bool(roles) and (
-        not allow_model
-        or any(item is None or not item.configured for item in selected.values())
+        not allow_model or any(item is None or not item.configured for item in selected.values())
     )
     bindings: dict[Role, RoleBinding] = {}
     if not config_error:

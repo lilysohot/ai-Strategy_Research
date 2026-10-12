@@ -1,0 +1,18 @@
+{
+  "schema_version": "items-contract-v41-signed-manifest-1",
+  "created_on": "2026-10-12",
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/46-contract-v41-draft-20261012/r0-zero-call/proposed-scoring-contract-v4.1.json": "sha256:ee085552f8ae3024450971a970df7e60c0e925d801d2e22797d0821ce7026875",
+    ".scratch/claims-r2-role-isolation/evidence/46-contract-v41-draft-20261012/r0-zero-call/contract-v4.1-review.md": "sha256:1d01218210388acf49f7c15a41301631d0631db6b1cf5e6e87ecc1ccf3b94bdc",
+    ".scratch/claims-r2-role-isolation/evidence/43-scoring-contract-v4-signed-20261012/r0-zero-call/scoring-contract-v4.json": "sha256:6806f1399e3bbf5ace41264598f6228998f706dd082f20d580d5303a48ab712d",
+    ".scratch/claims-r2-role-isolation/evidence/41-items-chain-accounting-20261012/r3-signoff-apply/scoring-contract-v4.proposed.json": "sha256:b3f88649e9eca70cf21b95c466ea4a4950ef6a316aa521e2b42822c4eae7818f",
+    ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate.json": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-manifest.json": "sha256:da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e"
+  },
+  "outputs": {
+    "scoring-contract-v4.1.json": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+    "signoff-record.json": "sha256:32dc784e496268d13e9f6338549d268cfec4446a1feadb0172e97a3ec5770677",
+    "README.md": "sha256:81e293abcba1b793c62cf0a70f60935f9aa669f588aa2406a420416f642ffe89",
+    "apply_v41_signoff.py": "sha256:082a42f07ae8da6e51a943bf628dc81f92313ef4720dc409adaecff7b9f0ab49"
+  }
+}

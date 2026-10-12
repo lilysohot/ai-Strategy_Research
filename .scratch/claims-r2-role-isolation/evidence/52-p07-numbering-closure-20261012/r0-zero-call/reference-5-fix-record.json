@@ -1,0 +1,23 @@
+{
+  "schema_version": "items-p07-reference-5-fix-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "authorised_by": "U（2026-10-12 明示同意修改该行路径）",
+  "target": ".scratch/claims-r2-role-isolation/evidence/41-items-chain-accounting-20261012/r2-proposals/contract-v4-draft.md",
+  "fix": {
+    "from": "../41-contract-v4-draft-20261012/r0-zero-call/contract-v4-review.md",
+    "to": "../45-contract-v4-draft-20261012/r0-zero-call/contract-v4-review.md",
+    "line": 80,
+    "single_line_change": true,
+    "other_bytes_changed": false
+  },
+  "sha256_before": "sha256:f8a8edf1f7f1b5726fec958c1d7a20158d8faeabd71e20a67b20c81be769afd0",
+  "sha256_after": "sha256:620bc6cc75763a3561a0b27829c86d5aa26815efc65a378341a0dcdabdd147a3",
+  "why_this_is_safe": [
+    "该文件是草案提案，非签认件（不含签认标记；artifact_state = plain）。",
+    "改名只动一行路径；引用的目标文件（45 的审阅件）字节未变、签认效力未变。",
+    "45/contract-v4-review.md（已签 v4 审阅件）提及本文件名（非哈希）⇒ 该引用仍有效。"
+  ],
+  "note": "本记录为新增文件；52 目录既有产物（p07-closure.*）字节未改。MANIFEST 随之重生成以纳入本记录。",
+  "in_place_edits": 1
+}

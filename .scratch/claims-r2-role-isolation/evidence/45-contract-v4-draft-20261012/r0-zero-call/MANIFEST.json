@@ -1,0 +1,24 @@
+{
+  "schema_version": "items-contract-v4-draft-manifest-1",
+  "created_on": "2026-10-12",
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/41-contract-v4-draft-20261012/r0-zero-call/preregistered-contract-v4.json": "sha256:06d57cfa08f8cea230d21ad05017bf8fa5be30ad425fa1c903dbe89c84a95d1d",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/scoring-contract.json": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate.json": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
+    ".scratch/claims-r2-role-isolation/evidence/37-store-baseline-and-route-decision-20261012/r0-zero-call/store-baseline.json": "sha256:e5133654c06dfec17d68589a01a160eb9c92e08eae20a7f513ed2ac5146a3fc0",
+    ".scratch/claims-r2-role-isolation/evidence/38-gate33-workbench-rebuild-20261012/r0-zero-call/workbench-v2.json": "sha256:0bd9e66072b08f9f30267112ee505789dcee4d0825359e632cdbaac670736558",
+    ".scratch/claims-r2-role-isolation/evidence/39-roles-l3-audit-20261012/r0-zero-call/roles-l3-audit.json": "sha256:5a446a54e5d87c29cce6b0fa43a1313b29abacb90401e43d9508d4a8ea90b096",
+    ".scratch/claims-r2-role-isolation/evidence/40-route-ab-decision-inputs-20261012/r0-zero-call/ab-cost-benefit.json": "sha256:c32a4509b0ebbe505b5c9e7b82ad50d0d21ff92dbe1a527dc684ea3bb277d2e0"
+  },
+  "outputs": {
+    "preregistered-contract-v4.json": "sha256:06d57cfa08f8cea230d21ad05017bf8fa5be30ad425fa1c903dbe89c84a95d1d",
+    "proposed-scoring-contract-v4.json": "sha256:506f2e39f006a14fdcfdf56739620a80a6d262965c8f445350ebb20d41d02d2c",
+    "contract-v4-diff.json": "sha256:a7ad7bc358afbdc58c64a9ceef77f520f8816a2778964fd6e9b015af4bce75b1",
+    "contract-v4-diff.md": "sha256:ef442f2d1c2aa35687de4d70445589d5254420e27d3731db30c06edd7a11472a",
+    "contract-v4-open-decisions.json": "sha256:15378de9b42a161aec3f69cb34c93e63147f9766fb96814ce4205afb1427a457",
+    "contract-v4-review.md": "sha256:7a94a5199f3e7b8205e3754e1fce0c9463bd0a02eb836c4d971bdabe62621cde",
+    "draft_contract_v4.py": "sha256:f969d890f48f9968e47ec8d46b80152445417e293ad07155a07404d25f9f147e"
+  },
+  "v3_unchanged_verified": true
+}

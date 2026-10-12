@@ -251,9 +251,7 @@ def probe_features(payload: ProbeInput) -> tuple[FeatureProbe, ...]:
     )
 
 
-def load_admission_policy(
-    path: str | Path, *, allow_dev_lane: bool = False
-) -> AdmissionPolicy:
+def load_admission_policy(path: str | Path, *, allow_dev_lane: bool = False) -> AdmissionPolicy:
     """装载 I0A-3 冻结政策文件；frozen/auto_decision/版本绑定/deve lane 校验 fail-closed。
 
     复核 R5：``policy_rev`` 必须属于本实现绑定的受支持版本集——拒绝未支持版本，
@@ -285,9 +283,7 @@ def load_admission_policy(
     if scope not in (_SCOPE_PRODUCTION, _SCOPE_DEV):
         raise AdmissionError(f"admission policy scope 非法: {scope!r}")
     if scope == _SCOPE_DEV and not allow_dev_lane:
-        raise AdmissionError(
-            "dev lane 政策不得在生产路径装载（需调用方显式 allow_dev_lane=True）"
-        )
+        raise AdmissionError("dev lane 政策不得在生产路径装载（需调用方显式 allow_dev_lane=True）")
 
     raw_materials = data.get("allowed_materials")
     if raw_materials is None:
@@ -583,8 +579,7 @@ def decide_admission(
     )
     dev_evidence = (
         [f"dev_lane={policy.lane_id}", f"admitted_material={effective_material.value}"]
-        if policy.scope == _SCOPE_DEV
-        and in_scope_material is not MaterialType.RESEARCH_REPORT
+        if policy.scope == _SCOPE_DEV and in_scope_material is not MaterialType.RESEARCH_REPORT
         else []
     )
     return _admission_of(

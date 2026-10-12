@@ -413,11 +413,11 @@ async def test_steer_reaches_next_llm_request(
     ]
     assert carried, "steer text never reached a follow-up LLM request"
 
-    # F21: the adoption the worker reported is durable, and the direction is part
-    # of the transcript — that is what makes the next run see the correction.
+    # F21: the adoption the worker reported is durable. The turn serves Web
+    # presentation/audit; the opaque session payload is what the next run replays.
     from server.history import STEER_TURN_PREFIX
     from server.orchestrator import _session_uuid
-    from server.store import list_controls, list_turns
+    from server.store import list_controls, list_turns, read_session_conversation
 
     records = await list_controls(run_id=uuid.UUID(run_id))
     steer_records = [r for r in records if r.kind == "steer"]
@@ -431,3 +431,5 @@ async def test_steer_reaches_next_llm_request(
         t for t in turns if t.content.startswith(STEER_TURN_PREFIX) and marker in t.content
     ]
     assert len(adopted) == 1, [t.content for t in turns]
+    payload = await read_session_conversation(session_id=session_uuid)
+    assert payload is not None and marker in payload

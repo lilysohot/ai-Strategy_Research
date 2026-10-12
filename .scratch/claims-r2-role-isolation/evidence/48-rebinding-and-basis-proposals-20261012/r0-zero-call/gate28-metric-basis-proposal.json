@@ -1,0 +1,241 @@
+{
+  "schema_version": "items-gate28-metric-basis-proposal-1",
+  "created_on": "2026-10-12",
+  "status": "proposal_pending_signoff",
+  "purpose": "门 28 是 OPEN-1=A 选定的**唯一权威阈值源**，但其 `metric_basis` 仍指向 v3；契约已签 v4.1 ⇒ 权威源自身的基准版本过期（循环引用）。须以**新版本门记录**推进，不就地改 `preregistered-gate.json`（issue-34 §8）。",
+  "cycle_detected": {
+    "edge_1": "契约 v4.1 的 `threshold_source.effective` 取自门 28 `quality_requirements`",
+    "edge_2": "门 28 的 `metric_basis` 指向 `non-table-selected-target-scoring-contract-v3`（v3），不是 v4.1",
+    "consequence": "『权威源』的基准版本落后于引用它的契约 ⇒ 单一口径并未真正闭合，须同轮修。"
+  },
+  "gate28_recorded": {
+    "path": ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate.json",
+    "sha256": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
+    "metric_basis_path": "quality_requirements.metric_basis",
+    "metric_basis": "non-table-selected-target-scoring-contract-v3",
+    "contract_binding_path": "gold.scoring_contract_sha256",
+    "contract_binding": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
+    "quality_requirements": {
+      "metric_basis": "non-table-selected-target-scoring-contract-v3",
+      "evaluation_scope": "selected_target_recall_not_exhaustive_document_gold",
+      "material_items_target_total": 48,
+      "target_recall_overall_min": 0.85,
+      "target_recall_per_source_min": 0.8,
+      "candidate_precision_min": 0.8,
+      "unresolved_candidates_max": 0,
+      "accepted_records_total_min": 40,
+      "accepted_records_per_source_min": 20,
+      "role_required_fields": [
+        "proposition",
+        "semantic_type",
+        "statement_role",
+        "speech_role",
+        "perspective",
+        "speaker_ref",
+        "polarity",
+        "attribution",
+        "source_stance"
+      ],
+      "semantic_types": [
+        "fact",
+        "forecast",
+        "opinion",
+        "behavior",
+        "unknown"
+      ],
+      "statement_roles": [
+        "claim",
+        "evidence",
+        "condition",
+        "risk",
+        "question",
+        "answer",
+        "other"
+      ],
+      "perspectives": [
+        "source_explicit",
+        "quoted_other",
+        "unknown"
+      ],
+      "high_risk_item_assertions_required": [
+        "NT-I09",
+        "NT-I13",
+        "NT-I15",
+        "NT-I17",
+        "NT-I19",
+        "NT-I29",
+        "NT-I35",
+        "NT-I37",
+        "NT-I38",
+        "NT-I39",
+        "NT-I42",
+        "NT-I43",
+        "NT-I45",
+        "NT-I46",
+        "NT-I47",
+        "NT-I48"
+      ],
+      "high_risk_item_annotations": {
+        "NT-I13": {
+          "condition": "Q3 OCF/扣非净利润 >= 0.6",
+          "condition_logic": {
+            "op": "compare",
+            "metric": "OCF_to_adjusted_profit",
+            "period": "Q3",
+            "comparator": ">=",
+            "value": "0.6",
+            "unit": "ratio"
+          }
+        },
+        "NT-I15": {
+          "condition": "下季 OCF/扣非净利润 < 0.5",
+          "condition_logic": {
+            "op": "compare",
+            "metric": "OCF_to_adjusted_profit",
+            "period": "next_quarter",
+            "comparator": "<",
+            "value": "0.5",
+            "unit": "ratio"
+          }
+        },
+        "NT-I17": {
+          "condition": "毛利率相对6.99%下降>1个百分点 AND 公司改口“涨价/mix受阻、Rubin延期”（并列项内部逻辑未明）",
+          "condition_logic": {
+            "op": "all",
+            "args": [
+              {
+                "op": "compare",
+                "metric": "gross_margin_change_from_baseline",
+                "baseline": "6.99",
+                "comparator": "<",
+                "value": "-1",
+                "unit": "percentage_points"
+              },
+              {
+                "op": "source_clause",
+                "text": "公司改口说涨价/mix 受阻、Rubin 延期",
+                "inner_operator": "unknown"
+              }
+            ]
+          },
+          "unknown_fields": [
+            "condition_inner_boolean"
+          ]
+        },
+        "NT-I09": {
+          "condition": "毛利率继续下降或Rubin延期",
+          "atomic_proposition_source": "condition",
+          "compound": true,
+          "sub_conditions": [
+            "毛利率继续下降",
+            "Rubin延期"
+          ],
+          "compound_rule": "二元析取（「或」），无 condition_logic；按 condition_role_read_path.compound_condition 计分，命中任一子条件计为部分命中，不得整体匹配。"
+        },
+        "NT-I19": {
+          "condition": "出口管制影响GPU系统集成",
+          "atomic_proposition_source": "condition",
+          "compound": false
+        },
+        "NT-I29": {
+          "condition": "政策变化导致成本上升",
+          "atomic_proposition_source": "condition",
+          "compound": false
+        },
+        "NT-I35": {
+          "condition": "无差别相信所有公司的份额陈述",
+          "atomic_proposition_source": "condition",
+          "compound": false
+        },
+        "NT-I39": {
+          "condition": "海外产能税率增加",
+          "atomic_proposition_source": "condition",
+          "compound": false
+        },
+        "NT-I37": {
+          "semantic_type": "opinion"
+        },
+        "NT-I38": {
+          "semantic_type": "opinion",
+          "polarity": "mixed"
+        },
+        "NT-I42": {
+          "condition": "52 <= 股价（元） <= 58 AND 无新的大额负面管制公告",
+          "condition_logic": {
+            "op": "all",
+            "args": [
+              {
+                "op": "range",
+                "metric": "share_price",
+                "lower": "52",
+                "upper": "58",
+                "bounds": "inclusive",
+                "unit": "CNY"
+              },
+              {
+                "op": "source_clause",
+                "text": "无新的大额负面管制公告"
+              }
+            ]
+          }
+        },
+        "NT-I43": {
+          "condition": "毛利率 >= 6.99%",
+          "condition_logic": {
+            "op": "compare",
+            "metric": "gross_margin",
+            "comparator": ">=",
+            "value": "6.99",
+            "unit": "percent"
+          }
+        },
+        "NT-I45": {
+          "perspective": "quoted_other",
+          "source_stance": "challenged"
+        },
+        "NT-I46": {
+          "perspective": "quoted_other",
+          "source_stance": "challenged"
+        },
+        "NT-I47": {
+          "perspective": "quoted_other",
+          "source_stance": "challenged"
+        },
+        "NT-I48": {
+          "perspective": "quoted_other",
+          "source_stance": "challenged"
+        }
+      }
+    },
+    "countersigned": "signed"
+  },
+  "drift_second_edge": {
+    "path": "gold.scoring_contract_sha256",
+    "recorded": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
+    "actual_now": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+    "note": "门 28 自身也把契约绑在 v3；该绑定与 metric_basis 必须同轮推进，否则门记录内部不一致。"
+  },
+  "established_precedent": "门 28 已有同类先例：`revision_history[1].changes` = 『gold.scoring_contract_sha256 由 v2 哈希 2eb24be7 再绑定至已签认 v3 哈希』+『quality_requirements.metric_basis 由 -v2 改为 -v3』。故本次推进不是新发明，而是沿用同一手续（新版本记录，不就地改）。",
+  "proposed_new_version_record": {
+    "record_path_suggestion": "evidence/28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate-v2.json（新文件；原 `preregistered-gate.json` 字节不变、哈希留存可追溯）",
+    "delta": {
+      "metric_basis": "non-table-selected-target-scoring-contract-v4.1",
+      "gold.scoring_contract_sha256": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+      "quality_requirements_values": "逐字不变（0.85 / 0.80 / 0.80 / 40 / 20 / 0）"
+    },
+    "requires": "具名签认（门记录修订）"
+  },
+  "threshold_single_source_effect": {
+    "authority": "门 28（推进后为 v2 记录，绑定 v4.1）",
+    "scorer_must_change": "`plugins/corpus/structured_scoring.py` 仍硬编码 0.95/0.90（PILOT_CANDIDATE_POLICY），与已签口径冲突；改为读契约属 **P03，尚未执行**。"
+  },
+  "gate32_note": {
+    "manifest": ".scratch/claims-r2-role-isolation/evidence/32-items-v6-reasoning-refreeze-20261011/r0-zero-call/freeze-manifest.json",
+    "extractor_version": "material-semantics-32",
+    "protocols": {
+      "control": "material-atomic-selector-jsonl-v5",
+      "treatment": "material-atomic-selector-jsonl-v6"
+    },
+    "note": "门 32 判据与被测对象同轴问题另见并行提案 `gate-32-v2-criteria.proposed.json`（P15）。"
+  }
+}

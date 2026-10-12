@@ -47,6 +47,8 @@ REACT_SPEC = PipelineSpec(
                 "final_answer_source", "stopped_by",
                 # Whether the cross-turn dump was replayed, and why not.
                 "replay_decision",
+                # The write-time summary call's own tokens (issue 01 §12.11 待办 2).
+                "summary_usage",
             ],
         ),
     ],

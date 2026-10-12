@@ -519,7 +519,7 @@ def build_prompt_v2(
             "\n候选槽位是系统从原文确定性切出的完整性义务。每个 candidate_slot_id 必须至少"
             "返回一个终态：若存在支持的 Claim，返回一条或多条普通 Claim 并逐条带同一 "
             "candidate_slot_id 与 coverage_status=claim；若该槽没有可支持的 Claim，仅返回 "
-            "{candidate_slot_id, coverage_status=\"no_supported_claim\", reason_code}。不得省略槽位，"
+            '{candidate_slot_id, coverage_status="no_supported_claim", reason_code}。不得省略槽位，'
             "不得跨槽引用 evidence_quote。\n候选槽位：\n"
             + json.dumps(slot_obligations, ensure_ascii=False, separators=(",", ":"))
         )

@@ -307,48 +307,6 @@ async def test_f21_steer_still_parked_when_the_run_ends_is_dropped(
     assert [t for t in turns if t.content.startswith(STEER_TURN_PREFIX)] == []
 
 
-async def test_f21_next_run_history_carries_the_adopted_correction(
-    app_client, auth_headers, isolated_orchestrator
-) -> None:
-    """A6: history is rendered from ``turns``, so the correction must be one."""
-    from server.history import render_session_history
-    from server.orchestrator import _turns_as_of_submission
-
-    run_id, session_id = await _owned_run(auth_headers)
-
-    user_id = _user_id_from(auth_headers)
-    handle = _live_handle(isolated_orchestrator, run_id, session_id, user_id)
-    resp = await _steer(app_client, auth_headers, run_id, "资金是 50 万，不是 5 万")
-    await isolated_orchestrator._record_steer_adopted(
-        handle, {"control_id": resp.json()["control_id"]}
-    )
-
-    # A later run of the same session renders what the user corrected. Its own
-    # question sits after the steer turn, so the F14 submission cutoff must
-    # exclude that question while keeping the correction.
-    from server.store import append_turn
-
-    later_run = uuid.uuid4()
-    await create_run(
-        run_id=later_run,
-        session_id=session_id,
-        user_id=user_id,
-        prompt="继续",
-        pipeline_id="stateful-react-agent",
-        run_dir=str(run_dir_for(later_run.hex)),
-        status="running",
-    )
-    await append_turn(
-        session_id=session_id, role="user", content="继续", run_id=later_run
-    )
-    turns = await list_turns(session_id=session_id)
-    history = render_session_history(
-        _turns_as_of_submission(turns, current_run_id=later_run)
-    )
-    assert "资金是 50 万，不是 5 万" in history
-    assert "继续" not in history
-
-
 # — A4 / A5 / A7: the approval state machine ————————————————————————
 
 

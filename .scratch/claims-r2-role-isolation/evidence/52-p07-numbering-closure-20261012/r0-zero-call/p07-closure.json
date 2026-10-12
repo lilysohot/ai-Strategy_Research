@@ -1,0 +1,69 @@
+{
+  "schema_version": "items-p07-numbering-closure-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "decided_by": "U（2026-10-12 委托本会话选定最佳编号）",
+  "numbering_decision": {
+    "keep_41_for": "evidence/41-items-chain-accounting-20261012",
+    "rationale": "存在对应 Issue 文件 issues/41-items-chain-accounting-freeze.md ⇒ 编号与 Issue 号对齐",
+    "contract_draft_stays_at": "evidence/45-contract-v4-draft-20261012",
+    "rationale_draft": "Issue 34 工作流产物，无 Issue 号主张，顺延至下一个空号",
+    "rule_forward": "整数编号全局唯一；有对应 Issue 者优先占用该号，无 Issue 号主张者顺延",
+    "rename_record": "evidence/45-contract-v4-draft-20261012/r0-zero-call/rename-record.json"
+  },
+  "residual_references": {
+    "grep_term": "41-contract-v4-draft",
+    "hits_total": 5,
+    "historical_mentions_kept": [
+      "evidence/34-chain-root-cause-audit-20261011/chain-report.md:16,423",
+      "evidence/45-contract-v4-draft-20261012/r0-zero-call/rename-record.json"
+    ],
+    "live_broken": [
+      {
+        "where": "evidence/45-contract-v4-draft-20261012/r0-zero-call/MANIFEST.json",
+        "kind": "stale input key",
+        "actual_broken_keys": [
+          ".scratch/claims-r2-role-isolation/evidence/41-contract-v4-draft-20261012/r0-zero-call/preregistered-contract-v4.json"
+        ],
+        "broken_count": 1,
+        "correct_value": ".scratch/claims-r2-role-isolation/evidence/45-contract-v4-draft-20261012/r0-zero-call/preregistered-contract-v4.json",
+        "disposition": "保留字节 + 本记录登记；下次该目录出新版本记录时一并修正"
+      },
+      {
+        "where": "evidence/45-contract-v4-draft-20261012/r0-zero-call/draft_contract_v4.py:10",
+        "kind": "stale usage example",
+        "correct_value": "uv run python .scratch/claims-r2-role-isolation/evidence/45-contract-v4-draft-20261012/r0-zero-call/draft_contract_v4.py",
+        "disposition": "保留字节 + 本记录登记（改注释会使其哈希与 MANIFEST/preregistered 记录不符）"
+      },
+      {
+        "where": "evidence/41-items-chain-accounting-20261012/r2-proposals/contract-v4-draft.md:80",
+        "kind": "stale cross-reference (parallel session directory)",
+        "correct_value": "../45-contract-v4-draft-20261012/r0-zero-call/contract-v4-review.md",
+        "disposition": "未写入（跨并行目录）；owner = parallel-session / U，等 U 一句话",
+        "file_sha256_now": "sha256:f8a8edf1f7f1b5726fec958c1d7a20158d8faeabd71e20a67b20c81be769afd0"
+      }
+    ],
+    "why_not_patched": [
+      "45 的脚本自带 fail-closed 签认护栏（draft_contract_v4.py:281-297），重跑会被拒绝；用 --force 会抹掉 U 的签认，正是护栏要防的事",
+      "因此无法用“重跑”再生成 MANIFEST；手改 MANIFEST 会让它与脚本产出不一致",
+      "单独改脚本注释会使其哈希与已记录的 MANIFEST / preregistered 值不符",
+      "⇒ 依 write-once：保留字节并以本记录登记"
+    ]
+  },
+  "guard_origin_finding": {
+    "source": "evidence/45-contract-v4-draft-20261012/r0-zero-call/draft_contract_v4.py:281-283",
+    "quote": "Incident 2026-10-12: re-running this script silently erased a signature on contract-v4-review.md; the user only authorised revoking chain-report.md.",
+    "meaning": "D9 不是抽象风险：本项目已真实发生过一次签认被脚本静默抹除。",
+    "p06_no_miss": "P06 扫描器 guarded=3 中即含 45/draft_contract_v4.py（inline_guard），其保护对象含 contract-v4-review.md；本会话曾怀疑漏报，实测证伪。",
+    "signed_instrument": {
+      "path": ".scratch/claims-r2-role-isolation/evidence/45-contract-v4-draft-20261012/r0-zero-call/contract-v4-review.md",
+      "sha256": "sha256:753532e8074aa0bf8a9f9cddf2b0e97b9b19519ed95b154407fdfac2e6c0ccd7",
+      "signed": "☑ 认可并签认 v4（2026-10-12）"
+    }
+  },
+  "in_place_edits": 0,
+  "not_claimed": [
+    "本记录不修改任何既有文件；#3/#4/#5 的字节日前仍为原样。",
+    "编号裁定不改变任何产物的哈希与效力。"
+  ]
+}

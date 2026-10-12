@@ -11,6 +11,13 @@
 - 修订：r4（2026-10-12，**签认前**补记，零调用）：执行 §7-10，产出 `evidence/38-gate33-workbench-rebuild-20261012/`（工作台 v2 严格超集），新增 §5.10，§7-10 标为已完成。
 - 修订：r5（2026-10-12，**签认前**补记，零调用）：执行 §7-9，产出 `evidence/39-roles-l3-audit-20261012/`，新增 §5.11 与 §7-12，§7-9 标为已完成，§9 增 relations 契约缺陷裁定行。
 - 修订：r6（2026-10-12，**签认前**补记，零调用）：产出 `evidence/40-route-ab-decision-inputs-20261012/`（同量纲成本-收益表 / 冻结影响清单 / route b 受控实验预注册草案），新增 §5.12 与 §7-13、§7-14，§9 增两行裁定项。
+- 修订：r7（2026-10-12，**签认前**补记，零调用）：U 裁定"222 条全量裁定（选项 a）"；产出 `evidence/45-contract-v4-draft-20261012/`（契约 v4 草案，含 OPEN-1/OPEN-2）与 `evidence/42-stage1-suggester-upgrade-20261012/`（Stage-1 助手 v2），新增 §5.13、§5.14，§7-5/§7-6/§7-11 状态更新，§9 增审阅行。
+- 修订：r8（2026-10-12，零调用）：**契约 v4 已签认并落地**（OPEN-1=A、OPEN-2=C），产出 `evidence/43-scoring-contract-v4-signed-20261012/`；撤销本报告 §10 的误填签认；为生成脚本加签认护栏；对账发现并行 v4 草案有 18 条独有叶子（含 3 条核心条款）。详见 §5.13.1。
+- 修订：r9（2026-10-12，零调用）：P07 消编号歧义——本会话证据目录 `41-contract-v4-draft-20261012` 改号为 `45-contract-v4-draft-20261012`，引用同步修复并重跑（见 `45-…/rename-record.json`）。
+- 修订：r10（2026-10-12，零调用）：P10 完成——产出契约 **v4.1 草案**（`evidence/46-contract-v41-draft-20261012/`），以已签 v4 为基只增不删地并入并行草案独有叶子。详见 §5.13.3。
+- 修订：r11（2026-10-12，零调用）：**契约 v4.1 已签认并落地**（`evidence/47-scoring-contract-v41-signed-20261012/`）；并行草案标 superseded；出 **P12/P13 记账提案**（`evidence/48-rebinding-and-basis-proposals-20261012/`，零就地改动）。详见 §5.13.4。
+- 修订：r12（2026-10-12，零调用）：**Wave 0 开工**——P01 装配器已实现并通过证据运行（`evidence/49-p01-assembler-20261012/`）；P02 设计说明待 U 审阅（`evidence/50-p02-matcher-design-20261012/`）。详见 §5.14。
+- 修订：r13（2026-10-12，零调用）：**P02 评分器匹配改造已完成**（legacy 四臂逐字段不变；`evidence/53-…`）；**P07 编号歧义已收敛**（41 归 Issue 41；`evidence/52-…`）。详见 §5.14。
 
 ## 0. 口径声明（先声明谓词，再看数字）
 
@@ -103,6 +110,13 @@
 > `40-…/r0-zero-call/ab-cost-benefit.json` = `c32a4509…7d2e0`；
 > `40-…/r0-zero-call/freeze-impact.json` = `a2200c5f…dea3dd`；
 > `40-…/r0-zero-call/route-b-experiment-protocol.json` = `88fddc8c…f43786`（草案，未执行）。
+
+> r7 补记新增产物（零调用只读，sha256 实测）：
+> `41-…/r0-zero-call/proposed-scoring-contract-v4.json` = `506f2e39…d02d2c`（**草案，未签认**）；
+> `41-…/r0-zero-call/contract-v4-diff.json` = `a7ad7bc3…ce75b1`（机器计算）；
+> `41-…/r0-zero-call/contract-v4-open-decisions.json` = `15378de9…27a457`；
+> `42-…/r0-zero-call/suggestions-v2.json` = `7fa2fdc9…03a4bb`；
+> `42-…/r0-zero-call/suggester-v2-report.json` = `2fc2896d…61a970`。
 
 > 记账：`evidence/34-chain-root-cause-audit-20261011/` 与 `evidence/35-gold-audit-20261011/` 当前**未入库**（`git status` 为 `??`）。
 
@@ -367,6 +381,158 @@ L9 是对 L3∩L7 的**测量**。把它计入节点数会重复计算同一处�
 
 **⑤ 仍缺（本批不代替）**：缺口 1 = **32 条区间的人工可裁定比例**（需 xyl 抽样裁定）；缺口 2 = **route b 的收益**（需执行上述实验）。
 
+### 5.13 契约 v4 草案（r7 补记）
+
+产物：`evidence/45-contract-v4-draft-20261012/r0-zero-call/`（零调用只读；幂等、支持 `--no-write`）。
+
+| 产物 | sha256 |
+|---|---|
+| 预注册 `preregistered-contract-v4.json` | `06d57cfa…a95d1d` |
+| **草案** `proposed-scoring-contract-v4.json` | `506f2e39…d02d2c` |
+| 差异 `contract-v4-diff.json`（机器计算） | `a7ad7bc3…ce75b1` |
+| 待裁定 `contract-v4-open-decisions.json` | `15378de9…27a457` |
+
+- **草案不是交付物**：`status = draft_pending_human_signature`，`signoff.signed_by` 为空（自检通过）；**v3 契约字节未变**（`d9bc51f2…` 实测复核）。
+- 差异由脚本递归 diff 计算，与 `declared_changes` 逐根一致（自检通过）。
+- 新增条款：`caliber_rules`（逐字段口径归一化 + 依据 + 是否可自动归一）、`read_path`（角色通用机制、本期仅 items；声明与记录 ID 无关、`review_assertions` 不得作匹配规则）、`adjudication_clause`（Stage 2 责任人/凭据/**全量 222**/逐字引文要求/抽检须隐藏建议）、`threshold_source`（双源 + OPEN-1 + 轴警告）、`relation_matching`（OPEN-2）、`bookkeeping_requirements`；`matching.projection` 增补"归一化不得覆盖原始字段"。
+- **两项待你裁定**：**OPEN-1** 阈值单源（A: 以门 28 为权威 0.85/0.80/20 ／ B: 维持评分器 0.95/0.90 并改门）；**OPEN-2** relations 修正（A 裁定映射／B 删金标字段／C 本轮不纳入）。另 **FORCED-1**：口径方向由 §8（金标字节不变）推定只剩"以金标口径为准、读时归一化"一条，**方向已定但条款仍须签认**。
+
+#### 5.13.1 签认与落地（r8 补记）
+
+- **签认**：`45-contract-v4-draft-20261012/r0-zero-call/contract-v4-review.md`＝**已签认**（`753532e8…`，2026-10-12）：结论 ☑ 认可并签认 v4、**OPEN-1 = A**（门 28 权威 0.85/0.80/20，评分器改为读契约）、**OPEN-2 = C**（material_relations 本轮不纳入评分）。
+- **落地**（新目录，write-once；草稿与 v3 字节均未变）：`evidence/43-scoring-contract-v4-signed-20261012/r0-zero-call/`
+
+| 产物 | sha256 |
+|---|---|
+| `scoring-contract-v4.json`（`status = frozen_signed`） | `6806f139…b712d` |
+| `signoff-record.json` | `5e8737f4…92d9ff` |
+| `README.md` | `37fad0a6…5ab3af` |
+
+> r9 注：上表哈希为 **P07 改号后**重跑的取值（原 `479ae04e…`/`32c14a15…`/`beb469c5…`）；改名只动路径、不改字节，**签署工具 `contract-v4-review.md` 哈希恒为 `753532e8…`**。改号记录见 `45-…/r0-zero-call/rename-record.json`。
+
+- **撤销留痕**：本报告 §10 此前被预填（半签），已于 2026-10-12 按 U 指示撤销；`contract-v4-review.md` 曾被误判为预填并被重生成脚本回退一次（**我的越权操作**，仅 `chain-report.md` 获得撤销授权），已于同日为生成脚本加**签认护栏**：检测到已签认标记即**拒绝写入**（除非显式 `--force`）。
+- ⚠️ **对账发现（重要）**：并行会话另有 v4 草案 `41-items-chain-accounting-20261012/r3-signoff-apply/scoring-contract-v4.proposed.json`（`b3f88649…`，`status = proposed_pending_signoff`，**签认栏为空、从未签认**）。按节名映射（`items_field_carrier_read_path`→`read_path`、`threshold_single_source`→`threshold_source`）对账后，**该草案有 18 条独有叶子路径**，其中 3 条为**核心条款且已签版缺失**：
+  1. `carrier_mapping.rule`：**只允许确定性载体映射（候选 `text` → 契约 `proposition`），只改字段名，不生成、不改写、不摘要任何语义文本**；
+  2. `absent_required_fields.rule`：**缺字段时记 `absent`，不得因缺字段直接判不匹配，也不得补造**；
+  3. `equivalence_judgement.scorer_contract`：**评分器不得以身份相等为匹配前提，只消费裁定完成的映射**。
+  ⇒ **已签版 v4 在核心读路径语义上是不完整的**。**不得**改已签版（那正是"签认后改写"）；须走**新修订（v4.1 或 v5）+ 单独签认**把上述条款并入。
+- **签认后仍未完成（不得读成已过门）**：评分器读契约/阈值对齐（§7-6，代码未改）；金标冻结链契约绑定再绑定（v2→v3→v4）；口径归一化实现与回归测试（§7-7 A1/A2）；route a/b 边际裁定与缺口 1/2（§5.12）。
+
+#### 5.13.2 全链路重规划入口（r9 补记）
+
+- **本节取代 §7 的修复依赖序**：计划以 `evidence/44-replan-20261012/r0-zero-call/replan.md` 为准（`replan.json` = `2cdd3506…c71ccb`，P07 改号后重跑），含 Wave 0–5、关键路径、缺陷→计划项映射与**机器化遗漏自检**（`complete = true`：§7 全 14 行、§9 全 16 项、D1–D12、扫描命中全部有归属；另显式声明未覆盖范围）。§7 保留作为溯源，不再作为执行顺序。
+- **P07 已完成（2026-10-12）**：本会话证据目录 `41-contract-v4-draft-20261012` **改号为 `45-contract-v4-draft-20261012`**（41 另属并行 Issue 41），改号记录见 `45-…/r0-zero-call/rename-record.json`；已同步修好本报告、`43` 与 `44` 的脚本引用并重跑。**遗留一项**：并行文件 `41-items-chain-accounting-20261012/r2-proposals/contract-v4-draft.md` 中对旧路径的引用已失效，须由该会话或 U 处置（不由本会话写入）。
+- ⚠️ **新增两处链路末端缺环（此前未记录）**：**①裁定→评分输入装配器不存在**（无代码读 `adjudications`/`canonical_observed_fields`）；**②评分器只认字段逐字相等、不消费裁定**（`structured_scoring.py:456`）。⇒ **即使 v4.1 补全且 222 条裁定完成，门 33 仍为 0 分**，且会被误归因为抽取质量。两者均为**零裁定纯工程**，已列为 Wave 0（P01/P02）。
+
+#### 5.13.3 契约 v4.1 草案（r10 补记，P10 已完成）
+
+产物：`evidence/46-contract-v41-draft-20261012/r0-zero-call/`（零调用；幂等、支持 `--no-write`；含签认护栏）。
+
+| 产物 | sha256 |
+|---|---|
+| 预注册 `preregistered-v41-merge.json` | `3f704f6f…c5f300` |
+| **草案** `proposed-scoring-contract-v4.1.json`（`status = draft_pending_human_signature`） | `ee085552…026875` |
+| 差异 `contract-v4.1-diff.json`（机器计算） | `ffc5639a…5c61d7` |
+| 对账 `merge-reconciliation.json` | `674221cb…bb21b7` |
+| 审阅件 `contract-v4.1-review.md`（签认栏留空） | `adcd7d61…f891dc` |
+
+- **合并规则**（预注册声明、机器执行）：以**已签 v4 为基**，donor 叶子**仅当基缺少该路径时写入**；路径已存在且值不同则**保留基值并记冲突**，绝不静默覆盖。
+- **自检结果**：**新增 22 条叶子、按已签结论落地 2 条、冲突 0、删除 0**（`add_only = true`）；基、签署工具与 donor 三个已签/外来产物**哈希均未变**（`6806f139…`／`753532e8…`／`b3f88649…`）。
+- **并入的 3 条核心条款**（此前已签版缺失，正是路线 a 的可行性开关）：`read_path.carrier_mapping.rule`（只改字段名、不生成/改写/摘要语义）、`read_path.absent_required_fields.rule`（缺字段记 absent、**不得因缺字段直接判不匹配**）、`read_path.equivalence_judgement.scorer_contract`（**评分器不得以身份相等为匹配前提**）。
+- **两处需 U 确认的可质疑项**（脚本撰写或改名，非机械搬运）：① `threshold_source.decision_history` 由 donor 的 `pending_signoff_detail` 改名而来，其历史说明已更新为"该分叉已由 OPEN-1=A 裁定"；② `read_path.absent_required_fields.alignment_with_caliber_rules`（调和 donor「记 absent」与基「移出匹配基」两种表述）。
+- **待办**：U 签认 v4.1（只勾"认可并签认 v4.1"，无需再选选项）→ 并行草案可标 `superseded_by` → 绑定再绑定与门 28 基准推进（P12/P13）以 v4.1 哈希为准。
+
+#### 5.13.4 契约 v4.1 已签认并落地；P12/P13 提案（r11 补记）
+
+**A. 签认与落地**（`evidence/47-scoring-contract-v41-signed-20261012/r0-zero-call/`）
+
+| 产物 | sha256 |
+|---|---|
+| `scoring-contract-v4.1.json`（`status = frozen_signed`） | `c76ac13e…38781b` |
+| `signoff-record.json` | `32dc784e…70677` |
+| `README.md` | `81e293ab…2ffe89` |
+
+- 签署工具：`46-…/r0-zero-call/contract-v4.1-review.md` = `1d012182…b94bdc`（`复核人 xyl／2026-10-12`、结论已勾"认可并签认 v4.1"）。
+- **备注为空 ⇒ 两处 `open_for_reviewer` 项（`threshold_source.decision_history`、`read_path.absent_required_fields.alignment_with_caliber_rules`）按「原样接受」处理**。这是对空备注的解释，已显式记录于 `signoff-record.json`，**不视为逐条确认**。
+- 取代关系：已签 v4 `6806f139…` 与并行草案 `b3f88649…` **均标 superseded_by v4.1**（后者从未签认，其独有叶子已并入）。上游四个已签/外来产物**哈希均未变**。
+- 幂等 + `--no-write` 通过；已签产物写盘前有签认护栏。
+
+**B. P12/P13 记账提案**（`evidence/48-rebinding-and-basis-proposals-20261012/r0-zero-call/`，`in_place_edits = 0`）
+
+| 产物 | sha256 |
+|---|---|
+| `gold-freeze-rebinding-proposal.json`（P12） | `3a99d6ad…d4c773` |
+| `gate28-metric-basis-proposal.json`（P13） | `2f0de079…e93d25` |
+
+- **P12**：金标冻结链 8 条输入实测 **漂移 1 条**（`scoring-contract.json` 记 v2 `2eb24be7…`，实际 v4.1 `c76ac13e…`；经 v3、v4），其余 7 条匹配。须以**新文件**记录再绑定，`freeze-manifest.json` 字节不变（实测 `da85e293…` 未变）。并行会话的同类记录针对 v2→v3，**不能沿用**。
+- **P13**：门 28 有**两处**绑定过期（此前只记了一处）：`quality_requirements.metric_basis = …-v3` 与 **`gold.scoring_contract_sha256 = d9bc51f2…`（v3）**；与契约 v4.1 形成**循环引用**（契约阈值取自门 28，门 28 的基准/绑定又落后于契约）。须同轮推进为 `…-v4.1` 并再绑定；**阈值数值逐字不变**。门 28 自身已有 v2→v3 的同类先例（`revision_history[1]`），故本次是沿用既有手续。门 28 文件字节不变（实测 `987772e9…` 未变）。
+- 两项均 `proposal_pending_signoff`，改的只是记账，不改语义。
+
+**C. 仍未完成（不得读成已过门）**：P01 装配器、P02 匹配改造、P03 评分器读契约/阈值、P04/P05 口径实现与回归、P12/P13 签认、route a/b 与缺口 1/2。
+
+### 5.14 Wave 0 进展：P01 完成、P02 设计待审（r12 补记）
+
+**P01 裁定→评分输入装配器：已实现并通过证据运行。** 产物 `evidence/49-p01-assembler-20261012/r0-zero-call/`（零调用、幂等、含预注册）。
+
+- 新代码：`plugins/corpus/adjudication_assembly.py`（`b7e426f3…`）；新测试 `tests/test_corpus_adjudication_assembly.py`。
+- 实现契约 5 条：`adjudication_clause`（11 必填字段 / judgement 枚举 / evidence 必填）、`read_path.carrier_mapping`（只改字段名）、`read_path.absent_required_fields`（显式 `absent`）、`caliber_rules`（归一化只作用于匹配视图、原始字段不覆盖）、`equivalence_judgement.scorer_contract`（输出裁定映射）。
+- **结构性禁止读金标**：函数签名无金标参数（有测试断言）；确定性载体由装配器从候选自身字段**重算**，申报值不符即拒绝——这是"禁止金标注入"的可执行形式。
+- **证据运行（真实数据）**：以门 33 工作台 v2（222 条候选）为目录，提交门 33 草案的 **19 条 `accepted`** ⇒ **装配成功 0、拒绝 19**。独立逐规则探测（不被 fail-fast 掩盖）的违约类：
+
+| 违约类 | 命中 |
+|---|---|
+| `reviewer_missing` / `evidence_missing` / `judgement_outside_contract_enum` | 各 19 |
+| `proposition_rewritten_or_copied`（金标注入） | 19 |
+| `field_filled_from_outside_candidate::{attribution, speaker_ref, source_stance}` | 各 19 |
+| `deterministic_field_declared_differently::perspective` | 3 |
+
+- ⇒ **契约合法裁定数 = 0，装配器输出为空**：门 33 的 0 分是**装配缺口**造成的，不是抽取质量问题。这是 §5.13.2「链路末端两处缺环」的可执行证实。
+- 回归：评分器 23 项 + 新模块 24 项全通过；`tests/` 中 corpus 相关 1440 通过，2 项失败均为**环境既有问题**（`current_database='postgres' ≠ 'i2_sandbox_corpus'`；测试硬编码 `reader-pdf-10+` 而实际 `reader-pdf-11`），与本轮新增无关（`structured_scoring.py` 未改动）。
+
+**P02 评分器匹配改造：设计说明已出，待 U 审阅**（`evidence/50-p02-matcher-design-20261012/r0-zero-call/matcher-design.md`，`bb2f59a1…`）。要点：新增 `MatchingMode.ADJUDICATED`（默认，无映射即报错、不回落）与显式 `LEGACY_IDENTITY`（诊断/对照臂）；评分器只校验裁定合法性、不做二次相似匹配；`correct_extra` 进入 precision 分子但不入 recall 分母（默认 0 时与原公式恒等，既有断言不受影响）。**两点待 U 确认**：默认模式取值；14 处既有测试调用点显式加 `LEGACY_IDENTITY`。
+
+**P06 签认护栏推广：已完成（机制层）**（`evidence/51-p06-guard-20261012/`，`in_place_edits=0`、`historical_scripts_modified=0`）。
+
+- 交付：`tools/evidence_guard.py`（单一实现：三态判定 + `assert_writable` + 原子 `write_once`，**`allow_overwrite=True` 下仍拒绝已签认件**）；`tools/check_evidence_guard.py`（AST 静态一致性检查，`violation` 时非零退出，可作门）；`tools/evidence_guard_exceptions.json`；`tests/test_evidence_guard.py`（13 项）。
+- 实测：116 个脚本 → `guarded 3` / `violations **0**` / `legacy_exempt **4**`。
+- **关键判断：不逐个改写历史脚本。** 那些脚本已执行，其哈希被 4 件产物引用（1 MANIFEST + 3 README/报告）；改字节＝改写历史，会使其产物（冻结金标、门 28、门 32 冻结门）的出处记录失效，与 §8 冲突。故落"机制 + 执行器 + 显式例外登记"：**新增**未护栏写入者必被拦截，历史写入者登记且禁原地重跑。4 条例外已具名（含 `43/apply_v4_signoff.py` —— 它**已被 47 取代**且 47 自带护栏）。
+- 自检纠错三处（已记入产物）：文本标记误报（JSON 仅**引用** `signed_by` 被判已签）、`frozen.atomic_write(...)` 限定调用假阴性、`X.write_text(Y)` 目标解析错。
+
+**Wave 0 余项**：**P08**（补齐或声明不补 MANIFEST：32/33/34/35 与 41-items-chain-accounting 的 r0）尚未做；**P07** 由 U 一句话决定。
+
+**P02 评分器匹配改造：已完成**（U 2026-10-12 裁定默认 `ADJUDICATED`、同意改既有调用点）。产物 `evidence/53-p02-legacy-invariance-20261012/`。
+
+- `plugins/corpus/structured_scoring.py`（`172ce465…` → `50d1553e…`）：新增 `MatchingMode`（`ADJUDICATED` 默认，无映射即报错、**不回落**；`LEGACY_IDENTITY` 须显式）；匹配拆为 `_match_by_identity`（仅诊断/对照）与 `_match_by_adjudication`（只校验裁定合法性，不二次判定）；`RoleMetrics`/`OriginMetrics` 增 `correct_extra`，`precision = (tp+correct_extra)/(tp+correct_extra+fp)`（默认 0 时与原式恒等），`recall` 分母不含它。
+- 裁定词汇表单源：`AdjudicationJudgement` 定义在评分器，`adjudication_assembly.Judgement` 改为其别名。
+- 既有测试 **14 处**调用点显式加 `LEGACY_IDENTITY`（**断言一字未动**）；新增 `tests/test_corpus_structured_scoring_adjudicated.py`（20 项）。
+- **legacy 不变性已实测**：复跑 `evidence/36` 四臂（A `0/222/48`、B `tp 19`、C `tp 0`、D/D2 `0`），比对 **12 个字段区**全部一致、`differing_sections = []`，`36/l9-redo.json` 字节未变。方法：复制到同深度临时目录 + 包装注入 `LEGACY_IDENTITY`，**未改历史脚本**（`in_place_edits = 0`、`historical_scripts_edited = false`），副本已删除。
+- **已知破面（已声明）**：另有 3 个已执行的历史脚本（`10/run_quality_score.py:246`、`34/audit_chain.py:327`、`36/l9_redo.py:208`）未传 `matching_mode`，改造后再跑会报错——刻意如此（身份相等不得为缺省），三者不改。
+- **P02 不产生门分数**：真实裁定数仍为 0；不改阈值（属 P03）；不实现口径归一化（属 P04/P05）。
+- 回归：80 项全通过（23 legacy + 20 裁定驱动 + 24 装配器 + 13 护栏）；`ruff check`/`format --check` 全绿。
+
+**P07 编号歧义：已收敛**（`evidence/52-p07-numbering-closure-20261012/`）。
+
+- 裁定：**41 归 `41-items-chain-accounting`**（存在 `issues/41-…-freeze.md` ⇒ 编号与 Issue 号对齐是唯一可判定的权威依据）；**契约草案保持 45**（原为 41，已改号）。规则：编号全局唯一，有对应 Issue 者优先占用该号。
+- 全树 grep 出 5 处旧路径：2 处**历史记载**（保留）、3 处活引用断裂。其中跨并行目录的 `41-…/r2-proposals/contract-v4-draft.md:80` 经 U 同意已修正（`f8a8edf1…` → `620bc6cc…`，单行路径，非签认件）。
+- 另 2 处（`45/MANIFEST.json` 的 1 条过期输入键、`45/draft_contract_v4.py:10` 用法注释）**刻意不就地修**：45 的脚本自带签认护栏，重跑会被拒；`--force` 会抹掉 U 的签认。按 write-once 登记，待该目录出新版本时一并修。
+- **连带发现（D9 的起因）**：`45/draft_contract_v4.py:281-283` 记载——重跑该脚本**曾静默抹掉 U 在 `contract-v4-review.md`（`753532e8…`）上的签认**。⇒ D9 不是抽象风险，本项目已真实发生过一次；P06 的方向（机制 + 执行器 + 例外登记）与该教训一致。P06 扫描器**未漏报**此项（`guarded = 3` 中即含该脚本）。
+
+### 5.14 Stage-1 助手 v2（r7 补记，§7-5 已完成）
+
+产物：`evidence/42-stage1-suggester-upgrade-20261012/r0-zero-call/`（零调用只读；幂等、支持 `--no-write`；工作台 v2 字节未变）。
+
+| 产物 | sha256 |
+|---|---|
+| 预注册 `preregistered-suggester-v2.json` | `96fb234f…5b16d2` |
+| `suggestions-v2.json` | `7fa2fdc9…03a4bb` |
+| `suggester-v2-report.json` | `2fc2896d…61a970` |
+
+- **目标不是"更准"（无真值、不可测），而是"每条建议带可核验证据链"**：信号 = 槽位关联 + 逐字引文 + 数值交集 + 字符 2-gram + 归一化枚举一致（权重预注册固定，未调参）。
+- **置信分布显著改善**：high 3→**46**、medium 17→**129**、low 146→**8**、none 56→**39**（222 候选同批对比）。
+- **有逐字引文证据链的金标**：quote+context 口径 **41/48**；限定 quote-only **39/48**，与 issue-35 的 `records_with_exact_candidate_quote = 39` **一致**（EC-S1 交叉校验通过）——**EC-S1 的口径差已定位为"是否含 `context_evidence` 引文"**，两者必须分别披露，不得互相替代。
+- **硬约束遵守**：未把金标 `semantic_fields` 写入候选（禁止重犯旧预填 19 条的错误）；候选字段逐字节未变（EC-S5 通过）；**未报任何准确率**（EC-S2）。
+- top1 变化 161/222 ⇒ 属新基线：Stage 2 须以 `suggestions-v2.json` 为准（合并方式见其 md）。
+
 ## 6. 量化天花板（诊断口径，非生产报分口径）
 
 > **2026-10-12 更正（见 §11）**：下表中凡取自门 33 草案的数字均**受污染**，不得用于门槛判断。
@@ -399,8 +565,8 @@ L9 是对 L3∩L7 的**测量**。把它计入节点数会重复计算同一处�
 | 2 | 补跑被传输丢掉的 1 个包（带重试/幂等策略） | 否则 §6 四项门槛不可达 | 新门 + 真实调用 | 需授权 |
 | 3 | 解 Stage 2 结构性阻塞：明确"候选 → 契约字段"由谁负责、以什么为凭据 | 现行契约禁止以改写充当裁定，人工步骤**不可执行**；且 `unresolved_candidates_max = 0` | 契约条款 | 需裁定 |
 | 4 | 裁定 L6 的 2 个我方信号槽（forecast / evidence） | 我方缺陷，连带丢 2 条已产出条目 | 协议变更 | 需裁定 |
-| 5 | 修 Stage-1 助手，或明确裁定全人工 | `19/48` 量的是助手（high 3 / medium 17 / low 146 / none 56），不是抽取质量；且该数两臂均为构造量（§5.4） | 工具，零调用 | 否 |
-| 6 | 记账与口径一致性：契约哈希 v2→v3 绑定、`validation-report` 空缺、门 32 判据与被测对象同轴、评分器阈值与门 28 对齐 | 否则任何"契约已绑""协议已验""阈值即口径"的陈述都不可信 | 记账，零调用 | 阈值变更需具名签认 |
+| 5 ✔ | **已完成（2026-10-12）**：Stage-1 助手 v2（证据链版），见 §5.14 | `19/48` 量的是助手（high 3 / medium 17 / low 146 / none 56），不是抽取质量；且该数两臂均为构造量（§5.4） | 工具，零调用 | 否 |
+| 6 | 记账与口径一致性：契约哈希 v2→v3 绑定、`validation-report` 空缺、门 32 判据与被测对象同轴、评分器阈值与门 28 对齐 | 否则任何"契约已绑""协议已验""阈值即口径"的陈述都不可信 | 记账，零调用 | 阈值变更需具名签认（**已并入契约 v4 草案 OPEN-1**，§5.13） |
 | 7 | 读路径规则写成**与记录 ID 无关**的字段语义规则，并逐字段给出"候选字段 → 契约字段"映射 + 不可派生反例清单（§5.5） | 否则修复只对本批 19 条成立、不可推广（§5.7） | 契约 v4 条款 | 需裁定 |
 | 8 ✔ | **已完成（2026-10-11，授权后）**：用留出记录重做 L9、禁止金标注入；结论见 §5.8 | 现行 `19/48` 是循环量，不能作为路线 a 的可行性证据（§5.4） | 零调用 | 否 |
 | 9 ✔ | **已完成（2026-10-12）**：claims / material_relations 同型 L3 零调用审计，结论见 §5.11 | 另两角色的同型接缝未验证，不得以 items 单角色推断（§5.6） | 零调用 | 否 |
@@ -408,7 +574,7 @@ L9 是对 L3∩L7 的**测量**。把它计入节点数会重复计算同一处�
 | 13 | 执行 route b 收益的受控双臂实验（预注册草案已就绪） | 缺它则 route b 的收益永远只是假设（§5.12 缺口 2） | 真实调用 | **需授权**（模型／`attempts_max`／节流／预算／样本包号） |
 | 14 | 对 32 条人工裁定区间做分层抽样裁定（xyl） | 缺它则 route a 的收益只有下界 7 与上界 39（§5.12 缺口 1） | 人工 | 需 xyl |
 | 10 ✔ | **已完成（2026-10-12）**：重建门 33 工作台 v2（严格超集，补回 `speaker_ref` 与 layer B 字段），结论见 §5.10 | 现行工作台缺该字段（影响 222/222 条），Stage 2 人工裁定**不可执行**（§5.9） | 零调用，工具 | 否 |
-| 11 | 定枚举**口径归一化条款**（`perspective`／`speech_role` 等） | 金标与生产端同轴默认值相反；不立此条款，任何匹配恒为 0（§5.9） | 契约条款 | 需具名签认 |
+| 11 | 定枚举**口径归一化条款**（`perspective`／`speech_role` 等） | 金标与生产端同轴默认值相反；不立此条款，任何匹配恒为 0（§5.9） | 契约条款 | **已起草（v4 草案 `caliber_rules`，§5.13），待具名签认** |
 
 1 与 3 是同一处契约修订的两面，应合并为一轮；2 独立于 1，可并行。第 6 项中的阈值统一**必须具名签认**（阈值/粒度变更的既有约定）。**第 7 项应并入第 1/3 那一轮**（同一份契约 v4）；第 8、9 项为零调用，可在该轮内先做，其中第 8 项是判定第 1 项是否成立的前置。
 
@@ -430,7 +596,11 @@ L9 是对 L3∩L7 的**测量**。把它计入节点数会重复计算同一处�
 | L6 我方信号 2 槽 | ☐ 修正信号规则　☐ 维持现状并登记为已知损失 | | |
 | Stage 2 阻塞条款 | 由谁负责候选→契约字段规范化、凭据是什么 | | |
 | Stage-1 助手 | ☐ 修　☐ 接受全人工 | | |
-| 阈值统一 | ☐ 以门 28 为权威（0.85/0.80）　☐ 维持评分器现值（0.95/0.90）并改门 | | |
+| ~~契约 v4 草案审阅~~ | **已签认（2026-10-12）**：OPEN-1 = **A**、OPEN-2 = **C**；落地见 §5.13.1 | xyl | 2026-10-12 |
+| ~~v4.1 并入并行草案核心条款~~ | **已签认（2026-10-12）**：`46-…/contract-v4.1-review.md` `1d012182…`；落地 `47-…/scoring-contract-v4.1.json` `c76ac13e…`（`frozen_signed`）；备注为空 ⇒ 两处可质疑项按原样接受（见 §5.13.4） | xyl | 2026-10-12 |
+| **P12 金标冻结链再绑定**（v2→v4.1） | ☐ 签认（新版本记录，不就地改）　☐ 退回 | | |
+| **P13 门 28 基准推进**（`metric_basis` + `gold.scoring_contract_sha256` 同轮 → v4.1） | ☐ 签认（新版本门记录）　☐ 退回 | | |
+| 阈值统一 | （已由 OPEN-1 = A 裁定：门 28 为单一口径；评分器须改为读契约，**代码未改**） | xyl | 2026-10-12 |
 | 读路径普遍性（§5.7 三条硬要求） | ☐ 接受三条并写入契约 v4　☐ 只修本批数据 | | |
 | 跨角色范围 | ☐ items-only　☐ 每角色各建读路径（先做 §7-9 审计） | | |
 | B-1 两条 md 记录（NT-I06／NT-I41） | ☐ 纳入补跑范围　☐ 判为模型 `no_supported_item`　☐ 关联方法差异（非损失） | | |
@@ -442,9 +612,13 @@ L9 是对 L3∩L7 的**测量**。把它计入节点数会重复计算同一处�
 
 ## 10. 签认栏
 
-- 复核人：　xyl　　　日期：2026-10-12
+- 复核人：　　　　日期：
 - 结论：☐ 认可本口径　☐ 退回修改
 - 备注：
+
+> **撤销记录（2026-10-12）**：本栏此前曾被预先填入签名与日期（结论勾选为空，属**半签**且未经审阅）。
+> 按 U 指示于 2026-10-12 **撤销签认**，恢复为未签认状态；该次填记**不是有效签认**，
+> 不作为任何后续步骤（含 §7/§9 各项）的依据。原文不改写、以本记录留痕。
 
 ## 11. 修订记录（2026-10-12，记账核对票带出；原编 36 号，后改号为 41）
 

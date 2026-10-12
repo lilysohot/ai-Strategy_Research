@@ -1,0 +1,102 @@
+{
+  "schema_version": "items-gold-freeze-rebinding-proposal-1",
+  "created_on": "2026-10-12",
+  "status": "proposal_pending_signoff",
+  "purpose": "金标冻结链记录的契约哈希为 v2，而当前已签契约是 v4.1（经 v3、v4）⇒ 出**新版本记录**修正绑定，不就地改 `freeze-manifest.json`（issue-34 §8）。",
+  "drift_found": {
+    "input": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/scoring-contract.json",
+    "recorded": "2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe",
+    "actual_now": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+    "intermediate_actual": {
+      "v3_signed": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce"
+    },
+    "chain": "v2 (recorded) → v3 (signed) → v4 (OPEN-1=A/OPEN-2=C) → v4.1 (signed 2026-10-12)"
+  },
+  "all_inputs_checked": [
+    {
+      "input": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review-candidates.json",
+      "status": "match",
+      "recorded": "f8feaf96168c1a068d6e0c0e1a1f6b34113765ed5a76058c3d9f02ea730ccc59",
+      "actual": "f8feaf96168c1a068d6e0c0e1a1f6b34113765ed5a76058c3d9f02ea730ccc59"
+    },
+    {
+      "input": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review.md",
+      "status": "match",
+      "recorded": "71cac53f319d5f6cd940840819cb8dd35765f685b4ab24437d066eabd74e563b",
+      "actual": "71cac53f319d5f6cd940840819cb8dd35765f685b4ab24437d066eabd74e563b"
+    },
+    {
+      "input": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/scoring-contract.json",
+      "status": "drift",
+      "recorded": "2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe",
+      "actual": "d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce"
+    },
+    {
+      "input": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/validation-report.json",
+      "status": "match",
+      "recorded": "139cfc222eb4688dccdce5c0116b00c84b87401e01e22427658c3dcfa6d5bc52",
+      "actual": "139cfc222eb4688dccdce5c0116b00c84b87401e01e22427658c3dcfa6d5bc52"
+    },
+    {
+      "input": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/draft-manifest.json",
+      "status": "match",
+      "recorded": "e8cd173761d2908864fa90388e2910462cca8f87901e0618f5f1fd9ab88fa87b",
+      "actual": "e8cd173761d2908864fa90388e2910462cca8f87901e0618f5f1fd9ab88fa87b"
+    },
+    {
+      "input": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/source-prose-units.json",
+      "status": "match",
+      "recorded": "58aa7c997376c9d7f5a84766725cf2fadddc649c7e9f73ff7309727048a37436",
+      "actual": "58aa7c997376c9d7f5a84766725cf2fadddc649c7e9f73ff7309727048a37436"
+    },
+    {
+      "input": "data/corpus/工业富联_投委会决策报告_20260829.md",
+      "status": "match",
+      "recorded": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "actual": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb"
+    },
+    {
+      "input": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "status": "match",
+      "recorded": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "actual": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+    }
+  ],
+  "drift_count": 1,
+  "other_inputs_stable": [
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review-candidates.json",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review.md",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/validation-report.json",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/draft-manifest.json",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r1/source-prose-units.json",
+    "data/corpus/工业富联_投委会决策报告_20260829.md",
+    "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx"
+  ],
+  "proposed_new_version_record": {
+    "record_path_suggestion": "evidence/10-quality-gold-freeze-20261008-r2/rebinding-v4.1-<date>.json（新文件；`freeze-manifest.json` 与 `freeze-state.json` 字节不变）",
+    "fields": {
+      "binds_contract": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+      "binds_contract_schema_version": "non-table-selected-target-scoring-contract-v4.1",
+      "contract_instrument": {
+        "path": ".scratch/claims-r2-role-isolation/evidence/46-contract-v41-draft-20261012/r0-zero-call/contract-v4.1-review.md",
+        "sha256": "sha256:1d01218210388acf49f7c15a41301631d0631db6b1cf5e6e87ecc1ccf3b94bdc",
+        "reviewer_remark": "",
+        "reviewer_remark_note": "备注为空。两处 open_for_reviewer 项（R-1/R-2）因此按**原样接受**处理；这是对空备注的解释，已显式记录，不视为对具体条文的逐条确认。"
+      },
+      "supersedes_recorded": "2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe",
+      "gold_bytes_untouched": true,
+      "gold_frozen_on": null
+    },
+    "requires": "具名签认（冻结链修订）"
+  },
+  "related_prior_art": {
+    "parallel_record": ".scratch/claims-r2-role-isolation/evidence/41-items-chain-accounting-20261012/r3-signoff-apply/freeze-rebinding-record.json",
+    "sha256": "sha256:b197ece9e41879139096459647aa8fb51af98a360352422e4f81b383b3ce98d1",
+    "note": "并行会话的再绑定记录针对 v2→v3；本次实际为 v2→v4.1，故须出新记录，不能沿用。"
+  },
+  "validation_report_note": {
+    "status_in_file": "valid_review_draft",
+    "human_accepted_counts": {},
+    "required": "与 frozen-gold 的 48/48 accepted 对齐（P14）"
+  }
+}

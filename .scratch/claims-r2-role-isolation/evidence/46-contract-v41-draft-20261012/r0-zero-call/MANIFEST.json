@@ -1,0 +1,19 @@
+{
+  "schema_version": "items-contract-v41-draft-manifest-1",
+  "created_on": "2026-10-12",
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/46-contract-v41-draft-20261012/r0-zero-call/preregistered-v41-merge.json": "sha256:3f704f6f42eab9ceebc0b069acdfb3e9b7b3b8e7f3b0af9feed4210989c5f300",
+    ".scratch/claims-r2-role-isolation/evidence/43-scoring-contract-v4-signed-20261012/r0-zero-call/scoring-contract-v4.json": "sha256:6806f1399e3bbf5ace41264598f6228998f706dd082f20d580d5303a48ab712d",
+    ".scratch/claims-r2-role-isolation/evidence/41-items-chain-accounting-20261012/r3-signoff-apply/scoring-contract-v4.proposed.json": "sha256:b3f88649e9eca70cf21b95c466ea4a4950ef6a316aa521e2b42822c4eae7818f"
+  },
+  "outputs": {
+    "preregistered-v41-merge.json": "sha256:3f704f6f42eab9ceebc0b069acdfb3e9b7b3b8e7f3b0af9feed4210989c5f300",
+    "proposed-scoring-contract-v4.1.json": "sha256:ee085552f8ae3024450971a970df7e60c0e925d801d2e22797d0821ce7026875",
+    "contract-v4.1-diff.json": "sha256:ffc5639ad69e24b04ab6501a5c26bf5d95376de3e000267fba40a8979b5c61d7",
+    "contract-v4.1-diff.md": "sha256:9fc1a5949a00137da292c58bc63e401b294ce19bb2e678772d2117c449231253",
+    "merge-reconciliation.json": "sha256:674221cb2429844d58792937b137b1a0a8a54888efa7ed9b098fc69282bb21b7",
+    "contract-v4.1-review.md": "sha256:adcd7d61ed7374893c071bca656fa21ad1d099c432519e1de0a23af331f891dc",
+    "draft_v41_merge.py": "sha256:4eedee17055437cb1f9962329177fcadc765dc25ff81fd5242e4562a9f999d6d"
+  },
+  "signed_v4_unchanged": true
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "items-p01-manifest-1",
+  "created_on": "2026-10-12",
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/47-scoring-contract-v41-signed-20261012/r0-zero-call/scoring-contract-v4.1.json": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+    ".scratch/claims-r2-role-isolation/evidence/38-gate33-workbench-rebuild-20261012/r0-zero-call/workbench-v2.json": "sha256:0bd9e66072b08f9f30267112ee505789dcee4d0825359e632cdbaac670736558",
+    ".scratch/claims-r2-role-isolation/evidence/33-items-quality-scoring-20261011/r0-zero-call/adjudications.draft.json": "sha256:972acca8d0375d3e5686f08f20cae1b55967abdd3203d4d0fac6c1708f54e89e",
+    ".scratch/claims-r2-role-isolation/evidence/33-items-quality-scoring-20261011/r0-zero-call/build_adjudication_draft.py": "sha256:7d839413dd0770ef0f277b762432b3618c0cb92dffd1e8f0117523e7d94998a6"
+  },
+  "outputs": {
+    "p01-evidence.json": "sha256:9bb117a3103003ca8dd0de3a70d3274e63fdd2b1e98256020ed6e9ff91823483",
+    "p01-evidence.md": "sha256:87cd8959d01b86a6dfa1e58313cb1f5a39be64899b4394dcd22135aed2470fdf",
+    "run_p01_evidence.py": "sha256:decdfeaa8d5cccfabc12bbcfd9f1013e10243e8c0c5fc40fd325ce1acd984d7b",
+    "preregistered-p01.json": "sha256:bf9805e620aee02ed01ed18defe6ceb0fea05e1b30d3f05f509565ef24cb3f5c"
+  },
+  "in_place_edits": 0
+}

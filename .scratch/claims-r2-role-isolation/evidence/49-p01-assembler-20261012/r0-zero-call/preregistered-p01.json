@@ -1,0 +1,44 @@
+{
+  "schema_version": "items-p01-preregistration-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "item": "P01 裁定→评分输入装配器（Wave 0）",
+  "contract_binding": {
+    "path": "evidence/47-scoring-contract-v41-signed-20261012/r0-zero-call/scoring-contract-v4.1.json",
+    "sha256": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+    "status": "frozen_signed",
+    "clauses_implemented": [
+      "adjudication_clause（required_per_record_fields / candidate_judgements / evidence_required / forbidden）",
+      "read_path.carrier_mapping（item.text -> proposition，只改字段名）",
+      "read_path.absent_required_fields（显式 absent，不得留空、不得猜测）",
+      "caliber_rules（归一化仅作用于匹配视图；原始字段不得覆盖）",
+      "read_path.equivalence_judgement.scorer_contract（评分器消费裁定映射）"
+    ]
+  },
+  "decisions_frozen_before_running": {
+    "D1": "装配器签名不得含金标参数——结构性禁止读金标（不是靠约定）。",
+    "D2": "确定性载体（normalization / caliber_normalization / none）由装配器从候选自身字段重算；裁定申报值与之不符即拒绝（这就是禁止金标注入的可执行形式）。",
+    "D3": "human_only 字段（semantic_type / statement_role / source_stance / condition）由裁定人填；装配器不得改写成候选原值。",
+    "D4": "excluded_from_matching_basis（speaker_ref / attribution）记入 canonical_observed_fields 但**不进匹配基**。",
+    "D5": "canonical_observed_fields 缺键或空串 ⇒ 报错（契约要求显式 absent，禁止留空）。",
+    "D6": "unresolved 一律拒绝（unresolved_max = 0）。",
+    "D7": "out_of_scope 登记但不进入评分候选。",
+    "D8": "raw 与 validated 分开放入两个切片。"
+  },
+  "exit_criteria": {
+    "EC-1": "单元测试覆盖：金标注入被拒、空字段被拒、unresolved 被拒、非法 judgement/role/stage 被拒、reviewer/evidence 缺失被拒、excluded 字段不进匹配基、caliber 归一化只作用于匹配视图且原始值保留。",
+    "EC-2": "对真实工作台（222 条）+ 门 33 草案（19 条 accepted）运行：装配成功 0 条，且被判定的违约类**不被 fail-fast 掩盖**（独立逐规则探测）。",
+    "EC-3": "既有评分器测试全部通过（不得回归）。",
+    "EC-4": "本产物不产生任何门分数、不评价抽取质量、不修改 draft。"
+  },
+  "inputs": [
+    "evidence/38-gate33-workbench-rebuild-20261012/r0-zero-call/workbench-v2.json（裁定目录）",
+    "evidence/33-items-quality-scoring-20261011/r0-zero-call/adjudications.draft.json（待检验的草案裁定）",
+    "evidence/33-items-quality-scoring-20261011/r0-zero-call/build_adjudication_draft.py（金标注入出处 98-100）"
+  ],
+  "not_in_scope": [
+    "不改评分器（P02）",
+    "不做口径归一化的其它字段（P04）",
+    "不生成任何真实裁定（Stage 2 仍阻塞：unresolved 203 条）"
+  ]
+}

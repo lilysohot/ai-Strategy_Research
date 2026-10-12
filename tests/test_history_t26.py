@@ -1,10 +1,9 @@
-"""T2.6 — multi-turn history backfill.
+"""Web transcript persistence and answer backfill.
 
-Maps to the T2.6 checklist:
-    * prior turns -> render_session_history -> workflow_input (history.txt)
-    * after a run, only the final_answer (with final_content / partial handling)
-      is written back as the assistant turn
-    * the workflow's internal messages are NEVER read for the backfill
+The ``turns`` table is the presentation/audit transcript. Cross-turn model
+continuity is tested in ``test_context_inheritance.py`` and comes only from the
+opaque ``session_conversations`` payload; S4 retired the former
+``history.txt`` / ``conversation_history`` path.
 
 Run with::
     uv run pytest tests/test_history_t26.py -q
@@ -19,11 +18,7 @@ from unittest.mock import AsyncMock
 import pytest
 
 from server.config import get_config, run_dir_for
-from server.history import (
-    extract_final_answer,
-    render_session_history,
-    turns_to_dicts,
-)
+from server.history import extract_final_answer
 from server.orchestrator import Orchestrator, _session_uuid
 from server.store import (
     SessionOwnershipError,
@@ -49,62 +44,6 @@ async def db(tmp_path):
     yield cfg
     cfg.database_url, cfg.master_key = orig_url, orig_key
     await reset_engine()
-
-
-# ── render_session_history ─────────────────────────────────────────
-def test_render_empty_returns_empty():
-    assert render_session_history([]) == ""
-
-
-def test_render_user_assistant_transcript():
-    turns = [
-        {"role": "user", "content": "What is A?"},
-        {"role": "assistant", "content": "A is ..."},
-        {"role": "user", "content": "And B?"},
-    ]
-    out = render_session_history(turns)
-    assert "## Conversation so far" in out
-    assert "User: What is A?" in out
-    assert "Assistant: A is ..." in out
-    assert "User: And B?" in out
-    # ordering preserved
-    assert out.index("What is A?") < out.index("And B?")
-
-
-def test_render_excludes_non_conversational_roles():
-    turns = [
-        {"role": "user", "content": "Hi"},
-        {"role": "system", "content": "secret system note"},
-        {"role": "tool", "content": "tool output"},
-        {"role": "assistant", "content": "hello"},
-    ]
-    out = render_session_history(turns)
-    assert "secret system note" not in out
-    assert "tool output" not in out
-    assert "User: Hi" in out
-    assert "Assistant: hello" in out
-
-
-def test_render_limit_keeps_most_recent():
-    turns = [
-        {"role": "user", "content": f"m{i}"} for i in range(10)
-    ]
-    out = render_session_history(turns, limit=3)
-    assert "m0" not in out
-    assert "m9" in out
-    assert out.count("User:") == 3
-
-
-def test_turns_to_dicts_accepts_orm_like():
-    class FakeTurn:
-        def __init__(self, role, content):
-            self.role = role
-            self.content = content
-
-    rows = [FakeTurn("user", "x"), FakeTurn("assistant", "y")]
-    out = turns_to_dicts(rows)
-    assert out == [{"role": "user", "content": "x"},
-                   {"role": "assistant", "content": "y"}]
 
 
 # ── extract_final_answer ───────────────────────────────────────────
@@ -226,16 +165,18 @@ def test_session_uuid_deterministic_for_string():
     assert _session_uuid("other") != a
 
 
-# ── orchestrator: history render + assistant backfill ─────────────
+# ── orchestrator: presentation transcript + assistant backfill ────
 @pytest.mark.asyncio
-async def test_orchestrator_writes_user_turn_and_renders_history(db, tmp_path, monkeypatch):
+async def test_orchestrator_backfills_turns_without_rendering_model_input(
+    db, tmp_path, monkeypatch
+):
     orch = Orchestrator()
     # Stub the heavy parts: slot acquisition + the actual subprocess launch/pump.
     monkeypatch.setattr(orch, "_acquire_slot", AsyncMock())
     monkeypatch.setattr(orch, "_release_slot", AsyncMock())
     monkeypatch.setattr(orch, "_resolve_llm_env", AsyncMock(return_value=None))
 
-    launched: dict[str, str] = {}
+    launched: dict[str, dict] = {}
 
     def make_handle(run_id, params):
         from server.orchestrator import RunHandle
@@ -245,8 +186,8 @@ async def test_orchestrator_writes_user_turn_and_renders_history(db, tmp_path, m
             proc=type("P", (), {"returncode": 0, "stdout": None})(),
         )
 
-    async def fake_launch(self, run_id, params, *, history=""):
-        launched[run_id] = history
+    async def fake_launch(self, run_id, params):
+        launched[run_id] = dict(params)
         return make_handle(run_id, params)
 
     async def fake_pump(self, handle):
@@ -276,7 +217,8 @@ async def test_orchestrator_writes_user_turn_and_renders_history(db, tmp_path, m
     assert [t.role for t in rows] == ["user", "assistant"]
     assert rows[1].content == "answer-A"
 
-    # Second message in the same session should render the prior transcript.
+    # A second message still extends the Web transcript. The model does not get
+    # a separately rendered copy; only the opaque continuity payload may cross.
     run2_uuid = await _seed_run(suuid, user_id)
     run2 = run2_uuid.hex
     await append_turn(session_id=suuid, role="user", content="second question",
@@ -285,10 +227,8 @@ async def test_orchestrator_writes_user_turn_and_renders_history(db, tmp_path, m
         run_id=run2, session_id=sid, session_uuid=suuid,
         prompt="second question", user_id=user_id,
     )
-    hist = launched[run2]
-    assert "first question" in hist
-    assert "answer-A" in hist
-    assert "second question" not in hist  # current turn excluded from history
+    assert launched[run1]["_prior_payload"] is None
+    assert launched[run2]["_prior_payload"] is None
 
     rows = await list_turns(session_id=suuid)
     assert [t.role for t in rows] == ["user", "assistant", "user", "assistant"]
@@ -334,9 +274,9 @@ async def test_assistant_backfill_skips_empty(db):
     assert rows == []
 
 
-# ── worker: history injected as extra_input ───────────────────────
+# ── worker: retired transcript carrier stays retired ─────────────
 @pytest.mark.asyncio
-async def test_worker_injects_history_as_extra_input(db, tmp_path, monkeypatch):
+async def test_worker_ignores_a_stale_history_file(db, tmp_path, monkeypatch):
     from argparse import Namespace
 
     from server import worker as worker_mod
@@ -389,54 +329,8 @@ async def test_worker_injects_history_as_extra_input(db, tmp_path, monkeypatch):
         os.environ.clear()
         os.environ.update(env_snapshot)
     assert rc == 0
-    assert captured["extra_input"].get("conversation_history") == (
-        "## Conversation so far\nUser: prior q\nAssistant: prior a")
-    assert captured["extra_input"].get("is_multi_turn") is True
+    assert "conversation_history" not in captured["extra_input"]
+    assert "is_multi_turn" not in captured["extra_input"]
     # Final answer written to summary.json for the orchestrator to read back.
     summary = (run_root / "summary.json").read_text(encoding="utf-8")
     assert "ok" in summary
-
-
-@pytest.mark.asyncio
-async def test_worker_no_history_when_absent(db, tmp_path, monkeypatch):
-    from argparse import Namespace
-
-    from server import worker as worker_mod
-
-    run_id = uuid.uuid4().hex
-    run_root = run_dir_for(run_id)
-    run_root.mkdir(parents=True, exist_ok=True)
-    # No history.txt written.
-
-    captured = {}
-
-    class FakeBenchmarkSession:
-        async def __aenter__(self):
-            return self
-
-        async def __aexit__(self, *exc):
-            return False
-
-        async def run(self, instruction, *, meta=None, pipeline_id="", extra_input=None):
-            captured["extra_input"] = extra_input or {}
-            return {"final_answer": "ok"}
-
-    monkeypatch.setattr("benchmarks.public.core.kernel_adapter.BenchmarkSession",
-                        FakeBenchmarkSession)
-    monkeypatch.setattr("server.config.run_dir_for",
-                        lambda rid: run_root if rid == run_id else run_dir_for(rid))
-
-    args = Namespace(
-        run_id=run_id, session_id="s", turn_index=1, prompt="q",
-        prompt_addendum="", pipeline_id="stateful-react-agent", backend="native",
-        wall_time=10, max_turns=5, model="", base_url="", api_key="",
-        agent_tools="",
-    )
-    env_snapshot = dict(os.environ)
-    try:
-        await worker_mod.run_once(args)
-    finally:
-        os.environ.clear()
-        os.environ.update(env_snapshot)
-    assert captured["extra_input"].get("conversation_history") == ""
-    assert captured["extra_input"].get("is_multi_turn") is False

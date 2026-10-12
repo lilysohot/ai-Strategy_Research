@@ -18,6 +18,7 @@ from plugins.corpus.structured_scoring import (
     CoverageTarget,
     EvaluationReadiness,
     GoldRecord,
+    MatchingMode,
     QualityPolicy,
     RecordOrigin,
     ReportConclusion,
@@ -120,7 +121,10 @@ def test_frozen_counterexample_is_scored_as_expected(case: dict[str, object]) ->
     candidates = tuple(_fixture_candidate(row) for row in case["candidates"])
 
     report = score_structured_quality(
-        gold, raw_candidates=candidates, validated_candidates=candidates
+        gold,
+        matching_mode=MatchingMode.LEGACY_IDENTITY,
+        raw_candidates=candidates,
+        validated_candidates=candidates,
     )
 
     role = gold[0].role
@@ -142,7 +146,12 @@ def test_role_matching_counts_duplicates_as_fp_and_routing_omissions_as_fn() -> 
         _candidate("i1", Role.MATERIAL_ITEMS, "conditional-view"),
     )
 
-    report = score_structured_quality(gold, raw_candidates=raw, validated_candidates=raw)
+    report = score_structured_quality(
+        gold,
+        matching_mode=MatchingMode.LEGACY_IDENTITY,
+        raw_candidates=raw,
+        validated_candidates=raw,
+    )
 
     claims = report.raw.role(Role.CLAIMS)
     assert (claims.tp, claims.fp, claims.fn) == (1, 1, 0)
@@ -166,6 +175,7 @@ def test_repeated_false_positive_is_classified_as_duplicate_without_hiding_eithe
 
     report = score_structured_quality(
         gold,
+        matching_mode=MatchingMode.LEGACY_IDENTITY,
         raw_candidates=repeated_hallucination,
         validated_candidates=repeated_hallucination,
     )
@@ -195,6 +205,7 @@ def test_raw_and_validated_scores_keep_table_and_llm_claims_separate() -> None:
 
     report = score_structured_quality(
         (table_gold, prose_gold),
+        matching_mode=MatchingMode.LEGACY_IDENTITY,
         raw_candidates=(table, wrong_prose),
         validated_candidates=(table,),
     )
@@ -246,6 +257,7 @@ def test_coverage_failures_keep_denominators_and_background_extraction_cannot_su
     )
     report = score_structured_quality(
         gold,
+        matching_mode=MatchingMode.LEGACY_IDENTITY,
         raw_candidates=(candidate,),
         validated_candidates=(candidate,),
         coverage_targets=(target,),
@@ -279,6 +291,7 @@ def test_coverage_reports_micro_and_per_document_macro_rates() -> None:
 
     report = score_structured_quality(
         (),
+        matching_mode=MatchingMode.LEGACY_IDENTITY,
         raw_candidates=(),
         validated_candidates=(),
         coverage_targets=targets,
@@ -316,6 +329,7 @@ def test_coverage_keeps_frozen_family_and_channel_groups() -> None:
 
     report = score_structured_quality(
         (),
+        matching_mode=MatchingMode.LEGACY_IDENTITY,
         raw_candidates=(),
         validated_candidates=(),
         coverage_targets=targets,
@@ -339,6 +353,7 @@ def test_empty_invalid_and_failed_observations_remain_in_denominator(
     target = CoverageTarget("g-1", "source-a", (CoverageStage.EXTRACTION,))
     report = score_structured_quality(
         (),
+        matching_mode=MatchingMode.LEGACY_IDENTITY,
         raw_candidates=(),
         validated_candidates=(),
         coverage_targets=(target,),
@@ -351,7 +366,9 @@ def test_empty_invalid_and_failed_observations_remain_in_denominator(
 
 
 def test_zero_denominators_are_undefined_and_cannot_pass_gate() -> None:
-    report = score_structured_quality((), raw_candidates=(), validated_candidates=())
+    report = score_structured_quality(
+        (), matching_mode=MatchingMode.LEGACY_IDENTITY, raw_candidates=(), validated_candidates=()
+    )
 
     for role in Role:
         assert report.validated.role(role).precision is None
@@ -369,7 +386,12 @@ def test_validated_candidates_must_be_an_unchanged_subset_of_raw() -> None:
     changed = _candidate("candidate-1", Role.CLAIMS, "changed-after-validation")
 
     with pytest.raises(ScoringInputError, match="unchanged raw candidate"):
-        score_structured_quality((), raw_candidates=(candidate,), validated_candidates=(changed,))
+        score_structured_quality(
+            (),
+            matching_mode=MatchingMode.LEGACY_IDENTITY,
+            raw_candidates=(candidate,),
+            validated_candidates=(changed,),
+        )
 
 
 def test_gold_semantic_identities_must_be_unique_for_one_to_one_matching() -> None:
@@ -379,7 +401,12 @@ def test_gold_semantic_identities_must_be_unique_for_one_to_one_matching() -> No
     )
 
     with pytest.raises(ScoringInputError, match="duplicate gold semantic identity"):
-        score_structured_quality(duplicate_gold, raw_candidates=(), validated_candidates=())
+        score_structured_quality(
+            duplicate_gold,
+            matching_mode=MatchingMode.LEGACY_IDENTITY,
+            raw_candidates=(),
+            validated_candidates=(),
+        )
 
 
 def _perfect_three_role_run(*, critical_error: str | None = None, min_sample: int = 1):
@@ -448,6 +475,7 @@ def test_candidate_thresholds_do_not_unlock_live_trial_without_frozen_developmen
     )
     report = score_structured_quality(
         gold,
+        matching_mode=MatchingMode.LEGACY_IDENTITY,
         raw_candidates=candidates,
         validated_candidates=candidates,
         coverage_targets=targets,
@@ -475,6 +503,7 @@ def test_signed_off_sufficient_run_can_pass_but_critical_error_is_absolute_veto(
     )
     passing = score_structured_quality(
         gold,
+        matching_mode=MatchingMode.LEGACY_IDENTITY,
         raw_candidates=candidates,
         validated_candidates=candidates,
         coverage_targets=targets,
@@ -488,6 +517,7 @@ def test_signed_off_sufficient_run_can_pass_but_critical_error_is_absolute_veto(
     _, bad, _, _, _, _ = _perfect_three_role_run(critical_error="wrong_year")
     vetoed = score_structured_quality(
         gold,
+        matching_mode=MatchingMode.LEGACY_IDENTITY,
         raw_candidates=bad,
         validated_candidates=bad,
         coverage_targets=targets,

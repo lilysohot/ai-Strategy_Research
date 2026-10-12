@@ -1,0 +1,51 @@
+{
+  "schema_version": "items-suggester-v2-preregistration-1",
+  "created_on": "2026-10-12",
+  "status": "preregistered_before_run",
+  "purpose": "执行 issue-34 §7-5：升级门 33 Stage-1 裁定助手。目标不是『更准』（准确率无真值不可测），而是**每条建议附可核验证据链**，从而降低 222 条人工裁定的单位成本。零调用、只读。",
+  "authorization": {"granted_by": "user", "granted_on": "2026-10-12", "scope": "零调用只读；不改金标/契约/评分器；不产出评分输入"},
+
+  "hard_constraints": {
+    "no_gold_injection": "**禁止**把金标 `semantic_fields` 写进候选（这恰是 issue-33/34 旧预填 19 条的错误：`build_adjudication_draft.py:98-100`）。本助手只在对候选**排序**时使用金标记录，且不得改写候选任何字段。",
+    "no_accuracy_claim": "无人工裁定真值 ⇒ 本批**不得**报『准确率/召回』；只报覆盖、可及率、证据链完整度与与旧建议的差异。",
+    "suggestion_policy": "沿用契约 v4 草案 `adjudication_clause.tooling`：建议仅作辅助；**抽样或独立复核时必须隐藏建议**。"
+  },
+
+  "signals": {
+    "slot_overlap": {"weight": 0.45, "definition": "候选 slot ∈ 金标证据跨度的覆盖槽位（复用 evidence/36 covering_slots 同法）", "gold_answer_free": true},
+    "verbatim_quote": {"weight": 0.35, "definition": "候选 evidence_quote 与金标 quote（或 context_evidence 引文）互相包含", "gold_answer_free": true},
+    "number_hit": {"weight": 0.1, "definition": "候选 text/value 与金标 quote 的数值交集 ≥1；≥2 时 +0.2", "gold_answer_free": true},
+    "bigram_containment": {"weight": 0.1, "definition": "金标 proposition/condition/value 文本在候选 text 中的字符 2-gram 包含率 ≥0.5", "gold_answer_free": false},
+    "enum_agreement": {"weight": 0.05, "definition": "归一化后 semantic_type/statement_role/perspective/polarity 中 ≥3 项一致", "gold_answer_free": false}
+  },
+  "confidence_rule": {
+    "high": "slot_overlap AND verbatim_quote",
+    "medium": "slot_overlap OR verbatim_quote",
+    "low": "score >= 0.1 且未达 medium",
+    "none": "score < 0.1"
+  },
+
+  "exit_criteria": {
+    "EC-S1": "R2（存在逐字引文证据链的金标条数）必须与 evidence/35 的 `records_with_exact_candidate_quote` = 39 一致；不一致须解释口径差异。",
+    "EC-S2": "只报覆盖/可及/证据链/差异四类量，**不得**出现准确率或召回字样。",
+    "EC-S3": "每条建议必须携带证据链（命中的信号与命中值）；不得只给分数与置信度。",
+    "EC-S4": "必须量化与 v1/v2 旧建议的差异（top1 变化数、置信分布变化）。",
+    "EC-S5": "助手不得改写任何候选字段；输出中候选对象与工作台 v2 逐字节相同。",
+    "EC-S6": "幂等 + `--no-write`；判据外新发现进 backlog。"
+  },
+
+  "out_of_scope": [
+    "不产出评分输入、不报分、不改门 33 产物（工作台 v2 字节不变）",
+    "不重算或替换门 33 的 adjudications 骨架",
+    "不宣称建议可用于自动评分"
+  ],
+
+  "artifacts": [
+    "r0-zero-call/preregistered-suggester-v2.json（本文件，write-once）",
+    "r0-zero-call/suggester_v2.py（支持 --no-write，幂等）",
+    "r0-zero-call/suggestions-v2.json",
+    "r0-zero-call/suggester-v2-report.json",
+    "r0-zero-call/suggester-v2-report.md",
+    "r0-zero-call/MANIFEST.json"
+  ]
+}

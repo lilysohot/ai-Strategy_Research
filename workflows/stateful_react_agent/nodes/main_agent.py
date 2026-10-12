@@ -1314,6 +1314,12 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         "final_answer": final_text,
         "final_content": final_text,
         "replay_decision": replay_decision,
+        # The write-time summary call's own tokens (issue 01 §12.11 待办 2): the
+        # observer reports them on the loop result, they ride the state and the
+        # worker's summary.json into ``runs.usage_json.replay.summary_usage``.
+        # Separate from the run's counters on purpose — folding them in would
+        # redefine every historical number instead of exposing the cost.
+        "summary_usage": result.metadata.get("summary_usage") or {},
         "session_turn": build_session_turn(
             _language_probe(state, question),
             result.messages,

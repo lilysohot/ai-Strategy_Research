@@ -1,0 +1,25 @@
+{
+  "schema_version": "items-p07-closure-manifest-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "inputs": {
+    "evidence/45-contract-v4-draft-20261012/r0-zero-call/rename-record.json": "sha256:7ca3a6034f42c29056636072164668998e5fe8210452df23c709a267e2cd26f4",
+    "evidence/45-contract-v4-draft-20261012/r0-zero-call/MANIFEST.json": "sha256:fa8022ca299d2653091ca3832d6620691633f3214665a3dc5876402e762b2ecb",
+    "evidence/45-contract-v4-draft-20261012/r0-zero-call/draft_contract_v4.py": "sha256:a394037ee8d657551ef37f89d2b9309b9efdf829acb8d03deab131beee39bcc6",
+    "evidence/45-contract-v4-draft-20261012/r0-zero-call/contract-v4-review.md": "sha256:753532e8074aa0bf8a9f9cddf2b0e97b9b19519ed95b154407fdfac2e6c0ccd7",
+    "evidence/41-items-chain-accounting-20261012/r2-proposals/contract-v4-draft.md": "sha256:f8a8edf1f7f1b5726fec958c1d7a20158d8faeabd71e20a67b20c81be769afd0",
+    "issues/41-items-chain-accounting-freeze.md": "sha256:238094370d25bcca50ce432e0ecc7c0997312fa028a3386d2069cc99517e6945"
+  },
+  "outputs": {
+    "p07-closure.json": "sha256:aa90337916ea9015d132ed03986b9b6c0375e1b62ae0c3c69aac796f5e894b5d",
+    "p07-closure.md": "sha256:fd8327a51bf0e2d224f36b518b5e4a3a5080b75e30ce22ef0d2da1db8e751305",
+    "reference-5-fix-record.json": "sha256:e2c80d723f29a104a2ea66e8923f09fe07d3182b4e1fe6aa2354b41bb15389c2"
+  },
+  "in_place_edits": 0,
+  "post_manifest_change": {
+    "changed": ".scratch/claims-r2-role-isolation/evidence/41-items-chain-accounting-20261012/r2-proposals/contract-v4-draft.md",
+    "sha256_before": "sha256:f8a8edf1f7f1b5726fec958c1d7a20158d8faeabd71e20a67b20c81be769afd0",
+    "sha256_after": "sha256:620bc6cc75763a3561a0b27829c86d5aa26815efc65a378341a0dcdabdd147a3",
+    "authorised_by": "U 2026-10-12"
+  }
+}

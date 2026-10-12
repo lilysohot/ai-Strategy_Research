@@ -170,6 +170,25 @@ intermediates.
 in-memory** implementation in this distribution; persisted traces, cost tracking,
 and checkpointing are owned by the `apodex` layer instead (see below).
 
+### Web multi-turn continuity
+
+The Web server's cross-turn model context is the opaque payload in
+`session_conversations`. The parent orchestrator stages it as
+`prior_conversation.json`; the worker passes it through; and the
+`stateful-react-agent` workflow validates it before replay. `turns` remains the
+presentation and audit transcript only. Do not recreate `history.txt`, inject a
+`conversation_history` field, or render `turns` back into the prompt: those paths
+were retired because they duplicate history and break prefix-cache stability.
+Watch-triggered runs neither read nor write the continuity carrier.
+
+The replay window is configured by `REPLAY_MAX_TURNS`, `REPLAY_MAX_TOKENS`, and
+`REPLAY_MAX_TURN_STEP` (defaults 10, half the model input limit, and 5). The token
+limit is always hard; the turn step is a hysteresis band that avoids sliding the
+window every turn. Keep the standing long-conversation regressions in
+`tests/test_context_inheritance.py` when changing this path, and use
+`scripts/replay_stats.py` to inspect decisions, cache reuse, and summary-call
+usage from `runs.usage_json`.
+
 ### Terminal layer (`apodex/`)
 
 Entry point is `apodex.cli:main`, exposed as both `frontier-agent` and the
