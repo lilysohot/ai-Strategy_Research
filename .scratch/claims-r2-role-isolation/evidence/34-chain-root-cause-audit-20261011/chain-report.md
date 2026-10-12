@@ -9,6 +9,8 @@
 - 修订：r2（2026-10-11，**签认前**补记，零调用）：据 `evidence/36-l9-redo-and-baseline-20261011/` 实测修订 §3 L3 行、§5.2 表第 2 行、§6 与 §7-8 状态，新增 §5.8。修订依据为产物哈希，见 §5.8 表。
 - 修订：r3（2026-10-12，**签认前**补记，零调用）：据 `evidence/37-store-baseline-and-route-decision-20261012/` 实测**收回 r2 的 EC-1 与「route a 无法产出契约形态记录」两条**（其候选基线取自门 33 工作台投影，非生产端产物），新增 §5.9 与 §7-10，§9 增路线裁定行。
 - 修订：r4（2026-10-12，**签认前**补记，零调用）：执行 §7-10，产出 `evidence/38-gate33-workbench-rebuild-20261012/`（工作台 v2 严格超集），新增 §5.10，§7-10 标为已完成。
+- 修订：r5（2026-10-12，**签认前**补记，零调用）：执行 §7-9，产出 `evidence/39-roles-l3-audit-20261012/`，新增 §5.11 与 §7-12，§7-9 标为已完成，§9 增 relations 契约缺陷裁定行。
+- 修订：r6（2026-10-12，**签认前**补记，零调用）：产出 `evidence/40-route-ab-decision-inputs-20261012/`（同量纲成本-收益表 / 冻结影响清单 / route b 受控实验预注册草案），新增 §5.12 与 §7-13、§7-14，§9 增两行裁定项。
 
 ## 0. 口径声明（先声明谓词，再看数字）
 
@@ -89,6 +91,18 @@
 > `38-…/r0-zero-call/workbench-v2.json` = `0bd9e660…36558`；
 > `38-…/r0-zero-call/workbench-v2.md` = `6acda8a7…b72f6e`；
 > `38-…/r0-zero-call/rebuild_workbench.py` = `fb7aca19…11d0e`。
+
+> r5 补记新增产物（零调用只读，sha256 实测）：
+> `39-…/r0-zero-call/preregistered-roles-l3.json` = `8f970041…ba25a`；
+> `39-…/r0-zero-call/roles-l3-audit.json` = `5a446a54…90b096`；
+> `39-…/r0-zero-call/roles-l3-audit.md` = `91ee96f9…e82b3`；
+> `39-…/r0-zero-call/roles_l3_audit.py` = `c7018773…a3fa7`。
+
+> r6 补记新增产物（零调用只读，sha256 实测）：
+> `40-…/r0-zero-call/preregistered-ab-inputs.json` = `97979128…271b8`；
+> `40-…/r0-zero-call/ab-cost-benefit.json` = `c32a4509…7d2e0`；
+> `40-…/r0-zero-call/freeze-impact.json` = `a2200c5f…dea3dd`；
+> `40-…/r0-zero-call/route-b-experiment-protocol.json` = `88fddc8c…f43786`（草案，未执行）。
 
 > 记账：`evidence/34-chain-root-cause-audit-20261011/` 与 `evidence/35-gold-audit-20261011/` 当前**未入库**（`git status` 为 `??`）。
 
@@ -188,6 +202,7 @@ L9 是对 L3∩L7 的**测量**。把它计入节点数会重复计算同一处�
 
 - 本次只测 `material_items`。契约对 `claims` / `material_relations` 另立必需字段清单（`role_required_fields.claims` 含 `subject/metric/period/unit/value/factuality/attribution/source_stance/estimate_status/qualifier`），生产端字段清单按角色各自冻结在提示词字符串里（items 清单见 `material_semantics.py:174-175`，其中确无 `proposition/attribution/source_stance`）。
 - 判定：同型接缝在另外两个角色上**结构条件具备，但未实测**，记为 `not_verified`。不得据 items 单角色结果推断"也坏"（那是把推测写成结论），也不得写成"通过"（那是把未测写成已过）。须按 §7-9 做零调用同型审计后方可下结论。
+- **r5 更新**：§7-9 已完成，结论见 §5.11 —— `material_relations` = **不同型**（协议范围外 + 契约含金标主键致结构性不可评分）；`claims` = **疑似同型但仅 code_level**（无产物，四个"归属/来源态度/估计状态"族字段无载体）。"未实测"状态对 claims 仍然成立。
 
 ### 5.7 普遍性评估：按本报告修复是否可推广（r1 补记）
 
@@ -296,7 +311,67 @@ L9 是对 L3∩L7 的**测量**。把它计入节点数会重复计算同一处�
 
 ⇒ **Stage 2 的"读不到字段"这一阻塞已解除**；剩下的阻塞是 §7-11 的口径条款与 §9 的路线裁定，不是工具问题。
 
+### 5.11 claims / material_relations 同型 L3 审计（r5 补记，§7-9 已完成）
+
+产物：`evidence/39-roles-l3-audit-20261012/r0-zero-call/`（零调用只读；幂等、支持 `--no-write`；预注册先于运行落盘）。
+
+| 产物 | sha256 |
+|---|---|
+| 预注册 `preregistered-roles-l3.json` | `8f970041…ba25a` |
+| `roles-l3-audit.json` | `5a446a54…90b096` |
+| `roles-l3-audit.md` | `91ee96f9…e82b3` |
+| 脚本 `roles_l3_audit.py` | `c7018773…a3fa7` |
+
+金标三角色齐备：`claims` 20、`material_items` 48、`material_relations` 24。
+
+**① `material_relations`：不同型——协议范围外 + 契约结构性不可评分。**
+- 实测两源 treatment 的 `understanding.relations` 均为 **0 条**（协议明文：`MATERIAL_ITEM_JSONL_PROMPT`"本阶段只抽 speakers 和 items，不输出 relations"）⇒ 属**范围外**，**不是字段错配**（按 §0 规则：非根因不得写成通过，范围外也不得写成缺陷）。
+- **新增缺陷（EC-B4）**：契约 `role_required_fields.material_relations` 含 `from_gold_record_id` / `to_gold_record_id`，即要求候选携带**金标主键**。严格 identity 匹配要求候选字段逐字等于金标 ⇒ 该角色在现评分器下**恒为 0**，与模型能力无关。
+
+**② `claims`：疑似同型，但只在 code_level（未在数据上验证）。**
+- 本工作流无 claims 运行产物（gate-32 为 items-only）。
+- code_level：`plugins/corpus/claims_detail.py::ClaimRecord` 对契约 11 个必需字段中，`subject`/`metric`/`unit`/`value` 直接同名、`period`/`qualifier` 为派生、`factuality` 为别名 `kind`（**取值域未核验**），而 **`attribution`/`perspective`/`source_stance`/`estimate_status` 四个字段无任何承载字段**——与 items 缺的正是**同一族**字段。
+- ⇒ 记 `not_observed_on_data` + `code_level`；**不得**写成"同型接缝已确认"。
+
+**③ §7-11 建议（EC-B5）**：口径条款应写成**每角色通用的读路径机制**，但本期只对 items 落地（claims 缺产物、relations 属范围外），机制留接口——否则将来必然在 claims 上重做一次。
+
+### 5.12 路线 a/b 的裁定输入（r6 补记）
+
+产物：`evidence/40-route-ab-decision-inputs-20261012/r0-zero-call/`（零调用只读；幂等、支持 `--no-write`；预注册先于运行落盘）。
+
+| 产物 | sha256 |
+|---|---|
+| 预注册 `preregistered-ab-inputs.json` | `97979128…271b8` |
+| 同量纲表 `ab-cost-benefit.json` | `c32a4509…7d2e0` |
+| 冻结影响 `freeze-impact.json` | `a2200c5f…dea3dd` |
+| 实验草案 `route-b-experiment-protocol.json`（未执行） | `88fddc8c…f43786` |
+
+**① 同量纲表（单位：模型调用／人工裁定条数／冻结修订／门次／零调用代码改动）。**
+
+| 维度 | 共同项 | a 边际 | b 边际 | 独立 | 共同项 ≥ 两边际之和 |
+|---|---|---|---|---|---|
+| `model_calls` | 0 | 0 | **24** | 1 | False |
+| `human_adjudication_records` | **222** | 0 | 0（但须在**新**候选集上重做） | 1 | True |
+| `freeze_revisions` | 2 | 1 | 1 | 0 | True |
+| `gate_runs` | 1 | 0 | 1 | 1 | True |
+| `zero_call_code_changes` | 2 | 2 | 2 | 0 | False |
+
+**收益三态**：S0 现状 = **0**（实测）；S1 共同项完成后 = **[7, 39]**（下界＝归一化后字段逐字对齐、上界＝逐字证据可达，**均为实测**）；S2 加补跑、S3 加 route b 重抽 = **[7, 48]**，均标 **unverified**。人工裁定区间 = **32** 条（39 − 7）。
+
+**② 伪二分假设（EC-AB3）**：在 `human_adjudication_records`／`freeze_revisions`／`gate_runs` 三个维度上**成立**（共同项 ≥ 两边际之和）；在 `model_calls`（0 vs 24）与 `zero_call_code_changes`（2 vs 4）上**不成立**。
+⇒ 路线分叉的真实差异只有**"24 次模型调用 + 2 处代码改动"**这一小块；其余成本两边都要付，且 route b 无法复用 route a 的人工裁定结果。
+
+**③ 冻结影响（EC-AB4）**：共 9 条绑定物件。直接失配的是 `material_semantics_module`（`1305dba1…`）与 4 个 plan 文件；金标冻结链里已漂移的契约绑定（v2→v3）须与 v4 **同轮**修；`treatment store` 对象须保持可读（B3）；`frozen-gold.json` 与 `structured_scoring.py` **声明不受影响**（后者不在 gate-32 绑定清单内，仍建议 v4 轮显式复核一次）。
+
+**④ route b 受控实验草案（EC-AB5，未执行）**：同代码双臂（control＝现冻结协议文本／treatment＝**只改提示词**）；指标 M1 `quoted_other`、M2 `condition`、M3 `behavior`、M4 `speech_role` 分布、M5 协议违规须为 0、M6 逐字证据可达率、M7 fail-closed 不得放大；判据 EC-X1（任一指标达金标计数 ≥50% 且 M5=0 ⇒ 口径歧义成立）、EC-X2（全无改善 ⇒ 属模型能力，route b 不得以收益为由）、EC-X5（M7 上升即终止回滚）；预算试跑 4 次／全量 48 次（＝24×2 臂，依据 gate-32 `expected_attempts`）；授权项待填。
+
+**⑤ 仍缺（本批不代替）**：缺口 1 = **32 条区间的人工可裁定比例**（需 xyl 抽样裁定）；缺口 2 = **route b 的收益**（需执行上述实验）。
+
 ## 6. 量化天花板（诊断口径，非生产报分口径）
+
+> **2026-10-12 更正（见 §11）**：下表中凡取自门 33 草案的数字均**受污染**，不得用于门槛判断。
+> 草案助手把金标字段回填进候选（违反契约 `matching.normalization`），"命中"因此测的是回填操作。
+> 仍可靠的只有"物理丢失"类数字（48 − 7、md 22 − 7、7 条 critical）。结论方向不变。
 
 分母 = 48 条已签认金标；命中数取自门 33 Stage 1 **草案建议**（**未经人工裁定，precision 依契约记 N/A**）。阈值取门 28 `quality_requirements`（signed，权威）。
 
@@ -328,7 +403,10 @@ L9 是对 L3∩L7 的**测量**。把它计入节点数会重复计算同一处�
 | 6 | 记账与口径一致性：契约哈希 v2→v3 绑定、`validation-report` 空缺、门 32 判据与被测对象同轴、评分器阈值与门 28 对齐 | 否则任何"契约已绑""协议已验""阈值即口径"的陈述都不可信 | 记账，零调用 | 阈值变更需具名签认 |
 | 7 | 读路径规则写成**与记录 ID 无关**的字段语义规则，并逐字段给出"候选字段 → 契约字段"映射 + 不可派生反例清单（§5.5） | 否则修复只对本批 19 条成立、不可推广（§5.7） | 契约 v4 条款 | 需裁定 |
 | 8 ✔ | **已完成（2026-10-11，授权后）**：用留出记录重做 L9、禁止金标注入；结论见 §5.8 | 现行 `19/48` 是循环量，不能作为路线 a 的可行性证据（§5.4） | 零调用 | 否 |
-| 9 | 对 `claims` / `material_relations` 做同型 L3 零调用审计 | 另两角色的同型接缝未验证，不得以 items 单角色推断（§5.6） | 零调用 | 否 |
+| 9 ✔ | **已完成（2026-10-12）**：claims / material_relations 同型 L3 零调用审计，结论见 §5.11 | 另两角色的同型接缝未验证，不得以 items 单角色推断（§5.6） | 零调用 | 否 |
+| 12 | 修 `material_relations` 契约：`from/to_gold_record_id` 要求候选携带**金标主键**，严格 identity 下恒为 0；须改为裁定映射或删去 | 该角色在现契约下**结构性不可评分**（§5.11 EC-B4） | 契约条款 | 需具名签认 |
+| 13 | 执行 route b 收益的受控双臂实验（预注册草案已就绪） | 缺它则 route b 的收益永远只是假设（§5.12 缺口 2） | 真实调用 | **需授权**（模型／`attempts_max`／节流／预算／样本包号） |
+| 14 | 对 32 条人工裁定区间做分层抽样裁定（xyl） | 缺它则 route a 的收益只有下界 7 与上界 39（§5.12 缺口 1） | 人工 | 需 xyl |
 | 10 ✔ | **已完成（2026-10-12）**：重建门 33 工作台 v2（严格超集，补回 `speaker_ref` 与 layer B 字段），结论见 §5.10 | 现行工作台缺该字段（影响 222/222 条），Stage 2 人工裁定**不可执行**（§5.9） | 零调用，工具 | 否 |
 | 11 | 定枚举**口径归一化条款**（`perspective`／`speech_role` 等） | 金标与生产端同轴默认值相反；不立此条款，任何匹配恒为 0（§5.9） | 契约条款 | 需具名签认 |
 
@@ -356,11 +434,58 @@ L9 是对 L3∩L7 的**测量**。把它计入节点数会重复计算同一处�
 | 读路径普遍性（§5.7 三条硬要求） | ☐ 接受三条并写入契约 v4　☐ 只修本批数据 | | |
 | 跨角色范围 | ☐ items-only　☐ 每角色各建读路径（先做 §7-9 审计） | | |
 | B-1 两条 md 记录（NT-I06／NT-I41） | ☐ 纳入补跑范围　☐ 判为模型 `no_supported_item`　☐ 关联方法差异（非损失） | | |
+| `material_relations` 契约缺陷（§7-12） | ☐ 改为裁定映射　☐ 删去 `from/to_gold_record_id`　☐ 该角色本轮不纳入评分 | | |
+| route b 受控实验授权（§7-13） | 模型／`attempts_max`／节流／预算上限／样本包号（预注册草案见 §5.12④） | | |
+| 32 条区间抽样裁定（§7-14） | 抽样量／分层方式（决定 route a 收益） | | |
 | 路线 a/b 最终裁定（r3 依据） | ☐ route a（零调用：修投影 + 复用 layer B 派生 + 口径归一化条款；自动对齐 7/48，余靠人工）　☐ route b（重抽统一口径，作废门 32 冻结）　☐ a + 定向补跑 | | |
 | 枚举口径归一化条款（§7-11） | ☐ 以金标口径为准（`source_explicit→unknown` 等）　☐ 维持生产端口径并改金标　　须具名签认 | | |
 
 ## 10. 签认栏
 
-- 复核人：　　　　日期：
+- 复核人：　xyl　　　日期：2026-10-12
 - 结论：☐ 认可本口径　☐ 退回修改
 - 备注：
+
+## 11. 修订记录（2026-10-12，记账核对票带出；原编 36 号，后改号为 41）
+
+原文不改写，只在此登记更正。依据 `evidence/41-items-chain-accounting-20261012/r0-zero-call/accounting-checks.json`。
+
+1. **§6 的草案来源数字受污染（AC-5 / AC-6）**：Stage-2 v1 助手把**金标**的 `semantic_fields` 写进候选
+   `canonical_observed_fields` 并预置 `judgement=accepted`，违反契约 `matching.normalization`
+   「不从金标反填候选缺字段」与 `matching.projection`。因此：
+   - `19/48`（§3 L9 与 §6）**不是预期待匹配数**，它是"把金标拷进候选"这一步的产物；
+   - `critical_matched = 1`、`risk/condition matched = 5` 同样受污染；
+   - **仍可靠**：48 − 7 = 41/48；md 22 − 7 = 15；7 条 critical 物理缺失（均来自
+     residual-attribution 与 Issue 35，与草案无关）。§6 的结论（补跑是必要前提）不变。
+2. **新增：评分器匹配模式与契约冲突（AC-4，§3 L7 的加强）**：评分器按
+   `(role, source_id, origin, semantic_fields)` **严格相等**匹配（`structured_scoring.py:118-142,457`），
+   而契约 v2 起即写明 `matching.mode = human_adjudicated_semantic_equivalence…` 且"proposition 不用
+   逐字字符串相等判定"。故 L7 不止"未实现 v3 读路径"，其**匹配机制本身即违反契约**。
+3. **新增：契约合法操作下自动匹配为 0**（`contract-gap-report.json`）：即使只比较双方都携带的 5 个
+   共有字段（`semantic_type/statement_role/speech_role/perspective/polarity`），匹配数仍为 **0**。
+   推论：读路径**不能**实现为"共有字段相等"，只能定义载体映射（候选 `text` → 契约 `proposition`），
+   等价性必须由**人工**判定，评分器必须**消费裁定**而非自行重算。
+4. **新增：契约是三方孤例（§5.2 的机读复核）**：候选缺 4 项（`proposition`/`attribution`/
+   `source_stance`/`speaker_ref`）；金标比契约多若干项。契约描述的形态，生产端不产出、金标也不完全使用。
+
+## 12. 与并行会话实测的对账（2026-10-12，Issue 41 带出）
+
+同一链路上另有会话产出 `evidence/36-l9-redo-…`（L9 重做）、`37-…`（路线决定）、`38-…`
+（工作台 v2）、`40-…`（路线 a/b 成本-收益）。其实测推翻／修正本文若干数字，**以实测为准**：
+
+| 本文原写 | 并行实测 | 处置 |
+|---|---|---|
+| §6：覆盖槽位内无候选 = 7 条 | **9 条**（除丢包区 7 条外，另有 NT-I06 `char:1393-1655`、NT-I41 `char:5055-5071`，且这两条不在 residual-attribution 的归因里） | **撤回** |
+| §6：`48 − 7 = 41/48`、`md 22 − 7 = 15` | `48 − 9 = 39`；且 route a 的记录级上界分两种口径：**strict 0/48** 与 **carrier-only 35/48**，两者**不得合并表述** | **更正** |
+| §6：md 分源召回 0.682 → 判"不可达" | 该差异 **100% 由 corpus_absent 解释**；剔除无候选记录后 md/docx 同为 1.0 ⇒ 规则本身跨源成立 | **更正**（结论降级：随语料缺口，非规则失效） |
+| §5.2：候选 `semantic_fields` 11 项含 `speaker_ref` | 222 条候选 `speaker_ref` 载体 **0**、`proposition` key 存在数 **0** | **更正** |
+| §5.1：condition 读路径"正是为条件组设计" | 方向对，但 10 条 condition 金标中仅 **1** 条覆盖槽位内有 condition 候选 ⇒ 该读路径**几乎无可读数据** | **补正** |
+| §3 L9 记 `19/48`（金标字段形态） | 与 §11-1 一致：`B_gold_injected=19`、`A_native=0` ⇒ 19/48 全部来自金标注入 | 已由 §11 更正 |
+
+**仍然成立的结论**：
+
+1. 根因接缝唯一（L3 ≡ L7）；L9 是测量不是节点；契约是三方孤例（§4.1、§5.2）。
+2. 阻塞出分的三项（接缝路线、Stage-2 结构阻塞、丢失包）——其中**接缝路线已由 `37` 裁定为 route a**；
+   故本文 §7 的修复依赖序应由 `40` 的工作项表（C1–C6 / A1–A2 / B1–B4 / I1–I2）取代。
+3. **补跑丢失包（`40` 的 I1）仍是必要前提**：9 条覆盖槽位内无候选的记录中，7 条属丢包区且
+   全部为 critical；`unresolved_candidates_max = 0` 与人工裁定 222 条是与路线无关的共同项。

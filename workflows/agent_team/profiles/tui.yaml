@@ -43,6 +43,15 @@ agent:
   tool_timeout_s: 360
   llm_timeout_s: 600
   research_wall_time_s: ${RESEARCH_WALL_TIME:-9000}
+  # Cross-turn replay window (issue 01 §12.6). The dump keeps at most
+  # `replay_max_turns` user turns, but only cuts once the window has overflowed
+  # by `replay_max_turn_step` — a hard bound re-evaluated on every write is over
+  # the limit on every turn once the window is full, which slides the window one
+  # position per turn and discards the cached prefix from the system prompt
+  # onward (measured: 27% cache reuse instead of 94%). `step: 0` restores the
+  # pre-hysteresis behaviour (and is only useful to reproduce it).
+  replay_max_turns: ${REPLAY_MAX_TURNS:-10}
+  replay_max_turn_step: ${REPLAY_MAX_TURN_STEP:-5}
   # Reasoning-runaway guardrails. Abort a streamed reply that is still only
   # reasoning after 120s or ~16K reasoning tokens, and bound the whole logical
   # call (admission wait + attempts + backoff) at 900s. Setting either

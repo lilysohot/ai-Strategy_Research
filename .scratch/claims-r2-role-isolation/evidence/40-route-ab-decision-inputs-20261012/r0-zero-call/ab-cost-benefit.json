@@ -1,0 +1,394 @@
+{
+  "schema_version": "items-ab-cost-benefit-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "preregistration": {
+    "path": "preregistered-ab-inputs.json",
+    "sha256": "sha256:97979128647373bfe5225fbb794f6728e5430ef0f23e0482425053439b6271b8"
+  },
+  "units": {
+    "cost_dimensions": [
+      "model_calls",
+      "human_adjudication_records",
+      "freeze_revisions",
+      "gate_runs",
+      "zero_call_code_changes"
+    ],
+    "benefit_dimension": "matchable_gold_records（分 measured / bounded / unverified 三态）",
+    "rule": "成本与收益必须同行同表给出；禁止用『确定性比例』比『代价清单』；未证数字不得写成具体值。"
+  },
+  "measured_inputs": {
+    "gold_denominator": 48,
+    "field_identical_after_normalization": 7,
+    "verbatim_evidence_reachable": 39,
+    "records_without_candidate": 9,
+    "lost_packet_records": 7,
+    "absent_required_fields_items": [
+      "source_stance"
+    ],
+    "relations_structurally_unscoreable": [
+      "from_gold_record_id",
+      "to_gold_record_id"
+    ],
+    "gate32_expected_attempts": {
+      "industrial-fulian-md": 10,
+      "optical-module-docx": 14
+    },
+    "gate32_automatic_retries": 0,
+    "gate32_extractor_version": "material-semantics-32",
+    "gate28_unresolved_candidates_max": 0,
+    "contract_matching_mode": "human_adjudicated_semantic_equivalence_then_one_to_one_mapping",
+    "human_adjudication_band": 32
+  },
+  "work_items": [
+    {
+      "id": "C1",
+      "name": "口径归一化条款（契约 v4 修订）",
+      "bucket": "common",
+      "cost": {
+        "model_calls": 0,
+        "human_adjudication_records": 0,
+        "freeze_revisions": 1,
+        "gate_runs": 0,
+        "zero_call_code_changes": 0
+      },
+      "basis": "issue-34 §5.9 口径差实测（perspective 0→32 等）；§7-11",
+      "status": "measured_basis"
+    },
+    {
+      "id": "C2",
+      "name": "Stage 2 阻塞条款：候选→契约字段由谁负责、凭据是什么",
+      "bucket": "common",
+      "cost": {
+        "model_calls": 0,
+        "human_adjudication_records": 0,
+        "freeze_revisions": 0,
+        "gate_runs": 0,
+        "zero_call_code_changes": 0
+      },
+      "basis": "并入 C1 同一份 v4（issue-34 §7 注：1 与 3 应合并为一轮）",
+      "status": "authored"
+    },
+    {
+      "id": "C3",
+      "name": "评分器读契约 + 阈值单源（对齐门 28）",
+      "bucket": "common",
+      "cost": {
+        "model_calls": 0,
+        "human_adjudication_records": 0,
+        "freeze_revisions": 1,
+        "gate_runs": 0,
+        "zero_call_code_changes": 1
+      },
+      "basis": "全仓零代码读 scoring-contract.json；阈值硬编码 structured_scoring.py:332-340；阈值变更须具名签认",
+      "status": "measured_basis"
+    },
+    {
+      "id": "C4",
+      "name": "重建门 33 工作台（补 speaker_ref 与 layer B 字段）",
+      "bucket": "common",
+      "cost": {
+        "model_calls": 0,
+        "human_adjudication_records": 0,
+        "freeze_revisions": 0,
+        "gate_runs": 0,
+        "zero_call_code_changes": 1
+      },
+      "basis": "evidence/38 已完成（§5.10），成本已付",
+      "status": "done"
+    },
+    {
+      "id": "C5",
+      "name": "人工裁定全部候选（unresolved_candidates_max = 0 的硬要求）",
+      "bucket": "common",
+      "cost": {
+        "model_calls": 0,
+        "human_adjudication_records": 222,
+        "freeze_revisions": 0,
+        "gate_runs": 0,
+        "zero_call_code_changes": 0
+      },
+      "basis": "门 33 草案：accepted 19 + pending 203 = 222；契约 matching.mode 要求人工裁定；门 28 unresolved_candidates_max=0",
+      "status": "measured_basis"
+    },
+    {
+      "id": "C6",
+      "name": "门 33 Stage 3 严格评分",
+      "bucket": "common",
+      "cost": {
+        "model_calls": 0,
+        "human_adjudication_records": 0,
+        "freeze_revisions": 0,
+        "gate_runs": 1,
+        "zero_call_code_changes": 0
+      },
+      "basis": "issue-33 §3 三步流程",
+      "status": "authored"
+    },
+    {
+      "id": "A1",
+      "name": "实现正式读路径（layer A + layer B + text → 契约字段）",
+      "bucket": "route_a_marginal",
+      "cost": {
+        "model_calls": 0,
+        "human_adjudication_records": 0,
+        "freeze_revisions": 1,
+        "gate_runs": 0,
+        "zero_call_code_changes": 1
+      },
+      "basis": "工作台 v2 已给出 contract_view 雏形（evidence/38）；条款并入 v4",
+      "status": "measured_basis"
+    },
+    {
+      "id": "A2",
+      "name": "口径映射的回归测试（防映射随数据/模型漂移）",
+      "bucket": "route_a_marginal",
+      "cost": {
+        "model_calls": 0,
+        "human_adjudication_records": 0,
+        "freeze_revisions": 0,
+        "gate_runs": 0,
+        "zero_call_code_changes": 1
+      },
+      "basis": "映射是事后口径，非源头口径（issue-34 §5.7 读路径须与记录 ID 无关）",
+      "status": "authored"
+    },
+    {
+      "id": "B1",
+      "name": "把口径写进协议文本（material_semantics.py 提示词）",
+      "bucket": "route_b_marginal",
+      "cost": {
+        "model_calls": 0,
+        "human_adjudication_records": 0,
+        "freeze_revisions": 0,
+        "gate_runs": 0,
+        "zero_call_code_changes": 1
+      },
+      "basis": "gate-32 freeze-manifest 绑定 material_semantics_module = 1305dba1…",
+      "status": "measured_basis"
+    },
+    {
+      "id": "B2",
+      "name": "重抽：单臂 24 包（md 10 + docx 14）；含对照臂则 48",
+      "bucket": "route_b_marginal",
+      "cost": {
+        "model_calls": 24,
+        "human_adjudication_records": 0,
+        "freeze_revisions": 0,
+        "gate_runs": 0,
+        "zero_call_code_changes": 0
+      },
+      "basis": "gate-32 expected_attempts = {md:10, docx:14}（实测字段）；若需 control 臂归因则 ×2",
+      "status": "measured_basis",
+      "variant_control_arm": 48
+    },
+    {
+      "id": "B3",
+      "name": "推进 extractor_version 并登记 _HISTORICAL_RUN_PAYLOAD_SHAPES",
+      "bucket": "route_b_marginal",
+      "cost": {
+        "model_calls": 0,
+        "human_adjudication_records": 0,
+        "freeze_revisions": 0,
+        "gate_runs": 0,
+        "zero_call_code_changes": 1
+      },
+      "basis": "环境硬约定：推进 version 不登记旧 current 会导致旧产物读不回（现 current 产物为 material-semantics-32）",
+      "status": "measured_basis"
+    },
+    {
+      "id": "B4",
+      "name": "新冻结 + 新门（gate-32 冻结作废）",
+      "bucket": "route_b_marginal",
+      "cost": {
+        "model_calls": 0,
+        "human_adjudication_records": 0,
+        "freeze_revisions": 1,
+        "gate_runs": 1,
+        "zero_call_code_changes": 0
+      },
+      "basis": "见 freeze-impact.json",
+      "status": "measured_basis"
+    },
+    {
+      "id": "I1",
+      "name": "补跑被传输事件丢掉的 1 个包（md 第 8 包，7 条 critical）",
+      "bucket": "independent",
+      "cost": {
+        "model_calls": 1,
+        "human_adjudication_records": 0,
+        "freeze_revisions": 0,
+        "gate_runs": 1,
+        "zero_call_code_changes": 0
+      },
+      "basis": "issue-34 §5.1/§6；gate-32 automatic_retries = 0（损失根因）⇒ 须先定重试/幂等策略",
+      "status": "measured_basis"
+    },
+    {
+      "id": "I2",
+      "name": "裁定 B-1 两条（NT-I06 / NT-I41）的性质",
+      "bucket": "independent",
+      "cost": {
+        "model_calls": 0,
+        "human_adjudication_records": 1,
+        "freeze_revisions": 0,
+        "gate_runs": 0,
+        "zero_call_code_changes": 0
+      },
+      "basis": "issue-34 §5.8 backlog B-1",
+      "status": "measured_basis"
+    }
+  ],
+  "totals_by_dimension": {
+    "model_calls": {
+      "common": 0,
+      "route_a_marginal": 0,
+      "route_b_marginal": 24,
+      "independent": 1,
+      "common_ge_sum_of_marginals": false
+    },
+    "human_adjudication_records": {
+      "common": 222,
+      "route_a_marginal": 0,
+      "route_b_marginal": 0,
+      "independent": 1,
+      "common_ge_sum_of_marginals": true
+    },
+    "freeze_revisions": {
+      "common": 2,
+      "route_a_marginal": 1,
+      "route_b_marginal": 1,
+      "independent": 0,
+      "common_ge_sum_of_marginals": true
+    },
+    "gate_runs": {
+      "common": 1,
+      "route_a_marginal": 0,
+      "route_b_marginal": 1,
+      "independent": 1,
+      "common_ge_sum_of_marginals": true
+    },
+    "zero_call_code_changes": {
+      "common": 2,
+      "route_a_marginal": 2,
+      "route_b_marginal": 2,
+      "independent": 0,
+      "common_ge_sum_of_marginals": false
+    }
+  },
+  "route_a_vs_b_marginal": {
+    "model_calls": {
+      "route_a": 0,
+      "route_b": 24
+    },
+    "freeze_revisions": {
+      "route_a": 1,
+      "route_b": 1
+    },
+    "gate_runs": {
+      "route_a": 0,
+      "route_b": 1
+    },
+    "human_adjudication_records": {
+      "route_a": "222（在现候选集上）",
+      "route_b": "222（在**新**候选集上，不可复用现裁定）"
+    },
+    "note": "route b 的收益（是否能减少 32 条人工裁定区间）未证；route a 的收益下界/上界见 benefit S1。"
+  },
+  "benefit_scenarios": [
+    {
+      "id": "S0",
+      "label": "现状（不修任何项）",
+      "matchable_gold": 0,
+      "status": "measured",
+      "basis": "evidence/36 A 臂 tp=0（严格 identity，原生候选形态）"
+    },
+    {
+      "id": "S1",
+      "label": "共同项完成后（口径条款 + 评分器读契约 + 工作台 v2 + 人工裁定）",
+      "matchable_gold": {
+        "lower": 7,
+        "upper": 39
+      },
+      "status": "bounded_by_measurement",
+      "basis": "下界 7 = 归一化后 5 元组逐字对齐（实测）；上界 39 = 逐字证据可达（evidence/35 实测）；中间 32 条须人工裁定，**机上不可测**"
+    },
+    {
+      "id": "S2",
+      "label": "S1 + 补跑丢失包（7 条 critical）",
+      "matchable_gold": {
+        "lower": 7,
+        "upper": 48
+      },
+      "status": "unverified",
+      "basis": "补跑只解除物理缺失（7 条）；其余上限变化取决于人工裁定与 route b 效果，均未证"
+    },
+    {
+      "id": "S3",
+      "label": "S2 + route b 重抽",
+      "matchable_gold": {
+        "lower": 7,
+        "upper": 48
+      },
+      "status": "unverified",
+      "basis": "route b 的增量收益**无任何证据**（缺口 2）；须先做 route-b-experiment-protocol 的受控实验"
+    }
+  ],
+  "pseudo_dichotomy": {
+    "hypothesis": "共同项成本占主导 ⇒ 先做共同项优于先分叉（可能为伪二分）",
+    "per_dimension": {
+      "model_calls": {
+        "common": 0,
+        "route_a_marginal": 0,
+        "route_b_marginal": 24,
+        "independent": 1,
+        "common_ge_sum_of_marginals": false
+      },
+      "human_adjudication_records": {
+        "common": 222,
+        "route_a_marginal": 0,
+        "route_b_marginal": 0,
+        "independent": 1,
+        "common_ge_sum_of_marginals": true
+      },
+      "freeze_revisions": {
+        "common": 2,
+        "route_a_marginal": 1,
+        "route_b_marginal": 1,
+        "independent": 0,
+        "common_ge_sum_of_marginals": true
+      },
+      "gate_runs": {
+        "common": 1,
+        "route_a_marginal": 0,
+        "route_b_marginal": 1,
+        "independent": 1,
+        "common_ge_sum_of_marginals": true
+      },
+      "zero_call_code_changes": {
+        "common": 2,
+        "route_a_marginal": 2,
+        "route_b_marginal": 2,
+        "independent": 0,
+        "common_ge_sum_of_marginals": false
+      }
+    },
+    "holds_on": [
+      "human_adjudication_records",
+      "freeze_revisions",
+      "gate_runs"
+    ],
+    "does_not_hold_on": [
+      "model_calls",
+      "zero_call_code_changes"
+    ],
+    "verdict": "在 ['human_adjudication_records', 'freeze_revisions', 'gate_runs'] 上成立：共同项 ≥ 两边际项之和。其中人工裁定维度由契约 matching.mode 决定——route a 与 route b 都必须付这一项，且 route b 在新的候选集上无法复用 route a 的裁定结果，故该维度上『先分叉』不省成本。在 ['model_calls', 'zero_call_code_changes'] 上不成立（边际项更大）：这两项正是路线分叉真正的差异所在，须由缺口 1（人工可裁定比例）与缺口 2（route b 收益）补齐后才能定。",
+    "status": "authored_from_measured"
+  },
+  "remaining_gaps": {
+    "gap_1": "32 条区间的人工可裁定比例 —— 需 xyl 分层抽样裁定（本批不代替）",
+    "gap_2": "route b 的抽取差可修复性 —— 需执行 route-b-experiment-protocol（需授权）",
+    "gap_3": "本批已关闭（同量纲表已产出）",
+    "gap_4": "本批已关闭（freeze-impact.json）"
+  }
+}

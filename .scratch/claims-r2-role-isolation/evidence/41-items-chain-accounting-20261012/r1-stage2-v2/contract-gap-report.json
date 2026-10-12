@@ -1,0 +1,71 @@
+{
+  "schema_version": "items-contract-gap-1",
+  "created_on": "2026-10-12",
+  "question": "can any candidate be matched without an operation the contract forbids?",
+  "inputs": {
+    "skeleton": "sha256:cc2946ef6a487fba059ca995f2c34f469d4c96720b6b6186225c97bd1e41b537",
+    "frozen_gold": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    "freeze_state": "sha256:08703b8dad9fc6c130872899741534c940787c29a15423db19d398999b237d85",
+    "scoring_contract": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce"
+  },
+  "contract_required_fields_material_items": [
+    "proposition",
+    "semantic_type",
+    "statement_role",
+    "speech_role",
+    "perspective",
+    "speaker_ref",
+    "polarity",
+    "attribution",
+    "source_stance"
+  ],
+  "candidate_semantic_fields": [
+    "perspective",
+    "polarity",
+    "semantic_type",
+    "speech_role",
+    "statement_role",
+    "temporal_frame",
+    "text",
+    "value"
+  ],
+  "fields_missing_in_candidate": [
+    "attribution",
+    "proposition",
+    "source_stance",
+    "speaker_ref"
+  ],
+  "gold_fields_not_required_by_contract": [
+    "behavior_status",
+    "condition",
+    "estimate_status",
+    "temporal_frame"
+  ],
+  "contract_legal_matching": {
+    "definition": "exact identity over the candidate's own fields, both sides key-sorted",
+    "matches": 0,
+    "gold_total": 48
+  },
+  "forbidden_operation": {
+    "normalization_clause": "数值仅做十进制单位缩放和闭区间规范化；日期和期间保留基准语境；约数不能升级成精确承诺。记录所用规则，不从金标反填候选缺字段。",
+    "projection_clause": "现有 strict scorer 只接受裁定完成的语义映射；映射须保存原始候选字段、裁定人、理由和依据。不得将目标字符串直接赋给候选并宣称自动语义评分。",
+    "v1_did": "filled each auto-accepted candidate's canonical_observed_fields with the gold record's semantic_fields, which is back-filling absent candidate fields from the gold and is what produced the 19/48 figure",
+    "v2_does": "records the candidate's own fields only; no match is asserted"
+  },
+  "sizing_counterfactual": {
+    "status": "not_contract_legal_not_a_score_threshold_free",
+    "shared_fields_used": [
+      "semantic_type",
+      "statement_role",
+      "speech_role",
+      "perspective",
+      "polarity"
+    ],
+    "matches": 0,
+    "gold_total": 48,
+    "purpose": "size how many records a future read-path rule could recover"
+  },
+  "blocking_decision_required": "Stage 2 cannot complete under the current contract: the candidate carries no proposition/attribution/source_stance (nor a condition carrier for condition-role records), and rewriting those fields by hand is exactly what matching.projection forbids. A read-path rule, or an extended extraction protocol, must be signed first.",
+  "model_requests": 0,
+  "production_database_access": 0
+}

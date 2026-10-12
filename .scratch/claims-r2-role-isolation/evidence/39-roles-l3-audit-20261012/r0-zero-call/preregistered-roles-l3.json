@@ -1,0 +1,45 @@
+{
+  "schema_version": "items-roles-l3-audit-preregistration-1",
+  "created_on": "2026-10-12",
+  "status": "preregistered_before_run",
+  "purpose": "执行 issue-34 §7-9：对 claims / material_relations 做同型 L3 零调用审计，判定「同一类字段接缝是否也存在于另外两个角色」，并据此给出 §7-11 口径条款应写成 items-only 还是每角色通用的读路径机制。",
+  "authorization": {"granted_by": "user", "granted_on": "2026-10-12", "scope": "零调用只读；不改金标、契约、评分器、不放宽阈值，不重跑模型"},
+
+  "known_scope_limits_upfront": {
+    "claims": "本工作流的 gate-32 运行是 items-only 协议（`material_semantics.py` 的 MATERIAL_ITEM_JSONL_PROMPT 明文：『本阶段只抽 speakers 和 items，不输出 relations』），证据树内未发现该仓库角色的 claims 运行产物。",
+    "material_relations": "同上；且运行前已探明 treatment 两源的 `understanding.relations` 均为 0 条。",
+    "consequence": "claims 与 relations 的『生产端载体』多数只能给 code_level（读代码 schema）结论；不得写成数据实测结论。"
+  },
+
+  "method": {
+    "gold_side": "`frozen-gold.json` 三个角色各自的记录数，及每个契约必需字段在该角色记录中的非空命中数（实测）。",
+    "production_side_items": "引用 evidence/37 的实测结论（其 store-baseline.json 哈希入 MANIFEST），不重复计算。",
+    "production_side_claims": "读 `plugins/corpus/claims_detail.py::ClaimRecord` 的 dataclass 字段清单与 `evidence_pipeline.py::EvidenceFact/EvidenceRun`（code_level，未在数据上测量）。",
+    "production_side_relations": "实测 treatment 两源 `understanding.relations` 条数；读 `structured/store.py::_material_records` 对 relation 的投影（`_material_record_evidence(..., relation.relation_id, relation.type, None, None, relation.evidence)`）。",
+    "carrier_classes": ["item_field", "alias", "derived", "absent", "absent_by_protocol", "not_observed"]
+  },
+
+  "exit_criteria": {
+    "EC-B1": "每个角色输出：契约必需字段 × 〔gold 非空命中 / 生产端载体 / 载体所属层〕三列，缺列即失败。",
+    "EC-B2": "claims 若无数据产物，必须记 `not_observed_on_data`，其结论只能标 `code_level`；**不得**表述为「同型接缝已确认」。",
+    "EC-B3": "relations 必须区分「协议范围外」与「字段错配」；若生产端条数为 0 且协议明文排除 relations，记 `absent_by_protocol`，不得记作字段错配缺陷。",
+    "EC-B4": "若任一角色（除 items）的契约必需字段包含**金标主键**（形如 `*_gold_record_id`），记 `structurally_unscoreable`，并说明其对严格 identity 匹配的后果。",
+    "EC-B5": "输出 §7-11 建议形态：☐ 每角色通用读路径机制 ☐ items-only；并给出依据（不得只给结论）。",
+    "EC-B6": "判据外新发现进 backlog，不回流本次判据。",
+    "EC-B7": "任何与 issue-34 §5.6 冲突者以实测/代码为准，并列出待修订条目。"
+  },
+
+  "out_of_scope": [
+    "不创建、不重跑、不补造 claims / relations 产物",
+    "不改金标、契约、评分器、阈值；不报分",
+    "不把 code_level 结论表述为实测结论"
+  ],
+
+  "artifacts": [
+    "r0-zero-call/preregistered-roles-l3.json（本文件，write-once）",
+    "r0-zero-call/roles_l3_audit.py（支持 --no-write，幂等）",
+    "r0-zero-call/roles-l3-audit.json",
+    "r0-zero-call/roles-l3-audit.md",
+    "r0-zero-call/MANIFEST.json"
+  ]
+}

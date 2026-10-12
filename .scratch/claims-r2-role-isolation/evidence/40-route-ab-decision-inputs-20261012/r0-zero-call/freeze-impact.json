@@ -1,0 +1,111 @@
+{
+  "schema_version": "items-freeze-impact-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "trigger": "任一改动 material_semantics.py 提示词文本 / 协议版本 / 装配投影",
+  "bound_artifacts": [
+    {
+      "artifact": "gate-32 freeze-manifest 输入 material_semantics_module",
+      "path": "32-…/r0-zero-call/freeze-manifest.json",
+      "sha256": "sha256:1305dba1f9fa074d0d5b0a662346d58168741bd27f78e96cb55bff2b46167a5e",
+      "bound_by": "gate-32 freeze-manifest inputs",
+      "impact": "直接失配（该文件是绑定输入）",
+      "action": "新冻结（新版本记录，旧哈希留存），须新门"
+    },
+    {
+      "artifact": "gate-32 freeze-manifest 输入 structured_config_module",
+      "path": "32-…/r0-zero-call/freeze-manifest.json",
+      "sha256": "sha256:3202c70cca56e11e45b758a5d5f9b4f70c9f9313532dcdb59cfb4d10ba65b73f",
+      "bound_by": "gate-32 freeze-manifest inputs",
+      "impact": "若同时改配置则失配；仅改提示词则不受影响",
+      "action": "按实际改动面决定"
+    },
+    {
+      "artifact": "gate-32 freeze-manifest 输入 structured_adapter_module",
+      "path": "32-…/r0-zero-call/freeze-manifest.json",
+      "sha256": "sha256:a534e2a3031bdc45fc8f463bed87015793189dd423dcef4d9e8ed47be9b598c2",
+      "bound_by": "gate-32 freeze-manifest inputs",
+      "impact": "若改装配投影则失配（工作台投影缺陷即在此层）",
+      "action": "按实际改动面决定"
+    },
+    {
+      "artifact": "gate-32 四个 plan 文件",
+      "path": "32-…/r0-zero-call/plan-*.json",
+      "sha256": {
+        "plan-control-industrial-fulian-md.json": "sha256:c8aadb4e62bb59ae1c9e66b342a6a22dba9feabbe3d31f254228c19f2e1017a0",
+        "plan-control-optical-module-docx.json": "sha256:74f9e38e56f17a7b60767d641a61a4ae95850f36b9b989daafe4540f4d085c32",
+        "plan-treatment-industrial-fulian-md.json": "sha256:c2a085a32358b72b37eede509806c1dcde568dc8a95868f4e3b877ede2eecd3a",
+        "plan-treatment-optical-module-docx.json": "sha256:e7099a37679dd286bae3426c9350ed567a590548fff6e15a0d0853e0184f820c"
+      },
+      "bound_by": "gate-32 freeze-manifest files_sha256",
+      "impact": "协议/快照变更会改 plan 内容 ⇒ 4 个哈希全部失配",
+      "action": "重新 plan（零调用）并新冻结"
+    },
+    {
+      "artifact": "金标冻结链 freeze-manifest 输入 scoring-contract.json",
+      "path": "10-quality-gold-freeze-20261008-r2/freeze-manifest.json",
+      "sha256": "2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe",
+      "bound_by": "金标冻结链（Issue 10）",
+      "impact": "**已漂移**：记录 v2，实际签认 v3（7/8 匹配）；契约 v4 会再漂一次",
+      "action": "与 C1/C3 同轮修绑定（新版本记录，不改金标字节）"
+    },
+    {
+      "artifact": "门 28 preregistered-gate（signed，权威阈值与字段清单来源）",
+      "path": "28-…/r0-zero-call/preregistered-gate.json",
+      "sha256": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
+      "bound_by": "门 28 自身",
+      "impact": "v4 若改 metric_basis / role_required_fields ⇒ 门 28 度量基准失配",
+      "action": "新版本门记录（不就地改）"
+    },
+    {
+      "artifact": "门 33 workbench v1",
+      "path": "33-…/r0-zero-call/workbench.json",
+      "sha256": "sha256:e00d8ae65536bf662101ba1d53b8c3e9f80189e2be6b8172472abd02ea489777",
+      "bound_by": "门 33 自身",
+      "impact": "route b 改协议 ⇒ 候选集变化 ⇒ v1 与 v2 均作废",
+      "action": "route b 须重建工作台（零调用，复用 evidence/38 脚本）"
+    },
+    {
+      "artifact": "门 33 adjudications 骨架",
+      "path": "33-…/r0-zero-call/adjudications.json",
+      "sha256": "sha256:cc2946ef6a487fba059ca995f2c34f469d4c96720b6b6186225c97bd1e41b537",
+      "bound_by": "门 33 自身",
+      "impact": "候选集变化即作废（现为空骨架，未填）",
+      "action": "随工作台重建"
+    },
+    {
+      "artifact": "treatment store 对象（现 extractor material-semantics-32）",
+      "path": "32-…/live/treatment-store/**/objects/**",
+      "sha256": {
+        "industrial-fulian-md": "sha256:5164a8c10df8cbad70a04cd6b223c8ff6aaef2f9c74e43523596734ec9b040c0",
+        "optical-module-docx": "sha256:08fe8d9e46210fd84c65e6ec3e4dcbecb4af94f1444a67692996c2e5a67cf8bd"
+      },
+      "bound_by": "运行产物本身",
+      "impact": "推进 extractor_version 后旧产物须保持可读，否则 222 条候选读不回",
+      "action": "登记 _HISTORICAL_RUN_PAYLOAD_SHAPES（对应 B3）"
+    }
+  ],
+  "unaffected": [
+    {
+      "artifact": "frozen-gold.json / freeze-state.json",
+      "sha256": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+      "reason": "金标字节不动（§8 范围外硬约束）；只修其 manifest 里的契约绑定记录"
+    },
+    {
+      "artifact": "plugins/corpus/structured_scoring.py",
+      "sha256": "sha256:172ce465492cf26cb7249599d9f53ac40d266c1883a49cea51b0b178894874f1",
+      "reason": "不在 gate-32 freeze-manifest 的绑定输入清单内（已核对；仍建议在 v4 轮显式确认一次）"
+    }
+  ],
+  "gate32_gate_self_hash_from_report": "6fb47e79…fba8（issue-34 §2 记载；本批未重算，需在执行前复核）",
+  "summary": {
+    "direct_hash_mismatch": [
+      "material_semantics_module",
+      "四个 plan（协议变更时）"
+    ],
+    "requires_new_gate": true,
+    "requires_new_freeze": true,
+    "gold_bytes_untouched": true,
+    "historical_readability_risk": "旧 222 条候选须保持可读（B3）"
+  }
+}

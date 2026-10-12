@@ -1,0 +1,13 @@
+{
+  "checked_at": "2026-10-12 09:43:06",
+  "arms": {
+    "treatment": {
+      "turns": 45,
+      "dumps_left": []
+    },
+    "control": {
+      "turns": 45,
+      "dumps_left": []
+    }
+  }
+}

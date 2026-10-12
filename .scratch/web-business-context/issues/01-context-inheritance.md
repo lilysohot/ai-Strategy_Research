@@ -1017,6 +1017,7 @@ payload 的 messages 序列变成：
 ```
 
 - **成本上界**：**每次发生裁剪的轮次最多 1 次摘要调用**；不发生裁剪的轮次 **0 次**。长期会话里裁剪是低频事件（每跨过一次窗口才发生一次）。
+  - ⚠️ **2026-10-12 更正**：这句话只在窗口**有迟滞**时成立。落地时的硬边界（`replay_max_turns` 每轮重新判定）会让窗口一满就**每轮裁一次**——45 轮里 35 次裁剪、35 次摘要调用、命中率从 93% 塌到 27%。已按 §12.8 加写侧迟滞修正；本节其余内容不变。
 - **失败语义（fail-open）**：摘要生成失败/超时 ⇒ `summary_block=None` ⇒ 行为**回退到今天的写时裁剪**（丢最旧轮），run 不受影响。**宁可少记忆，不可卡住运行**。
 - **不做**：不做"摘要+被裁原文并存"的中间态（那会让 payload 再次无界增长，违背本节目标）；不重算既有摘要（相邻 dump 的摘要块必须逐字节相同）。
 
@@ -1043,6 +1044,15 @@ payload 的 messages 序列变成：
 **集成（合成 40+ 轮会话，需额度）**
 
 6. 首请求 token 有界（≤ `replay_max_tokens`）；7. 裁剪那一轮之后连续 ≥2 轮命中率恢复 ≥80%（R4 口径）；8. 相邻 dump 的摘要块逐字节相同（不重算）；9. 40 轮总 prompt 呈"平台期"而非线性增长。
+
+**2026-10-12 判据按 §12.8 修订**（跑前生效，避免拿一个已被本地测量证伪的目标去跑额度）：
+
+6. 首请求 token ≤ `replay_max_tokens`（**不变**，尺寸保险不以迟滞让路）；
+7. **改为**：在**迟滞生效**的配置下（`replay_max_turns=10`、`replay_max_turn_step=5`），裁剪轮的**下一轮**命中率 ≥80%，即"裁剪只抖一次"；本地测量值 93.8%；
+8. **不变**，并加一条可机读口径：由 `usage_json.replay.trim` 数出的**裁剪轮数 ≤ ⌈轮数/step⌉ + 1**（45 轮应 ≤ 10，现状是 35）；
+9. **不变**：总 prompt 呈平台期（窗口被迟滞钉在 10–15 轮），且**平均 prompt 不再随轮数增长**。
+
+**新增跑法约束（2026-10-12 实跑发现）**：无人值守跑必须带自动批准（`--auto-approve session_all`）。新模型会调工具，而 `bash` 被安全分类判为 `confirm` ⇒ 每次 gated 调用会挂到审批门的 fail-closed 超时（`DEFAULT_TIMEOUT_S = 300s`），一轮里几次就能把墙钟耗光。
 
 ### 12.6 待裁决
 
@@ -1084,10 +1094,108 @@ payload 的 messages 序列变成：
 
 **未做**
 
-- **§12.5 的集成验收（合成 40+ 轮会话，需额度）未跑**：判据已预注册（① 首请求 token 有界；② 裁剪轮之后连续 ≥2 轮命中率恢复 ≥80%；③ 相邻 dump 的摘要块逐字节相同；④ 40 轮总 prompt 呈平台期而非线性）。**待批**，跑法照 S2：跑前探针确认模型上报缓存字段、每轮独立进程。
+- **§12.5 的集成验收（合成 40+ 轮会话，需额度）未跑**：判据已预注册（① 首请求 token 有界；② 裁剪轮之后连续 ≥2 轮命中率恢复 ≥80%；③ 相邻 dump 的摘要块逐字节相同；④ 40 轮总 prompt 呈平台期而非线性）。**待批**，跑法照 S2：跑前探针确认模型上报缓存字段、每轮独立进程。**2026-10-12 更新**：判据 ②/⑧ 已按 §12.8 修订（须在迟滞生效的配置下评），跑法必须带自动批准——见 §12.8 ②。
 - 观察项（有意取舍）：摘要块计入预算后，**窗口能保留的轮数会略少于** S3 之前——这是"用一点窗口换长期记忆"。
 
+### 12.8 端点切换、端到端核对与窗口迟滞修正（2026-10-12）
+
+**背景**：模型端点换成阿里云百炼（`.env`：`compatible-mode/v1` + `qwen3.7-flash-2026-07-15`）。跑集成验收前先做两件事：核对链路是否真的通、把"40+ 轮"这个规模的前缀性质用零额度方式量清楚。
+
+**① 端到端核对（已在百炼上跑通）**
+
+| 环节 | 证据 |
+|---|---|
+| 库 → 编排 → worker 子进程 | run 行 `queued` → `stopped`；worker 独立 pid |
+| worker → pipeline → **模型** | 轨迹 `start/attempt/llm/end`；`POST dashscope…/chat/completions 200` |
+| **usage 回库** | `usage_status=complete`，`prompt_tokens 15798 / cache_read 7936 / llm_calls 1`；首轮就吃到隐式缓存（约一半 prompt） |
+| S2 载体 | `dump_present_after_run=false` + `stored_after_run=true`（存的是 `[system,user,assistant]`） |
+| 终态 | `stopped_by=no_tool`、`error=null`、`final_answer=收到` |
+
+端点适配结论（探针，零副作用）：`prompt_tokens_details.cached_tokens` 字段名与我们客户端读的一致（两次相同长前缀：`5760/6020 = 95.7%`）；流式 `stream_options.include_usage` 被接受 ⇒ **不需要改适配器**。两个与预期不同、要记住的：**思考模型**（`max_tokens=16` 仍产生 183 `reasoning_tokens` ⇒ 输出上限在这端点上管不住思考）；web profile 钉的 `thinking_format=tag` 与端点返回的 `reasoning_content` 不一致 ⇒ 思考**不进历史**（对前缀稳定性有利；代价是 `agent_loop` 里"工具调用泄漏进思考"的兜底失效）。
+
+**② 一个会拖垮验收的链路事实：审批门**
+
+新模型会调工具（旧模型从不调，历史 run 全是 `no_tool`），而 `plugins/tools/bash` 的命令被 `apodex.assess_with_rules` 判为 **`confirm`** ⇒ `ApprovalObserver` 挂起等人工批准，`DEFAULT_TIMEOUT_S = 300s` 才 fail-closed。首次无人值守跑因此静默 5 分钟、被我自己的 300s 等待超时杀掉（`stopped_by=sigkill`）——**不是链路故障，是产品行为**。处置：验收驱动加 `--auto-approve session_all`（等价浏览器"本会话全部批准"），并加 `--wait`。另记：驱动以 `user_id=None` 提交 ⇒ `_control_owner` 返回 None ⇒ 审批**不落 `control_records`**，无人值守跑的审批证据只能取轨迹。
+
+**③ 零额度本地测量：窗口滑动会让前缀整段失效**
+
+方法：用真实 dump 做种子，**驱动真实写侧路径**（`ConversationSnapshotObserver.on_loop_end` → `_summarize_dropped` → `build_dump` → `trim_to_turns`），摘要用确定性替身，逐轮量"上一轮请求有多少还会作为下一轮请求的**前缀**出现"（缓存只认前缀，同一批消息换位置等于零命中）。脚本与报告：`.scratch/web-business-context/evidence/20261011-s3-window-prefix/`。
+
+45 轮、每轮 250 tok（1000 tok 见报告）：
+
+| 方案 | 首次裁剪 | 裁后命中 | 45 轮裁剪/摘要调用 | 重算 tokens | 有效开销/轮 |
+|---|---|---|---|---|---|
+| A 迟滞关（当日默认） | 第 11 轮 | **26.9%** | **35 / 35** | 220,726 | 5,314 |
+| **B 迟滞 step=5** | 第 16 轮 | **93.8%** | **5 / 5** | 53,994 | **2,011** |
+| C 只留 token 预算 | 45 轮内无 | 94–98% | 0 / 0 | 25,240 | 2,066 |
+
+诊断：A 从第 12 轮起请求在 `1:user` 处分叉——**system prompt 之后第一个消息就不同了**。因为轮数上限每轮重新判定，窗口一满就每轮丢一轮 ⇒ 窗口每轮滑一格，10 轮内容虽在但位置全变；同一轮还要重写摘要块（摘要也在前缀里）。**prompt 被钉在 ~8.7k 的"有界"是这样换来的：每轮重算约 4,800 tokens。**
+
+**④ 修正 B：写侧迟滞（已落地）**
+
+判定只此一处：`ConversationSnapshotObserver._effective_max_turns(wire)` —— 窗口（**只数真实轮**，摘要块不算，与 `trim_to_turns` 口径一致）**超过 `max_replay_turns + step` 才裁**，一次裁回 `max_replay_turns`；两处（`_write`、`_summarize_dropped`）**必须共用它**，否则会出现"裁了没摘要"或"摘要了没裁"。token 预算**不参与迟滞**（它是"不许写出跑不起来的 dump"的保险，每轮都要成立）。
+
+| 文件 | 改动 |
+|---|---|
+| `conversation_snapshot.py` | 新增 `_effective_max_turns`（含"为什么不是更大边界而是迟滞"的推导）；`__init__` 增 `max_replay_turn_step`（默认 0 = 旧行为）；`_write` / `_summarize_dropped` 改用有效边界 |
+| `main_agent.py` | 读 `agent_cfg["replay_max_turn_step"]`，**默认 5**，传给观察者 |
+| `tests/test_context_inheritance.py` | 新增 5 条：窗口在 2..5 带内不裁、越界一次裁回边界／摘要每裁一次写一次（12 轮 2 次 vs 无迟滞 10 次）／**裁间每一轮都是纯追加**（前缀性质）／`step=0` 与旧 dump **逐字节一致**（回归护栏）／token 预算在带内照样裁 |
+
+**门禁**：`tests/test_context_inheritance.py` **55 passed**；波及面 7 个文件 **139 passed**；`ruff check` 干净；`pyright` 0 error。（`ruff format --check` 在这两个文件上有**既有**三处差异，位置 208/290/432，均非本次新增；未做整文件重排以免混入无关 diff。）
+
+**未做/待批**：§12.5 的 40+ 轮集成验收（需额度）——判据已按本节修订，跑法必须带 `--auto-approve session_all`。
+
+### 12.9 S3 集成验收实跑（2026-10-12，用户批准）
+
+> ⚠️ **本节的 control 数据与 C1/C6 判定已于同日作废**：control 实际跑在 step=5 上（我的驱动把开关加错了 profile），更正与干净重跑见 **§12.10**。treatment 一节不受影响。
+
+**跑法**：两臂**同一份代码**，唯一差别是 `REPLAY_MAX_TURN_STEP`（treatment 5 = 新默认；control 0 = 迟滞前）——按 §10 的"单臂无法归因"纪律。每臂 45 轮、**每轮一个独立 worker 子进程**、载体走数据库（S2）。判据按 §12.5 修订版**跑前注册**。驱动 `.scratch/web-business-context/evidence/20261012-s3-window-e2e/run_acceptance_s3.py`（断点续跑 + 自动批准）。
+
+| 判据 | 结果 |
+|---|---|
+| C1 两臂各 45 轮完整 | **BLOCKED**（control 39 轮无计量） |
+| C2 载体每轮迁移 | PASS（含一次采样竞态：事后审计两臂各 45/45 dump 已清） |
+| C3 prompt ≤ 预算 | PASS（最大 26,885 ≪ 114,688） |
+| C4 裁剪只抖一次 | **FAIL（按字面）**，归因见下 |
+| C5 摘要每裁一次写一次 | PASS（重写 4 次 ≤ 裁剪 5 次） |
+| C6 两臂差异 | **BLOCKED** |
+| C7 prompt 平台期 | PASS（末 10 轮 max 26,815 ≤ 1.5× 15–25 轮 max 26,885） |
+
+**treatment 的可复核数字（45/45 有效、全部 `no_tool`、`llm_calls` 合计 45）**：44 次转换中 **5 次裁剪**（第 17/23/29/35/41 轮，**每 6 轮一次**，不再是每轮），每次都是**构造性 miss**（29.5–29.7% = 只剩 system+tools），**次轮恢复 98.4–99.0%**；**前缀保持的 39 轮平均 89.8%**，其中 33 轮 ≥80%。
+
+**C4 为什么按字面判负**：另有 **6 次"我方前缀连续、端点却没命中"**（第 9/31/34/42/43/45 轮，其中 5 次落在后半段——与免费额度即将耗尽的时点吻合）。它们把两次裁剪（29、41）的"两轮恢复窗口"打穿。即 **C4 的口径把端点缓存保留行为混进了我方前缀性质**：原始比值分不出这两者，而"相邻 dump 是否前缀一致"（本地可判）能分。**建议 C4 改成"前缀保持轮命中率 ≥80%"**、裁剪轮单列为构造性 miss；属判据变更，**须 U 具名签认**。
+
+**control 为何 BLOCKED**：control 第 7 轮起全部 `403 AllocationQuota.FreeTierOnly`（"Free quota exhausted… disable the use free tier only mode"），45 轮里只有 6 轮有计量 —— **判定中断，不是判负**。补法：限额恢复后 `--arm control` 续跑（剩 39 轮）。**建议**两臂对照在**付费档**上做：免费档的缓存保留本身抖动，会把两臂差异糊掉。
+
+**操作坑位（本次实测）**：本机 web 库是 docker 容器 `pg`（5432），空闲后会自行退出；验收前需 `docker start pg`，否则 `ConnectionRefused 127.0.0.1:5432`。
+
+### 12.10 S3 验收续跑与更正（2026-10-12，同日）
+
+**更正 ①：第一版 control 臂无效（我的驱动 bug）**
+`REPLAY_MAX_TURN_STEP` 开关我加进了 `workflows/agent_team/profiles/tui.yaml`，但 **web 实际加载的是 `workflows/stateful_react_agent/profiles/tui.yaml`**（走 `load_react_profile`）⇒ 两臂都落到 Python 默认 **step=5**，control 从来不是 step=0。证据：control 窗口 13–16 轮（step=0 时上限应为 10）、全程复用率 70%（那是迟滞行为）。**§12.9 里 control 的数字与 C1/C6 的 BLOCKED 判定据此作废**（treatment 不受影响：其行为本就等于 step=5）。处置：把 `replay_max_turns` / `replay_max_turn_step` 两个键加进**正确的** profile（均带 env 兜底），并用 `load_react_profile` 复核（env=0 → 0；不设 → 5）。
+
+**更正 ②：凭证与端点在同一小时内被换过两次**
+403 免费额度用尽 → key 轮换 → 401 窗口（`AuthenticationError: The API key doesn't exist`，标准路径 `/api/v3` 上同样 401 ⇒ key 无效而非路径错）。control 因此横跨两个端点；本次续跑固定在**火山方舟**（`ark.cn-beijing.volces.com/api/plan/v3` + `glm-5.3-flash`，探针证明该端点上报 `prompt_tokens_details.cached_tokens`：冷 0 → 暖 5184/5222）。
+
+**干净的 control（step=0，方舟，16 轮，新会话）**
+
+| 轮 | 现象 |
+|---|---|
+| 1–11 | 纯追加：复用 97.8–99.1% |
+| **12–15** | **每轮都裁剪**（`trim YES`）→ 窗口钉死 11t/22m → **`cached_tokens = 0`，复用 0.0%** |
+| 16 | 同类裁剪轮，端点偶然给了 11,776（52.2%） |
+
+- 稳态（≥12 轮）均值：**control 10.4%（5 次） vs treatment 79.0%（34 次）** ⇒ 差 **68.6pp**。
+- prompt 钉在 ~22.2k —— 所谓"成本有界"是**每轮整窗重算**换来的。
+- 端点差异要记：**方舟的缓存是全有全无**（前缀一破就返回 0），而百炼会保留 system+tools（7,936 ≈ 29.6%）。
+
+**判据（按用户"维持原口径"）**：C1 FAIL（control 16 ≠ 45，额度所限）、C2 PASS、C3 PASS、**C4 FAIL**（归因见 §12.9：端点侧 miss 打穿两处恢复窗口）、C5 PASS、**C6 FAIL**（字面口径：control 全程均值 70% > 60%，被其 11 个追加轮拉高——**预注册文本没钉测量窗口**，稳态口径下的实质结论是 79.0% vs 10.4%）、C7 PASS。
+
+产物：`evidence/20261012-s3-window-e2e/run-20261012-ark-control/`（`report.md` / `results.json` / 两臂逐轮 / `carrier-audit.json`）；作废与受阻证据：同目录 `control-quota-interruption.json`、`control-second-interruption.json`。门禁：`test_context_inheritance.py` 55 passed；profile 相关 108 passed / 1 failed（`test_react_profile_binds_the_finance_tools`，既有失败：`{"position_sizing","strategy_lint"} <= set()`，属工具注册，与本次无关）。
+
 ## Comments
+
+2026-10-12：**S3 集成验收实跑**（用户批准；见 §12.9）。treatment（step=5）**45/45 有效**：5 次裁剪（每 6 轮一次）、每次构造性 miss 29.5–29.7%、**次轮 98–99%**；前缀保持轮平均 89.8%。C2/C3/C5/C7 PASS；**C1/C6 BLOCKED** —— control 第 7 轮起 `403 AllocationQuota.FreeTierOnly`（免费额度用尽），39 轮无计量，属判定中断；**C4 按字面 FAIL**，归因是 6 次"我方前缀连续、端点未命中"，其口径把端点缓存保留混进了我方前缀性质 ⇒ 建议改为"前缀保持轮 ≥80%"，**待签认**。另测得一坑：本机 web 库容器 `pg` 空闲会自行退出，验收前需 `docker start pg`。
 
 2026-10-10：依据 Run `c3ec40b4…` 的 usage 实测（cache_read 85.7%）与 `_bind.py` 的会话亲和实现建立。核心判断：CLI 的 workflow 路径同样是信封重渲染，不可照搬；缓存友好需要 messages 累积。
 
@@ -1120,5 +1228,7 @@ payload 的 messages 序列变成：
 2026-10-11：**S2 实跑验收全部 PASS**（用户批准；模型取 `.env` 的 `deepseek-flash`，跑前探针确认其上报 `cached_tokens`）。方法：两臂各 3 轮、**每轮独立进程**（pid 53826/53872/53948），control 每轮后删库中会话行作唯一差别。结果：treatment 轮 2/3 `replay=used`、轮 3 复用轮 2 prompt 的 **99.4%**；每轮跑完 run 目录里的 dump 已删、库中有行；control 轮 2/3 全部 `skipped`；逐轮存储 messages 以上一轮为前缀。**归因补强**：control 轮 3 的 12,288 即共享块，treatment 多出的 4,224 只能来自重放（S1 附件验收缺的对照臂在这里补上）。证据 `evidence/20261011-s2-session-store/run-20261011/`；明细见 §11.10。
 
 2026-10-11：按要求**分层回填主文档**（父 `../spec.md`）：只回填三条**契约级**结论——① §5 非目标条目补立项指向与状态（原文停在"不在本次主线内"）；② §2.3 增第三条形态约束**前缀恒定** + §6 增"请求前缀"一行；③ §3.1 补"同一判据的第二用途"（绑定判据同时决定前缀配置）。**设计稿本身不回填**（按交付物口径方案不算交付）；证据/判据过程留在本 issue 与 `evidence/`。S2 实现落地后已同步 `docs/tech-stack.md`（目录树两个文件的角色、跨轮上下文段落、`session_conversations` DDL、`/readyz` 的 head 要求）；spec §6 的"终局形态"一句待 S2 实跑验收后再回填。
+
+2026-10-12：**端点换百炼 + 链路核对 + 窗口迟滞修正 B 落地**（详见 §12.8）。① 端到端在百炼上跑通：真库→编排→worker→pipeline→模型（`POST dashscope… 200`）→usage 回库（`prompt 15798 / cache_read 7936`）→S2 载体入库、终态 `no_tool`；探针证明该端点上报 `cached_tokens`（95.7%）且接受流式 `include_usage` ⇒ 适配器不用改。② 拦路的是**审批门**不是链路：新模型会调 `bash`（安全分类 `confirm`），无人值守跑会挂在 `DEFAULT_TIMEOUT_S=300s` 上；验收驱动已加 `--auto-approve`。③ **零额度本地测量**发现当日默认下前缀整段失效（45 轮：命中 27%、裁剪 35 次、每轮重算约 4,800 tokens），根因是轮数上限每轮重新判定导致窗口每轮滑动 ⇒ 落地**写侧迟滞**（`replay_max_turn_step`，默认 5）：命中回到 93.8%、裁剪降到 5 次、有效开销 2,011 tok/轮（比"只留 token 预算"的 2,066 更省，且 prompt 只有它的一半）。门禁：目标集 55 passed、波及面 139 passed、ruff/pyright 干净。§12.3 那句"裁剪是低频事件"已就地更正。
 
 2026-10-11：**S2 实现落地**（用户"开始实现 S2"，D1–D7 按建议执行、D5 除外）：会话连续性载体从"run 目录文件 + 每轮复制"搬到服务端 `session_conversations` 一行（opaque `payload` + 记账列，迁移 0019；父进程 ingest、成功即删文件、同 run 幂等、watch 两向都关；读侧改主键读 + 原子 staging；`resolve_prior_conversation` / `_stage_prior_conversation` / `_prior_conversation` 全部退役，不留双路径）。门禁：目标集 43 passed、波及面 146 passed、全量 2997 passed / 12 failed（与 S1 同名同数）、ruff/pyright 干净；本机库已升到 0019（单 head），漂移差分证明本次只退役掉 `add_table session_conversations` 一项、未动任何其它表。**未做**：§11.7 的 3 轮两臂 + 跨进程实跑（待批，消耗额度）、D5、B1/B2/B3。实施细节见 §11.10。

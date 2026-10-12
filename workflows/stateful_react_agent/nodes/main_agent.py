@@ -683,6 +683,15 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     # is turn-aligned and applied when the dump is written, so the next run
     # replays a byte-stable prefix until the next cut (issue 01 §9.7).
     replay_max_turns = int(agent_cfg.get("replay_max_turns", 10) or 0)
+    # Hysteresis on the turn bound (issue 01 §12.6). Without it the bound is
+    # re-evaluated every turn and, once the window is full, cuts one turn per
+    # write — sliding the window by one position every turn, which discards the
+    # cached prefix from the system prompt onward. With it the window grows to
+    # ``replay_max_turns + step`` and is cut back in one go, so the prefix
+    # survives ``step`` turns per cut and the summary is written once per cut.
+    # ``0`` restores the pre-hysteresis behaviour; a negative value is nonsense
+    # and is treated as ``0`` by the observer.
+    replay_max_turn_step = int(agent_cfg.get("replay_max_turn_step", 5) or 0)
     # Size bound for the replay (issue 01 §9.20): a turn count is not a size, and a
     # dump written just under the provider's ceiling must not become an
     # un-runnable next request. Unset → half the profile's input budget; an
@@ -995,6 +1004,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
                 model_name=model_name,
                 max_replay_turns=replay_max_turns,
                 max_replay_tokens=replay_max_tokens,
+                max_replay_turn_step=replay_max_turn_step,
                 # Issue 01 §12.3: when the write-time trim drops turns, summarize
                 # them first (the same LLMSummaryCompactor the in-run compaction
                 # ladder uses) so the memory survives as one fixed block instead

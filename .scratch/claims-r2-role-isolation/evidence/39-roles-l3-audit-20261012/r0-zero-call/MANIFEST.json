@@ -1,0 +1,20 @@
+{
+  "schema_version": "items-roles-l3-audit-manifest-1",
+  "created_on": "2026-10-12",
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/39-roles-l3-audit-20261012/r0-zero-call/preregistered-roles-l3.json": "sha256:8f970041130d1a66be86d6b128eebd606bf4e4809b359337ed4a97031c0ba25a",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/scoring-contract.json": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
+    ".scratch/claims-r2-role-isolation/evidence/37-store-baseline-and-route-decision-20261012/r0-zero-call/store-baseline.json": "sha256:e5133654c06dfec17d68589a01a160eb9c92e08eae20a7f513ed2ac5146a3fc0",
+    "plugins/corpus/claims_detail.py": "sha256:d8986ebe6455a1e09f71d0faf920c28600e4d8b4552ba438b4bcc34e1352f649",
+    "plugins/corpus/structured/store.py": "sha256:9db2bb5d663b028b7d7a38c53a1ceca1000c088b8a2a56144b0bcd64bdb7a8b7",
+    "store_object::industrial-fulian-md": "sha256:5164a8c10df8cbad70a04cd6b223c8ff6aaef2f9c74e43523596734ec9b040c0",
+    "store_object::optical-module-docx": "sha256:08fe8d9e46210fd84c65e6ec3e4dcbecb4af94f1444a67692996c2e5a67cf8bd"
+  },
+  "outputs": {
+    "preregistered-roles-l3.json": "sha256:8f970041130d1a66be86d6b128eebd606bf4e4809b359337ed4a97031c0ba25a",
+    "roles-l3-audit.json": "sha256:5a446a54e5d87c29cce6b0fa43a1313b29abacb90401e43d9508d4a8ea90b096",
+    "roles-l3-audit.md": "sha256:91ee96f9a8337f013f9246dc97cb90a1ee82c820d3514d999405247d784e82b3",
+    "roles_l3_audit.py": "sha256:c70187733b9c30e076ce061bee6ce417d62928e7a4b69bc9937e4c8ae76a3fa7"
+  }
+}

@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 """Offline prefix-stability measurement for the cross-turn replay window.
 
-Zero model calls. Drives the **real** write-time trim
-(``build_dump`` -> ``trim_to_turns``, i.e. the code path a run actually uses) turn
-by turn, with a deterministic stand-in for the summarizer LLM call, and measures
-how much of turn N-1's request reappears as a **prefix** of turn N's request.
+Zero model calls. Drives the **real** write path — ``ConversationSnapshotObserver.
+on_loop_end`` → ``_summarize_dropped`` → ``build_dump`` → ``trim_to_turns``, i.e.
+exactly what a run does — turn by turn, with a deterministic stand-in for the
+summarizer LLM call, and measures how much of turn N-1's request reappears as a
+**prefix** of turn N's request.
 
 Why a *prefix* and not a *set*: a provider KV cache matches the longest byte
 prefix shared with a previous request. If turn N replays the same nine turns as
@@ -18,18 +19,19 @@ Run:  uv run python .../measure_prefix.py --seed <a real conversation.json>
 from __future__ import annotations
 
 import argparse
+import asyncio
 import json
 import os
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 from frontier_agent.components.observers.conversation_snapshot import (
-    build_dump,
+    ConversationSnapshotObserver,
     canonical_json,
-    summary_from,
-    trim_to_turns,
 )
+from frontier_agent.core.loop_types import AgentLoopResult
 from frontier_agent.core.messages import system_msg
 from frontier_agent.core.runtime.loop.context_budget import estimate_tokens
 
@@ -60,11 +62,11 @@ def assistant_turn(index: int, tokens: int) -> dict[str, Any]:
     return {"role": "assistant", "content": f"第 {index} 轮回答：" + pad_to_tokens(UNIT, tokens)}
 
 
-def fake_summary(old: str | None, dropped: list[dict[str, Any]], tokens: int) -> str:
+class FakeSummarizer:
     """Stand-in for the summarizer LLM call — deterministic, *and changed each cut*.
 
     Being deterministic is what makes this script free; changing on every cut is
-    what makes it faithful: a real summary absorbs the newly dropped turn, so the
+    what makes it faithful: a real summary absorbs the newly dropped turns, so the
     block cannot stay byte-identical across cuts.
 
     Bounded, *not* accumulating: the compactor re-compresses (old summary +
@@ -72,8 +74,15 @@ def fake_summary(old: str | None, dropped: list[dict[str, Any]], tokens: int) ->
     block instead would grow the memory without bound and quietly make the window
     smaller and smaller — a bug this script is meant to *detect*, not commit.
     """
-    head = "摘要（含前版记忆）：" if old else "摘要："
-    return pad_to_tokens(f"{head}第 {len(dropped)} 条消息已被吸收。", tokens)
+
+    def __init__(self, tokens: int) -> None:
+        self.tokens = tokens
+        self.calls = 0
+
+    async def __call__(self, old_summary: str | None, dropped: list[dict[str, Any]]) -> str:
+        self.calls += 1
+        head = "摘要（含前版记忆）：" if old_summary else "摘要："
+        return pad_to_tokens(f"{head}第 {len(dropped)} 条消息已被吸收。{self.calls}", self.tokens)
 
 
 def shared_prefix_text(left: str, right: str) -> str:
@@ -114,6 +123,7 @@ class Turn:
     diff_at: str
     cut: dict[str, Any] | None
     summary_changed: bool
+    summarizer_calls: int
 
 
 @dataclass
@@ -121,10 +131,10 @@ class Regime:
     name: str
     max_turns: int
     max_tokens: int
-    hysteresis: int
+    step: int
 
 
-def simulate(
+async def simulate(
     *,
     seed: dict[str, Any],
     turns: int,
@@ -133,91 +143,82 @@ def simulate(
     regime: Regime,
     summary_tokens: int,
 ) -> list[Turn]:
-    """Run the real write-time trim for *turns* turns and record the prefix each turn."""
-    system_prompt = str(seed["system_prompt"])
-    tool_names = list(seed.get("tool_names") or [])
-    tools_hash = str(seed.get("tool_schema_sha256") or "")
-    thinking_format = str(seed.get("thinking_format") or "")
+    """Run the real observer for *turns* turns and record the prefix each turn.
 
+    Each turn feeds the *previous dump's* message list back in, which is what a
+    real turn replays — so this measures the prefix a provider would see, not an
+    idealised message list.
+    """
+    system_prompt = str(seed["system_prompt"])
+    summarizer = FakeSummarizer(summary_tokens)
+    rows: list[Turn] = []
     window: list[dict[str, Any]] | None = None
-    summary: str | None = None
     previous_request: list[dict[str, Any]] = []
     previous_bytes = ""
-    rows: list[Turn] = []
+    previous_calls = 0
 
-    for index in range(1, turns + 1):
-        ask = user_turn(index, per_turn_user)
-        # The dump *is* the next request's head, system message included: the
-        # kernel does not re-add a system message when ``initial_messages`` is
-        # supplied (see ``select_replay``), so re-adding it here would model a
-        # request nobody ever sends.
-        request = [*(window if window else [system_msg(system_prompt)]), ask]
-        ran = [*request, assistant_turn(index, per_turn_assistant)]
-
-        prefix = prefix_messages(previous_request, request) if previous_request else 0
-        request_tokens = estimate_tokens(canonical_json(request))
-        body = canonical_json(request)
-        shared = shared_prefix_text(previous_bytes, body) if previous_bytes else ""
-        divergence = ""
-        if previous_request and prefix < len(request):
-            divergence = f"{prefix}:{request[prefix].get('role', '?')}"
-        rows.append(
-            Turn(
-                index=index,
-                request_msgs=len(request),
-                request_tokens=request_tokens,
-                prefix_msgs=prefix,
-                hit_tokens=estimate_tokens(canonical_json(request[:prefix])),
-                partial_ratio=(
-                    estimate_tokens(shared) / request_tokens if request_tokens else 0.0
-                ),
-                ratio=0.0,  # filled below
-                diff_at=divergence,
-                cut=None,
-                summary_changed=False,
-            )
-        )
-
-        # ---- the write-time trim: the same call the observer makes ----
-        effective_max_turns = regime.max_turns
-        if regime.hysteresis:
-            # Emulation of the proposed fix: keep the turn bound *off* until the
-            # window overflows by ``hysteresis`` turns, then cut back to the bound
-            # in one go. Between cuts every turn is a pure append.
-            user_turns = sum(1 for m in ran if m.get("role") == "user")
-            effective_max_turns = (
-                regime.max_turns if user_turns > regime.max_turns + regime.hysteresis else 0
-            )
-        head, old_summary = summary_from(ran)
-        _, probe = trim_to_turns(
-            ran, effective_max_turns, max_tokens=regime.max_tokens, head=head
-        )
-        new_summary = summary
-        if probe is not None:
-            dropped = ran[head : int(probe["cut_at"])]
-            new_summary = fake_summary(old_summary, dropped, summary_tokens)
-        dump = build_dump(
-            messages=ran,
+    with tempfile.TemporaryDirectory() as tmp:
+        path = Path(tmp) / "conversation.json"
+        observer = ConversationSnapshotObserver(
+            path,
             system_prompt=system_prompt,
-            tool_names=tool_names,
-            tools_hash=tools_hash,
-            thinking_format=thinking_format,
+            tool_names=list(seed.get("tool_names") or []),
+            thinking_format=str(seed.get("thinking_format") or ""),
             session_id="sim",
-            run_id=f"sim-{index}",
-            turns_used=index,
-            max_replay_turns=effective_max_turns,
+            max_replay_turns=regime.max_turns,
             max_replay_tokens=regime.max_tokens,
-            summary_block=new_summary,
+            max_replay_turn_step=regime.step,
+            summarizer=summarizer,
         )
+        for index in range(1, turns + 1):
+            ask = user_turn(index, per_turn_user)
+            # The dump *is* the next request's head, system message included: the
+            # kernel does not re-add a system message when ``initial_messages`` is
+            # supplied (see ``select_replay``), so re-adding it here would model a
+            # request nobody ever sends.
+            request = [*(window if window else [system_msg(system_prompt)]), ask]
+            ran = [*request, assistant_turn(index, per_turn_assistant)]
 
-        row = rows[-1]
-        row.ratio = row.hit_tokens / request_tokens if request_tokens else 0.0
-        row.cut = dump["trim"]
-        row.summary_changed = new_summary != summary
-        summary = new_summary
-        previous_request = request
-        previous_bytes = body
-        window = [dict(message) for message in dump["messages"]]
+            prefix = prefix_messages(previous_request, request) if previous_request else 0
+            request_tokens = estimate_tokens(canonical_json(request))
+            body = canonical_json(request)
+            shared = shared_prefix_text(previous_bytes, body) if previous_bytes else ""
+            divergence = ""
+            if previous_request and prefix < len(request):
+                divergence = f"{prefix}:{request[prefix].get('role', '?')}"
+            rows.append(
+                Turn(
+                    index=index,
+                    request_msgs=len(request),
+                    request_tokens=request_tokens,
+                    prefix_msgs=prefix,
+                    hit_tokens=estimate_tokens(canonical_json(request[:prefix])),
+                    partial_ratio=(
+                        estimate_tokens(shared) / request_tokens if request_tokens else 0.0
+                    ),
+                    ratio=0.0,  # filled below
+                    diff_at=divergence,
+                    cut=None,
+                    summary_changed=False,
+                    summarizer_calls=0,
+                )
+            )
+
+            # ---- the real write path ----
+            await observer.on_loop_end(
+                AgentLoopResult(messages=ran, turns_used=index, stopped_by="no_tool")
+            )
+            document = json.loads(path.read_text(encoding="utf-8"))
+
+            row = rows[-1]
+            row.ratio = row.hit_tokens / request_tokens if request_tokens else 0.0
+            row.cut = document["trim"]
+            row.summary_changed = summarizer.calls > previous_calls
+            row.summarizer_calls = summarizer.calls
+            previous_calls = summarizer.calls
+            previous_request = request
+            previous_bytes = body
+            window = [dict(message) for message in document["messages"]]
 
     return rows
 
@@ -242,7 +243,7 @@ def aggregate(rows: list[Turn]) -> dict[str, Any]:
             sum(row.ratio for row in after_fill) / len(after_fill) if after_fill else None
         ),
         "cuts": sum(1 for row in rows if row.cut),
-        "summary_updates": sum(1 for row in rows if row.summary_changed),
+        "summary_calls": rows[-1].summarizer_calls if rows else 0,
         "miss_tokens": sum(row.request_tokens - row.hit_tokens for row in steady),
         "effective_per_turn": effective / len(steady) if steady else 0.0,
         "mean_partial_ratio": (
@@ -251,7 +252,15 @@ def aggregate(rows: list[Turn]) -> dict[str, Any]:
     }
 
 
-def main() -> int:
+def default_regimes(max_turns: int, max_tokens: int) -> list[Regime]:
+    return [
+        Regime("A 迟滞关 (step=0)", max_turns, max_tokens, 0),
+        Regime("B 迟滞 (step=5，新默认)", max_turns, max_tokens, 5),
+        Regime("C 只留 token 预算", 0, max_tokens, 0),
+    ]
+
+
+async def main() -> int:
     parser = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     parser.add_argument("--seed", required=True, help="a real conversation.json")
     parser.add_argument("--turns", type=int, default=45)
@@ -271,20 +280,14 @@ def main() -> int:
         f"est tokens (turn 2 onward)"
     )
     print(
-        f"bounds          : max_replay_turns={args.max_turns} (shipped default), "
+        f"bounds          : max_replay_turns={args.max_turns}, "
         f"max_replay_tokens={args.max_tokens} (= 229376 // 2)"
     )
     print(f"summary block   : about {args.summary_tokens} est tokens, rewritten on every cut")
     print()
 
-    regimes = [
-        Regime("A 现状", args.max_turns, args.max_tokens, 0),
-        Regime("B 迟滞 +5", args.max_turns, args.max_tokens, 5),
-        Regime("C 只留 token 预算", 0, args.max_tokens, 0),
-    ]
-
-    for regime in regimes:
-        rows = simulate(
+    for regime in default_regimes(args.max_turns, args.max_tokens):
+        rows = await simulate(
             seed=seed,
             turns=args.turns,
             per_turn_user=args.per_turn_user,
@@ -292,10 +295,7 @@ def main() -> int:
             regime=regime,
             summary_tokens=args.summary_tokens,
         )
-        print(
-            f"=== {regime.name} (max_replay_turns={regime.max_turns}, "
-            f"hysteresis={regime.hysteresis}) ==="
-        )
+        print(f"=== {regime.name} (max_turns={regime.max_turns}, step={regime.step}) ===")
         print(" turn  req_msgs  req_tok  kept_msgs  hit_tok  hit%  part%  cut  summ  diverges_at")
         for row in rows:
             mark = "CUT" if row.cut else "-"
@@ -316,29 +316,31 @@ def main() -> int:
             f"hit after fill: " + (f"{after * 100:.1f}%" if after is not None else "n/a")
         )
         print(
-            f"  -> cuts {stats['cuts']}  summary rewrites {stats['summary_updates']}  "
+            f"  -> cuts {stats['cuts']}  summary calls {stats['summary_calls']}  "
             f"miss tokens {stats['miss_tokens']:,.0f}  "
             f"effective {stats['effective_per_turn']:,.0f} tok/turn (hits at {DISCOUNT:g}x)"
         )
         print()
 
-    print("=== turn-size sweep (regime A): does the collapse depend on size? ===")
-    print("  user tok/turn   first cut   hit% after fill")
+    print("=== turn-size sweep: the band's effect does not depend on turn size ===")
+    print("  user tok/turn   step=0: hit%   cuts  |  step=5: hit%   cuts  |  miss-token ratio")
     for size in (100, 250, 1_000, 3_000):
-        rows = simulate(
-            seed=seed,
-            turns=args.turns,
-            per_turn_user=size,
-            per_turn_assistant=args.per_turn_assistant,
-            regime=Regime("A", args.max_turns, args.max_tokens, 0),
-            summary_tokens=args.summary_tokens,
-        )
-        stats = aggregate(rows)
-        after = stats["mean_ratio_after_fill"]
-        print(
-            f" {size:>13}   {stats['first_cut']!s:>9}   "
-            + (f"{after * 100:>5.1f}%" if after is not None else "n/a")
-        )
+        cells: list[str] = []
+        misses: list[int] = []
+        for step in (0, 5):
+            rows = await simulate(
+                seed=seed,
+                turns=args.turns,
+                per_turn_user=size,
+                per_turn_assistant=args.per_turn_assistant,
+                regime=Regime("sweep", args.max_turns, args.max_tokens, step),
+                summary_tokens=args.summary_tokens,
+            )
+            stats = aggregate(rows)
+            cells.append(f"{stats['mean_ratio'] * 100:>13.1f}% {stats['cuts']:>6}")
+            misses.append(stats["miss_tokens"])
+        ratio = misses[0] / misses[1] if misses[1] else 0.0
+        print(f" {size:>13}   " + "  |  ".join(cells) + f"  |  {ratio:>5.1f}x")
     print()
     print("note: 'kept_msgs' counts byte-identical *leading messages* — a lower bound on")
     print("      the provider's byte-prefix cache. Equal messages at a shifted offset")
@@ -347,4 +349,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(asyncio.run(main()))

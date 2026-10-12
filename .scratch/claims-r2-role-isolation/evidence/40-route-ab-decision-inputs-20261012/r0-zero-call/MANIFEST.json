@@ -1,0 +1,31 @@
+{
+  "schema_version": "items-ab-decision-inputs-manifest-1",
+  "created_on": "2026-10-12",
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/40-route-ab-decision-inputs-20261012/r0-zero-call/preregistered-ab-inputs.json": "sha256:97979128647373bfe5225fbb794f6728e5430ef0f23e0482425053439b6271b8",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/freeze-manifest.json": "sha256:da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/scoring-contract.json": "sha256:d9bc51f286a977ec92315b6e97c7ac303a971691334f4752ccd7e61d5b75a7ce",
+    ".scratch/claims-r2-role-isolation/evidence/35-gold-audit-20261011/r0-zero-call/gold-audit.json": "sha256:2802b614f4d7511500d39dad2b80c2fae23ad276a53f7a7694159381834c2bca",
+    ".scratch/claims-r2-role-isolation/evidence/36-l9-redo-and-baseline-20261011/r0-zero-call/l9-redo.json": "sha256:acd268f292c2b4312ce4549c9388741cf22e0c2d41a4b0253e548995b2393f99",
+    ".scratch/claims-r2-role-isolation/evidence/37-store-baseline-and-route-decision-20261012/r0-zero-call/store-baseline.json": "sha256:e5133654c06dfec17d68589a01a160eb9c92e08eae20a7f513ed2ac5146a3fc0",
+    ".scratch/claims-r2-role-isolation/evidence/38-gate33-workbench-rebuild-20261012/r0-zero-call/workbench-v2.json": "sha256:0bd9e66072b08f9f30267112ee505789dcee4d0825359e632cdbaac670736558",
+    ".scratch/claims-r2-role-isolation/evidence/39-roles-l3-audit-20261012/r0-zero-call/roles-l3-audit.json": "sha256:5a446a54e5d87c29cce6b0fa43a1313b29abacb90401e43d9508d4a8ea90b096",
+    ".scratch/claims-r2-role-isolation/evidence/32-items-v6-reasoning-refreeze-20261011/r0-zero-call/preregistered-gate.json": "sha256:6fb47e7945ce133dbdea7b73c6bb3b5e7266856cf6d956dbb9d191303783fba8",
+    ".scratch/claims-r2-role-isolation/evidence/32-items-v6-reasoning-refreeze-20261011/r0-zero-call/freeze-manifest.json": "sha256:1a0e008ad2af5835910cfe7d62918936f557dc377dd353e6a6dfea0f9df142f5",
+    ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate.json": "sha256:987772e957ce14526798a7258d1e5e8cb9afb4d58fb3f005e31891a5f46b2684",
+    ".scratch/claims-r2-role-isolation/evidence/33-items-quality-scoring-20261011/r0-zero-call/workbench.json": "sha256:e00d8ae65536bf662101ba1d53b8c3e9f80189e2be6b8172472abd02ea489777",
+    ".scratch/claims-r2-role-isolation/evidence/33-items-quality-scoring-20261011/r0-zero-call/adjudications.json": "sha256:cc2946ef6a487fba059ca995f2c34f469d4c96720b6b6186225c97bd1e41b537",
+    "plugins/corpus/structured_scoring.py": "sha256:172ce465492cf26cb7249599d9f53ac40d266c1883a49cea51b0b178894874f1"
+  },
+  "outputs": {
+    "preregistered-ab-inputs.json": "sha256:97979128647373bfe5225fbb794f6728e5430ef0f23e0482425053439b6271b8",
+    "ab-cost-benefit.json": "sha256:c32a4509b0ebbe505b5c9e7b82ad50d0d21ff92dbe1a527dc684ea3bb277d2e0",
+    "ab-cost-benefit.md": "sha256:2f818c72ae3ec1f46cc6f63886eb8fc93c7fd8d5ee8d5c414e4ab87f4bb29447",
+    "freeze-impact.json": "sha256:a2200c5f9f2b6b338c3cab8da17dfac5de39c96839568a7100e9dca366dea3dd",
+    "freeze-impact.md": "sha256:29b03712f22ce9a044f5051918a4785943cf39bade51c9ef2b900ec94463f14b",
+    "route-b-experiment-protocol.json": "sha256:88fddc8c43e8b467cbe505319877cf37be195179270231b5e36c635e94f43786",
+    "route-b-experiment-protocol.md": "sha256:a84eb878b340f1de9e88f236f4b546f880155217bd762fc1dafc2e4117d2fbee",
+    "build_ab_inputs.py": "sha256:a2cfed0808f4029cf943b8430dc8a903c20da93acffae71200ddd3027cf24199"
+  }
+}

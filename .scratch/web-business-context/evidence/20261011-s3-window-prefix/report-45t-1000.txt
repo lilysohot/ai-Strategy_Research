@@ -1,10 +1,10 @@
 seed            : /home/administrator/.local/share/frontier-agent/web/runs/d35f4b627354465dbd9033659579eb99/run/conversation.json
 system prompt   : 7749 chars / 2327 est tokens
 turn size       : user 1000 + assistant 300 est tokens (turn 2 onward)
-bounds          : max_replay_turns=10 (shipped default), max_replay_tokens=114688 (= 229376 // 2)
+bounds          : max_replay_turns=10, max_replay_tokens=114688 (= 229376 // 2)
 summary block   : about 300 est tokens, rewritten on every cut
 
-=== A 现状 (max_replay_turns=10, hysteresis=0) ===
+=== A 迟滞关 (step=0) (max_turns=10, step=0) ===
  turn  req_msgs  req_tok  kept_msgs  hit_tok  hit%  part%  cut  summ  diverges_at
     1         2     3349          0        0    0.0    0.0    -                    
     2         4     4678          2     3349   71.6   71.6    -         2:assistant
@@ -12,99 +12,99 @@ summary block   : about 300 est tokens, rewritten on every cut
     4         8     7336          6     6007   81.9   81.9    -         6:assistant
     5        10     8666          8     7336   84.7   84.7    -         8:assistant
     6        12     9995         10     8666   86.7   86.7    -        10:assistant
-    7        14    11324         12     9995   88.3   88.3    -        12:assistant
-    8        16    12653         14    11324   89.5   89.5    -        14:assistant
-    9        18    13983         16    12653   90.5   90.5    -        16:assistant
-   10        20    15312         18    13983   91.3   91.3    -        18:assistant
-   11        22    16642         20    15312   92.0   92.0  CUT   new  20:assistant
-   12        23    16980          1     2328   13.7   13.7  CUT   new        1:user
-   13        23    16977          1     2328   13.7   13.8  CUT              1:user
-   14        23    16978          2     2662   15.7   15.7  CUT              2:user
-   15        23    16978          2     2662   15.7   15.7  CUT              2:user
-   16        23    16979          2     2662   15.7   15.7  CUT              2:user
-   17        23    16979          2     2662   15.7   15.7  CUT              2:user
-   18        23    16980          2     2662   15.7   15.7  CUT              2:user
-   19        23    16980          2     2662   15.7   15.7  CUT              2:user
-   20        23    16981          2     2662   15.7   15.7  CUT              2:user
-   21        23    16981          2     2662   15.7   15.7  CUT              2:user
-   22        23    16981          2     2662   15.7   15.7  CUT              2:user
-   23        23    16981          2     2662   15.7   15.7  CUT              2:user
-   24        23    16981          2     2662   15.7   15.7  CUT              2:user
-   25        23    16981          2     2662   15.7   15.7  CUT              2:user
-   26        23    16981          2     2662   15.7   15.7  CUT              2:user
-   27        23    16981          2     2662   15.7   15.7  CUT              2:user
-   28        23    16981          2     2662   15.7   15.7  CUT              2:user
-   29        23    16981          2     2662   15.7   15.7  CUT              2:user
-   30        23    16981          2     2662   15.7   15.7  CUT              2:user
-   31        23    16981          2     2662   15.7   15.7  CUT              2:user
-   32        23    16981          2     2662   15.7   15.7  CUT              2:user
-   33        23    16981          2     2662   15.7   15.7  CUT              2:user
-   34        23    16981          2     2662   15.7   15.7  CUT              2:user
-   35        23    16981          2     2662   15.7   15.7  CUT              2:user
-   36        23    16981          2     2662   15.7   15.7  CUT              2:user
-   37        23    16981          2     2662   15.7   15.7  CUT              2:user
-   38        23    16981          2     2662   15.7   15.7  CUT              2:user
-   39        23    16981          2     2662   15.7   15.7  CUT              2:user
-   40        23    16981          2     2662   15.7   15.7  CUT              2:user
-   41        23    16981          2     2662   15.7   15.7  CUT              2:user
-   42        23    16981          2     2662   15.7   15.7  CUT              2:user
-   43        23    16981          2     2662   15.7   15.7  CUT              2:user
-   44        23    16981          2     2662   15.7   15.7  CUT              2:user
-   45        23    16981          2     2662   15.7   15.7  CUT              2:user
-  -> mean hit 31.4%  (counting the partial message too: 31.5%)  mean prompt 15,544 tok  first cut: turn 11  hit after fill: 17.7%
-  -> cuts 35  summary rewrites 2  miss tokens 500,790  effective 11,798 tok/turn (hits at 0.1x)
+    7        14    13150         12    11765   89.5   89.5    -        12:assistant
+    8        16    14483         14    13150   90.8   90.8    -        14:assistant
+    9        18    15816         16    14483   91.6   91.6    -        16:assistant
+   10        20    17149         18    15816   92.2   92.2    -        18:assistant
+   11        22    18482         20    17149   92.8   92.8  CUT   new  20:assistant
+   12        23    18491          1     2276   12.3   12.3  CUT   new        1:user
+   13        23    18185          1     2276   12.5   12.6  CUT   new        1:user
+   14        23    17873          1     2276   12.7   12.9  CUT   new        1:user
+   15        23    17561          1     2276   13.0   13.1  CUT   new        1:user
+   16        23    17249          1     2276   13.2   13.4  CUT   new        1:user
+   17        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   18        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   19        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   20        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   21        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   22        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   23        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   24        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   25        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   26        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   27        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   28        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   29        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   30        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   31        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   32        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   33        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   34        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   35        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   36        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   37        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   38        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   39        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   40        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   41        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   42        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   43        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   44        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+   45        23    16937          1     2276   13.4   13.6  CUT   new        1:user
+  -> mean hit 29.8%  (counting the partial message too: 30.0%)  mean prompt 15,825 tok  first cut: turn 11  hit after fill: 15.6%
+  -> cuts 35  summary calls 35  miss tokens 516,511  effective 12,147 tok/turn (hits at 0.1x)
 
-=== B 迟滞 +5 (max_replay_turns=10, hysteresis=5) ===
+=== B 迟滞 (step=5，新默认) (max_turns=10, step=5) ===
  turn  req_msgs  req_tok  kept_msgs  hit_tok  hit%  part%  cut  summ  diverges_at
-    1         2     3349          0        0    0.0    0.0    -                    
-    2         4     4678          2     3349   71.6   71.6    -         2:assistant
-    3         6     6007          4     4678   77.9   77.9    -         4:assistant
-    4         8     7336          6     6007   81.9   81.9    -         6:assistant
-    5        10     8666          8     7336   84.7   84.7    -         8:assistant
-    6        12     9995         10     8666   86.7   86.7    -        10:assistant
-    7        14    11324         12     9995   88.3   88.3    -        12:assistant
-    8        16    12653         14    11324   89.5   89.5    -        14:assistant
-    9        18    13983         16    12653   90.5   90.5    -        16:assistant
-   10        20    15312         18    13983   91.3   91.3    -        18:assistant
-   11        22    16642         20    15312   92.0   92.0    -        20:assistant
-   12        24    17972         22    16642   92.6   92.6    -        22:assistant
-   13        26    19301         24    17972   93.1   93.1    -        24:assistant
-   14        28    20631         26    19301   93.6   93.6    -        26:assistant
-   15        30    26310         28    24925   94.7   94.7    -        28:assistant
-   16        32    27643         30    26310   95.2   95.2  CUT   new  30:assistant
-   17        23    19426          1     2276   11.7   11.7    -              1:user
-   18        25    20759         23    19426   93.6   93.6    -        23:assistant
-   19        27    22092         25    20759   94.0   94.0    -        25:assistant
-   20        29    23425         27    22092   94.3   94.3    -        27:assistant
-   21        31    24758         29    23425   94.6   94.6  CUT   new  29:assistant
-   22        23    17860          1     2276   12.7   12.8    -              1:user
-   23        25    19193         23    17860   93.1   93.0    -        23:assistant
-   24        27    20526         25    19193   93.5   93.5    -        25:assistant
-   25        29    21859         27    20526   93.9   93.9    -        27:assistant
-   26        31    23192         29    21859   94.3   94.2  CUT        29:assistant
-   27        23    16924          2     2590   15.3   15.4    -              2:user
-   28        25    18257         23    16924   92.7   92.7    -        23:assistant
-   29        27    19590         25    18257   93.2   93.2    -        25:assistant
-   30        29    20923         27    19590   93.6   93.6    -        27:assistant
-   31        31    22256         29    20923   94.0   94.0  CUT        29:assistant
-   32        23    16924          2     2590   15.3   15.3    -              2:user
-   33        25    18257         23    16924   92.7   92.7    -        23:assistant
-   34        27    19590         25    18257   93.2   93.2    -        25:assistant
-   35        29    20923         27    19590   93.6   93.6    -        27:assistant
-   36        31    22256         29    20923   94.0   94.0  CUT        29:assistant
-   37        23    16924          2     2590   15.3   15.4    -              2:user
-   38        25    18257         23    16924   92.7   92.7    -        23:assistant
-   39        27    19590         25    18257   93.2   93.2    -        25:assistant
-   40        29    20923         27    19590   93.6   93.6    -        27:assistant
-   41        31    22256         29    20923   94.0   94.0  CUT        29:assistant
-   42        23    16924          2     2590   15.3   15.3    -              2:user
-   43        25    18257         23    16924   92.7   92.7    -        23:assistant
-   44        27    19590         25    18257   93.2   93.2    -        25:assistant
-   45        29    20923         27    19590   93.6   93.6    -        27:assistant
-  -> mean hit 80.9%  (counting the partial message too: 80.9%)  mean prompt 18,207 tok  first cut: turn 16  hit after fill: 77.7%
-  -> cuts 6  summary rewrites 2  miss tokens 140,729  effective 4,699 tok/turn (hits at 0.1x)
+    1         2     3280          0        1    0.0    0.0    -                    
+    2         4     4613          2     3280   71.1   71.1    -         2:assistant
+    3         6     5946          4     4613   77.6   77.6    -         4:assistant
+    4         8     7279          6     5946   81.7   81.7    -         6:assistant
+    5        10     8612          8     7279   84.5   84.5    -         8:assistant
+    6        12     9945         10     8612   86.6   86.6    -        10:assistant
+    7        14    11278         12     9945   88.2   88.2    -        12:assistant
+    8        16    12611         14    11278   89.4   89.4    -        14:assistant
+    9        18    13944         16    12611   90.4   90.4    -        16:assistant
+   10        20    15277         18    13944   91.3   91.3    -        18:assistant
+   11        22    16610         20    15277   92.0   92.0    -        20:assistant
+   12        24    17943         22    16610   92.6   92.6    -        22:assistant
+   13        26    19276         24    17943   93.1   93.1    -        24:assistant
+   14        28    20609         26    19276   93.5   93.5    -        26:assistant
+   15        30    21942         28    20609   93.9   93.9    -        28:assistant
+   16        32    23275         30    21942   94.3   94.3  CUT   new  30:assistant
+   17        23    16931          1     2276   13.4   13.4    -              1:user
+   18        25    18264         23    16931   92.7   92.7    -        23:assistant
+   19        27    19597         25    18264   93.2   93.2    -        25:assistant
+   20        29    20930         27    19597   93.6   93.6    -        27:assistant
+   21        31    22263         29    20930   94.0   94.0    -        29:assistant
+   22        33    23596         31    22263   94.4   94.3  CUT   new  31:assistant
+   23        23    16937          1     2276   13.4   13.5    -              1:user
+   24        25    18270         23    16937   92.7   92.7    -        23:assistant
+   25        27    19603         25    18270   93.2   93.2    -        25:assistant
+   26        29    20936         27    19603   93.6   93.6    -        27:assistant
+   27        31    22269         29    20936   94.0   94.0    -        29:assistant
+   28        33    23602         31    22269   94.4   94.3  CUT   new  31:assistant
+   29        23    16937          1     2276   13.4   13.6    -              1:user
+   30        25    18270         23    16937   92.7   92.7    -        23:assistant
+   31        27    19603         25    18270   93.2   93.2    -        25:assistant
+   32        29    20936         27    19603   93.6   93.6    -        27:assistant
+   33        31    22269         29    20936   94.0   94.0    -        29:assistant
+   34        33    23602         31    22269   94.4   94.3  CUT   new  31:assistant
+   35        23    16937          1     2276   13.4   13.6    -              1:user
+   36        25    18270         23    16937   92.7   92.7    -        23:assistant
+   37        27    19603         25    18270   93.2   93.2    -        25:assistant
+   38        29    20936         27    19603   93.6   93.6    -        27:assistant
+   39        31    22269         29    20936   94.0   94.0    -        29:assistant
+   40        33    23602         31    22269   94.4   94.3  CUT   new  31:assistant
+   41        23    16937          1     2276   13.4   13.6    -              1:user
+   42        25    18270         23    16937   92.7   92.7    -        23:assistant
+   43        27    19603         25    18270   93.2   93.2    -        25:assistant
+   44        29    20936         27    19603   93.6   93.6    -        27:assistant
+   45        31    22269         29    20936   94.0   94.0    -        29:assistant
+  -> mean hit 82.6%  (counting the partial message too: 82.6%)  mean prompt 18,037 tok  first cut: turn 16  hit after fill: 80.2%
+  -> cuts 5  summary calls 5  miss tokens 125,286  effective 4,366 tok/turn (hits at 0.1x)
 
-=== C 只留 token 预算 (max_replay_turns=0, hysteresis=0) ===
+=== C 只留 token 预算 (max_turns=0, step=0) ===
  turn  req_msgs  req_tok  kept_msgs  hit_tok  hit%  part%  cut  summ  diverges_at
     1         2     3280          0        1    0.0    0.0    -                    
     2         4     4613          2     3280   71.1   71.1    -         2:assistant
@@ -152,14 +152,14 @@ summary block   : about 300 est tokens, rewritten on every cut
    44        88    60599         86    59266   97.8   97.8    -        86:assistant
    45        90    61932         88    60599   97.8   97.8    -        88:assistant
   -> mean hit 93.7%  (counting the partial message too: 93.7%)  mean prompt 33,272 tok  first cut: turn None  hit after fill: n/a
-  -> cuts 0  summary rewrites 0  miss tokens 58,652  effective 4,527 tok/turn (hits at 0.1x)
+  -> cuts 0  summary calls 0  miss tokens 58,652  effective 4,527 tok/turn (hits at 0.1x)
 
-=== turn-size sweep (regime A): does the collapse depend on size? ===
-  user tok/turn   first cut   hit% after fill
-           100          11    37.4%
-           250          11    30.7%
-          1000          11    17.4%
-          3000          11     9.0%
+=== turn-size sweep: the band's effect does not depend on turn size ===
+  user tok/turn   step=0: hit%   cuts  |  step=5: hit%   cuts  |  miss-token ratio
+           100            44.8%     35  |           86.4%      5  |    4.1x
+           250            39.8%     35  |           85.2%      5  |    4.1x
+          1000            29.8%     35  |           82.6%      5  |    4.1x
+          3000            23.3%     35  |           80.8%      5  |    4.1x
 
 note: 'kept_msgs' counts byte-identical *leading messages* — a lower bound on
       the provider's byte-prefix cache. Equal messages at a shifted offset

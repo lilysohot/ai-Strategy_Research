@@ -11,6 +11,7 @@ See ``.scratch/web-business-context/issues/01-context-inheritance.md`` §9.
 from __future__ import annotations
 
 import asyncio
+import itertools
 import json
 import uuid
 from pathlib import Path
@@ -1228,8 +1229,10 @@ async def _dump_with(
     summarizer: object = None,
     max_replay_turns: int = 0,
     max_replay_tokens: int = 0,
+    max_replay_turn_step: int | None = None,
 ) -> dict:
     path = tmp_path / "conversation.json"
+    kwargs = {} if max_replay_turn_step is None else {"max_replay_turn_step": max_replay_turn_step}
     observer = ConversationSnapshotObserver(
         path,
         system_prompt=_SYSTEM,
@@ -1241,6 +1244,7 @@ async def _dump_with(
         max_replay_turns=max_replay_turns,
         max_replay_tokens=max_replay_tokens,
         summarizer=summarizer,
+        **kwargs,
     )
     await observer.on_loop_end(
         AgentLoopResult(messages=messages, turns_used=1, stopped_by="no_tool")
@@ -1394,3 +1398,175 @@ def test_the_summary_block_is_not_counted_as_a_real_turn() -> None:
 
     dropped_memory, _ = trim_to_turns(messages, 2, head=1)
     assert dropped_memory[1] != block, "head=1 loses the memory (the bug this prevents)"
+
+
+# ── S3: the turn bound keeps a hysteresis band (issue 01 §12.6) ──────
+
+
+def _conversation(turns: int) -> list[dict]:
+    """``system`` + *turns* complete turns, in the order a loop would end with."""
+    messages = [system_msg(_SYSTEM)]
+    for index in range(1, turns + 1):
+        messages.extend(_turn(f"Q{index}"))
+    return messages
+
+
+async def _chain(
+    tmp_path: Path,
+    *,
+    turns: int,
+    summarizer: object,
+    max_replay_turns: int,
+    max_replay_turn_step: int | None = None,
+    max_replay_tokens: int = 0,
+) -> list[dict]:
+    """Drive *turns* writes the way a conversation does: each dump feeds the next.
+
+    Feeding the previous dump back is what makes this a prefix test rather than a
+    trim test — the window a real turn replays is the previous run's output.
+    """
+    documents: list[dict] = []
+    messages = [system_msg(_SYSTEM)]
+    for index in range(1, turns + 1):
+        messages = [*messages, *_turn(f"Q{index}")]
+        documents.append(
+            await _dump_with(
+                tmp_path,
+                messages,
+                summarizer=summarizer,
+                max_replay_turns=max_replay_turns,
+                max_replay_turn_step=max_replay_turn_step,
+                max_replay_tokens=max_replay_tokens,
+            )
+        )
+        messages = documents[-1]["messages"]
+    return documents
+
+
+class _CountingSummarizer:
+    """A stand-in whose memory changes per call, like a real one does."""
+
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def __call__(self, old_summary: str | None, dropped: list[dict]) -> str | None:
+        self.calls += 1
+        return f"memory-{self.calls} (was {len(dropped)} messages)"
+
+
+async def test_the_turn_bound_waits_for_the_hysteresis_step(tmp_path) -> None:
+    """Inside the band nothing is cut; one turn over it, and the cut is one-shot.
+
+    The bound is re-evaluated on every write, so without the band a conversation
+    that has reached ``max_replay_turns`` is over it on every later turn — one
+    dropped turn per write, and the window slides by one position forever.
+    """
+    for turns in (1, 2, 3, 4, 5):
+        document = await _dump_with(
+            tmp_path,
+            _conversation(turns),
+            max_replay_turns=2,
+            max_replay_turn_step=3,
+        )
+        assert document["trim"] is None, f"{turns} turns is inside the 2..5 band"
+
+    cut = await _dump_with(tmp_path, _conversation(6), max_replay_turns=2, max_replay_turn_step=3)
+    assert cut["trim"] is not None
+    assert cut["trim"]["cut_at"] == 9, "cut back to the bound, not to one turn less"
+    assert [m for m in cut["messages"] if m["role"] == "user"] == [
+        user_msg("Q5"),
+        user_msg("Q6"),
+    ]
+
+
+async def test_the_summary_is_written_once_per_cut_not_once_per_turn(tmp_path) -> None:
+    """The band is what makes "trimming is rare" true (issue 01 §12.3).
+
+    Every cut rewrites the block, and the block sits inside the cached prefix —
+    so a cut per turn is a cache reset per turn *and* a summary call per turn.
+    """
+    banded = _CountingSummarizer()
+    documents = await _chain(
+        tmp_path,
+        turns=12,
+        summarizer=banded,
+        max_replay_turns=2,
+        max_replay_turn_step=3,
+    )
+    cuts = sum(1 for doc in documents if doc["trim"])
+
+    assert cuts == 2, "12 turns at 2..5 with one turn per write: cuts at 6 and 10"
+    assert banded.calls == cuts, "one summary per cut — not one per turn"
+
+    unbanded = _CountingSummarizer()
+    await _chain(
+        tmp_path,
+        turns=12,
+        summarizer=unbanded,
+        max_replay_turns=2,
+        max_replay_turn_step=0,
+    )
+    assert unbanded.calls == 10, "without the band every turn past the bound cuts"
+
+
+async def test_the_prefix_survives_every_turn_between_cuts(tmp_path) -> None:
+    """The property the band exists for, stated on our side of the wire.
+
+    Between cuts each dump is the previous dump plus one turn, so the next
+    request's first bytes are byte-identical to the previous request's. At a cut
+    it diverges at index 1 — the memory block, which is the price of the cut.
+    """
+    documents = await _chain(
+        tmp_path,
+        turns=12,
+        summarizer=_CountingSummarizer(),
+        max_replay_turns=2,
+        max_replay_turn_step=3,
+    )
+
+    appended = 0
+    for previous, current in itertools.pairwise(documents):
+        if current["trim"] is None:
+            assert current["messages"][: len(previous["messages"])] == previous["messages"], (
+                "an uncut write must be a pure append"
+            )
+            appended += 1
+        else:
+            assert current["messages"][0] == previous["messages"][0], "the system prompt is stable"
+            assert current["messages"][1] != previous["messages"][1], "the memory block moved"
+
+    assert appended == 9, "11 transitions, 2 of them cuts"
+
+
+async def test_step_zero_is_byte_identical_to_the_pre_hysteresis_writes(tmp_path) -> None:
+    """The regression guard: not passing the knob must change nothing.
+
+    ``max_replay_turn_step=0`` is documented as "the behaviour before the band",
+    so it has to reproduce the old dumps exactly — including the cut on every
+    turn past the bound.
+    """
+    for turns in range(1, 13):
+        implicit = await _dump_with(tmp_path, _conversation(turns), max_replay_turns=2)
+        explicit = await _dump_with(
+            tmp_path, _conversation(turns), max_replay_turns=2, max_replay_turn_step=0
+        )
+        assert canonical_json(implicit) == canonical_json(explicit), f"diverged at {turns} turns"
+
+
+async def test_the_token_budget_keeps_biting_inside_the_band(tmp_path) -> None:
+    """The band is for the *turn* bound only: the size guard is not negotiable.
+
+    The token budget exists so a dump can never make the next request unrunnable;
+    deferring it by a few turns to protect the cache would trade a cheap miss for
+    a failed run.
+    """
+    document = await _dump_with(
+        tmp_path,
+        _conversation(4),
+        max_replay_turns=2,
+        max_replay_turn_step=3,
+        max_replay_tokens=1,
+    )
+
+    assert document["trim"] is not None, "4 turns is inside the band, the budget still cut"
+    assert "replay_max_tokens" in document["trim"]["reason"]

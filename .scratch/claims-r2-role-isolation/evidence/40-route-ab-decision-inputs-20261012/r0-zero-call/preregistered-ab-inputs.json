@@ -1,0 +1,62 @@
+{
+  "schema_version": "items-route-ab-decision-inputs-preregistration-1",
+  "created_on": "2026-10-12",
+  "status": "preregistered_before_run",
+  "purpose": "产出裁定「路线 a vs 路线 b」所需的同量纲输入：①同量纲成本-收益表（含共同项/边际项拆分）②route b 冻结影响清单 ③route b 收益的受控双臂实验预注册草案。零调用、只读。",
+  "authorization": {"granted_by": "user", "granted_on": "2026-10-12", "scope": "零调用只读；不改金标/契约/评分器/冻结物；不执行实验；不报分"},
+
+  "why_this_batch": {
+    "gap_1": "收益侧中间区间未测：7（字段已逐字对齐）→ 39（逐字证据可达）→ 48。决定 a/b 的 32 条属人工裁定，机上不可测。",
+    "gap_2": "route b 收益零证据：未验证『抽取差』是口径歧义（改 prompt 可解）还是模型能力（不可解）。",
+    "gap_3": "两路线不在同一量纲：现有比较是『确定性比例』对『代价清单』。",
+    "gap_4": "route b 的冻结影响只有口头核出的 3 条事实，未成可签认件。"
+  },
+
+  "units": {
+    "cost_dimensions": [
+      "model_calls",
+      "human_adjudication_records",
+      "freeze_revisions",
+      "gate_runs",
+      "zero_call_code_changes"
+    ],
+    "benefit_dimension": "matchable_gold_records（分 measured / bounded / unverified 三态）",
+    "rule": "成本与收益必须同行同表给出；禁止用『确定性比例』比『代价清单』；未证数字不得写成具体值。"
+  },
+
+  "method": {
+    "measured_inputs": "全部从既有产物读取并记录其 sha256（36/37/38/39 与 32/28/10 的 manifest 与 gate），不得手抄。",
+    "authored_inputs": "工作项分解、归属判定、收益情形为人工撰写，但每行必须带 basis（出处）与 status。",
+    "freeze_impact": "逐条读取被绑定物件的 manifest 字段，给出 哈希 + 绑定来源 + 影响方式 + 处置；不得口头化。",
+    "experiment_protocol": "只写设计与判据，不执行。"
+  },
+
+  "exit_criteria": {
+    "EC-AB1": "每个工作项必须给出 5 个成本维度 + 归属（共同项／route a 边际／route b 边际／独立项）+ basis；缺项即失败。",
+    "EC-AB2": "收益侧必须区分 measured／bounded_by_measurement／unverified；unverified 项不得给出具体数字。",
+    "EC-AB3": "必须按维度给出「共同项 vs 边际项之和」的比较，并据此判定『伪二分假设』（先做共同项是否优于先分叉）是否成立；须逐维度给结论，不得只给一个总判断。",
+    "EC-AB4": "冻结影响清单必须逐条给出 哈希 + 绑定来源 + 影响方式 + 处置；且必须声明哪些被绑定物件**不受**该改动影响。",
+    "EC-AB5": "route b 实验协议必须含：同代码双臂、被测指标、预注册判据、样本与调用预算、授权项、范围外清单、以及『单臂不能归因』的显式禁止。",
+    "EC-AB6": "判据外新发现进 backlog，不回流本次。",
+    "EC-AB7": "任何与 issue-34 §5.9 冲突者以实测为准并列出待修订条目。"
+  },
+
+  "out_of_scope": [
+    "不执行 route b 实验、不发起任何模型调用",
+    "不改金标、契约、评分器、阈值；不动任何门产物与冻结物",
+    "不产出评分结果；本批只产出裁定输入",
+    "不代替 xyl 对 32 条区间做裁定（缺口 1 仍缺人工）"
+  ],
+
+  "artifacts": [
+    "r0-zero-call/preregistered-ab-inputs.json（本文件，write-once）",
+    "r0-zero-call/build_ab_inputs.py（支持 --no-write，幂等）",
+    "r0-zero-call/ab-cost-benefit.json",
+    "r0-zero-call/ab-cost-benefit.md",
+    "r0-zero-call/freeze-impact.json",
+    "r0-zero-call/freeze-impact.md",
+    "r0-zero-call/route-b-experiment-protocol.json",
+    "r0-zero-call/route-b-experiment-protocol.md",
+    "r0-zero-call/MANIFEST.json"
+  ]
+}

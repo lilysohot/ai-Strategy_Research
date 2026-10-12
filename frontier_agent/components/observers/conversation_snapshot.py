@@ -476,6 +476,7 @@ class ConversationSnapshotObserver(BaseObserver):
         model_name: str = "",
         max_replay_turns: int = 0,
         max_replay_tokens: int = 0,
+        max_replay_turn_step: int = 0,
         summarizer: Callable[[str | None, list[Message]], Awaitable[str | None]] | None = None,
     ) -> None:
         """Args:
@@ -495,6 +496,11 @@ class ConversationSnapshotObserver(BaseObserver):
             run's *first* request: a dump written just under the provider's
             ceiling would otherwise replay past it, where nothing in the run
             can compact it back.
+        max_replay_turn_step: Hysteresis for ``max_replay_turns`` (issue 01 §12.6).
+            ``0`` trims to the turn bound on *every* write; ``n > 0`` lets the
+            window grow to ``max_replay_turns + n`` before cutting it back in one
+            go. See :meth:`_effective_max_turns` for why cutting every turn costs
+            far more than the turns it drops.
         summarizer: Called as ``(previous_summary, dropped_messages)`` when a
             trim is about to discard turns, and expected to return the text that
             replaces them (issue 01 §12.3). ``None`` — or a ``None`` return —
@@ -513,6 +519,7 @@ class ConversationSnapshotObserver(BaseObserver):
         self._model_name = model_name
         self._max_replay_turns = max_replay_turns
         self._max_replay_tokens = max_replay_tokens
+        self._max_replay_turn_step = max_replay_turn_step
         self._summarizer = summarizer
 
     async def on_loop_end(self, result: AgentLoopResult) -> None:
@@ -552,11 +559,48 @@ class ConversationSnapshotObserver(BaseObserver):
             model_name=self._model_name,
             turns_used=int(getattr(result, "turns_used", 0) or 0),
             stopped_by=str(getattr(result, "stopped_by", "") or ""),
-            max_replay_turns=self._max_replay_turns,
+            max_replay_turns=self._effective_max_turns(wire),
             max_replay_tokens=self._max_replay_tokens,
             summary_block=summary_block,
         )
         self._atomic_write(document)
+
+    def _effective_max_turns(self, wire: list[Message]) -> int:
+        """The turn bound to apply on *this* write — ``0`` when it should not bite.
+
+        A hard bound is re-evaluated on every write, and a conversation gains one
+        user turn per run. Once the window reaches ``max_replay_turns`` it is
+        therefore over the bound on *every* subsequent turn: the writer cuts one
+        turn per write, the window slides by one position, and the next request
+        stops matching the previous one right after the system prompt — every
+        turn, for the rest of the conversation. Reusing the cache then costs a full
+        re-prefill of the window per turn, which is strictly worse than the turns
+        the cut removed (issue 01 §12.6 measures it: 27% hit where 94% is
+        available, 35 summary calls over 45 turns instead of 6).
+
+        The fix is not a bigger bound — it is a bound with hysteresis. Keep the
+        hard bound only once the window has overflowed by ``max_replay_turn_step``,
+        cut back to ``max_replay_turns`` in one go, and leave every turn in between
+        as a pure append. The prefix then survives ``step`` turns per cut instead
+        of zero, and the summary is rewritten once per cut instead of per turn.
+
+        This is the *only* place the decision is made: ``_write`` and
+        ``_summarize_dropped`` must agree on it, or a write would cut without
+        updating the memory (or rewrite the summary without cutting, which alone
+        resets the cache). The token bound is deliberately not part of the
+        hysteresis — it is the guard that keeps a replay from becoming a request
+        the provider rejects, so it has to hold on every write.
+        """
+        step = self._max_replay_turn_step
+        if step <= 0 or self._max_replay_turns <= 0:
+            return self._max_replay_turns
+        head, _ = summary_from(wire)
+        # Same accounting as ``trim_to_turns``: the summary block is memory, not a
+        # turn, so it must not push the window over the threshold on its own.
+        turns = sum(
+            1 for idx, message in enumerate(wire) if idx >= head and message.get("role") == "user"
+        )
+        return self._max_replay_turns if turns > self._max_replay_turns + step else 0
 
     async def _summarize_dropped(self, wire: list[Message]) -> str | None:
         """The summary block to write, updated only when turns are being dropped.
@@ -568,7 +612,7 @@ class ConversationSnapshotObserver(BaseObserver):
         """
         head, old_summary = summary_from(wire)
         _, probe = trim_to_turns(
-            wire, self._max_replay_turns, max_tokens=self._max_replay_tokens, head=head
+            wire, self._effective_max_turns(wire), max_tokens=self._max_replay_tokens, head=head
         )
         if probe is None or self._summarizer is None:
             return old_summary

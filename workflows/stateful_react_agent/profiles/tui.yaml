@@ -67,6 +67,16 @@ agent:
   max_len: ${OPENAI_CONTEXT_WINDOW:-262144}
   # Hard guard; leave output headroom and let tiered compaction trigger first.
   max_input_tokens: ${OPENAI_MAX_INPUT_TOKENS:-229376}
+  # Cross-turn replay window (issue 01 §12.6) — this is the profile the web runs
+  # load (the sibling agent-team profile has its own copy of these two keys).
+  # The dump keeps at most `replay_max_turns` user turns, but only cuts once the
+  # window has overflowed by `replay_max_turn_step`: a hard bound re-evaluated on
+  # every write is over the limit on every turn once the window is full, which
+  # slides the window one position per turn and discards the cached prefix from
+  # the system prompt onward (measured: 27% cache reuse instead of 94%).
+  # `step: 0` restores the pre-hysteresis behaviour (only useful to reproduce it).
+  replay_max_turns: ${REPLAY_MAX_TURNS:-10}
+  replay_max_turn_step: ${REPLAY_MAX_TURN_STEP:-5}
   tier1_keep_tool_result: 5
   keep_recent_turns: 5
   # Expose add_task/update_task and maintain their state during the run.

@@ -1,0 +1,432 @@
+{
+  "schema_version": "items-roles-l3-audit-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "preregistration": {
+    "path": "preregistered-roles-l3.json",
+    "sha256": "sha256:8f970041130d1a66be86d6b128eebd606bf4e4809b359337ed4a97031c0ba25a"
+  },
+  "scope_declaration": {
+    "claims": "no production artifact in this workstream (items-only gate-32 protocol)",
+    "material_relations": "measured 0 relations across both treatment sources",
+    "protocol_exclusion_quote": "MATERIAL_ITEM_JSONL_PROMPT: 本阶段只抽 speakers 和 items，不输出 relations"
+  },
+  "gold_side": {
+    "claims": {
+      "records": 20,
+      "per_field": {
+        "subject": {
+          "gold_nonempty": 20,
+          "gold_total": 20,
+          "distinct_values": 4
+        },
+        "metric": {
+          "gold_nonempty": 20,
+          "gold_total": 20,
+          "distinct_values": 18
+        },
+        "period": {
+          "gold_nonempty": 20,
+          "gold_total": 20,
+          "distinct_values": 9
+        },
+        "unit": {
+          "gold_nonempty": 20,
+          "gold_total": 20,
+          "distinct_values": 7
+        },
+        "value": {
+          "gold_nonempty": 20,
+          "gold_total": 20,
+          "distinct_values": 20
+        },
+        "factuality": {
+          "gold_nonempty": 20,
+          "gold_total": 20,
+          "distinct_values": 2
+        },
+        "attribution": {
+          "gold_nonempty": 20,
+          "gold_total": 20,
+          "distinct_values": 3
+        },
+        "perspective": {
+          "gold_nonempty": 20,
+          "gold_total": 20,
+          "distinct_values": 2
+        },
+        "source_stance": {
+          "gold_nonempty": 20,
+          "gold_total": 20,
+          "distinct_values": 2
+        },
+        "estimate_status": {
+          "gold_nonempty": 20,
+          "gold_total": 20,
+          "distinct_values": 5
+        },
+        "qualifier": {
+          "gold_nonempty": 20,
+          "gold_total": 20,
+          "distinct_values": 2
+        }
+      }
+    },
+    "material_items": {
+      "records": 48,
+      "per_field": {
+        "proposition": {
+          "gold_nonempty": 48,
+          "gold_total": 48,
+          "distinct_values": 48
+        },
+        "semantic_type": {
+          "gold_nonempty": 48,
+          "gold_total": 48,
+          "distinct_values": 4
+        },
+        "statement_role": {
+          "gold_nonempty": 48,
+          "gold_total": 48,
+          "distinct_values": 4
+        },
+        "speech_role": {
+          "gold_nonempty": 48,
+          "gold_total": 48,
+          "distinct_values": 1
+        },
+        "perspective": {
+          "gold_nonempty": 48,
+          "gold_total": 48,
+          "distinct_values": 2
+        },
+        "speaker_ref": {
+          "gold_nonempty": 48,
+          "gold_total": 48,
+          "distinct_values": 5
+        },
+        "polarity": {
+          "gold_nonempty": 48,
+          "gold_total": 48,
+          "distinct_values": 3
+        },
+        "attribution": {
+          "gold_nonempty": 48,
+          "gold_total": 48,
+          "distinct_values": 5
+        },
+        "source_stance": {
+          "gold_nonempty": 48,
+          "gold_total": 48,
+          "distinct_values": 2
+        }
+      }
+    },
+    "material_relations": {
+      "records": 24,
+      "per_field": {
+        "from_gold_record_id": {
+          "gold_nonempty": 24,
+          "gold_total": 24,
+          "distinct_values": 22
+        },
+        "to_gold_record_id": {
+          "gold_nonempty": 24,
+          "gold_total": 24,
+          "distinct_values": 21
+        },
+        "relation": {
+          "gold_nonempty": 24,
+          "gold_total": 24,
+          "distinct_values": 4
+        },
+        "provenance": {
+          "gold_nonempty": 24,
+          "gold_total": 24,
+          "distinct_values": 1
+        }
+      }
+    }
+  },
+  "claim_record_code_fields": [
+    "doc_id",
+    "source_rev",
+    "seq",
+    "locator",
+    "claim_text",
+    "evidence_quote",
+    "evidence_kind",
+    "table_ref",
+    "scope",
+    "subject_raw",
+    "subject",
+    "metric_raw",
+    "metric",
+    "qualifiers",
+    "kind",
+    "value_text",
+    "value_num",
+    "unit_raw",
+    "unit",
+    "period_raw",
+    "period_end",
+    "period_grain",
+    "observed_at",
+    "known_at",
+    "quality_status",
+    "reason_codes",
+    "model",
+    "extractor_version",
+    "lint_version",
+    "extracted_at"
+  ],
+  "relations_measured": {
+    "industrial-fulian-md": {
+      "relation_count": 0,
+      "object_sha256": "sha256:5164a8c10df8cbad70a04cd6b223c8ff6aaef2f9c74e43523596734ec9b040c0",
+      "sample": []
+    },
+    "optical-module-docx": {
+      "relation_count": 0,
+      "object_sha256": "sha256:08fe8d9e46210fd84c65e6ec3e4dcbecb4af94f1444a67692996c2e5a67cf8bd",
+      "sample": []
+    }
+  },
+  "role_audit": {
+    "claims": {
+      "gold_records": 20,
+      "contract_required": [
+        "subject",
+        "metric",
+        "period",
+        "unit",
+        "value",
+        "factuality",
+        "attribution",
+        "perspective",
+        "source_stance",
+        "estimate_status",
+        "qualifier"
+      ],
+      "carriers": {
+        "subject": {
+          "classification": "item_field",
+          "evidence_source": "code_level (claims_detail.ClaimRecord)",
+          "detail": "subject | subject_raw；直接同名",
+          "gold_nonempty": 20
+        },
+        "metric": {
+          "classification": "item_field",
+          "evidence_source": "code_level (claims_detail.ClaimRecord)",
+          "detail": "metric | metric_raw；直接同名",
+          "gold_nonempty": 20
+        },
+        "period": {
+          "classification": "derived",
+          "evidence_source": "code_level (claims_detail.ClaimRecord)",
+          "detail": "period_raw | period_end | period_grain；契约要 period，生产端按三种粒度拆开",
+          "gold_nonempty": 20
+        },
+        "unit": {
+          "classification": "item_field",
+          "evidence_source": "code_level (claims_detail.ClaimRecord)",
+          "detail": "unit | unit_raw；直接同名",
+          "gold_nonempty": 20
+        },
+        "value": {
+          "classification": "item_field",
+          "evidence_source": "code_level (claims_detail.ClaimRecord)",
+          "detail": "value_text | value_num；文本与数值两列",
+          "gold_nonempty": 20
+        },
+        "factuality": {
+          "classification": "alias",
+          "evidence_source": "code_level (claims_detail.ClaimRecord)",
+          "detail": "kind；别名字段；取值域未核验，须实测后才能确认同轴",
+          "gold_nonempty": 20
+        },
+        "attribution": {
+          "classification": "absent",
+          "evidence_source": "code_level (claims_detail.ClaimRecord)",
+          "detail": "—；ClaimRecord 无承载字段",
+          "gold_nonempty": 20
+        },
+        "perspective": {
+          "classification": "absent",
+          "evidence_source": "code_level (claims_detail.ClaimRecord)",
+          "detail": "—；ClaimRecord 无承载字段",
+          "gold_nonempty": 20
+        },
+        "source_stance": {
+          "classification": "absent",
+          "evidence_source": "code_level (claims_detail.ClaimRecord)",
+          "detail": "—；ClaimRecord 无承载字段",
+          "gold_nonempty": 20
+        },
+        "estimate_status": {
+          "classification": "absent",
+          "evidence_source": "code_level (claims_detail.ClaimRecord)",
+          "detail": "—；ClaimRecord 无承载字段",
+          "gold_nonempty": 20
+        },
+        "qualifier": {
+          "classification": "derived",
+          "evidence_source": "code_level (claims_detail.ClaimRecord)",
+          "detail": "qualifiers；dict 结构，非单值",
+          "gold_nonempty": 20
+        }
+      },
+      "absent_or_unscoreable": [
+        "attribution",
+        "perspective",
+        "source_stance",
+        "estimate_status"
+      ]
+    },
+    "material_items": {
+      "gold_records": 48,
+      "contract_required": [
+        "proposition",
+        "semantic_type",
+        "statement_role",
+        "speech_role",
+        "perspective",
+        "speaker_ref",
+        "polarity",
+        "attribution",
+        "source_stance"
+      ],
+      "carriers": {
+        "proposition": {
+          "classification": "text_carried",
+          "evidence_source": "measured (evidence/37)",
+          "detail": "text_carried",
+          "gold_nonempty": 48
+        },
+        "semantic_type": {
+          "classification": "item_field",
+          "evidence_source": "measured (evidence/37)",
+          "detail": "item_field",
+          "gold_nonempty": 48
+        },
+        "statement_role": {
+          "classification": "item_field",
+          "evidence_source": "measured (evidence/37)",
+          "detail": "item_field",
+          "gold_nonempty": 48
+        },
+        "speech_role": {
+          "classification": "item_field",
+          "evidence_source": "measured (evidence/37)",
+          "detail": "item_field",
+          "gold_nonempty": 48
+        },
+        "perspective": {
+          "classification": "item_field",
+          "evidence_source": "measured (evidence/37)",
+          "detail": "item_field",
+          "gold_nonempty": 48
+        },
+        "speaker_ref": {
+          "classification": "item_field",
+          "evidence_source": "measured (evidence/37)",
+          "detail": "item_field",
+          "gold_nonempty": 48
+        },
+        "polarity": {
+          "classification": "item_field",
+          "evidence_source": "measured (evidence/37)",
+          "detail": "item_field",
+          "gold_nonempty": 48
+        },
+        "attribution": {
+          "classification": "item_field_layer_b_coarse",
+          "evidence_source": "measured (evidence/37)",
+          "detail": "item_field_layer_b_coarse",
+          "gold_nonempty": 48
+        },
+        "source_stance": {
+          "classification": "absent",
+          "evidence_source": "measured (evidence/37)",
+          "detail": "absent",
+          "gold_nonempty": 48
+        }
+      },
+      "absent_or_unscoreable": [
+        "source_stance"
+      ]
+    },
+    "material_relations": {
+      "gold_records": 24,
+      "contract_required": [
+        "from_gold_record_id",
+        "to_gold_record_id",
+        "relation",
+        "provenance"
+      ],
+      "carriers": {
+        "from_gold_record_id": {
+          "classification": "structurally_unscoreable",
+          "evidence_source": "measured(0 relations) + code_level",
+          "detail": "—；契约要求候选携带金标主键",
+          "gold_nonempty": 24
+        },
+        "to_gold_record_id": {
+          "classification": "structurally_unscoreable",
+          "evidence_source": "measured(0 relations) + code_level",
+          "detail": "—；契约要求候选携带金标主键",
+          "gold_nonempty": 24
+        },
+        "relation": {
+          "classification": "alias",
+          "evidence_source": "measured(0 relations) + code_level",
+          "detail": "understanding.relations[].type -> layer B text；类型进 layer B 的 text 位",
+          "gold_nonempty": 24
+        },
+        "provenance": {
+          "classification": "absent",
+          "evidence_source": "measured(0 relations) + code_level",
+          "detail": "—；relation 投影未产出 provenance",
+          "gold_nonempty": 24
+        }
+      },
+      "absent_or_unscoreable": [
+        "from_gold_record_id",
+        "to_gold_record_id",
+        "provenance"
+      ]
+    }
+  },
+  "verdicts": {
+    "material_items": {
+      "verdict": "同型接缝（已实测确认）",
+      "basis": "evidence/37：零载体必需字段 = source_stance；枚举轴口径相反",
+      "level": "measured"
+    },
+    "claims": {
+      "verdict": "疑似同型（同为『归属／来源态度／估计状态』族字段缺载体），但**未在数据上验证**",
+      "basis": "code_level：ClaimRecord 无 ['attribution', 'perspective', 'source_stance', 'estimate_status'] 的承载字段；claims 运行产物在本范围不存在",
+      "level": "code_level",
+      "must_not_be_written_as": "同型接缝已确认"
+    },
+    "material_relations": {
+      "verdict": "不同型：属协议范围外 + 契约结构性不可评分，不是字段错配",
+      "basis": "实测 relations 条数 = 0；协议明文排除（MATERIAL_ITEM_JSONL_PROMPT: 本阶段只抽 speakers 和 items，不输出 relations）；契约必需字段含金标主键 ['from_gold_record_id', 'to_gold_record_id']",
+      "level": "measured + code_level"
+    },
+    "ec_b4_structurally_unscoreable": {
+      "fields": [
+        "from_gold_record_id",
+        "to_gold_record_id"
+      ],
+      "consequence": "严格 identity 匹配要求候选 semantic_fields 逐字等于金标；要求候选携带金标主键，等于要求候选先知道答案 ⇒ 该角色在现评分器下恒为 0。"
+    },
+    "section_7_11_recommendation": {
+      "choice": "每角色通用读路径机制（但先只对 items 落地）",
+      "basis": "三角色的缺口同属『归属／来源态度／估计状态 + 口径归一化』这一族；写成 items-only 的条款将来必然在 claims 上重做一次；但 claims 缺产物、relations 属范围外，故本期只对 items 实现，机制留接口。"
+    },
+    "conflicts_with_issue34": [
+      "§5.6『另两角色的同型接缝未验证』：现仍为未验证（claims code_level / relations 范围外），但可进一步确定 relations 不是字段错配而是协议范围外 + 契约含金标主键。"
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+# route b 收益的受控双臂实验（预注册草案，未执行）
+
+- 状态：`draft_for_authorization_not_executed`
+- 问题：抽取差（quoted_other 7 vs 2、condition 10 vs 6、behavior 3 vs 0）是口径歧义（改提示词可解）还是模型能力（不可解）？
+- 为什么必须测：这是 route b 唯一的收益来源；不测就没有收益证据（缺口 2）。
+
+## 设计
+
+- control：现行冻结协议文本（material-semantics-32 / material-atomic-selector-jsonl-v6），逐字不变
+- treatment：同代码 + 口径明确化增量（**只改提示词文本**，不改解析、装配、校验、阈值）
+- 同代码要求：两臂必须同代码同提交，diff 仅限提示词常量；禁止用历史冻结报告当对照（会把代码漂移混进归因）
+- 样本：两源各 1 个包（md 第 3 包 + docx 第 3 包，包号预注册固定）用于试跑；确认判据尺度后再决定是否全量
+- 预算：试跑 4 次；全量 48 次（gate-32 expected_attempts md 10 + docx 14 = 24/臂，双臂 48）
+
+## 被测指标
+
+- **M1**：perspective == quoted_other 计数（金标 7，现 2）
+- **M2**：statement_role == condition 计数（金标 10，现 6）
+- **M3**：semantic_type == behavior 计数（金标 3，现 0）
+- **M4**：speech_role 分布（金标全 statement；现有 question/answer）
+- **M5**：协议违规数（须为 0；gate-32 v6 实测为 0）
+- **M6**：逐字证据可达率（现 39/48，见 evidence/35）
+- **M7**：items_error / 解析失败数（fail-closed 不得放大）
+
+## 预注册判据
+
+- **EC-X1**：若 M1/M2/M3 任一在 treatment 上达到金标计数的 ≥50% 且 M5 仍为 0 ⇒ 『抽取差属口径歧义』成立，route b 收益存在。
+- **EC-X2**：若 M1/M2/M3 全部无改善（变化 ≤1）且 M6 无提升 ⇒ 『抽取差属模型能力』，route b 不得以『改善抽取差』为由；route a 优先。
+- **EC-X3**：单臂不得归因；两臂必须同代码。
+- **EC-X4**：判据外新发现进 backlog，不回流本次。
+- **EC-X5**：M7 若上升（fail-closed 放大）⇒ 立即终止并回滚，不得以收益为由放宽校验。
+
+## 需要授权（执行前填）
+
+| 项 | 值 |
+|---|---|
+| `granted_by` | 待填 |
+| `granted_on` | 待填 |
+| `model` | 待填（gate-32 用 deepseek-flash / openai_compat） |
+| `attempts_max` | 待填（gate-32 为 automatic_retries=0 ⇒ 本次须显式设定重试与幂等策略） |
+| `pacing` | 待填（gate-32 为 checkpoint_after_reserve 20s） |
+| `budget_cap_model_calls` | 待填 |
+
+## 范围外
+
+- 不放宽 fail-closed 校验与解析
+- 不改金标、契约、阈值；不报分；不发布
+- 不访问生产库；不触碰 holdout
+- 不在本实验内改口径条款以外的任何提示词内容
+
+> 本协议为草案，执行前须由 U 填授权并具名签认；执行本身属『开放式真实运行』，须先有本预注册。
