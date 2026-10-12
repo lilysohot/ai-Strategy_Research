@@ -325,6 +325,7 @@ export const accounts = {
     declared: Record<string, Array<unknown> | string | Record<string, unknown>>
     use_case: string
     allow_incomplete: boolean
+    make_default?: boolean
   }, idempotencyKey: string) {
     return request<BusinessOperationResponse>('/business/accounts', {
       method: 'POST',
@@ -349,6 +350,13 @@ export const accounts = {
     return request<BusinessOperationResponse>(`/business/accounts/${encodeURIComponent(id)}`, {
       method: 'PATCH',
       body,
+      headers: IDEMPOTENCY_HEADER(idempotencyKey),
+    })
+  },
+
+  setDefault(id: string, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(`/business/accounts/${encodeURIComponent(id)}/default`, {
+      method: 'PUT',
       headers: IDEMPOTENCY_HEADER(idempotencyKey),
     })
   },

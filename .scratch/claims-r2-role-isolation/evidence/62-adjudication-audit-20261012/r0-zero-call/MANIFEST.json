@@ -1,0 +1,49 @@
+{
+  "schema_version": "items-audit-manifest-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/adjudication/worksheet.json": "sha256:9e53d6a8e10d07cec5558a2d1d3de083160f8745da43916a9b14557a989dc5f1",
+    ".scratch/claims-r2-role-isolation/adjudication/gold-reference.json": "sha256:6ad3ca4d8139db5e793aa09aa68a77954e44bbc26ad8856aa2752a34879639e7",
+    ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate-v2.json": "sha256:8cc11bccc912ea7b123b6e769728c9076046d526c16c8a1218e27a2a692270f6"
+  },
+  "outputs": {
+    "audit-report.json": "sha256:e5404df9821dacc2d288d6fe00af28b05c19428a91f26f72aecbc73152ca1a93",
+    "audit_adjudications.py": "sha256:255761df5ed9327b1864fb879d06a5151aacdc4760cca4a85692cf7853a1dc48",
+    "preregistered-audit.json": "sha256:72ac164aea08a3f5fc6643bc177a7c0c6349624b6b4fb4791a88ae8455ecfbd7"
+  },
+  "written_to_workdir": {
+    ".scratch/claims-r2-role-isolation/adjudication/audit-sample.json": "sha256:6de5623ca0c7e023961f3318383497aaf24d31b39cf38676dd036c4ecd1f3908",
+    ".scratch/claims-r2-role-isolation/adjudication/audit-sample.md": "sha256:ea05830031dce148565fa88e5bd93935cbc5dad42b42834c60baae34652ebaf7"
+  },
+  "in_place_edits": 0,
+  "attribution": {
+    "unmatched_total": 19,
+    "structurally_absent": [
+      "NT-I06",
+      "NT-I13",
+      "NT-I14",
+      "NT-I15",
+      "NT-I16",
+      "NT-I17",
+      "NT-I42",
+      "NT-I43"
+    ],
+    "has_candidates_but_unmatched": [
+      "NT-I09",
+      "NT-I19",
+      "NT-I23",
+      "NT-I24",
+      "NT-I26",
+      "NT-I31",
+      "NT-I34",
+      "NT-I36",
+      "NT-I38",
+      "NT-I39",
+      "NT-I48"
+    ],
+    "max_recall_without_rerun": 0.8333,
+    "threshold_needed_records": 41,
+    "conclusion": "即使②全改 matched 仍 <0.85 ⇒ 补跑数学上必要"
+  }
+}

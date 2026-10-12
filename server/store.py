@@ -304,6 +304,31 @@ class InvestmentAccount(Base):
     )
 
 
+class UserInvestmentPreference(Base):
+    """用户级投资偏好；当前只保存显式选择的主账户。
+
+    主账户属于用户，而不是某个研究。研究创建时复制这条引用；Run 再从研究引用冻结
+    当时的账户版本。复合外键保证用户永远不能把他人的账户设为自己的主账户。
+    """
+
+    __tablename__ = "user_investment_preferences"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["user_id", "default_account_id"],
+            ["investment_accounts.user_id", "investment_accounts.id"],
+            name="fk_user_investment_preferences_account_owner",
+        ),
+    )
+
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    default_account_id: Mapped[uuid.UUID] = mapped_column(nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
 class InvestmentAccountRevision(Base):
     """账户资料的不可变版本行：只 INSERT，不 UPDATE、不 DELETE。"""
 
@@ -1522,30 +1547,20 @@ class SessionOwnershipError(Exception):
     """
 
 
-async def _inherit_recent_account_link(session: AsyncSession, row: Session) -> None:
-    """Carry the user's most recently selected account into a new research.
-
-    Plans remain research-owned and are never inherited. An archived account is
-    also excluded. This turns the last explicit research/account binding into
-    the user's practical main account without guessing from an account name.
-    """
+async def _inherit_default_account_link(session: AsyncSession, row: Session) -> None:
+    """Carry the user's explicit, non-archived main account into a new research."""
     account_id = (
         await session.execute(
-            select(ResearchInvestmentLink.account_id)
+            select(UserInvestmentPreference.default_account_id)
             .join(
                 InvestmentAccount,
-                InvestmentAccount.id == ResearchInvestmentLink.account_id,
+                InvestmentAccount.id == UserInvestmentPreference.default_account_id,
             )
             .where(
-                ResearchInvestmentLink.user_id == row.user_id,
-                ResearchInvestmentLink.account_id.is_not(None),
+                UserInvestmentPreference.user_id == row.user_id,
+                InvestmentAccount.user_id == row.user_id,
                 InvestmentAccount.archived.is_(False),
             )
-            .order_by(
-                ResearchInvestmentLink.updated_at.desc(),
-                ResearchInvestmentLink.research_id.desc(),
-            )
-            .limit(1)
         )
     ).scalar_one_or_none()
     if account_id is None:
@@ -1579,7 +1594,7 @@ async def ensure_session(*, session_id: uuid.UUID, user_id: uuid.UUID, title: st
             row = Session(id=session_id, user_id=user_id, title=title)
             session.add(row)
             await session.flush()
-            await _inherit_recent_account_link(session, row)
+            await _inherit_default_account_link(session, row)
             await session.commit()
             return row
         if row.user_id != user_id:
@@ -1610,7 +1625,7 @@ async def ensure_session_in(
     if row is None or row.user_id != user_id or row.deleted_at is not None:
         raise SessionOwnershipError(str(session_id))
     if created:
-        await _inherit_recent_account_link(session, row)
+        await _inherit_default_account_link(session, row)
     return row
 
 
@@ -1760,7 +1775,7 @@ async def create_session(*, user_id: uuid.UUID, title: str | None = None) -> Ses
         row = Session(user_id=user_id, title=title or "新对话")
         session.add(row)
         await session.flush()
-        await _inherit_recent_account_link(session, row)
+        await _inherit_default_account_link(session, row)
         await session.commit()
         await session.refresh(row)
         return row

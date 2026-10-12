@@ -1,0 +1,45 @@
+{
+  "schema_version": "items-adjudication-audit-prereg-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "purpose": "222 条人工裁定是评分的真值本身；抽样复核用于把『标错』从静默变成可测量。本件先于执行落盘。",
+  "population": {
+    "source": ".scratch/claims-r2-role-isolation/adjudication/worksheet.json",
+    "records": 222,
+    "assembled_ok": 222,
+    "matched": 29,
+    "unresolved": 0
+  },
+  "sample": {
+    "rule": "分层：① 全部 matched→16 条 high-risk 断言；② 全部 correct_extra；③ 全部 duplicate；④ 其余（matched 非高危 + incorrect）按确定性随机抽 20%，种子 = worksheet 文件 sha256 前 8 位",
+    "seed": "sha256(worksheet.json)[:8]",
+    "deterministic": true,
+    "expected_size_note": "高危 100% + extra/duplicate 100% + 其余 20% ⇒ 约 55–70 条，视实际分布而定"
+  },
+  "mechanical_checks_applied_to_all_222": {
+    "C1_evidence_empty": "evidence.quote 或 locator 为空 ⇒ 违反 evidence_required",
+    "C2_quote_not_attributable": "evidence.quote 不是候选 text 的子串 ⇒ 引文不属于该候选（误贴/编造信号）",
+    "C3_reason_too_short": "reason 少于 8 字符 ⇒ 判据不成立，事后无法复核",
+    "C4_reason_copypaste": "同一 reason 串在 ≥5 条出现 ⇒ 模板复制，未逐条判",
+    "C5_stance_absent_on_matched": "matched 到 source_stance≠空 的金标，却把 source_stance 标 absent ⇒ caliber_rules 要求读原文判定",
+    "C6_high_risk_field_mismatch": "16 条断言中字段型断言（NT-I37/38/45/46/47/48）的 canonical 字段不满足断言 ⇒ 断言实质未落实",
+    "C7_same_text_divergent_judgement": "候选 text 相同但 judgement 不同 ⇒ 标准漂移",
+    "C8_condition_absent_on_condition_role": "statement_role==condition 却 condition==absent ⇒ 违反 condition_role_addition",
+    "C9_duplicate_claims_no_matched_sibling": "判 duplicate 但无同金标的 matched ⇒ 重复判定无依据"
+  },
+  "outputs": {
+    "cards": ".scratch/claims-r2-role-isolation/adjudication/audit-sample.json / .md",
+    "record": "本目录 audit-report.json + audit-report.md"
+  },
+  "exit_criteria": {
+    "EC1": "样本抽取确定性可复现（同输入 ⇒ 同样本）",
+    "EC2": "9 项机械检查对全部 222 条执行，逐项给命中数与命中清单",
+    "EC3": "每张复核卡含：候选原文、引文、金标命题、已录字段、judgement、reason",
+    "EC4": "不修改 worksheet.json 字节；不替裁定人做任何语义改写",
+    "EC5": "语义一致性由人复核，本工具只做机械一致性＋出具复核卡，不得宣称『已验证正确』"
+  },
+  "not_claimed": [
+    "本工具不能判定语义等价（那是裁定人的职责）；只标记『结构上可疑』与『需人复核』。",
+    "机械检查通过 ≠ 标记正确。"
+  ]
+}

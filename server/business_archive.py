@@ -13,7 +13,7 @@ import uuid
 from datetime import UTC, datetime
 from typing import Any
 
-from sqlalchemy import select, update
+from sqlalchemy import delete, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from server import business_service as biz
@@ -85,6 +85,14 @@ async def archive_account(
                 "paused_rules": [],
             }
         account.archived = True
+        # An archived account cannot remain the source inherited by future
+        # research sessions. Do not guess a replacement; the user must choose it.
+        await session.execute(
+            delete(store.UserInvestmentPreference).where(
+                store.UserInvestmentPreference.user_id == user_id,
+                store.UserInvestmentPreference.default_account_id == account.id,
+            )
+        )
         # 暂停通过研究绑定引用该账户的所有活动监控规则（停止新采用）。
         linked_research = select(store.ResearchInvestmentLink.research_id).where(
             store.ResearchInvestmentLink.user_id == user_id,

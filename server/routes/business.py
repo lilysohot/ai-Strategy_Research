@@ -11,6 +11,7 @@
   GET    /api/business/accounts                      自己的账户列表
   GET    /api/business/accounts/{id}                 账户详情与当前版本值
   PATCH  /api/business/accounts/{id}                 修改账户（写）
+  PUT    /api/business/accounts/{id}/default         设为用户主账户（写）
   GET    /api/business/accounts/{id}/revisions       版本历史
   POST   /api/business/sessions/{rid}/plans          在研究内创建计划（写）
   GET    /api/business/sessions/{rid}/plans          该研究的计划集合
@@ -237,6 +238,7 @@ async def create_account(
             source_ref=body.get("source_ref"),
             use_case=str(body.get("use_case") or "general_reading"),
             allow_incomplete=bool(body.get("allow_incomplete", False)),
+            make_default=body.get("make_default") is True,
         )
     return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
 
@@ -248,6 +250,8 @@ async def list_accounts(
     offset: int = Query(0, ge=0),
 ) -> dict[str, Any]:
     async with biz.business_transaction() as session:
+        preference = await session.get(store.UserInvestmentPreference, user.id)
+        default_account_id = preference.default_account_id if preference else None
         total = (
             await session.execute(
                 select(func.count())
@@ -283,6 +287,7 @@ async def list_accounts(
                     "name": account.name,
                     "base_currency": account.base_currency,
                     "archived": account.archived,
+                    "is_default": account.id == default_account_id,
                     "revision": account.current_revision,
                     "updated_at": _iso(account.updated_at),
                     "values": _account_values(revision) if revision else {},
@@ -296,6 +301,8 @@ async def get_account(
     account_id: str, user: UserModel = Depends(get_current_user)
 ) -> dict[str, Any]:
     async with biz.business_transaction() as session:
+        preference = await session.get(store.UserInvestmentPreference, user.id)
+        default_account_id = preference.default_account_id if preference else None
         account = (
             await session.execute(
                 select(store.InvestmentAccount).where(
@@ -318,6 +325,7 @@ async def get_account(
             "name": account.name,
             "base_currency": account.base_currency,
             "archived": account.archived,
+            "is_default": account.id == default_account_id,
             "revision": account.current_revision,
             "updated_at": _iso(account.updated_at),
             "values": _account_values(revision) if revision else {},
@@ -344,6 +352,23 @@ async def update_account(
             source_kind=str(body.get("source_kind") or "form"),
             source_ref=body.get("source_ref"),
             allow_incomplete=bool(body.get("allow_incomplete", True)),
+        )
+    return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
+
+
+@router.put("/accounts/{account_id}/default")
+async def set_default_account(
+    account_id: str,
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    key = _require_key(idempotency_key)
+    async with biz.business_transaction() as session:
+        outcome = await biz.set_default_account(
+            session,
+            user_id=user.id,
+            account_id=_as_uuid(account_id, "account_id"),
+            idempotency_key=key,
         )
     return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
 

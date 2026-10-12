@@ -5789,8 +5789,8 @@
         "condition": "unconditional",
         "factuality": "forecast"
       },
-      "judgement": "matched",
-      "matched_gold_id": "NT-I45",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
       "canonical_observed_fields": {
         "proposition": "29年NPO到10%，",
         "semantic_type": "forecast",
@@ -5804,7 +5804,7 @@
         "condition": "unconditional"
       },
       "reviewer": "xyl",
-      "reason": "与金标NT-I45「被转述预测称2029年NPO渗透率为10%」同一预测数值（被转述/挑战立场由金标source_stance=challenged承载），matched。",
+      "reason": "【2026-10-12 U 校准裁定】原判 matched 撤销：金标为「被转述且被质疑的预测」(perspective=quoted_other, source_stance=challenged)；候选为「材料自身陈述的预测」(source_explicit, reported)。归属与来源态度不同 ⇒ 语义不等价（契约 matching.items 要求保留归属/来源态度）⇒ 不匹配。候选内容本身正确（数值与金标一致）但归属/立场不符 ⇒ 改判 correct_extra（若认为候选连数值归属也错则应改 incorrect，precision 会相应下降）。原判据：与金标NT-I45「被转述预测称2029年NPO渗透率为10%」同一预测数值（被转述/挑战立场由金标source_stance=challenged承载），ma",
       "evidence": {
         "quote": "29年NPO到10%，",
         "locator": "chunk:signed-non-table-target-scope"
@@ -5839,8 +5839,8 @@
         "condition": "unconditional",
         "factuality": "forecast"
       },
-      "judgement": "matched",
-      "matched_gold_id": "NT-I46",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
       "canonical_observed_fields": {
         "proposition": "CPO到30%，",
         "semantic_type": "forecast",
@@ -5854,7 +5854,7 @@
         "condition": "unconditional"
       },
       "reviewer": "xyl",
-      "reason": "与金标NT-I46「被转述预测称2029年CPO渗透率为30%」同一预测数值，matched。",
+      "reason": "【2026-10-12 U 校准裁定】原判 matched 撤销：金标为「被转述且被质疑的预测」(perspective=quoted_other, source_stance=challenged)；候选为「材料自身陈述的预测」(source_explicit, reported)。归属与来源态度不同 ⇒ 语义不等价（契约 matching.items 要求保留归属/来源态度）⇒ 不匹配。候选内容本身正确（数值与金标一致）但归属/立场不符 ⇒ 改判 correct_extra（若认为候选连数值归属也错则应改 incorrect，precision 会相应下降）。原判据：与金标NT-I46「被转述预测称2029年CPO渗透率为30%」同一预测数值，matched。",
       "evidence": {
         "quote": "CPO到30%，",
         "locator": "chunk:signed-non-table-target-scope"
@@ -5889,8 +5889,8 @@
         "condition": "unconditional",
         "factuality": "forecast"
       },
-      "judgement": "matched",
-      "matched_gold_id": "NT-I47",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
       "canonical_observed_fields": {
         "proposition": "可插拔主导70%。",
         "semantic_type": "forecast",
@@ -5904,7 +5904,7 @@
         "condition": "unconditional"
       },
       "reviewer": "xyl",
-      "reason": "与金标NT-I47「被转述预测称2029年可插拔份额为70%」同一预测数值，matched。",
+      "reason": "【2026-10-12 U 校准裁定】原判 matched 撤销：金标为「被转述且被质疑的预测」(perspective=quoted_other, source_stance=challenged)；候选为「材料自身陈述的预测」(source_explicit, reported)。归属与来源态度不同 ⇒ 语义不等价（契约 matching.items 要求保留归属/来源态度）⇒ 不匹配。候选内容本身正确（数值与金标一致）但归属/立场不符 ⇒ 改判 correct_extra（若认为候选连数值归属也错则应改 incorrect，precision 会相应下降）。原判据：与金标NT-I47「被转述预测称2029年可插拔份额为70%」同一预测数值，matched。",
       "evidence": {
         "quote": "可插拔主导70%。",
         "locator": "chunk:signed-non-table-target-scope"
@@ -10799,8 +10799,8 @@
         "condition": "unconditional",
         "factuality": "fact"
       },
-      "judgement": "correct_extra",
-      "matched_gold_id": null,
+      "judgement": "matched",
+      "matched_gold_id": "NT-I25",
       "canonical_observed_fields": {
         "proposition": "在实际研发当中，128的光波导经过五个批次的流片后，良率仍然不乐观，",
         "semantic_type": "fact",
@@ -10814,7 +10814,7 @@
         "condition": "unconditional"
       },
       "reviewer": "xyl",
-      "reason": "128光波导五批次流片后良率不乐观，金标无此条，correct_extra。",
+      "reason": "与金标NT-I25『128端口光波导五次流片后良率仍不理想』同义：主体『128的光波导』≡128端口光波导（省单位词，同NT-I49尺度）；『五个批次的流片后』≡五次流片后；『良率仍然不乐观』≡良率仍不理想。主体/事件/结论三一致，matched。",
       "evidence": {
         "quote": "在实际研发当中，128的光波导经过五个批次的流片后，良率仍然不乐观，",
         "locator": "chunk:signed-non-table-target-scope"
@@ -10914,7 +10914,7 @@
         "condition": "unconditional"
       },
       "reviewer": "xyl",
-      "reason": "设计上仍存在缺陷，为观点，金标无，correct_extra。",
+      "reason": "说明设计上仍然存在缺陷，为观点；同句语境指128光波导，含NT-I26『128端口光波导设计仍有缺陷』谓词，但命题缺主语『128端口光波导』，按itm_703720fdd5630e8b（缺主题→correct_extra）口径，correct_extra。",
       "evidence": {
         "quote": "说明设计上仍然存在缺陷，",
         "locator": "chunk:signed-non-table-target-scope"
@@ -11310,7 +11310,7 @@
         "condition": "unconditional",
         "factuality": "opinion"
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "proposition": "你还有PCB，还有7788的所有的供应链，没法等你这一个。",
@@ -11321,11 +11321,11 @@
         "speaker_ref": "spk_544d7167e8a5",
         "polarity": "negated",
         "attribution": "document_voice",
-        "source_stance": "absent",
+        "source_stance": "reported",
         "condition": "unconditional"
       },
       "reviewer": "xyl",
-      "reason": "",
+      "reason": "还有PCB及各类供应链、没法等你这一个，为观点，金标无，correct_extra。",
       "evidence": {
         "quote": "你还有PCB，还有7788的所有的供应链，没法等你这一个。",
         "locator": "chunk:signed-non-table-target-scope"
@@ -11363,7 +11363,7 @@
         "condition": "conditional",
         "factuality": "forecast"
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "proposition": "如果你这个出来就出来了，出不来只能用替代方案了。",
@@ -11374,11 +11374,11 @@
         "speaker_ref": "spk_544d7167e8a5",
         "polarity": "affirmed",
         "attribution": "document_voice",
-        "source_stance": "absent",
+        "source_stance": "reported",
         "condition": "conditional"
       },
       "reviewer": "xyl",
-      "reason": "",
+      "reason": "出来就出来、出不来用替代方案，为条件式预测，金标无，correct_extra。",
       "evidence": {
         "quote": "如果你这个出来就出来了，出不来只能用替代方案了。",
         "locator": "chunk:signed-non-table-target-scope"

@@ -1,0 +1,97 @@
+{
+  "schema_version": "items-calibration-ruling-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "ruling": {
+    "rule": "金标为「被转述且被质疑的预测」(perspective=quoted_other, source_stance=challenged)；候选为「材料自身陈述的预测」(source_explicit, reported)。归属与来源态度不同 ⇒ 语义不等价（契约 matching.items：须保持归属与来源态度）⇒ 不匹配。",
+    "decided_by": "U 2026-10-12",
+    "applied_to": [
+      "NT-I45",
+      "NT-I46",
+      "NT-I47"
+    ],
+    "new_judgement": "correct_extra",
+    "contract_ref": "matching.items：须保持语义类型、话语角色、归属、否定、条件、行为意向 ⇒ 归属/来源态度不同即非同一命题",
+    "why_not_incorrect": "候选数值与金标一致，仅归属/立场不同 ⇒ 属「正确但非本目标」= correct_extra。若 U 认为候选连归属也陈述有误，应改 incorrect（precision ≈0.995 → ≈0.982）。"
+  },
+  "changed_records": [
+    {
+      "candidate_id": "itm_42ffb8cedfa8d7ff",
+      "judgement_before": "matched",
+      "judgement_after": "correct_extra",
+      "matched_gold_id_before": "NT-I45"
+    },
+    {
+      "candidate_id": "itm_09fc1a90e71fe5bf",
+      "judgement_before": "matched",
+      "judgement_after": "correct_extra",
+      "matched_gold_id_before": "NT-I46"
+    },
+    {
+      "candidate_id": "itm_f2e29952886293c0",
+      "judgement_before": "matched",
+      "judgement_after": "correct_extra",
+      "matched_gold_id_before": "NT-I47"
+    }
+  ],
+  "impact": {
+    "matched": 26,
+    "gold_total": 48,
+    "recall": 0.5417,
+    "threshold": 0.85,
+    "records_needed": 41,
+    "high_risk_matched": [
+      "NT-I29",
+      "NT-I35",
+      "NT-I37"
+    ],
+    "high_risk_unmatched": [
+      "NT-I09",
+      "NT-I13",
+      "NT-I15",
+      "NT-I17",
+      "NT-I19",
+      "NT-I38",
+      "NT-I39",
+      "NT-I42",
+      "NT-I43",
+      "NT-I45",
+      "NT-I46",
+      "NT-I47",
+      "NT-I48"
+    ],
+    "unmatched_total": 22,
+    "structurally_absent": [
+      "NT-I06",
+      "NT-I13",
+      "NT-I14",
+      "NT-I15",
+      "NT-I16",
+      "NT-I17",
+      "NT-I42",
+      "NT-I43"
+    ],
+    "has_candidates_but_unmatched": [
+      "NT-I09",
+      "NT-I19",
+      "NT-I23",
+      "NT-I24",
+      "NT-I26",
+      "NT-I31",
+      "NT-I34",
+      "NT-I36",
+      "NT-I38",
+      "NT-I39",
+      "NT-I45",
+      "NT-I46",
+      "NT-I47",
+      "NT-I48"
+    ],
+    "recall_ceiling_without_rerun": 0.8333,
+    "still_short": 1,
+    "conclusion": "召回上限（不补跑）= 40/48 = 0.833 < 0.85 ⇒ 补跑仍属必要条件，至少需再恢复 1 条。"
+  },
+  "worksheet_sha256_after": "sha256:de2e7402518b573ef572a8f27fa6eb2d5254f926a12a8339f153e23cd2ae10f9",
+  "in_place_edits": 1,
+  "note": "本件记录 U 的校准裁定；worksheet.json 已按裁定改写（matched→correct_extra，理由写入 reason）。"
+}

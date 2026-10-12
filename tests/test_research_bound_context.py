@@ -14,8 +14,8 @@ from server.investment_context import InvestmentContextResolver
 
 
 @pytest.mark.asyncio
-async def test_new_research_inherits_the_users_most_recent_bound_account() -> None:
-    """A new research keeps the account the user most recently chose."""
+async def test_new_research_inherits_the_users_explicit_default_account() -> None:
+    """A new research uses the user-level default, not a recent research guess."""
     await store.init_db()
     user_id = uuid.uuid4()
     first_research_id = uuid.uuid4()
@@ -59,6 +59,32 @@ async def test_new_research_inherits_the_users_most_recent_bound_account() -> No
             idempotency_key="inherited-existing-link",
         )
 
+    # Bind a different, more recently used account to the old research. This
+    # must not change the explicit user-level main account.
+    async with biz.business_transaction() as session:
+        secondary = await biz.create_account(
+            session,
+            user_id=user_id,
+            name="短线账户",
+            base_currency="CNY",
+            declared={
+                "total_capital": "50000",
+                "available_capital": "30000",
+                "capital_basis": "tradable_assets",
+                "as_of": "2026-10-12T01:00:00Z",
+            },
+            idempotency_key="secondary-account",
+        )
+        secondary_id = uuid.UUID(secondary.result["account_id"])
+    async with biz.business_transaction() as session:
+        await biz.set_research_link(
+            session,
+            user_id=user_id,
+            research_id=first_research_id,
+            account_id=secondary_id,
+            idempotency_key="recent-secondary-link",
+        )
+
     new_research = await store.create_session(user_id=user_id, title="新研究")
 
     async with biz.business_transaction() as session:
@@ -72,6 +98,67 @@ async def test_new_research_inherits_the_users_most_recent_bound_account() -> No
     assert link is not None
     assert link.account_id == account_id
     assert link.primary_plan_id is None
+
+
+@pytest.mark.asyncio
+async def test_explicit_default_switch_changes_future_research_only() -> None:
+    await store.init_db()
+    user_id = uuid.uuid4()
+    async with biz.business_transaction() as session:
+        session.add(
+            store.User(
+                id=user_id,
+                username=f"default-switch-{user_id.hex}",
+                password_hash="x",
+                status="active",
+            )
+        )
+    async with biz.business_transaction() as session:
+        first = await biz.create_account(
+            session,
+            user_id=user_id,
+            name="长期账户",
+            base_currency="CNY",
+            declared={
+                "total_capital": "200000",
+                "available_capital": "120000",
+                "capital_basis": "tradable_assets",
+                "as_of": "2026-10-12T00:00:00Z",
+            },
+            idempotency_key="switch-first",
+        )
+        first_id = uuid.UUID(first.result["account_id"])
+    old_research = await store.create_session(user_id=user_id, title="旧研究")
+
+    async with biz.business_transaction() as session:
+        second = await biz.create_account(
+            session,
+            user_id=user_id,
+            name="新主账户",
+            base_currency="CNY",
+            declared={
+                "total_capital": "300000",
+                "available_capital": "180000",
+                "capital_basis": "tradable_assets",
+                "as_of": "2026-10-12T02:00:00Z",
+            },
+            idempotency_key="switch-second",
+        )
+        second_id = uuid.UUID(second.result["account_id"])
+    async with biz.business_transaction() as session:
+        await biz.set_default_account(
+            session,
+            user_id=user_id,
+            account_id=second_id,
+            idempotency_key="switch-default",
+        )
+
+    new_research = await store.create_session(user_id=user_id, title="新研究")
+    async with biz.business_transaction() as session:
+        old_link = await session.get(store.ResearchInvestmentLink, old_research.id)
+        new_link = await session.get(store.ResearchInvestmentLink, new_research.id)
+    assert old_link is not None and old_link.account_id == first_id
+    assert new_link is not None and new_link.account_id == second_id
 
 
 @pytest.mark.asyncio
@@ -145,6 +232,9 @@ async def test_plain_run_freezes_the_research_bound_account_before_launch() -> N
     context = await InvestmentContextResolver().resolve(run_id=run_id, user_id=user_id)
     assert context is not None
     assert Decimal(context.data["values"]["account.total_capital"]["value"]) == Decimal("200000")
+    assert Decimal(context.data["values"]["account.available_capital"]["value"]) == Decimal(
+        "120000"
+    )
 
 
 @pytest.mark.asyncio

@@ -28,6 +28,9 @@ const business = useBusinessStore()
 
 const accounts = computed(() => business.accounts)
 const accountId = ref<string | null>(null)
+const selectedAccount = computed(() =>
+  accounts.value.find((item) => item.id === accountId.value) ?? null,
+)
 const serverRevision = ref<number | null>(null)
 const saving = ref(false)
 const conflict = ref<{
@@ -232,6 +235,7 @@ async function saveAccount(analyze = false): Promise<string | null> {
         declared,
         use_case: draft.useCase,
         allow_incomplete: false,
+        make_default: accounts.value.length === 0,
       }, idempotencyKey('account.create'))
       clearActionKey('account.create')
       accountId.value = String(result.account_id ?? '')
@@ -275,6 +279,22 @@ async function saveAccount(analyze = false): Promise<string | null> {
     }
     accountKeys.clear()
     return null
+  } finally {
+    saving.value = false
+  }
+}
+
+async function setAsDefaultAccount(): Promise<void> {
+  if (!accountId.value || selectedAccount.value?.is_default || selectedAccount.value?.archived) return
+  saving.value = true
+  try {
+    await accountsApi.setDefault(accountId.value, idempotencyKey('account.set_default'))
+    clearActionKey('account.set_default')
+    await business.loadAccounts()
+    ElMessage.success('已设为主账户；新研究会自动继承该账户')
+  } catch (error) {
+    accountKeys.delete('account.set_default')
+    ElMessage.error(error instanceof Error ? error.message : '设置主账户失败')
   } finally {
     saving.value = false
   }
@@ -359,7 +379,8 @@ async function loadInitialData(): Promise<void> {
 onMounted(async () => {
   window.addEventListener('beforeunload', beforeUnload)
   await loadInitialData()
-  if (accounts.value.length) hydrateFromAccount(accounts.value[0])
+  const initial = accounts.value.find((item) => item.is_default) ?? accounts.value[0]
+  if (initial) hydrateFromAccount(initial)
 })
 onBeforeUnmount(() => window.removeEventListener('beforeunload', beforeUnload))
 defineExpose({ clearDraft })
@@ -398,7 +419,7 @@ defineExpose({ clearDraft })
         <label class="field field--wide">
           <span>读取已有账户</span>
           <el-select v-model="accountId" placeholder="选择要查看的账户" clearable @change="loadAccount">
-            <el-option v-for="account in accounts" :key="account.id" :label="`${account.name} · v${account.revision}${account.archived ? '（已归档）' : ''}`" :value="account.id" />
+            <el-option v-for="account in accounts" :key="account.id" :label="`${account.name}${account.is_default ? '（主账户）' : ''} · v${account.revision}${account.archived ? '（已归档）' : ''}`" :value="account.id" />
           </el-select>
         </label>
         <header class="section-heading">
@@ -406,7 +427,14 @@ defineExpose({ clearDraft })
             <span>账户资料</span>
             <h3>资金口径与数据时点</h3>
           </div>
-          <span class="section-note">金额按字符串传输</span>
+          <el-button
+            v-if="selectedAccount && !selectedAccount.is_default && !selectedAccount.archived"
+            size="small"
+            :loading="saving"
+            @click="setAsDefaultAccount"
+          >设为主账户</el-button>
+          <span v-else-if="selectedAccount?.is_default" class="section-note">当前主账户</span>
+          <span v-else class="section-note">金额按字符串传输</span>
         </header>
 
         <div class="form-grid">

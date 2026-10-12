@@ -117,6 +117,7 @@ async function createAndBindAccount(): Promise<Record<string, unknown> | null> {
       },
       use_case: 'general_reading',
       allow_incomplete: false,
+      make_default: true,
     },
     `dialog-account:${suffix}`,
   )

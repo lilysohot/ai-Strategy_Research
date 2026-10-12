@@ -410,7 +410,9 @@ def admit_group(group: str, declared: dict[str, Any] | None) -> AdmissionResult:
                 raise ValidationError("金额/价格/数量不接受负数", fields={name: "请填写非负数值"})
             value: Decimal | str | datetime = Decimal(text)
             integer_digits = max(value.adjusted() + 1, 0)
-            if -value.as_tuple().exponent > 10 or integer_digits > (
+            exponent = value.as_tuple().exponent
+            decimal_places = -exponent if isinstance(exponent, int) else 0
+            if decimal_places > 10 or integer_digits > (
                 10 if name == "profit_loss_ratio" else 20
             ):
                 raise ValidationError(
@@ -813,6 +815,7 @@ async def create_account(
     source_ref: str | None = None,
     use_case: str = "general_reading",
     allow_incomplete: bool = False,
+    make_default: bool = False,
 ) -> WriteOutcome:
     if not name.strip():
         raise ValidationError("账户名称不能为空", fields={"name": "请填写可识别的账户名称"})
@@ -829,6 +832,7 @@ async def create_account(
         "base_currency": base_currency,
         "declared": declared,
         "use_case": use_case,
+        "make_default": make_default,
     }
 
     async def _execute() -> dict[str, Any]:
@@ -858,11 +862,33 @@ async def create_account(
         )
         account.current_revision = 1
         await session.flush()
+        # Serialize preference creation through the user row. The first account
+        # becomes the main account automatically; later accounts only replace it
+        # after an explicit request.
+        await session.get(store.User, user_id, with_for_update=True)
+        preference = await session.get(
+            store.UserInvestmentPreference, user_id, with_for_update=True
+        )
+        is_default = make_default or preference is None
+        if is_default:
+            if preference is None:
+                session.add(
+                    store.UserInvestmentPreference(
+                        user_id=user_id, default_account_id=account.id
+                    )
+                )
+            else:
+                preference.default_account_id = account.id
         _append_audit(
             session,
             user_id=user_id,
             action="business.account.create",
-            detail={"account_id": str(account.id), "revision": 1, "record_state": record_state},
+            detail={
+                "account_id": str(account.id),
+                "revision": 1,
+                "record_state": record_state,
+                "is_default": is_default,
+            },
         )
         await session.flush()
         return {
@@ -870,12 +896,71 @@ async def create_account(
             "revision": 1,
             "record_state": record_state,
             "incomplete": pending,
+            "is_default": is_default,
         }
 
     return await run_write(
         session,
         user_id=user_id,
         scope="account.create",
+        idempotency_key=idempotency_key,
+        payload=payload,
+        execute=_execute,
+    )
+
+
+async def set_default_account(
+    session: AsyncSession,
+    *,
+    user_id: Any,
+    account_id: Any,
+    idempotency_key: str,
+) -> WriteOutcome:
+    """Persist the user's explicit main account selection."""
+
+    payload = {"account_id": str(account_id)}
+
+    async def _execute() -> dict[str, Any]:
+        account = (
+            await session.execute(
+                select(store.InvestmentAccount)
+                .where(
+                    store.InvestmentAccount.id == account_id,
+                    store.InvestmentAccount.user_id == user_id,
+                )
+                .with_for_update()
+            )
+        ).scalar_one_or_none()
+        if account is None:
+            raise NotFoundOrForbiddenError("账户不存在或无权访问")
+        if account.archived:
+            raise ObjectArchivedError("已归档账户不能设为主账户", current={"archived": True})
+
+        await session.get(store.User, user_id, with_for_update=True)
+        preference = await session.get(
+            store.UserInvestmentPreference, user_id, with_for_update=True
+        )
+        if preference is None:
+            session.add(
+                store.UserInvestmentPreference(
+                    user_id=user_id, default_account_id=account.id
+                )
+            )
+        else:
+            preference.default_account_id = account.id
+        _append_audit(
+            session,
+            user_id=user_id,
+            action="business.account.set_default",
+            detail={"account_id": str(account.id)},
+        )
+        await session.flush()
+        return {"account_id": str(account.id), "is_default": True}
+
+    return await run_write(
+        session,
+        user_id=user_id,
+        scope="account.set_default",
         idempotency_key=idempotency_key,
         payload=payload,
         execute=_execute,

@@ -195,6 +195,7 @@ export interface Account {
   name: string
   base_currency: string
   archived: boolean
+  is_default: boolean
   revision: number
   updated_at: string | null
   values: AccountValues

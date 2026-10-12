@@ -26,7 +26,10 @@ async def test_worker_injects_context_as_data_and_binds_only_guarded_tool(monkey
         "research_id": str(uuid.uuid4()),
         "snapshot_id": str(uuid.uuid4()),
         "use_case": "plan_analysis",
-        "values": {"account.total_capital": {"value": "100000", "status": "user_provided"}},
+        "values": {
+            "account.total_capital": {"value": "100000", "status": "user_provided"},
+            "account.available_capital": {"value": "60000", "status": "user_provided"},
+        },
         "missing": {},
     }
     (run_root / "investment-context.json").write_text(
@@ -74,6 +77,7 @@ async def test_worker_injects_context_as_data_and_binds_only_guarded_tool(monkey
     instruction = str(captured["instruction"])
     assert instruction.count("<investment_context_data>") == 1
     assert '"account.total_capital"' in instruction
+    assert '"account.available_capital"' in instruction
     metadata = captured["meta"]
     tools = metadata["profile_overrides"]["agent"]["agent_tools"]
     assert "investment_context" in tools
