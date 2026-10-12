@@ -22,55 +22,6 @@ from sqlalchemy import select
 
 from server import investment_snapshot, store
 
-_GENERAL_FIELDS = frozenset(
-    {"plan.symbol", "plan.market", "plan.asset_type", "plan.direction", "plan.currency"}
-)
-_PLAN_FIELDS = frozenset(
-    {
-        "account.total_capital",
-        "account.available_capital",
-        "account.capital_basis",
-        "account.currency",
-        "account.as_of",
-        "plan.symbol",
-        "plan.market",
-        "plan.asset_type",
-        "plan.direction",
-        "plan.target_price",
-        "plan.allocated_capital",
-        "plan.risk_budget_value",
-        "plan.risk_budget_unit",
-        "plan.position_limit_value",
-        "plan.position_limit_unit",
-        "plan.time_window",
-        "plan.invalidation",
-        "plan.profit_loss_ratio",
-        "plan.profit_loss_ratio_definition",
-        "plan.target_profit_value",
-        "plan.target_profit_unit",
-        "plan.currency",
-        "plan.as_of",
-    }
-)
-_HOLDING_FIELDS = _PLAN_FIELDS | frozenset(
-    {
-        "trade.symbol",
-        "trade.market",
-        "trade.side",
-        "trade.quantity",
-        "trade.price",
-        "trade.currency",
-        "trade.fees",
-        "trade.traded_at",
-        "position.symbol",
-        "position.market",
-        "position.quantity",
-        "position.cost_basis",
-        "position.currency",
-        "position.as_of",
-    }
-)
-
 
 @dataclass(frozen=True)
 class ResolvedInvestmentContext:
@@ -121,12 +72,14 @@ class InvestmentContextResolver:
         if row.schema_version != investment_snapshot.SNAPSHOT_SCHEMA_VERSION:
             raise ValueError(f"unsupported investment snapshot schema: {row.schema_version}")
 
-        allowed = _fields_for_use_case(row.use_case)
         resolved = dict(row.resolved_json or {})
         values = {
             name: copy.deepcopy(value)
             for name, value in resolved.items()
-            if name in allowed and "." in name
+            # The snapshot already contains only authenticated business facts.
+            # Purpose controls what conclusions may be produced; it must not
+            # hide known account/plan facts from the model.
+            if "." in name
         }
         data: dict[str, Any] = {
             "schema_version": row.schema_version,
@@ -149,14 +102,6 @@ class InvestmentContextResolver:
     def clear(self) -> None:
         """Drop the optimisation cache; immutable snapshots remain reconstructable."""
         self._cache.clear()
-
-
-def _fields_for_use_case(use_case: str) -> frozenset[str]:
-    if use_case == "holding_cost":
-        return _HOLDING_FIELDS
-    if use_case == "plan_analysis":
-        return _PLAN_FIELDS
-    return _GENERAL_FIELDS
 
 
 def _digest(data: dict[str, Any]) -> str:

@@ -21,6 +21,7 @@
   POST   /api/business/accounts/{aid}/trades         登记成交（写）
   GET    /api/business/trades                        成交列表（按账户）
   POST   /api/business/trades/{id}/correct           更正成交（写）
+  POST   /api/business/runs/{id}/input-request       对话结束后按用途生成补数请求
   POST   /api/business/sessions/{rid}/watch-rules    在研究中创建监控规则（写）
   GET    /api/business/watch-rules                   规则列表（按研究/状态）
   GET    /api/business/watch-rules/{id}              规则详情与当前版本
@@ -661,6 +662,23 @@ async def correct_trade(
 
 
 # ——— 持久补数请求与逻辑续接（DATA-07） ———————————————————————————————
+
+
+@router.post("/runs/{run_id}/input-request", status_code=201)
+async def create_post_run_input_request(
+    run_id: str,
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    """Derive a plan-analysis form after the user has read a finished Run."""
+    key = _require_key(idempotency_key)
+    async with biz.business_transaction() as session:
+        return await input_requests.materialize_post_run_request(
+            session,
+            user_id=user.id,
+            run_id=_as_uuid(run_id, "run_id"),
+            idempotency_key=key,
+        )
 
 
 @router.post("/sessions/{research_id}/input-requests", status_code=201)

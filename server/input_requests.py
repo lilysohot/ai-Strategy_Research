@@ -218,14 +218,115 @@ async def materialize_worker_intent(
         )
         if snapshot is None and run.status in store.ACTIVE_RUN_STATUSES:
             # 与 DATA-07 一致：原 Run 以 input_required 结束（不伪装成 completed）。
-            await dispatch_outbox.abandon_for_run(
-                session, run_id=run.id, reason="等待补充业务资料"
-            )
+            await dispatch_outbox.abandon_for_run(session, run_id=run.id, reason="等待补充业务资料")
             run.status = "stopped"
             run.stopped_by = "input_required"
             run.finished_at = _now()
         return outcome.result
     return None
+
+
+async def materialize_post_run_request(
+    session: AsyncSession,
+    *,
+    user_id: uuid.UUID,
+    run_id: uuid.UUID,
+    idempotency_key: str,
+    use_case: str = "plan_analysis",
+) -> dict[str, Any]:
+    """Create a user-requested input form after a Run has finished.
+
+    This is the deterministic alternative to asking the model to call
+    ``request_investment_input`` at exactly the right moment. The user chooses
+    "补充资料后继续分析" after reading the answer; the server derives the missing
+    fields from the frozen business snapshot (or the research's current binding
+    for legacy/no-snapshot Runs), and the normal answer path persists those
+    fields and creates the follow-up Run.
+
+    Merely finishing a Run never creates a request: general reading must not
+    produce an unsolicited modal. Repeated clicks are idempotent, and an
+    existing pending request for the same source Run is reused.
+    """
+    if use_case != "plan_analysis":
+        raise biz.ValidationError(
+            "对话结束后的补数暂只支持计划分析",
+            fields={"use_case": "仅支持 plan_analysis"},
+        )
+    run = await session.get(store.Run, run_id, with_for_update=True)
+    if run is None or run.user_id != user_id:
+        raise biz.NotFoundOrForbiddenError("运行不存在或无权访问")
+    if run.status in store.ACTIVE_RUN_STATUSES:
+        raise biz.RevisionConflictError("运行尚未结束", current={"status": run.status})
+
+    existing = (
+        await session.execute(
+            select(store.InputRequest)
+            .where(
+                store.InputRequest.user_id == user_id,
+                store.InputRequest.source_run_id == run_id,
+                store.InputRequest.use_case == use_case,
+                store.InputRequest.status == PENDING,
+            )
+            .order_by(store.InputRequest.created_at.desc())
+            .limit(1)
+        )
+    ).scalar_one_or_none()
+    if existing is not None:
+        return {
+            "required": True,
+            "request_id": str(existing.id),
+            "status": existing.status,
+            "revision": existing.revision,
+            "reused": True,
+        }
+
+    snapshot = await snapshots.get_snapshot(session, user_id=user_id, run_id=run_id)
+    if snapshot is None:
+        spec = await _spec_from_research_link(
+            session,
+            user_id=user_id,
+            research_id=run.session_id,
+            use_case=use_case,
+        )
+    else:
+        spec = replace(snapshots.spec_from_snapshot(snapshot), use_case=use_case)
+
+    try:
+        await snapshots.resolve_for_run(
+            session,
+            user_id=user_id,
+            research_id=run.session_id,
+            spec=spec,
+        )
+    except biz.PurposeRequirementError as exc:
+        requested = _normalize_missing_fields(exc.fields)
+        if not requested:
+            return {"required": False, "request_id": None, "status": "not_required"}
+        source_run_id: uuid.UUID | None = run_id
+        continuation = None
+        if snapshot is None:
+            # Legacy/no-snapshot Runs cannot use create_request's source path,
+            # which intentionally requires a frozen snapshot. Preserve the
+            # original question and current bindings explicitly instead.
+            source_run_id = None
+            continuation = {
+                "message": run.prompt or "按补充后的资料继续分析",
+                "investment_input": _spec_json(spec, keep_versions=True),
+                "pipeline_id": run.pipeline_id,
+            }
+        outcome = await create_request(
+            session,
+            user_id=user_id,
+            research_id=run.session_id,
+            use_case=use_case,
+            fields=requested,
+            idempotency_key=idempotency_key,
+            source_run_id=source_run_id,
+            continuation=continuation,
+            enforce_snapshot_use_case=False,
+        )
+        return {"required": True, "reused": outcome.replayed, **outcome.result}
+    return {"required": False, "request_id": None, "status": "not_required"}
 
 
 async def _spec_from_research_link(

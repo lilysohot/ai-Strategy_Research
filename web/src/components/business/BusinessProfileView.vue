@@ -2,7 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-import { accounts as accountsApi, runs as runsApi } from '@/api'
+import { accounts as accountsApi, link as linkApi, runs as runsApi } from '@/api'
 import { ApiError } from '@/api/client'
 import type { SessionPlanPreview } from '@/business-ui'
 import { useBusinessStore } from '@/stores/business'
@@ -25,8 +25,6 @@ const dirty = ref(false)
 let trackingEnabled = true
 const sessions = useSessionsStore()
 const business = useBusinessStore()
-
-const accountSessionIds = ref<string[]>(sessions.activeId ? [sessions.activeId] : [])
 
 const accounts = computed(() => business.accounts)
 const accountId = ref<string | null>(null)
@@ -79,10 +77,12 @@ const canSubmit = computed(() => checked.value && errorCount.value === 0)
 const canSaveAccount = computed(() => section.value === 'account' || section.value === 'records')
 
 const accountLinkedSessions = computed(() =>
-  accountSessionIds.value.map((id) => ({
-    id,
-    title: sessions.list.find((item) => item.id === id)?.title || '未命名研究',
-  })),
+  sessions.activeId && business.link?.account_id === accountId.value
+    ? [{
+        id: sessions.activeId,
+        title: sessions.list.find((item) => item.id === sessions.activeId)?.title || '未命名研究',
+      }]
+    : [],
 )
 
 function hydrateFromAccount(account: Account): void {
@@ -159,7 +159,6 @@ function clearDraft(): void {
   } satisfies BusinessDraft)
   accountId.value = null
   serverRevision.value = null
-  accountSessionIds.value = sessions.activeId ? [sessions.activeId] : []
   errors.value = {}
   checked.value = false
   void nextTick(() => {
@@ -239,6 +238,22 @@ async function saveAccount(analyze = false): Promise<string | null> {
     }
     const nextRevision = Number(result.revision ?? serverRevision.value ?? 1)
     serverRevision.value = nextRevision
+    const savedAccountId = String(result.account_id ?? accountId.value ?? '')
+    // The account editor lives inside the active research. Persist that
+    // relationship so subsequent plain chat turns inherit the selected main
+    // account instead of merely showing it in local UI state.
+    if (sessions.activeId && savedAccountId) {
+      await linkApi.set(
+        sessions.activeId,
+        {
+          account_id: savedAccountId,
+          primary_plan_id: business.link?.primary_plan_id ?? null,
+        },
+        idempotencyKey('account.link'),
+      )
+      clearActionKey('account.link')
+      await business.loadLink(sessions.activeId)
+    }
     business.prependOperation({
       operation_id: result.operation_id,
       scope: accountId.value ? 'account.create/update' : 'account.create',
@@ -250,8 +265,8 @@ async function saveAccount(analyze = false): Promise<string | null> {
     // Refresh the server-backed list so the account card reflects saved state.
     await business.loadAccounts()
     ElMessage.success(accountId.value ? '资料已保存' : '账户已创建')
-    if (!analyze) return String(accountId.value ?? '')
-    return String(result.account_id ?? accountId.value ?? '')
+    if (!analyze) return savedAccountId
+    return savedAccountId
   } catch (error) {
     if (error instanceof ApiError && error.status === 409) {
       await loadConflictDiff()

@@ -148,6 +148,14 @@ export interface InputRequestAnswerResponse {
   remaining_fields?: string[]
 }
 
+export interface PostRunInputRequestResponse {
+  required: boolean
+  request_id: string | null
+  status: InputRequestStatus | 'not_required'
+  revision?: number
+  reused?: boolean
+}
+
 // ——— 业务资料（DATA-01…04 / accounts.plans.trades） ——————————————————————
 
 /** 可写的业务对象响应信封：幂等回放标记 + 会话内操作标识。 */

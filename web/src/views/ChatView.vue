@@ -355,6 +355,7 @@ import { dialogCoversRequest } from '@/utils/inputRequest'
 
 const inputDialogOpen = ref(false)
 const inputDialogRequest = ref<InputRequest | null>(null)
+const preparingPostRunInput = ref(false)
 const promptedRequestIds = new Set<string>()
 
 async function maybeOpenInputRequest(): Promise<void> {
@@ -389,6 +390,55 @@ async function reloadTurns(): Promise<void> {
     // Keep the live stream visible if the authoritative refresh races.
   }
   await maybeOpenInputRequest()
+}
+
+async function preparePostRunInput(): Promise<void> {
+  const runId = runStream.runId
+  const researchId = sessions.activeId
+  if (!runId || !researchId || preparingPostRunInput.value) return
+  preparingPostRunInput.value = true
+  try {
+    // A plan supplies the security/market/direction portion of plan_analysis.
+    // Ask the user to create it through the existing structured form before
+    // creating a request that this focused dialog could never complete.
+    if (!business.link?.primary_plan_id) {
+      sessionPlanOpen.value = true
+      ElMessage.info('请先创建并选择当前会话的主计划，再补充资金后继续分析')
+      return
+    }
+    const prepared = await inputRequestsApi.prepareAfterRun(
+      runId,
+      `post-run-input:${runId}:plan_analysis`,
+    )
+    if (!prepared.required || !prepared.request_id) {
+      ElMessage.info('当前资料已满足计划分析；可以直接使用“用新资料重算”')
+      return
+    }
+    const request = await inputRequestsApi.get(prepared.request_id)
+    if (!dialogCoversRequest(request.remaining_fields ?? [], {
+      accountBound: Boolean(business.link?.account_id),
+    })) {
+      workspaceRequestId.value = request.id
+      workspaceArea.value = 'requests'
+      ElMessage.warning('还缺少计划基础字段，已转到补数中心逐项填写')
+      return
+    }
+    promptedRequestIds.add(request.id)
+    inputDialogRequest.value = request
+    inputDialogOpen.value = true
+  } catch (err) {
+    ElMessage.error(err instanceof Error ? err.message : '创建补数请求失败，请重试')
+  } finally {
+    preparingPostRunInput.value = false
+  }
+}
+
+async function onInputAnswered(followUpRunId: string | null): Promise<void> {
+  await reloadTurns()
+  if (!followUpRunId) return
+  if (sessions.activeId) runStream.rememberRun(sessions.activeId, followUpRunId)
+  detailsOpen.value = false
+  runStream.watch(followUpRunId, undefined, sessions.activeId)
 }
 
 function buildRunPayload(text: string, files: File[]): { message: string; session_id?: string } | FormData {
@@ -767,6 +817,20 @@ watch(
         @rerun-started="onRerunStarted"
       />
 
+      <section
+        v-if="runStream.runId && runFinished"
+        class="post-run-input"
+        aria-label="补充资料后继续分析"
+      >
+        <div>
+          <strong>需要结合你的资金和计划继续分析？</strong>
+          <span>本轮回答已经结束；资料保存后会以结构化快照发起新的关联 Run。</span>
+        </div>
+        <el-button :loading="preparingPostRunInput" @click="preparePostRunInput">
+          补充资料并继续
+        </el-button>
+      </section>
+
       <div ref="scrollEl" class="messages" data-testid="messages" @scroll.passive="onMessagesScroll">
         <div v-if="messages.length" class="older-turns" data-testid="older-turns">
           <el-button
@@ -823,7 +887,7 @@ watch(
         v-model="inputDialogOpen"
         :request="inputDialogRequest"
         :research-id="sessions.activeId ?? ''"
-        @answered="reloadTurns"
+        @answered="onInputAnswered"
       />
 
       <ResearchCanvas
@@ -933,6 +997,28 @@ watch(
   flex-direction: column;
   gap: 14px;
   padding: 18px 16px;
+}
+
+.post-run-input {
+  margin: 10px 16px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg-raised);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.post-run-input div {
+  display: grid;
+  gap: 3px;
+}
+
+.post-run-input span {
+  color: var(--text-soft);
+  font-size: 12px;
 }
 
 .messages-empty {
@@ -1111,6 +1197,12 @@ watch(
 
   .messages {
     padding: 12px;
+  }
+
+  .post-run-input {
+    margin: 8px 12px 0;
+    align-items: stretch;
+    flex-direction: column;
   }
 }
 </style>

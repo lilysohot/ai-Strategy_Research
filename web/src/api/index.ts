@@ -27,6 +27,7 @@ import type {
   OperationsListResponse,
   PlanListResponse,
   PlanRevisionsResponse,
+  PostRunInputRequestResponse,
   ResearchLink,
   RunControlsResponse,
   RunDiff,
@@ -262,6 +263,12 @@ export const runs = {
 
 // ── Durable business input requests (DATA-07) ──────────────────
 export const inputRequests = {
+  prepareAfterRun: (runId: string, idempotencyKey: string) =>
+    request<PostRunInputRequestResponse>(
+      `/business/runs/${encodeURIComponent(runId)}/input-request`,
+      { method: 'POST', headers: { 'Idempotency-Key': idempotencyKey } },
+    ),
+
   list: (params?: { research_id?: string; status?: string; limit?: number; offset?: number }) =>
     request<InputRequestListResponse>('/business/input-requests', { query: params }),
 

@@ -1217,7 +1217,7 @@ async def test_worker_hands_the_dump_to_the_workflow_verbatim(db, tmp_path, monk
 
 
 @pytest.mark.asyncio
-async def test_worker_non_business_prefix_keeps_the_calculation_tools(db, monkeypatch):
+async def test_worker_non_business_prefix_hides_unbound_calculation_tools(db, monkeypatch):
     import os
     import uuid
     from argparse import Namespace
@@ -1278,7 +1278,8 @@ async def test_worker_non_business_prefix_keeps_the_calculation_tools(db, monkey
     # No dump staged: the payload key must be absent, not empty.
     assert "replay_payload" not in captured["extra_input"]
     tools = captured["meta"]["profile_overrides"]["agent"]["agent_tools"]
-    assert "position_sizing" in tools
+    assert "position_sizing" not in tools
+    assert "strategy_lint" not in tools
     assert "investment_position_sizing" not in tools
     assert "BUSINESS CONTEXT POLICY" not in captured["meta"]["_sys_prompt_addendum"]
 

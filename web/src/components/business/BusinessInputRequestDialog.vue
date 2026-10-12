@@ -23,7 +23,10 @@ const props = defineProps<{
   /** 当前研究：无主账户时，弹窗内直接创建并绑定到它。 */
   researchId: string
 }>()
-const emit = defineEmits<{ 'update:modelValue': [value: boolean]; answered: [] }>()
+const emit = defineEmits<{
+  'update:modelValue': [value: boolean]
+  answered: [followUpRunId: string | null]
+}>()
 
 const store = useBusinessStore()
 const form = reactive({
@@ -186,7 +189,7 @@ async function submit(): Promise<void> {
     )
     if (result.status === 'answered') {
       ElMessage.success('资料已保存，后续分析已进入队列')
-      emit('answered')
+      emit('answered', result.follow_up_run_id)
       close()
     } else {
       // 列出服务端仍然缺的字段：只说"请补齐"用户不知道该补什么。

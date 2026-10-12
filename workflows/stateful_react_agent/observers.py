@@ -30,6 +30,7 @@ from workflows._shared.sdk_shim import (
     record_reporter_usage,
 )
 from workflows.stateful_react_agent._runtime import (
+    _INFRA_FINAL_STOP_REASONS,
     _build_recovery_messages,
     _forced_final_stop_reasons,
     _minimal_best_effort_answer,
@@ -491,6 +492,22 @@ class ReportSynthesisObserver(BaseObserver):
     async def on_loop_end(self, result: AgentLoopResult) -> None:
         # D5b: cancel/pause leaves no terminal — synthesise nothing.
         if result.stopped_by == "paused":
+            return
+
+        # A reporter is a summariser, not a replacement research agent. After
+        # an infrastructure stop, it must not infer a buy/sell or position
+        # conclusion from partial facts while bypassing required input tools.
+        if result.stopped_by in _INFRA_FINAL_STOP_REASONS:
+            answer = _minimal_best_effort_answer(
+                self._task_description,
+                result.stopped_by,
+                language=self._language,
+            )
+            result.metadata["final_answer"] = answer
+            result.metadata["final_answer_source"] = "deterministic_fallback"
+            result.metadata["final_answer_rescued"] = True
+            result.metadata["final_answer_rescue_mode"] = "deterministic_fallback"
+            result.final_content = answer
             return
 
         stream = ReporterDeltaEmitter(self._emitter)

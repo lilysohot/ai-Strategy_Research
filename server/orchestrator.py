@@ -32,6 +32,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from server import investment_snapshot
 from server.artifacts import scan_outputs
 from server.bridge import redact_deep
 from server.config import REPO_ROOT, build_run_paths, get_config, run_dir_for
@@ -1113,12 +1114,37 @@ class Orchestrator:
         run_dir = run_dir_for(run_id)
         context = None
         if user_id is not None:
-            context = await self._investment_context_resolver.resolve(
-                run_id=run_uuid, user_id=user_id
-            )
-            if context is not None:
-                materialize_context(
-                    run_dir, context, resolver=self._investment_context_resolver
+            try:
+                # Plain chat submissions do not carry investment_input. Freeze
+                # the research's authenticated binding before resolving the
+                # worker context; explicit submission snapshots are preserved.
+                await investment_snapshot.ensure_research_bound_snapshot(
+                    run_id=run_uuid, user_id=user_id
+                )
+            except Exception:
+                # Inheritance is additive. If it fails, an explicit submission
+                # snapshot may still exist and must remain readable below.
+                logger.warning(
+                    "research-bound snapshot freeze failed for run %s",
+                    run_id,
+                    exc_info=True,
+                )
+            try:
+                context = await self._investment_context_resolver.resolve(
+                    run_id=run_uuid, user_id=user_id
+                )
+                if context is not None:
+                    materialize_context(
+                        run_dir, context, resolver=self._investment_context_resolver
+                    )
+            except Exception:
+                # A broken/archived binding must not prevent general research.
+                # It degrades to no business values and remains visible in logs.
+                logger.warning(
+                    "investment context resolution failed for run %s; "
+                    "launching without business values",
+                    run_id,
+                    exc_info=True,
                 )
         if context is None:
             # Never let a prior launch's materialized data bypass a failed or

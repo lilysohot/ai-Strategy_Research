@@ -79,6 +79,29 @@ Labels: ready-for-agent
    草稿保护均未跑 Playwright；也**未做真实后端联调**，含"worker 真的调用工具产生请求"的完整链路。
 3. 前端单测未覆盖本轮新逻辑（现有 74 项不含弹窗与成交回填）。
 
+## 对话结束后补数续接（2026-10-12）
+
+为降低“必须由 Agent 在运行中准确调用补数工具”的触发难度，新增用户主动的后置续接路径：
+
+- Run 进入终态后，对话区显示“补充资料并继续”；普通材料阅读不会自动弹窗或自动创建请求。
+- 用户点击后，`POST /api/business/runs/{run_id}/input-request` 按 `plan_analysis` 在服务端读取该
+  Run 的冻结业务快照；旧 Run 没有快照时兼容读取研究当前绑定。缺项由 `evaluate_purpose` 计算，
+  前端不解析自然语言、不自行猜字段。
+- 同一个来源 Run 重复点击复用 pending 请求；仍在运行的 Run 返回冲突，其他用户的 Run 不可见。
+- 请求字段能由专用弹窗覆盖时直接打开；尚无主计划时先打开现有会话计划表单；其它基础字段缺失
+  时进入补数中心，避免固定弹窗无法完成请求。
+- 用户提交后沿用既有 `answer_request` 事务：结构化资料写入业务对象，创建不可变快照及关联的新
+  Run，并进入持久派发队列。弹窗把 `follow_up_run_id` 回传给 `ChatView`，页面自动关注新 Run。
+- Agent 的 `request_investment_input` 路径继续作为运行中提前中止的兼容入口；后置路径不依赖它。
+
+零模型回归 `tests/test_post_run_input_request.py` 覆盖：已有账户/主计划但缺规划资金 → 后置请求 →
+重复点击幂等复用 → 保存结构化规划资金 → 新 Run queued → `input_answer` 快照包含该值。结果 1 passed；
+目标 Ruff/Pyright、前端 `vue-tsc`、84 项前端单测通过。Vite build 在 Windows Node 读取 WSL 的 Linux
+`node_modules` 时缺 `@rollup/rollup-win32-x64-msvc`，属于当前依赖平台不匹配，本轮未重装依赖。
+
+本 issue 仍保持 `open`：后置路径已实现并完成代码级闭环，但真实浏览器 + 真实 worker 验收尚未执行，
+且 Agent 建议价/成交价的展示区分仍未完成。
+
 ## 说明
 
 - `target_price`（目标价）仍保留为可选字段：契约 §11 未冻结其与 `target_profit` 的分工，

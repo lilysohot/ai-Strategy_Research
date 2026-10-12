@@ -461,6 +461,21 @@ async def force_final_answer(
     if result.metadata.get("final_answer") or result.stopped_by not in forced:
         return result
 
+    # An infrastructure stop means the research loop did not reach a clean,
+    # tool-free answer. A second model call used to turn whatever partial market
+    # facts had arrived into a confident recommendation, bypassing required
+    # business-input tools. Keep these stops deterministic and non-conclusive.
+    if result.stopped_by in _INFRA_FINAL_STOP_REASONS:
+        text = _minimal_best_effort_answer(
+            task_description, result.stopped_by, language=language
+        )
+        result.metadata["final_answer"] = text
+        result.metadata["final_answer_rescued"] = True
+        result.metadata["final_answer_rescue_mode"] = "deterministic_fallback"
+        result.metadata["final_answer_source"] = "deterministic_fallback"
+        result.final_content = text
+        return result
+
     prompt = (
         final_prompt
         or (

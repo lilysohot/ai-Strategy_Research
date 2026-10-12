@@ -140,6 +140,11 @@ async def test_orchestrator_materializes_authenticated_context_without_db_creden
     fake_process = SimpleNamespace(stdin=SimpleNamespace(), stdout=None, returncode=None, pid=1)
     spawn = AsyncMock(return_value=fake_process)
     monkeypatch.setattr("asyncio.create_subprocess_exec", spawn)
+    freeze = AsyncMock(return_value=False)
+    monkeypatch.setattr(
+        "server.orchestrator.investment_snapshot.ensure_research_bound_snapshot",
+        freeze,
+    )
     orchestrator = Orchestrator()
     orchestrator._investment_context_resolver = FakeResolver()
     monkeypatch.setattr(orchestrator, "_acquire_slot", AsyncMock())
@@ -165,6 +170,7 @@ async def test_orchestrator_materializes_authenticated_context_without_db_creden
             "prompt_addendum": "",
         },
     )
+    freeze.assert_awaited_once_with(run_id=run_id, user_id=user_id)
     assert json.loads((run_dir_for(run_id.hex) / "investment-context.json").read_text()) == data
     child_env = spawn.await_args.kwargs["env"]
     assert child_env["SERVER_DATABASE_URL"] == "sqlite+aiosqlite:///:memory:"

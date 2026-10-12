@@ -243,8 +243,10 @@ def test_server_profile_exposes_complete_research_surface_with_bound_sizing() ->
     assert "investment_position_sizing" in with_context
     assert "investment_strategy_lint" in with_context
     assert "investment_context" in with_context
-    assert "position_sizing" in without_context
-    assert "strategy_lint" in without_context
+    # A run without an authenticated business snapshot must not accept capital
+    # invented by the model through the raw calculators.
+    assert "position_sizing" not in without_context
+    assert "strategy_lint" not in without_context
     assert "position_sizing" not in with_context
     assert "strategy_lint" not in with_context
 

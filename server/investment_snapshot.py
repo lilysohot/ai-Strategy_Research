@@ -303,7 +303,9 @@ async def resolve_for_run(
                 select(model).where(model.id == ref.id, model.user_id == user_id).with_for_update()
             )
         ).scalar_one_or_none()
-        if obj is None or (group == "plan" and obj.research_id != research_id):
+        if obj is None or (
+            group == "plan" and getattr(obj, "research_id", None) != research_id
+        ):
             raise biz.NotFoundOrForbiddenError("资料不存在或不属于该研究")
         if obj.archived:
             raise biz.ObjectArchivedError("资料已归档，不能用于新的分析")
@@ -419,7 +421,7 @@ async def resolve_for_run(
         for name, reason in admission.incomplete.items():
             missing[f"{group}.{name}"] = reason
     resolution.missing = missing
-    if missing and spec.use_case != "general_reading":
+    if missing and spec.use_case in {"plan_analysis", "holding_cost"}:
         raise biz.PurposeRequirementError("分析所需资料未满足", fields=missing)
     for group, values in entries.items():
         for name, item in values.items():
@@ -453,6 +455,7 @@ async def persist_declared(
             uuid.uuid5(uuid.NAMESPACE_URL, f"run.submit:{user_id}:{spec.idempotency_key}:{group}")
         )
         if group == "account":
+            assert ref is not None
             outcome = await biz.update_account(
                 session,
                 user_id=user_id,
@@ -464,6 +467,7 @@ async def persist_declared(
             )
             result = replace(result, account=ObjectRef(ref.id, outcome.result["revision"]))
         elif group == "plan":
+            assert ref is not None
             plan = await session.get(store.InvestmentPlan, ref.id)
             if plan is None or plan.user_id != user_id or plan.research_id != research_id:
                 raise biz.NotFoundOrForbiddenError("计划不属于该研究")
@@ -537,6 +541,69 @@ def build_snapshot(
         declared_json=spec.declared,
         frozen_at=datetime.now(UTC),
     )
+
+
+async def ensure_research_bound_snapshot(*, run_id: uuid.UUID, user_id: uuid.UUID) -> bool:
+    """Freeze a plain Run's current research binding exactly once.
+
+    Explicit submission snapshots (manual/input_answer/watch_event) always win.
+    For a Run without one, lock the Run, resolve the account and primary plan
+    currently bound to its authenticated research, and insert an immutable
+    ``research_bound`` snapshot.  ``unspecified`` deliberately records facts
+    without applying a purpose gate; the agent declares plan_analysis or
+    holding_cost later if it needs a personalised conclusion.
+
+    Returns ``True`` only when this call inserted the inherited snapshot.
+    """
+    async with biz.business_transaction() as session:
+        run = (
+            await session.execute(
+                select(store.Run)
+                .where(store.Run.id == run_id, store.Run.user_id == user_id)
+                .with_for_update()
+            )
+        ).scalar_one_or_none()
+        if run is None:
+            return False
+
+        existing = await get_snapshot(session, user_id=user_id, run_id=run_id)
+        if existing is not None:
+            return False
+
+        link = (
+            await session.execute(
+                select(store.ResearchInvestmentLink).where(
+                    store.ResearchInvestmentLink.research_id == run.session_id,
+                    store.ResearchInvestmentLink.user_id == user_id,
+                )
+            )
+        ).scalar_one_or_none()
+        if link is None or (link.account_id is None and link.primary_plan_id is None):
+            return False
+
+        spec = InvestmentInputSpec(
+            use_case="unspecified",
+            account=ObjectRef(link.account_id) if link.account_id else None,
+            plan=ObjectRef(link.primary_plan_id) if link.primary_plan_id else None,
+        )
+        resolution = await resolve_for_run(
+            session,
+            user_id=user_id,
+            research_id=run.session_id,
+            spec=spec,
+        )
+        session.add(
+            build_snapshot(
+                run_id=run.id,
+                user_id=user_id,
+                research_id=run.session_id,
+                spec=spec,
+                resolution=resolution,
+                source="research_bound",
+            )
+        )
+        await session.flush()
+        return True
 
 
 async def get_snapshot(
