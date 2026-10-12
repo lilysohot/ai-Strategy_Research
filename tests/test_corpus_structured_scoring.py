@@ -365,6 +365,26 @@ def test_empty_invalid_and_failed_observations_remain_in_denominator(
     assert extraction.failures == (f"g-1:{outcome}",)
 
 
+def _tiny_gate_requirements(**overrides: object):
+    """Scale the contract gate down to synthetic fixtures (they test machinery, not the 48-gate)."""
+    from plugins.corpus.structured_scoring import ContractGateRequirements
+
+    values: dict[str, object] = {
+        "schema_version": "synthetic-gate",
+        "role_scope": Role.MATERIAL_ITEMS,
+        "target_recall_overall_min": Fraction(4, 5),
+        "target_recall_per_source_min": Fraction(4, 5),
+        "candidate_precision_min": Fraction(4, 5),
+        "accepted_records_total_min": 1,
+        "accepted_records_per_source_min": 1,
+        "unresolved_candidates_max": 0,
+        "material_items_target_total": 1,
+        "high_risk_item_assertions_required": (),
+    }
+    values.update(overrides)
+    return ContractGateRequirements(**values)  # type: ignore[arg-type]
+
+
 def test_zero_denominators_are_undefined_and_cannot_pass_gate() -> None:
     report = score_structured_quality(
         (), matching_mode=MatchingMode.LEGACY_IDENTITY, raw_candidates=(), validated_candidates=()
@@ -373,11 +393,17 @@ def test_zero_denominators_are_undefined_and_cannot_pass_gate() -> None:
     for role in Role:
         assert report.validated.role(role).precision is None
         assert report.validated.role(role).recall is None
-        assert f"zero_denominator:{role}:precision" in report.gate.rate_blockers
-        assert f"zero_denominator:{role}:recall" in report.gate.rate_blockers
+        # Per-role pilot policy is now diagnostic: it lands in pilot_policy_blockers.
+        assert f"zero_denominator:{role}:precision" in report.gate.pilot_policy_blockers
+        assert f"zero_denominator:{role}:recall" in report.gate.pilot_policy_blockers
     assert report.gate.risk_condition_recall is None
-    assert "zero_denominator:risk_or_condition" in report.gate.rate_blockers
-    assert "zero_denominator:report_support" in report.gate.rate_blockers
+    # The contract gate owns the pass/fail boolean now.
+    assert "contract_zero_denominator:target_recall_overall" in report.gate.rate_blockers
+    assert "contract_zero_denominator:candidate_precision" in report.gate.rate_blockers
+    assert "contract_below_threshold:accepted_records_total:0<40" in report.gate.rate_blockers
+    # Report support moved to readiness (contract metrics.quality_gate).
+    assert "zero_denominator:report_support" in report.gate.readiness_blockers
+    assert report.gate.rate_gate_passed is False
     assert report.gate.live_trial_ready is False
 
 
@@ -483,6 +509,7 @@ def test_candidate_thresholds_do_not_unlock_live_trial_without_frozen_developmen
         conclusions=(conclusion,),
         policy=policy,
         readiness=EvaluationReadiness(),
+        gate_requirements=_tiny_gate_requirements(),
     )
 
     assert report.gate.rate_gate_passed is True
@@ -511,8 +538,11 @@ def test_signed_off_sufficient_run_can_pass_but_critical_error_is_absolute_veto(
         conclusions=(conclusion,),
         policy=policy,
         readiness=ready,
+        gate_requirements=_tiny_gate_requirements(),
     )
+    assert passing.gate.rate_gate_passed is True
     assert passing.gate.live_trial_ready is True
+    assert passing.gate.pilot_policy_blockers == ()
 
     _, bad, _, _, _, _ = _perfect_three_role_run(critical_error="wrong_year")
     vetoed = score_structured_quality(
@@ -525,6 +555,7 @@ def test_signed_off_sufficient_run_can_pass_but_critical_error_is_absolute_veto(
         conclusions=(conclusion,),
         policy=policy,
         readiness=ready,
+        gate_requirements=_tiny_gate_requirements(),
     )
     assert vetoed.gate.rate_gate_passed is False
     assert vetoed.gate.live_trial_ready is False

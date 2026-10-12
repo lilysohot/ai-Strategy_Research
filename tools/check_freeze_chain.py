@@ -25,6 +25,7 @@ import hashlib
 import json
 import sys
 from dataclasses import asdict, dataclass, field
+from fractions import Fraction
 from pathlib import Path
 from typing import Any
 
@@ -115,6 +116,52 @@ def check_gold_pins(report: Report, gate: dict[str, Any], gate_label: str) -> No
         )
 
 
+def check_scorer_snapshot(report: Report, contract: dict[str, Any]) -> None:
+    """P03: the scorer's embedded gate snapshot must equal the signed contract's values."""
+    sys.path.insert(0, str(REPO_ROOT))
+    from plugins.corpus.structured_scoring import CONTRACT_GATE_REQUIREMENTS
+
+    effective = contract["threshold_source"]["effective"]
+    expected = {
+        "target_recall_overall_min": Fraction(str(effective["target_recall_overall_min"])),
+        "target_recall_per_source_min": Fraction(str(effective["target_recall_per_source_min"])),
+        "candidate_precision_min": Fraction(str(effective["candidate_precision_min"])),
+        "accepted_records_total_min": effective["accepted_records_total_min"],
+        "accepted_records_per_source_min": effective["accepted_records_per_source_min"],
+        "unresolved_candidates_max": effective["unresolved_candidates_max"],
+    }
+    actual = {
+        "target_recall_overall_min": CONTRACT_GATE_REQUIREMENTS.target_recall_overall_min,
+        "target_recall_per_source_min": CONTRACT_GATE_REQUIREMENTS.target_recall_per_source_min,
+        "candidate_precision_min": CONTRACT_GATE_REQUIREMENTS.candidate_precision_min,
+        "accepted_records_total_min": CONTRACT_GATE_REQUIREMENTS.accepted_records_total_min,
+        "accepted_records_per_source_min": CONTRACT_GATE_REQUIREMENTS.accepted_records_per_source_min,
+        "unresolved_candidates_max": CONTRACT_GATE_REQUIREMENTS.unresolved_candidates_max,
+    }
+    mismatched = {
+        key: (expected[key], actual[key]) for key in expected if expected[key] != actual[key]
+    }
+    report.add(
+        Binding(
+            claim="scorer embedded gate snapshot == contract threshold_source.effective (P03)",
+            expected=json.dumps({k: str(v) for k, v in expected.items()}, sort_keys=True),
+            actual=json.dumps({k: str(v) for k, v in actual.items()}, sort_keys=True),
+            verdict="ok" if not mismatched else "drift",
+            detail=json.dumps(mismatched, ensure_ascii=False) if mismatched else "",
+        )
+    )
+    report.add(
+        Binding(
+            claim="scorer embedded schema_version == contract schema_version",
+            expected=contract["schema_version"],
+            actual=CONTRACT_GATE_REQUIREMENTS.schema_version,
+            verdict="ok"
+            if CONTRACT_GATE_REQUIREMENTS.schema_version == contract["schema_version"]
+            else "drift",
+        )
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--json", default=None)
@@ -122,9 +169,10 @@ def main() -> int:
     args = parser.parse_args()
 
     contract = load(CONTRACT_CURRENT)
+    report = Report()
+    check_scorer_snapshot(report, contract)
     gate_v1 = load(GATE_V1)
     gate_v2 = load(GATE_V2) if GATE_V2.exists() else None
-    report = Report()
 
     contract_hash = sha256(CONTRACT_CURRENT)
     gate_v1_hash = sha256(GATE_V1)

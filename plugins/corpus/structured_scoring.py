@@ -387,6 +387,75 @@ PILOT_CANDIDATE_POLICY = QualityPolicy(
 
 
 @dataclass(frozen=True)
+class ContractGateRequirements:
+    """The signed contract's gate axes, evaluated inside the gate's role scope.
+
+    Values are the **signed snapshot** (contract v4.2 ``threshold_source.effective`` + gate 28
+    ``quality_requirements``). ``tests/test_corpus_contract_gate.py`` asserts them against the
+    contract JSON itself, so a contract revision turns that test red — the executable form of
+    "评分器读契约" without product code importing a research-evidence file.
+    """
+
+    schema_version: str
+    role_scope: Role
+    target_recall_overall_min: Fraction
+    target_recall_per_source_min: Fraction
+    candidate_precision_min: Fraction
+    accepted_records_total_min: int
+    accepted_records_per_source_min: int
+    unresolved_candidates_max: int
+    material_items_target_total: int
+    high_risk_item_assertions_required: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        if not (0 < self.target_recall_overall_min <= 1):
+            raise ScoringInputError("target_recall_overall_min must be in (0, 1]")
+        if not (0 < self.target_recall_per_source_min <= 1):
+            raise ScoringInputError("target_recall_per_source_min must be in (0, 1]")
+        if not (0 < self.candidate_precision_min <= 1):
+            raise ScoringInputError("candidate_precision_min must be in (0, 1]")
+        if self.accepted_records_total_min < 1 or self.accepted_records_per_source_min < 1:
+            raise ScoringInputError("accepted_records minima must be positive")
+        if self.unresolved_candidates_max < 0:
+            raise ScoringInputError("unresolved_candidates_max must be non-negative")
+        if len(set(self.high_risk_item_assertions_required)) != len(
+            self.high_risk_item_assertions_required
+        ):
+            raise ScoringInputError("high_risk_item_assertions_required must be unique")
+
+
+CONTRACT_GATE_REQUIREMENTS = ContractGateRequirements(
+    schema_version="non-table-selected-target-scoring-contract-v4.2",
+    role_scope=Role.MATERIAL_ITEMS,
+    target_recall_overall_min=Fraction(17, 20),
+    target_recall_per_source_min=Fraction(4, 5),
+    candidate_precision_min=Fraction(4, 5),
+    accepted_records_total_min=40,
+    accepted_records_per_source_min=20,
+    unresolved_candidates_max=0,
+    material_items_target_total=48,
+    high_risk_item_assertions_required=(
+        "NT-I09",
+        "NT-I13",
+        "NT-I15",
+        "NT-I17",
+        "NT-I19",
+        "NT-I29",
+        "NT-I35",
+        "NT-I37",
+        "NT-I38",
+        "NT-I39",
+        "NT-I42",
+        "NT-I43",
+        "NT-I45",
+        "NT-I46",
+        "NT-I47",
+        "NT-I48",
+    ),
+)
+
+
+@dataclass(frozen=True)
 class EvaluationReadiness:
     """External evidence needed before code scores may unlock a live trial."""
 
@@ -401,13 +470,21 @@ DEFAULT_EVALUATION_READINESS = EvaluationReadiness()
 
 @dataclass(frozen=True)
 class QualityGateScore:
-    """Rate result and readiness result kept separate to avoid false release."""
+    """Rate result and readiness result kept separate to avoid false release.
+
+    ``rate_gate_passed`` is the **contract** gate (``ContractGateRequirements``), the single
+    authoritative boolean. The historical per-role pilot policy survives only as the
+    ``pilot_policy_blockers`` diagnostic list — it no longer gates, so there is exactly one
+    pass/fail verdict and never two competing truths.
+    """
 
     rate_gate_passed: bool
     live_trial_ready: bool
     risk_condition_recall: Fraction | None
     rate_blockers: tuple[str, ...]
     readiness_blockers: tuple[str, ...]
+    pilot_policy_blockers: tuple[str, ...] = ()
+    risk_condition_by_role: tuple[tuple[str, int, int], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -435,6 +512,7 @@ def score_structured_quality(
     matching_mode: MatchingMode = MatchingMode.ADJUDICATED,
     raw_mappings: Sequence[AdjudicatedMappingLike] | None = None,
     validated_mappings: Sequence[AdjudicatedMappingLike] | None = None,
+    gate_requirements: ContractGateRequirements = CONTRACT_GATE_REQUIREMENTS,
 ) -> StructuredQualityReport:
     """Score raw and validated candidates independently against frozen gold.
 
@@ -471,7 +549,15 @@ def score_structured_quality(
     sources = tuple(sorted({by_id[item].source_id for item in validated.matched_gold_ids}))
     coverage = _score_coverage(coverage_targets, coverage_observations)
     support = _score_report_support(gold, coverage_targets, coverage_observations, conclusions)
-    gate = _score_gate(gold, validated_candidates, validated, support, policy, readiness)
+    gate = _score_gate(
+        gold,
+        validated_candidates,
+        validated,
+        support,
+        policy,
+        readiness,
+        requirements=gate_requirements,
+    )
     return StructuredQualityReport(
         raw=raw,
         validated=validated,
@@ -833,39 +919,67 @@ def _score_gate(
     support: ReportSupportScore,
     policy: QualityPolicy,
     readiness: EvaluationReadiness,
+    requirements: ContractGateRequirements = CONTRACT_GATE_REQUIREMENTS,
 ) -> QualityGateScore:
-    rate_blockers: list[str] = []
-    for role in Role:
-        metrics = validated.role(role)
-        threshold = policy.role(role)
-        for name, value, minimum in (
-            ("precision", metrics.precision, threshold.precision_min),
-            ("recall", metrics.recall, threshold.recall_min),
-        ):
-            if value is None:
-                rate_blockers.append(f"zero_denominator:{role}:{name}")
-            elif value < minimum:
-                rate_blockers.append(f"below_threshold:{role}:{name}:{value}<{minimum}")
+    """Produce the gate verdicts.
+
+    ``rate_gate_passed`` is the **contract** gate (``requirements``, the signed snapshot),
+    evaluated inside the gate's role scope — it is the only pass/fail boolean. The per-role
+    pilot policy survives as the ``pilot_policy_blockers`` diagnostic list and never gates.
+    ``risk_condition`` is reported (per role, counts and rate) because contract
+    ``metrics.risk_condition`` keeps the existing computation but assigns no threshold; the
+    signed authority's instrument for high-risk coverage is the 16-assertion requirement,
+    which is a different instrument and must not be read as a risk-recall axis (16∩risk=10 of
+    21 marked records). Report support is a readiness precondition (contract
+    ``metrics.quality_gate``), not a rate. Zero-unresolved is enforced structurally: the
+    assembler rejects unresolved adjudications and the scorer rejects unmapped candidates.
+    """
     matched = set(validated.matched_gold_ids)
-    risk_gold = [item for item in gold if item.risk_or_condition]
-    risk_recall = (
-        Fraction(sum(item.record_id in matched for item in risk_gold), len(risk_gold))
-        if risk_gold
-        else None
-    )
-    if risk_recall is None:
-        rate_blockers.append("zero_denominator:risk_or_condition")
-    elif risk_recall < policy.risk_condition_recall_min:
+    rate_blockers: list[str] = []
+
+    # ---- contract gate, inside the gate's role scope -------------------------------
+    scope_gold = [item for item in gold if item.role is requirements.role_scope]
+    scope_matched = [item for item in scope_gold if item.record_id in matched]
+    scope_metrics = validated.role(requirements.role_scope)
+
+    if scope_metrics.recall is None:
+        rate_blockers.append("contract_zero_denominator:target_recall_overall")
+    elif scope_metrics.recall < requirements.target_recall_overall_min:
         rate_blockers.append(
-            f"below_threshold:risk_or_condition:recall:{risk_recall}"
-            f"<{policy.risk_condition_recall_min}"
+            f"contract_below_threshold:target_recall_overall:{scope_metrics.recall}"
+            f"<{requirements.target_recall_overall_min}"
         )
-    if support.rate is None:
-        rate_blockers.append("zero_denominator:report_support")
-    elif support.rate < policy.report_support_min:
+    if scope_metrics.precision is None:
+        rate_blockers.append("contract_zero_denominator:candidate_precision")
+    elif scope_metrics.precision < requirements.candidate_precision_min:
         rate_blockers.append(
-            f"below_threshold:report_support:{support.rate}<{policy.report_support_min}"
+            f"contract_below_threshold:candidate_precision:{scope_metrics.precision}"
+            f"<{requirements.candidate_precision_min}"
         )
+    if len(scope_matched) < requirements.accepted_records_total_min:
+        rate_blockers.append(
+            f"contract_below_threshold:accepted_records_total:{len(scope_matched)}"
+            f"<{requirements.accepted_records_total_min}"
+        )
+    for source_id in sorted({item.source_id for item in scope_gold}):
+        source_gold = [item for item in scope_gold if item.source_id == source_id]
+        source_matched = sum(item.record_id in matched for item in source_gold)
+        source_recall = Fraction(source_matched, len(source_gold))
+        if source_recall < requirements.target_recall_per_source_min:
+            rate_blockers.append(
+                f"contract_below_threshold:target_recall_per_source:{source_id}:"
+                f"{source_recall}<{requirements.target_recall_per_source_min}"
+            )
+        if source_matched < requirements.accepted_records_per_source_min:
+            rate_blockers.append(
+                f"contract_below_threshold:accepted_records_per_source:{source_id}:"
+                f"{source_matched}<{requirements.accepted_records_per_source_min}"
+            )
+    for record_id in requirements.high_risk_item_assertions_required:
+        if record_id not in matched:
+            rate_blockers.append(f"contract_high_risk_assertion_unmatched:{record_id}")
+
+    # ---- critical handling: pre-existing, unchanged --------------------------------
     rate_blockers.extend(f"critical_report_failure:{item}" for item in support.critical_failures)
     rate_blockers.extend(
         f"critical_gold_missing:{item.record_id}"
@@ -878,6 +992,38 @@ def _score_gate(
         if item.critical_error_code is not None
     )
 
+    # ---- per-role pilot policy: diagnostic only, never gating ----------------------
+    pilot_blockers: list[str] = []
+    for role in Role:
+        metrics = validated.role(role)
+        threshold = policy.role(role)
+        for name, value, minimum in (
+            ("precision", metrics.precision, threshold.precision_min),
+            ("recall", metrics.recall, threshold.recall_min),
+        ):
+            if value is None:
+                pilot_blockers.append(f"zero_denominator:{role}:{name}")
+            elif value < minimum:
+                pilot_blockers.append(f"below_threshold:{role}:{name}:{value}<{minimum}")
+
+    # ---- risk_condition: reported, not gating (contract has no threshold) ----------
+    risk_gold = [item for item in gold if item.risk_or_condition]
+    risk_recall = (
+        Fraction(sum(item.record_id in matched for item in risk_gold), len(risk_gold))
+        if risk_gold
+        else None
+    )
+    risk_by_role = tuple(
+        (
+            role.value,
+            sum(1 for item in risk_gold if item.record_id in matched and item.role is role),
+            sum(1 for item in risk_gold if item.role is role),
+        )
+        for role in Role
+        if any(item.role is role for item in risk_gold)
+    )
+
+    # ---- readiness ----------------------------------------------------------------
     readiness_blockers: list[str] = []
     for role in Role:
         count = sum(item.role is role for item in gold)
@@ -885,6 +1031,12 @@ def _score_gate(
             readiness_blockers.append(
                 f"insufficient_sample:{role}:{count}/{policy.min_gold_per_role}"
             )
+    if support.rate is None:
+        readiness_blockers.append("zero_denominator:report_support")
+    elif support.rate < policy.report_support_min:
+        readiness_blockers.append(
+            f"below_threshold:report_support:{support.rate}<{policy.report_support_min}"
+        )
     for ready, blocker in (
         (readiness.development_gold_frozen, "development_gold_not_frozen"),
         (readiness.gold_frozen_before_candidates, "gold_not_frozen_before_candidates"),
@@ -900,4 +1052,6 @@ def _score_gate(
         risk_condition_recall=risk_recall,
         rate_blockers=tuple(rate_blockers),
         readiness_blockers=tuple(readiness_blockers),
+        pilot_policy_blockers=tuple(pilot_blockers),
+        risk_condition_by_role=risk_by_role,
     )

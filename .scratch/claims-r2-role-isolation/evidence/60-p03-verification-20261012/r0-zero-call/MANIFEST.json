@@ -1,0 +1,17 @@
+{
+  "schema_version": "items-p03-verification-manifest-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "inputs": {
+    ".scratch/claims-r2-role-isolation/evidence/36-l9-redo-and-baseline-20261011/r0-zero-call/l9_redo.py": "sha256:12fc694fc10ff7463597a102ae4ec5c1db82057fcc42a62b6bcbe3a3e25b9187",
+    ".scratch/claims-r2-role-isolation/evidence/36-l9-redo-and-baseline-20261011/r0-zero-call/l9-redo.json": "sha256:acd268f292c2b4312ce4549c9388741cf22e0c2d41a4b0253e548995b2393f99",
+    "plugins/corpus/structured_scoring.py": "sha256:093d0ca1ce2036a6481b5d7e068c6b9ab2e4d745bae9807dd413fbaf76efae3e",
+    "evidence/59-p03-design-20261012/r0-zero-call/p03-design-evaluation.md": "sha256:c2c0c3b79732e3ae4da708f8a915ae4fbb79a7d8df33371cfd5bc090e7f5018f"
+  },
+  "outputs": {
+    "ledger-invariance.json": "sha256:308f85349f97fba0430ff2186c9803c4213012ee4355ba0c87483b80481a8967",
+    "verify_ledger_invariance.py": "sha256:80025b223769067bcbcbd74aea100c449df682313207b3aba79c599b7eb3b3e8"
+  },
+  "in_place_edits": 0,
+  "historical_scripts_edited": false
+}

@@ -23,6 +23,7 @@
 - 修订：r16（2026-10-12，零调用）：**P12/P13 已签认并落地**（U 签 `06ca5279…`；新增记录 `565a680b…`／`8cc11bcc…`）；**P14 已落地**（新增对齐记录，`validation-report.json` 字节不变）；**P16 冻结链校验器已建成并首跑**（`drift 0`，1 项待 U 裁定）。详见 §5.13.4。
 - 修订：r17（2026-10-12，零调用）：U 对校验器拦下项裁定 **(a)** ⇒ 出 **契约 v4.2 草案**（只改 3 处 authority pin，`unexpected_changed = 0`，阈值逐字不变；`evidence/57-…`，待签）；**P06 护栏修两处机制误报**（空白模板/空 signoff 占位被误判已签，`51-…/guard-fix-record.json`）。详见 §5.13.6。
 - 修订：r18（2026-10-12，零调用）：**契约 v4.2 已签认并落地**（U 签 `215a3490…`；`58-…/scoring-contract-v4.2.json`）；**P12 同轮再绑定 v4.2**（`rebinding-v4.2-20261012.json`，`8fa7f8bb…`）；**冻结链校验器全绿**（`ok 11 / covered 5 / drift 0 / needs_ruling 0 / exit 0`）。详见 §5.13.7。
+- 修订：r19（2026-10-12，零调用）：**P03 阈值单源落地**（`evidence/59-…` 设计＋评估、`60-…` 验证；组合 1-A＋2-C＋3-A′）。详见 §5.13.8。
 
 ## 0. 口径声明（先声明谓词，再看数字）
 
@@ -554,6 +555,32 @@ ok 11 · covered_by_record 5 · drift 0 · needs_ruling 0 · exit 0
 契约钉门哈希、门的 `metric_basis` 又钉契约版本 ⇒ **两者会相互追逐**：本轮 v4.2 落地后，门 v2 的 `metric_basis`（`…-v4.1`）已落后于契约，若按 `gate28_basis_sync` 再推进门，门哈希变化又会使契约的 pin 过期。**打破追逐的不变量是"阈值数值恒等"**（校验器已逐字核查 v1/v2 与契约三方一致）。建议后续以该不变量为权威、门版本推进只作簿记；是否把此规则写成条款属 U 裁定。
 
 **剩余**：P03 评分器读契约（以 **v4.2** 为准，已解锁）；P04/P05 口径实现与回归；route a/b 与缺口 1/2；Stage 2 真实裁定 222 条；补跑授权。
+
+#### 5.13.8 P03 阈值单源落地（r19 补记）
+
+设计与评估：`evidence/59-p03-design-20261012/`（`p03-design.md` + `p03-design-evaluation.md`）；验证：`evidence/60-p03-verification-20261012/`。**未动代码前先出设计**，U 裁定采用评估结论 **1-A＋2-C＋3-A′**。
+
+**关键设计事实（评估中实测发现）**：门 28 权威轴**没有按角色阈值**——"0.85/0.80"是总体/分源轴；且 **16 条 high-risk 断言 ≠ risk 集合**（16∩risk=10，21 条 risk 中 11 条不在 16 内，16 中 6 条是 opinion/立场项）。若按直觉把按角色阈值换成 0.80/0.85，即混轴（`axes_warning` 禁止）。
+
+**落地内容**（`plugins/corpus/structured_scoring.py`，只增字段不删）：
+
+1. 新增 `ContractGateRequirements`（已签快照 v4.2：六值＋16 断言＋`role_scope=material_items`＋`material_items_target_total=48`）。
+2. **`rate_gate_passed` 切换为契约轴判定**（唯一布尔），在 items 角色域内计算：总体召回 ≥0.85、每源召回 ≥0.80、精度 ≥0.80、接受总数 ≥40、每源接受 ≥20、16 条断言全命中；critical 处理保持不变。
+3. **按角色 pilot 阈值降级为 `pilot_policy_blockers` 诊断清单**（无数值布尔）——不删字段、不再 gating。
+4. **risk_condition 照报不 gating**（契约 `metrics.risk_condition`："总体仍可按既有 scorer 计算"），新增按角色计数 `risk_condition_by_role`。
+5. **report_support 移入 readiness**（契约 `metrics.quality_gate` 的放行前提），数值 0.95 暂留并标注"契约六值无对应项"。
+6. **单一来源可执行形式**：内嵌快照 + 回归测试直接读 `58-…/scoring-contract-v4.2.json` 逐字比对；校验器新增两条检查。
+
+**验证（10 条退出判据全过）**：
+
+- 内嵌值==契约逐字相等（测试 + 校验器 `OK scorer embedded…`）；校验器 `ok 13 / covered 5 / drift 0 / needs_ruling 0 / exit 0`。
+- **legacy 四臂账本逐字段不变**（`60-…/ledger-invariance.json`：tp/fp/fn/duplicate/precision/recall/matched 全等；D/D2 标量全等）；gate 区块变更 = 本轮已签交付物；`36/l9-redo.json` 字节未动（`acd268f2…`）。
+- 测试 **98 项全过**（23 legacy + 20 裁定驱动 + 14 契约门 + 24 装配器 + 17 护栏）；corpus 全量 1474 过，2 项失败为既有环境问题（与 P03 前基线一致）。
+- 修改的既有断言（3 处，逐条记录于测试内注释）：`test_zero_denominators…`（per-role 零分母移至 pilot 清单、report_support 移 readiness、新增契约 blocker 断言）；`test_candidate_thresholds…` 与 `test_signed_off…`（传入按 fixture 缩放的 `gate_requirements`——它们测的是门机制，不是 48 门数值）。
+
+**已申报的防护落差**：risk 门控从"21 条全 gated（≥0.95，无契约出处）"变为"16 条深度断言（其中 risk 10）＋总体/分源/接受数"；11 条未被 16 覆盖的 risk 记录由总体召回 0.85 与接受数覆盖，比率照报。此为 OPEN-1=A 的真实代价。
+
+**剩余**：P04/P05 口径归一化与回归；route a/b 与缺口 1/2；**Stage 2 真实裁定 222 条**；补跑授权。
 
 **C. 仍未完成（不得读成已过门）**：P01 装配器、P02 匹配改造、P03 评分器读契约/阈值、P04/P05 口径实现与回归、P12/P13 签认、route a/b 与缺口 1/2。
 

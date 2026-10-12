@@ -1,0 +1,51 @@
+{
+  "schema_version": "items-p03-ledger-invariance-1",
+  "created_on": "2026-10-12",
+  "zero_call": true,
+  "model_requests": 0,
+  "purpose": "P03 改的是门判定（已签决策的落实），不得改匹配账本。逐臂比对账本字段，显式排除 gate 区块——其变更即本轮已签交付物。",
+  "ledger_fields_compared": [
+    "tp",
+    "fp",
+    "fn",
+    "duplicate_fp",
+    "precision",
+    "recall",
+    "matched",
+    "matched_gold_ids"
+  ],
+  "per_arm": {
+    "A_native": {
+      "ledger_identical": true,
+      "gate_blockers_changed": true
+    },
+    "B_gold_injected": {
+      "ledger_identical": true,
+      "gate_blockers_changed": true
+    },
+    "C_route_a_projection": {
+      "ledger_identical": true,
+      "gate_blockers_changed": true
+    },
+    "D_field_alignment_tp": {
+      "ledger_identical": true,
+      "gate_blockers_changed": false
+    },
+    "D2_lexical_containment_tp": {
+      "ledger_identical": true,
+      "gate_blockers_changed": false
+    }
+  },
+  "ledger_identical": true,
+  "gate_blockers_changed_in_arms": [
+    "A_native",
+    "B_gold_injected",
+    "C_route_a_projection"
+  ],
+  "gate_change_declaration": "rate_gate_passed 语义已切换为契约轴（contract v4.2 threshold_source.effective），旧按角色阈值降级为 pilot_policy_blockers 诊断清单。gate 区块变更属已签交付物。",
+  "verdict": "四臂账本逐字段不变 ⇒ P03 未触碰匹配语义；gate 区块变更即本轮已签交付物。",
+  "not_claimed": [
+    "不证明裁定驱动臂在真实数据上正确（真实裁定仍为 0）。",
+    "不改动 evidence/36 的任何字节。"
+  ]
+}

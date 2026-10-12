@@ -4,6 +4,20 @@
   "zero_call": true,
   "checks": [
     {
+      "claim": "scorer embedded gate snapshot == contract threshold_source.effective (P03)",
+      "expected": "{\"accepted_records_per_source_min\": \"20\", \"accepted_records_total_min\": \"40\", \"candidate_precision_min\": \"4/5\", \"target_recall_overall_min\": \"17/20\", \"target_recall_per_source_min\": \"4/5\", \"unresolved_candidates_max\": \"0\"}",
+      "actual": "{\"accepted_records_per_source_min\": \"20\", \"accepted_records_total_min\": \"40\", \"candidate_precision_min\": \"4/5\", \"target_recall_overall_min\": \"17/20\", \"target_recall_per_source_min\": \"4/5\", \"unresolved_candidates_max\": \"0\"}",
+      "verdict": "ok",
+      "detail": ""
+    },
+    {
+      "claim": "scorer embedded schema_version == contract schema_version",
+      "expected": "non-table-selected-target-scoring-contract-v4.2",
+      "actual": "non-table-selected-target-scoring-contract-v4.2",
+      "verdict": "ok",
+      "detail": ""
+    },
+    {
       "claim": "current contract → authority gate (threshold_source.authority_source.sha256)",
       "expected": "sha256:8cc11bccc912ea7b123b6e769728c9076046d526c16c8a1218e27a2a692270f6",
       "actual": "gate v2 (preregistered-gate-v2.json)",
@@ -116,7 +130,7 @@
       "detail": "**保留字节，不改**：它是冻结当时实际生效的契约的历史记录，改它即伪造历史。本记录声明：该快照是历史，**不是**当前绑定；当前绑定即本记录的 binds_contract"
     }
   ],
-  "ok": 11,
+  "ok": 13,
   "covered_by_record": 5,
   "drift": 0,
   "needs_ruling": 0,
