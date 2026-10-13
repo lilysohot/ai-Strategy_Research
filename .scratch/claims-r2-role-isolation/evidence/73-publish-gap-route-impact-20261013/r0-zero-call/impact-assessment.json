@@ -1,0 +1,364 @@
+{
+  "schema_version": "publish-gap-route-impact-1",
+  "created_on": "2026-10-13",
+  "zero_model_calls": true,
+  "question": "若让语义发布在存在『已显式登记的缺口』时仍可进行，对后续有什么影响？",
+  "method": "扫描工作树枚举位点/断言/契约指纹；不改动任何文件；结论均由 enumerate 结果推导",
+  "sites": {
+    "publish_gate": {
+      "file": "plugins/corpus/structured/store.py",
+      "meaning": "artifact 级发布门：要求 quality_status == accepted，否则 CS_DEPENDENCY_NOT_READY",
+      "hits": [
+        {
+          "line": 539,
+          "text": "raise StructuredExecutionError(\"CS_DEPENDENCY_NOT_READY\", \"artifact_not_publishable\")"
+        }
+      ]
+    },
+    "manifest_quality_hardcoded": {
+      "file": "plugins/corpus/structured/store.py",
+      "meaning": "发布 manifest 组装时硬编码 accepted —— 缺口信息在此无落点",
+      "hits": [
+        {
+          "line": 955,
+          "text": "quality_status=\"accepted\","
+        }
+      ]
+    },
+    "read_gate": {
+      "file": "plugins/corpus/structured/store.py",
+      "meaning": "读取门：query 与 consumption 共用，manifest 非 accepted 即 CS_NOT_PUBLISHED",
+      "hits": [
+        {
+          "line": 1232,
+          "text": "manifest.publication_status != \"published\" or manifest.quality_status != \"accepted\""
+        }
+      ]
+    },
+    "manifest_reason_codes": {
+      "file": "plugins/corpus/structured/store.py",
+      "meaning": "manifest 已有自由字符串数组，结构上可承载缺口码（无坐标、无分级）",
+      "hits": [
+        {
+          "line": 143,
+          "text": "reason_codes: tuple[str, ...] = ()"
+        }
+      ]
+    },
+    "publication_coverage": {
+      "file": "plugins/corpus/structured/store.py",
+      "meaning": "manifest 的覆盖位只有三个 ContextStatus，没有缺口清单/坐标位",
+      "hits": [
+        {
+          "line": 116,
+          "text": "class PublicationCoverage(BaseModel):"
+        }
+      ]
+    },
+    "artifact_quality_derivation": {
+      "file": "plugins/corpus/structured/roles.py",
+      "meaning": "artifact 级 quality 推导式：缺口（omitted / invalid_quality / run-state）压成 review_required",
+      "hits": [
+        {
+          "line": 503,
+          "text": "quality: QualityStatus = ("
+        }
+      ]
+    },
+    "ledger_candidate_status": {
+      "file": "plugins/corpus/structured/ledger.py",
+      "meaning": "任务账把非 accepted 的 artifact 记为 unpublished，影响可发布候选集",
+      "hits": [
+        {
+          "line": 1618,
+          "text": "\"candidate\" if execution.artifact.quality_status == \"accepted\" else \"unpublished\""
+        }
+      ]
+    },
+    "ledger_accepted_items": {
+      "file": "plugins/corpus/structured/ledger.py",
+      "meaning": "accepted-items 导入要求父工件 quality_status == accepted",
+      "hits": [
+        {
+          "line": 222,
+          "text": "class AcceptedMaterialItems(BaseModel):"
+        },
+        {
+          "line": 243,
+          "text": "or self.artifact.quality_status != \"accepted\""
+        }
+      ]
+    },
+    "a4_quality_gate": {
+      "file": "plugins/corpus/structured/consumption.py",
+      "meaning": "A4 校验把 review_required 记为 problem(quality_not_accepted) —— 引用会被判未合格",
+      "hits": [
+        {
+          "line": 298,
+          "text": "if record.quality_status != \"accepted\":"
+        }
+      ]
+    },
+    "query_material_hardcoded": {
+      "file": "plugins/corpus/structured/query.py",
+      "meaning": "查询层对 material 记录硬编码 accepted —— 缺口对主线不可见",
+      "hits": [
+        {
+          "line": 382,
+          "text": "quality_status=\"accepted\","
+        }
+      ]
+    },
+    "query_claims_mapping": {
+      "file": "plugins/corpus/structured/query.py",
+      "meaning": "查询层 claims 记录按 payload 质量映射（与 material 路径不对称）",
+      "hits": [
+        {
+          "line": 269,
+          "text": "\"review\": \"review_required\","
+        }
+      ]
+    }
+  },
+  "standing_test_assertions": {
+    "gap_means_not_accepted": {
+      "meaning": "断言：存在缺口/异常时 artifact 不得为 accepted",
+      "pattern": "quality_status != \"accepted\"|quality_status == \"review_required\"",
+      "count": 11,
+      "by_file": {
+        "tests/test_corpus_structured_execution.py": 3,
+        "tests/test_corpus_structured_roles.py": 8
+      },
+      "hits": [
+        {
+          "file": "tests/test_corpus_structured_execution.py",
+          "line": 975,
+          "text": "assert items.quality_status != \"accepted\""
+        },
+        {
+          "file": "tests/test_corpus_structured_execution.py",
+          "line": 1714,
+          "text": "assert items_execution.artifact.quality_status == \"review_required\""
+        },
+        {
+          "file": "tests/test_corpus_structured_execution.py",
+          "line": 1816,
+          "text": "assert items.quality_status == \"review_required\""
+        },
+        {
+          "file": "tests/test_corpus_structured_roles.py",
+          "line": 556,
+          "text": "assert relations.artifact.quality_status == \"review_required\""
+        },
+        {
+          "file": "tests/test_corpus_structured_roles.py",
+          "line": 639,
+          "text": "assert result.artifact.quality_status != \"accepted\""
+        },
+        {
+          "file": "tests/test_corpus_structured_roles.py",
+          "line": 675,
+          "text": "assert result.artifact.quality_status != \"accepted\""
+        },
+        {
+          "file": "tests/test_corpus_structured_roles.py",
+          "line": 694,
+          "text": "assert result.artifact.quality_status == \"review_required\""
+        },
+        {
+          "file": "tests/test_corpus_structured_roles.py",
+          "line": 741,
+          "text": "assert result.artifact.quality_status == \"review_required\""
+        },
+        {
+          "file": "tests/test_corpus_structured_roles.py",
+          "line": 825,
+          "text": "assert result.artifact.quality_status == \"review_required\""
+        },
+        {
+          "file": "tests/test_corpus_structured_roles.py",
+          "line": 879,
+          "text": "assert result.artifact.quality_status != \"accepted\""
+        },
+        {
+          "file": "tests/test_corpus_structured_roles.py",
+          "line": 894,
+          "text": "assert result.artifact.quality_status != \"accepted\""
+        }
+      ]
+    },
+    "omission_asserted": {
+      "meaning": "断言：缺口必须显式可见（omitted_unit_ids 非空）",
+      "pattern": "coverage\\.omitted_unit_ids",
+      "count": 5,
+      "by_file": {
+        "tests/test_corpus_structured_roles.py": 5
+      },
+      "hits": [
+        {
+          "file": "tests/test_corpus_structured_roles.py",
+          "line": 496,
+          "text": "assert result.artifact.coverage.omitted_unit_ids"
+        },
+        {
+          "file": "tests/test_corpus_structured_roles.py",
+          "line": 676,
+          "text": "assert result.artifact.coverage.omitted_unit_ids"
+        },
+        {
+          "file": "tests/test_corpus_structured_roles.py",
+          "line": 695,
+          "text": "assert result.artifact.coverage.omitted_unit_ids"
+        },
+        {
+          "file": "tests/test_corpus_structured_roles.py",
+          "line": 740,
+          "text": "assert result.artifact.coverage.omitted_unit_ids"
+        },
+        {
+          "file": "tests/test_corpus_structured_roles.py",
+          "line": 880,
+          "text": "assert result.artifact.coverage.omitted_unit_ids"
+        }
+      ]
+    },
+    "publish_gate_asserted": {
+      "meaning": "断言：发布门拒绝行为的直接断言",
+      "pattern": "artifact_not_publishable",
+      "count": 0,
+      "by_file": {},
+      "hits": []
+    },
+    "a4_quality_asserted": {
+      "meaning": "断言：A4 对 review_required 记录的处理",
+      "pattern": "quality_not_accepted",
+      "count": 0,
+      "by_file": {},
+      "hits": []
+    }
+  },
+  "guard_coverage": {
+    "publish_gate_direct_assertions": 0,
+    "a4_quality_direct_assertions": 0,
+    "note": "两条拒绝路径没有直接断言：放宽门禁时缺少反例护栏"
+  },
+  "contract_fingerprints": {
+    "publication_schema": {
+      "path": ".scratch/claims-r2-role-isolation/contracts/v1/semantic-publication.schema.json",
+      "exists": true,
+      "sha256": "sha256:636e7b8000f31582766ab80acb90869cd0e4bfe04713c27a26369119b12f77aa"
+    },
+    "publication_valid_example": {
+      "path": ".scratch/claims-r2-role-isolation/contracts/v1/examples/valid/semantic-publication.json",
+      "exists": true,
+      "sha256": "sha256:b944391f0bc501bb686ece0e6f489787cb976d1a0319413ecdcff2b03d0e727a"
+    },
+    "publication_invalid_example": {
+      "path": ".scratch/claims-r2-role-isolation/contracts/v1/examples/invalid/semantic-publication.json",
+      "exists": true,
+      "sha256": "sha256:ec09bff8dbe76eedb73c566047214d9733f40dce842760b56484d275572b512f"
+    },
+    "role_artifact_schema": {
+      "path": ".scratch/claims-r2-role-isolation/contracts/v1/role-artifact.schema.json",
+      "exists": true,
+      "sha256": "sha256:a14e4703ab86e4aee6e56a5c398f227eba67b94c25c9baa78e1b919a2e1f14a0"
+    },
+    "contract_manifest": {
+      "path": ".scratch/claims-r2-role-isolation/contracts/contract-manifest.json",
+      "exists": true,
+      "sha256": "sha256:039d56e5261ddf4847da7457d0972afebc628cb8fb35ccde40669ce83230befa"
+    },
+    "synthetic_asset_manifest": {
+      "path": "tests/fixtures/corpus_structured_synthetic/asset-manifest.json",
+      "exists": true,
+      "sha256": "sha256:6f9cc51597601b05e220ce3b74696269311ff50d246cf8272aced833a491d073"
+    }
+  },
+  "ingestion_gap_mechanism": {
+    "preparation_gaps_module": "plugins/corpus/preparation/gaps.py",
+    "preparation_publishable_check": "plugins/corpus/preparation/engine.py:check_build_publishable",
+    "structured_imports_preparation": [],
+    "coupled": false
+  },
+  "options": [
+    {
+      "id": "O0_record_only",
+      "summary": "不发布，只把缺口记档",
+      "touches": [],
+      "artifacts_rebuilt": false,
+      "reaches_goal": false,
+      "note": "零改动、零风险；『发布走显式缺口』目标未达成"
+    },
+    {
+      "id": "O1_publish_layer_keeps_artifact_semantics",
+      "summary": "在发布层放行带缺口发布，artifact 层语义不动（仍 review_required），缺口进 manifest.reason_codes",
+      "touches": [
+        "manifest_quality_hardcoded",
+        "publish_gate",
+        "read_gate",
+        "manifest_reason_codes",
+        "a4_quality_gate",
+        "query_material_hardcoded",
+        "ledger_candidate_status"
+      ],
+      "artifacts_rebuilt": false,
+      "reaches_goal": true,
+      "note": "既有 artifact 字节与哈希不变；角色层 11 处断言全部保持有效；但必须三处同步（发布门/读取门/查询与A4揭示），否则缺口要么被隐藏要么被误拒"
+    },
+    {
+      "id": "O2_artifact_level_relaxation",
+      "summary": "改 artifact 级 quality 推导，让带缺口工件本身成为 accepted",
+      "touches": [
+        "artifact_quality_derivation",
+        "manifest_quality_hardcoded",
+        "publish_gate",
+        "read_gate"
+      ],
+      "artifacts_rebuilt": true,
+      "reaches_goal": true,
+      "note": "与常驻测试的既定语义直接冲突（缺口 ⇒ 不得 accepted）；按 U 既定纪律不得改测试适配；且缺口与无缺口在 artifact 层不可区分"
+    }
+  ],
+  "hardest_blockers": [
+    {
+      "n": 1,
+      "blocker": "发布 manifest 的 quality_status 是硬编码 accepted（store.py:955）",
+      "why": "缺口信息在 manifest 组装处没有落点；放宽门之前必须先决定 manifest 是否允许表达带缺口发布"
+    },
+    {
+      "n": 2,
+      "blocker": "缺口在查询层不可见（query.py:382 material 记录硬编码 accepted）",
+      "why": "发布后主线看到的是 accepted，等于把缺口藏起来，违反契约 §5.4『覆盖状态必须可区分』"
+    },
+    {
+      "n": 3,
+      "blocker": "A4 把 review_required 记为未合格（consumption.py:298）",
+      "why": "若查询层改为照实报告，报告引用会被判 quality_not_accepted；两处必须同轮改，否则只能在『隐藏』与『不可用』之间二选一"
+    },
+    {
+      "n": 4,
+      "blocker": "PublicationCoverage 没有缺口位（store.py:116-124）",
+      "why": "缺口只能塞进自由字符串 reason_codes，没有坐标/分级；若要对齐 ingestion 层口径则需要改 schema 并重签契约"
+    },
+    {
+      "n": 5,
+      "blocker": "ingestion 层已有独立缺口机制且与 structured 零对接",
+      "why": "不复用口径就会产生第三套『缺口』语义；复用则要打通两层枚举与字段"
+    }
+  ],
+  "input_hashes": {
+    "store": "sha256:9db2bb5d663b028b7d7a38c53a1ceca1000c088b8a2a56144b0bcd64bdb7a8b7",
+    "roles": "sha256:42fa34ec465c58302f960a0ef10e12f5a11cd1e8d51c8e0c3273163f5c7fd237",
+    "query": "sha256:ac19677e146adbecb53413faad88cfcf7c1e317e3c135878dffbb22a8b280558",
+    "consumption": "sha256:2ad168701553c658eeaf4a38d3c449419237151ce1b6fcf7a4f739216df4ae52",
+    "ledger": "sha256:0d405051782f0dd6f03f1a3baab115973127bc5d6e139023a6399840f3690a7b",
+    "preparation_gaps": "sha256:861fc1c1f2a32397cef2429bd9852565a65945dd15ad7504c4395420e3d7d091",
+    "publication_schema": "sha256:636e7b8000f31582766ab80acb90869cd0e4bfe04713c27a26369119b12f77aa",
+    "publication_valid_example": "sha256:b944391f0bc501bb686ece0e6f489787cb976d1a0319413ecdcff2b03d0e727a",
+    "publication_invalid_example": "sha256:ec09bff8dbe76eedb73c566047214d9733f40dce842760b56484d275572b512f",
+    "role_artifact_schema": "sha256:a14e4703ab86e4aee6e56a5c398f227eba67b94c25c9baa78e1b919a2e1f14a0",
+    "contract_manifest": "sha256:039d56e5261ddf4847da7457d0972afebc628cb8fb35ccde40669ce83230befa",
+    "synthetic_asset_manifest": "sha256:6f9cc51597601b05e220ce3b74696269311ff50d246cf8272aced833a491d073"
+  },
+  "reproduce": "uv run python .scratch/claims-r2-role-isolation/evidence/73-publish-gap-route-impact-20261013/r0-zero-call/build_publish_gap_impact.py"
+}

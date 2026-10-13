@@ -1,0 +1,1365 @@
+{
+  "schema_version": "gate33-fn-attribution-1",
+  "created_on": "2026-10-13",
+  "zero_model_calls": true,
+  "basis": "gate33-honest-score.json（A 工作表权威 + r5/base 签认批）",
+  "authority_note": "本表是机械归因输入，不是裁定。A/B 桶只说明『池内已有近似候选、但已被具名裁定为非匹配』，是否改判必须由 xyl 具名，并且会触碰『片段/缺限定是否算原子命题命中』这一口径。",
+  "method": {
+    "similarity": "difflib 归一化相似度（NFKC、去空白与标点），阈值 0.75；代理启发式",
+    "containment": "互为包含，较短一侧长度 >= 6",
+    "gap_slot": "落在 evidence/32 residual-attribution.json 记录的 9 个未产出槽",
+    "bucket_rule": "D 若落在未产出槽；否则若最近候选已被其他金标 matched（sim>=0.6）记 B；否则若 sim>=阈值或互为包含记 A；否则仅有 reason 提及记 E；否则记 C"
+  },
+  "inputs": {
+    "gold": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json",
+    "gate33_gold_reference": ".scratch/claims-r2-role-isolation/evidence/33-items-quality-scoring-20261011/r0-zero-call/adjudications.json",
+    "worksheet_A": ".scratch/claims-r2-role-isolation/adjudication/worksheet.json",
+    "signed_batches": {
+      "r5": ".scratch/claims-r2-role-isolation/evidence/65-rerun-two-arm-protocol-20261013/r6-assembly/assembled-scoring-input.json",
+      "base": ".scratch/claims-r2-role-isolation/evidence/66-base-protocol-change-proposal-20261013/r4-assembly/assembled-scoring-input.json"
+    },
+    "score": ".scratch/claims-r2-role-isolation/evidence/69-union-adjudication-20261013/r1-score/gate33-honest-score.json",
+    "residual_attribution": ".scratch/claims-r2-role-isolation/evidence/32-items-v6-reasoning-refreeze-20261011/live/residual-attribution.json",
+    "contract": ".scratch/claims-r2-role-isolation/evidence/58-contract-v42-signed-20261012/r0-zero-call/scoring-contract-v4.2.json"
+  },
+  "input_hashes": {
+    "gold": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    "gate33_gold_reference": "sha256:cc2946ef6a487fba059ca995f2c34f469d4c96720b6b6186225c97bd1e41b537",
+    "worksheet_A": "sha256:de2e7402518b573ef572a8f27fa6eb2d5254f926a12a8339f153e23cd2ae10f9",
+    "signed_r5": "sha256:88e0ddf69ef18afe426e1dda9c16c44aedcc4dc1c1121536be33b36d150c56b3",
+    "signed_base": "sha256:625d2002fcbf5a499c295f27ddf7b1f1f7e960e5ebe9e0116f98f5c7b506be77",
+    "score": "sha256:f1fddc1d943177d7fc7a6f296cdc4aac097063874da0cbb8a835d7f28c35bf55",
+    "residual_attribution": "sha256:4197d1a4e43839eb060e7a4d21a57689ecbdabdc13a3bc6efafc6222825ea4c7",
+    "contract": "sha256:67537eadcb2074d5bb47c19d20177bd400a8850fce560aa6b1f969409d42b943"
+  },
+  "consistency": {
+    "frozen_ids": [
+      "NT-I01",
+      "NT-I02",
+      "NT-I03",
+      "NT-I04",
+      "NT-I05",
+      "NT-I06",
+      "NT-I07",
+      "NT-I08",
+      "NT-I09",
+      "NT-I10",
+      "NT-I11",
+      "NT-I12",
+      "NT-I13",
+      "NT-I14",
+      "NT-I15",
+      "NT-I16",
+      "NT-I17",
+      "NT-I19",
+      "NT-I20",
+      "NT-I21",
+      "NT-I22",
+      "NT-I23",
+      "NT-I24",
+      "NT-I25",
+      "NT-I26",
+      "NT-I27",
+      "NT-I28",
+      "NT-I29",
+      "NT-I30",
+      "NT-I31",
+      "NT-I32",
+      "NT-I33",
+      "NT-I34",
+      "NT-I35",
+      "NT-I36",
+      "NT-I37",
+      "NT-I38",
+      "NT-I39",
+      "NT-I40",
+      "NT-I41",
+      "NT-I42",
+      "NT-I43",
+      "NT-I44",
+      "NT-I45",
+      "NT-I46",
+      "NT-I47",
+      "NT-I48",
+      "NT-I49"
+    ],
+    "gate33_ids": [
+      "NT-I01",
+      "NT-I02",
+      "NT-I03",
+      "NT-I04",
+      "NT-I05",
+      "NT-I06",
+      "NT-I07",
+      "NT-I08",
+      "NT-I09",
+      "NT-I10",
+      "NT-I11",
+      "NT-I12",
+      "NT-I13",
+      "NT-I14",
+      "NT-I15",
+      "NT-I16",
+      "NT-I17",
+      "NT-I19",
+      "NT-I20",
+      "NT-I21",
+      "NT-I22",
+      "NT-I23",
+      "NT-I24",
+      "NT-I25",
+      "NT-I26",
+      "NT-I27",
+      "NT-I28",
+      "NT-I29",
+      "NT-I30",
+      "NT-I31",
+      "NT-I32",
+      "NT-I33",
+      "NT-I34",
+      "NT-I35",
+      "NT-I36",
+      "NT-I37",
+      "NT-I38",
+      "NT-I39",
+      "NT-I40",
+      "NT-I41",
+      "NT-I42",
+      "NT-I43",
+      "NT-I44",
+      "NT-I45",
+      "NT-I46",
+      "NT-I47",
+      "NT-I48",
+      "NT-I49"
+    ],
+    "id_sets_equal": true,
+    "quote_mismatches": [],
+    "source_mismatches": [],
+    "field_note": "gate33.gold_reference.proposition 是完整命题，frozen-gold.quote 是原文片段；评分器 score_gate33.py:77 以 quote 作为 proposition 载体。"
+  },
+  "scored_candidates": {
+    "total": 253,
+    "by_bucket": {
+      "A_pool": 222,
+      "signed_base": 16,
+      "signed_r5": 15
+    },
+    "by_source": {
+      "源1": 119,
+      "源2": 134
+    },
+    "note": "31 条签认批候选全部属于源1；源2 的 FN 只可能由 222 池内的源2 候选解释。"
+  },
+  "inventory": {
+    "gold_total": 48,
+    "matched_total": 34,
+    "fn_total": 14,
+    "fn_by_source": {
+      "源1": 2,
+      "源2": 12
+    },
+    "assertions_total": 16,
+    "assertions_failed": [
+      "NT-I38",
+      "NT-I39",
+      "NT-I45",
+      "NT-I46",
+      "NT-I47",
+      "NT-I48",
+      "NT-I09",
+      "NT-I19"
+    ],
+    "assertions_failed_by_source": {
+      "源1": [
+        "NT-I09",
+        "NT-I19"
+      ],
+      "源2": [
+        "NT-I38",
+        "NT-I39",
+        "NT-I45",
+        "NT-I46",
+        "NT-I47",
+        "NT-I48"
+      ]
+    }
+  },
+  "buckets": {
+    "A_near_duplicate_ce": [
+      "NT-I23",
+      "NT-I24",
+      "NT-I26",
+      "NT-I31",
+      "NT-I34",
+      "NT-I36",
+      "NT-I38",
+      "NT-I39",
+      "NT-I45",
+      "NT-I46",
+      "NT-I47",
+      "NT-I48"
+    ],
+    "B_occupied_by_gold": [
+      "NT-I09",
+      "NT-I19"
+    ]
+  },
+  "bucket_counts": {
+    "A_near_duplicate_ce": 12,
+    "B_occupied_by_gold": 2
+  },
+  "contradicted_claims": [
+    {
+      "claim": "缺口为真实 FN（金标无候选匹配），非流程问题",
+      "where": "evidence/69-union-adjudication-20261013/r1-score/gate33-honest-score.json:88",
+      "machine_finding": "14/14 条 FN 在同源候选里都有近似文本（12 条 sim>=0.75 或互为包含，2 条候选已被邻近金标占用且带具名理由）；『无匹配』字面为真，但读作『模型没产出相关内容』与实测不符"
+    },
+    {
+      "claim": "14 条 FN 为真实抽取覆盖缺口（三次独立抽取均未覆盖）",
+      "where": "evidence/69-union-adjudication-20261013/r1-score/gate33-full-verdict.md:26-30",
+      "machine_finding": "0 条落在 evidence/32 记录的 9 个未产出槽；0 条为『池内无近似候选』"
+    },
+    {
+      "claim": "8 条未过断言全部属于源2 文档段",
+      "where": "evidence/69-union-adjudication-20261013/r1-score/gate33-full-verdict.md:17 与 report.md:14",
+      "machine_finding": "NT-I09、NT-I19 属于源1（locator 为 char: 体系；源2 为 body[N] 体系），与其自身判据 2『源1 20/22』自相矛盾"
+    },
+    {
+      "claim": "源2 召回 0.538 + 8 条断言未过：需对源2 对应片段定向补抽",
+      "where": "evidence/70-closure-20261013/r0-zero-call/closure.md:29 与 gate33-full-verdict.md:34",
+      "machine_finding": "补抽同样会产出这些片段，而它们已被具名裁定为非等价（原子度/限定/承载/断言形态）；要翻必须先裁口径，不是抽取问题"
+    }
+  ],
+  "scenarios": {
+    "S0_as_scored": {
+      "extra_matched": [],
+      "matched_total": 34,
+      "recall_overall": 0.708,
+      "per_source": {
+        "源1": {
+          "matched": 20,
+          "gold": 22,
+          "recall": 0.909
+        },
+        "源2": {
+          "matched": 14,
+          "gold": 26,
+          "recall": 0.538
+        }
+      },
+      "assertions_covered": "8/16",
+      "verdict": "still FAIL"
+    },
+    "S1_A_only": {
+      "extra_matched": [
+        "NT-I23",
+        "NT-I24",
+        "NT-I26",
+        "NT-I31",
+        "NT-I34",
+        "NT-I36",
+        "NT-I38",
+        "NT-I39",
+        "NT-I45",
+        "NT-I46",
+        "NT-I47",
+        "NT-I48"
+      ],
+      "matched_total": 46,
+      "recall_overall": 0.958,
+      "per_source": {
+        "源1": {
+          "matched": 20,
+          "gold": 22,
+          "recall": 0.909
+        },
+        "源2": {
+          "matched": 26,
+          "gold": 26,
+          "recall": 1.0
+        }
+      },
+      "assertions_covered": "14/16",
+      "verdict": "still FAIL"
+    },
+    "S2_A_and_B": {
+      "extra_matched": [
+        "NT-I09",
+        "NT-I19",
+        "NT-I23",
+        "NT-I24",
+        "NT-I26",
+        "NT-I31",
+        "NT-I34",
+        "NT-I36",
+        "NT-I38",
+        "NT-I39",
+        "NT-I45",
+        "NT-I46",
+        "NT-I47",
+        "NT-I48"
+      ],
+      "matched_total": 48,
+      "recall_overall": 1.0,
+      "per_source": {
+        "源1": {
+          "matched": 22,
+          "gold": 22,
+          "recall": 1.0
+        },
+        "源2": {
+          "matched": 26,
+          "gold": 26,
+          "recall": 1.0
+        }
+      },
+      "assertions_covered": "16/16",
+      "verdict": "PASS"
+    },
+    "S3_A_B_minus_u_calibration": {
+      "extra_matched": [
+        "NT-I09",
+        "NT-I19",
+        "NT-I23",
+        "NT-I24",
+        "NT-I26",
+        "NT-I31",
+        "NT-I34",
+        "NT-I36",
+        "NT-I38",
+        "NT-I39",
+        "NT-I48"
+      ],
+      "matched_total": 45,
+      "recall_overall": 0.938,
+      "per_source": {
+        "源1": {
+          "matched": 22,
+          "gold": 22,
+          "recall": 1.0
+        },
+        "源2": {
+          "matched": 23,
+          "gold": 26,
+          "recall": 0.885
+        }
+      },
+      "assertions_covered": "13/16",
+      "verdict": "still FAIL"
+    },
+    "S4_all_fn": {
+      "extra_matched": [
+        "NT-I09",
+        "NT-I19",
+        "NT-I23",
+        "NT-I24",
+        "NT-I26",
+        "NT-I31",
+        "NT-I34",
+        "NT-I36",
+        "NT-I38",
+        "NT-I39",
+        "NT-I45",
+        "NT-I46",
+        "NT-I47",
+        "NT-I48"
+      ],
+      "matched_total": 48,
+      "recall_overall": 1.0,
+      "per_source": {
+        "源1": {
+          "matched": 22,
+          "gold": 22,
+          "recall": 1.0
+        },
+        "源2": {
+          "matched": 26,
+          "gold": 26,
+          "recall": 1.0
+        }
+      },
+      "assertions_covered": "16/16",
+      "verdict": "PASS"
+    }
+  },
+  "rows": [
+    {
+      "gold_id": "NT-I23",
+      "bucket": "A_near_duplicate_ce",
+      "source": "源2",
+      "source_slug": "optical-module-docx",
+      "locator": "body[63]",
+      "quote": "尚无固定的客户",
+      "proposition": "128端口产品尚无固定客户",
+      "is_review_assertion": false,
+      "critical": false,
+      "risk_or_condition": true,
+      "u_calibration_revoked": false,
+      "agent_draft_mechanism": "候选缺承载主体：裁定理由为缺主语『128端口产品』，仅余谓词",
+      "reason_mentions": [
+        {
+          "candidate_id": "itm_e6b94f6820523c98",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "128刚推出、正在中心验证（问句），金标NT-I23/24未含『验证中』，correct_extra。"
+        },
+        {
+          "candidate_id": "itm_703720fdd5630e8b",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "命题『尚无固定的客户，德科立将其视为过渡型产品』缺主语主题『128端口产品』，仅余谓词（无固定客户/过渡型产品）；与itm_356f9d9b缺NT-I48主题同理，截掉主题的弱化版≠同一原子命题→correct_extra。NT-I23/NT-I24留未覆盖（若启用话语回指恢复契约则主题可由前文128端口产品补回，但其与NT-I48裁定需保持一致）。"
+        }
+      ],
+      "nearest_candidates": [
+        {
+          "candidate_id": "itm_703720fdd5630e8b",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.483,
+          "containment": true,
+          "text": "尚无固定的客户，德科立将其视为一个过渡型的产品",
+          "reason": "命题『尚无固定的客户，德科立将其视为过渡型产品』缺主语主题『128端口产品』，仅余谓词（无固定客户/过渡型产品）；与itm_356f9d9b缺NT-I48主题同理，截掉主题的弱化版≠同一原子命题→correct_extra。NT-I23/NT-I24留未覆盖（若启用话语回指恢复契约则主题可由前文128端口产品补回，但其与NT-I48裁定需保持一致）。",
+          "flags": [
+            "containment",
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_6e2923485c37dd60",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.429,
+          "containment": false,
+          "text": "中心是它的客户",
+          "reason": "中心是它的客户，为事实，金标无，correct_extra。",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_1f3315d7df3255ea",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.273,
+          "containment": false,
+          "text": "你们莫名其妙，说的就是这些新客户。",
+          "reason": "『莫名其妙说的就是这些新客户』，为观点，金标无，correct_extra。",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        }
+      ],
+      "gap_slot_hits": []
+    },
+    {
+      "gold_id": "NT-I24",
+      "bucket": "A_near_duplicate_ce",
+      "source": "源2",
+      "source_slug": "optical-module-docx",
+      "locator": "body[63]",
+      "quote": "德科立将其视为一个过渡型的产品",
+      "proposition": "128端口产品被视为过渡产品",
+      "is_review_assertion": false,
+      "critical": false,
+      "risk_or_condition": false,
+      "u_calibration_revoked": false,
+      "agent_draft_mechanism": "候选缺承载主体：同 I23（同一候选拆出的另一条）",
+      "reason_mentions": [
+        {
+          "candidate_id": "itm_703720fdd5630e8b",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "命题『尚无固定的客户，德科立将其视为过渡型产品』缺主语主题『128端口产品』，仅余谓词（无固定客户/过渡型产品）；与itm_356f9d9b缺NT-I48主题同理，截掉主题的弱化版≠同一原子命题→correct_extra。NT-I23/NT-I24留未覆盖（若启用话语回指恢复契约则主题可由前文128端口产品补回，但其与NT-I48裁定需保持一致）。"
+        }
+      ],
+      "nearest_candidates": [
+        {
+          "candidate_id": "itm_703720fdd5630e8b",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.811,
+          "containment": true,
+          "text": "尚无固定的客户，德科立将其视为一个过渡型的产品",
+          "reason": "命题『尚无固定的客户，德科立将其视为过渡型产品』缺主语主题『128端口产品』，仅余谓词（无固定客户/过渡型产品）；与itm_356f9d9b缺NT-I48主题同理，截掉主题的弱化版≠同一原子命题→correct_extra。NT-I23/NT-I24留未覆盖（若启用话语回指恢复契约则主题可由前文128端口产品补回，但其与NT-I48裁定需保持一致）。",
+          "flags": [
+            "containment",
+            "sim>=thr",
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_9bcf569cc80261ee",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.296,
+          "containment": false,
+          "text": "这个就是金像电的这个产品",
+          "reason": "「这个就是金像电的这个产品」，对前述预测的归属说明，金标无，correct_extra。",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_6c8aa33624f6a362",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.24,
+          "containment": false,
+          "text": "这是二者取其一的事情",
+          "reason": "二者取其一，观点，金标无，correct_extra。",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        }
+      ],
+      "gap_slot_hits": []
+    },
+    {
+      "gold_id": "NT-I26",
+      "bucket": "A_near_duplicate_ce",
+      "source": "源2",
+      "source_slug": "optical-module-docx",
+      "locator": "body[72]",
+      "quote": "说明设计上仍然存在缺陷",
+      "proposition": "128端口光波导设计仍有缺陷",
+      "is_review_assertion": false,
+      "critical": false,
+      "risk_or_condition": false,
+      "u_calibration_revoked": false,
+      "agent_draft_mechanism": "候选缺承载主体：文本逐字相同，但裁定理由为缺主语『128端口光波导』",
+      "reason_mentions": [
+        {
+          "candidate_id": "itm_a41addfcb6696346",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "说明设计上仍然存在缺陷，为观点；同句语境指128光波导，含NT-I26『128端口光波导设计仍有缺陷』谓词，但命题缺主语『128端口光波导』，按itm_703720fdd5630e8b（缺主题→correct_extra）口径，correct_extra。"
+        }
+      ],
+      "nearest_candidates": [
+        {
+          "candidate_id": "itm_a41addfcb6696346",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 1.0,
+          "containment": true,
+          "text": "说明设计上仍然存在缺陷，",
+          "reason": "说明设计上仍然存在缺陷，为观点；同句语境指128光波导，含NT-I26『128端口光波导设计仍有缺陷』谓词，但命题缺主语『128端口光波导』，按itm_703720fdd5630e8b（缺主题→correct_extra）口径，correct_extra。",
+          "flags": [
+            "containment",
+            "sim>=thr",
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_5de2e5ebfaa12f38",
+          "bucket": "A_pool",
+          "judgement": "matched",
+          "matched_gold_id": "NT-I25",
+          "sim": 0.311,
+          "containment": false,
+          "text": "在实际研发当中，128的光波导经过五个批次的流片后，良率仍然不乐观，",
+          "reason": "与金标NT-I25『128端口光波导五次流片后良率仍不理想』同义：主体『128的光波导』≡128端口光波导（省单位词，同NT-I49尺度）；『五个批次的流片后』≡五次流片后；『良率仍然不乐观』≡良率仍不理想。主体/事件/结论三一致，matched。",
+          "flags": [
+            "judged_matched_other"
+          ]
+        },
+        {
+          "candidate_id": "itm_49e72647189fa999",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.258,
+          "containment": false,
+          "text": "虽然NVIDIA可能对128有需求",
+          "reason": "NVIDIA可能对128有需求，金标无此条，correct_extra。",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        }
+      ],
+      "gap_slot_hits": []
+    },
+    {
+      "gold_id": "NT-I31",
+      "bucket": "A_near_duplicate_ce",
+      "source": "源2",
+      "source_slug": "optical-module-docx",
+      "locator": "body[37]",
+      "quote": "北美的这些电力短缺",
+      "proposition": "北美数据中心存在电力短缺",
+      "is_review_assertion": false,
+      "critical": false,
+      "risk_or_condition": true,
+      "u_calibration_revoked": false,
+      "agent_draft_mechanism": "金标比候选细/切分不同：I31 与 I32 为同一句的两种切分，候选被 I32 占用",
+      "reason_mentions": [],
+      "nearest_candidates": [
+        {
+          "candidate_id": "itm_7b0cfc4d08a27730",
+          "bucket": "A_pool",
+          "judgement": "matched",
+          "matched_gold_id": "NT-I32",
+          "sim": 0.529,
+          "containment": true,
+          "text": "主要群体北美的这些电力短缺的确会影响到公司出货节奏",
+          "reason": "与金标NT-I32『北美电力短缺会影响公司出货节奏』同义（『北美的电力短缺的确会影响到公司出货节奏』），matched。",
+          "flags": [
+            "containment",
+            "judged_matched_other"
+          ]
+        },
+        {
+          "candidate_id": "itm_a41addfcb6696346",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.261,
+          "containment": false,
+          "text": "说明设计上仍然存在缺陷，",
+          "reason": "说明设计上仍然存在缺陷，为观点；同句语境指128光波导，含NT-I26『128端口光波导设计仍有缺陷』谓词，但命题缺主语『128端口光波导』，按itm_703720fdd5630e8b（缺主题→correct_extra）口径，correct_extra。",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_1f3315d7df3255ea",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.25,
+          "containment": false,
+          "text": "你们莫名其妙，说的就是这些新客户。",
+          "reason": "『莫名其妙说的就是这些新客户』，为观点，金标无，correct_extra。",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        }
+      ],
+      "gap_slot_hits": []
+    },
+    {
+      "gold_id": "NT-I34",
+      "bucket": "A_near_duplicate_ce",
+      "source": "源2",
+      "source_slug": "optical-module-docx",
+      "locator": "body[37]",
+      "quote": "预计到29年30年在材料取得重大突破前，可插拔仍然是主流",
+      "proposition": "到2029至2030年可插拔方案仍将是主流",
+      "is_review_assertion": false,
+      "critical": true,
+      "risk_or_condition": true,
+      "u_calibration_revoked": false,
+      "agent_draft_mechanism": "候选缺时间框架与条件：裁定理由为缺『2029-2030 年』与『材料未突破』",
+      "reason_mentions": [
+        {
+          "candidate_id": "itm_a182c96df99ecd98",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "可插拔并没有成为主流（否定），与NT-I34『可插拔仍将是主流』方向相反，非匹配，correct_extra。"
+        },
+        {
+          "candidate_id": "itm_7f8414769e6a2a07",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "可插拔CPO没有成为主流（否定），与NT-I34方向相反，非匹配，correct_extra。"
+        },
+        {
+          "candidate_id": "itm_933ebba82bb09be7",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "可插拔仍有生命周期，金标NT-I34为『2029-2030主流』含时间框架，候选无框架，correct_extra。"
+        },
+        {
+          "candidate_id": "itm_15c17f04855a28b3",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "可插拔仍然是主流，金标NT-I34含『2029-2030年』时间框架与『材料未突破』条件，候选缺框架与条件，为截短版，correct_extra。"
+        }
+      ],
+      "nearest_candidates": [
+        {
+          "candidate_id": "itm_15c17f04855a28b3",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.483,
+          "containment": true,
+          "text": "可插拔仍然是主流",
+          "reason": "可插拔仍然是主流，金标NT-I34含『2029-2030年』时间框架与『材料未突破』条件，候选缺框架与条件，为截短版，correct_extra。",
+          "flags": [
+            "containment",
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_a182c96df99ecd98",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.323,
+          "containment": false,
+          "text": "可插拔并没有成为主流",
+          "reason": "可插拔并没有成为主流（否定），与NT-I34『可插拔仍将是主流』方向相反，非匹配，correct_extra。",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_f2e29952886293c0",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.286,
+          "containment": false,
+          "text": "可插拔主导70%。",
+          "reason": "【2026-10-12 U 校准裁定】原判 matched 撤销：金标为「被转述且被质疑的预测」(perspective=quoted_other, source_stance=challenged)；候选为「材料自身陈述的预测」(source_explicit, reported)。归属与来源态度不同 ⇒ 语义不等价（契约 matching.items 要求保留归属/来源态度）⇒ 不匹配。候选内",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        }
+      ],
+      "gap_slot_hits": []
+    },
+    {
+      "gold_id": "NT-I36",
+      "bucket": "A_near_duplicate_ce",
+      "source": "源2",
+      "source_slug": "optical-module-docx",
+      "locator": "body[115]",
+      "quote": "像当年机器人份额加起来超过100%",
+      "proposition": "公司口径可能导致行业份额加总超过100%",
+      "is_review_assertion": false,
+      "critical": false,
+      "risk_or_condition": true,
+      "u_calibration_revoked": false,
+      "agent_draft_mechanism": "断言形态不符：候选为类比式问句而非肯定断言",
+      "reason_mentions": [
+        {
+          "candidate_id": "itm_0398b930d1777c44",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "「加起来是不是会出现一个状态」为修辞问句，传达份额加总失真的关切点，金标NT-I36为肯定式风险断言，本句为问句形式，correct_extra。"
+        },
+        {
+          "candidate_id": "itm_ec18c38405c7e17f",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "以「当年机器人份额加起来超过100%」作历史类比，与NT-I36现象同源但为类比式问句，非金标肯定断言，correct_extra。"
+        },
+        {
+          "candidate_id": "itm_39f7ca0b5c2e1e73",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "「加起来总不能超过100%」为否定式反驳，与NT-I36（份额可能超过100%）方向相反，属独立观点，correct_extra。"
+        },
+        {
+          "candidate_id": "itm_5e38e7d668363dbd",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "『这个也是那个协会的』，为份额口径讨论片段，金标NT-I35/37已另由候选命中，本片段单独不构整句，correct_extra（关联NT-I36份额加总）。"
+        },
+        {
+          "candidate_id": "itm_a0c3595e9860c57c",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "『肯定是所有的光模块全算进去的』，协会份额加总机制片段；金标NT-I36为『口径导致加总超100%』，候选只给机制未给结论，correct_extra。"
+        }
+      ],
+      "nearest_candidates": [
+        {
+          "candidate_id": "itm_ec18c38405c7e17f",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.78,
+          "containment": true,
+          "text": "像当年机器人份额加起来超过100%，会不会出现这个状态？",
+          "reason": "以「当年机器人份额加起来超过100%」作历史类比，与NT-I36现象同源但为类比式问句，非金标肯定断言，correct_extra。",
+          "flags": [
+            "containment",
+            "sim>=thr",
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_39f7ca0b5c2e1e73",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.533,
+          "containment": false,
+          "text": "你说的加起来总不能超过100%。",
+          "reason": "「加起来总不能超过100%」为否定式反驳，与NT-I36（份额可能超过100%）方向相反，属独立观点，correct_extra。",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_42ffb8cedfa8d7ff",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.24,
+          "containment": false,
+          "text": "29年NPO到10%，",
+          "reason": "【2026-10-12 U 校准裁定】原判 matched 撤销：金标为「被转述且被质疑的预测」(perspective=quoted_other, source_stance=challenged)；候选为「材料自身陈述的预测」(source_explicit, reported)。归属与来源态度不同 ⇒ 语义不等价（契约 matching.items 要求保留归属/来源态度）⇒ 不匹配。候选内",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        }
+      ],
+      "gap_slot_hits": []
+    },
+    {
+      "gold_id": "NT-I38",
+      "bucket": "A_near_duplicate_ce",
+      "source": "源2",
+      "source_slug": "optical-module-docx",
+      "locator": "body[51]",
+      "quote": "Q2 800G其实是超预期的，肯定是超预期的。但这也不叫超预期",
+      "proposition": "讲者先称800G超预期，随后限定这并非通常意义的超预期",
+      "is_review_assertion": true,
+      "critical": false,
+      "risk_or_condition": false,
+      "u_calibration_revoked": false,
+      "agent_draft_mechanism": "金标比候选粗：金标把前半+后半两个原子并为一条，候选正确拆成两条，各自不完整均判 ce",
+      "reason_mentions": [
+        {
+          "candidate_id": "itm_e3109b1c8250afaf",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "「那反正不是旭创的数字」为数据归属 claim（800G相关数字非中际旭创），与NT-I38（800G超预期但限定）非同一命题，correct_extra。"
+        },
+        {
+          "candidate_id": "itm_bf5fa66fb7be5a02",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "Q2 800G超预期，为NT-I38『先称800G超预期、后限定非通常意义超预期』的前半句，缺后半限定，correct_extra（与itm_7a4789de164cf58a合起来覆盖NT-I38）。"
+        },
+        {
+          "candidate_id": "itm_7a4789de164cf58a",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "但不叫超预期，为NT-I38后半句（限定非通常意义超预期），缺前半，correct_extra（与itm_bf5fa66fb7be5a02合起来覆盖NT-I38）。"
+        }
+      ],
+      "nearest_candidates": [
+        {
+          "candidate_id": "itm_bf5fa66fb7be5a02",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.833,
+          "containment": true,
+          "text": "Q2 800G其实是超预期的，肯定是超预期的。",
+          "reason": "Q2 800G超预期，为NT-I38『先称800G超预期、后限定非通常意义超预期』的前半句，缺后半限定，correct_extra（与itm_7a4789de164cf58a合起来覆盖NT-I38）。",
+          "flags": [
+            "containment",
+            "sim>=thr",
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_7a4789de164cf58a",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.444,
+          "containment": true,
+          "text": "但这也不叫超预期。",
+          "reason": "但不叫超预期，为NT-I38后半句（限定非通常意义超预期），缺前半，correct_extra（与itm_bf5fa66fb7be5a02合起来覆盖NT-I38）。",
+          "flags": [
+            "containment",
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_0d765014a64939ef",
+          "bucket": "A_pool",
+          "judgement": "out_of_scope",
+          "matched_gold_id": null,
+          "sim": 0.32,
+          "containment": false,
+          "text": "二季度800G出货量未达市场预期的原因是什么？",
+          "reason": "「二季度800G出货量未达预期的原因是什么？」纯疑问句，无命题内容，out_of_scope。",
+          "flags": []
+        }
+      ],
+      "gap_slot_hits": []
+    },
+    {
+      "gold_id": "NT-I39",
+      "bucket": "A_near_duplicate_ce",
+      "source": "源2",
+      "source_slug": "optical-module-docx",
+      "locator": "body[26]",
+      "quote": "这里面税率加上去",
+      "proposition": "成本转嫁风险的条件",
+      "is_review_assertion": true,
+      "critical": false,
+      "risk_or_condition": true,
+      "u_calibration_revoked": false,
+      "agent_draft_mechanism": "候选缺限定：裁定理由为未提『海外产能』且仅为片段",
+      "reason_mentions": [
+        {
+          "candidate_id": "itm_a79b0be05f3456c3",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "税率加上去，金标NT-I39条件为『海外产能税率增加』，候选未提海外产能且仅为片段，不构成干净匹配，correct_extra。"
+        }
+      ],
+      "nearest_candidates": [
+        {
+          "candidate_id": "itm_a79b0be05f3456c3",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.889,
+          "containment": true,
+          "text": "然后这里面税率加上去",
+          "reason": "税率加上去，金标NT-I39条件为『海外产能税率增加』，候选未提海外产能且仅为片段，不构成干净匹配，correct_extra。",
+          "flags": [
+            "containment",
+            "sim>=thr",
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_806cac42d71917ad",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.286,
+          "containment": false,
+          "text": "你不可能全部转嫁给客户的",
+          "reason": "『不可能全部转嫁给客户』与NT-I40同命题但措辞异于已matched的itm_a8be3a946325fa22，非逐字重复，correct_extra（NT-I40的同义异述）。",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_e295d711292b83a2",
+          "bucket": "A_pool",
+          "judgement": "matched",
+          "matched_gold_id": "NT-I29",
+          "sim": 0.273,
+          "containment": false,
+          "text": "因为政策原因导致成本的上升",
+          "reason": "与金标NT-I29『启动提价协商的条件=政策变化导致成本上升』同主题同结论（『因为政策原因导致成本的上升』≡政策导致成本上升，即提价协商的触发条件），matched。",
+          "flags": [
+            "judged_matched_other"
+          ]
+        }
+      ],
+      "gap_slot_hits": []
+    },
+    {
+      "gold_id": "NT-I45",
+      "bucket": "A_near_duplicate_ce",
+      "source": "源2",
+      "source_slug": "optical-module-docx",
+      "locator": "body[1]",
+      "quote": "29年NPO到10%",
+      "proposition": "被转述预测称2029年NPO渗透率为10%",
+      "is_review_assertion": true,
+      "critical": false,
+      "risk_or_condition": false,
+      "u_calibration_revoked": true,
+      "agent_draft_mechanism": "U 2026-10-12 校准撤销：金标为被转述且被质疑的预测（quoted_other/challenged），候选为材料自身陈述",
+      "reason_mentions": [
+        {
+          "candidate_id": "itm_42ffb8cedfa8d7ff",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "【2026-10-12 U 校准裁定】原判 matched 撤销：金标为「被转述且被质疑的预测」(perspective=quoted_other, source_stance=challenged)；候选为「材料自身陈述的预测」(source_explicit, reported)。归属与来源态度不同 ⇒ 语义不等价（契约 matching.items 要求保留归属/来源态度）⇒ 不匹配。候选内"
+        }
+      ],
+      "nearest_candidates": [
+        {
+          "candidate_id": "itm_42ffb8cedfa8d7ff",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 1.0,
+          "containment": true,
+          "text": "29年NPO到10%，",
+          "reason": "【2026-10-12 U 校准裁定】原判 matched 撤销：金标为「被转述且被质疑的预测」(perspective=quoted_other, source_stance=challenged)；候选为「材料自身陈述的预测」(source_explicit, reported)。归属与来源态度不同 ⇒ 语义不等价（契约 matching.items 要求保留归属/来源态度）⇒ 不匹配。候选内",
+          "flags": [
+            "containment",
+            "sim>=thr",
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_09fc1a90e71fe5bf",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.533,
+          "containment": false,
+          "text": "CPO到30%，",
+          "reason": "【2026-10-12 U 校准裁定】原判 matched 撤销：金标为「被转述且被质疑的预测」(perspective=quoted_other, source_stance=challenged)；候选为「材料自身陈述的预测」(source_explicit, reported)。归属与来源态度不同 ⇒ 语义不等价（契约 matching.items 要求保留归属/来源态度）⇒ 不匹配。候选内",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_64a666c2efc4b5d8",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.385,
+          "containment": false,
+          "text": "27年5万到10万个水平，这是合理的",
+          "reason": "27年5万到10万个水平，为27年CPO出货预测，与NT-I22的26年口径不同，correct_extra。",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        }
+      ],
+      "gap_slot_hits": []
+    },
+    {
+      "gold_id": "NT-I46",
+      "bucket": "A_near_duplicate_ce",
+      "source": "源2",
+      "source_slug": "optical-module-docx",
+      "locator": "body[1]",
+      "quote": "CPO到30%",
+      "proposition": "被转述预测称2029年CPO渗透率为30%",
+      "is_review_assertion": true,
+      "critical": false,
+      "risk_or_condition": false,
+      "u_calibration_revoked": true,
+      "agent_draft_mechanism": "U 2026-10-12 校准撤销：同 I45",
+      "reason_mentions": [
+        {
+          "candidate_id": "itm_09fc1a90e71fe5bf",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "【2026-10-12 U 校准裁定】原判 matched 撤销：金标为「被转述且被质疑的预测」(perspective=quoted_other, source_stance=challenged)；候选为「材料自身陈述的预测」(source_explicit, reported)。归属与来源态度不同 ⇒ 语义不等价（契约 matching.items 要求保留归属/来源态度）⇒ 不匹配。候选内"
+        }
+      ],
+      "nearest_candidates": [
+        {
+          "candidate_id": "itm_09fc1a90e71fe5bf",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 1.0,
+          "containment": true,
+          "text": "CPO到30%，",
+          "reason": "【2026-10-12 U 校准裁定】原判 matched 撤销：金标为「被转述且被质疑的预测」(perspective=quoted_other, source_stance=challenged)；候选为「材料自身陈述的预测」(source_explicit, reported)。归属与来源态度不同 ⇒ 语义不等价（契约 matching.items 要求保留归属/来源态度）⇒ 不匹配。候选内",
+          "flags": [
+            "containment",
+            "sim>=thr",
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_42ffb8cedfa8d7ff",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.533,
+          "containment": false,
+          "text": "29年NPO到10%，",
+          "reason": "【2026-10-12 U 校准裁定】原判 matched 撤销：金标为「被转述且被质疑的预测」(perspective=quoted_other, source_stance=challenged)；候选为「材料自身陈述的预测」(source_explicit, reported)。归属与来源态度不同 ⇒ 语义不等价（契约 matching.items 要求保留归属/来源态度）⇒ 不匹配。候选内",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_bd6cd536f1fc2c56",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.375,
+          "containment": false,
+          "text": "CPO主要在交换机侧",
+          "reason": "CPO主要在交换机侧，为事实，金标NT-I21为『CPO市场成熟度不高』，本候选主语不同，correct_extra。",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        }
+      ],
+      "gap_slot_hits": []
+    },
+    {
+      "gold_id": "NT-I47",
+      "bucket": "A_near_duplicate_ce",
+      "source": "源2",
+      "source_slug": "optical-module-docx",
+      "locator": "body[1]",
+      "quote": "可插拔主导70%",
+      "proposition": "被转述预测称2029年可插拔份额为70%",
+      "is_review_assertion": true,
+      "critical": false,
+      "risk_or_condition": false,
+      "u_calibration_revoked": true,
+      "agent_draft_mechanism": "U 2026-10-12 校准撤销：同 I45",
+      "reason_mentions": [
+        {
+          "candidate_id": "itm_f2e29952886293c0",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "【2026-10-12 U 校准裁定】原判 matched 撤销：金标为「被转述且被质疑的预测」(perspective=quoted_other, source_stance=challenged)；候选为「材料自身陈述的预测」(source_explicit, reported)。归属与来源态度不同 ⇒ 语义不等价（契约 matching.items 要求保留归属/来源态度）⇒ 不匹配。候选内"
+        }
+      ],
+      "nearest_candidates": [
+        {
+          "candidate_id": "itm_f2e29952886293c0",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 1.0,
+          "containment": true,
+          "text": "可插拔主导70%。",
+          "reason": "【2026-10-12 U 校准裁定】原判 matched 撤销：金标为「被转述且被质疑的预测」(perspective=quoted_other, source_stance=challenged)；候选为「材料自身陈述的预测」(source_explicit, reported)。归属与来源态度不同 ⇒ 语义不等价（契约 matching.items 要求保留归属/来源态度）⇒ 不匹配。候选内",
+          "flags": [
+            "containment",
+            "sim>=thr",
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_15c17f04855a28b3",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.533,
+          "containment": false,
+          "text": "可插拔仍然是主流",
+          "reason": "可插拔仍然是主流，金标NT-I34含『2029-2030年』时间框架与『材料未突破』条件，候选缺框架与条件，为截短版，correct_extra。",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_a182c96df99ecd98",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.471,
+          "containment": false,
+          "text": "可插拔并没有成为主流",
+          "reason": "可插拔并没有成为主流（否定），与NT-I34『可插拔仍将是主流』方向相反，非匹配，correct_extra。",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        }
+      ],
+      "gap_slot_hits": []
+    },
+    {
+      "gold_id": "NT-I48",
+      "bucket": "A_near_duplicate_ce",
+      "source": "源2",
+      "source_slug": "optical-module-docx",
+      "locator": "body[26]",
+      "quote": "由于台湾海鸥基地有免税政策，这部分会转嫁给客户，因此对竞争力和毛利影响不大",
+      "proposition": "被转述观点认为税负可转嫁，对竞争力和毛利影响不大",
+      "is_review_assertion": true,
+      "critical": false,
+      "risk_or_condition": false,
+      "u_calibration_revoked": false,
+      "agent_draft_mechanism": "金标比候选粗：同 I38，金标合并『税负可转嫁』+『对竞争力毛利影响不大』两半",
+      "reason_mentions": [
+        {
+          "candidate_id": "itm_d96a4e7b052a89c7",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "台湾海鸥基地免税、税负转嫁客户，为NT-I48「税负可转嫁」半句；金标NT-I48合并「税负可转嫁+对竞争力和毛利影响不大」两句，本候选仅含前半，不完整，correct_extra。"
+        },
+        {
+          "candidate_id": "itm_356f9d9b23c78892",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "对竞争力和毛利影响不大，为NT-I48后半句；金标NT-I48为合并claim，本候选仅含后半，不完整，correct_extra。"
+        },
+        {
+          "candidate_id": "itm_b761f5c084e6360a",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "转嫁会影响竞争力，与NT-I48『对竞争力影响不大』方向相反，非匹配，correct_extra。"
+        },
+        {
+          "candidate_id": "itm_703720fdd5630e8b",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "reason": "命题『尚无固定的客户，德科立将其视为过渡型产品』缺主语主题『128端口产品』，仅余谓词（无固定客户/过渡型产品）；与itm_356f9d9b缺NT-I48主题同理，截掉主题的弱化版≠同一原子命题→correct_extra。NT-I23/NT-I24留未覆盖（若启用话语回指恢复契约则主题可由前文128端口产品补回，但其与NT-I48裁定需保持一致）。"
+        }
+      ],
+      "nearest_candidates": [
+        {
+          "candidate_id": "itm_d96a4e7b052a89c7",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.772,
+          "containment": true,
+          "text": "由于台湾海鸥基地有免税政策，这部分会转嫁给客户",
+          "reason": "台湾海鸥基地免税、税负转嫁客户，为NT-I48「税负可转嫁」半句；金标NT-I48合并「税负可转嫁+对竞争力和毛利影响不大」两句，本候选仅含前半，不完整，correct_extra。",
+          "flags": [
+            "containment",
+            "sim>=thr",
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_356f9d9b23c78892",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.611,
+          "containment": true,
+          "text": "因此对竞争力和毛利影响不大",
+          "reason": "对竞争力和毛利影响不大，为NT-I48后半句；金标NT-I48为合并claim，本候选仅含后半，不完整，correct_extra。",
+          "flags": [
+            "containment",
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "itm_b761f5c084e6360a",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.419,
+          "containment": false,
+          "text": "你如果转嫁了，对你的竞争力就会有影响，对不对？",
+          "reason": "转嫁会影响竞争力，与NT-I48『对竞争力影响不大』方向相反，非匹配，correct_extra。",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        }
+      ],
+      "gap_slot_hits": []
+    },
+    {
+      "gold_id": "NT-I09",
+      "bucket": "B_occupied_by_gold",
+      "source": "源1",
+      "source_slug": "industrial-fulian-md",
+      "locator": "char:3925-4239",
+      "quote": "一旦毛利率再掉或 Rubin 延期",
+      "proposition": "估值风险触发条件",
+      "is_review_assertion": true,
+      "critical": false,
+      "risk_or_condition": true,
+      "u_calibration_revoked": false,
+      "agent_draft_mechanism": "金标比候选细：金标把一句拆成『条件(I09)+结论(I10)』，候选整句被 I10 占用，一对一映射必有一条落空",
+      "reason_mentions": [],
+      "nearest_candidates": [
+        {
+          "candidate_id": "itm_2f60038387b4ea72",
+          "bucket": "A_pool",
+          "judgement": "matched",
+          "matched_gold_id": "NT-I10",
+          "sim": 0.769,
+          "containment": true,
+          "text": "一旦毛利率再掉或 Rubin 延期，弹性会先打在倍数上",
+          "reason": "『一旦毛利率再掉或Rubin延期，弹性会先打在倍数上』即金标NT-I10『估值倍数会先受到冲击』（forecast/affirmed），匹配 NT-I10。",
+          "flags": [
+            "containment",
+            "sim>=thr",
+            "judged_matched_other"
+          ]
+        },
+        {
+          "candidate_id": "slot_90af9c4e66866cda#4",
+          "bucket": "signed_base",
+          "judgement": "duplicate",
+          "matched_gold_id": null,
+          "sim": 0.636,
+          "containment": true,
+          "text": "Rubin 延期",
+          "reason": "",
+          "flags": [
+            "containment"
+          ]
+        },
+        {
+          "candidate_id": "itm_2a32de1669ff155d",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.414,
+          "containment": false,
+          "text": "Rubin / GB300 爬坡再延",
+          "reason": "Rubin/GB300爬坡再延为风险预测，不在金标内，correct_extra。",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        }
+      ],
+      "gap_slot_hits": []
+    },
+    {
+      "gold_id": "NT-I19",
+      "bucket": "B_occupied_by_gold",
+      "source": "源1",
+      "source_slug": "industrial-fulian-md",
+      "locator": "char:4385-4657",
+      "quote": "出口管制一旦打到 GPU 系统集成",
+      "proposition": "地理对冲失效的外部条件",
+      "is_review_assertion": true,
+      "critical": true,
+      "risk_or_condition": true,
+      "u_calibration_revoked": false,
+      "agent_draft_mechanism": "金标比候选细：同上，I19 条件从句与 I20 主命题同句，候选被 I20 占用",
+      "reason_mentions": [],
+      "nearest_candidates": [
+        {
+          "candidate_id": "itm_659e7d6382f5fd02",
+          "bucket": "A_pool",
+          "judgement": "matched",
+          "matched_gold_id": "NT-I20",
+          "sim": 0.682,
+          "containment": true,
+          "text": "墨西哥 / 美国厂是地理对冲，救不了出口管制一旦打到 GPU 系统集成",
+          "reason": "与金标NT-I20「墨西哥和美国工厂不能对冲GPU系统集成出口管制风险」同一命题（地理对冲救不了GPU系统集成出口管制），matched。",
+          "flags": [
+            "containment",
+            "judged_matched_other"
+          ]
+        },
+        {
+          "candidate_id": "itm_f80c5549dbc66cd1",
+          "bucket": "A_pool",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.231,
+          "containment": false,
+          "text": "GPU 线绑定英伟达节奏",
+          "reason": "GPU线绑定英伟达节奏，为事实陈述，不在金标内，correct_extra。",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        },
+        {
+          "candidate_id": "slot_6d633216b432f293#1",
+          "bucket": "signed_r5",
+          "judgement": "correct_extra",
+          "matched_gold_id": null,
+          "sim": 0.188,
+          "containment": false,
+          "text": "GPU/ASIC 机柜出货 +3.2 / +3 倍",
+          "reason": "",
+          "flags": [
+            "judged_correct_extra"
+          ]
+        }
+      ],
+      "gap_slot_hits": []
+    }
+  ]
+}

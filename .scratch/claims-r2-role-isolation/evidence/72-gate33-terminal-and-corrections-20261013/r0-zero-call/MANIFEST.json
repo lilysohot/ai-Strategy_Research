@@ -1,0 +1,26 @@
+{
+  "schema_version": "evidence-manifest-1",
+  "created_on": "2026-10-13",
+  "zero_model_calls": true,
+  "artifacts": {
+    "build_terminal_record.py": "sha256:510ae5cee5f91e8aabeec60a26a0088fe168c777d2d0b674c18d54b8f6d5bf89",
+    "terminal-decision.json": "sha256:fba56c4f7cfebbcfebbf8405ba0d1c8b1967e1bc68dc8a439e1826f41d5d50b9",
+    "corrections.md": "sha256:018e46a03cf61db132098f9afa76ca893a97de06789fab10bc2dd9a6e80c98bf"
+  },
+  "inputs": {
+    "gold": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    "score": "sha256:f1fddc1d943177d7fc7a6f296cdc4aac097063874da0cbb8a835d7f28c35bf55",
+    "verdict": "sha256:d7ffd4f1412f1e3673f20873de243799489b94b5980192485d4ed567d22927ae",
+    "attribution": "sha256:94ce5548adf99bb219071797e09250c8cbcd27023d435cf46de74bff8a83de4f",
+    "worksheet_A": "sha256:de2e7402518b573ef572a8f27fa6eb2d5254f926a12a8339f153e23cd2ae10f9",
+    "signed_r5": "sha256:88e0ddf69ef18afe426e1dda9c16c44aedcc4dc1c1121536be33b36d150c56b3",
+    "signed_base": "sha256:625d2002fcbf5a499c295f27ddf7b1f1f7e960e5ebe9e0116f98f5c7b506be77",
+    "contract": "sha256:67537eadcb2074d5bb47c19d20177bd400a8850fce560aa6b1f969409d42b943",
+    "issue_33": "sha256:effc71538bf899c80f1c56fd08ef2b8140e3309ab2bb104dc805ceaced5074b1",
+    "report": "sha256:de6c0ae83c664d21f4616e68d0982949c7d94b363d046d1d2e7beb2ad036ae4a",
+    "closure": "sha256:c87a049d3d501309902ecb0efe35fbd08745833e2423341015f1e77c2231abc1",
+    "residual_attribution": "sha256:4197d1a4e43839eb060e7a4d21a57689ecbdabdc13a3bc6efafc6222825ea4c7"
+  },
+  "note": "本记录取代 corrections.md 所列四处表述；旧件字节与哈希留存，未编辑。",
+  "reproduce": "uv run python .scratch/claims-r2-role-isolation/evidence/72-gate33-terminal-and-corrections-20261013/r0-zero-call/build_terminal_record.py"
+}

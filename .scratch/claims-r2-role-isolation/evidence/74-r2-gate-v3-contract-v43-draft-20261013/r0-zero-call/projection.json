@@ -1,0 +1,78 @@
+{
+  "schema_version": "r2-projection-1",
+  "created_on": "2026-10-13",
+  "label": "PROJECTION_ONLY",
+  "note": "本块是**未签认投影**，不是 verdict。只有门 v3 与契约 v4.3 具名签认、且 7 条改判由 xyl 具名确认之后，才可据实重算出分并形成新 verdict。",
+  "sentinel_count_v2": 16,
+  "sentinel_count_v3": 11,
+  "projections": [
+    {
+      "seventh_flip": "I36_question_form",
+      "flips": [
+        "NT-I23",
+        "NT-I26",
+        "NT-I34",
+        "NT-I36",
+        "NT-I38",
+        "NT-I39",
+        "NT-I48"
+      ],
+      "recall_overall": 0.854,
+      "per_source": {
+        "源1": {
+          "matched": 20,
+          "gold": 22,
+          "recall": 0.909
+        },
+        "源2": {
+          "matched": 21,
+          "gold": 26,
+          "recall": 0.808
+        }
+      },
+      "sentinel_covered": "11/11",
+      "thresholds_used": {
+        "target_recall_overall_min": 0.85,
+        "target_recall_per_source_min": 0.8
+      },
+      "projected_verdict": "PASS",
+      "cost": "需承认疑问句可承载该金标命题（原裁定理由为『类比式问句，非金标肯定断言』）"
+    },
+    {
+      "seventh_flip": "one_of_u_calibration_revoked",
+      "flips": [
+        "NT-I23",
+        "NT-I26",
+        "NT-I34",
+        "NT-I38",
+        "NT-I39",
+        "NT-I45",
+        "NT-I48"
+      ],
+      "recall_overall": 0.854,
+      "per_source": {
+        "源1": {
+          "matched": 20,
+          "gold": 22,
+          "recall": 0.909
+        },
+        "源2": {
+          "matched": 21,
+          "gold": 26,
+          "recall": 0.808
+        }
+      },
+      "sentinel_covered": "11/11",
+      "thresholds_used": {
+        "target_recall_overall_min": 0.85,
+        "target_recall_per_source_min": 0.8
+      },
+      "projected_verdict": "PASS",
+      "cost": "需推翻 U 2026-10-12 校准中的 1 条（候选与金标逐字相同，但 source_stance 口径相反）"
+    }
+  ],
+  "contract_invalid_option": {
+    "option": "I23_or_I24_double_assignment",
+    "why": "一条候选抵扣两条金标，违反 one_to_one_mapping 与契约 §8.1；本草案不提供该情形下的 PASS。"
+  }
+}

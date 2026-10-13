@@ -1,0 +1,324 @@
+{
+  "gate_v2_to_v3": [
+    {
+      "path": "countersignature.reviewer",
+      "op": "replace",
+      "old": "xyl",
+      "new": null
+    },
+    {
+      "path": "countersignature.signed_on",
+      "op": "replace",
+      "old": "2026-10-11",
+      "new": null
+    },
+    {
+      "path": "countersignature.status",
+      "op": "replace",
+      "old": "signed",
+      "new": "pending_human_signoff"
+    },
+    {
+      "path": "quality_requirements.high_risk_item_annotations.NT-I09",
+      "op": "remove",
+      "old": {
+        "condition": "毛利率继续下降或Rubin延期",
+        "atomic_proposition_source": "condition",
+        "compound": true,
+        "sub_conditions": [
+          "毛利率继续下降",
+          "Rubin延期"
+        ],
+        "compound_rule": "二元析取（「或」），无 condition_logic；按 condition_role_read_path.compound_condition 计分，命中任一子条件计为部分命中，不得整体匹配。"
+      }
+    },
+    {
+      "path": "quality_requirements.high_risk_item_annotations.NT-I19",
+      "op": "remove",
+      "old": {
+        "condition": "出口管制影响GPU系统集成",
+        "atomic_proposition_source": "condition",
+        "compound": false
+      }
+    },
+    {
+      "path": "quality_requirements.high_risk_item_annotations.NT-I45",
+      "op": "remove",
+      "old": {
+        "perspective": "quoted_other",
+        "source_stance": "challenged"
+      }
+    },
+    {
+      "path": "quality_requirements.high_risk_item_annotations.NT-I46",
+      "op": "remove",
+      "old": {
+        "perspective": "quoted_other",
+        "source_stance": "challenged"
+      }
+    },
+    {
+      "path": "quality_requirements.high_risk_item_annotations.NT-I47",
+      "op": "remove",
+      "old": {
+        "perspective": "quoted_other",
+        "source_stance": "challenged"
+      }
+    },
+    {
+      "path": "quality_requirements.high_risk_item_assertions_excluded",
+      "op": "add",
+      "new": {
+        "NT-I09": {
+          "mechanism": "gold_split_finer_than_candidate",
+          "reason": "金标把同一原文句拆成『条件(I09)+结论(I10)』两条，候选侧只产出整句一条且已被 NT-I10 占用；在 one_to_one_mapping 下必有一条落空（契约 §8.1：一条混合输出不能抵扣多个金标命题）。"
+        },
+        "NT-I19": {
+          "mechanism": "gold_split_finer_than_candidate",
+          "reason": "同 NT-I09：I19 与 I20 为同一句的两种切分，候选整句被 NT-I20 占用。"
+        },
+        "NT-I45": {
+          "mechanism": "candidate_side_cannot_carry_axis",
+          "reason": "U 2026-10-12 校准撤销 matched：金标属被转述且被质疑的预测(perspective=quoted_other, source_stance=challenged)，而契约 caliber_rules 记明 source_stance 生产端无载体、必须人工判定 ⇒ 候选侧结构上不承载该轴。"
+        },
+        "NT-I46": {
+          "mechanism": "candidate_side_cannot_carry_axis",
+          "reason": "同 NT-I45。"
+        },
+        "NT-I47": {
+          "mechanism": "candidate_side_cannot_carry_axis",
+          "reason": "同 NT-I45。"
+        }
+      }
+    },
+    {
+      "path": "quality_requirements.high_risk_item_assertions_required",
+      "op": "replace",
+      "old_count": 16,
+      "new_count": 11
+    },
+    {
+      "path": "quality_requirements.metric_basis",
+      "op": "replace",
+      "old": "non-table-selected-target-scoring-contract-v4.1",
+      "new": "non-table-selected-target-scoring-contract-v4.3"
+    },
+    {
+      "path": "quality_requirements.threshold_note",
+      "op": "add",
+      "new": "六项阈值逐字沿用 revision 5，未做任何放宽；R2 只调整『必须覆盖』的哨兵清单。"
+    },
+    {
+      "path": "quality_requirements_status",
+      "op": "replace",
+      "old": "signed",
+      "new": "proposed_pending_human_signoff"
+    },
+    {
+      "path": "revision_history",
+      "op": "replace",
+      "old_count": 5,
+      "new_count": 6
+    },
+    {
+      "path": "status",
+      "op": "replace",
+      "old": "frozen_before_execution",
+      "new": "draft_pending_human_signature"
+    },
+    {
+      "path": "terminal_decision_amendment",
+      "op": "add",
+      "new": {
+        "recorded_on": "2026-10-13",
+        "note": "原 terminal_decision.on_fail 要求关闭当前模型+抽取器路线、不放宽阈值；U 2026-10-13 的决定是不关闭路线，改为按 R2 调整判据基准。原字段逐字保留，本修订以独立键记录，便于审计对照。",
+        "u_decision": "先走 R2（调整哨兵清单与重新裁定口径，不动阈值、不动金标、不动样本）"
+      }
+    }
+  ],
+  "contract_v42_to_v43": [
+    {
+      "path": "matching.items",
+      "op": "replace",
+      "old": "同义改写可接受；须保持一个原子命题、语义类型、话语角色、归属、否定、条件、行为意向。proposition 不用逐字字符串相等判定。condition 角色 items 的原子命题按 condition_role_read_path 读取（condition 优先，proposition 兜底）。",
+      "new": "同义改写可接受；须保持一个原子命题、语义类型、话语角色、归属、否定、条件、行为意向。proposition 不用逐字字符串相等判定。condition 角色 items 的原子命题按 condition_role_read_path 读取（condition 优先，proposition 兜底）。【v4.3 增补｜上下文唯一可恢复】候选省略承载主体或限定条件时，若裁定人能依据同一证据包内唯一可恢复的上下文确定其主体/限定，视为保持该原子命题；无法唯一恢复者仍判不匹配。本增补不适用于：①同一候选被邻近金标占用（one_to_one_mapping 优先，一条输出不得抵扣多条金标）；②候选为疑问句等非断言形态。裁定人须在 reason 中记录恢复所依据的上下文。"
+    },
+    {
+      "path": "review_assertions.NT-I09",
+      "op": "remove",
+      "old": {
+        "condition": "毛利率继续下降或Rubin延期",
+        "atomic_proposition_source": "condition",
+        "compound": true,
+        "sub_conditions": [
+          "毛利率继续下降",
+          "Rubin延期"
+        ],
+        "compound_rule": "二元析取（「或」），无 condition_logic；按 condition_role_read_path.compound_condition 计分，命中任一子条件计为部分命中，不得整体匹配。"
+      }
+    },
+    {
+      "path": "review_assertions.NT-I19",
+      "op": "remove",
+      "old": {
+        "condition": "出口管制影响GPU系统集成",
+        "atomic_proposition_source": "condition",
+        "compound": false
+      }
+    },
+    {
+      "path": "review_assertions.NT-I45",
+      "op": "remove",
+      "old": {
+        "perspective": "quoted_other",
+        "source_stance": "challenged"
+      }
+    },
+    {
+      "path": "review_assertions.NT-I46",
+      "op": "remove",
+      "old": {
+        "perspective": "quoted_other",
+        "source_stance": "challenged"
+      }
+    },
+    {
+      "path": "review_assertions.NT-I47",
+      "op": "remove",
+      "old": {
+        "perspective": "quoted_other",
+        "source_stance": "challenged"
+      }
+    },
+    {
+      "path": "review_assertions_excluded",
+      "op": "add",
+      "new": {
+        "NT-I09": {
+          "mechanism": "gold_split_finer_than_candidate",
+          "reason": "金标把同一原文句拆成『条件(I09)+结论(I10)』两条，候选侧只产出整句一条且已被 NT-I10 占用；在 one_to_one_mapping 下必有一条落空（契约 §8.1：一条混合输出不能抵扣多个金标命题）。"
+        },
+        "NT-I19": {
+          "mechanism": "gold_split_finer_than_candidate",
+          "reason": "同 NT-I09：I19 与 I20 为同一句的两种切分，候选整句被 NT-I20 占用。"
+        },
+        "NT-I45": {
+          "mechanism": "candidate_side_cannot_carry_axis",
+          "reason": "U 2026-10-12 校准撤销 matched：金标属被转述且被质疑的预测(perspective=quoted_other, source_stance=challenged)，而契约 caliber_rules 记明 source_stance 生产端无载体、必须人工判定 ⇒ 候选侧结构上不承载该轴。"
+        },
+        "NT-I46": {
+          "mechanism": "candidate_side_cannot_carry_axis",
+          "reason": "同 NT-I45。"
+        },
+        "NT-I47": {
+          "mechanism": "candidate_side_cannot_carry_axis",
+          "reason": "同 NT-I45。"
+        }
+      }
+    },
+    {
+      "path": "revision_history",
+      "op": "replace",
+      "old_count": 5,
+      "new_count": 6
+    },
+    {
+      "path": "schema_version",
+      "op": "replace",
+      "old": "non-table-selected-target-scoring-contract-v4.2",
+      "new": "non-table-selected-target-scoring-contract-v4.3"
+    },
+    {
+      "path": "signoff.instrument",
+      "op": "replace",
+      "old": {
+        "path": ".scratch/claims-r2-role-isolation/evidence/57-contract-v42-draft-20261012/r0-zero-call/contract-v4.2-review.md",
+        "sha256": "sha256:215a3490e9e9c6fc70b482347438b36f7f9c9166d6869c44a4b2f2063f1b2f20"
+      },
+      "new": null
+    },
+    {
+      "path": "signoff.remark_note",
+      "op": "replace",
+      "old": "备注为空 ⇒ 草案按**原样接受**（含『3 处 authority pin、阈值逐字不变』的机器 diff 结论）。这是对空备注的解释，不等同逐条确认。",
+      "new": null
+    },
+    {
+      "path": "signoff.reviewer_remark",
+      "op": "replace",
+      "old": "",
+      "new": null
+    },
+    {
+      "path": "signoff.scope_note",
+      "op": "replace",
+      "old": "签认只定读路径、口径与度量口径；不代表 items-only 真实复验通过、不代表发布或语境完整。",
+      "new": "草案未签认；签认只定读路径、口径与度量口径，不代表 items-only 复验通过。"
+    },
+    {
+      "path": "signoff.signed_by",
+      "op": "replace",
+      "old": "xyl",
+      "new": null
+    },
+    {
+      "path": "signoff.signed_on",
+      "op": "replace",
+      "old": "2026-10-12",
+      "new": null
+    },
+    {
+      "path": "signoff.statement",
+      "op": "replace",
+      "old": "核准本契约 v4.2 作为 items-only 质量门的已签认度量基准；本轮唯一实质改动是把 threshold_source.authority_source 改钉门 28 的基准持有记录（v2），落实 U 对 P16 校验器拦下项的裁定 (a)。",
+      "new": null
+    },
+    {
+      "path": "status",
+      "op": "replace",
+      "old": "frozen_signed",
+      "new": "draft_pending_human_signature"
+    },
+    {
+      "path": "supersedes.note",
+      "op": "replace",
+      "old": "v4.2 只做一件事：把 threshold_source.authority_source 从门 28 的冻结执行门（v1）改钉到 P13 产生的基准持有记录（v2）。阈值数值逐字不变；v4.1 字节不变、哈希留存可追溯。",
+      "new": "v4.3 改两处：matching.items 增补『上下文唯一可恢复』条款；哨兵断言清单与门 v3 对齐。阈值数值逐字不变。"
+    },
+    {
+      "path": "supersedes.schema_version",
+      "op": "replace",
+      "old": "non-table-selected-target-scoring-contract-v4.1",
+      "new": "non-table-selected-target-scoring-contract-v4.2"
+    },
+    {
+      "path": "supersedes.sha256",
+      "op": "replace",
+      "old": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+      "new": "sha256:67537eadcb2074d5bb47c19d20177bd400a8850fce560aa6b1f969409d42b943"
+    },
+    {
+      "path": "threshold_source.authority_source.pin_status",
+      "op": "add",
+      "new": "provisional：门 v3 具名签认后须回填其最终字节哈希，本字段随之移除"
+    },
+    {
+      "path": "threshold_source.authority_source.sha256",
+      "op": "replace",
+      "old": "sha256:8cc11bccc912ea7b123b6e769728c9076046d526c16c8a1218e27a2a692270f6",
+      "new": "sha256:PENDING_SIGNED_GATE_V3"
+    },
+    {
+      "path": "threshold_source.authority_source.where",
+      "op": "replace",
+      "old": "门 28 preregistered-gate-v2.json quality_requirements（P13 基准持有记录，2026-10-12 签认）",
+      "new": "门 28 preregistered-gate-v3.json quality_requirements（R2 修订，revision 6）"
+    },
+    {
+      "path": "threshold_source.effective.source",
+      "op": "replace",
+      "old": "门 28 preregistered-gate-v2.json quality_requirements",
+      "new": "门 28 preregistered-gate-v3.json quality_requirements"
+    }
+  ]
+}

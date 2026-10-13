@@ -1,0 +1,26 @@
+{
+  "schema_version": "evidence-manifest-1",
+  "created_on": "2026-10-13",
+  "zero_model_calls": true,
+  "read_only_on_workspace": true,
+  "artifacts": {
+    "build_publish_gap_impact.py": "sha256:38f54ba2cc52912328c9186bf6276965f373c6bb766b67b0598137bfa4e96cb6",
+    "impact-assessment.json": "sha256:21e6d31414b108da46948e4d5c2978e39691618b058b732c51764c6ee64bd11b",
+    "impact-assessment.md": "sha256:a78dcd93440d2dbe15440c3d7221b8c2feebf17dcde0f10199c720f6e2f8a8d2"
+  },
+  "inputs": {
+    "store": "sha256:9db2bb5d663b028b7d7a38c53a1ceca1000c088b8a2a56144b0bcd64bdb7a8b7",
+    "roles": "sha256:42fa34ec465c58302f960a0ef10e12f5a11cd1e8d51c8e0c3273163f5c7fd237",
+    "query": "sha256:ac19677e146adbecb53413faad88cfcf7c1e317e3c135878dffbb22a8b280558",
+    "consumption": "sha256:2ad168701553c658eeaf4a38d3c449419237151ce1b6fcf7a4f739216df4ae52",
+    "ledger": "sha256:0d405051782f0dd6f03f1a3baab115973127bc5d6e139023a6399840f3690a7b",
+    "preparation_gaps": "sha256:861fc1c1f2a32397cef2429bd9852565a65945dd15ad7504c4395420e3d7d091",
+    "publication_schema": "sha256:636e7b8000f31582766ab80acb90869cd0e4bfe04713c27a26369119b12f77aa",
+    "publication_valid_example": "sha256:b944391f0bc501bb686ece0e6f489787cb976d1a0319413ecdcff2b03d0e727a",
+    "publication_invalid_example": "sha256:ec09bff8dbe76eedb73c566047214d9733f40dce842760b56484d275572b512f",
+    "role_artifact_schema": "sha256:a14e4703ab86e4aee6e56a5c398f227eba67b94c25c9baa78e1b919a2e1f14a0",
+    "contract_manifest": "sha256:039d56e5261ddf4847da7457d0972afebc628cb8fb35ccde40669ce83230befa",
+    "synthetic_asset_manifest": "sha256:6f9cc51597601b05e220ce3b74696269311ff50d246cf8272aced833a491d073"
+  },
+  "reproduce": "uv run python .scratch/claims-r2-role-isolation/evidence/73-publish-gap-route-impact-20261013/r0-zero-call/build_publish_gap_impact.py"
+}

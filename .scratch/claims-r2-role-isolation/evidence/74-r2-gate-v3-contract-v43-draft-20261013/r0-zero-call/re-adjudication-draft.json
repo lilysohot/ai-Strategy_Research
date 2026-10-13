@@ -1,0 +1,168 @@
+{
+  "schema_version": "r2-readjudication-draft-1",
+  "created_on": "2026-10-13",
+  "zero_model_calls": true,
+  "status": "agent_draft_pending_named_signoff",
+  "authority_note": "机械生成的改判草案，**不是裁定**。每条须由 xyl 具名确认；未具名前不得进入评分。",
+  "required_flips": [
+    {
+      "gold_id": "NT-I38",
+      "source": "源2",
+      "locator": "body[51]",
+      "gold_quote": "Q2 800G其实是超预期的，肯定是超预期的。但这也不叫超预期",
+      "gold_proposition": "讲者先称800G超预期，随后限定这并非通常意义的超预期",
+      "candidate_id": "itm_bf5fa66fb7be5a02",
+      "candidate_text": "Q2 800G其实是超预期的，肯定是超预期的。",
+      "previous_judgement": "correct_extra",
+      "previous_reason": "Q2 800G超预期，为NT-I38『先称800G超预期、后限定非通常意义超预期』的前半句，缺后半限定，correct_extra（与itm_7a4789de164cf58a合起来覆盖NT-I38）。",
+      "previous_matched_gold_id": null,
+      "proposed_judgement": "matched",
+      "basis_clause": "contract v4.3 matching.items 上下文唯一可恢复条款",
+      "recovery_context_note": "候选省略的主体/限定可在同一证据包内唯一恢复；裁定人须在 reason 补记恢复所依据的上下文。",
+      "reviewer": null,
+      "signed_on": null,
+      "status": "agent_draft_pending_named_signoff"
+    },
+    {
+      "gold_id": "NT-I39",
+      "source": "源2",
+      "locator": "body[26]",
+      "gold_quote": "这里面税率加上去",
+      "gold_proposition": "成本转嫁风险的条件",
+      "candidate_id": "itm_a79b0be05f3456c3",
+      "candidate_text": "然后这里面税率加上去",
+      "previous_judgement": "correct_extra",
+      "previous_reason": "税率加上去，金标NT-I39条件为『海外产能税率增加』，候选未提海外产能且仅为片段，不构成干净匹配，correct_extra。",
+      "previous_matched_gold_id": null,
+      "proposed_judgement": "matched",
+      "basis_clause": "contract v4.3 matching.items 上下文唯一可恢复条款",
+      "recovery_context_note": "候选省略的主体/限定可在同一证据包内唯一恢复；裁定人须在 reason 补记恢复所依据的上下文。",
+      "reviewer": null,
+      "signed_on": null,
+      "status": "agent_draft_pending_named_signoff"
+    },
+    {
+      "gold_id": "NT-I48",
+      "source": "源2",
+      "locator": "body[26]",
+      "gold_quote": "由于台湾海鸥基地有免税政策，这部分会转嫁给客户，因此对竞争力和毛利影响不大",
+      "gold_proposition": "被转述观点认为税负可转嫁，对竞争力和毛利影响不大",
+      "candidate_id": "itm_d96a4e7b052a89c7",
+      "candidate_text": "由于台湾海鸥基地有免税政策，这部分会转嫁给客户",
+      "previous_judgement": "correct_extra",
+      "previous_reason": "台湾海鸥基地免税、税负转嫁客户，为NT-I48「税负可转嫁」半句；金标NT-I48合并「税负可转嫁+对竞争力和毛利影响不大」两句，本候选仅含前半，不完整，correct_extra。",
+      "previous_matched_gold_id": null,
+      "proposed_judgement": "matched",
+      "basis_clause": "contract v4.3 matching.items 上下文唯一可恢复条款",
+      "recovery_context_note": "候选省略的主体/限定可在同一证据包内唯一恢复；裁定人须在 reason 补记恢复所依据的上下文。",
+      "reviewer": null,
+      "signed_on": null,
+      "status": "agent_draft_pending_named_signoff"
+    },
+    {
+      "gold_id": "NT-I26",
+      "source": "源2",
+      "locator": "body[72]",
+      "gold_quote": "说明设计上仍然存在缺陷",
+      "gold_proposition": "128端口光波导设计仍有缺陷",
+      "candidate_id": "itm_a41addfcb6696346",
+      "candidate_text": "说明设计上仍然存在缺陷，",
+      "previous_judgement": "correct_extra",
+      "previous_reason": "说明设计上仍然存在缺陷，为观点；同句语境指128光波导，含NT-I26『128端口光波导设计仍有缺陷』谓词，但命题缺主语『128端口光波导』，按itm_703720fdd5630e8b（缺主题→correct_extra）口径，correct_extra。",
+      "previous_matched_gold_id": null,
+      "proposed_judgement": "matched",
+      "basis_clause": "contract v4.3 matching.items 上下文唯一可恢复条款",
+      "recovery_context_note": "候选省略的主体/限定可在同一证据包内唯一恢复；裁定人须在 reason 补记恢复所依据的上下文。",
+      "reviewer": null,
+      "signed_on": null,
+      "status": "agent_draft_pending_named_signoff"
+    },
+    {
+      "gold_id": "NT-I34",
+      "source": "源2",
+      "locator": "body[37]",
+      "gold_quote": "预计到29年30年在材料取得重大突破前，可插拔仍然是主流",
+      "gold_proposition": "到2029至2030年可插拔方案仍将是主流",
+      "candidate_id": "itm_15c17f04855a28b3",
+      "candidate_text": "可插拔仍然是主流",
+      "previous_judgement": "correct_extra",
+      "previous_reason": "可插拔仍然是主流，金标NT-I34含『2029-2030年』时间框架与『材料未突破』条件，候选缺框架与条件，为截短版，correct_extra。",
+      "previous_matched_gold_id": null,
+      "proposed_judgement": "matched",
+      "basis_clause": "contract v4.3 matching.items 上下文唯一可恢复条款",
+      "recovery_context_note": "候选省略的主体/限定可在同一证据包内唯一恢复；裁定人须在 reason 补记恢复所依据的上下文。",
+      "reviewer": null,
+      "signed_on": null,
+      "status": "agent_draft_pending_named_signoff"
+    }
+  ],
+  "pair_alternatives": [
+    {
+      "gold_id": "NT-I23",
+      "source": "源2",
+      "locator": "body[63]",
+      "gold_quote": "尚无固定的客户",
+      "gold_proposition": "128端口产品尚无固定客户",
+      "candidate_id": "itm_703720fdd5630e8b",
+      "candidate_text": "尚无固定的客户，德科立将其视为一个过渡型的产品",
+      "previous_judgement": "correct_extra",
+      "previous_reason": "命题『尚无固定的客户，德科立将其视为过渡型产品』缺主语主题『128端口产品』，仅余谓词（无固定客户/过渡型产品）；与itm_356f9d9b缺NT-I48主题同理，截掉主题的弱化版≠同一原子命题→correct_extra。NT-I23/NT-I24留未覆盖（若启用话语回指恢复契约则主题可由前文128端口产品补回，但其与NT-I48裁定需保持一致）。",
+      "previous_matched_gold_id": null,
+      "proposed_judgement": "matched_or_pending",
+      "basis_clause": "contract v4.3 matching.items 上下文唯一可恢复条款",
+      "recovery_context_note": "候选省略的主体/限定可在同一证据包内唯一恢复；裁定人须在 reason 补记恢复所依据的上下文。",
+      "reviewer": null,
+      "signed_on": null,
+      "status": "agent_draft_pending_named_signoff"
+    },
+    {
+      "gold_id": "NT-I24",
+      "source": "源2",
+      "locator": "body[63]",
+      "gold_quote": "德科立将其视为一个过渡型的产品",
+      "gold_proposition": "128端口产品被视为过渡产品",
+      "candidate_id": "itm_703720fdd5630e8b",
+      "candidate_text": "尚无固定的客户，德科立将其视为一个过渡型的产品",
+      "previous_judgement": "correct_extra",
+      "previous_reason": "命题『尚无固定的客户，德科立将其视为过渡型产品』缺主语主题『128端口产品』，仅余谓词（无固定客户/过渡型产品）；与itm_356f9d9b缺NT-I48主题同理，截掉主题的弱化版≠同一原子命题→correct_extra。NT-I23/NT-I24留未覆盖（若启用话语回指恢复契约则主题可由前文128端口产品补回，但其与NT-I48裁定需保持一致）。",
+      "previous_matched_gold_id": null,
+      "proposed_judgement": "matched_or_pending",
+      "basis_clause": "contract v4.3 matching.items 上下文唯一可恢复条款",
+      "recovery_context_note": "候选省略的主体/限定可在同一证据包内唯一恢复；裁定人须在 reason 补记恢复所依据的上下文。",
+      "reviewer": null,
+      "signed_on": null,
+      "status": "agent_draft_pending_named_signoff"
+    }
+  ],
+  "seventh_flip_open_choice": [
+    {
+      "option": "I36_question_form",
+      "gold_id": "NT-I36",
+      "cost": "需承认疑问句可承载该金标命题（原裁定理由为『类比式问句，非金标肯定断言』）"
+    },
+    {
+      "option": "I23_or_I24_double_assignment",
+      "gold_id": "NT-I23+NT-I24",
+      "cost": "需承认一条候选可抵扣两条金标命题 —— 与 one_to_one_mapping / 契约 §8.1 冲突，不推荐"
+    },
+    {
+      "option": "one_of_u_calibration_revoked",
+      "gold_id": "NT-I45|NT-I46|NT-I47",
+      "cost": "需推翻 U 2026-10-12 校准中的 1 条（候选与金标逐字相同，但 source_stance 口径相反）"
+    }
+  ],
+  "explicitly_not_flipped": [
+    {
+      "gold_id": "NT-I31",
+      "reason": "最近候选已被 NT-I32 占用；改判将与 one_to_one_mapping 冲突（与 I09/I19 同机制）。"
+    },
+    {
+      "gold_id": "NT-I36",
+      "reason": "候选为疑问句形态；仅在选 I36_question_form 时才会成为第 7 条（见上方选项）。"
+    }
+  ],
+  "signoff": {
+    "reviewer": null,
+    "signed_on": null
+  }
+}

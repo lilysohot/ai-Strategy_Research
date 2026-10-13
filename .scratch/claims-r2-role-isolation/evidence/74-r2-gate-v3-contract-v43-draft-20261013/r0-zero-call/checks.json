@@ -1,0 +1,74 @@
+{
+  "schema_version": "r2-draft-checks-1",
+  "created_on": "2026-10-13",
+  "zero_model_calls": true,
+  "passed": 13,
+  "failed": 0,
+  "checks": [
+    {
+      "check": "thresholds_unchanged",
+      "ok": true,
+      "detail": "六项阈值逐字沿用门 v2（0.85/0.80/0.80/40/20/0）"
+    },
+    {
+      "check": "threshold_relaxation_flag_still_false",
+      "ok": true,
+      "detail": "scope_constraints.threshold_relaxation_after_execution_allowed 保持 false"
+    },
+    {
+      "check": "sentinel_matches_contract_items_subset",
+      "ok": true,
+      "detail": "门 v3 哨兵清单 == 契约 v4.3 review_assertions 的 NT-I* 子集"
+    },
+    {
+      "check": "exclusions_all_annotated",
+      "ok": true,
+      "detail": "每个被移出哨兵项都带 mechanism 与 reason"
+    },
+    {
+      "check": "exclusions_were_in_v2_sentinel",
+      "ok": true,
+      "detail": "被移出项原本都在门 v2 哨兵清单内"
+    },
+    {
+      "check": "sentinel_subset_of_gold",
+      "ok": true,
+      "detail": "哨兵清单全部属于 48 条冻结金标"
+    },
+    {
+      "check": "no_candidate_used_twice",
+      "ok": true,
+      "detail": "改判草案中候选互不重复：['itm_bf5fa66fb7be5a02', 'itm_a79b0be05f3456c3', 'itm_d96a4e7b052a89c7', 'itm_a41addfcb6696346', 'itm_15c17f04855a28b3']"
+    },
+    {
+      "check": "required_flips_are_distinct_candidates",
+      "ok": true,
+      "detail": "I23/I24 共享同一候选（-1），其余互不重复"
+    },
+    {
+      "check": "old_hashes_retained",
+      "ok": true,
+      "detail": "门 v2 与契约 v4.2 的旧哈希已留存于新版本记录"
+    },
+    {
+      "check": "contract_pin_provisional_not_faked",
+      "ok": true,
+      "detail": "契约对门 v3 的绑定标记为 provisional，未伪造已签哈希"
+    },
+    {
+      "check": "signoff_fields_empty",
+      "ok": true,
+      "detail": "门/契约/改判三处签认字段全部留空，不代签"
+    },
+    {
+      "check": "all_projection_options_pass_or_flagged",
+      "ok": true,
+      "detail": "两个合法第七项选项在未改阈值下均投影为 PASS"
+    },
+    {
+      "check": "attribution_propositions_match_gate33_gold",
+      "ok": true,
+      "detail": "归因表的金标命题与门 33 gold_reference 逐条一致"
+    }
+  ]
+}

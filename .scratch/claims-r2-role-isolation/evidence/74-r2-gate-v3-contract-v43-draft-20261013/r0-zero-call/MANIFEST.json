@@ -1,0 +1,27 @@
+{
+  "schema_version": "evidence-manifest-1",
+  "created_on": "2026-10-13",
+  "zero_model_calls": true,
+  "status": "draft_pending_named_signoff",
+  "note": "全部为草案；签认字段留空；未修改任何既有文件。",
+  "artifacts": {
+    "build_r2_drafts.py": "sha256:b231a9f4560031aa371c6ae98ab74bfc62e3941e9ff6b6ec2d3affe96e1f6f33",
+    "gate-v3.proposed.json": "sha256:e4e740f566a701b5b79df7f980ae58c27525f1fea2e8b8f4a023793be0aa611e",
+    "scoring-contract-v4.3.proposed.json": "sha256:9367a285844ff12df8f3f2356fc41225a06f3bec17b7e249599c1ccdc3dc8269",
+    "re-adjudication-draft.json": "sha256:5825c164ac0fc82909ba7d6fa04a7828fa1f9de067fbccb402fa2a316a34aa40",
+    "diffs.json": "sha256:02f731b975f2db61105a77c32917395704607cc58802432b4a55d3353b21cb73",
+    "checks.json": "sha256:423fc81962b6b741976aef334fe3eef2da61f3912a3893db6b9981845cd27a28",
+    "projection.json": "sha256:cfec3e098d68ba883a3b782edcdcb3ac641187073669fb39ea862b8fdb44e6f3",
+    "r2-drafts.md": "sha256:e31c93a01979832af79e46a7a24a36877fb9f7c51ce234090aa2fcd7bb0b0d55"
+  },
+  "inputs": {
+    "gate_v2": "sha256:8cc11bccc912ea7b123b6e769728c9076046d526c16c8a1218e27a2a692270f6",
+    "contract_v4.2": "sha256:67537eadcb2074d5bb47c19d20177bd400a8850fce560aa6b1f969409d42b943",
+    "attribution": "sha256:94ce5548adf99bb219071797e09250c8cbcd27023d435cf46de74bff8a83de4f",
+    "frozen_gold": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    "gate33_gold_reference": "sha256:cc2946ef6a487fba059ca995f2c34f469d4c96720b6b6186225c97bd1e41b537",
+    "worksheet_A": "sha256:de2e7402518b573ef572a8f27fa6eb2d5254f926a12a8339f153e23cd2ae10f9",
+    "terminal_decision": "sha256:fba56c4f7cfebbcfebbf8405ba0d1c8b1967e1bc68dc8a439e1826f41d5d50b9"
+  },
+  "reproduce": "uv run python .scratch/claims-r2-role-isolation/evidence/74-r2-gate-v3-contract-v43-draft-20261013/r0-zero-call/build_r2_drafts.py"
+}
