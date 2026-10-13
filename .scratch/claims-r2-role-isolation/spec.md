@@ -4,7 +4,7 @@
 - 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。18 已完成严格 parent 门、items/relations selector、accepted-items formal import 和 P10 有界 relation live 执行。P11 relation 样本已由 xyl 签认；P12 selector v2 实跑退化并已拒绝。P13 已完成零调用 `material-relations-question-group-jsonl-v1`。P14 最终 relation-only batch 已执行并在协议门失败。19 的零调用反事实证明同模型语义 no-go。20 仅替换为 `glm-5.3-flash` 的 4-call 复验在 4K 输出上限耗尽 reasoning。21 将上限放宽到 16K 后，三个确定响应仍全部耗尽 reasoning 且为空，第四个为 outcome_unknown；因此 token-only 路线已关闭。Issue 26 已完成离线冻结包上的 10 次 M_main 价值消融；P2 的正向发布、真实 query/delivery/context_use 和产品消费仍未启动。2026-10-13 追加：Issue 32/33/41 与 items 链 R2 修订已完成——门 28 的模板由 **v3** 取代、评分契约推进至 **v4.3**（六项阈值逐字未改），门 33 在原基准 FAIL 后按修订基准重算 **PASS**（41/48 = 0.854），实现绑定同步追平；**发布、query/delivery/context_use 与 M_main 消费仍未启动**。详见 §3 阶段状态追加段与各票。
 - 2026-10-10 收口：Issue 25 虽通过 boolean-v2 协议门但未通过关系质量门；Issue 26 随后完成
   items-only 对 items+relations 的 5 题、10 次 M_main 配对消融并经 xyl 盲评签认。relation treatment
-  提升 0/4、回退 2/4、持平 2/4，输入 token 中位数增加 24.33%，因此默认 relation 富化关闭。
+  提升 0/4、回退 2/4、持平 2/4，输入 token 中位数增加 24.33%，因此默认 relation 关闭。
   R2 默认交付和当前验收范围固定为 `material_items`；relations 只保留为非阻断、按需实验能力。
 - 范围裁决：当前 R2 不再为 relations 安排修复、模型调用或质量验收；这不是未完成债务，也不影响
   Claims/items 的验收与发布。未来只有新的明确业务问题、独立预注册价值门和单独授权同时成立时，
