@@ -1,8 +1,8 @@
 {
   "ledger": {
     "schema_version": "corpus-execution-ledger-v1",
-    "batch_id": "batch:77da92334d37ce76c45bf8c60ec8cdc99da23a0ac668899476e8be8d73a02097",
-    "plan_sha256": "sha256:77da92334d37ce76c45bf8c60ec8cdc99da23a0ac668899476e8be8d73a02097",
+    "batch_id": "batch:9c1573f5c120949889eebafbdc61f38397adc925aff0bed58926365e28d46626",
+    "plan_sha256": "sha256:9c1573f5c120949889eebafbdc61f38397adc925aff0bed58926365e28d46626",
     "snapshot_id": "sha256:3740f63e5f94063785fd2f79a53bb01f369bb478c9872979a52ef31a4a2e9fef",
     "budget": {
       "max_attempts": 2,
@@ -12,10 +12,10 @@
     },
     "tasks": [
       {
-        "task_id": "task:10e17d59bd7d2fe32531db7472300e0b72556017c3bf464bc1ccbde7d9367a8e",
+        "task_id": "task:3c89be3a54611348585d7c86db5a95c750586d8723d9084780d38934f0394ce3",
         "role": "claims",
         "method": "model",
-        "input_sha256": "sha256:10e17d59bd7d2fe32531db7472300e0b72556017c3bf464bc1ccbde7d9367a8e",
+        "input_sha256": "sha256:3c89be3a54611348585d7c86db5a95c750586d8723d9084780d38934f0394ce3",
         "profile_sha256": "sha256:64f82c34ff2c014237588c618c5747f7a4c024c0585064489da2a2fcfadd6999",
         "execution_status": "blocked",
         "protocol_status": "not_checked",
@@ -29,10 +29,10 @@
         ]
       },
       {
-        "task_id": "task:0d7171eae673a6241c7d6d7b7cab87a52d7f01d7821d9af91c6df6a58d3a244d",
+        "task_id": "task:7739367eaee78849b49e1d747b595256e96fa50e38ba100e78ce28cce5869b7e",
         "role": "material_items",
         "method": "model",
-        "input_sha256": "sha256:0d7171eae673a6241c7d6d7b7cab87a52d7f01d7821d9af91c6df6a58d3a244d",
+        "input_sha256": "sha256:7739367eaee78849b49e1d747b595256e96fa50e38ba100e78ce28cce5869b7e",
         "profile_sha256": "sha256:64f82c34ff2c014237588c618c5747f7a4c024c0585064489da2a2fcfadd6999",
         "execution_status": "succeeded",
         "protocol_status": "invalid",
@@ -41,26 +41,26 @@
         "context_status": "complete",
         "dependency_task_ids": [],
         "endpoint_item_ids": [],
-        "artifact_sha256": "sha256:842d8068dcdc7814614d20384edf130729da2356ccfda6cad20eac31e36a7b42",
+        "artifact_sha256": "sha256:9383f5ed7fd4ad6257916946767b62671f6d3d7511c573f0d18bf77e79d7cf74",
         "error_codes": []
       }
     ],
     "attempts": [
       {
-        "attempt_id": "attempt:96081996d6a0fe223dd42370dd0c2d486b7507f6fd4e2a27a657874286b948dc",
-        "task_id": "task:0d7171eae673a6241c7d6d7b7cab87a52d7f01d7821d9af91c6df6a58d3a244d",
+        "attempt_id": "attempt:bc57997f4da09272e4cb0e17258aa3d4bf22aba320f773de8cd90bbe13c9314d",
+        "task_id": "task:7739367eaee78849b49e1d747b595256e96fa50e38ba100e78ce28cce5869b7e",
         "attempt_number": 1,
         "execution_status": "succeeded",
-        "request_sha256": "sha256:2dd6bc61af8ff69e9c6e2ffff7557fccc06201ac52599223fd1d18a39021c52f",
-        "response_sha256": "sha256:f7d1471ec9b2addf98e77b039c6f889f8403f87a176f258484154517d2cf9261",
+        "request_sha256": "sha256:d4620be58cb99ec34561de75d1f1e7c83f5f572c66735037796826e761578b2f",
+        "response_sha256": "sha256:a428a0a3da3c446e8d7d901a008c9bb29e140f7888a3ac2043e7c1c9671d15f3",
         "provider": "openai_compat",
         "request_model": "deepseek-v4-flash",
         "response_model": "deepseek-v4-flash-ga-260731",
         "usage": {
-          "completion_tokens": 3067,
-          "prompt_tokens": 2440,
+          "completion_tokens": 2282,
+          "prompt_tokens": 2431,
           "reasoning_tokens": 0,
-          "total_tokens": 5507
+          "total_tokens": 4713
         },
         "cost": null
       }
@@ -68,10 +68,10 @@
   },
   "plan_consistent": true,
   "findings": [
-    "task_not_terminal:task:10e17d59bd7d2fe32531db7472300e0b72556017c3bf464bc1ccbde7d9367a8e:blocked"
+    "task_not_terminal:task:3c89be3a54611348585d7c86db5a95c750586d8723d9084780d38934f0394ce3:blocked"
   ],
   "derivations": {
-    "task:0d7171eae673a6241c7d6d7b7cab87a52d7f01d7821d9af91c6df6a58d3a244d": "disabled"
+    "task:7739367eaee78849b49e1d747b595256e96fa50e38ba100e78ce28cce5869b7e": "disabled"
   },
   "role_budgets": {
     "claims": {

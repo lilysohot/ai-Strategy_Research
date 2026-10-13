@@ -1,0 +1,548 @@
+{
+ "schema_version": "adjudication-worksheet-base-1",
+ "created_on": "2026-10-13",
+ "candidate_source": "P-B 累积记账：r3/r4/r6 三次尝试的并集（逐槽 provenance 见 cumulative-union.json）",
+ "model_note": "r3/r6 = deepseek-v4-flash（Ark，control 可进出分）；r4 = deepseek-flash（官方，模型名偏离 gate-28）",
+ "adjudicator": {
+  "name": "",
+  "date": ""
+ },
+ "gold_reference": [
+  {
+   "record_id": "NT-I13",
+   "quote": "Q3 OCF/扣非回到 0.6 以上",
+   "proposition": "Q3经营现金流与扣非净利润之比达到0.6以上，是重新讨论观察仓的条件之一",
+   "fields": {
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "source_stance": "reported",
+    "polarity": "affirmed"
+   }
+  },
+  {
+   "record_id": "NT-I14",
+   "quote": "若从零开一个观察仓：等两件事至少中一件再议",
+   "proposition": "从零开观察仓须等待至少一个指定条件满足后再讨论，并非立即建仓承诺",
+   "fields": {
+    "semantic_type": "behavior",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "polarity": "affirmed"
+   }
+  },
+  {
+   "record_id": "NT-I15",
+   "quote": "止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5）",
+   "proposition": "止损触发条件之一",
+   "fields": {
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "source_stance": "reported",
+    "polarity": "affirmed"
+   }
+  },
+  {
+   "record_id": "NT-I16",
+   "quote": "止损看两条硬的",
+   "proposition": "若任一指定硬性恶化条件触发，考虑执行止损；这是意向而非已执行行为",
+   "fields": {
+    "semantic_type": "behavior",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "polarity": "affirmed"
+   }
+  },
+  {
+   "record_id": "NT-I17",
+   "quote": "毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期",
+   "proposition": "毛利率较6.99%再降超过1个百分点，且公司改口涨价/mix受阻、Rubin延期，是另一止损条件",
+   "fields": {
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "source_stance": "reported",
+    "polarity": "affirmed"
+   }
+  },
+  {
+   "record_id": "NT-I42",
+   "quote": "回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）",
+   "proposition": "股价回撤至52—58元且无新的大额负面管制公告，是重新讨论观察仓的条件之一",
+   "fields": {
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "source_stance": "reported",
+    "polarity": "affirmed"
+   }
+  },
+  {
+   "record_id": "NT-I43",
+   "quote": "毛利率较 Q2 的 6.99% 不再回吐",
+   "proposition": "毛利率不再低于Q2的6.99%，是重新讨论观察仓的条件之一",
+   "fields": {
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "source_stance": "reported",
+    "polarity": "affirmed"
+   }
+  },
+  {
+   "record_id": "NT-R07",
+   "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。",
+   "proposition": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。",
+   "fields": {
+    "semantic_type": null,
+    "statement_role": null,
+    "source_stance": null,
+    "polarity": null
+   }
+  },
+  {
+   "record_id": "NT-R08",
+   "quote": "止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5）",
+   "proposition": "止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5）",
+   "fields": {
+    "semantic_type": null,
+    "statement_role": null,
+    "source_stance": null,
+    "polarity": null
+   }
+  },
+  {
+   "record_id": "NT-R09",
+   "quote": "毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期",
+   "proposition": "毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期",
+   "fields": {
+    "semantic_type": null,
+    "statement_role": null,
+    "source_stance": null,
+    "polarity": null
+   }
+  },
+  {
+   "record_id": "NT-R21",
+   "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。",
+   "proposition": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。",
+   "fields": {
+    "semantic_type": null,
+    "statement_role": null,
+    "source_stance": null,
+    "polarity": null
+   }
+  },
+  {
+   "record_id": "NT-R22",
+   "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。",
+   "proposition": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。",
+   "fields": {
+    "semantic_type": null,
+    "statement_role": null,
+    "source_stance": null,
+    "polarity": null
+   }
+  }
+ ],
+ "candidates": [
+  {
+   "candidate_id": "slot_1996d09d1fd9cdef#1",
+   "slot": "slot_1996d09d1fd9cdef",
+   "via_run": "r4",
+   "proposition": "Q3 OCF/扣非回到 0.6 以上",
+   "model_suggestion": {
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "Q3 OCF/扣非回到 0.6 以上"
+   },
+   "to_fill": {
+    "judgement": "matched",
+    "matched_gold_id": "NT-I13",
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_1996d09d1fd9cdef#2",
+   "slot": "slot_1996d09d1fd9cdef",
+   "via_run": "r4",
+   "proposition": "毛利率较 Q2 的 6.99% 不再回吐",
+   "model_suggestion": {
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "毛利率较 Q2 的 6.99% 不再回吐"
+   },
+   "to_fill": {
+    "judgement": "matched",
+    "matched_gold_id": "NT-I43",
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_292e7f88898806e5#1",
+   "slot": "slot_292e7f88898806e5",
+   "via_run": "r3",
+   "proposition": "止损看两条硬的",
+   "model_suggestion": {
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "polarity": "affirmed",
+    "evidence_quote": "止损看两条硬的："
+   },
+   "to_fill": {
+    "judgement": "matched",
+    "matched_gold_id": "NT-I16",
+    "semantic_type": "behavior",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification",
+   "needs_human": "needs_human_semantic_type_ruling"
+  },
+  {
+   "candidate_id": "slot_36c304436d5d2703#1",
+   "slot": "slot_36c304436d5d2703",
+   "via_run": "r3",
+   "proposition": "等两件事至少中一件再议",
+   "model_suggestion": {
+    "semantic_type": "condition",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "等两件事至少中一件再议——"
+   },
+   "to_fill": {
+    "judgement": "matched",
+    "matched_gold_id": "NT-I14",
+    "semantic_type": "behavior",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification",
+   "needs_human": "needs_human_semantic_type_ruling"
+  },
+  {
+   "candidate_id": "slot_36c304436d5d2703#2",
+   "slot": "slot_36c304436d5d2703",
+   "via_run": "r3",
+   "proposition": "回撤到 52–58",
+   "model_suggestion": {
+    "semantic_type": "condition",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "回撤到 52–58"
+   },
+   "to_fill": {
+    "judgement": "matched",
+    "matched_gold_id": "NT-I42",
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_36c304436d5d2703#3",
+   "slot": "slot_36c304436d5d2703",
+   "via_run": "r3",
+   "proposition": "大约回到 7 月回购均价 61 之下",
+   "model_suggestion": {
+    "semantic_type": "fact",
+    "statement_role": "claim",
+    "polarity": "affirmed",
+    "evidence_quote": "大约回到 7 月回购均价 61 之下"
+   },
+   "to_fill": {
+    "judgement": "correct_extra",
+    "matched_gold_id": "",
+    "semantic_type": "fact",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_36c304436d5d2703#4",
+   "slot": "slot_36c304436d5d2703",
+   "via_run": "r3",
+   "proposition": "动 PE 降到 24 附近",
+   "model_suggestion": {
+    "semantic_type": "condition",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "动 PE 降到 24 附近"
+   },
+   "to_fill": {
+    "judgement": "correct_extra",
+    "matched_gold_id": "",
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_3dfa35e5b40c1201#1",
+   "slot": "slot_3dfa35e5b40c1201",
+   "via_run": "r3",
+   "proposition": "单票不超过组合的合理上限",
+   "model_suggestion": {
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "polarity": "negated",
+    "evidence_quote": "单票不超过组合的合理上限。"
+   },
+   "to_fill": {
+    "judgement": "correct_extra",
+    "matched_gold_id": "",
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_90af9c4e66866cda#1",
+   "slot": "slot_90af9c4e66866cda",
+   "via_run": "r3",
+   "proposition": "下季 OCF 盖不住扣非的一半",
+   "model_suggestion": {
+    "semantic_type": "condition",
+    "statement_role": "condition",
+    "polarity": "negated",
+    "evidence_quote": "下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5）"
+   },
+   "to_fill": {
+    "judgement": "matched",
+    "matched_gold_id": "NT-I15",
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_90af9c4e66866cda#2",
+   "slot": "slot_90af9c4e66866cda",
+   "via_run": "r3",
+   "proposition": "毛利率较 6.99% 再掉超过 1 个百分点",
+   "model_suggestion": {
+    "semantic_type": "condition",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "或毛利率较 6.99% 再掉超过 1 个百分点"
+   },
+   "to_fill": {
+    "judgement": "matched",
+    "matched_gold_id": "NT-I17",
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_90af9c4e66866cda#3",
+   "slot": "slot_90af9c4e66866cda",
+   "via_run": "r3",
+   "proposition": "公司改口说涨价/mix 受阻",
+   "model_suggestion": {
+    "semantic_type": "condition",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "且公司改口说涨价/mix 受阻"
+   },
+   "to_fill": {
+    "judgement": "duplicate",
+    "matched_gold_id": "NT-I17",
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification",
+   "needs_human": "compound_condition_credit_rule_pending"
+  },
+  {
+   "candidate_id": "slot_90af9c4e66866cda#4",
+   "slot": "slot_90af9c4e66866cda",
+   "via_run": "r3",
+   "proposition": "Rubin 延期",
+   "model_suggestion": {
+    "semantic_type": "condition",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "、Rubin 延期"
+   },
+   "to_fill": {
+    "judgement": "duplicate",
+    "matched_gold_id": "NT-I17",
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification",
+   "needs_human": "compound_condition_credit_rule_pending"
+  },
+  {
+   "candidate_id": "slot_90af9c4e66866cda#5",
+   "slot": "slot_90af9c4e66866cda",
+   "via_run": "r3",
+   "proposition": "目标价不把 121、100.8 当锚",
+   "model_suggestion": {
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "polarity": "negated",
+    "evidence_quote": "目标价不把 121、100.8 当锚"
+   },
+   "to_fill": {
+    "judgement": "correct_extra",
+    "matched_gold_id": "",
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_90af9c4e66866cda#6",
+   "slot": "slot_90af9c4e66866cda",
+   "via_run": "r3",
+   "proposition": "中性路径就是 55–75 消化中报和英伟达 β",
+   "model_suggestion": {
+    "semantic_type": "forecast",
+    "statement_role": "claim",
+    "polarity": "affirmed",
+    "evidence_quote": "中性路径就是 55–75 消化中报和英伟达 β"
+   },
+   "to_fill": {
+    "judgement": "correct_extra",
+    "matched_gold_id": "",
+    "semantic_type": "forecast",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_90af9c4e66866cda#7",
+   "slot": "slot_90af9c4e66866cda",
+   "via_run": "r3",
+   "proposition": "乐观才靠近中金 77.68 / 华泰 93",
+   "model_suggestion": {
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "乐观才靠近中金 77.68 / 华泰 93"
+   },
+   "to_fill": {
+    "judgement": "correct_extra",
+    "matched_gold_id": "",
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_ef08e9bee54690b0#1",
+   "slot": "slot_ef08e9bee54690b0",
+   "via_run": "r4",
+   "proposition": "若从零开一个观察仓",
+   "model_suggestion": {
+    "semantic_type": "unknown",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "若从零开一个观察仓"
+   },
+   "to_fill": {
+    "judgement": "duplicate",
+    "matched_gold_id": "NT-I14",
+    "semantic_type": "behavior",
+    "statement_role": "condition",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification",
+   "needs_human": "same_source_as_row_4"
+  }
+ ],
+ "count": {
+  "candidate_records": 16,
+  "gold_records": 12
+ },
+ "fill_status": "agent_drafted_pending_human_verification",
+ "gold_scope_correction": {
+  "packet_span": "char:5246-5537",
+  "items_gold_in_scope": 7,
+  "items_gold_ids": [
+   "NT-I13",
+   "NT-I14",
+   "NT-I15",
+   "NT-I16",
+   "NT-I17",
+   "NT-I42",
+   "NT-I43"
+  ],
+  "why": "header said 12 gold of which 5 (NT-R07/R08/R09/R21/R22) are material_relations records; relations are out of scope this round (OPEN-2=C, and 39: production emits 0 relations). items candidates must not be matched to relation gold."
+ },
+ "model_deviation": {
+  "gate28_authorized": "deepseek-v4-flash",
+  "r4_recorded": "deepseek-flash",
+  "rows_affected": [
+   3,
+   4,
+   5,
+   16
+  ]
+ }
+}

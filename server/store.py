@@ -46,6 +46,8 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 from server.config import get_config
 from server.crypto import decrypt_api_key, encrypt_api_key, mask_api_key
+from server.run_outcome import is_legacy_normal_completion
+from server.session_titles import PLACEHOLDER_TITLES, research_title
 
 
 class Base(DeclarativeBase):
@@ -1659,6 +1661,7 @@ async def append_turn_in(
                 )
                 session.add(turn)
                 await session.flush()
+                await _update_session_after_turn(session, turn)
             return turn
         except IntegrityError:
             if attempt == _APPEND_TURN_ATTEMPTS - 1:
@@ -1724,9 +1727,67 @@ async def _insert_turn(
             run_id=run_id,
         )
         session.add(turn)
+        await session.flush()
+        await _update_session_after_turn(session, turn)
         await session.commit()
         await session.refresh(turn)
         return turn
+
+
+async def _update_session_after_turn(session: AsyncSession, turn: Turn) -> None:
+    """Keep metadata in the same transaction as its durable message."""
+    await session.execute(
+        update(Session).where(Session.id == turn.session_id).values(updated_at=datetime.now(UTC))
+    )
+    title = research_title(turn.content) if turn.role == "user" else None
+    if title:
+        await session.execute(
+            update(Session)
+            .where(Session.id == turn.session_id, Session.title.in_(PLACEHOLDER_TITLES))
+            .values(title=title)
+        )
+
+
+async def session_display_metadata(rows: list[Session]) -> dict[uuid.UUID, dict]:
+    """Enrich an already ownership-filtered page, including legacy placeholders.
+
+    Two batched queries avoid one history read per sidebar item. Only the first
+    twelve user requests per unnamed session are returned; assistant reasoning
+    and answers are never used as titles. Read repair does not rewrite history.
+    """
+    if not rows:
+        return {}
+    metadata = {row.id: {"title": row.title, "turn_count": 0} for row in rows}
+    async with get_sessionmaker()() as session:
+        counts = await session.execute(
+            select(Turn.session_id, func.count(Turn.id))
+            .where(Turn.session_id.in_(metadata))
+            .group_by(Turn.session_id)
+        )
+        for sid, count in counts:
+            metadata[sid]["turn_count"] = count
+        unnamed = [row.id for row in rows if row.title in PLACEHOLDER_TITLES]
+        if unnamed:
+            requests = (
+                select(
+                    Turn.session_id, Turn.content,
+                    func.row_number().over(partition_by=Turn.session_id, order_by=Turn.seq).label("n"),
+                )
+                .where(Turn.session_id.in_(unnamed), Turn.role == "user")
+                .subquery()
+            )
+            messages = await session.execute(
+                select(requests).where(requests.c.n <= 12).order_by(requests.c.n)
+            )
+            titled = set()
+            for sid, content, _ in messages:
+                if sid in titled or not content.strip():
+                    continue
+                title = research_title(content)
+                metadata[sid]["title"] = title or "问候与交流"
+                if title:
+                    titled.add(sid)
+    return metadata
 
 
 async def list_turns(
@@ -1749,13 +1810,29 @@ async def list_turns(
         conditions = [Turn.session_id == session_id]
         if before_seq is not None:
             conditions.append(Turn.seq < before_seq)
-        stmt = select(Turn).where(*conditions)
+        # Read-time compatibility for the old no_tool marker. Join its source
+        # run so user-authored text and genuinely interrupted replies survive.
+        stmt = select(Turn, Run).outerjoin(
+            Run, (Turn.run_id == Run.id) & (Turn.session_id == Run.session_id),
+        ).where(*conditions)
         if limit is not None:
             # Take the newest N, then re-sort ascending for stable output.
             stmt = stmt.order_by(Turn.seq.desc()).limit(limit)
-            rows = list(reversed((await session.execute(stmt)).scalars().all()))
-            return rows
-        return list((await session.execute(stmt.order_by(Turn.seq.asc()))).scalars().all())
+            pairs = list(reversed((await session.execute(stmt)).all()))
+        else:
+            pairs = list((await session.execute(stmt.order_by(Turn.seq.asc()))).all())
+        rows = []
+        for turn, run in pairs:
+            session.expunge(turn)  # presentation repair never changes stored evidence
+            if (
+                turn.role == "assistant" and run is not None
+                and is_legacy_normal_completion(run.status, run.stopped_by, run.error)
+                and run.final_answer
+                and turn.content == f"{run.final_answer}\n\n_[partial: no_tool]_"
+            ):
+                turn.content = run.final_answer
+            rows.append(turn)
+        return rows
 
 
 # ── Session CRUD (T2.7) ─────────────────────────────────────────────
@@ -1944,6 +2021,10 @@ async def get_run(*, run_id: uuid.UUID, user_id: uuid.UUID) -> Run | None:
         row = await session.get(Run, run_id)
         if row is None or row.user_id != user_id:
             return None
+        session.expunge(row)
+        if is_legacy_normal_completion(row.status, row.stopped_by, row.error):
+            row.status = "completed"
+            row.stopped_by = None
         return row
 
 

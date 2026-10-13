@@ -1,0 +1,1103 @@
+{
+ "union_slots": {
+  "slot_36c304436d5d2703": {
+   "status": "extracted",
+   "run": "r3",
+   "item_refs": [
+    "itm_bbe57cfafcb41a5a"
+   ],
+   "reason": [
+    "discarded_item_attempt",
+    "item_validation:schema"
+   ]
+  },
+  "slot_3dfa35e5b40c1201": {
+   "status": "extracted",
+   "run": "r3",
+   "item_refs": [
+    "itm_6152e6e8fdccfa08"
+   ],
+   "reason": []
+  },
+  "slot_292e7f88898806e5": {
+   "status": "extracted",
+   "run": "r3",
+   "item_refs": [
+    "itm_333c047433f5a978"
+   ],
+   "reason": []
+  },
+  "slot_90af9c4e66866cda": {
+   "status": "extracted",
+   "run": "r3",
+   "item_refs": [
+    "itm_96169f3e1c9fdc15",
+    "itm_3bef97fdf46d6d1a",
+    "itm_afe9a2f0fe0c69ad"
+   ],
+   "reason": [
+    "discarded_item_attempt",
+    "item_validation:schema"
+   ]
+  },
+  "slot_ef08e9bee54690b0": {
+   "status": "extracted",
+   "run": "r4",
+   "item_refs": [
+    "itm_6b5fffc03b034eb4"
+   ],
+   "reason": []
+  },
+  "slot_1996d09d1fd9cdef": {
+   "status": "extracted",
+   "run": "r4",
+   "item_refs": [
+    "itm_d62fd6b7bf3f0af0",
+    "itm_f8ec89a896223b56"
+   ],
+   "reason": []
+  },
+  "slot_83bd83014d07f67e": {
+   "status": "no_supported_item",
+   "run": "r6-this",
+   "item_refs": [],
+   "reason": [
+    "no_independent_proposition",
+    "missing_signal:evidence"
+   ]
+  }
+ },
+ "candidates": [
+  {
+   "slot": "slot_1996d09d1fd9cdef",
+   "disposition": "extracted",
+   "via_run": "r4",
+   "item_refs": [
+    "itm_d62fd6b7bf3f0af0",
+    "itm_f8ec89a896223b56"
+   ],
+   "raw_item_records": [
+    {
+     "record_type": "item",
+     "candidate_slot_id": "slot_1996d09d1fd9cdef",
+     "item_id": "slot_1996d09d1fd9cdef#1",
+     "text": "Q3 OCF/扣非回到 0.6 以上",
+     "semantic_type": "forecast",
+     "statement_role": "condition",
+     "speech_role": "statement",
+     "perspective": "source_explicit",
+     "speaker_ref": "spk_544d7167e8a5",
+     "polarity": "affirmed",
+     "value": "0.6",
+     "behavior_status": null,
+     "temporal_frame": "unknown",
+     "evidence_quote": "Q3 OCF/扣非回到 0.6 以上",
+     "unknown_fields": []
+    },
+    {
+     "record_type": "item",
+     "candidate_slot_id": "slot_1996d09d1fd9cdef",
+     "item_id": "slot_1996d09d1fd9cdef#2",
+     "text": "毛利率较 Q2 的 6.99% 不再回吐",
+     "semantic_type": "forecast",
+     "statement_role": "condition",
+     "speech_role": "statement",
+     "perspective": "source_explicit",
+     "speaker_ref": "spk_544d7167e8a5",
+     "polarity": "affirmed",
+     "value": null,
+     "behavior_status": null,
+     "temporal_frame": "unknown",
+     "evidence_quote": "毛利率较 Q2 的 6.99% 不再回吐",
+     "unknown_fields": []
+    }
+   ]
+  },
+  {
+   "slot": "slot_292e7f88898806e5",
+   "disposition": "extracted",
+   "via_run": "r3",
+   "item_refs": [
+    "itm_333c047433f5a978"
+   ],
+   "raw_item_records": [
+    {
+     "record_type": "item",
+     "candidate_slot_id": "slot_292e7f88898806e5",
+     "item_id": "slot_292e7f88898806e5#1",
+     "text": "止损看两条硬的",
+     "semantic_type": "opinion",
+     "statement_role": "claim",
+     "speech_role": "statement",
+     "perspective": "source_explicit",
+     "speaker_ref": "spk_544d7167e8a5",
+     "polarity": "affirmed",
+     "value": null,
+     "behavior_status": null,
+     "temporal_frame": "unknown",
+     "evidence_quote": "止损看两条硬的：",
+     "unknown_fields": []
+    }
+   ]
+  },
+  {
+   "slot": "slot_36c304436d5d2703",
+   "disposition": "extracted",
+   "via_run": "r3",
+   "item_refs": [
+    "itm_bbe57cfafcb41a5a"
+   ],
+   "raw_item_records": [
+    {
+     "record_type": "item",
+     "candidate_slot_id": "slot_36c304436d5d2703",
+     "item_id": "slot_36c304436d5d2703#1",
+     "text": "等两件事至少中一件再议",
+     "semantic_type": "condition",
+     "statement_role": "condition",
+     "speech_role": "statement",
+     "perspective": "source_explicit",
+     "speaker_ref": "spk_544d7167e8a5",
+     "polarity": "affirmed",
+     "value": "wait_for_at_least_one_of_two_conditions",
+     "behavior_status": null,
+     "temporal_frame": "unknown",
+     "evidence_quote": "等两件事至少中一件再议——",
+     "unknown_fields": []
+    },
+    {
+     "record_type": "item",
+     "candidate_slot_id": "slot_36c304436d5d2703",
+     "item_id": "slot_36c304436d5d2703#2",
+     "text": "回撤到 52–58",
+     "semantic_type": "condition",
+     "statement_role": "condition",
+     "speech_role": "statement",
+     "perspective": "source_explicit",
+     "speaker_ref": "spk_544d7167e8a5",
+     "polarity": "affirmed",
+     "value": null,
+     "behavior_status": null,
+     "temporal_frame": "unknown",
+     "evidence_quote": "回撤到 52–58",
+     "unknown_fields": []
+    },
+    {
+     "record_type": "item",
+     "candidate_slot_id": "slot_36c304436d5d2703",
+     "item_id": "slot_36c304436d5d2703#3",
+     "text": "大约回到 7 月回购均价 61 之下",
+     "semantic_type": "fact",
+     "statement_role": "claim",
+     "speech_role": "statement",
+     "perspective": "source_explicit",
+     "speaker_ref": "spk_544d7167e8a5",
+     "polarity": "affirmed",
+     "value": null,
+     "behavior_status": null,
+     "temporal_frame": "retrospective",
+     "evidence_quote": "大约回到 7 月回购均价 61 之下",
+     "unknown_fields": []
+    },
+    {
+     "record_type": "item",
+     "candidate_slot_id": "slot_36c304436d5d2703",
+     "item_id": "slot_36c304436d5d2703#4",
+     "text": "动 PE 降到 24 附近",
+     "semantic_type": "condition",
+     "statement_role": "condition",
+     "speech_role": "statement",
+     "perspective": "source_explicit",
+     "speaker_ref": "spk_544d7167e8a5",
+     "polarity": "affirmed",
+     "value": null,
+     "behavior_status": null,
+     "temporal_frame": "unknown",
+     "evidence_quote": "动 PE 降到 24 附近",
+     "unknown_fields": []
+    }
+   ]
+  },
+  {
+   "slot": "slot_3dfa35e5b40c1201",
+   "disposition": "extracted",
+   "via_run": "r3",
+   "item_refs": [
+    "itm_6152e6e8fdccfa08"
+   ],
+   "raw_item_records": [
+    {
+     "record_type": "item",
+     "candidate_slot_id": "slot_3dfa35e5b40c1201",
+     "item_id": "slot_3dfa35e5b40c1201#1",
+     "text": "单票不超过组合的合理上限",
+     "semantic_type": "opinion",
+     "statement_role": "claim",
+     "speech_role": "statement",
+     "perspective": "source_explicit",
+     "speaker_ref": "spk_544d7167e8a5",
+     "polarity": "negated",
+     "value": null,
+     "behavior_status": null,
+     "temporal_frame": "unknown",
+     "evidence_quote": "单票不超过组合的合理上限。",
+     "unknown_fields": []
+    }
+   ]
+  },
+  {
+   "slot": "slot_83bd83014d07f67e",
+   "disposition": "no_supported_item",
+   "via_run": "r6-this",
+   "reason": [
+    "no_independent_proposition",
+    "missing_signal:evidence"
+   ],
+   "raw_item_records": []
+  },
+  {
+   "slot": "slot_90af9c4e66866cda",
+   "disposition": "extracted",
+   "via_run": "r3",
+   "item_refs": [
+    "itm_96169f3e1c9fdc15",
+    "itm_3bef97fdf46d6d1a",
+    "itm_afe9a2f0fe0c69ad"
+   ],
+   "raw_item_records": [
+    {
+     "record_type": "item",
+     "candidate_slot_id": "slot_90af9c4e66866cda",
+     "item_id": "slot_90af9c4e66866cda#1",
+     "text": "下季 OCF 盖不住扣非的一半",
+     "semantic_type": "condition",
+     "statement_role": "condition",
+     "speech_role": "statement",
+     "perspective": "source_explicit",
+     "speaker_ref": "spk_544d7167e8a5",
+     "polarity": "negated",
+     "value": "OCF/扣非 < 0.5",
+     "behavior_status": null,
+     "temporal_frame": "unknown",
+     "evidence_quote": "下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5）",
+     "unknown_fields": []
+    },
+    {
+     "record_type": "item",
+     "candidate_slot_id": "slot_90af9c4e66866cda",
+     "item_id": "slot_90af9c4e66866cda#2",
+     "text": "毛利率较 6.99% 再掉超过 1 个百分点",
+     "semantic_type": "condition",
+     "statement_role": "condition",
+     "speech_role": "statement",
+     "perspective": "source_explicit",
+     "speaker_ref": "spk_544d7167e8a5",
+     "polarity": "affirmed",
+     "value": null,
+     "behavior_status": null,
+     "temporal_frame": "unknown",
+     "evidence_quote": "或毛利率较 6.99% 再掉超过 1 个百分点",
+     "unknown_fields": []
+    },
+    {
+     "record_type": "item",
+     "candidate_slot_id": "slot_90af9c4e66866cda",
+     "item_id": "slot_90af9c4e66866cda#3",
+     "text": "公司改口说涨价/mix 受阻",
+     "semantic_type": "condition",
+     "statement_role": "condition",
+     "speech_role": "statement",
+     "perspective": "source_explicit",
+     "speaker_ref": "spk_544d7167e8a5",
+     "polarity": "affirmed",
+     "value": null,
+     "behavior_status": null,
+     "temporal_frame": "unknown",
+     "evidence_quote": "且公司改口说涨价/mix 受阻",
+     "unknown_fields": []
+    },
+    {
+     "record_type": "item",
+     "candidate_slot_id": "slot_90af9c4e66866cda",
+     "item_id": "slot_90af9c4e66866cda#4",
+     "text": "Rubin 延期",
+     "semantic_type": "condition",
+     "statement_role": "condition",
+     "speech_role": "statement",
+     "perspective": "source_explicit",
+     "speaker_ref": "spk_544d7167e8a5",
+     "polarity": "affirmed",
+     "value": null,
+     "behavior_status": null,
+     "temporal_frame": "unknown",
+     "evidence_quote": "、Rubin 延期",
+     "unknown_fields": []
+    },
+    {
+     "record_type": "item",
+     "candidate_slot_id": "slot_90af9c4e66866cda",
+     "item_id": "slot_90af9c4e66866cda#5",
+     "text": "目标价不把 121、100.8 当锚",
+     "semantic_type": "opinion",
+     "statement_role": "claim",
+     "speech_role": "statement",
+     "perspective": "source_explicit",
+     "speaker_ref": "spk_544d7167e8a5",
+     "polarity": "negated",
+     "value": null,
+     "behavior_status": null,
+     "temporal_frame": "unknown",
+     "evidence_quote": "目标价不把 121、100.8 当锚",
+     "unknown_fields": []
+    },
+    {
+     "record_type": "item",
+     "candidate_slot_id": "slot_90af9c4e66866cda",
+     "item_id": "slot_90af9c4e66866cda#6",
+     "text": "中性路径就是 55–75 消化中报和英伟达 β",
+     "semantic_type": "forecast",
+     "statement_role": "claim",
+     "speech_role": "statement",
+     "perspective": "source_explicit",
+     "speaker_ref": "spk_544d7167e8a5",
+     "polarity": "affirmed",
+     "value": "55–75",
+     "behavior_status": null,
+     "temporal_frame": "unknown",
+     "evidence_quote": "中性路径就是 55–75 消化中报和英伟达 β",
+     "unknown_fields": []
+    },
+    {
+     "record_type": "item",
+     "candidate_slot_id": "slot_90af9c4e66866cda",
+     "item_id": "slot_90af9c4e66866cda#7",
+     "text": "乐观才靠近中金 77.68 / 华泰 93",
+     "semantic_type": "forecast",
+     "statement_role": "condition",
+     "speech_role": "statement",
+     "perspective": "source_explicit",
+     "speaker_ref": "spk_544d7167e8a5",
+     "polarity": "affirmed",
+     "value": null,
+     "behavior_status": null,
+     "temporal_frame": "unknown",
+     "evidence_quote": "乐观才靠近中金 77.68 / 华泰 93",
+     "unknown_fields": []
+    }
+   ]
+  },
+  {
+   "slot": "slot_ef08e9bee54690b0",
+   "disposition": "extracted",
+   "via_run": "r4",
+   "item_refs": [
+    "itm_6b5fffc03b034eb4"
+   ],
+   "raw_item_records": [
+    {
+     "record_type": "item",
+     "candidate_slot_id": "slot_ef08e9bee54690b0",
+     "item_id": "slot_ef08e9bee54690b0#1",
+     "text": "若从零开一个观察仓",
+     "semantic_type": "unknown",
+     "statement_role": "condition",
+     "speech_role": "statement",
+     "perspective": "source_explicit",
+     "speaker_ref": "spk_544d7167e8a5",
+     "polarity": "affirmed",
+     "value": null,
+     "behavior_status": null,
+     "temporal_frame": "unknown",
+     "evidence_quote": "若从零开一个观察仓",
+     "unknown_fields": [
+      "semantic_type"
+     ]
+    }
+   ]
+  }
+ ],
+ "gold": [
+  {
+   "record_id": "NT-I13",
+   "role": "material_items",
+   "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+   "origin": "llm_prose",
+   "locator": "char:5246-5537",
+   "quote": "Q3 OCF/扣非回到 0.6 以上",
+   "semantic_fields": {
+    "attribution": "报告作者",
+    "condition": "Q3 OCF/扣非净利润 >= 0.6",
+    "polarity": "affirmed",
+    "proposition": "Q3经营现金流与扣非净利润之比达到0.6以上，是重新讨论观察仓的条件之一",
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "perspective": "unknown",
+    "speaker_ref": "md_author",
+    "speech_role": "statement",
+    "source_stance": "reported"
+   },
+   "critical": true,
+   "risk_or_condition": true,
+   "review_status": "pending",
+   "condition_logic": {
+    "op": "compare",
+    "metric": "OCF_to_adjusted_profit",
+    "period": "Q3",
+    "comparator": ">=",
+    "value": "0.6",
+    "unit": "ratio"
+   },
+   "evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "Q3 OCF/扣非回到 0.6 以上",
+     "start": 86,
+     "end": 104,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "context_evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。单票不超过组合的合理上限。止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+     "start": 0,
+     "end": 291,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "unknown_fields": [],
+   "adjudication": {
+    "reviewer": null,
+    "decision": null,
+    "reason": null,
+    "changes": []
+   },
+   "critical_reason": "遗漏会丢失关键条件、限制、行为意向或否定立场",
+   "risk_reason": "原文明确的风险、前提或受条件限定的判断"
+  },
+  {
+   "record_id": "NT-I14",
+   "role": "material_items",
+   "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+   "origin": "llm_prose",
+   "locator": "char:5246-5537",
+   "quote": "若从零开一个观察仓：等两件事至少中一件再议",
+   "semantic_fields": {
+    "attribution": "报告作者",
+    "polarity": "affirmed",
+    "proposition": "从零开观察仓须等待至少一个指定条件满足后再讨论，并非立即建仓承诺",
+    "semantic_type": "behavior",
+    "statement_role": "claim",
+    "perspective": "unknown",
+    "speaker_ref": "md_author",
+    "speech_role": "statement",
+    "source_stance": "reported",
+    "behavior_status": "intent",
+    "temporal_frame": "contemporaneous"
+   },
+   "critical": true,
+   "risk_or_condition": false,
+   "review_status": "pending",
+   "evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "若从零开一个观察仓：等两件事至少中一件再议",
+     "start": 0,
+     "end": 21,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "context_evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。单票不超过组合的合理上限。止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+     "start": 0,
+     "end": 291,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "unknown_fields": [],
+   "adjudication": {
+    "reviewer": null,
+    "decision": null,
+    "reason": null,
+    "changes": []
+   },
+   "critical_reason": "遗漏会丢失关键条件、限制、行为意向或否定立场",
+   "risk_reason": null
+  },
+  {
+   "record_id": "NT-I15",
+   "role": "material_items",
+   "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+   "origin": "llm_prose",
+   "locator": "char:5246-5537",
+   "quote": "止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5）",
+   "semantic_fields": {
+    "attribution": "报告作者",
+    "condition": "下季 OCF/扣非净利润 < 0.5",
+    "polarity": "affirmed",
+    "proposition": "止损触发条件之一",
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "perspective": "unknown",
+    "speaker_ref": "md_author",
+    "speech_role": "statement",
+    "source_stance": "reported"
+   },
+   "critical": true,
+   "risk_or_condition": true,
+   "review_status": "pending",
+   "condition_logic": {
+    "op": "compare",
+    "metric": "OCF_to_adjusted_profit",
+    "period": "next_quarter",
+    "comparator": "<",
+    "value": "0.5",
+    "unit": "ratio"
+   },
+   "evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5）",
+     "start": 140,
+     "end": 177,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "context_evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。单票不超过组合的合理上限。止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+     "start": 0,
+     "end": 291,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "unknown_fields": [],
+   "adjudication": {
+    "reviewer": null,
+    "decision": null,
+    "reason": null,
+    "changes": []
+   },
+   "critical_reason": "遗漏会丢失关键条件、限制、行为意向或否定立场",
+   "risk_reason": "原文明确的风险、前提或受条件限定的判断"
+  },
+  {
+   "record_id": "NT-I16",
+   "role": "material_items",
+   "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+   "origin": "llm_prose",
+   "locator": "char:5246-5537",
+   "quote": "止损看两条硬的",
+   "semantic_fields": {
+    "attribution": "报告作者",
+    "polarity": "affirmed",
+    "proposition": "若任一指定硬性恶化条件触发，考虑执行止损；这是意向而非已执行行为",
+    "semantic_type": "behavior",
+    "statement_role": "claim",
+    "perspective": "unknown",
+    "speaker_ref": "md_author",
+    "speech_role": "statement",
+    "source_stance": "reported",
+    "behavior_status": "intent",
+    "temporal_frame": "contemporaneous"
+   },
+   "critical": true,
+   "risk_or_condition": false,
+   "review_status": "pending",
+   "evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "止损看两条硬的",
+     "start": 140,
+     "end": 147,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "context_evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。单票不超过组合的合理上限。止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+     "start": 0,
+     "end": 291,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "unknown_fields": [],
+   "adjudication": {
+    "reviewer": null,
+    "decision": null,
+    "reason": null,
+    "changes": []
+   },
+   "critical_reason": "遗漏会丢失关键条件、限制、行为意向或否定立场",
+   "risk_reason": null
+  },
+  {
+   "record_id": "NT-I17",
+   "role": "material_items",
+   "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+   "origin": "llm_prose",
+   "locator": "char:5246-5537",
+   "quote": "毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期",
+   "semantic_fields": {
+    "attribution": "报告作者",
+    "condition": "毛利率相对6.99%下降>1个百分点 AND 公司改口“涨价/mix受阻、Rubin延期”（并列项内部逻辑未明）",
+    "polarity": "affirmed",
+    "proposition": "毛利率较6.99%再降超过1个百分点，且公司改口涨价/mix受阻、Rubin延期，是另一止损条件",
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "perspective": "unknown",
+    "speaker_ref": "md_author",
+    "speech_role": "statement",
+    "source_stance": "reported"
+   },
+   "critical": true,
+   "risk_or_condition": true,
+   "review_status": "pending",
+   "unknown_fields": [
+    "condition_inner_boolean"
+   ],
+   "review_notes": "原文顿号未明确公司改口子项是 AND 还是 OR。保留原文，不将其中任一子项擅自作为充分条件。",
+   "condition_logic": {
+    "op": "all",
+    "args": [
+     {
+      "op": "compare",
+      "metric": "gross_margin_change_from_baseline",
+      "baseline": "6.99",
+      "comparator": "<",
+      "value": "-1",
+      "unit": "percentage_points"
+     },
+     {
+      "op": "source_clause",
+      "text": "公司改口说涨价/mix 受阻、Rubin 延期",
+      "inner_operator": "unknown"
+     }
+    ]
+   },
+   "evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期",
+     "start": 179,
+     "end": 225,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "context_evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。单票不超过组合的合理上限。止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+     "start": 0,
+     "end": 291,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "adjudication": {
+    "reviewer": null,
+    "decision": null,
+    "reason": null,
+    "changes": []
+   },
+   "critical_reason": "遗漏会丢失关键条件、限制、行为意向或否定立场",
+   "risk_reason": "原文明确的风险、前提或受条件限定的判断"
+  },
+  {
+   "record_id": "NT-I42",
+   "role": "material_items",
+   "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+   "origin": "llm_prose",
+   "locator": "char:5246-5537",
+   "quote": "回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）",
+   "semantic_fields": {
+    "attribution": "报告作者",
+    "polarity": "affirmed",
+    "proposition": "股价回撤至52—58元且无新的大额负面管制公告，是重新讨论观察仓的条件之一",
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "condition": "52 <= 股价（元） <= 58 AND 无新的大额负面管制公告",
+    "perspective": "unknown",
+    "speaker_ref": "md_author",
+    "speech_role": "statement",
+    "source_stance": "reported"
+   },
+   "critical": true,
+   "risk_or_condition": true,
+   "review_status": "pending",
+   "review_notes": "原文“约低于回购均价61、动PE到24附近”保留为解释性背景，不新增独立硬门槛。",
+   "condition_logic": {
+    "op": "all",
+    "args": [
+     {
+      "op": "range",
+      "metric": "share_price",
+      "lower": "52",
+      "upper": "58",
+      "bounds": "inclusive",
+      "unit": "CNY"
+     },
+     {
+      "op": "source_clause",
+      "text": "无新的大额负面管制公告"
+     }
+    ]
+   },
+   "evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）",
+     "start": 26,
+     "end": 82,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "context_evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。单票不超过组合的合理上限。止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+     "start": 0,
+     "end": 291,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "unknown_fields": [],
+   "adjudication": {
+    "reviewer": null,
+    "decision": null,
+    "reason": null,
+    "changes": []
+   },
+   "critical_reason": "遗漏会丢失关键条件、限制、行为意向或否定立场",
+   "risk_reason": "原文明确的风险、前提或受条件限定的判断"
+  },
+  {
+   "record_id": "NT-I43",
+   "role": "material_items",
+   "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+   "origin": "llm_prose",
+   "locator": "char:5246-5537",
+   "quote": "毛利率较 Q2 的 6.99% 不再回吐",
+   "semantic_fields": {
+    "attribution": "报告作者",
+    "polarity": "affirmed",
+    "proposition": "毛利率不再低于Q2的6.99%，是重新讨论观察仓的条件之一",
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "condition": "毛利率 >= 6.99%",
+    "perspective": "unknown",
+    "speaker_ref": "md_author",
+    "speech_role": "statement",
+    "source_stance": "reported"
+   },
+   "critical": true,
+   "risk_or_condition": true,
+   "review_status": "pending",
+   "condition_logic": {
+    "op": "compare",
+    "metric": "gross_margin",
+    "comparator": ">=",
+    "value": "6.99",
+    "unit": "percent"
+   },
+   "evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "毛利率较 Q2 的 6.99% 不再回吐",
+     "start": 106,
+     "end": 126,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "context_evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。单票不超过组合的合理上限。止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+     "start": 0,
+     "end": 291,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "unknown_fields": [],
+   "adjudication": {
+    "reviewer": null,
+    "decision": null,
+    "reason": null,
+    "changes": []
+   },
+   "critical_reason": "遗漏会丢失关键条件、限制、行为意向或否定立场",
+   "risk_reason": "原文明确的风险、前提或受条件限定的判断"
+  },
+  {
+   "record_id": "NT-R07",
+   "role": "material_relations",
+   "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+   "origin": "llm_prose",
+   "locator": "char:5246-5537",
+   "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。",
+   "semantic_fields": {
+    "from_gold_record_id": "NT-I13",
+    "provenance": "source_explicit",
+    "relation": "conditions",
+    "to_gold_record_id": "NT-I14"
+   },
+   "critical": true,
+   "risk_or_condition": true,
+   "review_status": "pending",
+   "evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。",
+     "start": 0,
+     "end": 127,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "context_evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。单票不超过组合的合理上限。止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+     "start": 0,
+     "end": 291,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "unknown_fields": [],
+   "adjudication": {
+    "reviewer": null,
+    "decision": null,
+    "reason": null,
+    "changes": []
+   },
+   "critical_reason": "关系丢失会改变条件或讲者立场",
+   "risk_reason": "连接明确条件或风险；与端点可能重复计数，不代表独立场景"
+  },
+  {
+   "record_id": "NT-R08",
+   "role": "material_relations",
+   "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+   "origin": "llm_prose",
+   "locator": "char:5246-5537",
+   "quote": "止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5）",
+   "semantic_fields": {
+    "from_gold_record_id": "NT-I15",
+    "provenance": "source_explicit",
+    "relation": "conditions",
+    "to_gold_record_id": "NT-I16"
+   },
+   "critical": true,
+   "risk_or_condition": true,
+   "review_status": "pending",
+   "evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5）",
+     "start": 140,
+     "end": 177,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "context_evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。单票不超过组合的合理上限。止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+     "start": 0,
+     "end": 291,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "unknown_fields": [],
+   "adjudication": {
+    "reviewer": null,
+    "decision": null,
+    "reason": null,
+    "changes": []
+   },
+   "critical_reason": "关系丢失会改变条件或讲者立场",
+   "risk_reason": "连接明确条件或风险；与端点可能重复计数，不代表独立场景"
+  },
+  {
+   "record_id": "NT-R09",
+   "role": "material_relations",
+   "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+   "origin": "llm_prose",
+   "locator": "char:5246-5537",
+   "quote": "毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期",
+   "semantic_fields": {
+    "from_gold_record_id": "NT-I17",
+    "provenance": "source_explicit",
+    "relation": "conditions",
+    "to_gold_record_id": "NT-I16"
+   },
+   "critical": true,
+   "risk_or_condition": true,
+   "review_status": "pending",
+   "evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期",
+     "start": 179,
+     "end": 225,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "context_evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。单票不超过组合的合理上限。止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+     "start": 0,
+     "end": 291,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "unknown_fields": [],
+   "adjudication": {
+    "reviewer": null,
+    "decision": null,
+    "reason": null,
+    "changes": []
+   },
+   "critical_reason": "关系丢失会改变条件或讲者立场",
+   "risk_reason": "连接明确条件或风险；与端点可能重复计数，不代表独立场景"
+  },
+  {
+   "record_id": "NT-R21",
+   "role": "material_relations",
+   "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+   "origin": "llm_prose",
+   "locator": "char:5246-5537",
+   "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。",
+   "semantic_fields": {
+    "from_gold_record_id": "NT-I42",
+    "provenance": "source_explicit",
+    "relation": "conditions",
+    "to_gold_record_id": "NT-I14"
+   },
+   "critical": true,
+   "risk_or_condition": true,
+   "review_status": "pending",
+   "evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。",
+     "start": 0,
+     "end": 127,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "context_evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。单票不超过组合的合理上限。止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+     "start": 0,
+     "end": 291,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "unknown_fields": [],
+   "adjudication": {
+    "reviewer": null,
+    "decision": null,
+    "reason": null,
+    "changes": []
+   },
+   "critical_reason": "关系丢失会改变条件或讲者立场",
+   "risk_reason": "连接明确条件或风险；与端点可能重复计数，不代表独立场景"
+  },
+  {
+   "record_id": "NT-R22",
+   "role": "material_relations",
+   "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+   "origin": "llm_prose",
+   "locator": "char:5246-5537",
+   "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。",
+   "semantic_fields": {
+    "from_gold_record_id": "NT-I43",
+    "provenance": "source_explicit",
+    "relation": "conditions",
+    "to_gold_record_id": "NT-I14"
+   },
+   "critical": true,
+   "risk_or_condition": true,
+   "review_status": "pending",
+   "evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。",
+     "start": 0,
+     "end": 127,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "context_evidence": [
+    {
+     "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+     "locator": "char:5246-5537",
+     "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。单票不超过组合的合理上限。止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+     "start": 0,
+     "end": 291,
+     "offset_basis": "unit_codepoints",
+     "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+    }
+   ],
+   "unknown_fields": [],
+   "adjudication": {
+    "reviewer": null,
+    "decision": null,
+    "reason": null,
+    "changes": []
+   },
+   "critical_reason": "关系丢失会改变条件或讲者立场",
+   "risk_reason": "连接明确条件或风险；与端点可能重复计数，不代表独立场景"
+  }
+ ]
+}

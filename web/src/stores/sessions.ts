@@ -67,6 +67,14 @@ export const useSessionsStore = defineStore('sessions', () => {
     await loadTurns(id)
   }
 
+  /** Refresh persisted title/count without changing the selected research. */
+  async function refreshMetadata(id: string): Promise<void> {
+    const updated = await sessionsApi.get(id)
+    if (!list.value.some((session) => session.id === id)) return
+    list.value = list.value.map((session) => session.id === id ? updated : session)
+      .sort((a, b) => (b.updated_at ?? b.created_at ?? '').localeCompare(a.updated_at ?? a.created_at ?? ''))
+  }
+
   /**
    * ``limit`` defaults to one page. Callers refreshing a conversation the user
    * has already paged through pass the current length instead, so a refresh
@@ -192,6 +200,7 @@ export const useSessionsStore = defineStore('sessions', () => {
     loadingOlder,
     error,
     loadList,
+    refreshMetadata,
     select,
     loadTurns,
     loadOlderTurns,

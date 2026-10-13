@@ -1,0 +1,24 @@
+{
+  "schema_version": "union-adjudication-manifest-1",
+  "created_on": "2026-10-13",
+  "zero_call": true,
+  "model_calls": 0,
+  "inputs": {
+    "A(authoritative)": "sha256:de2e7402518b573ef572a8f27fa6eb2d5254f926a12a8339f153e23cd2ae10f9",
+    "B(agent draft)": "sha256:00e4a2b6ab10bae4dd831bb1a2f2684422f12ce68f12c0c345af918f90c56ee6",
+    "r5 signed": "sha256:c18f08061d89e92cb36733c76ae75f3fe127ad6c7d34db11b4b0c1c7815cb867",
+    "base signed json": "sha256:24b0e45e230d8f9305e0df4c45e11580bf2f9c267f8e50ba170eb35401debc07",
+    "gold_scope_48": "sha256:cc2946ef6a487fba059ca995f2c34f469d4c96720b6b6186225c97bd1e41b537"
+  },
+  "outputs": {
+    "union-adjudication.md": "sha256:91c4a7f6a34a9137fef4a8812c5a8062a6f4189532a1a6d3dc4537afa37edfd3"
+  },
+  "in_place_edits": 0,
+  "authority": "A（adjudication/worksheet.json，reviewer=xyl×222，含 2026-10-12 U 校准撤销 3 行）为唯一权威；B 降级为提案，29 行分歧建议全部维持 A",
+  "effective_state": {
+    "adjudicated": 253,
+    "matched_golds": "34/48 = 0.708",
+    "gate_33": "仍不过（<0.85）；缺口 = 14 条无候选匹配的金标（真实 FN）",
+    "note": "A 为完整契约形态，可直接装配出真实分数（零调用）"
+  }
+}

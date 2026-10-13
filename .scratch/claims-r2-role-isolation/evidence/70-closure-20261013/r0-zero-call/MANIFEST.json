@@ -1,0 +1,27 @@
+{
+  "schema_version": "closure-manifest-1",
+  "created_on": "2026-10-13",
+  "zero_call": true,
+  "model_calls": 0,
+  "inputs": {
+    "69-union-adjudication-20261013/r1-score/gate33-full-verdict.md": "sha256:d7ffd4f1412f1e3673f20873de243799489b94b5980192485d4ed567d22927ae",
+    "69-union-adjudication-20261013/r1-score/gate33-honest-score.json": "sha256:f1fddc1d943177d7fc7a6f296cdc4aac097063874da0cbb8a835d7f28c35bf55",
+    "68-session-audit-20261013/r0-zero-call/session-audit.md": "sha256:f0bfd32dee7b584a4ea6a7604a2dfb1500c95591a5aab8ffe0786bfccd9581d4"
+  },
+  "outputs": {
+    "closure.md": "sha256:c87a049d3d501309902ecb0efe35fbd08745833e2423341015f1e77c2231abc1"
+  },
+  "in_place_edits": 0,
+  "closure": {
+    "gate33": "FAIL（诚实终态）",
+    "chain_integrity": "15/15 环节在位，哈希 PASS，出分幂等可复现",
+    "open_items": [
+      "源2 定向补抽或接受现状",
+      "ef08 未验证",
+      "预注册/授权互链",
+      "14 条 FN 归因",
+      "r4 偏差处置"
+    ],
+    "model_calls_this_round": 29
+  }
+}

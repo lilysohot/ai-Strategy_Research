@@ -1,0 +1,31 @@
+{
+  "schema_version": "session-audit-manifest-1",
+  "created_on": "2026-10-13",
+  "zero_call": true,
+  "model_calls": 0,
+  "scope": [
+    "65-rerun-two-arm-protocol-20261013",
+    "66-base-protocol-change-proposal-20261013",
+    "67-unresolved-prefill-20261013"
+  ],
+  "inputs": {
+    "65-rerun-two-arm-protocol-20261013/r5-adjudication-sheet/MANIFEST.json": "sha256:912555dc9edc4c3799e41dddf90c715eb94f5af58a8e0bc1bc8805ba4f136e39",
+    "65-rerun-two-arm-protocol-20261013/r5-adjudication-sheet/SIGNOFF.json": "sha256:2a5fed7043579a30ea9da3d64d85ba15902de04d5e8e1a78754f9515b30a6449",
+    "65-rerun-two-arm-protocol-20261013/r6-assembly/assembled-scoring-input.json": "sha256:88e0ddf69ef18afe426e1dda9c16c44aedcc4dc1c1121536be33b36d150c56b3",
+    "66-base-protocol-change-proposal-20261013/r1-repair-attempt/repair-record.json": "sha256:446149532a10f9fe8ecb1adf9765cd382293eafc533611d01cd0d8aba3ffb80f",
+    "66-base-protocol-change-proposal-20261013/r2-publish/publish-record.json": "sha256:6a96f9ceba621a12ee4524b19479f3bc9ec31ac3b5188ae5828770abd8fd9d81",
+    "66-base-protocol-change-proposal-20261013/r3-cumulative/cumulative-final.json": "sha256:6399f254f87583db45eb328037ea4469437d865ebdbeafb04c5101d395c89886",
+    "66-base-protocol-change-proposal-20261013/r4-assembly/assembled-scoring-input.json": "sha256:625d2002fcbf5a499c295f27ddf7b1f1f7e960e5ebe9e0116f98f5c7b506be77",
+    "67-unresolved-prefill-20261013/r0-zero-call/prefill-draft-203.json": "sha256:00e4a2b6ab10bae4dd831bb1a2f2684422f12ce68f12c0c345af918f90c56ee6"
+  },
+  "outputs": {
+    "session-audit.md": "sha256:f0bfd32dee7b584a4ea6a7604a2dfb1500c95591a5aab8ffe0786bfccd9581d4"
+  },
+  "in_place_edits": 0,
+  "summary": {
+    "errors_found_and_fixed": 14,
+    "cross_report_inconsistencies": 6,
+    "unverified_items": 5,
+    "core_facts_verified": "四臂结果/两次装配31条/预填222行/金标口径48与12 均成立"
+  }
+}

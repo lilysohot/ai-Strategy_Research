@@ -1,0 +1,1443 @@
+{
+  "raw": [
+    {
+      "candidate_id": "slot_1996d09d1fd9cdef#1",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "Q3 OCF/扣非回到 0.6 以上"
+        ],
+        [
+          "semantic_type",
+          "forecast"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "condition"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_1996d09d1fd9cdef#2",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "毛利率较 Q2 的 6.99% 不再回吐"
+        ],
+        [
+          "semantic_type",
+          "forecast"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "condition"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_292e7f88898806e5#1",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "止损看两条硬的"
+        ],
+        [
+          "semantic_type",
+          "behavior"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "claim"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_36c304436d5d2703#1",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "等两件事至少中一件再议"
+        ],
+        [
+          "semantic_type",
+          "behavior"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "claim"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_36c304436d5d2703#2",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "回撤到 52–58"
+        ],
+        [
+          "semantic_type",
+          "forecast"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "condition"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_36c304436d5d2703#3",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "大约回到 7 月回购均价 61 之下"
+        ],
+        [
+          "semantic_type",
+          "fact"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "claim"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_36c304436d5d2703#4",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "动 PE 降到 24 附近"
+        ],
+        [
+          "semantic_type",
+          "forecast"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "condition"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_3dfa35e5b40c1201#1",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "单票不超过组合的合理上限"
+        ],
+        [
+          "semantic_type",
+          "opinion"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "claim"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#1",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5）"
+        ],
+        [
+          "semantic_type",
+          "forecast"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "condition"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#2",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "毛利率较 6.99% 再掉超过 1 个百分点"
+        ],
+        [
+          "semantic_type",
+          "forecast"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "condition"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#3",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "公司改口说涨价/mix 受阻"
+        ],
+        [
+          "semantic_type",
+          "forecast"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "condition"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#4",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "Rubin 延期"
+        ],
+        [
+          "semantic_type",
+          "forecast"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "condition"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#5",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "negated"
+        ],
+        [
+          "proposition",
+          "目标价不把 121、100.8 当锚"
+        ],
+        [
+          "semantic_type",
+          "opinion"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "claim"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#6",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "中性路径就是 55–75 消化中报和英伟达 β"
+        ],
+        [
+          "semantic_type",
+          "forecast"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "claim"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#7",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "乐观才靠近中金 77.68"
+        ],
+        [
+          "semantic_type",
+          "forecast"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "condition"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_ef08e9bee54690b0#1",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "若从零开一个观察仓"
+        ],
+        [
+          "semantic_type",
+          "behavior"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "condition"
+        ]
+      ],
+      "critical_error_code": null
+    }
+  ],
+  "validated": [],
+  "mappings": [
+    {
+      "candidate_id": "slot_1996d09d1fd9cdef#1",
+      "gold_record_id": "NT-I13",
+      "judgement": "matched",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_1996d09d1fd9cdef#2",
+      "gold_record_id": "NT-I43",
+      "judgement": "matched",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_292e7f88898806e5#1",
+      "gold_record_id": "NT-I16",
+      "judgement": "matched",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_36c304436d5d2703#1",
+      "gold_record_id": "NT-I14",
+      "judgement": "matched",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_36c304436d5d2703#2",
+      "gold_record_id": "NT-I42",
+      "judgement": "matched",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_36c304436d5d2703#3",
+      "gold_record_id": null,
+      "judgement": "correct_extra",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_36c304436d5d2703#4",
+      "gold_record_id": null,
+      "judgement": "correct_extra",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_3dfa35e5b40c1201#1",
+      "gold_record_id": null,
+      "judgement": "correct_extra",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#1",
+      "gold_record_id": "NT-I15",
+      "judgement": "matched",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#2",
+      "gold_record_id": "NT-I17",
+      "judgement": "matched",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#3",
+      "gold_record_id": null,
+      "judgement": "duplicate",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#4",
+      "gold_record_id": null,
+      "judgement": "duplicate",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#5",
+      "gold_record_id": null,
+      "judgement": "correct_extra",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#6",
+      "gold_record_id": null,
+      "judgement": "correct_extra",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#7",
+      "gold_record_id": null,
+      "judgement": "correct_extra",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_ef08e9bee54690b0#1",
+      "gold_record_id": null,
+      "judgement": "duplicate",
+      "stage": "raw"
+    }
+  ],
+  "out_of_scope": [],
+  "audit": [
+    {
+      "candidate_id": "slot_1996d09d1fd9cdef#1",
+      "stage": "raw",
+      "judgement": "matched",
+      "matched_gold_id": "NT-I13",
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "Q3 OCF/扣非回到 0.6 以上",
+        "semantic_type": "forecast",
+        "statement_role": "condition",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_1996d09d1fd9cdef#2",
+      "stage": "raw",
+      "judgement": "matched",
+      "matched_gold_id": "NT-I43",
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "毛利率较 Q2 的 6.99% 不再回吐",
+        "semantic_type": "forecast",
+        "statement_role": "condition",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_292e7f88898806e5#1",
+      "stage": "raw",
+      "judgement": "matched",
+      "matched_gold_id": "NT-I16",
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "止损看两条硬的",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_36c304436d5d2703#1",
+      "stage": "raw",
+      "judgement": "matched",
+      "matched_gold_id": "NT-I14",
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "等两件事至少中一件再议",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_36c304436d5d2703#2",
+      "stage": "raw",
+      "judgement": "matched",
+      "matched_gold_id": "NT-I42",
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "回撤到 52–58",
+        "semantic_type": "forecast",
+        "statement_role": "condition",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_36c304436d5d2703#3",
+      "stage": "raw",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "大约回到 7 月回购均价 61 之下",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_36c304436d5d2703#4",
+      "stage": "raw",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "动 PE 降到 24 附近",
+        "semantic_type": "forecast",
+        "statement_role": "condition",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_3dfa35e5b40c1201#1",
+      "stage": "raw",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "单票不超过组合的合理上限",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#1",
+      "stage": "raw",
+      "judgement": "matched",
+      "matched_gold_id": "NT-I15",
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5）",
+        "semantic_type": "forecast",
+        "statement_role": "condition",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#2",
+      "stage": "raw",
+      "judgement": "matched",
+      "matched_gold_id": "NT-I17",
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "毛利率较 6.99% 再掉超过 1 个百分点",
+        "semantic_type": "forecast",
+        "statement_role": "condition",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#3",
+      "stage": "raw",
+      "judgement": "duplicate",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "公司改口说涨价/mix 受阻",
+        "semantic_type": "forecast",
+        "statement_role": "condition",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#4",
+      "stage": "raw",
+      "judgement": "duplicate",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "Rubin 延期",
+        "semantic_type": "forecast",
+        "statement_role": "condition",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#5",
+      "stage": "raw",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "目标价不把 121、100.8 当锚",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "negated",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#6",
+      "stage": "raw",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "中性路径就是 55–75 消化中报和英伟达 β",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_90af9c4e66866cda#7",
+      "stage": "raw",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "乐观才靠近中金 77.68",
+        "semantic_type": "forecast",
+        "statement_role": "condition",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_ef08e9bee54690b0#1",
+      "stage": "raw",
+      "judgement": "duplicate",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "若从零开一个观察仓",
+        "semantic_type": "behavior",
+        "statement_role": "condition",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    }
+  ],
+  "provenance": {
+    "signed_sheet_sha256": "sha256:24b0e45e230d8f9305e0df4c45e11580bf2f9c267f8e50ba170eb35401debc07",
+    "sheet_date_note": "工作表签名日期为 2026-10-30（疑为 2026-10-13 笔误），按原样存档",
+    "stripped_annotations": [
+      "slot_90af9c4e66866cda#3: 关联金标 NT-I17（非 matched，按契约剥离）",
+      "slot_90af9c4e66866cda#4: 关联金标 NT-I17（非 matched，按契约剥离）",
+      "slot_ef08e9bee54690b0#1: 关联金标 NT-I14（非 matched，按契约剥离）"
+    ]
+  }
+}

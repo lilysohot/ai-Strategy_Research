@@ -1,0 +1,521 @@
+{
+ "final_union": {
+  "slot_36c304436d5d2703": {
+   "status": "extracted",
+   "run": "r3",
+   "tag": "same_source",
+   "item_refs": [
+    "itm_bbe57cfafcb41a5a"
+   ],
+   "reason": [
+    "discarded_item_attempt",
+    "item_validation:schema"
+   ]
+  },
+  "slot_3dfa35e5b40c1201": {
+   "status": "extracted",
+   "run": "r3",
+   "tag": "same_source",
+   "item_refs": [
+    "itm_6152e6e8fdccfa08"
+   ],
+   "reason": []
+  },
+  "slot_292e7f88898806e5": {
+   "status": "extracted",
+   "run": "r3",
+   "tag": "same_source",
+   "item_refs": [
+    "itm_333c047433f5a978"
+   ],
+   "reason": []
+  },
+  "slot_90af9c4e66866cda": {
+   "status": "extracted",
+   "run": "r3",
+   "tag": "same_source",
+   "item_refs": [
+    "itm_96169f3e1c9fdc15",
+    "itm_3bef97fdf46d6d1a",
+    "itm_afe9a2f0fe0c69ad"
+   ],
+   "reason": [
+    "discarded_item_attempt",
+    "item_validation:schema"
+   ]
+  },
+  "slot_83bd83014d07f67e": {
+   "status": "no_supported_item",
+   "run": "r6",
+   "tag": "same_source",
+   "item_refs": [],
+   "reason": [
+    "no_independent_proposition",
+    "missing_signal:evidence"
+   ]
+  },
+  "slot_1996d09d1fd9cdef": {
+   "status": "extracted",
+   "run": "r7",
+   "tag": "same_source",
+   "item_refs": [
+    "itm_d62fd6b7bf3f0af0",
+    "itm_bf1687dc7d51823b"
+   ],
+   "reason": []
+  },
+  "slot_ef08e9bee54690b0": {
+   "status": "extracted",
+   "run": "r4",
+   "tag": "official_deviation",
+   "item_refs": [
+    "itm_6b5fffc03b034eb4"
+   ],
+   "reason": []
+  }
+ },
+ "provenance": [
+  {
+   "slot": "slot_36c304436d5d2703",
+   "status": "extracted",
+   "via": "r3",
+   "provenance": "same_source"
+  },
+  {
+   "slot": "slot_3dfa35e5b40c1201",
+   "status": "extracted",
+   "via": "r3",
+   "provenance": "same_source"
+  },
+  {
+   "slot": "slot_292e7f88898806e5",
+   "status": "extracted",
+   "via": "r3",
+   "provenance": "same_source"
+  },
+  {
+   "slot": "slot_90af9c4e66866cda",
+   "status": "extracted",
+   "via": "r3",
+   "provenance": "same_source"
+  },
+  {
+   "slot": "slot_83bd83014d07f67e",
+   "status": "no_supported_item",
+   "via": "r6",
+   "provenance": "same_source"
+  },
+  {
+   "slot": "slot_1996d09d1fd9cdef",
+   "status": "extracted",
+   "via": "r7",
+   "provenance": "same_source"
+  },
+  {
+   "slot": "slot_ef08e9bee54690b0",
+   "status": "extracted",
+   "via": "r4",
+   "provenance": "official_deviation"
+  }
+ ],
+ "rows": [
+  {
+   "candidate_id": "slot_1996d09d1fd9cdef#1",
+   "slot": "slot_1996d09d1fd9cdef",
+   "via_run": "r7",
+   "provenance": "same_source",
+   "disposition": "extracted",
+   "reason": null,
+   "proposition": "Q3 OCF/扣非回到 0.6 以上",
+   "model_suggestion": {
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "Q3 OCF/扣非回到 0.6 以上"
+   },
+   "to_fill": {
+    "judgement": "",
+    "matched_gold_id": "",
+    "semantic_type": "",
+    "statement_role": "",
+    "source_stance": "",
+    "condition": "",
+    "evidence": ""
+   }
+  },
+  {
+   "candidate_id": "slot_1996d09d1fd9cdef#2",
+   "slot": "slot_1996d09d1fd9cdef",
+   "via_run": "r7",
+   "provenance": "same_source",
+   "disposition": "extracted",
+   "reason": null,
+   "proposition": "或毛利率较 Q2 的 6.99% 不再回吐",
+   "model_suggestion": {
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "polarity": "negated",
+    "evidence_quote": "或毛利率较 Q2 的 6.99% 不再回吐"
+   },
+   "to_fill": {
+    "judgement": "",
+    "matched_gold_id": "",
+    "semantic_type": "",
+    "statement_role": "",
+    "source_stance": "",
+    "condition": "",
+    "evidence": ""
+   }
+  },
+  {
+   "candidate_id": "slot_292e7f88898806e5#1",
+   "slot": "slot_292e7f88898806e5",
+   "via_run": "r3",
+   "provenance": "same_source",
+   "disposition": "extracted",
+   "reason": null,
+   "proposition": "止损看两条硬的",
+   "model_suggestion": {
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "polarity": "affirmed",
+    "evidence_quote": "止损看两条硬的："
+   },
+   "to_fill": {
+    "judgement": "",
+    "matched_gold_id": "",
+    "semantic_type": "",
+    "statement_role": "",
+    "source_stance": "",
+    "condition": "",
+    "evidence": ""
+   }
+  },
+  {
+   "candidate_id": "slot_36c304436d5d2703#1",
+   "slot": "slot_36c304436d5d2703",
+   "via_run": "r3",
+   "provenance": "same_source",
+   "disposition": "extracted",
+   "reason": null,
+   "proposition": "等两件事至少中一件再议",
+   "model_suggestion": {
+    "semantic_type": "condition",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "等两件事至少中一件再议——"
+   },
+   "to_fill": {
+    "judgement": "",
+    "matched_gold_id": "",
+    "semantic_type": "",
+    "statement_role": "",
+    "source_stance": "",
+    "condition": "",
+    "evidence": ""
+   }
+  },
+  {
+   "candidate_id": "slot_36c304436d5d2703#2",
+   "slot": "slot_36c304436d5d2703",
+   "via_run": "r3",
+   "provenance": "same_source",
+   "disposition": "extracted",
+   "reason": null,
+   "proposition": "回撤到 52–58",
+   "model_suggestion": {
+    "semantic_type": "condition",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "回撤到 52–58"
+   },
+   "to_fill": {
+    "judgement": "",
+    "matched_gold_id": "",
+    "semantic_type": "",
+    "statement_role": "",
+    "source_stance": "",
+    "condition": "",
+    "evidence": ""
+   }
+  },
+  {
+   "candidate_id": "slot_36c304436d5d2703#3",
+   "slot": "slot_36c304436d5d2703",
+   "via_run": "r3",
+   "provenance": "same_source",
+   "disposition": "extracted",
+   "reason": null,
+   "proposition": "大约回到 7 月回购均价 61 之下",
+   "model_suggestion": {
+    "semantic_type": "fact",
+    "statement_role": "claim",
+    "polarity": "affirmed",
+    "evidence_quote": "大约回到 7 月回购均价 61 之下"
+   },
+   "to_fill": {
+    "judgement": "",
+    "matched_gold_id": "",
+    "semantic_type": "",
+    "statement_role": "",
+    "source_stance": "",
+    "condition": "",
+    "evidence": ""
+   }
+  },
+  {
+   "candidate_id": "slot_36c304436d5d2703#4",
+   "slot": "slot_36c304436d5d2703",
+   "via_run": "r3",
+   "provenance": "same_source",
+   "disposition": "extracted",
+   "reason": null,
+   "proposition": "动 PE 降到 24 附近",
+   "model_suggestion": {
+    "semantic_type": "condition",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "动 PE 降到 24 附近"
+   },
+   "to_fill": {
+    "judgement": "",
+    "matched_gold_id": "",
+    "semantic_type": "",
+    "statement_role": "",
+    "source_stance": "",
+    "condition": "",
+    "evidence": ""
+   }
+  },
+  {
+   "candidate_id": "slot_3dfa35e5b40c1201#1",
+   "slot": "slot_3dfa35e5b40c1201",
+   "via_run": "r3",
+   "provenance": "same_source",
+   "disposition": "extracted",
+   "reason": null,
+   "proposition": "单票不超过组合的合理上限",
+   "model_suggestion": {
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "polarity": "negated",
+    "evidence_quote": "单票不超过组合的合理上限。"
+   },
+   "to_fill": {
+    "judgement": "",
+    "matched_gold_id": "",
+    "semantic_type": "",
+    "statement_role": "",
+    "source_stance": "",
+    "condition": "",
+    "evidence": ""
+   }
+  },
+  {
+   "candidate_id": null,
+   "slot": "slot_83bd83014d07f67e",
+   "via_run": "r6",
+   "provenance": "same_source",
+   "disposition": "no_supported_item",
+   "reason": [
+    "no_independent_proposition",
+    "missing_signal:evidence"
+   ],
+   "proposition": null,
+   "model_suggestion": null,
+   "to_fill": null
+  },
+  {
+   "candidate_id": "slot_90af9c4e66866cda#1",
+   "slot": "slot_90af9c4e66866cda",
+   "via_run": "r3",
+   "provenance": "same_source",
+   "disposition": "extracted",
+   "reason": null,
+   "proposition": "下季 OCF 盖不住扣非的一半",
+   "model_suggestion": {
+    "semantic_type": "condition",
+    "statement_role": "condition",
+    "polarity": "negated",
+    "evidence_quote": "下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5）"
+   },
+   "to_fill": {
+    "judgement": "",
+    "matched_gold_id": "",
+    "semantic_type": "",
+    "statement_role": "",
+    "source_stance": "",
+    "condition": "",
+    "evidence": ""
+   }
+  },
+  {
+   "candidate_id": "slot_90af9c4e66866cda#2",
+   "slot": "slot_90af9c4e66866cda",
+   "via_run": "r3",
+   "provenance": "same_source",
+   "disposition": "extracted",
+   "reason": null,
+   "proposition": "毛利率较 6.99% 再掉超过 1 个百分点",
+   "model_suggestion": {
+    "semantic_type": "condition",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "或毛利率较 6.99% 再掉超过 1 个百分点"
+   },
+   "to_fill": {
+    "judgement": "",
+    "matched_gold_id": "",
+    "semantic_type": "",
+    "statement_role": "",
+    "source_stance": "",
+    "condition": "",
+    "evidence": ""
+   }
+  },
+  {
+   "candidate_id": "slot_90af9c4e66866cda#3",
+   "slot": "slot_90af9c4e66866cda",
+   "via_run": "r3",
+   "provenance": "same_source",
+   "disposition": "extracted",
+   "reason": null,
+   "proposition": "公司改口说涨价/mix 受阻",
+   "model_suggestion": {
+    "semantic_type": "condition",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "且公司改口说涨价/mix 受阻"
+   },
+   "to_fill": {
+    "judgement": "",
+    "matched_gold_id": "",
+    "semantic_type": "",
+    "statement_role": "",
+    "source_stance": "",
+    "condition": "",
+    "evidence": ""
+   }
+  },
+  {
+   "candidate_id": "slot_90af9c4e66866cda#4",
+   "slot": "slot_90af9c4e66866cda",
+   "via_run": "r3",
+   "provenance": "same_source",
+   "disposition": "extracted",
+   "reason": null,
+   "proposition": "Rubin 延期",
+   "model_suggestion": {
+    "semantic_type": "condition",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "、Rubin 延期"
+   },
+   "to_fill": {
+    "judgement": "",
+    "matched_gold_id": "",
+    "semantic_type": "",
+    "statement_role": "",
+    "source_stance": "",
+    "condition": "",
+    "evidence": ""
+   }
+  },
+  {
+   "candidate_id": "slot_90af9c4e66866cda#5",
+   "slot": "slot_90af9c4e66866cda",
+   "via_run": "r3",
+   "provenance": "same_source",
+   "disposition": "extracted",
+   "reason": null,
+   "proposition": "目标价不把 121、100.8 当锚",
+   "model_suggestion": {
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "polarity": "negated",
+    "evidence_quote": "目标价不把 121、100.8 当锚"
+   },
+   "to_fill": {
+    "judgement": "",
+    "matched_gold_id": "",
+    "semantic_type": "",
+    "statement_role": "",
+    "source_stance": "",
+    "condition": "",
+    "evidence": ""
+   }
+  },
+  {
+   "candidate_id": "slot_90af9c4e66866cda#6",
+   "slot": "slot_90af9c4e66866cda",
+   "via_run": "r3",
+   "provenance": "same_source",
+   "disposition": "extracted",
+   "reason": null,
+   "proposition": "中性路径就是 55–75 消化中报和英伟达 β",
+   "model_suggestion": {
+    "semantic_type": "forecast",
+    "statement_role": "claim",
+    "polarity": "affirmed",
+    "evidence_quote": "中性路径就是 55–75 消化中报和英伟达 β"
+   },
+   "to_fill": {
+    "judgement": "",
+    "matched_gold_id": "",
+    "semantic_type": "",
+    "statement_role": "",
+    "source_stance": "",
+    "condition": "",
+    "evidence": ""
+   }
+  },
+  {
+   "candidate_id": "slot_90af9c4e66866cda#7",
+   "slot": "slot_90af9c4e66866cda",
+   "via_run": "r3",
+   "provenance": "same_source",
+   "disposition": "extracted",
+   "reason": null,
+   "proposition": "乐观才靠近中金 77.68 / 华泰 93",
+   "model_suggestion": {
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "乐观才靠近中金 77.68 / 华泰 93"
+   },
+   "to_fill": {
+    "judgement": "",
+    "matched_gold_id": "",
+    "semantic_type": "",
+    "statement_role": "",
+    "source_stance": "",
+    "condition": "",
+    "evidence": ""
+   }
+  },
+  {
+   "candidate_id": "slot_ef08e9bee54690b0#1",
+   "slot": "slot_ef08e9bee54690b0",
+   "via_run": "r4",
+   "provenance": "official_deviation",
+   "disposition": "extracted",
+   "reason": null,
+   "proposition": "若从零开一个观察仓",
+   "model_suggestion": {
+    "semantic_type": "unknown",
+    "statement_role": "condition",
+    "polarity": "affirmed",
+    "evidence_quote": "若从零开一个观察仓"
+   },
+   "to_fill": {
+    "judgement": "",
+    "matched_gold_id": "",
+    "semantic_type": "",
+    "statement_role": "",
+    "source_stance": "",
+    "condition": "",
+    "evidence": ""
+   }
+  }
+ ]
+}

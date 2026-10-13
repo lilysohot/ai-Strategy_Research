@@ -18,6 +18,7 @@ import re
 from typing import Any
 
 from server.events import EventType, make_event
+from server.run_outcome import interruption_reason
 
 # Secrets that must never appear in a pushed event, even inside an argument blob.
 _SECRET_RE = re.compile(
@@ -143,7 +144,7 @@ class BridgeObserver:
         # ``BenchmarkSession.run``. Capture it so a stopped run can still show a
         # useful partial result to the user.
         self.final_content = str(getattr(result, "final_content", "") or "")
-        if self.stopped_by:
+        if interruption_reason(self.stopped_by):
             await self._emit(EventType.RUN_STOPPED.value, stopped_by=self.stopped_by)
 
     # — streaming ——————————————————————————————————————————————

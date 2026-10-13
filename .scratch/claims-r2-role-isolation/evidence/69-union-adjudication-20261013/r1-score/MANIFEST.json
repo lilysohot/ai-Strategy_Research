@@ -1,0 +1,47 @@
+{
+  "schema_version": "gate33-honest-score-manifest-1",
+  "created_on": "2026-10-13",
+  "zero_call": true,
+  "model_calls": 0,
+  "inputs": {
+    "union_adjudication": "sha256:91c4a7f6a34a9137fef4a8812c5a8062a6f4189532a1a6d3dc4537afa37edfd3",
+    "A_worksheet": "sha256:de2e7402518b573ef572a8f27fa6eb2d5254f926a12a8339f153e23cd2ae10f9",
+    "r6_assembled": "sha256:88e0ddf69ef18afe426e1dda9c16c44aedcc4dc1c1121536be33b36d150c56b3",
+    "r4_assembled": "sha256:625d2002fcbf5a499c295f27ddf7b1f1f7e960e5ebe9e0116f98f5c7b506be77",
+    "gate33_gold_scope": "sha256:cc2946ef6a487fba059ca995f2c34f469d4c96720b6b6186225c97bd1e41b537"
+  },
+  "outputs": {
+    "gate33-honest-score.json": "sha256:f1fddc1d943177d7fc7a6f296cdc4aac097063874da0cbb8a835d7f28c35bf55",
+    "score_gate33.py": "sha256:f876a6260d710fcd359a193dc1b1788f1204f9d7bad047c224d8fc967aaa83c6",
+    "gate33-full-verdict.md": "sha256:d7ffd4f1412f1e3673f20873de243799489b94b5980192485d4ed567d22927ae"
+  },
+  "in_place_edits": 0,
+  "score": {
+    "recall": "34/48 = 0.708（FAIL < 0.85）",
+    "precision": "240/248 = 30/31 = 0.968（PASS > 0.80）",
+    "decomposition": "tp=34, correct_extra=206, fp=8（duplicate）, incorrect=0, fn=14",
+    "excluded_out_of_scope": 5,
+    "verdict": "门 33 FAIL——真实 FN 缺口 14 条"
+  },
+  "full_verdict": {
+    "criteria": 7,
+    "pass": [
+      "precision 0.968",
+      "unresolved=0",
+      "accepted_total 242",
+      "accepted_per_source 117/130",
+      "assertions 8/16"
+    ],
+    "fail": [
+      "recall_overall 0.708<0.85",
+      "recall_per_source 源2 0.538<0.80",
+      "assertions 8 条未过（全部源2）"
+    ],
+    "formal_statements": [
+      "67 机械预填不作裁定依据；29 行分歧全部驳回、维持 A 工作表",
+      "r4 模型名偏差（deepseek-flash ≠ deepseek-v4-flash）正式申报：仅影响 ef08 终端记账，不产生候选，不影响评分",
+      "\"31 条\"= 裁定行数（base16+r5-15），新增 matched 金标 = 8——禁止读成 +31 匹配"
+    ],
+    "status": "FINAL — 门 33 FAIL（诚实终态，全部判据已陈述）"
+  }
+}

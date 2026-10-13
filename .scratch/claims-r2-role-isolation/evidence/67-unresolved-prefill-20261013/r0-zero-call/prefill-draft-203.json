@@ -1,0 +1,3370 @@
+{
+  "schema_version": "unresolved-prefill-draft-1",
+  "created_on": "2026-10-13",
+  "status": "draft_pending_human_verification",
+  "drafted_by": "agent",
+  "zero_model_calls": true,
+  "drafting_rules": [
+    "1:1 映射：已认领金标不得二次 matched",
+    "机械对应阈值 0.75（difflib 归一化），逐字包含按 0.92 计",
+    "r5 署名工作表预判的 4 组池内配对直接提议 matched",
+    "correct_extra 的内容真实性一律留人工复核",
+    "证据缺失且无对应的行留空给人工"
+  ],
+  "occupation_baseline": {
+    "signed_claimed_golds": [
+      "NT-I06",
+      "NT-I13",
+      "NT-I14",
+      "NT-I15",
+      "NT-I16",
+      "NT-I17",
+      "NT-I42",
+      "NT-I43"
+    ],
+    "r5_anticipated_pool_matches": {
+      "NT-I05": "itm_abebb2a7163927e9",
+      "NT-I07": "itm_d0e9f3a0a75f5157",
+      "NT-I08": "itm_9960b6f5d20e37ed",
+      "NT-I41": "itm_c71e15d5cebf1e85"
+    }
+  },
+  "tally": {
+    "matched_proposed": 33,
+    "duplicate_proposed": 8,
+    "correct_extra_proposed": 181,
+    "left_for_human": 0
+  },
+  "rows": [
+    {
+      "candidate_id": "itm_85743eee2cf32959",
+      "proposition": "卖方讲的三条核心发现是 CSP/GPU 机柜量、Rubin 卡位、CPO/高速网络。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "CSP/GPU 机柜量、Rubin 卡位、CPO/高速网络。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_abebb2a7163927e9",
+      "proposition": "中报云计算收入同比增长 75.7%。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "云计算 +75.7%，"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I05",
+        "reason": "r5 署名工作表预判配对（NT-I05）；请人工核对语义等价"
+      }
+    },
+    {
+      "candidate_id": "itm_444b8b2aaa95f978",
+      "proposition": "中报 CSP AI 服务器收入增长 2.3 倍。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "CSP AI 服务器 +2.3 倍，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_51e9c6409bda265c",
+      "proposition": "中报 GPU 机柜出货增长 3.2 倍，ASIC 机柜出货增长 3 倍。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "GPU/ASIC 机柜出货 +3.2 / +3 倍，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_c40657876fb583bc",
+      "proposition": "Q2 营收 3067.83 亿元，环比增长 22%。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "Q2 营收 3067.83 亿环比 +22%。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_e49947bc67cbe584",
+      "proposition": "卖方爱用归母净利润增长 96% 和 26E 600 亿以上的口径。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "卖方爱用归母 +96% 和 26E 600 亿+，中报扣非虽然同步，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_f506c336e80110ee",
+      "proposition": "中报扣非与归母同步。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "卖方爱用归母 +96% 和 26E 600 亿+，中报扣非虽然同步，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_a824eacfca8fa6e5",
+      "proposition": "但 OCF 只有 73.91 亿元。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "但 OCF 只有 73.91 亿；"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_d0e9f3a0a75f5157",
+      "proposition": "Q2 毛利率环比下降 0.36 个百分点。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "negated",
+        "evidence_quote": "Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I07",
+        "reason": "r5 署名工作表预判配对（NT-I07）；请人工核对语义等价"
+      }
+    },
+    {
+      "candidate_id": "itm_9960b6f5d20e37ed",
+      "proposition": "并表 7% 的加工费没有变成「系统商」。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I08",
+        "reason": "r5 署名工作表预判配对（NT-I08）；请人工核对语义等价"
+      }
+    },
+    {
+      "candidate_id": "itm_f5ab5310b9affe36",
+      "proposition": "报告框架站扣非、OCF 和毛利率，不站归母标题。",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "mixed",
+        "evidence_quote": "框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_e1ed4ded633b7b7b",
+      "proposition": "报告框架不站 90 元共识当明天的地板价。",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_c71e15d5cebf1e85",
+      "proposition": "持有 + 观望。",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "**持有 + 观望。**"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I41",
+        "reason": "r5 署名工作表预判配对（NT-I41）；请人工核对语义等价"
+      }
+    },
+    {
+      "candidate_id": "itm_a0a574b4fa573aea",
+      "proposition": "中报的利润几乎是真的",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "中报的利润几乎是真的："
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I02",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I02「中报的利润几乎是真的」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_45c20faff776385b",
+      "proposition": "扣非 229.84 亿同比 +97%",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "扣非 229.84 亿同比 +97%，与归母 237.40 亿只差 7.56 亿非经常，"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I01",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I01「扣非 229.84 亿同比 +97%」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_db11557f55262ac8",
+      "proposition": "与归母 237.40 亿只差 7.56 亿非经常",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "扣非 229.84 亿同比 +97%，与归母 237.40 亿只差 7.56 亿非经常，"
+      },
+      "draft": {
+        "judgement": "duplicate",
+        "matched_gold_id": "",
+        "reason": "金标 NT-I01 已被 itm_45c20faff776385b 占用（1:1 映射）；语义等价请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_7c8488b09e1c5443",
+      "proposition": "不是「公允价值把标题顶起来」",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "不是「公允价值把标题顶起来」。但经营现金流 73.91 亿只盖住扣非的 0.32 倍，"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I03",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I03「经营现金流 73.91 亿只盖住扣非的 0.32 倍」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_7ba3125d387514f9",
+      "proposition": "经营现金流 73.91 亿只盖住扣非的 0.32 倍",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "negated",
+        "evidence_quote": "不是「公允价值把标题顶起来」。但经营现金流 73.91 亿只盖住扣非的 0.32 倍，"
+      },
+      "draft": {
+        "judgement": "duplicate",
+        "matched_gold_id": "",
+        "reason": "金标 NT-I03 已被 itm_7c8488b09e1c5443 占用（1:1 映射）；语义等价请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_e8c6e22da32ba13d",
+      "proposition": "存货 1921 亿、应收 1275 亿，高营收已经变成营运资本。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "存货 1921 亿、应收 1275 亿，高营收已经变成营运资本。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_d34abd06836546b9",
+      "proposition": "毛利率 7.15% 同比只加 0.55 个百分点",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "毛利率 7.15% 同比只加 0.55 个百分点，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_17b13257df44aea8",
+      "proposition": "Q2 还从 Q1 的 7.35% 掉回 6.99%。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "Q2 还从 Q1 的 7.35% 掉回 6.99%。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_a2924f7eee4d6589",
+      "proposition": "现价 64.04 已从 6 月 84.95 回了约 25%",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "现价 64.04 已从 6 月 84.95 回了约 25%，动 PE 26.76 在定价约 475 亿 26E——几乎是 H1 线性年化，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_0ba7a9376102f0f0",
+      "proposition": "动 PE 26.76 在定价约 475 亿 26E——几乎是 H1 线性年化",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "现价 64.04 已从 6 月 84.95 回了约 25%，动 PE 26.76 在定价约 475 亿 26E——几乎是 H1 线性年化，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_2dc5cb13ec920e57",
+      "proposition": "没有把卖方 560–667 亿吃进去。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "没有把卖方 560–667 亿吃进去。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_e9e75c290f6ec098",
+      "proposition": "不按 93–101 去追",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "不按 93–101 去追，也不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_fdda3d66d7e89956",
+      "proposition": "不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "不按 93–101 去追，也不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_6aacb1ab12e7e24d",
+      "proposition": "少数股东 0.086 亿，几乎可忽略",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "少数股东 0.086 亿，几乎可忽略，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_9b6c175b5d7ed411",
+      "proposition": "「净利润 237.49 亿」和「归母 237.40 亿」不必像生益那样拆并表子公司",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "所以「净利润 237.49 亿」和「归母 237.40 亿」不必像生益那样拆并表子公司。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_c4442734f0161593",
+      "proposition": "中期不分红",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "中期不分红、应付股利 130.52 亿是上年股利落账；"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_33d99c2ada452a84",
+      "proposition": "应付股利 130.52 亿是上年股利落账",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "中期不分红、应付股利 130.52 亿是上年股利落账；"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_90f204ec22474324",
+      "proposition": "筹资现金流 −86.61 亿里分配股利/利息 84.39 亿",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "筹资现金流 −86.61 亿里分配股利/利息 84.39 亿，现金在往外走的同时短贷在滚动（借 960 亿、还 951 亿）。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_0d7289a59c0417ee",
+      "proposition": "现金在往外走的同时短贷在滚动（借 960 亿、还 951 亿）",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "筹资现金流 −86.61 亿里分配股利/利息 84.39 亿，现金在往外走的同时短贷在滚动（借 960 亿、还 951 亿）。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_99362251f6fe0d54",
+      "proposition": "利润质量相对扣非是干净的",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "「利润质量相对扣非是干净的，现金质量相对扣非是差的；"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I04",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I04「现金质量相对扣非是差的」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_7e31e390e92488a5",
+      "proposition": "现金质量相对扣非是差的",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "「利润质量相对扣非是干净的，现金质量相对扣非是差的；"
+      },
+      "draft": {
+        "judgement": "duplicate",
+        "matched_gold_id": "",
+        "reason": "金标 NT-I04 已被 itm_99362251f6fe0d54 占用（1:1 映射）；语义等价请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_0b87409f95e7693f",
+      "proposition": "AI 放量把资产负债表做成了服务器厂的标准形状——存贷双高、保理托底",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "AI 放量把资产负债表做成了服务器厂的标准形状——存贷双高、保理托底。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_f92a6a993cd4e761",
+      "proposition": "2026-08-28 收盘 64.04 元（mx-xuangu）。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "2026-08-28 收盘 64.04 元（mx-xuangu）。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_cd2d67aa9c4b0f08",
+      "proposition": "中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_df3bf600bf718df2",
+      "proposition": "本报告只对标的本身做独立判断，不针对任何已有仓位。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "本报告只对标的本身做独立判断，不针对任何已有仓位。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_454949e667d80db4",
+      "proposition": "TTM 27 倍对 7% 毛利率的 EMS 并不便宜到「必须买」",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "TTM 27 倍对 7% 毛利率的 EMS 并不便宜到「必须买」；"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_36692d3ea29613ba",
+      "proposition": "贵的是「A 股唯一 NVIDIA 整柜代理」的叙事溢价",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "贵的是「A 股唯一 NVIDIA 整柜代理」的叙事溢价，一旦毛利率再掉或 Rubin 延期，弹性会先打在倍数上。"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I09",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I09「一旦毛利率再掉或 Rubin 延期」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_2f60038387b4ea72",
+      "proposition": "一旦毛利率再掉或 Rubin 延期，弹性会先打在倍数上",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "贵的是「A 股唯一 NVIDIA 整柜代理」的叙事溢价，一旦毛利率再掉或 Rubin 延期，弹性会先打在倍数上。"
+      },
+      "draft": {
+        "judgement": "duplicate",
+        "matched_gold_id": "",
+        "reason": "金标 NT-I09 已被 itm_36692d3ea29613ba 占用（1:1 映射）；语义等价请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_c64daf27c7a8542a",
+      "proposition": "OCF/扣非 0.32 是已经发生的证伪",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "OCF/扣非 0.32 是已经发生的证伪，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_1368a0943a931631",
+      "proposition": "不是担心",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "不是担心。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_e5e58d32a16f8a29",
+      "proposition": "Q2 毛利率环比已经为负",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "Q2 毛利率环比已经为负。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_d68caa13d78d5c9d",
+      "proposition": "动 PE 隐含的 475 亿看起来「没给卖方 600」",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "mixed",
+        "evidence_quote": "动 PE 隐含的 475 亿看起来「没给卖方 600」，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_a338eb7a9bbec192",
+      "proposition": "475 本身就是把 H1 的 237 再做一次",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "evidence",
+        "polarity": "negated",
+        "evidence_quote": "但 475 本身就是把 H1 的 237 再做一次——如果 H2 只是季节性、Rubin 放量后移，475 不是地板。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_37d53fca30061a5f",
+      "proposition": "如果 H2 只是季节性、Rubin 放量后移，475 不是地板",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "condition",
+        "polarity": "mixed",
+        "evidence_quote": "但 475 本身就是把 H1 的 237 再做一次——如果 H2 只是季节性、Rubin 放量后移，475 不是地板。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_1581ae5d13678349",
+      "proposition": "北向 H1 减持 8180 万股",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "北向 H1 减持 8180 万股。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_127c30f2428151c6",
+      "proposition": "目标价 93–101 用的是 2026 年 24–35 倍或 2027 年利润",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "目标价 93–101 用的是 2026 年 24–35 倍或 2027 年利润，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_51ae8bb95797ba29",
+      "proposition": "不是 8 月能兑现的地板",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "不是 8 月能兑现的地板。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_c211fe6366c5f6ff",
+      "proposition": "高盛 121 是 IMA 标题，更不能当明天的价格",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "高盛 121 是 IMA 标题，更不能当明天的价格。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_2a32de1669ff155d",
+      "proposition": "Rubin / GB300 爬坡再延",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "polarity": "affirmed",
+        "evidence_quote": "Rubin / GB300 爬坡再延，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_365e79b35c0cc63d",
+      "proposition": "CSP 把增量柜双供给广达 / 纬颖",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "polarity": "affirmed",
+        "evidence_quote": "CSP 把增量柜双供给广达 / 纬颖，FII 只能靠传统板和机构件填收入，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_ffc7e4f53e2966ea",
+      "proposition": "FII 只能靠传统板和机构件填收入",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "polarity": "affirmed",
+        "evidence_quote": "CSP 把增量柜双供给广达 / 纬颖，FII 只能靠传统板和机构件填收入，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_848b0a7f4d3cba0b",
+      "proposition": "毛利率从 7% 回到 6% 以下",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "polarity": "affirmed",
+        "evidence_quote": "毛利率从 7% 回到 6% 以下，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_204fa5504590bfe9",
+      "proposition": "存货继续堆",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "polarity": "affirmed",
+        "evidence_quote": "存货继续堆，OCF 转负。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_44c05047307821cd",
+      "proposition": "OCF 转负",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "polarity": "affirmed",
+        "evidence_quote": "存货继续堆，OCF 转负。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_c5f28c133a0d1252",
+      "proposition": "云资本开支从「训练」切到「推理效率」",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "云资本开支从「训练」切到「推理效率」，整柜需求还在但 ASP 不再上、Consignment 切换慢于申万假设，利润增速回到收入增速。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_e349274db38098da",
+      "proposition": "整柜需求还在但 ASP 不再上",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "云资本开支从「训练」切到「推理效率」，整柜需求还在但 ASP 不再上、Consignment 切换慢于申万假设，利润增速回到收入增速。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_1a03085debe0bfff",
+      "proposition": "Consignment 切换慢于申万假设",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "云资本开支从「训练」切到「推理效率」，整柜需求还在但 ASP 不再上、Consignment 切换慢于申万假设，利润增速回到收入增速。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_52ba8f8a7210eca1",
+      "proposition": "利润增速回到收入增速",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "云资本开支从「训练」切到「推理效率」，整柜需求还在但 ASP 不再上、Consignment 切换慢于申万假设，利润增速回到收入增速。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_10b89b6c7fde5bab",
+      "proposition": "美元短贷 + 汇兑再来一刀",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "美元短贷 + 汇兑再来一刀，或保理额度收紧，现金缺口被融资费用放大。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_b88b791b87dcbdc5",
+      "proposition": "保理额度收紧",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "美元短贷 + 汇兑再来一刀，或保理额度收紧，现金缺口被融资费用放大。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_86c13efb43789ca3",
+      "proposition": "现金缺口被融资费用放大",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "polarity": "affirmed",
+        "evidence_quote": "美元短贷 + 汇兑再来一刀，或保理额度收紧，现金缺口被融资费用放大。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_54db46a6672a2bf7",
+      "proposition": "实体清单本次没有 sourced 命中",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "实体清单本次没有 sourced 命中，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_cc7b36e14b689fbc",
+      "proposition": "不能把「没搜到」当成「不会发生」",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "polarity": "affirmed",
+        "evidence_quote": "但不能把「没搜到」当成「不会发生」；"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_659e7d6382f5fd02",
+      "proposition": "墨西哥 / 美国厂是地理对冲，救不了出口管制一旦打到 GPU 系统集成",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "polarity": "affirmed",
+        "evidence_quote": "墨西哥 / 美国厂是地理对冲，救不了出口管制一旦打到 GPU 系统集成。"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I19",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I19「出口管制一旦打到 GPU 系统集成」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_fcbb5794e46a985a",
+      "proposition": "客户集中是结构风险",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "polarity": "affirmed",
+        "evidence_quote": "客户集中是结构风险："
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I12",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I12「客户集中是结构风险」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_02fab19d63fdcb92",
+      "proposition": "2025 年前五大客户收入占比 62%",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "2025 年前五大 62%，"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I11",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I11「2025 年前五大 62%」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_7eb7b7b237ab3ac4",
+      "proposition": "H1 应收账款前五占比 68.52%",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "H1 应收前五 68.52%。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_f80c5549dbc66cd1",
+      "proposition": "GPU 线绑定英伟达节奏",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "GPU 线绑英伟达节奏，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_6cd231170290b9d2",
+      "proposition": "ASIC 线绑定少数 CSP",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "ASIC 线绑少数 CSP。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_b1749c5f2c405309",
+      "proposition": "双供一旦发生，伤口不是「份额从叙事里的 50% 降到 45%」，而是整柜良率认证被别人拿走、自己变成备援。",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "polarity": "affirmed",
+        "evidence_quote": "双供一旦发生，伤口不是「份额从叙事里的 50% 降到 45%」，而是整柜良率认证被别人拿走、自己变成备援。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_9e9adf134861e592",
+      "proposition": "研发费用 −1.91%、费用率从约 1.41% 降到 0.90%（界面），利润改善来自规模和 mix 形容词",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "研发费用 −1.91%、费用率从约 1.41% 降到 0.90%（界面），利润改善来自规模和 mix 形容词，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_8991c34a6a46ea43",
+      "proposition": "利润改善不是研发变现",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "other",
+        "polarity": "negated",
+        "evidence_quote": "不是研发变现。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_1294f22e586c6286",
+      "proposition": "中期不分红、回购上限只有年分红的一个量级零头（腾讯「十问」的评论口径），治理上要接受「鸿海体系的现金调度优先于 A 股自由现金流故事」。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "mixed",
+        "evidence_quote": "中期不分红、回购上限只有年分红的一个量级零头（腾讯「十问」的评论口径），治理上要接受「鸿海体系的现金调度优先于 A 股自由现金流故事」。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_76dd6b5b7b8b02f2",
+      "proposition": "mx-xuangu，行情日 2026-08-28",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "【实时数据层】mx-xuangu，行情日 2026-08-28\n当日价格 64.04 元；"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_f66b7922943d371c",
+      "proposition": "当日价格 64.04 元",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "【实时数据层】mx-xuangu，行情日 2026-08-28\n当日价格 64.04 元；"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_77dffdd757bbf620",
+      "proposition": "涨跌 +0.28%",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "涨跌 +0.28%；"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_078fd4b710df3efa",
+      "proposition": "成交额 103.15 亿元",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "成交额 103.15 亿元；"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_b33ddf02fd98b73e",
+      "proposition": "换手 0.80%",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "换手 0.80%；"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_bc3df30723ffdb76",
+      "proposition": "量比 1.66",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "量比 1.66。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_5fb51168cccdaa34",
+      "proposition": "52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_3af507cde48b3bbc",
+      "proposition": "相对位置约 45.3%",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_43295714a536a7f6",
+      "proposition": "融资余额 79.81 亿",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "融资余额 79.81 亿。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_29826977b159aa8e",
+      "proposition": "近 5 日收盘 60.40 → 60.15 → 60.57 → 63.86 → 64.04",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "近 5 日收盘 60.40 → 60.15 → 60.57 → 63.86 → 64.04。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_5969ede2abf2ab22",
+      "proposition": "8/27 英伟达财报次日约 +5.43%",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "8/27 英伟达财报次日约 +5.43%，8/28 把溢价吐掉。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_6717556d849dcf83",
+      "proposition": "8/28 把溢价吐掉",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "8/27 英伟达财报次日约 +5.43%，8/28 把溢价吐掉。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_4083fb6b1acaaad6",
+      "proposition": "如果你所有的都选择相信，",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "condition",
+        "polarity": "affirmed",
+        "evidence_quote": "如果你所有的都选择相信，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_c8690f1bdde8846d",
+      "proposition": "公司所有说的话每个公司你都选择相信。",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "公司所有说的话每个公司你都选择相信。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_0398b930d1777c44",
+      "proposition": "那最后加起来是不是会出现一个状态？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "那最后加起来是不是会出现一个状态？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_8b4a64fcf5385fec",
+      "proposition": "什么状态？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "什么状态？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_ec18c38405c7e17f",
+      "proposition": "像当年机器人份额加起来超过100%，会不会出现这个状态？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "像当年机器人份额加起来超过100%，会不会出现这个状态？"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I36",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I36「像当年机器人份额加起来超过100%」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_de69e52043452b66",
+      "proposition": "是不是一个罗生门，总是有人说得不对的了，不管他是主观的还是被动的，对不对？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "是不是一个罗生门，总是有人说得不对的了，不管他是主观的还是被动的，对不对？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_39f7ca0b5c2e1e73",
+      "proposition": "你说的加起来总不能超过100%。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "你说的加起来总不能超过100%。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_0d765014a64939ef",
+      "proposition": "二季度800G出货量未达市场预期的原因是什么？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "二季度800G出货量未达市场预期的原因是什么？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_5e44b07c386a6c1e",
+      "proposition": "实际上这出货量主要原因是1.6T影响了800G",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "实际上这出货量主要原因是1.6T影响了800G，谁说的？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_5697c7311f116fbb",
+      "proposition": "谁说的？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "实际上这出货量主要原因是1.6T影响了800G，谁说的？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_aebcf763aeee8816",
+      "proposition": "这个不太对",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "这个不太对，那反正不是旭创的数字。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_e3109b1c8250afaf",
+      "proposition": "那反正不是旭创的数字",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "这个不太对，那反正不是旭创的数字。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_84124ea03ae67935",
+      "proposition": "我们3.2T预计将在27年三季度左右实现批量供应",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "我们3.2T预计将在27年三季度左右实现批量供应，这是个预计的，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_604970fb5906385c",
+      "proposition": "预计到28年整个行业的出货量将达到500万只的水平",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "预计到28年整个行业的出货量将达到500万只的水平。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_0ef7fdf7bfdaae99",
+      "proposition": "价格方面预计3.2T单价在1800美元左右",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "价格方面预计3.2T单价在1800美元左右，这是个比较早期的一些预计，可以先看看2.4T未来如何。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_fda18b3540092955",
+      "proposition": "这是个比较早期的一些预计",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "价格方面预计3.2T单价在1800美元左右，这是个比较早期的一些预计，可以先看看2.4T未来如何。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_e26f89a83aa071ff",
+      "proposition": "可以先看看2.4T未来如何",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "other",
+        "polarity": "affirmed",
+        "evidence_quote": "价格方面预计3.2T单价在1800美元左右，这是个比较早期的一些预计，可以先看看2.4T未来如何。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_520205f75c944508",
+      "proposition": "2.4T 27年的出货量预期在200万只",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "2.4T 27年的出货量预期在200万只，这个是之前传的，也是200万只，这是可能的。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_abced5f23ecef85b",
+      "proposition": "这个是之前传的，也是200万只",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "2.4T 27年的出货量预期在200万只，这个是之前传的，也是200万只，这是可能的。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_ca4a8fcc4b8c53ac",
+      "proposition": "这是可能的",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "2.4T 27年的出货量预期在200万只，这个是之前传的，也是200万只，这是可能的。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_5b8352b2c78e1066",
+      "proposition": "到28年预计增长至300至500万只",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "到28年预计增长至300至500万只，这个就是金像电的这个产品。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_9bcf569cc80261ee",
+      "proposition": "这个就是金像电的这个产品",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "到28年预计增长至300至500万只，这个就是金像电的这个产品。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_7e6e817acf0f22ac",
+      "proposition": "然后EML和硅光26年初是4比6",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "然后EML和硅光26年初是4比6，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_228ad2dbda4ac415",
+      "proposition": "预计到年底是规划到65%比35%",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "预计到年底是规划到65%比35%。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_65bce9c3c706dbf2",
+      "proposition": "有个OCS的快速看一下，渗透率反正都是吹牛的，都没准数的。",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "有个OCS的快速看一下，渗透率反正都是吹牛的，都没准数的。"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I44",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I44「渗透率反正都是吹牛的，都没准数的」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_42ffb8cedfa8d7ff",
+      "proposition": "29年NPO到10%，",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "29年NPO到10%，"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I45",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I45「29年NPO到10%」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_09fc1a90e71fe5bf",
+      "proposition": "CPO到30%，",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "CPO到30%，"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I46",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I46「CPO到30%」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_f2e29952886293c0",
+      "proposition": "可插拔主导70%。",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "可插拔主导70%。"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I47",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I47「可插拔主导70%」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_050c191768cad883",
+      "proposition": "长期来看，为规避风险，都在泰国布局产能",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "polarity": "affirmed",
+        "evidence_quote": "长期来看，为规避风险，都在泰国布局产能，未来60%以上的将通过泰国或者台湾生产，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_129d14fb212f4fa4",
+      "proposition": "未来60%以上的将通过泰国或者台湾生产",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "长期来看，为规避风险，都在泰国布局产能，未来60%以上的将通过泰国或者台湾生产，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_d96a4e7b052a89c7",
+      "proposition": "由于台湾海鸥基地有免税政策，这部分会转嫁给客户",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "由于台湾海鸥基地有免税政策，这部分会转嫁给客户，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_356f9d9b23c78892",
+      "proposition": "因此对竞争力和毛利影响不大",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "因此对竞争力和毛利影响不大。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_1a0a4edfc2fb8fcf",
+      "proposition": "这句话是不对的，是电话会还是什么忘了",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "这句话是不对的，是电话会还是什么忘了。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_6a4111c473852207",
+      "proposition": "这个已经是免税，应该是最后的事情了，以后再往下就不免税了",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "这个已经是免税，应该是最后的事情了，以后再往下就不免税了，你免了税还要按15%税率给你补上，以前都是零，前几年没有说是几年，可能是三年，反正之前几年是零，但是后面都是要算了，对吧？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_cc8511f87cf29cf7",
+      "proposition": "你免了税还要按15%税率给你补上",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "这个已经是免税，应该是最后的事情了，以后再往下就不免税了，你免了税还要按15%税率给你补上，以前都是零，前几年没有说是几年，可能是三年，反正之前几年是零，但是后面都是要算了，对吧？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_b5ffa8a07bd45bc0",
+      "proposition": "以前都是零，前几年没有说是几年，可能是三年，反正之前几年是零，但是后面都是要算了，对吧？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "这个已经是免税，应该是最后的事情了，以后再往下就不免税了，你免了税还要按15%税率给你补上，以前都是零，前几年没有说是几年，可能是三年，反正之前几年是零，但是后面都是要算了，对吧？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_4455ced5a6d4d09f",
+      "proposition": "这个事情当时已经说过了，以后都是要算的",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "这个事情当时已经说过了，以后都是要算的，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_ed5caf2e2b04ab1e",
+      "proposition": "所以这部分是在强掰",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "所以这部分是在强掰。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_a79b0be05f3456c3",
+      "proposition": "然后这里面税率加上去",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "然后这里面税率加上去，"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I39",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I39「这里面税率加上去」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_a8be3a946325fa22",
+      "proposition": "你转嫁给客户不一定能够很好地转嫁的",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "你转嫁给客户不一定能够很好地转嫁的。"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I40",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I40「你转嫁给客户不一定能够很好地转嫁的」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_f5de240b51d19b52",
+      "proposition": "这个是你公司自己的供应商自己的问题",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "这个是你公司自己的供应商自己的问题，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_806cac42d71917ad",
+      "proposition": "你不可能全部转嫁给客户的",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "你不可能全部转嫁给客户的，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_d727fe8375134fcc",
+      "proposition": "没有说得这么容易",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "没有说得这么容易。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_b761f5c084e6360a",
+      "proposition": "你如果转嫁了，对你的竞争力就会有影响，对不对？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "你如果转嫁了，对你的竞争力就会有影响，对不对？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_6c8aa33624f6a362",
+      "proposition": "这是二者取其一的事情",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "这是二者取其一的事情。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_8439a41e23a1fbeb",
+      "proposition": "面对潜在的政策变动，是否准备了涨价预案？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "面对潜在的政策变动，是否准备了涨价预案？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_51875d7abe3de001",
+      "proposition": "有相应的预案",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "polarity": "affirmed",
+        "evidence_quote": "有相应的预案，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_e295d711292b83a2",
+      "proposition": "因为政策原因导致成本的上升",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "因为政策原因导致成本的上升，"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I29",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I29「因为政策原因导致成本的上升」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_85ac32c15bf2636d",
+      "proposition": "会与客户协商，提价幅度在10%到20%之间",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "answer",
+        "polarity": "affirmed",
+        "evidence_quote": "会与客户协商，提价幅度在10%到20%之间。"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I30",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I30「会与客户协商，提价幅度在10%到20%之间」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_70458675c2e71a7e",
+      "proposition": "为保障供应链的稳定和产能持续供应对客户而言至关重要",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "为保障供应链的稳定和产能持续供应对客户而言至关重要，因此他们愿意承担部分增加的成本，对吧？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_b857a8598addea83",
+      "proposition": "因此他们愿意承担部分增加的成本，对吧？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "为保障供应链的稳定和产能持续供应对客户而言至关重要，因此他们愿意承担部分增加的成本，对吧？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_7db2a64fa40da1f5",
+      "proposition": "部分肯定是可能的，大家谈一谈做生意都是这样",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "answer",
+        "polarity": "affirmed",
+        "evidence_quote": "部分肯定是可能的，大家谈一谈做生意都是这样。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_fc329c492379fd15",
+      "proposition": "公司预计到27年市占率达到什么水平？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "公司预计到27年市占率达到什么水平？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_5e38e7d668363dbd",
+      "proposition": "这个也是那个协会的",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "polarity": "negated",
+        "evidence_quote": "这个也是那个协会的。但是这个肯定不是指的高速，高速显然不是这个比例，肯定是所有的光模块全算进去的。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_3b7f3587abb8f18e",
+      "proposition": "这个肯定不是指的高速",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "polarity": "negated",
+        "evidence_quote": "这个也是那个协会的。但是这个肯定不是指的高速，高速显然不是这个比例，肯定是所有的光模块全算进去的。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_b9d5dfa91cd4c6f6",
+      "proposition": "高速显然不是这个比例",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "polarity": "negated",
+        "evidence_quote": "这个也是那个协会的。但是这个肯定不是指的高速，高速显然不是这个比例，肯定是所有的光模块全算进去的。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_a0c3595e9860c57c",
+      "proposition": "肯定是所有的光模块全算进去的",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "answer",
+        "polarity": "negated",
+        "evidence_quote": "这个也是那个协会的。但是这个肯定不是指的高速，高速显然不是这个比例，肯定是所有的光模块全算进去的。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_3fe3d7cb5ec59cba",
+      "proposition": "27年公司的市占率将有显著提升",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "answer",
+        "polarity": "affirmed",
+        "evidence_quote": "好的，27年公司的市占率将有显著提升。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_f466cfafd673c044",
+      "proposition": "然后网络架构中scale out、scale up分别有哪些产品？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "然后网络架构中scale out、scale up分别有哪些产品？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_d44e98e79aae2074",
+      "proposition": "200G scale up领域主要用NPO，",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "200G scale up领域主要用NPO，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_68e572f2e5014119",
+      "proposition": "NPO可以理解为一种没有外壳的可插拔光模块。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "NPO可以理解为一种没有外壳的可插拔光模块。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_cfeed6066c940542",
+      "proposition": "2.4T产品用于scale up领域，3.2T则在scale out外面就是普通的光模块。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "2.4T产品用于scale up领域，3.2T则在scale out外面就是普通的光模块。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_71bbd42cf3522bea",
+      "proposition": "CPO目前可以理解为还没有实际的出货，这个是真实情况。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "CPO目前可以理解为还没有实际的出货，这个是真实情况。"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I33",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I33「CPO目前可以理解为还没有实际的出货」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_d9ee15a615ede4de",
+      "proposition": "在CPO里面90%以上的价值由交换机芯片厂商，",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "在CPO里面90%以上的价值由交换机芯片厂商，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_9bac5918ef97d1d8",
+      "proposition": "就是NVIDIA、台积电来主导。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "就是NVIDIA、台积电来主导。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_449ea66d54ccbd52",
+      "proposition": "在CPO领域，探索目前尚未形成明确的结论方向",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "在CPO领域，探索目前尚未形成明确的结论方向，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_a182c96df99ecd98",
+      "proposition": "可插拔并没有成为主流",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "可插拔并没有成为主流，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_7f8414769e6a2a07",
+      "proposition": "提出了可插拔CPO没有成为主流",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "就是提出了可插拔CPO没有成为主流。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_933ebba82bb09be7",
+      "proposition": "可插拔仍有生命周期",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "可插拔仍有生命周期，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_15c17f04855a28b3",
+      "proposition": "可插拔仍然是主流",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "可插拔仍然是主流，并且速度还有提升空间。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_898045d75c1c3ef3",
+      "proposition": "速度还有提升空间",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "可插拔仍然是主流，并且速度还有提升空间。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_7b0cfc4d08a27730",
+      "proposition": "主要群体北美的这些电力短缺的确会影响到公司出货节奏",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "主要群体北美的这些电力短缺的确会影响到公司出货节奏，所有的出货节奏都是环环相扣的。"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I31",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I31「北美的这些电力短缺」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_cf8baa3c797556e2",
+      "proposition": "所有的出货节奏都是环环相扣的",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "主要群体北美的这些电力短缺的确会影响到公司出货节奏，所有的出货节奏都是环环相扣的。"
+      },
+      "draft": {
+        "judgement": "duplicate",
+        "matched_gold_id": "",
+        "reason": "金标 NT-I31 已被 itm_7b0cfc4d08a27730 占用（1:1 映射）；语义等价请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_95e7e4459d035296",
+      "proposition": "对数据中心客户来说，通过网络的提升远比服务器芯片、存储这些提升要来得大，对吧？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "不可忽视的是，对数据中心客户来说，通过网络的提升远比服务器芯片、存储这些提升要来得大，对吧？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_f7c9a0f6e48f2968",
+      "proposition": "网络这个点提升的性价比是最高的",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "这个是从去年开始就跟大家反复说了，网络这个点提升的性价比是最高的。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_0d3296242ca0326f",
+      "proposition": "资本开支受限的情况下，网络提升需求依然存在",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "资本开支受限的情况下，网络提升需求依然存在。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_df752d361da64164",
+      "proposition": "这一定程度上可以对冲数据中心如果是放缓假设放缓的情况下带来的负面影响",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "condition",
+        "polarity": "affirmed",
+        "evidence_quote": "这一定程度上可以对冲数据中心如果是放缓假设放缓的情况下带来的负面影响。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_fe423a6fa82942e2",
+      "proposition": "这个观点我觉得是认可的",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "这个观点我觉得是认可的。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_6300b0c82cb68eaa",
+      "proposition": "互补关系非完全替代",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "互补关系非完全替代，然后这个东西也是反正也是吹牛的。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_eb70f5e25491c97f",
+      "proposition": "这个东西也是吹牛的",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "互补关系非完全替代，然后这个东西也是反正也是吹牛的。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_d30aadb7bc6b0a1b",
+      "proposition": "27年合计的高速光模块两个是1.5亿只，这是需求得出的需求量",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "27年合计的高速光模块两个是1.5亿只，这是需求得出的需求量，需求量没用，要交付量才有用。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_140c8dc132fd0b3a",
+      "proposition": "需求量没用，要交付量才有用",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "27年合计的高速光模块两个是1.5亿只，这是需求得出的需求量，需求量没用，要交付量才有用。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_bd6cd536f1fc2c56",
+      "proposition": "CPO主要在交换机侧",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "CPO主要在交换机侧，市场成熟度不高，"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I21",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I21「市场成熟度不高」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_e6a5f468d81f21ac",
+      "proposition": "市场成熟度不高",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "CPO主要在交换机侧，市场成熟度不高，"
+      },
+      "draft": {
+        "judgement": "duplicate",
+        "matched_gold_id": "",
+        "reason": "金标 NT-I21 已被 itm_bd6cd536f1fc2c56 占用（1:1 映射）；语义等价请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_ed3a149d2a52ec22",
+      "proposition": "预计26年很少，26年就忽略不计",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "预计26年很少，26年就忽略不计，27年5万到10万个水平，这是合理的。"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I22",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I22「预计26年很少，26年就忽略不计」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_64a666c2efc4b5d8",
+      "proposition": "27年5万到10万个水平，这是合理的",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "预计26年很少，26年就忽略不计，27年5万到10万个水平，这是合理的。"
+      },
+      "draft": {
+        "judgement": "duplicate",
+        "matched_gold_id": "",
+        "reason": "金标 NT-I22 已被 itm_ed3a149d2a52ec22 占用（1:1 映射）；语义等价请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_a361a20c875bf147",
+      "proposition": "剑桥在送样方面通常会经历一个为期六个月的实验室认证，之后再小批量。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "剑桥呢在送样方面，他们通常会经历一个为期六个月的实验室认证，之后再小批量。"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I27",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I27「为期六个月的实验室认证」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_bc0b1219e6a3fc7b",
+      "proposition": "整个流程下来最终拿到订单可能需要1年到1年半时间。",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "整个流程下来最终拿到订单可能需要1年到1年半时间。"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I28",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I28「最终拿到订单可能需要1年到1年半时间」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_6179bb820e8238c7",
+      "proposition": "北美客户今年定位非常明确，就服务于顶级客户。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "北美客户今年定位非常明确，就服务于顶级客户。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_862fac6e7a92034e",
+      "proposition": "今年下半年预计将有2到3个新客户开始贡献收入，这些主要是第二梯队。",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "今年下半年预计将有2到3个新客户开始贡献收入，这些主要是第二梯队。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_42e3bb9f9ed31279",
+      "proposition": "这里的相当于是一些新云，或者一些莫名其妙新增长出来的，就莫名其妙是那个奥特曼说的，对吧？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "这里的相当于是一些新云，或者一些莫名其妙新增长出来的，就莫名其妙是那个奥特曼说的，对吧？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_88efc09d561e6b0a",
+      "proposition": "他他说了你们这些莫名其妙新出来的这些客户，这些云，对不对？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "他他说了你们这些莫名其妙新出来的这些客户，这些云，对不对？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_a26f1a67b713329e",
+      "proposition": "自己都还没搞清楚赚钱模式，什么应用也没有，就来投入云。",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "自己都还没搞清楚赚钱模式，什么应用也没有，就来投入云。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_1f3315d7df3255ea",
+      "proposition": "你们莫名其妙，说的就是这些新客户。",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "你们莫名其妙，说的就是这些新客户。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_2da92712a28a7d31",
+      "proposition": "他那个采访反正他是有立场的，对吧？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "他那个采访反正他是有立场的，对吧？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_82f621b00c342721",
+      "proposition": "目前反正是有新客户了",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "目前反正是有新客户了，这些新的云不知道是什么原因。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_a6783e858a8b34f7",
+      "proposition": "这些新的云不知道是什么原因",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "other",
+        "polarity": "affirmed",
+        "evidence_quote": "目前反正是有新客户了，这些新的云不知道是什么原因。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_bde4a78464b25e0a",
+      "proposition": "目前公司与这些新客户开展顺利，进入了小批量测试",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "目前公司与这些新客户开展顺利，进入了小批量测试。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_4e3550b1755676ab",
+      "proposition": "到26年底这些新客户开始供应，供应占比合计能达到15%左右",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "到26年底这些新客户开始供应，供应占比合计能达到15%左右，那是一个比较有意义的体量了，不限于那四大了，还有四大加上NVIDIA，不限于这五家了。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_d2f7354f8f3c3e67",
+      "proposition": "那是一个比较有意义的体量了",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "到26年底这些新客户开始供应，供应占比合计能达到15%左右，那是一个比较有意义的体量了，不限于那四大了，还有四大加上NVIDIA，不限于这五家了。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_7a319067072a13b9",
+      "proposition": "不限于那四大了，还有四大加上NVIDIA，不限于这五家了",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "到26年底这些新客户开始供应，供应占比合计能达到15%左右，那是一个比较有意义的体量了，不限于那四大了，还有四大加上NVIDIA，不限于这五家了。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_a406a5fc67a9088a",
+      "proposition": "预计北美市场收入占比将达到85%左右",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "预计北美市场收入占比将达到85%左右。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_9d4ea01dda6ad54d",
+      "proposition": "今年85%左右，还有15%是国内",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "今年85%左右，还有15%是国内。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_bf5fa66fb7be5a02",
+      "proposition": "Q2 800G其实是超预期的，肯定是超预期的。",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "Q2 800G其实是超预期的，肯定是超预期的。但这也不叫超预期，"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I38",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I38「Q2 800G其实是超预期的，肯定是超预期的。但这也不叫超预期」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_7a4789de164cf58a",
+      "proposition": "但这也不叫超预期。",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "Q2 800G其实是超预期的，肯定是超预期的。但这也不叫超预期，"
+      },
+      "draft": {
+        "judgement": "duplicate",
+        "matched_gold_id": "",
+        "reason": "金标 NT-I38 已被 itm_bf5fa66fb7be5a02 占用（1:1 映射）；语义等价请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_fc120f1f696e575a",
+      "proposition": "就是因为1.6T拉胯了。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "就是因为1.6T拉胯了，"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I37",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I37「因为1.6T拉胯了」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_bcc948fbbc305801",
+      "proposition": "不是DSP拉胯了。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "negated",
+        "evidence_quote": "不是DSP拉胯了，然后800G就明显比那个800G肯定不止。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_9d5690aacd6b1c1f",
+      "proposition": "然后800G就明显比那个800G肯定不止。",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "不是DSP拉胯了，然后800G就明显比那个800G肯定不止。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_95b328bedd19db95",
+      "proposition": "他说什么半年这个肯定数字不对，二季度就有超过300万个了。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "mixed",
+        "evidence_quote": "他说什么半年这个肯定数字不对，二季度就有超过300万个了。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_e6b94f6820523c98",
+      "proposition": "128是刚刚推出的，正在中心进行验证",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "128是刚刚推出的，正在中心进行验证，对吧？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_6e2923485c37dd60",
+      "proposition": "中心是它的客户",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "中心是它的客户，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_703720fdd5630e8b",
+      "proposition": "尚无固定的客户，德科立将其视为一个过渡型的产品",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "尚无固定的客户，德科立将其视为一个过渡型的产品。"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I23",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I23「尚无固定的客户」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_98e6854ddb408a76",
+      "proposition": "因为mems主要是要用300",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "因为mems主要是要用300，对吧？"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I49",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I49「因为mems主要是要用300」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_c406d5644596545b",
+      "proposition": "为什么用300？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "为什么用300？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_44f86b05bddc6d21",
+      "proposition": "为什么要多？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "为什么要多？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_f30f5bad9b851bf4",
+      "proposition": "以前给你们讲特氟龙的时候都说过这个问题",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "以前给你们讲特氟龙的时候都说过这个问题，对吧？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_49e72647189fa999",
+      "proposition": "虽然NVIDIA可能对128有需求",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "虽然NVIDIA可能对128有需求，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_700b2b8ffda76474",
+      "proposition": "但谷歌已经明确表示，如果要mems的话就要300以上",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "condition",
+        "polarity": "affirmed",
+        "evidence_quote": "但谷歌已经明确表示，如果要mems的话就要300以上。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_2f72d51635263ce4",
+      "proposition": "Mems相比光波导优势，这个以前都解释过，就稍微看看时延、功耗等等这些。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "Mems相比光波导优势，这个以前都解释过，就稍微看看时延、功耗等等这些。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_c3c1266d9aa7373c",
+      "proposition": "既然光波导的方案优势明显，为何300还是要用mems？",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "question",
+        "polarity": "unknown",
+        "evidence_quote": "既然光波导的方案优势明显，为何300还是要用mems？"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_7c3277c9c5348a69",
+      "proposition": "因为光波导还没做出来。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "negated",
+        "evidence_quote": "因为光波导还没做出来。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_a060bdb6d96972d0",
+      "proposition": "他自称在全球上处于领先地位，理论仿真已经跑通了256端口的设计。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "他自称在全球上处于领先地位，理论仿真已经跑通了256端口的设计。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_5de2e5ebfaa12f38",
+      "proposition": "在实际研发当中，128的光波导经过五个批次的流片后，良率仍然不乐观，",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "在实际研发当中，128的光波导经过五个批次的流片后，良率仍然不乐观，"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I25",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I25「128的光波导经过五个批次的流片后，良率仍然不乐观」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_e84d344187dae400",
+      "proposition": "尚未达到可以量产的阈值，",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "尚未达到可以量产的阈值，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_a41addfcb6696346",
+      "proposition": "说明设计上仍然存在缺陷，",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "说明设计上仍然存在缺陷，"
+      },
+      "draft": {
+        "judgement": "matched",
+        "matched_gold_id": "NT-I26",
+        "reason": "机械匹配（相似度 0.92）金标 NT-I26「说明设计上仍然存在缺陷」；语义等价请人工核对"
+      }
+    },
+    {
+      "candidate_id": "itm_6c2ba78c0273630f",
+      "proposition": "需要进一步调整，",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "需要进一步调整，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_1734bd482906d94d",
+      "proposition": "就是没进展。",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "就是没进展。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_e1b6a3af581549d5",
+      "proposition": "希望谷歌，希望德科立加快这个速度，以匹配其V8I的需求，这个需求是非常紧急的了。",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "希望谷歌，希望德科立加快这个速度，以匹配其V8I的需求，这个需求是非常紧急的了。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_1c879ee0d6f8c8f5",
+      "proposition": "所以就要看你跑不跑得过，",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "affirmed",
+        "evidence_quote": "所以就要看你跑不跑得过，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_aa3a05e92d163f6e",
+      "proposition": "你自己如果跑不过，",
+      "model_suggestion": {
+        "semantic_type": "unknown",
+        "statement_role": "condition",
+        "polarity": "negated",
+        "evidence_quote": "你自己如果跑不过，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_db43bbe2defab43f",
+      "proposition": "但是芯片是不能等你的，",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "但是芯片是不能等你的，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_69e0ab3111e75cce",
+      "proposition": "因为这里面不光有芯片，有博通，有台积电，",
+      "model_suggestion": {
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "polarity": "affirmed",
+        "evidence_quote": "因为这里面不光有芯片，有博通，有台积电，"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_3318be64b425bc49",
+      "proposition": "你还有PCB，还有7788的所有的供应链，没法等你这一个。",
+      "model_suggestion": {
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "polarity": "negated",
+        "evidence_quote": "你还有PCB，还有7788的所有的供应链，没法等你这一个。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    },
+    {
+      "candidate_id": "itm_65a5702291b3b17b",
+      "proposition": "如果你这个出来就出来了，出不来只能用替代方案了。",
+      "model_suggestion": {
+        "semantic_type": "forecast",
+        "statement_role": "condition",
+        "polarity": "affirmed",
+        "evidence_quote": "如果你这个出来就出来了，出不来只能用替代方案了。"
+      },
+      "draft": {
+        "judgement": "correct_extra",
+        "matched_gold_id": "",
+        "reason": "48 条金标无机械对应；evidence_quote 在案，内容真实性请人工复核"
+      }
+    }
+  ]
+}

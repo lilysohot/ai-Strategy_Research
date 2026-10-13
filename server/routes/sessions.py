@@ -28,10 +28,10 @@ from server.store import (
     count_sessions,
     create_session,
     delete_session,
-    derive_title,
     get_session,
     list_sessions,
     list_turns,
+    session_display_metadata,
 )
 from server.store import User as UserModel
 
@@ -66,10 +66,10 @@ def _parse_create(body: dict[str, Any]) -> CreateSessionRequest:
     )
 
 
-def _session_view(s: Any) -> dict[str, Any]:
+def _session_view(s: Any, metadata: dict[str, Any]) -> dict[str, Any]:
     return {
         "id": str(s.id),
-        "title": s.title,
+        **metadata,
         "created_at": s.created_at.isoformat() if s.created_at else None,
         "updated_at": s.updated_at.isoformat() if s.updated_at else None,
     }
@@ -91,9 +91,6 @@ async def create_session_route(
 ) -> dict[str, Any]:
     req = _parse_create(body)
     title = req.title
-    # Derive the title from the first message when the client didn't supply one.
-    if not title and req.first_message:
-        title = derive_title(req.first_message)
     session = await create_session(user_id=user.id, title=title)
     # If a first message was provided, seed the conversation with a user turn so
     # the history renderer (T2.6) and the title derivation have something to work
@@ -102,7 +99,11 @@ async def create_session_route(
         await append_turn(
             session_id=session.id, role="user", content=req.first_message
         )
-    return _session_view(session)
+        refreshed = await get_session(session_id=session.id, user_id=user.id)
+        if refreshed is not None:
+            session = refreshed
+    metadata = await session_display_metadata([session])
+    return _session_view(session, metadata[session.id])
 
 
 @router.get("")
@@ -113,8 +114,9 @@ async def list_sessions_route(
 ) -> dict[str, Any]:
     rows = await list_sessions(user_id=user.id, limit=limit, offset=offset)
     total = await count_sessions(user_id=user.id)
+    metadata = await session_display_metadata(rows)
     return {
-        "sessions": [_session_view(s) for s in rows],
+        "sessions": [_session_view(s, metadata[s.id]) for s in rows],
         "total": total,
         "has_more": offset + len(rows) < total,
     }
@@ -136,7 +138,8 @@ async def get_session_route(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="会话不存在"
         ) from None
-    return _session_view(session)
+    metadata = await session_display_metadata([session])
+    return _session_view(session, metadata[session.id])
 
 
 @router.get("/{session_id}/turns")

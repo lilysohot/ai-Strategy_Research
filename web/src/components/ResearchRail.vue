@@ -185,7 +185,7 @@ onMounted(async () => {
         data-testid="session-item"
         @click="onSelect(s.id)"
       >
-        <span class="item-title">{{ s.title || '未命名研究' }}</span>
+          <span class="item-title" :title="s.title ?? undefined">{{ s.title || '未命名研究' }}</span>
         <span class="item-meta">
           {{ s.turn_count ?? 0 }} 条 · {{ formatDate(s.updated_at || s.created_at) }}
         </span>

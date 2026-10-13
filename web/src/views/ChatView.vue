@@ -387,6 +387,7 @@ async function reloadTurns(): Promise<void> {
   if (!id) return
   try {
     await sessions.loadTurns(id, Math.max(sessions.activeTurns.length, 100))
+    await sessions.refreshMetadata(id)
   } catch {
     // Keep the live stream visible if the authoritative refresh races.
   }
@@ -442,10 +443,10 @@ async function onInputAnswered(followUpRunId: string | null): Promise<void> {
   runStream.watch(followUpRunId, undefined, sessions.activeId)
 }
 
-function buildRunPayload(text: string, files: File[]): { message: string; session_id?: string } | FormData {
-  if (!files.length) return { session_id: sessions.activeId ?? undefined, message: text }
+function buildRunPayload(text: string, files: File[], sessionId: string): { message: string; session_id: string } | FormData {
+  if (!files.length) return { session_id: sessionId, message: text }
   const form = new FormData()
-  form.append('session_id', sessions.activeId ?? 'default')
+  form.append('session_id', sessionId)
   form.append('message', text)
   for (const file of files) form.append('files', file)
   return form
@@ -463,8 +464,10 @@ async function onSend(text: string, files: File[]): Promise<void> {
   }
 
   sending.value = true
+  const submittedSessionId = sessions.activeId
   try {
     await reloadTurns()
+    if (sessions.activeId !== submittedSessionId) return
     sessions.appendLocalTurn({
       seq: (sessions.activeTurns.at(-1)?.seq ?? 0) + 1,
       role: 'user',
@@ -472,13 +475,15 @@ async function onSend(text: string, files: File[]): Promise<void> {
       run_id: null,
       created_at: null,
     })
-    const res = await runsApi.submit(buildRunPayload(text, files))
+    const res = await runsApi.submit(buildRunPayload(text, files, submittedSessionId))
     // F21: remember the newest submitted run per session so a refresh can
     // re-subscribe it while it is still active (a run parked on the approval
     // gate has no assistant turn yet — turns alone cannot point at it).
-    if (sessions.activeId) runStream.rememberRun(sessions.activeId, res.run_id)
+    runStream.rememberRun(submittedSessionId, res.run_id)
     detailsOpen.value = false
-    runStream.watch(res.run_id, undefined, sessions.activeId)
+    runStream.watch(res.run_id, undefined, submittedSessionId)
+    // Metadata refresh must not turn a successful submission into a send error.
+    void sessions.refreshMetadata(submittedSessionId).catch(() => {})
   } catch (err) {
     ElMessage.error(err instanceof Error ? err.message : '发送失败')
   } finally {

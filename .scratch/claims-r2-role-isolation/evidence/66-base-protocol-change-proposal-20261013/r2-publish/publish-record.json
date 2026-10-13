@@ -6,13 +6,13 @@
   "calls": [
     {
       "prompt_chars": 4983,
-      "response_chars": 8306,
+      "response_chars": 6650,
       "model": "deepseek-v4-flash-ga-260731",
       "finish_reason": "stop",
       "usage": {
-        "prompt_tokens": 2440,
-        "completion_tokens": 3067,
-        "total_tokens": 5507,
+        "prompt_tokens": 2431,
+        "completion_tokens": 2282,
+        "total_tokens": 4713,
         "reasoning_tokens": 0
       }
     }
@@ -20,7 +20,7 @@
   "declared_deviation": "llm 包装注入 REPAIR_NOTE（逐字存档于本脚本）",
   "plan_consistent": true,
   "findings": [
-    "task_not_terminal:task:10e17d59bd7d2fe32531db7472300e0b72556017c3bf464bc1ccbde7d9367a8e:blocked"
+    "task_not_terminal:task:3c89be3a54611348585d7c86db5a95c750586d8723d9084780d38934f0394ce3:blocked"
   ],
   "tasks": [
     {

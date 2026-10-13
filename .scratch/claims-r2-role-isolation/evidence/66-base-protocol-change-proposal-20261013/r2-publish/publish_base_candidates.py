@@ -110,7 +110,7 @@ def main() -> int:
     try:
         result = execute_batch(
             plan,
-            store_root=HERE / "store-run3",
+            store_root=HERE / "store-run4-final",
             allow_model=True,
             config=cfg,
         )

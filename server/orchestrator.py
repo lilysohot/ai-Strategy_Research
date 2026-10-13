@@ -43,6 +43,7 @@ from server.history import (
     extract_final_answer,
 )
 from server.investment_context import InvestmentContextResolver, materialize_context
+from server.run_outcome import interruption_reason
 from server.store import (
     APPROVAL_ABANDONED,
     APPROVAL_ADOPTED,
@@ -1390,10 +1391,10 @@ class Orchestrator:
             answer = extract_final_answer(frame).strip()
         if not answer:
             return
-        stopped_by = frame.get("stopped_by") or ""
+        stopped_by = interruption_reason(frame.get("stopped_by"))
         error = frame.get("error") or ""
         content = answer
-        if stopped_by or error:
+        if stopped_by or error or frame.get("ok") is False:
             tag = stopped_by or "error"
             content = f"{answer}\n\n_[partial: {tag}]_"
         elif self._trajectory_degraded(handle.run_id):
@@ -1430,10 +1431,9 @@ class Orchestrator:
     async def _persist_run_result(self, handle: RunHandle, frame: dict[str, Any]) -> None:
         """Persist the run's terminal state (T2.7 / T2.8).
 
-        Status precedence (T2.8): a non-empty ``stopped_by`` means the run ended
-        early — it is recorded as ``"stopped"`` (not ``"completed"``) so the UI
-        can show it as a partial/stopped run. ``"failed"`` is reserved for runs
-        that raised. The api_key/prompt are never touched here (they were set at
+        Interruption reasons produce ``"stopped"``; normal engine exits such as
+        ``no_tool`` can complete successfully. An error or unsuccessful worker
+        still produces ``"failed"``. The api_key/prompt are never touched here (they were set at
         submission). A run id that is not a UUID (defensive) is skipped.
         """
         if not _looks_like_uuid(handle.run_id):
@@ -1442,14 +1442,14 @@ class Orchestrator:
         # stopped/input_required），再落终态；update_run_result 对该原因有防复活保护。
         await self._materialize_input_intent(handle.run_id)
         ok = frame.get("ok")
-        stopped_by = frame.get("stopped_by") or ""
+        stopped_by = interruption_reason(frame.get("stopped_by"))
         error = frame.get("error") or ""
         answer = (frame.get("final_answer") or "").strip()
         if not answer:
             answer = extract_final_answer(frame).strip()
         if stopped_by:
             status = "stopped"
-        elif ok:
+        elif ok and not error:
             status = "completed"
         else:
             status = "failed"
@@ -1468,7 +1468,7 @@ class Orchestrator:
         # Stops are owned by the bridge's run_stopped event, so we only emit the
         # other two outcomes here.
         if not stopped_by:
-            if ok:
+            if status == "completed":
                 self._publish(
                     handle.run_id,
                     make_event(
@@ -1541,7 +1541,7 @@ class Orchestrator:
                 turn.role == "assistant" and turn.run_id == run_id for turn in existing
             )
             if not already_recorded:
-                tag = stopped_by or error
+                tag = interruption_reason(stopped_by) or error
                 content = final_answer if not tag else f"{final_answer}\n\n_[partial: {tag}]_"
                 await append_turn(
                     session_id=session_id, role="assistant", content=content, run_id=run_id

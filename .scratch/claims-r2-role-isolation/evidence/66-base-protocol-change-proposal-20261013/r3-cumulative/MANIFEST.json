@@ -1,0 +1,24 @@
+{
+  "schema_version": "cumulative-final-manifest-1",
+  "created_on": "2026-10-13",
+  "zero_call": true,
+  "model_calls": 0,
+  "inputs": {
+    "r3/r6/r7/r4 四次尝试的 store 产物": "见 cumulative-final.json",
+    "gold": "sha256:f8feaf96168c1a068d6e0c0e1a1f6b34113765ed5a76058c3d9f02ea730ccc59"
+  },
+  "outputs": {
+    "MANIFEST.fill-record.json": "sha256:db58f89c6f80248ffa40412f64519be093a4725552c93240e72ca7ff6fea5e70",
+    "adjudication-worksheet-base.json": "sha256:24b0e45e230d8f9305e0df4c45e11580bf2f9c267f8e50ba170eb35401debc07",
+    "adjudication-worksheet-base.md": "sha256:2cde3a6ba3286d9ea2fbdb2ca2f35ce6dd17452996726ca0354b2cff8d82cc9f",
+    "cumulative-final.json": "sha256:6399f254f87583db45eb328037ea4469437d865ebdbeafb04c5101d395c89886",
+    "cumulative-union.json": "sha256:bdb20e4e97bca5e0a4fc9a7d21fca8467612377efcd674c5a7f04fb0b4fc51ac"
+  },
+  "in_place_edits": 0,
+  "final_union": {
+    "slots": "7/7",
+    "same_source": "6/7",
+    "r4_only_slot": "slot_ef08e9bee54690b0（引导性碎片；疑似亦为 no_independent_proposition，按 U 指示不再验证）",
+    "candidate_records": 16
+  }
+}

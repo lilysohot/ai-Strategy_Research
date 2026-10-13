@@ -1,0 +1,26 @@
+{
+  "schema_version": "base-adjudication-signoff-1",
+  "created_on": "2026-10-13",
+  "reviewer": "xyl",
+  "channel": "对话「已签认」+ 工作表签名（裁定人：xyl 日期：2026-10-30——日期疑为 2026-10-13 笔误，按原样存档）",
+  "signed_sheet_sha256": "sha256:de4765ead1dc7040b5ecefce52aa41cc1d41cd62bafb2b586116b0e71e305a84",
+  "fill_divergence_note": "裁定内容以 adjudication-worksheet-base.json（16/16 已填）为准；同名 .md 表格为未回写模板——两件哈希均已存档",
+  "rulings": {
+    "matched": 7,
+    "duplicate": 3,
+    "correct_extra": 6,
+    "matched_golds": [
+      "NT-I13",
+      "NT-I14",
+      "NT-I15",
+      "NT-I16",
+      "NT-I17",
+      "NT-I42",
+      "NT-I43"
+    ]
+  },
+  "contract_enforcement": [
+    "3 处非 matched 行的关联金标注记按契约剥离（保留于 reason）",
+    "duplicate 不携带 matched_gold_id"
+  ]
+}

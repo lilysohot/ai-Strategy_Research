@@ -1,0 +1,25 @@
+{
+  "schema_version": "base-assembly-manifest-1",
+  "created_on": "2026-10-13",
+  "zero_call": true,
+  "model_calls": 0,
+  "inputs": {
+    "signed_sheet_json": "sha256:24b0e45e230d8f9305e0df4c45e11580bf2f9c267f8e50ba170eb35401debc07",
+    "signed_sheet_md": "sha256:de4765ead1dc7040b5ecefce52aa41cc1d41cd62bafb2b586116b0e71e305a84",
+    "cumulative_final": "sha256:6399f254f87583db45eb328037ea4469437d865ebdbeafb04c5101d395c89886"
+  },
+  "outputs": {
+    "SIGNOFF.json": "sha256:fdff84d7258192c2c245cf2b2623e7287a0b4f6327a3091d972befd23c2a645f",
+    "assemble_base_candidates.py": "sha256:6a3ac166ffcbb355884f48350df8f5fac2b406a0e7d0967fd65ad2ab17eeeb8c",
+    "assembled-scoring-input.json": "sha256:625d2002fcbf5a499c295f27ddf7b1f1f7e960e5ebe9e0116f98f5c7b506be77"
+  },
+  "in_place_edits": 0,
+  "result": {
+    "assembled_raw": 16,
+    "mappings": 16,
+    "rejected": 0,
+    "judgement_mix": "matched 7 / duplicate 3 / correct_extra 6",
+    "cumulative_with_I06_I41": "31 条已装配裁定（15+16）",
+    "honest_scoring_note": "门 33 重出分仍被主工作台 203 条 unresolved 阻塞；本批不产生新分数"
+  }
+}

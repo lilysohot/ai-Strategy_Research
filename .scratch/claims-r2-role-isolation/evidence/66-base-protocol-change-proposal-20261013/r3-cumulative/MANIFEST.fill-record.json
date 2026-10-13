@@ -1,0 +1,47 @@
+{
+  "schema_version": "adjudication-fill-record-1",
+  "created_on": "2026-10-13",
+  "model_calls": 0,
+  "what_happened": "The base-packet worksheet (md + json) was filled in place by an agent draft, at U's request, so the human verifies instead of typing.",
+  "authority_note": "DRAFT, not an adjudication. Contract v4.1 makes semantic equivalence the human adjudicator's call. The header line `裁定人：____ 日期：____` is left blank; rows carry drafted_by=agent and status=pending_human_verification. It becomes an adjudication only when the human signs.",
+  "supersedes_manifest_hashes": {
+    "adjudication-worksheet-base.md": {
+      "previous": "(file as delivered by the run session, 2026-10-13 13:42)",
+      "now": "sha256:2823ef7b78ac6ab3d47bf79e1ccdabcebc3a19c20856f47a6ae2c1ca1b004d7b"
+    },
+    "adjudication-worksheet-base.json": {
+      "previous": "(file as delivered by the run session, 2026-10-13 13:40)",
+      "now": "sha256:24b0e45e230d8f9305e0df4c45e11580bf2f9c267f8e50ba170eb35401debc07"
+    }
+  },
+  "corrections_made_before_filling": [
+    {
+      "issue": "header claimed 'gold 12 (all critical)'",
+      "fact": "packet span is exactly char:5246-5537; the items gold records with that locator number 7 (NT-I13/I14/I15/I16/I17/I42/I43), all critical",
+      "why_wrong": "12 is the document-wide critical count, and 5 of the listed references (NT-R07/R08/R09/R21/R22) are material_relations records",
+      "consequence_if_ignored": "adjudicators could match items candidates against relation gold, polluting the items score; relations are out of scope this round (OPEN-2=C) and production emits 0 relations (evidence 39)"
+    },
+    {
+      "issue": "r4 provenance model name",
+      "fact": "gate 28 authorizes `deepseek-v4-flash`; r4 records `deepseek-flash`",
+      "action": "flagged for U's ruling; rows 3/4/5/16 affected; recorded in the json under model_deviation"
+    }
+  ],
+  "result_as_drafted": {
+    "matched": 7,
+    "duplicate": 3,
+    "correct_extra": 6,
+    "gold_items_covered": ["NT-I13", "NT-I14", "NT-I15", "NT-I16", "NT-I17", "NT-I42", "NT-I43"],
+    "note": "matched 7 covers exactly the 7 in-scope items gold records; if U rejects the two behavior-type rulings (rows 3 and 4), matched falls to 5"
+  },
+  "open_for_human_verification": [
+    "rows 3/4/16: candidate semantic_type (opinion/condition) vs gold behavior — accept behavior and match, or keep and downgrade to correct_extra?",
+    "rows 11/12: NT-I17 is a compound condition; does the contract's compound_condition clause let each sub-item take partial credit, or does strict 1:1 allow only one?",
+    "r4 model-name deviation: accept with a declared deviation, or spend +1 call to re-extract those 2 slots under the compliant model?"
+  ],
+  "not_claimed": [
+    "no candidate text was modified",
+    "no calls were made; no gold, contract or threshold was touched",
+    "the draft is not an adjudication and cannot enter scoring until the human signs it"
+  ]
+}
