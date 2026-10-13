@@ -1220,6 +1220,64 @@ Issue 28 零调用冻结 items-only 质量门（selector-v5 单角色计划、Is
 （doubao 2/8 与 deepseek 12/23 同形态），提示词/协议表达是否构成诱因未被本门归因，属未来新门
 可预注册的变量。任何新模型、新协议或归因实验路线须**另立新门**并获新的显式授权。
 
+## 33. 2026-10-12/13 执行增补：items 链口径冻结、Stage 2 全量裁定、门 33 诚实出分与 R2 修订基准过门
+
+**2026-10-12 基础（Issue 41 与 Wave 0）**：items 链被归因到**单一接缝**——契约
+`role_required_fields.material_items` 与生产端/金标两侧不同轴，加上评分器只做
+`(role, source_id, origin, semantic_fields)` 严格 identity 相等、完全不消费人工裁定
+（`evidence/34-chain-root-cause-audit-20261011/`，r1—r10）。据此先零调用冻结口径：契约经
+v4（**OPEN-1=A**：门 28 的 0.85/0.80 为唯一阈值权威、评分器改读契约；**OPEN-2=C**：
+relations 本轮不纳入评分并显式披露）→ v4.1（并入 3 条读路径条款：只改字段名不生成语义、
+缺字段记 absent 不得判不匹配、评分器不得以身份相等为匹配前提）→ v4.2（改钉门 28 **v2**
+`8cc11bcc…`；**六项阈值逐字不变**）逐版签认；Wave 0 五件落地——P01 装配器
+`plugins/corpus/adjudication_assembly.py`（签名无金标参数＝结构性禁读）、P02
+`MatchingMode.ADJUDICATED` + `_match_by_adjudication`（只消费裁定映射，`LEGACY_IDENTITY`
+须显式，legacy 四臂逐字段不变）、P06 证据护栏（`tools/evidence_guard.py` +
+`tools/check_evidence_guard.py` + 例外登记）、P07 编号归位、P08 MANIFEST 回填；记账四条
+（P12/P13/P14/P16）闭合，冻结链校验器全绿。门 33 工作台 v2 重建为严格超集（补齐
+`speaker_ref` 等缺失字段，三方交叉校验分歧 0）。
+
+**Stage 2 全量裁定**：`adjudication/worksheet.json` 的 222 条候选由 `xyl` 全量裁定
+（matched 26 / correct_extra 190 / out_of_scope 5 / duplicate 1，含 2026-10-12 校准撤销 3 行）；
+本会话机械预填（`evidence/67`）经 29 行分歧比对后**正式除名**，不再作为口径输入。
+
+**2026-10-13 双臂补跑与并集裁定**：授权后执行 control（`deepseek-v4-flash`）与 treatment
+（`doubao-seed-2.1-lite`）各 4 次（base-7critical 1 + NT-I06 2 + NT-I41 1）；两臂**接受/拒绝
+模式逐字一致**，证明 base 包的阻塞与模型选择无关。随后 base 包改用修复式重试（1 次调用，
+注入记账反馈 + 终端 reason 白名单词表），12 条 critical 金标由 **0 候选 → 7 条 matched**；
+并集裁定确立 A 工作表（reviewer=xyl）为唯一权威。
+
+**门 33 首次诚实出分（FAIL）**：召回 **34/48 = 0.708**、源1 0.909、源2 **0.538**、精确率
+240/248、unresolved 0、16 条高危断言 **8/16** ⇒ 判据 1/2/7 未过。经用户裁定（不改金标、
+不扩大样本），该 FAIL 被记为**原基准下的不可达终态**（`evidence/72-…/terminal-decision.json`），
+并登记四处表述更正——其中「8 条未过断言全部在源2」不成立：NT-I09/I19 属源1。
+
+**FN 归因推翻「抽取覆盖缺口」假说**：`evidence/71-fn-attribution-20261013/` 机器归因 14 条 FN
+——**全部**在同源候选里有近似文本（多条 sim=1.0），**0** 条落在 evidence/32 记录的未产出槽，
+**0** 条为「池内无近似候选」；缺口在**裁定口径**（原子度/限定/承载/断言形态/视角），不在抽取。
+据此「对源2 定向补抽」被排除为必要手段。
+
+**R2 修订基准与过门**：用户 2026-10-13 具名签认**门 v3 + 契约 v4.3 + 7 条具名改判**
+（`evidence/75-r2-signed-20261013/`）——门 v3 把哨兵清单 16 → **11** 项（移出
+NT-I09/I19/I45/I46/I47，逐条登记）；契约 v4.3 新增 `matching.items`「上下文唯一可恢复」条款
+并登记金标侧绑定落后为例外；改判使 NT-I23/I26/I34/I38/I39/I45/I48 由 `correct_extra` →
+`matched`（三项人裁：二选一 = NT-I23；第 7 条 = NT-I45）。**六项阈值逐字未改**，
+`threshold_relaxation_after_execution_allowed` 仍为 `false`。据此重算 **PASS**：41/48 = 0.854、
+源1 0.909、源2 0.808、精确率 30/31、哨兵 **11/11**（`evidence/77-…/r1-score/`）；原基准 FAIL
+终态由契约 `registrations.supersedes_terminal_record` 登记取代，**旧记录字节未改**。余量极薄
+（总 +0.004、源2 +0.008），**不得读成生产可用或整篇覆盖**。
+
+**审计与实现追平**：`evidence/76-r2-retro-audit-20261013/` 回溯审计（首轮 23 项 7 项未过并全部
+处置 → 复查 26 项、签认后相位 27 项均 0 未过；开放项登记门/契约版本追逐、金标侧绑定例外）；
+`evidence/78-p03-binding-catchup-20261013/` 把评分器内嵌契约快照追平到 v4.3 六项 + 哨兵 11 项
+（8 项核验全过，冻结链校验器 `exit 0`）；`evidence/79-guard-countersignature-fix-20261013/`
+修复证据护栏 `countersignature` 占位被误判为已签（守卫扫描由 `exit 1 / violations 1` 恢复为
+`exit 0 / violations 0`，全树仅 1 个草案受影响，未登记例外、未改产物字节）。
+
+**仍未启动／未实施**：发布（O1「显式缺口」路线，影响评估见 `evidence/73-…`）、query/delivery/
+context_use、M_main 正向消费、W6 独立留出与多模型比较、W7 生产化；**评分器直接读契约阈值**
+（OPEN-1=A 的兑现，现为内嵌快照）、P04/P05 口径归一化与回归、route a/b 裁定。
+
 ## 附录：依据与源码入口
 
 下列链接均相对本报告所在目录，可在仓库内解析；优先以符号名定位，行号仅对应本次审阅版本。
