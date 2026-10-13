@@ -1,0 +1,17 @@
+{
+  "schema_version": "evidence-manifest-1",
+  "created_on": "2026-10-13",
+  "zero_model_calls": true,
+  "inputs": {
+    "tools/evidence_guard.py": "sha256:6020f26d6a4c73949c8f6771e559376a050d63301c7f0ffbb62ef58c2ea52c41",
+    "tests/test_evidence_guard.py": "sha256:2b6cc3ef695138c70ef19c9dd041a3e8744e0f322f6274629fb55eb5da995154"
+  },
+  "outputs": {
+    "guard-fix-record.json": "sha256:454abfe870c175c47f816c4cf7476e16651c8d50158dd161f665dfecee009c9c",
+    "guard-fix-record.md": "sha256:fe7547a5ec457d9e3ccb308b6506457527710349856d674ed5ae10e97fadb0c6"
+  },
+  "reproduce": [
+    "uv run python .scratch/claims-r2-role-isolation/evidence/79-guard-countersignature-fix-20261013/r0-zero-call/build_guard_fix_record.py",
+    "uv run python tools/check_evidence_guard.py"
+  ]
+}

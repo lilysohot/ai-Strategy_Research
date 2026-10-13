@@ -31,8 +31,10 @@
   「已抽到但被判不等价」，0 条落在未产出槽。
 - 取代关系与开放项：原基准 FAIL 终态由契约 `registrations.supersedes_terminal_record` 登记取代，**旧证据字节
   一律未改**；发布路径（O1「显式缺口」）代码面仍待裁定实施；**评分器改读契约阈值（OPEN-1=A 的兑现）代码
-  仍未实施**（77 为独立脚本重算，不等于评分器已改造）；`tools/evidence_guard.artifact_state` 把未签门草案
-  读成 `signed`（共享护栏，待另裁）。
+  仍未实施**（77 为独立脚本重算，不等于评分器已改造）；共享护栏缺陷（`tools/evidence_guard.artifact_state`
+  把未签门草案读成 `signed`，即 76 号 §四第 4 行的上报项）**已于同日修复**——证据守卫扫描恢复
+  `exit 0 / violations 0`，未登记任何脚本为例外、未改任何产物字节，记录见
+  `evidence/79-guard-countersignature-fix-20261013/r0-zero-call/`。
 - 当前执行边界：不再继续修复、换模或验收 relations；它不是 Claims/items 收尾的缺陷债务，也不得
   阻断 items-only 发布与正向消费。未来若有明确业务问题，须以新版本、独立预注册价值门和单独授权
   重新立项，不能通过修改 gold-v2、降低既有门槛或占用 items 收尾预算恢复。

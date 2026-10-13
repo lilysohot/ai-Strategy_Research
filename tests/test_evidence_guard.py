@@ -159,3 +159,58 @@ def test_filled_signoff_block_is_signed(tmp_path: Path) -> None:
         encoding="utf-8",
     )
     assert artifact_state(signed) == "signed"
+
+
+def test_pending_countersignature_placeholder_is_not_signed(tmp_path: Path) -> None:
+    """The R2 gate drafts carry a *pending* countersignature block; that is not a signature.
+
+    Regression for ``evidence/74-…/gate-v3.proposed.json`` (found 2026-10-13): the same class
+    of false positive already fixed for ``signoff`` on 2026-10-12. A nested ``signed_by`` (e.g.
+    in ``revision_history``) must not leak into the top-level judgement either.
+    """
+    draft = tmp_path / "gate-v3.proposed.json"
+    draft.write_text(
+        json.dumps(
+            {
+                "schema_version": "x",
+                "status": "draft_pending_human_signature",
+                "countersignature": {
+                    "required": True,
+                    "status": "pending_human_signoff",
+                    "reviewer": None,
+                    "signed_on": None,
+                },
+                "revision_history": [{"signed_by": "xyl"}, {"signed_by": "xyl"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    assert artifact_state(draft) == "plain"
+
+
+@pytest.mark.parametrize(
+    "block",
+    [
+        {"status": "pending_human_signoff", "signed_by": "xyl"},
+        {"status": "pending_human_signoff", "signed_on": "2026-10-13"},
+        {"status": "pending_human_signoff", "instrument": {"sha256": "x"}},
+        {"status": "countersigned"},
+        {"status": "不认识的未来状态"},
+    ],
+)
+def test_filled_countersignature_is_signed(tmp_path: Path, block: dict[str, object]) -> None:
+    """Explicit evidence wins over a pending status; unknown shapes stay protected (fail-closed)."""
+    target = tmp_path / "countersigned.json"
+    target.write_text(
+        json.dumps({"schema_version": "x", "status": "draft", "countersignature": block}),
+        encoding="utf-8",
+    )
+    assert artifact_state(target) == "signed"
+
+
+def test_proposed_pending_signoff_status_stays_protected(tmp_path: Path) -> None:
+    """Retained by design (2026-10-13): a proposal already sent out for signature must not be
+    clobbered by a regenerating script. Loosening this needs an explicit ruling."""
+    target = tmp_path / "proposal.json"
+    target.write_text(json.dumps({"status": "proposed_pending_signoff"}), encoding="utf-8")
+    assert artifact_state(target) == "signed"

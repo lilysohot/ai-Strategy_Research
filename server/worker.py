@@ -352,6 +352,7 @@ async def run_once(args: argparse.Namespace) -> int:
     from server.diff import DiffRecorder
     from server.profile import (
         BUSINESS_CONTEXT_POLICY,
+        CONTEXT_INTEGRITY_POLICY,
         INPUT_REQUEST_POLICY,
         PROFILE_NAME,
         build_profile_overrides,
@@ -514,6 +515,7 @@ async def run_once(args: argparse.Namespace) -> int:
             # appended to the instruction tail below instead — see issue 01 §10.2
             # S1-b and `_per_run_tail`.
             "Input files are mounted read-only at /inputs. Write the final deliverable to /outputs."
+            "\n" + CONTEXT_INTEGRITY_POLICY
         ),
     }
     if business_prefix:

@@ -952,6 +952,9 @@ async def _drive_workflow(session, profile, follow_up):
 def test_detect_danger_covers_destructive_and_installs():
     from apodex.agent_tools import detect_danger
     assert "delete" in detect_danger("rm -rf build")
+    assert "delete" in detect_danger("rm report.json")
+    assert "delete" in detect_danger("find . -delete")
+    assert "delete" in detect_danger("python3 -c 'import os; os.remove(\"x\")'")
     assert detect_danger("pip install foo") == "installs dependencies"
     assert detect_danger("uv add httpx") == "installs dependencies"
     assert "force-push" in detect_danger("git push --force origin main")

@@ -154,5 +154,8 @@ target recall / candidate precision / duplicates / origin 切片 / 覆盖率 / �
   更正见 `../evidence/72-…/r0-zero-call/corrections.md` 第 3 项；「14 条 FN 为真实抽取覆盖缺口」亦由
   `../evidence/71-fn-attribution-20261013/` 更正为「候选已抽到、被判不等价」。
 - **仍开放（不阻塞结票）**：§7 `gold_consumption_and_scoring` 授权行仍为空（未具名，挂账不代签）；
-  `tools/evidence_guard.artifact_state` 把未签门草案读成 `signed`（共享护栏，待另裁）；
   **评分器改读契约阈值（OPEN-1=A 的兑现）代码改动仍未实施**——77 是独立脚本重算，不等于评分器已改造。
+- **共享护栏缺陷已修（2026-10-13，同轮）**：`tools/evidence_guard.artifact_state` 把未签门草案读成 `signed`
+  （76 号 §四第 4 行的上报项）已修复——`countersignature` 占位块不再等同签署，证据守卫扫描由 `exit 1 /
+  violations 1` 恢复为 `exit 0 / violations 0`，且未登记任何脚本为例外；记录见
+  `../evidence/79-guard-countersignature-fix-20261013/r0-zero-call/`。

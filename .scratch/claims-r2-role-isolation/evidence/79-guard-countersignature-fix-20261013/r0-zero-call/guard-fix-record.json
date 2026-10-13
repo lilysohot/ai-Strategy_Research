@@ -1,0 +1,107 @@
+{
+  "schema_version": "guard-fix-record-1",
+  "created_on": "2026-10-13",
+  "zero_model_calls": true,
+  "wave0_item": "P06（护栏）后续修复；对应 evidence/44-replan D9 的同一闭合线",
+  "defect": {
+    "file": "tools/evidence_guard.py",
+    "function": "artifact_state",
+    "branch": "for key in _COUNTERSIGNATURE_KEYS: elif payload.get(key): return \"signed\"",
+    "symptom": "只要 countersignature 键非空即判 signed，不区分占位与签署",
+    "trigger_file": ".scratch/claims-r2-role-isolation/evidence/74-r2-gate-v3-contract-v43-draft-20261013/r0-zero-call/gate-v3.proposed.json",
+    "trigger_block": {
+      "required": true,
+      "status": "pending_human_signoff",
+      "reviewer": null,
+      "signed_on": null
+    },
+    "trigger_declared_status": "draft_pending_human_signature",
+    "observable": "tools/check_evidence_guard.py exit=1，violations=1，报 evidence/74-…/build_r2_drafts.py -> ['gate-v3.proposed.json']"
+  },
+  "root_cause": {
+    "same_class_as": "evidence_guard.py:101-102 自陈：仅凭 signoff 键存在即判已签，曾把 v4.2 草案误判为已签（2026-10-12 发现）",
+    "incomplete_fix": "2026-10-12 只修了 signoff（_signoff_block_filled），countersignature 仍为「键存在即判签」",
+    "already_reported_unfixed": "evidence/76-r2-retro-audit-20261013 §四第 4 行（artifact_state 把未签门草案读成 signed，已上报、未修、待另裁）"
+  },
+  "fix": {
+    "predicate": "_countersignature_filled()：显式签署证据（signed_by / instrument / signed_on）一律判 signed；状态属 _PENDING_SIGNOFF_STATUSES 时判未签；其余形态一律维持 signed",
+    "fail_closed": "未知状态、缺状态、非 dict 非空值都仍按 signed 保护；本次不存在任何「真签件被判 plain」的变化",
+    "pending_statuses": [
+      "awaiting_signature",
+      "awaiting_signoff",
+      "draft_pending_human_signature",
+      "not_signed",
+      "pending",
+      "pending_human_signature",
+      "pending_human_signoff",
+      "pending_signoff",
+      "proposed_pending_signoff",
+      "unsigned"
+    ],
+    "scope": "只影响 countersignature 一个键；signoff 语义（空块=未签）原样保留"
+  },
+  "blast_radius": {
+    "scanned_json_files": 2863,
+    "changed_count": 1,
+    "changed": [
+      {
+        "path": "74-r2-gate-v3-contract-v43-draft-20261013/r0-zero-call/gate-v3.proposed.json",
+        "before": "signed",
+        "after": "plain"
+      }
+    ],
+    "note": "只有处于**显式待签状态**的 countersignature 占位块会被重新判为 plain；其余形态（含未知状态）一律维持 signed（fail-closed）。"
+  },
+  "protection_unchanged": {
+    "signed_targets_protected": 9,
+    "key_artifacts": {
+      "75-r2-signed-20261013/r0-zero-call/gate-v3.json": "signed",
+      "75-r2-signed-20261013/r0-zero-call/scoring-contract-v4.3.json": "signed",
+      "58-contract-v42-signed-20261012/r0-zero-call/scoring-contract-v4.2.json": "signed",
+      "10-quality-gold-freeze-20261008-r2/frozen-gold.json": "signed",
+      "28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate-v2.json": "signed",
+      "74-r2-gate-v3-contract-v43-draft-20261013/r0-zero-call/gate-v3.proposed.json": "plain"
+    }
+  },
+  "verification": {
+    "guard_tests": {
+      "command": "uv run python -m pytest -q tests/test_evidence_guard.py",
+      "exit": 0,
+      "summary": "24 passed in <elapsed>"
+    },
+    "guard_scanner": {
+      "command": "uv run python tools/check_evidence_guard.py",
+      "exit": 0,
+      "violations": 0,
+      "guarded": 9,
+      "legacy_exempt": 4,
+      "signed_targets_protected": 9
+    },
+    "freeze_chain": {
+      "command": "uv run python tools/check_freeze_chain.py",
+      "exit": 0,
+      "summary": "ok=16 covered=8 drift=0 needs_ruling=0"
+    },
+    "lint": {
+      "command": "uv run ruff check tools/evidence_guard.py tests/test_evidence_guard.py",
+      "exit": 0,
+      "summary": "All checks passed!"
+    }
+  },
+  "retained_by_design": {
+    "proposed_pending_signoff_in_SIGNED_STATUSES": "保守保留：它是「已发出待签」的提案态，覆盖它会使待签件失效（fail-closed）。移出该集合属放宽保护，须用户另行裁定。"
+  },
+  "not_done": [
+    "未把 evidence/74-…/build_r2_drafts.py 登记进 evidence_guard_exceptions.json（登记理由不成立：该脚本产物是草案而非已签产物，登记会封存误报）",
+    "未修改任何 evidence 产物字节；未重跑任何历史脚本",
+    "未改动 evidence/76-… 的字节（其上报的行由本记录声明已解决）"
+  ],
+  "inputs": {
+    "tools/evidence_guard.py": "sha256:6020f26d6a4c73949c8f6771e559376a050d63301c7f0ffbb62ef58c2ea52c41",
+    "tests/test_evidence_guard.py": "sha256:2b6cc3ef695138c70ef19c9dd041a3e8744e0f322f6274629fb55eb5da995154"
+  },
+  "reproduce": [
+    "uv run python .scratch/claims-r2-role-isolation/evidence/79-guard-countersignature-fix-20261013/r0-zero-call/build_guard_fix_record.py",
+    "uv run python tools/check_evidence_guard.py"
+  ]
+}

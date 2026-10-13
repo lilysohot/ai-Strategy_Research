@@ -1288,6 +1288,7 @@ async def test_worker_non_business_prefix_hides_unbound_calculation_tools(db, mo
     assert "strategy_lint" not in tools
     assert "investment_position_sizing" not in tools
     assert "BUSINESS CONTEXT POLICY" not in captured["meta"]["_sys_prompt_addendum"]
+    assert "CONTEXT INTEGRITY POLICY" in captured["meta"]["_sys_prompt_addendum"]
 
 
 # ── per-run guidance rides in the tail, never in the prefix (S1-b) ───

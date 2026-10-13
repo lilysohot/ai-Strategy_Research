@@ -107,6 +107,47 @@ def _signoff_block_filled(payload: dict[str, Any]) -> bool:
     return bool(str(signoff.get("signed_by") or "").strip()) or bool(signoff.get("instrument"))
 
 
+_PENDING_SIGNOFF_STATUSES: frozenset[str] = frozenset(
+    {
+        "pending",
+        "pending_human_signoff",
+        "pending_human_signature",
+        "pending_signoff",
+        "awaiting_signoff",
+        "awaiting_signature",
+        "proposed_pending_signoff",
+        "draft_pending_human_signature",
+        "not_signed",
+        "unsigned",
+    }
+)
+
+
+def _countersignature_filled(block: Any) -> bool:
+    """True only when a ``countersignature`` block actually carries a signature.
+
+    The R2 gate drafts use a *status-carrying* block shape — e.g.
+    ``{"required": true, "status": "pending_human_signoff", "reviewer": null,
+    "signed_on": null}``. Treating the key's mere presence as a signature misclassified
+    ``evidence/74-…/gate-v3.proposed.json`` (an unsigned draft) as signed (found 2026-10-13);
+    this is the same class of false positive fixed for ``signoff`` on 2026-10-12 and left
+    unfixed for this key.
+
+    Fail-closed by construction: explicit signature evidence always counts — whatever the
+    status claims — and any shape that is **not explicitly marked pending** counts as
+    signed, exactly as before.
+    """
+    if not isinstance(block, dict):
+        return bool(block)
+    if (
+        str(block.get("signed_by") or "").strip()
+        or block.get("instrument")
+        or str(block.get("signed_on") or "").strip()
+    ):
+        return True
+    return str(block.get("status") or "").strip() not in _PENDING_SIGNOFF_STATUSES
+
+
 def artifact_state(path: Path) -> str:
     """Classify one path as ``missing``, ``plain``, or ``signed``.
 
@@ -138,6 +179,9 @@ def artifact_state(path: Path) -> str:
     for key in _COUNTERSIGNATURE_KEYS:
         if key == "signoff":
             if _signoff_block_filled(payload):
+                return "signed"
+        elif key == "countersignature":
+            if _countersignature_filled(payload.get(key)):
                 return "signed"
         elif payload.get(key):
             return "signed"

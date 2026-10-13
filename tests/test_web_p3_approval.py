@@ -154,16 +154,16 @@ async def test_observer_confirm_emits_request_and_once_allows(tmp_path) -> None:
             None,
             {
                 "id": "c2",
-                "name": "create_file",
-                "args": {"path": "/outputs/report.md", "content": "hi"},
+                "name": "delete_file",
+                "args": {"path": str(tmp_path / "report.md")},
             },
         )
     )
     req = await _wait_for_event(events)
     assert req["type"] == "approval_requested"
-    assert req["tool_name"] == "create_file"
-    assert req["target"] == "/outputs/report.md"
-    assert req["risk"] == "normal"
+    assert req["tool_name"] == "delete_file"
+    assert req["target"] == str(tmp_path / "report.md")
+    assert req["risk"] == "high"
     assert req["approval_id"]
 
     assert gate.resolve(req["approval_id"], ApprovalDecision(decision="once")) is True
@@ -184,7 +184,7 @@ async def test_observer_pure_reject_uses_marker_text(tmp_path) -> None:
     task = asyncio.create_task(
         obs.on_tool_call(
             None,
-            {"id": "c3", "name": "create_file", "args": {"path": "/outputs/a.md", "content": "hi"}},
+            {"id": "c3", "name": "delete_file", "args": {"path": str(tmp_path / "a.md")}},
         )
     )
     req = await _wait_for_event(events)
@@ -193,7 +193,7 @@ async def test_observer_pure_reject_uses_marker_text(tmp_path) -> None:
     # Must match bridge._SYNTHETIC_RESULT_MARKERS so the terminal renders it
     # as skipped, and apodex's plain-reject wording (stop the task).
     assert out is not None
-    assert out.skip_with_result == "[user rejected this create_file call — task stopped]"
+    assert out.skip_with_result == "[user rejected this delete_file call — task stopped]"
 
 
 async def test_observer_reject_with_replacement_redirects(tmp_path) -> None:
@@ -205,7 +205,7 @@ async def test_observer_reject_with_replacement_redirects(tmp_path) -> None:
     task = asyncio.create_task(
         obs.on_tool_call(
             None,
-            {"id": "c4", "name": "create_file", "args": {"path": "/outputs/a.md", "content": "hi"}},
+            {"id": "c4", "name": "delete_file", "args": {"path": str(tmp_path / "a.md")}},
         )
     )
     req = await _wait_for_event(events)
@@ -215,7 +215,7 @@ async def test_observer_reject_with_replacement_redirects(tmp_path) -> None:
     )
     out = await asyncio.wait_for(task, timeout=2.0)
     assert out is not None
-    assert out.skip_with_result.startswith("[The user declined to run this create_file call. ")
+    assert out.skip_with_result.startswith("[The user declined to run this delete_file call. ")
     assert "write the tests first" in out.skip_with_result
 
 
@@ -230,6 +230,78 @@ async def test_observer_safe_tool_passes_through_without_event(tmp_path) -> None
     )
     assert out is None
     assert events == []
+
+
+async def test_observer_auto_allows_run_scoped_writes_and_computation(tmp_path) -> None:
+    from server.approval import ApprovalGate, ApprovalObserver
+
+    events: list[dict] = []
+    obs = ApprovalObserver(ApprovalGate(), events.append, cwd=str(tmp_path))
+    calls = [
+        {
+            "id": "write",
+            "name": "create_file",
+            "args": {"path": "/workspace/history.json", "content": "[]"},
+        },
+        {
+            "id": "compute",
+            "name": "bash",
+            "args": {"command": "python3 <<'PY'\nvalues = [1, 2, 3]\nprint(sum(values))\nPY"},
+        },
+    ]
+    for call in calls:
+        assert await obs.on_tool_call(None, call) is None
+    assert events == []
+
+
+def test_web_risk_policy_only_promotes_scoped_non_destructive_work(tmp_path) -> None:
+    from server.approval import assess_web_tool_risk
+
+    cwd = str(tmp_path)
+    for command in (
+        "python3 calculate_indicators.py",
+        "pytest -q",
+        "echo result > indicators.json",
+    ):
+        assert assess_web_tool_risk("bash", {"command": command}, cwd).level == "safe"
+
+    for command in (
+        "rm result.json",
+        "find . -delete",
+        "python3 -c 'import os; os.remove(\"result.json\")'",
+        "git reset --hard HEAD~1",
+        "pip install pandas-ta",
+    ):
+        risk = assess_web_tool_risk("bash", {"command": command}, cwd)
+        assert risk.level == "confirm", command
+        assert risk.danger, command
+
+    assert assess_web_tool_risk("bash", {"command": "rm -rf /"}, cwd).level == "deny"
+    assert (
+        assess_web_tool_risk("write_file", {"path": "/etc/passwd", "content": "x"}, cwd).level
+        == "deny"
+    )
+
+
+async def test_observer_keeps_shell_deletion_behind_high_risk_approval(tmp_path) -> None:
+    from server.approval import ApprovalDecision, ApprovalGate, ApprovalObserver
+
+    events: list[dict] = []
+    gate = ApprovalGate()
+    obs = ApprovalObserver(gate, events.append, cwd=str(tmp_path), timeout=5.0)
+    task = asyncio.create_task(
+        obs.on_tool_call(
+            None,
+            {"id": "delete", "name": "bash", "args": {"command": "rm -f /workspace/a.json"}},
+        )
+    )
+    req = await _wait_for_event(events)
+    assert req["tool_name"] == "bash"
+    assert req["risk"] == "high"
+    gate.resolve(req["approval_id"], ApprovalDecision(decision="reject"))
+    out = await asyncio.wait_for(task, timeout=2.0)
+    assert out is not None
+    assert "user rejected this bash call" in out.skip_with_result
 
 
 async def test_observer_danger_call_marks_risk_high(tmp_path) -> None:
@@ -257,7 +329,7 @@ async def test_observer_persists_session_all_for_rest_of_run(tmp_path) -> None:
 
     events: list[dict] = []
     gate = ApprovalGate()
-    call = {"id": "c7", "name": "create_file", "args": {"path": "/outputs/a.md", "content": "hi"}}
+    call = {"id": "c7", "name": "delete_file", "args": {"path": str(tmp_path / "a.md")}}
     obs = ApprovalObserver(gate, events.append, cwd=str(tmp_path), timeout=5.0)
     task = asyncio.create_task(obs.on_tool_call(None, call))
     req = await _wait_for_event(events)
@@ -277,10 +349,10 @@ async def test_observer_timeout_fails_closed(tmp_path) -> None:
     obs = ApprovalObserver(ApprovalGate(), events.append, cwd=str(tmp_path), timeout=0.05)
     out = await obs.on_tool_call(
         None,
-        {"id": "c8", "name": "create_file", "args": {"path": "/outputs/a.md", "content": "hi"}},
+        {"id": "c8", "name": "delete_file", "args": {"path": str(tmp_path / "a.md")}},
     )
     assert out is not None
-    assert out.skip_with_result == "[user rejected this create_file call — task stopped]"
+    assert out.skip_with_result == "[user rejected this delete_file call — task stopped]"
     assert events[-1]["decision"] == "reject"
 
 
@@ -288,15 +360,15 @@ async def test_observer_event_strings_are_redacted(tmp_path) -> None:
     from server.approval import ApprovalDecision, ApprovalGate, ApprovalObserver
 
     # §7 出口统一脱敏: even a secret smuggled into an argument that reaches the
-    # event payload (here the create_file target) must leave masked.
+    # event payload (here the delete_file target) must leave masked.
     events: list[dict] = []
     gate = ApprovalGate()
-    secret_path = "/outputs/a.md?api_key=supersecret123"
+    secret_path = str(tmp_path / "a.md?api_key=supersecret123")
     obs = ApprovalObserver(gate, events.append, cwd=str(tmp_path), timeout=5.0)
     task = asyncio.create_task(
         obs.on_tool_call(
             None,
-            {"id": "c9", "name": "create_file", "args": {"path": secret_path}},
+            {"id": "c9", "name": "delete_file", "args": {"path": secret_path}},
         )
     )
     req = await _wait_for_event(events)
@@ -541,13 +613,16 @@ async def test_completed_run_releases_worker_slot(monkeypatch) -> None:
     assert launches == ["r1", "r2"]
 
 
-# — slice 4: end-to-end — approve once executes; reject feeds the refusal —
+# — slice 4: end-to-end — destructive approval executes; reject preserves data —
 
 
 @pytest.fixture
 async def mock_llm_approval():
-    """One scripted server for two serial runs (worker pool is size 1):
-    turns 1-2 for the approved run, turns 3-4 for the rejected run."""
+    """One scripted server for two serial runs (worker pool is size 1).
+
+    Each run first creates a file without approval, then requests a destructive
+    Shell deletion. The first deletion is approved; the second is rejected.
+    """
     from deploy.huggingface.mock_llm import (
         MockLLMServer,
         text_turn,
@@ -557,12 +632,20 @@ async def mock_llm_approval():
     script = [
         tool_call_turn(
             "create_file",
-            {"path": "/outputs/approval-once.md", "content": "approved work"},
+            {"path": "/outputs/approval-once.md", "content": "delete after approval"},
+        ),
+        tool_call_turn(
+            "bash",
+            {"command": "rm -f outputs/approval-once.md"},
         ),
         text_turn("done once"),
         tool_call_turn(
             "create_file",
-            {"path": "/outputs/approval-reject.md", "content": "rejected work"},
+            {"path": "/outputs/approval-reject.md", "content": "preserve after rejection"},
+        ),
+        tool_call_turn(
+            "bash",
+            {"command": "rm -f outputs/approval-reject.md"},
         ),
         text_turn("done reject"),
     ]
@@ -617,9 +700,9 @@ async def test_approval_end_to_end(
 
         await asyncio.wait_for(_until_requested(), timeout=120)
         req = events[-1]
-        assert req["tool_name"] == "create_file"
-        assert req["target"] == f"/outputs/{marker}.md"
-        assert req["risk"] == "normal"  # plain sandbox write: no danger flag
+        assert req["tool_name"] == "bash"
+        assert req["target"] == f"rm -f outputs/{marker}.md"
+        assert req["risk"] == "high"
 
         approve = await app_client.post(
             f"/api/runs/{run_id}/approve",
@@ -639,15 +722,15 @@ async def test_approval_end_to_end(
         assert run.stopped_by != "user_stop"
         return run_id
 
-    # Run 1: approve → the sandbox write executes and the file lands.
+    # Run 1: the write is automatic; approving the destructive call removes it.
     run1 = await _drive("approval-once", "once")
     paths = build_run_paths(run1)
     landed = [
         p for root in (paths["outputs"], paths["workspace"]) for p in root.rglob("approval-once.md")
     ]
-    assert landed, "approved create_file never wrote the deliverable"
+    assert not landed, "approved Shell deletion did not remove the file"
 
-    # Run 2: reject → the declined result text flows back to the model.
+    # Run 2: rejecting deletion preserves the automatically-created file.
     run2 = await _drive("approval-reject", "reject")
     paths2 = build_run_paths(run2)
     landed2 = [
@@ -655,11 +738,11 @@ async def test_approval_end_to_end(
         for root in (paths2["outputs"], paths2["workspace"])
         for p in root.rglob("approval-reject.md")
     ]
-    assert not landed2, "rejected create_file must not have executed"
+    assert landed2, "rejected Shell deletion must preserve the file"
 
     refusals = [
         r
         for r in mock_llm_approval.requests
-        if "[user rejected this create_file call" in json.dumps(r.get("messages", []))
+        if "[user rejected this bash call" in json.dumps(r.get("messages", []))
     ]
     assert refusals, "the rejection never reached a follow-up LLM request"

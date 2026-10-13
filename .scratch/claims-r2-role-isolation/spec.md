@@ -347,6 +347,7 @@ challenges，缺少显式纠正/否定线索的 positive terminal 归一为 abse
   也未产生生产 query、publication 或数据库访问。
 - 未落定决议在对应 issue 中保持 needs-info/needs-triage，不由实现者选择会扩大数据、预算或产品范围的默认值。不得以“本地票已完成”代替主计划阶段签认。
 - 补充调用账（2026-10-13 追加；补足上文至 Issue 26 的计数，均为独立授权下执行，均不转授 publication、query、delivery、context_use 或额外预算）：Issue 28/31 各 24 次（run-1 `doubao-seed-2.1-lite` 16 次 429 失效、零 token；run-2 `deepseek-v4-flash` 24 次）；Issue 32 两臂各 24 次真实执行（control 10 + 14 全 succeeded；treatment 10 + 14，其中 1 次 `outcome_unknown`）；Issue 65 双臂补跑各 4 次（base-7critical 1 + NT-I06 2 + NT-I41 1；control `deepseek-v4-flash` / treatment `doubao-seed-2.1-lite`）；Issue 66 的 P-A 修复式重试 1 次（`doubao-seed-2.1-lite`）。阈值、金标与门 28 授权四项未因这些执行被放宽或改写。
+- 共享护栏口径（2026-10-13 追加）：`tools/evidence_guard.py::artifact_state` 曾把**处于显式待签状态**的 `countersignature` 占位块判为已签，导致 `tools/check_evidence_guard.py` 对 `evidence/74-…` 的草案生成脚本误报违约（`exit 1`）。已按「显式签署证据优先、明确待签即未签、其余形态一律维持已签」修正，扫描恢复 `exit 0 / violations 0`，未登记任何脚本为例外、未改任何产物字节；`SIGNED_STATUSES` 中的 `proposed_pending_signoff` **保守保留**（移出属放宽保护，须另行裁定）。记录：`evidence/79-guard-countersignature-fix-20261013/`。
 
 ## 6. 第一阶段完成条件
 

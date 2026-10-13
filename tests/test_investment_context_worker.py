@@ -84,6 +84,7 @@ async def test_worker_injects_context_as_data_and_binds_only_guarded_tool(monkey
     assert "investment_position_sizing" in tools
     assert "position_sizing" not in tools
     assert "BUSINESS CONTEXT POLICY" in metadata["_sys_prompt_addendum"]
+    assert "CONTEXT INTEGRITY POLICY" in metadata["_sys_prompt_addendum"]
     assert json.loads((run_root / "investment-context-tools.json").read_text()) == {
         "context_reads": 0,
         "lint_calls": 0,

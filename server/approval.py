@@ -1,8 +1,9 @@
 """ApprovalGate: the web-layer human-approval primitive (P3.2, §6.1).
 
-The observer half (:class:`ApprovalObserver`) classifies each tool call with
-apodex's own ``assess_with_rules`` (the single source of approval semantics —
-no new parsing points) and, for ``confirm``-level calls, parks an asyncio
+The observer half (:class:`ApprovalObserver`) starts with apodex's
+``assess_with_rules`` classification, then applies the Web worker's
+sandbox-aware promotion for reversible writes and non-destructive computation.
+For remaining ``confirm``-level calls, it parks an asyncio
 Future here and emits ``approval_requested``. The agent loop suspends on that
 future (the LLM cannot advance) until the user's decision arrives over the
 stdin JSONL channel::
@@ -25,7 +26,13 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 
-from apodex.agent_tools import RISK_DENY, RISK_SAFE, assess_with_rules
+from apodex.agent_tools import (
+    RISK_CONFIRM,
+    RISK_DENY,
+    RISK_SAFE,
+    ToolRisk,
+    assess_with_rules,
+)
 from frontier_agent.core.loop_types import ToolCallIntervention
 from server.bridge import redact_deep
 from server.events import make_event
@@ -33,6 +40,39 @@ from server.events import make_event
 # §6.1: a suspended approval must never hang the run forever; on timeout the
 # gate fails closed (reject) and forgets the pending id.
 DEFAULT_TIMEOUT_S = 300.0
+
+# A Web research worker already executes inside one run's isolated workspace.
+# Creating or replacing files there, and running non-destructive computation,
+# are routine reversible work. Keeping them behind a five-minute human gate
+# makes data analysis unable to finish. Unknown tools and destructive actions
+# retain the shared apodex decision; hard denials are never downgraded.
+_WEB_AUTO_APPROVED_MUTATIONS = frozenset(
+    {
+        "create_file",
+        "download_file",
+        "write_file",
+        "file_editor_create",
+        "file_editor_str_replace",
+    }
+)
+
+
+def assess_web_tool_risk(name: str, args: dict, cwd: str) -> ToolRisk:
+    """Apply the Web run's sandbox-aware approval policy.
+
+    The shared classifier remains authoritative for hard denials and danger
+    detection. Web only removes confirmation from scoped, reversible writes
+    and non-destructive shell computation. Deletion and every other dangerous
+    shell classification continue to require an explicit decision.
+    """
+    risk = assess_with_rules(name, args, cwd, rules=None)
+    if risk.level != RISK_CONFIRM:
+        return risk
+    if name in _WEB_AUTO_APPROVED_MUTATIONS:
+        return ToolRisk(RISK_SAFE, "run-scoped reversible write", risk.target)
+    if name == "bash" and not risk.danger:
+        return ToolRisk(RISK_SAFE, "sandboxed non-destructive command", risk.target)
+    return risk
 
 
 @dataclass
@@ -152,9 +192,9 @@ class ApprovalGate:
 class ApprovalObserver:
     """In-loop approval gate mirroring apodex's TerminalObserver semantics.
 
-    Classification is delegated to apodex's own ``assess_with_rules`` — the
-    single source of approval semantics, so no new deny/confirm parsing point
-    is introduced (§6.1). A hard ``deny`` is blocked *before* any event is
+    Classification starts with apodex's own ``assess_with_rules`` and only
+    promotes scoped reversible work after that shared policy has ruled out a
+    hard denial or destructive danger. A hard ``deny`` is blocked *before* any event is
     emitted, which is what makes it structurally unbypassable; a ``confirm``
     parks a future in the gate, emits ``approval_requested`` (redacted, like
     every SSE egress), and suspends the agent loop on it — the LLM cannot
@@ -185,7 +225,7 @@ class ApprovalObserver:
         del ctx  # unused; signature fixed by notify_tool_call
         name = str(tool_call.get("name", ""))
         args = tool_call.get("args", {}) or {}
-        risk = assess_with_rules(name, args, self.cwd, rules=None)
+        risk = assess_web_tool_risk(name, args, self.cwd)
 
         # Hard deny: never reaches the user prompt — no decision can bypass it.
         if risk.level == RISK_DENY:

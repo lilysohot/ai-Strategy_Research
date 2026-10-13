@@ -205,7 +205,13 @@ class ToolRisk:
 # they're not auto-denied. Covers what kimi's table misses: dependency installs
 # and destructive git. Matched against the full bash command string.
 _DANGER_PATTERNS: list[tuple[re.Pattern[str], str]] = [
-    (re.compile(r"\brm\s+(-\w*[rf]\w*|--recursive|--force)", re.I), "recursive/forced delete"),
+    # Deletion stays behind explicit confirmation even when Web runs are
+    # allowed to execute ordinary sandboxed computation without a prompt.
+    # Cover direct shell deleters and the common Python deletion APIs: a model
+    # must not bypass the gate merely by spelling ``rm`` in Python.
+    (re.compile(r"(?:^|[;&|]\s*|\b)(rm|rmdir|unlink|shred)\b", re.I), "deletes files"),
+    (re.compile(r"\bfind\b[^\n]*(?:-delete|-exec(?:dir)?\s+(?:rm|rmdir|unlink)\b)", re.I), "deletes files"),
+    (re.compile(r"\b(?:os\.(?:remove|unlink|rmdir)|shutil\.rmtree|Path\([^\n]*\)\.unlink)\s*\(", re.I), "deletes files"),
     (re.compile(r"\bsudo\b", re.I), "sudo (root)"),
     (re.compile(r"\b(curl|wget)\b[^|]*\|\s*(sudo\s+)?(sh|bash|zsh|python\d?)\b", re.I), "pipe-to-shell"),
     (re.compile(r"\bdd\b[^|]*\bof=", re.I), "dd raw write"),
