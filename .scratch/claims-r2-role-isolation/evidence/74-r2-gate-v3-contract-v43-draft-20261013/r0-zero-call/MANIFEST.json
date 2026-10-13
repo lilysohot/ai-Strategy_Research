@@ -5,14 +5,14 @@
   "status": "draft_pending_named_signoff",
   "note": "全部为草案；签认字段留空；未修改任何既有文件。",
   "artifacts": {
-    "build_r2_drafts.py": "sha256:b231a9f4560031aa371c6ae98ab74bfc62e3941e9ff6b6ec2d3affe96e1f6f33",
-    "gate-v3.proposed.json": "sha256:e4e740f566a701b5b79df7f980ae58c27525f1fea2e8b8f4a023793be0aa611e",
-    "scoring-contract-v4.3.proposed.json": "sha256:9367a285844ff12df8f3f2356fc41225a06f3bec17b7e249599c1ccdc3dc8269",
-    "re-adjudication-draft.json": "sha256:5825c164ac0fc82909ba7d6fa04a7828fa1f9de067fbccb402fa2a316a34aa40",
-    "diffs.json": "sha256:02f731b975f2db61105a77c32917395704607cc58802432b4a55d3353b21cb73",
-    "checks.json": "sha256:423fc81962b6b741976aef334fe3eef2da61f3912a3893db6b9981845cd27a28",
+    "build_r2_drafts.py": "sha256:ee597b468f558efa7ab66bc196920821dbc95cc46dc092aeb96d9dc99cc095d2",
+    "gate-v3.proposed.json": "sha256:6a657fe8351b8c45ec4d30e3e97e9caa4fa41ac73c2d2c8ba45886fb99982705",
+    "scoring-contract-v4.3.proposed.json": "sha256:c86660156476df5e928512b967689354afbe3b290bd20c2ff2557497fb5e9ded",
+    "re-adjudication-draft.json": "sha256:c4043b92219876bfced2d1505a5ad8155154ceff498499421b60be309b4c84a2",
+    "diffs.json": "sha256:0f29d669ccae628e993c209b3a4f5cb44cd31842f64f176b33f462c5f7b026d7",
+    "checks.json": "sha256:c8d050d1ca4153f85885c9ba2d2b33348c11396fcf7a4ba7243c5c3d3cf7b42e",
     "projection.json": "sha256:cfec3e098d68ba883a3b782edcdcb3ac641187073669fb39ea862b8fdb44e6f3",
-    "r2-drafts.md": "sha256:e31c93a01979832af79e46a7a24a36877fb9f7c51ce234090aa2fcd7bb0b0d55"
+    "r2-drafts.md": "sha256:0effe71ed8d1b53118da974b1ec9d9d64376988ce8ecaf0635d51d5fbf58df7d"
   },
   "inputs": {
     "gate_v2": "sha256:8cc11bccc912ea7b123b6e769728c9076046d526c16c8a1218e27a2a692270f6",

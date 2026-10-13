@@ -78,7 +78,8 @@
       "changes": [
         "quality_requirements.high_risk_item_assertions_required 由 16 项缩为 11 项，移出 ['NT-I09', 'NT-I19', 'NT-I45', 'NT-I46', 'NT-I47']。",
         "新增 high_risk_item_assertions_excluded：逐条记录移出机制与依据。",
-        "quality_requirements.metric_basis 由 -v4.1 改为 -v4.3。",
+        "quality_requirements.metric_basis 由 -v4.1 推进一档至 -v4.2（最近一个已签契约版本）；gold.scoring_contract_sha256 同步再绑定至 v4.2 哈希。",
+        "新增 quality_requirements.contract_version_chase：登记门 v3 与契约 v4.3 之间的版本追逐、不变量（阈值逐字恒等 + 哨兵与契约 NT-I* 子集恒等）与校验器要求。",
         "quality_requirements_status 由 signed 退回 proposed_pending_human_signoff；countersignature 退回 pending。",
         "六项阈值、执行要求、授权四项、scope_constraints（含 threshold_relaxation_after_execution_allowed=false）与冻结金标字节全部不变。"
       ],
@@ -100,7 +101,7 @@
     "freeze_manifest_sha256": "sha256:da85e29397f1b4b45186567079a9f2341bf36e42b7bf2ba8cb7102b23632b23e",
     "freeze_state_sha256": "sha256:08703b8dad9fc6c130872899741534c940787c29a15423db19d398999b237d85",
     "frozen_gold_sha256": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
-    "scoring_contract_sha256": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+    "scoring_contract_sha256": "sha256:67537eadcb2074d5bb47c19d20177bd400a8850fce560aa6b1f969409d42b943",
     "evaluation_scope": "selected_target_recall_not_exhaustive_document_gold",
     "reviewer": "xyl",
     "adjudicator": "xyl",
@@ -173,7 +174,7 @@
   },
   "quality_requirements_status": "proposed_pending_human_signoff",
   "quality_requirements": {
-    "metric_basis": "non-table-selected-target-scoring-contract-v4.3",
+    "metric_basis": "non-table-selected-target-scoring-contract-v4.2",
     "evaluation_scope": "selected_target_recall_not_exhaustive_document_gold",
     "material_items_target_total": 48,
     "target_recall_overall_min": 0.85,
@@ -330,6 +331,15 @@
         "perspective": "quoted_other",
         "source_stance": "challenged"
       }
+    },
+    "contract_version_chase": {
+      "gate_pins_signed_contract": "non-table-selected-target-scoring-contract-v4.2",
+      "gate_pins_sha256": "sha256:67537eadcb2074d5bb47c19d20177bd400a8850fce560aa6b1f969409d42b943",
+      "contract_next_version": "non-table-selected-target-scoring-contract-v4.3",
+      "why_lag": "契约 v4.3 反向钉门 v3 的签认字节；若门同时钉 v4.3 会形成哈希环，故门只推进到最近一个已签契约版本。",
+      "invariant": "六项阈值逐字恒等（0.85/0.80/0.80/40/20/0）+ 哨兵清单与契约 review_assertions 的 NT-I* 子集恒等",
+      "validator_required": "由校验器持续核查上述两条不变量，而非要求两处版本号相同",
+      "registration_basis": "沿用已签契约 v4.2 签认记录 outstanding_after_signoff 中的建议（阈值恒等为不变量）"
     },
     "high_risk_item_assertions_excluded": {
       "NT-I09": {

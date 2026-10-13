@@ -390,10 +390,17 @@ PILOT_CANDIDATE_POLICY = QualityPolicy(
 class ContractGateRequirements:
     """The signed contract's gate axes, evaluated inside the gate's role scope.
 
-    Values are the **signed snapshot** (contract v4.2 ``threshold_source.effective`` + gate 28
-    ``quality_requirements``). ``tests/test_corpus_contract_gate.py`` asserts them against the
-    contract JSON itself, so a contract revision turns that test red — the executable form of
-    "评分器读契约" without product code importing a research-evidence file.
+    Values are the **signed snapshot** (contract v4.3 ``threshold_source.effective`` + gate 28's
+    successor gate v3 ``quality_requirements``). ``tests/test_corpus_contract_gate.py`` asserts
+    them against the contract/gate JSON itself, so a contract or gate revision turns that test
+    red — the executable form of "评分器读契约" without product code importing a
+    research-evidence file.
+
+    R2 note (2026-10-13): the sentinel list follows the signed gate v3, which moved five records
+    to ``quality_requirements.high_risk_item_assertions_excluded``
+    (``gold_split_finer_than_candidate``: NT-I09/NT-I19; ``candidate_side_cannot_carry_axis``:
+    NT-I45/NT-I46/NT-I47). The dataclass field set is unchanged on purpose — the exclusions are
+    recorded by the gate, not re-modelled here.
     """
 
     schema_version: str
@@ -425,7 +432,7 @@ class ContractGateRequirements:
 
 
 CONTRACT_GATE_REQUIREMENTS = ContractGateRequirements(
-    schema_version="non-table-selected-target-scoring-contract-v4.2",
+    schema_version="non-table-selected-target-scoring-contract-v4.3",
     role_scope=Role.MATERIAL_ITEMS,
     target_recall_overall_min=Fraction(17, 20),
     target_recall_per_source_min=Fraction(4, 5),
@@ -435,11 +442,9 @@ CONTRACT_GATE_REQUIREMENTS = ContractGateRequirements(
     unresolved_candidates_max=0,
     material_items_target_total=48,
     high_risk_item_assertions_required=(
-        "NT-I09",
         "NT-I13",
         "NT-I15",
         "NT-I17",
-        "NT-I19",
         "NT-I29",
         "NT-I35",
         "NT-I37",
@@ -447,9 +452,6 @@ CONTRACT_GATE_REQUIREMENTS = ContractGateRequirements(
         "NT-I39",
         "NT-I42",
         "NT-I43",
-        "NT-I45",
-        "NT-I46",
-        "NT-I47",
         "NT-I48",
     ),
 )
@@ -928,9 +930,10 @@ def _score_gate(
     pilot policy survives as the ``pilot_policy_blockers`` diagnostic list and never gates.
     ``risk_condition`` is reported (per role, counts and rate) because contract
     ``metrics.risk_condition`` keeps the existing computation but assigns no threshold; the
-    signed authority's instrument for high-risk coverage is the 16-assertion requirement,
-    which is a different instrument and must not be read as a risk-recall axis (16∩risk=10 of
-    21 marked records). Report support is a readiness precondition (contract
+    signed authority's instrument for high-risk coverage is the sentinel-assertion requirement
+    (11 items under the signed gate v3; 16 under the superseded gate v2), which is a different
+    instrument and must not be read as a risk-recall axis (16∩risk=10 of 21 marked records).
+    Report support is a readiness precondition (contract
     ``metrics.quality_gate``), not a rate. Zero-unresolved is enforced structurally: the
     assembler rejects unresolved adjudications and the scorer rejects unmapped candidates.
     """

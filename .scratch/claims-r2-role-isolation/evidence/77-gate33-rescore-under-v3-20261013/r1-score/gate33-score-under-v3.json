@@ -1,0 +1,192 @@
+{
+  "schema_version": "gate33-score-under-v3-1",
+  "created_on": "2026-10-13",
+  "zero_model_calls": true,
+  "basis": {
+    "gate": {
+      "path": ".scratch/claims-r2-role-isolation/evidence/75-r2-signed-20261013/r0-zero-call/gate-v3.json",
+      "sha256": "sha256:340b312d9c0cec278e828d8303a03e9daf953feef4c0eef688f3d257971a9732"
+    },
+    "contract": {
+      "path": ".scratch/claims-r2-role-isolation/evidence/75-r2-signed-20261013/r0-zero-call/scoring-contract-v4.3.json",
+      "sha256": "sha256:d7b4f8a81ef42e3cd5d619eae92bc34df7b7aa683d34aeba4f1a22719ae69a2f"
+    },
+    "re_adjudication": {
+      "path": ".scratch/claims-r2-role-isolation/evidence/75-r2-signed-20261013/r0-zero-call/re-adjudication.json",
+      "sha256": "sha256:89246b39df0a9af34f26954d156f27c1bcd3991526aa1b05a213d0f476c15d13",
+      "flips": 7
+    },
+    "supersedes": {
+      "path": ".scratch/claims-r2-role-isolation/evidence/69-union-adjudication-20261013/r1-score/gate33-honest-score.json",
+      "sha256": "sha256:f1fddc1d943177d7fc7a6f296cdc4aac097063874da0cbb8a835d7f28c35bf55",
+      "old_verdict": "FAIL — 召回未达 0.85；缺口为真实 FN（金标无候选匹配），非流程问题",
+      "old_recall": "17/24"
+    }
+  },
+  "inputs": {
+    "gold_scope": 48,
+    "pool_adjudications": 217,
+    "signed_rerun_batches": 31,
+    "scored_candidates": 248,
+    "excluded_out_of_scope": [
+      "itm_76dd6b5b7b8b02f2",
+      "itm_8b4a64fcf5385fec",
+      "itm_0d765014a64939ef",
+      "itm_5697c7311f116fbb",
+      "itm_aebcf763aeee8816"
+    ],
+    "flips_applied": [
+      "itm_15c17f04855a28b3",
+      "itm_42ffb8cedfa8d7ff",
+      "itm_703720fdd5630e8b",
+      "itm_a41addfcb6696346",
+      "itm_a79b0be05f3456c3",
+      "itm_bf5fa66fb7be5a02",
+      "itm_d96a4e7b052a89c7"
+    ]
+  },
+  "items_role": {
+    "tp": 41,
+    "fp": 8,
+    "fn": 7,
+    "duplicate_fp": 8,
+    "correct_extra": 199,
+    "precision": "30/31",
+    "recall": "41/48"
+  },
+  "per_source": {
+    "源1": {
+      "gold": 22,
+      "matched": 20,
+      "recall": "10/11",
+      "recall_float": 0.909
+    },
+    "源2": {
+      "gold": 26,
+      "matched": 21,
+      "recall": "21/26",
+      "recall_float": 0.808
+    }
+  },
+  "matched_gold_ids": [
+    "NT-I05",
+    "NT-I07",
+    "NT-I08",
+    "NT-I41",
+    "NT-I02",
+    "NT-I01",
+    "NT-I03",
+    "NT-I04",
+    "NT-I10",
+    "NT-I20",
+    "NT-I12",
+    "NT-I11",
+    "NT-I35",
+    "NT-I37",
+    "NT-I44",
+    "NT-I45",
+    "NT-I48",
+    "NT-I39",
+    "NT-I40",
+    "NT-I29",
+    "NT-I30",
+    "NT-I33",
+    "NT-I34",
+    "NT-I32",
+    "NT-I21",
+    "NT-I22",
+    "NT-I27",
+    "NT-I28",
+    "NT-I38",
+    "NT-I23",
+    "NT-I49",
+    "NT-I25",
+    "NT-I26",
+    "NT-I06",
+    "NT-I13",
+    "NT-I43",
+    "NT-I16",
+    "NT-I14",
+    "NT-I42",
+    "NT-I15",
+    "NT-I17"
+  ],
+  "missing_gold_ids": [
+    "NT-I09",
+    "NT-I19",
+    "NT-I24",
+    "NT-I31",
+    "NT-I36",
+    "NT-I46",
+    "NT-I47"
+  ],
+  "criteria": [
+    {
+      "n": 1,
+      "id": "target_recall_overall_min",
+      "threshold": 0.85,
+      "measured": "41/48 = 0.854",
+      "pass": true
+    },
+    {
+      "n": 2,
+      "id": "target_recall_per_source_min",
+      "threshold": 0.8,
+      "measured": "源1 20/22 = 0.909；源2 21/26 = 0.808",
+      "pass": true
+    },
+    {
+      "n": 3,
+      "id": "candidate_precision_min",
+      "threshold": 0.8,
+      "measured": "30/31",
+      "pass": true
+    },
+    {
+      "n": 4,
+      "id": "unresolved_candidates_max",
+      "threshold": 0,
+      "measured": "0",
+      "pass": true
+    },
+    {
+      "n": 5,
+      "id": "accepted_records_total_min",
+      "threshold": 40,
+      "measured": "240",
+      "pass": true
+    },
+    {
+      "n": 6,
+      "id": "accepted_records_per_source_min",
+      "threshold": 20,
+      "measured": "见 per_source 明细",
+      "pass": true
+    },
+    {
+      "n": 7,
+      "id": "high_risk_item_assertions_required",
+      "threshold": "11/11",
+      "measured": "11/11；未中 []",
+      "pass": true
+    }
+  ],
+  "verdict": "PASS",
+  "failed_criteria": [],
+  "comparison_with_old_verdict": {
+    "old": {
+      "recall": "17/24",
+      "matched": 34
+    },
+    "new": {
+      "recall": "41/48",
+      "matched": 41
+    },
+    "delta_matched": 7
+  },
+  "honest_notes": [
+    "本记录按已签门 v3 + 契约 v4.3 + 7 条具名改判重算；旧 verdict 字节不变、仅以登记方式被取代。",
+    "哨兵清单已由 16 项缩为 11 项（移出项机制见门 v3 high_risk_item_assertions_excluded）。",
+    "召回余量极薄（总 +0.004 / 源2 +0.008）；本条不得读作生产可用或整篇覆盖。"
+  ]
+}

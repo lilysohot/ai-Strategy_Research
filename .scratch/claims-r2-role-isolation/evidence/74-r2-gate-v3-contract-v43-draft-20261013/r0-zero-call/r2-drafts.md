@@ -42,6 +42,8 @@
 | NT-I23 | `itm_703720fdd5630e8b` | correct_extra |
 | NT-I24 | `itm_703720fdd5630e8b` | correct_extra |
 
+**二选一勾选（签认件第六节）**：第 7 条下方另有 `NT-I23 / NT-I24` 勾选栏，必须且只能勾一项。
+
 ### 3.3 第 7 条：三选一（**待 U 决定**）
 
 | 选项 | 涉及 gold | 代价 |
@@ -63,7 +65,7 @@
 
 ## 五、机器校验
 
-通过 13 项，失败 0 项。
+通过 18 项，失败 0 项。
 
 | 检查 | 结果 | 说明 |
 |---|---|---|
@@ -77,7 +79,12 @@
 | `required_flips_are_distinct_candidates` | PASS | I23/I24 共享同一候选（-1），其余互不重复 |
 | `old_hashes_retained` | PASS | 门 v2 与契约 v4.2 的旧哈希已留存于新版本记录 |
 | `contract_pin_provisional_not_faked` | PASS | 契约对门 v3 的绑定标记为 provisional，未伪造已签哈希 |
-| `signoff_fields_empty` | PASS | 门/契约/改判三处签认字段全部留空，不代签 |
+| `signoff_fields_empty` | PASS | 门/契约/改判三处新签认字段全部留空，不代签（旧裁定人原样留档） |
+| `adjudications_carry_contract_fields` | PASS | 改判记录齐备契约 11 个 candidate_adjudication_fields |
+| `adjudications_have_verbatim_evidence` | PASS | 每条改判都带候选原文 evidence 与金标 locator |
+| `pair_stubs_share_one_candidate` | PASS | 二选一两条共享同一候选（apply 落地时只保留一条） |
+| `seventh_stubs_cover_all_options` | PASS | 第 7 条四个候选桩齐备：['NT-I36', 'NT-I45', 'NT-I46', 'NT-I47'] |
+| `landed_adjudication_count_is_seven` | PASS | 落地后应为 5（always）+ 1（pair）+ 1（seventh）= 7 条 |
 | `all_projection_options_pass_or_flagged` | PASS | 两个合法第七项选项在未改阈值下均投影为 PASS |
 | `attribution_propositions_match_gate33_gold` | PASS | 归因表的金标命题与门 33 gold_reference 逐条一致 |
 

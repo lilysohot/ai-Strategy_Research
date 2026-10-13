@@ -1,0 +1,360 @@
+{
+  "schema_version": "r2-retro-audit-1",
+  "created_on": "2026-10-13",
+  "phase": "initial",
+  "zero_model_calls": true,
+  "read_only_on_workspace": true,
+  "predicates": {
+    "blocking_target": "目标达不成",
+    "blocking_signoff": "签认会落地不可消费的记录，或代签 U 未做的决定",
+    "registration": "已知不一致必须登记，不得静默继承",
+    "cosmetic": "仅措辞/时效问题"
+  },
+  "scope": {
+    "chain": [
+      "71 FN 归因",
+      "72 终态记录",
+      "74 草案包",
+      "75 落地脚本"
+    ],
+    "not_audited": [
+      "发布路线 O1 的代码面（另见 evidence/73）",
+      "评分器读契约的代码改动（未实施）"
+    ]
+  },
+  "summary": {
+    "checks": 23,
+    "open": 7,
+    "blocking_target": 1,
+    "blocking_signoff": 4,
+    "registration": 1,
+    "cosmetic": 1
+  },
+  "findings": [
+    {
+      "check": "sentinel_equals_contract_items",
+      "predicate": "门 v3 哨兵清单 == 契约 v4.3 的 NT-I* 断言子集",
+      "claimed": [
+        "NT-I13",
+        "NT-I15",
+        "NT-I17",
+        "NT-I29",
+        "NT-I35",
+        "NT-I37",
+        "NT-I38",
+        "NT-I39",
+        "NT-I42",
+        "NT-I43",
+        "NT-I48"
+      ],
+      "actual": [
+        "NT-I13",
+        "NT-I15",
+        "NT-I17",
+        "NT-I29",
+        "NT-I35",
+        "NT-I37",
+        "NT-I38",
+        "NT-I39",
+        "NT-I42",
+        "NT-I43",
+        "NT-I48"
+      ],
+      "ok": true,
+      "severity": null,
+      "note": "二者不一致会让门与契约各说一套"
+    },
+    {
+      "check": "excluded_subset_of_v2_sentinel",
+      "predicate": "被移出 5 项 ⊂ 门 v2 的 16 项",
+      "claimed": [
+        "NT-I09",
+        "NT-I19",
+        "NT-I45",
+        "NT-I46",
+        "NT-I47"
+      ],
+      "actual": [
+        "NT-I09",
+        "NT-I19",
+        "NT-I45",
+        "NT-I46",
+        "NT-I47"
+      ],
+      "ok": true,
+      "severity": null,
+      "note": "移出项必须原本在清单内"
+    },
+    {
+      "check": "excluded_all_annotated",
+      "predicate": "每个被移出项都有 mechanism 与 reason",
+      "claimed": 5,
+      "actual": 5,
+      "ok": true,
+      "severity": null,
+      "note": "无理由的移出等于事后删项"
+    },
+    {
+      "check": "sentinel_subset_of_gold",
+      "predicate": "哨兵清单 ⊂ 48 条冻结金标",
+      "claimed": 11,
+      "actual": 11,
+      "ok": true,
+      "severity": null,
+      "note": ""
+    },
+    {
+      "check": "flip_count",
+      "predicate": "改判集 = 必需 5 + 二选一 2（共享候选，只取一）+ 第 7 条 1 = 7 条",
+      "claimed": [
+        "NT-I38",
+        "NT-I39",
+        "NT-I48",
+        "NT-I26",
+        "NT-I34",
+        "NT-I23",
+        "NT-I24",
+        "<第7条待选>"
+      ],
+      "actual": 8,
+      "ok": false,
+      "severity": "blocking_target",
+      "note": "少于 7 条算术上无法在未改阈值下达标"
+    },
+    {
+      "check": "required_flip_candidates_distinct",
+      "predicate": "必需 5 条的候选互不重复",
+      "claimed": 5,
+      "actual": 5,
+      "ok": true,
+      "severity": null,
+      "note": "一条候选不得抵扣多条金标（one_to_one_mapping）"
+    },
+    {
+      "check": "pair_share_one_candidate",
+      "predicate": "二选一两项共享同一候选（因此只能取一）",
+      "claimed": 1,
+      "actual": 1,
+      "ok": true,
+      "severity": null,
+      "note": "若为 2 则二选一前提不成立，需重算"
+    },
+    {
+      "check": "no_required_flip_candidate_is_occupied",
+      "predicate": "必需 5 条的候选此前均未被其他金标占用",
+      "claimed": "全部 correct_extra",
+      "actual": {},
+      "ok": true,
+      "severity": null,
+      "note": "若某条候选已被占用，该条改判会违反一对一"
+    },
+    {
+      "check": "flip_golds_not_already_matched",
+      "predicate": "改判目标 ⊄ 现有 matched 集合",
+      "claimed": [],
+      "actual": "空",
+      "ok": true,
+      "severity": null,
+      "note": "已是 matched 的条目不得重复计入增量"
+    },
+    {
+      "check": "projection_arithmetic",
+      "predicate": "未改阈值下投影达标记（≥41/48、每源 ≥0.80、哨兵全覆盖）",
+      "claimed": "PASS",
+      "actual": {
+        "overall": "41/48 = 0.854",
+        "per_source": {
+          "源1": "0.909",
+          "源2": "0.808"
+        },
+        "sentinel": "11/11"
+      },
+      "ok": true,
+      "severity": null,
+      "note": "算术不过则 R2 不成立"
+    },
+    {
+      "check": "precision_invariant_under_flip",
+      "predicate": "ce→matched 改判不改变精确率分子/分母（同一候选换了标签）",
+      "claimed": "240/248 = 0.9677",
+      "actual": "240/248（matched +8 / correct_extra −等量）",
+      "ok": true,
+      "severity": null,
+      "note": "改判只在 matched 与 correct_extra 之间搬移，判据 3/5/6 不受影响"
+    },
+    {
+      "check": "accepted_total_invariant",
+      "predicate": "接受数 = matched + correct_extra 恒定",
+      "claimed": 240,
+      "actual": 240,
+      "ok": true,
+      "severity": null,
+      "note": "判据 5（≥40）与判据 6（≥20/源）不变"
+    },
+    {
+      "check": "thresholds_byte_identical",
+      "predicate": "六项阈值 与门 v2 逐字相同",
+      "claimed": {
+        "target_recall_overall_min": 0.85,
+        "target_recall_per_source_min": 0.8,
+        "candidate_precision_min": 0.8,
+        "accepted_records_total_min": 40,
+        "accepted_records_per_source_min": 20,
+        "unresolved_candidates_max": 0
+      },
+      "actual": {
+        "target_recall_overall_min": 0.85,
+        "target_recall_per_source_min": 0.8,
+        "candidate_precision_min": 0.8,
+        "accepted_records_total_min": 40,
+        "accepted_records_per_source_min": 20,
+        "unresolved_candidates_max": 0
+      },
+      "ok": true,
+      "severity": null,
+      "note": "阈值一变即触发门自身的 threshold_relaxation 禁令"
+    },
+    {
+      "check": "signed_v42_pin_matches_gate_v2",
+      "predicate": "已签 v4.2 对门 v2 的绑定与现盘一致（扩展链条的前提）",
+      "claimed": "sha256:8cc11bccc912ea7b123b6e769728c9076046d526c16c8a1218e27a2a692270f6",
+      "actual": "sha256:8cc11bccc912ea7b123b6e769728c9076046d526c16c8a1218e27a2a692270f6",
+      "ok": true,
+      "severity": null,
+      "note": "若已不一致，说明旧链条本身已断，R2 不能默认继承"
+    },
+    {
+      "check": "gate_rebinds_contract_hash",
+      "predicate": "门 v3 的 gold.scoring_contract_sha256 必须再绑定到契约 v4.3",
+      "claimed": "sha256:9367a285844ff12df8f3f2356fc41225a06f3bec17b7e249599c1ccdc3dc8269",
+      "actual": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+      "ok": false,
+      "severity": "blocking_signoff",
+      "note": "门 revision 5 的先例要求 metric_basis 与 scoring_contract_sha256 两处同步改"
+    },
+    {
+      "check": "readjudication_carries_contract_fields",
+      "predicate": "改判记录须齐备契约 candidate_adjudication_fields（评分器消费前提）",
+      "claimed": [
+        "candidate_id",
+        "stage",
+        "role",
+        "source_id",
+        "original_candidate",
+        "judgement",
+        "matched_gold_id",
+        "canonical_observed_fields",
+        "reviewer",
+        "reason",
+        "evidence"
+      ],
+      "actual": [
+        "basis_clause",
+        "candidate_id",
+        "candidate_text",
+        "gold_id",
+        "gold_proposition",
+        "gold_quote",
+        "locator",
+        "previous_judgement",
+        "previous_matched_gold_id",
+        "previous_reason",
+        "proposed_judgement",
+        "recovery_context_note",
+        "reviewer",
+        "signed_on",
+        "source",
+        "status"
+      ],
+      "ok": false,
+      "severity": "blocking_signoff",
+      "note": "缺失字段：['stage', 'role', 'source_id', 'original_candidate', 'judgement', 'matched_gold_id', 'canonical_observed_fields', 'reason', 'evidence']；score_structured_quality 只消费契约形态裁定"
+    },
+    {
+      "check": "readjudication_has_verbatim_evidence",
+      "predicate": "每条改判须附逐字引文或原文定位（locator + 区间）",
+      "claimed": "locator + 区间",
+      "actual": [
+        "gold_quote",
+        "locator"
+      ],
+      "ok": false,
+      "severity": "blocking_signoff",
+      "note": "adjudication_clause.evidence_required"
+    },
+    {
+      "check": "single_signable_instrument",
+      "predicate": "只存在一份可签件",
+      "claimed": [
+        "r2-signoff-review.md"
+      ],
+      "actual": [
+        "r2-signoff-review.md"
+      ],
+      "ok": true,
+      "severity": null,
+      "note": "并行会话若再出第二份 v3 会产生多份真相"
+    },
+    {
+      "check": "no_prefilled_pair_decision",
+      "predicate": "二选一（I23/I24）不得由脚本预填，必须有勾选位并逐字读取",
+      "claimed": "签认件含 I23/I24 勾选位 + 脚本读取它",
+      "actual": {
+        "sheet_has_pair_box": false,
+        "apply_prefills_pair": true
+      },
+      "ok": false,
+      "severity": "blocking_signoff",
+      "note": "脚本硬编码 pairs_resolved=NT-I23 属于代签 U 未做的选择"
+    },
+    {
+      "check": "terminal_record_is_the_fail_state_being_superseded",
+      "predicate": "被取代的 evidence/72 记录的终态确为 FAIL（否则『取代』一说不成立）",
+      "claimed": "FAIL",
+      "actual": "FAIL（不可达）",
+      "ok": true,
+      "severity": null,
+      "note": "确认取代的对象正确"
+    },
+    {
+      "check": "terminal_record_supersession_declared",
+      "predicate": "R2 落地后取代 evidence/72 的『不可达』结论，须显式登记",
+      "claimed": "契约/门/改判件中声明 supersession",
+      "actual": true,
+      "ok": true,
+      "severity": null,
+      "note": "否则 72 的终态与 R2 的 PASS 会同时挂在案上"
+    },
+    {
+      "check": "frozen_gold_side_binding_registered",
+      "predicate": "已知的 frozen-gold 侧契约绑定过期须在 R2 轮内登记（金标不可改，只能登记为例外）",
+      "claimed": "R2 记录中出现该绑定例外",
+      "actual": false,
+      "ok": false,
+      "severity": "registration",
+      "note": "契约 bookkeeping_requirements 已记 match=False，R2 不得再加一层未登记的不一致"
+    },
+    {
+      "check": "quality_gate_wording_current",
+      "predicate": "契约 metrics.quality_gate 不得仍指向被取代的 v3",
+      "claimed": "引用当前版本",
+      "actual": "仍含『本契约 v3』字样",
+      "ok": false,
+      "severity": "cosmetic",
+      "note": "不影响判定，但会造成版本误读"
+    }
+  ],
+  "input_hashes": {
+    "gate_v2": "sha256:8cc11bccc912ea7b123b6e769728c9076046d526c16c8a1218e27a2a692270f6",
+    "contract_v4.2": "sha256:67537eadcb2074d5bb47c19d20177bd400a8850fce560aa6b1f969409d42b943",
+    "gate_v3_draft": "sha256:e4e740f566a701b5b79df7f980ae58c27525f1fea2e8b8f4a023793be0aa611e",
+    "contract_v4.3_draft": "sha256:9367a285844ff12df8f3f2356fc41225a06f3bec17b7e249599c1ccdc3dc8269",
+    "readjudication_draft": "sha256:5825c164ac0fc82909ba7d6fa04a7828fa1f9de067fbccb402fa2a316a34aa40",
+    "sheet": "sha256:df795c7c9971e4e41b33630c09af2e3b559ad7373d1338bf841cc177291f1fb5",
+    "apply_script": "sha256:9fb71249176871fb4cdb91b879c90a53021e2dfdcf259944588559d244e454a4",
+    "attribution": "sha256:94ce5548adf99bb219071797e09250c8cbcd27023d435cf46de74bff8a83de4f",
+    "honest_score": "sha256:f1fddc1d943177d7fc7a6f296cdc4aac097063874da0cbb8a835d7f28c35bf55",
+    "terminal": "sha256:fba56c4f7cfebbcfebbf8405ba0d1c8b1967e1bc68dc8a439e1826f41d5d50b9",
+    "frozen_gold": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2"
+  }
+}

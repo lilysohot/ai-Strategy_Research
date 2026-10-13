@@ -1,0 +1,81 @@
+{
+  "schema_version": "r2-signoff-record-1",
+  "created_on": "2026-10-13",
+  "zero_model_calls": true,
+  "signed_by": "xyl",
+  "signed_on": "2026-10-13",
+  "instrument": {
+    "path": ".scratch/claims-r2-role-isolation/evidence/74-r2-gate-v3-contract-v43-draft-20261013/r0-zero-call/r2-signoff-review.md",
+    "sha256": "sha256:b02dadc20189133ae0e717826ec928b86a669a967dec74e63911a34498df3d3f",
+    "superseded_unsigned_sha256": "sha256:37b3951b29e34a0d1ee1ee6fbac3c4dbc6749c88e32eac0f5b1d2c984e0b0621",
+    "covered": [
+      "gate_v3",
+      "contract_v4.3",
+      "seven_re_adjudications"
+    ],
+    "blank_template_reproduced": "sha256:37b3951b29e34a0d1ee1ee6fbac3c4dbc6749c88e32eac0f5b1d2c984e0b0621",
+    "marker_conventions_accepted": [
+      "☑",
+      "☒",
+      "[x]",
+      "✓",
+      "x/X（仓库既有结论行约定）"
+    ]
+  },
+  "human_decisions_read_from_sheet": {
+    "pair": {
+      "selected": "NT-I23",
+      "rejected": [
+        "NT-I24"
+      ]
+    },
+    "seventh": {
+      "selected": "one_of_u_calibration_revoked",
+      "rejected": [
+        "I36_question_form"
+      ],
+      "sub_selected": "NT-I45"
+    },
+    "contract_invalid_option": "I23_or_I24_double_assignment（不列入勾选）"
+  },
+  "outputs": {
+    "gate_v3": {
+      "file": "gate-v3.json",
+      "sha256": "sha256:340b312d9c0cec278e828d8303a03e9daf953feef4c0eef688f3d257971a9732",
+      "status": "frozen_before_execution"
+    },
+    "contract_v4.3": {
+      "file": "scoring-contract-v4.3.json",
+      "status": "frozen_signed"
+    },
+    "re_adjudication": {
+      "file": "re-adjudication.json",
+      "status": "named_signed",
+      "count": 7
+    }
+  },
+  "thresholds_untouched": {
+    "target_recall_overall_min": 0.85,
+    "target_recall_per_source_min": 0.8,
+    "candidate_precision_min": 0.8,
+    "accepted_records_total_min": 40,
+    "accepted_records_per_source_min": 20,
+    "unresolved_candidates_max": 0,
+    "threshold_relaxation_after_execution_allowed": false
+  },
+  "bytes_left_untouched": {
+    ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate-v2.json": "sha256:8cc11bccc912ea7b123b6e769728c9076046d526c16c8a1218e27a2a692270f6",
+    ".scratch/claims-r2-role-isolation/evidence/58-contract-v42-signed-20261012/r0-zero-call/scoring-contract-v4.2.json": "sha256:67537eadcb2074d5bb47c19d20177bd400a8850fce560aa6b1f969409d42b943",
+    ".scratch/claims-r2-role-isolation/evidence/74-r2-gate-v3-contract-v43-draft-20261013/r0-zero-call/gate-v3.proposed.json": "sha256:6a657fe8351b8c45ec4d30e3e97e9caa4fa41ac73c2d2c8ba45886fb99982705",
+    ".scratch/claims-r2-role-isolation/evidence/74-r2-gate-v3-contract-v43-draft-20261013/r0-zero-call/scoring-contract-v4.3.proposed.json": "sha256:c86660156476df5e928512b967689354afbe3b290bd20c2ff2557497fb5e9ded",
+    ".scratch/claims-r2-role-isolation/evidence/74-r2-gate-v3-contract-v43-draft-20261013/r0-zero-call/re-adjudication-draft.json": "sha256:c4043b92219876bfced2d1505a5ad8155154ceff498499421b60be309b4c84a2"
+  },
+  "in_place_edits": 0,
+  "outstanding_after_signoff": [
+    "据实重算门 33 出分并形成**新 verdict**；旧 verdict（FAIL）不改写",
+    "评分器按契约读阈值（OPEN-1=A 的兑现）——本条独立于本签认",
+    "发布路径（O1『显式缺口』）仍待单独裁定与实施",
+    "本签认不授权任何模型调用、发布、查询、delivery 或 context_use"
+  ],
+  "note": "签认只签条款：不等于出分、不等于复验通过、不等于可发布。"
+}

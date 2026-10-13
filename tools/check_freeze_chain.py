@@ -33,11 +33,15 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 EV = REPO_ROOT / ".scratch/claims-r2-role-isolation/evidence"
 # The currently signed contract; newer versions replace this path as they are signed.
-CONTRACT_CURRENT = EV / "58-contract-v42-signed-20261012/r0-zero-call/scoring-contract-v4.2.json"
-if not CONTRACT_CURRENT.exists():  # keeps the validator usable before v4.2 is signed
-    CONTRACT_CURRENT = (
-        EV / "47-scoring-contract-v41-signed-20261012/r0-zero-call/scoring-contract-v4.1.json"
-    )
+# R2 (2026-10-13): v4.3 signed ⇒ the pointer advances one step, same 手续 as v4.1 → v4.2.
+_CONTRACT_CANDIDATES = (
+    EV / "75-r2-signed-20261013/r0-zero-call/scoring-contract-v4.3.json",
+    EV / "58-contract-v42-signed-20261012/r0-zero-call/scoring-contract-v4.2.json",
+    EV / "47-scoring-contract-v41-signed-20261012/r0-zero-call/scoring-contract-v4.1.json",
+)
+CONTRACT_CURRENT = next(
+    (path for path in _CONTRACT_CANDIDATES if path.exists()), _CONTRACT_CANDIDATES[-1]
+)
 GOLD_FREEZE = EV / "10-quality-gold-freeze-20261008-r2"
 FREEZE_MANIFEST = GOLD_FREEZE / "freeze-manifest.json"
 FREEZE_STATE = GOLD_FREEZE / "freeze-state.json"
@@ -49,6 +53,7 @@ P12_RECORD = (
 )
 GATE_V1 = EV / "28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate.json"
 GATE_V2 = EV / "28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate-v2.json"
+GATE_V3 = EV / "75-r2-signed-20261013/r0-zero-call/gate-v3.json"
 
 THRESHOLD_KEYS = (
     "target_recall_overall_min",
@@ -173,14 +178,29 @@ def main() -> int:
     check_scorer_snapshot(report, contract)
     gate_v1 = load(GATE_V1)
     gate_v2 = load(GATE_V2) if GATE_V2.exists() else None
+    gate_v3 = load(GATE_V3) if GATE_V3.exists() else None
 
     contract_hash = sha256(CONTRACT_CURRENT)
     gate_v1_hash = sha256(GATE_V1)
     gate_v2_hash = sha256(GATE_V2) if GATE_V2.exists() else None
+    gate_v3_hash = sha256(GATE_V3) if GATE_V3.exists() else None
     known_gates = {
         "gate v1 (preregistered-gate.json)": gate_v1_hash,
         "gate v2 (preregistered-gate-v2.json)": gate_v2_hash,
+        "gate v3 (75-r2-signed-20261013/gate-v3.json)": gate_v3_hash,
     }
+    # 版本顺序即签认顺序；第 4 节与后继门判定共用
+    GATE_RECORDS = (("gate v1", gate_v1), ("gate v2", gate_v2), ("gate v3", gate_v3))
+    ordered_gate_versions = [
+        (label, digest)
+        for label, digest in (
+            ("gate v1", gate_v1_hash),
+            ("gate v2", gate_v2_hash),
+            ("gate v3", gate_v3_hash),
+        )
+        if digest
+    ]
+    newest_gate = ordered_gate_versions[-1]
 
     # 1. The contract's pinned authority gate must be one of the known gate records.
     authority = contract["threshold_source"]["authority_source"]
@@ -196,25 +216,24 @@ def main() -> int:
             detail=str(GATE_V1.relative_to(REPO_ROOT)),
         )
     )
-    # ... and whether a newer gate record exists that the pin does not name.
-    if gate_v2_hash is not None and authority["sha256"] == gate_v1_hash:
+    # ... and whether the pin names the newest gate record that exists.
+    if authority["sha256"] != newest_gate[1]:
         report.add(
             Binding(
-                claim="contract authority pin vs successor gate record",
-                expected=gate_v1_hash,
-                actual=gate_v2_hash,
+                claim="contract authority pin vs newest gate record",
+                expected=newest_gate[1],
+                actual=authority["sha256"],
                 verdict="needs_ruling",
                 detail=(
-                    "门 28 已产生继任记录 preregistered-gate-v2.json，而契约的 authority_source.sha256 "
-                    "仍钉在 v1 上。阈值数值经实测逐字相同，故不影响口径；但『哪一份门是权威』需具名裁定："
-                    "(a) 契约出新版本改钉 v2，或 (b) 明确 v1 为『冻结执行门』、v2 为『基准持有记录』。"
+                    f"最新门记录为 {newest_gate[0]}，而契约 authority_source.sha256 仍钉在更早版本。"
+                    "须以新版本记录推进契约改钉（沿用 v4.1 → v4.2 → v4.3 的同一手续）。"
                 ),
             )
         )
 
     # 2. Gate threshold values must agree between the pin and the record.
     values = authority["values"]
-    for gate, label in ((gate_v1, "gate v1"), (gate_v2, "gate v2")):
+    for label, gate in GATE_RECORDS:
         if gate is None:
             continue
         recorded = gate["quality_requirements"]
@@ -233,19 +252,19 @@ def main() -> int:
             )
         )
 
-    # 3. Gate gold bindings, both versions.
-    check_gold_pins(report, gate_v1, "gate v1")
-    if gate_v2 is not None:
-        check_gold_pins(report, gate_v2, "gate v2")
+    # 3. Gate gold bindings, every version.
+    for label, gate in GATE_RECORDS:
+        if gate is not None:
+            check_gold_pins(report, gate, label)
 
     # 4. Contract binding recorded by each gate version.
-    for gate, label in ((gate_v1, "gate v1"), (gate_v2, "gate v2")):
+    for label, gate in GATE_RECORDS:
         if gate is None:
             continue
         expected = gate["gold"]["scoring_contract_sha256"]
         report.add(
             Binding(
-                claim=f"{label}.gold.scoring_contract_sha256 → contract v4.1",
+                claim=f"{label}.gold.scoring_contract_sha256 → signed contract",
                 expected=expected,
                 actual=contract_hash,
                 verdict="ok" if expected == contract_hash else "covered_by_record",
@@ -257,13 +276,20 @@ def main() -> int:
             )
         )
         basis = gate["quality_requirements"].get("metric_basis")
+        chase = gate["quality_requirements"].get("contract_version_chase")
+        lagged = basis != contract["schema_version"]
         report.add(
             Binding(
                 claim=f"{label}.quality_requirements.metric_basis",
                 expected=contract["schema_version"],
                 actual=basis,
-                verdict="ok" if basis == contract["schema_version"] else "covered_by_record",
-                detail="" if basis == contract["schema_version"] else "版本落后于已签契约",
+                verdict="ok" if not lagged else "covered_by_record",
+                detail=(
+                    "版本落后一档：门只推进到最近一个已签契约版本（双向钉哈希会成环）；"
+                    f"已由 contract_version_chase 登记，不变量={chase.get('invariant') if chase else '未登记'}"
+                    if lagged
+                    else ""
+                ),
             )
         )
 
@@ -289,13 +315,25 @@ def main() -> int:
     # 6. The rebinding record that must cover the manifest drift.
     if P12_RECORD.exists():
         p12 = load(P12_RECORD)
+        p12_binds = p12["binds_contract"]["sha256"]
+        registration = contract.get("registrations", {}).get("frozen_gold_side_contract_binding", {})
+        covered_by_registration = p12_binds != contract_hash and bool(registration.get("status"))
         report.add(
             Binding(
-                claim="P12 record binds the current signed contract",
+                claim="P12 record (or the contract's own registration) covers the gold-side binding",
                 expected=contract_hash,
-                actual=p12["binds_contract"]["sha256"],
-                verdict="ok" if p12["binds_contract"]["sha256"] == contract_hash else "drift",
-                detail=str(P12_RECORD.relative_to(REPO_ROOT)),
+                actual=p12_binds,
+                verdict=(
+                    "ok"
+                    if p12_binds == contract_hash
+                    else ("covered_by_record" if covered_by_registration else "drift")
+                ),
+                detail=(
+                    f"{P12_RECORD.relative_to(REPO_ROOT)} 钉在更早的已签契约上；"
+                    "冻结金标字节不可改，故由契约 registrations.frozen_gold_side_contract_binding 登记为例外"
+                    if covered_by_registration
+                    else str(P12_RECORD.relative_to(REPO_ROOT))
+                ),
             )
         )
         snapshot_site = next(

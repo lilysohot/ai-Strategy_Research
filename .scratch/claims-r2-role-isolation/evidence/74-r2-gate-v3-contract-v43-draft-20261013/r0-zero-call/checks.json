@@ -2,7 +2,7 @@
   "schema_version": "r2-draft-checks-1",
   "created_on": "2026-10-13",
   "zero_model_calls": true,
-  "passed": 13,
+  "passed": 18,
   "failed": 0,
   "checks": [
     {
@@ -58,7 +58,32 @@
     {
       "check": "signoff_fields_empty",
       "ok": true,
-      "detail": "门/契约/改判三处签认字段全部留空，不代签"
+      "detail": "门/契约/改判三处新签认字段全部留空，不代签（旧裁定人原样留档）"
+    },
+    {
+      "check": "adjudications_carry_contract_fields",
+      "ok": true,
+      "detail": "改判记录齐备契约 11 个 candidate_adjudication_fields"
+    },
+    {
+      "check": "adjudications_have_verbatim_evidence",
+      "ok": true,
+      "detail": "每条改判都带候选原文 evidence 与金标 locator"
+    },
+    {
+      "check": "pair_stubs_share_one_candidate",
+      "ok": true,
+      "detail": "二选一两条共享同一候选（apply 落地时只保留一条）"
+    },
+    {
+      "check": "seventh_stubs_cover_all_options",
+      "ok": true,
+      "detail": "第 7 条四个候选桩齐备：['NT-I36', 'NT-I45', 'NT-I46', 'NT-I47']"
+    },
+    {
+      "check": "landed_adjudication_count_is_seven",
+      "ok": true,
+      "detail": "落地后应为 5（always）+ 1（pair）+ 1（seventh）= 7 条"
     },
     {
       "check": "all_projection_options_pass_or_flagged",

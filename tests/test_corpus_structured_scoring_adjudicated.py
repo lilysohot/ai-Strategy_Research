@@ -7,7 +7,7 @@ role/source_id 合法性与 canonical_observed_fields 是否齐备；身份相�
 from __future__ import annotations
 
 import inspect
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from fractions import Fraction
 
 import pytest
@@ -20,6 +20,7 @@ from plugins.corpus.structured_scoring import (
     MatchingMode,
     RecordOrigin,
     Role,
+    RoleThreshold,
     ScoringInputError,
     score_structured_quality,
 )
@@ -234,10 +235,46 @@ def test_duplicate_mapping_row_is_rejected() -> None:
         _score(gold, (_candidate("itm_1", "目标命题"),), mappings)
 
 
-def test_gate_thresholds_are_untouched_by_this_change() -> None:
-    """P02 is matching only: P03 owns the threshold single-source change."""
+def test_pilot_policy_is_diagnostic_only_and_cannot_move_the_verdict() -> None:
+    """P03 已落地：唯一权威布尔来自契约快照，pilot 策略只出诊断。
+
+    旧断言（"P02 is matching only: P03 owns the threshold single-source change"）描述的是 P03
+    落地前的状态；P03 已把 ``rate_gate_passed`` 单源到 ``ContractGateRequirements``。
+    本条保留原数值断言，并补：**改 policy 不得改变判定布尔**（否则又是两套真相）。
+    """
     threshold = PILOT_CANDIDATE_POLICY.role(Role.MATERIAL_ITEMS)
     assert (threshold.precision_min, threshold.recall_min) == (Fraction(19, 20), Fraction(9, 10))
+
+    gold = (_gold("NT-I01", "命题甲"), _gold("NT-I02", "命题乙"))
+    candidates = (_candidate("itm_1", "命题甲"),)
+    mappings = (Mapping("itm_1", "NT-I01", "matched"),)
+
+    def run(recall_min: Fraction):
+        policy = replace(
+            PILOT_CANDIDATE_POLICY,
+            role_thresholds=tuple(
+                RoleThreshold(item.role, item.precision_min, recall_min)
+                if item.role is Role.MATERIAL_ITEMS
+                else item
+                for item in PILOT_CANDIDATE_POLICY.role_thresholds
+            ),
+        )
+        return score_structured_quality(
+            gold,
+            raw_candidates=candidates,
+            validated_candidates=candidates,
+            matching_mode=MatchingMode.ADJUDICATED,
+            raw_mappings=mappings,
+            validated_mappings=mappings,
+            policy=policy,
+        )
+
+    lenient, strict = run(Fraction(1, 2)), run(Fraction(9, 10))
+    # 判定布尔只由契约快照决定 ⇒ 两次必须一致（此例契约门槛下均为 False）
+    assert lenient.gate.rate_gate_passed == strict.gate.rate_gate_passed
+    # 但诊断列表必须随之变化 ⇒ 证明 policy 仍在被计算、只是不再判定
+    assert lenient.gate.pilot_policy_blockers != strict.gate.pilot_policy_blockers
+    assert lenient.gate.rate_blockers == strict.gate.rate_blockers
 
 
 def test_legacy_mode_ledger_is_pinned() -> None:

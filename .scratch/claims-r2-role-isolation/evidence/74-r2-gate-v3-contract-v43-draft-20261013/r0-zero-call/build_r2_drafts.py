@@ -144,6 +144,11 @@ def main() -> int:
     by_id = {r["record_id"]: r for r in load(GOLD)["records"] if r["role"] == "material_items"}
     g33 = {g["record_id"]: g for g in load(GATE33_GOLD)["gold_reference"]}
     rows = {r["gold_id"]: r for r in attribution["rows"]}
+    # 契约形态的裁定必须保留候选原始记录：直接取 A 工作表的逐条原样记录
+    worksheet_by_candidate = {
+        rec["candidate_id"]: rec for rec in load(WORKSHEET)["records"]
+    }
+    contract_fields = list(load(CONTRACT_V42)["candidate_adjudication_fields"])
 
     gate_v2_sha = sha256_of(GATE_V2)
     contract_v42_sha = sha256_of(CONTRACT_V42)
@@ -153,7 +158,22 @@ def main() -> int:
     sentinel_v2 = list(gate_v2["quality_requirements"]["high_risk_item_assertions_required"])
     sentinel_v3 = [item for item in sentinel_v2 if item not in SENTINEL_EXCLUSIONS]
     annotations = gate_v2["quality_requirements"]["high_risk_item_annotations"]
-    gate_v3["quality_requirements"]["metric_basis"] = "non-table-selected-target-scoring-contract-v4.3"
+    # 门的 metric_basis/契约绑定只推进到**最近一个已签**契约版本（v4.2），与契约 v4.3 之间
+    # 保持「版本追逐」并将其显式登记：两者互相钉哈希会形成环，故不变量取「六项阈值逐字恒等」。
+    gate_v3["quality_requirements"]["metric_basis"] = "non-table-selected-target-scoring-contract-v4.2"
+    gate_v3["gold"]["scoring_contract_sha256"] = contract_v42_sha
+    gate_v3["quality_requirements"]["contract_version_chase"] = {
+        "gate_pins_signed_contract": "non-table-selected-target-scoring-contract-v4.2",
+        "gate_pins_sha256": contract_v42_sha,
+        "contract_next_version": "non-table-selected-target-scoring-contract-v4.3",
+        "why_lag": (
+            "契约 v4.3 反向钉门 v3 的签认字节；若门同时钉 v4.3 会形成哈希环，"
+            "故门只推进到最近一个已签契约版本。"
+        ),
+        "invariant": "六项阈值逐字恒等（0.85/0.80/0.80/40/20/0）+ 哨兵清单与契约 review_assertions 的 NT-I* 子集恒等",
+        "validator_required": "由校验器持续核查上述两条不变量，而非要求两处版本号相同",
+        "registration_basis": "沿用已签契约 v4.2 签认记录 outstanding_after_signoff 中的建议（阈值恒等为不变量）",
+    }
     gate_v3["quality_requirements"]["high_risk_item_assertions_required"] = sentinel_v3
     gate_v3["quality_requirements"]["high_risk_item_annotations"] = {
         key: value for key, value in annotations.items() if key in sentinel_v3
@@ -187,7 +207,10 @@ def main() -> int:
                 "quality_requirements.high_risk_item_assertions_required 由 16 项缩为 "
                 f"{len(sentinel_v3)} 项，移出 {sorted(SENTINEL_EXCLUSIONS)}。",
                 "新增 high_risk_item_assertions_excluded：逐条记录移出机制与依据。",
-                "quality_requirements.metric_basis 由 -v4.1 改为 -v4.3。",
+                "quality_requirements.metric_basis 由 -v4.1 推进一档至 -v4.2（最近一个已签契约版本）；"
+                "gold.scoring_contract_sha256 同步再绑定至 v4.2 哈希。",
+                "新增 quality_requirements.contract_version_chase：登记门 v3 与契约 v4.3 之间的版本追逐、"
+                "不变量（阈值逐字恒等 + 哨兵与契约 NT-I* 子集恒等）与校验器要求。",
                 "quality_requirements_status 由 signed 退回 proposed_pending_human_signoff；countersignature 退回 pending。",
                 "六项阈值、执行要求、授权四项、scope_constraints（含 threshold_relaxation_after_execution_allowed=false）"
                 "与冻结金标字节全部不变。",
@@ -239,6 +262,39 @@ def main() -> int:
         key: value for key, value in contract_v42["review_assertions"].items() if key not in SENTINEL_EXCLUSIONS
     }
     contract_v43["review_assertions_excluded"] = SENTINEL_EXCLUSIONS
+    contract_v43["metrics"]["quality_gate"] = (
+        "度量基准版本链：v2 → v3 → v4 → v4.1 → v4.2 → **v4.3（本版，草案）**；"
+        "其中 v4.3 把 matching.items 的读法写实（上下文唯一可恢复），并与门 v3 的哨兵清单对齐。"
+        "六项阈值自 v2 起逐字未变。Issue 28 items-only 质量门本身及其计数器签认仍单独进行；"
+        "未获得完整候选裁定、query/delivery/context_use 时不得宣告整体质量门通过。"
+    )
+    contract_v43["registrations"] = {
+        "contract_version_chase": {
+            "gate_v3_pins": "non-table-selected-target-scoring-contract-v4.2（最近一个已签契约版本）",
+            "contract_v43_pins_gate": "门 v3 签认字节（签认后回填，见 threshold_source.authority_source）",
+            "why": "双向钉哈希会形成环，故门只推进到最近已签版本，契约反向钉门。",
+            "invariant": "六项阈值逐字恒等 + 门哨兵清单与契约 review_assertions 的 NT-I* 子集恒等",
+            "validator_required": True,
+        },
+        "frozen_gold_side_contract_binding": {
+            "status": "known_exception_registered",
+            "detail": (
+                "冻结金标侧记录的契约绑定仍为 v2（sha256:2eb24be7…），与现行契约版本不符；"
+                "因冻结金标字节不可改（U 裁定『不改金标』），本轮登记为例外而不回填。"
+            ),
+            "exception_rule": "任何后续校验器遇到 gold 侧绑定落后时，应报『已登记例外』而非失败；"
+            "若金标字节本身变更则必须重签。",
+        },
+        "supersedes_terminal_record": {
+            "path": "evidence/72-gate33-terminal-and-corrections-20261013/r0-zero-call/terminal-decision.json",
+            "field": "terminal_state.gate",
+            "old_value": "FAIL（不可达）",
+            "note": (
+                "本契约 v4.3 与门 v3 经具名签认、且 7 条改判经 xyl 具名后，evidence/72 的『不可达』"
+                "结论由新的出分记录取代；72 的字节不改写，仅以本条登记取代关系。"
+            ),
+        },
+    }
     contract_v43["threshold_source"]["authority_source"]["where"] = (
         "门 28 preregistered-gate-v3.json quality_requirements（R2 修订，revision 6）"
     )
@@ -260,32 +316,64 @@ def main() -> int:
     }
 
     # ------------------------------------------------- re-adjudication draft
-    def entry(gid: str, proposed: str) -> dict[str, Any]:
+    # 契约形态：逐条保留 candidate_adjudication_fields 的 11 个字段，原始字段不改写。
+    def stub(gid: str, keep_if: dict[str, str]) -> dict[str, Any]:
         row = rows[gid]
         best = row["nearest_candidates"][0]
-        return {
-            "gold_id": gid,
-            "source": row["source"],
-            "locator": row["locator"],
+        source = worksheet_by_candidate[best["candidate_id"]]
+        record = {
+            "candidate_id": source["candidate_id"],
+            "stage": source["stage"],
+            "role": source["role"],
+            "source_id": source["source_id"],
+            "original_candidate": source["original_candidate"],
+            "judgement": source["judgement"],
+            "matched_gold_id": source["matched_gold_id"],
+            "canonical_observed_fields": source["canonical_observed_fields"],
+            "reviewer": source.get("reviewer"),
+            "reason": source.get("reason"),
+            "evidence": source.get("evidence"),
+            # —— 以下为本次草案新增，不改写上面 11 个原始字段 ——
+            "proposed_judgement": "matched",
+            "proposed_matched_gold_id": gid,
+            "proposed_reason": (
+                "按契约 v4.3 matching.items『上下文唯一可恢复』条款：候选省略的承载主体/限定可由同一证据包"
+                "唯一恢复，视为保持该原子命题。裁定人须在具名时补记恢复所依据的上下文。"
+            ),
             "gold_quote": row["quote"],
             "gold_proposition": row["proposition"],
-            "candidate_id": best["candidate_id"],
-            "candidate_text": best["text"],
+            "gold_locator": row["locator"],
+            "gold_source": row["source"],
             "previous_judgement": best["judgement"],
             "previous_reason": best["reason"],
             "previous_matched_gold_id": best["matched_gold_id"],
-            "proposed_judgement": proposed,
-            "basis_clause": "contract v4.3 matching.items 上下文唯一可恢复条款",
-            "recovery_context_note": (
-                "候选省略的主体/限定可在同一证据包内唯一恢复；裁定人须在 reason 补记恢复所依据的上下文。"
-            ),
-            "reviewer": None,
-            "signed_on": None,
+            "keep_if": keep_if,
+            # 上列 reviewer/reason/judgement 属**被取代的**旧裁定（原样留档）；
+            # 本次新裁定人在落地时才写入，草案阶段一律留空。
+            "superseded_reviewer": source.get("reviewer"),
+            "superseded_judgement": source["judgement"],
+            "proposed_reviewer": None,
+            "proposed_signed_on": None,
             "status": "agent_draft_pending_named_signoff",
         }
+        missing = [field for field in contract_fields if field not in record]
+        assert not missing, f"{gid} 缺契约字段 {missing}"
+        return record
 
-    required = [entry(gid, "matched") for gid in READJUDICATION_REQUIRED]
-    pair = [entry(gid, "matched_or_pending") for gid in READJUDICATION_PAIR_ALTERNATIVES]
+    required = [stub(gid, {"rule": "always"}) for gid in READJUDICATION_REQUIRED]
+    pair = [
+        stub(gid, {"rule": "pair_choice", "picked_id": gid}) for gid in READJUDICATION_PAIR_ALTERNATIVES
+    ]
+    seventh = [
+        stub("NT-I36", {"rule": "seventh_choice", "picked_id": "I36_question_form"}),
+        stub("NT-I45", {"rule": "seventh_choice", "picked_id": "one_of_u_calibration_revoked"}),
+        stub("NT-I46", {"rule": "seventh_choice", "picked_id": "one_of_u_calibration_revoked"}),
+        stub("NT-I47", {"rule": "seventh_choice", "picked_id": "one_of_u_calibration_revoked"}),
+    ]
+    adjudications = required + pair + seventh
+    required_golds = [r["proposed_matched_gold_id"] for r in required]
+    pair_golds = [r["proposed_matched_gold_id"] for r in pair]
+    seventh_golds = [r["proposed_matched_gold_id"] for r in seventh]
     readjudication = {
         "schema_version": "r2-readjudication-draft-1",
         "created_on": "2026-10-13",
@@ -294,8 +382,18 @@ def main() -> int:
         "authority_note": (
             "机械生成的改判草案，**不是裁定**。每条须由 xyl 具名确认；未具名前不得进入评分。"
         ),
-        "required_flips": required,
-        "pair_alternatives": pair,
+        "contract_form": {
+            "fields": contract_fields,
+            "source": "契约 adjudication_clause.required_per_record_fields（11 字段）",
+            "rule": "原始 11 字段逐字保留、不改写；本次新增字段一律以 proposed_/keep_if 前缀置于其后。",
+        },
+        "selection_rules": {
+            "always": "必需 5 条：I38/I39/I48/I26/I34",
+            "pair_choice": "二选一：I23 与 I24 共享同一候选，具名时只能保留其中一条（详见签认件第 7 条下方勾选栏）",
+            "seventh_choice": "第 7 条：I36 / I45 / I46 / I47 四条候选，具名时按签认件所勾选项保留一条",
+            "landed_count": "落地后应为 5 + 1 + 1 = 7 条，且候选互不重复（apply_r2_signoff.py 强制校验）",
+        },
+        "adjudications": adjudications,
         "seventh_flip_open_choice": list(READJUDICATION_SEVENTH_CHOICE),
         "explicitly_not_flipped": [
             {
@@ -303,8 +401,8 @@ def main() -> int:
                 "reason": "最近候选已被 NT-I32 占用；改判将与 one_to_one_mapping 冲突（与 I09/I19 同机制）。",
             },
             {
-                "gold_id": "NT-I36",
-                "reason": "候选为疑问句形态；仅在选 I36_question_form 时才会成为第 7 条（见上方选项）。",
+                "gold_id": "NT-I23/NT-I24",
+                "reason": "二者共享同一候选，只能取一；另一条保持原裁定 correct_extra。",
             },
         ],
         "signoff": {"reviewer": None, "signed_on": None},
@@ -314,7 +412,7 @@ def main() -> int:
     matched_now = set(
         load(E / "69-union-adjudication-20261013/r1-score/gate33-honest-score.json")["matched_gold_ids"]
     )
-    base_flip = [r["gold_id"] for r in required] + ["NT-I23"]  # pair alternative resolved to I23 for projection
+    base_flip = [*required_golds, pair_golds[0]]  # 二选一在投影中取 I23（另一条同分，选项等价）
     projections = []
     for choice in READJUDICATION_SEVENTH_CHOICE:
         if choice["option"] == "I23_or_I24_double_assignment":
@@ -437,8 +535,33 @@ def main() -> int:
         "signoff_fields_empty",
         contract_v43["signoff"]["signed_by"] is None
         and gate_v3["countersignature"]["reviewer"] is None
-        and all(r["reviewer"] is None for r in required + pair),
-        "门/契约/改判三处签认字段全部留空，不代签",
+        and all(r["proposed_reviewer"] is None for r in adjudications),
+        "门/契约/改判三处新签认字段全部留空，不代签（旧裁定人原样留档）",
+    )
+    check(
+        "adjudications_carry_contract_fields",
+        all(not [f for f in contract_fields if f not in r] for r in adjudications),
+        f"改判记录齐备契约 {len(contract_fields)} 个 candidate_adjudication_fields",
+    )
+    check(
+        "adjudications_have_verbatim_evidence",
+        all(r.get("evidence") and r.get("gold_locator") for r in adjudications),
+        "每条改判都带候选原文 evidence 与金标 locator",
+    )
+    check(
+        "pair_stubs_share_one_candidate",
+        len({r["candidate_id"] for r in pair}) == 1,
+        "二选一两条共享同一候选（apply 落地时只保留一条）",
+    )
+    check(
+        "seventh_stubs_cover_all_options",
+        sorted(seventh_golds) == sorted({"NT-I36", "NT-I45", "NT-I46", "NT-I47"}),
+        f"第 7 条四个候选桩齐备：{sorted(seventh_golds)}",
+    )
+    check(
+        "landed_adjudication_count_is_seven",
+        len([r for r in adjudications if r["keep_if"]["rule"] == "always"]) == 5,
+        "落地后应为 5（always）+ 1（pair）+ 1（seventh）= 7 条",
     )
     check(
         "all_projection_options_pass_or_flagged",
@@ -522,8 +645,8 @@ def main() -> int:
                 "sentinel_v2": len(sentinel_v2),
                 "sentinel_v3": len(sentinel_v3),
                 "excluded": sorted(SENTINEL_EXCLUSIONS),
-                "required_flips": [r["gold_id"] for r in required],
-                "pair_alternatives": [r["gold_id"] for r in pair],
+                "required_flips": required_golds,
+                "pair_alternatives": pair_golds,
                 "seventh_flip_options": [c["option"] for c in READJUDICATION_SEVENTH_CHOICE],
                 "projections": [
                     {
@@ -589,9 +712,11 @@ def render_md(
         "| gold | 源 | 候选 | 原裁定 | 拟裁定 |",
         "|---|---|---|---|---|",
     ]
-    for item in readjudication["required_flips"]:
+    for item in readjudication["adjudications"]:
+        if item["keep_if"]["rule"] != "always":
+            continue
         lines.append(
-            f"| {item['gold_id']} | {item['source']} | `{item['candidate_id']}` | "
+            f"| {item['proposed_matched_gold_id']} | {item['gold_source']} | `{item['candidate_id']}` | "
             f"{item['previous_judgement']} | {item['proposed_judgement']} |"
         )
     lines += [
@@ -601,8 +726,13 @@ def render_md(
         "| gold | 候选 | 原裁定 |",
         "|---|---|---|",
     ]
-    for item in readjudication["pair_alternatives"]:
-        lines.append(f"| {item['gold_id']} | `{item['candidate_id']}` | {item['previous_judgement']} |")
+    for item in readjudication["adjudications"]:
+        if item["keep_if"]["rule"] != "pair_choice":
+            continue
+        lines.append(
+            f"| {item['proposed_matched_gold_id']} | `{item['candidate_id']}` | {item['previous_judgement']} |"
+        )
+    lines += ["", "**二选一勾选（签认件第六节）**：第 7 条下方另有 `NT-I23 / NT-I24` 勾选栏，必须且只能勾一项。"]
     lines += [
         "",
         "### 3.3 第 7 条：三选一（**待 U 决定**）",

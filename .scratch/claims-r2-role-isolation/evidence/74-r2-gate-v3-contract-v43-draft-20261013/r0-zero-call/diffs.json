@@ -19,6 +19,25 @@
       "new": "pending_human_signoff"
     },
     {
+      "path": "gold.scoring_contract_sha256",
+      "op": "replace",
+      "old": "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b",
+      "new": "sha256:67537eadcb2074d5bb47c19d20177bd400a8850fce560aa6b1f969409d42b943"
+    },
+    {
+      "path": "quality_requirements.contract_version_chase",
+      "op": "add",
+      "new": {
+        "gate_pins_signed_contract": "non-table-selected-target-scoring-contract-v4.2",
+        "gate_pins_sha256": "sha256:67537eadcb2074d5bb47c19d20177bd400a8850fce560aa6b1f969409d42b943",
+        "contract_next_version": "non-table-selected-target-scoring-contract-v4.3",
+        "why_lag": "契约 v4.3 反向钉门 v3 的签认字节；若门同时钉 v4.3 会形成哈希环，故门只推进到最近一个已签契约版本。",
+        "invariant": "六项阈值逐字恒等（0.85/0.80/0.80/40/20/0）+ 哨兵清单与契约 review_assertions 的 NT-I* 子集恒等",
+        "validator_required": "由校验器持续核查上述两条不变量，而非要求两处版本号相同",
+        "registration_basis": "沿用已签契约 v4.2 签认记录 outstanding_after_signoff 中的建议（阈值恒等为不变量）"
+      }
+    },
+    {
       "path": "quality_requirements.high_risk_item_annotations.NT-I09",
       "op": "remove",
       "old": {
@@ -101,7 +120,7 @@
       "path": "quality_requirements.metric_basis",
       "op": "replace",
       "old": "non-table-selected-target-scoring-contract-v4.1",
-      "new": "non-table-selected-target-scoring-contract-v4.3"
+      "new": "non-table-selected-target-scoring-contract-v4.2"
     },
     {
       "path": "quality_requirements.threshold_note",
@@ -142,6 +161,36 @@
       "op": "replace",
       "old": "同义改写可接受；须保持一个原子命题、语义类型、话语角色、归属、否定、条件、行为意向。proposition 不用逐字字符串相等判定。condition 角色 items 的原子命题按 condition_role_read_path 读取（condition 优先，proposition 兜底）。",
       "new": "同义改写可接受；须保持一个原子命题、语义类型、话语角色、归属、否定、条件、行为意向。proposition 不用逐字字符串相等判定。condition 角色 items 的原子命题按 condition_role_read_path 读取（condition 优先，proposition 兜底）。【v4.3 增补｜上下文唯一可恢复】候选省略承载主体或限定条件时，若裁定人能依据同一证据包内唯一可恢复的上下文确定其主体/限定，视为保持该原子命题；无法唯一恢复者仍判不匹配。本增补不适用于：①同一候选被邻近金标占用（one_to_one_mapping 优先，一条输出不得抵扣多条金标）；②候选为疑问句等非断言形态。裁定人须在 reason 中记录恢复所依据的上下文。"
+    },
+    {
+      "path": "metrics.quality_gate",
+      "op": "replace",
+      "old": "本契约 v3（含 condition_role_read_path）已于 2026-10-11 签认，作为度量基准；但 Issue 28 items-only 质量门本身及其计数器签认仍单独进行。未获得完整候选裁定、query/delivery/context_use 时不得宣告整体质量门通过。",
+      "new": "度量基准版本链：v2 → v3 → v4 → v4.1 → v4.2 → **v4.3（本版，草案）**；其中 v4.3 把 matching.items 的读法写实（上下文唯一可恢复），并与门 v3 的哨兵清单对齐。六项阈值自 v2 起逐字未变。Issue 28 items-only 质量门本身及其计数器签认仍单独进行；未获得完整候选裁定、query/delivery/context_use 时不得宣告整体质量门通过。"
+    },
+    {
+      "path": "registrations",
+      "op": "add",
+      "new": {
+        "contract_version_chase": {
+          "gate_v3_pins": "non-table-selected-target-scoring-contract-v4.2（最近一个已签契约版本）",
+          "contract_v43_pins_gate": "门 v3 签认字节（签认后回填，见 threshold_source.authority_source）",
+          "why": "双向钉哈希会形成环，故门只推进到最近已签版本，契约反向钉门。",
+          "invariant": "六项阈值逐字恒等 + 门哨兵清单与契约 review_assertions 的 NT-I* 子集恒等",
+          "validator_required": true
+        },
+        "frozen_gold_side_contract_binding": {
+          "status": "known_exception_registered",
+          "detail": "冻结金标侧记录的契约绑定仍为 v2（sha256:2eb24be7…），与现行契约版本不符；因冻结金标字节不可改（U 裁定『不改金标』），本轮登记为例外而不回填。",
+          "exception_rule": "任何后续校验器遇到 gold 侧绑定落后时，应报『已登记例外』而非失败；若金标字节本身变更则必须重签。"
+        },
+        "supersedes_terminal_record": {
+          "path": "evidence/72-gate33-terminal-and-corrections-20261013/r0-zero-call/terminal-decision.json",
+          "field": "terminal_state.gate",
+          "old_value": "FAIL（不可达）",
+          "note": "本契约 v4.3 与门 v3 经具名签认、且 7 条改判经 xyl 具名后，evidence/72 的『不可达』结论由新的出分记录取代；72 的字节不改写，仅以本条登记取代关系。"
+        }
+      }
     },
     {
       "path": "review_assertions.NT-I09",

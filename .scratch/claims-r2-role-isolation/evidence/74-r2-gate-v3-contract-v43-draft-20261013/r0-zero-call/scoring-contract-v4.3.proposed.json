@@ -169,7 +169,7 @@
     "duplicates": "同义重复仅第一条可匹配；后续记录 duplicate 计 FP。I16 为唯一止损动作，可供 R08/R09 共用。",
     "selected_projection_precision": "不报告为完整抽取 precision；只看选中目标的候选投影会遗漏 FP。",
     "risk_condition": "按角色分别报告标记记录数；总体仍可按既有 scorer 计算，但 items 与关系相关，不称独立风险场景。",
-    "quality_gate": "本契约 v3（含 condition_role_read_path）已于 2026-10-11 签认，作为度量基准；但 Issue 28 items-only 质量门本身及其计数器签认仍单独进行。未获得完整候选裁定、query/delivery/context_use 时不得宣告整体质量门通过。"
+    "quality_gate": "度量基准版本链：v2 → v3 → v4 → v4.1 → v4.2 → **v4.3（本版，草案）**；其中 v4.3 把 matching.items 的读法写实（上下文唯一可恢复），并与门 v3 的哨兵清单对齐。六项阈值自 v2 起逐字未变。Issue 28 items-only 质量门本身及其计数器签认仍单独进行；未获得完整候选裁定、query/delivery/context_use 时不得宣告整体质量门通过。"
   },
   "candidate_adjudication_fields": [
     "candidate_id",
@@ -714,6 +714,26 @@
     "NT-I47": {
       "mechanism": "candidate_side_cannot_carry_axis",
       "reason": "同 NT-I45。"
+    }
+  },
+  "registrations": {
+    "contract_version_chase": {
+      "gate_v3_pins": "non-table-selected-target-scoring-contract-v4.2（最近一个已签契约版本）",
+      "contract_v43_pins_gate": "门 v3 签认字节（签认后回填，见 threshold_source.authority_source）",
+      "why": "双向钉哈希会形成环，故门只推进到最近已签版本，契约反向钉门。",
+      "invariant": "六项阈值逐字恒等 + 门哨兵清单与契约 review_assertions 的 NT-I* 子集恒等",
+      "validator_required": true
+    },
+    "frozen_gold_side_contract_binding": {
+      "status": "known_exception_registered",
+      "detail": "冻结金标侧记录的契约绑定仍为 v2（sha256:2eb24be7…），与现行契约版本不符；因冻结金标字节不可改（U 裁定『不改金标』），本轮登记为例外而不回填。",
+      "exception_rule": "任何后续校验器遇到 gold 侧绑定落后时，应报『已登记例外』而非失败；若金标字节本身变更则必须重签。"
+    },
+    "supersedes_terminal_record": {
+      "path": "evidence/72-gate33-terminal-and-corrections-20261013/r0-zero-call/terminal-decision.json",
+      "field": "terminal_state.gate",
+      "old_value": "FAIL（不可达）",
+      "note": "本契约 v4.3 与门 v3 经具名签认、且 7 条改判经 xyl 具名后，evidence/72 的『不可达』结论由新的出分记录取代；72 的字节不改写，仅以本条登记取代关系。"
     }
   }
 }

@@ -24,14 +24,17 @@ from plugins.corpus.structured_scoring import (
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-CONTRACT_V42 = (
+# R2 (2026-10-13): 指针推进到最近一次签认（v4.3 + 门 v3）；旧版本字节不变、路径留在历史记录里。
+CONTRACT_V43 = (
     REPO_ROOT
-    / ".scratch/claims-r2-role-isolation/evidence/58-contract-v42-signed-20261012/r0-zero-call/scoring-contract-v4.2.json"
+    / ".scratch/claims-r2-role-isolation/evidence/75-r2-signed-20261013/r0-zero-call/scoring-contract-v4.3.json"
 )
-GATE_V2 = (
+GATE_V3 = (
     REPO_ROOT
-    / ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate-v2.json"
+    / ".scratch/claims-r2-role-isolation/evidence/75-r2-signed-20261013/r0-zero-call/gate-v3.json"
 )
+# 已签门的哨兵清单在该门移出 5 项（机制见 high_risk_item_assertions_excluded）
+SENTINEL_EXCLUDED = ("NT-I09", "NT-I19", "NT-I45", "NT-I46", "NT-I47")
 
 
 def _item(
@@ -106,7 +109,7 @@ def _score(gold, candidates, mappings, requirements):
 
 def test_embedded_requirements_equal_the_signed_contract() -> None:
     """评分器读契约的可执行形式：契约一改，这条测试即红。"""
-    contract = json.loads(CONTRACT_V42.read_text(encoding="utf-8"))
+    contract = json.loads(CONTRACT_V43.read_text(encoding="utf-8"))
     effective = contract["threshold_source"]["effective"]
 
     assert contract["schema_version"] == CONTRACT_GATE_REQUIREMENTS.schema_version
@@ -136,16 +139,23 @@ def test_embedded_requirements_equal_the_signed_contract() -> None:
     )
 
 
-def test_high_risk_assertions_equal_gate_28() -> None:
-    gate = json.loads(GATE_V2.read_text(encoding="utf-8"))
+def test_high_risk_assertions_equal_the_signed_gate() -> None:
+    """哨兵清单必须逐项等于已签门；被移出项不得再出现在"必须覆盖"里。"""
+    gate = json.loads(GATE_V3.read_text(encoding="utf-8"))
     required = gate["quality_requirements"]["high_risk_item_assertions_required"]
+    excluded = gate["quality_requirements"]["high_risk_item_assertions_excluded"]
     assert tuple(required) == CONTRACT_GATE_REQUIREMENTS.high_risk_item_assertions_required
-    assert len(required) == 16
-    assert (
-        gate["gold"]["scoring_contract_sha256"]
-        == ("sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b")
-        or gate["quality_requirements"]["metric_basis"].endswith("v4.2") is False
-    )
+    assert len(required) == 11
+    assert tuple(sorted(excluded)) == tuple(sorted(SENTINEL_EXCLUDED))
+    assert not set(required) & set(SENTINEL_EXCLUDED)
+    # 每个被移出项都必须带机制与依据（否则等于事后删项）
+    for record_id, spec in excluded.items():
+        assert spec.get("mechanism") and spec.get("reason"), record_id
+    # 门的契约绑定只推进到最近一个**已签**契约版本，且版本追逐必须已登记
+    assert gate["quality_requirements"]["metric_basis"].endswith("v4.2")
+    chase = gate["quality_requirements"]["contract_version_chase"]
+    assert bool(chase["validator_required"]), "版本追逐必须声明校验器要求"
+    assert "阈值逐字恒等" in chase["invariant"], "不变量必须写明阈值恒等"
 
 
 # ---------------------------------------------------------------- single boolean

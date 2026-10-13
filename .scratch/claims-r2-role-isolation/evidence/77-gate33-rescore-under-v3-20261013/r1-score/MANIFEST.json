@@ -1,0 +1,22 @@
+{
+  "schema_version": "evidence-manifest-1",
+  "created_on": "2026-10-13",
+  "zero_model_calls": true,
+  "artifacts": {
+    "score_gate33_v3.py": "sha256:5ac9506274308d28bac229003681c2f2de983ef00c68a9e60b40bfd9bbd21c63",
+    "gate33-score-under-v3.json": "sha256:7a8a8c2b5849aa802abd5616248d7a3e090d63ae9ba44fd1ca6ce0877a147d09",
+    "gate33-score-under-v3.md": "sha256:e1042cc143b4941ac4f8804dddcb991198f264b120367ec8443f4281ada13973"
+  },
+  "inputs": {
+    "gate_v3": "sha256:340b312d9c0cec278e828d8303a03e9daf953feef4c0eef688f3d257971a9732",
+    "contract_v4.3": "sha256:d7b4f8a81ef42e3cd5d619eae92bc34df7b7aa683d34aeba4f1a22719ae69a2f",
+    "re_adjudication": "sha256:89246b39df0a9af34f26954d156f27c1bcd3991526aa1b05a213d0f476c15d13",
+    "old_score": "sha256:f1fddc1d943177d7fc7a6f296cdc4aac097063874da0cbb8a835d7f28c35bf55",
+    "gate33_gold_reference": "sha256:cc2946ef6a487fba059ca995f2c34f469d4c96720b6b6186225c97bd1e41b537",
+    "worksheet_A": "sha256:de2e7402518b573ef572a8f27fa6eb2d5254f926a12a8339f153e23cd2ae10f9",
+    "signed_r5": "sha256:88e0ddf69ef18afe426e1dda9c16c44aedcc4dc1c1121536be33b36d150c56b3",
+    "signed_base": "sha256:625d2002fcbf5a499c295f27ddf7b1f1f7e960e5ebe9e0116f98f5c7b506be77",
+    "frozen_gold": "sha256:603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2"
+  },
+  "reproduce": "uv run python .scratch/claims-r2-role-isolation/evidence/77-gate33-rescore-under-v3-20261013/r1-score/score_gate33_v3.py"
+}
