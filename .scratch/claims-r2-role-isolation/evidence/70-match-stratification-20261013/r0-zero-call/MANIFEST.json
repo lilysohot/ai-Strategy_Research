@@ -1,0 +1,31 @@
+{
+  "schema_version": "match-stratification-manifest-1",
+  "created_on": "2026-10-13",
+  "zero_model_calls": true,
+  "read_only": true,
+  "purpose": "Show the strength distribution of the 34 matched pairs, so the '34 vs 30' disagreement can be settled against explicit criteria instead of two bare numbers.",
+  "inputs": {
+    "A_worksheet_222": "../adjudication/worksheet.json (26 pairs)",
+    "base_packet_worksheet": "../66-base-protocol-change-proposal-20261013/r3-cumulative/adjudication-worksheet-base.json (7 pairs)",
+    "r5_worksheet": "../65-rerun-two-arm-protocol-20261013/r5-adjudication-sheet/adjudication-worksheet.json (1 pair)",
+    "frozen_gold": "../10-quality-gold-freeze-20261008-r2/frozen-gold.json"
+  },
+  "outputs": {
+    "stratify_matches.py": "deterministic classifier (difflib + containment + caliber-axis check)",
+    "match-stratification.md": "layer table, cross-tab, strictness ladder, per-pair detail",
+    "match-stratification.json": "machine-readable rows with flags"
+  },
+  "status": "AGENT HEURISTIC — not an adjudication. Every row carries its flags so a human can overrule; layer precedence is normalisation-need > verbatim > fragment > paraphrase.",
+  "headline": {
+    "total_pairs": 34,
+    "layer_counts": {"逐字一致": 9, "同义改写": 3, "归一化后等价": 22, "可恢复省略": 0},
+    "verbatim_against_gold_quote": 17,
+    "needs_caliber_normalisation": 22,
+    "strictness_ladder": {"verbatim_quote_only": 17, "plus_containment": 23, "contract_caliber": 34}
+  },
+  "not_claimed": [
+    "layers are not mutually exclusive; the cross-tab is the honest view",
+    "the classifier does not judge semantic equivalence — it only measures textual and enumerated-field distance",
+    "'30' does not appear on the ladder; its predicate must be stated before it can be compared with 34"
+  ]
+}
