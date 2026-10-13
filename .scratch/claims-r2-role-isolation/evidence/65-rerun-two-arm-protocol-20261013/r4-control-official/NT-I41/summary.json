@@ -1,0 +1,83 @@
+{
+  "ledger": {
+    "schema_version": "corpus-execution-ledger-v1",
+    "batch_id": "batch:b7b7ede909b980c5f40fa47f31fe6aba2adf7493cfd9973adc2bc034a2d1d3d9",
+    "plan_sha256": "sha256:b7b7ede909b980c5f40fa47f31fe6aba2adf7493cfd9973adc2bc034a2d1d3d9",
+    "snapshot_id": "sha256:110f8628eb71a3495153f05453c93c3fe5e04ba970d0846448eb1b37f0c7627d",
+    "budget": {
+      "max_attempts": 2,
+      "reserved_attempts": 1,
+      "actual_attempts": 1,
+      "currency": null
+    },
+    "tasks": [
+      {
+        "task_id": "task:09c1ce220a81e94b93b20e8af0eda66068fc6ceeda470c618ba6f57e1ad4db3d",
+        "role": "material_items",
+        "method": "model",
+        "input_sha256": "sha256:09c1ce220a81e94b93b20e8af0eda66068fc6ceeda470c618ba6f57e1ad4db3d",
+        "profile_sha256": "sha256:b5ca37e090aca7ed169c62e8861e4c38e3513a6bd09f8ab492e58482d7bfb787",
+        "execution_status": "succeeded",
+        "protocol_status": "valid",
+        "quality_status": "accepted",
+        "publication_status": "candidate",
+        "context_status": "complete",
+        "dependency_task_ids": [],
+        "endpoint_item_ids": [],
+        "artifact_sha256": "sha256:52573b7f1525bd3c31875b513d8955a8e448c201fd03d2b2f622d7b222ab990b",
+        "error_codes": []
+      }
+    ],
+    "attempts": [
+      {
+        "attempt_id": "attempt:7f5dae875ece6bd3579b3a41a5189ba5bd92f09f70730d3bd1ad58bd89fdf3c9",
+        "task_id": "task:09c1ce220a81e94b93b20e8af0eda66068fc6ceeda470c618ba6f57e1ad4db3d",
+        "attempt_number": 1,
+        "execution_status": "succeeded",
+        "request_sha256": "sha256:dabc8b0f891dba7db45f26d4e66e389c418fffcb241e0126235adf302f3a0810",
+        "response_sha256": "sha256:3ce0863ec4747b8a6bf7013e86035863c046804b1a0a99ed5871dc426a9cf4a9",
+        "provider": "openai_compat",
+        "request_model": "deepseek-flash",
+        "response_model": "deepseek-flash",
+        "usage": {
+          "completion_tokens": 2363,
+          "prompt_tokens": 1532,
+          "reasoning_tokens": 2193,
+          "total_tokens": 3895
+        },
+        "cost": null
+      }
+    ]
+  },
+  "plan_consistent": true,
+  "findings": [],
+  "derivations": {
+    "task:09c1ce220a81e94b93b20e8af0eda66068fc6ceeda470c618ba6f57e1ad4db3d": "disabled"
+  },
+  "role_budgets": {
+    "claims": {
+      "max_attempts": 0,
+      "reserved_attempts": 0
+    },
+    "material_items": {
+      "max_attempts": 2,
+      "reserved_attempts": 1
+    },
+    "material_relations": {
+      "max_attempts": 2,
+      "reserved_attempts": 0
+    }
+  },
+  "cost_summary": [
+    {
+      "provider": "openai_compat",
+      "model": "deepseek-flash",
+      "currency": null,
+      "kind": null,
+      "price_version": null,
+      "known_amount": 0.0,
+      "known_calls": 0,
+      "unknown_calls": 1
+    }
+  ]
+}

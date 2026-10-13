@@ -1,0 +1,34 @@
+{
+  "arm": "treatment",
+  "model": "doubao-seed-2.1-lite",
+  "model_calls_so_far": 0,
+  "single_variable": "model only — prompt/protocol/code/packets identical to run-1",
+  "output_enters_scoring": false,
+  "packets": [
+    {
+      "packet": "base-7critical",
+      "locator": "char:5246-5537",
+      "slots": 7,
+      "will_call": true,
+      "attempts_max": 2,
+      "note": "frozen"
+    },
+    {
+      "packet": "NT-I06",
+      "locator": "char:1393-1655",
+      "slots": 11,
+      "will_call": true,
+      "attempts_max": 2,
+      "note": "frozen"
+    },
+    {
+      "packet": "NT-I41",
+      "locator": "char:5055-5071",
+      "slots": 1,
+      "will_call": true,
+      "attempts_max": 2,
+      "note": "frozen"
+    }
+  ],
+  "max_total_calls": 9
+}

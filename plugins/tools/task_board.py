@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import json
 import logging
+from collections.abc import Iterable
 from typing import Any
 
 from frontier_agent.components.agent_bus import AgentBus
@@ -78,6 +80,98 @@ def clear_board(task_id: str) -> None:
     _BOARDS.pop(task_id, None)
     _PHASE.pop(task_id, None)
     _PENDING_OPS.pop(task_id, None)
+
+
+def restore_board_from_messages(task_id: str, messages: Iterable[Any]) -> int:
+    """Rebuild a continued Run's task board from replayed tool calls.
+
+    Conversation replay preserves the model-visible add_task and update_task
+    calls, but the in-memory board is intentionally cleared when each Run ends.
+    Replaying only the messages therefore leaves the next Run with a convincing
+    board transcript and no matching state. Rebuild that state before the loop so
+    the first resumed update_task addresses the same ids the model can see.
+
+    The assistant's call arguments are the source of truth. Tool-result text is a
+    human-readable projection and may be clipped, so it is never parsed. Malformed
+    calls are ignored; the ordinary tool path can still create a fresh board.
+    """
+    clear_board(task_id)
+    board = _board(task_id)
+
+    def arguments(call: Any) -> tuple[str, dict[str, Any] | None]:
+        if not isinstance(call, dict):
+            return "", None
+        function = call.get("function")
+        if not isinstance(function, dict):
+            return "", None
+        name = str(function.get("name") or "")
+        raw = function.get("arguments")
+        if isinstance(raw, dict):
+            return name, raw
+        if not isinstance(raw, str):
+            return name, None
+        try:
+            parsed = json.loads(raw)
+        except (TypeError, ValueError):
+            return name, None
+        return name, parsed if isinstance(parsed, dict) else None
+
+    for message in messages:
+        if not isinstance(message, dict) or message.get("role") != "assistant":
+            continue
+        for call in message.get("tool_calls") or []:
+            name, args = arguments(call)
+            if args is None:
+                continue
+            if name == "add_task":
+                items = coerce_json_list(args.get("tasks")) or []
+                existing = {
+                    task["description"].strip(): tid
+                    for tid, task in board["tasks"].items()
+                }
+                for raw in items:
+                    item = coerce_json_object(raw)
+                    if item is None:
+                        continue
+                    description = str(item.get("description") or "").strip()
+                    if not description or description in existing:
+                        continue
+                    board["seq"] += 1
+                    tid = f"t{board['seq']}"
+                    board["tasks"][tid] = {
+                        "description": description,
+                        "resolution": "open",
+                        "owners": _as_owner_list(item.get("owner") or item.get("owners")),
+                        "group": str(item.get("group") or "").strip(),
+                    }
+                    existing[description] = tid
+            elif name == "update_task":
+                for raw in coerce_json_list(args.get("updates")) or []:
+                    update = coerce_json_object(raw)
+                    if update is None:
+                        continue
+                    tid = str(update.get("id") or "")
+                    task = board["tasks"].get(tid)
+                    if task is None:
+                        continue
+                    resolution = str(update.get("resolution") or "").strip()
+                    if resolution in VALID_RESOLUTION:
+                        task["resolution"] = resolution
+                    owners = _as_owner_list(update.get("owner") or update.get("owners"))
+                    if owners:
+                        if update.get("replace_owners"):
+                            task["owners"] = owners
+                        else:
+                            for owner in owners:
+                                if owner not in task["owners"]:
+                                    task["owners"].append(owner)
+
+    if not board["tasks"]:
+        _BOARDS.pop(task_id, None)
+        return 0
+    # Make the restored snapshot visible to the stream/UI on the resumed Run.
+    _record_op(task_id, "add", list(board["tasks"]))
+    return len(board["tasks"])
 
 
 # ── Task-board stream projection — pure read helpers ─────────────────────────
@@ -496,6 +590,7 @@ __all__ = [
     "planning_block_message",
     "planning_enabled",
     "render_board",
+    "restore_board_from_messages",
     "serialize_tasks",
     "snapshot_tasks",
     "start_planning",

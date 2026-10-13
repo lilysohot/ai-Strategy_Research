@@ -1,0 +1,83 @@
+{
+  "schema_version": "corpus-evidence-snapshot-v1",
+  "snapshot_id": "sha256:3740f63e5f94063785fd2f79a53bb01f369bb478c9872979a52ef31a4a2e9fef",
+  "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+  "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+  "publication_generation": 1,
+  "parser_versions": {
+    "parse": "reader-md-2",
+    "clean": "signed-non-table-exact-text-1",
+    "chunk": "signed-non-table-scope-1",
+    "adapter": "signed-gold-evaluation-adapter-1",
+    "snapshot": "structured-snapshot-2"
+  },
+  "units": [
+    {
+      "unit_id": "snapshot-unit:724ca76b39690a6c84f2e1804990e0f53b8d8bc90b2a980a7216103e0c363cdf",
+      "chunk_id": "chunk:signed-non-table-target-scope",
+      "kind": "prose",
+      "locator": "char:5246-5537",
+      "text": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。单票不超过组合的合理上限。止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+      "text_sha256": "sha256:c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368",
+      "span": {
+        "coordinate_system": "unicode_code_points",
+        "text_sha256": "sha256:c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368",
+        "start": 0,
+        "end": 291
+      },
+      "metadata": {
+        "reader_kind": "paragraph",
+        "source_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368",
+        "gold_not_exposed_to_model": true,
+        "source_unit_id": "signed-unit-34",
+        "source_kind": "prose",
+        "page": null,
+        "element": null,
+        "label_path": [],
+        "parent_id": null,
+        "ordinal": 34,
+        "status": "kept",
+        "reasons": [],
+        "document": {
+          "title": "工业富联投委会决策报告",
+          "subject": "工业富联",
+          "published": "2026-08-29"
+        },
+        "cells": [],
+        "cell_reasons": [],
+        "dependency_details": [],
+        "context_status": "complete",
+        "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "metadata_sha256": "sha256:80a6df324bcaea2d8be6d5ddae3be1c4c9febb9cdd7a34c871f71bf5b97f2b82",
+      "dependencies": []
+    }
+  ],
+  "gaps": [],
+  "identity_input": {
+    "schema_version": "corpus-evidence-snapshot-v1",
+    "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+    "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+    "publication_generation": 1,
+    "parser_versions": {
+      "parse": "reader-md-2",
+      "clean": "signed-non-table-exact-text-1",
+      "chunk": "signed-non-table-scope-1",
+      "adapter": "signed-gold-evaluation-adapter-1",
+      "snapshot": "structured-snapshot-2"
+    },
+    "unit_identities": [
+      {
+        "unit_id": "snapshot-unit:724ca76b39690a6c84f2e1804990e0f53b8d8bc90b2a980a7216103e0c363cdf",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "char:5246-5537",
+        "coordinate_system": "unicode_code_points",
+        "start": 0,
+        "end": 291,
+        "text_sha256": "sha256:c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368",
+        "metadata_sha256": "sha256:80a6df324bcaea2d8be6d5ddae3be1c4c9febb9cdd7a34c871f71bf5b97f2b82"
+      }
+    ]
+  }
+}

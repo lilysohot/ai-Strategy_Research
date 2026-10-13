@@ -1,0 +1,17 @@
+{
+  "schema_version": "base-protocol-proposal-manifest-1",
+  "created_on": "2026-10-13",
+  "zero_call": true,
+  "model_calls": 0,
+  "inputs": {
+    "r4-control-official": "sha256:be71fb74a2b767e10e5e732cf0827e0c567ee7be6729578a1481247bcf0b8d69",
+    "r2-treatment-adjusted": "sha256:2fd78fb3e84a597ad6e0766b4969e7da91ce50d87a9d5fd88a4019c7767817ec",
+    "r3-control-live": "sha256:73df5131e67e0402a72409aae2fc10e95f1da0fa95025e99e61d9d19f6a6d29a",
+    "r1-treatment-live": "sha256:5df6edd1b65b52c73455375f0fca7007b6f5bf9df084b6682f4260c02760e071"
+  },
+  "outputs": {
+    "base-packet-protocol-change-proposal.md": "sha256:36a4c92d5e4d7bd37058a14c694b84416822801e3da3742f97631dfe21984b33"
+  },
+  "in_place_edits": 0,
+  "status": "proposal_pending_signoff"
+}

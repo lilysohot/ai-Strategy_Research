@@ -1,0 +1,31 @@
+{
+  "schema_version": "rerun-two-arm-manifest-1",
+  "created_on": "2026-10-13",
+  "zero_model_calls_so_far": true,
+  "status": "awaiting U authorization (no probe-with-call, no extraction run executed)",
+  "inputs": {
+    "gate28_preregistered": "../28-items-only-quality-gate-20261010/r0-zero-call/preregistered-gate.json",
+    "doubao_prior_evidence": "../22-doubao-lite-provider-ceiling-20261010/p0-256k-minimal-live/final-decision.json",
+    "superseded_rerun_doc": "../63-rerun-authorization-20261012/r0-zero-call/rerun-authorization.md",
+    "route_b_metric_family": "../40-route-ab-decision-inputs-20261012/r0-zero-call/route-b-experiment-protocol.json"
+  },
+  "outputs": {
+    "rerun-two-arm-authorization.md": "human-facing authorization document (two arms + probe step)",
+    "preregistered-two-arm.json": "machine-readable pre-registration",
+    "probe_extraction_endpoint.py": "Step-0 probe; --no-call is zero-cost, --arm makes exactly one call"
+  },
+  "findings_at_draft_time": {
+    "probe_0a_executed": true,
+    "probe_0b_executed": false,
+    "current_resolved_config": {
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.1-lite",
+      "base_url_host": "ark.cn-beijing.volces.com",
+      "adapter_version": "structured-chat-http-3",
+      "credential_resolved": true
+    },
+    "caveat": "0a proves the configuration resolves; it does NOT prove the endpoint accepts requests. That is what 0b is for.",
+    "doubao_prior_record": "route_closed on 2026-10-10 with items attempts=0; the treatment arm exists to re-measure this under the current protocol, not to be assumed working"
+  },
+  "key_design_point": "control arm is the rerun (recovers the 7 lost candidates and may be scored); treatment arm is the experiment (never scored)"
+}

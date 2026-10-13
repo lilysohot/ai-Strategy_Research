@@ -1,0 +1,99 @@
+{
+  "schema_version": "rerun-two-arm-preregistration-1",
+  "created_on": "2026-10-13",
+  "supersedes": "63-rerun-authorization-20261012 (single-model rerun framing)",
+  "purpose": "Recover the 7 candidates lost to the transport failure (control arm) AND measure whether doubao-seed-2.1-lite can run this protocol at all (treatment arm). The two goals are deliberately separated because mixing them would make the score uninterpretable.",
+  "single_variable": "model only — prompt, protocol, code, packets, attempts, throttle are identical across arms",
+  "arms": [
+    {
+      "id": "control",
+      "model": "deepseek-v4-flash",
+      "authority": "gate-28 authorization.items_live_extraction.model",
+      "is_the_actual_rerun": true,
+      "output_enters_scoring": true,
+      "why": "same model as the run that produced the existing 222 candidates, so its output is comparable and may be assembled with them"
+    },
+    {
+      "id": "treatment",
+      "model": "doubao-seed-2.1-lite",
+      "authority": "NEW — requires named authorization (gate-28 authorized a different model)",
+      "is_the_actual_rerun": false,
+      "output_enters_scoring": false,
+      "prior_evidence": "22-doubao-lite-provider-ceiling-20261010: status=failed_protocol_and_signed_semantic_gate_route_closed, items attempts=0, relation 2/4 packets failed, signed_cases 37<40"
+    }
+  ],
+  "probe_step_0": {
+    "why": "`.env` is rewritten by parallel sessions; an ark key 401'd on 2026-10-12. Config resolving is NOT the same as the endpoint working.",
+    "0a": {
+      "calls": 0,
+      "command": "uv run python probe_extraction_endpoint.py --no-call",
+      "result_on_2026-10-13": {
+        "configured": true,
+        "provider": "openai_compat",
+        "request_model": "doubao-seed-2.1-lite",
+        "base_url_host": "ark.cn-beijing.volces.com",
+        "adapter_version": "structured-chat-http-3",
+        "credential_resolved": true
+      }
+    },
+    "0b": {
+      "calls_per_arm": 1,
+      "command": "STRUCTURED_EXTRACTION_MODEL=... STRUCTURED_EXTRACTION_BASE_URL=... STRUCTURED_EXTRACTION_API_KEY=... uv run python probe_extraction_endpoint.py --arm control|treatment",
+      "records": ["endpoint_host", "request_model", "response_model", "error_code", "timestamp"],
+      "rule": "the arm is chosen by the environment, never by a flag, so the probe cannot claim one model while calling another"
+    },
+    "abort_rule": "any arm whose 0b probe fails is aborted; no budget is spent on it"
+  },
+  "packets": {
+    "base": ["industrial-fulian-md char:5246-5537 (7 critical gold records lost to TransportOutcomeUnknown)"],
+    "conditional_on_B1": ["NT-I06 char:1393-1655", "NT-I41 char:5055-5071"],
+    "note": "B-1 must be ruled first: it decides whether this is 1 packet or 3"
+  },
+  "invariants": {
+    "attempts_max": "gate-28 execution_requirements — must not be relaxed",
+    "automatic_retries": ">= 1 (the original loss was caused by automatic_retries=0)",
+    "throttle_seconds": 20,
+    "idempotent": true,
+    "input_isolation": "no gold records, target ids or labels reach the model",
+    "output_location": "new evidence directory; run-1/run-2/v6 artifacts byte-unchanged"
+  },
+  "exit_criteria": [
+    "both arms' 0b probes pass, with endpoint and model recorded per arm",
+    "automatic retries enabled and repeated packet execution is idempotent",
+    "target packets produce candidates; artifacts land in a new directory and old ones are byte-identical",
+    "input isolation holds",
+    "failures are recorded, never silent, and attributed to infrastructure | model behaviour | our contract signal",
+    "tools/check_freeze_chain.py and the assembler self-check stay exit 0",
+    "control-arm candidates enter assembly and scoring; treatment-arm candidates never do",
+    "if treatment-arm items attempts == 0, declare the model unusable here and stop spending",
+    "metrics are emitted per arm with the same metric set; no cross-arm merging",
+    "md and docx are reported separately"
+  ],
+  "treatment_metrics": [
+    "items attempts succeeded",
+    "protocol-violation batches",
+    "quoted_other / condition / behavior / speech_role yield",
+    "verbatim-quote reachability (does evidence_quote occur in the source segment)",
+    "whether fail-closed was amplified"
+  ],
+  "out_of_scope": [
+    "no change to gold, contract, thresholds or prompts (model is the only variable)",
+    "no relaxation of fail-closed; no response_format",
+    "no treatment output in this round's score",
+    "no human adjudication substituted by the agent",
+    "no calls before authorization"
+  ],
+  "signoff": {
+    "authorizer": "U (xyl)",
+    "date": null,
+    "budget_cap_control": null,
+    "budget_cap_treatment": null,
+    "B1_ruling": null,
+    "decision_options": [
+      "approve both arms (probe first)",
+      "approve control arm only",
+      "approve probe only",
+      "return for revision"
+    ]
+  }
+}

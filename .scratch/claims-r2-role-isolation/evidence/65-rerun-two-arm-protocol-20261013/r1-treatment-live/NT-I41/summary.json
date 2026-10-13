@@ -1,0 +1,83 @@
+{
+  "ledger": {
+    "schema_version": "corpus-execution-ledger-v1",
+    "batch_id": "batch:48a2e378ea8b126016debc39130631e1b95f251caa573be019342d30e69fec63",
+    "plan_sha256": "sha256:48a2e378ea8b126016debc39130631e1b95f251caa573be019342d30e69fec63",
+    "snapshot_id": "sha256:110f8628eb71a3495153f05453c93c3fe5e04ba970d0846448eb1b37f0c7627d",
+    "budget": {
+      "max_attempts": 2,
+      "reserved_attempts": 1,
+      "actual_attempts": 1,
+      "currency": null
+    },
+    "tasks": [
+      {
+        "task_id": "task:89efa2545dfde0bb3638394c627aeffb7b219ab397c8f0e151aa848077772826",
+        "role": "material_items",
+        "method": "model",
+        "input_sha256": "sha256:89efa2545dfde0bb3638394c627aeffb7b219ab397c8f0e151aa848077772826",
+        "profile_sha256": "sha256:1c71a27ef50668ed3016460503842da67c7ac3c8e25030e3fd45ab7a99a27f43",
+        "execution_status": "succeeded",
+        "protocol_status": "valid",
+        "quality_status": "accepted",
+        "publication_status": "candidate",
+        "context_status": "complete",
+        "dependency_task_ids": [],
+        "endpoint_item_ids": [],
+        "artifact_sha256": "sha256:27adefdb39d276a72c7105f781fe2b4c758dce734c24dc36f650fa01de279e7a",
+        "error_codes": []
+      }
+    ],
+    "attempts": [
+      {
+        "attempt_id": "attempt:018434c6a7d2108b46816999ddedafe92795b336e108585e655381239d21dc2f",
+        "task_id": "task:89efa2545dfde0bb3638394c627aeffb7b219ab397c8f0e151aa848077772826",
+        "attempt_number": 1,
+        "execution_status": "succeeded",
+        "request_sha256": "sha256:d9eb28c29a4756f9d7ba6aebba4940abfb5d846c26f00d56c57a0334fe22e4b3",
+        "response_sha256": "sha256:77226e2d285357e42e89fa27ef3d04338282123240c0fcd730d2a78fb0181ea2",
+        "provider": "openai_compat",
+        "request_model": "doubao-seed-2.1-lite",
+        "response_model": "doubao-seed-2-1-lite-260915",
+        "usage": {
+          "completion_tokens": 3724,
+          "prompt_tokens": 1686,
+          "reasoning_tokens": 3536,
+          "total_tokens": 5410
+        },
+        "cost": null
+      }
+    ]
+  },
+  "plan_consistent": true,
+  "findings": [],
+  "derivations": {
+    "task:89efa2545dfde0bb3638394c627aeffb7b219ab397c8f0e151aa848077772826": "disabled"
+  },
+  "role_budgets": {
+    "claims": {
+      "max_attempts": 0,
+      "reserved_attempts": 0
+    },
+    "material_items": {
+      "max_attempts": 2,
+      "reserved_attempts": 1
+    },
+    "material_relations": {
+      "max_attempts": 2,
+      "reserved_attempts": 0
+    }
+  },
+  "cost_summary": [
+    {
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.1-lite",
+      "currency": null,
+      "kind": null,
+      "price_version": null,
+      "known_amount": 0.0,
+      "known_calls": 0,
+      "unknown_calls": 1
+    }
+  ]
+}

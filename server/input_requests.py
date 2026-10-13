@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import uuid
 from dataclasses import replace
 from datetime import UTC, datetime
@@ -34,6 +35,26 @@ def _aware(value: datetime | None) -> datetime | None:
 
 def _field_names(fields: list[dict[str, Any]]) -> set[str]:
     return {str(field.get("name") or "") for field in fields}
+
+
+def _pending_request_signature(
+    fields: list[dict[str, Any]],
+    known_versions: dict[str, int],
+    continuation: dict[str, Any],
+) -> str:
+    """Identity of one unresolved question, independent of the producing Run.
+
+    A retry in the same research often creates a new Run and idempotency key, so
+    per-operation idempotency cannot catch it. The prompt, frozen object refs and
+    required field names describe the question the user is being asked; matching
+    that tuple means a second modal would collect the same answer.
+    """
+    payload = {
+        "fields": sorted(_field_names(fields)),
+        "known_versions": known_versions,
+        "continuation": continuation,
+    }
+    return json.dumps(payload, ensure_ascii=False, sort_keys=True, default=str)
 
 
 def validate_fields(fields: Any) -> list[dict[str, Any]]:
@@ -464,6 +485,39 @@ async def create_request(
                 known_versions["account"] = parsed.account.expected_revision
             if parsed and parsed.plan and parsed.plan.expected_revision:
                 known_versions["plan"] = parsed.plan.expected_revision
+
+        signature = _pending_request_signature(
+            requested, known_versions, continuation_data
+        )
+        pending_rows = (
+            await session.execute(
+                select(store.InputRequest)
+                .where(
+                    store.InputRequest.user_id == user_id,
+                    store.InputRequest.research_id == research_id,
+                    store.InputRequest.use_case == use_case,
+                    store.InputRequest.status == PENDING,
+                )
+                .order_by(store.InputRequest.created_at.desc())
+            )
+        ).scalars()
+        now = _now()
+        for existing in pending_rows:
+            existing_expiry = _aware(existing.expires_at)
+            if existing_expiry is not None and existing_expiry <= now:
+                continue
+            if _pending_request_signature(
+                list(existing.fields_json or []),
+                dict(existing.known_versions_json or {}),
+                dict(existing.continuation_json or {}),
+            ) != signature:
+                continue
+            return {
+                "request_id": str(existing.id),
+                "status": existing.status,
+                "revision": existing.revision,
+                "reused": True,
+            }
 
         row = store.InputRequest(
             user_id=user_id,

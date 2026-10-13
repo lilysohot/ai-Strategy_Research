@@ -1,0 +1,1325 @@
+{
+  "raw": [
+    {
+      "candidate_id": "slot_214372468938afb1#1",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "卖方讲三条"
+        ],
+        [
+          "semantic_type",
+          "opinion"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "claim"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_3d7a7290c7f874fa#1",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "CSP/GPU 机柜量、Rubin 卡位、CPO/高速网络"
+        ],
+        [
+          "semantic_type",
+          "opinion"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "claim"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_60052220425de312#1",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "中报验证了量"
+        ],
+        [
+          "semantic_type",
+          "opinion"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "claim"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_29321fd57ac9ff2e#1",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "云计算 +75.7%"
+        ],
+        [
+          "semantic_type",
+          "fact"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "evidence"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_fa65168fd657b4cc#1",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "CSP AI 服务器 +2.3 倍"
+        ],
+        [
+          "semantic_type",
+          "fact"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "evidence"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_6d633216b432f293#1",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "GPU/ASIC 机柜出货 +3.2 / +3 倍"
+        ],
+        [
+          "semantic_type",
+          "fact"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "evidence"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_f97e5c740c8137e0#1",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "Q2 营收 3067.83 亿环比 +22%"
+        ],
+        [
+          "semantic_type",
+          "fact"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "evidence"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_a7980f0dce789e71#1",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "卖方爱用归母 +96%"
+        ],
+        [
+          "semantic_type",
+          "opinion"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "claim"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_a7980f0dce789e71#2",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "卖方爱用 26E 600 亿+"
+        ],
+        [
+          "semantic_type",
+          "opinion"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "claim"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_a7980f0dce789e71#3",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "中报扣非虽然同步"
+        ],
+        [
+          "semantic_type",
+          "fact"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "claim"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_214c423c9dffff90#1",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "但 OCF 只有 73.91 亿；"
+        ],
+        [
+          "semantic_type",
+          "fact"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "claim"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_976f4b2891010ed3#1",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。"
+        ],
+        [
+          "semantic_type",
+          "fact"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "claim"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_976f4b2891010ed3#2",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "negated"
+        ],
+        [
+          "proposition",
+          "并表 7% 的加工费没有变成「系统商」。"
+        ],
+        [
+          "semantic_type",
+          "fact"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "claim"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_0941b49532217294#1",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "mixed"
+        ],
+        [
+          "proposition",
+          "框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。"
+        ],
+        [
+          "semantic_type",
+          "opinion"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "claim"
+        ]
+      ],
+      "critical_error_code": null
+    },
+    {
+      "candidate_id": "slot_f01c72a4463f094b#1",
+      "role": "material_items",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "semantic_fields": [
+        [
+          "condition",
+          "absent"
+        ],
+        [
+          "perspective",
+          "unknown"
+        ],
+        [
+          "polarity",
+          "affirmed"
+        ],
+        [
+          "proposition",
+          "持有 + 观望"
+        ],
+        [
+          "semantic_type",
+          "behavior"
+        ],
+        [
+          "source_stance",
+          "reported"
+        ],
+        [
+          "speech_role",
+          "statement"
+        ],
+        [
+          "statement_role",
+          "claim"
+        ]
+      ],
+      "critical_error_code": null
+    }
+  ],
+  "validated": [],
+  "mappings": [
+    {
+      "candidate_id": "slot_214372468938afb1#1",
+      "gold_record_id": null,
+      "judgement": "correct_extra",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_3d7a7290c7f874fa#1",
+      "gold_record_id": null,
+      "judgement": "correct_extra",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_60052220425de312#1",
+      "gold_record_id": "NT-I06",
+      "judgement": "matched",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_29321fd57ac9ff2e#1",
+      "gold_record_id": null,
+      "judgement": "duplicate",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_fa65168fd657b4cc#1",
+      "gold_record_id": null,
+      "judgement": "correct_extra",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_6d633216b432f293#1",
+      "gold_record_id": null,
+      "judgement": "correct_extra",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_f97e5c740c8137e0#1",
+      "gold_record_id": null,
+      "judgement": "correct_extra",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_a7980f0dce789e71#1",
+      "gold_record_id": null,
+      "judgement": "correct_extra",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_a7980f0dce789e71#2",
+      "gold_record_id": null,
+      "judgement": "correct_extra",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_a7980f0dce789e71#3",
+      "gold_record_id": null,
+      "judgement": "correct_extra",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_214c423c9dffff90#1",
+      "gold_record_id": null,
+      "judgement": "correct_extra",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_976f4b2891010ed3#1",
+      "gold_record_id": null,
+      "judgement": "duplicate",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_976f4b2891010ed3#2",
+      "gold_record_id": null,
+      "judgement": "duplicate",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_0941b49532217294#1",
+      "gold_record_id": null,
+      "judgement": "correct_extra",
+      "stage": "raw"
+    },
+    {
+      "candidate_id": "slot_f01c72a4463f094b#1",
+      "gold_record_id": null,
+      "judgement": "duplicate",
+      "stage": "raw"
+    }
+  ],
+  "out_of_scope": [],
+  "audit": [
+    {
+      "candidate_id": "slot_214372468938afb1#1",
+      "stage": "raw",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "卖方讲三条",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "unknown",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {},
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_3d7a7290c7f874fa#1",
+      "stage": "raw",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "CSP/GPU 机柜量、Rubin 卡位、CPO/高速网络",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "unknown",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {},
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_60052220425de312#1",
+      "stage": "raw",
+      "judgement": "matched",
+      "matched_gold_id": "NT-I06",
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "中报验证了量",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "unknown",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {},
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_29321fd57ac9ff2e#1",
+      "stage": "raw",
+      "judgement": "duplicate",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "云计算 +75.7%",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "unknown",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {},
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_fa65168fd657b4cc#1",
+      "stage": "raw",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "CSP AI 服务器 +2.3 倍",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "unknown",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {},
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_6d633216b432f293#1",
+      "stage": "raw",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "GPU/ASIC 机柜出货 +3.2 / +3 倍",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "unknown",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {},
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_f97e5c740c8137e0#1",
+      "stage": "raw",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "Q2 营收 3067.83 亿环比 +22%",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "unknown",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {},
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_a7980f0dce789e71#1",
+      "stage": "raw",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "卖方爱用归母 +96%",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "unknown",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {},
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_a7980f0dce789e71#2",
+      "stage": "raw",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "卖方爱用 26E 600 亿+",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "unknown",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {},
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_a7980f0dce789e71#3",
+      "stage": "raw",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "中报扣非虽然同步",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "unknown",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {},
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_214c423c9dffff90#1",
+      "stage": "raw",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "但 OCF 只有 73.91 亿；",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_976f4b2891010ed3#1",
+      "stage": "raw",
+      "judgement": "duplicate",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_976f4b2891010ed3#2",
+      "stage": "raw",
+      "judgement": "duplicate",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "并表 7% 的加工费没有变成「系统商」。",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "negated",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_0941b49532217294#1",
+      "stage": "raw",
+      "judgement": "correct_extra",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "mixed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    },
+    {
+      "candidate_id": "slot_f01c72a4463f094b#1",
+      "stage": "raw",
+      "judgement": "duplicate",
+      "matched_gold_id": null,
+      "reviewer": "xyl",
+      "canonical_observed_fields": {
+        "proposition": "持有 + 观望",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "polarity": "affirmed",
+        "speaker_ref": "spk_544d7167e8a5",
+        "attribution": "absent",
+        "source_stance": "reported",
+        "condition": "absent"
+      },
+      "excluded_from_matching_basis": [
+        "attribution",
+        "speaker_ref"
+      ],
+      "absent_required_fields": [
+        "attribution",
+        "condition"
+      ],
+      "matching_basis": [
+        "condition",
+        "perspective",
+        "polarity",
+        "proposition",
+        "semantic_type",
+        "source_stance",
+        "speech_role",
+        "statement_role"
+      ],
+      "normalized_fields": {
+        "perspective": "source_explicit -> unknown"
+      },
+      "contract_view": {},
+      "field_provenance": {}
+    }
+  ]
+}

@@ -350,7 +350,12 @@ async def run_once(args: argparse.Namespace) -> int:
     from server.bridge import BridgeObserver
     from server.config import build_run_paths, run_dir_for
     from server.diff import DiffRecorder
-    from server.profile import BUSINESS_CONTEXT_POLICY, PROFILE_NAME, build_profile_overrides
+    from server.profile import (
+        BUSINESS_CONTEXT_POLICY,
+        INPUT_REQUEST_POLICY,
+        PROFILE_NAME,
+        build_profile_overrides,
+    )
 
     paths = build_run_paths(args.run_id)
     run_root = run_dir_for(args.run_id)
@@ -515,14 +520,7 @@ async def run_once(args: argparse.Namespace) -> int:
         metadata["_sys_prompt_addendum"] += "\n" + BUSINESS_CONTEXT_POLICY
     # 缺料表达对**所有**研究 Run 生效（2026-10-08 实测补充）：只有工具描述不够，
     # 必须有 prompt 级指令，否则模型会把“缺资料”写成一段说明而不调用工具。
-    metadata["_sys_prompt_addendum"] += (
-        "\nINPUT REQUEST POLICY:\n"
-        "- 当你要给出买入/卖出价位、仓位或成本收益结论，而缺少用户自己的真实资料"
-        "（本标的规划资金、可承受风险、期望盈利、实际成交价）时，**必须先调用"
-        " request_investment_input 一次**，由系统向用户索取结构化资料；"
-        "不要在缺少这些资料时直接给出结论，也不要用假设值、现价或建议价替代。\n"
-        "- 纯材料阅读、看研报、一般问答不要调用该工具。\n"
-    )
+    metadata["_sys_prompt_addendum"] += "\n" + INPUT_REQUEST_POLICY
 
     started = time.time()
     _frame("run_started", run_dir=str(run_root))

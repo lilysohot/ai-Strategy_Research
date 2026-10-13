@@ -1,0 +1,15 @@
+{
+  "schema_version": "adjudication-sheet-manifest-1",
+  "created_on": "2026-10-13",
+  "zero_call": true,
+  "model_calls": 0,
+  "inputs": {
+    "r3 arm-run.json": "sha256:ed290ac3285b8151d946a645f84d4f01c9e8132cf2e822349f8b883d9bbe0749",
+    "gold": "sha256:f8feaf96168c1a068d6e0c0e1a1f6b34113765ed5a76058c3d9f02ea730ccc59"
+  },
+  "outputs": {
+    "adjudication-worksheet.json": "sha256:6355ebfbbab7918f6ef8f28332dc84942b0a387f611728352272c0dd8440bde3",
+    "adjudication-worksheet.md": "sha256:fe1c89c4c3449d0019417315ddc25e15f68b801eb0b48f5a7b642dfbbc6b3d90"
+  },
+  "in_place_edits": 0
+}

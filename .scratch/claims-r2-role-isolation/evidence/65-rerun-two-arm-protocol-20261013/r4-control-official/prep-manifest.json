@@ -1,0 +1,35 @@
+{
+  "arm": "control-official",
+  "model": "deepseek-flash",
+  "request_options": "timeout_seconds=300.0 max_output_tokens=262144 token_parameter='max_tokens' reasoning_effort='minimal' thinking=None",
+  "model_calls_so_far": 0,
+  "single_variable": "model only vs run-1; treatment arm adds the DECLARED doubao thinking=disabled switch (user-authorized 2026-10-13) — control uses gate-28 frozen options verbatim",
+  "output_enters_scoring": false,
+  "packets": [
+    {
+      "packet": "base-7critical",
+      "locator": "char:5246-5537",
+      "slots": 7,
+      "will_call": true,
+      "attempts_max": 2,
+      "note": "frozen"
+    },
+    {
+      "packet": "NT-I06",
+      "locator": "char:1393-1655",
+      "slots": 11,
+      "will_call": true,
+      "attempts_max": 2,
+      "note": "frozen"
+    },
+    {
+      "packet": "NT-I41",
+      "locator": "char:5055-5071",
+      "slots": 1,
+      "will_call": true,
+      "attempts_max": 2,
+      "note": "frozen"
+    }
+  ],
+  "max_total_calls": 9
+}

@@ -1,0 +1,33 @@
+{
+  "schema_version": "repair-attempt-manifest-1",
+  "created_on": "2026-10-13",
+  "authorization": "U 2026-10-13「执行 P-A」；声明式提示词偏差（记账反馈+白名单词表）逐字存档于 repair-record.json",
+  "model": "doubao-seed-2.1-lite",
+  "request_options": "timeout_seconds=300.0 max_output_tokens=262144 token_parameter='max_tokens' reasoning_effort=None thinking='disabled'",
+  "model_calls": 3,
+  "call_ledger": [
+    {
+      "n": 1,
+      "outcome": "响应到达但报告代码崩溃（MaterialRun.items 字段名错），响应丢失——浪费，如实记录"
+    },
+    {
+      "n": 2,
+      "outcome": "入口用错（直接 understanding 而非 items_role），记账空转；模型已输出 SUBORDINATED_CONDITION_CLAUSE 终端记录但被白名单拒绝"
+    },
+    {
+      "n": 3,
+      "outcome": "反馈附白名单词表 → 7/7 记账成功，packet completed"
+    }
+  ],
+  "result": {
+    "all_slots_accounted": true,
+    "packet_status": "completed",
+    "ledger_mix": "extracted 6 + no_supported_item 1（no_independent_proposition）"
+  },
+  "outputs": {
+    "repair-record.json": "sha256:446149532a10f9fe8ecb1adf9765cd382293eafc533611d01cd0d8aba3ffb80f",
+    "repair_base_packet.py": "sha256:2cf8e52d49d35bd3ab15246c6da1d638d9708745b93bfedcac7017a05174f707"
+  },
+  "in_place_edits": 0,
+  "budget_note": "base 修复 3 次（含 1 次浪费）；treatment 臂累计 ~16/30"
+}

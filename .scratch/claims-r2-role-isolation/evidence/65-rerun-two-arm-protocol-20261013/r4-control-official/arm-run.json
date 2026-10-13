@@ -1,0 +1,138 @@
+{
+  "arm": "control-official",
+  "model": "deepseek-flash",
+  "request_options": "timeout_seconds=300.0 max_output_tokens=262144 token_parameter='max_tokens' reasoning_effort='minimal' thinking=None",
+  "model_calls": 4,
+  "budget_cap": 9,
+  "output_enters_scoring": false,
+  "results": [
+    {
+      "packet": "base-7critical",
+      "plan_consistent": true,
+      "findings": [
+        "task_not_terminal:task:a05c105a2c3c2919f7a163331941f10b1adb067387a20d8157e98ecec4068dc2:blocked"
+      ],
+      "attempts": [
+        {
+          "attempt_number": 1,
+          "execution_status": "succeeded",
+          "request_model": "deepseek-flash",
+          "response_model": "deepseek-flash",
+          "usage": {
+            "completion_tokens": 11697,
+            "prompt_tokens": 2245,
+            "reasoning_tokens": 9156,
+            "total_tokens": 13942
+          }
+        }
+      ],
+      "tasks": [
+        {
+          "task_id": "task:a05c105a2c3c291",
+          "role": "claims",
+          "execution_status": "blocked",
+          "protocol_status": "not_checked",
+          "quality_status": "unassessed",
+          "publication_status": "unpublished",
+          "error_codes": [
+            "CS_BUDGET_EXHAUSTED"
+          ]
+        },
+        {
+          "task_id": "task:f0d8901b36267d2",
+          "role": "material_items",
+          "execution_status": "succeeded",
+          "protocol_status": "invalid",
+          "quality_status": "review_required",
+          "publication_status": "unpublished",
+          "error_codes": []
+        }
+      ]
+    },
+    {
+      "packet": "NT-I06",
+      "plan_consistent": true,
+      "findings": [
+        "task_not_terminal:task:fd5f65d6994851eb85ae098ef8b60ec18ef4b7d2c78b55d3e49b8e68755ab892:blocked"
+      ],
+      "attempts": [
+        {
+          "attempt_number": 1,
+          "execution_status": "succeeded",
+          "request_model": "deepseek-flash",
+          "response_model": "deepseek-flash",
+          "usage": {
+            "completion_tokens": 16466,
+            "prompt_tokens": 2102,
+            "reasoning_tokens": 14628,
+            "total_tokens": 18568
+          }
+        },
+        {
+          "attempt_number": 2,
+          "execution_status": "succeeded",
+          "request_model": "deepseek-flash",
+          "response_model": "deepseek-flash",
+          "usage": {
+            "completion_tokens": 5915,
+            "prompt_tokens": 1754,
+            "reasoning_tokens": 5033,
+            "total_tokens": 7669
+          }
+        }
+      ],
+      "tasks": [
+        {
+          "task_id": "task:fd5f65d6994851e",
+          "role": "claims",
+          "execution_status": "blocked",
+          "protocol_status": "not_checked",
+          "quality_status": "unassessed",
+          "publication_status": "unpublished",
+          "error_codes": [
+            "CS_BUDGET_EXHAUSTED"
+          ]
+        },
+        {
+          "task_id": "task:09b7abda3619db8",
+          "role": "material_items",
+          "execution_status": "succeeded",
+          "protocol_status": "valid",
+          "quality_status": "accepted",
+          "publication_status": "candidate",
+          "error_codes": []
+        }
+      ]
+    },
+    {
+      "packet": "NT-I41",
+      "plan_consistent": true,
+      "findings": [],
+      "attempts": [
+        {
+          "attempt_number": 1,
+          "execution_status": "succeeded",
+          "request_model": "deepseek-flash",
+          "response_model": "deepseek-flash",
+          "usage": {
+            "completion_tokens": 2363,
+            "prompt_tokens": 1532,
+            "reasoning_tokens": 2193,
+            "total_tokens": 3895
+          }
+        }
+      ],
+      "tasks": [
+        {
+          "task_id": "task:09c1ce220a81e94",
+          "role": "material_items",
+          "execution_status": "succeeded",
+          "protocol_status": "valid",
+          "quality_status": "accepted",
+          "publication_status": "candidate",
+          "error_codes": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "schema_version": "corpus-batch-plan-v2",
+  "batch_id": "batch:78966d2c728a388928f7087f3f6b1cdeab7bc18e0616a537339b715b81d9cd4c",
+  "plan_sha256": "sha256:78966d2c728a388928f7087f3f6b1cdeab7bc18e0616a537339b715b81d9cd4c",
+  "snapshot": {
+    "schema_version": "corpus-evidence-snapshot-v1",
+    "snapshot_id": "sha256:110f8628eb71a3495153f05453c93c3fe5e04ba970d0846448eb1b37f0c7627d",
+    "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+    "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+    "publication_generation": 1,
+    "parser_versions": {
+      "parse": "reader-md-2",
+      "clean": "signed-non-table-exact-text-1",
+      "chunk": "signed-non-table-scope-1",
+      "adapter": "signed-gold-evaluation-adapter-1",
+      "snapshot": "structured-snapshot-2"
+    },
+    "units": [
+      {
+        "unit_id": "snapshot-unit:6ec5cecf7239672a2b430eb25c02b291c840485b53d4b21e058ef5894336d609",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "char:5055-5071",
+        "text": "四选一：**持有 + 观望。**",
+        "text_sha256": "sha256:77611e276f516e7b66a3e620abb849c7aa6d76d505cd8a5cc2bc2623328e44af",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:77611e276f516e7b66a3e620abb849c7aa6d76d505cd8a5cc2bc2623328e44af",
+          "start": 0,
+          "end": 16
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "77611e276f516e7b66a3e620abb849c7aa6d76d505cd8a5cc2bc2623328e44af",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-32",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 32,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "工业富联投委会决策报告",
+            "subject": "工业富联",
+            "published": "2026-08-29"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:cf5e989d590ddf3aebb11144d5cc03f725305abff66d858d74b35564a60ba84b",
+        "dependencies": []
+      }
+    ],
+    "gaps": [],
+    "identity_input": {
+      "schema_version": "corpus-evidence-snapshot-v1",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+      "publication_generation": 1,
+      "parser_versions": {
+        "parse": "reader-md-2",
+        "clean": "signed-non-table-exact-text-1",
+        "chunk": "signed-non-table-scope-1",
+        "adapter": "signed-gold-evaluation-adapter-1",
+        "snapshot": "structured-snapshot-2"
+      },
+      "unit_identities": [
+        {
+          "unit_id": "snapshot-unit:6ec5cecf7239672a2b430eb25c02b291c840485b53d4b21e058ef5894336d609",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "char:5055-5071",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 16,
+          "text_sha256": "sha256:77611e276f516e7b66a3e620abb849c7aa6d76d505cd8a5cc2bc2623328e44af",
+          "metadata_sha256": "sha256:cf5e989d590ddf3aebb11144d5cc03f725305abff66d858d74b35564a60ba84b"
+        }
+      ]
+    }
+  },
+  "routing": {
+    "rule_version": "corpus-role-routing-v2",
+    "snapshot_id": "sha256:110f8628eb71a3495153f05453c93c3fe5e04ba970d0846448eb1b37f0c7627d",
+    "decisions": [
+      {
+        "unit_id": "snapshot-unit:6ec5cecf7239672a2b430eb25c02b291c840485b53d4b21e058ef5894336d609",
+        "unit_kind": "prose",
+        "claims_protocol": null,
+        "material_items": true,
+        "reason_codes": [
+          "unclassified_prose_conservatively_retained"
+        ],
+        "context_status": "complete"
+      }
+    ],
+    "unrouted_gap_ids": []
+  },
+  "routing_sha256": "sha256:435c757a9e4c202d02d767e2dae33d26adae8fe8a1cc56a2f3ea54cbd4ea4783",
+  "tasks": [
+    {
+      "task_id": "task:069826862e1e361d238ccdefc2d3849e3339879f3a10dfb346908697ef4bcbb6",
+      "logical_key": "sha256:069826862e1e361d238ccdefc2d3849e3339879f3a10dfb346908697ef4bcbb6",
+      "role": "material_items",
+      "protocol": "material-atomic-jsonl-v5",
+      "method": "model",
+      "scoped_unit_ids": [
+        "snapshot-unit:6ec5cecf7239672a2b430eb25c02b291c840485b53d4b21e058ef5894336d609"
+      ],
+      "input_sha256": "sha256:069826862e1e361d238ccdefc2d3849e3339879f3a10dfb346908697ef4bcbb6",
+      "profile_sha256": "sha256:c56be2ec37555c316c8fe3b4969fbaeb0d59c94038a34e470ab85dead89d8ee2",
+      "role_profile_sha256": "sha256:1da96a0655d46ee94bf46017ea732392b9bc14440b91e348c194feab9400e7e8",
+      "max_attempts": 2,
+      "dependency_task_ids": [],
+      "deadline_epoch": 1791861891.1143687,
+      "derived": false,
+      "endpoint_item_ids": []
+    }
+  ],
+  "profiles": [
+    {
+      "role": "claims",
+      "protocol": "claims-atomic-json-v2",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.1-lite",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-3",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 262144,
+        "token_parameter": "max_tokens",
+        "reasoning_effort": null,
+        "thinking": "disabled"
+      },
+      "profile_sha256": "sha256:c56be2ec37555c316c8fe3b4969fbaeb0d59c94038a34e470ab85dead89d8ee2",
+      "role_profile_sha256": "sha256:32c67f9c9786cd8b5b5b7312f4d56e4ec879a697dba80edf288d8aa34190d9f2"
+    },
+    {
+      "role": "material_items",
+      "protocol": "material-atomic-jsonl-v5",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.1-lite",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-3",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 262144,
+        "token_parameter": "max_tokens",
+        "reasoning_effort": null,
+        "thinking": "disabled"
+      },
+      "profile_sha256": "sha256:c56be2ec37555c316c8fe3b4969fbaeb0d59c94038a34e470ab85dead89d8ee2",
+      "role_profile_sha256": "sha256:1da96a0655d46ee94bf46017ea732392b9bc14440b91e348c194feab9400e7e8"
+    },
+    {
+      "role": "material_relations",
+      "protocol": "material-relations-jsonl-v1",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "doubao-seed-2.1-lite",
+      "base_url": "https://ark.cn-beijing.volces.com/api/plan/v3",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-3",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 262144,
+        "token_parameter": "max_tokens",
+        "reasoning_effort": null,
+        "thinking": "disabled"
+      },
+      "profile_sha256": "sha256:c56be2ec37555c316c8fe3b4969fbaeb0d59c94038a34e470ab85dead89d8ee2",
+      "role_profile_sha256": "sha256:7c794133575e0b7d64f87dddf86ae3e7627bf6d78ec5bf021f180aff9c6e0dfa"
+    }
+  ],
+  "max_attempts": 2,
+  "role_max_attempts": {
+    "claims": 0,
+    "material_items": 2,
+    "material_relations": 2
+  },
+  "currency": null,
+  "relations": {
+    "enabled": false,
+    "rule_version": "material-relation-candidates-v5",
+    "items_validation_version": "material-items-validation-v11",
+    "max_tasks": 1,
+    "max_attempts": 2
+  }
+}

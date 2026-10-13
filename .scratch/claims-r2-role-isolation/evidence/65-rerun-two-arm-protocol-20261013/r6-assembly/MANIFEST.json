@@ -1,0 +1,25 @@
+{
+  "schema_version": "r6-assembly-manifest-1",
+  "created_on": "2026-10-13",
+  "zero_call": true,
+  "model_calls": 0,
+  "inputs": {
+    "signed_sheet": "sha256:c18f08061d89e92cb36733c76ae75f3fe127ad6c7d34db11b4b0c1c7815cb867",
+    "worksheet_json": "sha256:52187faa56b508b102a436b20f643475afcc348ffe3739437df6fc74585d1606",
+    "SIGNOFF": "sha256:2a5fed7043579a30ea9da3d64d85ba15902de04d5e8e1a78754f9515b30a6449",
+    "r3 arm-run": "sha256:ed290ac3285b8151d946a645f84d4f01c9e8132cf2e822349f8b883d9bbe0749"
+  },
+  "outputs": {
+    "assemble_r3_candidates.py": "sha256:0dbe776b2f4e6362033346e3300a9cbf1f07e5a228c9600d20325f3605a92a7d",
+    "assembled-scoring-input.json": "sha256:88e0ddf69ef18afe426e1dda9c16c44aedcc4dc1c1121536be33b36d150c56b3"
+  },
+  "in_place_edits": 0,
+  "result": {
+    "assembled_raw": 15,
+    "mappings": 15,
+    "rejected": 0,
+    "out_of_scope": 0,
+    "judgement_mix": "matched 1 / duplicate 4 / correct_extra 10",
+    "note": "分数级合并仍需主工作台 203 条 unresolved 的裁定；本批证明装配管线端到端可用"
+  }
+}

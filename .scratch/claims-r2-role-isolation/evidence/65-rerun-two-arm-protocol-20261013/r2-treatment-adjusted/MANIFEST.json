@@ -1,0 +1,29 @@
+{
+  "schema_version": "treatment-adjusted-manifest-1",
+  "created_on": "2026-10-13",
+  "arm": "treatment",
+  "model": "doubao-seed-2.1-lite",
+  "request_options": "timeout 300 / max_output_tokens 262144 / token_parameter max_tokens / thinking disabled",
+  "declared_second_variable": "thinking=disabled（U 授权的调参；control 臂不带你参数，沿用 gate-28 冻结值）",
+  "model_calls": 4,
+  "authorization": "U 2026-10-13：自行调参、token 放大、doubao 补跑一次、AB 对比；DEEPSEEK 待确认",
+  "output_enters_scoring": false,
+  "outputs": {
+    "NT-I06/freeze.json": "sha256:3d3599a835d9fed08b7faa9c7c25c8851db053b5b9776385a3da2d9a03b7699d",
+    "NT-I06/plan.json": "sha256:771fa5b66ac6e91ac79e744f7807fe2e85baaa1b1452a3d7f5870b8ed9296470",
+    "NT-I06/snapshot.json": "sha256:2c6e4e2c5edf700071725875286659fac700ff8fd747d355f2e90d794e23ca44",
+    "NT-I06/summary.json": "sha256:fa511a1cb25984fcb1fe6a008875a3de4c822c6c48d42d7c5c79b6744db1bf5e",
+    "NT-I41/freeze.json": "sha256:ba6e6e2296d1f864d7936c4a95a33e4eee19889f7944eab96283350e0020c44b",
+    "NT-I41/plan.json": "sha256:f1bedf3f9883ddefb0fefb5514b8eab66eb07f8b5fad7b8c85b2b1e95c8cea12",
+    "NT-I41/snapshot.json": "sha256:09ceacac54f54398b535ff9cbb9d66e2d9fb0a5f8e3eaba99f715aa933a549eb",
+    "NT-I41/summary.json": "sha256:3cc672755b9c3e4fb6197107dc5314b7d443a1bcc0c0a286d94752a51c0a6a4d",
+    "adjusted-run-report.md": "sha256:868e8cd5319d6d98cc8ba961eaf974b22d3d54640868f97a88c6d2ae01077a1e",
+    "arm-run.json": "sha256:c904691970a0a8db8a7585040df955c1c294356c31586529e9e72b8485a68510",
+    "base-7critical/freeze.json": "sha256:4c526ed506694f30fdd54b708ebd252e425ca53fbb499113be714e43e4ae6e32",
+    "base-7critical/plan.json": "sha256:d40284c542724019b73e27b81dfd6b0680881653919e56a4c422ea78fbf9c076",
+    "base-7critical/snapshot.json": "sha256:82cdfdb70083eb8dc0d8471aaa5a9eb2ed5b900cdc312f53c391107ef7c18e2d",
+    "base-7critical/summary.json": "sha256:2fd78fb3e84a597ad6e0766b4969e7da91ce50d87a9d5fd88a4019c7767817ec",
+    "prep-manifest.json": "sha256:cd1f37d87e973e5825a51f7dc9b081b09954fd004c5e4c05ab3791344e9b136f"
+  },
+  "in_place_edits": 0
+}

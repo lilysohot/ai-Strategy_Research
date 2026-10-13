@@ -1,0 +1,47 @@
+{
+  "arm": "treatment",
+  "model": "doubao-seed-2.1-lite",
+  "model_calls": 1,
+  "budget_cap": 9,
+  "output_enters_scoring": false,
+  "results": [
+    {
+      "packet": "base-7critical",
+      "resumed": "already succeeded, no re-spend"
+    },
+    {
+      "packet": "NT-I06",
+      "resumed": "already succeeded, no re-spend"
+    },
+    {
+      "packet": "NT-I41",
+      "plan_consistent": true,
+      "findings": [],
+      "attempts": [
+        {
+          "attempt_number": 1,
+          "execution_status": "succeeded",
+          "request_model": "doubao-seed-2.1-lite",
+          "response_model": "doubao-seed-2-1-lite-260915",
+          "usage": {
+            "completion_tokens": 3724,
+            "prompt_tokens": 1686,
+            "reasoning_tokens": 3536,
+            "total_tokens": 5410
+          }
+        }
+      ],
+      "tasks": [
+        {
+          "task_id": "task:89efa2545dfde0b",
+          "role": "material_items",
+          "execution_status": "succeeded",
+          "protocol_status": "valid",
+          "quality_status": "accepted",
+          "publication_status": "candidate",
+          "error_codes": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,377 @@
+{
+ "schema_version": "adjudication-worksheet-1",
+ "created_on": "2026-10-13",
+ "candidate_source": {
+  "run": "r3-control-live",
+  "model": "deepseek-v4-flash（Ark）",
+  "output_enters_scoring": true,
+  "note": "r2 doubao 产出不进出分（契约）；本表仅采 r3 候选"
+ },
+ "adjudicator": {
+  "name": "xyl",
+  "date": "",
+  "filled": false
+ },
+ "gold_reference": {
+  "NT-I06": {
+   "quote": "中报验证了量",
+   "proposition": "中报验证了AI相关业务的出货量增长",
+   "semantic_type": "opinion",
+   "statement_role": "claim",
+   "source_stance": "reported",
+   "polarity": "affirmed",
+   "locator": "char:1393-1655"
+  },
+  "NT-I41": {
+   "quote": "持有 + 观望",
+   "proposition": "报告作者对工业富联的总体建议是持有加观望",
+   "semantic_type": "opinion",
+   "statement_role": "claim",
+   "source_stance": "reported",
+   "polarity": "affirmed",
+   "locator": "char:5055-5071"
+  }
+ },
+ "mechanical_hint_only": {
+  "note": "逐字匹配观察仅供核对；judgement 与 matched_gold_id 由裁定人定",
+  "verbatim_quote_matches": {
+   "slot_60052220425de312#1": "NT-I06",
+   "slot_f01c72a4463f094b#1": "NT-I41"
+  }
+ },
+ "candidates": [
+  {
+   "candidate_id": "slot_214372468938afb1#1",
+   "packet": "NT-I06",
+   "proposition": "卖方讲三条",
+   "model_suggestion": {
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "polarity": "affirmed",
+    "evidence_quote": "卖方讲三条："
+   },
+   "to_fill": {
+    "judgement": "correct_extra",
+    "matched_gold_id": "",
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_3d7a7290c7f874fa#1",
+   "packet": "NT-I06",
+   "proposition": "CSP/GPU 机柜量、Rubin 卡位、CPO/高速网络",
+   "model_suggestion": {
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "polarity": "affirmed",
+    "evidence_quote": "CSP/GPU 机柜量、Rubin 卡位、CPO/高速网络。"
+   },
+   "to_fill": {
+    "judgement": "correct_extra",
+    "matched_gold_id": "",
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_60052220425de312#1",
+   "packet": "NT-I06",
+   "proposition": "中报验证了量",
+   "model_suggestion": {
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "polarity": "affirmed",
+    "evidence_quote": "中报验证了量："
+   },
+   "to_fill": {
+    "judgement": "matched",
+    "matched_gold_id": "NT-I06",
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_29321fd57ac9ff2e#1",
+   "packet": "NT-I06",
+   "proposition": "云计算 +75.7%",
+   "model_suggestion": {
+    "semantic_type": "fact",
+    "statement_role": "evidence",
+    "polarity": "affirmed",
+    "evidence_quote": "云计算 +75.7%，"
+   },
+   "to_fill": {
+    "judgement": "duplicate",
+    "matched_gold_id": "NT-I05",
+    "semantic_type": "fact",
+    "statement_role": "evidence",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_fa65168fd657b4cc#1",
+   "packet": "NT-I06",
+   "proposition": "CSP AI 服务器 +2.3 倍",
+   "model_suggestion": {
+    "semantic_type": "fact",
+    "statement_role": "evidence",
+    "polarity": "affirmed",
+    "evidence_quote": "CSP AI 服务器 +2.3 倍，"
+   },
+   "to_fill": {
+    "judgement": "correct_extra",
+    "matched_gold_id": "",
+    "semantic_type": "fact",
+    "statement_role": "evidence",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_6d633216b432f293#1",
+   "packet": "NT-I06",
+   "proposition": "GPU/ASIC 机柜出货 +3.2 / +3 倍",
+   "model_suggestion": {
+    "semantic_type": "fact",
+    "statement_role": "evidence",
+    "polarity": "affirmed",
+    "evidence_quote": "GPU/ASIC 机柜出货 +3.2 / +3 倍，"
+   },
+   "to_fill": {
+    "judgement": "correct_extra",
+    "matched_gold_id": "",
+    "semantic_type": "fact",
+    "statement_role": "evidence",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_f97e5c740c8137e0#1",
+   "packet": "NT-I06",
+   "proposition": "Q2 营收 3067.83 亿环比 +22%",
+   "model_suggestion": {
+    "semantic_type": "fact",
+    "statement_role": "evidence",
+    "polarity": "affirmed",
+    "evidence_quote": "Q2 营收 3067.83 亿环比 +22%。"
+   },
+   "to_fill": {
+    "judgement": "correct_extra",
+    "matched_gold_id": "",
+    "semantic_type": "fact",
+    "statement_role": "evidence",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_a7980f0dce789e71#1",
+   "packet": "NT-I06",
+   "proposition": "卖方爱用归母 +96%",
+   "model_suggestion": {
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "polarity": "affirmed",
+    "evidence_quote": "卖方爱用归母 +96%"
+   },
+   "to_fill": {
+    "judgement": "correct_extra",
+    "matched_gold_id": "",
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_a7980f0dce789e71#2",
+   "packet": "NT-I06",
+   "proposition": "卖方爱用 26E 600 亿+",
+   "model_suggestion": {
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "polarity": "affirmed",
+    "evidence_quote": "26E 600 亿+，"
+   },
+   "to_fill": {
+    "judgement": "correct_extra",
+    "matched_gold_id": "",
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_a7980f0dce789e71#3",
+   "packet": "NT-I06",
+   "proposition": "中报扣非虽然同步",
+   "model_suggestion": {
+    "semantic_type": "fact",
+    "statement_role": "claim",
+    "polarity": "affirmed",
+    "evidence_quote": "中报扣非虽然同步，"
+   },
+   "to_fill": {
+    "judgement": "correct_extra",
+    "matched_gold_id": "",
+    "semantic_type": "fact",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_214c423c9dffff90#1",
+   "packet": "NT-I06",
+   "proposition": "但 OCF 只有 73.91 亿；",
+   "model_suggestion": {
+    "semantic_type": "fact",
+    "statement_role": "claim",
+    "polarity": "affirmed",
+    "evidence_quote": "但 OCF 只有 73.91 亿；"
+   },
+   "to_fill": {
+    "judgement": "correct_extra",
+    "matched_gold_id": "",
+    "semantic_type": "fact",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_976f4b2891010ed3#1",
+   "packet": "NT-I06",
+   "proposition": "Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。",
+   "model_suggestion": {
+    "semantic_type": "fact",
+    "statement_role": "claim",
+    "polarity": "affirmed",
+    "evidence_quote": "Q2 毛利率环比 −0.36pct"
+   },
+   "to_fill": {
+    "judgement": "duplicate",
+    "matched_gold_id": "NT-I07",
+    "semantic_type": "fact",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_976f4b2891010ed3#2",
+   "packet": "NT-I06",
+   "proposition": "并表 7% 的加工费没有变成「系统商」。",
+   "model_suggestion": {
+    "semantic_type": "fact",
+    "statement_role": "claim",
+    "polarity": "negated",
+    "evidence_quote": "并表 7% 的加工费没有变成「系统商」。"
+   },
+   "to_fill": {
+    "judgement": "duplicate",
+    "matched_gold_id": "NT-I08",
+    "semantic_type": "fact",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_0941b49532217294#1",
+   "packet": "NT-I06",
+   "proposition": "框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。",
+   "model_suggestion": {
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "polarity": "mixed",
+    "evidence_quote": "框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。"
+   },
+   "to_fill": {
+    "judgement": "correct_extra",
+    "matched_gold_id": "",
+    "semantic_type": "opinion",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  },
+  {
+   "candidate_id": "slot_f01c72a4463f094b#1",
+   "packet": "NT-I41",
+   "proposition": "持有 + 观望",
+   "model_suggestion": {
+    "semantic_type": "behavior",
+    "statement_role": "claim",
+    "polarity": "affirmed",
+    "evidence_quote": "**持有 + 观望。**"
+   },
+   "to_fill": {
+    "judgement": "duplicate",
+    "matched_gold_id": "NT-I41",
+    "semantic_type": "behavior",
+    "statement_role": "claim",
+    "source_stance": "reported",
+    "condition": "absent",
+    "evidence": ""
+   },
+   "drafted_by": "agent",
+   "status": "pending_human_verification"
+  }
+ ],
+ "contract_basis": "scoring-contract-v4.1（c76ac13e…）：judgement 枚举 matched/correct_extra/incorrect/duplicate/unresolved/out_of_scope；deterministic 载体由装配器重算，勿填",
+ "fill_status": "agent_drafted_pending_human_verification",
+ "fill_basis": "contract v4.1 matching (1:1 mapping + human semantic equivalence); existing 222-match occupancy"
+}

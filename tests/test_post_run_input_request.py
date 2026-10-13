@@ -97,6 +97,32 @@ async def test_finished_run_can_collect_missing_data_and_start_follow_up() -> No
         assert repeated.json()["request_id"] == request_id
         assert repeated.json()["reused"] is True
 
+        # A retry can finish as a different Run while asking the same question.
+        # Research-level semantic de-duplication must reuse the open form too.
+        retry_run_id = uuid.uuid4()
+        async with biz.business_transaction() as session:
+            retry = store.add_run(
+                session,
+                run_id=retry_run_id,
+                session_id=research_id,
+                user_id=user.id,
+                prompt="结合我的情况分析是否适合买入工业富联",
+                pipeline_id="stateful-react-agent",
+                run_dir=str(run_dir_for(retry_run_id.hex)),
+            )
+            retry.status = "completed"
+            retry.final_answer = "本轮重试仍需补数。"
+        cross_run = await client.post(
+            f"/api/business/runs/{retry_run_id}/input-request",
+            headers={
+                **headers,
+                "Idempotency-Key": f"post-run-input:{retry_run_id}:plan_analysis",
+            },
+        )
+        assert cross_run.status_code == 201, cross_run.text
+        assert cross_run.json()["request_id"] == request_id
+        assert cross_run.json()["reused"] is True
+
         request = await client.get(f"/api/business/input-requests/{request_id}", headers=headers)
         assert request.status_code == 200, request.text
         request_body = request.json()

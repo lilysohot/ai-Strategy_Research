@@ -1,0 +1,19 @@
+{
+  "packet": "base-7critical",
+  "locator": "char:5246-5537",
+  "unit_id": "snapshot-unit:724ca76b39690a6c84f2e1804990e0f53b8d8bc90b2a980a7216103e0c363cdf",
+  "snapshot_id": "sha256:3740f63e5f94063785fd2f79a53bb01f369bb478c9872979a52ef31a4a2e9fef",
+  "slot_count": 7,
+  "items_attempts_max": 2,
+  "automatic_retries": 1,
+  "throttle_seconds": 20,
+  "budget_calls_max": 9,
+  "relations_enabled": false,
+  "output_enters_scoring": false,
+  "arm": "control-official",
+  "request_options": "timeout_seconds=300.0 max_output_tokens=262144 token_parameter='max_tokens' reasoning_effort='minimal' thinking=None",
+  "model": "deepseek-flash",
+  "profile_sha256": "sha256:b5ca37e090aca7ed169c62e8861e4c38e3513a6bd09f8ab492e58482d7bfb787",
+  "runner_sha256": "994b73f8180d8900a72467a27c2d92d056d5830920fe7a78c28545a866d43518",
+  "parent_plan": ".scratch/claims-r2-role-isolation/evidence/16-r5-zero-model-replay-20261008-r3/industrial-fulian-md/plan.json"
+}

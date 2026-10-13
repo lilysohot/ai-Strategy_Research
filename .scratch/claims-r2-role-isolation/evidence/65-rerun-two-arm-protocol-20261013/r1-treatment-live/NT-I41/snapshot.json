@@ -1,0 +1,83 @@
+{
+  "schema_version": "corpus-evidence-snapshot-v1",
+  "snapshot_id": "sha256:110f8628eb71a3495153f05453c93c3fe5e04ba970d0846448eb1b37f0c7627d",
+  "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+  "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+  "publication_generation": 1,
+  "parser_versions": {
+    "parse": "reader-md-2",
+    "clean": "signed-non-table-exact-text-1",
+    "chunk": "signed-non-table-scope-1",
+    "adapter": "signed-gold-evaluation-adapter-1",
+    "snapshot": "structured-snapshot-2"
+  },
+  "units": [
+    {
+      "unit_id": "snapshot-unit:6ec5cecf7239672a2b430eb25c02b291c840485b53d4b21e058ef5894336d609",
+      "chunk_id": "chunk:signed-non-table-target-scope",
+      "kind": "prose",
+      "locator": "char:5055-5071",
+      "text": "四选一：**持有 + 观望。**",
+      "text_sha256": "sha256:77611e276f516e7b66a3e620abb849c7aa6d76d505cd8a5cc2bc2623328e44af",
+      "span": {
+        "coordinate_system": "unicode_code_points",
+        "text_sha256": "sha256:77611e276f516e7b66a3e620abb849c7aa6d76d505cd8a5cc2bc2623328e44af",
+        "start": 0,
+        "end": 16
+      },
+      "metadata": {
+        "reader_kind": "paragraph",
+        "source_text_sha256": "77611e276f516e7b66a3e620abb849c7aa6d76d505cd8a5cc2bc2623328e44af",
+        "gold_not_exposed_to_model": true,
+        "source_unit_id": "signed-unit-32",
+        "source_kind": "prose",
+        "page": null,
+        "element": null,
+        "label_path": [],
+        "parent_id": null,
+        "ordinal": 32,
+        "status": "kept",
+        "reasons": [],
+        "document": {
+          "title": "工业富联投委会决策报告",
+          "subject": "工业富联",
+          "published": "2026-08-29"
+        },
+        "cells": [],
+        "cell_reasons": [],
+        "dependency_details": [],
+        "context_status": "complete",
+        "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "metadata_sha256": "sha256:cf5e989d590ddf3aebb11144d5cc03f725305abff66d858d74b35564a60ba84b",
+      "dependencies": []
+    }
+  ],
+  "gaps": [],
+  "identity_input": {
+    "schema_version": "corpus-evidence-snapshot-v1",
+    "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+    "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+    "publication_generation": 1,
+    "parser_versions": {
+      "parse": "reader-md-2",
+      "clean": "signed-non-table-exact-text-1",
+      "chunk": "signed-non-table-scope-1",
+      "adapter": "signed-gold-evaluation-adapter-1",
+      "snapshot": "structured-snapshot-2"
+    },
+    "unit_identities": [
+      {
+        "unit_id": "snapshot-unit:6ec5cecf7239672a2b430eb25c02b291c840485b53d4b21e058ef5894336d609",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "char:5055-5071",
+        "coordinate_system": "unicode_code_points",
+        "start": 0,
+        "end": 16,
+        "text_sha256": "sha256:77611e276f516e7b66a3e620abb849c7aa6d76d505cd8a5cc2bc2623328e44af",
+        "metadata_sha256": "sha256:cf5e989d590ddf3aebb11144d5cc03f725305abff66d858d74b35564a60ba84b"
+      }
+    ]
+  }
+}

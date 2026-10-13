@@ -1,0 +1,18 @@
+{
+  "packet": "NT-I06",
+  "locator": "char:1393-1655",
+  "unit_id": "snapshot-unit:ec9e9284ed986c96c6ce5d64f7d58fff8c303cc1f85b18329eb0dccfa61e435e",
+  "snapshot_id": "sha256:b005ba70ff7abe21b43e5679355b7dd6c60f0426a03fc4444d40658e71b3cbbb",
+  "slot_count": 11,
+  "items_attempts_max": 2,
+  "automatic_retries": 1,
+  "throttle_seconds": 20,
+  "budget_calls_max": 9,
+  "relations_enabled": false,
+  "output_enters_scoring": false,
+  "arm": "treatment",
+  "model": "doubao-seed-2.1-lite",
+  "profile_sha256": "sha256:1c71a27ef50668ed3016460503842da67c7ac3c8e25030e3fd45ab7a99a27f43",
+  "runner_sha256": "7dd0d40f88a71ae82aa5b41c5842a635d51d630663efd85f4f8d9e770572f06c",
+  "parent_plan": ".scratch/claims-r2-role-isolation/evidence/16-r5-zero-model-replay-20261008-r3/industrial-fulian-md/plan.json"
+}

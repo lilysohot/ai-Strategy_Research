@@ -69,9 +69,19 @@ BUSINESS_CONTEXT_POLICY = """BUSINESS CONTEXT POLICY:
   authenticated total capital, available capital and as-of time actually used, so the user can verify the context.
 - Validate strategy cards with investment_strategy_lint; the raw strategy_lint is not a business-Run gate.
 - When you are about to give a price/position conclusion but required user facts are missing, call
-  request_investment_input(use_case, reason) once; the system asks the user and the server derives the
-  missing fields. Do not invent those fields, and do not request facts for pure material reading.
-- If a required field is missing or pending, explain what is missing and do not invent a numeric result."""
+  request_investment_input(use_case, reason) once; the server derives the exact missing fields.
+- After that call, do not enumerate or guess the fields the form will request. Tell the user that the
+  structured form shows the server-derived fields. Do not request facts for pure material reading.
+- If a required field is missing or pending, do not invent a numeric result."""
+
+
+INPUT_REQUEST_POLICY = """INPUT REQUEST POLICY:
+- When a price, position, or cost/return conclusion lacks required user facts, call
+  request_investment_input once. The server is the sole authority for the exact required fields.
+- After calling it, say that the structured form will show the server-derived fields. Do not list,
+  infer, or promise field names in the answer; optional risk/target inputs are not universal gates.
+- Do not invent user facts or replace them with assumptions, current prices, or suggested prices.
+- Do not call this tool for material reading, report summaries, or general questions."""
 
 
 def build_profile_overrides(*, has_investment_context: bool = False) -> dict[str, Any]:

@@ -1,0 +1,218 @@
+{
+  "schema_version": "corpus-batch-plan-v2",
+  "batch_id": "batch:b4403696e6fe567db5f3e23426e12e21eefc110fe17e0ba880e3b65efd33a6cd",
+  "plan_sha256": "sha256:b4403696e6fe567db5f3e23426e12e21eefc110fe17e0ba880e3b65efd33a6cd",
+  "snapshot": {
+    "schema_version": "corpus-evidence-snapshot-v1",
+    "snapshot_id": "sha256:b005ba70ff7abe21b43e5679355b7dd6c60f0426a03fc4444d40658e71b3cbbb",
+    "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+    "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+    "publication_generation": 1,
+    "parser_versions": {
+      "parse": "reader-md-2",
+      "clean": "signed-non-table-exact-text-1",
+      "chunk": "signed-non-table-scope-1",
+      "adapter": "signed-gold-evaluation-adapter-1",
+      "snapshot": "structured-snapshot-2"
+    },
+    "units": [
+      {
+        "unit_id": "snapshot-unit:ec9e9284ed986c96c6ce5d64f7d58fff8c303cc1f85b18329eb0dccfa61e435e",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "char:1393-1655",
+        "text": "【研报核心发现】卖方讲三条：CSP/GPU 机柜量、Rubin 卡位、CPO/高速网络。中报验证了量：云计算 +75.7%，CSP AI 服务器 +2.3 倍，GPU/ASIC 机柜出货 +3.2 / +3 倍，Q2 营收 3067.83 亿环比 +22%。冲突点：卖方爱用归母 +96% 和 26E 600 亿+，中报扣非虽然同步，但 OCF 只有 73.91 亿；Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。",
+        "text_sha256": "sha256:da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4",
+        "span": {
+          "coordinate_system": "unicode_code_points",
+          "text_sha256": "sha256:da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4",
+          "start": 0,
+          "end": 262
+        },
+        "metadata": {
+          "reader_kind": "paragraph",
+          "source_text_sha256": "da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4",
+          "gold_not_exposed_to_model": true,
+          "source_unit_id": "signed-unit-11",
+          "source_kind": "prose",
+          "page": null,
+          "element": null,
+          "label_path": [],
+          "parent_id": null,
+          "ordinal": 11,
+          "status": "kept",
+          "reasons": [],
+          "document": {
+            "title": "工业富联投委会决策报告",
+            "subject": "工业富联",
+            "published": "2026-08-29"
+          },
+          "cells": [],
+          "cell_reasons": [],
+          "dependency_details": [],
+          "context_status": "complete",
+          "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "metadata_sha256": "sha256:6320888c9c00a3e9f56661a71207a8e8698a046e52a71b8d3d01568042014673",
+        "dependencies": []
+      }
+    ],
+    "gaps": [],
+    "identity_input": {
+      "schema_version": "corpus-evidence-snapshot-v1",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+      "publication_generation": 1,
+      "parser_versions": {
+        "parse": "reader-md-2",
+        "clean": "signed-non-table-exact-text-1",
+        "chunk": "signed-non-table-scope-1",
+        "adapter": "signed-gold-evaluation-adapter-1",
+        "snapshot": "structured-snapshot-2"
+      },
+      "unit_identities": [
+        {
+          "unit_id": "snapshot-unit:ec9e9284ed986c96c6ce5d64f7d58fff8c303cc1f85b18329eb0dccfa61e435e",
+          "chunk_id": "chunk:signed-non-table-target-scope",
+          "kind": "prose",
+          "locator": "char:1393-1655",
+          "coordinate_system": "unicode_code_points",
+          "start": 0,
+          "end": 262,
+          "text_sha256": "sha256:da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4",
+          "metadata_sha256": "sha256:6320888c9c00a3e9f56661a71207a8e8698a046e52a71b8d3d01568042014673"
+        }
+      ]
+    }
+  },
+  "routing": {
+    "rule_version": "corpus-role-routing-v2",
+    "snapshot_id": "sha256:b005ba70ff7abe21b43e5679355b7dd6c60f0426a03fc4444d40658e71b3cbbb",
+    "decisions": [
+      {
+        "unit_id": "snapshot-unit:ec9e9284ed986c96c6ce5d64f7d58fff8c303cc1f85b18329eb0dccfa61e435e",
+        "unit_kind": "prose",
+        "claims_protocol": "claims-json-v2",
+        "material_items": true,
+        "reason_codes": [
+          "source_anchored_quantitative_statement",
+          "qualitative_or_relational_signal"
+        ],
+        "context_status": "complete"
+      }
+    ],
+    "unrouted_gap_ids": []
+  },
+  "routing_sha256": "sha256:2a6149f0585f6a7e7dc7b0beafe22cbc6cbe878f9355053b08ddd39f0a4a149a",
+  "tasks": [
+    {
+      "task_id": "task:fd5f65d6994851eb85ae098ef8b60ec18ef4b7d2c78b55d3e49b8e68755ab892",
+      "logical_key": "sha256:fd5f65d6994851eb85ae098ef8b60ec18ef4b7d2c78b55d3e49b8e68755ab892",
+      "role": "claims",
+      "protocol": "claims-atomic-json-v2",
+      "method": "model",
+      "scoped_unit_ids": [
+        "snapshot-unit:ec9e9284ed986c96c6ce5d64f7d58fff8c303cc1f85b18329eb0dccfa61e435e"
+      ],
+      "input_sha256": "sha256:fd5f65d6994851eb85ae098ef8b60ec18ef4b7d2c78b55d3e49b8e68755ab892",
+      "profile_sha256": "sha256:b5ca37e090aca7ed169c62e8861e4c38e3513a6bd09f8ab492e58482d7bfb787",
+      "role_profile_sha256": "sha256:7b6e036e4d292298a9787d4900a9e5b252d7417236122bf2f7ec02ed9885e133",
+      "max_attempts": 0,
+      "dependency_task_ids": [],
+      "deadline_epoch": 1791863274.6143754,
+      "derived": false,
+      "endpoint_item_ids": []
+    },
+    {
+      "task_id": "task:09b7abda3619db84c3a0cd9783add84f6a83a7074988e146627481e4c9b17949",
+      "logical_key": "sha256:09b7abda3619db84c3a0cd9783add84f6a83a7074988e146627481e4c9b17949",
+      "role": "material_items",
+      "protocol": "material-atomic-jsonl-v5",
+      "method": "model",
+      "scoped_unit_ids": [
+        "snapshot-unit:ec9e9284ed986c96c6ce5d64f7d58fff8c303cc1f85b18329eb0dccfa61e435e"
+      ],
+      "input_sha256": "sha256:09b7abda3619db84c3a0cd9783add84f6a83a7074988e146627481e4c9b17949",
+      "profile_sha256": "sha256:b5ca37e090aca7ed169c62e8861e4c38e3513a6bd09f8ab492e58482d7bfb787",
+      "role_profile_sha256": "sha256:c69255b10e665cd5ebacc70848853c3894e7d0964174a6cf3c3977f91db00dd3",
+      "max_attempts": 2,
+      "dependency_task_ids": [],
+      "deadline_epoch": 1791863274.6143754,
+      "derived": false,
+      "endpoint_item_ids": []
+    }
+  ],
+  "profiles": [
+    {
+      "role": "claims",
+      "protocol": "claims-atomic-json-v2",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "deepseek-flash",
+      "base_url": "https://api.deepseek.com",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-3",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 262144,
+        "token_parameter": "max_tokens",
+        "reasoning_effort": "minimal",
+        "thinking": null
+      },
+      "profile_sha256": "sha256:b5ca37e090aca7ed169c62e8861e4c38e3513a6bd09f8ab492e58482d7bfb787",
+      "role_profile_sha256": "sha256:7b6e036e4d292298a9787d4900a9e5b252d7417236122bf2f7ec02ed9885e133"
+    },
+    {
+      "role": "material_items",
+      "protocol": "material-atomic-jsonl-v5",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "deepseek-flash",
+      "base_url": "https://api.deepseek.com",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-3",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 262144,
+        "token_parameter": "max_tokens",
+        "reasoning_effort": "minimal",
+        "thinking": null
+      },
+      "profile_sha256": "sha256:b5ca37e090aca7ed169c62e8861e4c38e3513a6bd09f8ab492e58482d7bfb787",
+      "role_profile_sha256": "sha256:c69255b10e665cd5ebacc70848853c3894e7d0964174a6cf3c3977f91db00dd3"
+    },
+    {
+      "role": "material_relations",
+      "protocol": "material-relations-jsonl-v1",
+      "configured": true,
+      "provider": "openai_compat",
+      "model": "deepseek-flash",
+      "base_url": "https://api.deepseek.com",
+      "credential_ref": "env:STRUCTURED_EXTRACTION_API_KEY",
+      "adapter_version": "structured-chat-http-3",
+      "request_options": {
+        "timeout_seconds": 300.0,
+        "max_output_tokens": 262144,
+        "token_parameter": "max_tokens",
+        "reasoning_effort": "minimal",
+        "thinking": null
+      },
+      "profile_sha256": "sha256:b5ca37e090aca7ed169c62e8861e4c38e3513a6bd09f8ab492e58482d7bfb787",
+      "role_profile_sha256": "sha256:5768d622767015d2a1ea66b940b7b37f39ee5f1b9a2906a212d4c522e3bb8a94"
+    }
+  ],
+  "max_attempts": 2,
+  "role_max_attempts": {
+    "claims": 0,
+    "material_items": 2,
+    "material_relations": 2
+  },
+  "currency": null,
+  "relations": {
+    "enabled": false,
+    "rule_version": "material-relation-candidates-v5",
+    "items_validation_version": "material-items-validation-v11",
+    "max_tasks": 1,
+    "max_attempts": 2
+  }
+}

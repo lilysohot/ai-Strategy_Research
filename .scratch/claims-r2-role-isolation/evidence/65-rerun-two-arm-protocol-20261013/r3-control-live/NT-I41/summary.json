@@ -1,0 +1,83 @@
+{
+  "ledger": {
+    "schema_version": "corpus-execution-ledger-v1",
+    "batch_id": "batch:d52a27c2e88a06f7f5845c4ac0cd1be17f40b0fe726ae0d0f510d5c146e06405",
+    "plan_sha256": "sha256:d52a27c2e88a06f7f5845c4ac0cd1be17f40b0fe726ae0d0f510d5c146e06405",
+    "snapshot_id": "sha256:110f8628eb71a3495153f05453c93c3fe5e04ba970d0846448eb1b37f0c7627d",
+    "budget": {
+      "max_attempts": 2,
+      "reserved_attempts": 1,
+      "actual_attempts": 1,
+      "currency": null
+    },
+    "tasks": [
+      {
+        "task_id": "task:61f9e8b6ee1a37bbcf171fa1520ddc482468c14b251fcd340ab64f058bf37634",
+        "role": "material_items",
+        "method": "model",
+        "input_sha256": "sha256:61f9e8b6ee1a37bbcf171fa1520ddc482468c14b251fcd340ab64f058bf37634",
+        "profile_sha256": "sha256:64f82c34ff2c014237588c618c5747f7a4c024c0585064489da2a2fcfadd6999",
+        "execution_status": "succeeded",
+        "protocol_status": "valid",
+        "quality_status": "accepted",
+        "publication_status": "candidate",
+        "context_status": "complete",
+        "dependency_task_ids": [],
+        "endpoint_item_ids": [],
+        "artifact_sha256": "sha256:adf6ef676c8798cd7f9243e8b6dae41c0e5dd8583e37ab59d7311db66163397d",
+        "error_codes": []
+      }
+    ],
+    "attempts": [
+      {
+        "attempt_id": "attempt:e72c2b5cc07466597737126d2e3c0cded57b093b83cd6353600a2c9cfe66a44b",
+        "task_id": "task:61f9e8b6ee1a37bbcf171fa1520ddc482468c14b251fcd340ab64f058bf37634",
+        "attempt_number": 1,
+        "execution_status": "succeeded",
+        "request_sha256": "sha256:b9beebcfd4ed53e24436285c30b13bfdf61e309f357e12b22dab160dda5109cd",
+        "response_sha256": "sha256:c50a0beeee4cf365f0b9b7e8bb194673fb12c18ee10e68dbec251864cf7b0706",
+        "provider": "openai_compat",
+        "request_model": "deepseek-v4-flash",
+        "response_model": "deepseek-v4-flash-ga-260731",
+        "usage": {
+          "completion_tokens": 171,
+          "prompt_tokens": 1503,
+          "reasoning_tokens": 0,
+          "total_tokens": 1674
+        },
+        "cost": null
+      }
+    ]
+  },
+  "plan_consistent": true,
+  "findings": [],
+  "derivations": {
+    "task:61f9e8b6ee1a37bbcf171fa1520ddc482468c14b251fcd340ab64f058bf37634": "disabled"
+  },
+  "role_budgets": {
+    "claims": {
+      "max_attempts": 0,
+      "reserved_attempts": 0
+    },
+    "material_items": {
+      "max_attempts": 2,
+      "reserved_attempts": 1
+    },
+    "material_relations": {
+      "max_attempts": 2,
+      "reserved_attempts": 0
+    }
+  },
+  "cost_summary": [
+    {
+      "provider": "openai_compat",
+      "model": "deepseek-v4-flash",
+      "currency": null,
+      "kind": null,
+      "price_version": null,
+      "known_amount": 0.0,
+      "known_calls": 0,
+      "unknown_calls": 1
+    }
+  ]
+}

@@ -13,6 +13,12 @@ from frontier_agent.core.loop_types import (
 )
 from frontier_agent.core.runtime.loop.agent_loop import run_agent_loop
 from frontier_agent.core.tool import tool
+from plugins.tools.task_board import (
+    clear_board,
+    drain_board_ops,
+    restore_board_from_messages,
+    snapshot_tasks,
+)
 
 _REMINDER = (
     "Current task board (keep it current via add_task / update_task; "
@@ -54,6 +60,72 @@ def test_dispatcher_collects_task_board_intervention() -> None:
     assert observer.critical is True
     assert len(interventions) == 1
     assert interventions[0].inject_messages == [_REMINDER]
+
+
+def test_replayed_task_calls_restore_board_for_next_run() -> None:
+    task_id = "continued-run"
+    messages = [
+        {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [{
+                "id": "add",
+                "type": "function",
+                "function": {
+                    "name": "add_task",
+                    "arguments": json.dumps({
+                        "tasks": [
+                            {"description": "核查主账户"},
+                            {"description": "形成仓位结论"},
+                        ]
+                    }),
+                },
+            }],
+        },
+        {"role": "tool", "tool_call_id": "add", "content": "Added t1, t2"},
+        {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [{
+                "id": "update",
+                "type": "function",
+                "function": {
+                    "name": "update_task",
+                    "arguments": json.dumps({
+                        "updates": [{"id": "t1", "resolution": "resolved"}]
+                    }),
+                },
+            }],
+        },
+        {"role": "tool", "tool_call_id": "update", "content": "Updated t1"},
+    ]
+
+    try:
+        assert restore_board_from_messages(task_id, messages) == 2
+        assert snapshot_tasks(task_id) == [
+            {
+                "id": "t1",
+                "description": "核查主账户",
+                "resolution": "resolved",
+                "owners": [],
+                "group": "",
+            },
+            {
+                "id": "t2",
+                "description": "形成仓位结论",
+                "resolution": "open",
+                "owners": [],
+                "group": "",
+            },
+        ]
+        # The resumed UI receives one full-board projection.
+        assert drain_board_ops(task_id) == [{
+            "op": "add",
+            "ids": ["t1", "t2"],
+            "phase": "execution",
+        }]
+    finally:
+        clear_board(task_id)
 
 
 @tool

@@ -1,0 +1,27 @@
+{
+  "schema_version": "adjudication-signoff-1",
+  "created_on": "2026-10-13",
+  "reviewer": "xyl",
+  "signed_on": "2026-10-13",
+  "channel": "对话确认（“确认以上 15 条判定，文档我已经补签”）+ 工作表补签（裁定人：xyl 日期：2026-10-13）",
+  "signed_sheet_sha256": "sha256:c18f08061d89e92cb36733c76ae75f3fe127ad6c7d34db11b4b0c1c7815cb867",
+  "rulings": {
+    "matched": 1,
+    "duplicate": 4,
+    "correct_extra": 10,
+    "matched_rows": [
+      "slot_60052220425de312#1 -> NT-I06"
+    ],
+    "duplicate_rows": [
+      "slot_29321fd57ac9ff2e#1 -> NT-I05（已被 itm_abebb2a7163927e9 匹配）",
+      "slot_976f4b2891010ed3#1 -> NT-I07（已被 itm_d0e9f3a0a75f5157）",
+      "slot_976f4b2891010ed3#2 -> NT-I08（已被 itm_9960b6f5d20e37ed）",
+      "slot_f01c72a4463f094b#1 -> NT-I41（已被 itm_c71e15d5cebf1e85）"
+    ]
+  },
+  "in_place_drift_registered": [
+    "adjudication-worksheet.md（并行会话代理预填并就地并入原文件，原 MANIFEST 哈希失效；当前字节以本记录为准）",
+    "adjudication-worksheet.json（同上）"
+  ],
+  "note": "金标 NT-I41/I05/I07/I08 在原 222 池已有匹配 ⇒ 本次补跑真实召回增益 = NT-I06 一条。"
+}

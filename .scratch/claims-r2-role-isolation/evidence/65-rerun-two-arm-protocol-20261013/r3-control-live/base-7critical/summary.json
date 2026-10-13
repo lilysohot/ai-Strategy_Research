@@ -1,0 +1,102 @@
+{
+  "ledger": {
+    "schema_version": "corpus-execution-ledger-v1",
+    "batch_id": "batch:decbff34adca5c15d71484c2c184f02ba445059299cb6577ab9d9a6d118f3d9c",
+    "plan_sha256": "sha256:decbff34adca5c15d71484c2c184f02ba445059299cb6577ab9d9a6d118f3d9c",
+    "snapshot_id": "sha256:3740f63e5f94063785fd2f79a53bb01f369bb478c9872979a52ef31a4a2e9fef",
+    "budget": {
+      "max_attempts": 2,
+      "reserved_attempts": 1,
+      "actual_attempts": 1,
+      "currency": null
+    },
+    "tasks": [
+      {
+        "task_id": "task:d31d077e18b83dd723302ae427adf862c94d8564c4d6e3915085c3544500dcd2",
+        "role": "claims",
+        "method": "model",
+        "input_sha256": "sha256:d31d077e18b83dd723302ae427adf862c94d8564c4d6e3915085c3544500dcd2",
+        "profile_sha256": "sha256:64f82c34ff2c014237588c618c5747f7a4c024c0585064489da2a2fcfadd6999",
+        "execution_status": "blocked",
+        "protocol_status": "not_checked",
+        "quality_status": "unassessed",
+        "publication_status": "unpublished",
+        "context_status": "complete",
+        "dependency_task_ids": [],
+        "endpoint_item_ids": [],
+        "error_codes": [
+          "CS_BUDGET_EXHAUSTED"
+        ]
+      },
+      {
+        "task_id": "task:84647f54f555df7c1872b499dec9d52f02775b554080f10c5e4a38b023e0c907",
+        "role": "material_items",
+        "method": "model",
+        "input_sha256": "sha256:84647f54f555df7c1872b499dec9d52f02775b554080f10c5e4a38b023e0c907",
+        "profile_sha256": "sha256:64f82c34ff2c014237588c618c5747f7a4c024c0585064489da2a2fcfadd6999",
+        "execution_status": "succeeded",
+        "protocol_status": "invalid",
+        "quality_status": "review_required",
+        "publication_status": "unpublished",
+        "context_status": "complete",
+        "dependency_task_ids": [],
+        "endpoint_item_ids": [],
+        "artifact_sha256": "sha256:ceda920aa4aed5487337a19cafae91d6e491e6983ed2987a1e7be54a66b02ea2",
+        "error_codes": []
+      }
+    ],
+    "attempts": [
+      {
+        "attempt_id": "attempt:45f4d571b2d42c23b663928c1ed5a129dc3ef1ce220e7337efe323a3cb82413d",
+        "task_id": "task:84647f54f555df7c1872b499dec9d52f02775b554080f10c5e4a38b023e0c907",
+        "attempt_number": 1,
+        "execution_status": "succeeded",
+        "request_sha256": "sha256:47e9d861594a46328b959e2253a63fc45dbf626e90820551a9b70ada18131f7e",
+        "response_sha256": "sha256:9af505a2210f1ecf912435b397e120e64df1999ce53dcfd61b1c0a1796dba9f9",
+        "provider": "openai_compat",
+        "request_model": "deepseek-v4-flash",
+        "response_model": "deepseek-v4-flash-ga-260731",
+        "usage": {
+          "completion_tokens": 2416,
+          "prompt_tokens": 2222,
+          "reasoning_tokens": 0,
+          "total_tokens": 4638
+        },
+        "cost": null
+      }
+    ]
+  },
+  "plan_consistent": true,
+  "findings": [
+    "task_not_terminal:task:d31d077e18b83dd723302ae427adf862c94d8564c4d6e3915085c3544500dcd2:blocked"
+  ],
+  "derivations": {
+    "task:84647f54f555df7c1872b499dec9d52f02775b554080f10c5e4a38b023e0c907": "disabled"
+  },
+  "role_budgets": {
+    "claims": {
+      "max_attempts": 0,
+      "reserved_attempts": 0
+    },
+    "material_items": {
+      "max_attempts": 2,
+      "reserved_attempts": 1
+    },
+    "material_relations": {
+      "max_attempts": 2,
+      "reserved_attempts": 0
+    }
+  },
+  "cost_summary": [
+    {
+      "provider": "openai_compat",
+      "model": "deepseek-v4-flash",
+      "currency": null,
+      "kind": null,
+      "price_version": null,
+      "known_amount": 0.0,
+      "known_calls": 0,
+      "unknown_calls": 1
+    }
+  ]
+}

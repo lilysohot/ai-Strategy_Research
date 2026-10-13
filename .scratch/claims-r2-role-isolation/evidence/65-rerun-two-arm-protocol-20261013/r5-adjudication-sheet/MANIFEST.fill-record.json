@@ -1,0 +1,40 @@
+{
+  "schema_version": "adjudication-fill-record-1",
+  "created_on": "2026-10-13",
+  "model_calls": 0,
+  "what_happened": "The r5 worksheet (md + json) was filled in place by an agent draft, at U's request, so the human can verify rather than type from scratch.",
+  "authority_note": "This is a DRAFT, not an adjudication. Contract v4.1 makes semantic equivalence the human adjudicator's judgement. The header line `裁定人：____ 日期：____` is deliberately left blank; each row carries drafted_by=agent and status=pending_human_verification. The record only becomes an adjudication when the human signs it.",
+  "supersedes_manifest_hashes": {
+    "adjudication-worksheet.md": {
+      "in_MANIFEST.json": "sha256:fe1c89c4c3449d0019417315ddc25e15f68b801eb0b48f5a7b642dfbbc6b3d90",
+      "now": "sha256:77609b1e84d64306b05e1f974eafee1a58e12aaafd79e2253ef50ab67be70590"
+    },
+    "adjudication-worksheet.json": {
+      "in_MANIFEST.json": "sha256:6355ebfbbab7918f6ef8f28332dc84942b0a387f611728352272c0dd8440bde3",
+      "now": "sha256:52187faa56b508b102a436b20f643475afcc348ffe3739437df6fc74585d1606"
+    }
+  },
+  "fill_basis": [
+    "contract v4.1 matching.mode = human_adjudicated_semantic_equivalence_then_one_to_one_mapping",
+    "a gold record can carry at most one matched candidate, so a candidate pointing at an already-matched gold is `duplicate`",
+    "existing 222-candidate occupancy check: NT-I05/I07/I08/I41 already matched; NT-I06 un-matched",
+    "caliber_rules: attribution and speaker_ref are excluded from the matching basis; semantic_type is not auto-normalised; source_stance has no carrier and must be human-read (no default allowed)"
+  ],
+  "result": {
+    "matched": 1,
+    "duplicate": 4,
+    "correct_extra": 10,
+    "net_new_recall": "+1 (NT-I06) — 26 -> 27 of 48"
+  },
+  "open_for_human_verification": [
+    "row 3: accept 'recoverable ellipsis' as semantic equivalence?",
+    "row 12: composite candidate carries both NT-I07 and NT-I08 semantics — log an extraction-granularity backlog item?",
+    "row 13: candidate polarity=negated vs gold affirmed — unify the convention?",
+    "row 15: candidate semantic_type=behavior vs gold opinion is recorded even though the row is a duplicate"
+  ],
+  "transient_artifacts_removed": [
+    "adjudication-worksheet.drafted.md",
+    "adjudication-worksheet.drafted.json",
+    "draft_adjudication.py"
+  ]
+}

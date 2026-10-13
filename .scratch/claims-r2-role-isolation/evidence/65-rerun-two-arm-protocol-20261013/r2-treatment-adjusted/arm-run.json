@@ -1,0 +1,138 @@
+{
+  "arm": "treatment",
+  "model": "doubao-seed-2.1-lite",
+  "request_options": "timeout_seconds=300.0 max_output_tokens=262144 token_parameter='max_tokens' reasoning_effort=None thinking='disabled'",
+  "model_calls": 4,
+  "budget_cap": 9,
+  "output_enters_scoring": true,
+  "results": [
+    {
+      "packet": "base-7critical",
+      "plan_consistent": true,
+      "findings": [
+        "task_not_terminal:task:d69f628fff99c8f041f2f6a7a1d91f8fc1d2b05d9e9cb29b48a87c6cb65e4d82:blocked"
+      ],
+      "attempts": [
+        {
+          "attempt_number": 1,
+          "execution_status": "succeeded",
+          "request_model": "doubao-seed-2.1-lite",
+          "response_model": "doubao-seed-2-1-lite-260915",
+          "usage": {
+            "completion_tokens": 2573,
+            "prompt_tokens": 2457,
+            "reasoning_tokens": 0,
+            "total_tokens": 5030
+          }
+        }
+      ],
+      "tasks": [
+        {
+          "task_id": "task:d69f628fff99c8f",
+          "role": "claims",
+          "execution_status": "blocked",
+          "protocol_status": "not_checked",
+          "quality_status": "unassessed",
+          "publication_status": "unpublished",
+          "error_codes": [
+            "CS_BUDGET_EXHAUSTED"
+          ]
+        },
+        {
+          "task_id": "task:6db21bc356a08f8",
+          "role": "material_items",
+          "execution_status": "succeeded",
+          "protocol_status": "invalid",
+          "quality_status": "review_required",
+          "publication_status": "unpublished",
+          "error_codes": []
+        }
+      ]
+    },
+    {
+      "packet": "NT-I06",
+      "plan_consistent": true,
+      "findings": [
+        "task_not_terminal:task:fa4072159374d00a686b5cde6a2c822794ae4e07c8afdd8cdb5bf7764aa4444d:blocked"
+      ],
+      "attempts": [
+        {
+          "attempt_number": 1,
+          "execution_status": "succeeded",
+          "request_model": "doubao-seed-2.1-lite",
+          "response_model": "doubao-seed-2-1-lite-260915",
+          "usage": {
+            "completion_tokens": 1501,
+            "prompt_tokens": 2308,
+            "reasoning_tokens": 0,
+            "total_tokens": 3809
+          }
+        },
+        {
+          "attempt_number": 2,
+          "execution_status": "succeeded",
+          "request_model": "doubao-seed-2.1-lite",
+          "response_model": "doubao-seed-2-1-lite-260915",
+          "usage": {
+            "completion_tokens": 987,
+            "prompt_tokens": 1930,
+            "reasoning_tokens": 0,
+            "total_tokens": 2917
+          }
+        }
+      ],
+      "tasks": [
+        {
+          "task_id": "task:fa4072159374d00",
+          "role": "claims",
+          "execution_status": "blocked",
+          "protocol_status": "not_checked",
+          "quality_status": "unassessed",
+          "publication_status": "unpublished",
+          "error_codes": [
+            "CS_BUDGET_EXHAUSTED"
+          ]
+        },
+        {
+          "task_id": "task:98feec2dfe33d76",
+          "role": "material_items",
+          "execution_status": "succeeded",
+          "protocol_status": "valid",
+          "quality_status": "accepted",
+          "publication_status": "candidate",
+          "error_codes": []
+        }
+      ]
+    },
+    {
+      "packet": "NT-I41",
+      "plan_consistent": true,
+      "findings": [],
+      "attempts": [
+        {
+          "attempt_number": 1,
+          "execution_status": "succeeded",
+          "request_model": "doubao-seed-2.1-lite",
+          "response_model": "doubao-seed-2-1-lite-260915",
+          "usage": {
+            "completion_tokens": 194,
+            "prompt_tokens": 1687,
+            "reasoning_tokens": 0,
+            "total_tokens": 1881
+          }
+        }
+      ],
+      "tasks": [
+        {
+          "task_id": "task:069826862e1e361",
+          "role": "material_items",
+          "execution_status": "succeeded",
+          "protocol_status": "valid",
+          "quality_status": "accepted",
+          "publication_status": "candidate",
+          "error_codes": []
+        }
+      ]
+    }
+  ]
+}

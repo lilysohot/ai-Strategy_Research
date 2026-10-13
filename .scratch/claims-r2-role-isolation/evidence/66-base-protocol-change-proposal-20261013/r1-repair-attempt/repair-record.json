@@ -1,0 +1,75 @@
+{
+  "schema_version": "repair-attempt-record-1",
+  "created_on": "2026-10-13",
+  "authorization": "U 2026-10-13「执行 P-A」（66 提案 P-A：修复式重试，声明式提示词偏差）",
+  "model": "doubao-seed-2.1-lite",
+  "request_options": "timeout_seconds=300.0 max_output_tokens=262144 token_parameter='max_tokens' reasoning_effort=None thinking='disabled'",
+  "model_calls": 1,
+  "calls": [
+    {
+      "prompt_chars": 4983,
+      "repair_note_chars": 566,
+      "response_chars": 4707,
+      "response_sha256": "2b1969f4af3760bf4368da0fe5203e156c19ea1e37ad8f92b6e9c5c319ec381a",
+      "model": "doubao-seed-2-1-lite-260915",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2536,
+        "completion_tokens": 1810,
+        "total_tokens": 4346,
+        "reasoning_tokens": 0
+      }
+    }
+  ],
+  "declared_deviation": "prompt 追加 REPAIR_NOTE（记账反馈）——已在本记录逐字存档",
+  "slot_ledger": [
+    {
+      "slot": "slot_ef08e9bee54690b0",
+      "status": "extracted",
+      "reason_codes": []
+    },
+    {
+      "slot": "slot_36c304436d5d2703",
+      "status": "extracted",
+      "reason_codes": []
+    },
+    {
+      "slot": "slot_83bd83014d07f67e",
+      "status": "no_supported_item",
+      "reason_codes": [
+        "no_independent_proposition",
+        "missing_signal:evidence"
+      ]
+    },
+    {
+      "slot": "slot_1996d09d1fd9cdef",
+      "status": "extracted",
+      "reason_codes": []
+    },
+    {
+      "slot": "slot_3dfa35e5b40c1201",
+      "status": "extracted",
+      "reason_codes": []
+    },
+    {
+      "slot": "slot_292e7f88898806e5",
+      "status": "extracted",
+      "reason_codes": []
+    },
+    {
+      "slot": "slot_90af9c4e66866cda",
+      "status": "extracted",
+      "reason_codes": []
+    }
+  ],
+  "all_slots_accounted": true,
+  "records_per_packet": [
+    10
+  ],
+  "packet_status": [
+    "completed"
+  ],
+  "packet_reasons": [
+    []
+  ]
+}

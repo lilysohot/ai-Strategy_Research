@@ -1,0 +1,91 @@
+{
+  "schema_version": "treatment-arm-run-record-1",
+  "created_on": "2026-10-13",
+  "arm": "treatment",
+  "model": "doubao-seed-2.1-lite",
+  "authorization": "rerun-two-arm-authorization.md（xyl 2026-10-13，备注：doubao 替换 deepseek；结论：批准双臂执行先跑探针）",
+  "model_calls": 4,
+  "budget_cap": 30,
+  "attempts_max_respected": true,
+  "automatic_retries": 1,
+  "throttle_seconds": 20,
+  "output_enters_scoring": false,
+  "packets": {
+    "base-7critical": {
+      "attempts": [
+        {
+          "n": 1,
+          "execution_status": "succeeded",
+          "response_model": "doubao-seed-2-1-lite-260915",
+          "total_tokens": 17367
+        }
+      ],
+      "task": {
+        "execution_status": "succeeded",
+        "protocol_status": "invalid",
+        "quality_status": "review_required",
+        "publication_status": "unpublished"
+      },
+      "plan_consistent": true
+    },
+    "NT-I06": {
+      "attempts": [
+        {
+          "n": 1,
+          "execution_status": "succeeded",
+          "response_model": "doubao-seed-2-1-lite-260915",
+          "total_tokens": 16345
+        },
+        {
+          "n": 2,
+          "execution_status": "outcome_unknown",
+          "response_model": null,
+          "total_tokens": null
+        }
+      ],
+      "task": {
+        "execution_status": "outcome_unknown",
+        "protocol_status": "not_checked",
+        "quality_status": "review_required",
+        "publication_status": "unpublished"
+      },
+      "plan_consistent": true
+    },
+    "NT-I41": {
+      "attempts": [
+        {
+          "n": 1,
+          "execution_status": "succeeded",
+          "response_model": "doubao-seed-2-1-lite-260915",
+          "total_tokens": 5410
+        }
+      ],
+      "task": {
+        "execution_status": "succeeded",
+        "protocol_status": "valid",
+        "quality_status": "accepted",
+        "publication_status": "candidate"
+      },
+      "plan_consistent": true
+    }
+  },
+  "treatment_metrics": {
+    "items_attempts_succeeded": 3,
+    "items_attempts_total": 4,
+    "protocol_violation_batches": 1,
+    "outcome_unknown_attempts": 1,
+    "accepted_candidate_packets": 1,
+    "fail_closed_amplified": "base 包响应协议违规 ⇒ invalid → review_required → unpublished（fail-closed 生效，未发布垃圾）",
+    "verbatim_quote_reachability": "NT-I41 accepted 候选的 evidence_quote 可达性核查：待人工/下轮"
+  },
+  "interpretation": {
+    "NT-I41": "唯一全绿包（1 槽/16 字符段）：succeeded/valid/accepted/candidate",
+    "base-7critical": "传输成功但响应违反 JSONL 协议 ⇒ invalid；与 22-run 的协议违约结论一致",
+    "NT-I06": "attempt1 成功（16k tokens），attempt2 outcome_unknown；automatic retry 已触发（run-1 缺的正是这个），结局未知按基础设施失败记录，绝不静默",
+    "verdict": "doubao-seed-2.1-lite 在小包可跑通协议，在 7/11 槽包上协议不可靠——与 22-run failed_protocol 路线闭合一致"
+  },
+  "no_cross_arm_merge": "treatment 产出不进入出分；召回天花板仍 0.833（I41 无候选则 0.771）",
+  "crash_notes": [
+    "2026-10-13 两次投影层崩溃（LedgerAttempt.role / LedgerTask.error_code），均为报告代码字段名错误，不影响已执行调用与 summary.json 落盘；已修正并加已成功包跳过逻辑防重复花费"
+  ]
+}

@@ -87,7 +87,11 @@ from plugins.tools._sandbox import (
     resolve_sandbox_mode,
     set_task_sandbox,
 )
-from plugins.tools.task_board import build_task_board_observer, clear_board
+from plugins.tools.task_board import (
+    build_task_board_observer,
+    clear_board,
+    restore_board_from_messages,
+)
 from workflows.stateful_react_agent._runtime import (
     ReactToolResultPostProcessor,
     _minimal_best_effort_answer,
@@ -1181,6 +1185,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     # prefix that would miss the provider's prefix cache — or hand the model a
     # history it never saw.
     replay_payload = str(state.get("replay_payload") or "")
+    replay_decision: dict[str, Any]
     if continuity_enabled:
         replay_messages, replay_decision = select_replay(
             replay_payload,
@@ -1203,6 +1208,11 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
             "" if replay_decision.get("decision") == "used"
             else f": {replay_decision.get('reason')}",
         )
+
+    if task_board and replay_messages:
+        restored_tasks = restore_board_from_messages(ctx.task_id, replay_messages)
+        if restored_tasks:
+            replay_decision["task_board_restored"] = restored_tasks
 
     try:
         import sys

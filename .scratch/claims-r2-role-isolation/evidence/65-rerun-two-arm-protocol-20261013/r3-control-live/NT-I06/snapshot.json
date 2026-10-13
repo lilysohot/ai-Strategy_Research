@@ -1,0 +1,83 @@
+{
+  "schema_version": "corpus-evidence-snapshot-v1",
+  "snapshot_id": "sha256:b005ba70ff7abe21b43e5679355b7dd6c60f0426a03fc4444d40658e71b3cbbb",
+  "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+  "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+  "publication_generation": 1,
+  "parser_versions": {
+    "parse": "reader-md-2",
+    "clean": "signed-non-table-exact-text-1",
+    "chunk": "signed-non-table-scope-1",
+    "adapter": "signed-gold-evaluation-adapter-1",
+    "snapshot": "structured-snapshot-2"
+  },
+  "units": [
+    {
+      "unit_id": "snapshot-unit:ec9e9284ed986c96c6ce5d64f7d58fff8c303cc1f85b18329eb0dccfa61e435e",
+      "chunk_id": "chunk:signed-non-table-target-scope",
+      "kind": "prose",
+      "locator": "char:1393-1655",
+      "text": "【研报核心发现】卖方讲三条：CSP/GPU 机柜量、Rubin 卡位、CPO/高速网络。中报验证了量：云计算 +75.7%，CSP AI 服务器 +2.3 倍，GPU/ASIC 机柜出货 +3.2 / +3 倍，Q2 营收 3067.83 亿环比 +22%。冲突点：卖方爱用归母 +96% 和 26E 600 亿+，中报扣非虽然同步，但 OCF 只有 73.91 亿；Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。",
+      "text_sha256": "sha256:da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4",
+      "span": {
+        "coordinate_system": "unicode_code_points",
+        "text_sha256": "sha256:da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4",
+        "start": 0,
+        "end": 262
+      },
+      "metadata": {
+        "reader_kind": "paragraph",
+        "source_text_sha256": "da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4",
+        "gold_not_exposed_to_model": true,
+        "source_unit_id": "signed-unit-11",
+        "source_kind": "prose",
+        "page": null,
+        "element": null,
+        "label_path": [],
+        "parent_id": null,
+        "ordinal": 11,
+        "status": "kept",
+        "reasons": [],
+        "document": {
+          "title": "工业富联投委会决策报告",
+          "subject": "工业富联",
+          "published": "2026-08-29"
+        },
+        "cells": [],
+        "cell_reasons": [],
+        "dependency_details": [],
+        "context_status": "complete",
+        "snapshot_gaps_sha256": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "metadata_sha256": "sha256:6320888c9c00a3e9f56661a71207a8e8698a046e52a71b8d3d01568042014673",
+      "dependencies": []
+    }
+  ],
+  "gaps": [],
+  "identity_input": {
+    "schema_version": "corpus-evidence-snapshot-v1",
+    "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+    "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+    "publication_generation": 1,
+    "parser_versions": {
+      "parse": "reader-md-2",
+      "clean": "signed-non-table-exact-text-1",
+      "chunk": "signed-non-table-scope-1",
+      "adapter": "signed-gold-evaluation-adapter-1",
+      "snapshot": "structured-snapshot-2"
+    },
+    "unit_identities": [
+      {
+        "unit_id": "snapshot-unit:ec9e9284ed986c96c6ce5d64f7d58fff8c303cc1f85b18329eb0dccfa61e435e",
+        "chunk_id": "chunk:signed-non-table-target-scope",
+        "kind": "prose",
+        "locator": "char:1393-1655",
+        "coordinate_system": "unicode_code_points",
+        "start": 0,
+        "end": 262,
+        "text_sha256": "sha256:da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4",
+        "metadata_sha256": "sha256:6320888c9c00a3e9f56661a71207a8e8698a046e52a71b8d3d01568042014673"
+      }
+    ]
+  }
+}

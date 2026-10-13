@@ -1,0 +1,120 @@
+{
+  "ledger": {
+    "schema_version": "corpus-execution-ledger-v1",
+    "batch_id": "batch:d7658d91a4f5427eafce5d403fe3867fdddc14144722b3f9a302031c63edd9f4",
+    "plan_sha256": "sha256:d7658d91a4f5427eafce5d403fe3867fdddc14144722b3f9a302031c63edd9f4",
+    "snapshot_id": "sha256:b005ba70ff7abe21b43e5679355b7dd6c60f0426a03fc4444d40658e71b3cbbb",
+    "budget": {
+      "max_attempts": 2,
+      "reserved_attempts": 2,
+      "actual_attempts": 2,
+      "currency": null
+    },
+    "tasks": [
+      {
+        "task_id": "task:2d33dbdfb14c4399ac0981ca4a93f6c0934f831a090be9050fa8fb80aba687c8",
+        "role": "claims",
+        "method": "model",
+        "input_sha256": "sha256:2d33dbdfb14c4399ac0981ca4a93f6c0934f831a090be9050fa8fb80aba687c8",
+        "profile_sha256": "sha256:64f82c34ff2c014237588c618c5747f7a4c024c0585064489da2a2fcfadd6999",
+        "execution_status": "blocked",
+        "protocol_status": "not_checked",
+        "quality_status": "unassessed",
+        "publication_status": "unpublished",
+        "context_status": "complete",
+        "dependency_task_ids": [],
+        "endpoint_item_ids": [],
+        "error_codes": [
+          "CS_BUDGET_EXHAUSTED"
+        ]
+      },
+      {
+        "task_id": "task:f85a872f35c15031ac69542142cacf7b0f228a88d9f3aca8333f7b218882595a",
+        "role": "material_items",
+        "method": "model",
+        "input_sha256": "sha256:f85a872f35c15031ac69542142cacf7b0f228a88d9f3aca8333f7b218882595a",
+        "profile_sha256": "sha256:64f82c34ff2c014237588c618c5747f7a4c024c0585064489da2a2fcfadd6999",
+        "execution_status": "succeeded",
+        "protocol_status": "valid",
+        "quality_status": "accepted",
+        "publication_status": "candidate",
+        "context_status": "complete",
+        "dependency_task_ids": [],
+        "endpoint_item_ids": [],
+        "artifact_sha256": "sha256:5508d500ded3555d29abc93c62480856420f2f0e25b5bca43c1ac44899fbeb20",
+        "error_codes": []
+      }
+    ],
+    "attempts": [
+      {
+        "attempt_id": "attempt:c76e5c3a1f85a1ed206f6b5737cf405025d8942bccfe8005827215978e77fbf2",
+        "task_id": "task:f85a872f35c15031ac69542142cacf7b0f228a88d9f3aca8333f7b218882595a",
+        "attempt_number": 1,
+        "execution_status": "succeeded",
+        "request_sha256": "sha256:c9f66510c173a8a64a78b73d4b28dc629cc0b257ef26612a79913fee01cc3bf5",
+        "response_sha256": "sha256:fa21f7d280ed602cf55bafe16b7066f6daae9bac6d514e2175177577e521442f",
+        "provider": "openai_compat",
+        "request_model": "deepseek-v4-flash",
+        "response_model": "deepseek-v4-flash-ga-260731",
+        "usage": {
+          "completion_tokens": 1413,
+          "prompt_tokens": 2075,
+          "reasoning_tokens": 0,
+          "total_tokens": 3488
+        },
+        "cost": null
+      },
+      {
+        "attempt_id": "attempt:fad5f132123024462f318f34d35e574794d9069c396f8928c49fd6248f2456f0",
+        "task_id": "task:f85a872f35c15031ac69542142cacf7b0f228a88d9f3aca8333f7b218882595a",
+        "attempt_number": 2,
+        "execution_status": "succeeded",
+        "request_sha256": "sha256:79621572541e57ca96d03f4adfe04eea148318af4db263046f5e506750ed8ad5",
+        "response_sha256": "sha256:b9db361eac34510b449b8fd1b798d19b2c19683f9ad8fab206b324ce2ca5fc1d",
+        "provider": "openai_compat",
+        "request_model": "deepseek-v4-flash",
+        "response_model": "deepseek-v4-flash-ga-260731",
+        "usage": {
+          "completion_tokens": 657,
+          "prompt_tokens": 1727,
+          "reasoning_tokens": 0,
+          "total_tokens": 2384
+        },
+        "cost": null
+      }
+    ]
+  },
+  "plan_consistent": true,
+  "findings": [
+    "task_not_terminal:task:2d33dbdfb14c4399ac0981ca4a93f6c0934f831a090be9050fa8fb80aba687c8:blocked"
+  ],
+  "derivations": {
+    "task:f85a872f35c15031ac69542142cacf7b0f228a88d9f3aca8333f7b218882595a": "disabled"
+  },
+  "role_budgets": {
+    "claims": {
+      "max_attempts": 0,
+      "reserved_attempts": 0
+    },
+    "material_items": {
+      "max_attempts": 2,
+      "reserved_attempts": 2
+    },
+    "material_relations": {
+      "max_attempts": 2,
+      "reserved_attempts": 0
+    }
+  },
+  "cost_summary": [
+    {
+      "provider": "openai_compat",
+      "model": "deepseek-v4-flash",
+      "currency": null,
+      "kind": null,
+      "price_version": null,
+      "known_amount": 0.0,
+      "known_calls": 0,
+      "unknown_calls": 2
+    }
+  ]
+}

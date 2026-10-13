@@ -1,0 +1,138 @@
+{
+  "arm": "control",
+  "model": "deepseek-v4-flash",
+  "request_options": "timeout_seconds=300.0 max_output_tokens=262144 token_parameter='max_tokens' reasoning_effort='minimal' thinking=None",
+  "model_calls": 4,
+  "budget_cap": 9,
+  "output_enters_scoring": false,
+  "results": [
+    {
+      "packet": "base-7critical",
+      "plan_consistent": true,
+      "findings": [
+        "task_not_terminal:task:d31d077e18b83dd723302ae427adf862c94d8564c4d6e3915085c3544500dcd2:blocked"
+      ],
+      "attempts": [
+        {
+          "attempt_number": 1,
+          "execution_status": "succeeded",
+          "request_model": "deepseek-v4-flash",
+          "response_model": "deepseek-v4-flash-ga-260731",
+          "usage": {
+            "completion_tokens": 2416,
+            "prompt_tokens": 2222,
+            "reasoning_tokens": 0,
+            "total_tokens": 4638
+          }
+        }
+      ],
+      "tasks": [
+        {
+          "task_id": "task:d31d077e18b83dd",
+          "role": "claims",
+          "execution_status": "blocked",
+          "protocol_status": "not_checked",
+          "quality_status": "unassessed",
+          "publication_status": "unpublished",
+          "error_codes": [
+            "CS_BUDGET_EXHAUSTED"
+          ]
+        },
+        {
+          "task_id": "task:84647f54f555df7",
+          "role": "material_items",
+          "execution_status": "succeeded",
+          "protocol_status": "invalid",
+          "quality_status": "review_required",
+          "publication_status": "unpublished",
+          "error_codes": []
+        }
+      ]
+    },
+    {
+      "packet": "NT-I06",
+      "plan_consistent": true,
+      "findings": [
+        "task_not_terminal:task:2d33dbdfb14c4399ac0981ca4a93f6c0934f831a090be9050fa8fb80aba687c8:blocked"
+      ],
+      "attempts": [
+        {
+          "attempt_number": 1,
+          "execution_status": "succeeded",
+          "request_model": "deepseek-v4-flash",
+          "response_model": "deepseek-v4-flash-ga-260731",
+          "usage": {
+            "completion_tokens": 1413,
+            "prompt_tokens": 2075,
+            "reasoning_tokens": 0,
+            "total_tokens": 3488
+          }
+        },
+        {
+          "attempt_number": 2,
+          "execution_status": "succeeded",
+          "request_model": "deepseek-v4-flash",
+          "response_model": "deepseek-v4-flash-ga-260731",
+          "usage": {
+            "completion_tokens": 657,
+            "prompt_tokens": 1727,
+            "reasoning_tokens": 0,
+            "total_tokens": 2384
+          }
+        }
+      ],
+      "tasks": [
+        {
+          "task_id": "task:2d33dbdfb14c439",
+          "role": "claims",
+          "execution_status": "blocked",
+          "protocol_status": "not_checked",
+          "quality_status": "unassessed",
+          "publication_status": "unpublished",
+          "error_codes": [
+            "CS_BUDGET_EXHAUSTED"
+          ]
+        },
+        {
+          "task_id": "task:f85a872f35c1503",
+          "role": "material_items",
+          "execution_status": "succeeded",
+          "protocol_status": "valid",
+          "quality_status": "accepted",
+          "publication_status": "candidate",
+          "error_codes": []
+        }
+      ]
+    },
+    {
+      "packet": "NT-I41",
+      "plan_consistent": true,
+      "findings": [],
+      "attempts": [
+        {
+          "attempt_number": 1,
+          "execution_status": "succeeded",
+          "request_model": "deepseek-v4-flash",
+          "response_model": "deepseek-v4-flash-ga-260731",
+          "usage": {
+            "completion_tokens": 171,
+            "prompt_tokens": 1503,
+            "reasoning_tokens": 0,
+            "total_tokens": 1674
+          }
+        }
+      ],
+      "tasks": [
+        {
+          "task_id": "task:61f9e8b6ee1a37b",
+          "role": "material_items",
+          "execution_status": "succeeded",
+          "protocol_status": "valid",
+          "quality_status": "accepted",
+          "publication_status": "candidate",
+          "error_codes": []
+        }
+      ]
+    }
+  ]
+}
