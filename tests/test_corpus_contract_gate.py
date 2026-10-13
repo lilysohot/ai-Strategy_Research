@@ -1,6 +1,6 @@
 """P03: the gate boolean is driven by the signed contract's axes, in the gate's role scope.
 
-Contract v4.2 ``threshold_source.effective`` + gate 28 ``quality_requirements``; design
+Contract v4.3 ``threshold_source.effective`` + signed gate v3 ``quality_requirements``; design
 ``evidence/59-p03-design-20261012`` (1-A + 2-C + 3-A′).
 """
 
@@ -14,21 +14,21 @@ import pytest
 
 from plugins.corpus.structured_scoring import (
     CONTRACT_GATE_REQUIREMENTS,
+    SIGNED_SCORING_CONTRACT_PATH,
     CandidateRecord,
     ContractGateRequirements,
     GoldRecord,
     MatchingMode,
     RecordOrigin,
     Role,
+    ScoringInputError,
+    load_contract_gate_requirements,
     score_structured_quality,
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 # R2 (2026-10-13): 指针推进到最近一次签认（v4.3 + 门 v3）；旧版本字节不变、路径留在历史记录里。
-CONTRACT_V43 = (
-    REPO_ROOT
-    / ".scratch/claims-r2-role-isolation/evidence/75-r2-signed-20261013/r0-zero-call/scoring-contract-v4.3.json"
-)
+CONTRACT_V43 = SIGNED_SCORING_CONTRACT_PATH
 GATE_V3 = (
     REPO_ROOT
     / ".scratch/claims-r2-role-isolation/evidence/75-r2-signed-20261013/r0-zero-call/gate-v3.json"
@@ -104,14 +104,82 @@ def _score(gold, candidates, mappings, requirements):
     )
 
 
-# ---------------------------------------------------------------- signed snapshot regression
+# ---------------------------------------------------------------- signed contract loading regression
 
 
-def test_embedded_requirements_equal_the_signed_contract() -> None:
-    """评分器读契约的可执行形式：契约一改，这条测试即红。"""
+def _write_contract(tmp_path: Path, transform=None) -> Path:
+    contract = json.loads(CONTRACT_V43.read_text(encoding="utf-8"))
+    if transform is not None:
+        transform(contract)
+    path = tmp_path / "contract.json"
+    path.write_text(json.dumps(contract, ensure_ascii=False), encoding="utf-8")
+    return path
+
+
+def test_contract_loader_reads_thresholds_and_sentinels_from_the_selected_file(tmp_path) -> None:
+    def transform(contract: dict[str, object]) -> None:
+        threshold_source = contract["threshold_source"]
+        assert isinstance(threshold_source, dict)
+        effective = threshold_source["effective"]
+        assert isinstance(effective, dict)
+        effective["target_recall_overall_min"] = 0.9
+        assertions = contract["review_assertions"]
+        assert isinstance(assertions, dict)
+        assertions["NT-I99"] = assertions.pop("NT-I48")
+
+    requirements = load_contract_gate_requirements(_write_contract(tmp_path, transform))
+
+    assert requirements.target_recall_overall_min == Fraction(9, 10)
+    assert "NT-I99" in requirements.high_risk_item_assertions_required
+    assert "NT-I48" not in requirements.high_risk_item_assertions_required
+    assert len(requirements.high_risk_item_assertions_required) == 11
+
+
+def test_contract_loader_fails_closed_when_contract_is_missing(tmp_path) -> None:
+    with pytest.raises(ScoringInputError, match="contract_unavailable"):
+        load_contract_gate_requirements(tmp_path / "missing.json")
+
+
+@pytest.mark.parametrize(
+    ("transform", "error"),
+    [
+        (lambda contract: contract.update(schema_version="unexpected-v5"), "schema_version"),
+        (lambda contract: contract.update(status="draft"), "status"),
+        (
+            lambda contract: contract["threshold_source"]["effective"].pop(
+                "candidate_precision_min"
+            ),
+            "candidate_precision_min",
+        ),
+        (
+            lambda contract: contract["threshold_source"]["effective"].__setitem__(
+                "candidate_precision_min", "0.8"
+            ),
+            "not numeric",
+        ),
+        (
+            lambda contract: contract["signoff"].pop("signed_by"),
+            "signoff",
+        ),
+        (
+            lambda contract: contract["review_assertions"].pop("NT-I48"),
+            "exactly 11",
+        ),
+    ],
+)
+def test_contract_loader_fails_closed_on_invalid_contract(
+    tmp_path, transform, error: str,
+) -> None:
+    with pytest.raises(ScoringInputError, match=error):
+        load_contract_gate_requirements(_write_contract(tmp_path, transform))
+
+
+def test_default_requirements_are_loaded_from_the_signed_contract() -> None:
+    """The default used by the scorer is exactly the selected signed contract."""
     contract = json.loads(CONTRACT_V43.read_text(encoding="utf-8"))
     effective = contract["threshold_source"]["effective"]
 
+    assert load_contract_gate_requirements(CONTRACT_V43) == CONTRACT_GATE_REQUIREMENTS
     assert contract["schema_version"] == CONTRACT_GATE_REQUIREMENTS.schema_version
     assert (
         Fraction(str(effective["target_recall_overall_min"]))

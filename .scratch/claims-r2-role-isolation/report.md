@@ -1,6 +1,8 @@
 # Claims／R2 独立结构化提取：节点职责、数据契约与实施方案
 
-> **2026-10-13 发布状态追加（取代下文历史“发布/query 未启动”表述）**：本轮用户明确授权后，Issue 42 已完成 Claims/items 文件工件的显式缺口发布及零模型正向查询：52 Claims + 227 items，5 个独立范围快照，279 条记录、286 处原文区间回读核验通过，407 项相关回归通过。manifest 保留 review_required/partial；原工件与执行状态未改。不同范围快照使用独立 store root，不混为整篇覆盖；真实 delivery/context_use/report_reference 和 M_main 消费仍未启动，生产 PG 未访问。详情：[Issue 42](issues/42-scoped-publication.md)、[发布结果与使用方式](evidence/80-scoped-publication-20261013/README.md)。评分器阈值读取改造仍未实施。
+> **2026-10-13 发布状态追加（取代下文历史“发布/query 未启动”表述）**：本轮用户明确授权后，Issue 42 已完成 Claims/items 文件工件的显式缺口发布及零模型正向查询：52 Claims + 227 items，5 个独立范围快照，279 条记录、286 处原文区间回读核验通过，407 项相关回归通过。manifest 保留 review_required/partial；原工件与执行状态未改。不同范围快照使用独立 store root，不混为整篇覆盖；真实 delivery/context_use/report_reference 和 M_main 消费仍未启动，生产 PG 未访问。详情：[Issue 42](issues/42-scoped-publication.md)、[发布结果与使用方式](evidence/80-scoped-publication-20261013/README.md)。
+
+> **2026-10-13 评分契约读取闭环**：Issue 45 已使评分器直接读取签认契约 v4.3 的六项阈值与 11 个 `NT-I*` 哨兵，并对缺文件、版本/签认状态错误和字段不完整失败关闭。冻结 P03 复算逐项不变：PASS，41/48、30/31、源1 0.909、源2 0.808、哨兵 11/11。65 项相关回归、Ruff、Pyright 和冻结链校验均通过。详情：[Issue 45](issues/45-scorer-direct-contract.md)、[验证证据](evidence/82-scorer-direct-contract-20261013/README.md)。
 
 - 日期：2026-09-28；修订：2026-10-02；执行约束补充：2026-10-08；状态校正：2026-10-09；门 33 诚实出分与裁定闭环结案：2026-10-13；R2 修订（门 v3 + 契约 v4.3）与门 33 重算 PASS：2026-10-13
 - 状态：本文是原始架构方案基线；实现与多轮有界真实开发试验已经发生，当前执行真源为
@@ -32,8 +34,8 @@
   且与该段自报的「源1 0.909」自相矛盾；②「属真实抽取覆盖缺口而非流程问题」不成立——14 条 FN 全部是同源候选
   「已抽到但被判不等价」，0 条落在未产出槽。
 - 取代关系与开放项：原基准 FAIL 终态由契约 `registrations.supersedes_terminal_record` 登记取代，**旧证据字节
-  一律未改**；发布路径（O1「显式缺口」）代码面仍待裁定实施；**评分器改读契约阈值（OPEN-1=A 的兑现）代码
-  仍未实施**（77 为独立脚本重算，不等于评分器已改造）；共享护栏缺陷（`tools/evidence_guard.artifact_state`
+  一律未改**；发布路径（O1「显式缺口」）已由 Issue 42 有界实施；评分器改读契约阈值（OPEN-1=A）已由
+  Issue 45 完成，并保持 77 的冻结重算结果逐项不变；共享护栏缺陷（`tools/evidence_guard.artifact_state`
   把未签门草案读成 `signed`，即 76 号 §四第 4 行的上报项）**已于同日修复**——证据守卫扫描恢复
   `exit 0 / violations 0`，未登记任何脚本为例外、未改任何产物字节，记录见
   `evidence/79-guard-countersignature-fix-20261013/r0-zero-call/`。
@@ -1271,8 +1273,8 @@ NT-I09/I19/I45/I46/I47，逐条登记）；契约 v4.3 新增 `matching.items`�
 
 **审计与实现追平**：`evidence/76-r2-retro-audit-20261013/` 回溯审计（首轮 23 项 7 项未过并全部
 处置 → 复查 26 项、签认后相位 27 项均 0 未过；开放项登记门/契约版本追逐、金标侧绑定例外）；
-`evidence/78-p03-binding-catchup-20261013/` 把评分器内嵌契约快照追平到 v4.3 六项 + 哨兵 11 项
-（8 项核验全过，冻结链校验器 `exit 0`）；`evidence/79-guard-countersignature-fix-20261013/`
+`evidence/78-p03-binding-catchup-20261013/` 先把评分器内嵌契约快照追平到 v4.3 六项 + 哨兵 11 项；
+Issue 45 随后改为直接读取同一签认契约并失败关闭，冻结 P03 分数逐项不变（`evidence/82-scorer-direct-contract-20261013/`）；`evidence/79-guard-countersignature-fix-20261013/`
 修复证据护栏 `countersignature` 占位被误判为已签（守卫扫描由 `exit 1 / violations 1` 恢复为
 `exit 0 / violations 0`，全树仅 1 个草案受影响，未登记例外、未改产物字节）。
 
@@ -1280,7 +1282,7 @@ NT-I09/I19/I45/I46/I47，逐条登记）；契约 v4.3 新增 `matching.items`�
 
 Issue 43 同时暴露了 terminal task runner 对无 reporter 运行的完成态误判：workflow 明确返回 `answer_status=complete`，但 `stopped_by=no_tool` 仍被显示为 incomplete。Issue 44 已在真实 CLI 调用点补红绿回归并修复；只有显式 complete 的 `no_tool` 获得交付状态，无状态或 partial 结果继续失败关闭，完整 `apodex/tests` 为 823 passed。历史运行不追溯改写。
 
-**仍未实施**：W6 独立留出与多模型比较、W7 生产化；**评分器直接读契约阈值**（OPEN-1=A 的兑现，现为内嵌快照）、P04/P05 口径归一化与回归、route a/b 裁定。上述两个问题的消费闭环不扩大为整篇覆盖、研究质量或生产放行。
+**仍未实施**：W6 独立留出与多模型比较、W7 生产化、P04/P05 口径归一化与回归、route a/b 裁定。上述两个问题的消费闭环及 Issue 45 的评分器改造不扩大为整篇覆盖、研究质量或生产放行。
 
 ## 附录：依据与源码入口
 

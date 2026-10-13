@@ -1,0 +1,30 @@
+{
+  "issue": 45,
+  "status": "completed",
+  "contract_schema": "non-table-selected-target-scoring-contract-v4.3",
+  "contract_sha256": "d7b4f8a81ef42e3cd5d619eae92bc34df7b7aa683d34aeba4f1a22719ae69a2f",
+  "threshold_count": 6,
+  "sentinel_count": 11,
+  "focused_contract_tests": 22,
+  "related_scoring_tests": 65,
+  "freeze_chain": {
+    "ok": 17,
+    "covered": 8,
+    "drift": 0,
+    "needs_ruling": 0
+  },
+  "frozen_score": {
+    "verdict": "PASS",
+    "recall": "41/48",
+    "precision": "30/31",
+    "source_1": 0.909,
+    "source_2": 0.808,
+    "sentinel": "11/11",
+    "delta_matched": 7
+  },
+  "calls": {
+    "model": 0,
+    "extraction": 0,
+    "production_postgresql": 0
+  }
+}

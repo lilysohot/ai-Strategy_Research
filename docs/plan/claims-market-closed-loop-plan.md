@@ -6,6 +6,8 @@
 
 > **2026-10-13 CLI 完成态修复**：Issue 44 已使 terminal task runner 接受 workflow 显式 `answer_status=complete + stopped_by=no_tool` 的无 reporter 正常终态，同时保持无状态、partial、best-effort 和 deadline 结果失败关闭；CLI 回归 823 passed。历史 Issue 43 运行不追溯改写。见 [修复记录](../../.scratch/claims-r2-role-isolation/issues/44-cli-complete-no-tool.md)。
 
+> **2026-10-13 评分契约读取闭环**：Issue 45 已将 P03 从代码内嵌契约快照改为直接读取签认契约 v4.3 的六项阈值与 11 个 `NT-I*` 哨兵；输入缺失或不完整时失败关闭。冻结重算保持 PASS（41/48、30/31、源1 0.909、源2 0.808、哨兵 11/11），相关回归与冻结链校验通过，模型/抽取/生产 PG 调用均为 0。见 [验收记录](../../.scratch/claims-r2-role-isolation/evidence/82-scorer-direct-contract-20261013/README.md)。
+
 | 项   | 内容                                                                                                                         |
 | --- | -------------------------------------------------------------------------------------------------------------------------- |
 | 状态  | **有效 · 当前唯一跨层执行清单**；已有证据与市场工具基础，完整业务闭环未验收                                                                                  |

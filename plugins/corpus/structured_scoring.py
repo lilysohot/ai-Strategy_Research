@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import json
+import re
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from enum import StrEnum
 from fractions import Fraction
-from typing import Protocol, runtime_checkable
+from pathlib import Path
+from typing import Any, Protocol, runtime_checkable
 
 
 class ScoringInputError(ValueError):
@@ -390,11 +393,9 @@ PILOT_CANDIDATE_POLICY = QualityPolicy(
 class ContractGateRequirements:
     """The signed contract's gate axes, evaluated inside the gate's role scope.
 
-    Values are the **signed snapshot** (contract v4.3 ``threshold_source.effective`` + gate 28's
-    successor gate v3 ``quality_requirements``). ``tests/test_corpus_contract_gate.py`` asserts
-    them against the contract/gate JSON itself, so a contract or gate revision turns that test
-    red — the executable form of "评分器读契约" without product code importing a
-    research-evidence file.
+    Values are loaded directly from signed contract v4.3
+    ``threshold_source.effective`` and its item review assertions. Missing, malformed,
+    unsigned, or differently versioned contracts fail closed.
 
     R2 note (2026-10-13): the sentinel list follows the signed gate v3, which moved five records
     to ``quality_requirements.high_risk_item_assertions_excluded``
@@ -431,30 +432,100 @@ class ContractGateRequirements:
             raise ScoringInputError("high_risk_item_assertions_required must be unique")
 
 
-CONTRACT_GATE_REQUIREMENTS = ContractGateRequirements(
-    schema_version="non-table-selected-target-scoring-contract-v4.3",
-    role_scope=Role.MATERIAL_ITEMS,
-    target_recall_overall_min=Fraction(17, 20),
-    target_recall_per_source_min=Fraction(4, 5),
-    candidate_precision_min=Fraction(4, 5),
-    accepted_records_total_min=40,
-    accepted_records_per_source_min=20,
-    unresolved_candidates_max=0,
-    material_items_target_total=48,
-    high_risk_item_assertions_required=(
-        "NT-I13",
-        "NT-I15",
-        "NT-I17",
-        "NT-I29",
-        "NT-I35",
-        "NT-I37",
-        "NT-I38",
-        "NT-I39",
-        "NT-I42",
-        "NT-I43",
-        "NT-I48",
-    ),
+SIGNED_SCORING_CONTRACT_SCHEMA = "non-table-selected-target-scoring-contract-v4.3"
+SIGNED_SCORING_CONTRACT_PATH = (
+    Path(__file__).resolve().parents[2]
+    / ".scratch/claims-r2-role-isolation/evidence/75-r2-signed-20261013"
+    / "r0-zero-call/scoring-contract-v4.3.json"
 )
+_CONTRACT_RATE_FIELDS = (
+    "target_recall_overall_min",
+    "target_recall_per_source_min",
+    "candidate_precision_min",
+)
+_CONTRACT_COUNT_FIELDS = (
+    "accepted_records_total_min",
+    "accepted_records_per_source_min",
+    "unresolved_candidates_max",
+)
+
+
+def _contract_object(parent: dict[str, Any], key: str) -> dict[str, Any]:
+    value = parent.get(key)
+    if not isinstance(value, dict):
+        raise ScoringInputError(f"signed scoring contract field must be an object: {key}")
+    return value
+
+
+def load_contract_gate_requirements(
+    contract_path: str | Path = SIGNED_SCORING_CONTRACT_PATH,
+) -> ContractGateRequirements:
+    """Load the authoritative gate thresholds and item sentinels from contract v4.3."""
+    path = Path(contract_path)
+    try:
+        payload: Any = json.loads(path.read_text(encoding="utf-8"))
+    except OSError as exc:
+        raise ScoringInputError(f"contract_unavailable:{path}") from exc
+    except json.JSONDecodeError as exc:
+        raise ScoringInputError(f"contract_invalid_json:{path}") from exc
+    if not isinstance(payload, dict):
+        raise ScoringInputError("signed scoring contract must be a JSON object")
+    schema_version = payload.get("schema_version")
+    if schema_version != SIGNED_SCORING_CONTRACT_SCHEMA:
+        raise ScoringInputError(
+            "signed scoring contract schema_version mismatch: "
+            f"{schema_version!r}!={SIGNED_SCORING_CONTRACT_SCHEMA!r}"
+        )
+    if payload.get("status") != "frozen_signed":
+        raise ScoringInputError("signed scoring contract status must be frozen_signed")
+    signoff = _contract_object(payload, "signoff")
+    if not str(signoff.get("signed_by") or "").strip() or not str(
+        signoff.get("signed_on") or ""
+    ).strip():
+        raise ScoringInputError("signed scoring contract signoff is incomplete")
+
+    threshold_source = _contract_object(payload, "threshold_source")
+    effective = _contract_object(threshold_source, "effective")
+    rates: dict[str, Fraction] = {}
+    for field in _CONTRACT_RATE_FIELDS:
+        value = effective.get(field)
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise ScoringInputError(f"signed scoring contract field is not numeric: {field}")
+        rates[field] = Fraction(str(value))
+    counts: dict[str, int] = {}
+    for field in _CONTRACT_COUNT_FIELDS:
+        value = effective.get(field)
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise ScoringInputError(f"signed scoring contract field is not an integer: {field}")
+        counts[field] = value
+
+    assertions = _contract_object(payload, "review_assertions")
+    item_assertions = tuple(
+        sorted(key for key in assertions if re.fullmatch(r"NT-I\d{2}", key))
+    )
+    if len(item_assertions) != 11:
+        raise ScoringInputError(
+            "signed scoring contract must contain exactly 11 NT-I review assertions"
+        )
+    if any(not isinstance(assertions[key], dict) for key in item_assertions):
+        raise ScoringInputError("signed scoring contract item assertions must be objects")
+
+    return ContractGateRequirements(
+        schema_version=schema_version,
+        role_scope=Role.MATERIAL_ITEMS,
+        target_recall_overall_min=rates["target_recall_overall_min"],
+        target_recall_per_source_min=rates["target_recall_per_source_min"],
+        candidate_precision_min=rates["candidate_precision_min"],
+        accepted_records_total_min=counts["accepted_records_total_min"],
+        accepted_records_per_source_min=counts["accepted_records_per_source_min"],
+        unresolved_candidates_max=counts["unresolved_candidates_max"],
+        # Diagnostic denominator metadata; not one of the six gate thresholds.
+        material_items_target_total=48,
+        high_risk_item_assertions_required=item_assertions,
+    )
+
+
+CONTRACT_GATE_REQUIREMENTS = load_contract_gate_requirements()
 
 
 @dataclass(frozen=True)
@@ -925,7 +996,8 @@ def _score_gate(
 ) -> QualityGateScore:
     """Produce the gate verdicts.
 
-    ``rate_gate_passed`` is the **contract** gate (``requirements``, the signed snapshot),
+    ``rate_gate_passed`` is the **contract** gate (``requirements`` loaded from the signed
+    contract),
     evaluated inside the gate's role scope — it is the only pass/fail boolean. The per-role
     pilot policy survives as the ``pilot_policy_blockers`` diagnostic list and never gates.
     ``risk_condition`` is reported (per role, counts and rate) because contract
