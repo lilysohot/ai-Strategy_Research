@@ -431,6 +431,7 @@ export interface RunRevertResponse {
 }
 
 export interface Usage {
+  status?: 'complete' | 'partial' | 'unavailable'
   prompt_tokens: number
   completion_tokens: number
   total_tokens: number

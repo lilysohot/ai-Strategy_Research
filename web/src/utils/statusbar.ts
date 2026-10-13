@@ -71,6 +71,8 @@ export interface UsageTotals {
   cacheRead: number
   /** Cache-creation tokens (``cache_write_tokens`` / legacy ``cache_creation_tokens``). */
   cacheWrite: number
+  /** Reasoning is already included in completion; never add it to total. */
+  reasoning?: number
 }
 
 /**
@@ -88,6 +90,7 @@ export interface UsageFields {
   cached_tokens?: unknown
   cache_write_tokens?: unknown
   cache_creation_tokens?: unknown
+  reasoning_tokens?: unknown
 }
 
 /** Zeroed totals: the starting point for both accumulation and replacement. */
@@ -136,6 +139,7 @@ export function accumulateUsage(prev: UsageTotals, usage?: UsageFields | null): 
     total: prev.total + (reported > 0 ? reported : prompt + completion),
     cacheRead: prev.cacheRead + first(usage.cache_read_tokens, usage.cached_tokens),
     cacheWrite: prev.cacheWrite + first(usage.cache_write_tokens, usage.cache_creation_tokens),
+    reasoning: (prev.reasoning ?? 0) + first(usage.reasoning_tokens),
   }
 }
 

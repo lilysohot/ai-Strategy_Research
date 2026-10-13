@@ -1,0 +1,31 @@
+{
+  "schema_version": "base-publish-manifest-1",
+  "created_on": "2026-10-13",
+  "authorization": "U「继续」；P-A 修复发布（control 臂 Ark deepseek-v4-flash，指纹与 r3 plan 冻结值一致）",
+  "model_calls": 1,
+  "attempts_this_turn": [
+    {
+      "try": 1,
+      "config": "doubao + r4 plan",
+      "outcome": "blocked：plan 指纹不匹配（r4 冻结 deepseek 官方 vs doubao）——0 次调用"
+    },
+    {
+      "try": 2,
+      "config": "doubao + r4 plan",
+      "outcome": "cancelled：deadline_epoch 过期——0 次调用"
+    },
+    {
+      "try": 3,
+      "config": "Ark deepseek-v4-flash + 现场 plan_batch + 反馈注入",
+      "outcome": "1 次调用；slot_83bd 记账成功（no_supported_item/no_independent_proposition）；但 4 个槽 item_validation:schema 失败 ⇒ 包 partial"
+    }
+  ],
+  "key_finding": "P-A 结构性修复已被证实（3 号槽记账稳定成功）；残余失败 = 模型 item schema 校验的逐次方差（同模型不同次通过的槽位不同）；跨 3 次尝试的并集已覆盖全部 7 槽",
+  "outputs": {
+    "publish-record.json": "sha256:7e279aab92473d9b697a9227a3a5080a0f38e6a583ee8bd53659d09fa02a8d08",
+    "publish-summary.json": "sha256:24d4c66dad764ed68243bd8863ea59d7020aa6f0f881d45a73a70946fef9e746",
+    "publish_base_candidates.py": "sha256:16016f5507eb952d40953975df901894e90628ace850ff1e9934b4301e2659b3"
+  },
+  "in_place_edits": 0,
+  "status": "paused_for_decision"
+}

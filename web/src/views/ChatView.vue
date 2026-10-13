@@ -24,6 +24,7 @@ import ResearchCanvas from '@/components/ResearchCanvas.vue'
 import ResearchComposer from '@/components/ResearchComposer.vue'
 import ResearchRail from '@/components/ResearchRail.vue'
 import RunStage from '@/components/RunStage.vue'
+import TokenUsage from '@/components/TokenUsage.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useBusinessStore } from '@/stores/business'
 import { useRunStreamStore } from '@/stores/runs'
@@ -854,6 +855,12 @@ watch(
             <pre class="turn-thinking__body">{{ m.thinking }}</pre>
           </details>
           <div class="turn-body" v-html="m.html" />
+          <TokenUsage
+            v-if="m.role === 'assistant'"
+            :run-id="m.run_id"
+            :live-usage="sameRunId(runStream.runId, m.run_id) ? runStream.usage : null"
+            :streaming="sameRunId(runStream.runId, m.run_id) && runStream.isStreaming"
+          />
           <div v-if="m.role === 'assistant' && runStream.runId === m.run_id && runStream.isStreaming" class="generating">
             生成中
           </div>

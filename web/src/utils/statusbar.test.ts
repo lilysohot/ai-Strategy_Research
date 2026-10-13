@@ -64,7 +64,7 @@ test('accumulateUsage sums per-turn deltas', () => {
   let totals = { ...ZERO }
   totals = accumulateUsage(totals, { prompt_tokens: 100, completion_tokens: 10, total_tokens: 110 })
   totals = accumulateUsage(totals, { prompt_tokens: 50, completion_tokens: 5, total_tokens: 55 })
-  assert.deepEqual(totals, { prompt: 150, completion: 15, total: 165, cacheRead: 0, cacheWrite: 0 })
+  assert.deepEqual(totals, { prompt: 150, completion: 15, total: 165, cacheRead: 0, cacheWrite: 0, reasoning: 0 })
 })
 
 test('accumulateUsage tolerates missing usage', () => {
@@ -82,12 +82,12 @@ test('accumulateUsage mirrors aggregate_usage alias fallback (input/output token
     cache_read_tokens: 30,
     cache_write_tokens: 5,
   })
-  assert.deepEqual(totals, { prompt: 100, completion: 20, total: 120, cacheRead: 30, cacheWrite: 5 })
+  assert.deepEqual(totals, { prompt: 100, completion: 20, total: 120, cacheRead: 30, cacheWrite: 5, reasoning: 0 })
 })
 
 test('accumulateUsage derives total when gateway reports zero', () => {
   const totals = accumulateUsage(ZERO, { prompt_tokens: 100, completion_tokens: 10, total_tokens: 0 })
-  assert.deepEqual(totals, { prompt: 100, completion: 10, total: 110, cacheRead: 0, cacheWrite: 0 })
+  assert.deepEqual(totals, { prompt: 100, completion: 10, total: 110, cacheRead: 0, cacheWrite: 0, reasoning: 0 })
 })
 
 test('accumulateUsage maps legacy cache aliases without double counting', () => {
@@ -98,7 +98,15 @@ test('accumulateUsage maps legacy cache aliases without double counting', () => 
     cached_tokens: 8,
     cache_creation_tokens: 3,
   })
-  assert.deepEqual(totals, { prompt: 10, completion: 2, total: 12, cacheRead: 8, cacheWrite: 3 })
+  assert.deepEqual(totals, { prompt: 10, completion: 2, total: 12, cacheRead: 8, cacheWrite: 3, reasoning: 0 })
+})
+
+test('reasoning accumulates without being added twice to the output total', () => {
+  const first = accumulateUsage(ZERO, { prompt_tokens: 10, completion_tokens: 8, reasoning_tokens: 5 })
+  const next = accumulateUsage(first, { prompt_tokens: 20, completion_tokens: 4, reasoning_tokens: 2 })
+  assert.equal(next.reasoning, 7)
+  assert.equal(next.completion, 12)
+  assert.equal(next.total, 42)
 })
 
 test('formatElapsed renders terminal-style durations', () => {
