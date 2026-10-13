@@ -1187,6 +1187,8 @@ Claims/items/relations=20/48/24；修正关键门槛、条件组合、预测质�
 27 项回归通过。金标限定为 24 个正文单元内的选定目标，额外正确候选须独立裁定，不自动计 FP；
 人工签认与追加式冻结仍未完成，既有质量门不变。r1 和旧冻结工件保留原样。
 
+**2026-10-13 R2 阶段状态回填（覆盖上表 R2-S3 / R2-S4 / R2-S5 三行，以及文中「R2-S4 预算仍未授权」一类旧表述）**：items 链的 R2 修订已完成并全部留痕——①**三类开发标注**：48-item 非表格金标已由 xyl 签认并追加式冻结（[10-quality-gold-freeze](../../.scratch/claims-r2-role-isolation/evidence/10-quality-gold-freeze-20261008-r2/)），语义问题经 Issue 29 全量审计与 Issue 30 的 condition 读路径补签（契约 v3）修正完毕，候选输出前的 E01—E12 仍是部分关键检查点；②**真实诊断已出分**：门 33 在**原基准**下诚实出分 FAIL（召回 34/48 = 0.708、源2 0.538、16 条高危断言 8/16），缺口经 Issue 71 归因为「候选已抽到但被判非等价」，0 条落在未产出槽 ⇒ 不是抽取覆盖缺口；③随后在**冻结金标字节不变、样本不扩大、六项阈值逐字不变**的前提下，由用户具名签认**门 v3 + 契约 v4.3 + 7 条改判**（[75-r2-signed](../../.scratch/claims-r2-role-isolation/evidence/75-r2-signed-20261013/)），重算 **PASS**（41/48 = 0.854，源1 0.909 / 源2 0.808，哨兵 11/11；[77-rescore](../../.scratch/claims-r2-role-isolation/evidence/77-gate33-rescore-under-v3-20261013/)）；旧 FAIL 终态以契约登记方式取代，**旧记录字节未改**；④实现侧同步：评分器契约快照与冻结链校验器追平到 v4.3 / 门 v3（[78-binding-catchup](../../.scratch/claims-r2-role-isolation/evidence/78-p03-binding-catchup-20261013/)，8/0 通过、校验器 `exit 0`）。真实调用账（累加）：Issue 11 = 116 次，Issue 28/31 各 24 次，Issue 32 两臂各 24 次，Issue 65 两臂各 4 次，Issue 66 = 1 次；均未转授生产 PG、发布或 M_main 消费。**仍未完成**：R2-S3 的「逐类非回归门」中 P04/P05 口径归一化与回归未做；**R2-S4 预算已获独立授权并多轮执行**（原「仍未授权」表述作废，但**不构成阶段验收**）；**R2-S5 未启动**——未发布文件候选之外，生产 PG 保存/重放、正式发布、M_main 消费、报告验证与独立留出仍全为 0；发布侧另有 O1「显式缺口」路线待裁定实施（[73-publish-gap](../../.scratch/claims-r2-role-isolation/evidence/73-publish-gap-route-impact-20261013/)）。本回填只纠正阶段事实，不改写任何历史冻结资产。
+
 **2026-10-08 PDF 表格消费限制**：`reader-pdf-*` 表格在未经独立完整性核验时只作审计证据，统一
 标记 `partial / table_untrusted_or_incomplete`，不得进入 Claims、R2、发布、查询或 M_main；只有
 新快照显式 `table_consumption_status=verified_complete` 才可放行。受阻表格若属于冻结评测范围，

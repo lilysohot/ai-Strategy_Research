@@ -1,5 +1,15 @@
 # Stage 2 裁定工作台 · 操作说明
 
+> **阶段说明（2026-10-13 追加，不改写以下正文）**：本说明描述的是 **Stage 2 首轮**（工作表 222 条、
+> 契约 v4.2）。该轮**已执行完毕**：222 条由 `xyl` 全量裁定完（matched 26 / correct_extra 190 /
+> out_of_scope 5 / duplicate 1），并集裁定权威为 `worksheet.json`，出分与结案见
+> `../evidence/69-union-adjudication-20261013/`、`70-closure-20261013/`、`72-gate33-terminal-and-corrections-20261013/`。
+> 其后在冻结金标与样本不变的前提下，用户于 2026-10-13 签认**门 v3 + 契约 v4.3 + 7 条具名改判**
+> （`../evidence/75-r2-signed-20261013/`），门 33 重算 **PASS**（41/48 = 0.854；`../evidence/77-…`）。
+> 因此本文中「222 条」「契约 v4.2」「`gate_ready: true` 后告诉我，我立即装配 → 跑门 33 评分 → 出分」
+> 等表述**只具历史意义**，当前契约版本为 **v4.3**、门模板为 **v3**；后续裁定若再发生，须按 v4.3
+> 条款与新的工作台版本执行，不得沿用本文的字段与流程描述。
+
 - 工作表：`worksheet.json`（**222 条**，每条已是契约 11 字段形态，确定性字段已预填）
 - 金标参照：`gold-reference.json`（48 条，匹配时对照用；**裁定人可以看金标**，禁止的是把金标抄进候选）
 - 自检：`uv run python .scratch/claims-r2-role-isolation/adjudication/validate.py`

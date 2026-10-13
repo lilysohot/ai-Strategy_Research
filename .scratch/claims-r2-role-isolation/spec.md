@@ -1,7 +1,7 @@
 # Claims／R2 独立结构化提取：实施规格与任务索引
 
-- 日期：2026-10-02；状态复核：2026-10-10
-- 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。18 已完成严格 parent 门、items/relations selector、accepted-items formal import 和 P10 有界 relation live 执行。P11 relation 样本已由 xyl 签认；P12 selector v2 实跑退化并已拒绝。P13 已完成零调用 `material-relations-question-group-jsonl-v1`。P14 最终 relation-only batch 已执行并在协议门失败。19 的零调用反事实证明同模型语义 no-go。20 仅替换为 `glm-5.3-flash` 的 4-call 复验在 4K 输出上限耗尽 reasoning。21 将上限放宽到 16K 后，三个确定响应仍全部耗尽 reasoning 且为空，第四个为 outcome_unknown；因此 token-only 路线已关闭。Issue 26 已完成离线冻结包上的 10 次 M_main 价值消融；P2 的正向发布、真实 query/delivery/context_use 和产品消费仍未启动。
+- 日期：2026-10-02；状态复核：2026-10-13
+- 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。18 已完成严格 parent 门、items/relations selector、accepted-items formal import 和 P10 有界 relation live 执行。P11 relation 样本已由 xyl 签认；P12 selector v2 实跑退化并已拒绝。P13 已完成零调用 `material-relations-question-group-jsonl-v1`。P14 最终 relation-only batch 已执行并在协议门失败。19 的零调用反事实证明同模型语义 no-go。20 仅替换为 `glm-5.3-flash` 的 4-call 复验在 4K 输出上限耗尽 reasoning。21 将上限放宽到 16K 后，三个确定响应仍全部耗尽 reasoning 且为空，第四个为 outcome_unknown；因此 token-only 路线已关闭。Issue 26 已完成离线冻结包上的 10 次 M_main 价值消融；P2 的正向发布、真实 query/delivery/context_use 和产品消费仍未启动。2026-10-13 追加：Issue 32/33/41 与 items 链 R2 修订已完成——门 28 的模板由 **v3** 取代、评分契约推进至 **v4.3**（六项阈值逐字未改），门 33 在原基准 FAIL 后按修订基准重算 **PASS**（41/48 = 0.854），实现绑定同步追平；**发布、query/delivery/context_use 与 M_main 消费仍未启动**。详见 §3 阶段状态追加段与各票。
 - 2026-10-10 收口：Issue 25 虽通过 boolean-v2 协议门但未通过关系质量门；Issue 26 随后完成
   items-only 对 items+relations 的 5 题、10 次 M_main 配对消融并经 xyl 盲评签认。relation treatment
   提升 0/4、回退 2/4、持平 2/4，输入 token 中位数增加 24.33%，因此默认 relation 富化关闭。
@@ -71,6 +71,9 @@
 | 29 | [items 金标全量语义审计](issues/29-items-gold-semantic-audit.md) | 28 预注册后；10 冻结 48-item 金标 | 零调用只读复核 48 条 items 原子性/可评分性/字段裁定并澄清契约签认缺口；发现缺陷须另立修正票 |
 | 30 | [items 评分契约补签与 condition 读路径定义](issues/30-items-scoring-contract-condition-readpath.md) | 29 审计 F1/F2/F3；用户裁定路线 A | 不改金标，补签契约并定义 condition 读路径；签认后同步再绑定 Issue 28 门 |
 | 31 | [run-1 突增保护失效与模型替换重跑](issues/31-run1-429-invalidation-model-substitution.md) | 28 门执行受阻解除后；用户授权与模型指定 | 记录 run-1 429 失效、模型替换（deepseek-v4-flash）与 run-2 结构性未过门；按门终态关闭路线 |
+| 32 | [items selector v6 与执行配置重冻结](issues/32-items-v6-and-reasoning-refreeze-gate.md) | 28 门受阻解除后；31 的模型替换 | 零调用重冻结 selector `material-atomic-selector-jsonl-v6`、extractor `material-semantics-32`、校验 `material-items-validation-v11`；两臂真实执行（各 24 attempts），treatment 结构性未过门，根因后由 34—41 归因并经 65/66 复评 |
+| 33 | [items-only 质量评分门](issues/33-items-quality-scoring-gate.md) | 32 的 treatment 产物；10 冻结的 48-item 金标 | 零调用评分 32 产物：首轮诚实出分 FAIL 并把缺口归因到裁定口径，R2 修订基准（门 v3 + 契约 v4.3 + 7 条具名改判）下重算 PASS（41/48），已验收 |
+| 41 | [items 链路口径冻结与记账一致性](issues/41-items-chain-accounting-freeze.md) | 34—40 的根因与路线输入；33 | 零调用冻结 items 链读路径/记账口径并落地 Wave 0（P01/P02/P06/P07/P08）与 P03；契约 v4→v4.3 版本链、门 v3 与绑定追平后收口；P04/P05 与 route a/b 未完成 |
 
 01—10 已交付基础架构、回放、评分和冻结资产。17 已使 Claims 达冻结门；18 已使 copper items formal
 parent 合格并完成 relation-only P10，但整篇 relation precision 尚未通过质量门。所有结果仍为未发布
@@ -145,6 +148,21 @@ Issue 29 的两项门就绪阻塞据此解除；门仍处 `frozen_before_executi
 后续任何新模型/新协议路线须另立新门并经新的显式授权。
 W6 的独立留出/多模型比较、W7 的生产化仍须另行立项，
 不能通过单角色或单样本候选抽取成功自动宣布完成。
+2026-10-13 追加（32／33／41 与 items 链 R2 修订）：
+32 在不改既有金标与门 28 阈值的前提下，把 selector 重冻结为 v6 并关思考，两臂各 24 attempts 真实执行；
+treatment 臂仍有 1 次 `outcome_unknown`、两源各 1 个 packet partial，故本门只证明「消除 L2 协议缺陷」，
+不证明质量达标。33 随后对 32 的 treatment 产物做零调用评分：**首轮诚实出分为 FAIL**（召回 34/48 = 0.708、
+源2 0.538、16 条高危断言 8/16），缺口经 71 号归因为「候选已抽到但被判非等价」（14 条 FN 全部有同源近似候选、
+0 条落在未产出槽），即口径问题而非抽取覆盖缺口；72 号把该 FAIL 记为**原基准下的不可达终态**并登记四处表述更正。
+在冻结金标字节不变、样本不扩大、六项阈值逐字不变的前提下，用户于 2026-10-13 具名裁定走**门 v3 + 契约 v4.3 +
+7 条具名改判**（NT-I23/I26/I34/I38/I39/I45/I48 由 `correct_extra` 改判 `matched`；哨兵清单 16 → 11 项，
+移出 NT-I09/I19/I45/I46/I47），33 据此重算 **PASS**（41/48 = 0.854、源1 0.909、源2 0.808、哨兵 11/11），
+取代关系由契约 `registrations.supersedes_terminal_record` 登记、旧记录字节未改；余量极薄（总 +0.004、源2 +0.008），
+不得读成生产可用或整篇覆盖。76 号回溯审计（首轮 23 项 7 未过 → 复查 26 项、签认后 27 项均 0 未过）与
+78 号绑定追平（评分器契约快照 → v4.3 六项 + 哨兵 11 项，8/0 通过、冻结链校验器 exit 0）同轮完成。
+仍未启动：发布、query/delivery/context_use、M_main 消费；仍未实施：评分器改读契约阈值（OPEN-1=A 的兑现）。
+另按用户 2026-10-13 分诊裁定，`evidence/34—40`、`42—78` 为**票内证据目录**（不单独建票），
+其状态以 32／33／41 与本段为准。
 
 ## 4. 01 已冻结的实现决议
 
@@ -249,7 +267,7 @@ uv run python -m plugins.corpus.structured.cli query --source-id SOURCE --build-
 |---|---|---|
 | Claims table | `claims-deterministic-v1` | 仅显式 `verified_complete` 的结构完整 cell 可确定性投影；PDF reader 表格默认审计留存且拒绝消费，零模型 |
 | Claims prose | `claims-json-v2` | 复用 ClaimRecord/EvidenceFact 规范化与校验 |
-| R2 items | `material-atomic-selector-jsonl-v5`（新计划显式选择）；selector v1-v4 / `material-atomic-jsonl-v5`（历史可读） | controller 拥有 slot/item ID、终态和逐字 evidence span；模型只返回批内义务 selector 与语义字段；controller 规范 absence-valued 字段、显式数值区间、明确话语归属与通用判断性标记，一个候选槽最多四个原子 item，禁止隐式 relations；extractor `material-semantics-32`，校验版本 `material-items-validation-v11` |
+| R2 items | `material-atomic-selector-jsonl-v6`（Issue 32 重冻结后的新计划显式选择；本节首次发布时写作 v5，已被 v6 取代，见 §3 阶段状态追加段）；v5 及其前版本（selector v1-v4 / `material-atomic-jsonl-v5`）历史可读 | controller 拥有 slot/item ID、终态和逐字 evidence span；模型只返回批内义务 selector 与语义字段；controller 规范 absence-valued 字段、显式数值区间、明确话语归属与通用判断性标记，一个候选槽最多四个原子 item，禁止隐式 relations；extractor `material-semantics-32`，校验版本 `material-items-validation-v11` |
 | R2 relations | `material-relations-question-group-jsonl-v2`（新最终计划显式选择）；question-group v1、selector v1-v2 / `material-relations-jsonl-v1`（历史可读） | answers 返回 question-local selected indices；non-answer 只返回 relation index 与 JSON boolean；controller 拥有 pair/relation ID、端点、类型和逐字 `pair_window` 并回填关系；字符串布尔、旧 status shape 和 type-as-status fail closed |
 
 该表保留 relations 的历史可读与按需实验契约，不表示默认启用。Issue 26 之后，首轮产品和 R2 验收
@@ -295,6 +313,8 @@ challenges，缺少显式纠正/否定线索的 positive terminal 归一为 abse
   起草并修订的非表格 Claims/items/relations=20/48/24 r2 有限目标包，已由 xyl 签认并通过追加式
   冻结；该包不宣称整篇穷尽标注，额外正确输出须独立裁定、不自动计 FP，全部候选未裁定前不能
   报告完整 precision，因此真实质量门仍未过。正式冻结证据位于 `evidence/10-quality-gold-freeze-20261008-r2/`。
+  （2026-10-13 追加：items 角色的诊断评分已在 R2 修订基准「门 v3 + 契约 v4.3」下重算 PASS，见 §3 阶段状态
+  追加段；本段其余陈述仍指 Issue 10 的时点，冻结金标字节未变。）
 - 用户已于 2026-10-04—05 明确批准贵州茅台研报范围并授权有界真实提取调用；11 已执行 Claims
   preflight 和第 1 页 R2 语义抽取。该授权只覆盖开发试验，不转授生产 PG、受保护留出、正式发布或
   M_main 消费，也不能补足 10 的金标与质量分母。
@@ -326,6 +346,7 @@ challenges，缺少显式纠正/否定线索的 positive terminal 归一为 abse
   裁决证明默认 relation 富化无正向价值并触发成本止损。该预算不计入上述 82 次 selector attempts，
   也未产生生产 query、publication 或数据库访问。
 - 未落定决议在对应 issue 中保持 needs-info/needs-triage，不由实现者选择会扩大数据、预算或产品范围的默认值。不得以“本地票已完成”代替主计划阶段签认。
+- 补充调用账（2026-10-13 追加；补足上文至 Issue 26 的计数，均为独立授权下执行，均不转授 publication、query、delivery、context_use 或额外预算）：Issue 28/31 各 24 次（run-1 `doubao-seed-2.1-lite` 16 次 429 失效、零 token；run-2 `deepseek-v4-flash` 24 次）；Issue 32 两臂各 24 次真实执行（control 10 + 14 全 succeeded；treatment 10 + 14，其中 1 次 `outcome_unknown`）；Issue 65 双臂补跑各 4 次（base-7critical 1 + NT-I06 2 + NT-I41 1；control `deepseek-v4-flash` / treatment `doubao-seed-2.1-lite`）；Issue 66 的 P-A 修复式重试 1 次（`doubao-seed-2.1-lite`）。阈值、金标与门 28 授权四项未因这些执行被放宽或改写。
 
 ## 6. 第一阶段完成条件
 

@@ -153,4 +153,19 @@ reasoning 352,006 → 0；total 429,020 → 72,808（**-83.0%**）。
 **归因边界**：本门只报执行要求，不宣称质量达标（§8）；v6 的结论限定为「消除 L2 协议缺陷」。
 剩余未过门项分别是基础设施事件与语义层判定，继续推进须另立门（语义层/重试策略/质量评分）。
 
+## Comments（2026-10-13 追加，不改写以上字节）
+
+- **门的自身终态不变**：本门 `on_fail` 终态与 `Status: executed` 保持；阈值未改、未放行、未重跑同一门。
+  后续推进确按本票要求走了「另立新门」路径（28 门模板 → 41 → 门 33）。
+- **诊断结论已被取代（归因部分，非门的判定）**：§11 归因「treatment 结构性未过门」的**根因判断**已由
+  `evidence/34-chain-root-cause-audit-20261011/`（r1—r10）与 41 的记账核对取代——根因是 prompt/规格层同句
+  矛盾与记账链路（含 `record_type` 缺失的 fail-closed 放大、重试不带记账反馈），不是抽取语义本身。
+- **补跑与复评**：65 的双臂补跑（control `deepseek-v4-flash` / treatment `doubao-seed-2.1-lite`，各 4 次：
+  base-7critical 1 + NT-I06 2 + NT-I41 1）与 66 的 P-A 修复式重试（1 次，`doubao-seed-2.1-lite`）后，
+  base 包 12 条 critical 金标由 0 候选转为 7 条 matched；门 33 在新基准（门 v3 + 契约 v4.3）下重算 PASS
+  （`evidence/77-…`）。两臂接受/拒绝模式逐字一致 ⇒ **base 包阻塞与模型选择无关**。
+- **本票自身记账**：`live/{control-run-summary,treatment-run-summary}.json` 显示两臂各 24 次 attempts
+  （10 + 14，按源），control 全部 succeeded，treatment 有 1 次 `outcome_unknown`；`live/` 另有 v6 冻结产物。
+  该计数此前未进入 `spec.md` §5 的调用账，已于 2026-10-13 补记。
+
 

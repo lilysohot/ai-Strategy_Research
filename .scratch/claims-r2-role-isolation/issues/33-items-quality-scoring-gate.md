@@ -1,9 +1,10 @@
 # 33 · items-only 质量评分门（门 32 产物的诊断口径评分）
 
-Status: preregistered_zero_call（Stage 1 工作台已产出；Stage 2 待人工裁定）
+Status: complete
+Execution: 已验收（2026-10-13：质量门在 R2 修订基准「门 v3 + 契约 v4.3 + 7 条具名改判」下重算 PASS；原基准 FAIL 终态由新记录取代、旧证据字节未改；发布/query/delivery/context_use 与 M_main 消费仍未启动）
 Type: gate task
 Parent: [32 · items selector v6 与执行配置重冻结](32-items-v6-and-reasoning-refreeze-gate.md)
-Model attempts: 0（本门全程零调用）
+Model attempts: 0（本门全程零调用；R2 修订、重算与 P03 绑定追平同为 0 调用）
 Production database access: 0
 
 ## 1. 目的
@@ -123,3 +124,35 @@ target recall / candidate precision / duplicates / origin 切片 / 覆盖率 / �
   零引用（机器核验）。
 - **仍待补**：§7 `gold_consumption_and_scoring` 授权行签署时未填，**未具名前保持挂账，不代签**；本票头部
   `Status`/`Execution` 行仍为旧值，待正式结票时同步。
+
+## 8. R2 结票（2026-10-13 追加；不修改以上任何既有字节）
+
+- **状态变更**：本票由 `preregistered_zero_call` 结为 `complete` / `Execution: 已验收`（用户 2026-10-13
+  具名裁定「已验收」）。验收对象是**质量门**；发布与正向消费不在本票验收范围，仍未启动。
+- **取代关系（关键）**：本票先前的 FAIL 终态记录（`../evidence/72-gate33-terminal-and-corrections-20261013/r0-zero-call/terminal-decision.json`，
+  原基准下「不可达」）**未被改写**，取代关系由契约 v4.3 `registrations.supersedes_terminal_record` 登记。
+  两段结论不矛盾：前者是**原基准**下的诚实终态，后者是**修订基准**下的过门。
+- **R2 修订（三件，均具名签认；签署人 `xyl`，2026-10-13）**：
+  - 门 v3：`../evidence/75-r2-signed-20261013/r0-zero-call/gate-v3.json`（`sha256:340b312d…`，
+    `frozen_before_execution` + countersignature）；**六项阈值逐字未改**（0.85 / 0.80 / 0.80 / 40 / 20 / 0），
+    哨兵清单由 16 项缩为 **11 项**（移出 NT-I09/I19/I45/I46/I47，逐条登记于
+    `high_risk_item_assertions_excluded`）。
+  - 契约 v4.3：`../evidence/75-…/scoring-contract-v4.3.json`（`sha256:d7b4f8a8…`，`frozen_signed`）；
+    新增 `matching.items`「上下文唯一可恢复」条款，并登记冻结金标侧绑定落后（仍 v2）为例外。
+  - 7 条具名改判：`../evidence/75-…/re-adjudication.json`（`named_signed`）——NT-I23/I26/I34/I38/I39/I45/I48
+    由 `correct_extra` 改判 `matched`（三项人裁：二选一 = NT-I23、未选 I24；第 7 条 = NT-I45）。
+- **重算出分（PASS）**：`../evidence/77-gate33-rescore-under-v3-20261013/r1-score/gate33-score-under-v3.json`
+  ——召回 **41/48 = 0.854**（源1 20/22 = 0.909、源2 21/26 = 0.808）、精确率 30/31 = 0.968（与旧 240/248
+  同比值）、unresolved 0、接受 240、哨兵 **11/11**；7 条判据全 PASS。**余量极薄（总 +0.004 / 源2 +0.008），
+  不得读成生产可用或整篇覆盖。**
+- **链条回溯审计**：`../evidence/76-r2-retro-audit-20261013/r0-zero-call/`——首轮 23 项检查 7 项未过并全部处置；
+  复查 26 项、签认后相位 27 项均 0 未过。
+- **实现绑定追平**：`../evidence/78-p03-binding-catchup-20261013/r0-zero-call/verification.md`——评分器契约快照
+  推进到 v4.3 六项 + 哨兵 11 项（改 `plugins/corpus/structured_scoring.py`、`tools/check_freeze_chain.py`
+  与 2 个测试文件）；8 项核验通过 8/失败 0、冻结链校验器 `exit 0`。
+- **前置表述更正（引用，不改写旧行）**：本票前文「8 条未过断言全部源2」一句不成立（NT-I09/I19 属源1），
+  更正见 `../evidence/72-…/r0-zero-call/corrections.md` 第 3 项；「14 条 FN 为真实抽取覆盖缺口」亦由
+  `../evidence/71-fn-attribution-20261013/` 更正为「候选已抽到、被判不等价」。
+- **仍开放（不阻塞结票）**：§7 `gold_consumption_and_scoring` 授权行仍为空（未具名，挂账不代签）；
+  `tools/evidence_guard.artifact_state` 把未签门草案读成 `signed`（共享护栏，待另裁）；
+  **评分器改读契约阈值（OPEN-1=A 的兑现）代码改动仍未实施**——77 是独立脚本重算，不等于评分器已改造。

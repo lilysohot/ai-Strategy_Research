@@ -1,6 +1,6 @@
 # 41 · items 链路口径冻结与记账一致性（零调用）
 
-Status: in_progress（Stage 1 记账核对 + Stage 2 助手修正已落地；契约/阈值/判据变更待签认）
+Status: in_progress（Stage 1 记账核对 + Stage 2 助手修正已落地；契约 v4→v4.3 与门 v3 已于 2026-10-13 由 xyl 具名签认——原记「契约/阈值/判据变更待签认」已闭合；P04/P05 口径归一化与回归、route a/b 仍未完成）
 Type: gate task
 Parent: [34 · 链路根因审计](../evidence/34-chain-root-cause-audit-20261011/chain-report.md)、
 [33 · items-only 质量评分门](33-items-quality-scoring-gate.md)
@@ -183,3 +183,15 @@ sizing_counterfactual_matches = 0  （反事实，非契约合法、非分数、
 
 **v4 仍需你签**：① 是否采纳 v4（替代 route b）；② 阈值方向 A/B；③ 是否裁决 39 号 §7-11 的
 "每角色通用读路径机制、先只落 items"。
+
+## Comments（2026-10-13 追加，不改写以上字节）
+
+- **待签项已闭合**：上列 ①②③ 与契约 v4 的后续版本链已由用户具名裁定并签认——契约 v4（`evidence/43-…`，
+  OPEN-1=A / OPEN-2=C）→ v4.1（`evidence/47-…`）→ v4.2（`evidence/58-…`，改钉门 28 **v2** `8cc11bcc…`）
+  → **v4.3**（`evidence/75-r2-signed-20261013/r0-zero-call/scoring-contract-v4.3.json`）。本票头部
+  `Status` 中「契约/阈值/判据变更待签认」据此更新。
+- **同轮新增的门与出分**：门 28 模板由 **v3** 取代（`evidence/75-…/gate-v3.json`，`sha256:340b312d…`）；
+  门 33 在 v3 + v4.3 基准下重算 **PASS**（`evidence/77-…/r1-score/`，41/48 = 0.854）。**六项阈值逐字未改。**
+- **P03 绑定已追平**：评分器契约快照 → v4.3 六项 + 哨兵 11 项（`evidence/78-…/verification.md`，8/0 通过）。
+- **仍未完成（本票不结）**：P04/P05 口径归一化与回归、route a/b 裁定、缺口 1（32 条区间的人工可裁定比例）
+  与缺口 2（route b 收益）；**评分器改读契约阈值（OPEN-1=A 的兑现）代码仍未实施**。

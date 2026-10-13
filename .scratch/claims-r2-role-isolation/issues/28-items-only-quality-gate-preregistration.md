@@ -90,3 +90,16 @@ R2 关闭 relation 修复与验收后，`spec.md` 明确「下一阶段只处理
 本门已执行并终结：真实复验（run-1 基础设施失效、run-2 结构性未过门）完成后，按冻结终态关闭
 本门所验「模型 + extractor」路线（用户确认登记关闭，2026-10-11）。后续任何新模型、新协议或
 归因实验路线须**另立新门**并经新的显式授权；本门不得再执行、不得放宽阈值、不改 prompt、不新增金标。
+
+## Comments（2026-10-13 追加，不改写以上字节）
+
+- **门模板已被 v3 取代（登记，不构成放宽）**：items-only 质量门的现行版本为
+  `evidence/75-r2-signed-20261013/r0-zero-call/gate-v3.json`（`sha256:340b312d…`，`xyl` 2026-10-13 签认）。
+  本次取代**只动两处**：① 哨兵清单 16 → 11 项（移出 NT-I09/I19/I45/I46/I47，逐条登记于
+  `high_risk_item_assertions_excluded`）；② 配套契约条款（v4.3 `matching.items`「上下文唯一可恢复」）。
+- **阈值一字未改**：`target_recall_overall_min` 0.85、`target_recall_per_source_min` 0.8、
+  `candidate_precision_min` 0.8、`accepted_records_total_min` 40、`accepted_records_per_source_min` 20、
+  `unresolved_candidates_max` 0；`threshold_relaxation_after_execution_allowed` 仍为 `false`。
+  因此上文「不得放宽阈值」的约束**今天仍然成立**；v3 属本票预设的「另立新门 + 新显式授权」路径。
+- **本票 `Status: complete` 不变**：该终态描述的是本门所验路线（run-1/run-2）的关闭，不因 v3 取代而重新开启。
+- **同轮结果**：门 33 在 v3 + 契约 v4.3 基准下重算 PASS（41/48 = 0.854；`evidence/77-…`）。
