@@ -1,5 +1,11 @@
 # 研究材料 × 同花顺数据 × 分析：统一执行计划
 
+> **2026-10-13 Claims/items 文件发布进展**：经本轮用户授权，专项 Issue 42 完成 5 个独立范围快照的显式缺口发布（52 Claims、227 items）与注册工具正向查询；407 项回归通过，286 处原文区间核验通过。此进展只关闭 publish/positive_query，真实 M_main 消费、报告引用闭环及 R2 阶段验收仍未完成，不构成 S5 生产 PG 放行。见 [发布与验收记录](../../.scratch/claims-r2-role-isolation/evidence/80-scoped-publication-20261013/README.md)。
+
+> **2026-10-13 两个主快照的有界消费进展**：专项 Issue 43 已各用一个问题验证工业富联与光模块主快照的 `delivery → context_use → report_reference`。两次运行各 3 轮、2 次工具调用，工具面仅为语义查询及伴随清单；A4 enforce 均为 `verified`，新增抽取调用和生产 PG 访问均为 0。此进展仅关闭两个预定问题的消费链，不声明整篇覆盖、研究质量或 S5 生产放行。见 [消费验收记录](../../.scratch/claims-r2-role-isolation/evidence/81-bounded-main-consumption-20261013/README.md)。
+
+> **2026-10-13 CLI 完成态修复**：Issue 44 已使 terminal task runner 接受 workflow 显式 `answer_status=complete + stopped_by=no_tool` 的无 reporter 正常终态，同时保持无状态、partial、best-effort 和 deadline 结果失败关闭；CLI 回归 823 passed。历史 Issue 43 运行不追溯改写。见 [修复记录](../../.scratch/claims-r2-role-isolation/issues/44-cli-complete-no-tool.md)。
+
 | 项   | 内容                                                                                                                         |
 | --- | -------------------------------------------------------------------------------------------------------------------------- |
 | 状态  | **有效 · 当前唯一跨层执行清单**；已有证据与市场工具基础，完整业务闭环未验收                                                                                  |

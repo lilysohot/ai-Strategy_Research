@@ -1,5 +1,11 @@
 # Claims／R2 独立结构化提取：实施规格与任务索引
 
+> **2026-10-13 发布状态追加（取代下文历史“发布/query 未启动”表述）**：本轮用户明确授权后，Issue 42 已完成 Claims/items 文件工件的显式缺口发布及零模型正向查询：52 Claims + 227 items，5 个独立范围快照，279 条记录、286 处原文区间回读核验通过，407 项相关回归通过。manifest 保留 review_required/partial；原工件与执行状态未改。不同范围快照使用独立 store root，不混为整篇覆盖；真实 delivery/context_use/report_reference 和 M_main 消费仍未启动，生产 PG 未访问。详情：[Issue 42](issues/42-scoped-publication.md)、[发布结果与使用方式](evidence/80-scoped-publication-20261013/README.md)。评分器阈值读取改造仍未实施。
+
+> **2026-10-13 消费状态追加（取代上段“真实消费仍未启动”及下文同类历史表述）**：Issue 43 已用两个主快照各完成一个有界 M_main 问题；两次运行均只调用一次 `corpus_semantic_query` 和一次 `corpus_submit_manifest`，消费账确认记录送达并进入后续模型上下文，最终回答引用清单均经 A4 enforce 复算为 `verified`。合计 6 个成功模型响应、1 个无 token 回执的 stalled attempt、4 次工具调用；新增抽取调用 0，生产 PG 访问 0。此结果只关闭这两个问题的 `delivery → context_use → report_reference`，不声明整篇覆盖、研究质量或生产放行。详情：[Issue 43](issues/43-bounded-main-consumption.md)、[消费证据](evidence/81-bounded-main-consumption-20261013/README.md)。
+
+> **2026-10-13 CLI 完成态修复**：Issue 44 修复了 `reporter=false` 的 Stateful ReAct 在显式 `answer_status=complete`、`stopped_by=no_tool` 时被 terminal task runner 误报为 incomplete 的接缝；缺失状态和 partial 状态继续失败关闭。完整 CLI 回归 823 passed。历史 Issue 43 运行不追溯改写，修复作用于后续运行。详情：[Issue 44](issues/44-cli-complete-no-tool.md)。
+
 - 日期：2026-10-02；状态复核：2026-10-13
 - 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。18 已完成严格 parent 门、items/relations selector、accepted-items formal import 和 P10 有界 relation live 执行。P11 relation 样本已由 xyl 签认；P12 selector v2 实跑退化并已拒绝。P13 已完成零调用 `material-relations-question-group-jsonl-v1`。P14 最终 relation-only batch 已执行并在协议门失败。19 的零调用反事实证明同模型语义 no-go。20 仅替换为 `glm-5.3-flash` 的 4-call 复验在 4K 输出上限耗尽 reasoning。21 将上限放宽到 16K 后，三个确定响应仍全部耗尽 reasoning 且为空，第四个为 outcome_unknown；因此 token-only 路线已关闭。Issue 26 已完成离线冻结包上的 10 次 M_main 价值消融；P2 的正向发布、真实 query/delivery/context_use 和产品消费仍未启动。2026-10-13 追加：Issue 32/33/41 与 items 链 R2 修订已完成——门 28 的模板由 **v3** 取代、评分契约推进至 **v4.3**（六项阈值逐字未改），门 33 在原基准 FAIL 后按修订基准重算 **PASS**（41/48 = 0.854），实现绑定同步追平；**发布、query/delivery/context_use 与 M_main 消费仍未启动**。详见 §3 阶段状态追加段与各票。
 - 2026-10-10 收口：Issue 25 虽通过 boolean-v2 协议门但未通过关系质量门；Issue 26 随后完成

@@ -1,5 +1,7 @@
 # Claims／R2 独立结构化提取：节点职责、数据契约与实施方案
 
+> **2026-10-13 发布状态追加（取代下文历史“发布/query 未启动”表述）**：本轮用户明确授权后，Issue 42 已完成 Claims/items 文件工件的显式缺口发布及零模型正向查询：52 Claims + 227 items，5 个独立范围快照，279 条记录、286 处原文区间回读核验通过，407 项相关回归通过。manifest 保留 review_required/partial；原工件与执行状态未改。不同范围快照使用独立 store root，不混为整篇覆盖；真实 delivery/context_use/report_reference 和 M_main 消费仍未启动，生产 PG 未访问。详情：[Issue 42](issues/42-scoped-publication.md)、[发布结果与使用方式](evidence/80-scoped-publication-20261013/README.md)。评分器阈值读取改造仍未实施。
+
 - 日期：2026-09-28；修订：2026-10-02；执行约束补充：2026-10-08；状态校正：2026-10-09；门 33 诚实出分与裁定闭环结案：2026-10-13；R2 修订（门 v3 + 契约 v4.3）与门 33 重算 PASS：2026-10-13
 - 状态：本文是原始架构方案基线；实现与多轮有界真实开发试验已经发生，当前执行真源为
   [实施规格](spec.md)和[任务 11](issues/11-bounded-live-trial.md)。截至 2026-10-09，质量门、relations、
@@ -1274,9 +1276,11 @@ NT-I09/I19/I45/I46/I47，逐条登记）；契约 v4.3 新增 `matching.items`�
 修复证据护栏 `countersignature` 占位被误判为已签（守卫扫描由 `exit 1 / violations 1` 恢复为
 `exit 0 / violations 0`，全树仅 1 个草案受影响，未登记例外、未改产物字节）。
 
-**仍未启动／未实施**：发布（O1「显式缺口」路线，影响评估见 `evidence/73-…`）、query/delivery/
-context_use、M_main 正向消费、W6 独立留出与多模型比较、W7 生产化；**评分器直接读契约阈值**
-（OPEN-1=A 的兑现，现为内嵌快照）、P04/P05 口径归一化与回归、route a/b 裁定。
+**2026-10-13 后续执行**：Issue 42 已按 O1「显式缺口」路线完成 5 个独立范围文件发布和零模型正向查询；Issue 43 随后用两个主快照各完成一个有界 M_main 问题。两次真实消费均只有 `corpus_semantic_query → corpus_submit_manifest`，完整记录实际送达并进入后续模型上下文，最终引用经 A4 enforce 复算为 `verified`。新增抽取调用 0、生产 PG 访问 0；publication 的显式缺口和 `review_required` 保持不变。证据见 `evidence/80-scoped-publication-20261013/` 与 `evidence/81-bounded-main-consumption-20261013/`。
+
+Issue 43 同时暴露了 terminal task runner 对无 reporter 运行的完成态误判：workflow 明确返回 `answer_status=complete`，但 `stopped_by=no_tool` 仍被显示为 incomplete。Issue 44 已在真实 CLI 调用点补红绿回归并修复；只有显式 complete 的 `no_tool` 获得交付状态，无状态或 partial 结果继续失败关闭，完整 `apodex/tests` 为 823 passed。历史运行不追溯改写。
+
+**仍未实施**：W6 独立留出与多模型比较、W7 生产化；**评分器直接读契约阈值**（OPEN-1=A 的兑现，现为内嵌快照）、P04/P05 口径归一化与回归、route a/b 裁定。上述两个问题的消费闭环不扩大为整篇覆盖、研究质量或生产放行。
 
 ## 附录：依据与源码入口
 

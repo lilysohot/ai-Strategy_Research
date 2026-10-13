@@ -914,11 +914,11 @@ def test_native_workflow_wall_deadline_is_not_reported_as_delivery(
 def test_native_workflow_no_tool_stop_is_not_reported_as_delivery(
     tmp_path, monkeypatch, capsys,
 ):
-    """Workflows nudge on a tool-less turn, so ``no_tool`` means truncated.
+    """Workflow ``no_tool`` without an explicit complete status is truncated.
 
     Only the generic coding loop runs ``no_tool_behavior="stop"``, where a
-    plain-text turn is the normal finish. Sharing one set across both paths
-    presented a workflow that gave up mid-task as a delivered report.
+    plain-text turn is the normal finish. Stateful ReAct's explicit complete
+    status is tested separately; an ambiguous workflow stop must fail closed.
     """
     _run_workflow_returning({
         "final_answer": "I was unable to finish the comparison.",
@@ -933,12 +933,43 @@ def test_native_workflow_no_tool_stop_is_not_reported_as_delivery(
     assert "Final report" not in out
 
 
+def test_native_workflow_complete_agent_no_tool_stop_is_reported_as_delivery(
+    tmp_path, monkeypatch, capsys,
+):
+    """An explicit complete agent answer is terminal even without a reporter.
+
+    Stateful ReAct returns ``stopped_by=no_tool`` for its normal tool-free final
+    answer.  Its publication boundary has already reduced the outcome to the
+    explicit ``answer_status`` carried here, so the CLI must not discard that
+    status merely because ``final_answer_source`` is the agent rather than the
+    optional reporter.
+    """
+    _run_workflow_returning({
+        "final_answer": "The bounded answer and its A4 manifest are complete.",
+        "answer_status": "complete",
+        "final_answer_source": "agent",
+        "stopped_by": "no_tool",
+        "react_steps": [{}, {}, {}],
+    }, tmp_path, monkeypatch)
+
+    out = capsys.readouterr().out
+    assert "The bounded answer and its A4 manifest are complete." in out
+    assert "Result (turns=3 · tools=0 · no_tool)" in out
+    assert "run incomplete" not in out
+    assert "partial output was not saved as a final report" not in out
+
+
 def test_generic_loop_no_tool_stop_is_a_normal_finish():
     """The coding loop answers by producing a turn with no tool calls."""
     from apodex.task_runner import _is_complete_run
 
     assert _is_complete_run("no_tool", no_tool_is_complete=True) is True
+    assert _is_complete_run(
+        "no_tool", answer_status="complete", answer_source="agent",
+    ) is True
     assert _is_complete_run("no_tool") is False
+    assert _is_complete_run("no_tool", answer_status="best_effort") is False
+    assert _is_complete_run("wall_deadline", answer_status="complete") is False
     assert _is_complete_run("max_turns", no_tool_is_complete=True) is False
 
 

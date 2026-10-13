@@ -62,12 +62,13 @@ _PARTIAL_OUTPUT_LIMIT = 2000
 _COMPLETE_TOP_LEVEL_STOPS = frozenset({
     "", "completed", "final_answer", "submit_report", "workflow_complete",
 })
-# ``no_tool`` means opposite things on the two paths that reach here, so it is
-# never in the shared set above. The generic coding loop runs with
+# ``no_tool`` means opposite things on the paths that reach here, so it is never
+# in the shared set above. The generic coding loop runs with
 # ``no_tool_behavior="stop"``: a turn without tool calls IS how it answers.
-# Workflows run with ``no_tool_behavior="nudge"``, so the same reason_clip means the
-# nudge budget ran out mid-task — which ``agent_bus.fan_in`` also classifies as
-# INCOMPLETE ("agent stopped without producing a final answer").
+# Workflows normally run with ``no_tool_behavior="nudge"``, where the same stop
+# can mean the nudge budget ran out mid-task. Stateful ReAct disambiguates its
+# ordinary tool-free final answer by returning explicit ``answer_status=complete``
+# after its publication boundary; missing or partial statuses still fail closed.
 _NO_TOOL_STOP = "no_tool"
 
 # These stops can leave a non-empty ``final_content`` that is known to be
@@ -90,8 +91,12 @@ def _is_complete_run(
     if answer_status in {"best_effort", "not_found", "incomplete", "partial"}:
         return False
     # A downstream reporter really can finish synthesis after the research
-    # phase hit its soft deadline. Its explicit complete status is authoritative.
-    if answer_status == "complete" and answer_source == "reporter_llm":
+    # phase hit its soft deadline. Stateful ReAct also uses ``no_tool`` for the
+    # main agent's ordinary tool-free final answer; trust that stop only when
+    # the workflow publication boundary explicitly marked the answer complete.
+    if answer_status == "complete" and (
+        answer_source == "reporter_llm" or stopped_by == _NO_TOOL_STOP
+    ):
         return True
     if no_tool_is_complete and stopped_by == _NO_TOOL_STOP:
         return True

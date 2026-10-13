@@ -295,7 +295,16 @@ def verify_reference(
                         problem(
                             "missing_dependencies", "当前证据语境不完整", "CS_CONTEXT_INCOMPLETE"
                         )
-                    if record.quality_status != "accepted":
+                    scoped_citation = (
+                        ref.purpose == "cite"
+                        and record.quality_status == "review_required"
+                        and any(
+                            record.record_id in ids for ids in view.selected_record_ids.values()
+                        )
+                    )
+                    if scoped_citation:
+                        codes.append("CS_PUBLICATION_EXPLICIT_GAPS")
+                    elif record.quality_status != "accepted":
                         problem("quality_not_accepted", "记录质量未合格", "CS_CONTEXT_INCOMPLETE")
                     # Verify exact source-unit coordinates and hashes; never .find().
                     units = {

@@ -16,7 +16,12 @@ from plugins.corpus.structured.config import canonical_hash
 from plugins.corpus.structured.ledger import StructuredExecutionError
 from plugins.corpus.structured.mapping import resolve_packet_span, resolve_unit_span
 from plugins.corpus.structured.snapshot import EvidenceSnapshot, SnapshotUnit, source_unit_id
-from plugins.corpus.structured.store import MappingStatus, PublicationView, read_semantic
+from plugins.corpus.structured.store import (
+    EXPLICIT_GAPS,
+    MappingStatus,
+    PublicationView,
+    read_semantic,
+)
 
 QUERY_SCHEMA_VERSION = "corpus-semantic-query-page-v1"
 QUERY_SORT_VERSION = "semantic-lexical-sort-v1"
@@ -252,6 +257,9 @@ def _claim_records(view: PublicationView) -> list[tuple[str, SemanticQueryRecord
         if not isinstance(run, EvidenceRun):
             continue
         for fact in run.facts:
+            selected = view.selected_record_ids.get(published.reference.artifact_sha256)
+            if selected is not None and fact.fact_id not in selected:
+                continue
             alignment = fact.evidence_alignment or {}
             source_spans = alignment.get("source_spans", [])
             if not isinstance(source_spans, list) or not source_spans:
@@ -313,6 +321,9 @@ def _material_records(view: PublicationView) -> list[tuple[str, SemanticQueryRec
         speakers = {speaker.speaker_id: speaker for speaker in run.understanding.speakers}
         records: list[tuple[str, str, str, tuple[MaterialEvidence, ...]]] = []
         for item in run.understanding.items:
+            selected = view.selected_record_ids.get(published.reference.artifact_sha256)
+            if selected is not None and item.item_id not in selected:
+                continue
             speaker = speakers.get(item.speaker_ref)
             searchable = " ".join(
                 filter(
@@ -379,7 +390,9 @@ def _material_records(view: PublicationView) -> list[tuple[str, SemanticQueryRec
                         dependencies=dependencies,
                         context_status=published.artifact.context_status,
                         mapping_status=_mapping_status(view, record_id, role),
-                        quality_status="accepted",
+                        quality_status="review_required"
+                        if view.selected_record_ids
+                        else "accepted",
                     ),
                 )
             )
@@ -650,6 +663,7 @@ def query_semantic(
             error_codes=("CS_CURSOR_STALE",),
             publication_id=_cursor_publication(decoded),
         )
+    gap_codes = (EXPLICIT_GAPS,) if view.selected_record_ids else ()
     needle = "".join(query_text.lower().split())
     eligible = [
         (searchable, _purpose_context(record, purpose))
@@ -697,9 +711,9 @@ def query_semantic(
             records=(),
             next_cursor=None,
             status="no_match",
-            error_codes=("CS_NOT_FOUND",)
+            error_codes=(*gap_codes, "CS_NOT_FOUND")
             if not any(record.role in relevant_roles for _, record in eligible)
-            else (),
+            else gap_codes,
         )
     start = 0
     if decoded is not None:
@@ -733,6 +747,7 @@ def query_semantic(
             if more
             else None,
             status="more_available" if more else "complete",
+            error_codes=gap_codes,
         )
         if len(proposed_page.model_dump_json()) > max_chars:
             budget_limited = True
@@ -757,7 +772,7 @@ def query_semantic(
         records=tuple(selected),
         next_cursor=_cursor(view=view, query_sha=query_sha, position=position) if more else None,
         status=status,
-        error_codes=errors,
+        error_codes=(*gap_codes, *errors),
     )
     while len(page.model_dump_json()) > max_chars and selected:
         selected.pop()
@@ -770,7 +785,7 @@ def query_semantic(
             records=tuple(selected),
             next_cursor=_cursor(view=view, query_sha=query_sha, position=position),
             status="budget_limited",
-            error_codes=("CS_BUDGET_EXHAUSTED",),
+            error_codes=(*gap_codes, "CS_BUDGET_EXHAUSTED"),
         )
     if len(page.model_dump_json()) > max_chars:
         page = page.model_copy(update={"next_cursor": None})

@@ -1,0 +1,126 @@
+{
+  "schema_version": "bounded-main-consumption-result-v1",
+  "date": "2026-10-13",
+  "status": "consumption_chain_passed_with_terminal_wrapper_warning",
+  "bounds": {
+    "questions": 2,
+    "max_turns_per_question": 8,
+    "concurrency": 1,
+    "tool_allowlist": [
+      "corpus_semantic_query",
+      "corpus_submit_manifest"
+    ],
+    "extraction_calls": 0,
+    "production_postgresql_accesses": 0
+  },
+  "totals": {
+    "successful_model_responses": 6,
+    "stalled_model_attempts_without_token_receipt": 1,
+    "input_tokens": 29707,
+    "output_tokens": 3415,
+    "cached_tokens": 16192,
+    "tool_calls": 4
+  },
+  "runs": [
+    {
+      "label": "industrial",
+      "run_id": "20261013-194110+0800-react-9e00",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+      "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+      "publication_id": "sha256:0a91883776c853419648ed537d2ce76956760a24c48af638d390655f29516cb6",
+      "question": "材料称工业富联云计算业务同比增长多少？",
+      "query": {
+        "purpose": "cite",
+        "query_text": "云计算",
+        "limit": 2,
+        "cursor": null
+      },
+      "turns": 3,
+      "tool_calls": [
+        "corpus_semantic_query",
+        "corpus_submit_manifest"
+      ],
+      "successful_model_responses": 3,
+      "stalled_model_attempts_without_token_receipt": 0,
+      "usage": {
+        "input_tokens": 14847,
+        "output_tokens": 1961,
+        "cached_tokens": 8256
+      },
+      "delivered_record_ids": [
+        "7f060c5a601fa7ca74b06a28e27aa50c231361c3782a8f1b945eda3b5d12dea4",
+        "itm_abebb2a7163927e9"
+      ],
+      "answer": "材料称工业富联云计算业务同比增长 75.7%。",
+      "terminal_wrapper": {
+        "stopped_by": "no_tool",
+        "rendered_status": "incomplete",
+        "final_report_saved_to_outputs": false
+      },
+      "a4": {
+        "status": "verified",
+        "boundary_answer_status": "complete",
+        "supported": 1,
+        "partial": 0,
+        "unsupported": 0,
+        "verification_errors": 0
+      }
+    },
+    {
+      "label": "optical",
+      "run_id": "20261013-194545+0800-react-5e37",
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96",
+      "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+      "publication_id": "sha256:cfd0b3582e1344d87ff5137774fba93a1829e337392fe0bc8aa87d23c1cf399d",
+      "question": "材料对 Q2 800G 出货是否超预期的判断是什么？",
+      "query": {
+        "purpose": "cite",
+        "query_text": "800G",
+        "limit": 3,
+        "cursor": null
+      },
+      "turns": 3,
+      "tool_calls": [
+        "corpus_semantic_query",
+        "corpus_submit_manifest"
+      ],
+      "successful_model_responses": 3,
+      "stalled_model_attempts_without_token_receipt": 1,
+      "usage": {
+        "input_tokens": 14860,
+        "output_tokens": 1454,
+        "cached_tokens": 7936
+      },
+      "delivered_record_ids": [
+        "itm_9d5690aacd6b1c1f",
+        "itm_5e44b07c386a6c1e",
+        "itm_bf5fa66fb7be5a02"
+      ],
+      "referenced_record_ids": [
+        "itm_bf5fa66fb7be5a02"
+      ],
+      "answer": "材料判断 Q2 800G 出货超预期。",
+      "terminal_wrapper": {
+        "stopped_by": "no_tool",
+        "rendered_status": "incomplete",
+        "final_report_saved_to_outputs": false
+      },
+      "a4": {
+        "status": "verified",
+        "boundary_answer_status": "complete",
+        "supported": 1,
+        "partial": 0,
+        "unsupported": 0,
+        "verification_errors": 0
+      }
+    }
+  ],
+  "limitations": [
+    "CS_PUBLICATION_EXPLICIT_GAPS",
+    "quality_status=review_required",
+    "bounded questions only; no whole-document coverage claim",
+    "terminal task runner rendered reporter=false workflow no_tool as incomplete despite answer_status and A4 boundary being complete"
+  ]
+}

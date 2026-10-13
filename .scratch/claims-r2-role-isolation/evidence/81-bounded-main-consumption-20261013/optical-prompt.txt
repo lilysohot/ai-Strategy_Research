@@ -1,0 +1,9 @@
+这是一次有界消费链验证，只回答一个问题：材料对 Q2 800G 出货是否超预期的判断是什么？
+
+严格边界：
+- 只调用 corpus_semantic_query 和 corpus_submit_manifest，禁止调用任何其他工具或来源。
+- 只查询 source_id=48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f、build_id=dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96。
+- corpus_semantic_query 使用 purpose=cite、query_text=800G、limit=3；不要使用游标扩大结果集。
+- 依据实际送达的完整记录作答，不做任何其他研究、计算或推断。
+- 最终回答必须是一句简短中文陈述，并逐字包含“材料判断 Q2 800G 出货超预期”。
+- 在最终回答前调用 corpus_submit_manifest，登记同一句 report_quote，并用实际送达记录的 publication_id、record_id 和 purpose=cite 提交 semantic_references。按工具反馈修正，确保最终报告锚点与清单一致。

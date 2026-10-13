@@ -13,7 +13,7 @@ import os
 import re
 import sqlite3
 import tempfile
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from contextlib import suppress
 from dataclasses import dataclass, replace
 from decimal import Decimal
@@ -35,6 +35,7 @@ from plugins.corpus.structured.ledger import (
     _reader,
     _safe_path,
     _store_root,
+    _write_object,
     _writer,
 )
 from plugins.corpus.structured.mapping import resolve_packet_span
@@ -43,6 +44,8 @@ from plugins.corpus.structured.snapshot import EvidenceSnapshot, source_unit_id
 
 PUBLICATION_SCHEMA_VERSION = "corpus-semantic-publication-v1"
 PUBLICATION_INDEX_SCHEMA_VERSION = "1"
+SCOPED_SELECTION_PREFIX = "SCOPED_RECORD_SELECTION_V1:"
+EXPLICIT_GAPS = "CS_PUBLICATION_EXPLICIT_GAPS"
 CROSS_ROLE_RULE_VERSION = "cross-role-map-v2"
 SUPPORTED_MAPPING_RULES = frozenset({"cross-role-map-v1", "cross-role-map-v2"})
 # Frozen v2 conversions: never silently inherit changes to extraction rules.
@@ -169,6 +172,7 @@ class PublicationView(BaseModel):
     artifacts: tuple[PublishedArtifact, ...]
     effective_claim_purposes: dict[str, tuple[str, ...]]
     active_relation_ids: tuple[str, ...]
+    selected_record_ids: dict[str, tuple[str, ...]] = Field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -194,6 +198,7 @@ class _Candidate:
     snapshot: EvidenceSnapshot
     claims: dict[str, _RecordEvidence]
     items: dict[str, _RecordEvidence]
+    selected_ids: tuple[str, ...] | None = None
 
 
 def _noop_checkpoint(_name: str) -> None:
@@ -313,9 +318,17 @@ def _unit_reference(
     raise StructuredExecutionError("CS_ARTIFACT_CORRUPT", "evidence_reference_invalid")
 
 
-def _claim_records(run: EvidenceRun, snapshot: EvidenceSnapshot) -> dict[str, _RecordEvidence]:
+def _claim_records(
+    run: EvidenceRun, snapshot: EvidenceSnapshot, selected: set[str] | None = None
+) -> dict[str, _RecordEvidence]:
     result: dict[str, _RecordEvidence] = {}
     for fact in run.facts:
+        if selected is not None and fact.fact_id not in selected:
+            continue
+        if selected is not None and (
+            fact.claim.quality_status not in {"ok", "review"} or "cite" not in fact.usable_for
+        ):
+            raise StructuredExecutionError("CS_CONTEXT_INCOMPLETE", "selected_claim_not_qualified")
         if fact.fact_id in result or not set(fact.usable_for) <= {"cite", "compare", "calculate"}:
             raise StructuredExecutionError("CS_ARTIFACT_CORRUPT", "claim_identity_or_purpose")
         alignment = fact.evidence_alignment
@@ -448,10 +461,12 @@ def _material_record_evidence(
 
 
 def _material_records(
-    run: MaterialRun, snapshot: EvidenceSnapshot
+    run: MaterialRun, snapshot: EvidenceSnapshot, selected: set[str] | None = None
 ) -> tuple[dict[str, _RecordEvidence], set[str]]:
     items: dict[str, _RecordEvidence] = {}
     for item in run.understanding.items:
+        if selected is not None and item.item_id not in selected:
+            continue
         if item.item_id in items or "evidence_context" in item.unknown_fields:
             raise StructuredExecutionError(
                 "CS_CONTEXT_INCOMPLETE", "material_item_identity_or_context"
@@ -517,7 +532,10 @@ def _material_records(
 
 
 def _load_candidate(
-    connection: sqlite3.Connection, root: Path, reference: ArtifactReference
+    connection: sqlite3.Connection,
+    root: Path,
+    reference: ArtifactReference,
+    selected_ids: tuple[str, ...] | None = None,
 ) -> _Candidate:
     row = connection.execute(
         "SELECT t.*, b.plan_json, b.snapshot_id AS batch_snapshot_id "
@@ -529,7 +547,7 @@ def _load_candidate(
         raise StructuredExecutionError("CS_NOT_FOUND", "publication_task_not_found")
     if row["artifact_sha256"] != reference.artifact_sha256:
         raise StructuredExecutionError("CS_ARTIFACT_CORRUPT", "publication_artifact_binding")
-    if (
+    if selected_ids is None and (
         row["execution_status"] != "succeeded"
         or row["protocol_status"] != "valid"
         or row["quality_status"] != "accepted"
@@ -569,13 +587,82 @@ def _load_candidate(
         or artifact.payload_sha256 != canonical_hash(payload.model_dump(mode="json"))
     ):
         raise StructuredExecutionError("CS_ARTIFACT_CORRUPT", "role_artifact_binding")
+    for field in ("execution_status", "protocol_status", "quality_status", "context_status"):
+        if row[field] != getattr(artifact, field):
+            raise StructuredExecutionError("CS_ARTIFACT_CORRUPT", "artifact_state_binding")
+    selected = set(selected_ids) if selected_ids is not None else None
+    if selected is not None:
+        if (
+            not selected
+            or len(selected) != len(selected_ids or ())
+            or artifact.role not in {"claims", "material_items"}
+            or artifact.quality_status not in {"accepted", "review_required"}
+            or artifact.context_status != "complete"
+            or row["publication_status"] not in {"unpublished", "candidate", "published"}
+        ):
+            raise StructuredExecutionError(
+                "CS_DEPENDENCY_NOT_READY", "scoped_selection_not_publishable"
+            )
+        if isinstance(payload, MaterialRun):
+            qualified = {
+                item
+                for entry in payload.understanding.coverage.slot_ledger
+                if entry.status == "extracted"
+                for item in entry.item_refs
+            }
+            if not selected <= qualified or payload.understanding.relations:
+                raise StructuredExecutionError(
+                    "CS_DEPENDENCY_NOT_READY", "selected_items_not_extracted"
+                )
     claims: dict[str, _RecordEvidence] = {}
     items: dict[str, _RecordEvidence] = {}
     if isinstance(payload, EvidenceRun):
-        claims = _claim_records(payload, plan.snapshot)
+        claims = _claim_records(payload, plan.snapshot, selected)
     else:
-        items, _relation_ids = _material_records(payload, plan.snapshot)
-    return _Candidate(reference, artifact, payload, plan.snapshot, claims, items)
+        items, _relation_ids = _material_records(payload, plan.snapshot, selected)
+    if selected is not None and selected != set(claims) | set(items):
+        raise StructuredExecutionError("CS_INPUT_INVALID", "selected_record_not_found")
+    candidate = _Candidate(reference, artifact, payload, plan.snapshot, claims, items, selected_ids)
+    if selected is not None:
+        from plugins.corpus.structured.query import publication_records
+
+        # Reuse the consumer's dependency resolver; selecting a record cannot bypass
+        # a missing footnote, incomplete table, or unresolved dependency.
+        temporary = SemanticPublication(
+            publication_id="sha256:" + "0" * 64,
+            source_id=plan.snapshot.source_id,
+            build_id=plan.snapshot.build_id,
+            snapshot_id=plan.snapshot.snapshot_id,
+            generation=1,
+            parent_publication_id=None,
+            artifacts=(reference.artifact_sha256,),
+            coverage=_coverage([candidate]),
+            publication_status="published",
+            quality_status="review_required",
+            reason_codes=(EXPLICIT_GAPS,),
+        )
+        view = PublicationView(
+            manifest=temporary,
+            snapshot=plan.snapshot,
+            lifecycle="publish",
+            artifacts=(PublishedArtifact(reference=reference, artifact=artifact, payload=payload),),
+            effective_claim_purposes={key: ("cite",) for key in claims},
+            active_relation_ids=(),
+            selected_record_ids={reference.artifact_sha256: selected_ids or ()},
+        )
+        records = publication_records(view, "cite")
+        if {record.record_id for record in records} != selected or any(
+            record.context_status != "complete"
+            or any(
+                "cite" in dep.required_for and dep.status != "present"
+                for dep in record.dependencies
+            )
+            for record in records
+        ):
+            raise StructuredExecutionError(
+                "CS_CONTEXT_INCOMPLETE", "selected_record_context_incomplete"
+            )
+    return candidate
 
 
 def _overlap(left: _RecordEvidence, right: _RecordEvidence) -> bool:
@@ -804,7 +891,9 @@ def _coverage(candidates: Sequence[_Candidate]) -> PublicationCoverage:
         "material_relations": [],
     }
     for candidate in candidates:
-        by_role[candidate.artifact.role].append(candidate.artifact.context_status)
+        by_role[candidate.artifact.role].append(
+            "partial" if candidate.selected_ids is not None else candidate.artifact.context_status
+        )
     values: dict[str, ContextStatus] = {}
     for role, statuses in by_role.items():
         values[role] = max(statuses, key=rank.__getitem__) if statuses else "missing"
@@ -857,6 +946,67 @@ def _refresh_head_cache(
         raise
 
 
+def _selection_object(candidates: Sequence[_Candidate]) -> dict[str, Any]:
+    records = {}
+    gaps = {}
+    for candidate in candidates:
+        artifact = candidate.artifact
+        key = candidate.reference.artifact_sha256
+        records[key] = list(candidate.selected_ids or ())
+        payload = candidate.payload
+        all_ids = (
+            {fact.fact_id for fact in payload.facts}
+            if isinstance(payload, EvidenceRun)
+            else {item.item_id for item in payload.understanding.items}
+        )
+        gaps[key] = {
+            "execution_status": artifact.execution_status,
+            "protocol_status": artifact.protocol_status,
+            "quality_status": artifact.quality_status,
+            "omitted_unit_ids": list(artifact.coverage.omitted_unit_ids),
+            "reason_codes": list(artifact.coverage.reason_codes),
+            "error_codes": list(artifact.error_codes),
+            "excluded_record_ids": sorted(all_ids - set(records[key])),
+            "incomplete_slots": [
+                entry.model_dump(mode="json")
+                for entry in payload.understanding.coverage.slot_ledger
+                if entry.status not in {"extracted", "no_supported_item", "not_candidate"}
+            ]
+            if isinstance(payload, MaterialRun)
+            else [],
+        }
+    return {"schema_version": "corpus-publication-selection-v1", "records": records, "gaps": gaps}
+
+
+def _read_selection(root: Path, manifest: SemanticPublication) -> dict[str, Any] | None:
+    refs = [
+        code.removeprefix(SCOPED_SELECTION_PREFIX)
+        for code in manifest.reason_codes
+        if code.startswith(SCOPED_SELECTION_PREFIX)
+    ]
+    if not refs and EXPLICIT_GAPS not in manifest.reason_codes:
+        return None
+    if (
+        len(refs) != 1
+        or EXPLICIT_GAPS not in manifest.reason_codes
+        or manifest.quality_status != "review_required"
+    ):
+        raise StructuredExecutionError("CS_ARTIFACT_CORRUPT", "publication_selection_binding")
+    value = _read_object(root, refs[0])
+    if (
+        not isinstance(value, dict)
+        or value.get("schema_version") != "corpus-publication-selection-v1"
+        or not isinstance(value.get("records"), dict)
+        or set(value["records"]) != set(manifest.artifacts)
+        or any(
+            not isinstance(ids, list) or not ids or any(not isinstance(i, str) for i in ids)
+            for ids in value["records"].values()
+        )
+    ):
+        raise StructuredExecutionError("CS_ARTIFACT_CORRUPT", "publication_selection_invalid")
+    return value
+
+
 def publish_semantic(
     *,
     source_id: str,
@@ -869,6 +1019,7 @@ def publish_semantic(
     reason_codes: Sequence[str] = (),
     lifecycle: Literal["publish", "source_update", "rule_upgrade"] = "publish",
     checkpoint: Checkpoint = _noop_checkpoint,
+    record_selection: Mapping[str, Sequence[str]] | None = None,
 ) -> SemanticPublication:
     """Publish accepted ledger artifacts after an atomic expected-parent check."""
     root = _store_root(store_root, write=True)
@@ -877,7 +1028,33 @@ def publish_semantic(
     connection = _writer(root)
     try:
         _publication_schema(connection)
-        candidates = [_load_candidate(connection, root, item) for item in artifacts]
+        selection = (
+            {key: tuple(sorted(value)) for key, value in record_selection.items()}
+            if record_selection is not None
+            else None
+        )
+        if selection is not None and set(selection) != {item.artifact_sha256 for item in artifacts}:
+            raise StructuredExecutionError("CS_INPUT_INVALID", "selection_artifact_binding")
+        if any(
+            code.startswith(SCOPED_SELECTION_PREFIX) or code == EXPLICIT_GAPS
+            for code in reason_codes
+        ):
+            raise StructuredExecutionError("CS_INPUT_INVALID", "reserved_publication_reason")
+        candidates = [
+            _load_candidate(
+                connection,
+                root,
+                item,
+                selection[item.artifact_sha256] if selection is not None else None,
+            )
+            for item in artifacts
+        ]
+        scoped_codes: tuple[str, ...] = ()
+        if selection is not None:
+            selection_object = _selection_object(candidates)
+            selection_sha = _write_object(root, selection_object)
+            scoped_codes = (EXPLICIT_GAPS, SCOPED_SELECTION_PREFIX + selection_sha)
+        quality = "review_required" if selection is not None else "accepted"
         snapshots = {candidate.snapshot.snapshot_id for candidate in candidates}
         if snapshots != {snapshot_id} or any(
             candidate.snapshot.source_id != source_id or candidate.snapshot.build_id != build_id
@@ -952,11 +1129,12 @@ def publish_semantic(
                 ),
                 coverage=_coverage(candidates),
                 publication_status="published",
-                quality_status="accepted",
+                quality_status=quality,
                 reason_codes=tuple(
                     dict.fromkeys(
                         (
                             *reason_codes,
+                            *scoped_codes,
                             *(
                                 ("CROSS_ROLE_COMPARISON_UNPROVEN",)
                                 if any(
@@ -983,7 +1161,7 @@ def publish_semantic(
                 "publication_id, source_id, build_id, snapshot_id, generation, "
                 "parent_publication_id, manifest_sha256, manifest_relpath, "
                 "publication_status, quality_status, lifecycle) "
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'published', 'accepted', ?)",
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'published', ?, ?)",
                 (
                     publication_id,
                     source_id,
@@ -993,6 +1171,7 @@ def publish_semantic(
                     actual_parent,
                     manifest_sha,
                     relative,
+                    quality,
                     lifecycle,
                 ),
             )
@@ -1217,6 +1396,7 @@ def read_semantic(
             or manifest.generation != row["generation"]
             or manifest.snapshot_id != row["snapshot_id"]
             or manifest.publication_status != row["publication_status"]
+            or manifest.quality_status != row["quality_status"]
         ):
             raise StructuredExecutionError("CS_ARTIFACT_CORRUPT", "publication_index_mismatch")
         if row["lifecycle"] not in {
@@ -1228,8 +1408,11 @@ def read_semantic(
         }:
             raise StructuredExecutionError("CS_ARTIFACT_CORRUPT", "publication_lifecycle_invalid")
         lifecycle = cast(Lifecycle, row["lifecycle"])
+        selection_object = _read_selection(root, manifest)
+        selection = selection_object["records"] if selection_object is not None else {}
         if not allow_historical and (
-            manifest.publication_status != "published" or manifest.quality_status != "accepted"
+            manifest.publication_status != "published"
+            or (manifest.quality_status != "accepted" and selection_object is None)
         ):
             if manifest.publication_status == "withdrawn":
                 reason = "publication_expired" if lifecycle == "expire" else "publication_withdrawn"
@@ -1257,7 +1440,14 @@ def read_semantic(
                 task_id=artifact_row["task_id"],
                 artifact_sha256=artifact_row["artifact_sha256"],
             )
-            candidate = _load_candidate(connection, root, reference)
+            candidate = _load_candidate(
+                connection,
+                root,
+                reference,
+                tuple(selection[reference.artifact_sha256])
+                if selection_object is not None
+                else None,
+            )
             if candidate.snapshot.snapshot_id != manifest.snapshot_id:
                 raise StructuredExecutionError(
                     "CS_ARTIFACT_CORRUPT", "publication_snapshot_mismatch"
@@ -1270,6 +1460,8 @@ def read_semantic(
                     payload=candidate.payload,
                 )
             )
+        if selection_object is not None and selection_object != _selection_object(candidates):
+            raise StructuredExecutionError("CS_ARTIFACT_CORRUPT", "publication_selection_mismatch")
         claims = {key: value for candidate in candidates for key, value in candidate.claims.items()}
         items = {key: value for candidate in candidates for key, value in candidate.items.items()}
         _validate_mappings(manifest.mappings, claims, items, candidates[0].snapshot)
@@ -1284,6 +1476,8 @@ def read_semantic(
         for candidate in candidates:
             if isinstance(candidate.payload, EvidenceRun):
                 for fact in candidate.payload.facts:
+                    if fact.fact_id not in candidate.claims:
+                        continue
                     purposes[fact.fact_id] = tuple(
                         purpose
                         for purpose in fact.usable_for
@@ -1302,6 +1496,7 @@ def read_semantic(
             artifacts=tuple(published),
             effective_claim_purposes=purposes,
             active_relation_ids=tuple(relation_ids),
+            selected_record_ids={key: tuple(value) for key, value in selection.items()},
         )
     except sqlite3.DatabaseError as exc:
         raise StructuredExecutionError("CS_ARTIFACT_CORRUPT", "publication_index_invalid") from exc

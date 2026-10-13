@@ -1,0 +1,18 @@
+{
+  "schema_version": "scoped-publication-evidence-manifest-v1",
+  "model_calls": 0,
+  "production_pg_access": 0,
+  "files": {
+    ".scratch/claims-r2-role-isolation/evidence/80-scoped-publication-20261013/release-plan.json": "sha256:34c5110912c08393135a6ec901da5536c740d961e0844550a8dacabf8a455bf6",
+    ".scratch/claims-r2-role-isolation/evidence/80-scoped-publication-20261013/verification.json": "sha256:0af62a493367bce95a88dc9cb09852f2e96d182eeb86c7f3a41af09df23f706e",
+    ".scratch/claims-r2-role-isolation/evidence/80-scoped-publication-20261013/README.md": "sha256:503288a209a5331516667b342bcb13794cadc832c865dd4ea7d8ad8f10e89737",
+    ".scratch/claims-r2-role-isolation/evidence/80-scoped-publication-20261013/release.py": "sha256:bbc75557b56cedb7a90c161b5502d25f4e0120a94208f10b78a5fbd8874d8833",
+    ".scratch/claims-r2-role-isolation/evidence/80-scoped-publication-20261013/tests.log": "sha256:15833e256f9a72435a541ee53024180104c983caab493a976003897075e4e6fd",
+    ".scratch/claims-r2-role-isolation/evidence/80-scoped-publication-20261013/verify.py": "sha256:57f51cd4ffdb93b7c3cbd722a5f2d996daad6dfab51e37b35c406bc2a181fb3f",
+    ".scratch/claims-r2-role-isolation/evidence/80-scoped-publication-20261013/publication-result.json": "sha256:77394a7d5761f4068fcf2cb715a08d681d694f426b9e0a090a074ca3dae163d6",
+    "plugins/corpus/structured/store.py": "sha256:c910b4b5a418a9c2b538d95dabe161bd23623e4f8e5740bfd1091b251209e973",
+    "plugins/corpus/structured/query.py": "sha256:03eb69e18670f84c73fe287c73884a2fafb4fced48ed4e9bae7af46743c06604",
+    "plugins/corpus/structured/consumption.py": "sha256:c4e8745febb20215559f420b7c839313e7c53dfe3add60605247acbadb7e0548",
+    "tests/test_corpus_structured_scoped_publication.py": "sha256:c87ee0e0682f199839682947d0c381bae506dbd88f0d643a008171b0ca720e53"
+  }
+}

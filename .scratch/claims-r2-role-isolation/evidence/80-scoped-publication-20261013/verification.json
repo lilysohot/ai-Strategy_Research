@@ -1,0 +1,167 @@
+{
+  "status": "PASS",
+  "cwd": "/tmp",
+  "model_calls": 0,
+  "production_pg_access": 0,
+  "source_files_unchanged": true,
+  "counts": {
+    "claims": 52,
+    "material_items": 227
+  },
+  "publications": [
+    {
+      "publication_id": "sha256:0a91883776c853419648ed537d2ce76956760a24c48af638d390655f29516cb6",
+      "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+      "store_root": "/home/administrator/FrontierAgent/.local/claims-r2-publication-20261013/stores/d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+      "records": 118,
+      "evidence_ranges_verified": 119,
+      "read_only_index_unchanged": true,
+      "registered_tool_checks": [
+        {
+          "role": "claims",
+          "record_id": "0606a8f40574487c856c7b07870fa477e85f93735381c1b2ad34f62b5c90ffd8",
+          "pass": true,
+          "query": {
+            "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+            "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+            "purpose": "cite",
+            "field_filters": {
+              "record_id": "0606a8f40574487c856c7b07870fa477e85f93735381c1b2ad34f62b5c90ffd8"
+            },
+            "max_chars": 100000
+          }
+        },
+        {
+          "role": "material_items",
+          "record_id": "itm_02fab19d63fdcb92",
+          "pass": true,
+          "query": {
+            "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+            "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+            "purpose": "cite",
+            "field_filters": {
+              "record_id": "itm_02fab19d63fdcb92"
+            },
+            "max_chars": 100000
+          }
+        }
+      ],
+      "pass": true
+    },
+    {
+      "publication_id": "sha256:cfd0b3582e1344d87ff5137774fba93a1829e337392fe0bc8aa87d23c1cf399d",
+      "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+      "store_root": "/home/administrator/FrontierAgent/.local/claims-r2-publication-20261013/stores/7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+      "records": 143,
+      "evidence_ranges_verified": 143,
+      "read_only_index_unchanged": true,
+      "registered_tool_checks": [
+        {
+          "role": "claims",
+          "record_id": "24001d22a8123e04e6965d6ca0a20910b002440ebd3892cd657db05db8cfcb6e",
+          "pass": true,
+          "query": {
+            "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+            "build_id": "dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96",
+            "purpose": "cite",
+            "field_filters": {
+              "record_id": "24001d22a8123e04e6965d6ca0a20910b002440ebd3892cd657db05db8cfcb6e"
+            },
+            "max_chars": 100000
+          }
+        },
+        {
+          "role": "material_items",
+          "record_id": "itm_0398b930d1777c44",
+          "pass": true,
+          "query": {
+            "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+            "build_id": "dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96",
+            "purpose": "cite",
+            "field_filters": {
+              "record_id": "itm_0398b930d1777c44"
+            },
+            "max_chars": 100000
+          }
+        }
+      ],
+      "pass": true
+    },
+    {
+      "publication_id": "sha256:f118545620828a92d987b2229241a80f5f9162ef19bc8fa595f3d2940f7bb68b",
+      "snapshot_id": "sha256:100ace654a6ea2419a18d25cb56367727a72faad16bbf6b0c4480e84386e9ce0",
+      "store_root": "/home/administrator/FrontierAgent/.local/claims-r2-publication-20261013/stores/100ace654a6ea2419a18d25cb56367727a72faad16bbf6b0c4480e84386e9ce0",
+      "records": 5,
+      "evidence_ranges_verified": 5,
+      "read_only_index_unchanged": true,
+      "registered_tool_checks": [
+        {
+          "role": "claims",
+          "record_id": "27d6e1ec91b98b2f94f97b867387f82b09994312894edaa6cf3a120c3789fbc4",
+          "pass": true,
+          "query": {
+            "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+            "build_id": "dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96",
+            "purpose": "cite",
+            "field_filters": {
+              "record_id": "27d6e1ec91b98b2f94f97b867387f82b09994312894edaa6cf3a120c3789fbc4"
+            },
+            "max_chars": 100000
+          }
+        }
+      ],
+      "pass": true
+    },
+    {
+      "publication_id": "sha256:481620919551b52667d4df45db9dee443f1389a8c330635a786b3c1e0d295267",
+      "snapshot_id": "sha256:b005ba70ff7abe21b43e5679355b7dd6c60f0426a03fc4444d40658e71b3cbbb",
+      "store_root": "/home/administrator/FrontierAgent/.local/claims-r2-publication-20261013/stores/b005ba70ff7abe21b43e5679355b7dd6c60f0426a03fc4444d40658e71b3cbbb",
+      "records": 11,
+      "evidence_ranges_verified": 15,
+      "read_only_index_unchanged": true,
+      "registered_tool_checks": [
+        {
+          "role": "material_items",
+          "record_id": "itm_0955bdf8527c4f25",
+          "pass": true,
+          "query": {
+            "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+            "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+            "purpose": "cite",
+            "field_filters": {
+              "record_id": "itm_0955bdf8527c4f25"
+            },
+            "max_chars": 100000
+          }
+        }
+      ],
+      "pass": true
+    },
+    {
+      "publication_id": "sha256:b11fb457d9661b4e7cd5b226a429136ac8417c6f410b49611920a91f83a3c880",
+      "snapshot_id": "sha256:3740f63e5f94063785fd2f79a53bb01f369bb478c9872979a52ef31a4a2e9fef",
+      "store_root": "/home/administrator/FrontierAgent/.local/claims-r2-publication-20261013/stores/3740f63e5f94063785fd2f79a53bb01f369bb478c9872979a52ef31a4a2e9fef",
+      "records": 2,
+      "evidence_ranges_verified": 4,
+      "read_only_index_unchanged": true,
+      "registered_tool_checks": [
+        {
+          "role": "material_items",
+          "record_id": "itm_38701034c27c8705",
+          "pass": true,
+          "query": {
+            "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+            "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+            "purpose": "cite",
+            "field_filters": {
+              "record_id": "itm_38701034c27c8705"
+            },
+            "max_chars": 100000
+          }
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "boundary": "publish + positive_query only; no live delivery/context_use/report_reference"
+}
