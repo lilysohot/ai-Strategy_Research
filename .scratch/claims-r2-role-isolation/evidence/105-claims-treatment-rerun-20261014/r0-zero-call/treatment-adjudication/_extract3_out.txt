@@ -1,0 +1,181 @@
+[40] id=ba07d0a5d4e0 run=claims-industrial-fulian seq=4
+    claim_text=工业富联EMS业务的毛利率为7%
+    subject=工业富联 metric=7% 毛利率的 EMS metric_raw=7% 毛利率的 EMS
+    period_raw=None period_end=None period_grain=None
+    value_text=7 value_num=7 unit=%
+    kind=fact scope=company quality_status=review reason_codes=['period_missing', 'source_qualified_context_requires_review']
+    evidence_quote=7% 毛利率的 EMS
+    canonical.quote=7% 毛利率的 EMS
+
+[41] id=432d00f837b7 run=claims-industrial-fulian seq=4
+    claim_text=工业富联经营现金流与扣非净利润的比值为0.32，属于已发生的事实
+    subject=工业富联 metric=OCF/扣非 metric_raw=OCF/扣非
+    period_raw=None period_end=None period_grain=None
+    value_text=0.32 value_num=0.32 unit=None
+    kind=fact scope=company quality_status=review reason_codes=['unit_missing', 'period_missing', 'source_qualified_context_requires_review']
+    evidence_quote=OCF/扣非 0.32
+    canonical.quote=OCF/扣非 0.32
+
+[42] id=f3cef4f9a02b run=claims-industrial-fulian seq=4
+    claim_text=工业富联动态PE口径隐含的市值为475亿元
+    subject=工业富联 metric=动 PE 隐含的 475 亿 metric_raw=动 PE 隐含的 475 亿
+    period_raw=None period_end=None period_grain=None
+    value_text=475 value_num=4.75E+10 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['period_missing', 'source_qualified_context_requires_review']
+    evidence_quote=动 PE 隐含的 475 亿
+    canonical.quote=动 PE 隐含的 475 亿
+
+[43] id=a47194b7790f run=claims-industrial-fulian seq=4
+    claim_text=工业富联卖方预期对应的参考市值为600亿元
+    subject=工业富联 metric=卖方 600 metric_raw=卖方 600
+    period_raw=None period_end=None period_grain=None
+    value_text=600 value_num=600 unit=None
+    kind=fact scope=company quality_status=review reason_codes=['unit_missing', 'period_missing', 'source_qualified_context_requires_review']
+    evidence_quote=没给卖方 600
+    canonical.quote=没给卖方 600
+
+[44] id=31b545759b98 run=claims-industrial-fulian seq=4
+    claim_text=工业富联H1期间的对应动PE核算基数为237
+    subject=工业富联 metric=H1 的 237 metric_raw=H1 的 237
+    period_raw=H1 period_end=None period_grain=None
+    value_text=237 value_num=237 unit=None
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'unit_missing', 'source_qualified_context_requires_review']
+    evidence_quote=H1 的 237
+    canonical.quote=H1 的 237
+
+[45] id=465b33d2d97d run=claims-industrial-fulian seq=4
+    claim_text=工业富联H1期间被北向资金减持8180万股
+    subject=工业富联 metric=北向 H1 减持 8180 万股 metric_raw=北向 H1 减持 8180 万股
+    period_raw=H1 period_end=None period_grain=None
+    value_text=8180 value_num=8180 unit=万股
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'unit_unknown', 'source_qualified_context_requires_review']
+    evidence_quote=北向 H1 减持 8180 万股
+    canonical.quote=北向 H1 减持 8180 万股
+
+[46] id=dde58894d3f2 run=claims-industrial-fulian seq=4
+    claim_text=工业富联参考目标价区间下限为93
+    subject=工业富联 metric=目标价 93 metric_raw=目标价 93
+    period_raw=None period_end=None period_grain=None
+    value_text=93 value_num=93 unit=None
+    kind=forecast scope=company quality_status=review reason_codes=['unit_missing', 'period_missing', 'source_qualified_context_requires_review']
+    evidence_quote=目标价 93
+    canonical.quote=目标价 93
+
+[47] id=d14d63b985ed run=claims-industrial-fulian seq=4
+    claim_text=工业富联参考目标价区间上限为101
+    subject=工业富联 metric=101 metric_raw=101
+    period_raw=None period_end=None period_grain=None
+    value_text=101 value_num=101 unit=None
+    kind=forecast scope=company quality_status=review reason_codes=['unit_missing', 'period_missing', 'source_qualified_context_requires_review']
+    evidence_quote=101
+    canonical.quote=101
+
+[48] id=dbe0612a87f9 run=claims-industrial-fulian seq=4
+    claim_text=工业富联估值所采用的2026年PE倍数上限为35倍
+    subject=工业富联 metric=35 倍 metric_raw=35 倍
+    period_raw=2026年 period_end=2026-12-31 period_grain=annual
+    value_text=35 value_num=35 unit=倍
+    kind=fact scope=company quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=35 倍
+    canonical.quote=35 倍
+
+[49] id=cb0e8e1ee177 run=claims-industrial-fulian seq=4
+    claim_text=高盛IMA报告对应工业富联的参考价格为121
+    subject=工业富联 metric=高盛 121 metric_raw=高盛 121
+    period_raw=None period_end=None period_grain=None
+    value_text=121 value_num=121 unit=None
+    kind=fact scope=company quality_status=review reason_codes=['unit_missing', 'period_missing', 'source_qualified_context_requires_review']
+    evidence_quote=高盛 121 是 IMA 标题
+    canonical.quote=高盛 121 是 IMA 标题
+
+[50] id=bc432728eea1 run=claims-industrial-fulian seq=6
+    claim_text=工业富联2025年前五大客户占比为62%
+    subject=工业富联 metric=前五大占比 metric_raw=前五大占比
+    period_raw=2025年 period_end=2025-12-31 period_grain=annual
+    value_text=62 value_num=62 unit=%
+    kind=fact scope=company quality_status=ok reason_codes=[]
+    evidence_quote=2025 年前五大 62%，
+    canonical.quote=2025 年前五大 62%，
+
+[51] id=297e59a0811c run=claims-industrial-fulian seq=6
+    claim_text=工业富联2025年上半年应收账款前五大占比为68.52%
+    subject=工业富联 metric=应收前五占比 metric_raw=应收前五占比
+    period_raw=2025年H1 period_end=None period_grain=None
+    value_text=68.52 value_num=68.52 unit=%
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet']
+    evidence_quote=H1 应收前五 68.52%。
+    canonical.quote=H1 应收前五 68.52%。
+
+[52] id=465e513bf817 run=claims-industrial-fulian seq=6
+    claim_text=工业富联2025年上半年研发费用变动幅度为-1.91%
+    subject=工业富联 metric=研发费用变动幅度 metric_raw=研发费用变动幅度
+    period_raw=2025年H1 period_end=None period_grain=None
+    value_text=-1.91 value_num=-1.91 unit=%
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet']
+    evidence_quote=研发费用 −1.91%
+    canonical.quote=研发费用 −1.91%
+
+[53] id=fb4d44e8128d run=claims-industrial-fulian seq=6
+    claim_text=工业富联2025年上半年对比基期的研发费用率约为1.41%
+    subject=工业富联 metric=费用率 metric_raw=费用率
+    period_raw=2025年H1对比基期 period_end=None period_grain=None
+    value_text=1.41 value_num=1.41 unit=%
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet']
+    evidence_quote=费用率从约 1.41%
+    canonical.quote=费用率从约 1.41%
+
+[54] id=8897ed350a8c run=claims-industrial-fulian seq=6
+    claim_text=工业富联2025年上半年研发费用率为0.90%
+    subject=工业富联 metric=费用率 metric_raw=费用率
+    period_raw=2025年H1 period_end=None period_grain=None
+    value_text=0.90 value_num=0.90 unit=%
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet']
+    evidence_quote=降到 0.90%（界面）
+    canonical.quote=降到 0.90%（界面）
+
+[55] id=561fd5819b19 run=claims-industrial-fulian seq=7
+    claim_text=工业富联7月的回购均价为61
+    subject=工业富联 metric=回购均价 metric_raw=回购均价
+    period_raw=7 月 period_end=None period_grain=None
+    value_text=61 value_num=61 unit=None
+    kind=fact scope=company quality_status=review reason_codes=['period_unanchored', 'unit_missing', 'source_qualified_context_requires_review']
+    evidence_quote=7 月回购均价 61
+    canonical.quote=7 月回购均价 61
+
+[56] id=6a9c13bc4a4d run=claims-industrial-fulian seq=7
+    claim_text=工业富联Q2的毛利率为6.99%
+    subject=工业富联 metric=毛利率 metric_raw=毛利率
+    period_raw=Q2 period_end=2026-06-30 period_grain=quarter
+    value_text=6.99 value_num=6.99 unit=%
+    kind=fact scope=company quality_status=review reason_codes=['qualifier_definition_unverified', 'source_qualified_context_requires_review']
+    evidence_quote=Q2 的 6.99%
+    canonical.quote=Q2 的 6.99%
+
+[57] id=f52ec88febf4 run=claims-industrial-fulian seq=8
+    claim_text=工业富联2026-08-28的当日价格为64.04元
+    subject=工业富联 metric=当日价格 metric_raw=当日价格
+    period_raw=2026-08-28 period_end=2026-08-28 period_grain=point
+    value_text=64.04 value_num=64.04 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['qualifier_definition_unverified']
+    evidence_quote=【实时数据层】mx-xuangu，行情日 2026-08-28
+当日价格 64.04 元；
+    canonical.quote=【实时数据层】mx-xuangu，行情日 2026-08-28
+当日价格 64.04 元；
+
+[58] id=4403edcfdcf3 run=claims-industrial-fulian seq=8
+    claim_text=工业富联2026-08-28的涨跌幅为+0.28%
+    subject=工业富联 metric=涨跌 metric_raw=涨跌
+    period_raw=2026-08-28 period_end=2026-08-28 period_grain=point
+    value_text=+0.28 value_num=0.28 unit=%
+    kind=fact scope=company quality_status=ok reason_codes=[]
+    evidence_quote=涨跌 +0.28%；
+    canonical.quote=涨跌 +0.28%；
+
+[59] id=da0fbc373f20 run=claims-industrial-fulian seq=8
+    claim_text=工业富联2026-08-28的成交额为103.15亿元
+    subject=工业富联 metric=成交额 metric_raw=成交额
+    period_raw=2026-08-28 period_end=2026-08-28 period_grain=point
+    value_text=103.15 value_num=1.0315E+10 unit=元
+    kind=fact scope=company quality_status=ok reason_codes=[]
+    evidence_quote=成交额 103.15 亿元；
+    canonical.quote=成交额 103.15 亿元；

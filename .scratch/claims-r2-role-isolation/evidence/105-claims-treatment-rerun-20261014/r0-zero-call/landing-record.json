@@ -1,0 +1,77 @@
+{
+  "schema_version": "claims-treatment-stage1-landing-1",
+  "id": "105-claims-treatment-rerun-20261014",
+  "created_on": "2026-10-14",
+  "model_calls": 19,
+  "stage_1_live_run": {
+    "entry": "run_execute.py（102 号执行器原样，freeze 目录指向本记录）",
+    "gates": "六道 fail-closed 全过（dry-run 先行验证）；预算授权 = 103 号（1,000,000 tokens，stated_by U）",
+    "determinism_note": "重出计划的 batch_id 与 102 号旧 freeze 完全相同（batch:04238878… / batch:63092cfd…）——同 snapshot + 同 profile ⇒ 确定性规划，与 profile 指纹闸门互证",
+    "runs": {
+      "claims-industrial-fulian": {
+        "attempts": "9/9 succeeded",
+        "task": "succeeded",
+        "protocol_status": "invalid",
+        "protocol_status_meaning": "有 packet 为 partial（部分记录被语义门拦截，如 claim_slot_reason_missing / claim_quote_outside_slot）；非运行失败，产出照常入池",
+        "quality_status": "review_required",
+        "facts": 68,
+        "failed_packets": []
+      },
+      "claims-optical-module": {
+        "attempts": "10/10 succeeded",
+        "task": "succeeded",
+        "protocol_status": "valid",
+        "quality_status": "review_required",
+        "facts": 25,
+        "failed_packets": []
+      }
+    },
+    "findings": "两 run check findings 均为空",
+    "tokens_this_round": 246303,
+    "tokens_burned_in_interrupted_round": 125020,
+    "tokens_total": 371323,
+    "ceiling": 1000000,
+    "ceiling_usage": "37.1%",
+    "budget_exceeded": false
+  },
+  "stage_2_zero_call": {
+    "criteria_source": "evidence/104-claims-prereg-v4-amendment-20261014/r0-zero-call/claims-preregistration-v4.json（v4 生效件 6b5c93d5…，经 stage2_under_v4.py 逐字读取）",
+    "entry": "104 号 stage2_under_v4.py --freeze <本记录 freeze> --out <本记录 treatment-adjudication>",
+    "measured": {
+      "candidates_total": 93,
+      "in_role_candidates": 93,
+      "role_external_candidates": 0,
+      "redundant_renderings": 0,
+      "unbound_fields_without_reason_code": 0,
+      "unbound_union": 60
+    },
+    "verdict": {
+      "passed": true,
+      "gates_in_force": ["redundant_renderings", "role_external_candidates", "unbound_fields_without_reason_code"],
+      "unbound_union_reading": "诊断读数（v4：report_only_proxies，gating=false，baseline 54）；60 只报告不阻断——旧判据（≤27）下会在此挡死整轮，v4 下试验继续",
+      "note": "unbound_union=60 高于冻结池基线 54：新池候选更多（93 vs 81 in-role），其构成按 101 号结论以 matched/correct_extra 为主，属于标注覆盖率读数，与精度不同轴"
+    }
+  },
+  "stage_3_worksheet": {
+    "path": "treatment-adjudication/candidate-adjudications.worksheet.json",
+    "rows": 93,
+    "row_shape": "canonical 13 项 + original_candidate + decision_basis；review_status=pending_named_human_signoff；reviewer/adjudicator 留空（不代填）",
+    "next": "U 具名裁定 93 行 ⇒ 喂评分器（90 号 build_gate_v3_and_run.py 胶水）⇒ 按 99 号 v4 档位判去留"
+  },
+  "outputs": {
+    "rerun-incident.json": "见本目录（中断事故登记）",
+    "claims-treatment-plan-freeze/manifest.json": "新 freeze（哈希与 102 号旧 freeze 逐字相同：aa4cd46f…，确定性）",
+    "claims-treatment-plan-freeze/execution-summary.json": "本轮执行总账（write-once）",
+    "treatment-adjudication/stage2-proxies.json": "阶段 2 读数 + 判据源",
+    "treatment-adjudication/candidate-adjudications.worksheet.json": "阶段 3 工作表"
+  },
+  "does_not_touch": [
+    "evidence/95-claims-prereg-20261014/**",
+    "evidence/99-claims-prereg-v3-signed-r2-20261014/**",
+    "evidence/101-claims-treatment-t1t2t3-landing-20261014/**",
+    "evidence/102-claims-treatment-engineering-20261014/**（含其旧 freeze：interrupted_archive，token 对账凭证）",
+    "evidence/103-claims-budget-authorisation-20261014/**",
+    "evidence/104-claims-prereg-v4-amendment-20261014/**"
+  ],
+  "blocked_on": ["阶段 3：93 行人工裁定工时（U 供）"]
+}

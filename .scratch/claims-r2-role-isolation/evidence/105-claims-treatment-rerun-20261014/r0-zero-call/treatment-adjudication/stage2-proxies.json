@@ -1,0 +1,37 @@
+{
+  "measured": {
+    "role_external_candidates": 0,
+    "unbound_union": 60,
+    "redundant_renderings": 0,
+    "unbound_fields_without_reason_code": 0,
+    "candidates_total": 93,
+    "in_role_candidates": 93
+  },
+  "signed_rules": {
+    "stage2_proxies_source": "evidence/104-claims-prereg-v4-amendment-20261014/r0-zero-call/claims-preregistration-v4.json",
+    "verdicts": [
+      {
+        "proxy": "role_external_candidates",
+        "rule": "== 0（治疗定义）",
+        "baseline": 29,
+        "measured": 0,
+        "passed": true
+      },
+      {
+        "proxy": "redundant_renderings",
+        "rule": "== 0",
+        "baseline": 2,
+        "measured": 0,
+        "passed": true
+      },
+      {
+        "proxy": "unbound_fields_without_reason_code",
+        "rule": "== 0",
+        "baseline": 9,
+        "measured": 0,
+        "passed": true
+      }
+    ],
+    "passed": true
+  }
+}

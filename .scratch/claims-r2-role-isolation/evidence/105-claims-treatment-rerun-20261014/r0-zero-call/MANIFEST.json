@@ -1,0 +1,35 @@
+{
+  "schema_version": "claims-treatment-stage1-landing-manifest-1",
+  "id": "105-claims-treatment-rerun-20261014",
+  "status": "stage1_done_stage2_passed_awaiting_stage3",
+  "created_on": "2026-10-14",
+  "model_calls": 19,
+  "inputs": {
+    "rerun_incident": "bffe11e34b2196e2c45833c5b901769659ef397b699f791f20f7d5730a6cd96a",
+    "freeze_manifest": "aa4cd46f25d6da81a381083e7e093a05c6421aaed347fb7496dd37eea15f2201",
+    "budget_authorisation_103": "见 evidence/103-claims-budget-authorisation-20261014/**（ceiling 1,000,000 tokens）",
+    "v4_effective_prereg": "sha256:6b5c93d582c9ff8cebfd5e35944a46951068de0e95685abff4645ed1cdaaa510"
+  },
+  "outputs": {
+    "landing-record.json": "8401e5eab127c36d07dfc1f5aa46d579ba08460e99196df4bd5cae5d87b44c27",
+    "claims-treatment-plan-freeze/execution-summary.json": "87c6eebca27d21fd73a453355cf8b1e79e83c316485d489b95d3a314c177aaaa",
+    "treatment-adjudication/stage2-proxies.json": "662c289d28073bef137445af788834c9c8e4ed765459603322b6733985ad94df",
+    "treatment-adjudication/candidate-adjudications.worksheet.json": "41c7f5c5c77ad2124fae18f74de0c20e9b873de14fc8d595909b6a5f73e2efbe"
+  },
+  "accounting": {
+    "tokens_this_round": 246303,
+    "tokens_total_with_interrupted_round": 371323,
+    "ceiling": 1000000,
+    "verdict": "在授权额度内"
+  },
+  "stage2_verdict": "passed（v4 判据：三项闸门 0/0/0；unbound_union=60 诊断报告不阻断）",
+  "does_not_touch": [
+    "evidence/95-claims-prereg-20261014/**",
+    "evidence/99-claims-prereg-v3-signed-r2-20261014/**",
+    "evidence/101-claims-treatment-t1t2t3-landing-20261014/**",
+    "evidence/102-claims-treatment-engineering-20261014/**",
+    "evidence/103-claims-budget-authorisation-20261014/**",
+    "evidence/104-claims-prereg-v4-amendment-20261014/**"
+  ],
+  "blocked_on": ["阶段 3：93 行人工裁定（U 供工时；reviewer/adjudicator 留空待签）"]
+}

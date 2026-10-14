@@ -1,0 +1,69 @@
+{
+  "schema_version": "claims-treatment-execution-1",
+  "executed_on": "2026-10-14",
+  "freeze_manifest_sha256": "aa4cd46f25d6da81a381083e7e093a05c6421aaed347fb7496dd37eea15f2201",
+  "prereg_sha256": "a2d174407daa5a1b88ba9ca44e698cf4512a399b2a4895254d0a3ab4b57edf04",
+  "authorised_ceiling": 1000000,
+  "authorised_unit": "tokens",
+  "budget_source": "evidence/103-claims-budget-authorisation-20261014/r0-zero-call/budget-authorisation.json",
+  "new_model_calls": 19,
+  "tokens_used": {
+    "per_run": {
+      "claims-industrial-fulian": 126451,
+      "claims-optical-module": 119852
+    },
+    "total_tokens": 246303
+  },
+  "budget_exceeded": false,
+  "budget_verdict": "在授权额度内",
+  "automatic_retries": 0,
+  "production_database_access": 0,
+  "publication_writes": 0,
+  "results": [
+    {
+      "name": "claims-industrial-fulian",
+      "execution_mode": "live_model",
+      "ledger_attempts": 9,
+      "new_model_calls": 9,
+      "attempt_status": {
+        "succeeded": 9
+      },
+      "task_status": {
+        "succeeded": 1
+      },
+      "protocol_status": {
+        "invalid": 1
+      },
+      "quality_status": {
+        "review_required": 1
+      },
+      "publication_status": {
+        "unpublished": 1
+      },
+      "findings": []
+    },
+    {
+      "name": "claims-optical-module",
+      "execution_mode": "live_model",
+      "ledger_attempts": 10,
+      "new_model_calls": 10,
+      "attempt_status": {
+        "succeeded": 10
+      },
+      "task_status": {
+        "succeeded": 1
+      },
+      "protocol_status": {
+        "valid": 1
+      },
+      "quality_status": {
+        "review_required": 1
+      },
+      "publication_status": {
+        "unpublished": 1
+      },
+      "findings": []
+    }
+  ],
+  "next_action": "阶段 2 零调用止损（按已签判据）→ 新池裁定工作表（阶段 3）"
+}

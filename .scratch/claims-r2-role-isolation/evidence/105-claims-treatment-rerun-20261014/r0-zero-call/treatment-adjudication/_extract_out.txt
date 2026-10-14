@@ -1,0 +1,261 @@
+========== GOLD NT-C* ==========
+[NT-C01] 当日价格 64.04 元
+    subject=工业富联 metric=close_price period=2026-08-28 value=64.04 unit=元 factuality=actual
+    value_norm=64.04 scale=1 | period_norm=2026--08-28
+
+[NT-C02] 扣非 229.84 亿
+    subject=工业富联 metric=adjusted_net_profit period=2026H1 value=229.84 unit=亿元 factuality=actual
+    value_norm=229.84 scale=1 | period_norm=2026-H1
+
+[NT-C03] 归母 237.40 亿
+    subject=工业富联 metric=parent_net_profit period=2026H1 value=237.4 unit=亿元 factuality=actual
+    value_norm=237.40 scale=1 | period_norm=2026-H1
+
+[NT-C04] 经营现金流 73.91 亿
+    subject=工业富联 metric=operating_cash_flow period=2026H1 value=73.91 unit=亿元 factuality=actual
+    value_norm=73.91 scale=1 | period_norm=2026-H1
+
+[NT-C05] 存货 1921 亿
+    subject=工业富联 metric=inventory period=2026H1 value=1921 unit=亿元 factuality=actual
+    value_norm=1921 scale=1 | period_norm=2026-H1
+
+[NT-C06] 应收 1275 亿
+    subject=工业富联 metric=accounts_receivable period=2026H1 value=1275 unit=亿元 factuality=actual
+    value_norm=1275 scale=1 | period_norm=2026-H1
+
+[NT-C07] 毛利率 7.15%
+    subject=工业富联 metric=gross_margin period=2026H1 value=7.15 unit=% factuality=actual
+    value_norm=7.15 scale=1 | period_norm=2026-H1
+
+[NT-C08] Q2 还从 Q1 的 7.35% 掉回 6.99%
+    subject=工业富联 metric=gross_margin period=2026Q2 value=6.99 unit=% factuality=actual
+    value_norm=6.99 scale=1 | period_norm=2026-Q2
+
+[NT-C09] 云计算 +75.7%
+    subject=工业富联 metric=cloud_computing_revenue_yoy period=2026H1 value=75.7 unit=% factuality=actual
+    value_norm=75.7 scale=1 | period_norm=2026-H1
+
+[NT-C10] Q2 营收 3067.83 亿环比 +22%
+    subject=工业富联 metric=revenue period=2026Q2 value=3067.83 unit=亿元 factuality=actual
+    value_norm=3067.83 scale=1 | period_norm=2026-Q2
+
+[NT-C11] 29年NPO到10%
+    subject=光模块行业 metric=NPO_penetration period=2029 value=10 unit=% factuality=forecast
+    value_norm=10 scale=1 | period_norm=29年-
+
+[NT-C12] CPO到30%
+    subject=光模块行业 metric=CPO_penetration period=2029 value=30 unit=% factuality=forecast
+    value_norm=30 scale=1 | period_norm=29年-
+
+[NT-C13] 可插拔主导70%
+    subject=光模块行业 metric=pluggable_share period=2029 value=70 unit=% factuality=forecast
+    value_norm=70 scale=1 | period_norm=29年-
+
+[NT-C14] 27年5万到10万个水平
+    subject=光模块行业 metric=CPO_shipments period=2027 value=50000-100000 unit=个 factuality=forecast
+    value_norm=5万到10万 scale=10000 | period_norm=27年-
+
+[NT-C15] 我们3.2T预计将在27年三季度左右实现批量供应
+    subject=材料所述公司 metric=3.2T_batch_supply period=2027Q3 value=batch_supply unit=status factuality=forecast
+    value_norm=实现批量供应 scale=None | period_norm=27年-Q3
+
+[NT-C16] 预计到28年整个行业的出货量将达到500万只的水平
+    subject=光模块行业 metric=3.2T_shipments period=2028 value=5000000 unit=只 factuality=forecast
+    value_norm=500万 scale=10000 | period_norm=28年-
+
+[NT-C17] 价格方面预计3.2T单价在1800美元左右
+    subject=光模块行业 metric=3.2T_unit_price period=early_stage value=1800 unit=美元 factuality=forecast
+    value_norm=1800 scale=1 | period_norm=None-None
+
+[NT-C18] 2.4T 27年的出货量预期在200万只
+    subject=2.4T产品（厂商口径不明） metric=2.4T_shipments period=2027 value=2000000 unit=只 factuality=forecast
+    value_norm=200万 scale=10000 | period_norm=27年-
+
+[NT-C19] 到28年预计增长至300至500万只
+    subject=2.4T产品（厂商口径不明） metric=2.4T_shipments period=2028 value=3000000-5000000 unit=只 factuality=forecast
+    value_norm=300至500万 scale=10000 | period_norm=28年-
+
+[NT-C20] 今年下半年预计将有2到3个新客户开始贡献收入
+    subject=材料所述公司 metric=new_revenue_contributing_customers period=2026H2 value=2-3 unit=个 factuality=forecast
+    value_norm=2到3 scale=1 | period_norm=26年-H2
+
+========== CANDIDATES (first 20) ==========
+[0] id=abbab7baa507 run=claims-industrial-fulian seq=0
+    claim_text=工业富联中报披露的云计算业务增速为75.7%
+    subject=工业富联 metric=云计算业务增速 metric_raw=云计算业务增速
+    period_raw=中报 period_end=2026-06-30 period_grain=half
+    value_text=75.7 value_num=75.7 unit=%
+    kind=fact scope=company quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=云计算 +75.7%，
+    canonical.quote=云计算 +75.7%，
+
+[1] id=029e21876287 run=claims-industrial-fulian seq=0
+    claim_text=工业富联中报披露的CSP AI服务器业务增速为2.3倍
+    subject=工业富联 metric=CSP AI服务器业务增速 metric_raw=CSP AI服务器业务增速
+    period_raw=中报 period_end=2026-06-30 period_grain=half
+    value_text=2.3 value_num=2.3 unit=倍
+    kind=fact scope=company quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=CSP AI 服务器 +2.3 倍，
+    canonical.quote=CSP AI 服务器 +2.3 倍，
+
+[2] id=3e0bb71af879 run=claims-industrial-fulian seq=0
+    claim_text=工业富联中报披露的GPU机柜出货量增速为3.2倍
+    subject=工业富联 metric=GPU机柜出货量增速 metric_raw=GPU机柜出货量增速
+    period_raw=中报 period_end=2026-06-30 period_grain=half
+    value_text=3.2 value_num=3.2 unit=倍
+    kind=fact scope=company quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=GPU/ASIC 机柜出货 +3.2 / +3 倍，
+    canonical.quote=GPU/ASIC 机柜出货 +3.2 / +3 倍，
+
+[3] id=49dfd72c5b09 run=claims-industrial-fulian seq=0
+    claim_text=工业富联中报披露的ASIC机柜出货量增速为3倍
+    subject=工业富联 metric=ASIC机柜出货量增速 metric_raw=ASIC机柜出货量增速
+    period_raw=中报 period_end=2026-06-30 period_grain=half
+    value_text=3 value_num=3 unit=倍
+    kind=fact scope=company quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=GPU/ASIC 机柜出货 +3.2 / +3 倍，
+    canonical.quote=GPU/ASIC 机柜出货 +3.2 / +3 倍，
+
+[4] id=4d7c3928f882 run=claims-industrial-fulian seq=0
+    claim_text=工业富联Q2营收为3067.83亿
+    subject=工业富联 metric=营收 metric_raw=营收
+    period_raw=Q2 period_end=2026-06-30 period_grain=quarter
+    value_text=3067.83 value_num=3.06783E+11 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['qualifier_definition_unverified', 'source_qualified_context_requires_review']
+    evidence_quote=Q2 营收 3067.83 亿环比 +22%。
+    canonical.quote=Q2 营收 3067.83 亿环比 +22%。
+
+[5] id=1162b32d6606 run=claims-industrial-fulian seq=0
+    claim_text=工业富联Q2营收环比增速为22%
+    subject=工业富联 metric=营收环比增速 metric_raw=营收环比增速
+    period_raw=Q2 period_end=2026-06-30 period_grain=quarter
+    value_text=22 value_num=22 unit=%
+    kind=fact scope=company quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=Q2 营收 3067.83 亿环比 +22%。
+    canonical.quote=Q2 营收 3067.83 亿环比 +22%。
+
+[6] id=eb340933ec43 run=claims-industrial-fulian seq=0
+    claim_text=工业富联中报披露的归母净利润增速为96%
+    subject=工业富联 metric=归母净利润增速 metric_raw=归母净利润增速
+    period_raw=中报 period_end=2026-06-30 period_grain=half
+    value_text=96 value_num=96 unit=%
+    kind=fact scope=company quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=卖方爱用归母 +96% 和 26E 600 亿+，中报扣非虽然同步，
+    canonical.quote=卖方爱用归母 +96% 和 26E 600 亿+，中报扣非虽然同步，
+
+[7] id=bed16da4dc6b run=claims-industrial-fulian seq=0
+    claim_text=卖方预测工业富联2026年归母净利润为600亿以上
+    subject=工业富联 metric=归母净利润（2026年预期） metric_raw=归母净利润（2026年预期）
+    period_raw=26E period_end=None period_grain=None
+    value_text=600+ value_num=6.00E+10 unit=元
+    kind=forecast scope=company quality_status=review reason_codes=['period_ambiguous', 'source_qualified_context_requires_review']
+    evidence_quote=卖方爱用归母 +96% 和 26E 600 亿+，中报扣非虽然同步，
+    canonical.quote=卖方爱用归母 +96% 和 26E 600 亿+，中报扣非虽然同步，
+
+[8] id=7c09b7b8baa5 run=claims-industrial-fulian seq=0
+    claim_text=工业富联中报披露的经营活动现金流净额（OCF）为73.91亿
+    subject=工业富联 metric=OCF（经营活动现金流净额） metric_raw=OCF（经营活动现金流净额）
+    period_raw=中报 period_end=2026-06-30 period_grain=half
+    value_text=73.91 value_num=7.391E+9 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=但 OCF 只有 73.91 亿；
+    canonical.quote=但 OCF 只有 73.91 亿；
+
+[9] id=92f7f165154f run=claims-industrial-fulian seq=0
+    claim_text=工业富联Q2毛利率环比变动为-0.36个百分点
+    subject=工业富联 metric=毛利率环比变动 metric_raw=毛利率环比变动
+    period_raw=Q2 period_end=2026-06-30 period_grain=quarter
+    value_text=-0.36 value_num=-0.36 unit=pct
+    kind=fact scope=company quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。
+    canonical.quote=Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。
+
+[10] id=190b514823df run=claims-industrial-fulian seq=0
+    claim_text=工业富联并表范围内加工费业务占比为7%
+    subject=工业富联 metric=并表加工费占比 metric_raw=并表加工费占比
+    period_raw=中报 period_end=2026-06-30 period_grain=half
+    value_text=7 value_num=7 unit=%
+    kind=fact scope=company quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。
+    canonical.quote=Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。
+
+[11] id=f1fae18dc4e3 run=claims-industrial-fulian seq=0
+    claim_text=市场对工业富联的共识预期次日股价为90元
+    subject=工业富联 metric=共识预期股价 metric_raw=共识预期股价
+    period_raw=明天 period_end=None period_grain=None
+    value_text=90 value_num=90 unit=元
+    kind=forecast scope=company quality_status=review reason_codes=['period_ambiguous', 'source_qualified_context_requires_review']
+    evidence_quote=框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。
+    canonical.quote=框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。
+
+[12] id=27c1eee28aab run=claims-industrial-fulian seq=1
+    claim_text=工业富联2026年中报扣非净利润为229.84亿元
+    subject=工业富联 metric=扣非 metric_raw=扣非
+    period_raw=2026年中报 period_end=None period_grain=None
+    value_text=229.84 value_num=2.2984E+10 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet', 'source_qualified_context_requires_review']
+    evidence_quote=扣非 229.84 亿
+    canonical.quote=扣非 229.84 亿
+
+[13] id=7c04bfc0c682 run=claims-industrial-fulian seq=1
+    claim_text=工业富联2026年中报扣非净利润同比增速为97%
+    subject=工业富联 metric=扣非净利润同比增速 metric_raw=扣非净利润同比增速
+    period_raw=2026年中报 period_end=None period_grain=None
+    value_text=97 value_num=97 unit=%
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet', 'source_qualified_context_requires_review']
+    evidence_quote=扣非 229.84 亿同比 +97%
+    canonical.quote=扣非 229.84 亿同比 +97%
+
+[14] id=a2a59229a596 run=claims-industrial-fulian seq=1
+    claim_text=工业富联2026年中报归母净利润为237.40亿元
+    subject=工业富联 metric=归母 metric_raw=归母
+    period_raw=2026年中报 period_end=None period_grain=None
+    value_text=237.40 value_num=2.3740E+10 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet', 'source_qualified_context_requires_review']
+    evidence_quote=归母 237.40 亿
+    canonical.quote=归母 237.40 亿
+
+[15] id=1b814b29e8c2 run=claims-industrial-fulian seq=1
+    claim_text=工业富联2026年中报非经常性损益规模为7.56亿元
+    subject=工业富联 metric=非经常 metric_raw=非经常
+    period_raw=2026年中报 period_end=None period_grain=None
+    value_text=7.56 value_num=7.56E+8 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet', 'source_qualified_context_requires_review']
+    evidence_quote=与归母 237.40 亿只差 7.56 亿非经常
+    canonical.quote=与归母 237.40 亿只差 7.56 亿非经常
+
+[16] id=f4a22857db7d run=claims-industrial-fulian seq=1
+    claim_text=工业富联2026年中报经营活动现金流净额为73.91亿元
+    subject=工业富联 metric=经营现金流 metric_raw=经营现金流
+    period_raw=2026年中报 period_end=None period_grain=None
+    value_text=73.91 value_num=7.391E+9 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet', 'source_qualified_context_requires_review']
+    evidence_quote=经营现金流 73.91 亿
+    canonical.quote=经营现金流 73.91 亿
+
+[17] id=a6ea59890141 run=claims-industrial-fulian seq=1
+    claim_text=工业富联2026年中报经营活动现金流净额为当期扣非净利润的0.32倍
+    subject=工业富联 metric=经营现金流对扣非净利润的覆盖倍数 metric_raw=经营现金流对扣非净利润的覆盖倍数
+    period_raw=2026年中报 period_end=None period_grain=None
+    value_text=0.32 value_num=0.32 unit=倍
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet', 'source_qualified_context_requires_review']
+    evidence_quote=经营现金流 73.91 亿只盖住扣非的 0.32 倍
+    canonical.quote=经营现金流 73.91 亿只盖住扣非的 0.32 倍
+
+[18] id=0f43382ed44d run=claims-industrial-fulian seq=1
+    claim_text=工业富联2026年中报存货规模为1921亿元
+    subject=工业富联 metric=存货 metric_raw=存货
+    period_raw=2026年中报 period_end=None period_grain=None
+    value_text=1921 value_num=1.921E+11 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet', 'source_qualified_context_requires_review']
+    evidence_quote=存货 1921 亿
+    canonical.quote=存货 1921 亿
+
+[19] id=72bd04014324 run=claims-industrial-fulian seq=1
+    claim_text=工业富联2026年中报应收账款规模为1275亿元
+    subject=工业富联 metric=应收 metric_raw=应收
+    period_raw=2026年中报 period_end=None period_grain=None
+    value_text=1275 value_num=1.275E+11 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet', 'source_qualified_context_requires_review']
+    evidence_quote=应收 1275 亿
+    canonical.quote=应收 1275 亿

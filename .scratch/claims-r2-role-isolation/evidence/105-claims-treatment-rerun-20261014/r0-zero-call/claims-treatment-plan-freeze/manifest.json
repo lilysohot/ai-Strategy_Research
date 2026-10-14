@@ -1,0 +1,94 @@
+{
+  "schema_version": "claims-treatment-plan-freeze-1",
+  "status": "frozen_not_executed",
+  "frozen_on": "2026-10-14",
+  "purpose": "冻结治疗臂（T1–T4 落地后的当前代码版本）两源一次全量抽取的计划；execute_claims_treatment.py 是唯一执行入口，未授权预算时拒绝执行。",
+  "prereg": {
+    "path": "evidence/99-claims-prereg-v3-signed-r2-20261014/r0-zero-call/claims-preregistration.json",
+    "sha256": "a2d174407daa5a1b88ba9ca44e698cf4512a399b2a4895254d0a3ab4b57edf04",
+    "treatment_rules": [
+      "T1_no_opinion",
+      "T2_unbound_disposition",
+      "T3_dedupe_tie_break",
+      "T4_missing_field_must_be_labelled"
+    ]
+  },
+  "treatment_landing": {
+    "t4": {
+      "path": "evidence/100-claims-t4-labeling-landing-20261014/r0-zero-call/treatment-landing-record.json",
+      "sha256": "65de8105ee7aee2a71334f291ca2fe87d2a342cbe9414724a7d7073d49dc4a46"
+    },
+    "t1_t2_t3": {
+      "path": "evidence/101-claims-treatment-t1t2t3-landing-20261014/r0-zero-call/treatment-landing-record.json",
+      "sha256": "79c93cd9bb6f6220d6a356db55117708dc4cd8ac58db83b8e7c2e9e790478b70"
+    }
+  },
+  "budget": {
+    "requested_ceiling": null,
+    "per_run_ceilings": {
+      "claims-industrial-fulian": 10,
+      "claims-optical-module": 14
+    },
+    "total_attempt_ceiling": 24,
+    "authorised": false,
+    "note": "ceiling 由 U 填在已签预注册件里；未填时本冻结件合法存在但不可执行"
+  },
+  "runnable": false,
+  "runnable_note": "缺一不可：①簽认件 ceiling 非空 ②执行者显式 --allow-model ③profile 指纹与冻结计划一致",
+  "versions": {
+    "claims_protocol": "claims-atomic-json-v2",
+    "slot_protocol": "claims-slot-obligations-v2",
+    "routing": "corpus-role-routing-v2",
+    "extractor": "b5220ca2dc17",
+    "pipeline": "evidence-pipeline-13",
+    "lint": "claims-v2-lint-9",
+    "period_rules": "period-rules-4",
+    "unit_rules": "unit-rules-4"
+  },
+  "profile": {
+    "model": "doubao-seed-2.1-lite",
+    "adapter_version": "structured-chat-http-3",
+    "profile_sha256": "sha256:9aab83cdefcc58930b3429c4d8fb10d67f57f1ac513e4202a3040068e4bd6d90",
+    "request_options": {
+      "timeout_seconds": 300.0,
+      "max_output_tokens": 16384,
+      "token_parameter": "max_tokens",
+      "reasoning_effort": null,
+      "thinking": null
+    }
+  },
+  "entries": [
+    {
+      "name": "claims-industrial-fulian",
+      "mode": "live_model",
+      "source_snapshot": "evidence/17-structured-extraction-convergence-closure-20261009/p1r3-claims-plan-freeze/replay-claims-industrial-fulian/snapshot.json",
+      "source_snapshot_sha256": "a10af3d6cbb5301738feca9eb4fbe03219e9ae04e6381f1693756c0b02942eb5",
+      "batch_id": "batch:042388788bc529b3534e74a1e0e710149c465d92a349c7bcb249d27c072e1144",
+      "plan_sha256": "sha256:042388788bc529b3534e74a1e0e710149c465d92a349c7bcb249d27c072e1144",
+      "attempt_ceiling": 10,
+      "scoped_units": 9,
+      "protocol": "claims-atomic-json-v2",
+      "snapshot_file_sha256": "a10af3d6cbb5301738feca9eb4fbe03219e9ae04e6381f1693756c0b02942eb5",
+      "plan_file_sha256": "3cba2f121f69dfba66e5e09b0d3603e3d1b43042ea1a8232d161a0110af9dbf0"
+    },
+    {
+      "name": "claims-optical-module",
+      "mode": "live_model",
+      "source_snapshot": "evidence/17-structured-extraction-convergence-closure-20261009/p1r3-claims-plan-freeze/replay-claims-optical-module/snapshot.json",
+      "source_snapshot_sha256": "192d6c6a3ff07cb0edd0b8ed705bb25ab8add2dfc57693b3d9530a8191b8b4e4",
+      "batch_id": "batch:63092cfd4bcdd77fe87fddc80defe41418289e291cf586977a53475754f267f9",
+      "plan_sha256": "sha256:63092cfd4bcdd77fe87fddc80defe41418289e291cf586977a53475754f267f9",
+      "attempt_ceiling": 14,
+      "scoped_units": 10,
+      "protocol": "claims-atomic-json-v2",
+      "snapshot_file_sha256": "192d6c6a3ff07cb0edd0b8ed705bb25ab8add2dfc57693b3d9530a8191b8b4e4",
+      "plan_file_sha256": "7c7419db596901a42d7a70a277bf2cae8bb5ee30aa5718fd40449e3ec013b9e0"
+    }
+  ],
+  "maximum_new_model_calls": 24,
+  "automatic_retries": 0,
+  "gold_not_exposed_to_model": true,
+  "production_database_access": 0,
+  "publication_writes": 0,
+  "prepare_script_sha256": "1ec0ab47451eaff6a4329aaa5ebfb0494f2ca50e3321ae3f11f146552d6b9db9"
+}

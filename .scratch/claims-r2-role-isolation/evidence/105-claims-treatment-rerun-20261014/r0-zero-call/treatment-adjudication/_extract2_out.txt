@@ -1,0 +1,179 @@
+[20] id=a2ca54a7f78c run=claims-industrial-fulian seq=1
+    claim_text=工业富联2026年中报毛利率为7.15%
+    subject=工业富联 metric=毛利率 metric_raw=毛利率
+    period_raw=2026年中报 period_end=None period_grain=None
+    value_text=7.15 value_num=7.15 unit=%
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet', 'source_qualified_context_requires_review']
+    evidence_quote=毛利率 7.15%
+    canonical.quote=毛利率 7.15%
+
+[21] id=e5e08a93c532 run=claims-industrial-fulian seq=1
+    claim_text=工业富联2026年中报毛利率较上年同期提升0.55个百分点
+    subject=工业富联 metric=毛利率同比变动 metric_raw=毛利率同比变动
+    period_raw=2026年中报 period_end=None period_grain=None
+    value_text=0.55 value_num=0.55 unit=个百分点
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet', 'unit_unknown', 'source_qualified_context_requires_review']
+    evidence_quote=毛利率 7.15% 同比只加 0.55 个百分点
+    canonical.quote=毛利率 7.15% 同比只加 0.55 个百分点
+
+[22] id=0347dcc836c7 run=claims-industrial-fulian seq=1
+    claim_text=工业富联2026年Q1毛利率为7.35%
+    subject=工业富联 metric=毛利率 metric_raw=毛利率
+    period_raw=2026年Q1 period_end=None period_grain=None
+    value_text=7.35 value_num=7.35 unit=%
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet', 'source_qualified_context_requires_review']
+    evidence_quote=Q1 的 7.35%
+    canonical.quote=Q1 的 7.35%
+
+[23] id=62ba77ecd55c run=claims-industrial-fulian seq=1
+    claim_text=工业富联2026年Q2毛利率为6.99%
+    subject=工业富联 metric=毛利率 metric_raw=毛利率
+    period_raw=2026年Q2 period_end=None period_grain=None
+    value_text=6.99 value_num=6.99 unit=%
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet', 'source_qualified_context_requires_review']
+    evidence_quote=Q2 还从 Q1 的 7.35% 掉回 6.99%
+    canonical.quote=Q2 还从 Q1 的 7.35% 掉回 6.99%
+
+[24] id=099af9dbb3c5 run=claims-industrial-fulian seq=1
+    claim_text=工业富联报告发布时点二级市场交易价格为64.04
+    subject=工业富联 metric=现价 metric_raw=现价
+    period_raw=2026年报告发布时点 period_end=None period_grain=None
+    value_text=64.04 value_num=64.04 unit=None
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet', 'unit_missing', 'source_qualified_context_requires_review']
+    evidence_quote=现价 64.04
+    canonical.quote=现价 64.04
+
+[25] id=eaaf0a581991 run=claims-industrial-fulian seq=1
+    claim_text=工业富联2026年6月的二级市场交易价格曾达到84.95
+    subject=工业富联 metric=股价 metric_raw=股价
+    period_raw=2026年6月 period_end=None period_grain=None
+    value_text=84.95 value_num=84.95 unit=None
+    kind=fact scope=company quality_status=review reason_codes=['period_unanchored', 'period_not_in_packet', 'unit_missing', 'source_qualified_context_requires_review']
+    evidence_quote=已从 6 月 84.95 回了约 25%
+    canonical.quote=已从 6 月 84.95 回了约 25%
+
+[26] id=b771d38745eb run=claims-industrial-fulian seq=1
+    claim_text=工业富联当前股价较2026年6月的84.95水平回撤约25%
+    subject=工业富联 metric=股价回撤幅度 metric_raw=股价回撤幅度
+    period_raw=2026年6月 period_end=None period_grain=None
+    value_text=25 value_num=25 unit=%
+    kind=fact scope=company quality_status=review reason_codes=['period_unanchored', 'period_not_in_packet', 'source_qualified_context_requires_review']
+    evidence_quote=已从 6 月 84.95 回了约 25%
+    canonical.quote=已从 6 月 84.95 回了约 25%
+
+[27] id=d1463218b339 run=claims-industrial-fulian seq=1
+    claim_text=工业富联当前动态市盈率为26.76倍
+    subject=工业富联 metric=动PE metric_raw=动PE
+    period_raw=2026年报告发布时点 period_end=None period_grain=None
+    value_text=26.76 value_num=26.76 unit=倍
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet', 'source_qualified_context_requires_review']
+    evidence_quote=动 PE 26.76
+    canonical.quote=动 PE 26.76
+
+[28] id=46ab77ec509e run=claims-industrial-fulian seq=1
+    claim_text=市场当前定价隐含的工业富联2026年（26E）净利润约为475亿元
+    subject=工业富联 metric=26E净利润 metric_raw=26E净利润
+    period_raw=2026年（26E） period_end=None period_grain=None
+    value_text=475 value_num=4.75E+10 unit=元
+    kind=forecast scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet', 'source_qualified_context_requires_review']
+    evidence_quote=动 PE 26.76 在定价约 475 亿 26E
+    canonical.quote=动 PE 26.76 在定价约 475 亿 26E
+
+[29] id=2d8463883860 run=claims-industrial-fulian seq=1
+    claim_text=卖方研究预期的工业富联2026年净利润下限为560亿元
+    subject=工业富联 metric=卖方预期2026年净利润 metric_raw=卖方预期2026年净利润
+    period_raw=2026年（卖方预期） period_end=None period_grain=None
+    value_text=560 value_num=5.60E+10 unit=元
+    kind=forecast scope=company quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet', 'source_qualified_context_requires_review']
+    evidence_quote=没有把卖方 560–667 亿吃进去
+    canonical.quote=没有把卖方 560–667 亿吃进去
+
+[30] id=bc8c9a1b03dd run=claims-industrial-fulian seq=1
+    claim_text=工业富联AI机柜出货规模较对比基数增长3倍
+    subject=工业富联 metric=AI机柜出货增幅 metric_raw=AI机柜出货增幅
+    period_raw=None period_end=None period_grain=None
+    value_text=3 value_num=3 unit=倍
+    kind=fact scope=company quality_status=review reason_codes=['period_missing', 'source_qualified_context_requires_review']
+    evidence_quote=AI 机柜出货 +3 倍
+    canonical.quote=AI 机柜出货 +3 倍
+
+[31] id=3febac680e3c run=claims-industrial-fulian seq=2
+    claim_text=工业富联当期少数股东损益金额为0.086亿
+    subject=工业富联 metric=少数股东 metric_raw=少数股东
+    period_raw=中期 period_end=None period_grain=None
+    value_text=0.086 value_num=8.6E+6 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous']
+    evidence_quote=少数股东 0.086 亿
+    canonical.quote=少数股东 0.086 亿
+
+[32] id=dac900938b77 run=claims-industrial-fulian seq=2
+    claim_text=工业富联当期净利润金额为237.49亿
+    subject=工业富联 metric=净利润 metric_raw=净利润
+    period_raw=中期 period_end=None period_grain=None
+    value_text=237.49 value_num=2.3749E+10 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous']
+    evidence_quote=净利润 237.49 亿
+    canonical.quote=净利润 237.49 亿
+
+[33] id=196c5a0a506d run=claims-industrial-fulian seq=2
+    claim_text=工业富联当期应付股利金额为130.52亿
+    subject=工业富联 metric=应付股利 metric_raw=应付股利
+    period_raw=中期 period_end=None period_grain=None
+    value_text=130.52 value_num=1.3052E+10 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous']
+    evidence_quote=应付股利 130.52 亿
+    canonical.quote=应付股利 130.52 亿
+
+[34] id=7092c0c4bf50 run=claims-industrial-fulian seq=2
+    claim_text=工业富联当期筹资活动产生的现金流量净额为-86.61亿
+    subject=工业富联 metric=筹资现金流 metric_raw=筹资现金流
+    period_raw=中期 period_end=None period_grain=None
+    value_text=-86.61 value_num=-8.661E+9 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous']
+    evidence_quote=筹资现金流 −86.61 亿
+    canonical.quote=筹资现金流 −86.61 亿
+
+[35] id=7a83c7bdadc8 run=claims-industrial-fulian seq=2
+    claim_text=工业富联当期筹资活动中用于分配股利、利息支付的金额为84.39亿
+    subject=工业富联 metric=分配股利/利息 metric_raw=分配股利/利息
+    period_raw=中期 period_end=None period_grain=None
+    value_text=84.39 value_num=8.439E+9 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous']
+    evidence_quote=分配股利/利息 84.39 亿
+    canonical.quote=分配股利/利息 84.39 亿
+
+[36] id=720d8ed039d3 run=claims-industrial-fulian seq=2
+    claim_text=工业富联当期短期借款累计借入金额为960亿
+    subject=工业富联 metric=短贷借入 metric_raw=短贷借入
+    period_raw=中期 period_end=None period_grain=None
+    value_text=960 value_num=9.60E+10 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous']
+    evidence_quote=借 960 亿
+    canonical.quote=借 960 亿
+
+[37] id=dae00a9c7960 run=claims-industrial-fulian seq=2
+    claim_text=工业富联当期短期借款累计偿还金额为951亿
+    subject=工业富联 metric=短贷偿还 metric_raw=短贷偿还
+    period_raw=中期 period_end=None period_grain=None
+    value_text=951 value_num=9.51E+10 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous']
+    evidence_quote=还 951 亿
+    canonical.quote=还 951 亿
+
+[38] id=6a90ef04c2e0 run=claims-industrial-fulian seq=3
+    claim_text=工业富联2026-08-28的收盘价为64.04元
+    subject=工业富联 metric=收盘 metric_raw=收盘
+    period_raw=2026-08-28 period_end=2026-08-28 period_grain=point
+    value_text=64.04 value_num=64.04 unit=元
+    kind=fact scope=company quality_status=ok reason_codes=[]
+    evidence_quote=2026-08-28 收盘 64.04 元（mx-xuangu）
+    canonical.quote=2026-08-28 收盘 64.04 元（mx-xuangu）
+
+[39] id=3777cb0fa549 run=claims-industrial-fulian seq=4
+    claim_text=工业富联TTM口径的市盈率为27倍
+    subject=工业富联 metric=TTM 27 倍 metric_raw=TTM 27 倍
+    period_raw=TTM period_end=None period_grain=None
+    value_text=27 value_num=27 unit=倍
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous', 'source_qualified_context_requires_review']
+    evidence_quote=TTM 27 倍
+    canonical.quote=TTM 27 倍

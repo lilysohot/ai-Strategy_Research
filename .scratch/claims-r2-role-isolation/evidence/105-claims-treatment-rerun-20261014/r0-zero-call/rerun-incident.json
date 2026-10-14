@@ -1,0 +1,46 @@
+{
+  "schema_version": "claims-treatment-rerun-incident-1",
+  "id": "105-claims-treatment-rerun-20261014",
+  "created_on": "2026-10-14",
+  "model_calls": 0,
+  "what_happened": {
+    "run": "102 号 freeze 的首次 --allow-model 实跑（2026-10-14）",
+    "interrupt": "前端空闲超时把长跑进程杀掉（实跑无中间输出）；非模型端、非判据端原因",
+    "state_after_interrupt": {
+      "claims-industrial-fulian": {
+        "attempts": "9（8 succeeded + 1 outcome_unknown：packet f4e23495… TransportOutcomeUnknown，0 records）",
+        "task_status": "outcome_unknown",
+        "payload": "已落盘（51 facts），但缺 f4e23495… packet 的候选",
+        "tokens_used": 125020
+      },
+      "claims-optical-module": {
+        "attempts": "1（running 被杀，将由 recover_pending 冻结为 outcome_unknown）",
+        "task_status": "running（僵留）",
+        "payload": null,
+        "tokens_used": 0
+      }
+    }
+  },
+  "why_not_resume_in_place": {
+    "rule": "ledger 语义：recover_pending 把中断的 attempt/task 冻结为 outcome_unknown 且『never make them retryable』（防双花）；execute_batch 只跑非终态 task",
+    "consequence": "原 batch 内既不能补跑 run1 缺失的 packet，也不能续跑 run2；ledger 手术（复活终态 task）违反不可变设计，不采"
+  },
+  "decision": {
+    "choice": "重出全量计划（全新 freeze + 全新 store，两 run 从零跑）",
+    "why": "复用 102 号工程件（prepare/execute 原样，仅输出目录改变）；一批完整的两源产出使阶段 2 判读干净；无 ledger 特例",
+    "cost": "run1 的 51 facts 重抽，预计重花约 12.5 万 token（约占授权 1,000,000 的 12.5%）；新旧两轮总账仍按 103 号 ceiling 对账",
+    "decided_by": "U（2026-10-14 指示起跑阶段 1 实跑的延续：恢复被中断的同一轮实跑）"
+  },
+  "accounting": {
+    "authorised_ceiling_tokens": 1000000,
+    "burned_before_this_rerun": 125020,
+    "burned_record": "102 号 freeze 下两 run live-store 的 attempts.usage 总和",
+    "rule": "新旧两轮 token 总和按 103 号 ceiling 对账；execution-summary 记本轮，总账在 105 号落地记录里合并报告"
+  },
+  "old_freeze_disposition": {
+    "path": "evidence/102-claims-treatment-engineering-20261014/r0-zero-call/claims-treatment-plan-freeze",
+    "status": "interrupted_archive（不删不改；live-store 保留为已耗 token 的对账凭证）",
+    "note": "102 号 MANIFEST 的 dry_run_evidence 与 tests 仍指其工程件，不受影响"
+  },
+  "stage2_reading": "阶段 2 判读按 104 号 v4 生效件（stage2_under_v4.py → claims-preregistration-v4.json 6b5c93d5…）；execute 入口按 99 号（v4 未动其预算/规则块，无需推进）"
+}

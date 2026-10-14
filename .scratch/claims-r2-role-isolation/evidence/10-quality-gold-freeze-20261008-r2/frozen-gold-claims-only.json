@@ -1,0 +1,1568 @@
+{
+  "schema_version": "corpus-structured-non-table-gold-freeze-v2",
+  "status": "frozen",
+  "formal_gold_frozen": true,
+  "frozen_on": "2026-10-08",
+  "reviewer": "xyl",
+  "adjudicator": "xyl",
+  "signoff_evidence": [
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review-candidates.json",
+    ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2/gold-review.md"
+  ],
+  "parent_review": ".scratch/claims-r2-role-isolation/evidence/10-quality-gold-expansion-20261008-r2",
+  "evaluation_scope": "selected_target_recall_not_exhaustive_document_gold",
+  "candidate_outputs_observed_before_freeze": false,
+  "table_content_included": false,
+  "holdout_accessed": false,
+  "sources": [
+    {
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "path": "data/corpus/工业富联_投委会决策报告_20260829.md",
+      "format": "markdown",
+      "approval_provenance": "dev_lane",
+      "review_decision_ids": [
+        "i0a2-c-f8fa2208",
+        "devlane-md-f8fa2208"
+      ],
+      "extractor_rev": "reader-md-2",
+      "reader_issues": []
+    },
+    {
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "path": "data/corpus/9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx",
+      "format": "docx",
+      "approval_provenance": "dev_lane",
+      "review_decision_ids": [
+        "i0a2-d-48c05895",
+        "devlane-docx-48c05895"
+      ],
+      "extractor_rev": "reader-docx-2+python-docx-1.2.0",
+      "reader_issues": []
+    }
+  ],
+  "speakers": [
+    {
+      "speaker_id": "md_author",
+      "display_name": "报告作者（未署名）",
+      "identity_status": "unknown",
+      "perspective": "unknown"
+    },
+    {
+      "speaker_id": "doc_narrator",
+      "display_name": "未署名讲者",
+      "identity_status": "unknown",
+      "perspective": "unknown"
+    },
+    {
+      "speaker_id": "doc_quoted_unknown",
+      "display_name": "被转述来源（未明确）",
+      "identity_status": "unknown",
+      "perspective": "quoted_other"
+    },
+    {
+      "speaker_id": "doc_quoted_company",
+      "display_name": "被转述公司（身份未明）",
+      "identity_status": "unknown",
+      "perspective": "quoted_other"
+    },
+    {
+      "speaker_id": "doc_dekeli",
+      "display_name": "材料转述的德科立",
+      "identity_status": "explicit_organization",
+      "perspective": "quoted_other"
+    }
+  ],
+  "condition_groups": [
+    {
+      "group_id": "opening_watch_position",
+      "target_record_id": "NT-I14",
+      "operator": "any",
+      "condition_record_ids": [
+        "NT-I42",
+        "NT-I13",
+        "NT-I43"
+      ],
+      "source_structure": "price_branch OR (cashflow_branch OR margin_branch)",
+      "evidence": {
+        "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "locator": "char:5246-5537",
+        "quote": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。",
+        "start": 0,
+        "end": 127,
+        "offset_basis": "unit_codepoints",
+        "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+      }
+    },
+    {
+      "group_id": "stop_loss",
+      "target_record_id": "NT-I16",
+      "operator": "any",
+      "condition_record_ids": [
+        "NT-I15",
+        "NT-I17"
+      ],
+      "source_structure": "cashflow_deterioration OR (margin_deterioration AND company_changed_wording)",
+      "evidence": {
+        "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "locator": "char:5246-5537",
+        "quote": "止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期",
+        "start": 140,
+        "end": 225,
+        "offset_basis": "unit_codepoints",
+        "unit_text_sha256": "c8b8e101df31c1f5b43c0c4334e1f26818d3eaf4d01c6e335f76bfc6a9981368"
+      }
+    }
+  ],
+  "retired_records": [
+    {
+      "record_id": "NT-R02",
+      "reason": "system_inferred 不属于当前原文明示关系抽取契约；不进入必答分母。"
+    },
+    {
+      "record_id": "NT-R17",
+      "reason": "跨段系统推断不属于当前抽取契约；不进入必答分母。"
+    },
+    {
+      "record_id": "NT-I18",
+      "replacement_id": "NT-I16",
+      "reason": "同一止损动作去重；R09 改为指向 I16。"
+    }
+  ],
+  "counts": {
+    "claims": 20,
+    "material_items": 48,
+    "material_relations": 24
+  },
+  "known_ambiguities": [
+    {
+      "record_id": "NT-I17",
+      "field": "condition_inner_boolean",
+      "decision": "preserve_unknown"
+    }
+  ],
+  "scoring_contract_sha256": "2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe",
+  "records": [
+    {
+      "record_id": "NT-C01",
+      "role": "claims",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "locator": "char:621-855",
+      "quote": "当日价格 64.04 元",
+      "semantic_fields": {
+        "factuality": "actual",
+        "metric": "close_price",
+        "period": "2026-08-28",
+        "subject": "工业富联",
+        "unit": "元",
+        "value": "64.04",
+        "attribution": "报告作者引述的行情或中报数据",
+        "perspective": "quoted_other",
+        "source_stance": "reported",
+        "estimate_status": "not_applicable",
+        "qualifier": "exact_as_reported"
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:621-855",
+          "quote": "当日价格 64.04 元",
+          "start": 32,
+          "end": 44,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "c98e5a4109dca48ea8b0ad75117ac544a171c9fa8c59fea115d0df1edb599479"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:621-855",
+          "quote": "【实时数据层】mx-xuangu，行情日 2026-08-28\n当日价格 64.04 元；涨跌 +0.28%；成交额 103.15 亿元；换手 0.80%；量比 1.66。52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。融资余额 79.81 亿。近 5 日收盘 60.40 → 60.15 → 60.57 → 63.86 → 64.04。8/27 英伟达财报次日约 +5.43%，8/28 把溢价吐掉。",
+          "start": 0,
+          "end": 234,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "c98e5a4109dca48ea8b0ad75117ac544a171c9fa8c59fea115d0df1edb599479"
+        },
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:25-134",
+          "quote": "基准：2026-08-28 收盘 64.04 元（mx-xuangu）。中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。本报告只对标的本身做独立判断，不针对任何已有仓位。",
+          "start": 0,
+          "end": 109,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "e949b8a971f465ea985ae06f01b5ba5c391e27e8625f694f5d9faa519803aa45"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": null,
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "64.04",
+        "scale": "1"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "2026",
+        "suffix": "-08-28"
+      }
+    },
+    {
+      "record_id": "NT-C02",
+      "role": "claims",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "locator": "char:146-469",
+      "quote": "扣非 229.84 亿",
+      "semantic_fields": {
+        "factuality": "actual",
+        "metric": "adjusted_net_profit",
+        "period": "2026H1",
+        "subject": "工业富联",
+        "unit": "亿元",
+        "value": "229.84",
+        "attribution": "报告作者引述的行情或中报数据",
+        "perspective": "quoted_other",
+        "source_stance": "reported",
+        "estimate_status": "not_applicable",
+        "qualifier": "exact_as_reported"
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:146-469",
+          "quote": "扣非 229.84 亿",
+          "start": 24,
+          "end": 35,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:146-469",
+          "quote": "**持有 + 观望。** 中报的利润几乎是真的：扣非 229.84 亿同比 +97%，与归母 237.40 亿只差 7.56 亿非经常，不是「公允价值把标题顶起来」。但经营现金流 73.91 亿只盖住扣非的 0.32 倍，存货 1921 亿、应收 1275 亿，高营收已经变成营运资本。毛利率 7.15% 同比只加 0.55 个百分点，Q2 还从 Q1 的 7.35% 掉回 6.99%。现价 64.04 已从 6 月 84.95 回了约 25%，动 PE 26.76 在定价约 475 亿 26E——几乎是 H1 线性年化，没有把卖方 560–667 亿吃进去。不按 93–101 去追，也不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪。",
+          "start": 0,
+          "end": 323,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0"
+        },
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:25-134",
+          "quote": "基准：2026-08-28 收盘 64.04 元（mx-xuangu）。中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。本报告只对标的本身做独立判断，不针对任何已有仓位。",
+          "start": 0,
+          "end": 109,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "e949b8a971f465ea985ae06f01b5ba5c391e27e8625f694f5d9faa519803aa45"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": null,
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "229.84",
+        "scale": "1"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "2026",
+        "suffix": "H1",
+        "context_reason": "报告2026年中报口径；H1为当年上半年，Q2为当年第二季度"
+      }
+    },
+    {
+      "record_id": "NT-C03",
+      "role": "claims",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "locator": "char:146-469",
+      "quote": "归母 237.40 亿",
+      "semantic_fields": {
+        "factuality": "actual",
+        "metric": "parent_net_profit",
+        "period": "2026H1",
+        "subject": "工业富联",
+        "unit": "亿元",
+        "value": "237.4",
+        "attribution": "报告作者引述的行情或中报数据",
+        "perspective": "quoted_other",
+        "source_stance": "reported",
+        "estimate_status": "not_applicable",
+        "qualifier": "exact_as_reported"
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:146-469",
+          "quote": "归母 237.40 亿",
+          "start": 44,
+          "end": 55,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:146-469",
+          "quote": "**持有 + 观望。** 中报的利润几乎是真的：扣非 229.84 亿同比 +97%，与归母 237.40 亿只差 7.56 亿非经常，不是「公允价值把标题顶起来」。但经营现金流 73.91 亿只盖住扣非的 0.32 倍，存货 1921 亿、应收 1275 亿，高营收已经变成营运资本。毛利率 7.15% 同比只加 0.55 个百分点，Q2 还从 Q1 的 7.35% 掉回 6.99%。现价 64.04 已从 6 月 84.95 回了约 25%，动 PE 26.76 在定价约 475 亿 26E——几乎是 H1 线性年化，没有把卖方 560–667 亿吃进去。不按 93–101 去追，也不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪。",
+          "start": 0,
+          "end": 323,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0"
+        },
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:25-134",
+          "quote": "基准：2026-08-28 收盘 64.04 元（mx-xuangu）。中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。本报告只对标的本身做独立判断，不针对任何已有仓位。",
+          "start": 0,
+          "end": 109,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "e949b8a971f465ea985ae06f01b5ba5c391e27e8625f694f5d9faa519803aa45"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": null,
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "237.40",
+        "scale": "1"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "2026",
+        "suffix": "H1",
+        "context_reason": "报告2026年中报口径；H1为当年上半年，Q2为当年第二季度"
+      }
+    },
+    {
+      "record_id": "NT-C04",
+      "role": "claims",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "locator": "char:146-469",
+      "quote": "经营现金流 73.91 亿",
+      "semantic_fields": {
+        "factuality": "actual",
+        "metric": "operating_cash_flow",
+        "period": "2026H1",
+        "subject": "工业富联",
+        "unit": "亿元",
+        "value": "73.91",
+        "attribution": "报告作者引述的行情或中报数据",
+        "perspective": "quoted_other",
+        "source_stance": "reported",
+        "estimate_status": "not_applicable",
+        "qualifier": "exact_as_reported"
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:146-469",
+          "quote": "经营现金流 73.91 亿",
+          "start": 84,
+          "end": 97,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:146-469",
+          "quote": "**持有 + 观望。** 中报的利润几乎是真的：扣非 229.84 亿同比 +97%，与归母 237.40 亿只差 7.56 亿非经常，不是「公允价值把标题顶起来」。但经营现金流 73.91 亿只盖住扣非的 0.32 倍，存货 1921 亿、应收 1275 亿，高营收已经变成营运资本。毛利率 7.15% 同比只加 0.55 个百分点，Q2 还从 Q1 的 7.35% 掉回 6.99%。现价 64.04 已从 6 月 84.95 回了约 25%，动 PE 26.76 在定价约 475 亿 26E——几乎是 H1 线性年化，没有把卖方 560–667 亿吃进去。不按 93–101 去追，也不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪。",
+          "start": 0,
+          "end": 323,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0"
+        },
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:25-134",
+          "quote": "基准：2026-08-28 收盘 64.04 元（mx-xuangu）。中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。本报告只对标的本身做独立判断，不针对任何已有仓位。",
+          "start": 0,
+          "end": 109,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "e949b8a971f465ea985ae06f01b5ba5c391e27e8625f694f5d9faa519803aa45"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": null,
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "73.91",
+        "scale": "1"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "2026",
+        "suffix": "H1",
+        "context_reason": "报告2026年中报口径；H1为当年上半年，Q2为当年第二季度"
+      }
+    },
+    {
+      "record_id": "NT-C05",
+      "role": "claims",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "locator": "char:146-469",
+      "quote": "存货 1921 亿",
+      "semantic_fields": {
+        "factuality": "actual",
+        "metric": "inventory",
+        "period": "2026H1",
+        "subject": "工业富联",
+        "unit": "亿元",
+        "value": "1921",
+        "attribution": "报告作者引述的行情或中报数据",
+        "perspective": "quoted_other",
+        "source_stance": "reported",
+        "estimate_status": "not_applicable",
+        "qualifier": "exact_as_reported"
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:146-469",
+          "quote": "存货 1921 亿",
+          "start": 111,
+          "end": 120,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:146-469",
+          "quote": "**持有 + 观望。** 中报的利润几乎是真的：扣非 229.84 亿同比 +97%，与归母 237.40 亿只差 7.56 亿非经常，不是「公允价值把标题顶起来」。但经营现金流 73.91 亿只盖住扣非的 0.32 倍，存货 1921 亿、应收 1275 亿，高营收已经变成营运资本。毛利率 7.15% 同比只加 0.55 个百分点，Q2 还从 Q1 的 7.35% 掉回 6.99%。现价 64.04 已从 6 月 84.95 回了约 25%，动 PE 26.76 在定价约 475 亿 26E——几乎是 H1 线性年化，没有把卖方 560–667 亿吃进去。不按 93–101 去追，也不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪。",
+          "start": 0,
+          "end": 323,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0"
+        },
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:25-134",
+          "quote": "基准：2026-08-28 收盘 64.04 元（mx-xuangu）。中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。本报告只对标的本身做独立判断，不针对任何已有仓位。",
+          "start": 0,
+          "end": 109,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "e949b8a971f465ea985ae06f01b5ba5c391e27e8625f694f5d9faa519803aa45"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": null,
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "1921",
+        "scale": "1"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "2026",
+        "suffix": "H1",
+        "context_reason": "报告2026年中报口径；H1为当年上半年，Q2为当年第二季度"
+      }
+    },
+    {
+      "record_id": "NT-C06",
+      "role": "claims",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "locator": "char:146-469",
+      "quote": "应收 1275 亿",
+      "semantic_fields": {
+        "factuality": "actual",
+        "metric": "accounts_receivable",
+        "period": "2026H1",
+        "subject": "工业富联",
+        "unit": "亿元",
+        "value": "1275",
+        "attribution": "报告作者引述的行情或中报数据",
+        "perspective": "quoted_other",
+        "source_stance": "reported",
+        "estimate_status": "not_applicable",
+        "qualifier": "exact_as_reported"
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:146-469",
+          "quote": "应收 1275 亿",
+          "start": 121,
+          "end": 130,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:146-469",
+          "quote": "**持有 + 观望。** 中报的利润几乎是真的：扣非 229.84 亿同比 +97%，与归母 237.40 亿只差 7.56 亿非经常，不是「公允价值把标题顶起来」。但经营现金流 73.91 亿只盖住扣非的 0.32 倍，存货 1921 亿、应收 1275 亿，高营收已经变成营运资本。毛利率 7.15% 同比只加 0.55 个百分点，Q2 还从 Q1 的 7.35% 掉回 6.99%。现价 64.04 已从 6 月 84.95 回了约 25%，动 PE 26.76 在定价约 475 亿 26E——几乎是 H1 线性年化，没有把卖方 560–667 亿吃进去。不按 93–101 去追，也不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪。",
+          "start": 0,
+          "end": 323,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0"
+        },
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:25-134",
+          "quote": "基准：2026-08-28 收盘 64.04 元（mx-xuangu）。中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。本报告只对标的本身做独立判断，不针对任何已有仓位。",
+          "start": 0,
+          "end": 109,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "e949b8a971f465ea985ae06f01b5ba5c391e27e8625f694f5d9faa519803aa45"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": null,
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "1275",
+        "scale": "1"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "2026",
+        "suffix": "H1",
+        "context_reason": "报告2026年中报口径；H1为当年上半年，Q2为当年第二季度"
+      }
+    },
+    {
+      "record_id": "NT-C07",
+      "role": "claims",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "locator": "char:146-469",
+      "quote": "毛利率 7.15%",
+      "semantic_fields": {
+        "factuality": "actual",
+        "metric": "gross_margin",
+        "period": "2026H1",
+        "subject": "工业富联",
+        "unit": "%",
+        "value": "7.15",
+        "attribution": "报告作者引述的行情或中报数据",
+        "perspective": "quoted_other",
+        "source_stance": "reported",
+        "estimate_status": "not_applicable",
+        "qualifier": "exact_as_reported"
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:146-469",
+          "quote": "毛利率 7.15%",
+          "start": 143,
+          "end": 152,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:146-469",
+          "quote": "**持有 + 观望。** 中报的利润几乎是真的：扣非 229.84 亿同比 +97%，与归母 237.40 亿只差 7.56 亿非经常，不是「公允价值把标题顶起来」。但经营现金流 73.91 亿只盖住扣非的 0.32 倍，存货 1921 亿、应收 1275 亿，高营收已经变成营运资本。毛利率 7.15% 同比只加 0.55 个百分点，Q2 还从 Q1 的 7.35% 掉回 6.99%。现价 64.04 已从 6 月 84.95 回了约 25%，动 PE 26.76 在定价约 475 亿 26E——几乎是 H1 线性年化，没有把卖方 560–667 亿吃进去。不按 93–101 去追，也不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪。",
+          "start": 0,
+          "end": 323,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0"
+        },
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:25-134",
+          "quote": "基准：2026-08-28 收盘 64.04 元（mx-xuangu）。中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。本报告只对标的本身做独立判断，不针对任何已有仓位。",
+          "start": 0,
+          "end": 109,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "e949b8a971f465ea985ae06f01b5ba5c391e27e8625f694f5d9faa519803aa45"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": null,
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "7.15",
+        "scale": "1"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "2026",
+        "suffix": "H1",
+        "context_reason": "报告2026年中报口径；H1为当年上半年，Q2为当年第二季度"
+      }
+    },
+    {
+      "record_id": "NT-C08",
+      "role": "claims",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "locator": "char:146-469",
+      "quote": "Q2 还从 Q1 的 7.35% 掉回 6.99%",
+      "semantic_fields": {
+        "factuality": "actual",
+        "metric": "gross_margin",
+        "period": "2026Q2",
+        "subject": "工业富联",
+        "unit": "%",
+        "value": "6.99",
+        "attribution": "报告作者引述的行情或中报数据",
+        "perspective": "quoted_other",
+        "source_stance": "reported",
+        "estimate_status": "not_applicable",
+        "qualifier": "exact_as_reported"
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:146-469",
+          "quote": "Q2 还从 Q1 的 7.35% 掉回 6.99%",
+          "start": 168,
+          "end": 193,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:146-469",
+          "quote": "**持有 + 观望。** 中报的利润几乎是真的：扣非 229.84 亿同比 +97%，与归母 237.40 亿只差 7.56 亿非经常，不是「公允价值把标题顶起来」。但经营现金流 73.91 亿只盖住扣非的 0.32 倍，存货 1921 亿、应收 1275 亿，高营收已经变成营运资本。毛利率 7.15% 同比只加 0.55 个百分点，Q2 还从 Q1 的 7.35% 掉回 6.99%。现价 64.04 已从 6 月 84.95 回了约 25%，动 PE 26.76 在定价约 475 亿 26E——几乎是 H1 线性年化，没有把卖方 560–667 亿吃进去。不按 93–101 去追，也不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪。",
+          "start": 0,
+          "end": 323,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "3d096b379d6c637e57bb08d6124bf876e3b7cbe4799d1285b0bd0e43f07b4ab0"
+        },
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:25-134",
+          "quote": "基准：2026-08-28 收盘 64.04 元（mx-xuangu）。中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。本报告只对标的本身做独立判断，不针对任何已有仓位。",
+          "start": 0,
+          "end": 109,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "e949b8a971f465ea985ae06f01b5ba5c391e27e8625f694f5d9faa519803aa45"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": null,
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "6.99",
+        "scale": "1"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "2026",
+        "suffix": "Q2",
+        "context_reason": "报告2026年中报口径；H1为当年上半年，Q2为当年第二季度"
+      }
+    },
+    {
+      "record_id": "NT-C09",
+      "role": "claims",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "locator": "char:1393-1655",
+      "quote": "云计算 +75.7%",
+      "semantic_fields": {
+        "factuality": "actual",
+        "metric": "cloud_computing_revenue_yoy",
+        "period": "2026H1",
+        "subject": "工业富联",
+        "unit": "%",
+        "value": "75.7",
+        "attribution": "报告作者引述的行情或中报数据",
+        "perspective": "quoted_other",
+        "source_stance": "reported",
+        "estimate_status": "not_applicable",
+        "qualifier": "exact_as_reported"
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:1393-1655",
+          "quote": "云计算 +75.7%",
+          "start": 51,
+          "end": 61,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:1393-1655",
+          "quote": "【研报核心发现】卖方讲三条：CSP/GPU 机柜量、Rubin 卡位、CPO/高速网络。中报验证了量：云计算 +75.7%，CSP AI 服务器 +2.3 倍，GPU/ASIC 机柜出货 +3.2 / +3 倍，Q2 营收 3067.83 亿环比 +22%。冲突点：卖方爱用归母 +96% 和 26E 600 亿+，中报扣非虽然同步，但 OCF 只有 73.91 亿；Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。",
+          "start": 0,
+          "end": 262,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4"
+        },
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:25-134",
+          "quote": "基准：2026-08-28 收盘 64.04 元（mx-xuangu）。中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。本报告只对标的本身做独立判断，不针对任何已有仓位。",
+          "start": 0,
+          "end": 109,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "e949b8a971f465ea985ae06f01b5ba5c391e27e8625f694f5d9faa519803aa45"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": null,
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "75.7",
+        "scale": "1"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "2026",
+        "suffix": "H1",
+        "context_reason": "报告2026年中报口径；H1为当年上半年，Q2为当年第二季度"
+      }
+    },
+    {
+      "record_id": "NT-C10",
+      "role": "claims",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "origin": "llm_prose",
+      "locator": "char:1393-1655",
+      "quote": "Q2 营收 3067.83 亿环比 +22%",
+      "semantic_fields": {
+        "factuality": "actual",
+        "metric": "revenue",
+        "period": "2026Q2",
+        "subject": "工业富联",
+        "unit": "亿元",
+        "value": "3067.83",
+        "attribution": "报告作者引述的行情或中报数据",
+        "perspective": "quoted_other",
+        "source_stance": "reported",
+        "estimate_status": "not_applicable",
+        "qualifier": "exact_as_reported"
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:1393-1655",
+          "quote": "Q2 营收 3067.83 亿环比 +22%",
+          "start": 106,
+          "end": 128,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:1393-1655",
+          "quote": "【研报核心发现】卖方讲三条：CSP/GPU 机柜量、Rubin 卡位、CPO/高速网络。中报验证了量：云计算 +75.7%，CSP AI 服务器 +2.3 倍，GPU/ASIC 机柜出货 +3.2 / +3 倍，Q2 营收 3067.83 亿环比 +22%。冲突点：卖方爱用归母 +96% 和 26E 600 亿+，中报扣非虽然同步，但 OCF 只有 73.91 亿；Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。",
+          "start": 0,
+          "end": 262,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4"
+        },
+        {
+          "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "locator": "char:25-134",
+          "quote": "基准：2026-08-28 收盘 64.04 元（mx-xuangu）。中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。本报告只对标的本身做独立判断，不针对任何已有仓位。",
+          "start": 0,
+          "end": 109,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "e949b8a971f465ea985ae06f01b5ba5c391e27e8625f694f5d9faa519803aa45"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": null,
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "3067.83",
+        "scale": "1"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "2026",
+        "suffix": "Q2",
+        "context_reason": "报告2026年中报口径；H1为当年上半年，Q2为当年第二季度"
+      }
+    },
+    {
+      "record_id": "NT-C11",
+      "role": "claims",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "origin": "llm_prose",
+      "locator": "body[1]",
+      "quote": "29年NPO到10%",
+      "semantic_fields": {
+        "factuality": "forecast",
+        "metric": "NPO_penetration",
+        "period": "2029",
+        "subject": "光模块行业",
+        "unit": "%",
+        "value": "10",
+        "attribution": "讲者转述的未明确来源",
+        "perspective": "quoted_other",
+        "source_stance": "challenged",
+        "estimate_status": "uncertain",
+        "qualifier": "exact_as_reported"
+      },
+      "critical": true,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[1]",
+          "quote": "29年NPO到10%",
+          "start": 29,
+          "end": 39,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "18cc5c6c06ae3b5ab8cb84af6f770d1fbfc28aac1cfd4279db9d249e97f57972"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[1]",
+          "quote": "有个OCS的快速看一下，渗透率反正都是吹牛的，都没准数的。29年NPO到10%，CPO到30%，可插拔主导70%。",
+          "start": 0,
+          "end": 57,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "18cc5c6c06ae3b5ab8cb84af6f770d1fbfc28aac1cfd4279db9d249e97f57972"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": "必须同时保留预测数值与讲者质疑，避免把被质疑口径作为认可结论",
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "10",
+        "scale": "1"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "29年",
+        "suffix": ""
+      }
+    },
+    {
+      "record_id": "NT-C12",
+      "role": "claims",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "origin": "llm_prose",
+      "locator": "body[1]",
+      "quote": "CPO到30%",
+      "semantic_fields": {
+        "factuality": "forecast",
+        "metric": "CPO_penetration",
+        "period": "2029",
+        "subject": "光模块行业",
+        "unit": "%",
+        "value": "30",
+        "attribution": "讲者转述的未明确来源",
+        "perspective": "quoted_other",
+        "source_stance": "challenged",
+        "estimate_status": "uncertain",
+        "qualifier": "exact_as_reported"
+      },
+      "critical": true,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[1]",
+          "quote": "CPO到30%",
+          "start": 40,
+          "end": 47,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "18cc5c6c06ae3b5ab8cb84af6f770d1fbfc28aac1cfd4279db9d249e97f57972"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[1]",
+          "quote": "有个OCS的快速看一下，渗透率反正都是吹牛的，都没准数的。29年NPO到10%，CPO到30%，可插拔主导70%。",
+          "start": 0,
+          "end": 57,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "18cc5c6c06ae3b5ab8cb84af6f770d1fbfc28aac1cfd4279db9d249e97f57972"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": "必须同时保留预测数值与讲者质疑，避免把被质疑口径作为认可结论",
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "30",
+        "scale": "1"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "29年",
+        "suffix": ""
+      }
+    },
+    {
+      "record_id": "NT-C13",
+      "role": "claims",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "origin": "llm_prose",
+      "locator": "body[1]",
+      "quote": "可插拔主导70%",
+      "semantic_fields": {
+        "factuality": "forecast",
+        "metric": "pluggable_share",
+        "period": "2029",
+        "subject": "光模块行业",
+        "unit": "%",
+        "value": "70",
+        "attribution": "讲者转述的未明确来源",
+        "perspective": "quoted_other",
+        "source_stance": "challenged",
+        "estimate_status": "uncertain",
+        "qualifier": "exact_as_reported"
+      },
+      "critical": true,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[1]",
+          "quote": "可插拔主导70%",
+          "start": 48,
+          "end": 56,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "18cc5c6c06ae3b5ab8cb84af6f770d1fbfc28aac1cfd4279db9d249e97f57972"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[1]",
+          "quote": "有个OCS的快速看一下，渗透率反正都是吹牛的，都没准数的。29年NPO到10%，CPO到30%，可插拔主导70%。",
+          "start": 0,
+          "end": 57,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "18cc5c6c06ae3b5ab8cb84af6f770d1fbfc28aac1cfd4279db9d249e97f57972"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": "必须同时保留预测数值与讲者质疑，避免把被质疑口径作为认可结论",
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "70",
+        "scale": "1"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "29年",
+        "suffix": ""
+      }
+    },
+    {
+      "record_id": "NT-C14",
+      "role": "claims",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "origin": "llm_prose",
+      "locator": "body[3]",
+      "quote": "27年5万到10万个水平",
+      "semantic_fields": {
+        "factuality": "forecast",
+        "metric": "CPO_shipments",
+        "period": "2027",
+        "subject": "光模块行业",
+        "unit": "个",
+        "value": "50000-100000",
+        "attribution": "未署名材料中的预测",
+        "perspective": "unknown",
+        "source_stance": "reported",
+        "estimate_status": "forecast",
+        "qualifier": "exact_as_reported"
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[3]",
+          "quote": "27年5万到10万个水平",
+          "start": 107,
+          "end": 119,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "e1f7a330b58ebfaa898e1605e77584255df200d335bd54d0416fa3a1744e9807"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[3]",
+          "quote": "互补关系非完全替代，然后这个东西也是反正也是吹牛的。27年合计的高速光模块两个是1.5亿只，这是需求得出的需求量，需求量没用，要交付量才有用。CPO主要在交换机侧，市场成熟度不高，预计26年很少，26年就忽略不计，27年5万到10万个水平，这是合理的。",
+          "start": 0,
+          "end": 126,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "e1f7a330b58ebfaa898e1605e77584255df200d335bd54d0416fa3a1744e9807"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": null,
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "5万到10万",
+        "scale": "10000"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "27年",
+        "suffix": ""
+      }
+    },
+    {
+      "record_id": "NT-C15",
+      "role": "claims",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "origin": "llm_prose",
+      "locator": "body[15]",
+      "quote": "我们3.2T预计将在27年三季度左右实现批量供应",
+      "semantic_fields": {
+        "factuality": "forecast",
+        "metric": "3.2T_batch_supply",
+        "period": "2027Q3",
+        "subject": "材料所述公司",
+        "unit": "status",
+        "value": "batch_supply",
+        "attribution": "未署名材料中的预测",
+        "perspective": "unknown",
+        "source_stance": "reported",
+        "estimate_status": "forecast",
+        "qualifier": "approximately"
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "review_notes": "预测来源身份未可靠消歧；不得擅自归给旭创或其他具体企业。",
+      "evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[15]",
+          "quote": "我们3.2T预计将在27年三季度左右实现批量供应",
+          "start": 77,
+          "end": 101,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "7f19d9781227fd1f2f770a6a51476c1961e2bc7d636f22690eeb6feb04b120bb"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[15]",
+          "quote": "二季度800G出货量未达市场预期的原因是什么？实际上这出货量主要原因是1.6T影响了800G，谁说的？这个不太对，那反正不是旭创的数字。3.2T看看行业，我们3.2T预计将在27年三季度左右实现批量供应，这是个预计的，预计到28年整个行业的出货量将达到500万只的水平。价格方面预计3.2T单价在1800美元左右，这是个比较早期的一些预计，可以先看看2.4T未来如何。2.4T 27年的出货量预期在200万只，这个是之前传的，也是200万只，这是可能的。到28年预计增长至300至500万只，这个就是金像电的这个产品。然后EML和硅光26年初是4比6，预计到年底是规划到65%比35%。",
+          "start": 0,
+          "end": 293,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "7f19d9781227fd1f2f770a6a51476c1961e2bc7d636f22690eeb6feb04b120bb"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": null,
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "categorical",
+        "token": "实现批量供应",
+        "normalized": "batch_supply"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "27年",
+        "suffix": "Q3",
+        "context_reason": "27年三季度左右"
+      }
+    },
+    {
+      "record_id": "NT-C16",
+      "role": "claims",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "origin": "llm_prose",
+      "locator": "body[15]",
+      "quote": "预计到28年整个行业的出货量将达到500万只的水平",
+      "semantic_fields": {
+        "factuality": "forecast",
+        "metric": "3.2T_shipments",
+        "period": "2028",
+        "subject": "光模块行业",
+        "unit": "只",
+        "value": "5000000",
+        "attribution": "未署名材料中的预测",
+        "perspective": "unknown",
+        "source_stance": "reported",
+        "estimate_status": "forecast",
+        "qualifier": "exact_as_reported"
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "review_notes": "预测来源身份未可靠消歧；不得擅自归给旭创或其他具体企业。",
+      "evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[15]",
+          "quote": "预计到28年整个行业的出货量将达到500万只的水平",
+          "start": 109,
+          "end": 134,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "7f19d9781227fd1f2f770a6a51476c1961e2bc7d636f22690eeb6feb04b120bb"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[15]",
+          "quote": "二季度800G出货量未达市场预期的原因是什么？实际上这出货量主要原因是1.6T影响了800G，谁说的？这个不太对，那反正不是旭创的数字。3.2T看看行业，我们3.2T预计将在27年三季度左右实现批量供应，这是个预计的，预计到28年整个行业的出货量将达到500万只的水平。价格方面预计3.2T单价在1800美元左右，这是个比较早期的一些预计，可以先看看2.4T未来如何。2.4T 27年的出货量预期在200万只，这个是之前传的，也是200万只，这是可能的。到28年预计增长至300至500万只，这个就是金像电的这个产品。然后EML和硅光26年初是4比6，预计到年底是规划到65%比35%。",
+          "start": 0,
+          "end": 293,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "7f19d9781227fd1f2f770a6a51476c1961e2bc7d636f22690eeb6feb04b120bb"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": null,
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "500万",
+        "scale": "10000"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "28年",
+        "suffix": ""
+      }
+    },
+    {
+      "record_id": "NT-C17",
+      "role": "claims",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "origin": "llm_prose",
+      "locator": "body[15]",
+      "quote": "价格方面预计3.2T单价在1800美元左右",
+      "semantic_fields": {
+        "factuality": "forecast",
+        "metric": "3.2T_unit_price",
+        "period": "early_stage",
+        "subject": "光模块行业",
+        "unit": "美元",
+        "value": "1800",
+        "attribution": "未署名材料中的预测",
+        "perspective": "unknown",
+        "source_stance": "reported",
+        "estimate_status": "early_estimate",
+        "qualifier": "approximately"
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "review_notes": "预测来源身份未可靠消歧；不得擅自归给旭创或其他具体企业。",
+      "evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[15]",
+          "quote": "价格方面预计3.2T单价在1800美元左右",
+          "start": 135,
+          "end": 156,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "7f19d9781227fd1f2f770a6a51476c1961e2bc7d636f22690eeb6feb04b120bb"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[15]",
+          "quote": "二季度800G出货量未达市场预期的原因是什么？实际上这出货量主要原因是1.6T影响了800G，谁说的？这个不太对，那反正不是旭创的数字。3.2T看看行业，我们3.2T预计将在27年三季度左右实现批量供应，这是个预计的，预计到28年整个行业的出货量将达到500万只的水平。价格方面预计3.2T单价在1800美元左右，这是个比较早期的一些预计，可以先看看2.4T未来如何。2.4T 27年的出货量预期在200万只，这个是之前传的，也是200万只，这是可能的。到28年预计增长至300至500万只，这个就是金像电的这个产品。然后EML和硅光26年初是4比6，预计到年底是规划到65%比35%。",
+          "start": 0,
+          "end": 293,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "7f19d9781227fd1f2f770a6a51476c1961e2bc7d636f22690eeb6feb04b120bb"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": null,
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "1800",
+        "scale": "1"
+      },
+      "period_normalization": {
+        "kind": "descriptive",
+        "token": "比较早期",
+        "normalized": "early_stage"
+      }
+    },
+    {
+      "record_id": "NT-C18",
+      "role": "claims",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "origin": "llm_prose",
+      "locator": "body[15]",
+      "quote": "2.4T 27年的出货量预期在200万只",
+      "semantic_fields": {
+        "factuality": "forecast",
+        "metric": "2.4T_shipments",
+        "period": "2027",
+        "subject": "2.4T产品（厂商口径不明）",
+        "unit": "只",
+        "value": "2000000",
+        "attribution": "未署名材料中的预测",
+        "perspective": "unknown",
+        "source_stance": "reported",
+        "estimate_status": "reported_rumor",
+        "qualifier": "exact_as_reported"
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "review_notes": "预测来源身份未可靠消歧；不得擅自归给旭创或其他具体企业。",
+      "evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[15]",
+          "quote": "2.4T 27年的出货量预期在200万只",
+          "start": 184,
+          "end": 204,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "7f19d9781227fd1f2f770a6a51476c1961e2bc7d636f22690eeb6feb04b120bb"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[15]",
+          "quote": "二季度800G出货量未达市场预期的原因是什么？实际上这出货量主要原因是1.6T影响了800G，谁说的？这个不太对，那反正不是旭创的数字。3.2T看看行业，我们3.2T预计将在27年三季度左右实现批量供应，这是个预计的，预计到28年整个行业的出货量将达到500万只的水平。价格方面预计3.2T单价在1800美元左右，这是个比较早期的一些预计，可以先看看2.4T未来如何。2.4T 27年的出货量预期在200万只，这个是之前传的，也是200万只，这是可能的。到28年预计增长至300至500万只，这个就是金像电的这个产品。然后EML和硅光26年初是4比6，预计到年底是规划到65%比35%。",
+          "start": 0,
+          "end": 293,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "7f19d9781227fd1f2f770a6a51476c1961e2bc7d636f22690eeb6feb04b120bb"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": null,
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "200万",
+        "scale": "10000"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "27年",
+        "suffix": ""
+      }
+    },
+    {
+      "record_id": "NT-C19",
+      "role": "claims",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "origin": "llm_prose",
+      "locator": "body[15]",
+      "quote": "到28年预计增长至300至500万只",
+      "semantic_fields": {
+        "factuality": "forecast",
+        "metric": "2.4T_shipments",
+        "period": "2028",
+        "subject": "2.4T产品（厂商口径不明）",
+        "unit": "只",
+        "value": "3000000-5000000",
+        "attribution": "未署名材料中的预测",
+        "perspective": "unknown",
+        "source_stance": "reported",
+        "estimate_status": "forecast",
+        "qualifier": "exact_as_reported"
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "review_notes": "预测来源身份未可靠消歧；不得擅自归给旭创或其他具体企业。",
+      "evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[15]",
+          "quote": "到28年预计增长至300至500万只",
+          "start": 227,
+          "end": 245,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "7f19d9781227fd1f2f770a6a51476c1961e2bc7d636f22690eeb6feb04b120bb"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[15]",
+          "quote": "二季度800G出货量未达市场预期的原因是什么？实际上这出货量主要原因是1.6T影响了800G，谁说的？这个不太对，那反正不是旭创的数字。3.2T看看行业，我们3.2T预计将在27年三季度左右实现批量供应，这是个预计的，预计到28年整个行业的出货量将达到500万只的水平。价格方面预计3.2T单价在1800美元左右，这是个比较早期的一些预计，可以先看看2.4T未来如何。2.4T 27年的出货量预期在200万只，这个是之前传的，也是200万只，这是可能的。到28年预计增长至300至500万只，这个就是金像电的这个产品。然后EML和硅光26年初是4比6，预计到年底是规划到65%比35%。",
+          "start": 0,
+          "end": 293,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "7f19d9781227fd1f2f770a6a51476c1961e2bc7d636f22690eeb6feb04b120bb"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": null,
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "300至500万",
+        "scale": "10000"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "28年",
+        "suffix": ""
+      }
+    },
+    {
+      "record_id": "NT-C20",
+      "role": "claims",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "origin": "llm_prose",
+      "locator": "body[46]",
+      "quote": "今年下半年预计将有2到3个新客户开始贡献收入",
+      "semantic_fields": {
+        "factuality": "forecast",
+        "metric": "new_revenue_contributing_customers",
+        "period": "2026H2",
+        "subject": "材料所述公司",
+        "unit": "个",
+        "value": "2-3",
+        "attribution": "未署名材料中的预测",
+        "perspective": "unknown",
+        "source_stance": "reported",
+        "estimate_status": "forecast",
+        "qualifier": "exact_as_reported"
+      },
+      "critical": false,
+      "risk_or_condition": false,
+      "review_status": "accepted",
+      "review_notes": "预测来源身份未可靠消歧；不得擅自归给旭创或其他具体企业。",
+      "evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[46]",
+          "quote": "今年下半年预计将有2到3个新客户开始贡献收入",
+          "start": 22,
+          "end": 44,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "482ae17b1d59041da31e4da40511fb5ae8a21e6624382e5b5bc9e80a94e46700"
+        }
+      ],
+      "context_evidence": [
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[46]",
+          "quote": "北美客户今年定位非常明确，就服务于顶级客户。今年下半年预计将有2到3个新客户开始贡献收入，这些主要是第二梯队。这里的相当于是一些新云，或者一些莫名其妙新增长出来的，就莫名其妙是那个奥特曼说的，对吧？他他说了你们这些莫名其妙新出来的这些客户，这些云，对不对？自己都还没搞清楚赚钱模式，什么应用也没有，就来投入云。你们莫名其妙，说的就是这些新客户。他那个采访反正他是有立场的，对吧？",
+          "start": 0,
+          "end": 189,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "482ae17b1d59041da31e4da40511fb5ae8a21e6624382e5b5bc9e80a94e46700"
+        },
+        {
+          "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "locator": "body[49]",
+          "quote": "但是的确有一些可能性，这些前沿东西得关注，那些才是更重要的东西。目前反正是有新客户了，这些新的云不知道是什么原因。目前公司与这些新客户开展顺利，进入了小批量测试。到26年底这些新客户开始供应，供应占比合计能达到15%左右，那是一个比较有意义的体量了，不限于那四大了，还有四大加上NVIDIA，不限于这五家了。加上现有核心客户的业务，预计北美市场收入占比将达到85%左右。今年85%左右，还有15%是国内。",
+          "start": 0,
+          "end": 202,
+          "offset_basis": "unit_codepoints",
+          "unit_text_sha256": "374ca7875a5bb4b7b9e69ea771a44c2015bde499552f1205ec5c2db93c6c4f14"
+        }
+      ],
+      "unknown_fields": [],
+      "adjudication": {
+        "reviewer": "xyl",
+        "decision": "accepted",
+        "reason": "用户于 2026-10-08 明确签认 r2 两份审阅文档；按整包原样接受。",
+        "changes": []
+      },
+      "critical_reason": null,
+      "risk_reason": null,
+      "value_normalization": {
+        "kind": "numeric",
+        "token": "2到3",
+        "scale": "1"
+      },
+      "period_normalization": {
+        "kind": "calendar",
+        "year_token": "26年",
+        "suffix": "H2",
+        "context_reason": "今年下半年；相邻正文明确到26年底"
+      }
+    }
+  ],
+  "_filtered": {
+    "by": "role",
+    "value": "claims",
+    "original_count": 92,
+    "kept_count": 20
+  }
+}
