@@ -1,0 +1,32 @@
+{
+  "schema_version": "claims-publication-proposal-manifest-1",
+  "id": "106-claims-publication-lifecycle-20261015",
+  "status": "draft_pending_human_signature",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "purpose": "A 档后果的下一阶段立项草案：93 条签认裁定接入发布/消费闭环（裁定桥→发布→三用途消费验收）",
+  "inputs": {
+    "run_record_105": "sha256:6154292f59b71924cf293db655b42e1b39ac52282c4390d0a4e5bc073a3698ba",
+    "signed_pool_105": "sha256:d639e8a20d6ce0eef14fde1ace407eebb4fde7670e056b1adeabeb82deac75c2",
+    "prereg_v4_effective": "sha256:6b5c93d582c9ff8cebfd5e35944a46951068de0e95685abff4645ed1cdaaa510",
+    "exploration_basis": "code-explorer 零调用探查（2026-10-15）：发布/消费代码层已齐平，缺口四件（桥/入口/消费实测/生产链）"
+  },
+  "outputs": {
+    "claims-publication-proposal.json": "见本目录（题目/现状/缺口/S1–S5/验收判据/D1–D3）",
+    "claims-publication-proposal-signoff.md": "待 U 具名签署（D1–D3 同件裁定）"
+  },
+  "pool_facts": {
+    "usable_for": {"cite_only": 83, "cite+compare+calculate": 10},
+    "reason_codes_nonempty": "93/93（T4 生效）"
+  },
+  "does_not_touch": [
+    "evidence/95-claims-prereg-20261014/**",
+    "evidence/99-claims-prereg-v3-signed-r2-20261014/**",
+    "evidence/102-claims-treatment-engineering-20261014/**",
+    "evidence/103-claims-budget-authorisation-20261014/**",
+    "evidence/104-claims-prereg-v4-amendment-20261014/**",
+    "evidence/105-claims-treatment-rerun-20261014/**",
+    "evidence/10-quality-gold-freeze-20261008-r2/**"
+  ],
+  "blocked_on": ["U 在签认件上具名签署并裁定 D1–D3"]
+}

@@ -1,0 +1,179 @@
+[60] id=bbeefffe85f4 run=claims-industrial-fulian seq=8
+    claim_text=工业富联2026-08-28的换手率为0.80%
+    subject=工业富联 metric=换手 metric_raw=换手
+    period_raw=2026-08-28 period_end=2026-08-28 period_grain=point
+    value_text=0.80 value_num=0.80 unit=%
+    kind=fact scope=company quality_status=ok reason_codes=[]
+    evidence_quote=换手 0.80%；
+    canonical.quote=换手 0.80%；
+
+[61] id=5dea77a7f56f run=claims-industrial-fulian seq=8
+    claim_text=工业富联2026-08-28的量比为1.66
+    subject=工业富联 metric=量比 metric_raw=量比
+    period_raw=2026-08-28 period_end=2026-08-28 period_grain=point
+    value_text=1.66 value_num=1.66 unit=None
+    kind=fact scope=company quality_status=review reason_codes=['unit_missing']
+    evidence_quote=量比 1.66。
+    canonical.quote=量比 1.66。
+
+[62] id=14673aea7ed0 run=claims-industrial-fulian seq=8
+    claim_text=工业富联2025.09.01–2026.08.28的52周最高价为84.95元
+    subject=工业富联 metric=52周高 metric_raw=52周高
+    period_raw=2025.09.01–2026.08.28 period_end=None period_grain=None
+    value_text=84.95 value_num=84.95 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous']
+    evidence_quote=52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。
+    canonical.quote=52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。
+
+[63] id=cb8fe6ef0f04 run=claims-industrial-fulian seq=8
+    claim_text=工业富联2025.09.01–2026.08.28的52周最低价为46.70元
+    subject=工业富联 metric=52周低 metric_raw=52周低
+    period_raw=2025.09.01–2026.08.28 period_end=None period_grain=None
+    value_text=46.70 value_num=46.70 unit=元
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous']
+    evidence_quote=52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。
+    canonical.quote=52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。
+
+[64] id=767c0f173905 run=claims-industrial-fulian seq=8
+    claim_text=工业富联2025.09.01–2026.08.28的52周价格相对位置约为45.3%
+    subject=工业富联 metric=相对位置 metric_raw=相对位置
+    period_raw=2025.09.01–2026.08.28 period_end=None period_grain=None
+    value_text=45.3 value_num=45.3 unit=%
+    kind=fact scope=company quality_status=review reason_codes=['period_ambiguous']
+    evidence_quote=52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。
+    canonical.quote=52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。
+
+[65] id=19c493e2b097 run=claims-industrial-fulian seq=8
+    claim_text=工业富联2026-08-28的融资余额为79.81亿元
+    subject=工业富联 metric=融资余额 metric_raw=融资余额
+    period_raw=2026-08-28 period_end=2026-08-28 period_grain=point
+    value_text=79.81 value_num=7.981E+9 unit=元
+    kind=fact scope=company quality_status=ok reason_codes=[]
+    evidence_quote=融资余额 79.81 亿。
+    canonical.quote=融资余额 79.81 亿。
+
+[66] id=a8879a052a7a run=claims-industrial-fulian seq=8
+    claim_text=工业富联截至2026-08-28的近5个交易日序列中，最早的交易日收盘价为60.40元
+    subject=工业富联 metric=收盘 metric_raw=收盘
+    period_raw=2026-08-28 period_end=2026-08-28 period_grain=point
+    value_text=60.40 value_num=60.40 unit=元
+    kind=fact scope=company quality_status=ok reason_codes=[]
+    evidence_quote=近 5 日收盘 60.40 → 60.15 → 60.57 → 63.86 → 64.04。
+    canonical.quote=近 5 日收盘 60.40 → 60.15 → 60.57 → 63.86 → 64.04。
+
+[67] id=feec2b9badcb run=claims-industrial-fulian seq=8
+    claim_text=工业富联2026-08-27（英伟达财报次日）的涨跌幅约为+5.43%
+    subject=工业富联 metric=涨跌 metric_raw=涨跌
+    period_raw=2026-08-27 period_end=None period_grain=None
+    value_text=+5.43 value_num=5.43 unit=%
+    kind=fact scope=company quality_status=review reason_codes=['period_unanchored', 'period_not_in_packet']
+    evidence_quote=8/27 英伟达财报次日约 +5.43%
+    canonical.quote=8/27 英伟达财报次日约 +5.43%
+
+[68] id=5e8d1eb800a2 run=claims-optical-module seq=1
+    claim_text=我们的3.2T光模块预计将在27年三季度左右实现批量供应
+    subject=材料所述公司 metric=3.2T光模块批量供应时间 metric_raw=3.2T光模块批量供应时间
+    period_raw=None period_end=None period_grain=None
+    value_text=27年三季度左右 value_num=27 unit=年三季度左右
+    kind=forecast scope=company quality_status=review reason_codes=['period_missing', 'unit_unknown', 'source_qualified_context_requires_review']
+    evidence_quote=我们3.2T预计将在27年三季度左右实现批量供应
+    canonical.quote=我们3.2T预计将在27年三季度左右实现批量供应
+
+[69] id=77d8878d8f32 run=claims-optical-module seq=1
+    claim_text=预计到28年整个行业3.2T光模块出货量将达到500万只
+    subject=3.2T产品（厂商口径不明） metric=出货量 metric_raw=出货量
+    period_raw=28年 period_end=2028-12-31 period_grain=annual
+    value_text=500 value_num=5.00E+6 unit=只
+    kind=forecast scope=industry quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=预计到28年整个行业的出货量将达到500万只的水平
+    canonical.quote=预计到28年整个行业的出货量将达到500万只的水平
+
+[70] id=49f2112546fb run=claims-optical-module seq=1
+    claim_text=预计3.2T光模块单价在1800美元左右，为早期预计
+    subject=3.2T光模块 metric=单价 metric_raw=单价
+    period_raw=None period_end=None period_grain=None
+    value_text=1800 value_num=1800 unit=美元
+    kind=forecast scope=industry quality_status=review reason_codes=['period_missing', 'source_qualified_context_requires_review']
+    evidence_quote=价格方面预计3.2T单价在1800美元左右，这是个比较早期的一些预计
+    canonical.quote=价格方面预计3.2T单价在1800美元左右，这是个比较早期的一些预计
+
+[71] id=62eed12b127e run=claims-optical-module seq=1
+    claim_text=27年2.4T光模块行业出货量预期为200万只，为此前传闻，可能性较高
+    subject=2.4T产品（厂商口径不明） metric=出货量 metric_raw=出货量
+    period_raw=27年 period_end=2027-12-31 period_grain=annual
+    value_text=200 value_num=2.00E+6 unit=只
+    kind=forecast scope=industry quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=2.4T 27年的出货量预期在200万只，这个是之前传的，也是200万只，这是可能的
+    canonical.quote=2.4T 27年的出货量预期在200万只，这个是之前传的，也是200万只，这是可能的
+
+[72] id=2bdd8a50184a run=claims-optical-module seq=1
+    claim_text=预计到28年金像电的2.4T光模块产品出货量将增长至300至500万只
+    subject=2.4T产品（厂商口径不明） metric=出货量 metric_raw=出货量
+    period_raw=28年 period_end=2028-12-31 period_grain=annual
+    value_text=300至500 value_num=None unit=只
+    kind=forecast scope=company quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=到28年预计增长至300至500万只，这个就是金像电的这个产品
+    canonical.quote=到28年预计增长至300至500万只，这个就是金像电的这个产品
+
+[73] id=49383a575458 run=claims-optical-module seq=1
+    claim_text=26年初光模块行业EML技术路线的相对出货占比为4份
+    subject=光模块行业EML技术路线 metric=相对出货占比 metric_raw=相对出货占比
+    period_raw=26年初 period_end=None period_grain=None
+    value_text=4 value_num=4 unit=份
+    kind=fact scope=industry quality_status=review reason_codes=['period_ambiguous', 'unit_unknown', 'source_qualified_context_requires_review']
+    evidence_quote=EML和硅光26年初是4比6
+    canonical.quote=EML和硅光26年初是4比6
+
+[74] id=c9862e1608d8 run=claims-optical-module seq=1
+    claim_text=26年初光模块行业硅光技术路线的相对出货占比为6份
+    subject=光模块行业硅光技术路线 metric=相对出货占比 metric_raw=相对出货占比
+    period_raw=26年初 period_end=None period_grain=None
+    value_text=6 value_num=6 unit=份
+    kind=fact scope=industry quality_status=review reason_codes=['period_ambiguous', 'unit_unknown', 'source_qualified_context_requires_review']
+    evidence_quote=EML和硅光26年初是4比6
+    canonical.quote=EML和硅光26年初是4比6
+
+[75] id=1e7fc0a54900 run=claims-optical-module seq=1
+    claim_text=预计到年底光模块行业EML技术路线的出货占比将达到65%
+    subject=光模块行业EML技术路线 metric=出货占比 metric_raw=出货占比
+    period_raw=年底 period_end=2026-12-31 period_grain=half
+    value_text=65 value_num=65 unit=%
+    kind=forecast scope=industry quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=预计到年底是规划到65%比35%
+    canonical.quote=预计到年底是规划到65%比35%
+
+[76] id=56b140ff8a0e run=claims-optical-module seq=1
+    claim_text=预计到年底光模块行业硅光技术路线的出货占比将达到35%
+    subject=光模块行业硅光技术路线 metric=出货占比 metric_raw=出货占比
+    period_raw=年底 period_end=2026-12-31 period_grain=half
+    value_text=35 value_num=35 unit=%
+    kind=forecast scope=industry quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=预计到年底是规划到65%比35%
+    canonical.quote=预计到年底是规划到65%比35%
+
+[77] id=7ec29ecdaf20 run=claims-optical-module seq=2
+    claim_text=光模块行业29年NPO技术渗透率达到10%
+    subject=光模块行业 metric=NPO渗透率 metric_raw=NPO渗透率
+    period_raw=29年 period_end=2029-12-31 period_grain=annual
+    value_text=10 value_num=10 unit=%
+    kind=forecast scope=industry quality_status=ok reason_codes=[]
+    evidence_quote=29年NPO到10%，
+    canonical.quote=29年NPO到10%，
+
+[78] id=79c476110741 run=claims-optical-module seq=2
+    claim_text=光模块行业29年CPO技术渗透率达到30%
+    subject=光模块行业 metric=CPO渗透率 metric_raw=CPO渗透率
+    period_raw=29年 period_end=2029-12-31 period_grain=annual
+    value_text=30 value_num=30 unit=%
+    kind=forecast scope=industry quality_status=ok reason_codes=[]
+    evidence_quote=CPO到30%，
+    canonical.quote=CPO到30%，
+
+[79] id=20fe00f30fe5 run=claims-optical-module seq=2
+    claim_text=光模块行业29年可插拔技术渗透率达到70%
+    subject=光模块行业 metric=可插拔渗透率 metric_raw=可插拔渗透率
+    period_raw=29年 period_end=2029-12-31 period_grain=annual
+    value_text=70 value_num=70 unit=%
+    kind=forecast scope=industry quality_status=ok reason_codes=[]
+    evidence_quote=可插拔主导70%。
+    canonical.quote=可插拔主导70%。

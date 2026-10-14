@@ -1,0 +1,96 @@
+{
+  "schema_version": "claims-publication-proposal-1",
+  "id": "106-claims-publication-lifecycle-20261015",
+  "status": "draft_pending_human_signature",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "parent_decision": {
+    "what": "105 号 A 档后果（99/104 号预注册原文）：claims 保留并过目标线 ⇒ 进入发布/消费闭环的下一阶段（另行立项）",
+    "evidence": "claims-treatment-run-record.json（6154292f…）：84/93 = 0.9032、召回 20/20、护栏全绿"
+  },
+  "question": {
+    "statement": "把 105 号的 93 条签认裁定（stage=human_adjudicated_candidate）接入本仓的发布/消费闭环——以裁定工件进入 ledger、发布为 semantic publication、并对 cite/compare/calculate 三用途各完成一次真实消费验收——需要哪些件、按什么判据验收？",
+    "decision_use": "范围与验收判据经 U 签认后执行；执行全部零模型调用"
+  },
+  "current_state": {
+    "code_layer": "发布与消费的代码层已齐平：publish_semantic 全链（绑定校验/协议白名单/scoped 与 candidate 双模式）、查询用途 gate（purpose ∈ {cite,compare,calculate}，compare/calculate 只认 claims）、抽取侧用途撤除（claim_use_axes → fact.usable_for）、交付验证（verify_reference）",
+    "publication_now": "已发布的 claims 是 10-13 旧池（80 号：52 条，scoped cite）；105 治疗池只有裁定/评分证据，未发布",
+    "pool_usable_for": {"cite_only": 83, "cite+compare+calculate": 10, "note": "10 条 = matched 4 + correct_extra 6；93 条 reason_codes 全部非空（T4 生效）"}
+  },
+  "gaps": {
+    "bridge": {
+      "what": "裁定工件 → ledger 的 claims 导入桥（AcceptedClaims）：items 有先例（AcceptedMaterialItems，cli.py:90-96, 217-233；ledger.py:2043-2050），claims 没有 ⇒ 93 条签认裁定目前只是评分证据，不能直接作为已接受 ledger 工件发布",
+      "class": "新增件"
+    },
+    "publish_entry": {
+      "what": "受控发布入口：publish_semantic 目前只能 Python 直调（tests/harness），structured/cli.py 只有 plan/execute/replay/check/query 五个子命令",
+      "class": "需小改（新增受约束子命令）"
+    },
+    "consumption_verification": {
+      "what": "compare/calculate 用途的消费闭环从未实测（81 号只验证过 cite）；需用已授 compare/calculate 的 claims 记录各跑一次 delivery → context_use → report_reference 且 verify_reference 通过",
+      "class": "需执行（零调用）"
+    },
+    "out_of_scope_registered": {
+      "production_pg_web": "docs/corpus-retrieval.md:41-45 的生产 PG 活动 build + 全文索引 + web 读链：属生产放行件，不在本题范围（另立）",
+      "quantity_units_vocabulary": "store.py:52-59 的 _QUANTITY_UNITS 冻结词表（元/万元/百万元/亿元/%/倍）：扩词表属契约修订，本轮不动；新池单位若出词表，跨角色映射按现有 fail-closed 语义压制并在记录中如实登记"
+    }
+  },
+  "plan": [
+    {
+      "step": "S1 裁定桥",
+      "what": "新增 AcceptedClaims 导入桥：以 105 号 signed 件（93 条，judgement + stage=human_adjudicated_candidate）为权威工件进 ledger；protocol 校验语义按 items 桥先例对齐（裁定工件以人工签认替代机器 protocol_status；差异逐条登记）",
+      "zero_call": true
+    },
+    {
+      "step": "S2 发布",
+      "what": "对入账后的 claims 走 publish_semantic（candidate 模式，非 scoped）；若 quality 门因 review_required 行受阻，按 items 先例处理并在记录中登记，不得放宽门",
+      "zero_call": true
+    },
+    {
+      "step": "S3 受控入口",
+      "what": "structured/cli.py 增受约束的 publish 子命令（参数校验沿用 store 现有门；默认拒绝、显式授权才发布）",
+      "zero_call": true
+    },
+    {
+      "step": "S4 三用途消费验收",
+      "what": "cite（既有先例回归）+ compare + calculate 各 ≥1 条真实 delivery → context_use → report_reference，verify_reference 通过；compare/calculate 样本从 10 条可用行中取；不可用原因逐条登记",
+      "zero_call": true
+    },
+    {
+      "step": "S5 验收记录",
+      "what": "落地记录（写盘哈希、发布 manifest、消费验收三例、与 items 先例的对账）+ 常驻测试；校验类脚本支持 --no-write 且幂等",
+      "zero_call": true
+    }
+  ],
+  "acceptance_criteria": [
+    "93 条签认裁定全部经裁定桥进入 ledger，judgement 与 signed 件逐字一致（差集为空）",
+    "claims 发布成功：semantic_publications 落盘、tasks publication_status=published、发布 manifest 哈希登记",
+    "cite/compare/calculate 三用途各 ≥1 条消费验收通过（verify_reference 全绿，无未登记例外）",
+    "全程零模型调用；既有产物（95–105 号）字节未动；items 链路回归不破（pytest -k corpus 全绿）",
+    "每个缺口件的处置（含 fail-closed 遇阻）在落地记录中可查，无静默放宽"
+  ],
+  "open_decisions_for_u": [
+    {
+      "id": "D1",
+      "question": "范围确认：S1–S5 全做（含 compare/calculate 消费验证与 CLI publish 子命令）？",
+      "options": "全做（推荐：闭环才算走通）/ 只做 S1–S2+S4 的 cite 部分（compare/calculate 留待下次）"
+    },
+    {
+      "id": "D2",
+      "question": "生产 PG/web 读链出范围确认？",
+      "options": "出范围（推荐：生产放行是另一道门，另行立项）/ 并入本题"
+    },
+    {
+      "id": "D3",
+      "question": "S2 若遇 quality=review_required 行被发布门拦：按 items 先例的处置是什么（scoped 显式缺口 / 只发布 accepted 子集 / 逐条人工升格）？执行时遇阻即停、报 U 裁，不自行放宽。",
+      "options": "授权执行时按预设优先级处理 / 一律停下报裁"
+    }
+  ],
+  "blocked_on": ["U 签认本题（含 D1–D3 裁定）"],
+  "does_not_touch": [
+    "evidence/95-claims-prereg-20261014/**",
+    "evidence/99-claims-prereg-v3-signed-r2-20261014/**",
+    "evidence/102/103/104/105 号全部已落地产物",
+    "evidence/10-quality-gold-freeze-20261008-r2/**"
+  ]
+}

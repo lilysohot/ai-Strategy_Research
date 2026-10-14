@@ -1,0 +1,116 @@
+[80] id=f1ddde13fbe6 run=claims-optical-module seq=3
+    claim_text=光模块行业相关生产未来60%以上将通过泰国或者台湾完成
+    subject=光模块行业 metric=通过泰国或者台湾生产的产能占比 metric_raw=通过泰国或者台湾生产的产能占比
+    period_raw=长期来看、未来 period_end=None period_grain=None
+    value_text=60%以上 value_num=60 unit=%
+    kind=forecast scope=industry quality_status=review reason_codes=['period_ambiguous', 'period_unanchored', 'period_not_in_packet', 'source_qualified_context_requires_review']
+    evidence_quote=长期来看，为规避风险，都在泰国布局产能，未来60%以上的将通过泰国或者台湾生产，
+    canonical.quote=长期来看，为规避风险，都在泰国布局产能，未来60%以上的将通过泰国或者台湾生产，
+
+[81] id=c6a7dd36c564 run=claims-optical-module seq=3
+    claim_text=光模块行业相关生产基地之前几年适用的税率为0%
+    subject=光模块行业 metric=适用税率 metric_raw=适用税率
+    period_raw=前几年 period_end=None period_grain=None
+    value_text=0 value_num=0 unit=%
+    kind=fact scope=industry quality_status=rejected reason_codes=['period_ambiguous', 'value_not_in_evidence', 'source_qualified_context_requires_review']
+    evidence_quote=以前都是零
+    canonical.quote=以前都是零
+
+[82] id=22a0dabf7cda run=claims-optical-module seq=3
+    claim_text=光模块行业相关生产基地若已享受免税，后续需按15%的税率补缴税款
+    subject=光模块行业 metric=免税补缴税率 metric_raw=免税补缴税率
+    period_raw=以后 period_end=None period_grain=None
+    value_text=15 value_num=15 unit=%
+    kind=forecast scope=industry quality_status=review reason_codes=['period_ambiguous', 'source_qualified_context_requires_review']
+    evidence_quote=你免了税还要按15%税率给你补上
+    canonical.quote=你免了税还要按15%税率给你补上
+
+[83] id=40ea020fd7f9 run=claims-optical-module seq=4
+    claim_text=光模块行业相关主体因政策原因导致成本上升时，与客户协商的提价幅度下限为10%
+    subject=光模块行业 metric=提价幅度 metric_raw=提价幅度
+    period_raw=None period_end=None period_grain=None
+    value_text=10 value_num=10 unit=%
+    kind=forecast scope=industry quality_status=review reason_codes=['period_missing', 'source_qualified_context_requires_review']
+    evidence_quote=会与客户协商，提价幅度在10%到20%之间。
+    canonical.quote=会与客户协商，提价幅度在10%到20%之间。
+
+[84] id=12252904a162 run=claims-optical-module seq=5
+    claim_text=光模块行业CPO产业链中，交换机芯片厂商占据90%以上的价值
+    subject=光模块行业 metric=CPO产业链中交换机芯片厂商的价值占比 metric_raw=CPO产业链中交换机芯片厂商的价值占比
+    period_raw=None period_end=None period_grain=None
+    value_text=90%以上 value_num=90 unit=%
+    kind=fact scope=industry quality_status=review reason_codes=['period_missing', 'source_qualified_context_requires_review']
+    evidence_quote=在CPO里面90%以上的价值由交换机芯片厂商，
+    canonical.quote=在CPO里面90%以上的价值由交换机芯片厂商，
+
+[85] id=9ad3baf33891 run=claims-optical-module seq=6
+    claim_text=光模块行业27年合计高速光模块的需求测算值为1.5亿只
+    subject=高速光模块 metric=需求量 metric_raw=需求量
+    period_raw=27年 period_end=2027-12-31 period_grain=annual
+    value_text=1.5亿 value_num=1.5 unit=只
+    kind=forecast scope=industry quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=27年合计的高速光模块两个是1.5亿只，这是需求得出的需求量
+    canonical.quote=27年合计的高速光模块两个是1.5亿只，这是需求得出的需求量
+
+[86] id=ccc13eb0be3a run=claims-optical-module seq=6
+    claim_text=光模块行业CPO产品27年的预计水平为5万到10万个
+    subject=光模块行业 metric=CPO metric_raw=CPO
+    period_raw=27年 period_end=2027-12-31 period_grain=annual
+    value_text=5万到10万 value_num=None unit=个
+    kind=forecast scope=industry quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=27年5万到10万个水平
+    canonical.quote=27年5万到10万个水平
+
+[87] id=68ba4bac4434 run=claims-optical-module seq=7
+    claim_text=光模块行业预计今年下半年将有2到3个主要为第二梯队的新客户开始贡献收入
+    subject=材料所述公司 metric=开始贡献收入的新客户数量 metric_raw=开始贡献收入的新客户数量
+    period_raw=今年下半年 period_end=2026-12-31 period_grain=half
+    value_text=2到3 value_num=None unit=个
+    kind=forecast scope=company quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=今年下半年预计将有2到3个新客户开始贡献收入，这些主要是第二梯队。
+    canonical.quote=今年下半年预计将有2到3个新客户开始贡献收入，这些主要是第二梯队。
+
+[88] id=563d639ccd22 run=claims-optical-module seq=8
+    claim_text=到26年底，光模块行业相关公司的新客户供应占比合计能达到15%左右
+    subject=公司 metric=供应占比 metric_raw=供应占比
+    period_raw=26年底 period_end=None period_grain=None
+    value_text=15左右 value_num=15 unit=%
+    kind=forecast scope=industry quality_status=review reason_codes=['period_ambiguous', 'source_qualified_context_requires_review']
+    evidence_quote=到26年底这些新客户开始供应，供应占比合计能达到15%左右
+    canonical.quote=到26年底这些新客户开始供应，供应占比合计能达到15%左右
+
+[89] id=d40dbd51f899 run=claims-optical-module seq=8
+    claim_text=光模块行业相关公司预计到26年底的北美市场收入占比将达到85%左右
+    subject=公司 metric=北美市场收入占比 metric_raw=北美市场收入占比
+    period_raw=26年底 period_end=None period_grain=None
+    value_text=85左右 value_num=85 unit=%
+    kind=forecast scope=industry quality_status=review reason_codes=['period_ambiguous', 'source_qualified_context_requires_review']
+    evidence_quote=预计北美市场收入占比将达到85%左右
+    canonical.quote=预计北美市场收入占比将达到85%左右
+
+[90] id=411d0f433e55 run=claims-optical-module seq=8
+    claim_text=光模块行业相关公司今年的北美市场收入占比约为85%左右
+    subject=公司 metric=北美市场收入占比 metric_raw=北美市场收入占比
+    period_raw=今年 period_end=2026-12-31 period_grain=annual
+    value_text=85左右 value_num=85 unit=%
+    kind=fact scope=industry quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=今年85%左右
+    canonical.quote=今年85%左右
+
+[91] id=7f8fa31ac58e run=claims-optical-module seq=8
+    claim_text=光模块行业相关公司今年的国内市场收入占比约为15%左右
+    subject=公司 metric=国内市场收入占比 metric_raw=国内市场收入占比
+    period_raw=今年 period_end=2026-12-31 period_grain=annual
+    value_text=15左右 value_num=15 unit=%
+    kind=fact scope=industry quality_status=review reason_codes=['source_qualified_context_requires_review']
+    evidence_quote=还有15%是国内
+    canonical.quote=还有15%是国内
+
+[92] id=99c2d149bf9f run=claims-optical-module seq=9
+    claim_text=光模块行业800G产品二季度的规模超过300万个
+    subject=光模块行业 metric=800G metric_raw=800G
+    period_raw=二季度 period_end=2026-06-30 period_grain=quarter
+    value_text=超过300万 value_num=None unit=个
+    kind=fact scope=industry quality_status=review reason_codes=['value_missing']
+    evidence_quote=二季度就有超过300万个了
+    canonical.quote=二季度就有超过300万个了

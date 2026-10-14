@@ -1,0 +1,37 @@
+{
+  "schema_version": "claims-treatment-stage3-completion-1",
+  "id": "105-claims-treatment-rerun-20261014",
+  "created_on": "2026-10-14",
+  "model_calls": 0,
+  "what": "闭合 landing-record.json 的 blocked_on（『阶段 3：93 行人工裁定』）",
+  "completion_evidence": {
+    "worksheet_signed": {
+      "path": "treatment-adjudication/candidate-adjudications.worksheet.json",
+      "sha256": "9e853c0d3803ad5fa62e8510e5ee8ac72f027ac61fa7b39367a28735293e170d",
+      "facts": "93/93 accepted，reviewer/adjudicator=xyl；judgement = matched 20（覆盖 NT-C01..NT-C20 恰好各一次）/ correct_extra 64 / incorrect 3 / duplicate 6"
+    },
+    "signed_pool": {
+      "path": "treatment-adjudication/candidate-adjudications.signed.json",
+      "sha256": "d639e8a20d6ce0eef14fde1ace407eebb4fde7670e056b1adeabeb82deac75c2",
+      "note": "冻结件：补 stage/source_id/reason/evidence；doc_to_source 与 90 号逐字一致"
+    },
+    "run_record": {
+      "path": "claims-treatment-run-record.json",
+      "sha256": "6154292f59b71924cf293db655b42e1b39ac52282c4390d0a4e5bc073a3698ba",
+      "note": "评分 + 档位判定（write-once，零调用）"
+    }
+  },
+  "tier_verdict": {
+    "id": "A_keep_and_pass_target",
+    "candidate_precision": "84/93 = 0.9032",
+    "target_recall": "20/20",
+    "unresolved_candidates": 0,
+    "sentinels": "3/3",
+    "baseline_comparison": "冻结基线 51/81 = 0.6296 → 治疗臂 84/93 = 0.9032（T1–T4 治疗后新池实跑）",
+    "consequence_per_prereg": "A 档：进入发布/消费闭环的下一阶段（另行立项）"
+  },
+  "supersedes": {
+    "field": "landing-record.json blocked_on",
+    "reading_in_force": "阶段 3 已完成；现行档位判定以 claims-treatment-run-record.json 为准"
+  }
+}

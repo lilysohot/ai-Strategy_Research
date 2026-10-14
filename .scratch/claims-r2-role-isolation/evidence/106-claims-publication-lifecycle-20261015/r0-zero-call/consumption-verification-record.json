@@ -1,0 +1,78 @@
+{
+  "schema_version": "claims-consumption-verification-1",
+  "id": "106-claims-publication-lifecycle-20261015",
+  "run_on": "2026-10-15",
+  "model_calls": 0,
+  "rule": "三用途各取一条发布许可的记录，经 verify_reference 只读审计；无许可记录如实登记",
+  "runs": {
+    "claims-industrial-fulian": {
+      "cite": {
+        "status": "problems",
+        "publication_id": "sha256:1b1f0d5925d0a4e37be656ce9d618256b352cd1ae3b03b684f9a63e416a247cb",
+        "record_id": "029e21876287ac3b0d09d1409f180c03e496cd57f15778c1729eec85faffa705",
+        "licensed_records": 7,
+        "context_status": "complete",
+        "quality_status": "review_required",
+        "dependency_kinds": [],
+        "problems": [
+          {
+            "code": "quality_not_accepted",
+            "message": "记录质量未合格"
+          }
+        ]
+      },
+      "compare": {
+        "status": "no_licensed_record",
+        "records_in_page": 0,
+        "page_status": "no_match",
+        "note": "该用途在此发布中没有被许可的记录（usable_for 不含该用途）"
+      },
+      "calculate": {
+        "status": "no_licensed_record",
+        "records_in_page": 0,
+        "page_status": "no_match",
+        "note": "该用途在此发布中没有被许可的记录（usable_for 不含该用途）"
+      }
+    },
+    "claims-optical-module": {
+      "cite": {
+        "status": "problems",
+        "publication_id": "sha256:a4d7ec3a1dac85099ac5d728ca0c5a34e6f7e863d306b034645c49163790ffc3",
+        "record_id": "12252904a16259903d35aa64719498b7560db5acbce45edcedc5255279f904fb",
+        "licensed_records": 7,
+        "context_status": "complete",
+        "quality_status": "review_required",
+        "dependency_kinds": [],
+        "problems": [
+          {
+            "code": "quality_not_accepted",
+            "message": "记录质量未合格"
+          }
+        ]
+      },
+      "compare": {
+        "status": "no_licensed_record",
+        "records_in_page": 0,
+        "page_status": "no_match",
+        "note": "该用途在此发布中没有被许可的记录（usable_for 不含该用途）"
+      },
+      "calculate": {
+        "status": "no_licensed_record",
+        "records_in_page": 0,
+        "page_status": "no_match",
+        "note": "该用途在此发布中没有被许可的记录（usable_for 不含该用途）"
+      }
+    }
+  },
+  "verdict": {
+    "all_verified": false,
+    "not_verified": [
+      "claims-industrial-fulian/cite",
+      "claims-industrial-fulian/compare",
+      "claims-industrial-fulian/calculate",
+      "claims-optical-module/cite",
+      "claims-optical-module/compare",
+      "claims-optical-module/calculate"
+    ]
+  }
+}

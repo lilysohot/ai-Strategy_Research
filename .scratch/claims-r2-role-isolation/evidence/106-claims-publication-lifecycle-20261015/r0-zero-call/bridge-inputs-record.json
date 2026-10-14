@@ -1,0 +1,658 @@
+{
+  "schema_version": "claims-bridge-inputs-1",
+  "id": "106-claims-publication-lifecycle-20261015",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "rule": "只导入 matched + correct_extra；incorrect / duplicate 由裁定本身剔除，逐条登记",
+  "runs": [
+    {
+      "run": "claims-industrial-fulian",
+      "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "protocol": "claims-atomic-json-v2",
+      "facts_before": 68,
+      "kept": 60,
+      "dropped": 8,
+      "dropped_reasons": {
+        "f1fae18dc4e3162988ec3bcfdd42435d07ffc7783f233cdb64231af18499e41b": "adjudicated_incorrect",
+        "f4a22857db7dff35d37f861d30944f9a7f5e68fd603d8f3e8a90114b04933255": "adjudicated_duplicate",
+        "62ba77ecd55c3e7afd2f54f1ce28b47c09a418f13c9b5c146f303f778d2bd339": "adjudicated_duplicate",
+        "099af9dbb3c53ffa650aff6e8e59293e728ed87f405d01c85057833538fb85aa": "adjudicated_duplicate",
+        "432d00f837b7f7d227b31823543d394a9afc1e9f5252fd0e2c715b3f437f7fd6": "adjudicated_duplicate",
+        "f3cef4f9a02b6ec9658085d0cae31ac9a30a158d36cd42a84b5309eb80bc5bfb": "adjudicated_incorrect",
+        "a47194b7790f614b3f32eacc08a78286b8ab10b977fda730f18e06d88d4e1b0b": "adjudicated_incorrect",
+        "f52ec88febf4e9d17aec7eb04777f990d4b8ce88d01d269337eb0ea9a84f584d": "adjudicated_duplicate"
+      },
+      "backfill": {
+        "decision": "U 裁定 A（2026-10-15）：裁定接受 ⇒ quality=ok；用途取工作表按已签 claim_use_axes 规则算出的 usable_for",
+        "overrides": {
+          "abbab7baa50760ea29a27b66e158ba2de969d0be5032302f2bfe3e23c3b0ac37": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "matched"
+          },
+          "029e21876287ac3b0d09d1409f180c03e496cd57f15778c1729eec85faffa705": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "3e0bb71af87925bd19a77221be37edcb5f59467e03e7b9dc248fc87ef8c60161": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "49dfd72c5b09f4b8e67f4e02282b0cd0487e7ae1453da1b6b0cf22e1bab0a086": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "4d7c3928f8820a166e900c3ed69520d1aa60a3f01d0697e421aa8c214c6a35e1": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "matched"
+          },
+          "1162b32d6606638564dd3b7abafe13a8fef47050afa27fc7ef596a82c33cefd4": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "eb340933ec43f141c7baf6b7d97e365cae55ce869d8e84505e3c627a33488738": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "bed16da4dc6b1d321484ee84c0bea1ed28d6f9664acc338dcfcd0d3f4063b92d": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "7c09b7b8baa5b3db4385ccae91e4f204e30432d7dbaaa8b7e07f34af092ccbd8": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "matched"
+          },
+          "92f7f165154f491ef1362bdb7e2a18a522aada9b52343a31ef1ac6853bc60972": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "190b514823df2013e888cb67f84bc50749ff3618564b3915731ab29de74c77db": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "27c1eee28aab67d736e823ff4aeaced9b5ad6bde9be912437c0dcb4f38762157": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "matched"
+          },
+          "7c04bfc0c682e6bbaf68f1aa7f9f00ff6c0b29bd31eaaf1d603ddf9745e2b556": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "a2a59229a596aecd34e9a8a2eaa1afddf7fe994721f54137a6befeb76b7cfa35": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "matched"
+          },
+          "1b814b29e8c26e9bac8a9deb61208d267efff6cad75f5956833ab555344ebe22": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "a6ea5989014112ce548e22df7aa70966d7e11e9784098e25f82af29a71b022ce": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "0f43382ed44dc821caa5f0175a75ee2e4fdbe29adb45e34358438ace47d86446": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "matched"
+          },
+          "72bd04014324fd704ffdaf58e90aec98466985cd1515c57595a1ed1748235543": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "matched"
+          },
+          "a2ca54a7f78c3eaf19f665eea024d1a8c93aa58a0e97966ffd27b35c7894c1bf": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "matched"
+          },
+          "e5e08a93c5328bdccd5be60db909e8981309c82717c2f00c583f5b3d2b360e4a": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "0347dcc836c7efafc2648a30f010fa9e29545fde00c5f4ef79594e056b3b57f3": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "eaaf0a581991550f8ab4f8c7412496e8dd9ec8305bb2c8c7a70694a6546eb3bc": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "b771d38745eb8e71884ac728a8e82393d71dc893e246eb7263fa0ec23a33cc06": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "d1463218b339afee78417858cef48e265627e85908b560e2f78b914785e8e6c9": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "46ab77ec509ee5126b38b24fb67c2c2bdb2bb97b056dcfa35d90f5a3392cfb53": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "2d84638838608cc29c4d317f53807bc01966bfd8abe99609fd2b3780b2b33a99": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "bc8c9a1b03dd86d9cf7373340ad31f001b1bdb8ea3f600ec030b05945fd6ea0a": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "3febac680e3ca5adc4ee3d74ee60b3112ae1f67f42f265bc35375735e4180a13": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "dac900938b77c51a51ed0e5457e83f822e655044c9b6b76a8250b6d102d4d7d3": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "196c5a0a506d5a47de9fae6d1d70d38eee38bc46af30278f867353473f91d3af": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "7092c0c4bf50e5cc3185d3039cf9b1d45053169f2f2a837ba36b28c8f64e8f2f": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "7a83c7bdadc81806e5e004f922a59d790922e153e39cfc6c2e6017e9716ccfe0": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "720d8ed039d32aa085c3b0fc4374e6afd303a563c2aac492efa2dc399998c319": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "dae00a9c79605a3ce9bc8cf2f4546724be629bea5b05507e934b341eb0769168": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "6a90ef04c2e03857e8b7122e853e77207965ba354d3b4807a2e0a06e7ff1714c": {
+            "quality_before": "ok",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite,compare,calculate",
+            "judgement": "matched"
+          },
+          "3777cb0fa549123848a0871a1fd8943dc824163d7c35fd30da4d9c8181152e5c": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "ba07d0a5d4e042eb1e247df328ae0727f778a65da6d5af9bee5c2404e9a7e15e": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "31b545759b98f3652efa45a985632cc6a2862ab6630d03318356aeda553bd230": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "465b33d2d97de33be18220c950483d08ad09b6ab25b0af61bdc202d976076dcf": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "dde58894d3f2eb2e7256b096b7226e0d6321157109781887a74b7dc62391a1bb": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "d14d63b985ed3e805bea2052f60584a079cd2d10b4862db7c8889af66150f0bb": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "dbe0612a87f9875dc59fb4e332f8ff874b12dbec283fb9b15f5e87274a4bb5bd": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "cb0e8e1ee177b984fdf2ec7d1ab703db8cbb93fd2bdc5197d3a3801d6090026d": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "bc432728eea16cbda5a82884d8ccef089ebdb730dc8e778e6d3c84c49ca8bbf3": {
+            "quality_before": "ok",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite,compare,calculate",
+            "judgement": "correct_extra"
+          },
+          "297e59a0811cd5062011be367bf8a45d4d91ab54588003dba416e7e23c3c4b0e": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "465e513bf817d3a0e7a2cab29e423815b60da9c5b9df38eb0b64195a37b37082": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "fb4d44e8128d02419cb62f515b6c2fffc987f45a6c394e885f27e42d1645bc97": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "8897ed350a8c9b13d9fddd4174631a9664669b5c4c1b7ab28f3ad2211d2778c5": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "561fd5819b1913659fd601a7c29e5f7321e7ce1ba35abe51aa41649bc9604a5f": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "6a9c13bc4a4da7e182ee091cc228dc0cee2c14e2893759efa8ec1ed4f053edf6": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "matched"
+          },
+          "4403edcfdcf3fb03b072fa1a1b22c55b81dfb8d497e63acba3a7d3a5e22924cc": {
+            "quality_before": "ok",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite,compare,calculate",
+            "judgement": "correct_extra"
+          },
+          "da0fbc373f20e5b21717c097d4ed408aa983bba8a99d17b2e69c04d4056a7746": {
+            "quality_before": "ok",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite,compare,calculate",
+            "judgement": "correct_extra"
+          },
+          "bbeefffe85f42f6593eed52d7b0f8debc6b2746a88d58247a954db4c53a5a2ed": {
+            "quality_before": "ok",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite,compare,calculate",
+            "judgement": "correct_extra"
+          },
+          "5dea77a7f56f2db61956359a57b5698a012dff3b8e2e4e74fc9136fac8ad214e": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "14673aea7ed04dd4b1aa54875ae5342cb5dd3ac3942c5e3d62ceee2b7737c7a4": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "cb8fe6ef0f0415d1372e156aa63eeb913a50e521358ccb85081a744d130da969": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "767c0f1739051abacbf09f003f439fada1f5a2eda6a9499e3b9b81d506e6d068": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "19c493e2b0979a820156df9856eb7f661eabecb9cf0f7d1159a1efbad2051950": {
+            "quality_before": "ok",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite,compare,calculate",
+            "judgement": "correct_extra"
+          },
+          "a8879a052a7ab62a2254cb9472b7b34987af9f5cf223416ca1a1122e0843ebe4": {
+            "quality_before": "ok",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite,compare,calculate",
+            "judgement": "correct_extra"
+          },
+          "feec2b9badcbd1d434a11393bd5155e9f959220f002762f5fddc09d9da0c5a4c": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          }
+        },
+        "override_count": 60,
+        "usable_for_after": {
+          "cite": 53,
+          "cite,compare,calculate": 7
+        }
+      },
+      "artifact_id": "sha256:d982617968bc12b65b8bd159e5c5ef20a070455ba77d187bd0c01a226fa83c67",
+      "payload_sha256": "sha256:d735908380bc896b5fb8ec4dbdb2bbebc57a6406959f95ebfa5ea781e4b2030a"
+    },
+    {
+      "run": "claims-optical-module",
+      "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "protocol": "claims-atomic-json-v2",
+      "facts_before": 25,
+      "kept": 24,
+      "dropped": 1,
+      "dropped_reasons": {
+        "d40dbd51f8995e62beb09f74331dc01fd9f3f13ea708127e0d2f4a29621a9169": "adjudicated_duplicate"
+      },
+      "backfill": {
+        "decision": "U 裁定 A（2026-10-15）：裁定接受 ⇒ quality=ok；用途取工作表按已签 claim_use_axes 规则算出的 usable_for",
+        "overrides": {
+          "5e8d1eb800a2a2bf8edfbe362105538c81b286e3908b5cbdae7c42d6731e254f": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "matched"
+          },
+          "77d8878d8f32bb9ab60d1370e29449799625092063d7c5c23135ef84ab64edd7": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "matched"
+          },
+          "49f2112546fb1786c8e8cc2e6a26b70d465abcd7ee4e06299ad44d2c4ab6fd8d": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "matched"
+          },
+          "62eed12b127ebf9ce984c8e6908428cc822b022ff8cc3c37e3a9863541e6aac3": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "matched"
+          },
+          "2bdd8a50184a62c96cd6c5d2733cb64d36e6f6c63a5a0961d33645d1a38ffba7": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "matched"
+          },
+          "49383a575458cfd2234bcbcafb2ccdb8a7046ad20b184b5de719e5fa1dd20b18": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "c9862e1608d89aa2ffe7e4bf13b50cf3e78f3e95ca11efcb55d68529fb67d306": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "1e7fc0a549008fcf893cd44f990c11696290979b9cfc08a6beca58e52961444e": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "56b140ff8a0e0c6ec3d0b9c11dcf0c43c779dc8ab41aea11da164bc926f07f8c": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "7ec29ecdaf20ae3dc1b4f391ddb4d0ef7a91f1df6abcb15ec4fce36fb577a4fe": {
+            "quality_before": "ok",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite,compare,calculate",
+            "judgement": "matched"
+          },
+          "79c476110741dc8d60fa97f913e06dbe81aaf371405e1d6f65dfe2b2a1a670be": {
+            "quality_before": "ok",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite,compare,calculate",
+            "judgement": "matched"
+          },
+          "20fe00f30fe56290452ab2c720e37ec896c514b7e6a4c18f53be2e8dc4146290": {
+            "quality_before": "ok",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite,compare,calculate",
+            "judgement": "matched"
+          },
+          "f1ddde13fbe6bae1579f1a5c0e5c3f0631459c21510a5a4d6aa287dd7b9f92cd": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "c6a7dd36c564a886780b53999d9c587f777c42113cadacfd758fa97ca035923a": {
+            "quality_before": "rejected",
+            "quality_after": "ok",
+            "usable_for_before": "(none)",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "22a0dabf7cda5c1e998e3b412781ddd123b2212a1500283b40a423668242381f": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "40ea020fd7f91d02945b0ace626b71e6ccc868ff20749d562de7a79c72a30572": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "12252904a16259903d35aa64719498b7560db5acbce45edcedc5255279f904fb": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "9ad3baf33891575b39416c88298e98d79b5ce75b4fb95e9d5251a6a5fd0cfd6d": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "ccc13eb0be3a0b501f9c19199cf3701d0dff041a14b24bad59becb94941330e6": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "matched"
+          },
+          "68ba4bac443442f96d24837a9b5e30ad5b5bddac7918786569d73de94d864738": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "matched"
+          },
+          "563d639ccd22919f32416417aa9a498e0be92385b52fef49df4a46275d000f76": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "411d0f433e55a53d65fda49d602af0d66b06697a83e9a65363a18daaff9cc615": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "7f8fa31ac58e0a08ca22bfbb1b5387c179d7ec21444b77697418374d7e2d695a": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          },
+          "99c2d149bf9fc862fe6207895a7d066027d03d98350f49bfe874974f83686a9e": {
+            "quality_before": "review",
+            "quality_after": "ok",
+            "usable_for_before": "cite",
+            "usable_for_after": "cite",
+            "judgement": "correct_extra"
+          }
+        },
+        "override_count": 24,
+        "usable_for_after": {
+          "cite": 21,
+          "cite,compare,calculate": 3
+        }
+      },
+      "artifact_id": "sha256:9201dab7bdbfb8ff6c193f616ca4bbb67a130817c9e2bd679e2e0aef8ea58ae0",
+      "payload_sha256": "sha256:7549baf34062bd5b907f6d8c847f041d27afc3fcd0c70be2a9d369e78b46dc12"
+    }
+  ],
+  "outputs": {
+    "bridge-claims-industrial-fulian/claims-artifact.json": "043c91c1c78b33126bbf6b788627fa7e79a457261250599ae31c1031b3efd0b0",
+    "bridge-claims-industrial-fulian/claims-payload.json": "8f91c1436765071518f57be2105ea2130f54c04f2ec26f9f37a767b2b3fbcca2",
+    "bridge-claims-optical-module/claims-artifact.json": "d0f088013e37289ae8b046a7c421b3b1dbbb73e953f1a5890567f5711bbfb676",
+    "bridge-claims-optical-module/claims-payload.json": "5ed0bd707d2fa3f9743eb73cea90f21ed2b17851eca854b535dcbe2deed75327"
+  }
+}

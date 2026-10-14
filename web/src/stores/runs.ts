@@ -30,6 +30,11 @@ import {
 } from '../utils/approval'
 import { interruptInFlight, toolStepStatus, type StepStatus } from '../utils/activity'
 import {
+  isActiveRunStatus,
+  isTerminalRunStatus,
+  mergeReconciledRunStatus,
+} from '../utils/runStatus'
+import {
   accumulateUsage,
   mergeRunMeta,
   usageTotalsFrom,
@@ -580,28 +585,48 @@ export const useRunStreamStore = defineStore('runStream', () => {
     const requestedRunId = runId.value
     const requestedGeneration = generation
     if (!requestedRunId) return
-    try {
-      const summary = await runsApi.get(requestedRunId)
-      // F11: this reply belongs to `requestedRunId`, but the user may have
-      // switched runs (or reset / logged out) while it was in flight. Applying
-      // it would overwrite the run now on screen with the old run's outcome.
-      if (runId.value !== requestedRunId || generation !== requestedGeneration) return
-      if (runDir.value === null) runDir.value = summary.run_dir ?? null
-      if (summary.status) status.value = summary.status as RunStatus
-      finalAnswer.value = summary.final_answer ?? finalAnswer.value
-      const reason = summary.error || (summary.stopped_by ? `已停止（${summary.stopped_by}）` : null)
-      if (reason) errorMessage.value = reason
-      if (summary.usage) {
-        // F10: the server's whole-run figure is authoritative, so it REPLACES the
-        // running total. Adding it instead double-counts every turn the live
-        // stream already metered.
-        usage.value = usageTotalsFrom(summary.usage)
+    // `run_stopped` is emitted by the loop before the orchestrator persists the
+    // terminal row. Give that commit a short bounded window to become visible.
+    // The stream generation checks keep every delayed attempt scoped to this run.
+    const retryDelays = [0, 100, 250, 500]
+    for (const delay of retryDelays) {
+      if (delay) await new Promise((resolve) => setTimeout(resolve, delay))
+      try {
+        const summary = await runsApi.get(requestedRunId)
+        // F11: this reply belongs to `requestedRunId`, but the user may have
+        // switched runs (or reset / logged out) while it was in flight. Applying
+        // it would overwrite the run now on screen with the old run's outcome.
+        if (runId.value !== requestedRunId || generation !== requestedGeneration) return
+        if (runDir.value === null) runDir.value = summary.run_dir ?? null
+        const remoteStatus = summary.status as RunStatus
+        const streamEnded = connection.value === 'closed'
+        status.value = mergeReconciledRunStatus(status.value, remoteStatus, streamEnded)
+        finalAnswer.value = summary.final_answer ?? finalAnswer.value
+        const reason = summary.error || (summary.stopped_by ? `已停止（${summary.stopped_by}）` : null)
+        if (reason) errorMessage.value = reason
+        if (summary.finished_at && isTerminalRunStatus(remoteStatus)) {
+          const finished = Date.parse(summary.finished_at)
+          if (Number.isFinite(finished)) endedAtMs.value = finished
+        }
+        if (summary.usage) {
+          // F10: the server's whole-run figure is authoritative, so it REPLACES the
+          // running total. Adding it instead double-counts every turn the live
+          // stream already metered.
+          usage.value = usageTotalsFrom(summary.usage)
+        }
+        if (!streamEnded || !isActiveRunStatus(remoteStatus)) return
+      } catch {
+        // A later bounded attempt may still succeed while the terminal row is
+        // being committed. Only surface the failure after the final attempt.
+        if (delay !== retryDelays.at(-1)) continue
+        lastError.value = '运行已结束，但未能与服务端对账，结果待核实'
+        return
       }
-    } catch {
-      // Non-fatal, but not silent: a clean EOF is not proof the run succeeded,
-      // so surface the outcome as unconfirmed rather than quietly final (F11).
-      lastError.value = '运行已结束，但未能与服务端对账，结果待核实'
     }
+    // The stream is over but every read still reports an active row. Keep the UI
+    // settled and make the incomplete reconciliation visible instead of showing
+    // an execution that can no longer emit any event.
+    lastError.value = '运行已结束，但服务端终态尚未确认，请重试对账'
   }
 
   async function stop(): Promise<void> {

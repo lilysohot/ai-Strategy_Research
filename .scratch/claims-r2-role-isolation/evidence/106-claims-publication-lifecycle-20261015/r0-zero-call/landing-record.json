@@ -1,0 +1,66 @@
+{
+  "schema_version": "claims-publication-lifecycle-landing-1",
+  "id": "106-claims-publication-lifecycle-20261510",
+  "id_corrected": "106-claims-publication-lifecycle-20261015",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "authority": {
+    "proposal": "claims-publication-proposal.json（51f7967e…）",
+    "signoff": "claims-publication-proposal-signoff.md（db963f54…，U 具名签署 reviewer/adjudicator=xyl, signed_on=2026-10-15）",
+    "d1_d3": "U 未另选 ⇒ 按草案推荐值执行：D1 = S1–S5 全做；D2 = 生产 PG/web 出范围；D3 = 遇阻停下报裁（S4 遇阻时已照此停下，U 裁 A 后继续）"
+  },
+  "S1_bridge": {
+    "code": [
+      "plugins/corpus/structured/ledger.py：新增 AcceptedClaims 模型（对称 AcceptedMaterialItems）、BatchPlan.imported_claims、_import_claims_execution()、_run_task 按角色分派、plan_batch(imported_claims=…)、verify_identity 的 claims 快照对齐与 imported task 校验",
+      "plugins/corpus/structured/cli.py：--import-claims-artifact / --import-claims-payload / _read_accepted_claims"
+    ],
+    "semantics": "人工签认是权威：桥入账即 protocol_status=valid / quality_status=accepted（与 items 桥同语义），零模型调用",
+    "inputs": "bridge-inputs-record.json（48a57c2d…）：两 run 共保留 84 条（matched 20 + correct_extra 64），剔除 9 条（incorrect 3 / duplicate 6）逐条登记",
+    "plans": {
+      "claims-industrial-fulian": "batch:3bd142c6…（plan.json 8b69ddc0…）",
+      "claims-optical-module": "batch:7c19cedb…（plan.json f6453086…）"
+    }
+  },
+  "S2_execute_and_publish": {
+    "record": "publication-run-record.json（f65001c8…）",
+    "tasks": "两 run：method=imported / succeeded / valid / accepted / candidate，findings 空，零模型调用",
+    "publications": {
+      "claims-industrial-fulian": "sha256:5fc7116b…（published，quality=accepted，coverage claims=complete）",
+      "claims-optical-module": "sha256:8dde446f…（published，quality=accepted，coverage claims=complete）"
+    }
+  },
+  "S3_publish_entry": {
+    "what": "plugins/corpus/structured/cli.py 新增受约束 publish 子命令（--source-id/--build-id/--snapshot-id/--artifact BATCH:TASK:SHA [--expected-parent-publication-id] [--lifecycle]）",
+    "note": "参数解析后仍走 publish_semantic 的全部既有门；默认不做 scoped 选择、不绕过 parent 检查"
+  },
+  "S4_consumption_verification": {
+    "first_attempt": "未通过（见 consumption-gap-diagnosis.json d7dc0cc9…）：cite 报 quality_not_accepted；compare/calculate 无许可记录",
+    "root_cause": "裁定只体现在删掉被否定的 9 条，未回写 fact 层（quality 仍是抽取侧 review/rejected；usable_for 仍是抽取侧 cite-only）",
+    "u_decision": "A 回填（2026-10-15）",
+    "backfill": {
+      "rule": "裁定接受 ⇒ claim.quality_status=ok；usable_for 取工作表按已签 claim_use_axes（uses_for）算出的值",
+      "counts": {"claims-industrial-fulian": "60 条，7 条获 compare/calculate", "claims-optical-module": "24 条，3 条获 compare/calculate；含 1 条抽取侧标 rejected、裁定为 correct_extra 的记录（如实登记）"},
+      "total_licensed_compare_calculate": 10
+    },
+    "result": "consumption-verification-record.json（8726b8cf…）：all_verified = true",
+    "per_purpose": {
+      "claims-industrial-fulian": {"cite": "verified（7 条许可）", "compare": "verified（7）", "calculate": "verified（7）"},
+      "claims-optical-module": {"cite": "verified（8）", "compare": "verified（3）", "calculate": "verified（3）"}
+    }
+  },
+  "S5_records_and_tests": {
+    "tests": "tests/test_claims_publication.py（5 项：桥只收裁定接受的事实 / 回填语义与覆盖登记 / 发布经真实门 / 三用途消费 / 冻结件字节不动）",
+    "regression": "pytest -k corpus_structured：407 passed, 8 skipped；ruff/pyright 干净；check_evidence_guard violations 0"
+  },
+  "out_of_scope_registered": {
+    "production_pg_web": "按 D2 出范围：生产 PG 活动 build + 全文索引 + web 读链另行立项",
+    "live_store_no_backfill": "bridge-*/live-store-no-backfill 保留为回填前版本的档案（证实当时消费侧零条可用），不删"
+  },
+  "does_not_touch": [
+    "evidence/95-claims-prereg-20261014/**",
+    "evidence/99-claims-prereg-v3-signed-r2-20261014/**",
+    "evidence/102/103/104/105 号全部产物",
+    "evidence/10-quality-gold-freeze-20261008-r2/**"
+  ],
+  "verdict": "发布/消费闭环已通：84 条裁定接受的 claims 已发布，cite / compare / calculate 三用途各经 verify_reference 验收通过（零模型调用）"
+}

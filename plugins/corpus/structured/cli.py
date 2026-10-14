@@ -14,9 +14,11 @@ from typing import Literal, cast
 
 from pydantic import ValidationError
 
+from plugins.corpus.evidence_pipeline import EvidenceRun
 from plugins.corpus.material_semantics import MaterialRun
 from plugins.corpus.structured.config import RequestOptions, load_extraction_config
 from plugins.corpus.structured.ledger import (
+    AcceptedClaims,
     AcceptedMaterialItems,
     BatchCheck,
     BatchPlan,
@@ -29,6 +31,7 @@ from plugins.corpus.structured.ledger import (
 from plugins.corpus.structured.query import SemanticQueryPage, query_semantic
 from plugins.corpus.structured.roles import RoleArtifact
 from plugins.corpus.structured.snapshot import EvidenceSnapshot, SnapshotIntegrityError
+from plugins.corpus.structured.store import ArtifactReference, publish_semantic
 
 Role = Literal["claims", "material_items", "material_relations"]
 
@@ -93,6 +96,14 @@ def _parser() -> argparse.ArgumentParser:
     plan.add_argument(
         "--import-items-payload",
         help="MaterialRun JSON bound to --import-items-artifact",
+    )
+    plan.add_argument(
+        "--import-claims-artifact",
+        help="accepted claims RoleArtifact JSON to bridge into this plan",
+    )
+    plan.add_argument(
+        "--import-claims-payload",
+        help="EvidenceRun JSON bound to --import-claims-artifact",
     )
     plan.add_argument(
         "--relation-dependency-policy",
@@ -193,6 +204,30 @@ def _parser() -> argparse.ArgumentParser:
         metavar="FIELD=VALUE",
     )
     query.add_argument("--store-root")
+
+    publish = commands.add_parser(
+        "publish", help="publish accepted artifacts after an expected-parent check"
+    )
+    publish.add_argument("--source-id", required=True)
+    publish.add_argument("--build-id", required=True)
+    publish.add_argument("--snapshot-id", required=True)
+    publish.add_argument(
+        "--artifact",
+        required=True,
+        metavar="BATCH_ID:TASK_ID:ARTIFACT_SHA256",
+        help="one accepted artifact to publish; every gate in store.publish_semantic still applies",
+    )
+    publish.add_argument(
+        "--expected-parent-publication-id",
+        default=None,
+        help="fail closed unless the current head is this publication (omit for a first publish)",
+    )
+    publish.add_argument(
+        "--lifecycle",
+        choices=("publish", "source_update", "rule_upgrade"),
+        default="publish",
+    )
+    publish.add_argument("--store-root")
     return parser
 
 
@@ -230,6 +265,24 @@ def _read_accepted_material_items(
         )
     except (OSError, UnicodeError, ValidationError, ValueError) as exc:
         raise StructuredExecutionError("CS_INPUT_INVALID", "items_import_invalid") from exc
+
+
+def _read_accepted_claims(
+    artifact_path: str | None, payload_path: str | None
+) -> AcceptedClaims | None:
+    if bool(artifact_path) != bool(payload_path):
+        raise StructuredExecutionError("CS_INPUT_INVALID", "incomplete_claims_import")
+    if artifact_path is None or payload_path is None:
+        return None
+    try:
+        return AcceptedClaims(
+            artifact=RoleArtifact.model_validate_json(
+                Path(artifact_path).read_text(encoding="utf-8")
+            ),
+            payload=EvidenceRun.model_validate_json(Path(payload_path).read_text(encoding="utf-8")),
+        )
+    except (OSError, UnicodeError, ValidationError, ValueError) as exc:
+        raise StructuredExecutionError("CS_INPUT_INVALID", "claims_import_invalid") from exc
 
 
 def _write_plan(path: str, plan: BatchPlan) -> None:
@@ -332,9 +385,17 @@ def main(argv: Sequence[str] | None = None) -> int:
             imported_items = _read_accepted_material_items(
                 args.import_items_artifact, args.import_items_payload
             )
+            imported_claims_input = _read_accepted_claims(
+                args.import_claims_artifact, args.import_claims_payload
+            )
             enabled_roles = cast(Sequence[Role] | None, args.enabled_roles)
             if imported_items is not None and enabled_roles is None:
                 enabled_roles = ("material_items", "material_relations")
+            if imported_claims_input is not None:
+                if enabled_roles is None:
+                    enabled_roles = ("claims",)
+                elif "claims" not in enabled_roles:
+                    enabled_roles = cast(Sequence[Role] | None, (*enabled_roles, "claims"))
             plan = plan_batch(
                 snapshot,
                 config=config,
@@ -355,6 +416,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 material_items_protocol=args.material_items_protocol,
                 material_relations_protocol=args.material_relations_protocol,
                 imported_material_items=imported_items,
+                imported_claims=imported_claims_input,
             )
             _write_plan(args.out, plan)
             _output(
@@ -385,6 +447,41 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
         elif args.command == "check":
             result = check_batch(args.batch_id, store_root=args.store_root)
+        elif args.command == "publish":
+            parts = args.artifact.split(":")
+            if len(parts) != 3 or not all(part for part in parts):
+                raise StructuredExecutionError(
+                    "CS_INPUT_INVALID", "publish_artifact_must_be_batch_task_sha256"
+                )
+            manifest = publish_semantic(
+                source_id=args.source_id,
+                build_id=args.build_id,
+                snapshot_id=args.snapshot_id,
+                artifacts=(
+                    ArtifactReference(
+                        batch_id=parts[0],
+                        task_id=parts[1],
+                        artifact_sha256="sha256:" + parts[2]
+                        if not parts[2].startswith("sha256:")
+                        else parts[2],
+                    ),
+                ),
+                expected_parent_publication_id=args.expected_parent_publication_id,
+                store_root=args.store_root,
+                lifecycle=args.lifecycle,
+            )
+            _output(
+                {
+                    "publication_id": manifest.publication_id,
+                    "publication_status": manifest.publication_status,
+                    "quality_status": manifest.quality_status,
+                    "artifacts": list(manifest.artifacts),
+                    "coverage": manifest.coverage.model_dump(mode="json"),
+                    "reason_codes": list(manifest.reason_codes),
+                    "model_requests": 0,
+                }
+            )
+            return 0
         else:
             try:
                 page = query_semantic(

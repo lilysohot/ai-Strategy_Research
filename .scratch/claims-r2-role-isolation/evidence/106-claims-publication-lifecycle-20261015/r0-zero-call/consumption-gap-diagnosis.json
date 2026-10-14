@@ -1,0 +1,55 @@
+{
+  "schema_version": "claims-consumption-gap-diagnosis-1",
+  "id": "106-claims-publication-lifecycle-20261015",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "status": "blocked_for_u_decision",
+  "progress": {
+    "S1 桥与计划": "完成（ledger 新增 AcceptedClaims + claims 导入桥；CLI --import-claims-*；两 run 计划冻结）",
+    "S2 执行与发布": "完成（两 run：imported/succeeded/valid/accepted/candidate → publish_semantic → published，coverage claims=complete，findings 空，零调用）",
+    "S3 受控 publish 子命令": "未做（S4 先遇阻；可独立进行）",
+    "S4 三用途消费验收": "遇阻，见下（按 D3 停下报裁，不自行放宽）",
+    "S5 落地记录与测试": "待 S4"
+  },
+  "what_the_consumption_check_found": {
+    "cite": "记录可取（run1 60 条 / run2 7 条许可 cite），但 verify_reference 报 quality_not_accepted",
+    "compare": "no_licensed_record（page 0 条）",
+    "calculate": "no_licensed_record（page 0 条）"
+  },
+  "facts_measured": {
+    "payload_usable_for": {
+      "claims-industrial-fulian": {"('cite',)": 60},
+      "claims-optical-module": {"('cite',)": 23, "()": 1},
+      "note": "发布视图的 effective_claim_purposes 直接取 payload 的 fact.usable_for（store.py:1481-1485），故发布侧只许可 cite"
+    },
+    "payload_quality_status": {
+      "claims-industrial-fulian": {"review": 53, "ok": 7},
+      "claims-optical-module": {"review": 20, "ok": 3, "rejected": 1}
+    },
+    "worksheet_usable_for": {
+      "('cite',)": 83,
+      "('cite', 'compare', 'calculate')": 10,
+      "source": "worksheet 构建器用 uses_for(reason_codes, kind, has_value) 计算——即已签的 claim_use_axes 用途撤除规则，与 store.py 的 {cite,compare,calculate} 硬约束同源"
+    },
+    "adjudication_of_the_10": {"matched": 4, "correct_extra": 6}
+  },
+  "root_cause": "人工裁定（93 行签认）只体现在『删掉被否定的 9 条』上，没有回写到 fact 层：①裁定接受的语义没落到 claim.quality_status（仍是抽取侧的 review/rejected）；②已签规则算出的用途（worksheet 的 usable_for）没落到 payload 的 fact.usable_for（仍是抽取侧的 cite-only）。消费侧两者都读 fact 层，于是 cite 判 quality 不合格、compare/calculate 无许可记录。",
+  "options": {
+    "A_backfill_adjudication": {
+      "what": "桥 payload 的 facts 用 worksheet 的 usable_for（uses_for 已签规则算出）+ 把 matched/correct_extra 的 claim.quality_status 置为 ok",
+      "effect": "发布 84 条，10 条许可 compare/calculate，记录 quality=accepted ⇒ 三用途消费全通",
+      "semantics": "人工签认是权威，覆盖抽取侧的 quality 标注；用途不是放宽，而是把已签规则的结果落到发布记录",
+      "risk": "改动 fact 层两个字段，须逐条登记『裁定权威覆盖抽取侧标注』（含 run2 那条抽取侧标 rejected 但裁定为 correct_extra 的记录）"
+    },
+    "B_quality_only": {
+      "what": "只回填 quality（accepted），usable_for 保持抽取侧",
+      "effect": "cite 通过；compare/calculate 如实登记『发布侧无许可记录』⇒ 闭环只走通 cite 一半"
+    },
+    "C_do_not_backfill": {
+      "what": "保持现状",
+      "effect": "发布成功但消费侧零条可用（quality 全 review + 用途 cite-only）⇒ 发布/消费闭环实际未通"
+    }
+  },
+  "recommendation": "A（uses_for 是已签规则，回填等价落规则；且 105 号 A 档的目标就是进入消费闭环，只走通 cite 等于半程）",
+  "blocked_on": ["U 裁 A / B / C"]
+}

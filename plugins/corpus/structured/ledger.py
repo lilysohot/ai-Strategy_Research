@@ -248,6 +248,40 @@ class AcceptedMaterialItems(BaseModel):
         return self
 
 
+class AcceptedClaims(BaseModel):
+    """A self-contained, immutable claims dependency accepted before this batch.
+
+    Mirrors :class:`AcceptedMaterialItems`: the upstream artifact is a *human-adjudicated* claims
+    run, so the signed adjudication — not a machine protocol check — is what makes it accepted.
+    Bridging it in costs no model attempt, which is the point: a signed claims pool can be
+    published without re-running extraction.
+    """
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    artifact: RoleArtifact
+    payload: EvidenceRun
+
+    @model_validator(mode="after")
+    def validate_accepted_claims(self) -> AcceptedClaims:
+        try:
+            self.artifact.verify_identity()
+            self.payload.verify_identity()
+        except ValueError as exc:
+            raise ValueError("accepted claims identity mismatch") from exc
+        if (
+            self.artifact.role != "claims"
+            or self.artifact.business_contract != "EvidenceRun/EvidenceFact"
+            or self.artifact.execution_status != "succeeded"
+            or self.artifact.protocol_status != "valid"
+            or self.artifact.context_status != "complete"
+            or self.artifact.quality_status != "accepted"
+            or self.artifact.payload_sha256 != canonical_hash(self.payload.model_dump(mode="json"))
+        ):
+            raise ValueError("claims artifact is not an accepted claims run")
+        return self
+
+
 class BatchPlan(BaseModel):
     """Self-contained immutable plan used by execute and replay in another process."""
 
@@ -272,6 +306,10 @@ class BatchPlan(BaseModel):
         exclude_if=lambda value: value is None,
     )
     imported_material_items: AcceptedMaterialItems | None = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
+    )
+    imported_claims: AcceptedClaims | None = Field(
         default=None,
         exclude_if=lambda value: value is None,
     )
@@ -306,6 +344,15 @@ class BatchPlan(BaseModel):
             or imported.payload.understanding.source.source_rev != self.snapshot.snapshot_id
         ):
             raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_imported_material_items")
+        claims_import = self.imported_claims
+        if claims_import is not None and self.schema_version != PLAN_SCHEMA_VERSION:
+            raise StructuredExecutionError("CS_SCHEMA_UNSUPPORTED", "claims_import_requires_v2")
+        if claims_import is not None and (
+            "claims" not in self.enabled_roles
+            or claims_import.artifact.snapshot_id != self.snapshot.snapshot_id
+            or claims_import.payload.document.source_rev != self.snapshot.snapshot_id
+        ):
+            raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_imported_claims")
         if set(self.role_max_attempts) != {
             "claims",
             "material_items",
@@ -356,14 +403,11 @@ class BatchPlan(BaseModel):
             for protocol in (CLAIMS_TABLE_PROTOCOL, profiles["claims"].protocol):
                 scope = self.routing.claims_scope(protocol)
                 if scope:
-                    expected_routes.add(
-                        (
-                            "claims",
-                            protocol,
-                            "deterministic" if protocol == CLAIMS_TABLE_PROTOCOL else "model",
-                            scope,
-                        )
-                    )
+                    if protocol == CLAIMS_TABLE_PROTOCOL:
+                        method = "deterministic"
+                    else:
+                        method = "imported" if self.imported_claims is not None else "model"
+                    expected_routes.add(("claims", protocol, method, scope))
         if "material_items" in self.enabled_roles and self.routing.material_items_scope:
             expected_routes.add(
                 (
@@ -382,13 +426,15 @@ class BatchPlan(BaseModel):
         ):
             raise StructuredExecutionError("CS_INPUT_INVALID", "initial_tasks_do_not_match_routing")
         imported_tasks = [task for task in self.tasks if task.method == "imported"]
-        if (imported is None and imported_tasks) or (
-            imported is not None
-            and (
-                len(imported_tasks) != 1
-                or imported_tasks[0].role != "material_items"
-                or imported_tasks[0].protocol != imported.artifact.protocol
-            )
+        accepted_artifact = {
+            "material_items": imported.artifact if imported is not None else None,
+            "claims": self.imported_claims.artifact if self.imported_claims is not None else None,
+        }
+        expected_imported = sum(1 for value in accepted_artifact.values() if value is not None)
+        if len(imported_tasks) != expected_imported or any(
+            accepted_artifact.get(task.role) is None
+            or task.protocol != accepted_artifact[task.role].protocol  # type: ignore[union-attr]
+            for task in imported_tasks
         ):
             raise StructuredExecutionError("CS_INPUT_INVALID", "invalid_imported_task")
         for task in self.tasks:
@@ -575,12 +621,13 @@ def _frozen_profiles(
     config: ExtractionConfig | None,
     role_configs: Mapping[Role, ExtractionConfig] | None = None,
     *,
+    claims_protocol: str = CLAIMS_ATOMIC_PROTOCOL,
     material_items_protocol: str = MATERIAL_SLOT_JSONL_VERSION,
     material_relations_protocol: str = MATERIAL_RELATION_JSONL_VERSION,
 ) -> tuple[FrozenRoleProfile, ...]:
     result: list[FrozenRoleProfile] = []
     for role, protocol in (
-        ("claims", CLAIMS_ATOMIC_PROTOCOL),
+        ("claims", claims_protocol),
         ("material_items", material_items_protocol),
         ("material_relations", material_relations_protocol),
     ):
@@ -686,6 +733,7 @@ def plan_batch(
     material_items_protocol: str = MATERIAL_SLOT_JSONL_VERSION,
     material_relations_protocol: str = MATERIAL_RELATION_JSONL_VERSION,
     imported_material_items: AcceptedMaterialItems | None = None,
+    imported_claims: AcceptedClaims | None = None,
 ) -> BatchPlan:
     """Freeze deterministic routing, profiles, budgets, and relation derivation; no I/O."""
     snapshot.verify_identity()
@@ -821,16 +869,22 @@ def plan_batch(
         "material_relations",
     }:
         raise StructuredExecutionError("CS_INPUT_INVALID", "unknown_role_config")
+    if imported_claims is not None:
+        # The accepted artifact owns the protocol: a bridged claims run is not re-planned.
+        claims_protocol = imported_claims.artifact.protocol
+    else:
+        claims_protocol = CLAIMS_ATOMIC_PROTOCOL
     profiles = _frozen_profiles(
         config,
         role_configs,
+        claims_protocol=claims_protocol,
         material_items_protocol=material_items_protocol,
         material_relations_protocol=material_relations_protocol,
     )
     by_role = {profile.role: profile for profile in profiles}
     tasks: list[PlannedTask] = []
     if "claims" in selected:
-        for protocol in (CLAIMS_TABLE_PROTOCOL, CLAIMS_ATOMIC_PROTOCOL):
+        for protocol in (CLAIMS_TABLE_PROTOCOL, claims_protocol):
             scope = routing.claims_scope(protocol)
             if scope:
                 tasks.append(
@@ -838,7 +892,11 @@ def plan_batch(
                         snapshot=snapshot,
                         role="claims",
                         protocol=protocol,
-                        method="deterministic" if protocol == CLAIMS_TABLE_PROTOCOL else "model",
+                        method=(
+                            "deterministic"
+                            if protocol == CLAIMS_TABLE_PROTOCOL
+                            else ("imported" if imported_claims is not None else "model")
+                        ),
                         scope=scope,
                         profile=by_role["claims"],
                         max_attempts=budgets["claims"],
@@ -871,6 +929,7 @@ def plan_batch(
         enabled_roles=ordered_roles,
         material_items_options=item_options,
         imported_material_items=imported_material_items,
+        imported_claims=imported_claims,
         currency=currency,
         relations=RelationPlan(
             enabled=relations_enabled and "material_relations" in selected,
@@ -2062,6 +2121,48 @@ def _import_material_items_execution(plan: BatchPlan, task: PlannedTask) -> Role
     return RoleExecution(artifact=artifact, payload=imported.payload)
 
 
+def _import_claims_execution(plan: BatchPlan, task: PlannedTask) -> RoleExecution:
+    """Bridge one accepted upstream claims artifact into this batch without a model attempt.
+
+    The accepted artifact is a human-adjudicated claims run, so it enters the ledger as
+    ``protocol_status="valid"`` / ``quality_status="accepted"``: the signed adjudication — not a
+    machine protocol check — is what makes it publishable. This mirrors the items bridge exactly.
+    """
+    imported = plan.imported_claims
+    if imported is None or task.role != "claims" or task.method != "imported":
+        raise StructuredExecutionError("CS_INPUT_INVALID", "imported_claims_binding_missing")
+    source = imported.artifact
+    coverage = RoleCoverage(
+        scoped_unit_ids=task.scoped_unit_ids,
+        omitted_unit_ids=source.coverage.omitted_unit_ids,
+        reason_codes=tuple(
+            dict.fromkeys((*source.coverage.reason_codes, "accepted_claims_artifact_imported"))
+        ),
+    )
+    base = RoleArtifact(
+        artifact_id="sha256:" + "0" * 64,
+        role="claims",
+        snapshot_id=plan.snapshot.snapshot_id,
+        task_id=task.task_id,
+        protocol=task.protocol,  # type: ignore[arg-type]
+        business_contract="EvidenceRun/EvidenceFact",
+        payload_sha256=canonical_hash(imported.payload.model_dump(mode="json")),
+        upstream_artifact_ids=(source.artifact_id,),
+        coverage=coverage,
+        execution_status="succeeded",
+        protocol_status="valid",
+        context_status="complete",
+        quality_status="accepted",
+    )
+    artifact = base.model_copy(
+        update={
+            "artifact_id": canonical_hash(base.model_dump(mode="json", exclude={"artifact_id"}))
+        }
+    )
+    artifact.verify_identity()
+    return RoleExecution(artifact=artifact, payload=imported.payload)
+
+
 def _run_task(
     journal: ExecutionJournal,
     task: PlannedTask,
@@ -2083,7 +2184,11 @@ def _run_task(
         return None
     try:
         if task.method == "imported":
-            result = _import_material_items_execution(journal.plan, task)
+            result = (
+                _import_claims_execution(journal.plan, task)
+                if task.role == "claims"
+                else _import_material_items_execution(journal.plan, task)
+            )
         elif task.role == "claims":
             result = execute_claims_role(
                 journal.plan.snapshot,

@@ -1426,7 +1426,7 @@
           "cite"
         ]
       },
-      "judgement": "correct_extra",
+      "judgement": "incorrect",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。",
@@ -4977,7 +4977,7 @@
           "cite"
         ]
       },
-      "judgement": "correct_extra",
+      "judgement": "duplicate",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "OCF/扣非 0.32",
@@ -5093,7 +5093,7 @@
           "cite"
         ]
       },
-      "judgement": "correct_extra",
+      "judgement": "incorrect",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "动 PE 隐含的 475 亿",
@@ -5211,7 +5211,7 @@
           "cite"
         ]
       },
-      "judgement": "correct_extra",
+      "judgement": "incorrect",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "没给卖方 600",
@@ -6955,7 +6955,7 @@
           "cite"
         ]
       },
-      "judgement": "incorrect",
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "涨跌 +0.28%；",
@@ -7067,7 +7067,7 @@
           "cite"
         ]
       },
-      "judgement": "incorrect",
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "成交额 103.15 亿元；",
@@ -7179,7 +7179,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "换手 0.80%；",
@@ -7198,9 +7198,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite",
         "compare",
@@ -7294,7 +7294,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "量比 1.66。",
@@ -7313,9 +7313,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -7408,7 +7408,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。",
@@ -7427,9 +7427,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -7522,7 +7522,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。",
@@ -7541,9 +7541,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -7637,7 +7637,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。",
@@ -7656,9 +7656,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -7747,7 +7747,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "融资余额 79.81 亿。",
@@ -7766,9 +7766,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite",
         "compare",
@@ -7861,7 +7861,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "近 5 日收盘 60.40 → 60.15 → 60.57 → 63.86 → 64.04。",
@@ -7880,9 +7880,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite",
         "compare",
@@ -7981,7 +7981,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "8/27 英伟达财报次日约 +5.43%",
@@ -8000,9 +8000,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -8101,8 +8101,8 @@
           "cite"
         ]
       },
-      "judgement": null,
-      "matched_gold_id": null,
+      "judgement": "matched",
+      "matched_gold_id": "NT-C15",
       "canonical_observed_fields": {
         "quote": "我们3.2T预计将在27年三季度左右实现批量供应",
         "subject": "材料所述公司",
@@ -8120,9 +8120,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -8216,8 +8216,8 @@
           "cite"
         ]
       },
-      "judgement": null,
-      "matched_gold_id": null,
+      "judgement": "matched",
+      "matched_gold_id": "NT-C16",
       "canonical_observed_fields": {
         "quote": "预计到28年整个行业的出货量将达到500万只的水平",
         "subject": "3.2T产品（厂商口径不明）",
@@ -8235,9 +8235,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -8335,8 +8335,8 @@
           "cite"
         ]
       },
-      "judgement": null,
-      "matched_gold_id": null,
+      "judgement": "matched",
+      "matched_gold_id": "NT-C17",
       "canonical_observed_fields": {
         "quote": "价格方面预计3.2T单价在1800美元左右，这是个比较早期的一些预计",
         "subject": "3.2T光模块",
@@ -8354,9 +8354,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -8452,8 +8452,8 @@
           "cite"
         ]
       },
-      "judgement": null,
-      "matched_gold_id": null,
+      "judgement": "matched",
+      "matched_gold_id": "NT-C18",
       "canonical_observed_fields": {
         "quote": "2.4T 27年的出货量预期在200万只，这个是之前传的，也是200万只，这是可能的",
         "subject": "2.4T产品（厂商口径不明）",
@@ -8471,9 +8471,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -8572,8 +8572,8 @@
           "cite"
         ]
       },
-      "judgement": null,
-      "matched_gold_id": null,
+      "judgement": "matched",
+      "matched_gold_id": "NT-C19",
       "canonical_observed_fields": {
         "quote": "到28年预计增长至300至500万只，这个就是金像电的这个产品",
         "subject": "2.4T产品（厂商口径不明）",
@@ -8591,9 +8591,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -8690,7 +8690,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "EML和硅光26年初是4比6",
@@ -8709,9 +8709,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -8808,7 +8808,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "EML和硅光26年初是4比6",
@@ -8827,9 +8827,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -8924,7 +8924,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "预计到年底是规划到65%比35%",
@@ -8943,9 +8943,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -9040,7 +9040,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "预计到年底是规划到65%比35%",
@@ -9059,9 +9059,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -9151,8 +9151,8 @@
           "cite"
         ]
       },
-      "judgement": null,
-      "matched_gold_id": null,
+      "judgement": "matched",
+      "matched_gold_id": "NT-C11",
       "canonical_observed_fields": {
         "quote": "29年NPO到10%，",
         "subject": "光模块行业",
@@ -9170,9 +9170,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite",
         "compare",
@@ -9264,8 +9264,8 @@
           "cite"
         ]
       },
-      "judgement": null,
-      "matched_gold_id": null,
+      "judgement": "matched",
+      "matched_gold_id": "NT-C12",
       "canonical_observed_fields": {
         "quote": "CPO到30%，",
         "subject": "光模块行业",
@@ -9283,9 +9283,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite",
         "compare",
@@ -9377,8 +9377,8 @@
           "cite"
         ]
       },
-      "judgement": null,
-      "matched_gold_id": null,
+      "judgement": "matched",
+      "matched_gold_id": "NT-C13",
       "canonical_observed_fields": {
         "quote": "可插拔主导70%。",
         "subject": "光模块行业",
@@ -9396,9 +9396,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite",
         "compare",
@@ -9498,7 +9498,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "长期来看，为规避风险，都在泰国布局产能，未来60%以上的将通过泰国或者台湾生产，",
@@ -9517,9 +9517,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -9614,7 +9614,7 @@
         ],
         "usable_for": []
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "以前都是零",
@@ -9633,9 +9633,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -9729,7 +9729,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "你免了税还要按15%税率给你补上",
@@ -9748,9 +9748,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -9846,7 +9846,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "会与客户协商，提价幅度在10%到20%之间。",
@@ -9865,9 +9865,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -9961,7 +9961,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "在CPO里面90%以上的价值由交换机芯片厂商，",
@@ -9980,9 +9980,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -10076,7 +10076,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "27年合计的高速光模块两个是1.5亿只，这是需求得出的需求量",
@@ -10095,9 +10095,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -10197,8 +10197,8 @@
           "cite"
         ]
       },
-      "judgement": null,
-      "matched_gold_id": null,
+      "judgement": "matched",
+      "matched_gold_id": "NT-C14",
       "canonical_observed_fields": {
         "quote": "27年5万到10万个水平",
         "subject": "光模块行业",
@@ -10216,9 +10216,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -10317,8 +10317,8 @@
           "cite"
         ]
       },
-      "judgement": null,
-      "matched_gold_id": null,
+      "judgement": "matched",
+      "matched_gold_id": "NT-C20",
       "canonical_observed_fields": {
         "quote": "今年下半年预计将有2到3个新客户开始贡献收入，这些主要是第二梯队。",
         "subject": "材料所述公司",
@@ -10336,9 +10336,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -10433,7 +10433,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "到26年底这些新客户开始供应，供应占比合计能达到15%左右",
@@ -10452,9 +10452,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -10550,7 +10550,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "duplicate",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "预计北美市场收入占比将达到85%左右",
@@ -10569,9 +10569,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -10666,7 +10666,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "今年85%左右",
@@ -10685,9 +10685,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -10781,7 +10781,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "还有15%是国内",
@@ -10800,9 +10800,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]
@@ -10897,7 +10897,7 @@
           "cite"
         ]
       },
-      "judgement": null,
+      "judgement": "correct_extra",
       "matched_gold_id": null,
       "canonical_observed_fields": {
         "quote": "二季度就有超过300万个了",
@@ -10916,9 +10916,9 @@
       },
       "decision_basis": "pending_named_human_adjudication",
       "agent_reason": null,
-      "reviewer": null,
-      "adjudicator": null,
-      "review_status": "pending_named_human_signoff",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "review_status": "accepted",
       "usable_for": [
         "cite"
       ]

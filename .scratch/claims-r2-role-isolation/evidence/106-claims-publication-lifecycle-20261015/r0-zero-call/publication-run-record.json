@@ -1,0 +1,38 @@
+{
+  "schema_version": "claims-publication-run-record-1",
+  "id": "106-claims-publication-lifecycle-20261015",
+  "run_on": "2026-10-15",
+  "model_calls": 0,
+  "publications": {
+    "claims-industrial-fulian": {
+      "publication_id": "sha256:5fc7116b4df7b470cb143ae6f35c2060e6a68a4c30465cde39578efb0981a69f",
+      "publication_status": "published",
+      "quality_status": "accepted",
+      "artifacts": [
+        "sha256:0016ebf30598913bff8fbd95181a805f1d7ef516c7f648fe468a62c2dc0ca8ee"
+      ],
+      "coverage": {
+        "claims": "complete",
+        "material_items": "missing",
+        "material_relations": "missing"
+      },
+      "reason_codes": [],
+      "task_publication_status": "published"
+    },
+    "claims-optical-module": {
+      "publication_id": "sha256:8dde446f995204b18f754fea697e05622b1614a5ce04beeff2149f04555d0867",
+      "publication_status": "published",
+      "quality_status": "accepted",
+      "artifacts": [
+        "sha256:127ba2f5a4b32f0e9d94c890445f759ad3673ad12fb8cf2ef9a4f5aa4c469f27"
+      ],
+      "coverage": {
+        "claims": "complete",
+        "material_items": "missing",
+        "material_relations": "missing"
+      },
+      "reason_codes": [],
+      "task_publication_status": "published"
+    }
+  }
+}

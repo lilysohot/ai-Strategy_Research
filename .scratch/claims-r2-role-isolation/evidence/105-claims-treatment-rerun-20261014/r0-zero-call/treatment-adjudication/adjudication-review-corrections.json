@@ -1,0 +1,92 @@
+{
+  "schema_version": "claims-treatment-adjudication-review-corrections-1",
+  "status": "applied_pending_freeze",
+  "reviewed_on": "2026-10-14",
+  "model_calls": 0,
+  "worksheet": "candidate-adjudications.worksheet.json",
+  "corrections": [
+    {
+      "seq": 12,
+      "candidate_id": "f1fae18dc4e3162988ec3bcfdd42435d07ffc7783f233cdb64231af18499e41b",
+      "claim_text": "市场对工业富联的共识预期次日股价为90元",
+      "quote": "框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。",
+      "from": "correct_extra",
+      "to": "incorrect",
+      "basis": "原文「不站 90 元共识当明天的地板价」= 共识目标价且是否定用法；候选改写为「共识预期次日股价」属语义改动"
+    },
+    {
+      "seq": 42,
+      "candidate_id": "432d00f837b7f7d227b31823543d394a9afc1e9f5252fd0e2c715b3f437f7fd6",
+      "claim_text": "工业富联经营现金流与扣非净利润的比值为0.32，属于已发生的事实",
+      "quote": "OCF/扣非 0.32",
+      "from": "correct_extra",
+      "to": "duplicate",
+      "basis": "与 #18 同指 OCF/扣非 0.32（quote「OCF/扣非 0.32」vs「只盖住扣非的 0.32 倍」），同一事实两次渲染"
+    },
+    {
+      "seq": 43,
+      "candidate_id": "f3cef4f9a02b6ec9658085d0cae31ac9a30a158d36cd42a84b5309eb80bc5bfb",
+      "claim_text": "工业富联动态PE口径隐含的市值为475亿元",
+      "quote": "动 PE 隐含的 475 亿",
+      "from": "correct_extra",
+      "to": "incorrect",
+      "basis": "原文「动 PE 隐含的 475 亿…没给卖方 600」+ #29「定价约 475 亿 26E」⇒ 475 是净利润，候选写「市值」为对象错"
+    },
+    {
+      "seq": 44,
+      "candidate_id": "a47194b7790f614b3f32eacc08a78286b8ab10b977fda730f18e06d88d4e1b0b",
+      "claim_text": "工业富联卖方预期对应的参考市值为600亿元",
+      "quote": "没给卖方 600",
+      "from": "correct_extra",
+      "to": "incorrect",
+      "basis": "同 #43：600 亿为净利润口径（对照 #30 卖方 560–667 亿），候选写「参考市值」为对象错"
+    },
+    {
+      "seq": 60,
+      "candidate_id": "da0fbc373f20e5b21717c097d4ed408aa983bba8a99d17b2e69c04d4056a7746",
+      "claim_text": "工业富联2026-08-28的成交额为103.15亿元",
+      "quote": "成交额 103.15 亿元；",
+      "from": "incorrect",
+      "to": "correct_extra",
+      "basis": "原文「成交额 103.15 亿元；」内容正确；同段 #59/#61/#62/#65 均判 correct_extra，判 incorrect 与同源条目不一致"
+    },
+    {
+      "seq": 63,
+      "candidate_id": "14673aea7ed04dd4b1aa54875ae5342cb5dd3ac3942c5e3d62ceee2b7737c7a4",
+      "claim_text": "工业富联2025.09.01–2026.08.28的52周最高价为84.95元",
+      "quote": "52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。",
+      "from": "incorrect",
+      "to": "correct_extra",
+      "basis": "原文「52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70」内容正确；同源 #65（45.3%）判 correct_extra，不一致"
+    },
+    {
+      "seq": 64,
+      "candidate_id": "cb8fe6ef0f0415d1372e156aa63eeb913a50e521358ccb85081a744d130da969",
+      "claim_text": "工业富联2025.09.01–2026.08.28的52周最低价为46.70元",
+      "quote": "52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。",
+      "from": "incorrect",
+      "to": "correct_extra",
+      "basis": "同上，52 周低 46.70 元内容正确"
+    },
+    {
+      "seq": 90,
+      "candidate_id": "d40dbd51f8995e62beb09f74331dc01fd9f3f13ea708127e0d2f4a29621a9169",
+      "claim_text": "光模块行业相关公司预计到26年底的北美市场收入占比将达到85%左右",
+      "quote": "预计北美市场收入占比将达到85%左右",
+      "from": "correct_extra",
+      "to": "duplicate",
+      "basis": "与 #91 同指北美收入占比 85%（quote「预计北美市场收入占比将达到85%左右」vs「今年85%左右」），同一事实两次渲染"
+    }
+  ],
+  "post_counts": {
+    "matched": 20,
+    "correct_extra": 64,
+    "incorrect": 3,
+    "duplicate": 6
+  },
+  "post_precision": {
+    "numerator": 84,
+    "denominator": 93,
+    "value": 0.9032258064516129
+  }
+}

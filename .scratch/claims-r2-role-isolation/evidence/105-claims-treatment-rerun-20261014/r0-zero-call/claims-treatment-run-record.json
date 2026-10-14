@@ -1,0 +1,83 @@
+{
+  "schema_version": "claims-treatment-run-record-1",
+  "id": "105-claims-treatment-rerun-20261014",
+  "run_on": "2026-10-14",
+  "model_calls": 0,
+  "pool": {
+    "path": "evidence/105-claims-treatment-rerun-20261014/r0-zero-call/treatment-adjudication/candidate-adjudications.signed.json",
+    "sha256": "d639e8a20d6ce0eef14fde1ace407eebb4fde7670e056b1adeabeb82deac75c2",
+    "worksheet_sha256": "9e853c0d3803ad5fa62e8510e5ee8ac72f027ac61fa7b39367a28735293e170d",
+    "stage": "human_adjudicated_candidate（呈现为 validated 切片，raw 切片为空——与 90 号同构）"
+  },
+  "criteria": {
+    "contract": "evidence/88-claims-contract-v44-signed-20261014/r0-zero-call/scoring-contract-v4.4.json",
+    "contract_sha256": "ce1938b6d35a1292b22d8d75a3af461743e627ccebb0385f3267cb652fcd1650",
+    "tiers_source": "evidence/104-claims-prereg-v4-amendment-20261014/r0-zero-call/claims-preregistration-v4.json",
+    "tiers_source_sha256": "6b5c93d582c9ff8cebfd5e35944a46951068de0e95685abff4645ed1cdaaa510",
+    "note": "档位判定读 99/104 号预注册：主指标 + 质量护栏；accepted 下限轴已退出判定"
+  },
+  "metrics": {
+    "candidate_precision": "84/93 = 0.9032",
+    "target_recall": "20/20",
+    "unresolved_candidates": 0,
+    "sentinels": "3/3",
+    "per_source_precision_diagnostic": {
+      "sha256:48c05895798ba": "24/25 = 0.9600",
+      "sha256:f8fa22084535e": "60/68 = 0.8824"
+    }
+  },
+  "ledger": {
+    "judgement_counts": {
+      "matched": 20,
+      "correct_extra": 64,
+      "incorrect": 3,
+      "duplicate": 6
+    },
+    "matched_gold_ids": [
+      "NT-C01",
+      "NT-C02",
+      "NT-C03",
+      "NT-C04",
+      "NT-C05",
+      "NT-C06",
+      "NT-C07",
+      "NT-C08",
+      "NT-C09",
+      "NT-C10",
+      "NT-C11",
+      "NT-C12",
+      "NT-C13",
+      "NT-C14",
+      "NT-C15",
+      "NT-C16",
+      "NT-C17",
+      "NT-C18",
+      "NT-C19",
+      "NT-C20"
+    ],
+    "assembled": {
+      "validated_candidates": 93,
+      "mappings": 93,
+      "out_of_scope": 0
+    }
+  },
+  "guardrails": {
+    "target_recall": {
+      "value": "20/20",
+      "passed": true
+    },
+    "unresolved_candidates": {
+      "value": 0,
+      "passed": true
+    },
+    "sentinels": {
+      "value": "3/3",
+      "passed": true
+    }
+  },
+  "tier": {
+    "id": "A_keep_and_pass_target",
+    "reading": "claims 保留，且目标线达成"
+  },
+  "exit_rule_applied": "99/104 号预注册档位：A = precision ≥ 0.80 且护栏全绿；B = 0.60 ≤ precision < 0.80 且护栏全绿；C = precision < 0.60 或护栏任一破"
+}
