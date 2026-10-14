@@ -1,0 +1,68 @@
+{
+  "base": {
+    "path": "evidence/75-r2-signed-20261013/r0-zero-call/scoring-contract-v4.3.json",
+    "sha256": "d7b4f8a81ef42e3cd5d619eae92bc34df7b7aa683d34aeba4f1a22719ae69a2f"
+  },
+  "changed_leaf_paths": [
+    "schema_version",
+    "signoff.instrument.path",
+    "signoff.instrument.sha256",
+    "signoff.remark_note",
+    "signoff.reviewer_remark",
+    "signoff.scope_note",
+    "signoff.signed_by",
+    "signoff.signed_on",
+    "signoff.statement",
+    "status",
+    "supersedes.note",
+    "supersedes.schema_version",
+    "supersedes.sha256"
+  ],
+  "added_leaf_paths": [
+    "agent_proposals",
+    "claims_precision_single_source",
+    "claims_scope",
+    "claims_thresholds",
+    "claims_use_grading",
+    "read_path._proposal_note",
+    "read_path.roles_proposed",
+    "role_sections"
+  ],
+  "removed_leaf_paths": [],
+  "expected_changed_leaves": [
+    "schema_version",
+    "status",
+    "supersedes",
+    "signoff"
+  ],
+  "unexpected_changed": [],
+  "thresholds_unchanged": {
+    "target_recall_overall_min": {
+      "v4.3": 0.85,
+      "v4.4": 0.85
+    },
+    "target_recall_per_source_min": {
+      "v4.3": 0.8,
+      "v4.4": 0.8
+    },
+    "candidate_precision_min": {
+      "v4.3": 0.8,
+      "v4.4": 0.8
+    },
+    "accepted_records_total_min": {
+      "v4.3": 40,
+      "v4.4": 40
+    },
+    "accepted_records_per_source_min": {
+      "v4.3": 20,
+      "v4.4": 20
+    },
+    "unresolved_candidates_max": {
+      "v4.3": 0,
+      "v4.4": 0
+    }
+  },
+  "thresholds_byte_identical": true,
+  "role_sections_claims_target_total_equals_gold": true,
+  "removed_is_empty": true
+}

@@ -1597,7 +1597,11 @@ async def test_a_hanging_summarizer_cannot_hold_the_run_open(tmp_path, monkeypat
         max_replay_turns=1,
     )
 
-    assert summary_from(document["messages"]) == (1, None), "timed out ⇒ plain trim"
+    head, memory = summary_from(document["messages"])
+    assert head == 2 and "Q1" in memory
+    assert "Verbatim earlier user excerpts" in memory
+    assert document["trim"]["summary_status"] == "fallback_excerpts"
+    assert document["messages"][head:] == _turn("Q2")
 
 
 def test_the_summary_block_is_not_counted_as_a_real_turn() -> None:
@@ -1896,7 +1900,7 @@ async def test_the_summary_call_reports_its_own_tokens(tmp_path) -> None:
         "completion_tokens": 30,
         "cache_read_tokens": 64,
     }, "the compactor's call must be counted, with cached_tokens normalised"
-    assert seen["summary_usage"] == {"calls": 1, **summarizer.usage}
+    assert seen["summary_usage"] == {"calls": 1, "status": "updated", **summarizer.usage}
 
 
 async def test_a_summarizer_without_usage_still_reports_the_call(tmp_path) -> None:
@@ -1927,7 +1931,7 @@ async def test_a_summarizer_without_usage_still_reports_the_call(tmp_path) -> No
     )
     await observer.on_loop_end(result)
 
-    assert result.metadata["summary_usage"] == {"calls": 1}
+    assert result.metadata["summary_usage"] == {"calls": 1, "status": "updated"}
 
 
 async def test_the_token_budget_keeps_biting_inside_the_band(tmp_path) -> None:

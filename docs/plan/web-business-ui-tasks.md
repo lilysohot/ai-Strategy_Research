@@ -2,9 +2,9 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 日期 | v1.6 · 2026-10-08；回填执行情况（§7）并落实会话计划口径变更（计划不含价格、补数弹窗、成交价回填触发重算） |
-| 状态 | 有效任务设计；UI-01—02、04、06—10 页面代码已落地并接入真实业务 API，**UI-03 未落地、UI-05 部分、UI-11 浏览器验收未做**；本次口径变更待实施；未部署上线，不代表已交付 |
-| 需求依据 | [Web 业务资料 PRD v0.6](../design/web-business-data-prd.md)；[产品需求](../product-requirements.md) PR-BIZ-01—06、PR-WB-07、PR-DATA-13、PR-WATCH-01—04 |
+| 版本 / 日期 | v1.7 · 2026-10-14；回填会话计划、成交回填触发重算及 Run 实时订阅的执行情况（§7） |
+| 状态 | 有效任务设计；UI-01—02、04、06—10 页面代码已落地并接入真实业务 API，**UI-03 部分、UI-05 部分、UI-11 浏览器验收未做**；未部署上线，不代表已交付 |
+| 需求依据 | [Web 业务资料 PRD v0.7](../design/web-business-data-prd.md)；[产品需求](../product-requirements.md) PR-BIZ-01—06、PR-WB-07、PR-DATA-13、PR-WATCH-01—04 |
 | 配套清单 | [数据持久化与服务端任务](web-business-persistence-tasks.md)；本文任务编号 UI-*，配套任务编号 DATA-* |
 | 范围 | 三栏工作台、资料录入与回执、分析依据、补数、监控、站内通知及浏览器验收 |
 
@@ -15,9 +15,10 @@
 [本地任务规范](../agents/issue-tracker.md)将每项分别建为 issue，状态只在对应 issue 维护。
 产品状态仍以产品需求为准；本次拆分不调整其他专项优先级，不启动部署或迁移。
 
-2026-10-08 回填：配套 DATA 任务已在 `.scratch/web-business-repairs/issues/` 逐项建 issue（10 项）；
-UI 侧**尚未建立 issue 台账**，本文 §7 仅为代码落点核对记录，不是验收结论，不能替代 issue 状态
-与 UI-11 浏览器验收。页面实现方不得据此自宣完成。
+2026-10-14 回填：配套 DATA 任务已在 `.scratch/web-business-repairs/issues/` 逐项建 issue（10 项）；
+会话计划口径变更已在 `.scratch/web-business-session-plan/issues/` 建立 5 项 issue，其余 UI-* 尚无
+逐项完整台账。本文 §7 仅为代码落点核对记录，不是验收结论，不能替代 issue 状态与 UI-11
+浏览器验收。页面实现方不得据此自宣完成。
 
 ## 1. 交互约束
 
@@ -258,53 +259,59 @@ DATA-01 冻结草案见[共用数据与操作契约](../design/web-business-data
 
 2026-10-08 更正：原“B/C 的交付必须等待真实快照/持久调度/行情契约接通”的前提已满足——配套
 DATA-05—12 已实施并提交，前端业务组件也已接入真实端点（见 §7）。但组件存在不等于交付：
-UI-03 持仓/成交登记未落地，UI-05 缺少聊天写入路径，UI-11 浏览器与真实 worker 联合验收尚未执行，
+UI-03 已落地成交回填触发重算子路径，但持仓/成交历史、更正与建议价采纳仍未完成；UI-05 缺少
+聊天写入路径，UI-11 浏览器与真实 worker 联合验收尚未执行，
 因此仍不能以页面可见或 mock 原型代替专项验收。
 
 2026-10-08 口径变更（用户裁决）：会话计划重新梳理——计划**不再保存价格**；补数弹窗（规划资金必需，
 承受风险/期望盈利可后补）由 Agent 在准备给出价位/仓位结论时主动发起；成交价由用户回填到会话计划
-并触发重新分析。UI-02/03/05/06/07 已按新口径改写，属**待实施**变更，§7 的“已落地”状态不受影响。
+并触发重新分析。UI-02/03/06/07 的对应页面路径已实现；UI-05 的建议价/成交价回执区分仍待完成，
+详见 §7 与 `.scratch/web-business-session-plan/issues/05-frontend-dialog-fill.md`。
 
-## 7. 执行情况（2026-10-08 回填）
+## 7. 执行情况（2026-10-14 回填）
 
-本节是代码落点核对记录，**不是验收结论**：UI 侧尚未按任务规范建立 issue 台账，UI-11 浏览器端到端
-验收未执行，未部署上线。核对方式为只读检视工作区源码与提交历史，未运行浏览器或真实 API 联合验收。
+本节是代码落点核对记录，**不是验收结论**：会话计划已有局部 issue 台账，但 UI-* 尚未逐项完整建账；
+UI-11 浏览器端到端验收未执行，未部署上线。本轮运行了前端单测、类型检查与生产构建，但未用真实
+浏览器完成成交回填全路径，也未把代码级验证表述为上线验收。
 
 | 编号 | 代码落点 | 状态 |
 |---|---|---|
 | UI-01 | `web/src/components/business/BusinessWorkspace.vue`（三区块切换、`服务端持久化/前端预览` 标记）、`SessionPlanManager.vue`、`web/src/business-ui.ts` 导航注册 | 已落地 |
-| UI-02 | `BusinessProfileView.vue`（总资金/可用资金/币种/口径/时点、十进制字符串 `inputmode`、用途选择、保存与保存并分析）、`SessionPlanManager.vue`（会话内建计划、主计划） | 已落地 |
-| UI-03 | 仅 `web/src/api/index.ts` 封装 `trades.register/list/correct` 与 `web/src/types.ts` 类型；**无组件的持仓/成交登记与更正入口** | 未落地 |
+| UI-02 | `BusinessProfileView.vue`（总资金/可用资金/币种/口径/时点、十进制字符串 `inputmode`、用途选择、保存与保存并分析）、`SessionPlanManager.vue`（会话内建计划、主计划）、`BusinessInputRequestDialog.vue`（结构化补数） | 已落地 |
+| UI-03 | `SessionPlanManager.vue` 已提供方向、数量、实际成交价、带时区日期时间选择器、费用，并以 `holding_cost + declared.trade` 保存成交、创建新 Run；`api/index.ts` 另有成交列表/更正封装。**持仓/成交历史、更正入口、建议价采纳及历史对比仍缺** | 部分 |
 | UI-04 | `BusinessProfileView.vue`（`expected_revision` 冲突对比与重提、`idempotencyKey()`、`clearActionKey`）、`web/src/stores/business.ts`（最近操作回执恢复）、`ChatView.vue`（离开拦截、切研究草稿隔离） | 已落地 |
 | UI-05 | `ChatView.vue` + `stores/business.ts` 渲染服务端操作回执；**聊天自然语言→业务写入无入口**（服务端亦无该写路径） | 部分 |
-| UI-06 | `AnalysisEvidence.vue`（读取该 Run 冻结快照）、`AnalysisRerunPanel.vue`（停止并重算） | 已落地 |
-| UI-07 | `BusinessRequestCenter.vue`（补数列表/详情/回答/取消，走 `input-requests` 端点） | 已落地 |
+| UI-06 | `AnalysisEvidence.vue`（读取该 Run 冻结快照）、`AnalysisRerunPanel.vue`（停止并重算）、`SessionPlanManager.vue → ChatView.vue`（成交成功后追加会话记录、记住并订阅新 Run） | 已落地（浏览器验收待 UI-11） |
+| UI-07 | `BusinessRequestCenter.vue`（补数列表/详情/回答/取消）、`BusinessInputRequestDialog.vue`（结构化回答）、`ChatView.vue`（终态后主动补充及后续 Run 导航） | 已落地（真实 worker 联合验收待 UI-11） |
 | UI-08 | `BusinessMonitorCenter.vue`（规则创建/编辑/暂停/恢复/取消、行情口径与观测时间展示；C 阶段单次模式） | 已落地 |
 | UI-09 | `BusinessNotificationCenter.vue` + `stores/business.ts`（通知列表、已读、游标补读、设置） | 已落地 |
 | UI-10 | `BusinessProfileView.vue::archiveAccount`、`api/index.ts` 的账户/计划归档与研究删除封装 | 部分（归档已接；删除/清除草稿/清聊天的联动反馈未逐项核对） |
-| UI-11 | `web/tests/business-drafts.cjs`、`web/tests/input-requests-real.cjs`（Playwright，隔离 fixtures） | 未完成（无完整用户路径、窄屏/键盘、双身份隔离与网络回执证据） |
+| UI-11 | `web/tests/business-drafts.cjs`、`web/tests/input-requests-real.cjs`（Playwright，隔离 fixtures）；2026-10-14 前端 Node 单测 93 项通过、`vue-tsc --noEmit` 与 Vite 生产构建通过 | 未完成（代码级回归通过；仍无完整用户路径、窄屏/键盘、双身份隔离与网络回执证据） |
 
 补充核对：
 
 - 组件统一经 `web/src/api/index.ts` 调用真实端点，不解析自然语言判断提交结果；
 - `BusinessWorkspace.vue` 以 `meta.live` 区分“服务端持久化/前端预览”，预览态不代表已接后端；
-- `web/src/types.ts` 已含业务 wire 类型（含 `trades`），但 UI-03 登记入口缺失——类型存在不等于页面可用；
+- `web/src/types.ts` 已含业务 wire 类型（含 `trades`）；UI-03 的成交回填入口已可用，但列表、更正与持仓入口仍不能由类型或 API 封装替代；
+- 成交回填成功后，`SessionPlanManager.vue` 发出结构化 `runSubmitted`，`ChatView.vue` 统一追加用户回合、
+  `rememberRun` 并 `watch` 新 Run；`web/src/utils/chat.test.ts` 覆盖当前会话挂载与切会话隔离；
 - 关键提交：`5b5a1f8`（预览+导航）、`90e1a6e`/`ec24664`（部分接线+草稿保护）、`06af238`（UI 主接线）。
 
 缺口清单（不放行）：
 
-1. UI-03 成交登记与回填入口未实现（服务端 DATA-02/03 已支持）。
+1. UI-03 仅完成成交回填并重算；成交/持仓列表、更正、建议价采纳、来源与历史对比尚未实现。
 2. UI-05 聊天自然语言业务修改未实现（服务端无该写入路径，现有业务工具为只读+计算）。
 3. UI-11 浏览器端到端验收未执行，无窄屏/键盘/双身份隔离/迟到响应证据。
 4. 附件分阶段回执（上传/校验/提交/派发）与同名冲突提示未核对到组件级实现。
-5. UI 侧 issue 台账未建立，逐项状态无独立真源。
+5. UI 侧仅会话计划专项建立 issue，UI-* 全量逐项状态仍无完整独立真源。
 
-本次口径变更（2026-10-08 裁决）带来的新增缺口：
+2026-10-08 口径变更的实施核对：
 
-6. 补数弹窗组件与 Agent 主动触发入口未实现（无弹窗 UI；worker 侧无创建补数请求的路径）。
-7. 计划价格字段移除与 `allocated_capital`/`target_profit` 新增未实施（前后端仍为原字段，
-   准入表仍要求 `plan_price`）。
-8. 成交价回填触发重新分析的入口与回执未实现。
+6. 结构化补数弹窗、计划去价格与 `allocated_capital`、成交价回填触发重新分析均已实现；
+   Agent 工具真实子进程触发补数仍缺专门端到端证据。
+7. 成交回填创建 Run 后的前端会话记录与实时订阅已在 2026-10-14 修复；本次超时 Run 证明后端可启动，
+   但不构成成功产出分析结论的验收。
+8. Agent 建议价展示与聊天回执中的“建议价/成交价”区分仍未完成。
 
-收口时按[本地任务规范](../agents/issue-tracker.md)为上述缺口建 issue（含本次三项变更），并完成
-UI-11 的浏览器 + 真实 API + 真实 worker 联合验收；未通过项不向用户开放。
+收口时按[本地任务规范](../agents/issue-tracker.md)补齐其余 UI-* issue，并完成 UI-11 的浏览器 +
+真实 API + 真实 worker 联合验收；未通过项不向用户开放。

@@ -38,7 +38,7 @@ CLAIM_KINDS_V2 = ("fact", "forecast", "opinion")
 QUALITY_STATUSES = ("ok", "review", "rejected")
 EVIDENCE_KINDS = ("prose", "table")
 
-LINT_VERSION = "claims-v2-lint-8"
+LINT_VERSION = "claims-v2-lint-9"
 UNIT_RULE_VERSION = "unit-rules-4"
 PERIOD_RULE_VERSION = "period-rules-4"
 
@@ -49,8 +49,8 @@ V2_OUTPUT_CONTRACT = """
 - 每条 claim 必须包含 claim_text 与 evidence_quote。claim_text 是原子化断言；
   evidence_quote 是对应原文的精确片段，散文证据必须能在本块逐字找到。
 - 默认 evidence_kind="prose"；只有上下文提供真实表格 ID 和行列坐标时才使用 table。
-- kind 只能是 fact/forecast/opinion。评级、维持买入、上调至增持、Buy/Neutral/
-  Overweight 等没有数值投影的观点归 opinion，不要伪装成 forecast 数字。
+- kind 只能是 fact/forecast。Claims 只收有数值投影的断言；评级、维持买入、上调至增持、
+  Buy/Neutral/Overweight 这类没有数值投影的评级与观点不要输出（它们在 material_items 侧承接）。
 - 输出字段：claim_text, evidence_quote, evidence_kind, table_ref, scope, subject_raw,
   subject, metric_raw, metric, qualifiers, kind, value_text, unit_raw, period_raw,
   observed_at, known_at, confidence。
@@ -58,8 +58,8 @@ V2_OUTPUT_CONTRACT = """
   多条，不能用一个 value 承载 “3.2/3” 等多个值，也不能把原因、条件和结果合成一条 Claim。
 - 公司范围可使用“来源上下文”中明确给出的 subject 补足正文省略的主语，但仅限当前断言确实描述
   该主体；不得把客户、行业、竞争对手或被转述者的数据归给文档主体。
-- 纯条件、风险情景、因果连接、话语评价和没有可绑定指标的定性片段留给 material_items；Claims
-  只保留能够独立说明主体、指标以及适用期间/时点的事实、预测或明确评级观点。
+- 纯条件、风险情景、因果连接、话语评价、评级观点，以及没有可绑定指标或没有数值投影的定性片段，
+  一律留给 material_items；Claims 只保留能独立说明主体、指标、适用期间/时点且带数值投影的事实或预测。
 - value_num、unit、period_end、period_grain、quality_status、reason_codes 不由模型裁决；
   它们由 Python 规则重算。缺失或不确定的原始字段填 null，不要猜。
 - 数值与单位分别保留，如 value_text="16.2", unit_raw="万人"。保留零值和负号。
@@ -75,7 +75,7 @@ _SLOT_BY_KIND: dict[str, str] = {
     "macro": "领域：宏观。保留国家与指标，非农就业规范为 subject=US, metric=NFP；不合并实际、预期、前值。",
 }
 
-_EXTRACTOR_REV_V2 = 5
+_EXTRACTOR_REV_V2 = 6
 _PROMPT_PARTS_V2: tuple[str, ...] = (
     V2_OUTPUT_CONTRACT,
     *_SLOT_BY_KIND.values(),
@@ -774,6 +774,15 @@ def normalize_unit(unit_raw: str | None) -> str | None:
     return base or unit
 
 
+def is_claims_scope_candidate(record: ClaimRecord) -> bool:
+    """已签 C1 的产出侧判据：claims 只收有数值投影的非 opinion 断言。
+
+    这是 ``tools/check_claims_gate._is_role_external``（``kind == "opinion" or value_text is None``）
+    的正反两面；101 号落地件在冻结池上逐条断言两者互补，防止产出侧与前缀读数口径漂开。
+    """
+    return record.kind != "opinion" and bool(record.value_text)
+
+
 def lint_claim(
     record: ClaimRecord,
     *,
@@ -805,7 +814,11 @@ def lint_claim(
             reasons.append("value_missing")
         if not record.unit:
             reasons.append("unit_missing")
-        if not record.period_end and not record.observed_at:
+        if not record.period_raw:
+            # Field-first, not fallback-first: the zero-call stop-loss「缺字段却无阻断码 = 0」measures an
+            # empty ``period_raw``, so the code has to follow the same field. ``observed_at`` is the
+            # document-level observation time, not the claim's applicable period, so it must not
+            # suppress the code (9 in-role rows on the P1R5 pool were unlabelled for exactly this).
             reasons.append("period_missing")
     if (
         record.period_raw

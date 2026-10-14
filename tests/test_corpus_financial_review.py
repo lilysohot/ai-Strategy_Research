@@ -39,8 +39,6 @@ def report_run(*, source_margin="50.2", revenue="178657", duplicates=False):
                 "kind": "forecast",
             }
         )
-    if duplicates:
-        payload.append(payload[1])
     packet = EvidencePacket(packet_id="p", locator="3", kind="prose", text=text)
     doc = EvidenceDocument(
         doc_id="d",
@@ -54,7 +52,15 @@ def report_run(*, source_margin="50.2", revenue="178657", duplicates=False):
         pages=(Span(locator="3", text=text),),
         packets=(packet,),
     )
-    return extract_evidence(doc, llm=lambda _: json.dumps(payload), max_prose_calls=1)
+    run = extract_evidence(doc, llm=lambda _: json.dumps(payload), max_prose_calls=1)
+    if duplicates:
+        # 产出侧 T3 现在会合并同坐标的重复渲染，所以「重复 fact_id」只能手工构造；
+        # 被考验的是复核器的拒绝行为，不是抽取器的行为。
+        duplicated = run.model_copy(update={"facts": (*run.facts, run.facts[1])})
+        payload = duplicated.model_dump(mode="json")
+        payload.pop("run_id")
+        run = duplicated.model_copy(update={"run_id": fingerprint(payload)})
+    return run
 
 
 def test_review_preserves_source_and_marks_unresolved_definition():

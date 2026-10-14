@@ -71,7 +71,7 @@ SUMMARY_TAG = "conversation-summary"
 #: loop's return open until the run's wall deadline killed it. The summarizer's
 #: own transport timeout is far larger (hundreds of seconds) and is not a bound
 #: this code can rely on.
-SUMMARY_TIMEOUT_S = 60.0
+SUMMARY_TIMEOUT_S = 15.0
 _SUMMARY_RE = re.compile(
     rf"<{SUMMARY_TAG}>(?P<body>.*?)</{SUMMARY_TAG}>",
     re.DOTALL | re.IGNORECASE,
@@ -648,7 +648,7 @@ class ConversationSnapshotObserver(BaseObserver):
             logger.warning("conversation snapshot skipped: %s", invalid)
             return
         prepared, trim = await self._prepare_snapshot(wire)
-        self._report_summary_usage(result)
+        self._report_summary_usage(result, trim)
         document = build_dump(
             messages=prepared,
             system_prompt=self._system_prompt,
@@ -706,7 +706,9 @@ class ConversationSnapshotObserver(BaseObserver):
         )
         return self._max_replay_turns if turns > self._max_replay_turns + step else 0
 
-    def _report_summary_usage(self, result: AgentLoopResult) -> None:
+    def _report_summary_usage(
+        self, result: AgentLoopResult, trim: dict[str, Any] | None = None,
+    ) -> None:
         """Publish the write-time summary call's tokens on the loop result.
 
         The figures travel ``result.metadata`` → the pipeline's state → the worker's
@@ -725,9 +727,11 @@ class ConversationSnapshotObserver(BaseObserver):
         if not self._summary_calls:
             return
         usage = getattr(self._summarizer, "usage", None)
-        report: dict[str, int] = {"calls": self._summary_calls}
+        report: dict[str, Any] = {"calls": self._summary_calls}
         if isinstance(usage, dict):
             report.update({key: value for key, value in usage.items() if isinstance(value, int)})
+        if trim and trim.get("summary_status"):
+            report["status"] = trim["summary_status"]
         metadata = getattr(result, "metadata", None)
         if isinstance(metadata, dict):
             metadata["summary_usage"] = report
@@ -772,6 +776,17 @@ class ConversationSnapshotObserver(BaseObserver):
             logger.warning("conversation summary failed; the trim stands alone", exc_info=True)
             summary = None
         if not summary or not summary.strip():
+            # Keep the ordinary suffix and any previous memory byte-for-byte. With
+            # spare space, retain bounded verbatim user excerpts as a transparent
+            # fallback; never claim that a model summarized the missing turns.
+            if not old_summary:
+                excerpts = [content[:400] for m in wire[head:int(probe["cut_at"])]
+                            if m.get("role") == "user" and isinstance(content := m.get("content"), str)]
+                text = "Summary unavailable. Verbatim earlier user excerpts (incomplete):\n" + "\n".join(excerpts[-3:])
+                prepared = [fallback[0], user_msg(render_summary_content(text)), *fallback[1:]]
+                size = estimate_tokens(canonical_json(prepared))
+                if excerpts and (budget <= 0 or size <= budget):
+                    return prepared, {**probe, "summary_status": "fallback_excerpts", "est_tokens": size}
             return fallback, {**probe, "summary_status": "failed"}
 
         suffix = wire[cut:]

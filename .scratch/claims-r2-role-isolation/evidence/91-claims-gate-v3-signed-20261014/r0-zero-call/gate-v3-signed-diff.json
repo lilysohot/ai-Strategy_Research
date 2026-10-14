@@ -1,0 +1,82 @@
+{
+  "draft": {
+    "path": "evidence/90-claims-gate-v3-and-run-20261014/r0-zero-call/claims-gate-v3.proposed.json",
+    "sha256": "6a36cf1352ad19a11f136e41d99996634ff18304a2e20ca2e81e7b18dfd54339"
+  },
+  "signed": {
+    "path": "evidence/91-claims-gate-v3-signed-20261014/r0-zero-call/claims-gate-v3.json",
+    "sha256": "sha256:b2b93b9ce46711b1e2f55d340c54452c1033eb15569f0dd865af9e3477d74fb3"
+  },
+  "changed_leaf_paths": [
+    "open_decisions",
+    "status"
+  ],
+  "added_leaf_paths": [
+    "candidate_pool",
+    "countersignature",
+    "reporting_scope",
+    "unfrozen_axes",
+    "unfrozen_axes_note",
+    "verdict"
+  ],
+  "removed_leaf_paths": [
+    "signoff"
+  ],
+  "expected_changed_prefixes": [
+    "status",
+    "open_decisions",
+    "thresholds"
+  ],
+  "expected_removed": [
+    "signoff"
+  ],
+  "expected_added": [
+    "candidate_pool",
+    "countersignature",
+    "reporting_scope",
+    "unfrozen_axes",
+    "unfrozen_axes_note",
+    "verdict"
+  ],
+  "unexpected_changed": [],
+  "unexpected_removed": [],
+  "unexpected_added": [],
+  "conformance": {
+    "check_count": 27,
+    "blocking_failures": [],
+    "divergences": [
+      "superseded-artifact-drift"
+    ],
+    "verdict": "pass"
+  },
+  "verdict": {
+    "target_line": {
+      "candidate_precision_min": 0.8,
+      "verdict": "FAIL",
+      "unreachable_registered": true,
+      "variant_independence": {
+        "fails_in_every_variant": true,
+        "blocked_on_precision_in_every_variant": true,
+        "variants": [
+          "a_items_40_20",
+          "b_scaled_17_8",
+          "c_diagnostic_min"
+        ]
+      },
+      "note": "精度 0.6296 < 0.80 在所有 accepted 下限变体下都成立 ⇒ 目标线判定与 D-1 无关"
+    },
+    "release_line": {
+      "candidate_precision_min": 0.6,
+      "per_source_precision_min": 0.55,
+      "verdict": "PASS",
+      "precondition": "D-1 ≠ a（若取 a，放行线另受 accepted 下限 3 项阻断）",
+      "per_source_axis_status": "报告项；六项里无该轴，D-2 未裁前不参与 gating",
+      "not_a_quality_claim": "放行线是功能线：通过不等于质量达标"
+    },
+    "floors_only_blocked_variants": [],
+    "measured_run_ref": {
+      "path": "evidence/90-claims-gate-v3-and-run-20261014/r0-zero-call/claims-run-record.json",
+      "sha256": "sha256:4fc0893db3a2a07335ba1be2ba56563e2970861e5c96d83e90196d0054ed78d7"
+    }
+  }
+}

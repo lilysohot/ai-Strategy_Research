@@ -1,0 +1,847 @@
+{
+  "schema_version": "claims-gate-v2-retro-audit-1",
+  "created_on": "2026-10-14",
+  "zero_model_calls": true,
+  "auditor": "agent",
+  "reviewer": null,
+  "signed_on": null,
+  "subject": {
+    "gate": "evidence/84-claims-gate-v2-draft-20261014/r0-zero-call/claims-gate-v2.proposed.json",
+    "gate_sha256": "ad9b080e9a52b50b50f55498ba460956285a997ec934e132a39bbe090bd22a8c",
+    "manifest": "evidence/84-claims-gate-v2-draft-20261014/r0-zero-call/MANIFEST.json",
+    "manifest_sha256": "d18d924233e03cfb27a265d7f61fa9e558f104e03dc440e1d8bd36ef3e03d594"
+  },
+  "checker": {
+    "path": "tools/check_claims_gate.py",
+    "sha256": "770bc51de0010e1a2003c0111533d6d307421c70ee4d7b24ad631a733a075875",
+    "check_count": 26
+  },
+  "predicates": {
+    "layers": [
+      "bookkeeping",
+      "caliber",
+      "frozen",
+      "invariant",
+      "metric",
+      "pool"
+    ],
+    "kinds": [
+      "caliber_divergence",
+      "completeness",
+      "consistency",
+      "coverage",
+      "feasibility",
+      "identity",
+      "integrity",
+      "reproducibility"
+    ],
+    "blocking_definition": "该项失败会使门不可签认"
+  },
+  "checks": [
+    {
+      "check_id": "inputs-stable",
+      "layer": "frozen",
+      "kind": "integrity",
+      "blocking": true,
+      "claim": "门/清单引用的全部冻结输入与磁盘字节一致",
+      "method": "逐条 sha256（gate.frozen_inputs ∪ manifest.inputs）",
+      "expected": {
+        "mismatched": {},
+        "missing": []
+      },
+      "actual": {
+        "mismatched": {},
+        "missing": []
+      },
+      "verdict": "pass"
+    },
+    {
+      "check_id": "pool-ledger-closed",
+      "layer": "pool",
+      "kind": "integrity",
+      "blocking": true,
+      "claim": "候选池裁定账闭合：四类之和 == 池容量，unresolved == 0",
+      "method": "Counter(judgement) 求和 + unresolved_count",
+      "expected": {
+        "total": 110,
+        "ledger": {
+          "matched": 20,
+          "correct_extra": 36,
+          "incorrect": 51,
+          "duplicate": 3
+        },
+        "unresolved": 0
+      },
+      "actual": {
+        "total": 110,
+        "ledger": {
+          "matched": 20,
+          "correct_extra": 36,
+          "incorrect": 51,
+          "duplicate": 3
+        },
+        "unresolved": 0
+      },
+      "verdict": "pass"
+    },
+    {
+      "check_id": "caliber-reproducible:D1_all_candidates",
+      "layer": "metric",
+      "kind": "reproducibility",
+      "blocking": true,
+      "claim": "D1_all_candidates 的候选数/分子/分母/显示值可由冻结池复算",
+      "method": "独立实现按 gate 的 rule 字符串重算，逐字段比对",
+      "expected": {
+        "kept_candidates": 110,
+        "precision_contract_formula": {
+          "numerator": 56,
+          "denominator": 110,
+          "value": 0.5091,
+          "display": "56/110 = 0.5091"
+        },
+        "precision_scorer_implemented_formula": {
+          "numerator": 56,
+          "denominator": 107,
+          "value": 0.5234,
+          "display": "56/107 = 0.5234"
+        }
+      },
+      "actual": {
+        "kept_candidates": 110,
+        "precision_contract_formula": {
+          "numerator": 56,
+          "denominator": 110,
+          "value": 0.5091,
+          "display": "56/110 = 0.5091"
+        },
+        "precision_scorer_implemented_formula": {
+          "numerator": 56,
+          "denominator": 107,
+          "value": 0.5234,
+          "display": "56/107 = 0.5234"
+        }
+      },
+      "verdict": "pass"
+    },
+    {
+      "check_id": "caliber-row-complete:D1_all_candidates",
+      "layer": "metric",
+      "kind": "completeness",
+      "blocking": false,
+      "claim": "D1_all_candidates 行记录了候选数/裁定分布/召回（不得只留精度一个数）",
+      "method": "必需键存在性检查",
+      "expected": {
+        "kept_candidates": "<present>",
+        "judgements": "<present>",
+        "target_recall": "<present>",
+        "per_source_precision": "<present>"
+      },
+      "actual": {},
+      "verdict": "pass"
+    },
+    {
+      "check_id": "caliber-recall:D1_all_candidates",
+      "layer": "metric",
+      "kind": "reproducibility",
+      "blocking": true,
+      "claim": "D1_all_candidates 的召回/分源精度可由冻结池复算",
+      "method": "候选 matched 去重计数 / 按源分组重算",
+      "expected": {
+        "target_recall": {
+          "numerator": 20,
+          "denominator": 20,
+          "value": 1.0,
+          "display": "20/20 = 1.0000"
+        },
+        "per_source_precision": {
+          "dca4bad7f85b": {
+            "numerator": 21,
+            "denominator": 34,
+            "value": 0.6176,
+            "display": "21/34 = 0.6176"
+          },
+          "f16e7fde9553": {
+            "numerator": 35,
+            "denominator": 76,
+            "value": 0.4605,
+            "display": "35/76 = 0.4605"
+          }
+        }
+      },
+      "actual": {
+        "target_recall": {
+          "numerator": 20,
+          "denominator": 20,
+          "value": 1.0,
+          "display": "20/20 = 1.0000"
+        },
+        "per_source_precision": {
+          "dca4bad7f85b": {
+            "numerator": 21,
+            "denominator": 34,
+            "value": 0.6176,
+            "display": "21/34 = 0.6176"
+          },
+          "f16e7fde9553": {
+            "numerator": 35,
+            "denominator": 76,
+            "value": 0.4605,
+            "display": "35/76 = 0.4605"
+          }
+        }
+      },
+      "verdict": "pass"
+    },
+    {
+      "check_id": "caliber-reproducible:D2_in_role_only",
+      "layer": "metric",
+      "kind": "reproducibility",
+      "blocking": true,
+      "claim": "D2_in_role_only 的候选数/分子/分母/显示值可由冻结池复算",
+      "method": "独立实现按 gate 的 rule 字符串重算，逐字段比对",
+      "expected": {
+        "kept_candidates": 81,
+        "precision_contract_formula": {
+          "numerator": 51,
+          "denominator": 81,
+          "value": 0.6296,
+          "display": "51/81 = 0.6296"
+        },
+        "precision_scorer_implemented_formula": {
+          "numerator": 51,
+          "denominator": 78,
+          "value": 0.6538,
+          "display": "51/78 = 0.6538"
+        }
+      },
+      "actual": {
+        "kept_candidates": 81,
+        "precision_contract_formula": {
+          "numerator": 51,
+          "denominator": 81,
+          "value": 0.6296,
+          "display": "51/81 = 0.6296"
+        },
+        "precision_scorer_implemented_formula": {
+          "numerator": 51,
+          "denominator": 78,
+          "value": 0.6538,
+          "display": "51/78 = 0.6538"
+        }
+      },
+      "verdict": "pass"
+    },
+    {
+      "check_id": "caliber-row-complete:D2_in_role_only",
+      "layer": "metric",
+      "kind": "completeness",
+      "blocking": false,
+      "claim": "D2_in_role_only 行记录了候选数/裁定分布/召回（不得只留精度一个数）",
+      "method": "必需键存在性检查",
+      "expected": {
+        "kept_candidates": "<present>",
+        "judgements": "<present>",
+        "target_recall": "<present>",
+        "per_source_precision": "<present>"
+      },
+      "actual": {},
+      "verdict": "pass"
+    },
+    {
+      "check_id": "caliber-recall:D2_in_role_only",
+      "layer": "metric",
+      "kind": "reproducibility",
+      "blocking": true,
+      "claim": "D2_in_role_only 的召回/分源精度可由冻结池复算",
+      "method": "候选 matched 去重计数 / 按源分组重算",
+      "expected": {
+        "target_recall": {
+          "numerator": 20,
+          "denominator": 20,
+          "value": 1.0,
+          "display": "20/20 = 1.0000"
+        },
+        "per_source_precision": {
+          "dca4bad7f85b": {
+            "numerator": 18,
+            "denominator": 25,
+            "value": 0.72,
+            "display": "18/25 = 0.7200"
+          },
+          "f16e7fde9553": {
+            "numerator": 33,
+            "denominator": 56,
+            "value": 0.5893,
+            "display": "33/56 = 0.5893"
+          }
+        }
+      },
+      "actual": {
+        "target_recall": {
+          "numerator": 20,
+          "denominator": 20,
+          "value": 1.0,
+          "display": "20/20 = 1.0000"
+        },
+        "per_source_precision": {
+          "dca4bad7f85b": {
+            "numerator": 18,
+            "denominator": 25,
+            "value": 0.72,
+            "display": "18/25 = 0.7200"
+          },
+          "f16e7fde9553": {
+            "numerator": 33,
+            "denominator": 56,
+            "value": 0.5893,
+            "display": "33/56 = 0.5893"
+          }
+        }
+      },
+      "verdict": "pass"
+    },
+    {
+      "check_id": "caliber-reproducible:D3_in_role_and_coordinate_complete",
+      "layer": "metric",
+      "kind": "reproducibility",
+      "blocking": true,
+      "claim": "D3_in_role_and_coordinate_complete 的候选数/分子/分母/显示值可由冻结池复算",
+      "method": "独立实现按 gate 的 rule 字符串重算，逐字段比对",
+      "expected": {
+        "kept_candidates": 36,
+        "precision_contract_formula": {
+          "numerator": 26,
+          "denominator": 36,
+          "value": 0.7222,
+          "display": "26/36 = 0.7222"
+        },
+        "precision_scorer_implemented_formula": {
+          "numerator": 26,
+          "denominator": 33,
+          "value": 0.7879,
+          "display": "26/33 = 0.7879"
+        }
+      },
+      "actual": {
+        "kept_candidates": 36,
+        "precision_contract_formula": {
+          "numerator": 26,
+          "denominator": 36,
+          "value": 0.7222,
+          "display": "26/36 = 0.7222"
+        },
+        "precision_scorer_implemented_formula": {
+          "numerator": 26,
+          "denominator": 33,
+          "value": 0.7879,
+          "display": "26/33 = 0.7879"
+        }
+      },
+      "verdict": "pass"
+    },
+    {
+      "check_id": "caliber-row-complete:D3_in_role_and_coordinate_complete",
+      "layer": "metric",
+      "kind": "completeness",
+      "blocking": false,
+      "claim": "D3_in_role_and_coordinate_complete 行记录了候选数/裁定分布/召回（不得只留精度一个数）",
+      "method": "必需键存在性检查",
+      "expected": {
+        "kept_candidates": "<present>",
+        "judgements": "<present>",
+        "target_recall": "<present>",
+        "per_source_precision": "<present>"
+      },
+      "actual": {},
+      "verdict": "pass"
+    },
+    {
+      "check_id": "caliber-recall:D3_in_role_and_coordinate_complete",
+      "layer": "metric",
+      "kind": "reproducibility",
+      "blocking": true,
+      "claim": "D3_in_role_and_coordinate_complete 的召回/分源精度可由冻结池复算",
+      "method": "候选 matched 去重计数 / 按源分组重算",
+      "expected": {
+        "target_recall": {
+          "numerator": 12,
+          "denominator": 20,
+          "value": 0.6,
+          "display": "12/20 = 0.6000"
+        },
+        "per_source_precision": {
+          "dca4bad7f85b": {
+            "numerator": 13,
+            "denominator": 13,
+            "value": 1.0,
+            "display": "13/13 = 1.0000"
+          },
+          "f16e7fde9553": {
+            "numerator": 13,
+            "denominator": 23,
+            "value": 0.5652,
+            "display": "13/23 = 0.5652"
+          }
+        }
+      },
+      "actual": {
+        "target_recall": {
+          "numerator": 12,
+          "denominator": 20,
+          "value": 0.6,
+          "display": "12/20 = 0.6000"
+        },
+        "per_source_precision": {
+          "dca4bad7f85b": {
+            "numerator": 13,
+            "denominator": 13,
+            "value": 1.0,
+            "display": "13/13 = 1.0000"
+          },
+          "f16e7fde9553": {
+            "numerator": 13,
+            "denominator": 23,
+            "value": 0.5652,
+            "display": "13/23 = 0.5652"
+          }
+        }
+      },
+      "verdict": "pass"
+    },
+    {
+      "check_id": "caliber-reproducible:D4_similarity_scoped_v1_draft_option",
+      "layer": "metric",
+      "kind": "reproducibility",
+      "blocking": true,
+      "claim": "D4_similarity_scoped_v1_draft_option 的候选数/分子/分母/显示值可由冻结池复算",
+      "method": "独立实现按 gate 的 rule 字符串重算，逐字段比对",
+      "expected": {
+        "precision_contract_formula": {
+          "numerator": 56,
+          "denominator": 65,
+          "value": 0.8615,
+          "display": "56/65 = 0.8615"
+        },
+        "precision_scorer_implemented_formula": {
+          "numerator": 56,
+          "denominator": 62,
+          "value": 0.9032,
+          "display": "56/62 = 0.9032"
+        }
+      },
+      "actual": {
+        "precision_contract_formula": {
+          "numerator": 56,
+          "denominator": 65,
+          "value": 0.8615,
+          "display": "56/65 = 0.8615"
+        },
+        "precision_scorer_implemented_formula": {
+          "numerator": 56,
+          "denominator": 62,
+          "value": 0.9032,
+          "display": "56/62 = 0.9032"
+        },
+        "_keys_absent_in_record": [
+          "kept_candidates"
+        ]
+      },
+      "verdict": "pass"
+    },
+    {
+      "check_id": "caliber-row-complete:D4_similarity_scoped_v1_draft_option",
+      "layer": "metric",
+      "kind": "completeness",
+      "blocking": false,
+      "claim": "D4_similarity_scoped_v1_draft_option 行记录了候选数/裁定分布/召回（不得只留精度一个数）",
+      "method": "必需键存在性检查",
+      "expected": {
+        "kept_candidates": "<present>",
+        "judgements": "<present>",
+        "target_recall": "<present>",
+        "per_source_precision": "<present>"
+      },
+      "actual": {
+        "kept_candidates": "<missing>",
+        "judgements": "<missing>",
+        "target_recall": "<missing>",
+        "per_source_precision": "<missing>"
+      },
+      "verdict": "divergence"
+    },
+    {
+      "check_id": "caliber-recall:D4_similarity_scoped_v1_draft_option",
+      "layer": "metric",
+      "kind": "reproducibility",
+      "blocking": false,
+      "claim": "D4_similarity_scoped_v1_draft_option 的召回/分源精度可由冻结池复算",
+      "method": "候选 matched 去重计数 / 按源分组重算",
+      "expected": {
+        "target_recall": null,
+        "per_source_precision": null
+      },
+      "actual": {
+        "target_recall": {},
+        "per_source_precision": {}
+      },
+      "verdict": "note"
+    },
+    {
+      "check_id": "caliber-divergence:duplicate",
+      "layer": "caliber",
+      "kind": "caliber_divergence",
+      "blocking": false,
+      "claim": "契约文字公式（分母含 duplicate）与评分器实现公式（分母不含）不同源",
+      "method": "比较同一候选池上两个公式的分母",
+      "expected": "单一口径（两式相等或其中一处被具名取代）",
+      "actual": {
+        "contract_formula": "56/110 = 0.5091",
+        "implemented": "56/107 = 0.5234"
+      },
+      "verdict": "divergence"
+    },
+    {
+      "check_id": "sentinel-contract-subset",
+      "layer": "invariant",
+      "kind": "identity",
+      "blocking": true,
+      "claim": "哨兵清单 == 已签契约 review_assertions 的 NT-C* 子集",
+      "method": "契约键前缀枚举 vs 门记录值",
+      "expected": [
+        "NT-C11",
+        "NT-C12",
+        "NT-C13"
+      ],
+      "actual": [
+        "NT-C11",
+        "NT-C12",
+        "NT-C13"
+      ],
+      "verdict": "pass"
+    },
+    {
+      "check_id": "sentinel-required-hit",
+      "layer": "invariant",
+      "kind": "coverage",
+      "blocking": true,
+      "claim": "契约要求的每条 claims 哨兵在冻结池中被命中",
+      "method": "matched_gold_id 集合成员判定",
+      "expected": {
+        "NT-C11": true,
+        "NT-C12": true,
+        "NT-C13": true
+      },
+      "actual": {
+        "NT-C11": true,
+        "NT-C12": true,
+        "NT-C13": true
+      },
+      "verdict": "pass"
+    },
+    {
+      "check_id": "sentinel-no-foreign",
+      "layer": "invariant",
+      "kind": "identity",
+      "blocking": false,
+      "claim": "门不得携带契约之外的哨兵（v1 自造的 3 条须登记为作废而非保留）",
+      "method": "v1 提案集合 − 契约子集",
+      "expected": [
+        "NT-C01",
+        "NT-C03",
+        "NT-C08"
+      ],
+      "actual": [
+        "NT-C01",
+        "NT-C03",
+        "NT-C08"
+      ],
+      "verdict": "pass"
+    },
+    {
+      "check_id": "field-carriers-reproducible",
+      "layer": "metric",
+      "kind": "reproducibility",
+      "blocking": true,
+      "claim": "11 个 claims 必需字段的载体普查可复算，且零载体字段被显式登记",
+      "method": "逐字段非空载体计数 vs 门记录值",
+      "expected": {
+        "subject": 108,
+        "metric": 102,
+        "period": 74,
+        "unit": 80,
+        "value": 97,
+        "factuality": 110,
+        "attribution": 0,
+        "perspective": 0,
+        "source_stance": 0,
+        "estimate_status": 0,
+        "qualifier": 109
+      },
+      "actual": {
+        "subject": 108,
+        "metric": 102,
+        "period": 74,
+        "unit": 80,
+        "value": 97,
+        "factuality": 110,
+        "attribution": 0,
+        "perspective": 0,
+        "source_stance": 0,
+        "estimate_status": 0,
+        "qualifier": 109
+      },
+      "verdict": "pass"
+    },
+    {
+      "check_id": "field-carriers-no-carrier-listed",
+      "layer": "caliber",
+      "kind": "completeness",
+      "blocking": false,
+      "claim": "四个零载体必需字段（承载问题）在门里留有未决格",
+      "method": "no_carrier 集合 vs 门的 open_decisions",
+      "expected": [
+        "attribution",
+        "estimate_status",
+        "perspective",
+        "source_stance"
+      ],
+      "actual": {
+        "no_carrier_fields": [
+          "attribution",
+          "perspective",
+          "source_stance",
+          "estimate_status"
+        ],
+        "has_open_decision_C3": true
+      },
+      "verdict": "pass"
+    },
+    {
+      "check_id": "fp-decomposition-sums",
+      "layer": "metric",
+      "kind": "reproducibility",
+      "blocking": true,
+      "claim": "假阳性三分（角色外/坐标未绑/齐备不匹配）之和 == 裁定的 incorrect 总数",
+      "method": "按判定与 reason_codes 分类求和，逐类比对记录值",
+      "expected": {
+        "incorrect_total": 51,
+        "role_external": 24,
+        "coordinate_unbound": 20,
+        "structurally_complete_nonmatch": 7
+      },
+      "actual": {
+        "incorrect_total": 51,
+        "role_external": 24,
+        "coordinate_unbound": 20,
+        "structurally_complete_nonmatch": 7
+      },
+      "verdict": "pass"
+    },
+    {
+      "check_id": "release-tolerance-reproducible",
+      "layer": "metric",
+      "kind": "reproducibility",
+      "blocking": true,
+      "claim": "放行线容忍度表（每条线可再容忍的新增假阳性数）可复算",
+      "method": "按 gates 记录的分母与线值重算整数容忍度",
+      "expected": {
+        "D2_line_0.60": 4,
+        "D2_line_0.55": 11,
+        "D1_line_0.50": 2
+      },
+      "actual": {
+        "D2_line_0.60": 4,
+        "D2_line_0.55": 11,
+        "D1_line_0.50": 2
+      },
+      "verdict": "pass"
+    },
+    {
+      "check_id": "release-candidates-consistent",
+      "layer": "metric",
+      "kind": "consistency",
+      "blocking": false,
+      "claim": "放行线候选值与口径测量值一致（不得出现未被测量的线值）",
+      "method": "release candidates vs 同口径 precision 值（契约式公式）",
+      "expected": {
+        "D2_basis_0.60": 0.6296,
+        "D1_basis_0.50": 0.5091
+      },
+      "actual": {
+        "D1_basis_0.50": 0.5091,
+        "D2_basis_0.60": 0.6296
+      },
+      "verdict": "pass"
+    },
+    {
+      "check_id": "superseded-artifact-drift",
+      "layer": "bookkeeping",
+      "kind": "integrity",
+      "blocking": false,
+      "claim": "被取代的 83 号产物未在草案态被改动（md 漂移须登记）",
+      "method": "83 MANIFEST 记录的产物哈希 vs 磁盘现值",
+      "expected": {},
+      "actual": {
+        "claims-gate-v1-signoff.md": {
+          "recorded": "c3f212032ef59d642d0344fe42c88d8df20f832ebbba6035e655339363b36d42",
+          "on_disk": "7403d1dc754dc439b739f899ce804c3611190fd53f3b16b7c83f965f67d5ec7e"
+        }
+      },
+      "verdict": "divergence"
+    },
+    {
+      "check_id": "superseded-signoff-consistency",
+      "layer": "bookkeeping",
+      "kind": "consistency",
+      "blocking": false,
+      "claim": "83 号 signoff md 的签署栏与其 JSON 签认状态一致",
+      "method": "md 签署栏文本 vs gate_v1.signoff（残留时间戳也算不一致）",
+      "expected": {
+        "json_signoff_null": true,
+        "md_residual_signed_on": false
+      },
+      "actual": {
+        "json_status": "draft_pending_human_signature",
+        "json_signoff_null": true,
+        "md_residual_signed_on": false,
+        "md_carries_reviewer_name": false
+      },
+      "verdict": "pass"
+    },
+    {
+      "check_id": "target-line-reachability",
+      "layer": "metric",
+      "kind": "feasibility",
+      "blocking": false,
+      "claim": "目标线（精度 0.80）在冻结池上的可达性被显式记录",
+      "method": "各口径分子/分母上限 vs target_line",
+      "expected": {
+        "D1_all_candidates": {
+          "max_achievable_precision": 0.5091,
+          "note": "分子已固定（matched+correct_extra 不可增），分母不再增大的前提下这是上限"
+        },
+        "D2_in_role_only": {
+          "max_achievable_precision": 0.6296,
+          "note": "分子已固定（matched+correct_extra 不可增），分母不再增大的前提下这是上限"
+        },
+        "D3_in_role_and_coordinate_complete": {
+          "max_achievable_precision": 0.7222,
+          "note": "分子已固定（matched+correct_extra 不可增），分母不再增大的前提下这是上限"
+        }
+      },
+      "actual": {
+        "D1_all_candidates": {
+          "max_achievable_precision": 0.5091,
+          "recomputed": 0.5091,
+          "target_line": 0.8,
+          "reachable": false
+        },
+        "D2_in_role_only": {
+          "max_achievable_precision": 0.6296,
+          "recomputed": 0.6296,
+          "target_line": 0.8,
+          "reachable": false
+        },
+        "D3_in_role_and_coordinate_complete": {
+          "max_achievable_precision": 0.7222,
+          "recomputed": 0.7222,
+          "target_line": 0.8,
+          "reachable": false
+        }
+      },
+      "verdict": "note"
+    }
+  ],
+  "blocking_failures": [],
+  "divergences": [
+    "caliber-row-complete:D4_similarity_scoped_v1_draft_option",
+    "caliber-divergence:duplicate",
+    "superseded-artifact-drift"
+  ],
+  "notes": [
+    "caliber-recall:D4_similarity_scoped_v1_draft_option",
+    "target-line-reachability"
+  ],
+  "verdict": "pass",
+  "feasibility": [
+    {
+      "id": "F1-分母口径（C1）",
+      "component": "候选范围：材料范围（D1）还是 claims 角色范围（D2）",
+      "klass": "needs_human_decision",
+      "prerequisite": "U 具名裁定 + （若取 D2）把 45 条 in-scope 候选的分类改写为可核验记录",
+      "evidence": "候选池与金标均冻结；契约 scope_rules 规定范围内输出必须裁定、不得自动排除",
+      "blocking_now": true
+    },
+    {
+      "id": "F2-duplicate 单源化（C2）",
+      "component": "契约文字公式（分母含 duplicate）vs 评分器实现（分母不含）",
+      "klass": "needs_human_decision",
+      "prerequisite": "U 选一个源；改另一处须具名并留差异记录",
+      "evidence": "audit check `caliber-divergence:duplicate` 检出：56/110 vs 56/107",
+      "blocking_now": true
+    },
+    {
+      "id": "F3-无载体字段读路径（C3）",
+      "component": "attribution/perspective/source_stance/estimate_status 的 carrier/handling",
+      "klass": "needs_human_decision",
+      "prerequisite": "契约新版本（只增不删，沿 items 先例）；机制已在 v4.3 read_path 中存在但 applies_to 仅 material_items",
+      "evidence": "11 字段实测：四字段 0/110 载体；契约 read_path.roles.claims.implemented_in_this_revision=false",
+      "blocking_now": true
+    },
+    {
+      "id": "F4-用途分级（C4）",
+      "component": "compare/calculate 由『零 reason 全或无』改为按受影响用途分级",
+      "klass": "needs_human_decision",
+      "prerequisite": "U 裁定（属改默认行为类）",
+      "evidence": "45/56 条正确记录带 reason ⇒ 现规则下仅 11 条可算；reason 当硬门会使召回掉到 12/20",
+      "blocking_now": true
+    },
+    {
+      "id": "F5-阈值双线（C5/C6）",
+      "component": "目标线不动 + 新增放行线（功能线）与分源下限",
+      "klass": "needs_human_decision",
+      "prerequisite": "U 具名登记；禁止看到分数后再定值",
+      "evidence": "容忍度表可复算：0.60⇒再容忍 4 条 FP；D2 上限 0.630<0.80",
+      "blocking_now": true
+    },
+    {
+      "id": "F6-重跑产出新池",
+      "component": "在冻结金标与同一口径下用新配置重跑 claims 抽取",
+      "klass": "needs_call_budget",
+      "prerequisite": "U 明确授权调用额度与计划冻结",
+      "evidence": "冻结池上 0.80 不可达（D2 分子上限即 0.630）；这是唯一能让目标线可达的动作",
+      "blocking_now": false
+    },
+    {
+      "id": "F7-一致性校验器 + 复算回归",
+      "component": "哨兵恒等、口径可复算、分歧检出（工具 + 常驻测试）",
+      "klass": "landed_now",
+      "prerequisite": "无（零调用、只读、不改默认行为）",
+      "evidence": "tools/check_claims_gate.py；27 项审核，阻塞失败 0",
+      "blocking_now": false
+    },
+    {
+      "id": "F8-契约读取器按角色参数化",
+      "component": "load_contract_gate_requirements 支持 claims 角色（role_scope/target_total/哨兵子集）",
+      "klass": "needs_human_decision",
+      "prerequisite": "claim 专属契约字段（target_total=20、NT-C 哨兵子集）须先由 C1/C3 定值并进契约新版本",
+      "evidence": "structured_scoring.py:435-525 硬编码 role_scope=MATERIAL_ITEMS 且要求恰 11 条 NT-I*；tests/test_corpus_contract_gate.py:177-217 断言该形态",
+      "blocking_now": true
+    },
+    {
+      "id": "F9-生产侧接缝（角色边界/坐标绑定/去冗余）",
+      "component": "claims 只产指标断言、坐标绑定、同坐标不重复渲染",
+      "klass": "not_executable_this_round",
+      "prerequisite": "需要新池（F6）才能体现效果；在冻结池上只能做反事实上界",
+      "evidence": "D2 上限 0.630、D3 召回 12/20 ⇒ 反事实口径无法同时保住两轴",
+      "blocking_now": false
+    }
+  ],
+  "uncovered_scope": [
+    "本轮未核验：`.scratch` 下 evidence/01–82 的全部内容（未逐件复核）",
+    "本轮未核验：benchmarks/、workflows/、plugins/ 除 structured_scoring.py 与 claims_* 之外的行为",
+    "本轮未核验：冻结金标 20 条 claims 记录的语义正确性（沿用已签 Issue 29/30 结论，未重做审计）",
+    "本轮未执行：任何模型调用、生产 PG 访问、发布、query/delivery/context_use、M_main 消费",
+    "本轮未裁定：C1–C6 六格判据（全部保持 pending_human_decision）"
+  ]
+}

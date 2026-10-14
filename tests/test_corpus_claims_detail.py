@@ -8,6 +8,7 @@ from decimal import Decimal
 
 import pytest
 
+from plugins.corpus.claim_use_axes import uses_for
 from plugins.corpus.claims import CLAIMS_COMMENTS, CLAIMS_SQL, BlockView
 from plugins.corpus.claims_detail import (
     ClaimRecord,
@@ -202,12 +203,14 @@ def test_period_context_binding_uses_only_trusted_reference_year() -> None:
     assert normalize_period_in_context("29年", reference_date="2026-09-08").period_end == (
         "2029-12-31"
     )
-    assert normalize_period_in_context(
-        "27年三季度", reference_date="2026-09-08"
-    ).period_end == "2027-09-30"
-    assert normalize_period_in_context(
-        "今年下半年", reference_date="2026-09-08"
-    ).period_end == "2026-12-31"
+    assert (
+        normalize_period_in_context("27年三季度", reference_date="2026-09-08").period_end
+        == "2027-09-30"
+    )
+    assert (
+        normalize_period_in_context("今年下半年", reference_date="2026-09-08").period_end
+        == "2026-12-31"
+    )
     assert normalize_period_in_context("Q2", reference_date="2026-08-29").period_end == (
         "2026-06-30"
     )
@@ -377,3 +380,70 @@ def test_claim_tables_comment_every_data_column(
     sql: str, comments: tuple[str, ...], table: str
 ) -> None:
     assert _columns_in_create_table(sql, table) <= _commented_columns(comments, table)
+
+
+def _coordinate_record(**overrides: object) -> ClaimRecord:
+    base: dict[str, object] = {
+        "doc_id": "d",
+        "source_rev": "rev",
+        "seq": 1,
+        "locator": "p1",
+        "claim_text": "营收 1741 亿元",
+        "evidence_quote": "营收 1741 亿元",
+        "scope": "company",
+        "subject": "600519.SH",
+        "metric": "营业收入",
+        "kind": "fact",
+        "value_text": "1741 亿元",
+        "value_num": Decimal("174100000000"),
+        "unit_raw": "亿元",
+        "unit": "元",
+        "period_raw": "2026H1",
+        "period_end": "2026-06-30",
+        "period_grain": "half",
+        "known_at": "2026-09-06",
+    }
+    return ClaimRecord(**{**base, **overrides})  # type: ignore[arg-type]
+
+
+def test_lint_labels_missing_raw_coordinates_even_with_observed_at() -> None:
+    """T4: the zero-call stop-loss counts an empty ``period_raw`` as a defect, so the code must too.
+
+    ``observed_at`` is the document-level observation time, not the claim's applicable period; the
+    P1R5 pool had 9 in-role rows that were unlabelled because the old guard let it suppress the code.
+    """
+    labelled = lint_claim(_coordinate_record(), block_text="营收 1741 亿元")
+    assert labelled.quality_status == "ok"
+    assert labelled.reason_codes == ()
+
+    unlabelled = lint_claim(
+        _coordinate_record(period_raw=None, period_end=None, observed_at="2026-08-29"),
+        block_text="营收 1741 亿元",
+    )
+    assert "period_missing" in unlabelled.reason_codes
+    assert unlabelled.quality_status == "review"
+
+
+def test_every_empty_coordinate_field_carries_a_coordinate_code() -> None:
+    """Field-first invariant behind T4: an empty coordinate field never keeps a silent record.
+
+    ``subject`` is labelled one level up (``evidence_pipeline`` adds ``subject_missing``), so this
+    test covers the three fields lint itself owns.
+    """
+    cases = (
+        ({"metric": None}, "metric_missing"),
+        ({"unit_raw": None, "unit": None}, "unit_missing"),
+        ({"period_raw": None, "period_end": None}, "period_missing"),
+    )
+    for overrides, expected in cases:
+        record = _coordinate_record(**overrides)
+        codes = lint_claim(record, block_text="营收 1741 亿元").reason_codes
+        assert expected in codes, f"{expected} 缺失：{overrides}"
+
+
+def test_missing_period_code_withdraws_only_compare_and_calculate() -> None:
+    """The new code lands on the signed C4 period axis: cite survives, comparability does not."""
+    record = _coordinate_record(period_raw=None, period_end=None, observed_at="2026-08-29")
+    codes = lint_claim(record, block_text="营收 1741 亿元").reason_codes
+    uses = uses_for(codes, kind=record.kind, has_value=record.value_text is not None)
+    assert uses == ("cite",)

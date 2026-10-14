@@ -1,0 +1,33 @@
+{
+  "schema_version": "claims-preregistration-v4-signed-manifest-1",
+  "id": "104-claims-prereg-v4-amendment-20261014",
+  "status": "signed",
+  "created_on": "2026-10-14",
+  "signed_by": "xyl",
+  "model_calls": 0,
+  "amends": {
+    "path": "evidence/99-claims-prereg-v3-signed-r2-20261014/r0-zero-call/claims-preregistration.json",
+    "sha256": "a2d174407daa5a1b88ba9ca44e698cf4512a399b2a4895254d0a3ab4b57edf04"
+  },
+  "inputs": {
+    "v4_draft": "c5dc79126808b0b2bc2f008ed818ea7207d13efd6aa90b52f71c3d1bd88bd163",
+    "v4_draft_manifest": "dfe8897db401817208e80822c980c542d1668bc2cd77cf44e50bae992fede130",
+    "signoff_instrument": "786af22183431265117ed47274920cbe0c5de97bdff3b67c978936dbbc0f5fee",
+    "signed_prereg_99": "a2d174407daa5a1b88ba9ca44e698cf4512a399b2a4895254d0a3ab4b57edf04"
+  },
+  "outputs": {
+    "claims-preregistration-v4.json": "6b5c93d582c9ff8cebfd5e35944a46951068de0e95685abff4645ed1cdaaa510",
+    "prereg-v4-signed-diff.json": "2b6ceb942c48a765c810af9b48ba6b06bc554809d2c4e059a8a363ac060936d2"
+  },
+  "does_not_touch": [
+    "evidence/95-claims-prereg-20261014/**",
+    "evidence/99-claims-prereg-v3-signed-r2-20261014/**",
+    "evidence/101-claims-treatment-t1t2t3-landing-20261014/**",
+    "evidence/102-claims-treatment-engineering-20261014/**",
+    "evidence/103-claims-budget-authorisation-20261014/**"
+  ],
+  "notes": [
+    "本件把 v4 草案翻为生效态：只加签认块与状态；判据正文逐字沿用。",
+    "阶段 2 入口：stage2_under_v4.py（以生效件为判据，委托 102 号逻辑）。"
+  ]
+}

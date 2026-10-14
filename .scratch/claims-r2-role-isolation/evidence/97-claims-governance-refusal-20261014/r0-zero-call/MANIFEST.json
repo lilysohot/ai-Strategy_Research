@@ -1,0 +1,37 @@
+{
+  "schema_version": "claims-governance-refusal-manifest-1",
+  "status": "refused_registered",
+  "created_on": "2026-10-14",
+  "model_calls": 0,
+  "decision": {
+    "id": "REFUSE-93",
+    "decided_by": "U",
+    "decided_on": "2026-10-14",
+    "signature_applied": false
+  },
+  "inputs": {
+    "governance_signoff_instrument": "1d19d44690f541bb820268f98a7941056c9fa2e1d3e45484bd97c987b02dbd1d",
+    "governance_plan": "5aa29fca91e6d64aab6b31d04dfee3dd902fcb726d57ca22ec99792f2a02ed82",
+    "governance_corrections": "51ba12a129d79ff0b71b8d54e4fb9d1ae04e3d1aa00bbec5e2f2ecaf8f57bf9b",
+    "governance_registration_template": "12b42fa21b6127fee37dc452e38842632dd90c9d5fb797c510dbb5db02efceb7",
+    "claims_gate_v3_signed": "b2b93b9ce46711b1e2f55d340c54452c1033eb15569f0dd865af9e3477d74fb3"
+  },
+  "outputs": {
+    "claims-governance-refusal.json": "697aae8cbe5130f4e36d159a1897779a229a980f540e0322a77ab23c9560618d",
+    "refusal-record.md": "5328ed958424eeae98f4492fe0f502b67544e5116bc4bc7f975e1f275c287b91"
+  },
+  "observations": {
+    "checker": "tools/check_claims_gate.py exit 0 / verdict=pass / blocking_failures=[]；pass-not-dependent-on-unfrozen-axis = note（blocking=false）",
+    "focused_tests": "tests/test_claims_governance_{plan,signoff,apply}.py = 44 passed",
+    "instrument_state_after": "blank_unfilled（三格与签名栏保持空白；sha256 与写入前逐字一致）"
+  },
+  "does_not_touch": [
+    "evidence/93-claims-governance-plan-20261014/**",
+    "evidence/91-claims-gate-v3-signed-20261014/**",
+    "evidence/92-claims-scope-registration-20261014/**",
+    "evidence/95-claims-prereg-20261014/**",
+    "tools/**",
+    "tests/**",
+    "plugins/**"
+  ]
+}

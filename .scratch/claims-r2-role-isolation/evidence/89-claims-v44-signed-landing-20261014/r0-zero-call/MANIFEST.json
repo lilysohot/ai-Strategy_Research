@@ -1,0 +1,25 @@
+{
+  "schema_version": "claims-v44-signed-landing-manifest-1",
+  "status": "draft",
+  "created_on": "2026-10-14",
+  "model_calls": 0,
+  "inputs": {
+    "frozen::evidence/88-claims-contract-v44-signed-20261014/r0-zero-call/scoring-contract-v4.4.json": "ce1938b6d35a1292b22d8d75a3af461743e627ccebb0385f3267cb652fcd1650",
+    "frozen::evidence/88-claims-contract-v44-signed-20261014/r0-zero-call/c2-measurement.json": "b6815fe7247b9b16b37641017658c1c1ec3b18187fd29876377e243267fabe8d",
+    "frozen::evidence/88-claims-contract-v44-signed-20261014/r0-zero-call/contract-v4.4-signed-diff.json": "189d5802341b86a796f5bc392ba59822a39bec8e36ca5a3d33db6b7b13e1df63"
+  },
+  "outputs": {
+    "landing-record.json": "c338dd5297cfcb182cefb4f01ad3dfe483da005d077e61cd681558452862078b",
+    "landing-record.md": "4d5262abd9421753a2050de9d4aef72075f7ed7c63aa44c298cb5daf525aa6a7"
+  },
+  "does_not_touch": [
+    "evidence/75-r2-signed-20261013/r0-zero-call/scoring-contract-v4.3.json",
+    "evidence/75-r2-signed-20261013/r0-zero-call/gate-v3.json",
+    "evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json",
+    "evidence/17-structured-extraction-convergence-closure-20261009/p1r5-claims-adjudication-v2/candidate-adjudications.signed.json",
+    "evidence/86-claims-contract-v44-draft-20261014/r0-zero-call/scoring-contract-v4.4.proposed.json",
+    "evidence/88-claims-contract-v44-signed-20261014/r0-zero-call/scoring-contract-v4.4.json",
+    "evidence/88-claims-contract-v44-signed-20261014/r0-zero-call/c2-measurement.json",
+    "evidence/88-claims-contract-v44-signed-20261014/r0-zero-call/contract-v4.4-signed-diff.json"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": "claims-governance-corrections-1",
+  "created_on": "2026-10-14",
+  "zero_model_calls": true,
+  "authority": {
+    "plan": "claims-governance-plan.json",
+    "rules": [
+      "R1_assertion_only",
+      "R2_fail_closed_default"
+    ],
+    "rules_status": "pending_human_signature",
+    "note": "本件的豁免只在 R1/R2 签认后生效；未签认时校验器对该缺陷只检出、不阻塞。"
+  },
+  "corrections": [
+    {
+      "id": "CORR-91-PRECONDITION",
+      "artifact": {
+        "path": "evidence/91-claims-gate-v3-signed-20261014/r0-zero-call/claims-gate-v3.json",
+        "sha256": "b2b93b9ce46711b1e2f55d340c54452c1033eb15569f0dd865af9e3477d74fb3",
+        "bytes_unchanged": true,
+        "mutation_forbidden": "本件不修改 91 号任何字节"
+      },
+      "field_path": [
+        "verdict",
+        "release_line"
+      ],
+      "defect": "已签 PASS 以未裁轴（D-1）为前提：precondition = 'D-1 ≠ a'",
+      "corrected_view": {
+        "until_M1_decided": "pending_caliber（不得读作 PASS）",
+        "after_M1_decided": "按 R3 用新口径重算并重新签认",
+        "unchanged": "measured 值（0.6296 / 0.5893 / 0.7200）与 target_line FAIL 终态"
+      },
+      "scope": "仅该行判定读法；不触及目标线终态、不触及任何 measured 值",
+      "status": "registered_pending_human_signature"
+    }
+  ],
+  "not_covered": [
+    {
+      "item": "M2 / D-2 分源精度轴",
+      "reason": "91 号已按报告项处理（per_source_axis_note），未承载 PASS ⇒ 无需更正"
+    },
+    {
+      "item": "M3 / D-3 用途轴归属",
+      "reason": "不在 91 号门内，属 92 号机制落地；见 plan.cells.M3"
+    }
+  ]
+}

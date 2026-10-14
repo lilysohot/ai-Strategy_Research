@@ -1,0 +1,39 @@
+{
+  "schema_version": "claims-preregistration-signed-manifest-1",
+  "status": "signed",
+  "created_on": "2026-10-14",
+  "signed_by": "xyl",
+  "model_calls": 0,
+  "supersedes": {
+    "path": "evidence/98-claims-prereg-v3-signed-20261014/r0-zero-call/claims-preregistration.json",
+    "sha256": "0cfefc79f6adaa99f640a7cd70038bb903d5e49cc6213fd4462b81a5f8e639c0",
+    "reason": "98 号指向更正前的签认件字节"
+  },
+  "inputs": {
+    "claims_preregistration_draft": "443df86f559f973efa7d43fa636390463b0a5538922f19d1ef9c452157c7c657",
+    "claims_preregistration_draft_manifest": "6bd6216420e899ff074a4e49a9f522c3f7ee6955f7902d035cbfb4571ffff880",
+    "signoff_instrument": "ff4f4ed82dbeb32f00cc418f795817d3b19b53ae0fbb486fe9aef929fa54bb13",
+    "superseded_signed_record_98": "0cfefc79f6adaa99f640a7cd70038bb903d5e49cc6213fd4462b81a5f8e639c0",
+    "claims_gate_v3_signed": "b2b93b9ce46711b1e2f55d340c54452c1033eb15569f0dd865af9e3477d74fb3",
+    "governance_refusal_97": "697aae8cbe5130f4e36d159a1897779a229a980f540e0322a77ab23c9560618d"
+  },
+  "outputs": {
+    "claims-preregistration.json": "a2d174407daa5a1b88ba9ca44e698cf4512a399b2a4895254d0a3ab4b57edf04",
+    "prereg-signed-diff.json": "f38d01f9a17b98912537b9acc61928442f4711d9e1616acc6c5074ef7d901053"
+  },
+  "does_not_touch": [
+    "evidence/95-claims-prereg-20261014/r0-zero-call/claims-preregistration.json",
+    "evidence/95-claims-prereg-20261014/r0-zero-call/claims-preregistration-signoff.md",
+    "evidence/95-claims-prereg-20261014/r0-zero-call/MANIFEST.json",
+    "evidence/98-claims-prereg-v3-signed-20261014/**",
+    "evidence/91-claims-gate-v3-signed-20261014/**",
+    "evidence/97-claims-governance-refusal-20261014/**"
+  ],
+  "blocked_on": [
+    "budget_request.stage_1_live_run.requested_ceiling 由 U 填"
+  ],
+  "notes": [
+    "98 号不删不改，保留为更正前签认面的旧哈希档案；本件是其取代读法。",
+    "本件只加签认块/状态/取代关系；不修改 95 号草案目录的任何字节。"
+  ]
+}

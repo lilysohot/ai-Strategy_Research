@@ -1,0 +1,412 @@
+{
+  "coverage_measurements": [
+    {
+      "candidate_id": "0aa40a7eec000a02ecfd63d0a010bfb53f983a9f8cf4cbe7c0e473f6e1ab5c71",
+      "claim_text": "工业富联GPU/ASIC机柜出货量增长3.2倍",
+      "best_claims_gold_sim": 0.0758,
+      "best_claims_gold_id": "NT-C04",
+      "best_other_gold_sim": 0.3,
+      "best_other_gold_id": "NT-R03"
+    },
+    {
+      "candidate_id": "5ac69ab25e12417e7977e6109a202acac0d73b31076b0dfb10d79ff1fc7c6018",
+      "claim_text": "工业富联GPU/ASIC机柜出货量增长3倍",
+      "best_claims_gold_sim": 0.0769,
+      "best_claims_gold_id": "NT-C04",
+      "best_other_gold_sim": 0.3051,
+      "best_other_gold_id": "NT-R03"
+    },
+    {
+      "candidate_id": "ef512e03d2f8f74d95e6f60db111f60fb2c2668d95aef53a4904c3d8e382902f",
+      "claim_text": "框架站分析中不采用归母净利润指标作为标题",
+      "best_claims_gold_sim": 0.0769,
+      "best_claims_gold_id": "NT-C07",
+      "best_other_gold_sim": 0.0588,
+      "best_other_gold_id": "NT-I13"
+    },
+    {
+      "candidate_id": "6abd91e34184dae3d9210248bfb31b1426a502a215ed235d7223bb46674bb811",
+      "claim_text": "框架站分析中不将90元的共识价格视为明日股价的地板价",
+      "best_claims_gold_sim": 0.0563,
+      "best_claims_gold_id": "NT-C01",
+      "best_other_gold_sim": 0.0189,
+      "best_other_gold_id": "NT-I24"
+    },
+    {
+      "candidate_id": "d490be711309eb9b5110361b83d0201f4ca4d74c02387e1c4971f570f9b117c5",
+      "claim_text": "工业富联中报扣非净利润与归母净利润的差额为7.56亿非经常性损益",
+      "best_claims_gold_sim": 0.0746,
+      "best_claims_gold_id": "NT-C03",
+      "best_other_gold_sim": 0.0526,
+      "best_other_gold_id": "NT-R01"
+    },
+    {
+      "candidate_id": "0f76e56920e7c832b0c9b36010e86a64cf3ebdf2cbca43428133ac2e8ecc2da9",
+      "claim_text": "工业富联股票现价为64.04",
+      "best_claims_gold_sim": 0.2,
+      "best_claims_gold_id": "NT-C01",
+      "best_other_gold_sim": 0.0156,
+      "best_other_gold_id": "NT-I42"
+    },
+    {
+      "candidate_id": "d2eab2ceda3bb72053b9eab6ca585c4b78b53ee7226a1b42d84832952709f224",
+      "claim_text": "工业富联2026年6月股票价格为84.95",
+      "best_claims_gold_sim": 0.1509,
+      "best_claims_gold_id": "NT-C01",
+      "best_other_gold_sim": 0.0588,
+      "best_other_gold_id": "NT-I11"
+    },
+    {
+      "candidate_id": "affbd437f653701733e3bca7436761f4272e8fd62fd72148153d300eafea52c9",
+      "claim_text": "工业富联股票价格从2026年6月到现价下跌约25%",
+      "best_claims_gold_sim": 0.1455,
+      "best_claims_gold_id": "NT-C07",
+      "best_other_gold_sim": 0.075,
+      "best_other_gold_id": "NT-I11"
+    },
+    {
+      "candidate_id": "a150602052ee86090b813cf4bc56739536599087a74d3263810d546a40fd1a53",
+      "claim_text": "工业富联动态市盈率为26.76",
+      "best_claims_gold_sim": 0.093,
+      "best_claims_gold_id": "NT-C05",
+      "best_other_gold_sim": 0.037,
+      "best_other_gold_id": "NT-I05"
+    },
+    {
+      "candidate_id": "7cb5325fb57315e808a007b61f84cd7aa4a1ce871ca937264e3f043afd5fd7ca",
+      "claim_text": "工业富联26年估值定价约475亿",
+      "best_claims_gold_sim": 0.1132,
+      "best_claims_gold_id": "NT-C06",
+      "best_other_gold_sim": 0.0606,
+      "best_other_gold_id": "NT-I22"
+    },
+    {
+      "candidate_id": "3892dfdb95d0a53e8ddd5f3e271efb3ef6ab24415e6fa87b4c4d7108ed8a3ce2",
+      "claim_text": "工业富联未将卖方给出的560-667亿估值区间纳入定价",
+      "best_claims_gold_sim": 0.0571,
+      "best_claims_gold_id": "NT-C10",
+      "best_other_gold_sim": 0.0185,
+      "best_other_gold_id": "NT-I08"
+    },
+    {
+      "candidate_id": "de2a7c06fd9bd401da0d48290721f1940b01c3868d6d73b1b99dbc1da099bcd3",
+      "claim_text": "对于工业富联相关标的，不应按93-101区间追高，也不应因单日未上涨就将AI机柜出货增长3倍视为证伪",
+      "best_claims_gold_sim": 0.03,
+      "best_claims_gold_id": "NT-C05",
+      "best_other_gold_sim": 0.0598,
+      "best_other_gold_id": "NT-R03"
+    },
+    {
+      "candidate_id": "fdcf61c5048407ede9f0efa9d747926bb667160e2b57955519ee09e305b877a6",
+      "claim_text": "工业富联少数股东权益为0.086亿",
+      "best_claims_gold_sim": 0.1,
+      "best_claims_gold_id": "NT-C01",
+      "best_other_gold_sim": 0.0303,
+      "best_other_gold_id": "NT-I13"
+    },
+    {
+      "candidate_id": "244f41633320763b715e40d0330444bad06a54a1f29b2dbd5679f46e493d5bfb",
+      "claim_text": "工业富联净利润为237.49亿",
+      "best_claims_gold_sim": 0.1739,
+      "best_claims_gold_id": "NT-C03",
+      "best_other_gold_sim": 0.04,
+      "best_other_gold_id": "NT-I02"
+    },
+    {
+      "candidate_id": "d28d358224790545f68a4bc7bc9399c6119d947437a8f202b594aa266acb1143",
+      "claim_text": "工业富联中期不分红",
+      "best_claims_gold_sim": 0.0811,
+      "best_claims_gold_id": "NT-C05",
+      "best_other_gold_sim": 0.0143,
+      "best_other_gold_id": "NT-R18"
+    },
+    {
+      "candidate_id": "15b1275338880116fee56e6c1a6d57ebd271cb224f197e9fd45de8a2a23d1f77",
+      "claim_text": "工业富联短贷滚动中借入短贷960亿",
+      "best_claims_gold_sim": 0.0893,
+      "best_claims_gold_id": "NT-C03",
+      "best_other_gold_sim": 0.0035,
+      "best_other_gold_id": "NT-R26"
+    },
+    {
+      "candidate_id": "fbc97434b5461d4dea69f837c0315f11256fc7e4a62d920e6ec6c8a5ad40447e",
+      "claim_text": "工业富联短贷滚动中归还短贷951亿",
+      "best_claims_gold_sim": 0.1087,
+      "best_claims_gold_id": "NT-C05",
+      "best_other_gold_sim": 0.0227,
+      "best_other_gold_id": "NT-I03"
+    },
+    {
+      "candidate_id": "9c7779f71cca4611d722cc28f50e7915fdc0fa68bf672643f2c657e8bcf8c29d",
+      "claim_text": "工业富联TTM市盈率27倍对应7%毛利率，EMS并不便宜到「必须买」",
+      "best_claims_gold_sim": 0.0769,
+      "best_claims_gold_id": "NT-C07",
+      "best_other_gold_sim": 0.0435,
+      "best_other_gold_id": "NT-R04"
+    },
+    {
+      "candidate_id": "4aa87d164af99c4c12b7412b598a6535ea8ba89c0f1efea96c55982c09065951",
+      "claim_text": "工业富联Q2毛利率环比为负",
+      "best_claims_gold_sim": 0.1111,
+      "best_claims_gold_id": "NT-C07",
+      "best_other_gold_sim": 0.2143,
+      "best_other_gold_id": "NT-I07"
+    },
+    {
+      "candidate_id": "86701ad6a755bcef5c8eff0a6b8d92f7cdfd48096fed998cc0a78f481fa4db06",
+      "claim_text": "工业富联动态PE隐含的市值475亿看起来未给卖方600亿",
+      "best_claims_gold_sim": 0.0725,
+      "best_claims_gold_id": "NT-C06",
+      "best_other_gold_sim": 0.0392,
+      "best_other_gold_id": "NT-I36"
+    },
+    {
+      "candidate_id": "519ecd395c1aa24453a516803ef96355324e0c80fdeb57e1e531b1ac681edffe",
+      "claim_text": "工业富联H2动态PE隐含市值475亿是将H1的237亿市值再做一次",
+      "best_claims_gold_sim": 0.0822,
+      "best_claims_gold_id": "NT-C06",
+      "best_other_gold_sim": 0.0204,
+      "best_other_gold_id": "NT-I05"
+    },
+    {
+      "candidate_id": "48578c6df92a7a3f3e1fd61a601f04b236ec9fcd9e909d16258fd697b495c798",
+      "claim_text": "若工业富联H2只是季节性、Rubin放量后移，其动态PE隐含市值475亿不是估值底部",
+      "best_claims_gold_sim": 0.061,
+      "best_claims_gold_id": "NT-C06",
+      "best_other_gold_sim": 0.0667,
+      "best_other_gold_id": "NT-I09"
+    },
+    {
+      "candidate_id": "f1fba3c9d12b62deb564d956ddb7d784154a9fbf379d1ff6ffe079cf0a23db8b",
+      "claim_text": "工业富联目标价93-101基于2026年24-35倍市盈率或2027年利润得出",
+      "best_claims_gold_sim": 0.0897,
+      "best_claims_gold_id": "NT-C06",
+      "best_other_gold_sim": 0.0357,
+      "best_other_gold_id": "NT-I11"
+    },
+    {
+      "candidate_id": "9b9cfd337421e088645752fcc4b24dded371cd9091e2000cfbab590b15acdd57",
+      "claim_text": "工业富联目标价93-101不是8月能兑现的估值底部",
+      "best_claims_gold_sim": 0.0517,
+      "best_claims_gold_id": "NT-C05",
+      "best_other_gold_sim": 0.0238,
+      "best_other_gold_id": "NT-I45"
+    },
+    {
+      "candidate_id": "32e5c48adf2bc874170548e24af34c99ec50df424d429a71d7b4c8b9d6df0b89",
+      "claim_text": "高盛给出的工业富联121目标价是IMA标题，不能当作明日价格",
+      "best_claims_gold_sim": 0.0676,
+      "best_claims_gold_id": "NT-C01",
+      "best_other_gold_sim": 0.0149,
+      "best_other_gold_id": "NT-I25"
+    },
+    {
+      "candidate_id": "ecee8ac210fbf2bc220b2f37a2aa864c105a031d4374adb1038d263e777c3eae",
+      "claim_text": "工业富联的Rubin / GB300爬坡再延",
+      "best_claims_gold_sim": 0.0889,
+      "best_claims_gold_id": "NT-C05",
+      "best_other_gold_sim": 0.125,
+      "best_other_gold_id": "NT-I09"
+    },
+    {
+      "candidate_id": "28069c499e45f7ae8019a75c0265dbf2dffb42042c000cbd999ad07bbbb34c66",
+      "claim_text": "工业富联的毛利率从7%回到6%以下",
+      "best_claims_gold_sim": 0.1087,
+      "best_claims_gold_id": "NT-C07",
+      "best_other_gold_sim": 0.0606,
+      "best_other_gold_id": "NT-I09"
+    },
+    {
+      "candidate_id": "261cd5fab49fdc04641201b7c3c60d62a566ac1d1525c23908b6026cd84a36b9",
+      "claim_text": "工业富联观察仓投资决策需满足回撤到52–58（回到7月回购均价61之下、动PE降到24附近）等条件后再议",
+      "best_claims_gold_sim": 0.0404,
+      "best_claims_gold_id": "NT-C04",
+      "best_other_gold_sim": 0.4211,
+      "best_other_gold_id": "NT-I42"
+    },
+    {
+      "candidate_id": "4de8edc7f2acc00f7d5d136391c0b6b4146447006a2f5d74d2ad029cce514037",
+      "claim_text": "工业富联Q3的OCF/扣非回到0.6以上或毛利率较Q2的6.99%不再回吐",
+      "best_claims_gold_sim": 0.1013,
+      "best_claims_gold_id": "NT-C08",
+      "best_other_gold_sim": 0.3191,
+      "best_other_gold_id": "NT-I43"
+    },
+    {
+      "candidate_id": "13edee989550a682308e39675b2c5978c743a9cecd12aaa9dcbb026a4656bdde",
+      "claim_text": "工业富联观察仓止损条件为下季OCF/扣非<0.5",
+      "best_claims_gold_sim": 0.0563,
+      "best_claims_gold_id": "NT-C02",
+      "best_other_gold_sim": 0.5116,
+      "best_other_gold_id": "NT-R08"
+    },
+    {
+      "candidate_id": "5fafca8277ebd368d45b205dc90a2a6a2e78c962c950b7d244181195a829365b",
+      "claim_text": "工业富联观察仓止损条件为毛利率较6.99%再掉超过1个百分点且公司改口说涨价/mix受阻、Rubin延期",
+      "best_claims_gold_sim": 0.092,
+      "best_claims_gold_id": "NT-C08",
+      "best_other_gold_sim": 0.7091,
+      "best_other_gold_id": "NT-R09"
+    },
+    {
+      "candidate_id": "b206c716935a0fb179a2c9eecf8950174e7089ee1f312a9bb2ed5697460d82c8",
+      "claim_text": "工业富联目标价不把121、100.8当锚",
+      "best_claims_gold_sim": 0.0909,
+      "best_claims_gold_id": "NT-C05",
+      "best_other_gold_sim": 0.0571,
+      "best_other_gold_id": "NT-I36"
+    },
+    {
+      "candidate_id": "984aeafb7d1db22b3d9223e703bb75a387bce682266bb63f7122608a702bdea3",
+      "claim_text": "工业富联目标价中性路径为55–75",
+      "best_claims_gold_sim": 0.0625,
+      "best_claims_gold_id": "NT-C06",
+      "best_other_gold_sim": 0.0286,
+      "best_other_gold_id": "NT-I06"
+    },
+    {
+      "candidate_id": "461dc19ae710e49512f73d81b038306e2af36a14ad852919f31d30b8c26ac0a0",
+      "claim_text": "工业富联目标价乐观路径为靠近中金77.68/华泰93",
+      "best_claims_gold_sim": 0.0678,
+      "best_claims_gold_id": "NT-C07",
+      "best_other_gold_sim": 0.025,
+      "best_other_gold_id": "NT-I37"
+    },
+    {
+      "candidate_id": "acdf36af9ac1f3c8848d1f2f11ddbb4e61b4b60520063e6edf78fc803d83fa4d",
+      "claim_text": "工业富联在2026-08-28的成交额为103.15亿元",
+      "best_claims_gold_sim": 0.2453,
+      "best_claims_gold_id": "NT-C01",
+      "best_other_gold_sim": 0.0513,
+      "best_other_gold_id": "NT-I11"
+    },
+    {
+      "candidate_id": "1a271036578ba4a31b3ecc5db4391b63dbff0811c9b40c03c495e2dc7e4ae10a",
+      "claim_text": "工业富联在2025.09.01–2026.08.28期间的52周最高价格为84.95元",
+      "best_claims_gold_sim": 0.1549,
+      "best_claims_gold_id": "NT-C01",
+      "best_other_gold_sim": 0.0685,
+      "best_other_gold_id": "NT-R06"
+    },
+    {
+      "candidate_id": "21ac742925c74d60d199afc189e26bd29adac155a8384c386f4ae2ce37442c29",
+      "claim_text": "工业富联在2025.09.01–2026.08.28期间的52周最低价格为46.70元",
+      "best_claims_gold_sim": 0.1493,
+      "best_claims_gold_id": "NT-C01",
+      "best_other_gold_sim": 0.0735,
+      "best_other_gold_id": "NT-R06"
+    },
+    {
+      "candidate_id": "a64d15ff2c741b4fc2d66cde0ef86558443d3f35a97d365be9177a5386094f4e",
+      "claim_text": "工业富联在8/27（英伟达财报次日）的价格涨幅约为+5.43%",
+      "best_claims_gold_sim": 0.0641,
+      "best_claims_gold_id": "NT-C09",
+      "best_other_gold_sim": 0.0227,
+      "best_other_gold_id": "NT-I05"
+    },
+    {
+      "candidate_id": "0b9783f22788a50bc5c225bc463453cc591d85abb9df9a0148a222f5d68a41bb",
+      "claim_text": "会不会出现当年机器人份额加起来超过100%的状态？",
+      "best_claims_gold_sim": 0.0333,
+      "best_claims_gold_id": "NT-C11",
+      "best_other_gold_sim": 0.5161,
+      "best_other_gold_id": "NT-I36"
+    },
+    {
+      "candidate_id": "72ba229c15274bf13a5dcb04106c40830c8748fd81035a93294b980c466726ed",
+      "claim_text": "EML和硅光26年初的比例是4比6",
+      "best_claims_gold_sim": 0.08,
+      "best_claims_gold_id": "NT-C12",
+      "best_other_gold_sim": 0.0556,
+      "best_other_gold_id": "NT-I22"
+    },
+    {
+      "candidate_id": "b934822a9486b1dde40c3c11657fcdf790716c6fb78de2e6d659b8483f7d7ece",
+      "claim_text": "EML和硅光的比例预计到26年底规划为65%比35%",
+      "best_claims_gold_sim": 0.0909,
+      "best_claims_gold_id": "NT-C16",
+      "best_other_gold_sim": 0.0638,
+      "best_other_gold_id": "NT-I22"
+    },
+    {
+      "candidate_id": "86805f76ba216d4ae25771c779b2e304b4264906b7b0ab25d10ed39be7169c15",
+      "claim_text": "光模块行业为规避风险布局产能，未来60%以上的产能将通过泰国或台湾生产",
+      "best_claims_gold_sim": 0.0649,
+      "best_claims_gold_id": "NT-C12",
+      "best_other_gold_sim": 0.1357,
+      "best_other_gold_id": "NT-R26"
+    },
+    {
+      "candidate_id": "61ea5b5759ada99206dfc901adf2eae735bb131ee36bb7086ee0075fd70e4fcb",
+      "claim_text": "光模块行业台湾海鸥基地的免税政策处于最后阶段，后续将不再免税",
+      "best_claims_gold_sim": 0.0482,
+      "best_claims_gold_id": "NT-C12",
+      "best_other_gold_sim": 0.1138,
+      "best_other_gold_id": "NT-R26"
+    },
+    {
+      "candidate_id": "982c8d5ec8c61b5d2196d945c7aed270fb4e422b15632ea59f16788536a610f0",
+      "claim_text": "光模块行业台湾海鸥基地免税政策之前的税率为零，前几年可能持续三年",
+      "best_claims_gold_sim": 0.0519,
+      "best_claims_gold_id": "NT-C12",
+      "best_other_gold_sim": 0.1162,
+      "best_other_gold_id": "NT-R26"
+    },
+    {
+      "candidate_id": "32040699e0988baf3810f428918f16c870c8165bb747ba5695b5f1f8dcc454e6",
+      "claim_text": "当因政策原因导致成本上升时，光模块行业相关主体会与客户协商，提价幅度在10%到20%之间",
+      "best_claims_gold_sim": 0.1,
+      "best_claims_gold_id": "NT-C11",
+      "best_other_gold_sim": 0.5192,
+      "best_other_gold_id": "NT-R15"
+    },
+    {
+      "candidate_id": "a98cf94b6cb6fcded56fbe5648c6c0a468e898dbc7937d0282a7bbc5da306ca2",
+      "claim_text": "27年，光模块行业的市占率将有显著提升",
+      "best_claims_gold_sim": 0.0938,
+      "best_claims_gold_id": "NT-C14",
+      "best_other_gold_sim": 0.025,
+      "best_other_gold_id": "NT-I32"
+    },
+    {
+      "candidate_id": "8501a187ba0b55c50ca84a5f97ee4a4dc20a40143846d761defa26e4f96c81c0",
+      "claim_text": "200G scale up领域主要使用NPO",
+      "best_claims_gold_sim": 0.14,
+      "best_claims_gold_id": "NT-C11",
+      "best_other_gold_sim": 0.0833,
+      "best_other_gold_id": "NT-I49"
+    },
+    {
+      "candidate_id": "246de578d04248e64c0385edcda778cf3d234cac26084c0c05120330d1a671b7",
+      "claim_text": "2.4T产品用于scale up领域",
+      "best_claims_gold_sim": 0.102,
+      "best_claims_gold_id": "NT-C13",
+      "best_other_gold_sim": 0.0286,
+      "best_other_gold_id": "NT-I24"
+    },
+    {
+      "candidate_id": "c2d6e1cd0dd9ad3377b6d0b51058fac44dda045870158ff93151f422fe3436c2",
+      "claim_text": "3.2T产品在scale out领域之外是普通的光模块",
+      "best_claims_gold_sim": 0.0933,
+      "best_claims_gold_id": "NT-C16",
+      "best_other_gold_sim": 0.0247,
+      "best_other_gold_id": "NT-R03"
+    },
+    {
+      "candidate_id": "533e3c802f76eb77f22537c3a4d0a351dce2428bb4ecbbe164fb9e6c2d9d83eb",
+      "claim_text": "CPO领域90%以上的价值由交换机芯片厂商占有",
+      "best_claims_gold_sim": 0.125,
+      "best_claims_gold_id": "NT-C12",
+      "best_other_gold_sim": 0.0811,
+      "best_other_gold_id": "NT-I46"
+    },
+    {
+      "candidate_id": "85a3c88c6a64f4dab5c96756d59fa5131daac45355c376578d40e6aa89d7e7f2",
+      "claim_text": "Q2的800G光模块是超预期的",
+      "best_claims_gold_sim": 0.08,
+      "best_claims_gold_id": "NT-C16",
+      "best_other_gold_sim": 0.6765,
+      "best_other_gold_id": "NT-I38"
+    }
+  ]
+}

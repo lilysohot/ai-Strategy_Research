@@ -1,0 +1,52 @@
+{
+  "schema_version": "claims-governance-registration-template-1",
+  "fields": {
+    "id": {
+      "required": true,
+      "note": "稳定标识（如 M1 / CORR-91-PRECONDITION）"
+    },
+    "axis": {
+      "required": true,
+      "note": "被裁的轴名（须与门 unfrozen_axes / 契约叶子同名）"
+    },
+    "status": {
+      "required": true,
+      "allowed": [
+        "pending_human_decision",
+        "decided",
+        "expired_to_report_only"
+      ],
+      "note": "到期未裁只能转 expired_to_report_only，不得转 decided"
+    },
+    "value": {
+      "required": true,
+      "note": "未裁时必须是 null；禁止预填"
+    },
+    "owner": {
+      "required": true,
+      "note": "裁决人"
+    },
+    "decide_by": {
+      "required": true,
+      "note": "ISO 日期；R4 到期检查依据"
+    },
+    "pending_caliber": {
+      "required": true,
+      "note": "true ⇒ 该轴只能报告，不得承载 PASS / 达标 / 可交付"
+    },
+    "recompute_on_fill": {
+      "required": true,
+      "note": "裁完后必须重算并重签的结论路径清单（R3）"
+    },
+    "measured_options": {
+      "required": true,
+      "note": "每个选项的实测后果，供裁决时对照；不得只给推荐值"
+    }
+  },
+  "forbidden": [
+    "预填 value 或代签",
+    "用未裁轴承载 PASS / 达标 / 可交付（R1/R2）",
+    "到期后自动放行（到期 ⇒ 转报告项，不是转为通过）",
+    "裁完后沿用旧分而不重算（R3）"
+  ]
+}

@@ -799,6 +799,9 @@ async def get_input_request(
     request_uuid = _as_uuid(request_id, "request_id")
     async with biz.business_transaction() as session:
         await input_requests.expire_due(session, user_id=user.id)
+        await input_requests.reconcile_satisfied_requests(
+            session, user_id=user.id, request_id=request_uuid,
+        )
         row = (
             await session.execute(
                 select(store.InputRequest).where(

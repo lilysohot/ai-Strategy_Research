@@ -1,0 +1,48 @@
+{
+  "schema_version": "claims-budget-authorisation-manifest-1",
+  "id": "103-claims-budget-authorisation-20261014",
+  "status": "stated_effective_pending_countersignature",
+  "created_on": "2026-10-14",
+  "model_calls": 0,
+  "purpose": "记录 U 给出的治疗臂实跑预算（100 万 token），并把执行入口的预算闸门从「签认件那一格（空）」接到本件",
+  "outputs": {
+    "budget-authorisation.json": "5574a1882856ca39bc9625899355f41d1b13e17dddbe9101d73199288b9cbe78",
+    "budget-authorisation.md": "833d5e16ed30e522cdb9c346bfdf23b8483189857a5bf63033674a416ea6d181"
+  },
+  "inputs": {
+    "claims_preregistration_signed_99": "a2d174407daa5a1b88ba9ca44e698cf4512a399b2a4895254d0a3ab4b57edf04",
+    "treatment_freeze_manifest_102": "aa4cd46f25d6da81a381083e7e093a05c6421aaed347fb7496dd37eea15f2201"
+  },
+  "stated_value": {
+    "ceiling": 1000000,
+    "unit": "tokens",
+    "stated_by": "U",
+    "stated_on": "2026-10-14",
+    "stated_how": "会话中给出"
+  },
+  "enforcement_wired": {
+    "entry": "evidence/102-claims-treatment-engineering-20261014/r0-zero-call/execute_claims_treatment.py",
+    "entry_sha256": "d4303887057215524a5cdc385ddd910418b88274d735f2336d7f70729cdfcf00",
+    "behaviour": [
+      "读本件取 ceiling（校 hash 绑定 99 号，防配对到别的签认件）",
+      "逐 run 上限仍逐字取自 99 号的 historical_reference（10 / 14）",
+      "跑完按 ledger attempts.usage 汇总 total_tokens 对账，超限判该轮无效（exit 1）"
+    ]
+  },
+  "tests": {
+    "file": "tests/test_claims_treatment_entry.py",
+    "sha256": "fc4a772bbef60810877c6bb5c0bb157e76651918a35188ef3152987b8a380c4b",
+    "count": 11
+  },
+  "does_not_touch": [
+    "evidence/95-claims-prereg-20261014/**",
+    "evidence/99-claims-prereg-v3-signed-r2-20261014/**",
+    "evidence/102-claims-treatment-engineering-20261014/**"
+  ],
+  "blocked_on": ["人工裁定工时（阶段 3，U 供）"],
+  "notes": [
+    "99 号那一格保持空白（a2d17440… 未改）：已签件不得就地改写，预算落本件。",
+    "100 万 token 相对 24 次调用上限有 3–10 倍余量（实测单次 total_tokens 4,698 / 4,798）。",
+    "若要具名落档，在 budget-authorisation.md 上签署即可，届时由 apply 脚本翻成已签记录。"
+  ]
+}

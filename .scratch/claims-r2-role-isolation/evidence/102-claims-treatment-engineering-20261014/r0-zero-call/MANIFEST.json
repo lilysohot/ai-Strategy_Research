@@ -1,0 +1,80 @@
+{
+  "schema_version": "claims-treatment-engineering-manifest-1",
+  "id": "102-claims-treatment-engineering-20261014",
+  "status": "landed_not_runnable",
+  "created_on": "2026-10-14",
+  "model_calls": 0,
+  "purpose": "落地 95/99 号 only_prerequisites 里剩下的两个工程缺件：①活跑入口 ②新池裁定工作表（含阶段 2 止损判据）",
+  "deliverables": {
+    "prepare_claims_treatment_plan.py": {
+      "role": "零调用冻结治疗臂两源一次全量抽取的计划（当前代码版本，T1–T4 已落地）",
+      "sha256": "1ec0ab47451eaff6a4329aaa5ebfb0494f2ca50e3321ae3f11f146552d6b9db9"
+    },
+    "execute_claims_treatment.py": {
+      "role": "唯一活跑入口；六道 fail-closed 闸门（签认件冻结 + 预算授权非空 + 冻结件哈希 + profile 指纹 + --allow-model + 授权额度覆盖）+ 跑后按 ledger usage 做 token 对账",
+      "sha256": "d4303887057215524a5cdc385ddd910418b88274d735f2336d7f70729cdfcf00",
+      "sha256_note": "2026-10-14 同日刷新：预算闸门从「签认件空叶子」接到 103 号预算授权件（U 给出 100 万 token）"
+    },
+    "build_treatment_adjudication_worksheet.py": {
+      "role": "阶段 2 止损（按已签规则逐字求值）+ 阶段 3 工作表（reviewer/adjudicator 留空、review_status=pending_named_human_signoff）",
+      "sha256": "3ee6582458026eb327e95de90199fddfb23234667032294b07daa41a1755c7d9"
+    },
+    "claims-treatment-plan-freeze/manifest.json": {
+      "role": "治疗臂冻结计划清单（逐 run 上限取自签认件的 historical_reference）",
+      "sha256": "aa4cd46f25d6da81a381083e7e093a05c6421aaed347fb7496dd37eea15f2201"
+    }
+  },
+  "freeze": {
+    "runnable": false,
+    "authorised_ceiling": null,
+    "per_run_ceilings": {
+      "claims-industrial-fulian": 10,
+      "claims-optical-module": 14
+    },
+    "total_attempt_ceiling": 24,
+    "scoped_units": {
+      "claims-industrial-fulian": 9,
+      "claims-optical-module": 10
+    },
+    "planned_models": {
+      "claims_protocol": "claims-atomic-json-v2",
+      "extractor": "b5220ca2dc17",
+      "lint": "claims-v2-lint-9",
+      "pipeline": "evidence-pipeline-13"
+    }
+  },
+  "dry_run_evidence": [
+    "prepare --no-write：两 run 计划重算成功（batch:042388788bc5… / batch:63092cfd4bcd…，9+10 个 scoped unit），零调用",
+    "execute --dry-run：拒绝执行 —— 「budget_request.stage_1_live_run.requested_ceiling 未填（由 U 填）⇒ 按 99 号『未填预算不得起跑』拒绝执行」（exit 1）",
+    "worksheet：拒绝生成 —— 「execution-summary.json 不存在（先跑 execute）」（exit 1）"
+  ],
+  "tests": {
+    "file": "tests/test_claims_treatment_entry.py",
+    "count": 7,
+    "pins": [
+      "ceiling 未填 ⇒ executor 拒绝；填入整数 ⇒ 通过",
+      "签认件未冻结或治疗规则被改 ⇒ 拒绝",
+      "止损规则从已签件逐字读取并按 == 0 / ≤ baseline × 0.5 求值",
+      "阶段 2 判据与 95 号同口径（field-first 并集、subject+metric+quote+kind 冗余）",
+      "冻结件 fail-closed：runnable=false、逐 run 上限 == 签认件、authorised 跟随 ceiling"
+    ]
+  },
+  "does_not_touch": [
+    "evidence/95-claims-prereg-20261014/**",
+    "evidence/99-claims-prereg-v3-signed-r2-20261014/**",
+    "evidence/100-claims-t4-labeling-landing-20261014/**",
+    "evidence/101-claims-treatment-t1t2t3-landing-20261014/**",
+    "evidence/17-structured-extraction-convergence-closure-20261009/**"
+  ],
+  "blocked_on": ["人工裁定工时（阶段 3，U 供）"],
+  "budget_authorisation": {
+    "record": "evidence/103-claims-budget-authorisation-20261014/r0-zero-call/budget-authorisation.json",
+    "ceiling": 1000000,
+    "unit": "tokens",
+    "note": "冻结件的 budget.authorised=false 记的是 2026-10-14 冻结时点（早于 U 给出预算）；现行授权看 103 号，入口以此为准"
+  },
+  "notes": [
+    "阶段 2 的止损判据按已签件原样实现（unbound_union ≤ 27 照签认执行），未做任何口径修改。",
+    "所有写盘走共享护栏 tools.evidence_guard（write_once/assert_writable），冻结件为 write-once。"
+  ]
+}

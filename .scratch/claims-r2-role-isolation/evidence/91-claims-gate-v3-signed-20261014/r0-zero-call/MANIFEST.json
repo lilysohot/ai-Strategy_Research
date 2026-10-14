@@ -1,0 +1,22 @@
+{
+  "schema_version": "claims-gate-v3-signed-manifest-1",
+  "status": "signed",
+  "created_on": "2026-10-14",
+  "signed_by": "xyl",
+  "model_calls": 0,
+  "inputs": {
+    "claims_gate_v3_draft": "6a36cf1352ad19a11f136e41d99996634ff18304a2e20ca2e81e7b18dfd54339",
+    "claims_gate_v3_draft_manifest": "52cf0ef99bb79b6ff95a4a24504dfff1c5cd7d16609703f4c555abe8496c5cbf",
+    "signoff_instrument": "f2cb2fb740767c18470f14db69642012234d07e61c22f017b49dfaa9ec3738de",
+    "signed_scoring_contract_v4.4": "ce1938b6d35a1292b22d8d75a3af461743e627ccebb0385f3267cb652fcd1650",
+    "items_gate_v3_signed_reference": "340b312d9c0cec278e828d8303a03e9daf953feef4c0eef688f3d257971a9732"
+  },
+  "outputs": {
+    "claims-gate-v3.json": "b2b93b9ce46711b1e2f55d340c54452c1033eb15569f0dd865af9e3477d74fb3",
+    "gate-v3-signed-diff.json": "53af9ef768519af72a82ae6d13ea9cb45598fb60ba467a8c4d457ef3300a311d"
+  },
+  "does_not_touch": [
+    "evidence/90-claims-gate-v3-and-run-20261014/r0-zero-call/claims-gate-v3.proposed.json",
+    "evidence/90-claims-gate-v3-and-run-20261014/r0-zero-call/claims-gate-v3-signoff.md"
+  ]
+}

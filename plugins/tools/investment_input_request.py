@@ -13,6 +13,7 @@ import contextvars
 from typing import Any
 
 from frontier_agent.core.tool import tool
+from plugins.investment_requirements import missing_facts
 
 _INTENT: contextvars.ContextVar[dict[str, Any] | None] = contextvars.ContextVar(
     "investment_input_intent", default=None
@@ -68,8 +69,19 @@ async def request_investment_input(use_case: str, reason: str) -> str:
     if state is None:
         # 非业务 Run（未绑定意图槽）不产生请求，避免普通 Run 被误拦。
         return "本 Run 未启用业务资料补数，请按现有资料回答或说明资料不足。"
+    from plugins.tools.investment_context import _context, _entry_value
+
+    context = _context()
+    if context is not None:
+        present = {name for name in context.get("values", {}) if _entry_value(context, name) is not None}
+        if not missing_facts(use_case, present):
+            state["requested"] = None
+            return (
+                "当前冻结资料已满足该用途，无需创建补数请求。不要声称已创建弹窗或待办。"
+                "入场价是分析情景，不是待补用户事实；未填写风险约束时仅可给出资金上限，不能声称已验证风险仓位。"
+            )
     state["requested"] = {"use_case": use_case, "reason": text[:500]}
     return (
-        "已记录：服务端会按冻结快照裁决并在结构化窗口展示确切待补字段；"
+        "已记录补数意图，尚未创建待办：运行结束后服务端按冻结快照裁决是否创建结构化窗口；"
         "不要在回答中自行列举字段，也不要输出依赖缺失资料的个性化结论。"
     )

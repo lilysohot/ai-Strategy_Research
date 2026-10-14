@@ -1,0 +1,103 @@
+{
+  "schema_version": "claims-zero-call-cleanup-1",
+  "created_on": "2026-10-14",
+  "zero_model_calls": true,
+  "items_closed": [
+    {
+      "id": "C1-scope-registration",
+      "status": "landed",
+      "artifact": "claims-scope-registration.json",
+      "check": "tools/check_claims_gate.py::c1-scope-registration",
+      "entries": 29
+    },
+    {
+      "id": "C4-use-grading",
+      "status": "landed_mechanism_default_conservative",
+      "artifact": "plugins/corpus/claim_use_axes.py",
+      "check": "tests/test_corpus_claim_use_axes.py（含词表一致性 AST 扫描）",
+      "measured": {
+        "correct_records": 56,
+        "legacy_all_or_nothing": 11,
+        "landed_default_policy": 11,
+        "default_equals_legacy": true,
+        "counterfactual_two_code_remap": 26,
+        "counterfactual_remap_codes": [
+          "source_qualified_context_requires_review",
+          "qualifier_definition_unverified"
+        ],
+        "counterfactual_needs": "把这两个码从 condition 轴改挂 attribution 轴（口径变更，须签认）",
+        "vocabulary_note": "attribution/perspective/source_stance 是 cite 侧轴，在 {cite, compare, calculate} 词表下不撤任何用途；因此该改动等于放行带条件语境的数值断言参与比较与计算"
+      }
+    }
+  ],
+  "c4_axis_table": {
+    "in_force": "conservative（condition/qualifier 轴撤去 compare/calculate）",
+    "cite_side_axes": [
+      "attribution",
+      "perspective",
+      "source_stance"
+    ],
+    "registered_codes": [
+      "atomic_evidence_ambiguous",
+      "atomic_evidence_mismatch",
+      "atomic_evidence_unverified",
+      "conflicting_values",
+      "context_partial",
+      "evidence_not_found",
+      "known_at_missing",
+      "known_at_unverified_override",
+      "metric_missing",
+      "metric_not_in_quote",
+      "metric_not_registered",
+      "metric_unit_mismatch",
+      "normalized_unit_mismatch",
+      "normalized_value_mismatch",
+      "opinion_value_projection",
+      "period_ambiguous",
+      "period_missing",
+      "period_not_in_packet",
+      "period_unanchored",
+      "prompt_injection_detected",
+      "qualifier_definition_unverified",
+      "qualifier_invalid",
+      "ratio_definition_unverified",
+      "response_truncated",
+      "source_attribution_dependency",
+      "source_condition_dependency",
+      "source_evidence_mapping_missing",
+      "source_negation_dependency",
+      "source_qualified_context_requires_review",
+      "subject_ambiguous",
+      "subject_missing",
+      "subject_not_anchored",
+      "subject_scope_mismatch",
+      "time_invalid",
+      "unit_missing",
+      "unit_unknown",
+      "value_missing",
+      "value_not_in_evidence",
+      "value_unit_pair_not_in_quote"
+    ]
+  },
+  "prior_record_updates": [
+    {
+      "record": "evidence/89-claims-v44-signed-landing-20261014/r0-zero-call",
+      "line": "still_pending: 『C4 用途分级实现』『C1 移出项的 items/relations 侧覆盖登记』",
+      "now": "两项均已落地（见 items_closed）；89 号字节不改写"
+    },
+    {
+      "record": "evidence/89-claims-v44-signed-landing-20261014/r0-zero-call",
+      "line": "changed_files 中 tools/check_claims_gate.py 的哈希",
+      "now": "该文件在本轮继续演进（新增 c1-scope-registration、输入名映射、形状兼容），89 号记录为上一轮快照"
+    }
+  ],
+  "pending_human_decision": [
+    "D-1 accepted 总数/分源下限（a/b/c）",
+    "D-2 放行线的分源精度轴是否新增",
+    "C4 是否把 source_qualified_context_requires_review / qualifier_definition_unverified 改挂 attribution 轴（+16 条可算，见 measured.counterfactual）"
+  ],
+  "not_in_scope": [
+    "不改 frozen-gold / P1R5 已签裁定 / items 门 v3 / 契约 v4.3 v4.4 / 已签门 v3 字节",
+    "不执行模型调用、不重跑抽取、不发布"
+  ]
+}

@@ -13,6 +13,7 @@ from frontier_agent.core.tool import tool
 from plugins.market.factory import build_service, resolve_or_error, unavailability
 from plugins.market.failure import translate
 from plugins.market.ports import MarketUnavailable
+from plugins.market.temporal import local_date
 
 
 @tool
@@ -57,4 +58,9 @@ async def market_quote(query: str) -> str:
     except MarketUnavailable as exc:
         return json.dumps(translate(exc, tool="market_quote"), ensure_ascii=False)
 
-    return json.dumps({**result, "query": query, "thscode": thscode}, ensure_ascii=False)
+    items = [{**row, "price_kind": "snapshot",
+              "trade_date": local_date(row.get("as_of_ms"), str(row.get("thscode") or thscode))}
+             for row in result.get("items", [])]
+    return json.dumps({**result, "items": items, "query": query, "thscode": thscode,
+                       "price_time_note": "last_price 是 as_of 时刻的行情快照，不代表最终收盘价。"},
+                      ensure_ascii=False)

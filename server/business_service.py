@@ -32,6 +32,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from plugins.investment_requirements import missing_facts
 from server import store
 
 # ——— 契约常量 ——————————————————————————————————————————————————————————
@@ -451,45 +452,9 @@ def evaluate_purpose(
     ``only_groups`` 用于对象级写入：创建账户时只裁决账户字段，计划字段由创建计划
     时裁决；完整分析准入在提交 Run 时一次校验全部组（DATA-05）。
     """
-    missing: dict[str, str] = {}
-
-    def need(group: str, name: str, message: str) -> None:
-        admission = groups.get(group)
-        if admission is None or name not in admission.values:
-            missing[f"{group}.{name}"] = message
-
-    def need_any(group: str, names: tuple[str, ...], message: str) -> None:
-        admission = groups.get(group)
-        if admission is None or not any(n in admission.values for n in names):
-            missing["|".join(f"{group}.{n}" for n in names)] = message
-
-    if use_case == "general_reading":
-        return missing
-    if use_case not in {"plan_analysis", "holding_cost"}:
-        return missing
-
-    need("account", "currency", "请选择账户币种")
-    need("account", "capital_basis", "请说明资金口径（总资金 / 可用资金）")
-    need("account", "as_of", "请选择资金数据时点")
-    need_any(
-        "account",
-        ("total_capital", "available_capital"),
-        "请如实填写当前账户总资金或可用资金",
-    )
-
-    if use_case in {"plan_analysis", "holding_cost"}:
-        need("plan", "symbol", "请填写标的")
-        need("plan", "market", "请选择市场")
-        need("plan", "direction", "请选择方向")
-        #: 2026-10-08：计划价取消，改为要求本标的规划资金；上限在写入/提交时读账户版本校验。
-        need("plan", "allocated_capital", "请填写本标的规划资金（从主账户可用资金中划出）")
-
-    if use_case == "holding_cost":
-        # 依赖实际成本的计算必须拿到用户明确提供的成交事实（AC-25、AC-26）。
-        need("trade", "side", "请说明成交方向")
-        need("trade", "quantity", "请填写成交数量")
-        need("trade", "price", "已买入时请填写实际成交价，不能用现价或计划价替代")
-        need("trade", "traded_at", "请填写成交时间")
+    missing = missing_facts(use_case, {
+        f"{group}.{name}" for group, admission in groups.items() for name in admission.values
+    })
 
     if only_groups:
         allowed = set(only_groups)

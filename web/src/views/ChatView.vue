@@ -3,7 +3,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } 
 import { ElMessage } from 'element-plus'
 import { onBeforeRouteLeave } from 'vue-router'
 
-import { artifacts as artifactsApi, link as linkApi, plans as plansApi, runs as runsApi } from '@/api'
+import { artifacts as artifactsApi, runs as runsApi } from '@/api'
 import { ApiError } from '@/api/client'
 import type {
   SessionPlanInput,
@@ -33,9 +33,17 @@ import { useSessionsStore } from '@/stores/sessions'
 import type { DiffFile } from '@/types'
 import { renderMarkdown } from '@/utils/markdown'
 import { redactSecrets } from '@/utils/redact'
-import { dedupeAssistantTurns, hasRunAnswer, sameRunId, streamBelongsToSession } from '@/utils/chat'
+import {
+  attachSubmittedRun,
+  dedupeAssistantTurns,
+  hasRunAnswer,
+  sameRunId,
+  streamBelongsToSession,
+  type SubmittedConversationRun,
+} from '@/utils/chat'
 import { summarizeDiff } from '@/utils/diff'
 import { formatElapsed } from '@/utils/statusbar'
+import { createPlanWriter } from '@/utils/saveResearchPlan'
 import RunDetailView from '@/views/RunDetailView.vue'
 
 const sessions = useSessionsStore()
@@ -357,6 +365,10 @@ import { dialogCoversRequest } from '@/utils/inputRequest'
 const inputDialogOpen = ref(false)
 const inputDialogRequest = ref<InputRequest | null>(null)
 const preparingPostRunInput = ref(false)
+const pendingPlanContinuation = ref<{ researchId: string; runId: string } | null>(null)
+watch(sessionPlanOpen, (open) => {
+  if (!open) pendingPlanContinuation.value = null
+})
 const promptedRequestIds = new Set<string>()
 
 async function maybeOpenInputRequest(): Promise<void> {
@@ -404,6 +416,7 @@ async function preparePostRunInput(): Promise<void> {
     // Ask the user to create it through the existing structured form before
     // creating a request that this focused dialog could never complete.
     if (!business.link?.primary_plan_id) {
+      pendingPlanContinuation.value = { researchId, runId }
       sessionPlanOpen.value = true
       ElMessage.info('请先创建并选择当前会话的主计划，再补充资金后继续分析')
       return
@@ -489,6 +502,23 @@ async function onSend(text: string, files: File[]): Promise<void> {
   } finally {
     sending.value = false
   }
+}
+
+function onPlanRunSubmitted(submission: SubmittedConversationRun): void {
+  const attached = attachSubmittedRun(
+    submission,
+    sessions.activeId,
+    sessions.activeTurns,
+    {
+      appendTurn: (turn) => sessions.appendLocalTurn(turn),
+      rememberRun: (sessionId, runId) => runStream.rememberRun(sessionId, runId),
+      watchRun: (runId, sessionId) => runStream.watch(runId, undefined, sessionId),
+    },
+  )
+  if (!attached) return
+  sessionPlanOpen.value = false
+  detailsOpen.value = false
+  void sessions.refreshMetadata(submission.sessionId).catch(() => {})
 }
 
 async function onStop(): Promise<void> {
@@ -610,47 +640,26 @@ async function onNavigate(area: WorkspaceArea, target?: WorkspaceTarget): Promis
   if (area === 'research') void composerRef.value?.focus()
 }
 
+const planWriter = createPlanWriter()
+
 async function saveSessionPlan(input: SessionPlanInput): Promise<void> {
   const sessionId = sessions.activeId
   if (!sessionId) {
-    ElMessage.warning('请先选择研究会话')
-    return
+    throw new Error('请先选择研究会话')
   }
 
-  // Build the server-side declared dict — every provided value is a pure string
-  // so it survives DTO serialization; empty optional fields are simply omitted
-  // and the server treats them as pending.
-  const marketOf = (v: SessionPlanInput['market']) =>
-    ({ CN: 'CN', HK: 'HK', US: 'US' } as const)[v]
-  const declared: Record<string, unknown> = {
-    symbol: { value: input.symbol },
-    market: { value: marketOf(input.market) },
-    direction: { value: input.direction },
-  }
-  const allocatedCapital = input.allocatedCapital.trim()
-  if (allocatedCapital) declared.allocated_capital = { value: allocatedCapital }
-
-  try {
-    const res = await plansApi.create(
-      sessionId,
-      { name: input.name, declared, allow_incomplete: true },
-      `plan.create:${sessionId}:${input.name}:${input.symbol}`,
-    )
-    const planId = String(res.plan_id)
-
-    if (input.isPrimary) {
-      await linkApi.set(
-        sessionId,
-        { account_id: null, primary_plan_id: planId },
-        `link.set:${sessionId}:${planId}`,
-      )
-    }
-
-    // Re-read authoritative plans so the preview reflects the real persisted value.
-    await Promise.all([business.loadPlans(sessionId), business.loadLink(sessionId)])
-    ElMessage.success(input.isPrimary ? '计划已创建并设为本会话主计划' : '计划已添加到当前会话')
-  } catch (err) {
-    ElMessage.error(err instanceof Error ? err.message : '创建计划失败')
+  await planWriter.save(sessionId, input)
+  // Only a confirmed save clears the dialog. Failures propagate to its inline error.
+  if (sessions.activeId !== sessionId) return
+  await Promise.all([business.loadPlans(sessionId), business.loadLink(sessionId)])
+  planWriter.reset()
+  ElMessage.success(input.isPrimary ? '计划已创建并设为本会话主计划' : '计划已添加到当前会话')
+  const continuation = pendingPlanContinuation.value
+  if (input.isPrimary && continuation?.researchId === sessionId && continuation.runId === runStream.runId) {
+    sessionPlanOpen.value = false
+    pendingPlanContinuation.value = null
+    // Let the successful save settle before opening the next form.
+    void nextTick().then(() => preparePostRunInput())
   }
 }
 
@@ -891,8 +900,9 @@ watch(
         :session-id="sessions.activeId"
         :session-title="sessions.activeSession?.title || '未命名研究'"
         :plans="sessionPlans"
-        @save="saveSessionPlan"
+        :save-plan="saveSessionPlan"
         @dirty-change="planDirty = $event"
+        @run-submitted="onPlanRunSubmitted"
       />
 
       <BusinessInputRequestDialog

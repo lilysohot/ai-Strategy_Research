@@ -1,0 +1,50 @@
+{
+  "draft": {
+    "path": "evidence/104-claims-prereg-v4-amendment-20261014/r0-zero-call/claims-preregistration-v4.proposed.json",
+    "sha256": "c5dc79126808b0b2bc2f008ed818ea7207d13efd6aa90b52f71c3d1bd88bd163"
+  },
+  "effective": {
+    "path": "evidence/104-claims-prereg-v4-amendment-20261014/r0-zero-call/claims-preregistration-v4.json",
+    "sha256": "sha256:6b5c93d582c9ff8cebfd5e35944a46951068de0e95685abff4645ed1cdaaa510"
+  },
+  "amended_record": {
+    "path": "evidence/99-claims-prereg-v3-signed-r2-20261014/r0-zero-call/claims-preregistration.json",
+    "sha256": "a2d174407daa5a1b88ba9ca44e698cf4512a399b2a4895254d0a3ab4b57edf04",
+    "why": "v4 修订的基底：99 号已签件（其正文即 95 号草案正文）"
+  },
+  "changed_leaf_paths": [
+    "status"
+  ],
+  "added_leaf_paths": [
+    "countersignature",
+    "signed_from"
+  ],
+  "removed_leaf_paths": [],
+  "expected_changed": [
+    "status"
+  ],
+  "expected_added": [
+    "signed_from",
+    "countersignature"
+  ],
+  "expected_removed": [],
+  "unexpected_changed": [],
+  "unexpected_added": [],
+  "unexpected_removed": [],
+  "signature": {
+    "reviewer": "xyl",
+    "adjudicator": "xyl",
+    "signed_on_literal": "2026-10-14"
+  },
+  "verdict": {
+    "status": "frozen_before_execution",
+    "unbound_union": "diagnostic（report_only_proxies，gating=false）",
+    "stage2_gates_in_force": [
+      "redundant_renderings",
+      "role_external_candidates",
+      "unbound_fields_without_reason_code"
+    ],
+    "budget_ceiling": null,
+    "runnable_note": "判据生效；起跑仍需 103 号预算授权件在场（execute_claims_treatment.py 以其为准）"
+  }
+}

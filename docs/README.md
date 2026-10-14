@@ -34,7 +34,8 @@ The investment-research Web product has two canonical product documents:
 | What is the proposed source-to-index rebuild, and what must be verified before freezing it? | [Corpus preparation rebuild draft](plan/corpus-ingestion-rebuild-architecture.md) — candidate design, not implemented; authority and historical documents in §0 |
 | How is the approved Web experience expressed? | [Investment research workbench interaction spec](design/investment-research-workbench-prd.md) |
 | How should Web business data, versioned inputs, and price-triggered analysis work? | [Web business data and persistence specification](design/web-business-data-prd.md) — planning draft; scope/status live in product requirements §4.7 |
-| How is the Web business-data work split into tasks? | [Web interaction tasks](plan/web-business-ui-tasks.md) v1.4 and [data persistence tasks](plan/web-business-persistence-tasks.md) v1.3 — plans, input requests, and session receipts have explicit single-session ownership; not implemented |
+| How should the production monitoring layer collect quotes, trigger events, recover, and scale? | [Monitoring technical plan](design/monitoring-technical-plan.md) — candidate architecture and research gates; not production-approved |
+| How is the Web business-data work split into tasks? | [Web interaction tasks](plan/web-business-ui-tasks.md) v1.7 and [data persistence tasks](plan/web-business-persistence-tasks.md) v1.5 — implementation evidence and remaining gaps live in their backfill sections |
 | How is it implemented? | [Technical architecture](tech-stack.md) |
 | What is the status of Web storage and traceability repairs? | [Web runtime and trace repair report](plan/web-runtime-trace-repair-report.md) — v1.5 batch closure: 19 closed, 3 with remaining work (F12/F15/F20); individual issues govern status; [storage-chain audit](plan/web-storage-chain-audit.md) retains historical evidence and coverage limits |
 | How should the Web storage validation environment be prepared? | [Environment preparation](plan/web-storage-validation-environment.md) — reuse existing services first; separate test database for a second API, separate instance for instance faults; real-chain acceptance pending |
@@ -161,6 +162,7 @@ second set of commands:
 - `CONTEXT.md`: domain glossary only; it must not contain implementation or planning details;
 - `docs/design/investment-research-workbench-prd.md`: Web interaction expression of approved requirements, not a second product backlog;
 - `docs/design/web-business-data-prd.md`: delegated interaction, persistence contracts, and acceptance detail for product requirements §4.7; no separate scope/status ledger;
+- `docs/design/monitoring-technical-plan.md`: monitoring production architecture, module interfaces, research experiments, and release gates; product behavior remains owned by the PRD;
 - `docs/plan/`: implementation sequence and progress only; plans must link to requirement IDs rather than redefining them;
 - `docs/plan/README.md`: status index for active, implemented, historical, and invalidated plans;
 - `docs/install/`: environment-specific installation and deployment;

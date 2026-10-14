@@ -1,0 +1,16 @@
+{
+  "pool_size": 110,
+  "ledger": {
+    "tp": 20,
+    "correct_extra": 36,
+    "fp_includes_duplicates": 54,
+    "duplicate_fp_subset": 3,
+    "fn": 0
+  },
+  "precision_implemented": "28/55 = 0.5091",
+  "precision_contract_text": "56/110 = 0.5091",
+  "precision_if_duplicate_added_again": "56/113 = 0.4956",
+  "implementation_equals_contract": true,
+  "fp_equals_incorrect_plus_duplicate": true,
+  "conclusion": "评分器 precision 已等于契约文字公式（fp 已含 duplicate）；C2 的『实现分歧』是读数错误，补加 duplicate_fp 会造成重复计数"
+}

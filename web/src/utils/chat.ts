@@ -1,5 +1,40 @@
 import type { Turn } from '@/types'
 
+export interface SubmittedConversationRun {
+  sessionId: string
+  runId: string
+  message: string
+}
+
+interface SubmittedRunActions {
+  appendTurn: (turn: Turn) => void
+  rememberRun: (sessionId: string, runId: string) => void
+  watchRun: (runId: string, sessionId: string) => void
+}
+
+/**
+ * Attach a run created by a secondary UI (for example, the trade-fill dialog)
+ * to the same transcript and live stream used by the main composer.
+ */
+export function attachSubmittedRun(
+  submission: SubmittedConversationRun,
+  activeSessionId: string | null,
+  activeTurns: readonly Turn[],
+  actions: SubmittedRunActions,
+): boolean {
+  if (activeSessionId !== submission.sessionId) return false
+  actions.appendTurn({
+    seq: (activeTurns.at(-1)?.seq ?? 0) + 1,
+    role: 'user',
+    content: submission.message,
+    run_id: null,
+    created_at: null,
+  })
+  actions.rememberRun(submission.sessionId, submission.runId)
+  actions.watchRun(submission.runId, submission.sessionId)
+  return true
+}
+
 /** Compare UUIDs across the API's compact and canonical string forms. */
 export function sameRunId(left: string | null | undefined, right: string | null | undefined): boolean {
   if (!left || !right) return false

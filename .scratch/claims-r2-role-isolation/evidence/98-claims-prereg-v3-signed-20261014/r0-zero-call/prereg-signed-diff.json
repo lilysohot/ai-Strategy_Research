@@ -1,0 +1,59 @@
+{
+  "draft": {
+    "path": "evidence/95-claims-prereg-20261014/r0-zero-call/claims-preregistration.json",
+    "sha256": "443df86f559f973efa7d43fa636390463b0a5538922f19d1ef9c452157c7c657"
+  },
+  "signed": {
+    "path": "evidence/98-claims-prereg-v3-signed-20261014/r0-zero-call/claims-preregistration.json",
+    "sha256": "sha256:0cfefc79f6adaa99f640a7cd70038bb903d5e49cc6213fd4462b81a5f8e639c0"
+  },
+  "changed_leaf_paths": [
+    "status"
+  ],
+  "added_leaf_paths": [
+    "countersignature",
+    "signed_from"
+  ],
+  "removed_leaf_paths": [],
+  "expected_changed": [
+    "status"
+  ],
+  "expected_added": [
+    "countersignature",
+    "signed_from"
+  ],
+  "expected_removed": [],
+  "unexpected_changed": [],
+  "unexpected_added": [],
+  "unexpected_removed": [],
+  "instrument_drift": {
+    "pre_signature_sha256": "8ff7704843bf10e46f230bf974ed6fd29b0575c770342cda8b66c0c4875d45e3",
+    "signed_sha256": "c569c07327e6e39043f7798b5d9207ba38ed4ed1a872f51f043456fa687bfc6b",
+    "note": "签认件在草案 MANIFEST 写盘后被 U 填入签名 ⇒ 两哈希必然不同；草案 MANIFEST 未改。"
+  },
+  "signature": {
+    "reviewer": "xyl",
+    "adjudicator": "xyl",
+    "signed_on_literal": "2026-10=14",
+    "signed_on_normalised": "2026-10-14"
+  },
+  "verdict": {
+    "status": "frozen_before_execution",
+    "reading_axes_in_verdict": [
+      "candidate_precision",
+      "target_recall",
+      "unresolved_candidates",
+      "sentinels"
+    ],
+    "release_line_91": "无条件 PASS（见 prior_record_readings）",
+    "treatments_in_force": [
+      "T1_no_opinion",
+      "T2_unbound_disposition",
+      "T3_dedupe_tie_break",
+      "T4_missing_field_must_be_labelled"
+    ],
+    "budget_ceiling": null,
+    "runnable": false,
+    "runnable_note": "预算 ceiling 未填 ⇒ 尚未起跑条件"
+  }
+}

@@ -90,6 +90,7 @@ def request_view(
     collected = dict(row.collected_json or {})
     submitted = {f"{group}.{name}" for group, values in collected.items() for name in values}
     requested = _field_names(row.fields_json or [])
+    resolution_reason = (row.continuation_json or {}).get("resolution_reason")
     return {
         "id": str(row.id),
         "research_id": str(row.research_id),
@@ -98,12 +99,13 @@ def request_view(
         "follow_up_run_id": row.follow_up_run_id.hex if row.follow_up_run_id else None,
         "use_case": row.use_case,
         "status": row.status,
+        "resolution_reason": resolution_reason,
         "revision": row.revision,
         "fields": list(row.fields_json or []),
         "known_versions": dict(row.known_versions_json or {}),
         "current_versions": current_versions or dict(row.known_versions_json or {}),
         "collected": collected,
-        "remaining_fields": sorted(requested - submitted),
+        "remaining_fields": [] if resolution_reason == "facts_updated" else sorted(requested - submitted),
         "expires_at": row.expires_at.isoformat() if row.expires_at else None,
         "created_at": row.created_at.isoformat() if row.created_at else None,
         "updated_at": row.updated_at.isoformat() if row.updated_at else None,
@@ -934,6 +936,7 @@ async def list_requests(
     offset: int,
 ) -> tuple[list[store.InputRequest], int]:
     await expire_due(session, user_id=user_id)
+    await reconcile_satisfied_requests(session, user_id=user_id, research_id=research_id)
     filters = [store.InputRequest.user_id == user_id]
     if research_id is not None:
         filters.append(store.InputRequest.research_id == research_id)
@@ -956,3 +959,48 @@ async def list_requests(
         .all()
     )
     return list(rows), int(total)
+
+
+async def reconcile_satisfied_requests(
+    session: AsyncSession, *, user_id: uuid.UUID,
+    research_id: uuid.UUID | None = None, request_id: uuid.UUID | None = None,
+) -> None:
+    """Retire obsolete forms after separately saved facts; never invent answers or Runs."""
+    filters = [store.InputRequest.user_id == user_id, store.InputRequest.status == PENDING,
+               store.InputRequest.use_case == "plan_analysis"]
+    if research_id is not None:
+        filters.append(store.InputRequest.research_id == research_id)
+    if request_id is not None:
+        filters.append(store.InputRequest.id == request_id)
+    rows = (await session.execute(select(store.InputRequest).where(*filters))).scalars().all()
+    for row in rows:
+        try:
+            spec = await _spec_from_research_link(
+                session, user_id=user_id, research_id=row.research_id, use_case=row.use_case,
+            )
+            previous = (row.continuation_json or {}).get("investment_input") or {}
+            # A different account/plan does not answer a request about the old object.
+            if any((previous.get(group) or {}).get("id")
+                   and (ref is None or str(ref.id) != str(previous[group]["id"]))
+                   for group, ref in (("account", spec.account), ("plan", spec.plan))):
+                continue
+            resolution = await snapshots.resolve_for_run(
+                session, user_id=user_id, research_id=row.research_id, spec=spec,
+            )
+        except biz.BusinessError:
+            continue
+        present = {name for name, value in resolution.values.items()
+                   if value.get("status") in {"user_provided", "resolved"}
+                   and value.get("value") is not None}
+        requested = _field_names(row.fields_json or [])
+        if resolution.missing or not requested or not requested <= present:
+            continue
+        continuation = {**(row.continuation_json or {}), "resolution_reason": "facts_updated",
+                        "resolution_note": "当前资料已补齐；原请求关闭，历史执行快照保留。"}
+        # Compare status AND revision after lock wait so an answer cannot be overwritten.
+        await session.execute(update(store.InputRequest).where(
+            store.InputRequest.id == row.id, store.InputRequest.user_id == user_id,
+            store.InputRequest.status == PENDING, store.InputRequest.revision == row.revision,
+        ).values(status=CANCELLED, cancelled_at=_now(), revision=row.revision + 1,
+                 continuation_json=continuation))
+    await session.flush()

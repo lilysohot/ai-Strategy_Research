@@ -1,0 +1,591 @@
+{
+  "schema_version": "claims-gate-v2-preregistration-1",
+  "status": "draft_pending_human_signature",
+  "created_on": "2026-10-14",
+  "role": "claims",
+  "zero_model_calls": true,
+  "purpose": "口径先行、双线登记、不可恢复样本分类登记的 claims 度量基准（取代 83 号 v1 草案）",
+  "supersedes": {
+    "path": "evidence/83-claims-scope-gate-draft-20261014/r0-zero-call/claims-gate-v1.proposed.json",
+    "sha256": "28f19286cbe9c72e298c6ba05625d6ca1f24159c3321ce652e72cc50bdfa1f4c",
+    "status_at_supersede": "draft_pending_human_signature",
+    "note": "v2 不改 83 号任何字节；83 号 signoff md 的签署栏与其 JSON/MANIFEST 不一致，该不一致由 U 处置，v2 不以 83 号的签字状态为前提"
+  },
+  "invariants": [
+    "不改 frozen-gold.json 字节",
+    "不改 P1R5 candidate-adjudications.signed / claims-gate-result.signed 字节",
+    "不改 items 门 v3 / 契约 v4.3 字节",
+    "哨兵清单 == 契约 review_assertions 的 NT-C* 子集",
+    "零模型调用、零生产库访问"
+  ],
+  "frozen_inputs": {
+    "frozen_gold": "603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    "items_gate_v3": "340b312d9c0cec278e828d8303a03e9daf953feef4c0eef688f3d257971a9732",
+    "scoring_contract_v4.3": "d7b4f8a81ef42e3cd5d619eae92bc34df7b7aa683d34aeba4f1a22719ae69a2f",
+    "p1r5_candidate_adjudications_signed": "d12f3d276dc17d2ff5bb5455b78bc4da75b43c191d498af59d2aea61238b38a8",
+    "claims_gate_v1_proposed_superseded": "28f19286cbe9c72e298c6ba05625d6ca1f24159c3321ce652e72cc50bdfa1f4c",
+    "claims_coverage_v1_superseded": "a75ed8d16b76dbac77549ab02881d1c8a1be007ea25188ed51c5e8697d6b16d3"
+  },
+  "gold": {
+    "path": "evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json",
+    "role": "claims",
+    "target_total": 20,
+    "record_ids": [
+      "NT-C01",
+      "NT-C02",
+      "NT-C03",
+      "NT-C04",
+      "NT-C05",
+      "NT-C06",
+      "NT-C07",
+      "NT-C08",
+      "NT-C09",
+      "NT-C10",
+      "NT-C11",
+      "NT-C12",
+      "NT-C13",
+      "NT-C14",
+      "NT-C15",
+      "NT-C16",
+      "NT-C17",
+      "NT-C18",
+      "NT-C19",
+      "NT-C20"
+    ],
+    "evaluation_scope": "selected_target_recall_not_exhaustive_document_gold"
+  },
+  "candidate_pool": {
+    "path": "evidence/17-structured-extraction-convergence-closure-20261009/p1r5-claims-adjudication-v2/candidate-adjudications.signed.json",
+    "sha256": "d12f3d276dc17d2ff5bb5455b78bc4da75b43c191d498af59d2aea61238b38a8",
+    "total": 110,
+    "judgements": {
+      "matched": 20,
+      "correct_extra": 36,
+      "incorrect": 51,
+      "duplicate": 3
+    },
+    "unresolved": 0,
+    "reviewer": "xyl",
+    "distinct_source_spans": 19
+  },
+  "calibers": {
+    "D1_all_candidates": {
+      "rule": "不重分类，全部 110 条入围（83 号草案的现口径）",
+      "decision": "baseline_only",
+      "kept_candidates": 110,
+      "judgements": {
+        "matched": 20,
+        "correct_extra": 36,
+        "incorrect": 51,
+        "duplicate": 3
+      },
+      "precision_contract_formula": {
+        "numerator": 56,
+        "denominator": 110,
+        "value": 0.5091,
+        "display": "56/110 = 0.5091"
+      },
+      "precision_scorer_implemented_formula": {
+        "numerator": 56,
+        "denominator": 107,
+        "value": 0.5234,
+        "display": "56/107 = 0.5234"
+      },
+      "target_recall": {
+        "numerator": 20,
+        "denominator": 20,
+        "value": 1.0,
+        "display": "20/20 = 1.0000"
+      },
+      "per_source_precision": {
+        "dca4bad7f85b": {
+          "numerator": 21,
+          "denominator": 34,
+          "value": 0.6176,
+          "display": "21/34 = 0.6176"
+        },
+        "f16e7fde9553": {
+          "numerator": 35,
+          "denominator": 76,
+          "value": 0.4605,
+          "display": "35/76 = 0.4605"
+        }
+      }
+    },
+    "D2_in_role_only": {
+      "rule": "claims 角色范围＝指标断言：剔除 kind=='opinion' 或 value_text 为空的候选（剔出项须在 R2 侧登记覆盖）",
+      "decision": "pending_human_decision",
+      "kept_candidates": 81,
+      "judgements": {
+        "matched": 20,
+        "correct_extra": 31,
+        "incorrect": 27,
+        "duplicate": 3
+      },
+      "precision_contract_formula": {
+        "numerator": 51,
+        "denominator": 81,
+        "value": 0.6296,
+        "display": "51/81 = 0.6296"
+      },
+      "precision_scorer_implemented_formula": {
+        "numerator": 51,
+        "denominator": 78,
+        "value": 0.6538,
+        "display": "51/78 = 0.6538"
+      },
+      "target_recall": {
+        "numerator": 20,
+        "denominator": 20,
+        "value": 1.0,
+        "display": "20/20 = 1.0000"
+      },
+      "per_source_precision": {
+        "dca4bad7f85b": {
+          "numerator": 18,
+          "denominator": 25,
+          "value": 0.72,
+          "display": "18/25 = 0.7200"
+        },
+        "f16e7fde9553": {
+          "numerator": 33,
+          "denominator": 56,
+          "value": 0.5893,
+          "display": "33/56 = 0.5893"
+        }
+      }
+    },
+    "D3_in_role_and_coordinate_complete": {
+      "rule": "D2 再叠加坐标齐备（reason_codes 不含 period/unit/value/metric 缺项码）",
+      "decision": "pending_human_decision",
+      "warning": "实测吃掉 8/20 命中目标 ⇒ 不可作为召回口径",
+      "kept_candidates": 36,
+      "judgements": {
+        "matched": 12,
+        "correct_extra": 14,
+        "incorrect": 7,
+        "duplicate": 3
+      },
+      "precision_contract_formula": {
+        "numerator": 26,
+        "denominator": 36,
+        "value": 0.7222,
+        "display": "26/36 = 0.7222"
+      },
+      "precision_scorer_implemented_formula": {
+        "numerator": 26,
+        "denominator": 33,
+        "value": 0.7879,
+        "display": "26/33 = 0.7879"
+      },
+      "target_recall": {
+        "numerator": 12,
+        "denominator": 20,
+        "value": 0.6,
+        "display": "12/20 = 0.6000"
+      },
+      "per_source_precision": {
+        "dca4bad7f85b": {
+          "numerator": 13,
+          "denominator": 13,
+          "value": 1.0,
+          "display": "13/13 = 1.0000"
+        },
+        "f16e7fde9553": {
+          "numerator": 13,
+          "denominator": 23,
+          "value": 0.5652,
+          "display": "13/23 = 0.5652"
+        }
+      }
+    },
+    "D4_similarity_scoped_v1_draft_option": {
+      "rule": "83 号草案 B/C：按『与全部 92 条金标相似度 <0.15』（＋跨角色 9 条）移出分母",
+      "decision": "recommended_reject",
+      "reject_basis": "该规则按与金标的相似度定义分母，实测删 0 条 matched ⇒ 只删负例不删正例；且与契约 scope_rules『范围内未命中金标必须裁定』冲突",
+      "no_coverage_removed": 36,
+      "cross_role_removed": 9,
+      "precision_contract_formula": {
+        "numerator": 56,
+        "denominator": 65,
+        "value": 0.8615,
+        "display": "56/65 = 0.8615"
+      },
+      "precision_scorer_implemented_formula": {
+        "numerator": 56,
+        "denominator": 62,
+        "value": 0.9032,
+        "display": "56/62 = 0.9032"
+      }
+    }
+  },
+  "false_positive_decomposition": {
+    "incorrect_total": 51,
+    "role_external": {
+      "count": 24,
+      "criterion": "kind=='opinion' 或 value_text 为空",
+      "handling": "移出 claims 判据 + 在 R2/items 侧登记覆盖；不判通过、不改候选"
+    },
+    "coordinate_unbound": {
+      "count": 20,
+      "criterion": "in-role 且 reason_codes 命中坐标码",
+      "handling": "不得移出：属抽取/绑定缺陷，计入修复目标与 FP",
+      "reason_code_histogram": {
+        "period_missing": 17,
+        "period_ambiguous": 13,
+        "period_unanchored": 9,
+        "period_not_in_packet": 9,
+        "time_invalid": 8,
+        "unit_missing": 6,
+        "unit_unknown": 4,
+        "value_missing": 3,
+        "value_not_in_evidence": 4,
+        "metric_missing": 0
+      }
+    },
+    "structurally_complete_nonmatch": {
+      "count": 7,
+      "criterion": "in-role、坐标齐备、仍被裁定 incorrect",
+      "handling": "按契约 metrics.duplicates 计入 FP；重复渲染应回抽取侧收敛",
+      "samples": [
+        "工业富联GPU/ASIC机柜出货量增长3.2倍",
+        "工业富联GPU/ASIC机柜出货量增长3倍",
+        "工业富联少数股东权益为0.086亿",
+        "工业富联净利润为237.49亿",
+        "工业富联短贷滚动中借入短贷960亿",
+        "工业富联短贷滚动中归还短贷951亿",
+        "工业富联在2026-08-28的成交额为103.15亿元"
+      ]
+    }
+  },
+  "field_carriers": {
+    "subject": {
+      "carrier": "candidate.subject",
+      "count_out_of": [
+        108,
+        110
+      ],
+      "status": "has_carrier",
+      "requires": "caliber_normalization"
+    },
+    "metric": {
+      "carrier": "candidate.metric",
+      "count_out_of": [
+        102,
+        110
+      ],
+      "status": "has_carrier",
+      "requires": "caliber_normalization"
+    },
+    "period": {
+      "carrier": "candidate.period_raw",
+      "count_out_of": [
+        74,
+        110
+      ],
+      "status": "has_carrier",
+      "requires": "caliber_normalization"
+    },
+    "unit": {
+      "carrier": "candidate.unit_raw",
+      "count_out_of": [
+        80,
+        110
+      ],
+      "status": "has_carrier",
+      "requires": "caliber_normalization"
+    },
+    "value": {
+      "carrier": "candidate.value_text",
+      "count_out_of": [
+        97,
+        110
+      ],
+      "status": "has_carrier",
+      "requires": "caliber_normalization"
+    },
+    "factuality": {
+      "carrier": "candidate.kind",
+      "count_out_of": [
+        110,
+        110
+      ],
+      "status": "has_carrier",
+      "requires": "caliber_normalization"
+    },
+    "attribution": {
+      "carrier": "none",
+      "count_out_of": [
+        0,
+        110
+      ],
+      "status": "no_carrier",
+      "requires": "pending_human_decision"
+    },
+    "perspective": {
+      "carrier": "none",
+      "count_out_of": [
+        0,
+        110
+      ],
+      "status": "no_carrier",
+      "requires": "pending_human_decision"
+    },
+    "source_stance": {
+      "carrier": "none",
+      "count_out_of": [
+        0,
+        110
+      ],
+      "status": "no_carrier",
+      "requires": "pending_human_decision"
+    },
+    "estimate_status": {
+      "carrier": "none",
+      "count_out_of": [
+        0,
+        110
+      ],
+      "status": "no_carrier",
+      "requires": "pending_human_decision"
+    },
+    "qualifier": {
+      "carrier": "candidate.qualifiers",
+      "count_out_of": [
+        109,
+        110
+      ],
+      "status": "has_carrier",
+      "requires": "caliber_normalization"
+    }
+  },
+  "domain_mismatch": {
+    "factuality": {
+      "candidate_field": "kind",
+      "candidate_domain": {
+        "fact": 68,
+        "forecast": 18,
+        "opinion": 24
+      },
+      "gold_domain": [
+        "actual",
+        "forecast"
+      ],
+      "issue": "候选 fact/forecast/opinion vs 金标 actual/forecast：词表不同轴且金标无 opinion；candidate 的 opinion 属角色外，fact→actual 属读路径归一化"
+    }
+  },
+  "sentinels": {
+    "invariant": "哨兵清单 == 已签契约 review_assertions 的 NT-C* 子集（与 items 门 v3 同构的不变量）",
+    "contract_subset_required": [
+      "NT-C11",
+      "NT-C12",
+      "NT-C13"
+    ],
+    "measured_hit": {
+      "NT-C11": true,
+      "NT-C12": true,
+      "NT-C13": true
+    },
+    "v1_draft_proposed_ids": [
+      "NT-C01",
+      "NT-C03",
+      "NT-C08",
+      "NT-C11",
+      "NT-C12",
+      "NT-C13"
+    ],
+    "v1_extra_beyond_contract": [
+      "NT-C01",
+      "NT-C03",
+      "NT-C08"
+    ],
+    "note": "v1 额外 3 条（NT-C01/C03/C08）由 agent 自定 proposal_rule 生成，未与契约对齐；签下去等于新造第二份哨兵源"
+  },
+  "thresholds": {
+    "target_line": {
+      "status": "unchanged_from_items_gate_v3（六项阈值逐字沿用）",
+      "target_recall_overall_min": 0.85,
+      "target_recall_per_source_min": 0.8,
+      "candidate_precision_min": 0.8,
+      "unresolved_candidates_max": 0,
+      "sentinels_required": [
+        "NT-C11",
+        "NT-C12",
+        "NT-C13"
+      ],
+      "granularity_warning": "目标只有 20 条 ⇒ 0.85 ≙ 17/20，每错 1 条 −5.0pp",
+      "measured_verdict_on_frozen_pool": "FAIL（D1 精度 0.509/0.523；D2 精度 0.630）"
+    },
+    "release_line": {
+      "status": "pending_human_decision",
+      "purpose": "放行线（功能线）：只用于判断『可交付/需更换路线』，不等于质量达标；与目标线并存登记，禁止用放行线通过宣称质量达标",
+      "preregistration_rule": "必须在看到本轮分数之前具名登记；已看到分数再定值即为事后拟合",
+      "candidates": {
+        "D1_basis_0.50": {
+          "basis": "D1 分母 110",
+          "numerator": 56,
+          "denominator": 110,
+          "value": 0.5091,
+          "display": "56/110 = 0.5091",
+          "decision": "pending_human_decision"
+        },
+        "D2_basis_0.60": {
+          "basis": "D2 分母 81",
+          "numerator": 51,
+          "denominator": 81,
+          "value": 0.6296,
+          "display": "51/81 = 0.6296",
+          "decision": "pending_human_decision"
+        }
+      },
+      "tolerance_table": {
+        "D2_line_0.60": 4,
+        "D2_line_0.55": 11,
+        "D1_line_0.50": 2
+      },
+      "per_source_floor": {
+        "measured_D2": {
+          "dca4bad7f85b": {
+            "numerator": 18,
+            "denominator": 25,
+            "value": 0.72,
+            "display": "18/25 = 0.7200"
+          },
+          "f16e7fde9553": {
+            "numerator": 33,
+            "denominator": 56,
+            "value": 0.5893,
+            "display": "33/56 = 0.5893"
+          }
+        },
+        "note": "分源 0.80 在 D2 下同样不可达（源1 0.589）；分源下限须与总线下调同轮登记",
+        "decision": "pending_human_decision"
+      }
+    },
+    "reachability_on_frozen_pool": {
+      "D1_all_candidates": {
+        "max_achievable_precision": 0.5091,
+        "note": "分子已固定（matched+correct_extra 不可增），分母不再增大的前提下这是上限"
+      },
+      "D2_in_role_only": {
+        "max_achievable_precision": 0.6296,
+        "note": "分子已固定（matched+correct_extra 不可增），分母不再增大的前提下这是上限"
+      },
+      "D3_in_role_and_coordinate_complete": {
+        "max_achievable_precision": 0.7222,
+        "note": "分子已固定（matched+correct_extra 不可增），分母不再增大的前提下这是上限"
+      }
+    }
+  },
+  "unrecoverable_sample_policy": {
+    "principle": "金标与候选字节均冻结、不等价样本不硬通过；处置只允许『分类登记 → 移出判据 → 在应承担角色登记覆盖』，禁止改判为 matched、禁止改金标/候选、禁止为过门而调相似度阈值",
+    "precedent": {
+      "items_side_signed": "契约 v4.3 review_assertions_excluded 5 条（NT-I09/I19 gold_split_finer_than_candidate；NT-I45/I46/I47 candidate_side_cannot_carry_axis）",
+      "gate_side_signed": "门 v3 哨兵 16 → 11，六项阈值逐字未改"
+    },
+    "claims_side_registration_required": [
+      "角色外候选（opinion/无值）移出 claims 判据时，必须在 material_items/relations 侧登记为待覆盖",
+      "无载体必需字段（attribution/perspective/source_stance/estimate_status）按 items 先例登记 human_only 或 excluded_from_matching_basis，不得设默认值",
+      "凡移出项须逐条给出机制、理由、裁定人与生效版本；不得批量按相似度移出"
+    ],
+    "forbidden": [
+      "把不等价候选改判 matched",
+      "编辑 frozen-gold.json / P1R5 已签裁定 / 契约 v4.3 / 门 v3 字节",
+      "用放行线通过替代质量线结论"
+    ]
+  },
+  "open_decisions": [
+    {
+      "id": "C1-候选范围口径",
+      "question": "分母取材料范围（全部候选）还是 claims 角色范围（指标断言）？",
+      "measured": {
+        "D1": "56/110 = 0.5091",
+        "D2": "51/81 = 0.6296",
+        "D3_recall_cost": "12/20 = 0.6000"
+      }
+    },
+    {
+      "id": "C2-duplicate 是否计入分母",
+      "question": "契约文字分母含 duplicate、评分器实现分母不含；取哪个为单一口径？",
+      "measured": {
+        "contract_text_formula": "56/110 = 0.5091",
+        "implemented_formula": "56/107 = 0.5234",
+        "cross_ref_effect": "仅此一处定义即可无系统改动地把 0.509 变 0.523（及 D2 0.630 变 0.642）"
+      }
+    },
+    {
+      "id": "C3-无载体字段读路径",
+      "question": "四个零载体字段（实测 0/110）补载体还是登记读路径？",
+      "measured": {
+        "no_carrier_fields": [
+          "attribution",
+          "perspective",
+          "source_stance",
+          "estimate_status"
+        ],
+        "factuality_domain": {
+          "fact": 68,
+          "forecast": 18,
+          "opinion": 24
+        }
+      }
+    },
+    {
+      "id": "C4-用途分级（原 OPEN-D）",
+      "question": "compare/calculate 是否仍受 evidence_pipeline.py:404『零 reason』全或无约束？",
+      "measured": {
+        "correct_records_with_reason": "45/56 ⇒ 现规则下仅 11 条可 compare/calculate",
+        "reason_as_hard_gate_cost": "D3 召回 12/20 ⇒ reason 太粗，不能当匹配门"
+      }
+    },
+    {
+      "id": "C5-放行线数值与分源下限",
+      "question": "是否新增放行线（功能线）、取哪一档、分源下限取多少？",
+      "measured": {
+        "D2_measured": "51/81 = 0.6296",
+        "per_source": {
+          "dca4bad7f85b": {
+            "numerator": 18,
+            "denominator": 25,
+            "value": 0.72,
+            "display": "18/25 = 0.7200"
+          },
+          "f16e7fde9553": {
+            "numerator": 33,
+            "denominator": 56,
+            "value": 0.5893,
+            "display": "33/56 = 0.5893"
+          }
+        }
+      }
+    },
+    {
+      "id": "C6-目标线不可达的登记方式",
+      "question": "冻结池上 0.80/源0.80 不可达，是登记为『已登记不可达』还是授权重跑新池？",
+      "measured": {
+        "D1_all_candidates": {
+          "max_achievable_precision": 0.5091,
+          "note": "分子已固定（matched+correct_extra 不可增），分母不再增大的前提下这是上限"
+        },
+        "D2_in_role_only": {
+          "max_achievable_precision": 0.6296,
+          "note": "分子已固定（matched+correct_extra 不可增），分母不再增大的前提下这是上限"
+        },
+        "D3_in_role_and_coordinate_complete": {
+          "max_achievable_precision": 0.7222,
+          "note": "分子已固定（matched+correct_extra 不可增），分母不再增大的前提下这是上限"
+        }
+      }
+    }
+  ],
+  "not_in_scope": [
+    "不执行模型调用、不写生产 PG、不重跑抽取（候选池冻结）",
+    "不发布、不进入 query/delivery/context_use/M_main 消费"
+  ],
+  "signoff": {
+    "reviewer": null,
+    "adjudicator": null,
+    "signed_on": null,
+    "instrument": "claims-gate-v2-signoff.md"
+  }
+}

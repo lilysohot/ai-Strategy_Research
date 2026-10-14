@@ -17,11 +17,13 @@ from typing import TYPE_CHECKING, Literal, cast
 from pydantic import BaseModel, ConfigDict
 
 from plugins.corpus._semantic_validation import prose_binding_reasons
+from plugins.corpus.claim_use_axes import uses_for
 from plugins.corpus.claims import LlmCallError, LlmFn, LlmResponse, parse_value
 from plugins.corpus.claims_binding import (
     CLAIMS_SLOT_PROTOCOL_VERSION,
     bind_claim_coordinates,
     build_claim_candidate_slots,
+    recover_packet_coordinates,
     slot_prompt_payload,
     validate_slot_outcomes,
 )
@@ -32,6 +34,7 @@ from plugins.corpus.claims_detail import (
     apply_lint,
     build_prompt_v2,
     classify_doc_kind_detail,
+    is_claims_scope_candidate,
     parse_claims_json_detail,
     records_from_payload,
     triage_block_detail,
@@ -401,8 +404,13 @@ def _fact(
             for number, unit in pairs
         ):
             reasons.append("value_unit_pair_not_in_quote")
-    if record.kind != "opinion" and record.value_num is not None and not reasons:
-        usable.extend(["compare", "calculate"])
+    # Signed C4 (contract v4.4): uses are withdrawn **by axis**, not all-or-nothing. ``cite`` was
+    # granted above; the axis table decides whether compare/calculate may follow.
+    usable.extend(
+        use
+        for use in uses_for(reasons, kind=record.kind, has_value=record.value_num is not None)
+        if use != "cite" and use not in usable
+    )
     semantic_reasons = [
         reason
         for reason in reasons
@@ -555,6 +563,116 @@ def _mark_conflicts(facts: list[EvidenceFact]) -> list[EvidenceFact]:
     return facts
 
 
+def _render_norm(text: str | None) -> str:
+    """归一到预注册口径：只保留数字/字母/汉字/百分号，忽略标点与空白。"""
+    return re.sub(r"[^0-9a-zA-Z\u4e00-\u9fff%]", "", text or "").lower()
+
+
+def _render_key(record: ClaimRecord) -> tuple[str, str, str, str]:
+    """重复渲染的分组键：subject+metric+引用区间**+kind**。
+
+    kind 必须留在键里：同一坐标上 fact 与 forecast 并存是既有 ``conflicting_fact_kinds``
+    冲突（_mark_conflicts 会把它降为 cite-only），不是「同一句话渲染两次」；把它一并合掉会
+    静默消掉一条禁止计算的护栏（``duplicate_identity`` 探针即此形状）。
+    """
+    return (
+        _render_norm(record.subject),
+        _render_norm(record.metric),
+        _render_norm(record.evidence_quote)[:80],
+        record.kind,
+    )
+
+
+def _rendering_rank(index: int, claim: ClaimRecord) -> tuple[int, int, int]:
+    """预注册的并列优先级：坐标更完整 > value 与引用一致 > 文件序（不看金标、不看裁定）。"""
+    missing = sum(
+        1
+        for field_ in ("subject", "metric", "period_raw", "unit_raw")
+        if not getattr(claim, field_)
+    )
+    value_consistent = (
+        0 if (claim.value_text and claim.value_text in (claim.evidence_quote or "")) else 1
+    )
+    return (missing, value_consistent, index)
+
+
+def _merge_repeated_facts(
+    facts: list[EvidenceFact],
+) -> tuple[list[EvidenceFact], dict[str, object]]:
+    """T3：同一 subject+metric+引用区间的多次渲染合并为一条（**跨 packet**，与预注册口径一致）。
+
+    同一句话被两个 source block 各渲染一次正是这一族缺陷的成因，所以分组键不按 packet 切。
+    并列优先级用预注册的确定性规则（坐标更完整 > value 与引用一致 > 文件序），禁用金标；
+    载重实例：``归母净利润`` 那组的 duplicate 行缺 ``period_raw``，第一档即保住 matched 行。
+    """
+    groups: dict[tuple[str, str, str, str], list[int]] = {}
+    for index, fact in enumerate(facts):
+        groups.setdefault(_render_key(fact.claim), []).append(index)
+    keep: set[int] = set()
+    by_kept_packet: dict[str, int] = {}
+    detail: list[dict[str, object]] = []
+    merged = 0
+    for key, indexes in groups.items():
+        if len(indexes) == 1:
+            keep.add(indexes[0])
+            continue
+        chosen = min(indexes, key=lambda i: _rendering_rank(i, facts[i].claim))
+        keep.add(chosen)
+        dropped = [i for i in indexes if i != chosen]
+        merged += len(dropped)
+        packet_id = facts[chosen].packet_id
+        by_kept_packet[packet_id] = by_kept_packet.get(packet_id, 0) + len(dropped)
+        detail.append(
+            {
+                "key": list(key),
+                "kept_packet_id": packet_id,
+                "kept_value_text": facts[chosen].claim.value_text,
+                "dropped_packet_ids": [facts[i].packet_id for i in dropped],
+                "dropped_value_texts": [facts[i].claim.value_text for i in dropped],
+            }
+        )
+    ordered = [facts[index] for index in sorted(keep)]
+    summary: dict[str, object] = {
+        "groups": len(detail),
+        "merged_facts": merged,
+        "by_kept_packet": by_kept_packet,
+        "detail": detail,
+    }
+    return ordered, summary
+
+
+def apply_production_rules(
+    records: list[ClaimRecord],
+    packet: EvidencePacket,
+    document: EvidenceDocument,
+) -> tuple[list[EvidenceFact], dict[str, object]]:
+    """产出侧的预注册治疗规则：本函数负责 **T2** 与 **T1**；**T3** 在收齐全部事实后单独执行。
+
+    * **T2** 坐标补齐在 packet 级完成——载体只能是同 packet 的兄弟记录，离开 packet 就没有可指认的载具；
+    * **T1** 必须在 ``bind_claim_coordinates`` **之后**判定：分类状态值（``unit="status"``）是 bind
+      补出来的，提前过滤会误杀合法记录；
+    * **T3** 的合并键跨 packet（同一句话可能被两个 source block 各渲染一次），因此它在
+      ``extract_evidence`` 收齐事实后由 ``_merge_repeated_facts`` 执行。
+    """
+    recovered, recovery_notes = recover_packet_coordinates(records)
+    facts: list[EvidenceFact] = []
+    excluded = 0
+    for record in recovered:
+        fact = _fact(record, packet, document)
+        if not is_claims_scope_candidate(fact.claim):
+            excluded += 1
+            continue
+        facts.append(fact)
+    notes: dict[str, object] = {
+        "records_in": len(records),
+        "records_kept": len(facts),
+        "t1_excluded_role_external": excluded,
+    }
+    if any(recovery_notes.values()):
+        notes["t2_recovered"] = recovery_notes
+    return facts, notes
+
+
 def extract_evidence(
     document: EvidenceDocument,
     *,
@@ -664,7 +782,10 @@ def extract_evidence(
                     diagnostics = dict(exc.diagnostics)
                     error_type = diagnostics.get("error_type", type(exc).__name__)
                     reasons = (f"extraction_error:{error_type}",)
-        facts.extend(_fact(record, packet, document) for record in records)
+        produced, production_notes = apply_production_rules(records, packet, document)
+        facts.extend(produced)
+        if production_notes["records_in"]:
+            diagnostics = {**(diagnostics or {}), "production_rules": production_notes}
         run = PacketRun(
             packet_id=packet.packet_id,
             status=status,
@@ -676,6 +797,23 @@ def extract_evidence(
         runs.append(run)
         if on_packet:
             on_packet(run)
+    facts, dedupe = _merge_repeated_facts(facts)
+    merged_into = dedupe.get("by_kept_packet")
+    if isinstance(merged_into, dict) and merged_into:
+        # T3 跨 packet 合并：把「并入本 packet 的条数」记在保留行的 packet run 上，保持逐包可核。
+        runs = [
+            run.model_copy(
+                update={
+                    "diagnostics": {
+                        **(run.diagnostics or {}),
+                        "t3_dedupe_merged_here": merged_into[run.packet_id],
+                    }
+                }
+            )
+            if run.packet_id in merged_into
+            else run
+            for run in runs
+        ]
     result = EvidenceRun(
         run_id="",
         document=document,

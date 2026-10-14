@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import re
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from enum import StrEnum
 from fractions import Fraction
@@ -198,7 +198,19 @@ class RoleMetrics:
 
     @property
     def precision(self) -> Fraction | None:
-        """Precision, or ``None`` when no candidate was produced."""
+        """Precision, or ``None`` when no candidate was produced.
+
+        ``fp`` already includes duplicates: both matchers append DUPLICATE candidates to
+        ``false_positive_ids`` (``_match_by_identity``, ``_match_by_adjudication``), and
+        ``duplicate_fp`` is a *subset* counter used for diagnosis. The denominator is therefore
+        ``numerator + fp``, which is exactly the contract's duplicate-inclusive
+        ``(matched + correct_extra) / (matched + correct_extra + incorrect + duplicate)``.
+
+        Do not add ``duplicate_fp`` here: the 2026-10-14 claims draft C2 read the adjudication
+        file's ``incorrect`` count as if it were this ``fp`` and concluded the two formulas
+        diverged (56/107 vs 56/110). They do not diverge; adding ``duplicate_fp`` would double
+        count and yield 56/113 (see the 88-号 C2 re-check record).
+        """
         numerator = self.tp + self.correct_extra
         denominator = numerator + self.fp
         return Fraction(numerator, denominator) if denominator else None
@@ -222,7 +234,11 @@ class OriginMetrics:
 
     @property
     def precision(self) -> Fraction | None:
-        """Precision, or ``None`` when the slice produced no candidates."""
+        """Precision, or ``None`` when the slice produced no candidates.
+
+        Deliberately not duplicate-inclusive: this slice carries no ``duplicate_fp`` counter
+        (C2 applies to ``RoleMetrics``, which is where the contract formula is computed).
+        """
         numerator = self.tp + self.correct_extra
         denominator = numerator + self.fp
         return Fraction(numerator, denominator) if denominator else None
@@ -431,8 +447,27 @@ class ContractGateRequirements:
         ):
             raise ScoringInputError("high_risk_item_assertions_required must be unique")
 
+    @property
+    def role_target_total(self) -> int:
+        """The gate role's frozen target total.
+
+        ``material_items_target_total`` keeps its historical name because the frozen field set
+        is asserted by the P03 binding verifier; read the value through this alias by intent.
+        """
+        return self.material_items_target_total
+
 
 SIGNED_SCORING_CONTRACT_SCHEMA = "non-table-selected-target-scoring-contract-v4.3"
+SUPPORTED_SIGNED_CONTRACT_SCHEMAS: tuple[str, ...] = (
+    SIGNED_SCORING_CONTRACT_SCHEMA,
+    "non-table-selected-target-scoring-contract-v4.4",
+)
+"""Schema versions this loader accepts. v4.4 adds ``role_sections`` (items + claims).
+
+Accepting the version string is not activation: the loader still requires
+``status == frozen_signed`` and a complete signoff, so a draft contract carrying the v4.4 schema
+stays unreadable until it is signed.
+"""
 SIGNED_SCORING_CONTRACT_PATH = (
     Path(__file__).resolve().parents[2]
     / ".scratch/claims-r2-role-isolation/evidence/75-r2-signed-20261013"
@@ -457,10 +492,128 @@ def _contract_object(parent: dict[str, Any], key: str) -> dict[str, Any]:
     return value
 
 
+# A role section may override *only* these gate thresholds, and only with an explicit integer.
+# The allow-list is deliberately narrow: a stray threshold-looking key must fail closed rather than
+# silently re-scope the gate (e.g. a release-line 0.60 pasted into a target-line field). Rate
+# thresholds therefore stay role-identical and come from ``threshold_source.effective``; extending
+# this list is a deliberate, signed change.
+_ROLE_SECTION_ALLOWED_KEYS = (
+    "review_assertions",
+    "target_total",
+    "accepted_records_total_min",
+    "accepted_records_per_source_min",
+)
+_ROLE_THRESHOLD_OVERRIDE_FIELDS = (
+    "accepted_records_total_min",
+    "accepted_records_per_source_min",
+)
+
+_ROLE_ASSERTION_PATTERN: Mapping[Role, str] = {
+    Role.MATERIAL_ITEMS: r"NT-I\d{2}",
+    Role.CLAIMS: r"NT-C\d{2}",
+    # Relations has a sentinel pattern but no in-scope gate this round (contract OPEN-2 = C):
+    # a declared section loads, and nothing scores it.
+    Role.MATERIAL_RELATIONS: r"NT-R\d{2}",
+}
+_LEGACY_ITEMS_ASSERTION_COUNT = 11
+_LEGACY_ITEMS_TARGET_TOTAL = 48
+
+
+def _contract_role_section(payload: Mapping[str, Any], role: Role) -> Mapping[str, Any] | None:
+    """Return the contract's ``role_sections.<role>`` entry, or None when not declared.
+
+    Absent sections return None (the caller decides between the legacy branch and fail-closed);
+    a present-but-malformed section raises, so a typo cannot silently downgrade to "missing".
+    """
+    sections = payload.get("role_sections")
+    if sections is None:
+        return None
+    if not isinstance(sections, Mapping):
+        raise ScoringInputError("contract_role_sections_invalid")
+    section = sections.get(role.value)
+    if section is None:
+        return None
+    if not isinstance(section, Mapping):
+        raise ScoringInputError(f"contract_role_section_invalid:{role.value}")
+    unexpected = sorted(
+        str(key)
+        for key in section
+        if not str(key).startswith("_") and key not in _ROLE_SECTION_ALLOWED_KEYS
+    )
+    if unexpected:
+        raise ScoringInputError(
+            f"contract_role_section_invalid:{role.value}:unexpected_key:{unexpected[0]}"
+        )
+    return section
+
+
+def _resolve_role_sentinels(
+    section: Mapping[str, Any], role: Role, pattern: str
+) -> tuple[tuple[str, ...], int]:
+    """Validate one role section's sentinel list and target total; fail closed otherwise."""
+    declared = section.get("review_assertions")
+    if not isinstance(declared, (list, tuple)) or not declared:
+        raise ScoringInputError(f"contract_role_section_invalid:{role.value}:review_assertions")
+    names = tuple(sorted(str(name) for name in declared))
+    if len(set(names)) != len(names):
+        raise ScoringInputError(f"contract_role_section_invalid:{role.value}:duplicate_assertion")
+    foreign = [name for name in names if not re.fullmatch(pattern, name)]
+    if foreign:
+        raise ScoringInputError(
+            f"contract_role_section_invalid:{role.value}:foreign_assertion:{foreign[0]}"
+        )
+    total = section.get("target_total")
+    if isinstance(total, bool) or not isinstance(total, int) or total < 1:
+        raise ScoringInputError(f"contract_role_section_invalid:{role.value}:target_total")
+    return names, total
+
+
+def _resolve_role_thresholds(
+    section: Mapping[str, Any] | None,
+    role: Role,
+    rates: dict[str, Fraction],
+    counts: dict[str, int],
+) -> tuple[dict[str, Fraction], dict[str, int]]:
+    """Apply a role section's declared threshold overrides over ``threshold_source.effective``.
+
+    Absent leaves keep today's behaviour byte-for-byte: the signed v4.3/v4.4 claims section declares
+    none, so claims still inherits the items floors (40/20) until a signed revision says otherwise.
+    A present-but-invalid leaf raises, so a typo cannot silently fall back to the items values.
+    """
+    if section is None:
+        return rates, counts
+    resolved_counts = dict(counts)
+    for field in _ROLE_THRESHOLD_OVERRIDE_FIELDS:
+        if field not in section:
+            continue
+        value = section[field]
+        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+            raise ScoringInputError(f"contract_role_section_invalid:{role.value}:{field}")
+        resolved_counts[field] = value
+    return rates, resolved_counts
+
+
 def load_contract_gate_requirements(
     contract_path: str | Path = SIGNED_SCORING_CONTRACT_PATH,
+    role: Role = Role.MATERIAL_ITEMS,
 ) -> ContractGateRequirements:
-    """Load the authoritative gate thresholds and item sentinels from contract v4.3."""
+    """Load the authoritative gate thresholds for one role from the signed contract.
+
+    ``role`` selects the contract's ``role_sections.<role>`` entry when it declares one. The
+    frozen v4.2/v4.3 contracts predate ``role_sections`` and only serve ``Role.MATERIAL_ITEMS``;
+    their legacy shape (exactly eleven ``NT-I**`` sentinels, target total 48) is preserved
+    byte-for-byte, and every other role fails closed with ``contract_role_section_missing``.
+
+    The returned dataclass keeps its frozen field set (the P03 binding verifier asserts it):
+    ``material_items_target_total`` is read as the *role's* target total, so a claims section
+    carries 20 there. Use ``role_target_total`` for reading it by intent.
+
+    Rate thresholds stay role-identical and come from ``threshold_source.effective``. A role section
+    may override the two accepted-record *count* floors (``accepted_records_total_min``,
+    ``accepted_records_per_source_min``); when it declares none -- every signed contract so far --
+    the effective block applies unchanged, so this hook is inert until a signed revision uses it.
+    Any other threshold-looking key in a role section fails closed.
+    """
     path = Path(contract_path)
     try:
         payload: Any = json.loads(path.read_text(encoding="utf-8"))
@@ -471,17 +624,18 @@ def load_contract_gate_requirements(
     if not isinstance(payload, dict):
         raise ScoringInputError("signed scoring contract must be a JSON object")
     schema_version = payload.get("schema_version")
-    if schema_version != SIGNED_SCORING_CONTRACT_SCHEMA:
+    if schema_version not in SUPPORTED_SIGNED_CONTRACT_SCHEMAS:
         raise ScoringInputError(
             "signed scoring contract schema_version mismatch: "
-            f"{schema_version!r}!={SIGNED_SCORING_CONTRACT_SCHEMA!r}"
+            f"{schema_version!r} not in {SUPPORTED_SIGNED_CONTRACT_SCHEMAS!r}"
         )
     if payload.get("status") != "frozen_signed":
         raise ScoringInputError("signed scoring contract status must be frozen_signed")
     signoff = _contract_object(payload, "signoff")
-    if not str(signoff.get("signed_by") or "").strip() or not str(
-        signoff.get("signed_on") or ""
-    ).strip():
+    if (
+        not str(signoff.get("signed_by") or "").strip()
+        or not str(signoff.get("signed_on") or "").strip()
+    ):
         raise ScoringInputError("signed scoring contract signoff is incomplete")
 
     threshold_source = _contract_object(payload, "threshold_source")
@@ -499,20 +653,35 @@ def load_contract_gate_requirements(
             raise ScoringInputError(f"signed scoring contract field is not an integer: {field}")
         counts[field] = value
 
-    assertions = _contract_object(payload, "review_assertions")
-    item_assertions = tuple(
-        sorted(key for key in assertions if re.fullmatch(r"NT-I\d{2}", key))
-    )
-    if len(item_assertions) != 11:
-        raise ScoringInputError(
-            "signed scoring contract must contain exactly 11 NT-I review assertions"
-        )
-    if any(not isinstance(assertions[key], dict) for key in item_assertions):
-        raise ScoringInputError("signed scoring contract item assertions must be objects")
+    if not isinstance(role, Role):
+        try:
+            role = Role(role)
+        except ValueError as exc:
+            raise ScoringInputError(f"contract_role_unknown:{role}") from exc
+    pattern = _ROLE_ASSERTION_PATTERN.get(role)
+    if pattern is None:
+        raise ScoringInputError(f"contract_role_unknown:{role.value}")
+    section = _contract_role_section(payload, role)
+    if section is not None:
+        sentinels, target_total = _resolve_role_sentinels(section, role, pattern)
+    elif role is Role.MATERIAL_ITEMS and schema_version == SIGNED_SCORING_CONTRACT_SCHEMA:
+        assertions = _contract_object(payload, "review_assertions")
+        sentinels = tuple(sorted(key for key in assertions if re.fullmatch(pattern, key)))
+        if len(sentinels) != _LEGACY_ITEMS_ASSERTION_COUNT:
+            raise ScoringInputError(
+                "signed scoring contract must contain exactly 11 NT-I review assertions"
+            )
+        if any(not isinstance(assertions[key], dict) for key in sentinels):
+            raise ScoringInputError("signed scoring contract item assertions must be objects")
+        target_total = _LEGACY_ITEMS_TARGET_TOTAL
+    else:
+        raise ScoringInputError(f"contract_role_section_missing:{role.value}")
+
+    rates, counts = _resolve_role_thresholds(section, role, rates, counts)
 
     return ContractGateRequirements(
         schema_version=schema_version,
-        role_scope=Role.MATERIAL_ITEMS,
+        role_scope=role,
         target_recall_overall_min=rates["target_recall_overall_min"],
         target_recall_per_source_min=rates["target_recall_per_source_min"],
         candidate_precision_min=rates["candidate_precision_min"],
@@ -520,8 +689,9 @@ def load_contract_gate_requirements(
         accepted_records_per_source_min=counts["accepted_records_per_source_min"],
         unresolved_candidates_max=counts["unresolved_candidates_max"],
         # Diagnostic denominator metadata; not one of the six gate thresholds.
-        material_items_target_total=48,
-        high_risk_item_assertions_required=item_assertions,
+        # Holds the gate role's target total (items 48, claims 20); prefer role_target_total.
+        material_items_target_total=target_total,
+        high_risk_item_assertions_required=sentinels,
     )
 
 

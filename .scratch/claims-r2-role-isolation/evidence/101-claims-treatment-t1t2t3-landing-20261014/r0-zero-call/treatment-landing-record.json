@@ -1,0 +1,192 @@
+{
+  "schema_version": "claims-treatment-landing-1",
+  "id": "101-claims-treatment-t1t2t3-landing-20261014",
+  "created_on": "2026-10-14",
+  "zero_model_calls": true,
+  "treatment_rules": {
+    "T1_no_opinion": {
+      "status": "landed",
+      "where": "claims_detail.V2_OUTPUT_CONTRACT + is_claims_scope_candidate；evidence_pipeline.apply_production_rules",
+      "note": "契约不再邀请评级观点；产出侧按 C1 判据剔除（bind 之后判定，避免误杀分类状态值）"
+    },
+    "T2_unbound_disposition": {
+      "status": "landed（确定性部分）",
+      "where": "claims_binding.recover_packet_coordinates",
+      "note": "只从同 packet 兄弟记录补齐 period/unit，补不上留空；模型侧重抽只能由实跑验证"
+    },
+    "T3_dedupe_tie_break": {
+      "status": "landed",
+      "where": "evidence_pipeline._merge_repeated_facts（跨 packet，run 级）",
+      "note": "并列优先级：坐标更完整 > value 与引用一致 > 文件序；禁用金标/裁定"
+    },
+    "T4_missing_field_must_be_labelled": {
+      "status": "landed（100 号）",
+      "where": "claims_detail.lint_claim + LINT_VERSION 9"
+    }
+  },
+  "replay": {
+    "pool": {
+      "path": "evidence/17-structured-extraction-convergence-closure-20261009/p1r5-claims-adjudication-v2/candidate-adjudications.signed.json",
+      "sha256": "d12f3d276dc17d2ff5bb5455b78bc4da75b43c191d498af59d2aea61238b38a8",
+      "candidates_total": 110,
+      "packets": 19
+    },
+    "union_composition": {
+      "before_by_judgement": {
+        "correct_extra": 21,
+        "matched": 8,
+        "incorrect": 24,
+        "duplicate": 1
+      },
+      "after_by_judgement": {
+        "correct_extra": 20,
+        "matched": 8,
+        "incorrect": 24
+      },
+      "after_coordinate_code_histogram": {
+        "period_missing": 15,
+        "time_invalid": 16,
+        "period_not_in_packet": 9,
+        "period_unanchored": 9,
+        "unit_missing": 8,
+        "value_missing": 5,
+        "value_not_in_evidence": 5,
+        "period_ambiguous": 15,
+        "unit_unknown": 6
+      },
+      "why_it_matters": "unbound_union 里 matched/correct_extra 占多数 ⇒ 它是『标注覆盖率』而不是精度代理：减半它既非达成放行线的必要条件也非充分条件。真正决定去留的是 FP（incorrect）那一支。"
+    },
+    "c1_alignment": {
+      "rows_checked": 110,
+      "misaligned": [],
+      "aligned": true,
+      "note": "产出侧 is_claims_scope_candidate 与读数侧 _is_role_external 必须互补"
+    },
+    "t1": {
+      "role_external_rows": 29,
+      "in_role_before": 81,
+      "in_role_after": 81
+    },
+    "t2": {
+      "recovered": {
+        "period_from_same_quote": 0,
+        "period_from_same_metric": 2,
+        "unit_from_same_metric": 2
+      },
+      "recovered_rows": 4,
+      "basis_note": "载体只能是同一 packet 内的兄弟记录（同引用区间 / 同 subject+metric）"
+    },
+    "t3": {
+      "groups_merged": 2,
+      "rows_merged": 2,
+      "detail": [
+        {
+          "key": [
+            "工业富联",
+            "gpuasic机柜",
+            "gpuasic机柜出货323倍",
+            "fact"
+          ],
+          "kept_packet_id": "f974a1bbfc76c3ead1bb4306927e31b826f52c0f875333b0c4fb509a64f22a0a",
+          "kept_value_text": "3.2",
+          "dropped_packet_ids": [
+            "f974a1bbfc76c3ead1bb4306927e31b826f52c0f875333b0c4fb509a64f22a0a"
+          ],
+          "kept_row_judgements": [
+            "incorrect"
+          ],
+          "kept_row_was_matched": false
+        },
+        {
+          "key": [
+            "工业富联",
+            "归母净利润",
+            "归母23740亿",
+            "fact"
+          ],
+          "kept_packet_id": "f4e2349542f7e24c4adc2513774caf1fd45c7e1b102ebe535848990ab7b17b52",
+          "kept_value_text": "237.40",
+          "dropped_packet_ids": [
+            "0f941289d3e111f06787c34a1cf693fb2e664cef356d720a58431560029ecb47"
+          ],
+          "kept_row_judgements": [
+            "matched"
+          ],
+          "kept_row_was_matched": true
+        }
+      ],
+      "tie_break_note": "优先级：坐标更完整 > value 与引用一致 > 文件序；禁用金标/裁定"
+    },
+    "stage2_proxies": {
+      "before": {
+        "in_role": 81,
+        "field_gap": 25,
+        "coordinate_code": 54,
+        "union": 54,
+        "unlabelled": 0,
+        "redundant_groups": 2
+      },
+      "after_replay": {
+        "in_role": 79,
+        "field_gap": 22,
+        "coordinate_code": 52,
+        "union": 52,
+        "unlabelled": 0,
+        "redundant_groups": 0
+      },
+      "targets": {
+        "role_external_candidates": "== 0",
+        "unbound_union": "≤ 27",
+        "redundant_renderings": "== 0",
+        "unbound_fields_without_reason_code": "== 0"
+      },
+      "replay_verdict": {
+        "role_external_candidates_zero": true,
+        "role_external_note": "T1 在产出侧按同一判据剔除 ⇒ 该项按构造为 0；回放中 before 为 29 条",
+        "redundant_renderings_zero": true,
+        "unlabelled_zero": true,
+        "unbound_union_passed": false
+      }
+    },
+    "versions": {
+      "extractor_version_v2_now": "b5220ca2dc17",
+      "lint_version_now": "claims-v2-lint-9",
+      "frozen_pool_extractor_version": [
+        "1f699d25c7e4"
+      ],
+      "frozen_pool_lint_version": [
+        "claims-v2-lint-8"
+      ]
+    },
+    "code_change": {
+      "plugins/corpus/claims_detail.py": {
+        "git_blob": "edd16628"
+      },
+      "plugins/corpus/claims_binding.py": {
+        "git_blob": "4e79a529"
+      },
+      "plugins/corpus/evidence_pipeline.py": {
+        "git_blob": "59431019"
+      }
+    },
+    "not_the_real_pool": "本回放不含新契约下的重抽，也不含真实 packet 文本驱动的 bind；它只回答『三条规则在旧池等输入上会不会动闸门数字、T3 并列是否保住 matched 行』"
+  },
+  "prereg": {
+    "path": "evidence/99-claims-prereg-v3-signed-r2-20261014/r0-zero-call/claims-preregistration.json",
+    "sha256": "a2d174407daa5a1b88ba9ca44e698cf4512a399b2a4895254d0a3ab4b57edf04"
+  },
+  "t4_landing": {
+    "path": "evidence/100-claims-t4-labeling-landing-20261014/r0-zero-call/treatment-landing-record.json",
+    "sha256": "65de8105ee7aee2a71334f291ca2fe87d2a342cbe9414724a7d7073d49dc4a46"
+  },
+  "does_not_touch": [
+    "evidence/17-structured-extraction-convergence-closure-20261009/**",
+    "evidence/95-claims-prereg-20261014/**",
+    "evidence/99-claims-prereg-v3-signed-r2-20261014/**",
+    "evidence/100-claims-t4-labeling-landing-20261014/**"
+  ],
+  "next": [
+    "阶段 1 活跑入口（prepare/execute 对）与新池裁定工作表仍待建",
+    "起跑前置：预算 ceiling（U）+ 人工裁定工时（U）"
+  ]
+}

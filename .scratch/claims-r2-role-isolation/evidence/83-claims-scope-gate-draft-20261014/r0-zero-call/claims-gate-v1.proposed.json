@@ -1,0 +1,375 @@
+{
+  "schema_version": "claims-only-quality-gate-preregistration-1",
+  "status": "draft_pending_human_signature",
+  "created_on": "2026-10-14",
+  "role": "claims",
+  "zero_model_calls": true,
+  "purpose": "为 claims 角色建立独立的可签认度量基准（此前 claims 无专属门）",
+  "gold": {
+    "path": "evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json",
+    "sha256": "603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+    "role": "claims",
+    "target_total": 20,
+    "record_ids": [
+      "NT-C01",
+      "NT-C02",
+      "NT-C03",
+      "NT-C04",
+      "NT-C05",
+      "NT-C06",
+      "NT-C07",
+      "NT-C08",
+      "NT-C09",
+      "NT-C10",
+      "NT-C11",
+      "NT-C12",
+      "NT-C13",
+      "NT-C14",
+      "NT-C15",
+      "NT-C16",
+      "NT-C17",
+      "NT-C18",
+      "NT-C19",
+      "NT-C20"
+    ],
+    "evaluation_scope": "selected_target_recall_not_exhaustive_document_gold",
+    "caveat": "selected_target_recall_not_exhaustive_document_gold；非整篇穷尽标注"
+  },
+  "thresholds_proposal": {
+    "basis": "与已签 items 门 v3 同构（六项 + 哨兵），数值需由签认人裁定",
+    "items_gate_v3_reference": {
+      "path": "evidence/75-r2-signed-20261013/r0-zero-call/gate-v3.json",
+      "sha256": "340b312d9c0cec278e828d8303a03e9daf953feef4c0eef688f3d257971a9732",
+      "values": {
+        "metric_basis": "non-table-selected-target-scoring-contract-v4.2",
+        "evaluation_scope": "selected_target_recall_not_exhaustive_document_gold",
+        "material_items_target_total": 48,
+        "target_recall_overall_min": 0.85,
+        "target_recall_per_source_min": 0.8,
+        "candidate_precision_min": 0.8,
+        "unresolved_candidates_max": 0,
+        "accepted_records_total_min": 40,
+        "accepted_records_per_source_min": 20,
+        "role_required_fields": [
+          "proposition",
+          "semantic_type",
+          "statement_role",
+          "speech_role",
+          "perspective",
+          "speaker_ref",
+          "polarity",
+          "attribution",
+          "source_stance"
+        ],
+        "semantic_types": [
+          "fact",
+          "forecast",
+          "opinion",
+          "behavior",
+          "unknown"
+        ],
+        "statement_roles": [
+          "claim",
+          "evidence",
+          "condition",
+          "risk",
+          "question",
+          "answer",
+          "other"
+        ],
+        "perspectives": [
+          "source_explicit",
+          "quoted_other",
+          "unknown"
+        ],
+        "high_risk_item_assertions_required": [
+          "NT-I13",
+          "NT-I15",
+          "NT-I17",
+          "NT-I29",
+          "NT-I35",
+          "NT-I37",
+          "NT-I38",
+          "NT-I39",
+          "NT-I42",
+          "NT-I43",
+          "NT-I48"
+        ],
+        "high_risk_item_annotations": {
+          "NT-I13": {
+            "condition": "Q3 OCF/扣非净利润 >= 0.6",
+            "condition_logic": {
+              "op": "compare",
+              "metric": "OCF_to_adjusted_profit",
+              "period": "Q3",
+              "comparator": ">=",
+              "value": "0.6",
+              "unit": "ratio"
+            }
+          },
+          "NT-I15": {
+            "condition": "下季 OCF/扣非净利润 < 0.5",
+            "condition_logic": {
+              "op": "compare",
+              "metric": "OCF_to_adjusted_profit",
+              "period": "next_quarter",
+              "comparator": "<",
+              "value": "0.5",
+              "unit": "ratio"
+            }
+          },
+          "NT-I17": {
+            "condition": "毛利率相对6.99%下降>1个百分点 AND 公司改口“涨价/mix受阻、Rubin延期”（并列项内部逻辑未明）",
+            "condition_logic": {
+              "op": "all",
+              "args": [
+                {
+                  "op": "compare",
+                  "metric": "gross_margin_change_from_baseline",
+                  "baseline": "6.99",
+                  "comparator": "<",
+                  "value": "-1",
+                  "unit": "percentage_points"
+                },
+                {
+                  "op": "source_clause",
+                  "text": "公司改口说涨价/mix 受阻、Rubin 延期",
+                  "inner_operator": "unknown"
+                }
+              ]
+            },
+            "unknown_fields": [
+              "condition_inner_boolean"
+            ]
+          },
+          "NT-I29": {
+            "condition": "政策变化导致成本上升",
+            "atomic_proposition_source": "condition",
+            "compound": false
+          },
+          "NT-I35": {
+            "condition": "无差别相信所有公司的份额陈述",
+            "atomic_proposition_source": "condition",
+            "compound": false
+          },
+          "NT-I39": {
+            "condition": "海外产能税率增加",
+            "atomic_proposition_source": "condition",
+            "compound": false
+          },
+          "NT-I37": {
+            "semantic_type": "opinion"
+          },
+          "NT-I38": {
+            "semantic_type": "opinion",
+            "polarity": "mixed"
+          },
+          "NT-I42": {
+            "condition": "52 <= 股价（元） <= 58 AND 无新的大额负面管制公告",
+            "condition_logic": {
+              "op": "all",
+              "args": [
+                {
+                  "op": "range",
+                  "metric": "share_price",
+                  "lower": "52",
+                  "upper": "58",
+                  "bounds": "inclusive",
+                  "unit": "CNY"
+                },
+                {
+                  "op": "source_clause",
+                  "text": "无新的大额负面管制公告"
+                }
+              ]
+            }
+          },
+          "NT-I43": {
+            "condition": "毛利率 >= 6.99%",
+            "condition_logic": {
+              "op": "compare",
+              "metric": "gross_margin",
+              "comparator": ">=",
+              "value": "6.99",
+              "unit": "percent"
+            }
+          },
+          "NT-I48": {
+            "perspective": "quoted_other",
+            "source_stance": "challenged"
+          }
+        },
+        "contract_version_chase": {
+          "gate_pins_signed_contract": "non-table-selected-target-scoring-contract-v4.2",
+          "gate_pins_sha256": "sha256:67537eadcb2074d5bb47c19d20177bd400a8850fce560aa6b1f969409d42b943",
+          "contract_next_version": "non-table-selected-target-scoring-contract-v4.3",
+          "why_lag": "契约 v4.3 反向钉门 v3 的签认字节；若门同时钉 v4.3 会形成哈希环，故门只推进到最近一个已签契约版本。",
+          "invariant": "六项阈值逐字恒等（0.85/0.80/0.80/40/20/0）+ 哨兵清单与契约 review_assertions 的 NT-I* 子集恒等",
+          "validator_required": "由校验器持续核查上述两条不变量，而非要求两处版本号相同",
+          "registration_basis": "沿用已签契约 v4.2 签认记录 outstanding_after_signoff 中的建议（阈值恒等为不变量）"
+        },
+        "high_risk_item_assertions_excluded": {
+          "NT-I09": {
+            "mechanism": "gold_split_finer_than_candidate",
+            "reason": "金标把同一原文句拆成『条件(I09)+结论(I10)』两条，候选侧只产出整句一条且已被 NT-I10 占用；在 one_to_one_mapping 下必有一条落空（契约 §8.1：一条混合输出不能抵扣多个金标命题）。"
+          },
+          "NT-I19": {
+            "mechanism": "gold_split_finer_than_candidate",
+            "reason": "同 NT-I09：I19 与 I20 为同一句的两种切分，候选整句被 NT-I20 占用。"
+          },
+          "NT-I45": {
+            "mechanism": "candidate_side_cannot_carry_axis",
+            "reason": "U 2026-10-12 校准撤销 matched：金标属被转述且被质疑的预测(perspective=quoted_other, source_stance=challenged)，而契约 caliber_rules 记明 source_stance 生产端无载体、必须人工判定 ⇒ 候选侧结构上不承载该轴。"
+          },
+          "NT-I46": {
+            "mechanism": "candidate_side_cannot_carry_axis",
+            "reason": "同 NT-I45。"
+          },
+          "NT-I47": {
+            "mechanism": "candidate_side_cannot_carry_axis",
+            "reason": "同 NT-I45。"
+          }
+        },
+        "threshold_note": "六项阈值逐字沿用 revision 5，未做任何放宽；R2 只调整『必须覆盖』的哨兵清单。"
+      }
+    },
+    "target_recall_overall_min": 0.85,
+    "target_recall_per_source_min": 0.8,
+    "candidate_precision_min": 0.8,
+    "unresolved_candidates_max": 0,
+    "accepted_records_total_min": "OPEN-A（见 open_decisions）",
+    "accepted_records_per_source_min": "OPEN-A（见 open_decisions）"
+  },
+  "measured_against_draft": {
+    "target_recall_overall": "20/20 = 1.0000",
+    "note_recall": "20/20 全部命中；分母为 20 条 NT-C 冻结目标",
+    "per_source_recall": {
+      "f16e7fde9553": "10/10 = 1.0000",
+      "dca4bad7f85b": "10/10 = 1.0000"
+    },
+    "candidate_precision": "56/110 = 0.5091",
+    "candidate_precision_scorer_formula": "56/107 = 0.5234",
+    "unresolved": 0,
+    "predicted_verdict_note": "在保持现标签、维持 0.80 精度线的假设下为 FAIL"
+  },
+  "sentinels": {
+    "proposal_rule": "critical=true 或 命中该目标的候选渲染数 >= 2（归属歧义）",
+    "proposed_ids": [
+      "NT-C01",
+      "NT-C03",
+      "NT-C08",
+      "NT-C11",
+      "NT-C12",
+      "NT-C13"
+    ],
+    "per_gold_candidate_renderings": {
+      "NT-C01": 2,
+      "NT-C02": 1,
+      "NT-C03": 2,
+      "NT-C04": 1,
+      "NT-C05": 1,
+      "NT-C06": 1,
+      "NT-C07": 1,
+      "NT-C08": 2,
+      "NT-C09": 1,
+      "NT-C10": 1,
+      "NT-C11": 1,
+      "NT-C12": 1,
+      "NT-C13": 1,
+      "NT-C14": 1,
+      "NT-C15": 1,
+      "NT-C16": 1,
+      "NT-C17": 1,
+      "NT-C18": 1,
+      "NT-C19": 1,
+      "NT-C20": 1
+    }
+  },
+  "historical_gate_precedent": {
+    "path": "evidence/17-structured-extraction-convergence-closure-20261009/p1r5-claims-adjudication-v2/claims-gate-result.signed.json",
+    "sha256": "8ede7d9a25d24314d3e9a6ac344e96f37a43f7fca412b052ebc3c67c35ac6f30",
+    "note": "P1R5 是 claims 迄今唯一的签认门，但其 own floors 取自上一轮失败基线，因此不能充当度量基准；本草案即为取代它的候选。",
+    "floors": {
+      "candidate_precision_floor": 0.2803030303030303,
+      "target_recall_floor": 0.75
+    },
+    "measured": {
+      "candidate_precision": 0.509090909090909,
+      "target_recall": 1.0
+    },
+    "publication_authorized": false,
+    "copper_execution_authorized": true
+  },
+  "role_field_carrier": {
+    "contract_path": "evidence/75-r2-signed-20261013/r0-zero-call/scoring-contract-v4.3.json",
+    "contract_sha256": "d7b4f8a81ef42e3cd5d619eae92bc34df7b7aa683d34aeba4f1a22719ae69a2f",
+    "required_fields": [
+      "subject",
+      "metric",
+      "period",
+      "unit",
+      "value",
+      "factuality",
+      "attribution",
+      "perspective",
+      "source_stance",
+      "estimate_status",
+      "qualifier"
+    ],
+    "owner_side_reference": "read_path.applies_to 当前仅覆盖 material_items"
+  },
+  "precision_options": {
+    "A_keep_all_in_scope": {
+      "note": "不重分类，全部 110 条候选计入分母（现 P1R5 口径）",
+      "precision_old_formula": "56/110 = 0.5091",
+      "precision_scorer_formula": "56/107 = 0.5234"
+    },
+    "B_no_coverage_out_of_scope": {
+      "note": "36 条与全部 92 条金标相似度 <0.15，若签认为 out_of_scope",
+      "precision_old_formula": "56/74 = 0.7568",
+      "precision_scorer_formula": "56/71 = 0.7887"
+    },
+    "C_no_coverage_plus_cross_role": {
+      "note": "再叠加 9 条跨角色（更接近 items/relations 金标）判定为 out_of_scope",
+      "removed": 45,
+      "precision_old_formula": "56/65 = 0.8615",
+      "precision_scorer_formula": "56/62 = 0.9032"
+    }
+  },
+  "open_decisions": [
+    {
+      "id": "OPEN-A",
+      "question": "accepted_records_total_min / per_source_min 取哪套？",
+      "options": {
+        "a": "平移 items 门 v3 原值 40 / 20",
+        "b": "按 claims 20 条目标占比缩放 17 / 8",
+        "c": "不设数值，仅作诊断计数，不参与 gating"
+      }
+    },
+    {
+      "id": "OPEN-B",
+      "question": "与 items/relations 金标更接近的候选是否计入 claims 分母（out_of_scope 是否合法）？",
+      "evidence": "跨角色候选 9 条；无金标覆盖候选 36 条"
+    },
+    {
+      "id": "OPEN-C",
+      "question": "契约 11 个 claims 必需字段中 4 个无载体（attribution/perspective/source_stance/estimate_status），补载体还是修订契约？"
+    },
+    {
+      "id": "OPEN-D",
+      "question": "compare/calculate 是否仍受 evidence_pipeline.py:404 的『零 reason』全或无规则约束？"
+    }
+  ],
+  "not_in_scope": [
+    "不改 frozen-gold.json 字节",
+    "不改 P1R5 已签裁定字节",
+    "不改 items 门 v3 / 契约 v4.3 字节",
+    "不执行模型调用、不写生产 PG"
+  ],
+  "signoff": {
+    "reviewer": null,
+    "adjudicator": null,
+    "signed_on": null,
+    "instrument": "claims-gate-v1-signoff.md"
+  }
+}

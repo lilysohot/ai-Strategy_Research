@@ -1,0 +1,87 @@
+{
+  "schema_version": "claims-governance-refusal-1",
+  "created_on": "2026-10-14",
+  "zero_model_calls": true,
+  "decision": {
+    "id": "REFUSE-93",
+    "object": "evidence/93-claims-governance-plan-20261014/r0-zero-call/claims-governance-signoff.md",
+    "status": "refused",
+    "decided_by": "U",
+    "decided_on": "2026-10-14",
+    "basis": "U 的判据：若该方案未给治理带来效果，则拒签。经复核该方案净治理效果为空（见 effect_assessment），条件成立。",
+    "signature_applied": false,
+    "prefilled": false,
+    "note": "本件不代填、不代签；93 号签认件与计划件的字节一字未改，三格与签名栏保持空白。若需正式具名签署拒绝，由 U 在件上签署，本件不改名加签。"
+  },
+  "instrument": {
+    "path": "evidence/93-claims-governance-plan-20261014/r0-zero-call/claims-governance-signoff.md",
+    "sha256": "1d19d44690f541bb820268f98a7941056c9fa2e1d3e45484bd97c987b02dbd1d",
+    "state": "blank_unfilled",
+    "bytes_unchanged": true,
+    "mutation_forbidden": "本件不修改 93 号任何字节（md / plan / corrections / template / MANIFEST）"
+  },
+  "effect_assessment": {
+    "method": "逐条检查四项治理词的下游消费者 + 实测检查项与测试状态 + 检查项升为阻塞后的目标与豁免路径。",
+    "enforcement_today": {
+      "value": "none",
+      "evidence": "rules_in_force.status == 'pending_human_signature' ⇒ tools/check_claims_gate.py::pass-not-dependent-on-unfrozen-axis 实测 [NOTE]/blocking=false（checker exit 0, verdict=pass, blocking_failures=[]，2026-10-14 观测）。"
+    },
+    "enforcement_if_signed": {
+      "value": "inverted（指向已签产物，且豁免路径不可达）",
+      "evidence": "该检查项升为阻塞后，唯一 uncovered 行是已签 91 号门的 verdict.release_line（'D-1 ≠ a'）；豁免要求 governance-corrections.json 对应条 entry.status == 'signed'，而全仓仅 tools/check_claims_gate.py 与 tests/test_claims_governance_plan.py 读取该文件，无任何工具或签认件可把其 status 置为 signed。⇒ 签认后要么红盘（卡住已签产物，违 R1「治理只阻断断言不阻断动作」），要么因默认指针未推进而永不生效。"
+    },
+    "downstream_consumers": {
+      "value": "none",
+      "tokens": ["pending_caliber", "unfrozen_axes", "expired_to_report_only", "rules_in_force"],
+      "evidence": "四个词仅出现在 tools/check_claims_gate.py、tools/apply_claims_governance_decisions.py、tools/apply_claims_governance_signoff.py 与 tests/test_claims_governance_{plan,signoff,apply}.py；无产出、报告、导出或评分路径读取它们 ⇒ 不改变任何交付物的读数。"
+    },
+    "claims_decision_impact": {
+      "M1": "只决定新分的读法（D-1 口径），不改变新分高低",
+      "M2": "只影响放行线是否 gating，可不签（但物化脚本强制三格齐填，声明与工具行为矛盾）",
+      "M3": "与去留无关",
+      "note": "抬分路径在 95 号治疗臂与生产侧接缝，不在本件。"
+    },
+    "self_consistency": {
+      "value": "治理件违反自身规则",
+      "evidence": "R4 与 governance-registration-template.json 均要求登记件必填 owner + decide_by，但计划件三格只有 owner='U'，缺 decide_by（实测 cells 内无该键）。"
+    },
+    "residual_effect_retained": {
+      "value": "report-only detection + 档案价值",
+      "detail": "把 91 号「已签 PASS 以未裁轴为前提」从口头记忆变成可复算的 [NOTE] 检出；三格 reopen_history 记录同一概念在 OPEN-A/C5/M1 三次改名。这两项不依赖本件签认即可继续存在（检查项已在 checker 内，plan 已在库）。"
+    },
+    "verdict": "净治理效果为空：不阻断任何不该发生的事，不改变任何交付物读数，唯一可生效的分支指向已签产物且豁免路径缺失；留下的只是报告级检出与档案。"
+  },
+  "consequences": [
+    "rules_in_force 保持 pending_human_signature；不得改判为 signed（拒签 ⇒ 规则不生效）。",
+    "不产出 96 号签名物化件；93 号 md / plan / corrections / template / MANIFEST 字节一字不改。",
+    "checker 保持现状：pass-not-dependent-on-unfrozen-axis = note（检出但不阻塞，exit 0）。",
+    "91 号 verdict.release_line 的读法仍按 governance-corrections.json 的登记人工读作 pending_caliber；该登记 status 保持 registered_pending_human_signature，不豁免任何东西。",
+    "三项待裁（M1 accepted 下限 / M2 分源精度轴 / M3 cite 侧轴归属）维持未裁，登记在案，不因拒签而消失。",
+    "该检查项此后不得因本次拒签被删除或弱化——检出能力保留，只是不升为阻塞。"
+  ],
+  "reopen_conditions": [
+    "把 91 号更正做成独立、可签认的登记（自身有签署路径，满足「例外登记不得自授」），不与 R1–R4 捆绑签署。",
+    "若保留 R1/R2 规则：阻塞目标从「已签产物」改到「新证据 / 新门」，即断言层面而非动作用层面，并给出解套路径，使签认后不会把链路锁红。",
+    "三格补齐 decide_by 或显式声明三格豁免 R4；物化脚本允许 M2 保持待定，与「M2 可不签」的声明一致。"
+  ],
+  "verification": {
+    "observed_on": "2026-10-14",
+    "note": "时点观测，不是不变量。",
+    "commands": [
+      "uv run python tools/check_claims_gate.py  ⇒ exit 0, verdict=pass, blocking_failures=[], pass-not-dependent-on-unfrozen-axis=[NOTE]",
+      "uv run pytest tests/test_claims_governance_plan.py tests/test_claims_governance_signoff.py tests/test_claims_governance_apply.py -q  ⇒ 44 passed",
+      "sha256sum 93 号四件 + 91 号门  ⇒ 与 93 号 MANIFEST 记录逐字一致（本件写入前后各核一次）"
+    ]
+  },
+  "does_not_touch": [
+    "evidence/93-claims-governance-plan-20261014/**",
+    "evidence/91-claims-gate-v3-signed-20261014/**",
+    "evidence/92-claims-scope-registration-20261014/**",
+    "evidence/95-claims-prereg-20261014/**",
+    "tools/check_claims_gate.py",
+    "tools/apply_claims_governance_decisions.py",
+    "tools/apply_claims_governance_signoff.py",
+    "plugins/**",
+    "tests/**"
+  ]
+}

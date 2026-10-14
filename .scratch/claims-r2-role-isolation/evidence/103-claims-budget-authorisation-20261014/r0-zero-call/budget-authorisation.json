@@ -1,0 +1,70 @@
+{
+  "schema_version": "claims-budget-authorisation-1",
+  "id": "103-claims-budget-authorisation-20261014",
+  "status": "stated_effective_pending_countersignature",
+  "created_on": "2026-10-14",
+  "model_calls": 0,
+  "purpose": "把 95/99 号 budget_request.stage_1_live_run.requested_ceiling（签认时留空、filled_by: U）的数字落成可核记录，供治疗臂唯一活跑入口读取",
+  "budget": {
+    "ceiling_value": 1000000,
+    "ceiling_unit": "tokens",
+    "unit_definition": "total_tokens = prompt_tokens + completion_tokens，与 ledger attempts.usage 同源",
+    "applies_to": "95/99 号治疗臂阶段 1 一次实跑（两源全量抽取），不得挪作他轮",
+    "stated_by": "U",
+    "stated_on": "2026-10-14",
+    "stated_how": "会话中给出（未经具名签署）"
+  },
+  "signed_prereg": {
+    "path": "evidence/99-claims-prereg-v3-signed-r2-20261014/r0-zero-call/claims-preregistration.json",
+    "sha256": "a2d174407daa5a1b88ba9ca44e698cf4512a399b2a4895254d0a3ab4b57edf04",
+    "leaf_filled_here": "budget_request.stage_1_live_run.requested_ceiling",
+    "leaf_state_in_signed_record": null,
+    "note": "已签件字节不改；本件是它那一格的落地记录（write-once 之外不写回 99 号）"
+  },
+  "per_run_attempt_ceilings": {
+    "source": "99 号 budget_request.stage_1_live_run.historical_reference.per_execution（逐字）",
+    "claims-industrial-fulian": 10,
+    "claims-optical-module": 14,
+    "total_attempt_ceiling": 24
+  },
+  "hard_limits": [
+    "不得超 attempt ceiling 自动重试",
+    "不得换模型或换提供方",
+    "不得在运行中改判据或改提示词",
+    "不得跑第二个臂"
+  ],
+  "measured_reference": {
+    "source": "evidence/17-…/p1r3-claims-plan-freeze/live-claims-optical-routing-delta/live-store attempts.usage（真实调用）",
+    "per_call_total_tokens": [4698, 4798],
+    "per_call_reasoning_tokens": [2653, 2661],
+    "units_in_this_round": 19,
+    "estimated_round_tokens_range": [95000, 380000],
+    "note": "历史 p1-claims-gate-result.json 只记 model_calls=17，无 token 账；本轮为首次 token 口径授权"
+  },
+  "enforcement": {
+    "pre_run": [
+      "签认件 status=frozen_before_execution 且四条治疗规则齐",
+      "本件 ceiling_value 为正整数且 ceiling_unit 已知",
+      "冻结计划/快照哈希与 manifest 一致、profile 指纹一致",
+      "显式 --allow-model 且逐 run attempt 上限不超过签认件值"
+    ],
+    "post_run": [
+      "由 attempts.usage 汇总 total_tokens 与本上限对账；超限判该轮无效并登记",
+      "自动重试 0；换模型/提供方 0"
+    ]
+  },
+  "countersignature": {
+    "required": false,
+    "status": "pending",
+    "reviewer": null,
+    "adjudicator": null,
+    "signed_on": null,
+    "instrument": "budget-authorisation.md",
+    "note": "不签也按『U 已给出数字』执行；若要具名落档，签该 instrument 后由 apply_budget_authorisation.py（待建）翻成已签记录"
+  },
+  "does_not_touch": [
+    "evidence/95-claims-prereg-20261014/**",
+    "evidence/99-claims-prereg-v3-signed-r2-20261014/**",
+    "evidence/102-claims-treatment-engineering-20261014/**"
+  ]
+}

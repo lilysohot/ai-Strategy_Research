@@ -52,7 +52,8 @@ function sessionTitle(id: string): string {
   return sessions.list.find((session) => session.id === id)?.title || '未命名研究'
 }
 
-function statusLabel(status: InputRequestStatus): string {
+function statusLabel(status: InputRequestStatus, reason?: string | null): string {
+  if (reason === 'facts_updated') return '资料已补齐'
   return { pending: '待补充', answered: '已回答', cancelled: '已取消', expired: '已过期' }[status]
 }
 
@@ -265,7 +266,7 @@ onMounted(loadRequests)
             <strong>{{ item.fields.map((field) => field.name).join('、') }}</strong>
             <small>{{ sessionTitle(item.research_id) }} · {{ useCaseLabel(item.use_case) }}</small>
           </span>
-          <span class="status-label" :data-status="item.status">{{ statusLabel(item.status) }}</span>
+          <span class="status-label" :data-status="item.status">{{ statusLabel(item.status, item.resolution_reason) }}</span>
         </button>
         <el-empty v-if="!visibleRequests.length" description="该状态下没有请求" :image-size="72" />
       </div>
@@ -274,7 +275,7 @@ onMounted(loadRequests)
     <aside v-if="selected" class="request-detail" aria-label="补数请求详情" v-loading="detailLoading">
       <div class="detail-topline">
         <span>{{ selected.source_run_id ? '来源运行' : '事件预检查' }}</span>
-        <span class="status-label" :data-status="selected.status">{{ statusLabel(selected.status) }}</span>
+        <span class="status-label" :data-status="selected.status">{{ statusLabel(selected.status, selected.resolution_reason) }}</span>
       </div>
       <h3>{{ useCaseLabel(selected.use_case) }}</h3>
       <dl class="detail-facts">

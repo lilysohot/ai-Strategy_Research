@@ -1,0 +1,25 @@
+{
+  "schema_version": "claims-governance-preflight-manifest-1",
+  "status": "simulation_only_no_decision",
+  "created_on": "2026-10-14",
+  "model_calls": 0,
+  "inputs": {
+    "governance_plan": "5aa29fca91e6d64aab6b31d04dfee3dd902fcb726d57ca22ec99792f2a02ed82",
+    "signed_contract_v4.4": "ce1938b6d35a1292b22d8d75a3af461743e627ccebb0385f3267cb652fcd1650",
+    "claims_gate_v3_signed": "b2b93b9ce46711b1e2f55d340c54452c1033eb15569f0dd865af9e3477d74fb3"
+  },
+  "outputs": {
+    "preflight-record.json": "d7333792085a9d61b13e10ed2d24a18b350e1066a1a4c6d5ddd3d66627ac6ec4"
+  },
+  "touched_code": [
+    "tools/apply_claims_governance_decisions.py",
+    "tests/test_claims_governance_apply.py",
+    "plugins/corpus/structured_scoring.py",
+    "tests/test_claims_contract_role.py"
+  ],
+  "does_not_touch": [
+    "evidence/93-claims-governance-plan-20261014/**",
+    "evidence/88-claims-contract-v44-signed-20261014/**",
+    "evidence/91-claims-gate-v3-signed-20261014/**"
+  ]
+}

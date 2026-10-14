@@ -22,9 +22,12 @@ record whose declared value was copied from a gold record is rejected rather tha
 
 from __future__ import annotations
 
+import json
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from enum import StrEnum
+from functools import lru_cache
+from pathlib import Path
 from typing import Any
 
 from plugins.corpus.structured_scoring import (
@@ -37,6 +40,12 @@ from plugins.corpus.structured_scoring import (
 
 CONTRACT_SCHEMA_VERSION = "non-table-selected-target-scoring-contract-v4.1"
 CONTRACT_SHA256 = "sha256:c76ac13ec0a109074775a2b5e1c8cc170da955847638d6ea7f5778988238781b"
+CLAIMS_CONTRACT_PATH = (
+    Path(__file__).resolve().parents[2]
+    / ".scratch/claims-r2-role-isolation/evidence/88-claims-contract-v44-signed-20261014"
+    / "r0-zero-call/scoring-contract-v4.4.json"
+)
+"""Signed claims-carrying contract (v4.4): source of the claims read path (C3)."""
 
 ABSENT = "absent"
 """Explicit marker for a contract-required field the candidate does not carry."""
@@ -100,6 +109,11 @@ MATERIAL_ITEMS_CARRIERS: Mapping[str, Carrier] = {
 ROLE_CARRIERS: Mapping[Role, Mapping[str, Carrier]] = {
     Role.MATERIAL_ITEMS: MATERIAL_ITEMS_CARRIERS,
 }
+"""Static carriers for roles whose read path was implemented in-revision.
+
+``Role.CLAIMS`` resolves lazily from the signed claims-carrying contract
+(``read_path.roles.claims.carriers``, contract v4.4) — see ``_carriers_for``.
+"""
 
 ROLE_REQUIRED_FIELDS: Mapping[Role, tuple[str, ...]] = {
     Role.MATERIAL_ITEMS: (
@@ -115,6 +129,15 @@ ROLE_REQUIRED_FIELDS: Mapping[Role, tuple[str, ...]] = {
     ),
 }
 
+
+def required_fields_for(role: Role) -> tuple[str, ...]:
+    """Contract-required fields for ``role``: static map first, else the signed contract."""
+    declared = ROLE_REQUIRED_FIELDS.get(role)
+    if declared is not None:
+        return declared
+    return tuple(sorted(_carriers_for(role)))
+
+
 CALIBER_AUTO_NORMALIZE: Mapping[str, Mapping[str, str]] = {
     "perspective": {"source_explicit": "unknown"},
     "speech_role": {
@@ -122,6 +145,9 @@ CALIBER_AUTO_NORMALIZE: Mapping[str, Mapping[str, str]] = {
         "answer": "statement",
         "unknown": "statement",
     },
+    # Signed caliber C3 (contract v4.4): claims carries ``kind`` for ``factuality``.
+    # Inert for items, whose required fields have no ``factuality`` member.
+    "factuality": {"fact": "actual"},
 }
 """``caliber_rules.rules.<field>`` entries with ``auto_normalize: true``, matching view only."""
 
@@ -300,12 +326,86 @@ def matching_view(field: str, value: str) -> str:
 
 def _carriers_for(role: Role) -> Mapping[str, Carrier]:
     carriers = ROLE_CARRIERS.get(role)
-    if carriers is None:
+    if carriers is not None:
+        return carriers
+    if role is Role.CLAIMS:
+        return _claims_carriers()
+    raise ScoringInputError(
+        f"role {role} has no implemented read path in contract v4.1 "
+        "(read_path.roles.*.implemented_in_this_revision is false)"
+    )
+
+
+@lru_cache(maxsize=1)
+def _claims_carriers() -> Mapping[str, Carrier]:
+    """Cached claims carriers; the contract file is read at most once per process."""
+    return load_claims_carriers()
+
+
+def load_claims_carriers(
+    contract_path: str | Path = CLAIMS_CONTRACT_PATH,
+) -> Mapping[str, Carrier]:
+    """Read the claims read path from the signed claims-carrying contract (C3).
+
+    Prefers ``read_path.roles.claims.carriers``; falls back to the transitional
+    ``read_path.roles_proposed.claims.carriers`` location used by the v4.4 signoff, and fails
+    closed if both are declared (two sources) or if the carrier set does not match the
+    contract's ``role_required_fields.claims``.
+    """
+    path = Path(contract_path)
+    try:
+        payload: Any = json.loads(path.read_text(encoding="utf-8"))
+    except OSError as exc:
+        raise ScoringInputError(f"claims_contract_unavailable:{path}") from exc
+    except json.JSONDecodeError as exc:
+        raise ScoringInputError(f"claims_contract_invalid_json:{path}") from exc
+    if not isinstance(payload, Mapping) or payload.get("status") != "frozen_signed":
+        raise ScoringInputError("claims contract must be a frozen_signed JSON object")
+    read_path = payload.get("read_path")
+    if not isinstance(read_path, Mapping):
+        raise ScoringInputError("claims_contract_read_path_missing")
+    canonical = _nested(read_path, "roles", "claims")
+    proposed = _nested(read_path, "roles_proposed", "claims")
+    canonical_carriers = canonical.get("carriers") if isinstance(canonical, Mapping) else None
+    proposed_carriers = proposed.get("carriers") if isinstance(proposed, Mapping) else None
+    if canonical_carriers and proposed_carriers:
         raise ScoringInputError(
-            f"role {role} has no implemented read path in contract v4.1 "
-            "(read_path.roles.*.implemented_in_this_revision is false)"
+            "claims carriers declared twice (read_path.roles.claims and roles_proposed.claims)"
+        )
+    declared = canonical_carriers or proposed_carriers
+    if not isinstance(declared, Mapping) or not declared:
+        raise ScoringInputError("claims_contract_role_carriers_missing:claims")
+    carriers: dict[str, Carrier] = {}
+    for name, entry in declared.items():
+        if not isinstance(entry, Mapping):
+            raise ScoringInputError(f"claims carrier must be an object: {name}")
+        carrier = str(entry.get("carrier") or "")
+        requires = str(entry.get("requires") or "")
+        if not carrier or not requires:
+            raise ScoringInputError(f"claims carrier incomplete: {name}")
+        try:
+            requirement = Requirement(requires)
+        except ValueError as exc:
+            raise ScoringInputError(
+                f"claims carrier {name} has unknown requires={requires!r}"
+            ) from exc
+        carriers[str(name)] = Carrier(carrier, requirement)
+    required = set((payload.get("role_required_fields") or {}).get("claims") or ())
+    if required and required != set(carriers):
+        raise ScoringInputError(
+            "claims carriers do not match role_required_fields.claims: "
+            f"missing={sorted(required - set(carriers))} extra={sorted(set(carriers) - required)}"
         )
     return carriers
+
+
+def _nested(parent: Mapping[str, Any], *keys: str) -> Mapping[str, Any]:
+    current: Any = parent
+    for key in keys:
+        if not isinstance(current, Mapping):
+            return {}
+        current = current.get(key)
+    return current if isinstance(current, Mapping) else {}
 
 
 def _validate_adjudication_shape(adjudication: Mapping[str, Any], index: int) -> dict[str, Any]:
@@ -444,11 +544,22 @@ def _resolve_canonical_fields(
     return canonical, basis, normalized
 
 
+_CARRIER_PREFIXES = ("layer_b.", "item.", "claim.")
+"""Carrier namespaces: the candidate's own fields, its layer-B projection, and claims rows."""
+
+
 def _deterministic_value(carrier: Carrier, origin_candidate: Mapping[str, Any]) -> str:
     if carrier.carrier == "none":
         return ABSENT
-    prefix = "layer_b." if carrier.carrier.startswith("layer_b.") else "item."
-    key = carrier.carrier[len(prefix) :]
+    key = None
+    for prefix in _CARRIER_PREFIXES:
+        if carrier.carrier.startswith(prefix):
+            key = carrier.carrier[len(prefix) :]
+            break
+    if not key:
+        raise ScoringInputError(
+            f"carrier {carrier.carrier!r} has no known namespace {_CARRIER_PREFIXES}"
+        )
     value = origin_candidate.get(key)
     if value is None or not str(value).strip():
         return ABSENT

@@ -17,13 +17,13 @@
 | `policy_cannot_move_the_verdict` | 改 pilot 策略阈值 ⇒ rate_gate_passed 与 rate_blockers 不变（唯一权威布尔） | PASS | `{"lenient_passed": false, "strict_passed": false, "pilot_blockers_differ": true}` |
 | `two_twenty_axes_are_distinct` | 角色轴 min_gold_per_role(20) 与源轴 accepted_records_per_source_min(20) 未被混用 | PASS | `{"min_gold_per_role": 20, "accepted_records_per_source_min": 20}` |
 | `published_score_record_unchanged` | 77 出分记录在本改动后逐字节不变 | PASS | `{"recorded": "sha256:7a8a8c2b5849aa802abd5616248d7a3e090d63ae9ba44fd1ca6ce0877a147d09", "now": "sha256:7a8a8c2b5849aa802abd5616248d7a3e090d63ae9ba44fd` |
-| `freeze_chain_validator_clean` | check_freeze_chain.py 退出 0，drift=0，needs_ruling=0 | PASS | `{"exit": 0, "ok": 16, "covered": 8, "drift": 0, "needs_ruling": 0}` |
+| `freeze_chain_validator_clean` | check_freeze_chain.py 退出 0，drift=0，needs_ruling=0 | PASS | `{"exit": 0, "ok": 17, "covered": 8, "drift": 0, "needs_ruling": 0}` |
 
 ## 二、改动文件（哈希）
 
-- `plugins/corpus/structured_scoring.py` `sha256:0318e525ae38c8e8f6be06c7a7b2263f2da2b55e9e2d72f66e62ac3f9aee1327`
-- `tools/check_freeze_chain.py` `sha256:509714a07a8d87ede8b4403763a1e636f042d9de8d7ab226e4437af8d8832095`
-- `tests/test_corpus_contract_gate.py` `sha256:a451407a438feb266c3cba443a066180b8dbb7f3d291075568691514022d1d30`
+- `plugins/corpus/structured_scoring.py` `sha256:aa40d42dbd58663715df217bca06c48ef5843d913a9a6d2170f0ee681b0ab4e0`
+- `tools/check_freeze_chain.py` `sha256:089ef31ed044635b6eb3910372430ce7683aa33112517522ad64adef86128a29`
+- `tests/test_corpus_contract_gate.py` `sha256:6f1851a54dbfac5447d504740a762d768741a220a353fb3573ef52cf03e3189a`
 - `tests/test_corpus_structured_scoring_adjudicated.py` `sha256:2d96e2d5ffc68cd9eabf18452eb3ac9e763f6a4301dc046299a7b6630f4875e2`
 
 ## 三、明确未改动的部分

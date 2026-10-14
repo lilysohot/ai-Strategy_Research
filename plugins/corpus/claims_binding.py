@@ -28,6 +28,7 @@ from plugins.corpus.material_semantics import (
 
 CLAIMS_SLOT_PROTOCOL_VERSION = "claims-slot-obligations-v2"
 _RESOLVED_PERIOD_REASONS = {"period_ambiguous", "period_unanchored", "period_missing"}
+_RESOLVED_UNIT_REASONS = {"unit_missing", "unit_unknown"}
 _EVIDENCE_RANGE_RE = re.compile(
     r"(?<!\d)([+-]?\d[\d,]*(?:\.\d+)?\s*[万亿]?\s*"
     r"(?:-|~|～|—|–|至|到)\s*[+-]?\d[\d,]*(?:\.\d+)?\s*[万亿]?"
@@ -211,6 +212,86 @@ def bind_claim_coordinates(
     if qualifiers != record.qualifiers:
         updates["qualifiers"] = qualifiers
     return replace(record, **updates) if updates else record
+
+
+def _norm_key(text: str | None) -> str:
+    return re.sub(r"\s+", "", text or "").lower()
+
+
+def recover_packet_coordinates(
+    records: list[ClaimRecord],
+) -> tuple[list[ClaimRecord], dict[str, int]]:
+    """T2（预注册「缺坐标=补齐，不得不产出」）：用同 packet 的确定性载体补 period/unit。
+
+    载体只有两种，都要能在本 packet 内逐字指认，绝不猜：
+
+    * 同一引用区间（``evidence_quote`` 归一后相同）的兄弟记录带着 period ⇒ 同一段原文的期间；
+    * 同一 ``subject+metric`` 的兄弟记录带着 period/unit ⇒ 同一指标口径的期间/单位。
+
+    补齐时把归一后的 ``period_end/period_grain`` 一并带上（与载体逐字一致），这样
+    ``bind_claim_coordinates`` 不会再改口 provenance；已解析的 period 阻断码同时撤下，
+    使 ``缺字段却无阻断码`` 与 ``坐标未绑`` 两个代理同时受益。
+    """
+    period_by_quote: dict[str, ClaimRecord] = {}
+    period_by_metric: dict[tuple[str, str], ClaimRecord] = {}
+    unit_by_metric: dict[tuple[str, str], ClaimRecord] = {}
+    for record in records:
+        quote_key = _norm_key(record.evidence_quote)
+        metric_key = (_norm_key(record.subject), _norm_key(record.metric))
+        if record.period_raw and record.period_end:
+            if quote_key:
+                period_by_quote.setdefault(quote_key, record)
+            if metric_key != ("", ""):
+                period_by_metric.setdefault(metric_key, record)
+        if record.unit_raw and record.unit and metric_key != ("", ""):
+            unit_by_metric.setdefault(metric_key, record)
+
+    notes = {"period_from_same_quote": 0, "period_from_same_metric": 0, "unit_from_same_metric": 0}
+    recovered: list[ClaimRecord] = []
+    for record in records:
+        updates: dict[str, Any] = {}
+        qualifiers = dict(record.qualifiers)
+        quote_key = _norm_key(record.evidence_quote)
+        metric_key = (_norm_key(record.subject), _norm_key(record.metric))
+        if not (record.period_raw and record.period_end):
+            carrier = period_by_quote.get(quote_key)
+            basis = "packet_sibling_same_quote"
+            if carrier is None:
+                carrier = period_by_metric.get(metric_key)
+                basis = "packet_sibling_same_metric"
+            if carrier is not None and carrier is not record:
+                updates.update(
+                    period_raw=carrier.period_raw,
+                    period_end=carrier.period_end,
+                    period_grain=carrier.period_grain,
+                    reason_codes=tuple(
+                        code for code in record.reason_codes if code not in _RESOLVED_PERIOD_REASONS
+                    ),
+                )
+                qualifiers["period_basis"] = basis
+                notes[
+                    "period_from_same_quote"
+                    if basis.endswith("quote")
+                    else "period_from_same_metric"
+                ] += 1
+        if not (record.unit_raw and record.unit):
+            carrier_unit = unit_by_metric.get(metric_key)
+            if carrier_unit is not None and carrier_unit is not record:
+                updates.update(
+                    unit_raw=carrier_unit.unit_raw,
+                    unit=carrier_unit.unit,
+                    reason_codes=tuple(
+                        code
+                        for code in updates.get("reason_codes", record.reason_codes)
+                        if code not in _RESOLVED_UNIT_REASONS
+                    ),
+                )
+                qualifiers["unit_basis"] = "packet_sibling_same_metric"
+                notes["unit_from_same_metric"] += 1
+        if qualifiers != record.qualifiers:
+            updates["qualifiers"] = qualifiers
+        recovered.append(replace(record, **updates) if updates else record)
+    return recovered, notes
 
 
 def validate_slot_outcomes(

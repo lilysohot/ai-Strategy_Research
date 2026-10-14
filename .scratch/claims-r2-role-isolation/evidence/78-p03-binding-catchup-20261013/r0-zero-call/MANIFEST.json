@@ -4,16 +4,16 @@
   "zero_model_calls": true,
   "artifacts": {
     "verify_p03_binding.py": "sha256:8b2953ac6410836bc0218f7088ed0c1bbd3aa5c95585899fbb1b6c2e1687aa36",
-    "verification.json": "sha256:c74d3fb926ec8a1aa73f625afe2f964bc83fe48d2c07d27893f9c2445bd5e688",
-    "verification.md": "sha256:217d5da5b79a178ddf35461e9d109dfed6e7f04879ed60d9c23df6300dd877d1"
+    "verification.json": "sha256:616bbadf39ccda2ea4bc4147fab24540d13e20b889ad0a0142dcb94ef5f68398",
+    "verification.md": "sha256:6267198853d5277e5757d5f1a9ad79453731787183cfc19019da33a9fc5e4ec4"
   },
   "inputs": {
     "contract_v4.3": "sha256:d7b4f8a81ef42e3cd5d619eae92bc34df7b7aa683d34aeba4f1a22719ae69a2f",
     "gate_v3": "sha256:340b312d9c0cec278e828d8303a03e9daf953feef4c0eef688f3d257971a9732",
     "score_77_record": "sha256:7a8a8c2b5849aa802abd5616248d7a3e090d63ae9ba44fd1ca6ce0877a147d09",
-    "plugins/corpus/structured_scoring.py": "sha256:0318e525ae38c8e8f6be06c7a7b2263f2da2b55e9e2d72f66e62ac3f9aee1327",
-    "tools/check_freeze_chain.py": "sha256:509714a07a8d87ede8b4403763a1e636f042d9de8d7ab226e4437af8d8832095",
-    "tests/test_corpus_contract_gate.py": "sha256:a451407a438feb266c3cba443a066180b8dbb7f3d291075568691514022d1d30",
+    "plugins/corpus/structured_scoring.py": "sha256:aa40d42dbd58663715df217bca06c48ef5843d913a9a6d2170f0ee681b0ab4e0",
+    "tools/check_freeze_chain.py": "sha256:089ef31ed044635b6eb3910372430ce7683aa33112517522ad64adef86128a29",
+    "tests/test_corpus_contract_gate.py": "sha256:6f1851a54dbfac5447d504740a762d768741a220a353fb3573ef52cf03e3189a",
     "tests/test_corpus_structured_scoring_adjudicated.py": "sha256:2d96e2d5ffc68cd9eabf18452eb3ac9e763f6a4301dc046299a7b6630f4875e2"
   },
   "reproduce": "uv run python .scratch/claims-r2-role-isolation/evidence/78-p03-binding-catchup-20261013/r0-zero-call/verify_p03_binding.py"

@@ -63,6 +63,21 @@ def board_size(task_id: str) -> int:
     return len(b["tasks"]) if b else 0
 
 
+def record_verification(name: str, *, passed: bool, detail: str) -> None:
+    """Record a tool verdict separately from the model's completion judgment."""
+    scope = get_current_execution_scope()
+    if scope is None:
+        return
+    board = _board(scope.task_id)
+    tid = f"verification:{name}"
+    op = "update" if tid in board["tasks"] else "add"
+    board["tasks"][tid] = {
+        "description": detail, "resolution": "resolved" if passed else "open",
+        "owners": [], "group": "工具校验", "verification_ok": passed,
+    }
+    _record_op(scope.task_id, op, [tid])
+
+
 def build_task_board_observer(*, cooldown_turns: int = 5) -> TaskBoardObserver:
     """Bind the shared observer to this plugin's task-board state."""
     return TaskBoardObserver(
@@ -517,6 +532,16 @@ async def update_task(updates: list[Any]) -> str:
             errors.append(f"{tid}: bad resolution {res!r} (use {VALID_RESOLUTION})")
             continue
         t = b["tasks"][tid]
+        if t.get("verification_ok") is False:
+            if res == "resolved":
+                errors.append(f"{tid}: 工具校验未通过，须重试成功后才可完成")
+                continue
+            if res == "cancelled":
+                reason = str(u.get("reason") or "").strip()
+                if not reason:
+                    errors.append(f"{tid}: 取消未通过的校验须提供 reason，并在报告披露限制")
+                    continue
+                t["description"] += f"；未完成原因：{reason}"
         t.setdefault("owners", [])
         if res:
             t["resolution"] = res

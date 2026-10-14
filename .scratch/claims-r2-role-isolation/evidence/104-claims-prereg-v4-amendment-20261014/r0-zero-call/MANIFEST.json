@@ -1,0 +1,74 @@
+{
+  "schema_version": "claims-preregistration-amendment-manifest-1",
+  "id": "104-claims-prereg-v4-amendment-20261014",
+  "status": "draft_pending_human_signature",
+  "created_on": "2026-10-14",
+  "model_calls": 0,
+  "purpose": "把阶段 2 止损项 unbound_union 从闸门改为诊断（U 2026-10-14 裁示）；以新版本记录 + 旧哈希留存落地，不改 95/99/101 号字节",
+  "inputs": {
+    "signed_prereg_99": "a2d174407daa5a1b88ba9ca44e698cf4512a399b2a4895254d0a3ab4b57edf04",
+    "prereg_draft_95": "443df86f559f973efa7d43fa636390463b0a5538922f19d1ef9c452157c7c657",
+    "treatment_landing_101": "79c93cd9bb6f6220d6a356db55117708dc4cd8ac58db83b8e7c2e9e790478b70",
+    "claims_gate_v3_signed": "b2b93b9ce46711b1e2f55d340c54452c1033eb15569f0dd865af9e3477d74fb3",
+    "governance_refusal_97": "697aae8cbe5130f4e36d159a1897779a229a980f540e0322a77ab23c9560618d",
+    "signed_scoring_contract_v4.4": "ce1938b6d35a1292b22d8d75a3af461743e627ccebb0385f3267cb652fcd1650",
+    "prereg_draft_95_manifest": "6bd6216420e899ff074a4e49a9f522c3f7ee6955f7902d035cbfb4571ffff880"
+  },
+  "outputs": {
+    "claims-preregistration-v4.proposed.json": "c5dc79126808b0b2bc2f008ed818ea7207d13efd6aa90b52f71c3d1bd88bd163",
+    "claims-preregistration-v4-signoff.md": "3531e2c359adb2c53a5a7efe67fc6adfb3b7fb75a91f9ddb49840a2644afc989"
+  },
+  "amendment_diff": {
+    "changed_leaf_paths": [
+      "not_done",
+      "pre_registered_treatment_rules.coverage_rule",
+      "pre_registered_treatment_rules.rules",
+      "prior_record_readings",
+      "revisions",
+      "status"
+    ],
+    "added_leaf_paths": [
+      "amended_from",
+      "downstream_followups",
+      "exit_rules.early_stop_before_human_adjudication.report_only_proxies",
+      "exit_rules.early_stop_before_human_adjudication.stage2_proxies_protocol"
+    ],
+    "removed_leaf_paths": [
+      "exit_rules.early_stop_before_human_adjudication.stage2_proxies.unbound_union"
+    ],
+    "unexpected": {
+      "unexpected_changed": [],
+      "unexpected_added": [],
+      "unexpected_removed": []
+    }
+  },
+  "invariants_kept": {
+    "tiers": true,
+    "reading_axes": true,
+    "guardrails": true,
+    "treatment_definition_checks": true,
+    "trial_validity": true,
+    "proxies": true,
+    "budget_request": true,
+    "thresholds": true,
+    "diagnostic_keeps_baseline": true
+  },
+  "does_not_touch": [
+    "evidence/95-claims-prereg-20261014/**",
+    "evidence/99-claims-prereg-v3-signed-r2-20261014/**",
+    "evidence/101-claims-treatment-t1t2t3-landing-20261014/**",
+    "evidence/102-claims-treatment-engineering-20261014/**",
+    "evidence/103-claims-budget-authorisation-20261014/**",
+    "evidence/88-claims-contract-v44-signed-20261014/**",
+    "evidence/91-claims-gate-v3-signed-20261014/**",
+    "evidence/97-claims-governance-refusal-20261014/**",
+    "evidence/10-quality-gold-freeze-20261008-r2/**"
+  ],
+  "blocked_on": [
+    "U 在本件签认件上具名签署；未签不得生成生效件"
+  ],
+  "notes": [
+    "草案产出；签名字段一律留空，实施脚本不代签、不预填。",
+    "生效需另跑 apply_prereg_v4_signoff.py；阶段 2 由 stage2_under_v4.py 按 v4 判据执行。"
+  ]
+}

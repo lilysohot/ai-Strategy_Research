@@ -11,12 +11,13 @@ const props = defineProps<{
   sessionId: string | null
   sessionTitle: string
   plans: readonly SessionPlanPreview[]
+  savePlan: (plan: SessionPlanInput) => Promise<void>
 }>()
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean]
-  save: [plan: SessionPlanInput]
   dirtyChange: [dirty: boolean]
+  runSubmitted: [submission: { sessionId: string; runId: string; message: string }]
 }>()
 
 // 计划不保存价格（2026-10-08 口径）：只登记本标的规划资金；成交价由成交记录回填。
@@ -31,6 +32,8 @@ const draft = reactive<SessionPlanInput>({
 
 const currentPlans = computed(() => props.plans.filter((plan) => plan.sessionId === props.sessionId))
 const canSave = computed(() => !!props.sessionId && !!draft.name.trim() && !!draft.symbol.trim())
+const saving = ref(false)
+const saveError = ref('')
 
 watch(() => props.sessionId, () => resetDraft(), { flush: 'sync' })
 watch(() => props.modelValue, (open) => {
@@ -55,6 +58,7 @@ function isDirty(): boolean {
 }
 
 function resetDraft(): void {
+  saveError.value = ''
   Object.assign(draft, {
     name: '',
     symbol: '',
@@ -66,6 +70,7 @@ function resetDraft(): void {
 }
 
 function discardDraft(): boolean {
+  if (saving.value) return false
   if (isDirty() && !window.confirm('计划尚未保存，关闭将丢弃草稿。是否继续？')) return false
   resetDraft()
   return true
@@ -80,15 +85,31 @@ function close(): void {
   emit('update:modelValue', false)
 }
 
-function save(): void {
-  if (!canSave.value) return
-  emit('save', {
+async function save(): Promise<void> {
+  if (saving.value) return
+  saveError.value = ''
+  if (!canSave.value) {
+    saveError.value = '请填写计划名称和标的后保存'
+    return
+  }
+  const sessionId = props.sessionId
+  const input = {
     ...draft,
     name: draft.name.trim(),
     symbol: draft.symbol.trim().toUpperCase(),
     allocatedCapital: draft.allocatedCapital.trim(),
-  })
-  resetDraft()
+  }
+  saving.value = true
+  try {
+    await props.savePlan(input)
+    if (props.sessionId === sessionId) resetDraft()
+  } catch (err) {
+    if (props.sessionId === sessionId) {
+      saveError.value = err instanceof Error ? err.message : '保存失败，请重试'
+    }
+  } finally {
+    saving.value = false
+  }
 }
 
 function marketLabel(market: SessionPlanPreview['market']): string {
@@ -132,11 +153,13 @@ async function submitTrade(): Promise<void> {
   const plan = store.plans.find((item) => item.id === planId)
   const symbol = plan?.values?.symbol ?? ''
   const currency = plan?.values?.currency ?? 'CNY'
+  const sessionId = props.sessionId
+  const message = `已按 ${trade.price.trim()} ${trade.side === 'buy' ? '买入' : '卖出'} ${trade.quantity.trim()}，请按实际成交成本重新分析。`
   submittingTrade.value = true
   try {
     const res = await runsApi.submit({
-      session_id: props.sessionId,
-      message: `已按 ${trade.price.trim()} ${trade.side === 'buy' ? '买入' : '卖出'} ${trade.quantity.trim()}，请按实际成交成本重新分析。`,
+      session_id: sessionId,
+      message,
       investment_input: {
         use_case: 'holding_cost',
         account: { id: accountId },
@@ -156,6 +179,7 @@ async function submitTrade(): Promise<void> {
       },
     })
     resetTrade()
+    emit('runSubmitted', { sessionId, runId: res.run_id, message })
     ElMessage.success(`成交已保存，分析已排队（Run ${res.run_id ?? ''}）`)
   } catch (err) {
     tradeError.value = err instanceof Error ? err.message : '保存失败，请重试'
@@ -172,6 +196,8 @@ defineExpose({ resetDraft })
     width="min(720px, calc(100vw - 28px))"
     class="session-plan-dialog"
     :close-on-click-modal="false"
+    :close-on-press-escape="!saving"
+    :show-close="!saving"
     :before-close="beforeClose"
     @update:model-value="emit('update:modelValue', $event)"
   >
@@ -211,6 +237,7 @@ defineExpose({ resetDraft })
         <h3 id="new-session-plan-title">创建当前会话的计划</h3>
       </header>
 
+      <el-form :disabled="saving" @submit.prevent="save">
       <div class="plan-form">
         <label class="field field--wide">
           <span>计划名称 <em>必填</em></span>
@@ -251,6 +278,8 @@ defineExpose({ resetDraft })
           </span>
         </label>
       </div>
+      </el-form>
+      <p v-if="saveError" class="trade-error" role="alert">{{ saveError }}；填写内容已保留。</p>
     </section>
 
     <section class="trade-fill" aria-labelledby="session-trade-fill-title">
@@ -280,7 +309,13 @@ defineExpose({ resetDraft })
         </label>
         <label class="field">
           <span>成交时间</span>
-          <el-input v-model="trade.tradedAt" placeholder="2026-10-08T10:30:00Z" />
+          <el-date-picker
+            v-model="trade.tradedAt"
+            type="datetime"
+            format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY-MM-DDTHH:mm:ssZ"
+            placeholder="选择实际成交时间"
+          />
         </label>
         <label class="field">
           <span>费用（可选）</span>
@@ -295,9 +330,9 @@ defineExpose({ resetDraft })
 
     <template #footer>
       <div class="dialog-actions">
-        <span>前端交互预览 · 暂不写入服务端</span>
-        <el-button @click="close">关闭</el-button>
-        <el-button type="primary" :disabled="!canSave" @click="save">添加到当前会话</el-button>
+        <span>保存后归属当前会话</span>
+        <el-button :disabled="saving" @click="close">关闭</el-button>
+        <el-button type="primary" :loading="saving" @click="save">保存计划</el-button>
       </div>
     </template>
   </el-dialog>
@@ -330,7 +365,9 @@ defineExpose({ resetDraft })
 .field--wide { grid-column: 1 / -1; }
 .field > span { font-size: 13px; font-weight: 600; }
 .field em { color: var(--warning); font-style: normal; }
+.trade-error { color: var(--el-color-danger); font-size: 13px; }
 .field :deep(.el-select) { width: 100%; }
+.field :deep(.el-date-editor) { width: 100%; }
 .primary-choice { display: flex; align-items: center; gap: 10px; padding-top: 4px; }
 .primary-choice > span { display: flex; flex-direction: column; }
 .primary-choice strong { font-size: 13px; }

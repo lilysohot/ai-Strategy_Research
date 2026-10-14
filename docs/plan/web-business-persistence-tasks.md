@@ -4,7 +4,7 @@
 |---|---|
 | 版本 / 日期 | v1.5 · 2026-10-08；回填执行情况（§10）并落实 DATA-01 口径变更（规划资金/期望盈利、计划不含价格、Agent 主动补数） |
 | 状态 | 有效任务设计；DATA-00—15 服务端已实施并提交（证据见[环境基线](web-business-data-env-baseline.md) §4.1—4.11，`tests/pg` 202 passed），**未部署 API、未迁移生产库**；D 阶段、供应商实测、保留策略与 UI 侧联合验收待办 |
-| 需求依据 | [Web 业务资料 PRD v0.6](../design/web-business-data-prd.md)；[产品需求](../product-requirements.md) PR-DATA-13、PR-BIZ-01—06、PR-WB-07、PR-WATCH-01—04；工具接线依赖 PR-DATA-04 |
+| 需求依据 | [Web 业务资料 PRD v0.7](../design/web-business-data-prd.md)；[产品需求](../product-requirements.md) PR-DATA-13、PR-BIZ-01—06、PR-WB-07、PR-WATCH-01—04；工具接线依赖 PR-DATA-04 |
 | 配套清单 | [Web 页面交互任务](web-business-ui-tasks.md) |
 | 范围 | PostgreSQL 业务真源、统一写入、版本/快照、补数、上下文、监控事件、持久调度、恢复与验收 |
 

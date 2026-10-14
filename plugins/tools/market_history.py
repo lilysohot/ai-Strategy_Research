@@ -19,6 +19,7 @@ from frontier_agent.core.tool import tool
 from plugins.market.factory import build_service, resolve_or_error, unavailability
 from plugins.market.failure import translate
 from plugins.market.ports import MarketUnavailable
+from plugins.market.temporal import annotate_history
 
 #: 试验阶段的回溯硬上限。10 年日线约 2400 条 / 13 万字符，会触发工具结果的 overflow
 #: 落盘，模型只能靠 ``recover_result`` 逐页翻读（每次 2 万字符），实测一次任务为此多花
@@ -49,9 +50,9 @@ async def market_history(
             **随基准变化、跨次调用不可比**）/ `backward`（后复权）。
 
     Returns:
-        JSON 字符串：``{"ok": true, "thscode", "interval", "adjust", "count",
-        "items": [{"date_ms", "open_price", "high_price", "low_price",
-        "close_price", "volume", "turnover"}]}``。
+        JSON 字符串：``items`` 只含已收盘日线；当日未完成日线单列于
+        ``provisional_items``，不得参与均线、日均量或完整日涨跌比较。返回体同时包含
+        ``retrieved_at``、``latest_closed_trade_date``、``raw_count`` 与 ``count``。
         请求超过上限时另带 ``requested_days`` 与 ``capped: true``——不要据此认为更早的
         区间不存在。
     """
@@ -91,7 +92,7 @@ async def market_history(
         return json.dumps(translate(exc, tool="market_history"), ensure_ascii=False)
 
     payload: dict[str, Any] = {
-        **result,
+        **annotate_history(result, str(thscode), end_ms),
         "query": query,
         "days": days,
         "start_ms": start_ms,

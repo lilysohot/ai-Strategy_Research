@@ -1,0 +1,980 @@
+{
+  "schema_version": "non-table-selected-target-scoring-contract-v4.4",
+  "status": "frozen_signed",
+  "supersedes": {
+    "schema_version": "non-table-selected-target-scoring-contract-v4.3",
+    "status_at_supersede": "frozen_signed",
+    "sha256": "sha256:d7b4f8a81ef42e3cd5d619eae92bc34df7b7aa683d34aeba4f1a22719ae69a2f",
+    "note": "v4.4 只增叶子：新增 role_sections/claims_scope/claims_precision_single_source/claims_use_grading/claims_thresholds/read_path.roles_proposed 与 agent_proposals；既有叶子仅 schema_version/status/supersedes/signoff 四处按新版本手续改动，六项阈值逐字不变。"
+  },
+  "revision_history": [
+    {
+      "revision": "v2",
+      "status": "draft_pending_human_review",
+      "sha256": "sha256:2eb24be7e74f9e6003ca623487478790cdb60265c5f05377eda377f498f3bdbe"
+    },
+    {
+      "revision": "v3",
+      "revised_on": "2026-10-11",
+      "authors": "agent",
+      "signed_by": "xyl",
+      "basis": "用户于 2026-10-11 指令「按 Issue 30 的提案执行」；依据 Issue 29 语义审计 F1/F2/F3 与 Issue 30 路线 A 提案。",
+      "changes": [
+        "status 由 draft_pending_human_review 转为已签认终态 frozen_signed。",
+        "新增 condition_role_read_path：定义 statement_role == 'condition' 的原子命题读路径。",
+        "condition_role_read_path 含 compound_condition 子规则（复合 condition 按子条件计分）与 required_fields_override（condition 角色追加 condition 为必需字段）。",
+        "matching.items / matching.conditions 引用 condition_role_read_path。",
+        "review_assertions 增补 label-only condition 项 NT-I09/I19/I29/I35/I39。",
+        "未改动 frozen-gold.json 与 freeze-state.json；未改动任何已冻结金标记录。"
+      ]
+    },
+    {
+      "revision": "v4",
+      "status": "draft_pending_human_signature",
+      "created_on": "2026-10-12",
+      "authors": "agent",
+      "signed_by": "xyl",
+      "basis": "issue-34 §7-1/§7-3/§7-6/§7-7/§7-11/§7-12 与 U 2026-10-12 全量裁定；依据 evidence/36–40 实测",
+      "changes": [
+        "新增 caliber_rules（逐字段口径归一化；方向由 §8 硬约束推定）",
+        "新增 read_path（角色通用机制，本期仅 material_items 落地；声明与记录 ID 无关）",
+        "新增 adjudication_clause（Stage 2 责任人/凭据/全量 222）",
+        "新增 threshold_source（双源并列 + OPEN-1）",
+        "新增 relation_matching（金标主键缺陷 + OPEN-2）",
+        "新增 bookkeeping_requirements（绑定同步/校验器/validation-report）",
+        "matching.projection 增补：归一化不得覆盖原始字段",
+        "status 由 frozen_signed 退回 draft_pending_human_signature（v4 未签认）"
+      ]
+    },
+    {
+      "revision": "v4.1",
+      "status": "draft_pending_human_signature",
+      "created_on": "2026-10-12",
+      "authors": "agent",
+      "signed_by": "xyl",
+      "basis": "P10（replan）：以已签 v4 为基，并入并行草案 `.scratch/claims-r2-role-isolation/evidence/41-items-chain-accounting-20261012/r3-signoff-apply/scoring-contract-v4.proposed.json`（`sha256:b3f88649e9eca70cf21b95c466ea4a4950ef6a316aa521e2b42822c4eae7818f`）的独有叶子。",
+      "changes": [
+        "新增 22 条叶子（含 3 条核心读路径条款：carrier_mapping.rule、absent_required_fields.rule、equivalence_judgement.scorer_contract）",
+        "按已签结论落地 2 条（threshold_source.required_alignment 由 pending 改为已定）",
+        "status 退回 draft_pending_human_signature（v4.1 未签认）",
+        "未改动已签 v4 的任何既有叶子（只增不删）"
+      ]
+    },
+    {
+      "revision": "v4.2",
+      "status": "frozen_signed",
+      "created_on": "2026-10-12",
+      "authors": "agent",
+      "signed_by": "xyl",
+      "basis": "U 于 2026-10-12 对 P16 校验器拦下的项裁定 **(a)**：契约出新版本、把 authority_source 改钉门 28 的继任记录 v2（P13 产出）。沿用 P12/P13 的『新版本记录 + 旧哈希留存』手续。",
+      "changes": [
+        "threshold_source.authority_source.sha256 由 sha256:987772e9…（门 v1）改钉 sha256:8cc11bccc912ea7b123b6e769728c9076046d526c16c8a1218e27a2a692270f6（门 v2）。",
+        "threshold_source.authority_source.where 与 threshold_source.effective.source 同步改指 v2 文件。",
+        "阈值数值逐字不变（六项，机器校验）；其余叶子零改动（见 contract-v4.2-diff.json）。",
+        "v4.1 字节不变；v4.2 未签认前不生效。"
+      ]
+    },
+    {
+      "revision": "v4.3",
+      "status": "frozen_signed",
+      "created_on": "2026-10-13",
+      "authors": "agent",
+      "signed_by": "xyl",
+      "basis": "U 2026-10-13『先走 R2』；依据 evidence/71 FN 归因与 evidence/72 门 33 终态记录。",
+      "changes": [
+        "matching.items 增补『上下文唯一可恢复』条款及其两项不适用情形。",
+        "review_assertions 移出 ['NT-I09', 'NT-I19', 'NT-I45', 'NT-I46', 'NT-I47']，移入新增 review_assertions_excluded。",
+        "threshold_source.authority_source 由门 v2 改钉门 v3（签认后回填最终哈希）。",
+        "六项阈值数值逐字不变（机器校验）。",
+        "status 由 frozen_signed 退回 draft_pending_human_signature；signoff 清空为 pending。"
+      ]
+    }
+  ],
+  "signoff": {
+    "signed_by": "xyl",
+    "signed_on": "2026-10-14",
+    "statement": "核准 claims 契约 v4.4（只增叶子）：新增 role_sections（items 镜像 v4.3 的 11 条 NT-I 与 48；claims = NT-C11/NT-C12/NT-C13 与 target_total 20）、claims 角色范围（C1）、精度单一口径（C2）、claims 读路径（C3）、用途分级（C4）、claims 双线阈值与不可达登记（C5/C6）。六项阈值逐字不变；不改 v4.3 / frozen-gold / P1R5 已签裁定 / items 门 v3 字节。",
+    "instrument": {
+      "path": "evidence/86-claims-contract-v44-draft-20261014/r0-zero-call/claims-contract-v4.4-signoff.md",
+      "sha256": "sha256:2b9636559896c9b6fc3f33b8d66fd31ea9f39d26a627566019590d2fbac6cbc1"
+    },
+    "scope_note": "签认生效 claims 分支的读取；C2 附具名更正（前提为读数错误、无实现分歧）；C3 读路径已在代码中接线，C4 用途分级仍待落地；不代表出分、发布或语境完整。",
+    "reviewer_remark": "",
+    "remark_note": "备注为空 ⇒ 六格提案按原样接受（含 C2 更正记录）；不等同逐格确认。"
+  },
+  "source_export": "../10-quality-gold-expansion-20261008-r1/source-prose-units.json",
+  "evaluation_scope": "selected_target_recall_not_exhaustive_document_gold",
+  "candidate_input_scope": [
+    {
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "locators": [
+        "char:1393-1655",
+        "char:146-469",
+        "char:2405-2625",
+        "char:25-134",
+        "char:3925-4239",
+        "char:4385-4657",
+        "char:4659-4907",
+        "char:5055-5071",
+        "char:5246-5537",
+        "char:621-855"
+      ]
+    },
+    {
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "locators": [
+        "body[115]",
+        "body[15]",
+        "body[1]",
+        "body[26]",
+        "body[29]",
+        "body[32]",
+        "body[37]",
+        "body[3]",
+        "body[43]",
+        "body[46]",
+        "body[49]",
+        "body[51]",
+        "body[63]",
+        "body[72]"
+      ]
+    }
+  ],
+  "scope_rules": [
+    "候选只接收 candidate_input_scope 指定的非表格原文单元、来源元信息和既有角色提示；不得输入本包金标、目标ID或标注结果。",
+    "目标召回分母仅为人工接受的本包记录；并不宣称覆盖两份材料的所有命题。",
+    "声明范围外的输出独立登记 out_of_scope；范围内未命中金标的输出必须裁定，不能自动当 FP。",
+    "额外正确输出标为 correct_extra，用于候选正确率；不添加到已冻结目标金标，不追溯增加召回分母。",
+    "raw 与 validated 候选逐条分别裁定；漏抽、空输出、拒绝、失败保持在目标召回分母。"
+  ],
+  "condition_role_read_path": {
+    "applies_to": "statement_role == 'condition'",
+    "atomic_proposition_source": "condition 优先，proposition 兜底",
+    "rule": "condition 角色 items 的原子命题由非空 `condition` 字段承载；`proposition` 可为命名该条件的短标签。scorer 必须把非空 `condition` 值作为可匹配的原子命题；仅当 `condition` 缺失时才以 `proposition` 为准。",
+    "condition_logic": "存在时为规范化/机读形式，仅作辅助，不得作为命题文本参与匹配。",
+    "compound_condition": "当 `condition` 为复合（含 AND/OR 连接多个子条件）时，scorer 必须按子条件计分：各子条件均可匹配，命中任一子条件计为部分命中；复合项不得作为单一原子命题整体匹配。NT-I09（`condition=\"毛利率继续下降或Rubin延期\"`，二元析取、无 `condition_logic`）落此项；NT-I17/NT-I42 已有 `condition_logic` 显式承载复合结构。",
+    "required_fields_override": "statement_role == 'condition' 时，`condition` 追加为必需字段（其余角色不变，避免误伤 NT-I34 等非 condition 角色携带 condition 的情况）。",
+    "audit_reference": "Issue 29 items 金标语义审计 F1；Issue 30 路线 A 提案。"
+  },
+  "matching": {
+    "mode": "human_adjudicated_semantic_equivalence_then_one_to_one_mapping",
+    "claims": "独立从候选字段及原文核对主体、指标、期间、数值/区间、单位、实际/预测、约数、归属与来源态度。原文质疑和早期预计等限定必须一并交付。",
+    "items": "同义改写可接受；须保持一个原子命题、语义类型、话语角色、归属、否定、条件、行为意向。proposition 不用逐字字符串相等判定。condition 角色 items 的原子命题按 condition_role_read_path 读取（condition 优先，proposition 兜底）。【v4.3 增补｜上下文唯一可恢复】候选省略承载主体或限定条件时，若裁定人能依据同一证据包内唯一可恢复的上下文确定其主体/限定，视为保持该原子命题；无法唯一恢复者仍判不匹配。本增补不适用于：①同一候选被邻近金标占用（one_to_one_mapping 优先，一条输出不得抵扣多条金标）；②候选为疑问句等非断言形态。裁定人须在 reason 中记录恢复所依据的上下文。",
+    "conditions": "condition_logic 与 condition_groups 约束值、比较符、单位、基期及 AND/OR。I17 子项内部逻辑不明；保留原文或显式未知均可，擅自填 AND/OR 或去掉门槛不匹配。condition 角色 items 的原子命题文本按 condition_role_read_path 读取；复合 condition 按该路径的 compound_condition 子规则计分。",
+    "relations": "先独立判定两端 item 并一对一建立 candidate_item_id -> gold_record_id，随后比较有向端点、type、source_explicit 和关系原文。允许多条关系共享一个动作端点。",
+    "unknowns": "未明确来源保留 unknown；不得猜具体公司、人物或把同源转述当独立证据。",
+    "normalization": "数值仅做十进制单位缩放和闭区间规范化；日期和期间保留基准语境；约数不能升级成精确承诺。记录所用规则，不从金标反填候选缺字段。",
+    "projection": "现有 strict scorer 只接受裁定完成的语义映射；映射须保存原始候选字段、裁定人、理由和依据。不得将目标字符串直接赋给候选并宣称自动语义评分。 读路径/口径归一化只作用于匹配视图，不得覆盖候选或金标的原始字段；原始候选字段必须完整留存。"
+  },
+  "metrics": {
+    "target_recall": "accepted_gold_matched_once / accepted_gold_total；分角色，并保留原始/校验后切片。",
+    "candidate_precision": "(matched + correct_extra) / (matched + correct_extra + incorrect + duplicate)；unresolved 非零则 N/A，不能排除后报告通过。",
+    "duplicates": "同义重复仅第一条可匹配；后续记录 duplicate 计 FP。I16 为唯一止损动作，可供 R08/R09 共用。",
+    "selected_projection_precision": "不报告为完整抽取 precision；只看选中目标的候选投影会遗漏 FP。",
+    "risk_condition": "按角色分别报告标记记录数；总体仍可按既有 scorer 计算，但 items 与关系相关，不称独立风险场景。",
+    "quality_gate": "度量基准版本链：v2 → v3 → v4 → v4.1 → v4.2 → **v4.3（本版，草案）**；其中 v4.3 把 matching.items 的读法写实（上下文唯一可恢复），并与门 v3 的哨兵清单对齐。六项阈值自 v2 起逐字未变。Issue 28 items-only 质量门本身及其计数器签认仍单独进行；未获得完整候选裁定、query/delivery/context_use 时不得宣告整体质量门通过。"
+  },
+  "candidate_adjudication_fields": [
+    "candidate_id",
+    "stage",
+    "role",
+    "source_id",
+    "original_candidate",
+    "judgement",
+    "matched_gold_id",
+    "canonical_observed_fields",
+    "reviewer",
+    "reason",
+    "evidence"
+  ],
+  "candidate_judgements": [
+    "matched",
+    "correct_extra",
+    "incorrect",
+    "duplicate",
+    "unresolved",
+    "out_of_scope"
+  ],
+  "record_states": [
+    "pending",
+    "accepted",
+    "edited",
+    "rejected"
+  ],
+  "role_required_fields": {
+    "claims": [
+      "subject",
+      "metric",
+      "period",
+      "unit",
+      "value",
+      "factuality",
+      "attribution",
+      "perspective",
+      "source_stance",
+      "estimate_status",
+      "qualifier"
+    ],
+    "material_items": [
+      "proposition",
+      "semantic_type",
+      "statement_role",
+      "speech_role",
+      "perspective",
+      "speaker_ref",
+      "polarity",
+      "attribution",
+      "source_stance"
+    ],
+    "material_relations": [
+      "from_gold_record_id",
+      "to_gold_record_id",
+      "relation",
+      "provenance"
+    ]
+  },
+  "metric_units": {
+    "close_price": "元",
+    "adjusted_net_profit": "亿元",
+    "parent_net_profit": "亿元",
+    "operating_cash_flow": "亿元",
+    "inventory": "亿元",
+    "accounts_receivable": "亿元",
+    "gross_margin": "%",
+    "cloud_computing_revenue_yoy": "%",
+    "revenue": "亿元",
+    "NPO_penetration": "%",
+    "CPO_penetration": "%",
+    "pluggable_share": "%",
+    "CPO_shipments": "个",
+    "3.2T_batch_supply": "status",
+    "3.2T_shipments": "只",
+    "3.2T_unit_price": "美元",
+    "2.4T_shipments": "只",
+    "new_revenue_contributing_customers": "个"
+  },
+  "relation_types": [
+    "supports",
+    "challenges",
+    "conditions",
+    "invalidates",
+    "answers",
+    "motivates",
+    "attributes",
+    "elaborates"
+  ],
+  "semantic_types": [
+    "fact",
+    "forecast",
+    "opinion",
+    "behavior",
+    "unknown"
+  ],
+  "statement_roles": [
+    "claim",
+    "evidence",
+    "condition",
+    "risk",
+    "question",
+    "answer",
+    "other"
+  ],
+  "perspectives": [
+    "source_explicit",
+    "quoted_other",
+    "unknown"
+  ],
+  "minimum_accepted_records_per_role": 20,
+  "human_gates": [
+    "逐条语义裁定",
+    "争议及 unknown 处理口径",
+    "目标范围、匹配规则和完整候选正确率口径签认",
+    "新增冻结版本及其签名"
+  ],
+  "review_assertions": {
+    "NT-I13": {
+      "condition": "Q3 OCF/扣非净利润 >= 0.6",
+      "condition_logic": {
+        "op": "compare",
+        "metric": "OCF_to_adjusted_profit",
+        "period": "Q3",
+        "comparator": ">=",
+        "value": "0.6",
+        "unit": "ratio"
+      }
+    },
+    "NT-I15": {
+      "condition": "下季 OCF/扣非净利润 < 0.5",
+      "condition_logic": {
+        "op": "compare",
+        "metric": "OCF_to_adjusted_profit",
+        "period": "next_quarter",
+        "comparator": "<",
+        "value": "0.5",
+        "unit": "ratio"
+      }
+    },
+    "NT-I17": {
+      "condition": "毛利率相对6.99%下降>1个百分点 AND 公司改口“涨价/mix受阻、Rubin延期”（并列项内部逻辑未明）",
+      "condition_logic": {
+        "op": "all",
+        "args": [
+          {
+            "op": "compare",
+            "metric": "gross_margin_change_from_baseline",
+            "baseline": "6.99",
+            "comparator": "<",
+            "value": "-1",
+            "unit": "percentage_points"
+          },
+          {
+            "op": "source_clause",
+            "text": "公司改口说涨价/mix 受阻、Rubin 延期",
+            "inner_operator": "unknown"
+          }
+        ]
+      },
+      "unknown_fields": [
+        "condition_inner_boolean"
+      ]
+    },
+    "NT-I42": {
+      "condition": "52 <= 股价（元） <= 58 AND 无新的大额负面管制公告",
+      "condition_logic": {
+        "op": "all",
+        "args": [
+          {
+            "op": "range",
+            "metric": "share_price",
+            "lower": "52",
+            "upper": "58",
+            "bounds": "inclusive",
+            "unit": "CNY"
+          },
+          {
+            "op": "source_clause",
+            "text": "无新的大额负面管制公告"
+          }
+        ]
+      }
+    },
+    "NT-I43": {
+      "condition": "毛利率 >= 6.99%",
+      "condition_logic": {
+        "op": "compare",
+        "metric": "gross_margin",
+        "comparator": ">=",
+        "value": "6.99",
+        "unit": "percent"
+      }
+    },
+    "NT-I29": {
+      "condition": "政策变化导致成本上升",
+      "atomic_proposition_source": "condition",
+      "compound": false
+    },
+    "NT-I35": {
+      "condition": "无差别相信所有公司的份额陈述",
+      "atomic_proposition_source": "condition",
+      "compound": false
+    },
+    "NT-I39": {
+      "condition": "海外产能税率增加",
+      "atomic_proposition_source": "condition",
+      "compound": false
+    },
+    "NT-C11": {
+      "perspective": "quoted_other",
+      "source_stance": "challenged"
+    },
+    "NT-C12": {
+      "perspective": "quoted_other",
+      "source_stance": "challenged"
+    },
+    "NT-C13": {
+      "perspective": "quoted_other",
+      "source_stance": "challenged"
+    },
+    "NT-I48": {
+      "perspective": "quoted_other",
+      "source_stance": "challenged"
+    },
+    "NT-I38": {
+      "semantic_type": "opinion",
+      "polarity": "mixed"
+    },
+    "NT-I37": {
+      "semantic_type": "opinion"
+    },
+    "NT-R09": {
+      "to_gold_record_id": "NT-I16"
+    },
+    "NT-R10": {
+      "relation": "conditions"
+    },
+    "NT-R20": {
+      "relation": "conditions"
+    },
+    "NT-R12": {
+      "from_gold_record_id": "NT-I49"
+    },
+    "NT-R19": {
+      "relation": "elaborates"
+    }
+  },
+  "review_assertion_note": "这些断言固定本轮高风险裁定建议，供回归防退化；不自动证明语义正确。人工修改这些裁定时须同时审阅对应约束，冻结前保留变更记录。",
+  "caliber_rules": {
+    "principle": "以金标口径为准，在读取/匹配视图上归一化；**不得覆盖候选或金标的原始字段**。",
+    "direction_note": "『维持生产端口径并改金标』与 issue-34 §8（冻结金标字节不变）冲突 ⇒ 事实上只剩本方向；本方向仍标注为待具名签认，草案不自行生效。",
+    "rules": {
+      "perspective": {
+        "rule": "source_explicit -> unknown（仅匹配视图）",
+        "measurement": "evidence/37：raw 0/48 -> 归一化后 32/48（+32）",
+        "auto_normalize": true
+      },
+      "speech_role": {
+        "rule": "question|answer|unknown -> statement",
+        "measurement": "evidence/37：raw 34/48 -> 39/48（+5）",
+        "auto_normalize": true
+      },
+      "statement_role": {
+        "rule": "不自动归一化；生产端的 question/answer/other 须人工判定（金标不使用这些取值）",
+        "measurement": "evidence/37：归一化后仍仅 21/48",
+        "auto_normalize": false,
+        "handling": "human_only"
+      },
+      "semantic_type": {
+        "rule": "不自动归一化；生产端 unknown（24 条）须人工判定，金标 behavior（3 条）生产端不产出",
+        "measurement": "evidence/37：27/48（归一化无增益）",
+        "auto_normalize": false,
+        "handling": "human_only"
+      },
+      "polarity": {
+        "rule": "无需规则（两侧同词表）",
+        "measurement": "evidence/37：32/48",
+        "auto_normalize": false
+      },
+      "attribution": {
+        "rule": "不作为匹配必需项（粒度不足：生产端 2 类 vs 金标 5 类）",
+        "measurement": "evidence/37 EC-A4：layer B 与金标 raw 一致 0/48",
+        "auto_normalize": false,
+        "handling": "excluded_from_matching_basis"
+      },
+      "speaker_ref": {
+        "rule": "同上（金标内 attribution 与 speaker_ref 1:1 冗余）",
+        "measurement": "evidence/37 EC-A4",
+        "auto_normalize": false,
+        "handling": "excluded_from_matching_basis"
+      },
+      "source_stance": {
+        "rule": "无载体 ⇒ 必须人工按原文判定；**不得设默认值**（默认值属事后拟合）",
+        "measurement": "evidence/37 EC-A1：唯一零载体必需字段",
+        "auto_normalize": false,
+        "handling": "human_only"
+      }
+    }
+  },
+  "read_path": {
+    "mechanism": "按角色注册读路径：每个契约必需字段声明 carrier 与 normalization；机制与记录 ID 无关。",
+    "id_independence": "任何读路径规则不得按 record_id 硬编码（禁止 NT-Ixx 逐条规则）。",
+    "review_assertions_status": "契约内 review_assertions 的逐条 ID 断言**仅作回归防退化**，不得作为匹配规则参与评分。",
+    "roles": {
+      "material_items": {
+        "implemented_in_this_revision": true,
+        "carriers": {
+          "proposition": {
+            "carrier": "item.text",
+            "requires": "normalization"
+          },
+          "semantic_type": {
+            "carrier": "item.semantic_type",
+            "requires": "human_only"
+          },
+          "statement_role": {
+            "carrier": "item.statement_role",
+            "requires": "human_only"
+          },
+          "speech_role": {
+            "carrier": "item.speech_role",
+            "requires": "caliber_normalization"
+          },
+          "perspective": {
+            "carrier": "item.perspective",
+            "requires": "caliber_normalization"
+          },
+          "polarity": {
+            "carrier": "item.polarity",
+            "requires": "none"
+          },
+          "speaker_ref": {
+            "carrier": "item.speaker_ref",
+            "requires": "excluded_from_matching_basis"
+          },
+          "attribution": {
+            "carrier": "layer_b.attribution",
+            "requires": "excluded_from_matching_basis"
+          },
+          "source_stance": {
+            "carrier": "none",
+            "requires": "human_only"
+          },
+          "condition": {
+            "carrier": "item.text (statement_role==condition)",
+            "requires": "human_only"
+          }
+        },
+        "basis": "evidence/37 EC-A1 + evidence/38 contract_view（工作台 v2 已给出雏形）"
+      },
+      "claims": {
+        "implemented_in_this_revision": false,
+        "status": "not_observed_on_data；code_level 显示 attribution/perspective/source_stance/estimate_status 无载体（evidence/39）"
+      },
+      "material_relations": {
+        "implemented_in_this_revision": false,
+        "status": "协议范围外（实测 0 条）+ 金标主键问题（见 relation_matching）"
+      }
+    },
+    "applies_to": "role == 'material_items'",
+    "authoritative_side": "冻结金标（48/48 逐字可回取、xyl 签认、Issue 29 判定 gold_meaning_sound=true）",
+    "carrier_mapping": {
+      "rule": "裁定前允许且仅允许做确定性载体映射：候选 `text` 视为契约 `proposition` 的载体。映射只改字段名，不生成、不改写、不摘要任何语义文本。",
+      "forbidden": "不得从金标反填候选缺失字段；不得把目标字符串直接赋给候选；不得为凑匹配而重写候选文本。",
+      "recording": "映射后的字段集记入 canonical_observed_fields；未映射的契约必需字段必须显式记为 absent，不得留空、不得猜测。"
+    },
+    "absent_required_fields": {
+      "list[0]": "attribution",
+      "list[1]": "source_stance",
+      "list[2]": "speaker_ref",
+      "rule": "候选未携带上述字段时，canonical_observed_fields 记 absent，等价性判定按契约 unknowns 条款处理；不得因缺字段直接判不匹配，也不得补造。",
+      "condition_role_addition": "statement_role == 'condition' 且候选无 condition 载体时，裁定人须逐条判定候选 text 是否表达了该条件，并在 reason 记录判据。",
+      "evidence": "实测：候选侧 proposition 键存在数 0、speaker_ref/attribution/source_stance 载体 0 （evidence/36-l9-redo；evidence/39）",
+      "alignment_with_caliber_rules": "与 caliber_rules 并用，不冲突：`absent_required_fields` 规定候选未携带时在 `canonical_observed_fields` 中**显式记为 absent**（不得留空、不得猜测），`caliber_rules` 规定 attribution/speaker_ref **移出匹配基**。两者叠加的正确读法是：先按 caliber_rules 决定哪些字段参与匹配，再对不参与的字段按本条显式记 absent 以备审。"
+    },
+    "equivalence_judgement": {
+      "owner": "human adjudicator",
+      "rule": "等价性一律由人工判定（沿用 matching.mode）；评分器不得自行按字段相等推导匹配。",
+      "scorer_contract": "评分器只消费裁定完成的映射，并校验其 role/source_id 合法性与 canonical_observed_fields 是否齐备；身份相等不得作为匹配前提。",
+      "evidence": "实测：现有评分器按 (role, source_id, origin, semantic_fields) 严格相等匹配（structured_scoring.py:118-142,457）；契约合法操作下自动匹配数 = 0"
+    },
+    "condition_role": "沿用 v3 的 condition_role_read_path（含 compound_condition 子规则）。",
+    "audit_reference": "Issue 34 chain-report §5.2/§11；Issue 36/37/38/39/40/41 实测。",
+    "roles_proposed": {
+      "claims": {
+        "status": "signed_2026-10-14_xyl",
+        "id": "C3",
+        "implemented_in_this_revision": true,
+        "measured_carriers_out_of_110": {
+          "subject": 108,
+          "metric": 102,
+          "period": 74,
+          "unit": 80,
+          "value": 97,
+          "factuality": 110,
+          "qualifier": 109,
+          "attribution": 0,
+          "perspective": 0,
+          "source_stance": 0,
+          "estimate_status": 0
+        },
+        "precedent": "items 先例：attribution/speaker_ref 移出匹配基、source_stance 记 human_only（契约 v4.3 caliber_rules）",
+        "carriers": {
+          "subject": {
+            "carrier": "claim.subject",
+            "requires": "normalization"
+          },
+          "metric": {
+            "carrier": "claim.metric",
+            "requires": "caliber_normalization"
+          },
+          "period": {
+            "carrier": "claim.period_raw",
+            "requires": "normalization"
+          },
+          "unit": {
+            "carrier": "claim.unit_raw",
+            "requires": "normalization"
+          },
+          "value": {
+            "carrier": "claim.value_text",
+            "requires": "normalization"
+          },
+          "factuality": {
+            "carrier": "claim.kind",
+            "requires": "caliber_normalization",
+            "proposed_rule": "fact -> actual；candidate 的 opinion 属角色外（见 claims_scope）",
+            "domain_note": "候选 fact/opinion/forecast vs 金标 actual/forecast；词表不同轴"
+          },
+          "qualifier": {
+            "carrier": "claim.qualifiers",
+            "requires": "none"
+          },
+          "attribution": {
+            "carrier": "none",
+            "requires": "excluded_from_matching_basis"
+          },
+          "perspective": {
+            "carrier": "none",
+            "requires": "human_only"
+          },
+          "source_stance": {
+            "carrier": "none",
+            "requires": "human_only"
+          },
+          "estimate_status": {
+            "carrier": "none",
+            "requires": "human_only"
+          }
+        }
+      }
+    },
+    "_proposal_note": "既有 read_path（material_items）逐字未改；claims 分支以 roles_proposed 另立，避免与已签叶子混写"
+  },
+  "adjudication_clause": {
+    "mode": "human_adjudicated_semantic_equivalence_then_one_to_one_mapping",
+    "responsible_party": "xyl（待签认确认）",
+    "full_coverage_required": {
+      "unresolved_max": 0,
+      "candidate_records": 222,
+      "basis": "门 28 quality_requirements.unresolved_candidates_max = 0；U 2026-10-12 裁定维持全量（选项 a）"
+    },
+    "required_per_record_fields": [
+      "candidate_id",
+      "stage",
+      "role",
+      "source_id",
+      "original_candidate",
+      "judgement",
+      "matched_gold_id",
+      "canonical_observed_fields",
+      "reviewer",
+      "reason",
+      "evidence"
+    ],
+    "evidence_required": "每条裁定须附逐字引文或原文定位（locator + 区间），不得仅给结论",
+    "forbidden": "不得把目标字符串直接赋给候选后宣称自动语义评分（沿用 v3 matching.projection）",
+    "tooling": {
+      "workbench": "门 33 工作台 v2（evidence/38，含 contract_view 与 field_provenance）",
+      "suggestion_policy": "Stage-1 建议仅作辅助；**独立复核或抽样裁定时必须隐藏建议**，以防污染判定"
+    },
+    "blocking_resolution": "本条即 issue-34 §7-3 的答案：候选→契约字段的规范化责任人在此具名，凭据为逐字引文/定位；契约不再需要人工『改写命题』这一步骤。"
+  },
+  "threshold_source": {
+    "authority_source": {
+      "where": "门 28 preregistered-gate-v3.json quality_requirements（R2 修订，revision 6）",
+      "sha256": "sha256:340b312d9c0cec278e828d8303a03e9daf953feef4c0eef688f3d257971a9732",
+      "values": {
+        "target_recall_overall_min": 0.85,
+        "target_recall_per_source_min": 0.8,
+        "candidate_precision_min": 0.8,
+        "accepted_records_total_min": 40,
+        "accepted_records_per_source_min": 20,
+        "unresolved_candidates_max": 0
+      }
+    },
+    "observed_second_source": {
+      "where": "plugins/corpus/structured_scoring.py:332-340（PILOT_CANDIDATE_POLICY）",
+      "values": {
+        "material_items": {
+          "precision_min": 0.95,
+          "recall_min": 0.9
+        },
+        "risk_condition_recall_min": 0.95,
+        "report_support_min": 0.95
+      }
+    },
+    "open_decision": {
+      "id": "OPEN-1",
+      "question": "阈值以哪个源为单一口径？",
+      "options": [
+        {
+          "option": "A",
+          "text": "以门 28 为权威（0.85/0.80/20），评分器改为读契约",
+          "consequence": "判定评分器现值（0.95/0.90）为『未经签认的偏离』；数值方向为放宽，须具名签认并记录理由"
+        },
+        {
+          "option": "B",
+          "text": "维持评分器现值（0.95/0.90）并改门 28",
+          "consequence": "门槛提高；须重算 §6 全部天花板，且与已签认的门 28 冲突，需重新签认门 28"
+        }
+      ],
+      "requires": "具名签认（阈值变更的既有约定）",
+      "chosen": "A",
+      "decided_on": "2026-10-12",
+      "rationale_recorded": "0.95/0.90 是评分器实现方未经签认的硬编码偏离（structured_scoring.py:334-339），从未获授权；门 28 是唯一经签认的权威源。选 A 是恢复到已签认口径，不是降低已批准的标准。"
+    },
+    "axes_warning": "`minimum_accepted_records_per_role`（角色轴，20）与门 28 `accepted_records_per_source_min`（源轴，20）是两个不同轴，不得互相替代或混用。",
+    "effective": {
+      "source": "门 28 preregistered-gate-v3.json quality_requirements",
+      "target_recall_overall_min": 0.85,
+      "target_recall_per_source_min": 0.8,
+      "candidate_precision_min": 0.8,
+      "accepted_records_total_min": 40,
+      "accepted_records_per_source_min": 20,
+      "unresolved_candidates_max": 0,
+      "implementation_required": "评分器 `plugins/corpus/structured_scoring.py` 现以 PILOT_CANDIDATE_POLICY 硬编码 0.95/0.90，与本节冲突；须改为读取本契约。**该代码改动尚未执行**，属独立工作项（§7-6）。",
+      "authority_pin_note": "已回填门 v3 签认版字节哈希 sha256:340b312d9c0cec278e828d8303a03e9daf953feef4c0eef688f3d257971a9732"
+    },
+    "rule": "召回/精确率/未裁定上限/断言清单以本契约与签认门为唯一来源；任何实现方不得另存一份。",
+    "conflict_resolution": "实现值与契约不一致时以已签认来源为准，实现方须改为读取或与契约同步，变更须具名签认。",
+    "required_alignment": "OPEN-1 = A（2026-10-12 已签认）：以门 28 为单一口径，评分器改为读契约",
+    "already_verified": {
+      "gate28_contract_binding": "PASS（issue 41 AC-2）",
+      "gate28_high_risk_assertions": "PASS：16 条 == 契约 items 断言子集（issue 41 AC-10）"
+    },
+    "decision_history": {
+      "fork": "门 28（signed）为 target_recall_overall_min=0.85 / candidate_precision_min=0.80；评分器实现为 0.95 / 0.90（structured_scoring.py:334-339）",
+      "options": [
+        "A：以门 28 为权威（0.85 / 0.80），改评分器实现",
+        "B：维持评分器现值（0.95 / 0.90）并改门"
+      ],
+      "why_not_chosen": "决策前状态（保留供追溯）：当时 U 的签认为文件级「准予继续」，未勾选该分叉。该分叉已于 2026-10-12 由 OPEN-1 = A 裁定，见同节 required_alignment。",
+      "renamed_from": "donor:threshold_source.pending_signoff_detail"
+    }
+  },
+  "relation_matching": {
+    "defect": "契约 role_required_fields.material_relations 含 from_gold_record_id / to_gold_record_id，即要求候选携带金标主键 ⇒ 严格 identity 匹配下该角色恒为 0（evidence/39 EC-B4）",
+    "open_decision": {
+      "id": "OPEN-2",
+      "question": "material_relations 如何修正？",
+      "options": [
+        {
+          "option": "A",
+          "text": "改由裁定映射承载（候选只带 item_id，金标主键由 matched_gold_id 提供）",
+          "consequence": "契约条款改动；该角色可评分，但仍需人工裁定"
+        },
+        {
+          "option": "B",
+          "text": "从必需字段删去两个金标主键字段",
+          "consequence": "字段清单缩短；匹配基改为 relation + provenance"
+        },
+        {
+          "option": "C",
+          "text": "本轮不纳入 material_relations 评分",
+          "consequence": "范围显式缩小并披露；不产生该角色报分"
+        }
+      ],
+      "requires": "具名签认",
+      "chosen": "C",
+      "decided_on": "2026-10-12"
+    },
+    "scope_note": "另一独立问题：本工作流协议明文不抽 relations，两源实测 0 条（属范围外，不是字段错配）",
+    "in_scope_this_round": false,
+    "scope_decision_note": "本轮不纳入 material_relations 评分：39 号实测生产端不产出 relations（协议明文本阶段不抽），A/B 通道本期无输入。`role_required_fields.material_relations` 的金标主键缺陷**保留在案**，将来恢复 relations 抽取时按 `read_path` 的角色通用机制补条款。"
+  },
+  "bookkeeping_requirements": {
+    "contract_binding_sync": "契约修订必须同轮更新 frozen-gold 侧记录的契约绑定哈希；现记录 v2 `2eb24be7…` 与实际 v3 `d9bc51f2…` 不符（match=False）",
+    "validation_report_consistency": "validation-report 的 human_accepted_counts 须与 frozen-gold 的 48/48 accepted 一致（现为空 {}）",
+    "freeze_chain_validator_required": "新增机制要求：任何契约/金标/manifest 修订须有校验器验证绑定一致（现无）",
+    "gate28_basis_sync": "门 28 的 metric_basis 须随契约版本同步"
+  },
+  "review_assertions_excluded": {
+    "NT-I09": {
+      "mechanism": "gold_split_finer_than_candidate",
+      "reason": "金标把同一原文句拆成『条件(I09)+结论(I10)』两条，候选侧只产出整句一条且已被 NT-I10 占用；在 one_to_one_mapping 下必有一条落空（契约 §8.1：一条混合输出不能抵扣多个金标命题）。"
+    },
+    "NT-I19": {
+      "mechanism": "gold_split_finer_than_candidate",
+      "reason": "同 NT-I09：I19 与 I20 为同一句的两种切分，候选整句被 NT-I20 占用。"
+    },
+    "NT-I45": {
+      "mechanism": "candidate_side_cannot_carry_axis",
+      "reason": "U 2026-10-12 校准撤销 matched：金标属被转述且被质疑的预测(perspective=quoted_other, source_stance=challenged)，而契约 caliber_rules 记明 source_stance 生产端无载体、必须人工判定 ⇒ 候选侧结构上不承载该轴。"
+    },
+    "NT-I46": {
+      "mechanism": "candidate_side_cannot_carry_axis",
+      "reason": "同 NT-I45。"
+    },
+    "NT-I47": {
+      "mechanism": "candidate_side_cannot_carry_axis",
+      "reason": "同 NT-I45。"
+    }
+  },
+  "registrations": {
+    "contract_version_chase": {
+      "gate_v3_pins": "non-table-selected-target-scoring-contract-v4.2（最近一个已签契约版本）",
+      "contract_v43_pins_gate": "门 v3 签认字节（签认后回填，见 threshold_source.authority_source）",
+      "why": "双向钉哈希会形成环，故门只推进到最近已签版本，契约反向钉门。",
+      "invariant": "六项阈值逐字恒等 + 门哨兵清单与契约 review_assertions 的 NT-I* 子集恒等",
+      "validator_required": true
+    },
+    "frozen_gold_side_contract_binding": {
+      "status": "known_exception_registered",
+      "detail": "冻结金标侧记录的契约绑定仍为 v2（sha256:2eb24be7…），与现行契约版本不符；因冻结金标字节不可改（U 裁定『不改金标』），本轮登记为例外而不回填。",
+      "exception_rule": "任何后续校验器遇到 gold 侧绑定落后时，应报『已登记例外』而非失败；若金标字节本身变更则必须重签。"
+    },
+    "supersedes_terminal_record": {
+      "path": "evidence/72-gate33-terminal-and-corrections-20261013/r0-zero-call/terminal-decision.json",
+      "field": "terminal_state.gate",
+      "old_value": "FAIL（不可达）",
+      "note": "本契约 v4.3 与门 v3 经具名签认、且 7 条改判经 xyl 具名后，evidence/72 的『不可达』结论由新的出分记录取代；72 的字节不改写，仅以本条登记取代关系。"
+    }
+  },
+  "claims_scope": {
+    "status": "signed_2026-10-14_xyl",
+    "id": "C1",
+    "mode": "in_role_only",
+    "predicate": "candidate.kind != 'opinion' AND candidate.value_text 非空",
+    "excluded_handling": [
+      "移出 claims 角色判据（不计入 claims 分母）",
+      "必须在 material_items / material_relations 侧登记为待覆盖，不得就地丢弃",
+      "不得改判为 matched，不得改动候选或金标字节"
+    ],
+    "rejected_alternative": {
+      "option": "按与全部 92 条金标相似度 <0.15 移出（83 号草案 B/C）",
+      "reason": "该规则按与金标的相似度定义分母，实测删 0 条 matched ⇒ 只删负例不删正例"
+    },
+    "measured": {
+      "D1_all_candidates": "56/110 = 0.5091",
+      "D2_in_role_only": "51/81 = 0.6296",
+      "per_source_D2": {
+        "f16e7fde9553": "33/56 = 0.5893",
+        "dca4bad7f85b": "18/25 = 0.7200"
+      },
+      "target_recall_D2": "20/20 = 1.0000"
+    }
+  },
+  "claims_precision_single_source": {
+    "status": "signed_2026-10-14_xyl_with_correction",
+    "id": "C2",
+    "defect": "契约文字公式分母含 duplicate；plugins/corpus/structured_scoring.py::RoleMetrics.precision 分母不含",
+    "observed_values": {
+      "contract_text_formula": "56/110 = 0.5091",
+      "scorer_implemented_formula": "56/107 = 0.5234"
+    },
+    "proposed_single_source": "分母含 duplicate（与已签 P1R5 gate result 的 0.5091 一致）",
+    "required_implementation_change": "RoleMetrics.precision 计入 duplicate_fp；评分器改为读契约声明",
+    "note": "该改动会改变评分器对含 duplicate 池的输出，须与契约同轮具名签认",
+    "correction": {
+      "applied_on": "2026-10-14",
+      "as_signed_premise": "契约文字公式分母含 duplicate；plugins/corpus/structured_scoring.py::RoleMetrics.precision 分母不含",
+      "retracted": true,
+      "retraction_reason": "实测：评分器 RoleMetrics.fp 已含 duplicate（两个匹配器都把 DUPLICATE 记入 false_positives），故实现分母 = 分子 + fp 已等于契约文字公式；草案的 56/107 是把裁定文件的 incorrect 计数当成 fp 的读数错误",
+      "measurement": {
+        "path": "evidence/88-claims-contract-v44-signed-20261014/r0-zero-call/c2-measurement.json",
+        "sha256": "sha256:b6815fe7247b9b16b37641017658c1c1ec3b18187fd29876377e243267fabe8d",
+        "ledger": {
+          "tp": 20,
+          "correct_extra": 36,
+          "fp_includes_duplicates": 54,
+          "duplicate_fp_subset": 3,
+          "fn": 0
+        },
+        "precision_implemented": "28/55 = 0.5091",
+        "precision_if_duplicate_added_again": "56/113 = 0.4956"
+      },
+      "effective_disposition": "单一口径 = 含 duplicate 的契约公式（已满足）；required_implementation_change 作废；禁止在 precision 分母再补加 duplicate_fp（会得到 56/113）",
+      "required_implementation_change_void": true
+    }
+  },
+  "claims_use_grading": {
+    "status": "signed_2026-10-14_xyl",
+    "id": "C4",
+    "current_behaviour": "evidence_pipeline.py:404 『零 reason 才授予 compare/calculate』（全或无）",
+    "measured_impact": {
+      "correct_records_with_at_least_one_reason": "45/56",
+      "records_that_can_compare_or_calculate_today": "11/56",
+      "reason_codes_as_hard_gate_cost": "召回 12/20 ⇒ reason 粒度太粗，不能当匹配门"
+    },
+    "proposed_rule": "按受影响轴撤去用途：缺 period/unit/value 只撤去 compare/calculate；缺 attribution/perspective 只撤去 cite 的归属声明；不得整条判不可用",
+    "axes": {
+      "value": [
+        "compare",
+        "calculate"
+      ],
+      "unit": [
+        "compare",
+        "calculate"
+      ],
+      "period": [
+        "compare",
+        "calculate"
+      ],
+      "attribution": [
+        "cite_attributed"
+      ],
+      "perspective": [
+        "cite_attributed"
+      ],
+      "source_stance": [
+        "cite_stance"
+      ]
+    },
+    "implementation_note": "须先拆 reason_codes 为『阻断匹配』与『阻断某项用途』两类，再落地；属改默认行为，须具名签认"
+  },
+  "claims_thresholds": {
+    "status": "signed_2026-10-14_xyl",
+    "id": "C5/C6",
+    "target_line": {
+      "basis": "与已签 items 门 v3 / 契约六项逐字恒等（0.85 / 0.80 / 0.80 / 0 / 哨兵 3 条）",
+      "target_recall_overall_min": 0.85,
+      "target_recall_per_source_min": 0.8,
+      "candidate_precision_min": 0.8,
+      "unresolved_candidates_max": 0,
+      "sentinels_required": [
+        "NT-C11",
+        "NT-C12",
+        "NT-C13"
+      ],
+      "granularity_warning": "目标仅 20 条 ⇒ 0.85 ≙ 17/20，每错 1 条 −5.0pp"
+    },
+    "release_line_proposed": {
+      "candidate_precision_min": 0.6,
+      "target_recall_per_source_min": 0.55,
+      "basis": "D2 口径实测值 0.6296 / 分源 0.5893（源1）",
+      "tolerance": "再容忍 4 条新增假阳性（契约式公式，分母 81）",
+      "role": "功能线：只判『可交付 / 需更换路线』，不等于质量达标",
+      "preregistration_rule": "禁止在看到本轮分数之后再定值"
+    },
+    "unreachable_registration": {
+      "target_line_on_frozen_pool": "不可达",
+      "evidence": "D2 分子上限 51/81 = 0.6296 < 0.80；分源 0.5893 < 0.80",
+      "implication": "要达目标线须另立授权的重跑（新池），不得通过改分母实现"
+    }
+  },
+  "role_sections": {
+    "material_items": {
+      "review_assertions": [
+        "NT-I13",
+        "NT-I15",
+        "NT-I17",
+        "NT-I29",
+        "NT-I35",
+        "NT-I37",
+        "NT-I38",
+        "NT-I39",
+        "NT-I42",
+        "NT-I43",
+        "NT-I48"
+      ],
+      "target_total": 48,
+      "_basis": "逐字镜像 v4.3 review_assertions 的 NT-I* 子集与既有 target_total（48），使同一份契约同时服务 items 与 claims"
+    },
+    "claims": {
+      "review_assertions": [
+        "NT-C11",
+        "NT-C12",
+        "NT-C13"
+      ],
+      "target_total": 20,
+      "_basis": "契约 v4.3 review_assertions 的 NT-C* 子集恒等；target_total = 冻结金标 claims 目标数"
+    }
+  },
+  "signoff_dispositions": {
+    "status": "signed_2026-10-14_xyl",
+    "accepted_as_proposed": [
+      "C1 claims_scope",
+      "C2 claims_precision_single_source",
+      "C3 claims_read_path（只提案，未实施）",
+      "C4 claims_use_grading（未实施）",
+      "C5/C6 claims_thresholds"
+    ],
+    "with_registered_correction": [
+      "C2 claims_precision_single_source"
+    ],
+    "not_changed_by_this_draft": [
+      "契约 v4.3 的任何既有叶子值（只增不删）",
+      "items 六项阈值与 11 条 NT-I 哨兵",
+      "frozen-gold.json / P1R5 已签裁定 / items 门 v3 字节"
+    ]
+  }
+}

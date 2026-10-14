@@ -1,0 +1,440 @@
+{
+  "schema_version": "claims-governance-plan-1",
+  "status": "draft_pending_human_signature",
+  "id": "93-claims-governance-plan-20261014",
+  "role": "claims",
+  "created_on": "2026-10-14",
+  "zero_model_calls": true,
+  "purpose": "把「判据的载体」从判据的取值里拆出来单独裁：三格（M1/M2/M3）全部是载体问题，裁完这三格，同一条线上不会再出现同一概念以新名字复活。",
+  "problem_statement": {
+    "statement": "门/契约把判据的「取值」签了，却没有签判据的「载体」；于是每遇到一个新数值或新词，就必然回到『这个数字/这个词归谁』这同一个问题。",
+    "anchors": [
+      {
+        "site": "gate v3 unfrozen_axes",
+        "evidence": "['accepted_records_total_min', 'accepted_records_per_source_min', 'per_source_precision_axis']",
+        "reading": "判据被「留白」，不是「未定」：三个轴的载体没有归属声明"
+      },
+      {
+        "site": "gate v3 verdict.release_line.precondition",
+        "evidence": "D-1 ≠ a（若取 a，放行线另受 accepted 下限 3 项阻断）",
+        "reading": "已签的 PASS 以未裁轴（D-1）为前提 ⇒ 用未定的判据撑已签的结论"
+      },
+      {
+        "site": "contract v4.4 claims_thresholds.target_line.basis",
+        "evidence": "与已签 items 门 v3 / 契约六项逐字恒等（0.85 / 0.80 / 0.80 / 0 / 哨兵 3 条）",
+        "reading": "写着「与契约六项逐字恒等」，枚举却只列 3 个比例 + unresolved ⇒ 字面恒等就得取 items 的 40/20，而 claims 池只有 20 条"
+      },
+      {
+        "site": "contract v4.4 claims_use_grading.axes",
+        "evidence": [
+          "attribution",
+          "period",
+          "perspective",
+          "source_stance",
+          "unit",
+          "value"
+        ],
+        "reading": "签的是 cite 侧轴名；下游 plugins/corpus/structured/store.py:332 的 usable_for 只允许 {cite, compare, calculate} ⇒ 签下的规则无处安放"
+      }
+    ]
+  },
+  "rules": {
+    "R1_assertion_only": {
+      "rule": "治理只阻断「断言」，不阻断「动作」",
+      "detail": "执行层可以继续跑、继续产、继续改；带未裁轴的结论必须标 pending_caliber，不得标 PASS / 达标 / 可交付。",
+      "why": "否则治理会以「判据未定」为由冻结执行，与「治理服务执行层」相冲。",
+      "how_to_apply": "任何门/报告/登记件中出现 PASS 时，检查其是否引用 pending_human_decision 的轴。",
+      "enforced_by": "tools/check_claims_gate.py::pass-not-dependent-on-unfrozen-axis"
+    },
+    "R2_fail_closed_default": {
+      "rule": "未裁轴的默认行为 = 拒绝正面断言（fail-closed），而不是强取最严值去阻断执行",
+      "detail": "未裁期间该轴只报告；既不因为未裁而放行（不 PASS），也不因为未裁而阻断动作（不 fail 执行）。",
+      "why": "强取最严值（例如未裁即按 a=40/20）会阻断执行，等价于让治理阻碍执行；而默认放行则会用未定判据产出结论。两者都不是 fail-closed 的正确形态。",
+      "how_to_apply": "登记件必填 pending_caliber=true；校验器只在规则生效后升为阻塞。",
+      "enforced_by": "governance-registration-template.fields.pending_caliber"
+    },
+    "R3_recompute_on_fill": {
+      "rule": "回填必须重算",
+      "detail": "任何轴裁完后，受影响的结论必须用新口径重算并重新签认；旧分只作历史证据，不得沿用。",
+      "why": "防止「旧分挂新尺」，也防止「改尺子过门」。",
+      "how_to_apply": "登记件必填 recompute_on_fill（结论路径清单）；缺该字段的登记不接受。",
+      "enforced_by": "governance-registration-template.fields.recompute_on_fill"
+    },
+    "R4_expiry_to_report_only": {
+      "rule": "到期即转报告项",
+      "detail": "每格登记 owner + decide_by；到期末裁 ⇒ 该轴自动转为永久报告项（保守），不自动放行。",
+      "why": "防止「永久滞后」积债，也防止滞后被读成默认通过。",
+      "how_to_apply": "登记件必填 owner / decide_by；到期后 status 只能是 expired_to_report_only。",
+      "enforced_by": "governance-registration-template.fields.status.allowed"
+    }
+  },
+  "registration_template": {
+    "schema_version": "claims-governance-registration-template-1",
+    "fields": {
+      "id": {
+        "required": true,
+        "note": "稳定标识（如 M1 / CORR-91-PRECONDITION）"
+      },
+      "axis": {
+        "required": true,
+        "note": "被裁的轴名（须与门 unfrozen_axes / 契约叶子同名）"
+      },
+      "status": {
+        "required": true,
+        "allowed": [
+          "pending_human_decision",
+          "decided",
+          "expired_to_report_only"
+        ],
+        "note": "到期未裁只能转 expired_to_report_only，不得转 decided"
+      },
+      "value": {
+        "required": true,
+        "note": "未裁时必须是 null；禁止预填"
+      },
+      "owner": {
+        "required": true,
+        "note": "裁决人"
+      },
+      "decide_by": {
+        "required": true,
+        "note": "ISO 日期；R4 到期检查依据"
+      },
+      "pending_caliber": {
+        "required": true,
+        "note": "true ⇒ 该轴只能报告，不得承载 PASS / 达标 / 可交付"
+      },
+      "recompute_on_fill": {
+        "required": true,
+        "note": "裁完后必须重算并重签的结论路径清单（R3）"
+      },
+      "measured_options": {
+        "required": true,
+        "note": "每个选项的实测后果，供裁决时对照；不得只给推荐值"
+      }
+    },
+    "forbidden": [
+      "预填 value 或代签",
+      "用未裁轴承载 PASS / 达标 / 可交付（R1/R2）",
+      "到期后自动放行（到期 ⇒ 转报告项，不是转为通过）",
+      "裁完后沿用旧分而不重算（R3）"
+    ]
+  },
+  "cells": [
+    {
+      "id": "M1",
+      "title": "数值阈值的角色归属：比例恒等继承，条数下限如何派生",
+      "question": "claims 的 accepted_records_total_min / accepted_records_per_source_min 取哪一条派生规则？（这是载体问题：两个数字该挂在角色规模上，还是原样挂在 items 的绝对条数上）",
+      "applies_to": [
+        "accepted_records_total_min",
+        "accepted_records_per_source_min"
+      ],
+      "kind": "carrier_meta_rule",
+      "status": "pending_human_decision",
+      "value": null,
+      "signature_did_not_decide": true,
+      "owner": "U",
+      "decide_by": null,
+      "pending_caliber": true,
+      "recompute_on_fill": [
+        "claims-gate-v3.verdict.release_line.verdict",
+        "claims-gate-v3.measured_run.variants.*.rate_gate_passed",
+        "claims-gate-v3.measured_run.variants.*.rate_blockers"
+      ],
+      "reopen_history": [
+        {
+          "round": "OPEN-A（83 号）",
+          "form": "40/20 直接平移是否可接受"
+        },
+        {
+          "round": "C5（契约 v4.4）",
+          "form": "目标线「与 items 契约六项逐字恒等」"
+        },
+        {
+          "round": "D-1（91 号）",
+          "form": "accepted 下限取 a/b/c 哪套"
+        }
+      ],
+      "measured_common": {
+        "accepted_records_total": 20,
+        "accepted_records_per_source": {
+          "f16e7fde9553": 10,
+          "dca4bad7f85b": 10
+        },
+        "gold_targets_total": 20,
+        "target_line_candidate_precision_min": 0.8,
+        "note": "两个 accepted 计数由冻结池独立复算（matched 去重计数），与门 blocker 文本（contract_below_threshold:accepted_records_total:20<40 / contract_below_threshold:accepted_records_per_source:sha256:48c0…）同源"
+      },
+      "options": [
+        {
+          "key": "a_transplant",
+          "rule": "平移 items 门 v3 的绝对条数（40 / 20），不按角色规模缩放",
+          "derived": {
+            "accepted_records_total_min": 40,
+            "accepted_records_per_source_min": 20
+          },
+          "measured": {
+            "target_line": "FAIL（与下限无关，被精度 0.6296 < 0.80 卡住，三变体一致）",
+            "release_line": "FAIL：额外 3 项 accepted 下限阻断",
+            "blockers": [
+              "contract_below_threshold:candidate_precision:17/27<4/5",
+              "contract_below_threshold:accepted_records_total:20<40",
+              "contract_below_threshold:accepted_records_per_source:sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f:10<20",
+              "contract_below_threshold:accepted_records_per_source:sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb:10<20"
+            ]
+          },
+          "reading": "算术上不可满足（池 20 条 < 40；每源 10 < 20）⇒ 等价于永久 FAIL"
+        },
+        {
+          "key": "b_scaled_floor",
+          "rule": "比例类阈值角色间恒等继承；条数下限按角色目标规模派生，向下取整：total = floor(0.85 × 20) = 17；per_source = floor(0.85 × 10) = 8",
+          "derived": {
+            "accepted_records_total_min": 17,
+            "accepted_records_per_source_min": 8
+          },
+          "measured": {
+            "target_line": "FAIL（同上，唯一卡点是精度）",
+            "release_line": "PASS（前提：该轴已裁；实测 20 ≥ 17、10 ≥ 8）",
+            "blockers": [
+              "contract_below_threshold:candidate_precision:17/27<4/5"
+            ]
+          },
+          "reading": "与已签 C5「六项逐字恒等」的字面冲突最小，且把比例与条数分开归属"
+        },
+        {
+          "key": "b_scaled_ceil",
+          "rule": "同 b_scaled_floor，但向上取整：total = ceil(0.85 × 20) = 17；per_source = ceil(0.85 × 10) = 9",
+          "derived": {
+            "accepted_records_total_min": 17,
+            "accepted_records_per_source_min": 9
+          },
+          "measured": {
+            "target_line": "FAIL（同上）",
+            "release_line": "PASS（实测 10 ≥ 9）",
+            "blockers": [
+              "contract_below_threshold:candidate_precision:17/27<4/5"
+            ]
+          },
+          "reading": "更严；在本池上与向下取整同结论，但取整方向对将来新角色是有载体的"
+        },
+        {
+          "key": "c_diagnostic",
+          "rule": "不设数值下限，仅作诊断计数（accepted 只报告不 gating，须契约修订）",
+          "derived": null,
+          "measured": {
+            "target_line": "FAIL（同上）",
+            "release_line": "PASS（无 accepted 阻断项）",
+            "blockers": [
+              "contract_below_threshold:candidate_precision:17/27<4/5"
+            ]
+          },
+          "reading": "最干净，但要改契约语义（该轴从 gating 降为 diagnostic），多一轮修订"
+        }
+      ],
+      "load_bearing_note": "取整方向（floor 8 / ceil 9）在本池上不影响判定（10 ≥ 9），因此它现在不是载重项；但若不定，换角色时它会成为新的未定轴。必须在同一格内把取整方向定死。",
+      "scaling_basis": {
+        "formula_numerator": 0.85,
+        "formula_numerator_basis": "已签目标线 target_recall_overall_min = 0.85",
+        "scaled_total": 17.0,
+        "scaled_per_source": {
+          "dca4bad7f85b": 8.5,
+          "f16e7fde9553": 8.5
+        }
+      }
+    },
+    {
+      "id": "M2",
+      "title": "分源精度轴是否存在",
+      "question": "放行线的分源轴（0.55）在契约六项里没有对应字段，是否新增该轴？",
+      "applies_to": [
+        "per_source_precision_axis"
+      ],
+      "kind": "carrier_meta_rule",
+      "status": "pending_human_decision",
+      "value": null,
+      "signature_did_not_decide": true,
+      "owner": "U",
+      "decide_by": null,
+      "pending_caliber": true,
+      "recompute_on_fill": [
+        "claims-gate-v3.verdict.release_line.verdict",
+        "claims-gate-v3.thresholds.release_line.per_source_axis_status"
+      ],
+      "reopen_history": [
+        {
+          "round": "C5（契约 v4.4）",
+          "form": "放行线新增分源 0.55"
+        },
+        {
+          "round": "D-2（91 号）",
+          "form": "该轴在契约六项里没有载体"
+        }
+      ],
+      "measured_common": {
+        "release_line_per_source_precision_min": 0.55,
+        "measured_per_source_precision": {
+          "dca4bad7f85b": "18/25 = 0.7200",
+          "f16e7fde9553": "33/56 = 0.5893"
+        },
+        "reading": "两源实测均 ≥ 0.55 ⇒ 若新增该轴，放行线结论不变（仍 PASS）"
+      },
+      "options": [
+        {
+          "key": "exists",
+          "rule": "新增契约字段（分源精度下限）+ 评分器读取该字段；该轴进入 gating",
+          "derived": {
+            "per_source_precision_min": 0.55
+          },
+          "measured": {
+            "release_line": "PASS（0.5893 / 0.7200 均 ≥ 0.55）"
+          },
+          "cost": "契约 schema 加字段；ContractGateRequirements 的字段元组被 P03 绑定校验器逐字钉住 ⇒ 须同轮出新绑定记录（取代声明）"
+        },
+        {
+          "key": "report_only",
+          "rule": "不新增；分源精度永远只报告，不参与 gating",
+          "derived": null,
+          "measured": {
+            "release_line": "PASS（与现状一致）"
+          },
+          "cost": "0；但该轴的退化不会被自动检出（只能靠人读报告）"
+        }
+      ]
+    },
+    {
+      "id": "M3",
+      "title": "C4 的 cite 侧轴在当前下游词表下如何落地",
+      "question": "C4 已签的 cite 侧轴（cite_attributed / cite_stance）在 plugins/corpus/structured/store.py:332 的 usable_for 词表下无法表达，如何处置？",
+      "applies_to": [
+        "claims_use_grading.axes.attribution",
+        "claims_use_grading.axes.perspective",
+        "claims_use_grading.axes.source_stance"
+      ],
+      "kind": "carrier_meta_rule",
+      "status": "pending_human_decision",
+      "value": null,
+      "signature_did_not_decide": true,
+      "owner": "U",
+      "decide_by": null,
+      "pending_caliber": true,
+      "recompute_on_fill": [
+        "usable_for 词表（plugins/corpus/structured/store.py）",
+        "compare/calculate 可用记录数（当前 11/56）"
+      ],
+      "reopen_history": [
+        {
+          "round": "OPEN-D（83 号）",
+          "form": "compare/calculate 是否仍全或无"
+        },
+        {
+          "round": "C4（契约 v4.4）",
+          "form": "按受影响轴撤去用途（轴名已签）"
+        },
+        {
+          "round": "D-3（92 号机制落地后）",
+          "form": "两个理由码挂 condition 轴还是 attribution 轴"
+        }
+      ],
+      "measured_common": {
+        "records_that_can_compare_or_calculate_today": "11/56",
+        "correct_records_with_at_least_one_reason": "45/56",
+        "reason_codes_as_hard_gate_cost": "召回 12/20 ⇒ reason 粒度太粗，不能当匹配门",
+        "default_implementation": "92 号 claim_use_axes.py 已落地，默认档与旧规则同结果（11 = 11）"
+      },
+      "options": [
+        {
+          "key": "O1_status_quo",
+          "rule": "保持现状：不改词表、不改轴归属；cite 侧缺口只报告",
+          "derived": {
+            "usable_compare_or_calculate": "11/56"
+          },
+          "measured": {
+            "delta_vs_today": 0
+          },
+          "cost": "0；但已签的 C4 三条 cite 侧轴在本词表下名不副实"
+        },
+        {
+          "key": "O2_remap_two_codes",
+          "rule": "把 source_qualified_context_requires_review 与 qualifier_definition_unverified 从 condition 轴改挂 attribution 轴",
+          "derived": {
+            "usable_compare_or_calculate": "26/56"
+          },
+          "measured": {
+            "delta_vs_today": 15
+          },
+          "cost": "属口径变更须签认；风险：带条件/否定/转述语境的数值断言变成「可计算」，与报告 §5.1.2「有缺口的条目不得取得受影响的用途」相冲"
+        },
+        {
+          "key": "O3_extend_vocabulary",
+          "rule": "扩展下游 usable_for 词表，新增 cite_attributed / cite_stance；不放行 compare/calculate",
+          "derived": {
+            "usable_compare_or_calculate": "11/56",
+            "cite_side_axes": "可表达"
+          },
+          "measured": {
+            "delta_vs_today": 0
+          },
+          "cost": "改 plugins/corpus/structured/store.py:332 的允许集合 + query/consumption/derivation 消费点 + 回归证明（数据结构变更，须 U 裁）"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "measured_by_this_script": {
+      "accepted_records_total": 20,
+      "accepted_records_per_source": {
+        "f16e7fde9553": 10,
+        "dca4bad7f85b": 10
+      },
+      "gold_claims_targets": 20,
+      "gate_v3_unfrozen_axes": [
+        "accepted_records_total_min",
+        "accepted_records_per_source_min",
+        "per_source_precision_axis"
+      ],
+      "gate_v3_release_precondition": "D-1 ≠ a（若取 a，放行线另受 accepted 下限 3 项阻断）",
+      "gate_v3_target_line_verdict": "FAIL",
+      "gate_v3_release_verdict": "PASS"
+    },
+    "read_not_recomputed": {
+      "per_source_precision": {
+        "dca4bad7f85b": "18/25 = 0.7200",
+        "f16e7fde9553": "33/56 = 0.5893"
+      },
+      "usable_compare_or_calculate": "11/56"
+    },
+    "frozen_input_hashes": {
+      "frozen_gold": "603de5e6c532463db8ae2788b830c2c1a74400b4ba736292bd5503468dfa7de2",
+      "p1r5_candidate_adjudications_signed": "d12f3d276dc17d2ff5bb5455b78bc4da75b43c191d498af59d2aea61238b38a8",
+      "scoring_contract_v4.3": "d7b4f8a81ef42e3cd5d619eae92bc34df7b7aa683d34aeba4f1a22719ae69a2f",
+      "items_gate_v3_signed_reference": "340b312d9c0cec278e828d8303a03e9daf953feef4c0eef688f3d257971a9732",
+      "signed_scoring_contract_v4.4": "ce1938b6d35a1292b22d8d75a3af461743e627ccebb0385f3267cb652fcd1650",
+      "claims_gate_v3_signed": "b2b93b9ce46711b1e2f55d340c54452c1033eb15569f0dd865af9e3477d74fb3",
+      "claims_scope_registration": "76010ca0336373350ebc9e0b0d27946f2f18c80111b593364d3ea944cdf3f18f"
+    }
+  },
+  "authority": {
+    "gate_v3_signed": {
+      "path": "evidence/91-claims-gate-v3-signed-20261014/r0-zero-call/claims-gate-v3.json",
+      "sha256": "b2b93b9ce46711b1e2f55d340c54452c1033eb15569f0dd865af9e3477d74fb3"
+    },
+    "contract_v4.4_signed": {
+      "path": "evidence/88-claims-contract-v44-signed-20261014/r0-zero-call/scoring-contract-v4.4.json",
+      "sha256": "ce1938b6d35a1292b22d8d75a3af461743e627ccebb0385f3267cb652fcd1650"
+    },
+    "registration_92": {
+      "path": "evidence/92-claims-scope-registration-20261014/r0-zero-call/claims-scope-registration.json",
+      "sha256": "76010ca0336373350ebc9e0b0d27946f2f18c80111b593364d3ea944cdf3f18f"
+    }
+  },
+  "rules_in_force": {
+    "status": "pending_human_signature",
+    "note": "R1/R2 未签认前，校验器对「未裁轴承载 PASS」只检出、不阻塞（否则等于用未签的规则去卡已签的产物）；签认后自动升为阻塞，91 号由更正登记豁免。",
+    "checker": "tools/check_claims_gate.py::pass-not-dependent-on-unfrozen-axis"
+  },
+  "not_in_scope": [
+    "不改金标 / 不改 P1R5 已签裁定 / 不改契约 v4.3、v4.4 / 不改门 v3（91 号）/ 不改 92 号登记",
+    "不做约定外的阈值或口径取值裁定（三格 value 留空，由 U 填）",
+    "不启动 F6 重跑、不改生产侧接缝（F9）"
+  ]
+}

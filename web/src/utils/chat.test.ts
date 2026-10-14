@@ -2,7 +2,13 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 
 import type { Turn } from '@/types'
-import { dedupeAssistantTurns, hasRunAnswer, sameRunId, streamBelongsToSession } from './chat.ts'
+import {
+  attachSubmittedRun,
+  dedupeAssistantTurns,
+  hasRunAnswer,
+  sameRunId,
+  streamBelongsToSession,
+} from './chat.ts'
 
 function turn(partial: Partial<Turn> & Pick<Turn, 'seq' | 'role'>): Turn {
   return {
@@ -66,4 +72,61 @@ test('hasRunAnswer finds the persisted answer of the run, not just any reply', (
     ),
     true,
   )
+})
+
+test('attachSubmittedRun records and watches a run created outside the composer', () => {
+  const turns = [turn({ seq: 4, role: 'assistant', content: '原分析', run_id: 'run-old' })]
+  const calls: string[] = []
+  let appended: Turn | null = null
+
+  const attached = attachSubmittedRun(
+    {
+      sessionId: 'research-1',
+      runId: 'run-new',
+      message: '已按 48.82 买入 100，请按实际成交成本重新分析。',
+    },
+    'research-1',
+    turns,
+    {
+      appendTurn(value) {
+        calls.push('append')
+        appended = value
+      },
+      rememberRun(sessionId, runId) {
+        calls.push(`remember:${sessionId}:${runId}`)
+      },
+      watchRun(runId, sessionId) {
+        calls.push(`watch:${runId}:${sessionId}`)
+      },
+    },
+  )
+
+  assert.equal(attached, true)
+  assert.deepEqual(appended, turn({
+    seq: 5,
+    role: 'user',
+    content: '已按 48.82 买入 100，请按实际成交成本重新分析。',
+  }))
+  assert.deepEqual(calls, [
+    'append',
+    'remember:research-1:run-new',
+    'watch:run-new:research-1',
+  ])
+})
+
+test('attachSubmittedRun ignores a submission after the active research changed', () => {
+  let called = false
+  const attached = attachSubmittedRun(
+    { sessionId: 'research-old', runId: 'run-new', message: '重新分析' },
+    'research-current',
+    [],
+    {
+      appendTurn() { called = true },
+      rememberRun() { called = true },
+      watchRun() { called = true },
+    },
+  )
+
+  assert.equal(attached, false)
+  assert.equal(called, false)
 })

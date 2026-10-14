@@ -363,7 +363,7 @@ class StructuredEventObserver(BaseObserver):
                 message=f"{result.name} failed",
                 detail=self._preview(result.result, self._result_chars),
             )
-        elif result.name in BOARD_TOOLS:
+        if result.name in BOARD_TOOLS or result.name == "investment_position_sizing":
             # Project the runtime's authoritative board state. The UI should
             # never have to infer ids/statuses by parsing a tool's prose result.
             #
@@ -420,6 +420,14 @@ _ERROR_PREFIXES = ("error:", "error ", "[error", "traceback")
 
 def _looks_like_error(result: str) -> bool:
     head = str(result or "").lstrip().lower()[:40]
+    if head.startswith("{"):
+        try:
+            payload = json.loads(result)
+        except (TypeError, ValueError):
+            pass
+        else:
+            if isinstance(payload, dict) and (payload.get("ok") is False or payload.get("passed") is False):
+                return True
     return head.startswith(_ERROR_PREFIXES) or "error]" in head
 
 

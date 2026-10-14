@@ -1,0 +1,152 @@
+{
+  "draft": {
+    "path": "evidence/86-claims-contract-v44-draft-20261014/r0-zero-call/scoring-contract-v4.4.proposed.json",
+    "sha256": "79e8651d12d917c6f62d2d9416ca9de205e68a7caf710387319168990cb4dea2"
+  },
+  "signed": {
+    "path": "evidence/88-claims-contract-v44-signed-20261014/r0-zero-call/scoring-contract-v4.4.json",
+    "sha256": "ce1938b6d35a1292b22d8d75a3af461743e627ccebb0385f3267cb652fcd1650"
+  },
+  "changed_leaf_paths": [
+    "claims_precision_single_source.status",
+    "claims_scope.status",
+    "claims_thresholds.status",
+    "claims_use_grading.status",
+    "read_path.roles_proposed.claims.implemented_in_this_revision",
+    "read_path.roles_proposed.claims.status",
+    "signoff.instrument.sha256",
+    "signoff.remark_note",
+    "signoff.reviewer_remark",
+    "signoff.scope_note",
+    "signoff.signed_by",
+    "signoff.signed_on",
+    "signoff.statement",
+    "status"
+  ],
+  "added_leaf_paths": [
+    "claims_precision_single_source.correction",
+    "read_path.roles_proposed.claims.carriers",
+    "signoff_dispositions"
+  ],
+  "removed_leaf_paths": [
+    "agent_proposals",
+    "read_path.roles_proposed.claims.carriers_proposed",
+    "read_path.roles_proposed.claims.reason_not_implemented"
+  ],
+  "expected_changed_prefixes": [
+    "status",
+    "signoff",
+    "claims_scope",
+    "claims_precision_single_source",
+    "claims_use_grading",
+    "claims_thresholds",
+    "read_path.roles_proposed.claims"
+  ],
+  "unexpected_changed": [],
+  "expected_removed_leaves": [
+    "agent_proposals",
+    "read_path.roles_proposed.claims.carriers_proposed",
+    "read_path.roles_proposed.claims.reason_not_implemented"
+  ],
+  "unexpected_removed": [],
+  "thresholds_unchanged": {
+    "source": {
+      "v4.3": "门 28 preregistered-gate-v3.json quality_requirements",
+      "v4.4": "门 28 preregistered-gate-v3.json quality_requirements"
+    },
+    "target_recall_overall_min": {
+      "v4.3": 0.85,
+      "v4.4": 0.85
+    },
+    "target_recall_per_source_min": {
+      "v4.3": 0.8,
+      "v4.4": 0.8
+    },
+    "candidate_precision_min": {
+      "v4.3": 0.8,
+      "v4.4": 0.8
+    },
+    "accepted_records_total_min": {
+      "v4.3": 40,
+      "v4.4": 40
+    },
+    "accepted_records_per_source_min": {
+      "v4.3": 20,
+      "v4.4": 20
+    },
+    "unresolved_candidates_max": {
+      "v4.3": 0,
+      "v4.4": 0
+    },
+    "implementation_required": {
+      "v4.3": "评分器 `plugins/corpus/structured_scoring.py` 现以 PILOT_CANDIDATE_POLICY 硬编码 0.95/0.90，与本节冲突；须改为读取本契约。**该代码改动尚未执行**，属独立工作项（§7-6）。",
+      "v4.4": "评分器 `plugins/corpus/structured_scoring.py` 现以 PILOT_CANDIDATE_POLICY 硬编码 0.95/0.90，与本节冲突；须改为读取本契约。**该代码改动尚未执行**，属独立工作项（§7-6）。"
+    },
+    "authority_pin_note": {
+      "v4.3": "已回填门 v3 签认版字节哈希 sha256:340b312d9c0cec278e828d8303a03e9daf953feef4c0eef688f3d257971a9732",
+      "v4.4": "已回填门 v3 签认版字节哈希 sha256:340b312d9c0cec278e828d8303a03e9daf953feef4c0eef688f3d257971a9732"
+    }
+  },
+  "thresholds_byte_identical": true,
+  "verification": {
+    "claims_role_scope": "claims",
+    "claims_sentinels": [
+      "NT-C11",
+      "NT-C12",
+      "NT-C13"
+    ],
+    "claims_target_total": 20,
+    "items_equal_v43_except_schema": true,
+    "claims_carrier_keys": [
+      "attribution",
+      "estimate_status",
+      "factuality",
+      "metric",
+      "period",
+      "perspective",
+      "qualifier",
+      "source_stance",
+      "subject",
+      "unit",
+      "value"
+    ],
+    "claims_carrier_keys_match_contract": true,
+    "required_fields_for_claims": [
+      "attribution",
+      "estimate_status",
+      "factuality",
+      "metric",
+      "period",
+      "perspective",
+      "qualifier",
+      "source_stance",
+      "subject",
+      "unit",
+      "value"
+    ],
+    "assembled_candidates": 1,
+    "assembled_mappings": 1,
+    "assembled_basis_fields": [
+      "estimate_status",
+      "factuality",
+      "metric",
+      "period",
+      "perspective",
+      "qualifier",
+      "source_stance",
+      "subject",
+      "unit",
+      "value"
+    ],
+    "assembled_absent_fields": [
+      "attribution",
+      "estimate_status",
+      "perspective",
+      "source_stance"
+    ],
+    "contract_path_matches_module_constant": true,
+    "pool_stage_vocabulary": {
+      "human_adjudicated_candidate": 110
+    }
+  }
+}

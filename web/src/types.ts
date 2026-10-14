@@ -120,6 +120,7 @@ export interface InputRequest {
   follow_up_run_id: string | null
   use_case: string
   status: InputRequestStatus
+  resolution_reason?: string | null
   revision: number
   fields: InputRequestField[]
   known_versions: Record<string, number>
