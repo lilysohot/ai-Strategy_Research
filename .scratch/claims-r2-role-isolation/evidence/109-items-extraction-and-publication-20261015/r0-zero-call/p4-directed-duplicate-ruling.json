@@ -1,0 +1,68 @@
+{
+  "schema_version": "items-p4-directed-ruling-1",
+  "id": "109-p4-directed-duplicate-ruling",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "production_pg_writes": 0,
+  "status": "applied_pending_u_named_signature",
+  "authority": {
+    "instruction": "U 2026-10-15 会话指令：『你把重复的直接改成duplicate』",
+    "rule_applied": "契约 v4.3 metrics.duplicates：『同义重复仅第一条可匹配；后续记录 duplicate 计 FP』；candidate_precision 分母 = matched + correct_extra + incorrect + duplicate",
+    "scope": "仅落在 7 个被多映射金标的多余记录（8 行）；其余 191 行保持未裁（judgement=None）"
+  },
+  "artifact": {
+    "path": "items-reextract-adjudication-r3-blank/candidate-adjudications.worksheet.json",
+    "sha256_before": "47c56ceae1ad3f80d438a4671056cf31f963bca37f474af5082bca18ceca8220",
+    "sha256_after": "d18af06617d4803af63e5c0b61af0bd70125373de150e31312b882f80fef16fb",
+    "serialization_unchanged": true,
+    "reviewer_still": null,
+    "adjudicator_still": null,
+    "review_status_still": "pending_named_human_signoff",
+    "status_still": "pending_named_human_adjudication"
+  },
+  "edits": [
+    {"serial": 60, "candidate_id": "itm_18e98dfd1cf59fce", "gold": "NT-I14", "carrier_serial": 59, "carrier_id": "itm_df7dddac66c6d5c9"},
+    {"serial": 82, "candidate_id": "itm_c8690f1bdde8846d", "gold": "NT-I35", "carrier_serial": 81, "carrier_id": "itm_ab9917e0195deb2f", "note": "本条为字面命中；序号 81 为片段口径，互换不改变任何指标"},
+    {"serial": 106, "candidate_id": "itm_356f9d9b23c78892", "gold": "NT-I48", "carrier_serial": 105, "carrier_id": "itm_cf5580d2eb88e109", "note": "本条承载『对竞争力和毛利影响不大』限定项"},
+    {"serial": 118, "candidate_id": "itm_806cac42d71917ad", "gold": "NT-I40", "carrier_serial": 116, "carrier_id": "itm_a8be3a946325fa22"},
+    {"serial": 120, "candidate_id": "itm_0fca52c92489d0fc", "gold": "NT-I40", "carrier_serial": 116, "carrier_id": "itm_a8be3a946325fa22"},
+    {"serial": 158, "candidate_id": "itm_5d761c2b54213857", "gold": "NT-I21", "carrier_serial": 140, "carrier_id": "itm_449ea66d54ccbd52", "note": "本条为字面命中（CPO 的市场成熟度不高），而序号 140 命题不同（探索尚未形成明确结论方向）；互换不改变任何指标"},
+    {"serial": 62, "candidate_id": "itm_21ba88541f88728e", "gold": "NT-I42", "carrier_serial": 61, "carrier_id": "itm_d1f812ab48ddc701", "note": "本条承载『无新的大额负面管制公告』限定项"},
+    {"serial": 184, "candidate_id": "itm_5877d68ab36d1710", "gold": "NT-I38", "carrier_serial": 182, "carrier_id": "itm_5326cef728099080", "note": "金标 NT-I38 为 mixed polarity；本池无单条候选同时承载两句，故按第一条承载"}
+  ],
+  "validation_dry_run": {
+    "method": "内存补全：未裁的 191 行暂用已除名预填件的结论（不回写工件）；真代码路径 structured_scoring.MatchingMode.ADJUDICATED + 契约 v4.3 契约读取器 + 门 v3",
+    "as_is_sheet": "不可出分（fail-closed）：ScoringInputError『itm_3131977b46dc2d03: invalid judgement None』⇒ 未具名全量前工作表天然不可评分",
+    "with_prefill_fill": {
+      "tp": 41,
+      "correct_extra": 150,
+      "duplicate_fp": 8,
+      "fn": 7,
+      "recall": "41/48 = 0.8542",
+      "precision": "191/199 = 0.9598",
+      "per_source": {"industrian-fulian-md": "18/22", "optical-module-docx": "23/26"},
+      "rate_gate_passed": false,
+      "rate_blockers": [
+        "contract_below_threshold:accepted_records_per_source:md:18<20",
+        "contract_high_risk_assertion_unmatched:NT-I43"
+      ],
+      "note": "与改判前 B 情景逐项一致 ⇒ 本指令只把 8 行从 matched 改为 duplicate，未改动其它任何计数"
+    },
+    "after_revoking_I46_I47": {
+      "recall": "39/48 = 0.8125",
+      "rate_blockers_count": 4,
+      "note": "I46/I47 仍处 U 2026-10-12 撤销态，是否撤回另需你具名（见 pending）"
+    }
+  },
+  "untouched": [
+    "items-reextract-adjudication-r3/candidate-adjudications.worksheet.json（已除名预填件，字节未改，仍为 a5869ab1…）",
+    "任何已签件（83–108 号、75 号 gate v3、契约 v4.3）、prereg v2、freeze、MANIFEST"
+  ],
+  "pending_u_decision": [
+    "其余 191 行逐条裁定（第 1 批的 4 个待定点仍待答：序号 1 判词、序号 7/11 polarity 冲突、同句拆两条口径、序号 14 与 NT-I43 的非载体关系）",
+    "NT-I46 / NT-I47：是否撤回 matched（R2 三选一只恢复 NT-I45）",
+    "NT-I26 / NT-I43：登记为 FN 还是走具名改判桩（本轮池无独立载体）",
+    "NT-I21 承载条是否改由字面命中（序号 158 的 itm_5d761c2b54213857）承载——不改变任何指标",
+    "c1_pending_coverage 29 条的 disposition"
+  ]
+}

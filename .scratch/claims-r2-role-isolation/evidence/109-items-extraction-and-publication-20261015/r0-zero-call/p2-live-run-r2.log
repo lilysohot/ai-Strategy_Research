@@ -1,0 +1,74 @@
+{"slug": "industrial-fulian-md", "execution_mode": "live_model", "ledger_attempts": 10, "new_model_calls": 10, "attempt_status": {"succeeded": 9, "outcome_unknown": 1}, "task_status": {"outcome_unknown": 1}, "protocol_status": {"not_checked": 1}, "quality_status": {"review_required": 1}, "publication_status": {"unpublished": 1}, "findings": ["attempt_outcome_unknown:attempt:76c577f3c234ae2c17dea776fc8c517f2e65c1732d40cc5ade06df4fd8496494"]}
+{"slug": "optical-module-docx", "execution_mode": "live_model", "ledger_attempts": 14, "new_model_calls": 14, "attempt_status": {"succeeded": 14}, "task_status": {"failed": 1}, "protocol_status": {"not_checked": 1}, "quality_status": {"review_required": 1}, "publication_status": {"unpublished": 1}, "findings": []}
+{
+  "schema_version": "items-reextract-execution-1",
+  "executed_on": "2026-10-15",
+  "freeze_manifest_sha256": "3f9316670d5b67d49acdd78c4e8a1be12bbde976221d544ce2fce3510b748b5e",
+  "prereg_sha256": "3a40caf8e5f2d7e2ed14a61a834da987d9a663475fc53523e9e55de9ecb7ab33",
+  "authorisation_sha256": "1de264a3ce279dbcca7349fe7a2a8606aa4a128ddd8aeba2023e04f99fc0b8bf",
+  "authorised_ceiling_total_tokens": 1000000,
+  "budget_source": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/budget-authorisation-r2.json",
+  "new_model_calls": 24,
+  "tokens_used": {
+    "per_run": {
+      "industrial-fulian-md": 35223,
+      "optical-module-docx": 51249
+    },
+    "total_tokens": 86472
+  },
+  "budget_exceeded": false,
+  "budget_verdict": "在授权额度内",
+  "automatic_retries": 0,
+  "production_database_access": 0,
+  "publication_writes": 0,
+  "results": [
+    {
+      "slug": "industrial-fulian-md",
+      "execution_mode": "live_model",
+      "ledger_attempts": 10,
+      "new_model_calls": 10,
+      "attempt_status": {
+        "succeeded": 9,
+        "outcome_unknown": 1
+      },
+      "task_status": {
+        "outcome_unknown": 1
+      },
+      "protocol_status": {
+        "not_checked": 1
+      },
+      "quality_status": {
+        "review_required": 1
+      },
+      "publication_status": {
+        "unpublished": 1
+      },
+      "findings": [
+        "attempt_outcome_unknown:attempt:76c577f3c234ae2c17dea776fc8c517f2e65c1732d40cc5ade06df4fd8496494"
+      ]
+    },
+    {
+      "slug": "optical-module-docx",
+      "execution_mode": "live_model",
+      "ledger_attempts": 14,
+      "new_model_calls": 14,
+      "attempt_status": {
+        "succeeded": 14
+      },
+      "task_status": {
+        "failed": 1
+      },
+      "protocol_status": {
+        "not_checked": 1
+      },
+      "quality_status": {
+        "review_required": 1
+      },
+      "publication_status": {
+        "unpublished": 1
+      },
+      "findings": []
+    }
+  ],
+  "next_action": "阶段 2 零调用止损（按已签 stage2_gates）→ items 裁定工作表（含 92 号 29 条 checklist）"
+}

@@ -1,0 +1,416 @@
+{
+  "schema_version": "items-c1-disposition-final-1",
+  "id": "109-p4-c1-disposition-final",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "production_pg_writes": 0,
+  "status": "ruled_by_u_recorded",
+  "title": "92 号 29 条 pending_coverage 的最终处置（U 具名）",
+  "u_ruling_verbatim": "序号2，有相似的词，但是含义主体不同。8是 18是、25是。24/9/17/20 都不是",
+  "ruled_by": "U（xyl）",
+  "ruled_on": "2026-10-15",
+  "ruling_scope": "只重裁此前被 assistant 机械判为 no_candidate 的 15 条；其余 14 条机械判 covered 未获异议，维持",
+  "basis": {
+    "worksheet_before": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-reextract-adjudication-r3-blank/candidate-adjudications.worksheet.json",
+      "sha256": "02e5dcfb0a993f9f0807b04fbd65b290b60c3dc886802f778ebdd49091faf234"
+    },
+    "worksheet_after": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-reextract-adjudication-r3-c1ruled/candidate-adjudications.worksheet.json",
+      "sha256": "7578a8f8fafea50f77e6111c7bb9186456e45cb50de263a9f304b2a086eef923"
+    },
+    "u_authored_set_unchanged": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-reextract-adjudication-r3/candidate-adjudications.worksheet.json",
+      "sha256": "2e574b6ec57c3132b0074b4db96a8d937856c0acaf2df6051acf894c39784767",
+      "note": "U 亲填原件字节未动；本修订版在其可出分副本上仅补 29 个 disposition 字段"
+    },
+    "review_listing": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/p4-c1-review-listing.json",
+      "sha256": "7370383b087c38e70cc4dc0c7d3cddf1b349c672be4de731bd545d1fa2c613cc"
+    }
+  },
+  "summary": {
+    "total": 29,
+    "covered_by_candidate": 17,
+    "no_candidate": 12,
+    "re_ruled": 15,
+    "flipped_from_machine": 3,
+    "flipped_serials": [
+      8,
+      18,
+      25
+    ],
+    "explicit_u_rulings": 8,
+    "confirmed_by_omission": 21
+  },
+  "assistant_correction": {
+    "item": "序号 2",
+    "my_earlier_claim": "曾把 #2『观察仓止损条件为下季OCF/扣非<0.5』与池内『下季 OCF 盖不住扣非的一半（OCF/扣非<0.5）』判为同一断言",
+    "u_finding": "有相似的词，但是含义主体不同",
+    "why_i_was_wrong": "两者共享数值表达式，但主体不同：池内句陈述财务指标事实，C1 句陈述观察仓的止损条件 ⇒ 字面重合掩盖了主体差异",
+    "consequence": "该条维持 no_candidate（跨角色仍未被覆盖），并列入发布件缺口；机械/字面法在此类『同词不同主体』上系统性失效，这正是人判不可替代的证据"
+  },
+  "dispositions": [
+    {
+      "serial": 1,
+      "c1_candidate_id": "0b9783f22788a50bc5c225bc463453cc591d85abb9df9a0148a222f5d68a41bb",
+      "claim_text": "会不会出现当年机器人份额加起来超过100%的状态？",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.717,
+      "machine_disposition_v1": "covered_by_candidate",
+      "disposition": "covered_by_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 2,
+      "c1_candidate_id": "13edee989550a682308e39675b2c5978c743a9cecd12aaa9dcbb026a4656bdde",
+      "claim_text": "工业富联观察仓止损条件为下季OCF/扣非<0.5",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.49,
+      "machine_disposition_v1": "no_candidate",
+      "disposition": "no_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "explicit_u_ruling",
+      "u_reason": "有相似的词，但是含义主体不同"
+    },
+    {
+      "serial": 3,
+      "c1_candidate_id": "246de578d04248e64c0385edcda778cf3d234cac26084c0c05120330d1a671b7",
+      "claim_text": "2.4T产品用于scale up领域",
+      "role_external_reason": "no value_text",
+      "machine_similarity": 0.971,
+      "machine_disposition_v1": "covered_by_candidate",
+      "disposition": "covered_by_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 4,
+      "c1_candidate_id": "261cd5fab49fdc04641201b7c3c60d62a566ac1d1525c23908b6026cd84a36b9",
+      "claim_text": "工业富联观察仓投资决策需满足回撤到52–58（回到7月回购均价61之下、动PE降到24附近）等条件后再议",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.729,
+      "machine_disposition_v1": "covered_by_candidate",
+      "disposition": "covered_by_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 5,
+      "c1_candidate_id": "29a9f49a3647248f89fd3b75a945798ba5bcf05a827fda5a1a711e30f95ca7f6",
+      "claim_text": "需求量没有用，交付量才有用",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.615,
+      "machine_disposition_v1": "covered_by_candidate",
+      "disposition": "covered_by_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 6,
+      "c1_candidate_id": "32040699e0988baf3810f428918f16c870c8165bb747ba5695b5f1f8dcc454e6",
+      "claim_text": "当因政策原因导致成本上升时，光模块行业相关主体会与客户协商，提价幅度在10%到20%之间",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.636,
+      "machine_disposition_v1": "covered_by_candidate",
+      "disposition": "covered_by_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 7,
+      "c1_candidate_id": "32e5c48adf2bc874170548e24af34c99ec50df424d429a71d7b4c8b9d6df0b89",
+      "claim_text": "高盛给出的工业富联121目标价是IMA标题，不能当作明日价格",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.195,
+      "machine_disposition_v1": "no_candidate",
+      "disposition": "no_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 8,
+      "c1_candidate_id": "461dc19ae710e49512f73d81b038306e2af36a14ad852919f31d30b8c26ac0a0",
+      "claim_text": "工业富联目标价乐观路径为靠近中金77.68/华泰93",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.5,
+      "machine_disposition_v1": "no_candidate",
+      "disposition": "covered_by_candidate",
+      "covered_by_candidate_id": "itm_8de34fd51247bddf",
+      "provenance": "explicit_u_ruling",
+      "u_reason": null
+    },
+    {
+      "serial": 9,
+      "c1_candidate_id": "48578c6df92a7a3f3e1fd61a601f04b236ec9fcd9e909d16258fd697b495c798",
+      "claim_text": "若工业富联H2只是季节性、Rubin放量后移，其动态PE隐含市值475亿不是估值底部",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.211,
+      "machine_disposition_v1": "no_candidate",
+      "disposition": "no_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "explicit_u_ruling",
+      "u_reason": null
+    },
+    {
+      "serial": 10,
+      "c1_candidate_id": "4de8edc7f2acc00f7d5d136391c0b6b4146447006a2f5d74d2ad029cce514037",
+      "claim_text": "工业富联Q3的OCF/扣非回到0.6以上或毛利率较Q2的6.99%不再回吐",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.914,
+      "machine_disposition_v1": "covered_by_candidate",
+      "disposition": "covered_by_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 11,
+      "c1_candidate_id": "5fafca8277ebd368d45b205dc90a2a6a2e78c962c950b7d244181195a829365b",
+      "claim_text": "工业富联观察仓止损条件为毛利率较6.99%再掉超过1个百分点且公司改口说涨价/mix受阻、Rubin延期",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.87,
+      "machine_disposition_v1": "covered_by_candidate",
+      "disposition": "covered_by_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 12,
+      "c1_candidate_id": "6abd91e34184dae3d9210248bfb31b1426a502a215ed235d7223bb46674bb811",
+      "claim_text": "框架站分析中不将90元的共识价格视为明日股价的地板价",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.25,
+      "machine_disposition_v1": "no_candidate",
+      "disposition": "no_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 13,
+      "c1_candidate_id": "6bb1d41ee43404c0fa1f6600ee30e9f10b75ba15b94ac624dc26dec95e63ee1a",
+      "claim_text": "卖方使用工业富联26年度归母净利润600亿元以上的指标",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.275,
+      "machine_disposition_v1": "no_candidate",
+      "disposition": "no_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 14,
+      "c1_candidate_id": "79f051811ddfede5fc02c2e8791b9bec604e5b8d1a049a9537fbe030f6450fba",
+      "claim_text": "卖方使用工业富联归母净利润同比增长96%的指标",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.222,
+      "machine_disposition_v1": "no_candidate",
+      "disposition": "no_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 15,
+      "c1_candidate_id": "8501a187ba0b55c50ca84a5f97ee4a4dc20a40143846d761defa26e4f96c81c0",
+      "claim_text": "200G scale up领域主要使用NPO",
+      "role_external_reason": "no value_text",
+      "machine_similarity": 0.952,
+      "machine_disposition_v1": "covered_by_candidate",
+      "disposition": "covered_by_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 16,
+      "c1_candidate_id": "85a3c88c6a64f4dab5c96756d59fa5131daac45355c376578d40e6aa89d7e7f2",
+      "claim_text": "Q2的800G光模块是超预期的",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.786,
+      "machine_disposition_v1": "covered_by_candidate",
+      "disposition": "covered_by_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 17,
+      "c1_candidate_id": "86701ad6a755bcef5c8eff0a6b8d92f7cdfd48096fed998cc0a78f481fa4db06",
+      "claim_text": "工业富联动态PE隐含的市值475亿看起来未给卖方600亿",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.231,
+      "machine_disposition_v1": "no_candidate",
+      "disposition": "no_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "explicit_u_ruling",
+      "u_reason": null
+    },
+    {
+      "serial": 18,
+      "c1_candidate_id": "984aeafb7d1db22b3d9223e703bb75a387bce682266bb63f7122608a702bdea3",
+      "claim_text": "工业富联目标价中性路径为55–75",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.327,
+      "machine_disposition_v1": "no_candidate",
+      "disposition": "covered_by_candidate",
+      "covered_by_candidate_id": "itm_8de34fd51247bddf",
+      "provenance": "explicit_u_ruling",
+      "u_reason": null
+    },
+    {
+      "serial": 19,
+      "c1_candidate_id": "9b9cfd337421e088645752fcc4b24dded371cd9091e2000cfbab590b15acdd57",
+      "claim_text": "工业富联目标价93-101不是8月能兑现的估值底部",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.293,
+      "machine_disposition_v1": "no_candidate",
+      "disposition": "no_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 20,
+      "c1_candidate_id": "9c7779f71cca4611d722cc28f50e7915fdc0fa68bf672643f2c657e8bcf8c29d",
+      "claim_text": "工业富联TTM市盈率27倍对应7%毛利率，EMS并不便宜到「必须买」",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.174,
+      "machine_disposition_v1": "no_candidate",
+      "disposition": "no_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "explicit_u_ruling",
+      "u_reason": null
+    },
+    {
+      "serial": 21,
+      "c1_candidate_id": "b206c716935a0fb179a2c9eecf8950174e7089ee1f312a9bb2ed5697460d82c8",
+      "claim_text": "工业富联目标价不把121、100.8当锚",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.889,
+      "machine_disposition_v1": "covered_by_candidate",
+      "disposition": "covered_by_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 22,
+      "c1_candidate_id": "c2d6e1cd0dd9ad3377b6d0b51058fac44dda045870158ff93151f422fe3436c2",
+      "claim_text": "3.2T产品在scale out领域之外是普通的光模块",
+      "role_external_reason": "no value_text",
+      "machine_similarity": 0.745,
+      "machine_disposition_v1": "covered_by_candidate",
+      "disposition": "covered_by_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 23,
+      "c1_candidate_id": "d28d358224790545f68a4bc7bc9399c6119d947437a8f202b594aa266acb1143",
+      "claim_text": "工业富联中期不分红",
+      "role_external_reason": "no value_text",
+      "machine_similarity": 0.714,
+      "machine_disposition_v1": "covered_by_candidate",
+      "disposition": "covered_by_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 24,
+      "c1_candidate_id": "de2a7c06fd9bd401da0d48290721f1940b01c3868d6d73b1b99dbc1da099bcd3",
+      "claim_text": "对于工业富联相关标的，不应按93-101区间追高，也不应因单日未上涨就将AI机柜出货增长3倍视为证伪",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.389,
+      "machine_disposition_v1": "no_candidate",
+      "disposition": "no_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "explicit_u_ruling",
+      "u_reason": null
+    },
+    {
+      "serial": 25,
+      "c1_candidate_id": "ebd8d8fe178f8fd4b411fa27d2370d723c0dda822bd278f072daac7c20b4b385",
+      "claim_text": "1.6T光模块表现不佳（拉胯）",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.462,
+      "machine_disposition_v1": "no_candidate",
+      "disposition": "covered_by_candidate",
+      "covered_by_candidate_id": "itm_8c4a2ad0e2114d84",
+      "provenance": "explicit_u_ruling",
+      "u_reason": null
+    },
+    {
+      "serial": 26,
+      "c1_candidate_id": "ecee8ac210fbf2bc220b2f37a2aa864c105a031d4374adb1038d263e777c3eae",
+      "claim_text": "工业富联的Rubin / GB300爬坡再延",
+      "role_external_reason": "no value_text",
+      "machine_similarity": 0.857,
+      "machine_disposition_v1": "covered_by_candidate",
+      "disposition": "covered_by_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 27,
+      "c1_candidate_id": "ef512e03d2f8f74d95e6f60db111f60fb2c2668d95aef53a4904c3d8e382902f",
+      "claim_text": "框架站分析中不采用归母净利润指标作为标题",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.222,
+      "machine_disposition_v1": "no_candidate",
+      "disposition": "no_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 28,
+      "c1_candidate_id": "f1fba3c9d12b62deb564d956ddb7d784154a9fbf379d1ff6ffe079cf0a23db8b",
+      "claim_text": "工业富联目标价93-101基于2026年24-35倍市盈率或2027年利润得出",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.275,
+      "machine_disposition_v1": "no_candidate",
+      "disposition": "no_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    },
+    {
+      "serial": 29,
+      "c1_candidate_id": "f36ba79df091c5759ce837d0449dabcece1d810d8866571b963c7ca2d3a400cf",
+      "claim_text": "份额加起来总不能超过100%",
+      "role_external_reason": "kind=opinion",
+      "machine_similarity": 0.8,
+      "machine_disposition_v1": "covered_by_candidate",
+      "disposition": "covered_by_candidate",
+      "covered_by_candidate_id": null,
+      "provenance": "confirmed_by_omission",
+      "u_reason": null
+    }
+  ],
+  "worksheet_delta": {
+    "fields_written": [
+      "c1_pending_coverage[].disposition",
+      "c1_pending_coverage[].covered_by_candidate_id"
+    ],
+    "schema_change": "无——未新增任何字段",
+    "adjudications_untouched": "199 行 candidate 裁定与 8 行 matched_gold_id 置空（前批已登记）逐字节不变"
+  },
+  "untouched": [
+    "U 亲填候选集（2e574b6e…）字节未动",
+    "可出分副本（02e5dcfb…）字节未动（本修订版另存新目录）",
+    "92 号登记件、预注册 v1/v2、门 v3、契约 v4.3、83–108 号产物：字节全未动"
+  ]
+}

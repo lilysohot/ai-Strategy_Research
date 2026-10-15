@@ -1,0 +1,38 @@
+{
+  "schema_version": "items-reextract-p1-landing-1",
+  "id": "109-p1-landing",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "production_pg_writes": 0,
+  "summary": "P1 完成：预注册件（判据锚定已签门 v3/契约 v4.3）+ items 版三件套（prepare/execute/worksheet）+ 14 项常驻测试全绿 + 零调用干跑证据。",
+  "deliverables": {
+    "prereg": "items-reextraction-preregistration.json（draft_pending_human_signature，待 U 签认后 frozen_before_execution）",
+    "prereg_signoff": "items-reextraction-preregistration-signoff.md（未签，不预填）",
+    "prepare": "prepare_items_reextract_plan.py（复用 28 号 freeze_items_only_plan.py 的快照构建，只导入不改历史字节；批次对照 check_attempts fail-closed）",
+    "execute": "execute_items_reextract.py（六道闸门 + 跑后 total_tokens 对账，超限判该轮无效；授权件哈希绑定自预注册件）",
+    "worksheet": "build_items_adjudication_worksheet.py（止损规则从已签件逐字求值；行结构与 items-adjudication-worksheet-1 兼容；92 号 29 条 checklist 哈希绑定、逐条处置）",
+    "tests": "tests/test_items_reextract_entry.py（14 项）"
+  },
+  "dry_run_evidence": {
+    "method": "临时已签副本（仅翻 status 叶）+ 内存 build，零写入",
+    "recomputed_batches": {
+      "industrial-fulian-md": { "attempt_ceiling": 10, "historical": 10 },
+      "optical-module-docx": { "attempt_ceiling": 14, "historical": 14 }
+    },
+    "maximum_new_model_calls": 24,
+    "verdict": "当前代码重排批次与已签参照逐字一致，24 attempts ≤ 授权；prepare 可在预注册签认后落冻结件",
+    "profile_model": "doubao-seed-2.1-lite（当前 .env 配置，冻结时逐字记入 manifest）"
+  },
+  "verification": [
+    "uv run pytest tests/test_items_reextract_entry.py -q → 14 passed",
+    "uv run ruff check（三脚本 + 测试）→ All checks passed",
+    "执行器拒绝路径实测：草稿预注册 / 授权件缺失 / 哈希错配 / 状态不生效 / ceiling 非法（测试覆盖）",
+    "止损规则行为跟随已签件（测试：改已签规则 ⇒ 行为改变，无需改代码）；未知规则 fail-closed"
+  ],
+  "gates_state": {
+    "P0": "立项签认 + 预算 1,000,000 total_tokens（授权件 stated_effective_pending_countersignature，U 口谕）",
+    "P1": "三件套落地；**预注册件待 U 签认**（P2 前最后一个人工序）",
+    "P2": "blocked on：预注册件 frozen_before_execution（签认后 prepare 落冻结件 → execute --dry-run 六闸 → --allow-model 实跑）"
+  },
+  "out_of_scope_this_step": "金标字节、83–108 号产物、生产 PG、发布动作"
+}

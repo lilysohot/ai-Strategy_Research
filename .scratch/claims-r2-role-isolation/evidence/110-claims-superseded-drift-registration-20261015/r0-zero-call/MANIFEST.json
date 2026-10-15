@@ -1,0 +1,21 @@
+{
+  "schema_version": "claims-zero-call-cleanup-manifest-1",
+  "status": "draft",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "inputs": {
+    "superseded_83_manifest": "afdb1a5b4f8c88e1b9bf31680cb74757cf9ea96955dabde4112059d79b67e147",
+    "superseded_83_signoff_md": "7403d1dc754dc439b739f899ce804c3611190fd53f3b16b7c83f965f67d5ec7e",
+    "superseded_83_gate": "28f19286cbe9c72e298c6ba05625d6ca1f24159c3321ce652e72cc50bdfa1f4c",
+    "superseded_83_coverage": "a75ed8d16b76dbac77549ab02881d1c8a1be007ea25188ed51c5e8697d6b16d3"
+  },
+  "outputs": {
+    "superseded-drift-registration.json": "d99ee2ca0c2ad743e879dfb64f7ead678b03226cf81ad4feeef818a83e4b74d6"
+  },
+  "registers": {
+    "check_id": "superseded-artifact-drift",
+    "drifted_artifact": "evidence/83-claims-scope-gate-draft-20261014/r0-zero-call/claims-gate-v1-signoff.md",
+    "manifest_recorded_sha256": "c3f212032ef59d642d0344fe42c88d8df20f832ebbba6035e655339363b36d42",
+    "on_disk_sha256": "7403d1dc754dc439b739f899ce804c3611190fd53f3b16b7c83f965f67d5ec7e"
+  }
+}

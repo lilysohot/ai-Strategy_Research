@@ -1,0 +1,134 @@
+{
+  "schema_version": "items-extraction-publication-landing-1",
+  "id": "109-items-extraction-and-publication-20261015",
+  "landed_on": "2026-10-15",
+  "model_calls": 0,
+  "production_pg_writes": 0,
+  "authority": {
+    "p5_release": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-p5-release-decided.json",
+      "sha256": "sha256:32648fd46bd7efcde868fa14b1939c65d39f34df358703070092414745611327",
+      "instrument": "items-p5-release-signoff.md（b50bb0b9…，U 具名 xyl / 2026-10-15）",
+      "authorises": ["P6 发布", "P7 读链"]
+    },
+    "release_basis": "72 号既定解耦路线：发布标准（结构完备性）与门阈值/金标解耦，store 对 gold/recall/assertion 零引用；发布理由写『结构完备 + coverage 补全 + 缺口清单明示』，不写『门 PASS』",
+    "gate_verdict_unchanged": "FAIL（单轴：哨兵 NT-I43）——本件不改写、不弱化该读数"
+  },
+  "P6_publication": {
+    "bridge": {
+      "builder": "build_items_bridge.py",
+      "sha256": "sha256:4a5b08fb6c01a61f00770fe36ab8ea8e69d0e402312935c9171f895274fd4b17",
+      "record": {
+        "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-bridge-inputs-record.json",
+        "sha256": "sha256:a179677a6f13b33660c0ce14a61c08f5342616df6723853f6c193e275d0cd0bb"
+      },
+      "rule": "导入 round-3 全池 199 条（matched 41 + correct_extra 150 + duplicate 8）；0 条 incorrect ⇒ 剔除清单为空",
+      "why_duplicates_retained": "8 条 duplicate 的 reason 逐条自述『为一对一约束下的重复标注』，实测其 text/value 与主匹配条目互不相同（例：『若从零开一个观察仓』vs『等两件事至少中一件再议』）⇒ 该判定由评分器一对一映射强加，非重复渲染；为满足评分侧约束删除真抽取条目属 83 号登记的反模式",
+      "gold_fields_read": 0
+    },
+    "placement": {
+      "script": "place_items_publication.py",
+      "sha256": "sha256:c0c53bc045f2ca556cdc9f245c540bd239f5136d07f4057edcb96a2c77202505",
+      "record": {
+        "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/p6-items-publication-record.json",
+        "sha256": "sha256:325a577103dd14401a37f28cd12a7d0e247ec2f42e6b7ca32a7d2dcb5143de8a"
+      },
+      "store_root": "data/corpus/structured-store（CORPUS_STRUCTURED_ROOT 原值未动）",
+      "design": "gen-2 单代同时承载 claims 与 material_items 两个 artifact。非风格选择：读路径（read_semantic）只解析 head 的 artifacts，coverage 也按本代 artifacts 计，items-only 代会让 claims 可读性静默丢失",
+      "dry_run": "先在与生产 store 逐字相同的 /tmp 副本上跑通，再对生产 root 执行；两次输出逐字相同（确定性复核）",
+      "publications": {
+        "industrial-fulian-md": {
+          "parent": "sha256:5fc7116b4df7b470cb143ae6f35c2060e6a68a4c30465cde39578efb0981a69f",
+          "publication_id": "sha256:c3dbd91bfa0fe2b1c905077f35fba04e27c9b8bdc678abbcb1515f982a8b3871",
+          "generation": 2,
+          "coverage": { "claims": "complete", "material_items": "complete", "material_relations": "missing" },
+          "artifacts": 2,
+          "mappings": 108,
+          "items": 80,
+          "claims_records": 60
+        },
+        "optical-module-docx": {
+          "parent": "sha256:8dde446f995204b18f754fea697e05622b1614a5ce04beeff2149f04555d0867",
+          "publication_id": "sha256:8395c900d91fe12d6507db5a1d8d16705dee7e95538f1785b86dcf083eb45aeb",
+          "generation": 2,
+          "coverage": { "claims": "complete", "material_items": "complete", "material_relations": "missing" },
+          "artifacts": 2,
+          "mappings": 123,
+          "items": 119,
+          "claims_records": 24
+        }
+      },
+      "gen1_preserved": "两份 gen-1 发布件（5fc7116b…/8dde446f…）仍在 store 中、parent 链完整、字节未动 ⇒ 108 号签认件所绑定的 publication_id 依然可核",
+      "quality_status": "accepted（与 106 号 claims 发布的口径一致；未走 record_selection ⇒ 不触发 review_required）"
+    },
+    "query_acceptance": {
+      "claims_three_purposes_unchanged": {
+        "industrial-fulian-md": "cite 60 / compare 7 / calculate 7",
+        "optical-module-docx": "cite 24 / compare 3 / calculate 3",
+        "comparison": "compare/calculate 与 106 号回填后逐字一致（7/7 与 3/3）；cite 为全量读数（106 号当时只读首页 8 条）"
+      },
+      "items_reachable": { "industrial-fulian-md": 80, "optical-module-docx": 119 },
+      "material_relations": "missing —— 契约 OPEN-2=C，本轮不抽不评（P5 已登记出范围）"
+    }
+  },
+  "P7_read_chain": {
+    "code": {
+      "server/routes/corpus.py": {
+        "git_blob": "9d30ba1f28bcda7ad4bf3956b1923e53676a5451",
+        "change": "新增 GET /api/corpus/items/{source_id}（field_filters={\"role\":\"material_items\"}）；claims/items 共用 _semantic_page；两个端点补 cursor 入参（此前暴露 next_cursor 却不接受回传 ⇒ 客户端无法翻页）"
+      },
+      "tests/test_web_corpus_read_chain.py": {
+        "git_blob": "0f91a4e1d470ddc49db56e16eda0f23d8337a5f5",
+        "change": "11 → 14 项（items 无 store root 409 / 未知 source 404 / role 过滤 + cursor 往返；鉴权循环纳入 items）"
+      }
+    },
+    "acceptance": {
+      "script": "p7_items_endpoint_acceptance.py",
+      "sha256": "sha256:fc9871e5b67b2cb0334baa0d217969407e1c552553e6e9caff2b3cfe9115c5fe",
+      "record": {
+        "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/p7-items-endpoint-acceptance.json",
+        "sha256": "sha256:81b9f086750692468bc59c7cf59ecba34531f385d092061f159b0430fd3d174f"
+      },
+      "method": "ASGITransport 直驱真实路由 + 真实生产 store（真实 query_semantic 与 head cache），仅替换 get_current_user 依赖 ⇒ 不连业务库、零写入",
+      "observed": {
+        "items_over_http": { "industrial-fulian-md": "80/80", "optical-module-docx": "119/119" },
+        "roles_on_page": "仅 material_items",
+        "pagination": "两源均翻至 next_cursor 为空（10 / 15 页）",
+        "claims_compare_still_200": true,
+        "unknown_source": 404,
+        "unauthorised": "401 由常驻测试覆盖（app_client 无 token）"
+      }
+    }
+  },
+  "regression": {
+    "command": "pytest tests -k 'corpus or web_corpus or claims or evidence'",
+    "result": "2 failed / 1706 passed / 19 skipped",
+    "failures": [
+      "tests/test_corpus_golden.py::test_golden_recall_at_5_is_full —— 101 号已登记既有环境失败（golden 锚点语料不在库）",
+      "tests/test_corpus_preparation_readers.py::test_dev_materials_smoke_units_and_pages —— 101 号已登记既有环境失败（reader-pdf-11+pymupdf-1.28.2 版本漂移，测试期望 reader-pdf-10+）"
+    ],
+    "lint": "ruff check + ruff format --check 全过（改动文件）",
+    "types": "pyright server/routes/corpus.py = 0 errors"
+  },
+  "explicit_gaps": {
+    "carried_from_p5": true,
+    "source": "p5-release-record.json::explicit_gaps（逐条未删）",
+    "gold_uncovered": ["NT-I06", "NT-I09", "NT-I10", "NT-I25", "NT-I26", "NT-I31", "NT-I43"],
+    "unmatched_critical_gold": ["NT-I43"],
+    "c1_no_candidate": 12,
+    "note": "发布对外理由必须逐条列出上述缺口，不得只写总数；不得写成『门 PASS』"
+  },
+  "untouched": [
+    "U 工作表两版（2e574b6e… / 7578a8f8…）、92 号登记件、预注册 v1/v2、r3 冻结件、已签门 v3 / 契约 v4.3、83–108 号产物：字节全未动",
+    "106 号 bridge 输入与 live-store：重放只读其输入，字节未动",
+    "生产 PG corpus schema：零写入",
+    "e6_holdout_corpus、web 前端 corpus/页：出范围"
+  ],
+  "what_this_record_claims": "items 角色候选集已按已签放行路线发布进生产 store（coverage missing→complete），并经 HTTP 读链可查；claims 读链读数未回退",
+  "what_this_record_does_not_claim": [
+    "不主张质量达标或门通过（判档仍为 FAIL 单轴：哨兵 NT-I43）",
+    "不主张 material_relations 已覆盖（本轮不抽不评）",
+    "不主张缺口清单可作等价替代",
+    "不自我放行为「生产放行门」——该判定由 U 具名（108 号）"
+  ]
+}

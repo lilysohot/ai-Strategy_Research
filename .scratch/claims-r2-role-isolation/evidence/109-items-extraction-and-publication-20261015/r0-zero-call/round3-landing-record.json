@@ -1,0 +1,32 @@
+{
+  "schema_version": "items-round3-landing-1",
+  "id": "109-round3-landing",
+  "created_on": "2026-10-15",
+  "model_calls": 24,
+  "tokens_round3": 88450,
+  "tokens_cumulative": 263971,
+  "authorised_ceiling_total_tokens": 1000000,
+  "summary": "round-3（协议 v6）全量重抽完成：24/24 attempts succeeded、零 outcome_unknown、零协议弃项；stage2 闸（v2）通过，裁定工作表已生成（199 候选 + 92 号 29 条 checklist）。",
+  "chain": {
+    "prereg_v2": "items-reextraction-preregistration-v2.json（frozen_before_execution；协议 v6 + 止损闸执行有效性口径 + 范围 A 全量重抽，U 会话指令 2026-10-15）",
+    "freeze": "items-reextract-plan-freeze-r3/manifest.json（batch 6b41c260…/fb60b9d6…，六闸干跑全绿）",
+    "execution": "items-reextract-plan-freeze-r3/execution-summary.json",
+    "worksheet": "items-reextract-adjudication-r3/candidate-adjudications.worksheet.json"
+  },
+  "results": {
+    "industrial-fulian-md": "10/10 attempts succeeded；80 items",
+    "optical-module-docx": "14/14 attempts succeeded；119 items",
+    "pool_total": 199,
+    "round1_pool": 177,
+    "round2_pool": 211,
+    "variance_note": "199 vs 211 为模型抽取抽样方差（本轮零协议弃项、零传输事故）；round-1/2 池留档为证据，裁定池以预注册 v2 指定的 round-3 为准（禁止看过结果后挑池）"
+  },
+  "stage2_verdict": {
+    "gates": { "sources_with_candidates": "2 >= 2 ✓", "attempts_outcome_unknown": "0 == 0 ✓" },
+    "report_only": { "material_items_tasks_failed": 2, "note": "v1 闸位已按预注册 v2 降级 report-only" },
+    "passed": true,
+    "worksheet_status": "pending_named_human_adjudication"
+  },
+  "next": "P3 零调用 Stage-1 建议（42 号证据链权重，禁金标注入）→ P4 人工裁定（U 具名全量，assistant 每 20 条批次列清单）",
+  "economy": "round1 89,049 + round2 86,472 + round3 88,450 + probes ≈2k = 263,971 / 1,000,000（26.4%）；attempts 累计 72（三轮各 24，单轮 ≤30 口径）"
+}

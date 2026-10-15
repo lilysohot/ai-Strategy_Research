@@ -1,0 +1,84 @@
+{
+  "schema_version": "items-signoff-state-1",
+  "id": "109-p5-signoff-state-20261015",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "production_pg_writes": 0,
+  "status": "recorded",
+  "title": "两份签认件的当前签署状态与同一类正文瑕疵的勘误",
+  "why_this_record": "U 于 2026-10-15 17:17 亲自填写了预注册签认件的签名栏，闭合了 budget-authorisation-r2.json 明文登记的一项开放项；同时两份签认件都存在『签名栏已填、正文状态行仍写未签认』的同一类瑕疵，需统一的勘误口径。",
+  "no_signature_by_assistant": {
+    "statement": "本件未在任何签名栏写入任何字符；两份签认件的签名字符均由 U 本人填入",
+    "basis": "签认纪律：签名只能由 U 本人指示与填入，实施方不得预填代签"
+  },
+  "instruments": [
+    {
+      "which": "预注册签认件（本批新签）",
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-reextraction-preregistration-signoff.md",
+      "sha256_before_this_batch": "fffbe36325efc1a463b8d973f8b893b05887f0e8dd205c02125c3311cbb1d5f7",
+      "sha256_now": "66ad76f47051c414357df8a131062ff4758e2f0dc12035563391d6e2fb5e1984",
+      "observed_mtime": "2026-10-15 17:17:44",
+      "signature_block": "reviewer:    xyl      adjudicator:     xyl     signed_on: 2026-10-15",
+      "body_status_line": "状态：草稿，**未签认**。`status = draft_pending_human_signature`。",
+      "erratum": "以**签名栏为准**；正文状态行判为草稿期残留并作废。本句为 U 已签认的事实陈述，不构成对签名的代填。",
+      "effect": "第 3 行『P2 在本件签认（frozen_before_execution）前禁止起跑』的条件已满足；预注册 v2 的独立具名项闭合"
+    },
+    {
+      "which": "立项/发布签认件（本批之前已签）",
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-extraction-publication-signoff.md",
+      "sha256": "c5420de9505782bb307da95beeb9ec8d050420799722e6be07c724d1ae458379",
+      "signature_block": "reviewer:     xyl     adjudicator:     xyl     signed_on:2026-10-15",
+      "body_status_line": "状态：草稿，**未签认**。`status = draft_pending_human_signature`。",
+      "erratum": "同上：以签名栏为准，正文状态行作废",
+      "already_registered_in": {
+        "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/p5-u-rulings-20261015.json",
+        "sha256": "0d8866baa767fe59370cb11d1e3458cec3f9d837dd2b96b91601d7f918c7a5c7",
+        "section": "rulings[R4]"
+      }
+    }
+  ],
+  "common_defect": {
+    "class": "签认件自述与签名栏不一致（正文状态行未随签名更新）",
+    "occurrences": 2,
+    "assessment": "非代签；两件的签名字符均由 U 本人填入。缺陷仅是正文状态行陈旧",
+    "uniform_reading": "凡本链签认件，签名栏为准；正文状态行与签名栏冲突时以签名栏为准，冲突行判为草稿期残留",
+    "bytes_touched": "无——两件均保持 U 填写后的原字节，未修正正文（改已签件字节等于改变签名对象，须另行登记取代关系）"
+  },
+  "closed_items": [
+    {
+      "item": "budget-authorisation-r2.json::countersignature.does_not_cover —— 『items-reextraction-preregistration-signoff.md 的独立具名（仍开放，U 可随时补签）』",
+      "status": "closed_by_this_record",
+      "mechanism": "以本件登记闭合；**未改 budget-authorisation-r2.json 任何字节**（该件为 countersigned_effective，改动会使其 instrument 链失效）",
+      "residual": "无"
+    }
+  ],
+  "chain_stability": {
+    "statement": "本件为新增登记，未触发 p5-release-record.json 与 p4-c1-archival-conformance.json 重生成",
+    "why_valid": "该两件均不含对两份签认件状态的陈述（前者只含 C-1 读法认可与 R1–R4 裁定摘要，后者只涉 C1 归档合规），故本件的状态更新不使其失效",
+    "hashes_at_this_moment": {
+      "p5-release-record.json": "63c232d9d9ad213e110c329b4b3f77550dc9fc93f77812b18e6b7d1f61ae80cf",
+      "p4-c1-archival-conformance.json": "a437c3f608b6a73a6419f1b47c7a66ad04f316bebe7e03bce761ee950341421e",
+      "p5-u-rulings-20261015.json": "0d8866baa767fe59370cb11d1e3458cec3f9d837dd2b96b91601d7f918c7a5c7",
+      "p5-c1-reading-ratification.json": "cd7d54798d4191c2b2f5ebf622edb99e70f8ea4793c911e323f3c73c2dc9ddd6"
+    }
+  },
+  "state_of_the_chain": {
+    "P0_立项_签认": "已（budget-authorisation-r2.json countersigned_effective）",
+    "P1_预注册_签认": "已（本件登记的预注册签认件）",
+    "P2_重抽": "已（round-3，24 attempts / 88450 tokens，均在授权内）",
+    "P3_止损复核": "已",
+    "P4_人工裁定": "候选集 199 行已由 U 具名（R2 确认）；**仅剩 92 号 29 条中 15 条方向待 U 给**",
+    "P5_门评分": "出分已出（判档 FAIL 单轴：哨兵 NT-I43）；**放行具名签认未签**",
+    "P6_发布": "未执行（待 P5 放行）",
+    "P7_读链": "未执行"
+  },
+  "untouched": [
+    "两份签认件：保持 U 填写后的原字节",
+    "budget-authorisation.json / budget-authorisation-r2.json、预注册 v1/v2、门 v3、契约 v4.3、92 号登记件、工作表两版、83–108 号产物：字节全未动",
+    "未写生产 PG、未发布、未补抽、未代签"
+  ],
+  "countersignature": {
+    "status": "not_applicable",
+    "note": "本件为状态登记，不设签名栏"
+  }
+}

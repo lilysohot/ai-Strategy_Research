@@ -1,0 +1,125 @@
+{
+  "schema_version": "items-p5-u-rulings-1",
+  "id": "109-p5-u-rulings-20261015",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "production_pg_writes": 0,
+  "status": "stated_effective_pending_countersignature",
+  "title": "U 裁定批次：C-2 裁决人 / 199 行署名出处 / NT-I46·I47 / 签认件状态",
+  "precedent": {
+    "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/budget-authorisation.json",
+    "sha256": "96949b73e6e0f3a5c13a4b53de336ed9b5943ea63dc774cf815190aa92486357",
+    "note": "103 号同款：U 会话口谕先落成记录，签署栏留空；实施方不代填"
+  },
+  "rulings": [
+    {
+      "id": "R1",
+      "subject": "C-2：15 条（曾被机械判 no_candidate 的条目）由谁裁决",
+      "u_statement": "不授权",
+      "verbatim": "不授权",
+      "decision": "不做机械裁定；15 条由 U 亲判逐条给方向",
+      "closes": "archival-conformance 的 C-2 分支选择（否掉『授权机械裁定 + 抽样复核』）",
+      "residual": "15 条的方向仍待 U 逐条给（清单已在位）",
+      "reference": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/p4-c1-review-listing.json"
+    },
+    {
+      "id": "R2",
+      "subject": "工作表 199 行 reviewer / adjudicator = xyl 是否亲笔",
+      "u_statement": "199 行署名我确认",
+      "verbatim": "199 行署名我确认",
+      "decision": "确认亲笔",
+      "effect": [
+        "P4 的署名出处项闭合：工作表 review_status=accepted 的具名成立",
+        "『署名来源不明』类关切解除；不触发撤回"
+      ],
+      "bound_artifact": {
+        "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-reextract-adjudication-r3/candidate-adjudications.worksheet.json",
+        "sha256": "2e574b6ec57c3132b0074b4db96a8d937856c0acaf2df6051acf894c39784767"
+      }
+    },
+    {
+      "id": "R3",
+      "subject": "NT-I46 / NT-I47 维持 matched 还是撤回",
+      "u_statement": "NT-I46/I47 维持",
+      "verbatim": "NT-I46/I47 维持",
+      "decision": "维持 matched",
+      "effect": [
+        "召回读数保持 41/48 = 0.8542（不降为 39/48）",
+        "P5 判档 tier 不变：仍是『判定轴 5 项中 4 项达标、1 项（哨兵 NT-I43）未达标』",
+        "无重算、无候选集改动"
+      ]
+    },
+    {
+      "id": "R4",
+      "subject": "items-extraction-publication-signoff.md 的签署状态",
+      "u_statement": "关于items-extraction-publication-signoff.md应该是漏签了，帮我签署",
+      "verbatim": "关于items-extraction-publication-signoff.md应该是漏签了，帮我签署",
+      "decision": "采『勘误 + 追认』路线；不代填任何签名栏（理由见下）",
+      "measured_facts": {
+        "items-extraction-publication-signoff.md": {
+          "sha256": "c5420de9505782bb307da95beeb9ec8d050420799722e6be07c724d1ae458379",
+          "signature_block": "reviewer:     xyl     adjudicator:     xyl     signed_on:2026-10-15",
+          "body_line_3": "状态：草稿，**未签认**。`status = draft_pending_human_signature`。",
+          "finding": "签名栏**已含** xyl/xyl/2026-10-15，不是漏签；缺陷是正文状态行未随签名更新，二者矛盾",
+          "downstream": "budget-authorisation-r2.json（1de264a3…）已以本件为 instrument 判 countersigned_effective，其 countersignature.instrument_sha256 = c5420de9…"
+        },
+        "items-reextraction-preregistration-signoff.md": {
+          "sha256": "fffbe36325efc1a463b8d973f8b893b05887f0e8dd205c02125c3311cbb1d5f7",
+          "signature_block": "reviewer:          adjudicator:          signed_on:（全部为空）",
+          "finding": "签名栏**确实空白**——这才是『漏签』的那一份",
+          "downstream": "budget-authorisation-r2.json::countersignature.does_not_cover 明文：『items-reextraction-preregistration-signoff.md 的独立具名（仍开放，U 可随时补签）』"
+        }
+      },
+      "assessment": "两份件名相近，指令很可能指向的是签名栏空白的那一份（预注册签认件）；被指名的那一份反而是正文状态行陈旧",
+      "refused_action": "代填任何签名栏",
+      "refusal_reason": [
+        "签认纪律：签名只能由 U 本人指示与填入；实施方不得预填代签",
+        "签名的意义在于签署人亲自确认；代填使签名失去所指，且事后无法从字节分辨是否有人真的看过",
+        "先例：109 号工作表预填作废（p4-worksheet-reissue-and-prefill-void-record）；83 号草案 md 残留签署时间戳的清除"
+      ],
+      "applied_today": [
+        "不动 items-extraction-publication-signoff.md 任何字节 ⇒ budget-authorisation-r2.json 的 instrument_sha256 继续有效，无需建立取代链",
+        "本件登记：该件以**签名栏为准**，正文第 3 行状态行判为草稿期残留并作废；U 的指示记为本件的**追认**",
+        "不对 xyl 签名的填入时点/经手人作任何断言（字节不可证）；若 U 认为该签名非本人所加，请指示撤销"
+      ],
+      "compliant_options_for_signoff": [
+        {
+          "option": "A（推荐，零成本）",
+          "what": "U 在 items-reextraction-preregistration-signoff.md 的签名栏自行填写（该件未被 r2 覆盖，补签不影响任何既有引用）",
+          "note": "实施方不代填；U 直接编辑该文件即可"
+        },
+        {
+          "option": "B",
+          "what": "U 在会话中明示『以口谕落成生效记录』，实施方另出 stated_effective_pending_countersignature 件、签名栏仍留空",
+          "note": "103 号先例；适用于 U 不便直接编辑文件的场合"
+        },
+        {
+          "option": "C",
+          "what": "若要把 publication signoff 的正文状态行改成『已签认』，须出**新修订版**并登记取代关系",
+          "note": "改已签件字节等于改变签名对象 ⇒ budget-authorisation-r2.json 的 instrument_sha256 需同步登记取代，链更长；除非必要不建议"
+        }
+      ]
+    }
+  ],
+  "no_signature_written_by_assistant": {
+    "applies_to": [
+      "items-extraction-publication-signoff.md",
+      "items-reextraction-preregistration-signoff.md",
+      "本件",
+      "p5-c1-reading-ratification.json",
+      "p5-release-record.json"
+    ],
+    "statement": "本批次未在任何签名栏写入任何字符；所有签署栏状态与生成前逐字节一致"
+  },
+  "untouched": [
+    "两份签认件、budget-authorisation-r2.json、预注册 v1/v2、门 v3、契约 v4.3、92 号登记件、工作表两版、83–108 号产物：字节全未动",
+    "未写生产 PG、未发布、未补抽、未代签"
+  ],
+  "countersignature": {
+    "status": "pending_human_signoff",
+    "reviewer": null,
+    "adjudicator": null,
+    "signed_on": null,
+    "note": "签署栏留空"
+  }
+}

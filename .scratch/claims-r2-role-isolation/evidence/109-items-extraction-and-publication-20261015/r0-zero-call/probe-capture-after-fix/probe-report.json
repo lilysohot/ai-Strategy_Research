@@ -1,0 +1,67 @@
+{
+  "slug": "industrial-fulian-md",
+  "packet_prefix": "eeff713f",
+  "slots": [
+    "slot_0a08e2eb7641ff11",
+    "slot_50d7557446961af3",
+    "slot_f932c5c1f3bd3cf7"
+  ],
+  "probe_run": {
+    "execution_status": "succeeded",
+    "protocol_status": "valid",
+    "items": 6
+  },
+  "packet_runs": [
+    {
+      "packet_id": "58f845e7afc4",
+      "status": "not_candidate",
+      "reasons": []
+    },
+    {
+      "packet_id": "c215024290d4",
+      "status": "not_candidate",
+      "reasons": []
+    },
+    {
+      "packet_id": "c584e0747708",
+      "status": "not_candidate",
+      "reasons": []
+    },
+    {
+      "packet_id": "eeff713fb118",
+      "status": "completed",
+      "reasons": []
+    },
+    {
+      "packet_id": "08f991bf99ca",
+      "status": "not_candidate",
+      "reasons": []
+    },
+    {
+      "packet_id": "a30b7107d7c2",
+      "status": "not_candidate",
+      "reasons": []
+    },
+    {
+      "packet_id": "0f22fc727f02",
+      "status": "not_candidate",
+      "reasons": []
+    },
+    {
+      "packet_id": "dafad60e2e52",
+      "status": "not_candidate",
+      "reasons": []
+    },
+    {
+      "packet_id": "8e0d44fbddd2",
+      "status": "not_candidate",
+      "reasons": []
+    },
+    {
+      "packet_id": "f81899c530e0",
+      "status": "not_candidate",
+      "reasons": []
+    }
+  ],
+  "model_calls": 1
+}

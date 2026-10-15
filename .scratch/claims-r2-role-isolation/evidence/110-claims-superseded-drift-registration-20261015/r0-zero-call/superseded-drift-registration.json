@@ -1,0 +1,47 @@
+{
+  "schema_version": "claims-superseded-artifact-drift-registration-1",
+  "created_on": "2026-10-15",
+  "zero_model_calls": true,
+  "basis": {
+    "claim": "被取代的 83 号产物未在草案态被改动（md 漂移须登记）",
+    "checker": "tools/check_claims_gate.py",
+    "check_id": "superseded-artifact-drift",
+    "manifest": "evidence/83-claims-scope-gate-draft-20261014/r0-zero-call/MANIFEST.json",
+    "reading": "该主张的括号例外即本件：草案 md 的文本改动本身不被禁止，但必须登记（产物路径 + MANIFEST 记录哈希 + 磁盘现值 + 触及范围 + 不可逆性）；83 号的 JSON 产物与 coverage 物不得漂移。",
+    "detected_since": "evidence/85-claims-gate-v2-audit-20261014（此后 87/89/91 号落地记录均照实录出）"
+  },
+  "entries": [
+    {
+      "artifact": "evidence/83-claims-scope-gate-draft-20261014/r0-zero-call/claims-gate-v1-signoff.md",
+      "manifest_recorded_sha256": "c3f212032ef59d642d0344fe42c88d8df20f832ebbba6035e655339363b36d42",
+      "on_disk_sha256": "7403d1dc754dc439b739f899ce804c3611190fd53f3b16b7c83f965f67d5ec7e",
+      "change_kind": "text_edit_on_superseded_draft",
+      "observed_on_disk_state": {
+        "residual_signed_on": false,
+        "carries_reviewer_name": false,
+        "json_signoff_reviewer_null": true
+      },
+      "counterpart_check": "superseded-signoff-consistency（要求 83 号 JSON signoff 为 null 且 md 无残留 signed_on）",
+      "cause": "无当时记录：83 号 MANIFEST 写于 2026-10-14 01:30（mtime），md 于 2026-10-14 09:33 被改，其间没有任何变更记录件。本件只登记事实与范围，不以推测代替证据。",
+      "scope": "仅该草案 md 的文本；claims-gate-v1.proposed.json 与 coverage-measurements.json 的字节与 MANIFEST 记录逐条一致，未漂移。不触及任何已签认产物。",
+      "irreversibility": "c3f212032ef5… 版本在磁盘与 git 中均不存在（该目录的 git 历史为单次压缩提交），无法复原；且回退会使 superseded-signoff-consistency 由 pass 转为 divergence。",
+      "disposition": "接受该改动并登记为已知漂移；不得再次改动——后续修订须另立新目录并留旧哈希。",
+      "status": "registered_pending_human_signature"
+    }
+  ],
+  "not_covered": [
+    {
+      "item": "83 号 JSON 产物（claims-gate-v1.proposed.json / coverage-measurements.json）",
+      "reason": "与 MANIFEST 记录哈希逐条一致，无漂移，无需登记；builder 会在其漂移时直接拒绝出件"
+    },
+    {
+      "item": "83 号 md 的改动原因",
+      "reason": "无当时记录；本件登记事实、范围与不可逆性，不为无据的原因背书"
+    }
+  ],
+  "signoff": {
+    "reviewer": null,
+    "adjudicator": null,
+    "signed_on": null
+  }
+}

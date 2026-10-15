@@ -1,0 +1,89 @@
+{
+  "schema_version": "items-p5-reading-ratification-1",
+  "id": "109-p5-c1-reading-ratification",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "production_pg_writes": 0,
+  "status": "stated_effective_pending_countersignature",
+  "title": "C-1 读法认可：条数下限（accepted_records_per_source）是否算判定轴",
+  "precedent": {
+    "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/budget-authorisation.json",
+    "sha256": "96949b73e6e0f3a5c13a4b53de336ed9b5943ea63dc774cf815190aa92486357",
+    "note": "103 号同款形态：U 会话口谕先落成记录（stated_effective_pending_countersignature），签署栏留空；已签件一字不动。U 若另签具名 instrument，本件状态改 countersigned_effective。"
+  },
+  "subject": {
+    "question": "C-1：评分器把 accepted_records_per_source 当合同 blocker（md 18<20 ⇒ rate_gate_passed=false），而预注册 v2 reading_axes 声明条数下限不另立独立判定轴——两读是否须二选一",
+    "analysis_record": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/p4-c1-archival-conformance.json",
+      "section": "conflicts_requiring_u[C-1]",
+      "hash_binding": "none_by_design——该件随后要引用本件（登记本认可）。若在此处绑其哈希，两件将互相引用成环，任一重生成都会使另一件失效。本件的论证来源即该件，取代关系由该件登记。"
+    }
+  },
+  "reading_ratified": {
+    "route_1_judgement_axes": {
+      "basis": "预注册 v2 reading_axes.primary 五轴：target_recall_overall / target_recall_per_source / candidate_precision / unresolved_candidates / sentinel_assertions",
+      "outcome": {
+        "target_recall_overall": "PASS（41/48 = 0.8542 ≥ 0.85）",
+        "target_recall_per_source": "PASS（md 18/22 = 0.8182、docx 23/26 = 0.8846 ≥ 0.80）",
+        "candidate_precision": "PASS（191/199 = 0.9598 ≥ 0.80）",
+        "unresolved_candidates": "PASS（0 = 0）",
+        "sentinel_assertions": "FAIL（10/11，缺 NT-I43）"
+      },
+      "sole_failing_axis": "sentinel_assertions"
+    },
+    "route_2_contract_self_derivation": {
+      "rule": "floor(0.85 × 角色目标规模)（93 号 M1 b_scaled_floor）",
+      "self_consistency_proof": "floor(0.85 × 48) = 40，与合同 accepted_records_total_min = 40 逐字相符 ⇒ 该规则即合同自身的派生规则",
+      "origin_of_contract_per_source_floor": "合同的 per_source = 20 = floor(0.85 × 48/2) ⇒ 产自『两源按 48/2 均分』假设",
+      "actual_per_source_targets": { "industrial-fulian-md": 22, "optical-module-docx": 26 },
+      "recomputed_per_source_floors": { "industrial-fulian-md": 18, "optical-module-docx": 22 },
+      "measured_matched": { "industrial-fulian-md": 18, "optical-module-docx": 23 },
+      "consequence": "md 实测 18 恰在复算下限 18 上 ⇒ 达标；『18<20』是把均分假设当真值的读数"
+    },
+    "convergence": "两路同指『唯一实质未达标 = 哨兵 NT-I43』；不需要二选一",
+    "invariants": [
+      "未改合同 v4.3 任何字节",
+      "未改评分器实现（plugins/corpus/structured_scoring.py）",
+      "未改任何阈值、哨兵清单、预注册件",
+      "rate_gate_passed 仍为 false，逐字保留为合同层读数"
+    ],
+    "reading_in_force": "P5 判档措辞 = 『判定轴 5 项中 4 项达标、1 项（哨兵 NT-I43）未达标 ⇒ 判档 FAIL（单轴）』，并并列保留合同层布尔 rate_gate_passed=false"
+  },
+  "u_statement": {
+    "source": "U 会话指令",
+    "on": "2026-10-15",
+    "verbatim": "C-1认可这个读法",
+    "means": "认可三层并列登记（合同布尔 / 派生复算 / 判定轴）与『唯一实质未达标 = 哨兵 NT-I43』这一读法；不需在合同口径与预注册口径之间二选一"
+  },
+  "effect": {
+    "applies_to": ["109 号 P5 判档措辞", "109 号 P6 发布件的缺口声明口径"],
+    "does_not": [
+      "不使 rate_gate_passed 变为 true",
+      "不改合同 v4.3 / 评分器 / 预注册任何字节",
+      "不构成发布放行（P5 放行仍须 U 具名另签）",
+      "不覆盖 C-2（15 条裁决人）与署名出处两项"
+    ]
+  },
+  "countersignature": {
+    "status": "pending_human_signoff",
+    "reviewer": null,
+    "adjudicator": null,
+    "signed_on": null,
+    "note": "签署栏留空——按签认纪律，签名只能由 U 指示填入；实施方不得预填代签"
+  },
+  "flagged_adjacent_inconsistency": {
+    "scope": "与 C-1 无关，顺带登记；可独立成件",
+    "item": "items-extraction-publication-signoff.md 正文与签名栏互相矛盾",
+    "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-extraction-publication-signoff.md",
+    "sha256": "c5420de9505782bb307da95beeb9ec8d050420799722e6be07c724d1ae458379",
+    "line_3_text": "状态：草稿，**未签认**。`status = draft_pending_human_signature`。",
+    "signature_block": "reviewer: xyl     adjudicator: xyl     signed_on:2026-10-15",
+    "timeline": "proposal 10:43 → 预算口谕件 10:57（stated_effective_pending_countersignature）→ 预注册签认件 11:07（签名栏留空）→ 本签认件 11:20（签名栏已填）→ budget-authorisation-r2 11:24（countersigned_effective，以本件为 instrument）",
+    "assessment": "不是代签（U 同期在场并指示，且预算 r2 以其为 instrument）；缺陷是**正文状态行未随签名更新**，属签认件自述与签名栏不一致的簿记瑕疵",
+    "remedy_requires": "U 指示（实施方不得自行改动签认件字节）",
+    "possible_actions": [
+      "U 指示修正正文状态行为已签认（产生新哈希，r2 的 instrument_sha256 随之需登记取代关系）",
+      "或 U 指示保留原字节，另立登记说明该状态行为草稿期残留、以签名栏为准"
+    ]
+  }
+}

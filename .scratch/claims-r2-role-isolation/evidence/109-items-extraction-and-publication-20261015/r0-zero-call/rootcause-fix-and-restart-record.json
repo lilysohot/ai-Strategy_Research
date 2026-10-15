@@ -1,0 +1,49 @@
+{
+  "schema_version": "items-rootcause-fix-landing-1",
+  "id": "109-rootcause-fix-and-restart",
+  "created_on": "2026-10-15",
+  "model_calls": { "probe_round1": 1, "probe_after_fix": 1, "round2": 24 },
+  "tokens": {
+    "round1": 89049,
+    "round2": 86472,
+    "probes": "约 2k",
+    "cumulative_total_tokens": 175521,
+    "authorised_ceiling": 1000000,
+    "note": "attempts 上限 30 为立项时 U 给定；U 2026-10-15 会话指令『执行修复，重新开启抽取』构成 restart 授权，round-2 为新轮（+24 attempts，累计 48）"
+  },
+  "root_cause": {
+    "finding": "doubao-seed-2.1-lite 在 selector 协议响应中偶尔省略常量字段 record_type（其余四字段 exact）",
+    "probe_evidence": [
+      "probe-capture/raw-response.json（7926e21f…，round-1 同 packet 重跑捕获：逐行 {obligation_index,status,reason_code,items}，无 record_type）",
+      "material_semantics.py:4350-4351 严格校验要求 record_type == obligation_result → 整包弃项；:1494-1499 下游解析同样要求该字段（双消费点）",
+      "v5 协议 prompt 本不含 record_type 字样；v6 才加入（tests/test_corpus_material_semantics.py 曾以此钉死 label-free 拒收）"
+    ],
+    "why_not_jsonl": "豆包支持 JSONL：round-1 14/24 packet 完整解析；问题是字段级协议符合度不稳定"
+  },
+  "fix": {
+    "file": "plugins/corpus/material_semantics.py（git blob 4456393d…，+31/-3）",
+    "change": "_strict_role_llm 单点归一化：allowed=={obligation_result} 且 dict 缺 record_type 且 set(record)==set(_SELECTOR_RESULT_FIELD_ORDER)-{record_type} → 注入常量并重序列化该行；其它任何偏差仍整包拒（fail-closed 不放宽）；合法响应字节不变",
+    "version_bump": "MATERIAL_ITEMS_VALIDATION_VERSION v11 → v12（artifacts 可辨识；plan 身份变化 ⇒ round-2 重出冻结件）",
+    "tests": [
+      "tests/test_material_selector_record_tolerance.py（8 项新增，全绿）",
+      "tests/test_corpus_material_semantics.py::test_strict_role_llm_reinjects_label_free_selector_record（原『钉死拒收』测试按新契约更新并留痕；下游 test_selector_parser_still_fails_closed_without_record_type 保持不动——解析器自身仍 fail-closed，唯宽容点在 strict 包装层）",
+      "回归：-k 'material_semantics or selector or material_selector' 116 passed；tests/test_items_reextract_entry.py 15 passed"
+    ],
+    "end_to_end_verification": "probe-capture-after-fix/probe-report.json（ba37ed54…）：round-1 同一弃项 packet 重跑 → completed，6 items，任务 succeeded/valid"
+  },
+  "round2": {
+    "freeze": "items-reextract-plan-freeze-r2/（manifest 3f931667…，六闸干跑全绿）",
+    "execution_summary": "items-reextract-plan-freeze-r2/execution-summary.json（0bb7b9ce…）",
+    "results": {
+      "industrial-fulian-md": "9/10 attempts succeeded + 1 outcome_unknown（传输层未定型，防双花不可同店重试）；100 items；64/76 槽位 extracted，11 failed；2 partial（均为真账目不全 atomic_obligations_incomplete，0 个 unsupported-JSONL）",
+      "optical-module-docx": "14/14 attempts succeeded；111 items；93/114 槽位 extracted，18 failed；2 partial（真账目不全）"
+    },
+    "pool_total": 211,
+    "round1_pool_total": 177,
+    "fix_effect": "unsupported-JSONL 弃项 packet 10 → 0；残余弃项 = 4 个真账目不全 partial + 1 个 outcome_unknown 传输丢失 packet"
+  },
+  "open_items": [
+    "stage2 止损闸仍按 v1 冻结判据实测触发（两源任务终态非 succeeded）；闸修订（执行有效性口径 + 任务级 failed/partial 降 report-only + 池读取改 payload）仍待 U 裁",
+    "md outcome_unknown 的 1 个 packet 与 2 个零记录 packet（md a30b7107/docx e91a34c8）是否定向补抽（约 2 次调用 ≈ 7k tokens，须配套补店+合并路径）待 U 裁"
+  ]
+}

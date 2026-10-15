@@ -1,0 +1,94 @@
+{
+  "schema_version": "items-p4-candidateset-sync-1",
+  "id": "109-p4-candidateset-sync",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "production_pg_writes": 0,
+  "status": "synced_and_scoreable_pending_u_confirmation",
+  "authority": {
+    "instruction": "U 2026-10-15 会话指令：『不要搞复杂了，你现在依据我的候选集copy到你的工作表中』",
+    "interpretation": "以 U 的候选集（109 预填件当前版本）为唯一内容来源，全量覆盖目的工作表的裁定块"
+  },
+  "source": {
+    "path": "items-reextract-adjudication-r3/candidate-adjudications.worksheet.json",
+    "sha256": "2e574b6ec57c3132b0074b4db96a8d937856c0acaf2df6051acf894c39784767",
+    "mtime": "2026-10-15T15:53:37+08:00",
+    "state": {
+      "rows": 199,
+      "judgements": {"matched": 41, "correct_extra": 150, "duplicate": 8},
+      "reviewer": "xyl (199/199)",
+      "adjudicator": "xyl (199/199)",
+      "review_status": "accepted (199/199)",
+      "gold_matched_twice": 0,
+      "matched_without_gold": 0
+    },
+    "drift_vs_earlier_audit": {
+      "sha256_at_audit_20261015_1500": "a5869ab1561f34e735e92d9cff8c58defc8f6cb7a7ecc9f60ca5097b58114ae8",
+      "sha256_now": "2e574b6ec57c3132b0074b4db96a8d937856c0acaf2df6051acf894c39784767",
+      "what_changed": [
+        "8 组重复映射由『两条都 matched』改为『一条 matched + 一条 duplicate』，且承载条选的是字面/完整命中的那一条（如 NT-I21 承载条 = #158『CPO的市场成熟度不高』、NT-I38 承载条 = #182、NT-I35 承载条 = #82、NT-I40 承载条 = #116）",
+        "199 行 reviewer/adjudicator 由审计时的 \"U\"/\"assistant\" 改为 \"xyl\"，review_status=accepted"
+      ],
+      "note": "本记录以 mtime 15:53 的当前版本为准；此前 p4-worksheet-reissue-and-prefill-void-record.json 中记录的 a5869ab1… 已是历史值。"
+    }
+  },
+  "target": {
+    "path": "items-reextract-adjudication-r3-blank/candidate-adjudications.worksheet.json",
+    "sha256_after_pure_copy": "2e574b6ec57c3132b0074b4db96a8d937856c0acaf2df6051acf894c39784767",
+    "pure_copy_note": "纯照抄后目的件与源件**逐字同哈希**（内容完全一致）",
+    "sha256_final": "02e5dcfb0a993f9f0807b04fbd65b290b60c3dc886802f778ebdd49091faf234"
+  },
+  "only_extra_change": {
+    "why": "源件无法出分：装配器拒绝（ScoringInputError『judgement duplicate must not carry a matched_gold_id』，plugins/corpus/adjudication_assembly.py:452）",
+    "what": "把 8 行 duplicate 的 matched_gold_id 置为 null（判词、理由、承载关系文字一律照抄保留）",
+    "rows": [
+      {"serial": 59, "candidate_id": "itm_df7dddac66c6d5c9", "gold_nulled": "NT-I14"},
+      {"serial": 62, "candidate_id": "itm_21ba88541f88728e", "gold_nulled": "NT-I42"},
+      {"serial": 81, "candidate_id": "itm_ab9917e0195deb2f", "gold_nulled": "NT-I35"},
+      {"serial": 105, "candidate_id": "itm_cf5580d2eb88e109", "gold_nulled": "NT-I48"},
+      {"serial": 118, "candidate_id": "itm_806cac42d71917ad", "gold_nulled": "NT-I40"},
+      {"serial": 120, "candidate_id": "itm_0fca52c92489d0fc", "gold_nulled": "NT-I40"},
+      {"serial": 140, "candidate_id": "itm_449ea66d54ccbd52", "gold_nulled": "NT-I21"},
+      {"serial": 184, "candidate_id": "itm_5877d68ab36d1710", "gold_nulled": "NT-I38"}
+    ],
+    "scope": "仅此 8 个字段；候选字段、判词、理由、签名栏均未改"
+  },
+  "superseded_prior_rulings": {
+    "note": "我此前的 28 行落法（8 行 duplicate 选第二条承载 + 第 1 批 20 行，含序号 1 判 out_of_scope）已被 U 候选集覆盖；以 U 版为准。",
+    "serial_1_now": "correct_extra（原我判 out_of_scope）",
+    "duplicate_carrier_choice_now": "字面/完整命中条承载（我的版本相反）"
+  },
+  "real_path_score": {
+    "mode": "structured_scoring.MatchingMode.ADJUDICATED + 契约 v4.3 契约读取器 + 门 v3",
+    "candidates_scored": 199,
+    "out_of_scope": 0,
+    "tp": 41,
+    "correct_extra": 150,
+    "duplicate_fp": 8,
+    "fn": 7,
+    "recall": "41/48 = 0.8542",
+    "precision": "191/199 = 0.9598",
+    "per_source_recall": {"industrial-fulian-md": "18/22", "optical-module-docx": "23/26"},
+    "fn_list": {
+      "industrial-fulian-md": ["NT-I06", "NT-I09", "NT-I10", "NT-I43"],
+      "optical-module-docx": ["NT-I25", "NT-I26", "NT-I31"]
+    },
+    "sentinels": {"required": 11, "matched": 10, "unmatched": ["NT-I43"]},
+    "rate_gate_passed": false,
+    "rate_blockers": [
+      "accepted_records_per_source: md 18<20（分源下限 20，md 金标共 22）",
+      "contract_high_risk_assertion_unmatched:NT-I43（哨兵）"
+    ]
+  },
+  "pending_u_confirmation": [
+    "签名出处：源件 199 行 reviewer/adjudicator=xyl 在我 15:0x 审计时还是 \"U\"/\"assistant\"，现已变为 xyl 并 accepted。我按『照抄』执行、未做判断；若该署名不是 U 亲笔落笔，请指示撤回（判词保留、署名清空）。",
+    "门判档：这份完整候选集走真路径 = FAIL（2 项卡点：md 分源 accepted 18<20、哨兵 NT-I43）。放行/发布是否照 72 号解耦路线走，请 U 定。",
+    "NT-I46 / NT-I47：本候选集判 matched（R2 三选一只恢复 NT-I45）；撤回与否会改召回读数。",
+    "c1_pending_coverage 29 条 disposition 仍为空。"
+  ],
+  "untouched": [
+    "源件（U 候选集）字节未改，仍 2e574b6e…",
+    "任何已签件（83–108、75 号 gate v3、契约 v4.3/v4.4）、prereg v2、freeze、MANIFEST 均未动",
+    "候选字段一律未改"
+  ]
+}

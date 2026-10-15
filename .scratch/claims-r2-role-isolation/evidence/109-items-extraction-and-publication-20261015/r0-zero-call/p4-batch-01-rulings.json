@@ -1,0 +1,103 @@
+{
+  "schema_version": "items-p4-batch-rulings-1",
+  "id": "109-p4-batch-01-rulings",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "production_pg_writes": 0,
+  "status": "ruled_pending_u_named_signature",
+  "authority": {
+    "instruction": "U 2026-10-15 会话指令：『第 1 批那 4 个，你可以自行裁决』",
+    "scope": "仅第 1 批（工作表序号 1–20）的 4 个待定点与由此确定的 20 行裁定；不含署名",
+    "delegation_note": "U 授权的是『裁决』，不是『署名』：工作表 reviewer/adjudicator 仍为空，review_status 仍 pending_named_human_signoff"
+  },
+  "artifact": {
+    "path": "items-reextract-adjudication-r3-blank/candidate-adjudications.worksheet.json",
+    "sha256_before": "d18af06617d4803af63e5c0b61af0bd70125373de150e31312b882f80fef16fb",
+    "sha256_after": "259eb969be9494bad98e5195a9758807dfbcbe55cd60c7fb7a4460b52b6e2806",
+    "rows_filled_total": 28,
+    "rows_blank": 171
+  },
+  "decisions": [
+    {
+      "point": "序号 1 itm_3131977b46dc2d03『CSP/GPU 机柜量、Rubin 卡位、CPO/高速网络。』",
+      "options": ["out_of_scope", "correct_extra"],
+      "ruled": "out_of_scope",
+      "rationale": "议题罗列无谓词、无真假条件，不构成可被 cite/compare/calculate 的原子命题；沿用 66/67 号 no_independent_proposition 撤下口径。",
+      "cost_registered": "out_of_scope 从 candidate_precision 分子与分母同时移出（候选数 199 → 198）⇒ 精确率 191/199 → 190/198，属机制性移动而非放宽：34/39 号口径明记『声明范围外的输出独立登记 out_of_scope』。",
+      "alternative_if_u_disagrees": "改判 correct_extra 即回到 191/199，其余指标不动。"
+    },
+    {
+      "point": "序号 7 / 11 的 polarity 字段冲突（候选 negated vs 金标 affirmed）",
+      "options": ["按字段值算 ⇒ 不能 matched", "判为抽取字段缺陷 ⇒ 先修字段再 matched"],
+      "ruled": "判 matched（NT-I07 / NT-I03），同时把 polarity 登记为**生产侧字段修复项**",
+      "rationale": "两条候选的命题本体都是肯定式（『毛利率环比 −0.36pct』的负号是取值的一部分；『只/仅盖住 0.32 倍』的『只』是弱化词），不构成命题否定 ⇒ polarity=negated 是字段缺陷，不是语义差异；裁定人有权判定语义等价，且 109 号 P1 已确立『字段级缺陷走生产侧修复』的先例（record_type 缺字段即属同类）。",
+      "no_in_place_edit": "按契约 metrics 注记『读路径/口径归一化只作用于匹配视图，不得覆盖候选或金标的原始字段；原始候选字段必须完整留存』⇒ 工作表内**未改**任何候选字段，只在 reason 里登记缺陷。",
+      "claim_register_effect": "该 2 条若按字段字面判不可匹配，则 NT-I07/NT-I03 落空 ⇒ 本轮 recall 再 -2。此处按『字段缺陷』处理是本批最重要的裁决，已单列留痕供 U 复核。"
+    },
+    {
+      "point": "序号 7/8 与 10/11 共用同一 evidence quote（同句拆两条）",
+      "options": ["判 duplicate", "两条各自独立裁定"],
+      "ruled": "同句拆分为两条独立原子命题时**各自独立裁定、可各自 matched**；duplicate 只适用于与已 matched 条『同义重复』的记录",
+      "rationale": "契约 metrics.duplicates 原文『同义重复仅第一条可匹配；后续记录 duplicate 计 FP』；本批两组命题不同（I07 毛利率环比 / I08 未转变为系统商；I02 利润质量 / I03 现金覆盖倍数），非同一命题，故不构成重复。"
+    },
+    {
+      "point": "序号 14 itm_3d0a3dc46e6837b4 与 NT-I43 的关系",
+      "options": ["I43 载体", "correct_extra"],
+      "ruled": "correct_extra；NT-I43 登记为 FN（gold_split_finer_than_candidate）",
+      "rationale": "金标 I43 是前瞻条件（毛利率不再低于 Q2 的 6.99% 作为重开观察仓条件），本条第 14 是 Q2 现状事实（掉回 6.99%），语义类型/话语角色不同；I43 本轮池唯一载体 itm_8e932aaf49806db7 是复合候选（『Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐』）且已被 NT-I13 占用，契约增补『不适用①（同一候选被邻近金标占用）』⇒ I43 无法在此池被第二条承载。I13/I43 同为哨兵 ⇒ 本池必失其一，这是 md 源 18/22 上限的直接成因。"
+    }
+  ],
+  "batch_rows": [
+    {"serial": 1, "candidate_id": "itm_3131977b46dc2d03", "judgement": "out_of_scope", "gold": null},
+    {"serial": 2, "candidate_id": "itm_bf0c10772dfcb0bd", "judgement": "matched", "gold": "NT-I05"},
+    {"serial": 3, "candidate_id": "itm_45f70982875f3a56", "judgement": "correct_extra", "gold": null},
+    {"serial": 4, "candidate_id": "itm_c21ff87ce469effd", "judgement": "correct_extra", "gold": null},
+    {"serial": 5, "candidate_id": "itm_606114e59602a3a2", "judgement": "correct_extra", "gold": null},
+    {"serial": 6, "candidate_id": "itm_b88c5aa8e4cf9d93", "judgement": "correct_extra", "gold": null},
+    {"serial": 7, "candidate_id": "itm_f10a2786bce96b74", "judgement": "matched", "gold": "NT-I07"},
+    {"serial": 8, "candidate_id": "itm_c462803f22154b00", "judgement": "matched", "gold": "NT-I08"},
+    {"serial": 9, "candidate_id": "itm_9beefa3f92899a14", "judgement": "matched", "gold": "NT-I01"},
+    {"serial": 10, "candidate_id": "itm_1b28a0df90711578", "judgement": "matched", "gold": "NT-I02"},
+    {"serial": 11, "candidate_id": "itm_7ba3125d387514f9", "judgement": "matched", "gold": "NT-I03"},
+    {"serial": 12, "candidate_id": "itm_326a165e24a204eb", "judgement": "correct_extra", "gold": null},
+    {"serial": 13, "candidate_id": "itm_d34abd06836546b9", "judgement": "correct_extra", "gold": null},
+    {"serial": 14, "candidate_id": "itm_3d0a3dc46e6837b4", "judgement": "correct_extra", "gold": null},
+    {"serial": 15, "candidate_id": "itm_9218124fbf3f3abe", "judgement": "correct_extra", "gold": null},
+    {"serial": 16, "candidate_id": "itm_107df6dcd10427a6", "judgement": "correct_extra", "gold": null},
+    {"serial": 17, "candidate_id": "itm_f4701ead02653e21", "judgement": "correct_extra", "gold": null},
+    {"serial": 18, "candidate_id": "itm_fdda3d66d7e89956", "judgement": "correct_extra", "gold": null},
+    {"serial": 19, "candidate_id": "itm_6aacb1ab12e7e24d", "judgement": "correct_extra", "gold": null},
+    {"serial": 20, "candidate_id": "itm_65a0b9716a7f3809", "judgement": "correct_extra", "gold": null}
+  ],
+  "batch_totals": {"matched": 6, "correct_extra": 13, "out_of_scope": 1, "duplicate": 0, "incorrect": 0, "unresolved": 0},
+  "validation_dry_run": {
+    "method": "内存补全未裁 171 行（沿用已除名预填件结论，不回写工件）；真代码路径 ADJUDICATED + 契约 v4.3 + 门 v3",
+    "candidates_scored": 198,
+    "out_of_scope_filtered": 1,
+    "tp": 41,
+    "correct_extra": 149,
+    "duplicate_fp": 8,
+    "fn": 7,
+    "recall": "41/48 = 0.8542",
+    "precision": "190/198 = 0.9596",
+    "per_source": {"industrial-fulian-md": "18/22", "optical-module-docx": "23/26"},
+    "rate_gate_passed": false,
+    "rate_blockers": [
+      "accepted_records_per_source: md 18<20",
+      "contract_high_risk_assertion_unmatched:NT-I43"
+    ],
+    "note": "与 batch-01 提案一致；唯一差异是序号 1 由 correct_extra 改判 out_of_scope 导致精确率分母 199→198"
+  },
+  "registered_followups": [
+    "生产侧字段修复项：itm_f10a2786bce96b74 / itm_7ba3125d387514f9 的 polarity（负向标注与肯定式命题不符）",
+    "本轮池无载体的金标 FN：NT-I06 / NT-I09 / NT-I10 / NT-I25 / NT-I26 / NT-I31 / NT-I43（其中 I09 属已登记 gold_split_finer_than_candidate）",
+    "NT-I46 / NT-I47 是否撤回 matched（R2 三选一只恢复 NT-I45）——未在本批内，另行待裁",
+    "NT-I21 承载条是否改由字面命中承载（不改变任何指标）",
+    "c1_pending_coverage 29 条 disposition"
+  ],
+  "untouched": [
+    "已除名预填件字节未改（仍 a5869ab1…）",
+    "任何已签件（83–108、75 号 gate v3、契约 v4.3/v4.4）、prereg v2、freeze、MANIFEST 均未动",
+    "工作表内候选字段一律未改（契约要求原始字段完整留存）"
+  ]
+}

@@ -1,0 +1,331 @@
+{
+  "schema_version": "items-p4-remaining-gap-analysis-1",
+  "id": "109-p4-remaining-gaps",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "production_pg_writes": 0,
+  "status": "read_only_analysis_pending_u_decision",
+  "predicates": {
+    "accepted_records_per_source (scorer implementation)": "per-source matched count; plugins/corpus/structured_scoring.py:1218 compares source_matched to accepted_records_per_source_min",
+    "accepted (72-号 verdict-level reading, NOT what the scorer uses)": "matched + correct_extra per source",
+    "uncovered gold": "frozen gold record with no row whose matched_gold_id equals it",
+    "in-set repair": "any row already in this pool being re-judged to matched"
+  },
+  "inputs": {
+    "candidate_set_u_authored": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-reextract-adjudication-r3/candidate-adjudications.worksheet.json",
+      "sha256": "2e574b6ec57c3132b0074b4db96a8d937856c0acaf2df6051acf894c39784767"
+    },
+    "scoreable_copy": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-reextract-adjudication-r3-blank/candidate-adjudications.worksheet.json",
+      "sha256": "02e5dcfb0a993f9f0807b04fbd65b290b60c3dc886802f778ebdd49091faf234"
+    },
+    "frozen_gold_items": {
+      "path": "evidence/33-items-quality-scoring-20261011/r0-zero-call/adjudications.json",
+      "sha256": "cc2946ef6a487fba059ca995f2c34f469d4c96720b6b6186225c97bd1e41b537",
+      "records": 48
+    },
+    "signed_gate_v3": {
+      "path": "evidence/75-r2-signed-20261013/r0-zero-call/gate-v3.json",
+      "sha256": "340b312d9c0cec278e828d8303a03e9daf953feef4c0eef688f3d257971a9732"
+    }
+  },
+  "candidate_set": {
+    "rows": 199,
+    "judgements": {
+      "correct_extra": 150,
+      "matched": 41,
+      "duplicate": 8
+    },
+    "reviewer": [
+      "xyl"
+    ],
+    "adjudicator": [
+      "xyl"
+    ],
+    "review_status": [
+      "accepted"
+    ],
+    "rows_matching_authored_set_bytewise": false,
+    "authored_row_count": 199,
+    "gold_nulled_rows": 8
+  },
+  "per_source": {
+    "industrial-fulian-md": {
+      "candidates": 80,
+      "gold": 22,
+      "matched": 18,
+      "correct_extra": 60,
+      "duplicate": 2
+    },
+    "optical-module-docx": {
+      "candidates": 119,
+      "gold": 26,
+      "matched": 23,
+      "correct_extra": 90,
+      "duplicate": 6
+    }
+  },
+  "rate_readings": {
+    "precision": "191/199",
+    "recall": "41/48",
+    "unresolved": 0,
+    "sentinels_matched": [
+      "NT-I13",
+      "NT-I15",
+      "NT-I17",
+      "NT-I29",
+      "NT-I35",
+      "NT-I37",
+      "NT-I38",
+      "NT-I39",
+      "NT-I42",
+      "NT-I48"
+    ],
+    "sentinels_unmatched": [
+      "NT-I43"
+    ],
+    "accepted_records_total_min_reading": {
+      "scorer-matched": 41,
+      "matched+correct_extra": 191
+    }
+  },
+  "gate_blockers_under_scorer_predicate": [
+    {
+      "criterion": "accepted_records_per_source_min",
+      "measured": "18 (md)",
+      "threshold": 20,
+      "verdict": "FAIL",
+      "note": "md 金标 22；分源召回 18/22 本身 ≥0.80，卡的是条数下限"
+    },
+    {
+      "criterion": "high_risk_item_assertions_required",
+      "measured": "10/11",
+      "threshold": "11/11",
+      "verdict": "FAIL",
+      "unmatched": [
+        "NT-I43"
+      ]
+    }
+  ],
+  "gaps": [
+    {
+      "gold_record_id": "NT-I06",
+      "source": "industrial-fulian-md",
+      "sentinel": false,
+      "critical": false,
+      "risk_or_condition": false,
+      "gold_text": "中报验证了量 中报验证了AI相关业务的出货量增长",
+      "closest_unmatched_candidates": [
+        {
+          "candidate_id": "itm_fdda3d66d7e89956",
+          "run": "industrial-fulian-md",
+          "similarity": 0.2,
+          "proposition": "不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪"
+        },
+        {
+          "candidate_id": "itm_17134ba31492ceb6",
+          "run": "optical-module-docx",
+          "similarity": 0.2,
+          "proposition": "预计到28年整个行业的出货量将达到500万只的水平。"
+        },
+        {
+          "candidate_id": "itm_45f70982875f3a56",
+          "run": "industrial-fulian-md",
+          "similarity": 0.195,
+          "proposition": "CSP AI 服务器 +2.3 倍"
+        }
+      ],
+      "best_similarity": 0.2
+    },
+    {
+      "gold_record_id": "NT-I09",
+      "source": "industrial-fulian-md",
+      "sentinel": false,
+      "critical": false,
+      "risk_or_condition": true,
+      "gold_text": "一旦毛利率再掉或 Rubin 延期 估值风险触发条件",
+      "closest_unmatched_candidates": [
+        {
+          "candidate_id": "itm_2a32de1669ff155d",
+          "run": "industrial-fulian-md",
+          "similarity": 0.318,
+          "proposition": "Rubin / GB300 爬坡再延"
+        },
+        {
+          "candidate_id": "itm_848b0a7f4d3cba0b",
+          "run": "industrial-fulian-md",
+          "similarity": 0.286,
+          "proposition": "毛利率从 7% 回到 6% 以下"
+        },
+        {
+          "candidate_id": "itm_3131977b46dc2d03",
+          "run": "industrial-fulian-md",
+          "similarity": 0.25,
+          "proposition": "CSP/GPU 机柜量、Rubin 卡位、CPO/高速网络。"
+        }
+      ],
+      "best_similarity": 0.318
+    },
+    {
+      "gold_record_id": "NT-I10",
+      "source": "industrial-fulian-md",
+      "sentinel": false,
+      "critical": false,
+      "risk_or_condition": true,
+      "gold_text": "弹性会先打在倍数上 估值倍数会先受到冲击",
+      "closest_unmatched_candidates": [
+        {
+          "candidate_id": "itm_406d896f07166930",
+          "run": "industrial-fulian-md",
+          "similarity": 0.121,
+          "proposition": "ASIC 线绑少数 CSP"
+        },
+        {
+          "candidate_id": "itm_848b0a7f4d3cba0b",
+          "run": "industrial-fulian-md",
+          "similarity": 0.111,
+          "proposition": "毛利率从 7% 回到 6% 以下"
+        },
+        {
+          "candidate_id": "itm_6aacb1ab12e7e24d",
+          "run": "industrial-fulian-md",
+          "similarity": 0.105,
+          "proposition": "少数股东 0.086 亿，几乎可忽略"
+        }
+      ],
+      "best_similarity": 0.121
+    },
+    {
+      "gold_record_id": "NT-I25",
+      "source": "optical-module-docx",
+      "sentinel": false,
+      "critical": false,
+      "risk_or_condition": true,
+      "gold_text": "128的光波导经过五个批次的流片后，良率仍然不乐观 128端口光波导五次流片后良率仍不理想",
+      "closest_unmatched_candidates": [
+        {
+          "candidate_id": "itm_19c700bfd2590f85",
+          "run": "industrial-fulian-md",
+          "similarity": 0.159,
+          "proposition": "目标价不把 121、100.8 当锚"
+        },
+        {
+          "candidate_id": "itm_4dbb734cc6c6fd72",
+          "run": "optical-module-docx",
+          "similarity": 0.149,
+          "proposition": "128是刚刚推出的，正在中心进行验证，对吧？"
+        },
+        {
+          "candidate_id": "itm_6338147637296ae1",
+          "run": "optical-module-docx",
+          "similarity": 0.136,
+          "proposition": "2.4T 27年的出货量预期在200万只，这个是之前传的，也是200万只，这是可能的。"
+        }
+      ],
+      "best_similarity": 0.159
+    },
+    {
+      "gold_record_id": "NT-I26",
+      "source": "optical-module-docx",
+      "sentinel": false,
+      "critical": false,
+      "risk_or_condition": false,
+      "gold_text": "说明设计上仍然存在缺陷 128端口光波导设计仍有缺陷",
+      "closest_unmatched_candidates": [
+        {
+          "candidate_id": "itm_49e72647189fa999",
+          "run": "optical-module-docx",
+          "similarity": 0.233,
+          "proposition": "虽然NVIDIA可能对128有需求"
+        },
+        {
+          "candidate_id": "itm_19c700bfd2590f85",
+          "run": "industrial-fulian-md",
+          "similarity": 0.182,
+          "proposition": "目标价不把 121、100.8 当锚"
+        },
+        {
+          "candidate_id": "itm_77dffdd757bbf620",
+          "run": "industrial-fulian-md",
+          "similarity": 0.171,
+          "proposition": "涨跌 +0.28%"
+        }
+      ],
+      "best_similarity": 0.233
+    },
+    {
+      "gold_record_id": "NT-I31",
+      "source": "optical-module-docx",
+      "sentinel": false,
+      "critical": false,
+      "risk_or_condition": true,
+      "gold_text": "北美的这些电力短缺 北美数据中心存在电力短缺",
+      "closest_unmatched_candidates": [
+        {
+          "candidate_id": "itm_081adac237258aa1",
+          "run": "optical-module-docx",
+          "similarity": 0.175,
+          "proposition": "对数据中心客户来说，通过网络的提升远比服务器芯片、存储这些提升要来得大"
+        },
+        {
+          "candidate_id": "itm_c1a9630c58ef9f27",
+          "run": "optical-module-docx",
+          "similarity": 0.16,
+          "proposition": "网络提升需求可以一定程度对冲数据中心放缓假设下的负面影响"
+        },
+        {
+          "candidate_id": "itm_787e8903687250be",
+          "run": "optical-module-docx",
+          "similarity": 0.146,
+          "proposition": "被称为“莫名其妙”的客户就是这些新客户"
+        }
+      ],
+      "best_similarity": 0.175
+    },
+    {
+      "gold_record_id": "NT-I43",
+      "source": "industrial-fulian-md",
+      "sentinel": true,
+      "critical": true,
+      "risk_or_condition": true,
+      "gold_text": "毛利率较 Q2 的 6.99% 不再回吐 毛利率不再低于Q2的6.99%，是重新讨论观察仓的条件之一",
+      "closest_unmatched_candidates": [
+        {
+          "candidate_id": "itm_3d0a3dc46e6837b4",
+          "run": "industrial-fulian-md",
+          "similarity": 0.333,
+          "proposition": "Q2 毛利率还从 Q1 的 7.35% 掉回 6.99%"
+        },
+        {
+          "candidate_id": "itm_848b0a7f4d3cba0b",
+          "run": "industrial-fulian-md",
+          "similarity": 0.273,
+          "proposition": "毛利率从 7% 回到 6% 以下"
+        },
+        {
+          "candidate_id": "itm_d34abd06836546b9",
+          "run": "industrial-fulian-md",
+          "similarity": 0.243,
+          "proposition": "毛利率 7.15% 同比只加 0.55 个百分点"
+        }
+      ],
+      "best_similarity": 0.333
+    }
+  ],
+  "in_set_repair_possible": false,
+  "in_set_repair_evidence": "7 uncovered golds, best unmatched-candidate similarity 0.121–0.333; no row carries the assertion, so no re-judgement can map it truthfully",
+  "c1_pending_coverage": {
+    "rows": 29,
+    "with_disposition": 0,
+    "suggestions": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-reextract-adjudication-r3/c1-suggestions.json",
+      "sha256": "2fd42d87f91ed63eb09b3e29e41f195634cea6d8413f4ef52ff89fede52c3258",
+      "suggestion_only": true
+    }
+  },
+  "untouched": [
+    "候选集与可出分副本字节未改（本脚本只读）",
+    "冻结金标、已签门 v3、契约、prereg v2、freeze、MANIFEST 均未动"
+  ]
+}

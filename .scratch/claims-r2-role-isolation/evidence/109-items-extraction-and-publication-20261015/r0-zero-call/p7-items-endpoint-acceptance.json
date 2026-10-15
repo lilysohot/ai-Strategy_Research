@@ -1,0 +1,41 @@
+{
+  "schema_version": "items-web-endpoint-acceptance-1",
+  "id": "109-items-extraction-and-publication-20261015",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "production_pg_writes": 0,
+  "method": "ASGITransport 直驱真实路由 + 真实生产 store（query_semantic 与 head cache 全真），仅替换 get_current_user 依赖 ⇒ 不连业务库、不写任何东西",
+  "store_root": "/home/administrator/FrontierAgent/data/corpus/structured-store",
+  "expected_items": {
+    "industrial-fulian-md": 80,
+    "optical-module-docx": 119
+  },
+  "observed": {
+    "industrial-fulian-md": {
+      "items_status": 200,
+      "items_total": 80,
+      "items_roles": [
+        "material_items"
+      ],
+      "items_pages": 10,
+      "items_exhausted": true,
+      "items_page_status": "complete",
+      "claims_compare_status": 200,
+      "claims_compare_records": 5
+    },
+    "optical-module-docx": {
+      "items_status": 200,
+      "items_total": 119,
+      "items_roles": [
+        "material_items"
+      ],
+      "items_pages": 15,
+      "items_exhausted": true,
+      "items_page_status": "complete",
+      "claims_compare_status": 200,
+      "claims_compare_records": 3
+    },
+    "unknown_source_status": 404,
+    "unauthorised_guard": "covered by tests/test_web_corpus_read_chain.py"
+  }
+}

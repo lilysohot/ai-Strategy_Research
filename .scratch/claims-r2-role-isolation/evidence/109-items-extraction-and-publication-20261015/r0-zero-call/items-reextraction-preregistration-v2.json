@@ -1,0 +1,176 @@
+{
+  "schema_version": "items-reextraction-preregistration-2",
+  "id": "109-items-reextraction-preregistration-v2",
+  "created_on": "2026-10-15",
+  "status": "frozen_before_execution",
+  "supersedes": {
+    "path": "items-reextraction-preregistration.json",
+    "sha256": "3a40caf8e5f2d7e2ed14a61a834da987d9a663475fc53523e9e55de9ecb7ab33",
+    "changes": [
+      "协议 material-atomic-selector-jsonl-v1（v1 件笔误，实际冻结用 v5）→ material-atomic-selector-jsonl-v6（prompt 显式 record_type 契约，与校验器同源）",
+      "阶段止损闸修订：任务级 failed/partial 降 report-only（round-1 实测：语义控制器确定性弃项导致任务终态非 succeeded，代码确定性修不到的量不得设闸——claims 101 号同款）；闸改执行有效性口径",
+      "范围裁定：U 会话指令『A全量重抽』（2026-10-15）——round-3 全量重抽两源"
+    ]
+  },
+  "title": "items 重抽预注册 v2（109 号 round-3）：判据写死先于花预算与人工裁定",
+  "issue": "109-items-extraction-and-publication",
+  "role_scope": ["material_items"],
+  "relations_note": "material_relations 本轮不抽取、不评分（契约 OPEN-2=C 已签：范围显式披露，生产端不产出 relations）",
+  "criteria_source": {
+    "gate_v3": {
+      "path": ".scratch/claims-r2-role-isolation/evidence/75-r2-signed-20261013/r0-zero-call/gate-v3.json",
+      "sha256": "340b312d9c0cec278e828d8303a03e9daf953feef4c0eef688f3d257971a9732",
+      "status": "frozen_before_execution"
+    },
+    "scoring_contract": {
+      "path": ".scratch/claims-r2-role-isolation/evidence/75-r2-signed-20261013/r0-zero-call/scoring-contract-v4.3.json",
+      "sha256": "d7b4f8a81ef42e3cd5d619eae92bc34df7b7aa683d34aeba4f1a22719ae69a2f",
+      "note": "评分器现行 SIGNED_SCORING_CONTRACT_PATH 即本件（v4.4 items 镜像逐字等价，不切换）"
+    },
+    "restatement_rule": "下方阈值与哨兵是已签件的复述；签认时须与已签件逐字核对，任何不一致以已签件为准并阻断签认"
+  },
+  "quality_requirements": {
+    "metric_basis": "scoring-contract-v4.3",
+    "material_items_target_total": 48,
+    "target_recall_overall_min": 0.85,
+    "target_recall_per_source_min": 0.8,
+    "candidate_precision_min": 0.8,
+    "unresolved_candidates_max": 0,
+    "accepted_records_total_min": 40,
+    "accepted_records_per_source_min": 20,
+    "sentinel_assertion_ids": [
+      "NT-I13", "NT-I15", "NT-I17", "NT-I29", "NT-I35",
+      "NT-I37", "NT-I38", "NT-I39", "NT-I42", "NT-I43", "NT-I48"
+    ],
+    "sentinel_source": "gate-v3.json quality_requirements.high_risk_item_assertions_required（哨兵 16→11 的 r2 修订版）"
+  },
+  "reading_axes": {
+    "note": "判定只用以下轴；条数下限不另立独立判定轴（claims 95 号 v2 教训）。评分只消费人工裁定映射（ADJUDICATED），候选生成零金标注入。",
+    "primary": [
+      "target_recall_overall",
+      "target_recall_per_source",
+      "candidate_precision",
+      "unresolved_candidates",
+      "sentinel_assertions"
+    ],
+    "diagnostic_only": [
+      "candidates_total",
+      "candidates_per_source",
+      "matched_by_source",
+      "correct_extra_caliber_note"
+    ]
+  },
+  "protocol": {
+    "material_items": "material-atomic-selector-jsonl-v6",
+    "protocol_source": "material_semantics.MATERIAL_SELECTOR_JSONL_VERSION（冻结时逐字记录进冻结件；v6 prompt 显式 record_type 契约，109 号 desync 修复 2026-10-15）",
+    "strict_wrapper_tolerance": "material-items-validation-v12：selector 协议下缺 record_type 且其余四字段 exact 的行归一化注入；其它偏差整包拒",
+    "relations_enabled": false,
+    "automatic_retries": 0,
+    "concurrency": 1,
+    "gold_not_exposed_to_model": true,
+    "production_database_access": 0,
+    "publication_writes_during_extraction": 0
+  },
+  "stage2_gates": {
+    "note": "v2 修订（round-1/2 实测教训）：闸只含执行有效性（轮次是否成立）与池存在性；模型侧量（任务终态、槽位弃项）全部 report-only——语义控制器的确定性弃项不是代码可修的执行失败。规则从本件逐字求值，修订本件即改行为、无需改代码。",
+    "gates": {
+      "sources_with_candidates": {
+        "rule": ">= 2",
+        "predicate": "从全部 material_items 任务 payload（无论任务终态）汇集的候选池中，有 ≥1 条候选的源数（两源各至少 1 条，空池 = 结构性失败）",
+        "gating": true
+      },
+      "attempts_outcome_unknown": {
+        "rule": "== 0",
+        "predicate": "attempts 表中 execution_status=outcome_unknown 的 attempt 数（传输层未定型 = 执行事故，防双花不可同店重试，必须止损）",
+        "gating": true
+      }
+    },
+    "report_only": {
+      "candidates_total": "新池候选总数",
+      "candidates_per_source": "分源候选数",
+      "distinct_slots_with_candidates": "有候选证据定位的槽位数",
+      "protocol_status_distribution": "任务 protocol_status 分布",
+      "material_items_tasks_failed": "终态非 succeeded 的任务数（v1 闸位，v2 降级为 report-only）",
+      "slots_failed": "slot_ledger 中 status=failed 的槽位数（分源）",
+      "packets_partial": "status=partial 的 packet 数（分源，附 reasons）"
+    },
+    "on_fail": "不生成裁定工作表、不进入人工裁定、写 stage2-failed.json；轮次成本已花但按判据该轮不进入裁定"
+  },
+  "stage1_suggester": {
+    "note": "零调用；建议仅加速人工裁定、不替代裁定（机械预填不得污染人工校准记录——65 号教训）",
+    "evidence_chain_weights_fixed": {
+      "slot_association": 0.45,
+      "verbatim_quote": 0.35,
+      "numeric": 0.1,
+      "bigram": 0.1,
+      "normalized_enum": 0.05
+    },
+    "gold_injection_forbidden": true
+  },
+  "adjudication_clause": {
+    "adjudicator": "U 具名（xyl）全量逐条",
+    "assistant_participation": "每裁完一批（20 条）assistant 即列出该批候选清单（序号/candidate_id/命题/裁定/映射金标）留档",
+    "c1_pending_coverage": {
+      "source": ".scratch/claims-r2-role-isolation/evidence/92-claims-scope-registration-20261014/r0-zero-call/claims-scope-registration.json",
+      "sha256": "76010ca0336373350ebc9e0b0d27946f2f18c80111b593364d3ea944cdf3f18f",
+      "count": 29,
+      "handling": "29 条逐条列入工作表 checklist（owner_role=material_items、pending_coverage）；有对应新池候选者入裁定、无对应者记 no_candidate；不得就地丢弃"
+    }
+  },
+  "budget_request": {
+    "stage_1_live_run": {
+      "scope": "round-3 全量重抽两源（U 会话指令『A全量重抽』2026-10-15；round-1/2 各 24 attempts 已花，累计 175,521 tokens）",
+      "requested_ceiling": null,
+      "filled_by": "U（经 109 号预算授权件，见 authorisation_record；本叶保持空白，已签件不回填）",
+      "authorisation_record": {
+        "path": "budget-authorisation-r2.json",
+        "sha256": "1de264a3ce279dbcca7349fe7a2a8606aa4a128ddd8aeba2023e04f99fc0b8bf",
+        "ceiling_total_tokens": 1000000,
+        "attempts_ceiling": 30,
+        "status": "countersigned_effective",
+        "interpretation": "attempts 上限 30 为单轮口径（立项轮给定；restart 系 U 会话指令授权的新轮，累计口径在落地记录逐轮声明）"
+      },
+      "historical_reference": {
+        "per_execution": [
+          { "name": "items-industrial-fulian-md", "attempt_ceiling": 10 },
+          { "name": "items-optical-module-docx", "attempt_ceiling": 14 }
+        ],
+        "source": "evidence/28-items-only-quality-gate-20261010/r0-zero-call/（门 32 冻结计划 expected_attempts md10+docx14）",
+        "note": "重排批次数若超出此参照，冻结件拒绝生成并须 U 另裁"
+      }
+    }
+  },
+  "scope_constraints": {
+    "new_gold_allowed": false,
+    "threshold_relaxation_after_execution_allowed": false,
+    "prompt_revision_after_execution_allowed": false,
+    "protocol_or_extractor_change_after_execution_allowed": false,
+    "note": "协议 v6 与宽容层在本件冻结时已落地并有测试钉定（不属于执行后变更）；执行后不得再动",
+    "holdout_accessed": false,
+    "production_database_access_authorized": false,
+    "publication_authorized_in_this_step": false,
+    "publication_note": "发布（P6）走既有桥与全部门，另行按落地记录 + U 签认放行；本件只预注册抽取与裁定"
+  },
+  "countersignature": {
+    "required": true,
+    "status": "countersigned_effective",
+    "reviewer": "xyl",
+    "adjudicator": "xyl",
+    "signed_on": "2026-10-15",
+    "basis": [
+      {
+        "instrument": "items-extraction-publication-signoff.md（109 号立项签认件，U 具名）",
+        "sha256": "c5420de9505782bb307da95beeb9ec8d050420799722e6be07c724d1ae458379"
+      },
+      {
+        "instrument": "budget-authorisation-r2.json（ceiling 1,000,000 total_tokens / attempts 单轮 30）",
+        "sha256": "1de264a3ce279dbcca7349fe7a2a8606aa4a128ddd8aeba2023e04f99fc0b8bf"
+      },
+      {
+        "instrument": "U 会话指令：『A全量重抽』（2026-10-15，范围裁定）+『执行修复，重新开启抽取』（2026-10-15，restart 授权）",
+        "sha256": null
+      }
+    ],
+    "note": "本件为 v2 冻结版；U 可随时在 MANIFEST 登记补具名"
+  }
+}
