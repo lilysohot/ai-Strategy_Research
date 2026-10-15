@@ -1,0 +1,20 @@
+{
+  "schema": "evidence-manifest-v1",
+  "record_id": "111-i43-polarity-seam-erratum",
+  "created_on": "2026-10-15",
+  "status": "draft_pending_human_signoff",
+  "note": "草案期 MANIFEST。签认生效后生效件 i43-polarity-seam-erratum.json 与签认件签后字节不在本表内，由生效件自记 instrument 哈希。",
+  "model_requests": 0,
+  "production_database_access": 0,
+  "files": {
+    "i43-polarity-seam-erratum.proposed.json": {
+      "sha256": "6b462001ed4c2329a04c72a0203fbe0734cd2d5b10253a8b845eb99e1b779ca8"
+    },
+    "i43-polarity-seam-erratum-signoff.md": {
+      "sha256": "ba30e20fb2449e919500de46a27004496fa026a29157474b3b2858f3d57a8cb4"
+    },
+    "apply_i43_erratum_signoff.py": {
+      "sha256": "954fb29f541e2d5101545fa141a116159c4ea8b44fb314efbc0853c7f4b27379"
+    }
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "schema": "i43-polarity-seam-erratum-v1",
+  "record_id": "i43-polarity-seam-erratum",
+  "created_on": "2026-10-15",
+  "status": "decided_signed",
+  "reviewer": "xyl",
+  "adjudicator": "xyl",
+  "signed_on": "2026-10-15",
+  "subject": "NT-I43（items 哨兵 + critical）P5 未匹配的归因登记与取代读法",
+  "provenance": {
+    "session_instruction_20261015": [
+      "U 指出：NT-I43 在金标标注时与原文存在语义上的问题，原因已在此前文档中说明（该文档位置未能在本链档案中定位，按口谕登记）。",
+      "U 指示：先把 I43 完结，不能成为接下来的阻碍。"
+    ],
+    "model_requests": 0,
+    "production_database_access": 0
+  },
+  "gold_record_snapshot": {
+    "source_of_truth": "evidence/10-quality-gold-expansion-20261008-r2/gold-review-candidates.json#NT-I43（冻结金标 evidence/10-quality-gold-freeze-20261008-r2/frozen-gold.json 的追加冻结；字节未改）",
+    "record_id": "NT-I43",
+    "role": "material_items",
+    "source": "data/corpus/工业富联_投委会决策报告_20260829.md",
+    "locator": "char:5246-5537",
+    "quote": "毛利率较 Q2 的 6.99% 不再回吐",
+    "proposition": "毛利率不再低于Q2的6.99%，是重新讨论观察仓的条件之一",
+    "polarity": "affirmed",
+    "semantic_type": "forecast",
+    "statement_role": "condition",
+    "condition": "毛利率 >= 6.99%",
+    "condition_logic": {
+      "op": "compare",
+      "metric": "gross_margin",
+      "comparator": ">=",
+      "value": "6.99",
+      "unit": "percent"
+    },
+    "speaker_ref": "md_author",
+    "sentinel": true,
+    "critical": true
+  },
+  "seam_description": {
+    "claim": "NT-I43 未匹配系金标侧 polarity 表示轴与原文字面否定词的错位（叠加复合载体被占用），非抽取覆盖缺口；补抽对本条零收益。",
+    "mechanism": "原文字面含否定副词「不再」；同一句话在候选侧被读为 negated，在金标侧被读为肯定式条件（affirmed，condition >= 6.99%）。契约匹配要求 polarity 一致，故逐字候选永远不能 matched。",
+    "evidence": [
+      {
+        "point": "模型曾逐字抽出该句，且 polarity=negated",
+        "reference": "evidence/66-base-protocol-change-proposal-20261013/r3-cumulative/adjudication-worksheet-base.md 第 2 行：slot_1996d09d1fd9cdef#2，候选文本「或毛利率较 Q2 的 6.99% 不再回吐」与金标 quote 逐字相同，模型抽取 polarity=negated"
+      },
+      {
+        "point": "70 号分层将 NT-I43 归入「逐字一致」层",
+        "reference": "evidence/70-match-stratification-20261013/r0-zero-call/match-stratification.md 第 8 行：NT-I43，逐字一致，sim 0.489"
+      },
+      {
+        "point": "109 号 round-3 池无独立载体；唯一复合载体已被 NT-I13 占用",
+        "reference": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/p4-batch-listings/batch-01.md 第 4 点：itm_8e932aaf49806db7 被 NT-I13 占用，属 gold_split_finer_than_candidate，是 md 源 18/22 上限的直接成因之一"
+      },
+      {
+        "point": "round-3 机器归因：哨兵未中仅 NT-I43，且池内不可修复",
+        "reference": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/p4-remaining-gap-analysis.json：sentinels_unmatched=[NT-I43]；NT-I43 best_similarity 0.333 且最近候选为现状事实句；in_set_repair_possible=false"
+      },
+      {
+        "point": "金标内部自洽（语义审计 ok、condition_logic 与 condition 文本一致）",
+        "reference": "evidence/35-gold-audit-20261011/r0-zero-call/semantic-review.json：NT-I43 在 per_record.ok；condition_logic_vs_condition_text 5/5 含 NT-I43 >=6.99%"
+      }
+    ]
+  },
+  "disposition": {
+    "attribution": "NT-I43 未匹配归因 = 金标侧 polarity 表示缝 + 复合载体占用（gold_split_finer_than_candidate），非抽取覆盖缺口。",
+    "bytes_unchanged": [
+      "冻结金标（10-quality-gold-freeze / 10-quality-gold-expansion）",
+      "门 v3（evidence/75-r2-signed-20261013/r0-zero-call/gate-v3.json）与其 11 项哨兵清单",
+      "评分契约 v4.3/v4.4 与评分器",
+      "P5 放行件与判档读数（items-p5-release-decided.json；判档 FAIL 单轴逐字保留）",
+      "gen-2 发布件与生产 store"
+    ],
+    "superseding_reading": {
+      "precedent": "91 号 release_line 的「人工读作 pending_caliber」取代读法先例（记录不并改，只登记读法）",
+      "rule": "此后引用 P5 哨兵读数 10/11 时，须连带引用本件：NT-I43 未中系标注侧成因（polarity 表示缝），不构成抽取质量缺口的证据；同理，P5 判档 FAIL（单轴）不得被引用为「抽取模型漏抽 NT-I43 所述内容」的证据。"
+    },
+    "not_done_in_this_record": "不修订金标 polarity 字段、不移出哨兵、不重算 P5 分数。若未来需要以哨兵 11/11 或改判后的读数出分，须另立金标 polarity 勘误 + 门修订的独立签认（Issue 23 / 75 号模式），本轮不做。",
+    "reextraction_note": "对 NT-I43 的任何补抽零收益：该句在 66 号 base 工作表已被逐字抽出，卡点在匹配口径不在抽取。"
+  },
+  "signoff_requirements": {
+    "who": "U 具名（xyl）",
+    "surface": "i43-polarity-seam-erratum-signoff.md 签名栏",
+    "effect": "签认后由 apply_i43_erratum_signoff.py 出生效件 i43-polarity-seam-erratum.json（status=decided_signed）；不代填任何签名栏，生效件不可覆盖重出。"
+  },
+  "signed_instrument": {
+    "file": "i43-polarity-seam-erratum-signoff.md",
+    "sha256": "59d29fdc91efcadd1421cd85059fc520ea95dc7098bfa5c0779469bc9b865108",
+    "draft_sha256": "6b462001ed4c2329a04c72a0203fbe0734cd2d5b10253a8b845eb99e1b779ca8"
+  },
+  "model_requests": 0,
+  "production_database_access": 0
+}
