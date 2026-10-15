@@ -10,7 +10,9 @@
 
 > **2026-10-14/15 claims 链完结追加（取代下文历史“claims 诊断未过/发布消费未启动”表述）**：claims 角色（83—107 号）经预注册试验完结——契约 **v4.4** 角色参数化签认（88 号，claims = NT-C11/12/13 + target_total 20）、门 v3 签认（91 号）、预注册判据 v3/v4 签认（99/104 号）、治疗臂实跑后 **A 档**（精度 84/93 = 0.9032、召回 20/20、unresolved 0、哨兵 3/3；基线 51/81 = 0.6296，105 号）、发布/消费闭环 **cite/compare/calculate 三用途 verified**（106 号，桥输入 84 条）、D-2 分源轴裁定**维持诊断**（107 号）；108 号生产 PG/web 只读读链已接通（放行判定待 U 具名签认）。105 号实跑为唯一模型消费轮（371,323 / 1,000,000 tokens）。出范围：web 前端页面、claims 进生产 PG 写链、e6_holdout_corpus。详情见 `evidence/83—108` 各证据目录与 [report.md](report.md) §34。
 
-- 日期：2026-10-02；状态复核：2026-10-13；claims 链执行增补：2026-10-14/15
+> **2026-10-15 items 链重立项完结追加（取代上段“108 放行判定待 U 具名签认”与 §3 claims 段末“109 号预注册件待签”表述）**：U 已在 108 号生产放行签认件与 109 号 P5 放行签认件上具名（均 xyl / 2026-10-15），各自另立生效件（`production-pg-web-read-chain-release-decision.json` `a06f4975…`、`items-p5-release-decided.json` `32648fd4…`，`decided_signed`；签认件正文状态行仍为草稿态，按本链统一读法**以签名栏为准**）。109 号 items 链全链完结：预注册 v2（协议 v6、判定池 = round-3 单池）签认 → round-3 **24/24 succeeded、池 199 条**（累计 263,971 / 1,000,000 tokens）→ U 具名全量裁定 199 行 + C-1 清单 29 条处置定稿（covered 17 / no_candidate 12）→ **P5 出分：召回 41/48 = 0.8542、精度 191/199 = 0.9598、unresolved 0，判档 FAIL（单轴：哨兵 NT-I43）**（合同层布尔 `rate_gate_passed=false` 并列逐字保留）→ **P6 发布 / P7 读链**按其放行依据（72 号解耦路线：结构完备 + coverage 补全 + 缺口清单明示，**不写「门 PASS」**）执行完毕，全程零模型调用、零生产 PG 写入：全池 199 条导入生产 store 为 **gen-2 单代双角色发布**，两源 `material_items` coverage **missing → complete**（claims 仍 complete，三用途读数未回退），新增 `GET /api/corpus/items/{source_id}` 并经真实生产 store 验收（80/80、119/119 可达）。**范围不扩大**：material_relations 角色（契约 OPEN-2=C）本轮不抽不评；web 前端 items 页面、claims 进生产 PG 写链、e6_holdout_corpus 仍出范围；本次发布不主张质量达标或门通过。详情见 `evidence/109-items-extraction-and-publication-20261015/` 与 [report.md](report.md) §35。
+
+- 日期：2026-10-02；状态复核：2026-10-13；claims 链执行增补：2026-10-14/15；items 链重立项（109 号）执行增补：2026-10-15
 - 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。18 已完成严格 parent 门、items/relations selector、accepted-items formal import 和 P10 有界 relation live 执行。P11 relation 样本已由 xyl 签认；P12 selector v2 实跑退化并已拒绝。P13 已完成零调用 `material-relations-question-group-jsonl-v1`。P14 最终 relation-only batch 已执行并在协议门失败。19 的零调用反事实证明同模型语义 no-go。20 仅替换为 `glm-5.3-flash` 的 4-call 复验在 4K 输出上限耗尽 reasoning。21 将上限放宽到 16K 后，三个确定响应仍全部耗尽 reasoning 且为空，第四个为 outcome_unknown；因此 token-only 路线已关闭。Issue 26 已完成离线冻结包上的 10 次 M_main 价值消融；P2 的正向发布、真实 query/delivery/context_use 和产品消费仍未启动。2026-10-13 追加：Issue 32/33/41 与 items 链 R2 修订已完成——门 28 的模板由 **v3** 取代、评分契约推进至 **v4.3**（六项阈值逐字未改），门 33 在原基准 FAIL 后按修订基准重算 **PASS**（41/48 = 0.854），实现绑定同步追平；**发布、query/delivery/context_use 与 M_main 消费仍未启动**。详见 §3 阶段状态追加段与各票。
 - 2026-10-10 收口：Issue 25 虽通过 boolean-v2 协议门但未通过关系质量门；Issue 26 随后完成
   items-only 对 items+relations 的 5 题、10 次 M_main 配对消融并经 xyl 盲评签认。relation treatment
@@ -194,6 +196,34 @@ Wave 0 五件（P01 装配器 / P02 `ADJUDICATED` 匹配改造 / P06 证据护�
 回归 1520 passed。**「生产放行门」放行判定待 U 具名签认（独立复核 + 签认，实施方不自宣）。**
 出范围：web 前端页面、claims 进生产 PG 写链、e6_holdout_corpus。以上均不扩大为整篇覆盖、研究质量
 或生产放行；衔接项 = 第一笔经生产读链的真实消费冒烟、items 抽取与发布重立项（109 号，预注册件待签）。
+2026-10-15 追加（109 号 items 链重立项完结）：108 号生产放行签认件与 109 号 P5 放行签认件均已由 U 具名
+（xyl / 2026-10-15），生效件 `production-pg-web-read-chain-release-decision.json`（`a06f4975…`）与
+`items-p5-release-decided.json`（`32648fd4…`）均为 `decided_signed`；两件正文状态行仍是草稿态，按本链统一
+读法以签名栏为准（登记见 109 号 `p5-signoff-state-20261015.json`，字节未改）。109 号按立项 + 预注册 v2
+（协议 v6、判定池 = round-3 单池、ceiling 1,000,000 tokens）执行：round-3 **24/24 succeeded、零协议弃项、
+池 199 条**（累计 263,971 / 1,000,000 = 26.4%、累计 attempts 72）；assistant 机械预填的工作表经真代码路径
+复核判定不可用（契约 `one_to_one_mapping` 拒收同金标重复匹配）后作废，重出与 MANIFEST 逐字一致的空白仪器，
+199 行由 U 具名全量裁定（R1 十五条亲判 / R2 署名确认 / R3 NT-I46、I47 维持 matched / R4 勘误且不代填），
+C-1 清单 29 条处置定稿（covered 17 / no_candidate 12）。P5 零调用出分（ADJUDICATED + 门 v3 + 契约 v4.3，
+不改任何已签字节）：总召回 **41/48 = 0.8542**、分源召回 18/22 与 23/26、候选精度 **191/199 = 0.9598**、
+unresolved **0**、哨兵 **10/11（未中 NT-I43）** ⇒ **判档 FAIL（单轴）：判定轴 5 项中 4 项达标，唯一实质未达标
+= 哨兵 NT-I43**；合同层布尔 `rate_gate_passed=false` 逐字并列保留。派生复算层登记一项来源事实：合同分源下限
+20 = floor(0.85 × 48/2) 是「两源按 48/2 均分」假设的产物，按实际分源目标 22/26 复算下限为 18/22（实测 18/23
+均达标）——只登记，不改合同、不改评分器。据此 P6 发布与 P7 读链按 72 号既定解耦路线执行完毕（发布理由 =
+结构完备 + coverage 补全 + 缺口清单明示，**不写「门 PASS」**），全程零模型调用、零生产 PG 写入：全池 199 条
+经 `AcceptedMaterialItems` 桥导入生产 store，以 **gen-2 单代双角色**（与 106 号已签 claims payload 同代，避免
+items-only 代静默丢 claims 可读性）发布为 md `c3dbd91b…`（parent `5fc7116b…`，80 items）、docx `8395c900…`
+（parent `8dde446f…`，119 items），两源 coverage `{claims: complete, material_items: complete,
+material_relations: missing}`、quality `accepted`；两份 gen-1 发布件与 parent 链保留，108 号签认件绑定值仍可核；
+claims 三用途读数未回退（md 7/7、docx 3/3）。P7 新增 `GET /api/corpus/items/{source_id}`（role 过滤）并给
+claims/items 两端点补 `cursor` 入参，常驻测试 11 → 14 项，验收以 ASGITransport 直驱真实路由 + 真实生产 store
+（仅替换鉴权依赖）得 items 可达 80/80 与 119/119。显式缺口逐条登记：未覆盖金标 7 条（NT-I06/I09/I10/I25/
+I26/I31/I43）、critical 缺 NT-I43、claims 侧无候选 12 条（含 provenance，不得只写总数）。回归 1706 passed /
+2 failed（均为 101 号已登记既有环境失败），Ruff、Pyright、`check_evidence_guard`（violations 0）、
+`check_claims_gate`（pass）全过。**范围仍不扩大**：material_relations（OPEN-2=C）本轮不抽不评，web 前端 items
+页面、claims 进生产 PG 写链、e6_holdout_corpus 仍出范围；本次发布不主张质量达标或门通过。新增证据：
+109 号 `p6-items-publication-record.json`（`325a5771…`）、`p7-items-endpoint-acceptance.json`（`81b9f086…`）、
+`p7-items-read-chain-landing.json`（`ab6b3021…`）、`MANIFEST-p6p7.json`（分立命名，不覆盖草案期 MANIFEST）。
 
 ## 4. 01 已冻结的实现决议
 
