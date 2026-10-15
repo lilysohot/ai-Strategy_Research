@@ -1,0 +1,28 @@
+{
+  "schema_version": "items-budget-authorisation-1",
+  "id": "109-items-budget-authorisation-20261015",
+  "created_on": "2026-10-15",
+  "status": "stated_effective_pending_countersignature",
+  "title": "109 号 P0 预算授权与立项签认（U 会话口谕记录）",
+  "budget": {
+    "ceiling_total_tokens": 1000000,
+    "unit": "total_tokens（含 reasoning，与 ledger attempts.usage 同源，与 claims 103 号口径一致）",
+    "source": "U 会话口谕（2026-10-15）：『预算100万token，我已签认』",
+    "reconciliation": "P2 跑后按 attempts.usage 汇总 total_tokens 对账，超限判该轮无效（exit 1），与 103 号同语义"
+  },
+  "attempts_reference": {
+    "note": "U 未另行给出 attempts 上限；沿用冻结计划的历史参照（与 claims『per-run 取自签认件 historical_reference』同型）",
+    "expected_attempts": { "md": 10, "docx": 14, "total": 24 },
+    "source": "evidence/28-items-only-quality-gate-20261010/r0-zero-call/（门 32 冻结计划 expected_attempts）"
+  },
+  "signoff_state": {
+    "file": "items-extraction-publication-signoff.md",
+    "observed_state": "签名栏与预算格在 2026-10-15 读取时仍为空白（字节未签）",
+    "handling": "按 103 号先例：U 会话口谕即授权生效、待 U 事后在签认件补具名（countersignature）；本记录不代填签认件的任何签名/预算格（禁预填代签）；U 口谕明确含『我已签认』与『预算100万token』两项"
+  },
+  "effect": [
+    "P0 立项签认：按 U 口谕视为已给出，P1 开工",
+    "P2 起跑前置：execute 闸门读本件 ceiling（非空校验）+ P1 预注册件 frozen_before_execution",
+    "签认件 md 若事后被 U 具名，以该字节为准登记，本记录不回收"
+  ]
+}

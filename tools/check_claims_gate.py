@@ -16,6 +16,8 @@ Checks (see ``run_checks``):
 * the 11 claims required fields' carrier census is reproducible;
 * the false-positive decomposition sums to the adjudicated ``incorrect`` total;
 * the release-line tolerance table is reproducible;
+* every 83-号 superseded product still matches its MANIFEST hash, or the drift is covered by a
+  registration record that binds the artifact path *and* both hashes (md drift must be registered);
 * reachability of the target line on the frozen pool is recorded;
 * no PASS in the gate depends on an axis the gate itself leaves unfrozen (R1/R2 of the
   93-号 governance plan); an exception is honoured only when the correction registration
@@ -76,6 +78,14 @@ DEFAULT_V1_MANIFEST = (
 )
 DEFAULT_V1_COVERAGE = (
     SCRATCH / "evidence/83-claims-scope-gate-draft-20261014/r0-zero-call/coverage-measurements.json"
+)
+# The 83-号 md drift registry. The check's own claim carries the exception ("md 漂移须登记"), so a
+# drifted product is a finding only while nothing registers it; an entry must bind the artifact path
+# *and* both hashes (MANIFEST-recorded and on-disk) to count as a registration.
+DEFAULT_DRIFT_REGISTRATION = (
+    SCRATCH
+    / "evidence/110-claims-superseded-drift-registration-20261015"
+    / "r0-zero-call/superseded-drift-registration.json"
 )
 
 DEFAULT_GOVERNANCE_PLAN = (
@@ -156,6 +166,7 @@ class Inputs:
     v1_manifest: Path = DEFAULT_V1_MANIFEST
     v1_coverage: Path = DEFAULT_V1_COVERAGE
     registration: Path = DEFAULT_SCOPE_REGISTRATION
+    drift_registration: Path = DEFAULT_DRIFT_REGISTRATION
     governance_plan: Path = DEFAULT_GOVERNANCE_PLAN
     governance_corrections: Path = DEFAULT_GOVERNANCE_CORRECTIONS
 
@@ -334,6 +345,38 @@ def _correction_coverage(
         path = [str(part) for part in entry.get("field_path") or []]
         if entry.get("scope") == "artifact_wide" or path == field_path:
             return entry
+    return None
+
+
+def _scratch_or_absolute(path: Path) -> str:
+    """Scratch-relative when the path is inside the scratch root, absolute otherwise (tests)."""
+    try:
+        return str(path.relative_to(SCRATCH))
+    except ValueError:
+        return str(path)
+
+
+def _drift_registration_entry(
+    registration: dict[str, Any] | None,
+    relative_paths: set[str],
+    recorded: str,
+    on_disk: str,
+) -> dict[str, Any] | None:
+    """A registration covers a drifted product only if it binds the path **and** both hashes.
+
+    Recording one hash is not enough: binding only the manifest hash would let a second, later edit
+    inherit the registration, and binding only the on-disk hash would let the registry follow the
+    file around. Both must match the pair the checker observed.
+    """
+    for entry in (registration or {}).get("entries") or []:
+        artifact = str(entry.get("artifact") or "").removeprefix("./")
+        if artifact not in relative_paths:
+            continue
+        if str(entry.get("manifest_recorded_sha256") or "") != recorded:
+            continue
+        if str(entry.get("on_disk_sha256") or "") != on_disk:
+            continue
+        return entry
     return None
 
 
@@ -873,13 +916,37 @@ def run_checks(inputs: Inputs) -> list[Check]:
     )
 
     # ---- superseded artifact drift ----------------------------------------
+    drift_registration = (
+        load_json(inputs.drift_registration) if inputs.drift_registration.exists() else None
+    )
     v1_recorded = v1_manifest["outputs"]
-    drift = {
-        name: {"recorded": digest, "on_disk": sha256(inputs.v1_gate.parent / name)}
-        for name, digest in v1_recorded.items()
-        if (inputs.v1_gate.parent / name).exists()
-        and sha256(inputs.v1_gate.parent / name) != digest
-    }
+    drift: dict[str, dict[str, Any]] = {}
+    for name, digest in v1_recorded.items():
+        product = inputs.v1_gate.parent / name
+        if not product.exists():
+            continue
+        on_disk = sha256(product)
+        if on_disk == digest:
+            continue
+        paths = {
+            str(product.relative_to(SCRATCH)),
+            str(product.relative_to(REPO_ROOT)),
+        }
+        entry = _drift_registration_entry(drift_registration, paths, digest, on_disk)
+        drift[name] = {
+            "recorded": digest,
+            "on_disk": on_disk,
+            "artifact": str(product.relative_to(SCRATCH)),
+            "registration": (entry or {}).get("artifact"),
+            "registration_status": (entry or {}).get("status"),
+            "covered": entry is not None,
+        }
+    unregistered = sorted(name for name, value in drift.items() if not value["covered"])
+    unsigned = sorted(
+        name
+        for name, value in drift.items()
+        if value["covered"] and value["registration_status"] != "signed"
+    )
     checks.append(
         Check(
             check_id="superseded-artifact-drift",
@@ -887,10 +954,22 @@ def run_checks(inputs: Inputs) -> list[Check]:
             kind="integrity",
             blocking=False,
             claim="被取代的 83 号产物未在草案态被改动（md 漂移须登记）",
-            method="83 MANIFEST 记录的产物哈希 vs 磁盘现值",
-            expected={},
-            actual=drift,
-            verdict="pass" if not drift else "divergence",
+            method="83 MANIFEST 记录的产物哈希 vs 磁盘现值；漂移项须有登记件按路径+双哈希覆盖",
+            expected={"unregistered_drift": {}},
+            actual={
+                "drift": drift,
+                "unregistered": unregistered,
+                "registered_pending_signature": unsigned,
+                "registration_source": (
+                    _scratch_or_absolute(inputs.drift_registration)
+                    if drift_registration is not None
+                    else None
+                ),
+            },
+            # A drift that nothing registers is the finding; a registered one is accounted for, so it
+            # drops to a note -- the artifact bytes stay the evidence, and only the attribution moves.
+            # The claim is never relaxed to "pass" while a product still differs from its manifest.
+            verdict=("pass" if not drift else "divergence" if unregistered else "note"),
         )
     )
     signoff_md = inputs.v1_gate.parent / "claims-gate-v1-signoff.md"
@@ -1121,6 +1200,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--v1-gate", type=Path, default=DEFAULT_V1_GATE)
     parser.add_argument("--v1-manifest", type=Path, default=DEFAULT_V1_MANIFEST)
     parser.add_argument("--v1-coverage", type=Path, default=DEFAULT_V1_COVERAGE)
+    parser.add_argument("--drift-registration", type=Path, default=DEFAULT_DRIFT_REGISTRATION)
     parser.add_argument("--governance-plan", type=Path, default=DEFAULT_GOVERNANCE_PLAN)
     parser.add_argument(
         "--governance-corrections", type=Path, default=DEFAULT_GOVERNANCE_CORRECTIONS
@@ -1138,6 +1218,7 @@ def main(argv: list[str] | None = None) -> int:
         v1_gate=args.v1_gate,
         v1_manifest=args.v1_manifest,
         v1_coverage=args.v1_coverage,
+        drift_registration=args.drift_registration,
         governance_plan=args.governance_plan,
         governance_corrections=args.governance_corrections,
     )

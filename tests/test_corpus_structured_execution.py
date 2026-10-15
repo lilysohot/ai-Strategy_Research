@@ -975,7 +975,12 @@ def test_missing_response_is_failure_not_no_content_or_attempt(tmp_path: Path) -
     assert items.quality_status != "accepted"
 
 
-def test_root_is_required_and_relative_paths_are_rejected() -> None:
+def test_root_is_required_and_relative_paths_are_rejected(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    # 108 号起 .env 可合法携带 CORPUS_STRUCTURED_ROOT（生产 store）；本测试钉死的
+    # 前置是「root 缺失」，必须自建该前置，不得继承运行环境。
+    monkeypatch.delenv("CORPUS_STRUCTURED_ROOT", raising=False)
     plan = plan_batch(snapshot())
     with pytest.raises(StructuredExecutionError, match="CS_STORE_ROOT_REQUIRED"):
         check_batch(plan.batch_id, store_root=None)

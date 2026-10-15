@@ -1,0 +1,68 @@
+{
+  "schema_version": "items-extraction-publication-scan-1",
+  "id": "109-items-extraction-and-publication-20261015",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "method": "只读探查（ls/grep/read_file + 生产 store manifests 解析），无写入",
+  "findings": [
+    {
+      "topic": "items 抽取活跑入口",
+      "fact": "items 无 claims-treatment 式三件套（prepare/execute/worksheet）对应物；102/105 号 treatment 脚本均 hard-wire claims 判据（claim_use_axes、tools.check_claims_gate、99 号预注册），不能直接复用",
+      "evidence": [
+        ".scratch/claims-r2-role-isolation/evidence/102-claims-treatment-engineering-20261014/r0-zero-call/",
+        ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/freeze_items_only_plan.py（原始 222 条池的冻结链，协议 material-atomic-selector-jsonl-v1，活跑 r1-live/execute_items_only.py、r2-live/execute_items_only_paced.py）",
+        "plugins/corpus/structured/cli.py:133-136（--material-items-protocol choices）"
+      ],
+      "implication": "须新写 items 版预注册/冻结计划/execute/worksheet，形态参照 102 号 claims 版；底层通用件（structured CLI plan --enabled-roles material_items、material_semantics slot 构建）已在位"
+    },
+    {
+      "topic": "裁定与门评分侧",
+      "fact": "裁定工作台工具链 items 原生可复用（38 号 v2 工作台生成器、adjudication/worksheet.json 模板与 validate、adjudication_assembly.py 永不读金标）；评分器 ADJUDICATED 模式与 items 门 v3 判据已在位",
+      "evidence": [
+        ".scratch/claims-r2-role-isolation/evidence/38-gate33-workbench-rebuild-20261012/r0-zero-call/rebuild_workbench.py",
+        ".scratch/claims-r2-role-isolation/adjudication/worksheet.json（schema_version=items-adjudication-worksheet-1，candidates_total=222，首轮已裁定完）",
+        "plugins/corpus/structured_scoring.py（MatchingMode.ADJUDICATED 默认、无映射即报错不回落）"
+      ]
+    },
+    {
+      "topic": "契约指针",
+      "fact": "SIGNED_SCORING_CONTRACT_PATH 仍指向 v4.3（75 号）；v4.4（88 号已签）的 role_sections.material_items 是 v4.3 的镜像（11 条 NT-I + target 48），items 判据轴两版逐字等价",
+      "evidence": [
+        "plugins/corpus/structured_scoring.py:471-475",
+        ".scratch/claims-r2-role-isolation/evidence/88-claims-contract-v44-signed-20261014/r0-zero-call/scoring-contract-v4.4.json:934-941 起"
+      ],
+      "implication": "items 门评分沿用现行 v4.3 指针，不切 v4.4（切换无判据增益，属纯簿记）"
+    },
+    {
+      "topic": "发布侧",
+      "fact": "items 桥已在位且曾背书 claims 桥的实现：--import-items-artifact/payload + AcceptedMaterialItems + plan_batch(imported_material_items=…)；publish_semantic 的 Role 字面量含 material_items；生产 store 两源 coverage 均 material_items=missing（items 尚未发布）",
+      "evidence": [
+        "plugins/corpus/structured/cli.py:22,94-99,252-264,385-419",
+        "data/corpus/structured-store/manifests/（sha256:5fc7116b… 与 sha256:8dde446f… 两份发布件 coverage 均 {claims:complete, material_items:missing, material_relations:missing}）"
+      ]
+    },
+    {
+      "topic": "92 号 C1 待覆盖登记",
+      "fact": "29 条角色外 claims 候选（kind=opinion 24 / 无 value_text 5）全部 owner_role=material_items、status=pending_coverage；登记件自述『不构成 items/relations 的已覆盖证明，须由对应角色的门另行出分』",
+      "evidence": [
+        ".scratch/claims-r2-role-isolation/evidence/92-claims-scope-registration-20261014/r0-zero-call/claims-scope-registration.json（summary.moved_out=29）"
+      ],
+      "implication": "这 29 条是 109 号 items 新池裁定的登记输入，不得就地丢弃"
+    },
+    {
+      "topic": "生产读链",
+      "fact": "108 号已建生产 store 落位 + 四只读端点（status/search/documents/claims）+ 端到端验收，但 signoff 件仍为 draft_pending_human_signature（未签认）；items 查询端点不在 108 范围",
+      "evidence": [
+        ".scratch/claims-r2-role-isolation/evidence/108-production-pg-web-read-chain-20261015/r0-zero-call/production-pg-web-read-chain-signoff.md"
+      ]
+    },
+    {
+      "topic": "预算参照（历史实测）",
+      "fact": "claims 治疗轮实跑 19 attempts / 246,303 tokens（约 12,963 tokens/attempt）；items 门 32 冻结计划 expected_attempts md 10 + docx 14 = 24；2026-10-13 items 双臂补跑授权曾为 30+30 attempts；claims 103 号预算 ceiling 为 1,000,000 tokens",
+      "evidence": [
+        ".scratch/claims-r2-role-isolation/evidence/105-claims-treatment-rerun-20261014/r0-zero-call/",
+        ".scratch/claims-r2-role-isolation/evidence/28-items-only-quality-gate-20261010/r0-zero-call/（freeze 计划 expected_attempts）"
+      ]
+    }
+  ]
+}

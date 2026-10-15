@@ -1,0 +1,129 @@
+{
+  "schema_version": "production-pg-web-read-chain-release-decision-1",
+  "id": "108-production-pg-web-read-chain-20261015",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "production_pg_writes": 0,
+  "status": "decided_signed",
+  "title": "生产 PG/web 读链（生产放行门）· 放行裁定",
+  "question": {
+    "statement": "生产 PG/web 读链（生产放行门）",
+    "scope_verbatim": [
+      {
+        "step": "S1",
+        "what": "claims 生产 store 落位：临时 root 复算 publication_id 与 106 号一致 → 正式 root data/corpus/structured-store（合并单 store）→ .env CORPUS_STRUCTURED_ROOT 指向"
+      },
+      {
+        "step": "S2",
+        "what": "server/routes/corpus.py：status / search / documents/{doc_id} / claims/{source_id} 四端点，get_current_user 鉴权"
+      },
+      {
+        "step": "S3",
+        "what": "端到端验收：真实 JWT 经 HTTP 读生产检索与两源 claims 三用途查询"
+      },
+      {
+        "step": "S4",
+        "what": "常驻测试 + 回归 + 落地记录 + MANIFEST"
+      }
+    ],
+    "acceptance_criteria": [
+      "临时 root 重放 publication_id 与 106 号已发布件逐一相同",
+      "正式 root：两源 claims query_semantic 可读，三用途许可数 = 106 号回填后值（7/7/7 与 8/3/3）",
+      "端点无 token 401、带 token 200 且数据来自生产库/生产 store",
+      "零模型调用、生产 PG 零写入（generation/activated_at 不变）",
+      "95–107 号与 106 号 bridge 输入/冻结件字节未动",
+      "pytest -k corpus 与 server 层测试全绿；ruff/pyright 干净"
+    ],
+    "out_of_scope": [
+      "web 前端 corpus/claims 页面",
+      "生产 PG 任何写入",
+      "e6_holdout_corpus"
+    ]
+  },
+  "landed_evidence": {
+    "verdict_verbatim": "生产 PG/web 读链已接通（零调用）：生产检索、取证回读、两源 claims 三用途查询均可经 HTTP + JWT 读取；放行判定待 U 具名签认",
+    "S1_production_store": {
+      "store_root": "/home/administrator/FrontierAgent/data/corpus/structured-store（git-ignored data/ 约定）",
+      "method": "place_production_store.py --place：桥输入经 plan_batch → execute_batch → publish_semantic 重放进合并单 store（先 --verify-only 于 /tmp/s108-verify-root 复算）",
+      "determinism_proof": {
+        "claims-industrial-fulian": {
+          "publication_id": "sha256:5fc7116b4df7b470cb143ae6f35c2060e6a68a4c30465cde39578efb0981a69f",
+          "batch_id": "batch:3bd142c649bfeccc12ced07ff4f454685a0aefb9f82e7bdd0dbddfcddcf47486",
+          "equals_106_signed": true
+        },
+        "claims-optical-module": {
+          "publication_id": "sha256:8dde446f995204b18f754fea697e05622b1614a5ce04beeff2149f04555d0867",
+          "batch_id": "batch:7c19cedb28d754c794fbdd298d99deecd0d5f8c6e81a2ff05765175adc8709b4",
+          "equals_106_signed": true
+        }
+      },
+      "license_counts": {
+        "claims-industrial-fulian": "7/7/7",
+        "claims-optical-module": "8/3/3"
+      },
+      "env_change": ".env CORPUS_STRUCTURED_ROOT 由空 → /home/administrator/FrontierAgent/data/corpus/structured-store（CORPUS_TARGET_DB=postgres 原值未动）"
+    },
+    "S3_acceptance": "s3-acceptance-record.json：七个用例全过（401 守卫、status、search 3 hits、取证回读、两源三用途 7/7/7 与 8/3/3、生产库零写入复核）",
+    "frozen_inputs_unchanged": {
+      "106_bridge_industrial_artifact": "043c91c1c78b33126bbf6b788627fa7e79a457261250599ae31c1031b3efd0b0",
+      "106_bridge_optical_artifact": "d0f088013e37289ae8b046a7c421b3b1dbbb73e953f1a5890567f5711bbfb676",
+      "106_bridge_industrial_payload": "8f91c1436765071518f57be2105ea2130f54c04f2ec26f9f37a767b2b3fbcca2",
+      "106_bridge_optical_payload": "5ed0bd707d2fa3f9743eb73cea90f21ed2b17851eca854b535dcbe2deed75327",
+      "106_plan_industrial": "8b69ddc0654099c7f53a3a7fdaf15f4a9ed5eca5274f3ed97d6cd1897c2394bf（与 106 landing-record 登记一致）",
+      "106_plan_optical": "f6453086b61602d709b9a4982195eb766cd24f08e8b8e921b5ee5dfc2f17324d（与 106 landing-record 登记一致）",
+      "105_snapshot_industrial": "a10af3d6cbb5301738feca9eb4fbe03219e9ae04e6381f1693756c0b02942eb5",
+      "105_snapshot_optical": "192d6c6a3ff07cb0edd0b8ed705bb25ab8add2dfc57693b3d9530a8191b8b4e4"
+    }
+  },
+  "ruling": {
+    "decision": "放行：接受 108 号落地记录所述生产形态为「生产放行门」通过",
+    "accepted_form": "生产 PG 活动 build（postgres.corpus，8 源 8 发布全 active、zhparser 全文索引在位） + 文件型 claims 生产 store（data/corpus/structured-store，CORPUS_STRUCTURED_ROOT 指向） + server/routes/corpus.py 四只读端点（get_current_user 鉴权）",
+    "basis": "U 于生产放行签认件具名签认（本件 countersignature.instrument）；签认件 §五 明示『是否放行由 U 具名签认，实施方不自宣』",
+    "what_it_does_not_do": [
+      "不改变 95–107 号任何已落地产物字节",
+      "不放行 web 前端 corpus/claims 页面（立项时已出范围）",
+      "不放行 claims 语义发布件进生产 PG（生产形态为文件型 store，已登记出范围）",
+      "不改变生产 PG 任何状态（generation / activated_at 不变）"
+    ]
+  },
+  "evidence_base": {
+    "production-pg-web-read-chain-proposal.json": "sha256:78c89d5c63c2d59f8767c02638c508ef21989c426ac09dcf47e3d3023a24f5b1",
+    "landing-record.json": "sha256:588360516baa12b1bf0c912fa2e769abdffaf1f0d253182733c86dd27399e281",
+    "s3-acceptance-record.json": "sha256:1bb68c0cf104cc2a4363a1321b86a2e1c18f1e95f033673b65eb4370fd23ba3b",
+    "current-state-scan.json": "sha256:2889bd5cab6e73497b028e33dfc1a7a83d9bdeb281378c62748b84aae43c1c13",
+    "place_production_store.py": "sha256:fb7bf4ba2284b89098ada9e3e9ae80ca9f6fc08ca4d7634e5a3520c5cf338cda"
+  },
+  "countersignature": {
+    "required": true,
+    "status": "signed",
+    "reviewer": "xyl",
+    "adjudicator": "xyl",
+    "signed_on": "2026-10-15",
+    "instrument": {
+      "path": "evidence/108-production-pg-web-read-chain-20261015/r0-zero-call/production-pg-web-read-chain-signoff.md",
+      "sha256": "sha256:3d944cfadbda38c90cbf9ee89710ebc59243de3510010ca45503edd207e3afae",
+      "signature_line": "reviewer:    xyl      adjudicator:     xyl     signed_on: 2026-10-15",
+      "body_status_line": "状态：草稿，**未签认**。`status = draft_pending_human_signature`。（判为草稿期残留；本链统一读法 = 以签名栏为准）"
+    },
+    "statement": "核准 108 号生产放行：生产 PG 活动 build 与文件型 claims 生产 store + server 只读读链端点为可接受的生产形态；放行判定由 U 具名作出，实施方不自宣。",
+    "covered": [
+      "S1 生产 claims store 落位（临时 root 复算 publication_id 与 106 号签认件逐一相同）",
+      "S2 server/routes/corpus.py 四只读端点 + get_current_user 鉴权",
+      "S3 端到端验收（401 守卫、检索命中、取证回读、两源三用途 7/7/7 与 8/3/3）",
+      "S4 常驻测试 + 回归 + 落地记录"
+    ],
+    "does_not_cover": [
+      "web 前端 corpus/claims 页面",
+      "claims 语义发布件进生产 PG",
+      "e6_holdout_corpus",
+      "95–107 号任何产物的修订"
+    ],
+    "signature_applied_by": "apply_pg_web_read_chain_signoff.py（零调用；不代填任何签名字段）"
+  },
+  "untouched": [
+    "签认件（production-pg-web-read-chain-signoff.md）保持 U 填写后的原字节",
+    "proposal / landing-record / s3-acceptance / current-state-scan / place_production_store.py：字节未动",
+    "95–107 号已落地产物：字节未动",
+    "未写生产 PG、未发布任何东西、未代签"
+  ]
+}

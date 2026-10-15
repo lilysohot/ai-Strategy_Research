@@ -1,0 +1,14 @@
+{
+  "schema_version": "evidence-manifest-1",
+  "id": "108-production-pg-web-read-chain-20261015",
+  "note": "sha256 于落地当日 2026-10-15 计；比较剔 generated_at",
+  "generated_at": "2026-10-15T00:00:00+00:00",
+  "files": {
+    "current-state-scan.json": "2889bd5cab6e73497b028e33dfc1a7a83d9bdeb281378c62748b84aae43c1c13",
+    "landing-record.json": "588360516baa12b1bf0c912fa2e769abdffaf1f0d253182733c86dd27399e281",
+    "place_production_store.py": "fb7bf4ba2284b89098ada9e3e9ae80ca9f6fc08ca4d7634e5a3520c5cf338cda",
+    "production-pg-web-read-chain-proposal.json": "78c89d5c63c2d59f8767c02638c508ef21989c426ac09dcf47e3d3023a24f5b1",
+    "production-pg-web-read-chain-signoff.md": "396db4a0569b71c2002d0e6be7f10ac38ad157d2aafdfc8a1ffdf747cd4cd1c4",
+    "s3-acceptance-record.json": "1bb68c0cf104cc2a4363a1321b86a2e1c18f1e95f033673b65eb4370fd23ba3b"
+  }
+}

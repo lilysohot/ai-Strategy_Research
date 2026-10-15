@@ -1,0 +1,58 @@
+{
+  "schema_version": "production-pg-web-read-chain-scan-1",
+  "id": "108-production-pg-web-read-chain-20261015",
+  "scan_on": "2026-10-15",
+  "model_calls": 0,
+  "purpose": "108 号立项前零调用探查：生产 PG/web 读链（生产放行门）的现状与缺口",
+  "pg_instance": {
+    "endpoint": "postgresql://postgres:postgres@127.0.0.1:5432",
+    "databases": ["apodex", "apodex_biz_test", "apodex_sp_test", "e6_holdout_corpus", "postgres"],
+    "note": "无 i2_sandbox_corpus；生产语料库 = postgres 库 corpus schema（M7 I4-4 重建产物，i0c-r5n 链内放行）"
+  },
+  "production_corpus_db": {
+    "database": "postgres",
+    "schema": "corpus",
+    "tables": ["corpus_admissions", "corpus_builds", "corpus_chunks", "corpus_jobs", "corpus_publications", "corpus_review_decisions", "corpus_source_checkpoints", "corpus_sources", "corpus_units"],
+    "counts": { "sources": 8, "builds": 14, "publications": 8, "units": 7128, "chunks": 1214 },
+    "active_builds": "8/8 publications 均有 active_build_id（最新 activated_at 2026-09-29）",
+    "fulltext_index": {
+      "column": "corpus_chunks.search_tsv tsvector",
+      "index": "idx_chunks_tsv GIN(search_tsv)",
+      "config": "zhcfg（zhparser）在位"
+    },
+    "conclusion": "『生产 PG 活动 build + 全文索引』已在位；本立项不写生产库"
+  },
+  "read_chain_probe": {
+    "command": "CORPUS_TARGET_DB=postgres uv run python -c 'CorpusService(dsn).search(\"光模块 800G\", limit=3)'",
+    "result": "read_chain=new，返回 3 条 SearchHit（cv2: 句柄 + chunk locator）",
+    "guard_probe": "不设 CORPUS_TARGET_DB 时同一调用拒绝：StoreError current_database='postgres' ≠ 'i2_sandbox_corpus'（fail-closed 行为实证，未放宽）",
+    "conclusion": "读链代码已可用，唯一放行开关 = pg_target.CORPUS_TARGET_DB（r5g 冻结机制）"
+  },
+  "web_layer": {
+    "server_routes": ["artifacts", "auth", "business", "llm_configs", "models", "runs", "sessions"],
+    "corpus_http_endpoints": 0,
+    "agent_tools": ["corpus_search", "corpus_fetch", "corpus_semantic_query", "corpus_inventory（server/profile.py:40-43 注册，非 HTTP 端点）"],
+    "frontend_pages": "无 corpus/claims 页面（web/src 仅 Chat/Login/ModelConfigs/RunDetail/business）",
+    "conclusion": "web 读链 = 零端点，是本立项主缺口"
+  },
+  "claims_semantic_publications": {
+    "location": "evidence/106-claims-publication-lifecycle-20261015/r0-zero-call/bridge-claims-*/live-store（sqlite+objects，回填后版本）",
+    "env_CORPUS_STRUCTURED_ROOT": "空 ⇒ 服务侧/工具默认读不到 claims",
+    "published": {
+      "claims-industrial-fulian": "sha256:5fc7116b…（published，quality=accepted）",
+      "claims-optical-module": "sha256:8dde446f…（published，quality=accepted）"
+    },
+    "conclusion": "claims 生产落位 = 生产 store root + 两份发布件可读，是本立项第二缺口"
+  },
+  "gaps": [
+    { "id": "G1", "what": "claims 结构化 store 生产落位（data/corpus/structured-store + CORPUS_STRUCTURED_ROOT）", "owner": "S1" },
+    { "id": "G2", "what": "server HTTP 读链端点（检索/取证/claims 语义查询/状态，get_current_user 鉴权）", "owner": "S2" },
+    { "id": "G3", "what": "端到端验收：真实 JWT 经 HTTP 读生产检索 + claims 查询", "owner": "S3" },
+    { "id": "G4", "what": "常驻测试 + 回归 + 落地记录", "owner": "S4" }
+  ],
+  "out_of_scope": [
+    "web 前端 corpus/claims 页面（另行立项）",
+    "生产 PG 任何写入（活动 build 已在位，无需迁移）",
+    "e6_holdout_corpus（留出库，不进生产读链）"
+  ]
+}

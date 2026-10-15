@@ -1,0 +1,40 @@
+{
+  "measured": {
+    "sources_with_candidates": 2,
+    "attempts_outcome_unknown": 0,
+    "material_items_tasks_failed": 2,
+    "candidates_total": 199,
+    "candidates_per_source": {
+      "industrial-fulian-md": 80,
+      "optical-module-docx": 119
+    },
+    "distinct_slots_with_candidates": 1,
+    "protocol_status_distribution": {
+      "industrial-fulian-md": {
+        "not_checked": 1
+      },
+      "optical-module-docx": {
+        "not_checked": 1
+      }
+    }
+  },
+  "signed_gates": {
+    "stage2_gates_source": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-reextraction-preregistration-v2.json",
+    "prereg_sha256": "60d89b8d60078620f277b0f7b820425ee45619295e5c2305aa80e323a12d562c",
+    "verdicts": [
+      {
+        "gate": "sources_with_candidates",
+        "rule": ">= 2",
+        "measured": 2,
+        "passed": true
+      },
+      {
+        "gate": "attempts_outcome_unknown",
+        "rule": "== 0",
+        "measured": 0,
+        "passed": true
+      }
+    ],
+    "passed": true
+  }
+}

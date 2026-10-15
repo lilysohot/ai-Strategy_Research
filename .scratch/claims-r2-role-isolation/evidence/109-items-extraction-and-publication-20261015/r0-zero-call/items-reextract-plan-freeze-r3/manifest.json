@@ -1,0 +1,87 @@
+{
+  "schema_version": "items-reextract-plan-freeze-1",
+  "status": "frozen_not_executed",
+  "frozen_on": "2026-10-15",
+  "purpose": "109 号：在当前代码版本下冻结两源 material_items 一次全量重抽的计划；execute_items_reextract.py 是唯一执行入口，预算/签认闸门 fail-closed。",
+  "prereg": {
+    "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-reextraction-preregistration-v2.json",
+    "sha256": "60d89b8d60078620f277b0f7b820425ee45619295e5c2305aa80e323a12d562c",
+    "stage2_gates": [
+      "attempts_outcome_unknown",
+      "sources_with_candidates"
+    ]
+  },
+  "budget": {
+    "authorisation": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/budget-authorisation-r2.json",
+    "authorisation_sha256": "1de264a3ce279dbcca7349fe7a2a8606aa4a128ddd8aeba2023e04f99fc0b8bf",
+    "authorisation_status": "countersigned_effective",
+    "ceiling_total_tokens": 1000000,
+    "total_attempt_ceiling": 24,
+    "historical_reference": {
+      "items-industrial-fulian-md": 10,
+      "items-optical-module-docx": 14
+    },
+    "note": "ceiling 在 109 号授权件（U 口谕 100 万 total_tokens）；超限判该轮无效"
+  },
+  "runnable": false,
+  "runnable_note": "缺一不可：①预注册件 frozen_before_execution ②授权件 ceiling 非空且哈希绑定 ③执行者显式 --allow-model ④profile 指纹与冻结计划一致",
+  "versions": {
+    "items_protocol": "material-atomic-selector-jsonl-v6",
+    "extractor": "material-semantics-32",
+    "items_validation": "material-items-validation-v12",
+    "slot_batching": "material-slot-batching-v3",
+    "freeze_28_script_sha256": "942cafe9e86717e745912bff8792286c110b261ebe34cf2d985e9b405e37dff3"
+  },
+  "profile": {
+    "model": "doubao-seed-2.1-lite",
+    "adapter_version": "structured-chat-http-3",
+    "profile_sha256": "sha256:f4296675dbae38b2943e4412246a90a5dcc978aa450ec584912e9197fcbdae83",
+    "request_options": {
+      "timeout_seconds": 300.0,
+      "max_output_tokens": 262144,
+      "token_parameter": "max_tokens",
+      "reasoning_effort": "minimal",
+      "thinking": null
+    }
+  },
+  "entries": [
+    {
+      "slug": "industrial-fulian-md",
+      "mode": "live_model",
+      "source_id": "sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+      "batch_id": "batch:6b41c26073e3166f80bc7faf46e2c3fb42c5b80029d970e6d37b1d8060d1254c",
+      "plan_sha256": "sha256:6b41c26073e3166f80bc7faf46e2c3fb42c5b80029d970e6d37b1d8060d1254c",
+      "attempt_ceiling": 10,
+      "historical_attempt_ceiling": 10,
+      "scoped_unit_count": 10,
+      "candidate_slot_count": 76,
+      "batch_count": 10,
+      "protocol": "material-atomic-selector-jsonl-v6",
+      "snapshot_file_sha256": "a10af3d6cbb5301738feca9eb4fbe03219e9ae04e6381f1693756c0b02942eb5",
+      "plan_file_sha256": "6443dc8a77b8c4b78f42a2da36b716066acfc62add86484da0c288a663b3cc30"
+    },
+    {
+      "slug": "optical-module-docx",
+      "mode": "live_model",
+      "source_id": "sha256:48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+      "batch_id": "batch:fb60b9d64048a9ea36cfc0f2a4fcbf1a0029c09ee6d55649dfa4e337f6b5eb2e",
+      "plan_sha256": "sha256:fb60b9d64048a9ea36cfc0f2a4fcbf1a0029c09ee6d55649dfa4e337f6b5eb2e",
+      "attempt_ceiling": 14,
+      "historical_attempt_ceiling": 14,
+      "scoped_unit_count": 14,
+      "candidate_slot_count": 114,
+      "batch_count": 14,
+      "protocol": "material-atomic-selector-jsonl-v6",
+      "snapshot_file_sha256": "192d6c6a3ff07cb0edd0b8ed705bb25ab8add2dfc57693b3d9530a8191b8b4e4",
+      "plan_file_sha256": "a18fa48bc194e6c88c7bdb3d53dffc5c3f1f78a1099c16dcff02cc3b8191b858"
+    }
+  ],
+  "maximum_new_model_calls": 24,
+  "automatic_retries": 0,
+  "gold_not_exposed_to_model": true,
+  "production_database_access": 0,
+  "publication_writes": 0,
+  "prepare_script_sha256": "dc35a5df4bb4eeb7b272b997cb864533929714a81043099e601fe1d7d1dada36"
+}

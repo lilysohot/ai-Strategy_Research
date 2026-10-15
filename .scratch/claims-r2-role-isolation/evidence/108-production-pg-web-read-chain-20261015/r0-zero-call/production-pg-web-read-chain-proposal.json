@@ -1,0 +1,36 @@
+{
+  "schema_version": "production-pg-web-read-chain-proposal-1",
+  "id": "108-production-pg-web-read-chain-20261015",
+  "created_on": "2026-10-15",
+  "status": "draft_pending_human_signature",
+  "title": "生产 PG/web 读链（生产放行门）",
+  "authority": {
+    "instruction": "U 于 2026-10-15 指示执行（claims 链 83–107 完结后的唯一剩余立项）",
+    "release_note": "生产放行判定须独立复核 + U 具名签认，实施方不自宣"
+  },
+  "model_calls": 0,
+  "production_pg_writes": 0,
+  "plan": [
+    { "step": "S1", "what": "claims 生产 store 落位：临时 root 复算 publication_id 与 106 号一致 → 正式 root data/corpus/structured-store（合并单 store）→ .env CORPUS_STRUCTURED_ROOT 指向" },
+    { "step": "S2", "what": "server/routes/corpus.py：status / search / documents/{doc_id} / claims/{source_id} 四端点，get_current_user 鉴权" },
+    { "step": "S3", "what": "端到端验收：真实 JWT 经 HTTP 读生产检索与两源 claims 三用途查询" },
+    { "step": "S4", "what": "常驻测试 + 回归 + 落地记录 + MANIFEST" }
+  ],
+  "acceptance_criteria": [
+    "临时 root 重放 publication_id 与 106 号已发布件逐一相同",
+    "正式 root：两源 claims query_semantic 可读，三用途许可数 = 106 号回填后值（7/7/7 与 8/3/3）",
+    "端点无 token 401、带 token 200 且数据来自生产库/生产 store",
+    "零模型调用、生产 PG 零写入（generation/activated_at 不变）",
+    "95–107 号与 106 号 bridge 输入/冻结件字节未动",
+    "pytest -k corpus 与 server 层测试全绿；ruff/pyright 干净"
+  ],
+  "inputs": [
+    "evidence/106-claims-publication-lifecycle-20261015/r0-zero-call/bridge-claims-*/{claims-artifact.json,claims-payload.json,plan.json}",
+    "evidence/105-claims-treatment-rerun-20261014/r0-zero-call/claims-treatment-plan-freeze/*/snapshot.json"
+  ],
+  "out_of_scope": [
+    "web 前端 corpus/claims 页面",
+    "生产 PG 任何写入",
+    "e6_holdout_corpus"
+  ]
+}

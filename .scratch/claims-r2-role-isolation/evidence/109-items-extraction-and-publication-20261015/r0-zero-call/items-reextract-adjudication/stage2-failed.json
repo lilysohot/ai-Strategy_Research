@@ -1,0 +1,42 @@
+{
+  "schema_version": "items-reextract-stage2-failed-1",
+  "verdict": "轮次执行有效性未达已签止损判据",
+  "measured": {
+    "sources_with_candidates": 0,
+    "material_items_tasks_failed": 2,
+    "candidates_total": 0,
+    "candidates_per_source": {
+      "industrial-fulian-md": 0,
+      "optical-module-docx": 0
+    },
+    "distinct_slots_with_candidates": 0,
+    "protocol_status_distribution": {
+      "industrial-fulian-md": {
+        "not_checked": 1
+      },
+      "optical-module-docx": {
+        "not_checked": 1
+      }
+    }
+  },
+  "signed_gates": {
+    "stage2_gates_source": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-reextraction-preregistration.json",
+    "prereg_sha256": "3a40caf8e5f2d7e2ed14a61a834da987d9a663475fc53523e9e55de9ecb7ab33",
+    "verdicts": [
+      {
+        "gate": "sources_with_candidates",
+        "rule": ">= 2",
+        "measured": 0,
+        "passed": false
+      },
+      {
+        "gate": "material_items_tasks_failed",
+        "rule": "== 0",
+        "measured": 2,
+        "passed": false
+      }
+    ],
+    "passed": false
+  },
+  "consequence": "不生成工作表、不进入人工裁定"
+}

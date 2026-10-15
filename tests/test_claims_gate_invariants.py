@@ -2,8 +2,8 @@
 
 These tests pin the properties the claims gate must satisfy before it can be signed:
 sentinel identity with the signed contract, caliber reproducibility from the frozen pool,
-detection of the duplicate-formula divergence, and fail-closed behaviour on missing or
-mutated artifacts.
+detection of the duplicate-formula divergence, registration coverage for the superseded
+83-号 md, and fail-closed behaviour on missing or mutated artifacts.
 
 They read the real frozen artifacts under ``.scratch/claims-r2-role-isolation`` (same
 convention as ``tests/test_corpus_contract_gate.py``), so they are integration tests: if a
@@ -126,6 +126,85 @@ def test_superseded_v2_draft_is_flagged_on_both_known_defects() -> None:
         if check.check_id.startswith("caliber-row-complete:") and check.verdict != "pass"
     ]
     assert incomplete == ["caliber-row-complete:D4_similarity_scoped_v1_draft_option"]
+
+
+DRIFT_REGISTRATION = (
+    SCRATCH
+    / "evidence/110-claims-superseded-drift-registration-20261015"
+    / "r0-zero-call/superseded-drift-registration.json"
+)
+
+
+def _drift_registration(tmp_path: Path, mutate) -> Path:
+    registration = load_json(DRIFT_REGISTRATION)
+    mutate(registration)
+    tmp_path.mkdir(parents=True, exist_ok=True)
+    target = tmp_path / "superseded-drift-registration.json"
+    target.write_text(json.dumps(registration, ensure_ascii=False, indent=2), encoding="utf-8")
+    return target
+
+
+def test_superseded_md_drift_is_registered_rather_than_unexplained(checks: list) -> None:
+    """83-号 md drifted after its MANIFEST; the registration accounts for it, so it is a note."""
+    check = _by_id(checks, "superseded-artifact-drift")
+    assert check.verdict == "note"
+    assert check.actual["unregistered"] == []
+    entry = check.actual["drift"]["claims-gate-v1-signoff.md"]
+    assert entry["covered"] is True
+    assert entry["recorded"] == "c3f212032ef59d642d0344fe42c88d8df20f832ebbba6035e655339363b36d42"
+    assert entry["on_disk"] == "7403d1dc754dc439b739f899ce804c3611190fd53f3b16b7c83f965f67d5ec7e"
+    # The registration is recorded, not self-granted: it still awaits a human signature.
+    assert check.actual["registered_pending_signature"] == ["claims-gate-v1-signoff.md"]
+    assert check.actual["registration_source"].endswith("superseded-drift-registration.json")
+
+
+def test_unregistered_drift_stays_a_divergence(tmp_path: Path) -> None:
+    checks = run_checks(Inputs(drift_registration=tmp_path / "absent.json"))
+    check = _by_id(checks, "superseded-artifact-drift")
+    assert check.verdict == "divergence"
+    assert check.actual["unregistered"] == ["claims-gate-v1-signoff.md"]
+
+
+def _drop_manifest_hash(registration: dict) -> None:
+    registration["entries"][0]["manifest_recorded_sha256"] = None
+
+
+def _drop_on_disk_hash(registration: dict) -> None:
+    registration["entries"][0]["on_disk_sha256"] = None
+
+
+def _register_the_wrong_product(registration: dict) -> None:
+    registration["entries"][0]["artifact"] = (
+        "evidence/83-claims-scope-gate-draft-20261014/r0-zero-call/MANIFEST.json"
+    )
+
+
+def test_registration_binding_only_one_hash_cannot_cover_the_drift(tmp_path: Path) -> None:
+    """One hash is not a registration: either alone lets a later edit inherit the coverage."""
+    cases = (
+        ("manifest_hash_only", _drop_manifest_hash),
+        ("on_disk_hash_only", _drop_on_disk_hash),
+        ("wrong_path", _register_the_wrong_product),
+    )
+    for label, mutate in cases:
+        path = _drift_registration(tmp_path / label, mutate)
+        check = _by_id(run_checks(Inputs(drift_registration=path)), "superseded-artifact-drift")
+        assert check.verdict == "divergence", label
+        assert check.actual["unregistered"] == ["claims-gate-v1-signoff.md"], label
+
+
+def test_an_untouched_superseded_set_passes_without_registration(tmp_path: Path) -> None:
+    """A manifest whose products all still match is a pass even with no registration present."""
+    drifted = load_json(DRIFT_REGISTRATION)["entries"][0]
+    manifest = load_json(Inputs().v1_manifest)
+    manifest["outputs"] = {
+        name: (drifted["on_disk_sha256"] if name == "claims-gate-v1-signoff.md" else digest)
+        for name, digest in manifest["outputs"].items()
+    }
+    target = tmp_path / "MANIFEST.json"
+    target.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    checks = run_checks(Inputs(v1_manifest=target, drift_registration=tmp_path / "absent.json"))
+    assert _by_id(checks, "superseded-artifact-drift").verdict == "pass"
 
 
 def test_false_positive_decomposition_sums_to_the_adjudicated_total(checks: list) -> None:

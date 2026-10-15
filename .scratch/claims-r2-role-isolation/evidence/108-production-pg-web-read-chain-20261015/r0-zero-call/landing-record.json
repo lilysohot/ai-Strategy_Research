@@ -1,0 +1,64 @@
+{
+  "schema_version": "production-pg-web-read-chain-landing-1",
+  "id": "108-production-pg-web-read-chain-20261015",
+  "landed_on": "2026-10-15",
+  "model_calls": 0,
+  "production_pg_writes": 0,
+  "authority": {
+    "instruction": "U 于 2026-10-15 指示执行（claims 链 83–107 完结后唯一剩余立项）",
+    "proposal": "production-pg-web-read-chain-proposal.json（draft_pending_human_signature）",
+    "release": "「生产放行门」是否放行由 U 具名签认，本落地记录不自我放行"
+  },
+  "S1_production_store": {
+    "store_root": "/home/administrator/FrontierAgent/data/corpus/structured-store（git-ignored data/ 约定）",
+    "method": "place_production_store.py --place：桥输入经 plan_batch → execute_batch → publish_semantic 重放进合并单 store（先 --verify-only 于 /tmp/s108-verify-root 复算）",
+    "determinism_proof": {
+      "claims-industrial-fulian": {
+        "publication_id": "sha256:5fc7116b4df7b470cb143ae6f35c2060e6a68a4c30465cde39578efb0981a69f",
+        "batch_id": "batch:3bd142c649bfeccc12ced07ff4f454685a0aefb9f82e7bdd0dbddfcddcf47486",
+        "equals_106_signed": true
+      },
+      "claims-optical-module": {
+        "publication_id": "sha256:8dde446f995204b18f754fea697e05622b1614a5ce04beeff2149f04555d0867",
+        "batch_id": "batch:7c19cedb28d754c794fbdd298d99deecd0d5f8c6e81a2ff05765175adc8709b4",
+        "equals_106_signed": true
+      }
+    },
+    "license_counts": { "claims-industrial-fulian": "7/7/7", "claims-optical-module": "8/3/3" },
+    "env_change": ".env CORPUS_STRUCTURED_ROOT 由空 → /home/administrator/FrontierAgent/data/corpus/structured-store（CORPUS_TARGET_DB=postgres 原值未动）"
+  },
+  "S2_web_routes": {
+    "code": [
+      "server/routes/corpus.py（新增）：GET /api/corpus/status|search|documents/{doc_id}|claims/{source_id}，全部 get_current_user 鉴权；fail-closed 错误翻译 404/409/410/400，不吞成空 200；load_dotenv(.env, override=False) 同 worker 先例",
+      "server/app.py：include_router(corpus_routes.router)（+import）"
+    ],
+    "readonly_guarantee": "端点只调 read_chain 检索/fetch_verbatim/query_semantic；structured store 只读（query_semantic 内部 _reader）；语料 PG 只读"
+  },
+  "S3_acceptance": "s3-acceptance-record.json：七个用例全过（401 守卫、status、search 3 hits、取证回读、两源三用途 7/7/7 与 8/3/3、生产库零写入复核）",
+  "S4_tests_and_regression": {
+    "new_tests": "tests/test_web_corpus_read_chain.py（11 项，全离线：fake service + 合成 store root；含 401 守卫、状态/检索/取证/claims build 解析、四类 fail-closed 错误翻译、无 store root 409）",
+    "regression": "pytest tests apodex/tests -k 'corpus or web_corpus' = 3 failed / 1520 passed / 18 skipped：1 项（test_root_is_required…）系本立项 .env 携带 CORPUS_STRUCTURED_ROOT 后暴露的前置泄漏，已修（测试 monkeypatch.delenv 自建「root 缺失」前置，断言未放宽）；另 2 项为 101 号已登记的既有环境失败（golden 锚点语料不在库 / reader-pdf extractor 版本漂移），与本立项无关",
+    "ruff_pyright": "改动文件 ruff check/format 通过；pyright server/routes/corpus.py + 测试 = 0 errors"
+  },
+  "frozen_inputs_unchanged": {
+    "106_bridge_industrial_artifact": "043c91c1c78b33126bbf6b788627fa7e79a457261250599ae31c1031b3efd0b0",
+    "106_bridge_optical_artifact": "d0f088013e37289ae8b046a7c421b3b1dbbb73e953f1a5890567f5711bbfb676",
+    "106_bridge_industrial_payload": "8f91c1436765071518f57be2105ea2130f54c04f2ec26f9f37a767b2b3fbcca2",
+    "106_bridge_optical_payload": "5ed0bd707d2fa3f9743eb73cea90f21ed2b17851eca854b535dcbe2deed75327",
+    "106_plan_industrial": "8b69ddc0654099c7f53a3a7fdaf15f4a9ed5eca5274f3ed97d6cd1897c2394bf（与 106 landing-record 登记一致）",
+    "106_plan_optical": "f6453086b61602d709b9a4982195eb766cd24f08e8b8e921b5ee5dfc2f17324d（与 106 landing-record 登记一致）",
+    "105_snapshot_industrial": "a10af3d6cbb5301738feca9eb4fbe03219e9ae04e6381f1693756c0b02942eb5",
+    "105_snapshot_optical": "192d6c6a3ff07cb0edd0b8ed705bb25ab8add2dfc57693b3d9530a8191b8b4e4"
+  },
+  "does_not_touch": [
+    "evidence/95–107 号全部产物",
+    "106 号 bridge 输入与 live-store（字节未动，重放只读其输入）",
+    "生产 PG corpus schema（零写入，generation/activated_at 不变）",
+    "e6_holdout_corpus"
+  ],
+  "out_of_scope_registered": [
+    "web 前端 corpus/claims 页面（另行立项）",
+    "claims 语义发布件进生产 PG（structured store 为文件型，生产形态 = data/corpus/structured-store + CORPUS_STRUCTURED_ROOT）"
+  ],
+  "verdict": "生产 PG/web 读链已接通（零调用）：生产检索、取证回读、两源 claims 三用途查询均可经 HTTP + JWT 读取；放行判定待 U 具名签认"
+}

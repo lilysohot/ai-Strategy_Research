@@ -1,0 +1,452 @@
+{
+  "schema_version": "items-p5-release-record-1",
+  "id": "109-p5-release-round3-pool",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "production_pg_writes": 0,
+  "status": "decided_signed",
+  "title": "items 门评分（round-3 单池）与放行依据",
+  "basis": {
+    "gate": {
+      "path": "evidence/75-r2-signed-20261013/r0-zero-call/gate-v3.json",
+      "sha256": "340b312d9c0cec278e828d8303a03e9daf953feef4c0eef688f3d257971a9732"
+    },
+    "contract": {
+      "path": "evidence/75-r2-signed-20261013/r0-zero-call/scoring-contract-v4.3.json",
+      "sha256": "d7b4f8a81ef42e3cd5d619eae92bc34df7b7aa683d34aeba4f1a22719ae69a2f",
+      "role": "material_items"
+    },
+    "gold": {
+      "path": "evidence/33-items-quality-scoring-20261011/r0-zero-call/adjudications.json",
+      "sha256": "cc2946ef6a487fba059ca995f2c34f469d4c96720b6b6186225c97bd1e41b537"
+    },
+    "candidate_set_u_authored": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-reextract-adjudication-r3/candidate-adjudications.worksheet.json",
+      "sha256": "2e574b6ec57c3132b0074b4db96a8d937856c0acaf2df6051acf894c39784767"
+    },
+    "scoreable_copy": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-reextract-adjudication-r3-blank/candidate-adjudications.worksheet.json",
+      "sha256": "02e5dcfb0a993f9f0807b04fbd65b290b60c3dc886802f778ebdd49091faf234",
+      "derivation": "唯一机械处置：8 行 duplicate 的 matched_gold_id 置 null（装配器拒收该组合）；其余字段 0 差异"
+    },
+    "gap_analysis": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/p4-remaining-gap-analysis.json",
+      "sha256": "1f791ee4f58e9281d7438e44e57ebb4a0b4f3b227e5791168030fd4fe9d5d6db"
+    },
+    "c1_disposition_superseded": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/p4-c1-disposition.json",
+      "sha256": "ccb90105f4b635f1e8143d1409f55e449a3c0195a090669198ffbfd5a528b39f",
+      "role": "assistant 机械初判（阈值 0.55）——已被 U 裁定取代，字节保留供审计"
+    },
+    "c1_disposition_final": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/p4-c1-disposition-final.json",
+      "sha256": "e6cc23474ad564de950bdfd67c601c1d49cc35b3431f48187c28b65c96377adc",
+      "role": "U 具名裁定后的定稿；29 条处置的唯一权威来源"
+    },
+    "c1_ruled_worksheet": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-reextract-adjudication-r3-c1ruled/candidate-adjudications.worksheet.json",
+      "sha256": "7578a8f8fafea50f77e6111c7bb9186456e45cb50de263a9f304b2a086eef923",
+      "role": "disposition 已落回器件原意位置（工作表 checklist）的修订版"
+    }
+  },
+  "mode": "structured_scoring.MatchingMode.ADJUDICATED（只消费人工裁定映射，零金标注入）",
+  "gate_reading": {
+    "rate_gate_passed": false,
+    "live_trial_ready": false,
+    "rate_blockers": [
+      "contract_below_threshold:accepted_records_per_source:sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb:18<20",
+      "contract_high_risk_assertion_unmatched:NT-I43",
+      "critical_gold_missing:NT-I43"
+    ],
+    "readiness_blockers": [
+      "insufficient_sample:claims:0/20",
+      "insufficient_sample:material_relations:0/20",
+      "zero_denominator:report_support",
+      "development_gold_not_frozen",
+      "gold_not_frozen_before_candidates",
+      "adjudications_unresolved",
+      "thresholds_not_signed_off"
+    ],
+    "pilot_policy_blockers": [
+      "zero_denominator:claims:precision",
+      "zero_denominator:claims:recall",
+      "below_threshold:material_items:recall:41/48<9/10",
+      "zero_denominator:material_relations:precision",
+      "zero_denominator:material_relations:recall"
+    ],
+    "items_role": {
+      "tp": 41,
+      "fp": 8,
+      "fn": 7,
+      "duplicate_fp": 8,
+      "correct_extra": 150,
+      "precision": "191/199",
+      "recall": "41/48"
+    },
+    "per_source": {
+      "industrial-fulian-md": {
+        "candidates": 80,
+        "gold": 22,
+        "matched": 18,
+        "recall": "18/22",
+        "correct_extra": 60,
+        "duplicate": 2
+      },
+      "optical-module-docx": {
+        "candidates": 119,
+        "gold": 26,
+        "matched": 23,
+        "recall": "23/26",
+        "correct_extra": 90,
+        "duplicate": 6
+      }
+    },
+    "criteria": [
+      {
+        "n": 1,
+        "id": "target_recall_overall_min",
+        "threshold": 0.85,
+        "measured": "41/48 = 0.8542",
+        "verdict": "PASS"
+      },
+      {
+        "n": 2,
+        "id": "target_recall_per_source_min",
+        "threshold": 0.8,
+        "measured": "industrial-fulian-md 18/22；optical-module-docx 23/26",
+        "verdict": "PASS"
+      },
+      {
+        "n": 3,
+        "id": "candidate_precision_min",
+        "threshold": 0.8,
+        "measured": "191/199",
+        "verdict": "PASS"
+      },
+      {
+        "n": 4,
+        "id": "unresolved_candidates_max",
+        "threshold": 0,
+        "measured": "0",
+        "verdict": "PASS"
+      },
+      {
+        "n": 5,
+        "id": "accepted_records_total_min",
+        "threshold": 40,
+        "measured": "41",
+        "verdict": "PASS"
+      },
+      {
+        "n": 6,
+        "id": "accepted_records_per_source_min",
+        "threshold": 20,
+        "measured": "industrial-fulian-md 18；optical-module-docx 23",
+        "verdict": "FAIL"
+      },
+      {
+        "n": 7,
+        "id": "high_risk_item_assertions_required",
+        "threshold": "11/11",
+        "measured": "10/11；未中 ['NT-I43']",
+        "verdict": "FAIL"
+      }
+    ],
+    "predicate_note": "accepted_records_per_source 按评分器实现 = 该源 matched 数（plugins/corpus/structured_scoring.py:1218）；72 号终局记录里的 accepted 读法（matched+correct_extra）不是评分器口径，本件不采用",
+    "two_booleans": "rate_gate_passed 是唯一的契约判定；live_trial_ready / readiness_blockers 是就绪前置（本件未接线到本轮运行，逐字录出仅供参考），不得互相代替"
+  },
+  "reading_layers": {
+    "why": "同一份已签集合里，合同层（评分器布尔）与判定轴层（预注册 v2 reading_axes）不必同义；本件把三层逐字并列登记，不把其中任何一层说成另一层",
+    "layer_1_contract_boolean": {
+      "value": false,
+      "blockers": [
+        "contract_below_threshold:accepted_records_per_source:sha256:f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb:18<20",
+        "contract_high_risk_assertion_unmatched:NT-I43",
+        "critical_gold_missing:NT-I43"
+      ],
+      "meaning": "评分器 rate_gate_passed，逐字照录；含条数下限与 critical 派生项"
+    },
+    "layer_2_derived_count_floor": {
+      "rule": "floor(0.85 × 角色目标规模)（93 号 M1 b_scaled_floor；本件只复算，不改任何已签件）",
+      "self_consistency": {
+        "total": "floor(0.85 × 48) = 40",
+        "contract_total_floor": 40,
+        "matches": true
+      },
+      "origin_of_contract_per_source_floor": {
+        "value": 20,
+        "hypothesis": "floor(0.85 × 48/2) = floor(0.85 × 24) = 20",
+        "matches": true,
+        "reading": "合同的分源下限与『两源按 48/2 均分』的假设相符 ⇒ 它是均分假设的产物，而非按实际分源目标 22/26 派生"
+      },
+      "actual_per_source_targets": {
+        "industrial-fulian-md": 22,
+        "optical-module-docx": 26
+      },
+      "recomputed_per_source_floors": {
+        "industrial-fulian-md": 18,
+        "optical-module-docx": 22
+      },
+      "measured_matched": {
+        "industrial-fulian-md": 18,
+        "optical-module-docx": 23
+      },
+      "consequence": {
+        "industrial-fulian-md": "18 vs 复算下限 18（合同字面 20） ⇒ 达标",
+        "optical-module-docx": "23 vs 复算下限 22（合同字面 20） ⇒ 达标"
+      },
+      "status": "复算结论待 U 裁；合同 v4.3 字节未动、评分器未改"
+    },
+    "layer_3_judgement_axes": {
+      "in_verdict": [
+        "target_recall_overall",
+        "target_recall_per_source",
+        "candidate_precision",
+        "unresolved_candidates",
+        "sentinel_assertions"
+      ],
+      "diagnostic_only": [
+        "candidates_total",
+        "candidates_per_source",
+        "matched_by_source",
+        "correct_extra_caliber_note"
+      ],
+      "outcome": {
+        "target_recall_overall": "PASS",
+        "target_recall_per_source": "PASS",
+        "candidate_precision": "PASS",
+        "unresolved_candidates": "PASS",
+        "sentinel_assertions": "FAIL"
+      },
+      "sole_failing_axis": "sentinel_assertions（缺 NT-I43）",
+      "precedent": {
+        "path": "evidence/99-claims-prereg-v3-signed-r2-20261014/r0-zero-call/claims-preregistration.json",
+        "sha256": "a2d174407daa5a1b88ba9ca44e698cf4512a399b2a4895254d0a3ab4b57edf04",
+        "what": "claims 侧已签 v3 用 reading_axes.in_verdict（4 项）+ excluded 登记『accepted 条数下限不参与读数』（95 号 v2 教训）；items 侧预注册 v2 同旨"
+      }
+    },
+    "convergence": "三层读法各自的未达标项：合同层 2 类 blocker（哨兵 + 条数下限，critical 项与哨兵同源）；派生复算层 1 项（哨兵）；判定轴层 1 项（哨兵）⇒ **三读在『唯一实质未达标 = 哨兵 NT-I43』上收敛**",
+    "not_a_relaxation": "本层不修改合同 v4.3 任何字节、不改评分器、不改阈值；只是把合同的条数下限按其自身的派生规模复算一次，并把『均分假设』这一来源登记出来",
+    "ratification": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/p5-c1-reading-ratification.json",
+      "sha256": "cd7d54798d4191c2b2f5ebf622edb99e70f8ea4793c911e323f3c73c2dc9ddd6",
+      "status": "stated_effective_pending_countersignature",
+      "u_statement": {
+        "source": "U 会话指令",
+        "on": "2026-10-15",
+        "verbatim": "C-1认可这个读法",
+        "means": "认可三层并列登记（合同布尔 / 派生复算 / 判定轴）与『唯一实质未达标 = 哨兵 NT-I43』这一读法；不需在合同口径与预注册口径之间二选一"
+      },
+      "meaning": "本读法已由 U 认可（会话口谕落成记录，签署栏留空）；P5 判档措辞据此写成『轴内 1 项未达标（哨兵）』并并列保留合同层布尔"
+    }
+  },
+  "verdict_reading": {
+    "gate": "FAIL（如实读数，不得读作 PASS）",
+    "tier": "判档 FAIL（单轴）：判定轴 5 项中 4 项达标、1 项（哨兵 NT-I43）未达标",
+    "contract_layer_boolean": {
+      "rate_gate_passed": false,
+      "status": "逐字保留为合同层读数，不参与判档措辞"
+    },
+    "what_this_record_does_not_claim": [
+      "不主张质量达标",
+      "不主张门通过",
+      "不主张缺口清单为等价替代",
+      "不主张 rate_gate_passed 为 true"
+    ],
+    "what_it_does_claim": "候选集可评分、可复算，缺口已枚举；判档按轴读为单轴未达标（依据见 reading_layers 与其 ratification）；发布依据另立（见下）"
+  },
+  "publication_basis": {
+    "authority": "72 号 terminal-decision.json:178 / corrections.md:53 —— 发布标准（结构完备性）与门阈值/金标解耦，store 对 gold/recall/assertion 零引用；按 U 裁定走『显式缺口』路线",
+    "reading": "发布理由写『结构完备 + coverage 补全 + 缺口清单明示』，不写『门 PASS』",
+    "route": "U 2026-10-15 15:24 裁定『乙』：门判档按 round-3 单池如实读数；跨轮累积读数为登记对照、不是判定池"
+  },
+  "explicit_gaps": {
+    "uncovered_gold": [
+      "NT-I06",
+      "NT-I09",
+      "NT-I10",
+      "NT-I25",
+      "NT-I26",
+      "NT-I31",
+      "NT-I43"
+    ],
+    "unmatched_critical_gold": [
+      "NT-I43"
+    ],
+    "c1_no_candidate": [
+      {
+        "serial": 2,
+        "c1_candidate_id": "13edee989550a682308e39675b2c5978c743a9cecd12aaa9dcbb026a4656bdde",
+        "claim_text": "工业富联观察仓止损条件为下季OCF/扣非<0.5",
+        "provenance": "explicit_u_ruling"
+      },
+      {
+        "serial": 7,
+        "c1_candidate_id": "32e5c48adf2bc874170548e24af34c99ec50df424d429a71d7b4c8b9d6df0b89",
+        "claim_text": "高盛给出的工业富联121目标价是IMA标题，不能当作明日价格",
+        "provenance": "confirmed_by_omission"
+      },
+      {
+        "serial": 9,
+        "c1_candidate_id": "48578c6df92a7a3f3e1fd61a601f04b236ec9fcd9e909d16258fd697b495c798",
+        "claim_text": "若工业富联H2只是季节性、Rubin放量后移，其动态PE隐含市值475亿不是估值底部",
+        "provenance": "explicit_u_ruling"
+      },
+      {
+        "serial": 12,
+        "c1_candidate_id": "6abd91e34184dae3d9210248bfb31b1426a502a215ed235d7223bb46674bb811",
+        "claim_text": "框架站分析中不将90元的共识价格视为明日股价的地板价",
+        "provenance": "confirmed_by_omission"
+      },
+      {
+        "serial": 13,
+        "c1_candidate_id": "6bb1d41ee43404c0fa1f6600ee30e9f10b75ba15b94ac624dc26dec95e63ee1a",
+        "claim_text": "卖方使用工业富联26年度归母净利润600亿元以上的指标",
+        "provenance": "confirmed_by_omission"
+      },
+      {
+        "serial": 14,
+        "c1_candidate_id": "79f051811ddfede5fc02c2e8791b9bec604e5b8d1a049a9537fbe030f6450fba",
+        "claim_text": "卖方使用工业富联归母净利润同比增长96%的指标",
+        "provenance": "confirmed_by_omission"
+      },
+      {
+        "serial": 17,
+        "c1_candidate_id": "86701ad6a755bcef5c8eff0a6b8d92f7cdfd48096fed998cc0a78f481fa4db06",
+        "claim_text": "工业富联动态PE隐含的市值475亿看起来未给卖方600亿",
+        "provenance": "explicit_u_ruling"
+      },
+      {
+        "serial": 19,
+        "c1_candidate_id": "9b9cfd337421e088645752fcc4b24dded371cd9091e2000cfbab590b15acdd57",
+        "claim_text": "工业富联目标价93-101不是8月能兑现的估值底部",
+        "provenance": "confirmed_by_omission"
+      },
+      {
+        "serial": 20,
+        "c1_candidate_id": "9c7779f71cca4611d722cc28f50e7915fdc0fa68bf672643f2c657e8bcf8c29d",
+        "claim_text": "工业富联TTM市盈率27倍对应7%毛利率，EMS并不便宜到「必须买」",
+        "provenance": "explicit_u_ruling"
+      },
+      {
+        "serial": 24,
+        "c1_candidate_id": "de2a7c06fd9bd401da0d48290721f1940b01c3868d6d73b1b99dbc1da099bcd3",
+        "claim_text": "对于工业富联相关标的，不应按93-101区间追高，也不应因单日未上涨就将AI机柜出货增长3倍视为证伪",
+        "provenance": "explicit_u_ruling"
+      },
+      {
+        "serial": 27,
+        "c1_candidate_id": "ef512e03d2f8f74d95e6f60db111f60fb2c2668d95aef53a4904c3d8e382902f",
+        "claim_text": "框架站分析中不采用归母净利润指标作为标题",
+        "provenance": "confirmed_by_omission"
+      },
+      {
+        "serial": 28,
+        "c1_candidate_id": "f1fba3c9d12b62deb564d956ddb7d784154a9fbf379d1ff6ffe079cf0a23db8b",
+        "claim_text": "工业富联目标价93-101基于2026年24-35倍市盈率或2027年利润得出",
+        "provenance": "confirmed_by_omission"
+      }
+    ],
+    "c1_no_candidate_note": "12 条由 U 具名裁定（口径：语义相同即算，不看字面相似度）。其中 U 显式点名的 5 条（#2/#9/#17/#20/#24）与未点名、按机械初判落档并标 confirmed_by_omission 的 7 条（#7/#12/#13/#14/#19/#27/#28）分列 provenance，U 可随时更正后者。发布件须逐条列出，不得只写总数。"
+  },
+  "next_step": {
+    "p6": "structured/cli.py --import-items-artifact → plan_batch(imported_material_items=…) → publish_semantic 全门 → 生产 store 两源 material_items coverage missing→complete → 查询验收",
+    "p7": "web items 查询端点 + 常驻测试 + 落地记录",
+    "boundary": "零调用、不写生产 PG（沿用 108 号边界）"
+  },
+  "countersignature": {
+    "required": true,
+    "status": "signed",
+    "reviewer": "xyl",
+    "adjudicator": "xyl",
+    "signed_on": "2026-10-15",
+    "instrument": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-p5-release-signoff.md",
+      "sha256": "sha256:b50bb0b90c533ba3593edcd41c8e94635389f4789cd5fae8f6476c601a9e1366",
+      "signature_line": "reviewer:   xyl       adjudicator:   xyl       signed_on: 2026-10-15",
+      "body_status_line": "状态：草稿，**未签认**。`status = draft_pending_human_signature`。（判为草稿期残留；本链统一读法 = 以签名栏为准）",
+      "signed_record": {
+        "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/p5-release-record.json",
+        "sha256": "sha256:a035b06843a67c26f0c11081471231975140f5b742e4f1a7d78de66ae0478e7b"
+      }
+    },
+    "statement": "核准 109 号 P5 放行：授权起跑 P6（发布）与 P7（读链），两步均零调用、不写生产 PG。放行依据 = 72 号既定解耦路线（发布标准为结构完备性，与门阈值/金标解耦）；发布理由写『结构完备 + coverage 补全 + 缺口清单明示』，**不写『门 PASS』**。",
+    "covered": [
+      "P5 判档读法：判定轴 5 项中 4 项达标、唯一实质未达标 = 哨兵 NT-I43（合同层布尔 rate_gate_passed=false 并列保留）",
+      "显式缺口清单随发布件逐条列出（金标未覆盖 7 条 + claims 欠账 12 条）",
+      "P6 发布：--import-items-artifact → plan_batch → publish_semantic 全门 → 生产 store 两源 material_items coverage 补全 → 查询验收",
+      "P7 读链：web items 查询端点 + 常驻测试 + 落地记录 + MANIFEST"
+    ],
+    "does_not_cover": [
+      "主张质量达标或门通过（verdict_reading.gate = FAIL 逐字保留）",
+      "合同 v4.3 / 评分器 / 阈值 / 预注册 的任何修订",
+      "material_relations 角色（契约 OPEN-2=C，本轮不抽不评）",
+      "生产 PG 任何写入",
+      "C-1 读法认可件的具名补签（其 status 仍 stated_effective_pending_countersignature）"
+    ],
+    "signature_applied_by": "apply_p5_release_signoff.py（零调用；不代填任何签名字段）"
+  },
+  "u_rulings": {
+    "record": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/p5-u-rulings-20261015.json",
+      "sha256": "0d8866baa767fe59370cb11d1e3458cec3f9d837dd2b96b91601d7f918c7a5c7"
+    },
+    "status": "stated_effective_pending_countersignature",
+    "items": [
+      {
+        "id": "R1",
+        "subject": "C-2：15 条（曾被机械判 no_candidate 的条目）由谁裁决",
+        "u_statement": "不授权",
+        "decision": "不做机械裁定；15 条由 U 亲判逐条给方向"
+      },
+      {
+        "id": "R2",
+        "subject": "工作表 199 行 reviewer / adjudicator = xyl 是否亲笔",
+        "u_statement": "199 行署名我确认",
+        "decision": "确认亲笔"
+      },
+      {
+        "id": "R3",
+        "subject": "NT-I46 / NT-I47 维持 matched 还是撤回",
+        "u_statement": "NT-I46/I47 维持",
+        "decision": "维持 matched"
+      },
+      {
+        "id": "R4",
+        "subject": "items-extraction-publication-signoff.md 的签署状态",
+        "u_statement": "关于items-extraction-publication-signoff.md应该是漏签了，帮我签署",
+        "decision": "采『勘误 + 追认』路线；不代填任何签名栏（理由见下）"
+      }
+    ],
+    "reading_effect": "R3 维持 NT-I46/I47 ⇒ 召回 41/48 不变、判档 tier 不变；R2 确认署名 ⇒ P4 署名出处项闭合；R1 不授权机械裁定 ⇒ 15 条由 U 亲判；U 已逐条给方向，落档见 c1_ruling_record",
+    "c1_ruling_record": {
+      "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/p4-c1-disposition-final.json",
+      "sha256": "e6cc23474ad564de950bdfd67c601c1d49cc35b3431f48187c28b65c96377adc",
+      "u_ruling_verbatim": "序号2，有相似的词，但是含义主体不同。8是 18是、25是。24/9/17/20 都不是",
+      "summary": {
+        "total": 29,
+        "covered_by_candidate": 17,
+        "no_candidate": 12,
+        "re_ruled": 15,
+        "flipped_from_machine": 3,
+        "flipped_serials": [
+          8,
+          18,
+          25
+        ],
+        "explicit_u_rulings": 8,
+        "confirmed_by_omission": 21
+      },
+      "effect": "P4 全量闭合：候选集具名 + 29 条处置定稿（covered 17 / no_candidate 12）"
+    }
+  },
+  "untouched": [
+    "U 候选集、92 号登记件、预注册 v2、冻结件、已签门 v3/契约 v4.3、83–108 号产物：字节全未动",
+    "未写生产 PG、未发布任何东西、未代签"
+  ],
+  "read_after_signature": {
+    "p6_p7_authorised": true,
+    "gate_verdict_unchanged": "FAIL（单轴：哨兵 NT-I43）——逐字保留，放行依据不读作门 PASS",
+    "basis_precedent": "72 号 terminal-decision.json:178 / corrections.md:53：发布标准（结构完备性）与门阈值、金标解耦；store 对 gold/recall/assertion 零引用"
+  }
+}

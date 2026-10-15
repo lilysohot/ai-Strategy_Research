@@ -1,0 +1,26 @@
+{
+  "schema_version": "claims-d2-axis-ruling-manifest-1",
+  "id": "107-claims-d2-per-source-axis-20261015",
+  "status": "draft_pending_human_signature",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "purpose": "关闭预注册最后一条未决读数轴：D-2 分源精度维持诊断（只报告、不 gating），对本轮及后续轮次生效",
+  "inputs": {
+    "prereg_draft_95": "sha256:443df86f559f973efa7d43fa636390463b0a5538922f19d1ef9c452157c7c657",
+    "prereg_signed_99": "sha256:a2d174407daa5a1b88ba9ca44e698cf4512a399b2a4895254d0a3ab4b57edf04",
+    "run_record_105": "sha256:6154292f59b71924cf293db655b42e1b39ac52282c4390d0a4e5bc073a3698ba"
+  },
+  "outputs": {
+    "claims-d2-axis-ruling.json": "见本目录（裁定 + 四条依据 + 对既有记录的影响）",
+    "claims-d2-axis-signoff.md": "待 U 具名签署"
+  },
+  "does_not_touch": [
+    "evidence/95-claims-prereg-20261014/**",
+    "evidence/99-claims-prereg-v3-signed-r2-20261014/**",
+    "evidence/104-claims-prereg-v4-amendment-20261014/**",
+    "evidence/105-claims-treatment-rerun-20261014/**",
+    "evidence/106-claims-publication-lifecycle-20261015/**",
+    "evidence/10-quality-gold-freeze-20261008-r2/**"
+  ],
+  "blocked_on": ["U 在签认件上具名签署"]
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": "items-extraction-publication-proposal-1",
+  "id": "109-items-extraction-and-publication-20261015",
+  "created_on": "2026-10-15",
+  "status": "draft_pending_human_signature",
+  "title": "items 抽取与发布",
+  "authority": {
+    "instruction": "U 于 2026-10-15 指示立项并授权由 assistant 拟定计划（『由你定』）",
+    "budget_note": "本项目含唯一花钱轮（P2 重抽），属 ①类待裁项：预算 ceiling 留空，须 U 填写/另行授权后才允许起跑",
+    "adjudication_note": "Stage-2 人工裁定须 assistant 参与批次留档：每裁完一批（20 条）即列出该批候选清单（序号/candidate_id/命题/裁定/映射金标）",
+    "release_note": "门分判档与发布放行须独立复核 + U 具名签认，实施方不自宣"
+  },
+  "model_calls": 0,
+  "production_pg_writes": 0,
+  "plan": [
+    { "step": "P0", "what": "立项（本件）签认 + 预算授权（①类，待裁）", "model_calls": false },
+    { "step": "P1", "what": "零调用：items 版预注册 + 冻结计划 + 工程缺件三件（参照 102 号 claims 形态：prepare 冻结两源计划 / execute 六道 fail-closed 闸门 / worksheet 构建器逐字读已签判据）；判据写死 = items 门 v3 六项（0.85/0.80/0.80/0）+ 哨兵 11 + target 48，读已签 v4.3 现行指针（不切 v4.4，items 轴逐字等价）；止损规则与 Stage-1 证据链权重预注册固定；92 号 29 条 pending_coverage 登记为工作台输入", "model_calls": false },
+    { "step": "P2", "what": "活跑重抽（唯一花钱轮）：当前代码版本全量重抽两源 material_items（协议 material-atomic-selector-jsonl-v1），预算按授权件对账、超限判该轮无效；P1 预注册签认前禁止起跑", "model_calls": true },
+    { "step": "P3", "what": "零调用：阶段止损复核（从已签预注册件逐字读规则）+ Stage-1 建议器（带可核验证据链，禁金标注入）", "model_calls": false },
+    { "step": "P4", "what": "Stage-2 人工裁定：U 具名全量逐条；assistant 按批次（每 20 条）列候选清单留档；含 92 号 29 条处置（有对应候选入裁定、无候选记 no_candidate）", "model_calls": false },
+    { "step": "P5", "what": "门评分：ADJUDICATED 模式喂 structured_scoring（零金标注入、只消费人工裁定映射），items 门 v3 判据出分判档；U 具名签认放行", "model_calls": false },
+    { "step": "P6", "what": "发布：accepted items → structured CLI 桥（--import-items-artifact）→ plan_batch(imported_material_items) → publish_semantic 全部门 → 生产 store（material_items coverage missing → complete）+ 查询验收", "model_calls": false },
+    { "step": "P7", "what": "零调用：web 读链 items 查询端点（补 108 号 claims 端点的 items 对应物）+ 常驻测试 + 落地记录 + MANIFEST", "model_calls": false }
+  ],
+  "acceptance_criteria": [
+    "判据写死先于花预算与人工裁定（P1 预注册件签认后 P2 才可起跑）；线值/哨兵/target 与门 v3 逐字一致，不因看到新池结果而改",
+    "唯一花钱轮 = P2；按授权件 ceiling 对账，超限判该轮无效（与 103 号同语义）",
+    "Stage-2 全量逐条 U 具名裁定；批次清单按批留档；机械预填不得替代或污染人工校准记录",
+    "评分只消费人工裁定映射（ADJUDICATED），候选生成零金标注入；判档读数只按预注册轴",
+    "发布走既有桥 + publish_semantic 全部门；生产 store material_items coverage 补全且既有 claims 发布件字节不动",
+    "零调用步骤零模型调用；生产 PG 零写入",
+    "83–108 号已落地产物字节未动（108 号 signoff 保持 draft 态，其签认与本项目解耦）",
+    "常驻测试 + ruff/pyright + import_smoke/check_symbols 干净"
+  ],
+  "decided_by_assistant": [
+    "判据轴沿用现行 SIGNED_SCORING_CONTRACT_PATH（v4.3）；v4.4 items 镜像不切换（逐字等价，切换属纯簿记、无判据增益）",
+    "92 号 29 条角色外候选纳入 P4 工作台处置（有候选入裁定、无候选记 no_candidate），不另开链",
+    "工程缺件按 102 号 claims 形态新写 items 版三件（判据从已签件逐字读，不硬编码）",
+    "P7 items 查询端点纳入范围（零调用，补齐与 claims 的读链对等）"
+  ],
+  "pending_human_decisions": [
+    { "id": "budget", "class": "①类（花模型额度）", "what": "P2 预算 ceiling（total_tokens）与 attempts 上限；参照：claims 治理轮实测 246,303 tokens/19 attempts、items 门 32 冻结 24 attempts、历史双臂补跑授权 30+30；assistant 建议参照 claims 103 号口径 ceiling=1,000,000 tokens，由 U 填定或调整", "value": null },
+    { "id": "signoff", "class": "立项签认", "what": "本件签认后 P1 方可开工；P2 起跑另须预算格非空", "value": null }
+  ],
+  "inputs": [
+    "evidence/92-claims-scope-registration-20261014/r0-zero-call/claims-scope-registration.json（29 条 pending_coverage）",
+    "evidence/88-claims-contract-v44-signed-20261014/r0-zero-call/scoring-contract-v4.4.json（items 镜像参照）",
+    "evidence/75-r2-signed-20261013/r0-zero-call/scoring-contract-v4.3.json（现行判据轴）",
+    "evidence/38-gate33-workbench-rebuild-20261012/r0-zero-call/（工作台工具链）",
+    "evidence/28-items-only-quality-gate-20261010/r0-zero-call/（冻结链与协议先例）"
+  ],
+  "out_of_scope": [
+    "material_relations 角色（契约 relation_matching 属 OPEN-2=C，本轮不评分，范围显式披露）",
+    "生产 PG 任何写入（沿用 108 号边界）",
+    "web 前端页面",
+    "e6_holdout_corpus"
+  ]
+}

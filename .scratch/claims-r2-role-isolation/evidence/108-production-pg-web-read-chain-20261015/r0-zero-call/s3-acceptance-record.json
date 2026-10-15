@@ -1,0 +1,26 @@
+{
+  "schema_version": "production-pg-web-read-chain-acceptance-1",
+  "id": "108-production-pg-web-read-chain-20261015",
+  "accepted_on": "2026-10-15",
+  "model_calls": 0,
+  "production_pg_writes": 0,
+  "transport": "real HTTP：uvicorn server.app:app @ 127.0.0.1:8010（验收后已停）",
+  "auth": {
+    "method": "POST /api/auth/register + /api/auth/login（真实 JWT 路径）",
+    "user": "corpus-e2e-108（专用验收账号，业务库一行用户记录，如实登记）"
+  },
+  "cases": [
+    { "case": "无 token 访问 /api/corpus/status", "expect": "401", "got": 401, "pass": true },
+    { "case": "GET /api/corpus/status", "expect": "read_chain=new, target_db=postgres, store_root=生产 root, claims_publications=2 条（5fc7116b…/8dde446f…）", "pass": true },
+    { "case": "GET /api/corpus/search?query=光模块 800G", "expect": "命中来自生产活动 build + 覆盖元数据", "got": "3 hits（cv2: 句柄 + chunk locator）+ coverage（availability/counts/…）", "pass": true },
+    { "case": "GET /api/corpus/documents/{doc_id}?locator=…", "expect": "按 §7.2 句柄回读权威原文", "got": "正文首段与源文档一致（光模块价值量…）", "pass": true },
+    { "case": "GET /api/corpus/claims/{src1}?purpose=cite|compare|calculate", "expect": "许可数与 106 号回填后一致（7/7/7），publication_id=5fc7116b…", "got": "7/7/7，sha256:5fc7116b4…，cite 页 page_status=budget_limited（106 号同口径）", "pass": true },
+    { "case": "GET /api/corpus/claims/{src2}?purpose=cite|compare|calculate", "expect": "8/3/3，publication_id=8dde446f…", "got": "8/3/3，sha256:8dde446f9…", "pass": true },
+    { "case": "生产 PG 零写入复核", "expect": "corpus_publications.generation/activated_at 与立项扫描时逐字相同", "got": "1@2026-09-23 / 2@2026-09-29 不变", "pass": true }
+  ],
+  "source_ids": {
+    "claims-industrial-fulian": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+    "claims-optical-module": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+  },
+  "verdict": "端到端验收通过：四个只读端点全部经真实 JWT 命中，数据来自生产库与生产 store，零模型调用、生产库零写入"
+}

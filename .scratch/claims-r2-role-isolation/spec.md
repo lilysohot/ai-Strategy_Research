@@ -8,7 +8,9 @@
 
 > **2026-10-13 评分契约读取闭环**：Issue 45 已使评分器直接读取签认契约 v4.3 的六项阈值和 11 个 `NT-I*` 哨兵；缺文件、版本/签认状态错误及字段不完整均失败关闭。冻结 P03 复算仍为 PASS（41/48、30/31、源1 0.909、源2 0.808、哨兵 11/11）；65 项相关回归、Ruff、Pyright 与冻结链校验均通过。详情：[Issue 45](issues/45-scorer-direct-contract.md)、[验证证据](evidence/82-scorer-direct-contract-20261013/README.md)。
 
-- 日期：2026-10-02；状态复核：2026-10-13
+> **2026-10-14/15 claims 链完结追加（取代下文历史“claims 诊断未过/发布消费未启动”表述）**：claims 角色（83—107 号）经预注册试验完结——契约 **v4.4** 角色参数化签认（88 号，claims = NT-C11/12/13 + target_total 20）、门 v3 签认（91 号）、预注册判据 v3/v4 签认（99/104 号）、治疗臂实跑后 **A 档**（精度 84/93 = 0.9032、召回 20/20、unresolved 0、哨兵 3/3；基线 51/81 = 0.6296，105 号）、发布/消费闭环 **cite/compare/calculate 三用途 verified**（106 号，桥输入 84 条）、D-2 分源轴裁定**维持诊断**（107 号）；108 号生产 PG/web 只读读链已接通（放行判定待 U 具名签认）。105 号实跑为唯一模型消费轮（371,323 / 1,000,000 tokens）。出范围：web 前端页面、claims 进生产 PG 写链、e6_holdout_corpus。详情见 `evidence/83—108` 各证据目录与 [report.md](report.md) §34。
+
+- 日期：2026-10-02；状态复核：2026-10-13；claims 链执行增补：2026-10-14/15
 - 状态：01—10 的基础架构、回放和冻结已完成；17 的 P1R5 Claims 110 条裁定已由 xyl 签认并通过冻结门。18 已完成严格 parent 门、items/relations selector、accepted-items formal import 和 P10 有界 relation live 执行。P11 relation 样本已由 xyl 签认；P12 selector v2 实跑退化并已拒绝。P13 已完成零调用 `material-relations-question-group-jsonl-v1`。P14 最终 relation-only batch 已执行并在协议门失败。19 的零调用反事实证明同模型语义 no-go。20 仅替换为 `glm-5.3-flash` 的 4-call 复验在 4K 输出上限耗尽 reasoning。21 将上限放宽到 16K 后，三个确定响应仍全部耗尽 reasoning 且为空，第四个为 outcome_unknown；因此 token-only 路线已关闭。Issue 26 已完成离线冻结包上的 10 次 M_main 价值消融；P2 的正向发布、真实 query/delivery/context_use 和产品消费仍未启动。2026-10-13 追加：Issue 32/33/41 与 items 链 R2 修订已完成——门 28 的模板由 **v3** 取代、评分契约推进至 **v4.3**（六项阈值逐字未改），门 33 在原基准 FAIL 后按修订基准重算 **PASS**（41/48 = 0.854），实现绑定同步追平；**发布、query/delivery/context_use 与 M_main 消费仍未启动**。详见 §3 阶段状态追加段与各票。
 - 2026-10-10 收口：Issue 25 虽通过 boolean-v2 协议门但未通过关系质量门；Issue 26 随后完成
   items-only 对 items+relations 的 5 题、10 次 M_main 配对消融并经 xyl 盲评签认。relation treatment
@@ -174,6 +176,24 @@ Wave 0 五件（P01 装配器 / P02 `ADJUDICATED` 匹配改造 / P06 证据护�
 该段之后的 Issue 42/43 已完成有界发布与两个问题的消费链；Issue 45 已完成评分器直接读取契约阈值（OPEN-1=A 的兑现）。范围仍不扩大为整篇覆盖或生产放行。
 另按用户 2026-10-13 分诊裁定，`evidence/34—40`、`42—78` 为**票内证据目录**（不单独建票），
 其状态以 32／33／41 与本段为准。
+2026-10-14/15 追加（claims 链 83—107 与生产读链 108）：claims 角色按预注册试验走完全链。
+83—92 号诊断与口径冻结：精度 56/110 = 0.509 为唯一失败轴、51 条 FP 三分解（角色外/坐标未绑定/无码）、
+84 号四口径实测（角色范围 51/81 = 0.6296；相似度删条拒绝为定向调参）、契约 **v4.4** 角色参数化签认
+（`role_sections`，items 逐字不变、P03 绑定 8/0）、门 v3 签认（D-1/D-2 登记 `unfrozen_axes`）。
+93/97 号治理层方案被 U 拒签（净效果为空），检出能力保留不弱化。95—105 号预注册试验：判据 v3/v4 签认
+（读数轴收敛为 4 项；`unbound_union` 降诊断）、T1—T4 治疗落地、预算授权 100 万 token；治疗臂实跑
+（19/19 succeeded、93 facts 全 in-role、371,323 tokens）并经 xyl 全量裁定与复核改判 8 条 ⇒
+**A 档（精度 84/93 = 0.9032、召回 20/20、unresolved 0、哨兵 3/3；分源 0.8824/0.9600）**。
+106 号发布/消费闭环（全程零模型调用）：`AcceptedClaims` 桥 + CLI 导入（人工签认替代机器 protocol）
++ 受约束 `publish` 子命令；S4 首验未过按约停下，A 回填（裁定接受 ⇒ quality=ok、用途取 `uses_for()`
+已签规则）后 **cite/compare/calculate 三用途 verified**（桥输入 84 条 = matched 20 + correct_extra 64，
+剔除 9 条逐条登记）；常驻测试 5 项、回归 1653 passed。107 号 D-2 分源轴裁定**维持诊断**（只报告、
+不 gating，对本轮及后续轮次生效）——预注册最后一条未决读数轴关闭，**claims 链（83—107 号）全部完结**。
+108 号生产 PG/web 只读读链接通（零调用、不写生产库）：生产 store 确定性落位（publication_id 与
+106 号签认件逐一相同）+ `server/routes/corpus.py` 四只读端点 + 真实 JWT 端到端验收 + 11 项离线测试；
+回归 1520 passed。**「生产放行门」放行判定待 U 具名签认（独立复核 + 签认，实施方不自宣）。**
+出范围：web 前端页面、claims 进生产 PG 写链、e6_holdout_corpus。以上均不扩大为整篇覆盖、研究质量
+或生产放行；衔接项 = 第一笔经生产读链的真实消费冒烟、items 抽取与发布重立项（109 号，预注册件待签）。
 
 ## 4. 01 已冻结的实现决议
 

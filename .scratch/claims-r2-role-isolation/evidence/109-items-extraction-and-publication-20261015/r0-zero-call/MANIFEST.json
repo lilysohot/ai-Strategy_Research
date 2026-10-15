@@ -1,0 +1,43 @@
+{
+  "schema_version": "evidence-manifest-1",
+  "id": "109-items-extraction-and-publication-20261015",
+  "created_on": "2026-10-15",
+  "status": "round3_done_worksheet_pending_adjudication",
+  "model_calls": "round1 24 + probe 2 + round2 24 + round3 24（累计 tokens 263,971 / 1,000,000 = 26.4%）",
+  "files": {
+    "current-state-scan.json": "4e40c0901cd39e659788e3c1e62d351c4a7e13124f7cc8ac036efcabd2580867",
+    "items-extraction-publication-proposal.json": "206ec5b204fa8ea70172b823e22a1bbc90099638de8fcd1a7b8a84d3216c2313",
+    "items-extraction-publication-signoff.md": "c5420de9505782bb307da95beeb9ec8d050420799722e6be07c724d1ae458379（U 具名 signed_on 2026-10-15，ceiling 1,000,000 / attempts 30；草案态哈希 93f686f3… 留档）",
+    "budget-authorisation.json": "96949b73e6e0f3a5c13a4b53de336ed9b5943ea63dc774cf815190aa92486357（r1 口谕版，被 r2 取代，字节留档）",
+    "budget-authorisation.md": "36754538a8a5b617bc04200543ffa1abcf517273a66be0e3a409d9c7322f479a",
+    "budget-authorisation-r2.json": "1de264a3ce279dbcca7349fe7a2a8606aa4a128ddd8aeba2023e04f99fc0b8bf",
+    "budget-authorisation-r2.md": "6420e87611a7fbdf7844493482d680113baaeb49d9ff5493b868b521e52a8ab2",
+    "items-reextraction-preregistration.draft.json": "8b6abeaa6c8b4a98f4cb57709eca3c4559e1a7057da48ddbadc488cdd14381a5（草稿留档）",
+    "items-reextraction-preregistration.json": "3a40caf8e5f2d7e2ed14a61a834da987d9a663475fc53523e9e55de9ecb7ab33（frozen_before_execution，diff 仅 status/countersignature/budget_request/frozen_from_draft_sha256）",
+    "items-reextraction-preregistration-signoff.md": "fffbe36325efc1a463b8d973f8b893b05887f0e8dd205c02125c3311cbb1d5f7（专用签认件仍开放，U 可随时补具名）",
+    "freeze_preregistration.py": "d8c3c52a233e9975478c056255b42d66c32b760bf394101134418bbf3a7911c1",
+    "prepare_items_reextract_plan.py": "19a8c3ccdce161bb770a3f57a0550dd8991421947aff15dabc7388b298331137（AUTHORISATION 指向 r2）",
+    "execute_items_reextract.py": "execute_items_reextract.py 哈希见冻结件内 prepare_script_sha256/执行记录（AUTHORISATION→r2 + attempts 上限闸 + profile 与 28 号同构造）",
+    "build_items_adjudication_worksheet.py": "0b15375bf77990cd1500855082ffd068732a2ee43eb354baed75d156f91d32d9",
+    "p1-landing-record.json": "52b3c3f2a2b305c0eb62ba559615647f0e4b9fd2be0183a62dd5694a7e723ec1",
+    "items-reextract-plan-freeze/manifest.json": "bff3e29562661d9dc08519c3ac9a4b02030a37bc9bd6fd4292ccf6fd4f35cdb8（round-1，留档）",
+    "probe_failed_packet.py": "7e44eb0177d8acbc35d88d69f8f7bda48a29ae6e623a869c74126132ce1b053c",
+    "probe-capture/raw-response.json": "7926e21f009d1d217d6f0e625eb35fb69b148d1018b0a075f5e6e73fa0e3ea2a（根因证据）",
+    "probe-capture-after-fix/probe-report.json": "ba37ed548be19badeba4ec8d8a2fad404302cc32560d79df210d9a9af7d4c64b（修复端到端验证）",
+    "rootcause-fix-and-restart-record.json": "ad24bf7d69423413b36bc58ea7174c522fdda4e3e3d90502de9e9620e91aff0d",
+    "items-reextract-plan-freeze-r2/manifest.json": "3f9316670d5b67d49acdd78c4e8a1be12bbde976221d544ce2fce3510b748b5e",
+    "items-reextract-plan-freeze-r2/execution-summary.json": "0bb7b9cef4ccab9eb2fc218498d2380553b7a55b1f9e299e733aac1eae625307",
+    "items-reextraction-preregistration-v2.json": "60d89b8d60078620f277b0f7b820425ee45619295e5c2305aa80e323a12d562c（frozen；协议 v6 + 止损闸执行有效性口径 + 范围 A，U 会话指令 2026-10-15）",
+    "items-reextract-plan-freeze-r3/manifest.json": "ddc0e990805201c832c739170b21d71499259850192ff7e201fd4b36ab7251ba",
+    "items-reextract-plan-freeze-r3/execution-summary.json": "7c1c8b2ccf82a984f2498a678302fd431889fa5c8d9d61861f15f748d5d9b7a1",
+    "items-reextract-adjudication-r3/stage2-gates.json": "2bb5ccb96c498ec80d6a93989930c324eed6f78b8d2e03474f1c36d39f3c5a9b",
+    "items-reextract-adjudication-r3/candidate-adjudications.worksheet.json": "47c56ceae1ad3f80d438a4671056cf31f963bca37f474af5082bca18ceca8220（199 候选 + 29 条 C1，pending_named_human_adjudication）",
+    "round3-landing-record.json": "cff58d6c7ab8b9e3fbd398e01427f2b73dffb35aae084ed4bd91f5b6d36e86f6",
+    "repo_changes": {
+      "plugins/corpus/material_semantics.py": "git blob 4456393d…（_strict_role_llm 单点归一化 + v11→v12，+31/-3）",
+      "tests/test_material_selector_record_tolerance.py": "git blob c627ace5…（8 项新增）",
+      "tests/test_corpus_material_semantics.py": "git blob 326a2d6f…（label-free 拒收测试按新契约更新留痕）"
+    }
+  },
+  "note": "round-1 实跑后 10/24 packet 因豆包省略 record_type 被整包弃项 ⇒ 探针定位根因（raw-response.json）⇒ 严格包装层单点归一化修复（版本 v11→v12，回归 116 passed）⇒ 探针复验同 packet 变 completed ⇒ round-2 全量重抽（86,472 tokens，unsupported-JSONL 弃项 10→0，池 211 条）。剩余待裁：stage2 止损闸修订（任务级 failed/partial 降 report-only）+ 3 个零记录 packet 是否定向补抽。签认生效已同轮登记本 MANIFEST（83 号教训）。"
+}

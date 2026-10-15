@@ -1,0 +1,72 @@
+{
+  "schema_version": "claims-d2-axis-ruling-1",
+  "id": "107-claims-d2-per-source-axis-20261015",
+  "status": "decided_signed",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "question": {
+    "statement": "D-2 分源精度轴：per_source_precision 是否升为判定轴（例如『每源 ≥ 0.80 才算过』），还是维持预登记的诊断读法（只报告、不 gating）？",
+    "registered_as": "95 号预注册 reading_axes.excluded.per_source_precision = 『诊断项：只报告，不参与判定（M2 拒签/未裁）』；99 号签认生效；99 号 prior_record_readings[0].does_not_change[3] = 『D-2（分源精度轴）仍未裁：该轴只报告、不 gating』；104/106 号签认件 does_not_cover 亦同"
+  },
+  "measured": {
+    "this_round_treatment_pool": {
+      "candidate_precision": "84/93 = 0.9032（合并口径，判定口径）",
+      "per_source_precision_diagnostic": {
+        "f16e7fde9553（工业富联）": "0.9600",
+        "dca4bad7f85b（光模块）": "0.8824"
+      },
+      "source": "105 号 claims-treatment-run-record.json（6154292f…）诊断块原值"
+    },
+    "frozen_baseline_for_reference": {
+      "dca4bad7f85b": "18/25 = 0.7200",
+      "f16e7fde9553": "33/56 = 0.5893"
+    }
+  },
+  "ruling": {
+    "decision": "维持诊断：per_source_precision 只报告、不 gating，对本轮及后续轮次均生效",
+    "meaning": "判定口径维持合并 candidate_precision 单一口径；分源读数继续出现在每个评分记录的诊断块，但永远不参与档位/放行/目标线判定",
+    "what_it_does_not_do": [
+      "不改变 105 号 A 档判定的任何读数（A 档由合并口径 + 护栏得出，分源从未参与）",
+      "不改变预注册的线值（0.80/0.60）与护栏条款",
+      "不是『看到结果后换口径』：维持现状读法不改变任何已发生或将发生的判定输入；升为判定轴才是换口径（见 why_not_upgrade[3]）"
+    ]
+  },
+  "why_not_upgrade": [
+    "小样本无判别力：目标金标 20 条、每源约 10 条 ⇒ 分源判线下每错 1 条 −10pp（预注册 precision_granularity_warning 的分源加倍版）；把 0.80 线压到这个噪声水平上只会把运气读成质量",
+    "本轮无分源不均衡信号：两源 0.9600 / 0.8824 均 ≥ 0.80，95 号 arms_not_run 登记的『B 档边界（分源不均衡 ⇒ 归因臂）』条款未触发，升轴缺乏事实动机",
+    "分源不均衡的真正用途已有着落：它作为归因臂的触发条件登记在 arms_not_run.conditional_second_round，不需要升为常设判定轴",
+    "时机纪律：升为判定轴发生在看到 0.9032 之后 ⇒ 正中 95 号 forbidden_readings[1]『在看到结果后调整精度口径』；唯一豁免形态是声明只对未来轮次生效，而其判别力不足（见第 1 条）使该声明无意义"
+  ],
+  "effect_on_records": {
+    "95/99 号": "字节不动；『D-2 仍未裁』的自述由本件的取代读法关闭（does_not_change[3] 读作『已裁：永久诊断』）",
+    "104 号": "字节不动；签认件 does_not_cover 中的『D-2 仍未裁』同上",
+    "105/106 号": "字节不动；其诊断块读法不变（本来就是只报告）",
+    "future": "后续任何评分记录的 per_source_precision 保持诊断块位置；校验器与测试无须新增 gating 逻辑"
+  },
+  "blocked_on": [
+    "U 在本件签认件上具名签署"
+  ],
+  "countersignature": {
+    "required": true,
+    "status": "signed",
+    "reviewer": "xyl",
+    "adjudicator": "xyl",
+    "signed_on": "2026-10-15",
+    "instrument": {
+      "path": "evidence/107-claims-d2-per-source-axis-20261015/r0-zero-call/claims-d2-axis-signoff.md",
+      "sha256": "sha256:f1f014fa139b1b22bad58e1db6013d4e4cf0979a3c87a7cbb8e7e157678d713e",
+      "signature_line": "reviewer:     xyl       adjudicator:  xyl          signed_on: 2026-10-15"
+    },
+    "statement": "核准 D-2 分源精度轴裁定（107 号）：per_source_precision 维持诊断读法——只报告、不 gating，对本轮及后续轮次均生效；判定口径维持合并 candidate_precision 单一口径。本裁定不改变任何已发生判定（105 号 A 档由合并口径 + 护栏得出），95–106 号字节不动。",
+    "covered": [
+      "裁定：per_source_precision 维持诊断（只报告、不 gating）",
+      "四条依据（小样本无判别力 / 本轮无不均衡信号 / 归因臂已有归属 / 时机纪律）",
+      "对既有记录的影响：取代读法关闭 99 号 does_not_change[3] 的『D-2 仍未裁』自述"
+    ],
+    "does_not_cover": [
+      "生产 PG/web 读链（另行立项）",
+      "任何线值与护栏条款"
+    ],
+    "signature_applied_by": "apply_d2_ruling_signoff.py（零调用；不代填任何签名字段）"
+  }
+}

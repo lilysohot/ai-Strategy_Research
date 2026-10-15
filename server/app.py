@@ -30,6 +30,7 @@ from server.readiness import enforce_startup_readiness, storage_readiness
 from server.routes import artifacts as artifacts_routes
 from server.routes import auth as auth_routes
 from server.routes import business as business_routes
+from server.routes import corpus as corpus_routes
 from server.routes import llm_configs as llm_configs_routes
 from server.routes import models as models_routes
 from server.routes import runs as runs_routes
@@ -127,6 +128,8 @@ app.include_router(artifacts_routes.router)
 app.include_router(runs_routes.router)
 # 业务资料（DATA-03）：路由只做身份绑定与契约翻译，准入/版本/幂等在 business_service。
 app.include_router(business_routes.router)
+# 语料读链（108 号 生产 PG/web 读链）：只读端点，鉴权同既有路由；fail-closed 拒绝原样透传。
+app.include_router(corpus_routes.router)
 # 业务错误统一渲染为契约信封（字段定位、冲突、幂等、无权）；注册后才能覆盖默认 500。
 app.add_exception_handler(biz.BusinessError, business_routes.business_error_handler)
 

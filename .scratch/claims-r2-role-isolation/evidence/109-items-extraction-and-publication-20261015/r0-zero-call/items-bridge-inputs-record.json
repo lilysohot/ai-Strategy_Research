@@ -1,0 +1,65 @@
+{
+  "schema_version": "items-bridge-inputs-1",
+  "id": "109-items-extraction-and-publication-20261015",
+  "created_on": "2026-10-15",
+  "model_calls": 0,
+  "authority": "109 号 P4 人工裁定（199/199 具名，reviewer=adjudicator=xyl）+ P5 放行签认（items-p5-release-decided.json）",
+  "rule": "导入 round-3 全池（matched 41 + correct_extra 150 + duplicate 8 = 199）；0 条 incorrect ⇒ 无剔除；被剔除条目清单为空且必须为空",
+  "why_duplicates_retained": "8 条 duplicate 的 reason 逐条自述『为一对一约束下的重复标注』，其 text/value 与主匹配条目互不相同（实测：『若从零开一个观察仓』vs『等两件事至少中一件再议』等）⇒ 判定由评分器一对一映射强加，非重复渲染；为满足评分侧约束删真条目属 83 号登记的反模式",
+  "worksheet": {
+    "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-reextract-adjudication-r3/candidate-adjudications.worksheet.json",
+    "sha256": "sha256:2e574b6ec57c3132b0074b4db96a8d937856c0acaf2df6051acf894c39784767",
+    "candidate_count": 199,
+    "judgement_tally": {
+      "correct_extra": 150,
+      "matched": 41,
+      "duplicate": 8
+    },
+    "review_status": [
+      "accepted"
+    ],
+    "reviewers": [
+      "xyl"
+    ],
+    "adjudicators": [
+      "xyl"
+    ],
+    "gold_fields_read": 0
+  },
+  "freeze": {
+    "path": "evidence/109-items-extraction-and-publication-20261015/r0-zero-call/items-reextract-plan-freeze-r3",
+    "manifest_sha256": "sha256:ddc0e990805201c832c739170b21d71499259850192ff7e201fd4b36ab7251ba"
+  },
+  "runs": [
+    {
+      "run": "industrial-fulian-md",
+      "snapshot_id": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+      "protocol": "material-atomic-selector-jsonl-v6",
+      "items_published": 80,
+      "scoped_units": 10,
+      "dropped": [],
+      "artifact_id": "sha256:83fb274ffa58724865c32faa191a54ff9535980bc87da4d30aebaf71719122a4",
+      "payload_sha256": "sha256:860cfd1fd93e0841c7cbea691c2b2dc52a508229e941585e7bb80c98cd8b4120"
+    },
+    {
+      "run": "optical-module-docx",
+      "snapshot_id": "sha256:7d8f27c875796ee3ace724131f2e8f7d3c5bf08ea85b919e6fe5b722a7fa7195",
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96",
+      "protocol": "material-atomic-selector-jsonl-v6",
+      "items_published": 119,
+      "scoped_units": 14,
+      "dropped": [],
+      "artifact_id": "sha256:2ba2c7c40a6d6ba7f7ef5b57c066c00b8bc8b9ba23a795f7f18da5259b2d3e23",
+      "payload_sha256": "sha256:ba00e8c4fdd0f8efaf0c8b35d0ebdb4c6e099da9484ee33f37e56cfba326e7ba"
+    }
+  ],
+  "outputs": {
+    "items-bridge-industrial-fulian-md/items-artifact.json": "a7194ddb773b0cc04e15318fb2172c5d8ed7997319ba4686a64659eaf3846ce6",
+    "items-bridge-industrial-fulian-md/items-payload.json": "7d88e6c3259b5f9036473b8cad298472b28c530a9475224b9e741ef78e79d3f4",
+    "items-bridge-optical-module-docx/items-artifact.json": "b2626ac1557c46b225d8eaf18e2fd966b58dde53fa4fda92feeb72b00e97ba99",
+    "items-bridge-optical-module-docx/items-payload.json": "89401c68ec9fa3981642272416e7aff343e8008f7b99fce402ebad07b23a343c"
+  }
+}

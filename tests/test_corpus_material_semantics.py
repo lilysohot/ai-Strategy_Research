@@ -250,7 +250,9 @@ def test_selector_protocol_controller_materializes_exact_slot_evidence(tmp_path:
         relations_required=False,
     )
 
-    assert MATERIAL_SELECTOR_JSONL_VERSION == "material-atomic-selector-jsonl-v5"
+    # 109 号 2026-10-15: default flipped v5 → v6 (prompt now states the record_type contract
+    # the strict validator always enforced).
+    assert MATERIAL_SELECTOR_JSONL_VERSION == "material-atomic-selector-jsonl-v6"
     assert result.packet_runs[0].status == "completed"
     assert result.summary()["complete"] is True
     item = result.understanding.items[0]
@@ -3569,8 +3571,10 @@ def test_selector_prompt_whitelists_cover_their_validators() -> None:
 def test_selector_protocol_prompt_selects_frozen_text_per_protocol() -> None:
     assert selector_protocol_prompt(MATERIAL_SELECTOR_JSONL_V6) == MATERIAL_SELECTOR_PROTOCOL_V6
     assert selector_protocol_prompt(MATERIAL_SELECTOR_JSONL_V5) == MATERIAL_SELECTOR_PROTOCOL_V5
+    # 109 号 2026-10-15: the default selector protocol is now v6 — the v5 prompt never mentioned
+    # record_type while the strict validator required it, and doubao omitted the constant leaf.
     assert (
-        selector_protocol_prompt(MATERIAL_SELECTOR_JSONL_VERSION) == MATERIAL_SELECTOR_PROTOCOL_V5
+        selector_protocol_prompt(MATERIAL_SELECTOR_JSONL_VERSION) == MATERIAL_SELECTOR_PROTOCOL_V6
     )
     assert '"record_type":"obligation_result"' in MATERIAL_SELECTOR_PROTOCOL_V6
     assert '"record_type":"obligation_result"' not in MATERIAL_SELECTOR_PROTOCOL_V5
@@ -3599,15 +3603,20 @@ def test_selector_parser_still_fails_closed_without_record_type(tmp_path: Path) 
     assert entry.reason_codes == ("controller_terminal_invalid",)
 
 
-def test_strict_role_llm_still_rejects_label_free_selector_record() -> None:
-    import pytest
+def test_strict_role_llm_reinjects_label_free_selector_record() -> None:
+    """109 号 root-cause fix (2026-10-15): doubao omits the constant ``record_type`` leaf.
 
+    The exact-shape label-free obligation row is re-injected by the strict wrapper instead of
+    discarding the whole packet; the downstream selector parser itself still fails closed when
+    handed a label-free row directly (see test_selector_parser_still_fails_closed_without_record_type).
+    """
     strict = _strict_role_llm(
         lambda _prompt: _label_free_selector_row(), frozenset({"obligation_result"})
     )
     assert strict is not None
-    with pytest.raises(ValueError):
-        strict("prompt")
+    row = json.loads(strict("prompt"))
+    assert row["record_type"] == "obligation_result"
+    assert set(row) == set(_SELECTOR_RESULT_FIELD_ORDER)
 
 
 def test_items_role_default_prompt_stays_on_frozen_v5(tmp_path: Path) -> None:

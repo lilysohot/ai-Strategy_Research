@@ -4,7 +4,9 @@
 
 > **2026-10-13 评分契约读取闭环**：Issue 45 已使评分器直接读取签认契约 v4.3 的六项阈值与 11 个 `NT-I*` 哨兵，并对缺文件、版本/签认状态错误和字段不完整失败关闭。冻结 P03 复算逐项不变：PASS，41/48、30/31、源1 0.909、源2 0.808、哨兵 11/11。65 项相关回归、Ruff、Pyright 和冻结链校验均通过。详情：[Issue 45](issues/45-scorer-direct-contract.md)、[验证证据](evidence/82-scorer-direct-contract-20261013/README.md)。
 
-- 日期：2026-09-28；修订：2026-10-02；执行约束补充：2026-10-08；状态校正：2026-10-09；门 33 诚实出分与裁定闭环结案：2026-10-13；R2 修订（门 v3 + 契约 v4.3）与门 33 重算 PASS：2026-10-13
+> **2026-10-14/15 claims 链完结追加（取代下文历史“claims 无专属门/诊断失败/发布消费未启动”表述）**：claims 链（83—107 号）已全部完结——预注册试验 **A 档保留且过目标线**（精度 84/93 = 0.9032、召回 20/20、unresolved 0、哨兵 3/3；基线 51/81 = 0.6296，105 号）；发布/消费闭环 cite/compare/calculate **三用途 verified**（106 号，桥输入 84 条）；D-2 分源精度轴裁定**维持诊断**（107 号）；108 号生产 PG/web 只读读链已接通（放行判定待 U 具名签认）。105 号治疗实跑为唯一模型消费轮（371,323 / 1,000,000 tokens），其余各号零调用。详情见 §34 与 `evidence/83—108` 各证据目录。
+
+- 日期：2026-09-28；修订：2026-10-02；执行约束补充：2026-10-08；状态校正：2026-10-09；门 33 诚实出分与裁定闭环结案：2026-10-13；R2 修订（门 v3 + 契约 v4.3）与门 33 重算 PASS：2026-10-13；claims 链预注册试验、发布闭环与 D-2 裁定执行增补：2026-10-14/15
 - 状态：本文是原始架构方案基线；实现与多轮有界真实开发试验已经发生，当前执行真源为
   [实施规格](spec.md)和[任务 11](issues/11-bounded-live-trial.md)。截至 2026-10-09，质量门、relations、
   正向发布/query/delivery/context_use 与 M_main 消费仍未闭环，不得按本文旧时点描述为“尚未实施”，
@@ -1283,6 +1285,22 @@ Issue 45 随后改为直接读取同一签认契约并失败关闭，冻结 P03 
 Issue 43 同时暴露了 terminal task runner 对无 reporter 运行的完成态误判：workflow 明确返回 `answer_status=complete`，但 `stopped_by=no_tool` 仍被显示为 incomplete。Issue 44 已在真实 CLI 调用点补红绿回归并修复；只有显式 complete 的 `no_tool` 获得交付状态，无状态或 partial 结果继续失败关闭，完整 `apodex/tests` 为 823 passed。历史运行不追溯改写。
 
 **仍未实施**：W6 独立留出与多模型比较、W7 生产化、P04/P05 口径归一化与回归、route a/b 裁定。上述两个问题的消费闭环及 Issue 45 的评分器改造不扩大为整篇覆盖、研究质量或生产放行。
+
+## 34. 2026-10-14/15 执行增补：claims 链预注册试验、A 档判卷、发布/消费闭环与读数轴裁定
+
+**诊断与口径冻结（83—92 号，零调用）**：83 号草案实测 claims 失败轴只有精度——target_recall 20/20（分母 = 20 条 NT-C 冻结目标）、candidate_precision 56/110 = 0.509；51 条 FP 三分解为 24 条角色外（`kind=opinion` 或无 `value_text`）、20 条坐标未绑定（period/unit reason 码）、7 条无 reason 码（95 号更正为 2 条同引用重复渲染 + 4 条缺 period 未标码 + 1 条确不匹配）。84 号四套口径实测：D1 全池 0.5091、D2 角色范围 51/81 = 0.6296（分源 0.5893/0.7200）、D3 叠坐标 0.7222 但召回掉到 12/20（reason 太粗不可作召回口径）、D4 相似度删条 0.8615 而**删 0 条 matched ⇒ 拒绝为定向调参**；登记“冻结池上不可达”并新增放行线（0.60 ⇒ 容忍 4 条新增 FP；0.55 ⇒ 11 条），禁止用放行线通过宣称质量达标。85 号 26 项机器校验器（`tools/check_claims_gate.py`，fail-closed）+ 14 项不变量测试。86—89 号契约 **v4.4** 签认落地：`role_sections` 角色参数化（claims = NT-C11/12/13 + target_total 20；items 小节镜像 v4.3 逐字不变，P03 绑定 8/0）、claims 载体惰性接线、C2 duplicate 计数具名更正（评分器 fp 已含 duplicate，56/110 与契约文字同源）。90 号按已签口径全量出分：候选 81、精度 51/81 = 0.6296、哨兵全中——目标线在冻结池上不可达（三个 accepted 下限变体全部被精度卡住），放行线 PASS。91 号门 v3 签认，D-1/D-2 显式登记为 `unfrozen_axes`。92 号 C1 角色外 29 条 owner_role 登记与 C4 用途轴机制（`plugins/corpus/claim_use_axes.py`，未登记码 fail-closed）落地。
+
+**治理层处置（93/94/97 号）**：治理层方案（R1—R4 + 三格）经四项实测被 U 拒签——净效果为空、签认后反而锁红已签产物、四词不进任何交付物读数、且违反自身 R4；拒签后检出能力保留不弱化。94 号一键执行器 + 全分支仿真矩阵保留为载体。95 号 v3 预注册据此把读数轴由 6 项收敛为 4 项：accepted 条数下限（M1）被证明与召回**字面等价、零独立判别力**，退出判定；`per_source_precision` 暂留未决（后由 107 号裁定）。
+
+**预注册试验（95/98—105 号）**：U 签认 95 号 v3（98/99 号；生效记录 `claims-preregistration.json` `a2d17440…`，签认日期笔误按“修订 = 新版本记录 + 旧哈希留存”以 99 号重出，98 号留档）。四条治疗规则落地：T1 不产 opinion/无值候选（`claims_detail.py` 契约不再邀请 opinion + 范围判定）、T2 同 packet 载体补齐 period/unit（带 provenance，无载体不猜）、T3 跨 packet fact 级去冗余（键含 `kind`，防误合真冲突护栏）、T4 缺字段必带 reason 码（100/101 号）。102/103 号活跑工程（六道 fail-closed 闸门 + 预算授权 ceiling 1,000,000 total_tokens）。104 号 U 裁把 `unbound_union` 从阶段 2 闸门降为诊断（生效件 `claims-preregistration-v4.json` `6b5c93d5…`；101 号“≤27”目标登记取代读法，字节不改）。105 号实跑：首轮被前端空闲超时中断（`outcome_unknown` 不可重试、防双花），重出确定性计划后 **19/19 attempts 全 succeeded、facts 93 全 in-role**，合计 371,323 / 1,000,000 tokens；阶段 2（v4 判据）三闸门全绿（角色外 0 / 冗余 0 / 缺字段无码 0）；阶段 3 工作表 93 行由 xyl 逐行裁定并复核改判 8 条 ⇒ matched 20（覆盖 NT-C01..20 各一次）/ correct_extra 64 / duplicate 6 / incorrect 3，**精度 84/93 = 0.9032、召回 20/20、unresolved 0、哨兵 3/3 ⇒ A 档 `A_keep_and_pass_target`**（基线 0.6296 → 0.9032；分源 0.8824/0.9600；对改判组合不敏感，最保守仍 0.871）。**预注册试验完结：claims 保留且过目标线。**
+
+**发布/消费闭环（106 号，2026-10-15）**：按 A 档后果立项并签认（U 裁：D1 全做 / D2 生产读链出范围 / D3 遇阻停下报裁）。①S1 桥：ledger 新增 `AcceptedClaims` + `BatchPlan.imported_claims` + CLI `--import-claims-artifact/payload`——人工签认替代机器 protocol，入账即 valid/accepted、零模型调用；②S2 两 run 导入后 `publish_semantic` 至 **published**（coverage claims=complete，findings 空）；桥输入保留 84 条（matched 20 + correct_extra 64），剔除 9 条逐条登记；③S3 CLI 受约束 `publish` 子命令（`--artifact BATCH:TASK:SHA`，仍走全部既有门）；④S4 首次验收未过并按 D3 停下：cite 报 `quality_not_accepted`，根因是裁定未回写 fact 层；U 裁 **A 回填**（裁定接受 ⇒ quality=ok、用途取工作表 `uses_for()` 已签规则）后 **cite/compare/calculate 三用途 `verify_reference` 全部 verified**（run1 各 7 条，run2 cite 8 / compare·calculate 3）；⑤S5 常驻测试 `tests/test_claims_publication.py` 5 项，回归 1653 passed（2 项失败为既有环境问题）。踩坑登记：`EvidenceRun.run_id` 是内容指纹（删/改 facts 必须重算）、`ClaimRecord` 为 frozen dataclass（用 `dataclasses.replace`）、`verify_reference` 内部依赖 `CORPUS_STRUCTURED_ROOT`、同 source 二次发布撞 parent 检查 ⇒ 重建 store（旧 store 留 `live-store-no-backfill` 档案）。证据：`evidence/106-claims-publication-lifecycle-20261015/`。
+
+**D-2 分源轴裁定（107 号，2026-10-15）**：U 具名签认（签认件 `f1f014fa…`），生效件 `claims-d2-axis-decided.json`（`feb7bd96…`）：**`per_source_precision` 维持诊断（只报告、不 gating），对本轮及后续轮次生效**，判定口径维持合并 candidate_precision。四条依据：①金标 20 条/每源约 10，分源判线噪声 −10pp/条、无判别力；②本轮两源 0.9600/0.8824 均 ≥0.80，无不均衡信号（归因臂条款未触发）；③分源不均衡的用途已登记为归因臂触发条件；④看到 0.9032 后升轴正中 forbidden_readings[1]（看到结果后换口径）。95—106 号字节不动，105 号 A 档读数不变。**预注册最后一条未决读数轴关闭，claims 链（83—107 号）全部完结。**
+
+**生产 PG/web 读链（108 号，2026-10-15，零调用）**：生产 PG 活动 build + 全文索引已在位（M7 I4-4 重建产物：8 源 8 发布全 active、`search_tsv`+GIN+zhcfg），本立项**不写生产库**。落地：`place_production_store.py --place` 把 106 号桥输入重放为合并单生产 store（临时 root 复算 publication_id 与 106 号签认件逐一相同后才落，确定性重放成立），`CORPUS_STRUCTURED_ROOT` 指向它；`server/routes/corpus.py` 四只读端点（status/search/documents/{doc_id}/claims/{source_id}，鉴权 + fail-closed 错误翻译）；真实 JWT 经 HTTP 端到端验收全过（401 守卫、search 3 hits、取证回读、两源三用途计数与 106 号一致、生产库 generation/activated_at 不变）；`tests/test_web_corpus_read_chain.py` 11 项全离线；回归 1520 passed。**「生产放行门」放行判定待 U 具名签认（独立复核 + 签认，实施方不自宣）。**出范围：web 前端页面、claims 进生产 PG 写链、e6_holdout_corpus。
+
+**边界**：以上均不扩大为整篇覆盖、研究质量或生产放行；claims 链完结后的衔接项 = 第一笔经生产读链的真实消费冒烟、items 抽取与发布重立项（109 号，预注册件待签，另行记录）。93/97 号治理层拒签记录、101 号 interrupted_archive 与 106 号旧 store 档案均保留供审计。
 
 ## 附录：依据与源码入口
 

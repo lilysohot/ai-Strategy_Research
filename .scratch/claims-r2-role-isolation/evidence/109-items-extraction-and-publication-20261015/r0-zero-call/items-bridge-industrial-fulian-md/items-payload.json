@@ -1,0 +1,4357 @@
+{
+  "run_id": "edaf23109c441a98bca1b03eb752a0567f8f15268be491c7bca258b4aab55aff",
+  "evidence_run_id": "401b4c4001142b2fc58f48de9d70567524a52723807230b12baec9f655582d1f",
+  "extractor_version": "material-semantics-32",
+  "understanding": {
+    "contract_version": "material-understanding-v1",
+    "source": {
+      "source_id": "cv2:f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+      "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+      "title": "工业富联投委会决策报告",
+      "material_type": "other",
+      "research_domain": "company",
+      "material_date": "2026-08-29",
+      "published_at": "2026-08-29",
+      "language": "zh-CN"
+    },
+    "speakers": [
+      {
+        "speaker_id": "spk_544d7167e8a5",
+        "display_name": null,
+        "role": "document_voice",
+        "identity_status": "unknown"
+      }
+    ],
+    "items": [
+      {
+        "item_id": "itm_3131977b46dc2d03",
+        "text": "CSP/GPU 机柜量、Rubin 卡位、CPO/高速网络。",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "CSP/GPU机柜量、Rubin卡位、CPO/高速网络是卖方提出的三条相关内容",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "CSP/GPU 机柜量、Rubin 卡位、CPO/高速网络。",
+            "start": 14,
+            "end": 44
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_bf0c10772dfcb0bd",
+        "text": "云计算 +75.7%",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "云计算业务同比增长75.7%",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "云计算 +75.7%，",
+            "start": 51,
+            "end": 62
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_45f70982875f3a56",
+        "text": "CSP AI 服务器 +2.3 倍",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "CSP AI服务器规模增长2.3倍",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "CSP AI 服务器 +2.3 倍，",
+            "start": 62,
+            "end": 80
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_c21ff87ce469effd",
+        "text": "GPU/ASIC 机柜出货 +3.2 / +3 倍",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "GPU、ASIC机柜出货量分别增长3.2倍、3倍",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "GPU/ASIC 机柜出货 +3.2 / +3 倍，",
+            "start": 80,
+            "end": 106
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_606114e59602a3a2",
+        "text": "Q2 营收 3067.83 亿环比 +22%",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "第二季度营收为3067.83亿，环比增长22%",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "Q2 营收 3067.83 亿环比 +22%。",
+            "start": 106,
+            "end": 129
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_b88c5aa8e4cf9d93",
+        "text": "但 OCF 只有 73.91 亿",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "经营现金流（OCF）仅为73.91亿",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "但 OCF 只有 73.91 亿；",
+            "start": 167,
+            "end": 184
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_f10a2786bce96b74",
+        "text": "Q2 毛利率环比 −0.36pct",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "negated",
+        "value": "第二季度毛利率环比下降0.36个百分点",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。",
+            "start": 184,
+            "end": 222
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_c462803f22154b00",
+        "text": "并表 7% 的加工费没有变成「系统商」",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "negated",
+        "value": "并表的7%加工费并未推动企业转型为系统商",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。",
+            "start": 184,
+            "end": 222
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_9beefa3f92899a14",
+        "text": "扣非 229.84 亿同比 +97%，与归母 237.40 亿只差 7.56 亿非经常",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "扣非净利润229.84亿元，同比增长97%，与归母净利润237.40亿元的差额仅为7.56亿元非经常性损益",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "扣非 229.84 亿同比 +97%，与归母 237.40 亿只差 7.56 亿非经常，",
+            "start": 24,
+            "end": 68
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_1b28a0df90711578",
+        "text": "利润不是「公允价值把标题顶起来」",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "negated",
+        "value": "中报利润并非由公允价值变动推高至当前披露水平",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "不是「公允价值把标题顶起来」。但经营现金流 73.91 亿只盖住扣非的 0.32 倍，",
+            "start": 68,
+            "end": 111
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_7ba3125d387514f9",
+        "text": "经营现金流 73.91 亿只盖住扣非的 0.32 倍",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "negated",
+        "value": "经营现金流为73.91亿元，仅为扣非净利润的0.32倍",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "不是「公允价值把标题顶起来」。但经营现金流 73.91 亿只盖住扣非的 0.32 倍，",
+            "start": 68,
+            "end": 111
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_326a165e24a204eb",
+        "text": "存货 1921 亿、应收 1275 亿，高营收已经变成营运资本",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "存货规模达1921亿元、应收款项达1275亿元，高营收规模已对应形成相应规模的营运资本占用",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "存货 1921 亿、应收 1275 亿，高营收已经变成营运资本。",
+            "start": 111,
+            "end": 143
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_d34abd06836546b9",
+        "text": "毛利率 7.15% 同比只加 0.55 个百分点",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "毛利率为7.15%，同比仅提升0.55个百分点",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "毛利率 7.15% 同比只加 0.55 个百分点，",
+            "start": 143,
+            "end": 168
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_3d0a3dc46e6837b4",
+        "text": "Q2 毛利率还从 Q1 的 7.35% 掉回 6.99%",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "第二季度毛利率从第一季度的7.35%回落至6.99%",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "Q2 还从 Q1 的 7.35% 掉回 6.99%。",
+            "start": 168,
+            "end": 194
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_9218124fbf3f3abe",
+        "text": "现价 64.04 已从 6 月 84.95 回了约 25%，动 PE 26.76 在定价约 475 亿 26E——几乎是 H1 线性年化",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "当前股价64.04元，较6月的84.95元已回调约25%，动态市盈率26.76倍对应的2026年预期盈利约为475亿元，该预期几乎是上半年盈利的线性年化结果",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "现价 64.04 已从 6 月 84.95 回了约 25%，动 PE 26.76 在定价约 475 亿 26E——几乎是 H1 线性年化，",
+            "start": 194,
+            "end": 263
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_107df6dcd10427a6",
+        "text": "估值没有把卖方 560–667 亿的 26E 盈利预测吃进去",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "negated",
+        "value": "当前估值水平并未纳入卖方给出的2026年560亿至667亿元的盈利预测",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "没有把卖方 560–667 亿吃进去。",
+            "start": 263,
+            "end": 282
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_f4701ead02653e21",
+        "text": "不按 93–101 的目标价去追",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "negated",
+        "value": "不按照93-101元的目标价进行追高",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "不按 93–101 去追，也不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪。",
+            "start": 282,
+            "end": 323
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_fdda3d66d7e89956",
+        "text": "不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "negated",
+        "value": "不会因为单日股价未上涨就将AI机柜出货量增长3倍的趋势判定为被证伪",
+        "behavior_status": "intent",
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "不按 93–101 去追，也不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪。",
+            "start": 282,
+            "end": 323
+          }
+        ],
+        "unknown_fields": [
+          "execution_verified"
+        ]
+      },
+      {
+        "item_id": "itm_6aacb1ab12e7e24d",
+        "text": "少数股东 0.086 亿，几乎可忽略",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "0.086亿，几乎可忽略",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "少数股东 0.086 亿，几乎可忽略，",
+            "start": 0,
+            "end": 19
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_65a0b9716a7f3809",
+        "text": "所以「净利润 237.49 亿」和「归母 237.40 亿」不必像生益那样拆并表子公司",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "不必拆并表子公司",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "所以「净利润 237.49 亿」和「归母 237.40 亿」不必像生益那样拆并表子公司。",
+            "start": 19,
+            "end": 63
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_c4442734f0161593",
+        "text": "中期不分红",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "negated",
+        "value": "中期不分红",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "中期不分红、应付股利 130.52 亿是上年股利落账；",
+            "start": 63,
+            "end": 90
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_33d99c2ada452a84",
+        "text": "应付股利 130.52 亿是上年股利落账",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "130.52亿为上年股利",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "中期不分红、应付股利 130.52 亿是上年股利落账；",
+            "start": 63,
+            "end": 90
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_90f204ec22474324",
+        "text": "筹资现金流 −86.61 亿里分配股利/利息 84.39 亿",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "分配股利/利息84.39亿",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "筹资现金流 −86.61 亿里分配股利/利息 84.39 亿，现金在往外走的同时短贷在滚动（借 960 亿、还 951 亿）。",
+            "start": 90,
+            "end": 153
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_0d7289a59c0417ee",
+        "text": "现金在往外走的同时短贷在滚动（借 960 亿、还 951 亿）",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "短贷滚动，借960亿、还951亿",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "筹资现金流 −86.61 亿里分配股利/利息 84.39 亿，现金在往外走的同时短贷在滚动（借 960 亿、还 951 亿）。",
+            "start": 90,
+            "end": 153
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_9b377edc7ffafd93",
+        "text": "「利润质量相对扣非是干净的，现金质量相对扣非是差的",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "mixed",
+        "value": "利润质量干净、现金质量差",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "「利润质量相对扣非是干净的，现金质量相对扣非是差的；",
+            "start": 158,
+            "end": 184
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_0b87409f95e7693f",
+        "text": "AI 放量把资产负债表做成了服务器厂的标准形状——存贷双高、保理托底",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "存贷双高、保理托底",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "AI 放量把资产负债表做成了服务器厂的标准形状——存贷双高、保理托底。",
+            "start": 184,
+            "end": 219
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_49845cb2a5350751",
+        "text": "2026-08-28工业富联收盘价为64.04元",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "2026-08-28工业富联收盘价为64.04元",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "eeff713fb118049559305f16e3cea96d5839261bbea0ce249115eccda031d7a8",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "2026-08-28 收盘 64.04 元（mx-xuangu）。",
+            "start": 3,
+            "end": 36
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_54143b897ce207a5",
+        "text": "本报告采用的中报数据来源于2026年8月11日在上交所披露的工业富联半年报全文，以及8月12日的摘要版本",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "本报告采用的中报数据来源于2026年8月11日在上交所披露的工业富联半年报全文，以及8月12日的摘要版本",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "eeff713fb118049559305f16e3cea96d5839261bbea0ce249115eccda031d7a8",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。",
+            "start": 36,
+            "end": 84
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_1289e7947fa3c4b5",
+        "text": "本报告的中报数据经过新浪指定披露镜像交叉验证",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "本报告的中报数据经过新浪指定披露镜像交叉验证",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "eeff713fb118049559305f16e3cea96d5839261bbea0ce249115eccda031d7a8",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。",
+            "start": 36,
+            "end": 84
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_e696a38c508529e8",
+        "text": "本报告仅针对工业富联标的本身做出独立投资判断",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "本报告仅针对工业富联标的本身做出独立投资判断",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "eeff713fb118049559305f16e3cea96d5839261bbea0ce249115eccda031d7a8",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "本报告只对标的本身做独立判断，不针对任何已有仓位。",
+            "start": 84,
+            "end": 109
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_c54e0bc4ed3c26df",
+        "text": "本报告的判断不针对任何已有的持仓情况",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "本报告的判断不针对任何已有的持仓情况",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "eeff713fb118049559305f16e3cea96d5839261bbea0ce249115eccda031d7a8",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "本报告只对标的本身做独立判断，不针对任何已有仓位。",
+            "start": 84,
+            "end": 109
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_2a32de1669ff155d",
+        "text": "Rubin / GB300 爬坡再延",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "若发生Rubin / GB300 爬坡再延的情形",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "Rubin / GB300 爬坡再延，",
+            "start": 5,
+            "end": 24
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_365e79b35c0cc63d",
+        "text": "CSP 把增量柜双供给广达 / 纬颖",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "若发生CSP 把增量柜双供给广达 / 纬颖的情形",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "CSP 把增量柜双供给广达 / 纬颖，FII 只能靠传统板和机构件填收入，",
+            "start": 24,
+            "end": 61
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_ffc7e4f53e2966ea",
+        "text": "FII 只能靠传统板和机构件填收入",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "FII 只能靠传统板和机构件填收入",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "CSP 把增量柜双供给广达 / 纬颖，FII 只能靠传统板和机构件填收入，",
+            "start": 24,
+            "end": 61
+          }
+        ],
+        "unknown_fields": [
+          "probability"
+        ]
+      },
+      {
+        "item_id": "itm_848b0a7f4d3cba0b",
+        "text": "毛利率从 7% 回到 6% 以下",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "毛利率从 7% 回到 6% 以下",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "毛利率从 7% 回到 6% 以下，",
+            "start": 61,
+            "end": 78
+          }
+        ],
+        "unknown_fields": [
+          "probability"
+        ]
+      },
+      {
+        "item_id": "itm_204fa5504590bfe9",
+        "text": "存货继续堆",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "存货继续堆",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "存货继续堆，OCF 转负。",
+            "start": 78,
+            "end": 91
+          }
+        ],
+        "unknown_fields": [
+          "probability"
+        ]
+      },
+      {
+        "item_id": "itm_44c05047307821cd",
+        "text": "OCF 转负",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "OCF 转负",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "存货继续堆，OCF 转负。",
+            "start": 78,
+            "end": 91
+          }
+        ],
+        "unknown_fields": [
+          "probability"
+        ]
+      },
+      {
+        "item_id": "itm_c5f28c133a0d1252",
+        "text": "云资本开支从「训练」切到「推理效率」",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "云资本开支从「训练」切到「推理效率」",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "云资本开支从「训练」切到「推理效率」，整柜需求还在但 ASP 不再上、Consignment 切换慢于申万假设，利润增速回到收入增速。",
+            "start": 94,
+            "end": 161
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_13b9d1346fecd687",
+        "text": "整柜需求还在",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "整柜需求还在",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "云资本开支从「训练」切到「推理效率」，整柜需求还在但 ASP 不再上、Consignment 切换慢于申万假设，利润增速回到收入增速。",
+            "start": 94,
+            "end": 161
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_c7014992f6fb222b",
+        "text": "ASP 不再上",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "ASP 不再上",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "云资本开支从「训练」切到「推理效率」，整柜需求还在但 ASP 不再上、Consignment 切换慢于申万假设，利润增速回到收入增速。",
+            "start": 94,
+            "end": 161
+          }
+        ],
+        "unknown_fields": [
+          "probability"
+        ]
+      },
+      {
+        "item_id": "itm_52ba8f8a7210eca1",
+        "text": "利润增速回到收入增速",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "利润增速回到收入增速",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "云资本开支从「训练」切到「推理效率」，整柜需求还在但 ASP 不再上、Consignment 切换慢于申万假设，利润增速回到收入增速。",
+            "start": 94,
+            "end": 161
+          }
+        ],
+        "unknown_fields": [
+          "probability"
+        ]
+      },
+      {
+        "item_id": "itm_7c15b59569d71afe",
+        "text": "美元短贷 + 汇兑再来一刀，或保理额度收紧",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "若发生美元短贷 + 汇兑再来一刀，或保理额度收紧的情形",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "美元短贷 + 汇兑再来一刀，或保理额度收紧，现金缺口被融资费用放大。",
+            "start": 164,
+            "end": 198
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_195afd86b3f4f19b",
+        "text": "现金缺口被融资费用放大",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "现金缺口被融资费用放大",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "美元短贷 + 汇兑再来一刀，或保理额度收紧，现金缺口被融资费用放大。",
+            "start": 164,
+            "end": 198
+          }
+        ],
+        "unknown_fields": [
+          "probability"
+        ]
+      },
+      {
+        "item_id": "itm_54db46a6672a2bf7",
+        "text": "实体清单本次没有 sourced 命中",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "negated",
+        "value": "实体清单本次没有 sourced 命中",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "实体清单本次没有 sourced 命中，",
+            "start": 198,
+            "end": 218
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_cc7b36e14b689fbc",
+        "text": "不能把「没搜到」当成「不会发生」",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "negated",
+        "value": "不能将未搜索到实体清单命中的情况等同于该事件不会发生",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "但不能把「没搜到」当成「不会发生」；",
+            "start": 218,
+            "end": 236
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_60b3ebf29b5c13b6",
+        "text": "墨西哥 / 美国厂是地理对冲",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "墨西哥 / 美国厂是地理对冲",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "墨西哥 / 美国厂是地理对冲，救不了出口管制一旦打到 GPU 系统集成。",
+            "start": 236,
+            "end": 272
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_39c64ae475df8581",
+        "text": "救不了出口管制一旦打到 GPU 系统集成",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "若出口管制一旦打到 GPU 系统集成，现有墨西哥 / 美国厂的地理对冲无法应对相关风险",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "墨西哥 / 美国厂是地理对冲，救不了出口管制一旦打到 GPU 系统集成。",
+            "start": 236,
+            "end": 272
+          }
+        ],
+        "unknown_fields": [
+          "probability"
+        ]
+      },
+      {
+        "item_id": "itm_fcbb5794e46a985a",
+        "text": "客户集中是结构风险",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "客户集中是结构风险",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "客户集中是结构风险：",
+            "start": 0,
+            "end": 10
+          }
+        ],
+        "unknown_fields": [
+          "probability"
+        ]
+      },
+      {
+        "item_id": "itm_797f289bcee35fec",
+        "text": "2025 年前五大 62%",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "2025年前五大客户占比为62%",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "2025 年前五大 62%，",
+            "start": 10,
+            "end": 24
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_e9157e105d680b9f",
+        "text": "H1 应收前五 68.52%",
+        "semantic_type": "fact",
+        "statement_role": "evidence",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "上半年应收账款前五大占比为68.52%",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "H1 应收前五 68.52%。",
+            "start": 24,
+            "end": 39
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_f6f396ff32ac82aa",
+        "text": "GPU 线绑英伟达节奏",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "GPU生产线受英伟达供应节奏制约",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "GPU 线绑英伟达节奏，",
+            "start": 39,
+            "end": 51
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_406d896f07166930",
+        "text": "ASIC 线绑少数 CSP",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "ASIC生产线受少数云服务客户制约",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "ASIC 线绑少数 CSP。",
+            "start": 51,
+            "end": 65
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_5d8e9ea0303d6b8e",
+        "text": "双供一旦发生，伤口不是「份额从叙事里的 50% 降到 45%」，而是整柜良率认证被别人拿走、自己变成备援",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "双供应格局发生时，核心损失不是市场份额从50%降至45%，而是整柜良率认证被竞争对手获取，自身沦为备用供应商",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "双供一旦发生，伤口不是「份额从叙事里的 50% 降到 45%」，而是整柜良率认证被别人拿走、自己变成备援。",
+            "start": 65,
+            "end": 118
+          }
+        ],
+        "unknown_fields": [
+          "probability"
+        ]
+      },
+      {
+        "item_id": "itm_9e9adf134861e592",
+        "text": "研发费用 −1.91%、费用率从约 1.41% 降到 0.90%（界面），利润改善来自规模和 mix 形容词",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "研发费用同比下降1.91%，费用率从约1.41%降至0.90%，利润改善来自规模效应和产品结构调整",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "研发费用 −1.91%、费用率从约 1.41% 降到 0.90%（界面），利润改善来自规模和 mix 形容词，",
+            "start": 118,
+            "end": 173
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_9029cef5522e3e9e",
+        "text": "不是研发变现",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "negated",
+        "value": "利润改善并非来自研发投入的变现",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "不是研发变现。",
+            "start": 173,
+            "end": 180
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_b9e5da0e1f889fbb",
+        "text": "中期不分红、回购上限只有年分红的一个量级零头",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "中期不进行分红，股票回购上限仅为年度分红的极小比例",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "中期不分红、回购上限只有年分红的一个量级零头（腾讯「十问」的评论口径），治理上要接受「鸿海体系的现金调度优先于 A 股自由现金流故事」。",
+            "start": 180,
+            "end": 248
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_3441a3cf9661d5e3",
+        "text": "治理上要接受「鸿海体系的现金调度优先于 A 股自由现金流故事」",
+        "semantic_type": "opinion",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "公司治理层面需接受鸿海体系的现金调度优先级高于A股自由现金流叙事",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "中期不分红、回购上限只有年分红的一个量级零头（腾讯「十问」的评论口径），治理上要接受「鸿海体系的现金调度优先于 A 股自由现金流故事」。",
+            "start": 180,
+            "end": 248
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_e9fecaf3ebc70725",
+        "text": "持有 + 观望",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "持有 + 观望",
+        "behavior_status": "intent",
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "dafad60e2e5252f9d31253e9ee6f4ec40ef64d828ac7c4ec2d03f94bf7a49d69",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "**持有 + 观望。**",
+            "start": 4,
+            "end": 16
+          }
+        ],
+        "unknown_fields": [
+          "execution_verified"
+        ]
+      },
+      {
+        "item_id": "itm_df7dddac66c6d5c9",
+        "text": "若从零开一个观察仓",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "unknown",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "从零开设工业富联观察仓",
+        "behavior_status": "unknown",
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "若从零开一个观察仓：",
+            "start": 0,
+            "end": 10
+          }
+        ],
+        "unknown_fields": [
+          "behavior_status",
+          "temporal_frame",
+          "execution_verified"
+        ]
+      },
+      {
+        "item_id": "itm_18e98dfd1cf59fce",
+        "text": "等两件事至少中一件再议",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "unknown",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "开设观察仓需等待指定两个条件至少满足其一",
+        "behavior_status": "intent",
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，",
+            "start": 10,
+            "end": 69
+          }
+        ],
+        "unknown_fields": [
+          "temporal_frame",
+          "execution_verified"
+        ]
+      },
+      {
+        "item_id": "itm_d1f812ab48ddc701",
+        "text": "回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "unknown",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "工业富联股价回撤至52-58元区间，约等于7月回购均价61元以下、动态PE降至24附近",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，",
+            "start": 10,
+            "end": 69
+          }
+        ],
+        "unknown_fields": [
+          "temporal_frame"
+        ]
+      },
+      {
+        "item_id": "itm_21ba88541f88728e",
+        "text": "且无新的大额负面管制公告",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "unknown",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "negated",
+        "value": "无新的大额负面管制公告",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "且无新的大额负面管制公告）；",
+            "start": 69,
+            "end": 83
+          }
+        ],
+        "unknown_fields": [
+          "temporal_frame"
+        ]
+      },
+      {
+        "item_id": "itm_8e932aaf49806db7",
+        "text": "Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "unknown",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "Q3经营现金流与扣非净利润比值回升至0.6以上，或毛利率相比Q2的6.99%不再下降",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。",
+            "start": 83,
+            "end": 127
+          }
+        ],
+        "unknown_fields": [
+          "temporal_frame"
+        ]
+      },
+      {
+        "item_id": "itm_564344c233a92bdd",
+        "text": "单票不超过组合的合理上限",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "unknown",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "工业富联单票持仓不超过投资组合的合理上限",
+        "behavior_status": "intent",
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "单票不超过组合的合理上限。",
+            "start": 127,
+            "end": 140
+          }
+        ],
+        "unknown_fields": [
+          "temporal_frame",
+          "execution_verified"
+        ]
+      },
+      {
+        "item_id": "itm_394f2b26bdac4249",
+        "text": "止损看两条硬的",
+        "semantic_type": "behavior",
+        "statement_role": "claim",
+        "speech_role": "unknown",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "工业富联止损需遵循两项硬性判断标准",
+        "behavior_status": "intent",
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "止损看两条硬的：",
+            "start": 140,
+            "end": 148
+          }
+        ],
+        "unknown_fields": [
+          "temporal_frame",
+          "execution_verified"
+        ]
+      },
+      {
+        "item_id": "itm_2b67067f2c772870",
+        "text": "下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5）",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "unknown",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "下一季度经营现金流与扣非净利润比值低于0.5，即经营现金流无法覆盖扣非净利润的一半",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+            "start": 148,
+            "end": 291
+          }
+        ],
+        "unknown_fields": [
+          "temporal_frame",
+          "probability"
+        ]
+      },
+      {
+        "item_id": "itm_6a6a18bf9719c296",
+        "text": "毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期",
+        "semantic_type": "forecast",
+        "statement_role": "risk",
+        "speech_role": "unknown",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "毛利率相比6.99%再下降超过1个百分点，且公司表示涨价或产品组合优化受阻、Rubin项目延期",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+            "start": 148,
+            "end": 291
+          }
+        ],
+        "unknown_fields": [
+          "temporal_frame",
+          "probability"
+        ]
+      },
+      {
+        "item_id": "itm_19c700bfd2590f85",
+        "text": "目标价不把 121、100.8 当锚",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "unknown",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "negated",
+        "value": "不将121、100.8作为工业富联的目标价锚定依据",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+            "start": 148,
+            "end": 291
+          }
+        ],
+        "unknown_fields": [
+          "temporal_frame"
+        ]
+      },
+      {
+        "item_id": "itm_8de34fd51247bddf",
+        "text": "中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93",
+        "semantic_type": "forecast",
+        "statement_role": "claim",
+        "speech_role": "unknown",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "中性预期下工业富联股价运行区间为55-75元，用于消化中报及英伟达相关波动；乐观预期下接近中金77.68元、华泰93元的目标价",
+        "behavior_status": null,
+        "temporal_frame": "unknown",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+            "start": 148,
+            "end": 291
+          }
+        ],
+        "unknown_fields": [
+          "temporal_frame"
+        ]
+      },
+      {
+        "item_id": "itm_a729121ee9cfe164",
+        "text": "【实时数据层】mx-xuangu，行情日 2026-08-28 当日价格 64.04 元",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "行情日2026-08-28当日价格64.04元",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "【实时数据层】mx-xuangu，行情日 2026-08-28\n当日价格 64.04 元；",
+            "start": 0,
+            "end": 45
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_77dffdd757bbf620",
+        "text": "涨跌 +0.28%",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "2026-08-28当日涨跌+0.28%",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "涨跌 +0.28%；",
+            "start": 45,
+            "end": 55
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_078fd4b710df3efa",
+        "text": "成交额 103.15 亿元",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "2026-08-28当日成交额103.15亿元",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "成交额 103.15 亿元；",
+            "start": 55,
+            "end": 69
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_b33ddf02fd98b73e",
+        "text": "换手 0.80%",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "2026-08-28当日换手率0.80%",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "换手 0.80%；",
+            "start": 69,
+            "end": 78
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_bc3df30723ffdb76",
+        "text": "量比 1.66",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "2026-08-28当日量比1.66",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "量比 1.66。",
+            "start": 78,
+            "end": 86
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_228a7b978b417380",
+        "text": "52周（2025.09.01–2026.08.28）股价高84.95、低46.70",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "52周区间(2025.09.01-2026.08.28)最高价84.95，最低价46.70",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。",
+            "start": 86,
+            "end": 143
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_012a7197a2d9008c",
+        "text": "截至2026-08-28股价在52周区间内的相对位置约45.3%",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "当前股价在52周区间的相对位置约45.3%",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。",
+            "start": 86,
+            "end": 143
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_43295714a536a7f6",
+        "text": "融资余额 79.81 亿",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "融资余额为79.81亿元",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "融资余额 79.81 亿。",
+            "start": 143,
+            "end": 156
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_f8c749df0e9be453",
+        "text": "近5日收盘价依次为60.40、60.15、60.57、63.86、64.04",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "近5日收盘数据为60.40→60.15→60.57→63.86→64.04",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "近 5 日收盘 60.40 → 60.15 → 60.57 → 63.86 → 64.04。",
+            "start": 156,
+            "end": 202
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_6808c29976c2af28",
+        "text": "8月27日英伟达财报发布次日股价涨幅约5.43%",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "8/27英伟达财报次日股价约上涨5.43%",
+        "behavior_status": null,
+        "temporal_frame": "retrospective",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "8/27 英伟达财报次日约 +5.43%，8/28 把溢价吐掉。",
+            "start": 202,
+            "end": 234
+          }
+        ],
+        "unknown_fields": []
+      },
+      {
+        "item_id": "itm_b0ce357ff3a429d4",
+        "text": "8月28日股价将此前的溢价完全回吐",
+        "semantic_type": "fact",
+        "statement_role": "claim",
+        "speech_role": "statement",
+        "perspective": "source_explicit",
+        "speaker_ref": "spk_544d7167e8a5",
+        "polarity": "affirmed",
+        "value": "8/28股价将8/27的上涨溢价全部回吐",
+        "behavior_status": null,
+        "temporal_frame": "contemporaneous",
+        "evidence": [
+          {
+            "source_rev": "sha256:d6546966ac517902659ed66c4fbdc7efd8512725a0ba1ef9d507844718bac055",
+            "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+            "locator": "chunk:signed-non-table-target-scope",
+            "quote": "8/27 英伟达财报次日约 +5.43%，8/28 把溢价吐掉。",
+            "start": 202,
+            "end": 234
+          }
+        ],
+        "unknown_fields": []
+      }
+    ],
+    "relations": [],
+    "coverage": {
+      "scoped_locators": [
+        "chunk:signed-non-table-target-scope"
+      ],
+      "omitted_areas": [
+        "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166:atomic_obligations_incomplete",
+        "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703:atomic_obligations_incomplete",
+        "08f991bf99ca90c078508a0e2f2002a16422974569cedf0d52e470cc49861e91:atomic_obligations_incomplete",
+        "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7:atomic_obligations_incomplete"
+      ],
+      "unknowns": [
+        "speaker_identity"
+      ],
+      "slot_ledger": [
+        {
+          "candidate_slot_id": "slot_a034e951d274aadf",
+          "status": "no_supported_item",
+          "item_refs": [],
+          "reason_codes": [
+            "title_only",
+            "missing_signal:claim"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_f91d3261e66bce58",
+          "status": "extracted",
+          "item_refs": [
+            "itm_3131977b46dc2d03"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_6ad5e01d7d38f35a",
+          "status": "no_supported_item",
+          "item_refs": [],
+          "reason_codes": [
+            "fragment",
+            "missing_signal:claim"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_40ee124742e4d80d",
+          "status": "extracted",
+          "item_refs": [
+            "itm_bf0c10772dfcb0bd"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_3cc2e4cebb1caf59",
+          "status": "extracted",
+          "item_refs": [
+            "itm_45f70982875f3a56"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_87b3b187d8e3125d",
+          "status": "extracted",
+          "item_refs": [
+            "itm_c21ff87ce469effd"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_1bb9284a5a158adc",
+          "status": "extracted",
+          "item_refs": [
+            "itm_606114e59602a3a2"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_1cb2c67f8f2ec615",
+          "status": "failed",
+          "item_refs": [],
+          "reason_codes": [
+            "controller_semantic_validation_failed",
+            "item_failed_validation",
+            "item_validation:schema",
+            "missing_signal:claim"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_b903c33f0fd15d3c",
+          "status": "extracted",
+          "item_refs": [
+            "itm_b88c5aa8e4cf9d93"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_fce46d8dd0c9fbde",
+          "status": "extracted",
+          "item_refs": [
+            "itm_f10a2786bce96b74",
+            "itm_c462803f22154b00"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_7d9ec7c631c99e82",
+          "status": "failed",
+          "item_refs": [],
+          "reason_codes": [
+            "controller_semantic_validation_failed",
+            "item_failed_validation",
+            "item_validation:schema",
+            "missing_signal:claim"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_0c217abf1b9110c6",
+          "status": "no_supported_item",
+          "item_refs": [],
+          "reason_codes": [
+            "fragment_only",
+            "missing_signal:claim"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_de31fca8eb3a0b26",
+          "status": "failed",
+          "item_refs": [],
+          "reason_codes": [
+            "controller_semantic_validation_failed",
+            "item_failed_validation",
+            "item_validation:schema",
+            "missing_signal:claim"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_dccec44c385534fa",
+          "status": "extracted",
+          "item_refs": [
+            "itm_9beefa3f92899a14"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_63a469c9fe86142d",
+          "status": "extracted",
+          "item_refs": [
+            "itm_1b28a0df90711578",
+            "itm_7ba3125d387514f9"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_a3873dd64753c0cc",
+          "status": "extracted",
+          "item_refs": [
+            "itm_326a165e24a204eb"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_1a926c3aef1c3e49",
+          "status": "extracted",
+          "item_refs": [
+            "itm_d34abd06836546b9"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_eb54e0de842530b5",
+          "status": "extracted",
+          "item_refs": [
+            "itm_3d0a3dc46e6837b4"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_fcd2151e320ca2f9",
+          "status": "extracted",
+          "item_refs": [
+            "itm_9218124fbf3f3abe"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_2504373c638833da",
+          "status": "extracted",
+          "item_refs": [
+            "itm_107df6dcd10427a6"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_32645f062c3a40e5",
+          "status": "extracted",
+          "item_refs": [
+            "itm_f4701ead02653e21",
+            "itm_fdda3d66d7e89956"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_35e2dca9dafaf387",
+          "status": "extracted",
+          "item_refs": [
+            "itm_6aacb1ab12e7e24d"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_63053fdb0687d99e",
+          "status": "extracted",
+          "item_refs": [
+            "itm_65a0b9716a7f3809"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_e0e7ca1ce11ed610",
+          "status": "extracted",
+          "item_refs": [
+            "itm_c4442734f0161593",
+            "itm_33d99c2ada452a84"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_d81515e9bb046866",
+          "status": "extracted",
+          "item_refs": [
+            "itm_90f204ec22474324",
+            "itm_0d7289a59c0417ee"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_99063943ec604797",
+          "status": "extracted",
+          "item_refs": [
+            "itm_9b377edc7ffafd93"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_9bf184abe4e57559",
+          "status": "extracted",
+          "item_refs": [
+            "itm_0b87409f95e7693f"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_50d7557446961af3",
+          "status": "extracted",
+          "item_refs": [
+            "itm_49845cb2a5350751"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_0a08e2eb7641ff11",
+          "status": "extracted",
+          "item_refs": [
+            "itm_54143b897ce207a5",
+            "itm_1289e7947fa3c4b5"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_f932c5c1f3bd3cf7",
+          "status": "extracted",
+          "item_refs": [
+            "itm_e696a38c508529e8",
+            "itm_c54e0bc4ed3c26df"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_2bfe7106911a3b8f",
+          "status": "failed",
+          "item_refs": [],
+          "reason_codes": [
+            "items_error:JSONDecodeError"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_b4343e8b16dfe42c",
+          "status": "failed",
+          "item_refs": [],
+          "reason_codes": [
+            "items_error:JSONDecodeError"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_c3ae1ee9ff0978f3",
+          "status": "failed",
+          "item_refs": [],
+          "reason_codes": [
+            "items_error:JSONDecodeError"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_aa5380b7fa9129bf",
+          "status": "failed",
+          "item_refs": [],
+          "reason_codes": [
+            "items_error:JSONDecodeError"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_8f2aead4505e12c9",
+          "status": "failed",
+          "item_refs": [],
+          "reason_codes": [
+            "items_error:JSONDecodeError"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_19c9a4b56ca8758a",
+          "status": "failed",
+          "item_refs": [],
+          "reason_codes": [
+            "items_error:JSONDecodeError"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_6c6ccb4a50efee24",
+          "status": "failed",
+          "item_refs": [],
+          "reason_codes": [
+            "items_error:JSONDecodeError"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_29ab4859fdf4372a",
+          "status": "failed",
+          "item_refs": [],
+          "reason_codes": [
+            "items_error:JSONDecodeError"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_de9cc51c9c6b9b35",
+          "status": "failed",
+          "item_refs": [],
+          "reason_codes": [
+            "items_error:JSONDecodeError"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_92689adf6cbb4468",
+          "status": "failed",
+          "item_refs": [],
+          "reason_codes": [
+            "items_error:JSONDecodeError"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_adf90a1aa6f1b715",
+          "status": "failed",
+          "item_refs": [],
+          "reason_codes": [
+            "items_error:JSONDecodeError"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_2a3f19c09e30112e",
+          "status": "extracted",
+          "item_refs": [
+            "itm_2a32de1669ff155d"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_d7e8feef7808cf61",
+          "status": "extracted",
+          "item_refs": [
+            "itm_365e79b35c0cc63d",
+            "itm_ffc7e4f53e2966ea"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_e786d10909fb106d",
+          "status": "extracted",
+          "item_refs": [
+            "itm_848b0a7f4d3cba0b"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_f09a3a0fbe66feb7",
+          "status": "extracted",
+          "item_refs": [
+            "itm_204fa5504590bfe9",
+            "itm_44c05047307821cd"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_d27d22600e82d6f5",
+          "status": "extracted",
+          "item_refs": [
+            "itm_c5f28c133a0d1252",
+            "itm_13b9d1346fecd687",
+            "itm_c7014992f6fb222b",
+            "itm_52ba8f8a7210eca1"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_71f5d245323013c4",
+          "status": "extracted",
+          "item_refs": [
+            "itm_7c15b59569d71afe",
+            "itm_195afd86b3f4f19b"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_f429b9cd71e5d734",
+          "status": "extracted",
+          "item_refs": [
+            "itm_54db46a6672a2bf7"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_f234961d69f646a7",
+          "status": "extracted",
+          "item_refs": [
+            "itm_cc7b36e14b689fbc"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_499ce1615b28e781",
+          "status": "extracted",
+          "item_refs": [
+            "itm_60b3ebf29b5c13b6",
+            "itm_39c64ae475df8581"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_1496a1c1b2a0bda1",
+          "status": "extracted",
+          "item_refs": [
+            "itm_fcbb5794e46a985a"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_e1cc134434cdc458",
+          "status": "extracted",
+          "item_refs": [
+            "itm_797f289bcee35fec"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_067bb3e7f85fa37f",
+          "status": "extracted",
+          "item_refs": [
+            "itm_e9157e105d680b9f"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_ecf006ec266ff39e",
+          "status": "extracted",
+          "item_refs": [
+            "itm_f6f396ff32ac82aa"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_40bc19242ac6d859",
+          "status": "extracted",
+          "item_refs": [
+            "itm_406d896f07166930"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_e8b4d08ba6737f95",
+          "status": "extracted",
+          "item_refs": [
+            "itm_5d8e9ea0303d6b8e"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_55a3f0ebb79c8967",
+          "status": "extracted",
+          "item_refs": [
+            "itm_9e9adf134861e592"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_40803d68acea01c6",
+          "status": "extracted",
+          "item_refs": [
+            "itm_9029cef5522e3e9e"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_14d2e2087ab604fa",
+          "status": "extracted",
+          "item_refs": [
+            "itm_b9e5da0e1f889fbb",
+            "itm_3441a3cf9661d5e3"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_5e0a114ed8b5d2a6",
+          "status": "extracted",
+          "item_refs": [
+            "itm_e9fecaf3ebc70725"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_7b2c716720ace1aa",
+          "status": "extracted",
+          "item_refs": [
+            "itm_df7dddac66c6d5c9"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_998e49ccab85bdb7",
+          "status": "extracted",
+          "item_refs": [
+            "itm_18e98dfd1cf59fce",
+            "itm_d1f812ab48ddc701"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_8a33a8aadc6a6490",
+          "status": "failed",
+          "item_refs": [
+            "itm_21ba88541f88728e"
+          ],
+          "reason_codes": [
+            "controller_semantic_validation_failed",
+            "missing_signal:evidence"
+          ]
+        },
+        {
+          "candidate_slot_id": "slot_3e8965b10d203f0b",
+          "status": "extracted",
+          "item_refs": [
+            "itm_8e932aaf49806db7"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_06028a3f339dfe73",
+          "status": "extracted",
+          "item_refs": [
+            "itm_564344c233a92bdd"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_ff5db383726f84c7",
+          "status": "extracted",
+          "item_refs": [
+            "itm_394f2b26bdac4249"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_a0285709c19e993e",
+          "status": "extracted",
+          "item_refs": [
+            "itm_2b67067f2c772870",
+            "itm_6a6a18bf9719c296",
+            "itm_19c700bfd2590f85",
+            "itm_8de34fd51247bddf"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_1440934d4bb011d8",
+          "status": "extracted",
+          "item_refs": [
+            "itm_a729121ee9cfe164"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_cfef88ff74c1e18c",
+          "status": "extracted",
+          "item_refs": [
+            "itm_77dffdd757bbf620"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_5032c0ad0ef20662",
+          "status": "extracted",
+          "item_refs": [
+            "itm_078fd4b710df3efa"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_1e58b10db0b7f3a1",
+          "status": "extracted",
+          "item_refs": [
+            "itm_b33ddf02fd98b73e"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_3b5447b5e44bf07b",
+          "status": "extracted",
+          "item_refs": [
+            "itm_bc3df30723ffdb76"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_ebd71047dd959ab6",
+          "status": "extracted",
+          "item_refs": [
+            "itm_228a7b978b417380",
+            "itm_012a7197a2d9008c"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_eff3c201d3a2856c",
+          "status": "extracted",
+          "item_refs": [
+            "itm_43295714a536a7f6"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_7908edd5877a7489",
+          "status": "extracted",
+          "item_refs": [
+            "itm_f8c749df0e9be453"
+          ],
+          "reason_codes": []
+        },
+        {
+          "candidate_slot_id": "slot_76cdf271eaa15b4a",
+          "status": "extracted",
+          "item_refs": [
+            "itm_6808c29976c2af28",
+            "itm_b0ce357ff3a429d4"
+          ],
+          "reason_codes": []
+        }
+      ]
+    }
+  },
+  "packet_runs": [
+    {
+      "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+      "status": "partial",
+      "records": 8,
+      "model_calls": 1,
+      "reasons": [
+        "atomic_obligations_incomplete"
+      ],
+      "diagnostics": {
+        "response_format": "material-atomic-selector-jsonl-v6",
+        "stages": {
+          "item_batches": [
+            {
+              "adapter_version": "structured-chat-http-3",
+              "attempt_id": "attempt:9ed9cc33ace5c3402498220898a9f611718e8e027ee7641726f4818ca715aeb8",
+              "attempts": 1,
+              "batch_index": 0,
+              "candidate_slots": 11,
+              "completion_tokens": 1348,
+              "content_chars": 4504,
+              "cost": null,
+              "coverage_protocol_incomplete": true,
+              "discarded_records": 3,
+              "duration_ms": 17435,
+              "execution_status": "succeeded",
+              "finish_reason": "stop",
+              "http_status": 200,
+              "idempotency_key": "attempt:9ed9cc33ace5c3402498220898a9f611718e8e027ee7641726f4818ca715aeb8",
+              "model": "doubao-seed-2.1-lite",
+              "profile_sha256": "sha256:f4296675dbae38b2943e4412246a90a5dcc978aa450ec584912e9197fcbdae83",
+              "prompt_tokens": 3015,
+              "protocol": "material-atomic-selector-jsonl-v6",
+              "provider": "openai_compat",
+              "reasoning_effort": "minimal",
+              "reasoning_tokens": 0,
+              "request_model": "doubao-seed-2.1-lite",
+              "request_sha256": "sha256:12d22022f87be6c6aad1423335d4464783824a88da07c1840a0683391b1f26e4",
+              "response_model": "doubao-seed-2-1-lite-260915",
+              "role": "material_items",
+              "role_profile_sha256": "sha256:63cc71d03276804827ab287a60f67eda486ffb4d40d279e75aaa433e004d9760",
+              "thinking": null,
+              "tool_choice": "none",
+              "total_tokens": 4363,
+              "usage": {
+                "completion_tokens": 1348,
+                "prompt_tokens": 3015,
+                "reasoning_tokens": 0,
+                "total_tokens": 4363
+              }
+            }
+          ],
+          "relations": {
+            "status": "not_requested_for_items_role"
+          }
+        }
+      }
+    },
+    {
+      "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+      "status": "partial",
+      "records": 10,
+      "model_calls": 1,
+      "reasons": [
+        "atomic_obligations_incomplete"
+      ],
+      "diagnostics": {
+        "response_format": "material-atomic-selector-jsonl-v6",
+        "stages": {
+          "item_batches": [
+            {
+              "adapter_version": "structured-chat-http-3",
+              "attempt_id": "attempt:8c7861ac1589cec3c1d228d45f5a7d3f2fb68fd0d0c4a2d6165c81dd89c3f511",
+              "attempts": 1,
+              "batch_index": 0,
+              "candidate_slots": 10,
+              "completion_tokens": 1486,
+              "content_chars": 4572,
+              "cost": null,
+              "coverage_protocol_incomplete": true,
+              "discarded_records": 1,
+              "duration_ms": 18646,
+              "execution_status": "succeeded",
+              "finish_reason": "stop",
+              "http_status": 200,
+              "idempotency_key": "attempt:8c7861ac1589cec3c1d228d45f5a7d3f2fb68fd0d0c4a2d6165c81dd89c3f511",
+              "model": "doubao-seed-2.1-lite",
+              "profile_sha256": "sha256:f4296675dbae38b2943e4412246a90a5dcc978aa450ec584912e9197fcbdae83",
+              "prompt_tokens": 3133,
+              "protocol": "material-atomic-selector-jsonl-v6",
+              "provider": "openai_compat",
+              "reasoning_effort": "minimal",
+              "reasoning_tokens": 0,
+              "request_model": "doubao-seed-2.1-lite",
+              "request_sha256": "sha256:8bc03f44aa852bbd3fbfdfa0cdeb0ffc1ac65e9814dceeff72b58bee7fb0d2c9",
+              "response_model": "doubao-seed-2-1-lite-260915",
+              "role": "material_items",
+              "role_profile_sha256": "sha256:63cc71d03276804827ab287a60f67eda486ffb4d40d279e75aaa433e004d9760",
+              "thinking": null,
+              "tool_choice": "none",
+              "total_tokens": 4619,
+              "usage": {
+                "completion_tokens": 1486,
+                "prompt_tokens": 3133,
+                "reasoning_tokens": 0,
+                "total_tokens": 4619
+              }
+            }
+          ],
+          "relations": {
+            "status": "not_requested_for_items_role"
+          }
+        }
+      }
+    },
+    {
+      "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+      "status": "completed",
+      "records": 8,
+      "model_calls": 1,
+      "reasons": [],
+      "diagnostics": {
+        "response_format": "material-atomic-selector-jsonl-v6",
+        "stages": {
+          "item_batches": [
+            {
+              "adapter_version": "structured-chat-http-3",
+              "attempt_id": "attempt:f39127bce55caf386c68c72a40271e42e7e0615aa1d794158b8428eccf598b20",
+              "attempts": 1,
+              "batch_index": 0,
+              "candidate_slots": 6,
+              "completion_tokens": 888,
+              "content_chars": 2957,
+              "cost": null,
+              "duration_ms": 11385,
+              "execution_status": "succeeded",
+              "finish_reason": "stop",
+              "http_status": 200,
+              "idempotency_key": "attempt:f39127bce55caf386c68c72a40271e42e7e0615aa1d794158b8428eccf598b20",
+              "model": "doubao-seed-2.1-lite",
+              "profile_sha256": "sha256:f4296675dbae38b2943e4412246a90a5dcc978aa450ec584912e9197fcbdae83",
+              "prompt_tokens": 2434,
+              "protocol": "material-atomic-selector-jsonl-v6",
+              "provider": "openai_compat",
+              "reasoning_effort": "minimal",
+              "reasoning_tokens": 0,
+              "request_model": "doubao-seed-2.1-lite",
+              "request_sha256": "sha256:f19db66d3cd4261ae24b02ddf327d58ba55df509f97720443665951394d5e616",
+              "response_model": "doubao-seed-2-1-lite-260915",
+              "role": "material_items",
+              "role_profile_sha256": "sha256:63cc71d03276804827ab287a60f67eda486ffb4d40d279e75aaa433e004d9760",
+              "thinking": null,
+              "tool_choice": "none",
+              "total_tokens": 3322,
+              "usage": {
+                "completion_tokens": 888,
+                "prompt_tokens": 2434,
+                "reasoning_tokens": 0,
+                "total_tokens": 3322
+              }
+            }
+          ],
+          "relations": {
+            "status": "not_requested_for_items_role"
+          }
+        }
+      }
+    },
+    {
+      "packet_id": "eeff713fb118049559305f16e3cea96d5839261bbea0ce249115eccda031d7a8",
+      "status": "completed",
+      "records": 5,
+      "model_calls": 1,
+      "reasons": [],
+      "diagnostics": {
+        "response_format": "material-atomic-selector-jsonl-v6",
+        "stages": {
+          "item_batches": [
+            {
+              "adapter_version": "structured-chat-http-3",
+              "attempt_id": "attempt:d8011c8cdae442598f085a317d5f02aef823be5787fbad2eb02f6ea120a6bbfb",
+              "attempts": 1,
+              "batch_index": 0,
+              "candidate_slots": 3,
+              "completion_tokens": 581,
+              "content_chars": 1858,
+              "cost": null,
+              "duration_ms": 7587,
+              "execution_status": "succeeded",
+              "finish_reason": "stop",
+              "http_status": 200,
+              "idempotency_key": "attempt:d8011c8cdae442598f085a317d5f02aef823be5787fbad2eb02f6ea120a6bbfb",
+              "model": "doubao-seed-2.1-lite",
+              "profile_sha256": "sha256:f4296675dbae38b2943e4412246a90a5dcc978aa450ec584912e9197fcbdae83",
+              "prompt_tokens": 2004,
+              "protocol": "material-atomic-selector-jsonl-v6",
+              "provider": "openai_compat",
+              "reasoning_effort": "minimal",
+              "reasoning_tokens": 0,
+              "request_model": "doubao-seed-2.1-lite",
+              "request_sha256": "sha256:c17405d62f4f7023fc9fda2fc8521db1554a6e92d0845fcd89aa601c3827574b",
+              "response_model": "doubao-seed-2-1-lite-260915",
+              "role": "material_items",
+              "role_profile_sha256": "sha256:63cc71d03276804827ab287a60f67eda486ffb4d40d279e75aaa433e004d9760",
+              "thinking": null,
+              "tool_choice": "none",
+              "total_tokens": 2585,
+              "usage": {
+                "completion_tokens": 581,
+                "prompt_tokens": 2004,
+                "reasoning_tokens": 0,
+                "total_tokens": 2585
+              }
+            }
+          ],
+          "relations": {
+            "status": "not_requested_for_items_role"
+          }
+        }
+      }
+    },
+    {
+      "packet_id": "08f991bf99ca90c078508a0e2f2002a16422974569cedf0d52e470cc49861e91",
+      "status": "partial",
+      "records": 0,
+      "model_calls": 1,
+      "reasons": [
+        "atomic_obligations_incomplete"
+      ],
+      "diagnostics": {
+        "response_format": "material-atomic-selector-jsonl-v6",
+        "stages": {
+          "item_batches": [
+            {
+              "batch_index": 0,
+              "candidate_slots": 11,
+              "error_type": "JSONDecodeError",
+              "validation_error": "Expecting ',' delimiter: line 1 column 74 (char 73)"
+            }
+          ],
+          "relations": {
+            "status": "not_requested_for_items_role"
+          }
+        }
+      }
+    },
+    {
+      "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+      "status": "completed",
+      "records": 16,
+      "model_calls": 1,
+      "reasons": [],
+      "diagnostics": {
+        "response_format": "material-atomic-selector-jsonl-v6",
+        "stages": {
+          "item_batches": [
+            {
+              "adapter_version": "structured-chat-http-3",
+              "attempt_id": "attempt:488e9f077493721154a3177c545c72536af5a346c82e52441903daf0917b8a29",
+              "attempts": 1,
+              "batch_index": 0,
+              "candidate_slots": 9,
+              "completion_tokens": 1516,
+              "content_chars": 5442,
+              "cost": null,
+              "duration_ms": 17775,
+              "execution_status": "succeeded",
+              "finish_reason": "stop",
+              "http_status": 200,
+              "idempotency_key": "attempt:488e9f077493721154a3177c545c72536af5a346c82e52441903daf0917b8a29",
+              "model": "doubao-seed-2.1-lite",
+              "profile_sha256": "sha256:f4296675dbae38b2943e4412246a90a5dcc978aa450ec584912e9197fcbdae83",
+              "prompt_tokens": 2918,
+              "protocol": "material-atomic-selector-jsonl-v6",
+              "provider": "openai_compat",
+              "reasoning_effort": "minimal",
+              "reasoning_tokens": 0,
+              "request_model": "doubao-seed-2.1-lite",
+              "request_sha256": "sha256:c8dd356242a9f0ec40a15fe8198b3a47be65a2c1955460ed487f72d82c99093c",
+              "response_model": "doubao-seed-2-1-lite-260915",
+              "role": "material_items",
+              "role_profile_sha256": "sha256:63cc71d03276804827ab287a60f67eda486ffb4d40d279e75aaa433e004d9760",
+              "thinking": null,
+              "tool_choice": "none",
+              "total_tokens": 4434,
+              "usage": {
+                "completion_tokens": 1516,
+                "prompt_tokens": 2918,
+                "reasoning_tokens": 0,
+                "total_tokens": 4434
+              }
+            }
+          ],
+          "relations": {
+            "status": "not_requested_for_items_role"
+          }
+        }
+      }
+    },
+    {
+      "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+      "status": "completed",
+      "records": 10,
+      "model_calls": 1,
+      "reasons": [],
+      "diagnostics": {
+        "response_format": "material-atomic-selector-jsonl-v6",
+        "stages": {
+          "item_batches": [
+            {
+              "adapter_version": "structured-chat-http-3",
+              "attempt_id": "attempt:a9e8aacc8ae92c7c6a29fbfa59993ab9006c3d2b392e1bde0d9740e2b3b770ca",
+              "attempts": 1,
+              "batch_index": 0,
+              "candidate_slots": 9,
+              "completion_tokens": 1177,
+              "content_chars": 3929,
+              "cost": null,
+              "duration_ms": 16177,
+              "execution_status": "succeeded",
+              "finish_reason": "stop",
+              "http_status": 200,
+              "idempotency_key": "attempt:a9e8aacc8ae92c7c6a29fbfa59993ab9006c3d2b392e1bde0d9740e2b3b770ca",
+              "model": "doubao-seed-2.1-lite",
+              "profile_sha256": "sha256:f4296675dbae38b2943e4412246a90a5dcc978aa450ec584912e9197fcbdae83",
+              "prompt_tokens": 2697,
+              "protocol": "material-atomic-selector-jsonl-v6",
+              "provider": "openai_compat",
+              "reasoning_effort": "minimal",
+              "reasoning_tokens": 0,
+              "request_model": "doubao-seed-2.1-lite",
+              "request_sha256": "sha256:5d6bbc9f06dd5a834cb61f9d31e829eabb8761d6ea0d0feecf83f5cd4a4d445c",
+              "response_model": "doubao-seed-2-1-lite-260915",
+              "role": "material_items",
+              "role_profile_sha256": "sha256:63cc71d03276804827ab287a60f67eda486ffb4d40d279e75aaa433e004d9760",
+              "thinking": null,
+              "tool_choice": "none",
+              "total_tokens": 3874,
+              "usage": {
+                "completion_tokens": 1177,
+                "prompt_tokens": 2697,
+                "reasoning_tokens": 0,
+                "total_tokens": 3874
+              }
+            }
+          ],
+          "relations": {
+            "status": "not_requested_for_items_role"
+          }
+        }
+      }
+    },
+    {
+      "packet_id": "dafad60e2e5252f9d31253e9ee6f4ec40ef64d828ac7c4ec2d03f94bf7a49d69",
+      "status": "completed",
+      "records": 1,
+      "model_calls": 1,
+      "reasons": [],
+      "diagnostics": {
+        "response_format": "material-atomic-selector-jsonl-v6",
+        "stages": {
+          "item_batches": [
+            {
+              "adapter_version": "structured-chat-http-3",
+              "attempt_id": "attempt:41a033d5920e32b89ecf4151b63a2020d687810bef5ad12164652de83988effd",
+              "attempts": 1,
+              "batch_index": 0,
+              "candidate_slots": 1,
+              "completion_tokens": 97,
+              "content_chars": 380,
+              "cost": null,
+              "duration_ms": 1888,
+              "execution_status": "succeeded",
+              "finish_reason": "stop",
+              "http_status": 200,
+              "idempotency_key": "attempt:41a033d5920e32b89ecf4151b63a2020d687810bef5ad12164652de83988effd",
+              "model": "doubao-seed-2.1-lite",
+              "profile_sha256": "sha256:f4296675dbae38b2943e4412246a90a5dcc978aa450ec584912e9197fcbdae83",
+              "prompt_tokens": 1681,
+              "protocol": "material-atomic-selector-jsonl-v6",
+              "provider": "openai_compat",
+              "reasoning_effort": "minimal",
+              "reasoning_tokens": 0,
+              "request_model": "doubao-seed-2.1-lite",
+              "request_sha256": "sha256:75024259d64483a5dc1a5e7eb9a8593f5d13ed069c00aeda67dd6feebcd2aa9a",
+              "response_model": "doubao-seed-2-1-lite-260915",
+              "role": "material_items",
+              "role_profile_sha256": "sha256:63cc71d03276804827ab287a60f67eda486ffb4d40d279e75aaa433e004d9760",
+              "thinking": null,
+              "tool_choice": "none",
+              "total_tokens": 1778,
+              "usage": {
+                "completion_tokens": 97,
+                "prompt_tokens": 1681,
+                "reasoning_tokens": 0,
+                "total_tokens": 1778
+              }
+            }
+          ],
+          "relations": {
+            "status": "not_requested_for_items_role"
+          }
+        }
+      }
+    },
+    {
+      "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+      "status": "partial",
+      "records": 11,
+      "model_calls": 1,
+      "reasons": [
+        "atomic_obligations_incomplete"
+      ],
+      "diagnostics": {
+        "response_format": "material-atomic-selector-jsonl-v6",
+        "stages": {
+          "item_batches": [
+            {
+              "adapter_version": "structured-chat-http-3",
+              "attempt_id": "attempt:8804c3c4e7532fb3ba064b7493d28c56390274973d12d693f29d67e7b93fc948",
+              "attempts": 1,
+              "batch_index": 0,
+              "candidate_slots": 7,
+              "completion_tokens": 1313,
+              "content_chars": 4300,
+              "cost": null,
+              "coverage_protocol_incomplete": true,
+              "duration_ms": 15414,
+              "execution_status": "succeeded",
+              "finish_reason": "stop",
+              "http_status": 200,
+              "idempotency_key": "attempt:8804c3c4e7532fb3ba064b7493d28c56390274973d12d693f29d67e7b93fc948",
+              "model": "doubao-seed-2.1-lite",
+              "profile_sha256": "sha256:f4296675dbae38b2943e4412246a90a5dcc978aa450ec584912e9197fcbdae83",
+              "prompt_tokens": 2485,
+              "protocol": "material-atomic-selector-jsonl-v6",
+              "provider": "openai_compat",
+              "reasoning_effort": "minimal",
+              "reasoning_tokens": 0,
+              "request_model": "doubao-seed-2.1-lite",
+              "request_sha256": "sha256:9373af0cd9fea0895c53084f76c99a082bfda88549f651b8a86bba7b54a54cb0",
+              "response_model": "doubao-seed-2-1-lite-260915",
+              "role": "material_items",
+              "role_profile_sha256": "sha256:63cc71d03276804827ab287a60f67eda486ffb4d40d279e75aaa433e004d9760",
+              "thinking": null,
+              "tool_choice": "none",
+              "total_tokens": 3798,
+              "usage": {
+                "completion_tokens": 1313,
+                "prompt_tokens": 2485,
+                "reasoning_tokens": 0,
+                "total_tokens": 3798
+              }
+            }
+          ],
+          "relations": {
+            "status": "not_requested_for_items_role"
+          }
+        }
+      }
+    },
+    {
+      "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+      "status": "completed",
+      "records": 11,
+      "model_calls": 1,
+      "reasons": [],
+      "diagnostics": {
+        "response_format": "material-atomic-selector-jsonl-v6",
+        "stages": {
+          "item_batches": [
+            {
+              "adapter_version": "structured-chat-http-3",
+              "attempt_id": "attempt:627f4ef6a83b9f7e233c015f1eccd253da05ac716b7f5240e69c0c621744ff10",
+              "attempts": 1,
+              "batch_index": 0,
+              "candidate_slots": 9,
+              "completion_tokens": 1358,
+              "content_chars": 4245,
+              "cost": null,
+              "duration_ms": 16224,
+              "execution_status": "succeeded",
+              "finish_reason": "stop",
+              "http_status": 200,
+              "idempotency_key": "attempt:627f4ef6a83b9f7e233c015f1eccd253da05ac716b7f5240e69c0c621744ff10",
+              "model": "doubao-seed-2.1-lite",
+              "profile_sha256": "sha256:f4296675dbae38b2943e4412246a90a5dcc978aa450ec584912e9197fcbdae83",
+              "prompt_tokens": 2741,
+              "protocol": "material-atomic-selector-jsonl-v6",
+              "provider": "openai_compat",
+              "reasoning_effort": "minimal",
+              "reasoning_tokens": 0,
+              "request_model": "doubao-seed-2.1-lite",
+              "request_sha256": "sha256:6f0a267da6103e61874373bbc1762a1e200f9accf75368a4fb523fe4c25c0981",
+              "response_model": "doubao-seed-2-1-lite-260915",
+              "role": "material_items",
+              "role_profile_sha256": "sha256:63cc71d03276804827ab287a60f67eda486ffb4d40d279e75aaa433e004d9760",
+              "thinking": null,
+              "tool_choice": "none",
+              "total_tokens": 4099,
+              "usage": {
+                "completion_tokens": 1358,
+                "prompt_tokens": 2741,
+                "reasoning_tokens": 0,
+                "total_tokens": 4099
+              }
+            }
+          ],
+          "relations": {
+            "status": "not_requested_for_items_role"
+          }
+        }
+      }
+    }
+  ],
+  "structure": {
+    "dialogue_structure": "document_voice",
+    "attribution_capability": "document_only",
+    "processing_mode": "degraded",
+    "segments": [
+      {
+        "segment_id": "seg_90c15d168ce9de08",
+        "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+        "locator": "chunk:signed-non-table-target-scope",
+        "start": 0,
+        "end": 262,
+        "text": "【研报核心发现】卖方讲三条：CSP/GPU 机柜量、Rubin 卡位、CPO/高速网络。中报验证了量：云计算 +75.7%，CSP AI 服务器 +2.3 倍，GPU/ASIC 机柜出货 +3.2 / +3 倍，Q2 营收 3067.83 亿环比 +22%。冲突点：卖方爱用归母 +96% 和 26E 600 亿+，中报扣非虽然同步，但 OCF 只有 73.91 亿；Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_0b124ef2e23e0f45",
+        "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+        "locator": "chunk:signed-non-table-target-scope",
+        "start": 0,
+        "end": 323,
+        "text": "**持有 + 观望。** 中报的利润几乎是真的：扣非 229.84 亿同比 +97%，与归母 237.40 亿只差 7.56 亿非经常，不是「公允价值把标题顶起来」。但经营现金流 73.91 亿只盖住扣非的 0.32 倍，存货 1921 亿、应收 1275 亿，高营收已经变成营运资本。毛利率 7.15% 同比只加 0.55 个百分点，Q2 还从 Q1 的 7.35% 掉回 6.99%。现价 64.04 已从 6 月 84.95 回了约 25%，动 PE 26.76 在定价约 475 亿 26E——几乎是 H1 线性年化，没有把卖方 560–667 亿吃进去。不按 93–101 去追，也不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪。",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_832246ff03a40e42",
+        "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+        "locator": "chunk:signed-non-table-target-scope",
+        "start": 0,
+        "end": 220,
+        "text": "少数股东 0.086 亿，几乎可忽略，所以「净利润 237.49 亿」和「归母 237.40 亿」不必像生益那样拆并表子公司。中期不分红、应付股利 130.52 亿是上年股利落账；筹资现金流 −86.61 亿里分配股利/利息 84.39 亿，现金在往外走的同时短贷在滚动（借 960 亿、还 951 亿）。审计结论：「利润质量相对扣非是干净的，现金质量相对扣非是差的；AI 放量把资产负债表做成了服务器厂的标准形状——存贷双高、保理托底。」",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_399bd1bcc3a6db89",
+        "packet_id": "eeff713fb118049559305f16e3cea96d5839261bbea0ce249115eccda031d7a8",
+        "locator": "chunk:signed-non-table-target-scope",
+        "start": 0,
+        "end": 109,
+        "text": "基准：2026-08-28 收盘 64.04 元（mx-xuangu）。中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。本报告只对标的本身做独立判断，不针对任何已有仓位。",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_47b9d26b94d3862d",
+        "packet_id": "08f991bf99ca90c078508a0e2f2002a16422974569cedf0d52e470cc49861e91",
+        "locator": "chunk:signed-non-table-target-scope",
+        "start": 0,
+        "end": 314,
+        "text": "看空：TTM 27 倍对 7% 毛利率的 EMS 并不便宜到「必须买」；贵的是「A 股唯一 NVIDIA 整柜代理」的叙事溢价，一旦毛利率再掉或 Rubin 延期，弹性会先打在倍数上。OCF/扣非 0.32 是已经发生的证伪，不是担心。Q2 毛利率环比已经为负。动 PE 隐含的 475 亿看起来「没给卖方 600」，但 475 本身就是把 H1 的 237 再做一次——如果 H2 只是季节性、Rubin 放量后移，475 不是地板。北向 H1 减持 8180 万股。目标价 93–101 用的是 2026 年 24–35 倍或 2027 年利润，不是 8 月能兑现的地板。高盛 121 是 IMA 标题，更不能当明天的价格。",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_2012ad1e2e93df48",
+        "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+        "locator": "chunk:signed-non-table-target-scope",
+        "start": 0,
+        "end": 272,
+        "text": "最坏情景：Rubin / GB300 爬坡再延，CSP 把增量柜双供给广达 / 纬颖，FII 只能靠传统板和机构件填收入，毛利率从 7% 回到 6% 以下，存货继续堆，OCF 转负。次坏：云资本开支从「训练」切到「推理效率」，整柜需求还在但 ASP 不再上、Consignment 切换慢于申万假设，利润增速回到收入增速。再坏：美元短贷 + 汇兑再来一刀，或保理额度收紧，现金缺口被融资费用放大。实体清单本次没有 sourced 命中，但不能把「没搜到」当成「不会发生」；墨西哥 / 美国厂是地理对冲，救不了出口管制一旦打到 GPU 系统集成。",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_8aa54b0d0059f4d8",
+        "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+        "locator": "chunk:signed-non-table-target-scope",
+        "start": 0,
+        "end": 248,
+        "text": "客户集中是结构风险：2025 年前五大 62%，H1 应收前五 68.52%。GPU 线绑英伟达节奏，ASIC 线绑少数 CSP。双供一旦发生，伤口不是「份额从叙事里的 50% 降到 45%」，而是整柜良率认证被别人拿走、自己变成备援。研发费用 −1.91%、费用率从约 1.41% 降到 0.90%（界面），利润改善来自规模和 mix 形容词，不是研发变现。中期不分红、回购上限只有年分红的一个量级零头（腾讯「十问」的评论口径），治理上要接受「鸿海体系的现金调度优先于 A 股自由现金流故事」。",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_c07487c92288d976",
+        "packet_id": "dafad60e2e5252f9d31253e9ee6f4ec40ef64d828ac7c4ec2d03f94bf7a49d69",
+        "locator": "chunk:signed-non-table-target-scope",
+        "start": 0,
+        "end": 16,
+        "text": "四选一：**持有 + 观望。**",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_38b17cee263005dc",
+        "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+        "locator": "chunk:signed-non-table-target-scope",
+        "start": 0,
+        "end": 291,
+        "text": "若从零开一个观察仓：等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，且无新的大额负面管制公告）；（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。单票不超过组合的合理上限。止损看两条硬的：下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      },
+      {
+        "segment_id": "seg_2193ee23919e5c65",
+        "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+        "locator": "chunk:signed-non-table-target-scope",
+        "start": 0,
+        "end": 234,
+        "text": "【实时数据层】mx-xuangu，行情日 2026-08-28\n当日价格 64.04 元；涨跌 +0.28%；成交额 103.15 亿元；换手 0.80%；量比 1.66。52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。融资余额 79.81 亿。近 5 日收盘 60.40 → 60.15 → 60.57 → 63.86 → 64.04。8/27 英伟达财报次日约 +5.43%，8/28 把溢价吐掉。",
+        "explicit_role": null,
+        "attribution_capability": "document_only"
+      }
+    ],
+    "reasons": [
+      "speaker_identity_not_observable"
+    ]
+  },
+  "candidate_slots": [
+    {
+      "candidate_slot_id": "slot_a034e951d274aadf",
+      "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 0,
+      "end": 14,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "【研报核心发现】卖方讲三条：",
+      "explicit_role": null,
+      "segment_id": "seg_90c15d168ce9de08"
+    },
+    {
+      "candidate_slot_id": "slot_f91d3261e66bce58",
+      "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 14,
+      "end": 44,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "CSP/GPU 机柜量、Rubin 卡位、CPO/高速网络。",
+      "explicit_role": null,
+      "segment_id": "seg_90c15d168ce9de08"
+    },
+    {
+      "candidate_slot_id": "slot_6ad5e01d7d38f35a",
+      "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 44,
+      "end": 51,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "中报验证了量：",
+      "explicit_role": null,
+      "segment_id": "seg_90c15d168ce9de08"
+    },
+    {
+      "candidate_slot_id": "slot_40ee124742e4d80d",
+      "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 51,
+      "end": 62,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "云计算 +75.7%，",
+      "explicit_role": null,
+      "segment_id": "seg_90c15d168ce9de08"
+    },
+    {
+      "candidate_slot_id": "slot_3cc2e4cebb1caf59",
+      "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 62,
+      "end": 80,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "CSP AI 服务器 +2.3 倍，",
+      "explicit_role": null,
+      "segment_id": "seg_90c15d168ce9de08"
+    },
+    {
+      "candidate_slot_id": "slot_87b3b187d8e3125d",
+      "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 80,
+      "end": 106,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "GPU/ASIC 机柜出货 +3.2 / +3 倍，",
+      "explicit_role": null,
+      "segment_id": "seg_90c15d168ce9de08"
+    },
+    {
+      "candidate_slot_id": "slot_1bb9284a5a158adc",
+      "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 106,
+      "end": 129,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "Q2 营收 3067.83 亿环比 +22%。",
+      "explicit_role": null,
+      "segment_id": "seg_90c15d168ce9de08"
+    },
+    {
+      "candidate_slot_id": "slot_1cb2c67f8f2ec615",
+      "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 133,
+      "end": 167,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "卖方爱用归母 +96% 和 26E 600 亿+，中报扣非虽然同步，",
+      "explicit_role": null,
+      "segment_id": "seg_90c15d168ce9de08"
+    },
+    {
+      "candidate_slot_id": "slot_b903c33f0fd15d3c",
+      "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 167,
+      "end": 184,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "但 OCF 只有 73.91 亿；",
+      "explicit_role": null,
+      "segment_id": "seg_90c15d168ce9de08"
+    },
+    {
+      "candidate_slot_id": "slot_fce46d8dd0c9fbde",
+      "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 184,
+      "end": 222,
+      "signal_types": [
+        "negation"
+      ],
+      "attribution_capability": "document_only",
+      "text": "Q2 毛利率环比 −0.36pct，并表 7% 的加工费没有变成「系统商」。",
+      "explicit_role": null,
+      "segment_id": "seg_90c15d168ce9de08"
+    },
+    {
+      "candidate_slot_id": "slot_7d9ec7c631c99e82",
+      "packet_id": "58f845e7afc43f36c61731fbf025fb465234387102ceaf34d7909dc76035d166",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 222,
+      "end": 262,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "框架站扣非、OCF 和毛利率，不站归母标题，也不站 90 元共识当明天的地板价。",
+      "explicit_role": null,
+      "segment_id": "seg_90c15d168ce9de08"
+    },
+    {
+      "candidate_slot_id": "slot_0c217abf1b9110c6",
+      "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 0,
+      "end": 12,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "**持有 + 观望。**",
+      "explicit_role": null,
+      "segment_id": "seg_0b124ef2e23e0f45"
+    },
+    {
+      "candidate_slot_id": "slot_de31fca8eb3a0b26",
+      "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 12,
+      "end": 24,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": " 中报的利润几乎是真的：",
+      "explicit_role": null,
+      "segment_id": "seg_0b124ef2e23e0f45"
+    },
+    {
+      "candidate_slot_id": "slot_dccec44c385534fa",
+      "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 24,
+      "end": 68,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "扣非 229.84 亿同比 +97%，与归母 237.40 亿只差 7.56 亿非经常，",
+      "explicit_role": null,
+      "segment_id": "seg_0b124ef2e23e0f45"
+    },
+    {
+      "candidate_slot_id": "slot_63a469c9fe86142d",
+      "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 68,
+      "end": 111,
+      "signal_types": [
+        "negation"
+      ],
+      "attribution_capability": "document_only",
+      "text": "不是「公允价值把标题顶起来」。但经营现金流 73.91 亿只盖住扣非的 0.32 倍，",
+      "explicit_role": null,
+      "segment_id": "seg_0b124ef2e23e0f45"
+    },
+    {
+      "candidate_slot_id": "slot_a3873dd64753c0cc",
+      "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 111,
+      "end": 143,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "存货 1921 亿、应收 1275 亿，高营收已经变成营运资本。",
+      "explicit_role": null,
+      "segment_id": "seg_0b124ef2e23e0f45"
+    },
+    {
+      "candidate_slot_id": "slot_1a926c3aef1c3e49",
+      "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 143,
+      "end": 168,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "毛利率 7.15% 同比只加 0.55 个百分点，",
+      "explicit_role": null,
+      "segment_id": "seg_0b124ef2e23e0f45"
+    },
+    {
+      "candidate_slot_id": "slot_eb54e0de842530b5",
+      "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 168,
+      "end": 194,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "Q2 还从 Q1 的 7.35% 掉回 6.99%。",
+      "explicit_role": null,
+      "segment_id": "seg_0b124ef2e23e0f45"
+    },
+    {
+      "candidate_slot_id": "slot_fcd2151e320ca2f9",
+      "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 194,
+      "end": 263,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "现价 64.04 已从 6 月 84.95 回了约 25%，动 PE 26.76 在定价约 475 亿 26E——几乎是 H1 线性年化，",
+      "explicit_role": null,
+      "segment_id": "seg_0b124ef2e23e0f45"
+    },
+    {
+      "candidate_slot_id": "slot_2504373c638833da",
+      "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 263,
+      "end": 282,
+      "signal_types": [
+        "negation"
+      ],
+      "attribution_capability": "document_only",
+      "text": "没有把卖方 560–667 亿吃进去。",
+      "explicit_role": null,
+      "segment_id": "seg_0b124ef2e23e0f45"
+    },
+    {
+      "candidate_slot_id": "slot_32645f062c3a40e5",
+      "packet_id": "c215024290d4241013bbde188663265d3e955f648d21d49b2220d7e98f5d2703",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 282,
+      "end": 323,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "不按 93–101 去追，也不因为一天没涨就把 AI 机柜出货 +3 倍写成证伪。",
+      "explicit_role": null,
+      "segment_id": "seg_0b124ef2e23e0f45"
+    },
+    {
+      "candidate_slot_id": "slot_35e2dca9dafaf387",
+      "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 0,
+      "end": 19,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "少数股东 0.086 亿，几乎可忽略，",
+      "explicit_role": null,
+      "segment_id": "seg_832246ff03a40e42"
+    },
+    {
+      "candidate_slot_id": "slot_63053fdb0687d99e",
+      "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 19,
+      "end": 63,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "所以「净利润 237.49 亿」和「归母 237.40 亿」不必像生益那样拆并表子公司。",
+      "explicit_role": null,
+      "segment_id": "seg_832246ff03a40e42"
+    },
+    {
+      "candidate_slot_id": "slot_e0e7ca1ce11ed610",
+      "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 63,
+      "end": 90,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "中期不分红、应付股利 130.52 亿是上年股利落账；",
+      "explicit_role": null,
+      "segment_id": "seg_832246ff03a40e42"
+    },
+    {
+      "candidate_slot_id": "slot_d81515e9bb046866",
+      "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 90,
+      "end": 153,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "筹资现金流 −86.61 亿里分配股利/利息 84.39 亿，现金在往外走的同时短贷在滚动（借 960 亿、还 951 亿）。",
+      "explicit_role": null,
+      "segment_id": "seg_832246ff03a40e42"
+    },
+    {
+      "candidate_slot_id": "slot_99063943ec604797",
+      "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 158,
+      "end": 184,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "「利润质量相对扣非是干净的，现金质量相对扣非是差的；",
+      "explicit_role": null,
+      "segment_id": "seg_832246ff03a40e42"
+    },
+    {
+      "candidate_slot_id": "slot_9bf184abe4e57559",
+      "packet_id": "c584e0747708bca799b9d1808d24b4f045cfb7c6f3eb5a78108091ae95ae0435",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 184,
+      "end": 219,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "AI 放量把资产负债表做成了服务器厂的标准形状——存贷双高、保理托底。",
+      "explicit_role": null,
+      "segment_id": "seg_832246ff03a40e42"
+    },
+    {
+      "candidate_slot_id": "slot_50d7557446961af3",
+      "packet_id": "eeff713fb118049559305f16e3cea96d5839261bbea0ce249115eccda031d7a8",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 3,
+      "end": 36,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "2026-08-28 收盘 64.04 元（mx-xuangu）。",
+      "explicit_role": null,
+      "segment_id": "seg_399bd1bcc3a6db89"
+    },
+    {
+      "candidate_slot_id": "slot_0a08e2eb7641ff11",
+      "packet_id": "eeff713fb118049559305f16e3cea96d5839261bbea0ce249115eccda031d7a8",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 36,
+      "end": 84,
+      "signal_types": [
+        "summary"
+      ],
+      "attribution_capability": "document_only",
+      "text": "中报口径来自 2026-08-11 上交所半年报全文及 8/12 摘要（新浪指定披露镜像交叉）。",
+      "explicit_role": null,
+      "segment_id": "seg_399bd1bcc3a6db89"
+    },
+    {
+      "candidate_slot_id": "slot_f932c5c1f3bd3cf7",
+      "packet_id": "eeff713fb118049559305f16e3cea96d5839261bbea0ce249115eccda031d7a8",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 84,
+      "end": 109,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "本报告只对标的本身做独立判断，不针对任何已有仓位。",
+      "explicit_role": null,
+      "segment_id": "seg_399bd1bcc3a6db89"
+    },
+    {
+      "candidate_slot_id": "slot_2bfe7106911a3b8f",
+      "packet_id": "08f991bf99ca90c078508a0e2f2002a16422974569cedf0d52e470cc49861e91",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 3,
+      "end": 36,
+      "signal_types": [
+        "negation"
+      ],
+      "attribution_capability": "document_only",
+      "text": "TTM 27 倍对 7% 毛利率的 EMS 并不便宜到「必须买」；",
+      "explicit_role": null,
+      "segment_id": "seg_47b9d26b94d3862d"
+    },
+    {
+      "candidate_slot_id": "slot_b4343e8b16dfe42c",
+      "packet_id": "08f991bf99ca90c078508a0e2f2002a16422974569cedf0d52e470cc49861e91",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 36,
+      "end": 92,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "贵的是「A 股唯一 NVIDIA 整柜代理」的叙事溢价，一旦毛利率再掉或 Rubin 延期，弹性会先打在倍数上。",
+      "explicit_role": null,
+      "segment_id": "seg_47b9d26b94d3862d"
+    },
+    {
+      "candidate_slot_id": "slot_c3ae1ee9ff0978f3",
+      "packet_id": "08f991bf99ca90c078508a0e2f2002a16422974569cedf0d52e470cc49861e91",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 92,
+      "end": 113,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "OCF/扣非 0.32 是已经发生的证伪，",
+      "explicit_role": null,
+      "segment_id": "seg_47b9d26b94d3862d"
+    },
+    {
+      "candidate_slot_id": "slot_aa5380b7fa9129bf",
+      "packet_id": "08f991bf99ca90c078508a0e2f2002a16422974569cedf0d52e470cc49861e91",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 113,
+      "end": 118,
+      "signal_types": [
+        "negation"
+      ],
+      "attribution_capability": "document_only",
+      "text": "不是担心。",
+      "explicit_role": null,
+      "segment_id": "seg_47b9d26b94d3862d"
+    },
+    {
+      "candidate_slot_id": "slot_8f2aead4505e12c9",
+      "packet_id": "08f991bf99ca90c078508a0e2f2002a16422974569cedf0d52e470cc49861e91",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 118,
+      "end": 131,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "Q2 毛利率环比已经为负。",
+      "explicit_role": null,
+      "segment_id": "seg_47b9d26b94d3862d"
+    },
+    {
+      "candidate_slot_id": "slot_19c9a4b56ca8758a",
+      "packet_id": "08f991bf99ca90c078508a0e2f2002a16422974569cedf0d52e470cc49861e91",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 131,
+      "end": 159,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "动 PE 隐含的 475 亿看起来「没给卖方 600」，",
+      "explicit_role": null,
+      "segment_id": "seg_47b9d26b94d3862d"
+    },
+    {
+      "candidate_slot_id": "slot_6c6ccb4a50efee24",
+      "packet_id": "08f991bf99ca90c078508a0e2f2002a16422974569cedf0d52e470cc49861e91",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 159,
+      "end": 218,
+      "signal_types": [
+        "forecast",
+        "condition",
+        "negation"
+      ],
+      "attribution_capability": "document_only",
+      "text": "但 475 本身就是把 H1 的 237 再做一次——如果 H2 只是季节性、Rubin 放量后移，475 不是地板。",
+      "explicit_role": null,
+      "segment_id": "seg_47b9d26b94d3862d"
+    },
+    {
+      "candidate_slot_id": "slot_29ab4859fdf4372a",
+      "packet_id": "08f991bf99ca90c078508a0e2f2002a16422974569cedf0d52e470cc49861e91",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 218,
+      "end": 235,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "北向 H1 减持 8180 万股。",
+      "explicit_role": null,
+      "segment_id": "seg_47b9d26b94d3862d"
+    },
+    {
+      "candidate_slot_id": "slot_de9cc51c9c6b9b35",
+      "packet_id": "08f991bf99ca90c078508a0e2f2002a16422974569cedf0d52e470cc49861e91",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 235,
+      "end": 275,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "目标价 93–101 用的是 2026 年 24–35 倍或 2027 年利润，",
+      "explicit_role": null,
+      "segment_id": "seg_47b9d26b94d3862d"
+    },
+    {
+      "candidate_slot_id": "slot_92689adf6cbb4468",
+      "packet_id": "08f991bf99ca90c078508a0e2f2002a16422974569cedf0d52e470cc49861e91",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 275,
+      "end": 288,
+      "signal_types": [
+        "negation"
+      ],
+      "attribution_capability": "document_only",
+      "text": "不是 8 月能兑现的地板。",
+      "explicit_role": null,
+      "segment_id": "seg_47b9d26b94d3862d"
+    },
+    {
+      "candidate_slot_id": "slot_adf90a1aa6f1b715",
+      "packet_id": "08f991bf99ca90c078508a0e2f2002a16422974569cedf0d52e470cc49861e91",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 288,
+      "end": 314,
+      "signal_types": [
+        "negation"
+      ],
+      "attribution_capability": "document_only",
+      "text": "高盛 121 是 IMA 标题，更不能当明天的价格。",
+      "explicit_role": null,
+      "segment_id": "seg_47b9d26b94d3862d"
+    },
+    {
+      "candidate_slot_id": "slot_2a3f19c09e30112e",
+      "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 5,
+      "end": 24,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "Rubin / GB300 爬坡再延，",
+      "explicit_role": null,
+      "segment_id": "seg_2012ad1e2e93df48"
+    },
+    {
+      "candidate_slot_id": "slot_d7e8feef7808cf61",
+      "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 24,
+      "end": 61,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "CSP 把增量柜双供给广达 / 纬颖，FII 只能靠传统板和机构件填收入，",
+      "explicit_role": null,
+      "segment_id": "seg_2012ad1e2e93df48"
+    },
+    {
+      "candidate_slot_id": "slot_e786d10909fb106d",
+      "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 61,
+      "end": 78,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "毛利率从 7% 回到 6% 以下，",
+      "explicit_role": null,
+      "segment_id": "seg_2012ad1e2e93df48"
+    },
+    {
+      "candidate_slot_id": "slot_f09a3a0fbe66feb7",
+      "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 78,
+      "end": 91,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "存货继续堆，OCF 转负。",
+      "explicit_role": null,
+      "segment_id": "seg_2012ad1e2e93df48"
+    },
+    {
+      "candidate_slot_id": "slot_d27d22600e82d6f5",
+      "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 94,
+      "end": 161,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "云资本开支从「训练」切到「推理效率」，整柜需求还在但 ASP 不再上、Consignment 切换慢于申万假设，利润增速回到收入增速。",
+      "explicit_role": null,
+      "segment_id": "seg_2012ad1e2e93df48"
+    },
+    {
+      "candidate_slot_id": "slot_71f5d245323013c4",
+      "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 164,
+      "end": 198,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "美元短贷 + 汇兑再来一刀，或保理额度收紧，现金缺口被融资费用放大。",
+      "explicit_role": null,
+      "segment_id": "seg_2012ad1e2e93df48"
+    },
+    {
+      "candidate_slot_id": "slot_f429b9cd71e5d734",
+      "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 198,
+      "end": 218,
+      "signal_types": [
+        "negation"
+      ],
+      "attribution_capability": "document_only",
+      "text": "实体清单本次没有 sourced 命中，",
+      "explicit_role": null,
+      "segment_id": "seg_2012ad1e2e93df48"
+    },
+    {
+      "candidate_slot_id": "slot_f234961d69f646a7",
+      "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 218,
+      "end": 236,
+      "signal_types": [
+        "negation"
+      ],
+      "attribution_capability": "document_only",
+      "text": "但不能把「没搜到」当成「不会发生」；",
+      "explicit_role": null,
+      "segment_id": "seg_2012ad1e2e93df48"
+    },
+    {
+      "candidate_slot_id": "slot_499ce1615b28e781",
+      "packet_id": "a30b7107d7c27c7166c20833d59ba43be8854fc99b7989203a53b10a7630bd0d",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 236,
+      "end": 272,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "墨西哥 / 美国厂是地理对冲，救不了出口管制一旦打到 GPU 系统集成。",
+      "explicit_role": null,
+      "segment_id": "seg_2012ad1e2e93df48"
+    },
+    {
+      "candidate_slot_id": "slot_1496a1c1b2a0bda1",
+      "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 0,
+      "end": 10,
+      "signal_types": [
+        "forecast",
+        "risk"
+      ],
+      "attribution_capability": "document_only",
+      "text": "客户集中是结构风险：",
+      "explicit_role": null,
+      "segment_id": "seg_8aa54b0d0059f4d8"
+    },
+    {
+      "candidate_slot_id": "slot_e1cc134434cdc458",
+      "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 10,
+      "end": 24,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "2025 年前五大 62%，",
+      "explicit_role": null,
+      "segment_id": "seg_8aa54b0d0059f4d8"
+    },
+    {
+      "candidate_slot_id": "slot_067bb3e7f85fa37f",
+      "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 24,
+      "end": 39,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "H1 应收前五 68.52%。",
+      "explicit_role": null,
+      "segment_id": "seg_8aa54b0d0059f4d8"
+    },
+    {
+      "candidate_slot_id": "slot_ecf006ec266ff39e",
+      "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 39,
+      "end": 51,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "GPU 线绑英伟达节奏，",
+      "explicit_role": null,
+      "segment_id": "seg_8aa54b0d0059f4d8"
+    },
+    {
+      "candidate_slot_id": "slot_40bc19242ac6d859",
+      "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 51,
+      "end": 65,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "ASIC 线绑少数 CSP。",
+      "explicit_role": null,
+      "segment_id": "seg_8aa54b0d0059f4d8"
+    },
+    {
+      "candidate_slot_id": "slot_e8b4d08ba6737f95",
+      "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 65,
+      "end": 118,
+      "signal_types": [
+        "negation"
+      ],
+      "attribution_capability": "document_only",
+      "text": "双供一旦发生，伤口不是「份额从叙事里的 50% 降到 45%」，而是整柜良率认证被别人拿走、自己变成备援。",
+      "explicit_role": null,
+      "segment_id": "seg_8aa54b0d0059f4d8"
+    },
+    {
+      "candidate_slot_id": "slot_55a3f0ebb79c8967",
+      "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 118,
+      "end": 173,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "研发费用 −1.91%、费用率从约 1.41% 降到 0.90%（界面），利润改善来自规模和 mix 形容词，",
+      "explicit_role": null,
+      "segment_id": "seg_8aa54b0d0059f4d8"
+    },
+    {
+      "candidate_slot_id": "slot_40803d68acea01c6",
+      "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 173,
+      "end": 180,
+      "signal_types": [
+        "negation"
+      ],
+      "attribution_capability": "document_only",
+      "text": "不是研发变现。",
+      "explicit_role": null,
+      "segment_id": "seg_8aa54b0d0059f4d8"
+    },
+    {
+      "candidate_slot_id": "slot_14d2e2087ab604fa",
+      "packet_id": "0f22fc727f02a1d31d0417cc60281e52dd986eaf624dc3e7e96b3d3228360610",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 180,
+      "end": 248,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "中期不分红、回购上限只有年分红的一个量级零头（腾讯「十问」的评论口径），治理上要接受「鸿海体系的现金调度优先于 A 股自由现金流故事」。",
+      "explicit_role": null,
+      "segment_id": "seg_8aa54b0d0059f4d8"
+    },
+    {
+      "candidate_slot_id": "slot_5e0a114ed8b5d2a6",
+      "packet_id": "dafad60e2e5252f9d31253e9ee6f4ec40ef64d828ac7c4ec2d03f94bf7a49d69",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 4,
+      "end": 16,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "**持有 + 观望。**",
+      "explicit_role": null,
+      "segment_id": "seg_c07487c92288d976"
+    },
+    {
+      "candidate_slot_id": "slot_7b2c716720ace1aa",
+      "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 0,
+      "end": 10,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "若从零开一个观察仓：",
+      "explicit_role": null,
+      "segment_id": "seg_38b17cee263005dc"
+    },
+    {
+      "candidate_slot_id": "slot_998e49ccab85bdb7",
+      "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 10,
+      "end": 69,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "等两件事至少中一件再议——（1）回撤到 52–58（大约回到 7 月回购均价 61 之下、动 PE 降到 24 附近，",
+      "explicit_role": null,
+      "segment_id": "seg_38b17cee263005dc"
+    },
+    {
+      "candidate_slot_id": "slot_8a33a8aadc6a6490",
+      "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 69,
+      "end": 83,
+      "signal_types": [
+        "evidence"
+      ],
+      "attribution_capability": "document_only",
+      "text": "且无新的大额负面管制公告）；",
+      "explicit_role": null,
+      "segment_id": "seg_38b17cee263005dc"
+    },
+    {
+      "candidate_slot_id": "slot_3e8965b10d203f0b",
+      "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 83,
+      "end": 127,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "（2）Q3 OCF/扣非回到 0.6 以上，或毛利率较 Q2 的 6.99% 不再回吐。",
+      "explicit_role": null,
+      "segment_id": "seg_38b17cee263005dc"
+    },
+    {
+      "candidate_slot_id": "slot_06028a3f339dfe73",
+      "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 127,
+      "end": 140,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "单票不超过组合的合理上限。",
+      "explicit_role": null,
+      "segment_id": "seg_38b17cee263005dc"
+    },
+    {
+      "candidate_slot_id": "slot_ff5db383726f84c7",
+      "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 140,
+      "end": 148,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "止损看两条硬的：",
+      "explicit_role": null,
+      "segment_id": "seg_38b17cee263005dc"
+    },
+    {
+      "candidate_slot_id": "slot_a0285709c19e993e",
+      "packet_id": "8e0d44fbddd2662fa4067842eb5f36c8b216cc6fdf6098917960eccb528904f7",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 148,
+      "end": 291,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "下季 OCF 盖不住扣非的一半（OCF/扣非 < 0.5），或毛利率较 6.99% 再掉超过 1 个百分点且公司改口说涨价/mix 受阻、Rubin 延期。目标价不把 121、100.8 当锚；中性路径就是 55–75 消化中报和英伟达 β，乐观才靠近中金 77.68 / 华泰 93。",
+      "explicit_role": null,
+      "segment_id": "seg_38b17cee263005dc"
+    },
+    {
+      "candidate_slot_id": "slot_1440934d4bb011d8",
+      "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 0,
+      "end": 45,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "【实时数据层】mx-xuangu，行情日 2026-08-28\n当日价格 64.04 元；",
+      "explicit_role": null,
+      "segment_id": "seg_2193ee23919e5c65"
+    },
+    {
+      "candidate_slot_id": "slot_cfef88ff74c1e18c",
+      "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 45,
+      "end": 55,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "涨跌 +0.28%；",
+      "explicit_role": null,
+      "segment_id": "seg_2193ee23919e5c65"
+    },
+    {
+      "candidate_slot_id": "slot_5032c0ad0ef20662",
+      "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 55,
+      "end": 69,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "成交额 103.15 亿元；",
+      "explicit_role": null,
+      "segment_id": "seg_2193ee23919e5c65"
+    },
+    {
+      "candidate_slot_id": "slot_1e58b10db0b7f3a1",
+      "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 69,
+      "end": 78,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "换手 0.80%；",
+      "explicit_role": null,
+      "segment_id": "seg_2193ee23919e5c65"
+    },
+    {
+      "candidate_slot_id": "slot_3b5447b5e44bf07b",
+      "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 78,
+      "end": 86,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "量比 1.66。",
+      "explicit_role": null,
+      "segment_id": "seg_2193ee23919e5c65"
+    },
+    {
+      "candidate_slot_id": "slot_ebd71047dd959ab6",
+      "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 86,
+      "end": 143,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "52 周（2025.09.01–2026.08.28）高 84.95 / 低 46.70，相对位置约 45.3%。",
+      "explicit_role": null,
+      "segment_id": "seg_2193ee23919e5c65"
+    },
+    {
+      "candidate_slot_id": "slot_eff3c201d3a2856c",
+      "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 143,
+      "end": 156,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "融资余额 79.81 亿。",
+      "explicit_role": null,
+      "segment_id": "seg_2193ee23919e5c65"
+    },
+    {
+      "candidate_slot_id": "slot_7908edd5877a7489",
+      "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 156,
+      "end": 202,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "近 5 日收盘 60.40 → 60.15 → 60.57 → 63.86 → 64.04。",
+      "explicit_role": null,
+      "segment_id": "seg_2193ee23919e5c65"
+    },
+    {
+      "candidate_slot_id": "slot_76cdf271eaa15b4a",
+      "packet_id": "f81899c530e0db184ffd39fe2e2586f47ba21328bcc887cc03f854e7bfd19794",
+      "locator": "chunk:signed-non-table-target-scope",
+      "start": 202,
+      "end": 234,
+      "signal_types": [
+        "claim"
+      ],
+      "attribution_capability": "document_only",
+      "text": "8/27 英伟达财报次日约 +5.43%，8/28 把溢价吐掉。",
+      "explicit_role": null,
+      "segment_id": "seg_2193ee23919e5c65"
+    }
+  ],
+  "relation_candidate_set_id": null
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": "evidence-manifest-1",
+  "id": "109-items-extraction-and-publication-20261015",
+  "created_on": "2026-10-15",
+  "status": "p6_published_p7_read_chain_landed",
+  "model_calls": 0,
+  "production_pg_writes": 0,
+  "note": "P6/P7 阶段的独立 MANIFEST：不覆盖 13:07 的草案期 MANIFEST.json（其记录的 r3 工作表哈希 47c56cea… 是 U 裁定前的空白态；U 裁定后的现值 2e574b6e… 已在 p4-candidateset-sync-record.json 与 p5-release-record.json 登记）。命名分立沿用 104 号 MANIFEST-signed.json 先例。",
+  "signoff": {
+    "p5_release_decided": {
+      "path": "items-p5-release-decided.json",
+      "sha256": "32648fd46bd7efcde868fa14b1939c65d39f34df358703070092414745611327",
+      "status": "decided_signed",
+      "reviewer": "xyl",
+      "adjudicator": "xyl",
+      "signed_on": "2026-10-15",
+      "instrument": "items-p5-release-signoff.md（b50bb0b9…）",
+      "signed_record": "p5-release-record.json（a035b068…）",
+      "applier": "apply_p5_release_signoff.py（9b60ad04…，零调用、不代填）"
+    }
+  },
+  "files": {
+    "p7-items-read-chain-landing.json": "ab6b3021936ee99b28ac25b9a75aa94d2142d69eadf9ac88adee1d63a652efd3",
+    "build_items_bridge.py": "4a5b08fb6c01a61f00770fe36ab8ea8e69d0e402312935c9171f895274fd4b17",
+    "items-bridge-inputs-record.json": "a179677a6f13b33660c0ce14a61c08f5342616df6723853f6c193e275d0cd0bb",
+    "items-bridge-industrial-fulian-md/items-artifact.json": "a7194ddb773b0cc04e15318fb2172c5d8ed7997319ba4686a64659eaf3846ce6",
+    "items-bridge-industrial-fulian-md/items-payload.json": "7d88e6c3259b5f9036473b8cad298472b28c530a9475224b9e741ef78e79d3f4",
+    "items-bridge-optical-module-docx/items-artifact.json": "b2626ac1557c46b225d8eaf18e2fd966b58dde53fa4fda92feeb72b00e97ba99",
+    "items-bridge-optical-module-docx/items-payload.json": "89401c68ec9fa3981642272416e7aff343e8008f7b99fce402ebad07b23a343c",
+    "place_items_publication.py": "c0c53bc045f2ca556cdc9f245c540bd239f5136d07f4057edcb96a2c77202505",
+    "p6-items-publication-record.json": "325a577103dd14401a37f28cd12a7d0e247ec2f42e6b7ca32a7d2dcb5143de8a",
+    "p7_items_endpoint_acceptance.py": "fc9871e5b67b2cb0334baa0d217969407e1c552553e6e9caff2b3cfe9115c5fe",
+    "p7-items-endpoint-acceptance.json": "81b9f086750692468bc59c7cf59ecba34531f385d092061f159b0430fd3d174f",
+    "apply_p5_release_signoff.py": "9b60ad04056bd10b9822b3f9035210fecbe55dfab806d02b5edaf1c7a285a25c",
+    "items-p5-release-decided.json": "32648fd46bd7efcde868fa14b1939c65d39f34df358703070092414745611327",
+    "items-p5-release-signoff.md": "b50bb0b90c533ba3593edcd41c8e94635389f4789cd5fae8f6476c601a9e1366（U 具名，字节未动）",
+    "p5-release-record.json": "a035b06843a67c26f0c11081471231975140f5b742e4f1a7d78de66ae0478e7b（U 签认对象，字节未动）",
+    "repo_changes": {
+      "server/routes/corpus.py": "git blob 9d30ba1f…（新增 /api/corpus/items/{source_id} + claims/items 共用 _semantic_page + 两端点补 cursor 入参）",
+      "tests/test_web_corpus_read_chain.py": "git blob 0f91a4e1…（11 → 14 项）"
+    }
+  },
+  "production_store": {
+    "root": "data/corpus/structured-store（git-ignored data/ 约定；CORPUS_STRUCTURED_ROOT 原值）",
+    "heads": {
+      "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb": "sha256:c3dbd91bfa0fe2b1c905077f35fba04e27c9b8bdc678abbcb1515f982a8b3871（gen 2，parent 5fc7116b…）",
+      "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f": "sha256:8395c900d91fe12d6507db5a1d8d16705dee7e95538f1785b86dcf083eb45aeb（gen 2，parent 8dde446f…）"
+    },
+    "coverage": "两源 material_items: missing → complete；claims 仍 complete；material_relations 仍 missing（出范围）",
+    "gen1_preserved": "5fc7116b… / 8dde446f… 两份 gen-1 发布件保留，108 号签认件绑定值仍可核"
+  },
+  "untouched": [
+    "items-reextract-adjudication-r3/candidate-adjudications.worksheet.json（2e574b6e…，U 裁定件）",
+    "items-reextract-adjudication-r3-c1ruled/…（7578a8f8…）与 -blank/…（02e5dcfb…）",
+    "p5-release-record.json、items-p5-release-signoff.md、预注册 v1/v2、r3 冻结件、门 v3 / 契约 v4.3、83–108 号产物",
+    "生产 PG（零写入）"
+  ]
+}

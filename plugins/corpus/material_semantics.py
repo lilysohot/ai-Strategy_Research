@@ -34,10 +34,12 @@ MATERIAL_SELECTOR_JSONL_V2 = "material-atomic-selector-jsonl-v2"
 MATERIAL_SELECTOR_JSONL_V3 = "material-atomic-selector-jsonl-v3"
 MATERIAL_SELECTOR_JSONL_V4 = "material-atomic-selector-jsonl-v4"
 # v5 keeps the exact pre-fix prompt wording so historical runs stay byte-replayable;
-# v6 is the field-contract-aligned successor and must be selected explicitly.
+# v6 is the field-contract-aligned successor (109 号 2026-10-15: selected as the default after the
+# strict validator required record_type while the v5 prompt never mentioned it — the desync that
+# let doubao omit the constant leaf and lose whole packets).
 MATERIAL_SELECTOR_JSONL_V5 = "material-atomic-selector-jsonl-v5"
-MATERIAL_SELECTOR_JSONL_VERSION = MATERIAL_SELECTOR_JSONL_V5
 MATERIAL_SELECTOR_JSONL_V6 = "material-atomic-selector-jsonl-v6"
+MATERIAL_SELECTOR_JSONL_VERSION = MATERIAL_SELECTOR_JSONL_V6
 MATERIAL_SELECTOR_JSONL_VERSIONS = frozenset(
     {
         MATERIAL_SELECTOR_JSONL_V1,
@@ -75,7 +77,7 @@ MATERIAL_RELATION_SELECTOR_JSONL_VERSIONS = frozenset(
         MATERIAL_RELATION_QUESTION_GROUP_JSONL_V2,
     }
 )
-MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v11"
+MATERIAL_ITEMS_VALIDATION_VERSION = "material-items-validation-v12"
 RELATION_CANDIDATE_RULE_V3 = "material-relation-candidates-v3"
 RELATION_CANDIDATE_RULE_V4 = "material-relation-candidates-v4"
 RELATION_CANDIDATE_RULE_VERSION = "material-relation-candidates-v5"
@@ -104,6 +106,7 @@ MaterialItemsValidationVersion = Literal[
     "material-items-validation-v9",
     "material-items-validation-v10",
     "material-items-validation-v11",
+    "material-items-validation-v12",
 ]
 RelationCandidateRuleVersion = Literal[
     "material-relation-candidates-v1",
@@ -4343,10 +4346,33 @@ def _strict_role_llm(
             "end_turn",
         }:
             raise ValueError("role response did not finish normally")
-        for line in response.splitlines():
+        lines = response.splitlines()
+        # Selector-protocol tolerance (109 号 root cause): the model sometimes omits the constant
+        # ``record_type`` leaf while every other obligation_result field is present and exact.
+        # Re-inject the constant instead of discarding the whole packet; any other deviation
+        # still rejects the response unchanged (fail-closed).
+        selector_result = allowed == frozenset({"obligation_result"})
+        normalized: list[str] | None = None
+        for position, line in enumerate(lines):
             if not line.strip():
+                if normalized is not None:
+                    normalized.append(line)
                 continue
             record = json.loads(line)
+            if (
+                selector_result
+                and isinstance(record, dict)
+                and "record_type" not in record
+                and set(record) == set(_SELECTOR_RESULT_FIELD_ORDER) - {"record_type"}
+            ):
+                if normalized is None:
+                    normalized = list(lines)
+                normalized[position] = json.dumps(
+                    {"record_type": "obligation_result", **record},
+                    ensure_ascii=False,
+                    separators=(",", ":"),
+                )
+                continue
             if not isinstance(record, dict) or record.get("record_type") not in allowed:
                 raise ValueError("role response contains an unsupported JSONL record")
             if record["record_type"] != "obligation_result" and {
@@ -4397,7 +4423,11 @@ def _strict_role_llm(
                     or len(selected) != len(set(selected))
                 ):
                     raise ValueError("answer group result is invalid")
-        return response
+            if normalized is not None:
+                normalized.append(line)
+        if normalized is None:
+            return response
+        return "\n".join(normalized)
 
     return call
 

@@ -1,0 +1,35 @@
+{
+  "schema_version": "items-budget-authorisation-1",
+  "id": "109-items-budget-authorisation-r2-20261015",
+  "created_on": "2026-10-15",
+  "supersedes": {
+    "path": "budget-authorisation.json",
+    "sha256": "96949b73e6e0f3a5c13a4b53de336ed9b5943ea63dc774cf815190aa92486357",
+    "reason": "U 在立项签认件上补具名并给出 attempts 上限 30（r1 为口谕记录、无 attempts 格）"
+  },
+  "status": "countersigned_effective",
+  "title": "109 号 P0 预算授权 r2（U 具名签认版）",
+  "budget": {
+    "ceiling_total_tokens": 1000000,
+    "attempts_ceiling": 30,
+    "unit": "total_tokens（含 reasoning，与 ledger attempts.usage 同源，与 claims 103 号口径一致）",
+    "reconciliation": "P2 跑后按 attempts.usage 汇总对账：超 token 判该轮无效（exit 1）；attempts 上限同轮校验"
+  },
+  "countersignature": {
+    "status": "countersigned_effective",
+    "instrument": "items-extraction-publication-signoff.md（U 具名：reviewer/adjudicator xyl，signed_on 2026-10-15）",
+    "instrument_sha256": "c5420de9505782bb307da95beeb9ec8d050420799722e6be07c724d1ae458379",
+    "covered": ["预算 ceiling 1000000 total_tokens", "attempts 上限 30", "立项签认（含 §五 assistant 已定项未被否决）"],
+    "does_not_cover": ["items-reextraction-preregistration-signoff.md 的独立具名（仍开放，U 可随时补签）"]
+  },
+  "attempts_reference": {
+    "u_specified_ceiling": 30,
+    "historical_per_execution": { "items-industrial-fulian-md": 10, "items-optical-module-docx": 14 },
+    "historical_source": "evidence/28-items-only-quality-gate-20261010/r0-zero-call/（门 32 冻结计划 expected_attempts md10+docx14）",
+    "note": "预注册件的 per-source 历史参照（10/14）保持不变；U 的 30 是轮次总上限（24 ≤ 30，兼容）"
+  },
+  "effect": [
+    "P0 立项签认 + 预算授权完结（U 具名）",
+    "P2 起跑前置：预注册件 frozen_before_execution（countersignature 记本件与已签立项件为依据）+ execute 六闸"
+  ]
+}
