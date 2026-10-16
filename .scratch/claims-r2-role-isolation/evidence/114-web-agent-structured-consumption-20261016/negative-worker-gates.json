@@ -1,0 +1,18 @@
+{
+  "schema": "web-semantic-worker-negative-gates-v1",
+  "model_calls": 0,
+  "cases": [
+    {
+      "label": "missing",
+      "returncode": 1,
+      "stdout": "{\"type\": \"run_finished\", \"ok\": false, \"error\": \"ValueError: semantic research requires a read-only publication-store mount. Prepare WAL sidecars on the writer side with prepare_readonly_access, then launch the research process with the store mounted read-only and no writable aliases. Native file modes alone are not a read-only boundary.\"}\n",
+      "stderr": ""
+    },
+    {
+      "label": "writable",
+      "returncode": 1,
+      "stdout": "{\"type\": \"run_finished\", \"ok\": false, \"error\": \"ValueError: semantic research requires a read-only publication-store mount. Prepare WAL sidecars on the writer side with prepare_readonly_access, then launch the research process with the store mounted read-only and no writable aliases. Native file modes alone are not a read-only boundary.\"}\n",
+      "stderr": ""
+    }
+  ]
+}

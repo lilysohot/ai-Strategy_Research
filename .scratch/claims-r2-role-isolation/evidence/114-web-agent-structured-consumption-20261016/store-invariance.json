@@ -1,0 +1,14 @@
+{
+  "paths_unchanged": true,
+  "sizes_unchanged": true,
+  "business_mtimes_unchanged": true,
+  "business_inventory_unchanged": true,
+  "mtime_changes_seconds": {
+    "index/structured.sqlite3-shm": 1301.9607486724854
+  },
+  "immutable_tree_sha256_after": {
+    "manifests": "f2b51760407e1a6c645f67661a662763ed9948d603e6e73a66c31cffe9c8e75e",
+    "objects": "585cd4cdeb93d94bc7a93dd8c00e40a52f83aa1f95b9fd929b4352eab4fed3fa"
+  },
+  "note": "prepare_readonly_access may refresh SQLite SHM sidecar mtime; application rows and immutable publication files are unchanged"
+}

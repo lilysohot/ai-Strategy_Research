@@ -1,0 +1,61 @@
+{
+  "schema_version": 2,
+  "conclusions": [
+    {
+      "id": "c1",
+      "report_quote": "材料显示，工业富联云计算业务同比增长 75.7%。",
+      "semantic_references": [
+        {
+          "schema_version": "corpus-report-semantic-reference-v1",
+          "report_anchor": "最终回复结论句（消费链验证最终回答，全篇唯一结论句）",
+          "report_quote": "材料显示，工业富联云计算业务同比增长 75.7%。",
+          "publication_id": "sha256:684c93fb18e6e66c39246e6b555fc6152e2e1ba41c3e7a7468425e85662b0823",
+          "record_id": "abbab7baa50760ea29a27b66e158ba2de969d0be5032302f2bfe3e23c3b0ac37",
+          "purpose": "cite",
+          "evidence_ranges": [
+            {
+              "handle": "cv2:f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314#chunk:signed-non-table-target-scope",
+              "unit_id": "signed-unit-11",
+              "coordinate_system": "unicode_code_points",
+              "start": 51,
+              "end": 62,
+              "quote_sha256": "sha256:e9a6b09a2c136a1d2b6f8b6fb7891c09aef21e638ff0d46ddda1fa25d7777440"
+            }
+          ],
+          "dependency_assertions": [],
+          "delivery_status": "pending",
+          "publication_status": "published",
+          "quality_status": "review_required",
+          "verification_status": "pending",
+          "error_codes": []
+        },
+        {
+          "schema_version": "corpus-report-semantic-reference-v1",
+          "report_anchor": "最终回复结论句（消费链验证最终回答，全篇唯一结论句）",
+          "report_quote": "材料显示，工业富联云计算业务同比增长 75.7%。",
+          "publication_id": "sha256:684c93fb18e6e66c39246e6b555fc6152e2e1ba41c3e7a7468425e85662b0823",
+          "record_id": "itm_bf0c10772dfcb0bd",
+          "purpose": "cite",
+          "evidence_ranges": [
+            {
+              "handle": "cv2:f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314#chunk:signed-non-table-target-scope",
+              "unit_id": "signed-unit-11",
+              "coordinate_system": "unicode_code_points",
+              "start": 51,
+              "end": 62,
+              "quote_sha256": "sha256:e9a6b09a2c136a1d2b6f8b6fb7891c09aef21e638ff0d46ddda1fa25d7777440"
+            }
+          ],
+          "dependency_assertions": [],
+          "delivery_status": "pending",
+          "publication_status": "published",
+          "quality_status": "review_required",
+          "verification_status": "pending",
+          "error_codes": []
+        }
+      ],
+      "text_location": "最终回复结论句（消费链验证最终回答，全篇唯一结论句）"
+    }
+  ],
+  "owner_role": "stateful_react:a6a046eb7039"
+}

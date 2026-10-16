@@ -1,0 +1,22 @@
+{
+  "counts": {
+    "batches": 4,
+    "tasks": 6,
+    "attempts": 0,
+    "semantic_publications": 6,
+    "semantic_publication_artifacts": 10,
+    "semantic_publication_heads": 2
+  },
+  "heads": [
+    {
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96",
+      "publication_id": "sha256:933d718da67a5993b637f067bc69ec5557a2b8a6a24f4c9f23ab6d48f2d25918"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+      "publication_id": "sha256:684c93fb18e6e66c39246e6b555fc6152e2e1ba41c3e7a7468425e85662b0823"
+    }
+  ]
+}

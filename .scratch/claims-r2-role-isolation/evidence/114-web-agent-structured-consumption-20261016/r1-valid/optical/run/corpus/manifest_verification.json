@@ -1,0 +1,109 @@
+{
+  "schema_version": 2,
+  "checked_at": "2026-10-16T05:34:50.431244+00:00",
+  "status": "verified",
+  "counts": {
+    "supported": 1,
+    "partial": 0,
+    "unsupported": 0
+  },
+  "verification_errors": 0,
+  "range_completeness": [],
+  "all_offered_fetched": null,
+  "conclusions": [
+    {
+      "id": "c1",
+      "text_location": "最终回答（单句中文结论陈述）",
+      "report_quote": "材料判断 Q2 800G 出货超预期",
+      "status": "supported",
+      "evidence_count": 0,
+      "covered_purposes": [],
+      "missing_dependencies": [],
+      "delivery": [
+        "delivered"
+      ],
+      "semantic_references": [
+        {
+          "schema_version": "corpus-report-semantic-reference-v1",
+          "report_anchor": "最终回答（单句中文结论陈述）",
+          "report_quote": "材料判断 Q2 800G 出货超预期",
+          "publication_id": "sha256:933d718da67a5993b637f067bc69ec5557a2b8a6a24f4c9f23ab6d48f2d25918",
+          "record_id": "itm_5326cef728099080",
+          "purpose": "cite",
+          "evidence_ranges": [
+            {
+              "handle": "cv2:dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96#chunk:signed-non-table-target-scope",
+              "unit_id": "signed-unit-20",
+              "coordinate_system": "unicode_code_points",
+              "start": 0,
+              "end": 32,
+              "quote_sha256": "sha256:4685308a30594c66d24128ace5810173e15b99a2299de91de3091e0ea92c8f49"
+            }
+          ],
+          "dependency_assertions": [],
+          "delivery_status": "delivered",
+          "publication_status": "published",
+          "quality_status": "accepted",
+          "verification_status": "verified",
+          "error_codes": []
+        },
+        {
+          "schema_version": "corpus-report-semantic-reference-v1",
+          "report_anchor": "最终回答（单句中文结论陈述）",
+          "report_quote": "材料判断 Q2 800G 出货超预期",
+          "publication_id": "sha256:933d718da67a5993b637f067bc69ec5557a2b8a6a24f4c9f23ab6d48f2d25918",
+          "record_id": "99c2d149bf9fc862fe6207895a7d066027d03d98350f49bfe874974f83686a9e",
+          "purpose": "cite",
+          "evidence_ranges": [
+            {
+              "handle": "cv2:dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96#chunk:signed-non-table-target-scope",
+              "unit_id": "signed-unit-20",
+              "coordinate_system": "unicode_code_points",
+              "start": 89,
+              "end": 102,
+              "quote_sha256": "sha256:0a9f0cb0ffcf42620ae07506e97ae983560930045e26234b44e7c596fff17168"
+            }
+          ],
+          "dependency_assertions": [],
+          "delivery_status": "delivered",
+          "publication_status": "published",
+          "quality_status": "accepted",
+          "verification_status": "verified",
+          "error_codes": []
+        },
+        {
+          "schema_version": "corpus-report-semantic-reference-v1",
+          "report_anchor": "最终回答（单句中文结论陈述）",
+          "report_quote": "材料判断 Q2 800G 出货超预期",
+          "publication_id": "sha256:933d718da67a5993b637f067bc69ec5557a2b8a6a24f4c9f23ab6d48f2d25918",
+          "record_id": "itm_5c1109b67c18d8d2",
+          "purpose": "cite",
+          "evidence_ranges": [
+            {
+              "handle": "cv2:dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96#chunk:signed-non-table-target-scope",
+              "unit_id": "signed-unit-20",
+              "coordinate_system": "unicode_code_points",
+              "start": 44,
+              "end": 74,
+              "quote_sha256": "sha256:509a88d6107a5520c68ace89dda82463f8982e95ede7c8d13f030b1e98d6cbdb"
+            }
+          ],
+          "dependency_assertions": [],
+          "delivery_status": "delivered",
+          "publication_status": "published",
+          "quality_status": "accepted",
+          "verification_status": "verified",
+          "error_codes": []
+        }
+      ],
+      "problems": [],
+      "model_claimed_complete": null
+    }
+  ],
+  "manifest_files": [
+    "/tmp/fa-web-semantic-47-r1.jhsuxgzl/runs/6254dd08089b429f84458e74966cf008/run/corpus/manifests/manifest-000.json"
+  ],
+  "report_sha256": "4b65335e2c8ce4a745b651ef98ac8f43bbff52250e3b15f666a707272351bc41",
+  "report_chars": 19,
+  "boundary_answer_status": "complete"
+}
