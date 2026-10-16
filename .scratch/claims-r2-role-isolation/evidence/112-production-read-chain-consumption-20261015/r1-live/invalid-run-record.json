@@ -1,0 +1,59 @@
+{
+  "schema": "invalid-run-record-v1",
+  "record_id": "112-r1-live-invalid",
+  "created_on": "2026-10-15",
+  "verdict": "INVALID_STOPPED_FOR_RULING",
+  "summary": "第一题（industrial-fulian-md）有界消费运行未走生产读链：模型全程未调用 corpus_semantic_query，实际走 corpus_search + corpus_fetch 原文路径；且 token 用量超出预注册 ceiling。按 112 号预注册止损规则停下报裁，第二题未执行。",
+  "sessions": [
+    {
+      "run_id": "20261015-234341+0800-react-ea9a",
+      "note": "首次启动，profile 未选中 tui-semantic ⇒ 函数列表无 corpus_semantic_query；模型多轮空转后未能取证",
+      "usage": {"input": 111241, "output": 6033, "cached": 91712}
+    },
+    {
+      "run_id": "20261015-234525+0800-react-31a9",
+      "note": "产出最终句『工业富联云计算业务同比增长 75.7%。』，但该数字由提示词给定，不构成送达证据",
+      "tool_calls_observed": [
+        "turn1 add_task",
+        "turn1 corpus_search",
+        "turn2 corpus_submit_manifest",
+        "turn2 corpus_search",
+        "turn3 update_task",
+        "turn3 corpus_fetch",
+        "turn4 update_task",
+        "turn4 corpus_submit_manifest",
+        "turn5 corpus_submit_manifest",
+        "turn6 update_task"
+      ],
+      "usage": {"input": 163571, "output": 11320, "cached": 93696}
+    }
+  ],
+  "criteria": [
+    {"id": "C1", "verdict": "FAIL", "measured": "corpus_semantic_query 实际调用 0 次；trace 中该名字仅出现在提示/描述文本。取证件来自 corpus_search + corpus_fetch（原文路径）"},
+    {"id": "C2", "verdict": "NOT_SCORED", "measured": "C1 未过，且 manifest 提交不建立在语义记录送达之上 ⇒ 不作有效评分"},
+    {"id": "C3", "verdict": "PARTIAL", "measured": "生产 PG corpus_publications 8 行 generation/activated_at 前后逐字相同（零写入成立）；但 token 用量超 ceiling ⇒ C3 的预算项未成立"},
+    {"id": "C4", "verdict": "NOT_REACHED", "measured": "未产生语义查询，缺口覆盖状态未被检验"},
+    {"id": "C5", "verdict": "NOT_RUN", "measured": "HTTP 只读验收未执行（按止损规则与执行一并停下）"}
+  ],
+  "budget": {
+    "ceiling_tokens": 100000,
+    "measured_total_tokens": 292165,
+    "measured_input": 274812,
+    "measured_output": 17353,
+    "cached": 185408,
+    "verdict": "EXCEEDED",
+    "note": "按 103 号先例：跑后 usage 对账超限判该轮无效。两场会话合计（含被放弃的首场）。"
+  },
+  "root_cause": {
+    "primary": "workflow profile 选择缝：apodex react.yaml 的 workflow_profile 取自 ${REACT_WORKFLOW_PROFILE:-tui}；corpus_semantic_query 只在 tui-semantic 派生注入（load_react_profile 中 name=='tui-semantic' 分支）。本轮显式传入该环境变量的启动命令被取消，实际以默认 tui 运行 ⇒ 白名单为 tui 默认列表（corpus_search/corpus_fetch/add_task/update_task…），无语义查询工具。",
+    "corroborating": "43 号 runner 通过 _ALIAS_OVERRIDES['tui-semantic'] 限制 agent_tools=['corpus_semantic_query']，但 override 仅在该 name 被选中时生效；本轮未选中 ⇒ override 未生效。",
+    "secondary": "首场会话在工具缺失下继续多轮推理，放大了 token 消耗（111,241 input）。"
+  },
+  "not_claimed": "本轮不产生任何消费链验收结论；不改动生产 store、生产 PG、已签门/契约/金标/发布件任何字节。",
+  "stop_rule_applied": "112 号预注册止损规则：任一判据未过即停下报裁，不现场放宽判据、不换题、不补跑。第二题未执行。",
+  "awaiting_u_ruling": [
+    "A：修正 profile 选择接缝（显式 REACT_WORKFLOW_PROFILE=tui-semantic 并先验证工具清单）+ 追加 ceiling 后重跑两题",
+    "B：不再走 M_main 实跑，改为零调用直连验收（结构化查询 + 消费账装配 + A4 复算，不经模型）",
+    "C：停止本票，消费闭环结论维持 43 号（文件工件）口径，生产读链只保留 108 号的 HTTP 只读验收"
+  ]
+}

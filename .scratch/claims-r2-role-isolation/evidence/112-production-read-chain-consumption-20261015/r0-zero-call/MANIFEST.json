@@ -1,0 +1,28 @@
+{
+  "schema": "evidence-manifest-v1",
+  "record_id": "112-production-read-chain-consumption",
+  "created_on": "2026-10-15",
+  "status": "draft_pending_human_signoff",
+  "model_requests": 0,
+  "production_database_access": 0,
+  "files": {
+    "production-read-chain-consumption-signoff.md": {
+      "sha256": "f109b5da358c5b9541eeec869820eb2e4f6018e667674a878152c001d94f4236"
+    },
+    "production-read-chain-consumption.proposed.json": {
+      "sha256": "413dac7523e410a91f166b0c012334ccc61775891a84151babb41be35f272bd3"
+    },
+    "apply_112_signoff.py": {
+      "sha256": "4013a63eb263b6147245668673838ee22c3a6186c70cf1db198ee8c6111aad42"
+    },
+    "apply_budget_questions_112.py": {
+      "sha256": "6d880fa22e1995703364bcd05e06d4ddf461f9c63386960db37d958fe76b0a74"
+    },
+    "budget-and-questions-authorisation.md": {
+      "sha256": "72e94dad364e1fbff1bf7f28097a1a7ce094447cd354d980b253cfe023600ed2"
+    },
+    "production-read-chain-consumption.json": {
+      "sha256": "decec7c7352b6d60498f639be635f17c691faa8a3b6d5e9aba706b01a2ebac5a"
+    }
+  }
+}

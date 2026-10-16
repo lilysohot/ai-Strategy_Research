@@ -1,0 +1,82 @@
+{
+  "schema": "production-read-chain-consumption-v1",
+  "record_id": "112-production-read-chain-consumption",
+  "created_on": "2026-10-15",
+  "status": "decided_signed",
+  "reviewer": "xyl",
+  "adjudicator": "xyl",
+  "signed_on": "2026-10-15",
+  "title": "第一笔经生产读链的真实消费冒烟",
+  "background": [
+    "108 号：生产 PG/web 只读读链接通并获 U 具名放行（production-pg-web-read-chain-release-decision.json a06f4975…）。",
+    "109 号 P6：gen-2 单代双角色发布落生产 store，两源 coverage {claims: complete, material_items: complete, material_relations: missing}。",
+    "111 号：NT-I43 polarity 表示缝勘误登记已签生效，I43 不再作为断言悬项。",
+    "43 号：消费闭环已在文件工件快照上验证过（两题、A4 enforce verified）；本轮唯一差异 = 查询走生产读链。"
+  ],
+  "zero_call_recon_20261015": {
+    "store_root": "CORPUS_STRUCTURED_ROOT=/home/administrator/FrontierAgent/data/corpus/structured-store（108 号落位，未改）",
+    "manifests_present": [
+      "sha256:c3dbd91b…（gen-2, industrial-fulian-md, parent 5fc7116b…）",
+      "sha256:8395c900…（gen-2, optical-module-docx, parent 8dde446f…）",
+      "gen-1 两份保留，parent 链完整"
+    ],
+    "semantic_query_readonly": "两源按真实 build_id 只读查询均返回记录：句柄 cv2:<build>#chunk:…、逐字 quote、quality_status=accepted、usable_for=[cite]、next_cursor 可翻页",
+    "web_offline_tests": "tests/test_web_corpus_read_chain.py 14 passed",
+    "model_requests": 0,
+    "production_database_writes": 0
+  },
+  "scope": {
+    "questions": 2,
+    "per_source": 1,
+    "question_style": "沿用 43 号先例：单源、单事实、可被引证回答的有界问题；问题文本冻结后不改",
+    "tooling": "apodex react / stateful-react-agent，白名单只含 corpus_semantic_query + corpus_submit_manifest（经 A4 enforce）",
+    "query_path": "corpus_semantic_query 读取生产 store root（gen-2 head），不是文件工件快照挂载",
+    "differs_from_43": "43 号消费的是 42 号文件工件发布目录；本轮消费的是生产读链落位后的生产 store"
+  },
+  "budget": {
+    "ceiling_tokens": null,
+    "ceiling_note": "待 U 填。43 号实测参照：2 题 = 6 个成功模型响应 + 1 个无 token 回执 stalled attempt + 4 次工具调用；每题 max_turns=8、并发 1。",
+    "extraction_attempts": 0,
+    "production_pg_writes": 0
+  },
+  "pre_registered_criteria": [
+    {
+      "id": "C1",
+      "criterion": "每题至少一次 corpus_semantic_query，且记录进入实际模型消息（消费账 delivered，非仅 pending / 非仅记录 ID）"
+    },
+    {
+      "id": "C2",
+      "criterion": "提交 corpus_submit_manifest，A4 enforce 复算 = verified，引用回溯到本题 publication（gen-2 + cursor 版）"
+    },
+    {
+      "id": "C3",
+      "criterion": "零抽取调用（claims/items/relations attempts = 0）；零生产 PG 写入（生产库 generation/activated_at 落位前后比对不变）"
+    },
+    {
+      "id": "C4",
+      "criterion": "命中已登记缺口（7 条未覆盖金标、12 条 claims 无候选、material_relations missing）时返回覆盖状态而非空数组，不得读成『无风险/无数据』"
+    },
+    {
+      "id": "C5",
+      "criterion": "HTTP 只读验收（零模型）：真实 JWT、401 守卫、claims/items 两端点可达与 cursor 往返"
+    }
+  ],
+  "stop_rule": "任一判据未过即停下报裁，不现场放宽判据、不换问题、不补跑（106 号 D3 先例）。",
+  "out_of_scope": [
+    "web 前端 items 页面",
+    "claims / items 进生产 PG 写链",
+    "e6_holdout_corpus",
+    "material_relations 抽取",
+    "任何补抽或金标修订"
+  ],
+  "not_claimed": "本票只关闭这两个问题的 delivery → context_use → report_reference；不声明整篇覆盖、研究质量或生产放行（后者由 108 号签认件覆盖）。",
+  "signed_instrument": {
+    "file": "production-read-chain-consumption-signoff.md",
+    "sha256": "f109b5da358c5b9541eeec869820eb2e4f6018e667674a878152c001d94f4236",
+    "draft_sha256": "413dac7523e410a91f166b0c012334ccc61775891a84151babb41be35f272bd3"
+  },
+  "runnable": false,
+  "runnable_note": "预算 ceiling 与问题文本未填 ⇒ 不可起跑（99 号/102 号先例）",
+  "model_requests": 0,
+  "production_database_access": 0
+}
