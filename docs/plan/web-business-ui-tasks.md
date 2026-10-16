@@ -2,9 +2,9 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 日期 | v1.7 · 2026-10-14；回填会话计划、成交回填触发重算及 Run 实时订阅的执行情况（§7） |
+| 版本 / 日期 | v1.8 · 2026-10-16；新增§8 执行情况回填（§7 漏记项、单测数字刷新、缺口复核）；v1.7 · 2026-10-14 回填会话计划、成交回填触发重算及 Run 实时订阅的执行情况（§7） |
 | 状态 | 有效任务设计；UI-01—02、04、06—10 页面代码已落地并接入真实业务 API，**UI-03 部分、UI-05 部分、UI-11 浏览器验收未做**；未部署上线，不代表已交付 |
-| 需求依据 | [Web 业务资料 PRD v0.7](../design/web-business-data-prd.md)；[产品需求](../product-requirements.md) PR-BIZ-01—06、PR-WB-07、PR-DATA-13、PR-WATCH-01—04 |
+| 需求依据 | [Web 业务资料 PRD v0.8](../design/web-business-data-prd.md)；[产品需求](../product-requirements.md) PR-BIZ-01—06、PR-WB-07、PR-DATA-13、PR-WATCH-01—04 |
 | 配套清单 | [数据持久化与服务端任务](web-business-persistence-tasks.md)；本文任务编号 UI-*，配套任务编号 DATA-* |
 | 范围 | 三栏工作台、资料录入与回执、分析依据、补数、监控、站内通知及浏览器验收 |
 
@@ -315,3 +315,43 @@ UI-11 浏览器端到端验收未执行，未部署上线。本轮运行了前�
 
 收口时按[本地任务规范](../agents/issue-tracker.md)补齐其余 UI-* issue，并完成 UI-11 的浏览器 +
 真实 API + 真实 worker 联合验收；未通过项不向用户开放。
+
+## 8. 执行情况回填（2026-10-16）
+
+本节补记 §7（2026-10-14 回填）**之后**与 §7 **漏记**的代码落点。**不是验收结论**：
+UI-11 浏览器联合验收仍未执行。谓词声明：本节“已落地”= 代码已提交并存在对应前端/服务端落点，
+**不等于**已过门、已验收或已上线；归属任务按提交信息与文件落点**推定**。
+
+### 8.1 §7 漏记或之后新增的落地（按提交）
+
+| 提交 | 日期 | 代码落点 | 对应任务 | 说明 |
+|---|---|---|---|---|
+| `d91805ee` | 2026-10-09 | `stores/runs.ts`、`stores/sessions.ts`、`utils/chat.ts`、`views/ChatView.vue`：会话流与会话切换竞态修复 | UI-04（切研究隔离）、UI-09（流状态） | §7 只提了 `chat.test.ts` 的覆盖范围，未记本项 |
+| `41573ba1` | 2026-10-12 | 对话结束后补充资料并继续分析的后置路径 | UI-07 | §7 已覆盖，此处补记提交号 |
+| `89128f1b` | 2026-10-12 | `server/store.py`：新研究创建时继承用户最近未归档账户 | UI-01/UI-02 依赖的服务端默认 | 纯服务端行为、前端无改动；任务归属以[持久化清单 §11](web-business-persistence-tasks.md)为准。**需求侧未固化**（PRD §3.1 未写） |
+| `6bb45fd3` | 2026-10-14 | `types.ts`（`resolution_reason`）、`components/business/BusinessRequestCenter.vue`、`views/ChatView.vue`、`utils/chat.ts`、新增 `utils/saveResearchPlan.ts`、`api/planSave.test.ts`、`utils/chat.test.ts` | UI-07（补数请求）、UI-02/03（保存路径） | **字段语义未进 PRD/契约**；服务端侧见[持久化清单 §11.2](web-business-persistence-tasks.md) |
+| `4662bc52` | 2026-10-15 | 新增 `utils/runStatus.ts`（把 DB 读回的陈旧 `running` 与已结束的 SSE 流合并，避免终态被回退）、`stores/runs.ts` 改造、新增 `utils/runStatus.test.ts` | UI-09（运行状态展示）、UI-04 | 该改动挂在一笔名为 claims 证据的提交下；建议后续按路径而非提交信息检索 |
+
+### 8.2 数字刷新（2026-10-16 实跑）
+
+| 项 | §7 记录（2026-10-14） | 本轮实测 |
+|---|---|---|
+| 前端 Node 单测 | 93 项通过 | **96 passed / 0 failed**（`cd web && node --experimental-strip-types --test "src/**/*.test.ts"`）；增量来自 `runStatus.test.ts` 等 |
+| 类型检查 | 通过 | `cd web && node ./node_modules/vue-tsc/bin/vue-tsc.js --noEmit` 退出码 0 |
+| 浏览器验收 | 未执行 | 仍未执行：`web/tests/` 仍只有 `business-drafts.cjs`、`input-requests-real.cjs` 两个隔离 fixtures 脚本 |
+
+### 8.3 §7 缺口清单复核（2026-10-16）
+
+| §7 缺口 | 复核结论 |
+|---|---|
+| 1. UI-03 仅成交回填并重算；成交/持仓列表、更正、建议价采纳、来源与历史对比未实现 | 成立：`components/business/` 共 9 个组件，无交易列表/更正/建议价采纳组件。服务端已有 `GET /trades`、`POST /trades/{trade_id}/correct`，缺的是页面入口 |
+| 2. UI-05 聊天自然语言业务修改未实现（服务端无写入路径） | 成立：`server/profile.py::BUSINESS_TOOL_NAMES` 仅 `investment_context`/`request_investment_input`/`investment_position_sizing`/`investment_strategy_lint`，无写入工具 |
+| 3. UI-11 浏览器端到端验收未执行 | 成立 |
+| 4. 附件分阶段回执与同名冲突提示未核对 | 未核对，维持 |
+| 5. UI-* 全量逐项状态无完整独立真源 | 成立；且本轮新增 5 项“做了未记”正是该结构的直接后果（建议按 §5 收口动作补齐 UI-* issue） |
+| 6. 结构化补数弹窗、计划去价格与 `allocated_capital`、成交价回填触发重算已实现 | 维持“已实现”；§7 记为 2026-10-08 口径变更核对，提交号见[持久化清单 §11.2](web-business-persistence-tasks.md) |
+| 7. 成交回填创建 Run 后的前端会话记录与实时订阅已于 2026-10-14 修复 | 维持；本不构成分析结论产出成功的验收 |
+| 8. Agent 建议价展示与聊天回执中“建议价/成交价”区分仍未完成 | 仍未完成 |
+
+收口动作不变：按[本地任务规范](../agents/issue-tracker.md)补齐 UI-* issue 真源并完成 UI-11 联合验收；
+未通过项不向用户开放。

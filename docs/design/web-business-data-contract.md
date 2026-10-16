@@ -5,7 +5,7 @@
 | 版本 / 日期 | v0.2 · 2026-10-08；落实会话计划口径变更（计划不含价格、`allocated_capital`、`target_profit`、Agent 主动补数触发） |
 | 状态 | **契约冻结中**：本文确定的语义即实现口径；§11 的待定项在冻结前不得被客户端或实现静默填值 |
 | 需求依据 | [产品需求](../product-requirements.md) §4.7、PR-BIZ-01—06、PR-WATCH-01—04、PR-DATA-13 |
-| 上级设计 | [Web 业务资料需求规格](web-business-data-prd.md) v0.7（§8 的“拟议”接口由本文收口） |
+| 上级设计 | [Web 业务资料需求规格](web-business-data-prd.md) v0.8（§8 的“拟议”接口由本文收口） |
 | 任务依据 | [持久化任务清单](../plan/web-business-persistence-tasks.md) DATA-01；[页面任务清单](../plan/web-business-ui-tasks.md) §5 |
 | 环境依据 | [环境基线与验证入口](../plan/web-business-data-env-baseline.md) |
 

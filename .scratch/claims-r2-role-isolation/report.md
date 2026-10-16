@@ -1353,7 +1353,7 @@ Issue 43 同时暴露了 terminal task runner 对无 reporter 运行的完成态
 
 **验收与边界**：C4 = **PASS**。生产 PostgreSQL 以 READ ONLY 事务复核，8 行 `generation/activated_at` 与 112 号基线逐字相同；未写生产 PG。聚焦回归 70 passed；相关广测 1707 passed / 2 failed / 19 skipped（两项仍为既有环境失败：golden 锚点语料缺失、reader-pdf-11 与测试期待 reader-pdf-10 漂移）；Ruff、Pyright 与 import smoke 通过。C4 通过只证明缺口能被下游正确识别，**不表示 7+12 条内容已补齐，不改变 items P5 单轴 FAIL，也不表示 material_relations 已抽取**。证据：`evidence/113-c4-registered-gap-consumption-20261016/`。
 
-**当前剩余任务**：7 条 items 未覆盖金标与 12 条 claims 无候选的内容处置（若要补齐须另立抽取/裁定任务）、material_relations、web 前端 items 页面、claims/items 进生产 PG 写链、e6_holdout_corpus；C4 不再属于剩余项。
+**当前剩余任务**：7 条 items 未覆盖金标与 12 条 claims 无候选的内容处置（若要补齐须另立抽取/裁定任务）、material_relations、Web Agent 结构化消费接线与真实运行验收（Issue 47，已立项未执行）、claims/items 进生产 PG 写链、e6_holdout_corpus；C4 不再属于剩余项。web 前端 items 页面不属于当前“让 Agent 消费结构化数据”的目标。
 
 ## 附录：依据与源码入口
 
