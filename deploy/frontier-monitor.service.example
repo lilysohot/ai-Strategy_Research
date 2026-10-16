@@ -1,0 +1,15 @@
+[Unit]
+Description=FrontierAgent HTTP monitoring worker
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/administrator/FrontierAgent
+ExecStart=/home/administrator/FrontierAgent/.venv/bin/python -m server.monitor_worker
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=20
+UMask=0077
+
+[Install]
+WantedBy=default.target

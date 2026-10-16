@@ -99,7 +99,11 @@ async def create_rule(case, *, spec=None, **extra) -> uuid.UUID:
 
 
 async def evaluate(case, rule_id, obs, *, step_now=None, max_gap_seconds=None) -> dict:
-    now = _dt(step_now) if step_now is not None else _dt(0)
+    now = (
+        _dt(step_now)
+        if step_now is not None
+        else datetime.fromtimestamp(obs.received_at_ms / 1000, UTC)
+    )
     max_gap = timedelta(seconds=max_gap_seconds) if max_gap_seconds else None
     async with biz.business_transaction() as session:
         return await watch_eval.evaluate(
@@ -356,21 +360,16 @@ async def test_concurrent_evaluation_consumes_once(case) -> None:
     assert await event_count(case, rule_id) == 1
 
 
-async def test_observation_preserves_precision_and_time_source(case) -> None:
+async def test_unverified_imprecise_observation_cannot_establish_baseline(case) -> None:
     rule_id = await create_rule(case)
     obs = make_obs("19.99", step=0, time_source="unknown", precision_limited=True)
-    await evaluate(case, rule_id, obs)
+    outcome = await evaluate(case, rule_id, obs)
+    assert outcome == {"status": "invalid_quote", "reason": "imprecise_price"}
     async with biz.business_transaction() as session:
-        row = (
-            await session.execute(
-                select(store.WatchObservation).where(store.WatchObservation.rule_id == rule_id)
-            )
-        ).scalar_one()
-    assert row.price == Decimal("19.99")
-    assert row.observed_at_ms is None
-    assert row.time_source == "unknown"
-    assert row.precision_limited is True
-    assert row.received_at_ms == _ms(0)
+        rule = await session.get(store.WatchRule, rule_id)
+        assert rule.baseline_price is None and rule.armed
+        assert rule.last_suppressed_reason == "imprecise_price"
+    assert await observation_count(case, rule_id) == 0
 
 
 async def test_expired_rule_does_not_trigger(case) -> None:

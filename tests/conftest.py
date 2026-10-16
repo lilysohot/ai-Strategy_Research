@@ -28,7 +28,7 @@ import pytest
 
 
 @pytest.fixture(autouse=True)
-async def _isolated_database(tmp_path):
+async def _isolated_database(tmp_path, monkeypatch):
     """Point the server store at a throwaway SQLite file for every test."""
     try:
         from server.config import get_config
@@ -40,6 +40,11 @@ async def _isolated_database(tmp_path):
         return
 
     cfg = get_config()
+    # Local deployment switches must never silently opt a test into background
+    # monitoring. Pipeline tests explicitly enable the mode they exercise.
+    monkeypatch.setattr(cfg, "monitor_enabled", False)
+    monkeypatch.setattr(cfg, "monitor_streams_enabled", False)
+    monkeypatch.setattr(cfg, "auto_enabled", False)
     saved_db = cfg.database_url
     saved_runs_root = cfg.runs_root
     saved_env = os.environ.get("SERVER_RUNS_ROOT")

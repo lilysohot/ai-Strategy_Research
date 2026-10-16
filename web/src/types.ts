@@ -304,7 +304,7 @@ export interface WatchRule {
   plan_id: string | null
   name: string
   status: string
-  current_version: number
+  version: number
   archived?: boolean
   spec?: Record<string, unknown>
   created_at?: string | null

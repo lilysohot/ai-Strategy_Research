@@ -22,7 +22,7 @@ import uuid
 from datetime import UTC, datetime
 from typing import Any
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from server import (
@@ -200,6 +200,9 @@ async def schedule_event(
         # 改版/暂停/取消使旧版未启动的派发失效（契约 §9），不补发积压旧触发。
         await _expire(session, event, now, "rule_obsoleted")
         return {"status": EXPIRED, "reason": "rule_obsoleted"}
+    if rule.lifecycle_epoch != (event.detail_json or {}).get("lifecycle_epoch", 0):
+        await _expire(session, event, now, "rule_lifecycle_changed")
+        return {"status": EXPIRED, "reason": "rule_lifecycle_changed"}
     rev = await _latest_revision(session, rule.id, rule.current_version)
     if rev is None:
         await _expire(session, event, now, "rule_missing")
@@ -210,6 +213,51 @@ async def schedule_event(
     if event.analysis_expires_at is not None and now > event.analysis_expires_at:
         await _expire(session, event, now, "max_delay")
         return {"status": EXPIRED, "reason": "max_delay"}
+    if cfg.monitor_streams_enabled:
+        from server.monitor_pipeline import online
+        from server.watch_eval import condition_met
+
+        if not await online(session, event.user_id, now):
+            await _expire(session, event, now, "browser_offline")
+            return {"status": EXPIRED, "reason": "browser_offline"}
+        presence = await session.get(store.MonitorPresence, event.user_id)
+        if event.received_at_ms < int(presence.started_at.timestamp() * 1000):
+            await _expire(session, event, now, "prior_online_period")
+            return {"status": EXPIRED, "reason": "prior_online_period"}
+        # Freeze account/plan context only when this research can actually run.
+        busy = await session.scalar(
+            select(store.Run.id)
+            .where(
+                store.Run.session_id == event.research_id,
+                store.Run.status.in_(["queued", "running", "waiting_approval"]),
+            )
+            .limit(1)
+        )
+        if rev.action == "auto_analyze" and busy:
+            return {"status": "deferred", "reason": "research_busy"}
+        if rev.action == "auto_analyze":
+            active_count = await session.scalar(
+                select(func.count())
+                .select_from(store.Run)
+                .where(
+                    store.Run.status.in_(["queued", "running", "waiting_approval"]),
+                )
+            )
+            if active_count >= cfg.worker_pool_size:
+                return {"status": "deferred", "reason": "worker_capacity"}
+        if rev.action == "auto_analyze" and (
+            rule.last_valid_quote_at is None
+            or (now - rule.last_valid_quote_at).total_seconds() > cfg.monitor_quote_max_age_seconds
+        ):
+            return {"status": "deferred", "reason": "awaiting_fresh_quote"}
+        if rev.action == "auto_analyze" and not condition_met(
+            rule.last_valid_quote_price,
+            rev.direction,
+            rev.threshold_low,
+            rev.threshold_high,
+        ):
+            await _expire(session, event, now, "condition_no_longer_met")
+            return {"status": EXPIRED, "reason": "condition_no_longer_met"}
     if rev.action != "auto_analyze":
         # 仅要求提醒（notify）：不擅自开启模型分析（契约 §9 / PRD §7.1）。
         # 触发事件本身就是通知事实，置 completed 并标记 notify_only，不建 Run。
@@ -304,7 +352,21 @@ async def schedule_event(
     if depth >= cfg.dispatch_research_queue_limit:
         return {"status": "queued_full", "queue_depth": depth}
 
-    prompt = rev.task or f"监控触发：{event.symbol} {event.trigger_reason}"
+    prompt = (
+        f"价格监控触发：{event.symbol}，{event.trigger_reason}；触发价 {event.price} {event.currency}；"
+        f"供应商行情时间戳 {event.observed_at_ms}，规则版本 {event.rule_version}。\n"
+        f"{rev.task or '请按当前研究的账户与计划重新分析。'}\n"
+        "这是 HTTP 定时采样触发，不代表完整的盘中价格路径；请核验最新行情后给出研究结论。"
+    )
+    event.detail_json = {
+        **(event.detail_json or {}),
+        "analysis_quote": {
+            "price": str(rule.last_valid_quote_price),
+            "observed_at": rule.last_valid_quote_at.isoformat()
+            if rule.last_valid_quote_at
+            else None,
+        },
+    }
     run_id = uuid.uuid4()
     default_llm = await get_default_llm_config(user_id=event.user_id)
     llm_snapshot = await build_llm_snapshot(user_id=event.user_id)
@@ -510,6 +572,86 @@ async def schedule_cycle(
     reconciled = await reconcile_event_runs(session, limit=limit, now=now)
     counters["reconciled"] = reconciled
     return counters
+
+
+async def assert_watch_launch_ready(run_id: uuid.UUID) -> None:
+    """Final gate after an execution slot is acquired, before spawning a model.
+
+    Never silently refresh an immutable snapshot. A queued analysis whose inputs
+    changed is closed with an explicit error; the user can create a new analysis.
+    Browser expiry does not cancel a Run which was already created.
+    """
+    from server.watch_eval import condition_met
+
+    reason = None
+    now = _now()
+    async with biz.business_transaction() as session:
+        event = await session.scalar(
+            select(store.WatchEvent).where(store.WatchEvent.run_id == run_id)
+        )
+        if event is None:
+            return
+        rule = await session.get(store.WatchRule, event.rule_id)
+        rev = await _latest_revision(session, event.rule_id, event.rule_version)
+        snapshot = await session.scalar(
+            select(store.RunInvestmentSnapshot).where(store.RunInvestmentSnapshot.run_id == run_id)
+        )
+        if (
+            rule is None
+            or rev is None
+            or rule.last_valid_quote_at is None
+            or (now - rule.last_valid_quote_at).total_seconds()
+            > get_config().monitor_quote_max_age_seconds
+        ):
+            reason = "monitor_quote_expired_before_launch"
+        elif not condition_met(
+            rule.last_valid_quote_price, rev.direction, rev.threshold_low, rev.threshold_high
+        ):
+            reason = "monitor_condition_changed_before_launch"
+        elif snapshot is None:
+            reason = "monitor_snapshot_missing"
+        else:
+            link = await session.scalar(
+                select(store.ResearchInvestmentLink).where(
+                    store.ResearchInvestmentLink.research_id == event.research_id
+                )
+            )
+            if (
+                link is None
+                or link.account_id != snapshot.account_id
+                or link.primary_plan_id != snapshot.plan_id
+            ):
+                reason = "monitor_business_snapshot_changed"
+            else:
+                spec = investment_snapshot.InvestmentInputSpec(
+                    use_case=snapshot.use_case,
+                    account=investment_snapshot.ObjectRef(id=snapshot.account_id),
+                    plan=investment_snapshot.ObjectRef(id=snapshot.plan_id),
+                )
+                try:
+                    current = await investment_snapshot.resolve_for_run(
+                        session, user_id=event.user_id, research_id=event.research_id, spec=spec
+                    )
+                    if (
+                        current.account_revision != snapshot.account_revision
+                        or current.plan_revision != snapshot.plan_revision
+                        or current.values != snapshot.resolved_json
+                    ):
+                        reason = "monitor_business_snapshot_changed"
+                except biz.BusinessError:
+                    reason = "monitor_business_snapshot_changed"
+        detail = dict(event.detail_json or {})
+        if reason:
+            detail["launch_rejection"] = reason
+        else:
+            detail["launch_quote"] = {
+                "price": str(rule.last_valid_quote_price),
+                "observed_at": rule.last_valid_quote_at.isoformat(),
+                "checked_at": now.isoformat(),
+            }
+        event.detail_json = detail
+    if reason:
+        raise RuntimeError(reason)
 
 
 async def scheduler_loop(*, poll_seconds: float, batch: int) -> None:

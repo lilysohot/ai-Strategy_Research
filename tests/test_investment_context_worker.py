@@ -143,6 +143,10 @@ async def test_orchestrator_materializes_authenticated_context_without_db_creden
     fake_process = SimpleNamespace(stdin=SimpleNamespace(), stdout=None, returncode=None, pid=1)
     spawn = AsyncMock(return_value=fake_process)
     monkeypatch.setattr("asyncio.create_subprocess_exec", spawn)
+    monkeypatch.setattr(
+        "server.orchestrator._readonly_semantic_worker_command",
+        lambda command, **_kwargs: command,
+    )
     freeze = AsyncMock(return_value=False)
     monkeypatch.setattr(
         "server.orchestrator.investment_snapshot.ensure_research_bound_snapshot",
@@ -207,6 +211,10 @@ async def test_orchestrator_removes_stale_context_after_failed_auth_resolution(
     fake_process = SimpleNamespace(stdin=SimpleNamespace(), stdout=None, returncode=None, pid=1)
     spawn = AsyncMock(return_value=fake_process)
     monkeypatch.setattr("asyncio.create_subprocess_exec", spawn)
+    monkeypatch.setattr(
+        "server.orchestrator._readonly_semantic_worker_command",
+        lambda command, **_kwargs: command,
+    )
     orchestrator = Orchestrator()
     orchestrator._investment_context_resolver = MissingResolver()
     monkeypatch.setattr(orchestrator, "_acquire_slot", AsyncMock())

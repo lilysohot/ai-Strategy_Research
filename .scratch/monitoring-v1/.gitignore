@@ -1,0 +1,6 @@
+browser-libs/
+*.png
+*.log
+*.json
+*.pid
+*.env

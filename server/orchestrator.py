@@ -23,6 +23,7 @@ import contextlib
 import json
 import logging
 import os
+import shutil
 import signal
 import sys
 import uuid
@@ -77,6 +78,64 @@ from server.usage import replay_block_from_summary, usage_for_run
 logger = logging.getLogger(__name__)
 
 WorkerCallback = Callable[[str, dict[str, Any]], None]
+
+
+def _readonly_semantic_worker_command(
+    command: list[str],
+    *,
+    run_dir: Path,
+    store_root: Path | None,
+) -> list[str]:
+    """Prepare the store and place one Web worker behind a read-only root."""
+    if store_root is None:
+        raise RuntimeError("CORPUS_STRUCTURED_ROOT is required for Web research workers")
+    try:
+        store = store_root.expanduser().resolve(strict=True)
+    except OSError as exc:
+        raise RuntimeError("CORPUS_STRUCTURED_ROOT does not exist") from exc
+    if not store.is_dir():
+        raise RuntimeError("CORPUS_STRUCTURED_ROOT must be a directory")
+
+    run_root = run_dir.resolve()
+    if run_root == store or run_root.is_relative_to(store) or store.is_relative_to(run_root):
+        raise RuntimeError("the writable run directory must not overlap the publication store")
+
+    bwrap = shutil.which("bwrap")
+    if not bwrap:
+        raise RuntimeError(
+            "bubblewrap is required to mount the semantic publication store read-only"
+        )
+
+    # Run this on the trusted writer side. SQLite read-only WAL mode needs the
+    # sidecars to exist before the worker loses all write access.
+    from plugins.corpus.structured.store import prepare_readonly_access
+
+    prepare_readonly_access(store_root=store)
+    return [
+        bwrap,
+        "--die-with-parent",
+        "--unshare-pid",
+        "--ro-bind",
+        "/",
+        "/",
+        "--proc",
+        "/proc",
+        "--dev-bind",
+        "/dev",
+        "/dev",
+        "--tmpfs",
+        "/tmp",
+        "--ro-bind",
+        str(store),
+        str(store),
+        "--bind",
+        str(run_root),
+        str(run_root),
+        "--chdir",
+        str(REPO_ROOT),
+        "--",
+        *command,
+    ]
 
 
 def _signal_worker(proc: asyncio.subprocess.Process, sig: int) -> None:
@@ -1178,6 +1237,10 @@ class Orchestrator:
         llm_env = await self._resolve_llm_env(params.get("user_id"))
         # Gate cross-session parallelism at worker_pool_size.
         await self._acquire_slot()
+        if self._cfg.monitor_streams_enabled:
+            from server.watch_scheduler import assert_watch_launch_ready
+
+            await assert_watch_launch_ready(run_uuid)
         run_dir.mkdir(parents=True, exist_ok=True)
         _stage_prior_payload(run_dir, params.get("_prior_payload"))
         cmd = [
@@ -1218,8 +1281,17 @@ class Orchestrator:
         child_env["SERVER_DATABASE_URL_DOCKER"] = ""
         child_env["SERVER_MASTER_KEY"] = ""
         child_env["SERVER_JWT_SECRET"] = ""
+        if self._cfg.semantic_store_root is not None:
+            child_env["CORPUS_STRUCTURED_ROOT"] = str(self._cfg.semantic_store_root)
+        child_env["XDG_CACHE_HOME"] = str(run_dir / ".cache")
         if llm_env:
             child_env.update(llm_env)
+
+        cmd = _readonly_semantic_worker_command(
+            cmd,
+            run_dir=run_dir,
+            store_root=self._cfg.semantic_store_root,
+        )
 
         proc = await asyncio.create_subprocess_exec(
             *cmd,

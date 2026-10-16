@@ -113,6 +113,9 @@ async def _isolated_database(tmp_path, monkeypatch):
     from server.store import reset_engine
 
     cfg = get_config()
+    monkeypatch.setattr(cfg, "monitor_enabled", False)
+    monkeypatch.setattr(cfg, "monitor_streams_enabled", False)
+    monkeypatch.setattr(cfg, "auto_enabled", False)
     # The PG override must retain the root fixture's file isolation too.
     monkeypatch.setattr(cfg, "runs_root", tmp_path / "runs")
     monkeypatch.setenv("SERVER_RUNS_ROOT", str(cfg.runs_root))

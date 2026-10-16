@@ -710,6 +710,53 @@ class NotificationSettings(Base):
     )
 
 
+class MonitorPresence(Base):
+    __tablename__ = "monitor_presence"
+
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class MonitorTarget(Base):
+    """Shared HTTP polling cursor and fenced lease, independent of research Runs."""
+
+    __tablename__ = "monitor_targets"
+
+    key: Mapped[str] = mapped_column(String(200), primary_key=True)
+    next_poll_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    lease_token: Mapped[str | None] = mapped_column(String(36))
+    lease_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    last_error: Mapped[str | None] = mapped_column(String(200))
+    last_poll_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class MonitorMessage(Base):
+    """Durable outbox + consumer receipt. Redis is delivery, PostgreSQL is truth."""
+
+    __tablename__ = "monitor_messages"
+    __table_args__ = (Index("ix_monitor_messages_delivery", "channel", "state", "available_at"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    channel: Mapped[str] = mapped_column(String(16), nullable=False)
+    payload: Mapped[dict] = mapped_column(JSON, nullable=False)
+    state: Mapped[str] = mapped_column(String(20), nullable=False, default="pending")
+    attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    available_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    result: Mapped[dict | None] = mapped_column(JSON)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class MonitorWorker(Base):
+    __tablename__ = "monitor_workers"
+
+    role: Mapped[str] = mapped_column(String(32), primary_key=True)
+    heartbeat_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    last_error: Mapped[str | None] = mapped_column(String(200))
+
+
 class WatchRule(Base):
     """监控规则的当前指针行（DATA-09 / PR-WATCH-01）。
 
@@ -736,6 +783,9 @@ class WatchRule(Base):
     status: Mapped[str] = mapped_column(String, nullable=False, default="active")
     #: 已落库的最大配置版本号；配置明细读取版本行，不在指针行复制正文。
     current_version: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    lifecycle_epoch: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
     #: 最近一次检查时间与"有效行情"观测（DATA-10 判定侧写入；无可靠观测不得用 now 冒充）。
     last_check_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     last_valid_quote_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
@@ -1770,8 +1820,11 @@ async def session_display_metadata(rows: list[Session]) -> dict[uuid.UUID, dict]
         if unnamed:
             requests = (
                 select(
-                    Turn.session_id, Turn.content,
-                    func.row_number().over(partition_by=Turn.session_id, order_by=Turn.seq).label("n"),
+                    Turn.session_id,
+                    Turn.content,
+                    func.row_number()
+                    .over(partition_by=Turn.session_id, order_by=Turn.seq)
+                    .label("n"),
                 )
                 .where(Turn.session_id.in_(unnamed), Turn.role == "user")
                 .subquery()
@@ -1812,9 +1865,14 @@ async def list_turns(
             conditions.append(Turn.seq < before_seq)
         # Read-time compatibility for the old no_tool marker. Join its source
         # run so user-authored text and genuinely interrupted replies survive.
-        stmt = select(Turn, Run).outerjoin(
-            Run, (Turn.run_id == Run.id) & (Turn.session_id == Run.session_id),
-        ).where(*conditions)
+        stmt = (
+            select(Turn, Run)
+            .outerjoin(
+                Run,
+                (Turn.run_id == Run.id) & (Turn.session_id == Run.session_id),
+            )
+            .where(*conditions)
+        )
         if limit is not None:
             # Take the newest N, then re-sort ascending for stable output.
             stmt = stmt.order_by(Turn.seq.desc()).limit(limit)
@@ -1825,7 +1883,8 @@ async def list_turns(
         for turn, run in pairs:
             session.expunge(turn)  # presentation repair never changes stored evidence
             if (
-                turn.role == "assistant" and run is not None
+                turn.role == "assistant"
+                and run is not None
                 and is_legacy_normal_completion(run.status, run.stopped_by, run.error)
                 and run.final_answer
                 and turn.content == f"{run.final_answer}\n\n_[partial: no_tool]_"

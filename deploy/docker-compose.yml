@@ -83,6 +83,9 @@ services:
       # 可用状态（实测 /healthz = 503 storage_unavailable）。用 SERVER_DATABASE_URL_DOCKER
       # 覆盖；scheme 必须是 +asyncpg。库名与语料库不同：业务 apodex、语料 postgres。
       SERVER_DATABASE_URL: ${SERVER_DATABASE_URL_DOCKER:-postgresql+asyncpg://postgres:postgres@host.docker.internal:5432/apodex}
+      # The API is the trusted writer; each spawned research worker remounts
+      # this store read-only in its own bubblewrap mount/PID namespace.
+      CORPUS_STRUCTURED_ROOT: /app/data/corpus/structured-store
       # F01: run data (trajectories / inputs / outputs / spill) lives outside the
       # source tree, on the named volume mounted below — never in the image.
       SERVER_RUNS_ROOT: /var/lib/frontier-agent/web/runs
