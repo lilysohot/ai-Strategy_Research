@@ -1168,7 +1168,9 @@ class Orchestrator:
             except Exception:
                 logger.warning(
                     "research binding lookup failed for run %s; falling back to "
-                    "run-level prefix config", run_id, exc_info=True,
+                    "run-level prefix config",
+                    run_id,
+                    exc_info=True,
                 )
         # Resolve credentials here, in the parent, then hand them to the worker via
         # its environment only — never as argv (argv is world-readable via ps). The
@@ -1198,6 +1200,7 @@ class Orchestrator:
             str(self._cfg.max_turns),
             "--pipeline-id",
             self._cfg.pipeline_id,
+            "--require-semantic-store",
         ]
         cmd += ["--business-prefix", "1" if business_prefix else "0"]
         cmd += ["--continuity", str(params.get("_continuity") or "on")]

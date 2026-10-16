@@ -1,0 +1,46 @@
+2026-10-16 13:15:07,071 INFO frontier_agent.core.runtime.registries.agents: Registered agent: agent_team_main (Agent-Team Coordinator)
+2026-10-16 13:15:07,071 INFO frontier_agent.core.runtime.registries.agents: Registered agent: agent_team_sub (Agent-Team Sub)
+2026-10-16 13:15:07,071 INFO frontier_agent.scheduling.pipeline_registry: Registered pipeline: agent_team (Agent Team)
+2026-10-16 13:15:07,071 INFO frontier_agent.core.runtime.registries.workflows: Workflow plugin registered pipeline: agent_team
+2026-10-16 13:15:07,071 INFO frontier_agent.scheduling.pipeline_registry: Registered pipeline: agent_team_report (Agent Team + Reporter)
+2026-10-16 13:15:07,071 INFO frontier_agent.core.runtime.registries.workflows: Workflow plugin registered pipeline: agent_team_report
+2026-10-16 13:15:07,071 INFO frontier_agent.scheduling.pipeline_registry: Registered pipeline: agent-team (Agent Team)
+2026-10-16 13:15:07,071 INFO frontier_agent.core.runtime.registries.workflows: Workflow plugin registered pipeline: agent-team
+2026-10-16 13:15:07,071 INFO frontier_agent.scheduling.pipeline_registry: Registered pipeline: agent-team-report (Agent Team + Reporter)
+2026-10-16 13:15:07,071 INFO frontier_agent.core.runtime.registries.workflows: Workflow plugin registered pipeline: agent-team-report
+2026-10-16 13:15:07,072 INFO frontier_agent.core.runtime.registries.agents: Registered agent: stateful_react (Stateful ReAct Agent)
+2026-10-16 13:15:07,072 INFO frontier_agent.scheduling.pipeline_registry: Registered pipeline: stateful-react-agent (Stateful ReAct Agent)
+2026-10-16 13:15:07,072 INFO frontier_agent.core.runtime.registries.workflows: Workflow plugin registered pipeline: stateful-react-agent
+2026-10-16 13:15:07,072 INFO frontier_agent.scheduling.workflow_loader: Loaded 2 external workflow plugin(s)
+2026-10-16 13:15:07,072 INFO frontier_agent.scheduling.pipeline_registry: Registered pipeline: agent_team (Agent Team)
+2026-10-16 13:15:07,072 INFO frontier_agent.scheduling.pipeline_registry: Registered pipeline: stateful-react-agent (Stateful ReAct Agent)
+2026-10-16 13:15:07,103 INFO frontier_agent.core.runtime.loop.budget_consistency: stateful_react: compaction trigger 209,715 leaves 52,429 tokens before max_len 262,144; one full-length reply (max_tokens 32,768) is 62% of that margin
+2026-10-16 13:15:07,103 WARNING frontier_agent.components.finalization.budget: stateful: wall-time config cannot guarantee a final answer — research stops at 450s and one late tool call may run to 2280s, past the 900s hard ceiling, leaving no room for the 600s finalization phase. Lower tool_timeout_s (to at most half the wall) or raise the wall.
+2026-10-16 13:15:07,105 INFO workflows.stateful_react_agent.nodes.main_agent: stateful_react tools selected by profile: ['web_search', 'web_fetch', 'download_file', 'bash', 'grep_search', 'glob_search', 'read_file', 'create_file', 'recover_result', 'corpus_search', 'corpus_fetch', 'corpus_semantic_query', 'corpus_inventory', 'data_coverage', 'market_resolve', 'market_quote', 'market_history', 'market_financials', 'add_task', 'update_task', 'request_investment_input']
+2026-10-16 13:15:07,105 INFO plugins.tools.corpus_manifest: A4 manifest tool auto-bound for stateful_react (companion of ['corpus_fetch', 'corpus_search', 'corpus_semantic_query'])
+2026-10-16 13:15:07,110 INFO workflows.stateful_react_agent.nodes.main_agent: [stateful_react inputs] container /inputs path=/tmp/fa-web-semantic-47.pzru4gmx/runs/c5b26f72653f46bc8fa685cdaaa5701e/inputs exists=True is_dir=True
+2026-10-16 13:15:07,110 WARNING workflows.stateful_react_agent.nodes.main_agent: [stateful_react inputs] container /inputs path=/tmp/fa-web-semantic-47.pzru4gmx/runs/c5b26f72653f46bc8fa685cdaaa5701e/inputs is EMPTY — read_file / glob_search will find nothing here
+2026-10-16 13:15:07,110 WARNING workflows.stateful_react_agent.nodes.main_agent: [stateful_react inputs] no files at expected input path(s); probing fallback locations to find where the mounted files landed
+2026-10-16 13:15:07,110 WARNING workflows.stateful_react_agent.nodes.main_agent: [stateful_react inputs] fallback workspace path=/tmp/fa-web-semantic-47.pzru4gmx/runs/c5b26f72653f46bc8fa685cdaaa5701e/ws exists=True entries=['outputs/']
+2026-10-16 13:15:07,111 WARNING workflows.stateful_react_agent.nodes.main_agent: [stateful_react inputs] fallback root path=/ exists=True entries=['Docker/', 'bin/', 'boot/', 'dev/', 'etc/', 'home/', 'init', 'lib/', 'lib64/', 'lost+found/', 'media/', 'mnt/', 'opt/', 'proc/', 'root/', 'run/', 'sbin/', 'snap/', 'srv/', 'sys/', 'tmp/', 'usr/', 'var/']
+2026-10-16 13:15:07,112 WARNING workflows.stateful_react_agent.nodes.main_agent: [stateful_react inputs] fallback cwd path=/home/administrator/FrontierAgent exists=True entries=['.apodex/', '.codebuddy/', '.dockerignore', '.e5runs/', '.e5runs_e5/', '.e5runs_e5_160401-failed-infra/', '.env', '.env.example', '.env.sglang.example', '.env.transformers.example', '.git/', '.github/', '.gitignore', '.local/', '.playwright-cli/', '.pytest_cache/', '.python-version', '.ruff_cache/', '.scratch/', '.trae/', '.venv/', '.vscode/', 'AGENTS.md', 'CHANGELOG.md', 'CONTEXT.md', 'CONTRIBUTING.md', 'Dockerfile', 'LICENSE', 'README.md', 'SECURITY.md', 'apodex/', 'assets/', 'before-click.yaml', 'benchmarks/', 'compose.dev.yaml', 'compose.network.yaml', 'compose.sglang.yaml', 'compose.transformers.yaml', 'compose.yaml', 'config/', '… (truncated)']
+2026-10-16 13:15:07,113 WARNING plugins.tools._sandbox: CurrentSandbox running model commands with the harness's own uid: the child environment is scrubbed, but /proc/<harness-pid>/environ remains readable
+2026-10-16 13:15:07,113 INFO plugins.tools._sandbox: CurrentSandbox attached: workdir=/tmp/fa-web-semantic-47.pzru4gmx/runs/c5b26f72653f46bc8fa685cdaaa5701e/ws
+2026-10-16 13:15:07,114 INFO frontier_agent.core.runtime.loop._call: LLM call timeout clamped to wall_deadline remaining: 600s → 450s (turn=1, attempt=1/5, reason=pre_gate)
+2026-10-16 13:15:13,273 INFO httpx: HTTP Request: POST https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions?x-upstream-session-id=web47-industrial_claim "HTTP/1.1 200 OK"
+2026-10-16 13:15:35,600 INFO plugins.tools.task_board: add_task(task=dcde1bf43f4e): +4 skipped=0 (ids=['t1', 't2', 't3', 't4'])
+2026-10-16 13:15:35,604 INFO frontier_agent.core.runtime.loop._call: LLM call timeout clamped to wall_deadline remaining: 600s → 422s (turn=2, attempt=1/5, reason=pre_gate)
+2026-10-16 13:15:41,348 INFO httpx: HTTP Request: POST https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions?x-upstream-session-id=web47-industrial_claim "HTTP/1.1 200 OK"
+2026-10-16 13:15:42,052 INFO frontier_agent.core.runtime.loop._call: LLM call timeout clamped to wall_deadline remaining: 600s → 415s (turn=3, attempt=1/5, reason=pre_gate)
+2026-10-16 13:15:46,324 INFO httpx: HTTP Request: POST https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions?x-upstream-session-id=web47-industrial_claim "HTTP/1.1 200 OK"
+2026-10-16 13:15:48,024 INFO frontier_agent.core.runtime.loop._call: LLM call timeout clamped to wall_deadline remaining: 600s → 409s (turn=4, attempt=1/5, reason=pre_gate)
+2026-10-16 13:15:52,129 INFO httpx: HTTP Request: POST https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions?x-upstream-session-id=web47-industrial_claim "HTTP/1.1 200 OK"
+2026-10-16 13:16:10,674 INFO frontier_agent.core.runtime.loop._call: LLM call timeout clamped to wall_deadline remaining: 600s → 386s (turn=5, attempt=1/5, reason=pre_gate)
+2026-10-16 13:16:14,936 INFO httpx: HTTP Request: POST https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions?x-upstream-session-id=web47-industrial_claim "HTTP/1.1 200 OK"
+2026-10-16 13:16:16,568 INFO frontier_agent.core.runtime.loop._call: LLM call timeout clamped to wall_deadline remaining: 600s → 381s (turn=6, attempt=1/5, reason=pre_gate)
+2026-10-16 13:16:21,052 INFO httpx: HTTP Request: POST https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions?x-upstream-session-id=web47-industrial_claim "HTTP/1.1 200 OK"
+2026-10-16 13:21:23,890 INFO frontier_agent.core.runtime.loop._call: LLM call timeout clamped to wall_deadline remaining: 600s → 73s (turn=7, attempt=1/5, reason=pre_gate)
+2026-10-16 13:21:28,214 INFO httpx: HTTP Request: POST https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions?x-upstream-session-id=web47-industrial_claim "HTTP/1.1 200 OK"
+2026-10-16 13:21:40,050 INFO frontier_agent.core.runtime.loop._call: LLM call timeout clamped to wall_deadline remaining: 600s → 57s (turn=8, attempt=1/5, reason=pre_gate)
+2026-10-16 13:21:44,204 INFO httpx: HTTP Request: POST https://ark.cn-beijing.volces.com/api/plan/v3/chat/completions?x-upstream-session-id=web47-industrial_claim "HTTP/1.1 200 OK"
+2026-10-16 13:21:46,856 INFO frontier_agent.scheduling.scheduler: Task dcde1bf43f4e: phase → react_agent

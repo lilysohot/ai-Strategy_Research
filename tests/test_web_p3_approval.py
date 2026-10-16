@@ -21,6 +21,7 @@ import json
 import sys
 import threading
 import uuid
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -247,6 +248,11 @@ async def test_observer_auto_allows_run_scoped_writes_and_computation(tmp_path) 
             "id": "compute",
             "name": "bash",
             "args": {"command": "python3 <<'PY'\nvalues = [1, 2, 3]\nprint(sum(values))\nPY"},
+        },
+        {
+            "id": "manifest",
+            "name": "corpus_submit_manifest",
+            "args": {"conclusions": [{"report_quote": "bounded"}]},
         },
     ]
     for call in calls:
@@ -664,6 +670,22 @@ async def test_approval_end_to_end(
     from server.security import decode_access_token
     from server.store import get_run, init_db
 
+    # This test exercises a destructive-shell approval, not corpus access. The
+    # Web worker still enforces its production semantic startup gate, so point it
+    # at any real read-only mount visible in the same process namespace.
+    readonly_root = next(
+        (
+            Path(fields[4])
+            for line in Path("/proc/self/mountinfo").read_text().splitlines()
+            if (fields := line.split())
+            and "ro" in fields[5].split(",")
+            and Path(fields[4]).is_dir()
+        ),
+        None,
+    )
+    if readonly_root is None:
+        pytest.skip("no read-only mount available for Web worker startup gate")
+    monkeypatch.setenv("CORPUS_STRUCTURED_ROOT", str(readonly_root))
     monkeypatch.setenv("OPENAI_BASE_URL", mock_llm_approval.base_url)
     monkeypatch.setenv("OPENAI_API_KEY", "sk-spike-mock")
     monkeypatch.setenv("OPENAI_MODEL", mock_llm_approval.model)

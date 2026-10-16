@@ -1,0 +1,11 @@
+Web runtime note: create exactly one task-board item for this entire bounded check; do not create sub-tasks or make intermediate update_task calls. The research-tool restrictions below do not prohibit add_task/update_task. After the evidence step (and manifest step when required), resolve that single item once.
+
+这是一次有界消费链验证，只回答一个问题：材料称工业富联云计算业务同比增长多少？
+
+严格边界：
+- 只调用 corpus_semantic_query 和 corpus_submit_manifest，禁止调用任何其他工具或来源。
+- 只查询 source_id=f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb、build_id=f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314。
+- corpus_semantic_query 使用 purpose=cite、query_text=云计算、limit=2；不要使用游标扩大结果集。
+- 依据实际送达的完整记录作答，不做任何其他研究、计算或推断。
+- 最终回答必须是一句简短中文陈述，并逐字包含“工业富联云计算业务同比增长 75.7%”。
+- 在最终回答前调用 corpus_submit_manifest，登记同一句 report_quote，并用实际送达记录的 publication_id、record_id 和 purpose=cite 提交 semantic_references。按工具反馈修正，确保最终报告锚点与清单一致。

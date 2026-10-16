@@ -32,9 +32,7 @@ async def test_worker_injects_context_as_data_and_binds_only_guarded_tool(monkey
         },
         "missing": {},
     }
-    (run_root / "investment-context.json").write_text(
-        json.dumps(context), encoding="utf-8"
-    )
+    (run_root / "investment-context.json").write_text(json.dumps(context), encoding="utf-8")
     captured: dict[str, object] = {}
 
     class FakeBenchmarkSession:
@@ -178,6 +176,8 @@ async def test_orchestrator_materializes_authenticated_context_without_db_creden
     freeze.assert_awaited_once_with(run_id=run_id, user_id=user_id)
     assert json.loads((run_dir_for(run_id.hex) / "investment-context.json").read_text()) == data
     child_env = spawn.await_args.kwargs["env"]
+    child_argv = spawn.await_args.args
+    assert "--require-semantic-store" in child_argv
     assert child_env["SERVER_DATABASE_URL"] == "sqlite+aiosqlite:///:memory:"
     assert child_env["SERVER_DATABASE_URL_DOCKER"] == ""
     assert child_env["SERVER_MASTER_KEY"] == ""
