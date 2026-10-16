@@ -45,6 +45,7 @@ from plugins.corpus.structured.snapshot import EvidenceSnapshot, source_unit_id
 PUBLICATION_SCHEMA_VERSION = "corpus-semantic-publication-v1"
 PUBLICATION_INDEX_SCHEMA_VERSION = "1"
 SCOPED_SELECTION_PREFIX = "SCOPED_RECORD_SELECTION_V1:"
+COVERAGE_GAPS_PREFIX = "COVERAGE_GAPS_V1:"
 EXPLICIT_GAPS = "CS_PUBLICATION_EXPLICIT_GAPS"
 CROSS_ROLE_RULE_VERSION = "cross-role-map-v2"
 SUPPORTED_MAPPING_RULES = frozenset({"cross-role-map-v1", "cross-role-map-v2"})
@@ -126,6 +127,43 @@ class PublicationCoverage(BaseModel):
     material_relations: ContextStatus
 
 
+class PublicationGap(BaseModel):
+    """One signed publication omission exposed to downstream semantic queries."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    gap_id: str = Field(min_length=1)
+    role: Literal["claims", "material_items", "material_relations"]
+    description: str = Field(min_length=1)
+    query_terms: tuple[str, ...] = Field(min_length=1)
+    authority: str = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_terms(self) -> PublicationGap:
+        if any(not term.strip() for term in self.query_terms):
+            raise ValueError("publication gap query terms must be non-empty")
+        if len(set(self.query_terms)) != len(self.query_terms):
+            raise ValueError("publication gap query terms must be unique")
+        return self
+
+
+class PublicationGapRegistry(BaseModel):
+    """Content-addressed gap declarations bound to one source/build publication."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    schema_version: Literal["corpus-publication-gaps-v1"] = "corpus-publication-gaps-v1"
+    source_id: str
+    build_id: str
+    gaps: tuple[PublicationGap, ...] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_gaps(self) -> PublicationGapRegistry:
+        if len({gap.gap_id for gap in self.gaps}) != len(self.gaps):
+            raise ValueError("publication gap ids must be unique")
+        return self
+
+
 class SemanticPublication(BaseModel):
     """Frozen v1 semantic publication manifest."""
 
@@ -173,6 +211,7 @@ class PublicationView(BaseModel):
     effective_claim_purposes: dict[str, tuple[str, ...]]
     active_relation_ids: tuple[str, ...]
     selected_record_ids: dict[str, tuple[str, ...]] = Field(default_factory=dict)
+    coverage_gaps: tuple[PublicationGap, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -1007,6 +1046,29 @@ def _read_selection(root: Path, manifest: SemanticPublication) -> dict[str, Any]
     return value
 
 
+def _read_coverage_gaps(
+    root: Path, manifest: SemanticPublication
+) -> tuple[PublicationGap, ...]:
+    refs = [
+        code.removeprefix(COVERAGE_GAPS_PREFIX)
+        for code in manifest.reason_codes
+        if code.startswith(COVERAGE_GAPS_PREFIX)
+    ]
+    if not refs:
+        return ()
+    if len(refs) != 1:
+        raise StructuredExecutionError("CS_ARTIFACT_CORRUPT", "publication_gap_binding")
+    try:
+        registry = PublicationGapRegistry.model_validate(_read_object(root, refs[0]))
+    except (TypeError, ValueError) as exc:
+        raise StructuredExecutionError(
+            "CS_ARTIFACT_CORRUPT", "publication_gap_registry_invalid"
+        ) from exc
+    if registry.source_id != manifest.source_id or registry.build_id != manifest.build_id:
+        raise StructuredExecutionError("CS_ARTIFACT_CORRUPT", "publication_gap_source_binding")
+    return registry.gaps
+
+
 def publish_semantic(
     *,
     source_id: str,
@@ -1017,6 +1079,7 @@ def publish_semantic(
     store_root: str | Path | None = None,
     mappings: Sequence[CrossRoleMapping] | None = None,
     reason_codes: Sequence[str] = (),
+    coverage_gaps: Sequence[PublicationGap] = (),
     lifecycle: Literal["publish", "source_update", "rule_upgrade"] = "publish",
     checkpoint: Checkpoint = _noop_checkpoint,
     record_selection: Mapping[str, Sequence[str]] | None = None,
@@ -1036,7 +1099,8 @@ def publish_semantic(
         if selection is not None and set(selection) != {item.artifact_sha256 for item in artifacts}:
             raise StructuredExecutionError("CS_INPUT_INVALID", "selection_artifact_binding")
         if any(
-            code.startswith(SCOPED_SELECTION_PREFIX) or code == EXPLICIT_GAPS
+            code.startswith((SCOPED_SELECTION_PREFIX, COVERAGE_GAPS_PREFIX))
+            or code == EXPLICIT_GAPS
             for code in reason_codes
         ):
             raise StructuredExecutionError("CS_INPUT_INVALID", "reserved_publication_reason")
@@ -1054,6 +1118,24 @@ def publish_semantic(
             selection_object = _selection_object(candidates)
             selection_sha = _write_object(root, selection_object)
             scoped_codes = (EXPLICIT_GAPS, SCOPED_SELECTION_PREFIX + selection_sha)
+        try:
+            declared_gaps = tuple(PublicationGap.model_validate(gap) for gap in coverage_gaps)
+            gap_registry = (
+                PublicationGapRegistry(
+                    source_id=source_id,
+                    build_id=build_id,
+                    gaps=declared_gaps,
+                )
+                if declared_gaps
+                else None
+            )
+        except (TypeError, ValueError) as exc:
+            raise StructuredExecutionError("CS_INPUT_INVALID", "publication_gaps_invalid") from exc
+        gap_codes = (
+            (COVERAGE_GAPS_PREFIX + _write_object(root, gap_registry.model_dump(mode="json")),)
+            if gap_registry is not None
+            else ()
+        )
         quality = "review_required" if selection is not None else "accepted"
         snapshots = {candidate.snapshot.snapshot_id for candidate in candidates}
         if snapshots != {snapshot_id} or any(
@@ -1135,6 +1217,7 @@ def publish_semantic(
                         (
                             *reason_codes,
                             *scoped_codes,
+                            *gap_codes,
                             *(
                                 ("CROSS_ROLE_COMPARISON_UNPROVEN",)
                                 if any(
@@ -1409,6 +1492,7 @@ def read_semantic(
             raise StructuredExecutionError("CS_ARTIFACT_CORRUPT", "publication_lifecycle_invalid")
         lifecycle = cast(Lifecycle, row["lifecycle"])
         selection_object = _read_selection(root, manifest)
+        coverage_gaps = _read_coverage_gaps(root, manifest)
         selection = selection_object["records"] if selection_object is not None else {}
         if not allow_historical and (
             manifest.publication_status != "published"
@@ -1497,6 +1581,7 @@ def read_semantic(
             effective_claim_purposes=purposes,
             active_relation_ids=tuple(relation_ids),
             selected_record_ids={key: tuple(value) for key, value in selection.items()},
+            coverage_gaps=coverage_gaps,
         )
     except sqlite3.DatabaseError as exc:
         raise StructuredExecutionError("CS_ARTIFACT_CORRUPT", "publication_index_invalid") from exc

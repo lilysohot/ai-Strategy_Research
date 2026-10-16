@@ -19,7 +19,12 @@ from plugins.corpus.evidence import fingerprint
 from plugins.corpus.evidence_pipeline import evidence_document_from_snapshot
 from plugins.corpus.material_semantics import build_candidate_slots, build_material_structure
 from plugins.corpus.service import CorpusService
-from plugins.corpus.structured.ledger import ReplayResponse, plan_batch, replay_batch
+from plugins.corpus.structured.ledger import (
+    ReplayResponse,
+    StructuredExecutionError,
+    plan_batch,
+    replay_batch,
+)
 from plugins.corpus.structured.query import query_semantic
 from plugins.corpus.structured.snapshot import (
     SnapshotBuildSource,
@@ -31,8 +36,11 @@ from plugins.corpus.structured.snapshot import (
     build_snapshot,
 )
 from plugins.corpus.structured.store import (
+    COVERAGE_GAPS_PREFIX,
+    EXPLICIT_GAPS,
     ArtifactReference,
     CrossRoleMapping,
+    PublicationGap,
     publish_semantic,
     read_semantic,
     retire_semantic,
@@ -465,6 +473,62 @@ def test_query_distinguishes_publication_extraction_and_match_states(tmp_path: P
         "no_match",
         ("CS_NOT_FOUND",),
     )
+
+
+def test_query_reports_only_registered_publication_gaps(tmp_path: Path) -> None:
+    snapshot, _plan, root, references, _checked = forecast_artifacts(tmp_path)
+    publication = publish_semantic(
+        source_id=snapshot.source_id,
+        build_id=snapshot.build_id,
+        snapshot_id=snapshot.snapshot_id,
+        artifacts=(references["claims"], references["material_items"]),
+        expected_parent_publication_id=None,
+        store_root=root,
+        coverage_gaps=(
+            PublicationGap(
+                gap_id="NT-I99",
+                role="material_items",
+                description="已登记但未覆盖的合成目标",
+                query_terms=("合成缺口问题",),
+                authority="synthetic-test-authority",
+            ),
+        ),
+    )
+
+    gap = query_semantic(
+        snapshot.source_id,
+        snapshot.build_id,
+        purpose="cite",
+        query_text="合成缺口问题",
+        field_filters={"role": "material_items"},
+        store_root=root,
+    )
+    ordinary_miss = query_semantic(
+        snapshot.source_id,
+        snapshot.build_id,
+        purpose="cite",
+        query_text="普通未命中",
+        field_filters={"role": "material_items"},
+        store_root=root,
+    )
+    view = read_semantic(snapshot.source_id, snapshot.build_id, store_root=root)
+
+    assert gap.page_status == "no_match"
+    assert gap.error_codes == (EXPLICIT_GAPS,)
+    assert ordinary_miss.page_status == "no_match"
+    assert ordinary_miss.error_codes == ()
+    assert view.coverage_gaps[0].gap_id == "NT-I99"
+    registry = next(
+        code.removeprefix(COVERAGE_GAPS_PREFIX)
+        for code in publication.reason_codes
+        if code.startswith(COVERAGE_GAPS_PREFIX)
+    )
+    digest = registry.removeprefix("sha256:")
+    (root / "objects" / "sha256" / digest[:2] / f"{digest}.json").write_text(
+        "{}", encoding="utf-8"
+    )
+    with pytest.raises(StructuredExecutionError, match="CS_ARTIFACT_CORRUPT"):
+        read_semantic(snapshot.source_id, snapshot.build_id, store_root=root)
 
 
 def test_condition_is_independently_searchable_not_support_ranked_away(tmp_path: Path) -> None:

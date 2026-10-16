@@ -1,0 +1,101 @@
+{
+  "schema": "c4-registered-gap-consumption-landing-v1",
+  "record_id": "113-c4-registered-gap-consumption",
+  "created_on": "2026-10-16",
+  "verdict": "PASS",
+  "summary": "C4 已关闭：19 个裁定缺口被内容寻址登记并绑定到两源 gen-3 规则升级发布；所有登记、普通未命中与 relations 控制探测通过；两个有界 M_main 消费者均明确报告覆盖不足且拒绝从空结果作否定推断。",
+  "publications": [
+    {
+      "source": "industrial-fulian-md",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+      "generation": 3,
+      "publication_id": "sha256:684c93fb18e6e66c39246e6b555fc6152e2e1ba41c3e7a7468425e85662b0823",
+      "parent_publication_id": "sha256:c3dbd91bfa0fe2b1c905077f35fba04e27c9b8bdc678abbcb1515f982a8b3871",
+      "registered_gaps": 16
+    },
+    {
+      "source": "optical-module-docx",
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96",
+      "generation": 3,
+      "publication_id": "sha256:933d718da67a5993b637f067bc69ec5557a2b8a6a24f4c9f23ab6d48f2d25918",
+      "parent_publication_id": "sha256:8395c900d91fe12d6507db5a1d8d16705dee7e95538f1785b86dcf083eb45aeb",
+      "registered_gaps": 3
+    }
+  ],
+  "publication_invariants": {
+    "artifacts_unchanged": true,
+    "snapshot_unchanged": true,
+    "mappings_unchanged": true,
+    "coverage_unchanged": true,
+    "quality_status": "accepted",
+    "roles": ["claims", "material_items"],
+    "material_relations": "missing",
+    "extraction_attempts": 0
+  },
+  "deterministic_probes": {
+    "registered_gaps": "19/19 include CS_PUBLICATION_EXPLICIT_GAPS",
+    "ordinary_misses": "2/2 exclude CS_PUBLICATION_EXPLICIT_GAPS",
+    "relations": "2/2 not_extracted + CS_DEPENDENCY_NOT_READY",
+    "clone_rehearsal": "PASS",
+    "production": "PASS"
+  },
+  "valid_consumption_runs": [
+    {
+      "source": "industrial-fulian-md",
+      "run_id": "20261016-104324+0800-react-5c04",
+      "main_max_turns": 4,
+      "actual_turns": 2,
+      "tool_sequence": ["corpus_semantic_query"],
+      "page_status": "no_match",
+      "error_codes": ["CS_PUBLICATION_EXPLICIT_GAPS"],
+      "publication_id": "sha256:684c93fb18e6e66c39246e6b555fc6152e2e1ba41c3e7a7468425e85662b0823",
+      "tokens": 8715,
+      "answer_verdict": "PASS"
+    },
+    {
+      "source": "optical-module-docx",
+      "run_id": "20261016-104352+0800-react-64de",
+      "main_max_turns": 4,
+      "actual_turns": 2,
+      "tool_sequence": ["corpus_semantic_query"],
+      "page_status": "no_match",
+      "error_codes": ["CS_PUBLICATION_EXPLICIT_GAPS"],
+      "publication_id": "sha256:933d718da67a5993b637f067bc69ec5557a2b8a6a24f4c9f23ab6d48f2d25918",
+      "tokens": 8634,
+      "answer_verdict": "PASS"
+    }
+  ],
+  "budget": {
+    "valid_tokens": 17349,
+    "invalid_tokens": 26106,
+    "cumulative_tokens": 43455,
+    "ceiling_tokens": 60000,
+    "verdict": "PASS"
+  },
+  "integrity": {
+    "readonly_mount": "bwrap --ro-bind / /; writable alias limited to per-run cwd",
+    "wal_preparation": "prepare_readonly_access executed immediately before each valid run",
+    "production_pg": "8 corpus_publications rows byte-equivalent to 112 baseline generation/activated_at",
+    "production_pg_writes": 0,
+    "invalid_runs_disclosed": "invalid-runs.json"
+  },
+  "tests": {
+    "focused": "70 passed",
+    "broad": "1707 passed, 2 failed, 19 skipped, 1914 deselected",
+    "known_unrelated_failures": [
+      "tests/test_corpus_golden.py::test_golden_recall_at_5_is_full",
+      "tests/test_corpus_preparation_readers.py::test_dev_materials_smoke_units_and_pages"
+    ],
+    "ruff": "PASS",
+    "pyright": "0 errors",
+    "import_smoke": "PASS"
+  },
+  "not_claimed": [
+    "7 条 items 金标与 12 条 claims 无候选已被补抽或补齐",
+    "material_relations 已抽取",
+    "items 质量门由 FAIL 改为 PASS"
+  ]
+}
+

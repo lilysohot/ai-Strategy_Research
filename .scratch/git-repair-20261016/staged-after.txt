@@ -1,0 +1,15 @@
+.scratch/claims-r2-role-isolation/evidence/112-production-read-chain-consumption-20261015/r0-zero-call/MANIFEST.json
+.scratch/claims-r2-role-isolation/evidence/112-production-read-chain-consumption-20261015/r0-zero-call/apply_112_signoff.py
+.scratch/claims-r2-role-isolation/evidence/112-production-read-chain-consumption-20261015/r0-zero-call/apply_budget_questions_112.py
+.scratch/claims-r2-role-isolation/evidence/112-production-read-chain-consumption-20261015/r0-zero-call/authorisation-112.json
+.scratch/claims-r2-role-isolation/evidence/112-production-read-chain-consumption-20261015/r0-zero-call/budget-and-questions-authorisation.md
+.scratch/claims-r2-role-isolation/evidence/112-production-read-chain-consumption-20261015/r0-zero-call/production-read-chain-consumption-signoff.md
+.scratch/claims-r2-role-isolation/evidence/112-production-read-chain-consumption-20261015/r0-zero-call/production-read-chain-consumption.json
+.scratch/claims-r2-role-isolation/evidence/112-production-read-chain-consumption-20261015/r0-zero-call/production-read-chain-consumption.proposed.json
+.scratch/claims-r2-role-isolation/evidence/112-production-read-chain-consumption-20261015/r1-live/industrial-prompt.txt
+.scratch/claims-r2-role-isolation/evidence/112-production-read-chain-consumption-20261015/r1-live/industrial.log
+.scratch/claims-r2-role-isolation/evidence/112-production-read-chain-consumption-20261015/r1-live/invalid-run-record.json
+.scratch/claims-r2-role-isolation/evidence/112-production-read-chain-consumption-20261015/r1-live/optical-prompt.txt
+.scratch/claims-r2-role-isolation/evidence/112-production-read-chain-consumption-20261015/r1-live/pg-state-after.json
+.scratch/claims-r2-role-isolation/evidence/112-production-read-chain-consumption-20261015/r1-live/pg-state-before.json
+.scratch/claims-r2-role-isolation/evidence/112-production-read-chain-consumption-20261015/r1-live/run_bounded.py

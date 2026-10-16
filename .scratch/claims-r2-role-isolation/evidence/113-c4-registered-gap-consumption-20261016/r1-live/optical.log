@@ -1,0 +1,40 @@
+[preflight] {"workflow_profile_env": "tui-semantic", "resolved_agent_tools": ["corpus_semantic_query"], "required_tool_present": true, "required_tool_allowlisted": true, "manifest_companion_will_bind": true, "model_requests": 0, "verdict": "PASS"}
+apodex: native mode — mutable runtime files are under /home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/113-c4-registered-gap-consumption-20261016/r1-live/optical/.apodex/runtime/native.
+        This is not a container or OS sandbox; approved commands run with your host user permissions.
+apodex: native workspace runtime (not an OS sandbox) (workspace-local native runtime)
+
+[1;35m============================================================[0m
+[1;35m[[0m[1;35mReAct[0m[1;35m][0m[1;35m task started[0m  [33mtask_id[0m=[36m0a75987e1128[0m  [33mmax_turns[0m=[1;36m600[0m
+workflow → stateful-react-agent · profile → tui-semantic
+[thinking] The task is very constrained: only call corpus_semantic_query once with exact parameters. Let me do that.
+
+Parameters:
+- source_id=48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f
+- build_id=dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96
+- purpose=cite
+- query_text=128端口光波导五次流片后良率仍不理想
+- limit=1
+- field_filters={"role":"material_items"}
+
+No retry, no pagination. Then answer based on the actually delivered query status. If no_match + CS_PUBLICATION_EXPLICIT_GAPS, only state it's a registered publication coverage gap, current coverage insufficient, empty result doesn't prove non-existence; must not answer yes or no. Final answer: one short Chinese sentence.[LLM] stream model=glm-5.3-flash ttft=4.27s total=10.67s chunks=366
+
+
+[1;36m=== [0m[1;36m[[0m[1;36mReAct[0m[1;36m][0m[1;36m Turn [0m[1;36m1[0m[1;36m/[0m[1;36m600[0m  [2mstateful_react[0m  [2mtokens: [0m[1;2;36m3746[0m[2m->[0m[1;2;36m378[0m
+  [33mtool corpus_semantic_query[0m  [1;2m{[0m[2;32m"build_id"[0m[2m: [0m[2;32m"dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96"[0m[2m, [0m[2;32m"field_filters"[0m[2m: [0m[1;2m{[0m[2;32m"role"[0m[2m: [0m[2;32m"material_items"[0m[1;2m}[0m[2m, [0m[2;32m"limit"[0m[2m: [0m[1;2;36m1[0m[2m, [0m[2;32m"purpose"[0m[2m: [0m[2;32m"cite"[0m[2m, [0m[2;32m"query_text"[0m[2m:[0m
+[2;32m"128端口光波导五次流片后良率仍不理想"[0m[2m, [0m[2;32m"source_id"[0m[2m: [0m[2;32m"48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"[0m[1;2m}[0m
+  [32m-> [0m
+[1;32m{[0m[32m"schema_version"[0m[32m:[0m[32m"corpus-semantic-query-page-v1"[0m[32m,[0m[32m"query_id"[0m[32m:[0m[32m"query:31f9fff5dab3206c"[0m[32m,[0m[32m"publication_id"[0m[32m:[0m[32m"sha256:933d718da67a5993b637f067bc69ec5557a2b8a6a24f4c9f23ab6d48f2d25918"[0m[32m,[0m[32m"query_sha256"[0m[32m:[0m[32m"sha256:[0m
+[32m31f9fff5dab3206c27638023e0879664cbf5758c7b0516d839bcceaaf9f7ddf6"[0m[32m,[0m[32m"sort_version"[0m[32m:[0m[32m"semantic-lexical-sort-v1"[0m[32m,[0m[32m"purpose"[0m[32m:[0m[32m"cite"[0m[32m,[0m[32m"records"[0m[32m:[0m[1;32m[[0m[1;32m][0m[32m,[0m[32m"next_cursor"[0m[32m:null,[0m[32m"page_status"[0m[32m:[0m[32m"no_match"[0m[32m,[0m[32m"error_codes"[0m[32m:[0m[1;32m[[0m[32m"CS[0m
+[32m...[0m
+◆ corpus_semantic_query build_id=dca4bad7f85b59dce0110ef15037b34223163b88, field_filters={'role': 'material_items'}, limit=1
+[✓ corpus_semantic_query  (161 ms)]
+{"schema_version":"corpus-semantic-query-page-v1","query_id":"query:31f9fff5dab3206c","publication_id":"sha256:933d718da67a5993b637f067bc69ec5557a2b8a6a24f4c9f23ab6d48f2d25918","query_sha256":"sha256:31f9fff5dab3206c27638023e0879664cbf5758c7b0516d839bcceaaf9f7ddf6","sort_version":"semantic-lexical-sort-v1","purpose":"cite","records":[],"next_cursor":null,"page_status":"no_match","error_codes":["CS_PUBLICATION_EXPLICIT_GAPS"]}
+[thinking] The query returned page_status="no_match" with error_codes=["CS_PUBLICATION_EXPLICIT_GAPS"]. Per the strict boundary: state only that this is a registered publication coverage gap, current coverage insufficient, and the empty result cannot prove the situation doesn't exist; must not answer yes or no. One short Chinese sentence.
+该问题命中已登记的发布覆盖缺口（no_match + CS_PUBLICATION_EXPLICIT_GAPS），当前语义覆盖不足，空结果不能证明该情况存在或不存在，故不作"是/否"回答。[LLM] stream model=glm-5.3-flash ttft=4.06s total=6.31s chunks=114
+
+
+[1;36m=== [0m[1;36m[[0m[1;36mReAct[0m[1;36m][0m[1;36m Turn [0m[1;36m2[0m[1;36m/[0m[1;36m600[0m  [2mstateful_react[0m  [2mtokens: [0m[1;2;36m4305[0m[2m->[0m[1;2;36m114[0m
+该问题命中已登记的发布覆盖缺口（no_match + CS_PUBLICATION_EXPLICIT_GAPS），当前语义覆盖不足，空结果不能证明该情况存在或不存在，故不作"是/否"回答。
+
+[1;35m[[0m[1;35mReAct[0m[1;35m][0m[1;35m done[0m  [33mturns[0m=[1;36m2[0m  [33mtool_calls[0m=[1;36m1[0m  [33mstopped_by[0m=[35mno_tool[0m
+✓ done · turns=1 · tools=0 · no_tool · 8,543 tokens (in 8,051 · out 492 · cached 3,136)

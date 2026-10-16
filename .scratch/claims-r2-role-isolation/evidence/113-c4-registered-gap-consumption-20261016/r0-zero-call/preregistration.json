@@ -1,0 +1,36 @@
+{
+  "schema": "c4-registered-gap-consumption-prereg-v1",
+  "record_id": "113-c4-registered-gap-consumption",
+  "created_on": "2026-10-16",
+  "status": "frozen_before_production_write",
+  "authorization": "用户指令：帮我完成C4任务",
+  "scope": {
+    "registered_item_gaps": 7,
+    "registered_claim_gaps": 12,
+    "sources": 2,
+    "extraction_calls": 0,
+    "production_pg_writes": 0,
+    "publication_change": "gen-2 -> gen-3 rule_upgrade; artifacts/snapshot/mappings/coverage/quality unchanged"
+  },
+  "sequence": [
+    "code regression",
+    "cloned production store rehearsal",
+    "production store rule upgrade",
+    "all registered and control probes",
+    "two bounded M_main consumption questions"
+  ],
+  "acceptance": {
+    "registered_probes": "19/19 include CS_PUBLICATION_EXPLICIT_GAPS",
+    "ordinary_misses": "2/2 exclude CS_PUBLICATION_EXPLICIT_GAPS",
+    "relations": "2/2 not_extracted + CS_DEPENDENCY_NOT_READY",
+    "consumer": "2/2 explicitly report registered coverage gap and reject negative inference"
+  },
+  "model_budget": {
+    "ceiling_tokens": 60000,
+    "questions": 2,
+    "max_turns_per_question": 4,
+    "concurrency": 1
+  },
+  "stop_rule": "任一判据失败或累计达到 60000 tokens 即停止；不换题、不现场放宽。"
+}
+

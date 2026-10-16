@@ -1,0 +1,12 @@
+{
+  "workflow_profile_env": "tui-semantic",
+  "resolved_agent_tools": [
+    "corpus_semantic_query"
+  ],
+  "required_tool_present": true,
+  "required_tool_allowlisted": true,
+  "manifest_companion_will_bind": true,
+  "main_max_turns": 4,
+  "model_requests": 0,
+  "verdict": "PASS"
+}

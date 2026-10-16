@@ -1,0 +1,38 @@
+{
+  "schema": "c4-invalid-runs-v1",
+  "record_id": "113-c4-invalid-runs",
+  "created_on": "2026-10-16",
+  "status": "disclosed_invalid",
+  "runs": [
+    {
+      "phase": "r1-live",
+      "questions": 2,
+      "tokens": 17409,
+      "verdict": "INVALID_CONFIG_BOUND",
+      "reason": "CLI 传入 --max-turns 4，但 stateful workflow 的 main_max_turns 仍显示 600；实际两题均第 2 轮结束且消费结论正确，但硬上限不可核。"
+    },
+    {
+      "phase": "r2-live-first-industrial",
+      "questions": 1,
+      "tokens": 8697,
+      "verdict": "INVALID_READONLY_SIDECAR",
+      "reason": "硬上限已显示 4，但宿主侧一次 SQLite 读取关闭后移除了 WAL 侧车；只读挂载内返回 CS_ARTIFACT_CORRUPT: structured_index_invalid。模型按禁止重试规则停止，未产生 C4 验收结论。"
+    },
+    {
+      "phase": "startup-before-r1",
+      "questions": 0,
+      "tokens": 0,
+      "verdict": "REFUSED_PRE_MODEL",
+      "reason": "首次未使用 bwrap 只读挂载，被 apodex.semantic_access 在模型请求前拒绝。"
+    }
+  ],
+  "repair": [
+    "把 agent.main_max_turns=4 纳入 profile override 与先验断言",
+    "每题启动前在 writer 侧紧邻调用 prepare_readonly_access，随后立即进入 bwrap --ro-bind / /"
+  ],
+  "invalid_tokens": 26106,
+  "valid_tokens": 17349,
+  "cumulative_tokens": 43455,
+  "ceiling_tokens": 60000
+}
+

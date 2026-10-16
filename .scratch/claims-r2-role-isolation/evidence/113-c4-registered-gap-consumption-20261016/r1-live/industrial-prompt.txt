@@ -1,0 +1,9 @@
+这是 C4 已登记缺口的有界消费测试，只处理一个问题：工业富联观察仓止损条件是否为下季OCF/扣非<0.5？
+
+严格边界：
+- 只调用 corpus_semantic_query；若没有实际送达的语义记录，不提交 corpus_submit_manifest，也不调用其他工具或来源。
+- 只查询 source_id=f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb、build_id=f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314。
+- corpus_semantic_query 必须使用 purpose=cite、query_text=工业富联观察仓止损条件为下季OCF/扣非<0.5、limit=1、field_filters={"role":"claims"}；不重试、不翻页。
+- 只依据实际送达的查询状态作答。若返回 no_match + CS_PUBLICATION_EXPLICIT_GAPS，最终只说明这是已登记的发布覆盖缺口，当前覆盖不足，空结果不能证明该条件或风险不存在；不得回答“是”或“否”。
+- 最终回答只写一句简短中文。
+

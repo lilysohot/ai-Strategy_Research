@@ -4,11 +4,11 @@
 
 > **2026-10-13 评分契约读取闭环**：Issue 45 已使评分器直接读取签认契约 v4.3 的六项阈值与 11 个 `NT-I*` 哨兵，并对缺文件、版本/签认状态错误和字段不完整失败关闭。冻结 P03 复算逐项不变：PASS，41/48、30/31、源1 0.909、源2 0.808、哨兵 11/11。65 项相关回归、Ruff、Pyright 和冻结链校验均通过。详情：[Issue 45](issues/45-scorer-direct-contract.md)、[验证证据](evidence/82-scorer-direct-contract-20261013/README.md)。
 
-> **2026-10-14/15 claims 链完结追加（取代下文历史“claims 无专属门/诊断失败/发布消费未启动”表述）**：claims 链（83—107 号）已全部完结——预注册试验 **A 档保留且过目标线**（精度 84/93 = 0.9032、召回 20/20、unresolved 0、哨兵 3/3；基线 51/81 = 0.6296，105 号）；发布/消费闭环 cite/compare/calculate **三用途 verified**（106 号，桥输入 84 条）；D-2 分源精度轴裁定**维持诊断**（107 号）；108 号生产 PG/web 只读读链已接通（放行判定待 U 具名签认）。105 号治疗实跑为唯一模型消费轮（371,323 / 1,000,000 tokens），其余各号零调用。详情见 §34 与 `evidence/83—108` 各证据目录。
+> **2026-10-14/15 claims 链完结追加（取代下文历史“claims 无专属门/诊断失败/发布消费未启动”表述）**：claims 链（83—107 号）已全部完结——预注册试验 **A 档保留且过目标线**（精度 84/93 = 0.9032、召回 20/20、unresolved 0、哨兵 3/3；基线 51/81 = 0.6296，105 号）；发布/消费闭环 cite/compare/calculate **三用途 verified**（106 号，桥输入 84 条）；D-2 分源精度轴裁定**维持诊断**（107 号）；108 号生产 PG/web 只读读链已接通（放行判定待 U 具名签认）。105 号治疗实跑为唯一模型消费轮（371,323 / 1,000,000 tokens），其余各号零调用。详情见 §34 与 `evidence/83—110` 各证据目录（110 号漂移登记状态见 §34 边界段）。
 
 > **2026-10-15 items 链重立项完结追加（取代上段“108 放行判定待 U 具名签认”与 §34 边界段“109 号预注册件待签，另行记录”表述）**：U 已在 **108 号生产放行签认件**与 **109 号 P5 放行签认件**上具名（均 xyl / 2026-10-15），两件各自另立生效件（`production-pg-web-read-chain-release-decision.json` `a06f4975…`、`items-p5-release-decided.json` `32648fd4…`，`status=decided_signed`；签认件正文状态行仍为草稿态，按本链统一读法**以签名栏为准**）。据此 109 号 items 链全链走完：round-3 单池（协议 v6）24/24 succeeded、池 199 条、累计 263,971 / 1,000,000 tokens；P4 由 U 具名全量裁定（199 行 + 6 号 C-1 清单 29 条处置定稿）；P5 出分 **召回 41/48 = 0.8542、精度 191/199 = 0.9598、unresolved 0**，判档 **FAIL（单轴：哨兵 NT-I43）**——**该读数逐字保留，未改写为 PASS**；P6 发布与 P7 读链已按其放行依据（72 号解耦路线：结构完备 + coverage 补全 + 缺口清单明示）执行完毕，全程**零模型调用、零生产 PG 写入**：全池 199 条导入生产 store 为 **gen-2 单代双角色发布**，两源 `material_items` coverage **missing → complete**（claims 仍 complete，读数未回退），新增 `GET /api/corpus/items/{source_id}` 并经真实 store 验收（80/80、119/119 可达）。出范围：web 前端 items 页面、`material_relations` 角色（契约 OPEN-2=C）、claims 进生产 PG 写链、e6_holdout_corpus。详情见 §35 与 `evidence/109-…`。
 
-- 日期：2026-09-28；修订：2026-10-02；执行约束补充：2026-10-08；状态校正：2026-10-09；门 33 诚实出分与裁定闭环结案：2026-10-13；R2 修订（门 v3 + 契约 v4.3）与门 33 重算 PASS：2026-10-13；claims 链预注册试验、发布闭环与 D-2 裁定执行增补：2026-10-14/15；items 链重立项（109 号）P5 放行、P6 发布与 P7 读链回填：2026-10-15
+- 日期：2026-09-28；修订：2026-10-02；执行约束补充：2026-10-08；状态校正：2026-10-09；门 33 诚实出分与裁定闭环结案：2026-10-13；R2 修订（门 v3 + 契约 v4.3）与门 33 重算 PASS：2026-10-13；claims 链预注册试验、发布闭环与 D-2 裁定执行增补：2026-10-14/15；items 链重立项（109 号）P5 放行、P6 发布与 P7 读链回填：2026-10-15；I43 勘误登记（111 号）、生产读链消费冒烟（112 号）与 C4 闭环（113 号）回填：2026-10-15/16
 - 状态：本文是原始架构方案基线；实现与多轮有界真实开发试验已经发生，当前执行真源为
   [实施规格](spec.md)和[任务 11](issues/11-bounded-live-trial.md)。截至 2026-10-09，质量门、relations、
   正向发布/query/delivery/context_use 与 M_main 消费仍未闭环，不得按本文旧时点描述为“尚未实施”，
@@ -1302,7 +1302,9 @@ Issue 43 同时暴露了 terminal task runner 对无 reporter 运行的完成态
 
 **生产 PG/web 读链（108 号，2026-10-15，零调用）**：生产 PG 活动 build + 全文索引已在位（M7 I4-4 重建产物：8 源 8 发布全 active、`search_tsv`+GIN+zhcfg），本立项**不写生产库**。落地：`place_production_store.py --place` 把 106 号桥输入重放为合并单生产 store（临时 root 复算 publication_id 与 106 号签认件逐一相同后才落，确定性重放成立），`CORPUS_STRUCTURED_ROOT` 指向它；`server/routes/corpus.py` 四只读端点（status/search/documents/{doc_id}/claims/{source_id}，鉴权 + fail-closed 错误翻译）；真实 JWT 经 HTTP 端到端验收全过（401 守卫、search 3 hits、取证回读、两源三用途计数与 106 号一致、生产库 generation/activated_at 不变）；`tests/test_web_corpus_read_chain.py` 11 项全离线；回归 1520 passed。**「生产放行门」放行判定待 U 具名签认（独立复核 + 签认，实施方不自宣）。**出范围：web 前端页面、claims 进生产 PG 写链、e6_holdout_corpus。
 
-**边界**：以上均不扩大为整篇覆盖、研究质量或生产放行；claims 链完结后的衔接项 = 第一笔经生产读链的真实消费冒烟、items 抽取与发布重立项（109 号，预注册件待签，另行记录）。93/97 号治理层拒签记录、101 号 interrupted_archive 与 106 号旧 store 档案均保留供审计。
+**边界**：以上均不扩大为整篇覆盖、研究质量或生产放行；claims 链完结后的衔接项 = 第一笔经生产读链的真实消费冒烟（已于 §36 执行）、items 抽取与发布重立项（109 号，预注册件待签，另行记录）。93/97 号治理层拒签记录、101 号 interrupted_archive 与 106 号旧 store 档案均保留供审计。
+
+**被取代产物漂移登记（110 号，2026-10-15，零调用，未签）**：83 号草案 `claims-gate-v1-signoff.md` 在草案态被文本改动（MANIFEST 记录哈希 `c3f21203…`、磁盘现值 `7403d1dc…`），其间无任何变更记录件，本件只登记事实、范围与不可逆性——`c3f21203…` 版本在磁盘与 git 中均不存在（该目录 git 历史为单次压缩提交），无法复原；处置 = 接受该改动并登记为已知漂移、不得再次改动，后续修订须另立新目录并留旧哈希。范围仅限该草案 md 文本：83 号 JSON 产物（`claims-gate-v1.proposed.json` / `coverage-measurements.json`）与 MANIFEST 记录逐条一致、未漂移；不触及任何已签认产物。校验器语义：`tools/check_claims_gate.py` 的 `superseded-artifact-drift` 为 `blocking=False`（bookkeeping/integrity 层），覆盖判据只要求"有登记项按路径 + 双哈希覆盖"，**不阻断门**；签名另按 `unsigned` 追踪。**状态 `registered_pending_human_signature`（reviewer/adjudicator/signed_on 全为 null）⇒ 仍待 U 具名**，登记件 `superseded-drift-registration.json`。
 
 ## 35. 2026-10-15 执行增补：items 链重立项（109 号）——P5 放行、P6 发布与 P7 读链
 
@@ -1323,6 +1325,35 @@ Issue 43 同时暴露了 terminal task runner 对无 reporter 运行的完成态
 **回归与门禁**：`pytest tests -k "corpus or web_corpus or claims or evidence"` = **1706 passed / 2 failed**（两项均为 101 号已登记既有环境失败：golden 锚点语料不在库、`reader-pdf-11` 版本漂移）；Ruff check/format 全过；Pyright 0 errors；`tools/check_evidence_guard.py` exit 0 / violations 0（guarded 脚本 38 → 40）；`tools/check_claims_gate.py` verdict `pass`。
 
 **边界**：本轮 items 发布**不主张质量达标、不主张门通过**（判档仍为 FAIL 单轴：哨兵 NT-I43）、**不主张缺口清单为等价替代**；`material_relations` 角色（契约 OPEN-2=C）本轮不抽不评；「生产放行门」的放行判定由 U 具名作出（108 号），实施方不自宣。未写生产 PG、未改 83–108 号与 109 号任何已签/已冻结字节。
+
+## 36. 2026-10-15/16 执行增补：I43 勘误登记（111 号）与第一笔经生产读链的真实消费冒烟（112 号）
+
+**111 号（零调用，已签生效）**：NT-I43 未匹配的归因登记。归因 = 金标侧 polarity 表示缝（原文字面「不再」在候选侧读 negated、金标侧读肯定式条件 affirmed，契约要求 polarity 一致 ⇒ 逐字候选永不能 matched）+ 复合载体 `itm_8e932aaf49806db7` 已被 NT-I13 占用（`gold_split_finer_than_candidate`）。证据：66 号 base 工作表第 2 行逐字候选（polarity=negated）、70 号分层「逐字一致」0.489、109 号 batch-01 第 4 点、P4 缺口分析 `in_set_repair_possible=false`、35 号审计金标内部自洽。处置：只登记归因与取代读法（引用 P5 哨兵 10/11 与判档 FAIL 时须连带引用本件，不得读作「抽取模型漏抽该内容」的证据）；**不改金标、不移出哨兵、不重算分数**；哨兵 11/11 新读数须另立金标勘误 + 门修订签认。生效件 `i43-polarity-seam-erratum.json`（`9a48c563…`，decided_signed，U 具名 xyl/2026-10-15）。**补抽对 NT-I43 零收益**（该句历史上已被逐字抽出）。NT-I06/09/10/25/26 与 I43 形态不同：round-3 池为候选缺失（`in_set_repair_possible=false`），维持抽取侧缺口读数。
+
+**112 号（两轮；首轮无效，第二轮通过）**：第一笔经生产读链的真实消费冒烟。
+
+- **首轮（r1-live）无效并停下报裁**：模型 0 次调用 `corpus_semantic_query`，实际走 `corpus_search`/`corpus_fetch` 原文路径；两场会话合计 292,165 tokens，超 ceiling 100,000。根因 = workflow profile 选择缝——`corpus_semantic_query` 只在 `tui-semantic` 派生注入，而 `workflow_profile=${REACT_WORKFLOW_PROFILE:-tui}`，显式传该环境变量的启动命令被取消 ⇒ 实跑默认 `tui`。按预注册止损规则未跑第二题（`r1-live/invalid-run-record.json`）。
+- **第二轮（r2-live）通过**：U 裁方案 A（修 profile 接缝 + 追加 ceiling）。接缝修法 = 进程内强制 `REACT_WORKFLOW_PROFILE=tui-semantic`（早于任何配置加载）+ 零调用先验闸门（断言解析出的 `agent_tools` 含 `corpus_semantic_query`、工具在 `plugins/tools` allowlist、清单工具伴随绑定成立）通过后才发模型请求；另按 `apodex.semantic_access` 闸门要求以 **bwrap 只读挂载**（`--ro-bind / /`）运行，WAL 侧车由 `prepare_readonly_access` 在 writer 侧准备。U 追加 ceiling = 150,000 tokens（结构化问答指定）。
+- **结果**：两题工具序列均为 `[corpus_semantic_query, corpus_submit_manifest]`，各 2 条语义引用 `delivery_status=delivered`，A4 enforce `verified`（supported 1 / partial 0 / unsupported 0 / verification_errors 0），引用绑定 **gen-2 生产发布件**（`c3dbd91b…` industrial-fulian-md、`8395c900…` optical-module-docx），`purpose=cite`、`quality_status=accepted`、evidence 区间为 `cv2:<build>#chunk:…`。用量 15,774 + 19,270 = **35,044 / 150,000 tokens**。
+- **判据**：C1 PASS、C2 PASS、C3 PASS（零抽取调用；生产 store `attempts=0` 且 db mtime 保持 2026-10-15 18:24:48、objects 8/manifests 4 未变；生产 PG 8 行 `generation/activated_at` 与基线逐字相同）、C4 **NOT_EXERCISED**（两题未打在已登记缺口上，覆盖状态返回未被检验，不得读成通过）、C5 PASS（`tests/test_web_corpus_read_chain.py` 14 passed；108 号真实 JWT 验收仍有效）。
+- **不主张**：整篇覆盖或语义完整性（7 条未覆盖金标、12 条 claims 无候选、`material_relations: missing` 均未解决）、研究质量、生产放行（后者属 108 号签认件）。
+- **落地件**：`evidence/111-i43-polarity-seam-erratum-20261015/`、`evidence/112-production-read-chain-consumption-20261015/{r0-zero-call,r1-live,r2-live}/`（含 `landing-record.json`、`preflight-q{1,2}.json`、`pg-state-before/after.json`、`invalid-run-record.json`、各轮 MANIFEST）。
+
+**下一步口径（已由 113 号取代）**：本段记录的是 112 号完成时点；C4 已在 113 号关闭。其余缺口仍须按下节边界读取。
+
+## 37. 2026-10-16 执行增补：C4 已登记缺口消费闭环（113 号）
+
+**根因与实现**：gen-2 对 `material_relations: missing` 已正确返回 `not_extracted + CS_DEPENDENCY_NOT_READY`，但 7 条未覆盖 items 金标与 12 条 claims 无候选只存在于 109 号裁定证据，未绑定发布清单，查询只能得到无原因 `no_match`。113 号新增内容寻址的 `corpus-publication-gaps-v1` 登记对象，由 manifest 的 `COVERAGE_GAPS_V1:<sha256>` 绑定 source/build；读取端校验对象哈希、schema 与 source/build，一旦篡改失败关闭。查询仅在规范化 query 命中相关 role 的登记词时附加 `CS_PUBLICATION_EXPLICIT_GAPS`，普通词法未命中不扩大为覆盖声明。
+
+**生产规则升级**：先克隆生产 store 演练，再把两源 head 从 gen-2 推进到 gen-3 `rule_upgrade`：industrial-fulian-md `684c93fb…`（parent `c3dbd91b…`，16 个登记缺口），optical-module-docx `933d718d…`（parent `8395c900…`，3 个登记缺口）。artifacts、snapshot、mappings、coverage 与 quality_status 逐项不变；两源仍为 `{claims: complete, material_items: complete, material_relations: missing}` / `accepted`，抽取 attempts 保持 0。确定性读链为 19/19 登记探测均含显式缺口码，2/2 普通未命中均不含该码，2/2 relations 控制维持 dependency-not-ready。
+
+**真实消费**：最终有效轮以 `bwrap --ro-bind / /` 只读挂载运行，每题启动前紧邻调用 `prepare_readonly_access`，零调用先验闸门同时断言语义工具接通与 `main_max_turns=4`。工业 claims 题消费 `684c93fb…`、光模块 items 题消费 `933d718d…`；两题均只调用一次 `corpus_semantic_query`，收到 `no_match + CS_PUBLICATION_EXPLICIT_GAPS` 后明确回答“已登记发布覆盖缺口、当前覆盖不足、空结果不能证明事实/风险存在与否”，没有提交无证据 manifest。有效轮 **17,349 tokens**。
+
+**无效轮与预算**：第一组双题实际均在第 2 轮停止并给出正确缺口读法，但 workflow 内部 `main_max_turns` banner 仍为 600，故按配置边界记无效（17,409 tokens）；修复硬上限后，第二组首题因一次宿主 SQLite 读取关闭移除了 WAL 侧车，在只读挂载内返回 `structured_index_invalid`，按禁止重试规则停止并记无效（8,697 tokens）。最终修法是每题启动前紧邻准备侧车。含全部无效轮累计 **43,455 / 60,000 tokens**，零调用启动拒绝另记 0 tokens。
+
+**验收与边界**：C4 = **PASS**。生产 PostgreSQL 以 READ ONLY 事务复核，8 行 `generation/activated_at` 与 112 号基线逐字相同；未写生产 PG。聚焦回归 70 passed；相关广测 1707 passed / 2 failed / 19 skipped（两项仍为既有环境失败：golden 锚点语料缺失、reader-pdf-11 与测试期待 reader-pdf-10 漂移）；Ruff、Pyright 与 import smoke 通过。C4 通过只证明缺口能被下游正确识别，**不表示 7+12 条内容已补齐，不改变 items P5 单轴 FAIL，也不表示 material_relations 已抽取**。证据：`evidence/113-c4-registered-gap-consumption-20261016/`。
+
+**当前剩余任务**：7 条 items 未覆盖金标与 12 条 claims 无候选的内容处置（若要补齐须另立抽取/裁定任务）、material_relations、web 前端 items 页面、claims/items 进生产 PG 写链、e6_holdout_corpus；C4 不再属于剩余项。
 
 ## 附录：依据与源码入口
 

@@ -1,0 +1,51 @@
+[preflight] {"workflow_profile_env": "tui-semantic", "resolved_agent_tools": ["corpus_semantic_query"], "required_tool_present": true, "required_tool_allowlisted": true, "manifest_companion_will_bind": true, "model_requests": 0, "verdict": "PASS"}
+apodex: native mode — mutable runtime files are under /home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/113-c4-registered-gap-consumption-20261016/r1-live/industrial/.apodex/runtime/native.
+        This is not a container or OS sandbox; approved commands run with your host user permissions.
+apodex: native workspace runtime (not an OS sandbox) (workspace-local native runtime)
+
+[1;35m============================================================[0m
+[1;35m[[0m[1;35mReAct[0m[1;35m][0m[1;35m task started[0m  [33mtask_id[0m=[36m8cfbe534eaa4[0m  [33mmax_turns[0m=[1;36m600[0m
+workflow → stateful-react-agent · profile → tui-semantic
+[thinking] Let me parse this task carefully.
+
+The user is running a bounded consumption test for a registered gap (C4). The task: answer only one question: is 工业富联's observation position stop-loss condition "下季OCF/扣非<0.5"?
+
+Strict boundaries:
+- Only call corpus_semantic_query; if no actually-delivered semantic records, do NOT submit corpus_submit_manifest, and do not call other tools or sources.
+- Only query source_id=f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb, build_id=f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314.
+- corpus_semantic_query must use purpose=cite, query_text=工业富联观察仓止损条件为下季OCF/扣非<0.5, limit=1, field_filters={"role":"claims"}; no retry, no pagination.
+- Answer only based on actually-delivered query status. If it returns no_match + CS_PUBLICATION_EXPLICIT_GAPS, the final answer only states this is a registered publication coverage gap, current coverage insufficient, empty result cannot prove the condition or risk doesn't exist; must NOT answer "yes" or "no".
+- Final answer is one short Chinese sentence.
+
+So I need to make exactly one call to corpus_semantic_query with the specified parameters, then answer based on what's returned.
+
+Let me make the call.[LLM] stream model=glm-5.3-flash ttft=4.56s total=12.68s chunks=483
+
+
+[1;36m=== [0m[1;36m[[0m[1;36mReAct[0m[1;36m][0m[1;36m Turn [0m[1;36m1[0m[1;36m/[0m[1;36m600[0m  [2mstateful_react[0m  [2mtokens: [0m[1;2;36m3756[0m[2m->[0m[1;2;36m498[0m
+  [33mtool corpus_semantic_query[0m  [1;2m{[0m[2;32m"build_id"[0m[2m: [0m[2;32m"f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314"[0m[2m, [0m[2;32m"field_filters"[0m[2m: [0m[1;2m{[0m[2;32m"role"[0m[2m: [0m[2;32m"claims"[0m[1;2m}[0m[2m, [0m[2;32m"limit"[0m[2m: [0m[1;2;36m1[0m[2m, [0m[2;32m"purpose"[0m[2m: [0m[2;32m"cite"[0m[2m, [0m[2;32m"query_text"[0m[2m: [0m
+[2;32m"工业富联观察仓止损条件为下季OCF/扣非<0.5"[0m[2m, [0m[2;32m"source_id"[0m[2m: [0m[2;32m"f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb"[0m[1;2m}[0m
+  [32m-> [0m
+[1;32m{[0m[32m"schema_version"[0m[32m:[0m[32m"corpus-semantic-query-page-v1"[0m[32m,[0m[32m"query_id"[0m[32m:[0m[32m"query:06580bfd1ac6bbc7"[0m[32m,[0m[32m"publication_id"[0m[32m:[0m[32m"sha256:684c93fb18e6e66c39246e6b555fc6152e2e1ba41c3e7a7468425e85662b0823"[0m[32m,[0m[32m"query_sha256"[0m[32m:[0m[32m"sha256:[0m
+[32m06580bfd1ac6bbc75b8c725220d650def9155428cea594245270f8864b54c284"[0m[32m,[0m[32m"sort_version"[0m[32m:[0m[32m"semantic-lexical-sort-v1"[0m[32m,[0m[32m"purpose"[0m[32m:[0m[32m"cite"[0m[32m,[0m[32m"records"[0m[32m:[0m[1;32m[[0m[1;32m][0m[32m,[0m[32m"next_cursor"[0m[32m:null,[0m[32m"page_status"[0m[32m:[0m[32m"no_match"[0m[32m,[0m[32m"error_codes"[0m[32m:[0m[1;32m[[0m[32m"CS[0m
+[32m...[0m
+◆ corpus_semantic_query build_id=f16e7fde95537f0656a69cb1547232ca26a0347b, field_filters={'role': 'claims'}, limit=1
+[✓ corpus_semantic_query  (113 ms)]
+{"schema_version":"corpus-semantic-query-page-v1","query_id":"query:06580bfd1ac6bbc7","publication_id":"sha256:684c93fb18e6e66c39246e6b555fc6152e2e1ba41c3e7a7468425e85662b0823","query_sha256":"sha256:06580bfd1ac6bbc75b8c725220d650def9155428cea594245270f8864b54c284","sort_version":"semantic-lexical-sort-v1","purpose":"cite","records":[],"next_cursor":null,"page_status":"no_match","error_codes":["CS_PUBLICATION_EXPLICIT_GAPS"]}
+[thinking] The query returned:
+- page_status: "no_match"
+- error_codes: ["CS_PUBLICATION_EXPLICIT_GAPS"]
+- records: [] (empty)
+- next_cursor: null
+
+Per the strict boundary: if it returns no_match + CS_PUBLICATION_EXPLICIT_GAPS, the final answer must only state that this is a registered publication coverage gap, current coverage insufficient, and that an empty result cannot prove the condition or risk doesn't exist; must NOT answer "yes" or "no". And no corpus_submit_manifest submission since no semantic records were actually delivered.
+
+Final answer: one short Chinese sentence.
+查询返回 no_match + CS_PUBLICATION_EXPLICIT_GAPS：这是已登记的发布覆盖缺口，当前覆盖不足，空结果不能证明工业富联观察仓止损条件为「下季OCF/扣非<0.5」存在或不存在。[LLM] stream model=glm-5.3-flash ttft=4.29s total=7.28s chunks=181
+
+
+[1;36m=== [0m[1;36m[[0m[1;36mReAct[0m[1;36m][0m[1;36m Turn [0m[1;36m2[0m[1;36m/[0m[1;36m600[0m  [2mstateful_react[0m  [2mtokens: [0m[1;2;36m4430[0m[2m->[0m[1;2;36m182[0m
+查询返回 no_match + CS_PUBLICATION_EXPLICIT_GAPS：这是已登记的发布覆盖缺口，当前覆盖不足，空结果不能证明工业富联观察仓止损条件为「下季OCF/扣非<[1;36m0.5[0m」存在或不存在。
+
+[1;35m[[0m[1;35mReAct[0m[1;35m][0m[1;35m done[0m  [33mturns[0m=[1;36m2[0m  [33mtool_calls[0m=[1;36m1[0m  [33mstopped_by[0m=[35mno_tool[0m
+✓ done · turns=1 · tools=0 · no_tool · 8,866 tokens (in 8,186 · out 680 · cached 3,712)

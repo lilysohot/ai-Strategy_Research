@@ -1,0 +1,71 @@
+{
+  "schema": "production-read-chain-consumption-landing-v1",
+  "record_id": "112-production-read-chain-consumption-r2",
+  "created_on": "2026-10-16",
+  "verdict": "PASSED_WITH_C4_NOT_EXERCISED",
+  "summary": "第一笔经生产读链的真实消费冒烟完成：两题均只调用 corpus_semantic_query + corpus_submit_manifest，语义记录实际送达（delivery=delivered），A4 enforce 复算 verified，引用绑定 gen-2 生产发布件；零抽取调用、零生产 PG/生产 store 写入；预算 35,044 / 150,000 tokens。",
+  "runs": [
+    {
+      "label": "industrial",
+      "run_id": "20261016-095835+0800-react-1fd8",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+      "publication_id": "sha256:c3dbd91bfa0fe2b1c905077f35fba04e27c9b8bdc678abbcb1515f982a8b3871",
+      "question": "工业富联 2026H1 云计算业务同比增长多少？",
+      "tool_sequence": ["corpus_semantic_query", "corpus_submit_manifest"],
+      "turns": 3,
+      "usage": {"input": 14605, "output": 1169, "cached": 8320},
+      "total_tokens": 15774,
+      "delivered_records": [
+        "abbab7baa50760ea29a27b66e158ba2de969d0be5032302f2bfe3e23c3b0ac37",
+        "itm_bf0c10772dfcb0bd"
+      ],
+      "evidence_handle": "cv2:f16e7fde…#chunk:signed-non-table-target-scope (signed-unit-11, 逐字「云计算 +75.7%，」)",
+      "answer": "工业富联云计算业务同比增长 75.7%。",
+      "a4": {"status": "verified", "supported": 1, "partial": 0, "unsupported": 0, "verification_errors": 0}
+    },
+    {
+      "label": "optical",
+      "run_id": "20261016-100109+0800-react-07fd",
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96",
+      "publication_id": "sha256:8395c900d91fe12d6507db5a1d8d16705dee7e95538f1785b86dcf083eb45aeb",
+      "question": "Q2 800G 出货是否超预期？",
+      "tool_sequence": ["corpus_semantic_query", "corpus_submit_manifest"],
+      "turns": 3,
+      "usage": {"input": 16999, "output": 2271, "cached": 0},
+      "total_tokens": 19270,
+      "delivered_records": ["itm_5326cef728099080", "99c2d149bf9fc862fe6207895a7d066027d03d98350f49bfe874974f83686a9e"],
+      "evidence_handle": "cv2:dca4bad7…#chunk:signed-non-table-target-scope (signed-unit-20)",
+      "answer": "材料判断 Q2 800G 出货超预期。",
+      "a4": {"status": "verified", "supported": 1, "partial": 0, "unsupported": 0, "verification_errors": 0}
+    }
+  ],
+  "criteria": [
+    {"id": "C1", "verdict": "PASS", "measured": "两题工具序列均为 [corpus_semantic_query, corpus_submit_manifest]；语义引用 delivery_status=delivered 各 2 条，非仅记录 ID"},
+    {"id": "C2", "verdict": "PASS", "measured": "manifest status=verified，supported 1 / partial 0 / unsupported 0 / verification_errors 0；semantic_references 绑定 gen-2 publication（c3dbd91b… / 8395c900…）、purpose=cite、evidence_ranges 为 cv2:<build>#chunk 精确区间、publication_status=published、quality_status=accepted、verification_status=verified"},
+    {"id": "C3", "verdict": "PASS", "measured": "抽取调用 0（工具白名单 + store attempts=0 且 db mtime 保持 2026-10-15 18:24:48、objects 8 / manifests 4 未变）；生产 PG corpus_publications 8 行 generation/activated_at 与 2026-10-15 基线逐字相同；预算 35,044 ≤ 150,000"},
+    {"id": "C4", "verdict": "NOT_EXERCISED", "measured": "两题均未打在已登记缺口（7 条未覆盖金标 / 12 条 claims 无候选 / material_relations missing）上，故覆盖状态返回未被检验——如实记为未行使，不得读成通过"},
+    {"id": "C5", "verdict": "PASS", "measured": "tests/test_web_corpus_read_chain.py 14 passed（含 items role 过滤、cursor 往返、无 store root 409、未知 source 404、鉴权循环）；108 号的真实 JWT 端到端验收仍有效，本轮未改动读链代码"}
+  ],
+  "r1_invalid_disclosure": {
+    "record": "../r1-live/invalid-run-record.json",
+    "verdict": "INVALID_STOPPED_FOR_RULING",
+    "measured_total_tokens": 292165,
+    "ceiling_tokens": 100000,
+    "note": "该轮未走语义查询（profile 仍为默认 tui）且超预算；不产生验收结论，本轮 150,000 ceiling 不含其消耗，两者并列披露。"
+  },
+  "integrity": {
+    "model_requests_changed_signed_bytes": 0,
+    "production_store_writes": 0,
+    "production_pg_writes": 0,
+    "frozen_gold_gate_contract_publication_bytes": "未改动",
+    "store_readonly_mount": "bwrap --ro-bind / /，经 apodex.semantic_access 只读闸门实测 PASS；WAL 侧车由 store.prepare_readonly_access 在 writer 侧准备",
+    "io_note": "prepare_readonly_access 在 store/index/ 生成/保留了 structured.sqlite3-wal 与 -shm 侧车（脚本明示不修改业务行）；db mtime 未变"
+  },
+  "not_claimed": [
+    "整篇覆盖或语义完整性（7 条未覆盖金标、12 条 claims 无候选、material_relations missing 均未解决）",
+    "研究质量或生产放行（后者由 108 号签认件覆盖）",
+    "C4 缺口覆盖状态已检验"
+  ]
+}

@@ -663,8 +663,26 @@ def query_semantic(
             error_codes=("CS_CURSOR_STALE",),
             publication_id=_cursor_publication(decoded),
         )
-    gap_codes = (EXPLICIT_GAPS,) if view.selected_record_ids else ()
     needle = "".join(query_text.lower().split())
+    requested_role = field_filters.get("role")
+    relevant_roles: set[str] = (
+        {requested_role}
+        if requested_role is not None
+        else (
+            {"claims"}
+            if purpose in {"compare", "calculate"}
+            else {"claims", "material_items", "material_relations"}
+        )
+    )
+    registered_gap_hit = bool(needle) and any(
+        gap.role in relevant_roles
+        and any(
+            (term := "".join(value.lower().split())) and (term in needle or needle in term)
+            for value in gap.query_terms
+        )
+        for gap in view.coverage_gaps
+    )
+    gap_codes = (EXPLICIT_GAPS,) if view.selected_record_ids or registered_gap_hit else ()
     eligible = [
         (searchable, _purpose_context(record, purpose))
         for searchable, record in (*_claim_records(view), *_material_records(view))
@@ -685,12 +703,6 @@ def query_semantic(
         )
     )
     published_roles = {artifact.artifact.role for artifact in view.artifacts}
-    requested_role = field_filters.get("role")
-    relevant_roles: set[str] = (
-        {requested_role}
-        if requested_role is not None
-        else ({"claims"} if purpose in {"compare", "calculate"} else set(role_order))
-    )
     if not (published_roles & relevant_roles):
         return _empty_page(
             query_id=query_id,

@@ -1,0 +1,44 @@
+{
+  "schema": "evidence-manifest-v1",
+  "record_id": "112-production-read-chain-consumption-r2",
+  "created_on": "2026-10-16",
+  "status": "landed",
+  "model_requests": 2,
+  "production_database_access": "read_only",
+  "note": "运行工件（industrial/.apodex、optical/.apodex）不登记哈希，按 apodex 运行目录原样留档。",
+  "files": {
+    "authorisation-112-r2.json": {
+      "sha256": "a439c40d4189e8b1a55ef2787164ef15ffdac653e608231e88bb4720343bf4e3"
+    },
+    "industrial-prompt.txt": {
+      "sha256": "613812832966d7b6811f0170e9f061a355f37ee7a3ac236d7cf03ad6f705081f"
+    },
+    "industrial.log": {
+      "sha256": "adb17ad3cc779813ab69288ca110b01b2eb3ae897767a3698e9df43090240fa3"
+    },
+    "landing-record.json": {
+      "sha256": "60b4ebb85f83fa51d0f0e94108dfff0206c5799db3d8896b9059505f8e8c031c"
+    },
+    "optical-prompt.txt": {
+      "sha256": "5fa92d5092f9cd3f0122b512c24788e5c485aa6d694889860b6f076502e46f6d"
+    },
+    "optical.log": {
+      "sha256": "149ef54bc1e1ea23667d0ca3d58ab9986b3b5b09045db9f878cb6a5639873759"
+    },
+    "pg-state-after.json": {
+      "sha256": "ef73eceb8e0509e72ab979fb5e4747adc013d666f8c061d78ec27854fd12f30c"
+    },
+    "preflight-q1.json": {
+      "sha256": "3e3c65f09e6bd589eebc6f3979c2446ba302059352871dc81b549b58816de55d"
+    },
+    "preflight-q2.json": {
+      "sha256": "3e3c65f09e6bd589eebc6f3979c2446ba302059352871dc81b549b58816de55d"
+    },
+    "preflight_profile.py": {
+      "sha256": "8462f4b275a8c072f1ad58bb3e0448cfdb20d7ce99de7d3b12b5471a21dde0c3"
+    },
+    "run_bounded_r2.py": {
+      "sha256": "c1e4bc5f092f65fb8ab102a3cd0f58cf3dda67ae5f4a80daa48a7d739755b8fb"
+    }
+  }
+}

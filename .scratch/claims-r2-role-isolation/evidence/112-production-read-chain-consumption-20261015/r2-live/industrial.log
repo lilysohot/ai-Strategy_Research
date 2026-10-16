@@ -1,0 +1,73 @@
+[preflight] {"workflow_profile_env": "tui-semantic", "resolved_agent_tools": ["corpus_semantic_query"], "required_tool_present": true, "required_tool_allowlisted": true, "manifest_companion_will_bind": true, "model_requests": 0, "verdict": "PASS"}
+apodex: native mode — mutable runtime files are under /home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/112-production-read-chain-consumption-20261015/r2-live/industrial/.apodex/runtime/native.
+        This is not a container or OS sandbox; approved commands run with your host user permissions.
+apodex: native workspace runtime (not an OS sandbox) (workspace-local native runtime)
+workflow → stateful-react-agent · profile → tui-semantic
+
+[1;35m============================================================[0m
+[1;35m[[0m[1;35mReAct[0m[1;35m][0m[1;35m task started[0m  [33mtask_id[0m=[36mcc471b1a3a3b[0m  [33mmax_turns[0m=[1;36m600[0m
+[thinking] Let me carefully follow the task instructions:
+
+1. Only call `corpus_semantic_query` and `corpus_submit_manifest`.
+2. Query with source_id=f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb, build_id=f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314.
+3. purpose=cite, query_text=云计算, limit=2.
+4. Answer based on actually delivered complete records.
+5. Final answer: one short Chinese statement containing verbatim "工业富联云计算业务同比增长 75.7%".
+6. Before final answer, call corpus_submit_manifest with the same report_quote, using actual delivered records' publication_id, record_id, purpose=cite as semantic_references.
+
+Let me start with the semantic query.[LLM] stream model=glm-5.3-flash ttft=5.26s total=10.66s chunks=327
+
+◆ corpus_semantic_query build_id=f16e7fde95537f0656a69cb1547232ca26a0347b, limit=2, purpose=cite
+
+[1;36m=== [0m[1;36m[[0m[1;36mReAct[0m[1;36m][0m[1;36m Turn [0m[1;36m1[0m[1;36m/[0m[1;36m600[0m  [2mstateful_react[0m  [2mtokens: [0m[1;2;36m3733[0m[2m->[0m[1;2;36m338[0m
+  [33mtool corpus_semantic_query[0m  [1;2m{[0m[2;32m"build_id"[0m[2m: [0m[2;32m"f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314"[0m[2m, [0m[2;32m"limit"[0m[2m: [0m[1;2;36m2[0m[2m, [0m[2;32m"purpose"[0m[2m: [0m[2;32m"cite"[0m[2m, [0m[2;32m"query_text"[0m[2m: [0m[2;32m"云计算"[0m[2m, [0m[2;32m"source_id"[0m[2m: [0m
+[2;32m"f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb"[0m[1;2m}[0m
+  [32m-> [0m
+[1;32m{[0m[32m"schema_version"[0m[32m:[0m[32m"corpus-semantic-query-page-v1"[0m[32m,[0m[32m"query_id"[0m[32m:[0m[32m"query:27bab44b7988ef58"[0m[32m,[0m[32m"publication_id"[0m[32m:[0m[32m"sha256:c3dbd91bfa0fe2b1c905077f35fba04e27c9b8bdc678abbcb1515f982a8b3871"[0m[32m,[0m[32m"query_sha256"[0m[32m:[0m[32m"sha256:[0m
+[32m27bab44b7988ef580afc1fed0f92baa61adafffda5319bf8bf8d2142615d997e"[0m[32m,[0m[32m"sort_version"[0m[32m:[0m[32m"semantic-lexical-sort-v1"[0m[32m,[0m[32m"purpose"[0m[32m:[0m[32m"cite"[0m[32m,[0m[32m"records"[0m[32m:[0m[1;32m[[0m[1;32m{[0m[32m"record_id"[0m[32m:"abbab7baa50760ea29a27b66e158ba2de969d0be5032302f2b[0m
+[32m...[0m
+[✓ corpus_semantic_query  (139 ms)]
+{"schema_version":"corpus-semantic-query-page-v1","query_id":"query:27bab44b7988ef58","publication_id":"sha256:c3dbd91bfa0fe2b1c905077f35fba04e27c9b8bdc678abbcb1515f982a8b3871","query_sha256":"sha256:27bab44b7988ef580afc1fed0f92baa61adafffda5319bf8bf8d2142615d997e","sort_version":"semantic-lexical-sort-v1","purpose":"cite","records":[{"record_id":"abbab7baa50760ea29a27b66e158ba2de969d0be5032302f2bfe3e23c3b0ac37","role":"claims","usable_for":["cite"],"evidence":[{"handle":"cv2:f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314#chunk:signed-non-table-target-scope","unit_id":"signed-unit-11","locator":"char:1393-1655","quote":"云计算 +75.7%，","coordinate_system":"unicode_code_points","start":51,"end":62,"text_sha256":"sha256:da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4"}],"dependencies":[],"context_status":"complete","mapping_status":"suspected","quality_status":"accepted"},{"record_id":"itm_bf0c10772dfcb0bd","role":"material_items","usable_for":["cite"],"evidence":[{"handle":"cv2:f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314#chunk:signed-non-table-target-scope","unit_id":"signed-unit-11","locator":"char:1393-1655","quote":"云计算 +75.7%，","coordinate_system":"unicode_code_points","start":51,"end":62,"text_sha256":"sha256:da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4"}],"dependencies":[],"context_status":"complete","mapping_status":"suspected","quality_status":"accepted"}],"next_cursor":null,"page_status":"complete","error_codes":[]}
+[thinking] The query returned two records, both with complete evidence delivered: quote "云计算 +75.7%，" from signed-unit-11, locator char:1393-1655. Both records are usable_for ["cite"], quality accepted, context complete, page_status complete, no error codes.
+
+The records were actually delivered with full evidence. Now I need to submit the manifest with:
+- report_quote: the final answer sentence containing verbatim "工业富联云计算业务同比增长 75.7%"
+- semantic_references: publication_id sha256:c3dbd91bfa0fe2b1c905077f35fba04e27c9b8bdc678abbcb1515f982a8b3871, record_id abbab7baa50760ea29a27b66e158ba2de969d0be5032302f2bfe3e23c3b0ac37 (and/or itm_bf0c10772dfcb0bd), purpose=cite.
+
+The final answer must be one short Chinese statement, verbatim containing "工业富联云计算业务同比增长 75.7%".
+
+So report_quote should be exactly the final answer sentence: "工业富联云计算业务同比增长 75.7%。"
+
+I'll include both record_ids as semantic references, or at least one. The instruction says "用实际送达记录的 publication_id、record_id 和 purpose=cite 提交 semantic_references" — use the actually delivered records. Both records share the same evidence; I'll include both to be safe. Also give text_location. Let me submit.
+查询返回 `page_status=complete`，两条记录（role=claims 与 material_items）均 `quality_status=accepted`、`context_status=complete`，完整证据已实际送达：signed-unit-11（locator char:1393-1655）逐字原文「云计算 +75.7%，」。现在按要求提交证据清单：[LLM] stream model=glm-5.3-flash ttft=3.95s total=15.04s chunks=638
+
+◆ corpus_submit_manifest conclusions=[{'evidence': [], 'report_quote': '工业富联云  (non-read tool)
+
+[1;36m=== [0m[1;36m[[0m[1;36mReAct[0m[1;36m][0m[1;36m Turn [0m[1;36m2[0m[1;36m/[0m[1;36m600[0m  [2mstateful_react[0m  [2mtokens: [0m[1;2;36m4657[0m[2m->[0m[1;2;36m644[0m
+查询返回 `[33mpage_status[0m=[35mcomplete[0m`，两条记录（[33mrole[0m=[35mclaims[0m 与 material_items）均 `[33mquality_status[0m=[35maccepted[0m`、`[33mcontext_status[0m=[35mcomplete[0m`，完整证据已实际送达：signed-unit-[1;36m11[0m（locator 
+char:[1;36m1393[0m-[1;36m1655[0m）逐字原文「云计算 +[1;36m75.7[0m%，」。现在按要求提交证据清单：
+  [33mtool corpus_submit_manifest[0m  [1;2m{[0m[2;32m"conclusions"[0m[2m: [0m[1;2m[[0m[1;2m{[0m[2;32m"evidence"[0m[2m: [0m[1;2m[[0m[1;2m][0m[2m, [0m[2;32m"report_quote"[0m[2m: [0m[2;32m"工业富联云计算业务同比增长 75.7%。"[0m[2m, [0m[2;32m"semantic_references"[0m[2m: [0m[1;2m[[0m[1;2m{[0m[2;32m"publication_id"[0m[2m: [0m
+[2;32m"sha256:c3dbd91bfa0fe2b1c905077f35fba04e27c9b8bdc678abbcb1515f982a8b3871"[0m[2m, [0m[2;32m"purpose"[0m[2m: [0m[2;32m"cite"[0m[2m, [0m[2;32m"record_id"[0m[2m: [0m[2;32m"abbab7baa50760ea29a27b66e158ba2de969d0be5032302f2bfe3e23c3b0ac37"[0m[1;2m}[0m[2m, [0m[1;2m{[0m[2;32m"publication_id"[0m[2m: [0m
+[2;32m"sha256:c3dbd91bfa0fe2b1c905077f35fba04e27c9b8bdc678abbcb1515f982a8b3871"[0m[2m, [0m[2;32m"purpose"[0m[2m: "c[0m[2;33m...[0m
+  [32m-> [0m[1;32m{[0m[32m"ok"[0m[32m: true, [0m[32m"manifest_file"[0m[32m: [0m
+[32m"/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/112-production-read-chain-consumption-20261015/r2-live/industrial/.apodex/runs/20261016-095835+0800-react-1fd8/corpus/mani[0m
+[32mfests/manifest-000.json"[0m[32m, [0m[32m"owner"[0m[32m: [0m[32m"stateful_react:cc471b1a3a3b"[0m[32m, [0m[32m"publish_status"[0m[32m: [0m[32m"verified"[0m[32m, [0m[32m"counts"[0m[32m: [0m[1;32m{[0m[32m"supported"[0m[32m: [0m[1;32m1[0m[32m, [0m[32m"partial"[0m[32m: [0m[1;32m0[0m[32m, [0m[32m"unsupported"[0m[32m: [0m[1;32m0[0m[1;32m}[0m[32m, [0m[32m"conclusions"[0m[32m:[0m[32m...[0m
+[✓ corpus_submit_manifest  (218 ms)]
+{"ok": true, "manifest_file": "/home/administrator/FrontierAgent/.scratch/claims-r2-role-isolation/evidence/112-production-read-chain-consumption-20261015/r2-live/industrial/.apodex/runs/20261016-095835+0800-react-1fd8/corpus/manifests/manifest-000.json", "owner": "stateful_react:cc471b1a3a3b", "publish_status": "verified", "counts": {"supported": 1, "partial": 0, "unsupported": 0}, "conclusions": [{"id": "C1", "status": "supported", "delivery": ["delivered"], "semantic_references": [{"schema_version": "corpus-report-semantic-reference-v1", "report_anchor": "最终回答（单句结论）", "report_quote": "工业富联云计算业务同比增长 75.7%。", "publication_id": "sha256:c3dbd91bfa0fe2b1c905077f35fba04e27c9b8bdc678abbcb1515f982a8b3871", "record_id": "abbab7baa50760ea29a27b66e158ba2de969d0be5032302f2bfe3e23c3b0ac37", "purpose": "cite", "evidence_ranges": [{"handle": "cv2:f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314#chunk:signed-non-table-target-scope", "unit_id": "signed-unit-11", "coordinate_system": "unicode_code_points", "start": 51, "end": 62, "quote_sha256": "sha256:e9a6b09a2c136a1d2b6f8b6fb7891c09aef21e638ff0d46ddda1fa25d7777440"}], "dependency_assertions": [], "delivery_status": "delivered", "publication_status": "published", "quality_status": "accepted", "verification_status": "verified", "error_codes": []}, {"schema_version": "corpus-report-semantic-reference-v1", "report_anchor": "最终回答（单句结论）", "report_quote": "工业富联云计算业务同比增长 75.7%。", "publication_id": "sha256:c3dbd91bfa0fe2b1c905077f35fba04e27c9b8bdc678abbcb1515f982a8b3871", "record_id": "itm_bf0c10772dfcb0bd", "purpose": "cite", "evidence_ranges": [{"handle": "cv2:f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314#chunk:signed-non-table-target-scope", "unit_id": "signed-unit-11", "coordinate_system": "unicode_code_points", "start": 51, "end": 62, "quote_sha256": "sha256:e9a6b09a2c136a1d2b6f8b6fb7891c09aef21e638ff0d46ddda1fa25d7777440"}], "dependency_assertions": [], "delivery_status": "delivered", "publication_status": "published", "quality_status": "accepted", "verification_status": "verified", "error_codes": []}], "problems": []}], "hint": "对非 supported 的结论：按需补取原文、重新查询失效语义版本、修改表述或移除结论；已完整送达的语义证据不必例行 corpus_fetch。然后重新提交**完整**清单（每次提交生成新的候选文件，边界以汇总校验为准）。本轮新取的片段需经过下一轮消息边界核验，pending 的结论请下一轮重新提交确认。"}
+[thinking] The manifest submission returned ok=true, publish_status=verified, all conclusions supported, delivery=delivered, no problems. The report_quote "工业富联云计算业务同比增长 75.7%。" matches exactly. Now I can give the final answer — one short Chinese statement verbatim containing "工业富联云计算业务同比增长 75.7%".
+清单提交结果：`ok=true`，`publish_status=verified`，结论 C1 状态 `supported`、`delivery=delivered`，无任何问题项，报告锚点与清单一致。
+
+**工业富联云计算业务同比增长 75.7%。**
+
+（依据：语义查询实际送达的完整记录 abbab7ba… 与 itm_bf0c10772dfcb0bd，signed-unit-11 逐字原文「云计算 +75.7%，」，purpose=cite，已通过 corpus_submit_manifest 验证。）[LLM] stream model=glm-5.3-flash ttft=3.95s total=8.11s chunks=185
+
+
+[1;36m=== [0m[1;36m[[0m[1;36mReAct[0m[1;36m][0m[1;36m Turn [0m[1;36m3[0m[1;36m/[0m[1;36m600[0m  [2mstateful_react[0m  [2mtokens: [0m[1;2;36m6215[0m[2m->[0m[1;2;36m187[0m
+清单提交结果：`[33mok[0m=[35mtrue[0m`，`[33mpublish_status[0m=[35mverified[0m`，结论 C1 状态 `supported`、`[33mdelivery[0m=[35mdelivered[0m`，无任何问题项，报告锚点与清单一致。
+
+**工业富联云计算业务同比增长 [1;36m75.7[0m%。**
+
+（依据：语义查询实际送达的完整记录 abbab7ba… 与 itm_bf0c10772dfcb0bd，signed-unit-[1;36m11[0m 逐字原文「云计算 +[1;36m75.7[0m%，」，[33mpurpose[0m=[35mcite[0m，已通过 corpus_submit_manifest 验证。）
+
+[1;35m[[0m[1;35mReAct[0m[1;35m][0m[1;35m done[0m  [33mturns[0m=[1;36m3[0m  [33mtool_calls[0m=[1;36m2[0m  [33mstopped_by[0m=[35mno_tool[0m
+✓ done · turns=2 · tools=0 · no_tool · 15,774 tokens (in 14,605 · out 1,169 · cached 8,320)
