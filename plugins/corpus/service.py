@@ -1218,9 +1218,11 @@ class CorpusService:
         superficially single hit span many disjoint document regions.  The
         resulting fetch request could require dozens of pages and exhaust the
         normal tool budget before the relevant band reached the model.  Each
-        returned hit now owns exactly one bounded, contiguous band.  Bands are
-        emitted round-robin by source so the first page retains source diversity;
-        the public ``limit`` still bounds the total number of returned hits.
+        returned hit now owns exactly one bounded, contiguous band.  With structural
+        signals enabled, each source keeps its structural winner first and its lexical
+        winner second, followed by the remaining structural order.  Bands are emitted
+        round-robin by source so the first page retains source diversity; the public
+        ``limit`` still bounds the total number of returned hits.
         """
         from dataclasses import replace as dataclass_replace
 
@@ -1228,6 +1230,7 @@ class CorpusService:
 
         if not raw_hits:
             return ()
+        lexical_hits = raw_hits
         if lexemes:
             # Keep document order lexical, but rank bands inside each document
             # by the established structural-overlap signal first.  The
@@ -1261,12 +1264,51 @@ class CorpusService:
                 dataclass_replace(hit, score=structural_score(hit)) for hit in raw_hits
             )
         policy = SelectionPolicy(top_k=min(SelectionPolicy().top_k, limit))
+        band_policy = BandPolicy()
         bands = select_band(
             raw_hits,
             policy,
-            BandPolicy(),
+            band_policy,
             chunk_order_by_source=chunk_order_by_source,
         )
+        if lexemes:
+            # Structural labels are valuable for row/column questions, but generic labels such
+            # as ``行业`` and ``涨幅`` occur on many table bands.  With five source documents and
+            # a ten-hit response, round-robin emits only two bands per source; an otherwise
+            # first-ranked body passage could therefore sit behind two generic structural bands
+            # and never be delivered.  Keep the structural winner first, reserve the next slot
+            # for the source's lexical winner, then retain the remaining structural order.
+            lexical_bands = select_band(
+                lexical_hits,
+                policy,
+                band_policy,
+                chunk_order_by_source=chunk_order_by_source,
+            )
+            structural_by_source: dict[str, list[SelectedBand]] = {}
+            lexical_by_source: dict[str, list[SelectedBand]] = {}
+            source_order: list[str] = []
+            for band in bands:
+                if band.source_id not in structural_by_source:
+                    structural_by_source[band.source_id] = []
+                    source_order.append(band.source_id)
+                structural_by_source[band.source_id].append(band)
+            for band in lexical_bands:
+                lexical_by_source.setdefault(band.source_id, []).append(band)
+            interleaved: list[SelectedBand] = []
+            for source_id in source_order:
+                structural = structural_by_source[source_id]
+                lexical = lexical_by_source.get(source_id, [])
+                candidates = [*structural[:1], *lexical[:1], *structural[1:], *lexical[1:]]
+                seen: set[tuple[int, int]] = set()
+                for band in candidates:
+                    key = (band.start, band.end)
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    interleaved.append(band)
+                    if len(seen) >= band_policy.band_cap:
+                        break
+            bands = tuple(interleaved)
         by_source: dict[str, list[SelectedBand]] = {}
         order: list[str] = []
         for band in bands:

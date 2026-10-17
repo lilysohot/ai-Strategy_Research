@@ -1,0 +1,120 @@
+{
+  "artifact": "s1-unit-invariants",
+  "control_db": "e6_holdout_corpus",
+  "candidate_db": "v14_s1_table_corpus",
+  "sources": [
+    {
+      "sample_id": "holdout-company-001",
+      "source_id": "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+      "control_build_id": "ecc26968ccdb53ddf0dbe5e3684aa8d5cb6a3cc920b15faaf77230e70cea5763",
+      "candidate_build_id": "ff4a6fdfce5c31a43e32bdcd75808fe4556d61ce057182048c9a18242b91ae4e",
+      "unit_count": 196,
+      "raw_order_coordinates_stable": true,
+      "label_path_changes": 73
+    },
+    {
+      "sample_id": "holdout-company-002",
+      "source_id": "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+      "control_build_id": "0acdab0a7583d0d607129377db777cb6a841f7f0b72a078c64cbcd36c4b6a50e",
+      "candidate_build_id": "fa0790da50cffff00914a7a2c841f203c1ba0df2edcb4f397bb38406350c16c1",
+      "unit_count": 433,
+      "raw_order_coordinates_stable": true,
+      "label_path_changes": 11
+    },
+    {
+      "sample_id": "holdout-industry-003",
+      "source_id": "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885",
+      "control_build_id": "a6be5fb919b5ca0f46bb6a820c3cee77a9f809c37188962ee6f4383e954a7030",
+      "candidate_build_id": "6a376319b079b2491637af4b414d13b4f142adbf506f57e72cedf4108f7591c9",
+      "unit_count": 1092,
+      "raw_order_coordinates_stable": true,
+      "label_path_changes": 101
+    },
+    {
+      "sample_id": "holdout-industry-004",
+      "source_id": "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160",
+      "control_build_id": "5a213a956083ee6461e2c07dc060bd9b2b748ff5b18bb7ffd9e7fab200fe4be6",
+      "candidate_build_id": "08ca14a7e7825916abd7df1e2bd2042ff0be11e42b32b67b1c980d12013795fd",
+      "unit_count": 1153,
+      "raw_order_coordinates_stable": true,
+      "label_path_changes": 21
+    },
+    {
+      "sample_id": "holdout-industry-005",
+      "source_id": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+      "control_build_id": "f6a8d012f8aa2bbecd09daf504d651a8a3254ece950123d16e78c6cce648b3e5",
+      "candidate_build_id": "df9dbd208f1869e757c61cedb315fbc427aa6b1bd1d781b22a4faa0e043b188f",
+      "unit_count": 171,
+      "raw_order_coordinates_stable": true,
+      "label_path_changes": 2
+    },
+    {
+      "sample_id": "holdout-industry-006",
+      "source_id": "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2",
+      "control_build_id": "3cc347ca9ed8e789103486558cd565ce1a0f15545e7185abbeaf1a6a066f453f",
+      "candidate_build_id": "cbdb7e7270083888eacfa959d602ae642c65a799d2f55dab7204d389e7f771b7",
+      "unit_count": 469,
+      "raw_order_coordinates_stable": true,
+      "label_path_changes": 29
+    },
+    {
+      "sample_id": "holdout-industry-007",
+      "source_id": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+      "control_build_id": "7b066b2a05b1d6fcfc4aa3a2801ebd823b59972385e3aee7fe6c6cc904bf68db",
+      "candidate_build_id": "7ebb6c7a302419e10eb0776c9ae926c2d42ae6b79d07fff48361582410e95f8c",
+      "unit_count": 681,
+      "raw_order_coordinates_stable": true,
+      "label_path_changes": 1
+    },
+    {
+      "sample_id": "holdout-macro-008",
+      "source_id": "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+      "control_build_id": "88ad6cf30eb10c3c5275ae814ccaf10b9f1132f7d40c9eb4bf6a2c544140347c",
+      "candidate_build_id": "350636d623db42cd60bc8ce3b452455d77964bebbde802a6a67db3cef1fa326e",
+      "unit_count": 1432,
+      "raw_order_coordinates_stable": true,
+      "label_path_changes": 21
+    },
+    {
+      "sample_id": "holdout-macro-009",
+      "source_id": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+      "control_build_id": "07873d962c0568d7df07da3ea8241c5c14d7b0d31fbb23a728b0d39b6b6be73f",
+      "candidate_build_id": "79d110b75aa1c87ef49da5a1b2db733d85e47145ba26a7a6103a7335a31864a3",
+      "unit_count": 176,
+      "raw_order_coordinates_stable": true,
+      "label_path_changes": 1
+    },
+    {
+      "sample_id": "holdout-macro-010",
+      "source_id": "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+      "control_build_id": "9465684d3a781404bc33521b337016486851f64c4ecf7109a264b5926ca5c9d8",
+      "candidate_build_id": "f1186db15dc2cbb51cb73bb8b7b0473a404991bb4a192ffdedb34afb7e3ff7e7",
+      "unit_count": 481,
+      "raw_order_coordinates_stable": true,
+      "label_path_changes": 49
+    },
+    {
+      "sample_id": "holdout-macro-011",
+      "source_id": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+      "control_build_id": "dd3db0fdfdffec2bad3e8dd3f5decd019a1d8c9a500bf516488f5fd2d1566e09",
+      "candidate_build_id": "10df0f16928c426d0ef036e7e5fcd3e8ecc90c3d174de7dfbc0cac16c4a384ca",
+      "unit_count": 232,
+      "raw_order_coordinates_stable": true,
+      "label_path_changes": 28
+    },
+    {
+      "sample_id": "holdout-macro-012",
+      "source_id": "f3b28791e1355dc371206b10a003dc2ef6c65f88f631c77ea7578be145f28279",
+      "control_build_id": "bb6c4f161d46eee93fe5da141dea7a6e8cc272835b75f44029ab40e4501c23c7",
+      "candidate_build_id": "e483a80ae9f4a115259470090cfe3748777226d4ab89a4dd8099236296fcfe0a",
+      "unit_count": 278,
+      "raw_order_coordinates_stable": true,
+      "label_path_changes": 39
+    }
+  ],
+  "summary": {
+    "sources": 12,
+    "raw_order_coordinates_stable": true,
+    "label_path_changes": 376
+  }
+}

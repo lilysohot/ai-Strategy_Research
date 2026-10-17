@@ -536,6 +536,32 @@ def test_product_context_selection_uses_structural_overlap_inside_document() -> 
     assert [hit.chunk_id for hit in selected] == ["a12", "a2"]
 
 
+def test_product_context_selection_reserves_second_band_for_lexical_best() -> None:
+    """Source round-robin must not drop the lexical winner behind generic table labels."""
+    from plugins.corpus.service import CorpusService
+
+    svc = CorpusService("dummy")
+    hits = (
+        _hit("A", "ba", 9.0, chunk_id="a2", page=1),
+        _hit("B", "bb", 8.0, chunk_id="b2", page=1),
+        _hit("C", "bc", 7.0, chunk_id="c2", page=1),
+        _hit("D", "bd", 6.0, chunk_id="d2", page=1),
+        _hit("E", "be", 5.0, chunk_id="e2", page=1),
+        _hit("A", "ba", 1.0, chunk_id="a12", page=2, label_path=("行业 涨幅",)),
+        _hit("A", "ba", 0.9, chunk_id="a22", page=3, label_path=("行业 跌幅",)),
+        *(
+            _hit(source, f"b{source.lower()}", 0.8, chunk_id=f"{source.lower()}12", page=2)
+            for source in ("B", "C", "D", "E")
+        ),
+    )
+    orders = {source: tuple(f"{source.lower()}{i}" for i in range(26)) for source in "ABCDE"}
+
+    selected = svc._selected_context_hits(hits, orders, 10, lexemes=("行业", "涨幅", "跌幅"))
+    selected_a = [hit.chunk_id for hit in selected if hit.source_id == "A"]
+
+    assert selected_a == ["a12", "a2"]
+
+
 def test_product_context_selection_promotes_casefolded_product_identifier() -> None:
     """A specific identifier such as R32 outranks a generic matching table label."""
     from plugins.corpus.service import CorpusService

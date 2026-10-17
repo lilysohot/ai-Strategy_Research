@@ -1,5 +1,18 @@
 # 语料检索数据质量优化方案：先改善取证，再验证切块
 
+> **重启轮（v14 · 2026-10-17）**：S0 结构 shadow、S1 PDF 表关系、S2 引文送达、S3
+> 分页完整性和 S4 来源召回候选均已通过。control 已复现 42/51；S1 达到 46/51，S2 达到
+> 49/51，S3 达到 50/51，S4 在同一候选库达到 **51/51**（required 36/36、
+> supplementary 15/15），既有 50 项零回归。S4 以来源级候选查询词元覆盖数为第一排序键，
+> 再比较来源最高块分，使分散在同一研报不同块的查询概念参与来源选择；没有重建语料。
+> OCR、向量和 clean 策略未改变。状态见
+> [04 · 结构重启与 A/B 基线](04-structure-restart.md)，机器绑定见
+> [v14-control-manifest.json](v14-control-manifest.json)，A/B 结果见
+> [v14-s1-ab-report.json](v14-s1-ab-report.json)、
+> [v14-s2-ab-report.json](v14-s2-ab-report.json)、
+> [v14-s3-ab-report.json](v14-s3-ab-report.json) 和
+> [v14-s4-ab-report.json](v14-s4-ab-report.json)。
+>
 > 修订：v13 · 2026-10-01。状态：`CLOSED_WITH_ACCEPTED_EXCEPTIONS`。A0–A4 已实施，A4 仍为观测模式；开发集必需证据 79/79、全部证据 98/99；12 份留出材料在隔离库均有活动发布。冻结 51 项零模型矩阵重新核验为 42/51（required 31/36、supplementary 11/15），9 项失败及原始分母完整保留。项目负责人基于投入产出接受残余风险，本轮数据治理任务按带例外方式关闭。该状态不表示原冻结协议全量通过，也不覆盖原模型独立实测 90/99；生产库未改动。证据见 [E6 数据收尾报告](../../.scratch/corpus-access-validation/e6-data-closure-report.md)、[收口决定](../../.scratch/corpus-access-validation/e6-closure-decision.md)与[03 执行状态](03-end-to-end-validation.md)。
 > 本次收口未修改生产数据库；历史快照原样保留，当前隔离库状态与 42/51 复测另有只读核验产物。
 > **执行修正（2026-09-29）**：B1/B3 仅为开发样本对照通过，普遍性与模型实际获取待验。按本次对话，后续统一执行 [03 · 独立研报与模型获取](03-end-to-end-validation.md)；G1 规范、G2 独立样本、G3 实际获取验证及必要修复均属于当前总任务。02 §B4.4 的旧草案留作记录，其中“签认即关闭本轮、验证另开任务”不作为总任务收口依据。

@@ -90,6 +90,14 @@ from plugins.corpus.preparation.readers.base import (
 )
 from plugins.corpus.preparation.repository import Store, StoreError
 from plugins.corpus.preparation.source import IngestLimits, ingest_source
+from plugins.corpus.preparation.structure import (
+    RelationCertainty,
+    RelationKind,
+    StructuredDocument,
+    StructureNode,
+    StructureRelation,
+    TextOrigin,
+)
 
 ENGINE_REV = "engine-1"
 PARSE_RULE_REV = "parse-2"
@@ -486,7 +494,8 @@ def _serialize_parse_checkpoint(
     """序列化解析检查点（值由 store 持有，键为 ``(source_id, "parse")``）。
 
     检查点记录：parse_rule_rev + source_id + extractor_rev + 逐单元 content_hash +
-    reader units 的精简投影（ordinal/kind/raw_text/坐标 + bbox + cells + label_path）。
+    reader units 的精简投影（ordinal/kind/raw_text/坐标 + bbox + cells + label_path）+
+    S1 结构节点（含不参与兼容投影的 table/cell 节点）、文本来源及关系。
     引擎据此校验当前代码对该格式会产出的 extractor_rev 是否与检查点一致——不一致
     即不可复用。
 
@@ -496,7 +505,7 @@ def _serialize_parse_checkpoint(
     ``reparse_reason`` 记录本次重算原因（检查点缺失/损坏/版本不匹配等，审计可追溯）。
     """
     payload = {
-        "checkpoint_schema_rev": "parse-checkpoint-2",
+        "checkpoint_schema_rev": "parse-checkpoint-4",
         "parse_rule_rev": PARSE_RULE_REV,
         "source_id": source_id,
         "extractor_rev": extractor_rev,
@@ -523,6 +532,47 @@ def _serialize_parse_checkpoint(
             {"code": i.code, "location": i.location, "detail": i.detail}
             for i in reader_result.issues
         ],
+        "structure": {
+            "nodes": [
+                {
+                    "node_id": node.node_id,
+                    "ordinal": node.ordinal,
+                    "kind": node.kind,
+                    "status": node.status.value,
+                    "reasons": list(node.reasons),
+                    "raw_text": node.raw_text,
+                    "page": node.location.page,
+                    "element": node.location.element,
+                    "char_start": (
+                        node.location.char_span.start if node.location.char_span else None
+                    ),
+                    "char_end": node.location.char_span.end if node.location.char_span else None,
+                    "bbox": list(node.location.bbox) if node.location.bbox else None,
+                    "cells": (
+                        [list(cell) for cell in node.location.cells]
+                        if node.location.cells
+                        else None
+                    ),
+                    "label_path": (
+                        list(node.location.label_path) if node.location.label_path else None
+                    ),
+                    "text_origin": node.text_origin.value,
+                }
+                for node in (reader_result.structure.nodes if reader_result.structure else ())
+            ],
+            "relations": [
+                {
+                    "source_id": relation.source_id,
+                    "target_id": relation.target_id,
+                    "kind": relation.kind.value,
+                    "certainty": relation.certainty.value,
+                    "evidence": relation.evidence,
+                }
+                for relation in (
+                    reader_result.structure.relations if reader_result.structure else ()
+                )
+            ],
+        },
         "format": reader_result.format.value,
         "source_path": reader_result.source_path,
         "page_count": reader_result.page_count,
@@ -555,7 +605,7 @@ def _validate_parse_checkpoint(
         return None, "checkpoint_corrupt"
     if not isinstance(data, dict):
         return None, "checkpoint_corrupt"
-    if data.get("checkpoint_schema_rev") != "parse-checkpoint-2":
+    if data.get("checkpoint_schema_rev") != "parse-checkpoint-4":
         return None, "checkpoint_schema_mismatch"
     payload_hash = data.pop("payload_hash", None)
     if not isinstance(payload_hash, str) or payload_hash != canonical_fingerprint(data):
@@ -656,14 +706,96 @@ def _validate_parse_checkpoint(
         fmt = DocumentFormat(str(data.get("format", "")))
     except ValueError:
         return None, "checkpoint_corrupt"
-    result = ReaderResult(
-        format=fmt,
-        extractor_rev=expected_extractor_rev,
-        source_path=str(data.get("source_path", "")),
-        page_count=data.get("page_count") if isinstance(data.get("page_count"), int) else None,
-        units=tuple(units),
-        issues=tuple(issues),
-    )
+    structure_data = data.get("structure")
+    if not isinstance(structure_data, dict):
+        return None, "checkpoint_corrupt"
+    nodes_data = structure_data.get("nodes")
+    relations_data = structure_data.get("relations")
+    if not isinstance(nodes_data, list) or not isinstance(relations_data, list):
+        return None, "checkpoint_corrupt"
+    try:
+        nodes_list: list[StructureNode] = []
+        for entry in nodes_data:
+            if not isinstance(entry, dict):
+                continue
+            ordinal_raw = entry.get("ordinal")
+            node_ordinal = int(ordinal_raw) if ordinal_raw is not None else None
+            node_cs = entry.get("char_start")
+            node_ce = entry.get("char_end")
+            node_char_span = (
+                CharSpan(start=int(node_cs), end=int(node_ce))
+                if node_cs is not None and node_ce is not None
+                else None
+            )
+            node_bbox_raw = entry.get("bbox")
+            node_bbox = None
+            if node_bbox_raw is not None:
+                if not isinstance(node_bbox_raw, list) or len(node_bbox_raw) != 4:
+                    return None, "checkpoint_corrupt"
+                node_bbox = tuple(float(value) for value in node_bbox_raw)
+            node_cells_raw = entry.get("cells")
+            node_cells = ()
+            if node_cells_raw is not None:
+                if not isinstance(node_cells_raw, list):
+                    return None, "checkpoint_corrupt"
+                node_cells = tuple((int(cell[0]), int(cell[1])) for cell in node_cells_raw)
+            node_labels_raw = entry.get("label_path")
+            node_labels = ()
+            if node_labels_raw is not None:
+                if not isinstance(node_labels_raw, list) or not all(
+                    isinstance(item, str) for item in node_labels_raw
+                ):
+                    return None, "checkpoint_corrupt"
+                node_labels = tuple(node_labels_raw)
+            nodes_list.append(
+                StructureNode(
+                    node_id=str(entry["node_id"]),
+                    ordinal=node_ordinal,
+                    kind=str(entry["kind"]),
+                    status=UnitStatus(str(entry["status"])),
+                    reasons=tuple(str(reason) for reason in entry.get("reasons", [])),
+                    raw_text=str(entry["raw_text"]),
+                    location=UnitLocation(
+                        page=entry.get("page"),
+                        element=entry.get("element"),
+                        char_span=node_char_span,
+                        bbox=cast("tuple[float, float, float, float] | None", node_bbox),
+                        cells=node_cells,
+                        label_path=node_labels,
+                    ),
+                    text_origin=TextOrigin(str(entry["text_origin"])),
+                )
+            )
+        nodes = tuple(nodes_list)
+        if len(nodes) != len(nodes_data):
+            return None, "checkpoint_corrupt"
+        relations = tuple(
+            StructureRelation(
+                source_id=str(entry["source_id"]),
+                target_id=str(entry["target_id"]),
+                kind=RelationKind(str(entry["kind"])),
+                certainty=RelationCertainty(str(entry["certainty"])),
+                evidence=str(entry["evidence"]),
+            )
+            for entry in relations_data
+            if isinstance(entry, dict)
+        )
+        if len(relations) != len(relations_data):
+            return None, "checkpoint_corrupt"
+        structure = StructuredDocument(nodes=nodes, relations=relations)
+        result = ReaderResult(
+            format=fmt,
+            extractor_rev=expected_extractor_rev,
+            source_path=str(data.get("source_path", "")),
+            page_count=(
+                data.get("page_count") if isinstance(data.get("page_count"), int) else None
+            ),
+            units=tuple(units),
+            issues=tuple(issues),
+            structure=structure,
+        )
+    except (KeyError, TypeError, ValueError):
+        return None, "checkpoint_corrupt"
     # 校验逐单元哈希与检查点记录一致（源/解析变化则重算）。
     actual_hashes = [u.content_hash for u in result.units]
     if actual_hashes != unit_hashes:

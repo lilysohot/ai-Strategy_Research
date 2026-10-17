@@ -16,8 +16,8 @@ zhcfg 或索引文本规则升级必须换新 index_rev 全量重建（新 build
 
 排序信号（c′/i0c-r4v）：``score`` 列按**实词词元**计算（``negative_query.rank_lexemes``
 剔除功能词/标点，``RANK_LEXEME_PRUNE`` 开关可整体回退）。候选来自 chunk 全文或来源
-原名，来源内最多保留 40 个候选，再按来源最高分和块分排序；``ts_headline`` 仍只展示
-chunk 的截断文本。
+原名，来源内最多保留 40 个候选。来源先按候选查询词元在整份来源中的覆盖数排序，再按
+来源最高块分排序；来源内仍按块分排序。``ts_headline`` 只展示 chunk 的截断文本。
 
 目标 fail-closed：与 :class:`PgStore` 同纪律——``current_database`` 必须等于隔离库；
 目标实例含 ``apodex`` 库即判定为生产实例并拒绝（读侧同样不允许触碰生产库）；
@@ -52,7 +52,8 @@ RANK_LEXEME_PRUNE = True
 _SEARCH_SQL = """
 WITH q AS (
   SELECT websearch_to_tsquery('zhcfg', %(query)s) AS tsq,
-         websearch_to_tsquery('zhcfg', %(rank_query)s) AS tsq_rank
+         websearch_to_tsquery('zhcfg', %(rank_query)s) AS tsq_rank,
+         tsvector_to_array(to_tsvector('zhcfg', %(query)s)) AS query_terms
 ), matches AS (
   SELECT p.source_id, c.build_id, c.chunk_id, c.kind, c.title_text, c.section_path,
          c.unit_refs,
@@ -61,7 +62,17 @@ WITH q AS (
                         q.tsq_rank)) AS score,
          ts_headline('zhcfg', c.search_text, q.tsq,
                      'MaxWords=28, MinWords=8, ShortWord=1') AS snippet,
-         a.metadata_snapshot->'report_publication'->>'value' AS published
+         a.metadata_snapshot->'report_publication'->>'value' AS published,
+         ARRAY(
+           SELECT DISTINCT query_term
+           FROM unnest(q.query_terms) AS query_terms(query_term)
+           WHERE query_term = ANY(
+             tsvector_to_array(
+               c.search_tsv
+               || to_tsvector('zhcfg', array_to_string(s.original_names, ' '))
+             )
+           )
+         ) AS matched_terms
   FROM q
   JOIN corpus.corpus_chunks AS c ON true
   JOIN corpus.corpus_builds AS b ON b.build_id = c.build_id
@@ -75,18 +86,26 @@ WITH q AS (
          OR a.metadata_snapshot->'report_publication'->>'value' >= %(date_from)s)
     AND (%(date_to)s::text IS NULL
          OR a.metadata_snapshot->'report_publication'->>'value' <= %(date_to)s)
-), ranked AS (
-  SELECT matches.*,
-         max(score) OVER (PARTITION BY source_id) AS source_score,
-         row_number() OVER (PARTITION BY source_id
-                            ORDER BY score DESC, build_id, chunk_id) AS source_position
+), source_stats AS (
+  SELECT matches.source_id,
+         max(matches.score) AS source_score,
+         count(DISTINCT matched_term) AS source_coverage
   FROM matches
+  LEFT JOIN LATERAL unnest(matches.matched_terms) AS terms(matched_term) ON TRUE
+  GROUP BY matches.source_id
+), ranked AS (
+  SELECT matches.*, source_stats.source_score, source_stats.source_coverage,
+         row_number() OVER (PARTITION BY matches.source_id
+                            ORDER BY matches.score DESC, matches.build_id,
+                                     matches.chunk_id) AS source_position
+  FROM matches
+  JOIN source_stats USING (source_id)
 )
 SELECT source_id, build_id, chunk_id, kind, title_text, section_path, unit_refs,
-       score, snippet, published
+       score, snippet, published, source_coverage
 FROM ranked
 WHERE source_position <= 40
-ORDER BY source_score DESC, score DESC, build_id, chunk_id
+ORDER BY source_coverage DESC, source_score DESC, score DESC, build_id, chunk_id
 LIMIT %(limit)s
 """
 
@@ -120,6 +139,8 @@ class SearchHit:
     label_path: tuple[str, ...] = ()
     #: Ordered authority chunks in the selected document evidence regions.
     context_chunk_ids: tuple[str, ...] = ()
+    #: Distinct candidate-query lexemes matched anywhere in this source.
+    source_coverage: int = 0
 
 
 _UNITS_LOCATION_SQL = """
@@ -367,6 +388,7 @@ def search_chunks_on(cur: psycopg.Cursor, params: dict[str, object]) -> tuple[Se
             score=row[7],
             snippet=str(row[8] or ""),
             published=str(row[9]) if row[9] else None,
+            source_coverage=int(row[10] or 0),
         )
         for row in rows
     )

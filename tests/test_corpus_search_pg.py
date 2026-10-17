@@ -8,7 +8,8 @@
   合成块 score=0 但仍在候选集（@@ 全词元 tsq 为真）；
 - 标点剔除 / 空兜底：``is_punct_lexeme`` / ``rank_lexemes`` 单元门（全为功能词/
   标点时回退原词元，fail-closed）；
-- 来源内候选最多 40 个，最终顺序按来源最高分、块分、build/chunk 稳定键排列；
+- 来源内候选最多 40 个；来源先按查询词元覆盖数、再按最高分排序，来源内按块分和
+  build/chunk 稳定键排列；
 - 开关回滚：``RANK_LEXEME_PRUNE=False`` ⇒ 注入的 rank_query == query，且结果与
   显式 ``rank_query=query`` 逐字段一致（SearchHit 冻结 dataclass 逐字段相等）。
 
@@ -81,9 +82,10 @@ def test_search_sql_wiring_candidate_pool_vs_score():
     assert "ts_rank(c.search_tsv, q.tsq_rank)" in sql
     assert "+ 2 * ts_rank(to_tsvector" in sql
     assert "websearch_to_tsquery('zhcfg', %(rank_query)s) AS tsq_rank" in sql
-    assert "row_number() OVER (PARTITION BY source_id" in sql
+    assert "count(DISTINCT matched_term) AS source_coverage" in sql
+    assert "row_number() OVER (PARTITION BY matches.source_id" in sql
     assert "WHERE source_position <= 40" in sql
-    assert "ORDER BY source_score DESC, score DESC, build_id, chunk_id" in sql
+    assert "ORDER BY source_coverage DESC, source_score DESC, score DESC, build_id, chunk_id" in sql
 
 
 def test_build_search_params_rank_query_key():
@@ -145,14 +147,17 @@ def test_function_only_match_scores_zero_but_stays_in_pool():
 
 @requires_db
 def test_tie_break_order_live():
-    """真库门：命中序按来源最高分、块分和稳定句柄排列。"""
+    """真库门：命中序按来源词元覆盖、最高分、块分和稳定句柄排列。"""
     hits = search_pg.search_chunks(DSN, POOL_QUERY, limit=50)
     assert len(hits) > 1  # 门有效性：多命中才检验排序
     source_scores = {
         source_id: max(hit.score for hit in hits if hit.source_id == source_id)
         for source_id in {hit.source_id for hit in hits}
     }
-    keys = [(-source_scores[h.source_id], -h.score, h.build_id, h.chunk_id) for h in hits]
+    keys = [
+        (-h.source_coverage, -source_scores[h.source_id], -h.score, h.build_id, h.chunk_id)
+        for h in hits
+    ]
     assert keys == sorted(keys)
 
 

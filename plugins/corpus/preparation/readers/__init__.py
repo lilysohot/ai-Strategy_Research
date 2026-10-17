@@ -17,6 +17,8 @@ from plugins.corpus.preparation.readers.base import (
     ReaderIssue,
     ReaderResult,
     detect_format,
+    project_candidate_units,
+    structure_from_units,
 )
 
 __all__ = [
@@ -27,7 +29,9 @@ __all__ = [
     "ReaderResult",
     "detect_format",
     "extractor_rev_for",
+    "project_candidate_units",
     "read_document",
+    "structure_from_units",
 ]
 
 

@@ -1,0 +1,62 @@
+{
+  "schema": "corpus-structure-ab-control-v1",
+  "created_at": "2026-10-17",
+  "status": "reproduced",
+  "git_commit": "669b7d4a8540c38d47cf642dc0de4d879eb28c4f",
+  "revisions": {
+    "pdf_reader": "reader-pdf-11",
+    "clean": "clean-5",
+    "chunk": "chunk-5",
+    "index": "index-4-zhcfg-2"
+  },
+  "assets": {
+    "inventory": {
+      "path": ".scratch/corpus-access-validation/e2-inventory.json",
+      "sha256": "eca55629deb9e404f795f63bd91903e6fce2e23226588f9e7e60ef26863cfd5c"
+    },
+    "holdout_targets": {
+      "path": ".scratch/corpus-access-validation/e2_holdout_targets.json",
+      "sha256": "81188e3cfe7222437a4b03c60b74c62f3bf4fb6e7aaea322abf2f61dc4cd26c2"
+    },
+    "scorer": {
+      "path": ".scratch/corpus-access-validation/e4_scorer.py",
+      "sha256": "7d39a50551b86285876abe36e1c1cfe3a0c5948234743d1e4b044abb045ee2b9"
+    },
+    "historical_result": {
+      "path": ".scratch/corpus-access-validation/e6-data-delivery-holdout-rerun.json",
+      "sha256": "8f8abbf334b1cb9da9655ce072cc1d038784f1d2680107d4b0222462f437aaa4"
+    },
+    "historical_report": {
+      "path": ".scratch/corpus-access-validation/e6-data-closure-report.md",
+      "sha256": "14f788f5f0becb410c2941b7badc1cbff05a91d597f209451d256438680804f0"
+    },
+    "current_control_build": {
+      "path": ".scratch/corpus-structure-restart/v14-control-build.json",
+      "sha256": "5d30259a630d5ab69b05673254f968eb0eddaef39f22924a54813273cce74d09"
+    },
+    "current_control_verification": {
+      "path": ".scratch/corpus-structure-restart/v14-control-verification.json",
+      "sha256": "72052fb8cff5332be812a730f33f992c04e258d5022f2349db578d13cb949379"
+    }
+  },
+  "historical_score": {
+    "all": "42/51",
+    "required": "31/36",
+    "supplementary": "11/15"
+  },
+  "experiment": {
+    "control": "current_candidate_units_pipeline",
+    "candidate": "structure_shadow_projection",
+    "ocr": false,
+    "vector_search": false,
+    "clean_rule_changes": false,
+    "chunk_rule_changes": false,
+    "retrieval_rule_changes": false,
+    "fetch_rule_changes": false
+  },
+  "notes": [
+    "The historical 42/51 score is retained as immutable evidence bound by hash.",
+    "The isolated control was rebuilt and rerun on 2026-10-17: 12/12 expected builds active and all 51 targets reproduced the frozen status and delivery fields, yielding 42/51.",
+    "Behavior-changing structure relations remain disabled until a separately frozen candidate arm is created."
+  ]
+}

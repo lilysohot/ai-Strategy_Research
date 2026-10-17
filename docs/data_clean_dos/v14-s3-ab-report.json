@@ -1,0 +1,122 @@
+{
+  "artifact": "v14-s3-fetch-completeness-ab",
+  "date": "2026-10-17",
+  "scope": {
+    "change": "compact fetch metadata budget fallback",
+    "database": "v14_s2_quote_corpus",
+    "database_rebuilt": false
+  },
+  "control": {
+    "targets": 51,
+    "passed": 49,
+    "failed": 2,
+    "failure_classes": {
+      "fetch_incomplete": 1,
+      "source_not_offered": 1
+    },
+    "by_role": {
+      "required": {
+        "passed": 35,
+        "failed": 1,
+        "failure_classes": {
+          "fetch_incomplete": 1
+        }
+      },
+      "supplementary": {
+        "passed": 14,
+        "failed": 1,
+        "failure_classes": {
+          "source_not_offered": 1
+        }
+      }
+    }
+  },
+  "candidate": {
+    "targets": 51,
+    "passed": 50,
+    "failed": 1,
+    "failure_classes": {
+      "source_not_offered": 1
+    },
+    "by_role": {
+      "required": {
+        "passed": 36,
+        "failed": 0,
+        "failure_classes": {}
+      },
+      "supplementary": {
+        "passed": 14,
+        "failed": 1,
+        "failure_classes": {
+          "source_not_offered": 1
+        }
+      }
+    }
+  },
+  "gains": [
+    {
+      "target_id": "5e305376-fedrate",
+      "role": "required",
+      "before": {
+        "pass": false,
+        "first_fail": "fetch_incomplete",
+        "plans": 3,
+        "pages": 28,
+        "fetch_complete": false,
+        "unresolved": null,
+        "item_errors": null,
+        "quote_delivered": true
+      },
+      "after": {
+        "pass": true,
+        "first_fail": null,
+        "plans": 3,
+        "pages": 28,
+        "fetch_complete": true,
+        "unresolved": null,
+        "item_errors": null,
+        "quote_delivered": true
+      }
+    }
+  ],
+  "regressions": [],
+  "remaining_failures": [
+    {
+      "target_id": "f7f65d7e-risk",
+      "role": "supplementary",
+      "first_fail": "source_not_offered"
+    }
+  ],
+  "invariants": {
+    "sources": 12,
+    "character_multiset_stable_by_page": true,
+    "non_table_units_stable": true,
+    "sources_with_page_sequence_changes": [
+      "holdout-company-001",
+      "holdout-industry-003",
+      "holdout-industry-004",
+      "holdout-industry-007",
+      "holdout-macro-008",
+      "holdout-macro-010",
+      "holdout-macro-011"
+    ],
+    "target_quote_present": true
+  },
+  "gates": {
+    "minimum_total": 50,
+    "minimum_required": 36,
+    "minimum_supplementary": 14,
+    "existing_pass_regressions": 0,
+    "scoped_targets": [
+      "5e305376-fedrate"
+    ],
+    "passed": true
+  },
+  "evidence": {
+    ".scratch/corpus-structure-restart/s2-candidate-verification.json": "711aa1f793b5dec987dc5fe6cd753f142549c4c754488e8835ab589e6d5f614a",
+    ".scratch/corpus-structure-restart/s3-candidate-verification.json": "4ab5337a01dee1acb7798aad4d4db00a37909099af2c6041276225cadaf9b9f6",
+    ".scratch/corpus-structure-restart/s2-candidate-build.json": "48faa23fed82145023bad76a10d482f7471995a24b33bd415a44fc5d1fecabce",
+    ".scratch/corpus-structure-restart/s2-unit-invariants.json": "d05d7bc97b2f719c3aceafc7204aa9bc09a37d296f9bbe2d43f79563ce4c31d5",
+    ".scratch/corpus-structure-restart/s3-fetch-repro.json": "0deb34c77520a4bb8d8f04ebffc9339cb98e32d27f77cb9b0287ee0bb11c481f"
+  }
+}

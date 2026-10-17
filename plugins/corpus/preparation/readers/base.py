@@ -25,13 +25,23 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from itertools import pairwise
 from pathlib import Path
+from typing import cast
 
 from plugins.corpus.preparation.contract import (
     DocumentFormat,
     UnitLocation,
     UnitStatus,
     sha256_of_bytes,
+)
+from plugins.corpus.preparation.structure import (
+    RelationCertainty,
+    RelationKind,
+    StructuredDocument,
+    StructureNode,
+    StructureRelation,
+    shadow_node_id,
 )
 
 _FORMAT_SIGNATURES: dict[str, tuple[DocumentFormat, bytes | None]] = {
@@ -77,7 +87,12 @@ class CandidateUnit:
 
 @dataclass(frozen=True)
 class ReaderResult:
-    """一次确定性读取的结果：单元 + 坐标 + 状态 + 缺口台账。"""
+    """一次确定性读取的结果：结构文档、兼容单元与缺口台账。
+
+    S0 shadow 阶段允许现有 reader 只传 ``units``；此时自动建立一对一结构节点和
+    显式阅读顺序关系。reader 后续传入更深的 ``structure`` 时，其兼容投影必须与
+    ``units`` 逐字段一致，避免 clean/chunk 在迁移期间观察到两套内容。
+    """
 
     format: DocumentFormat
     extractor_rev: str
@@ -85,6 +100,63 @@ class ReaderResult:
     page_count: int | None
     units: tuple[CandidateUnit, ...]
     issues: tuple[ReaderIssue, ...]
+    structure: StructuredDocument | None = None
+
+    def __post_init__(self) -> None:
+        structure = self.structure
+        if structure is None:
+            structure = structure_from_units(self.units)
+            object.__setattr__(self, "structure", structure)
+        if project_candidate_units(structure) != self.units:
+            raise ReaderError("structure 的 CandidateUnit 兼容投影与 units 不一致")
+
+
+def structure_from_units(units: tuple[CandidateUnit, ...]) -> StructuredDocument:
+    """把现有扁平 reader 输出提升为零行为变化的 shadow 结构。"""
+
+    ordered = tuple(sorted(units, key=lambda unit: unit.ordinal))
+    nodes = tuple(
+        StructureNode(
+            node_id=shadow_node_id(unit.ordinal),
+            ordinal=unit.ordinal,
+            kind=unit.kind,
+            status=unit.status,
+            reasons=unit.reasons,
+            raw_text=unit.raw_text,
+            location=unit.location,
+        )
+        for unit in ordered
+    )
+    relations = tuple(
+        StructureRelation(
+            source_id=shadow_node_id(previous.ordinal),
+            target_id=shadow_node_id(current.ordinal),
+            kind=RelationKind.NEXT_IN_READING_ORDER,
+            certainty=RelationCertainty.CONFIRMED,
+            evidence="reader_unit_ordinal",
+        )
+        for previous, current in pairwise(ordered)
+    )
+    return StructuredDocument(nodes=nodes, relations=relations)
+
+
+def project_candidate_units(structure: StructuredDocument) -> tuple[CandidateUnit, ...]:
+    """生成旧 clean/chunk 消费的逐字段兼容视图。"""
+
+    return tuple(
+        CandidateUnit(
+            ordinal=cast(int, node.ordinal),
+            kind=node.kind,
+            status=node.status,
+            reasons=node.reasons,
+            raw_text=node.raw_text,
+            location=node.location,
+        )
+        for node in sorted(
+            (item for item in structure.nodes if item.ordinal is not None),
+            key=lambda item: item.ordinal if item.ordinal is not None else -1,
+        )
+    )
 
 
 def detect_format(path: str | Path) -> tuple[DocumentFormat, Path]:

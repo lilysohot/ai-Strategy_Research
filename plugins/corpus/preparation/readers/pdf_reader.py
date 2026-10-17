@@ -11,7 +11,7 @@ from __future__ import annotations
 import re
 import statistics
 import unicodedata
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from itertools import pairwise
 from pathlib import Path
 from typing import Any, cast
@@ -24,9 +24,18 @@ from plugins.corpus.preparation.readers.base import (
     ReaderIssue,
     ReaderResult,
     detect_format,
+    structure_from_units,
+)
+from plugins.corpus.preparation.structure import (
+    RelationCertainty,
+    RelationKind,
+    StructuredDocument,
+    StructureNode,
+    StructureRelation,
+    shadow_node_id,
 )
 
-READER_PDF_REV = "reader-pdf-11"
+READER_PDF_REV = "reader-pdf-13"
 
 _GARBLED_MAX_RATIO = 0.05
 _HEADING_SIZE_FACTOR = 1.15
@@ -36,7 +45,7 @@ _MIN_GRID_LINES = 6
 _GRID_LINE_MIN_LEN = 40.0  # 图表刻度线/曲线碎片（通常 <40pt）不计为制表线
 _IMAGE_REGION_RATIO = 0.25  # 混合页大图缺口阈值（占页面积比例）
 _FULLPAGE_BG_RATIO = 0.95  # 面积≈整页的图像视为衬底背景图，不按大图缺口记账
-_MAX_HEADER_ROWS = 2  # 表格结构模型：最多识别 2 行表头（多级表头按层级展开）
+_MAX_HEADER_ROWS = 3  # 表格结构模型：最多识别 3 行表头（多级表头按层级展开）
 _MAX_LABEL_LINES = 2  # 超过两行通常是 find_tables 把整列数据折进了一个网格格
 _MAX_LABEL_CHARS = 80  # 结构标签只收紧凑标题；长文本仍完整保留在 raw_text
 
@@ -109,12 +118,21 @@ class _Table:
 
 
 @dataclass(frozen=True)
+class _TableEmission:
+    """表格到兼容单元的可追溯映射；供结构节点和关系生成使用。"""
+
+    page: int
+    table: _Table
+    groups: tuple[tuple[int, tuple[_TableCell, ...]], ...]
+
+
+@dataclass(frozen=True)
 class _TableModel:
     """表格结构模型（确定性表头识别 + 合并单元格几何，票 04 I-B1 落点）。
 
     为每个网格单元格提供行/列标签路径：
     - 行标签 = 数据行在首个数据形态单元格之前的文本（如产品名）；
-    - 列标签 = 表头行链自下而上收集，合并单元格按 bbox 覆盖继承标签。
+    - 列标签 = 表头行链按视觉顺序自上而下收集，合并单元格按 bbox 覆盖继承标签。
 
     只输出结构事实，不参与文本顺序——I1/I2（字符/顺序保真）仍由
     ``_row_text`` 决定，本模型绝不重排或改写单元格文本。
@@ -161,21 +179,36 @@ class _TableModel:
             parts.append(label)
         return " ".join(parts)
 
-    def col_labels(self, col: int) -> tuple[str, ...]:
-        """列标签链：自下而上遍历表头行，合并单元格按 bbox 覆盖继承。"""
+    def column_header_cells(self, col: int) -> tuple[tuple[int, int], ...]:
+        """目标列继承的表头锚定格；合并表头按 bbox 覆盖确定。"""
         center = self._column_center(col)
-        out: list[str] = []
-        for header_row in reversed(self.header_rows):
-            label: str | None = None
+        out: list[tuple[int, int]] = []
+        for header_row in self.header_rows:
             if center is not None and header_row < len(self.anchored):
                 for cell_col, (x0, x1) in self.anchored[header_row]:
                     if x0 <= center <= x1:
-                        label = self.cell_text(header_row, cell_col)
+                        if _compact_structural_label(self.cell_text(header_row, cell_col)):
+                            out.append((header_row, cell_col))
                         break
-            compact = _compact_structural_label(label or "")
+        return tuple(out)
+
+    def col_labels(self, col: int) -> tuple[str, ...]:
+        """列标签链：按视觉上的自上而下顺序展开多层表头。"""
+        out: list[str] = []
+        for header_row, cell_col in self.column_header_cells(col):
+            compact = _compact_structural_label(self.cell_text(header_row, cell_col))
             if compact and compact not in out:
                 out.append(compact)
         return tuple(out)
+
+    def table_header_labels(self) -> tuple[str, ...]:
+        """按列序返回完整表头路径，供表级检索上下文使用。"""
+        labels: list[str] = []
+        for col in range(self.ncols()):
+            label = " ".join(self.col_labels(col))
+            if label and label not in labels:
+                labels.append(label)
+        return tuple(labels)
 
     def label_path(self, row: int, col: int) -> tuple[str, ...]:
         """(行标签, 列标签, 列标签父级, ...)——多级表头按层级展开。"""
@@ -270,6 +303,18 @@ def _cell_native_pos(rect: tuple[float, float, float, float] | None, lines: list
     box: BBox = (float(rect[0]), float(rect[1]), float(rect[2]), float(rect[3]))
     for index, line in enumerate(lines):
         if _inside_any(line.bbox, [box]):
+            return index
+    # PyMuPDF may infer a false vertical grid line through one PDF word and split the word
+    # into several extracted cells (for example ``-2`` / ``.`` / ``4%``).  None of the
+    # fragment cells except the middle one contains the native line's centre, so the old
+    # lookup sent the outer fragments to the end of the page and a later continuity split
+    # detached them from their row.  A horizontal overlap on the same visual row still gives
+    # an unambiguous native owner and preserves the source characters without reconstructing
+    # or guessing the word.
+    for index, line in enumerate(lines):
+        line_y = (line.bbox[1] + line.bbox[3]) / 2
+        horizontal_overlap = min(line.bbox[2], box[2]) - max(line.bbox[0], box[0])
+        if box[1] <= line_y <= box[3] and horizontal_overlap > 0:
             return index
     return len(lines)
 
@@ -871,6 +916,7 @@ def _emit_table(
     page_lines: list[_Line],
     units: list[CandidateUnit],
     issues: list[ReaderIssue],
+    emissions: list[_TableEmission] | None = None,
 ) -> int:
     """发射一张表的连续组单元，并按页级行流记账 overlap；返回新的 ordinal。"""
     overlap = sum(1 for line in page_lines if _inside_any(line.bbox, [table.bbox]))
@@ -883,6 +929,7 @@ def _emit_table(
                 "已从正文单元剔除并计入表格行",
             )
         )
+    emitted_groups: list[tuple[int, tuple[_TableCell, ...]]] = []
     for group in _native_groups(table):
         row_text, cells = _row_text(_TableRow(cells=group))
         if not row_text.strip():
@@ -906,7 +953,299 @@ def _emit_table(
                 ),
             )
         )
+        emitted_groups.append((ordinal, group))
+    if emissions is not None and emitted_groups:
+        emissions.append(_TableEmission(page=page_no, table=table, groups=tuple(emitted_groups)))
     return ordinal
+
+
+_CAPTION_RE = re.compile(r"^\s*[图表]\s*\d+")
+_TABLE_NOTE_RE = re.compile(r"^\s*(?:资料来源|数据来源|来源|注[:：])")
+_PERIOD_RE = re.compile(r"20\d{2}(?:H[12]|Q[1-4]|E|A)?", re.IGNORECASE)
+_MALFORMED_PERIOD_RE = re.compile(r"(?<!\d)20\d(?:H[12]|Q[1-4]|E|A)(?!\d)", re.IGNORECASE)
+
+
+def _flat_text(text: str) -> str:
+    """只用于派生结构标签的空白规整；权威 raw_text 保持原样。"""
+    return " ".join(text.split())
+
+
+def _related_units(
+    units: list[CandidateUnit], emissions: list[_TableEmission]
+) -> dict[int, tuple[CandidateUnit | None, tuple[CandidateUnit, ...]]]:
+    """按同页阅读序把最近表题和连续表注绑定到每张已发射表。"""
+    related: dict[int, tuple[CandidateUnit | None, tuple[CandidateUnit, ...]]] = {}
+    by_page: dict[int, list[_TableEmission]] = {}
+    for emission in emissions:
+        by_page.setdefault(emission.page, []).append(emission)
+    units_by_page: dict[int, list[CandidateUnit]] = {}
+    for unit in units:
+        if unit.location.page is not None:
+            units_by_page.setdefault(unit.location.page, []).append(unit)
+    for page, page_emissions in by_page.items():
+        ordered_tables = sorted(page_emissions, key=lambda item: item.groups[0][0])
+        page_units = sorted(units_by_page.get(page, []), key=lambda item: item.ordinal)
+        for index, emission in enumerate(ordered_tables):
+            first = emission.groups[0][0]
+            last = emission.groups[-1][0]
+            lower = ordered_tables[index - 1].groups[-1][0] if index else -1
+            upper = (
+                ordered_tables[index + 1].groups[0][0]
+                if index + 1 < len(ordered_tables)
+                else 2**63 - 1
+            )
+            captions = [
+                unit
+                for unit in page_units
+                if lower < unit.ordinal < first and _CAPTION_RE.match(unit.raw_text)
+            ]
+            caption = captions[-1] if captions else None
+            notes: list[CandidateUnit] = []
+            after = [unit for unit in page_units if last < unit.ordinal < upper]
+            for unit in after:
+                if _TABLE_NOTE_RE.match(unit.raw_text):
+                    notes.append(unit)
+                elif notes:
+                    break
+            related[id(emission)] = (caption, tuple(notes))
+    return related
+
+
+def _reconciled_header_labels(
+    labels: tuple[str, ...], caption: CandidateUnit | None
+) -> tuple[str, ...]:
+    """用已绑定表题中的完整期间补齐表头文字层漏掉的单个字符。"""
+    if caption is None:
+        return labels
+    periods = tuple(dict.fromkeys(_PERIOD_RE.findall(caption.raw_text)))
+    if len(periods) != 1:
+        return labels
+    period = periods[0]
+
+    def replace_period(match: re.Match[str]) -> str:
+        malformed = match.group(0)
+        candidates = [period[:index] + period[index + 1 :] for index in range(len(period))]
+        return period if malformed.lower() in {item.lower() for item in candidates} else malformed
+
+    return tuple(_MALFORMED_PERIOD_RE.sub(replace_period, label) for label in labels)
+
+
+def _combined_source_note(notes: tuple[CandidateUnit, ...]) -> str:
+    """把来源行与后续注释中的数据截止子句组合成紧凑表注证据。"""
+    source = next(
+        (
+            _flat_text(unit.raw_text)
+            for unit in notes
+            if re.match(r"^\s*(?:资料来源|数据来源|来源)", unit.raw_text)
+        ),
+        "",
+    )
+    if not source:
+        return ""
+    for unit in notes:
+        flat = _flat_text(unit.raw_text)
+        match = re.search(r"([；;]\s*数据截至.+)$", flat)
+        if match:
+            return f"{source}{match.group(1)}"
+    return ""
+
+
+def _table_context(
+    emission: _TableEmission,
+    caption: CandidateUnit | None,
+    notes: tuple[CandidateUnit, ...],
+) -> str:
+    """生成一次表级结构上下文；内容均来自已确认的表题、表头和表注关系。"""
+    model = emission.table.model
+    header_labels = model.table_header_labels() if model is not None else ()
+    header_labels = _reconciled_header_labels(header_labels, caption)
+    parts = [
+        *([_flat_text(caption.raw_text)] if caption is not None else []),
+        *header_labels,
+        *(_flat_text(unit.raw_text) for unit in notes),
+    ]
+    combined = _combined_source_note(notes)
+    if combined:
+        parts.append(combined)
+    return " | ".join(dict.fromkeys(part for part in parts if part))
+
+
+def _cell_node_id(page: int, table_index: int, row: int, col: int) -> str:
+    return f"pdf:p{page:04d}:t{table_index:03d}:r{row:04d}:c{col:04d}"
+
+
+def _decorate_table_context_and_structure(
+    units: list[CandidateUnit], emissions: list[_TableEmission]
+) -> tuple[list[CandidateUnit], StructuredDocument]:
+    """附加表级检索上下文，并生成不参与兼容投影的 table/cell 结构图。"""
+    related = _related_units(units, emissions)
+    unit_index = {unit.ordinal: index for index, unit in enumerate(units)}
+    for emission in emissions:
+        caption, notes = related.get(id(emission), (None, ()))
+        context = _table_context(emission, caption, notes)
+        if not context:
+            continue
+        first_ordinal = emission.groups[0][0]
+        index = unit_index[first_ordinal]
+        unit = units[index]
+        labels = list(unit.location.label_path)
+        if labels:
+            labels[0] = f"{labels[0]} {context}".strip()
+        elif unit.location.cells:
+            labels = [context, *("" for _ in unit.location.cells[1:])]
+        units[index] = replace(unit, location=replace(unit.location, label_path=tuple(labels)))
+
+    shadow = structure_from_units(tuple(units))
+    nodes = list(shadow.nodes)
+    relations = list(shadow.relations)
+    relation_keys = {
+        (relation.source_id, relation.target_id, relation.kind) for relation in relations
+    }
+
+    def add_relation(
+        source_id: str,
+        target_id: str,
+        kind: RelationKind,
+        evidence: str,
+    ) -> None:
+        key = (source_id, target_id, kind)
+        if key in relation_keys:
+            return
+        relation_keys.add(key)
+        relations.append(
+            StructureRelation(
+                source_id=source_id,
+                target_id=target_id,
+                kind=kind,
+                certainty=RelationCertainty.CONFIRMED,
+                evidence=evidence,
+            )
+        )
+
+    for emission in emissions:
+        table = emission.table
+        table_id = f"pdf:p{emission.page:04d}:t{table.index:03d}"
+        nodes.append(
+            StructureNode(
+                node_id=table_id,
+                ordinal=None,
+                kind="table",
+                status=UnitStatus.KEPT,
+                reasons=(f"tbl[{table.index}]",),
+                raw_text="",
+                location=UnitLocation(page=emission.page, bbox=table.bbox),
+            )
+        )
+        model = table.model
+        if model is None:
+            continue
+        cell_ids: dict[tuple[int, int], str] = {}
+        for row, values in enumerate(model.grid):
+            for col, value in enumerate(values):
+                if value is None or not value.strip():
+                    continue
+                cell_id = _cell_node_id(emission.page, table.index, row, col)
+                cell_ids[(row, col)] = cell_id
+                nodes.append(
+                    StructureNode(
+                        node_id=cell_id,
+                        ordinal=None,
+                        kind="table_cell",
+                        status=UnitStatus.KEPT,
+                        reasons=(f"tbl[{table.index}]",),
+                        raw_text=value,
+                        location=UnitLocation(
+                            page=emission.page,
+                            bbox=table.bbox,
+                            cells=((row, col),),
+                            label_path=(" ".join(model.label_path(row, col)),),
+                        ),
+                    )
+                )
+                add_relation(table_id, cell_id, RelationKind.CONTAINS, "table_grid_membership")
+
+        for ordinal, group in emission.groups:
+            unit_id = shadow_node_id(ordinal)
+            add_relation(table_id, unit_id, RelationKind.CONTAINS, "emitted_table_group")
+            for cell in group:
+                cell_id = cell_ids.get((cell.row, cell.col))
+                if cell_id is not None:
+                    add_relation(unit_id, cell_id, RelationKind.CONTAINS, "emitted_cell_membership")
+
+        for row, values in enumerate(model.grid):
+            if row in model.header_rows:
+                continue
+            populated = [
+                (col, value)
+                for col, value in enumerate(values)
+                if value is not None and value.strip()
+            ]
+            data_start = next(
+                (
+                    index
+                    for index, (_, value) in enumerate(populated)
+                    if any(_NUMERIC_TOKEN_RE.match(token) for token in value.split())
+                ),
+                len(populated),
+            )
+            row_labels = populated[:data_start]
+            data_cells = populated[data_start:]
+            for col, _ in populated:
+                target_id = cell_ids.get((row, col))
+                if target_id is None:
+                    continue
+                for header_cell in model.column_header_cells(col):
+                    source_id = cell_ids.get(header_cell)
+                    if source_id is not None:
+                        add_relation(
+                            source_id,
+                            target_id,
+                            RelationKind.HEADER_FOR,
+                            "column_center_within_header_bbox",
+                        )
+            for label_col, _ in row_labels:
+                source_id = cell_ids.get((row, label_col))
+                if source_id is None:
+                    continue
+                for data_col, _ in data_cells:
+                    target_id = cell_ids.get((row, data_col))
+                    if target_id is not None:
+                        add_relation(
+                            source_id,
+                            target_id,
+                            RelationKind.ROW_LABEL_FOR,
+                            "row_label_precedes_first_numeric_cell",
+                        )
+
+        for col in range(model.ncols()):
+            header_cells = model.column_header_cells(col)
+            for previous, current in pairwise(header_cells):
+                source_id = cell_ids.get(current)
+                target_id = cell_ids.get(previous)
+                if source_id is not None and target_id is not None:
+                    add_relation(
+                        source_id,
+                        target_id,
+                        RelationKind.CONTINUATION_OF,
+                        "same_column_adjacent_header_rows",
+                    )
+
+        caption, notes = related.get(id(emission), (None, ()))
+        if caption is not None:
+            add_relation(
+                shadow_node_id(caption.ordinal),
+                table_id,
+                RelationKind.CAPTION_OF,
+                "nearest_numbered_caption_before_table_same_page",
+            )
+        for note in notes:
+            add_relation(
+                shadow_node_id(note.ordinal),
+                table_id,
+                RelationKind.FOOTNOTE_OF,
+                "consecutive_source_or_note_after_table_same_page",
+            )
+    return units, StructuredDocument(nodes=tuple(nodes), relations=tuple(relations))
 
 
 def read_pdf(path: str | Path) -> ReaderResult:
@@ -914,6 +1253,7 @@ def read_pdf(path: str | Path) -> ReaderResult:
     fmt, file_path = detect_format(path)
     units: list[CandidateUnit] = []
     issues: list[ReaderIssue] = []
+    emissions: list[_TableEmission] = []
     ordinal = 0
     page_count = 0
     with pymupdf.open(str(file_path)) as document:
@@ -1057,6 +1397,7 @@ def read_pdf(path: str | Path) -> ReaderResult:
                                     page_lines=lines,
                                     units=units,
                                     issues=issues,
+                                    emissions=emissions,
                                 )
                         continue
                     if _is_heading(line, median_size):
@@ -1096,9 +1437,16 @@ def read_pdf(path: str | Path) -> ReaderResult:
                 key=lambda table: table.bbox[1],
             ):
                 ordinal = _emit_table(
-                    table, ordinal, page_no=page_no, page_lines=lines, units=units, issues=issues
+                    table,
+                    ordinal,
+                    page_no=page_no,
+                    page_lines=lines,
+                    units=units,
+                    issues=issues,
+                    emissions=emissions,
                 )
 
+    units, structure = _decorate_table_context_and_structure(units, emissions)
     return ReaderResult(
         format=fmt,
         extractor_rev=_extractor_rev(),
@@ -1106,4 +1454,5 @@ def read_pdf(path: str | Path) -> ReaderResult:
         page_count=page_count,
         units=tuple(units),
         issues=tuple(issues),
+        structure=structure,
     )

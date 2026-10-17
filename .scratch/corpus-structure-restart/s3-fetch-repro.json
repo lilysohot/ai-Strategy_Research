@@ -1,0 +1,2391 @@
+{
+  "artifact": "s3-fetch-repro",
+  "target_db": "v14_s2_quote_corpus",
+  "target": {
+    "target_id": "5e305376-fedrate",
+    "locator": [
+      "page:1"
+    ],
+    "verbatim_quote": "联储年内剩余累计加息预期下降 3bp 至 35bp。",
+    "subject": "联储年内加息预期",
+    "metric": "剩余累计加息预期",
+    "period": "2026 年内",
+    "unit": "bp",
+    "constraints_row": null,
+    "constraints_col": null,
+    "constraints_cell": null,
+    "header_refs": null,
+    "row_labels": null,
+    "footnotes": null,
+    "acceptable_evidence": "第 1 页'金融市场'证据，须包含联储年内剩余累计加息预期下降 3bp 至 35bp。",
+    "question": "全周联储年内剩余累计加息预期变化了多少（降至多少 bp）？",
+    "required_dependencies": [],
+    "evidence_role": "required",
+    "high_risk_format": null,
+    "page_basis": 1
+  },
+  "delivered_search_chars": 19379,
+  "source_hits": [
+    {
+      "doc_id": "cv2:a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+      "locator": "chunk:a18883e28d578988:body:0005",
+      "source_id": "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+      "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+      "chunk_id": "a18883e28d578988:body:0005",
+      "context_locators": [
+        "chunk:a18883e28d578988:body:0000",
+        "chunk:a18883e28d578988:heading:0000",
+        "chunk:a18883e28d578988:body:0001",
+        "chunk:a18883e28d578988:table:0000",
+        "chunk:a18883e28d578988:table:0001",
+        "chunk:a18883e28d578988:body:0002",
+        "chunk:a18883e28d578988:table:0002",
+        "chunk:a18883e28d578988:body:0003",
+        "chunk:a18883e28d578988:table:0003",
+        "chunk:a18883e28d578988:body:0004",
+        "chunk:a18883e28d578988:body:0005",
+        "chunk:a18883e28d578988:heading:0001"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+        "locator": "chunk:a18883e28d578988:body:0005",
+        "locators": [
+          "chunk:a18883e28d578988:body:0000",
+          "chunk:a18883e28d578988:heading:0000",
+          "chunk:a18883e28d578988:body:0001",
+          "chunk:a18883e28d578988:table:0000",
+          "chunk:a18883e28d578988:table:0001",
+          "chunk:a18883e28d578988:body:0002",
+          "chunk:a18883e28d578988:table:0002",
+          "chunk:a18883e28d578988:body:0003",
+          "chunk:a18883e28d578988:table:0003",
+          "chunk:a18883e28d578988:body:0004",
+          "chunk:a18883e28d578988:body:0005",
+          "chunk:a18883e28d578988:heading:0001"
+        ],
+        "scope_id": "scope:f058b41df0a3c36e324d3700a3141162",
+        "view": "compact"
+      },
+      "scope_id": "scope:f058b41df0a3c36e324d3700a3141162",
+      "total_chunks": 12,
+      "by_kind": {
+        "unknown": 12
+      },
+      "table_chunks": 0,
+      "title": "联储加息悬念白热化",
+      "published": "undated",
+      "snippet": "<b>联储</b><b>年内</b><b>剩余</b><b>累计</b><b>加息</b><b>预期</b>下降3bp"
+    },
+    {
+      "doc_id": "cv2:a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+      "locator": "chunk:a18883e28d578988:heading:0128",
+      "source_id": "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+      "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+      "chunk_id": "a18883e28d578988:heading:0128",
+      "context_locators": [
+        "chunk:a18883e28d578988:heading:0126",
+        "chunk:a18883e28d578988:heading:0127",
+        "chunk:a18883e28d578988:heading:0128",
+        "chunk:a18883e28d578988:table:0005",
+        "chunk:a18883e28d578988:table:0006",
+        "chunk:a18883e28d578988:table:0007",
+        "chunk:a18883e28d578988:table:0008",
+        "chunk:a18883e28d578988:table:0009",
+        "chunk:a18883e28d578988:table:0010",
+        "chunk:a18883e28d578988:table:0011",
+        "chunk:a18883e28d578988:table:0012",
+        "chunk:a18883e28d578988:table:0013",
+        "chunk:a18883e28d578988:table:0014",
+        "chunk:a18883e28d578988:table:0015",
+        "chunk:a18883e28d578988:table:0016",
+        "chunk:a18883e28d578988:table:0017",
+        "chunk:a18883e28d578988:table:0018",
+        "chunk:a18883e28d578988:table:0019",
+        "chunk:a18883e28d578988:table:0020",
+        "chunk:a18883e28d578988:table:0021",
+        "chunk:a18883e28d578988:table:0022",
+        "chunk:a18883e28d578988:table:0023",
+        "chunk:a18883e28d578988:table:0024",
+        "chunk:a18883e28d578988:body:0022",
+        "chunk:a18883e28d578988:heading:0129",
+        "chunk:a18883e28d578988:body:0023",
+        "chunk:a18883e28d578988:heading:0130",
+        "chunk:a18883e28d578988:heading:0131",
+        "chunk:a18883e28d578988:heading:0132",
+        "chunk:a18883e28d578988:heading:0133",
+        "chunk:a18883e28d578988:body:0024",
+        "chunk:a18883e28d578988:heading:0134",
+        "chunk:a18883e28d578988:heading:0135",
+        "chunk:a18883e28d578988:heading:0136"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+        "locator": "chunk:a18883e28d578988:heading:0128",
+        "locators": [
+          "chunk:a18883e28d578988:heading:0126",
+          "chunk:a18883e28d578988:heading:0127",
+          "chunk:a18883e28d578988:heading:0128",
+          "chunk:a18883e28d578988:table:0005",
+          "chunk:a18883e28d578988:table:0006",
+          "chunk:a18883e28d578988:table:0007",
+          "chunk:a18883e28d578988:table:0008",
+          "chunk:a18883e28d578988:table:0009",
+          "chunk:a18883e28d578988:table:0010",
+          "chunk:a18883e28d578988:table:0011",
+          "chunk:a18883e28d578988:table:0012",
+          "chunk:a18883e28d578988:table:0013",
+          "chunk:a18883e28d578988:table:0014",
+          "chunk:a18883e28d578988:table:0015",
+          "chunk:a18883e28d578988:table:0016",
+          "chunk:a18883e28d578988:table:0017",
+          "chunk:a18883e28d578988:table:0018",
+          "chunk:a18883e28d578988:table:0019",
+          "chunk:a18883e28d578988:table:0020",
+          "chunk:a18883e28d578988:table:0021",
+          "chunk:a18883e28d578988:table:0022",
+          "chunk:a18883e28d578988:table:0023",
+          "chunk:a18883e28d578988:table:0024",
+          "chunk:a18883e28d578988:body:0022",
+          "chunk:a18883e28d578988:heading:0129",
+          "chunk:a18883e28d578988:body:0023",
+          "chunk:a18883e28d578988:heading:0130",
+          "chunk:a18883e28d578988:heading:0131",
+          "chunk:a18883e28d578988:heading:0132",
+          "chunk:a18883e28d578988:heading:0133",
+          "chunk:a18883e28d578988:body:0024",
+          "chunk:a18883e28d578988:heading:0134",
+          "chunk:a18883e28d578988:heading:0135",
+          "chunk:a18883e28d578988:heading:0136"
+        ],
+        "scope_id": "scope:abdf9bbdd06c8360aefb385d1461bdb4",
+        "view": "compact"
+      },
+      "scope_id": "scope:abdf9bbdd06c8360aefb385d1461bdb4",
+      "total_chunks": 34,
+      "by_kind": {
+        "unknown": 34
+      },
+      "table_chunks": 0,
+      "title": "资料来源：Bloomberg，华泰研究",
+      "published": "undated",
+      "snippet": "<b>联储</b>2026年<b>加息</b><b>预期</b>下降3bp至"
+    },
+    {
+      "doc_id": "cv2:a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+      "locator": "chunk:a18883e28d578988:body:0009",
+      "source_id": "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+      "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+      "chunk_id": "a18883e28d578988:body:0009",
+      "context_locators": [
+        "chunk:a18883e28d578988:heading:0042",
+        "chunk:a18883e28d578988:body:0009",
+        "chunk:a18883e28d578988:body:0010",
+        "chunk:a18883e28d578988:heading:0043"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+        "locator": "chunk:a18883e28d578988:body:0009",
+        "locators": [
+          "chunk:a18883e28d578988:heading:0042",
+          "chunk:a18883e28d578988:body:0009",
+          "chunk:a18883e28d578988:body:0010",
+          "chunk:a18883e28d578988:heading:0043"
+        ],
+        "scope_id": "scope:7147ec694355cba66f309be0f0fe6239",
+        "view": "compact"
+      },
+      "scope_id": "scope:7147ec694355cba66f309be0f0fe6239",
+      "total_chunks": 4,
+      "by_kind": {
+        "unknown": 4
+      },
+      "table_chunks": 0,
+      "title": "全球经济动能高频指标一览\n经济动能总览",
+      "published": "undated",
+      "snippet": "<b>变化</b>\n0.8\n8.5\n-25.7"
+    }
+  ],
+  "plans": [
+    {
+      "doc_id": "cv2:a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+      "locator": "chunk:a18883e28d578988:body:0005",
+      "locators": [
+        "chunk:a18883e28d578988:body:0000",
+        "chunk:a18883e28d578988:heading:0000",
+        "chunk:a18883e28d578988:body:0001",
+        "chunk:a18883e28d578988:table:0000",
+        "chunk:a18883e28d578988:table:0001",
+        "chunk:a18883e28d578988:body:0002",
+        "chunk:a18883e28d578988:table:0002",
+        "chunk:a18883e28d578988:body:0003",
+        "chunk:a18883e28d578988:table:0003",
+        "chunk:a18883e28d578988:body:0004",
+        "chunk:a18883e28d578988:body:0005",
+        "chunk:a18883e28d578988:heading:0001"
+      ],
+      "scope_id": "scope:f058b41df0a3c36e324d3700a3141162",
+      "view": "compact"
+    },
+    {
+      "doc_id": "cv2:a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+      "locator": "chunk:a18883e28d578988:heading:0128",
+      "locators": [
+        "chunk:a18883e28d578988:heading:0126",
+        "chunk:a18883e28d578988:heading:0127",
+        "chunk:a18883e28d578988:heading:0128",
+        "chunk:a18883e28d578988:table:0005",
+        "chunk:a18883e28d578988:table:0006",
+        "chunk:a18883e28d578988:table:0007",
+        "chunk:a18883e28d578988:table:0008",
+        "chunk:a18883e28d578988:table:0009",
+        "chunk:a18883e28d578988:table:0010",
+        "chunk:a18883e28d578988:table:0011",
+        "chunk:a18883e28d578988:table:0012",
+        "chunk:a18883e28d578988:table:0013",
+        "chunk:a18883e28d578988:table:0014",
+        "chunk:a18883e28d578988:table:0015",
+        "chunk:a18883e28d578988:table:0016",
+        "chunk:a18883e28d578988:table:0017",
+        "chunk:a18883e28d578988:table:0018",
+        "chunk:a18883e28d578988:table:0019",
+        "chunk:a18883e28d578988:table:0020",
+        "chunk:a18883e28d578988:table:0021",
+        "chunk:a18883e28d578988:table:0022",
+        "chunk:a18883e28d578988:table:0023",
+        "chunk:a18883e28d578988:table:0024",
+        "chunk:a18883e28d578988:body:0022",
+        "chunk:a18883e28d578988:heading:0129",
+        "chunk:a18883e28d578988:body:0023",
+        "chunk:a18883e28d578988:heading:0130",
+        "chunk:a18883e28d578988:heading:0131",
+        "chunk:a18883e28d578988:heading:0132",
+        "chunk:a18883e28d578988:heading:0133",
+        "chunk:a18883e28d578988:body:0024",
+        "chunk:a18883e28d578988:heading:0134",
+        "chunk:a18883e28d578988:heading:0135",
+        "chunk:a18883e28d578988:heading:0136"
+      ],
+      "scope_id": "scope:abdf9bbdd06c8360aefb385d1461bdb4",
+      "view": "compact"
+    },
+    {
+      "doc_id": "cv2:a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+      "locator": "chunk:a18883e28d578988:body:0009",
+      "locators": [
+        "chunk:a18883e28d578988:heading:0042",
+        "chunk:a18883e28d578988:body:0009",
+        "chunk:a18883e28d578988:body:0010",
+        "chunk:a18883e28d578988:heading:0043"
+      ],
+      "scope_id": "scope:7147ec694355cba66f309be0f0fe6239",
+      "view": "compact"
+    }
+  ],
+  "fetches": [
+    {
+      "ok": true,
+      "doc_id": "cv2:a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+      "locators": [
+        "chunk:a18883e28d578988:body:0000",
+        "chunk:a18883e28d578988:heading:0000",
+        "chunk:a18883e28d578988:body:0001",
+        "chunk:a18883e28d578988:table:0000",
+        "chunk:a18883e28d578988:table:0001",
+        "chunk:a18883e28d578988:body:0002",
+        "chunk:a18883e28d578988:table:0002",
+        "chunk:a18883e28d578988:body:0003",
+        "chunk:a18883e28d578988:table:0003",
+        "chunk:a18883e28d578988:body:0004",
+        "chunk:a18883e28d578988:body:0005",
+        "chunk:a18883e28d578988:heading:0001"
+      ],
+      "pages": 4,
+      "page_sizes": [
+        {
+          "raw": 4997,
+          "delivered": 4997
+        },
+        {
+          "raw": 5438,
+          "delivered": 5438
+        },
+        {
+          "raw": 4534,
+          "delivered": 4534
+        },
+        {
+          "raw": 4433,
+          "delivered": 4433
+        }
+      ],
+      "items": [
+        {
+          "locator": "chunk:a18883e28d578988:body:0000",
+          "chunk_id": "a18883e28d578988:body:0000",
+          "kind": "body",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "免责声明和披露以及分析师声明是报告的一部分，请务必一起阅读。\n1 \n证券研究报告",
+          "pages": [
+            1
+          ],
+          "fragment": null,
+          "text_chars": 40,
+          "text_sha256": "765ab51b42acf209525162121314b95c37e0133aad641c392a0425b8e6db0670",
+          "structure_status": "unknown",
+          "content_role": "content",
+          "relations": [],
+          "relation_status": "unknown"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:heading:0000",
+          "chunk_id": "a18883e28d578988:heading:0000",
+          "kind": "heading",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "宏观\n联储加息悬念白热化",
+          "pages": [
+            1
+          ],
+          "fragment": null,
+          "text_chars": 12,
+          "text_sha256": "5e5f67c06533c4ffb56dc1060b7f375566aec3e7bb06a997a8bb0319322e1b00",
+          "structure_status": "unknown",
+          "content_role": "heading_only",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:body:0001",
+              "target_kind": "body",
+              "relation": "section_candidate",
+              "status": "candidate",
+              "basis": "same_section"
+            },
+            {
+              "target_locator": "chunk:a18883e28d578988:table:0000",
+              "target_kind": "table",
+              "relation": "section_candidate",
+              "status": "candidate",
+              "basis": "same_section"
+            },
+            {
+              "target_locator": "chunk:a18883e28d578988:table:0001",
+              "target_kind": "table",
+              "relation": "section_candidate",
+              "status": "candidate",
+              "basis": "same_section"
+            },
+            {
+              "target_locator": "chunk:a18883e28d578988:body:0002",
+              "target_kind": "body",
+              "relation": "section_candidate",
+              "status": "candidate",
+              "basis": "same_section"
+            },
+            {
+              "target_locator": "chunk:a18883e28d578988:table:0002",
+              "target_kind": "table",
+              "relation": "section_candidate",
+              "status": "candidate",
+              "basis": "same_section"
+            },
+            {
+              "target_locator": "chunk:a18883e28d578988:body:0003",
+              "target_kind": "body",
+              "relation": "section_candidate",
+              "status": "candidate",
+              "basis": "same_section"
+            },
+            {
+              "target_locator": "chunk:a18883e28d578988:table:0003",
+              "target_kind": "table",
+              "relation": "section_candidate",
+              "status": "candidate",
+              "basis": "same_section"
+            },
+            {
+              "target_locator": "chunk:a18883e28d578988:body:0004",
+              "target_kind": "body",
+              "relation": "section_candidate",
+              "status": "candidate",
+              "basis": "same_section"
+            },
+            {
+              "target_locator": "chunk:a18883e28d578988:body:0005",
+              "target_kind": "body",
+              "relation": "section_candidate",
+              "status": "candidate",
+              "basis": "same_section"
+            }
+          ],
+          "relation_status": "candidate"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:body:0001",
+          "chunk_id": "a18883e28d578988:body:0001",
+          "kind": "body",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "宏观\n华泰研究",
+          "pages": [
+            1
+          ],
+          "fragment": null,
+          "text_chars": 7,
+          "text_sha256": "039aebc7bae64d3455c81b9bed83fcf5da34441df216a5a111f1715b1c4036da",
+          "structure_status": "unknown",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0000",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "宏观\n联储加息悬念白热化",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0000",
+          "chunk_id": "a18883e28d578988:table:0000",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "易峘 0 0 0 0 0\n研究员\n0 0 0\nSAC No. S0570520100005\nevayi@htsc.com\nSFC No. AMH263\n+(852) 3658 6000\n胡李鹏，PhD\n研究员\nSAC No. S0570525010001\nhulipeng@htsc.com\nSFC No. BWA860\n+(86) 10 6321 1166",
+          "pages": [
+            1
+          ],
+          "fragment": null,
+          "text_chars": 179,
+          "text_sha256": "701a81b2af352857be1b6cf1aef326472951836cf02ed2f6d85d62ff1957530f",
+          "structure_status": "verified",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0000",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "易峘 0 0 0 0 0 0 0 0 SAC No. S0570520100005 SFC No. AMH263 易峘 0 0 0 0 0 0 0 0 SAC No. S0570520100005 SFC No. AMH263 | 易峘 0 0 0 0 0 evayi@htsc.com +(852) 3658 6000 | 研究员 evayi@htsc.com +(852) 3658 6000",
+            "研究员 evayi@htsc.com +(852) 3658 6000",
+            "易峘 0 0 0 0 0 0 0 0 SAC No. S0570520100005 SFC No. AMH263",
+            "易峘 0 0 0 0 0 evayi@htsc.com +(852) 3658 6000",
+            "胡李鹏，PhD 研究员 易峘 0 0 0 0 0 0 0 0 SAC No. S0570520100005 SFC No. AMH263",
+            "胡李鹏，PhD 研究员 研究员 evayi@htsc.com +(852) 3658 6000",
+            "SAC No. S0570525010001 hulipeng@htsc.com 易峘 0 0 0 0 0 0 0 0 SAC No. S0570520100005 SFC No. AMH263",
+            "SAC No. S0570525010001 hulipeng@htsc.com 易峘 0 0 0 0 0 evayi@htsc.com +(852) 3658 6000",
+            "SFC No. BWA860 +(86) 10 6321 1166 易峘 0 0 0 0 0 0 0 0 SAC No. S0570520100005 SFC No. AMH263",
+            "SFC No. BWA860 +(86) 10 6321 1166 易峘 0 0 0 0 0 evayi@htsc.com +(852) 3658 6000"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0001",
+          "chunk_id": "a18883e28d578988:table:0001",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "易峘 0 0 0 0 0\n研究员\n王子琳*，PhD\n研究员\nSAC No. S0570525090002\nwangzilin@htsc.com",
+          "pages": [
+            1
+          ],
+          "fragment": null,
+          "text_chars": 71,
+          "text_sha256": "2c22428d0055425ffca61b1e90108596b2ddb664155e031ac392e09d2e350904",
+          "structure_status": "verified",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0000",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "易峘 0 0 0 0 0 0 0 0 SAC No. S0570520100005 SFC No. AMH263 易峘 0 0 0 0 0 0 0 0 SAC No. S0570520100005 SFC No. AMH263 | 易峘 0 0 0 0 0 evayi@htsc.com +(852) 3658 6000 | 研究员 evayi@htsc.com +(852) 3658 6000",
+            "研究员 evayi@htsc.com +(852) 3658 6000",
+            "王子琳*，PhD 研究员 易峘 0 0 0 0 0 0 0 0 SAC No. S0570520100005 SFC No. AMH263",
+            "王子琳*，PhD 研究员 研究员 evayi@htsc.com +(852) 3658 6000",
+            "SAC No. S0570525090002 wangzilin@htsc.com 易峘 0 0 0 0 0 0 0 0 SAC No. S0570520100005 SFC No. AMH263",
+            "SAC No. S0570525090002 wangzilin@htsc.com 易峘 0 0 0 0 0 evayi@htsc.com +(852) 3658 6000"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:body:0002",
+          "chunk_id": "a18883e28d578988:body:0002",
+          "kind": "body",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "+(86) 10 6321 1166",
+          "pages": [
+            1
+          ],
+          "fragment": null,
+          "text_chars": 18,
+          "text_sha256": "fc351252aafd1b352b642487a8f749ea051a657df0eae50ef4d1715d7429e019",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0000",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "+(86) 10 6321 1166 易峘 0 0 0 0 0 evayi@htsc.com +(852) 3658 6000"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0002",
+          "chunk_id": "a18883e28d578988:table:0002",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "赵文瑄* 0 0 0 0\n研究员\nSAC No. S0570526040002 0 0 0 0\nzhaowenxuan@htsc.com",
+          "pages": [
+            1
+          ],
+          "fragment": null,
+          "text_chars": 68,
+          "text_sha256": "3fd0a40ffccf10d0758742f6ec1143589d9f087121ee068b46b844581f0151de",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0000",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "赵文瑄* 0 0 0 0 研究员 易峘 0 0 0 0 0 0 0 0 SAC No. S0570520100005 SFC No. AMH263",
+            "赵文瑄* 0 0 0 0 研究员 研究员 evayi@htsc.com +(852) 3658 6000",
+            "SAC No. S0570526040002 0 0 0 0 zhaowenxuan@htsc.com 易峘 0 0 0 0 0 0 0 0 SAC No. S0570520100005 SFC No. AMH263",
+            "SAC No. S0570526040002 0 0 0 0 zhaowenxuan@htsc.com 易峘 0 0 0 0 0 evayi@htsc.com +(852) 3658 6000"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:body:0003",
+          "chunk_id": "a18883e28d578988:body:0003",
+          "kind": "body",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "+(86) 10 6321 1166",
+          "pages": [
+            1
+          ],
+          "fragment": null,
+          "text_chars": 18,
+          "text_sha256": "fc351252aafd1b352b642487a8f749ea051a657df0eae50ef4d1715d7429e019",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0000",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "易峘 0 0 0 0 0 evayi@htsc.com +(852) 3658 6000"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0003",
+          "chunk_id": "a18883e28d578988:table:0003",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "丁煦洲*\n联系人\nSAC No. S0570126020028\ndingxuzhou@htsc.com",
+          "pages": [
+            1
+          ],
+          "fragment": null,
+          "text_chars": 51,
+          "text_sha256": "204c7a63770c703e45d8c8e3bb6c9fcc934411655bc18ffdceebe9639bf2da45",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0000",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "丁煦洲* 联系人 易峘 0 0 0 0 0 0 0 0 SAC No. S0570520100005 SFC No. AMH263",
+            "丁煦洲* 联系人 研究员 evayi@htsc.com +(852) 3658 6000",
+            "SAC No. S0570126020028 dingxuzhou@htsc.com 易峘 0 0 0 0 0 0 0 0 SAC No. S0570520100005 SFC No. AMH263",
+            "SAC No. S0570126020028 dingxuzhou@htsc.com 易峘 0 0 0 0 0 evayi@htsc.com +(852) 3658 6000"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:body:0004",
+          "chunk_id": "a18883e28d578988:body:0004",
+          "kind": "body",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "+(86) 10 6321 1166\n0 0 0\n2026 年9 月06 日│中国内地\n海外周报\n海外一周概览\n美国与伊朗爆发新一轮军事冲突，推高全球油价；联储理事沃勒和纽约联储\n行长表态偏鸽，强调通胀呈现趋势性放缓。市场加息预期进一步分化，需观\n察CPI 数据以及9 月FOMC 投票结果来明确本届联储的反应函数。经济数\n据方面，美国8 月非农大幅超预期；美国ISM 制造业PMI 走弱但服务业PMI\n高位上行。全周来看，联储理事偏鸽发言推动年内加息预期小幅降温；美伊\n冲突再起导致油价回升，贵金属走弱，美债收益率曲线上移；日元明显升值\n推动美元走弱；美股三大股指涨跌不一。本周关注欧央行利率决议（9 月10\n日）、美国8 月PPI（9 月10 日）、美国8 月CPI（9 月11 日）。\n高频数据\n美国增长与消费维持韧性，就业边际走弱，住房市场仍然偏弱。增长方面，\n亚特兰大联储GDPNow 上调三季度GDP 增速预测至4.7%。消费方面，三\n季度实际个人消费季比折年增速Nowcast 上升至3.8%，Redbook 名义零售\n同比上行至8.7%。就业方面，上周季调后美国首次申领失业金人数上升0.3\n万至20.6 万，差于预期的20.5 万（彭博一致预期，下同）。地产方面，截\n至9 月3 日，30 年期房贷利率小幅上升5bp 至6.71%，房贷申请量回落。\n上周主要宏观数据\n美国8 月非农大幅超预期，失业率维持低位，ISM 制造业PMI 走弱；欧元\n区8 月CPI 上行。美国8 月新增非农就业为16.2 万，大幅高于预期的5.6\n万，前两个月累计上修5.5 万。分行业看，商品、服务和政府部门均明显回\n升，主要源于休闲酒店和地方政府就业的反弹。美国8 月失业率在劳动参与\n率走高下（上行0.2pp 至61.6%）维持4.1%的低位，源于家庭调查口径的\n就业大幅回升。8 月ISM 制造业PMI 下行1.0pp 至54.6，不及预期的55.2；\n服务业PMI大幅升温1.3pp至55.4。欧元区8月CPI同比上行0.3pp至\n3.2%，符合预期；7 月失业率与前值持平于6.4%，略高于预期的6.3%。",
+          "pages": [
+            1
+          ],
+          "fragment": null,
+          "text_chars": 907,
+          "text_sha256": "7dc290cbfaf8e66e1d1a447d5b270aa7ff5a317c028aa3157943636539ef08ba",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0000",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "+(86) 10 6321 1166 易峘 0 0 0 0 0 evayi@htsc.com +(852) 3658 6000",
+            "易峘 0 0 0 0 0 0 0 0 SAC No. S0570520100005 SFC No. AMH263"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:body:0005",
+          "chunk_id": "a18883e28d578988:body:0005",
+          "kind": "body",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "政策动态\n美伊冲突再度升级，联储官员表态中性偏鸽；特朗普政府或加征半导体关税；\n日央行官员表态偏鹰。地缘政治方面，美国与伊朗爆发新一轮军事冲突。美\n国对伊朗发动空袭并袭击伊朗运油船，德黑兰则对美军基地发射导弹，并袭\n击试图通过海峡的商船。联储方面，美联储理事沃勒表示，由于通胀出现回\n落迹象，若8月CPI数据显示通胀延续改善，则倾向维持利率不变。纽约\n联储行长认为随关税影响消退，通胀正逐步下降。考虑到当前利率具备良好\n限制性，倾向于维持利率不变。然而联储委员多为数据驱动，因此需观察8\n月CPI 以及9 月FOMC 投票结果来明确本届联储的反应函数。关税方面，\n特朗普政府考虑对进口半导体加征关税，并对在美国生产的企业给予豁免。\n日本方面，日央行委员高田创释放加快紧缩信号，不排除大幅加息的可能性。\n金融市场\n联储加息预期小幅回落，美债收益率曲线上移，美元走弱，美股三大指数涨\n跌不一，油价上涨，贵金属下跌。全周看，联储年内剩余累计加息预期下降\n3bp 至35bp。债市方面，2y、10y 美债收益率分别上行3bp、5bp 至4.37%、\n4.78%。汇率方面，日央行紧缩预期升温导致日元升值2.4%至156.3，美元\n指数下行0.5%至99.2，欧元升值0.3%至1.16。股市方面，标普、纳指分\n别上涨0.1%、0.4%，道指下跌0.3%。大宗商品方面，布伦特原油期货上\n涨7.8%至96.3 美元/桶，COMEX 期金下跌1.2%至4476.6 美元/盎司，伦\n敦现银下跌0.3%至66.2 美元/盎司，LME 现铜下跌0.5%至14325 美元/吨。\n风险提示：地缘政治不确定性，货币政策超预期紧缩。\n00000000000\n00000000000",
+          "pages": [
+            1
+          ],
+          "fragment": null,
+          "text_chars": 729,
+          "text_sha256": "e03554831d28f3ae700b651ce44158d716d4da59097c5f92602f422935a9e228",
+          "structure_status": "unknown",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0000",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            }
+          ],
+          "relation_status": "verified"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:heading:0001",
+          "chunk_id": "a18883e28d578988:heading:0001",
+          "kind": "heading",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "00000000000\n00000000000\n00000000000\n00000000000",
+          "pages": [
+            1
+          ],
+          "fragment": null,
+          "text_chars": 47,
+          "text_sha256": "bfa869963560e4e879f22f500129f13c8616191454bda807f0a04bd60d8fc775",
+          "structure_status": "unknown",
+          "content_role": "heading_only",
+          "relations": [],
+          "relation_status": "unknown"
+        }
+      ],
+      "item_errors": [],
+      "unresolved": [],
+      "fetch_complete": true
+    },
+    {
+      "ok": true,
+      "doc_id": "cv2:a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+      "locators": [
+        "chunk:a18883e28d578988:heading:0126",
+        "chunk:a18883e28d578988:heading:0127",
+        "chunk:a18883e28d578988:heading:0128",
+        "chunk:a18883e28d578988:table:0005",
+        "chunk:a18883e28d578988:table:0006",
+        "chunk:a18883e28d578988:table:0007",
+        "chunk:a18883e28d578988:table:0008",
+        "chunk:a18883e28d578988:table:0009",
+        "chunk:a18883e28d578988:table:0010",
+        "chunk:a18883e28d578988:table:0011",
+        "chunk:a18883e28d578988:table:0012",
+        "chunk:a18883e28d578988:table:0013",
+        "chunk:a18883e28d578988:table:0014",
+        "chunk:a18883e28d578988:table:0015",
+        "chunk:a18883e28d578988:table:0016",
+        "chunk:a18883e28d578988:table:0017",
+        "chunk:a18883e28d578988:table:0018",
+        "chunk:a18883e28d578988:table:0019",
+        "chunk:a18883e28d578988:table:0020",
+        "chunk:a18883e28d578988:table:0021",
+        "chunk:a18883e28d578988:table:0022",
+        "chunk:a18883e28d578988:table:0023",
+        "chunk:a18883e28d578988:table:0024",
+        "chunk:a18883e28d578988:body:0022",
+        "chunk:a18883e28d578988:heading:0129",
+        "chunk:a18883e28d578988:body:0023",
+        "chunk:a18883e28d578988:heading:0130",
+        "chunk:a18883e28d578988:heading:0131",
+        "chunk:a18883e28d578988:heading:0132",
+        "chunk:a18883e28d578988:heading:0133",
+        "chunk:a18883e28d578988:body:0024",
+        "chunk:a18883e28d578988:heading:0134",
+        "chunk:a18883e28d578988:heading:0135",
+        "chunk:a18883e28d578988:heading:0136"
+      ],
+      "pages": 23,
+      "page_sizes": [
+        {
+          "raw": 4426,
+          "delivered": 4426
+        },
+        {
+          "raw": 4792,
+          "delivered": 4792
+        },
+        {
+          "raw": 4767,
+          "delivered": 4767
+        },
+        {
+          "raw": 4739,
+          "delivered": 4739
+        },
+        {
+          "raw": 4765,
+          "delivered": 4765
+        },
+        {
+          "raw": 4741,
+          "delivered": 4741
+        },
+        {
+          "raw": 4745,
+          "delivered": 4745
+        },
+        {
+          "raw": 4755,
+          "delivered": 4755
+        },
+        {
+          "raw": 4753,
+          "delivered": 4753
+        },
+        {
+          "raw": 4751,
+          "delivered": 4751
+        },
+        {
+          "raw": 4747,
+          "delivered": 4747
+        },
+        {
+          "raw": 5028,
+          "delivered": 5028
+        },
+        {
+          "raw": 5190,
+          "delivered": 5190
+        },
+        {
+          "raw": 5070,
+          "delivered": 5070
+        },
+        {
+          "raw": 4751,
+          "delivered": 4751
+        },
+        {
+          "raw": 5174,
+          "delivered": 5174
+        },
+        {
+          "raw": 5105,
+          "delivered": 5105
+        },
+        {
+          "raw": 5141,
+          "delivered": 5141
+        },
+        {
+          "raw": 4739,
+          "delivered": 4739
+        },
+        {
+          "raw": 5050,
+          "delivered": 5050
+        },
+        {
+          "raw": 5351,
+          "delivered": 5351
+        },
+        {
+          "raw": 5890,
+          "delivered": 5890
+        },
+        {
+          "raw": 3856,
+          "delivered": 3856
+        }
+      ],
+      "items": [
+        {
+          "locator": "chunk:a18883e28d578988:heading:0126",
+          "chunk_id": "a18883e28d578988:heading:0126",
+          "kind": "heading",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "00000000000\n免责声明和披露以及分析师声明是报告的一部分，请务必一起阅读。\n10 ",
+          "pages": [
+            9,
+            10
+          ],
+          "fragment": null,
+          "text_chars": 46,
+          "text_sha256": "8c746a696779649ce8d7296b700748bc1191564884cd853ff8390c7c30346340",
+          "structure_status": "unknown",
+          "content_role": "heading_only",
+          "relations": [],
+          "relation_status": "unknown"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:heading:0127",
+          "chunk_id": "a18883e28d578988:heading:0127",
+          "kind": "heading",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "海外央行跟踪\n图表32：全球央行基准利率变化一览\n资料来源：Wind，华泰研究",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 39,
+          "text_sha256": "c85bf148f788245165fa2c137d265419225438477c301e7cbcf8d3492343c27f",
+          "structure_status": "unknown",
+          "content_role": "heading_only",
+          "relations": [],
+          "relation_status": "unknown"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:heading:0128",
+          "chunk_id": "a18883e28d578988:heading:0128",
+          "kind": "heading",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "图表33：上周联储2026 年加息预期下降3bp 至35bp \n资料来源：Bloomberg，华泰研究",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 51,
+          "text_sha256": "68806c10830261dbfc23eb25f71e527aff661b94c2a05852ed3bba1b76f7a8a4",
+          "structure_status": "unknown",
+          "content_role": "heading_only",
+          "relation_status": "candidate",
+          "relations_elided": true,
+          "relation_count": 21
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0005",
+          "chunk_id": "a18883e28d578988:table:0005",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "图表33：上周联储2026 年加息预期下降3bp 至35bp \n·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n0.00\n-1.00↓ 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.0\n0 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.25↓\n0.00\n+0.50↑\n+0.75↑\n0\n+0.75↑\n0\n0.00\n+0.75↑\n0.00\n+0.75↑\n+0.50↑\n0.00\n+0.25↑\n+0.25↑\n0.00\n+0.25↑\n0.00\n+0.25↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.50↓\n0.00\n-0.25↓\n-0.25↓\n0.00\n0.00\n0\n0.00\n0\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.25↓\n-0.25↓\n0.00 -0.25↓ 0\n.00 0.00 0.00\n0.00\n0.00\n0.00\n0.00\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 624,
+          "text_sha256": "ab98b6b937a8a97dbd10143053810dc764e9026a8d73475cd9cf5a7eb7c544ca",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "·## #"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0006",
+          "chunk_id": "a18883e28d578988:table:0006",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n0.00\n0.00 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.0\n0 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0\n0.00\n0\n0.00\n0\n0.00\n+0.50↑\n0.00\n+0.75↑\n0.00\n+0.75↑\n+0.50↑\n0.00\n+0.50↑\n+0.50↑\n0.00\n+0.25↑\n+0.25↑\n0.00\n+0.25↑\n+0.25↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n-0.25↓\n-0.25↓\n0.00\n0\n-0.25↓\n0\n0.00\n0\n-0.25↓\n-0.25↓\n-0.25↓\n0.00\n-0.25↓\n0.00\n0.00\n0.00\n0.00\n0.00 0.00 0\n.00 0.00 0.00\n0.00\n0.00\n+0.25↑\n0.00\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 598,
+          "text_sha256": "374bf2e367c1a5d657c70dee2ccc1ec1d14cc2568fee3710b88ed95e6613c75a",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "·## #"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0007",
+          "chunk_id": "a18883e28d578988:table:0007",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n0.00\n0.00 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.0\n0 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0\n0.00\n0\n0.00\n0\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n+0.20↑\n0.00\n0.00\n0.00\n0.00\n+0.15↑\n0\n0.00\n0\n0.00\n0\n0.00\n0.00\n+0.25↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00 +0.25↑ 0\n.00 0.00 0.00\n0.00\n0.00\n+0.25↑\n0.00\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 570,
+          "text_sha256": "009f36b9925c7d1d9742ad4d24bc4ff42bc20e5f7adc77655bc60bca59996619",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "·## #"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0008",
+          "chunk_id": "a18883e28d578988:table:0008",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n0.00\n-0.58↓ 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.0\n0 0.00\n0.00\n0.00\n0.00\n0\n0.00\n0\n+0.08↑\n0.00\n+0.25↑\n+0.25↑\n0.00\n+0.25↑\n+0.25↑\n0.00\n+0.50↑\n+0.50↑\n0.00\n+0.75↑\n+0.50↑\n0.00\n+0.50↑\n+0.25↑\n0.00\n+0.25↑\n+0.50↑\n0.00\n+0.25↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0\n0.00\n0\n-0.25↓\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n0.00 -0.25↓ 0\n.00 0.00 0.00\n0.00\n0.00\n0.00\n0.00\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 598,
+          "text_sha256": "a530914dd8e1bd917ec9466938525ca67a17b9956d3c397ad141211d20d155d4",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "·## #"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0009",
+          "chunk_id": "a18883e28d578988:table:0009",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n0.00\n0.00 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.0\n0 0.00\n0.00\n0.00\n0\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n+0.50↑\n0.00\n0.00\n+0.75↑\n0.00\n0.00\n+0.50↑\n0.00\n0.00\n+0.50↑\n0.00\n0.00\n+0.25↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n0\n-0.25↓\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n-0.50↓\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n0.00\n-0.25↓\n0.00 0.00 0\n.00 0.00 0.00\n0.00\n0.00\n0.00\n0.00\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 576,
+          "text_sha256": "fcf2d156d7485cb981dfa295dff82a69472212a19f6afe1b84237f08c222d6fb",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "·## #"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0010",
+          "chunk_id": "a18883e28d578988:table:0010",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n0.00\n0.00 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.0\n0 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n+0.25↑\n0.00\n+0.50↑\n0.00\n+1.00↑\n0.00\n+0.75↑\n0.00\n0.00\n+0.50↑\n0.00\n0.00\n+0.50↑\n0.00\n+0.25↑\n0.00\n+0.25↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n-0.25↓\n0.00\n-0.25↓\n-0.50↓\n0.00\n-0.25↓\n-0.25↓\n0.00\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n0.00\n0.00\n0.00 0.00 0\n.00 +0.25↑ +0.25↑\n0.00\n0.00\n0.00\n0.00\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 582,
+          "text_sha256": "f81dc8993f756aeefa396a2abe3645fdc80d3d8ccc3efe3bd72b5b1db73c99c3",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "·## #"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0011",
+          "chunk_id": "a18883e28d578988:table:0011",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n0.00\n-0.88↓ 0.00\n-0.63↓\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.0\n0 0.00\n0.00\n+0.25↑\n0.00\n0.00\n+0.25↑\n0.00\n0.00\n+0.25↑\n0.00\n0.00\n+0.50↑\n0.00\n+0.50↑\n+0.50↑\n0.00\n+0.25↑\n+0.25↑\n0.00\n0.00\n+0.25↑\n0.00\n+0.25↑\n+0.50↑\n0.00\n+0.25↑\n+0.25↑\n0.00\n0.00\n+0.25↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n-0.25↓\n-0.50↓\n-0.25↓ 0.00 0\n.00 0.00 0.00\n0.00\n0.00\n0.00\n+0.25↑\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 590,
+          "text_sha256": "28459891f077cceb59cd4ca7e7c015c8cc2ccce62101e1aeea6e802a182bd902",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "·## #"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0012",
+          "chunk_id": "a18883e28d578988:table:0012",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n0.00\n-1.00↓ 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.0\n0 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.25↓\n+0.50↑\n0.00\n+0.50↑\n+1.00↑\n0.00\n+0.75↑\n+0.50↑\n0.00\n+0.50↑\n+0.25↑\n0.00\n0.00\n0.00\n0.00\n+0.25↑\n+0.25↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.25↓\n-0.25↓\n0.00\n-0.25↓\n-0.50↓\n0.00\n-0.50↓\n-0.25↓\n0.00\n-0.25↓\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.25↓\n-0.25↓\n0.00 0.00 0\n.00 0.00 0.00\n0.00\n0.00\n0.00\n0.00\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 588,
+          "text_sha256": "c3755b0e5173b8be8d3de813c1f9b8d73922c5a39c2ce5d9e14ea136107505d7",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "·## #"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0013",
+          "chunk_id": "a18883e28d578988:table:0013",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n0.00\n-0.38↓ 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.28↓\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.0\n0 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n+0.25↑\n+0.50↑\n+0.50↑\n+0.50↑\n+0.50↑\n+0.25↑\n+0.25↑\n+0.25↑\n0.00\n+0.25↑\n+0.25↑\n0.00\n+0.25↑\n+0.25↑\n0.00\n0.00\n0.00\n0.00\n+0.25↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n0.00 0.00 0\n.00 0.00 0.00\n0.00\n+0.25↑\n0.00\n0.00\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 586,
+          "text_sha256": "1f0ed0b948079f96a924f527f87188e6d9481734c3b141cbd2d7143dc15a7539",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "·## #"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0014",
+          "chunk_id": "a18883e28d578988:table:0014",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n0.00\n-0.50↓ 0.00\n-0.25↓\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.0\n0 0.00\n+0.25↑\n0.00\n0.00\n+0.25↑\n0.00\n+0.25↑\n0.00\n0.00\n+0.25↑\n+0.25↑\n0.00\n+0.50↑\n+0.25↑\n0.00\n+0.50↑\n+0.25↑\n0.00\n+0.25↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.25↓\n-0.25↓\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00 0.00 0\n.00 0.00 0.00\n0.00\n0.00\n+0.25↑\n0.00\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 582,
+          "text_sha256": "0beb38f6d8f3b35b3cccc53a623a1acda480641dc2ee3be977a9c3f51db531b1",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "·## #"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0015",
+          "chunk_id": "a18883e28d578988:table:0015",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n-0.10↓\n-0.20↓ 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.0\n0 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.10↓\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.10↓\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.10↓\n0.00\n-0.10↓\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.10↓\n0.00\n-0.20↓\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.10↓\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00 0.00 0\n.00 0.00 0.00\n0.00\n0.00\n0.00\n0.00\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 566,
+          "text_sha256": "412f40c10d18f2d788f1721a8a767ddc559e79c660b808ef97349b20b0990526",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "-0.10↓ -0.20↓ 0.00 ·## #",
+            "-0.10↓ -0.20↓ 0.00 # ## ## ## ## ## ## ## ## ##",
+            "-0.10↓ -0.20↓ 0.00 ## ## ## ## ## ## ## ## ## ## ##",
+            "-0.10↓ -0.20↓ 0.00 ## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "-0.10↓ -0.20↓ 0.00 ## ## ## ## ## ## ## ## ## ## ## ##",
+            "-0.10↓ -0.20↓ 0.00 ## ## ##",
+            "-0.10↓ -0.20↓ 0.00"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0016",
+          "chunk_id": "a18883e28d578988:table:0016",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n-0.25↓\n-0.50↓ -0.50↓\n-0.50↓\n-0.50↓\n0.00\n-0.50↓\n-0.25↓\n0.00\n0.00\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n0.00\n+0.25\n↑ 0.00\n+0.25↑\n+0.25↑\n0.00\n+0.25↑\n+0.50↑\n0.00\n+0.50↑\n+0.50↑\n0.00\n+0.50↑\n+0.75↑\n0.00\n+0.75↑\n+0.75↑\n0.00\n+0.75↑\n+0.50↑\n0.00\n+0.50↑\n+0.25↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n0.00\n0.00\n-0.25↓\n-0.25↓\n0.00\n-0.25↓\n-0.25↓\n0.00\n-0.50↓\n-0.50↓\n0.00\n-0.50↓\n-0.50↓\n0.00\n-0.25↓\n-0.25↓\n0.00\n0.00 0.00 0\n.00 0.00 0.00\n0.00\n0.00\n0.00\n0.00\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 616,
+          "text_sha256": "7d1857245decd28ebe3ad5a3c29d68c736c4e0d8e331ec39b1a019a355c8055d",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "-0.25↓ -0.50↓ -0.50↓ -0.50↓ -0.50↓ ·## #",
+            "-0.25↓ -0.50↓ -0.50↓ -0.50↓ -0.50↓ # ## ## ## ## ## ## ## ## ##",
+            "-0.25↓ -0.50↓ -0.50↓ -0.50↓ -0.50↓ ## ## ## ## ## ## ## ## ## ## ##",
+            "-0.25↓ -0.50↓ -0.50↓ -0.50↓ -0.50↓ ## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "-0.25↓ -0.50↓ -0.50↓ -0.50↓ -0.50↓ ## ## ## ## ## ## ## ## ## ## ## ##",
+            "-0.25↓ -0.50↓ -0.50↓ -0.50↓ -0.50↓ ## ## ##",
+            "-0.25↓ -0.50↓ -0.50↓ -0.50↓ -0.50↓"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0017",
+          "chunk_id": "a18883e28d578988:table:0017",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n-0.25↓\n0.00 -0.50↓\n0.00\n-1.00↓\n-0.25↓\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n+0.25↑\n+0.50↑\n0.00\n+0.50\n↑ +1.00↑\n0.00\n+0.25↑\n+0.75↑\n0.00\n+1.00↑\n0.00\n+6.25↑\n0.00\n+2.25↑\n-4.50↓\n-3.00↓\n-1.50↓\n0.00\n-0.50↓\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n+1.00↑\n+3.50↑\n+1.00↑\n+2.00↑\n0.00\n+1.00↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n+2.00↑\n0.00\n+1.00↑\n+2.00↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-1.00↓\n-2.00↓\n0.00\n-1.00↓\n0.00\n0.00 0.00 0\n.00 0.00 0.00\n0.00\n0.00\n0.00\n+0.25↑\n+0.25↑",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 608,
+          "text_sha256": "407dfdd1b14b4fab54277dec5272940027104df43462ad662b1d631b1ba9adf0",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "-0.25↓ 0.00 -0.50↓ ·## #",
+            "-0.25↓ 0.00 -0.50↓ # ## ## ## ## ## ## ## ## ##",
+            "-0.25↓ 0.00 -0.50↓ ## ## ## ## ## ## ## ## ## ## ##",
+            "-0.25↓ 0.00 -0.50↓ ## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "-0.25↓ 0.00 -0.50↓ ## ## ## ## ## ## ## ## ## ## ## ##",
+            "-0.25↓ 0.00 -0.50↓ ## ## ##",
+            "-0.25↓ 0.00 -0.50↓"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0018",
+          "chunk_id": "a18883e28d578988:table:0018",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n0.00\n-1.00↓ -1.00↓\n-0.50↓\n0.00\n-0.25↓\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.0\n0 0.00\n0.00\n0.00\n0.00\n+0.25↑\n0.00\n+0.25↑\n0.00\n+0.25↑\n0.00\n+0.50↑\n0.00\n+0.75↑\n0.00\n+0.75↑\n0.00\n+0.75↑\n0.00\n+0.25↑\n0.00\n+0.50↑\n0.00\n+0.50↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.25↓\n0.00\n-0.25↓\n0.00\n-0.25↓\n0.00\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n0.00 0.00 0\n.00 0.00 0.00\n0.00\n0.00\n0.00\n0.00\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 586,
+          "text_sha256": "3acbb2378ff75bf56c2abe42bc8a54074d99bf0bbbd610e2dc72ae32c13922f0",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "·## #"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0019",
+          "chunk_id": "a18883e28d578988:table:0019",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n-0.25↓\n-0.50↓ 0.00\n-0.75↓\n-0.75↓\n0.00\n-0.25↓\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n+0.75↑\n0.00\n+0.75↑\n+0.75\n↑ 0.00\n+1.00↑\n+1.00↑\n+1.50↑\n0.00\n+1.50↑\n0.00\n+1.50↑\n+1.00↑\n0.00\n+1.00↑\n+0.50↑\n0.00\n+0.50↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.50↓\n-0.50↓\n0.00\n-0.50↓\n-0.50↓\n0.00\n-0.50↓\n-0.50↓\n0.00\n-0.25↓\n0.00\n0.00\n0.00\n+0.25↑\n0.00\n+0.50↑\n+1.00↑\n+1.00↑\n0.00\n+1.00↑\n0.00\n+0.50↑\n+0.25↑\n0.00\n0.00\n0.00\n-0.25↓\n0.00 -0.25↓ 0\n.00 0.00 0.00\n0.00\n0.00\n0.00\n0.00\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 614,
+          "text_sha256": "1f72200c32373188ec1b1aa3311c350895c8d756de97c7f28f01f25a24d2c034",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "-0.25↓ -0.50↓ 0.00 -0.75↓ -0.75↓ ·## #",
+            "-0.25↓ -0.50↓ 0.00 -0.75↓ -0.75↓ # ## ## ## ## ## ## ## ## ##",
+            "-0.25↓ -0.50↓ 0.00 -0.75↓ -0.75↓ ## ## ## ## ## ## ## ## ## ## ##",
+            "-0.25↓ -0.50↓ 0.00 -0.75↓ -0.75↓ ## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "-0.25↓ -0.50↓ 0.00 -0.75↓ -0.75↓ ## ## ## ## ## ## ## ## ## ## ## ##",
+            "-0.25↓ -0.50↓ 0.00 -0.75↓ -0.75↓ ## ## ##",
+            "-0.25↓ -0.50↓ 0.00 -0.75↓ -0.75↓"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0020",
+          "chunk_id": "a18883e28d578988:table:0020",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n-6.37↓\n-6.81↓ -0.63↓\n0.00\n0.00\n0.00\n0.00\n0.00\n-1.10↓\n+0.04↑\n+1.05↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.0\n0 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n+1.71↑\n+1.21↑\n+2.25↑\n+2.78↑\n+2.25↑\n+2.15↑\n+2.41↑\n+13.28↑\n+6.60↑\n+2.36↑\n0.00\n0.00\n0.00\n0.00\n+1.50↑\n+3.78↑\n+14.02↑\n+2.70↑\n0.00\n+12.41↑\n+8.59↑\n+9.00↑\n+6.00↑\n-15.63↓\n-17.37↓\n0.00\n-12.63↓\n-16.37↓\n-27.36↓\n-3.64↓\n0.00\n0.00\n0.00\n0.00\n-5.00↓\n-2.37↓\n-0.77↓\n-2.86↓\n0.00\n0.00\n0.00\n0.00\n0.00\n-29.00↓\n0.00\n0.00\n0.00 -0.25↓ 0\n.00 0.00 0.00\n0.00\n0.00\n0.00\n0.00\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 629,
+          "text_sha256": "d8d6a5bb5a8e4a7227a12af926a556b581fdaab71be88cd0c774151bfd755bf9",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "-6.37↓ -6.81↓ -0.63↓ ·## #",
+            "-6.37↓ -6.81↓ -0.63↓ # ## ## ## ## ## ## ## ## ##",
+            "-6.37↓ -6.81↓ -0.63↓ ## ## ## ## ## ## ## ## ## ## ##",
+            "-6.37↓ -6.81↓ -0.63↓ ## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "-6.37↓ -6.81↓ -0.63↓ ## ## ## ## ## ## ## ## ## ## ## ##",
+            "-6.37↓ -6.81↓ -0.63↓ ## ## ##",
+            "-6.37↓ -6.81↓ -0.63↓"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0021",
+          "chunk_id": "a18883e28d578988:table:0021",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n-0.50↓\n-1.00↓ -1.00↓\n-0.50↓\n0.00\n0.00\n0.00\n+2.00↑\n0.00\n+4.75↑\n+2.00↑\n0.00\n0.00\n+2.00↑\n0.00\n0.00\n0.0\n0 0.00\n0.00\n-1.00↓\n-2.00↓\n-1.00↓\n-1.00↓\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-1.00↓\n-1.00↓\n-1.50↓\n-1.50↓\n0.00\n0.00\n-0.50↓\n0.00\n0.00\n0.00\n+6.50↑\n+2.50↑\n+7.50↑\n+5.00↑\n+5.00↑\n+5.00↑\n+2.50↑\n+2.50↑\n0.00\n+5.00↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-2.50↓\n-2.50↓\n0.00\n-2.50↓\n+3.50↑\n0.00\n0.00\n-3.00↓\n0.00\n-2.50↓\n0.00\n0.00 0.00 0\n.00 0.00 0.00\n0.00\n+0.50↑\n+0.38↑\n0.00\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 616,
+          "text_sha256": "500cbff4f2a49d24a4ad7847dd323f69742f853ba995465200f48df3af05b901",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "-0.50↓ -1.00↓ -1.00↓ -0.50↓ ·## #",
+            "-0.50↓ -1.00↓ -1.00↓ -0.50↓ # ## ## ## ## ## ## ## ## ##",
+            "-0.50↓ -1.00↓ -1.00↓ -0.50↓ ## ## ## ## ## ## ## ## ## ## ##",
+            "-0.50↓ -1.00↓ -1.00↓ -0.50↓ ## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "-0.50↓ -1.00↓ -1.00↓ -0.50↓ ## ## ## ## ## ## ## ## ## ## ## ##",
+            "-0.50↓ -1.00↓ -1.00↓ -0.50↓ ## ## ##",
+            "-0.50↓ -1.00↓ -1.00↓ -0.50↓"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0022",
+          "chunk_id": "a18883e28d578988:table:0022",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n0.00\n-0.75↓ 0.00\n-0.40↓\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.0\n0 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n+0.40↑\n+0.50↑\n0.00\n+0.50↑\n+0.50↑\n0.00\n0.00\n+0.35↑\n0.00\n+0.25↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.25↓\n0.00\n-0.25↓\n0.00\n-0.50↓\n0.00\n0.00\n0.00\n0.00\n0.00 -0.25↓ 0\n.00 -0.25↓ 0.00\n0.00\n0.00\n0.00\n0.00\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 574,
+          "text_sha256": "08d295253ccd7b061f85f03d38ed840df3bad34b3078f2511a944847ad27b1bd",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "·## #"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0023",
+          "chunk_id": "a18883e28d578988:table:0023",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n-0.25↓\n-0.25↓ 0.00\n0.00\n-0.25↓\n-0.25↓\n0.00\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n0.00\n0.0\n0 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n+0.25↑\n+0.50↑\n+0.50↑\n+0.50↑\n+0.25↑\n+0.25↑\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n+0.25↑\n0.00\n0.00\n0.00\n0.00\n0.00\n+0.25↑\n0.00\n0.00\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n0.00\n-0.25↓\n0.00\n0.00\n0.00\n-0.25↓\n0.00\n-0.25↓\n-0.25↓\n-0.25↓\n0.00\n0.00 0.00 0\n.00 0.00 0.00\n0.00\n0.00\n0.00\n0.00\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 588,
+          "text_sha256": "4f03848146b4d47711a7417c51b9657a2ab6340ddee32bd5b23934156ae43e9d",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "-0.25↓ -0.25↓ 0.00 ·## #",
+            "-0.25↓ -0.25↓ 0.00 # ## ## ## ## ## ## ## ## ##",
+            "-0.25↓ -0.25↓ 0.00 ## ## ## ## ## ## ## ## ## ## ##",
+            "-0.25↓ -0.25↓ 0.00 ## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "-0.25↓ -0.25↓ 0.00 ## ## ## ## ## ## ## ## ## ## ## ##",
+            "-0.25↓ -0.25↓ 0.00 ## ## ##",
+            "-0.25↓ -0.25↓ 0.00"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:table:0024",
+          "chunk_id": "a18883e28d578988:table:0024",
+          "kind": "table",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "·## #\n# ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ## ##\n## ## ## ## ## ## ## ## ## ## ## ##\n## ## ##\n0.00\n-1.00↓ 0.00\n-0.50↓\n0.00\n0.00\n0.00\n0.00\n-0.50↓\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.0\n0 0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n+1.00↑\n+1.00↑\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.50↓\n-0.50↓\n-0.50↓\n-4.50↓\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n0.00\n-0.25↓\n0.00 -0.25↓ 0\n.00 -0.25↓ 0.00\n+0.25↑\n0.00\n+0.25↑\n0.00\n0.00",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 576,
+          "text_sha256": "ca4fc17b465807ce71c8f3009e84d82de159fc2a5a266d5fbe5d765df872b9df",
+          "structure_status": "partial",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "图表33：上周联储2026 年加息预期下降3bp 至35bp\n资料来源：Bloomberg，华泰研究",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified",
+          "label_path": [
+            "·## # ·## # | # ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ## ## ## ## ## ## ## ## ## ## | ## ## ##",
+            "# ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ## ## ## ## ## ## ## ## ## ##",
+            "## ## ##",
+            "·## #"
+          ]
+        },
+        {
+          "locator": "chunk:a18883e28d578988:body:0022",
+          "chunk_id": "a18883e28d578988:body:0022",
+          "kind": "body",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "美国",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 2,
+          "text_sha256": "58857e5318f3090b61e8b0944298c0cb60fa0e2cfb89a34e50da12915a3efeb4",
+          "structure_status": "unknown",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0128",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            }
+          ],
+          "relation_status": "verified"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:heading:0129",
+          "chunk_id": "a18883e28d578988:heading:0129",
+          "kind": "heading",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "欧元区\n日本\n英国\n瑞士\n瑞典\n挪威\n加拿大\n澳大利亚\n韩国\n中国\n墨西哥\n俄罗斯\n南非\n巴西\n阿根廷\n土耳其\n印度\n印尼\n越南",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 64,
+          "text_sha256": "e1356ce1767e5863f776108f3b21029a5e8a87db50b30632bfc7ab2b0bc0a588",
+          "structure_status": "unknown",
+          "content_role": "heading_only",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:body:0023",
+              "target_kind": "body",
+              "relation": "section_candidate",
+              "status": "candidate",
+              "basis": "same_section"
+            }
+          ],
+          "relation_status": "candidate"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:body:0023",
+          "chunk_id": "a18883e28d578988:body:0023",
+          "kind": "body",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "欧元区\nMar 2020\nJan 2021\nJan 2022\nJan 2023\nJan 2024\nJan 2025\nJan 2026",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 66,
+          "text_sha256": "600afe364004b033aa3a09f3874b0b3899dc5bd664ee542e4f018bd465f92097",
+          "structure_status": "unknown",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0129",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "欧元区\n日本\n英国\n瑞士\n瑞典\n挪威\n加拿大\n澳大利亚\n韩国\n中国\n墨西哥\n俄罗斯\n南非\n巴西\n阿根廷\n土耳其\n印度\n印尼\n越南",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:heading:0130",
+          "chunk_id": "a18883e28d578988:heading:0130",
+          "kind": "heading",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "3.98 ",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 5,
+          "text_sha256": "4e62838591871afee58ba5a9e21a7e47b3d32e032268fe9721da2b8c9addc085",
+          "structure_status": "unknown",
+          "content_role": "heading_only",
+          "relations": [],
+          "relation_status": "unknown"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:heading:0131",
+          "chunk_id": "a18883e28d578988:heading:0131",
+          "kind": "heading",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "3.63 ",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 5,
+          "text_sha256": "97a36a2a62da022fef8c7d535e5ffcc7211d0eae65912918c47479ca7dc9072a",
+          "structure_status": "unknown",
+          "content_role": "heading_only",
+          "relations": [],
+          "relation_status": "unknown"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:heading:0132",
+          "chunk_id": "a18883e28d578988:heading:0132",
+          "kind": "heading",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "4.01 ",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 5,
+          "text_sha256": "37edc49f42ae5cc11dd690ebcc92b123638ad888cad392cec631039e97dbd3a3",
+          "structure_status": "unknown",
+          "content_role": "heading_only",
+          "relations": [],
+          "relation_status": "unknown"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:heading:0133",
+          "chunk_id": "a18883e28d578988:heading:0133",
+          "kind": "heading",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "0.0\n1.0\n2.0\n3.0\n4.0\n5.0\n6.0",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 27,
+          "text_sha256": "672eaad538158c49cf8afb73083164eab7a13e57a5010670c54281451de5d7d8",
+          "structure_status": "unknown",
+          "content_role": "heading_only",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:body:0024",
+              "target_kind": "body",
+              "relation": "section_candidate",
+              "status": "candidate",
+              "basis": "same_section"
+            }
+          ],
+          "relation_status": "candidate"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:body:0024",
+          "chunk_id": "a18883e28d578988:body:0024",
+          "kind": "body",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "0.0\n21/12\n22/6\n22/12\n23/6\n23/12\n24/6\n24/12\n25/6\n25/12\n26/6\n26/12",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 64,
+          "text_sha256": "37cfca7118f597dd7bc39fd956022fc3b07a9b908c91ee3ebd7c9e4590ef55eb",
+          "structure_status": "unknown",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0133",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "0.0\n1.0\n2.0\n3.0\n4.0\n5.0\n6.0",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:heading:0134",
+          "chunk_id": "a18883e28d578988:heading:0134",
+          "kind": "heading",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "（%）",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 3,
+          "text_sha256": "ef16458755f6b84fec166be716ee33506c5f26f80fb14b9cbe0a9e19c394d430",
+          "structure_status": "unknown",
+          "content_role": "heading_only",
+          "relations": [],
+          "relation_status": "unknown"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:heading:0135",
+          "chunk_id": "a18883e28d578988:heading:0135",
+          "kind": "heading",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "联储利率路径预期与点阵图指引\n联邦基金有效利率\n联储利率路径预期（9.4）\n2026年6月FOMC点阵图\n联储利率路径预期（8.28）",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 67,
+          "text_sha256": "f06768316e9e377348e17ab788b662d6fa7606b3fd5bd420d8af2a5b8599c4a2",
+          "structure_status": "unknown",
+          "content_role": "heading_only",
+          "relations": [],
+          "relation_status": "unknown"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:heading:0136",
+          "chunk_id": "a18883e28d578988:heading:0136",
+          "kind": "heading",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "00000000000",
+          "pages": [
+            10
+          ],
+          "fragment": null,
+          "text_chars": 11,
+          "text_sha256": "9c9f57efe04f8f5a65b699db1c777238d5876b44cef240654c749dd09e1790ef",
+          "structure_status": "unknown",
+          "content_role": "heading_only",
+          "relations": [],
+          "relation_status": "unknown"
+        }
+      ],
+      "item_errors": [],
+      "unresolved": [],
+      "fetch_complete": true
+    },
+    {
+      "ok": true,
+      "doc_id": "cv2:a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+      "locators": [
+        "chunk:a18883e28d578988:heading:0042",
+        "chunk:a18883e28d578988:body:0009",
+        "chunk:a18883e28d578988:body:0010",
+        "chunk:a18883e28d578988:heading:0043"
+      ],
+      "pages": 1,
+      "page_sizes": [
+        {
+          "raw": 5410,
+          "delivered": 5410
+        }
+      ],
+      "items": [
+        {
+          "locator": "chunk:a18883e28d578988:heading:0042",
+          "chunk_id": "a18883e28d578988:heading:0042",
+          "kind": "heading",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "全球经济动能高频指标一览\n经济动能总览",
+          "pages": [
+            4
+          ],
+          "fragment": null,
+          "text_chars": 19,
+          "text_sha256": "b1b5ed06efef9c1e6b6268ef87c08c9d9dd8e21605f00fc0c66a0bed205fd17a",
+          "structure_status": "unknown",
+          "content_role": "heading_only",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:body:0009",
+              "target_kind": "body",
+              "relation": "section_candidate",
+              "status": "candidate",
+              "basis": "same_section"
+            },
+            {
+              "target_locator": "chunk:a18883e28d578988:body:0010",
+              "target_kind": "body",
+              "relation": "section_candidate",
+              "status": "candidate",
+              "basis": "same_section"
+            }
+          ],
+          "relation_status": "candidate"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:body:0009",
+          "chunk_id": "a18883e28d578988:body:0009",
+          "kind": "body",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "全球经济动能高频指标一览\n图表1： GDP Now 预测美国三季度GDP 增速为4.7% \n图表2：最新一周ADS 商业景气指数小幅上升\n资料来源：Haver，华泰研究\n资料来源：Haver，华泰研究\n图表3：最新一周德国WAI 指数有所下降\n图表4：最新一周G10 经济意外指数和新兴市场意外指数均下行\n资料来源： Bloomberg，华泰研究\n资料来源：Haver，华泰研究\n图表5：最新一周欧洲、美国、中国和日本经济意外指数均有所下行\n图表6：美国最新一周硬数据和软数据均上行\n资料来源：Wind，华泰研究\n注：硬数据与软数据分别为Hard data、Soft data，前者主要是各类消费、就\n业、住房等经济统计数据，后者主要是景气度、消费者信心等调查数据。\n资料来源： Bloomberg，华泰研究\n-4\n-2\n0\n2\n4\n6\n8\n23/07\n23/11\n24/03\n24/07\n24/11\n25/03\n25/07\n25/11\n26/03\n26/07\nFRB Atlanta GDPNow\nSt. Louis Economic News Index\nNewyork Fed: GDP Nowcast\n(%)\n美\n日\n欧\n最新一周变化\n0.8\n8.5\n-25.7\n最近一个月变化\n14.2\n3.5\n-12.7\n-0.8\n-0.6\n-0.4\n-0.2\n0.0\n0.2\n0.4\n0.6\n23/09 24/01 24/05 24/09 25/01 25/05 25/09 26/01 26/05 26/09\n(点)\nAruoba-Diebold-Scotti Business Conditions Index\nCFNAI\n-0.5\n-0.4\n-0.3\n-0.2\n-0.1\n0.0\n0.1\n0.2\n0.3\n0.4\n0.5\n-0.6\n-0.5\n-0.4\n-0.3\n-0.2\n-0.1\n0\n0.1\n0.2\n0.3\n0.4\n23/0623/10 24/0224/0624/10 25/0225/0625/10 26/0226/06\n（%）\n（点）\nWAI\n实际GDP环比（右轴）\n美\n日\n欧\n最新一周变化\n0.8\n8.5\n-25.7\n最近一个月变化\n14.2\n3.5\n-12.7\n-50\n-30\n-10\n10\n30\n50\n70\n24-07\n24-11\n25-03\n25-07\n25-11\n26-03\n26-07\n花旗G10经济意外指数\n正：实际经济情况好于彭博预期\n负：实际经济情况不及彭博预期\n(点)\n-80\n-60\n-40\n-20\n0\n20\n40\n60\n80\n100\n120\n24-07 24-10 25-01 25-04 25-07 25-10 26-01 26-04 26-07\n（点）\n花旗经济意外指数\n美国\n日本\n欧洲\n中国\n正：实际经济情况好于彭博预期\n美\n日\n欧\n最新一周变化\n0.8\n8.5\n-25.7\n最近一个月变化\n00000000000\n00000000000\n00000000000",
+          "pages": [
+            4
+          ],
+          "fragment": null,
+          "text_chars": 1252,
+          "text_sha256": "d9a3d24b63f1fe76b49e86d31795e166675029e29465e373558de041624a345d",
+          "structure_status": "unknown",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0042",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "全球经济动能高频指标一览\n经济动能总览",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:body:0010",
+          "chunk_id": "a18883e28d578988:body:0010",
+          "kind": "body",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "14.2\n3.5\n-12.7\n-1.5\n-1.0\n-0.5\n0.0\n0.5\n1.0\n1.5\n24-09\n24-12 25-03\n25-06\n25-09\n25-12\n26-03\n26-06\n26-09\n彭博经济惊喜指数\n硬数据\n软数据\n(点)\n(点)\nG10\n新兴市场\n最新一周变化\n-6.8\n-0.7\n最近一个月变化\n-3.3\n-3.0\n美\n日\n欧\n中\n最新一周变化\n-6.5\n-10.1\n-13.5\n-1.9\n最近一个月变化\n-15.3\n-38.0\n13.9\n11.0",
+          "pages": [
+            4
+          ],
+          "fragment": null,
+          "text_chars": 235,
+          "text_sha256": "edae12923150459d61732b012afd5313081a6eff55926ef7287d752fd6a65955",
+          "structure_status": "unknown",
+          "content_role": "content",
+          "relations": [
+            {
+              "target_locator": "chunk:a18883e28d578988:heading:0042",
+              "target_kind": "heading",
+              "relation": "section_member",
+              "status": "verified",
+              "basis": "persisted_section_path"
+            },
+            {
+              "target_locator": null,
+              "target_kind": "heading",
+              "target_heading": "全球经济动能高频指标一览\n经济动能总览",
+              "relation": "caption_of",
+              "status": "candidate",
+              "basis": "title_text_without_member_heading"
+            }
+          ],
+          "relation_status": "verified"
+        },
+        {
+          "locator": "chunk:a18883e28d578988:heading:0043",
+          "chunk_id": "a18883e28d578988:heading:0043",
+          "kind": "heading",
+          "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+          "text": "00000000000",
+          "pages": [
+            4
+          ],
+          "fragment": null,
+          "text_chars": 11,
+          "text_sha256": "9c9f57efe04f8f5a65b699db1c777238d5876b44cef240654c749dd09e1790ef",
+          "structure_status": "unknown",
+          "content_role": "heading_only",
+          "relations": [],
+          "relation_status": "unknown"
+        }
+      ],
+      "item_errors": [],
+      "unresolved": [],
+      "fetch_complete": true
+    }
+  ],
+  "score": {
+    "sample_id": "holdout-macro-008",
+    "split": "holdout",
+    "domain": "macro",
+    "target_id": "5e305376-fedrate",
+    "role": "required",
+    "question": "全周联储年内剩余累计加息预期变化了多少（降至多少 bp）？",
+    "doc_identity": "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+    "search_ok": true,
+    "search_hits": 10,
+    "delivered_search_chars": 19379,
+    "source_offered": true,
+    "source_hit_ids": [
+      "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+      "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+      "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9"
+    ],
+    "source_hit_summaries": [
+      {
+        "locator": "chunk:a18883e28d578988:body:0005",
+        "context_count": 12,
+        "snippet": "<b>联储</b><b>年内</b><b>剩余</b><b>累计</b><b>加息</b><b>预期</b>下降3bp"
+      },
+      {
+        "locator": "chunk:a18883e28d578988:heading:0128",
+        "context_count": 34,
+        "snippet": "<b>联储</b>2026年<b>加息</b><b>预期</b>下降3bp至"
+      },
+      {
+        "locator": "chunk:a18883e28d578988:body:0009",
+        "context_count": 4,
+        "snippet": "<b>变化</b>\n0.8\n8.5\n-25.7"
+      }
+    ],
+    "plans": 3,
+    "requested_locators": 50,
+    "delivered_locators": [
+      "chunk:a18883e28d578988:body:0000",
+      "chunk:a18883e28d578988:heading:0000",
+      "chunk:a18883e28d578988:body:0001",
+      "chunk:a18883e28d578988:table:0000",
+      "chunk:a18883e28d578988:table:0001",
+      "chunk:a18883e28d578988:body:0002",
+      "chunk:a18883e28d578988:table:0002",
+      "chunk:a18883e28d578988:body:0003",
+      "chunk:a18883e28d578988:table:0003",
+      "chunk:a18883e28d578988:body:0004",
+      "chunk:a18883e28d578988:body:0005",
+      "chunk:a18883e28d578988:heading:0001",
+      "chunk:a18883e28d578988:heading:0126",
+      "chunk:a18883e28d578988:heading:0127",
+      "chunk:a18883e28d578988:heading:0128",
+      "chunk:a18883e28d578988:table:0005",
+      "chunk:a18883e28d578988:table:0006",
+      "chunk:a18883e28d578988:table:0007",
+      "chunk:a18883e28d578988:table:0008",
+      "chunk:a18883e28d578988:table:0009",
+      "chunk:a18883e28d578988:table:0010",
+      "chunk:a18883e28d578988:table:0011",
+      "chunk:a18883e28d578988:table:0012",
+      "chunk:a18883e28d578988:table:0013",
+      "chunk:a18883e28d578988:table:0014",
+      "chunk:a18883e28d578988:table:0015",
+      "chunk:a18883e28d578988:table:0016",
+      "chunk:a18883e28d578988:table:0017",
+      "chunk:a18883e28d578988:table:0018",
+      "chunk:a18883e28d578988:table:0019",
+      "chunk:a18883e28d578988:table:0020",
+      "chunk:a18883e28d578988:table:0021",
+      "chunk:a18883e28d578988:table:0022",
+      "chunk:a18883e28d578988:table:0023",
+      "chunk:a18883e28d578988:table:0024",
+      "chunk:a18883e28d578988:body:0022",
+      "chunk:a18883e28d578988:heading:0129",
+      "chunk:a18883e28d578988:body:0023",
+      "chunk:a18883e28d578988:heading:0130",
+      "chunk:a18883e28d578988:heading:0131",
+      "chunk:a18883e28d578988:heading:0132",
+      "chunk:a18883e28d578988:heading:0133",
+      "chunk:a18883e28d578988:body:0024",
+      "chunk:a18883e28d578988:heading:0134",
+      "chunk:a18883e28d578988:heading:0135",
+      "chunk:a18883e28d578988:heading:0136",
+      "chunk:a18883e28d578988:heading:0042",
+      "chunk:a18883e28d578988:body:0009",
+      "chunk:a18883e28d578988:body:0010",
+      "chunk:a18883e28d578988:heading:0043"
+    ],
+    "pages": 28,
+    "fetch_complete": true,
+    "unresolved": [],
+    "item_errors": [],
+    "fetch_errors": [],
+    "page_sizes": [
+      {
+        "raw": 4997,
+        "delivered": 4997
+      },
+      {
+        "raw": 5438,
+        "delivered": 5438
+      },
+      {
+        "raw": 4534,
+        "delivered": 4534
+      },
+      {
+        "raw": 4433,
+        "delivered": 4433
+      },
+      {
+        "raw": 4426,
+        "delivered": 4426
+      },
+      {
+        "raw": 4792,
+        "delivered": 4792
+      },
+      {
+        "raw": 4767,
+        "delivered": 4767
+      },
+      {
+        "raw": 4739,
+        "delivered": 4739
+      },
+      {
+        "raw": 4765,
+        "delivered": 4765
+      },
+      {
+        "raw": 4741,
+        "delivered": 4741
+      },
+      {
+        "raw": 4745,
+        "delivered": 4745
+      },
+      {
+        "raw": 4755,
+        "delivered": 4755
+      },
+      {
+        "raw": 4753,
+        "delivered": 4753
+      },
+      {
+        "raw": 4751,
+        "delivered": 4751
+      },
+      {
+        "raw": 4747,
+        "delivered": 4747
+      },
+      {
+        "raw": 5028,
+        "delivered": 5028
+      },
+      {
+        "raw": 5190,
+        "delivered": 5190
+      },
+      {
+        "raw": 5070,
+        "delivered": 5070
+      },
+      {
+        "raw": 4751,
+        "delivered": 4751
+      },
+      {
+        "raw": 5174,
+        "delivered": 5174
+      },
+      {
+        "raw": 5105,
+        "delivered": 5105
+      },
+      {
+        "raw": 5141,
+        "delivered": 5141
+      },
+      {
+        "raw": 4739,
+        "delivered": 4739
+      },
+      {
+        "raw": 5050,
+        "delivered": 5050
+      },
+      {
+        "raw": 5351,
+        "delivered": 5351
+      },
+      {
+        "raw": 5890,
+        "delivered": 5890
+      },
+      {
+        "raw": 3856,
+        "delivered": 3856
+      },
+      {
+        "raw": 5410,
+        "delivered": 5410
+      }
+    ],
+    "quote_delivered": true,
+    "expected_quote": "联储年内剩余累计加息预期下降 3bp 至 35bp。",
+    "dependencies": {
+      "header_refs": true,
+      "row_labels": true,
+      "footnotes": true
+    },
+    "delivered_chars": 26885,
+    "all_pass": true,
+    "first_fail": null
+  }
+}

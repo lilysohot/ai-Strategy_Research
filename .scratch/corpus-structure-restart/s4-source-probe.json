@@ -1,0 +1,1401 @@
+{
+  "artifact": "s4-source-probe",
+  "target_db": "v14_s2_quote_corpus",
+  "target_id": "f7f65d7e-risk",
+  "question": "本期研报列出了哪些主要风险提示？",
+  "expected_quote": "地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。",
+  "target_source": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+  "lexemes": [
+    "了",
+    "列出",
+    "哪些",
+    "报",
+    "提示",
+    "本期",
+    "研",
+    "风险",
+    "？"
+  ],
+  "candidate_query": "\"列出\" OR \"提示\" OR \"本期\" OR \"风险\"",
+  "raw_hit_count": 52,
+  "source_count": 12,
+  "source_order": [
+    {
+      "rank": 1,
+      "source_id": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+      "target_source": false,
+      "hit_count": 6,
+      "max_score": 0.030729766935110092,
+      "score_sum": 0.11583956051617861,
+      "top_two_sum": 0.05504685081541538,
+      "snippets": [
+        "<b>风险</b><b>提示</b>\n1、AI商业价值",
+        "<b>风险</b><b>提示</b>AI资本开支节奏不及预期",
+        "<b>风险</b><b>提示</b>..........................",
+        "<b>本期</b>景气度说明\n运营商\n稳健",
+        "<b>风险</b>。尽管该合作短期不会对",
+        "<b>风险</b>，可能\n不易变卖以及不"
+      ]
+    },
+    {
+      "rank": 2,
+      "source_id": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+      "target_source": false,
+      "hit_count": 4,
+      "max_score": 0.03039635345339775,
+      "score_sum": 0.06687197927385569,
+      "top_two_sum": 0.042554895393550396,
+      "snippets": [
+        "<b>风险</b><b>提示</b>：技术进步速度低于预期",
+        "<b>风险</b>预警或机器动作，感知",
+        "<b>风险</b>。①整机制造成本居高不下，",
+        "<b>风险</b>，投资需谨慎。投资者不"
+      ]
+    },
+    {
+      "rank": 3,
+      "source_id": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+      "target_source": false,
+      "hit_count": 9,
+      "max_score": 0.027356719598174095,
+      "score_sum": 0.15502140950411558,
+      "top_two_sum": 0.05471343919634819,
+      "snippets": [
+        "<b>提示</b>的“滞胀”特征仍在",
+        "<b>风险</b><b>提示</b>海外货币政策预期大幅收紧：",
+        "<b>风险</b><b>提示</b>海外货币政策预期大幅收紧；",
+        "<b>风险</b>，可能不易变卖以及不适合",
+        "<b>风险</b>溢价才愿意为其债务提供",
+        "<b>风险</b>资产的干扰。2、企业",
+        "<b>风险</b>正在抬升；另一方面，非AI",
+        "<b>提示</b>的是，当下全球原油陆地",
+        "<b>风险</b>已明显上升，库存处于历史"
+      ]
+    },
+    {
+      "rank": 4,
+      "source_id": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+      "target_source": true,
+      "hit_count": 3,
+      "max_score": 0.02431708388030529,
+      "score_sum": 0.04863416776061058,
+      "top_two_sum": 0.036475625820457935,
+      "snippets": [
+        "<b>风险</b><b>提示</b>：地缘冲突超预期，",
+        "<b>本期</b>数据未更新，记为0）",
+        "<b>本期</b>关注重点：习近平主席同吉尔吉斯斯坦"
+      ]
+    },
+    {
+      "rank": 5,
+      "source_id": "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+      "target_source": false,
+      "hit_count": 5,
+      "max_score": 0.03250721096992493,
+      "score_sum": 0.0902602830901742,
+      "top_two_sum": 0.0477053876966238,
+      "snippets": [
+        "<b>风险</b><b>提示</b>：政策落地不及预期，",
+        "<b>风险</b>落地。\n\n非农强化",
+        "<b>风险</b>。3）海外经济超预期",
+        "<b>风险</b>。\n本报告所载的",
+        "<b>风险</b>落地与情绪修复。\n图表"
+      ]
+    },
+    {
+      "rank": 6,
+      "source_id": "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2",
+      "target_source": false,
+      "hit_count": 2,
+      "max_score": 0.03039635345339775,
+      "score_sum": 0.04694548062980175,
+      "top_two_sum": 0.04694548062980175,
+      "snippets": [
+        "<b>风险</b><b>提示</b>：1）医保、集",
+        "<b>风险</b>，导致相关企业利润有望受到"
+      ]
+    },
+    {
+      "rank": 7,
+      "source_id": "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+      "target_source": false,
+      "hit_count": 4,
+      "max_score": 0.03039635345339775,
+      "score_sum": 0.11550614424049854,
+      "top_two_sum": 0.0607927069067955,
+      "snippets": [
+        "<b>风险</b><b>提示</b>：宏观经济复苏不及预期致",
+        "<b>风险</b><b>提示</b>：宏观经济复苏不及预期致",
+        "<b>风险</b><b>提示</b>：宏观经济复苏不及预期致",
+        "<b>风险</b><b>提示</b>\n行业竞争加剧，行业"
+      ]
+    },
+    {
+      "rank": 8,
+      "source_id": "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160",
+      "target_source": false,
+      "hit_count": 3,
+      "max_score": 0.02995392121374607,
+      "score_sum": 0.06534596532583237,
+      "top_two_sum": 0.04879683814942837,
+      "snippets": [
+        "<b>风险</b><b>提示</b>：数据统计存在误差<b>风险</b>；",
+        "<b>风险</b>：报告相关数据主要来源于Choice",
+        "<b>风险</b>偏好等方面的具体情况，"
+      ]
+    },
+    {
+      "rank": 9,
+      "source_id": "f3b28791e1355dc371206b10a003dc2ef6c65f88f631c77ea7578be145f28279",
+      "target_source": false,
+      "hit_count": 5,
+      "max_score": 0.02946757711470127,
+      "score_sum": 0.09633955638855696,
+      "top_two_sum": 0.05378466099500656,
+      "snippets": [
+        "<b>风险</b><b>提示</b>：经济数据波动，政策",
+        "<b>风险</b><b>提示</b>：经济数据波动，政策",
+        "<b>风险</b>偏好的收缩。美伊冲突",
+        "<b>风险</b>偏好收缩。后续货币政策趋于明朗",
+        "<b>风险</b>，任何形式的分享证券投资收益"
+      ]
+    },
+    {
+      "rank": 10,
+      "source_id": "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885",
+      "target_source": false,
+      "hit_count": 4,
+      "max_score": 0.02946757711470127,
+      "score_sum": 0.07337342295795679,
+      "top_two_sum": 0.04601670429110527,
+      "snippets": [
+        "<b>风险</b><b>提示</b>：根据历史数据得出的相关性",
+        "<b>风险</b>；宏观政策调整的<b>风险</b>；",
+        "<b>风险</b>。本报告中的信息或",
+        "<b>风险</b>偏好、通胀预期的重要指标"
+      ]
+    },
+    {
+      "rank": 11,
+      "source_id": "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+      "target_source": false,
+      "hit_count": 5,
+      "max_score": 0.02870766818523407,
+      "score_sum": 0.07734183594584465,
+      "top_two_sum": 0.040866210125386715,
+      "snippets": [
+        "<b>风险</b><b>提示</b>：1）贵金属供应与",
+        "<b>风险</b>的传统材料；LED封装胶",
+        "<b>风险</b>。公司贵金属业务包括以银为",
+        "<b>风险</b>。公司有机硅业务主要客户客户",
+        "<b>风险</b>，投资需谨慎。投资者不"
+      ]
+    },
+    {
+      "rank": 12,
+      "source_id": "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+      "target_source": false,
+      "hit_count": 2,
+      "max_score": 0.02431708388030529,
+      "score_sum": 0.04086621105670929,
+      "top_two_sum": 0.04086621105670929,
+      "snippets": [
+        "<b>风险</b><b>提示</b>：地缘政治不确定性，货币政策",
+        "<b>风险</b>下降\n图表52：美银"
+      ]
+    }
+  ],
+  "target_raw_hits": [
+    {
+      "target_source": true,
+      "source_id": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+      "chunk_id": "ebff0cfc6c33f6fc:body:0002",
+      "kind": "body",
+      "score": 0.02431708388030529,
+      "page": 1,
+      "snippet": "<b>风险</b><b>提示</b>：地缘冲突超预期，",
+      "label_path": [],
+      "context_count": 0
+    },
+    {
+      "target_source": true,
+      "source_id": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+      "chunk_id": "ebff0cfc6c33f6fc:body:0006",
+      "kind": "body",
+      "score": 0.012158541940152645,
+      "page": 4,
+      "snippet": "<b>本期</b>数据未更新，记为0）",
+      "label_path": [],
+      "context_count": 0
+    },
+    {
+      "target_source": true,
+      "source_id": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+      "chunk_id": "ebff0cfc6c33f6fc:body:0007",
+      "kind": "body",
+      "score": 0.012158541940152645,
+      "page": 5,
+      "snippet": "<b>本期</b>关注重点：习近平主席同吉尔吉斯斯坦",
+      "label_path": [],
+      "context_count": 0
+    }
+  ],
+  "selected_10": [
+    {
+      "target_source": false,
+      "source_id": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+      "chunk_id": "470d27f7d64e5a23:body:0030",
+      "kind": "body",
+      "score": 0.02981360189730961,
+      "page": 11,
+      "snippet": "<b>风险</b><b>提示</b>\n1、AI商业价值",
+      "label_path": [],
+      "context_count": 3
+    },
+    {
+      "target_source": false,
+      "source_id": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+      "chunk_id": "93e5a416a92c79f8:body:0002",
+      "kind": "body",
+      "score": 0.02949967102612859,
+      "page": 1,
+      "snippet": "<b>风险</b><b>提示</b>：技术进步速度低于预期",
+      "label_path": [],
+      "context_count": 3
+    },
+    {
+      "target_source": false,
+      "source_id": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+      "chunk_id": "5466f9dd9a34e00a:body:0000",
+      "kind": "body",
+      "score": 0.026628257815721514,
+      "page": 1,
+      "snippet": "<b>提示</b>的“滞胀”特征仍在",
+      "label_path": [],
+      "context_count": 4
+    },
+    {
+      "target_source": true,
+      "source_id": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+      "chunk_id": "ebff0cfc6c33f6fc:body:0002",
+      "kind": "body",
+      "score": 0.02373980114457099,
+      "page": 1,
+      "snippet": "<b>风险</b><b>提示</b>：地缘冲突超预期，",
+      "label_path": [],
+      "context_count": 3
+    },
+    {
+      "target_source": false,
+      "source_id": "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+      "chunk_id": "83b6ee9b34f24d32:body:0002",
+      "kind": "body",
+      "score": 0.03148376168665015,
+      "page": 1,
+      "snippet": "<b>风险</b><b>提示</b>：政策落地不及预期，",
+      "label_path": [],
+      "context_count": 6
+    },
+    {
+      "target_source": false,
+      "source_id": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+      "chunk_id": "470d27f7d64e5a23:body:0002",
+      "kind": "body",
+      "score": 0.02373980114457099,
+      "page": 1,
+      "snippet": "<b>风险</b><b>提示</b>AI资本开支节奏不及预期",
+      "label_path": [],
+      "context_count": 3
+    },
+    {
+      "target_source": false,
+      "source_id": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+      "chunk_id": "93e5a416a92c79f8:body:0007",
+      "kind": "body",
+      "score": 0.01201248760579206,
+      "page": 5,
+      "snippet": "<b>风险</b>预警或机器动作，感知",
+      "label_path": [],
+      "context_count": 3
+    },
+    {
+      "target_source": false,
+      "source_id": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+      "chunk_id": "5466f9dd9a34e00a:body:0025",
+      "kind": "body",
+      "score": 0.026628257815721514,
+      "page": 12,
+      "snippet": "<b>风险</b><b>提示</b>海外货币政策预期大幅收紧：",
+      "label_path": [],
+      "context_count": 4
+    },
+    {
+      "target_source": true,
+      "source_id": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+      "chunk_id": "ebff0cfc6c33f6fc:body:0007",
+      "kind": "body",
+      "score": 0.01201248760579206,
+      "page": 5,
+      "snippet": "<b>本期</b>关注重点：习近平主席同吉尔吉斯斯坦",
+      "label_path": [],
+      "context_count": 4
+    },
+    {
+      "target_source": false,
+      "source_id": "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+      "chunk_id": "83b6ee9b34f24d32:body:0028",
+      "kind": "body",
+      "score": 0.014970650140155218,
+      "page": 10,
+      "snippet": "<b>风险</b>。3）海外经济超预期",
+      "label_path": [],
+      "context_count": 3
+    }
+  ],
+  "public": {
+    "10": {
+      "ok": true,
+      "query": "本期研报列出了哪些主要风险提示？",
+      "count": 10,
+      "hits": [
+        {
+          "doc_id": "cv2:470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+          "locator": "chunk:470d27f7d64e5a23:body:0030",
+          "source_id": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+          "build_id": "470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+          "chunk_id": "470d27f7d64e5a23:body:0030",
+          "context_locators": [
+            "chunk:470d27f7d64e5a23:body:0029",
+            "chunk:470d27f7d64e5a23:body:0030",
+            "chunk:470d27f7d64e5a23:body:0031"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+            "locator": "chunk:470d27f7d64e5a23:body:0030",
+            "locators": [
+              "chunk:470d27f7d64e5a23:body:0029",
+              "chunk:470d27f7d64e5a23:body:0030",
+              "chunk:470d27f7d64e5a23:body:0031"
+            ],
+            "scope_id": "scope:3b36c70e31bb1d4141203ba9ed8b168b",
+            "view": "compact"
+          },
+          "scope_id": "scope:3b36c70e31bb1d4141203ba9ed8b168b",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "韩国8 月半导体出口466.5 亿美元同比增209%，今年第五次刷新月度纪录",
+          "published": "undated",
+          "snippet": "<b>风险</b><b>提示</b>\n1、AI商业价值"
+        },
+        {
+          "doc_id": "cv2:93e5a416a92c79f867c4a25a125cdac3fb626a52a0f8b10ba736c072eaa4f930",
+          "locator": "chunk:93e5a416a92c79f8:body:0002",
+          "source_id": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+          "build_id": "93e5a416a92c79f867c4a25a125cdac3fb626a52a0f8b10ba736c072eaa4f930",
+          "chunk_id": "93e5a416a92c79f8:body:0002",
+          "context_locators": [
+            "chunk:93e5a416a92c79f8:body:0001",
+            "chunk:93e5a416a92c79f8:body:0002",
+            "chunk:93e5a416a92c79f8:body:0003"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:93e5a416a92c79f867c4a25a125cdac3fb626a52a0f8b10ba736c072eaa4f930",
+            "locator": "chunk:93e5a416a92c79f8:body:0002",
+            "locators": [
+              "chunk:93e5a416a92c79f8:body:0001",
+              "chunk:93e5a416a92c79f8:body:0002",
+              "chunk:93e5a416a92c79f8:body:0003"
+            ],
+            "scope_id": "scope:1fc671f5fe1d17a74b8ce1cd67d2e1e7",
+            "view": "compact"
+          },
+          "scope_id": "scope:1fc671f5fe1d17a74b8ce1cd67d2e1e7",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "93e5a416a92c79f8:body:0002",
+          "published": "undated",
+          "snippet": "<b>风险</b><b>提示</b>：技术进步速度低于预期"
+        },
+        {
+          "doc_id": "cv2:5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+          "locator": "chunk:5466f9dd9a34e00a:body:0000",
+          "source_id": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+          "build_id": "5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+          "chunk_id": "5466f9dd9a34e00a:body:0000",
+          "context_locators": [
+            "chunk:5466f9dd9a34e00a:table:0000",
+            "chunk:5466f9dd9a34e00a:body:0000",
+            "chunk:5466f9dd9a34e00a:body:0001",
+            "chunk:5466f9dd9a34e00a:table:0001"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+            "locator": "chunk:5466f9dd9a34e00a:body:0000",
+            "locators": [
+              "chunk:5466f9dd9a34e00a:table:0000",
+              "chunk:5466f9dd9a34e00a:body:0000",
+              "chunk:5466f9dd9a34e00a:body:0001",
+              "chunk:5466f9dd9a34e00a:table:0001"
+            ],
+            "scope_id": "scope:fb75ee39f8384590f10382d1d5609cec",
+            "view": "compact"
+          },
+          "scope_id": "scope:fb75ee39f8384590f10382d1d5609cec",
+          "total_chunks": 4,
+          "by_kind": {
+            "unknown": 4
+          },
+          "table_chunks": 0,
+          "title": "5466f9dd9a34e00a:body:0000",
+          "published": "undated",
+          "snippet": "<b>提示</b>的“滞胀”特征仍在"
+        },
+        {
+          "doc_id": "cv2:ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730",
+          "locator": "chunk:ebff0cfc6c33f6fc:body:0002",
+          "source_id": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+          "build_id": "ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730",
+          "chunk_id": "ebff0cfc6c33f6fc:body:0002",
+          "context_locators": [
+            "chunk:ebff0cfc6c33f6fc:body:0001",
+            "chunk:ebff0cfc6c33f6fc:body:0002",
+            "chunk:ebff0cfc6c33f6fc:heading:0000"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730",
+            "locator": "chunk:ebff0cfc6c33f6fc:body:0002",
+            "locators": [
+              "chunk:ebff0cfc6c33f6fc:body:0001",
+              "chunk:ebff0cfc6c33f6fc:body:0002",
+              "chunk:ebff0cfc6c33f6fc:heading:0000"
+            ],
+            "scope_id": "scope:a2017fbb476fd2769c18692b6cabb91b",
+            "view": "compact"
+          },
+          "scope_id": "scope:a2017fbb476fd2769c18692b6cabb91b",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "非农大超预期，加息预期升温",
+          "published": "undated",
+          "snippet": "<b>风险</b><b>提示</b>：地缘冲突超预期，"
+        },
+        {
+          "doc_id": "cv2:83b6ee9b34f24d32bbb1d7e2f38d3908107f875d2f57ea39a13cc5310feeb003",
+          "locator": "chunk:83b6ee9b34f24d32:body:0002",
+          "source_id": "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+          "build_id": "83b6ee9b34f24d32bbb1d7e2f38d3908107f875d2f57ea39a13cc5310feeb003",
+          "chunk_id": "83b6ee9b34f24d32:body:0002",
+          "context_locators": [
+            "chunk:83b6ee9b34f24d32:heading:0000",
+            "chunk:83b6ee9b34f24d32:body:0001",
+            "chunk:83b6ee9b34f24d32:body:0002",
+            "chunk:83b6ee9b34f24d32:body:0003",
+            "chunk:83b6ee9b34f24d32:body:0004",
+            "chunk:83b6ee9b34f24d32:table:0000"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:83b6ee9b34f24d32bbb1d7e2f38d3908107f875d2f57ea39a13cc5310feeb003",
+            "locator": "chunk:83b6ee9b34f24d32:body:0002",
+            "locators": [
+              "chunk:83b6ee9b34f24d32:heading:0000",
+              "chunk:83b6ee9b34f24d32:body:0001",
+              "chunk:83b6ee9b34f24d32:body:0002",
+              "chunk:83b6ee9b34f24d32:body:0003",
+              "chunk:83b6ee9b34f24d32:body:0004",
+              "chunk:83b6ee9b34f24d32:table:0000"
+            ],
+            "scope_id": "scope:fe490064e775a9f2c65dcca3246141db",
+            "view": "compact"
+          },
+          "scope_id": "scope:fe490064e775a9f2c65dcca3246141db",
+          "total_chunks": 6,
+          "by_kind": {
+            "unknown": 6
+          },
+          "table_chunks": 0,
+          "title": "策略周报\n外部加息扰动未消，短期以守为攻",
+          "published": "undated",
+          "snippet": "<b>风险</b><b>提示</b>：政策落地不及预期，"
+        },
+        {
+          "doc_id": "cv2:470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+          "locator": "chunk:470d27f7d64e5a23:body:0002",
+          "source_id": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+          "build_id": "470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+          "chunk_id": "470d27f7d64e5a23:body:0002",
+          "context_locators": [
+            "chunk:470d27f7d64e5a23:body:0001",
+            "chunk:470d27f7d64e5a23:body:0002",
+            "chunk:470d27f7d64e5a23:heading:0003"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+            "locator": "chunk:470d27f7d64e5a23:body:0002",
+            "locators": [
+              "chunk:470d27f7d64e5a23:body:0001",
+              "chunk:470d27f7d64e5a23:body:0002",
+              "chunk:470d27f7d64e5a23:heading:0003"
+            ],
+            "scope_id": "scope:410bc71354a4ed1e2fbf0eab2d1e0544",
+            "view": "compact"
+          },
+          "scope_id": "scope:410bc71354a4ed1e2fbf0eab2d1e0544",
+          "total_chunks": 3,
+          "by_kind": {
+            "body": 1,
+            "unknown": 2
+          },
+          "table_chunks": 0,
+          "title": "亿美元银团贷款",
+          "published": "undated",
+          "snippet": "<b>风险</b><b>提示</b>AI资本开支节奏不及预期"
+        },
+        {
+          "doc_id": "cv2:93e5a416a92c79f867c4a25a125cdac3fb626a52a0f8b10ba736c072eaa4f930",
+          "locator": "chunk:93e5a416a92c79f8:body:0007",
+          "source_id": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+          "build_id": "93e5a416a92c79f867c4a25a125cdac3fb626a52a0f8b10ba736c072eaa4f930",
+          "chunk_id": "93e5a416a92c79f8:body:0007",
+          "context_locators": [
+            "chunk:93e5a416a92c79f8:body:0006",
+            "chunk:93e5a416a92c79f8:body:0007",
+            "chunk:93e5a416a92c79f8:body:0008"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:93e5a416a92c79f867c4a25a125cdac3fb626a52a0f8b10ba736c072eaa4f930",
+            "locator": "chunk:93e5a416a92c79f8:body:0007",
+            "locators": [
+              "chunk:93e5a416a92c79f8:body:0006",
+              "chunk:93e5a416a92c79f8:body:0007",
+              "chunk:93e5a416a92c79f8:body:0008"
+            ],
+            "scope_id": "scope:46e49db427a8d146e5722c913e8dfed3",
+            "view": "compact"
+          },
+          "scope_id": "scope:46e49db427a8d146e5722c913e8dfed3",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "2.投融资动态",
+          "published": "undated",
+          "snippet": "<b>风险</b>预警或机器动作，感知"
+        },
+        {
+          "doc_id": "cv2:5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+          "locator": "chunk:5466f9dd9a34e00a:body:0025",
+          "source_id": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+          "build_id": "5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+          "chunk_id": "5466f9dd9a34e00a:body:0025",
+          "context_locators": [
+            "chunk:5466f9dd9a34e00a:table:0018",
+            "chunk:5466f9dd9a34e00a:body:0025",
+            "chunk:5466f9dd9a34e00a:table:0019",
+            "chunk:5466f9dd9a34e00a:body:0026"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+            "locator": "chunk:5466f9dd9a34e00a:body:0025",
+            "locators": [
+              "chunk:5466f9dd9a34e00a:table:0018",
+              "chunk:5466f9dd9a34e00a:body:0025",
+              "chunk:5466f9dd9a34e00a:table:0019",
+              "chunk:5466f9dd9a34e00a:body:0026"
+            ],
+            "scope_id": "scope:9cc5e5c91eacdfa32d552c91b667b064",
+            "view": "compact"
+          },
+          "scope_id": "scope:9cc5e5c91eacdfa32d552c91b667b064",
+          "total_chunks": 4,
+          "by_kind": {
+            "unknown": 4
+          },
+          "table_chunks": 0,
+          "title": "下载日志已记录，仅供内部参考",
+          "published": "undated",
+          "snippet": "<b>风险</b><b>提示</b>海外货币政策预期大幅收紧："
+        },
+        {
+          "doc_id": "cv2:ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730",
+          "locator": "chunk:ebff0cfc6c33f6fc:body:0007",
+          "source_id": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+          "build_id": "ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730",
+          "chunk_id": "ebff0cfc6c33f6fc:body:0007",
+          "context_locators": [
+            "chunk:ebff0cfc6c33f6fc:body:0005",
+            "chunk:ebff0cfc6c33f6fc:body:0006",
+            "chunk:ebff0cfc6c33f6fc:body:0007",
+            "chunk:ebff0cfc6c33f6fc:body:0008"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730",
+            "locator": "chunk:ebff0cfc6c33f6fc:body:0007",
+            "locators": [
+              "chunk:ebff0cfc6c33f6fc:body:0005",
+              "chunk:ebff0cfc6c33f6fc:body:0006",
+              "chunk:ebff0cfc6c33f6fc:body:0007",
+              "chunk:ebff0cfc6c33f6fc:body:0008"
+            ],
+            "scope_id": "scope:9166b33b66c18de5fe4a63790ff135df",
+            "view": "compact"
+          },
+          "scope_id": "scope:9166b33b66c18de5fe4a63790ff135df",
+          "total_chunks": 4,
+          "by_kind": {
+            "unknown": 4
+          },
+          "table_chunks": 0,
+          "title": "1.4.国内大事跟踪",
+          "published": "undated",
+          "snippet": "<b>本期</b>关注重点：习近平主席同吉尔吉斯斯坦"
+        },
+        {
+          "doc_id": "cv2:83b6ee9b34f24d32bbb1d7e2f38d3908107f875d2f57ea39a13cc5310feeb003",
+          "locator": "chunk:83b6ee9b34f24d32:body:0028",
+          "source_id": "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+          "build_id": "83b6ee9b34f24d32bbb1d7e2f38d3908107f875d2f57ea39a13cc5310feeb003",
+          "chunk_id": "83b6ee9b34f24d32:body:0028",
+          "context_locators": [
+            "chunk:83b6ee9b34f24d32:body:0027",
+            "chunk:83b6ee9b34f24d32:body:0028",
+            "chunk:83b6ee9b34f24d32:body:0029"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:83b6ee9b34f24d32bbb1d7e2f38d3908107f875d2f57ea39a13cc5310feeb003",
+            "locator": "chunk:83b6ee9b34f24d32:body:0028",
+            "locators": [
+              "chunk:83b6ee9b34f24d32:body:0027",
+              "chunk:83b6ee9b34f24d32:body:0028",
+              "chunk:83b6ee9b34f24d32:body:0029"
+            ],
+            "scope_id": "scope:d5282c5e8822dd7e47b10034ef5cb749",
+            "view": "compact"
+          },
+          "scope_id": "scope:d5282c5e8822dd7e47b10034ef5cb749",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "风险提示",
+          "published": "undated",
+          "snippet": "<b>风险</b>。3）海外经济超预期"
+        }
+      ],
+      "coverage": {
+        "requested_scope_ref": "corpus_schema",
+        "effective_scope_ref": "corpus_publications.active_build_id",
+        "publication_snapshot_ref": "corpus_publications@dc7bb19fa37cadc6b0659be1ad5f03f4",
+        "processing": "scoped",
+        "query_status": "matched",
+        "availability": "unknown",
+        "reason_codes": [
+          "gap_regions_present"
+        ],
+        "counts": {
+          "sources": 12,
+          "published": 12,
+          "withdrawn": 0,
+          "pending": 0,
+          "failed_jobs": 0,
+          "builds": 12,
+          "published_with_gaps": 12
+        }
+      },
+      "hint": "snippet 已截断，仅用于定位，禁止直接引用。写 evidence 前请严格使用同一命中的 fetch_plan.doc_id 与fetch_plan.locators 和 fetch_plan.view 调用 corpus_fetch；不得把不同命中的 doc_id、locator 或 context_locators 混在一起。这些句柄共同构成有界的文档证据区。需要先看清这批上下文候选的结构（哪些是标题、哪些是表格块、各自覆盖哪些页与区间）时，用 corpus_inventory(doc_id, locators=context_locators)。"
+    },
+    "20": {
+      "ok": true,
+      "query": "本期研报列出了哪些主要风险提示？",
+      "count": 20,
+      "hits": [
+        {
+          "doc_id": "cv2:470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+          "locator": "chunk:470d27f7d64e5a23:body:0030",
+          "source_id": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+          "build_id": "470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+          "chunk_id": "470d27f7d64e5a23:body:0030",
+          "context_locators": [
+            "chunk:470d27f7d64e5a23:body:0029",
+            "chunk:470d27f7d64e5a23:body:0030",
+            "chunk:470d27f7d64e5a23:body:0031"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+            "locator": "chunk:470d27f7d64e5a23:body:0030",
+            "locators": [
+              "chunk:470d27f7d64e5a23:body:0029",
+              "chunk:470d27f7d64e5a23:body:0030",
+              "chunk:470d27f7d64e5a23:body:0031"
+            ],
+            "scope_id": "scope:3b36c70e31bb1d4141203ba9ed8b168b",
+            "view": "compact"
+          },
+          "scope_id": "scope:3b36c70e31bb1d4141203ba9ed8b168b",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "韩国8 月半导体出口466.5 亿美元同比增209%，今年第五次刷新月度纪录",
+          "published": "undated",
+          "snippet": "<b>风险</b><b>提示</b>\n1、AI商业价值"
+        },
+        {
+          "doc_id": "cv2:93e5a416a92c79f867c4a25a125cdac3fb626a52a0f8b10ba736c072eaa4f930",
+          "locator": "chunk:93e5a416a92c79f8:body:0002",
+          "source_id": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+          "build_id": "93e5a416a92c79f867c4a25a125cdac3fb626a52a0f8b10ba736c072eaa4f930",
+          "chunk_id": "93e5a416a92c79f8:body:0002",
+          "context_locators": [
+            "chunk:93e5a416a92c79f8:body:0001",
+            "chunk:93e5a416a92c79f8:body:0002",
+            "chunk:93e5a416a92c79f8:body:0003"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:93e5a416a92c79f867c4a25a125cdac3fb626a52a0f8b10ba736c072eaa4f930",
+            "locator": "chunk:93e5a416a92c79f8:body:0002",
+            "locators": [
+              "chunk:93e5a416a92c79f8:body:0001",
+              "chunk:93e5a416a92c79f8:body:0002",
+              "chunk:93e5a416a92c79f8:body:0003"
+            ],
+            "scope_id": "scope:1fc671f5fe1d17a74b8ce1cd67d2e1e7",
+            "view": "compact"
+          },
+          "scope_id": "scope:1fc671f5fe1d17a74b8ce1cd67d2e1e7",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "93e5a416a92c79f8:body:0002",
+          "published": "undated",
+          "snippet": "<b>风险</b><b>提示</b>：技术进步速度低于预期"
+        },
+        {
+          "doc_id": "cv2:5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+          "locator": "chunk:5466f9dd9a34e00a:body:0000",
+          "source_id": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+          "build_id": "5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+          "chunk_id": "5466f9dd9a34e00a:body:0000",
+          "context_locators": [
+            "chunk:5466f9dd9a34e00a:table:0000",
+            "chunk:5466f9dd9a34e00a:body:0000",
+            "chunk:5466f9dd9a34e00a:body:0001",
+            "chunk:5466f9dd9a34e00a:table:0001"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+            "locator": "chunk:5466f9dd9a34e00a:body:0000",
+            "locators": [
+              "chunk:5466f9dd9a34e00a:table:0000",
+              "chunk:5466f9dd9a34e00a:body:0000",
+              "chunk:5466f9dd9a34e00a:body:0001",
+              "chunk:5466f9dd9a34e00a:table:0001"
+            ],
+            "scope_id": "scope:fb75ee39f8384590f10382d1d5609cec",
+            "view": "compact"
+          },
+          "scope_id": "scope:fb75ee39f8384590f10382d1d5609cec",
+          "total_chunks": 4,
+          "by_kind": {
+            "unknown": 4
+          },
+          "table_chunks": 0,
+          "title": "5466f9dd9a34e00a:body:0000",
+          "published": "undated",
+          "snippet": "<b>提示</b>的“滞胀”特征仍在"
+        },
+        {
+          "doc_id": "cv2:ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730",
+          "locator": "chunk:ebff0cfc6c33f6fc:body:0002",
+          "source_id": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+          "build_id": "ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730",
+          "chunk_id": "ebff0cfc6c33f6fc:body:0002",
+          "context_locators": [
+            "chunk:ebff0cfc6c33f6fc:body:0001",
+            "chunk:ebff0cfc6c33f6fc:body:0002",
+            "chunk:ebff0cfc6c33f6fc:heading:0000"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730",
+            "locator": "chunk:ebff0cfc6c33f6fc:body:0002",
+            "locators": [
+              "chunk:ebff0cfc6c33f6fc:body:0001",
+              "chunk:ebff0cfc6c33f6fc:body:0002",
+              "chunk:ebff0cfc6c33f6fc:heading:0000"
+            ],
+            "scope_id": "scope:a2017fbb476fd2769c18692b6cabb91b",
+            "view": "compact"
+          },
+          "scope_id": "scope:a2017fbb476fd2769c18692b6cabb91b",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "非农大超预期，加息预期升温",
+          "published": "undated",
+          "snippet": "<b>风险</b><b>提示</b>：地缘冲突超预期，"
+        },
+        {
+          "doc_id": "cv2:83b6ee9b34f24d32bbb1d7e2f38d3908107f875d2f57ea39a13cc5310feeb003",
+          "locator": "chunk:83b6ee9b34f24d32:body:0002",
+          "source_id": "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+          "build_id": "83b6ee9b34f24d32bbb1d7e2f38d3908107f875d2f57ea39a13cc5310feeb003",
+          "chunk_id": "83b6ee9b34f24d32:body:0002",
+          "context_locators": [
+            "chunk:83b6ee9b34f24d32:heading:0000",
+            "chunk:83b6ee9b34f24d32:body:0001",
+            "chunk:83b6ee9b34f24d32:body:0002",
+            "chunk:83b6ee9b34f24d32:body:0003",
+            "chunk:83b6ee9b34f24d32:body:0004",
+            "chunk:83b6ee9b34f24d32:table:0000"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:83b6ee9b34f24d32bbb1d7e2f38d3908107f875d2f57ea39a13cc5310feeb003",
+            "locator": "chunk:83b6ee9b34f24d32:body:0002",
+            "locators": [
+              "chunk:83b6ee9b34f24d32:heading:0000",
+              "chunk:83b6ee9b34f24d32:body:0001",
+              "chunk:83b6ee9b34f24d32:body:0002",
+              "chunk:83b6ee9b34f24d32:body:0003",
+              "chunk:83b6ee9b34f24d32:body:0004",
+              "chunk:83b6ee9b34f24d32:table:0000"
+            ],
+            "scope_id": "scope:fe490064e775a9f2c65dcca3246141db",
+            "view": "compact"
+          },
+          "scope_id": "scope:fe490064e775a9f2c65dcca3246141db",
+          "total_chunks": 6,
+          "by_kind": {
+            "unknown": 6
+          },
+          "table_chunks": 0,
+          "title": "策略周报\n外部加息扰动未消，短期以守为攻",
+          "published": "undated",
+          "snippet": "<b>风险</b><b>提示</b>：政策落地不及预期，"
+        },
+        {
+          "doc_id": "cv2:470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+          "locator": "chunk:470d27f7d64e5a23:body:0002",
+          "source_id": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+          "build_id": "470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+          "chunk_id": "470d27f7d64e5a23:body:0002",
+          "context_locators": [
+            "chunk:470d27f7d64e5a23:body:0001",
+            "chunk:470d27f7d64e5a23:body:0002",
+            "chunk:470d27f7d64e5a23:heading:0003"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+            "locator": "chunk:470d27f7d64e5a23:body:0002",
+            "locators": [
+              "chunk:470d27f7d64e5a23:body:0001",
+              "chunk:470d27f7d64e5a23:body:0002",
+              "chunk:470d27f7d64e5a23:heading:0003"
+            ],
+            "scope_id": "scope:410bc71354a4ed1e2fbf0eab2d1e0544",
+            "view": "compact"
+          },
+          "scope_id": "scope:410bc71354a4ed1e2fbf0eab2d1e0544",
+          "total_chunks": 3,
+          "by_kind": {
+            "body": 1,
+            "unknown": 2
+          },
+          "table_chunks": 0,
+          "title": "亿美元银团贷款",
+          "published": "undated",
+          "snippet": "<b>风险</b><b>提示</b>AI资本开支节奏不及预期"
+        },
+        {
+          "doc_id": "cv2:93e5a416a92c79f867c4a25a125cdac3fb626a52a0f8b10ba736c072eaa4f930",
+          "locator": "chunk:93e5a416a92c79f8:body:0007",
+          "source_id": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+          "build_id": "93e5a416a92c79f867c4a25a125cdac3fb626a52a0f8b10ba736c072eaa4f930",
+          "chunk_id": "93e5a416a92c79f8:body:0007",
+          "context_locators": [
+            "chunk:93e5a416a92c79f8:body:0006",
+            "chunk:93e5a416a92c79f8:body:0007",
+            "chunk:93e5a416a92c79f8:body:0008"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:93e5a416a92c79f867c4a25a125cdac3fb626a52a0f8b10ba736c072eaa4f930",
+            "locator": "chunk:93e5a416a92c79f8:body:0007",
+            "locators": [
+              "chunk:93e5a416a92c79f8:body:0006",
+              "chunk:93e5a416a92c79f8:body:0007",
+              "chunk:93e5a416a92c79f8:body:0008"
+            ],
+            "scope_id": "scope:46e49db427a8d146e5722c913e8dfed3",
+            "view": "compact"
+          },
+          "scope_id": "scope:46e49db427a8d146e5722c913e8dfed3",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "2.投融资动态",
+          "published": "undated",
+          "snippet": "<b>风险</b>预警或机器动作，感知"
+        },
+        {
+          "doc_id": "cv2:5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+          "locator": "chunk:5466f9dd9a34e00a:body:0025",
+          "source_id": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+          "build_id": "5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+          "chunk_id": "5466f9dd9a34e00a:body:0025",
+          "context_locators": [
+            "chunk:5466f9dd9a34e00a:table:0018",
+            "chunk:5466f9dd9a34e00a:body:0025",
+            "chunk:5466f9dd9a34e00a:table:0019",
+            "chunk:5466f9dd9a34e00a:body:0026"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+            "locator": "chunk:5466f9dd9a34e00a:body:0025",
+            "locators": [
+              "chunk:5466f9dd9a34e00a:table:0018",
+              "chunk:5466f9dd9a34e00a:body:0025",
+              "chunk:5466f9dd9a34e00a:table:0019",
+              "chunk:5466f9dd9a34e00a:body:0026"
+            ],
+            "scope_id": "scope:9cc5e5c91eacdfa32d552c91b667b064",
+            "view": "compact"
+          },
+          "scope_id": "scope:9cc5e5c91eacdfa32d552c91b667b064",
+          "total_chunks": 4,
+          "by_kind": {
+            "unknown": 4
+          },
+          "table_chunks": 0,
+          "title": "下载日志已记录，仅供内部参考",
+          "published": "undated",
+          "snippet": "<b>风险</b><b>提示</b>海外货币政策预期大幅收紧："
+        },
+        {
+          "doc_id": "cv2:ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730",
+          "locator": "chunk:ebff0cfc6c33f6fc:body:0007",
+          "source_id": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+          "build_id": "ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730",
+          "chunk_id": "ebff0cfc6c33f6fc:body:0007",
+          "context_locators": [
+            "chunk:ebff0cfc6c33f6fc:body:0005",
+            "chunk:ebff0cfc6c33f6fc:body:0006",
+            "chunk:ebff0cfc6c33f6fc:body:0007",
+            "chunk:ebff0cfc6c33f6fc:body:0008"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730",
+            "locator": "chunk:ebff0cfc6c33f6fc:body:0007",
+            "locators": [
+              "chunk:ebff0cfc6c33f6fc:body:0005",
+              "chunk:ebff0cfc6c33f6fc:body:0006",
+              "chunk:ebff0cfc6c33f6fc:body:0007",
+              "chunk:ebff0cfc6c33f6fc:body:0008"
+            ],
+            "scope_id": "scope:9166b33b66c18de5fe4a63790ff135df",
+            "view": "compact"
+          },
+          "scope_id": "scope:9166b33b66c18de5fe4a63790ff135df",
+          "total_chunks": 4,
+          "by_kind": {
+            "unknown": 4
+          },
+          "table_chunks": 0,
+          "title": "1.4.国内大事跟踪",
+          "published": "undated",
+          "snippet": "<b>本期</b>关注重点：习近平主席同吉尔吉斯斯坦"
+        },
+        {
+          "doc_id": "cv2:83b6ee9b34f24d32bbb1d7e2f38d3908107f875d2f57ea39a13cc5310feeb003",
+          "locator": "chunk:83b6ee9b34f24d32:body:0028",
+          "source_id": "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+          "build_id": "83b6ee9b34f24d32bbb1d7e2f38d3908107f875d2f57ea39a13cc5310feeb003",
+          "chunk_id": "83b6ee9b34f24d32:body:0028",
+          "context_locators": [
+            "chunk:83b6ee9b34f24d32:body:0027",
+            "chunk:83b6ee9b34f24d32:body:0028",
+            "chunk:83b6ee9b34f24d32:body:0029"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:83b6ee9b34f24d32bbb1d7e2f38d3908107f875d2f57ea39a13cc5310feeb003",
+            "locator": "chunk:83b6ee9b34f24d32:body:0028",
+            "locators": [
+              "chunk:83b6ee9b34f24d32:body:0027",
+              "chunk:83b6ee9b34f24d32:body:0028",
+              "chunk:83b6ee9b34f24d32:body:0029"
+            ],
+            "scope_id": "scope:d5282c5e8822dd7e47b10034ef5cb749",
+            "view": "compact"
+          },
+          "scope_id": "scope:d5282c5e8822dd7e47b10034ef5cb749",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "风险提示",
+          "published": "undated",
+          "snippet": "<b>风险</b>。3）海外经济超预期"
+        },
+        {
+          "doc_id": "cv2:470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+          "locator": "chunk:470d27f7d64e5a23:body:0005",
+          "source_id": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+          "build_id": "470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+          "chunk_id": "470d27f7d64e5a23:body:0005",
+          "context_locators": [
+            "chunk:470d27f7d64e5a23:body:0004",
+            "chunk:470d27f7d64e5a23:body:0005",
+            "chunk:470d27f7d64e5a23:body:0006"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+            "locator": "chunk:470d27f7d64e5a23:body:0005",
+            "locators": [
+              "chunk:470d27f7d64e5a23:body:0004",
+              "chunk:470d27f7d64e5a23:body:0005",
+              "chunk:470d27f7d64e5a23:body:0006"
+            ],
+            "scope_id": "scope:73a017ee8ef88184cf2f7e4d08916513",
+            "view": "compact"
+          },
+          "scope_id": "scope:73a017ee8ef88184cf2f7e4d08916513",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "内容目录",
+          "published": "undated",
+          "snippet": "<b>风险</b><b>提示</b>.........................."
+        },
+        {
+          "doc_id": "cv2:93e5a416a92c79f867c4a25a125cdac3fb626a52a0f8b10ba736c072eaa4f930",
+          "locator": "chunk:93e5a416a92c79f8:body:0015",
+          "source_id": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+          "build_id": "93e5a416a92c79f867c4a25a125cdac3fb626a52a0f8b10ba736c072eaa4f930",
+          "chunk_id": "93e5a416a92c79f8:body:0015",
+          "context_locators": [
+            "chunk:93e5a416a92c79f8:body:0013",
+            "chunk:93e5a416a92c79f8:body:0014",
+            "chunk:93e5a416a92c79f8:body:0015",
+            "chunk:93e5a416a92c79f8:body:0016"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:93e5a416a92c79f867c4a25a125cdac3fb626a52a0f8b10ba736c072eaa4f930",
+            "locator": "chunk:93e5a416a92c79f8:body:0015",
+            "locators": [
+              "chunk:93e5a416a92c79f8:body:0013",
+              "chunk:93e5a416a92c79f8:body:0014",
+              "chunk:93e5a416a92c79f8:body:0015",
+              "chunk:93e5a416a92c79f8:body:0016"
+            ],
+            "scope_id": "scope:a6601ed85ac7165114f7fa000dbf7e14",
+            "view": "compact"
+          },
+          "scope_id": "scope:a6601ed85ac7165114f7fa000dbf7e14",
+          "total_chunks": 4,
+          "by_kind": {
+            "unknown": 4
+          },
+          "table_chunks": 0,
+          "title": "本公司具有中国证监会核准的证券投资咨询业务资格",
+          "published": "undated",
+          "snippet": "<b>风险</b>，投资需谨慎。投资者不"
+        },
+        {
+          "doc_id": "cv2:5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+          "locator": "chunk:5466f9dd9a34e00a:body:0003",
+          "source_id": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+          "build_id": "5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+          "chunk_id": "5466f9dd9a34e00a:body:0003",
+          "context_locators": [
+            "chunk:5466f9dd9a34e00a:table:0002",
+            "chunk:5466f9dd9a34e00a:body:0003",
+            "chunk:5466f9dd9a34e00a:body:0004"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+            "locator": "chunk:5466f9dd9a34e00a:body:0003",
+            "locators": [
+              "chunk:5466f9dd9a34e00a:table:0002",
+              "chunk:5466f9dd9a34e00a:body:0003",
+              "chunk:5466f9dd9a34e00a:body:0004"
+            ],
+            "scope_id": "scope:794cc29d1889a8ac3eb2d3260060d927",
+            "view": "compact"
+          },
+          "scope_id": "scope:794cc29d1889a8ac3eb2d3260060d927",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "5466f9dd9a34e00a:body:0003",
+          "published": "undated",
+          "snippet": "<b>风险</b>溢价才愿意为其债务提供"
+        },
+        {
+          "doc_id": "cv2:83b6ee9b34f24d32bbb1d7e2f38d3908107f875d2f57ea39a13cc5310feeb003",
+          "locator": "chunk:83b6ee9b34f24d32:body:0031",
+          "source_id": "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+          "build_id": "83b6ee9b34f24d32bbb1d7e2f38d3908107f875d2f57ea39a13cc5310feeb003",
+          "chunk_id": "83b6ee9b34f24d32:body:0031",
+          "context_locators": [
+            "chunk:83b6ee9b34f24d32:body:0030",
+            "chunk:83b6ee9b34f24d32:body:0031",
+            "chunk:83b6ee9b34f24d32:heading:0003"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:83b6ee9b34f24d32bbb1d7e2f38d3908107f875d2f57ea39a13cc5310feeb003",
+            "locator": "chunk:83b6ee9b34f24d32:body:0031",
+            "locators": [
+              "chunk:83b6ee9b34f24d32:body:0030",
+              "chunk:83b6ee9b34f24d32:body:0031",
+              "chunk:83b6ee9b34f24d32:heading:0003"
+            ],
+            "scope_id": "scope:4b6a8421de9a585e7d5f71b389f39ed6",
+            "view": "compact"
+          },
+          "scope_id": "scope:4b6a8421de9a585e7d5f71b389f39ed6",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "风险提示及免责声明",
+          "published": "undated",
+          "snippet": "<b>风险</b>。\n本报告所载的"
+        },
+        {
+          "doc_id": "cv2:470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+          "locator": "chunk:470d27f7d64e5a23:body:0010",
+          "source_id": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+          "build_id": "470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+          "chunk_id": "470d27f7d64e5a23:body:0010",
+          "context_locators": [
+            "chunk:470d27f7d64e5a23:body:0009",
+            "chunk:470d27f7d64e5a23:body:0010",
+            "chunk:470d27f7d64e5a23:heading:0006"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+            "locator": "chunk:470d27f7d64e5a23:body:0010",
+            "locators": [
+              "chunk:470d27f7d64e5a23:body:0009",
+              "chunk:470d27f7d64e5a23:body:0010",
+              "chunk:470d27f7d64e5a23:heading:0006"
+            ],
+            "scope_id": "scope:115dafadb06f6e126339ffb19578ef29",
+            "view": "compact"
+          },
+          "scope_id": "scope:115dafadb06f6e126339ffb19578ef29",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "图表5：本周通信板块景气度",
+          "published": "undated",
+          "snippet": "<b>本期</b>景气度说明\n运营商\n稳健"
+        },
+        {
+          "doc_id": "cv2:5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+          "locator": "chunk:5466f9dd9a34e00a:body:0005",
+          "source_id": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+          "build_id": "5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+          "chunk_id": "5466f9dd9a34e00a:body:0005",
+          "context_locators": [
+            "chunk:5466f9dd9a34e00a:table:0003",
+            "chunk:5466f9dd9a34e00a:body:0005",
+            "chunk:5466f9dd9a34e00a:body:0006"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+            "locator": "chunk:5466f9dd9a34e00a:body:0005",
+            "locators": [
+              "chunk:5466f9dd9a34e00a:table:0003",
+              "chunk:5466f9dd9a34e00a:body:0005",
+              "chunk:5466f9dd9a34e00a:body:0006"
+            ],
+            "scope_id": "scope:388a0135edf64f9da72d89820fc95cbf",
+            "view": "compact"
+          },
+          "scope_id": "scope:388a0135edf64f9da72d89820fc95cbf",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "5466f9dd9a34e00a:body:0005",
+          "published": "undated",
+          "snippet": "<b>风险</b>资产的干扰。2、企业"
+        },
+        {
+          "doc_id": "cv2:470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+          "locator": "chunk:470d27f7d64e5a23:body:0022",
+          "source_id": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+          "build_id": "470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+          "chunk_id": "470d27f7d64e5a23:body:0022",
+          "context_locators": [
+            "chunk:470d27f7d64e5a23:body:0021",
+            "chunk:470d27f7d64e5a23:body:0022",
+            "chunk:470d27f7d64e5a23:body:0023"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+            "locator": "chunk:470d27f7d64e5a23:body:0022",
+            "locators": [
+              "chunk:470d27f7d64e5a23:body:0021",
+              "chunk:470d27f7d64e5a23:body:0022",
+              "chunk:470d27f7d64e5a23:body:0023"
+            ],
+            "scope_id": "scope:3c0bee50c6ae878802553ec6c0acfb78",
+            "view": "compact"
+          },
+          "scope_id": "scope:3c0bee50c6ae878802553ec6c0acfb78",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "SK 海力士考虑英特尔代工HBM4E 基底芯片",
+          "published": "undated",
+          "snippet": "<b>风险</b>。尽管该合作短期不会对"
+        },
+        {
+          "doc_id": "cv2:5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+          "locator": "chunk:5466f9dd9a34e00a:body:0011",
+          "source_id": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+          "build_id": "5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+          "chunk_id": "5466f9dd9a34e00a:body:0011",
+          "context_locators": [
+            "chunk:5466f9dd9a34e00a:table:0011",
+            "chunk:5466f9dd9a34e00a:body:0011",
+            "chunk:5466f9dd9a34e00a:body:0012"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+            "locator": "chunk:5466f9dd9a34e00a:body:0011",
+            "locators": [
+              "chunk:5466f9dd9a34e00a:table:0011",
+              "chunk:5466f9dd9a34e00a:body:0011",
+              "chunk:5466f9dd9a34e00a:body:0012"
+            ],
+            "scope_id": "scope:f806aa65ae4f5d65ab718e858b5c0e34",
+            "view": "compact"
+          },
+          "scope_id": "scope:f806aa65ae4f5d65ab718e858b5c0e34",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "来源：中国政府网，国务院，人民日报，新华社，国金证券研究所",
+          "published": "undated",
+          "snippet": "<b>风险</b>正在抬升；另一方面，非AI"
+        },
+        {
+          "doc_id": "cv2:470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+          "locator": "chunk:470d27f7d64e5a23:body:0032",
+          "source_id": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+          "build_id": "470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+          "chunk_id": "470d27f7d64e5a23:body:0032",
+          "context_locators": [
+            "chunk:470d27f7d64e5a23:heading:0033",
+            "chunk:470d27f7d64e5a23:body:0032",
+            "chunk:470d27f7d64e5a23:body:0033"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+            "locator": "chunk:470d27f7d64e5a23:body:0032",
+            "locators": [
+              "chunk:470d27f7d64e5a23:heading:0033",
+              "chunk:470d27f7d64e5a23:body:0032",
+              "chunk:470d27f7d64e5a23:body:0033"
+            ],
+            "scope_id": "scope:a36623c958a95ad922bc2f9a6ed73554",
+            "view": "compact"
+          },
+          "scope_id": "scope:a36623c958a95ad922bc2f9a6ed73554",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "特别声明：",
+          "published": "undated",
+          "snippet": "<b>风险</b>，可能\n不易变卖以及不"
+        },
+        {
+          "doc_id": "cv2:5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+          "locator": "chunk:5466f9dd9a34e00a:body:0015",
+          "source_id": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+          "build_id": "5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+          "chunk_id": "5466f9dd9a34e00a:body:0015",
+          "context_locators": [
+            "chunk:5466f9dd9a34e00a:table:0013",
+            "chunk:5466f9dd9a34e00a:body:0015",
+            "chunk:5466f9dd9a34e00a:table:0014"
+          ],
+          "fetch_plan": {
+            "doc_id": "cv2:5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+            "locator": "chunk:5466f9dd9a34e00a:body:0015",
+            "locators": [
+              "chunk:5466f9dd9a34e00a:table:0013",
+              "chunk:5466f9dd9a34e00a:body:0015",
+              "chunk:5466f9dd9a34e00a:table:0014"
+            ],
+            "scope_id": "scope:e6994f34f840eb9f60f8b560f6844afe",
+            "view": "compact"
+          },
+          "scope_id": "scope:e6994f34f840eb9f60f8b560f6844afe",
+          "total_chunks": 3,
+          "by_kind": {
+            "unknown": 3
+          },
+          "table_chunks": 0,
+          "title": "来源：中国政府网，国务院，人民日报，新华社，国金证券研究所",
+          "published": "undated",
+          "snippet": "<b>提示</b>的是，当下全球原油陆地"
+        }
+      ],
+      "coverage": {
+        "requested_scope_ref": "corpus_schema",
+        "effective_scope_ref": "corpus_publications.active_build_id",
+        "publication_snapshot_ref": "corpus_publications@dc7bb19fa37cadc6b0659be1ad5f03f4",
+        "processing": "scoped",
+        "query_status": "matched",
+        "availability": "unknown",
+        "reason_codes": [
+          "gap_regions_present"
+        ],
+        "counts": {
+          "sources": 12,
+          "published": 12,
+          "withdrawn": 0,
+          "pending": 0,
+          "failed_jobs": 0,
+          "builds": 12,
+          "published_with_gaps": 12
+        }
+      },
+      "hint": "snippet 已截断，仅用于定位，禁止直接引用。写 evidence 前请严格使用同一命中的 fetch_plan.doc_id 与fetch_plan.locators 和 fetch_plan.view 调用 corpus_fetch；不得把不同命中的 doc_id、locator 或 context_locators 混在一起。这些句柄共同构成有界的文档证据区。需要先看清这批上下文候选的结构（哪些是标题、哪些是表格块、各自覆盖哪些页与区间）时，用 corpus_inventory(doc_id, locators=context_locators)。"
+    }
+  }
+}

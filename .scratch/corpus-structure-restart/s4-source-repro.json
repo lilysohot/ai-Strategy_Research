@@ -1,0 +1,92 @@
+{
+  "artifact": "s4-source-repro",
+  "target_db": "v14_s2_quote_corpus",
+  "target": {
+    "target_id": "f7f65d7e-risk",
+    "locator": [
+      "page:9"
+    ],
+    "verbatim_quote": "地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。",
+    "subject": "风险提示",
+    "metric": "风险提示条目",
+    "period": null,
+    "unit": null,
+    "constraints_row": null,
+    "constraints_col": null,
+    "constraints_cell": null,
+    "header_refs": null,
+    "row_labels": [],
+    "footnotes": null,
+    "acceptable_evidence": "复述三项风险提示：地缘冲突超预期、海外通胀持续性超预期、流动性收紧超预期",
+    "question": "本期研报列出了哪些主要风险提示？",
+    "required_dependencies": [],
+    "evidence_role": "supplementary",
+    "high_risk_format": "风险文字：正文末尾以独立段落列出的风险提示句",
+    "page_basis": 9
+  },
+  "result": {
+    "sample_id": "holdout-macro-009",
+    "split": "holdout",
+    "domain": "macro",
+    "target_id": "f7f65d7e-risk",
+    "role": "supplementary",
+    "question": "本期研报列出了哪些主要风险提示？",
+    "doc_identity": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+    "search_ok": true,
+    "search_hits": 10,
+    "delivered_search_chars": 11452,
+    "source_offered": true,
+    "source_hit_ids": [
+      "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+      "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826"
+    ],
+    "source_hit_summaries": [
+      {
+        "locator": "chunk:ebff0cfc6c33f6fc:body:0002",
+        "context_count": 3,
+        "snippet": "<b>风险</b><b>提示</b>：地缘冲突超预期，"
+      },
+      {
+        "locator": "chunk:ebff0cfc6c33f6fc:body:0007",
+        "context_count": 4,
+        "snippet": "<b>本期</b>关注重点：习近平主席同吉尔吉斯斯坦"
+      }
+    ],
+    "plans": 2,
+    "requested_locators": 7,
+    "delivered_locators": [
+      "chunk:ebff0cfc6c33f6fc:body:0001",
+      "chunk:ebff0cfc6c33f6fc:body:0002",
+      "chunk:ebff0cfc6c33f6fc:heading:0000",
+      "chunk:ebff0cfc6c33f6fc:body:0005",
+      "chunk:ebff0cfc6c33f6fc:body:0006",
+      "chunk:ebff0cfc6c33f6fc:body:0007",
+      "chunk:ebff0cfc6c33f6fc:body:0008"
+    ],
+    "pages": 2,
+    "fetch_complete": true,
+    "unresolved": [],
+    "item_errors": [],
+    "fetch_errors": [],
+    "page_sizes": [
+      {
+        "raw": 4013,
+        "delivered": 4013
+      },
+      {
+        "raw": 3905,
+        "delivered": 3905
+      }
+    ],
+    "quote_delivered": true,
+    "expected_quote": "地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。",
+    "dependencies": {
+      "header_refs": true,
+      "row_labels": true,
+      "footnotes": true
+    },
+    "delivered_chars": 1912,
+    "all_pass": true,
+    "first_fail": null
+  }
+}

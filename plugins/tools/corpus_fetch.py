@@ -309,6 +309,35 @@ def _item(
     return item
 
 
+def _compact_structure_metadata_variants(extra: dict[str, Any]) -> list[dict[str, Any]]:
+    """Progressively replace optional structure diagnostics with exact counts.
+
+    ``compact`` promises that authoritative text wins the page budget.  A large
+    section can give its heading one relation per member, so the relation list
+    alone may otherwise make even an empty-text item impossible to serialize.
+    Elide relations first and keep the more valuable table label path whenever
+    it fits.  The full lists remain available by repeating the request with a
+    larger budget; the compact page says explicitly what was omitted.
+    """
+    variants: list[dict[str, Any]] = []
+    out = dict(extra)
+    relations = out.get("relations")
+    if isinstance(relations, list) and relations:
+        out = dict(out)
+        del out["relations"]
+        out["relations_elided"] = True
+        out["relation_count"] = len(relations)
+        variants.append(out)
+    label_path = out.get("label_path")
+    if isinstance(label_path, list) and label_path:
+        out = dict(out)
+        del out["label_path"]
+        out["label_path_elided"] = True
+        out["label_path_count"] = len(label_path)
+        variants.append(out)
+    return variants
+
+
 def _structure_status(payload: dict[str, Any]) -> str:
     """A0.2 结构状态（与 A1 词汇一致），只依据实际可核验的结构证据：
 
@@ -728,40 +757,48 @@ def _page(
         # full 的固定字段大头（units 清单）吃掉正文预算、表格原子行装不下时，
         # compact 视图释放的预算可能恰好容纳——不再于第一个 budget>0 的视图上
         # 因 _AtomTooLarge 直接终止（原子粒度只取决于 text/kind，与视图无关）。
+        member_extra = extra
         for candidate in tried_views:
-            empty_item = _item(
-                evidence,
-                locator,
-                0,
-                0,
-                candidate,
-                status,
-                extra,
-                include_units=block_evidence is None,
-            )
-            probe_len = len(
-                json.dumps(
-                    envelope(
-                        [empty_item],
-                        _content_cursor(doc_id, build_id, request, view, mi, off, unresolved),
-                        False,
-                        diagnostics=candidate == "full",  # compact 等价视图不携带整块证据
-                    ),
-                    ensure_ascii=False,
+            extra_candidates = [extra]
+            if candidate == "compact":
+                extra_candidates.extend(_compact_structure_metadata_variants(extra))
+            for candidate_extra in extra_candidates:
+                empty_item = _item(
+                    evidence,
+                    locator,
+                    0,
+                    0,
+                    candidate,
+                    status,
+                    candidate_extra,
+                    include_units=block_evidence is None,
                 )
-            )
-            candidate_budget = max_chars - probe_len - _MARGIN
-            if candidate_budget <= 0:
-                continue
-            budget_ok = True
-            try:
-                candidate_ranges = _fragment_ranges(text, evidence.kind, candidate_budget, off)
-            except _AtomTooLarge as exc:
-                atom_chars = max(atom_chars, exc.chars)  # 原子粒度与视图无关，记录供报错
-                continue
-            member_view = candidate
-            ranges = candidate_ranges
-            break
+                probe_len = len(
+                    json.dumps(
+                        envelope(
+                            [empty_item],
+                            _content_cursor(doc_id, build_id, request, view, mi, off, unresolved),
+                            False,
+                            diagnostics=candidate == "full",  # compact 等价视图不携带整块证据
+                        ),
+                        ensure_ascii=False,
+                    )
+                )
+                candidate_budget = max_chars - probe_len - _MARGIN
+                if candidate_budget <= 0:
+                    continue
+                budget_ok = True
+                try:
+                    candidate_ranges = _fragment_ranges(text, evidence.kind, candidate_budget, off)
+                except _AtomTooLarge as exc:
+                    atom_chars = max(atom_chars, exc.chars)  # 原子粒度与视图无关，记录供报错
+                    continue
+                member_view = candidate
+                member_extra = candidate_extra
+                ranges = candidate_ranges
+                break
+            if ranges is not None:
+                break
         if ranges is None:
             diagnostics_on = False  # 成员失败：错误信封不携带装不下的大字段
             if budget_ok:
@@ -797,7 +834,7 @@ def _page(
             mi += 1
             off = 0
             continue
-        item_extra = dict(extra)
+        item_extra = dict(member_extra)
         if member_view != view:  # 回退对调用方透明，但如实标注在 item 上供审计
             item_extra["view_fallback"] = member_view
         diagnostics_on = member_view == "full"  # compact 回退时整块证据一并省去
@@ -884,7 +921,10 @@ async def corpus_fetch(
         ``source_id``／``units``／``spans``／``semantic_cells``，块坐标，供行／列证据
         校验与跨页拼回整块）。每个 item 亦带 ``content_role``（标题块为
         ``heading_only``）与 ``relations``（本次请求范围内的结构关联，``verified`` 与
-        ``candidate`` 严格分开）。旧句柄／来源已撤销／游标类型不符时返回 ``ok=false``。
+        ``candidate`` 严格分开）。compact 页的重复结构清单若挤占正文预算，则以
+        ``relations_elided``／``relation_count`` 或 ``label_path_elided``／
+        ``label_path_count`` 明示省略；提高预算可重取完整诊断。旧句柄／来源已撤销／
+        游标类型不符时返回 ``ok=false``。
     """
     if not isinstance(doc_id, str) or not doc_id.strip():
         return _json_error("doc_id 必须是非空字符串")

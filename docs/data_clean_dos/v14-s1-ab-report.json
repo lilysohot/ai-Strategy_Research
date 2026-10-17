@@ -1,0 +1,199 @@
+{
+  "artifact": "v14-s1-table-relations-ab",
+  "date": "2026-10-17",
+  "control": {
+    "targets": 51,
+    "passed": 42,
+    "failed": 9,
+    "failure_classes": {
+      "quote_not_delivered": 5,
+      "dependency_not_delivered": 1,
+      "fetch_incomplete": 2,
+      "source_not_offered": 1
+    },
+    "by_role": {
+      "required": {
+        "passed": 31,
+        "failed": 5,
+        "failure_classes": {
+          "quote_not_delivered": 3,
+          "fetch_incomplete": 2
+        }
+      },
+      "supplementary": {
+        "passed": 11,
+        "failed": 4,
+        "failure_classes": {
+          "quote_not_delivered": 2,
+          "dependency_not_delivered": 1,
+          "source_not_offered": 1
+        }
+      }
+    }
+  },
+  "candidate": {
+    "targets": 51,
+    "passed": 46,
+    "failed": 5,
+    "failure_classes": {
+      "quote_not_delivered": 3,
+      "fetch_incomplete": 1,
+      "source_not_offered": 1
+    },
+    "by_role": {
+      "required": {
+        "passed": 33,
+        "failed": 3,
+        "failure_classes": {
+          "quote_not_delivered": 2,
+          "fetch_incomplete": 1
+        }
+      },
+      "supplementary": {
+        "passed": 13,
+        "failed": 2,
+        "failure_classes": {
+          "quote_not_delivered": 1,
+          "source_not_offered": 1
+        }
+      }
+    }
+  },
+  "gains": [
+    {
+      "target_id": "c1ddcd8a-realestate",
+      "role": "supplementary",
+      "before": {
+        "pass": false,
+        "first_fail": "quote_not_delivered"
+      },
+      "after": {
+        "pass": true,
+        "first_fail": null
+      },
+      "quote": [
+        false,
+        true
+      ],
+      "dependencies": [
+        {
+          "header_refs": true,
+          "row_labels": true,
+          "footnotes": true
+        },
+        {
+          "header_refs": true,
+          "row_labels": true,
+          "footnotes": true
+        }
+      ]
+    },
+    {
+      "target_id": "d179b615-hikerate",
+      "role": "required",
+      "before": {
+        "pass": false,
+        "first_fail": "fetch_incomplete"
+      },
+      "after": {
+        "pass": true,
+        "first_fail": null
+      },
+      "quote": [
+        true,
+        true
+      ],
+      "dependencies": [
+        {
+          "header_refs": true,
+          "row_labels": true,
+          "footnotes": true
+        },
+        {
+          "header_refs": true,
+          "row_labels": true,
+          "footnotes": true
+        }
+      ]
+    },
+    {
+      "target_id": "f3b28791-table1",
+      "role": "required",
+      "before": {
+        "pass": false,
+        "first_fail": "quote_not_delivered"
+      },
+      "after": {
+        "pass": true,
+        "first_fail": null
+      },
+      "quote": [
+        false,
+        true
+      ],
+      "dependencies": [
+        {
+          "header_refs": false,
+          "row_labels": true,
+          "footnotes": false
+        },
+        {
+          "header_refs": true,
+          "row_labels": true,
+          "footnotes": true
+        }
+      ]
+    },
+    {
+      "target_id": "f86c6d2c-cxotable",
+      "role": "supplementary",
+      "before": {
+        "pass": false,
+        "first_fail": "dependency_not_delivered"
+      },
+      "after": {
+        "pass": true,
+        "first_fail": null
+      },
+      "quote": [
+        true,
+        true
+      ],
+      "dependencies": [
+        {
+          "header_refs": false,
+          "row_labels": true,
+          "footnotes": true
+        },
+        {
+          "header_refs": true,
+          "row_labels": true,
+          "footnotes": true
+        }
+      ]
+    }
+  ],
+  "regressions": [],
+  "invariants": {
+    "sources": 12,
+    "raw_order_coordinates_stable": true,
+    "label_path_changes": 376
+  },
+  "gates": {
+    "minimum_total": 44,
+    "minimum_required": 32,
+    "minimum_supplementary": 12,
+    "existing_pass_regressions": 0,
+    "scoped_targets": [
+      "f3b28791-table1",
+      "f86c6d2c-cxotable"
+    ],
+    "passed": true
+  },
+  "evidence": {
+    ".scratch/corpus-structure-restart/v14-control-verification.json": "72052fb8cff5332be812a730f33f992c04e258d5022f2349db578d13cb949379",
+    ".scratch/corpus-structure-restart/s1-candidate-verification.json": "30a5349ef3ec24942997ac1a5430321abbb355dfba9f8e246d4d923f6cccb699",
+    ".scratch/corpus-structure-restart/s1-candidate-build.json": "36dacdbf82f150ff012fa0b59dd9a2fcba7de296059885d60c712663aee463e0",
+    ".scratch/corpus-structure-restart/s1-unit-invariants.json": "d367a865ccf4cd0627c9d11e3cc3d084e4f541874141d1ba6abaa07362877177"
+  }
+}

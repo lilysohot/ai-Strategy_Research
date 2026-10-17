@@ -1,0 +1,110 @@
+{
+  "artifact": "v14-s4-source-coverage-ab",
+  "date": "2026-10-17",
+  "scope": {
+    "change": "source-level candidate-query lexeme coverage before max chunk score",
+    "database": "v14_s2_quote_corpus",
+    "database_rebuilt": false
+  },
+  "control": {
+    "targets": 51,
+    "passed": 50,
+    "failed": 1,
+    "failure_classes": {
+      "source_not_offered": 1
+    },
+    "by_role": {
+      "required": {
+        "passed": 36,
+        "failed": 0,
+        "failure_classes": {}
+      },
+      "supplementary": {
+        "passed": 14,
+        "failed": 1,
+        "failure_classes": {
+          "source_not_offered": 1
+        }
+      }
+    }
+  },
+  "candidate": {
+    "targets": 51,
+    "passed": 51,
+    "failed": 0,
+    "failure_classes": {},
+    "by_role": {
+      "required": {
+        "passed": 36,
+        "failed": 0,
+        "failure_classes": {}
+      },
+      "supplementary": {
+        "passed": 15,
+        "failed": 0,
+        "failure_classes": {}
+      }
+    }
+  },
+  "gains": [
+    {
+      "target_id": "f7f65d7e-risk",
+      "role": "supplementary",
+      "before": {
+        "pass": false,
+        "first_fail": "source_not_offered",
+        "search_hits": 10,
+        "source_offered": false,
+        "plans": 0,
+        "pages": 0,
+        "fetch_complete": false,
+        "quote_delivered": false
+      },
+      "after": {
+        "pass": true,
+        "first_fail": null,
+        "search_hits": 10,
+        "source_offered": true,
+        "plans": 2,
+        "pages": 2,
+        "fetch_complete": true,
+        "quote_delivered": true
+      }
+    }
+  ],
+  "regressions": [],
+  "remaining_failures": [],
+  "invariants": {
+    "sources": 12,
+    "character_multiset_stable_by_page": true,
+    "non_table_units_stable": true,
+    "sources_with_page_sequence_changes": [
+      "holdout-company-001",
+      "holdout-industry-003",
+      "holdout-industry-004",
+      "holdout-industry-007",
+      "holdout-macro-008",
+      "holdout-macro-010",
+      "holdout-macro-011"
+    ],
+    "target_quote_present": true
+  },
+  "gates": {
+    "total": 51,
+    "required": 36,
+    "supplementary": 15,
+    "existing_pass_regressions": 0,
+    "scoped_targets": [
+      "f7f65d7e-risk"
+    ],
+    "passed": true
+  },
+  "evidence": {
+    ".scratch/corpus-structure-restart/s3-candidate-verification.json": "4ab5337a01dee1acb7798aad4d4db00a37909099af2c6041276225cadaf9b9f6",
+    ".scratch/corpus-structure-restart/s4-candidate-verification.json": "a1d71d883f77dcb13596dcd1aa4ab84aef3ac8e7a0018230a01d323d0f711397",
+    ".scratch/corpus-structure-restart/s2-candidate-build.json": "48faa23fed82145023bad76a10d482f7471995a24b33bd415a44fc5d1fecabce",
+    ".scratch/corpus-structure-restart/s2-unit-invariants.json": "d05d7bc97b2f719c3aceafc7204aa9bc09a37d296f9bbe2d43f79563ce4c31d5",
+    ".scratch/corpus-structure-restart/s4-source-probe.json": "638c9216170203295b87a73d8b4fa71b9e65ef66fcfe523eaa6c7867799b0bff",
+    ".scratch/corpus-structure-restart/s4-source-repro.json": "f5cf0c04b198234e1a27745ae09d3a9065d39631686243057b139c32e4e7e73c"
+  }
+}

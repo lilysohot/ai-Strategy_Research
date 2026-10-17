@@ -1,0 +1,384 @@
+{
+  "artifact": "s2-quote-repro",
+  "target_db": "v14_s2_quote_corpus",
+  "definitions": [
+    {
+      "target_id": "c1ddcd8a-summarytable",
+      "locator": [
+        "page:2",
+        "row:1",
+        "col:0"
+      ],
+      "verbatim_quote": "螺纹钢 元/吨 3240 0.9% 4.2% -2.4% -0.6% 6000",
+      "subject": "螺纹钢（量价利汇总表）",
+      "metric": "价格、7日/30日/年内/365日涨幅、历史最高值",
+      "period": "2026-9-4",
+      "unit": "元/吨/%",
+      "constraints_row": "螺纹钢",
+      "constraints_col": null,
+      "constraints_cell": null,
+      "header_refs": [
+        "板块",
+        "2026-9-4",
+        "单位",
+        "数值",
+        "7日涨幅",
+        "30日涨幅",
+        "年内涨幅",
+        "365日涨幅",
+        "历史最高值"
+      ],
+      "row_labels": [
+        "螺纹钢"
+      ],
+      "footnotes": null,
+      "acceptable_evidence": "量价利汇总表（表1）中螺纹钢所在行给出的价格3240元/吨、7日涨幅0.9%、30日涨幅4.2%、年内涨幅-2.4%、365日涨幅-0.6%、历史最高值6000元/吨等任一数字与所在列对应正确即可。",
+      "question": "研报的量价利汇总表中，螺纹钢在2026-9-4的价格、7日涨幅、30日涨幅和年内涨幅分别是多少？",
+      "required_dependencies": [],
+      "evidence_role": "supplementary",
+      "high_risk_format": "宽表内嵌“单位”列（元/吨/指数/美元等）、行标签含板块大分类（社会库存/细分领域/新开工等）合并单元格，列多且需跨列对应单位，属高风险版式。",
+      "page_basis": 2
+    },
+    {
+      "target_id": "b7e932c8-index",
+      "locator": [
+        "page:2"
+      ],
+      "verbatim_quote": "本周主要宽基指数普遍下跌 ，上证综指、东财全A分别下跌0.56%、1.20%，沪深300下跌1.33%；成长风格方面 ，创业板指下跌 4.03%，科创50下跌5.10%",
+      "subject": "A股主要宽基指数",
+      "metric": "周涨跌幅",
+      "period": "2026/8/31-2026/9/4",
+      "unit": "%",
+      "constraints_row": null,
+      "constraints_col": null,
+      "constraints_cell": null,
+      "header_refs": null,
+      "row_labels": null,
+      "footnotes": null,
+      "acceptable_evidence": "研报本周市场回顾或指数图表给出上证综指-0.56%、东财全A-1.20%、沪深300-1.33%、创业板指-4.03%、科创50-5.10%等任一指数周涨跌幅即为可接受证据。",
+      "question": "本周A股各主要宽基指数表现如何，上证综指、沪深300、创业板指等分别涨跌了多少？",
+      "required_dependencies": [],
+      "evidence_role": "required",
+      "high_risk_format": null,
+      "page_basis": 2
+    },
+    {
+      "target_id": "b7e932c8-industry",
+      "locator": [
+        "page:2"
+      ],
+      "verbatim_quote": "行业层面 ，本周申万 31个行业中 14个录得正收益 ，机构低配板块表现居前 ，传媒、银行和农林牧渔涨幅居前 ，分别上涨 6.0%、4.0%、3.3%；电子、有色金属和建筑材料表现较弱，分别下跌5.4%、5.0%、4.3%。",
+      "subject": "申万一级行业（机构低配板块）",
+      "metric": "行业周涨跌幅、涨幅/跌幅居前行业",
+      "period": "本周（2026/8/31-2026/9/4）",
+      "unit": "%",
+      "constraints_row": null,
+      "constraints_col": null,
+      "constraints_cell": null,
+      "header_refs": null,
+      "row_labels": null,
+      "footnotes": null,
+      "acceptable_evidence": "研报行业比较或行业涨跌图表给出传媒/银行/农林牧渔上涨6.0%/4.0%/3.3%居前，电子/有色金属/建筑材料下跌5.4%/5.0%/4.3%等任一关键数字，或“申万31个行业中14个录得正收益”的表述即可。",
+      "question": "本周申万行业中有多少个录得正收益？涨幅居前和跌幅居前的是哪些行业、涨跌幅分别是多少？",
+      "required_dependencies": [],
+      "evidence_role": "required",
+      "high_risk_format": null,
+      "page_basis": 2
+    }
+  ],
+  "results": [
+    {
+      "sample_id": "holdout-industry-003",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "c1ddcd8a-summarytable",
+      "role": "supplementary",
+      "question": "研报的量价利汇总表中，螺纹钢在2026-9-4的价格、7日涨幅、30日涨幅和年内涨幅分别是多少？",
+      "doc_identity": "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885",
+      "search_ok": true,
+      "search_hits": 9,
+      "delivered_search_chars": 19882,
+      "source_offered": true,
+      "source_hit_ids": [
+        "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885",
+        "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:a9d35db2b4409cc0:table:0007",
+          "context_count": 19,
+          "snippet": "<b>涨幅</b><b>30</b>日<b>涨幅</b><b>年内</b><b>涨幅</b>365日"
+        },
+        {
+          "locator": "chunk:a9d35db2b4409cc0:body:0030",
+          "context_count": 14,
+          "snippet": "<b>螺纹钢</b>价差：本周五该价差为"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 33,
+      "delivered_locators": [
+        "chunk:a9d35db2b4409cc0:body:0006",
+        "chunk:a9d35db2b4409cc0:table:0002",
+        "chunk:a9d35db2b4409cc0:table:0003",
+        "chunk:a9d35db2b4409cc0:table:0004",
+        "chunk:a9d35db2b4409cc0:table:0005",
+        "chunk:a9d35db2b4409cc0:table:0006",
+        "chunk:a9d35db2b4409cc0:table:0007",
+        "chunk:a9d35db2b4409cc0:table:0008",
+        "chunk:a9d35db2b4409cc0:table:0009",
+        "chunk:a9d35db2b4409cc0:table:0010",
+        "chunk:a9d35db2b4409cc0:table:0011",
+        "chunk:a9d35db2b4409cc0:table:0012",
+        "chunk:a9d35db2b4409cc0:table:0013",
+        "chunk:a9d35db2b4409cc0:table:0014",
+        "chunk:a9d35db2b4409cc0:table:0015",
+        "chunk:a9d35db2b4409cc0:table:0016",
+        "chunk:a9d35db2b4409cc0:table:0017",
+        "chunk:a9d35db2b4409cc0:table:0018",
+        "chunk:a9d35db2b4409cc0:body:0007",
+        "chunk:a9d35db2b4409cc0:table:0035",
+        "chunk:a9d35db2b4409cc0:body:0029",
+        "chunk:a9d35db2b4409cc0:heading:0006",
+        "chunk:a9d35db2b4409cc0:body:0030",
+        "chunk:a9d35db2b4409cc0:table:0036",
+        "chunk:a9d35db2b4409cc0:table:0037",
+        "chunk:a9d35db2b4409cc0:table:0038",
+        "chunk:a9d35db2b4409cc0:table:0039",
+        "chunk:a9d35db2b4409cc0:body:0031",
+        "chunk:a9d35db2b4409cc0:heading:0007",
+        "chunk:a9d35db2b4409cc0:body:0032",
+        "chunk:a9d35db2b4409cc0:heading:0008",
+        "chunk:a9d35db2b4409cc0:body:0033",
+        "chunk:a9d35db2b4409cc0:table:0040"
+      ],
+      "pages": 14,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5788,
+          "delivered": 5788
+        },
+        {
+          "raw": 5609,
+          "delivered": 5609
+        },
+        {
+          "raw": 5528,
+          "delivered": 5528
+        },
+        {
+          "raw": 5453,
+          "delivered": 5453
+        },
+        {
+          "raw": 5482,
+          "delivered": 5482
+        },
+        {
+          "raw": 5454,
+          "delivered": 5454
+        },
+        {
+          "raw": 5554,
+          "delivered": 5554
+        },
+        {
+          "raw": 5274,
+          "delivered": 5274
+        },
+        {
+          "raw": 3129,
+          "delivered": 3129
+        },
+        {
+          "raw": 4739,
+          "delivered": 4739
+        },
+        {
+          "raw": 5468,
+          "delivered": 5468
+        },
+        {
+          "raw": 5440,
+          "delivered": 5440
+        },
+        {
+          "raw": 4670,
+          "delivered": 4670
+        },
+        {
+          "raw": 3708,
+          "delivered": 3708
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "螺纹钢 元/吨 3240 0.9% 4.2% -2.4% -0.6% 6000",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 23411,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-004",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "b7e932c8-index",
+      "role": "required",
+      "question": "本周A股各主要宽基指数表现如何，上证综指、沪深300、创业板指等分别涨跌了多少？",
+      "doc_identity": "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 13936,
+      "source_offered": true,
+      "source_hit_ids": [
+        "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160",
+        "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:67b659aabc20ffb5:table:0015",
+          "context_count": 9,
+          "snippet": "<b>本周</b>\n涨跌幅<b>本周</b>近一周变化"
+        },
+        {
+          "locator": "chunk:67b659aabc20ffb5:body:0002",
+          "context_count": 3,
+          "snippet": "<b>指数</b>普遍下跌，<b>上证</b><b>综指</b>、东"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 12,
+      "delivered_locators": [
+        "chunk:67b659aabc20ffb5:body:0013",
+        "chunk:67b659aabc20ffb5:table:0009",
+        "chunk:67b659aabc20ffb5:table:0010",
+        "chunk:67b659aabc20ffb5:table:0011",
+        "chunk:67b659aabc20ffb5:table:0012",
+        "chunk:67b659aabc20ffb5:table:0013",
+        "chunk:67b659aabc20ffb5:table:0014",
+        "chunk:67b659aabc20ffb5:table:0015",
+        "chunk:67b659aabc20ffb5:body:0014",
+        "chunk:67b659aabc20ffb5:body:0001",
+        "chunk:67b659aabc20ffb5:body:0002",
+        "chunk:67b659aabc20ffb5:body:0003"
+      ],
+      "pages": 5,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 4205,
+          "delivered": 4205
+        },
+        {
+          "raw": 5268,
+          "delivered": 5268
+        },
+        {
+          "raw": 5235,
+          "delivered": 5235
+        },
+        {
+          "raw": 4976,
+          "delivered": 4976
+        },
+        {
+          "raw": 4129,
+          "delivered": 4129
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "本周主要宽基指数普遍下跌 ，上证综指、东财全A分别下跌0.56%、1.20%，沪深300下跌1.33%；成长风格方面 ，创业板指下跌 4.03%，科创50下跌5.10%",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 9874,
+      "all_pass": true,
+      "first_fail": null
+    },
+    {
+      "sample_id": "holdout-industry-004",
+      "split": "holdout",
+      "domain": "industry",
+      "target_id": "b7e932c8-industry",
+      "role": "required",
+      "question": "本周申万行业中有多少个录得正收益？涨幅居前和跌幅居前的是哪些行业、涨跌幅分别是多少？",
+      "doc_identity": "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160",
+      "search_ok": true,
+      "search_hits": 10,
+      "delivered_search_chars": 15343,
+      "source_offered": true,
+      "source_hit_ids": [
+        "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160",
+        "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160"
+      ],
+      "source_hit_summaries": [
+        {
+          "locator": "chunk:67b659aabc20ffb5:table:0068",
+          "context_count": 5,
+          "snippet": "<b>行业</b>电子<b>涨跌幅</b><b>本周</b>近一周变化"
+        },
+        {
+          "locator": "chunk:67b659aabc20ffb5:body:0002",
+          "context_count": 3,
+          "snippet": "<b>行业</b>。<b>本周</b>市场回顾\n\n<b>本周</b>"
+        }
+      ],
+      "plans": 2,
+      "requested_locators": 8,
+      "delivered_locators": [
+        "chunk:67b659aabc20ffb5:body:0034",
+        "chunk:67b659aabc20ffb5:table:0067",
+        "chunk:67b659aabc20ffb5:table:0068",
+        "chunk:67b659aabc20ffb5:table:0069",
+        "chunk:67b659aabc20ffb5:body:0035",
+        "chunk:67b659aabc20ffb5:body:0001",
+        "chunk:67b659aabc20ffb5:body:0002",
+        "chunk:67b659aabc20ffb5:body:0003"
+      ],
+      "pages": 3,
+      "fetch_complete": true,
+      "unresolved": [],
+      "item_errors": [],
+      "fetch_errors": [],
+      "page_sizes": [
+        {
+          "raw": 5819,
+          "delivered": 5819
+        },
+        {
+          "raw": 2687,
+          "delivered": 2687
+        },
+        {
+          "raw": 4129,
+          "delivered": 4129
+        }
+      ],
+      "quote_delivered": true,
+      "expected_quote": "行业层面 ，本周申万 31个行业中 14个录得正收益 ，机构低配板块表现居前 ，传媒、银行和农林牧渔涨幅居前 ，分别上涨 6.0%、4.0%、3.3%；电子、有色金属和建筑材料表现较弱，分别下跌5.4%、5.0%、4.3%。",
+      "dependencies": {
+        "header_refs": true,
+        "row_labels": true,
+        "footnotes": true
+      },
+      "delivered_chars": 4696,
+      "all_pass": true,
+      "first_fail": null
+    }
+  ],
+  "passed": 3,
+  "targets": 3
+}

@@ -164,6 +164,59 @@ def test_batch_returns_envelope_with_whole_blocks(stub) -> None:
     assert out["next_cursor"] is None
 
 
+def test_compact_batch_elides_oversize_relations_before_failing_content(stub) -> None:
+    """Large structural diagnostics must not consume the whole content budget."""
+    svc = stub(
+        {
+            "chunk:h0": _evidence("h0", "heading", [("u0", "联储加息预期", 10, ())]),
+            "chunk:b0": _evidence("b0", "body", [("u1", "下降 3bp 至 35bp", 10, ())]),
+        }
+    )
+    svc.context_relations = lambda _doc_id, _locators: {
+        "chunk:h0": {
+            "content_role": "heading_only",
+            "relations": [
+                {
+                    "target_locator": f"chunk:t{i:03d}",
+                    "target_kind": "table",
+                    "relation": "section_candidate",
+                    "status": "candidate",
+                    "basis": "same_section",
+                }
+                for i in range(100)
+            ],
+            "relation_status": "candidate",
+            "label_path": ["金融市场", "联储利率路径"],
+        }
+    }
+
+    out = json.loads(
+        _call(
+            doc_id=_DOC,
+            locators=["chunk:h0", "chunk:b0"],
+            view="compact",
+            max_chars=2000,
+        )
+    )
+
+    pages = [out]
+    while not pages[-1]["exhausted"]:
+        pages.append(
+            json.loads(_call(doc_id=_DOC, cursor=pages[-1]["next_cursor"], max_chars=2000))
+        )
+
+    assert all(page["ok"] is True for page in pages)
+    assert pages[-1]["fetch_complete"] is True
+    assert all(page["unresolved"] == [] and page["item_errors"] == [] for page in pages)
+    items = [item for page in pages for item in page["items"]]
+    assert "".join(item["text"] for item in items) == "联储加息预期下降 3bp 至 35bp"
+    heading = items[0]
+    assert heading["relations_elided"] is True
+    assert heading["relation_count"] == 100
+    assert "relations" not in heading
+    assert heading["label_path"] == ["金融市场", "联储利率路径"]
+
+
 def test_fetch_returns_persisted_label_path_for_table_value_binding(stub) -> None:
     svc = stub({"chunk:t0": _evidence("t0", "table", [("u0", "R32\n99.6%", 10, ())])})
     svc.context_relations = lambda _doc_id, _locators: {
@@ -175,9 +228,7 @@ def test_fetch_returns_persisted_label_path_for_table_value_binding(stub) -> Non
         }
     }
 
-    batch = json.loads(
-        _call(doc_id=_DOC, locators=["chunk:t0"], view="compact", max_chars=4000)
-    )
+    batch = json.loads(_call(doc_id=_DOC, locators=["chunk:t0"], view="compact", max_chars=4000))
     single = json.loads(_call(doc_id=_DOC, locator="chunk:t0", view="compact"))
 
     expected = ["R32 价格分位", "R32 价差分位", "R32 开工率"]
@@ -261,9 +312,7 @@ def test_atom_too_large_reports_error_and_resolves(stub) -> None:
 
 def _long_row_table(rows: int = 6, row_len: int = 600):
     """多行长表格：行是原子，full 的固定字段吃掉正文预算时行装不下。"""
-    specs = [
-        (f"u{i}", f"指标{i}：" + "甲" * (row_len - 10), 1, ((i, 0),)) for i in range(rows)
-    ]
+    specs = [(f"u{i}", f"指标{i}：" + "甲" * (row_len - 10), 1, ((i, 0),)) for i in range(rows)]
     return _evidence("t0", "table", specs)
 
 

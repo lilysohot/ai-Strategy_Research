@@ -18,9 +18,17 @@ import pymupdf
 import pytest
 from docx import Document
 
-from plugins.corpus.preparation.contract import UnitStatus
-from plugins.corpus.preparation.readers import ReaderError, read_document
+from plugins.corpus.preparation.contract import UnitLocation, UnitStatus
+from plugins.corpus.preparation.readers import (
+    CandidateUnit,
+    ReaderError,
+    project_candidate_units,
+    read_document,
+)
 from plugins.corpus.preparation.readers.pdf_reader import (
+    READER_PDF_REV,
+    _cell_native_pos,
+    _decorate_table_context_and_structure,
     _detect_header_rows,
     _emit_table,
     _garbled_ratio,
@@ -31,9 +39,11 @@ from plugins.corpus.preparation.readers.pdf_reader import (
     _row_text,
     _Table,
     _TableCell,
+    _TableEmission,
     _TableModel,
     _TableRow,
 )
+from plugins.corpus.preparation.structure import RelationKind
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -351,6 +361,14 @@ def test_table_row_text_invariants_native_order_and_source_characters() -> None:
     assert cells == ((0, 9), (0, 1), (0, 6))  # 行列仍在，只是降级为元数据
 
 
+def test_table_fragment_cell_uses_overlapping_native_line_position() -> None:
+    """A false grid line may split one PDF word into several extracted cells."""
+    lines = [_Line(text="-2.4%", bbox=(414.42, 151.15, 437.69, 159.81), size=8.0)]
+
+    # The fragment cell does not contain the native word's center, but it overlaps the word.
+    assert _cell_native_pos((414.0, 149.0, 422.0, 162.0), lines) == 0
+
+
 def test_garbled_ratio_helper() -> None:
     assert _garbled_ratio("") == 0.0
     assert _garbled_ratio("正常文本") == 0.0
@@ -389,12 +407,19 @@ def test_detect_header_rows_stops_at_data_rows_and_skips_sparse() -> None:
         ["尿素", "5814.2", "32.1", "89.9%"],
     ]
     assert _detect_header_rows(with_years) == (0,)
+    three_levels = [
+        ["板块", "7 月以来2026E"],
+        ["一级行业", "净利润上修幅"],
+        ["二级行业", "度"],
+        ["AI 算力硬件", "27.1%"],
+    ]
+    assert _detect_header_rows(three_levels) == (0, 1, 2)
 
 
 def test_table_model_label_path_merged_headers() -> None:
     """I-B1 读侧投影：多级表头 + 合并单元格按 bbox 覆盖继承列标签。
 
-    ``开工率`` 跨列 2-3 合并（覆盖位 None）；``col_labels`` 自下而上遍历表头行，
+    ``开工率`` 跨列 2-3 合并（覆盖位 None）；``col_labels`` 自上而下遍历表头行，
     数据行锚定单元格的列中心落入合并 bbox 即继承标签。
     """
     model = _TableModel(
@@ -412,14 +437,116 @@ def test_table_model_label_path_merged_headers() -> None:
             ((1, (100.0, 200.0)), (2, (200.0, 300.0)), (3, (300.0, 400.0))),
         ),
     )
-    # 数据行 cell(2, 3)：行标签 尿素 + 列标签链（纯碱 ← 开工率）
-    assert model.label_path(2, 3) == ("尿素", "纯碱", "开工率")
+    # 数据行 cell(2, 3)：行标签 尿素 + 列标签链（开工率 → 纯碱）
+    assert model.label_path(2, 3) == ("尿素", "开工率", "纯碱")
     # cell(2, 2) 同属纯碱 列，且开工率 合并 bbox 覆盖列 2-3 → 同样继承完整链
-    assert model.label_path(2, 2) == ("尿素", "纯碱", "开工率")
+    assert model.label_path(2, 2) == ("尿素", "开工率", "纯碱")
     # 表头行无行标签
-    assert model.label_path(1, 2) == ("纯碱", "开工率")
+    assert model.label_path(1, 2) == ("开工率", "纯碱")
     # 覆盖位空单元格不猜测内容
     assert model.cell_text(0, 3) == ""
+
+
+def test_pdf_table_structure_binds_caption_headers_row_labels_and_footnotes() -> None:
+    model = _TableModel(
+        page=1,
+        table_index=0,
+        header_rows=(0, 1, 2),
+        grid=(
+            ("板块", "7 月以来2026E"),
+            (None, "净利润上修幅"),
+            (None, "度"),
+            ("AI 算力硬件", "27.1%"),
+        ),
+        anchored=(
+            ((0, (10.0, 100.0)), (1, (100.0, 200.0))),
+            ((1, (100.0, 200.0)),),
+            ((1, (100.0, 200.0)),),
+            ((0, (10.0, 100.0)), (1, (100.0, 200.0))),
+        ),
+    )
+    table = _Table(index=0, bbox=(10.0, 30.0, 200.0, 120.0), rows=[], model=model)
+    header_group = (
+        _TableCell("板块", 0, 0, 0),
+        _TableCell("7 月以来2026E", 0, 1, 1),
+    )
+    data_group = (
+        _TableCell("AI 算力硬件", 3, 0, 2),
+        _TableCell("27.1%", 3, 1, 3),
+    )
+    units = [
+        CandidateUnit(
+            ordinal=0,
+            kind="heading",
+            status=UnitStatus.KEPT,
+            reasons=(),
+            raw_text="表1、2026E 净利润上修方向",
+            location=UnitLocation(page=1, bbox=(10.0, 10.0, 200.0, 20.0)),
+        ),
+        CandidateUnit(
+            ordinal=1,
+            kind="table_row",
+            status=UnitStatus.KEPT,
+            reasons=("tbl[0]",),
+            raw_text="板块\n7 月以来2026E",
+            location=UnitLocation(
+                page=1,
+                bbox=table.bbox,
+                cells=((0, 0), (0, 1)),
+                label_path=("板块", "7 月以来2026E 净利润上修幅 度"),
+            ),
+        ),
+        CandidateUnit(
+            ordinal=2,
+            kind="table_row",
+            status=UnitStatus.KEPT,
+            reasons=("tbl[0]",),
+            raw_text="AI 算力硬件\n27.1%",
+            location=UnitLocation(
+                page=1,
+                bbox=table.bbox,
+                cells=((3, 0), (3, 1)),
+                label_path=("AI 算力硬件 板块", "AI 算力硬件 7 月以来2026E"),
+            ),
+        ),
+        CandidateUnit(
+            ordinal=3,
+            kind="paragraph",
+            status=UnitStatus.KEPT,
+            reasons=(),
+            raw_text="数据来源：Wind，研究院整理",
+            location=UnitLocation(page=1, bbox=(10.0, 125.0, 200.0, 135.0)),
+        ),
+        CandidateUnit(
+            ordinal=4,
+            kind="paragraph",
+            status=UnitStatus.KEPT,
+            reasons=(),
+            raw_text="注：预测口径一致；数据截至9 月4 日",
+            location=UnitLocation(page=1, bbox=(10.0, 136.0, 200.0, 146.0)),
+        ),
+    ]
+    emission = _TableEmission(
+        page=1,
+        table=table,
+        groups=((1, header_group), (2, data_group)),
+    )
+
+    decorated, structure = _decorate_table_context_and_structure(units, [emission])
+
+    context = decorated[1].location.label_path[0]
+    assert "7 月以来2026E 净利润上修幅 度" in context
+    assert "数据来源：Wind，研究院整理；数据截至9 月4 日" in context
+    assert project_candidate_units(structure) == tuple(decorated)
+    kinds = {relation.kind for relation in structure.relations}
+    assert {
+        RelationKind.CONTAINS,
+        RelationKind.HEADER_FOR,
+        RelationKind.ROW_LABEL_FOR,
+        RelationKind.CONTINUATION_OF,
+        RelationKind.CAPTION_OF,
+        RelationKind.FOOTNOTE_OF,
+    } <= kinds
 
 
 def test_table_model_rejects_multiline_column_dump_as_labels() -> None:
@@ -652,7 +779,7 @@ def test_r9_cross_column_merged_grid_keeps_quote_contiguous() -> None:
 
     构造尿素逻辑行：产能值（col3，native 62）、价格值（col9，native 65）、标签
     尿素与价格分位（col2/6/7/8，native 349-352 连续）。即便该行被标 column_order，
-    R9 仍按 native 连续性把同一逻辑行的取值切成连续组发射，使「尿素 32.1% 
+    R9 仍按 native 连续性把同一逻辑行的取值切成连续组发射，使「尿素 32.1%
     10.9% 89.9%」在发射文本内连续成串（不被产能/价格值打断）。
     """
     row = _TableRow(
@@ -783,7 +910,7 @@ def test_dev_materials_smoke_units_and_pages() -> None:
         result = read_document(path)
         assert result.page_count is not None and result.page_count >= 1, path.name
         assert result.units, path.name
-        assert result.extractor_rev.startswith("reader-pdf-10+")
+        assert result.extractor_rev.startswith(f"{READER_PDF_REV}+")
 
 
 def test_readers_do_not_import_pg_or_model_client() -> None:
