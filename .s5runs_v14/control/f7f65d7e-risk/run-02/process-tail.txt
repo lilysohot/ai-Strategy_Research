@@ -1,0 +1,102 @@
+he final answer.
+
+Let me update tasks and then write the final chat answer. The final answer should be a plain-text reply summarizing the risk warnings with sources.[LLM] stream model=glm-5.3-flash ttft=4.56s total=6.79s chunks=113
+[0m
+☑ Plan 2 items · resolved
+╭─ ✓ Plan ─────────────────────────────────────────────────────────────────────╮
+│ Updated ['t4', 't5'].                                                        │
+│  resolved 5/5 · in-progress 0 · open 0 · cancelled 0                         │
+│   ✓ t1 resolved    定位语料库中「本期研报」所指的研报（最近发布的报告及其基  │
+│   ✓ t2 resolved    检索该研报中的「风险提示」章节定位（corpus_search 定位句  │
+│   ✓ t3 resolved    用 corpus_fetch 取回风险提示章节的逐字原文，不得直接引用  │
+│   ✓ t4 resolved    提交语料证据清单（corpus_submit_manifest）并按回验问题修  │
+│   ✓ t5 resolved    汇总主要风险提示并逐条附来源（doc_id/locator/quote）作答  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+[38;2;166;173;200m⠼ working… 0s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠴ working… 0s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠦ working… 0s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠧ working… 0s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠇ working… 0s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠏ working… 0s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠋ working… 0s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠙ working… 0s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠹ working… 0s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠸ working… 0s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠼ working… 1s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠴ working… 1s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠦ working… 1s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠧ working… 1s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠇ working… 1s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠏ working… 1s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠋ working… 1s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠙ working… 1s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠹ working… 1s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠸ working… 1s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠼ working… 2s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠴ working… 2s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠦ working… 2s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠧ working… 2s · ctx 69% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[K[38;2;166;173;200m✻ All tasks resolved. Now give the final answer — a plain-text reply summarizing what risk warnings the reports in this corpus listed, organized by report, with source locations, the common themes, and boundary notes.[0m
+[0m**本期（2026-09-05～09-06 当周）语料库共 12 篇研报，其中 10 篇给出了明确的「风险提示」**，各篇要点如下（均逐字取自对应报告的风险提示章节，已通过证据清单回验，13/13 条 supported）：
+
+**一、策略类**
+1. **中银证券《策略周报——外部加息扰动未消，短期以守为攻》**（2026-09-06）：①政策落地不及预期，宏观经济波动超预期；②市场波动风险；③海外经济超预期衰退、流动性风险。[p.10-11]
+2. **天风证券《A股策略周报》**（2026-09-06，吴开达等）：地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。[p.10-11]
+3. **国金证券《迷雾与罗盘——产业纠结期，货币政策预期的摇摆》**（牟一凌、季宏坤）：①海外货币政策预期大幅收紧（滞胀预期持续→市场可能超预期下跌）；②AI 产业趋势迎来重大突破（市场重回科技主线，防御思维失效）。[p.12-13]
+4. **兴业证券《极致轮动如何收敛：探讨几个契机》**（2026-09-06）：经济数据波动，政策宽松低于预期，美联储降息不及预期，地缘局势升级等。[p.10]
+5. **中信建投《行业数据周报 9 月第 1 期》**（2026-09-05，夏凡捷）：①数据统计存在误差风险；②海内外经济波动风险；③市场流动性风险；④海外地缘政治冲突加剧风险。[p.25]
+6. **《金属周期品高频数据周报（2026.8.31-9.6）》**：根据历史数据得出的相关性失效的风险；宏观政策调整的风险（首页表述为「政府对大宗商品价格调控的风险」）；公司经营不善风险。[p.21-22]
+
+**二、行业类**
+7. **国联民生《医药周报 20260906》**：①医保、集采政策导致价格不及预期；②临床进度或上市时间不及预期；③行业竞争格局的不确定性；④地缘政治风险（业务出海受阻）；⑤下游投融资及需求复苏不及预期。[p.18-19]
+8. **通信行业周报**（2026-09-06）：首页摘要为 AI 资本开支节奏不及预期、地缘政治与出口管制不确定性、存储价格大幅波动；正文详列五条——AI 商业价值、技术发展速度、供应链集中度、行业监管、市场竞争均可能不及预期/加剧。[p.11-12]
+9. **国泰海通机器人行业周报**：①技术进步速度低于预期（具身大模型与本体硬件底层技术瓶颈）；②商业化落地速度低于预期。[p.9-10]
+
+**三、公司类**
+10. **国信证券白酒财报点评**（收盘价 1341.99 元，维持「优于大市」）：宏观经济复苏不及预期致行业需求承压、食品安全问题；正文另列行业竞争加剧、需求恢复不及预期、供给增加下批价大幅下跌。[p.3-4]
+
+**未检出的两篇（如实说明）**：华泰宏观海外周报《联储加息悬念白热化》未检出独立「风险提示」章节（全文检索未命中该表述，正文以数据图表为主、以免责声明收尾）；另有 1 篇文档在全部风险相关检索中未命中，其风险内容无法定位，不作引用。
+
+**共性集中方向**：本期研报的风险提示高度趋同——①海外货币政策与流动性；②地缘政治与出口管制；③AI 产业链兑现（资本开支、商业价值、监管竞争）；④宏观与行业需求波动。
+
+完整逐字原文与块级定位（doc_id/locator/页码）见 `/outputs/report.md`；证据链已提交清单（manifest-001，publish_status=verified），可按 locator 在语料库中逐字复现。[LLM] stream model=glm-5.3-flash ttft=2.38s total=16.30s chunks=928
+[0m
+✓ done · turns=51 · tools=0 · no_tool · 2,698,463 tokens (in 2,636,400 · out 62,063 · cached 2,353,856)
+
+--- stderr ---
+的报告及其基本信息）[0m
+[32m  ✓ t2 resolved    检索该研报中的「风险提示」章节定位（corpus_search 定位句柄）[0m
+[32m  ✓ t3 resolved    用 corpus_fetch 取回风险提示章节的逐字原文，不得直接引用截断 snippet[0m
+[32m  ✓ t4 resolved    提交语料证据清单（corpus_submit_manifest）并按回验问题修正[0m
+[32m  ✓ t5 resolved    汇总主要风险提示并逐条附来源（doc_id/locator/quote）作答[0m
+
+[1;36m=== [0m[1;36m[[0m[1;36mReAct[0m[1;36m][0m[1;36m Turn [0m[1;36m25[0m[1;36m/[0m[1;36m40[0m  [2mstateful_react[0m  [2mtokens: [0m[1;2;36m81881[0m[2m->[0m[1;2;36m935[0m
+**本期（[1;36m2026[0m-[1;36m09[0m-[1;36m05[0m～[1;36m09[0m-[1;36m06[0m 当周）语料库共 [1;36m12[0m 篇研报，其中 [1;36m10[0m 篇给出了明确的「风险提示」**，各篇要点如下（均逐字取自对应报告的风险提示章节，已通过证据清单回验，[1;36m13[0m/[1;36m13[0m 条 supported）：
+
+**一、策略类**
+[1;36m1[0m. **中银证券《策略周报——外部加息扰动未消，短期以守为攻》**（[1;36m2026[0m-[1;36m09[0m-[1;36m06[0m）：①政策落地不及预期，宏观经济波动超预期；②市场波动风险；③海外经济超预期衰退、流动性风险。[1m[[0mp.[1;36m10[0m-[1;36m11[0m[1m][0m
+[1;36m2[0m. **天风证券《A股策略周报》**（[1;36m2026[0m-[1;36m09[0m-[1;36m06[0m，吴开达等）：地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。[1m[[0mp.[1;36m10[0m-[1;36m11[0m[1m][0m
+[1;36m3[0m. **国金证券《迷雾与罗盘——产业纠结期，货币政策预期的摇摆》**（牟一凌、季宏坤）：①海外货币政策预期大幅收紧（滞胀预期持续→市场可能超预期下跌）；②AI 
+产业趋势迎来重大突破（市场重回科技主线，防御思维失效）。[1m[[0mp.[1;36m12[0m-[1;36m13[0m[1m][0m
+[1;36m4[0m. **兴业证券《极致轮动如何收敛：探讨几个契机》**（[1;36m2026[0m-[1;36m09[0m-[1;36m06[0m）：经济数据波动，政策宽松低于预期，美联储降息不及预期，地缘局势升级等。[1m[[0mp.[1;36m10[0m[1m][0m
+[1;36m5[0m. **中信建投《行业数据周报 [1;36m9[0m 月第 [1;36m1[0m 期》**（[1;36m2026[0m-[1;36m09[0m-[1;36m05[0m，夏凡捷）：①数据统计存在误差风险；②海内外经济波动风险；③市场流动性风险；④海外地缘政治冲突加剧风险。[1m[[0mp.[1;36m25[0m[1m][0m
+[1;36m6[0m. **《金属周期品高频数据周报（[1;36m2026.8[0m.[1;36m31[0m-[1;36m9.6[0m）》**：根据历史数据得出的相关性失效的风险；宏观政策调整的风险（首页表述为「政府对大宗商品价格调控的风险」）；公司经营不善风险。[1m[[0mp.[1;36m21[0m-[1;36m22[0m[1m][0m
+
+**二、行业类**
+[1;36m7[0m. **国联民生《医药周报 [1;36m20260906[0m》**：①医保、集采政策导致价格不及预期；②临床进度或上市时间不及预期；③行业竞争格局的不确定性；④地缘政治风险（业务出海受阻）；⑤下游投融资及需求复苏不及预期。[1m[[0mp.[1;36m18[0m-[1;36m19[0m[1m][0m
+[1;36m8[0m. **通信行业周报**（[1;36m2026[0m-[1;36m09[0m-[1;36m06[0m）：首页摘要为 AI 资本开支节奏不及预期、地缘政治与出口管制不确定性、存储价格大幅波动；正文详列五条——AI 
+商业价值、技术发展速度、供应链集中度、行业监管、市场竞争均可能不及预期/加剧。[1m[[0mp.[1;36m11[0m-[1;36m12[0m[1m][0m
+[1;36m9[0m. **国泰海通机器人行业周报**：①技术进步速度低于预期（具身大模型与本体硬件底层技术瓶颈）；②商业化落地速度低于预期。[1m[[0mp.[1;36m9[0m-[1;36m10[0m[1m][0m
+
+**三、公司类**
+[1;36m10[0m. **国信证券白酒财报点评**（收盘价 [1;36m1341.99[0m 元，维持「优于大市」）：宏观经济复苏不及预期致行业需求承压、食品安全问题；正文另列行业竞争加剧、需求恢复不及预期、供给增加下批价大幅下跌。[1m[[0mp.[1;36m3[0m-[1;36m4[0m[1m][0m
+
+**未检出的两篇（如实说明）**：华泰宏观海外周报《联储加息悬念白热化》未检出独立「风险提示」章节（全文检索未命中该表述，正文以数据图表为主、以免责声明收尾）；另有 [1;36m1[0m 
+篇文档在全部风险相关检索中未命中，其风险内容无法定位，不作引用。
+
+**共性集中方向**：本期研报的风险提示高度趋同——①海外货币政策与流动性；②地缘政治与出口管制；③AI 产业链兑现（资本开支、商业价值、监管竞争）；④宏观与行业需求波动。
+
+完整逐字原文与块级定位（doc_id/locator/页码）见 `[35m/outputs/[0m[95mreport.md[0m`；证据链已提交清单（manifest-[1;36m001[0m，[33mpublish_status[0m=[35mverified[0m），可按 locator 在语料库中逐字复现。
+
+[1;35m[[0m[1;35mReAct[0m[1;35m][0m[1;35m done[0m  [33mturns[0m=[1;36m25[0m  [33mtool_calls[0m=[1;36m51[0m  [33mstopped_by[0m=[35mno_tool[0m

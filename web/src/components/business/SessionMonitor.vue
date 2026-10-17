@@ -3,10 +3,11 @@ import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { monitor, watchRules, type MonitorStatus } from '@/api'
 import type { WatchRule } from '@/types'
+import { activeMonitorRunId } from '@/utils/monitor'
 import RunDetailView from '@/views/RunDetailView.vue'
 
 const props = defineProps<{ researchId: string }>()
-const emit = defineEmits<{ runsChanged: [researchId: string] }>()
+const emit = defineEmits<{ runsChanged: [researchId: string, activeRunId: string | null] }>()
 const opened = ref(false)
 const selectedRun = ref<string | null>(null)
 const status = ref<MonitorStatus | null>(null)
@@ -73,7 +74,9 @@ async function load(): Promise<void> {
     status.value = result
     error.value = ''
     const fingerprint = result.events.filter(e => e.run_id).map(e => `${e.run_id}:${e.status}`).join('|')
-    if (fingerprint && fingerprint !== runFingerprint) emit('runsChanged', id)
+    if (fingerprint && fingerprint !== runFingerprint) {
+      emit('runsChanged', id, activeMonitorRunId(result.events))
+    }
     runFingerprint = fingerprint
   } catch (err) {
     if (requestEpoch === epoch) error.value = err instanceof Error ? err.message : '读取监控失败'

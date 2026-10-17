@@ -1,0 +1,62 @@
+{
+  "artifact": "v14-s5-real-model-run",
+  "generated_at": "2026-10-17T09:57:31.118616+00:00",
+  "arm": "candidate",
+  "repeat": 2,
+  "target_id": "5e305376-fedrate",
+  "sample_id": "holdout-macro-008",
+  "domain": "macro",
+  "role": "required",
+  "question": "全周联储年内剩余累计加息预期变化了多少（降至多少 bp）？",
+  "status": "ok",
+  "wall_s": 109.6,
+  "run_present": true,
+  "run_dir": ".s5runs_v14/candidate/5e305376-fedrate/run-02/workspace/.apodex/runs/20261017-175542+0800-react-67f0",
+  "answer": "**全周联储年内剩余累计加息预期下降 3bp，降至 35bp。**\n\n依据（研报《联储加息悬念白热化》，华泰研究）：\n\n- 正文「金融市场」段（第 1 页）逐字原文：\n  > 「联储加息预期小幅回落……**全周看，联储年内剩余累计加息预期下降 3bp 至 35bp。**」\n- 同报告第 10 页图表 33 标题互相印证：\n  > 「图表33：上周联储2026 年加息预期下降3bp 至35bp」（资料来源：Bloomberg，华泰研究）\n\n补充上下文（同一句原文）：同期 2y、10y 美债收益率分别上行 3bp、5bp 至 4.37%、4.78%，美元指数下行 0.5% 至 99.2——即加息预期回落的同时长端利率仍上行。\n\n证据清单（A4）已提交并核验通过（C1 → supported）。\n\n来源定位：doc_id `cv2:a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009`；locator `chunk:a18883e28d578988:body:0005`（p.1）、`chunk:a18883e28d578988:heading:0128`（p.10）。",
+  "trace": {
+    "llm_turns": 10,
+    "tool_calls": 9,
+    "tool_calls_by_name": {
+      "add_task": 1,
+      "update_task": 4,
+      "corpus_search": 1,
+      "corpus_fetch": 1,
+      "corpus_submit_manifest": 2
+    },
+    "tool_errors": 0
+  },
+  "usage": {
+    "input": 216010,
+    "output": 3895,
+    "cached": 187840,
+    "compactions": 0
+  },
+  "ledger": {
+    "present": true,
+    "offered": 10,
+    "requested": 1,
+    "fetched": 2,
+    "delivered": 2,
+    "errors": []
+  },
+  "deterministic": {
+    "source_offered": true,
+    "quote_fetched": true,
+    "quote_delivered": true,
+    "expected_build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009"
+  },
+  "judge": {
+    "verdict": "pass",
+    "score": 1.0,
+    "supported": true,
+    "complete": true,
+    "reason": "回答核心事实（下降3bp、降至35bp）与第1页金融市场证据逐字一致，完整覆盖问题要求的变化量与降至水平。",
+    "raw": "{\"verdict\":\"pass\",\"score\":1.0,\"supported\":true,\"complete\":true,\"reason\":\"回答核心事实（下降3bp、降至35bp）与第1页金融市场证据逐字一致，完整覆盖问题要求的变化量与降至水平。\"}",
+    "model": "glm-5.3-flash",
+    "usage": {
+      "input": 506,
+      "output": 512,
+      "total": 1018
+    }
+  }
+}

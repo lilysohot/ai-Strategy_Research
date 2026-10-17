@@ -5,13 +5,22 @@
 > 49/51，S3 达到 50/51，S4 在同一候选库达到 **51/51**（required 36/36、
 > supplementary 15/15），既有 50 项零回归。S4 以来源级候选查询词元覆盖数为第一排序键，
 > 再比较来源最高块分，使分散在同一研报不同块的查询概念参与来源选择；没有重建语料。
-> OCR、向量和 clean 策略未改变。状态见
+> S5 已完成 3 题×2 臂×3 次、共 18 个独立真实模型会话：两臂来源提供、金标取回和送达
+> 均为 9/9；同模型 judge 为 control 8/9、candidate **9/9**。候选墙钟 -21.6%、工具调用
+> -19.0%、input token -21.3%、output token -36.4%，search 27 对 34、fetch 31 对 50。
+> candidate 在复杂表格和来源召回题上的时延及查询行为方差也低于 control；唯一工具错误是一次
+> 可恢复的 `corpus_fetch` 缺少 `doc_id`。当前状态为 `pilot_repeats_pass_expand_51_matrix`，允许
+> 进入冻结 51 项真实模型矩阵，但尚未达到生产发布门；judge 复用当前回答模型，仍不能称为独立
+> 裁判。OCR、向量和 clean 策略未改变。状态见
 > [04 · 结构重启与 A/B 基线](04-structure-restart.md)，机器绑定见
-> [v14-control-manifest.json](v14-control-manifest.json)，A/B 结果见
+> [v14-control-manifest.json](v14-control-manifest.json) 和
+> [v14-s5-real-model-manifest.json](v14-s5-real-model-manifest.json) 及其重复运行扩展
+> [v14-s5-real-model-manifest-r3.json](v14-s5-real-model-manifest-r3.json)，A/B 结果见
 > [v14-s1-ab-report.json](v14-s1-ab-report.json)、
 > [v14-s2-ab-report.json](v14-s2-ab-report.json)、
 > [v14-s3-ab-report.json](v14-s3-ab-report.json) 和
-> [v14-s4-ab-report.json](v14-s4-ab-report.json)。
+> [v14-s4-ab-report.json](v14-s4-ab-report.json) 及
+> [v14-s5-real-model-ab-report.json](v14-s5-real-model-ab-report.json)。
 >
 > 修订：v13 · 2026-10-01。状态：`CLOSED_WITH_ACCEPTED_EXCEPTIONS`。A0–A4 已实施，A4 仍为观测模式；开发集必需证据 79/79、全部证据 98/99；12 份留出材料在隔离库均有活动发布。冻结 51 项零模型矩阵重新核验为 42/51（required 31/36、supplementary 11/15），9 项失败及原始分母完整保留。项目负责人基于投入产出接受残余风险，本轮数据治理任务按带例外方式关闭。该状态不表示原冻结协议全量通过，也不覆盖原模型独立实测 90/99；生产库未改动。证据见 [E6 数据收尾报告](../../.scratch/corpus-access-validation/e6-data-closure-report.md)、[收口决定](../../.scratch/corpus-access-validation/e6-closure-decision.md)与[03 执行状态](03-end-to-end-validation.md)。
 > 本次收口未修改生产数据库；历史快照原样保留，当前隔离库状态与 42/51 复测另有只读核验产物。

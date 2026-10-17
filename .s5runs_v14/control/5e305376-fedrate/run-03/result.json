@@ -1,0 +1,62 @@
+{
+  "artifact": "v14-s5-real-model-run",
+  "generated_at": "2026-10-17T10:38:38.135637+00:00",
+  "arm": "control",
+  "repeat": 3,
+  "target_id": "5e305376-fedrate",
+  "sample_id": "holdout-macro-008",
+  "domain": "macro",
+  "role": "required",
+  "question": "全周联储年内剩余累计加息预期变化了多少（降至多少 bp）？",
+  "status": "ok",
+  "wall_s": 63.3,
+  "run_present": true,
+  "run_dir": ".s5runs_v14/control/5e305376-fedrate/run-03/workspace/.apodex/runs/20261017-183735+0800-react-a9ab",
+  "answer": "**答案：全周联储年内剩余累计加息预期下降了 3bp，降至 35bp。**\n\n**逐字原文**（研报《联储加息悬念白热化》，金融市场章节，第 1 页，语料块 `chunk:88ad6cf30eb10c3c:body:0005`）：\n\n> “联储加息预期小幅回落……全周看，联储年内剩余累计加息预期下降 3bp 至 35bp。”\n\n**补充背景**（同段原文）：本周联储官员表态中性偏鸽（沃勒表示若 8 月 CPI 延续改善倾向维持利率不变），叠加美伊冲突升级，全周加息预期小幅回落；同周 2y、10y 美债收益率分别上行 3bp、5bp 至 4.37%、4.78%。\n\n来源：语料库研报《联储加息悬念白热化》（数据来源标注为 Bloomberg，华泰研究），结论已登记至证据清单并校验通过（manifest C1: supported）。",
+  "trace": {
+    "llm_turns": 6,
+    "tool_calls": 8,
+    "tool_calls_by_name": {
+      "add_task": 1,
+      "update_task": 4,
+      "corpus_search": 1,
+      "corpus_fetch": 1,
+      "corpus_submit_manifest": 1
+    },
+    "tool_errors": 0
+  },
+  "usage": {
+    "input": 127409,
+    "output": 2376,
+    "cached": 99904,
+    "compactions": 0
+  },
+  "ledger": {
+    "present": true,
+    "offered": 10,
+    "requested": 1,
+    "fetched": 1,
+    "delivered": 1,
+    "errors": []
+  },
+  "deterministic": {
+    "source_offered": true,
+    "quote_fetched": true,
+    "quote_delivered": true,
+    "expected_build_id": "88ad6cf30eb10c3c5275ae814ccaf10b9f1132f7d40c9eb4bf6a2c544140347c"
+  },
+  "judge": {
+    "verdict": "pass",
+    "score": 1,
+    "supported": true,
+    "complete": true,
+    "reason": "回答核心事实'全周联储年内剩余累计加息预期下降3bp至35bp'与参考证据完全一致，主体、期间、单位正确，且完整回答了变化幅度和降至水平两项要求。",
+    "raw": "{\"verdict\":\"pass\",\"score\":1,\"supported\":true,\"complete\":true,\"reason\":\"回答核心事实'全周联储年内剩余累计加息预期下降3bp至35bp'与参考证据完全一致，主体、期间、单位正确，且完整回答了变化幅度和降至水平两项要求。\"}",
+    "model": "glm-5.3-flash",
+    "usage": {
+      "input": 413,
+      "output": 1549,
+      "total": 1962
+    }
+  }
+}

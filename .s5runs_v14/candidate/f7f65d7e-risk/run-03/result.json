@@ -1,0 +1,64 @@
+{
+  "artifact": "v14-s5-real-model-run",
+  "generated_at": "2026-10-17T10:52:03.382898+00:00",
+  "arm": "candidate",
+  "repeat": 3,
+  "target_id": "f7f65d7e-risk",
+  "sample_id": "holdout-macro-009",
+  "domain": "macro",
+  "role": "supplementary",
+  "question": "本期研报列出了哪些主要风险提示？",
+  "status": "ok",
+  "wall_s": 411.8,
+  "run_present": true,
+  "run_dir": ".s5runs_v14/candidate/f7f65d7e-risk/run-03/workspace/.apodex/runs/20261017-184512+0800-react-951d",
+  "answer": "本期研报为：天风证券《A股策略周报——非农大超预期，加息预期升温》（证券研究报告，2026年09月06日；作者：吴开达、林晨、汪书慧，联系人：陈英奇）。\n\n报告列出的主要风险提示共 3 项：1）地缘冲突超预期；2）海外通胀持续性超预期；3）流动性收紧超预期。\n\n出处（报告内两处，逐字原文已核对，表述一致）：\n- 正文「5.风险提示」章节（报告第 11 页，为报告最后一个正文章节）：「地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。」该句之后即紧接分析师声明与免责条款。[doc_id cv2:ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730，locator chunk:ebff0cfc6c33f6fc:body:0015，页 10-11]\n- 首页摘要末行（报告第 1-2 页）：「风险提示：地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。」[同上 doc_id，locator chunk:ebff0cfc6c33f6fc:body:0002]\n\n两点说明：\n1. 两处表述一致，且均为一句话整体列举、未对每项风险逐条展开论述——本期报告对风险的陈述即以上内容。\n2. 证据清单已提交并通过校验（3/3 supported）。若你指的是本批语料中的另一篇研报（本批共收录 12 篇，如 2026-09-05 的另一篇策略周报、医药周报 20260906、半导体行业周报等），请指明是哪一篇，我再取回其风险提示章节原文。",
+  "trace": {
+    "llm_turns": 11,
+    "tool_calls": 16,
+    "tool_calls_by_name": {
+      "add_task": 1,
+      "update_task": 4,
+      "glob_search": 1,
+      "corpus_search": 5,
+      "corpus_fetch": 3,
+      "corpus_inventory": 1,
+      "corpus_submit_manifest": 1
+    },
+    "tool_errors": 0
+  },
+  "usage": {
+    "input": 496379,
+    "output": 18663,
+    "cached": 420480,
+    "compactions": 0
+  },
+  "ledger": {
+    "present": true,
+    "offered": 41,
+    "requested": 3,
+    "fetched": 18,
+    "delivered": 18,
+    "errors": []
+  },
+  "deterministic": {
+    "source_offered": true,
+    "quote_fetched": true,
+    "quote_delivered": true,
+    "expected_build_id": "ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730"
+  },
+  "judge": {
+    "verdict": "pass",
+    "score": 1.0,
+    "supported": true,
+    "complete": true,
+    "reason": "回答逐字复述了参考证据中的三项风险提示（地缘冲突超预期、海外通胀持续性超预期、流动性收紧超预期），核心事实完整且受支持，满足问题要求。",
+    "raw": "{\"verdict\":\"pass\",\"score\":1.0,\"supported\":true,\"complete\":true,\"reason\":\"回答逐字复述了参考证据中的三项风险提示（地缘冲突超预期、海外通胀持续性超预期、流动性收紧超预期），核心事实完整且受支持，满足问题要求。\"}",
+    "model": "glm-5.3-flash",
+    "usage": {
+      "input": 609,
+      "output": 1036,
+      "total": 1645
+    }
+  }
+}

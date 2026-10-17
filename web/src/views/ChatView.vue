@@ -35,6 +35,7 @@ import type { DiffFile } from '@/types'
 import { renderMarkdown } from '@/utils/markdown'
 import { redactSecrets } from '@/utils/redact'
 import {
+  attachDiscoveredRun,
   attachSubmittedRun,
   dedupeAssistantTurns,
   hasRunAnswer,
@@ -590,10 +591,10 @@ watch(
     await reloadTurns()
     await loadDiff()
     await canvasRef.value?.load()
-    if (pendingMonitorResearch && !runStream.isStreaming) {
-      const researchId = pendingMonitorResearch
-      pendingMonitorResearch = null
-      if (sessions.activeId === researchId) await attachSessionRun(researchId)
+    const pending = pendingMonitorRun
+    if (pending && !runStream.isStreaming) {
+      pendingMonitorRun = null
+      if (sessions.activeId === pending.researchId) connectMonitorRun(pending.researchId, pending.runId)
     }
   },
 )
@@ -725,13 +726,27 @@ async function restoreSession(): Promise<void> {
 }
 
 let monitorHeartbeat: ReturnType<typeof setInterval> | null = null
-let pendingMonitorResearch: string | null = null
-async function refreshMonitorRun(researchId: string): Promise<void> {
+let pendingMonitorRun: { researchId: string; runId: string } | null = null
+
+function connectMonitorRun(researchId: string, runId: string): void {
+  const outcome = attachDiscoveredRun(
+    { sessionId: researchId, runId },
+    sessions.activeId,
+    runStream.runId,
+    runStream.isStreaming,
+    {
+      rememberRun: (sessionId, discoveredRunId) => runStream.rememberRun(sessionId, discoveredRunId),
+      watchRun: (discoveredRunId, sessionId) => runStream.watch(discoveredRunId, undefined, sessionId),
+    },
+  )
+  if (outcome === 'deferred') pendingMonitorRun = { researchId, runId }
+}
+
+async function refreshMonitorRun(researchId: string, activeRunId: string | null): Promise<void> {
   if (sessions.activeId !== researchId) return
   await reloadTurns()
-  if (sessions.activeId !== researchId) return
-  if (runStream.isStreaming) pendingMonitorResearch = researchId
-  else await attachSessionRun(researchId)
+  if (sessions.activeId !== researchId || !activeRunId) return
+  connectMonitorRun(researchId, activeRunId)
 }
 
 onMounted(async () => {

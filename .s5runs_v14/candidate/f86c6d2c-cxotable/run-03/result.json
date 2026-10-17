@@ -1,0 +1,70 @@
+{
+  "artifact": "v14-s5-real-model-run",
+  "generated_at": "2026-10-17T10:35:19.704305+00:00",
+  "arm": "candidate",
+  "repeat": 3,
+  "target_id": "f86c6d2c-cxotable",
+  "sample_id": "holdout-industry-006",
+  "domain": "industry",
+  "role": "supplementary",
+  "question": "图 5 中 CXO 龙头药明康德按市值排序的 2026H1 营业收入及同比增速是多少？",
+  "status": "ok",
+  "wall_s": 385.6,
+  "run_present": true,
+  "run_dir": ".s5runs_v14/candidate/f86c6d2c-cxotable/run-03/workspace/.apodex/runs/20261017-182854+0800-react-383a",
+  "answer": "**答案：图 5 中，CXO 龙头药明康德按市值排序居首，其 2026H1 营业收入为 288.97 亿元，收入同比增速（yoy）为 +39%，对应市值 4,693.7 亿元。**\n\n**来源与出处**\n- 报告：《医药周报 20260906：CXO 中报我们看到了什么？》（国联民生证券研究所，2026 年 9 月 6 日）\n- 图题：「图5：CXO A 股上市公司2026H1 收入及增速概览（按市值排序）」[stub:R01 p3–4]\n- 药明康德数据行：「药明康德 | 2026H1 营业收入 288.97 亿元 | 收入yoy 39% | 市值 4,693.7 亿元」[stub:R01 p4]\n- 图注：「资料来源：Wind、各公司公告，国联民生证券研究所 注：按20260904 收盘市值排序」[stub:R01 p4]\n\n**口径与限定说明**\n1. 排序依据是 **2026/09/04 收盘市值**（药明康德 4,693.7 亿元，为图 5 中 20 家样本公司之首），营收与增速为已披露的 2026 年中报口径数据。\n2. 图 5 中\"39%\"为四舍五入后的整数增速；营收保留了两位小数（288.97 亿元）。原文表格表头在文本抽取中显示为「206H1 营业收入」，系版面换行/抽取痕迹，实际表头为「2026H1 营业收入（亿元）」。\n3. 该图覆盖 20 家样本公司（图 5 横跨两栏：前 13 家 + 后 7 家），药明康德数据取自第一栏首行。\n\n**反方/平衡证据（同一图 5 及同报告内可见）**\n- 增速并非板块普遍 39% 量级：同图中九洲药业收入同比 **-10%**、阳光诺和 **-28%**、普蕊斯 **-5%** [stub:R01 p4]，报告亦指出部分企业因大品种专利到期等短期扰动同比下滑。\n- 板块整体利润增速低于收入增速：2026H1 20 家样本公司合计收入 562 亿元（同比 +24.5%）、归母净利润 132 亿元（同比仅 +17%）[stub:R01 p3]，说明收入高增长尚未完全传导为利润弹性，且报告提示部分公司应关注经调整净利润或扣非口径。\n\n**风险提示**：以上为研报披露的历史数据引用，非投资建议；市值排序时点（20260904）与中报披露时点不同，若用于决策请注意数据时点差异。",
+  "trace": {
+    "llm_turns": 9,
+    "tool_calls": 10,
+    "tool_calls_by_name": {
+      "add_task": 1,
+      "update_task": 3,
+      "corpus_search": 1,
+      "corpus_inventory": 1,
+      "corpus_fetch": 3,
+      "corpus_submit_manifest": 1
+    },
+    "tool_errors": 1
+  },
+  "usage": {
+    "input": 251896,
+    "output": 8161,
+    "cached": 204800,
+    "compactions": 0
+  },
+  "ledger": {
+    "present": true,
+    "offered": 10,
+    "requested": 3,
+    "fetched": 4,
+    "delivered": 4,
+    "errors": [
+      {
+        "locator": "",
+        "code": "",
+        "error": "Error: TypeError: corpus_fetch() missing 1 required positional argument: 'doc_id'",
+        "turn": 5
+      }
+    ]
+  },
+  "deterministic": {
+    "source_offered": true,
+    "quote_fetched": true,
+    "quote_delivered": true,
+    "expected_build_id": "e22bc49c40c4c58746479abe7d884a36b5fa84bc3ada033bc2d0779835a992a3"
+  },
+  "judge": {
+    "verdict": "pass",
+    "score": 0.95,
+    "supported": true,
+    "complete": true,
+    "reason": "核心事实（2026H1营收288.97亿元、收入yoy 39%、市值4,693.7亿元）与参考证据完全一致，主体、期间、单位正确且完整回答问题；附加的同业及板块数据超出参考证据范围但非问题核心。",
+    "raw": "{\"verdict\":\"pass\",\"score\":0.95,\"supported\":true,\"complete\":true,\"reason\":\"核心事实（2026H1营收288.97亿元、收入yoy 39%、市值4,693.7亿元）与参考证据完全一致，主体、期间、单位正确且完整回答问题；附加的同业及板块数据超出参考证据范围但非问题核心。\"}",
+    "model": "glm-5.3-flash",
+    "usage": {
+      "input": 899,
+      "output": 1243,
+      "total": 2142
+    }
+  }
+}

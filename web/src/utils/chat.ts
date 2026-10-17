@@ -12,6 +12,36 @@ interface SubmittedRunActions {
   watchRun: (runId: string, sessionId: string) => void
 }
 
+interface DiscoveredRunActions {
+  rememberRun: (sessionId: string, runId: string) => void
+  watchRun: (runId: string, sessionId: string) => void
+}
+
+export type DiscoveredRunOutcome = 'ignored' | 'current' | 'deferred' | 'attached'
+
+/**
+ * Attach a run created asynchronously by the monitor to the active conversation.
+ *
+ * The trigger message is already persisted by the server, so this path only
+ * records the run for refresh recovery and opens its SSE stream. If another run
+ * is still streaming, the caller keeps the discovery pending until that stream
+ * settles.
+ */
+export function attachDiscoveredRun(
+  discovery: Pick<SubmittedConversationRun, 'sessionId' | 'runId'>,
+  activeSessionId: string | null,
+  currentRunId: string | null,
+  isStreaming: boolean,
+  actions: DiscoveredRunActions,
+): DiscoveredRunOutcome {
+  if (activeSessionId !== discovery.sessionId) return 'ignored'
+  actions.rememberRun(discovery.sessionId, discovery.runId)
+  if (sameRunId(currentRunId, discovery.runId)) return 'current'
+  if (isStreaming) return 'deferred'
+  actions.watchRun(discovery.runId, discovery.sessionId)
+  return 'attached'
+}
+
 /**
  * Attach a run created by a secondary UI (for example, the trade-fill dialog)
  * to the same transcript and live stream used by the main composer.

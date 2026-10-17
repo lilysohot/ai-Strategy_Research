@@ -1,0 +1,57 @@
+{
+  "artifact": "v14-s5-real-model-run",
+  "generated_at": "2026-10-17T08:24:33.599386+00:00",
+  "arm": "control",
+  "repeat": 1,
+  "target_id": "5e305376-fedrate",
+  "sample_id": "holdout-macro-008",
+  "domain": "macro",
+  "role": "required",
+  "question": "全周联储年内剩余累计加息预期变化了多少（降至多少 bp）？",
+  "status": "ok",
+  "wall_s": 105.8,
+  "run_present": true,
+  "run_dir": ".s5runs_v14/control/5e305376-fedrate/run-01/workspace/.apodex/runs/20261017-162248+0800-react-2042",
+  "answer": "**答案：全周联储年内剩余累计加息预期下降了 3bp，降至 35bp。**\n\n依据（研报语料库逐字原文，华泰研究《联储加息悬念白热化》）：\n\n- 「金融市场」段（第 1 页，`chunk:88ad6cf30eb10c3c:body:0005`）：\n  「联储加息预期小幅回落……**全周看，联储年内剩余累计加息预期下降 3bp 至 35bp。**」\n- 交叉印证，「图表33」标题（第 10 页，`chunk:88ad6cf30eb10c3c:heading:0128`，资料来源：Bloomberg，华泰研究）：\n  「图表33：上周联储 **2026 年加息预期下降3bp 至35bp**」\n\n两处口径一致：变化量为 **−3bp**，期末水平 **35bp**（即市场对年内/2026 年剩余累计加息幅度的定价）。该结论已提交证据清单并核验通过（manifest 状态：supported）。",
+  "trace": {
+    "llm_turns": 7,
+    "tool_calls": 7,
+    "tool_calls_by_name": {
+      "add_task": 1,
+      "update_task": 2,
+      "corpus_search": 1,
+      "corpus_fetch": 2,
+      "corpus_submit_manifest": 1
+    },
+    "tool_errors": 0
+  },
+  "usage": {
+    "input": 150472,
+    "output": 3577,
+    "cached": 119552,
+    "compactions": 0
+  },
+  "ledger": {
+    "present": true,
+    "offered": 10,
+    "requested": 2,
+    "fetched": 6,
+    "delivered": 6,
+    "errors": []
+  },
+  "deterministic": {
+    "source_offered": true,
+    "quote_fetched": true,
+    "quote_delivered": true,
+    "expected_build_id": "88ad6cf30eb10c3c5275ae814ccaf10b9f1132f7d40c9eb4bf6a2c544140347c"
+  },
+  "judge": {
+    "verdict": "pass",
+    "score": 1,
+    "supported": true,
+    "complete": true,
+    "reason": "回答核心事实（下降3bp、降至35bp）与第1页'金融市场'参考证据逐字一致，变化量与期末水平两项均完整覆盖问题要求。",
+    "raw": "{\"verdict\":\"pass\",\"score\":1,\"supported\":true,\"complete\":true,\"reason\":\"回答核心事实（下降3bp、降至35bp）与第1页'金融市场'参考证据逐字一致，变化量与期末水平两项均完整覆盖问题要求。\"}",
+    "model": "glm-5.3-flash"
+  }
+}

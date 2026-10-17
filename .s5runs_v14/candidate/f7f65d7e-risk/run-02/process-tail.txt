@@ -1,0 +1,89 @@
+码数字, corpus 原文路径的 locator 要原样填进 evidence.page. In my reply I'll cite as [chunk:ebff0cfc6c33f6fc:body:0015 · p11] style.
+
+Mark t3 resolved, t4 in_progress then resolved, then final answer. Actually I can do: update t3 resolved and t4 in_progress in one call, then after composing the answer mark t4 resolved — but the final answer must be a plain-text reply with no tool call. So I should mark t4 resolved in the same update as t3? t4 is "汇总主要风险点，给出带引用的最终回答" — the answer composition is happening now; once I give it, it's done. I'll mark t3 resolved + t4 resolved in one turn (both genuinely completed as I finalize), then post the final plain-text answer.
+
+Wait — rule 4: update each task as it happens; two tasks in one turn is allowed when both finished in the same turn. t3 (verbatim fetch) is done; t4 (compose answer) — the answer is composed in this same turn and will be delivered in the next message. I'll mark both resolved now, then give the final answer.[LLM] stream model=glm-5.3-flash ttft=4.43s total=18.38s chunks=620
+[0m
+☑ Plan 2 items · resolved
+╭─ ✓ Plan ─────────────────────────────────────────────────────────────────────╮
+│ Updated ['t3', 't4'].                                                        │
+│  resolved 4/4 · in-progress 0 · open 0 · cancelled 0                         │
+│   ✓ t1 resolved    确认「本期研报」具体指哪篇研报（检查 /inputs 任务说明与语 │
+│   ✓ t2 resolved    在语料库中定位该研报的风险提示（风险提示/风险因素）章节   │
+│   ✓ t3 resolved    用 corpus_fetch 取回风险提示逐字原文及定位句柄            │
+│   ✓ t4 resolved    汇总主要风险点，给出带 source_ref+页码 引用的最终回答     │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+[38;2;166;173;200m⠼ working… 0s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠴ working… 0s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠦ working… 0s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠧ working… 0s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠇ working… 0s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠏ working… 0s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠋ working… 0s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠙ working… 0s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠹ working… 0s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠸ working… 0s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠼ working… 1s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠴ working… 1s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠦ working… 1s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠧ working… 1s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠇ working… 1s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠏ working… 1s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠋ working… 1s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠙ working… 1s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠹ working… 1s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠸ working… 1s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠼ working… 2s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠴ working… 2s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠦ working… 2s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠧ working… 2s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠇ working… 2s · ctx 71% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[K[38;2;166;173;200m✻ All 4 tasks resolved, manifest verified (R1, R2 both supported/delivered). Now give the final plain-text answer.[0m
+[0m**本期研报**：天风证券《A 股策略周报：非农大超预期，加息预期升温》（证券研究报告，2026 年 09 月 06 日，分析师吴开达、林晨、汪书慧）。
+
+**列出的主要风险提示共三项**（摘要页与正文「5. 风险提示」两处逐字一致）：
+
+1. **地缘冲突超预期** —— 报告当期跟踪了俄乌冲突（乌国家安全局总部遭袭、美国邀请俄出席 G20 财长会议）与中东冲突（美方称可能打击伊朗核设施、美军袭击已致伊朗 18 死 142 伤）等事件，地缘局势恶化是首要风险。
+2. **海外通胀持续性超预期** —— 通胀回落慢于预期将制约海外宽松空间。
+3. **流动性收紧超预期** —— 8 月美国非农大超预期（新增 16.2 万人 vs 预期 5.6 万）后市场加息预期回升：据 CME「美联储观察」，截至 2026/9/5，美联储 2026 年 9 月加息 25 基点概率 59.4%、维持利率概率 40.6%，若流动性收紧快于预期将压制风险资产估值。
+
+**逐字原文与出处**：
+- 正文「5.风险提示」（第 11 页）：「地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。」［chunk:ebff0cfc6c33f6fc:body:0015 · p11］
+- 首页摘要（第 2 页）：「风险提示：地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。」［chunk:ebff0cfc6c33f6fc:body:0002 · p2］
+
+**说明**：以上三项即报告「风险提示」章节的全部内容（报告正文共 5 节，末节即为风险提示，未列其他风险项）；括号内的背景对应关系是依据报告正文事件梳理的理解性归纳，风险提示本身仅为上述三项表述。证据清单（A4）已提交并核验通过（2/2 条 supported）。[LLM] stream model=glm-5.3-flash ttft=2.45s total=11.79s chunks=506
+[0m
+✓ done · turns=22 · tools=0 · no_tool · 767,149 tokens (in 754,976 · out 12,173 · cached 676,544)
+
+--- stderr ---
+ [0m[1;32m{[0m[32m"supported"[0m[32m: [0m[1;32m2[0m[32m, [0m[32m"partial"[0m[32m: [0m[1;32m0[0m[32m, [0m[32m"unsupported"[0m[32m: [0m[1;32m0[0m[1;32m}[0m[32m, [0m[32m"conclusions"[0m[32m: [0m[1;32m[[0m[1;32m{[0m[32m"id"[0m[32m: [0m[32m"R1"[0m[32m, [0m[32m"status"[0m[32m: [0m[32m"supported"[0m[32m, [0m[32m"delivery"[0m[32m: [0m[1;32m[[0m[32m"deli[0m[32m...[0m
+
+[1;36m=== [0m[1;36m[[0m[1;36mReAct[0m[1;36m][0m[1;36m Turn [0m[1;36m14[0m[1;36m/[0m[1;36m40[0m  [2mstateful_react[0m  [2mtokens: [0m[1;2;36m76555[0m[2m->[0m[1;2;36m629[0m
+  [33mtool update_task[0m  [1;2m{[0m[2;32m"updates"[0m[2m: [0m[1;2m[[0m[1;2m{[0m[2;32m"id"[0m[2m: [0m[2;32m"t3"[0m[2m, [0m[2;32m"resolution"[0m[2m: [0m[2;32m"resolved"[0m[1;2m}[0m[2m, [0m[1;2m{[0m[2;32m"id"[0m[2m: [0m[2;32m"t4"[0m[2m, [0m[2;32m"resolution"[0m[2m: [0m[2;32m"resolved"[0m[1;2m}[0m[1;2m][0m[1;2m}[0m
+  [32m-> Updated [0m[1;32m[[0m[32m't3'[0m[32m, [0m[32m't4'[0m[1;32m][0m[32m.[0m
+[1;32m[[0m[32mtask board[0m[1;32m][0m[32m resolved [0m[1;32m4[0m[32m/[0m[1;32m4[0m[32m · in-progress [0m[1;32m0[0m[32m · open [0m[1;32m0[0m[32m · cancelled [0m[1;32m0[0m
+[32m  ✓ t1 resolved    确认「本期研报」具体指哪篇研报（检查 [0m[32m/[0m[32minputs[0m[32m 任务说明与语料库内容）[0m
+[32m  ✓ t2 resolved    在语料库中定位该研报的风险提示（风险提示/风险因素）章节[0m
+[32m  ✓ t3 resolved    用 corpus_fetch 取回风险提示逐字原文及定位句柄[0m
+[32m  ✓ t4 resolved    汇总主要风险点，给出带 source_ref+页码 引用的最终回答[0m
+
+[1;36m=== [0m[1;36m[[0m[1;36mReAct[0m[1;36m][0m[1;36m Turn [0m[1;36m15[0m[1;36m/[0m[1;36m40[0m  [2mstateful_react[0m  [2mtokens: [0m[1;2;36m77330[0m[2m->[0m[1;2;36m513[0m
+**本期研报**：天风证券《A 股策略周报：非农大超预期，加息预期升温》（证券研究报告，[1;36m2026[0m 年 [1;36m09[0m 月 [1;36m06[0m 日，分析师吴开达、林晨、汪书慧）。
+
+**列出的主要风险提示共三项**（摘要页与正文「[1;36m5[0m. 风险提示」两处逐字一致）：
+
+[1;36m1[0m. **地缘冲突超预期** —— 报告当期跟踪了俄乌冲突（乌国家安全局总部遭袭、美国邀请俄出席 G20 财长会议）与中东冲突（美方称可能打击伊朗核设施、美军袭击已致伊朗 [1;36m18[0m 死 [1;36m142[0m 
+伤）等事件，地缘局势恶化是首要风险。
+[1;36m2[0m. **海外通胀持续性超预期** —— 通胀回落慢于预期将制约海外宽松空间。
+[1;36m3[0m. **流动性收紧超预期** —— [1;36m8[0m 月美国非农大超预期（新增 [1;36m16.2[0m 万人 vs 预期 [1;36m5.6[0m 万）后市场加息预期回升：据 CME「美联储观察」，截至 [1;36m2026[0m/[1;36m9[0m/[1;36m5[0m，美联储 [1;36m2026[0m 年 [1;36m9[0m 月加息 [1;36m25[0m 基点概率 [1;36m59.4[0m%、维持利率概率 
+[1;36m40.6[0m%，若流动性收紧快于预期将压制风险资产估值。
+
+**逐字原文与出处**：
+- 正文「[1;36m5.[0m风险提示」（第 [1;36m11[0m 页）：「地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。」［chunk:ebff0cfc6c33[1;92mf6fc:b[0mody:[1;36m0015[0m · p11］
+- 首页摘要（第 [1;36m2[0m 页）：「风险提示：地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。」［chunk:ebff0cfc6c33[1;92mf6fc:b[0mody:[1;36m0002[0m · p2］
+
+**说明**：以上三项即报告「风险提示」章节的全部内容（报告正文共 [1;36m5[0m 
+节，末节即为风险提示，未列其他风险项）；括号内的背景对应关系是依据报告正文事件梳理的理解性归纳，风险提示本身仅为上述三项表述。证据清单（A4）已提交并核验通过（[1;36m2[0m/[1;36m2[0m 条 supported）。
+
+[1;35m[[0m[1;35mReAct[0m[1;35m][0m[1;35m done[0m  [33mturns[0m=[1;36m15[0m  [33mtool_calls[0m=[1;36m22[0m  [33mstopped_by[0m=[35mno_tool[0m

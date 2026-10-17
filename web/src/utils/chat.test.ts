@@ -3,6 +3,7 @@ import assert from 'node:assert/strict'
 
 import type { Turn } from '@/types'
 import {
+  attachDiscoveredRun,
   attachSubmittedRun,
   dedupeAssistantTurns,
   hasRunAnswer,
@@ -129,4 +130,58 @@ test('attachSubmittedRun ignores a submission after the active research changed'
 
   assert.equal(attached, false)
   assert.equal(called, false)
+})
+
+test('attachDiscoveredRun watches an asynchronously created monitor run', () => {
+  const calls: string[] = []
+  const outcome = attachDiscoveredRun(
+    { sessionId: 'research-1', runId: 'run-monitor' },
+    'research-1',
+    'run-old',
+    false,
+    {
+      rememberRun(sessionId, runId) { calls.push(`remember:${sessionId}:${runId}`) },
+      watchRun(runId, sessionId) { calls.push(`watch:${runId}:${sessionId}`) },
+    },
+  )
+
+  assert.equal(outcome, 'attached')
+  assert.deepEqual(calls, [
+    'remember:research-1:run-monitor',
+    'watch:run-monitor:research-1',
+  ])
+})
+
+test('attachDiscoveredRun defers switching away from a live run', () => {
+  const calls: string[] = []
+  const outcome = attachDiscoveredRun(
+    { sessionId: 'research-1', runId: 'run-monitor' },
+    'research-1',
+    'run-current',
+    true,
+    {
+      rememberRun(sessionId, runId) { calls.push(`remember:${sessionId}:${runId}`) },
+      watchRun(runId, sessionId) { calls.push(`watch:${runId}:${sessionId}`) },
+    },
+  )
+
+  assert.equal(outcome, 'deferred')
+  assert.deepEqual(calls, ['remember:research-1:run-monitor'])
+})
+
+test('attachDiscoveredRun does not re-open the run already on screen', () => {
+  const calls: string[] = []
+  const outcome = attachDiscoveredRun(
+    { sessionId: 'research-1', runId: '550e8400-e29b-41d4-a716-446655440000' },
+    'research-1',
+    '550e8400e29b41d4a716446655440000',
+    true,
+    {
+      rememberRun(sessionId, runId) { calls.push(`remember:${sessionId}:${runId}`) },
+      watchRun(runId, sessionId) { calls.push(`watch:${runId}:${sessionId}`) },
+    },
+  )
+
+  assert.equal(outcome, 'current')
+  assert.equal(calls.length, 1)
 })

@@ -1,0 +1,57 @@
+{
+  "schema": "corpus-v14-s5-real-model-ab-v1",
+  "frozen_at": "2026-10-17T07:57:06.936380+00:00",
+  "status": "frozen_before_execution",
+  "arms": {
+    "control": {
+      "commit": "669b7d4a8540c38d47cf642dc0de4d879eb28c4f",
+      "database": "e6_holdout_corpus"
+    },
+    "candidate": {
+      "commit": "288711846b2af754b891120f0d58a7e2f7feab37",
+      "database": "v14_s2_quote_corpus"
+    }
+  },
+  "execution": {
+    "workflow": "react/stateful-react-agent",
+    "one_question_per_process": true,
+    "gold_hidden_from_agent": true,
+    "concurrency": 1,
+    "repeats": 1,
+    "target_ids": [
+      "f86c6d2c-cxotable",
+      "5e305376-fedrate",
+      "f7f65d7e-risk"
+    ],
+    "budgets": {
+      "MAIN_MAX_TURNS": "40",
+      "RESEARCH_WALL_TIME": "1800",
+      "REPORT_WALL_TIME": "600",
+      "OPENAI_MAX_INPUT_TOKENS": "2000000",
+      "OPENAI_MAX_TOKENS": "100000",
+      "SANDBOX_BACKEND": "bwrap"
+    },
+    "arm_order": "counterbalanced by target index and repeat"
+  },
+  "model": {
+    "model": "glm-5.3-flash",
+    "endpoint_host": "ark.cn-beijing.volces.com"
+  },
+  "judge": {
+    "model": "glm-5.3-flash",
+    "endpoint_host": "ark.cn-beijing.volces.com",
+    "credential_source": "configured OPENAI_* copied to JUDGE_* at runtime",
+    "independence": "same-provider same-model judge (user-authorized; not independent)"
+  },
+  "assets": {
+    ".scratch/corpus-access-validation/e2_holdout_targets.json": "81188e3cfe7222437a4b03c60b74c62f3bf4fb6e7aaea322abf2f61dc4cd26c2",
+    ".scratch/corpus-access-validation/e4_scorer.py": "7d39a50551b86285876abe36e1c1cfe3a0c5948234743d1e4b044abb045ee2b9",
+    ".scratch/corpus-structure-restart/v14-control-verification.json": "72052fb8cff5332be812a730f33f992c04e258d5022f2349db578d13cb949379",
+    ".scratch/corpus-structure-restart/s4-candidate-verification.json": "a1d71d883f77dcb13596dcd1aa4ab84aef3ac8e7a0018230a01d323d0f711397",
+    "plugins/corpus/preparation/search_pg.py": "dadfd13974f8725ad8225a2ff616d615e958ea9a10d18e07acfc09065b8541fc",
+    "plugins/tools/corpus_fetch.py": "d83ca59293e0f37eb6ada85066b4d881214160b051651d9dc86bcf829008f0ce"
+  },
+  "non_user_dirty_paths_at_freeze": [
+    "?? .scratch/corpus-structure-restart/s5_real_model_ab.py"
+  ]
+}

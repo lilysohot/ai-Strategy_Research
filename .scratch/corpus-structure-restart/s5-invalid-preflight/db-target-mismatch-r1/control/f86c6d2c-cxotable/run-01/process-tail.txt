@@ -1,0 +1,104 @@
+m[K
+[38;2;166;173;200m⠹ working… 1s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠸ working… 1s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠼ working… 1s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠴ working… 1s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠦ working… 1s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠧ working… 2s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠇ working… 2s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠏ working… 2s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠋ working… 2s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠙ working… 2s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠹ working… 2s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠸ working… 2s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠼ working… 2s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠴ working… 2s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠦ working… 2s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠧ working… 3s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠇ working… 3s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠏ working… 3s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠋ working… 3s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠙ working… 3s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠹ working… 3s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠸ working… 3s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠼ working… 3s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠴ working… 3s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠦ working… 3s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠧ working… 4s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠇ working… 4s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠏ working… 4s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠋ working… 4s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠙ working… 4s · ctx 89% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[K[38;2;166;173;200m✻ All tasks resolved. Now give the final answer as plain text. Key points:
+
+1. 直接答案：药明康德 2026H1 营业收入 288.97 亿元（约 289.0 亿元），同比 +38.9%
+2. 数据说明与口径
+3. 来源
+4. 诚实说明语料库不可用，无法直接读图5
+5. 反方证据/风险提示
+6. 不涉及建仓，未产策略卡[0m
+[0m**回答：图 5 中按市值排序的 CXO 龙头药明康德，2026H1 营业收入为 289.0 亿元（精确值 28,897,478,718.36 元），同比增速 +38.9%。**
+
+**先说明一个数据源限制（如实告知）**：本次研报语料库不可用（`corpus_search` 连续返回数据库未就绪错误，`data_coverage` 确认研报源宕机），因此我无法直接读取「图 5」原图。以下数字来自确定性市场数据工具与公网可定位来源的交叉验证，应与图中展示的中报披露数据一致。
+
+**关键数字及来源**
+
+| 指标 | 数值 | 来源 |
+|---|---|---|
+| 2026H1 营业收入 | **289.0 亿元**（28,897,478,718.36 元） | market_financials（603259.SH，中报披露日 2026-08-04，报告期末 2026-06-30）[W1] |
+| 同比增速 | **+38.9%** | 公司官方新闻稿（经 vir.com.vn 转载）逐字原文："H1 2026 total revenue reached RMB 28.90 billion, up 38.9% YoY" [W2]；SCMP、Yahoo Finance 同日报道 [W3][W4] |
+| 归母净利润（区分口径，非营业收入） | 110.80 亿元，同比 +29.4% | market_financials 11,080,173,661.42 元 [W1]；新闻稿 "Net profit per CAS up 29.4% YoY to RMB 11.08 billion" [W2] |
+
+**口径核对（t3）**
+- 增速为**半年度累计同比**（2026H1 vs 2025H1）。沙盒回算：隐含 2025H1 基期 ≈ 208.05 亿元，288.97 ÷ 208.05 − 1 = 38.9%，与官方口径自洽。
+- 注意区分：+38.9% 是**总营收**口径；若按**持续经营业务**口径则为 **+48.0%**（新闻稿原文："revenue from Continuing Operations up 48.0% YoY" [W2]）——若图 5 图例注明“持续经营口径”，对应数字应看 48.0%。
+- 所问为**营业收入**，勿与归母净利润（110.8 亿元，+29.4%）混淆。
+
+**反方证据 / 风险提示（投研纪律四）**
+- 总营收 +38.9% 受终止经营业务基数扰动，核心（持续经营）增速为 +48.0%，两个口径差异近 10 个百分点，横向对比其他 CXO 时须统一口径。
+- SCMP 同日报道标题即点出业绩高增发生于 "amid US scrutiny"（美国审查背景）之下 [W3]，地缘政策风险仍是 CXO 板块的持续性压制因素。
+- 公司已将 2026 全年营收指引上调至 58.5–60.5 billion 元（原 51.3–53.0 billion）[W2]，隐含下半年约 296–316 亿元，达成年内确定性较高但并非无风险。
+
+**来源清单**
+- [W1] market_financials / market_quote 接口，603259.SH（行情快照 as_of 2026-10-17 16:02 +08:00，收盘价 144.30 元，PE-TTM 20.2）
+- [W2] https://vir.com.vn/wuxi-apptec-raises-full-year-guidance-after-strong-h1-158062.html（2026-08-04，转载公司 H1 2026 业绩新闻稿）
+- [W3] https://www.scmp.com/business/banking-finance/article/3362817/（2026-08-03）
+- [W4] https://finance.yahoo.com/healthcare/articles/wuxi-apptec-delivers-strong-h1-094900769.html（2026-08-03）
+
+本次为数据查询，不涉及建仓建议，故未产出策略卡；如您需要基于此数据构建交易策略，请提供**总资金**与**单笔风险预算（占总资金 %）**，我再按流程完成仓位计算与校验。[LLM] stream model=glm-5.3-flash ttft=4.47s total=23.47s chunks=1091
+[0m
+✓ done · turns=21 · tools=0 · no_tool · 309,639 tokens (in 298,003 · out 11,636 · cached 268,800)
+
+--- stderr ---
+0m 中按市值排序的 CXO 龙头药明康德，2026H1 营业收入为 [1;36m289.0[0m 亿元（精确值 [1;36m28[0m,[1;36m897[0m,[1;36m478[0m,[1;36m718.36[0m 元），同比增速 +[1;36m38.9[0m%。**
+
+**先说明一个数据源限制（如实告知）**：本次研报语料库不可用（`corpus_search` 连续返回数据库未就绪错误，`data_coverage` 确认研报源宕机），因此我无法直接读取「图 
+[1;36m5[0m」原图。以下数字来自确定性市场数据工具与公网可定位来源的交叉验证，应与图中展示的中报披露数据一致。
+
+**关键数字及来源**
+
+| 指标 | 数值 | 来源 |
+|---|---|---|
+| 2026H1 营业收入 | **[1;36m289.0[0m 亿元**（[1;36m28[0m,[1;36m897[0m,[1;36m478[0m,[1;36m718.36[0m 元） | market_financials（[1;36m603259.[0mSH，中报披露日 [1;36m2026[0m-[1;36m08[0m-[1;36m04[0m，报告期末 [1;36m2026[0m-[1;36m06[0m-[1;36m30[0m）[1m[[0mW1[1m][0m |
+| 同比增速 | **+[1;36m38.9[0m%** | 公司官方新闻稿（经 vir.com.vn 转载）逐字原文：[32m"H1 2026 total revenue reached RMB 28.90 billion, up 38.9% YoY"[0m [1m[[0mW2[1m][0m；SCMP、Yahoo Finance 同日报道 [1m[[0mW3[1m][0m[1m[[0mW4[1m][0m |
+| 归母净利润（区分口径，非营业收入） | [1;36m110.80[0m 亿元，同比 +[1;36m29.4[0m% | market_financials [1;36m11[0m,[1;36m080[0m,[1;36m173[0m,[1;36m661.42[0m 元 [1m[[0mW1[1m][0m；新闻稿 [32m"Net profit per CAS up 29.4% YoY to RMB 11.08 billion"[0m [1m[[0mW2[1m][0m |
+
+**口径核对（t3）**
+- 增速为**半年度累计同比**（2026H1 vs 2025H1）。沙盒回算：隐含 2025H1 基期 ≈ [1;36m208.05[0m 亿元，[1;36m288.97[0m ÷ [1;36m208.05[0m − [1;36m1[0m = [1;36m38.9[0m%，与官方口径自洽。
+- 注意区分：+[1;36m38.9[0m% 是**总营收**口径；若按**持续经营业务**口径则为 **+[1;36m48.0[0m%**（新闻稿原文：[32m"revenue from Continuing Operations up 48.0% YoY"[0m [1m[[0mW2[1m][0m）——若图 [1;36m5[0m 图例注明“持续经营口径”，对应数字应看 [1;36m48.0[0m%。
+- 所问为**营业收入**，勿与归母净利润（[1;36m110.8[0m 亿元，+[1;36m29.4[0m%）混淆。
+
+**反方证据 [35m/[0m 风险提示（投研纪律四）**
+- 总营收 +[1;36m38.9[0m% 受终止经营业务基数扰动，核心（持续经营）增速为 +[1;36m48.0[0m%，两个口径差异近 [1;36m10[0m 个百分点，横向对比其他 CXO 时须统一口径。
+- SCMP 同日报道标题即点出业绩高增发生于 [32m"amid US scrutiny"[0m（美国审查背景）之下 [1m[[0mW3[1m][0m，地缘政策风险仍是 CXO 板块的持续性压制因素。
+- 公司已将 [1;36m2026[0m 全年营收指引上调至 [1;36m58.5[0m–[1;36m60.5[0m billion 元（原 [1;36m51.3[0m–[1;36m53.0[0m billion）[1m[[0mW2[1m][0m，隐含下半年约 [1;36m296[0m–[1;36m316[0m 亿元，达成年内确定性较高但并非无风险。
+
+**来源清单**
+- [1m[[0mW1[1m][0m market_financials [35m/[0m market_quote 接口，[1;36m603259.[0mSH（行情快照 as_of [1;36m2026[0m-[1;36m10[0m-[1;36m17[0m [1;92m16:02[0m +[1;92m08:00[0m，收盘价 [1;36m144.30[0m 元，PE-TTM [1;36m20.2[0m）
+- [1m[[0mW2[1m][0m [4;94mhttps://vir.com.vn/wuxi-apptec-raises-full-year-guidance-after-strong-h1-158062.html[0m（[1;36m2026[0m-[1;36m08[0m-[1;36m04[0m，转载公司 H1 [1;36m2026[0m 业绩新闻稿）
+- [1m[[0mW3[1m][0m [4;94mhttps://www.scmp.com/business/banking-finance/article/3362817/[0m（[1;36m2026[0m-[1;36m08[0m-[1;36m03[0m）
+- [1m[[0mW4[1m][0m [4;94mhttps://finance.yahoo.com/healthcare/articles/wuxi-apptec-delivers-strong-h1-094900769.html[0m（[1;36m2026[0m-[1;36m08[0m-[1;36m03[0m）
+
+本次为数据查询，不涉及建仓建议，故未产出策略卡；如您需要基于此数据构建交易策略，请提供**总资金**与**单笔风险预算（占总资金 %）**，我再按流程完成仓位计算与校验。
+
+[1;35m[[0m[1;35mReAct[0m[1;35m][0m[1;35m done[0m  [33mturns[0m=[1;36m15[0m  [33mtool_calls[0m=[1;36m21[0m  [33mstopped_by[0m=[35mno_tool[0m

@@ -1,0 +1,61 @@
+{
+  "artifact": "v14-s5-real-model-run",
+  "generated_at": "2026-10-17T08:16:43.082125+00:00",
+  "arm": "control",
+  "repeat": 1,
+  "target_id": "f86c6d2c-cxotable",
+  "sample_id": "holdout-industry-006",
+  "domain": "industry",
+  "role": "supplementary",
+  "question": "图 5 中 CXO 龙头药明康德按市值排序的 2026H1 营业收入及同比增速是多少？",
+  "status": "ok",
+  "wall_s": 611.4,
+  "run_present": true,
+  "run_dir": ".s5runs_v14/control/f86c6d2c-cxotable/run-01/workspace/.apodex/runs/20261017-160632+0800-react-c8ea",
+  "answer": "**答案**\n\n图 5 中 CXO 龙头药明康德：2026H1 营业收入 **288.97 亿元**，收入同比增速 **39%**，市值 **4,693.7 亿元**（按 20260904 收盘市值排序居首）。[stub:R01 p4]\n\n**出处与原文依据**\n\n- 该图出自国联民生证券《医药周报20260906——CXO 中报我们看到了什么？》（2026-09-06）。\n- 图题原文（第 3–4 页）：「图5：CXO A 股上市公司2026H1 收入及增速概览（按市值排序）」[stub:R01 p3-4]\n- 图 5 数据表（第 4 页）首行：「药明康德 / 288.97 / 39% / 4,693.7」，表注：「资料来源：Wind、各公司公告，国联民生证券研究所 注：按20260904 收盘市值排序」[stub:R01 p4]\n- 市值排序：药明康德 4,693.7 亿元为 15 家 A 股 CXO 样本公司之首（第二名康龙化成 698.8 亿元）[stub:R01 p4]\n\n**口径核对与风险提示**\n\n- 报告期确认为 **2026H1**（非 2025H1）：报告发布于 2026-09-06，正文写明「2026 年8 月中下旬，CXO 上市公司中报陆续披露，我们选取20 家样本上市公司数据进行总结与分析」（第 3 页）。图 5 表头在 PDF 文字抽取中被截为「206H1」，已用图题（图5……2026H1……）与表注核对确认。\n- 交叉验证：市场数据接口（同花顺 603259.SH 利润表，2026Q2 累计＝2026H1，报告期末 2026-06-30，约 2026-08-04 披露）显示营业收入 28,897,478,718.36 元 ≈ 288.97 亿元，与图 5 完全一致 [stub:R02]。\n- 正文写明「2026H1 年20 家CXO 企业合计实现收入562亿元，同比+24.5%」（第 3 页），药明康德的 39% 高于全板块整体增速，属龙头个体的强势表现；同一表中九洲药业（-10%）、阳光诺和（-28%）同比下滑，板块内部分化明显 [stub:R01 p3-4]。\n- 注意：市值排序基准日为 2026-09-04 收盘，与营收报告期（2026H1）并非同一时点；图中「39%」为表内「收入yoy」口径，表内未另标正负号。\n\n**来源**\n\n- R01：国联民生证券《医药周报20260906 CXO 中报我们看到了什么？》，第 3–5 页（语料库文档 cv2:3cc347ca…，chunks heading:0002 / body:0004 / table:0000，均已逐字取回）。\n- R02：市场数据接口 market_financials（药明康德 603259.SH，季度利润表，2026Q2 累计期）。\n\nA4 证据清单已提交并通过校验（2/2 条结论 supported，publish_status: verified）。",
+  "trace": {
+    "llm_turns": 10,
+    "tool_calls": 18,
+    "tool_calls_by_name": {
+      "add_task": 1,
+      "update_task": 4,
+      "corpus_search": 3,
+      "corpus_inventory": 1,
+      "corpus_fetch": 4,
+      "data_coverage": 1,
+      "market_resolve": 1,
+      "market_financials": 1,
+      "corpus_submit_manifest": 2
+    },
+    "tool_errors": 0
+  },
+  "usage": {
+    "input": 488176,
+    "output": 20521,
+    "cached": 404480,
+    "compactions": 0
+  },
+  "ledger": {
+    "present": true,
+    "offered": 22,
+    "requested": 4,
+    "fetched": 6,
+    "delivered": 6,
+    "errors": []
+  },
+  "deterministic": {
+    "source_offered": true,
+    "quote_fetched": true,
+    "quote_delivered": true,
+    "expected_build_id": "3cc347ca9ed8e789103486558cd565ce1a0f15545e7185abbeaf1a6a066f453f"
+  },
+  "judge": {
+    "verdict": "pass",
+    "score": 1,
+    "supported": true,
+    "complete": true,
+    "reason": "回答给出药明康德2026H1营收288.97亿元、同比增速39%及市值4,693.7亿元，与参考证据第4页表格行完全一致，主体、期间、单位均正确。",
+    "raw": "{\"verdict\":\"pass\",\"score\":1,\"supported\":true,\"complete\":true,\"reason\":\"回答给出药明康德2026H1营收288.97亿元、同比增速39%及市值4,693.7亿元，与参考证据第4页表格行完全一致，主体、期间、单位均正确。\"}",
+    "model": "glm-5.3-flash"
+  }
+}

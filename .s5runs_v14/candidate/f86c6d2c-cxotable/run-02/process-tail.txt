@@ -1,0 +1,126 @@
+upt · type to steer[0m[K
+[38;2;166;173;200m⠙ working… 0s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠹ working… 0s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠸ working… 1s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠼ working… 1s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠴ working… 1s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠦ working… 1s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠧ working… 1s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠇ working… 1s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠏ working… 1s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠋ working… 1s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠙ working… 1s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠹ working… 1s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠸ working… 2s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠼ working… 2s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠴ working… 2s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠦ working… 2s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠧ working… 2s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠇ working… 2s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠏ working… 2s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠋ working… 2s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠙ working… 2s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠹ working… 2s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠸ working… 3s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠼ working… 3s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠴ working… 3s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠦ working… 3s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠧ working… 3s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠇ working… 3s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠏ working… 3s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠋ working… 3s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠙ working… 3s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠹ working… 3s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠸ working… 4s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠼ working… 4s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠴ working… 4s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠦ working… 4s · ctx 83% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[K[38;2;166;173;200m✻ All tasks resolved. Final answer now. Include the verbatim anchored sentence. Provide source refs, the figure table, cross-check, caveats.[0m
+[0m## 直接回答
+
+**图5（按市值排序）中：药明康德 2026H1 营业收入 288.97 亿元，同比 +39%；市值 4,693.7 亿元（按 20260904 收盘市值排序，居 13 家样本公司首位）。**
+
+## 出处与溯源
+
+- **图题**（逐字）：「图5：CXO A 股上市公司2026H1 收入及增速概览（按市值排序）」 [医药周报20260906《CXO 中报我们看到了什么？》（国联民生证券研究所）， p3-4]
+- **数据行**（逐字）：「药明康德 288.97 / 39% / 4,693.7」，列头为「2026H1 营业收入（亿元）/ 收入yoy / 市值（亿元）」 [同上， 图5 数据表, p4，chunk:`e22bc49c40c4c587:table:0000`]
+- **表注**（逐字）：「资料来源：Wind、各公司公告，国联民生证券研究所 注：按20260904 收盘市值排序」
+
+## 图 5 完整数据（按市值降序）
+
+| 公司 | 2026H1 营业收入（亿元） | 收入yoy | 市值（亿元） |
+|---|---|---|---|
+| **药明康德** | **288.97** | **+39%** | **4,693.7** |
+| 康龙化成 | 75.95 | +18% | 698.8 |
+| 凯莱英 | 36.07 | +13% | 574.8 |
+| 泰格医药 | 37.08 | +14% | 411.2 |
+| 昭衍新药 | 7.04 | +5% | 294.1 |
+| 皓元医药 | 16.48 | +26% | 189.4 |
+| 九洲药业 | 25.75 | -10% | 132.9 |
+| 成都先导 | 3.46 | +52% | 126.0 |
+| 美迪西 | 7.61 | +41% | 125.3 |
+| 益诺思 | 4.65 | +24% | 112.4 |
+| 博腾股份 | 17.90 | +10% | 106.9 |
+| 药石科技 | 10.59 | +15% | 99.9 |
+| 阳光诺和 | 4.26 | -28% | 79.1 |
+
+## 交叉核对（市场数据接口）
+
+同花顺财务接口（603259.SH，药明康德）2026 年中报：报告期末 **2026-06-30**、披露日 **2026-08-04**，营业收入 **28,897,478,718.36 元 ≈ 288.97 亿元** —— 与图 5 数值完全一致，期间口径确认为 2026 年上半年（中报累计）。
+
+## 口径说明与注意点
+
+1. **同比 +39% 出自研报图表**（其资料来源为 Wind、各公司公告）；市场接口本次仅返回最新一期财务数据、未提供 2025H1 对比基数，故同比增速未能独立复算，以研报图表口径为准。
+2. 图表正文解析文本中出现的「206H1」系文本抽取截断，图题证实期间为 **2026H1**。
+3. 图内同为 CXO 板块，增长存在分化：九洲药业 -10%、阳光诺和 -28% 为负增长，龙头药明康德的 +39% 并不代表板块全体公司表现。[LLM] stream model=glm-5.3-flash ttft=4.34s total=17.80s chunks=865
+[0m
+✓ done · turns=13 · tools=0 · no_tool · 306,767 tokens (in 297,277 · out 9,490 · cached 252,416)
+
+--- stderr ---
+m
+[32m  ✓ t1 resolved    在本地研报语料库中定位包含「图 [0m[1;32m5[0m[32m」且涉及 CXO 龙头（按市值排序）营业收入及同比增速的研报文档[0m
+[32m  ✓ t2 resolved    用 corpus_fetch 取回图 [0m[1;32m5[0m[32m 中药明康德 2026H1 营业收入及同比增速的逐字原文（含图题、期间、单位）[0m
+[32m  ✓ t3 resolved    用 data_coverage [0m[32m/[0m[32m market_financials 交叉核对药明康德披露的半年报营收数据，确认图 [0m[1;32m5[0m[32m 数值与期间口径[0m
+[32m  ✓ t4 resolved    提交 corpus_submit_manifest 证据清单，并在最终回复中给出带 source_ref 的结论[0m
+
+[1;36m=== [0m[1;36m[[0m[1;36mReAct[0m[1;36m][0m[1;36m Turn [0m[1;36m9[0m[1;36m/[0m[1;36m40[0m  [2mstateful_react[0m  [2mtokens: [0m[1;2;36m44587[0m[2m->[0m[1;2;36m874[0m
+## 直接回答
+
+**图5（按市值排序）中：药明康德 2026H1 营业收入 [1;36m288.97[0m 亿元，同比 +[1;36m39[0m%；市值 [1;36m4[0m,[1;36m693.7[0m 亿元（按 [1;36m20260904[0m 收盘市值排序，居 [1;36m13[0m 家样本公司首位）。**
+
+## 出处与溯源
+
+- **图题**（逐字）：「图5：CXO A 股上市公司2026H1 收入及增速概览（按市值排序）」 [1m[[0m医药周报20260906《CXO 中报我们看到了什么？》（国联民生证券研究所）， p3-[1;36m4[0m[1m][0m
+- **数据行**（逐字）：「药明康德 [1;36m288.97[0m [35m/[0m [1;36m39[0m% [35m/[0m [1;36m4[0m,[1;36m693.7[0m」，列头为「2026H1 营业收入（亿元）[35m/[0m 收入yoy [35m/[0m 市值（亿元）」 [1m[[0m同上， 图5 数据表, p4，chunk:`e22bc49c40c4c587:tabl[1;92me:0000[0m`[1m][0m
+- **表注**（逐字）：「资料来源：Wind、各公司公告，国联民生证券研究所 注：按20260904 收盘市值排序」
+
+## 图 [1;36m5[0m 完整数据（按市值降序）
+
+| 公司 | 2026H1 营业收入（亿元） | 收入yoy | 市值（亿元） |
+|---|---|---|---|
+| **药明康德** | **[1;36m288.97[0m** | **+[1;36m39[0m%** | **[1;36m4[0m,[1;36m693.7[0m** |
+| 康龙化成 | [1;36m75.95[0m | +[1;36m18[0m% | [1;36m698.8[0m |
+| 凯莱英 | [1;36m36.07[0m | +[1;36m13[0m% | [1;36m574.8[0m |
+| 泰格医药 | [1;36m37.08[0m | +[1;36m14[0m% | [1;36m411.2[0m |
+| 昭衍新药 | [1;36m7.04[0m | +[1;36m5[0m% | [1;36m294.1[0m |
+| 皓元医药 | [1;36m16.48[0m | +[1;36m26[0m% | [1;36m189.4[0m |
+| 九洲药业 | [1;36m25.75[0m | [1;36m-10[0m% | [1;36m132.9[0m |
+| 成都先导 | [1;36m3.46[0m | +[1;36m52[0m% | [1;36m126.0[0m |
+| 美迪西 | [1;36m7.61[0m | +[1;36m41[0m% | [1;36m125.3[0m |
+| 益诺思 | [1;36m4.65[0m | +[1;36m24[0m% | [1;36m112.4[0m |
+| 博腾股份 | [1;36m17.90[0m | +[1;36m10[0m% | [1;36m106.9[0m |
+| 药石科技 | [1;36m10.59[0m | +[1;36m15[0m% | [1;36m99.9[0m |
+| 阳光诺和 | [1;36m4.26[0m | [1;36m-28[0m% | [1;36m79.1[0m |
+
+## 交叉核对（市场数据接口）
+
+同花顺财务接口（[1;36m603259.[0mSH，药明康德）[1;36m2026[0m 年中报：报告期末 **[1;36m2026[0m-[1;36m06[0m-[1;36m30[0m**、披露日 **[1;36m2026[0m-[1;36m08[0m-[1;36m04[0m**，营业收入 **[1;36m28[0m,[1;36m897[0m,[1;36m478[0m,[1;36m718.36[0m 元 ≈ [1;36m288.97[0m 亿元** —— 与图 [1;36m5[0m 数值完全一致，期间口径确认为 [1;36m2026[0m 
+年上半年（中报累计）。
+
+## 口径说明与注意点
+
+[1;36m1[0m. **同比 +[1;36m39[0m% 出自研报图表**（其资料来源为 Wind、各公司公告）；市场接口本次仅返回最新一期财务数据、未提供 2025H1 对比基数，故同比增速未能独立复算，以研报图表口径为准。
+[1;36m2[0m. 图表正文解析文本中出现的「206H1」系文本抽取截断，图题证实期间为 **2026H1**。
+[1;36m3[0m. 图内同为 CXO 板块，增长存在分化：九洲药业 [1;36m-10[0m%、阳光诺和 [1;36m-28[0m% 为负增长，龙头药明康德的 +[1;36m39[0m% 并不代表板块全体公司表现。
+
+[1;35m[[0m[1;35mReAct[0m[1;35m][0m[1;35m done[0m  [33mturns[0m=[1;36m9[0m  [33mtool_calls[0m=[1;36m13[0m  [33mstopped_by[0m=[35mno_tool[0m

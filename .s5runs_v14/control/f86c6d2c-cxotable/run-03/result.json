@@ -1,0 +1,62 @@
+{
+  "artifact": "v14-s5-real-model-run",
+  "generated_at": "2026-10-17T10:28:23.862302+00:00",
+  "arm": "control",
+  "repeat": 3,
+  "target_id": "f86c6d2c-cxotable",
+  "sample_id": "holdout-industry-006",
+  "domain": "industry",
+  "role": "supplementary",
+  "question": "图 5 中 CXO 龙头药明康德按市值排序的 2026H1 营业收入及同比增速是多少？",
+  "status": "ok",
+  "wall_s": 211.3,
+  "run_present": true,
+  "run_dir": ".s5runs_v14/control/f86c6d2c-cxotable/run-03/workspace/.apodex/runs/20261017-182453+0800-react-ad36",
+  "answer": "**答案：图 5 中，CXO 龙头药明康德（按 2026-09-04 收盘市值 4,693.7 亿元居 20 家样本公司之首）2026H1 营业收入为 288.97 亿元，同比增速（收入yoy）为 39%。**\n\n**出处**：国联民生证券研究所医药行业定期报告（2026-09-06）第 4 页，图 5「CXO A 股上市公司 2026H1 收入及增速概览（按市值排序）」，数据来源 Wind、各公司公告，排序口径为「按 20260904 收盘市值排序」[3cc347ca·body:0004 p4；body:0005 p4]。\n\n**图 5 中市值排序前几名（便于对照）** [3cc347ca·table:0000 p4]：\n| 公司 | 2026H1 营业收入（亿元） | 收入yoy | 市值（亿元） |\n|---|---|---|---|\n| 药明康德 | 288.97 | +39% | 4,693.7 |\n| 康龙化成 | 75.95 | +18% | 698.8 |\n| 凯莱英 | 36.07 | +13% | 574.8 |\n| 泰格医药 | 37.08 | +14% | 411.2 |\n\n**口径与交叉印证**：图内表头在原文 OCR 中拆行为「206H1 营业收（亿元）」，即 2026H1 营业收入（亿元），期间口径以图 5 标题为准 [3cc347ca·table:0000 p4]。同一报告正文称「CRDMO/CDMO 板块 A 股上市公司 2026Q2、2026H1 收入端普遍维持双位数增长（药明康德、凯莱英、康龙化成等）」，与图 5 中药明康德 +39% 的双位数高增相一致 [3cc347ca·body:0005 p4-5]。39% 为图示取整值；图 5 未给出增速的驱动拆分（资料未给出，不做推断）。\n\n**反方/平衡证据**：图 5 内并非全员增长——九洲药业 -10%、阳光诺和 -28%、普蕊斯 -5% [3cc347ca·table:0000/0001 p4]；报告亦提示「部分公司应关注经调整净利润或扣非归母净利润」，且「板块整体增长并不仅由龙头驱动」[3cc347ca·body:0004 p4]。\n\n**风险提示**：排序市值时点为 2026-09-04 收盘，会随股价变动；数据为 2026H1 中报口径（Wind 及公司公告整理），非本方测算。本条为图表数据问答，不涉及仓位建议；证据清单（A4）已提交并通过逐条校验（2/2 supported）。",
+  "trace": {
+    "llm_turns": 9,
+    "tool_calls": 10,
+    "tool_calls_by_name": {
+      "add_task": 1,
+      "update_task": 3,
+      "corpus_search": 2,
+      "corpus_fetch": 3,
+      "corpus_submit_manifest": 1
+    },
+    "tool_errors": 0
+  },
+  "usage": {
+    "input": 267746,
+    "output": 9156,
+    "cached": 225536,
+    "compactions": 0
+  },
+  "ledger": {
+    "present": true,
+    "offered": 13,
+    "requested": 3,
+    "fetched": 6,
+    "delivered": 6,
+    "errors": []
+  },
+  "deterministic": {
+    "source_offered": true,
+    "quote_fetched": true,
+    "quote_delivered": true,
+    "expected_build_id": "3cc347ca9ed8e789103486558cd565ce1a0f15545e7185abbeaf1a6a066f453f"
+  },
+  "judge": {
+    "verdict": "pass",
+    "score": 0.95,
+    "supported": true,
+    "complete": true,
+    "reason": "核心事实（药明康德2026H1营业收入288.97亿元、收入yoy 39%、市值4,693.7亿元）与参考证据完全一致，主体/期间/单位正确且满足问题要求；附加的其他公司数据超出所给证据摘录范围但不属于问题核心，不影响判定。",
+    "raw": "{\"verdict\":\"pass\",\"score\":0.95,\"supported\":true,\"complete\":true,\"reason\":\"核心事实（药明康德2026H1营业收入288.97亿元、收入yoy 39%、市值4,693.7亿元）与参考证据完全一致，主体/期间/单位正确且满足问题要求；附加的其他公司数据超出所给证据摘录范围但不属于问题核心，不影响判定。\"}",
+    "model": "glm-5.3-flash",
+    "usage": {
+      "input": 941,
+      "output": 2213,
+      "total": 3154
+    }
+  }
+}

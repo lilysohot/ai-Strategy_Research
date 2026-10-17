@@ -1,0 +1,113 @@
+ · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠧ working… 0s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠇ working… 0s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠏ working… 0s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠋ working… 0s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠙ working… 0s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠹ working… 0s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠸ working… 1s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠼ working… 1s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠴ working… 1s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠦ working… 1s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠧ working… 1s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠇ working… 1s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠏ working… 1s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠋ working… 1s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠙ working… 1s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠹ working… 1s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠸ working… 2s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠼ working… 2s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠴ working… 2s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠦ working… 2s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠧ working… 2s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠇ working… 2s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠏ working… 2s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠋ working… 2s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠙ working… 2s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠹ working… 2s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠸ working… 3s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠼ working… 3s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠴ working… 3s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠦ working… 3s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠧ working… 3s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠇ working… 3s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠏ working… 3s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠋ working… 3s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠙ working… 3s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠹ working… 3s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠸ working… 4s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠼ working… 4s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠴ working… 4s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠦ working… 4s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠧ working… 4s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠇ working… 4s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[38;2;166;173;200m⠏ working… 4s · ctx 66% left  ·  Ctrl-C interrupt · type to steer[0m[K
+[K[0m**本期研报为天风证券 2026 年 9 月 6 日发布的《A股策略周报——非农大超预期，加息预期升温》**（吴开达、林晨等，doc_id: `cv2:07873d962c0568d7…`）。
+
+## 报告列出的三条主要风险提示
+
+报告在正文「5.风险提示」（第 10 页）列出三条主要风险：**①地缘冲突超预期；②海外通胀持续性超预期；③流动性收紧超预期。**
+（来源：doc_id `cv2:07873d962c0568d7df07da3ea8241c5c14d7b0d31fbb23a728b0d39b6b6be73f`，chunk `body:0015`，p10）
+
+原文逐字为：
+
+> **5.风险提示**
+> 地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。
+
+## 首页摘要的对应表述
+
+首页摘要（第 1–2 页）末尾同样标注：「风险提示：地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。」
+（来源：同上 doc_id，chunk `body:0002`，p1–2）
+
+两处表述完全一致。
+
+## 补充说明
+
+- 逐块核查显示，风险提示仅在首页摘要与正文第 5 节两处出现且内容一致，其余章节未再单列风险提示（其余章节为：1. 国内 8 月制造业 PMI 回暖及高频跟踪；2. 国际大事与 8 月美国非农数据；3. 行业配置建议「赛点 2.0 第三阶段，重视 AI 产业趋势」；4. 重点大事前瞻）。
+- 三条风险与报告当期核心逻辑直接呼应：报告正文跟踪了俄乌冲突、中东局势（对应「地缘冲突超预期」），并指出 8 月美国非农大超预期使市场 9 月加息 25bp 概率升至 59.4%（CME，截至 2026/9/5，对应「通胀持续性/流动性收紧超预期」）。
+- 提示：以上为研报原文风险提示的如实转述，属于报告作者的观点性声明，不构成对风险是否发生的判断；本回答不涉及任何建仓建议。[LLM] stream model=glm-5.3-flash ttft=4.63s total=14.57s chunks=523
+[0m
+✓ done · turns=22 · tools=0 · no_tool · 814,487 tokens (in 798,518 · out 15,969 · cached 614,912)
+
+--- stderr ---
+l"[0m[32m: [0m[1;32m0[0m[32m, [0m[32m"unsupported"[0m[32m: [0m[1;32m0[0m[1;32m}[0m[32m, [0m[32m"conclusions"[0m[32m: [0m[1;32m[[0m[1;32m{[0m[32m"id"[0m[32m: [0m[32m"C1"[0m[32m, [0m[32m"status"[0m[32m: [0m[32m"supported"[0m[32m, [0m[32m"delivery"[0m[32m: [0m[1;32m[[0m[32m"delive[0m[32m...[0m
+
+[1;36m=== [0m[1;36m[[0m[1;36mReAct[0m[1;36m][0m[1;36m Turn [0m[1;36m13[0m[1;36m/[0m[1;36m40[0m  [2mstateful_react[0m  [2mtokens: [0m[1;2;36m87882[0m[2m->[0m[1;2;36m506[0m
+  [33mtool update_task[0m  [1;2m{[0m[2;32m"updates"[0m[2m: [0m[1;2m[[0m[1;2m{[0m[2;32m"id"[0m[2m: [0m[2;32m"t4"[0m[2m, [0m[2;32m"resolution"[0m[2m: [0m[2;32m"resolved"[0m[1;2m}[0m[2m, [0m[1;2m{[0m[2;32m"id"[0m[2m: [0m[2;32m"t5"[0m[2m, [0m[2;32m"resolution"[0m[2m: [0m[2;32m"resolved"[0m[1;2m}[0m[1;2m][0m[1;2m}[0m
+  [32m-> Updated [0m[1;32m[[0m[32m't4'[0m[32m, [0m[32m't5'[0m[1;32m][0m[32m.[0m
+[1;32m[[0m[32mtask board[0m[1;32m][0m[32m resolved [0m[1;32m5[0m[32m/[0m[1;32m5[0m[32m · in-progress [0m[1;32m0[0m[32m · open [0m[1;32m0[0m[32m · cancelled [0m[1;32m0[0m
+[32m  ✓ t1 resolved    在研报语料库中定位「本期研报」对应文档，确认其标识（doc_id/标题）[0m
+[32m  ✓ t2 resolved    检索该研报中的「风险提示」章节，定位风险提示相关段落[0m
+[32m  ✓ t3 resolved    用 corpus_fetch 取回风险提示段落的逐字原文（不得引用截断 snippet）[0m
+[32m  ✓ t4 resolved    梳理并列出研报列出的全部主要风险提示，每条附来源定位（doc_id/locator/页码）[0m
+[32m  ✓ t5 resolved    调用 corpus_submit_manifest 提交结论证据清单并逐条修正至通过[0m
+
+[1;36m=== [0m[1;36m[[0m[1;36mReAct[0m[1;36m][0m[1;36m Turn [0m[1;36m14[0m[1;36m/[0m[1;36m40[0m  [2mstateful_react[0m  [2mtokens: [0m[1;2;36m88571[0m[2m->[0m[1;2;36m525[0m
+**本期研报为天风证券 [1;36m2026[0m 年 [1;36m9[0m 月 [1;36m6[0m 日发布的《A股策略周报——非农大超预期，加息预期升温》**（吴开达、林晨等，doc_id: `cv[1;92m2:0787[0m3d962c0568d7…`）。
+
+## 报告列出的三条主要风险提示
+
+报告在正文「[1;36m5.[0m风险提示」（第 [1;36m10[0m 页）列出三条主要风险：**①地缘冲突超预期；②海外通胀持续性超预期；③流动性收紧超预期。**
+（来源：doc_id `cv[1;92m2:0787[0m3d962c0568d7df07da3ea8241c5c14d7b0d31fbb23a728b0d39b6b6be73f`，chunk `body:[1;36m0015[0m`，p10）
+
+原文逐字为：
+
+> **[1;36m5.[0m风险提示**
+> 地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。
+
+## 首页摘要的对应表述
+
+首页摘要（第 [1;36m1[0m–[1;36m2[0m 页）末尾同样标注：「风险提示：地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。」
+（来源：同上 doc_id，chunk `body:[1;36m0002[0m`，p1–[1;36m2[0m）
+
+两处表述完全一致。
+
+## 补充说明
+
+- 逐块核查显示，风险提示仅在首页摘要与正文第 [1;36m5[0m 节两处出现且内容一致，其余章节未再单列风险提示（其余章节为：[1;36m1[0m. 国内 [1;36m8[0m 月制造业 PMI 回暖及高频跟踪；[1;36m2[0m. 国际大事与 [1;36m8[0m 月美国非农数据；[1;36m3[0m. 行业配置建议「赛点 
+[1;36m2.0[0m 第三阶段，重视 AI 产业趋势」；[1;36m4[0m. 重点大事前瞻）。
+- 三条风险与报告当期核心逻辑直接呼应：报告正文跟踪了俄乌冲突、中东局势（对应「地缘冲突超预期」），并指出 [1;36m8[0m 月美国非农大超预期使市场 [1;36m9[0m 月加息 25bp 概率升至 [1;36m59.4[0m%（CME，截至 
+[1;36m2026[0m/[1;36m9[0m/[1;36m5[0m，对应「通胀持续性/流动性收紧超预期」）。
+- 提示：以上为研报原文风险提示的如实转述，属于报告作者的观点性声明，不构成对风险是否发生的判断；本回答不涉及任何建仓建议。
+
+[1;35m[[0m[1;35mReAct[0m[1;35m][0m[1;35m done[0m  [33mturns[0m=[1;36m14[0m  [33mtool_calls[0m=[1;36m22[0m  [33mstopped_by[0m=[35mno_tool[0m

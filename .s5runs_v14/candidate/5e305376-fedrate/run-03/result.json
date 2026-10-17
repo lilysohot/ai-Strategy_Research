@@ -1,0 +1,62 @@
+{
+  "artifact": "v14-s5-real-model-run",
+  "generated_at": "2026-10-17T10:37:13.878418+00:00",
+  "arm": "candidate",
+  "repeat": 3,
+  "target_id": "5e305376-fedrate",
+  "sample_id": "holdout-macro-008",
+  "domain": "macro",
+  "role": "required",
+  "question": "全周联储年内剩余累计加息预期变化了多少（降至多少 bp）？",
+  "status": "ok",
+  "wall_s": 97.1,
+  "run_present": true,
+  "run_dir": ".s5runs_v14/candidate/5e305376-fedrate/run-03/workspace/.apodex/runs/20261017-183537+0800-react-f4df",
+  "answer": "**答案：全周联储年内剩余累计加息预期下降了 3bp，降至 35bp。**\n\n**溯源（逐字原文）**\n\n1. 研报正文（第 1 页「金融市场」段）：\n   > 「全周看，联储年内剩余累计加息预期下降 3bp 至 35bp。」\n   —— 出处：华泰研究《联储加息悬念白热化》p.1（locator: chunk:a18883e28d578988:body:0005）\n\n2. 同报告图表标题（第 10 页）交叉印证：\n   > 「图表33：上周联储2026 年加息预期下降3bp 至35bp　资料来源：Bloomberg，华泰研究」\n   —— 出处：同上报告 p.10（locator: chunk:a18883e28d578988:heading:0128）\n\n**要点说明**\n- 变化幅度：**-3bp**（全周累计）\n- 期末水平：**35bp**（年内剩余累计加息预期；按报告口径即由约 38bp 回落至 35bp）\n- 同期背景：联储加息预期小幅回落，但 2y/10y 美债收益率分别上行 3bp/5bp 至 4.37%/4.78%，美元指数下行 0.5% 至 99.2。\n- 报告同时提示风险：地缘政治不确定性、货币政策超预期紧缩（即该预期存在重新上行的反向可能）。\n\n证据清单已提交并通过校验（manifest：1 条结论，状态 supported/delivered）。",
+  "trace": {
+    "llm_turns": 7,
+    "tool_calls": 8,
+    "tool_calls_by_name": {
+      "add_task": 1,
+      "update_task": 4,
+      "corpus_search": 1,
+      "corpus_fetch": 1,
+      "corpus_submit_manifest": 1
+    },
+    "tool_errors": 0
+  },
+  "usage": {
+    "input": 151663,
+    "output": 3814,
+    "cached": 123904,
+    "compactions": 0
+  },
+  "ledger": {
+    "present": true,
+    "offered": 10,
+    "requested": 1,
+    "fetched": 2,
+    "delivered": 2,
+    "errors": []
+  },
+  "deterministic": {
+    "source_offered": true,
+    "quote_fetched": true,
+    "quote_delivered": true,
+    "expected_build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009"
+  },
+  "judge": {
+    "verdict": "pass",
+    "score": 1.0,
+    "supported": true,
+    "complete": true,
+    "reason": "回答核心事实（全周下降3bp、降至35bp）与第1页「金融市场」证据逐字一致，变化幅度与期末水平均满足问题要求，主体与单位正确。",
+    "raw": "{\"verdict\":\"pass\",\"score\":1.0,\"supported\":true,\"complete\":true,\"reason\":\"回答核心事实（全周下降3bp、降至35bp）与第1页「金融市场」证据逐字一致，变化幅度与期末水平均满足问题要求，主体与单位正确。\"}",
+    "model": "glm-5.3-flash",
+    "usage": {
+      "input": 537,
+      "output": 1536,
+      "total": 2073
+    }
+  }
+}

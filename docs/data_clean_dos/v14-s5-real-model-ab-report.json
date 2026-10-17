@@ -1,0 +1,1565 @@
+{
+  "artifact": "v14-s5-real-model-ab",
+  "generated_at": "2026-10-17T10:54:55.188714+00:00",
+  "status": "pilot_repeats_complete",
+  "manifest_sha256": "a9cf10b78d0d78d83fd98c2bd42d6d6f32eec4c1c28435cb52c9a5b2477a5757",
+  "judge_independence": "same-provider same-model judge (user-authorized; not independent)",
+  "scope": {
+    "questions": 3,
+    "repeats": 3,
+    "runs": 18
+  },
+  "summary": {
+    "control": {
+      "runs": 9,
+      "ok": 9,
+      "judge_pass": 8,
+      "source_offered": 9,
+      "quote_fetched": 9,
+      "quote_delivered": 9,
+      "wall_s": 3535.4,
+      "tool_calls": 153,
+      "tool_errors": 0,
+      "tool_calls_by_name": {
+        "add_task": 9,
+        "bash": 3,
+        "corpus_fetch": 50,
+        "corpus_inventory": 4,
+        "corpus_search": 34,
+        "corpus_submit_manifest": 12,
+        "create_file": 2,
+        "data_coverage": 2,
+        "glob_search": 2,
+        "market_financials": 2,
+        "market_resolve": 1,
+        "recover_result": 1,
+        "update_task": 31
+      },
+      "tokens": {
+        "input": 5344048,
+        "output": 141633,
+        "cached": 4564992
+      },
+      "judge_tokens": {
+        "recorded_runs": 6,
+        "input": 4362,
+        "output": 9872
+      }
+    },
+    "candidate": {
+      "runs": 9,
+      "ok": 9,
+      "judge_pass": 9,
+      "source_offered": 9,
+      "quote_fetched": 9,
+      "quote_delivered": 9,
+      "wall_s": 2772.4,
+      "tool_calls": 124,
+      "tool_errors": 1,
+      "tool_calls_by_name": {
+        "add_task": 9,
+        "bash": 1,
+        "corpus_fetch": 31,
+        "corpus_inventory": 3,
+        "corpus_search": 27,
+        "corpus_submit_manifest": 13,
+        "create_file": 1,
+        "data_coverage": 1,
+        "glob_search": 3,
+        "market_financials": 1,
+        "update_task": 34
+      },
+      "tokens": {
+        "input": 4205387,
+        "output": 90099,
+        "cached": 3728256
+      },
+      "judge_tokens": {
+        "recorded_runs": 6,
+        "input": 4316,
+        "output": 6107
+      }
+    }
+  },
+  "comparison": {
+    "judge_pass_delta": 1,
+    "source_offered_delta": 0,
+    "quote_fetched_delta": 0,
+    "quote_delivered_delta": 0,
+    "wall_s_delta_percent": -21.6,
+    "tool_calls_delta_percent": -19.0,
+    "corpus_search_calls_delta_percent": -20.6,
+    "corpus_fetch_calls_delta_percent": -38.0,
+    "tool_errors_delta": 1,
+    "input_tokens_delta_percent": -21.3,
+    "output_tokens_delta_percent": -36.4,
+    "cached_tokens_delta_percent": -18.3
+  },
+  "variance": {
+    "5e305376-fedrate": {
+      "control": {
+        "runs": 3,
+        "judge_pass": 3,
+        "source_offered": 3,
+        "quote_fetched": 3,
+        "quote_delivered": 3,
+        "wall_s": {
+          "mean": 81.2,
+          "min": 63.3,
+          "max": 105.8,
+          "pstdev": 18.0,
+          "cv": 0.222
+        },
+        "input_tokens": {
+          "mean": 135498.7,
+          "min": 127409.0,
+          "max": 150472.0,
+          "pstdev": 10599.2,
+          "cv": 0.078
+        },
+        "tool_calls": {
+          "mean": 7.3,
+          "min": 7.0,
+          "max": 8.0,
+          "pstdev": 0.5,
+          "cv": 0.064
+        },
+        "corpus_search_calls": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0,
+          "pstdev": 0.0,
+          "cv": 0.0
+        },
+        "corpus_fetch_calls": {
+          "mean": 1.7,
+          "min": 1.0,
+          "max": 2.0,
+          "pstdev": 0.5,
+          "cv": 0.283
+        },
+        "tool_errors": {
+          "mean": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "pstdev": 0.0,
+          "cv": 0.0
+        }
+      },
+      "candidate": {
+        "runs": 3,
+        "judge_pass": 3,
+        "source_offered": 3,
+        "quote_fetched": 3,
+        "quote_delivered": 3,
+        "wall_s": {
+          "mean": 103.1,
+          "min": 97.1,
+          "max": 109.6,
+          "pstdev": 5.1,
+          "cv": 0.05
+        },
+        "input_tokens": {
+          "mean": 172205.3,
+          "min": 148943.0,
+          "max": 216010.0,
+          "pstdev": 30994.5,
+          "cv": 0.18
+        },
+        "tool_calls": {
+          "mean": 8.3,
+          "min": 8.0,
+          "max": 9.0,
+          "pstdev": 0.5,
+          "cv": 0.057
+        },
+        "corpus_search_calls": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0,
+          "pstdev": 0.0,
+          "cv": 0.0
+        },
+        "corpus_fetch_calls": {
+          "mean": 1.0,
+          "min": 1.0,
+          "max": 1.0,
+          "pstdev": 0.0,
+          "cv": 0.0
+        },
+        "tool_errors": {
+          "mean": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "pstdev": 0.0,
+          "cv": 0.0
+        }
+      }
+    },
+    "f7f65d7e-risk": {
+      "control": {
+        "runs": 3,
+        "judge_pass": 2,
+        "source_offered": 3,
+        "quote_fetched": 3,
+        "quote_delivered": 3,
+        "wall_s": {
+          "mean": 758.8,
+          "min": 353.2,
+          "max": 1236.6,
+          "pstdev": 364.2,
+          "cv": 0.48
+        },
+        "input_tokens": {
+          "mean": 1331696.3,
+          "min": 560171.0,
+          "max": 2636400.0,
+          "pstdev": 927682.1,
+          "cv": 0.697
+        },
+        "tool_calls": {
+          "mean": 30.7,
+          "min": 19.0,
+          "max": 51.0,
+          "pstdev": 14.4,
+          "cv": 0.471
+        },
+        "corpus_search_calls": {
+          "mean": 8.3,
+          "min": 5.0,
+          "max": 15.0,
+          "pstdev": 4.7,
+          "cv": 0.566
+        },
+        "corpus_fetch_calls": {
+          "mean": 12.0,
+          "min": 2.0,
+          "max": 27.0,
+          "pstdev": 10.8,
+          "cv": 0.9
+        },
+        "tool_errors": {
+          "mean": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "pstdev": 0.0,
+          "cv": 0.0
+        }
+      },
+      "candidate": {
+        "runs": 3,
+        "judge_pass": 3,
+        "source_offered": 3,
+        "quote_fetched": 3,
+        "quote_delivered": 3,
+        "wall_s": {
+          "mean": 482.5,
+          "min": 343.9,
+          "max": 691.7,
+          "pstdev": 150.5,
+          "cv": 0.312
+        },
+        "input_tokens": {
+          "mean": 959634.7,
+          "min": 496379.0,
+          "max": 1627549.0,
+          "pstdev": 483942.3,
+          "cv": 0.504
+        },
+        "tool_calls": {
+          "mean": 22.0,
+          "min": 16.0,
+          "max": 28.0,
+          "pstdev": 4.9,
+          "cv": 0.223
+        },
+        "corpus_search_calls": {
+          "mean": 6.7,
+          "min": 5.0,
+          "max": 8.0,
+          "pstdev": 1.2,
+          "cv": 0.187
+        },
+        "corpus_fetch_calls": {
+          "mean": 6.3,
+          "min": 3.0,
+          "max": 10.0,
+          "pstdev": 2.9,
+          "cv": 0.453
+        },
+        "tool_errors": {
+          "mean": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "pstdev": 0.0,
+          "cv": 0.0
+        }
+      }
+    },
+    "f86c6d2c-cxotable": {
+      "control": {
+        "runs": 3,
+        "judge_pass": 3,
+        "source_offered": 3,
+        "quote_fetched": 3,
+        "quote_delivered": 3,
+        "wall_s": {
+          "mean": 338.5,
+          "min": 192.9,
+          "max": 611.4,
+          "pstdev": 193.1,
+          "cv": 0.57
+        },
+        "input_tokens": {
+          "mean": 314154.3,
+          "min": 186541.0,
+          "max": 488176.0,
+          "pstdev": 127439.4,
+          "cv": 0.406
+        },
+        "tool_calls": {
+          "mean": 13.0,
+          "min": 10.0,
+          "max": 18.0,
+          "pstdev": 3.6,
+          "cv": 0.274
+        },
+        "corpus_search_calls": {
+          "mean": 2.0,
+          "min": 1.0,
+          "max": 3.0,
+          "pstdev": 0.8,
+          "cv": 0.408
+        },
+        "corpus_fetch_calls": {
+          "mean": 3.0,
+          "min": 2.0,
+          "max": 4.0,
+          "pstdev": 0.8,
+          "cv": 0.272
+        },
+        "tool_errors": {
+          "mean": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "pstdev": 0.0,
+          "cv": 0.0
+        }
+      },
+      "candidate": {
+        "runs": 3,
+        "judge_pass": 3,
+        "source_offered": 3,
+        "quote_fetched": 3,
+        "quote_delivered": 3,
+        "wall_s": {
+          "mean": 338.6,
+          "min": 239.2,
+          "max": 390.9,
+          "pstdev": 70.3,
+          "cv": 0.208
+        },
+        "input_tokens": {
+          "mean": 269955.7,
+          "min": 251896.0,
+          "max": 297277.0,
+          "pstdev": 19650.2,
+          "cv": 0.073
+        },
+        "tool_calls": {
+          "mean": 11.0,
+          "min": 10.0,
+          "max": 13.0,
+          "pstdev": 1.4,
+          "cv": 0.129
+        },
+        "corpus_search_calls": {
+          "mean": 1.3,
+          "min": 1.0,
+          "max": 2.0,
+          "pstdev": 0.5,
+          "cv": 0.354
+        },
+        "corpus_fetch_calls": {
+          "mean": 3.0,
+          "min": 2.0,
+          "max": 4.0,
+          "pstdev": 0.8,
+          "cv": 0.272
+        },
+        "tool_errors": {
+          "mean": 0.3,
+          "min": 0.0,
+          "max": 1.0,
+          "pstdev": 0.5,
+          "cv": 1.414
+        }
+      }
+    }
+  },
+  "decision": {
+    "status": "pilot_repeats_pass_expand_51_matrix",
+    "release_ready": false,
+    "reasons": [
+      "Control judged-answer pass: 8/9; candidate: 9/9.",
+      "Candidate wall time delta: -21.6%; tool-call delta: -19.0%; input-token delta: -21.3%.",
+      "The configured judge is the same provider and model as the answering agent, so it is not independent."
+    ],
+    "next_gate": "run the frozen 51-target real-model matrix; use an independent judge before a release claim"
+  },
+  "limitations": [
+    "Judge-call token usage was not persisted for repeat 1; repeats 2 and 3 persist it. Answer-agent usage is complete for all repeats.",
+    "The pre-execution manifest did not hash the untracked runner source; the report records the post-processing runner hash."
+  ],
+  "excluded_preflight_attempts": [
+    {
+      "reason": "CORPUS_TARGET_DB was set but CORPUS_DSN still connected to postgres",
+      "disposition": "excluded before formal A/B; preserved as harness preflight failure",
+      "arm": "control",
+      "target_id": "f86c6d2c-cxotable",
+      "status": "ok",
+      "wall_s": 389.4,
+      "usage": {
+        "input": 298003,
+        "output": 11636,
+        "cached": 268800,
+        "compactions": 0
+      },
+      "tool_calls": 21
+    }
+  ],
+  "postprocess_runner_sha256": "00e6bf9f50b50489ad1fdd453ae8cc311ef7a55e641af4f1db9e7e5fa16fc4a6",
+  "per_run": [
+    {
+      "artifact": "v14-s5-real-model-run",
+      "generated_at": "2026-10-17T08:22:36.502132+00:00",
+      "arm": "candidate",
+      "repeat": 1,
+      "target_id": "5e305376-fedrate",
+      "sample_id": "holdout-macro-008",
+      "domain": "macro",
+      "role": "required",
+      "question": "全周联储年内剩余累计加息预期变化了多少（降至多少 bp）？",
+      "status": "ok",
+      "wall_s": 102.6,
+      "run_present": true,
+      "run_dir": ".s5runs_v14/candidate/5e305376-fedrate/run-01/workspace/.apodex/runs/20261017-162054+0800-react-1793",
+      "answer": "**答：全周联储年内剩余累计加息预期下降了 3bp，降至 35bp。**\n\n依据（研报原文，逐字）：\n\n> 「金融市场：联储加息预期小幅回落……**全周看，联储年内剩余累计加息预期下降 3bp 至 35bp。**」\n\n- 来源：华泰研究周报《联储加息悬念白热化》「金融市场」章节（`stub:R01 p1`，locator `chunk:a18883e28d578988:body:0005`），证据已通过清单校验（status: supported）。\n- 同段上下文可佐证回落方向：报告当周联储官员表态中性偏鸽（沃勒称若 8 月 CPI 延续改善倾向维持利率不变），与加息预期小幅回落一致。\n\n即：变化幅度为 **-3bp**，期末水平为 **35bp**。",
+      "trace": {
+        "llm_turns": 7,
+        "tool_calls": 8,
+        "tool_calls_by_name": {
+          "add_task": 1,
+          "update_task": 3,
+          "corpus_search": 1,
+          "corpus_fetch": 1,
+          "corpus_submit_manifest": 2
+        },
+        "tool_errors": 0
+      },
+      "usage": {
+        "input": 148943,
+        "output": 3350,
+        "cached": 108160,
+        "compactions": 0
+      },
+      "ledger": {
+        "present": true,
+        "offered": 10,
+        "requested": 1,
+        "fetched": 1,
+        "delivered": 1,
+        "errors": []
+      },
+      "deterministic": {
+        "source_offered": true,
+        "quote_fetched": true,
+        "quote_delivered": true,
+        "expected_build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009"
+      },
+      "judge": {
+        "verdict": "pass",
+        "score": 1,
+        "supported": true,
+        "complete": true,
+        "reason": "回答核心事实（下降3bp、降至35bp）与参考证据逐字一致，来源为第1页'金融市场'章节，变化幅度与期末水平两项问题要求均已完整回答。",
+        "raw": "{\"verdict\":\"pass\",\"score\":1,\"supported\":true,\"complete\":true,\"reason\":\"回答核心事实（下降3bp、降至35bp）与参考证据逐字一致，来源为第1页'金融市场'章节，变化幅度与期末水平两项问题要求均已完整回答。\"}",
+        "model": "glm-5.3-flash"
+      }
+    },
+    {
+      "artifact": "v14-s5-real-model-run",
+      "generated_at": "2026-10-17T09:57:31.118616+00:00",
+      "arm": "candidate",
+      "repeat": 2,
+      "target_id": "5e305376-fedrate",
+      "sample_id": "holdout-macro-008",
+      "domain": "macro",
+      "role": "required",
+      "question": "全周联储年内剩余累计加息预期变化了多少（降至多少 bp）？",
+      "status": "ok",
+      "wall_s": 109.6,
+      "run_present": true,
+      "run_dir": ".s5runs_v14/candidate/5e305376-fedrate/run-02/workspace/.apodex/runs/20261017-175542+0800-react-67f0",
+      "answer": "**全周联储年内剩余累计加息预期下降 3bp，降至 35bp。**\n\n依据（研报《联储加息悬念白热化》，华泰研究）：\n\n- 正文「金融市场」段（第 1 页）逐字原文：\n  > 「联储加息预期小幅回落……**全周看，联储年内剩余累计加息预期下降 3bp 至 35bp。**」\n- 同报告第 10 页图表 33 标题互相印证：\n  > 「图表33：上周联储2026 年加息预期下降3bp 至35bp」（资料来源：Bloomberg，华泰研究）\n\n补充上下文（同一句原文）：同期 2y、10y 美债收益率分别上行 3bp、5bp 至 4.37%、4.78%，美元指数下行 0.5% 至 99.2——即加息预期回落的同时长端利率仍上行。\n\n证据清单（A4）已提交并核验通过（C1 → supported）。\n\n来源定位：doc_id `cv2:a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009`；locator `chunk:a18883e28d578988:body:0005`（p.1）、`chunk:a18883e28d578988:heading:0128`（p.10）。",
+      "trace": {
+        "llm_turns": 10,
+        "tool_calls": 9,
+        "tool_calls_by_name": {
+          "add_task": 1,
+          "update_task": 4,
+          "corpus_search": 1,
+          "corpus_fetch": 1,
+          "corpus_submit_manifest": 2
+        },
+        "tool_errors": 0
+      },
+      "usage": {
+        "input": 216010,
+        "output": 3895,
+        "cached": 187840,
+        "compactions": 0
+      },
+      "ledger": {
+        "present": true,
+        "offered": 10,
+        "requested": 1,
+        "fetched": 2,
+        "delivered": 2,
+        "errors": []
+      },
+      "deterministic": {
+        "source_offered": true,
+        "quote_fetched": true,
+        "quote_delivered": true,
+        "expected_build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009"
+      },
+      "judge": {
+        "verdict": "pass",
+        "score": 1.0,
+        "supported": true,
+        "complete": true,
+        "reason": "回答核心事实（下降3bp、降至35bp）与第1页金融市场证据逐字一致，完整覆盖问题要求的变化量与降至水平。",
+        "raw": "{\"verdict\":\"pass\",\"score\":1.0,\"supported\":true,\"complete\":true,\"reason\":\"回答核心事实（下降3bp、降至35bp）与第1页金融市场证据逐字一致，完整覆盖问题要求的变化量与降至水平。\"}",
+        "model": "glm-5.3-flash",
+        "usage": {
+          "input": 506,
+          "output": 512,
+          "total": 1018
+        }
+      }
+    },
+    {
+      "artifact": "v14-s5-real-model-run",
+      "generated_at": "2026-10-17T10:37:13.878418+00:00",
+      "arm": "candidate",
+      "repeat": 3,
+      "target_id": "5e305376-fedrate",
+      "sample_id": "holdout-macro-008",
+      "domain": "macro",
+      "role": "required",
+      "question": "全周联储年内剩余累计加息预期变化了多少（降至多少 bp）？",
+      "status": "ok",
+      "wall_s": 97.1,
+      "run_present": true,
+      "run_dir": ".s5runs_v14/candidate/5e305376-fedrate/run-03/workspace/.apodex/runs/20261017-183537+0800-react-f4df",
+      "answer": "**答案：全周联储年内剩余累计加息预期下降了 3bp，降至 35bp。**\n\n**溯源（逐字原文）**\n\n1. 研报正文（第 1 页「金融市场」段）：\n   > 「全周看，联储年内剩余累计加息预期下降 3bp 至 35bp。」\n   —— 出处：华泰研究《联储加息悬念白热化》p.1（locator: chunk:a18883e28d578988:body:0005）\n\n2. 同报告图表标题（第 10 页）交叉印证：\n   > 「图表33：上周联储2026 年加息预期下降3bp 至35bp　资料来源：Bloomberg，华泰研究」\n   —— 出处：同上报告 p.10（locator: chunk:a18883e28d578988:heading:0128）\n\n**要点说明**\n- 变化幅度：**-3bp**（全周累计）\n- 期末水平：**35bp**（年内剩余累计加息预期；按报告口径即由约 38bp 回落至 35bp）\n- 同期背景：联储加息预期小幅回落，但 2y/10y 美债收益率分别上行 3bp/5bp 至 4.37%/4.78%，美元指数下行 0.5% 至 99.2。\n- 报告同时提示风险：地缘政治不确定性、货币政策超预期紧缩（即该预期存在重新上行的反向可能）。\n\n证据清单已提交并通过校验（manifest：1 条结论，状态 supported/delivered）。",
+      "trace": {
+        "llm_turns": 7,
+        "tool_calls": 8,
+        "tool_calls_by_name": {
+          "add_task": 1,
+          "update_task": 4,
+          "corpus_search": 1,
+          "corpus_fetch": 1,
+          "corpus_submit_manifest": 1
+        },
+        "tool_errors": 0
+      },
+      "usage": {
+        "input": 151663,
+        "output": 3814,
+        "cached": 123904,
+        "compactions": 0
+      },
+      "ledger": {
+        "present": true,
+        "offered": 10,
+        "requested": 1,
+        "fetched": 2,
+        "delivered": 2,
+        "errors": []
+      },
+      "deterministic": {
+        "source_offered": true,
+        "quote_fetched": true,
+        "quote_delivered": true,
+        "expected_build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009"
+      },
+      "judge": {
+        "verdict": "pass",
+        "score": 1.0,
+        "supported": true,
+        "complete": true,
+        "reason": "回答核心事实（全周下降3bp、降至35bp）与第1页「金融市场」证据逐字一致，变化幅度与期末水平均满足问题要求，主体与单位正确。",
+        "raw": "{\"verdict\":\"pass\",\"score\":1.0,\"supported\":true,\"complete\":true,\"reason\":\"回答核心事实（全周下降3bp、降至35bp）与第1页「金融市场」证据逐字一致，变化幅度与期末水平均满足问题要求，主体与单位正确。\"}",
+        "model": "glm-5.3-flash",
+        "usage": {
+          "input": 537,
+          "output": 1536,
+          "total": 2073
+        }
+      }
+    },
+    {
+      "artifact": "v14-s5-real-model-run",
+      "generated_at": "2026-10-17T08:48:06.749600+00:00",
+      "arm": "candidate",
+      "repeat": 1,
+      "target_id": "f7f65d7e-risk",
+      "sample_id": "holdout-macro-009",
+      "domain": "macro",
+      "role": "supplementary",
+      "question": "本期研报列出了哪些主要风险提示？",
+      "status": "ok",
+      "wall_s": 691.7,
+      "run_present": true,
+      "run_dir": ".s5runs_v14/candidate/f7f65d7e-risk/run-01/workspace/.apodex/runs/20261017-163636+0800-react-2c52",
+      "answer": "## 回答\n\n**本期研报**：天风证券《A股策略周报：非农大超预期，加息预期升温》，证券研究报告，2026年09月06日，分析师吴开达（S1110524030001）、林晨、汪书慧，联系人陈英奇。\n\n### 列出的主要风险提示（共三项）\n\n报告在首页摘要末尾（报告第2页）与正文「**5.风险提示**」章节（报告第10页）两处给出**完全相同**的一句话，逐字原文为：\n\n> **风险提示：地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。**\n> [chunk:ebff0cfc6c33f6fc:body:0002 · 第2页；chunk:ebff0cfc6c33f6fc:body:0015 · 第10页]\n\n逐条即：\n\n1. **地缘冲突超预期** —— 与报告当期跟踪的两条地缘线直接对应：俄乌冲突（乌国家安全局总部遭俄无人机袭击等）与中东冲突（美伊对峙、美军袭击伊朗致18死142伤）[chunk:…:body:0011 / body:0012 · 第6–7页]；\n2. **海外通胀持续性超预期** —— 通胀回落慢于预期、居高不下的风险；\n3. **流动性收紧超预期** —— 与本篇核心事件呼应：8月美国非农新增就业16.2万人、大幅高于预期的5.6万人且前值上修，市场加息预期回升，据CME“美联储观察”截至2026/9/5，美联储2026年9月加息25基点概率59.4%（维持利率40.6%）[chunk:…:body:0013 · 第7–8页]。\n\n### 核对说明\n\n- 三项风险的共同限定是「**超预期**」，即针对偏离一致预期的程度，而非方向本身；\n- 已通读全文（正文1.国内、2.国际、3.行业配置建议、4.重点大事前瞻、5.风险提示及声明页，chunk 0000–0016），除上述三项外**未再单列其他风险条目**，第11页起为分析师声明/免责声明，不属于风险提示内容；\n- 本篇为归纳性回答，未涉及仓位计算，不适用 position_sizing / strategy_lint；证据清单已提交并回验通过（5/5 结论 supported，publish_status=verified）。\n\n归纳稿已写入 `/outputs/report.md`。",
+      "trace": {
+        "llm_turns": 21,
+        "tool_calls": 28,
+        "tool_calls_by_name": {
+          "add_task": 1,
+          "update_task": 4,
+          "glob_search": 1,
+          "corpus_search": 8,
+          "corpus_inventory": 1,
+          "corpus_fetch": 10,
+          "create_file": 1,
+          "corpus_submit_manifest": 2
+        },
+        "tool_errors": 0
+      },
+      "usage": {
+        "input": 1627549,
+        "output": 20677,
+        "cached": 1530560,
+        "compactions": 0
+      },
+      "ledger": {
+        "present": true,
+        "offered": 48,
+        "requested": 10,
+        "fetched": 17,
+        "delivered": 17,
+        "errors": []
+      },
+      "deterministic": {
+        "source_offered": true,
+        "quote_fetched": true,
+        "quote_delivered": true,
+        "expected_build_id": "ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730"
+      },
+      "judge": {
+        "verdict": "pass",
+        "score": 1.0,
+        "supported": true,
+        "complete": true,
+        "reason": "回答逐字复述了参考证据中的三项风险提示（地缘冲突超预期、海外通胀持续性超预期、流动性收紧超预期），核心事实完全受支持且无遗漏，附加说明仅为释义性展开不影响判定。",
+        "raw": "{\"verdict\":\"pass\",\"score\":1.0,\"supported\":true,\"complete\":true,\"reason\":\"回答逐字复述了参考证据中的三项风险提示（地缘冲突超预期、海外通胀持续性超预期、流动性收紧超预期），核心事实完全受支持且无遗漏，附加说明仅为释义性展开不影响判定。\"}",
+        "model": "glm-5.3-flash"
+      }
+    },
+    {
+      "artifact": "v14-s5-real-model-run",
+      "generated_at": "2026-10-17T10:03:22.619020+00:00",
+      "arm": "candidate",
+      "repeat": 2,
+      "target_id": "f7f65d7e-risk",
+      "sample_id": "holdout-macro-009",
+      "domain": "macro",
+      "role": "supplementary",
+      "question": "本期研报列出了哪些主要风险提示？",
+      "status": "ok",
+      "wall_s": 343.9,
+      "run_present": true,
+      "run_dir": ".s5runs_v14/candidate/f7f65d7e-risk/run-02/workspace/.apodex/runs/20261017-175739+0800-react-a6c2",
+      "answer": "**本期研报**：天风证券《A 股策略周报：非农大超预期，加息预期升温》（证券研究报告，2026 年 09 月 06 日，分析师吴开达、林晨、汪书慧）。\n\n**列出的主要风险提示共三项**（摘要页与正文「5. 风险提示」两处逐字一致）：\n\n1. **地缘冲突超预期** —— 报告当期跟踪了俄乌冲突（乌国家安全局总部遭袭、美国邀请俄出席 G20 财长会议）与中东冲突（美方称可能打击伊朗核设施、美军袭击已致伊朗 18 死 142 伤）等事件，地缘局势恶化是首要风险。\n2. **海外通胀持续性超预期** —— 通胀回落慢于预期将制约海外宽松空间。\n3. **流动性收紧超预期** —— 8 月美国非农大超预期（新增 16.2 万人 vs 预期 5.6 万）后市场加息预期回升：据 CME「美联储观察」，截至 2026/9/5，美联储 2026 年 9 月加息 25 基点概率 59.4%、维持利率概率 40.6%，若流动性收紧快于预期将压制风险资产估值。\n\n**逐字原文与出处**：\n- 正文「5.风险提示」（第 11 页）：「地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。」［chunk:ebff0cfc6c33f6fc:body:0015 · p11］\n- 首页摘要（第 2 页）：「风险提示：地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。」［chunk:ebff0cfc6c33f6fc:body:0002 · p2］\n\n**说明**：以上三项即报告「风险提示」章节的全部内容（报告正文共 5 节，末节即为风险提示，未列其他风险项）；括号内的背景对应关系是依据报告正文事件梳理的理解性归纳，风险提示本身仅为上述三项表述。证据清单（A4）已提交并核验通过（2/2 条 supported）。",
+      "trace": {
+        "llm_turns": 15,
+        "tool_calls": 22,
+        "tool_calls_by_name": {
+          "add_task": 1,
+          "update_task": 5,
+          "glob_search": 1,
+          "corpus_search": 7,
+          "corpus_fetch": 6,
+          "corpus_submit_manifest": 2
+        },
+        "tool_errors": 0
+      },
+      "usage": {
+        "input": 754976,
+        "output": 12173,
+        "cached": 676544,
+        "compactions": 0
+      },
+      "ledger": {
+        "present": true,
+        "offered": 53,
+        "requested": 6,
+        "fetched": 18,
+        "delivered": 18,
+        "errors": []
+      },
+      "deterministic": {
+        "source_offered": true,
+        "quote_fetched": true,
+        "quote_delivered": true,
+        "expected_build_id": "ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730"
+      },
+      "judge": {
+        "verdict": "pass",
+        "score": 0.9,
+        "supported": true,
+        "complete": true,
+        "reason": "回答完整复述了参考证据中的三项风险提示（地缘冲突超预期、海外通胀持续性超预期、流动性收紧超预期），核心事实受证据支持且无遗漏，附加背景已明确标注为理解性归纳，不影响核心判定。",
+        "raw": "{\"verdict\":\"pass\",\"score\":0.9,\"supported\":true,\"complete\":true,\"reason\":\"回答完整复述了参考证据中的三项风险提示（地缘冲突超预期、海外通胀持续性超预期、流动性收紧超预期），核心事实受证据支持且无遗漏，附加背景已明确标注为理解性归纳，不影响核心判定。\"}",
+        "model": "glm-5.3-flash",
+        "usage": {
+          "input": 670,
+          "output": 1003,
+          "total": 1673
+        }
+      }
+    },
+    {
+      "artifact": "v14-s5-real-model-run",
+      "generated_at": "2026-10-17T10:52:03.382898+00:00",
+      "arm": "candidate",
+      "repeat": 3,
+      "target_id": "f7f65d7e-risk",
+      "sample_id": "holdout-macro-009",
+      "domain": "macro",
+      "role": "supplementary",
+      "question": "本期研报列出了哪些主要风险提示？",
+      "status": "ok",
+      "wall_s": 411.8,
+      "run_present": true,
+      "run_dir": ".s5runs_v14/candidate/f7f65d7e-risk/run-03/workspace/.apodex/runs/20261017-184512+0800-react-951d",
+      "answer": "本期研报为：天风证券《A股策略周报——非农大超预期，加息预期升温》（证券研究报告，2026年09月06日；作者：吴开达、林晨、汪书慧，联系人：陈英奇）。\n\n报告列出的主要风险提示共 3 项：1）地缘冲突超预期；2）海外通胀持续性超预期；3）流动性收紧超预期。\n\n出处（报告内两处，逐字原文已核对，表述一致）：\n- 正文「5.风险提示」章节（报告第 11 页，为报告最后一个正文章节）：「地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。」该句之后即紧接分析师声明与免责条款。[doc_id cv2:ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730，locator chunk:ebff0cfc6c33f6fc:body:0015，页 10-11]\n- 首页摘要末行（报告第 1-2 页）：「风险提示：地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。」[同上 doc_id，locator chunk:ebff0cfc6c33f6fc:body:0002]\n\n两点说明：\n1. 两处表述一致，且均为一句话整体列举、未对每项风险逐条展开论述——本期报告对风险的陈述即以上内容。\n2. 证据清单已提交并通过校验（3/3 supported）。若你指的是本批语料中的另一篇研报（本批共收录 12 篇，如 2026-09-05 的另一篇策略周报、医药周报 20260906、半导体行业周报等），请指明是哪一篇，我再取回其风险提示章节原文。",
+      "trace": {
+        "llm_turns": 11,
+        "tool_calls": 16,
+        "tool_calls_by_name": {
+          "add_task": 1,
+          "update_task": 4,
+          "glob_search": 1,
+          "corpus_search": 5,
+          "corpus_fetch": 3,
+          "corpus_inventory": 1,
+          "corpus_submit_manifest": 1
+        },
+        "tool_errors": 0
+      },
+      "usage": {
+        "input": 496379,
+        "output": 18663,
+        "cached": 420480,
+        "compactions": 0
+      },
+      "ledger": {
+        "present": true,
+        "offered": 41,
+        "requested": 3,
+        "fetched": 18,
+        "delivered": 18,
+        "errors": []
+      },
+      "deterministic": {
+        "source_offered": true,
+        "quote_fetched": true,
+        "quote_delivered": true,
+        "expected_build_id": "ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730"
+      },
+      "judge": {
+        "verdict": "pass",
+        "score": 1.0,
+        "supported": true,
+        "complete": true,
+        "reason": "回答逐字复述了参考证据中的三项风险提示（地缘冲突超预期、海外通胀持续性超预期、流动性收紧超预期），核心事实完整且受支持，满足问题要求。",
+        "raw": "{\"verdict\":\"pass\",\"score\":1.0,\"supported\":true,\"complete\":true,\"reason\":\"回答逐字复述了参考证据中的三项风险提示（地缘冲突超预期、海外通胀持续性超预期、流动性收紧超预期），核心事实完整且受支持，满足问题要求。\"}",
+        "model": "glm-5.3-flash",
+        "usage": {
+          "input": 609,
+          "output": 1036,
+          "total": 1645
+        }
+      }
+    },
+    {
+      "artifact": "v14-s5-real-model-run",
+      "generated_at": "2026-10-17T08:20:49.067613+00:00",
+      "arm": "candidate",
+      "repeat": 1,
+      "target_id": "f86c6d2c-cxotable",
+      "sample_id": "holdout-industry-006",
+      "domain": "industry",
+      "role": "supplementary",
+      "question": "图 5 中 CXO 龙头药明康德按市值排序的 2026H1 营业收入及同比增速是多少？",
+      "status": "ok",
+      "wall_s": 239.2,
+      "run_present": true,
+      "run_dir": ".s5runs_v14/candidate/f86c6d2c-cxotable/run-01/workspace/.apodex/runs/20261017-161650+0800-react-269d",
+      "answer": "## 答案\n\n**图 5 中，CXO 龙头药明康德 2026H1 营业收入为 288.97 亿元，收入同比增速（收入yoy）为 39%。**\n\n原句（证据锚点）：图 5（CXO A 股上市公司 2026H1 收入及增速概览，按市值排序）中，CXO 龙头药明康德 2026H1 营业收入为 288.97 亿元，收入同比增速（收入yoy）为 39%。该表按 2026-09-04 收盘市值排序，药明康德以 4,693.7 亿元市值位列表首，即 CXO A 股板块市值最大的龙头。\n\n### 出处与口径说明\n\n| 项目 | 内容 |\n|---|---|\n| 所在图表 | 图 5：CXO A 股上市公司 2026H1 收入及增速概览（按市值排序） |\n| 来源报告 | 国联民生证券《医药周报 20260906——CXO 中报我们看到了什么？》，第 4 页 |\n| 表内数据来源 | Wind、各公司公告（图注原文） |\n| 排序口径 | 按 2026-09-04 收盘市值排序；药明康德 4,693.7 亿元，列第 1 位 |\n| 单位 | 营业收入：亿元；增速：收入yoy（%） |\n\n两点提示：\n- 原文表头 OCR 识别为「206H1 营业收入（亿元）」，系「2026H1」的识别残缺，图题已明确为 2026H1 口径；\n- 该数字为报告中的事实性引用（图 5 表格数据），本回答仅作数据溯源，不构成投资建议。\n\n来源引用：`[cv2:e22bc49c… chunk:e22bc49c40c4c587:table:0000, p4]`（国联民生证券医药周报 20260906，图 5）",
+      "trace": {
+        "llm_turns": 10,
+        "tool_calls": 10,
+        "tool_calls_by_name": {
+          "add_task": 1,
+          "update_task": 3,
+          "corpus_search": 1,
+          "corpus_fetch": 4,
+          "corpus_submit_manifest": 1
+        },
+        "tool_errors": 0
+      },
+      "usage": {
+        "input": 260694,
+        "output": 9876,
+        "cached": 223552,
+        "compactions": 0
+      },
+      "ledger": {
+        "present": true,
+        "offered": 10,
+        "requested": 4,
+        "fetched": 10,
+        "delivered": 10,
+        "errors": [
+          {
+            "locator": "",
+            "code": "",
+            "error": "游标不可用：游标校验和不符（被篡改或损坏）",
+            "turn": 4
+          }
+        ]
+      },
+      "deterministic": {
+        "source_offered": true,
+        "quote_fetched": true,
+        "quote_delivered": true,
+        "expected_build_id": "e22bc49c40c4c58746479abe7d884a36b5fa84bc3ada033bc2d0779835a992a3"
+      },
+      "judge": {
+        "verdict": "pass",
+        "score": 1.0,
+        "supported": true,
+        "complete": true,
+        "reason": "回答准确给出药明康德2026H1营业收入288.97亿元、收入yoy 39%及市值4,693.7亿元，主体、期间、单位均与参考证据一致且完整满足问题要求。",
+        "raw": "{\"verdict\":\"pass\",\"score\":1.0,\"supported\":true,\"complete\":true,\"reason\":\"回答准确给出药明康德2026H1营业收入288.97亿元、收入yoy 39%及市值4,693.7亿元，主体、期间、单位均与参考证据一致且完整满足问题要求。\"}",
+        "model": "glm-5.3-flash"
+      }
+    },
+    {
+      "artifact": "v14-s5-real-model-run",
+      "generated_at": "2026-10-17T09:50:32.696854+00:00",
+      "arm": "candidate",
+      "repeat": 2,
+      "target_id": "f86c6d2c-cxotable",
+      "sample_id": "holdout-industry-006",
+      "domain": "industry",
+      "role": "supplementary",
+      "question": "图 5 中 CXO 龙头药明康德按市值排序的 2026H1 营业收入及同比增速是多少？",
+      "status": "ok",
+      "wall_s": 390.9,
+      "run_present": true,
+      "run_dir": ".s5runs_v14/candidate/f86c6d2c-cxotable/run-02/workspace/.apodex/runs/20261017-174402+0800-react-34b3",
+      "answer": "## 直接回答\n\n**图5（按市值排序）中：药明康德 2026H1 营业收入 288.97 亿元，同比 +39%；市值 4,693.7 亿元（按 20260904 收盘市值排序，居 13 家样本公司首位）。**\n\n## 出处与溯源\n\n- **图题**（逐字）：「图5：CXO A 股上市公司2026H1 收入及增速概览（按市值排序）」 [医药周报20260906《CXO 中报我们看到了什么？》（国联民生证券研究所）， p3-4]\n- **数据行**（逐字）：「药明康德 288.97 / 39% / 4,693.7」，列头为「2026H1 营业收入（亿元）/ 收入yoy / 市值（亿元）」 [同上， 图5 数据表, p4，chunk:`e22bc49c40c4c587:table:0000`]\n- **表注**（逐字）：「资料来源：Wind、各公司公告，国联民生证券研究所 注：按20260904 收盘市值排序」\n\n## 图 5 完整数据（按市值降序）\n\n| 公司 | 2026H1 营业收入（亿元） | 收入yoy | 市值（亿元） |\n|---|---|---|---|\n| **药明康德** | **288.97** | **+39%** | **4,693.7** |\n| 康龙化成 | 75.95 | +18% | 698.8 |\n| 凯莱英 | 36.07 | +13% | 574.8 |\n| 泰格医药 | 37.08 | +14% | 411.2 |\n| 昭衍新药 | 7.04 | +5% | 294.1 |\n| 皓元医药 | 16.48 | +26% | 189.4 |\n| 九洲药业 | 25.75 | -10% | 132.9 |\n| 成都先导 | 3.46 | +52% | 126.0 |\n| 美迪西 | 7.61 | +41% | 125.3 |\n| 益诺思 | 4.65 | +24% | 112.4 |\n| 博腾股份 | 17.90 | +10% | 106.9 |\n| 药石科技 | 10.59 | +15% | 99.9 |\n| 阳光诺和 | 4.26 | -28% | 79.1 |\n\n## 交叉核对（市场数据接口）\n\n同花顺财务接口（603259.SH，药明康德）2026 年中报：报告期末 **2026-06-30**、披露日 **2026-08-04**，营业收入 **28,897,478,718.36 元 ≈ 288.97 亿元** —— 与图 5 数值完全一致，期间口径确认为 2026 年上半年（中报累计）。\n\n## 口径说明与注意点\n\n1. **同比 +39% 出自研报图表**（其资料来源为 Wind、各公司公告）；市场接口本次仅返回最新一期财务数据、未提供 2025H1 对比基数，故同比增速未能独立复算，以研报图表口径为准。\n2. 图表正文解析文本中出现的「206H1」系文本抽取截断，图题证实期间为 **2026H1**。\n3. 图内同为 CXO 板块，增长存在分化：九洲药业 -10%、阳光诺和 -28% 为负增长，龙头药明康德的 +39% 并不代表板块全体公司表现。",
+      "trace": {
+        "llm_turns": 9,
+        "tool_calls": 13,
+        "tool_calls_by_name": {
+          "add_task": 1,
+          "update_task": 4,
+          "corpus_search": 2,
+          "corpus_fetch": 2,
+          "data_coverage": 1,
+          "market_financials": 1,
+          "bash": 1,
+          "corpus_submit_manifest": 1
+        },
+        "tool_errors": 0
+      },
+      "usage": {
+        "input": 297277,
+        "output": 9490,
+        "cached": 252416,
+        "compactions": 0
+      },
+      "ledger": {
+        "present": true,
+        "offered": 17,
+        "requested": 2,
+        "fetched": 4,
+        "delivered": 4,
+        "errors": []
+      },
+      "deterministic": {
+        "source_offered": true,
+        "quote_fetched": true,
+        "quote_delivered": true,
+        "expected_build_id": "e22bc49c40c4c58746479abe7d884a36b5fa84bc3ada033bc2d0779835a992a3"
+      },
+      "judge": {
+        "verdict": "pass",
+        "score": 1,
+        "supported": true,
+        "complete": true,
+        "reason": "回答核心事实（药明康德2026H1营收288.97亿元、同比+39%、市值4,693.7亿元）与参考证据完全一致，主体、期间、单位均正确，并完整满足问题要求。",
+        "raw": "{\"verdict\":\"pass\",\"score\":1,\"supported\":true,\"complete\":true,\"reason\":\"回答核心事实（药明康德2026H1营收288.97亿元、同比+39%、市值4,693.7亿元）与参考证据完全一致，主体、期间、单位均正确，并完整满足问题要求。\"}",
+        "model": "glm-5.3-flash",
+        "usage": {
+          "input": 1095,
+          "output": 777,
+          "total": 1872
+        }
+      }
+    },
+    {
+      "artifact": "v14-s5-real-model-run",
+      "generated_at": "2026-10-17T10:35:19.704305+00:00",
+      "arm": "candidate",
+      "repeat": 3,
+      "target_id": "f86c6d2c-cxotable",
+      "sample_id": "holdout-industry-006",
+      "domain": "industry",
+      "role": "supplementary",
+      "question": "图 5 中 CXO 龙头药明康德按市值排序的 2026H1 营业收入及同比增速是多少？",
+      "status": "ok",
+      "wall_s": 385.6,
+      "run_present": true,
+      "run_dir": ".s5runs_v14/candidate/f86c6d2c-cxotable/run-03/workspace/.apodex/runs/20261017-182854+0800-react-383a",
+      "answer": "**答案：图 5 中，CXO 龙头药明康德按市值排序居首，其 2026H1 营业收入为 288.97 亿元，收入同比增速（yoy）为 +39%，对应市值 4,693.7 亿元。**\n\n**来源与出处**\n- 报告：《医药周报 20260906：CXO 中报我们看到了什么？》（国联民生证券研究所，2026 年 9 月 6 日）\n- 图题：「图5：CXO A 股上市公司2026H1 收入及增速概览（按市值排序）」[stub:R01 p3–4]\n- 药明康德数据行：「药明康德 | 2026H1 营业收入 288.97 亿元 | 收入yoy 39% | 市值 4,693.7 亿元」[stub:R01 p4]\n- 图注：「资料来源：Wind、各公司公告，国联民生证券研究所 注：按20260904 收盘市值排序」[stub:R01 p4]\n\n**口径与限定说明**\n1. 排序依据是 **2026/09/04 收盘市值**（药明康德 4,693.7 亿元，为图 5 中 20 家样本公司之首），营收与增速为已披露的 2026 年中报口径数据。\n2. 图 5 中\"39%\"为四舍五入后的整数增速；营收保留了两位小数（288.97 亿元）。原文表格表头在文本抽取中显示为「206H1 营业收入」，系版面换行/抽取痕迹，实际表头为「2026H1 营业收入（亿元）」。\n3. 该图覆盖 20 家样本公司（图 5 横跨两栏：前 13 家 + 后 7 家），药明康德数据取自第一栏首行。\n\n**反方/平衡证据（同一图 5 及同报告内可见）**\n- 增速并非板块普遍 39% 量级：同图中九洲药业收入同比 **-10%**、阳光诺和 **-28%**、普蕊斯 **-5%** [stub:R01 p4]，报告亦指出部分企业因大品种专利到期等短期扰动同比下滑。\n- 板块整体利润增速低于收入增速：2026H1 20 家样本公司合计收入 562 亿元（同比 +24.5%）、归母净利润 132 亿元（同比仅 +17%）[stub:R01 p3]，说明收入高增长尚未完全传导为利润弹性，且报告提示部分公司应关注经调整净利润或扣非口径。\n\n**风险提示**：以上为研报披露的历史数据引用，非投资建议；市值排序时点（20260904）与中报披露时点不同，若用于决策请注意数据时点差异。",
+      "trace": {
+        "llm_turns": 9,
+        "tool_calls": 10,
+        "tool_calls_by_name": {
+          "add_task": 1,
+          "update_task": 3,
+          "corpus_search": 1,
+          "corpus_inventory": 1,
+          "corpus_fetch": 3,
+          "corpus_submit_manifest": 1
+        },
+        "tool_errors": 1
+      },
+      "usage": {
+        "input": 251896,
+        "output": 8161,
+        "cached": 204800,
+        "compactions": 0
+      },
+      "ledger": {
+        "present": true,
+        "offered": 10,
+        "requested": 3,
+        "fetched": 4,
+        "delivered": 4,
+        "errors": [
+          {
+            "locator": "",
+            "code": "",
+            "error": "Error: TypeError: corpus_fetch() missing 1 required positional argument: 'doc_id'",
+            "turn": 5
+          }
+        ]
+      },
+      "deterministic": {
+        "source_offered": true,
+        "quote_fetched": true,
+        "quote_delivered": true,
+        "expected_build_id": "e22bc49c40c4c58746479abe7d884a36b5fa84bc3ada033bc2d0779835a992a3"
+      },
+      "judge": {
+        "verdict": "pass",
+        "score": 0.95,
+        "supported": true,
+        "complete": true,
+        "reason": "核心事实（2026H1营收288.97亿元、收入yoy 39%、市值4,693.7亿元）与参考证据完全一致，主体、期间、单位正确且完整回答问题；附加的同业及板块数据超出参考证据范围但非问题核心。",
+        "raw": "{\"verdict\":\"pass\",\"score\":0.95,\"supported\":true,\"complete\":true,\"reason\":\"核心事实（2026H1营收288.97亿元、收入yoy 39%、市值4,693.7亿元）与参考证据完全一致，主体、期间、单位正确且完整回答问题；附加的同业及板块数据超出参考证据范围但非问题核心。\"}",
+        "model": "glm-5.3-flash",
+        "usage": {
+          "input": 899,
+          "output": 1243,
+          "total": 2142
+        }
+      }
+    },
+    {
+      "artifact": "v14-s5-real-model-run",
+      "generated_at": "2026-10-17T08:24:33.599386+00:00",
+      "arm": "control",
+      "repeat": 1,
+      "target_id": "5e305376-fedrate",
+      "sample_id": "holdout-macro-008",
+      "domain": "macro",
+      "role": "required",
+      "question": "全周联储年内剩余累计加息预期变化了多少（降至多少 bp）？",
+      "status": "ok",
+      "wall_s": 105.8,
+      "run_present": true,
+      "run_dir": ".s5runs_v14/control/5e305376-fedrate/run-01/workspace/.apodex/runs/20261017-162248+0800-react-2042",
+      "answer": "**答案：全周联储年内剩余累计加息预期下降了 3bp，降至 35bp。**\n\n依据（研报语料库逐字原文，华泰研究《联储加息悬念白热化》）：\n\n- 「金融市场」段（第 1 页，`chunk:88ad6cf30eb10c3c:body:0005`）：\n  「联储加息预期小幅回落……**全周看，联储年内剩余累计加息预期下降 3bp 至 35bp。**」\n- 交叉印证，「图表33」标题（第 10 页，`chunk:88ad6cf30eb10c3c:heading:0128`，资料来源：Bloomberg，华泰研究）：\n  「图表33：上周联储 **2026 年加息预期下降3bp 至35bp**」\n\n两处口径一致：变化量为 **−3bp**，期末水平 **35bp**（即市场对年内/2026 年剩余累计加息幅度的定价）。该结论已提交证据清单并核验通过（manifest 状态：supported）。",
+      "trace": {
+        "llm_turns": 7,
+        "tool_calls": 7,
+        "tool_calls_by_name": {
+          "add_task": 1,
+          "update_task": 2,
+          "corpus_search": 1,
+          "corpus_fetch": 2,
+          "corpus_submit_manifest": 1
+        },
+        "tool_errors": 0
+      },
+      "usage": {
+        "input": 150472,
+        "output": 3577,
+        "cached": 119552,
+        "compactions": 0
+      },
+      "ledger": {
+        "present": true,
+        "offered": 10,
+        "requested": 2,
+        "fetched": 6,
+        "delivered": 6,
+        "errors": []
+      },
+      "deterministic": {
+        "source_offered": true,
+        "quote_fetched": true,
+        "quote_delivered": true,
+        "expected_build_id": "88ad6cf30eb10c3c5275ae814ccaf10b9f1132f7d40c9eb4bf6a2c544140347c"
+      },
+      "judge": {
+        "verdict": "pass",
+        "score": 1,
+        "supported": true,
+        "complete": true,
+        "reason": "回答核心事实（下降3bp、降至35bp）与第1页'金融市场'参考证据逐字一致，变化量与期末水平两项均完整覆盖问题要求。",
+        "raw": "{\"verdict\":\"pass\",\"score\":1,\"supported\":true,\"complete\":true,\"reason\":\"回答核心事实（下降3bp、降至35bp）与第1页'金融市场'参考证据逐字一致，变化量与期末水平两项均完整覆盖问题要求。\"}",
+        "model": "glm-5.3-flash"
+      }
+    },
+    {
+      "artifact": "v14-s5-real-model-run",
+      "generated_at": "2026-10-17T09:55:27.199122+00:00",
+      "arm": "control",
+      "repeat": 2,
+      "target_id": "5e305376-fedrate",
+      "sample_id": "holdout-macro-008",
+      "domain": "macro",
+      "role": "required",
+      "question": "全周联储年内剩余累计加息预期变化了多少（降至多少 bp）？",
+      "status": "ok",
+      "wall_s": 74.4,
+      "run_present": true,
+      "run_dir": ".s5runs_v14/control/5e305376-fedrate/run-02/workspace/.apodex/runs/20261017-175413+0800-react-9af9",
+      "answer": "**答案：全周联储年内剩余累计加息预期下降了 3bp，降至 35bp。**\n\n逐字依据（两处互相印证，来自语料库报告《联储加息悬念白热化》）：\n\n1. 第 1 页「金融市场」段：**「全周看，联储年内剩余累计加息预期下降 3bp 至35bp。」** [chunk:88ad6cf30eb10c3c:body:0005，第1页]\n2. 第 10 页图表 33 标题（交叉印证）：**「图表33：上周联储2026 年加息预期下降3bp 至35bp」**（资料来源：Bloomberg，华泰研究）[chunk:88ad6cf30eb10c3c:heading:0128，第10页]\n\n补充背景（同段原文）：当周联储加息预期整体小幅回落，背景是美伊冲突升级、联储官员表态中性偏鸽（沃勒表示若 8 月 CPI 延续改善则倾向维持利率不变）；同期 2y/10y 美债收益率分别上行 3bp/5bp 至 4.37%/4.78%，美元指数下行 0.5% 至 99.2。风险提示：地缘政治不确定性、货币政策超预期紧缩。\n\n证据清单已提交并校验通过（1/1 supported）。",
+      "trace": {
+        "llm_turns": 6,
+        "tool_calls": 7,
+        "tool_calls_by_name": {
+          "add_task": 1,
+          "update_task": 2,
+          "corpus_search": 1,
+          "corpus_fetch": 2,
+          "corpus_submit_manifest": 1
+        },
+        "tool_errors": 0
+      },
+      "usage": {
+        "input": 128615,
+        "output": 2648,
+        "cached": 100800,
+        "compactions": 0
+      },
+      "ledger": {
+        "present": true,
+        "offered": 10,
+        "requested": 2,
+        "fetched": 2,
+        "delivered": 2,
+        "errors": []
+      },
+      "deterministic": {
+        "source_offered": true,
+        "quote_fetched": true,
+        "quote_delivered": true,
+        "expected_build_id": "88ad6cf30eb10c3c5275ae814ccaf10b9f1132f7d40c9eb4bf6a2c544140347c"
+      },
+      "judge": {
+        "verdict": "pass",
+        "score": 1,
+        "supported": true,
+        "complete": true,
+        "reason": "回答核心事实'下降3bp至35bp'与第1页金融市场证据逐字一致，主体、期间、单位正确，并完整回答了变化幅度和降至水平两项要求。",
+        "raw": "{\"verdict\":\"pass\",\"score\":1,\"supported\":true,\"complete\":true,\"reason\":\"回答核心事实'下降3bp至35bp'与第1页金融市场证据逐字一致，主体、期间、单位正确，并完整回答了变化幅度和降至水平两项要求。\"}",
+        "model": "glm-5.3-flash",
+        "usage": {
+          "input": 486,
+          "output": 984,
+          "total": 1470
+        }
+      }
+    },
+    {
+      "artifact": "v14-s5-real-model-run",
+      "generated_at": "2026-10-17T10:38:38.135637+00:00",
+      "arm": "control",
+      "repeat": 3,
+      "target_id": "5e305376-fedrate",
+      "sample_id": "holdout-macro-008",
+      "domain": "macro",
+      "role": "required",
+      "question": "全周联储年内剩余累计加息预期变化了多少（降至多少 bp）？",
+      "status": "ok",
+      "wall_s": 63.3,
+      "run_present": true,
+      "run_dir": ".s5runs_v14/control/5e305376-fedrate/run-03/workspace/.apodex/runs/20261017-183735+0800-react-a9ab",
+      "answer": "**答案：全周联储年内剩余累计加息预期下降了 3bp，降至 35bp。**\n\n**逐字原文**（研报《联储加息悬念白热化》，金融市场章节，第 1 页，语料块 `chunk:88ad6cf30eb10c3c:body:0005`）：\n\n> “联储加息预期小幅回落……全周看，联储年内剩余累计加息预期下降 3bp 至 35bp。”\n\n**补充背景**（同段原文）：本周联储官员表态中性偏鸽（沃勒表示若 8 月 CPI 延续改善倾向维持利率不变），叠加美伊冲突升级，全周加息预期小幅回落；同周 2y、10y 美债收益率分别上行 3bp、5bp 至 4.37%、4.78%。\n\n来源：语料库研报《联储加息悬念白热化》（数据来源标注为 Bloomberg，华泰研究），结论已登记至证据清单并校验通过（manifest C1: supported）。",
+      "trace": {
+        "llm_turns": 6,
+        "tool_calls": 8,
+        "tool_calls_by_name": {
+          "add_task": 1,
+          "update_task": 4,
+          "corpus_search": 1,
+          "corpus_fetch": 1,
+          "corpus_submit_manifest": 1
+        },
+        "tool_errors": 0
+      },
+      "usage": {
+        "input": 127409,
+        "output": 2376,
+        "cached": 99904,
+        "compactions": 0
+      },
+      "ledger": {
+        "present": true,
+        "offered": 10,
+        "requested": 1,
+        "fetched": 1,
+        "delivered": 1,
+        "errors": []
+      },
+      "deterministic": {
+        "source_offered": true,
+        "quote_fetched": true,
+        "quote_delivered": true,
+        "expected_build_id": "88ad6cf30eb10c3c5275ae814ccaf10b9f1132f7d40c9eb4bf6a2c544140347c"
+      },
+      "judge": {
+        "verdict": "pass",
+        "score": 1,
+        "supported": true,
+        "complete": true,
+        "reason": "回答核心事实'全周联储年内剩余累计加息预期下降3bp至35bp'与参考证据完全一致，主体、期间、单位正确，且完整回答了变化幅度和降至水平两项要求。",
+        "raw": "{\"verdict\":\"pass\",\"score\":1,\"supported\":true,\"complete\":true,\"reason\":\"回答核心事实'全周联储年内剩余累计加息预期下降3bp至35bp'与参考证据完全一致，主体、期间、单位正确，且完整回答了变化幅度和降至水平两项要求。\"}",
+        "model": "glm-5.3-flash",
+        "usage": {
+          "input": 413,
+          "output": 1549,
+          "total": 1962
+        }
+      }
+    },
+    {
+      "artifact": "v14-s5-real-model-run",
+      "generated_at": "2026-10-17T08:36:06.681150+00:00",
+      "arm": "control",
+      "repeat": 1,
+      "target_id": "f7f65d7e-risk",
+      "sample_id": "holdout-macro-009",
+      "domain": "macro",
+      "role": "supplementary",
+      "question": "本期研报列出了哪些主要风险提示？",
+      "status": "ok",
+      "wall_s": 686.5,
+      "run_present": true,
+      "run_dir": ".s5runs_v14/control/f7f65d7e-risk/run-01/workspace/.apodex/runs/20261017-162441+0800-react-50c4",
+      "answer": "**本期研报为天风证券 2026 年 9 月 6 日发布的《A股策略周报——非农大超预期，加息预期升温》**（吴开达、林晨等，doc_id: `cv2:07873d962c0568d7…`）。\n\n## 报告列出的三条主要风险提示\n\n报告在正文「5.风险提示」（第 10 页）列出三条主要风险：**①地缘冲突超预期；②海外通胀持续性超预期；③流动性收紧超预期。**\n（来源：doc_id `cv2:07873d962c0568d7df07da3ea8241c5c14d7b0d31fbb23a728b0d39b6b6be73f`，chunk `body:0015`，p10）\n\n原文逐字为：\n\n> **5.风险提示**\n> 地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。\n\n## 首页摘要的对应表述\n\n首页摘要（第 1–2 页）末尾同样标注：「风险提示：地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。」\n（来源：同上 doc_id，chunk `body:0002`，p1–2）\n\n两处表述完全一致。\n\n## 补充说明\n\n- 逐块核查显示，风险提示仅在首页摘要与正文第 5 节两处出现且内容一致，其余章节未再单列风险提示（其余章节为：1. 国内 8 月制造业 PMI 回暖及高频跟踪；2. 国际大事与 8 月美国非农数据；3. 行业配置建议「赛点 2.0 第三阶段，重视 AI 产业趋势」；4. 重点大事前瞻）。\n- 三条风险与报告当期核心逻辑直接呼应：报告正文跟踪了俄乌冲突、中东局势（对应「地缘冲突超预期」），并指出 8 月美国非农大超预期使市场 9 月加息 25bp 概率升至 59.4%（CME，截至 2026/9/5，对应「通胀持续性/流动性收紧超预期」）。\n- 提示：以上为研报原文风险提示的如实转述，属于报告作者的观点性声明，不构成对风险是否发生的判断；本回答不涉及任何建仓建议。",
+      "trace": {
+        "llm_turns": 14,
+        "tool_calls": 22,
+        "tool_calls_by_name": {
+          "add_task": 1,
+          "update_task": 4,
+          "corpus_search": 5,
+          "glob_search": 2,
+          "corpus_inventory": 1,
+          "recover_result": 1,
+          "corpus_fetch": 7,
+          "corpus_submit_manifest": 1
+        },
+        "tool_errors": 0
+      },
+      "usage": {
+        "input": 798518,
+        "output": 15969,
+        "cached": 614912,
+        "compactions": 0
+      },
+      "ledger": {
+        "present": true,
+        "offered": 40,
+        "requested": 7,
+        "fetched": 17,
+        "delivered": 17,
+        "errors": []
+      },
+      "deterministic": {
+        "source_offered": true,
+        "quote_fetched": true,
+        "quote_delivered": true,
+        "expected_build_id": "07873d962c0568d7df07da3ea8241c5c14d7b0d31fbb23a728b0d39b6b6be73f"
+      },
+      "judge": {
+        "verdict": "pass",
+        "score": 0.95,
+        "supported": true,
+        "complete": true,
+        "reason": "回答逐字复述了三项风险提示（地缘冲突超预期、海外通胀持续性超预期、流动性收紧超预期），与参考证据完全一致且无遗漏，核心事实受支持；附加的元数据与分析性细节超出证据范围但不影响核心判定。",
+        "raw": "{\"verdict\":\"pass\",\"score\":0.95,\"supported\":true,\"complete\":true,\"reason\":\"回答逐字复述了三项风险提示（地缘冲突超预期、海外通胀持续性超预期、流动性收紧超预期），与参考证据完全一致且无遗漏，核心事实受支持；附加的元数据与分析性细节超出证据范围但不影响核心判定。\"}",
+        "model": "glm-5.3-flash"
+      }
+    },
+    {
+      "artifact": "v14-s5-real-model-run",
+      "generated_at": "2026-10-17T10:24:14.034950+00:00",
+      "arm": "control",
+      "repeat": 2,
+      "target_id": "f7f65d7e-risk",
+      "sample_id": "holdout-macro-009",
+      "domain": "macro",
+      "role": "supplementary",
+      "question": "本期研报列出了哪些主要风险提示？",
+      "status": "ok",
+      "wall_s": 1236.6,
+      "run_present": true,
+      "run_dir": ".s5runs_v14/control/f7f65d7e-risk/run-02/workspace/.apodex/runs/20261017-180338+0800-react-ec50",
+      "answer": "**本期（2026-09-05～09-06 当周）语料库共 12 篇研报，其中 10 篇给出了明确的「风险提示」**，各篇要点如下（均逐字取自对应报告的风险提示章节，已通过证据清单回验，13/13 条 supported）：\n\n**一、策略类**\n1. **中银证券《策略周报——外部加息扰动未消，短期以守为攻》**（2026-09-06）：①政策落地不及预期，宏观经济波动超预期；②市场波动风险；③海外经济超预期衰退、流动性风险。[p.10-11]\n2. **天风证券《A股策略周报》**（2026-09-06，吴开达等）：地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。[p.10-11]\n3. **国金证券《迷雾与罗盘——产业纠结期，货币政策预期的摇摆》**（牟一凌、季宏坤）：①海外货币政策预期大幅收紧（滞胀预期持续→市场可能超预期下跌）；②AI 产业趋势迎来重大突破（市场重回科技主线，防御思维失效）。[p.12-13]\n4. **兴业证券《极致轮动如何收敛：探讨几个契机》**（2026-09-06）：经济数据波动，政策宽松低于预期，美联储降息不及预期，地缘局势升级等。[p.10]\n5. **中信建投《行业数据周报 9 月第 1 期》**（2026-09-05，夏凡捷）：①数据统计存在误差风险；②海内外经济波动风险；③市场流动性风险；④海外地缘政治冲突加剧风险。[p.25]\n6. **《金属周期品高频数据周报（2026.8.31-9.6）》**：根据历史数据得出的相关性失效的风险；宏观政策调整的风险（首页表述为「政府对大宗商品价格调控的风险」）；公司经营不善风险。[p.21-22]\n\n**二、行业类**\n7. **国联民生《医药周报 20260906》**：①医保、集采政策导致价格不及预期；②临床进度或上市时间不及预期；③行业竞争格局的不确定性；④地缘政治风险（业务出海受阻）；⑤下游投融资及需求复苏不及预期。[p.18-19]\n8. **通信行业周报**（2026-09-06）：首页摘要为 AI 资本开支节奏不及预期、地缘政治与出口管制不确定性、存储价格大幅波动；正文详列五条——AI 商业价值、技术发展速度、供应链集中度、行业监管、市场竞争均可能不及预期/加剧。[p.11-12]\n9. **国泰海通机器人行业周报**：①技术进步速度低于预期（具身大模型与本体硬件底层技术瓶颈）；②商业化落地速度低于预期。[p.9-10]\n\n**三、公司类**\n10. **国信证券白酒财报点评**（收盘价 1341.99 元，维持「优于大市」）：宏观经济复苏不及预期致行业需求承压、食品安全问题；正文另列行业竞争加剧、需求恢复不及预期、供给增加下批价大幅下跌。[p.3-4]\n\n**未检出的两篇（如实说明）**：华泰宏观海外周报《联储加息悬念白热化》未检出独立「风险提示」章节（全文检索未命中该表述，正文以数据图表为主、以免责声明收尾）；另有 1 篇文档在全部风险相关检索中未命中，其风险内容无法定位，不作引用。\n\n**共性集中方向**：本期研报的风险提示高度趋同——①海外货币政策与流动性；②地缘政治与出口管制；③AI 产业链兑现（资本开支、商业价值、监管竞争）；④宏观与行业需求波动。\n\n完整逐字原文与块级定位（doc_id/locator/页码）见 `/outputs/report.md`；证据链已提交清单（manifest-001，publish_status=verified），可按 locator 在语料库中逐字复现。",
+      "trace": {
+        "llm_turns": 25,
+        "tool_calls": 51,
+        "tool_calls_by_name": {
+          "add_task": 1,
+          "update_task": 4,
+          "corpus_search": 15,
+          "corpus_fetch": 27,
+          "corpus_submit_manifest": 3,
+          "create_file": 1
+        },
+        "tool_errors": 0
+      },
+      "usage": {
+        "input": 2636400,
+        "output": 62063,
+        "cached": 2353856,
+        "compactions": 0
+      },
+      "ledger": {
+        "present": true,
+        "offered": 75,
+        "requested": 27,
+        "fetched": 63,
+        "delivered": 63,
+        "errors": [
+          {
+            "locator": "",
+            "code": "",
+            "error": "游标不可用：游标校验和不符（被篡改或损坏）",
+            "turn": 14
+          }
+        ]
+      },
+      "deterministic": {
+        "source_offered": true,
+        "quote_fetched": true,
+        "quote_delivered": true,
+        "expected_build_id": "07873d962c0568d7df07da3ea8241c5c14d7b0d31fbb23a728b0d39b6b6be73f"
+      },
+      "judge": {
+        "verdict": "fail",
+        "score": 0.4,
+        "supported": false,
+        "complete": true,
+        "reason": "回答虽在第2条逐字复述了证据支持的三项风险提示（地缘冲突超预期、海外通胀持续性超预期、流动性收紧超预期），但主体内容是参考证据之外的其余9篇研报风险清单、篇数统计及定位信息，均无参考证据支持，构成编造扩展，触发失败条件。",
+        "raw": "{\"verdict\":\"fail\",\"score\":0.4,\"supported\":false,\"complete\":true,\"reason\":\"回答虽在第2条逐字复述了证据支持的三项风险提示（地缘冲突超预期、海外通胀持续性超预期、流动性收紧超预期），但主体内容是参考证据之外的其余9篇研报风险清单、篇数统计及定位信息，均无参考证据支持，构成编造扩展，触发失败条件。\"}",
+        "model": "glm-5.3-flash",
+        "usage": {
+          "input": 1077,
+          "output": 2524,
+          "total": 3601
+        }
+      }
+    },
+    {
+      "artifact": "v14-s5-real-model-run",
+      "generated_at": "2026-10-17T10:44:53.141834+00:00",
+      "arm": "control",
+      "repeat": 3,
+      "target_id": "f7f65d7e-risk",
+      "sample_id": "holdout-macro-009",
+      "domain": "macro",
+      "role": "supplementary",
+      "question": "本期研报列出了哪些主要风险提示？",
+      "status": "ok",
+      "wall_s": 353.2,
+      "run_present": true,
+      "run_dir": ".s5runs_v14/control/f7f65d7e-risk/run-03/workspace/.apodex/runs/20261017-183900+0800-react-d267",
+      "answer": "**本期研报**：天风证券《A股策略周报——非农大超预期，加息预期升温》（证券研究报告，2026年09月06日，分析师吴开达、林晨、汪书慧）。\n\n## 主要风险提示：共三条\n\n报告在**首页摘要（第1–2页）**和**正文第5节「风险提示」（第10–11页）**两处列出了措辞完全一致的三条风险：\n\n1. **地缘冲突超预期**\n2. **海外通胀持续性超预期**\n3. **流动性收紧超预期**\n\n逐字原文（两处一致）：\n- 首页摘要：「风险提示：地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。」[chunk:07873d962c0568d7:body:0002，p1–2]\n- 正文第5节：「5.风险提示 地缘冲突超预期，海外通胀持续性超预期，流动性收紧超预期。」[chunk:07873d962c0568d7:body:0015，p10–11]\n\n## 报告内对应的风险背景（转述报告自身内容）\n\n- **流动性收紧**：8月美国非农大超预期（新增16.2万人，大幅高于预期的5.6万人，前值上修），市场加息预期回升——据CME“美联储观察”，截至2026/9/5，9月加息25基点概率59.4%、维持利率概率40.6% [body:0002，p1–2]\n- **地缘冲突**：报告正文设俄乌冲突跟踪（如“乌国家安全局总部遭俄无人机袭击”）与中东冲突跟踪栏目 [body:0002，p1–2]\n\n## 说明\n\n- 报告的风险提示为三条一句话式提示（天风策略周报惯例），正文未逐条展开论述；检索确认该报告内无其他风险提示段落，条目无遗漏。\n- 本回答仅逐字转述原文风险提示，不含自主方向性判断，故无反方证据需要列示；语料库中其他研报（医药周报、海外周报等）的风险提示各不相同，未混用。\n- 证据清单已提交核验：3 条结论全部 supported（publish_status=verified）。详细溯源版报告已写入 `/outputs/report.md`。",
+      "trace": {
+        "llm_turns": 13,
+        "tool_calls": 19,
+        "tool_calls_by_name": {
+          "add_task": 1,
+          "update_task": 5,
+          "bash": 3,
+          "corpus_search": 5,
+          "corpus_fetch": 2,
+          "corpus_inventory": 1,
+          "create_file": 1,
+          "corpus_submit_manifest": 1
+        },
+        "tool_errors": 0
+      },
+      "usage": {
+        "input": 560171,
+        "output": 16542,
+        "cached": 498304,
+        "compactions": 0
+      },
+      "ledger": {
+        "present": true,
+        "offered": 44,
+        "requested": 2,
+        "fetched": 7,
+        "delivered": 7,
+        "errors": []
+      },
+      "deterministic": {
+        "source_offered": true,
+        "quote_fetched": true,
+        "quote_delivered": true,
+        "expected_build_id": "07873d962c0568d7df07da3ea8241c5c14d7b0d31fbb23a728b0d39b6b6be73f"
+      },
+      "judge": {
+        "verdict": "pass",
+        "score": 1.0,
+        "supported": true,
+        "complete": true,
+        "reason": "回答逐字复述了参考证据中的三条风险提示（地缘冲突超预期、海外通胀持续性超预期、流动性收紧超预期），核心事实完全受支持且无遗漏、无编造。",
+        "raw": "{\"verdict\":\"pass\",\"score\":1.0,\"supported\":true,\"complete\":true,\"reason\":\"回答逐字复述了参考证据中的三条风险提示（地缘冲突超预期、海外通胀持续性超预期、流动性收紧超预期），核心事实完全受支持且无遗漏、无编造。\"}",
+        "model": "glm-5.3-flash",
+        "usage": {
+          "input": 696,
+          "output": 1240,
+          "total": 1936
+        }
+      }
+    },
+    {
+      "artifact": "v14-s5-real-model-run",
+      "generated_at": "2026-10-17T08:16:43.082125+00:00",
+      "arm": "control",
+      "repeat": 1,
+      "target_id": "f86c6d2c-cxotable",
+      "sample_id": "holdout-industry-006",
+      "domain": "industry",
+      "role": "supplementary",
+      "question": "图 5 中 CXO 龙头药明康德按市值排序的 2026H1 营业收入及同比增速是多少？",
+      "status": "ok",
+      "wall_s": 611.4,
+      "run_present": true,
+      "run_dir": ".s5runs_v14/control/f86c6d2c-cxotable/run-01/workspace/.apodex/runs/20261017-160632+0800-react-c8ea",
+      "answer": "**答案**\n\n图 5 中 CXO 龙头药明康德：2026H1 营业收入 **288.97 亿元**，收入同比增速 **39%**，市值 **4,693.7 亿元**（按 20260904 收盘市值排序居首）。[stub:R01 p4]\n\n**出处与原文依据**\n\n- 该图出自国联民生证券《医药周报20260906——CXO 中报我们看到了什么？》（2026-09-06）。\n- 图题原文（第 3–4 页）：「图5：CXO A 股上市公司2026H1 收入及增速概览（按市值排序）」[stub:R01 p3-4]\n- 图 5 数据表（第 4 页）首行：「药明康德 / 288.97 / 39% / 4,693.7」，表注：「资料来源：Wind、各公司公告，国联民生证券研究所 注：按20260904 收盘市值排序」[stub:R01 p4]\n- 市值排序：药明康德 4,693.7 亿元为 15 家 A 股 CXO 样本公司之首（第二名康龙化成 698.8 亿元）[stub:R01 p4]\n\n**口径核对与风险提示**\n\n- 报告期确认为 **2026H1**（非 2025H1）：报告发布于 2026-09-06，正文写明「2026 年8 月中下旬，CXO 上市公司中报陆续披露，我们选取20 家样本上市公司数据进行总结与分析」（第 3 页）。图 5 表头在 PDF 文字抽取中被截为「206H1」，已用图题（图5……2026H1……）与表注核对确认。\n- 交叉验证：市场数据接口（同花顺 603259.SH 利润表，2026Q2 累计＝2026H1，报告期末 2026-06-30，约 2026-08-04 披露）显示营业收入 28,897,478,718.36 元 ≈ 288.97 亿元，与图 5 完全一致 [stub:R02]。\n- 正文写明「2026H1 年20 家CXO 企业合计实现收入562亿元，同比+24.5%」（第 3 页），药明康德的 39% 高于全板块整体增速，属龙头个体的强势表现；同一表中九洲药业（-10%）、阳光诺和（-28%）同比下滑，板块内部分化明显 [stub:R01 p3-4]。\n- 注意：市值排序基准日为 2026-09-04 收盘，与营收报告期（2026H1）并非同一时点；图中「39%」为表内「收入yoy」口径，表内未另标正负号。\n\n**来源**\n\n- R01：国联民生证券《医药周报20260906 CXO 中报我们看到了什么？》，第 3–5 页（语料库文档 cv2:3cc347ca…，chunks heading:0002 / body:0004 / table:0000，均已逐字取回）。\n- R02：市场数据接口 market_financials（药明康德 603259.SH，季度利润表，2026Q2 累计期）。\n\nA4 证据清单已提交并通过校验（2/2 条结论 supported，publish_status: verified）。",
+      "trace": {
+        "llm_turns": 10,
+        "tool_calls": 18,
+        "tool_calls_by_name": {
+          "add_task": 1,
+          "update_task": 4,
+          "corpus_search": 3,
+          "corpus_inventory": 1,
+          "corpus_fetch": 4,
+          "data_coverage": 1,
+          "market_resolve": 1,
+          "market_financials": 1,
+          "corpus_submit_manifest": 2
+        },
+        "tool_errors": 0
+      },
+      "usage": {
+        "input": 488176,
+        "output": 20521,
+        "cached": 404480,
+        "compactions": 0
+      },
+      "ledger": {
+        "present": true,
+        "offered": 22,
+        "requested": 4,
+        "fetched": 6,
+        "delivered": 6,
+        "errors": []
+      },
+      "deterministic": {
+        "source_offered": true,
+        "quote_fetched": true,
+        "quote_delivered": true,
+        "expected_build_id": "3cc347ca9ed8e789103486558cd565ce1a0f15545e7185abbeaf1a6a066f453f"
+      },
+      "judge": {
+        "verdict": "pass",
+        "score": 1,
+        "supported": true,
+        "complete": true,
+        "reason": "回答给出药明康德2026H1营收288.97亿元、同比增速39%及市值4,693.7亿元，与参考证据第4页表格行完全一致，主体、期间、单位均正确。",
+        "raw": "{\"verdict\":\"pass\",\"score\":1,\"supported\":true,\"complete\":true,\"reason\":\"回答给出药明康德2026H1营收288.97亿元、同比增速39%及市值4,693.7亿元，与参考证据第4页表格行完全一致，主体、期间、单位均正确。\"}",
+        "model": "glm-5.3-flash"
+      }
+    },
+    {
+      "artifact": "v14-s5-real-model-run",
+      "generated_at": "2026-10-17T09:53:56.493593+00:00",
+      "arm": "control",
+      "repeat": 2,
+      "target_id": "f86c6d2c-cxotable",
+      "sample_id": "holdout-industry-006",
+      "domain": "industry",
+      "role": "supplementary",
+      "question": "图 5 中 CXO 龙头药明康德按市值排序的 2026H1 营业收入及同比增速是多少？",
+      "status": "ok",
+      "wall_s": 192.9,
+      "run_present": true,
+      "run_dir": ".s5runs_v14/control/f86c6d2c-cxotable/run-02/workspace/.apodex/runs/20261017-175044+0800-react-6ba1",
+      "answer": "## 答复\n\n**图5** 出自国联民生证券研究所《医药周报20260906：CXO中报我们看到了什么？》（2026-09-06），图题为「图5：CXO A股上市公司2026H1收入及增速概览（按市值排序）」[chunk:3cc347ca9ed8e789:body:0004 p3–4]，数据按 2026年9月4日收盘市值排序（注：资料来源 Wind、各公司公告）[chunk:3cc347ca9ed8e789:table:0000 p4]。\n\n**图5中 CXO 龙头药明康德（市值排名第一）：**\n\n| 指标 | 数值 |\n|---|---|\n| 2026H1 营业收入 | **288.97 亿元** |\n| 收入同比增速 | **+39%** |\n| 市值（排序依据） | 4,693.7 亿元，**20 家样本公司中排第 1** |\n\n逐字原文：「药明康德 288.97 39% 4,693.7」[chunk:3cc347ca9ed8e789:table:0000 p4]。\n\n**交叉核验**：市场财报接口（603259.SH，季度利润表，2026Q2 累计即 2026H1）营业收入 28,897,478,718.36 元 ≈ 288.97 亿元，与研报数字完全一致（披露日 2026-08-03）。\n\n**排序位置佐证**：图5中市值排在药明康德之后的依次为康龙化成（698.8亿）、凯莱英（574.8亿）、泰格医药（411.2亿）等，药明康德以约 4,700 亿市值居首，是图中体量与增速兼优的龙头（营收占 20 家样本公司 2026H1 合计 562 亿元的约一半）。\n\n说明：本问为图内数据读取，未涉及建仓决策，故不涉及仓位计算；结论已通过报告证据清单校验（C1: supported）。",
+      "trace": {
+        "llm_turns": 7,
+        "tool_calls": 11,
+        "tool_calls_by_name": {
+          "add_task": 1,
+          "update_task": 3,
+          "corpus_search": 1,
+          "data_coverage": 1,
+          "corpus_inventory": 1,
+          "corpus_fetch": 2,
+          "market_financials": 1,
+          "corpus_submit_manifest": 1
+        },
+        "tool_errors": 0
+      },
+      "usage": {
+        "input": 186541,
+        "output": 8781,
+        "cached": 147648,
+        "compactions": 0
+      },
+      "ledger": {
+        "present": true,
+        "offered": 10,
+        "requested": 2,
+        "fetched": 3,
+        "delivered": 3,
+        "errors": []
+      },
+      "deterministic": {
+        "source_offered": true,
+        "quote_fetched": true,
+        "quote_delivered": true,
+        "expected_build_id": "3cc347ca9ed8e789103486558cd565ce1a0f15545e7185abbeaf1a6a066f453f"
+      },
+      "judge": {
+        "verdict": "pass",
+        "score": 1.0,
+        "supported": true,
+        "complete": true,
+        "reason": "回答核心事实（药明康德2026H1营收288.97亿元、同比+39%、市值4,693.7亿元）与参考证据逐字一致，主体、期间、单位均正确，并完整满足问题要求。",
+        "raw": "{\"verdict\":\"pass\",\"score\":1.0,\"supported\":true,\"complete\":true,\"reason\":\"回答核心事实（药明康德2026H1营收288.97亿元、同比+39%、市值4,693.7亿元）与参考证据逐字一致，主体、期间、单位均正确，并完整满足问题要求。\"}",
+        "model": "glm-5.3-flash",
+        "usage": {
+          "input": 749,
+          "output": 1362,
+          "total": 2111
+        }
+      }
+    },
+    {
+      "artifact": "v14-s5-real-model-run",
+      "generated_at": "2026-10-17T10:28:23.862302+00:00",
+      "arm": "control",
+      "repeat": 3,
+      "target_id": "f86c6d2c-cxotable",
+      "sample_id": "holdout-industry-006",
+      "domain": "industry",
+      "role": "supplementary",
+      "question": "图 5 中 CXO 龙头药明康德按市值排序的 2026H1 营业收入及同比增速是多少？",
+      "status": "ok",
+      "wall_s": 211.3,
+      "run_present": true,
+      "run_dir": ".s5runs_v14/control/f86c6d2c-cxotable/run-03/workspace/.apodex/runs/20261017-182453+0800-react-ad36",
+      "answer": "**答案：图 5 中，CXO 龙头药明康德（按 2026-09-04 收盘市值 4,693.7 亿元居 20 家样本公司之首）2026H1 营业收入为 288.97 亿元，同比增速（收入yoy）为 39%。**\n\n**出处**：国联民生证券研究所医药行业定期报告（2026-09-06）第 4 页，图 5「CXO A 股上市公司 2026H1 收入及增速概览（按市值排序）」，数据来源 Wind、各公司公告，排序口径为「按 20260904 收盘市值排序」[3cc347ca·body:0004 p4；body:0005 p4]。\n\n**图 5 中市值排序前几名（便于对照）** [3cc347ca·table:0000 p4]：\n| 公司 | 2026H1 营业收入（亿元） | 收入yoy | 市值（亿元） |\n|---|---|---|---|\n| 药明康德 | 288.97 | +39% | 4,693.7 |\n| 康龙化成 | 75.95 | +18% | 698.8 |\n| 凯莱英 | 36.07 | +13% | 574.8 |\n| 泰格医药 | 37.08 | +14% | 411.2 |\n\n**口径与交叉印证**：图内表头在原文 OCR 中拆行为「206H1 营业收（亿元）」，即 2026H1 营业收入（亿元），期间口径以图 5 标题为准 [3cc347ca·table:0000 p4]。同一报告正文称「CRDMO/CDMO 板块 A 股上市公司 2026Q2、2026H1 收入端普遍维持双位数增长（药明康德、凯莱英、康龙化成等）」，与图 5 中药明康德 +39% 的双位数高增相一致 [3cc347ca·body:0005 p4-5]。39% 为图示取整值；图 5 未给出增速的驱动拆分（资料未给出，不做推断）。\n\n**反方/平衡证据**：图 5 内并非全员增长——九洲药业 -10%、阳光诺和 -28%、普蕊斯 -5% [3cc347ca·table:0000/0001 p4]；报告亦提示「部分公司应关注经调整净利润或扣非归母净利润」，且「板块整体增长并不仅由龙头驱动」[3cc347ca·body:0004 p4]。\n\n**风险提示**：排序市值时点为 2026-09-04 收盘，会随股价变动；数据为 2026H1 中报口径（Wind 及公司公告整理），非本方测算。本条为图表数据问答，不涉及仓位建议；证据清单（A4）已提交并通过逐条校验（2/2 supported）。",
+      "trace": {
+        "llm_turns": 9,
+        "tool_calls": 10,
+        "tool_calls_by_name": {
+          "add_task": 1,
+          "update_task": 3,
+          "corpus_search": 2,
+          "corpus_fetch": 3,
+          "corpus_submit_manifest": 1
+        },
+        "tool_errors": 0
+      },
+      "usage": {
+        "input": 267746,
+        "output": 9156,
+        "cached": 225536,
+        "compactions": 0
+      },
+      "ledger": {
+        "present": true,
+        "offered": 13,
+        "requested": 3,
+        "fetched": 6,
+        "delivered": 6,
+        "errors": []
+      },
+      "deterministic": {
+        "source_offered": true,
+        "quote_fetched": true,
+        "quote_delivered": true,
+        "expected_build_id": "3cc347ca9ed8e789103486558cd565ce1a0f15545e7185abbeaf1a6a066f453f"
+      },
+      "judge": {
+        "verdict": "pass",
+        "score": 0.95,
+        "supported": true,
+        "complete": true,
+        "reason": "核心事实（药明康德2026H1营业收入288.97亿元、收入yoy 39%、市值4,693.7亿元）与参考证据完全一致，主体/期间/单位正确且满足问题要求；附加的其他公司数据超出所给证据摘录范围但不属于问题核心，不影响判定。",
+        "raw": "{\"verdict\":\"pass\",\"score\":0.95,\"supported\":true,\"complete\":true,\"reason\":\"核心事实（药明康德2026H1营业收入288.97亿元、收入yoy 39%、市值4,693.7亿元）与参考证据完全一致，主体/期间/单位正确且满足问题要求；附加的其他公司数据超出所给证据摘录范围但不属于问题核心，不影响判定。\"}",
+        "model": "glm-5.3-flash",
+        "usage": {
+          "input": 941,
+          "output": 2213,
+          "total": 3154
+        }
+      }
+    }
+  ]
+}
