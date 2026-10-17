@@ -53,6 +53,9 @@ _WEB_AUTO_APPROVED_MUTATIONS = frozenset(
         "write_file",
         "file_editor_create",
         "file_editor_str_replace",
+        # Appends an audit manifest under this run's own artifact directory.
+        # It cannot mutate the corpus publication store.
+        "corpus_submit_manifest",
     }
 )
 

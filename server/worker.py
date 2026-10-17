@@ -135,9 +135,7 @@ def _load_investment_context(run_root: Path, run_id: str) -> dict[str, Any] | No
     return context
 
 
-def _finalize_investment_context(
-    run_root: Path, context_tokens: tuple[Any, Any] | None
-) -> None:
+def _finalize_investment_context(run_root: Path, context_tokens: tuple[Any, Any] | None) -> None:
     """Persist best-effort tool metrics and always release the Run binding."""
     if context_tokens is None:
         return
@@ -203,6 +201,10 @@ def apply_env(
             "FRONTIER_AGENT_INPUTS_DIR": str(paths["inputs"]),
             "CODING_WORKSPACE_ROOT": str(paths["workspace"]),
             "APODEX_SPILL_DIR": str(paths["spill"]),
+            # Corpus consumption ledgers and A4 manifests are run artifacts too.
+            # Without this, Web workers verify only in process memory and leave
+            # no durable semantic audit trail after exit.
+            "APODEX_RUN_DIR": str(paths["run"]),
             "FRONTIER_AGENT_TASK_WALL_TIME_S": str(wall_time_s),
             "FRONTIER_AGENT_MAX_TURNS": str(max_turns),
             "BASH_ALLOWLIST_MODE": "enforce",
@@ -570,9 +572,7 @@ async def run_once(args: argparse.Namespace) -> int:
                     extra_input={
                         # Watch-triggered runs are told to keep the carrier out
                         # (issue 01 §9.18 #1); everyone else leaves it on.
-                        "continuity_enabled": (
-                            getattr(args, "continuity", "on") or "on"
-                        ) != "off",
+                        "continuity_enabled": (getattr(args, "continuity", "on") or "on") != "off",
                         **({"replay_payload": replay_payload} if replay_payload else {}),
                     },
                 ),
@@ -677,6 +677,11 @@ def main() -> int:
     parser.add_argument("--base-url", default="")
     parser.add_argument("--api-key", default="")
     parser.add_argument("--agent-tools", default="")
+    parser.add_argument(
+        "--require-semantic-store",
+        action="store_true",
+        help="fail before the first model call unless CORPUS_STRUCTURED_ROOT is a read-only mount",
+    )
     # Session-level business flag (issue 01 §9.6): ``1``/``0`` pins the request
     # prefix config; omitted (``None``) keeps the legacy per-run behaviour for
     # callers that do not send it.
@@ -692,6 +697,10 @@ def main() -> int:
         sys.path.insert(0, str(REPO_ROOT))
 
     try:
+        if args.require_semantic_store:
+            from apodex.semantic_access import require_readonly_semantic_store
+
+            require_readonly_semantic_store(required=True)
         return asyncio.run(run_once(args))
     except SystemExit:
         raise

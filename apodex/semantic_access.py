@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 
-def require_readonly_semantic_store() -> None:
+def require_readonly_semantic_store(*, required: bool = False) -> None:
     """Refuse a visible writable store before exposing research tools or calling LLMs.
 
     File modes are insufficient when the researcher owns the files: it could
@@ -17,18 +17,22 @@ def require_readonly_semantic_store() -> None:
     the existing query error and original-source fallback behavior.
     """
     raw = os.environ.get("CORPUS_STRUCTURED_ROOT", "").strip()
-    if not raw:
+    if not raw and not required:
         return
     message = (
-        "tui-semantic requires a read-only publication-store mount. "
+        "semantic research requires a read-only publication-store mount. "
         "Prepare WAL sidecars on the writer side with prepare_readonly_access, "
         "then launch the research process with the store mounted read-only and "
         "no writable aliases. Native file modes alone are not a read-only boundary."
     )
+    if not raw:
+        raise ValueError(message)
     try:
         root = Path(raw).resolve()
-        if not root.exists():
+        if not root.exists() and not required:
             return
+        if not root.is_dir():
+            raise ValueError(message)
         if not hasattr(os, "statvfs") or not os.statvfs(root).f_flag & os.ST_RDONLY:
             raise ValueError(message)
         # Linux bind mounts can hide a writable subtree under a read-only root.

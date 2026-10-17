@@ -1,0 +1,1 @@
+{"run_id": "b3b7e84fbc224888a12eac95ad98cde4", "session_id": "web47-registered_gap", "final_answer": "查询返回 no_match（CS_PUBLICATION_EXPLICIT_GAPS，无实际送达记录）：128端口光波导五次流片后良率是否仍不理想，属于该发布已登记的覆盖缺口，当前覆盖不足，空结果不能证明该情况不存在或存在。", "error": "", "stopped_by": "no_tool", "duration_s": 45.6, "replay": {"decision": "skipped", "reason": "no_payload"}, "summary_usage": {}}

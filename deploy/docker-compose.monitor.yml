@@ -1,0 +1,54 @@
+# Overlay: docker compose --env-file ../.env -f docker-compose.yml -f docker-compose.monitor.yml --profile full --profile monitoring up -d --build
+services:
+  api:
+    environment:
+      SERVER_MONITOR_ENABLED: "true"
+      SERVER_MONITOR_STREAMS_ENABLED: "true"
+      SERVER_AUTO_ENABLED: "true"
+      SERVER_MONITOR_REDIS_URL: redis://monitor-redis:6379/0
+      SERVER_MONITOR_VENDOR_TIME_VERIFIED: ${SERVER_MONITOR_VENDOR_TIME_VERIFIED:-false}
+
+  monitor-redis:
+    profiles: ["monitoring"]
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec", "--maxmemory", "128mb", "--maxmemory-policy", "noeviction"]
+    volumes:
+      - monitor_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+
+  monitor:
+    profiles: ["monitoring"]
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.web
+      target: runtime
+    command: ["python", "-m", "server.monitor_worker"]
+    restart: unless-stopped
+    depends_on:
+      api: {condition: service_healthy}
+      monitor-redis: {condition: service_healthy}
+    environment:
+      SERVER_DATABASE_URL: ${SERVER_DATABASE_URL_DOCKER:-postgresql+asyncpg://postgres:postgres@host.docker.internal:5432/apodex}
+      SERVER_RUNS_ROOT: /var/lib/frontier-agent/web/runs
+      SERVER_MONITOR_ENABLED: "true"
+      SERVER_MONITOR_STREAMS_ENABLED: "true"
+      SERVER_AUTO_ENABLED: "true"
+      SERVER_MONITOR_REDIS_URL: redis://monitor-redis:6379/0
+      SERVER_MONITOR_VENDOR_TIME_VERIFIED: ${SERVER_MONITOR_VENDOR_TIME_VERIFIED:-false}
+    volumes:
+      - ../.env:/app/.env:ro
+      - agent_data:/var/lib/frontier-agent/web
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+
+volumes:
+  monitor_redis_data:

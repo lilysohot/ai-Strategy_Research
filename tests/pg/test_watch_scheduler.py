@@ -396,7 +396,11 @@ async def test_rule_pause_invalidates_pending_event(case) -> None:
     assert outcome["reason"] == "rule_inactive"
 
 
-async def test_pending_events_merge(case) -> None:
+async def test_pending_events_merge(case, monkeypatch) -> None:
+    # Exercise the reserved future one-to-many capability explicitly.
+    from server.config import get_config
+
+    monkeypatch.setattr(get_config(), "monitor_session_limit", 2)
     rule_a = await create_rule(
         case,
         spec={

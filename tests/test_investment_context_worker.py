@@ -32,9 +32,7 @@ async def test_worker_injects_context_as_data_and_binds_only_guarded_tool(monkey
         },
         "missing": {},
     }
-    (run_root / "investment-context.json").write_text(
-        json.dumps(context), encoding="utf-8"
-    )
+    (run_root / "investment-context.json").write_text(json.dumps(context), encoding="utf-8")
     captured: dict[str, object] = {}
 
     class FakeBenchmarkSession:
@@ -145,6 +143,10 @@ async def test_orchestrator_materializes_authenticated_context_without_db_creden
     fake_process = SimpleNamespace(stdin=SimpleNamespace(), stdout=None, returncode=None, pid=1)
     spawn = AsyncMock(return_value=fake_process)
     monkeypatch.setattr("asyncio.create_subprocess_exec", spawn)
+    monkeypatch.setattr(
+        "server.orchestrator._readonly_semantic_worker_command",
+        lambda command, **_kwargs: command,
+    )
     freeze = AsyncMock(return_value=False)
     monkeypatch.setattr(
         "server.orchestrator.investment_snapshot.ensure_research_bound_snapshot",
@@ -178,6 +180,8 @@ async def test_orchestrator_materializes_authenticated_context_without_db_creden
     freeze.assert_awaited_once_with(run_id=run_id, user_id=user_id)
     assert json.loads((run_dir_for(run_id.hex) / "investment-context.json").read_text()) == data
     child_env = spawn.await_args.kwargs["env"]
+    child_argv = spawn.await_args.args
+    assert "--require-semantic-store" in child_argv
     assert child_env["SERVER_DATABASE_URL"] == "sqlite+aiosqlite:///:memory:"
     assert child_env["SERVER_DATABASE_URL_DOCKER"] == ""
     assert child_env["SERVER_MASTER_KEY"] == ""
@@ -207,6 +211,10 @@ async def test_orchestrator_removes_stale_context_after_failed_auth_resolution(
     fake_process = SimpleNamespace(stdin=SimpleNamespace(), stdout=None, returncode=None, pid=1)
     spawn = AsyncMock(return_value=fake_process)
     monkeypatch.setattr("asyncio.create_subprocess_exec", spawn)
+    monkeypatch.setattr(
+        "server.orchestrator._readonly_semantic_worker_command",
+        lambda command, **_kwargs: command,
+    )
     orchestrator = Orchestrator()
     orchestrator._investment_context_resolver = MissingResolver()
     monkeypatch.setattr(orchestrator, "_acquire_slot", AsyncMock())

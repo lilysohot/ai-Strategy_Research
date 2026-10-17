@@ -1,0 +1,22 @@
+{
+  "schema": "web-agent-semantic-invalid-runs-v2",
+  "accepted_as_evidence": false,
+  "runs": [
+    {
+      "run_id": "c5b26f72653f46bc8fa685cdaaa5701e",
+      "tokens": 123669,
+      "reason": "max_turns=6 and manifest approval timeout/rejection"
+    },
+    {
+      "run_id": "c0d0dcbc418b489db95a5e8e1398b9d4",
+      "tokens": 70303,
+      "reason": "A4 verified in memory but APODEX_RUN_DIR was absent; no durable manifest"
+    },
+    {
+      "run_id": "84f74422bc814f7a974d6aa602024374",
+      "tokens": 86141,
+      "reason": "A4 verified in memory but APODEX_RUN_DIR was absent; no durable manifest"
+    }
+  ],
+  "total_tokens": 280113
+}

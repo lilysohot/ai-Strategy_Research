@@ -1,0 +1,1 @@
+{"run_id": "a7a0da496f5e4e6f9546c148bab5ad41", "session_id": "web47-r2-industrial_claim", "final_answer": "材料显示，工业富联云计算业务同比增长 75.7%。", "error": "", "stopped_by": "no_tool", "duration_s": 76.06, "replay": {"decision": "skipped", "reason": "no_payload"}, "summary_usage": {}}

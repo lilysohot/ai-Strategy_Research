@@ -123,6 +123,7 @@ web = [
     # Password hashing. argon2id is the OWASP recommendation and won the PHC;
     # passlib is deliberately avoided (unmaintained). See FR-1.1.
     "argon2-cffi>=23.1",
+    "redis>=5,<8",
 ]
 
 [tool.hatch.build.targets.wheel]

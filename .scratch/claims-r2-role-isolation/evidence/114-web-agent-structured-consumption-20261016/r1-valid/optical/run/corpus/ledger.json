@@ -1,0 +1,129 @@
+{
+  "schema_version": 2,
+  "task_id": "dbb6af80849b",
+  "role_id": "stateful_react",
+  "pipeline_id": "stateful-react-agent",
+  "created_at": "2026-10-16T05:32:55.479030+00:00",
+  "last_finalized_turn": 4,
+  "offered": [],
+  "requested": [],
+  "semantic": {
+    "calls": [
+      {
+        "tool": "corpus_semantic_query",
+        "call_id": "call_e3d506de690b48d2b1fbca61",
+        "turn": 2,
+        "args": {
+          "build_id": "dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96",
+          "limit": 3,
+          "purpose": "cite",
+          "query_text": "800G",
+          "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        }
+      }
+    ],
+    "receipts": [
+      {
+        "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "build_id": "dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96",
+        "tool": "corpus_semantic_query",
+        "call_id": "call_e3d506de690b48d2b1fbca61",
+        "turn": 2,
+        "page": {
+          "schema_version": "corpus-semantic-query-page-v1",
+          "query_id": "query:340e9eb00edd4b33",
+          "publication_id": "sha256:933d718da67a5993b637f067bc69ec5557a2b8a6a24f4c9f23ab6d48f2d25918",
+          "query_sha256": "sha256:340e9eb00edd4b33da5f6ed1e100a8473b5536cd5f11c45c545e1b2f3bd0e7b8",
+          "sort_version": "semantic-lexical-sort-v1",
+          "purpose": "cite",
+          "records": [
+            {
+              "record_id": "itm_5c1109b67c18d8d2",
+              "role": "material_items",
+              "usable_for": [
+                "cite"
+              ],
+              "evidence": [
+                {
+                  "handle": "cv2:dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96#chunk:signed-non-table-target-scope",
+                  "unit_id": "signed-unit-20",
+                  "locator": "body[51]",
+                  "quote": "不是DSP拉胯了，然后800G就明显比那个800G肯定不止。",
+                  "coordinate_system": "unicode_code_points",
+                  "start": 44,
+                  "end": 74,
+                  "text_sha256": "sha256:e142ecf5b2df04dfde04c835575cd3efecfb9782a1e11ce701dfba867178d0a2"
+                }
+              ],
+              "dependencies": [],
+              "context_status": "complete",
+              "mapping_status": "unlinked",
+              "quality_status": "accepted"
+            },
+            {
+              "record_id": "99c2d149bf9fc862fe6207895a7d066027d03d98350f49bfe874974f83686a9e",
+              "role": "claims",
+              "usable_for": [
+                "cite"
+              ],
+              "evidence": [
+                {
+                  "handle": "cv2:dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96#chunk:signed-non-table-target-scope",
+                  "unit_id": "signed-unit-20",
+                  "locator": "body[51]",
+                  "quote": "二季度就有超过300万个了",
+                  "coordinate_system": "unicode_code_points",
+                  "start": 89,
+                  "end": 102,
+                  "text_sha256": "sha256:e142ecf5b2df04dfde04c835575cd3efecfb9782a1e11ce701dfba867178d0a2"
+                }
+              ],
+              "dependencies": [],
+              "context_status": "complete",
+              "mapping_status": "suspected",
+              "quality_status": "accepted"
+            },
+            {
+              "record_id": "itm_5326cef728099080",
+              "role": "material_items",
+              "usable_for": [
+                "cite"
+              ],
+              "evidence": [
+                {
+                  "handle": "cv2:dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96#chunk:signed-non-table-target-scope",
+                  "unit_id": "signed-unit-20",
+                  "locator": "body[51]",
+                  "quote": "Q2 800G其实是超预期的，肯定是超预期的。但这也不叫超预期，",
+                  "coordinate_system": "unicode_code_points",
+                  "start": 0,
+                  "end": 32,
+                  "text_sha256": "sha256:e142ecf5b2df04dfde04c835575cd3efecfb9782a1e11ce701dfba867178d0a2"
+                }
+              ],
+              "dependencies": [],
+              "context_status": "complete",
+              "mapping_status": "unlinked",
+              "quality_status": "accepted"
+            }
+          ],
+          "next_cursor": "eyJnZW5lcmF0aW9uIjozLCJwb3NpdGlvbiI6MywicHVibGljYXRpb25faWQiOiJzaGEyNTY6OTMzZDcxOGRhNjdhNTk5M2I2MzdmMDY3YmM2OWVjNTU1N2EyYjhhNmEyNGY0YzlmMjNhYjZkNDhmMmQyNTkxOCIsInF1ZXJ5X3NoYTI1NiI6InNoYTI1NjozNDBlOWViMDBlZGQ0YjMzZGE1ZjZlZDFlMTAwYTg0NzNiNTUzNmNkNWYxMWM0NWM1NDVlMWIyZjNiZDBlN2I4Iiwic29ydF92ZXJzaW9uIjoic2VtYW50aWMtbGV4aWNhbC1zb3J0LXYxIiwic3VtIjoiOGM4ODM3YjU4MTBjZTViMCIsInR5cGUiOiJzZW1hbnRpY19xdWVyeSIsInYiOjF9",
+          "page_status": "more_available",
+          "error_codes": []
+        },
+        "delivery": {
+          "itm_5c1109b67c18d8d2": "delivered",
+          "99c2d149bf9fc862fe6207895a7d066027d03d98350f49bfe874974f83686a9e": "delivered",
+          "itm_5326cef728099080": "delivered"
+        }
+      }
+    ]
+  },
+  "fetched": [],
+  "delivered": [],
+  "errors": [],
+  "skipped": [],
+  "notes": [],
+  "range_completeness": [],
+  "all_offered_fetched": null
+}

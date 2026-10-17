@@ -3,7 +3,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } 
 import { ElMessage } from 'element-plus'
 import { onBeforeRouteLeave } from 'vue-router'
 
-import { artifacts as artifactsApi, runs as runsApi } from '@/api'
+import { artifacts as artifactsApi, runs as runsApi, monitor as monitorApi } from '@/api'
 import { ApiError } from '@/api/client'
 import type {
   SessionPlanInput,
@@ -18,6 +18,7 @@ import AnalysisRerunPanel from '@/components/business/AnalysisRerunPanel.vue'
 import BusinessWorkspace from '@/components/business/BusinessWorkspace.vue'
 import BusinessInputRequestDialog from '@/components/business/BusinessInputRequestDialog.vue'
 import SessionPlanManager from '@/components/business/SessionPlanManager.vue'
+import SessionMonitor from '@/components/business/SessionMonitor.vue'
 import DiffPanel from '@/components/DiffPanel.vue'
 import PlanPanel from '@/components/PlanPanel.vue'
 import ResearchCanvas from '@/components/ResearchCanvas.vue'
@@ -589,6 +590,11 @@ watch(
     await reloadTurns()
     await loadDiff()
     await canvasRef.value?.load()
+    if (pendingMonitorResearch && !runStream.isStreaming) {
+      const researchId = pendingMonitorResearch
+      pendingMonitorResearch = null
+      if (sessions.activeId === researchId) await attachSessionRun(researchId)
+    }
   },
 )
 
@@ -718,7 +724,20 @@ async function restoreSession(): Promise<void> {
   await attachSessionRun(target.id)
 }
 
+let monitorHeartbeat: ReturnType<typeof setInterval> | null = null
+let pendingMonitorResearch: string | null = null
+async function refreshMonitorRun(researchId: string): Promise<void> {
+  if (sessions.activeId !== researchId) return
+  await reloadTurns()
+  if (sessions.activeId !== researchId) return
+  if (runStream.isStreaming) pendingMonitorResearch = researchId
+  else await attachSessionRun(researchId)
+}
+
 onMounted(async () => {
+  // No unload/release request: another workbench tab may still be online.
+  void monitorApi.heartbeat().catch(() => {})
+  monitorHeartbeat = setInterval(() => void monitorApi.heartbeat().catch(() => {}), 30000)
   if (!sessions.list.length) {
     try {
       await sessions.loadList()
@@ -730,6 +749,7 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
+  if (monitorHeartbeat) clearInterval(monitorHeartbeat)
   runStream.close()
   if (clockTimer !== null) clearInterval(clockTimer)
 })
@@ -778,6 +798,8 @@ watch(
           </el-button>
         </div>
       </header>
+
+      <SessionMonitor v-if="sessions.activeId" :key="sessions.activeId" :research-id="sessions.activeId" @runs-changed="refreshMonitorRun" />
 
       <RunStage
         :elapsed-label="elapsedLabel"

@@ -1,0 +1,411 @@
+{
+  "schema": "web-agent-semantic-durable-positive-runs-v1",
+  "runs": [
+    {
+      "label": "industrial_claim",
+      "run_id": "a7a0da496f5e4e6f9546c148bab5ad41",
+      "summary": {
+        "run_id": "a7a0da49-6f5e-4e6f-9546-c148bab5ad41",
+        "session_id": "c09075f6-15a8-5f30-9814-e494e3a91530",
+        "user_id": "1463b7a7-9b11-4181-83aa-3d85b6f1b220",
+        "prompt": "Web runtime note: create exactly one task-board item for this entire bounded check; do not create sub-tasks or make intermediate update_task calls. The research-tool restrictions below do not prohibit add_task/update_task. After the evidence step (and manifest step when required), resolve that single item once.\n\n这是一次有界消费链验证，只回答一个问题：材料称工业富联云计算业务同比增长多少？\n\n严格边界：\n- 只调用 corpus_semantic_query 和 corpus_submit_manifest，禁止调用任何其他工具或来源。\n- 只查询 source_id=f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb、build_id=f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314。\n- corpus_semantic_query 使用 purpose=cite、query_text=云计算、limit=2；不要使用游标扩大结果集。\n- 依据实际送达的完整记录作答，不做任何其他研究、计算或推断。\n- 最终回答必须是一句简短中文陈述，并逐字包含“工业富联云计算业务同比增长 75.7%”。\n- 在最终回答前调用 corpus_submit_manifest，登记同一句 report_quote，并用实际送达记录的 publication_id、record_id 和 purpose=cite 提交 semantic_references。按工具反馈修正，确保最终报告锚点与清单一致。",
+        "status": "completed",
+        "pipeline_id": "stateful-react-agent",
+        "model": null,
+        "final_answer": "材料显示，工业富联云计算业务同比增长 75.7%。",
+        "error": null,
+        "stopped_by": null,
+        "usage": {
+          "prompt_tokens": 74448,
+          "completion_tokens": 2953,
+          "total_tokens": 77401,
+          "cache_read_tokens": 43264,
+          "cache_write_tokens": 0,
+          "reasoning_tokens": 0,
+          "llm_calls": 5,
+          "models": [
+            "glm-5-3-flash-260828"
+          ],
+          "providers": [
+            "openai"
+          ],
+          "status": "complete",
+          "replay": {
+            "decision": "skipped",
+            "reason": "no_payload"
+          }
+        },
+        "run_dir": "/tmp/fa-web-semantic-47-r1.jhsuxgzl/runs/a7a0da496f5e4e6f9546c148bab5ad41",
+        "created_at": "2026-10-16T05:31:33",
+        "finished_at": "2026-10-16T05:32:50.474414"
+      },
+      "tokens": 77401,
+      "semantic_results": [
+        {
+          "name": "corpus_semantic_query",
+          "body": {
+            "schema_version": "corpus-semantic-query-page-v1",
+            "query_id": "query:27bab44b7988ef58",
+            "publication_id": "sha256:684c93fb18e6e66c39246e6b555fc6152e2e1ba41c3e7a7468425e85662b0823",
+            "query_sha256": "sha256:27bab44b7988ef580afc1fed0f92baa61adafffda5319bf8bf8d2142615d997e",
+            "sort_version": "semantic-lexical-sort-v1",
+            "purpose": "cite",
+            "records": [
+              {
+                "record_id": "abbab7baa50760ea29a27b66e158ba2de969d0be5032302f2bfe3e23c3b0ac37",
+                "role": "claims",
+                "usable_for": [
+                  "cite"
+                ],
+                "evidence": [
+                  {
+                    "handle": "cv2:f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314#chunk:signed-non-table-target-scope",
+                    "unit_id": "signed-unit-11",
+                    "locator": "char:1393-1655",
+                    "quote": "云计算 +75.7%，",
+                    "coordinate_system": "unicode_code_points",
+                    "start": 51,
+                    "end": 62,
+                    "text_sha256": "sha256:da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4"
+                  }
+                ],
+                "dependencies": [],
+                "context_status": "complete",
+                "mapping_status": "suspected",
+                "quality_status": "accepted"
+              },
+              {
+                "record_id": "itm_bf0c10772dfcb0bd",
+                "role": "material_items",
+                "usable_for": [
+                  "cite"
+                ],
+                "evidence": [
+                  {
+                    "handle": "cv2:f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314#chunk:signed-non-table-target-scope",
+                    "unit_id": "signed-unit-11",
+                    "locator": "char:1393-1655",
+                    "quote": "云计算 +75.7%，",
+                    "coordinate_system": "unicode_code_points",
+                    "start": 51,
+                    "end": 62,
+                    "text_sha256": "sha256:da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4"
+                  }
+                ],
+                "dependencies": [],
+                "context_status": "complete",
+                "mapping_status": "suspected",
+                "quality_status": "accepted"
+              }
+            ],
+            "next_cursor": null,
+            "page_status": "complete",
+            "error_codes": []
+          }
+        },
+        {
+          "name": "corpus_submit_manifest",
+          "body": {
+            "ok": true,
+            "manifest_file": "/tmp/fa-web-semantic-47-r1.jhsuxgzl/runs/a7a0da496f5e4e6f9546c148bab5ad41/run/corpus/manifests/manifest-000.json",
+            "owner": "stateful_react:a6a046eb7039",
+            "publish_status": "verified",
+            "counts": {
+              "supported": 1,
+              "partial": 0,
+              "unsupported": 0
+            },
+            "conclusions": [
+              {
+                "id": "c1",
+                "status": "supported",
+                "delivery": [
+                  "delivered"
+                ],
+                "semantic_references": [
+                  {
+                    "schema_version": "corpus-report-semantic-reference-v1",
+                    "report_anchor": "最终回复结论句（消费链验证最终回答，全篇唯一结论句）",
+                    "report_quote": "材料显示，工业富联云计算业务同比增长 75.7%。",
+                    "publication_id": "sha256:684c93fb18e6e66c39246e6b555fc6152e2e1ba41c3e7a7468425e85662b0823",
+                    "record_id": "abbab7baa50760ea29a27b66e158ba2de969d0be5032302f2bfe3e23c3b0ac37",
+                    "purpose": "cite",
+                    "evidence_ranges": [
+                      {
+                        "handle": "cv2:f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314#chunk:signed-non-table-target-scope",
+                        "unit_id": "signed-unit-11",
+                        "coordinate_system": "unicode_code_points",
+                        "start": 51,
+                        "end": 62,
+                        "quote_sha256": "sha256:e9a6b09a2c136a1d2b6f8b6fb7891c09aef21e638ff0d46ddda1fa25d7777440"
+                      }
+                    ],
+                    "dependency_assertions": [],
+                    "delivery_status": "delivered",
+                    "publication_status": "published",
+                    "quality_status": "accepted",
+                    "verification_status": "verified",
+                    "error_codes": []
+                  },
+                  {
+                    "schema_version": "corpus-report-semantic-reference-v1",
+                    "report_anchor": "最终回复结论句（消费链验证最终回答，全篇唯一结论句）",
+                    "report_quote": "材料显示，工业富联云计算业务同比增长 75.7%。",
+                    "publication_id": "sha256:684c93fb18e6e66c39246e6b555fc6152e2e1ba41c3e7a7468425e85662b0823",
+                    "record_id": "itm_bf0c10772dfcb0bd",
+                    "purpose": "cite",
+                    "evidence_ranges": [
+                      {
+                        "handle": "cv2:f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314#chunk:signed-non-table-target-scope",
+                        "unit_id": "signed-unit-11",
+                        "coordinate_system": "unicode_code_points",
+                        "start": 51,
+                        "end": 62,
+                        "quote_sha256": "sha256:e9a6b09a2c136a1d2b6f8b6fb7891c09aef21e638ff0d46ddda1fa25d7777440"
+                      }
+                    ],
+                    "dependency_assertions": [],
+                    "delivery_status": "delivered",
+                    "publication_status": "published",
+                    "quality_status": "accepted",
+                    "verification_status": "verified",
+                    "error_codes": []
+                  }
+                ],
+                "problems": []
+              }
+            ],
+            "hint": "对非 supported 的结论：按需补取原文、重新查询失效语义版本、修改表述或移除结论；已完整送达的语义证据不必例行 corpus_fetch。然后重新提交**完整**清单（每次提交生成新的候选文件，边界以汇总校验为准）。本轮新取的片段需经过下一轮消息边界核验，pending 的结论请下一轮重新提交确认。"
+          }
+        }
+      ]
+    },
+    {
+      "label": "optical_item",
+      "run_id": "6254dd08089b429f84458e74966cf008",
+      "summary": {
+        "run_id": "6254dd08-089b-429f-8445-8e74966cf008",
+        "session_id": "05282e92-e196-5522-81bb-cd4958e58c13",
+        "user_id": "1463b7a7-9b11-4181-83aa-3d85b6f1b220",
+        "prompt": "Web runtime note: create exactly one task-board item for this entire bounded check; do not create sub-tasks or make intermediate update_task calls. The research-tool restrictions below do not prohibit add_task/update_task. After the evidence step (and manifest step when required), resolve that single item once.\n\n这是一次有界消费链验证，只回答一个问题：材料对 Q2 800G 出货是否超预期的判断是什么？\n\n严格边界：\n- 只调用 corpus_semantic_query 和 corpus_submit_manifest，禁止调用任何其他工具或来源。\n- 只查询 source_id=48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f、build_id=dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96。\n- corpus_semantic_query 使用 purpose=cite、query_text=800G、limit=3；不要使用游标扩大结果集。\n- 依据实际送达的完整记录作答，不做任何其他研究、计算或推断。\n- 最终回答必须是一句简短中文陈述，并逐字包含“材料判断 Q2 800G 出货超预期”。\n- 在最终回答前调用 corpus_submit_manifest，登记同一句 report_quote，并用实际送达记录的 publication_id、record_id 和 purpose=cite 提交 semantic_references。按工具反馈修正，确保最终报告锚点与清单一致。",
+        "status": "completed",
+        "pipeline_id": "stateful-react-agent",
+        "model": null,
+        "final_answer": "材料判断 Q2 800G 出货超预期。",
+        "error": null,
+        "stopped_by": null,
+        "usage": {
+          "prompt_tokens": 81106,
+          "completion_tokens": 4508,
+          "total_tokens": 85614,
+          "cache_read_tokens": 46848,
+          "cache_write_tokens": 0,
+          "reasoning_tokens": 0,
+          "llm_calls": 5,
+          "models": [
+            "glm-5-3-flash-260828"
+          ],
+          "providers": [
+            "openai"
+          ],
+          "status": "complete",
+          "replay": {
+            "decision": "skipped",
+            "reason": "no_payload"
+          }
+        },
+        "run_dir": "/tmp/fa-web-semantic-47-r1.jhsuxgzl/runs/6254dd08089b429f84458e74966cf008",
+        "created_at": "2026-10-16T05:32:52",
+        "finished_at": "2026-10-16T05:34:50.438493"
+      },
+      "tokens": 85614,
+      "semantic_results": [
+        {
+          "name": "corpus_semantic_query",
+          "body": {
+            "schema_version": "corpus-semantic-query-page-v1",
+            "query_id": "query:340e9eb00edd4b33",
+            "publication_id": "sha256:933d718da67a5993b637f067bc69ec5557a2b8a6a24f4c9f23ab6d48f2d25918",
+            "query_sha256": "sha256:340e9eb00edd4b33da5f6ed1e100a8473b5536cd5f11c45c545e1b2f3bd0e7b8",
+            "sort_version": "semantic-lexical-sort-v1",
+            "purpose": "cite",
+            "records": [
+              {
+                "record_id": "itm_5c1109b67c18d8d2",
+                "role": "material_items",
+                "usable_for": [
+                  "cite"
+                ],
+                "evidence": [
+                  {
+                    "handle": "cv2:dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96#chunk:signed-non-table-target-scope",
+                    "unit_id": "signed-unit-20",
+                    "locator": "body[51]",
+                    "quote": "不是DSP拉胯了，然后800G就明显比那个800G肯定不止。",
+                    "coordinate_system": "unicode_code_points",
+                    "start": 44,
+                    "end": 74,
+                    "text_sha256": "sha256:e142ecf5b2df04dfde04c835575cd3efecfb9782a1e11ce701dfba867178d0a2"
+                  }
+                ],
+                "dependencies": [],
+                "context_status": "complete",
+                "mapping_status": "unlinked",
+                "quality_status": "accepted"
+              },
+              {
+                "record_id": "99c2d149bf9fc862fe6207895a7d066027d03d98350f49bfe874974f83686a9e",
+                "role": "claims",
+                "usable_for": [
+                  "cite"
+                ],
+                "evidence": [
+                  {
+                    "handle": "cv2:dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96#chunk:signed-non-table-target-scope",
+                    "unit_id": "signed-unit-20",
+                    "locator": "body[51]",
+                    "quote": "二季度就有超过300万个了",
+                    "coordinate_system": "unicode_code_points",
+                    "start": 89,
+                    "end": 102,
+                    "text_sha256": "sha256:e142ecf5b2df04dfde04c835575cd3efecfb9782a1e11ce701dfba867178d0a2"
+                  }
+                ],
+                "dependencies": [],
+                "context_status": "complete",
+                "mapping_status": "suspected",
+                "quality_status": "accepted"
+              },
+              {
+                "record_id": "itm_5326cef728099080",
+                "role": "material_items",
+                "usable_for": [
+                  "cite"
+                ],
+                "evidence": [
+                  {
+                    "handle": "cv2:dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96#chunk:signed-non-table-target-scope",
+                    "unit_id": "signed-unit-20",
+                    "locator": "body[51]",
+                    "quote": "Q2 800G其实是超预期的，肯定是超预期的。但这也不叫超预期，",
+                    "coordinate_system": "unicode_code_points",
+                    "start": 0,
+                    "end": 32,
+                    "text_sha256": "sha256:e142ecf5b2df04dfde04c835575cd3efecfb9782a1e11ce701dfba867178d0a2"
+                  }
+                ],
+                "dependencies": [],
+                "context_status": "complete",
+                "mapping_status": "unlinked",
+                "quality_status": "accepted"
+              }
+            ],
+            "next_cursor": "eyJnZW5lcmF0aW9uIjozLCJwb3NpdGlvbiI6MywicHVibGljYXRpb25faWQiOiJzaGEyNTY6OTMzZDcxOGRhNjdhNTk5M2I2MzdmMDY3YmM2OWVjNTU1N2EyYjhhNmEyNGY0YzlmMjNhYjZkNDhmMmQyNTkxOCIsInF1ZXJ5X3NoYTI1NiI6InNoYTI1NjozNDBlOWViMDBlZGQ0YjMzZGE1ZjZlZDFlMTAwYTg0NzNiNTUzNmNkNWYxMWM0NWM1NDVlMWIyZjNiZDBlN2I4Iiwic29ydF92ZXJzaW9uIjoic2VtYW50aWMtbGV4aWNhbC1zb3J0LXYxIiwic3VtIjoiOGM4ODM3YjU4MTBjZTViMCIsInR5cGUiOiJzZW1hbnRpY19xdWVyeSIsInYiOjF9",
+            "page_status": "more_available",
+            "error_codes": []
+          }
+        },
+        {
+          "name": "corpus_submit_manifest",
+          "body": {
+            "ok": true,
+            "manifest_file": "/tmp/fa-web-semantic-47-r1.jhsuxgzl/runs/6254dd08089b429f84458e74966cf008/run/corpus/manifests/manifest-000.json",
+            "owner": "stateful_react:dbb6af80849b",
+            "publish_status": "verified",
+            "counts": {
+              "supported": 1,
+              "partial": 0,
+              "unsupported": 0
+            },
+            "conclusions": [
+              {
+                "id": "c1",
+                "status": "supported",
+                "delivery": [
+                  "delivered"
+                ],
+                "semantic_references": [
+                  {
+                    "schema_version": "corpus-report-semantic-reference-v1",
+                    "report_anchor": "最终回答（单句中文结论陈述）",
+                    "report_quote": "材料判断 Q2 800G 出货超预期",
+                    "publication_id": "sha256:933d718da67a5993b637f067bc69ec5557a2b8a6a24f4c9f23ab6d48f2d25918",
+                    "record_id": "itm_5326cef728099080",
+                    "purpose": "cite",
+                    "evidence_ranges": [
+                      {
+                        "handle": "cv2:dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96#chunk:signed-non-table-target-scope",
+                        "unit_id": "signed-unit-20",
+                        "coordinate_system": "unicode_code_points",
+                        "start": 0,
+                        "end": 32,
+                        "quote_sha256": "sha256:4685308a30594c66d24128ace5810173e15b99a2299de91de3091e0ea92c8f49"
+                      }
+                    ],
+                    "dependency_assertions": [],
+                    "delivery_status": "delivered",
+                    "publication_status": "published",
+                    "quality_status": "accepted",
+                    "verification_status": "verified",
+                    "error_codes": []
+                  },
+                  {
+                    "schema_version": "corpus-report-semantic-reference-v1",
+                    "report_anchor": "最终回答（单句中文结论陈述）",
+                    "report_quote": "材料判断 Q2 800G 出货超预期",
+                    "publication_id": "sha256:933d718da67a5993b637f067bc69ec5557a2b8a6a24f4c9f23ab6d48f2d25918",
+                    "record_id": "99c2d149bf9fc862fe6207895a7d066027d03d98350f49bfe874974f83686a9e",
+                    "purpose": "cite",
+                    "evidence_ranges": [
+                      {
+                        "handle": "cv2:dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96#chunk:signed-non-table-target-scope",
+                        "unit_id": "signed-unit-20",
+                        "coordinate_system": "unicode_code_points",
+                        "start": 89,
+                        "end": 102,
+                        "quote_sha256": "sha256:0a9f0cb0ffcf42620ae07506e97ae983560930045e26234b44e7c596fff17168"
+                      }
+                    ],
+                    "dependency_assertions": [],
+                    "delivery_status": "delivered",
+                    "publication_status": "published",
+                    "quality_status": "accepted",
+                    "verification_status": "verified",
+                    "error_codes": []
+                  },
+                  {
+                    "schema_version": "corpus-report-semantic-reference-v1",
+                    "report_anchor": "最终回答（单句中文结论陈述）",
+                    "report_quote": "材料判断 Q2 800G 出货超预期",
+                    "publication_id": "sha256:933d718da67a5993b637f067bc69ec5557a2b8a6a24f4c9f23ab6d48f2d25918",
+                    "record_id": "itm_5c1109b67c18d8d2",
+                    "purpose": "cite",
+                    "evidence_ranges": [
+                      {
+                        "handle": "cv2:dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96#chunk:signed-non-table-target-scope",
+                        "unit_id": "signed-unit-20",
+                        "coordinate_system": "unicode_code_points",
+                        "start": 44,
+                        "end": 74,
+                        "quote_sha256": "sha256:509a88d6107a5520c68ace89dda82463f8982e95ede7c8d13f030b1e98d6cbdb"
+                      }
+                    ],
+                    "dependency_assertions": [],
+                    "delivery_status": "delivered",
+                    "publication_status": "published",
+                    "quality_status": "accepted",
+                    "verification_status": "verified",
+                    "error_codes": []
+                  }
+                ],
+                "problems": []
+              }
+            ],
+            "hint": "对非 supported 的结论：按需补取原文、重新查询失效语义版本、修改表述或移除结论；已完整送达的语义证据不必例行 corpus_fetch。然后重新提交**完整**清单（每次提交生成新的候选文件，边界以汇总校验为准）。本轮新取的片段需经过下一轮消息边界核验，pending 的结论请下一轮重新提交确认。"
+          }
+        }
+      ]
+    }
+  ],
+  "total_tokens": 163015
+}

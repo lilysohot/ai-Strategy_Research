@@ -48,7 +48,7 @@ class MonitoringObservation:
     observed_at_ms: int | None = None
     #: vendor=供应商观测时间可用；unknown=缺可靠观测时间（不得以本地 now 冒充实时）。
     time_source: str = "vendor"
-    #: 值已经过 float 往返（真实适配器），精度受限但判定仍可用。
+    #: 值已经过 float 往返；监控触发拒绝使用精度受限的值。
     precision_limited: bool = False
     source_ref: str | None = None
     quote_basis: str = "last"
@@ -93,6 +93,21 @@ class FuyaoQuoteSource:
                 )
             )
         return out
+
+
+def quote_rejection(obs: MonitoringObservation, *, now: datetime) -> str | None:
+    if not obs.price.is_finite() or obs.price <= 0:
+        return "invalid_price"
+    if obs.precision_limited:
+        return "imprecise_price"
+    if obs.time_source != "vendor" or obs.observed_at_ms is None:
+        return "unverified_quote_time"
+    age_ms = int(now.timestamp() * 1000) - obs.observed_at_ms
+    if age_ms < -30_000:
+        return "future_quote"
+    if age_ms > get_config().monitor_quote_max_age_seconds * 1000:
+        return "stale_quote"
+    return None
 
 
 def condition_met(
@@ -142,7 +157,12 @@ def _iso(value: Any) -> str | None:
 
 def _analysis_deadline(obs: MonitoringObservation) -> datetime | None:
     """事件的分析截止 = 接收时间 + 最大排队延迟；配置为 0 表示发布前未冻结（不强制）。"""
-    max_delay = get_config().auto_max_delay_seconds
+    cfg = get_config()
+    max_delay = (
+        cfg.monitor_event_max_age_seconds
+        if cfg.monitor_streams_enabled
+        else cfg.auto_max_delay_seconds
+    )
     if max_delay and max_delay > 0:
         return datetime.fromtimestamp(obs.received_at_ms / 1000, UTC) + timedelta(seconds=max_delay)
     return None
@@ -329,13 +349,24 @@ async def evaluate(
     rev = await _latest_revision(session, rule.id, rule.current_version)
     if rev is None:
         return {"status": "inactive"}
+    rule.last_check_at = now
+    quality = quote_rejection(obs, now=now)
+    if quality:
+        rule.last_suppressed_reason = quality
+        return {"status": "invalid_quote", "reason": quality}
     if rev.symbol != obs.thscode or rev.market != obs.market or rev.currency != obs.currency:
+        rule.last_suppressed_reason = "instrument_mismatch"
+        return {"status": "mismatch"}
+    if rev.quote_basis.replace("last_trade", "last") != obs.quote_basis.replace(
+        "last_trade", "last"
+    ):
+        rule.last_suppressed_reason = "quote_basis_mismatch"
         return {"status": "mismatch"}
     if rev.expires_at is not None and now > rev.expires_at:
         # 有效期已过：不再判定/记录观测，保持待核定（规则本身未取消，UI 可续期改版）。
         return {"status": "expired"}
 
-    dedup = _dedup_hash(rule.id, obs)
+    dedup = _dedup_hash(f"{rule.id}:{rule.current_version}", obs)
     existing = (
         await session.execute(
             select(store.WatchObservation).where(store.WatchObservation.dedup_hash == dedup)
@@ -350,11 +381,20 @@ async def evaluate(
 
     prev_baseline = rule.baseline_price
     prev_last_valid_at = rule.last_valid_quote_at
-    first_ever = prev_baseline is None
+    first_ever = prev_baseline is None and prev_last_valid_at is None
     gap = (
-        max_gap is not None
-        and prev_last_valid_at is not None
-        and (now - prev_last_valid_at) > max_gap
+        (prev_baseline is None and prev_last_valid_at is not None)
+        or rule.last_suppressed_reason
+        in {
+            "browser_offline",
+            "browser_reconnected",
+            "manual_resumed",
+        }
+        or (
+            max_gap is not None
+            and prev_last_valid_at is not None
+            and (now - prev_last_valid_at) > max_gap
+        )
     )
 
     direction = rev.direction
@@ -421,6 +461,7 @@ async def evaluate(
             status="pending",
             analysis_expires_at=_analysis_deadline(obs),
             detail_json={
+                "lifecycle_epoch": rule.lifecycle_epoch,
                 "gap": gap,
                 "first_observation": first_ever,
                 "precision_limited": obs.precision_limited,
@@ -464,7 +505,7 @@ async def evaluate(
 
     rule.baseline_price = price
     rule.last_check_at = now
-    rule.last_valid_quote_at = datetime.fromtimestamp(obs.received_at_ms / 1000, UTC)
+    rule.last_valid_quote_at = datetime.fromtimestamp(obs.observed_at_ms / 1000, UTC)
     rule.last_valid_quote_price = price
     await session.flush()
 

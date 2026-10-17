@@ -33,6 +33,7 @@ from server.routes import business as business_routes
 from server.routes import corpus as corpus_routes
 from server.routes import llm_configs as llm_configs_routes
 from server.routes import models as models_routes
+from server.routes import monitor as monitor_routes
 from server.routes import runs as runs_routes
 from server.routes import sessions as sessions_routes
 from server.security import check_startup_secrets
@@ -75,7 +76,12 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     # DATA-10: 监控常驻轮询（独立于 API 请求协程与浏览器）。默认关闭，部署时显式开启；
     # 行情源不可用（缺凭据等）时保持"未启用/待核定"，不伪装实时。
     monitor_task: asyncio.Task[None] | None = None
-    if readiness.ok and not get_config().restore_mode and get_config().monitor_enabled:
+    if (
+        readiness.ok
+        and not get_config().restore_mode
+        and get_config().monitor_enabled
+        and not get_config().monitor_streams_enabled
+    ):
         source = monitor.build_quote_source()
         if source is not None:
             monitor_task = asyncio.create_task(
@@ -89,7 +95,12 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             )
     # DATA-11: 事件→自动 Run 的调度循环（默认关闭，部署显式开启；DATA-00 §5 登记）。
     scheduler_task: asyncio.Task[None] | None = None
-    if readiness.ok and not get_config().restore_mode and get_config().auto_enabled:
+    if (
+        readiness.ok
+        and not get_config().restore_mode
+        and get_config().auto_enabled
+        and not get_config().monitor_streams_enabled
+    ):
         scheduler_task = asyncio.create_task(
             watch_scheduler.scheduler_loop(
                 poll_seconds=get_config().auto_poll_seconds,
@@ -128,6 +139,7 @@ app.include_router(artifacts_routes.router)
 app.include_router(runs_routes.router)
 # 业务资料（DATA-03）：路由只做身份绑定与契约翻译，准入/版本/幂等在 business_service。
 app.include_router(business_routes.router)
+app.include_router(monitor_routes.router)
 # 语料读链（108 号 生产 PG/web 读链）：只读端点，鉴权同既有路由；fail-closed 拒绝原样透传。
 app.include_router(corpus_routes.router)
 # 业务错误统一渲染为契约信封（字段定位、冲突、幂等、无权）；注册后才能覆盖默认 500。

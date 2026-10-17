@@ -18,6 +18,7 @@ import uuid
 from functools import lru_cache
 from pathlib import Path
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -103,12 +104,26 @@ class ServerConfig(BaseSettings):
     # — Monitor (DATA-10) ————————————————————————————————
     # 监控常驻轮询默认关闭：部署时显式开启（DATA-00 §5 后台进程登记）。监控链不调用 LLM。
     monitor_enabled: bool = False
-    monitor_poll_seconds: float = 60.0
+    monitor_poll_seconds: float = 900.0
     # 相邻观测间隔超过该值视为断线缺口：恢复后首个报价按 disconnect_recovery 处理。
-    monitor_max_gap_seconds: float = 300.0
+    monitor_max_gap_seconds: float = 1800.0
     # 每轮最多判定的规则数与去重后标的数（轮询容量上限，防止拖垮行情额度）。
     monitor_batch_rules: int = 50
     monitor_max_symbols: int = 20
+    # Streams mode runs in `python -m server.monitor_worker`, outside the API.
+    monitor_streams_enabled: bool = False
+    monitor_redis_url: str = "redis://127.0.0.1:6379/0"
+    monitor_stream_prefix: str = "frontier:monitor:v1"
+    monitor_session_limit: int = Field(default=1, ge=1, le=100)
+    monitor_presence_seconds: int = Field(default=120, ge=60)
+    monitor_quote_max_age_seconds: int = Field(default=120, ge=1)
+    monitor_replay_seconds: int = Field(default=60, ge=1)
+    monitor_max_attempts: int = Field(default=5, ge=1, le=20)
+    monitor_queue_limit: int = Field(default=10000, ge=1)
+    monitor_retention_days: int = Field(default=7, ge=1)
+    monitor_event_max_age_seconds: int = Field(default=3600, ge=1)
+    # Enable only after the provider's timestamp semantics have been verified.
+    monitor_vendor_time_verified: bool = False
 
     # — Auto-analysis scheduler (DATA-11) ————————————————
     # 事件→自动 Run 的调度循环默认关闭，部署时显式开启（DATA-00 §5 后台进程登记）。
@@ -155,6 +170,13 @@ class ServerConfig(BaseSettings):
 
     # — Model / sandbox ——————————————————————————————————————
     sandbox_backend: str = "native"
+    # Historical corpus configuration is intentionally not SERVER_-prefixed.
+    # Exposing it through typed server config lets the trusted parent prepare
+    # SQLite WAL sidecars and construct the worker mount namespace.
+    semantic_store_root: Path | None = Field(
+        default=None,
+        validation_alias="CORPUS_STRUCTURED_ROOT",
+    )
     # Default system model (used only when a user has no LLM config). The actual
     # credentials come from the repo .env (OPENAI_*), which load_dotenv loads at
     # import time in infra.config — see tech-stack.md §5.3.

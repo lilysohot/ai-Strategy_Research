@@ -1,0 +1,105 @@
+{
+  "schema_version": 2,
+  "task_id": "a6a046eb7039",
+  "role_id": "stateful_react",
+  "pipeline_id": "stateful-react-agent",
+  "created_at": "2026-10-16T05:31:41.229918+00:00",
+  "last_finalized_turn": 4,
+  "offered": [],
+  "requested": [],
+  "semantic": {
+    "calls": [
+      {
+        "tool": "corpus_semantic_query",
+        "call_id": "call_26db7050b7be43d7aba50d94",
+        "turn": 2,
+        "args": {
+          "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+          "limit": 2,
+          "purpose": "cite",
+          "query_text": "云计算",
+          "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb"
+        }
+      }
+    ],
+    "receipts": [
+      {
+        "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+        "tool": "corpus_semantic_query",
+        "call_id": "call_26db7050b7be43d7aba50d94",
+        "turn": 2,
+        "page": {
+          "schema_version": "corpus-semantic-query-page-v1",
+          "query_id": "query:27bab44b7988ef58",
+          "publication_id": "sha256:684c93fb18e6e66c39246e6b555fc6152e2e1ba41c3e7a7468425e85662b0823",
+          "query_sha256": "sha256:27bab44b7988ef580afc1fed0f92baa61adafffda5319bf8bf8d2142615d997e",
+          "sort_version": "semantic-lexical-sort-v1",
+          "purpose": "cite",
+          "records": [
+            {
+              "record_id": "abbab7baa50760ea29a27b66e158ba2de969d0be5032302f2bfe3e23c3b0ac37",
+              "role": "claims",
+              "usable_for": [
+                "cite"
+              ],
+              "evidence": [
+                {
+                  "handle": "cv2:f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314#chunk:signed-non-table-target-scope",
+                  "unit_id": "signed-unit-11",
+                  "locator": "char:1393-1655",
+                  "quote": "云计算 +75.7%，",
+                  "coordinate_system": "unicode_code_points",
+                  "start": 51,
+                  "end": 62,
+                  "text_sha256": "sha256:da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4"
+                }
+              ],
+              "dependencies": [],
+              "context_status": "complete",
+              "mapping_status": "suspected",
+              "quality_status": "accepted"
+            },
+            {
+              "record_id": "itm_bf0c10772dfcb0bd",
+              "role": "material_items",
+              "usable_for": [
+                "cite"
+              ],
+              "evidence": [
+                {
+                  "handle": "cv2:f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314#chunk:signed-non-table-target-scope",
+                  "unit_id": "signed-unit-11",
+                  "locator": "char:1393-1655",
+                  "quote": "云计算 +75.7%，",
+                  "coordinate_system": "unicode_code_points",
+                  "start": 51,
+                  "end": 62,
+                  "text_sha256": "sha256:da5600328796df9440fcbe9086070a09db93cbe7dd86d071138655c583e5fcd4"
+                }
+              ],
+              "dependencies": [],
+              "context_status": "complete",
+              "mapping_status": "suspected",
+              "quality_status": "accepted"
+            }
+          ],
+          "next_cursor": null,
+          "page_status": "complete",
+          "error_codes": []
+        },
+        "delivery": {
+          "abbab7baa50760ea29a27b66e158ba2de969d0be5032302f2bfe3e23c3b0ac37": "delivered",
+          "itm_bf0c10772dfcb0bd": "delivered"
+        }
+      }
+    ]
+  },
+  "fetched": [],
+  "delivered": [],
+  "errors": [],
+  "skipped": [],
+  "notes": [],
+  "range_completeness": [],
+  "all_offered_fetched": null
+}

@@ -1353,7 +1353,18 @@ Issue 43 同时暴露了 terminal task runner 对无 reporter 运行的完成态
 
 **验收与边界**：C4 = **PASS**。生产 PostgreSQL 以 READ ONLY 事务复核，8 行 `generation/activated_at` 与 112 号基线逐字相同；未写生产 PG。聚焦回归 70 passed；相关广测 1707 passed / 2 failed / 19 skipped（两项仍为既有环境失败：golden 锚点语料缺失、reader-pdf-11 与测试期待 reader-pdf-10 漂移）；Ruff、Pyright 与 import smoke 通过。C4 通过只证明缺口能被下游正确识别，**不表示 7+12 条内容已补齐，不改变 items P5 单轴 FAIL，也不表示 material_relations 已抽取**。证据：`evidence/113-c4-registered-gap-consumption-20261016/`。
 
-**当前剩余任务**：7 条 items 未覆盖金标与 12 条 claims 无候选的内容处置（若要补齐须另立抽取/裁定任务）、material_relations、Web Agent 结构化消费接线与真实运行验收（Issue 47，已立项未执行）、claims/items 进生产 PG 写链、e6_holdout_corpus；C4 不再属于剩余项。web 前端 items 页面不属于当前“让 Agent 消费结构化数据”的目标。
+**当前剩余任务（已由 114 号更新）**：7 条 items 未覆盖金标与 12 条 claims 无候选的内容处置（若要补齐须另立抽取/裁定任务）、material_relations、claims/items 进生产 PG 写链、e6_holdout_corpus；C4 与 Web Agent 结构化消费接线均不再属于剩余项。web 前端 items 页面不属于当前“让 Agent 消费结构化数据”的目标。
+
+
+## 38. 2026-10-16 执行增补：Web Agent 结构化语义消费接线与真实验收（114 号）
+
+**接线修复**：真实 Web worker 原先虽由 profile 暴露 corpus_semantic_query，但缺三处运行边界。114 号完成：①orchestrator 强制传 --require-semantic-store，worker 在首个模型请求前拒绝未配置、路径不存在或可写的 production store；②Web 审批层把只写当前 run 审计工件的 corpus_submit_manifest 作为 run-scoped 可逆写自动执行，保留所有 hard deny；③worker 设置 APODEX_RUN_DIR=<run>/run，使消费账、manifest 与最终 A4 校验持久化。没有新增平行查询协议，仍复用 corpus_semantic_query → ConsumptionLedger → corpus_submit_manifest/A4。
+
+**真实 Web 验收**：本机 FastAPI 实例经真实 JWT、POST /api/runs、orchestrator 与独立 worker 串行运行，外围以 bwrap --ro-bind / / 提供只读生产 store，只开放隔离 Web SQLite 与 runs 目录写入。W1—W6 功能全部通过：真实 worker 最终工具集含 semantic query 并自动伴随 manifest；工业 Claims run a7a0da… 消费 gen-3 684c93fb…，光模块 Items run 6254dd… 消费 gen-3 933d718d…，两者记录均 delivered 且持久化 manifest_verification.json 为 verified；缺口 run b3b7e8… 收到 no_match + CS_PUBLICATION_EXPLICIT_GAPS，明确拒绝空结果推断且未提交 manifest。真实未认证 HTTP 返回 401；另两个真实 worker 负例对未配置/可写 store 均在模型调用前 exit 1。
+
+**不变量**：structured store 仍为 batches 4 / tasks 6 / attempts 0 / semantic publications 6 / artifacts 10 / heads 2，两源 head 保持 gen-3；应用业务文件路径、大小和 mtime 不变，仅 prepare_readonly_access 刷新 SQLite SHM 侧车 mtime。生产 PG 以 READ ONLY 事务核对，8 行 generation/activated_at 与 113 号基线逐字相同。生产结构化 store 应用写入 0、生产 PG 写入 0；Web 验收数据只写隔离临时 SQLite。聚焦回归 85 passed，Ruff 通过，Pyright 0 errors。
+
+**预算结论**：最终有效集合 232,083 / 300,000 tokens；无效或被取代轮次 280,113，全部模型调用累计 512,196，超过修订 ceiling。因此验收记为 **W1—W6 功能通过、累计预算门失败**，不写成无条件 PASS。历史失败全部保留在 evidence/114-web-agent-structured-consumption-20261016/invalid-runs.json。这不改变 7+12 内容缺口、material_relations: missing、生产 PG 写链和前端 items 页面的状态。
 
 ## 附录：依据与源码入口
 

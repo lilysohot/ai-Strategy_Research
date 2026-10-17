@@ -46,7 +46,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     FRONTIER_AGENT_TOOL_USER=off
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates \
+    && apt-get install -y --no-install-recommends bubblewrap ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /opt/venv /opt/venv

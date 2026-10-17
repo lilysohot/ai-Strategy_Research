@@ -346,9 +346,13 @@ async def _load_plan(
 async def _ensure_research(session: AsyncSession, *, user_id: Any, research_id: Any) -> None:
     research = (
         await session.execute(
-            select(store.Session).where(
-                store.Session.id == research_id, store.Session.user_id == user_id
+            select(store.Session)
+            .where(
+                store.Session.id == research_id,
+                store.Session.user_id == user_id,
+                store.Session.deleted_at.is_(None),
             )
+            .with_for_update()
         )
     ).scalar_one_or_none()
     if research is None:
@@ -379,6 +383,21 @@ async def create_rule(
 
     async def _execute() -> dict[str, Any]:
         await _ensure_research(session, user_id=user_id, research_id=research_id)
+        from server.config import get_config
+
+        current_count = await session.scalar(
+            select(func.count())
+            .select_from(store.WatchRule)
+            .where(
+                store.WatchRule.research_id == research_id,
+                store.WatchRule.status != CANCELLED,
+            )
+        )
+        if current_count >= get_config().monitor_session_limit:
+            raise biz.ValidationError(
+                "当前会话已有监控，请编辑现有监控或先取消",
+                fields={"research_id": "实验阶段每个会话限一个当前监控，暂停不会释放名额"},
+            )
         if plan_id is not None:
             plan = await _load_plan(
                 session, plan_id=plan_id, user_id=user_id, research_id=research_id
@@ -418,6 +437,9 @@ async def create_rule(
         )
         rule.current_version = 1
         await session.flush()
+        from server.monitor_pipeline import request_check
+
+        await request_check(session, rule)
         _append_audit(
             session,
             user_id=user_id,
@@ -536,8 +558,15 @@ async def update_rule(
         # 改版不复用旧版报价基线与触发资格：新版本重新布防（DATA-10 消费）。
         rule.armed = True
         rule.baseline_price = None
+        rule.last_valid_quote_at = None
+        rule.last_valid_quote_price = None
+        rule.last_check_at = None
+        rule.last_triggered_at = None
         rule.last_suppressed_reason = None
         await session.flush()
+        from server.monitor_pipeline import request_check
+
+        await request_check(session, rule)
         _append_audit(
             session,
             user_id=user_id,
@@ -622,7 +651,15 @@ async def set_rule_status(
                 "状态流转不合法", fields={"status": f"不能从 {rule.status} 变为 {target}"}
             )
         rule.status = target
+        rule.lifecycle_epoch += 1
+        if target == ACTIVE:
+            rule.last_suppressed_reason = "manual_resumed"
+            rule.baseline_price = None
         await session.flush()
+        if target == ACTIVE:
+            from server.monitor_pipeline import request_check
+
+            await request_check(session, rule)
         _append_audit(
             session,
             user_id=user_id,

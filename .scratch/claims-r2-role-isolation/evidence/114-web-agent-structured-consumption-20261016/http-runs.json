@@ -1,0 +1,169 @@
+{
+  "schema": "web-agent-semantic-http-runs-v1",
+  "auth": {
+    "unauthenticated_status": 401,
+    "authenticated": true
+  },
+  "total_tokens": 155209,
+  "token_ceiling": 300000,
+  "runs": [
+    {
+      "label": "industrial_claim",
+      "run_id": "c0d0dcbc418b489db95a5e8e1398b9d4",
+      "summary": {
+        "run_id": "c0d0dcbc-418b-489d-b95a-5e8e1398b9d4",
+        "session_id": "412af011-a739-5bd1-a9b3-530ee0113571",
+        "user_id": "1463b7a7-9b11-4181-83aa-3d85b6f1b220",
+        "prompt": "Web runtime note: create exactly one task-board item for this entire bounded check; do not create sub-tasks or make intermediate update_task calls. The research-tool restrictions below do not prohibit add_task/update_task. After the evidence step (and manifest step when required), resolve that single item once.\n\n这是一次有界消费链验证，只回答一个问题：材料称工业富联云计算业务同比增长多少？\n\n严格边界：\n- 只调用 corpus_semantic_query 和 corpus_submit_manifest，禁止调用任何其他工具或来源。\n- 只查询 source_id=f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb、build_id=f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314。\n- corpus_semantic_query 使用 purpose=cite、query_text=云计算、limit=2；不要使用游标扩大结果集。\n- 依据实际送达的完整记录作答，不做任何其他研究、计算或推断。\n- 最终回答必须是一句简短中文陈述，并逐字包含“工业富联云计算业务同比增长 75.7%”。\n- 在最终回答前调用 corpus_submit_manifest，登记同一句 report_quote，并用实际送达记录的 publication_id、record_id 和 purpose=cite 提交 semantic_references。按工具反馈修正，确保最终报告锚点与清单一致。",
+        "status": "completed",
+        "pipeline_id": "stateful-react-agent",
+        "model": null,
+        "final_answer": "工业富联云计算业务同比增长 75.7%（依据本次语义查询实际送达的两条 accepted 完整记录，其引文逐字为“云计算 +75.7%，”，清单提交结果为 supported/verified）。",
+        "error": null,
+        "stopped_by": null,
+        "usage": null,
+        "run_dir": "/tmp/fa-web-semantic-47-r1.jhsuxgzl/runs/c0d0dcbc418b489db95a5e8e1398b9d4",
+        "created_at": "2026-10-16T05:25:19",
+        "finished_at": "2026-10-16T05:26:10.956043"
+      },
+      "turns": {
+        "turns": [
+          {
+            "seq": 1,
+            "role": "user",
+            "content": "Web runtime note: create exactly one task-board item for this entire bounded check; do not create sub-tasks or make intermediate update_task calls. The research-tool restrictions below do not prohibit add_task/update_task. After the evidence step (and manifest step when required), resolve that single item once.\n\n这是一次有界消费链验证，只回答一个问题：材料称工业富联云计算业务同比增长多少？\n\n严格边界：\n- 只调用 corpus_semantic_query 和 corpus_submit_manifest，禁止调用任何其他工具或来源。\n- 只查询 source_id=f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb、build_id=f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314。\n- corpus_semantic_query 使用 purpose=cite、query_text=云计算、limit=2；不要使用游标扩大结果集。\n- 依据实际送达的完整记录作答，不做任何其他研究、计算或推断。\n- 最终回答必须是一句简短中文陈述，并逐字包含“工业富联云计算业务同比增长 75.7%”。\n- 在最终回答前调用 corpus_submit_manifest，登记同一句 report_quote，并用实际送达记录的 publication_id、record_id 和 purpose=cite 提交 semantic_references。按工具反馈修正，确保最终报告锚点与清单一致。",
+            "run_id": "c0d0dcbc-418b-489d-b95a-5e8e1398b9d4",
+            "created_at": "2026-10-16T05:25:19"
+          },
+          {
+            "seq": 2,
+            "role": "assistant",
+            "content": "工业富联云计算业务同比增长 75.7%（依据本次语义查询实际送达的两条 accepted 完整记录，其引文逐字为“云计算 +75.7%，”，清单提交结果为 supported/verified）。",
+            "run_id": "c0d0dcbc-418b-489d-b95a-5e8e1398b9d4",
+            "created_at": "2026-10-16T05:26:10"
+          }
+        ],
+        "has_more": false
+      },
+      "measured_tokens": 0
+    },
+    {
+      "label": "optical_item",
+      "run_id": "84f74422bc814f7a974d6aa602024374",
+      "summary": {
+        "run_id": "84f74422-bc81-4f7a-974d-6aa602024374",
+        "session_id": "d6cd37c7-c9c3-5bba-a72d-f5a9831cb8f7",
+        "user_id": "1463b7a7-9b11-4181-83aa-3d85b6f1b220",
+        "prompt": "Web runtime note: create exactly one task-board item for this entire bounded check; do not create sub-tasks or make intermediate update_task calls. The research-tool restrictions below do not prohibit add_task/update_task. After the evidence step (and manifest step when required), resolve that single item once.\n\n这是一次有界消费链验证，只回答一个问题：材料对 Q2 800G 出货是否超预期的判断是什么？\n\n严格边界：\n- 只调用 corpus_semantic_query 和 corpus_submit_manifest，禁止调用任何其他工具或来源。\n- 只查询 source_id=48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f、build_id=dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96。\n- corpus_semantic_query 使用 purpose=cite、query_text=800G、limit=3；不要使用游标扩大结果集。\n- 依据实际送达的完整记录作答，不做任何其他研究、计算或推断。\n- 最终回答必须是一句简短中文陈述，并逐字包含“材料判断 Q2 800G 出货超预期”。\n- 在最终回答前调用 corpus_submit_manifest，登记同一句 report_quote，并用实际送达记录的 publication_id、record_id 和 purpose=cite 提交 semantic_references。按工具反馈修正，确保最终报告锚点与清单一致。",
+        "status": "completed",
+        "pipeline_id": "stateful-react-agent",
+        "model": null,
+        "final_answer": "材料判断 Q2 800G 出货超预期。",
+        "error": null,
+        "stopped_by": null,
+        "usage": {
+          "prompt_tokens": 81612,
+          "completion_tokens": 4529,
+          "total_tokens": 86141,
+          "cache_read_tokens": 61760,
+          "cache_write_tokens": 0,
+          "reasoning_tokens": 0,
+          "llm_calls": 5,
+          "models": [
+            "glm-5-3-flash-260828"
+          ],
+          "providers": [
+            "openai"
+          ],
+          "status": "complete",
+          "replay": {
+            "decision": "skipped",
+            "reason": "no_payload"
+          }
+        },
+        "run_dir": "/tmp/fa-web-semantic-47-r1.jhsuxgzl/runs/84f74422bc814f7a974d6aa602024374",
+        "created_at": "2026-10-16T05:26:11",
+        "finished_at": "2026-10-16T05:27:59.524620"
+      },
+      "turns": {
+        "turns": [
+          {
+            "seq": 1,
+            "role": "user",
+            "content": "Web runtime note: create exactly one task-board item for this entire bounded check; do not create sub-tasks or make intermediate update_task calls. The research-tool restrictions below do not prohibit add_task/update_task. After the evidence step (and manifest step when required), resolve that single item once.\n\n这是一次有界消费链验证，只回答一个问题：材料对 Q2 800G 出货是否超预期的判断是什么？\n\n严格边界：\n- 只调用 corpus_semantic_query 和 corpus_submit_manifest，禁止调用任何其他工具或来源。\n- 只查询 source_id=48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f、build_id=dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96。\n- corpus_semantic_query 使用 purpose=cite、query_text=800G、limit=3；不要使用游标扩大结果集。\n- 依据实际送达的完整记录作答，不做任何其他研究、计算或推断。\n- 最终回答必须是一句简短中文陈述，并逐字包含“材料判断 Q2 800G 出货超预期”。\n- 在最终回答前调用 corpus_submit_manifest，登记同一句 report_quote，并用实际送达记录的 publication_id、record_id 和 purpose=cite 提交 semantic_references。按工具反馈修正，确保最终报告锚点与清单一致。",
+            "run_id": "84f74422-bc81-4f7a-974d-6aa602024374",
+            "created_at": "2026-10-16T05:26:11"
+          },
+          {
+            "seq": 2,
+            "role": "assistant",
+            "content": "材料判断 Q2 800G 出货超预期。",
+            "run_id": "84f74422-bc81-4f7a-974d-6aa602024374",
+            "created_at": "2026-10-16T05:27:59"
+          }
+        ],
+        "has_more": false
+      },
+      "measured_tokens": 86141
+    },
+    {
+      "label": "registered_gap",
+      "run_id": "b3b7e84fbc224888a12eac95ad98cde4",
+      "summary": {
+        "run_id": "b3b7e84f-bc22-4888-a12e-ac95ad98cde4",
+        "session_id": "4929be8c-4c15-52ba-a6a7-b6e5116a80d2",
+        "user_id": "1463b7a7-9b11-4181-83aa-3d85b6f1b220",
+        "prompt": "Web runtime note: create exactly one task-board item for this entire bounded check; do not create sub-tasks or make intermediate update_task calls. The research-tool restrictions below do not prohibit add_task/update_task. After the evidence step (and manifest step when required), resolve that single item once.\n\n这是 C4 已登记缺口的有界消费测试，只处理一个问题：128端口光波导五次流片后良率是否仍不理想？\n\n严格边界：\n- 只调用 corpus_semantic_query；若没有实际送达的语义记录，不提交 corpus_submit_manifest，也不调用其他工具或来源。\n- 只查询 source_id=48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f、build_id=dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96。\n- corpus_semantic_query 必须使用 purpose=cite、query_text=128端口光波导五次流片后良率仍不理想、limit=1、field_filters={\"role\":\"material_items\"}；不重试、不翻页。\n- 只依据实际送达的查询状态作答。若返回 no_match + CS_PUBLICATION_EXPLICIT_GAPS，最终只说明这是已登记的发布覆盖缺口，当前覆盖不足，空结果不能证明该情况不存在；不得回答“是”或“否”。\n- 最终回答只写一句简短中文。",
+        "status": "completed",
+        "pipeline_id": "stateful-react-agent",
+        "model": null,
+        "final_answer": "查询返回 no_match（CS_PUBLICATION_EXPLICIT_GAPS，无实际送达记录）：128端口光波导五次流片后良率是否仍不理想，属于该发布已登记的覆盖缺口，当前覆盖不足，空结果不能证明该情况不存在或存在。",
+        "error": null,
+        "stopped_by": null,
+        "usage": {
+          "prompt_tokens": 67549,
+          "completion_tokens": 1519,
+          "total_tokens": 69068,
+          "cache_read_tokens": 65024,
+          "cache_write_tokens": 0,
+          "reasoning_tokens": 0,
+          "llm_calls": 5,
+          "models": [
+            "glm-5-3-flash-260828"
+          ],
+          "providers": [
+            "openai"
+          ],
+          "status": "complete",
+          "replay": {
+            "decision": "skipped",
+            "reason": "no_payload"
+          }
+        },
+        "run_dir": "/tmp/fa-web-semantic-47-r1.jhsuxgzl/runs/b3b7e84fbc224888a12eac95ad98cde4",
+        "created_at": "2026-10-16T05:28:01",
+        "finished_at": "2026-10-16T05:28:47.576882"
+      },
+      "turns": {
+        "turns": [
+          {
+            "seq": 1,
+            "role": "user",
+            "content": "Web runtime note: create exactly one task-board item for this entire bounded check; do not create sub-tasks or make intermediate update_task calls. The research-tool restrictions below do not prohibit add_task/update_task. After the evidence step (and manifest step when required), resolve that single item once.\n\n这是 C4 已登记缺口的有界消费测试，只处理一个问题：128端口光波导五次流片后良率是否仍不理想？\n\n严格边界：\n- 只调用 corpus_semantic_query；若没有实际送达的语义记录，不提交 corpus_submit_manifest，也不调用其他工具或来源。\n- 只查询 source_id=48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f、build_id=dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96。\n- corpus_semantic_query 必须使用 purpose=cite、query_text=128端口光波导五次流片后良率仍不理想、limit=1、field_filters={\"role\":\"material_items\"}；不重试、不翻页。\n- 只依据实际送达的查询状态作答。若返回 no_match + CS_PUBLICATION_EXPLICIT_GAPS，最终只说明这是已登记的发布覆盖缺口，当前覆盖不足，空结果不能证明该情况不存在；不得回答“是”或“否”。\n- 最终回答只写一句简短中文。",
+            "run_id": "b3b7e84f-bc22-4888-a12e-ac95ad98cde4",
+            "created_at": "2026-10-16T05:28:01"
+          },
+          {
+            "seq": 2,
+            "role": "assistant",
+            "content": "查询返回 no_match（CS_PUBLICATION_EXPLICIT_GAPS，无实际送达记录）：128端口光波导五次流片后良率是否仍不理想，属于该发布已登记的覆盖缺口，当前覆盖不足，空结果不能证明该情况不存在或存在。",
+            "run_id": "b3b7e84f-bc22-4888-a12e-ac95ad98cde4",
+            "created_at": "2026-10-16T05:28:47"
+          }
+        ],
+        "has_more": false
+      },
+      "measured_tokens": 69068
+    }
+  ]
+}

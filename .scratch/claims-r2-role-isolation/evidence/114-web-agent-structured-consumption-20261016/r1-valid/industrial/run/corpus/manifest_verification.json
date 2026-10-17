@@ -1,0 +1,85 @@
+{
+  "schema_version": 2,
+  "checked_at": "2026-10-16T05:32:50.466605+00:00",
+  "status": "verified",
+  "counts": {
+    "supported": 1,
+    "partial": 0,
+    "unsupported": 0
+  },
+  "verification_errors": 0,
+  "range_completeness": [],
+  "all_offered_fetched": null,
+  "conclusions": [
+    {
+      "id": "c1",
+      "text_location": "最终回复结论句（消费链验证最终回答，全篇唯一结论句）",
+      "report_quote": "材料显示，工业富联云计算业务同比增长 75.7%。",
+      "status": "supported",
+      "evidence_count": 0,
+      "covered_purposes": [],
+      "missing_dependencies": [],
+      "delivery": [
+        "delivered"
+      ],
+      "semantic_references": [
+        {
+          "schema_version": "corpus-report-semantic-reference-v1",
+          "report_anchor": "最终回复结论句（消费链验证最终回答，全篇唯一结论句）",
+          "report_quote": "材料显示，工业富联云计算业务同比增长 75.7%。",
+          "publication_id": "sha256:684c93fb18e6e66c39246e6b555fc6152e2e1ba41c3e7a7468425e85662b0823",
+          "record_id": "abbab7baa50760ea29a27b66e158ba2de969d0be5032302f2bfe3e23c3b0ac37",
+          "purpose": "cite",
+          "evidence_ranges": [
+            {
+              "handle": "cv2:f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314#chunk:signed-non-table-target-scope",
+              "unit_id": "signed-unit-11",
+              "coordinate_system": "unicode_code_points",
+              "start": 51,
+              "end": 62,
+              "quote_sha256": "sha256:e9a6b09a2c136a1d2b6f8b6fb7891c09aef21e638ff0d46ddda1fa25d7777440"
+            }
+          ],
+          "dependency_assertions": [],
+          "delivery_status": "delivered",
+          "publication_status": "published",
+          "quality_status": "accepted",
+          "verification_status": "verified",
+          "error_codes": []
+        },
+        {
+          "schema_version": "corpus-report-semantic-reference-v1",
+          "report_anchor": "最终回复结论句（消费链验证最终回答，全篇唯一结论句）",
+          "report_quote": "材料显示，工业富联云计算业务同比增长 75.7%。",
+          "publication_id": "sha256:684c93fb18e6e66c39246e6b555fc6152e2e1ba41c3e7a7468425e85662b0823",
+          "record_id": "itm_bf0c10772dfcb0bd",
+          "purpose": "cite",
+          "evidence_ranges": [
+            {
+              "handle": "cv2:f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314#chunk:signed-non-table-target-scope",
+              "unit_id": "signed-unit-11",
+              "coordinate_system": "unicode_code_points",
+              "start": 51,
+              "end": 62,
+              "quote_sha256": "sha256:e9a6b09a2c136a1d2b6f8b6fb7891c09aef21e638ff0d46ddda1fa25d7777440"
+            }
+          ],
+          "dependency_assertions": [],
+          "delivery_status": "delivered",
+          "publication_status": "published",
+          "quality_status": "accepted",
+          "verification_status": "verified",
+          "error_codes": []
+        }
+      ],
+      "problems": [],
+      "model_claimed_complete": null
+    }
+  ],
+  "manifest_files": [
+    "/tmp/fa-web-semantic-47-r1.jhsuxgzl/runs/a7a0da496f5e4e6f9546c148bab5ad41/run/corpus/manifests/manifest-000.json"
+  ],
+  "report_sha256": "7faa544ed67102e7b183141fe5af7bd008fdc5675dccb59abc3716dd91bc971b",
+  "report_chars": 25,
+  "boundary_answer_status": "complete"
+}

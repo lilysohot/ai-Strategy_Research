@@ -323,7 +323,7 @@ async def test_update_rule_direction_change_requires_threshold(case) -> None:
     assert "threshold" in back_to_range.json()["error"]["fields"]
 
     # up → range 同样必须显式给出 low/high，不能复用 up 的单值。
-    rule2 = (await create_rule(case, name="上穿规则")).json()["rule_id"]
+    rule2 = (await create_rule(case, research_id=case.rid2, name="上穿规则")).json()["rule_id"]
     response = await case.client.patch(
         f"/api/business/watch-rules/{rule2}",
         json={"expected_version": 1, "direction": "range"},

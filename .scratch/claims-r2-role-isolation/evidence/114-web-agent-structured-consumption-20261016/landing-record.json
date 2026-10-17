@@ -1,0 +1,193 @@
+{
+  "schema": "web-agent-structured-consumption-landing-v1",
+  "record_id": "114-web-agent-structured-consumption",
+  "created_on": "2026-10-16",
+  "verdict": "FUNCTIONAL_PASS_WITH_BUDGET_OVERRUN",
+  "summary": "W1-W6 functional acceptance passed through authenticated Web API and real workers. The cumulative preregistered execution budget failed because invalid and superseded runs were required to expose and repair two Web-only seams.",
+  "implementation": [
+    "orchestrator always launches Web workers with --require-semantic-store",
+    "strict startup gate rejects missing, absent, or writable semantic stores before model calls",
+    "Web approval auto-allows run-scoped corpus_submit_manifest while retaining hard denials",
+    "Web worker sets APODEX_RUN_DIR so ledger, manifest, and boundary verification persist"
+  ],
+  "criteria": {
+    "W1": {
+      "verdict": "PASS",
+      "measured": "real worker log contains corpus_semantic_query and companion auto-binding of corpus_submit_manifest"
+    },
+    "W2": {
+      "verdict": "PASS",
+      "run_id": "a7a0da496f5e4e6f9546c148bab5ad41",
+      "measured": "industrial gen-3 records delivered; durable boundary A4 verified"
+    },
+    "W3": {
+      "verdict": "PASS",
+      "run_id": "6254dd08089b429f84458e74966cf008",
+      "measured": "optical gen-3 records delivered; durable boundary A4 verified"
+    },
+    "W4": {
+      "verdict": "PASS",
+      "run_id": "b3b7e84fbc224888a12eac95ad98cde4",
+      "measured": "no_match + CS_PUBLICATION_EXPLICIT_GAPS; no manifest submitted; answer refuses existence/nonexistence inference"
+    },
+    "W5": {
+      "verdict": "PASS",
+      "measured": {
+        "structured_counts": {
+          "batches": 4,
+          "tasks": 6,
+          "attempts": 0,
+          "semantic_publications": 6,
+          "semantic_publication_artifacts": 10,
+          "semantic_publication_heads": 2
+        },
+        "heads": [
+          {
+            "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+            "build_id": "dca4bad7f85b59dce0110ef15037b34223163b88c06685bcae4764e5f700ab96",
+            "publication_id": "sha256:933d718da67a5993b637f067bc69ec5557a2b8a6a24f4c9f23ab6d48f2d25918"
+          },
+          {
+            "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+            "build_id": "f16e7fde95537f0656a69cb1547232ca26a0347b3823d0dc1844dbf798149314",
+            "publication_id": "sha256:684c93fb18e6e66c39246e6b555fc6152e2e1ba41c3e7a7468425e85662b0823"
+          }
+        ],
+        "store_business_inventory_unchanged": true,
+        "only_mtime_change": {
+          "index/structured.sqlite3-shm": 1301.9607486724854
+        },
+        "production_pg_unchanged": true
+      }
+    },
+    "W6": {
+      "verdict": "PASS",
+      "measured": "real unauthenticated HTTP request returned 401; authenticated session/run/worker/final response completed; separate real worker processes rejected missing and writable stores with 0 model calls"
+    }
+  },
+  "valid_runs": [
+    {
+      "label": "industrial_claim",
+      "run_id": "a7a0da496f5e4e6f9546c148bab5ad41",
+      "tokens": 77401,
+      "answer": "材料显示，工业富联云计算业务同比增长 75.7%。",
+      "publication_id": "sha256:684c93fb18e6e66c39246e6b555fc6152e2e1ba41c3e7a7468425e85662b0823",
+      "page_status": "complete",
+      "record_ids": [
+        "abbab7baa50760ea29a27b66e158ba2de969d0be5032302f2bfe3e23c3b0ac37",
+        "itm_bf0c10772dfcb0bd"
+      ],
+      "manifest_file": "/tmp/fa-web-semantic-47-r1.jhsuxgzl/runs/a7a0da496f5e4e6f9546c148bab5ad41/run/corpus/manifests/manifest-000.json",
+      "a4": {
+        "publish_status": "verified",
+        "counts": {
+          "supported": 1,
+          "partial": 0,
+          "unsupported": 0
+        },
+        "delivery": [
+          "delivered",
+          "delivered"
+        ],
+        "verification": [
+          "verified",
+          "verified"
+        ]
+      }
+    },
+    {
+      "label": "optical_item",
+      "run_id": "6254dd08089b429f84458e74966cf008",
+      "tokens": 85614,
+      "answer": "材料判断 Q2 800G 出货超预期。",
+      "publication_id": "sha256:933d718da67a5993b637f067bc69ec5557a2b8a6a24f4c9f23ab6d48f2d25918",
+      "page_status": "more_available",
+      "record_ids": [
+        "itm_5c1109b67c18d8d2",
+        "99c2d149bf9fc862fe6207895a7d066027d03d98350f49bfe874974f83686a9e",
+        "itm_5326cef728099080"
+      ],
+      "manifest_file": "/tmp/fa-web-semantic-47-r1.jhsuxgzl/runs/6254dd08089b429f84458e74966cf008/run/corpus/manifests/manifest-000.json",
+      "a4": {
+        "publish_status": "verified",
+        "counts": {
+          "supported": 1,
+          "partial": 0,
+          "unsupported": 0
+        },
+        "delivery": [
+          "delivered",
+          "delivered",
+          "delivered"
+        ],
+        "verification": [
+          "verified",
+          "verified",
+          "verified"
+        ]
+      }
+    },
+    {
+      "label": "registered_gap",
+      "run_id": "b3b7e84fbc224888a12eac95ad98cde4",
+      "tokens": 69068,
+      "answer": "查询返回 no_match（CS_PUBLICATION_EXPLICIT_GAPS，无实际送达记录）：128端口光波导五次流片后良率是否仍不理想，属于该发布已登记的覆盖缺口，当前覆盖不足，空结果不能证明该情况不存在或存在。",
+      "publication_id": "sha256:933d718da67a5993b637f067bc69ec5557a2b8a6a24f4c9f23ab6d48f2d25918",
+      "page_status": "no_match",
+      "error_codes": [
+        "CS_PUBLICATION_EXPLICIT_GAPS"
+      ],
+      "record_ids": [],
+      "tool_sequence": [
+        "add_task",
+        "update_task",
+        "corpus_semantic_query",
+        "update_task"
+      ],
+      "manifest_submitted": false
+    }
+  ],
+  "budget": {
+    "valid_selected_tokens": 232083,
+    "invalid_or_superseded_tokens": 280113,
+    "all_model_tokens": 512196,
+    "revised_ceiling_tokens": 300000,
+    "valid_selected_within_ceiling": true,
+    "all_attempts_within_ceiling": false,
+    "verdict": "FAIL",
+    "note": "Do not report this execution as an unconditional PASS."
+  },
+  "invalid_runs": [
+    {
+      "run_id": "c5b26f72653f46bc8fa685cdaaa5701e",
+      "tokens": 123669,
+      "reason": "max_turns=6 and manifest approval timeout/rejection"
+    },
+    {
+      "run_id": "c0d0dcbc418b489db95a5e8e1398b9d4",
+      "tokens": 70303,
+      "reason": "A4 verified in memory but APODEX_RUN_DIR was absent; no durable manifest"
+    },
+    {
+      "run_id": "84f74422bc814f7a974d6aa602024374",
+      "tokens": 86141,
+      "reason": "A4 verified in memory but APODEX_RUN_DIR was absent; no durable manifest"
+    }
+  ],
+  "production_writes": {
+    "structured_store_application_writes": 0,
+    "production_pg_writes": 0,
+    "web_acceptance_db": "isolated temporary SQLite only"
+  },
+  "tests": {
+    "focused": "85 passed",
+    "ruff": "PASS",
+    "pyright": "0 errors"
+  },
+  "not_claimed": [
+    "production PostgreSQL structured write path",
+    "front-end items page",
+    "coverage of the registered 7+12 gaps",
+    "material_relations extraction"
+  ]
+}

@@ -44,6 +44,7 @@ import type {
   TradesListResponse,
   TurnListResponse,
   User,
+  WatchEvent,
   WatchEventsListResponse,
   WatchRule,
   WatchRuleListResponse,
@@ -526,6 +527,23 @@ export const watchEvents = {
   list(params?: { research_id?: string; status?: string; limit?: number; offset?: number }) {
     return request<WatchEventsListResponse>('/business/watch-events', { query: params })
   },
+}
+
+export interface MonitorStatus {
+  rules: WatchRule[]
+  events: WatchEvent[]
+  event_total: number
+  session_limit: number
+  online: boolean
+  enabled: boolean
+  source_verified: boolean
+  poll_seconds: number
+  workers: Array<{ role: string; healthy: boolean; last_error: string | null }>
+}
+
+export const monitor = {
+  heartbeat: () => request<{ expires_at: string }>('/business/monitor/heartbeat', { method: 'POST' }),
+  status: (researchId: string) => request<MonitorStatus>(`/business/monitor/sessions/${encodeURIComponent(researchId)}`),
 }
 
 // ── Research delete (DATA-13 / PR-BIZ-06) ──────────────────────────

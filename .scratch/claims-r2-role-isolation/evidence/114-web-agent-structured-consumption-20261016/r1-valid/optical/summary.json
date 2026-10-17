@@ -1,0 +1,1 @@
+{"run_id": "6254dd08089b429f84458e74966cf008", "session_id": "web47-r2-optical_item", "final_answer": "材料判断 Q2 800G 出货超预期。", "error": "", "stopped_by": "no_tool", "duration_s": 117.83, "replay": {"decision": "skipped", "reason": "no_payload"}, "summary_usage": {}}
