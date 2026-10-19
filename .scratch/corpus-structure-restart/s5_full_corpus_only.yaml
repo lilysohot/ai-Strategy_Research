@@ -1,0 +1,43 @@
+# Frozen corpus-only profile for the v14 S5 51-target real-model matrix.
+# It deliberately excludes web, market, shell, filesystem, semantic-store,
+# investment-calculation, and transcript-recovery tools. corpus_submit_manifest
+# is companion-bound by the workflow whenever corpus retrieval tools are present.
+llm:
+  provider: ${OPENAI_PROVIDER:-openai}
+  model: ${OPENAI_MODEL}
+  base_url: ${OPENAI_BASE_URL}
+  api_key: ${OPENAI_API_KEY}
+  temperature: 1.0
+  top_p: 0.95
+  max_tokens: ${OPENAI_MAX_TOKENS:-100000}
+  extra_body:
+    top_k: 20
+    chat_template_kwargs: {enable_thinking: true, preserve_thinking: true}
+
+agent:
+  reporter: false
+  main_max_turns: ${MAIN_MAX_TURNS:-40}
+  tool_timeout_s: 1800
+  llm_timeout_s: 600
+  research_wall_time_s: ${RESEARCH_WALL_TIME:-1800}
+  reasoning_only_timeout_s: 120
+  reasoning_only_max_tokens: 16384
+  logical_call_timeout_s: 900
+  wall_deadline_reserve_s: ${REPORT_WALL_TIME:-600}
+  reporter_timeout_s: 600
+  reporter_phase_timeout_s: 1800
+  thinking_format: tag
+  thinking_in_history: true
+  context_compaction: tiered
+  compaction_spill: false
+  max_len: ${OPENAI_CONTEXT_WINDOW:-262144}
+  max_input_tokens: ${OPENAI_MAX_INPUT_TOKENS:-2000000}
+  tier1_keep_tool_result: 5
+  keep_recent_turns: 5
+  task_board: true
+  agent_tools:
+    - add_task
+    - update_task
+    - corpus_search
+    - corpus_fetch
+    - corpus_inventory

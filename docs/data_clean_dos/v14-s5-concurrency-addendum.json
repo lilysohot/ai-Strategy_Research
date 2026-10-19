@@ -1,0 +1,53 @@
+{
+  "artifact": "v14-s5-concurrency-addendum",
+  "updated_at": "2026-10-19T17:04:57.9762155+08:00",
+  "frozen_schedule_sessions": 204,
+  "dispatch_scope": "candidate repeats 2 and 3 only",
+  "round_barrier": "repeat 2 completes before repeat 3 starts",
+  "phases": [
+    {
+      "concurrency": 1,
+      "sessions": "1-102",
+      "purpose": "frozen Control/Candidate first-round pairing"
+    },
+    {
+      "concurrency": 2,
+      "sessions": "103-136 completed",
+      "purpose": "candidate repeat 2"
+    },
+    {
+      "concurrency": 3,
+      "sessions": "137-204",
+      "purpose": "remaining candidate repeat 2 and repeat 3",
+      "started_after_completed_sessions": 136
+    }
+  ],
+  "switch": {
+    "discarded_incomplete_sessions": [
+      137,
+      138
+    ],
+    "result_json_written": false,
+    "action": "rerun from clean checkpoint under concurrency 3"
+  },
+  "invariants": [
+    "frozen runner unchanged",
+    "manifest and schedule unchanged",
+    "one isolated apodex process per session",
+    "same candidate database and code root",
+    "same closed corpus-only tool profile",
+    "same independent judge configuration",
+    "one result.json checkpoint per completed session",
+    "latency and query behavior reported by concurrency phase"
+  ],
+  "sha256": {
+    "frozen_runner": "d916c2d5aa273a599deffc213f5bd236586b97ba0d814a52536cabe181c7a3e8",
+    "concurrent_dispatcher": "4ac6bda7f4c92de1ce59bd94b9086e732432b44ebf69a0ca29dcdac7fa9701dc",
+    "frozen_manifest": "740920ea1a46286f81d35ece2f5c22ee65c49fbedb86caea1cd2aeb8ae719fad"
+  },
+  "runtime": {
+    "pid_file": ".scratch/corpus-structure-restart/s5-full-matrix-live.pid",
+    "log_file": ".scratch/corpus-structure-restart/s5-full-matrix-live.log",
+    "report": "docs/data_clean_dos/v14-s5-full-matrix-report.json"
+  }
+}

@@ -1,0 +1,196 @@
+{
+  "schema": "corpus-v14-s5-full-matrix-v1",
+  "frozen_at": "2026-10-18T07:41:25.685386+00:00",
+  "status": "superseded_during_execution_for_uniform_structured_judge_rescore",
+  "arms": {
+    "control": {
+      "commit": "669b7d4a8540c38d47cf642dc0de4d879eb28c4f",
+      "database": "e6_holdout_corpus"
+    },
+    "candidate": {
+      "commit": "288711846b2af754b891120f0d58a7e2f7feab37",
+      "database": "v14_s2_quote_corpus"
+    }
+  },
+  "execution": {
+    "workflow": "react/stateful-react-agent",
+    "workflow_profile": ".scratch/corpus-structure-restart/s5_full_corpus_only.yaml",
+    "one_question_per_process": true,
+    "gold_hidden_from_agent": true,
+    "concurrency": 1,
+    "protocol": "minimum-204",
+    "repeats_by_arm": {
+      "control": 1,
+      "candidate": 3
+    },
+    "questions": 51,
+    "expected_sessions": 204,
+    "target_ids": [
+      "c195233b-mt-h1",
+      "c195233b-imt-q2",
+      "c195233b-xlw",
+      "c195233b-ktable",
+      "f0e67b73-overview",
+      "f0e67b73-top5cust",
+      "f0e67b73-petable",
+      "f0e67b73-risk",
+      "c1ddcd8a-coalprice",
+      "c1ddcd8a-summarytable",
+      "c1ddcd8a-realestate",
+      "c1ddcd8a-invest",
+      "b7e932c8-index",
+      "b7e932c8-industry",
+      "b7e932c8-pmi",
+      "b7e932c8-eptable",
+      "0c25f0e9-figure35",
+      "0c25f0e9-dele",
+      "0c25f0e9-musk",
+      "0c25f0e9-turnover",
+      "0c25f0e9-eptable",
+      "f86c6d2c-cxo-h1",
+      "f86c6d2c-wuqi-order",
+      "f86c6d2c-medamt",
+      "f86c6d2c-cxotable",
+      "f86c6d2c-glp1",
+      "a91d95c7-hbm",
+      "a91d95c7-bytedance",
+      "a91d95c7-hbmprice",
+      "a91d95c7-cxmt",
+      "5e305376-nonfarm",
+      "5e305376-fedrate",
+      "5e305376-oil",
+      "5e305376-dxy",
+      "5e305376-gdpnow",
+      "f7f65d7e-payroll",
+      "f7f65d7e-cme",
+      "f7f65d7e-alloc",
+      "f7f65d7e-risk",
+      "d179b615-hikerate",
+      "d179b615-passive",
+      "d179b615-chart3",
+      "d179b615-goldoil",
+      "2f8aa709-hike",
+      "2f8aa709-oil",
+      "2f8aa709-alloc",
+      "2f8aa709-fedtable",
+      "f3b28791-rotation",
+      "f3b28791-fedwatch",
+      "f3b28791-table1",
+      "f3b28791-regression"
+    ],
+    "budgets": {
+      "MAIN_MAX_TURNS": "40",
+      "RESEARCH_WALL_TIME": "1800",
+      "REPORT_WALL_TIME": "600",
+      "OPENAI_MAX_INPUT_TOKENS": "2000000",
+      "OPENAI_MAX_TOKENS": "100000",
+      "SANDBOX_BACKEND": "bwrap",
+      "REACT_NO_WEB": "1"
+    },
+    "schedule": {
+      "sha256": "3498e02b0eed7a0ddf49db901fcc75356d1dde7fa7dca443401b7170661e80ee",
+      "rule": "repeat 1 counterbalances control/candidate by target index; candidate repeat 2 is forward and repeat 3 reverse target order"
+    }
+  },
+  "answer_model": {
+    "model": "glm-5.3-flash",
+    "endpoint_host": "ark.cn-beijing.volces.com"
+  },
+  "judge": {
+    "model": "doubao-seed-2.1-lite",
+    "endpoint_host": "ark.cn-beijing.volces.com",
+    "credential_source": "configured JUDGE_*",
+    "different_model_identity": true,
+    "different_endpoint_host": false,
+    "independence": "different-model judge on the same configured endpoint/provider"
+  },
+  "tools": {
+    "policy": "hard profile allowlist plus automatic manifest companion",
+    "profile_allowlist": [
+      "add_task",
+      "update_task",
+      "corpus_search",
+      "corpus_fetch",
+      "corpus_inventory"
+    ],
+    "effective_expected": [
+      "add_task",
+      "update_task",
+      "corpus_search",
+      "corpus_fetch",
+      "corpus_inventory",
+      "corpus_submit_manifest"
+    ],
+    "closed_categories": [
+      "web/search/download",
+      "market/同花顺",
+      "shell/filesystem/repository search",
+      "investment calculation",
+      "semantic structured store",
+      "transcript recovery"
+    ],
+    "profile_resolution_preflight": {
+      "control": {
+        "profile_tools": [
+          "add_task",
+          "update_task",
+          "corpus_search",
+          "corpus_fetch",
+          "corpus_inventory"
+        ],
+        "effective_tools": [
+          "add_task",
+          "update_task",
+          "corpus_search",
+          "corpus_fetch",
+          "corpus_inventory",
+          "corpus_submit_manifest"
+        ]
+      },
+      "candidate": {
+        "profile_tools": [
+          "add_task",
+          "update_task",
+          "corpus_search",
+          "corpus_fetch",
+          "corpus_inventory"
+        ],
+        "effective_tools": [
+          "add_task",
+          "update_task",
+          "corpus_search",
+          "corpus_fetch",
+          "corpus_inventory",
+          "corpus_submit_manifest"
+        ]
+      }
+    }
+  },
+  "assets": {
+    ".scratch/corpus-access-validation/e2_holdout_targets.json": "81188e3cfe7222437a4b03c60b74c62f3bf4fb6e7aaea322abf2f61dc4cd26c2",
+    ".scratch/corpus-structure-restart/s5_full_model_matrix.py": "08d64325e7c799a0657341a663871f5561b9fe7a108deb4d3cc182f463416d4d",
+    ".scratch/corpus-structure-restart/s5_full_corpus_only.yaml": "98d221337874337d6633348e3d40a027bcee9780f20c0eb4b06699ef17248d23",
+    "docs/data_clean_dos/v14-s4-ab-report.json": "f497d9cb4b335a09df56889b3f1b99f56d0f8122532bf920de85bb9af74dd2cf",
+    "docs/data_clean_dos/v14-s5-real-model-ab-report.json": "ef6a1ba3ff9dc474581b82b937878de551564005a3db5fcb3939dd4c57fe5e7e",
+    ".scratch/corpus-access-validation/e4_scorer.py": "7d39a50551b86285876abe36e1c1cfe3a0c5948234743d1e4b044abb045ee2b9",
+    ".scratch/corpus-structure-restart/v14-control-verification.json": "72052fb8cff5332be812a730f33f992c04e258d5022f2349db578d13cb949379",
+    ".scratch/corpus-structure-restart/s4-candidate-verification.json": "a1d71d883f77dcb13596dcd1aa4ab84aef3ac8e7a0018230a01d323d0f711397",
+    "plugins/corpus/preparation/search_pg.py": "dadfd13974f8725ad8225a2ff616d615e958ea9a10d18e07acfc09065b8541fc",
+    "plugins/tools/corpus_fetch.py": "d83ca59293e0f37eb6ada85066b4d881214160b051651d9dc86bcf829008f0ce",
+    "plugins/corpus/research_discipline.py": "ae22df28a41414e2efdc9c087666d6bee884edc5f5ce2072e76352fbd7d203c5"
+  },
+  "non_user_dirty_paths_at_freeze": [
+    "?? .s5runs_v14_full/",
+    "?? .s5runs_v14_full_invalidated/",
+    "?? .scratch/corpus-structure-restart/s5_full_corpus_only.yaml",
+    "?? .scratch/corpus-structure-restart/s5_full_model_matrix.py",
+    "?? docs/data_clean_dos/v14-s5-full-matrix-manifest-invalidated-judge-auth-r1.json",
+    "?? docs/data_clean_dos/v14-s5-full-matrix-manifest-invalidated-prelaunch-r0.json",
+    "?? docs/data_clean_dos/v14-s5-full-matrix-manifest-superseded-judge-budget-r3.json",
+    "?? docs/data_clean_dos/v14-s5-full-matrix-manifest-superseded-judge-model-r2.json",
+    "?? docs/data_clean_dos/v14-s5-full-matrix-report.json"
+  ],
+  "superseded_reason": "Judge changed to official thinking-disabled JSON-object mode after repeated unparseable outputs; all existing answers will be rescored uniformly",
+  "answer_sessions_preserved": 16,
+  "accepted_judgments_before_uniform_rescore": 0
+}
