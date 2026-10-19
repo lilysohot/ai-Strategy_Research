@@ -81,3 +81,6 @@ server/dev.db
 server/*.db
 .codebuddy/
 .codebuddy/memory/MEMORY.md
+.e5runs
+.e5runs_e5
+.e5runs_e5_160401-failed-infra
