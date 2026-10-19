@@ -13,6 +13,11 @@
 [I0 细任务台账](claims-market-closed-loop-plan.md#i0-execution-ledger)；本文后续“本轮未执行/未生成”
 指 v1.1 设计修订时点，不覆盖此后执行事实。本次仅同步状态引用，不修改下列架构或放行门。
 
+2026-10-20 补充：语料质量重启轮已在 S4 冻结，并完成 204 次 S5 真实模型会话；项目负责人基于
+人工复核接受 Judge 已知局限，决定不再重测或执行 shadow rescore，按
+`CLOSED_WITH_HUMAN_ACCEPTED_JUDGE_EXCEPTIONS` 收口。该决定不修改本文的目标架构、生产发布门或
+Claims／R2 边界，详见[最终收口记录](../data_clean_dos/v14-s5-closure.md)。
+
 ## 0. 文档权威与本轮修订
 
 本文补齐讨论中的十项契约缺口，不表示已执行 I0、恢复演练、测试或架构冻结。文内表名、字段名、

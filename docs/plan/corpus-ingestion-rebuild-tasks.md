@@ -14,6 +14,12 @@ v1.1 任务分解评审时只修订依赖与验收表达；此后工作区已出
 
 ## 0. 执行状态入口
 
+**2026-10-20 语料质量重启轮收口。** S4 保持冻结；S5 已完成 204/204 个会话。项目负责人在
+人工复核 42 个 Judge 失败会话后接受现有 Judge 局限，决定不再重测或执行 shadow rescore，
+状态为 `CLOSED_WITH_HUMAN_ACCEPTED_JUDGE_EXCEPTIONS`。该记录只关闭本轮语料层清洗、切块、
+检索重启及评估，不改变生产切换和 Claims／R2 的独立门。证据见
+[v14 S5 最终收口记录](../data_clean_dos/v14-s5-closure.md)。
+
 **2026-09-24 I5-1 四场景复核执行完成（全绿；[总报告](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260924-i51-scenarios/i51-summary-report.json)（sha `1b571136…`）；i0c-r5o 冻结修订随本条入链）。**
 U 2026-09-24 批准范围（r5n m8_kickoff）：**全四场景 × 全部 8 个活动源**，源变化/新规则/复用解析
 在隔离环境执行；守卫 [i5-scenarios.json](../../.scratch/corpus-evidence-pipeline/ingestion-rebuild/guards/i5-scenarios.json)

@@ -1,5 +1,18 @@
 # 语料检索数据质量优化方案：先改善取证，再验证切块
 
+> **S5 全量矩阵收口（2026-10-20）**：冻结 204 次真实模型会话已全部正常完成；
+> 原始 Judge 为 control 39/51、candidate 123/153，报告按原协议保留
+> `full_matrix_quality_failed` / `release_ready: false`。人工复核 42 个失败会话后确认，基础检索和
+> 相关语料召回整体没有明显问题，失败主要混合了回答扩写、单条金标证据覆盖不足及 Markdown
+> 表格格式对 Judge 的干扰。42 个失败会话均获得候选来源；14 个失败回答含 Markdown 表格，但
+> 通过组也有 41 个表格回答，因此表格不是唯一根因。本轮不据此启动 OCR、向量、清洗或切块
+> 重建。项目负责人决定不再重测，也不执行 Judge shadow rescore；S4 保持冻结，本轮语料层优化与
+> 评估按已知 Judge 例外收口，状态记为 `CLOSED_WITH_HUMAN_ACCEPTED_JUDGE_EXCEPTIONS`。
+> 该收口不改写原始机器分数，不构成生产发布、Claims 或 R2 结构化提取放行。详见
+> [全量矩阵报告](v14-s5-full-matrix-report.json)、
+> [失败题目复核清单](v14-s5-failed-question-review.md)和
+> [人工复核结论](v14-s5-human-adjudication.md)、[最终收口记录](v14-s5-closure.md)。
+
 > **重启轮（v14 · 2026-10-17）**：S0 结构 shadow、S1 PDF 表关系、S2 引文送达、S3
 > 分页完整性和 S4 来源召回候选均已通过。control 已复现 42/51；S1 达到 46/51，S2 达到
 > 49/51，S3 达到 50/51，S4 在同一候选库达到 **51/51**（required 36/36、

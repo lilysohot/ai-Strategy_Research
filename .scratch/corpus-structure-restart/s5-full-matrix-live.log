@@ -1,0 +1,512 @@
+[preflight] control database={'current_database': 'e6_holdout_corpus', 'active_publications': 12}
+[preflight] control tools={'profile_tools': ['add_task', 'update_task', 'corpus_search', 'corpus_fetch', 'corpus_inventory'], 'effective_tools': ['add_task', 'update_task', 'corpus_search', 'corpus_fetch', 'corpus_inventory', 'corpus_submit_manifest']}
+[preflight] candidate database={'current_database': 'v14_s2_quote_corpus', 'active_publications': 12}
+[preflight] candidate tools={'profile_tools': ['add_task', 'update_task', 'corpus_search', 'corpus_fetch', 'corpus_inventory'], 'effective_tools': ['add_task', 'update_task', 'corpus_search', 'corpus_fetch', 'corpus_inventory', 'corpus_submit_manifest']}
+[freeze-check] validated /home/administrator/FrontierAgent/docs/data_clean_dos/v14-s5-full-matrix-manifest.json
+[preflight] Judge authentication and model routing succeeded
+[run 1/204] r1 c195233b-mt-h1 control
+[done] ok judge=pass offered=True fetched=True wall=395.3s
+[run 2/204] r1 c195233b-mt-h1 candidate
+[done] ok judge=pass offered=True fetched=True wall=242.9s
+[run 3/204] r1 c195233b-imt-q2 candidate
+[done] ok judge=pass offered=True fetched=True wall=698.6s
+[run 4/204] r1 c195233b-imt-q2 control
+[done] ok judge=pass offered=True fetched=True wall=419.6s
+[run 5/204] r1 c195233b-xlw control
+[done] ok judge=pass offered=True fetched=True wall=527.2s
+[run 6/204] r1 c195233b-xlw candidate
+[done] ok judge=pass offered=True fetched=True wall=304.3s
+[run 7/204] r1 c195233b-ktable candidate
+[done] ok judge=pass offered=True fetched=False wall=304.6s
+[run 8/204] r1 c195233b-ktable control
+[done] ok judge=pass offered=True fetched=False wall=582.5s
+[run 9/204] r1 f0e67b73-overview control
+[done] ok judge=pass offered=True fetched=True wall=749.0s
+[run 10/204] r1 f0e67b73-overview candidate
+[done] ok judge=pass offered=True fetched=True wall=259.6s
+[run 11/204] r1 f0e67b73-top5cust candidate
+[done] ok judge=pass offered=True fetched=True wall=153.9s
+[run 12/204] r1 f0e67b73-top5cust control
+[done] ok judge=pass offered=True fetched=True wall=325.2s
+[run 13/204] r1 f0e67b73-petable control
+[done] ok judge=pass offered=True fetched=True wall=279.7s
+[run 14/204] r1 f0e67b73-petable candidate
+[done] ok judge=pass offered=True fetched=True wall=784.8s
+[run 15/204] r1 f0e67b73-risk candidate
+[done] ok judge=pass offered=True fetched=True wall=405.4s
+[run 16/204] r1 f0e67b73-risk control
+[done] ok judge=pass offered=True fetched=True wall=234.4s
+[run 17/204] r1 c1ddcd8a-coalprice control
+[done] ok judge=pass offered=True fetched=True wall=217.8s
+[run 18/204] r1 c1ddcd8a-coalprice candidate
+[done] ok judge=pass offered=True fetched=True wall=142.0s
+[run 19/204] r1 c1ddcd8a-summarytable candidate
+[done] ok judge=pass offered=True fetched=True wall=569.3s
+[run 20/204] r1 c1ddcd8a-summarytable control
+[done] ok judge=fail offered=True fetched=False wall=680.4s
+[run 21/204] r1 c1ddcd8a-realestate control
+[done] ok judge=pass offered=True fetched=True wall=203.1s
+[run 22/204] r1 c1ddcd8a-realestate candidate
+[done] ok judge=pass offered=True fetched=True wall=147.5s
+[run 23/204] r1 c1ddcd8a-invest candidate
+[done] ok judge=pass offered=True fetched=True wall=354.2s
+[run 24/204] r1 c1ddcd8a-invest control
+[done] ok judge=pass offered=True fetched=True wall=437.3s
+[run 25/204] r1 b7e932c8-index control
+[done] ok judge=fail offered=True fetched=True wall=554.7s
+[run 26/204] r1 b7e932c8-index candidate
+[done] ok judge=fail offered=True fetched=True wall=583.7s
+[run 27/204] r1 b7e932c8-industry candidate
+[done] ok judge=pass offered=True fetched=True wall=356.3s
+[run 28/204] r1 b7e932c8-industry control
+[done] ok judge=pass offered=True fetched=True wall=427.5s
+[run 29/204] r1 b7e932c8-pmi control
+[done] ok judge=fail offered=True fetched=True wall=262.2s
+[run 30/204] r1 b7e932c8-pmi candidate
+[done] ok judge=pass offered=True fetched=True wall=143.0s
+[run 31/204] r1 b7e932c8-eptable candidate
+[done] ok judge=pass offered=True fetched=True wall=394.9s
+[run 32/204] r1 b7e932c8-eptable control
+[done] ok judge=pass offered=True fetched=True wall=364.5s
+[run 33/204] r1 0c25f0e9-figure35 control
+[done] ok judge=fail offered=True fetched=True wall=146.5s
+[run 34/204] r1 0c25f0e9-figure35 candidate
+[done] ok judge=pass offered=True fetched=True wall=315.3s
+[run 35/204] r1 0c25f0e9-dele candidate
+[done] ok judge=pass offered=True fetched=True wall=115.9s
+[run 36/204] r1 0c25f0e9-dele control
+[done] ok judge=pass offered=True fetched=True wall=140.7s
+[run 37/204] r1 0c25f0e9-musk control
+[done] ok judge=pass offered=True fetched=True wall=358.2s
+[run 38/204] r1 0c25f0e9-musk candidate
+[done] ok judge=pass offered=True fetched=True wall=446.6s
+[run 39/204] r1 0c25f0e9-turnover candidate
+[done] ok judge=pass offered=True fetched=True wall=145.0s
+[run 40/204] r1 0c25f0e9-turnover control
+[done] ok judge=pass offered=True fetched=True wall=110.3s
+[run 41/204] r1 0c25f0e9-eptable control
+[done] ok judge=pass offered=True fetched=False wall=217.6s
+[run 42/204] r1 0c25f0e9-eptable candidate
+[done] ok judge=fail offered=True fetched=False wall=195.9s
+[run 43/204] r1 f86c6d2c-cxo-h1 candidate
+[done] ok judge=pass offered=True fetched=True wall=553.4s
+[run 44/204] r1 f86c6d2c-cxo-h1 control
+[done] ok judge=pass offered=True fetched=True wall=215.5s
+[run 45/204] r1 f86c6d2c-wuqi-order control
+[done] ok judge=pass offered=True fetched=True wall=246.9s
+[run 46/204] r1 f86c6d2c-wuqi-order candidate
+[done] ok judge=fail offered=True fetched=True wall=315.5s
+[run 47/204] r1 f86c6d2c-medamt candidate
+[done] ok judge=pass offered=True fetched=True wall=82.2s
+[run 48/204] r1 f86c6d2c-medamt control
+[done] ok judge=pass offered=True fetched=True wall=307.6s
+[run 49/204] r1 f86c6d2c-cxotable control
+[done] ok judge=pass offered=True fetched=True wall=157.1s
+[run 50/204] r1 f86c6d2c-cxotable candidate
+[done] ok judge=pass offered=True fetched=True wall=139.7s
+[run 51/204] r1 f86c6d2c-glp1 candidate
+[done] ok judge=pass offered=True fetched=True wall=226.9s
+[run 52/204] r1 f86c6d2c-glp1 control
+[done] ok judge=pass offered=True fetched=True wall=227.4s
+[run 53/204] r1 a91d95c7-hbm control
+[done] ok judge=pass offered=True fetched=True wall=163.0s
+[run 54/204] r1 a91d95c7-hbm candidate
+[done] ok judge=pass offered=True fetched=True wall=211.9s
+[run 55/204] r1 a91d95c7-bytedance candidate
+[done] ok judge=pass offered=True fetched=True wall=321.6s
+[run 56/204] r1 a91d95c7-bytedance control
+[done] ok judge=pass offered=True fetched=True wall=328.8s
+[run 57/204] r1 a91d95c7-hbmprice control
+[done] ok judge=pass offered=True fetched=True wall=99.5s
+[run 58/204] r1 a91d95c7-hbmprice candidate
+[done] ok judge=pass offered=True fetched=True wall=115.3s
+[run 59/204] r1 a91d95c7-cxmt candidate
+[done] ok judge=fail offered=True fetched=False wall=747.4s
+[run 60/204] r1 a91d95c7-cxmt control
+[done] ok judge=fail offered=True fetched=False wall=958.7s
+[run 61/204] r1 5e305376-nonfarm control
+[done] ok judge=fail offered=True fetched=True wall=417.0s
+[run 62/204] r1 5e305376-nonfarm candidate
+[done] ok judge=pass offered=True fetched=True wall=564.9s
+[run 63/204] r1 5e305376-fedrate candidate
+[done] ok judge=pass offered=True fetched=True wall=209.3s
+[run 64/204] r1 5e305376-fedrate control
+[done] ok judge=pass offered=True fetched=True wall=209.8s
+[run 65/204] r1 5e305376-oil control
+[done] ok judge=pass offered=True fetched=True wall=271.6s
+[run 66/204] r1 5e305376-oil candidate
+[done] ok judge=pass offered=True fetched=True wall=158.3s
+[run 67/204] r1 5e305376-dxy candidate
+[done] ok judge=pass offered=True fetched=True wall=167.7s
+[run 68/204] r1 5e305376-dxy control
+[done] ok judge=pass offered=True fetched=True wall=315.0s
+[run 69/204] r1 5e305376-gdpnow control
+[done] ok judge=pass offered=True fetched=True wall=339.7s
+[run 70/204] r1 5e305376-gdpnow candidate
+[done] ok judge=pass offered=True fetched=True wall=560.1s
+[run 71/204] r1 f7f65d7e-payroll candidate
+[done] ok judge=pass offered=True fetched=True wall=340.2s
+[run 72/204] r1 f7f65d7e-payroll control
+[done] ok judge=pass offered=True fetched=True wall=366.4s
+[run 73/204] r1 f7f65d7e-cme control
+[done] ok judge=pass offered=True fetched=True wall=413.5s
+[run 74/204] r1 f7f65d7e-cme candidate
+[done] ok judge=pass offered=True fetched=True wall=698.6s
+[run 75/204] r1 f7f65d7e-alloc candidate
+[done] ok judge=fail offered=True fetched=True wall=803.1s
+[run 76/204] r1 f7f65d7e-alloc control
+[done] ok judge=pass offered=True fetched=True wall=647.0s
+[run 77/204] r1 f7f65d7e-risk control
+[done] ok judge=fail offered=True fetched=True wall=1463.6s
+[run 78/204] r1 f7f65d7e-risk candidate
+[done] ok judge=fail offered=True fetched=False wall=1114.3s
+[run 79/204] r1 d179b615-hikerate candidate
+[done] ok judge=fail offered=True fetched=True wall=791.1s
+[run 80/204] r1 d179b615-hikerate control
+[done] ok judge=fail offered=True fetched=True wall=750.6s
+[run 81/204] r1 d179b615-passive control
+[done] ok judge=fail offered=True fetched=True wall=751.8s
+[run 82/204] r1 d179b615-passive candidate
+[done] ok judge=pass offered=True fetched=True wall=745.6s
+[run 83/204] r1 d179b615-chart3 candidate
+[done] ok judge=fail offered=True fetched=False wall=868.6s
+[run 84/204] r1 d179b615-chart3 control
+[done] ok judge=pass offered=True fetched=False wall=708.1s
+[run 85/204] r1 d179b615-goldoil control
+[done] ok judge=pass offered=True fetched=True wall=459.1s
+[run 86/204] r1 d179b615-goldoil candidate
+[done] ok judge=pass offered=True fetched=True wall=780.2s
+[run 87/204] r1 2f8aa709-hike candidate
+[done] ok judge=pass offered=True fetched=True wall=270.3s
+[run 88/204] r1 2f8aa709-hike control
+[done] ok judge=pass offered=True fetched=True wall=369.2s
+[run 89/204] r1 2f8aa709-oil control
+[done] ok judge=fail offered=True fetched=True wall=491.7s
+[run 90/204] r1 2f8aa709-oil candidate
+[done] ok judge=pass offered=True fetched=True wall=765.7s
+[run 91/204] r1 2f8aa709-alloc candidate
+[done] ok judge=pass offered=True fetched=True wall=465.2s
+[run 92/204] r1 2f8aa709-alloc control
+[done] ok judge=pass offered=True fetched=True wall=1169.9s
+[run 93/204] r1 2f8aa709-fedtable control
+[done] ok judge=fail offered=True fetched=True wall=493.7s
+[run 94/204] r1 2f8aa709-fedtable candidate
+[done] ok judge=fail offered=True fetched=True wall=604.9s
+[run 95/204] r1 f3b28791-rotation candidate
+[done] ok judge=pass offered=True fetched=True wall=674.5s
+[run 96/204] r1 f3b28791-rotation control
+[done] ok judge=pass offered=True fetched=True wall=839.7s
+[run 97/204] r1 f3b28791-fedwatch control
+[done] ok judge=pass offered=True fetched=True wall=303.6s
+[run 98/204] r1 f3b28791-fedwatch candidate
+[done] ok judge=pass offered=True fetched=False wall=226.7s
+[run 99/204] r1 f3b28791-table1 candidate
+[done] ok judge=fail offered=True fetched=False wall=585.5s
+[run 100/204] r1 f3b28791-table1 control
+[done] ok judge=fail offered=True fetched=False wall=919.7s
+[run 101/204] r1 f3b28791-regression control
+[done] ok judge=pass offered=True fetched=True wall=595.4s
+[run 102/204] r1 f3b28791-regression candidate
+[done] ok judge=pass offered=True fetched=True wall=164.7s
+[run 103/204] r2 c195233b-mt-h1 candidate
+[preflight] control database={'current_database': 'e6_holdout_corpus', 'active_publications': 12}
+[preflight] control tools={'profile_tools': ['add_task', 'update_task', 'corpus_search', 'corpus_fetch', 'corpus_inventory'], 'effective_tools': ['add_task', 'update_task', 'corpus_search', 'corpus_fetch', 'corpus_inventory', 'corpus_submit_manifest']}
+[preflight] candidate database={'current_database': 'v14_s2_quote_corpus', 'active_publications': 12}
+[preflight] candidate tools={'profile_tools': ['add_task', 'update_task', 'corpus_search', 'corpus_fetch', 'corpus_inventory'], 'effective_tools': ['add_task', 'update_task', 'corpus_search', 'corpus_fetch', 'corpus_inventory', 'corpus_submit_manifest']}
+Traceback (most recent call last):
+  File "/home/administrator/FrontierAgent/.scratch/corpus-structure-restart/s5_full_model_matrix.py", line 1110, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/administrator/FrontierAgent/.scratch/corpus-structure-restart/s5_full_model_matrix.py", line 1009, in main
+    validate_manifest(
+  File "/home/administrator/FrontierAgent/.scratch/corpus-structure-restart/s5_full_model_matrix.py", line 364, in validate_manifest
+    raise RuntimeError(f"frozen asset drifted: {relative}")
+RuntimeError: frozen asset drifted: .scratch/corpus-structure-restart/s5_full_model_matrix.py
+
+[2026-10-19T15:07:51+08:00] switching to frozen-runner concurrent dispatcher (concurrency=2)
+[preflight] control database={'current_database': 'e6_holdout_corpus', 'active_publications': 12}
+[preflight] control tools={'profile_tools': ['add_task', 'update_task', 'corpus_search', 'corpus_fetch', 'corpus_inventory'], 'effective_tools': ['add_task', 'update_task', 'corpus_search', 'corpus_fetch', 'corpus_inventory', 'corpus_submit_manifest']}
+[preflight] candidate database={'current_database': 'v14_s2_quote_corpus', 'active_publications': 12}
+[preflight] candidate tools={'profile_tools': ['add_task', 'update_task', 'corpus_search', 'corpus_fetch', 'corpus_inventory'], 'effective_tools': ['add_task', 'update_task', 'corpus_search', 'corpus_fetch', 'corpus_inventory', 'corpus_submit_manifest']}
+[freeze-check] validated /home/administrator/FrontierAgent/docs/data_clean_dos/v14-s5-full-matrix-manifest.json
+[preflight] Judge authentication and model routing succeeded
+[resume] completed=102 pending=102 concurrency=2
+[round] repeat=2 pending=51
+[run 103/204] r2 c195233b-mt-h1 candidate[run 104/204] r2 c195233b-imt-q2 candidate
+
+[run 105/204] r2 c195233b-xlw candidate
+[done 104/204] ok judge=pass offered=True fetched=True wall=384.5s
+[run 106/204] r2 c195233b-ktable candidate
+[done 103/204] ok judge=pass offered=True fetched=True wall=432.6s
+[run 107/204] r2 f0e67b73-overview candidate
+[done 106/204] ok judge=pass offered=True fetched=False wall=306.0s
+[run 108/204] r2 f0e67b73-top5cust candidate
+[done 105/204] ok judge=pass offered=True fetched=True wall=409.2s
+[run 109/204] r2 f0e67b73-petable candidate
+[done 107/204] ok judge=pass offered=True fetched=True wall=335.6s
+[run 110/204] r2 f0e67b73-risk candidate
+[done 108/204] ok judge=pass offered=True fetched=True wall=319.9s
+[run 111/204] r2 c1ddcd8a-coalprice candidate
+[done 109/204] ok judge=pass offered=True fetched=True wall=422.6s
+[run 112/204] r2 c1ddcd8a-summarytable candidate
+[done 110/204] ok judge=pass offered=True fetched=True wall=229.2s
+[run 113/204] r2 c1ddcd8a-realestate candidate
+[done 111/204] ok judge=pass offered=True fetched=True wall=241.8s
+[run 114/204] r2 c1ddcd8a-invest candidate
+[done 112/204] ok judge=pass offered=True fetched=True wall=351.9s
+[run 115/204] r2 b7e932c8-index candidate
+[done 113/204] ok judge=pass offered=True fetched=True wall=475.9s
+[run 116/204] r2 b7e932c8-industry candidate
+[done 114/204] ok judge=pass offered=True fetched=True wall=648.8s
+[run 117/204] r2 b7e932c8-pmi candidate
+[done 116/204] ok judge=pass offered=True fetched=True wall=229.8s
+[run 118/204] r2 b7e932c8-eptable candidate
+[done 115/204] ok judge=fail offered=True fetched=True wall=645.4s
+[run 119/204] r2 0c25f0e9-figure35 candidate
+[done 117/204] ok judge=pass offered=True fetched=True wall=379.0s
+[run 120/204] r2 0c25f0e9-dele candidate
+[done 119/204] ok judge=pass offered=True fetched=True wall=70.7s
+[run 121/204] r2 0c25f0e9-musk candidate
+[done 120/204] ok judge=pass offered=True fetched=True wall=162.4s
+[run 122/204] r2 0c25f0e9-turnover candidate
+[done 118/204] ok judge=pass offered=True fetched=True wall=594.5s
+[run 123/204] r2 0c25f0e9-eptable candidate
+[done 122/204] ok judge=pass offered=True fetched=True wall=323.0s
+[run 124/204] r2 f86c6d2c-cxo-h1 candidate
+[done 123/204] ok judge=pass offered=True fetched=False wall=200.7s
+[run 125/204] r2 f86c6d2c-wuqi-order candidate
+[done 121/204] ok judge=pass offered=True fetched=True wall=620.9s
+[run 126/204] r2 f86c6d2c-medamt candidate
+[done 124/204] ok judge=pass offered=True fetched=True wall=486.8s
+[run 127/204] r2 f86c6d2c-cxotable candidate
+[done 126/204] ok judge=pass offered=True fetched=True wall=260.2s
+[run 128/204] r2 f86c6d2c-glp1 candidate
+[done 125/204] ok judge=pass offered=True fetched=True wall=785.1s
+[run 129/204] r2 a91d95c7-hbm candidate
+[done 128/204] ok judge=pass offered=True fetched=True wall=242.5s
+[run 130/204] r2 a91d95c7-bytedance candidate
+[done 127/204] ok judge=pass offered=True fetched=True wall=481.0s
+[run 131/204] r2 a91d95c7-hbmprice candidate
+[done 129/204] ok judge=pass offered=True fetched=True wall=479.9s
+[run 132/204] r2 a91d95c7-cxmt candidate
+[done 130/204] ok judge=pass offered=True fetched=True wall=399.9s
+[run 133/204] r2 5e305376-nonfarm candidate
+[done 131/204] ok judge=pass offered=True fetched=True wall=70.3s
+[run 134/204] r2 5e305376-fedrate candidate
+[done 133/204] ok judge=fail offered=True fetched=True wall=709.8s
+[run 135/204] r2 5e305376-oil candidate
+[done 134/204] ok judge=pass offered=True fetched=True wall=87.2s
+[run 136/204] r2 5e305376-dxy candidate
+[done 135/204] ok judge=pass offered=True fetched=True wall=231.6s
+[run 137/204] r2 5e305376-gdpnow candidate
+[done 132/204] ok judge=fail offered=True fetched=False wall=1111.2s
+[run 138/204] r2 f7f65d7e-payroll candidate
+[done 136/204] ok judge=pass offered=True fetched=True wall=147.6s
+
+[2026-10-19T17:04:35+08:00] switching to frozen-runner concurrent dispatcher (concurrency=3)
+[preflight] control database={'current_database': 'e6_holdout_corpus', 'active_publications': 12}
+[preflight] control tools={'profile_tools': ['add_task', 'update_task', 'corpus_search', 'corpus_fetch', 'corpus_inventory'], 'effective_tools': ['add_task', 'update_task', 'corpus_search', 'corpus_fetch', 'corpus_inventory', 'corpus_submit_manifest']}
+[preflight] candidate database={'current_database': 'v14_s2_quote_corpus', 'active_publications': 12}
+[preflight] candidate tools={'profile_tools': ['add_task', 'update_task', 'corpus_search', 'corpus_fetch', 'corpus_inventory'], 'effective_tools': ['add_task', 'update_task', 'corpus_search', 'corpus_fetch', 'corpus_inventory', 'corpus_submit_manifest']}
+[freeze-check] validated /home/administrator/FrontierAgent/docs/data_clean_dos/v14-s5-full-matrix-manifest.json
+[preflight] Judge authentication and model routing succeeded
+[resume] completed=136 pending=68 concurrency=3
+[round] repeat=2 pending=17
+[run 137/204] r2 5e305376-gdpnow candidate
+[run 138/204] r2 f7f65d7e-payroll candidate
+[run 139/204] r2 f7f65d7e-cme candidate
+[run 140/204] r2 f7f65d7e-alloc candidate
+[done 137/204] ok judge=pass offered=True fetched=True wall=261.2s
+[run 141/204] r2 f7f65d7e-risk candidate
+[done 138/204] ok judge=pass offered=True fetched=True wall=291.3s
+[run 142/204] r2 d179b615-hikerate candidate
+[done 139/204] ok judge=pass offered=True fetched=True wall=526.6s
+[run 143/204] r2 d179b615-passive candidate
+[done 142/204] ok judge=fail offered=True fetched=True wall=676.6s
+[run 144/204] r2 d179b615-chart3 candidate
+[done 141/204] ok judge=fail offered=True fetched=True wall=1082.1s
+[run 145/204] r2 d179b615-goldoil candidate
+[done 140/204] ok judge=pass offered=True fetched=True wall=716.5s
+[run 146/204] r2 2f8aa709-hike candidate
+[done 145/204] ok judge=pass offered=True fetched=True wall=237.6s
+[run 147/204] r2 2f8aa709-oil candidate
+[done 143/204] ok judge=fail offered=True fetched=True wall=695.4s
+[run 148/204] r2 2f8aa709-alloc candidate
+[done 146/204] ok judge=pass offered=True fetched=True wall=248.5s
+[run 149/204] r2 2f8aa709-fedtable candidate
+[done 144/204] ok judge=fail offered=True fetched=False wall=720.5s
+[run 150/204] r2 f3b28791-rotation candidate
+[done 149/204] ok judge=fail offered=True fetched=True wall=551.9s
+[run 151/204] r2 f3b28791-fedwatch candidate
+[done 147/204] ok judge=pass offered=True fetched=True wall=789.6s
+[run 152/204] r2 f3b28791-table1 candidate
+[done 148/204] ok judge=pass offered=True fetched=True wall=734.5s
+[run 153/204] r2 f3b28791-regression candidate
+[done 151/204] ok judge=pass offered=True fetched=True wall=317.7s
+[done 150/204] ok judge=fail offered=True fetched=True wall=517.9s
+[done 153/204] ok judge=pass offered=True fetched=True wall=334.1s
+[done 152/204] ok judge=fail offered=True fetched=False wall=627.6s
+[round] repeat=3 pending=51
+[run 154/204] r3 f3b28791-regression candidate
+[run 155/204] r3 f3b28791-table1 candidate
+[run 156/204] r3 f3b28791-fedwatch candidate
+[run 157/204] r3 f3b28791-rotation candidate
+[done 154/204] ok judge=pass offered=True fetched=True wall=384.4s
+[run 158/204] r3 2f8aa709-fedtable candidate
+[done 155/204] ok judge=fail offered=True fetched=False wall=553.5s
+[run 159/204] r3 2f8aa709-alloc candidate
+[done 157/204] ok judge=pass offered=True fetched=True wall=342.5s
+[run 160/204] r3 2f8aa709-oil candidate
+[done 156/204] ok judge=fail offered=True fetched=True wall=832.0s
+[run 161/204] r3 2f8aa709-hike candidate
+[done 158/204] ok judge=fail offered=True fetched=True wall=573.9s
+[run 162/204] r3 d179b615-goldoil candidate
+[done 161/204] ok judge=pass offered=True fetched=True wall=194.9s
+[run 163/204] r3 d179b615-chart3 candidate
+[done 160/204] ok judge=pass offered=True fetched=True wall=568.6s
+[run 164/204] r3 d179b615-passive candidate
+[done 162/204] ok judge=pass offered=True fetched=True wall=225.9s
+[run 165/204] r3 d179b615-hikerate candidate
+[done 159/204] ok judge=pass offered=True fetched=True wall=1010.0s
+[run 166/204] r3 f7f65d7e-risk candidate
+[done 164/204] ok judge=fail offered=True fetched=True wall=595.4s
+[run 167/204] r3 f7f65d7e-alloc candidate
+[done 163/204] ok judge=fail offered=True fetched=False wall=854.9s
+[run 168/204] r3 f7f65d7e-cme candidate
+[done 165/204] ok judge=pass offered=True fetched=True wall=766.1s
+[run 169/204] r3 f7f65d7e-payroll candidate
+[done 167/204] ok judge=pass offered=True fetched=True wall=306.3s
+[run 170/204] r3 5e305376-gdpnow candidate
+[done 169/204] ok judge=fail offered=True fetched=True wall=389.8s
+[run 171/204] r3 5e305376-dxy candidate
+[done 166/204] ok judge=fail offered=True fetched=True wall=818.3s
+[run 172/204] r3 5e305376-oil candidate
+[done 171/204] ok judge=pass offered=True fetched=True wall=117.3s
+[run 173/204] r3 5e305376-fedrate candidate
+[done 170/204] ok judge=pass offered=True fetched=True wall=235.4s
+[run 174/204] r3 5e305376-nonfarm candidate
+[done 168/204] ok judge=pass offered=True fetched=True wall=716.2s
+[run 175/204] r3 a91d95c7-cxmt candidate
+[done 173/204] ok judge=pass offered=True fetched=True wall=76.7s
+[run 176/204] r3 a91d95c7-hbmprice candidate
+[done 172/204] ok judge=pass offered=True fetched=True wall=212.8s
+[run 177/204] r3 a91d95c7-bytedance candidate
+[done 176/204] ok judge=pass offered=True fetched=True wall=150.5s
+[run 178/204] r3 a91d95c7-hbm candidate
+[done 177/204] ok judge=pass offered=True fetched=True wall=419.0s
+[run 179/204] r3 f86c6d2c-glp1 candidate
+[done 178/204] ok judge=pass offered=True fetched=True wall=109.7s
+[run 180/204] r3 f86c6d2c-cxotable candidate
+[done 174/204] ok judge=fail offered=True fetched=True wall=791.5s
+[run 181/204] r3 f86c6d2c-medamt candidate
+[done 175/204] ok judge=fail offered=True fetched=False wall=881.1s
+[run 182/204] r3 f86c6d2c-wuqi-order candidate
+[done 179/204] ok judge=pass offered=True fetched=True wall=356.7s
+[run 183/204] r3 f86c6d2c-cxo-h1 candidate
+[done 181/204] ok judge=pass offered=True fetched=True wall=194.9s
+[run 184/204] r3 0c25f0e9-eptable candidate
+[done 180/204] ok judge=pass offered=True fetched=True wall=500.9s
+[run 185/204] r3 0c25f0e9-turnover candidate
+[done 183/204] ok judge=pass offered=True fetched=True wall=329.2s
+[run 186/204] r3 0c25f0e9-musk candidate
+[done 184/204] ok judge=pass offered=True fetched=False wall=222.2s
+[run 187/204] r3 0c25f0e9-dele candidate
+[done 182/204] ok judge=pass offered=True fetched=True wall=435.5s
+[run 188/204] r3 0c25f0e9-figure35 candidate
+[done 185/204] ok judge=pass offered=True fetched=True wall=136.5s
+[run 189/204] r3 b7e932c8-eptable candidate
+[done 188/204] ok judge=pass offered=True fetched=True wall=106.0s
+[run 190/204] r3 b7e932c8-pmi candidate
+[done 187/204] ok judge=pass offered=True fetched=True wall=210.2s
+[run 191/204] r3 b7e932c8-industry candidate
+[done 186/204] ok judge=pass offered=True fetched=True wall=366.8s
+[run 192/204] r3 b7e932c8-index candidate
+[done 189/204] ok judge=pass offered=True fetched=True wall=366.5s
+[run 193/204] r3 c1ddcd8a-invest candidate
+[done 191/204] ok judge=pass offered=True fetched=True wall=275.2s
+[run 194/204] r3 c1ddcd8a-realestate candidate
+[done 190/204] ok judge=pass offered=True fetched=True wall=416.0s
+[run 195/204] r3 c1ddcd8a-summarytable candidate
+[done 194/204] ok judge=pass offered=True fetched=True wall=163.3s
+[run 196/204] r3 c1ddcd8a-coalprice candidate
+[done 193/204] ok judge=pass offered=True fetched=True wall=302.6s
+[run 197/204] r3 f0e67b73-risk candidate
+[done 192/204] ok judge=fail offered=True fetched=True wall=404.7s
+[run 198/204] r3 f0e67b73-petable candidate
+[done 195/204] ok judge=pass offered=True fetched=True wall=130.1s
+[run 199/204] r3 f0e67b73-top5cust candidate
+[done 197/204] ok judge=pass offered=True fetched=True wall=184.7s
+[run 200/204] r3 f0e67b73-overview candidate
+[done 196/204] ok judge=pass offered=True fetched=True wall=194.4s
+[run 201/204] r3 c195233b-ktable candidate
+[done 200/204] ok judge=pass offered=True fetched=True wall=160.2s
+[run 202/204] r3 c195233b-xlw candidate
+[done 199/204] ok judge=pass offered=True fetched=True wall=248.7s
+[run 203/204] r3 c195233b-imt-q2 candidate
+[done 198/204] ok judge=pass offered=True fetched=True wall=554.1s
+[run 204/204] r3 c195233b-mt-h1 candidate
+[done 202/204] ok judge=pass offered=True fetched=True wall=306.6s
+[done 201/204] ok judge=pass offered=True fetched=False wall=447.6s
+[done 203/204] ok judge=pass offered=True fetched=True wall=461.6s
+[done 204/204] ok judge=pass offered=True fetched=True wall=647.0s
+{
+  "control": {
+    "runs": 51,
+    "ok": 51,
+    "judge_pass": 39,
+    "source_offered": 51,
+    "quote_fetched": 45,
+    "quote_delivered": 45,
+    "wall_s": 22634.3,
+    "tool_calls": 760,
+    "tool_errors": 4,
+    "tool_calls_by_name": {
+      "add_task": 55,
+      "corpus_fetch": 267,
+      "corpus_inventory": 10,
+      "corpus_search": 148,
+      "corpus_submit_manifest": 81,
+      "update_task": 199
+    },
+    "tokens": {
+      "input": 17753979,
+      "output": 822015,
+      "cached": 15281472
+    },
+    "judge_tokens": {
+      "recorded_runs": 51,
+      "input": 51765,
+      "output": 3472
+    }
+  },
+  "candidate": {
+    "runs": 153,
+    "ok": 153,
+    "judge_pass": 123,
+    "source_offered": 153,
+    "quote_fetched": 136,
+    "quote_delivered": 137,
+    "wall_s": 64193.1,
+    "tool_calls": 2289,
+    "tool_errors": 11,
+    "tool_calls_by_name": {
+      "add_task": 160,
+      "corpus_fetch": 804,
+      "corpus_inventory": 12,
+      "corpus_search": 447,
+      "corpus_submit_manifest": 257,
+      "update_task": 609
+    },
+    "tokens": {
+      "input": 55470200,
+      "output": 2315509,
+      "cached": 48100480
+    },
+    "judge_tokens": {
+      "recorded_runs": 153,
+      "input": 173752,
+      "output": 10221
+    }
+  }
+}
+[report] /home/administrator/FrontierAgent/docs/data_clean_dos/v14-s5-full-matrix-report.json

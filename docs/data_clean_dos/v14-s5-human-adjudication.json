@@ -1,0 +1,45 @@
+{
+  "artifact": "v14-s5-human-adjudication",
+  "generated_at": "2026-10-20T00:11:49.2136078+08:00",
+  "status": "CLOSED_WITH_HUMAN_ACCEPTED_JUDGE_EXCEPTIONS",
+  "raw_matrix": {
+    "sessions": 204,
+    "non_ok": 0,
+    "control_pass": "39/51",
+    "candidate_pass": "123/153",
+    "decision_status": "full_matrix_quality_failed",
+    "release_ready": false
+  },
+  "human_review": {
+    "completed": true,
+    "failed_sessions_reviewed": 42,
+    "unique_questions": 19,
+    "conclusion": "Relevant corpus content and basic recall were substantially correct; raw judge failures mix answer expansion, narrow reference scope, and formatting complexity.",
+    "scope_limit": "Does not automatically validate every expanded claim or waive individual omissions and off-target answers."
+  },
+  "quantitative": {
+    "failed_source_offered": "42/42",
+    "failed_quote_fetched": "28/42",
+    "failed_quote_delivered": "31/42",
+    "failed_with_markdown_table": "14/42",
+    "passed_with_markdown_table": "41/162",
+    "judge_reason_explicitly_acknowledged_core_correct": "13/42"
+  },
+  "closure": {
+    "decided_by": "project_owner",
+    "decision_date": "2026-10-20",
+    "retest": false,
+    "shadow_rescore": false,
+    "s4_frozen": true,
+    "corpus_rebuild_started": false,
+    "production_release_authorized": false,
+    "claims_or_r2_release_authorized": false,
+    "accepted_exception": "Raw Judge failures are retained; known sensitivity to answer expansion, narrow reference evidence, and complex Markdown presentation is accepted for this closeout."
+  },
+  "next_gate": null,
+  "sha256": {
+    "raw_report": "393f0d46eb49cf0232780e7072b486570f947fbfb94de8360c75d5324afc3fda",
+    "failure_review": "fbcffd1090bc6c2b26039a80ad60cbf44a9e623792563dc95a3a40341af94a09",
+    "human_note": "1a37b28252b7f9fec239f43d5c387cbee4d1be3b66f16bdf9fff49239f32a8b2"
+  }
+}

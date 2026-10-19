@@ -1,0 +1,52 @@
+{
+  "artifact": "v14-s5-closure",
+  "closed_at": "2026-10-20",
+  "status": "CLOSED_WITH_HUMAN_ACCEPTED_JUDGE_EXCEPTIONS",
+  "scope": "corpus cleaning, chunking, retrieval restart, and S5 full-matrix evaluation",
+  "decision": {
+    "close_current_task": true,
+    "retest": false,
+    "shadow_rescore": false,
+    "rerun_answer_sessions": false,
+    "rewrite_raw_scores": false,
+    "s4_frozen": true,
+    "start_ocr_vector_clean_chunk_rebuild": false,
+    "production_release_authorized": false,
+    "claims_or_r2_release_authorized": false
+  },
+  "frozen_results": {
+    "sessions": 204,
+    "ok": 204,
+    "non_ok": 0,
+    "protocol_violations": 0,
+    "control_pass": "39/51",
+    "candidate_pass": "123/153",
+    "candidate_repeats": ["41/51", "41/51", "41/51"],
+    "raw_decision_status": "full_matrix_quality_failed",
+    "raw_release_ready": false
+  },
+  "human_adjudication": {
+    "failed_sessions_reviewed": 42,
+    "unique_questions": 19,
+    "failed_source_offered": "42/42",
+    "conclusion": "Basic retrieval and relevant corpus recall were accepted as substantially correct.",
+    "scope_limit": "This does not validate every expanded claim or authorize production, Claims, or R2 release."
+  },
+  "accepted_exceptions": [
+    "Judge sensitivity to answer expansion and narrow reference evidence",
+    "Judge sensitivity to complex Markdown presentation",
+    "Individual omissions, off-target content, and unsupported expansions remain in raw failures"
+  ],
+  "artifacts": {
+    "raw_matrix": "v14-s5-full-matrix-report.json",
+    "failure_review": "v14-s5-failed-question-review.md",
+    "failed_sessions": "v14-s5-failed-sessions.csv",
+    "human_adjudication": "v14-s5-human-adjudication.md"
+  },
+  "sha256": {
+    "raw_matrix": "393f0d46eb49cf0232780e7072b486570f947fbfb94de8360c75d5324afc3fda",
+    "failure_review": "fbcffd1090bc6c2b26039a80ad60cbf44a9e623792563dc95a3a40341af94a09",
+    "human_adjudication": "1a37b28252b7f9fec239f43d5c387cbee4d1be3b66f16bdf9fff49239f32a8b2"
+  },
+  "next_gate": null
+}
