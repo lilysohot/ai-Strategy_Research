@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import importlib
 import logging
-import os
 from pathlib import Path
 from types import TracebackType
 from typing import TYPE_CHECKING, Any
@@ -189,9 +188,10 @@ class BenchmarkSession:
         from plugins.tools import get_builtin_tools
 
         config = get_config()
-        os.makedirs("data", exist_ok=True)
 
-        # In-memory EventStore + ProcessManager (no DB writes).
+        # In-memory EventStore + ProcessManager (no DB writes). Keep bootstrap
+        # free of repository-relative writes: Web workers run with the repository
+        # mounted read-only and receive explicit writable run/workspace paths.
         event_store = EventStore()
         registry.register(EventStore, event_store)
         event_bus = EventBus()

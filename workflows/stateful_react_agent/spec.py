@@ -33,8 +33,12 @@ REACT_SPEC = PipelineSpec(
                     # Opaque previous-run dump transported by the server; the
                     # node validates it before replaying (issue 01 §9.4).
                     "replay_payload",
-                    # False for watch-triggered runs: they neither replay nor
-                    # write the continuity carrier (issue 01 §9.18 #1).
+                    # Read/write are separate for watch runs (issue 01 §13):
+                    # replay the human conversation, never persist raw monitor
+                    # messages over it. ``continuity_enabled`` remains as a
+                    # compatibility input for older direct workflow callers.
+                    "continuity_read_enabled",
+                    "continuity_write_enabled",
                     "continuity_enabled",
                 ],
             ),

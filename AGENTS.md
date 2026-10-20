@@ -179,7 +179,9 @@ The Web server's cross-turn model context is the opaque payload in
 presentation and audit transcript only. Do not recreate `history.txt`, inject a
 `conversation_history` field, or render `turns` back into the prompt: those paths
 were retired because they duplicate history and break prefix-cache stability.
-Watch-triggered runs neither read nor write the continuity carrier.
+Watch-triggered runs read the latest human continuity carrier so monitoring can
+reuse prior research, but never write their raw messages back; a later human turn
+therefore still inherits the last human-authored conversation state.
 
 The replay window is configured by `REPLAY_MAX_TURNS`, `REPLAY_MAX_TOKENS`, and
 `REPLAY_MAX_TURN_STEP` (defaults 10, half the model input limit, and 5). The token

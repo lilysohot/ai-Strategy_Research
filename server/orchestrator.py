@@ -787,29 +787,27 @@ class Orchestrator:
         continuity = "on"
         if session_uuid is not None:
             current = uuid.UUID(run_id) if _looks_like_uuid(run_id) else None
-            # Watch-triggered runs neither read nor write the continuity carrier
-            # (issue 01 §9.18 #1): the auto-analysis is rules-driven, so it keeps a
-            # clean, bounded context — and because it stores nothing, a later chat
-            # turn still reads the last *chat* payload instead of replaying the
-            # monitoring run.
+            # Watch-triggered runs read the latest chat carrier but never replace
+            # it (issue 01 §13): monitoring needs the research already completed
+            # in this session, while its raw tool trace must not become the next
+            # human turn's history.
             if current is not None and await is_watch_run(run_id=current):
-                continuity = "off"
-            else:
-                # Cross-turn continuity (issue 01 §11.4): one primary-key read of
-                # this session's stored conversation. No directory scanning, no
-                # in-process state — the payload is opaque here and is staged into
-                # this run's directory by ``_launch``. Best-effort: an unavailable
-                # store means this run starts a fresh conversation, never a failed
-                # launch.
-                try:
-                    prior_payload = await read_session_conversation(session_id=session_uuid)
-                except Exception:
-                    logger.warning(
-                        "could not read the stored conversation for session %s; "
-                        "starting without continuity",
-                        session_uuid,
-                        exc_info=True,
-                    )
+                continuity = "read"
+            # Cross-turn continuity (issue 01 §11.4/§13): one primary-key read of
+            # this session's stored conversation. No directory scanning, no
+            # in-process state — the payload is opaque here and is staged into
+            # this run's directory by ``_launch``. Best-effort: an unavailable
+            # store means this run starts a fresh conversation, never a failed
+            # launch.
+            try:
+                prior_payload = await read_session_conversation(session_id=session_uuid)
+            except Exception:
+                logger.warning(
+                    "could not read the stored conversation for session %s; "
+                    "starting without continuity",
+                    session_uuid,
+                    exc_info=True,
+                )
         params["_prior_payload"] = prior_payload
         params["_continuity"] = continuity
         handle: RunHandle | None = None
@@ -1066,10 +1064,10 @@ class Orchestrator:
         Nothing here parses the payload — the only inspection is a header probe so
         a foreign file cannot be stored under the continuity key.
         """
-        if continuity == "off":
-            # Watch-triggered runs also *write* nothing (issue 01 §9.18 #1): if
-            # they stored a payload, the next chat turn would replay the
-            # monitoring run's context instead of the conversation.
+        if continuity != "on":
+            # ``read`` is the watch mode (issue 01 §13): it may replay the
+            # session's chat carrier, but must never replace it with the
+            # monitoring run's raw messages. ``off`` remains fully disabled.
             return
         if not _looks_like_uuid(run_id) or session_uuid is None:
             return

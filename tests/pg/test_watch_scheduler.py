@@ -178,6 +178,7 @@ async def test_trigger_schedules_auto_run(case) -> None:
     assert outcome["status"] == "dispatching"
     assert outcome["run_id"]
     assert await run_count(case) == 1
+    assert await store.is_watch_run(run_id=uuid.UUID(outcome["run_id"])) is True
 
     async with biz.business_transaction() as session:
         event = (

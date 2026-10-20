@@ -1211,6 +1211,7 @@ class CorpusService:
         limit: int,
         *,
         lexemes: tuple[str, ...] = (),
+        lexical_fallback_hits: tuple[SearchPgHit, ...] | None = None,
     ) -> tuple[SearchPgHit, ...]:
         """Return one document-bound hit per selected evidence band.
 
@@ -1223,6 +1224,10 @@ class CorpusService:
         winner second, followed by the remaining structural order.  Bands are emitted
         round-robin by source so the first page retains source diversity; the public
         ``limit`` still bounds the total number of returned hits.
+
+        In hybrid mode, ``raw_hits`` already carries fused ranks. Its winning band
+        goes first and ``lexical_fallback_hits`` reserves the true lexical winner;
+        structural rescoring is disabled so vector-only evidence remains deliverable.
         """
         from dataclasses import replace as dataclass_replace
 
@@ -1231,7 +1236,16 @@ class CorpusService:
         if not raw_hits:
             return ()
         lexical_hits = raw_hits
-        if lexemes:
+        if lexical_fallback_hits is not None:
+            # Hybrid scores are reciprocal ranks, not ts_rank. Preserve the fused
+            # winner and reserve a second band for the actual lexical winner.
+            source_positions = {
+                sid: i for i, sid in enumerate(dict.fromkeys(hit.source_id for hit in raw_hits))
+            }
+            lexical_hits = tuple(
+                sorted(lexical_fallback_hits, key=lambda hit: source_positions[hit.source_id])
+            )
+        if lexemes and lexical_fallback_hits is None:
             # Keep document order lexical, but rank bands inside each document
             # by the established structural-overlap signal first.  The
             # fractional lexical component remains the tie-breaker.
@@ -1271,7 +1285,7 @@ class CorpusService:
             band_policy,
             chunk_order_by_source=chunk_order_by_source,
         )
-        if lexemes:
+        if lexemes or lexical_fallback_hits is not None:
             # Structural labels are valuable for row/column questions, but generic labels such
             # as ``行业`` and ``涨幅`` occur on many table bands.  With five source documents and
             # a ten-hit response, round-robin emits only two bands per source; an otherwise
@@ -1426,12 +1440,29 @@ class CorpusService:
         if not candidate_query:
             candidate_query = query
 
-        raw_hits, chunk_order, coverage = read_pg.search_with_coverage_bands(
-            self._dsn,
-            candidate_query,
-            limit=max(limit, _SELECTION_POOL_MIN),
-            sandbox_db=self._target_db,
-        )
+        from plugins.corpus.preparation.negative_query import is_corpus_availability_query
+
+        mode = os.environ.get("CORPUS_RETRIEVAL_MODE", "lexical").strip().lower()
+        if mode not in ("lexical", "hybrid"):
+            raise StoreError("CORPUS_RETRIEVAL_MODE must be lexical or hybrid")
+        lexical_fallback_hits = None
+        if mode == "hybrid" and not is_corpus_availability_query(query):
+            from plugins.corpus.retrieval.hybrid import search as hybrid_search
+
+            raw_hits, chunk_order, coverage, lexical_fallback_hits = hybrid_search(
+                self._dsn,
+                candidate_query,
+                original_query=query,
+                limit=max(limit, _SELECTION_POOL_MIN),
+                sandbox_db=self._target_db,
+            )
+        else:
+            raw_hits, chunk_order, coverage = read_pg.search_with_coverage_bands(
+                self._dsn,
+                candidate_query,
+                limit=max(limit, _SELECTION_POOL_MIN),
+                sandbox_db=self._target_db,
+            )
         if self._abstain_decision(query):
             abstain_cov = read_pg.coverage_snapshot(
                 self._dsn,
@@ -1441,7 +1472,13 @@ class CorpusService:
             abstain_cov.update({"abstain": True, "abstain_reason": "no_answer_rejected"})
             return [], abstain_cov
         # 生产默认（i0c-r4n U 决策）：band 选带 → 带内原文序块摊平为逐块命中。
-        raw_hits = self._selected_context_hits(raw_hits, chunk_order, limit, lexemes=lexemes)
+        raw_hits = self._selected_context_hits(
+            raw_hits,
+            chunk_order,
+            limit,
+            lexemes=lexemes,
+            lexical_fallback_hits=lexical_fallback_hits,
+        )
         table_sources = {
             hit.source_id: (hit.build_id, chunk_order[hit.source_id])
             for hit in raw_hits

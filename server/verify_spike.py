@@ -156,8 +156,8 @@ def check_a6(baseline: list[str]) -> tuple[str, str]:
     if offenders:
         return FAIL, "spike wrote outside server/: " + "; ".join(offenders)
 
-    # data/ is created by BenchmarkSession._bootstrap at CWD and is gitignored,
-    # so it never shows up above — say so explicitly rather than look clean.
+    # Explicitly report ignored CWD directories when present. BenchmarkSession
+    # no longer creates them; another path doing so must remain visible here.
     side_effects = [p for p in ("data", "logs") if (REPO_ROOT / p).is_dir()]
     note = f"; CWD side effects (gitignored): {', '.join(side_effects)}" if side_effects else ""
     return PASS, f"no new changes outside server/{note}"

@@ -958,11 +958,12 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     # what lets the provider reuse the conversation prefix (issue 01 §9.4/§9.15).
     loop_user_message = f"{question}{run_tail_notes}" if run_tail_notes else question
 
-    # Watch-triggered runs switch the continuity carrier off in BOTH directions
-    # (issue 01 §9.18 #1): a rules-driven investment analysis keeps a clean,
-    # bounded context, and leaving no dump behind keeps a later chat turn from
-    # replaying the monitoring run instead of the conversation.
-    continuity_enabled = state.get("continuity_enabled", True) is not False
+    # Watch-triggered runs read the human conversation but do not write their raw
+    # tool trace back (issue 01 §13). The legacy combined flag keeps direct
+    # workflow callers compatible; new Web workers always send both directions.
+    legacy_continuity = state.get("continuity_enabled", True) is not False
+    continuity_read_enabled = state.get("continuity_read_enabled", legacy_continuity) is not False
+    continuity_write_enabled = state.get("continuity_write_enabled", legacy_continuity) is not False
 
     event_store = registry.get_optional(EventStore)
     model_name = extract_model_name(llm)
@@ -990,7 +991,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
             pipeline_id="stateful-react-agent",
         ),
     ]
-    if continuity_enabled:
+    if continuity_write_enabled:
         # Cross-turn continuity (issue 01 §9.3): the exact message list this loop
         # ends with, for the next turn to replay. Written beside the run's other
         # artifacts; the server layer only transports it.
@@ -1186,7 +1187,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     # history it never saw.
     replay_payload = str(state.get("replay_payload") or "")
     replay_decision: dict[str, Any]
-    if continuity_enabled:
+    if continuity_read_enabled:
         replay_messages, replay_decision = select_replay(
             replay_payload,
             system_prompt=system_prompt,
@@ -1200,7 +1201,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         )
     else:
         replay_messages = None
-        replay_decision = {"decision": "skipped", "reason": "continuity_disabled"}
+        replay_decision = {"decision": "skipped", "reason": "continuity_read_disabled"}
     if replay_payload:
         logger.info(
             "stateful_react replay %s%s",

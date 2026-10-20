@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+
 import pytest
 
 from benchmarks.public.core.kernel_adapter import BenchmarkSession
@@ -25,6 +27,20 @@ async def test_benchmark_session_bootstraps_team_runtime(monkeypatch: pytest.Mon
     monkeypatch.setenv("OPENAI_BASE_URL", "http://127.0.0.1:9/v1")
     monkeypatch.setenv("OPENAI_MODEL", "test")
     before = registry.snapshot()
+
+    # Web workers mount the repository read-only. The benchmark adapter used to
+    # create a legacy relative data directory before the first model call,
+    # which failed with EROFS even though its EventStore is in memory.
+    real_makedirs = os.makedirs
+
+    def reject_legacy_data_dir(
+        path: os.PathLike[str] | str, *args: object, **kwargs: object
+    ) -> None:
+        if os.fspath(path) == "data":
+            raise AssertionError("bootstrap must not write a repository-relative data directory")
+        real_makedirs(path, *args, **kwargs)
+
+    monkeypatch.setattr(os, "makedirs", reject_legacy_data_dir)
 
     async with BenchmarkSession():
         pipelines = registry.get(PipelineRegistry)

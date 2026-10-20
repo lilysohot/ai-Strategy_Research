@@ -782,22 +782,28 @@ async def test_ingest_refuses_a_file_that_is_not_a_dump(db, tmp_path, monkeypatc
 
 
 @pytest.mark.asyncio
-async def test_ingest_is_off_for_watch_runs(db, tmp_path, monkeypatch) -> None:
-    """Watch runs write nothing — not even to the new carrier (§9.18 #1)."""
+async def test_read_only_ingest_does_not_replace_the_chat_carrier(
+    db, tmp_path, monkeypatch
+) -> None:
+    """A monitor may read the chat carrier but can never replace it (§13)."""
     from server import orchestrator as orch_mod
-    from server.store import read_session_conversation
+    from server.store import read_session_conversation, upsert_session_conversation
 
     run_hex = uuid.uuid4().hex
     run_root = tmp_path / run_hex
-    dump = _write_dump(run_root, '{"schema": "conversation-dump/1"}')
+    dump = _write_dump(run_root, '{"schema": "conversation-dump/1", "marker": "monitor"}')
     monkeypatch.setattr(orch_mod, "run_dir_for", lambda _rid: run_root)
     session_uuid = await _session_for_ingest(db)
+    original = '{"schema": "conversation-dump/1", "marker": "chat"}'
+    await upsert_session_conversation(
+        session_id=session_uuid, payload=original, run_id=uuid.uuid4()
+    )
 
     orch = orch_mod.Orchestrator()
-    await orch._ingest_conversation(run_hex, session_uuid=session_uuid, continuity="off")
+    await orch._ingest_conversation(run_hex, session_uuid=session_uuid, continuity="read")
 
-    assert await read_session_conversation(session_id=session_uuid) is None
-    assert dump.exists(), "a switched-off ingest must not touch the file either"
+    assert await read_session_conversation(session_id=session_uuid) == original
+    assert dump.exists(), "a read-only ingest must not touch a stray monitor dump"
 
 
 @pytest.mark.asyncio
@@ -905,17 +911,19 @@ def test_the_react_spec_lets_the_replay_payload_reach_the_node() -> None:
         {
             "original_question": "q",
             "replay_payload": '{"schema": "x"}',
-            "continuity_enabled": False,
+            "continuity_read_enabled": True,
+            "continuity_write_enabled": False,
             "unrelated": 1,
         },
     )
 
     assert filtered["replay_payload"] == '{"schema": "x"}'
-    assert filtered["continuity_enabled"] is False
+    assert filtered["continuity_read_enabled"] is True
+    assert filtered["continuity_write_enabled"] is False
     assert "unrelated" not in filtered
 
 
-# ── watch-triggered runs keep the carrier out of both directions ─────
+# ── watch-triggered runs read chat context without replacing it ──────
 
 
 async def _new_user_id() -> uuid.UUID:
@@ -940,17 +948,12 @@ async def test_is_watch_run_is_false_for_an_ordinary_run(db) -> None:
 
 
 @pytest.mark.asyncio
-async def test_a_watch_run_skips_the_continuity_carrier(db, tmp_path, monkeypatch):
-    """Watch-triggered runs are excluded in BOTH directions (issue 01 §9.18 #1).
+async def test_a_watch_run_reads_the_chat_carrier_without_replacing_it(db, tmp_path, monkeypatch):
+    """Watch runs replay the authoritative chat row in read-only mode (§13).
 
-    They must not replay the chat — a rules-driven investment analysis keeps a
-    clean, bounded context — and they must store nothing either, or the next chat
-    turn would replay the monitoring run's context and lose the conversation.
-
-    Since issue 01 §11 both directions run through the session store, and the chat
-    arm doubles as proof of *which* carrier is authoritative: the dump left on
-    disk here says one thing, the session row another, and the read side must
-    follow the row.
+    The monitor needs the research already completed in this session. Its own raw
+    messages remain excluded from the write side, so the next human turn still
+    reads this same chat payload.
     """
     from unittest.mock import AsyncMock
 
@@ -1057,15 +1060,13 @@ async def test_a_watch_run_skips_the_continuity_carrier(db, tmp_path, monkeypatc
         prompt="监控触发：x",
         user_id=user_id,
     )
-    assert captured[watch_run]["_continuity"] == "off"
-    # ... even though a payload *is* stored: the watch branch must skip the read.
-    assert captured[watch_run]["_prior_payload"] is None
+    assert captured[watch_run]["_continuity"] == "read"
+    assert captured[watch_run]["_prior_payload"] == stored
 
 
 @pytest.mark.asyncio
-async def test_worker_reports_the_continuity_flag_to_the_workflow(db, tmp_path, monkeypatch):
-    """``--continuity off`` (watch-triggered runs) must arrive as state, because
-    the node — not the worker — decides both halves (issue 01 §9.18 #1)."""
+async def test_worker_reports_read_only_continuity_to_the_workflow(db, tmp_path, monkeypatch):
+    """``--continuity read`` reaches the workflow as two explicit directions."""
     import os
     import uuid as _uuid
     from argparse import Namespace
@@ -1114,7 +1115,7 @@ async def test_worker_reports_the_continuity_flag_to_the_workflow(db, tmp_path, 
         api_key="",
         agent_tools="",
         business_prefix=1,
-        continuity="off",
+        continuity="read",
     )
     env_snapshot = dict(os.environ)
     try:
@@ -1123,7 +1124,68 @@ async def test_worker_reports_the_continuity_flag_to_the_workflow(db, tmp_path, 
         os.environ.clear()
         os.environ.update(env_snapshot)
 
-    assert captured["extra_input"]["continuity_enabled"] is False
+    assert captured["extra_input"]["continuity_read_enabled"] is True
+    assert captured["extra_input"]["continuity_write_enabled"] is False
+
+
+@pytest.mark.asyncio
+async def test_read_only_node_replays_without_registering_a_snapshot(tmp_path, monkeypatch):
+    """Read-only mode reaches the loop with history and no dump producer."""
+    from workflows.stateful_react_agent.nodes import main_agent as node
+
+    monkeypatch.setattr(
+        node,
+        "_resolve_llm_and_profile",
+        lambda *args, **kwargs: (
+            SimpleNamespace(model_name="mock"),
+            {"agent": {"direct": True, "replay_max_tokens": 0}},
+            None,
+        ),
+    )
+    monkeypatch.setattr(
+        node, "registry", SimpleNamespace(get=lambda _: None, get_optional=lambda _: None)
+    )
+    monkeypatch.setattr(node, "_tools_for_stateful_react", lambda *args: [])
+    monkeypatch.setattr(node, "get_direct_system_prompt", lambda: _SYSTEM)
+    monkeypatch.setattr(node, "resolve_sandbox_mode", lambda _: "bwrap")
+    monkeypatch.setattr(node, "_resolve_worktree_root", lambda *args: tmp_path)
+    monkeypatch.setattr(node, "_resolve_sandbox_binds", lambda *args: ((), tmp_path / "outputs"))
+    monkeypatch.setattr(node, "_resolve_trajectory_dir", lambda *args: tmp_path / "trace")
+    monkeypatch.setattr(
+        node, "_resolve_conversation_path", lambda *args: tmp_path / "conversation.json"
+    )
+    document = _dump(
+        messages=[system_msg(_SYSTEM), user_msg("prior q"), assistant_msg("prior a")],
+        tool_names=[],
+        tools_hash=tool_schema_sha256([]),
+        node_id="react_agent",
+    )
+
+    class LoopReached(Exception):
+        pass
+
+    async def loop(**kwargs):
+        assert kwargs["initial_messages"] == document["messages"]
+        assert not any(
+            isinstance(observer, ConversationSnapshotObserver) for observer in kwargs["observers"]
+        )
+        raise LoopReached
+
+    monkeypatch.setattr(node, "run_agent_loop", loop)
+    import apodex.session
+
+    monkeypatch.setattr(apodex.session, "run_agent_loop", loop)
+    with pytest.raises(LoopReached):
+        await node.react_agent_node(
+            {
+                "original_question": "monitor trigger",
+                "replay_payload": canonical_json(document),
+                "continuity_read_enabled": True,
+                "continuity_write_enabled": False,
+                "metadata": {"session_id": _SESSION},
+            },
+            SimpleNamespace(task_id="watch-read-only"),
+        )
 
 
 # ── the worker's half of the transport chain ─────────────────────────

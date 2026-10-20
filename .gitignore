@@ -86,3 +86,16 @@ server/*.db
 .e5runs_e5_160401-failed-infra
 .s5runs_v14_full
 .s5runs_v14_full_invalidated
+
+# ── .scratch 本地运行产物（pilot 构建/日志）────────────────────────────
+# .scratch/ 本身是仓库文档化的（spec.md / issues/ / report.md 被 docs 引用），
+# 故不整目录忽略，仅忽略 pilot 目录下的中间产物；report.md 与 *.py 仍可提交。
+.scratch/corpus-vector-pilot-20261020/*.log
+.scratch/corpus-vector-pilot-20261020/*.pid
+.scratch/corpus-vector-pilot-20261020/build-results.json
+.scratch/corpus-vector-pilot-20261020/vector-build-*.json
+.scratch/corpus-vector-pilot-20261020/vector-eval-*.json
+.scratch/corpus-vector-pilot-20261020/vector-*.log
+.scratch/corpus-vector-acceptance-20261020/
+.scratch/corpus-vector-pilot-20261020/
+.scratch/corpus-contextual-prefix-20261020

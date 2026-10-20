@@ -2559,11 +2559,9 @@ async def close_open_controls(
 async def is_watch_run(*, run_id: uuid.UUID) -> bool:
     """Was this Run created by a monitoring event (DATA-11)?
 
-    Watch-triggered auto-analysis shares the research's session, but it must not
-    inherit the conversation: it is a rules-driven investment analysis, so its
-    context has to stay clean and its prompt must not grow with the user's chat.
-    The orchestrator uses this to keep the conversation-continuity carrier out of
-    both directions (issue 01 §9.18 #1).
+    Watch-triggered auto-analysis shares the research's session. The orchestrator
+    uses this identity to select read-only continuity (issue 01 §13): replay the
+    latest human conversation, but never replace it with the monitor's raw trace.
     """
     async with get_sessionmaker()() as session:
         row = (

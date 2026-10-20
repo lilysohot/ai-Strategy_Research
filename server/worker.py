@@ -562,6 +562,7 @@ async def run_once(args: argparse.Namespace) -> int:
 
         instruction = f"{instruction}\n\n{render_context_data(investment_context)}"
 
+    continuity_mode = (getattr(args, "continuity", "on") or "on").strip().lower()
     try:
         async with BenchmarkSession() as session:
             state = await asyncio.wait_for(
@@ -570,9 +571,10 @@ async def run_once(args: argparse.Namespace) -> int:
                     meta=metadata,
                     pipeline_id=args.pipeline_id,
                     extra_input={
-                        # Watch-triggered runs are told to keep the carrier out
-                        # (issue 01 §9.18 #1); everyone else leaves it on.
-                        "continuity_enabled": (getattr(args, "continuity", "on") or "on") != "off",
+                        # Watch mode is read-only (issue 01 §13): it can replay
+                        # the chat carrier but cannot write its raw trace back.
+                        "continuity_read_enabled": continuity_mode != "off",
+                        "continuity_write_enabled": continuity_mode == "on",
                         **({"replay_payload": replay_payload} if replay_payload else {}),
                     },
                 ),
@@ -686,9 +688,9 @@ def main() -> int:
     # prefix config; omitted (``None``) keeps the legacy per-run behaviour for
     # callers that do not send it.
     parser.add_argument("--business-prefix", type=int, default=None, choices=(0, 1))
-    # Cross-turn continuity carrier (issue 01 §9.18): watch-triggered runs pass
-    # ``off`` so they neither replay the conversation nor leave a dump behind.
-    parser.add_argument("--continuity", default="on", choices=("on", "off"))
+    # Cross-turn continuity carrier (issue 01 §13): watch-triggered runs pass
+    # ``read`` so they replay the chat conversation without leaving a dump.
+    parser.add_argument("--continuity", default="on", choices=("on", "read", "off"))
     args = parser.parse_args()
 
     # CWD = repo root is mandatory for workflow discovery.
