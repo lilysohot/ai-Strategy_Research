@@ -1,7 +1,7 @@
 {
   "artifact": "v14-s4-production-cutover",
   "schema": "corpus-v14-s4-production-cutover-v1",
-  "status": "DEPLOYED_ENHANCED_MONITORING",
+  "status": "DEPLOYED_USER_WEB_TESTING",
   "cutover_started_at": "2026-10-20T11:37:42+08:00",
   "ready_at": "2026-10-20T11:37:45+08:00",
   "old_runtime": {
@@ -262,18 +262,22 @@
     "checkout": "/home/administrator/FrontierAgent-prod-pre-rc1",
     "commit": "d06ad598d64ced3052da383a12f3ad5101491a63",
     "dependencies_synced": true,
-    "automatic_hard_gate_rollback_armed": true,
+    "automatic_hard_gate_rollback_armed": false,
     "database_restore_on_normal_rollback": false
   },
   "monitoring": {
-    "status": "MONITORING",
+    "status": "STOPPED_BY_USER_FOR_WEB_TEST",
     "started_at": "2026-10-20T03:39:56.744286+00:00",
     "planned_end_at": "2026-10-20T05:39:56.744286+00:00",
     "interval_seconds": 60,
-    "samples_completed_at_record": 1,
+    "samples_completed_at_record": 70,
     "warnings_at_record": 0,
     "hard_failures_at_record": 0,
     "checkpoint": ".scratch/corpus-structure-restart/cutover-20261020/enhanced-monitor.json",
-    "heartbeat_automation_id": "s4"
+    "heartbeat_automation_id": null,
+    "stopped_at": "2026-10-20T04:49:49.788921+00:00",
+    "stop_reason": "User requested monitoring stop before running Web tests; production remained live.",
+    "warnings_at_stop": 0,
+    "hard_failures_at_stop": 0
   }
 }

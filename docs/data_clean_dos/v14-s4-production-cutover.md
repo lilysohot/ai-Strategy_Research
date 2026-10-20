@@ -1,6 +1,6 @@
 # V14 S4 生产切换记录
 
-状态：`DEPLOYED_ENHANCED_MONITORING`
+状态：`DEPLOYED_USER_WEB_TESTING`
 
 ## 执行结果
 
@@ -32,7 +32,7 @@ build、7,128 个 unit、1,214 个 chunk、8 个 publication、42 个 job、0 �
 `d06ad598d64ced3052da383a12f3ad5101491a63`，依赖已经按 lockfile 安装。强化监控遇到硬门时会
 正常终止 RC1 并从该工作树恢复 8000；常规代码回滚不恢复数据库。
 
-## 当前监控
+## 监控记录
 
 两小时强化监控从 2026-10-20 11:39:56 持续到 13:39:56（Asia/Shanghai），每分钟检查：
 
@@ -42,9 +42,10 @@ build、7,128 个 unit、1,214 个 chunk、8 个 publication、42 个 job、0 �
 - 8 组活动 publication/build 对；
 - running job 保持为 0。
 
-本地 watchdog 会按 Runbook 的硬门触发代码回滚；任务 heartbeat `s4` 每 15 分钟检查一次状态，
-正常时保持静默，异常或两小时结束时通知。两小时无红线后状态可改为 `DEPLOYED_2H_PASSED`；
-24 小时稳定观察完成后才能标记为稳定上线。
+强化监控运行至 2026-10-20 12:49:49，共完成 70 个一分钟采样，全部通过，警告 0、硬故障 0。
+随后按用户要求停止 watchdog 和任务 heartbeat，以便用户自行执行 Web 测试；生产 8000 未停止，
+没有触发回滚。由于强化监控在两小时门限前主动停止，本次不能标记为 `DEPLOYED_2H_PASSED`；
+当前状态记录为 `DEPLOYED_USER_WEB_TESTING`。
 
 完整的切换前后快照、探针与进程记录见
 [机器可读切换记录](v14-s4-production-cutover.json)。预切换证据见

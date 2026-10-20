@@ -4,8 +4,8 @@
 > `/home/administrator/FrontierAgent-rc1` 启动，运行提交 `58260fbc…`；健康和就绪均为 200。
 > 切换前后数据库身份、9 张 corpus 表计数及 8 组活动 publication/build 完全一致，切换后
 > 6/6 只读 search/fetch 探针通过。未执行 DDL、rebuild、publish 或数据指针变更。当前状态为
-> `DEPLOYED_ENHANCED_MONITORING`，两小时强化监控和自动硬门回滚已启动；24 小时稳定观察完成后
-> 才标记为稳定上线。详见[生产切换记录](v14-s4-production-cutover.md)和
+> `DEPLOYED_USER_WEB_TESTING`。强化监控完成 70 个一分钟采样，全部通过，随后按用户要求停止，
+> 生产服务保持运行，供用户执行 Web 测试。详见[生产切换记录](v14-s4-production-cutover.md)和
 > [机器可读记录](v14-s4-production-cutover.json)。
 
 > **S4 RC1 只读预切换验证（2026-10-20）**：冻结 RC1 已在独立工作树启动 8001，
