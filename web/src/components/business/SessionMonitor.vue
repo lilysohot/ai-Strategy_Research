@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { monitor, watchRules, type MonitorStatus } from '@/api'
-import type { WatchRule } from '@/types'
-import { activeMonitorRunId } from '@/utils/monitor'
+import { link as researchLink, monitor, watchRules, type MonitorStatus } from '@/api'
+import type { ResearchLink, WatchRule } from '@/types'
+import {
+  activeMonitorRunId,
+  autoAnalysisBindingIssue,
+  type MonitorBindingState,
+} from '@/utils/monitor'
 import RunDetailView from '@/views/RunDetailView.vue'
 
 const props = defineProps<{ researchId: string }>()
@@ -15,6 +19,8 @@ const error = ref('')
 const saving = ref(false)
 const editing = ref<string | null>(null)
 const showForm = ref(false)
+const binding = ref<ResearchLink | null>(null)
+const bindingState = ref<MonitorBindingState>('loading')
 let timer: ReturnType<typeof setInterval> | null = null
 let epoch = 0
 let loading = false
@@ -24,6 +30,9 @@ let operationPayload = ''
 const form = reactive({ symbol: '', direction: 'up', threshold: '', upper: '', expires: '', action: 'notify',
   task: '', alreadyMet: 'wait_requalify' })
 const current = computed(() => status.value?.rules ?? [])
+const autoAnalysisIssue = computed(() =>
+  autoAnalysisBindingIssue(binding.value, bindingState.value),
+)
 const health = computed(() => {
   if (error.value) return error.value
   if (!status.value) return '正在读取监控状态'
@@ -68,9 +77,18 @@ async function load(): Promise<void> {
   loading = true
   const id = props.researchId
   const requestEpoch = epoch
+  if (binding.value?.research_id !== id) {
+    binding.value = null
+    bindingState.value = 'loading'
+  }
+  const [monitorResult, bindingResult] = await Promise.allSettled([
+    monitor.status(id),
+    researchLink.get(id),
+  ])
   try {
-    const result = await monitor.status(id)
     if (requestEpoch !== epoch) return
+    if (monitorResult.status === 'rejected') throw monitorResult.reason
+    const result = monitorResult.value
     status.value = result
     error.value = ''
     const fingerprint = result.events.filter(e => e.run_id).map(e => `${e.run_id}:${e.status}`).join('|')
@@ -81,7 +99,29 @@ async function load(): Promise<void> {
   } catch (err) {
     if (requestEpoch === epoch) error.value = err instanceof Error ? err.message : '读取监控失败'
   } finally {
+    if (requestEpoch === epoch) {
+      if (bindingResult.status === 'fulfilled') {
+        binding.value = bindingResult.value
+        bindingState.value = 'ready'
+      } else {
+        bindingState.value = 'error'
+      }
+    }
     loading = false
+  }
+}
+
+async function refreshBinding(): Promise<void> {
+  const id = props.researchId
+  const requestEpoch = epoch
+  bindingState.value = 'loading'
+  try {
+    const result = await researchLink.get(id)
+    if (requestEpoch !== epoch || id !== props.researchId) return
+    binding.value = result
+    bindingState.value = 'ready'
+  } catch {
+    if (requestEpoch === epoch) bindingState.value = 'error'
   }
 }
 function edit(rule?: WatchRule): void {
@@ -94,6 +134,7 @@ function edit(rule?: WatchRule): void {
     action: String(rule?.action ?? 'notify'), task: String(rule?.task ?? ''),
     alreadyMet: String(rule?.on_create_already_met ?? 'wait_requalify') })
   showForm.value = true
+  void refreshBinding()
 }
 async function save(): Promise<void> {
   if (saving.value) return
@@ -116,6 +157,13 @@ async function save(): Promise<void> {
   if (operationPayload !== payload) { operationPayload = payload; operationKey = crypto.randomUUID() }
   saving.value = true
   try {
+    if (form.action === 'auto_analyze') {
+      await refreshBinding()
+      if (autoAnalysisIssue.value) {
+        ElMessage.warning(autoAnalysisIssue.value)
+        return
+      }
+    }
     if (editing.value) {
       const rule = current.value.find(r => r.id === editing.value)
       if (!rule) throw new Error('监控已变更，请刷新后重试')
@@ -147,6 +195,8 @@ async function change(rule: WatchRule, action: 'pause' | 'resume' | 'cancel'): P
 watch(() => props.researchId, () => {
   epoch++
   status.value = null
+  binding.value = null
+  bindingState.value = 'loading'
   opened.value = false
   showForm.value = false
   runFingerprint = ''
@@ -191,12 +241,13 @@ onBeforeUnmount(() => { epoch++; if (timer) clearInterval(timer) })
             <el-form-item label="有效期至" required><el-date-picker v-model="form.expires" type="datetime" placeholder="选择日期和时间" /></el-form-item>
           </div>
           <el-form-item label="首次采样已满足条件时"><el-select v-model="form.alreadyMet"><el-option label="等待价格离开条件后再次达到" value="wait_requalify"/><el-option label="立即触发一次" value="trigger_now"/></el-select></el-form-item>
-          <el-form-item label="触发后的操作"><el-radio-group v-model="form.action"><el-radio-button value="notify">仅提醒</el-radio-button><el-radio-button value="auto_analyze">在当前会话自动分析</el-radio-button></el-radio-group></el-form-item>
+          <el-form-item label="触发后的操作"><el-radio-group v-model="form.action"><el-radio-button value="notify">仅提醒</el-radio-button><el-radio-button value="auto_analyze" :disabled="!!autoAnalysisIssue">在当前会话自动分析</el-radio-button></el-radio-group></el-form-item>
+          <el-alert v-if="autoAnalysisIssue" :title="autoAnalysisIssue" type="warning" :closable="false" show-icon />
           <template v-if="form.action === 'auto_analyze'">
-            <p>请先在会话计划中绑定账户和主计划。每个版本最多发起一次分析；当前研究运行中时等待，新行情仍满足条件才执行。</p>
+            <p>自动分析将使用当前研究绑定的主账户和主计划。每个版本最多发起一次分析；当前研究运行中时等待，新行情仍满足条件才执行。</p>
             <el-form-item label="分析任务" required><el-input v-model="form.task" type="textarea" :rows="3" placeholder="达到目标价时，结合当前账户和计划重新评估买入条件" /></el-form-item>
           </template>
-          <el-button native-type="submit" type="primary" :loading="saving">保存监控</el-button>
+          <el-button native-type="submit" type="primary" :loading="saving" :disabled="form.action === 'auto_analyze' && !!autoAnalysisIssue">保存监控</el-button>
           <el-button :disabled="saving" @click="showForm = false">返回</el-button>
         </el-form>
         <h3>触发记录</h3>
