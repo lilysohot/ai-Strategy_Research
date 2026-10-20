@@ -132,6 +132,9 @@ def build_profile_overrides(*, has_investment_context: bool = False) -> dict[str
             "agent_tools": agent_tools,
             "task_board": True,
             "fs_mode": True,
+            # A healthy shared gateway starts streaming within seconds. Bound only
+            # the zero-chunk wait; inter-chunk stalls keep the runtime's 180s leash.
+            "first_chunk_s": 45,
             "thinking_format": "tag",
         },
     }

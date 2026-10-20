@@ -12,6 +12,14 @@ from apodex.semantic_access import require_readonly_semantic_store
 from server.profile import build_profile_overrides
 
 
+def test_web_profile_bounds_zero_chunk_wait_without_overriding_other_timeouts() -> None:
+    agent = build_profile_overrides()["agent"]
+
+    assert agent["first_chunk_s"] == 45
+    assert "llm_timeout_s" not in agent
+    assert "tool_timeout_s" not in agent
+
+
 def test_web_profile_exposes_semantic_query_with_manifest_companion() -> None:
     from plugins.tools import get_builtin_tools
     from plugins.tools.corpus_manifest import with_manifest_tool
