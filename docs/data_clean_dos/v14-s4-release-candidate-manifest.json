@@ -1,0 +1,162 @@
+{
+  "artifact": "v14-s4-release-candidate-manifest",
+  "schema": "corpus-v14-s4-release-candidate-v1",
+  "frozen_at": "2026-10-20T10:45:34.0329343+08:00",
+  "status": "RELEASE_CANDIDATE_FROZEN_NOT_DEPLOYED",
+  "scope": "S0-S4 corpus structure, retrieval, fetch, and the v14 candidate publication set",
+  "code_identity": {
+    "evaluated_commit": "288711846b2af754b891120f0d58a7e2f7feab37",
+    "integration_head_at_freeze": "d06ad598d64ced3052da383a12f3ad5101491a63",
+    "branch_at_freeze": "xyl-数据层与前端整理10-10",
+    "evaluated_commit_is_ancestor_of_integration_head": true,
+    "critical_paths_unchanged_since_evaluated_commit": true,
+    "critical_git_objects": {
+      "plugins/corpus_tree": "2ed5f53e0d6a9e9babf1c86c9ee2e07637106357",
+      "plugins/tools/corpus_search.py": "c02466e7ed8d1b3ad2ca16cbf58ee088c608c2ce",
+      "plugins/tools/corpus_fetch.py": "4570c02cf20559e162741aa82b22a107d92e0a25"
+    },
+    "critical_files_sha256": {
+      "plugins/corpus/preparation/engine.py": "d046bdac56866282716184acd7ebbef094fc8eb5f2fc42251b1db8c46e1e7755",
+      "plugins/corpus/preparation/readers/__init__.py": "27075a50e19ebc8e915a4cf2d84f90c73e55c055a15f83ce3c09318f61d9e4f1",
+      "plugins/corpus/preparation/readers/base.py": "ac259c5f987ecbc35957b3efda13f895e4ab32d2985f86439ecfdcec43d55998",
+      "plugins/corpus/preparation/readers/pdf_reader.py": "803917c716fed5c8049a72b8c9fd567837c8402ee1cbb433f077c0d40bf3790a",
+      "plugins/corpus/preparation/search_pg.py": "dadfd13974f8725ad8225a2ff616d615e958ea9a10d18e07acfc09065b8541fc",
+      "plugins/corpus/preparation/structure.py": "2036d2f00f070753d89c3a8a59c047e075f625106af77e2916e13e165871db6d",
+      "plugins/corpus/service.py": "a4fa776c5824ed4b0ca1900e98bab95f65e1a8675f25c3e3d8af85f7721492e0",
+      "plugins/tools/corpus_fetch.py": "d83ca59293e0f37eb6ada85066b4d881214160b051651d9dc86bcf829008f0ce"
+    }
+  },
+  "worktree_at_freeze": {
+    "critical_paths_clean": true,
+    "excluded_dirty_paths": [
+      ".codebuddy/memory/MEMORY.md",
+      ".scratch/web-business-context/issues/01-context-inheritance.md",
+      "server/profile.py",
+      "tests/test_web_semantic_worker_gate.py"
+    ],
+    "policy": "Excluded paths are outside this release candidate and must not be bundled as candidate changes."
+  },
+  "candidate_publication": {
+    "database": "v14_s2_quote_corpus",
+    "verification_mode": "zero-model; read-only; isolated database",
+    "sources": 12,
+    "active": 12,
+    "expected_build_active": 12,
+    "builds": [
+      {
+        "sample_id": "holdout-company-001",
+        "source_id": "c195233b4064b1d9c30a238af2895a968c0f2af0bad76a17a41d2e34bb29569e",
+        "build_id": "e8689cd2b18aa62cc3f9644d4edfbc95bf3281971895f54e7263154544cee6e8",
+        "generation": 1
+      },
+      {
+        "sample_id": "holdout-company-002",
+        "source_id": "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+        "build_id": "7aba9b939d79ebbfef093a4ac33709b9a73385f003d1f22efd1ed274595ae78a",
+        "generation": 1
+      },
+      {
+        "sample_id": "holdout-industry-003",
+        "source_id": "c1ddcd8aecb80e39c555459e3ea007db1419ed9f3b844724ac90fc65bda8a885",
+        "build_id": "a9d35db2b4409cc0f5a82efbaad729f1adb865b0e96630a38717efaafe4b455a",
+        "generation": 1
+      },
+      {
+        "sample_id": "holdout-industry-004",
+        "source_id": "b7e932c80e88d00931374d29ab8a786e4dc42cd194309f126301f58192e5d160",
+        "build_id": "67b659aabc20ffb5adffd5310bf72276b67630769dc6cfbae29d59a1548627ad",
+        "generation": 1
+      },
+      {
+        "sample_id": "holdout-industry-005",
+        "source_id": "0c25f0e96b1526f0aa43da15557c4dd706f256c59b75d6fb068418b4a58d8dd4",
+        "build_id": "93e5a416a92c79f867c4a25a125cdac3fb626a52a0f8b10ba736c072eaa4f930",
+        "generation": 1
+      },
+      {
+        "sample_id": "holdout-industry-006",
+        "source_id": "f86c6d2c054a835de4de3707c984529580e8ce57628d59f60b6aeca7a0f61fd2",
+        "build_id": "e22bc49c40c4c58746479abe7d884a36b5fa84bc3ada033bc2d0779835a992a3",
+        "generation": 1
+      },
+      {
+        "sample_id": "holdout-industry-007",
+        "source_id": "a91d95c71fd0558c054bd2374139b1c24d85f58a305bc8dd83628e380d564961",
+        "build_id": "470d27f7d64e5a23ff5800d26294cc893f51cc22acf1c8c88310c7d548767424",
+        "generation": 1
+      },
+      {
+        "sample_id": "holdout-macro-008",
+        "source_id": "5e30537691c88e4eee8790af34876323cef08e3cd22d388dee8a7bbe1e8f44e9",
+        "build_id": "a18883e28d578988bb53accdf0c6583dde8c147d1a4131ac5b6d44b18538b009",
+        "generation": 1
+      },
+      {
+        "sample_id": "holdout-macro-009",
+        "source_id": "f7f65d7ee16db19e79766a9f0f13b16f22b56ff318530fedf64d9240fbb87826",
+        "build_id": "ebff0cfc6c33f6fcd66d0814f0011e4c3199d46e1b09c3a975d3749103633730",
+        "generation": 1
+      },
+      {
+        "sample_id": "holdout-macro-010",
+        "source_id": "d179b615e82e4f6b47184ead5a34027abbd7bf2ef65ca4d599d03d31368c7595",
+        "build_id": "83b6ee9b34f24d32bbb1d7e2f38d3908107f875d2f57ea39a13cc5310feeb003",
+        "generation": 1
+      },
+      {
+        "sample_id": "holdout-macro-011",
+        "source_id": "2f8aa70958184296f74bc9a78193c49f5966608bd3ff2330331472eaa3b90339",
+        "build_id": "5466f9dd9a34e00a9f1a4b56f95c4e9b5b7973a3427dadb3c3e40860a058a0cf",
+        "generation": 1
+      },
+      {
+        "sample_id": "holdout-macro-012",
+        "source_id": "f3b28791e1355dc371206b10a003dc2ef6c65f88f631c77ea7578be145f28279",
+        "build_id": "0a53bc209e8a2fac6555ab485aecbbe475bfe86c78822cfd89ba0711e41fd7a1",
+        "generation": 1
+      }
+    ]
+  },
+  "evidence": {
+    "s4_zero_model": {
+      "targets": 51,
+      "passed": 51,
+      "required": "36/36",
+      "supplementary": "15/15",
+      "existing_pass_regressions": 0
+    },
+    "s5_full_matrix": {
+      "sessions": 204,
+      "ok": 204,
+      "control_pass": "39/51",
+      "candidate_pass": "123/153",
+      "raw_decision_status": "full_matrix_quality_failed",
+      "human_closeout_status": "CLOSED_WITH_HUMAN_ACCEPTED_JUDGE_EXCEPTIONS"
+    }
+  },
+  "evaluation_control": {
+    "commit": "669b7d4a8540c38d47cf642dc0de4d879eb28c4f",
+    "database": "e6_holdout_corpus",
+    "purpose": "Evaluation rollback baseline; production rollback requires a separate current-production snapshot and runbook."
+  },
+  "assets_sha256": {
+    ".scratch/corpus-structure-restart/s2-candidate-build.json": "48faa23fed82145023bad76a10d482f7471995a24b33bd415a44fc5d1fecabce",
+    ".scratch/corpus-structure-restart/s2-unit-invariants.json": "d05d7bc97b2f719c3aceafc7204aa9bc09a37d296f9bbe2d43f79563ce4c31d5",
+    ".scratch/corpus-structure-restart/s4-candidate-verification.json": "a1d71d883f77dcb13596dcd1aa4ab84aef3ac8e7a0018230a01d323d0f711397",
+    "docs/data_clean_dos/v14-s4-ab-report.json": "f497d9cb4b335a09df56889b3f1b99f56d0f8122532bf920de85bb9af74dd2cf",
+    "docs/data_clean_dos/v14-s5-full-matrix-manifest.json": "740920ea1a46286f81d35ece2f5c22ee65c49fbedb86caea1cd2aeb8ae719fad",
+    "docs/data_clean_dos/v14-s5-full-matrix-report.json": "393f0d46eb49cf0232780e7072b486570f947fbfb94de8360c75d5324afc3fda",
+    "docs/data_clean_dos/v14-s5-closure.json": "4fbd6f954e4ae44b255f80772356032832490d45e291346a010a72ccc331d498"
+  },
+  "release_gate": {
+    "candidate_frozen": true,
+    "production_deployed": false,
+    "production_switch_authorized": false,
+    "remaining_before_cutover": [
+      "Capture the current production code, database pointer, active builds, and counts as the rollback baseline.",
+      "Prepare and review the exact pointer-switch and rollback runbook.",
+      "Define post-switch retrieval, fetch-error, latency, and cost monitoring thresholds.",
+      "Obtain explicit production cutover authorization."
+    ]
+  }
+}

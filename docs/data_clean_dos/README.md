@@ -1,5 +1,13 @@
 # 语料检索数据质量优化方案：先改善取证，再验证切块
 
+> **S4 发布候选冻结（2026-10-20）**：S0–S4 语料关键代码、`v14_s2_quote_corpus` 的 12 个
+> 活动 build、S4/S5 证据和收口结果已经绑定为发布候选，状态为
+> `RELEASE_CANDIDATE_FROZEN_NOT_DEPLOYED`。评测提交 `28871184…` 到冻结时集成 HEAD
+> `d06ad598…` 的语料关键 Git 对象完全一致；工作区其他任务的 4 个未提交文件明确排除。
+> 本次未切换生产，下一门禁是冻结当前生产回滚基线并编写切换／回滚方案。详见
+> [发布候选冻结记录](v14-s4-release-candidate.md)和
+> [机器可读清单](v14-s4-release-candidate-manifest.json)。
+>
 > **S5 全量矩阵收口（2026-10-20）**：冻结 204 次真实模型会话已全部正常完成；
 > 原始 Judge 为 control 39/51、candidate 123/153，报告按原协议保留
 > `full_matrix_quality_failed` / `release_ready: false`。人工复核 42 个失败会话后确认，基础检索和

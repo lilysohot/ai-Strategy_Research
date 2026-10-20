@@ -14,6 +14,12 @@ v1.1 任务分解评审时只修订依赖与验收表达；此后工作区已出
 
 ## 0. 执行状态入口
 
+**2026-10-20 S4 发布候选已冻结，未部署。** 候选代码身份、12 个活动 build、S4/S5 证据及
+回滚评测基线已写入[发布候选冻结记录](../data_clean_dos/v14-s4-release-candidate.md)和
+[机器清单](../data_clean_dos/v14-s4-release-candidate-manifest.json)。状态为
+`RELEASE_CANDIDATE_FROZEN_NOT_DEPLOYED`；下一步是冻结当前生产状态并形成切换／回滚 runbook，
+本条不授权生产指针切换。
+
 **2026-10-20 语料质量重启轮收口。** S4 保持冻结；S5 已完成 204/204 个会话。项目负责人在
 人工复核 42 个 Judge 失败会话后接受现有 Judge 局限，决定不再重测或执行 shadow rescore，
 状态为 `CLOSED_WITH_HUMAN_ACCEPTED_JUDGE_EXCEPTIONS`。该记录只关闭本轮语料层清洗、切块、
