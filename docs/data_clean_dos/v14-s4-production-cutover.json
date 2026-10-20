@@ -1,0 +1,279 @@
+{
+  "artifact": "v14-s4-production-cutover",
+  "schema": "corpus-v14-s4-production-cutover-v1",
+  "status": "DEPLOYED_ENHANCED_MONITORING",
+  "cutover_started_at": "2026-10-20T11:37:42+08:00",
+  "ready_at": "2026-10-20T11:37:45+08:00",
+  "old_runtime": {
+    "checkout": "/home/administrator/FrontierAgent",
+    "launcher_pid": 118359,
+    "worker_pid": 118371,
+    "rollback_tag": "corpus-prod-pre-rc1",
+    "rollback_commit": "d06ad598d64ced3052da383a12f3ad5101491a63",
+    "terminated_gracefully": true
+  },
+  "new_runtime": {
+    "checkout": "/home/administrator/FrontierAgent-rc1",
+    "tag": "corpus-v14-s4-rc1",
+    "commit": "58260fbc60ad65129bbb98a47c07defc0850622f",
+    "launcher_pid": 1031549,
+    "worker_pid": 1031555,
+    "host": "0.0.0.0",
+    "port": 8000,
+    "healthz": 200,
+    "readyz": 200
+  },
+  "database_change": {
+    "target": "postgres",
+    "schema": "corpus",
+    "ddl": false,
+    "rebuild": false,
+    "publish": false,
+    "publication_pointer_change": false
+  },
+  "precutover": {
+    "artifact": "v14-s4-precutover",
+    "captured_at": "2026-10-20T03:37:09.407057+00:00",
+    "phase": "precutover",
+    "port": 8000,
+    "healthz": {
+      "status_code": 200,
+      "body": {
+        "status": "ok"
+      }
+    },
+    "readyz": {
+      "status_code": 200,
+      "body": {
+        "status": "ok"
+      }
+    },
+    "database": {
+      "database": "postgres",
+      "transaction_read_only": "on",
+      "tables": [
+        "corpus_admissions",
+        "corpus_builds",
+        "corpus_chunks",
+        "corpus_jobs",
+        "corpus_publications",
+        "corpus_review_decisions",
+        "corpus_source_checkpoints",
+        "corpus_sources",
+        "corpus_units"
+      ],
+      "counts": {
+        "corpus_admissions": 14,
+        "corpus_builds": 14,
+        "corpus_chunks": 1214,
+        "corpus_jobs": 42,
+        "corpus_publications": 8,
+        "corpus_review_decisions": 10,
+        "corpus_source_checkpoints": 16,
+        "corpus_sources": 8,
+        "corpus_units": 7128
+      },
+      "publication_pairs": [
+        [
+          "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c"
+        ],
+        [
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2"
+        ],
+        [
+          "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+          "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745"
+        ],
+        [
+          "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+          "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a"
+        ],
+        [
+          "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+          "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac"
+        ],
+        [
+          "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea"
+        ],
+        [
+          "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31"
+        ],
+        [
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768"
+        ]
+      ],
+      "canonical_fingerprint": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+      "running_jobs": 0,
+      "passed": true
+    },
+    "model_calls": 0,
+    "judge_calls": 0,
+    "passed": true
+  },
+  "postcutover": {
+    "artifact": "v14-s4-postcutover",
+    "captured_at": "2026-10-20T03:37:51.787772+00:00",
+    "phase": "postcutover",
+    "port": 8000,
+    "healthz": {
+      "status_code": 200,
+      "body": {
+        "status": "ok"
+      }
+    },
+    "readyz": {
+      "status_code": 200,
+      "body": {
+        "status": "ok"
+      }
+    },
+    "database": {
+      "database": "postgres",
+      "transaction_read_only": "on",
+      "tables": [
+        "corpus_admissions",
+        "corpus_builds",
+        "corpus_chunks",
+        "corpus_jobs",
+        "corpus_publications",
+        "corpus_review_decisions",
+        "corpus_source_checkpoints",
+        "corpus_sources",
+        "corpus_units"
+      ],
+      "counts": {
+        "corpus_admissions": 14,
+        "corpus_builds": 14,
+        "corpus_chunks": 1214,
+        "corpus_jobs": 42,
+        "corpus_publications": 8,
+        "corpus_review_decisions": 10,
+        "corpus_source_checkpoints": 16,
+        "corpus_sources": 8,
+        "corpus_units": 7128
+      },
+      "publication_pairs": [
+        [
+          "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c"
+        ],
+        [
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2"
+        ],
+        [
+          "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+          "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745"
+        ],
+        [
+          "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+          "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a"
+        ],
+        [
+          "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+          "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac"
+        ],
+        [
+          "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea"
+        ],
+        [
+          "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31"
+        ],
+        [
+          "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768"
+        ]
+      ],
+      "canonical_fingerprint": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+      "running_jobs": 0,
+      "passed": true
+    },
+    "model_calls": 0,
+    "judge_calls": 0,
+    "probes": [
+      {
+        "query_id": "company-003",
+        "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "rank": 1,
+        "locator": "chunk:568f9e752f0fa65a:table:0024",
+        "fetch_mode": "page_envelope",
+        "passed": true
+      },
+      {
+        "query_id": "company-005",
+        "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "rank": 1,
+        "locator": "chunk:568f9e752f0fa65a:table:0005",
+        "fetch_mode": "direct",
+        "passed": true
+      },
+      {
+        "query_id": "industry-001",
+        "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "rank": 1,
+        "locator": "chunk:82dac0d446ef83cd:table:0022",
+        "fetch_mode": "direct",
+        "passed": true
+      },
+      {
+        "query_id": "industry-005",
+        "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "rank": 1,
+        "locator": "chunk:1d0117eb6e17c63c:body:0008",
+        "fetch_mode": "direct",
+        "passed": true
+      },
+      {
+        "query_id": "macro-001",
+        "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "rank": 1,
+        "locator": "chunk:9ebd323f89e55cc1:body:0001",
+        "fetch_mode": "direct",
+        "passed": true
+      },
+      {
+        "query_id": "macro-008",
+        "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "rank": 1,
+        "locator": "chunk:147e841aab35836a:body:0003",
+        "fetch_mode": "direct",
+        "passed": true
+      }
+    ],
+    "passed": true
+  },
+  "cutover_verdict": {
+    "passed": true,
+    "health_and_readiness": true,
+    "database_snapshot_unchanged": true,
+    "postcutover_probes_passed": 6,
+    "postcutover_probes_total": 6,
+    "model_calls": 0,
+    "judge_calls": 0
+  },
+  "rollback": {
+    "checkout": "/home/administrator/FrontierAgent-prod-pre-rc1",
+    "commit": "d06ad598d64ced3052da383a12f3ad5101491a63",
+    "dependencies_synced": true,
+    "automatic_hard_gate_rollback_armed": true,
+    "database_restore_on_normal_rollback": false
+  },
+  "monitoring": {
+    "status": "MONITORING",
+    "started_at": "2026-10-20T03:39:56.744286+00:00",
+    "planned_end_at": "2026-10-20T05:39:56.744286+00:00",
+    "interval_seconds": 60,
+    "samples_completed_at_record": 1,
+    "warnings_at_record": 0,
+    "hard_failures_at_record": 0,
+    "checkpoint": ".scratch/corpus-structure-restart/cutover-20261020/enhanced-monitor.json",
+    "heartbeat_automation_id": "s4"
+  }
+}

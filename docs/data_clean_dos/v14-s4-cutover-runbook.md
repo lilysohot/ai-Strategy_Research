@@ -1,9 +1,14 @@
 # V14 S4 生产切换与回滚 Runbook
 
-状态：`PLAN_READY_NOT_EXECUTED`  
+状态：`EXECUTED_2026-10-20_ENHANCED_MONITORING`
+
 生产基线：[v14-s4-production-baseline.json](v14-s4-production-baseline.json)  
 冻结清单：[v14-s4-production-freeze.json](v14-s4-production-freeze.json)  
 校验清单：[v14-s4-production-freeze.sha256](v14-s4-production-freeze.sha256)
+
+执行记录：[v14-s4-production-cutover.md](v14-s4-production-cutover.md)；生产 8000 已于
+2026-10-20 11:37:45（Asia/Shanghai）切换到冻结 RC1，切换后 6/6 只读探针通过，当前处于
+两小时强化监控。以下步骤保留为本次实际操作与回滚依据。
 
 ## 1. 切换结论
 
