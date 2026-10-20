@@ -14,6 +14,20 @@ v1.1 任务分解评审时只修订依赖与验收表达；此后工作区已出
 
 ## 0. 执行状态入口
 
+**2026-10-20 S4 RC1 已切换生产，当前处于 Web 验证和发布收口阶段。** 生产端口 8000 已从
+冻结工作树 `/home/administrator/FrontierAgent-rc1` 启动，运行 tag `corpus-v14-s4-rc1`
+（提交 `58260fbc…`）；切换前后仍使用 `postgres.corpus` 的 8 个活动来源，未执行 DDL、rebuild、
+publish 或 publication 指针变更。切换后 6/6 只读探针通过，强化监控完成 70 个一分钟采样且
+零告警，随后按用户要求在两小时门限前停止，状态为 `DEPLOYED_USER_WEB_TESTING`，尚不能记为
+两小时或 24 小时稳定通过。Web 首测另暴露 `BenchmarkSession._bootstrap()` 写仓库相对 `data/`
+目录的问题；修复和回归已经完成，但当前仅存在于主工作区与 RC1 工作树的未提交修改中，尚未形成
+新的干净提交、tag 和正式重启验证。重算又被默认模型 `deepseek-v4-flash` 的 HTTP 401 阻断。
+发布收口尚需：冻结并部署该热修、修复模型凭据、完成一次真实 Web 端到端重算、按重新批准的观察
+窗口完成稳定性记录并更新最终状态。证据见
+[生产切换记录](../data_clean_dos/v14-s4-production-cutover.md)和
+[监控记录](../data_clean_dos/v14-s4-monitoring-plan.md)。以下“切换未执行／候选未部署”段落是
+切换前的历史冻结状态，由本段取代其当前状态含义。
+
 **2026-10-20 生产基线已只读冻结，切换方案已就绪但未执行。** `postgres.corpus` 当前 8 个活动
 来源与评测库 12 个 holdout 来源零重叠，故 RC1 只做代码来源正规化，保持生产数据库和活动 build
 不变，禁止指向 `v14_s2_quote_corpus`。新备份已完成隔离恢复对账；切换、回滚和监控门见

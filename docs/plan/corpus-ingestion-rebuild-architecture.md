@@ -18,6 +18,15 @@
 `CLOSED_WITH_HUMAN_ACCEPTED_JUDGE_EXCEPTIONS` 收口。该决定不修改本文的目标架构、生产发布门或
 Claims／R2 边界，详见[最终收口记录](../data_clean_dos/v14-s5-closure.md)。
 
+2026-10-20 发布状态补充：S4 RC1 已在生产端口 8000 完成代码切换，生产数据面保持
+`postgres.corpus` 的 8 个活动来源不变；未发布 12 个 holdout，也未执行 DDL、语料重建或活动
+publication 指针切换。切换后只读探针和 70 个一分钟监控采样均通过，但强化监控按用户要求提前
+停止，当前状态为 `DEPLOYED_USER_WEB_TESTING`，不是 24 小时稳定放行。Web 首测发现的仓库相对
+`data/` 写入热修尚未形成新的干净提交/tag，默认模型凭据 HTTP 401 仍阻断真实重算；二者与 Web
+端到端验收、稳定观察记录共同构成发布收口项。详见
+[生产切换记录](../data_clean_dos/v14-s4-production-cutover.md)和
+[监控记录](../data_clean_dos/v14-s4-monitoring-plan.md)。
+
 ## 0. 文档权威与本轮修订
 
 本文补齐讨论中的十项契约缺口，不表示已执行 I0、恢复演练、测试或架构冻结。文内表名、字段名、

@@ -67,3 +67,19 @@
 每个阶段保存开始/结束时间、tag、PID、健康结果、数据库快照、发布指纹、6 条 canary 结果和所有
 告警。强化监控两小时无红线后可结束维护窗口；24 小时稳定后才把状态从“已切换待观察”改为
 “稳定”。任何回滚都保留 RC1 失败工件，不覆盖本次生产基线或 S5 原始结果。
+
+
+## 7. 监控停止后的线上故障记录（2026-10-20）
+
+- 12:51，价格监控自动分析 Run `3f39a2fd80ba4ce3b9df7e2dd49f6ab4` 在首次模型调用前失败，
+  错误为 `OSError: [Errno 30] Read-only file system: 'data'`。
+- 根因不是 publication store 的只读隔离；该边界按设计生效。`BenchmarkSession._bootstrap()` 仍创建
+  已无用途的仓库相对目录 `data/`，而 Web worker 发布后只允许 Run 目录写入。
+- 修复删除该遗留写入；内存 `EventStore` 不需要磁盘目录，Run 工件继续只写显式的运行/工作区路径。
+  源目录与当前 RC1 均已修正。
+- 回归验证：目标单测与 Ruff 通过；使用与生产一致的 bubblewrap 配置（根目录只读、仅 Run 目录可写）
+  启动 `BenchmarkSession` 成功，输出 `readonly-bootstrap-ok`。
+- 原失败记录保留。重算 Run `5d4f21c2d29947ae897b45508b5cce72` 已越过只读启动阶段并进入首次
+  LLM 请求，随后暴露独立的用户凭据问题：当前唯一默认配置 `deepseek-v4-flash` 返回 HTTP 401。
+  2026-10-20 12:58（Asia/Shanghai）复测仍为 401，配置已记录 `last_verify_ok=false`；更新有效 API key
+  后才能再次重算，本项不归因于 publication store 或监控消费链路。

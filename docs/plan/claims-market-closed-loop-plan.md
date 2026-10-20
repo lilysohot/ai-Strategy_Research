@@ -1,5 +1,15 @@
 # 研究材料 × 同花顺数据 × 分析：统一执行计划
 
+> **2026-10-20 语料 S4 RC1 生产切换与剩余门**：冻结 RC1 已切换到生产端口 8000，继续读取
+> `postgres.corpus` 的 8 个活动来源；未执行 DDL、rebuild、publish 或 publication 指针变更，
+> 12 个 holdout 仍仅在隔离评测库。切换后 6/6 只读探针和 70 个一分钟采样通过，监控随后按用户
+> 要求在两小时门限前停止，当前状态为 `DEPLOYED_USER_WEB_TESTING`，尚未取得两小时/24 小时稳定
+> 放行。Web 首测暴露的仓库相对 `data/` 写入问题已有未提交热修，仍需冻结为干净提交并正式部署；
+> 默认模型 `deepseek-v4-flash` 的 HTTP 401 仍阻断真实重算。完成热修发布、凭据修复、Web 端到端
+> 验收和稳定观察后，才能关闭本次发布。该状态不放行 holdout 入生产，也不改变 Claims/R2 独立门。
+> 见[生产切换记录](../data_clean_dos/v14-s4-production-cutover.md)和
+> [监控记录](../data_clean_dos/v14-s4-monitoring-plan.md)。
+
 > **2026-10-13 Claims/items 文件发布进展**：经本轮用户授权，专项 Issue 42 完成 5 个独立范围快照的显式缺口发布（52 Claims、227 items）与注册工具正向查询；407 项回归通过，286 处原文区间核验通过。此进展只关闭 publish/positive_query，真实 M_main 消费、报告引用闭环及 R2 阶段验收仍未完成，不构成 S5 生产 PG 放行。见 [发布与验收记录](../../.scratch/claims-r2-role-isolation/evidence/80-scoped-publication-20261013/README.md)。
 
 > **2026-10-13 两个主快照的有界消费进展**：专项 Issue 43 已各用一个问题验证工业富联与光模块主快照的 `delivery → context_use → report_reference`。两次运行各 3 轮、2 次工具调用，工具面仅为语义查询及伴随清单；A4 enforce 均为 `verified`，新增抽取调用和生产 PG 访问均为 0。此进展仅关闭两个预定问题的消费链，不声明整篇覆盖、研究质量或 S5 生产放行。见 [消费验收记录](../../.scratch/claims-r2-role-isolation/evidence/81-bounded-main-consumption-20261013/README.md)。

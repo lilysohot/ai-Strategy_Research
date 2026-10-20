@@ -1,5 +1,12 @@
 # 语料检索数据质量优化方案：先改善取证，再验证切块
 
+> **发布后 Web 验证待收口（2026-10-20）**：RC1 服务健康与就绪仍为 200，但首次 Web 自动分析
+> 暴露 `BenchmarkSession._bootstrap()` 尝试在只读代码目录创建 `data/`。删除该遗留写入的修复及
+> 目标回归已完成，当前仍是主工作区和 RC1 工作树中的未提交热修，尚未冻结为新提交/tag 并正式
+> 重启验证。重算随后被默认模型 `deepseek-v4-flash` 的 HTTP 401 阻断。发布收口仍需完成热修
+> 正式发布、有效模型凭据验证、一次真实 Web 端到端重算，以及重新批准的稳定观察；在此之前状态
+> 保持 `DEPLOYED_USER_WEB_TESTING`。详见[上线监控方案与故障记录](v14-s4-monitoring-plan.md)。
+
 > **S4 RC1 已切换生产（2026-10-20 11:37，Asia/Shanghai）**：生产 8000 已从冻结工作树
 > `/home/administrator/FrontierAgent-rc1` 启动，运行提交 `58260fbc…`；健康和就绪均为 200。
 > 切换前后数据库身份、9 张 corpus 表计数及 8 组活动 publication/build 完全一致，切换后
