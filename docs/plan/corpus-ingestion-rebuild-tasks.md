@@ -14,6 +14,13 @@ v1.1 任务分解评审时只修订依赖与验收表达；此后工作区已出
 
 ## 0. 执行状态入口
 
+**2026-10-20 生产基线已只读冻结，切换方案已就绪但未执行。** `postgres.corpus` 当前 8 个活动
+来源与评测库 12 个 holdout 来源零重叠，故 RC1 只做代码来源正规化，保持生产数据库和活动 build
+不变，禁止指向 `v14_s2_quote_corpus`。新备份已完成隔离恢复对账；切换、回滚和监控门见
+[生产冻结清单](../data_clean_dos/v14-s4-production-freeze.json)、
+[Runbook](../data_clean_dos/v14-s4-cutover-runbook.md)和
+[监控方案](../data_clean_dos/v14-s4-monitoring-plan.md)。本条不授权或执行服务重启、生产切换或重建。
+
 **2026-10-20 S4 发布候选已冻结，未部署。** 候选代码身份、12 个活动 build、S4/S5 证据及
 回滚评测基线已写入[发布候选冻结记录](../data_clean_dos/v14-s4-release-candidate.md)和
 [机器清单](../data_clean_dos/v14-s4-release-candidate-manifest.json)。状态为

@@ -1,0 +1,264 @@
+{
+  "artifact": "v14-s4-production-baseline",
+  "schema": "corpus-v14-s4-production-baseline-v1",
+  "captured_at": "2026-10-20T02:52:40.153644+00:00",
+  "capture_mode": "explicit BEGIN READ ONLY; no model calls; no writes",
+  "status": "PRODUCTION_BASELINE_FROZEN_PRE_CUTOVER",
+  "target": {
+    "database": "postgres",
+    "schema": "corpus",
+    "server_version": "18.6 (Debian 18.6-1.pgdg12+2)",
+    "in_recovery": false,
+    "wal_lsn": "0/99EA5960",
+    "database_size_bytes": 26375871,
+    "transaction_read_only": "on",
+    "target_env_matches_current_database": true
+  },
+  "code_at_capture": {
+    "head": "58260fbc60ad65129bbb98a47c07defc0850622f",
+    "branch": "xyl-数据层与前端整理10-10",
+    "release_candidate_tag_commit": "58260fbc60ad65129bbb98a47c07defc0850622f"
+  },
+  "corpus_schema": {
+    "table_count": 9,
+    "tables": [
+      "corpus_admissions",
+      "corpus_builds",
+      "corpus_chunks",
+      "corpus_jobs",
+      "corpus_publications",
+      "corpus_review_decisions",
+      "corpus_source_checkpoints",
+      "corpus_sources",
+      "corpus_units"
+    ],
+    "row_counts": {
+      "corpus_admissions": 14,
+      "corpus_builds": 14,
+      "corpus_chunks": 1214,
+      "corpus_jobs": 42,
+      "corpus_publications": 8,
+      "corpus_review_decisions": 10,
+      "corpus_source_checkpoints": 16,
+      "corpus_sources": 8,
+      "corpus_units": 7128
+    },
+    "active_publication_count": 8,
+    "active_publications": [
+      {
+        "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "format": "pdf",
+        "size_bytes": 3517093,
+        "original_names": [
+          "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf"
+        ],
+        "current_decision_id": "d242109e8ea4d0e69fee5fc5ed605fd725d4e4881e2f9b4c13ed55546d63f1d2",
+        "active_build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "generation": 2,
+        "activated_at": "2026-09-29T16:36:07.077814+00:00",
+        "material_type": "research_report",
+        "research_domain": "industry",
+        "scope_ref": null,
+        "parse_rev": "1839a56224900eb9a6810c490c4e4a6de7de5f8e4955a4bc43613161d37855a9",
+        "clean_rev": "ccadcc7d0756e4b95e1adc508401e7519be708722330ec1e3e63a6f6dbd4745c",
+        "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+        "index_rev": "index-4-zhcfg-2",
+        "config_fingerprint": null,
+        "unit_count": 1329,
+        "chunk_count": 146
+      },
+      {
+        "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "format": "docx",
+        "size_bytes": 25406,
+        "original_names": [
+          "9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx"
+        ],
+        "current_decision_id": "a52f9501b5b073d43413501c692e46ca24613a57164afe8c9a6b69fb8379ea9a",
+        "active_build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+        "generation": 1,
+        "activated_at": "2026-09-23T17:05:14.876364+00:00",
+        "material_type": "internal_unattributed",
+        "research_domain": "industry",
+        "scope_ref": null,
+        "parse_rev": "747860affaab837c29c5f6386cf76b6d0225c03a1490680a277752f03a15524a",
+        "clean_rev": "f17753283f310fe85f66f4b67593b7a24594c001520d3fb0767f7aa9b1dedf57",
+        "chunk_rev": "ff430da84301a9210502a749da48f09f1da39f2ecc82a729336e393c44a04ee3",
+        "index_rev": "index-4-zhcfg-2",
+        "config_fingerprint": null,
+        "unit_count": 44,
+        "chunk_count": 7
+      },
+      {
+        "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "format": "pdf",
+        "size_bytes": 2101147,
+        "original_names": [
+          "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf"
+        ],
+        "current_decision_id": "237bea4b92ca9d90beca14a883183475d90e3dbd2baf62f533bd12468c1c3d20",
+        "active_build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+        "generation": 2,
+        "activated_at": "2026-09-29T16:36:07.348681+00:00",
+        "material_type": "research_report",
+        "research_domain": "company",
+        "scope_ref": null,
+        "parse_rev": "2b451eec1b815942ac319a5c48629b2189bdac44438b7cc3f9248e4550083a44",
+        "clean_rev": "ccadcc7d0756e4b95e1adc508401e7519be708722330ec1e3e63a6f6dbd4745c",
+        "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+        "index_rev": "index-4-zhcfg-2",
+        "config_fingerprint": null,
+        "unit_count": 326,
+        "chunk_count": 55
+      },
+      {
+        "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "format": "pdf",
+        "size_bytes": 489717,
+        "original_names": [
+          "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf"
+        ],
+        "current_decision_id": "6a3ae1b6c697677e2eb1b16d8438d37b93ff63fbaf8c072d46f639fc7de2e832",
+        "active_build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "generation": 2,
+        "activated_at": "2026-09-29T16:36:07.518591+00:00",
+        "material_type": "research_report",
+        "research_domain": "macro",
+        "scope_ref": null,
+        "parse_rev": "9f3d2b60d51f6b65d07778025e872d75de95d650c2e51bda946f39c3d7994fbf",
+        "clean_rev": "ccadcc7d0756e4b95e1adc508401e7519be708722330ec1e3e63a6f6dbd4745c",
+        "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+        "index_rev": "index-4-zhcfg-2",
+        "config_fingerprint": null,
+        "unit_count": 474,
+        "chunk_count": 43
+      },
+      {
+        "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "format": "pdf",
+        "size_bytes": 1588565,
+        "original_names": [
+          "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf"
+        ],
+        "current_decision_id": "952e0137e7511e99d4b99f6092cd2d7710464270f913482fffb41d88c5a6c244",
+        "active_build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+        "generation": 2,
+        "activated_at": "2026-09-29T16:07:51.816488+00:00",
+        "material_type": "research_report",
+        "research_domain": "macro",
+        "scope_ref": null,
+        "parse_rev": "f57fae4096c0a6ee08052dcab94bdccfbe8eee46d28ed691031c30211a1b29a3",
+        "clean_rev": "ccadcc7d0756e4b95e1adc508401e7519be708722330ec1e3e63a6f6dbd4745c",
+        "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+        "index_rev": "index-4-zhcfg-2",
+        "config_fingerprint": null,
+        "unit_count": 269,
+        "chunk_count": 30
+      },
+      {
+        "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "format": "pdf",
+        "size_bytes": 1643958,
+        "original_names": [
+          "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf"
+        ],
+        "current_decision_id": "45c1cce0d0fe65fe598533491282ea27d74b5f552ee62e33d745c5516011e9ae",
+        "active_build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "generation": 2,
+        "activated_at": "2026-09-29T16:36:07.788393+00:00",
+        "material_type": "research_report",
+        "research_domain": "company",
+        "scope_ref": null,
+        "parse_rev": "b53584814f8304976ecbf8f5830f0fcd414a658ccb5abaa368d5afb2e4f5a8f4",
+        "clean_rev": "ccadcc7d0756e4b95e1adc508401e7519be708722330ec1e3e63a6f6dbd4745c",
+        "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+        "index_rev": "index-4-zhcfg-2",
+        "config_fingerprint": null,
+        "unit_count": 613,
+        "chunk_count": 83
+      },
+      {
+        "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "format": "pdf",
+        "size_bytes": 1709634,
+        "original_names": [
+          "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf"
+        ],
+        "current_decision_id": "c819129b3ccb4ee1537cc1cd0cc2e8640d91b7fa4f33ef3dce2f74bdee9c1d72",
+        "active_build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+        "generation": 2,
+        "activated_at": "2026-09-29T16:07:53.940246+00:00",
+        "material_type": "research_report",
+        "research_domain": "industry",
+        "scope_ref": null,
+        "parse_rev": "f3264968fb5e8324912ce089bc651ad0f761ac72ac0a0229db72c43654c9c074",
+        "clean_rev": "ccadcc7d0756e4b95e1adc508401e7519be708722330ec1e3e63a6f6dbd4745c",
+        "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+        "index_rev": "index-4-zhcfg-2",
+        "config_fingerprint": null,
+        "unit_count": 230,
+        "chunk_count": 23
+      },
+      {
+        "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "format": "markdown",
+        "size_bytes": 18558,
+        "original_names": [
+          "工业富联_投委会决策报告_20260829.md"
+        ],
+        "current_decision_id": "45d0f545d18619a8c88ccc06443e51bdee3bf4c922e172089adc21c5609d4a1b",
+        "active_build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+        "generation": 1,
+        "activated_at": "2026-09-23T17:05:14.818659+00:00",
+        "material_type": "internal_committee_report",
+        "research_domain": "company",
+        "scope_ref": null,
+        "parse_rev": "28fd6541c91aad284905e19175272b3fb3133293bd5417675ae9b57f732fdfcf",
+        "clean_rev": "f17753283f310fe85f66f4b67593b7a24594c001520d3fb0767f7aa9b1dedf57",
+        "chunk_rev": "ff430da84301a9210502a749da48f09f1da39f2ecc82a729336e393c44a04ee3",
+        "index_rev": "index-4-zhcfg-2",
+        "config_fingerprint": null,
+        "unit_count": 91,
+        "chunk_count": 20
+      }
+    ],
+    "job_state_counts": {
+      "succeeded": 42
+    },
+    "running_jobs": 0
+  },
+  "retained_public_tables": {
+    "documents": 0,
+    "blocks": 0,
+    "claims": 0,
+    "claims_v2": 0,
+    "claim_block_runs": 0,
+    "claim_block_runs_v2": 0,
+    "corpus_evidence_runs": 0,
+    "ingest_runs": 0,
+    "ingest_failures": 0,
+    "docs": 3,
+    "chinese_docs": 3
+  },
+  "extensions": {
+    "pg_trgm": "1.6",
+    "plpgsql": "1.0",
+    "vector": "0.8.6",
+    "zhparser": "2.4"
+  },
+  "connection_role_capabilities": {
+    "schema_usage": true,
+    "schema_create": true,
+    "any_table_select": true,
+    "any_table_insert": true,
+    "any_table_update": true,
+    "any_table_delete": true,
+    "note": "The capture transaction itself was read-only; role capabilities are recorded for cutover risk assessment without storing the role name."
+  },
+  "prior_cutover_evidence": {
+    "manifest": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/i4-cutover-manifest.json",
+    "manifest_sha256": "543e851d29a9568cd8168a75aaf0efcf070fb706b0e78ea9cddde8334dc1fb06",
+    "restore_verification": ".scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i46-restore-verification.json",
+    "restore_verification_sha256": "8e80cc4c64c992986893d17e2bbe1d34fab1a9677d1bb1146b840c915151db31"
+  }
+}

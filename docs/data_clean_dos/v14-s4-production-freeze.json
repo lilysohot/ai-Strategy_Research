@@ -1,0 +1,85 @@
+{
+  "artifact": "v14-s4-production-freeze",
+  "schema": "corpus-v14-s4-production-freeze-v1",
+  "frozen_at": "2026-10-20T10:57:19.7130563+08:00",
+  "status": "PRODUCTION_BASELINE_FROZEN_CUTOVER_PLAN_READY_NOT_EXECUTED",
+  "production": {
+    "database": "postgres",
+    "schema": "corpus",
+    "database_container": {
+      "name": "pg",
+      "container_id": "8716f5d7bd4a632daaf3785422685c9edceef0b1c681b44a3440dc6a167c1c5c",
+      "image": "pg18-zhvector",
+      "image_digest": "sha256:78d73570b538cfc9f146ec79593a743d8c21e76ba283352ebad371c28f5a30ed",
+      "data_volume": "pgdata:/var/lib/postgresql",
+      "started_at": "2026-10-20T00:46:14.388150704Z"
+    },
+    "database_snapshot": {
+      "path": "docs/data_clean_dos/v14-s4-production-baseline.json",
+      "sha256": "ea4d00ac410b063c406117823110dac9cdd3a423114b3599526de921fab0f746",
+      "wal_lsn": "0/99EA5960",
+      "transaction_read_only": "on",
+      "tables": 9,
+      "sources": 8,
+      "builds": 14,
+      "units": 7128,
+      "chunks": 1214,
+      "active_publications": 8,
+      "jobs": 42,
+      "running_jobs": 0,
+      "publication_fingerprint": "5475ac32885611fde9b34adefd44f58ee53b01577646e8b959f56fb306b25ed1"
+    },
+    "runtime": {
+      "kind": "local WSL uvicorn process",
+      "cwd": "/home/administrator/FrontierAgent",
+      "command": "uv run --group web uvicorn server.app:app --host 0.0.0.0 --port 8000",
+      "process_started_at": "2026-10-20T09:45:33+08:00",
+      "healthz": 200,
+      "readyz": 200,
+      "inferred_source_commit": "d06ad598d64ced3052da383a12f3ad5101491a63",
+      "rollback_tag": "corpus-prod-pre-rc1",
+      "inference_limit": "The process predates the RC1 documentation commit and the later uncommitted server/profile.py edit; no immutable runtime bundle identifier was emitted by the process."
+    }
+  },
+  "backup": {
+    "path": ".scratch/corpus-structure-restart/backups/v14-s4-precutover-20261020T105240+0800/postgres.dump",
+    "sha256": "25736bd329c6fedb660c8ccfd8acccd3e96aec4b3568719469389b709a84efcf",
+    "size_bytes": 1409015,
+    "format": "PostgreSQL custom",
+    "toc_entries": 251,
+    "restore_verified": true,
+    "restore_verification": ".scratch/corpus-structure-restart/backups/v14-s4-precutover-20261020T105240+0800/restore-verification.json"
+  },
+  "release_candidate": {
+    "tag": "corpus-v14-s4-rc1",
+    "tag_commit": "58260fbc60ad65129bbb98a47c07defc0850622f",
+    "evaluated_corpus_commit": "288711846b2af754b891120f0d58a7e2f7feab37",
+    "manifest": "docs/data_clean_dos/v14-s4-release-candidate-manifest.json",
+    "manifest_sha256": "5951a6e9328d4ce889f3cbf351c0f3159b5c4f5bce23f71c2332e0a5d8eba823",
+    "runtime_code_diff_from_inferred_production_commit": "none; RC1 adds documentation artifacts only"
+  },
+  "deployment_decision": {
+    "mode": "code-provenance cutover first; data plane unchanged",
+    "keep_corpus_target_db": "postgres",
+    "keep_active_publications": true,
+    "candidate_holdout_database_deployable": false,
+    "candidate_holdout_database": "v14_s2_quote_corpus",
+    "production_candidate_source_overlap": "0/8",
+    "forbidden": [
+      "Do not point production CORPUS_TARGET_DB or CORPUS_DSN at v14_s2_quote_corpus.",
+      "Do not publish any of the 12 holdout sources into production as part of RC1.",
+      "Do not restart the service from the dirty primary checkout.",
+      "Do not modify corpus_publications during the code-provenance cutover."
+    ]
+  },
+  "plans": {
+    "cutover": "docs/data_clean_dos/v14-s4-cutover-runbook.md",
+    "monitoring": "docs/data_clean_dos/v14-s4-monitoring-plan.md"
+  },
+  "executed": {
+    "production_database_write": false,
+    "production_pointer_switch": false,
+    "application_restart": false,
+    "model_test": false
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "artifact": "v14-s4-precutover-restore-verification",
+  "verified_at": "2026-10-20T10:56:45+08:00",
+  "source_dump": "postgres.dump",
+  "source_dump_sha256": "25736bd329c6fedb660c8ccfd8acccd3e96aec4b3568719469389b709a84efcf",
+  "source_dump_size_bytes": 1409015,
+  "archive": {
+    "format": "PostgreSQL custom",
+    "toc_entries": 251,
+    "dump_server_version": "18.6 (Debian 18.6-1.pgdg12+2)",
+    "pg_restore_list_exit": 0
+  },
+  "restore": {
+    "container_image": "pg18-zhvector@sha256:78d73570b538cfc9f146ec79593a743d8c21e76ba283352ebad371c28f5a30ed",
+    "network_ports_published": false,
+    "target_database": "restorecheck",
+    "pg_restore_exit": 0,
+    "temporary_container_removed": true
+  },
+  "verified_counts": {
+    "corpus_tables": 9,
+    "corpus_sources": 8,
+    "corpus_builds": 14,
+    "corpus_units": 7128,
+    "corpus_chunks": 1214,
+    "corpus_publications": 8,
+    "corpus_jobs": 42,
+    "running_jobs": 0,
+    "public_docs": 3,
+    "public_chinese_docs": 3
+  },
+  "matches_production_baseline": true
+}

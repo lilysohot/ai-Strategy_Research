@@ -1,5 +1,14 @@
 # 语料检索数据质量优化方案：先改善取证，再验证切块
 
+> **生产基线冻结与切换方案（2026-10-20）**：已通过只读事务冻结 `postgres.corpus` 当前状态：
+> 9 张表、8 个活动来源、14 个 build、7,128 个 unit、1,214 个 chunk、42 个 succeeded job、
+> 0 个 running job；`healthz`/`readyz` 均为 200。新鲜 `pg_dump` 已在无端口临时容器完整恢复，
+> 计数一致。生产 8 个来源与评测库 12 个 holdout 来源交集为 0，因此 RC1 采用代码来源正规化、
+> 数据面不变的方式，明确禁止把生产指向 `v14_s2_quote_corpus`。当前状态为
+> `PRODUCTION_BASELINE_FROZEN_CUTOVER_PLAN_READY_NOT_EXECUTED`，尚未重启服务或切换生产。详见
+> [生产冻结清单](v14-s4-production-freeze.json)、[切换与回滚 Runbook](v14-s4-cutover-runbook.md)
+> 和[上线监控方案](v14-s4-monitoring-plan.md)。
+>
 > **S4 发布候选冻结（2026-10-20）**：S0–S4 语料关键代码、`v14_s2_quote_corpus` 的 12 个
 > 活动 build、S4/S5 证据和收口结果已经绑定为发布候选，状态为
 > `RELEASE_CANDIDATE_FROZEN_NOT_DEPLOYED`。评测提交 `28871184…` 到冻结时集成 HEAD
