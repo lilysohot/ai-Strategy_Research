@@ -1,0 +1,1962 @@
+{
+  "artifact": "v14-s4-canary-8001",
+  "schema": "corpus-v14-s4-canary-8001-v1",
+  "started_at": "2026-10-20T03:17:22.277395+00:00",
+  "status": "CANARY_PASSED",
+  "mode": "read-only corpus canary; no model; no judge; no production switch",
+  "runtime": {
+    "url": "http://127.0.0.1:8001",
+    "rc1_worktree": "/home/administrator/FrontierAgent-rc1",
+    "head": "58260fbc60ad65129bbb98a47c07defc0850622f",
+    "expected_head": "58260fbc60ad65129bbb98a47c07defc0850622f",
+    "head_matches": true,
+    "manifest_sha256": "5951a6e9328d4ce889f3cbf351c0f3159b5c4f5bce23f71c2332e0a5d8eba823",
+    "manifest_matches": true
+  },
+  "frozen_reference": {
+    "baseline": "docs/data_clean_dos/v14-s4-production-baseline.json",
+    "freeze": "docs/data_clean_dos/v14-s4-production-freeze.json",
+    "recorded_publication_fingerprint": "5475ac32885611fde9b34adefd44f58ee53b01577646e8b959f56fb306b25ed1"
+  },
+  "model_tools": {
+    "initial_blocked_modules_loaded": [],
+    "model_calls": 0,
+    "judge_calls": 0,
+    "final_blocked_modules_loaded": []
+  },
+  "health_initial": {
+    "healthz": {
+      "status_code": 200,
+      "elapsed_ms": 5.61,
+      "body": {
+        "status": "ok"
+      }
+    },
+    "readyz": {
+      "status_code": 200,
+      "elapsed_ms": 3.96,
+      "body": {
+        "status": "ok"
+      }
+    }
+  },
+  "database_before": {
+    "captured_at": "2026-10-20T03:17:22.310872+00:00",
+    "database": "postgres",
+    "transaction_read_only": "on",
+    "table_counts": {
+      "corpus_admissions": 14,
+      "corpus_builds": 14,
+      "corpus_chunks": 1214,
+      "corpus_jobs": 42,
+      "corpus_publications": 8,
+      "corpus_review_decisions": 10,
+      "corpus_source_checkpoints": 16,
+      "corpus_sources": 8,
+      "corpus_units": 7128
+    },
+    "publication_pairs": [
+      [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c"
+      ],
+      [
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2"
+      ],
+      [
+        "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745"
+      ],
+      [
+        "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a"
+      ],
+      [
+        "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac"
+      ],
+      [
+        "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea"
+      ],
+      [
+        "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31"
+      ],
+      [
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768"
+      ]
+    ],
+    "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+    "publication_set_matches_frozen_baseline": true,
+    "build_checks": [
+      {
+        "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 1329,
+        "chunk_count": 146,
+        "expected_unit_count": 1329,
+        "expected_chunk_count": 146,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 44,
+        "chunk_count": 7,
+        "expected_unit_count": 44,
+        "expected_chunk_count": 7,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 326,
+        "chunk_count": 55,
+        "expected_unit_count": 326,
+        "expected_chunk_count": 55,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 474,
+        "chunk_count": 43,
+        "expected_unit_count": 474,
+        "expected_chunk_count": 43,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 269,
+        "chunk_count": 30,
+        "expected_unit_count": 269,
+        "expected_chunk_count": 30,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 613,
+        "chunk_count": 83,
+        "expected_unit_count": 613,
+        "expected_chunk_count": 83,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 230,
+        "chunk_count": 23,
+        "expected_unit_count": 230,
+        "expected_chunk_count": 23,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 91,
+        "chunk_count": 20,
+        "expected_unit_count": 91,
+        "expected_chunk_count": 20,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      }
+    ],
+    "all_build_checks_passed": true,
+    "running_jobs": 0
+  },
+  "probes": [
+    {
+      "query_id": "company-003",
+      "domain": "company",
+      "expected_source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "expected_build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "search_ok": true,
+      "query_status": "matched",
+      "hit_count": 10,
+      "expected_source_rank": 1,
+      "locator": "chunk:568f9e752f0fa65a:table:0024",
+      "kind": "table",
+      "fetch_ok": true,
+      "fetch_mode": "page_envelope",
+      "fetch_complete": true,
+      "fetched_items": 1,
+      "fetched_text_chars": 365,
+      "passed": true
+    },
+    {
+      "query_id": "company-005",
+      "domain": "company",
+      "expected_source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "expected_build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "search_ok": true,
+      "query_status": "matched",
+      "hit_count": 10,
+      "expected_source_rank": 1,
+      "locator": "chunk:568f9e752f0fa65a:table:0005",
+      "kind": null,
+      "fetch_ok": true,
+      "fetch_mode": "direct",
+      "fetch_complete": true,
+      "fetched_items": 4,
+      "fetched_text_chars": 288,
+      "passed": true
+    },
+    {
+      "query_id": "industry-001",
+      "domain": "industry",
+      "expected_source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "expected_build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "search_ok": true,
+      "query_status": "matched",
+      "hit_count": 10,
+      "expected_source_rank": 1,
+      "locator": "chunk:82dac0d446ef83cd:table:0022",
+      "kind": null,
+      "fetch_ok": true,
+      "fetch_mode": "direct",
+      "fetch_complete": true,
+      "fetched_items": 10,
+      "fetched_text_chars": 346,
+      "passed": true
+    },
+    {
+      "query_id": "industry-005",
+      "domain": "industry",
+      "expected_source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "expected_build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "search_ok": true,
+      "query_status": "matched",
+      "hit_count": 10,
+      "expected_source_rank": 1,
+      "locator": "chunk:1d0117eb6e17c63c:body:0008",
+      "kind": null,
+      "fetch_ok": true,
+      "fetch_mode": "direct",
+      "fetch_complete": true,
+      "fetched_items": 24,
+      "fetched_text_chars": 547,
+      "passed": true
+    },
+    {
+      "query_id": "macro-001",
+      "domain": "macro",
+      "expected_source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "expected_build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "search_ok": true,
+      "query_status": "matched",
+      "hit_count": 10,
+      "expected_source_rank": 1,
+      "locator": "chunk:9ebd323f89e55cc1:body:0001",
+      "kind": null,
+      "fetch_ok": true,
+      "fetch_mode": "direct",
+      "fetch_complete": true,
+      "fetched_items": 23,
+      "fetched_text_chars": 1223,
+      "passed": true
+    },
+    {
+      "query_id": "macro-008",
+      "domain": "macro",
+      "expected_source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "expected_build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "search_ok": true,
+      "query_status": "matched",
+      "hit_count": 10,
+      "expected_source_rank": 1,
+      "locator": "chunk:147e841aab35836a:body:0003",
+      "kind": null,
+      "fetch_ok": true,
+      "fetch_mode": "direct",
+      "fetch_complete": true,
+      "fetched_items": 27,
+      "fetched_text_chars": 1184,
+      "passed": true
+    }
+  ],
+  "all_probes_passed": true,
+  "database_after_probes": {
+    "captured_at": "2026-10-20T03:17:24.997673+00:00",
+    "database": "postgres",
+    "transaction_read_only": "on",
+    "table_counts": {
+      "corpus_admissions": 14,
+      "corpus_builds": 14,
+      "corpus_chunks": 1214,
+      "corpus_jobs": 42,
+      "corpus_publications": 8,
+      "corpus_review_decisions": 10,
+      "corpus_source_checkpoints": 16,
+      "corpus_sources": 8,
+      "corpus_units": 7128
+    },
+    "publication_pairs": [
+      [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c"
+      ],
+      [
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2"
+      ],
+      [
+        "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745"
+      ],
+      [
+        "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a"
+      ],
+      [
+        "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac"
+      ],
+      [
+        "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea"
+      ],
+      [
+        "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31"
+      ],
+      [
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768"
+      ]
+    ],
+    "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+    "publication_set_matches_frozen_baseline": true,
+    "build_checks": [
+      {
+        "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 1329,
+        "chunk_count": 146,
+        "expected_unit_count": 1329,
+        "expected_chunk_count": 146,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 44,
+        "chunk_count": 7,
+        "expected_unit_count": 44,
+        "expected_chunk_count": 7,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 326,
+        "chunk_count": 55,
+        "expected_unit_count": 326,
+        "expected_chunk_count": 55,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 474,
+        "chunk_count": 43,
+        "expected_unit_count": 474,
+        "expected_chunk_count": 43,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 269,
+        "chunk_count": 30,
+        "expected_unit_count": 269,
+        "expected_chunk_count": 30,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 613,
+        "chunk_count": 83,
+        "expected_unit_count": 613,
+        "expected_chunk_count": 83,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 230,
+        "chunk_count": 23,
+        "expected_unit_count": 230,
+        "expected_chunk_count": 23,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 91,
+        "chunk_count": 20,
+        "expected_unit_count": 91,
+        "expected_chunk_count": 20,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      }
+    ],
+    "all_build_checks_passed": true,
+    "running_jobs": 0
+  },
+  "no_database_drift_after_probes": true,
+  "observation": {
+    "planned_seconds": 900,
+    "sample_interval_seconds": 30,
+    "samples": [
+      {
+        "index": 0,
+        "captured_at": "2026-10-20T03:17:24.998234+00:00",
+        "elapsed_seconds": 0.0,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.42,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 3.82,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 1,
+        "captured_at": "2026-10-20T03:17:55.019663+00:00",
+        "elapsed_seconds": 30.02,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 4.17,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 4.97,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 2,
+        "captured_at": "2026-10-20T03:18:25.045544+00:00",
+        "elapsed_seconds": 60.05,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 3.04,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 3.8,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 3,
+        "captured_at": "2026-10-20T03:18:55.068843+00:00",
+        "elapsed_seconds": 90.08,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.81,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 3.79,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 4,
+        "captured_at": "2026-10-20T03:19:25.092457+00:00",
+        "elapsed_seconds": 120.1,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.83,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 3.92,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 5,
+        "captured_at": "2026-10-20T03:19:55.115850+00:00",
+        "elapsed_seconds": 150.12,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.69,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 3.6,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 6,
+        "captured_at": "2026-10-20T03:20:25.137824+00:00",
+        "elapsed_seconds": 180.15,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.75,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 4.05,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 7,
+        "captured_at": "2026-10-20T03:20:55.162827+00:00",
+        "elapsed_seconds": 210.17,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.65,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 4.42,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 8,
+        "captured_at": "2026-10-20T03:21:25.186886+00:00",
+        "elapsed_seconds": 240.2,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.51,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 3.23,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 9,
+        "captured_at": "2026-10-20T03:21:55.206814+00:00",
+        "elapsed_seconds": 270.22,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.15,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 3.41,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 10,
+        "captured_at": "2026-10-20T03:22:25.226943+00:00",
+        "elapsed_seconds": 300.24,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.96,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 3.32,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 11,
+        "captured_at": "2026-10-20T03:22:55.249732+00:00",
+        "elapsed_seconds": 330.27,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.04,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 3.1,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 12,
+        "captured_at": "2026-10-20T03:23:25.269929+00:00",
+        "elapsed_seconds": 360.29,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.2,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 2.82,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 13,
+        "captured_at": "2026-10-20T03:23:55.290429+00:00",
+        "elapsed_seconds": 390.31,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.19,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 2.98,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 14,
+        "captured_at": "2026-10-20T03:24:25.310247+00:00",
+        "elapsed_seconds": 420.33,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.5,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 3.33,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 15,
+        "captured_at": "2026-10-20T03:24:55.330655+00:00",
+        "elapsed_seconds": 450.35,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.47,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 3.46,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 16,
+        "captured_at": "2026-10-20T03:25:25.352023+00:00",
+        "elapsed_seconds": 480.38,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.17,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 3.26,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 17,
+        "captured_at": "2026-10-20T03:25:55.373313+00:00",
+        "elapsed_seconds": 510.4,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 1.94,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 3.29,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 18,
+        "captured_at": "2026-10-20T03:26:25.393490+00:00",
+        "elapsed_seconds": 540.42,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.88,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 3.53,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 19,
+        "captured_at": "2026-10-20T03:26:55.414506+00:00",
+        "elapsed_seconds": 570.44,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.25,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 5.92,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 20,
+        "captured_at": "2026-10-20T03:27:25.442245+00:00",
+        "elapsed_seconds": 600.47,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.71,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 3.82,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 21,
+        "captured_at": "2026-10-20T03:27:55.464887+00:00",
+        "elapsed_seconds": 630.5,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.64,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 4.36,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 22,
+        "captured_at": "2026-10-20T03:28:25.489190+00:00",
+        "elapsed_seconds": 660.52,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.6,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 3.97,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 23,
+        "captured_at": "2026-10-20T03:28:55.513680+00:00",
+        "elapsed_seconds": 690.55,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.37,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 4.05,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 24,
+        "captured_at": "2026-10-20T03:29:25.537497+00:00",
+        "elapsed_seconds": 720.57,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.99,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 4.49,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 25,
+        "captured_at": "2026-10-20T03:29:55.563706+00:00",
+        "elapsed_seconds": 750.6,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 3.02,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 5.79,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 26,
+        "captured_at": "2026-10-20T03:30:25.592969+00:00",
+        "elapsed_seconds": 780.63,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.6,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 4.38,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 27,
+        "captured_at": "2026-10-20T03:30:55.622768+00:00",
+        "elapsed_seconds": 810.66,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.54,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 4.81,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 28,
+        "captured_at": "2026-10-20T03:31:25.652066+00:00",
+        "elapsed_seconds": 840.69,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.7,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 3.89,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 29,
+        "captured_at": "2026-10-20T03:31:55.674769+00:00",
+        "elapsed_seconds": 870.72,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.86,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 4.71,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      },
+      {
+        "index": 30,
+        "captured_at": "2026-10-20T03:32:24.988142+00:00",
+        "elapsed_seconds": 900.03,
+        "healthz": {
+          "status_code": 200,
+          "elapsed_ms": 2.79,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "readyz": {
+          "status_code": 200,
+          "elapsed_ms": 3.56,
+          "body": {
+            "status": "ok"
+          }
+        },
+        "database": {
+          "publication_set_matches_frozen_baseline": true,
+          "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+          "all_build_checks_passed": true,
+          "running_jobs": 0,
+          "table_counts": {
+            "corpus_admissions": 14,
+            "corpus_builds": 14,
+            "corpus_chunks": 1214,
+            "corpus_jobs": 42,
+            "corpus_publications": 8,
+            "corpus_review_decisions": 10,
+            "corpus_source_checkpoints": 16,
+            "corpus_sources": 8,
+            "corpus_units": 7128
+          }
+        },
+        "passed": true
+      }
+    ],
+    "actual_seconds": 900.08,
+    "all_samples_passed": true
+  },
+  "database_final": {
+    "captured_at": "2026-10-20T03:32:25.028978+00:00",
+    "database": "postgres",
+    "transaction_read_only": "on",
+    "table_counts": {
+      "corpus_admissions": 14,
+      "corpus_builds": 14,
+      "corpus_chunks": 1214,
+      "corpus_jobs": 42,
+      "corpus_publications": 8,
+      "corpus_review_decisions": 10,
+      "corpus_source_checkpoints": 16,
+      "corpus_sources": 8,
+      "corpus_units": 7128
+    },
+    "publication_pairs": [
+      [
+        "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c"
+      ],
+      [
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2"
+      ],
+      [
+        "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745"
+      ],
+      [
+        "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a"
+      ],
+      [
+        "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac"
+      ],
+      [
+        "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea"
+      ],
+      [
+        "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31"
+      ],
+      [
+        "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768"
+      ]
+    ],
+    "publication_fingerprint_canonical_sha256": "8c0c8c07e7ff8d9273dc65fc01e3726e420eb9b34fb26e01f717dd91ea71e26e",
+    "publication_set_matches_frozen_baseline": true,
+    "build_checks": [
+      {
+        "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+        "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 1329,
+        "chunk_count": 146,
+        "expected_unit_count": 1329,
+        "expected_chunk_count": 146,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+        "build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 44,
+        "chunk_count": 7,
+        "expected_unit_count": 44,
+        "expected_chunk_count": 7,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+        "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 326,
+        "chunk_count": 55,
+        "expected_unit_count": 326,
+        "expected_chunk_count": 55,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+        "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 474,
+        "chunk_count": 43,
+        "expected_unit_count": 474,
+        "expected_chunk_count": 43,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+        "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 269,
+        "chunk_count": 30,
+        "expected_unit_count": 269,
+        "expected_chunk_count": 30,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 613,
+        "chunk_count": 83,
+        "expected_unit_count": 613,
+        "expected_chunk_count": 83,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+        "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 230,
+        "chunk_count": 23,
+        "expected_unit_count": 230,
+        "expected_chunk_count": 23,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      },
+      {
+        "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+        "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+        "exists": true,
+        "source_matches": true,
+        "active": true,
+        "unit_count": 91,
+        "chunk_count": 20,
+        "expected_unit_count": 91,
+        "expected_chunk_count": 20,
+        "job_states": {
+          "succeeded": 3
+        },
+        "passed": true
+      }
+    ],
+    "all_build_checks_passed": true,
+    "running_jobs": 0
+  },
+  "health_final": {
+    "healthz": {
+      "status_code": 200,
+      "elapsed_ms": 2.39,
+      "body": {
+        "status": "ok"
+      }
+    },
+    "readyz": {
+      "status_code": 200,
+      "elapsed_ms": 3.46,
+      "body": {
+        "status": "ok"
+      }
+    }
+  },
+  "no_database_drift_final": true,
+  "completed_at": "2026-10-20T03:32:25.034945+00:00",
+  "probe_contract_note": "The first assertion treated every corpus_fetch response as a page envelope. corpus_fetch has two valid success shapes: direct single-block text/units and a page envelope for fallback/fragmented results. Probes were rerun and normalized against both documented shapes; no retrieval was rerun through a model or judge.",
+  "probes_initial_overstrict": [
+    {
+      "query_id": "company-003",
+      "domain": "company",
+      "expected_source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "expected_build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "search_ok": true,
+      "query_status": "matched",
+      "hit_count": 10,
+      "expected_source_rank": 1,
+      "locator": "chunk:568f9e752f0fa65a:table:0024",
+      "kind": "table",
+      "fetch_ok": true,
+      "fetch_complete": true,
+      "fetched_items": 1,
+      "fetched_text_chars": 365,
+      "passed": true
+    },
+    {
+      "query_id": "company-005",
+      "domain": "company",
+      "expected_source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "expected_build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "search_ok": true,
+      "query_status": "matched",
+      "hit_count": 10,
+      "expected_source_rank": 1,
+      "locator": "chunk:568f9e752f0fa65a:table:0005",
+      "kind": null,
+      "fetch_ok": true,
+      "fetch_complete": null,
+      "fetched_items": 0,
+      "fetched_text_chars": 0,
+      "passed": false
+    },
+    {
+      "query_id": "industry-001",
+      "domain": "industry",
+      "expected_source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "expected_build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "search_ok": true,
+      "query_status": "matched",
+      "hit_count": 10,
+      "expected_source_rank": 1,
+      "locator": "chunk:82dac0d446ef83cd:table:0022",
+      "kind": null,
+      "fetch_ok": true,
+      "fetch_complete": null,
+      "fetched_items": 0,
+      "fetched_text_chars": 0,
+      "passed": false
+    },
+    {
+      "query_id": "industry-005",
+      "domain": "industry",
+      "expected_source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "expected_build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "search_ok": true,
+      "query_status": "matched",
+      "hit_count": 10,
+      "expected_source_rank": 1,
+      "locator": "chunk:1d0117eb6e17c63c:body:0008",
+      "kind": null,
+      "fetch_ok": true,
+      "fetch_complete": null,
+      "fetched_items": 0,
+      "fetched_text_chars": 0,
+      "passed": false
+    },
+    {
+      "query_id": "macro-001",
+      "domain": "macro",
+      "expected_source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "expected_build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "search_ok": true,
+      "query_status": "matched",
+      "hit_count": 10,
+      "expected_source_rank": 1,
+      "locator": "chunk:9ebd323f89e55cc1:body:0001",
+      "kind": null,
+      "fetch_ok": true,
+      "fetch_complete": null,
+      "fetched_items": 0,
+      "fetched_text_chars": 0,
+      "passed": false
+    },
+    {
+      "query_id": "macro-008",
+      "domain": "macro",
+      "expected_source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "expected_build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "search_ok": true,
+      "query_status": "matched",
+      "hit_count": 10,
+      "expected_source_rank": 1,
+      "locator": "chunk:147e841aab35836a:body:0003",
+      "kind": null,
+      "fetch_ok": true,
+      "fetch_complete": null,
+      "fetched_items": 0,
+      "fetched_text_chars": 0,
+      "passed": false
+    }
+  ],
+  "normalized_at": "2026-10-20T03:32:33.981716+00:00"
+}
