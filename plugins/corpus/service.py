@@ -63,6 +63,7 @@ if TYPE_CHECKING:
     from plugins.corpus.preparation.search_pg import SearchHit as SearchPgHit
     from plugins.corpus.preparation.selection import SelectedBand
     from plugins.corpus.retrieval.diagnostics import RetrievalTrace
+    from plugins.corpus.retrieval.native import NativeIndex, NativeResult
     from plugins.corpus.structured.roles import RoleDispatch, RoleExecution
     from plugins.corpus.structured.snapshot import EvidenceSnapshot
 
@@ -1566,6 +1567,28 @@ class CorpusService:
                 )
             )
         return hits_out, coverage
+
+    def search_native_evidence(
+        self,
+        query: str,
+        *,
+        index: NativeIndex,
+        limit: int = 20,
+        char_budget: int = 16000,
+        trace: RetrievalTrace | None = None,
+    ) -> NativeResult:
+        """Explicit isolated pilot: search and return bounded, exact native slices."""
+        from plugins.corpus.retrieval.native_pg import search_native
+
+        return search_native(
+            self._dsn,
+            self._target_db,
+            query,
+            index,
+            limit=limit,
+            char_budget=char_budget,
+            trace=trace,
+        )
 
     def evidence_previews(self, query: str, hits: Sequence[SearchHit]) -> list[dict[str, object]]:
         """Pilot-only first-read plans; does not alter retrieval or citation receipts."""

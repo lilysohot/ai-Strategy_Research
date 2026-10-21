@@ -108,3 +108,7 @@ server/*.db
 .scratch/**/*.pid
 .scratch/**/live/
 .scratch/corpus-body-ranking-20261021/
+.scratch/corpus-native5-ranking-20261021/
+.scratch/corpus-native5-eval-20261021/
+.scratch/corpus-combined57-20261021/
+.scratch/corpus-native-integration-20261021/

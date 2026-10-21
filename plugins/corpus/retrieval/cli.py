@@ -36,7 +36,8 @@ def pilot_dsn(config: VectorConfig) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "command", choices=("status", "init", "metadata", "build", "query", "compare")
+        "command",
+        choices=("status", "init", "metadata", "build", "query", "compare", "native-query"),
     )
     parser.add_argument("--max-requests", type=int, default=10)
     parser.add_argument("--retry-failed", action="store_true")
@@ -47,9 +48,13 @@ def main() -> int:
     )
     parser.add_argument("--query", default="")
     parser.add_argument("--mode", choices=("lexical", "hybrid"), default="hybrid")
-    parser.add_argument("--limit", type=int, default=10)
+    parser.add_argument("--limit", type=int)
     parser.add_argument("--metadata-file", type=Path)
+    parser.add_argument("--native-index", type=Path)
+    parser.add_argument("--char-budget", type=int, default=16000)
     args = parser.parse_args()
+    if args.limit is None:
+        args.limit = 20 if args.command == "native-query" else 10
     if args.max_requests < 0 or not 1 <= args.limit <= 20:
         parser.error("--max-requests must be >= 0; --limit must be between 1 and 20")
     load_dotenv()
@@ -75,6 +80,22 @@ def main() -> int:
                 max_requests=args.max_requests,
                 retry_failed=args.retry_failed,
                 retry_uncertain=args.retry_uncertain,
+            )
+        elif args.command == "native-query":
+            if not args.query.strip() or args.native_index is None:
+                parser.error("native-query requires --query and --native-index")
+            if not 1 <= args.char_budget <= 16000:
+                parser.error("--char-budget must be between 1 and 16000")
+            from plugins.corpus.retrieval.native import NativeIndex
+            from plugins.corpus.service import CorpusService
+
+            output = asdict(
+                CorpusService(target).search_native_evidence(
+                    args.query,
+                    index=NativeIndex(args.native_index),
+                    limit=args.limit,
+                    char_budget=args.char_budget,
+                )
             )
         else:
             if not args.query.strip():
