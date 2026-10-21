@@ -1,0 +1,120 @@
+{
+  "case": {
+    "id": "n01",
+    "question": "紫荆量子光电股份有限公司2026年上半年营业收入和净利润是多少？",
+    "build_id": null,
+    "source_id": null
+  },
+  "capture_sha256": "21d6002ec07cfbd64427d94f34d1837745ea86160fb7ad26119b40982c2f46ed",
+  "top10_pool": [
+    "022ae1713fb760ff:body:0001",
+    "022ae1713fb760ff:body:0021",
+    "16a9a510ef9e405f:body:0007",
+    "16a9a510ef9e405f:body:0016",
+    "568f9e752f0fa65a:body:0003",
+    "568f9e752f0fa65a:body:0014",
+    "568f9e752f0fa65a:body:0016",
+    "568f9e752f0fa65a:body:0017",
+    "568f9e752f0fa65a:body:0018",
+    "568f9e752f0fa65a:body:0019",
+    "568f9e752f0fa65a:body:0022",
+    "568f9e752f0fa65a:body:0023",
+    "568f9e752f0fa65a:body:0037",
+    "568f9e752f0fa65a:table:0000",
+    "568f9e752f0fa65a:table:0001",
+    "568f9e752f0fa65a:table:0002",
+    "568f9e752f0fa65a:table:0015",
+    "568f9e752f0fa65a:table:0018",
+    "7ceca88433b092ae:body:0012",
+    "9fa4cd7cf1ab602a:body:0003",
+    "9fa4cd7cf1ab602a:table:0000",
+    "9fa4cd7cf1ab602a:table:0009"
+  ],
+  "reviewed_report_scope": [],
+  "ranks": {
+    "568f9e752f0fa65a:body:0016": {
+      "lexical": 1,
+      "dense": 10,
+      "fused": 2,
+      "production": 6
+    },
+    "568f9e752f0fa65a:body:0003": {
+      "lexical": 2,
+      "dense": 2,
+      "fused": 1,
+      "production": 1
+    },
+    "568f9e752f0fa65a:body:0014": {
+      "lexical": 3
+    },
+    "568f9e752f0fa65a:table:0000": {
+      "lexical": 4,
+      "dense": 7,
+      "fused": 4
+    },
+    "568f9e752f0fa65a:body:0037": {
+      "lexical": 5,
+      "fused": 10
+    },
+    "568f9e752f0fa65a:body:0017": {
+      "lexical": 6
+    },
+    "568f9e752f0fa65a:body:0023": {
+      "lexical": 7,
+      "dense": 3,
+      "fused": 3,
+      "production": 10
+    },
+    "568f9e752f0fa65a:body:0019": {
+      "lexical": 8,
+      "fused": 7
+    },
+    "568f9e752f0fa65a:body:0018": {
+      "lexical": 9
+    },
+    "568f9e752f0fa65a:table:0018": {
+      "lexical": 10,
+      "fused": 8
+    },
+    "9fa4cd7cf1ab602a:body:0003": {
+      "dense": 1
+    },
+    "568f9e752f0fa65a:table:0015": {
+      "dense": 4,
+      "fused": 6
+    },
+    "16a9a510ef9e405f:body:0007": {
+      "dense": 5,
+      "production": 2
+    },
+    "568f9e752f0fa65a:body:0022": {
+      "dense": 6,
+      "fused": 5
+    },
+    "9fa4cd7cf1ab602a:table:0000": {
+      "dense": 8,
+      "production": 3
+    },
+    "568f9e752f0fa65a:table:0002": {
+      "dense": 9
+    },
+    "568f9e752f0fa65a:table:0001": {
+      "fused": 9
+    },
+    "7ceca88433b092ae:body:0012": {
+      "production": 4
+    },
+    "022ae1713fb760ff:body:0001": {
+      "production": 5
+    },
+    "16a9a510ef9e405f:body:0016": {
+      "production": 7
+    },
+    "9fa4cd7cf1ab602a:table:0009": {
+      "production": 8
+    },
+    "022ae1713fb760ff:body:0021": {
+      "production": 9
+    }
+  }
+}

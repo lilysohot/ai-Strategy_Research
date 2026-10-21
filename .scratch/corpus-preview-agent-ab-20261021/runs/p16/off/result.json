@@ -1,0 +1,125 @@
+{
+  "case": "p16",
+  "mode": "off",
+  "question": "国联民生的CIOE前瞻里，华工正源和立讯技术分别计划展示什么NPO产品？",
+  "manifest_sha256": "50305e59759c13d662dce9ae84001474ae7dec596c55aed1449c9aabf1250a68",
+  "vector_profile": "fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107",
+  "model": "glm-5.3-flash",
+  "prompt_sha256": "2528842bb71243ec76bcf0f5d3e6ed575ea6f2be84af722cf02bad606e599470",
+  "profile_overrides": {
+    "llm": {
+      "max_tokens": 8192
+    },
+    "agent": {
+      "agent_tools": [
+        "corpus_search",
+        "corpus_fetch"
+      ],
+      "task_board": false,
+      "reporter": false,
+      "main_max_turns": 12,
+      "research_wall_time_s": 300,
+      "wall_deadline_reserve_s": 30,
+      "llm_timeout_s": 180,
+      "logical_call_timeout_s": 210,
+      "reasoning_only_timeout_s": 120,
+      "reasoning_only_max_tokens": 4096,
+      "salvage_infra_errors": false,
+      "compaction_spill": false
+    }
+  },
+  "final_answer": "清单已验证通过（C1: supported）。答案如下：\n\n**国联民生《通信行业周报：2026 CIOE 中国光博会前瞻》（2026-09-06，分析师张宁、范宇）第1页原文：**\n\n> “2）NPO 加速推动光引擎向交换芯片侧靠近……**华工正源将动态展示 6.4T 去 DSP NPO 光引擎，立讯技术则计划展示 3.2T NPO 光引擎 Live Demo**。”\n\n**结论：**\n- **华工正源**：动态展示 **6.4T 去 DSP NPO 光引擎**\n- **立讯技术**：计划展示 **3.2T NPO 光引擎 Live Demo**\n\n**来源**\n- 标题：《通信行业周报 2026 CIOE 中国光博会前瞻》（国联民生证券，2026年09月06日）\n- doc_id：`cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509`\n- locator：`chunk:7ceca88433b092ae:body:0001`（第1页）",
+  "answer_status": "complete",
+  "stopped_by": "no_tool",
+  "final_answer_source": "agent",
+  "final_answer_rescued": false,
+  "errors": [],
+  "react_steps": [
+    {
+      "turn": 1,
+      "thinking": "The user asks: In 国联民生 (Guolian Minsheng) 's CIOE前瞻 (CIOE preview) report, what NPO products do 华工正源 and 立讯技术 plan to showcase respectively?\n\nI need to search the local corpus for this. Let me search for relevant terms like \"CIOE\" \"华工正源\" \"NPO\" \"立讯\".",
+      "tool_name": "corpus_search",
+      "tool_args": "{\"query\": \"CIOE 华工正源 NPO\"}",
+      "tool_result": "{\"ok\": true, \"query\": \"CIOE 华工正源 NPO\", \"count\": 10, \"hits\": [{\"doc_id\": \"cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"locator\": \"chunk:7ceca88433b092ae:body:0004\", \"source_id\": \"8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122\", \"build_id\": \"7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"chunk_id\": \"7ceca88433b092ae:body:0004\", \"context_locators\": [\"chunk:7ceca88433b092ae:body:0000\", \"chunk:7ceca88433b092ae:heading:0000\", \"chunk:7ceca88433b092ae:body:0001\", \"chunk:7ceca88433b092ae:body:0002\", \"chunk:7ceca88433b092ae:body:0003\", \"chunk:7ceca88433b092ae:body:0004\", \"chunk:7ceca88433b092ae:body:0005\", \"chunk:7ceca88433b092ae:body:0006\", \"chunk:7ceca88433b092ae:body:0007\", \"chunk:7ceca88433b092ae:heading:0001\", \"chunk:7ceca88433b092ae:body:0008\", \"chunk:7ceca88433b092ae:heading:0002\", \"chunk:7ceca88433b092ae:body:0009\", \"chunk:7ceca88433b092ae:body:0010\", \"chunk:7ceca88433b092ae:body:0011\", \"chunk:7ceca88433b092ae:body:0012\", \"chunk:7ceca88433b092ae:body:0013\", \"chunk:7ceca88433b092ae:heading:0003\", \"chunk:7ceca88433b092ae:body:0014\", \"chunk:7ceca88433b092ae:body:0015\", \"chunk:7ceca88433b092ae:heading:0004\", \"chunk:7ceca88433b092ae:body:0016\"], \"fetch_plan\": {\"doc_id\": \"cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"locator\": \"chunk:7ceca88433b092ae:body:0004\", \"locators\": [\"chunk:7ceca88433b092ae:body:0000\", \"chunk:7ceca88433b092ae:heading:0000\", \"chunk:7ceca88433b092ae:body:0001\", \"chunk:7ceca88433b092ae:body:0002\", \"chunk:7ceca88433b092ae:body:0003\", \"chunk:7ceca88433b092ae:body:0004\", \"chunk:7ceca88433b092ae:body:0005\", \"chunk:7ceca88433b092ae:body:0006\", \"chunk:7ceca88433b092ae:body:0007\", \"chunk:7ceca88433b092ae:heading:0001\", \"chunk:7ceca88433b092ae:body:0008\", \"chunk:7ceca88433b092ae:heading:0002\", \"chunk:7ceca88433b092ae:body:0009\", \"chunk:7ceca88433b092ae:body:0010\", \"chunk:7ceca88433b092ae:body:0011\", \"chunk:7ceca88433b092ae:body:0012\", \"chunk:7ceca88433b092ae:body:0013\", \"chunk:7ceca88433b092ae:heading:0003\", \"chunk:7ceca88433b092ae:body:0014\", \"chunk:7ceca88433b092ae:body:0015\", \"chunk:7ceca88433b092ae:heading:0004\", \"chunk:7ceca88433b092ae:body:0016\"], \"scope_id\": \"scope:586216fde12a53a10c8dfa2035b2b7b8\", \"view\": \"compact\"}, \"scope_id\": \"scope:586216fde12a53a10c8dfa2035b2b7b8\", \"total_chunks\": 22, \"by_kind\": {\"unknown\": 22}, \"table_chunks\": 0, \"title\": \"1 2026 CIOE 中国光博会前瞻\", \"published\": \"undated\", \"snippet\": \"<b>华工</b>正源：6.4T<b>NPO</b>光\"}, {\"doc_id\": \"cv2:6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2\", \"locator\": \"chunk:6475cbacca1575c5:body:0001\", \"source_id\": \"48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f\", \"build_id\": \"6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2\", \"chunk_id\": \"6475cbacca1575c5:body:0001\", \"context_locators\": [\"chunk:6475cbacca1575c5:body:0000\", \"chunk:6475cbacca1575c5:body:0001\", \"chunk:6475cbacca1575c5:body:0002\", \"chunk:6475cbacca1575c5:body:0003\", \"chunk:6475cbacca1575c5:body:0004\", \"chunk:6475cbacca1575c5:body:0005\", \"chunk:6475cbacca1575c5:body:0006\"], \"fetch_plan\": {\"doc_id\": \"cv2:6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2\", \"locator\": \"chunk:6475cbacca1575c5:body:0001\", \"locators\": [\"chunk:6475cbacca1575c5:body:0000\", \"chunk:6475cbacca1575c5:body:0001\", \"chunk:6475cbacca1575c5:body:0002\", \"chunk:6475cbacca1575c5:body:0003\", \"chunk:6475cbacca1575c5:body:0004\", \"chunk:6475cbacca1575c5:body:0005\", \"chunk:6475cbacca1575c5:body:0006\"], \"scope_id\": \"scope:e011f7e0ba1f8e1028877a420ec450b9\", \"view\": \"compact\"}, \"scope_id\": \"scope:e011f7e0ba1f8e1028877a420ec450b9\", \"total_chunks\": 7, \"by_kind\": {\"unknown\": 7}, \"table_chunks\": 0, \"title\": \"6475cbacca1575c5:body:0001\", \"published\": \"undated\", \"snippet\": \"<b>NPO</b>，<b>NPO</b>可以理解为一种\"}, {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0004\", \"source_id\": \"3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e\", \"build_id\": \"022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"chunk\n... [truncated 13399 of 17495 chars]",
+      "duration_ms": 475,
+      "is_error": false
+    },
+    {
+      "turn": 1,
+      "thinking": "The user asks: In 国联民生 (Guolian Minsheng) 's CIOE前瞻 (CIOE preview) report, what NPO products do 华工正源 and 立讯技术 plan to showcase respectively?\n\nI need to search the local corpus for this. Let me search for relevant terms like \"CIOE\" \"华工正源\" \"NPO\" \"立讯\".",
+      "tool_name": "corpus_search",
+      "tool_args": "{\"query\": \"立讯技术 NPO 展示\"}",
+      "tool_result": "{\"ok\": true, \"query\": \"立讯技术 NPO 展示\", \"count\": 10, \"hits\": [{\"doc_id\": \"cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"locator\": \"chunk:7ceca88433b092ae:body:0001\", \"source_id\": \"8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122\", \"build_id\": \"7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"chunk_id\": \"7ceca88433b092ae:body:0001\", \"context_locators\": [\"chunk:7ceca88433b092ae:body:0000\", \"chunk:7ceca88433b092ae:heading:0000\", \"chunk:7ceca88433b092ae:body:0001\", \"chunk:7ceca88433b092ae:body:0002\", \"chunk:7ceca88433b092ae:body:0003\", \"chunk:7ceca88433b092ae:body:0004\", \"chunk:7ceca88433b092ae:body:0005\", \"chunk:7ceca88433b092ae:body:0006\", \"chunk:7ceca88433b092ae:body:0007\", \"chunk:7ceca88433b092ae:heading:0001\", \"chunk:7ceca88433b092ae:body:0008\", \"chunk:7ceca88433b092ae:heading:0002\", \"chunk:7ceca88433b092ae:body:0009\", \"chunk:7ceca88433b092ae:body:0010\", \"chunk:7ceca88433b092ae:body:0011\", \"chunk:7ceca88433b092ae:body:0012\", \"chunk:7ceca88433b092ae:body:0013\", \"chunk:7ceca88433b092ae:heading:0003\", \"chunk:7ceca88433b092ae:body:0014\", \"chunk:7ceca88433b092ae:body:0015\", \"chunk:7ceca88433b092ae:heading:0004\"], \"fetch_plan\": {\"doc_id\": \"cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"locator\": \"chunk:7ceca88433b092ae:body:0001\", \"locators\": [\"chunk:7ceca88433b092ae:body:0000\", \"chunk:7ceca88433b092ae:heading:0000\", \"chunk:7ceca88433b092ae:body:0001\", \"chunk:7ceca88433b092ae:body:0002\", \"chunk:7ceca88433b092ae:body:0003\", \"chunk:7ceca88433b092ae:body:0004\", \"chunk:7ceca88433b092ae:body:0005\", \"chunk:7ceca88433b092ae:body:0006\", \"chunk:7ceca88433b092ae:body:0007\", \"chunk:7ceca88433b092ae:heading:0001\", \"chunk:7ceca88433b092ae:body:0008\", \"chunk:7ceca88433b092ae:heading:0002\", \"chunk:7ceca88433b092ae:body:0009\", \"chunk:7ceca88433b092ae:body:0010\", \"chunk:7ceca88433b092ae:body:0011\", \"chunk:7ceca88433b092ae:body:0012\", \"chunk:7ceca88433b092ae:body:0013\", \"chunk:7ceca88433b092ae:heading:0003\", \"chunk:7ceca88433b092ae:body:0014\", \"chunk:7ceca88433b092ae:body:0015\", \"chunk:7ceca88433b092ae:heading:0004\"], \"scope_id\": \"scope:260a866186113b1b89b372c09f07b0b4\", \"view\": \"compact\"}, \"scope_id\": \"scope:260a866186113b1b89b372c09f07b0b4\", \"total_chunks\": 21, \"by_kind\": {\"unknown\": 21}, \"table_chunks\": 0, \"title\": \"通信行业周报\\n2026 CIOE 中国光博会前瞻\", \"published\": \"undated\", \"snippet\": \"<b>技术</b>则计划<b>展示</b>3.2T<b>NPO</b>光\"}, {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0004\", \"source_id\": \"3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e\", \"build_id\": \"022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"chunk_id\": \"022ae1713fb760ff:body:0004\", \"context_locators\": [\"chunk:022ae1713fb760ff:body:0000\", \"chunk:022ae1713fb760ff:body:0001\", \"chunk:022ae1713fb760ff:body:0002\", \"chunk:022ae1713fb760ff:body:0003\", \"chunk:022ae1713fb760ff:body:0004\", \"chunk:022ae1713fb760ff:body:0005\", \"chunk:022ae1713fb760ff:body:0006\", \"chunk:022ae1713fb760ff:body:0007\", \"chunk:022ae1713fb760ff:body:0008\", \"chunk:022ae1713fb760ff:body:0009\", \"chunk:022ae1713fb760ff:table:0000\", \"chunk:022ae1713fb760ff:body:0010\", \"chunk:022ae1713fb760ff:body:0011\", \"chunk:022ae1713fb760ff:body:0012\", \"chunk:022ae1713fb760ff:body:0013\", \"chunk:022ae1713fb760ff:body:0014\"], \"fetch_plan\": {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0004\", \"locators\": [\"chunk:022ae1713fb760ff:body:0000\", \"chunk:022ae1713fb760ff:body:0001\", \"chunk:022ae1713fb760ff:body:0002\", \"chunk:022ae1713fb760ff:body:0003\", \"chunk:022ae1713fb760ff:body:0004\", \"chunk:022ae1713fb760ff:body:0005\", \"chunk:022ae1713fb760ff:body:0006\", \"chunk:022ae1713fb760ff:body:0007\", \"chunk:022ae1713fb760ff:body:0008\", \"chunk:022ae1713fb760ff:body:0009\", \"chunk:022ae1713fb760ff:table:0000\", \"chunk:022ae1713fb760ff:body:0010\", \"chunk:022ae1713fb760ff:body:0011\", \"chunk:022ae1713fb760ff:body:0012\", \"chunk:022ae1713fb760ff:body:0013\", \"chunk:022ae1713fb760ff:body:0014\"], \"scope\n... [truncated 14205 of 18301 chars]",
+      "duration_ms": 605,
+      "is_error": false
+    },
+    {
+      "turn": 2,
+      "thinking": "I found the document \"通信行业周报 2026 CIOE 中国光博会前瞻\" (doc_id: cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509). The relevant chunks appear to be around body:0001 (mentions \"技术则计划展示3.2T NPO光\" — likely 立讯技术) and body:0004 (mentions \"华工正源：6.4T NPO光\").\n\nLet me fetch the full text of these chunks. I'll fetch the context locators to get the full document section. Let me fetch body:0001 through body:0007 plus headings to see the relevant content.",
+      "tool_name": "corpus_fetch",
+      "tool_args": "{\"doc_id\": \"cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"locators\": [\"chunk:7ceca88433b092ae:body:0001\", \"chunk:7ceca88433b092ae:body:0002\", \"chunk:7ceca88433b092ae:body:0003\", \"chunk:7ceca88433b092ae:body:0004\", \"chunk:7ceca88433b092ae:body:0005\"]}",
+      "tool_result": "{\"ok\": true, \"schema_version\": 1, \"cursor_type\": \"content\", \"doc_id\": \"cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"build_id\": \"7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"scope_id\": \"scope:9d26ede5151124e7ed716d06b33a51a9\", \"view\": \"full\", \"items\": [{\"locator\": \"chunk:7ceca88433b092ae:body:0001\", \"chunk_id\": \"7ceca88433b092ae:body:0001\", \"kind\": \"body\", \"build_id\": \"7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"text\": \"通信行业周报 \\n2026 年9 月9-11 日，第27 届中国国际光电博览会（CIOE 中国光博会）将在\\n深圳国际会展中心（宝安）举办。CIOE 中国光博会八大主题展覆盖信息通信、精\\n密光学、摄像头技术及应用、激光及智能制造、红外、紫外、智能传感、新型显\\n示、AR&VR、光电子创新等板块。\\n本届 CIOE 可重点关注光互联高速率演进、互联架构架构变化以及光器件和系统\\n级光网络的技术进展：1）高速光互联继续向更高速率演进，单波400G、3.2T 及\\n更高容量方案成为重要前瞻方向。在1.6T 持续推进的基础上，光迅科技将展示单\\n波400G 核心技术，Coherent 则进一步布局6.4T CPO、12.8T XPO 等方案。随\\n着单通道速率提升，DSP、光芯片、高速电接口及信号完整性的协同能力将成为\\n下一阶段产品升级的重要支撑。2）NPO 加速推动光引擎向交换芯片侧靠近，AI\\nScale-Up 互联架构有望进一步演进。华工正源将动态展示6.4T 去DSP NPO 光\\n引擎，立讯技术则计划展示 3.2T NPO 光引擎 Live Demo。相较传统可插拔方\\n案，缩短高速电连接距离有助于降低功耗并改善信号完整性，NPO 的工程化和客\\n户验证进展有望进一步加快。3）3.2T 及NPO/CPO 演进推动光芯片、光组件及\\n精密耦合等底层器件加速升级。仕佳光子将集中展示DFB、EML、SOA 等有源芯\\n片，以及 AWG、MT-FA、FAU 等高速光组件。随着 3.2T 及 NPO/CPO 持续推\\n进，光源、光芯片、精密耦合和高密度连接的重要性有望同步提升，产业链价值\\n量或进一步向底层核心器件扩散。4）AI 数据中心光互联正在由单点链路升级向\\n系统级光网络协同延伸。长芯博创将展示 1.6T 光模块、EBO 预端接光缆以及基\\n于MEMS 技术的全光交换机，覆盖高速传输、光连接与OCS 多个环节。随着AI\\n集群规模扩大，除端口速率外，跨机柜流量调度、网络能效及低时延互联也将成\\n为下一阶段光网络升级的重要方向。\\n行业要闻：\\n英伟达向联发科投资35 亿美元，深化芯片合作\\nNASA 向蓝色起源授予火星通信网络开发合同，该合同价值可能高达7 亿美元\\n公司动态：\\n中际旭创：9 月1 日，中际旭创发布关于首次回购公司股份的公告。公司于9 月\\n1 日首次通过股份回购专用证券账户以集中竞价交易方式回购公司股份 37.41 万\\n股，占公司总股本的0.0318%，最高成交价为870.00 元/股，最低成交价为838.16\\n元/股，支付总金额为3.18 亿元（不含交易费用）。\\n投资建议：CIOE 2026 参展企业展品预告显示，AI 算力集群扩张仍在推动光互联\\n向更高速率、更低功耗方向演进，产业技术有望从800G 进一步向1.6T 升级。从\\n参展企业披露的产品进展看，1.6T 正逐步进入规模上量阶段，3.2T 及更高阶产品\\n则陆续推进送样与客户验证。随着AI 集群规模持续扩大，NPO、CPO、XPO 等\\n新型架构的产业化进展有望成为本届展会的重要看点。从产业链布局看，参展产\\n品进一步向高速 DSP 及模拟芯片、EML/硅光激光器、CW 光源、光引擎、光芯\\n片、高密度连接及先进光电封装等环节延伸，随着速率和架构持续升级，核心光\\n电器件和光引擎的重要性有望进一步提升。建议关注高速光模块相关标的：中际\\n旭创、新易盛等；同时建议关注CPO 及光器件相关标的：天孚通信、炬光科技、\\n蘅东光、光库科技、致尚科技、长盈通等。\\n风险提示：AI 需求不及预期、行业竞争加剧及产品价格下降风险、核心器件及供\\n应链波动风险，展会信息及产品进展存在变化风险。\", \"pages\": [1], \"fragment\": null, \"text_chars\": 1521, \"text_sha256\": \"95e36e37155c362ac3e6ffe4e9288bd2b132e986797fc206749e2aa7d8dcdeea\", \"structure_status\": \"partial\", \"content_role\": \"content\", \"relations\": [{\"target_locator\": null, \"target_kind\": \"heading\", \"target_heading\": \"通信行业周报\\n2026 CIOE 中国光博会前瞻\", \"relation\": \"caption_of\", \"status\": \"candidate\", \"basis\": \"title_text_without_member_heading\"}], \"relation_status\": \"candidate\", \"label_path\": [\"推荐 维持评级\"], \"source_id\": \"8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122\", \"units\": [{\"unit_id\": \"unit:0004\", \"page\": 1}, {\"unit_id\": \"unit:0006\", \"page\": 1}]}, {\"locator\": \"chunk:7ceca88433b092ae:body:0002\", \"chunk_id\": \"7ceca88433b092ae:body:0002\", \"kind\": \"body\", \"build_id\": \"7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"text\": \"推荐 维持评级\\n分析师 张宁\\n执业证书： S0590523120003\\n邮箱： zhangnyj@glms.com.cn\\n分析师 范宇\\n执业证书： S0590525110074\\n邮箱： fanyu@glms.com.cn\\n相对走势\\n通信 沪深300\\n220%\\n143%\\n67%\\n-10%\\n2025/6 2025/12 2026/6\\n相关研究\\n1． 通信行业周报20260607：Marvell CEO\\n提出连接是AI 关键瓶颈，强调“铜墙移\\n动”趋势-2026/06/07\\n2． 通信行业动态报告：XPO 融合液冷和CPC\\n技术，直通3.2T 时代-2026/05/31\\n3． 通信行业周报20260530：MRC 协议重塑\\n大规模AI 互联-2026/05/30\\n4． 通信行业周报20260524：英伟达业绩超\\n市场预期，持续看好AI 景气周期-\\n2026/05/24\\n5． 通信行业周报：关注光通信新技术的边际\\n变化，以及液冷环节-2026/05/17\\n2026年09月06日\\n仅供内部参考，请勿外传\\n本公司具备证券投资咨询业务资格，请务必阅读最后一页免责声明 \\n证券研究报告 \\n2 \\n行业定期报告/通信\\n本公司具备证券投资咨询业务资格，请务必阅读最后一页免责声明 \\n证券研究报告 \\n3 \", \"pages\": [1, 2, 3], \"fragment\": null, \"text_chars\": 547, \"text_sha256\": \"f99cce88720b648ebab58a41fb312ea9b8ec2469070efd8448364bdbc1b9504a\", \"structure_status\": \"partial\", \"content_role\": \"content\", \"relations\": [{\"target_locator\": null, \"target_kind\": \"heading\", \"target_heading\": \"通信行业周报\\n2026 CIOE 中国光博会前瞻\", \"relation\": \"caption_of\", \"status\": \"candidate\", \"basis\": \"title_text_without_member_heading\"}], \"relation_status\": \"candidate\", \"label_path\": [\"推荐 维持评级\"], \"source_id\": \"8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122\", \"units\": [{\"unit_id\": \"unit:0007\", \"page\": 1}, {\"unit_id\": \"unit:0008\", \"page\"\n... [truncated 1538 of 5634 chars]",
+      "duration_ms": 218,
+      "is_error": false
+    },
+    {
+      "turn": 3,
+      "thinking": "I found the exact text in chunk:7ceca88433b092ae:body:0001:\n\n\"2）NPO 加速推动光引擎向交换芯片侧靠近，AI Scale-Up 互联架构有望进一步演进。华工正源将动态展示6.4T 去DSP NPO 光引擎，立讯技术则计划展示 3.2T NPO 光引擎 Live Demo。\"\n\nSo:\n- 华工正源: 6.4T 去DSP NPO 光引擎 (动态展示)\n- 立讯技术: 3.2T NPO 光引擎 Live Demo (计划展示)\n\nThe report is \"通信行业周报 2026 CIOE 中国光博会前瞻\" dated 2026年09月06日, analysts 张宁、范宇, emails @glms.com.cn (国联民生, GLMS = GuoLian MinSheng). The doc title is \"通信行业周报 2026 CIOE 中国光博会前瞻\".\n\nNow I need to verify this is 国联民生. The email domain glms.com.cn — 国联民生证券 was formed from merger of 国联证券 and 民生证券, and the domain glms.com.cn fits. The title \"通信行业周报\\n2026 CIOE 中国光博会前瞻\". Analysts 张宁 (S0590523120003) and 范宇 (S0590525110074). S0590 is 国联民生's prefix. Good enough.\n\nShould I submit a manifest? The instructions say before producing corpus-based conclusions in the final report, register each conclusion into the manifest. This is a simple Q&A task. The A4 rules say to submit the manifest with conclusions including report_quote, evidence with doc_id/locator/quote. Let me do that to comply.\n\nThe report_quote — the final answer's anchor text. My answer will state: 华工正源将动态展示6.4T去DSP NPO光引擎；立讯技术计划展示3.2T NPO光引擎Live Demo。来源：《通信行业周报：2026 CIOE 中国光博会前瞻》（2026-09-06），doc_id cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509，locator chunk:7ceca88433b092ae:body:0001.\n\nLet me submit the manifest with the evidence quote:\n\"华工正源将动态展示6.4T 去DSP NPO 光\\n引擎，立讯技术则计划展示 3.2T NPO 光引擎 Live Demo\"\n\nNote the original text has line break \"6.4T 去DSP NPO 光\\n引擎\". For the quote I should include it verbatim; I can include the newline as-is. Let me write quote exactly: \"华工正源将动态展示6.4T 去DSP NPO 光引擎，立讯技术则计划展示 3.2T NPO 光引擎 Live Demo。\" — but verbatim includes a newline between 光 and 引擎. I'll include the text with the newline replaced? Verbatim should be exact; I'll include the newline as \"\\n\". Actually safer to quote a contiguous span: \"华工正源将动态展示6.4T 去DSP NPO 光\\n引擎，立讯技术则计划展示 3.2T NPO 光引擎 Live Demo。\"\n\nI'll submit the manifest, then give the final answer.",
+      "tool_name": "corpus_submit_manifest",
+      "tool_args": "{\"conclusions\": [{\"evidence\": [{\"doc_id\": \"cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"locator\": \"chunk:7ceca88433b092ae:body:0001\", \"purpose\": \"value\", \"quote\": \"华工正源将动态展示6.4T 去DSP NPO 光\\n引擎，立讯技术则计划展示 3.2T NPO 光引擎 Live Demo。\"}], \"report_quote\": \"华工正源将动态展示6.4T 去DSP NPO 光引擎，立讯技术则计划展示3.2T NPO 光引擎 Live Demo。\", \"text_location\": \"最终回复第一段（问题答案主体）\"}]}",
+      "tool_result": "{\"ok\": true, \"manifest_file\": null, \"owner\": \"stateful_react:5a88767e845b\", \"publish_status\": \"verified\", \"counts\": {\"supported\": 1, \"partial\": 0, \"unsupported\": 0}, \"conclusions\": [{\"id\": \"C1\", \"status\": \"supported\", \"delivery\": [\"delivered\"], \"semantic_references\": [], \"problems\": []}], \"hint\": \"对非 supported 的结论：按需补取原文、重新查询失效语义版本、修改表述或移除结论；已完整送达的语义证据不必例行 corpus_fetch。然后重新提交**完整**清单（每次提交生成新的候选文件，边界以汇总校验为准）。本轮新取的片段需经过下一轮消息边界核验，pending 的结论请下一轮重新提交确认。\"}",
+      "duration_ms": 30,
+      "is_error": false
+    }
+  ],
+  "elapsed_s": 49.621,
+  "search_calls": 2,
+  "search_duration_ms": 1080,
+  "fetch_calls": 1,
+  "fetch_duration_ms": 218,
+  "tool_errors": 0,
+  "usage_responses": [
+    {
+      "provider": "openai",
+      "model": "glm-5-3-flash-260828",
+      "prompt_tokens": 2092,
+      "completion_tokens": 124,
+      "cache_read_tokens": 2048,
+      "cache_write_tokens": 0,
+      "cached_tokens": 2048,
+      "cache_creation_tokens": 0
+    },
+    {
+      "provider": "openai",
+      "model": "glm-5-3-flash-260828",
+      "prompt_tokens": 20742,
+      "completion_tokens": 369,
+      "cache_read_tokens": 2048,
+      "cache_write_tokens": 0,
+      "cached_tokens": 2048,
+      "cache_creation_tokens": 0
+    },
+    {
+      "provider": "openai",
+      "model": "glm-5-3-flash-260828",
+      "prompt_tokens": 24146,
+      "completion_tokens": 1003,
+      "cache_read_tokens": 20736,
+      "cache_write_tokens": 0,
+      "cached_tokens": 20736,
+      "cache_creation_tokens": 0
+    },
+    {
+      "provider": "openai",
+      "model": "glm-5-3-flash-260828",
+      "prompt_tokens": 25336,
+      "completion_tokens": 448,
+      "cache_read_tokens": 24128,
+      "cache_write_tokens": 0,
+      "cached_tokens": 24128,
+      "cache_creation_tokens": 0
+    }
+  ],
+  "degraded_attempts": 0,
+  "progress_only": false
+}

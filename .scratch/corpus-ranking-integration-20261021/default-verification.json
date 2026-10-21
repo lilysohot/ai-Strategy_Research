@@ -1,0 +1,266 @@
+{
+  "db": "vector_pilot_clean7_20261021",
+  "queries": 32,
+  "results": [
+    {
+      "case": "p01",
+      "rows": 7,
+      "elapsed_ms": 264.0971859982528,
+      "full_scope_preserved": true,
+      "first": "668bac61a631636c:body:0001",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p02",
+      "rows": 7,
+      "elapsed_ms": 255.94254300085595,
+      "full_scope_preserved": true,
+      "first": "668bac61a631636c:body:0001",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p03",
+      "rows": 10,
+      "elapsed_ms": 459.2853690010088,
+      "full_scope_preserved": true,
+      "first": "668bac61a631636c:body:0001",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p04",
+      "rows": 10,
+      "elapsed_ms": 297.82844399960595,
+      "full_scope_preserved": true,
+      "first": "7d23fc247bda199b:body:0002",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p05",
+      "rows": 8,
+      "elapsed_ms": 266.00045200029854,
+      "full_scope_preserved": true,
+      "first": "7d23fc247bda199b:body:0002",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p06",
+      "rows": 10,
+      "elapsed_ms": 427.6698689973273,
+      "full_scope_preserved": true,
+      "first": "7ed6e0b7e6f46d30:body:0003",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p07",
+      "rows": 7,
+      "elapsed_ms": 260.1757659977011,
+      "full_scope_preserved": true,
+      "first": "7ed6e0b7e6f46d30:body:0001",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p08",
+      "rows": 8,
+      "elapsed_ms": 232.47508200074662,
+      "full_scope_preserved": true,
+      "first": "7ed6e0b7e6f46d30:body:0002",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p09",
+      "rows": 7,
+      "elapsed_ms": 370.4082520016527,
+      "full_scope_preserved": true,
+      "first": "510f83c463db4121:body:0000",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p10",
+      "rows": 7,
+      "elapsed_ms": 295.92760300147347,
+      "full_scope_preserved": true,
+      "first": "510f83c463db4121:body:0009",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p11",
+      "rows": 8,
+      "elapsed_ms": 251.38385600075708,
+      "full_scope_preserved": true,
+      "first": "5be178f951c61eae:body:0000",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p12",
+      "rows": 6,
+      "elapsed_ms": 324.47555600083433,
+      "full_scope_preserved": true,
+      "first": "5be178f951c61eae:body:0000",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p13",
+      "rows": 9,
+      "elapsed_ms": 455.6504220017814,
+      "full_scope_preserved": true,
+      "first": "8fe537bdac281f39:body:0002",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p14",
+      "rows": 9,
+      "elapsed_ms": 315.7933660004346,
+      "full_scope_preserved": true,
+      "first": "43db124db26de27f:body:0002",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p15",
+      "rows": 9,
+      "elapsed_ms": 391.37122800093493,
+      "full_scope_preserved": true,
+      "first": "43db124db26de27f:body:0002",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p16",
+      "rows": 9,
+      "elapsed_ms": 316.0453359996609,
+      "full_scope_preserved": true,
+      "first": "2696b5d4a615f984:body:0005",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p17",
+      "rows": 8,
+      "elapsed_ms": 292.4307079993014,
+      "full_scope_preserved": true,
+      "first": "9bebd13a330d0b61:body:0006",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p18",
+      "rows": 7,
+      "elapsed_ms": 247.66468099915073,
+      "full_scope_preserved": true,
+      "first": "8fe537bdac281f39:body:0007",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p19",
+      "rows": 10,
+      "elapsed_ms": 394.05431599880103,
+      "full_scope_preserved": true,
+      "first": "568f9e752f0fa65a:body:0003",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p20",
+      "rows": 8,
+      "elapsed_ms": 392.10611100133974,
+      "full_scope_preserved": true,
+      "first": "568f9e752f0fa65a:body:0003",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p21",
+      "rows": 10,
+      "elapsed_ms": 471.43540300021414,
+      "full_scope_preserved": true,
+      "first": "568f9e752f0fa65a:body:0014",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p22",
+      "rows": 10,
+      "elapsed_ms": 267.39767999970354,
+      "full_scope_preserved": true,
+      "first": "bbddcfe7ee8c592b:body:0008",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p23",
+      "rows": 7,
+      "elapsed_ms": 263.670522999746,
+      "full_scope_preserved": true,
+      "first": "bbddcfe7ee8c592b:body:0007",
+      "ranking_disabled": true
+    },
+    {
+      "case": "p24",
+      "rows": 7,
+      "elapsed_ms": 336.9488940006704,
+      "full_scope_preserved": true,
+      "first": "3d9805f1aac9767a:body:0004",
+      "ranking_disabled": true
+    },
+    {
+      "case": "n01",
+      "rows": 10,
+      "elapsed_ms": 421.5569799998775,
+      "full_scope_preserved": true,
+      "first": "568f9e752f0fa65a:body:0003",
+      "ranking_disabled": true
+    },
+    {
+      "case": "n02",
+      "rows": 7,
+      "elapsed_ms": 284.2007299987017,
+      "full_scope_preserved": true,
+      "first": "9fa4cd7cf1ab602a:table:0000",
+      "ranking_disabled": true
+    },
+    {
+      "case": "n03",
+      "rows": 6,
+      "elapsed_ms": 241.58970799908275,
+      "full_scope_preserved": true,
+      "first": "5be178f951c61eae:body:0000",
+      "ranking_disabled": true
+    },
+    {
+      "case": "n04",
+      "rows": 8,
+      "elapsed_ms": 275.15622200007783,
+      "full_scope_preserved": true,
+      "first": "568f9e752f0fa65a:body:0036",
+      "ranking_disabled": true
+    },
+    {
+      "case": "n05",
+      "rows": 7,
+      "elapsed_ms": 242.37601599816117,
+      "full_scope_preserved": true,
+      "first": "bbddcfe7ee8c592b:body:0007",
+      "ranking_disabled": true
+    },
+    {
+      "case": "n06",
+      "rows": 10,
+      "elapsed_ms": 431.19523899804335,
+      "full_scope_preserved": true,
+      "first": "568f9e752f0fa65a:body:0003",
+      "ranking_disabled": true
+    },
+    {
+      "case": "n07",
+      "rows": 10,
+      "elapsed_ms": 518.8980010025261,
+      "full_scope_preserved": true,
+      "first": "568f9e752f0fa65a:body:0035",
+      "ranking_disabled": true
+    },
+    {
+      "case": "n08",
+      "rows": 9,
+      "elapsed_ms": 408.97492400108604,
+      "full_scope_preserved": true,
+      "first": "3d9805f1aac9767a:list:0001",
+      "ranking_disabled": true
+    }
+  ],
+  "index_unchanged": true,
+  "publication_unchanged": true,
+  "model_calls": 0,
+  "note": "Real business ranking and PG feature loading, no ranking monkeypatch. Cached existing query embeddings only; loading overhead included."
+}

@@ -1,0 +1,23 @@
+{
+  "live_queries": 32,
+  "default_queries": 32,
+  "diagnostic_matches": 265,
+  "constraint_diagnostics_identical": true,
+  "baseline_scope_preserved": 32,
+  "regression_tests": 133,
+  "pg_lifecycle_tests": 1,
+  "lifecycle_mutations": "rollback-only; no formal publication",
+  "embedding_calls": 0,
+  "preflight_normal_model_calls": 1,
+  "default_config_unchanged": true,
+  "hashes": {
+    "plugins/corpus/preparation/read_pg.py": "1931ba6044c317a6744da0aedca46cccc40aedf3f4d0ac64baa720ac855c8099",
+    "plugins/corpus/retrieval/constraints.py": "0bfc148a2d072ffec74fbc08b4c748eea1579d74d6aececffc8cf288e2392e91",
+    "plugins/corpus/retrieval/ranking.py": "7938a3c35334c74b946f83e3d69926f187ba1d40e8b094f66d244246558eac37",
+    "plugins/corpus/retrieval/ranking_pg.py": "47dc775b96a307b9cdec8c59f40c0104f0501fa8a2b96cebe76ffcac4f56ce74",
+    "plugins/corpus/retrieval/hybrid.py": "c451161e7510816b98ca5dc5ae21b7eb1cce6dbb98840eded045f3ab6ee095a0",
+    "plugins/corpus/service.py": "ab78fe7a84954343890dcdbb042ff1960fb44e26a8e3f71e2f4a309e731fdd2d",
+    "tests/test_corpus_retrieval_ranking.py": "22582b0feea953ce17bde23e9c3f164e8b1ed5b82fba991da05ab22e4a9058c3",
+    "tests/test_corpus_retrieval_ranking_pg.py": "38d86f09d98482a206c87a4d8aa6ff01069e59b205295591c91a774a3d1a353c"
+  }
+}

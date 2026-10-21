@@ -1,0 +1,100 @@
+{
+  "manifest_sha256": "50305e59759c13d662dce9ae84001474ae7dec596c55aed1449c9aabf1250a68",
+  "cases": 32,
+  "hybrid_cases": 30,
+  "excluded": [
+    {
+      "case": "p17",
+      "kind": "positive",
+      "excluded": "lexical_fallback"
+    },
+    {
+      "case": "p18",
+      "kind": "positive",
+      "excluded": "lexical_fallback"
+    }
+  ],
+  "positive_cases": 22,
+  "measurement_boundary": "selection before table-header enrichment",
+  "capture": {
+    "profile": [
+      "fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107"
+    ],
+    "publication_snapshots": [
+      "corpus_publications@48e8e60844f69177d5eb672a1d1b1010"
+    ],
+    "median_query_ms": 620.725618500046,
+    "max_query_ms": 15397.303742000076,
+    "reported_query_tokens": 1536,
+    "fallbacks": [
+      {
+        "case": "p17",
+        "reason": "provider_transport_uncertain",
+        "elapsed_ms": 15397.303742000076
+      },
+      {
+        "case": "p18",
+        "reason": "provider_transport_uncertain",
+        "elapsed_ms": 15306.836966999981
+      }
+    ],
+    "new_document_embedding_requests": 0,
+    "automatic_query_retries": 0
+  },
+  "positive_candidate_hits": {
+    "lexical": 22,
+    "dense": 22,
+    "fused": 22
+  },
+  "variants": {
+    "baseline": {
+      "positive_hits": 22,
+      "positive_top1": 21,
+      "mrr": 0.9772727272727273,
+      "mean_sources": 5,
+      "mean_context_chunks": 102.5,
+      "mean_repeated_chunks": 15.533333333333333,
+      "rank_changes": []
+    },
+    "source_first": {
+      "positive_hits": 22,
+      "positive_top1": 21,
+      "mrr": 0.9595959595959596,
+      "mean_sources": 2.6333333333333333,
+      "mean_context_chunks": 84.96666666666667,
+      "mean_repeated_chunks": 16.433333333333334,
+      "rank_changes": [
+        {
+          "case": "p13",
+          "before": 2,
+          "after": 9
+        }
+      ]
+    },
+    "global_rrf_cap3": {
+      "positive_hits": 22,
+      "positive_top1": 21,
+      "mrr": 0.9772727272727273,
+      "mean_sources": 6.4,
+      "mean_context_chunks": 127.63333333333334,
+      "mean_repeated_chunks": 1,
+      "rank_changes": [
+        {
+          "case": "p12",
+          "before": 1,
+          "after": 2
+        },
+        {
+          "case": "p13",
+          "before": 2,
+          "after": 1
+        }
+      ]
+    }
+  },
+  "baseline_omission_counts": {
+    "output_limit": 1106,
+    "band_selection": 108,
+    "source_gate": 4198
+  }
+}

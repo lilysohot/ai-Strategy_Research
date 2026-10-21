@@ -1,0 +1,52 @@
+{
+  "chunk": {
+    "chunk_id": "9e891a2daabca1df:body:0007",
+    "build_id": "9e891a2daabca1df0f9eaa32e48e3f53e78de7e05ab5e034db3be140bc626e15",
+    "kind": "body",
+    "unit_refs": [
+      "unit:0043"
+    ],
+    "search_text": "well above 65 . Under the reported framework, eligibility would depend on component sourcing, which is already established for the leaders. 2. This could strengthen InnoLight’s and Eoptolink’s positions. In our view, second- tier players hoping to reduce costs through Chinese lasers would lose that route in the U.S. market. A workable technical standard would replace entity-level risk, apart from the separate Section 1260H risk, while leaving the full 1.6T cycle unaffected. 3. Lumentum and Coherent could benefit in two ways: the policy would support demand for their high-speed lasers without requiring them to expand lower- margin module assembly. Lumentum has said that module margins are below laser margins, so this framework could reduce the need to scale that business. 4. For suppliers outside both China and the U.S., including Sumitomo Electric and Mitsubishi Electric in EMLs, ST in silicon photonics PICs, and MediaTek in DSPs, Chinese-built modules could still use Japanese EMLs or European PICs. The likely effect would be to make U.S. parts the safer choice for incremental orders, without eliminating these suppliers from the market. Other sales channels, including modules assembled in the U.S. or allied countries and the Chinese domestic market, would remain unaffected under this reading. 5. Japanese substrate makers, including Sumitomo Electric and JX, would also benefit, in our view. This assumes that substrates are not counted separately in the module-level calculation and that their customers, Lumentum and Coherent, gain demand. 6. Beyond InnoLight and Eoptolink, we see a negative outcome for Chinese suppliers. In our assessment, Chinese laser chip makers such as Yuanjie would lose access to U.S.- bound modules, leaving the domestic market and no exemption to pursue. 7. For InP substrates, Chinese suppliers such as Yunnan Germanium and Guangzhi Technology could face greater difficulty qualifying at overseas laser makers. AXT is a U.S. company, but export licensing for its China-based production gives Beijing a readily available means of retaliation.",
+    "title_text": "商业层面的影响",
+    "section_path": [
+      "中国光模块。该法案明确点名了中际旭创（InnoLight）和新易盛（Eoptolink）。",
+      "FCC 潜在限制框架",
+      "商业层面的影响"
+    ],
+    "source_ranges": [],
+    "context_refs": []
+  },
+  "units": [
+    {
+      "unit_id": "unit:0043",
+      "build_id": "9e891a2daabca1df0f9eaa32e48e3f53e78de7e05ab5e034db3be140bc626e15",
+      "kind": "paragraph",
+      "raw_text": "well above 65%. Under the reported framework, eligibility would depend on\ncomponent sourcing, which is already established for the leaders.\n2. This could strengthen InnoLight’s and Eoptolink’s positions. In our view, second-\ntier players hoping to reduce costs through Chinese lasers would lose that route in the\nU.S. market. A workable technical standard would replace entity-level risk, apart from\nthe separate Section 1260H risk, while leaving the full 1.6T cycle unaffected.\n3. Lumentum and Coherent could benefit in two ways: the policy would support\ndemand for their high-speed lasers without requiring them to expand lower-\nmargin module assembly. Lumentum has said that module margins are below laser\nmargins, so this framework could reduce the need to scale that business.\n4. For suppliers outside both China and the U.S., including Sumitomo Electric and\nMitsubishi Electric in EMLs, ST in silicon photonics PICs, and MediaTek in DSPs,\nChinese-built modules could still use Japanese EMLs or European PICs. The likely\neffect would be to make U.S. parts the safer choice for incremental orders, without\neliminating these suppliers from the market. Other sales channels, including modules\nassembled in the U.S. or allied countries and the Chinese domestic market, would\nremain unaffected under this reading.\n5. Japanese substrate makers, including Sumitomo Electric and JX, would also benefit, in\nour view. This assumes that substrates are not counted separately in the module-level\ncalculation and that their customers, Lumentum and Coherent, gain demand.\n6. Beyond InnoLight and Eoptolink, we see a negative outcome for Chinese suppliers. In\nour assessment, Chinese laser chip makers such as Yuanjie would lose access to U.S.-\nbound modules, leaving the domestic market and no exemption to pursue.\n7. For InP substrates, Chinese suppliers such as Yunnan Germanium and Guangzhi\nTechnology could face greater difficulty qualifying at overseas laser makers. AXT is a\nU.S. company, but export licensing for its China-based production gives Beijing a\nreadily available means of retaliation.",
+      "content_hash": "40e6ad5d20e2e266d4c7fef0b9856a1a867851772120291ab03722b790bb7684",
+      "parent_id": null,
+      "ordinal": 43,
+      "location": {
+        "page": 4,
+        "element": null,
+        "char_span": null,
+        "bbox": [
+          46.21875,
+          29.702495574951172,
+          549.7341918945312,
+          667.8942260742188
+        ],
+        "cells": [],
+        "label_path": []
+      },
+      "clean_view": "well above 65%. Under the reported framework, eligibility would depend on component sourcing, which is already established for the leaders. 2. This could strengthen InnoLight’s and Eoptolink’s positions. In our view, second- tier players hoping to reduce costs through Chinese lasers would lose that route in the U.S. market. A workable technical standard would replace entity-level risk, apart from the separate Section 1260H risk, while leaving the full 1.6T cycle unaffected. 3. Lumentum and Coherent could benefit in two ways: the policy would support demand for their high-speed lasers without requiring them to expand lower- margin module assembly. Lumentum has said that module margins are below laser margins, so this framework could reduce the need to scale that business. 4. For suppliers outside both China and the U.S., including Sumitomo Electric and Mitsubishi Electric in EMLs, ST in silicon photonics PICs, and MediaTek in DSPs, Chinese-built modules could still use Japanese EMLs or European PICs. The likely effect would be to make U.S. parts the safer choice for incremental orders, without eliminating these suppliers from the market. Other sales channels, including modules assembled in the U.S. or allied countries and the Chinese domestic market, would remain unaffected under this reading. 5. Japanese substrate makers, including Sumitomo Electric and JX, would also benefit, in our view. This assumes that substrates are not counted separately in the module-level calculation and that their customers, Lumentum and Coherent, gain demand. 6. Beyond InnoLight and Eoptolink, we see a negative outcome for Chinese suppliers. In our assessment, Chinese laser chip makers such as Yuanjie would lose access to U.S.- bound modules, leaving the domestic market and no exemption to pursue. 7. For InP substrates, Chinese suppliers such as Yunnan Germanium and Guangzhi Technology could face greater difficulty qualifying at overseas laser makers. AXT is a U.S. company, but export licensing for its China-based production gives Beijing a readily available means of retaliation.",
+      "mapping": [
+        [
+          0,
+          0
+        ]
+      ],
+      "status": "kept",
+      "reasons": []
+    }
+  ]
+}

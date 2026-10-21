@@ -1,0 +1,45 @@
+{
+  "cases": [
+    {
+      "id": "p01",
+      "question": "国金电子报告怎样解释麒麟芯片晶体管更多、做同样工作却更省电？",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428"
+    },
+    {
+      "id": "p13",
+      "question": "平安策略周报如何描述2026年8月美国制造业和服务业景气的分化？",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0"
+    },
+    {
+      "id": "p16",
+      "question": "国联民生的CIOE前瞻里，华工正源和立讯技术分别计划展示什么NPO产品？",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122"
+    },
+    {
+      "id": "n01",
+      "question": "紫荆量子光电股份有限公司2026年上半年营业收入和净利润是多少？",
+      "build_id": null,
+      "source_id": null
+    }
+  ],
+  "manifest_sha256": "50305e59759c13d662dce9ae84001474ae7dec596c55aed1449c9aabf1250a68",
+  "profile": "fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107",
+  "methods": [
+    "lexical_candidates",
+    "dense_candidates",
+    "fused_candidates",
+    "production_hybrid"
+  ],
+  "k": [
+    1,
+    5,
+    10
+  ],
+  "labels": "Original-text relevance, no assessment of source factual truth. Full/partial evidence vs context-only vs mismatch. Source-constrained recall scoped to completely reviewed requested reports. No full-corpus recall claim.",
+  "negative": "n01 pooled precision/mismatch only; recall undefined without positive evidence.",
+  "no_agent_runs": true,
+  "no_new_embedding_requests": true
+}

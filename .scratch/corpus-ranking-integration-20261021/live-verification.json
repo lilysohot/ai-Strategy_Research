@@ -1,0 +1,266 @@
+{
+  "db": "vector_pilot_clean7_20261021",
+  "queries": 32,
+  "results": [
+    {
+      "case": "p01",
+      "rows": 7,
+      "elapsed_ms": 782.5627290003467,
+      "full_scope_preserved": true,
+      "first": "668bac61a631636c:body:0001",
+      "feature_cache_hit": false
+    },
+    {
+      "case": "p02",
+      "rows": 7,
+      "elapsed_ms": 280.91205000237096,
+      "full_scope_preserved": true,
+      "first": "668bac61a631636c:body:0001",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p03",
+      "rows": 10,
+      "elapsed_ms": 540.4373620003753,
+      "full_scope_preserved": true,
+      "first": "668bac61a631636c:body:0001",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p04",
+      "rows": 10,
+      "elapsed_ms": 335.9670659992844,
+      "full_scope_preserved": true,
+      "first": "7d23fc247bda199b:body:0002",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p05",
+      "rows": 8,
+      "elapsed_ms": 289.79077500116546,
+      "full_scope_preserved": true,
+      "first": "7d23fc247bda199b:body:0002",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p06",
+      "rows": 10,
+      "elapsed_ms": 524.2993969986856,
+      "full_scope_preserved": true,
+      "first": "7ed6e0b7e6f46d30:body:0003",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p07",
+      "rows": 7,
+      "elapsed_ms": 307.66035599663155,
+      "full_scope_preserved": true,
+      "first": "7ed6e0b7e6f46d30:body:0001",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p08",
+      "rows": 8,
+      "elapsed_ms": 281.42414600006305,
+      "full_scope_preserved": true,
+      "first": "7ed6e0b7e6f46d30:body:0002",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p09",
+      "rows": 7,
+      "elapsed_ms": 429.4068929993955,
+      "full_scope_preserved": true,
+      "first": "510f83c463db4121:body:0000",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p10",
+      "rows": 7,
+      "elapsed_ms": 317.876236000302,
+      "full_scope_preserved": true,
+      "first": "510f83c463db4121:body:0009",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p11",
+      "rows": 8,
+      "elapsed_ms": 298.67159000059473,
+      "full_scope_preserved": true,
+      "first": "5be178f951c61eae:body:0000",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p12",
+      "rows": 6,
+      "elapsed_ms": 382.95120899783797,
+      "full_scope_preserved": true,
+      "first": "5be178f951c61eae:body:0000",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p13",
+      "rows": 9,
+      "elapsed_ms": 494.3817109997326,
+      "full_scope_preserved": true,
+      "first": "231ff3a07f5570e9:body:0002",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p14",
+      "rows": 9,
+      "elapsed_ms": 336.70613399954163,
+      "full_scope_preserved": true,
+      "first": "43db124db26de27f:body:0002",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p15",
+      "rows": 9,
+      "elapsed_ms": 396.3968720017874,
+      "full_scope_preserved": true,
+      "first": "43db124db26de27f:body:0002",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p16",
+      "rows": 9,
+      "elapsed_ms": 352.57388399986667,
+      "full_scope_preserved": true,
+      "first": "2696b5d4a615f984:body:0001",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p17",
+      "rows": 8,
+      "elapsed_ms": 331.7935109989776,
+      "full_scope_preserved": true,
+      "first": "9bebd13a330d0b61:body:0006",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p18",
+      "rows": 7,
+      "elapsed_ms": 279.89718800017727,
+      "full_scope_preserved": true,
+      "first": "8fe537bdac281f39:body:0007",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p19",
+      "rows": 10,
+      "elapsed_ms": 455.45839999977034,
+      "full_scope_preserved": true,
+      "first": "568f9e752f0fa65a:body:0003",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p20",
+      "rows": 8,
+      "elapsed_ms": 459.34968500296236,
+      "full_scope_preserved": true,
+      "first": "568f9e752f0fa65a:body:0003",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p21",
+      "rows": 10,
+      "elapsed_ms": 546.2522509988048,
+      "full_scope_preserved": true,
+      "first": "568f9e752f0fa65a:body:0014",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p22",
+      "rows": 10,
+      "elapsed_ms": 298.04659100045683,
+      "full_scope_preserved": true,
+      "first": "bbddcfe7ee8c592b:body:0008",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p23",
+      "rows": 7,
+      "elapsed_ms": 294.506177000585,
+      "full_scope_preserved": true,
+      "first": "bbddcfe7ee8c592b:body:0007",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "p24",
+      "rows": 7,
+      "elapsed_ms": 403.77814100065734,
+      "full_scope_preserved": true,
+      "first": "3d9805f1aac9767a:body:0004",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "n01",
+      "rows": 10,
+      "elapsed_ms": 483.76791199916624,
+      "full_scope_preserved": true,
+      "first": "568f9e752f0fa65a:body:0003",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "n02",
+      "rows": 7,
+      "elapsed_ms": 326.8418890002067,
+      "full_scope_preserved": true,
+      "first": "9fa4cd7cf1ab602a:table:0000",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "n03",
+      "rows": 6,
+      "elapsed_ms": 279.2966009983502,
+      "full_scope_preserved": true,
+      "first": "5be178f951c61eae:body:0000",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "n04",
+      "rows": 8,
+      "elapsed_ms": 302.6671349980461,
+      "full_scope_preserved": true,
+      "first": "568f9e752f0fa65a:body:0036",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "n05",
+      "rows": 7,
+      "elapsed_ms": 260.33559899951797,
+      "full_scope_preserved": true,
+      "first": "bbddcfe7ee8c592b:body:0007",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "n06",
+      "rows": 10,
+      "elapsed_ms": 457.1531630026584,
+      "full_scope_preserved": true,
+      "first": "568f9e752f0fa65a:body:0003",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "n07",
+      "rows": 10,
+      "elapsed_ms": 569.7983379977813,
+      "full_scope_preserved": true,
+      "first": "568f9e752f0fa65a:body:0035",
+      "feature_cache_hit": true
+    },
+    {
+      "case": "n08",
+      "rows": 9,
+      "elapsed_ms": 438.2537540004705,
+      "full_scope_preserved": true,
+      "first": "3d9805f1aac9767a:list:0001",
+      "feature_cache_hit": true
+    }
+  ],
+  "index_unchanged": true,
+  "publication_unchanged": true,
+  "model_calls": 0,
+  "note": "Real business ranking and PG feature loading, no ranking monkeypatch. Cached existing query embeddings only; loading overhead included."
+}

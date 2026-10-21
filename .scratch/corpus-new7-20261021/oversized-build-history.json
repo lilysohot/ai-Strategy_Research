@@ -1,0 +1,25 @@
+[
+  {
+    "path": "/home/administrator/FrontierAgent/data/corpus/2026-10-02_FundaAI_专栏  光通信FCC 光模块规则可能好于悲观预期对中国头部厂商的利好或超想象.pdf",
+    "original_name": "2026-10-02_FundaAI_专栏  光通信FCC 光模块规则可能好于悲观预期对中国头部厂商的利好或超想象.pdf",
+    "source_id": "8b11fbdd67b1d0a215c39c3155799e12cb9c259d6a7b40066d6efa557434ed39",
+    "domain_hint": "industry",
+    "material_type": "personal_or_external_subscription",
+    "has_usable_text": true,
+    "review_decision_ids": [
+      "new7-user-20261021-8b11fbdd67b1d0a215c39c3155799e12cb9c259d6a7b40066d6efa557434ed39"
+    ],
+    "outcome": "built",
+    "admission": "in_scope",
+    "units": 113,
+    "chunks": 41,
+    "build_id": "9e891a2daabca1df0f9eaa32e48e3f53e78de7e05ab5e034db3be140bc626e15",
+    "quality_report": {
+      "gap_regions": [],
+      "oversized_chunks": [
+        "9e891a2daabca1df:body:0007"
+      ]
+    },
+    "gaps": []
+  }
+]

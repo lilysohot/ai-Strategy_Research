@@ -1,0 +1,5047 @@
+{
+  "case": "p14",
+  "kind": "positive",
+  "candidate_gold": {
+    "lexical": true,
+    "dense": true,
+    "fused": true
+  },
+  "dense_only_candidates": 69,
+  "fates": [
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0002",
+      "lexical_rank": 1,
+      "dense_rank": 1,
+      "fused_rank": 1,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0001",
+      "lexical_rank": 4,
+      "dense_rank": 2,
+      "fused_rank": 2,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0005",
+      "lexical_rank": 3,
+      "dense_rank": 6,
+      "fused_rank": 3,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0007",
+      "lexical_rank": 2,
+      "dense_rank": 49,
+      "fused_rank": 4,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0003",
+      "lexical_rank": 5,
+      "dense_rank": 10,
+      "fused_rank": 5,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:heading:0001",
+      "lexical_rank": 7,
+      "dense_rank": 8,
+      "fused_rank": 6,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0000",
+      "lexical_rank": 10,
+      "dense_rank": 4,
+      "fused_rank": 7,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0004",
+      "lexical_rank": 8,
+      "dense_rank": 96,
+      "fused_rank": 8,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0006",
+      "lexical_rank": 9,
+      "dense_rank": 107,
+      "fused_rank": 9,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:heading:0000",
+      "lexical_rank": 6,
+      "dense_rank": null,
+      "fused_rank": 10,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:heading:0002",
+      "lexical_rank": 11,
+      "dense_rank": null,
+      "fused_rank": 11,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0001",
+      "lexical_rank": 12,
+      "dense_rank": 5,
+      "fused_rank": 12,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0000",
+      "lexical_rank": 14,
+      "dense_rank": 12,
+      "fused_rank": 13,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0010",
+      "lexical_rank": 13,
+      "dense_rank": 18,
+      "fused_rank": 14,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0006",
+      "lexical_rank": 15,
+      "dense_rank": 13,
+      "fused_rank": 15,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0004",
+      "lexical_rank": 17,
+      "dense_rank": 64,
+      "fused_rank": 16,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0019",
+      "lexical_rank": 18,
+      "dense_rank": 38,
+      "fused_rank": 17,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0003",
+      "lexical_rank": 16,
+      "dense_rank": 89,
+      "fused_rank": 18,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0005",
+      "lexical_rank": 25,
+      "dense_rank": 20,
+      "fused_rank": 19,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0020",
+      "lexical_rank": 20,
+      "dense_rank": 75,
+      "fused_rank": 20,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0007",
+      "lexical_rank": 26,
+      "dense_rank": 33,
+      "fused_rank": 21,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0011",
+      "lexical_rank": 28,
+      "dense_rank": 21,
+      "fused_rank": 22,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0012",
+      "lexical_rank": 23,
+      "dense_rank": 87,
+      "fused_rank": 23,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0002",
+      "lexical_rank": 24,
+      "dense_rank": 110,
+      "fused_rank": 24,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0021",
+      "lexical_rank": 19,
+      "dense_rank": 191,
+      "fused_rank": 25,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0022",
+      "lexical_rank": 22,
+      "dense_rank": 153,
+      "fused_rank": 26,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0015",
+      "lexical_rank": 32,
+      "dense_rank": 77,
+      "fused_rank": 27,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0014",
+      "lexical_rank": 31,
+      "dense_rank": 115,
+      "fused_rank": 28,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:heading:0001",
+      "lexical_rank": 30,
+      "dense_rank": 132,
+      "fused_rank": 29,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0013",
+      "lexical_rank": 29,
+      "dense_rank": 136,
+      "fused_rank": 30,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0009",
+      "lexical_rank": 27,
+      "dense_rank": 170,
+      "fused_rank": 31,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0016",
+      "lexical_rank": 33,
+      "dense_rank": 189,
+      "fused_rank": 32,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:table:0002",
+      "lexical_rank": 40,
+      "dense_rank": 152,
+      "fused_rank": 33,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0008",
+      "lexical_rank": 21,
+      "dense_rank": null,
+      "fused_rank": 34,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0017",
+      "lexical_rank": 34,
+      "dense_rank": null,
+      "fused_rank": 35,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0018",
+      "lexical_rank": 35,
+      "dense_rank": null,
+      "fused_rank": 36,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:heading:0000",
+      "lexical_rank": 36,
+      "dense_rank": null,
+      "fused_rank": 37,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:heading:0002",
+      "lexical_rank": 37,
+      "dense_rank": null,
+      "fused_rank": 38,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:table:0000",
+      "lexical_rank": 38,
+      "dense_rank": null,
+      "fused_rank": 39,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:table:0001",
+      "lexical_rank": 39,
+      "dense_rank": null,
+      "fused_rank": 40,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:table:0003",
+      "lexical_rank": 41,
+      "dense_rank": null,
+      "fused_rank": 41,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0007",
+      "lexical_rank": 70,
+      "dense_rank": 44,
+      "fused_rank": 42,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0067",
+      "lexical_rank": 67,
+      "dense_rank": 58,
+      "fused_rank": 43,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0022",
+      "lexical_rank": 73,
+      "dense_rank": 36,
+      "fused_rank": 44,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0011",
+      "lexical_rank": 80,
+      "dense_rank": 19,
+      "fused_rank": 45,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0070",
+      "lexical_rank": 75,
+      "dense_rank": 50,
+      "fused_rank": 46,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0038",
+      "lexical_rank": 69,
+      "dense_rank": 92,
+      "fused_rank": 47,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0051",
+      "lexical_rank": 97,
+      "dense_rank": 3,
+      "fused_rank": 48,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0007",
+      "lexical_rank": 92,
+      "dense_rank": 22,
+      "fused_rank": 49,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0034",
+      "lexical_rank": 96,
+      "dense_rank": 15,
+      "fused_rank": 50,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "band_selection"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0006",
+      "lexical_rank": 81,
+      "dense_rank": 60,
+      "fused_rank": 51,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0052",
+      "lexical_rank": 98,
+      "dense_rank": 29,
+      "fused_rank": 52,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0014",
+      "lexical_rank": 72,
+      "dense_rank": 123,
+      "fused_rank": 53,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0061",
+      "lexical_rank": 87,
+      "dense_rank": 70,
+      "fused_rank": 54,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0069",
+      "lexical_rank": 77,
+      "dense_rank": 122,
+      "fused_rank": 55,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0020",
+      "lexical_rank": 85,
+      "dense_rank": 83,
+      "fused_rank": 56,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "band_selection"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0017",
+      "lexical_rank": 78,
+      "dense_rank": 134,
+      "fused_rank": 57,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "band_selection"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0009",
+      "lexical_rank": 84,
+      "dense_rank": 98,
+      "fused_rank": 58,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0056",
+      "lexical_rank": 99,
+      "dense_rank": 95,
+      "fused_rank": 59,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0027",
+      "lexical_rank": 94,
+      "dense_rank": 171,
+      "fused_rank": 60,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0057",
+      "lexical_rank": 100,
+      "dense_rank": 166,
+      "fused_rank": 61,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0001",
+      "lexical_rank": 103,
+      "dense_rank": 168,
+      "fused_rank": 62,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "band_selection"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0001",
+      "lexical_rank": 68,
+      "dense_rank": null,
+      "fused_rank": 63,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "band_selection"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0003",
+      "lexical_rank": 71,
+      "dense_rank": null,
+      "fused_rank": 64,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0050",
+      "lexical_rank": null,
+      "dense_rank": 47,
+      "fused_rank": 65,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0000",
+      "lexical_rank": 74,
+      "dense_rank": null,
+      "fused_rank": 66,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "band_selection"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0054",
+      "lexical_rank": null,
+      "dense_rank": 54,
+      "fused_rank": 67,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "band_selection"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0041",
+      "lexical_rank": 76,
+      "dense_rank": null,
+      "fused_rank": 68,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0028",
+      "lexical_rank": null,
+      "dense_rank": 57,
+      "fused_rank": 69,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0031",
+      "lexical_rank": null,
+      "dense_rank": 59,
+      "fused_rank": 70,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "band_selection"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0010",
+      "lexical_rank": 79,
+      "dense_rank": null,
+      "fused_rank": 71,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0032",
+      "lexical_rank": null,
+      "dense_rank": 61,
+      "fused_rank": 72,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0011",
+      "lexical_rank": 82,
+      "dense_rank": null,
+      "fused_rank": 73,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0015",
+      "lexical_rank": null,
+      "dense_rank": 68,
+      "fused_rank": 74,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "band_selection"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0058",
+      "lexical_rank": null,
+      "dense_rank": 69,
+      "fused_rank": 75,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0063",
+      "lexical_rank": 83,
+      "dense_rank": null,
+      "fused_rank": 76,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0016",
+      "lexical_rank": null,
+      "dense_rank": 73,
+      "fused_rank": 77,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "band_selection"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0024",
+      "lexical_rank": null,
+      "dense_rank": 78,
+      "fused_rank": 78,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0047",
+      "lexical_rank": 86,
+      "dense_rank": null,
+      "fused_rank": 79,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0064",
+      "lexical_rank": null,
+      "dense_rank": 81,
+      "fused_rank": 80,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0004",
+      "lexical_rank": 88,
+      "dense_rank": null,
+      "fused_rank": 81,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0009",
+      "lexical_rank": 89,
+      "dense_rank": null,
+      "fused_rank": 82,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "band_selection"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0029",
+      "lexical_rank": null,
+      "dense_rank": 90,
+      "fused_rank": 83,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0039",
+      "lexical_rank": 90,
+      "dense_rank": null,
+      "fused_rank": 84,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0004",
+      "lexical_rank": 91,
+      "dense_rank": null,
+      "fused_rank": 85,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0023",
+      "lexical_rank": null,
+      "dense_rank": 93,
+      "fused_rank": 86,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0012",
+      "lexical_rank": 93,
+      "dense_rank": null,
+      "fused_rank": 87,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0017",
+      "lexical_rank": null,
+      "dense_rank": 109,
+      "fused_rank": 88,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "band_selection"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0029",
+      "lexical_rank": 95,
+      "dense_rank": null,
+      "fused_rank": 89,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "band_selection"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0026",
+      "lexical_rank": null,
+      "dense_rank": 113,
+      "fused_rank": 90,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "band_selection"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0049",
+      "lexical_rank": null,
+      "dense_rank": 120,
+      "fused_rank": 91,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0030",
+      "lexical_rank": null,
+      "dense_rank": 133,
+      "fused_rank": 92,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "band_selection"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0059",
+      "lexical_rank": 101,
+      "dense_rank": null,
+      "fused_rank": 93,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0002",
+      "lexical_rank": null,
+      "dense_rank": 149,
+      "fused_rank": 94,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "band_selection"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0066",
+      "lexical_rank": 102,
+      "dense_rank": null,
+      "fused_rank": 95,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0008",
+      "lexical_rank": null,
+      "dense_rank": 150,
+      "fused_rank": 96,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "band_selection"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0008",
+      "lexical_rank": null,
+      "dense_rank": 157,
+      "fused_rank": 97,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0040",
+      "lexical_rank": 104,
+      "dense_rank": null,
+      "fused_rank": 98,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0002",
+      "lexical_rank": 120,
+      "dense_rank": 84,
+      "fused_rank": 99,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0016",
+      "lexical_rank": 121,
+      "dense_rank": 156,
+      "fused_rank": 100,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0011",
+      "lexical_rank": 127,
+      "dense_rank": 17,
+      "fused_rank": 101,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0012",
+      "lexical_rank": 128,
+      "dense_rank": 35,
+      "fused_rank": 102,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0014",
+      "lexical_rank": 129,
+      "dense_rank": 174,
+      "fused_rank": 103,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0005",
+      "lexical_rank": 118,
+      "dense_rank": null,
+      "fused_rank": 104,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0001",
+      "lexical_rank": 119,
+      "dense_rank": null,
+      "fused_rank": 105,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0004",
+      "lexical_rank": 122,
+      "dense_rank": null,
+      "fused_rank": 106,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0003",
+      "lexical_rank": 123,
+      "dense_rank": null,
+      "fused_rank": 107,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0006",
+      "lexical_rank": 124,
+      "dense_rank": null,
+      "fused_rank": 108,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0013",
+      "lexical_rank": 125,
+      "dense_rank": null,
+      "fused_rank": 109,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0015",
+      "lexical_rank": 126,
+      "dense_rank": null,
+      "fused_rank": 110,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:heading:0002",
+      "lexical_rank": 130,
+      "dense_rank": null,
+      "fused_rank": 111,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0018",
+      "lexical_rank": 42,
+      "dense_rank": 56,
+      "fused_rank": 112,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0039",
+      "lexical_rank": 44,
+      "dense_rank": 65,
+      "fused_rank": 113,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0027",
+      "lexical_rank": 45,
+      "dense_rank": 85,
+      "fused_rank": 114,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0013",
+      "lexical_rank": 52,
+      "dense_rank": 42,
+      "fused_rank": 115,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0012",
+      "lexical_rank": 51,
+      "dense_rank": 46,
+      "fused_rank": 116,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0003",
+      "lexical_rank": 46,
+      "dense_rank": 86,
+      "fused_rank": 117,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0005",
+      "lexical_rank": 47,
+      "dense_rank": 130,
+      "fused_rank": 118,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0004",
+      "lexical_rank": 43,
+      "dense_rank": 165,
+      "fused_rank": 119,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0017",
+      "lexical_rank": 53,
+      "dense_rank": 97,
+      "fused_rank": 120,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0014",
+      "lexical_rank": 59,
+      "dense_rank": 82,
+      "fused_rank": 121,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0037",
+      "lexical_rank": 50,
+      "dense_rank": 161,
+      "fused_rank": 122,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0028",
+      "lexical_rank": 48,
+      "dense_rank": 196,
+      "fused_rank": 123,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0007",
+      "lexical_rank": 58,
+      "dense_rank": 139,
+      "fused_rank": 124,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0038",
+      "lexical_rank": 56,
+      "dense_rank": 147,
+      "fused_rank": 125,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0035",
+      "lexical_rank": 64,
+      "dense_rank": 127,
+      "fused_rank": 126,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0006",
+      "lexical_rank": 57,
+      "dense_rank": 155,
+      "fused_rank": 127,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0008",
+      "lexical_rank": 54,
+      "dense_rank": 178,
+      "fused_rank": 128,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0040",
+      "lexical_rank": 66,
+      "dense_rank": 144,
+      "fused_rank": 129,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0019",
+      "lexical_rank": 62,
+      "dense_rank": 169,
+      "fused_rank": 130,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0016",
+      "lexical_rank": 61,
+      "dense_rank": 183,
+      "fused_rank": 131,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0036",
+      "lexical_rank": 65,
+      "dense_rank": 199,
+      "fused_rank": 132,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0011",
+      "lexical_rank": null,
+      "dense_rank": 91,
+      "fused_rank": 133,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0014",
+      "lexical_rank": 49,
+      "dense_rank": null,
+      "fused_rank": 134,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0016",
+      "lexical_rank": null,
+      "dense_rank": 135,
+      "fused_rank": 135,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0013",
+      "lexical_rank": 55,
+      "dense_rank": null,
+      "fused_rank": 136,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0015",
+      "lexical_rank": 60,
+      "dense_rank": null,
+      "fused_rank": 137,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0024",
+      "lexical_rank": 63,
+      "dense_rank": null,
+      "fused_rank": 138,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:heading:0002",
+      "lexical_rank": null,
+      "dense_rank": 186,
+      "fused_rank": 139,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:heading:0005",
+      "lexical_rank": null,
+      "dense_rank": 188,
+      "fused_rank": 140,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0009",
+      "lexical_rank": null,
+      "dense_rank": 192,
+      "fused_rank": 141,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "band_selection"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:heading:0004",
+      "lexical_rank": null,
+      "dense_rank": 200,
+      "fused_rank": 142,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0007",
+      "lexical_rank": 177,
+      "dense_rank": 9,
+      "fused_rank": 143,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0004",
+      "lexical_rank": 179,
+      "dense_rank": 11,
+      "fused_rank": 144,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0002",
+      "lexical_rank": 173,
+      "dense_rank": 41,
+      "fused_rank": 145,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0000",
+      "lexical_rank": 175,
+      "dense_rank": 40,
+      "fused_rank": 146,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0011",
+      "lexical_rank": 183,
+      "dense_rank": 16,
+      "fused_rank": 147,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:table:0002",
+      "lexical_rank": 185,
+      "dense_rank": 28,
+      "fused_rank": 148,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0003",
+      "lexical_rank": 178,
+      "dense_rank": 45,
+      "fused_rank": 149,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0005",
+      "lexical_rank": 184,
+      "dense_rank": 37,
+      "fused_rank": 150,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:table:0003",
+      "lexical_rank": 188,
+      "dense_rank": 31,
+      "fused_rank": 151,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0001",
+      "lexical_rank": 186,
+      "dense_rank": 34,
+      "fused_rank": 152,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0013",
+      "lexical_rank": 180,
+      "dense_rank": 53,
+      "fused_rank": 153,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0012",
+      "lexical_rank": 189,
+      "dense_rank": 176,
+      "fused_rank": 154,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0008",
+      "lexical_rank": null,
+      "dense_rank": 7,
+      "fused_rank": 155,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0014",
+      "lexical_rank": null,
+      "dense_rank": 48,
+      "fused_rank": 156,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:heading:0000",
+      "lexical_rank": null,
+      "dense_rank": 52,
+      "fused_rank": 157,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0010",
+      "lexical_rank": null,
+      "dense_rank": 62,
+      "fused_rank": 158,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0009",
+      "lexical_rank": null,
+      "dense_rank": 67,
+      "fused_rank": 159,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:heading:0002",
+      "lexical_rank": null,
+      "dense_rank": 124,
+      "fused_rank": 160,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0006",
+      "lexical_rank": null,
+      "dense_rank": 138,
+      "fused_rank": 161,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:heading:0003",
+      "lexical_rank": null,
+      "dense_rank": 197,
+      "fused_rank": 162,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0007",
+      "lexical_rank": 105,
+      "dense_rank": 72,
+      "fused_rank": 163,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0001",
+      "lexical_rank": 111,
+      "dense_rank": 32,
+      "fused_rank": 164,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0010",
+      "lexical_rank": 110,
+      "dense_rank": 39,
+      "fused_rank": 165,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0015",
+      "lexical_rank": 108,
+      "dense_rank": 80,
+      "fused_rank": 166,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0004",
+      "lexical_rank": 109,
+      "dense_rank": 119,
+      "fused_rank": 167,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0016",
+      "lexical_rank": 106,
+      "dense_rank": 163,
+      "fused_rank": 168,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:heading:0001",
+      "lexical_rank": 117,
+      "dense_rank": 55,
+      "fused_rank": 169,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0006",
+      "lexical_rank": 114,
+      "dense_rank": 114,
+      "fused_rank": 170,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0017",
+      "lexical_rank": 107,
+      "dense_rank": 184,
+      "fused_rank": 171,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0002",
+      "lexical_rank": 112,
+      "dense_rank": 140,
+      "fused_rank": 172,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0011",
+      "lexical_rank": 115,
+      "dense_rank": 125,
+      "fused_rank": 173,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0014",
+      "lexical_rank": 116,
+      "dense_rank": 126,
+      "fused_rank": 174,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0003",
+      "lexical_rank": null,
+      "dense_rank": 51,
+      "fused_rank": 175,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0005",
+      "lexical_rank": 113,
+      "dense_rank": null,
+      "fused_rank": 176,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0008",
+      "lexical_rank": null,
+      "dense_rank": 177,
+      "fused_rank": 177,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:heading:0004",
+      "lexical_rank": null,
+      "dense_rank": 182,
+      "fused_rank": 178,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0021",
+      "lexical_rank": 169,
+      "dense_rank": 14,
+      "fused_rank": 179,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0018",
+      "lexical_rank": 170,
+      "dense_rank": 121,
+      "fused_rank": 180,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0000",
+      "lexical_rank": null,
+      "dense_rank": 24,
+      "fused_rank": 181,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0004",
+      "lexical_rank": 171,
+      "dense_rank": null,
+      "fused_rank": 182,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0017",
+      "lexical_rank": null,
+      "dense_rank": 25,
+      "fused_rank": 183,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0005",
+      "lexical_rank": 172,
+      "dense_rank": null,
+      "fused_rank": 184,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0010",
+      "lexical_rank": 158,
+      "dense_rank": 101,
+      "fused_rank": 185,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0005",
+      "lexical_rank": 160,
+      "dense_rank": 71,
+      "fused_rank": 186,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0006",
+      "lexical_rank": 157,
+      "dense_rank": 160,
+      "fused_rank": 187,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0014",
+      "lexical_rank": 159,
+      "dense_rank": 103,
+      "fused_rank": 188,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0007",
+      "lexical_rank": 161,
+      "dense_rank": 175,
+      "fused_rank": 189,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0000",
+      "lexical_rank": null,
+      "dense_rank": 23,
+      "fused_rank": 190,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0002",
+      "lexical_rank": 156,
+      "dense_rank": null,
+      "fused_rank": 191,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0001",
+      "lexical_rank": null,
+      "dense_rank": 173,
+      "fused_rank": 192,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0011",
+      "lexical_rank": null,
+      "dense_rank": 187,
+      "fused_rank": 193,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0003",
+      "lexical_rank": null,
+      "dense_rank": 194,
+      "fused_rank": 194,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0008",
+      "lexical_rank": null,
+      "dense_rank": 195,
+      "fused_rank": 195,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:table:0006",
+      "lexical_rank": 162,
+      "dense_rank": 27,
+      "fused_rank": 196,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:table:0005",
+      "lexical_rank": 163,
+      "dense_rank": 108,
+      "fused_rank": 197,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0025",
+      "lexical_rank": 167,
+      "dense_rank": 99,
+      "fused_rank": 198,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0000",
+      "lexical_rank": 165,
+      "dense_rank": 142,
+      "fused_rank": 199,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0048",
+      "lexical_rank": 164,
+      "dense_rank": null,
+      "fused_rank": 200,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0003",
+      "lexical_rank": null,
+      "dense_rank": 129,
+      "fused_rank": 201,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0002",
+      "lexical_rank": 166,
+      "dense_rank": null,
+      "fused_rank": 202,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0029",
+      "lexical_rank": null,
+      "dense_rank": 131,
+      "fused_rank": 203,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0049",
+      "lexical_rank": 168,
+      "dense_rank": null,
+      "fused_rank": 204,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "build_id": "d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+      "chunk_id": "d5c99534333873cc:body:0007",
+      "lexical_rank": 150,
+      "dense_rank": 63,
+      "fused_rank": 205,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "build_id": "d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+      "chunk_id": "d5c99534333873cc:body:0006",
+      "lexical_rank": 151,
+      "dense_rank": 179,
+      "fused_rank": 206,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "build_id": "d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+      "chunk_id": "d5c99534333873cc:body:0001",
+      "lexical_rank": 154,
+      "dense_rank": 198,
+      "fused_rank": 207,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "build_id": "d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+      "chunk_id": "d5c99534333873cc:body:0004",
+      "lexical_rank": 147,
+      "dense_rank": null,
+      "fused_rank": 208,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "build_id": "d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+      "chunk_id": "d5c99534333873cc:body:0002",
+      "lexical_rank": 148,
+      "dense_rank": null,
+      "fused_rank": 209,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "build_id": "d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+      "chunk_id": "d5c99534333873cc:body:0003",
+      "lexical_rank": 149,
+      "dense_rank": null,
+      "fused_rank": 210,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "build_id": "d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+      "chunk_id": "d5c99534333873cc:body:0005",
+      "lexical_rank": 152,
+      "dense_rank": null,
+      "fused_rank": 211,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "build_id": "d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+      "chunk_id": "d5c99534333873cc:table:0001",
+      "lexical_rank": 153,
+      "dense_rank": null,
+      "fused_rank": 212,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "build_id": "d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+      "chunk_id": "d5c99534333873cc:body:0000",
+      "lexical_rank": 155,
+      "dense_rank": null,
+      "fused_rank": 213,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0012",
+      "lexical_rank": 133,
+      "dense_rank": 76,
+      "fused_rank": 214,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0013",
+      "lexical_rank": 131,
+      "dense_rank": 159,
+      "fused_rank": 215,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0014",
+      "lexical_rank": 132,
+      "dense_rank": 185,
+      "fused_rank": 216,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0001",
+      "lexical_rank": 139,
+      "dense_rank": 100,
+      "fused_rank": 217,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0011",
+      "lexical_rank": 138,
+      "dense_rank": 128,
+      "fused_rank": 218,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0008",
+      "lexical_rank": 137,
+      "dense_rank": 146,
+      "fused_rank": 219,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0000",
+      "lexical_rank": 135,
+      "dense_rank": 167,
+      "fused_rank": 220,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0003",
+      "lexical_rank": 134,
+      "dense_rank": null,
+      "fused_rank": 221,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0002",
+      "lexical_rank": 136,
+      "dense_rank": null,
+      "fused_rank": 222,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0004",
+      "lexical_rank": 140,
+      "dense_rank": null,
+      "fused_rank": 223,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0007",
+      "lexical_rank": 141,
+      "dense_rank": null,
+      "fused_rank": 224,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0010",
+      "lexical_rank": 142,
+      "dense_rank": null,
+      "fused_rank": 225,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0005",
+      "lexical_rank": 143,
+      "dense_rank": null,
+      "fused_rank": 226,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0006",
+      "lexical_rank": 144,
+      "dense_rank": null,
+      "fused_rank": 227,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0009",
+      "lexical_rank": 145,
+      "dense_rank": null,
+      "fused_rank": 228,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:heading:0000",
+      "lexical_rank": 146,
+      "dense_rank": null,
+      "fused_rank": 229,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0000",
+      "lexical_rank": 197,
+      "dense_rank": 145,
+      "fused_rank": 230,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0013",
+      "lexical_rank": 200,
+      "dense_rank": 43,
+      "fused_rank": 231,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:list:0001",
+      "lexical_rank": null,
+      "dense_rank": 26,
+      "fused_rank": 232,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0003",
+      "lexical_rank": 198,
+      "dense_rank": null,
+      "fused_rank": 233,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0005",
+      "lexical_rank": null,
+      "dense_rank": 117,
+      "fused_rank": 234,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0008",
+      "lexical_rank": 199,
+      "dense_rank": null,
+      "fused_rank": 235,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0004",
+      "lexical_rank": null,
+      "dense_rank": 143,
+      "fused_rank": 236,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0006",
+      "lexical_rank": null,
+      "dense_rank": 193,
+      "fused_rank": 237,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:body:0012",
+      "lexical_rank": 174,
+      "dense_rank": 30,
+      "fused_rank": 238,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:body:0002",
+      "lexical_rank": 176,
+      "dense_rank": 66,
+      "fused_rank": 239,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:body:0011",
+      "lexical_rank": 182,
+      "dense_rank": 104,
+      "fused_rank": 240,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:body:0003",
+      "lexical_rank": 181,
+      "dense_rank": 118,
+      "fused_rank": 241,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:body:0001",
+      "lexical_rank": 196,
+      "dense_rank": 102,
+      "fused_rank": 242,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:body:0000",
+      "lexical_rank": 195,
+      "dense_rank": 111,
+      "fused_rank": 243,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:table:0002",
+      "lexical_rank": 187,
+      "dense_rank": null,
+      "fused_rank": 244,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:table:0007",
+      "lexical_rank": 190,
+      "dense_rank": null,
+      "fused_rank": 245,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:table:0001",
+      "lexical_rank": null,
+      "dense_rank": 151,
+      "fused_rank": 246,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:table:0008",
+      "lexical_rank": 191,
+      "dense_rank": null,
+      "fused_rank": 247,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:table:0000",
+      "lexical_rank": null,
+      "dense_rank": 190,
+      "fused_rank": 248,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:table:0009",
+      "lexical_rank": 192,
+      "dense_rank": null,
+      "fused_rank": 249,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:table:0010",
+      "lexical_rank": 193,
+      "dense_rank": null,
+      "fused_rank": 250,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:table:0011",
+      "lexical_rank": 194,
+      "dense_rank": null,
+      "fused_rank": 251,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+      "chunk_id": "6475cbacca1575c5:body:0006",
+      "lexical_rank": null,
+      "dense_rank": 74,
+      "fused_rank": 252,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+      "chunk_id": "6475cbacca1575c5:body:0005",
+      "lexical_rank": null,
+      "dense_rank": 158,
+      "fused_rank": 253,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0001",
+      "lexical_rank": null,
+      "dense_rank": 79,
+      "fused_rank": 254,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0036",
+      "lexical_rank": null,
+      "dense_rank": 88,
+      "fused_rank": 255,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0024",
+      "lexical_rank": null,
+      "dense_rank": 106,
+      "fused_rank": 256,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0026",
+      "lexical_rank": null,
+      "dense_rank": 141,
+      "fused_rank": 257,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:table:0018",
+      "lexical_rank": null,
+      "dense_rank": 162,
+      "fused_rank": 258,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0006",
+      "lexical_rank": null,
+      "dense_rank": 172,
+      "fused_rank": 259,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:table:0001",
+      "lexical_rank": null,
+      "dense_rank": 181,
+      "fused_rank": 260,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0022",
+      "lexical_rank": null,
+      "dense_rank": 94,
+      "fused_rank": 261,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0000",
+      "lexical_rank": null,
+      "dense_rank": 105,
+      "fused_rank": 262,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0024",
+      "lexical_rank": null,
+      "dense_rank": 112,
+      "fused_rank": 263,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0023",
+      "lexical_rank": null,
+      "dense_rank": 116,
+      "fused_rank": 264,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:table:0001",
+      "lexical_rank": null,
+      "dense_rank": 137,
+      "fused_rank": 265,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:table:0006",
+      "lexical_rank": null,
+      "dense_rank": 154,
+      "fused_rank": 266,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:table:0005",
+      "lexical_rank": null,
+      "dense_rank": 180,
+      "fused_rank": 267,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "build_id": "d2ec2ce01b12450b6090114e23ec01465ea4399b38387c0a83d1808354c6e75f",
+      "chunk_id": "d2ec2ce01b12450b:body:0008",
+      "lexical_rank": null,
+      "dense_rank": 148,
+      "fused_rank": 268,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "build_id": "d2ec2ce01b12450b6090114e23ec01465ea4399b38387c0a83d1808354c6e75f",
+      "chunk_id": "d2ec2ce01b12450b:body:0007",
+      "lexical_rank": null,
+      "dense_rank": 164,
+      "fused_rank": 269,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    }
+  ],
+  "variants": {
+    "baseline": {
+      "anchor_rank": 1,
+      "returned_bands": 10,
+      "sources": 5,
+      "unique_context_chunks": 91,
+      "repeated_context_chunks": 8,
+      "added_chunks": [],
+      "removed_chunks": [],
+      "hits": [
+        {
+          "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+          "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+          "chunk_id": "1ada4314a25261ea:body:0002",
+          "kind": "body",
+          "title_text": "——环保行业周报（20260831~20260906）\n投资要点：",
+          "section_path": [
+            "投资评级：看好（维持）",
+            "——环保行业周报（20260831~20260906）",
+            "投资要点："
+          ],
+          "unit_refs": [
+            "unit:0011",
+            "unit:0013",
+            "unit:0014",
+            "unit:0015",
+            "unit:0016",
+            "unit:0017",
+            "unit:0018",
+            "unit:0019",
+            "unit:0020",
+            "unit:0021",
+            "unit:0022",
+            "unit:0023",
+            "unit:0024",
+            "unit:0025",
+            "unit:0026",
+            "unit:0027",
+            "unit:0028",
+            "unit:0029"
+          ],
+          "score": 0.03278688524590164,
+          "snippet": "<b>发电</b>、钢铁、水泥<b>行业</b><b>覆盖</b><b>温室</b>",
+          "published": null,
+          "page": 1,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "1ada4314a25261ea:body:0000",
+            "1ada4314a25261ea:heading:0000",
+            "1ada4314a25261ea:body:0001",
+            "1ada4314a25261ea:heading:0001",
+            "1ada4314a25261ea:body:0002",
+            "1ada4314a25261ea:body:0003",
+            "1ada4314a25261ea:body:0004",
+            "1ada4314a25261ea:body:0005",
+            "1ada4314a25261ea:body:0006",
+            "1ada4314a25261ea:body:0007",
+            "1ada4314a25261ea:heading:0002"
+          ],
+          "source_coverage": 11
+        },
+        {
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "chunk_id": "022ae1713fb760ff:body:0001",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [],
+          "unit_refs": [
+            "unit:0005",
+            "unit:0006",
+            "unit:0007",
+            "unit:0009",
+            "unit:0010",
+            "unit:0011",
+            "unit:0012",
+            "unit:0013"
+          ],
+          "score": 0.03278688524590164,
+          "snippet": "<b>报告</b>正文各子<b>行业</b>观点详情。",
+          "published": null,
+          "page": 1,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "022ae1713fb760ff:body:0000",
+            "022ae1713fb760ff:body:0001",
+            "022ae1713fb760ff:body:0002",
+            "022ae1713fb760ff:body:0003",
+            "022ae1713fb760ff:body:0004",
+            "022ae1713fb760ff:body:0005",
+            "022ae1713fb760ff:body:0006",
+            "022ae1713fb760ff:body:0007",
+            "022ae1713fb760ff:body:0008",
+            "022ae1713fb760ff:body:0009",
+            "022ae1713fb760ff:table:0000",
+            "022ae1713fb760ff:body:0010",
+            "022ae1713fb760ff:body:0011",
+            "022ae1713fb760ff:body:0012",
+            "022ae1713fb760ff:body:0013",
+            "022ae1713fb760ff:body:0014",
+            "022ae1713fb760ff:body:0015",
+            "022ae1713fb760ff:heading:0000",
+            "022ae1713fb760ff:heading:0001",
+            "022ae1713fb760ff:body:0016",
+            "022ae1713fb760ff:table:0001",
+            "022ae1713fb760ff:body:0017",
+            "022ae1713fb760ff:table:0002",
+            "022ae1713fb760ff:body:0018",
+            "022ae1713fb760ff:table:0003"
+          ],
+          "source_coverage": 8
+        },
+        {
+          "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "chunk_id": "82dac0d446ef83cd:heading:0007",
+          "kind": "heading",
+          "title_text": null,
+          "section_path": [
+            "接地转化为价差扩大，价格和价差的方向基本一致，这种情况通常观察产品的价格即可。",
+            "化工行业的复杂性就在于子行业众多，产业链不同。但如果抽丝剥茧，放大一些观察就",
+            "可以发现，每一个子行业的情况和钢铁、铜等周期品区别不大。"
+          ],
+          "unit_refs": [
+            "unit:0509",
+            "unit:0510"
+          ],
+          "score": 0.03055037313432836,
+          "snippet": "<b>行业</b>众多，产业链不同。但如果",
+          "published": null,
+          "page": 9,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "82dac0d446ef83cd:table:0007",
+            "82dac0d446ef83cd:body:0027",
+            "82dac0d446ef83cd:heading:0007",
+            "82dac0d446ef83cd:body:0028"
+          ],
+          "source_coverage": 6
+        },
+        {
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "chunk_id": "7ceca88433b092ae:body:0002",
+          "kind": "body",
+          "title_text": "通信行业周报\n2026 CIOE 中国光博会前瞻",
+          "section_path": [
+            "通信行业周报",
+            "2026 CIOE 中国光博会前瞻"
+          ],
+          "unit_refs": [
+            "unit:0007",
+            "unit:0008",
+            "unit:0009",
+            "unit:0010",
+            "unit:0011",
+            "unit:0014",
+            "unit:0015",
+            "unit:0020"
+          ],
+          "score": 0.031746031746031744,
+          "snippet": "外传\n2\n<b>行业</b>定期<b>报告</b>/通信\n3",
+          "published": null,
+          "page": 1,
+          "cells": [
+            [
+              0,
+              1
+            ]
+          ],
+          "label_path": [
+            "推荐 维持评级"
+          ],
+          "context_chunk_ids": [
+            "7ceca88433b092ae:heading:0000",
+            "7ceca88433b092ae:body:0001",
+            "7ceca88433b092ae:body:0002",
+            "7ceca88433b092ae:body:0003",
+            "7ceca88433b092ae:body:0004",
+            "7ceca88433b092ae:body:0005",
+            "7ceca88433b092ae:body:0006",
+            "7ceca88433b092ae:body:0007"
+          ],
+          "source_coverage": 5
+        },
+        {
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:body:0018",
+          "kind": "body",
+          "title_text": "半导体划片机转入放量进程,煤矿业务企稳",
+          "section_path": [
+            "半导体加工设备逐步打开业务成长空间",
+            "8",
+            "半导体划片机转入放量进程,煤矿业务企稳"
+          ],
+          "unit_refs": [
+            "unit:0212",
+            "unit:0213"
+          ],
+          "score": 0.032266458495966696,
+          "snippet": "<b>温室</b><b>气体</b>监测等新场景。2025",
+          "published": null,
+          "page": 12,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "568f9e752f0fa65a:table:0010",
+            "568f9e752f0fa65a:body:0013",
+            "568f9e752f0fa65a:table:0011",
+            "568f9e752f0fa65a:body:0014",
+            "568f9e752f0fa65a:body:0015",
+            "568f9e752f0fa65a:table:0012",
+            "568f9e752f0fa65a:table:0013",
+            "568f9e752f0fa65a:table:0014",
+            "568f9e752f0fa65a:body:0016",
+            "568f9e752f0fa65a:body:0017",
+            "568f9e752f0fa65a:body:0018",
+            "568f9e752f0fa65a:heading:0006"
+          ],
+          "source_coverage": 6
+        },
+        {
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "chunk_id": "022ae1713fb760ff:body:0019",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "方形磷酸铁锂动力电芯：0.3-0.4 元/Wh",
+            "方形三元（高镍）电芯：680-790 元/KWh",
+            "图表11：本周新能源与电力设备板块景气度"
+          ],
+          "unit_refs": [
+            "unit:0257",
+            "unit:0258",
+            "unit:0259",
+            "unit:0260",
+            "unit:0261"
+          ],
+          "score": 0.029631255487269532,
+          "snippet": "<b>发电</b>已逐步实现平价上网，能源",
+          "published": null,
+          "page": 11,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "022ae1713fb760ff:body:0018",
+            "022ae1713fb760ff:table:0003",
+            "022ae1713fb760ff:body:0019",
+            "022ae1713fb760ff:body:0020",
+            "022ae1713fb760ff:heading:0002",
+            "022ae1713fb760ff:body:0021",
+            "022ae1713fb760ff:body:0022"
+          ],
+          "source_coverage": 8
+        },
+        {
+          "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "chunk_id": "82dac0d446ef83cd:body:0067",
+          "kind": "body",
+          "title_text": "投资评级说明",
+          "section_path": [
+            "消费周期，关键是选择与自身持仓久期相匹配的景气阶段。",
+            "风险提示",
+            "投资评级说明"
+          ],
+          "unit_refs": [
+            "unit:1282",
+            "unit:1283",
+            "unit:1284",
+            "unit:1285",
+            "unit:1286",
+            "unit:1287",
+            "unit:1288",
+            "unit:1289",
+            "unit:1290",
+            "unit:1291",
+            "unit:1292",
+            "unit:1293",
+            "unit:1294",
+            "unit:1295",
+            "unit:1296",
+            "unit:1297",
+            "unit:1298",
+            "unit:1299",
+            "unit:1300",
+            "unit:1301",
+            "unit:1302"
+          ],
+          "score": 0.03028233151183971,
+          "snippet": "<b>行业</b>评级\n<b>报告</b>发布日后的12",
+          "published": null,
+          "page": 24,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "82dac0d446ef83cd:body:0065",
+            "82dac0d446ef83cd:body:0066",
+            "82dac0d446ef83cd:body:0067",
+            "82dac0d446ef83cd:body:0068",
+            "82dac0d446ef83cd:body:0069",
+            "82dac0d446ef83cd:body:0070"
+          ],
+          "source_coverage": 6
+        },
+        {
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "chunk_id": "7ceca88433b092ae:body:0016",
+          "kind": "body",
+          "title_text": "插图目录\n分析师承诺",
+          "section_path": [
+            "6 风险提示",
+            "插图目录",
+            "分析师承诺"
+          ],
+          "unit_refs": [
+            "unit:0204",
+            "unit:0208",
+            "unit:0209"
+          ],
+          "score": 0.03125,
+          "snippet": "<b>报告</b>，并对本<b>报告</b>的内容和",
+          "published": null,
+          "page": 15,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "7ceca88433b092ae:body:0010",
+            "7ceca88433b092ae:body:0011",
+            "7ceca88433b092ae:body:0012",
+            "7ceca88433b092ae:body:0013",
+            "7ceca88433b092ae:heading:0003",
+            "7ceca88433b092ae:body:0014",
+            "7ceca88433b092ae:body:0015",
+            "7ceca88433b092ae:heading:0004",
+            "7ceca88433b092ae:body:0016"
+          ],
+          "source_coverage": 5
+        },
+        {
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:body:0039",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "20",
+            "财务预测与估值",
+            "国信证券投资评级"
+          ],
+          "unit_refs": [
+            "unit:0589"
+          ],
+          "score": 0.03149801587301587,
+          "snippet": "<b>报告</b>中投资建议所涉及的评级（",
+          "published": null,
+          "page": 21,
+          "cells": [
+            [
+              1,
+              0
+            ]
+          ],
+          "label_path": [
+            "报告中投资建议所涉及的评级（如有）分为股票评\n级和行业评级（另有说明的除外）。评级标准为报\n告发布日后6 到12 个月内的相对市场表现，也即报\n告发布日后的6 到12 个月内公司股价（或行业指数）\n相对同期相关证券市场代表性指数的涨跌幅作为基\n准。A 股市场以沪深300 指数（000300.SH）作为基\n准；新三板市场以三板成指（899001.CSI）为基准；\n香港市场以恒生指数(HSI.HI)作为基准；美国市场\n以标普500 指数(SPX.GI)或纳斯达克指数\n（IXIC.GI）为基准。 投资评级标准"
+          ],
+          "context_chunk_ids": [
+            "568f9e752f0fa65a:table:0026",
+            "568f9e752f0fa65a:table:0027",
+            "568f9e752f0fa65a:body:0039",
+            "568f9e752f0fa65a:table:0028",
+            "568f9e752f0fa65a:body:0040",
+            "568f9e752f0fa65a:body:0041"
+          ],
+          "source_coverage": 6
+        },
+        {
+          "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "chunk_id": "82dac0d446ef83cd:body:0067",
+          "kind": "body",
+          "title_text": "投资评级说明",
+          "section_path": [
+            "消费周期，关键是选择与自身持仓久期相匹配的景气阶段。",
+            "风险提示",
+            "投资评级说明"
+          ],
+          "unit_refs": [
+            "unit:1282",
+            "unit:1283",
+            "unit:1284",
+            "unit:1285",
+            "unit:1286",
+            "unit:1287",
+            "unit:1288",
+            "unit:1289",
+            "unit:1290",
+            "unit:1291",
+            "unit:1292",
+            "unit:1293",
+            "unit:1294",
+            "unit:1295",
+            "unit:1296",
+            "unit:1297",
+            "unit:1298",
+            "unit:1299",
+            "unit:1300",
+            "unit:1301",
+            "unit:1302"
+          ],
+          "score": 0.03028233151183971,
+          "snippet": "<b>行业</b>评级\n<b>报告</b>发布日后的12",
+          "published": null,
+          "page": 24,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "82dac0d446ef83cd:table:0030",
+            "82dac0d446ef83cd:body:0063",
+            "82dac0d446ef83cd:table:0031",
+            "82dac0d446ef83cd:body:0064",
+            "82dac0d446ef83cd:table:0032",
+            "82dac0d446ef83cd:body:0065",
+            "82dac0d446ef83cd:body:0066",
+            "82dac0d446ef83cd:body:0067",
+            "82dac0d446ef83cd:body:0068",
+            "82dac0d446ef83cd:body:0069",
+            "82dac0d446ef83cd:body:0070"
+          ],
+          "source_coverage": 6
+        }
+      ]
+    },
+    "source_first": {
+      "anchor_rank": 1,
+      "returned_bands": 10,
+      "sources": 3,
+      "unique_context_chunks": 91,
+      "repeated_context_chunks": 8,
+      "added_chunks": [
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0022"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0023"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0024"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0045"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0046"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0047"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0048"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0049"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0050"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0051"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0052"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0056"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0057"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0058"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0059"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0060"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0061"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0062"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0005"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0010"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0011"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0012"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0032"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0033"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0034"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0037"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0038"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0039"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0040"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0041"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0004"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0005"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0006"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0028"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0029"
+        ]
+      ],
+      "removed_chunks": [
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0013"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0014"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0015"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0016"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0017"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0018"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0039"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0040"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0041"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:heading:0006"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0010"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0011"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0012"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0013"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0014"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0026"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0027"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0028"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0001"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0002"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0003"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0004"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0005"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0006"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0007"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0010"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0011"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0012"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0013"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0014"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0015"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0016"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:heading:0000"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:heading:0003"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:heading:0004"
+        ]
+      ],
+      "hits": [
+        {
+          "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+          "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+          "chunk_id": "1ada4314a25261ea:body:0002",
+          "kind": "body",
+          "title_text": "——环保行业周报（20260831~20260906）\n投资要点：",
+          "section_path": [
+            "投资评级：看好（维持）",
+            "——环保行业周报（20260831~20260906）",
+            "投资要点："
+          ],
+          "unit_refs": [
+            "unit:0011",
+            "unit:0013",
+            "unit:0014",
+            "unit:0015",
+            "unit:0016",
+            "unit:0017",
+            "unit:0018",
+            "unit:0019",
+            "unit:0020",
+            "unit:0021",
+            "unit:0022",
+            "unit:0023",
+            "unit:0024",
+            "unit:0025",
+            "unit:0026",
+            "unit:0027",
+            "unit:0028",
+            "unit:0029"
+          ],
+          "score": 0.03278688524590164,
+          "snippet": "<b>发电</b>、钢铁、水泥<b>行业</b><b>覆盖</b><b>温室</b>",
+          "published": null,
+          "page": 1,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "1ada4314a25261ea:body:0000",
+            "1ada4314a25261ea:heading:0000",
+            "1ada4314a25261ea:body:0001",
+            "1ada4314a25261ea:heading:0001",
+            "1ada4314a25261ea:body:0002",
+            "1ada4314a25261ea:body:0003",
+            "1ada4314a25261ea:body:0004",
+            "1ada4314a25261ea:body:0005",
+            "1ada4314a25261ea:body:0006",
+            "1ada4314a25261ea:body:0007",
+            "1ada4314a25261ea:heading:0002"
+          ],
+          "source_coverage": 11
+        },
+        {
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "chunk_id": "022ae1713fb760ff:body:0001",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [],
+          "unit_refs": [
+            "unit:0005",
+            "unit:0006",
+            "unit:0007",
+            "unit:0009",
+            "unit:0010",
+            "unit:0011",
+            "unit:0012",
+            "unit:0013"
+          ],
+          "score": 0.03278688524590164,
+          "snippet": "<b>报告</b>正文各子<b>行业</b>观点详情。",
+          "published": null,
+          "page": 1,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "022ae1713fb760ff:body:0000",
+            "022ae1713fb760ff:body:0001",
+            "022ae1713fb760ff:body:0002",
+            "022ae1713fb760ff:body:0003",
+            "022ae1713fb760ff:body:0004",
+            "022ae1713fb760ff:body:0005",
+            "022ae1713fb760ff:body:0006",
+            "022ae1713fb760ff:body:0007",
+            "022ae1713fb760ff:body:0008",
+            "022ae1713fb760ff:body:0009",
+            "022ae1713fb760ff:table:0000",
+            "022ae1713fb760ff:body:0010",
+            "022ae1713fb760ff:body:0011",
+            "022ae1713fb760ff:body:0012",
+            "022ae1713fb760ff:body:0013",
+            "022ae1713fb760ff:body:0014",
+            "022ae1713fb760ff:body:0015",
+            "022ae1713fb760ff:heading:0000",
+            "022ae1713fb760ff:heading:0001",
+            "022ae1713fb760ff:body:0016",
+            "022ae1713fb760ff:table:0001",
+            "022ae1713fb760ff:body:0017",
+            "022ae1713fb760ff:table:0002",
+            "022ae1713fb760ff:body:0018",
+            "022ae1713fb760ff:table:0003"
+          ],
+          "source_coverage": 8
+        },
+        {
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "chunk_id": "022ae1713fb760ff:body:0019",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "方形磷酸铁锂动力电芯：0.3-0.4 元/Wh",
+            "方形三元（高镍）电芯：680-790 元/KWh",
+            "图表11：本周新能源与电力设备板块景气度"
+          ],
+          "unit_refs": [
+            "unit:0257",
+            "unit:0258",
+            "unit:0259",
+            "unit:0260",
+            "unit:0261"
+          ],
+          "score": 0.029631255487269532,
+          "snippet": "<b>发电</b>已逐步实现平价上网，能源",
+          "published": null,
+          "page": 11,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "022ae1713fb760ff:body:0018",
+            "022ae1713fb760ff:table:0003",
+            "022ae1713fb760ff:body:0019",
+            "022ae1713fb760ff:body:0020",
+            "022ae1713fb760ff:heading:0002",
+            "022ae1713fb760ff:body:0021",
+            "022ae1713fb760ff:body:0022"
+          ],
+          "source_coverage": 8
+        },
+        {
+          "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "chunk_id": "82dac0d446ef83cd:heading:0007",
+          "kind": "heading",
+          "title_text": null,
+          "section_path": [
+            "接地转化为价差扩大，价格和价差的方向基本一致，这种情况通常观察产品的价格即可。",
+            "化工行业的复杂性就在于子行业众多，产业链不同。但如果抽丝剥茧，放大一些观察就",
+            "可以发现，每一个子行业的情况和钢铁、铜等周期品区别不大。"
+          ],
+          "unit_refs": [
+            "unit:0509",
+            "unit:0510"
+          ],
+          "score": 0.03055037313432836,
+          "snippet": "<b>行业</b>众多，产业链不同。但如果",
+          "published": null,
+          "page": 9,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "82dac0d446ef83cd:table:0007",
+            "82dac0d446ef83cd:body:0027",
+            "82dac0d446ef83cd:heading:0007",
+            "82dac0d446ef83cd:body:0028"
+          ],
+          "source_coverage": 6
+        },
+        {
+          "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "chunk_id": "82dac0d446ef83cd:body:0067",
+          "kind": "body",
+          "title_text": "投资评级说明",
+          "section_path": [
+            "消费周期，关键是选择与自身持仓久期相匹配的景气阶段。",
+            "风险提示",
+            "投资评级说明"
+          ],
+          "unit_refs": [
+            "unit:1282",
+            "unit:1283",
+            "unit:1284",
+            "unit:1285",
+            "unit:1286",
+            "unit:1287",
+            "unit:1288",
+            "unit:1289",
+            "unit:1290",
+            "unit:1291",
+            "unit:1292",
+            "unit:1293",
+            "unit:1294",
+            "unit:1295",
+            "unit:1296",
+            "unit:1297",
+            "unit:1298",
+            "unit:1299",
+            "unit:1300",
+            "unit:1301",
+            "unit:1302"
+          ],
+          "score": 0.03028233151183971,
+          "snippet": "<b>行业</b>评级\n<b>报告</b>发布日后的12",
+          "published": null,
+          "page": 24,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "82dac0d446ef83cd:body:0065",
+            "82dac0d446ef83cd:body:0066",
+            "82dac0d446ef83cd:body:0067",
+            "82dac0d446ef83cd:body:0068",
+            "82dac0d446ef83cd:body:0069",
+            "82dac0d446ef83cd:body:0070"
+          ],
+          "source_coverage": 6
+        },
+        {
+          "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "chunk_id": "82dac0d446ef83cd:body:0067",
+          "kind": "body",
+          "title_text": "投资评级说明",
+          "section_path": [
+            "消费周期，关键是选择与自身持仓久期相匹配的景气阶段。",
+            "风险提示",
+            "投资评级说明"
+          ],
+          "unit_refs": [
+            "unit:1282",
+            "unit:1283",
+            "unit:1284",
+            "unit:1285",
+            "unit:1286",
+            "unit:1287",
+            "unit:1288",
+            "unit:1289",
+            "unit:1290",
+            "unit:1291",
+            "unit:1292",
+            "unit:1293",
+            "unit:1294",
+            "unit:1295",
+            "unit:1296",
+            "unit:1297",
+            "unit:1298",
+            "unit:1299",
+            "unit:1300",
+            "unit:1301",
+            "unit:1302"
+          ],
+          "score": 0.03028233151183971,
+          "snippet": "<b>行业</b>评级\n<b>报告</b>发布日后的12",
+          "published": null,
+          "page": 24,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "82dac0d446ef83cd:table:0030",
+            "82dac0d446ef83cd:body:0063",
+            "82dac0d446ef83cd:table:0031",
+            "82dac0d446ef83cd:body:0064",
+            "82dac0d446ef83cd:table:0032",
+            "82dac0d446ef83cd:body:0065",
+            "82dac0d446ef83cd:body:0066",
+            "82dac0d446ef83cd:body:0067",
+            "82dac0d446ef83cd:body:0068",
+            "82dac0d446ef83cd:body:0069",
+            "82dac0d446ef83cd:body:0070"
+          ],
+          "source_coverage": 6
+        },
+        {
+          "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "chunk_id": "82dac0d446ef83cd:body:0022",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "十、公司市值已经反映较高的产品涨价预期，是否还能继续持有？ ........................................... 21",
+            "图表目录",
+            "一、为什么化工行业是一个好赛道？"
+          ],
+          "unit_refs": [
+            "unit:0303",
+            "unit:0304",
+            "unit:0305",
+            "unit:0306",
+            "unit:0307",
+            "unit:0308",
+            "unit:0309",
+            "unit:0310",
+            "unit:0311",
+            "unit:0312",
+            "unit:0313",
+            "unit:0314",
+            "unit:0315",
+            "unit:0316",
+            "unit:0317",
+            "unit:0318",
+            "unit:0319",
+            "unit:0320",
+            "unit:0321",
+            "unit:0322",
+            "unit:0323",
+            "unit:0324",
+            "unit:0325",
+            "unit:0326",
+            "unit:0327",
+            "unit:0328",
+            "unit:0329",
+            "unit:0330",
+            "unit:0331",
+            "unit:0332",
+            "unit:0333",
+            "unit:0334",
+            "unit:0335",
+            "unit:0336",
+            "unit:0337",
+            "unit:0338",
+            "unit:0339",
+            "unit:0340",
+            "unit:0341",
+            "unit:0342",
+            "unit:0343",
+            "unit:0344",
+            "unit:0345",
+            "unit:0346",
+            "unit:0347",
+            "unit:0348",
+            "unit:0349",
+            "unit:0350"
+          ],
+          "score": 0.03007688828584351,
+          "snippet": "<b>环保</b>新材\n料和特种精细化学品",
+          "published": null,
+          "page": 7,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "82dac0d446ef83cd:table:0004",
+            "82dac0d446ef83cd:body:0022",
+            "82dac0d446ef83cd:table:0005",
+            "82dac0d446ef83cd:body:0023",
+            "82dac0d446ef83cd:table:0006",
+            "82dac0d446ef83cd:body:0024",
+            "82dac0d446ef83cd:heading:0005"
+          ],
+          "source_coverage": 6
+        },
+        {
+          "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "chunk_id": "82dac0d446ef83cd:heading:0011",
+          "kind": "heading",
+          "title_text": null,
+          "section_path": [
+            "上。即使需求仅保持温和增长，只要行业长期缺少资本开支、新增产能有限，或者存量",
+            "产能持续退出，供需关系仍可能逐年收紧。如近年来的有色行业，诸如铜、铝等；以及",
+            "化工子行业的钾肥、制冷剂等。"
+          ],
+          "unit_refs": [
+            "unit:0659",
+            "unit:0660",
+            "unit:0661",
+            "unit:0662",
+            "unit:0663",
+            "unit:0664"
+          ],
+          "score": 0.029386529386529386,
+          "snippet": "<b>行业</b>的研究就需要把着眼点放在",
+          "published": null,
+          "page": 11,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "82dac0d446ef83cd:body:0045",
+            "82dac0d446ef83cd:table:0028",
+            "82dac0d446ef83cd:body:0046",
+            "82dac0d446ef83cd:heading:0010",
+            "82dac0d446ef83cd:body:0047",
+            "82dac0d446ef83cd:body:0048",
+            "82dac0d446ef83cd:heading:0011",
+            "82dac0d446ef83cd:body:0049",
+            "82dac0d446ef83cd:heading:0012"
+          ],
+          "source_coverage": 6
+        },
+        {
+          "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "chunk_id": "82dac0d446ef83cd:heading:0038",
+          "kind": "heading",
+          "title_text": null,
+          "section_path": [
+            "技术先进、生产规模大的生产线，行业集中度明显提升，这些企业的开工率可以长期维",
+            "持在较高水平，甚至高达100%。所以，部分行业的开工率即使呈现出接近历史较高水",
+            "平的现象，也未必意味着供给已经明显不足，实际景气依然不高。"
+          ],
+          "unit_refs": [
+            "unit:0952",
+            "unit:0953",
+            "unit:0954",
+            "unit:0955",
+            "unit:0956",
+            "unit:0957",
+            "unit:0958",
+            "unit:0959"
+          ],
+          "score": 0.027777777777777776,
+          "snippet": "<b>行业</b>开工率很高，能够达到80",
+          "published": null,
+          "page": 16,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "82dac0d446ef83cd:heading:0037",
+            "82dac0d446ef83cd:body:0056",
+            "82dac0d446ef83cd:table:0029",
+            "82dac0d446ef83cd:body:0057",
+            "82dac0d446ef83cd:body:0058",
+            "82dac0d446ef83cd:heading:0038",
+            "82dac0d446ef83cd:body:0059",
+            "82dac0d446ef83cd:heading:0039",
+            "82dac0d446ef83cd:body:0060",
+            "82dac0d446ef83cd:heading:0040",
+            "82dac0d446ef83cd:body:0061",
+            "82dac0d446ef83cd:heading:0041",
+            "82dac0d446ef83cd:body:0062"
+          ],
+          "source_coverage": 6
+        },
+        {
+          "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "chunk_id": "82dac0d446ef83cd:body:0051",
+          "kind": "body",
+          "title_text": "图 10：中国和全球实际GDP 增长率逐步放缓",
+          "section_path": [
+            "25/06",
+            "26/06",
+            "图 10：中国和全球实际GDP 增长率逐步放缓"
+          ],
+          "unit_refs": [
+            "unit:0705",
+            "unit:0706",
+            "unit:0707",
+            "unit:0708",
+            "unit:0709",
+            "unit:0710"
+          ],
+          "score": 0.02738245361196181,
+          "snippet": "<b>配额</b>（万吨）及变化情况",
+          "published": null,
+          "page": 12,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "82dac0d446ef83cd:heading:0032",
+            "82dac0d446ef83cd:body:0050",
+            "82dac0d446ef83cd:body:0051",
+            "82dac0d446ef83cd:heading:0033",
+            "82dac0d446ef83cd:body:0052",
+            "82dac0d446ef83cd:heading:0034"
+          ],
+          "source_coverage": 6
+        }
+      ]
+    },
+    "global_rrf_cap3": {
+      "anchor_rank": 1,
+      "returned_bands": 10,
+      "sources": 7,
+      "unique_context_chunks": 130,
+      "repeated_context_chunks": 2,
+      "added_chunks": [
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:body:0000"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:body:0001"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:body:0002"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:body:0003"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:body:0004"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:body:0005"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:body:0006"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:body:0007"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:body:0008"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:body:0009"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:body:0010"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:body:0011"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:body:0012"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:body:0013"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:body:0014"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:heading:0000"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:heading:0001"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:heading:0002"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:heading:0003"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:table:0000"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:table:0001"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:table:0002"
+        ],
+        [
+          "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "1d0117eb6e17c63c:table:0003"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0033"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0034"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0035"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0036"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0037"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0038"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0039"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0040"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0041"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0042"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0043"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0044"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0045"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0046"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0047"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0048"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0049"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0050"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0051"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0052"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0010"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0011"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0012"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0032"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0033"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0034"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0012"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0013"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0014"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0015"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0016"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0017"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0018"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0019"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0020"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0021"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0022"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0023"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0024"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0025"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0026"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0028"
+        ],
+        [
+          "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "9fa4cd7cf1ab602a:body:0020"
+        ],
+        [
+          "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "9fa4cd7cf1ab602a:body:0021"
+        ],
+        [
+          "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "9fa4cd7cf1ab602a:table:0028"
+        ]
+      ],
+      "removed_chunks": [
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0039"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0040"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0041"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0026"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0027"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0028"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0001"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0002"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0003"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0004"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0005"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0006"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0007"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:heading:0000"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0027"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0028"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0063"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0064"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0065"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0066"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0067"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0068"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0069"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0070"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0007"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0007"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0030"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0031"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0032"
+        ]
+      ],
+      "hits": [
+        {
+          "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+          "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+          "chunk_id": "1ada4314a25261ea:body:0002",
+          "kind": "body",
+          "title_text": "——环保行业周报（20260831~20260906）\n投资要点：",
+          "section_path": [
+            "投资评级：看好（维持）",
+            "——环保行业周报（20260831~20260906）",
+            "投资要点："
+          ],
+          "unit_refs": [
+            "unit:0011",
+            "unit:0013",
+            "unit:0014",
+            "unit:0015",
+            "unit:0016",
+            "unit:0017",
+            "unit:0018",
+            "unit:0019",
+            "unit:0020",
+            "unit:0021",
+            "unit:0022",
+            "unit:0023",
+            "unit:0024",
+            "unit:0025",
+            "unit:0026",
+            "unit:0027",
+            "unit:0028",
+            "unit:0029"
+          ],
+          "score": 0.03278688524590164,
+          "snippet": "<b>发电</b>、钢铁、水泥<b>行业</b><b>覆盖</b><b>温室</b>",
+          "published": null,
+          "page": 1,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "1ada4314a25261ea:body:0000",
+            "1ada4314a25261ea:heading:0000",
+            "1ada4314a25261ea:body:0001",
+            "1ada4314a25261ea:heading:0001",
+            "1ada4314a25261ea:body:0002",
+            "1ada4314a25261ea:body:0003",
+            "1ada4314a25261ea:body:0004",
+            "1ada4314a25261ea:body:0005",
+            "1ada4314a25261ea:body:0006",
+            "1ada4314a25261ea:body:0007",
+            "1ada4314a25261ea:heading:0002"
+          ],
+          "source_coverage": 11
+        },
+        {
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "chunk_id": "022ae1713fb760ff:body:0001",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [],
+          "unit_refs": [
+            "unit:0005",
+            "unit:0006",
+            "unit:0007",
+            "unit:0009",
+            "unit:0010",
+            "unit:0011",
+            "unit:0012",
+            "unit:0013"
+          ],
+          "score": 0.029273504273504274,
+          "snippet": "<b>报告</b>正文各子<b>行业</b>观点详情。",
+          "published": null,
+          "page": 1,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "022ae1713fb760ff:body:0000",
+            "022ae1713fb760ff:body:0001",
+            "022ae1713fb760ff:body:0002",
+            "022ae1713fb760ff:body:0003",
+            "022ae1713fb760ff:body:0004",
+            "022ae1713fb760ff:body:0005",
+            "022ae1713fb760ff:body:0006",
+            "022ae1713fb760ff:body:0007",
+            "022ae1713fb760ff:body:0008",
+            "022ae1713fb760ff:body:0009",
+            "022ae1713fb760ff:table:0000",
+            "022ae1713fb760ff:body:0010",
+            "022ae1713fb760ff:body:0011",
+            "022ae1713fb760ff:body:0012",
+            "022ae1713fb760ff:body:0013",
+            "022ae1713fb760ff:body:0014",
+            "022ae1713fb760ff:body:0015",
+            "022ae1713fb760ff:heading:0000",
+            "022ae1713fb760ff:heading:0001",
+            "022ae1713fb760ff:body:0016",
+            "022ae1713fb760ff:table:0001",
+            "022ae1713fb760ff:body:0017",
+            "022ae1713fb760ff:table:0002",
+            "022ae1713fb760ff:body:0018",
+            "022ae1713fb760ff:table:0003"
+          ],
+          "source_coverage": 8
+        },
+        {
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "chunk_id": "022ae1713fb760ff:body:0019",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "方形磷酸铁锂动力电芯：0.3-0.4 元/Wh",
+            "方形三元（高镍）电芯：680-790 元/KWh",
+            "图表11：本周新能源与电力设备板块景气度"
+          ],
+          "unit_refs": [
+            "unit:0257",
+            "unit:0258",
+            "unit:0259",
+            "unit:0260",
+            "unit:0261"
+          ],
+          "score": 0.023024594453165882,
+          "snippet": "<b>发电</b>已逐步实现平价上网，能源",
+          "published": null,
+          "page": 11,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "022ae1713fb760ff:body:0018",
+            "022ae1713fb760ff:table:0003",
+            "022ae1713fb760ff:body:0019",
+            "022ae1713fb760ff:body:0020",
+            "022ae1713fb760ff:heading:0002",
+            "022ae1713fb760ff:body:0021",
+            "022ae1713fb760ff:body:0022"
+          ],
+          "source_coverage": 8
+        },
+        {
+          "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "chunk_id": "82dac0d446ef83cd:body:0051",
+          "kind": "body",
+          "title_text": "图 10：中国和全球实际GDP 增长率逐步放缓",
+          "section_path": [
+            "25/06",
+            "26/06",
+            "图 10：中国和全球实际GDP 增长率逐步放缓"
+          ],
+          "unit_refs": [
+            "unit:0705",
+            "unit:0706",
+            "unit:0707",
+            "unit:0708",
+            "unit:0709",
+            "unit:0710"
+          ],
+          "score": 0.022242442624608227,
+          "snippet": "<b>配额</b>（万吨）及变化情况",
+          "published": null,
+          "page": 12,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "82dac0d446ef83cd:heading:0032",
+            "82dac0d446ef83cd:body:0050",
+            "82dac0d446ef83cd:body:0051",
+            "82dac0d446ef83cd:heading:0033",
+            "82dac0d446ef83cd:body:0052",
+            "82dac0d446ef83cd:heading:0034"
+          ],
+          "source_coverage": 6
+        },
+        {
+          "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "chunk_id": "82dac0d446ef83cd:heading:0011",
+          "kind": "heading",
+          "title_text": null,
+          "section_path": [
+            "上。即使需求仅保持温和增长，只要行业长期缺少资本开支、新增产能有限，或者存量",
+            "产能持续退出，供需关系仍可能逐年收紧。如近年来的有色行业，诸如铜、铝等；以及",
+            "化工子行业的钾肥、制冷剂等。"
+          ],
+          "unit_refs": [
+            "unit:0659",
+            "unit:0660",
+            "unit:0661",
+            "unit:0662",
+            "unit:0663",
+            "unit:0664"
+          ],
+          "score": 0.01980108499095841,
+          "snippet": "<b>行业</b>的研究就需要把着眼点放在",
+          "published": null,
+          "page": 11,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "82dac0d446ef83cd:body:0045",
+            "82dac0d446ef83cd:table:0028",
+            "82dac0d446ef83cd:body:0046",
+            "82dac0d446ef83cd:heading:0010",
+            "82dac0d446ef83cd:body:0047",
+            "82dac0d446ef83cd:body:0048",
+            "82dac0d446ef83cd:heading:0011",
+            "82dac0d446ef83cd:body:0049",
+            "82dac0d446ef83cd:heading:0012"
+          ],
+          "source_coverage": 6
+        },
+        {
+          "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "chunk_id": "82dac0d446ef83cd:body:0034",
+          "kind": "body",
+          "title_text": "图 6：重点化工品景气一览表（续表）",
+          "section_path": [
+            "较好的品种。在具体实践中，这样的操作命中率一般较高。",
+            "图 5：重点化工品景气一览表",
+            "图 6：重点化工品景气一览表（续表）"
+          ],
+          "unit_refs": [
+            "unit:0560",
+            "unit:0561"
+          ],
+          "score": 0.019743589743589744,
+          "snippet": "、R32、R134a的产能为<b>配额</b>",
+          "published": null,
+          "page": 10,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "82dac0d446ef83cd:body:0033",
+            "82dac0d446ef83cd:body:0034",
+            "82dac0d446ef83cd:table:0014",
+            "82dac0d446ef83cd:table:0012",
+            "82dac0d446ef83cd:table:0013",
+            "82dac0d446ef83cd:table:0015",
+            "82dac0d446ef83cd:table:0016",
+            "82dac0d446ef83cd:table:0017",
+            "82dac0d446ef83cd:body:0035",
+            "82dac0d446ef83cd:table:0018",
+            "82dac0d446ef83cd:body:0036",
+            "82dac0d446ef83cd:table:0019",
+            "82dac0d446ef83cd:body:0037",
+            "82dac0d446ef83cd:table:0020",
+            "82dac0d446ef83cd:body:0038",
+            "82dac0d446ef83cd:table:0021",
+            "82dac0d446ef83cd:body:0039",
+            "82dac0d446ef83cd:table:0022",
+            "82dac0d446ef83cd:body:0040",
+            "82dac0d446ef83cd:table:0023",
+            "82dac0d446ef83cd:body:0041",
+            "82dac0d446ef83cd:table:0024",
+            "82dac0d446ef83cd:body:0042",
+            "82dac0d446ef83cd:table:0025",
+            "82dac0d446ef83cd:body:0043",
+            "82dac0d446ef83cd:table:0026",
+            "82dac0d446ef83cd:body:0044"
+          ],
+          "source_coverage": 6
+        },
+        {
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:table:0013",
+          "kind": "table",
+          "title_text": null,
+          "section_path": [
+            "煤矿检测业务作为公司业务基本盘",
+            "半导体加工设备逐步打开业务成长空间",
+            "8"
+          ],
+          "unit_refs": [
+            "unit:0155",
+            "unit:0158",
+            "unit:0159"
+          ],
+          "score": 0.01873249299719888,
+          "snippet": "<b>管理</b>专业。2000年加入公司，",
+          "published": null,
+          "page": 8,
+          "cells": [
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          "label_path": [
+            "工学硕士、EMBA，环境工程专业。曾任河南电力试验研究所技术干部、光力有限执行董事及法定代表\n人；2011 年至今任公司董事长、法定代表人，2016 年至2023 年兼任总经理。现为公司控股股东、实\n际控制人，主要负责战略规划及重大经营决策。 个人简介",
+            "董事长，董事 职务",
+            "1967 出生年份",
+            "赵薇 董事，副总经理 1979 本科学历，道路交通管理专业。2000 年加入公司，历任销售经理、供应链主任、供应链总监及生产制\n造中心负责人；2022 年起负责半导体装备销售，2025 年起任副总经理，2026 年当选董事。 工学硕士、EMBA，环境工程专业。曾任河南电力试验研究所技术干部、光力有限执行董事及法定代表\n人；2011 年至今任公司董事长、法定代表人，2016 年至2023 年兼任总经理。现为公司控股股东、实\n际控制人，主要负责战略规划及重大经营决策。 个人简介",
+            "赵薇 董事，副总经理 1979 本科学历，道路交通管理专业。2000 年加入公司，历任销售经理、供应链主任、供应链总监及生产制\n造中心负责人；2022 年起负责半导体装备销售，2025 年起任副总经理，2026 年当选董事。 董事长，董事 职务",
+            "赵薇 董事，副总经理 1979 本科学历，道路交通管理专业。2000 年加入公司，历任销售经理、供应链主任、供应链总监及生产制\n造中心负责人；2022 年起负责半导体装备销售，2025 年起任副总经理，2026 年当选董事。 1967 出生年份",
+            "吕琦 副总经理，董事会秘书 1975 硕士研究生学历，具有财务管理、公司治理及资本市场工作经验。曾任奥维通信副总裁、董事会秘书、\n董事长，以及谱尼测试副总经理、财务负责人；2026 年加入公司，现任副总经理、董事会秘书。 工学硕士、EMBA，环境工程专业。曾任河南电力试验研究所技术干部、光力有限执行董事及法定代表\n人；2011 年至今任公司董事长、法定代表人，2016 年至2023 年兼任总经理。现为公司控股股东、实\n际控制人，主要负责战略规划及重大经营决策。 个人简介",
+            "吕琦 副总经理，董事会秘书 1975 硕士研究生学历，具有财务管理、公司治理及资本市场工作经验。曾任奥维通信副总裁、董事会秘书、\n董事长，以及谱尼测试副总经理、财务负责人；2026 年加入公司，现任副总经理、董事会秘书。 董事长，董事 职务"
+          ],
+          "context_chunk_ids": [
+            "568f9e752f0fa65a:table:0010",
+            "568f9e752f0fa65a:body:0013",
+            "568f9e752f0fa65a:table:0011",
+            "568f9e752f0fa65a:body:0014",
+            "568f9e752f0fa65a:body:0015",
+            "568f9e752f0fa65a:table:0012",
+            "568f9e752f0fa65a:table:0013",
+            "568f9e752f0fa65a:table:0014",
+            "568f9e752f0fa65a:body:0016",
+            "568f9e752f0fa65a:body:0017",
+            "568f9e752f0fa65a:body:0018",
+            "568f9e752f0fa65a:heading:0006"
+          ],
+          "source_coverage": 6
+        },
+        {
+          "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+          "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "chunk_id": "1d0117eb6e17c63c:body:0007",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "材(-13.81%)、安集科技(-12.62%)、博迁新材(-12.48%)、国瓷材料(-12.35%)、三祥新",
+            "材(-11.88%)、东岳硅材(-11.32%)、雅克科技(-10.87%)、金博股份(-10.7%)。",
+            "图表9：本周涨跌幅后十"
+          ],
+          "unit_refs": [
+            "unit:0118",
+            "unit:0120",
+            "unit:0124",
+            "unit:0127",
+            "unit:0128",
+            "unit:0129",
+            "unit:0130",
+            "unit:0131",
+            "unit:0132",
+            "unit:0133",
+            "unit:0134",
+            "unit:0135",
+            "unit:0136",
+            "unit:0137",
+            "unit:0138",
+            "unit:0139",
+            "unit:0140",
+            "unit:0141",
+            "unit:0142",
+            "unit:0144",
+            "unit:0148",
+            "unit:0150"
+          ],
+          "score": 0.018712162905888827,
+          "snippet": "<b>行业</b>定期<b>报告</b>|基础化工近日，",
+          "published": null,
+          "page": 5,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "1d0117eb6e17c63c:body:0000",
+            "1d0117eb6e17c63c:body:0001",
+            "1d0117eb6e17c63c:heading:0000",
+            "1d0117eb6e17c63c:body:0002",
+            "1d0117eb6e17c63c:body:0003",
+            "1d0117eb6e17c63c:body:0004",
+            "1d0117eb6e17c63c:heading:0001",
+            "1d0117eb6e17c63c:body:0005",
+            "1d0117eb6e17c63c:heading:0002",
+            "1d0117eb6e17c63c:table:0000",
+            "1d0117eb6e17c63c:body:0006",
+            "1d0117eb6e17c63c:heading:0003",
+            "1d0117eb6e17c63c:table:0001",
+            "1d0117eb6e17c63c:body:0007",
+            "1d0117eb6e17c63c:body:0008",
+            "1d0117eb6e17c63c:body:0009",
+            "1d0117eb6e17c63c:body:0010",
+            "1d0117eb6e17c63c:body:0011",
+            "1d0117eb6e17c63c:body:0012",
+            "1d0117eb6e17c63c:table:0002",
+            "1d0117eb6e17c63c:table:0003",
+            "1d0117eb6e17c63c:body:0013",
+            "1d0117eb6e17c63c:body:0014"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "chunk_id": "7ceca88433b092ae:body:0011",
+          "kind": "body",
+          "title_text": "3 行业新闻",
+          "section_path": [
+            "2.3%、1.1%、0.5%、-0.9%、-2.2%、-2.4%、-4.8%。",
+            "-10%",
+            "3 行业新闻"
+          ],
+          "unit_refs": [
+            "unit:0148",
+            "unit:0149",
+            "unit:0150",
+            "unit:0151",
+            "unit:0152",
+            "unit:0153",
+            "unit:0154",
+            "unit:0155",
+            "unit:0156",
+            "unit:0160"
+          ],
+          "score": 0.01833460656990069,
+          "snippet": "<b>行业</b>观察，英伟达宣布向联发",
+          "published": null,
+          "page": 10,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "7ceca88433b092ae:body:0010",
+            "7ceca88433b092ae:body:0011",
+            "7ceca88433b092ae:body:0012",
+            "7ceca88433b092ae:body:0013",
+            "7ceca88433b092ae:heading:0003",
+            "7ceca88433b092ae:body:0014",
+            "7ceca88433b092ae:body:0015",
+            "7ceca88433b092ae:heading:0004",
+            "7ceca88433b092ae:body:0016"
+          ],
+          "source_coverage": 5
+        },
+        {
+          "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "chunk_id": "9fa4cd7cf1ab602a:body:0021",
+          "kind": "body",
+          "title_text": "华创行业公司投资评级体系",
+          "section_path": [
+            "食品饮料组团队介绍",
+            "华创证券机构销售通讯录",
+            "华创行业公司投资评级体系"
+          ],
+          "unit_refs": [
+            "unit:0306",
+            "unit:0307",
+            "unit:0308",
+            "unit:0309",
+            "unit:0310",
+            "unit:0311",
+            "unit:0312",
+            "unit:0313",
+            "unit:0315",
+            "unit:0316"
+          ],
+          "score": 0.01788032574058775,
+          "snippet": "<b>行业</b>投资评级说明：\n推荐：",
+          "published": null,
+          "page": 7,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "9fa4cd7cf1ab602a:body:0020",
+            "9fa4cd7cf1ab602a:body:0021",
+            "9fa4cd7cf1ab602a:table:0028"
+          ],
+          "source_coverage": 3
+        }
+      ]
+    }
+  }
+}

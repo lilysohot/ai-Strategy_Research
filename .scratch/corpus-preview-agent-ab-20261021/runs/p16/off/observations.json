@@ -1,0 +1,279 @@
+{
+  "tools": [
+    {
+      "turn": 1,
+      "name": "corpus_search",
+      "args": {
+        "query": "CIOE 华工正源 NPO"
+      },
+      "result": "{\"ok\": true, \"query\": \"CIOE 华工正源 NPO\", \"count\": 10, \"hits\": [{\"doc_id\": \"cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"locator\": \"chunk:7ceca88433b092ae:body:0004\", \"source_id\": \"8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122\", \"build_id\": \"7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"chunk_id\": \"7ceca88433b092ae:body:0004\", \"context_locators\": [\"chunk:7ceca88433b092ae:body:0000\", \"chunk:7ceca88433b092ae:heading:0000\", \"chunk:7ceca88433b092ae:body:0001\", \"chunk:7ceca88433b092ae:body:0002\", \"chunk:7ceca88433b092ae:body:0003\", \"chunk:7ceca88433b092ae:body:0004\", \"chunk:7ceca88433b092ae:body:0005\", \"chunk:7ceca88433b092ae:body:0006\", \"chunk:7ceca88433b092ae:body:0007\", \"chunk:7ceca88433b092ae:heading:0001\", \"chunk:7ceca88433b092ae:body:0008\", \"chunk:7ceca88433b092ae:heading:0002\", \"chunk:7ceca88433b092ae:body:0009\", \"chunk:7ceca88433b092ae:body:0010\", \"chunk:7ceca88433b092ae:body:0011\", \"chunk:7ceca88433b092ae:body:0012\", \"chunk:7ceca88433b092ae:body:0013\", \"chunk:7ceca88433b092ae:heading:0003\", \"chunk:7ceca88433b092ae:body:0014\", \"chunk:7ceca88433b092ae:body:0015\", \"chunk:7ceca88433b092ae:heading:0004\", \"chunk:7ceca88433b092ae:body:0016\"], \"fetch_plan\": {\"doc_id\": \"cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"locator\": \"chunk:7ceca88433b092ae:body:0004\", \"locators\": [\"chunk:7ceca88433b092ae:body:0000\", \"chunk:7ceca88433b092ae:heading:0000\", \"chunk:7ceca88433b092ae:body:0001\", \"chunk:7ceca88433b092ae:body:0002\", \"chunk:7ceca88433b092ae:body:0003\", \"chunk:7ceca88433b092ae:body:0004\", \"chunk:7ceca88433b092ae:body:0005\", \"chunk:7ceca88433b092ae:body:0006\", \"chunk:7ceca88433b092ae:body:0007\", \"chunk:7ceca88433b092ae:heading:0001\", \"chunk:7ceca88433b092ae:body:0008\", \"chunk:7ceca88433b092ae:heading:0002\", \"chunk:7ceca88433b092ae:body:0009\", \"chunk:7ceca88433b092ae:body:0010\", \"chunk:7ceca88433b092ae:body:0011\", \"chunk:7ceca88433b092ae:body:0012\", \"chunk:7ceca88433b092ae:body:0013\", \"chunk:7ceca88433b092ae:heading:0003\", \"chunk:7ceca88433b092ae:body:0014\", \"chunk:7ceca88433b092ae:body:0015\", \"chunk:7ceca88433b092ae:heading:0004\", \"chunk:7ceca88433b092ae:body:0016\"], \"scope_id\": \"scope:586216fde12a53a10c8dfa2035b2b7b8\", \"view\": \"compact\"}, \"scope_id\": \"scope:586216fde12a53a10c8dfa2035b2b7b8\", \"total_chunks\": 22, \"by_kind\": {\"unknown\": 22}, \"table_chunks\": 0, \"title\": \"1 2026 CIOE 中国光博会前瞻\", \"published\": \"undated\", \"snippet\": \"<b>华工</b>正源：6.4T<b>NPO</b>光\"}, {\"doc_id\": \"cv2:6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2\", \"locator\": \"chunk:6475cbacca1575c5:body:0001\", \"source_id\": \"48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f\", \"build_id\": \"6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2\", \"chunk_id\": \"6475cbacca1575c5:body:0001\", \"context_locators\": [\"chunk:6475cbacca1575c5:body:0000\", \"chunk:6475cbacca1575c5:body:0001\", \"chunk:6475cbacca1575c5:body:0002\", \"chunk:6475cbacca1575c5:body:0003\", \"chunk:6475cbacca1575c5:body:0004\", \"chunk:6475cbacca1575c5:body:0005\", \"chunk:6475cbacca1575c5:body:0006\"], \"fetch_plan\": {\"doc_id\": \"cv2:6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2\", \"locator\": \"chunk:6475cbacca1575c5:body:0001\", \"locators\": [\"chunk:6475cbacca1575c5:body:0000\", \"chunk:6475cbacca1575c5:body:0001\", \"chunk:6475cbacca1575c5:body:0002\", \"chunk:6475cbacca1575c5:body:0003\", \"chunk:6475cbacca1575c5:body:0004\", \"chunk:6475cbacca1575c5:body:0005\", \"chunk:6475cbacca1575c5:body:0006\"], \"scope_id\": \"scope:e011f7e0ba1f8e1028877a420ec450b9\", \"view\": \"compact\"}, \"scope_id\": \"scope:e011f7e0ba1f8e1028877a420ec450b9\", \"total_chunks\": 7, \"by_kind\": {\"unknown\": 7}, \"table_chunks\": 0, \"title\": \"6475cbacca1575c5:body:0001\", \"published\": \"undated\", \"snippet\": \"<b>NPO</b>，<b>NPO</b>可以理解为一种\"}, {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0004\", \"source_id\": \"3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e\", \"build_id\": \"022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"chunk_id\": \"022ae1713fb760ff:body:0004\", \"context_locators\": [\"chunk:022ae1713fb760ff:body:0000\", \"chunk:022ae1713fb760ff:body:0001\", \"chunk:022ae1713fb760ff:body:0002\", \"chunk:022ae1713fb760ff:body:0003\", \"chunk:022ae1713fb760ff:body:0004\", \"chunk:022ae1713fb760ff:body:0005\", \"chunk:022ae1713fb760ff:body:0006\", \"chunk:022ae1713fb760ff:body:0007\"], \"fetch_plan\": {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0004\", \"locators\": [\"chunk:022ae1713fb760ff:body:0000\", \"chunk:022ae1713fb760ff:body:0001\", \"chunk:022ae1713fb760ff:body:0002\", \"chunk:022ae1713fb760ff:body:0003\", \"chunk:022ae1713fb760ff:body:0004\", \"chunk:022ae1713fb760ff:body:0005\", \"chunk:022ae1713fb760ff:body:0006\", \"chunk:022ae1713fb760ff:body:0007\"], \"scope_id\": \"scope:110ec03115b59685c2dbd2da1ee6a32c\", \"view\": \"compact\"}, \"scope_id\": \"scope:110ec03115b59685c2dbd2da1ee6a32c\", \"total_chunks\": 8, \"by_kind\": {\"body\": 1, \"unknown\": 7}, \"table_chunks\": 0, \"title\": \"022ae1713fb760ff:body:0004\", \"published\": \"undated\", \"snippet\": \"<b>NPO</b>液冷散热方案的研发、\"}, {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locator\": \"chunk:16a9a510ef9e405f:body:0007\", \"source_id\": \"00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428\", \"build_id\": \"16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"chunk_id\": \"16a9a510ef9e405f:body:0007\", \"context_locators\": [\"chunk:16a9a510ef9e405f:heading:0004\", \"chunk:16a9a510ef9e405f:body:0003\", \"chunk:16a9a510ef9e405f:body:0004\", \"chunk:16a9a510ef9e405f:body:0005\", \"chunk:16a9a510ef9e405f:body:0006\", \"chunk:16a9a510ef9e405f:body:0007\", \"chunk:16a9a510ef9e405f:body:0008\", \"chunk:16a9a510ef9e405f:body:0009\", \"chunk:16a9a510ef9e405f:body:0010\", \"chunk:16a9a510ef9e405f:heading:0005\", \"chunk:16a9a510ef9e405f:body:0011\", \"chunk:16a9a510ef9e405f:body:0012\"], \"fetch_plan\": {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locator\": \"chunk:16a9a510ef9e405f:body:0007\", \"locators\": [\"chunk:16a9a510ef9e405f:heading:0004\", \"chunk:16a9a510ef9e405f:body:0003\", \"chunk:16a9a510ef9e405f:body:0004\", \"chunk:16a9a510ef9e405f:body:0005\", \"chunk:16a9a510ef9e405f:body:0006\", \"chunk:16a9a510ef9e405f:body:0007\", \"chunk:16a9a510ef9e405f:body:0008\", \"chunk:16a9a510ef9e405f:body:0009\", \"chunk:16a9a510ef9e405f:body:0010\", \"chunk:16a9a510ef9e405f:heading:0005\", \"chunk:16a9a510ef9e405f:body:0011\", \"chunk:16a9a510ef9e405f:body:0012\"], \"scope_id\": \"scope:bf5793fcb4c0264250c8c99d42ea91c4\", \"view\": \"compact\"}, \"scope_id\": \"scope:bf5793fcb4c0264250c8c99d42ea91c4\", \"total_chunks\": 12, \"by_kind\": {\"unknown\": 12}, \"table_chunks\": 0, \"title\": \"一、细分板块观点\\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩\", \"published\": \"undated\", \"snippet\": \"长鑫科技：公司于2026 年08 月28 日公布财报。2026 年上半年，公司实现营业收入1,503.10 亿元，归属于母公司净利润达776.05 亿元，净利润率高达51.6 ，创历史新高；毛利率达84.84 ，显著高于行业均值，主因DRAM 价格上行与销量双升，叠加IDM 模式成本优势，盈利质量优异且非经常性损益影响极小。公司构建覆盖设计、制造、封装到模组的全链条IDM 模式，第四代工艺平台已量产，第五代平台进入客户认证，核心技术达国际先进水平；拥有境内专利 4,484 项（含发明专利3,744 项）及境外专利3,400 项，支撑DDR5、LPDDR5\"}, {\"doc_id\": \"cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"locator\": \"chunk:568f9e752f0fa65a:body:0014\", \"source_id\": \"dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa\", \"build_id\": \"568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"chunk_id\": \"568f9e752f0fa65a:body:0014\", \"context_locators\": [\"chunk:568f9e752f0fa65a:body:0010\", \"chunk:568f9e752f0fa65a:table:0008\", \"chunk:568f9e752f0fa65a:body:0011\", \"chunk:568f9e752f0fa65a:table:0009\", \"chunk:568f9e752f0fa65a:body:0012\", \"chunk:568f9e752f0fa65a:table:0010\", \"chunk:568f9e752f0fa65a:body:0013\", \"chunk:568f9e752f0fa65a:table:0011\", \"chunk:568f9e752f0fa65a:body:0014\", \"chunk:568f9e752f0fa65a:body:0015\", \"chunk:568f9e752f0fa65a:table:0012\", \"chunk:568f9e752f0fa65a:table:0013\", \"chunk:568f9e752f0fa65a:table:0014\", \"chunk:568f9e752f0fa65a:body:0016\", \"chunk:568f9e752f0fa65a:body:0017\", \"chunk:568f9e752f0fa65a:body:0018\", \"chunk:568f9e752f0fa65a:heading:0006\"], \"fetch_plan\": {\"doc_id\": \"cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"locator\": \"chunk:568f9e752f0fa65a:body:0014\", \"locators\": [\"chunk:568f9e752f0fa65a:body:0010\", \"chunk:568f9e752f0fa65a:table:0008\", \"chunk:568f9e752f0fa65a:body:0011\", \"chunk:568f9e752f0fa65a:table:0009\", \"chunk:568f9e752f0fa65a:body:0012\", \"chunk:568f9e752f0fa65a:table:0010\", \"chunk:568f9e752f0fa65a:body:0013\", \"chunk:568f9e752f0fa65a:table:0011\", \"chunk:568f9e752f0fa65a:body:0014\", \"chunk:568f9e752f0fa65a:body:0015\", \"chunk:568f9e752f0fa65a:table:0012\", \"chunk:568f9e752f0fa65a:table:0013\", \"chunk:568f9e752f0fa65a:table:0014\", \"chunk:568f9e752f0fa65a:body:0016\", \"chunk:568f9e752f0fa65a:body:0017\", \"chunk:568f9e752f0fa65a:body:0018\", \"chunk:568f9e752f0fa65a:heading:0006\"], \"scope_id\": \"scope:dddb4030feb598b6a08de5e83fc415f7\", \"view\": \"compact\"}, \"scope_id\": \"scope:dddb4030feb598b6a08de5e83fc415f7\", \"total_chunks\": 17, \"by_kind\": {\"unknown\": 17}, \"table_chunks\": 0, \"title\": \"半导体加工设备逐步打开业务成长空间\", \"published\": \"undated\", \"snippet\": \"6\\n公司半导体装备的优势是全产业链闭环。“整机设备＋核心零部件＋耗材”的产业链闭环带来更低综合成本，更优切割品质和更快定制能力。产品主要应用于晶圆切割、封装体切割和晶圆减薄等关键工序。2025 年，公司半导体封测装备制造业务实现收入3.62 亿元，同比增长31.16 ，占营业收入的53.99 ；相关装备销量达351 台（套），同比增长28.57 。随着AI、HBM 及先进封装推动设备需求增长，公司有望进一步提升国产划切设备的市场份额。\\n图2：公司全产业链闭环示意图\\n资料来源：公司公告，国信证券经济研究所整理\\n7\\n股权结构：实控人合计持有公司36.60 股\"}, {\"doc_id\": \"cv2:6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2\", \"locator\": \"chunk:6475cbacca1575c5:body:0001\", \"source_id\": \"48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f\", \"build_id\": \"6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2\", \"chunk_id\": \"6475cbacca1575c5:body:0001\", \"context_locators\": [\"chunk:6475cbacca1575c5:body:0000\", \"chunk:6475cbacca1575c5:body:0001\", \"chunk:6475cbacca1575c5:body:0002\"], \"fetch_plan\": {\"doc_id\": \"cv2:6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2\", \"locator\": \"chunk:6475cbacca1575c5:body:0001\", \"locators\": [\"chunk:6475cbacca1575c5:body:0000\", \"chunk:6475cbacca1575c5:body:0001\", \"chunk:6475cbacca1575c5:body:0002\"], \"scope_id\": \"scope:6b58ffd5e72c5173a40fc5b066aa1456\", \"view\": \"compact\"}, \"scope_id\": \"scope:6b58ffd5e72c5173a40fc5b066aa1456\", \"total_chunks\": 3, \"by_kind\": {\"unknown\": 3}, \"table_chunks\": 0, \"title\": \"6475cbacca1575c5:body:0001\", \"published\": \"undated\", \"snippet\": \"<b>NPO</b>，<b>NPO</b>可以理解为一种\"}, {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0004\", \"source_id\": \"3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e\", \"build_id\": \"022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"chunk_id\": \"022ae1713fb760ff:body:0004\", \"context_locators\": [\"chunk:022ae1713fb760ff:body:0003\", \"chunk:022ae1713fb760ff:body:0004\", \"chunk:022ae1713fb760ff:body:0005\"], \"fetch_plan\": {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0004\", \"locators\": [\"chunk:022ae1713fb760ff:body:0003\", \"chunk:022ae1713fb760ff:body:0004\", \"chunk:022ae1713fb760ff:body:0005\"], \"scope_id\": \"scope:adbcdb54d8ff962ba569a6efde3c8ae5\", \"view\": \"compact\"}, \"scope_id\": \"scope:adbcdb54d8ff962ba569a6efde3c8ae5\", \"total_chunks\": 3, \"by_kind\": {\"unknown\": 3}, \"table_chunks\": 0, \"title\": \"022ae1713fb760ff:body:0004\", \"published\": \"undated\", \"snippet\": \"<b>NPO</b>液冷散热方案的研发、\"}, {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locator\": \"chunk:16a9a510ef9e405f:body:0014\", \"source_id\": \"00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428\", \"build_id\": \"16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"chunk_id\": \"16a9a510ef9e405f:body:0014\", \"context_locators\": [\"chunk:16a9a510ef9e405f:body:0013\", \"chunk:16a9a510ef9e405f:body:0014\", \"chunk:16a9a510ef9e405f:body:0015\", \"chunk:16a9a510ef9e405f:heading:0007\", \"chunk:16a9a510ef9e405f:body:0016\", \"chunk:16a9a510ef9e405f:body:0017\"], \"fetch_plan\": {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locator\": \"chunk:16a9a510ef9e405f:body:0014\", \"locators\": [\"chunk:16a9a510ef9e405f:body:0013\", \"chunk:16a9a510ef9e405f:body:0014\", \"chunk:16a9a510ef9e405f:body:0015\", \"chunk:16a9a510ef9e405f:heading:0007\", \"chunk:16a9a510ef9e405f:body:0016\", \"chunk:16a9a510ef9e405f:body:0017\"], \"scope_id\": \"scope:79baef35f8deccb6051aaeee4a4a03c3\", \"view\": \"compact\"}, \"scope_id\": \"scope:79baef35f8deccb6051aaeee4a4a03c3\", \"total_chunks\": 6, \"by_kind\": {\"unknown\": 6}, \"table_chunks\": 0, \"title\": \"风险提示\", \"published\": \"undated\", \"snippet\": \"AIGC 进展不及预期的风险：科技巨头公司布局AI，存在未来行业竞争进一步加剧、AI 产品不能有效与应用实践相结合的风险。\\n外部制裁进一步升级的风险：全球范围内的贸易摩擦不断升级，若美国、日本、荷兰等国出口管制进一步升级，可能会导致相关企业的核心环节受限。\\n终端需求不及预期的风险：消费类智能手机创新乏力，对产业链拉动低于预期，换机周期较长；若新能源（电动汽车、风电、光伏、储能）需求不及预期，电动车销量下滑，光储装机量不及预期，可能会对相关公司业绩产生影响。\\n(30) (20) (10) 0 10 20 30\\n鸿富瀚\\n爱克股份\\n捷荣技术\\n灿瑞科技\\n领先股份\"}, {\"doc_id\": \"cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"locator\": \"chunk:568f9e752f0fa65a:heading:0005\", \"source_id\": \"dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa\", \"build_id\": \"568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"chunk_id\": \"568f9e752f0fa65a:heading:0005\", \"context_locators\": [\"chunk:568f9e752f0fa65a:body:0004\", \"chunk:568f9e752f0fa65a:heading:0005\", \"chunk:568f9e752f0fa65a:body:0005\", \"chunk:568f9e752f0fa65a:table:0003\", \"chunk:568f9e752f0fa65a:body:0006\", \"chunk:568f9e752f0fa65a:table:0004\", \"chunk:568f9e752f0fa65a:body:0007\", \"chunk:568f9e752f0fa65a:body:0008\", \"chunk:568f9e752f0fa65a:table:0005\", \"chunk:568f9e752f0fa65a:table:0006\", \"chunk:568f9e752f0fa65a:body:0009\", \"chunk:568f9e752f0fa65a:table:0007\"], \"fetch_plan\": {\"doc_id\": \"cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"locator\": \"chunk:568f9e752f0fa65a:heading:0005\", \"locators\": [\"chunk:568f9e752f0fa65a:body:0004\", \"chunk:568f9e752f0fa65a:heading:0005\", \"chunk:568f9e752f0fa65a:body:0005\", \"chunk:568f9e752f0fa65a:table:0003\", \"chunk:568f9e752f0fa65a:body:0006\", \"chunk:568f9e752f0fa65a:table:0004\", \"chunk:568f9e752f0fa65a:body:0007\", \"chunk:568f9e752f0fa65a:body:0008\", \"chunk:568f9e752f0fa65a:table:0005\", \"chunk:568f9e752f0fa65a:table:0006\", \"chunk:568f9e752f0fa65a:body:0009\", \"chunk:568f9e752f0fa65a:table:0007\"], \"scope_id\": \"scope:4db3503d2a0340344e71360755d54a39\", \"view\": \"compact\"}, \"scope_id\": \"scope:4db3503d2a0340344e71360755d54a39\", \"total_chunks\": 12, \"by_kind\": {\"unknown\": 12}, \"table_chunks\": 0, \"title\": \"煤矿检测业务作为公司业务基本盘\", \"published\": \"undated\", \"snippet\": \"光力科技：煤矿检测转型半导体划片机龙头\\n煤矿检测业务作为公司业务基本盘\"}, {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0013\", \"source_id\": \"3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e\", \"build_id\": \"022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"chunk_id\": \"022ae1713fb760ff:body:0013\", \"context_locators\": [\"chunk:022ae1713fb760ff:table:0000\", \"chunk:022ae1713fb760ff:body:0010\", \"chunk:022ae1713fb760ff:body:0011\", \"chunk:022ae1713fb760ff:body:0012\", \"chunk:022ae1713fb760ff:body:0013\", \"chunk:022ae1713fb760ff:body:0014\", \"chunk:022ae1713fb760ff:body:0015\", \"chunk:022ae1713fb760ff:heading:0000\"], \"fetch_plan\": {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0013\", \"locators\": [\"chunk:022ae1713fb760ff:table:0000\", \"chunk:022ae1713fb760ff:body:0010\", \"chunk:022ae1713fb760ff:body:0011\", \"chunk:022ae1713fb760ff:body:0012\", \"chunk:022ae1713fb760ff:body:0013\", \"chunk:022ae1713fb760ff:body:0014\", \"chunk:022ae1713fb760ff:body:0015\", \"chunk:022ae1713fb760ff:heading:0000\"], \"scope_id\": \"scope:ec15879f83c93e343450d2b0691ce4d7\", \"view\": \"compact\"}, \"scope_id\": \"scope:ec15879f83c93e343450d2b0691ce4d7\", \"total_chunks\": 8, \"by_kind\": {\"unknown\": 8}, \"table_chunks\": 0, \"title\": \"光伏：板块半年报整体呈现“景气底部夯实”状态，玻璃、胶膜、高效电池（尤其BC）等部分环节拐点或率先出现。\", \"published\": \"undated\", \"snippet\": \"锂电：推荐：宁德时代、亿纬锂能、富临精工、科达利、厦钨新能，建议关注：天赐材料、多氟多、石大胜华、海科新源、恩捷股份、星源材质、佛塑科技、湖南裕能、万润新能、诺德股份、中一科技、鼎盛新材、璞泰来。\\n8\\n要点：截至9 月2 日，本周电池片价格下跌，其他环节价格持稳。 1）硅料：硅料价格跌回企业成本线附近； 2）硅片：最新硅片报价可覆盖头部企业全成本； 3）电池片：电池片盈利承压； 4）组件：除部分海外高盈利市场外，组件整体盈利承压。\\n图表3：主产业链单位毛利趋势（测算，截至2026/9/2）\\n来源：硅业分会、PVInfoLink，国金证券研究所测算\\n注：单\"}], \"coverage\": {\"requested_scope_ref\": \"corpus_schema\", \"effective_scope_ref\": \"corpus_publications.active_build_id\", \"publication_snapshot_ref\": \"corpus_publications@48e8e60844f69177d5eb672a1d1b1010\", \"processing\": \"scoped\", \"query_status\": \"matched\", \"availability\": \"unknown\", \"reason_codes\": [\"partial_published\", \"gap_regions_present\"], \"counts\": {\"sources\": 22, \"published\": 18, \"withdrawn\": 0, \"pending\": 0, \"failed_jobs\": 0, \"builds\": 28, \"published_with_gaps\": 16}, \"retrieval\": {\"requested\": \"hybrid\", \"used\": \"hybrid\", \"reason\": null, \"profile\": \"fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107\", \"expected_chunks\": 703, \"ready_chunks\": 703, \"lexical_candidates\": 25, \"vector_candidates\": 200, \"query_cache_hit\": false, \"query_usage\": {\"prompt_tokens\": 39, \"total_tokens\": 39}, \"elapsed_ms\": 450}}, \"hint\": \"snippet 已截断，仅用于定位，禁止直接引用。写 evidence 前请严格使用同一命中的 fetch_plan.doc_id 与fetch_plan.locators 和 fetch_plan.view 调用 corpus_fetch；不得把不同命中的 doc_id、locator 或 context_locators 混在一起。这些句柄共同构成有界的文档证据区。需要先看清这批上下文候选的结构（哪些是标题、哪些是表格块、各自覆盖哪些页与区间）时，用 corpus_inventory(doc_id, locators=context_locators)。\"}",
+      "duration_ms": 475,
+      "tool_call_id": "call_3036bef0f4654a399e7455ba",
+      "is_error": false,
+      "interrupted": false
+    },
+    {
+      "turn": 1,
+      "name": "corpus_search",
+      "args": {
+        "query": "立讯技术 NPO 展示"
+      },
+      "result": "{\"ok\": true, \"query\": \"立讯技术 NPO 展示\", \"count\": 10, \"hits\": [{\"doc_id\": \"cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"locator\": \"chunk:7ceca88433b092ae:body:0001\", \"source_id\": \"8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122\", \"build_id\": \"7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"chunk_id\": \"7ceca88433b092ae:body:0001\", \"context_locators\": [\"chunk:7ceca88433b092ae:body:0000\", \"chunk:7ceca88433b092ae:heading:0000\", \"chunk:7ceca88433b092ae:body:0001\", \"chunk:7ceca88433b092ae:body:0002\", \"chunk:7ceca88433b092ae:body:0003\", \"chunk:7ceca88433b092ae:body:0004\", \"chunk:7ceca88433b092ae:body:0005\", \"chunk:7ceca88433b092ae:body:0006\", \"chunk:7ceca88433b092ae:body:0007\", \"chunk:7ceca88433b092ae:heading:0001\", \"chunk:7ceca88433b092ae:body:0008\", \"chunk:7ceca88433b092ae:heading:0002\", \"chunk:7ceca88433b092ae:body:0009\", \"chunk:7ceca88433b092ae:body:0010\", \"chunk:7ceca88433b092ae:body:0011\", \"chunk:7ceca88433b092ae:body:0012\", \"chunk:7ceca88433b092ae:body:0013\", \"chunk:7ceca88433b092ae:heading:0003\", \"chunk:7ceca88433b092ae:body:0014\", \"chunk:7ceca88433b092ae:body:0015\", \"chunk:7ceca88433b092ae:heading:0004\"], \"fetch_plan\": {\"doc_id\": \"cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"locator\": \"chunk:7ceca88433b092ae:body:0001\", \"locators\": [\"chunk:7ceca88433b092ae:body:0000\", \"chunk:7ceca88433b092ae:heading:0000\", \"chunk:7ceca88433b092ae:body:0001\", \"chunk:7ceca88433b092ae:body:0002\", \"chunk:7ceca88433b092ae:body:0003\", \"chunk:7ceca88433b092ae:body:0004\", \"chunk:7ceca88433b092ae:body:0005\", \"chunk:7ceca88433b092ae:body:0006\", \"chunk:7ceca88433b092ae:body:0007\", \"chunk:7ceca88433b092ae:heading:0001\", \"chunk:7ceca88433b092ae:body:0008\", \"chunk:7ceca88433b092ae:heading:0002\", \"chunk:7ceca88433b092ae:body:0009\", \"chunk:7ceca88433b092ae:body:0010\", \"chunk:7ceca88433b092ae:body:0011\", \"chunk:7ceca88433b092ae:body:0012\", \"chunk:7ceca88433b092ae:body:0013\", \"chunk:7ceca88433b092ae:heading:0003\", \"chunk:7ceca88433b092ae:body:0014\", \"chunk:7ceca88433b092ae:body:0015\", \"chunk:7ceca88433b092ae:heading:0004\"], \"scope_id\": \"scope:260a866186113b1b89b372c09f07b0b4\", \"view\": \"compact\"}, \"scope_id\": \"scope:260a866186113b1b89b372c09f07b0b4\", \"total_chunks\": 21, \"by_kind\": {\"unknown\": 21}, \"table_chunks\": 0, \"title\": \"通信行业周报\\n2026 CIOE 中国光博会前瞻\", \"published\": \"undated\", \"snippet\": \"<b>技术</b>则计划<b>展示</b>3.2T<b>NPO</b>光\"}, {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0004\", \"source_id\": \"3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e\", \"build_id\": \"022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"chunk_id\": \"022ae1713fb760ff:body:0004\", \"context_locators\": [\"chunk:022ae1713fb760ff:body:0000\", \"chunk:022ae1713fb760ff:body:0001\", \"chunk:022ae1713fb760ff:body:0002\", \"chunk:022ae1713fb760ff:body:0003\", \"chunk:022ae1713fb760ff:body:0004\", \"chunk:022ae1713fb760ff:body:0005\", \"chunk:022ae1713fb760ff:body:0006\", \"chunk:022ae1713fb760ff:body:0007\", \"chunk:022ae1713fb760ff:body:0008\", \"chunk:022ae1713fb760ff:body:0009\", \"chunk:022ae1713fb760ff:table:0000\", \"chunk:022ae1713fb760ff:body:0010\", \"chunk:022ae1713fb760ff:body:0011\", \"chunk:022ae1713fb760ff:body:0012\", \"chunk:022ae1713fb760ff:body:0013\", \"chunk:022ae1713fb760ff:body:0014\"], \"fetch_plan\": {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0004\", \"locators\": [\"chunk:022ae1713fb760ff:body:0000\", \"chunk:022ae1713fb760ff:body:0001\", \"chunk:022ae1713fb760ff:body:0002\", \"chunk:022ae1713fb760ff:body:0003\", \"chunk:022ae1713fb760ff:body:0004\", \"chunk:022ae1713fb760ff:body:0005\", \"chunk:022ae1713fb760ff:body:0006\", \"chunk:022ae1713fb760ff:body:0007\", \"chunk:022ae1713fb760ff:body:0008\", \"chunk:022ae1713fb760ff:body:0009\", \"chunk:022ae1713fb760ff:table:0000\", \"chunk:022ae1713fb760ff:body:0010\", \"chunk:022ae1713fb760ff:body:0011\", \"chunk:022ae1713fb760ff:body:0012\", \"chunk:022ae1713fb760ff:body:0013\", \"chunk:022ae1713fb760ff:body:0014\"], \"scope_id\": \"scope:998d41154ee830361038080be3603c88\", \"view\": \"compact\"}, \"scope_id\": \"scope:998d41154ee830361038080be3603c88\", \"total_chunks\": 16, \"by_kind\": {\"body\": 1, \"unknown\": 15}, \"table_chunks\": 0, \"title\": \"022ae1713fb760ff:body:0004\", \"published\": \"undated\", \"snippet\": \"<b>NPO</b>液冷散热方案的研发、\"}, {\"doc_id\": \"cv2:6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2\", \"locator\": \"chunk:6475cbacca1575c5:body:0001\", \"source_id\": \"48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f\", \"build_id\": \"6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2\", \"chunk_id\": \"6475cbacca1575c5:body:0001\", \"context_locators\": [\"chunk:6475cbacca1575c5:body:0000\", \"chunk:6475cbacca1575c5:body:0001\", \"chunk:6475cbacca1575c5:body:0002\", \"chunk:6475cbacca1575c5:body:0003\", \"chunk:6475cbacca1575c5:body:0004\", \"chunk:6475cbacca1575c5:body:0005\", \"chunk:6475cbacca1575c5:body:0006\"], \"fetch_plan\": {\"doc_id\": \"cv2:6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2\", \"locator\": \"chunk:6475cbacca1575c5:body:0001\", \"locators\": [\"chunk:6475cbacca1575c5:body:0000\", \"chunk:6475cbacca1575c5:body:0001\", \"chunk:6475cbacca1575c5:body:0002\", \"chunk:6475cbacca1575c5:body:0003\", \"chunk:6475cbacca1575c5:body:0004\", \"chunk:6475cbacca1575c5:body:0005\", \"chunk:6475cbacca1575c5:body:0006\"], \"scope_id\": \"scope:e011f7e0ba1f8e1028877a420ec450b9\", \"view\": \"compact\"}, \"scope_id\": \"scope:e011f7e0ba1f8e1028877a420ec450b9\", \"total_chunks\": 7, \"by_kind\": {\"unknown\": 7}, \"table_chunks\": 0, \"title\": \"6475cbacca1575c5:body:0001\", \"published\": \"undated\", \"snippet\": \"<b>NPO</b>，<b>NPO</b>可以理解为一种\"}, {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locator\": \"chunk:16a9a510ef9e405f:body:0007\", \"source_id\": \"00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428\", \"build_id\": \"16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"chunk_id\": \"16a9a510ef9e405f:body:0007\", \"context_locators\": [\"chunk:16a9a510ef9e405f:heading:0003\", \"chunk:16a9a510ef9e405f:heading:0004\", \"chunk:16a9a510ef9e405f:body:0003\", \"chunk:16a9a510ef9e405f:body:0004\", \"chunk:16a9a510ef9e405f:body:0005\", \"chunk:16a9a510ef9e405f:body:0006\", \"chunk:16a9a510ef9e405f:body:0007\", \"chunk:16a9a510ef9e405f:body:0008\", \"chunk:16a9a510ef9e405f:body:0009\", \"chunk:16a9a510ef9e405f:body:0010\", \"chunk:16a9a510ef9e405f:heading:0005\", \"chunk:16a9a510ef9e405f:body:0011\", \"chunk:16a9a510ef9e405f:body:0012\"], \"fetch_plan\": {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locator\": \"chunk:16a9a510ef9e405f:body:0007\", \"locators\": [\"chunk:16a9a510ef9e405f:heading:0003\", \"chunk:16a9a510ef9e405f:heading:0004\", \"chunk:16a9a510ef9e405f:body:0003\", \"chunk:16a9a510ef9e405f:body:0004\", \"chunk:16a9a510ef9e405f:body:0005\", \"chunk:16a9a510ef9e405f:body:0006\", \"chunk:16a9a510ef9e405f:body:0007\", \"chunk:16a9a510ef9e405f:body:0008\", \"chunk:16a9a510ef9e405f:body:0009\", \"chunk:16a9a510ef9e405f:body:0010\", \"chunk:16a9a510ef9e405f:heading:0005\", \"chunk:16a9a510ef9e405f:body:0011\", \"chunk:16a9a510ef9e405f:body:0012\"], \"scope_id\": \"scope:15228c5974b006fc41e9afd624b4c639\", \"view\": \"compact\"}, \"scope_id\": \"scope:15228c5974b006fc41e9afd624b4c639\", \"total_chunks\": 13, \"by_kind\": {\"unknown\": 13}, \"table_chunks\": 0, \"title\": \"一、细分板块观点\\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩\", \"published\": \"undated\", \"snippet\": \"<b>技术</b>达国际先进水平；拥有境内\"}, {\"doc_id\": \"cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"locator\": \"chunk:568f9e752f0fa65a:body:0014\", \"source_id\": \"dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa\", \"build_id\": \"568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"chunk_id\": \"568f9e752f0fa65a:body:0014\", \"context_locators\": [\"chunk:568f9e752f0fa65a:body:0004\", \"chunk:568f9e752f0fa65a:heading:0005\", \"chunk:568f9e752f0fa65a:body:0005\", \"chunk:568f9e752f0fa65a:table:0003\", \"chunk:568f9e752f0fa65a:body:0006\", \"chunk:568f9e752f0fa65a:table:0004\", \"chunk:568f9e752f0fa65a:body:0007\", \"chunk:568f9e752f0fa65a:body:0008\", \"chunk:568f9e752f0fa65a:table:0005\", \"chunk:568f9e752f0fa65a:table:0006\", \"chunk:568f9e752f0fa65a:body:0009\", \"chunk:568f9e752f0fa65a:table:0007\", \"chunk:568f9e752f0fa65a:body:0010\", \"chunk:568f9e752f0fa65a:table:0008\", \"chunk:568f9e752f0fa65a:body:0011\", \"chunk:568f9e752f0fa65a:table:0009\", \"chunk:568f9e752f0fa65a:body:0012\", \"chunk:568f9e752f0fa65a:table:0010\", \"chunk:568f9e752f0fa65a:body:0013\", \"chunk:568f9e752f0fa65a:table:0011\", \"chunk:568f9e752f0fa65a:body:0014\", \"chunk:568f9e752f0fa65a:body:0015\", \"chunk:568f9e752f0fa65a:table:0012\", \"chunk:568f9e752f0fa65a:table:0013\", \"chunk:568f9e752f0fa65a:table:0014\", \"chunk:568f9e752f0fa65a:body:0016\", \"chunk:568f9e752f0fa65a:body:0017\", \"chunk:568f9e752f0fa65a:body:0018\"], \"fetch_plan\": {\"doc_id\": \"cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"locator\": \"chunk:568f9e752f0fa65a:body:0014\", \"locators\": [\"chunk:568f9e752f0fa65a:body:0004\", \"chunk:568f9e752f0fa65a:heading:0005\", \"chunk:568f9e752f0fa65a:body:0005\", \"chunk:568f9e752f0fa65a:table:0003\", \"chunk:568f9e752f0fa65a:body:0006\", \"chunk:568f9e752f0fa65a:table:0004\", \"chunk:568f9e752f0fa65a:body:0007\", \"chunk:568f9e752f0fa65a:body:0008\", \"chunk:568f9e752f0fa65a:table:0005\", \"chunk:568f9e752f0fa65a:table:0006\", \"chunk:568f9e752f0fa65a:body:0009\", \"chunk:568f9e752f0fa65a:table:0007\", \"chunk:568f9e752f0fa65a:body:0010\", \"chunk:568f9e752f0fa65a:table:0008\", \"chunk:568f9e752f0fa65a:body:0011\", \"chunk:568f9e752f0fa65a:table:0009\", \"chunk:568f9e752f0fa65a:body:0012\", \"chunk:568f9e752f0fa65a:table:0010\", \"chunk:568f9e752f0fa65a:body:0013\", \"chunk:568f9e752f0fa65a:table:0011\", \"chunk:568f9e752f0fa65a:body:0014\", \"chunk:568f9e752f0fa65a:body:0015\", \"chunk:568f9e752f0fa65a:table:0012\", \"chunk:568f9e752f0fa65a:table:0013\", \"chunk:568f9e752f0fa65a:table:0014\", \"chunk:568f9e752f0fa65a:body:0016\", \"chunk:568f9e752f0fa65a:body:0017\", \"chunk:568f9e752f0fa65a:body:0018\"], \"scope_id\": \"scope:0fb23e8a8b4cfa0d54a89320e7a4eed0\", \"view\": \"compact\"}, \"scope_id\": \"scope:0fb23e8a8b4cfa0d54a89320e7a4eed0\", \"total_chunks\": 28, \"by_kind\": {\"unknown\": 28}, \"table_chunks\": 0, \"title\": \"半导体加工设备逐步打开业务成长空间\", \"published\": \"undated\", \"snippet\": \"<b>技术</b>、电气设备、矿山机械及技术服务的\"}, {\"doc_id\": \"cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"locator\": \"chunk:7ceca88433b092ae:body:0001\", \"source_id\": \"8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122\", \"build_id\": \"7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"chunk_id\": \"7ceca88433b092ae:body:0001\", \"context_locators\": [\"chunk:7ceca88433b092ae:heading:0000\", \"chunk:7ceca88433b092ae:body:0001\", \"chunk:7ceca88433b092ae:body:0002\", \"chunk:7ceca88433b092ae:body:0003\", \"chunk:7ceca88433b092ae:body:0004\", \"chunk:7ceca88433b092ae:body:0005\", \"chunk:7ceca88433b092ae:body:0006\", \"chunk:7ceca88433b092ae:body:0007\"], \"fetch_plan\": {\"doc_id\": \"cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"locator\": \"chunk:7ceca88433b092ae:body:0001\", \"locators\": [\"chunk:7ceca88433b092ae:heading:0000\", \"chunk:7ceca88433b092ae:body:0001\", \"chunk:7ceca88433b092ae:body:0002\", \"chunk:7ceca88433b092ae:body:0003\", \"chunk:7ceca88433b092ae:body:0004\", \"chunk:7ceca88433b092ae:body:0005\", \"chunk:7ceca88433b092ae:body:0006\", \"chunk:7ceca88433b092ae:body:0007\"], \"scope_id\": \"scope:f5264a3b57c2c806dca458fdec19d0f0\", \"view\": \"compact\"}, \"scope_id\": \"scope:f5264a3b57c2c806dca458fdec19d0f0\", \"total_chunks\": 8, \"by_kind\": {\"unknown\": 8}, \"table_chunks\": 0, \"title\": \"通信行业周报\\n2026 CIOE 中国光博会前瞻\", \"published\": \"undated\", \"snippet\": \"<b>技术</b>则计划<b>展示</b>3.2T<b>NPO</b>光\"}, {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0004\", \"source_id\": \"3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e\", \"build_id\": \"022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"chunk_id\": \"022ae1713fb760ff:body:0004\", \"context_locators\": [\"chunk:022ae1713fb760ff:body:0000\", \"chunk:022ae1713fb760ff:body:0001\", \"chunk:022ae1713fb760ff:body:0002\", \"chunk:022ae1713fb760ff:body:0003\", \"chunk:022ae1713fb760ff:body:0004\", \"chunk:022ae1713fb760ff:body:0005\", \"chunk:022ae1713fb760ff:body:0006\", \"chunk:022ae1713fb760ff:body:0007\", \"chunk:022ae1713fb760ff:body:0008\", \"chunk:022ae1713fb760ff:body:0009\"], \"fetch_plan\": {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0004\", \"locators\": [\"chunk:022ae1713fb760ff:body:0000\", \"chunk:022ae1713fb760ff:body:0001\", \"chunk:022ae1713fb760ff:body:0002\", \"chunk:022ae1713fb760ff:body:0003\", \"chunk:022ae1713fb760ff:body:0004\", \"chunk:022ae1713fb760ff:body:0005\", \"chunk:022ae1713fb760ff:body:0006\", \"chunk:022ae1713fb760ff:body:0007\", \"chunk:022ae1713fb760ff:body:0008\", \"chunk:022ae1713fb760ff:body:0009\"], \"scope_id\": \"scope:9ed2380c6fc4063c2cf86aa175daca83\", \"view\": \"compact\"}, \"scope_id\": \"scope:9ed2380c6fc4063c2cf86aa175daca83\", \"total_chunks\": 10, \"by_kind\": {\"body\": 1, \"unknown\": 9}, \"table_chunks\": 0, \"title\": \"022ae1713fb760ff:body:0004\", \"published\": \"undated\", \"snippet\": \"<b>NPO</b>液冷散热方案的研发、\"}, {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locator\": \"chunk:16a9a510ef9e405f:body:0007\", \"source_id\": \"00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428\", \"build_id\": \"16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"chunk_id\": \"16a9a510ef9e405f:body:0007\", \"context_locators\": [\"chunk:16a9a510ef9e405f:body:0004\", \"chunk:16a9a510ef9e405f:body:0005\", \"chunk:16a9a510ef9e405f:body:0006\", \"chunk:16a9a510ef9e405f:body:0007\", \"chunk:16a9a510ef9e405f:body:0008\"], \"fetch_plan\": {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locator\": \"chunk:16a9a510ef9e405f:body:0007\", \"locators\": [\"chunk:16a9a510ef9e405f:body:0004\", \"chunk:16a9a510ef9e405f:body:0005\", \"chunk:16a9a510ef9e405f:body:0006\", \"chunk:16a9a510ef9e405f:body:0007\", \"chunk:16a9a510ef9e405f:body:0008\"], \"scope_id\": \"scope:60842db61f0b1f0782c568b8247e6547\", \"view\": \"compact\"}, \"scope_id\": \"scope:60842db61f0b1f0782c568b8247e6547\", \"total_chunks\": 5, \"by_kind\": {\"unknown\": 5}, \"table_chunks\": 0, \"title\": \"一、细分板块观点\\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩\", \"published\": \"undated\", \"snippet\": \"<b>技术</b>达国际先进水平；拥有境内\"}, {\"doc_id\": \"cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"locator\": \"chunk:568f9e752f0fa65a:body:0014\", \"source_id\": \"dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa\", \"build_id\": \"568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"chunk_id\": \"568f9e752f0fa65a:body:0014\", \"context_locators\": [\"chunk:568f9e752f0fa65a:table:0009\", \"chunk:568f9e752f0fa65a:body:0012\", \"chunk:568f9e752f0fa65a:table:0010\", \"chunk:568f9e752f0fa65a:body:0013\", \"chunk:568f9e752f0fa65a:table:0011\", \"chunk:568f9e752f0fa65a:body:0014\", \"chunk:568f9e752f0fa65a:body:0015\", \"chunk:568f9e752f0fa65a:table:0012\", \"chunk:568f9e752f0fa65a:table:0013\", \"chunk:568f9e752f0fa65a:table:0014\", \"chunk:568f9e752f0fa65a:body:0016\"], \"fetch_plan\": {\"doc_id\": \"cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"locator\": \"chunk:568f9e752f0fa65a:body:0014\", \"locators\": [\"chunk:568f9e752f0fa65a:table:0009\", \"chunk:568f9e752f0fa65a:body:0012\", \"chunk:568f9e752f0fa65a:table:0010\", \"chunk:568f9e752f0fa65a:body:0013\", \"chunk:568f9e752f0fa65a:table:0011\", \"chunk:568f9e752f0fa65a:body:0014\", \"chunk:568f9e752f0fa65a:body:0015\", \"chunk:568f9e752f0fa65a:table:0012\", \"chunk:568f9e752f0fa65a:table:0013\", \"chunk:568f9e752f0fa65a:table:0014\", \"chunk:568f9e752f0fa65a:body:0016\"], \"scope_id\": \"scope:98d095ddf73d5410299f27f55ffcf730\", \"view\": \"compact\"}, \"scope_id\": \"scope:98d095ddf73d5410299f27f55ffcf730\", \"total_chunks\": 11, \"by_kind\": {\"unknown\": 11}, \"table_chunks\": 0, \"title\": \"半导体加工设备逐步打开业务成长空间\", \"published\": \"undated\", \"snippet\": \"<b>技术</b>、电气设备、矿山机械及技术服务的\"}, {\"doc_id\": \"cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"locator\": \"chunk:7ceca88433b092ae:body:0014\", \"source_id\": \"8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122\", \"build_id\": \"7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"chunk_id\": \"7ceca88433b092ae:body:0014\", \"context_locators\": [\"chunk:7ceca88433b092ae:heading:0003\", \"chunk:7ceca88433b092ae:body:0014\", \"chunk:7ceca88433b092ae:body:0015\", \"chunk:7ceca88433b092ae:heading:0004\"], \"fetch_plan\": {\"doc_id\": \"cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"locator\": \"chunk:7ceca88433b092ae:body:0014\", \"locators\": [\"chunk:7ceca88433b092ae:heading:0003\", \"chunk:7ceca88433b092ae:body:0014\", \"chunk:7ceca88433b092ae:body:0015\", \"chunk:7ceca88433b092ae:heading:0004\"], \"scope_id\": \"scope:8500d4979e886934fb50607493da518b\", \"view\": \"compact\"}, \"scope_id\": \"scope:8500d4979e886934fb50607493da518b\", \"total_chunks\": 4, \"by_kind\": {\"unknown\": 4}, \"table_chunks\": 0, \"title\": \"5 投资建议：AI 光互联加速升级，高速率与新架构\\n协同演进\", \"published\": \"undated\", \"snippet\": \"<b>技术</b>有望从800G进一步向1.6T升级\"}], \"coverage\": {\"requested_scope_ref\": \"corpus_schema\", \"effective_scope_ref\": \"corpus_publications.active_build_id\", \"publication_snapshot_ref\": \"corpus_publications@48e8e60844f69177d5eb672a1d1b1010\", \"processing\": \"scoped\", \"query_status\": \"matched\", \"availability\": \"unknown\", \"reason_codes\": [\"partial_published\", \"gap_regions_present\"], \"counts\": {\"sources\": 22, \"published\": 18, \"withdrawn\": 0, \"pending\": 0, \"failed_jobs\": 0, \"builds\": 28, \"published_with_gaps\": 16}, \"retrieval\": {\"requested\": \"hybrid\", \"used\": \"hybrid\", \"reason\": null, \"profile\": \"fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107\", \"expected_chunks\": 703, \"ready_chunks\": 703, \"lexical_candidates\": 54, \"vector_candidates\": 200, \"query_cache_hit\": false, \"query_usage\": {\"prompt_tokens\": 37, \"total_tokens\": 37}, \"elapsed_ms\": 589}}, \"hint\": \"snippet 已截断，仅用于定位，禁止直接引用。写 evidence 前请严格使用同一命中的 fetch_plan.doc_id 与fetch_plan.locators 和 fetch_plan.view 调用 corpus_fetch；不得把不同命中的 doc_id、locator 或 context_locators 混在一起。这些句柄共同构成有界的文档证据区。需要先看清这批上下文候选的结构（哪些是标题、哪些是表格块、各自覆盖哪些页与区间）时，用 corpus_inventory(doc_id, locators=context_locators)。\"}",
+      "duration_ms": 605,
+      "tool_call_id": "call_42a8f362796f46638dabc12a",
+      "is_error": false,
+      "interrupted": false
+    },
+    {
+      "turn": 2,
+      "name": "corpus_fetch",
+      "args": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locators": [
+          "chunk:7ceca88433b092ae:body:0001",
+          "chunk:7ceca88433b092ae:body:0002",
+          "chunk:7ceca88433b092ae:body:0003",
+          "chunk:7ceca88433b092ae:body:0004",
+          "chunk:7ceca88433b092ae:body:0005"
+        ]
+      },
+      "result": "{\"ok\": true, \"schema_version\": 1, \"cursor_type\": \"content\", \"doc_id\": \"cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"build_id\": \"7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"scope_id\": \"scope:9d26ede5151124e7ed716d06b33a51a9\", \"view\": \"full\", \"items\": [{\"locator\": \"chunk:7ceca88433b092ae:body:0001\", \"chunk_id\": \"7ceca88433b092ae:body:0001\", \"kind\": \"body\", \"build_id\": \"7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"text\": \"通信行业周报 \\n2026 年9 月9-11 日，第27 届中国国际光电博览会（CIOE 中国光博会）将在\\n深圳国际会展中心（宝安）举办。CIOE 中国光博会八大主题展覆盖信息通信、精\\n密光学、摄像头技术及应用、激光及智能制造、红外、紫外、智能传感、新型显\\n示、AR&VR、光电子创新等板块。\\n本届 CIOE 可重点关注光互联高速率演进、互联架构架构变化以及光器件和系统\\n级光网络的技术进展：1）高速光互联继续向更高速率演进，单波400G、3.2T 及\\n更高容量方案成为重要前瞻方向。在1.6T 持续推进的基础上，光迅科技将展示单\\n波400G 核心技术，Coherent 则进一步布局6.4T CPO、12.8T XPO 等方案。随\\n着单通道速率提升，DSP、光芯片、高速电接口及信号完整性的协同能力将成为\\n下一阶段产品升级的重要支撑。2）NPO 加速推动光引擎向交换芯片侧靠近，AI\\nScale-Up 互联架构有望进一步演进。华工正源将动态展示6.4T 去DSP NPO 光\\n引擎，立讯技术则计划展示 3.2T NPO 光引擎 Live Demo。相较传统可插拔方\\n案，缩短高速电连接距离有助于降低功耗并改善信号完整性，NPO 的工程化和客\\n户验证进展有望进一步加快。3）3.2T 及NPO/CPO 演进推动光芯片、光组件及\\n精密耦合等底层器件加速升级。仕佳光子将集中展示DFB、EML、SOA 等有源芯\\n片，以及 AWG、MT-FA、FAU 等高速光组件。随着 3.2T 及 NPO/CPO 持续推\\n进，光源、光芯片、精密耦合和高密度连接的重要性有望同步提升，产业链价值\\n量或进一步向底层核心器件扩散。4）AI 数据中心光互联正在由单点链路升级向\\n系统级光网络协同延伸。长芯博创将展示 1.6T 光模块、EBO 预端接光缆以及基\\n于MEMS 技术的全光交换机，覆盖高速传输、光连接与OCS 多个环节。随着AI\\n集群规模扩大，除端口速率外，跨机柜流量调度、网络能效及低时延互联也将成\\n为下一阶段光网络升级的重要方向。\\n行业要闻：\\n英伟达向联发科投资35 亿美元，深化芯片合作\\nNASA 向蓝色起源授予火星通信网络开发合同，该合同价值可能高达7 亿美元\\n公司动态：\\n中际旭创：9 月1 日，中际旭创发布关于首次回购公司股份的公告。公司于9 月\\n1 日首次通过股份回购专用证券账户以集中竞价交易方式回购公司股份 37.41 万\\n股，占公司总股本的0.0318%，最高成交价为870.00 元/股，最低成交价为838.16\\n元/股，支付总金额为3.18 亿元（不含交易费用）。\\n投资建议：CIOE 2026 参展企业展品预告显示，AI 算力集群扩张仍在推动光互联\\n向更高速率、更低功耗方向演进，产业技术有望从800G 进一步向1.6T 升级。从\\n参展企业披露的产品进展看，1.6T 正逐步进入规模上量阶段，3.2T 及更高阶产品\\n则陆续推进送样与客户验证。随着AI 集群规模持续扩大，NPO、CPO、XPO 等\\n新型架构的产业化进展有望成为本届展会的重要看点。从产业链布局看，参展产\\n品进一步向高速 DSP 及模拟芯片、EML/硅光激光器、CW 光源、光引擎、光芯\\n片、高密度连接及先进光电封装等环节延伸，随着速率和架构持续升级，核心光\\n电器件和光引擎的重要性有望进一步提升。建议关注高速光模块相关标的：中际\\n旭创、新易盛等；同时建议关注CPO 及光器件相关标的：天孚通信、炬光科技、\\n蘅东光、光库科技、致尚科技、长盈通等。\\n风险提示：AI 需求不及预期、行业竞争加剧及产品价格下降风险、核心器件及供\\n应链波动风险，展会信息及产品进展存在变化风险。\", \"pages\": [1], \"fragment\": null, \"text_chars\": 1521, \"text_sha256\": \"95e36e37155c362ac3e6ffe4e9288bd2b132e986797fc206749e2aa7d8dcdeea\", \"structure_status\": \"partial\", \"content_role\": \"content\", \"relations\": [{\"target_locator\": null, \"target_kind\": \"heading\", \"target_heading\": \"通信行业周报\\n2026 CIOE 中国光博会前瞻\", \"relation\": \"caption_of\", \"status\": \"candidate\", \"basis\": \"title_text_without_member_heading\"}], \"relation_status\": \"candidate\", \"label_path\": [\"推荐 维持评级\"], \"source_id\": \"8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122\", \"units\": [{\"unit_id\": \"unit:0004\", \"page\": 1}, {\"unit_id\": \"unit:0006\", \"page\": 1}]}, {\"locator\": \"chunk:7ceca88433b092ae:body:0002\", \"chunk_id\": \"7ceca88433b092ae:body:0002\", \"kind\": \"body\", \"build_id\": \"7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509\", \"text\": \"推荐 维持评级\\n分析师 张宁\\n执业证书： S0590523120003\\n邮箱： zhangnyj@glms.com.cn\\n分析师 范宇\\n执业证书： S0590525110074\\n邮箱： fanyu@glms.com.cn\\n相对走势\\n通信 沪深300\\n220%\\n143%\\n67%\\n-10%\\n2025/6 2025/12 2026/6\\n相关研究\\n1． 通信行业周报20260607：Marvell CEO\\n提出连接是AI 关键瓶颈，强调“铜墙移\\n动”趋势-2026/06/07\\n2． 通信行业动态报告：XPO 融合液冷和CPC\\n技术，直通3.2T 时代-2026/05/31\\n3． 通信行业周报20260530：MRC 协议重塑\\n大规模AI 互联-2026/05/30\\n4． 通信行业周报20260524：英伟达业绩超\\n市场预期，持续看好AI 景气周期-\\n2026/05/24\\n5． 通信行业周报：关注光通信新技术的边际\\n变化，以及液冷环节-2026/05/17\\n2026年09月06日\\n仅供内部参考，请勿外传\\n本公司具备证券投资咨询业务资格，请务必阅读最后一页免责声明 \\n证券研究报告 \\n2 \\n行业定期报告/通信\\n本公司具备证券投资咨询业务资格，请务必阅读最后一页免责声明 \\n证券研究报告 \\n3 \", \"pages\": [1, 2, 3], \"fragment\": null, \"text_chars\": 547, \"text_sha256\": \"f99cce88720b648ebab58a41fb312ea9b8ec2469070efd8448364bdbc1b9504a\", \"structure_status\": \"partial\", \"content_role\": \"content\", \"relations\": [{\"target_locator\": null, \"target_kind\": \"heading\", \"target_heading\": \"通信行业周报\\n2026 CIOE 中国光博会前瞻\", \"relation\": \"caption_of\", \"status\": \"candidate\", \"basis\": \"title_text_without_member_heading\"}], \"relation_status\": \"candidate\", \"label_path\": [\"推荐 维持评级\"], \"source_id\": \"8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122\", \"units\": [{\"unit_id\": \"unit:0007\", \"page\": 1}, {\"unit_id\": \"unit:0008\", \"page\": 1}, {\"unit_id\": \"unit:0009\", \"page\": 1}, {\"unit_id\": \"unit:0010\", \"page\": 1}, {\"unit_id\": \"unit:0011\", \"page\": 1}, {\"unit_id\": \"unit:0012\", \"page\": 2}, {\"unit_id\": \"unit:0013\", \"page\": 2}, {\"unit_id\": \"unit:0014\", \"page\": 2}, {\"unit_id\": \"unit:0015\", \"page\": 2}, {\"unit_id\": \"unit:0018\", \"page\": 3}, {\"unit_id\": \"unit:0019\", \"page\": 3}, {\"unit_id\": \"unit:0020\", \"page\": 3}]}], \"item_errors\": [], \"unresolved\": [], \"next_cursor\": \"eyJidWlsZF9pZCI6IjdjZWNhODg0MzNiMDkyYWVmMTEyYmIyNWM5NWQyMjE2NjUwODBjNWY5Yzk3OWFkMzdlYjRjYmVlZWU0MGU1MDkiLCJkb2NfaWQiOiJjdjI6N2NlY2E4ODQzM2IwOTJhZWYxMTJiYjI1Yzk1ZDIyMTY2NTA4MGM1ZjljOTc5YWQzN2ViNGNiZWVlZTQwZTUwOSIsIm1pIjoyLCJvZmYiOjAsInJlcSI6WyJjaHVuazo3Y2VjYTg4NDMzYjA5MmFlOmJvZHk6MDAwMSIsImNodW5rOjdjZWNhODg0MzNiMDkyYWU6Ym9keTowMDAyIiwiY2h1bms6N2NlY2E4ODQzM2IwOTJhZTpib2R5OjAwMDMiLCJjaHVuazo3Y2VjYTg4NDMzYjA5MmFlOmJvZHk6MDAwNCIsImNodW5rOjdjZWNhODg0MzNiMDkyYWU6Ym9keTowMDA1Il0sInN1bSI6IjNmZDg2Y2VkNTUzMTkyZGUiLCJ0eXBlIjoiY29udGVudCIsInVucmVzb2x2ZWQiOltdLCJ2IjoxLCJ2aWV3IjoiZnVsbCJ9\", \"exhausted\": false, \"fetch_complete\": false, \"page_id\": \"fpage:4f36166ee9552e42\", \"hint\": \"本页 items 是取回的正文（可能为整块或分片）；quote 必须逐字取自 item.text。ok=false 表示本次没有取回任何权威正文；fetch_complete=false 表示仍有未解决项或分页未结束；这两种状态下都不得把 items 当作完整证据。分片用 fragment.start/end 标注**本块 text 内**的 Unicode 码点区间，text_sha256/text_chars 是整块内容身份，可用于校验分片确来自该块。续取用 next_cursor；exhausted 只表示这轮遍历到终点——有失败项时 fetch_complete 仍为 false 且见 unresolved，不得把游标前移当作已取全。kind=heading 的 item content_role=heading_only（只证明标题被取回）；relations 是本次请求范围内的结构关联（verified／candidate 严格分开）。\"}",
+      "duration_ms": 218,
+      "tool_call_id": "call_4f41513ca47845f2adac8fc3",
+      "is_error": false,
+      "interrupted": false
+    },
+    {
+      "turn": 3,
+      "name": "corpus_submit_manifest",
+      "args": {
+        "conclusions": [
+          {
+            "evidence": [
+              {
+                "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+                "locator": "chunk:7ceca88433b092ae:body:0001",
+                "purpose": "value",
+                "quote": "华工正源将动态展示6.4T 去DSP NPO 光\n引擎，立讯技术则计划展示 3.2T NPO 光引擎 Live Demo。"
+              }
+            ],
+            "report_quote": "华工正源将动态展示6.4T 去DSP NPO 光引擎，立讯技术则计划展示3.2T NPO 光引擎 Live Demo。",
+            "text_location": "最终回复第一段（问题答案主体）"
+          }
+        ]
+      },
+      "result": "{\"ok\": true, \"manifest_file\": null, \"owner\": \"stateful_react:5a88767e845b\", \"publish_status\": \"verified\", \"counts\": {\"supported\": 1, \"partial\": 0, \"unsupported\": 0}, \"conclusions\": [{\"id\": \"C1\", \"status\": \"supported\", \"delivery\": [\"delivered\"], \"semantic_references\": [], \"problems\": []}], \"hint\": \"对非 supported 的结论：按需补取原文、重新查询失效语义版本、修改表述或移除结论；已完整送达的语义证据不必例行 corpus_fetch。然后重新提交**完整**清单（每次提交生成新的候选文件，边界以汇总校验为准）。本轮新取的片段需经过下一轮消息边界核验，pending 的结论请下一轮重新提交确认。\"}",
+      "duration_ms": 30,
+      "tool_call_id": "call_c38dcffa591441289dc08e15",
+      "is_error": false,
+      "interrupted": false
+    }
+  ],
+  "responses": [
+    {
+      "turn": 1,
+      "usage": {
+        "provider": "openai",
+        "model": "glm-5-3-flash-260828",
+        "prompt_tokens": 2092,
+        "completion_tokens": 124,
+        "cache_read_tokens": 2048,
+        "cache_write_tokens": 0,
+        "cached_tokens": 2048,
+        "cache_creation_tokens": 0
+      },
+      "text": "",
+      "tool_calls": [
+        {
+          "name": "corpus_search",
+          "args": {
+            "query": "CIOE 华工正源 NPO"
+          },
+          "id": "call_3036bef0f4654a399e7455ba"
+        },
+        {
+          "name": "corpus_search",
+          "args": {
+            "query": "立讯技术 NPO 展示"
+          },
+          "id": "call_42a8f362796f46638dabc12a"
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "usage": {
+        "provider": "openai",
+        "model": "glm-5-3-flash-260828",
+        "prompt_tokens": 20742,
+        "completion_tokens": 369,
+        "cache_read_tokens": 2048,
+        "cache_write_tokens": 0,
+        "cached_tokens": 2048,
+        "cache_creation_tokens": 0
+      },
+      "text": "找到了国联民生的《2026 CIOE 中国光博会前瞻》报告（doc_id: cv2:7ceca88433b092ae...）。现在取回相关段落原文：",
+      "tool_calls": [
+        {
+          "name": "corpus_fetch",
+          "args": {
+            "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+            "locators": [
+              "chunk:7ceca88433b092ae:body:0001",
+              "chunk:7ceca88433b092ae:body:0002",
+              "chunk:7ceca88433b092ae:body:0003",
+              "chunk:7ceca88433b092ae:body:0004",
+              "chunk:7ceca88433b092ae:body:0005"
+            ]
+          },
+          "id": "call_4f41513ca47845f2adac8fc3"
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "usage": {
+        "provider": "openai",
+        "model": "glm-5-3-flash-260828",
+        "prompt_tokens": 24146,
+        "completion_tokens": 1003,
+        "cache_read_tokens": 20736,
+        "cache_write_tokens": 0,
+        "cached_tokens": 20736,
+        "cache_creation_tokens": 0
+      },
+      "text": "已取到原文，关键句在 chunk:7ceca88433b092ae:body:0001（第1页）。先按 A4 要求登记证据清单：",
+      "tool_calls": [
+        {
+          "name": "corpus_submit_manifest",
+          "args": {
+            "conclusions": [
+              {
+                "evidence": [
+                  {
+                    "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+                    "locator": "chunk:7ceca88433b092ae:body:0001",
+                    "purpose": "value",
+                    "quote": "华工正源将动态展示6.4T 去DSP NPO 光\n引擎，立讯技术则计划展示 3.2T NPO 光引擎 Live Demo。"
+                  }
+                ],
+                "report_quote": "华工正源将动态展示6.4T 去DSP NPO 光引擎，立讯技术则计划展示3.2T NPO 光引擎 Live Demo。",
+                "text_location": "最终回复第一段（问题答案主体）"
+              }
+            ]
+          },
+          "id": "call_c38dcffa591441289dc08e15"
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "usage": {
+        "provider": "openai",
+        "model": "glm-5-3-flash-260828",
+        "prompt_tokens": 25336,
+        "completion_tokens": 448,
+        "cache_read_tokens": 24128,
+        "cache_write_tokens": 0,
+        "cached_tokens": 24128,
+        "cache_creation_tokens": 0
+      },
+      "text": "清单已验证通过（C1: supported）。答案如下：\n\n**国联民生《通信行业周报：2026 CIOE 中国光博会前瞻》（2026-09-06，分析师张宁、范宇）第1页原文：**\n\n> “2）NPO 加速推动光引擎向交换芯片侧靠近……**华工正源将动态展示 6.4T 去 DSP NPO 光引擎，立讯技术则计划展示 3.2T NPO 光引擎 Live Demo**。”\n\n**结论：**\n- **华工正源**：动态展示 **6.4T 去 DSP NPO 光引擎**\n- **立讯技术**：计划展示 **3.2T NPO 光引擎 Live Demo**\n\n**来源**\n- 标题：《通信行业周报 2026 CIOE 中国光博会前瞻》（国联民生证券，2026年09月06日）\n- doc_id：`cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509`\n- locator：`chunk:7ceca88433b092ae:body:0001`（第1页）",
+      "tool_calls": []
+    }
+  ],
+  "attempts": [
+    {
+      "phase": "started",
+      "outcome": "",
+      "usage": null,
+      "duration_ms": 0,
+      "error_type": ""
+    },
+    {
+      "phase": "finished",
+      "outcome": "accepted",
+      "usage": {
+        "provider": "openai",
+        "model": "glm-5-3-flash-260828",
+        "prompt_tokens": 2092,
+        "completion_tokens": 124,
+        "cache_read_tokens": 2048,
+        "cache_write_tokens": 0,
+        "cached_tokens": 2048,
+        "cache_creation_tokens": 0
+      },
+      "duration_ms": 6407,
+      "error_type": ""
+    },
+    {
+      "phase": "started",
+      "outcome": "",
+      "usage": null,
+      "duration_ms": 0,
+      "error_type": ""
+    },
+    {
+      "phase": "finished",
+      "outcome": "accepted",
+      "usage": {
+        "provider": "openai",
+        "model": "glm-5-3-flash-260828",
+        "prompt_tokens": 20742,
+        "completion_tokens": 369,
+        "cache_read_tokens": 2048,
+        "cache_write_tokens": 0,
+        "cached_tokens": 2048,
+        "cache_creation_tokens": 0
+      },
+      "duration_ms": 7979,
+      "error_type": ""
+    },
+    {
+      "phase": "started",
+      "outcome": "",
+      "usage": null,
+      "duration_ms": 0,
+      "error_type": ""
+    },
+    {
+      "phase": "finished",
+      "outcome": "accepted",
+      "usage": {
+        "provider": "openai",
+        "model": "glm-5-3-flash-260828",
+        "prompt_tokens": 24146,
+        "completion_tokens": 1003,
+        "cache_read_tokens": 20736,
+        "cache_write_tokens": 0,
+        "cached_tokens": 20736,
+        "cache_creation_tokens": 0
+      },
+      "duration_ms": 22049,
+      "error_type": ""
+    },
+    {
+      "phase": "started",
+      "outcome": "",
+      "usage": null,
+      "duration_ms": 0,
+      "error_type": ""
+    },
+    {
+      "phase": "finished",
+      "outcome": "accepted",
+      "usage": {
+        "provider": "openai",
+        "model": "glm-5-3-flash-260828",
+        "prompt_tokens": 25336,
+        "completion_tokens": 448,
+        "cache_read_tokens": 24128,
+        "cache_write_tokens": 0,
+        "cached_tokens": 24128,
+        "cache_creation_tokens": 0
+      },
+      "duration_ms": 11086,
+      "error_type": ""
+    }
+  ]
+}

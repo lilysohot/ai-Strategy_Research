@@ -1,0 +1,36 @@
+[
+  {
+    "source": {
+      "source_id": "8935e5291a43a0251b35b7c82e6a228d86f41929f9c19acda8f3d8cf168defb1",
+      "format": "pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 5943272,
+      "archive_path": "89/8935e5291a43a0251b35b7c82e6a228d86f41929f9c19acda8f3d8cf168defb1.pdf",
+      "original_names": [
+        "2026-08-13_2026.08.13-goldman-sachs-国外研报-高盛-贵州茅台-600519-sh-市场化改革方案六-全国42家直营店四款产品提价-维持-买入-评级-a1454167.pdf"
+      ]
+    },
+    "registered": true,
+    "already_registered": false,
+    "reused_archive": false,
+    "error": null,
+    "ingest_rev": "ingest-1"
+  },
+  {
+    "source": {
+      "source_id": "004303e2ff4f9acd4f315c909c098ebe0af5d2d1b7f537dc701b5e1fc02caa7e",
+      "format": "pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 1958357,
+      "archive_path": "00/004303e2ff4f9acd4f315c909c098ebe0af5d2d1b7f537dc701b5e1fc02caa7e.pdf",
+      "original_names": [
+        "2026-09-30_2026.09.30-国内研报-长江消费周周谈20260928-5f4db7fb.pdf"
+      ]
+    },
+    "registered": true,
+    "already_registered": false,
+    "reused_archive": false,
+    "error": null,
+    "ingest_rev": "ingest-1"
+  }
+]

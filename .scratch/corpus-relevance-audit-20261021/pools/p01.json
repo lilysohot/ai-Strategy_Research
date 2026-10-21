@@ -1,0 +1,138 @@
+{
+  "case": {
+    "id": "p01",
+    "question": "国金电子报告怎样解释麒麟芯片晶体管更多、做同样工作却更省电？",
+    "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+    "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428"
+  },
+  "capture_sha256": "9ad82af3f8514c90a962dba7c6a1ffb432a78cff5c981cc31393823dc09fcc0a",
+  "top10_pool": [
+    "022ae1713fb760ff:body:0001",
+    "022ae1713fb760ff:body:0022",
+    "022ae1713fb760ff:table:0003",
+    "16a9a510ef9e405f:body:0001",
+    "16a9a510ef9e405f:body:0002",
+    "16a9a510ef9e405f:body:0003",
+    "16a9a510ef9e405f:body:0004",
+    "16a9a510ef9e405f:body:0006",
+    "16a9a510ef9e405f:body:0007",
+    "16a9a510ef9e405f:body:0009",
+    "16a9a510ef9e405f:body:0011",
+    "16a9a510ef9e405f:body:0016",
+    "16a9a510ef9e405f:body:0017",
+    "1d0117eb6e17c63c:body:0007",
+    "2055995f24f1db3a:body:0010",
+    "568f9e752f0fa65a:body:0017",
+    "568f9e752f0fa65a:heading:0002",
+    "568f9e752f0fa65a:table:0008",
+    "6b55ddbbcfdc484d:list:0001",
+    "d2ec2ce01b12450b:body:0008"
+  ],
+  "reviewed_report_scope": [
+    "16a9a510ef9e405f:body:0000",
+    "16a9a510ef9e405f:body:0001",
+    "16a9a510ef9e405f:body:0002",
+    "16a9a510ef9e405f:body:0003",
+    "16a9a510ef9e405f:body:0004",
+    "16a9a510ef9e405f:body:0005",
+    "16a9a510ef9e405f:body:0006",
+    "16a9a510ef9e405f:body:0007",
+    "16a9a510ef9e405f:body:0008",
+    "16a9a510ef9e405f:body:0009",
+    "16a9a510ef9e405f:body:0010",
+    "16a9a510ef9e405f:body:0011",
+    "16a9a510ef9e405f:body:0012",
+    "16a9a510ef9e405f:body:0013",
+    "16a9a510ef9e405f:body:0014",
+    "16a9a510ef9e405f:body:0015",
+    "16a9a510ef9e405f:body:0016",
+    "16a9a510ef9e405f:body:0017",
+    "16a9a510ef9e405f:heading:0000",
+    "16a9a510ef9e405f:heading:0001",
+    "16a9a510ef9e405f:heading:0002",
+    "16a9a510ef9e405f:heading:0003",
+    "16a9a510ef9e405f:heading:0004",
+    "16a9a510ef9e405f:heading:0005",
+    "16a9a510ef9e405f:heading:0006",
+    "16a9a510ef9e405f:heading:0007"
+  ],
+  "ranks": {
+    "16a9a510ef9e405f:body:0001": {
+      "lexical": 1,
+      "dense": 1,
+      "fused": 1,
+      "production": 1
+    },
+    "16a9a510ef9e405f:body:0011": {
+      "lexical": 2,
+      "fused": 5
+    },
+    "16a9a510ef9e405f:body:0004": {
+      "lexical": 3,
+      "fused": 2,
+      "production": 6
+    },
+    "16a9a510ef9e405f:body:0006": {
+      "lexical": 4,
+      "fused": 7
+    },
+    "16a9a510ef9e405f:body:0002": {
+      "lexical": 5,
+      "fused": 9
+    },
+    "16a9a510ef9e405f:body:0016": {
+      "lexical": 6,
+      "fused": 4,
+      "production": 10
+    },
+    "16a9a510ef9e405f:body:0017": {
+      "lexical": 7,
+      "fused": 8
+    },
+    "16a9a510ef9e405f:body:0003": {
+      "lexical": 8,
+      "dense": 8,
+      "fused": 3
+    },
+    "16a9a510ef9e405f:body:0007": {
+      "lexical": 9,
+      "dense": 10,
+      "fused": 6
+    },
+    "16a9a510ef9e405f:body:0009": {
+      "lexical": 10,
+      "fused": 10
+    },
+    "022ae1713fb760ff:table:0003": {
+      "dense": 2
+    },
+    "568f9e752f0fa65a:heading:0002": {
+      "dense": 3
+    },
+    "568f9e752f0fa65a:table:0008": {
+      "dense": 4
+    },
+    "2055995f24f1db3a:body:0010": {
+      "dense": 5,
+      "production": 8
+    },
+    "6b55ddbbcfdc484d:list:0001": {
+      "dense": 6
+    },
+    "d2ec2ce01b12450b:body:0008": {
+      "dense": 7
+    },
+    "022ae1713fb760ff:body:0022": {
+      "dense": 9
+    },
+    "022ae1713fb760ff:body:0001": {
+      "production": 7
+    },
+    "568f9e752f0fa65a:body:0017": {
+      "production": 9
+    },
+    "1d0117eb6e17c63c:body:0007": {
+      "production": 5
+    }
+  }
+}

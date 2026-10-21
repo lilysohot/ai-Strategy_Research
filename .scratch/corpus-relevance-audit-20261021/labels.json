@@ -1,0 +1,1732 @@
+{
+  "reviewer": "agent; not independently human-reviewed; sample seen during development",
+  "rules": {
+    "relevant": "full or partial contains substantive evidence for at least one requested facet",
+    "context": "topic-related/structural material without requested substantive evidence gets 0 for evidence precision",
+    "scope": "Positive questions explicitly name a report/institution; other-source material is excluded by provenance, not claimed factually false. This is an evaluation label, never a retrieval filter.",
+    "recall": "Within the completely inspected 3 requested report chunk inventories only; not universal corpus recall",
+    "negative": "n01 top10 pooled results reviewed for requested-company evidence; no positive denominator and no global absence claim"
+  },
+  "authority_sha256": "78664f61c4ae204b25b3273086cee21732789a4499ceead21463414659db506a",
+  "cases": {
+    "p01": {
+      "question": "国金电子报告怎样解释麒麟芯片晶体管更多、做同样工作却更省电？",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "facets": [
+        "interconnect",
+        "voltage"
+      ],
+      "positive_chunks": [
+        "16a9a510ef9e405f:body:0001"
+      ],
+      "labels": {
+        "022ae1713fb760ff:body:0001": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "text_sha256": "eda0cf935ef321fb41ced32f1eb889ee5de2e8e0fb75f29ff3008e61dd51b5b1"
+        },
+        "022ae1713fb760ff:body:0022": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "text_sha256": "e6d9d97338952fa4ecbe039b7aed820d44fcadaeb276faa9d6ae73597a00918b"
+        },
+        "022ae1713fb760ff:table:0003": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "text_sha256": "9f82f8f652b601626fa356bc74535e66c63bbfc064cc8d0913b0ffd23a3b1ea8"
+        },
+        "16a9a510ef9e405f:body:0000": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "9fe21b6369d1d4c96ca28c244db00ae432acf4e33a4e828c4ec90a25bda57596"
+        },
+        "16a9a510ef9e405f:body:0001": {
+          "grade": "full",
+          "facets": [
+            "interconnect",
+            "voltage"
+          ],
+          "reason": "同时解释走线/互连电容与电压平方关系",
+          "support_markers": [
+            "互连电容",
+            "降低工作电压"
+          ],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "6f64ad3eca6da2d3465f057c9215b8aadbd4b7c247479dc17d5e1b51ee099c20"
+        },
+        "16a9a510ef9e405f:body:0002": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "d4855a21b7ff095de26890893ce886e5637350998e51c1489568816ca4f526b2"
+        },
+        "16a9a510ef9e405f:body:0003": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "efadbe35010fcdf7171e1ca2b938936e4d79b18c93f0fbf6e3f23af8d37b3932"
+        },
+        "16a9a510ef9e405f:body:0004": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "ae33d187047a4c967de8c40a8227bd01cffcf217465b051c3e609e3f71074044"
+        },
+        "16a9a510ef9e405f:body:0005": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "3c6ce41e70da84d581536ff087b6089abcc794841ff02c652f15d3105b90626d"
+        },
+        "16a9a510ef9e405f:body:0006": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "47216454e27c4387aba630332dc399701217c64176d2d845031e040c9e7acf44"
+        },
+        "16a9a510ef9e405f:body:0007": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "12155b13983e74974bb3444222379b77ef6e054169dac474d5f06234233841c0"
+        },
+        "16a9a510ef9e405f:body:0008": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "ac636ad604c720a6cd9febeb6d6acb598e99ce0fa6c02bc29ae0a9a2f2750aa3"
+        },
+        "16a9a510ef9e405f:body:0009": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "ddf5e001f519459c2820a99857352255120745bee2c876a40738f78a51a9e043"
+        },
+        "16a9a510ef9e405f:body:0010": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "f0042342bb99ec7818ccef521ff078f4e8f0487a8e342fc15ca88f985cf1939d"
+        },
+        "16a9a510ef9e405f:body:0011": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "e8f21cd665af64dc92d604c24428125580578d2192e682b141c421c37239480f"
+        },
+        "16a9a510ef9e405f:body:0012": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "64f0ef73eed6aa7021ad930ba175ec6bfbd51bce1a9bbed16f62052ced827614"
+        },
+        "16a9a510ef9e405f:body:0013": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "bae8de9c1077800b937ef5e4786da3c0884afb36179d2914c346bb0a6da4837e"
+        },
+        "16a9a510ef9e405f:body:0014": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "2423deec12deab440b4b9bdb109b67a9540581ab79121d055928512409f696cb"
+        },
+        "16a9a510ef9e405f:body:0015": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "81e7c5ae14efbf7a7cbe001b87fd93d33c20bfd254d4d40d122a8d2148f71162"
+        },
+        "16a9a510ef9e405f:body:0016": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "f84f4bb6b48e82a5b6521ddcc77f6ab3aa45cb3e546fc2c9484f01e18b87931a"
+        },
+        "16a9a510ef9e405f:body:0017": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "38038426fe1b18e07bbfdabdc63837ba45f08f2b7bd159ee56a1af00d795136c"
+        },
+        "16a9a510ef9e405f:heading:0000": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "45ca84540972d0c19cd6d5eac039033507694fc50152fa1cb83938155fae9903"
+        },
+        "16a9a510ef9e405f:heading:0001": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "1b8ae109bee0765e7b1b830580cef167e5f49a897717b0423af8a7881bfc57c8"
+        },
+        "16a9a510ef9e405f:heading:0002": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "9fb2936a4a279b0da2118925bca79853620c4d82df8b0dd32ec9825b9bedaffc"
+        },
+        "16a9a510ef9e405f:heading:0003": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "c6e2b3a0e2965cadc5ad726b245d320f693d686825ce47b631bbf6872cb725ef"
+        },
+        "16a9a510ef9e405f:heading:0004": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "b3da04d91e3e7b942158a13d2fcbbb61b5457d816bc40b001f3bc65569e727c4"
+        },
+        "16a9a510ef9e405f:heading:0005": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "3d9f79cf7cd4114eace7e89356820651a5ca5cc28d827077d8526dea32df6912"
+        },
+        "16a9a510ef9e405f:heading:0006": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "7a940b2ef6cd13136371fdfed9485b2cde69ac569f6589f4a8b0f159f586d54d"
+        },
+        "16a9a510ef9e405f:heading:0007": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "4972f362b4ee488977cfa336a5d0c60e1916c9e78eb5fbb93df117e4873c0f36"
+        },
+        "1d0117eb6e17c63c:body:0007": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+          "text_sha256": "ececb8099c0e152bacbc8648f5022898bb42b3a5ba643c878f7d5000d32f6b64"
+        },
+        "2055995f24f1db3a:body:0010": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+          "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+          "text_sha256": "c07b7b0b2f29b3c5cb8960c58c868a10f0b494e578946b563c7e59d49320a067"
+        },
+        "568f9e752f0fa65a:body:0017": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "a550e5c7a20a1aa4623d57b4a1ca2f52c99e67ae499f621e040e662d52f28470"
+        },
+        "568f9e752f0fa65a:heading:0002": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "e5c8c344ba989a792f2f8dfcf1e21f6e1fb7ffbd954f1901c193c7ea10898ae0"
+        },
+        "568f9e752f0fa65a:table:0008": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "d45d6b7f1011781bdc8a0a4eb296742685720c1ab6a51c4642246e8d2283698d"
+        },
+        "6b55ddbbcfdc484d:list:0001": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "text_sha256": "06fb04ad24e1030d16c083e0e42121a5de484ffa6f4d236cdc67b07f650322a9"
+        },
+        "d2ec2ce01b12450b:body:0008": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "d2ec2ce01b12450b6090114e23ec01465ea4399b38387c0a83d1808354c6e75f",
+          "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+          "text_sha256": "7e26e32cec4ef6396ef88a7043bd71825e37f89a5d9f1f8923c39795a4d2a520"
+        }
+      },
+      "report_chunks_reviewed": 26,
+      "pooled_chunks_reviewed": 20
+    },
+    "p13": {
+      "question": "平安策略周报如何描述2026年8月美国制造业和服务业景气的分化？",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "facets": [
+        "manufacturing",
+        "services"
+      ],
+      "positive_chunks": [
+        "e1b21386e9b62dde:body:0002"
+      ],
+      "labels": {
+        "022ae1713fb760ff:body:0003": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "text_sha256": "028d94a32e3bc81c7dadd727618151a757e89813b42fccd24ab812957203e4fb"
+        },
+        "022ae1713fb760ff:body:0021": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "text_sha256": "5488ec92d7067d4e4c4d139731189af7ecd6f24282491455498b2ed56bb223fc"
+        },
+        "147e841aab35836a:body:0001": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+          "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+          "text_sha256": "b84c1a1267992b4382d214c4b45b01089721af9f49bfda482fe675c71745a497"
+        },
+        "147e841aab35836a:body:0005": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+          "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+          "text_sha256": "56b285f91da4ba6540d9f42b68938c1acb47d9c243ec5da276fd0b73c827a998"
+        },
+        "147e841aab35836a:body:0013": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+          "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+          "text_sha256": "a86a5439149ad0281f8c8e08ed4fe5afe9dc3d627e0b6553159668bff5ab36d7"
+        },
+        "628ec76d5b4001b7:body:0002": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "text_sha256": "3641e58c25cbff1083b5714093060ad4dd21c3f1928eed37b47b938cf49a6034"
+        },
+        "628ec76d5b4001b7:body:0006": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "text_sha256": "263f4d1398c7a0fcac055bb784afb2a67201e280acc14a02e3d57f97a73abf39"
+        },
+        "628ec76d5b4001b7:body:0007": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "text_sha256": "e3fe527bdf8d9e6517f9e4bb814bbf8719a5f249053bb190b2f5d98f0a8ffcf1"
+        },
+        "628ec76d5b4001b7:body:0021": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "text_sha256": "9842ad9cfb2c2dd146e022f2d61764f54db68a02832fc4d1679ad2c4153df48d"
+        },
+        "628ec76d5b4001b7:body:0022": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "text_sha256": "d41f1bcc51c862b2ee3831403556f9913f67dcc31523a72499e4811968bb6240"
+        },
+        "628ec76d5b4001b7:body:0023": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "text_sha256": "0d2221acc116f2ab85dcacbfb31355e0d2d9f17e112b9a82c71506b4949b6fbe"
+        },
+        "628ec76d5b4001b7:body:0026": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "text_sha256": "ade2c61a14f6780ba2b6e29db57e1dff63479d040b25b94ed0b07c52048ba51c"
+        },
+        "628ec76d5b4001b7:body:0032": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "text_sha256": "88ab8e5c3cf44ca3f0342aa36d6b87f7a44959ce5b55f93822c91d8489f95242"
+        },
+        "628ec76d5b4001b7:table:0000": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "text_sha256": "caef6ff4d2a2986a79fb73d97b802869642e6736a11c0876af30c8bcec7c87fa"
+        },
+        "628ec76d5b4001b7:table:0002": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "text_sha256": "255395420ea53d9998e4c26c197bff57330295c6c0317e00f503c7168d917fd3"
+        },
+        "9ebd323f89e55cc1:body:0002": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+          "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+          "text_sha256": "4b8f0a9aded11f545410ce058145f8337637a4e9b722f9277bf3a57d59a516d0"
+        },
+        "9ebd323f89e55cc1:body:0008": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+          "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+          "text_sha256": "ce3ecb29b42679fa5693ffc0771361c8ef3ce0425b60cf11d1db1b56dcfe411a"
+        },
+        "9ebd323f89e55cc1:body:0010": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+          "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+          "text_sha256": "99d18e0c09460fcc6a449a824bcb8c419db3733d557e267a57ec479b1b298098"
+        },
+        "9ebd323f89e55cc1:body:0011": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+          "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+          "text_sha256": "f527dd27a46974087394a4015a7fa0a17735b88718d3b8d3f2997d35b7c8a73c"
+        },
+        "9ebd323f89e55cc1:body:0015": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+          "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+          "text_sha256": "5c482955961921c721f73683f775e947e16df6cdbb96074bbf69310d68d46b06"
+        },
+        "e1b21386e9b62dde:body:0000": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "07d06b3900300f838ef054dc23b1fd4861eff732f4dd64adeee4cbe555c958a5"
+        },
+        "e1b21386e9b62dde:body:0001": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "1ccaa511faf3fba352ab76ec8d45b89119d64a9e3eff3336c6d665ca4f5a8dc3"
+        },
+        "e1b21386e9b62dde:body:0002": {
+          "grade": "full",
+          "facets": [
+            "manufacturing",
+            "services"
+          ],
+          "reason": "同一段比较美国8月制造业走弱和服务业走强",
+          "support_markers": [
+            "54.6%",
+            "55.4%",
+            "服务通胀粘性"
+          ],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "15147982960ce64c2b096dceff11f4b303db930740141d2f7c70ce23c3748c90"
+        },
+        "e1b21386e9b62dde:body:0003": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "57288c9a40261bec21225c585c68d32ae03fcaa057a61bc70268b5d9cc497961"
+        },
+        "e1b21386e9b62dde:body:0004": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "2da1b5dae9be19168dea474aad0409563029a6658fd079b9fc8ec74972b211a8"
+        },
+        "e1b21386e9b62dde:body:0005": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "8768672ad7e482b8657596ac29fcfd1d4d0e094a8e813e128e2011a9758eabbb"
+        },
+        "e1b21386e9b62dde:body:0006": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "a1b67442363aa928803e299c4fdd34d7a13075f3a8aedc8985cfa981008bf662"
+        },
+        "e1b21386e9b62dde:body:0007": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "ed2f086f639fb1dec6beb0e3c7d7247510572bd59e02940aa7d38e82af82f8ff"
+        },
+        "e1b21386e9b62dde:body:0008": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "6162b3b4417fb81993b16f735b247094f739595923ad310befd0142b60441865"
+        },
+        "e1b21386e9b62dde:body:0009": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "fc6196b6035c76cd261a10e55fd04e08e62799e7f6d7c8b8086bcbb959ce7139"
+        },
+        "e1b21386e9b62dde:body:0010": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "fe0dade74bbf366d865b1695d001e18f9ea450ff34d130162d747f495ce5100f"
+        },
+        "e1b21386e9b62dde:body:0011": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "450339955aeadeacdecb3b9cd60b68416626d3d9a78d562ffb7b44db48f51a57"
+        },
+        "e1b21386e9b62dde:body:0012": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "e70bacbe227914cb1a5a1361932b9b8931981fe42b46d01395cf1c12ecba95f6"
+        },
+        "e1b21386e9b62dde:body:0013": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "6b34cc2230fca93950bc3438f76d7ae9fc435b0794de8f2bfccc9dfd3d95a5ca"
+        },
+        "e1b21386e9b62dde:body:0014": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "8d4bbb4c4c0180ce38b96cc7857bf38af33fd088de7bde47d4f43d2c135e4f76"
+        },
+        "e1b21386e9b62dde:body:0015": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "95cbd94fa62dc4ae530a8d36dedecf15e6234b8f0470d0263ff8bcdeb708623e"
+        },
+        "e1b21386e9b62dde:body:0016": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "882bd6b27fd0a5bd845b9f980f7d44f4e95b19f79d345952ca3aa53f1deeaa88"
+        },
+        "e1b21386e9b62dde:body:0017": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "fa1c31b064fd7c7feeb8e9c0bf65d64f78533bf1f2c84d0b56cc7d183fac964a"
+        },
+        "e1b21386e9b62dde:body:0018": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "0031d094525e0e2a310531f3e94d05aebc28f40312b61523597c6341d4da70cf"
+        },
+        "e1b21386e9b62dde:body:0019": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "471c9f1656eecb4cbe8a0bb54b0dd5c53be6c60c36d08e95253c2c9468796164"
+        },
+        "e1b21386e9b62dde:body:0020": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "8872e931d5b8eea6fa1337d967e151459540f30ab00f4e79f87ae0622674ebf4"
+        },
+        "e1b21386e9b62dde:body:0021": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "7f118d576e8b7c58b87963d4189dda9c6c77d97acecf16e9fa740628e352c610"
+        },
+        "e1b21386e9b62dde:body:0022": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "2ba3e6d2c58c4cfacd2f18dc2008f1c1996edda632d4095a175cf51ee353d982"
+        },
+        "e1b21386e9b62dde:body:0023": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "ccdffd1318d500fb28b19ca17c445315fce33034fb640f0f758c43503a421a59"
+        },
+        "e1b21386e9b62dde:body:0024": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "76636bcd30af2e260add2b4787019e7d543227740788ba3651e15e5b5f1f427d"
+        },
+        "e1b21386e9b62dde:body:0025": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "20333b8655f19dee865fa35337f9ddfbde3c25c57c441773275b7904c4dda083"
+        },
+        "e1b21386e9b62dde:body:0026": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "afd1d3a474790652fee9ebcc4082413a1d23bfcb45705584fc19d45ed2f4c50b"
+        },
+        "e1b21386e9b62dde:body:0027": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "1cbc75b2373d73d6fb1543772b942c5fb1118ec321851ddec1469ba86eb13bc5"
+        },
+        "e1b21386e9b62dde:body:0028": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "18daf6a061049647fdd1d8259a3ba9ac38d64a9120d22aaaba6642a952a34618"
+        },
+        "e1b21386e9b62dde:body:0029": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "f673a8499ba11a3ba52947a7598433ff86ae6790fb48369f18e6d39e99b4ca75"
+        },
+        "e1b21386e9b62dde:body:0030": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "d3ad759b0828988086113532b4e038a23f6e9561746cb5991c46d92c9cf89c5c"
+        },
+        "e1b21386e9b62dde:body:0031": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "7628bc6e11536574f5a36777a96475eb47d2a50148c9ce783701aace7e307ea8"
+        },
+        "e1b21386e9b62dde:body:0032": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "35111186bc76ace09860c319f7d987347f9e71fc29cdd105040bb0d467b62132"
+        },
+        "e1b21386e9b62dde:body:0033": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "a2702d88846be84055989a61d4587c5852ee7fd684a86418c2b87cf5c2e44956"
+        },
+        "e1b21386e9b62dde:body:0034": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "16e0a5e4dd20e72e9d3ecefb48c076c75cd9bbc202d87106d1615201c4b688fd"
+        },
+        "e1b21386e9b62dde:body:0035": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "3a2bd7d0dfa41a6c05ac91c2f30c17553f72e215e3063524ff8a43e9e83ad6a6"
+        },
+        "e1b21386e9b62dde:body:0036": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "04c484e1f77ea4c4907a309c2d0c13d74b73fb9ea1487893fc1937ad3774eb64"
+        },
+        "e1b21386e9b62dde:body:0037": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "000fc5a5e193292a46a9d84f0a74cc95903c5af71426673c37d086b375a8b001"
+        },
+        "e1b21386e9b62dde:body:0038": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "90fb65f4ee847f453027cfe3c4ecd70222dc9cd8c2212f2d4ea4633b43a7831d"
+        },
+        "e1b21386e9b62dde:body:0039": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "0197a8f8a32bc90339998ded56e749291fb3e8b531bbf50daf9030ea73cd818c"
+        },
+        "e1b21386e9b62dde:body:0040": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "ae1603902e5d9590a2e6f2d50e916fa850adede484a0a38abbea44f8c53933f6"
+        },
+        "e1b21386e9b62dde:body:0041": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "d6d711f22d34827ced080ebce095bc9e88a59084722728d7bd10530710ac962a"
+        },
+        "e1b21386e9b62dde:body:0042": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "409fff83106055030507e52c7388214fd48a7023e8eec0cab7253755fb1d4278"
+        },
+        "e1b21386e9b62dde:body:0043": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "e724e4c0502564d0394996eee0b414c1d80ebb26d10e1f7522d575e8e457f5df"
+        },
+        "e1b21386e9b62dde:body:0044": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "d4165f5a61429147d5ec25b3a12c08ff2f29195cfb07d59c0bc8004b68b169fc"
+        },
+        "e1b21386e9b62dde:body:0045": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "5fb6f16b2aaa53189d36a9fdfd035ecec338f58379d1961003323832f96a0104"
+        },
+        "e1b21386e9b62dde:body:0046": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "2d462f2aa719bc7672b4c63693179abe64cb74dde6606c5ebcb5f1e09e8708ef"
+        },
+        "e1b21386e9b62dde:body:0047": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "eaf7224e4aa13166506bfcb7f4f3a13af9683b9950807b76579e1ae99b33adfe"
+        },
+        "e1b21386e9b62dde:body:0048": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "f2d35e84b28cc0c24b0dcdc28cf9566d6d75b4e2b71bb9fbbfed9412f638ac4a"
+        },
+        "e1b21386e9b62dde:body:0049": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "3e4b9d1fc49beb00e445e0bb840d7917df075b55c2cdc1b9903561bbba554436"
+        },
+        "e1b21386e9b62dde:body:0050": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "bd8e9edb2b0596732a9cc7ea5776f83954b19dbdfbb732698659e6b299f729dc"
+        },
+        "e1b21386e9b62dde:body:0051": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "0d59def6733319fa305e8477ad932f392dbf1028addff2ac434269b275a0ad54"
+        },
+        "e1b21386e9b62dde:heading:0000": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "74252d9338a3779016f79daffb688bb88eb66d3d436c11bd62ee84c172ac7a06"
+        },
+        "e1b21386e9b62dde:heading:0001": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "28f687c52389ceb4f71979a9a23e46ae0c26a9532620b8ac4b9917c1c5081c0f"
+        },
+        "e1b21386e9b62dde:heading:0002": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "57c1280bce7b7e5d7b7df43f08e9156e9750f23b12797e8e0dede21188cf340f"
+        },
+        "e1b21386e9b62dde:heading:0003": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "ca0c3a4099d38aea5bb4bb77a1fc8a38fa39b4ac0f59ed091dae64cab1e88388"
+        },
+        "e1b21386e9b62dde:heading:0004": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "c38ee669b2dfa9393ac4fa77db4cf8e961459b0d1ddc1d7285ad96eb8cb665c9"
+        },
+        "e1b21386e9b62dde:heading:0005": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "ef6fab85a9d1c803950a50a3bd9852d367092e93900e2b59ffbe56d220d59429"
+        },
+        "e1b21386e9b62dde:heading:0006": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "7e915d9dcbc12364fcc52f1665be470a028ae98f4a0de1d442381fdd9f79ab1c"
+        },
+        "e1b21386e9b62dde:heading:0007": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "b7d53affb0e39b5ddaf30dfeccca1493ef53819d48496a015f2dacd6a6722547"
+        },
+        "e1b21386e9b62dde:heading:0008": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "7b7c9f49ebc57e9db7ad6ab474da736ab145a3bf4a66c896909814413a41bd91"
+        },
+        "e1b21386e9b62dde:heading:0009": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "2b87dae56b8879d4a5dff6d3df3a661fb44ec6950b3cd1adef9445ac08f4a995"
+        },
+        "e1b21386e9b62dde:heading:0010": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "6bce893eea32a30becce2d93520b228ba27ff307e4853de0ffef627ed0fa0c06"
+        },
+        "e1b21386e9b62dde:table:0000": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "8d69a865744812119825244360e84fcc4e6899f45d9d46e3e80647de5889fa28"
+        },
+        "e1b21386e9b62dde:table:0001": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "2b2950ac9740f7ac158074b0f4272dabf47eab1e3701a6689dcabcd25fa97899"
+        },
+        "e1b21386e9b62dde:table:0002": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "5ba1f109a81735471cbb12669b451844c8663dec6b0be5a5e12ef373ba512524"
+        },
+        "e1b21386e9b62dde:table:0003": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "d1f5730dbda7d64cd42f09b49989ca03014401b50b51dcaccd381eed9fd1e140"
+        },
+        "e1b21386e9b62dde:table:0004": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "689e0946fe11e30d18681e0f7ef177700f46c71c27cfbec70bc464a508912887"
+        },
+        "e1b21386e9b62dde:table:0005": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "edc646eafdf3843b71570e2f117c9b40969d921375c9062b000da7caaf1e1850"
+        },
+        "e1b21386e9b62dde:table:0006": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "16ae6c9d9208ed6eaef051e7f0a1cc232e3d3a5826f6626ee1cb5640055b208d"
+        },
+        "e1b21386e9b62dde:table:0007": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "b71037617e4cbdcbfce3c8fc2efeac81a0430910b5846d9356f404b03a76b39e"
+        },
+        "e1b21386e9b62dde:table:0008": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "text_sha256": "c09bf814497c47e206c3500f7667f2bdcded5e883f2e3a2e287cfe638fe0b53c"
+        }
+      },
+      "report_chunks_reviewed": 72,
+      "pooled_chunks_reviewed": 30
+    },
+    "p16": {
+      "question": "国联民生的CIOE前瞻里，华工正源和立讯技术分别计划展示什么NPO产品？",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "facets": [
+        "huagong",
+        "luxshare"
+      ],
+      "positive_chunks": [
+        "7ceca88433b092ae:body:0001",
+        "7ceca88433b092ae:body:0003",
+        "7ceca88433b092ae:body:0004",
+        "7ceca88433b092ae:body:0005"
+      ],
+      "labels": {
+        "022ae1713fb760ff:body:0004": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "text_sha256": "6db52cdb97cc6837bc6c7ba35cc93013537d82654d4c24d8390b329b27fd62dd"
+        },
+        "022ae1713fb760ff:body:0011": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "text_sha256": "897ecd56a1411f810a51dc20d13374aa9f42dfbaa192f805407e3ebfa2550ca1"
+        },
+        "022ae1713fb760ff:body:0021": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "text_sha256": "5488ec92d7067d4e4c4d139731189af7ecd6f24282491455498b2ed56bb223fc"
+        },
+        "16a9a510ef9e405f:body:0007": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "12155b13983e74974bb3444222379b77ef6e054169dac474d5f06234233841c0"
+        },
+        "568f9e752f0fa65a:body:0003": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "a2b28d83b50466de316570f6e5786d9e063f628d308d92b670794a24c88203c6"
+        },
+        "568f9e752f0fa65a:body:0038": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "f89ac99730b53cc5c1ba01148c468d872562b45b62e314068f6a6e7ddf71486a"
+        },
+        "568f9e752f0fa65a:table:0006": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "d6918d8469d18f5e6048071062cc19a9cd49464c7f0c88b2266a1becd4829c5e"
+        },
+        "6475cbacca1575c5:body:0001": {
+          "grade": "source_scope_mismatch",
+          "facets": [],
+          "reason": "不属于题目明确指定的报告，不能替代该报告的描述",
+          "support_markers": [],
+          "build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+          "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+          "text_sha256": "60ff87ef3b4907b67f1a66b1a8edd738da9f962db554f8a2586bca3feb1a9741"
+        },
+        "7ceca88433b092ae:body:0000": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "3d24dedfd1563e341153fee8de286f328fa1c6c4d12bb113719260d02bd3e92c"
+        },
+        "7ceca88433b092ae:body:0001": {
+          "grade": "full",
+          "facets": [
+            "huagong",
+            "luxshare"
+          ],
+          "reason": "摘要同时给出两家NPO展品",
+          "support_markers": [
+            "华工正源",
+            "6.4T",
+            "立讯技术",
+            "3.2T"
+          ],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "95e36e37155c362ac3e6ffe4e9288bd2b132e986797fc206749e2aa7d8dcdeea"
+        },
+        "7ceca88433b092ae:body:0002": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "f99cce88720b648ebab58a41fb312ea9b8ec2469070efd8448364bdbc1b9504a"
+        },
+        "7ceca88433b092ae:body:0003": {
+          "grade": "full",
+          "facets": [
+            "huagong",
+            "luxshare"
+          ],
+          "reason": "展会前瞻总述同时给出两家NPO展品",
+          "support_markers": [
+            "华工正源",
+            "6.4T",
+            "立讯技术",
+            "3.2T"
+          ],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "cdd9958ed3641bd94b70179784c715c97942a1b3c89939ec54ff1af1b540734d"
+        },
+        "7ceca88433b092ae:body:0004": {
+          "grade": "partial",
+          "facets": [
+            "huagong"
+          ],
+          "reason": "华工正源6.4T去DSP NPO，未给立讯展品",
+          "support_markers": [
+            "华工正源",
+            "6.4T",
+            "去 DSP"
+          ],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "eea3d8d388dfe60f2c07d7964ea1131b6bb80f67fe244a8568f3170af83bb7de"
+        },
+        "7ceca88433b092ae:body:0005": {
+          "grade": "partial",
+          "facets": [
+            "luxshare"
+          ],
+          "reason": "立讯3.2T NPO Live Demo；开头华工来源署名不是其展品证据",
+          "support_markers": [
+            "立讯技术",
+            "3.2T NPO",
+            "Live Demo"
+          ],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "c3e3d92c7713a17693993e2531d1fbadf903e7220c00f634dccec96d6003a1e3"
+        },
+        "7ceca88433b092ae:body:0006": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "af7a42e665a3dc1cefda838985992796db724ffdc05073097498977aed2d22dc"
+        },
+        "7ceca88433b092ae:body:0007": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "72d0d8fa00923728240cb52f8f32085200c15f7a7cb0d5aa3eefa4a253d527d5"
+        },
+        "7ceca88433b092ae:body:0008": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "b732b025947e84ba5ce3c7648db0fca98482574b25bdfa5e35ea5db9c24edbf6"
+        },
+        "7ceca88433b092ae:body:0009": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "94155308e691e7e682dc8676a95603d87ef69ea825ed5b1360a511638e3daff7"
+        },
+        "7ceca88433b092ae:body:0010": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "2ced69ca7ffdce1aa75f39a4867dd47d286a678fdaa74d68955618b11e846723"
+        },
+        "7ceca88433b092ae:body:0011": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "9551e0f869811f250519737d1cf56e6791135c7838762680fd588e9e35b63fdf"
+        },
+        "7ceca88433b092ae:body:0012": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "4ee6e164370ee87fd7943d22cc65a522c751d2158c6fa830f50053ebf7452ba4"
+        },
+        "7ceca88433b092ae:body:0013": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "d865fefc33406b73e076af331eed5816c2cdc473e824666d5f789ebee52b2e01"
+        },
+        "7ceca88433b092ae:body:0014": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "7cb00352558f999eac7829840356f88a5a57d6c309d1979bbc6d30b365441437"
+        },
+        "7ceca88433b092ae:body:0015": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "8e98e5ee873da0dffec6f580e0da292f0cc61047a62f17b4590fe40f94f94bda"
+        },
+        "7ceca88433b092ae:body:0016": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "d0ac8997c9bc6f1b91163f66d3fc5a8bf8a4c62871d9801adeea9b9f2201a83d"
+        },
+        "7ceca88433b092ae:heading:0000": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "0fb3436f6f7ef038613f3affbe3284b014cfb5a7e1777b68201da2b63764f633"
+        },
+        "7ceca88433b092ae:heading:0001": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "43115372614b524b9b66069b7983dc76f42c51d50aa5d12c84a9742abb2db4f2"
+        },
+        "7ceca88433b092ae:heading:0002": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "f35cca4c8059da3b8fd80ae36ef9c55c2fb1ccdd8cd7b571f3d8f66b9f29ac2b"
+        },
+        "7ceca88433b092ae:heading:0003": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "b12efd0fa0b54cde3f06cb14b2ba9f58be8bf76bff3fdd5b71a52b48fced4db8"
+        },
+        "7ceca88433b092ae:heading:0004": {
+          "grade": "context_only",
+          "facets": [],
+          "reason": "同报告内背景、其他对象/指标、图表碎片或声明；未提供本题所问的实质证据",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "bc7404abffd50e6e631494b19b708ea2b6c4ce21b44c834a3497882ee297c16f"
+        }
+      },
+      "report_chunks_reviewed": 22,
+      "pooled_chunks_reviewed": 19
+    },
+    "n01": {
+      "question": "紫荆量子光电股份有限公司2026年上半年营业收入和净利润是多少？",
+      "build_id": null,
+      "facets": [],
+      "positive_chunks": [],
+      "labels": {
+        "022ae1713fb760ff:body:0001": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "text_sha256": "eda0cf935ef321fb41ced32f1eb889ee5de2e8e0fb75f29ff3008e61dd51b5b1"
+        },
+        "022ae1713fb760ff:body:0021": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "text_sha256": "5488ec92d7067d4e4c4d139731189af7ecd6f24282491455498b2ed56bb223fc"
+        },
+        "16a9a510ef9e405f:body:0007": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "12155b13983e74974bb3444222379b77ef6e054169dac474d5f06234233841c0"
+        },
+        "16a9a510ef9e405f:body:0016": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "text_sha256": "f84f4bb6b48e82a5b6521ddcc77f6ab3aa45cb3e546fc2c9484f01e18b87931a"
+        },
+        "568f9e752f0fa65a:body:0003": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "a2b28d83b50466de316570f6e5786d9e063f628d308d92b670794a24c88203c6"
+        },
+        "568f9e752f0fa65a:body:0014": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "a945e7baf42790531d98b5b488e1caf835ceb4d242858db8e4774c003549d68d"
+        },
+        "568f9e752f0fa65a:body:0016": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "5184d8f51c1b07885e454374abc8e387e375ee4f4447d508383931691d0bb9e6"
+        },
+        "568f9e752f0fa65a:body:0017": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "a550e5c7a20a1aa4623d57b4a1ca2f52c99e67ae499f621e040e662d52f28470"
+        },
+        "568f9e752f0fa65a:body:0018": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "82fbf7aeab321a19ae4eee130f6ae264521710c0aa2e9e616dff4412714c9bf8"
+        },
+        "568f9e752f0fa65a:body:0019": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "6c8ed38cc107c4094634d0b19e6463c71638e2561e057df30a00c7a42110a7f8"
+        },
+        "568f9e752f0fa65a:body:0022": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "98e4c8a282b320b97f095d18a11fcd8230795e5361563280696ccae7bea473be"
+        },
+        "568f9e752f0fa65a:body:0023": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "7cae1201b4bfe0cf7afcc939f8cbaf07cd44834ccb0a57c4907102ecea7a1c5c"
+        },
+        "568f9e752f0fa65a:body:0037": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "f2f4470ad85c7e04da5b241faca029567746b92e0df283c54eedd0ad4b8dfb62"
+        },
+        "568f9e752f0fa65a:table:0000": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "81111ce437ab17552561ff071e761f6aca163c0d6b8fd0f2112d7a81a4ec6281"
+        },
+        "568f9e752f0fa65a:table:0001": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "b8224cdc091fa4c086cff96424451a3cd3a562402615d8c90d7559b4874e06f1"
+        },
+        "568f9e752f0fa65a:table:0002": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "fd5675400d61cd78df4a4502fa56a527dd5c223d35692b533edabc04cb3653a2"
+        },
+        "568f9e752f0fa65a:table:0015": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "bb3369159f0d44717723e23d8b89baba797a3111317c4c7f93e3184ad1707425"
+        },
+        "568f9e752f0fa65a:table:0018": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "text_sha256": "a670ddc3a23e77e33369def4ff2d39fe245b587ee4272f7d6965a2e4c980c7af"
+        },
+        "7ceca88433b092ae:body:0012": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "text_sha256": "4ee6e164370ee87fd7943d22cc65a522c751d2158c6fa830f50053ebf7452ba4"
+        },
+        "9fa4cd7cf1ab602a:body:0003": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+          "text_sha256": "bfc9f0943c5ee0ffafd8ba4390769abe9e5b3238fe2c243ea492de920a5fb11c"
+        },
+        "9fa4cd7cf1ab602a:table:0000": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+          "text_sha256": "489bb99091a8a07f2596e66a0d832dc8559bbdd48ce71e32922011aff8c52cd2"
+        },
+        "9fa4cd7cf1ab602a:table:0009": {
+          "grade": "entity_mismatch",
+          "facets": [],
+          "reason": "已核验候选为光力科技/其他公司或行业材料，没有问题公司的营收净利证据；不据此断言全库不存在",
+          "support_markers": [],
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+          "text_sha256": "ecd10f5ec825ac0e8653e313245c6b71946bbf043cd99aede4846bdd03117c74"
+        }
+      },
+      "report_chunks_reviewed": 0,
+      "pooled_chunks_reviewed": 22
+    }
+  }
+}

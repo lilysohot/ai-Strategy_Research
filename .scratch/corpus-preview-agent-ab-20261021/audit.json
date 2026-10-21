@@ -1,0 +1,13 @@
+{
+  "runs": 6,
+  "paired_prompt_model_profile_checks": "passed",
+  "publication_snapshots": [
+    "corpus_publications@48e8e60844f69177d5eb672a1d1b1010"
+  ],
+  "retrieval_fallbacks": 1,
+  "search_calls": 20,
+  "fetch_calls": 12,
+  "reported_query_embedding_tokens": 701,
+  "new_document_embeddings": 0,
+  "text_measurement": "Deterministic replay of current real workflow post-processor over original full tool results; not truncated trajectory bodies. Followed by assistant response, not proof of semantic reading. Exact duplicate text parts only are deduplicated."
+}

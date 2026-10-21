@@ -1,0 +1,23 @@
+{
+  "policy_rev": "v3-dev-20261021",
+  "frozen": true,
+  "scope": "dev",
+  "auto_decision": {
+    "enabled": false
+  },
+  "allowed_materials": [
+    "research_report",
+    "personal_or_external_subscription"
+  ],
+  "dev_lane": {
+    "lane_id": "new7-local-ocr-20261021",
+    "sources": [
+      {
+        "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365"
+      },
+      {
+        "source_id": "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def"
+      }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "enabled_cold_first_ms": 782.5627290003467,
+  "enabled_warm_median_ms": 336.70613399954163,
+  "disabled_median_ms": 306.8109050000203,
+  "feature_cache_hits": 31,
+  "note": "separate sequential 32-question runs; cached paid query embeddings; not controlled latency benchmark"
+}

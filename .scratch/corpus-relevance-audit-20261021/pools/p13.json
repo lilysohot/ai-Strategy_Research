@@ -1,0 +1,216 @@
+{
+  "case": {
+    "id": "p13",
+    "question": "平安策略周报如何描述2026年8月美国制造业和服务业景气的分化？",
+    "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+    "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0"
+  },
+  "capture_sha256": "2cc04541533d23ce81e72f49a3f2de205402764457a4e6d2741408188e3c3c2f",
+  "top10_pool": [
+    "022ae1713fb760ff:body:0003",
+    "022ae1713fb760ff:body:0021",
+    "147e841aab35836a:body:0001",
+    "147e841aab35836a:body:0005",
+    "147e841aab35836a:body:0013",
+    "628ec76d5b4001b7:body:0002",
+    "628ec76d5b4001b7:body:0006",
+    "628ec76d5b4001b7:body:0007",
+    "628ec76d5b4001b7:body:0021",
+    "628ec76d5b4001b7:body:0022",
+    "628ec76d5b4001b7:body:0023",
+    "628ec76d5b4001b7:body:0026",
+    "628ec76d5b4001b7:body:0032",
+    "628ec76d5b4001b7:table:0000",
+    "628ec76d5b4001b7:table:0002",
+    "9ebd323f89e55cc1:body:0002",
+    "9ebd323f89e55cc1:body:0008",
+    "9ebd323f89e55cc1:body:0010",
+    "9ebd323f89e55cc1:body:0011",
+    "9ebd323f89e55cc1:body:0015",
+    "e1b21386e9b62dde:body:0000",
+    "e1b21386e9b62dde:body:0002",
+    "e1b21386e9b62dde:body:0003",
+    "e1b21386e9b62dde:body:0022",
+    "e1b21386e9b62dde:body:0032",
+    "e1b21386e9b62dde:heading:0000",
+    "e1b21386e9b62dde:heading:0001",
+    "e1b21386e9b62dde:heading:0003",
+    "e1b21386e9b62dde:table:0002",
+    "e1b21386e9b62dde:table:0007"
+  ],
+  "reviewed_report_scope": [
+    "e1b21386e9b62dde:body:0000",
+    "e1b21386e9b62dde:body:0001",
+    "e1b21386e9b62dde:body:0002",
+    "e1b21386e9b62dde:body:0003",
+    "e1b21386e9b62dde:body:0004",
+    "e1b21386e9b62dde:body:0005",
+    "e1b21386e9b62dde:body:0006",
+    "e1b21386e9b62dde:body:0007",
+    "e1b21386e9b62dde:body:0008",
+    "e1b21386e9b62dde:body:0009",
+    "e1b21386e9b62dde:body:0010",
+    "e1b21386e9b62dde:body:0011",
+    "e1b21386e9b62dde:body:0012",
+    "e1b21386e9b62dde:body:0013",
+    "e1b21386e9b62dde:body:0014",
+    "e1b21386e9b62dde:body:0015",
+    "e1b21386e9b62dde:body:0016",
+    "e1b21386e9b62dde:body:0017",
+    "e1b21386e9b62dde:body:0018",
+    "e1b21386e9b62dde:body:0019",
+    "e1b21386e9b62dde:body:0020",
+    "e1b21386e9b62dde:body:0021",
+    "e1b21386e9b62dde:body:0022",
+    "e1b21386e9b62dde:body:0023",
+    "e1b21386e9b62dde:body:0024",
+    "e1b21386e9b62dde:body:0025",
+    "e1b21386e9b62dde:body:0026",
+    "e1b21386e9b62dde:body:0027",
+    "e1b21386e9b62dde:body:0028",
+    "e1b21386e9b62dde:body:0029",
+    "e1b21386e9b62dde:body:0030",
+    "e1b21386e9b62dde:body:0031",
+    "e1b21386e9b62dde:body:0032",
+    "e1b21386e9b62dde:body:0033",
+    "e1b21386e9b62dde:body:0034",
+    "e1b21386e9b62dde:body:0035",
+    "e1b21386e9b62dde:body:0036",
+    "e1b21386e9b62dde:body:0037",
+    "e1b21386e9b62dde:body:0038",
+    "e1b21386e9b62dde:body:0039",
+    "e1b21386e9b62dde:body:0040",
+    "e1b21386e9b62dde:body:0041",
+    "e1b21386e9b62dde:body:0042",
+    "e1b21386e9b62dde:body:0043",
+    "e1b21386e9b62dde:body:0044",
+    "e1b21386e9b62dde:body:0045",
+    "e1b21386e9b62dde:body:0046",
+    "e1b21386e9b62dde:body:0047",
+    "e1b21386e9b62dde:body:0048",
+    "e1b21386e9b62dde:body:0049",
+    "e1b21386e9b62dde:body:0050",
+    "e1b21386e9b62dde:body:0051",
+    "e1b21386e9b62dde:heading:0000",
+    "e1b21386e9b62dde:heading:0001",
+    "e1b21386e9b62dde:heading:0002",
+    "e1b21386e9b62dde:heading:0003",
+    "e1b21386e9b62dde:heading:0004",
+    "e1b21386e9b62dde:heading:0005",
+    "e1b21386e9b62dde:heading:0006",
+    "e1b21386e9b62dde:heading:0007",
+    "e1b21386e9b62dde:heading:0008",
+    "e1b21386e9b62dde:heading:0009",
+    "e1b21386e9b62dde:heading:0010",
+    "e1b21386e9b62dde:table:0000",
+    "e1b21386e9b62dde:table:0001",
+    "e1b21386e9b62dde:table:0002",
+    "e1b21386e9b62dde:table:0003",
+    "e1b21386e9b62dde:table:0004",
+    "e1b21386e9b62dde:table:0005",
+    "e1b21386e9b62dde:table:0006",
+    "e1b21386e9b62dde:table:0007",
+    "e1b21386e9b62dde:table:0008"
+  ],
+  "ranks": {
+    "e1b21386e9b62dde:body:0002": {
+      "lexical": 1,
+      "dense": 10,
+      "production": 2
+    },
+    "e1b21386e9b62dde:table:0007": {
+      "lexical": 2,
+      "production": 7
+    },
+    "e1b21386e9b62dde:table:0002": {
+      "lexical": 3
+    },
+    "e1b21386e9b62dde:body:0022": {
+      "lexical": 4
+    },
+    "e1b21386e9b62dde:body:0032": {
+      "lexical": 5
+    },
+    "e1b21386e9b62dde:body:0000": {
+      "lexical": 6
+    },
+    "e1b21386e9b62dde:body:0003": {
+      "lexical": 7
+    },
+    "e1b21386e9b62dde:heading:0000": {
+      "lexical": 8
+    },
+    "e1b21386e9b62dde:heading:0001": {
+      "lexical": 9
+    },
+    "e1b21386e9b62dde:heading:0003": {
+      "lexical": 10
+    },
+    "9ebd323f89e55cc1:body:0015": {
+      "dense": 1,
+      "production": 8
+    },
+    "628ec76d5b4001b7:body:0021": {
+      "dense": 2,
+      "fused": 4
+    },
+    "9ebd323f89e55cc1:body:0008": {
+      "dense": 3,
+      "production": 3
+    },
+    "9ebd323f89e55cc1:body:0010": {
+      "dense": 4
+    },
+    "9ebd323f89e55cc1:body:0002": {
+      "dense": 5
+    },
+    "628ec76d5b4001b7:body:0002": {
+      "dense": 6,
+      "fused": 1,
+      "production": 6
+    },
+    "628ec76d5b4001b7:body:0023": {
+      "dense": 7,
+      "fused": 3
+    },
+    "9ebd323f89e55cc1:body:0011": {
+      "dense": 8
+    },
+    "147e841aab35836a:body:0001": {
+      "dense": 9
+    },
+    "628ec76d5b4001b7:table:0000": {
+      "fused": 2
+    },
+    "628ec76d5b4001b7:body:0026": {
+      "fused": 5
+    },
+    "628ec76d5b4001b7:body:0032": {
+      "fused": 6
+    },
+    "628ec76d5b4001b7:body:0007": {
+      "fused": 7
+    },
+    "628ec76d5b4001b7:body:0006": {
+      "fused": 8
+    },
+    "628ec76d5b4001b7:table:0002": {
+      "fused": 9
+    },
+    "628ec76d5b4001b7:body:0022": {
+      "fused": 10
+    },
+    "147e841aab35836a:body:0005": {
+      "production": 4
+    },
+    "022ae1713fb760ff:body:0003": {
+      "production": 5
+    },
+    "147e841aab35836a:body:0013": {
+      "production": 9
+    },
+    "022ae1713fb760ff:body:0021": {
+      "production": 10
+    }
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "case": {
+    "id": "p16",
+    "question": "国联民生的CIOE前瞻里，华工正源和立讯技术分别计划展示什么NPO产品？",
+    "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+    "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122"
+  },
+  "capture_sha256": "f170ebd4df5d930556af56d581789d77b683aafa91ccf853a2b74f1e6f65033e",
+  "top10_pool": [
+    "022ae1713fb760ff:body:0004",
+    "022ae1713fb760ff:body:0011",
+    "022ae1713fb760ff:body:0021",
+    "16a9a510ef9e405f:body:0007",
+    "568f9e752f0fa65a:body:0003",
+    "568f9e752f0fa65a:body:0038",
+    "568f9e752f0fa65a:table:0006",
+    "6475cbacca1575c5:body:0001",
+    "7ceca88433b092ae:body:0001",
+    "7ceca88433b092ae:body:0003",
+    "7ceca88433b092ae:body:0004",
+    "7ceca88433b092ae:body:0005",
+    "7ceca88433b092ae:body:0006",
+    "7ceca88433b092ae:body:0007",
+    "7ceca88433b092ae:body:0008",
+    "7ceca88433b092ae:body:0012",
+    "7ceca88433b092ae:body:0014",
+    "7ceca88433b092ae:body:0015",
+    "7ceca88433b092ae:heading:0000"
+  ],
+  "reviewed_report_scope": [
+    "7ceca88433b092ae:body:0000",
+    "7ceca88433b092ae:body:0001",
+    "7ceca88433b092ae:body:0002",
+    "7ceca88433b092ae:body:0003",
+    "7ceca88433b092ae:body:0004",
+    "7ceca88433b092ae:body:0005",
+    "7ceca88433b092ae:body:0006",
+    "7ceca88433b092ae:body:0007",
+    "7ceca88433b092ae:body:0008",
+    "7ceca88433b092ae:body:0009",
+    "7ceca88433b092ae:body:0010",
+    "7ceca88433b092ae:body:0011",
+    "7ceca88433b092ae:body:0012",
+    "7ceca88433b092ae:body:0013",
+    "7ceca88433b092ae:body:0014",
+    "7ceca88433b092ae:body:0015",
+    "7ceca88433b092ae:body:0016",
+    "7ceca88433b092ae:heading:0000",
+    "7ceca88433b092ae:heading:0001",
+    "7ceca88433b092ae:heading:0002",
+    "7ceca88433b092ae:heading:0003",
+    "7ceca88433b092ae:heading:0004"
+  ],
+  "ranks": {
+    "7ceca88433b092ae:body:0005": {
+      "lexical": 1,
+      "dense": 1,
+      "fused": 1,
+      "production": 1
+    },
+    "7ceca88433b092ae:body:0001": {
+      "lexical": 2,
+      "dense": 2,
+      "fused": 2
+    },
+    "7ceca88433b092ae:body:0004": {
+      "lexical": 3,
+      "dense": 3,
+      "fused": 3
+    },
+    "7ceca88433b092ae:body:0003": {
+      "lexical": 4,
+      "dense": 4,
+      "fused": 4
+    },
+    "7ceca88433b092ae:body:0006": {
+      "lexical": 5,
+      "dense": 7,
+      "fused": 5
+    },
+    "7ceca88433b092ae:body:0015": {
+      "lexical": 6,
+      "dense": 8,
+      "fused": 7
+    },
+    "7ceca88433b092ae:body:0014": {
+      "lexical": 7,
+      "dense": 6,
+      "fused": 6
+    },
+    "7ceca88433b092ae:body:0012": {
+      "lexical": 8,
+      "fused": 10
+    },
+    "7ceca88433b092ae:body:0007": {
+      "lexical": 9,
+      "dense": 10,
+      "fused": 9
+    },
+    "7ceca88433b092ae:body:0008": {
+      "lexical": 10
+    },
+    "7ceca88433b092ae:heading:0000": {
+      "dense": 5,
+      "fused": 8
+    },
+    "6475cbacca1575c5:body:0001": {
+      "dense": 9,
+      "production": 2
+    },
+    "022ae1713fb760ff:body:0004": {
+      "production": 3
+    },
+    "568f9e752f0fa65a:table:0006": {
+      "production": 4
+    },
+    "16a9a510ef9e405f:body:0007": {
+      "production": 8
+    },
+    "022ae1713fb760ff:body:0011": {
+      "production": 6
+    },
+    "568f9e752f0fa65a:body:0003": {
+      "production": 7
+    },
+    "022ae1713fb760ff:body:0021": {
+      "production": 9
+    },
+    "568f9e752f0fa65a:body:0038": {
+      "production": 10
+    }
+  }
+}

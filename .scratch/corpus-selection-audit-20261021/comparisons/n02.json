@@ -1,0 +1,4976 @@
+{
+  "case": "n02",
+  "kind": "future_actual",
+  "candidate_gold": {
+    "lexical": false,
+    "dense": false,
+    "fused": false
+  },
+  "dense_only_candidates": 120,
+  "fates": [
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:table:0000",
+      "lexical_rank": 4,
+      "dense_rank": 2,
+      "fused_rank": 1,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:table:0009",
+      "lexical_rank": 2,
+      "dense_rank": 4,
+      "fused_rank": 2,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:heading:0000",
+      "lexical_rank": 9,
+      "dense_rank": 1,
+      "fused_rank": 3,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0006",
+      "lexical_rank": 6,
+      "dense_rank": 6,
+      "fused_rank": 4,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:table:0007",
+      "lexical_rank": 1,
+      "dense_rank": 21,
+      "fused_rank": 5,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:table:0006",
+      "lexical_rank": 5,
+      "dense_rank": 15,
+      "fused_rank": 6,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0008",
+      "lexical_rank": 7,
+      "dense_rank": 7,
+      "fused_rank": 7,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0004",
+      "lexical_rank": 3,
+      "dense_rank": 20,
+      "fused_rank": 8,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0005",
+      "lexical_rank": 14,
+      "dense_rank": 3,
+      "fused_rank": 9,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0021",
+      "lexical_rank": 8,
+      "dense_rank": 24,
+      "fused_rank": 10,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0001",
+      "lexical_rank": 11,
+      "dense_rank": 29,
+      "fused_rank": 11,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0002",
+      "lexical_rank": 12,
+      "dense_rank": 65,
+      "fused_rank": 12,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0000",
+      "lexical_rank": 10,
+      "dense_rank": 183,
+      "fused_rank": 13,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0003",
+      "lexical_rank": 13,
+      "dense_rank": 69,
+      "fused_rank": 14,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:table:0013",
+      "lexical_rank": 39,
+      "dense_rank": 11,
+      "fused_rank": 15,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:table:0010",
+      "lexical_rank": 36,
+      "dense_rank": 16,
+      "fused_rank": 16,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:table:0008",
+      "lexical_rank": 35,
+      "dense_rank": 19,
+      "fused_rank": 17,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:table:0004",
+      "lexical_rank": 33,
+      "dense_rank": 28,
+      "fused_rank": 18,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0018",
+      "lexical_rank": 25,
+      "dense_rank": 42,
+      "fused_rank": 19,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:table:0001",
+      "lexical_rank": 30,
+      "dense_rank": 31,
+      "fused_rank": 20,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0019",
+      "lexical_rank": 26,
+      "dense_rank": 87,
+      "fused_rank": 21,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:table:0014",
+      "lexical_rank": 40,
+      "dense_rank": 30,
+      "fused_rank": 22,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0017",
+      "lexical_rank": 24,
+      "dense_rank": 195,
+      "fused_rank": 23,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:table:0002",
+      "lexical_rank": 31,
+      "dense_rank": 68,
+      "fused_rank": 24,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:table:0012",
+      "lexical_rank": 38,
+      "dense_rank": 37,
+      "fused_rank": 25,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:table:0005",
+      "lexical_rank": 34,
+      "dense_rank": 43,
+      "fused_rank": 26,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:table:0011",
+      "lexical_rank": 37,
+      "dense_rank": 39,
+      "fused_rank": 27,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:heading:0002",
+      "lexical_rank": 29,
+      "dense_rank": 138,
+      "fused_rank": 28,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:table:0003",
+      "lexical_rank": 32,
+      "dense_rank": 70,
+      "fused_rank": 29,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0007",
+      "lexical_rank": 15,
+      "dense_rank": null,
+      "fused_rank": 30,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0009",
+      "lexical_rank": 16,
+      "dense_rank": null,
+      "fused_rank": 31,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0010",
+      "lexical_rank": 17,
+      "dense_rank": null,
+      "fused_rank": 32,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0011",
+      "lexical_rank": 18,
+      "dense_rank": null,
+      "fused_rank": 33,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0012",
+      "lexical_rank": 19,
+      "dense_rank": null,
+      "fused_rank": 34,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0013",
+      "lexical_rank": 20,
+      "dense_rank": null,
+      "fused_rank": 35,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0014",
+      "lexical_rank": 21,
+      "dense_rank": null,
+      "fused_rank": 36,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0015",
+      "lexical_rank": 22,
+      "dense_rank": null,
+      "fused_rank": 37,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0016",
+      "lexical_rank": 23,
+      "dense_rank": null,
+      "fused_rank": 38,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0020",
+      "lexical_rank": 27,
+      "dense_rank": null,
+      "fused_rank": 39,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:heading:0001",
+      "lexical_rank": 28,
+      "dense_rank": null,
+      "fused_rank": 40,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0018",
+      "lexical_rank": 43,
+      "dense_rank": 5,
+      "fused_rank": 41,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0015",
+      "lexical_rank": 46,
+      "dense_rank": 8,
+      "fused_rank": 42,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0000",
+      "lexical_rank": 44,
+      "dense_rank": 18,
+      "fused_rank": 43,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0001",
+      "lexical_rank": 45,
+      "dense_rank": 22,
+      "fused_rank": 44,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0023",
+      "lexical_rank": 54,
+      "dense_rank": 9,
+      "fused_rank": 45,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0022",
+      "lexical_rank": 53,
+      "dense_rank": 10,
+      "fused_rank": 46,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0019",
+      "lexical_rank": 49,
+      "dense_rank": 17,
+      "fused_rank": 47,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0002",
+      "lexical_rank": 55,
+      "dense_rank": 13,
+      "fused_rank": 48,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0014",
+      "lexical_rank": 42,
+      "dense_rank": 52,
+      "fused_rank": 49,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0016",
+      "lexical_rank": 48,
+      "dense_rank": 33,
+      "fused_rank": 50,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0003",
+      "lexical_rank": 47,
+      "dense_rank": 36,
+      "fused_rank": 51,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0020",
+      "lexical_rank": 52,
+      "dense_rank": 26,
+      "fused_rank": 52,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0037",
+      "lexical_rank": 41,
+      "dense_rank": 66,
+      "fused_rank": 53,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0038",
+      "lexical_rank": 51,
+      "dense_rank": 32,
+      "fused_rank": 54,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0021",
+      "lexical_rank": 50,
+      "dense_rank": 38,
+      "fused_rank": 55,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0018",
+      "lexical_rank": 58,
+      "dense_rank": 27,
+      "fused_rank": 56,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0025",
+      "lexical_rank": 56,
+      "dense_rank": 47,
+      "fused_rank": 57,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0024",
+      "lexical_rank": 59,
+      "dense_rank": 54,
+      "fused_rank": 58,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0022",
+      "lexical_rank": 61,
+      "dense_rank": 53,
+      "fused_rank": 59,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0017",
+      "lexical_rank": 57,
+      "dense_rank": 108,
+      "fused_rank": 60,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0012",
+      "lexical_rank": 60,
+      "dense_rank": 120,
+      "fused_rank": 61,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0017",
+      "lexical_rank": null,
+      "dense_rank": 12,
+      "fused_rank": 62,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0016",
+      "lexical_rank": null,
+      "dense_rank": 14,
+      "fused_rank": 63,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0024",
+      "lexical_rank": null,
+      "dense_rank": 25,
+      "fused_rank": 64,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0030",
+      "lexical_rank": null,
+      "dense_rank": 34,
+      "fused_rank": 65,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0035",
+      "lexical_rank": null,
+      "dense_rank": 49,
+      "fused_rank": 66,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0036",
+      "lexical_rank": null,
+      "dense_rank": 51,
+      "fused_rank": 67,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0001",
+      "lexical_rank": null,
+      "dense_rank": 55,
+      "fused_rank": 68,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0028",
+      "lexical_rank": null,
+      "dense_rank": 56,
+      "fused_rank": 69,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0026",
+      "lexical_rank": null,
+      "dense_rank": 62,
+      "fused_rank": 70,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0023",
+      "lexical_rank": null,
+      "dense_rank": 78,
+      "fused_rank": 71,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0027",
+      "lexical_rank": null,
+      "dense_rank": 94,
+      "fused_rank": 72,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0005",
+      "lexical_rank": null,
+      "dense_rank": 102,
+      "fused_rank": 73,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:heading:0002",
+      "lexical_rank": null,
+      "dense_rank": 104,
+      "fused_rank": 74,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0013",
+      "lexical_rank": null,
+      "dense_rank": 113,
+      "fused_rank": 75,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0014",
+      "lexical_rank": null,
+      "dense_rank": 123,
+      "fused_rank": 76,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0033",
+      "lexical_rank": null,
+      "dense_rank": 130,
+      "fused_rank": 77,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0019",
+      "lexical_rank": null,
+      "dense_rank": 150,
+      "fused_rank": 78,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0029",
+      "lexical_rank": null,
+      "dense_rank": 159,
+      "fused_rank": 79,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:heading:0010",
+      "lexical_rank": null,
+      "dense_rank": 162,
+      "fused_rank": 80,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0007",
+      "lexical_rank": 62,
+      "dense_rank": 73,
+      "fused_rank": 81,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0008",
+      "lexical_rank": 63,
+      "dense_rank": 35,
+      "fused_rank": 82,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0009",
+      "lexical_rank": 64,
+      "dense_rank": 92,
+      "fused_rank": 83,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0006",
+      "lexical_rank": 65,
+      "dense_rank": 154,
+      "fused_rank": 84,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0016",
+      "lexical_rank": 66,
+      "dense_rank": 125,
+      "fused_rank": 85,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0003",
+      "lexical_rank": null,
+      "dense_rank": 164,
+      "fused_rank": 86,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0002",
+      "lexical_rank": null,
+      "dense_rank": 166,
+      "fused_rank": 87,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0015",
+      "lexical_rank": null,
+      "dense_rank": 171,
+      "fused_rank": 88,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0004",
+      "lexical_rank": null,
+      "dense_rank": 177,
+      "fused_rank": 89,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0001",
+      "lexical_rank": null,
+      "dense_rank": 187,
+      "fused_rank": 90,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0014",
+      "lexical_rank": null,
+      "dense_rank": 192,
+      "fused_rank": 91,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0004",
+      "lexical_rank": 71,
+      "dense_rank": 23,
+      "fused_rank": 92,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0007",
+      "lexical_rank": 73,
+      "dense_rank": 74,
+      "fused_rank": 93,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0013",
+      "lexical_rank": 74,
+      "dense_rank": 59,
+      "fused_rank": 94,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:table:0002",
+      "lexical_rank": 75,
+      "dense_rank": 88,
+      "fused_rank": 95,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0005",
+      "lexical_rank": 72,
+      "dense_rank": 153,
+      "fused_rank": 96,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0010",
+      "lexical_rank": null,
+      "dense_rank": 41,
+      "fused_rank": 97,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0003",
+      "lexical_rank": null,
+      "dense_rank": 45,
+      "fused_rank": 98,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0001",
+      "lexical_rank": null,
+      "dense_rank": 46,
+      "fused_rank": 99,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0012",
+      "lexical_rank": null,
+      "dense_rank": 58,
+      "fused_rank": 100,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:list:0000",
+      "lexical_rank": null,
+      "dense_rank": 79,
+      "fused_rank": 101,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0000",
+      "lexical_rank": null,
+      "dense_rank": 91,
+      "fused_rank": 102,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0006",
+      "lexical_rank": null,
+      "dense_rank": 93,
+      "fused_rank": 103,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0002",
+      "lexical_rank": null,
+      "dense_rank": 99,
+      "fused_rank": 104,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:table:0000",
+      "lexical_rank": null,
+      "dense_rank": 107,
+      "fused_rank": 105,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0008",
+      "lexical_rank": null,
+      "dense_rank": 110,
+      "fused_rank": 106,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:list:0001",
+      "lexical_rank": null,
+      "dense_rank": 132,
+      "fused_rank": 107,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0011",
+      "lexical_rank": 69,
+      "dense_rank": 40,
+      "fused_rank": 108,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0012",
+      "lexical_rank": 67,
+      "dense_rank": 121,
+      "fused_rank": 109,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0013",
+      "lexical_rank": 70,
+      "dense_rank": 191,
+      "fused_rank": 110,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0002",
+      "lexical_rank": null,
+      "dense_rank": 82,
+      "fused_rank": 111,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0005",
+      "lexical_rank": 68,
+      "dense_rank": null,
+      "fused_rank": 112,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0014",
+      "lexical_rank": null,
+      "dense_rank": 109,
+      "fused_rank": 113,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:heading:0001",
+      "lexical_rank": null,
+      "dense_rank": 167,
+      "fused_rank": 114,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0052",
+      "lexical_rank": 88,
+      "dense_rank": 75,
+      "fused_rank": 115,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0070",
+      "lexical_rank": 93,
+      "dense_rank": 89,
+      "fused_rank": 116,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0014",
+      "lexical_rank": null,
+      "dense_rank": 44,
+      "fused_rank": 117,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0065",
+      "lexical_rank": 92,
+      "dense_rank": null,
+      "fused_rank": 118,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0012",
+      "lexical_rank": null,
+      "dense_rank": 57,
+      "fused_rank": 119,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0004",
+      "lexical_rank": null,
+      "dense_rank": 60,
+      "fused_rank": 120,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0063",
+      "lexical_rank": null,
+      "dense_rank": 64,
+      "fused_rank": 121,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0038",
+      "lexical_rank": 94,
+      "dense_rank": null,
+      "fused_rank": 122,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0017",
+      "lexical_rank": null,
+      "dense_rank": 81,
+      "fused_rank": 123,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0062",
+      "lexical_rank": null,
+      "dense_rank": 84,
+      "fused_rank": 124,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0057",
+      "lexical_rank": null,
+      "dense_rank": 97,
+      "fused_rank": 125,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0013",
+      "lexical_rank": null,
+      "dense_rank": 101,
+      "fused_rank": 126,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0009",
+      "lexical_rank": null,
+      "dense_rank": 103,
+      "fused_rank": 127,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0021",
+      "lexical_rank": null,
+      "dense_rank": 114,
+      "fused_rank": 128,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0015",
+      "lexical_rank": null,
+      "dense_rank": 115,
+      "fused_rank": 129,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0016",
+      "lexical_rank": null,
+      "dense_rank": 131,
+      "fused_rank": 130,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0049",
+      "lexical_rank": null,
+      "dense_rank": 142,
+      "fused_rank": 131,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0003",
+      "lexical_rank": null,
+      "dense_rank": 155,
+      "fused_rank": 132,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0008",
+      "lexical_rank": null,
+      "dense_rank": 158,
+      "fused_rank": 133,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0067",
+      "lexical_rank": null,
+      "dense_rank": 161,
+      "fused_rank": 134,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0010",
+      "lexical_rank": null,
+      "dense_rank": 165,
+      "fused_rank": 135,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0032",
+      "lexical_rank": null,
+      "dense_rank": 172,
+      "fused_rank": 136,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0002",
+      "lexical_rank": null,
+      "dense_rank": 174,
+      "fused_rank": 137,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0050",
+      "lexical_rank": null,
+      "dense_rank": 175,
+      "fused_rank": 138,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0055",
+      "lexical_rank": null,
+      "dense_rank": 176,
+      "fused_rank": 139,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0015",
+      "lexical_rank": null,
+      "dense_rank": 181,
+      "fused_rank": 140,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0011",
+      "lexical_rank": null,
+      "dense_rank": 186,
+      "fused_rank": 141,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0054",
+      "lexical_rank": null,
+      "dense_rank": 193,
+      "fused_rank": 142,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0000",
+      "lexical_rank": 85,
+      "dense_rank": 85,
+      "fused_rank": 143,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0013",
+      "lexical_rank": 86,
+      "dense_rank": 111,
+      "fused_rank": 144,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0007",
+      "lexical_rank": 84,
+      "dense_rank": null,
+      "fused_rank": 145,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0011",
+      "lexical_rank": null,
+      "dense_rank": 50,
+      "fused_rank": 146,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0010",
+      "lexical_rank": null,
+      "dense_rank": 72,
+      "fused_rank": 147,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0012",
+      "lexical_rank": null,
+      "dense_rank": 147,
+      "fused_rank": 148,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0005",
+      "lexical_rank": null,
+      "dense_rank": 148,
+      "fused_rank": 149,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0008",
+      "lexical_rank": null,
+      "dense_rank": 199,
+      "fused_rank": 150,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0002",
+      "lexical_rank": 79,
+      "dense_rank": 127,
+      "fused_rank": 151,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0005",
+      "lexical_rank": 78,
+      "dense_rank": 198,
+      "fused_rank": 152,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0021",
+      "lexical_rank": 83,
+      "dense_rank": 105,
+      "fused_rank": 153,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0003",
+      "lexical_rank": 76,
+      "dense_rank": null,
+      "fused_rank": 154,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0011",
+      "lexical_rank": null,
+      "dense_rank": 134,
+      "fused_rank": 155,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0000",
+      "lexical_rank": 80,
+      "dense_rank": null,
+      "fused_rank": 156,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0020",
+      "lexical_rank": null,
+      "dense_rank": 146,
+      "fused_rank": 157,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0001",
+      "lexical_rank": 81,
+      "dense_rank": null,
+      "fused_rank": 158,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0013",
+      "lexical_rank": 82,
+      "dense_rank": null,
+      "fused_rank": 159,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+      "chunk_id": "6475cbacca1575c5:body:0001",
+      "lexical_rank": 89,
+      "dense_rank": 118,
+      "fused_rank": 160,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+      "chunk_id": "6475cbacca1575c5:body:0003",
+      "lexical_rank": 91,
+      "dense_rank": 157,
+      "fused_rank": 161,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+      "chunk_id": "6475cbacca1575c5:body:0000",
+      "lexical_rank": null,
+      "dense_rank": 96,
+      "fused_rank": 162,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+      "chunk_id": "6475cbacca1575c5:body:0004",
+      "lexical_rank": 87,
+      "dense_rank": null,
+      "fused_rank": 163,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+      "chunk_id": "6475cbacca1575c5:body:0002",
+      "lexical_rank": 90,
+      "dense_rank": null,
+      "fused_rank": 164,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+      "chunk_id": "6475cbacca1575c5:body:0005",
+      "lexical_rank": null,
+      "dense_rank": 189,
+      "fused_rank": 165,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0004",
+      "lexical_rank": 102,
+      "dense_rank": 67,
+      "fused_rank": 166,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0003",
+      "lexical_rank": 103,
+      "dense_rank": 100,
+      "fused_rank": 167,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0009",
+      "lexical_rank": 101,
+      "dense_rank": 152,
+      "fused_rank": 168,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0007",
+      "lexical_rank": 104,
+      "dense_rank": 168,
+      "fused_rank": 169,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0006",
+      "lexical_rank": 98,
+      "dense_rank": null,
+      "fused_rank": 170,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0008",
+      "lexical_rank": 99,
+      "dense_rank": null,
+      "fused_rank": 171,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0002",
+      "lexical_rank": 100,
+      "dense_rank": null,
+      "fused_rank": 172,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0012",
+      "lexical_rank": null,
+      "dense_rank": 106,
+      "fused_rank": 173,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0001",
+      "lexical_rank": null,
+      "dense_rank": 135,
+      "fused_rank": 174,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0014",
+      "lexical_rank": null,
+      "dense_rank": 145,
+      "fused_rank": 175,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0000",
+      "lexical_rank": null,
+      "dense_rank": 182,
+      "fused_rank": 176,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0005",
+      "lexical_rank": 105,
+      "dense_rank": null,
+      "fused_rank": 177,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0002",
+      "lexical_rank": 108,
+      "dense_rank": null,
+      "fused_rank": 178,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0025",
+      "lexical_rank": null,
+      "dense_rank": 61,
+      "fused_rank": 179,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0005",
+      "lexical_rank": 109,
+      "dense_rank": null,
+      "fused_rank": 180,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0037",
+      "lexical_rank": null,
+      "dense_rank": 80,
+      "fused_rank": 181,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0026",
+      "lexical_rank": null,
+      "dense_rank": 98,
+      "fused_rank": 182,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0023",
+      "lexical_rank": null,
+      "dense_rank": 117,
+      "fused_rank": 183,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0036",
+      "lexical_rank": null,
+      "dense_rank": 124,
+      "fused_rank": 184,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0032",
+      "lexical_rank": null,
+      "dense_rank": 136,
+      "fused_rank": 185,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0034",
+      "lexical_rank": null,
+      "dense_rank": 139,
+      "fused_rank": 186,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0024",
+      "lexical_rank": null,
+      "dense_rank": 140,
+      "fused_rank": 187,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:heading:0005",
+      "lexical_rank": null,
+      "dense_rank": 143,
+      "fused_rank": 188,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0021",
+      "lexical_rank": null,
+      "dense_rank": 144,
+      "fused_rank": 189,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:table:0015",
+      "lexical_rank": null,
+      "dense_rank": 156,
+      "fused_rank": 190,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:table:0012",
+      "lexical_rank": null,
+      "dense_rank": 173,
+      "fused_rank": 191,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:table:0013",
+      "lexical_rank": null,
+      "dense_rank": 180,
+      "fused_rank": 192,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:table:0014",
+      "lexical_rank": null,
+      "dense_rank": 188,
+      "fused_rank": 193,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0035",
+      "lexical_rank": null,
+      "dense_rank": 197,
+      "fused_rank": 194,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0028",
+      "lexical_rank": null,
+      "dense_rank": 200,
+      "fused_rank": 195,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:body:0011",
+      "lexical_rank": 107,
+      "dense_rank": 169,
+      "fused_rank": 196,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:table:0010",
+      "lexical_rank": null,
+      "dense_rank": 63,
+      "fused_rank": 197,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:table:0009",
+      "lexical_rank": null,
+      "dense_rank": 71,
+      "fused_rank": 198,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:table:0008",
+      "lexical_rank": null,
+      "dense_rank": 76,
+      "fused_rank": 199,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:table:0007",
+      "lexical_rank": null,
+      "dense_rank": 128,
+      "fused_rank": 200,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:table:0011",
+      "lexical_rank": null,
+      "dense_rank": 170,
+      "fused_rank": 201,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:body:0001",
+      "lexical_rank": null,
+      "dense_rank": 179,
+      "fused_rank": 202,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0002",
+      "lexical_rank": 77,
+      "dense_rank": null,
+      "fused_rank": 203,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0031",
+      "lexical_rank": null,
+      "dense_rank": 141,
+      "fused_rank": 204,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0033",
+      "lexical_rank": null,
+      "dense_rank": 160,
+      "fused_rank": 205,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0040",
+      "lexical_rank": null,
+      "dense_rank": 163,
+      "fused_rank": 206,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0028",
+      "lexical_rank": null,
+      "dense_rank": 190,
+      "fused_rank": 207,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0007",
+      "lexical_rank": 97,
+      "dense_rank": 133,
+      "fused_rank": 208,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0002",
+      "lexical_rank": 95,
+      "dense_rank": null,
+      "fused_rank": 209,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0004",
+      "lexical_rank": null,
+      "dense_rank": 122,
+      "fused_rank": 210,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0005",
+      "lexical_rank": 96,
+      "dense_rank": null,
+      "fused_rank": 211,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "build_id": "d2ec2ce01b12450b6090114e23ec01465ea4399b38387c0a83d1808354c6e75f",
+      "chunk_id": "d2ec2ce01b12450b:body:0007",
+      "lexical_rank": 110,
+      "dense_rank": 126,
+      "fused_rank": 212,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "build_id": "d2ec2ce01b12450b6090114e23ec01465ea4399b38387c0a83d1808354c6e75f",
+      "chunk_id": "d2ec2ce01b12450b:body:0005",
+      "lexical_rank": null,
+      "dense_rank": 77,
+      "fused_rank": 213,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0007",
+      "lexical_rank": 106,
+      "dense_rank": 149,
+      "fused_rank": 214,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:table:0002",
+      "lexical_rank": null,
+      "dense_rank": 116,
+      "fused_rank": 215,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:heading:0000",
+      "lexical_rank": null,
+      "dense_rank": 178,
+      "fused_rank": 216,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:table:0003",
+      "lexical_rank": null,
+      "dense_rank": 184,
+      "fused_rank": 217,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0008",
+      "lexical_rank": null,
+      "dense_rank": 185,
+      "fused_rank": 218,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0001",
+      "lexical_rank": null,
+      "dense_rank": 194,
+      "fused_rank": 219,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0017",
+      "lexical_rank": null,
+      "dense_rank": 48,
+      "fused_rank": 220,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0014",
+      "lexical_rank": null,
+      "dense_rank": 83,
+      "fused_rank": 221,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0000",
+      "lexical_rank": null,
+      "dense_rank": 86,
+      "fused_rank": 222,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0012",
+      "lexical_rank": null,
+      "dense_rank": 90,
+      "fused_rank": 223,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:table:0006",
+      "lexical_rank": null,
+      "dense_rank": 95,
+      "fused_rank": 224,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0007",
+      "lexical_rank": null,
+      "dense_rank": 112,
+      "fused_rank": 225,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:table:0001",
+      "lexical_rank": null,
+      "dense_rank": 119,
+      "fused_rank": 226,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0015",
+      "lexical_rank": null,
+      "dense_rank": 137,
+      "fused_rank": 227,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0016",
+      "lexical_rank": null,
+      "dense_rank": 151,
+      "fused_rank": 228,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "build_id": "d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+      "chunk_id": "d5c99534333873cc:body:0006",
+      "lexical_rank": null,
+      "dense_rank": 129,
+      "fused_rank": 229,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "build_id": "d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+      "chunk_id": "d5c99534333873cc:body:0008",
+      "lexical_rank": null,
+      "dense_rank": 196,
+      "fused_rank": 230,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    }
+  ],
+  "variants": {
+    "baseline": {
+      "anchor_rank": null,
+      "returned_bands": 10,
+      "sources": 5,
+      "unique_context_chunks": 89,
+      "repeated_context_chunks": 19,
+      "added_chunks": [],
+      "removed_chunks": [],
+      "hits": [
+        {
+          "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "chunk_id": "9fa4cd7cf1ab602a:table:0000",
+          "kind": "table",
+          "title_text": null,
+          "section_path": [
+            "报表实质扎实，经营底部已过",
+            "事项：",
+            "评论："
+          ],
+          "unit_refs": [
+            "unit:0025",
+            "unit:0026",
+            "unit:0027",
+            "unit:0028",
+            "unit:0029",
+            "unit:0030",
+            "unit:0031",
+            "unit:0032"
+          ],
+          "score": 0.031754032258064516,
+          "snippet": "<b>营业</b>总收入(百万)2025A<b>营业</b>",
+          "published": null,
+          "page": 1,
+          "cells": [
+            [
+              4,
+              1
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              4,
+              4
+            ]
+          ],
+          "label_path": [
+            "2025A",
+            "2026E",
+            "2027E",
+            "2028E",
+            "营业总收入(百万) 要财务指标",
+            "营业总收入(百万) 2025A",
+            "营业总收入(百万) 2026E",
+            "营业总收入(百万) 2027E",
+            "营业总收入(百万) 2028E",
+            "同比增速(%) 要财务指标",
+            "同比增速(%) 2025A",
+            "同比增速(%) 2026E",
+            "同比增速(%) 2027E",
+            "同比增速(%) 2028E",
+            "归母净利润(百万) 要财务指标",
+            "归母净利润(百万) 2025A",
+            "归母净利润(百万) 2026E",
+            "归母净利润(百万) 2027E",
+            "归母净利润(百万) 2028E",
+            "每股盈利(元) 要财务指标",
+            "每股盈利(元) 2025A",
+            "每股盈利(元) 2026E",
+            "每股盈利(元) 2027E",
+            "每股盈利(元) 2028E",
+            "市盈率(倍) 要财务指标",
+            "市盈率(倍) 2025A",
+            "市盈率(倍) 2026E",
+            "市盈率(倍) 2027E",
+            "市盈率(倍) 2028E",
+            "市净率(倍) 要财务指标",
+            "市净率(倍) 2025A",
+            "市净率(倍) 2026E",
+            "市净率(倍) 2027E",
+            "市净率(倍) 2028E"
+          ],
+          "context_chunk_ids": [
+            "9fa4cd7cf1ab602a:body:0000",
+            "9fa4cd7cf1ab602a:body:0001",
+            "9fa4cd7cf1ab602a:heading:0000",
+            "9fa4cd7cf1ab602a:heading:0001",
+            "9fa4cd7cf1ab602a:body:0002",
+            "9fa4cd7cf1ab602a:body:0003",
+            "9fa4cd7cf1ab602a:body:0004",
+            "9fa4cd7cf1ab602a:body:0005",
+            "9fa4cd7cf1ab602a:table:0000",
+            "9fa4cd7cf1ab602a:body:0006",
+            "9fa4cd7cf1ab602a:body:0007",
+            "9fa4cd7cf1ab602a:body:0008",
+            "9fa4cd7cf1ab602a:heading:0002",
+            "9fa4cd7cf1ab602a:table:0001",
+            "9fa4cd7cf1ab602a:table:0002",
+            "9fa4cd7cf1ab602a:table:0003",
+            "9fa4cd7cf1ab602a:body:0009",
+            "9fa4cd7cf1ab602a:table:0004",
+            "9fa4cd7cf1ab602a:table:0005",
+            "9fa4cd7cf1ab602a:table:0006",
+            "9fa4cd7cf1ab602a:table:0007",
+            "9fa4cd7cf1ab602a:body:0010",
+            "9fa4cd7cf1ab602a:table:0008",
+            "9fa4cd7cf1ab602a:body:0011",
+            "9fa4cd7cf1ab602a:table:0009"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:table:0018",
+          "kind": "table",
+          "title_text": null,
+          "section_path": [
+            "我们的盈利预测主要基于以下假设条件：",
+            "未来3年业绩预测",
+            "14"
+          ],
+          "unit_refs": [
+            "unit:0246",
+            "unit:0247",
+            "unit:0248",
+            "unit:0249",
+            "unit:0250",
+            "unit:0251",
+            "unit:0252",
+            "unit:0253",
+            "unit:0254"
+          ],
+          "score": 0.032266458495966696,
+          "snippet": "<b>营业</b><b>收入</b>2024<b>营业</b><b>收入</b>2025<b>营业</b><b>收入</b>",
+          "published": null,
+          "page": 14,
+          "cells": [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              1,
+              8
+            ]
+          ],
+          "label_path": [
+            "2024",
+            "2025",
+            "2026E",
+            "2027E",
+            "2028E",
+            "营业收入 2024",
+            "营业收入 2025",
+            "营业收入 2026E",
+            "营业收入 2027E",
+            "营业收入 2028E",
+            "营业成本 2024",
+            "营业成本 2025",
+            "营业成本 2026E",
+            "营业成本 2027E",
+            "营业成本 2028E",
+            "销售费用 2024",
+            "销售费用 2025",
+            "销售费用 2026E",
+            "销售费用 2027E",
+            "销售费用 2028E",
+            "管理费用 2024",
+            "管理费用 2025",
+            "管理费用 2026E",
+            "管理费用 2027E",
+            "管理费用 2028E",
+            "研发费用 2024",
+            "研发费用 2025",
+            "研发费用 2026E",
+            "研发费用 2027E",
+            "研发费用 2028E",
+            "财务费用 2024",
+            "财务费用 2025",
+            "财务费用 2026E",
+            "财务费用 2027E",
+            "财务费用 2028E",
+            "营业利润 2024",
+            "营业利润 2025",
+            "营业利润 2026E",
+            "营业利润 2027E",
+            "营业利润 2028E",
+            "利润总额 2024",
+            "利润总额 2025",
+            "利润总额 2026E",
+            "利润总额 2027E",
+            "利润总额 2028E"
+          ],
+          "context_chunk_ids": [
+            "568f9e752f0fa65a:heading:0007",
+            "568f9e752f0fa65a:body:0019",
+            "568f9e752f0fa65a:table:0015",
+            "568f9e752f0fa65a:body:0020",
+            "568f9e752f0fa65a:table:0016",
+            "568f9e752f0fa65a:body:0021",
+            "568f9e752f0fa65a:table:0017",
+            "568f9e752f0fa65a:body:0022",
+            "568f9e752f0fa65a:body:0023",
+            "568f9e752f0fa65a:body:0024",
+            "568f9e752f0fa65a:table:0018",
+            "568f9e752f0fa65a:body:0025"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "chunk_id": "16a9a510ef9e405f:body:0008",
+          "kind": "body",
+          "title_text": "一、细分板块观点\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩",
+          "section_path": [
+            "扫码获取更多服务",
+            "一、细分板块观点",
+            "1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩"
+          ],
+          "unit_refs": [
+            "unit:0091"
+          ],
+          "score": 0.03252247488101534,
+          "snippet": "<b>收入</b>为1080亿美元（±2）",
+          "published": null,
+          "page": 5,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "16a9a510ef9e405f:heading:0004",
+            "16a9a510ef9e405f:body:0003",
+            "16a9a510ef9e405f:body:0004",
+            "16a9a510ef9e405f:body:0005",
+            "16a9a510ef9e405f:body:0006",
+            "16a9a510ef9e405f:body:0007",
+            "16a9a510ef9e405f:body:0008",
+            "16a9a510ef9e405f:body:0009",
+            "16a9a510ef9e405f:body:0010"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "chunk_id": "6b55ddbbcfdc484d:body:0004",
+          "kind": "body",
+          "title_text": "### 大脑一 财务审计师",
+          "section_path": [
+            "## 第零步数据验证",
+            "## 五脑辩论",
+            "### 大脑一 财务审计师"
+          ],
+          "unit_refs": [
+            "unit:0013",
+            "unit:0014",
+            "unit:0015",
+            "unit:0016",
+            "unit:0017"
+          ],
+          "score": 0.03278688524590164,
+          "snippet": "<b>收入</b>一致，<b>审计</b>不否定「结构",
+          "published": null,
+          "page": null,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "6b55ddbbcfdc484d:body:0000",
+            "6b55ddbbcfdc484d:body:0001",
+            "6b55ddbbcfdc484d:body:0002",
+            "6b55ddbbcfdc484d:body:0003",
+            "6b55ddbbcfdc484d:heading:0000",
+            "6b55ddbbcfdc484d:body:0004",
+            "6b55ddbbcfdc484d:body:0005",
+            "6b55ddbbcfdc484d:body:0006",
+            "6b55ddbbcfdc484d:body:0007",
+            "6b55ddbbcfdc484d:body:0008",
+            "6b55ddbbcfdc484d:body:0009",
+            "6b55ddbbcfdc484d:table:0000",
+            "6b55ddbbcfdc484d:body:0010",
+            "6b55ddbbcfdc484d:list:0000",
+            "6b55ddbbcfdc484d:table:0001"
+          ],
+          "source_coverage": 2
+        },
+        {
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "chunk_id": "7ceca88433b092ae:body:0011",
+          "kind": "body",
+          "title_text": "3 行业新闻",
+          "section_path": [
+            "2.3%、1.1%、0.5%、-0.9%、-2.2%、-2.4%、-4.8%。",
+            "-10%",
+            "3 行业新闻"
+          ],
+          "unit_refs": [
+            "unit:0148",
+            "unit:0149",
+            "unit:0150",
+            "unit:0151",
+            "unit:0152",
+            "unit:0153",
+            "unit:0154",
+            "unit:0155",
+            "unit:0156",
+            "unit:0160"
+          ],
+          "score": 0.032266458495966696,
+          "snippet": "<b>收入</b>约20亿美元，并设定",
+          "published": null,
+          "page": 10,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "7ceca88433b092ae:body:0010",
+            "7ceca88433b092ae:body:0011",
+            "7ceca88433b092ae:body:0012",
+            "7ceca88433b092ae:body:0013",
+            "7ceca88433b092ae:heading:0003",
+            "7ceca88433b092ae:body:0014",
+            "7ceca88433b092ae:body:0015"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "chunk_id": "9fa4cd7cf1ab602a:table:0009",
+          "kind": "table",
+          "title_text": null,
+          "section_path": [
+            "附录：财务预测表",
+            "资产负债表",
+            "利润表"
+          ],
+          "unit_refs": [
+            "unit:0186",
+            "unit:0187",
+            "unit:0188"
+          ],
+          "score": 0.031754032258064516,
+          "snippet": "<b>营业</b><b>收入</b>增长率2025A<b>营业</b><b>收入</b>增长率2026E",
+          "published": null,
+          "page": 3,
+          "cells": [
+            [
+              28,
+              0
+            ],
+            [
+              28,
+              1
+            ],
+            [
+              28,
+              2
+            ],
+            [
+              28,
+              3
+            ],
+            [
+              28,
+              4
+            ]
+          ],
+          "label_path": [
+            "营业收入增长率 位：百万元",
+            "营业收入增长率 2025A",
+            "营业收入增长率 2026E",
+            "营业收入增长率 2027E",
+            "营业收入增长率 2028E",
+            "EBIT 增长率 位：百万元",
+            "EBIT 增长率 2025A",
+            "EBIT 增长率 2026E",
+            "EBIT 增长率 2027E",
+            "EBIT 增长率 2028E",
+            "归母净利润增长率 位：百万元",
+            "归母净利润增长率 2025A",
+            "归母净利润增长率 2026E",
+            "归母净利润增长率 2027E",
+            "归母净利润增长率 2028E"
+          ],
+          "context_chunk_ids": [
+            "9fa4cd7cf1ab602a:body:0011",
+            "9fa4cd7cf1ab602a:table:0009",
+            "9fa4cd7cf1ab602a:body:0012",
+            "9fa4cd7cf1ab602a:table:0010",
+            "9fa4cd7cf1ab602a:body:0013",
+            "9fa4cd7cf1ab602a:table:0011",
+            "9fa4cd7cf1ab602a:body:0014",
+            "9fa4cd7cf1ab602a:table:0012",
+            "9fa4cd7cf1ab602a:body:0015",
+            "9fa4cd7cf1ab602a:table:0013",
+            "9fa4cd7cf1ab602a:body:0016",
+            "9fa4cd7cf1ab602a:table:0014",
+            "9fa4cd7cf1ab602a:body:0017",
+            "9fa4cd7cf1ab602a:body:0018",
+            "9fa4cd7cf1ab602a:table:0015"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:table:0020",
+          "kind": "table",
+          "title_text": "财务预测与估值",
+          "section_path": [
+            "风险提示",
+            "20",
+            "财务预测与估值"
+          ],
+          "unit_refs": [
+            "unit:0541",
+            "unit:0542",
+            "unit:0543",
+            "unit:0544",
+            "unit:0545",
+            "unit:0546",
+            "unit:0547",
+            "unit:0548"
+          ],
+          "score": 0.027777777777777776,
+          "snippet": "<b>营业</b><b>收入</b>57367099714341832\n应收",
+          "published": null,
+          "page": 20,
+          "cells": [],
+          "label_path": [
+            "资产负债表（百万元）",
+            "2024",
+            "2025",
+            "2026E",
+            "2027E",
+            "2028E",
+            "利润表（百万元）",
+            "现金及现金等价物 资产负债表（百万元）",
+            "现金及现金等价物 2024",
+            "现金及现金等价物 2025",
+            "现金及现金等价物 2026E",
+            "现金及现金等价物 2027E",
+            "现金及现金等价物 2028E",
+            "现金及现金等价物 利润表（百万元）",
+            "应收款项 资产负债表（百万元）",
+            "应收款项 2024",
+            "应收款项 2025",
+            "应收款项 2026E",
+            "应收款项 2027E",
+            "应收款项 2028E",
+            "应收款项 利润表（百万元）",
+            "存货净额 资产负债表（百万元）",
+            "存货净额 2024",
+            "存货净额 2025",
+            "存货净额 2026E",
+            "存货净额 2027E",
+            "存货净额 2028E",
+            "存货净额 利润表（百万元）",
+            "其他流动资产 资产负债表（百万元）",
+            "其他流动资产 2024",
+            "其他流动资产 2025",
+            "其他流动资产 2026E",
+            "其他流动资产 2027E",
+            "其他流动资产 2028E",
+            "其他流动资产 利润表（百万元）",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 资产负债表（百万元）",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2024",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2025",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2026E",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2027E",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2028E",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 利润表（百万元）",
+            "固定资产 资产负债表（百万元）",
+            "固定资产 2024",
+            "固定资产 2025",
+            "固定资产 2026E",
+            "固定资产 2027E",
+            "固定资产 2028E",
+            "固定资产 利润表（百万元）"
+          ],
+          "context_chunk_ids": [
+            "568f9e752f0fa65a:body:0036",
+            "568f9e752f0fa65a:body:0037",
+            "568f9e752f0fa65a:body:0038",
+            "568f9e752f0fa65a:heading:0011",
+            "568f9e752f0fa65a:table:0020",
+            "568f9e752f0fa65a:table:0021",
+            "568f9e752f0fa65a:table:0022",
+            "568f9e752f0fa65a:table:0023"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "chunk_id": "16a9a510ef9e405f:body:0008",
+          "kind": "body",
+          "title_text": "一、细分板块观点\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩",
+          "section_path": [
+            "扫码获取更多服务",
+            "一、细分板块观点",
+            "1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩"
+          ],
+          "unit_refs": [
+            "unit:0091"
+          ],
+          "score": 0.03252247488101534,
+          "snippet": "<b>收入</b>为1080亿美元（±2）",
+          "published": null,
+          "page": 5,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "16a9a510ef9e405f:body:0005",
+            "16a9a510ef9e405f:body:0006",
+            "16a9a510ef9e405f:body:0007",
+            "16a9a510ef9e405f:body:0008",
+            "16a9a510ef9e405f:body:0009",
+            "16a9a510ef9e405f:body:0010"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "chunk_id": "6b55ddbbcfdc484d:body:0004",
+          "kind": "body",
+          "title_text": "### 大脑一 财务审计师",
+          "section_path": [
+            "## 第零步数据验证",
+            "## 五脑辩论",
+            "### 大脑一 财务审计师"
+          ],
+          "unit_refs": [
+            "unit:0013",
+            "unit:0014",
+            "unit:0015",
+            "unit:0016",
+            "unit:0017"
+          ],
+          "score": 0.03278688524590164,
+          "snippet": "<b>收入</b>一致，<b>审计</b>不否定「结构",
+          "published": null,
+          "page": null,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "6b55ddbbcfdc484d:heading:0000",
+            "6b55ddbbcfdc484d:body:0004",
+            "6b55ddbbcfdc484d:body:0005",
+            "6b55ddbbcfdc484d:body:0006",
+            "6b55ddbbcfdc484d:body:0007",
+            "6b55ddbbcfdc484d:body:0008"
+          ],
+          "source_coverage": 2
+        },
+        {
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "chunk_id": "7ceca88433b092ae:body:0011",
+          "kind": "body",
+          "title_text": "3 行业新闻",
+          "section_path": [
+            "2.3%、1.1%、0.5%、-0.9%、-2.2%、-2.4%、-4.8%。",
+            "-10%",
+            "3 行业新闻"
+          ],
+          "unit_refs": [
+            "unit:0148",
+            "unit:0149",
+            "unit:0150",
+            "unit:0151",
+            "unit:0152",
+            "unit:0153",
+            "unit:0154",
+            "unit:0155",
+            "unit:0156",
+            "unit:0160"
+          ],
+          "score": 0.032266458495966696,
+          "snippet": "<b>收入</b>约20亿美元，并设定",
+          "published": null,
+          "page": 10,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "7ceca88433b092ae:body:0010",
+            "7ceca88433b092ae:body:0011",
+            "7ceca88433b092ae:body:0012",
+            "7ceca88433b092ae:body:0013",
+            "7ceca88433b092ae:heading:0003"
+          ],
+          "source_coverage": 3
+        }
+      ]
+    },
+    "source_first": {
+      "anchor_rank": null,
+      "returned_bands": 10,
+      "sources": 2,
+      "unique_context_chunks": 102,
+      "repeated_context_chunks": 10,
+      "added_chunks": [
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0000"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0001"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0002"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0003"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0014"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0015"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0016"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0017"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0018"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0027"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0028"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0029"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0030"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0031"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0032"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0033"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0034"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0035"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:heading:0001"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:heading:0002"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:heading:0003"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:heading:0004"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:heading:0006"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:heading:0009"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:heading:0010"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0000"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0001"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0002"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0011"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0012"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0013"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0014"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0019"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0024"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0025"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0026"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0027"
+        ],
+        [
+          "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "9fa4cd7cf1ab602a:body:0019"
+        ],
+        [
+          "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "9fa4cd7cf1ab602a:body:0020"
+        ],
+        [
+          "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "9fa4cd7cf1ab602a:body:0021"
+        ],
+        [
+          "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "9fa4cd7cf1ab602a:table:0024"
+        ],
+        [
+          "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "9fa4cd7cf1ab602a:table:0025"
+        ],
+        [
+          "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "9fa4cd7cf1ab602a:table:0027"
+        ],
+        [
+          "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "9fa4cd7cf1ab602a:table:0028"
+        ]
+      ],
+      "removed_chunks": [
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0003"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0004"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0005"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0006"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0007"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0008"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0009"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0010"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:heading:0004"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:body:0000"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:body:0001"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:body:0002"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:body:0003"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:body:0004"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:body:0005"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:body:0006"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:body:0007"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:body:0008"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:body:0009"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:body:0010"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:heading:0000"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:list:0000"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:table:0000"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:table:0001"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0010"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0011"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0012"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0013"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0014"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:body:0015"
+        ],
+        [
+          "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "7ceca88433b092ae:heading:0003"
+        ]
+      ],
+      "hits": [
+        {
+          "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "chunk_id": "9fa4cd7cf1ab602a:table:0000",
+          "kind": "table",
+          "title_text": null,
+          "section_path": [
+            "报表实质扎实，经营底部已过",
+            "事项：",
+            "评论："
+          ],
+          "unit_refs": [
+            "unit:0025",
+            "unit:0026",
+            "unit:0027",
+            "unit:0028",
+            "unit:0029",
+            "unit:0030",
+            "unit:0031",
+            "unit:0032"
+          ],
+          "score": 0.031754032258064516,
+          "snippet": "<b>营业</b>总收入(百万)2025A<b>营业</b>",
+          "published": null,
+          "page": 1,
+          "cells": [
+            [
+              4,
+              1
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              4,
+              4
+            ]
+          ],
+          "label_path": [
+            "2025A",
+            "2026E",
+            "2027E",
+            "2028E",
+            "营业总收入(百万) 要财务指标",
+            "营业总收入(百万) 2025A",
+            "营业总收入(百万) 2026E",
+            "营业总收入(百万) 2027E",
+            "营业总收入(百万) 2028E",
+            "同比增速(%) 要财务指标",
+            "同比增速(%) 2025A",
+            "同比增速(%) 2026E",
+            "同比增速(%) 2027E",
+            "同比增速(%) 2028E",
+            "归母净利润(百万) 要财务指标",
+            "归母净利润(百万) 2025A",
+            "归母净利润(百万) 2026E",
+            "归母净利润(百万) 2027E",
+            "归母净利润(百万) 2028E",
+            "每股盈利(元) 要财务指标",
+            "每股盈利(元) 2025A",
+            "每股盈利(元) 2026E",
+            "每股盈利(元) 2027E",
+            "每股盈利(元) 2028E",
+            "市盈率(倍) 要财务指标",
+            "市盈率(倍) 2025A",
+            "市盈率(倍) 2026E",
+            "市盈率(倍) 2027E",
+            "市盈率(倍) 2028E",
+            "市净率(倍) 要财务指标",
+            "市净率(倍) 2025A",
+            "市净率(倍) 2026E",
+            "市净率(倍) 2027E",
+            "市净率(倍) 2028E"
+          ],
+          "context_chunk_ids": [
+            "9fa4cd7cf1ab602a:body:0000",
+            "9fa4cd7cf1ab602a:body:0001",
+            "9fa4cd7cf1ab602a:heading:0000",
+            "9fa4cd7cf1ab602a:heading:0001",
+            "9fa4cd7cf1ab602a:body:0002",
+            "9fa4cd7cf1ab602a:body:0003",
+            "9fa4cd7cf1ab602a:body:0004",
+            "9fa4cd7cf1ab602a:body:0005",
+            "9fa4cd7cf1ab602a:table:0000",
+            "9fa4cd7cf1ab602a:body:0006",
+            "9fa4cd7cf1ab602a:body:0007",
+            "9fa4cd7cf1ab602a:body:0008",
+            "9fa4cd7cf1ab602a:heading:0002",
+            "9fa4cd7cf1ab602a:table:0001",
+            "9fa4cd7cf1ab602a:table:0002",
+            "9fa4cd7cf1ab602a:table:0003",
+            "9fa4cd7cf1ab602a:body:0009",
+            "9fa4cd7cf1ab602a:table:0004",
+            "9fa4cd7cf1ab602a:table:0005",
+            "9fa4cd7cf1ab602a:table:0006",
+            "9fa4cd7cf1ab602a:table:0007",
+            "9fa4cd7cf1ab602a:body:0010",
+            "9fa4cd7cf1ab602a:table:0008",
+            "9fa4cd7cf1ab602a:body:0011",
+            "9fa4cd7cf1ab602a:table:0009"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "chunk_id": "9fa4cd7cf1ab602a:table:0009",
+          "kind": "table",
+          "title_text": null,
+          "section_path": [
+            "附录：财务预测表",
+            "资产负债表",
+            "利润表"
+          ],
+          "unit_refs": [
+            "unit:0186",
+            "unit:0187",
+            "unit:0188"
+          ],
+          "score": 0.031754032258064516,
+          "snippet": "<b>营业</b><b>收入</b>增长率2025A<b>营业</b><b>收入</b>增长率2026E",
+          "published": null,
+          "page": 3,
+          "cells": [
+            [
+              28,
+              0
+            ],
+            [
+              28,
+              1
+            ],
+            [
+              28,
+              2
+            ],
+            [
+              28,
+              3
+            ],
+            [
+              28,
+              4
+            ]
+          ],
+          "label_path": [
+            "营业收入增长率 位：百万元",
+            "营业收入增长率 2025A",
+            "营业收入增长率 2026E",
+            "营业收入增长率 2027E",
+            "营业收入增长率 2028E",
+            "EBIT 增长率 位：百万元",
+            "EBIT 增长率 2025A",
+            "EBIT 增长率 2026E",
+            "EBIT 增长率 2027E",
+            "EBIT 增长率 2028E",
+            "归母净利润增长率 位：百万元",
+            "归母净利润增长率 2025A",
+            "归母净利润增长率 2026E",
+            "归母净利润增长率 2027E",
+            "归母净利润增长率 2028E"
+          ],
+          "context_chunk_ids": [
+            "9fa4cd7cf1ab602a:body:0011",
+            "9fa4cd7cf1ab602a:table:0009",
+            "9fa4cd7cf1ab602a:body:0012",
+            "9fa4cd7cf1ab602a:table:0010",
+            "9fa4cd7cf1ab602a:body:0013",
+            "9fa4cd7cf1ab602a:table:0011",
+            "9fa4cd7cf1ab602a:body:0014",
+            "9fa4cd7cf1ab602a:table:0012",
+            "9fa4cd7cf1ab602a:body:0015",
+            "9fa4cd7cf1ab602a:table:0013",
+            "9fa4cd7cf1ab602a:body:0016",
+            "9fa4cd7cf1ab602a:table:0014",
+            "9fa4cd7cf1ab602a:body:0017",
+            "9fa4cd7cf1ab602a:body:0018",
+            "9fa4cd7cf1ab602a:table:0015"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "chunk_id": "9fa4cd7cf1ab602a:body:0021",
+          "kind": "body",
+          "title_text": "华创行业公司投资评级体系",
+          "section_path": [
+            "食品饮料组团队介绍",
+            "华创证券机构销售通讯录",
+            "华创行业公司投资评级体系"
+          ],
+          "unit_refs": [
+            "unit:0306",
+            "unit:0307",
+            "unit:0308",
+            "unit:0309",
+            "unit:0310",
+            "unit:0311",
+            "unit:0312",
+            "unit:0313",
+            "unit:0315",
+            "unit:0316"
+          ],
+          "score": 0.028404512489927477,
+          "snippet": "<b>贵州茅台</b>（600519），根据上市公司公告",
+          "published": null,
+          "page": 7,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "9fa4cd7cf1ab602a:table:0027",
+            "9fa4cd7cf1ab602a:body:0020",
+            "9fa4cd7cf1ab602a:body:0021",
+            "9fa4cd7cf1ab602a:table:0028"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "chunk_id": "9fa4cd7cf1ab602a:body:0019",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "利润表",
+            "食品饮料组团队介绍",
+            "华创证券机构销售通讯录"
+          ],
+          "unit_refs": [
+            "unit:0285",
+            "unit:0288"
+          ],
+          "score": 0.023255813953488372,
+          "snippet": "021-20572536\n6",
+          "published": null,
+          "page": 5,
+          "cells": [
+            [
+              25,
+              3
+            ]
+          ],
+          "label_path": [
+            "上海机构销售部 许彩霞 总经理助理、上海机构销售总监 021-20572536 xucaixia@hcyjs.com 010-63214682 办公电话"
+          ],
+          "context_chunk_ids": [
+            "9fa4cd7cf1ab602a:table:0024",
+            "9fa4cd7cf1ab602a:body:0019",
+            "9fa4cd7cf1ab602a:table:0025"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:table:0018",
+          "kind": "table",
+          "title_text": null,
+          "section_path": [
+            "我们的盈利预测主要基于以下假设条件：",
+            "未来3年业绩预测",
+            "14"
+          ],
+          "unit_refs": [
+            "unit:0246",
+            "unit:0247",
+            "unit:0248",
+            "unit:0249",
+            "unit:0250",
+            "unit:0251",
+            "unit:0252",
+            "unit:0253",
+            "unit:0254"
+          ],
+          "score": 0.032266458495966696,
+          "snippet": "<b>营业</b><b>收入</b>2024<b>营业</b><b>收入</b>2025<b>营业</b><b>收入</b>",
+          "published": null,
+          "page": 14,
+          "cells": [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              1,
+              8
+            ]
+          ],
+          "label_path": [
+            "2024",
+            "2025",
+            "2026E",
+            "2027E",
+            "2028E",
+            "营业收入 2024",
+            "营业收入 2025",
+            "营业收入 2026E",
+            "营业收入 2027E",
+            "营业收入 2028E",
+            "营业成本 2024",
+            "营业成本 2025",
+            "营业成本 2026E",
+            "营业成本 2027E",
+            "营业成本 2028E",
+            "销售费用 2024",
+            "销售费用 2025",
+            "销售费用 2026E",
+            "销售费用 2027E",
+            "销售费用 2028E",
+            "管理费用 2024",
+            "管理费用 2025",
+            "管理费用 2026E",
+            "管理费用 2027E",
+            "管理费用 2028E",
+            "研发费用 2024",
+            "研发费用 2025",
+            "研发费用 2026E",
+            "研发费用 2027E",
+            "研发费用 2028E",
+            "财务费用 2024",
+            "财务费用 2025",
+            "财务费用 2026E",
+            "财务费用 2027E",
+            "财务费用 2028E",
+            "营业利润 2024",
+            "营业利润 2025",
+            "营业利润 2026E",
+            "营业利润 2027E",
+            "营业利润 2028E",
+            "利润总额 2024",
+            "利润总额 2025",
+            "利润总额 2026E",
+            "利润总额 2027E",
+            "利润总额 2028E"
+          ],
+          "context_chunk_ids": [
+            "568f9e752f0fa65a:heading:0007",
+            "568f9e752f0fa65a:body:0019",
+            "568f9e752f0fa65a:table:0015",
+            "568f9e752f0fa65a:body:0020",
+            "568f9e752f0fa65a:table:0016",
+            "568f9e752f0fa65a:body:0021",
+            "568f9e752f0fa65a:table:0017",
+            "568f9e752f0fa65a:body:0022",
+            "568f9e752f0fa65a:body:0023",
+            "568f9e752f0fa65a:body:0024",
+            "568f9e752f0fa65a:table:0018",
+            "568f9e752f0fa65a:body:0025"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:table:0020",
+          "kind": "table",
+          "title_text": "财务预测与估值",
+          "section_path": [
+            "风险提示",
+            "20",
+            "财务预测与估值"
+          ],
+          "unit_refs": [
+            "unit:0541",
+            "unit:0542",
+            "unit:0543",
+            "unit:0544",
+            "unit:0545",
+            "unit:0546",
+            "unit:0547",
+            "unit:0548"
+          ],
+          "score": 0.027777777777777776,
+          "snippet": "<b>营业</b><b>收入</b>57367099714341832\n应收",
+          "published": null,
+          "page": 20,
+          "cells": [],
+          "label_path": [
+            "资产负债表（百万元）",
+            "2024",
+            "2025",
+            "2026E",
+            "2027E",
+            "2028E",
+            "利润表（百万元）",
+            "现金及现金等价物 资产负债表（百万元）",
+            "现金及现金等价物 2024",
+            "现金及现金等价物 2025",
+            "现金及现金等价物 2026E",
+            "现金及现金等价物 2027E",
+            "现金及现金等价物 2028E",
+            "现金及现金等价物 利润表（百万元）",
+            "应收款项 资产负债表（百万元）",
+            "应收款项 2024",
+            "应收款项 2025",
+            "应收款项 2026E",
+            "应收款项 2027E",
+            "应收款项 2028E",
+            "应收款项 利润表（百万元）",
+            "存货净额 资产负债表（百万元）",
+            "存货净额 2024",
+            "存货净额 2025",
+            "存货净额 2026E",
+            "存货净额 2027E",
+            "存货净额 2028E",
+            "存货净额 利润表（百万元）",
+            "其他流动资产 资产负债表（百万元）",
+            "其他流动资产 2024",
+            "其他流动资产 2025",
+            "其他流动资产 2026E",
+            "其他流动资产 2027E",
+            "其他流动资产 2028E",
+            "其他流动资产 利润表（百万元）",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 资产负债表（百万元）",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2024",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2025",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2026E",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2027E",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2028E",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 利润表（百万元）",
+            "固定资产 资产负债表（百万元）",
+            "固定资产 2024",
+            "固定资产 2025",
+            "固定资产 2026E",
+            "固定资产 2027E",
+            "固定资产 2028E",
+            "固定资产 利润表（百万元）"
+          ],
+          "context_chunk_ids": [
+            "568f9e752f0fa65a:body:0036",
+            "568f9e752f0fa65a:body:0037",
+            "568f9e752f0fa65a:body:0038",
+            "568f9e752f0fa65a:heading:0011",
+            "568f9e752f0fa65a:table:0020",
+            "568f9e752f0fa65a:table:0021",
+            "568f9e752f0fa65a:table:0022",
+            "568f9e752f0fa65a:table:0023"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:table:0000",
+          "kind": "table",
+          "title_text": null,
+          "section_path": [
+            "基础数据",
+            "市场走势",
+            "相关研究报告"
+          ],
+          "unit_refs": [
+            "unit:0031",
+            "unit:0032",
+            "unit:0033",
+            "unit:0034",
+            "unit:0035",
+            "unit:0036",
+            "unit:0037",
+            "unit:0038",
+            "unit:0039",
+            "unit:0040",
+            "unit:0041",
+            "unit:0042",
+            "unit:0043",
+            "unit:0044",
+            "unit:0045"
+          ],
+          "score": 0.030117753623188408,
+          "snippet": "<b>营业</b><b>收入</b>(百万元)573",
+          "published": null,
+          "page": 1,
+          "cells": [
+            [
+              0,
+              0
+            ]
+          ],
+          "label_path": [
+            "账款回收及经营现金流风险、资产及商誉减值风险、股东减持风险 营业收入(百万元) 573 670 997 1,434 盈利预测和财务指标 2024 2025 2026E 2027E",
+            "营业收入(百万元) 573 670 997 1,434 盈利预测和财务指标 2024 2025 2026E 2027E",
+            ",832 28E",
+            "(+/-%) -13.2% 16.9% 48.71% 43.88% 营业收入(百万元) 573 670 997 1,434 盈利预测和财务指标 2024 2025 2026E 2027E",
+            "(+/-%) -13.2% 16.9% 48.71% 43.88% ,832 28E",
+            "归母净利润(百万元) -113 40 132 219 营业收入(百万元) 573 670 997 1,434 盈利预测和财务指标 2024 2025 2026E 2027E",
+            "归母净利润(百万元) -113 40 132 219 ,832 28E",
+            "(+/-%) -263.3% -135.6% 228.37% 65.48% 营业收入(百万元) 573 670 997 1,434 盈利预测和财务指标 2024 2025 2026E 2027E",
+            "(+/-%) -263.3% -135.6% 228.37% 65.48% ,832 28E",
+            "每股收益（元） -0.32 0.11 0.36 0.59 营业收入(百万元) 573 670 997 1,434 盈利预测和财务指标 2024 2025 2026E 2027E",
+            "每股收益（元） -0.32 0.11 0.36 0.59 ,832 28E",
+            "EBIT Margin 2.1% 8.9% 16.7% 19.2% 营业收入(百万元) 573 670 997 1,434 盈利预测和财务指标 2024 2025 2026E 2027E",
+            "EBIT Margin 2.1% 8.9% 16.7% 19.2% ,832 28E"
+          ],
+          "context_chunk_ids": [
+            "568f9e752f0fa65a:heading:0001",
+            "568f9e752f0fa65a:heading:0002",
+            "568f9e752f0fa65a:heading:0003",
+            "568f9e752f0fa65a:body:0000",
+            "568f9e752f0fa65a:body:0001",
+            "568f9e752f0fa65a:body:0002",
+            "568f9e752f0fa65a:body:0003",
+            "568f9e752f0fa65a:table:0000",
+            "568f9e752f0fa65a:table:0001",
+            "568f9e752f0fa65a:table:0002",
+            "568f9e752f0fa65a:heading:0004"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:body:0014",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "光力科技：煤矿检测转型半导体划片机龙头",
+            "煤矿检测业务作为公司业务基本盘",
+            "半导体加工设备逐步打开业务成长空间"
+          ],
+          "unit_refs": [
+            "unit:0136",
+            "unit:0137",
+            "unit:0138",
+            "unit:0139",
+            "unit:0143",
+            "unit:0144",
+            "unit:0145",
+            "unit:0146",
+            "unit:0147"
+          ],
+          "score": 0.02832415420928403,
+          "snippet": "<b>营业</b><b>收入</b>的53.99；相关装备销量",
+          "published": null,
+          "page": 6,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "568f9e752f0fa65a:table:0011",
+            "568f9e752f0fa65a:body:0014",
+            "568f9e752f0fa65a:body:0015",
+            "568f9e752f0fa65a:table:0012",
+            "568f9e752f0fa65a:table:0013",
+            "568f9e752f0fa65a:table:0014",
+            "568f9e752f0fa65a:body:0016",
+            "568f9e752f0fa65a:body:0017",
+            "568f9e752f0fa65a:body:0018",
+            "568f9e752f0fa65a:heading:0006"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:table:0020",
+          "kind": "table",
+          "title_text": "财务预测与估值",
+          "section_path": [
+            "风险提示",
+            "20",
+            "财务预测与估值"
+          ],
+          "unit_refs": [
+            "unit:0541",
+            "unit:0542",
+            "unit:0543",
+            "unit:0544",
+            "unit:0545",
+            "unit:0546",
+            "unit:0547",
+            "unit:0548"
+          ],
+          "score": 0.027777777777777776,
+          "snippet": "<b>营业</b><b>收入</b>57367099714341832\n应收",
+          "published": null,
+          "page": 20,
+          "cells": [],
+          "label_path": [
+            "资产负债表（百万元）",
+            "2024",
+            "2025",
+            "2026E",
+            "2027E",
+            "2028E",
+            "利润表（百万元）",
+            "现金及现金等价物 资产负债表（百万元）",
+            "现金及现金等价物 2024",
+            "现金及现金等价物 2025",
+            "现金及现金等价物 2026E",
+            "现金及现金等价物 2027E",
+            "现金及现金等价物 2028E",
+            "现金及现金等价物 利润表（百万元）",
+            "应收款项 资产负债表（百万元）",
+            "应收款项 2024",
+            "应收款项 2025",
+            "应收款项 2026E",
+            "应收款项 2027E",
+            "应收款项 2028E",
+            "应收款项 利润表（百万元）",
+            "存货净额 资产负债表（百万元）",
+            "存货净额 2024",
+            "存货净额 2025",
+            "存货净额 2026E",
+            "存货净额 2027E",
+            "存货净额 2028E",
+            "存货净额 利润表（百万元）",
+            "其他流动资产 资产负债表（百万元）",
+            "其他流动资产 2024",
+            "其他流动资产 2025",
+            "其他流动资产 2026E",
+            "其他流动资产 2027E",
+            "其他流动资产 2028E",
+            "其他流动资产 利润表（百万元）",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 资产负债表（百万元）",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2024",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2025",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2026E",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2027E",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2028E",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 利润表（百万元）",
+            "固定资产 资产负债表（百万元）",
+            "固定资产 2024",
+            "固定资产 2025",
+            "固定资产 2026E",
+            "固定资产 2027E",
+            "固定资产 2028E",
+            "固定资产 利润表（百万元）"
+          ],
+          "context_chunk_ids": [
+            "568f9e752f0fa65a:body:0032",
+            "568f9e752f0fa65a:body:0033",
+            "568f9e752f0fa65a:table:0019",
+            "568f9e752f0fa65a:body:0034",
+            "568f9e752f0fa65a:body:0035",
+            "568f9e752f0fa65a:body:0036",
+            "568f9e752f0fa65a:body:0037",
+            "568f9e752f0fa65a:body:0038",
+            "568f9e752f0fa65a:heading:0011",
+            "568f9e752f0fa65a:table:0020",
+            "568f9e752f0fa65a:table:0021",
+            "568f9e752f0fa65a:table:0022",
+            "568f9e752f0fa65a:table:0023",
+            "568f9e752f0fa65a:table:0024",
+            "568f9e752f0fa65a:table:0025",
+            "568f9e752f0fa65a:table:0026",
+            "568f9e752f0fa65a:table:0027"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:body:0030",
+          "kind": "body",
+          "title_text": "表10：FCFF 估值表（单位：百万元）",
+          "section_path": [
+            "未来10 年估值假设条件见下表：",
+            "表9：绝对估值法资本成本假设（20260906）",
+            "表10：FCFF 估值表（单位：百万元）"
+          ],
+          "unit_refs": [
+            "unit:0322",
+            "unit:0323",
+            "unit:0324",
+            "unit:0325",
+            "unit:0326",
+            "unit:0327",
+            "unit:0328",
+            "unit:0329",
+            "unit:0330",
+            "unit:0331",
+            "unit:0332",
+            "unit:0333",
+            "unit:0334",
+            "unit:0335",
+            "unit:0336",
+            "unit:0337",
+            "unit:0338",
+            "unit:0339",
+            "unit:0340",
+            "unit:0341",
+            "unit:0342",
+            "unit:0343",
+            "unit:0344",
+            "unit:0345",
+            "unit:0346",
+            "unit:0347",
+            "unit:0348",
+            "unit:0349",
+            "unit:0350",
+            "unit:0351",
+            "unit:0352",
+            "unit:0353",
+            "unit:0354",
+            "unit:0355"
+          ],
+          "score": 0.013157894736842105,
+          "snippet": "2026E\n2027E\n2028E\n2029E\n2030E\n2031E\n2032E\n2033E\n2034E\n2035E\nTV\nEBIT\n166.28\n274.76\n308.48\n458.18\n644.18\n835.78\n1050.77\n1319.16\n1785.24\n2156.95\n所得税税率\n10.00 \n10.00 \n10.00 \n10.00 \n10.00 \n10.00 \n10.00 \n10.00 \n10.00 \n10.00 ",
+          "published": null,
+          "page": 15,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "568f9e752f0fa65a:heading:0009",
+            "568f9e752f0fa65a:body:0027",
+            "568f9e752f0fa65a:body:0028",
+            "568f9e752f0fa65a:heading:0010",
+            "568f9e752f0fa65a:body:0029",
+            "568f9e752f0fa65a:body:0030",
+            "568f9e752f0fa65a:body:0031"
+          ],
+          "source_coverage": 0
+        }
+      ]
+    },
+    "global_rrf_cap3": {
+      "anchor_rank": null,
+      "returned_bands": 10,
+      "sources": 5,
+      "unique_context_chunks": 118,
+      "repeated_context_chunks": 2,
+      "added_chunks": [
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0000"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0001"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0002"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0003"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0032"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0033"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0034"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:body:0035"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:heading:0001"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:heading:0002"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:heading:0003"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:heading:0004"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0000"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0001"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0002"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0019"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0024"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0025"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0026"
+        ],
+        [
+          "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "568f9e752f0fa65a:table:0027"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:body:0011"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:body:0012"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:body:0013"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:list:0001"
+        ],
+        [
+          "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "6b55ddbbcfdc484d:table:0002"
+        ],
+        [
+          "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "9fa4cd7cf1ab602a:body:0020"
+        ],
+        [
+          "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "9fa4cd7cf1ab602a:body:0021"
+        ],
+        [
+          "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "9fa4cd7cf1ab602a:table:0027"
+        ],
+        [
+          "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "9fa4cd7cf1ab602a:table:0028"
+        ]
+      ],
+      "removed_chunks": [],
+      "hits": [
+        {
+          "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "chunk_id": "9fa4cd7cf1ab602a:table:0000",
+          "kind": "table",
+          "title_text": null,
+          "section_path": [
+            "报表实质扎实，经营底部已过",
+            "事项：",
+            "评论："
+          ],
+          "unit_refs": [
+            "unit:0025",
+            "unit:0026",
+            "unit:0027",
+            "unit:0028",
+            "unit:0029",
+            "unit:0030",
+            "unit:0031",
+            "unit:0032"
+          ],
+          "score": 0.031754032258064516,
+          "snippet": "<b>营业</b>总收入(百万)2025A<b>营业</b>",
+          "published": null,
+          "page": 1,
+          "cells": [
+            [
+              4,
+              1
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              4,
+              4
+            ]
+          ],
+          "label_path": [
+            "2025A",
+            "2026E",
+            "2027E",
+            "2028E",
+            "营业总收入(百万) 要财务指标",
+            "营业总收入(百万) 2025A",
+            "营业总收入(百万) 2026E",
+            "营业总收入(百万) 2027E",
+            "营业总收入(百万) 2028E",
+            "同比增速(%) 要财务指标",
+            "同比增速(%) 2025A",
+            "同比增速(%) 2026E",
+            "同比增速(%) 2027E",
+            "同比增速(%) 2028E",
+            "归母净利润(百万) 要财务指标",
+            "归母净利润(百万) 2025A",
+            "归母净利润(百万) 2026E",
+            "归母净利润(百万) 2027E",
+            "归母净利润(百万) 2028E",
+            "每股盈利(元) 要财务指标",
+            "每股盈利(元) 2025A",
+            "每股盈利(元) 2026E",
+            "每股盈利(元) 2027E",
+            "每股盈利(元) 2028E",
+            "市盈率(倍) 要财务指标",
+            "市盈率(倍) 2025A",
+            "市盈率(倍) 2026E",
+            "市盈率(倍) 2027E",
+            "市盈率(倍) 2028E",
+            "市净率(倍) 要财务指标",
+            "市净率(倍) 2025A",
+            "市净率(倍) 2026E",
+            "市净率(倍) 2027E",
+            "市净率(倍) 2028E"
+          ],
+          "context_chunk_ids": [
+            "9fa4cd7cf1ab602a:body:0000",
+            "9fa4cd7cf1ab602a:body:0001",
+            "9fa4cd7cf1ab602a:heading:0000",
+            "9fa4cd7cf1ab602a:heading:0001",
+            "9fa4cd7cf1ab602a:body:0002",
+            "9fa4cd7cf1ab602a:body:0003",
+            "9fa4cd7cf1ab602a:body:0004",
+            "9fa4cd7cf1ab602a:body:0005",
+            "9fa4cd7cf1ab602a:table:0000",
+            "9fa4cd7cf1ab602a:body:0006",
+            "9fa4cd7cf1ab602a:body:0007",
+            "9fa4cd7cf1ab602a:body:0008",
+            "9fa4cd7cf1ab602a:heading:0002",
+            "9fa4cd7cf1ab602a:table:0001",
+            "9fa4cd7cf1ab602a:table:0002",
+            "9fa4cd7cf1ab602a:table:0003",
+            "9fa4cd7cf1ab602a:body:0009",
+            "9fa4cd7cf1ab602a:table:0004",
+            "9fa4cd7cf1ab602a:table:0005",
+            "9fa4cd7cf1ab602a:table:0006",
+            "9fa4cd7cf1ab602a:table:0007",
+            "9fa4cd7cf1ab602a:body:0010",
+            "9fa4cd7cf1ab602a:table:0008",
+            "9fa4cd7cf1ab602a:body:0011",
+            "9fa4cd7cf1ab602a:table:0009"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "chunk_id": "9fa4cd7cf1ab602a:table:0009",
+          "kind": "table",
+          "title_text": null,
+          "section_path": [
+            "附录：财务预测表",
+            "资产负债表",
+            "利润表"
+          ],
+          "unit_refs": [
+            "unit:0186",
+            "unit:0187",
+            "unit:0188"
+          ],
+          "score": 0.031754032258064516,
+          "snippet": "<b>营业</b><b>收入</b>增长率2025A<b>营业</b><b>收入</b>增长率2026E",
+          "published": null,
+          "page": 3,
+          "cells": [
+            [
+              28,
+              0
+            ],
+            [
+              28,
+              1
+            ],
+            [
+              28,
+              2
+            ],
+            [
+              28,
+              3
+            ],
+            [
+              28,
+              4
+            ]
+          ],
+          "label_path": [
+            "营业收入增长率 位：百万元",
+            "营业收入增长率 2025A",
+            "营业收入增长率 2026E",
+            "营业收入增长率 2027E",
+            "营业收入增长率 2028E",
+            "EBIT 增长率 位：百万元",
+            "EBIT 增长率 2025A",
+            "EBIT 增长率 2026E",
+            "EBIT 增长率 2027E",
+            "EBIT 增长率 2028E",
+            "归母净利润增长率 位：百万元",
+            "归母净利润增长率 2025A",
+            "归母净利润增长率 2026E",
+            "归母净利润增长率 2027E",
+            "归母净利润增长率 2028E"
+          ],
+          "context_chunk_ids": [
+            "9fa4cd7cf1ab602a:body:0011",
+            "9fa4cd7cf1ab602a:table:0009",
+            "9fa4cd7cf1ab602a:body:0012",
+            "9fa4cd7cf1ab602a:table:0010",
+            "9fa4cd7cf1ab602a:body:0013",
+            "9fa4cd7cf1ab602a:table:0011",
+            "9fa4cd7cf1ab602a:body:0014",
+            "9fa4cd7cf1ab602a:table:0012",
+            "9fa4cd7cf1ab602a:body:0015",
+            "9fa4cd7cf1ab602a:table:0013",
+            "9fa4cd7cf1ab602a:body:0016",
+            "9fa4cd7cf1ab602a:table:0014",
+            "9fa4cd7cf1ab602a:body:0017",
+            "9fa4cd7cf1ab602a:body:0018",
+            "9fa4cd7cf1ab602a:table:0015"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "chunk_id": "9fa4cd7cf1ab602a:body:0021",
+          "kind": "body",
+          "title_text": "华创行业公司投资评级体系",
+          "section_path": [
+            "食品饮料组团队介绍",
+            "华创证券机构销售通讯录",
+            "华创行业公司投资评级体系"
+          ],
+          "unit_refs": [
+            "unit:0306",
+            "unit:0307",
+            "unit:0308",
+            "unit:0309",
+            "unit:0310",
+            "unit:0311",
+            "unit:0312",
+            "unit:0313",
+            "unit:0315",
+            "unit:0316"
+          ],
+          "score": 0.02661064425770308,
+          "snippet": "<b>贵州茅台</b>（600519），根据上市公司公告",
+          "published": null,
+          "page": 7,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "9fa4cd7cf1ab602a:table:0027",
+            "9fa4cd7cf1ab602a:body:0020",
+            "9fa4cd7cf1ab602a:body:0021",
+            "9fa4cd7cf1ab602a:table:0028"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:table:0018",
+          "kind": "table",
+          "title_text": null,
+          "section_path": [
+            "我们的盈利预测主要基于以下假设条件：",
+            "未来3年业绩预测",
+            "14"
+          ],
+          "unit_refs": [
+            "unit:0246",
+            "unit:0247",
+            "unit:0248",
+            "unit:0249",
+            "unit:0250",
+            "unit:0251",
+            "unit:0252",
+            "unit:0253",
+            "unit:0254"
+          ],
+          "score": 0.025093353248693055,
+          "snippet": "<b>营业</b><b>收入</b>2024<b>营业</b><b>收入</b>2025<b>营业</b><b>收入</b>",
+          "published": null,
+          "page": 14,
+          "cells": [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              1,
+              8
+            ]
+          ],
+          "label_path": [
+            "2024",
+            "2025",
+            "2026E",
+            "2027E",
+            "2028E",
+            "营业收入 2024",
+            "营业收入 2025",
+            "营业收入 2026E",
+            "营业收入 2027E",
+            "营业收入 2028E",
+            "营业成本 2024",
+            "营业成本 2025",
+            "营业成本 2026E",
+            "营业成本 2027E",
+            "营业成本 2028E",
+            "销售费用 2024",
+            "销售费用 2025",
+            "销售费用 2026E",
+            "销售费用 2027E",
+            "销售费用 2028E",
+            "管理费用 2024",
+            "管理费用 2025",
+            "管理费用 2026E",
+            "管理费用 2027E",
+            "管理费用 2028E",
+            "研发费用 2024",
+            "研发费用 2025",
+            "研发费用 2026E",
+            "研发费用 2027E",
+            "研发费用 2028E",
+            "财务费用 2024",
+            "财务费用 2025",
+            "财务费用 2026E",
+            "财务费用 2027E",
+            "财务费用 2028E",
+            "营业利润 2024",
+            "营业利润 2025",
+            "营业利润 2026E",
+            "营业利润 2027E",
+            "营业利润 2028E",
+            "利润总额 2024",
+            "利润总额 2025",
+            "利润总额 2026E",
+            "利润总额 2027E",
+            "利润总额 2028E"
+          ],
+          "context_chunk_ids": [
+            "568f9e752f0fa65a:heading:0007",
+            "568f9e752f0fa65a:body:0019",
+            "568f9e752f0fa65a:table:0015",
+            "568f9e752f0fa65a:body:0020",
+            "568f9e752f0fa65a:table:0016",
+            "568f9e752f0fa65a:body:0021",
+            "568f9e752f0fa65a:table:0017",
+            "568f9e752f0fa65a:body:0022",
+            "568f9e752f0fa65a:body:0023",
+            "568f9e752f0fa65a:body:0024",
+            "568f9e752f0fa65a:table:0018",
+            "568f9e752f0fa65a:body:0025"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:table:0000",
+          "kind": "table",
+          "title_text": null,
+          "section_path": [
+            "基础数据",
+            "市场走势",
+            "相关研究报告"
+          ],
+          "unit_refs": [
+            "unit:0031",
+            "unit:0032",
+            "unit:0033",
+            "unit:0034",
+            "unit:0035",
+            "unit:0036",
+            "unit:0037",
+            "unit:0038",
+            "unit:0039",
+            "unit:0040",
+            "unit:0041",
+            "unit:0042",
+            "unit:0043",
+            "unit:0044",
+            "unit:0045"
+          ],
+          "score": 0.022435897435897436,
+          "snippet": "<b>营业</b><b>收入</b>(百万元)573",
+          "published": null,
+          "page": 1,
+          "cells": [
+            [
+              0,
+              0
+            ]
+          ],
+          "label_path": [
+            "账款回收及经营现金流风险、资产及商誉减值风险、股东减持风险 营业收入(百万元) 573 670 997 1,434 盈利预测和财务指标 2024 2025 2026E 2027E",
+            "营业收入(百万元) 573 670 997 1,434 盈利预测和财务指标 2024 2025 2026E 2027E",
+            ",832 28E",
+            "(+/-%) -13.2% 16.9% 48.71% 43.88% 营业收入(百万元) 573 670 997 1,434 盈利预测和财务指标 2024 2025 2026E 2027E",
+            "(+/-%) -13.2% 16.9% 48.71% 43.88% ,832 28E",
+            "归母净利润(百万元) -113 40 132 219 营业收入(百万元) 573 670 997 1,434 盈利预测和财务指标 2024 2025 2026E 2027E",
+            "归母净利润(百万元) -113 40 132 219 ,832 28E",
+            "(+/-%) -263.3% -135.6% 228.37% 65.48% 营业收入(百万元) 573 670 997 1,434 盈利预测和财务指标 2024 2025 2026E 2027E",
+            "(+/-%) -263.3% -135.6% 228.37% 65.48% ,832 28E",
+            "每股收益（元） -0.32 0.11 0.36 0.59 营业收入(百万元) 573 670 997 1,434 盈利预测和财务指标 2024 2025 2026E 2027E",
+            "每股收益（元） -0.32 0.11 0.36 0.59 ,832 28E",
+            "EBIT Margin 2.1% 8.9% 16.7% 19.2% 营业收入(百万元) 573 670 997 1,434 盈利预测和财务指标 2024 2025 2026E 2027E",
+            "EBIT Margin 2.1% 8.9% 16.7% 19.2% ,832 28E"
+          ],
+          "context_chunk_ids": [
+            "568f9e752f0fa65a:heading:0001",
+            "568f9e752f0fa65a:heading:0002",
+            "568f9e752f0fa65a:heading:0003",
+            "568f9e752f0fa65a:body:0000",
+            "568f9e752f0fa65a:body:0001",
+            "568f9e752f0fa65a:body:0002",
+            "568f9e752f0fa65a:body:0003",
+            "568f9e752f0fa65a:table:0000",
+            "568f9e752f0fa65a:table:0001",
+            "568f9e752f0fa65a:table:0002",
+            "568f9e752f0fa65a:heading:0004"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:table:0020",
+          "kind": "table",
+          "title_text": "财务预测与估值",
+          "section_path": [
+            "风险提示",
+            "20",
+            "财务预测与估值"
+          ],
+          "unit_refs": [
+            "unit:0541",
+            "unit:0542",
+            "unit:0543",
+            "unit:0544",
+            "unit:0545",
+            "unit:0546",
+            "unit:0547",
+            "unit:0548"
+          ],
+          "score": 0.020556478405315614,
+          "snippet": "<b>营业</b><b>收入</b>57367099714341832\n应收",
+          "published": null,
+          "page": 20,
+          "cells": [],
+          "label_path": [
+            "资产负债表（百万元）",
+            "2024",
+            "2025",
+            "2026E",
+            "2027E",
+            "2028E",
+            "利润表（百万元）",
+            "现金及现金等价物 资产负债表（百万元）",
+            "现金及现金等价物 2024",
+            "现金及现金等价物 2025",
+            "现金及现金等价物 2026E",
+            "现金及现金等价物 2027E",
+            "现金及现金等价物 2028E",
+            "现金及现金等价物 利润表（百万元）",
+            "应收款项 资产负债表（百万元）",
+            "应收款项 2024",
+            "应收款项 2025",
+            "应收款项 2026E",
+            "应收款项 2027E",
+            "应收款项 2028E",
+            "应收款项 利润表（百万元）",
+            "存货净额 资产负债表（百万元）",
+            "存货净额 2024",
+            "存货净额 2025",
+            "存货净额 2026E",
+            "存货净额 2027E",
+            "存货净额 2028E",
+            "存货净额 利润表（百万元）",
+            "其他流动资产 资产负债表（百万元）",
+            "其他流动资产 2024",
+            "其他流动资产 2025",
+            "其他流动资产 2026E",
+            "其他流动资产 2027E",
+            "其他流动资产 2028E",
+            "其他流动资产 利润表（百万元）",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 资产负债表（百万元）",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2024",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2025",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2026E",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2027E",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 2028E",
+            "流动资产合计 1348 1377 1688 2357 2855 管理费用 利润表（百万元）",
+            "固定资产 资产负债表（百万元）",
+            "固定资产 2024",
+            "固定资产 2025",
+            "固定资产 2026E",
+            "固定资产 2027E",
+            "固定资产 2028E",
+            "固定资产 利润表（百万元）"
+          ],
+          "context_chunk_ids": [
+            "568f9e752f0fa65a:body:0032",
+            "568f9e752f0fa65a:body:0033",
+            "568f9e752f0fa65a:table:0019",
+            "568f9e752f0fa65a:body:0034",
+            "568f9e752f0fa65a:body:0035",
+            "568f9e752f0fa65a:body:0036",
+            "568f9e752f0fa65a:body:0037",
+            "568f9e752f0fa65a:body:0038",
+            "568f9e752f0fa65a:heading:0011",
+            "568f9e752f0fa65a:table:0020",
+            "568f9e752f0fa65a:table:0021",
+            "568f9e752f0fa65a:table:0022",
+            "568f9e752f0fa65a:table:0023",
+            "568f9e752f0fa65a:table:0024",
+            "568f9e752f0fa65a:table:0025",
+            "568f9e752f0fa65a:table:0026",
+            "568f9e752f0fa65a:table:0027"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "chunk_id": "6b55ddbbcfdc484d:body:0004",
+          "kind": "body",
+          "title_text": "### 大脑一 财务审计师",
+          "section_path": [
+            "## 第零步数据验证",
+            "## 五脑辩论",
+            "### 大脑一 财务审计师"
+          ],
+          "unit_refs": [
+            "unit:0013",
+            "unit:0014",
+            "unit:0015",
+            "unit:0016",
+            "unit:0017"
+          ],
+          "score": 0.01968178055734388,
+          "snippet": "<b>收入</b>一致，<b>审计</b>不否定「结构",
+          "published": null,
+          "page": null,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "6b55ddbbcfdc484d:body:0000",
+            "6b55ddbbcfdc484d:body:0001",
+            "6b55ddbbcfdc484d:body:0002",
+            "6b55ddbbcfdc484d:body:0003",
+            "6b55ddbbcfdc484d:heading:0000",
+            "6b55ddbbcfdc484d:body:0004",
+            "6b55ddbbcfdc484d:body:0005",
+            "6b55ddbbcfdc484d:body:0006",
+            "6b55ddbbcfdc484d:body:0007",
+            "6b55ddbbcfdc484d:body:0008",
+            "6b55ddbbcfdc484d:body:0009",
+            "6b55ddbbcfdc484d:table:0000",
+            "6b55ddbbcfdc484d:body:0010",
+            "6b55ddbbcfdc484d:list:0000",
+            "6b55ddbbcfdc484d:table:0001"
+          ],
+          "source_coverage": 2
+        },
+        {
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "chunk_id": "16a9a510ef9e405f:body:0008",
+          "kind": "body",
+          "title_text": "一、细分板块观点\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩",
+          "section_path": [
+            "扫码获取更多服务",
+            "一、细分板块观点",
+            "1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩"
+          ],
+          "unit_refs": [
+            "unit:0091"
+          ],
+          "score": 0.018656397090286693,
+          "snippet": "<b>收入</b>为1080亿美元（±2）",
+          "published": null,
+          "page": 5,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "16a9a510ef9e405f:heading:0004",
+            "16a9a510ef9e405f:body:0003",
+            "16a9a510ef9e405f:body:0004",
+            "16a9a510ef9e405f:body:0005",
+            "16a9a510ef9e405f:body:0006",
+            "16a9a510ef9e405f:body:0007",
+            "16a9a510ef9e405f:body:0008",
+            "16a9a510ef9e405f:body:0009",
+            "16a9a510ef9e405f:body:0010"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+          "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+          "chunk_id": "7ceca88433b092ae:body:0011",
+          "kind": "body",
+          "title_text": "3 行业新闻",
+          "section_path": [
+            "2.3%、1.1%、0.5%、-0.9%、-2.2%、-2.4%、-4.8%。",
+            "-10%",
+            "3 行业新闻"
+          ],
+          "unit_refs": [
+            "unit:0148",
+            "unit:0149",
+            "unit:0150",
+            "unit:0151",
+            "unit:0152",
+            "unit:0153",
+            "unit:0154",
+            "unit:0155",
+            "unit:0156",
+            "unit:0160"
+          ],
+          "score": 0.017751937984496126,
+          "snippet": "<b>收入</b>约20亿美元，并设定",
+          "published": null,
+          "page": 10,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "7ceca88433b092ae:body:0010",
+            "7ceca88433b092ae:body:0011",
+            "7ceca88433b092ae:body:0012",
+            "7ceca88433b092ae:body:0013",
+            "7ceca88433b092ae:heading:0003",
+            "7ceca88433b092ae:body:0014",
+            "7ceca88433b092ae:body:0015"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+          "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+          "chunk_id": "6b55ddbbcfdc484d:body:0013",
+          "kind": "body",
+          "title_text": "## 免责声明",
+          "section_path": [
+            "## 数据来源声明",
+            "## 数据完整性检查",
+            "## 免责声明"
+          ],
+          "unit_refs": [
+            "unit:0090",
+            "unit:0091"
+          ],
+          "score": 0.015866047911701993,
+          "snippet": "<b>收入</b>上加厚、经营现金流能否追",
+          "published": null,
+          "page": null,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "6b55ddbbcfdc484d:body:0011",
+            "6b55ddbbcfdc484d:table:0002",
+            "6b55ddbbcfdc484d:list:0001",
+            "6b55ddbbcfdc484d:body:0012",
+            "6b55ddbbcfdc484d:body:0013"
+          ],
+          "source_coverage": 2
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,309 @@
+{
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@f4c6473f5c13ff0cfbd60a779b427f45",
+    "processing": "scoped",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 22,
+      "published": 18,
+      "withdrawn": 0,
+      "pending": 0,
+      "failed_jobs": 0,
+      "builds": 46,
+      "published_with_gaps": 16
+    },
+    "retrieval": {
+      "requested": "hybrid",
+      "used": "lexical",
+      "reason": "vector_target_mismatch",
+      "elapsed_ms": 153
+    },
+    "ranking": {
+      "requested": "body-constraints-v1",
+      "used": "off",
+      "reason": "hybrid_unavailable"
+    }
+  },
+  "hits": [
+    {
+      "doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "locator": "chunk:668bac61a631636c:body:0001",
+      "title": "”",
+      "snippet": "<b>麒麟</b>2026的<b>芯片</b><b>晶体管</b>密度从约",
+      "score": 0.04320826837169241,
+      "published": "undated",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "chunk_id": "668bac61a631636c:body:0001",
+      "context_locators": [
+        "chunk:668bac61a631636c:heading:0000",
+        "chunk:668bac61a631636c:body:0001",
+        "chunk:668bac61a631636c:body:0002",
+        "chunk:668bac61a631636c:heading:0001"
+      ],
+      "scope_id": "scope:bad8fd2971f134d5ef70b289e90f9a2c",
+      "context_by_kind": [
+        [
+          "unknown",
+          4
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24",
+      "locator": "chunk:510f83c463db4121:body:0004",
+      "title": "510f83c463db4121:body:0004",
+      "snippet": "<b>芯片</b>性能提升与功耗提升成正",
+      "score": 0.01332941780258394,
+      "published": "undated",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24",
+      "chunk_id": "510f83c463db4121:body:0004",
+      "context_locators": [
+        "chunk:510f83c463db4121:body:0000",
+        "chunk:510f83c463db4121:body:0001",
+        "chunk:510f83c463db4121:body:0002",
+        "chunk:510f83c463db4121:body:0003",
+        "chunk:510f83c463db4121:body:0004",
+        "chunk:510f83c463db4121:body:0005"
+      ],
+      "scope_id": "scope:4813615be68fc0972421850791e8db62",
+      "context_by_kind": [
+        [
+          "unknown",
+          6
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:bbddcfe7ee8c592bb2551296fc524d8ae75dfbd8446285f9ba6ba82bbeb3a98c",
+      "locator": "chunk:bbddcfe7ee8c592b:body:0007",
+      "title": "图表9：本周涨跌幅后十",
+      "snippet": "<b>更多</b>信息\n披露。该公司目前",
+      "score": 0.03267032892165543,
+      "published": "undated",
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "bbddcfe7ee8c592bb2551296fc524d8ae75dfbd8446285f9ba6ba82bbeb3a98c",
+      "chunk_id": "bbddcfe7ee8c592b:body:0007",
+      "context_locators": [
+        "chunk:bbddcfe7ee8c592b:body:0000",
+        "chunk:bbddcfe7ee8c592b:body:0001",
+        "chunk:bbddcfe7ee8c592b:heading:0000",
+        "chunk:bbddcfe7ee8c592b:body:0002",
+        "chunk:bbddcfe7ee8c592b:body:0003",
+        "chunk:bbddcfe7ee8c592b:body:0004",
+        "chunk:bbddcfe7ee8c592b:heading:0001",
+        "chunk:bbddcfe7ee8c592b:body:0005",
+        "chunk:bbddcfe7ee8c592b:heading:0002",
+        "chunk:bbddcfe7ee8c592b:table:0000",
+        "chunk:bbddcfe7ee8c592b:body:0006",
+        "chunk:bbddcfe7ee8c592b:heading:0003",
+        "chunk:bbddcfe7ee8c592b:table:0001",
+        "chunk:bbddcfe7ee8c592b:body:0007",
+        "chunk:bbddcfe7ee8c592b:body:0008",
+        "chunk:bbddcfe7ee8c592b:body:0009",
+        "chunk:bbddcfe7ee8c592b:body:0010",
+        "chunk:bbddcfe7ee8c592b:body:0011",
+        "chunk:bbddcfe7ee8c592b:body:0012"
+      ],
+      "scope_id": "scope:0ad001eb1e86045137ab9a888ae62398",
+      "context_by_kind": [
+        [
+          "unknown",
+          19
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969",
+      "locator": "chunk:231ff3a07f5570e9:table:0006",
+      "title": "资料来源：Wind，平安证券研究所；数据截至2026/9/4，历史分位数统计区间为近十年",
+      "snippet": "<b>电子</b>行业<b>电子</b>\n<b>电子</b>-5.366.1",
+      "score": 1.0091102008271557,
+      "published": "undated",
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969",
+      "chunk_id": "231ff3a07f5570e9:table:0006",
+      "context_locators": [
+        "chunk:231ff3a07f5570e9:table:0005",
+        "chunk:231ff3a07f5570e9:table:0006",
+        "chunk:231ff3a07f5570e9:body:0025"
+      ],
+      "scope_id": "scope:e2430bc12994a34a0a12d46c9e730879",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+      "locator": "chunk:c520485162e66660:body:0009",
+      "title": "【行业重大事件】",
+      "snippet": "<b>更多</b>在本地安全运行强大智能体",
+      "score": 0.01569833721999244,
+      "published": "undated",
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+      "chunk_id": "c520485162e66660:body:0009",
+      "context_locators": [
+        "chunk:c520485162e66660:body:0006",
+        "chunk:c520485162e66660:body:0007",
+        "chunk:c520485162e66660:body:0008",
+        "chunk:c520485162e66660:body:0009",
+        "chunk:c520485162e66660:body:0010",
+        "chunk:c520485162e66660:body:0011",
+        "chunk:c520485162e66660:heading:0000"
+      ],
+      "scope_id": "scope:b0e240f28fdea08eeb70b111bc17e5fb",
+      "context_by_kind": [
+        [
+          "unknown",
+          7
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "locator": "chunk:668bac61a631636c:body:0011",
+      "title": "图表9：板块周涨跌幅排序（单位：%）（2026.08.31-2026.09.04）",
+      "snippet": "<b>电子</b>、LED、模拟<b>芯片</b>设计，",
+      "score": 0.016683488444120143,
+      "published": "undated",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "chunk_id": "668bac61a631636c:body:0011",
+      "context_locators": [
+        "chunk:668bac61a631636c:heading:0002",
+        "chunk:668bac61a631636c:heading:0003",
+        "chunk:668bac61a631636c:heading:0004",
+        "chunk:668bac61a631636c:body:0003",
+        "chunk:668bac61a631636c:body:0004",
+        "chunk:668bac61a631636c:body:0005",
+        "chunk:668bac61a631636c:body:0006",
+        "chunk:668bac61a631636c:body:0007",
+        "chunk:668bac61a631636c:body:0008",
+        "chunk:668bac61a631636c:body:0009",
+        "chunk:668bac61a631636c:body:0010",
+        "chunk:668bac61a631636c:heading:0005",
+        "chunk:668bac61a631636c:body:0011",
+        "chunk:668bac61a631636c:body:0012"
+      ],
+      "scope_id": "scope:0fb087d345bff8350b95a7e93d9d8bc2",
+      "context_by_kind": [
+        [
+          "unknown",
+          14
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24",
+      "locator": "chunk:510f83c463db4121:body:0008",
+      "title": "5",
+      "snippet": "<b>工作</b>由公司自主建造的大型甲板",
+      "score": 0.009110200827155792,
+      "published": "undated",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24",
+      "chunk_id": "510f83c463db4121:body:0008",
+      "context_locators": [
+        "chunk:510f83c463db4121:body:0007",
+        "chunk:510f83c463db4121:body:0008",
+        "chunk:510f83c463db4121:body:0009"
+      ],
+      "scope_id": "scope:130818666a7233b9fe5586ef737e24f7",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969",
+      "locator": "chunk:231ff3a07f5570e9:body:0002",
+      "title": "平安观点：",
+      "snippet": "<b>更多</b><b>芯片</b>制造企业落户美国本土建厂",
+      "score": 0.019861753001196122,
+      "published": "undated",
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969",
+      "chunk_id": "231ff3a07f5570e9:body:0002",
+      "context_locators": [
+        "chunk:231ff3a07f5570e9:heading:0000",
+        "chunk:231ff3a07f5570e9:body:0000",
+        "chunk:231ff3a07f5570e9:heading:0001",
+        "chunk:231ff3a07f5570e9:body:0001",
+        "chunk:231ff3a07f5570e9:body:0002",
+        "chunk:231ff3a07f5570e9:body:0003",
+        "chunk:231ff3a07f5570e9:heading:0002"
+      ],
+      "scope_id": "scope:5095d48f106aadddc1bc3cfad72be8e6",
+      "context_by_kind": [
+        [
+          "body",
+          1
+        ],
+        [
+          "unknown",
+          6
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+      "locator": "chunk:c520485162e66660:body:0000",
+      "title": "c520485162e66660:body:0000",
+      "snippet": "<b>工作</b>方面均达到当前最先进水平",
+      "score": 0.01332941780258394,
+      "published": "undated",
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+      "chunk_id": "c520485162e66660:body:0000",
+      "context_locators": [
+        "chunk:c520485162e66660:body:0000",
+        "chunk:c520485162e66660:body:0001"
+      ],
+      "scope_id": "scope:f35055357116da21a156921ee5e7a61a",
+      "context_by_kind": [
+        [
+          "unknown",
+          2
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24",
+      "locator": "chunk:510f83c463db4121:body:0012",
+      "title": "光伏：板块半年报整体呈现“景气底部夯实”状态，玻璃、胶膜、高效电池（尤其BC）等部分环节拐点或率先出现。",
+      "snippet": "<b>电子</b>。\n电力设备与工控：推荐",
+      "score": 0.006709425267595466,
+      "published": "undated",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24",
+      "chunk_id": "510f83c463db4121:body:0012",
+      "context_locators": [
+        "chunk:510f83c463db4121:body:0011",
+        "chunk:510f83c463db4121:body:0012",
+        "chunk:510f83c463db4121:body:0013"
+      ],
+      "scope_id": "scope:7a10f8db5f878ecab8eab8f754593cd6",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    }
+  ],
+  "model_calls": 0
+}

@@ -1,0 +1,371 @@
+{
+  "tools": [
+    {
+      "turn": 1,
+      "name": "corpus_search",
+      "args": {
+        "query": "麒麟 晶体管 省电"
+      },
+      "result": "{\"ok\": true, \"query\": \"麒麟 晶体管 省电\", \"count\": 4, \"hits\": [{\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locator\": \"chunk:16a9a510ef9e405f:body:0001\", \"source_id\": \"00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428\", \"build_id\": \"16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"chunk_id\": \"16a9a510ef9e405f:body:0001\", \"context_locators\": [\"chunk:16a9a510ef9e405f:heading:0000\", \"chunk:16a9a510ef9e405f:body:0001\", \"chunk:16a9a510ef9e405f:body:0002\"], \"fetch_plan\": {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locator\": \"chunk:16a9a510ef9e405f:body:0001\", \"locators\": [\"chunk:16a9a510ef9e405f:heading:0000\", \"chunk:16a9a510ef9e405f:body:0001\", \"chunk:16a9a510ef9e405f:body:0002\"], \"scope_id\": \"scope:b1d3d155993dfdabc21add9a156845ad\", \"view\": \"compact\"}, \"scope_id\": \"scope:b1d3d155993dfdabc21add9a156845ad\", \"total_chunks\": 3, \"by_kind\": {\"unknown\": 3}, \"table_chunks\": 0, \"title\": \"”\", \"published\": \"undated\", \"snippet\": \"<b>麒麟</b>2026的芯片<b>晶体管</b>密度从约\", \"preview\": {\"text\": \"”\\n投资逻辑 \\n\\n “韬定律”与业绩斜率：AI PCB 及半导体设备迎来布局良机。9 月4 日，华为半导体负责人何庭波在中科院科技\\n论文预发布平台ChinaXiv，再次发布相关论文《Huawei's τ Chip Was Supposed to Melt?》，提到热量是韬定律\\n最棘手的隐忧，而麒麟芯片实测结果，颠覆了这一质疑。数据显示，麒麟2026 的芯片晶体管密度从约每平方毫\\n米1.55 亿提升到2.38 亿个，跃升55%。在同等性能的测试条件下，对比前代平面架构麒麟9030 Pro，麒麟2026\\n的NPU 功耗下降66%，GPU 功耗下降58%，CPU 性能大核功耗下降41%，在晶体管数量暴涨的同时，完成同\\n等工作的芯片工作温度更低。论文解释了反常识的核心原因：芯片绝大部分能耗，并非消耗在晶体管本身的计算\\n运算上，而是消耗在金属走线的数据搬运，如同上班族通勤的能量消耗远大于工位办公。逻辑折叠大幅缩短信号\\n走线长度，直接削减占据功耗大头的互连电容开销。走线缩短带来电容层面的功耗缩减，同时走线变短后，电路\\n可以进一步降低工作电压；动态功耗与电压平方成正比，由此带来幅度更大的功耗收益。我们认为，华为韬定律\\n芯片从平面集成走向立体集成，工艺步骤、互连数量和制造复杂度同步提升，对半导体设备是积极利好，半导体\\n设备板块近期股价连续回撤，产业逻辑没有发生变化。\", \"start\": 0, \"end\": 585, \"status\": \"complete_sentence_window\", \"matched_terms\": [\"晶体管\", \"麒麟\"], \"citation_ready\": false}, \"core_fetch_plan\": {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locators\": [\"chunk:16a9a510ef9e405f:body:0001\"], \"view\": \"compact\"}, \"expansion\": {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locators\": [\"chunk:16a9a510ef9e405f:heading:0000\", \"chunk:16a9a510ef9e405f:body:0001\", \"chunk:16a9a510ef9e405f:body:0002\"], \"remaining_after_prior_full_expansions\": [\"chunk:16a9a510ef9e405f:heading:0000\", \"chunk:16a9a510ef9e405f:body:0001\", \"chunk:16a9a510ef9e405f:body:0002\"], \"view\": \"compact\", \"may_contain_additional_answer_parts\": true}, \"delivery_hint\": \"先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。\"}, {\"doc_id\": \"cv2:147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac\", \"locator\": \"chunk:147e841aab35836a:body:0010\", \"source_id\": \"cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128\", \"build_id\": \"147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac\", \"chunk_id\": \"147e841aab35836a:body:0010\", \"context_locators\": [\"chunk:147e841aab35836a:body:0009\", \"chunk:147e841aab35836a:body:0010\", \"chunk:147e841aab35836a:body:0011\"], \"fetch_plan\": {\"doc_id\": \"cv2:147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac\", \"locator\": \"chunk:147e841aab35836a:body:0010\", \"locators\": [\"chunk:147e841aab35836a:body:0009\", \"chunk:147e841aab35836a:body:0010\", \"chunk:147e841aab35836a:body:0011\"], \"scope_id\": \"scope:dc04d3129abdf8467bf3ce9b170bf0b5\", \"view\": \"compact\"}, \"scope_id\": \"scope:dc04d3129abdf8467bf3ce9b170bf0b5\", \"total_chunks\": 3, \"by_kind\": {\"body\": 1, \"unknown\": 2}, \"table_chunks\": 0, \"title\": \"宏观组团队介绍\", \"published\": \"undated\", \"snippet\": \"<b>麒麟</b>最佳分析师、上证报最佳宏观经济\", \"preview\": {\"text\": \"现任华创证券研究所副所\\n长、宏观经济研究主管、首席宏观分析师，曾任民生证券投资决策委员会委员、首席宏观分析师、资产配置与投资战\\n略研究中心负责人。目前还兼任中国人民大学国际货币研究所研究员，中国人民大学财税研究所兼职研究员，澳门城\\n市大学经济研究所特约研究员，中国金融四十人论坛（CF40）青年论坛会员，中国保险资产管理业协会资管百人。作\\n为首席带队连续多年获得资本市场奖项。2019 至2021 年，连续多年获新财富最佳分析师、水晶球最佳分析师、新浪金\\n麒麟最佳分析师、上证报最佳宏观经济分析师、金牛最具价值分析师、21 世纪金牌分析师、Wind 金牌分析师及路演领\\n军人物等奖项。2022 年最新获奖详情：新财富最佳分析师第三名、水晶球最佳分析师第二名、上证报最佳分析师第二、\\n中证报最佳分析师第二、新浪金麒麟最佳分析师第三。\\n组长、资深分析师：陆银波\\n研究方向：宏观政策、经济增长及行业比较。中国人民大学汉青研究院数量经济学硕士研究生，统计学院数学与经济\\n学双学士学位，CPA，2019 年加入华创证券研究所。曾任职于中信证券股权衍生品部、另类投资部，主要负责可转债\\n研究及大类资产配置，具有六年证券从业经历。凤凰卫视、第一财经等特约连线评论员，对外经济贸易大学特聘讲师。\\n作为核心成员，连续两年获得资本市场多个奖项，包括2020-2022 年新财富最佳分析师等。\", \"start\": 66, \"end\": 651, \"status\": \"complete_sentence_window\", \"matched_terms\": [\"麒麟\"], \"citation_ready\": false}, \"core_fetch_plan\": {\"doc_id\": \"cv2:147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac\", \"locators\": [\"chunk:147e841aab35836a:body:0010\"], \"view\": \"compact\"}, \"expansion\": {\"doc_id\": \"cv2:147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac\", \"locators\": [\"chunk:147e841aab35836a:body:0009\", \"chunk:147e841aab35836a:body:0010\", \"chunk:147e841aab35836a:body:0011\"], \"remaining_after_prior_full_expansions\": [\"chunk:147e841aab35836a:body:0009\", \"chunk:147e841aab35836a:body:0010\", \"chunk:147e841aab35836a:body:0011\"], \"view\": \"compact\", \"may_contain_additional_answer_parts\": true}, \"delivery_hint\": \"先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。\"}, {\"doc_id\": \"cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de\", \"locator\": \"chunk:2055995f24f1db3a:body:0010\", \"source_id\": \"987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a\", \"build_id\": \"2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de\", \"chunk_id\": \"2055995f24f1db3a:body:0010\", \"context_locators\": [\"chunk:2055995f24f1db3a:body:0009\", \"chunk:2055995f24f1db3a:body:0010\", \"chunk:2055995f24f1db3a:body:0011\"], \"fetch_plan\": {\"doc_id\": \"cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de\", \"locator\": \"chunk:2055995f24f1db3a:body:0010\", \"locators\": [\"chunk:2055995f24f1db3a:body:0009\", \"chunk:2055995f24f1db3a:body:0010\", \"chunk:2055995f24f1db3a:body:0011\"], \"scope_id\": \"scope:e939103e9458e777f2825bfc2a213428\", \"view\": \"compact\"}, \"scope_id\": \"scope:e939103e9458e777f2825bfc2a213428\", \"total_chunks\": 3, \"by_kind\": {\"unknown\": 3}, \"table_chunks\": 0, \"title\": \"【行业重大事件】\", \"published\": \"undated\", \"snippet\": \"<b>麒麟</b>操作系统和统信操作系统UOS，\", \"preview\": {\"text\": \"6）36 氪获悉，据腾讯安全消息，腾讯正式推出WorkBuddy 金融版，为保险、资管、银行等机构提供覆盖投研、合规、\\n客户经营、信贷尽调、财富资配等核心业务的技能矩阵与金融数据源及全链路安全可信底座。（36 氪） \\n7）36 氪获悉，9 月3 日，腾讯WorkBuddy 正式登陆银河麒麟操作系统和统信操作系统UOS，并上架其应用商店；同时\\n也上架了openKylin 社区和deepin 社区的软件商店。（36 氪） \\n8）继三周前发布Flash 3.7 之后，隆重推出 Gemini 3.8，在短短六周内发布的第三个 Flash 版本。Gemini 3.8 是\\n我们迄今为止性能最佳的推理和编码模型，速度和成本与 3.7 版本保持一致。Gemini 3.8 包含两个版本：Gemini \\n3.8 Flash：我们最智能的主力机型，在软件工程、智能体任务以及特定领域的关键多步骤推理方面，相比 3.7 \\nFlash 有了显著提升。它以同样的优惠价格发售。 3.7 Flash 的价格为每百万个输入代币 0.75 美元，每百万\\n个输出代币 3.75 美元。Gemini 3.8 Flash Cyber：我们功能最强大的网络安全模型，在漏洞检测和自动修补方\\n面具有前沿性能，可通过我们新的Fairwind 计划提供给受信任的防御者。\", \"start\": 0, \"end\": 566, \"status\": \"complete_sentence_window\", \"matched_terms\": [\"麒麟\"], \"citation_ready\": false}, \"core_fetch_plan\": {\"doc_id\": \"cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de\", \"locators\": [\"chunk:2055995f24f1db3a:body:0010\"], \"view\": \"compact\"}, \"expansion\": {\"doc_id\": \"cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de\", \"locators\": [\"chunk:2055995f24f1db3a:body:0009\", \"chunk:2055995f24f1db3a:body:0010\", \"chunk:2055995f24f1db3a:body:0011\"], \"remaining_after_prior_full_expansions\": [\"chunk:2055995f24f1db3a:body:0009\", \"chunk:2055995f24f1db3a:body:0010\", \"chunk:2055995f24f1db3a:body:0011\"], \"view\": \"compact\", \"may_contain_additional_answer_parts\": true}, \"delivery_hint\": \"先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。\"}, {\"doc_id\": \"cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745\", \"locator\": \"chunk:9fa4cd7cf1ab602a:body:0018\", \"source_id\": \"6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11\", \"build_id\": \"9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745\", \"chunk_id\": \"9fa4cd7cf1ab602a:body:0018\", \"context_locators\": [\"chunk:9fa4cd7cf1ab602a:body:0017\", \"chunk:9fa4cd7cf1ab602a:body:0018\", \"chunk:9fa4cd7cf1ab602a:table:0015\"], \"fetch_plan\": {\"doc_id\": \"cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745\", \"locator\": \"chunk:9fa4cd7cf1ab602a:body:0018\", \"locators\": [\"chunk:9fa4cd7cf1ab602a:body:0017\", \"chunk:9fa4cd7cf1ab602a:body:0018\", \"chunk:9fa4cd7cf1ab602a:table:0015\"], \"scope_id\": \"scope:669186c5046b71df24f5163bec25e402\", \"view\": \"compact\"}, \"scope_id\": \"scope:669186c5046b71df24f5163bec25e402\", \"total_chunks\": 3, \"by_kind\": {\"unknown\": 3}, \"table_chunks\": 0, \"title\": \"食品饮料组团队介绍\", \"published\": \"undated\", \"snippet\": \"<b>麒麟</b>、水晶球、上证报和21\", \"preview\": {\"text\": \"食品饮料组团队介绍\\n研究所所长助理、消费研究中心大组长、食品饮料首席分析师：欧阳予\\n浙江大学本科，荷兰伊拉斯姆斯大学研究型硕士，10 年食品饮料研究经验。曾任职于招商证券，2020 年加入华创证券。\\n2021-2024 年连续四届获新财富最佳分析师评选第一名，并多次获新浪金麒麟、水晶球、上证报和21 世纪金牌分析师\\n等最佳分析师评选第一名，2025 年获新财富最佳分析师评选第二名。\\n——酒类研究小组（白酒、啤酒、黄酒、红酒、新酒饮、酒类流通行业）\\n酒类研究小组组长、高级分析师：田晨曦\\n英国伯明翰大学硕士，2020 年加入华创证券研究所，5 年消费行业研究经验。\\n助理研究员：王培培\\n南开大学金融学硕士，2024 年加入华创证券研究所。\\n助理分析师：张慧\\n悉尼大学商学学士，蒙纳士大学银行与金融硕士。2019 年加入华创证券研究所。\\n——大众品研究组（软饮料、乳肉制品、休闲零食、功能食品、食品配料等）\\n大众品研究组组长、资深分析师：范子盼\\n中国人民大学硕士，7 年消费行业研究经验，曾任职于长江证券，2020 年加入华创证券研究所。\\n分析师：张恒玮\\n澳大利亚国立大学硕士，4 年食品饮料研究经验，曾任职于开源证券，2026 年加入华创证券研究所。\", \"start\": 0, \"end\": 526, \"status\": \"complete_sentence_window\", \"matched_terms\": [\"麒麟\"], \"citation_ready\": false}, \"core_fetch_plan\": {\"doc_id\": \"cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745\", \"locators\": [\"chunk:9fa4cd7cf1ab602a:body:0018\"], \"view\": \"compact\"}, \"expansion\": {\"doc_id\": \"cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745\", \"locators\": [\"chunk:9fa4cd7cf1ab602a:body:0017\", \"chunk:9fa4cd7cf1ab602a:body:0018\", \"chunk:9fa4cd7cf1ab602a:table:0015\"], \"remaining_after_prior_full_expansions\": [\"chunk:9fa4cd7cf1ab602a:body:0017\", \"chunk:9fa4cd7cf1ab602a:body:0018\", \"chunk:9fa4cd7cf1ab602a:table:0015\"], \"view\": \"compact\", \"may_contain_additional_answer_parts\": true}, \"delivery_hint\": \"先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。\"}], \"coverage\": {\"requested_scope_ref\": \"corpus_schema\", \"effective_scope_ref\": \"corpus_publications.active_build_id\", \"publication_snapshot_ref\": \"corpus_publications@48e8e60844f69177d5eb672a1d1b1010\", \"processing\": \"scoped\", \"query_status\": \"matched\", \"availability\": \"unknown\", \"reason_codes\": [\"partial_published\", \"gap_regions_present\"], \"counts\": {\"sources\": 22, \"published\": 18, \"withdrawn\": 0, \"pending\": 0, \"failed_jobs\": 0, \"builds\": 28, \"published_with_gaps\": 16}, \"retrieval\": {\"requested\": \"hybrid\", \"used\": \"lexical\", \"reason\": \"provider_transport_uncertain\", \"elapsed_ms\": 15178}}, \"hint\": \"preview 是选读预览，不是已取证引用。先用同一命中的 core_fetch_plan 调用 corpus_fetch；问题涉及多个对象、因果链或指代不完整时，再按 fetch_plan 扩展上下文。表格保留原范围以带齐表头、期间和单位。重复 locator 可在相同 doc_id 下去重；不同版本不可混用。\", \"delivery_preview\": \"pilot\"}",
+      "duration_ms": 15431,
+      "tool_call_id": "call_7553c14c130e4ac3aae63e0f",
+      "is_error": false,
+      "interrupted": false
+    },
+    {
+      "turn": 1,
+      "name": "corpus_search",
+      "args": {
+        "query": "国金电子 麒麟芯片"
+      },
+      "result": "{\"ok\": true, \"query\": \"国金电子 麒麟芯片\", \"count\": 10, \"hits\": [{\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0004\", \"source_id\": \"3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e\", \"build_id\": \"022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"chunk_id\": \"022ae1713fb760ff:body:0004\", \"context_locators\": [\"chunk:022ae1713fb760ff:body:0000\", \"chunk:022ae1713fb760ff:body:0001\", \"chunk:022ae1713fb760ff:body:0002\", \"chunk:022ae1713fb760ff:body:0003\", \"chunk:022ae1713fb760ff:body:0004\", \"chunk:022ae1713fb760ff:body:0005\", \"chunk:022ae1713fb760ff:body:0006\", \"chunk:022ae1713fb760ff:body:0007\", \"chunk:022ae1713fb760ff:body:0008\", \"chunk:022ae1713fb760ff:body:0009\"], \"fetch_plan\": {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0004\", \"locators\": [\"chunk:022ae1713fb760ff:body:0000\", \"chunk:022ae1713fb760ff:body:0001\", \"chunk:022ae1713fb760ff:body:0002\", \"chunk:022ae1713fb760ff:body:0003\", \"chunk:022ae1713fb760ff:body:0004\", \"chunk:022ae1713fb760ff:body:0005\", \"chunk:022ae1713fb760ff:body:0006\", \"chunk:022ae1713fb760ff:body:0007\", \"chunk:022ae1713fb760ff:body:0008\", \"chunk:022ae1713fb760ff:body:0009\"], \"scope_id\": \"scope:9ed2380c6fc4063c2cf86aa175daca83\", \"view\": \"compact\"}, \"scope_id\": \"scope:9ed2380c6fc4063c2cf86aa175daca83\", \"total_chunks\": 10, \"by_kind\": {\"body\": 1, \"unknown\": 9}, \"table_chunks\": 0, \"title\": \"022ae1713fb760ff:body:0004\", \"published\": \"undated\", \"snippet\": \"<b>芯片</b>性能提升与功耗提升成正\", \"preview\": {\"text\": \"液冷作为数据中心基础设施建设的重要组成，整体板块情绪及相关标的将会持续受益于三大底层逻辑：1）海外大厂\\nCapex 维持高增速；2）芯片性能提升与功耗提升成正相关；3）算力的尽头是电力。国内企业后续在全球液冷产业链\\n中的份额提升值得持续重视，投资建议： \\n1）长期逻辑强且环节格局好：申菱环境、冰轮环境、飞龙股份、英维克、鑫磊股份、大元泵业、领益智造； \\n2）短期盈利及放量确定性强的环节：金田股份、金富科技、五洋自控； \\n3）三季度订单及业绩有望放量的企业：科创新源、捷邦科技、强瑞技术、胜蓝股份、川润股份、同飞股份、奕东电\\n子、高澜股份、鸿富瀚、兴瑞科技、蓝思科技、思泉新材、腾龙股份等； \\n4）重视新技术发展方向：建议关注 四方达、沃尔德、黄河旋风 等； \\n5）受益于全球液冷产业链扩张的相关设备标的：建议关注 津上机床中国、创世纪、乔峰智能、宁波精达 等。 \\n储能：国家新兴产业发展示范基地名单落地，新型储能制造进入国家级新兴产业示范体系；河南容量补偿与跨省交易\\n机制持续完善，独立储能经济性改善；印度等新兴市场需求提速，AIDC打开长时储能新增量；持续看好储能板块当\\n前阶段的配置机会。 \\n国家新兴产业发展示范基地名单落地，新型储能制造进入国家级新兴产业示范体系，产业政策进一步由规模扩张向技\\n术创新和高质量制造倾斜。\", \"start\": 124, \"end\": 688, \"status\": \"complete_sentence_window\", \"matched_terms\": [\"电子\", \"芯片\"], \"citation_ready\": false}, \"core_fetch_plan\": {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locators\": [\"chunk:022ae1713fb760ff:body:0004\"], \"view\": \"compact\"}, \"expansion\": {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locators\": [\"chunk:022ae1713fb760ff:body:0000\", \"chunk:022ae1713fb760ff:body:0001\", \"chunk:022ae1713fb760ff:body:0002\", \"chunk:022ae1713fb760ff:body:0003\", \"chunk:022ae1713fb760ff:body:0004\", \"chunk:022ae1713fb760ff:body:0005\", \"chunk:022ae1713fb760ff:body:0006\", \"chunk:022ae1713fb760ff:body:0007\", \"chunk:022ae1713fb760ff:body:0008\", \"chunk:022ae1713fb760ff:body:0009\"], \"remaining_after_prior_full_expansions\": [\"chunk:022ae1713fb760ff:body:0000\", \"chunk:022ae1713fb760ff:body:0001\", \"chunk:022ae1713fb760ff:body:0002\", \"chunk:022ae1713fb760ff:body:0003\", \"chunk:022ae1713fb760ff:body:0004\", \"chunk:022ae1713fb760ff:body:0005\", \"chunk:022ae1713fb760ff:body:0006\", \"chunk:022ae1713fb760ff:body:0007\", \"chunk:022ae1713fb760ff:body:0008\", \"chunk:022ae1713fb760ff:body:0009\"], \"view\": \"compact\", \"may_contain_additional_answer_parts\": true}, \"delivery_hint\": \"先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。\"}, {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locator\": \"chunk:16a9a510ef9e405f:body:0001\", \"source_id\": \"00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428\", \"build_id\": \"16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"chunk_id\": \"16a9a510ef9e405f:body:0001\", \"context_locators\": [\"chunk:16a9a510ef9e405f:heading:0000\", \"chunk:16a9a510ef9e405f:body:0001\", \"chunk:16a9a510ef9e405f:body:0002\", \"chunk:16a9a510ef9e405f:heading:0001\"], \"fetch_plan\": {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locator\": \"chunk:16a9a510ef9e405f:body:0001\", \"locators\": [\"chunk:16a9a510ef9e405f:heading:0000\", \"chunk:16a9a510ef9e405f:body:0001\", \"chunk:16a9a510ef9e405f:body:0002\", \"chunk:16a9a510ef9e405f:heading:0001\"], \"scope_id\": \"scope:f8d03cba8edacc7c5dcdf316c3c361ca\", \"view\": \"compact\"}, \"scope_id\": \"scope:f8d03cba8edacc7c5dcdf316c3c361ca\", \"total_chunks\": 4, \"by_kind\": {\"unknown\": 4}, \"table_chunks\": 0, \"title\": \"”\", \"published\": \"undated\", \"snippet\": \"<b>麒麟</b><b>芯片</b>实测结果，颠覆了这\", \"preview\": {\"text\": \"”\\n投资逻辑 \\n\\n “韬定律”与业绩斜率：AI PCB 及半导体设备迎来布局良机。9 月4 日，华为半导体负责人何庭波在中科院科技\\n论文预发布平台ChinaXiv，再次发布相关论文《Huawei's τ Chip Was Supposed to Melt?》，提到热量是韬定律\\n最棘手的隐忧，而麒麟芯片实测结果，颠覆了这一质疑。数据显示，麒麟2026 的芯片晶体管密度从约每平方毫\\n米1.55 亿提升到2.38 亿个，跃升55%。在同等性能的测试条件下，对比前代平面架构麒麟9030 Pro，麒麟2026\\n的NPU 功耗下降66%，GPU 功耗下降58%，CPU 性能大核功耗下降41%，在晶体管数量暴涨的同时，完成同\\n等工作的芯片工作温度更低。论文解释了反常识的核心原因：芯片绝大部分能耗，并非消耗在晶体管本身的计算\\n运算上，而是消耗在金属走线的数据搬运，如同上班族通勤的能量消耗远大于工位办公。逻辑折叠大幅缩短信号\\n走线长度，直接削减占据功耗大头的互连电容开销。走线缩短带来电容层面的功耗缩减，同时走线变短后，电路\\n可以进一步降低工作电压；动态功耗与电压平方成正比，由此带来幅度更大的功耗收益。我们认为，华为韬定律\\n芯片从平面集成走向立体集成，工艺步骤、互连数量和制造复杂度同步提升，对半导体设备是积极利好，半导体\\n设备板块近期股价连续回撤，产业逻辑没有发生变化。\", \"start\": 0, \"end\": 585, \"status\": \"complete_sentence_window\", \"matched_terms\": [\"芯片\", \"麒麟\"], \"citation_ready\": false}, \"core_fetch_plan\": {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locators\": [\"chunk:16a9a510ef9e405f:body:0001\"], \"view\": \"compact\"}, \"expansion\": {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locators\": [\"chunk:16a9a510ef9e405f:heading:0000\", \"chunk:16a9a510ef9e405f:body:0001\", \"chunk:16a9a510ef9e405f:body:0002\", \"chunk:16a9a510ef9e405f:heading:0001\"], \"remaining_after_prior_full_expansions\": [\"chunk:16a9a510ef9e405f:heading:0000\", \"chunk:16a9a510ef9e405f:body:0001\", \"chunk:16a9a510ef9e405f:body:0002\", \"chunk:16a9a510ef9e405f:heading:0001\"], \"view\": \"compact\", \"may_contain_additional_answer_parts\": true}, \"delivery_hint\": \"先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。\"}, {\"doc_id\": \"cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de\", \"locator\": \"chunk:2055995f24f1db3a:body:0010\", \"source_id\": \"987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a\", \"build_id\": \"2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de\", \"chunk_id\": \"2055995f24f1db3a:body:0010\", \"context_locators\": [\"chunk:2055995f24f1db3a:body:0000\", \"chunk:2055995f24f1db3a:body:0001\", \"chunk:2055995f24f1db3a:body:0002\", \"chunk:2055995f24f1db3a:body:0003\", \"chunk:2055995f24f1db3a:body:0004\", \"chunk:2055995f24f1db3a:body:0005\", \"chunk:2055995f24f1db3a:body:0006\", \"chunk:2055995f24f1db3a:body:0007\", \"chunk:2055995f24f1db3a:body:0008\", \"chunk:2055995f24f1db3a:body:0009\", \"chunk:2055995f24f1db3a:body:0010\", \"chunk:2055995f24f1db3a:body:0011\", \"chunk:2055995f24f1db3a:body:0012\", \"chunk:2055995f24f1db3a:heading:0000\", \"chunk:2055995f24f1db3a:body:0013\", \"chunk:2055995f24f1db3a:body:0014\"], \"fetch_plan\": {\"doc_id\": \"cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de\", \"locator\": \"chunk:2055995f24f1db3a:body:0010\", \"locators\": [\"chunk:2055995f24f1db3a:body:0000\", \"chunk:2055995f24f1db3a:body:0001\", \"chunk:2055995f24f1db3a:body:0002\", \"chunk:2055995f24f1db3a:body:0003\", \"chunk:2055995f24f1db3a:body:0004\", \"chunk:2055995f24f1db3a:body:0005\", \"chunk:2055995f24f1db3a:body:0006\", \"chunk:2055995f24f1db3a:body:0007\", \"chunk:2055995f24f1db3a:body:0008\", \"chunk:2055995f24f1db3a:body:0009\", \"chunk:2055995f24f1db3a:body:0010\", \"chunk:2055995f24f1db3a:body:0011\", \"chunk:2055995f24f1db3a:body:0012\", \"chunk:2055995f24f1db3a:heading:0000\", \"chunk:2055995f24f1db3a:body:0013\", \"chunk:2055995f24f1db3a:body:0014\"], \"scope_id\": \"scope:d0cf62c2d99e72685eef7bf2a8810d15\", \"view\": \"compact\"}, \"scope_id\": \"scope:d0cf62c2d99e72685eef7bf2a8810d15\", \"total_chunks\": 16, \"by_kind\": {\"unknown\": 16}, \"table_chunks\": 0, \"title\": \"【行业重大事件】\", \"published\": \"undated\", \"snippet\": \"<b>麒麟</b>操作系统和统信操作系统UOS，\", \"preview\": {\"text\": \"6）36 氪获悉，据腾讯安全消息，腾讯正式推出WorkBuddy 金融版，为保险、资管、银行等机构提供覆盖投研、合规、\\n客户经营、信贷尽调、财富资配等核心业务的技能矩阵与金融数据源及全链路安全可信底座。（36 氪） \\n7）36 氪获悉，9 月3 日，腾讯WorkBuddy 正式登陆银河麒麟操作系统和统信操作系统UOS，并上架其应用商店；同时\\n也上架了openKylin 社区和deepin 社区的软件商店。（36 氪） \\n8）继三周前发布Flash 3.7 之后，隆重推出 Gemini 3.8，在短短六周内发布的第三个 Flash 版本。Gemini 3.8 是\\n我们迄今为止性能最佳的推理和编码模型，速度和成本与 3.7 版本保持一致。Gemini 3.8 包含两个版本：Gemini \\n3.8 Flash：我们最智能的主力机型，在软件工程、智能体任务以及特定领域的关键多步骤推理方面，相比 3.7 \\nFlash 有了显著提升。它以同样的优惠价格发售。 3.7 Flash 的价格为每百万个输入代币 0.75 美元，每百万\\n个输出代币 3.75 美元。Gemini 3.8 Flash Cyber：我们功能最强大的网络安全模型，在漏洞检测和自动修补方\\n面具有前沿性能，可通过我们新的Fairwind 计划提供给受信任的防御者。\", \"start\": 0, \"end\": 566, \"status\": \"complete_sentence_window\", \"matched_terms\": [\"麒麟\"], \"citation_ready\": false}, \"core_fetch_plan\": {\"doc_id\": \"cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de\", \"locators\": [\"chunk:2055995f24f1db3a:body:0010\"], \"view\": \"compact\"}, \"expansion\": {\"doc_id\": \"cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de\", \"locators\": [\"chunk:2055995f24f1db3a:body:0000\", \"chunk:2055995f24f1db3a:body:0001\", \"chunk:2055995f24f1db3a:body:0002\", \"chunk:2055995f24f1db3a:body:0003\", \"chunk:2055995f24f1db3a:body:0004\", \"chunk:2055995f24f1db3a:body:0005\", \"chunk:2055995f24f1db3a:body:0006\", \"chunk:2055995f24f1db3a:body:0007\", \"chunk:2055995f24f1db3a:body:0008\", \"chunk:2055995f24f1db3a:body:0009\", \"chunk:2055995f24f1db3a:body:0010\", \"chunk:2055995f24f1db3a:body:0011\", \"chunk:2055995f24f1db3a:body:0012\", \"chunk:2055995f24f1db3a:heading:0000\", \"chunk:2055995f24f1db3a:body:0013\", \"chunk:2055995f24f1db3a:body:0014\"], \"remaining_after_prior_full_expansions\": [\"chunk:2055995f24f1db3a:body:0000\", \"chunk:2055995f24f1db3a:body:0001\", \"chunk:2055995f24f1db3a:body:0002\", \"chunk:2055995f24f1db3a:body:0003\", \"chunk:2055995f24f1db3a:body:0004\", \"chunk:2055995f24f1db3a:body:0005\", \"chunk:2055995f24f1db3a:body:0006\", \"chunk:2055995f24f1db3a:body:0007\", \"chunk:2055995f24f1db3a:body:0008\", \"chunk:2055995f24f1db3a:body:0009\", \"chunk:2055995f24f1db3a:body:0010\", \"chunk:2055995f24f1db3a:body:0011\", \"chunk:2055995f24f1db3a:body:0012\", \"chunk:2055995f24f1db3a:heading:0000\", \"chunk:2055995f24f1db3a:body:0013\", \"chunk:2055995f24f1db3a:body:0014\"], \"view\": \"compact\", \"may_contain_additional_answer_parts\": true}, \"delivery_hint\": \"先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。\"}, {\"doc_id\": \"cv2:1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31\", \"locator\": \"chunk:1d0117eb6e17c63c:body:0002\", \"source_id\": \"f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560\", \"build_id\": \"1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31\", \"chunk_id\": \"1d0117eb6e17c63c:body:0002\", \"context_locators\": [\"chunk:1d0117eb6e17c63c:body:0000\", \"chunk:1d0117eb6e17c63c:body:0001\", \"chunk:1d0117eb6e17c63c:heading:0000\", \"chunk:1d0117eb6e17c63c:body:0002\", \"chunk:1d0117eb6e17c63c:body:0003\", \"chunk:1d0117eb6e17c63c:body:0004\", \"chunk:1d0117eb6e17c63c:heading:0001\", \"chunk:1d0117eb6e17c63c:body:0005\", \"chunk:1d0117eb6e17c63c:heading:0002\", \"chunk:1d0117eb6e17c63c:table:0000\", \"chunk:1d0117eb6e17c63c:body:0006\", \"chunk:1d0117eb6e17c63c:heading:0003\", \"chunk:1d0117eb6e17c63c:table:0001\", \"chunk:1d0117eb6e17c63c:body:0007\", \"chunk:1d0117eb6e17c63c:body:0008\", \"chunk:1d0117eb6e17c63c:body:0009\", \"chunk:1d0117eb6e17c63c:body:0010\", \"chunk:1d0117eb6e17c63c:body:0011\", \"chunk:1d0117eb6e17c63c:body:0012\", \"chunk:1d0117eb6e17c63c:table:0002\", \"chunk:1d0117eb6e17c63c:table:0003\", \"chunk:1d0117eb6e17c63c:body:0013\", \"chunk:1d0117eb6e17c63c:body:0014\"], \"fetch_plan\": {\"doc_id\": \"cv2:1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31\", \"locator\": \"chunk:1d0117eb6e17c63c:body:0002\", \"locators\": [\"chunk:1d0117eb6e17c63c:body:0000\", \"chunk:1d0117eb6e17c63c:body:0001\", \"chunk:1d0117eb6e17c63c:heading:0000\", \"chunk:1d0117eb6e17c63c:body:0002\", \"chunk:1d0117eb6e17c63c:body:0003\", \"chunk:1d0117eb6e17c63c:body:0004\", \"chunk:1d0117eb6e17c63c:heading:0001\", \"chunk:1d0117eb6e17c63c:body:0005\", \"chunk:1d0117eb6e17c63c:heading:0002\", \"chunk:1d0117eb6e17c63c:table:0000\", \"chunk:1d0117eb6e17c63c:body:0006\", \"chunk:1d0117eb6e17c63c:heading:0003\", \"chunk:1d0117eb6e17c63c:table:0001\", \"chunk:1d0117eb6e17c63c:body:0007\", \"chunk:1d0117eb6e17c63c:body:0008\", \"chunk:1d0117eb6e17c63c:body:0009\", \"chunk:1d0117eb6e17c63c:body:0010\", \"chunk:1d0117eb6e17c63c:body:0011\", \"chunk:1d0117eb6e17c63c:body:0012\", \"chunk:1d0117eb6e17c63c:table:0002\", \"chunk:1d0117eb6e17c63c:table:0003\", \"chunk:1d0117eb6e17c63c:body:0013\", \"chunk:1d0117eb6e17c63c:body:0014\"], \"scope_id\": \"scope:320ea9cd2511da1e2ace1b50288aa1d8\", \"view\": \"compact\"}, \"scope_id\": \"scope:320ea9cd2511da1e2ace1b50288aa1d8\", \"total_chunks\": 23, \"by_kind\": {\"unknown\": 23}, \"table_chunks\": 0, \"title\": \"基础化工\\n新材料周报：英伟达带火“新材料”，电子特气\\n涨幅超240%\\n投资要点：\", \"published\": \"undated\", \"snippet\": \"<b>电子</b>特气领域十余年，不断\", \"preview\": {\"text\": \"建议关注：半导体材料国产化加速，下游晶圆厂扩产迅猛，关注头部企业\\n产业红利优势最大化。光刻胶板块为我国自主可控之路上关键核心环节，关注\\n彤程新材在进口替代方面的高速进展。特气方面，华特气体深耕电子特气领域\\n十余年，不断创新研发，实现进口替代，西南基地叠加空分设备双重布局，一\\n体化产业链版图初显，建议关注华特气体。电子化学品方面，下游晶圆厂逐步\\n落成，芯片产能有望持续释放，建议关注：安集科技、鼎龙股份。下游需求推\\n动产业升级和革新，行业迈入高速发展期。国内持续推进制造升级，高标准、\\n高性能材料需求将逐步释放，新材料产业有望快速发展。国瓷材料三大业务保\\n持高增速，有条不紊打造齿科巨头，新能源业务爆发式增长，横向拓展、纵向\\n延伸打造新材料巨擘，建议关注新材料平台型公司国瓷材料。高分子材料的性\\n能提升离不开高分子助剂，国内抗老化剂龙头利安隆，珠海新基地产能逐步释\\n放，凭借康泰股份，进军千亿润滑油添加剂，打造第二增长点，建议关注国内\\n抗老化剂龙头利安隆。碳中和背景下，绿电行业蓬勃发展，光伏风电装机量逐\\n渐攀升，建议关注上游原材料金属硅龙头企业合盛硅业、EVA 粒子技术行业领\\n先的联泓新科、拥有三氯氢硅产能的新安股份以及三孚股份。\", \"start\": 0, \"end\": 517, \"status\": \"complete_sentence_window\", \"matched_terms\": [\"电子\", \"芯片\"], \"citation_ready\": false}, \"core_fetch_plan\": {\"doc_id\": \"cv2:1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31\", \"locators\": [\"chunk:1d0117eb6e17c63c:body:0002\"], \"view\": \"compact\"}, \"expansion\": {\"doc_id\": \"cv2:1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31\", \"locators\": [\"chunk:1d0117eb6e17c63c:body:0000\", \"chunk:1d0117eb6e17c63c:body:0001\", \"chunk:1d0117eb6e17c63c:heading:0000\", \"chunk:1d0117eb6e17c63c:body:0002\", \"chunk:1d0117eb6e17c63c:body:0003\", \"chunk:1d0117eb6e17c63c:body:0004\", \"chunk:1d0117eb6e17c63c:heading:0001\", \"chunk:1d0117eb6e17c63c:body:0005\", \"chunk:1d0117eb6e17c63c:heading:0002\", \"chunk:1d0117eb6e17c63c:table:0000\", \"chunk:1d0117eb6e17c63c:body:0006\", \"chunk:1d0117eb6e17c63c:heading:0003\", \"chunk:1d0117eb6e17c63c:table:0001\", \"chunk:1d0117eb6e17c63c:body:0007\", \"chunk:1d0117eb6e17c63c:body:0008\", \"chunk:1d0117eb6e17c63c:body:0009\", \"chunk:1d0117eb6e17c63c:body:0010\", \"chunk:1d0117eb6e17c63c:body:0011\", \"chunk:1d0117eb6e17c63c:body:0012\", \"chunk:1d0117eb6e17c63c:table:0002\", \"chunk:1d0117eb6e17c63c:table:0003\", \"chunk:1d0117eb6e17c63c:body:0013\", \"chunk:1d0117eb6e17c63c:body:0014\"], \"remaining_after_prior_full_expansions\": [\"chunk:1d0117eb6e17c63c:body:0000\", \"chunk:1d0117eb6e17c63c:body:0001\", \"chunk:1d0117eb6e17c63c:heading:0000\", \"chunk:1d0117eb6e17c63c:body:0002\", \"chunk:1d0117eb6e17c63c:body:0003\", \"chunk:1d0117eb6e17c63c:body:0004\", \"chunk:1d0117eb6e17c63c:heading:0001\", \"chunk:1d0117eb6e17c63c:body:0005\", \"chunk:1d0117eb6e17c63c:heading:0002\", \"chunk:1d0117eb6e17c63c:table:0000\", \"chunk:1d0117eb6e17c63c:body:0006\", \"chunk:1d0117eb6e17c63c:heading:0003\", \"chunk:1d0117eb6e17c63c:table:0001\", \"chunk:1d0117eb6e17c63c:body:0007\", \"chunk:1d0117eb6e17c63c:body:0008\", \"chunk:1d0117eb6e17c63c:body:0009\", \"chunk:1d0117eb6e17c63c:body:0010\", \"chunk:1d0117eb6e17c63c:body:0011\", \"chunk:1d0117eb6e17c63c:body:0012\", \"chunk:1d0117eb6e17c63c:table:0002\", \"chunk:1d0117eb6e17c63c:table:0003\", \"chunk:1d0117eb6e17c63c:body:0013\", \"chunk:1d0117eb6e17c63c:body:0014\"], \"view\": \"compact\", \"may_contain_additional_answer_parts\": true}, \"delivery_hint\": \"先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。\"}, {\"doc_id\": \"cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"locator\": \"chunk:568f9e752f0fa65a:body:0017\", \"source_id\": \"dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa\", \"build_id\": \"568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"chunk_id\": \"568f9e752f0fa65a:body:0017\", \"context_locators\": [\"chunk:568f9e752f0fa65a:table:0014\", \"chunk:568f9e752f0fa65a:body:0016\", \"chunk:568f9e752f0fa65a:body:0017\", \"chunk:568f9e752f0fa65a:body:0018\", \"chunk:568f9e752f0fa65a:heading:0006\"], \"fetch_plan\": {\"doc_id\": \"cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"locator\": \"chunk:568f9e752f0fa65a:body:0017\", \"locators\": [\"chunk:568f9e752f0fa65a:table:0014\", \"chunk:568f9e752f0fa65a:body:0016\", \"chunk:568f9e752f0fa65a:body:0017\", \"chunk:568f9e752f0fa65a:body:0018\", \"chunk:568f9e752f0fa65a:heading:0006\"], \"scope_id\": \"scope:64fff266b74f2e0f9d57ade604136245\", \"view\": \"compact\"}, \"scope_id\": \"scope:64fff266b74f2e0f9d57ade604136245\", \"total_chunks\": 5, \"by_kind\": {\"unknown\": 5}, \"table_chunks\": 0, \"title\": \"半导体划片机转入放量进程,煤矿业务企稳\", \"published\": \"undated\", \"snippet\": \"<b>芯片</b>与存储器市场扩张。WSTS数据\", \"preview\": {\"text\": \"半导体划片机转入放量进程,煤矿业务企稳\\n半导体行业需求增长,国产划片机仍处渗透初期\\nAI 需求与先进封装升级推动行业进入新一轮增长周期。高性能计算、数据中心、\\nAIPC、AI 手机和智能汽车等领域需求加速释放，带动逻辑芯片与存储器市场扩张。\\nWSTS 数据显示，2025 年全球半导体销售额达到7,956 亿美元，同比增长26.2%，\\n预计2026 年市场规模有望接近万亿美元。与此同时,异构集成、Chiplet 和HBM\\n成为提升芯片性能的重要路径，推动晶圆及封装体向更薄、更复杂和更高集成度\\n发展，对切割精度、减薄能力和设备稳定性提出更高要求。2025 年，全球硅晶圆\\n出货量增长5.8%至129.73 亿平方英寸，划切、研磨和抛光设备市场需求有望持\\n续提升。\\n全球高端划片机市场长期由海外厂商主导。日本DISCO、东京精密等海外厂商市\\n场占有率极高。由于半导体划切设备直接影响芯片性能、良率与生产成本，对精\\n度、稳定性和效率要求高，国产设备通常需要经历较长时间的测试验证和小批量\\n导入，因此国产目前替代仍处于由验证向批量采购过渡的阶段。\\n图5：全球半导体行业需求增长\\n图9：全球硅晶圆出货量增长\\n资料来源：WSTS，国信证券经济研究所整理\\n资料来源：公司年报，国信证券经济研究所整理\\n公司国产划片机已经进入头部封测客户并开始逐步放量。\", \"start\": 0, \"end\": 570, \"status\": \"complete_sentence_window\", \"matched_terms\": [\"芯片\"], \"citation_ready\": false}, \"core_fetch_plan\": {\"doc_id\": \"cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"locators\": [\"chunk:568f9e752f0fa65a:body:0017\"], \"view\": \"compact\"}, \"expansion\": {\"doc_id\": \"cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"locators\": [\"chunk:568f9e752f0fa65a:table:0014\", \"chunk:568f9e752f0fa65a:body:0016\", \"chunk:568f9e752f0fa65a:body:0017\", \"chunk:568f9e752f0fa65a:body:0018\", \"chunk:568f9e752f0fa65a:heading:0006\"], \"remaining_after_prior_full_expansions\": [\"chunk:568f9e752f0fa65a:table:0014\", \"chunk:568f9e752f0fa65a:body:0016\", \"chunk:568f9e752f0fa65a:body:0017\", \"chunk:568f9e752f0fa65a:body:0018\", \"chunk:568f9e752f0fa65a:heading:0006\"], \"view\": \"compact\", \"may_contain_additional_answer_parts\": true}, \"delivery_hint\": \"先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。\"}, {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0004\", \"source_id\": \"3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e\", \"build_id\": \"022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"chunk_id\": \"022ae1713fb760ff:body:0004\", \"context_locators\": [\"chunk:022ae1713fb760ff:body:0001\", \"chunk:022ae1713fb760ff:body:0002\", \"chunk:022ae1713fb760ff:body:0003\", \"chunk:022ae1713fb760ff:body:0004\", \"chunk:022ae1713fb760ff:body:0005\"], \"fetch_plan\": {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0004\", \"locators\": [\"chunk:022ae1713fb760ff:body:0001\", \"chunk:022ae1713fb760ff:body:0002\", \"chunk:022ae1713fb760ff:body:0003\", \"chunk:022ae1713fb760ff:body:0004\", \"chunk:022ae1713fb760ff:body:0005\"], \"scope_id\": \"scope:aa99797e4275336e6947714639ee97f0\", \"view\": \"compact\"}, \"scope_id\": \"scope:aa99797e4275336e6947714639ee97f0\", \"total_chunks\": 5, \"by_kind\": {\"unknown\": 5}, \"table_chunks\": 0, \"title\": \"022ae1713fb760ff:body:0004\", \"published\": \"undated\", \"snippet\": \"<b>芯片</b>性能提升与功耗提升成正\", \"preview\": {\"text\": \"液冷作为数据中心基础设施建设的重要组成，整体板块情绪及相关标的将会持续受益于三大底层逻辑：1）海外大厂\\nCapex 维持高增速；2）芯片性能提升与功耗提升成正相关；3）算力的尽头是电力。国内企业后续在全球液冷产业链\\n中的份额提升值得持续重视，投资建议： \\n1）长期逻辑强且环节格局好：申菱环境、冰轮环境、飞龙股份、英维克、鑫磊股份、大元泵业、领益智造； \\n2）短期盈利及放量确定性强的环节：金田股份、金富科技、五洋自控； \\n3）三季度订单及业绩有望放量的企业：科创新源、捷邦科技、强瑞技术、胜蓝股份、川润股份、同飞股份、奕东电\\n子、高澜股份、鸿富瀚、兴瑞科技、蓝思科技、思泉新材、腾龙股份等； \\n4）重视新技术发展方向：建议关注 四方达、沃尔德、黄河旋风 等； \\n5）受益于全球液冷产业链扩张的相关设备标的：建议关注 津上机床中国、创世纪、乔峰智能、宁波精达 等。 \\n储能：国家新兴产业发展示范基地名单落地，新型储能制造进入国家级新兴产业示范体系；河南容量补偿与跨省交易\\n机制持续完善，独立储能经济性改善；印度等新兴市场需求提速，AIDC打开长时储能新增量；持续看好储能板块当\\n前阶段的配置机会。 \\n国家新兴产业发展示范基地名单落地，新型储能制造进入国家级新兴产业示范体系，产业政策进一步由规模扩张向技\\n术创新和高质量制造倾斜。\", \"start\": 124, \"end\": 688, \"status\": \"complete_sentence_window\", \"matched_terms\": [\"电子\", \"芯片\"], \"citation_ready\": false}, \"core_fetch_plan\": {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locators\": [\"chunk:022ae1713fb760ff:body:0004\"], \"view\": \"compact\"}, \"expansion\": {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locators\": [\"chunk:022ae1713fb760ff:body:0001\", \"chunk:022ae1713fb760ff:body:0002\", \"chunk:022ae1713fb760ff:body:0003\", \"chunk:022ae1713fb760ff:body:0004\", \"chunk:022ae1713fb760ff:body:0005\"], \"remaining_after_prior_full_expansions\": [], \"view\": \"compact\", \"may_contain_additional_answer_parts\": true}, \"delivery_hint\": \"先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。\"}, {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locator\": \"chunk:16a9a510ef9e405f:body:0011\", \"source_id\": \"00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428\", \"build_id\": \"16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"chunk_id\": \"16a9a510ef9e405f:body:0011\", \"context_locators\": [\"chunk:16a9a510ef9e405f:heading:0003\", \"chunk:16a9a510ef9e405f:heading:0004\", \"chunk:16a9a510ef9e405f:body:0003\", \"chunk:16a9a510ef9e405f:body:0004\", \"chunk:16a9a510ef9e405f:body:0005\", \"chunk:16a9a510ef9e405f:body:0006\", \"chunk:16a9a510ef9e405f:body:0007\", \"chunk:16a9a510ef9e405f:body:0008\", \"chunk:16a9a510ef9e405f:body:0009\", \"chunk:16a9a510ef9e405f:body:0010\", \"chunk:16a9a510ef9e405f:heading:0005\", \"chunk:16a9a510ef9e405f:body:0011\", \"chunk:16a9a510ef9e405f:body:0012\"], \"fetch_plan\": {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locator\": \"chunk:16a9a510ef9e405f:body:0011\", \"locators\": [\"chunk:16a9a510ef9e405f:heading:0003\", \"chunk:16a9a510ef9e405f:heading:0004\", \"chunk:16a9a510ef9e405f:body:0003\", \"chunk:16a9a510ef9e405f:body:0004\", \"chunk:16a9a510ef9e405f:body:0005\", \"chunk:16a9a510ef9e405f:body:0006\", \"chunk:16a9a510ef9e405f:body:0007\", \"chunk:16a9a510ef9e405f:body:0008\", \"chunk:16a9a510ef9e405f:body:0009\", \"chunk:16a9a510ef9e405f:body:0010\", \"chunk:16a9a510ef9e405f:heading:0005\", \"chunk:16a9a510ef9e405f:body:0011\", \"chunk:16a9a510ef9e405f:body:0012\"], \"scope_id\": \"scope:15228c5974b006fc41e9afd624b4c639\", \"view\": \"compact\"}, \"scope_id\": \"scope:15228c5974b006fc41e9afd624b4c639\", \"total_chunks\": 13, \"by_kind\": {\"unknown\": 13}, \"table_chunks\": 0, \"title\": \"图表9：板块周涨跌幅排序（单位：%）（2026.08.31-2026.09.04）\", \"published\": \"undated\", \"snippet\": \"<b>电子</b>、LED、模拟<b>芯片</b>设计，\", \"preview\": {\"text\": \"图表9：板块周涨跌幅排序（单位：%）（2026.08.31-2026.09.04） \\n来源：Wind，国金证券研究所 \\n在电子细分板块中，涨跌幅前三大细分板块为品牌消费电子、LED、模拟芯片设计，涨跌幅分别为2.18%、-0.51%、\\n-1.39%。涨跌幅靠后的三大细分板块为半导体设备、半导体材料、电子化学品III，涨跌幅分别为-9.10%、-9.12%、-\\n9.18%。\\n图表10：申万二级电子细分板块周涨跌幅（单位：%）\\n（2026.08.31-2026.09.04） \\n图表11：申万三级电子细分板块周涨跌幅（单位：%）\\n（2026.08.31-2026.09.04） \\n来源：Wind，国金证券研究所 \\n来源：Wind，国金证券研究所 \\n从个股情况来看，08.31-09.04，鸿富瀚、爱克股份、捷荣技术、灿瑞科技、领先股份为涨幅前五大公司，涨幅分别为\\n26.55%、24.91%、22.61%、19.65%、18.84%。跌幅前五为中科飞测、华亚智能、燕东微、菲沃泰、经纬辉开跌幅\\n分别为-17.33%、-17.43%、-17.97%、-18.92%、-21.95%。\", \"start\": 0, \"end\": 490, \"status\": \"complete_sentence_window\", \"matched_terms\": [\"电子\", \"芯片\"], \"citation_ready\": false}, \"core_fetch_plan\": {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locators\": [\"chunk:16a9a510ef9e405f:body:0011\"], \"view\": \"compact\"}, \"expansion\": {\"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"locators\": [\"chunk:16a9a510ef9e405f:heading:0003\", \"chunk:16a9a510ef9e405f:heading:0004\", \"chunk:16a9a510ef9e405f:body:0003\", \"chunk:16a9a510ef9e405f:body:0004\", \"chunk:16a9a510ef9e405f:body:0005\", \"chunk:16a9a510ef9e405f:body:0006\", \"chunk:16a9a510ef9e405f:body:0007\", \"chunk:16a9a510ef9e405f:body:0008\", \"chunk:16a9a510ef9e405f:body:0009\", \"chunk:16a9a510ef9e405f:body:0010\", \"chunk:16a9a510ef9e405f:heading:0005\", \"chunk:16a9a510ef9e405f:body:0011\", \"chunk:16a9a510ef9e405f:body:0012\"], \"remaining_after_prior_full_expansions\": [\"chunk:16a9a510ef9e405f:heading:0003\", \"chunk:16a9a510ef9e405f:heading:0004\", \"chunk:16a9a510ef9e405f:body:0003\", \"chunk:16a9a510ef9e405f:body:0004\", \"chunk:16a9a510ef9e405f:body:0005\", \"chunk:16a9a510ef9e405f:body:0006\", \"chunk:16a9a510ef9e405f:body:0007\", \"chunk:16a9a510ef9e405f:body:0008\", \"chunk:16a9a510ef9e405f:body:0009\", \"chunk:16a9a510ef9e405f:body:0010\", \"chunk:16a9a510ef9e405f:heading:0005\", \"chunk:16a9a510ef9e405f:body:0011\", \"chunk:16a9a510ef9e405f:body:0012\"], \"view\": \"compact\", \"may_contain_additional_answer_parts\": true}, \"delivery_hint\": \"先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。\"}, {\"doc_id\": \"cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de\", \"locator\": \"chunk:2055995f24f1db3a:body:0010\", \"source_id\": \"987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a\", \"build_id\": \"2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de\", \"chunk_id\": \"2055995f24f1db3a:body:0010\", \"context_locators\": [\"chunk:2055995f24f1db3a:body:0009\", \"chunk:2055995f24f1db3a:body:0010\", \"chunk:2055995f24f1db3a:body:0011\"], \"fetch_plan\": {\"doc_id\": \"cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de\", \"locator\": \"chunk:2055995f24f1db3a:body:0010\", \"locators\": [\"chunk:2055995f24f1db3a:body:0009\", \"chunk:2055995f24f1db3a:body:0010\", \"chunk:2055995f24f1db3a:body:0011\"], \"scope_id\": \"scope:e939103e9458e777f2825bfc2a213428\", \"view\": \"compact\"}, \"scope_id\": \"scope:e939103e9458e777f2825bfc2a213428\", \"total_chunks\": 3, \"by_kind\": {\"unknown\": 3}, \"table_chunks\": 0, \"title\": \"【行业重大事件】\", \"published\": \"undated\", \"snippet\": \"<b>麒麟</b>操作系统和统信操作系统UOS，\", \"preview\": {\"text\": \"6）36 氪获悉，据腾讯安全消息，腾讯正式推出WorkBuddy 金融版，为保险、资管、银行等机构提供覆盖投研、合规、\\n客户经营、信贷尽调、财富资配等核心业务的技能矩阵与金融数据源及全链路安全可信底座。（36 氪） \\n7）36 氪获悉，9 月3 日，腾讯WorkBuddy 正式登陆银河麒麟操作系统和统信操作系统UOS，并上架其应用商店；同时\\n也上架了openKylin 社区和deepin 社区的软件商店。（36 氪） \\n8）继三周前发布Flash 3.7 之后，隆重推出 Gemini 3.8，在短短六周内发布的第三个 Flash 版本。Gemini 3.8 是\\n我们迄今为止性能最佳的推理和编码模型，速度和成本与 3.7 版本保持一致。Gemini 3.8 包含两个版本：Gemini \\n3.8 Flash：我们最智能的主力机型，在软件工程、智能体任务以及特定领域的关键多步骤推理方面，相比 3.7 \\nFlash 有了显著提升。它以同样的优惠价格发售。 3.7 Flash 的价格为每百万个输入代币 0.75 美元，每百万\\n个输出代币 3.75 美元。Gemini 3.8 Flash Cyber：我们功能最强大的网络安全模型，在漏洞检测和自动修补方\\n面具有前沿性能，可通过我们新的Fairwind 计划提供给受信任的防御者。\", \"start\": 0, \"end\": 566, \"status\": \"complete_sentence_window\", \"matched_terms\": [\"麒麟\"], \"citation_ready\": false}, \"core_fetch_plan\": {\"doc_id\": \"cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de\", \"locators\": [\"chunk:2055995f24f1db3a:body:0010\"], \"view\": \"compact\"}, \"expansion\": {\"doc_id\": \"cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de\", \"locators\": [\"chunk:2055995f24f1db3a:body:0009\", \"chunk:2055995f24f1db3a:body:0010\", \"chunk:2055995f24f1db3a:body:0011\"], \"remaining_after_prior_full_expansions\": [], \"view\": \"compact\", \"may_contain_additional_answer_parts\": true}, \"delivery_hint\": \"先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。\"}, {\"doc_id\": \"cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"locator\": \"chunk:568f9e752f0fa65a:body:0017\", \"source_id\": \"dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa\", \"build_id\": \"568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"chunk_id\": \"568f9e752f0fa65a:body:0017\", \"context_locators\": [\"chunk:568f9e752f0fa65a:body:0016\", \"chunk:568f9e752f0fa65a:body:0017\", \"chunk:568f9e752f0fa65a:body:0018\"], \"fetch_plan\": {\"doc_id\": \"cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"locator\": \"chunk:568f9e752f0fa65a:body:0017\", \"locators\": [\"chunk:568f9e752f0fa65a:body:0016\", \"chunk:568f9e752f0fa65a:body:0017\", \"chunk:568f9e752f0fa65a:body:0018\"], \"scope_id\": \"scope:cc1a72ecb5d7737520fcc5cdfa191696\", \"view\": \"compact\"}, \"scope_id\": \"scope:cc1a72ecb5d7737520fcc5cdfa191696\", \"total_chunks\": 3, \"by_kind\": {\"unknown\": 3}, \"table_chunks\": 0, \"title\": \"半导体划片机转入放量进程,煤矿业务企稳\", \"published\": \"undated\", \"snippet\": \"<b>芯片</b>与存储器市场扩张。WSTS数据\", \"preview\": {\"text\": \"半导体划片机转入放量进程,煤矿业务企稳\\n半导体行业需求增长,国产划片机仍处渗透初期\\nAI 需求与先进封装升级推动行业进入新一轮增长周期。高性能计算、数据中心、\\nAIPC、AI 手机和智能汽车等领域需求加速释放，带动逻辑芯片与存储器市场扩张。\\nWSTS 数据显示，2025 年全球半导体销售额达到7,956 亿美元，同比增长26.2%，\\n预计2026 年市场规模有望接近万亿美元。与此同时,异构集成、Chiplet 和HBM\\n成为提升芯片性能的重要路径，推动晶圆及封装体向更薄、更复杂和更高集成度\\n发展，对切割精度、减薄能力和设备稳定性提出更高要求。2025 年，全球硅晶圆\\n出货量增长5.8%至129.73 亿平方英寸，划切、研磨和抛光设备市场需求有望持\\n续提升。\\n全球高端划片机市场长期由海外厂商主导。日本DISCO、东京精密等海外厂商市\\n场占有率极高。由于半导体划切设备直接影响芯片性能、良率与生产成本，对精\\n度、稳定性和效率要求高，国产设备通常需要经历较长时间的测试验证和小批量\\n导入，因此国产目前替代仍处于由验证向批量采购过渡的阶段。\\n图5：全球半导体行业需求增长\\n图9：全球硅晶圆出货量增长\\n资料来源：WSTS，国信证券经济研究所整理\\n资料来源：公司年报，国信证券经济研究所整理\\n公司国产划片机已经进入头部封测客户并开始逐步放量。\", \"start\": 0, \"end\": 570, \"status\": \"complete_sentence_window\", \"matched_terms\": [\"芯片\"], \"citation_ready\": false}, \"core_fetch_plan\": {\"doc_id\": \"cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"locators\": [\"chunk:568f9e752f0fa65a:body:0017\"], \"view\": \"compact\"}, \"expansion\": {\"doc_id\": \"cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea\", \"locators\": [\"chunk:568f9e752f0fa65a:body:0016\", \"chunk:568f9e752f0fa65a:body:0017\", \"chunk:568f9e752f0fa65a:body:0018\"], \"remaining_after_prior_full_expansions\": [], \"view\": \"compact\", \"may_contain_additional_answer_parts\": true}, \"delivery_hint\": \"先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。\"}, {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0012\", \"source_id\": \"3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e\", \"build_id\": \"022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"chunk_id\": \"022ae1713fb760ff:body:0012\", \"context_locators\": [\"chunk:022ae1713fb760ff:table:0000\", \"chunk:022ae1713fb760ff:body:0010\", \"chunk:022ae1713fb760ff:body:0011\", \"chunk:022ae1713fb760ff:body:0012\", \"chunk:022ae1713fb760ff:body:0013\", \"chunk:022ae1713fb760ff:body:0014\", \"chunk:022ae1713fb760ff:body:0015\", \"chunk:022ae1713fb760ff:heading:0000\", \"chunk:022ae1713fb760ff:heading:0001\", \"chunk:022ae1713fb760ff:body:0016\"], \"fetch_plan\": {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locator\": \"chunk:022ae1713fb760ff:body:0012\", \"locators\": [\"chunk:022ae1713fb760ff:table:0000\", \"chunk:022ae1713fb760ff:body:0010\", \"chunk:022ae1713fb760ff:body:0011\", \"chunk:022ae1713fb760ff:body:0012\", \"chunk:022ae1713fb760ff:body:0013\", \"chunk:022ae1713fb760ff:body:0014\", \"chunk:022ae1713fb760ff:body:0015\", \"chunk:022ae1713fb760ff:heading:0000\", \"chunk:022ae1713fb760ff:heading:0001\", \"chunk:022ae1713fb760ff:body:0016\"], \"scope_id\": \"scope:94fcd9e783d01e3ef58814d136aa64fe\", \"view\": \"compact\"}, \"scope_id\": \"scope:94fcd9e783d01e3ef58814d136aa64fe\", \"total_chunks\": 10, \"by_kind\": {\"unknown\": 10}, \"table_chunks\": 0, \"title\": \"光伏：板块半年报整体呈现“景气底部夯实”状态，玻璃、胶膜、高效电池（尤其BC）等部分环节拐点或率先出现。\", \"published\": \"undated\", \"snippet\": \"<b>电子</b>。\\n电力设备与工控：推荐\", \"preview\": {\"text\": \"此外，当前内资工控企业密集卡位人形机器人赛道，核心聚焦电机/驱动器/编码\\n器等环节，开辟第二增长曲线，我们看好工控企业人形机器人卡位优势，建议关注：汇川技术、信捷电气、伟创电气、\\n雷赛智能等。 \\n风电：推荐：运达股份、金风科技、明阳智能、三一重能、大金重工、东方电缆、日月股份、海力风电，建议关\\n注：金雷股份、中际联合、中天科技、中材科技。 \\n光伏：推荐：阳光电源、信义光能、钧达股份、福莱特（A/H）、聚和材料、阿特斯、通威股份、天合光能、晶澳\\n科技、TCL 中环、高测股份、奥特维、捷佳伟创、晶科能源、隆基绿能、金晶科技、林洋能源、迈为股份、信义能源，\\n建议关注：爱旭股份、协鑫科技、大全能源（A/美）、宇邦新材、正泰电器、锦浪科技、固德威、禾迈股份、昱能科技、\\n双良节能、新特能源、海优新材。 \\n储能：推荐：阳光电源、阿特斯、盛弘股份、林洋能源、科士达，建议关注：南都电源、上能电气、科陆电子。 \\n电力设备与工控：推荐：思源电气、三星医疗，建议关注：海兴电力、金盘科技、国能日新、东方电子、国电南\\n瑞、国网信通、安科瑞、望变电气、汇川技术、南网科技、四方股份、伊戈尔、宏发股份、许继电气。 \\n氢能：推荐：科威尔，建议关注：富瑞特装、华光环能、华电科工、昇辉科技、石化机械、厚普股份、亿华通、\\n国鸿氢能、京城股份、致远新能、蜀道装备。\", \"start\": 660, \"end\": 1229, \"status\": \"complete_sentence_window\", \"matched_terms\": [\"电子\"], \"citation_ready\": false}, \"core_fetch_plan\": {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locators\": [\"chunk:022ae1713fb760ff:body:0012\"], \"view\": \"compact\"}, \"expansion\": {\"doc_id\": \"cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef\", \"locators\": [\"chunk:022ae1713fb760ff:table:0000\", \"chunk:022ae1713fb760ff:body:0010\", \"chunk:022ae1713fb760ff:body:0011\", \"chunk:022ae1713fb760ff:body:0012\", \"chunk:022ae1713fb760ff:body:0013\", \"chunk:022ae1713fb760ff:body:0014\", \"chunk:022ae1713fb760ff:body:0015\", \"chunk:022ae1713fb760ff:heading:0000\", \"chunk:022ae1713fb760ff:heading:0001\", \"chunk:022ae1713fb760ff:body:0016\"], \"remaining_after_prior_full_expansions\": [\"chunk:022ae1713fb760ff:table:0000\", \"chunk:022ae1713fb760ff:body:0010\", \"chunk:022ae1713fb760ff:body:0011\", \"chunk:022ae1713fb760ff:body:0012\", \"chunk:022ae1713fb760ff:body:0013\", \"chunk:022ae1713fb760ff:body:0014\", \"chunk:022ae1713fb760ff:body:0015\", \"chunk:022ae1713fb760ff:heading:0000\", \"chunk:022ae1713fb760ff:heading:0001\", \"chunk:022ae1713fb760ff:body:0016\"], \"view\": \"compact\", \"may_contain_additional_answer_parts\": true}, \"delivery_hint\": \"先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。\"}], \"coverage\": {\"requested_scope_ref\": \"corpus_schema\", \"effective_scope_ref\": \"corpus_publications.active_build_id\", \"publication_snapshot_ref\": \"corpus_publications@48e8e60844f69177d5eb672a1d1b1010\", \"processing\": \"scoped\", \"query_status\": \"matched\", \"availability\": \"unknown\", \"reason_codes\": [\"partial_published\", \"gap_regions_present\"], \"counts\": {\"sources\": 22, \"published\": 18, \"withdrawn\": 0, \"pending\": 0, \"failed_jobs\": 0, \"builds\": 28, \"published_with_gaps\": 16}, \"retrieval\": {\"requested\": \"hybrid\", \"used\": \"hybrid\", \"reason\": null, \"profile\": \"fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107\", \"expected_chunks\": 703, \"ready_chunks\": 703, \"lexical_candidates\": 59, \"vector_candidates\": 200, \"query_cache_hit\": false, \"query_usage\": {\"prompt_tokens\": 36, \"total_tokens\": 36}, \"elapsed_ms\": 449}}, \"hint\": \"preview 是选读预览，不是已取证引用。先用同一命中的 core_fetch_plan 调用 corpus_fetch；问题涉及多个对象、因果链或指代不完整时，再按 fetch_plan 扩展上下文。表格保留原范围以带齐表头、期间和单位。重复 locator 可在相同 doc_id 下去重；不同版本不可混用。\", \"delivery_preview\": \"pilot\"}",
+      "duration_ms": 694,
+      "tool_call_id": "call_c87a025df0fc45e5ae64a6ba",
+      "is_error": false,
+      "interrupted": false
+    },
+    {
+      "turn": 2,
+      "name": "corpus_fetch",
+      "args": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0000",
+          "chunk:16a9a510ef9e405f:body:0000",
+          "chunk:16a9a510ef9e405f:body:0001"
+        ],
+        "view": "compact"
+      },
+      "result": "{\"ok\": true, \"schema_version\": 1, \"cursor_type\": \"content\", \"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"build_id\": \"16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"scope_id\": \"scope:df15eb5d195ea26dd0ac509201eb2d9b\", \"view\": \"compact\", \"items\": [{\"locator\": \"chunk:16a9a510ef9e405f:heading:0000\", \"chunk_id\": \"16a9a510ef9e405f:heading:0000\", \"kind\": \"heading\", \"build_id\": \"16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"text\": \"“\", \"pages\": [1], \"fragment\": null, \"text_chars\": 1, \"text_sha256\": \"45ca84540972d0c19cd6d5eac039033507694fc50152fa1cb83938155fae9903\", \"structure_status\": \"unknown\", \"content_role\": \"heading_only\", \"relations\": [], \"relation_status\": \"unknown\"}, {\"locator\": \"chunk:16a9a510ef9e405f:body:0000\", \"chunk_id\": \"16a9a510ef9e405f:body:0000\", \"kind\": \"body\", \"build_id\": \"16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"text\": \"敬请参阅最后一页特别声明\\n1 \", \"pages\": [1], \"fragment\": null, \"text_chars\": 15, \"text_sha256\": \"9fe21b6369d1d4c96ca28c244db00ae432acf4e33a4e828c4ec90a25bda57596\", \"structure_status\": \"unknown\", \"content_role\": \"content\", \"relations\": [], \"relation_status\": \"unknown\"}, {\"locator\": \"chunk:16a9a510ef9e405f:body:0001\", \"chunk_id\": \"16a9a510ef9e405f:body:0001\", \"kind\": \"body\", \"build_id\": \"16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"text\": \"”\\n投资逻辑 \\n\\n “韬定律”与业绩斜率：AI PCB 及半导体设备迎来布局良机。9 月4 日，华为半导体负责人何庭波在中科院科技\\n论文预发布平台ChinaXiv，再次发布相关论文《Huawei's τ Chip Was Supposed to Melt?》，提到热量是韬定律\\n最棘手的隐忧，而麒麟芯片实测结果，颠覆了这一质疑。数据显示，麒麟2026 的芯片晶体管密度从约每平方毫\\n米1.55 亿提升到2.38 亿个，跃升55%。在同等性能的测试条件下，对比前代平面架构麒麟9030 Pro，麒麟2026\\n的NPU 功耗下降66%，GPU 功耗下降58%，CPU 性能大核功耗下降41%，在晶体管数量暴涨的同时，完成同\\n等工作的芯片工作温度更低。论文解释了反常识的核心原因：芯片绝大部分能耗，并非消耗在晶体管本身的计算\\n运算上，而是消耗在金属走线的数据搬运，如同上班族通勤的能量消耗远大于工位办公。逻辑折叠大幅缩短信号\\n走线长度，直接削减占据功耗大头的互连电容开销。走线缩短带来电容层面的功耗缩减，同时走线变短后，电路\\n可以进一步降低工作电压；动态功耗与电压平方成正比，由此带来幅度更大的功耗收益。我们认为，华为韬定律\\n芯片从平面集成走向立体集成，工艺步骤、互连数量和制造复杂度同步提升，对半导体设备是积极利好，半导体\\n设备板块近期股价连续回撤，产业逻辑没有发生变化。国内晶圆厂扩产加速、先进芯片工艺升级、存储芯片扩产\\n加速、国产设备份额提升继续兑现，当前位置建议积极抄底半导体设备板块。前道设备受益于国内存储、先进逻\\n辑扩产，韬定律有望加速下游扩产节奏，刻蚀、薄膜沉积、涂胶显影及键合设备等需求全面增加。后道测试是韬\\n定律更直接的增量方向。芯片堆叠层数和互连数量增加，测试复杂度、测试时长及良率管理要求同步提升，芯片\\nCoT 倍数级提升，带动ATE、分选机、探针台、SLT 和老化设备需求量增长。继续看好AI 覆铜板/PCB 方向，下\\n半年PCB有望开启新品拉货和盈利修复的双重利好。我们认为从三季度开始PCB的业绩斜率有望启动加速，\\nPCB有望成为最亮眼的板块，核心原因在于：1)AI高端新品已经开始出货。根据产业链跟踪，我们观察到部分\\nAI高端新品已在7月底实现出货，最晚的料号也有望在8月中旬实现量产，至今年年底都有望保持爆满状态，\\nPCB 作为AI 敞口最大的环节，将显著受益；2)PCB 价格开始传导。上半年中上游涨价到PCB 端后，PCB 未完\\n全将涨价的部分向客户传导，但我们观察到这一情况正在积极改善，从产业链跟踪角度下半年PCB盈利水平有\\n望进一步提升，推高环节的加速斜率。\\n投资建议与估值 \\n\", \"pages\": [1], \"fragment\": null, \"text_chars\": 1109, \"text_sha256\": \"6f64ad3eca6da2d3465f057c9215b8aadbd4b7c247479dc17d5e1b51ee099c20\", \"structure_status\": \"unknown\", \"content_role\": \"content\", \"relations\": [{\"target_locator\": null, \"target_kind\": \"heading\", \"target_heading\": \"”\", \"relation\": \"caption_of\", \"status\": \"candidate\", \"basis\": \"title_text_without_member_heading\"}], \"relation_status\": \"candidate\"}], \"item_errors\": [], \"unresolved\": [], \"next_cursor\": null, \"exhausted\": true, \"fetch_complete\": true, \"page_id\": \"fpage:e0a701ba8015467d\", \"hint\": \"本页 items 是取回的正文（可能为整块或分片）；quote 必须逐字取自 item.text。ok=false 表示本次没有取回任何权威正文；fetch_complete=false 表示仍有未解决项或分页未结束；这两种状态下都不得把 items 当作完整证据。分片用 fragment.start/end 标注**本块 text 内**的 Unicode 码点区间，text_sha256/text_chars 是整块内容身份，可用于校验分片确来自该块。续取用 next_cursor；exhausted 只表示这轮遍历到终点——有失败项时 fetch_complete 仍为 false 且见 unresolved，不得把游标前移当作已取全。kind=heading 的 item content_role=heading_only（只证明标题被取回）；relations 是本次请求范围内的结构关联（verified／candidate 严格分开）。\"}",
+      "duration_ms": 260,
+      "tool_call_id": "call_23d324e660ba434b972195aa",
+      "is_error": false,
+      "interrupted": false
+    },
+    {
+      "turn": 3,
+      "name": "corpus_fetch",
+      "args": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0005",
+          "chunk:16a9a510ef9e405f:body:0010",
+          "chunk:16a9a510ef9e405f:body:0011",
+          "chunk:16a9a510ef9e405f:body:0012"
+        ],
+        "view": "compact"
+      },
+      "result": "{\"ok\": true, \"schema_version\": 1, \"cursor_type\": \"content\", \"doc_id\": \"cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"build_id\": \"16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"scope_id\": \"scope:e77aeafc695a8c2addda7b6cef7741e9\", \"view\": \"compact\", \"items\": [{\"locator\": \"chunk:16a9a510ef9e405f:heading:0005\", \"chunk_id\": \"16a9a510ef9e405f:heading:0005\", \"kind\": \"heading\", \"build_id\": \"16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"text\": \"敬请参阅最后一页特别声明\\n6 \", \"pages\": [6], \"fragment\": null, \"text_chars\": 15, \"text_sha256\": \"3d9f79cf7cd4114eace7e89356820651a5ca5cc28d827077d8526dea32df6912\", \"structure_status\": \"unknown\", \"content_role\": \"heading_only\", \"relations\": [], \"relation_status\": \"unknown\"}, {\"locator\": \"chunk:16a9a510ef9e405f:body:0010\", \"chunk_id\": \"16a9a510ef9e405f:body:0010\", \"kind\": \"body\", \"build_id\": \"16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"text\": \"三、板块行情回顾 \\n回顾本周行情，参考申万一级行业划分，涨跌幅前三名的行业分别为传媒、银行、农林牧渔，涨跌幅分别为6.03%、\\n4.03%、3.34%。涨跌幅后三位为建筑材料、有色金属、电子，涨跌幅分别为-4.26%、-5.01%、-5.36%。本周电子行\\n业涨跌幅为-5.36%。\", \"pages\": [5], \"fragment\": null, \"text_chars\": 141, \"text_sha256\": \"f0042342bb99ec7818ccef521ff078f4e8f0487a8e342fc15ca88f985cf1939d\", \"structure_status\": \"unknown\", \"content_role\": \"content\", \"relations\": [{\"target_locator\": null, \"target_kind\": \"heading\", \"target_heading\": \"一、细分板块观点\\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩\", \"relation\": \"caption_of\", \"status\": \"candidate\", \"basis\": \"title_text_without_member_heading\"}], \"relation_status\": \"candidate\"}, {\"locator\": \"chunk:16a9a510ef9e405f:body:0011\", \"chunk_id\": \"16a9a510ef9e405f:body:0011\", \"kind\": \"body\", \"build_id\": \"16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"text\": \"图表9：板块周涨跌幅排序（单位：%）（2026.08.31-2026.09.04） \\n来源：Wind，国金证券研究所 \\n在电子细分板块中，涨跌幅前三大细分板块为品牌消费电子、LED、模拟芯片设计，涨跌幅分别为2.18%、-0.51%、\\n-1.39%。涨跌幅靠后的三大细分板块为半导体设备、半导体材料、电子化学品III，涨跌幅分别为-9.10%、-9.12%、-\\n9.18%。\\n图表10：申万二级电子细分板块周涨跌幅（单位：%）\\n（2026.08.31-2026.09.04） \\n图表11：申万三级电子细分板块周涨跌幅（单位：%）\\n（2026.08.31-2026.09.04） \\n来源：Wind，国金证券研究所 \\n来源：Wind，国金证券研究所 \\n从个股情况来看，08.31-09.04，鸿富瀚、爱克股份、捷荣技术、灿瑞科技、领先股份为涨幅前五大公司，涨幅分别为\\n26.55%、24.91%、22.61%、19.65%、18.84%。跌幅前五为中科飞测、华亚智能、燕东微、菲沃泰、经纬辉开跌幅\\n分别为-17.33%、-17.43%、-17.97%、-18.92%、-21.95%。\\n-6\\n-4\\n-2\\n0\\n2\\n4\\n6\\n8\\n传媒(申万) 银行(申万) 农林牧渔(申万) 国防军工(申万) 商贸零售(申万) 非银金融(申万) 食品饮料(申万) 美容护理(申万) 社会服务(申万) 家用电器(申万) 轻工制造(申万) 计算机(申万) 公用事业(申万) 交通运输(申万) 纺织服饰(申万) 汽车(申万) 建筑装饰(申万) 房地产(申万) 石油石化(申万) 钢铁(申万) 环保(申万) 机械设备(申万) 医药生物(申万) 煤炭(申万) 基础化工(申万) 综合(申万) 电力设备(申万) 通信(申万) 建筑材料(申万) 有色金属(申万) 电子(申万)\\n电子(申万)\", \"pages\": [6], \"fragment\": null, \"text_chars\": 775, \"text_sha256\": \"e8f21cd665af64dc92d604c24428125580578d2192e682b141c421c37239480f\", \"structure_status\": \"partial\", \"content_role\": \"content\", \"relations\": [{\"target_locator\": null, \"target_kind\": \"heading\", \"target_heading\": \"图表9：板块周涨跌幅排序（单位：%）（2026.08.31-2026.09.04）\", \"relation\": \"caption_of\", \"status\": \"candidate\", \"basis\": \"title_text_without_member_heading\"}], \"relation_status\": \"candidate\"}, {\"locator\": \"chunk:16a9a510ef9e405f:body:0012\", \"chunk_id\": \"16a9a510ef9e405f:body:0012\", \"kind\": \"body\", \"build_id\": \"16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287\", \"text\": \"周涨跌幅\\n-10\\n-9\\n-8\\n-7\\n-6\\n-5\\n-4\\n-3\\n-2\\n-1\\n0\\n周涨跌幅\\n-10\\n-8\\n-6\\n-4\\n-2\\n0\\n2\\n4\\n周涨跌幅\", \"pages\": [6], \"fragment\": null, \"text_chars\": 69, \"text_sha256\": \"64f0ef73eed6aa7021ad930ba175ec6bfbd51bce1a9bbed16f62052ced827614\", \"structure_status\": \"unknown\", \"content_role\": \"content\", \"relations\": [{\"target_locator\": null, \"target_kind\": \"heading\", \"target_heading\": \"周涨跌幅\", \"relation\": \"caption_of\", \"status\": \"candidate\", \"basis\": \"title_text_without_member_heading\"}], \"relation_status\": \"candidate\"}], \"item_errors\": [], \"unresolved\": [], \"next_cursor\": null, \"exhausted\": true, \"fetch_complete\": true, \"page_id\": \"fpage:f06edabfcb0f690e\", \"hint\": \"本页 items 是取回的正文（可能为整块或分片）；quote 必须逐字取自 item.text。ok=false 表示本次没有取回任何权威正文；fetch_complete=false 表示仍有未解决项或分页未结束；这两种状态下都不得把 items 当作完整证据。分片用 fragment.start/end 标注**本块 text 内**的 Unicode 码点区间，text_sha256/text_chars 是整块内容身份，可用于校验分片确来自该块。续取用 next_cursor；exhausted 只表示这轮遍历到终点——有失败项时 fetch_complete 仍为 false 且见 unresolved，不得把游标前移当作已取全。kind=heading 的 item content_role=heading_only（只证明标题被取回）；relations 是本次请求范围内的结构关联（verified／candidate 严格分开）。\"}",
+      "duration_ms": 270,
+      "tool_call_id": "call_2c072800079a477f96e7e33a",
+      "is_error": false,
+      "interrupted": false
+    },
+    {
+      "turn": 4,
+      "name": "corpus_submit_manifest",
+      "args": {
+        "conclusions": [
+          {
+            "evidence": [
+              {
+                "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+                "locator": "chunk:16a9a510ef9e405f:body:0001",
+                "purpose": "value",
+                "quote": "数据显示，麒麟2026 的芯片晶体管密度从约每平方毫\n米1.55 亿提升到2.38 亿个，跃升55%。在同等性能的测试条件下，对比前代平面架构麒麟9030 Pro，麒麟2026\n的NPU 功耗下降66%，GPU 功耗下降58%，CPU 性能大核功耗下降41%，在晶体管数量暴涨的同时，完成同\n等工作的芯片工作温度更低。论文解释了反常识的核心原因：芯片绝大部分能耗，并非消耗在晶体管本身的计算\n运算上，而是消耗在金属走线的数据搬运，如同上班族通勤的能量消耗远大于工位办公。逻辑折叠大幅缩短信号\n走线长度，直接削减占据功耗大头的互连电容开销。走线缩短带来电容层面的功耗缩减，同时走线变短后，电路\n可以进一步降低工作电压；动态功耗与电压平方成正比，由此带来幅度更大的功耗收益。"
+              },
+              {
+                "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+                "locator": "chunk:16a9a510ef9e405f:body:0011",
+                "purpose": "attribution",
+                "quote": "来源：Wind，国金证券研究所"
+              }
+            ],
+            "id": "1",
+            "report_quote": "国金证券电子周报解释：芯片绝大部分能耗并非消耗在晶体管本身的计算运算上，而是消耗在金属走线的数据搬运；逻辑折叠大幅缩短信号走线长度，削减占据功耗大头的互连电容开销，且走线变短后可降低工作电压，动态功耗与电压平方成正比，带来更大功耗收益",
+            "required_dependencies": [
+              "value",
+              "attribution"
+            ],
+            "text_location": "最终答案正文，国金电子报告对麒麟2026省电原因的解释"
+          }
+        ]
+      },
+      "result": "{\"ok\": true, \"manifest_file\": null, \"owner\": \"stateful_react:eaf2a6dcd2e3\", \"publish_status\": \"verified\", \"counts\": {\"supported\": 1, \"partial\": 0, \"unsupported\": 0}, \"conclusions\": [{\"id\": \"1\", \"status\": \"supported\", \"delivery\": [\"delivered\"], \"semantic_references\": [], \"problems\": []}], \"hint\": \"对非 supported 的结论：按需补取原文、重新查询失效语义版本、修改表述或移除结论；已完整送达的语义证据不必例行 corpus_fetch。然后重新提交**完整**清单（每次提交生成新的候选文件，边界以汇总校验为准）。本轮新取的片段需经过下一轮消息边界核验，pending 的结论请下一轮重新提交确认。\"}",
+      "duration_ms": 266,
+      "tool_call_id": "call_524ac266f732484d9f4a3085",
+      "is_error": false,
+      "interrupted": false
+    }
+  ],
+  "responses": [
+    {
+      "turn": 1,
+      "usage": {
+        "provider": "openai",
+        "model": "glm-5-3-flash-260828",
+        "prompt_tokens": 2086,
+        "completion_tokens": 125,
+        "cache_read_tokens": 2048,
+        "cache_write_tokens": 0,
+        "cached_tokens": 2048,
+        "cache_creation_tokens": 0
+      },
+      "text": "",
+      "tool_calls": [
+        {
+          "name": "corpus_search",
+          "args": {
+            "query": "麒麟 晶体管 省电"
+          },
+          "id": "call_7553c14c130e4ac3aae63e0f"
+        },
+        {
+          "name": "corpus_search",
+          "args": {
+            "query": "国金电子 麒麟芯片"
+          },
+          "id": "call_c87a025df0fc45e5ae64a6ba"
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "usage": {
+        "provider": "openai",
+        "model": "glm-5-3-flash-260828",
+        "prompt_tokens": 17498,
+        "completion_tokens": 403,
+        "cache_read_tokens": 2048,
+        "cache_write_tokens": 0,
+        "cached_tokens": 2048,
+        "cache_creation_tokens": 0
+      },
+      "text": "第一轮检索命中了 doc_id `cv2:16a9a510ef9e405f...` 的段落，内容与\"麒麟芯片晶体管密度提升但功耗下降\"高度相关。现在用 corpus_fetch 读取逐字原文，并确认该报告确为\"国金\"（电子）出品。",
+      "tool_calls": [
+        {
+          "name": "corpus_fetch",
+          "args": {
+            "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+            "locators": [
+              "chunk:16a9a510ef9e405f:heading:0000",
+              "chunk:16a9a510ef9e405f:body:0000",
+              "chunk:16a9a510ef9e405f:body:0001"
+            ],
+            "view": "compact"
+          },
+          "id": "call_23d324e660ba434b972195aa"
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "usage": {
+        "provider": "openai",
+        "model": "glm-5-3-flash-260828",
+        "prompt_tokens": 19640,
+        "completion_tokens": 805,
+        "cache_read_tokens": 2112,
+        "cache_write_tokens": 0,
+        "cached_tokens": 2112,
+        "cache_creation_tokens": 0
+      },
+      "text": "原文已取到，内容正是对该问题的回答。还需确认这份报告确实是\"国金（证券）电子\"团队的周报——再取该文档后面的板块涨跌及落款部分核实。",
+      "tool_calls": [
+        {
+          "name": "corpus_fetch",
+          "args": {
+            "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+            "locators": [
+              "chunk:16a9a510ef9e405f:heading:0005",
+              "chunk:16a9a510ef9e405f:body:0010",
+              "chunk:16a9a510ef9e405f:body:0011",
+              "chunk:16a9a510ef9e405f:body:0012"
+            ],
+            "view": "compact"
+          },
+          "id": "call_2c072800079a477f96e7e33a"
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "usage": {
+        "provider": "openai",
+        "model": "glm-5-3-flash-260828",
+        "prompt_tokens": 22556,
+        "completion_tokens": 2244,
+        "cache_read_tokens": 19584,
+        "cache_write_tokens": 0,
+        "cached_tokens": 19584,
+        "cache_creation_tokens": 0
+      },
+      "text": "原文与出处均已核实（图表落款\"来源：Wind，国金证券研究所\"，内容为电子行业周度观察，含\"投资逻辑\"\"板块行情回顾\"等电子周报结构）。按 A4 流程先提交证据清单再作答。",
+      "tool_calls": [
+        {
+          "name": "corpus_submit_manifest",
+          "args": {
+            "conclusions": [
+              {
+                "evidence": [
+                  {
+                    "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+                    "locator": "chunk:16a9a510ef9e405f:body:0001",
+                    "purpose": "value",
+                    "quote": "数据显示，麒麟2026 的芯片晶体管密度从约每平方毫\n米1.55 亿提升到2.38 亿个，跃升55%。在同等性能的测试条件下，对比前代平面架构麒麟9030 Pro，麒麟2026\n的NPU 功耗下降66%，GPU 功耗下降58%，CPU 性能大核功耗下降41%，在晶体管数量暴涨的同时，完成同\n等工作的芯片工作温度更低。论文解释了反常识的核心原因：芯片绝大部分能耗，并非消耗在晶体管本身的计算\n运算上，而是消耗在金属走线的数据搬运，如同上班族通勤的能量消耗远大于工位办公。逻辑折叠大幅缩短信号\n走线长度，直接削减占据功耗大头的互连电容开销。走线缩短带来电容层面的功耗缩减，同时走线变短后，电路\n可以进一步降低工作电压；动态功耗与电压平方成正比，由此带来幅度更大的功耗收益。"
+                  },
+                  {
+                    "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+                    "locator": "chunk:16a9a510ef9e405f:body:0011",
+                    "purpose": "attribution",
+                    "quote": "来源：Wind，国金证券研究所"
+                  }
+                ],
+                "id": "1",
+                "report_quote": "国金证券电子周报解释：芯片绝大部分能耗并非消耗在晶体管本身的计算运算上，而是消耗在金属走线的数据搬运；逻辑折叠大幅缩短信号走线长度，削减占据功耗大头的互连电容开销，且走线变短后可降低工作电压，动态功耗与电压平方成正比，带来更大功耗收益",
+                "required_dependencies": [
+                  "value",
+                  "attribution"
+                ],
+                "text_location": "最终答案正文，国金电子报告对麒麟2026省电原因的解释"
+              }
+            ]
+          },
+          "id": "call_524ac266f732484d9f4a3085"
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "usage": {
+        "provider": "openai",
+        "model": "glm-5-3-flash-260828",
+        "prompt_tokens": 25071,
+        "completion_tokens": 664,
+        "cache_read_tokens": 22528,
+        "cache_write_tokens": 0,
+        "cached_tokens": 22528,
+        "cache_creation_tokens": 0
+      },
+      "text": "清单已验证通过（1 条结论均 supported）。以下为最终答案：\n\n---\n\n**答案**\n\n国金证券电子行业周报（投资逻辑部分，主题为\"韬定律\"与业绩斜率：AI PCB 及半导体设备迎来布局良机）对该反常识现象的解释是：\n\n- **现象数据**：麒麟2026 芯片晶体管密度从约每平方毫米 1.55 亿提升到 2.38 亿个，跃升 55%；在同等性能测试条件下，对比前代平面架构麒麟9030 Pro，NPU 功耗下降 66%、GPU 功耗下降 58%、CPU 性能大核功耗下降 41%——晶体管数量暴涨的同时，完成同等工作的芯片工作温度更低。\n\n- **省电原因（报告转述论文解释的\"反常识核心原因\"）**：芯片绝大部分能耗并非消耗在晶体管本身的计算运算上，而是消耗在金属走线的数据搬运上，\"如同上班族通勤的能量消耗远大于工位办公\"。逻辑折叠大幅缩短信号走线长度，直接削减占据功耗大头的互连电容开销；同时走线变短后，电路可以进一步降低工作电压，而动态功耗与电压平方成正比，由此带来幅度更大的功耗收益。\n\n- **来源背景**：该解释出自华为半导体负责人何庭波 9 月 4 日在中科院科技论文预发布平台 ChinaXiv 发布的论文《Huawei's τ Chip Was Supposed to Melt?》，国金电子周报在其\"投资逻辑\"部分予以转述。\n\n**来源**\n- 来源标题：国金证券电子行业周报·投资逻辑（\"韬定律\"与业绩斜率：AI PCB 及半导体设备迎来布局良机）\n- doc_id：`cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287`\n- locator：`chunk:16a9a510ef9e405f:body:0001`（出处归属佐证：`chunk:16a9a510ef9e405f:body:0011`，图表落款\"来源：Wind，国金证券研究所\"）",
+      "tool_calls": []
+    }
+  ],
+  "attempts": [
+    {
+      "phase": "started",
+      "outcome": "",
+      "usage": null,
+      "duration_ms": 0,
+      "error_type": ""
+    },
+    {
+      "phase": "finished",
+      "outcome": "accepted",
+      "usage": {
+        "provider": "openai",
+        "model": "glm-5-3-flash-260828",
+        "prompt_tokens": 2086,
+        "completion_tokens": 125,
+        "cache_read_tokens": 2048,
+        "cache_write_tokens": 0,
+        "cached_tokens": 2048,
+        "cache_creation_tokens": 0
+      },
+      "duration_ms": 6420,
+      "error_type": ""
+    },
+    {
+      "phase": "started",
+      "outcome": "",
+      "usage": null,
+      "duration_ms": 0,
+      "error_type": ""
+    },
+    {
+      "phase": "finished",
+      "outcome": "accepted",
+      "usage": {
+        "provider": "openai",
+        "model": "glm-5-3-flash-260828",
+        "prompt_tokens": 17498,
+        "completion_tokens": 403,
+        "cache_read_tokens": 2048,
+        "cache_write_tokens": 0,
+        "cached_tokens": 2048,
+        "cache_creation_tokens": 0
+      },
+      "duration_ms": 12219,
+      "error_type": ""
+    },
+    {
+      "phase": "started",
+      "outcome": "",
+      "usage": null,
+      "duration_ms": 0,
+      "error_type": ""
+    },
+    {
+      "phase": "finished",
+      "outcome": "accepted",
+      "usage": {
+        "provider": "openai",
+        "model": "glm-5-3-flash-260828",
+        "prompt_tokens": 19640,
+        "completion_tokens": 805,
+        "cache_read_tokens": 2112,
+        "cache_write_tokens": 0,
+        "cached_tokens": 2112,
+        "cache_creation_tokens": 0
+      },
+      "duration_ms": 21233,
+      "error_type": ""
+    },
+    {
+      "phase": "started",
+      "outcome": "",
+      "usage": null,
+      "duration_ms": 0,
+      "error_type": ""
+    },
+    {
+      "phase": "finished",
+      "outcome": "accepted",
+      "usage": {
+        "provider": "openai",
+        "model": "glm-5-3-flash-260828",
+        "prompt_tokens": 22556,
+        "completion_tokens": 2244,
+        "cache_read_tokens": 19584,
+        "cache_write_tokens": 0,
+        "cached_tokens": 19584,
+        "cache_creation_tokens": 0
+      },
+      "duration_ms": 47211,
+      "error_type": ""
+    },
+    {
+      "phase": "started",
+      "outcome": "",
+      "usage": null,
+      "duration_ms": 0,
+      "error_type": ""
+    },
+    {
+      "phase": "finished",
+      "outcome": "accepted",
+      "usage": {
+        "provider": "openai",
+        "model": "glm-5-3-flash-260828",
+        "prompt_tokens": 25071,
+        "completion_tokens": 664,
+        "cache_read_tokens": 22528,
+        "cache_write_tokens": 0,
+        "cached_tokens": 22528,
+        "cache_creation_tokens": 0
+      },
+      "duration_ms": 11060,
+      "error_type": ""
+    }
+  ]
+}

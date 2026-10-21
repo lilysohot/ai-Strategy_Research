@@ -1,0 +1,5014 @@
+{
+  "case": "p22",
+  "kind": "positive",
+  "candidate_gold": {
+    "lexical": true,
+    "dense": true,
+    "fused": true
+  },
+  "dense_only_candidates": 79,
+  "fates": [
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0001",
+      "lexical_rank": 1,
+      "dense_rank": 2,
+      "fused_rank": 1,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0008",
+      "lexical_rank": 2,
+      "dense_rank": 1,
+      "fused_rank": 2,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:heading:0000",
+      "lexical_rank": 6,
+      "dense_rank": 3,
+      "fused_rank": 3,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0010",
+      "lexical_rank": 4,
+      "dense_rank": 6,
+      "fused_rank": 4,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0011",
+      "lexical_rank": 5,
+      "dense_rank": 10,
+      "fused_rank": 5,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0005",
+      "lexical_rank": 10,
+      "dense_rank": 4,
+      "fused_rank": 6,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0004",
+      "lexical_rank": 9,
+      "dense_rank": 5,
+      "fused_rank": 7,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0002",
+      "lexical_rank": 3,
+      "dense_rank": 23,
+      "fused_rank": 8,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0009",
+      "lexical_rank": 13,
+      "dense_rank": 12,
+      "fused_rank": 9,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0000",
+      "lexical_rank": 7,
+      "dense_rank": 99,
+      "fused_rank": 10,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0006",
+      "lexical_rank": 11,
+      "dense_rank": 18,
+      "fused_rank": 11,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0007",
+      "lexical_rank": 12,
+      "dense_rank": 15,
+      "fused_rank": 12,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0003",
+      "lexical_rank": 8,
+      "dense_rank": 138,
+      "fused_rank": 13,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:table:0003",
+      "lexical_rank": 23,
+      "dense_rank": 8,
+      "fused_rank": 14,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:heading:0003",
+      "lexical_rank": 19,
+      "dense_rank": 14,
+      "fused_rank": 15,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0014",
+      "lexical_rank": 16,
+      "dense_rank": 19,
+      "fused_rank": 16,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:table:0002",
+      "lexical_rank": 22,
+      "dense_rank": 13,
+      "fused_rank": 17,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:heading:0002",
+      "lexical_rank": 18,
+      "dense_rank": 30,
+      "fused_rank": 18,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:table:0001",
+      "lexical_rank": 21,
+      "dense_rank": 136,
+      "fused_rank": 19,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:table:0000",
+      "lexical_rank": 20,
+      "dense_rank": 162,
+      "fused_rank": 20,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0012",
+      "lexical_rank": 14,
+      "dense_rank": null,
+      "fused_rank": 21,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0013",
+      "lexical_rank": 15,
+      "dense_rank": null,
+      "fused_rank": 22,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:heading:0001",
+      "lexical_rank": 17,
+      "dense_rank": null,
+      "fused_rank": 23,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0013",
+      "lexical_rank": 64,
+      "dense_rank": 16,
+      "fused_rank": 24,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0014",
+      "lexical_rank": 68,
+      "dense_rank": 7,
+      "fused_rank": 25,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0015",
+      "lexical_rank": 69,
+      "dense_rank": 9,
+      "fused_rank": 26,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0000",
+      "lexical_rank": 66,
+      "dense_rank": 66,
+      "fused_rank": 27,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0001",
+      "lexical_rank": 67,
+      "dense_rank": 54,
+      "fused_rank": 28,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0008",
+      "lexical_rank": 65,
+      "dense_rank": 112,
+      "fused_rank": 29,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0010",
+      "lexical_rank": 71,
+      "dense_rank": 78,
+      "fused_rank": 30,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0011",
+      "lexical_rank": 76,
+      "dense_rank": 31,
+      "fused_rank": 31,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0003",
+      "lexical_rank": 72,
+      "dense_rank": 84,
+      "fused_rank": 32,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0006",
+      "lexical_rank": 70,
+      "dense_rank": 139,
+      "fused_rank": 33,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:heading:0001",
+      "lexical_rank": 79,
+      "dense_rank": 28,
+      "fused_rank": 34,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0009",
+      "lexical_rank": 73,
+      "dense_rank": 168,
+      "fused_rank": 35,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0019",
+      "lexical_rank": 77,
+      "dense_rank": 117,
+      "fused_rank": 36,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0007",
+      "lexical_rank": 75,
+      "dense_rank": 158,
+      "fused_rank": 37,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0004",
+      "lexical_rank": 74,
+      "dense_rank": 182,
+      "fused_rank": 38,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0021",
+      "lexical_rank": 78,
+      "dense_rank": null,
+      "fused_rank": 39,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0020",
+      "lexical_rank": null,
+      "dense_rank": 196,
+      "fused_rank": 40,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0003",
+      "lexical_rank": 24,
+      "dense_rank": 37,
+      "fused_rank": 41,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0027",
+      "lexical_rank": 25,
+      "dense_rank": 35,
+      "fused_rank": 42,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0019",
+      "lexical_rank": 27,
+      "dense_rank": 34,
+      "fused_rank": 43,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0010",
+      "lexical_rank": 26,
+      "dense_rank": 58,
+      "fused_rank": 44,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0009",
+      "lexical_rank": 37,
+      "dense_rank": 27,
+      "fused_rank": 45,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0008",
+      "lexical_rank": 36,
+      "dense_rank": 62,
+      "fused_rank": 46,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0001",
+      "lexical_rank": 30,
+      "dense_rank": 156,
+      "fused_rank": 47,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0017",
+      "lexical_rank": 44,
+      "dense_rank": 44,
+      "fused_rank": 48,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0011",
+      "lexical_rank": 38,
+      "dense_rank": 70,
+      "fused_rank": 49,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0020",
+      "lexical_rank": 46,
+      "dense_rank": 43,
+      "fused_rank": 50,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0002",
+      "lexical_rank": 31,
+      "dense_rank": 177,
+      "fused_rank": 51,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0024",
+      "lexical_rank": 50,
+      "dense_rank": 75,
+      "fused_rank": 52,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0015",
+      "lexical_rank": 42,
+      "dense_rank": 183,
+      "fused_rank": 53,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0022",
+      "lexical_rank": 48,
+      "dense_rank": 149,
+      "fused_rank": 54,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0026",
+      "lexical_rank": 52,
+      "dense_rank": 135,
+      "fused_rank": 55,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0033",
+      "lexical_rank": 58,
+      "dense_rank": 108,
+      "fused_rank": 56,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0028",
+      "lexical_rank": 53,
+      "dense_rank": 146,
+      "fused_rank": 57,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0032",
+      "lexical_rank": 57,
+      "dense_rank": 132,
+      "fused_rank": 58,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0035",
+      "lexical_rank": 60,
+      "dense_rank": 131,
+      "fused_rank": 59,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0023",
+      "lexical_rank": 49,
+      "dense_rank": 178,
+      "fused_rank": 60,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0036",
+      "lexical_rank": 61,
+      "dense_rank": 164,
+      "fused_rank": 61,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:table:0018",
+      "lexical_rank": null,
+      "dense_rank": 22,
+      "fused_rank": 62,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:heading:0007",
+      "lexical_rank": 28,
+      "dense_rank": null,
+      "fused_rank": 63,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0000",
+      "lexical_rank": 29,
+      "dense_rank": null,
+      "fused_rank": 64,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:table:0017",
+      "lexical_rank": null,
+      "dense_rank": 53,
+      "fused_rank": 65,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0004",
+      "lexical_rank": 32,
+      "dense_rank": null,
+      "fused_rank": 66,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:table:0016",
+      "lexical_rank": null,
+      "dense_rank": 56,
+      "fused_rank": 67,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0005",
+      "lexical_rank": 33,
+      "dense_rank": null,
+      "fused_rank": 68,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0006",
+      "lexical_rank": 34,
+      "dense_rank": null,
+      "fused_rank": 69,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0007",
+      "lexical_rank": 35,
+      "dense_rank": null,
+      "fused_rank": 70,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:table:0019",
+      "lexical_rank": null,
+      "dense_rank": 89,
+      "fused_rank": 71,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0012",
+      "lexical_rank": 39,
+      "dense_rank": null,
+      "fused_rank": 72,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0013",
+      "lexical_rank": 40,
+      "dense_rank": null,
+      "fused_rank": 73,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0014",
+      "lexical_rank": 41,
+      "dense_rank": null,
+      "fused_rank": 74,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0016",
+      "lexical_rank": 43,
+      "dense_rank": null,
+      "fused_rank": 75,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0018",
+      "lexical_rank": 45,
+      "dense_rank": null,
+      "fused_rank": 76,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:table:0008",
+      "lexical_rank": null,
+      "dense_rank": 161,
+      "fused_rank": 77,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0021",
+      "lexical_rank": 47,
+      "dense_rank": null,
+      "fused_rank": 78,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0025",
+      "lexical_rank": 51,
+      "dense_rank": null,
+      "fused_rank": 79,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0029",
+      "lexical_rank": 54,
+      "dense_rank": null,
+      "fused_rank": 80,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0030",
+      "lexical_rank": 55,
+      "dense_rank": null,
+      "fused_rank": 81,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0031",
+      "lexical_rank": 56,
+      "dense_rank": null,
+      "fused_rank": 82,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0034",
+      "lexical_rank": 59,
+      "dense_rank": null,
+      "fused_rank": 83,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0037",
+      "lexical_rank": 62,
+      "dense_rank": null,
+      "fused_rank": 84,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:heading:0000",
+      "lexical_rank": 63,
+      "dense_rank": null,
+      "fused_rank": 85,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:heading:0001",
+      "lexical_rank": 144,
+      "dense_rank": 17,
+      "fused_rank": 86,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0005",
+      "lexical_rank": 142,
+      "dense_rank": 122,
+      "fused_rank": 87,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0003",
+      "lexical_rank": 143,
+      "dense_rank": 114,
+      "fused_rank": 88,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0001",
+      "lexical_rank": 146,
+      "dense_rank": 73,
+      "fused_rank": 89,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0000",
+      "lexical_rank": 145,
+      "dense_rank": null,
+      "fused_rank": 90,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0002",
+      "lexical_rank": 147,
+      "dense_rank": null,
+      "fused_rank": 91,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0004",
+      "lexical_rank": 148,
+      "dense_rank": null,
+      "fused_rank": 92,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0006",
+      "lexical_rank": 149,
+      "dense_rank": null,
+      "fused_rank": 93,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0007",
+      "lexical_rank": 150,
+      "dense_rank": null,
+      "fused_rank": 94,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:heading:0000",
+      "lexical_rank": 151,
+      "dense_rank": null,
+      "fused_rank": 95,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:heading:0002",
+      "lexical_rank": 152,
+      "dense_rank": null,
+      "fused_rank": 96,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0001",
+      "lexical_rank": 166,
+      "dense_rank": 88,
+      "fused_rank": 97,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:heading:0001",
+      "lexical_rank": 177,
+      "dense_rank": 11,
+      "fused_rank": 98,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0005",
+      "lexical_rank": 168,
+      "dense_rank": 144,
+      "fused_rank": 99,
+      "delivery": "anchor",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0007",
+      "lexical_rank": 175,
+      "dense_rank": 92,
+      "fused_rank": 100,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0006",
+      "lexical_rank": 174,
+      "dense_rank": 163,
+      "fused_rank": 101,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0011",
+      "lexical_rank": null,
+      "dense_rank": 21,
+      "fused_rank": 102,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0010",
+      "lexical_rank": null,
+      "dense_rank": 36,
+      "fused_rank": 103,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0012",
+      "lexical_rank": null,
+      "dense_rank": 85,
+      "fused_rank": 104,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0016",
+      "lexical_rank": 176,
+      "dense_rank": null,
+      "fused_rank": 105,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0003",
+      "lexical_rank": null,
+      "dense_rank": 104,
+      "fused_rank": 106,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0004",
+      "lexical_rank": null,
+      "dense_rank": 145,
+      "fused_rank": 107,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0014",
+      "lexical_rank": null,
+      "dense_rank": 175,
+      "fused_rank": 108,
+      "delivery": "omitted",
+      "baseline_source_gate": true,
+      "omission_stage": "output_limit"
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0002",
+      "lexical_rank": null,
+      "dense_rank": 186,
+      "fused_rank": 109,
+      "delivery": "context",
+      "baseline_source_gate": true,
+      "omission_stage": null
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0000",
+      "lexical_rank": 84,
+      "dense_rank": 69,
+      "fused_rank": 110,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:table:0000",
+      "lexical_rank": 80,
+      "dense_rank": 170,
+      "fused_rank": 111,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0002",
+      "lexical_rank": 88,
+      "dense_rank": 64,
+      "fused_rank": 112,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0003",
+      "lexical_rank": 85,
+      "dense_rank": 152,
+      "fused_rank": 113,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:heading:0000",
+      "lexical_rank": 86,
+      "dense_rank": 128,
+      "fused_rank": 114,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0005",
+      "lexical_rank": 90,
+      "dense_rank": 93,
+      "fused_rank": 115,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0004",
+      "lexical_rank": 89,
+      "dense_rank": 184,
+      "fused_rank": 116,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0022",
+      "lexical_rank": 107,
+      "dense_rank": 26,
+      "fused_rank": 117,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0021",
+      "lexical_rank": 106,
+      "dense_rank": 33,
+      "fused_rank": 118,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0023",
+      "lexical_rank": 108,
+      "dense_rank": 80,
+      "fused_rank": 119,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0031",
+      "lexical_rank": 116,
+      "dense_rank": 126,
+      "fused_rank": 120,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0024",
+      "lexical_rank": 109,
+      "dense_rank": 171,
+      "fused_rank": 121,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0032",
+      "lexical_rank": 117,
+      "dense_rank": 187,
+      "fused_rank": 122,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:table:0001",
+      "lexical_rank": 81,
+      "dense_rank": null,
+      "fused_rank": 123,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:table:0002",
+      "lexical_rank": 82,
+      "dense_rank": null,
+      "fused_rank": 124,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:table:0003",
+      "lexical_rank": 83,
+      "dense_rank": null,
+      "fused_rank": 125,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:table:0007",
+      "lexical_rank": null,
+      "dense_rank": 72,
+      "fused_rank": 126,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0001",
+      "lexical_rank": 87,
+      "dense_rank": null,
+      "fused_rank": 127,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0006",
+      "lexical_rank": 91,
+      "dense_rank": null,
+      "fused_rank": 128,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0007",
+      "lexical_rank": 92,
+      "dense_rank": null,
+      "fused_rank": 129,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0044",
+      "lexical_rank": null,
+      "dense_rank": 181,
+      "fused_rank": 130,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0008",
+      "lexical_rank": 93,
+      "dense_rank": null,
+      "fused_rank": 131,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0009",
+      "lexical_rank": 94,
+      "dense_rank": null,
+      "fused_rank": 132,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0010",
+      "lexical_rank": 95,
+      "dense_rank": null,
+      "fused_rank": 133,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0011",
+      "lexical_rank": 96,
+      "dense_rank": null,
+      "fused_rank": 134,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0012",
+      "lexical_rank": 97,
+      "dense_rank": null,
+      "fused_rank": 135,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0013",
+      "lexical_rank": 98,
+      "dense_rank": null,
+      "fused_rank": 136,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0014",
+      "lexical_rank": 99,
+      "dense_rank": null,
+      "fused_rank": 137,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0015",
+      "lexical_rank": 100,
+      "dense_rank": null,
+      "fused_rank": 138,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0016",
+      "lexical_rank": 101,
+      "dense_rank": null,
+      "fused_rank": 139,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0017",
+      "lexical_rank": 102,
+      "dense_rank": null,
+      "fused_rank": 140,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0018",
+      "lexical_rank": 103,
+      "dense_rank": null,
+      "fused_rank": 141,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0019",
+      "lexical_rank": 104,
+      "dense_rank": null,
+      "fused_rank": 142,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0020",
+      "lexical_rank": 105,
+      "dense_rank": null,
+      "fused_rank": 143,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0025",
+      "lexical_rank": 110,
+      "dense_rank": null,
+      "fused_rank": 144,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0026",
+      "lexical_rank": 111,
+      "dense_rank": null,
+      "fused_rank": 145,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0027",
+      "lexical_rank": 112,
+      "dense_rank": null,
+      "fused_rank": 146,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0028",
+      "lexical_rank": 113,
+      "dense_rank": null,
+      "fused_rank": 147,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0029",
+      "lexical_rank": 114,
+      "dense_rank": null,
+      "fused_rank": 148,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0030",
+      "lexical_rank": 115,
+      "dense_rank": null,
+      "fused_rank": 149,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0033",
+      "lexical_rank": 118,
+      "dense_rank": null,
+      "fused_rank": 150,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0034",
+      "lexical_rank": 119,
+      "dense_rank": null,
+      "fused_rank": 151,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0026",
+      "lexical_rank": 190,
+      "dense_rank": 20,
+      "fused_rank": 152,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0005",
+      "lexical_rank": 181,
+      "dense_rank": 48,
+      "fused_rank": 153,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0005",
+      "lexical_rank": 183,
+      "dense_rank": 46,
+      "fused_rank": 154,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0061",
+      "lexical_rank": 196,
+      "dense_rank": 25,
+      "fused_rank": 155,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0047",
+      "lexical_rank": 185,
+      "dense_rank": 65,
+      "fused_rank": 156,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0059",
+      "lexical_rank": 182,
+      "dense_rank": 107,
+      "fused_rank": 157,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0022",
+      "lexical_rank": 192,
+      "dense_rank": 68,
+      "fused_rank": 158,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0065",
+      "lexical_rank": 184,
+      "dense_rank": 120,
+      "fused_rank": 159,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0009",
+      "lexical_rank": 191,
+      "dense_rank": 91,
+      "fused_rank": 160,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0011",
+      "lexical_rank": 195,
+      "dense_rank": 86,
+      "fused_rank": 161,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0040",
+      "lexical_rank": 187,
+      "dense_rank": 123,
+      "fused_rank": 162,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0028",
+      "lexical_rank": 200,
+      "dense_rank": 87,
+      "fused_rank": 163,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0063",
+      "lexical_rank": 197,
+      "dense_rank": 102,
+      "fused_rank": 164,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0039",
+      "lexical_rank": 199,
+      "dense_rank": 105,
+      "fused_rank": 165,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0030",
+      "lexical_rank": null,
+      "dense_rank": 38,
+      "fused_rank": 166,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0034",
+      "lexical_rank": null,
+      "dense_rank": 39,
+      "fused_rank": 167,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0030",
+      "lexical_rank": null,
+      "dense_rank": 40,
+      "fused_rank": 168,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0004",
+      "lexical_rank": null,
+      "dense_rank": 42,
+      "fused_rank": 169,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0006",
+      "lexical_rank": 186,
+      "dense_rank": null,
+      "fused_rank": 170,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0022",
+      "lexical_rank": null,
+      "dense_rank": 45,
+      "fused_rank": 171,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0041",
+      "lexical_rank": 188,
+      "dense_rank": null,
+      "fused_rank": 172,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0013",
+      "lexical_rank": 189,
+      "dense_rank": null,
+      "fused_rank": 173,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0014",
+      "lexical_rank": null,
+      "dense_rank": 47,
+      "fused_rank": 174,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0024",
+      "lexical_rank": null,
+      "dense_rank": 50,
+      "fused_rank": 175,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0023",
+      "lexical_rank": null,
+      "dense_rank": 51,
+      "fused_rank": 176,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0021",
+      "lexical_rank": null,
+      "dense_rank": 52,
+      "fused_rank": 177,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0010",
+      "lexical_rank": 193,
+      "dense_rank": null,
+      "fused_rank": 178,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0051",
+      "lexical_rank": null,
+      "dense_rank": 55,
+      "fused_rank": 179,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0017",
+      "lexical_rank": 194,
+      "dense_rank": null,
+      "fused_rank": 180,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0062",
+      "lexical_rank": null,
+      "dense_rank": 60,
+      "fused_rank": 181,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0025",
+      "lexical_rank": null,
+      "dense_rank": 61,
+      "fused_rank": 182,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0034",
+      "lexical_rank": 198,
+      "dense_rank": null,
+      "fused_rank": 183,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0001",
+      "lexical_rank": null,
+      "dense_rank": 77,
+      "fused_rank": 184,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0002",
+      "lexical_rank": null,
+      "dense_rank": 79,
+      "fused_rank": 185,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0024",
+      "lexical_rank": null,
+      "dense_rank": 81,
+      "fused_rank": 186,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0060",
+      "lexical_rank": null,
+      "dense_rank": 83,
+      "fused_rank": 187,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0027",
+      "lexical_rank": null,
+      "dense_rank": 96,
+      "fused_rank": 188,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0026",
+      "lexical_rank": null,
+      "dense_rank": 97,
+      "fused_rank": 189,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0007",
+      "lexical_rank": null,
+      "dense_rank": 98,
+      "fused_rank": 190,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0017",
+      "lexical_rank": null,
+      "dense_rank": 100,
+      "fused_rank": 191,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0066",
+      "lexical_rank": null,
+      "dense_rank": 103,
+      "fused_rank": 192,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0025",
+      "lexical_rank": null,
+      "dense_rank": 110,
+      "fused_rank": 193,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0003",
+      "lexical_rank": null,
+      "dense_rank": 113,
+      "fused_rank": 194,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0020",
+      "lexical_rank": null,
+      "dense_rank": 116,
+      "fused_rank": 195,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:table:0018",
+      "lexical_rank": null,
+      "dense_rank": 121,
+      "fused_rank": 196,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0049",
+      "lexical_rank": null,
+      "dense_rank": 130,
+      "fused_rank": 197,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0006",
+      "lexical_rank": 171,
+      "dense_rank": 29,
+      "fused_rank": 198,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0000",
+      "lexical_rank": 167,
+      "dense_rank": 74,
+      "fused_rank": 199,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0002",
+      "lexical_rank": 178,
+      "dense_rank": 24,
+      "fused_rank": 200,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0007",
+      "lexical_rank": 172,
+      "dense_rank": 41,
+      "fused_rank": 201,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0003",
+      "lexical_rank": 170,
+      "dense_rank": 76,
+      "fused_rank": 202,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0011",
+      "lexical_rank": 169,
+      "dense_rank": 179,
+      "fused_rank": 203,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0009",
+      "lexical_rank": 179,
+      "dense_rank": 167,
+      "fused_rank": 204,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0008",
+      "lexical_rank": null,
+      "dense_rank": 49,
+      "fused_rank": 205,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0004",
+      "lexical_rank": null,
+      "dense_rank": 57,
+      "fused_rank": 206,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0010",
+      "lexical_rank": 173,
+      "dense_rank": null,
+      "fused_rank": 207,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0013",
+      "lexical_rank": 180,
+      "dense_rank": null,
+      "fused_rank": 208,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0012",
+      "lexical_rank": null,
+      "dense_rank": 197,
+      "fused_rank": 209,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0002",
+      "lexical_rank": 120,
+      "dense_rank": 142,
+      "fused_rank": 210,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:heading:0000",
+      "lexical_rank": 125,
+      "dense_rank": 71,
+      "fused_rank": 211,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0013",
+      "lexical_rank": 124,
+      "dense_rank": 95,
+      "fused_rank": 212,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0001",
+      "lexical_rank": 121,
+      "dense_rank": 169,
+      "fused_rank": 213,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0015",
+      "lexical_rank": 122,
+      "dense_rank": 190,
+      "fused_rank": 214,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0008",
+      "lexical_rank": 131,
+      "dense_rank": 101,
+      "fused_rank": 215,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0011",
+      "lexical_rank": 134,
+      "dense_rank": 129,
+      "fused_rank": 216,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0012",
+      "lexical_rank": 135,
+      "dense_rank": 141,
+      "fused_rank": 217,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0009",
+      "lexical_rank": 132,
+      "dense_rank": 189,
+      "fused_rank": 218,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:heading:0002",
+      "lexical_rank": 139,
+      "dense_rank": 188,
+      "fused_rank": 219,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:heading:0001",
+      "lexical_rank": 138,
+      "dense_rank": 198,
+      "fused_rank": 220,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0003",
+      "lexical_rank": 123,
+      "dense_rank": null,
+      "fused_rank": 221,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0000",
+      "lexical_rank": 126,
+      "dense_rank": null,
+      "fused_rank": 222,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0004",
+      "lexical_rank": 127,
+      "dense_rank": null,
+      "fused_rank": 223,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0005",
+      "lexical_rank": 128,
+      "dense_rank": null,
+      "fused_rank": 224,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0006",
+      "lexical_rank": 129,
+      "dense_rank": null,
+      "fused_rank": 225,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0007",
+      "lexical_rank": 130,
+      "dense_rank": null,
+      "fused_rank": 226,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0010",
+      "lexical_rank": 133,
+      "dense_rank": null,
+      "fused_rank": 227,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0014",
+      "lexical_rank": 136,
+      "dense_rank": null,
+      "fused_rank": 228,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0016",
+      "lexical_rank": 137,
+      "dense_rank": null,
+      "fused_rank": 229,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:heading:0003",
+      "lexical_rank": 140,
+      "dense_rank": null,
+      "fused_rank": 230,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:heading:0004",
+      "lexical_rank": 141,
+      "dense_rank": null,
+      "fused_rank": 231,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:body:0002",
+      "lexical_rank": 153,
+      "dense_rank": 119,
+      "fused_rank": 232,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:table:0006",
+      "lexical_rank": 156,
+      "dense_rank": 63,
+      "fused_rank": 233,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:table:0002",
+      "lexical_rank": 159,
+      "dense_rank": 59,
+      "fused_rank": 234,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:table:0005",
+      "lexical_rank": 157,
+      "dense_rank": 82,
+      "fused_rank": 235,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:table:0003",
+      "lexical_rank": 158,
+      "dense_rank": 109,
+      "fused_rank": 236,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:body:0009",
+      "lexical_rank": 154,
+      "dense_rank": 155,
+      "fused_rank": 237,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:table:0004",
+      "lexical_rank": 160,
+      "dense_rank": 143,
+      "fused_rank": 238,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:body:0000",
+      "lexical_rank": 163,
+      "dense_rank": 133,
+      "fused_rank": 239,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:body:0007",
+      "lexical_rank": 162,
+      "dense_rank": 151,
+      "fused_rank": 240,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:body:0001",
+      "lexical_rank": 164,
+      "dense_rank": 150,
+      "fused_rank": 241,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:body:0006",
+      "lexical_rank": 161,
+      "dense_rank": 176,
+      "fused_rank": 242,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:body:0010",
+      "lexical_rank": 155,
+      "dense_rank": null,
+      "fused_rank": 243,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "chunk_id": "3ed3ecab2fdf5035:body:0011",
+      "lexical_rank": 165,
+      "dense_rank": null,
+      "fused_rank": 244,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:list:0001",
+      "lexical_rank": null,
+      "dense_rank": 32,
+      "fused_rank": 245,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0008",
+      "lexical_rank": null,
+      "dense_rank": 154,
+      "fused_rank": 246,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0003",
+      "lexical_rank": null,
+      "dense_rank": 166,
+      "fused_rank": 247,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0012",
+      "lexical_rank": null,
+      "dense_rank": 174,
+      "fused_rank": 248,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0007",
+      "lexical_rank": null,
+      "dense_rank": 193,
+      "fused_rank": 249,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:table:0000",
+      "lexical_rank": null,
+      "dense_rank": 195,
+      "fused_rank": 250,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0017",
+      "lexical_rank": null,
+      "dense_rank": 67,
+      "fused_rank": 251,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0021",
+      "lexical_rank": null,
+      "dense_rank": 90,
+      "fused_rank": 252,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0000",
+      "lexical_rank": null,
+      "dense_rank": 125,
+      "fused_rank": 253,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0006",
+      "lexical_rank": null,
+      "dense_rank": 134,
+      "fused_rank": 254,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0008",
+      "lexical_rank": null,
+      "dense_rank": 140,
+      "fused_rank": 255,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0018",
+      "lexical_rank": null,
+      "dense_rank": 159,
+      "fused_rank": 256,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "build_id": "d2ec2ce01b12450b6090114e23ec01465ea4399b38387c0a83d1808354c6e75f",
+      "chunk_id": "d2ec2ce01b12450b:body:0003",
+      "lexical_rank": null,
+      "dense_rank": 94,
+      "fused_rank": 257,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "build_id": "d2ec2ce01b12450b6090114e23ec01465ea4399b38387c0a83d1808354c6e75f",
+      "chunk_id": "d2ec2ce01b12450b:body:0002",
+      "lexical_rank": null,
+      "dense_rank": 111,
+      "fused_rank": 258,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "build_id": "d2ec2ce01b12450b6090114e23ec01465ea4399b38387c0a83d1808354c6e75f",
+      "chunk_id": "d2ec2ce01b12450b:body:0001",
+      "lexical_rank": null,
+      "dense_rank": 118,
+      "fused_rank": 259,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "build_id": "d2ec2ce01b12450b6090114e23ec01465ea4399b38387c0a83d1808354c6e75f",
+      "chunk_id": "d2ec2ce01b12450b:body:0000",
+      "lexical_rank": null,
+      "dense_rank": 157,
+      "fused_rank": 260,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "build_id": "d2ec2ce01b12450b6090114e23ec01465ea4399b38387c0a83d1808354c6e75f",
+      "chunk_id": "d2ec2ce01b12450b:body:0008",
+      "lexical_rank": null,
+      "dense_rank": 185,
+      "fused_rank": 261,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0010",
+      "lexical_rank": null,
+      "dense_rank": 106,
+      "fused_rank": 262,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0000",
+      "lexical_rank": null,
+      "dense_rank": 124,
+      "fused_rank": 263,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "build_id": "d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+      "chunk_id": "d5c99534333873cc:body:0001",
+      "lexical_rank": null,
+      "dense_rank": 115,
+      "fused_rank": 264,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0013",
+      "lexical_rank": null,
+      "dense_rank": 127,
+      "fused_rank": 265,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0003",
+      "lexical_rank": null,
+      "dense_rank": 137,
+      "fused_rank": 266,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0011",
+      "lexical_rank": null,
+      "dense_rank": 148,
+      "fused_rank": 267,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0016",
+      "lexical_rank": null,
+      "dense_rank": 160,
+      "fused_rank": 268,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0000",
+      "lexical_rank": null,
+      "dense_rank": 165,
+      "fused_rank": 269,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0038",
+      "lexical_rank": null,
+      "dense_rank": 172,
+      "fused_rank": 270,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0036",
+      "lexical_rank": null,
+      "dense_rank": 180,
+      "fused_rank": 271,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0018",
+      "lexical_rank": null,
+      "dense_rank": 192,
+      "fused_rank": 272,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0008",
+      "lexical_rank": null,
+      "dense_rank": 194,
+      "fused_rank": 273,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0016",
+      "lexical_rank": null,
+      "dense_rank": 200,
+      "fused_rank": 274,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0009",
+      "lexical_rank": null,
+      "dense_rank": 147,
+      "fused_rank": 275,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0017",
+      "lexical_rank": null,
+      "dense_rank": 173,
+      "fused_rank": 276,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0000",
+      "lexical_rank": null,
+      "dense_rank": 191,
+      "fused_rank": 277,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0005",
+      "lexical_rank": null,
+      "dense_rank": 199,
+      "fused_rank": 278,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    },
+    {
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+      "chunk_id": "6475cbacca1575c5:body:0006",
+      "lexical_rank": null,
+      "dense_rank": 153,
+      "fused_rank": 279,
+      "delivery": "omitted",
+      "baseline_source_gate": false,
+      "omission_stage": "source_gate"
+    }
+  ],
+  "variants": {
+    "baseline": {
+      "anchor_rank": 1,
+      "returned_bands": 10,
+      "sources": 5,
+      "unique_context_chunks": 117,
+      "repeated_context_chunks": 3,
+      "added_chunks": [],
+      "removed_chunks": [],
+      "hits": [
+        {
+          "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+          "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "chunk_id": "1d0117eb6e17c63c:body:0008",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "材(-13.81%)、安集科技(-12.62%)、博迁新材(-12.48%)、国瓷材料(-12.35%)、三祥新",
+            "材(-11.88%)、东岳硅材(-11.32%)、雅克科技(-10.87%)、金博股份(-10.7%)。",
+            "图表9：本周涨跌幅后十"
+          ],
+          "unit_refs": [
+            "unit:0151",
+            "unit:0152",
+            "unit:0153",
+            "unit:0154",
+            "unit:0156",
+            "unit:0160",
+            "unit:0163",
+            "unit:0164",
+            "unit:0165",
+            "unit:0166",
+            "unit:0167",
+            "unit:0168",
+            "unit:0169",
+            "unit:0170",
+            "unit:0171",
+            "unit:0172",
+            "unit:0174",
+            "unit:0178"
+          ],
+          "score": 0.03252247488101534,
+          "snippet": "<b>氩气</b><b>价格</b>报2459元/吨，",
+          "published": null,
+          "page": 7,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "1d0117eb6e17c63c:body:0000",
+            "1d0117eb6e17c63c:body:0001",
+            "1d0117eb6e17c63c:heading:0000",
+            "1d0117eb6e17c63c:body:0002",
+            "1d0117eb6e17c63c:body:0003",
+            "1d0117eb6e17c63c:body:0004",
+            "1d0117eb6e17c63c:heading:0001",
+            "1d0117eb6e17c63c:body:0005",
+            "1d0117eb6e17c63c:heading:0002",
+            "1d0117eb6e17c63c:table:0000",
+            "1d0117eb6e17c63c:body:0006",
+            "1d0117eb6e17c63c:heading:0003",
+            "1d0117eb6e17c63c:table:0001",
+            "1d0117eb6e17c63c:body:0007",
+            "1d0117eb6e17c63c:body:0008",
+            "1d0117eb6e17c63c:body:0009",
+            "1d0117eb6e17c63c:body:0010",
+            "1d0117eb6e17c63c:body:0011",
+            "1d0117eb6e17c63c:body:0012",
+            "1d0117eb6e17c63c:table:0002",
+            "1d0117eb6e17c63c:table:0003",
+            "1d0117eb6e17c63c:body:0013",
+            "1d0117eb6e17c63c:body:0014"
+          ],
+          "source_coverage": 5
+        },
+        {
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "chunk_id": "022ae1713fb760ff:body:0013",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "5",
+            "光伏：板块半年报整体呈现“景气底部夯实”状态，玻璃、胶膜、高效电池（尤其BC）等部分环节拐点或率先出现。"
+          ],
+          "unit_refs": [
+            "unit:0189",
+            "unit:0193",
+            "unit:0194",
+            "unit:0195",
+            "unit:0196",
+            "unit:0197",
+            "unit:0198",
+            "unit:0199",
+            "unit:0200",
+            "unit:0201",
+            "unit:0202"
+          ],
+          "score": 0.032266458495966696,
+          "snippet": "<b>价格</b>下跌，其他环节<b>价格</b>持稳",
+          "published": null,
+          "page": 7,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "022ae1713fb760ff:body:0000",
+            "022ae1713fb760ff:body:0001",
+            "022ae1713fb760ff:body:0002",
+            "022ae1713fb760ff:body:0003",
+            "022ae1713fb760ff:body:0004",
+            "022ae1713fb760ff:body:0005",
+            "022ae1713fb760ff:body:0006",
+            "022ae1713fb760ff:body:0007",
+            "022ae1713fb760ff:body:0008",
+            "022ae1713fb760ff:body:0009",
+            "022ae1713fb760ff:table:0000",
+            "022ae1713fb760ff:body:0010",
+            "022ae1713fb760ff:body:0011",
+            "022ae1713fb760ff:body:0012",
+            "022ae1713fb760ff:body:0013",
+            "022ae1713fb760ff:body:0014",
+            "022ae1713fb760ff:body:0015",
+            "022ae1713fb760ff:heading:0000",
+            "022ae1713fb760ff:heading:0001",
+            "022ae1713fb760ff:body:0016"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "chunk_id": "628ec76d5b4001b7:body:0003",
+          "kind": "body",
+          "title_text": "海外跟踪周报 20260906",
+          "section_path": [
+            "固定收益 | 固定收益点评",
+            "非农清障，通胀定调",
+            "海外跟踪周报 20260906"
+          ],
+          "unit_refs": [
+            "unit:0026",
+            "unit:0027",
+            "unit:0030",
+            "unit:0031",
+            "unit:0032",
+            "unit:0033",
+            "unit:0034",
+            "unit:0035",
+            "unit:0036",
+            "unit:0037",
+            "unit:0038",
+            "unit:0039",
+            "unit:0040",
+            "unit:0041",
+            "unit:0045"
+          ],
+          "score": 0.03177805800756621,
+          "snippet": "<b>价格</b>：本周美国零售汽油<b>价格</b>上升",
+          "published": null,
+          "page": 1,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "628ec76d5b4001b7:body:0000",
+            "628ec76d5b4001b7:body:0001",
+            "628ec76d5b4001b7:body:0002",
+            "628ec76d5b4001b7:body:0003",
+            "628ec76d5b4001b7:heading:0000",
+            "628ec76d5b4001b7:body:0004",
+            "628ec76d5b4001b7:body:0005",
+            "628ec76d5b4001b7:body:0006",
+            "628ec76d5b4001b7:table:0000"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+          "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+          "chunk_id": "1ada4314a25261ea:heading:0001",
+          "kind": "heading",
+          "title_text": null,
+          "section_path": [
+            "投资评级：看好（维持）",
+            "——环保行业周报（20260831~20260906）",
+            "投资要点："
+          ],
+          "unit_refs": [
+            "unit:0011",
+            "unit:0012"
+          ],
+          "score": 0.032266458495966696,
+          "snippet": "<b>周报</b>（20260831~20260906）\n投资",
+          "published": null,
+          "page": 1,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "1ada4314a25261ea:body:0000",
+            "1ada4314a25261ea:heading:0000",
+            "1ada4314a25261ea:body:0001",
+            "1ada4314a25261ea:heading:0001",
+            "1ada4314a25261ea:body:0002",
+            "1ada4314a25261ea:body:0003",
+            "1ada4314a25261ea:body:0004",
+            "1ada4314a25261ea:body:0005",
+            "1ada4314a25261ea:body:0006",
+            "1ada4314a25261ea:body:0007",
+            "1ada4314a25261ea:heading:0002"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "chunk_id": "16a9a510ef9e405f:body:0001",
+          "kind": "body",
+          "title_text": "”",
+          "section_path": [
+            "“",
+            "”"
+          ],
+          "unit_refs": [
+            "unit:0004",
+            "unit:0005",
+            "unit:0006",
+            "unit:0007",
+            "unit:0008"
+          ],
+          "score": 0.03177805800756621,
+          "snippet": "<b>变化</b>。国内晶圆厂扩产加速、先进",
+          "published": null,
+          "page": 1,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "16a9a510ef9e405f:heading:0000",
+            "16a9a510ef9e405f:body:0001",
+            "16a9a510ef9e405f:body:0002",
+            "16a9a510ef9e405f:heading:0001",
+            "16a9a510ef9e405f:heading:0002"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "chunk_id": "022ae1713fb760ff:body:0019",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "方形磷酸铁锂动力电芯：0.3-0.4 元/Wh",
+            "方形三元（高镍）电芯：680-790 元/KWh",
+            "图表11：本周新能源与电力设备板块景气度"
+          ],
+          "unit_refs": [
+            "unit:0257",
+            "unit:0258",
+            "unit:0259",
+            "unit:0260",
+            "unit:0261"
+          ],
+          "score": 0.027598020555767037,
+          "snippet": "<b>价格</b>竞争激烈程度超预期：在",
+          "published": null,
+          "page": 11,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "022ae1713fb760ff:table:0003",
+            "022ae1713fb760ff:body:0019",
+            "022ae1713fb760ff:body:0020",
+            "022ae1713fb760ff:heading:0002",
+            "022ae1713fb760ff:body:0021",
+            "022ae1713fb760ff:body:0022"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "chunk_id": "628ec76d5b4001b7:body:0027",
+          "kind": "body",
+          "title_text": "5、价格",
+          "section_path": [
+            "45",
+            "50",
+            "5、价格"
+          ],
+          "unit_refs": [
+            "unit:0413",
+            "unit:0414",
+            "unit:0415",
+            "unit:0416",
+            "unit:0417",
+            "unit:0418",
+            "unit:0419"
+          ],
+          "score": 0.031754032258064516,
+          "snippet": "<b>价格</b>上升。截至9月4日",
+          "published": null,
+          "page": 14,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "628ec76d5b4001b7:heading:0005",
+            "628ec76d5b4001b7:body:0026",
+            "628ec76d5b4001b7:body:0027",
+            "628ec76d5b4001b7:body:0028",
+            "628ec76d5b4001b7:heading:0006",
+            "628ec76d5b4001b7:body:0029",
+            "628ec76d5b4001b7:body:0030",
+            "628ec76d5b4001b7:body:0031",
+            "628ec76d5b4001b7:heading:0007",
+            "628ec76d5b4001b7:body:0032",
+            "628ec76d5b4001b7:body:0033",
+            "628ec76d5b4001b7:table:0020",
+            "628ec76d5b4001b7:body:0034",
+            "628ec76d5b4001b7:table:0021",
+            "628ec76d5b4001b7:body:0035",
+            "628ec76d5b4001b7:table:0022",
+            "628ec76d5b4001b7:body:0036",
+            "628ec76d5b4001b7:body:0037"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "chunk_id": "16a9a510ef9e405f:body:0005",
+          "kind": "body",
+          "title_text": "一、细分板块观点\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩",
+          "section_path": [
+            "扫码获取更多服务",
+            "一、细分板块观点",
+            "1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩"
+          ],
+          "unit_refs": [
+            "unit:0061",
+            "unit:0062",
+            "unit:0063",
+            "unit:0064",
+            "unit:0065",
+            "unit:0066",
+            "unit:0069",
+            "unit:0071",
+            "unit:0072",
+            "unit:0073",
+            "unit:0074"
+          ],
+          "score": 0.030834914611005692,
+          "snippet": "<b>价格</b><b>价格</b>变动1、1、2、",
+          "published": null,
+          "page": 3,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "16a9a510ef9e405f:heading:0004",
+            "16a9a510ef9e405f:body:0003",
+            "16a9a510ef9e405f:body:0004",
+            "16a9a510ef9e405f:body:0005",
+            "16a9a510ef9e405f:body:0006",
+            "16a9a510ef9e405f:body:0007",
+            "16a9a510ef9e405f:body:0008"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "chunk_id": "022ae1713fb760ff:body:0019",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "方形磷酸铁锂动力电芯：0.3-0.4 元/Wh",
+            "方形三元（高镍）电芯：680-790 元/KWh",
+            "图表11：本周新能源与电力设备板块景气度"
+          ],
+          "unit_refs": [
+            "unit:0257",
+            "unit:0258",
+            "unit:0259",
+            "unit:0260",
+            "unit:0261"
+          ],
+          "score": 0.027598020555767037,
+          "snippet": "<b>价格</b>竞争激烈程度超预期：在",
+          "published": null,
+          "page": 11,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "022ae1713fb760ff:table:0003",
+            "022ae1713fb760ff:body:0019",
+            "022ae1713fb760ff:body:0020"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "chunk_id": "628ec76d5b4001b7:body:0019",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "三、海外政策与要闻",
+            "1、海外央行动态",
+            "2、海外政策跟踪"
+          ],
+          "unit_refs": [
+            "unit:0263",
+            "unit:0264",
+            "unit:0265",
+            "unit:0266",
+            "unit:0267",
+            "unit:0268",
+            "unit:0272",
+            "unit:0273"
+          ],
+          "score": 0.03149801587301587,
+          "snippet": "<b>价格</b>温和上涨。\n3）9月",
+          "published": null,
+          "page": 10,
+          "cells": [],
+          "label_path": [
+            "1）8 月 31 日，日元再破160。贝森特发声：日元“已得到控制”，日本央行“将做正确",
+            "的事”，“安倍经济学”已走到尽头。"
+          ],
+          "context_chunk_ids": [
+            "628ec76d5b4001b7:table:0015",
+            "628ec76d5b4001b7:body:0016",
+            "628ec76d5b4001b7:body:0017",
+            "628ec76d5b4001b7:table:0016",
+            "628ec76d5b4001b7:body:0018",
+            "628ec76d5b4001b7:table:0017",
+            "628ec76d5b4001b7:table:0018",
+            "628ec76d5b4001b7:body:0019",
+            "628ec76d5b4001b7:table:0019",
+            "628ec76d5b4001b7:body:0020",
+            "628ec76d5b4001b7:heading:0002",
+            "628ec76d5b4001b7:body:0021",
+            "628ec76d5b4001b7:body:0022",
+            "628ec76d5b4001b7:body:0023",
+            "628ec76d5b4001b7:body:0024",
+            "628ec76d5b4001b7:heading:0003",
+            "628ec76d5b4001b7:body:0025",
+            "628ec76d5b4001b7:heading:0004"
+          ],
+          "source_coverage": 4
+        }
+      ]
+    },
+    "source_first": {
+      "anchor_rank": 1,
+      "returned_bands": 10,
+      "sources": 3,
+      "unique_context_chunks": 112,
+      "repeated_context_chunks": 6,
+      "added_chunks": [
+        [
+          "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "628ec76d5b4001b7:body:0007"
+        ],
+        [
+          "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "628ec76d5b4001b7:body:0008"
+        ],
+        [
+          "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "628ec76d5b4001b7:body:0009"
+        ],
+        [
+          "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "628ec76d5b4001b7:body:0010"
+        ],
+        [
+          "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "628ec76d5b4001b7:body:0011"
+        ],
+        [
+          "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "628ec76d5b4001b7:body:0012"
+        ],
+        [
+          "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "628ec76d5b4001b7:body:0013"
+        ],
+        [
+          "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "628ec76d5b4001b7:body:0014"
+        ],
+        [
+          "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "628ec76d5b4001b7:body:0015"
+        ],
+        [
+          "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "628ec76d5b4001b7:heading:0001"
+        ],
+        [
+          "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "628ec76d5b4001b7:table:0003"
+        ],
+        [
+          "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "628ec76d5b4001b7:table:0004"
+        ],
+        [
+          "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "628ec76d5b4001b7:table:0007"
+        ],
+        [
+          "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "628ec76d5b4001b7:table:0008"
+        ],
+        [
+          "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "628ec76d5b4001b7:table:0009"
+        ],
+        [
+          "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "628ec76d5b4001b7:table:0010"
+        ],
+        [
+          "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "628ec76d5b4001b7:table:0011"
+        ],
+        [
+          "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "628ec76d5b4001b7:table:0012"
+        ]
+      ],
+      "removed_chunks": [
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0001"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0002"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0003"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0004"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0005"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0006"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0007"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0008"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:heading:0000"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:heading:0001"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:heading:0002"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:heading:0004"
+        ],
+        [
+          "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+          "1ada4314a25261ea:body:0000"
+        ],
+        [
+          "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+          "1ada4314a25261ea:body:0001"
+        ],
+        [
+          "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+          "1ada4314a25261ea:body:0002"
+        ],
+        [
+          "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+          "1ada4314a25261ea:body:0003"
+        ],
+        [
+          "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+          "1ada4314a25261ea:body:0004"
+        ],
+        [
+          "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+          "1ada4314a25261ea:body:0005"
+        ],
+        [
+          "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+          "1ada4314a25261ea:body:0006"
+        ],
+        [
+          "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+          "1ada4314a25261ea:body:0007"
+        ],
+        [
+          "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+          "1ada4314a25261ea:heading:0000"
+        ],
+        [
+          "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+          "1ada4314a25261ea:heading:0001"
+        ],
+        [
+          "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+          "1ada4314a25261ea:heading:0002"
+        ]
+      ],
+      "hits": [
+        {
+          "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+          "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "chunk_id": "1d0117eb6e17c63c:body:0008",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "材(-13.81%)、安集科技(-12.62%)、博迁新材(-12.48%)、国瓷材料(-12.35%)、三祥新",
+            "材(-11.88%)、东岳硅材(-11.32%)、雅克科技(-10.87%)、金博股份(-10.7%)。",
+            "图表9：本周涨跌幅后十"
+          ],
+          "unit_refs": [
+            "unit:0151",
+            "unit:0152",
+            "unit:0153",
+            "unit:0154",
+            "unit:0156",
+            "unit:0160",
+            "unit:0163",
+            "unit:0164",
+            "unit:0165",
+            "unit:0166",
+            "unit:0167",
+            "unit:0168",
+            "unit:0169",
+            "unit:0170",
+            "unit:0171",
+            "unit:0172",
+            "unit:0174",
+            "unit:0178"
+          ],
+          "score": 0.03252247488101534,
+          "snippet": "<b>氩气</b><b>价格</b>报2459元/吨，",
+          "published": null,
+          "page": 7,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "1d0117eb6e17c63c:body:0000",
+            "1d0117eb6e17c63c:body:0001",
+            "1d0117eb6e17c63c:heading:0000",
+            "1d0117eb6e17c63c:body:0002",
+            "1d0117eb6e17c63c:body:0003",
+            "1d0117eb6e17c63c:body:0004",
+            "1d0117eb6e17c63c:heading:0001",
+            "1d0117eb6e17c63c:body:0005",
+            "1d0117eb6e17c63c:heading:0002",
+            "1d0117eb6e17c63c:table:0000",
+            "1d0117eb6e17c63c:body:0006",
+            "1d0117eb6e17c63c:heading:0003",
+            "1d0117eb6e17c63c:table:0001",
+            "1d0117eb6e17c63c:body:0007",
+            "1d0117eb6e17c63c:body:0008",
+            "1d0117eb6e17c63c:body:0009",
+            "1d0117eb6e17c63c:body:0010",
+            "1d0117eb6e17c63c:body:0011",
+            "1d0117eb6e17c63c:body:0012",
+            "1d0117eb6e17c63c:table:0002",
+            "1d0117eb6e17c63c:table:0003",
+            "1d0117eb6e17c63c:body:0013",
+            "1d0117eb6e17c63c:body:0014"
+          ],
+          "source_coverage": 5
+        },
+        {
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "chunk_id": "022ae1713fb760ff:body:0013",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "5",
+            "光伏：板块半年报整体呈现“景气底部夯实”状态，玻璃、胶膜、高效电池（尤其BC）等部分环节拐点或率先出现。"
+          ],
+          "unit_refs": [
+            "unit:0189",
+            "unit:0193",
+            "unit:0194",
+            "unit:0195",
+            "unit:0196",
+            "unit:0197",
+            "unit:0198",
+            "unit:0199",
+            "unit:0200",
+            "unit:0201",
+            "unit:0202"
+          ],
+          "score": 0.032266458495966696,
+          "snippet": "<b>价格</b>下跌，其他环节<b>价格</b>持稳",
+          "published": null,
+          "page": 7,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "022ae1713fb760ff:body:0000",
+            "022ae1713fb760ff:body:0001",
+            "022ae1713fb760ff:body:0002",
+            "022ae1713fb760ff:body:0003",
+            "022ae1713fb760ff:body:0004",
+            "022ae1713fb760ff:body:0005",
+            "022ae1713fb760ff:body:0006",
+            "022ae1713fb760ff:body:0007",
+            "022ae1713fb760ff:body:0008",
+            "022ae1713fb760ff:body:0009",
+            "022ae1713fb760ff:table:0000",
+            "022ae1713fb760ff:body:0010",
+            "022ae1713fb760ff:body:0011",
+            "022ae1713fb760ff:body:0012",
+            "022ae1713fb760ff:body:0013",
+            "022ae1713fb760ff:body:0014",
+            "022ae1713fb760ff:body:0015",
+            "022ae1713fb760ff:heading:0000",
+            "022ae1713fb760ff:heading:0001",
+            "022ae1713fb760ff:body:0016"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "chunk_id": "022ae1713fb760ff:body:0019",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "方形磷酸铁锂动力电芯：0.3-0.4 元/Wh",
+            "方形三元（高镍）电芯：680-790 元/KWh",
+            "图表11：本周新能源与电力设备板块景气度"
+          ],
+          "unit_refs": [
+            "unit:0257",
+            "unit:0258",
+            "unit:0259",
+            "unit:0260",
+            "unit:0261"
+          ],
+          "score": 0.027598020555767037,
+          "snippet": "<b>价格</b>竞争激烈程度超预期：在",
+          "published": null,
+          "page": 11,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "022ae1713fb760ff:table:0003",
+            "022ae1713fb760ff:body:0019",
+            "022ae1713fb760ff:body:0020",
+            "022ae1713fb760ff:heading:0002",
+            "022ae1713fb760ff:body:0021",
+            "022ae1713fb760ff:body:0022"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "chunk_id": "022ae1713fb760ff:body:0019",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "方形磷酸铁锂动力电芯：0.3-0.4 元/Wh",
+            "方形三元（高镍）电芯：680-790 元/KWh",
+            "图表11：本周新能源与电力设备板块景气度"
+          ],
+          "unit_refs": [
+            "unit:0257",
+            "unit:0258",
+            "unit:0259",
+            "unit:0260",
+            "unit:0261"
+          ],
+          "score": 0.027598020555767037,
+          "snippet": "<b>价格</b>竞争激烈程度超预期：在",
+          "published": null,
+          "page": 11,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "022ae1713fb760ff:table:0003",
+            "022ae1713fb760ff:body:0019",
+            "022ae1713fb760ff:body:0020"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "chunk_id": "022ae1713fb760ff:body:0021",
+          "kind": "body",
+          "title_text": "特别声明：",
+          "section_path": [
+            "12",
+            "13",
+            "特别声明："
+          ],
+          "unit_refs": [
+            "unit:0272",
+            "unit:0273",
+            "unit:0274",
+            "unit:0275",
+            "unit:0276",
+            "unit:0277",
+            "unit:0278",
+            "unit:0279",
+            "unit:0280",
+            "unit:0281",
+            "unit:0282",
+            "unit:0283",
+            "unit:0284",
+            "unit:0285",
+            "unit:0286",
+            "unit:0287",
+            "unit:0288",
+            "unit:0289",
+            "unit:0290",
+            "unit:0291",
+            "unit:0292"
+          ],
+          "score": 0.013333333333333334,
+          "snippet": "<b>价格</b>、价值及收益可能会受",
+          "published": null,
+          "page": 13,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "022ae1713fb760ff:heading:0002",
+            "022ae1713fb760ff:body:0021",
+            "022ae1713fb760ff:body:0022"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "chunk_id": "628ec76d5b4001b7:body:0003",
+          "kind": "body",
+          "title_text": "海外跟踪周报 20260906",
+          "section_path": [
+            "固定收益 | 固定收益点评",
+            "非农清障，通胀定调",
+            "海外跟踪周报 20260906"
+          ],
+          "unit_refs": [
+            "unit:0026",
+            "unit:0027",
+            "unit:0030",
+            "unit:0031",
+            "unit:0032",
+            "unit:0033",
+            "unit:0034",
+            "unit:0035",
+            "unit:0036",
+            "unit:0037",
+            "unit:0038",
+            "unit:0039",
+            "unit:0040",
+            "unit:0041",
+            "unit:0045"
+          ],
+          "score": 0.03177805800756621,
+          "snippet": "<b>价格</b>：本周美国零售汽油<b>价格</b>上升",
+          "published": null,
+          "page": 1,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "628ec76d5b4001b7:body:0000",
+            "628ec76d5b4001b7:body:0001",
+            "628ec76d5b4001b7:body:0002",
+            "628ec76d5b4001b7:body:0003",
+            "628ec76d5b4001b7:heading:0000",
+            "628ec76d5b4001b7:body:0004",
+            "628ec76d5b4001b7:body:0005",
+            "628ec76d5b4001b7:body:0006",
+            "628ec76d5b4001b7:table:0000"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "chunk_id": "628ec76d5b4001b7:body:0027",
+          "kind": "body",
+          "title_text": "5、价格",
+          "section_path": [
+            "45",
+            "50",
+            "5、价格"
+          ],
+          "unit_refs": [
+            "unit:0413",
+            "unit:0414",
+            "unit:0415",
+            "unit:0416",
+            "unit:0417",
+            "unit:0418",
+            "unit:0419"
+          ],
+          "score": 0.031754032258064516,
+          "snippet": "<b>价格</b>上升。截至9月4日",
+          "published": null,
+          "page": 14,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "628ec76d5b4001b7:heading:0005",
+            "628ec76d5b4001b7:body:0026",
+            "628ec76d5b4001b7:body:0027",
+            "628ec76d5b4001b7:body:0028",
+            "628ec76d5b4001b7:heading:0006",
+            "628ec76d5b4001b7:body:0029",
+            "628ec76d5b4001b7:body:0030",
+            "628ec76d5b4001b7:body:0031",
+            "628ec76d5b4001b7:heading:0007",
+            "628ec76d5b4001b7:body:0032",
+            "628ec76d5b4001b7:body:0033",
+            "628ec76d5b4001b7:table:0020",
+            "628ec76d5b4001b7:body:0034",
+            "628ec76d5b4001b7:table:0021",
+            "628ec76d5b4001b7:body:0035",
+            "628ec76d5b4001b7:table:0022",
+            "628ec76d5b4001b7:body:0036",
+            "628ec76d5b4001b7:body:0037"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "chunk_id": "628ec76d5b4001b7:body:0019",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "三、海外政策与要闻",
+            "1、海外央行动态",
+            "2、海外政策跟踪"
+          ],
+          "unit_refs": [
+            "unit:0263",
+            "unit:0264",
+            "unit:0265",
+            "unit:0266",
+            "unit:0267",
+            "unit:0268",
+            "unit:0272",
+            "unit:0273"
+          ],
+          "score": 0.03149801587301587,
+          "snippet": "<b>价格</b>温和上涨。\n3）9月",
+          "published": null,
+          "page": 10,
+          "cells": [],
+          "label_path": [
+            "1）8 月 31 日，日元再破160。贝森特发声：日元“已得到控制”，日本央行“将做正确",
+            "的事”，“安倍经济学”已走到尽头。"
+          ],
+          "context_chunk_ids": [
+            "628ec76d5b4001b7:table:0015",
+            "628ec76d5b4001b7:body:0016",
+            "628ec76d5b4001b7:body:0017",
+            "628ec76d5b4001b7:table:0016",
+            "628ec76d5b4001b7:body:0018",
+            "628ec76d5b4001b7:table:0017",
+            "628ec76d5b4001b7:table:0018",
+            "628ec76d5b4001b7:body:0019",
+            "628ec76d5b4001b7:table:0019",
+            "628ec76d5b4001b7:body:0020",
+            "628ec76d5b4001b7:heading:0002",
+            "628ec76d5b4001b7:body:0021",
+            "628ec76d5b4001b7:body:0022",
+            "628ec76d5b4001b7:body:0023",
+            "628ec76d5b4001b7:body:0024",
+            "628ec76d5b4001b7:heading:0003",
+            "628ec76d5b4001b7:body:0025",
+            "628ec76d5b4001b7:heading:0004"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "chunk_id": "628ec76d5b4001b7:body:0010",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "图1：美国非农就业数据总览",
+            "二、海外市场一周复盘",
+            "本周黄金收涨，白银下跌。本周美伊局势反复，美元指数小幅回落，黄金小幅收涨。"
+          ],
+          "unit_refs": [
+            "unit:0153",
+            "unit:0154",
+            "unit:0155",
+            "unit:0156",
+            "unit:0157",
+            "unit:0158",
+            "unit:0159",
+            "unit:0160",
+            "unit:0161",
+            "unit:0162",
+            "unit:0163",
+            "unit:0164",
+            "unit:0165",
+            "unit:0166",
+            "unit:0167",
+            "unit:0168",
+            "unit:0169",
+            "unit:0170",
+            "unit:0171",
+            "unit:0172",
+            "unit:0173",
+            "unit:0174",
+            "unit:0175",
+            "unit:0176",
+            "unit:0177",
+            "unit:0178",
+            "unit:0179",
+            "unit:0180",
+            "unit:0181",
+            "unit:0182",
+            "unit:0183",
+            "unit:0184",
+            "unit:0185",
+            "unit:0186",
+            "unit:0187",
+            "unit:0188",
+            "unit:0189",
+            "unit:0190",
+            "unit:0191",
+            "unit:0192",
+            "unit:0193",
+            "unit:0194",
+            "unit:0195",
+            "unit:0196",
+            "unit:0197",
+            "unit:0198",
+            "unit:0201"
+          ],
+          "score": 0.030158730158730156,
+          "snippet": "<b>价格</b>均上涨\n资料来源：Wind",
+          "published": null,
+          "page": 8,
+          "cells": [],
+          "label_path": [
+            "图10：本周国际油价、铜期货价格均上涨"
+          ],
+          "context_chunk_ids": [
+            "628ec76d5b4001b7:table:0007",
+            "628ec76d5b4001b7:body:0010",
+            "628ec76d5b4001b7:heading:0001",
+            "628ec76d5b4001b7:body:0011",
+            "628ec76d5b4001b7:table:0008",
+            "628ec76d5b4001b7:body:0012",
+            "628ec76d5b4001b7:table:0009",
+            "628ec76d5b4001b7:body:0013",
+            "628ec76d5b4001b7:table:0010",
+            "628ec76d5b4001b7:body:0014",
+            "628ec76d5b4001b7:table:0011",
+            "628ec76d5b4001b7:body:0015",
+            "628ec76d5b4001b7:table:0012"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "chunk_id": "628ec76d5b4001b7:body:0009",
+          "kind": "body",
+          "title_text": "本周黄金收涨，白银下跌。本周美伊局势反复，美元指数小幅回落，黄金小幅收涨。",
+          "section_path": [
+            "图1：美国非农就业数据总览",
+            "二、海外市场一周复盘",
+            "本周黄金收涨，白银下跌。本周美伊局势反复，美元指数小幅回落，黄金小幅收涨。"
+          ],
+          "unit_refs": [
+            "unit:0131",
+            "unit:0132",
+            "unit:0133",
+            "unit:0134",
+            "unit:0135"
+          ],
+          "score": 0.02964254577157803,
+          "snippet": "截至9月4日当周，COMEX",
+          "published": null,
+          "page": 7,
+          "cells": [],
+          "label_path": [
+            "当前点位 本周涨幅(%) 近一个月(%) 标普500 7,718.60 +0.09 道琼斯工业指数 53,414.25 -0.27 纳斯达克综指 26,506.99 +0.40 图4：本周市场表现汇总（各指标截至当地时间2026 年9 月4 日） | 标普500 7,718.60 +0.09 道琼斯工业指数 53,414.25 -0.27 纳斯达克综指 26,506.99 +0.40 | -0. -1. | 24 欧元 1.1614 外汇 29 日元 156.2450 | +0.28 +2.47"
+          ],
+          "context_chunk_ids": [
+            "628ec76d5b4001b7:table:0003",
+            "628ec76d5b4001b7:body:0007",
+            "628ec76d5b4001b7:body:0008",
+            "628ec76d5b4001b7:body:0009",
+            "628ec76d5b4001b7:table:0004"
+          ],
+          "source_coverage": 4
+        }
+      ]
+    },
+    "global_rrf_cap3": {
+      "anchor_rank": 1,
+      "returned_bands": 10,
+      "sources": 8,
+      "unique_context_chunks": 147,
+      "repeated_context_chunks": 0,
+      "added_chunks": [
+        [
+          "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+          "2055995f24f1db3a:body:0000"
+        ],
+        [
+          "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+          "2055995f24f1db3a:body:0001"
+        ],
+        [
+          "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+          "2055995f24f1db3a:body:0002"
+        ],
+        [
+          "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+          "2055995f24f1db3a:body:0003"
+        ],
+        [
+          "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+          "2055995f24f1db3a:body:0004"
+        ],
+        [
+          "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+          "2055995f24f1db3a:body:0005"
+        ],
+        [
+          "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+          "2055995f24f1db3a:body:0006"
+        ],
+        [
+          "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+          "2055995f24f1db3a:body:0007"
+        ],
+        [
+          "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+          "2055995f24f1db3a:body:0008"
+        ],
+        [
+          "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+          "2055995f24f1db3a:body:0009"
+        ],
+        [
+          "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+          "2055995f24f1db3a:body:0010"
+        ],
+        [
+          "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+          "2055995f24f1db3a:body:0011"
+        ],
+        [
+          "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+          "2055995f24f1db3a:body:0012"
+        ],
+        [
+          "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+          "2055995f24f1db3a:body:0013"
+        ],
+        [
+          "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+          "2055995f24f1db3a:body:0014"
+        ],
+        [
+          "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+          "2055995f24f1db3a:heading:0000"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0024"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0025"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0026"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:body:0027"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0005"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0006"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:heading:0007"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0006"
+        ],
+        [
+          "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "82dac0d446ef83cd:table:0007"
+        ],
+        [
+          "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "e1b21386e9b62dde:body:0011"
+        ],
+        [
+          "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "e1b21386e9b62dde:body:0012"
+        ],
+        [
+          "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "e1b21386e9b62dde:body:0013"
+        ],
+        [
+          "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "e1b21386e9b62dde:body:0014"
+        ],
+        [
+          "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "e1b21386e9b62dde:body:0015"
+        ],
+        [
+          "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "e1b21386e9b62dde:body:0016"
+        ],
+        [
+          "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "e1b21386e9b62dde:body:0017"
+        ],
+        [
+          "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "e1b21386e9b62dde:body:0018"
+        ],
+        [
+          "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "e1b21386e9b62dde:body:0019"
+        ],
+        [
+          "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "e1b21386e9b62dde:body:0020"
+        ],
+        [
+          "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "e1b21386e9b62dde:body:0021"
+        ],
+        [
+          "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "e1b21386e9b62dde:body:0022"
+        ],
+        [
+          "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "e1b21386e9b62dde:body:0023"
+        ],
+        [
+          "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "e1b21386e9b62dde:body:0024"
+        ],
+        [
+          "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "e1b21386e9b62dde:heading:0007"
+        ],
+        [
+          "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "e1b21386e9b62dde:heading:0008"
+        ],
+        [
+          "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "e1b21386e9b62dde:table:0004"
+        ],
+        [
+          "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "e1b21386e9b62dde:table:0005"
+        ]
+      ],
+      "removed_chunks": [
+        [
+          "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "022ae1713fb760ff:body:0019"
+        ],
+        [
+          "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "022ae1713fb760ff:body:0020"
+        ],
+        [
+          "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "022ae1713fb760ff:body:0021"
+        ],
+        [
+          "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "022ae1713fb760ff:body:0022"
+        ],
+        [
+          "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "022ae1713fb760ff:heading:0002"
+        ],
+        [
+          "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "022ae1713fb760ff:table:0003"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0003"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0004"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0005"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0006"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0007"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:body:0008"
+        ],
+        [
+          "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "16a9a510ef9e405f:heading:0004"
+        ]
+      ],
+      "hits": [
+        {
+          "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+          "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+          "chunk_id": "1d0117eb6e17c63c:body:0008",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "材(-13.81%)、安集科技(-12.62%)、博迁新材(-12.48%)、国瓷材料(-12.35%)、三祥新",
+            "材(-11.88%)、东岳硅材(-11.32%)、雅克科技(-10.87%)、金博股份(-10.7%)。",
+            "图表9：本周涨跌幅后十"
+          ],
+          "unit_refs": [
+            "unit:0151",
+            "unit:0152",
+            "unit:0153",
+            "unit:0154",
+            "unit:0156",
+            "unit:0160",
+            "unit:0163",
+            "unit:0164",
+            "unit:0165",
+            "unit:0166",
+            "unit:0167",
+            "unit:0168",
+            "unit:0169",
+            "unit:0170",
+            "unit:0171",
+            "unit:0172",
+            "unit:0174",
+            "unit:0178"
+          ],
+          "score": 0.03252247488101534,
+          "snippet": "<b>氩气</b><b>价格</b>报2459元/吨，",
+          "published": null,
+          "page": 7,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "1d0117eb6e17c63c:body:0000",
+            "1d0117eb6e17c63c:body:0001",
+            "1d0117eb6e17c63c:heading:0000",
+            "1d0117eb6e17c63c:body:0002",
+            "1d0117eb6e17c63c:body:0003",
+            "1d0117eb6e17c63c:body:0004",
+            "1d0117eb6e17c63c:heading:0001",
+            "1d0117eb6e17c63c:body:0005",
+            "1d0117eb6e17c63c:heading:0002",
+            "1d0117eb6e17c63c:table:0000",
+            "1d0117eb6e17c63c:body:0006",
+            "1d0117eb6e17c63c:heading:0003",
+            "1d0117eb6e17c63c:table:0001",
+            "1d0117eb6e17c63c:body:0007",
+            "1d0117eb6e17c63c:body:0008",
+            "1d0117eb6e17c63c:body:0009",
+            "1d0117eb6e17c63c:body:0010",
+            "1d0117eb6e17c63c:body:0011",
+            "1d0117eb6e17c63c:body:0012",
+            "1d0117eb6e17c63c:table:0002",
+            "1d0117eb6e17c63c:table:0003",
+            "1d0117eb6e17c63c:body:0013",
+            "1d0117eb6e17c63c:body:0014"
+          ],
+          "source_coverage": 5
+        },
+        {
+          "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+          "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+          "chunk_id": "022ae1713fb760ff:body:0014",
+          "kind": "body",
+          "title_text": "9",
+          "section_path": [
+            "5",
+            "光伏：板块半年报整体呈现“景气底部夯实”状态，玻璃、胶膜、高效电池（尤其BC）等部分环节拐点或率先出现。",
+            "9"
+          ],
+          "unit_refs": [
+            "unit:0206",
+            "unit:0207",
+            "unit:0208",
+            "unit:0209",
+            "unit:0210",
+            "unit:0211",
+            "unit:0212",
+            "unit:0213",
+            "unit:0214",
+            "unit:0215",
+            "unit:0216",
+            "unit:0217",
+            "unit:0218",
+            "unit:0219",
+            "unit:0223",
+            "unit:0224",
+            "unit:0225",
+            "unit:0226",
+            "unit:0227",
+            "unit:0228",
+            "unit:0229",
+            "unit:0230",
+            "unit:0231",
+            "unit:0232",
+            "unit:0233"
+          ],
+          "score": 0.02273787313432836,
+          "snippet": "<b>价格</b>（元/片）\n图表",
+          "published": null,
+          "page": 9,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "022ae1713fb760ff:body:0000",
+            "022ae1713fb760ff:body:0001",
+            "022ae1713fb760ff:body:0002",
+            "022ae1713fb760ff:body:0003",
+            "022ae1713fb760ff:body:0004",
+            "022ae1713fb760ff:body:0005",
+            "022ae1713fb760ff:body:0006",
+            "022ae1713fb760ff:body:0007",
+            "022ae1713fb760ff:body:0008",
+            "022ae1713fb760ff:body:0009",
+            "022ae1713fb760ff:table:0000",
+            "022ae1713fb760ff:body:0010",
+            "022ae1713fb760ff:body:0011",
+            "022ae1713fb760ff:body:0012",
+            "022ae1713fb760ff:body:0013",
+            "022ae1713fb760ff:body:0014",
+            "022ae1713fb760ff:body:0015",
+            "022ae1713fb760ff:heading:0000",
+            "022ae1713fb760ff:heading:0001",
+            "022ae1713fb760ff:body:0016"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "chunk_id": "628ec76d5b4001b7:body:0027",
+          "kind": "body",
+          "title_text": "5、价格",
+          "section_path": [
+            "45",
+            "50",
+            "5、价格"
+          ],
+          "unit_refs": [
+            "unit:0413",
+            "unit:0414",
+            "unit:0415",
+            "unit:0416",
+            "unit:0417",
+            "unit:0418",
+            "unit:0419"
+          ],
+          "score": 0.022291021671826623,
+          "snippet": "<b>价格</b>上升。截至9月4日",
+          "published": null,
+          "page": 14,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "628ec76d5b4001b7:heading:0005",
+            "628ec76d5b4001b7:body:0026",
+            "628ec76d5b4001b7:body:0027",
+            "628ec76d5b4001b7:body:0028",
+            "628ec76d5b4001b7:heading:0006",
+            "628ec76d5b4001b7:body:0029",
+            "628ec76d5b4001b7:body:0030",
+            "628ec76d5b4001b7:body:0031",
+            "628ec76d5b4001b7:heading:0007",
+            "628ec76d5b4001b7:body:0032",
+            "628ec76d5b4001b7:body:0033",
+            "628ec76d5b4001b7:table:0020",
+            "628ec76d5b4001b7:body:0034",
+            "628ec76d5b4001b7:table:0021",
+            "628ec76d5b4001b7:body:0035",
+            "628ec76d5b4001b7:table:0022",
+            "628ec76d5b4001b7:body:0036",
+            "628ec76d5b4001b7:body:0037"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "chunk_id": "628ec76d5b4001b7:body:0003",
+          "kind": "body",
+          "title_text": "海外跟踪周报 20260906",
+          "section_path": [
+            "固定收益 | 固定收益点评",
+            "非农清障，通胀定调",
+            "海外跟踪周报 20260906"
+          ],
+          "unit_refs": [
+            "unit:0026",
+            "unit:0027",
+            "unit:0030",
+            "unit:0031",
+            "unit:0032",
+            "unit:0033",
+            "unit:0034",
+            "unit:0035",
+            "unit:0036",
+            "unit:0037",
+            "unit:0038",
+            "unit:0039",
+            "unit:0040",
+            "unit:0041",
+            "unit:0045"
+          ],
+          "score": 0.022214040255277366,
+          "snippet": "<b>价格</b>：本周美国零售汽油<b>价格</b>上升",
+          "published": null,
+          "page": 1,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "628ec76d5b4001b7:body:0000",
+            "628ec76d5b4001b7:body:0001",
+            "628ec76d5b4001b7:body:0002",
+            "628ec76d5b4001b7:body:0003",
+            "628ec76d5b4001b7:heading:0000",
+            "628ec76d5b4001b7:body:0004",
+            "628ec76d5b4001b7:body:0005",
+            "628ec76d5b4001b7:body:0006",
+            "628ec76d5b4001b7:table:0000"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+          "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+          "chunk_id": "628ec76d5b4001b7:body:0019",
+          "kind": "body",
+          "title_text": null,
+          "section_path": [
+            "三、海外政策与要闻",
+            "1、海外央行动态",
+            "2、海外政策跟踪"
+          ],
+          "unit_refs": [
+            "unit:0263",
+            "unit:0264",
+            "unit:0265",
+            "unit:0266",
+            "unit:0267",
+            "unit:0268",
+            "unit:0272",
+            "unit:0273"
+          ],
+          "score": 0.022132550745903645,
+          "snippet": "<b>价格</b>温和上涨。\n3）9月",
+          "published": null,
+          "page": 10,
+          "cells": [],
+          "label_path": [
+            "1）8 月 31 日，日元再破160。贝森特发声：日元“已得到控制”，日本央行“将做正确",
+            "的事”，“安倍经济学”已走到尽头。"
+          ],
+          "context_chunk_ids": [
+            "628ec76d5b4001b7:table:0015",
+            "628ec76d5b4001b7:body:0016",
+            "628ec76d5b4001b7:body:0017",
+            "628ec76d5b4001b7:table:0016",
+            "628ec76d5b4001b7:body:0018",
+            "628ec76d5b4001b7:table:0017",
+            "628ec76d5b4001b7:table:0018",
+            "628ec76d5b4001b7:body:0019",
+            "628ec76d5b4001b7:table:0019",
+            "628ec76d5b4001b7:body:0020",
+            "628ec76d5b4001b7:heading:0002",
+            "628ec76d5b4001b7:body:0021",
+            "628ec76d5b4001b7:body:0022",
+            "628ec76d5b4001b7:body:0023",
+            "628ec76d5b4001b7:body:0024",
+            "628ec76d5b4001b7:heading:0003",
+            "628ec76d5b4001b7:body:0025",
+            "628ec76d5b4001b7:heading:0004"
+          ],
+          "source_coverage": 4
+        },
+        {
+          "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+          "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+          "chunk_id": "16a9a510ef9e405f:heading:0001",
+          "kind": "heading",
+          "title_text": null,
+          "section_path": [
+            "“",
+            "”",
+            "行业周报"
+          ],
+          "unit_refs": [
+            "unit:0014"
+          ],
+          "score": 0.018303916324953942,
+          "snippet": "行业<b>周报</b>",
+          "published": null,
+          "page": 2,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "16a9a510ef9e405f:heading:0000",
+            "16a9a510ef9e405f:body:0001",
+            "16a9a510ef9e405f:body:0002",
+            "16a9a510ef9e405f:heading:0001",
+            "16a9a510ef9e405f:heading:0002"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+          "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+          "chunk_id": "1ada4314a25261ea:heading:0001",
+          "kind": "heading",
+          "title_text": null,
+          "section_path": [
+            "投资评级：看好（维持）",
+            "——环保行业周报（20260831~20260906）",
+            "投资要点："
+          ],
+          "unit_refs": [
+            "unit:0011",
+            "unit:0012"
+          ],
+          "score": 0.017888973771326713,
+          "snippet": "<b>周报</b>（20260831~20260906）\n投资",
+          "published": null,
+          "page": 1,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "1ada4314a25261ea:body:0000",
+            "1ada4314a25261ea:heading:0000",
+            "1ada4314a25261ea:body:0001",
+            "1ada4314a25261ea:heading:0001",
+            "1ada4314a25261ea:body:0002",
+            "1ada4314a25261ea:body:0003",
+            "1ada4314a25261ea:body:0004",
+            "1ada4314a25261ea:body:0005",
+            "1ada4314a25261ea:body:0006",
+            "1ada4314a25261ea:body:0007",
+            "1ada4314a25261ea:heading:0002"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+          "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+          "chunk_id": "e1b21386e9b62dde:body:0022",
+          "kind": "body",
+          "title_text": "2.2 A 股市场：大盘抗跌，防御占优",
+          "section_path": [
+            "SENSEX30",
+            "4/ 8",
+            "2.2 A 股市场：大盘抗跌，防御占优"
+          ],
+          "unit_refs": [
+            "unit:0130",
+            "unit:0131",
+            "unit:0132",
+            "unit:0133",
+            "unit:0134",
+            "unit:0135",
+            "unit:0136",
+            "unit:0137",
+            "unit:0138",
+            "unit:0139",
+            "unit:0140",
+            "unit:0141",
+            "unit:0142",
+            "unit:0143",
+            "unit:0144",
+            "unit:0145",
+            "unit:0146",
+            "unit:0147",
+            "unit:0148",
+            "unit:0149",
+            "unit:0150",
+            "unit:0151",
+            "unit:0152",
+            "unit:0153",
+            "unit:0154",
+            "unit:0155",
+            "unit:0156",
+            "unit:0157",
+            "unit:0158",
+            "unit:0159",
+            "unit:0160",
+            "unit:0161",
+            "unit:0162",
+            "unit:0163",
+            "unit:0164",
+            "unit:0165",
+            "unit:0166",
+            "unit:0167",
+            "unit:0168",
+            "unit:0169",
+            "unit:0170",
+            "unit:0171",
+            "unit:0172",
+            "unit:0173",
+            "unit:0174",
+            "unit:0175",
+            "unit:0176",
+            "unit:0177",
+            "unit:0178",
+            "unit:0179",
+            "unit:0180",
+            "unit:0181",
+            "unit:0182",
+            "unit:0183",
+            "unit:0184",
+            "unit:0185",
+            "unit:0186",
+            "unit:0187",
+            "unit:0188",
+            "unit:0189",
+            "unit:0190",
+            "unit:0191",
+            "unit:0192"
+          ],
+          "score": 0.017615930928839993,
+          "snippet": "图表4\n近一周A股",
+          "published": null,
+          "page": 4,
+          "cells": [],
+          "label_path": [
+            "指数 上证指数"
+          ],
+          "context_chunk_ids": [
+            "e1b21386e9b62dde:heading:0007",
+            "e1b21386e9b62dde:body:0011",
+            "e1b21386e9b62dde:body:0012",
+            "e1b21386e9b62dde:body:0013",
+            "e1b21386e9b62dde:body:0014",
+            "e1b21386e9b62dde:body:0015",
+            "e1b21386e9b62dde:body:0016",
+            "e1b21386e9b62dde:body:0017",
+            "e1b21386e9b62dde:body:0018",
+            "e1b21386e9b62dde:body:0019",
+            "e1b21386e9b62dde:body:0020",
+            "e1b21386e9b62dde:body:0021",
+            "e1b21386e9b62dde:body:0022",
+            "e1b21386e9b62dde:table:0004",
+            "e1b21386e9b62dde:body:0023",
+            "e1b21386e9b62dde:heading:0008",
+            "e1b21386e9b62dde:body:0024",
+            "e1b21386e9b62dde:table:0005"
+          ],
+          "source_coverage": 3
+        },
+        {
+          "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+          "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+          "chunk_id": "82dac0d446ef83cd:body:0026",
+          "kind": "body",
+          "title_text": "纯碱是另一个较为典型的案例，在煤炭价格变化不大的情况下，纯碱价格上涨能够较直\n接地转化为价差扩大，价格和价差的方向基本一致，这种情况通常观察产品的价格即可。",
+          "section_path": [
+            "显著上涨的影响，磷酸二铵价格虽然有所上升，但价差却在缩小，景气反而下降。",
+            "纯碱是另一个较为典型的案例，在煤炭价格变化不大的情况下，纯碱价格上涨能够较直",
+            "接地转化为价差扩大，价格和价差的方向基本一致，这种情况通常观察产品的价格即可。"
+          ],
+          "unit_refs": [
+            "unit:0436",
+            "unit:0438",
+            "unit:0439",
+            "unit:0440",
+            "unit:0441",
+            "unit:0442",
+            "unit:0443",
+            "unit:0444",
+            "unit:0445",
+            "unit:0446",
+            "unit:0447",
+            "unit:0448",
+            "unit:0449",
+            "unit:0450",
+            "unit:0451",
+            "unit:0452",
+            "unit:0453",
+            "unit:0454",
+            "unit:0455",
+            "unit:0456",
+            "unit:0457",
+            "unit:0458",
+            "unit:0459",
+            "unit:0460",
+            "unit:0461",
+            "unit:0462",
+            "unit:0463",
+            "unit:0464",
+            "unit:0465",
+            "unit:0466",
+            "unit:0467",
+            "unit:0468",
+            "unit:0469",
+            "unit:0470",
+            "unit:0471",
+            "unit:0472",
+            "unit:0473",
+            "unit:0474",
+            "unit:0475",
+            "unit:0476",
+            "unit:0477",
+            "unit:0478"
+          ],
+          "score": 0.0165,
+          "snippet": "<b>价格</b><b>变化</b>不大\n图4：纯碱",
+          "published": null,
+          "page": 8,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "82dac0d446ef83cd:table:0006",
+            "82dac0d446ef83cd:body:0024",
+            "82dac0d446ef83cd:heading:0005",
+            "82dac0d446ef83cd:body:0025",
+            "82dac0d446ef83cd:heading:0006",
+            "82dac0d446ef83cd:body:0026",
+            "82dac0d446ef83cd:table:0007",
+            "82dac0d446ef83cd:body:0027",
+            "82dac0d446ef83cd:heading:0007"
+          ],
+          "source_coverage": 2
+        },
+        {
+          "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+          "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+          "chunk_id": "2055995f24f1db3a:body:0002",
+          "kind": "body",
+          "title_text": "图表目录",
+          "section_path": [
+            "内容目录",
+            "图表目录"
+          ],
+          "unit_refs": [
+            "unit:0032",
+            "unit:0033",
+            "unit:0034",
+            "unit:0035",
+            "unit:0036",
+            "unit:0037",
+            "unit:0038",
+            "unit:0039",
+            "unit:0040",
+            "unit:0043"
+          ],
+          "score": 0.01610644257703081,
+          "snippet": "<b>价格</b>（8.31-9.04）......................",
+          "published": null,
+          "page": 2,
+          "cells": [],
+          "label_path": [],
+          "context_chunk_ids": [
+            "2055995f24f1db3a:body:0000",
+            "2055995f24f1db3a:body:0001",
+            "2055995f24f1db3a:body:0002",
+            "2055995f24f1db3a:body:0003",
+            "2055995f24f1db3a:body:0004",
+            "2055995f24f1db3a:body:0005",
+            "2055995f24f1db3a:body:0006",
+            "2055995f24f1db3a:body:0007",
+            "2055995f24f1db3a:body:0008",
+            "2055995f24f1db3a:body:0009",
+            "2055995f24f1db3a:body:0010",
+            "2055995f24f1db3a:body:0011",
+            "2055995f24f1db3a:body:0012",
+            "2055995f24f1db3a:heading:0000",
+            "2055995f24f1db3a:body:0013",
+            "2055995f24f1db3a:body:0014"
+          ],
+          "source_coverage": 3
+        }
+      ]
+    }
+  }
+}

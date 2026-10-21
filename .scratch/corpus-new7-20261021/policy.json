@@ -1,0 +1,38 @@
+{
+  "policy_rev": "v3-dev-20261021",
+  "frozen": true,
+  "scope": "dev",
+  "auto_decision": {
+    "enabled": false
+  },
+  "allowed_materials": [
+    "research_report",
+    "personal_or_external_subscription"
+  ],
+  "dev_lane": {
+    "lane_id": "new7-user-20261021",
+    "sources": [
+      {
+        "source_id": "8935e5291a43a0251b35b7c82e6a228d86f41929f9c19acda8f3d8cf168defb1"
+      },
+      {
+        "source_id": "a981b0641542c425a0ebcdb69af2333a8f82c4d65d5f434a6850453463aa0f49"
+      },
+      {
+        "source_id": "b505dcd712bc33050d71b82783fae29bc9e7f61fdc4d8300e2f5e126168ca1c6"
+      },
+      {
+        "source_id": "004303e2ff4f9acd4f315c909c098ebe0af5d2d1b7f537dc701b5e1fc02caa7e"
+      },
+      {
+        "source_id": "8b11fbdd67b1d0a215c39c3155799e12cb9c259d6a7b40066d6efa557434ed39"
+      },
+      {
+        "source_id": "eecaab994514609bf9d459618e9d0cb53c00b5fa4bbebcebf413f6d97c7f4e23"
+      },
+      {
+        "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7"
+      }
+    ]
+  }
+}
