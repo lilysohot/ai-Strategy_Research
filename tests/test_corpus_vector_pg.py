@@ -16,6 +16,7 @@ from plugins.corpus.preparation import read_pg
 from plugins.corpus.preparation.search_pg import build_search_params
 from plugins.corpus.retrieval import hybrid
 from plugins.corpus.retrieval.cli import pilot_dsn
+from plugins.corpus.retrieval.diagnostics import RetrievalTrace
 from plugins.corpus.retrieval.embedding import EmbeddingError, EmbeddingResult, VectorConfig
 from plugins.corpus.retrieval.index_pg import ACTIVE_SQL, VectorIndex, ready_counts
 from plugins.corpus.service import CorpusService
@@ -82,9 +83,20 @@ def test_incremental_reuse_retrieval_revocation_and_input_integrity(pilot, monke
         hybrid, "query_vector", lambda c, q: (fake_vector(q, "query").vector, False, {})
     )
     monkeypatch.setenv("CORPUS_RETRIEVAL_MODE", "hybrid")
-    hits, coverage = CorpusService(dsn).search_with_coverage("行业供需变化", limit=10)
+    service = CorpusService(dsn)
+    hits, coverage = service.search_with_coverage("行业供需变化", limit=10)
+    trace = RetrievalTrace()
+    traced_hits, _ = service.search_with_coverage("行业供需变化", limit=10, trace=trace)
+    assert traced_hits == hits
+    assert trace.status == "hybrid"
+    assert trace.dense and trace.fused and trace.selected and trace.selectable_bands
     assert coverage["retrieval"]["used"] == "hybrid"
     assert hits and all(hit.build_id and hit.context_locators for hit in hits)
+    views = service.evidence_previews("行业供需变化", hits)
+    assert len(views) == len(hits)
+    for hit, view in zip(hits, views, strict=True):
+        assert set(view["core_fetch_plan"]["locators"]) <= set(hit.context_locators)
+        assert view["expansion"]["locators"] == list(dict.fromkeys(hit.context_locators))
     # Exercise the existing authoritative fetch protocol for an actual vector result.
     evidence = read_pg.fetch_verbatim(
         dsn, hits[0].doc_id, hits[0].locator, sandbox_db=cfg.target_db
@@ -136,7 +148,12 @@ def test_incremental_reuse_retrieval_revocation_and_input_integrity(pilot, monke
             raise EmbeddingError("provider_transport_uncertain", uncertain=True)
 
         patch.setattr(hybrid, "query_vector", fail_query)
-        degraded = hybrid.search(dsn, "行业", original_query="行业", sandbox_db=cfg.target_db)
+        trace = RetrievalTrace()
+        degraded = hybrid.search(
+            dsn, "行业", original_query="行业", sandbox_db=cfg.target_db, trace=trace
+        )
+        assert trace.status == "lexical_fallback"
+        assert trace.dense == () and trace.fused == trace.lexical
         assert degraded[2]["retrieval"]["reason"] == "provider_transport_uncertain"
         assert degraded[3] is None
     with monkeypatch.context() as patch:

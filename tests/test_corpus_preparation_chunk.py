@@ -85,6 +85,26 @@ def _by_key(result):
 # --- 正文：章节/段落/句界与标题关联 ---
 
 
+def test_long_english_prose_splits_without_cutting_decimals_or_abbreviations():
+    from plugins.corpus.preparation.chunk import _split_sentences
+
+    sentence = "Dr. Smith at U.S. Inc. expects 1.6T demand to increase. "
+    text = sentence * 45
+    result = _chunk_of([_unit(1, text)])
+    assert not result.oversized_ordinals
+    assert all(len(c.search_text) <= HARD_LIMIT for c in result.chunks)
+    assert all(c.unit_ordinals == (1,) for c in result.chunks)
+    assert "".join(_split_sentences(text)) == text
+    assert all(
+        "Dr. Smith at U.S. Inc. expects 1.6T" in s for s in _split_sentences(text) if s.strip()
+    )
+
+
+def test_english_unbroken_sentence_remains_oversized():
+    result = _chunk_of([_unit(1, "Longunbrokenword" * 150)])
+    assert result.oversized_ordinals == (1,)
+
+
 def test_body_accumulation_with_heading_title_and_section() -> None:
     units = [
         _unit(1, "一、行业概况", kind="heading"),
@@ -324,7 +344,10 @@ def test_consecutive_headings_merged_into_single_chunk() -> None:
     result = _chunk_of(units)
     headings = [c for c in result.chunks if c.kind == "heading"]
     assert len(headings) == 1
-    assert headings[0].search_text == "光力科技（300480.SZ）\n2026 年中报点评：半导体划片机国内龙头，经营拐点向上"
+    assert (
+        headings[0].search_text
+        == "光力科技（300480.SZ）\n2026 年中报点评：半导体划片机国内龙头，经营拐点向上"
+    )
     assert headings[0].unit_ordinals == (1, 2)
     body = next(c for c in result.chunks if c.kind == "body")
     assert body.title_text == headings[0].search_text  # 合并标题作后文标题关联

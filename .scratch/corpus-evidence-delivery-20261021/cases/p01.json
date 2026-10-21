@@ -1,0 +1,99 @@
+{
+  "case": "p01",
+  "kind": "positive",
+  "review": {
+    "class": "direct",
+    "reason": "解释走线、电容和工作电压如何影响功耗",
+    "markers": [
+      "互连电容",
+      "降低工作电压"
+    ]
+  },
+  "capture_sha256": "9ad82af3f8514c90a962dba7c6a1ffb432a78cff5c981cc31393823dc09fcc0a",
+  "original_sha256": "fbb8ff5e27e20b675ece16a90d13d3e8a3e1cdcadc873952754dde73ae0026ee",
+  "original_retrieval": "hybrid",
+  "top_chunk": "16a9a510ef9e405f:body:0001",
+  "top_original_chars": 1109,
+  "old_snippet": "<b>麒麟</b>2026的<b>芯片</b><b>晶体管</b>密度从约",
+  "preview": {
+    "text": "”\n投资逻辑 \n\n “韬定律”与业绩斜率：AI PCB 及半导体设备迎来布局良机。9 月4 日，华为半导体负责人何庭波在中科院科技\n论文预发布平台ChinaXiv，再次发布相关论文《Huawei's τ Chip Was Supposed to Melt?》，提到热量是韬定律\n最棘手的隐忧，而麒麟芯片实测结果，颠覆了这一质疑。数据显示，麒麟2026 的芯片晶体管密度从约每平方毫\n米1.55 亿提升到2.38 亿个，跃升55%。在同等性能的测试条件下，对比前代平面架构麒麟9030 Pro，麒麟2026\n的NPU 功耗下降66%，GPU 功耗下降58%，CPU 性能大核功耗下降41%，在晶体管数量暴涨的同时，完成同\n等工作的芯片工作温度更低。论文解释了反常识的核心原因：芯片绝大部分能耗，并非消耗在晶体管本身的计算\n运算上，而是消耗在金属走线的数据搬运，如同上班族通勤的能量消耗远大于工位办公。逻辑折叠大幅缩短信号\n走线长度，直接削减占据功耗大头的互连电容开销。走线缩短带来电容层面的功耗缩减，同时走线变短后，电路\n可以进一步降低工作电压；动态功耗与电压平方成正比，由此带来幅度更大的功耗收益。我们认为，华为韬定律\n芯片从平面集成走向立体集成，工艺步骤、互连数量和制造复杂度同步提升，对半导体设备是积极利好，半导体\n设备板块近期股价连续回撤，产业逻辑没有发生变化。",
+    "start": 0,
+    "end": 585,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "工作",
+      "晶体管",
+      "芯片",
+      "解释",
+      "麒麟"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": [
+      "互连电容",
+      "降低工作电压"
+    ]
+  },
+  "core_chunks": 7,
+  "full_chunks": 90,
+  "original_context_occurrences": 109,
+  "preview_statuses": {
+    "complete_sentence_window": 10
+  },
+  "preview_chars": [
+    585,
+    299,
+    566,
+    570,
+    541,
+    541,
+    299,
+    566,
+    570,
+    549
+  ],
+  "body_chars": {
+    "off": 17177,
+    "pilot": 35546
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 5635,
+        "hits": 3,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 4299,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11823,
+        "hits": 6,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 10543,
+        "hits": 5,
+        "previews": 5,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

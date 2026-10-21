@@ -1,0 +1,134 @@
+{
+  "baseline": {
+    "body_first_cases": 22,
+    "full_block_first_cases": 21,
+    "gold_context_blocks": 38,
+    "new_source_gold_context_blocks": 34,
+    "baseline_scope_preserved_cases": 32,
+    "contexts_all32": 3178,
+    "template_anchors": 2,
+    "rows_all32": 265,
+    "lost_gold": {},
+    "detailed_top1": {
+      "p01": {
+        "full": true,
+        "facets": [
+          "interconnect",
+          "voltage"
+        ]
+      },
+      "p13": {
+        "full": false,
+        "facets": []
+      },
+      "p16": {
+        "full": false,
+        "facets": [
+          "luxshare"
+        ]
+      }
+    }
+  },
+  "previous": {
+    "body_first_cases": 24,
+    "full_block_first_cases": 23,
+    "gold_context_blocks": 38,
+    "new_source_gold_context_blocks": 34,
+    "baseline_scope_preserved_cases": 32,
+    "contexts_all32": 3178,
+    "template_anchors": 2,
+    "rows_all32": 265,
+    "lost_gold": {},
+    "detailed_top1": {
+      "p01": {
+        "full": true,
+        "facets": [
+          "interconnect",
+          "voltage"
+        ]
+      },
+      "p13": {
+        "full": true,
+        "facets": [
+          "manufacturing",
+          "services"
+        ]
+      },
+      "p16": {
+        "full": true,
+        "facets": [
+          "huagong",
+          "luxshare"
+        ]
+      }
+    }
+  },
+  "aliases_roles": {
+    "body_first_cases": 24,
+    "full_block_first_cases": 23,
+    "gold_context_blocks": 38,
+    "new_source_gold_context_blocks": 34,
+    "baseline_scope_preserved_cases": 32,
+    "contexts_all32": 3178,
+    "template_anchors": 2,
+    "rows_all32": 265,
+    "lost_gold": {},
+    "detailed_top1": {
+      "p01": {
+        "full": true,
+        "facets": [
+          "interconnect",
+          "voltage"
+        ]
+      },
+      "p13": {
+        "full": true,
+        "facets": [
+          "manufacturing",
+          "services"
+        ]
+      },
+      "p16": {
+        "full": true,
+        "facets": [
+          "huagong",
+          "luxshare"
+        ]
+      }
+    }
+  },
+  "years": {
+    "body_first_cases": 23,
+    "full_block_first_cases": 22,
+    "gold_context_blocks": 38,
+    "new_source_gold_context_blocks": 34,
+    "baseline_scope_preserved_cases": 32,
+    "contexts_all32": 3178,
+    "template_anchors": 2,
+    "rows_all32": 265,
+    "lost_gold": {},
+    "detailed_top1": {
+      "p01": {
+        "full": true,
+        "facets": [
+          "interconnect",
+          "voltage"
+        ]
+      },
+      "p13": {
+        "full": true,
+        "facets": [
+          "manufacturing",
+          "services"
+        ]
+      },
+      "p16": {
+        "full": true,
+        "facets": [
+          "huagong",
+          "luxshare"
+        ]
+      }
+    }
+  }
+}

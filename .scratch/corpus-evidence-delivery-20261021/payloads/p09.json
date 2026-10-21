@@ -1,0 +1,1104 @@
+{
+  "ok": true,
+  "query": "AI电源和液冷公司的相关收入还不多时，国金通过哪些财务和经营线索判断订单即将放量？",
+  "count": 10,
+  "hits": [
+    {
+      "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "locator": "chunk:022ae1713fb760ff:body:0000",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0000",
+      "context_locators": [
+        "chunk:022ae1713fb760ff:body:0000",
+        "chunk:022ae1713fb760ff:body:0001",
+        "chunk:022ae1713fb760ff:body:0002",
+        "chunk:022ae1713fb760ff:body:0003",
+        "chunk:022ae1713fb760ff:body:0004",
+        "chunk:022ae1713fb760ff:body:0005",
+        "chunk:022ae1713fb760ff:body:0006",
+        "chunk:022ae1713fb760ff:body:0007",
+        "chunk:022ae1713fb760ff:body:0008",
+        "chunk:022ae1713fb760ff:body:0009",
+        "chunk:022ae1713fb760ff:table:0000",
+        "chunk:022ae1713fb760ff:body:0010",
+        "chunk:022ae1713fb760ff:body:0011",
+        "chunk:022ae1713fb760ff:body:0012",
+        "chunk:022ae1713fb760ff:body:0013",
+        "chunk:022ae1713fb760ff:body:0014",
+        "chunk:022ae1713fb760ff:body:0015",
+        "chunk:022ae1713fb760ff:heading:0000",
+        "chunk:022ae1713fb760ff:heading:0001",
+        "chunk:022ae1713fb760ff:body:0016",
+        "chunk:022ae1713fb760ff:table:0001"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locator": "chunk:022ae1713fb760ff:body:0000",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015",
+          "chunk:022ae1713fb760ff:heading:0000",
+          "chunk:022ae1713fb760ff:heading:0001",
+          "chunk:022ae1713fb760ff:body:0016",
+          "chunk:022ae1713fb760ff:table:0001"
+        ],
+        "scope_id": "scope:681677f30db3ac298ce5018a2283f4ec",
+        "view": "compact"
+      },
+      "scope_id": "scope:681677f30db3ac298ce5018a2283f4ec",
+      "total_chunks": 21,
+      "by_kind": {
+        "body": 1,
+        "unknown": 20
+      },
+      "table_chunks": 0,
+      "title": "022ae1713fb760ff:body:0000",
+      "published": "undated",
+      "snippet": "<b>AI</b><b>相关</b><b>订单</b>、<b>收入</b><b>放量</b>的窗口",
+      "preview": {
+        "text": "敬请参阅最后一页特别声明\n1 \n子行业周度核心观点\n整体观点： \n本周我们陆续发布电新板块各子行业半年报总结，整体来看，不同子行业之间业绩表现差异显著：1）锂电板块，在全\n球动储需求同步高增叠加税费政策调整带来的“抢装”需求影响下，上半年整体呈现量价利齐升的景气上行趋势；2）\nAIDC 电源与液冷板块，尽管大部分公司在半年报中呈现的AI 相关收入仍较少，但从存货、购买商品现金流出、在建\n工程等财务指标，以及管理层讨论中呈现的订单展望等方面，已能够看到许多公司开始进入订单储备、客户认证、产\n能建设、备料阶段，预计未来半年内将看到大量企业开始进入AI 相关订单、收入放量的窗口；3）光伏板块，在上半\n年内需低迷的影响下，产业链供需矛盾仍然突出，但企业在盈利承压下普遍以销定产、控制亏损、加强现金管理，夯\n实产业链价格与盈利底部，部分辅材及BC 组件龙头率先呈现拐点迹象；4）电网设备方面，变压器、高压开关等核心\n产品出口维持较快增长。结合行业半年报，AI 基建相关领域（SOFC/电源/液冷/电力设备出口）及基本面景气度持续\n高企但股价背离显著的锂电板块仍是我们当前时点优先推荐方向，同时围绕全球能源自主、细分领域技术迭代相关的\n风光储领域强alpha 个股当前也是低位布局的理想选择。",
+        "start": 0,
+        "end": 544,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "ai",
+          "公司",
+          "收入",
+          "放量",
+          "电源",
+          "相关",
+          "订单",
+          "财务"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015",
+          "chunk:022ae1713fb760ff:heading:0000",
+          "chunk:022ae1713fb760ff:heading:0001",
+          "chunk:022ae1713fb760ff:body:0016",
+          "chunk:022ae1713fb760ff:table:0001"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015",
+          "chunk:022ae1713fb760ff:heading:0000",
+          "chunk:022ae1713fb760ff:heading:0001",
+          "chunk:022ae1713fb760ff:body:0016",
+          "chunk:022ae1713fb760ff:table:0001"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0017",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0017",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:body:0010",
+        "chunk:568f9e752f0fa65a:table:0008",
+        "chunk:568f9e752f0fa65a:body:0011",
+        "chunk:568f9e752f0fa65a:table:0009",
+        "chunk:568f9e752f0fa65a:body:0012",
+        "chunk:568f9e752f0fa65a:table:0010",
+        "chunk:568f9e752f0fa65a:body:0013",
+        "chunk:568f9e752f0fa65a:table:0011",
+        "chunk:568f9e752f0fa65a:body:0014",
+        "chunk:568f9e752f0fa65a:body:0015",
+        "chunk:568f9e752f0fa65a:table:0012",
+        "chunk:568f9e752f0fa65a:table:0013",
+        "chunk:568f9e752f0fa65a:table:0014",
+        "chunk:568f9e752f0fa65a:body:0016",
+        "chunk:568f9e752f0fa65a:body:0017",
+        "chunk:568f9e752f0fa65a:body:0018",
+        "chunk:568f9e752f0fa65a:heading:0006"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locator": "chunk:568f9e752f0fa65a:body:0017",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0010",
+          "chunk:568f9e752f0fa65a:table:0008",
+          "chunk:568f9e752f0fa65a:body:0011",
+          "chunk:568f9e752f0fa65a:table:0009",
+          "chunk:568f9e752f0fa65a:body:0012",
+          "chunk:568f9e752f0fa65a:table:0010",
+          "chunk:568f9e752f0fa65a:body:0013",
+          "chunk:568f9e752f0fa65a:table:0011",
+          "chunk:568f9e752f0fa65a:body:0014",
+          "chunk:568f9e752f0fa65a:body:0015",
+          "chunk:568f9e752f0fa65a:table:0012",
+          "chunk:568f9e752f0fa65a:table:0013",
+          "chunk:568f9e752f0fa65a:table:0014",
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018",
+          "chunk:568f9e752f0fa65a:heading:0006"
+        ],
+        "scope_id": "scope:dddb4030feb598b6a08de5e83fc415f7",
+        "view": "compact"
+      },
+      "scope_id": "scope:dddb4030feb598b6a08de5e83fc415f7",
+      "total_chunks": 17,
+      "by_kind": {
+        "unknown": 17
+      },
+      "table_chunks": 0,
+      "title": "半导体划片机转入放量进程,煤矿业务企稳",
+      "published": "undated",
+      "snippet": "<b>订单</b>，<b>公司</b>国内半导体业务<b>收入</b>首",
+      "preview": {
+        "text": "2025 年，全球硅晶圆\n出货量增长5.8%至129.73 亿平方英寸，划切、研磨和抛光设备市场需求有望持\n续提升。\n全球高端划片机市场长期由海外厂商主导。日本DISCO、东京精密等海外厂商市\n场占有率极高。由于半导体划切设备直接影响芯片性能、良率与生产成本，对精\n度、稳定性和效率要求高，国产设备通常需要经历较长时间的测试验证和小批量\n导入，因此国产目前替代仍处于由验证向批量采购过渡的阶段。\n图5：全球半导体行业需求增长\n图9：全球硅晶圆出货量增长\n资料来源：WSTS，国信证券经济研究所整理\n资料来源：公司年报，国信证券经济研究所整理\n公司国产划片机已经进入头部封测客户并开始逐步放量。2026 年上半年，8230CF、\n82WT 等高端机型获得批量订单，公司国内半导体业务收入首次超过海外业务，成\n为业绩增长的核心动力。同期，公司半导体封测装备制造业务收入同比增长\n162.25%至3.51 亿元，业务毛利率同比提升3.40 个百分点至44.97%。考虑到激\n光划片机、研磨设备和国产硬刀仍处于客户验证或产能爬坡阶段，公司半导体业\n务仍处在产品导入和市场份额提升的早期阶段。\n国产划切设备放量已成为公司业绩修复的核心动力。公司国产划片机已经进入头\n部封测客户并开始逐步放量。2025 年，公司半导体封测装备销量为351 台（套），\n同比增长28.57%，创历史新高。",
+        "start": 274,
+        "end": 861,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "公司",
+          "收入",
+          "放量",
+          "订单"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0017"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0010",
+          "chunk:568f9e752f0fa65a:table:0008",
+          "chunk:568f9e752f0fa65a:body:0011",
+          "chunk:568f9e752f0fa65a:table:0009",
+          "chunk:568f9e752f0fa65a:body:0012",
+          "chunk:568f9e752f0fa65a:table:0010",
+          "chunk:568f9e752f0fa65a:body:0013",
+          "chunk:568f9e752f0fa65a:table:0011",
+          "chunk:568f9e752f0fa65a:body:0014",
+          "chunk:568f9e752f0fa65a:body:0015",
+          "chunk:568f9e752f0fa65a:table:0012",
+          "chunk:568f9e752f0fa65a:table:0013",
+          "chunk:568f9e752f0fa65a:table:0014",
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018",
+          "chunk:568f9e752f0fa65a:heading:0006"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:568f9e752f0fa65a:body:0010",
+          "chunk:568f9e752f0fa65a:table:0008",
+          "chunk:568f9e752f0fa65a:body:0011",
+          "chunk:568f9e752f0fa65a:table:0009",
+          "chunk:568f9e752f0fa65a:body:0012",
+          "chunk:568f9e752f0fa65a:table:0010",
+          "chunk:568f9e752f0fa65a:body:0013",
+          "chunk:568f9e752f0fa65a:table:0011",
+          "chunk:568f9e752f0fa65a:body:0014",
+          "chunk:568f9e752f0fa65a:body:0015",
+          "chunk:568f9e752f0fa65a:table:0012",
+          "chunk:568f9e752f0fa65a:table:0013",
+          "chunk:568f9e752f0fa65a:table:0014",
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018",
+          "chunk:568f9e752f0fa65a:heading:0006"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "locator": "chunk:16a9a510ef9e405f:body:0006",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0006",
+      "context_locators": [
+        "chunk:16a9a510ef9e405f:heading:0003",
+        "chunk:16a9a510ef9e405f:heading:0004",
+        "chunk:16a9a510ef9e405f:body:0003",
+        "chunk:16a9a510ef9e405f:body:0004",
+        "chunk:16a9a510ef9e405f:body:0005",
+        "chunk:16a9a510ef9e405f:body:0006",
+        "chunk:16a9a510ef9e405f:body:0007",
+        "chunk:16a9a510ef9e405f:body:0008",
+        "chunk:16a9a510ef9e405f:body:0009",
+        "chunk:16a9a510ef9e405f:body:0010"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locator": "chunk:16a9a510ef9e405f:body:0006",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0003",
+          "chunk:16a9a510ef9e405f:heading:0004",
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010"
+        ],
+        "scope_id": "scope:54ab8ccc627f63d6cedb03e0b20410a7",
+        "view": "compact"
+      },
+      "scope_id": "scope:54ab8ccc627f63d6cedb03e0b20410a7",
+      "total_chunks": 10,
+      "by_kind": {
+        "unknown": 10
+      },
+      "table_chunks": 0,
+      "title": "一、细分板块观点\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩",
+      "published": "undated",
+      "snippet": "<b>AI</b>应用落地：1）<b>AI</b>手机",
+      "preview": {
+        "text": "我们认\n为，随着台积电Rubin 及谷歌/亚马逊等ASIC 厂商新产品的拉货，Q3 环比增长有望加速，继续看好AI 产业链硬件核\n心公司。我们研判谷歌、亚马逊、Meta、Open AI 及微软的ASIC 数量，2026-2027 年将迎来爆发式增长。我们认为\nAI 强劲需求带动PCB 价量齐升，目前多家AI-PCB 公司订单强劲，满产满销，正在大力扩产，业绩高增长有望持续。\nAI 覆铜板也需求旺盛，由于海外覆铜板厂商扩产缓慢，缺货涨价情况持续，大陆覆铜板龙头厂商有望积极受益。整体\n来看，继续看好AI 覆铜板/PCB 及核心算力硬件、半导体设备及苹果产业链。相关标的：长鑫科技、生益科技、北方\n华创、中微公司、拓荆科技、东山精密、沪电股份、鹏鼎控股、景旺电子、微导纳米、胜宏科技、大族数控、蓝特光\n学、南亚新材、三环集团、深南电路、芯原股份、广合科技、生益电子、鼎泰高科、芯碁微装、大族激光、立讯精密、\n寒武纪、长川科技、水晶光电、江海股份、东睦股份、奥海科技、安集科技、江丰电子、鼎龙股份、铂科新材、顺络\n电子、蓝思科技、领益智造。美股建议关注：台积电、美光科技、英伟达、海力士、博通、天弘科技。",
+        "start": 956,
+        "end": 1457,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "ai",
+          "公司",
+          "订单"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0006"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0003",
+          "chunk:16a9a510ef9e405f:heading:0004",
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:16a9a510ef9e405f:heading:0003",
+          "chunk:16a9a510ef9e405f:heading:0004",
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "locator": "chunk:6b55ddbbcfdc484d:body:0005",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0005",
+      "context_locators": [
+        "chunk:6b55ddbbcfdc484d:body:0000",
+        "chunk:6b55ddbbcfdc484d:body:0001",
+        "chunk:6b55ddbbcfdc484d:body:0002",
+        "chunk:6b55ddbbcfdc484d:body:0003",
+        "chunk:6b55ddbbcfdc484d:heading:0000",
+        "chunk:6b55ddbbcfdc484d:body:0004",
+        "chunk:6b55ddbbcfdc484d:body:0005",
+        "chunk:6b55ddbbcfdc484d:body:0006",
+        "chunk:6b55ddbbcfdc484d:body:0007",
+        "chunk:6b55ddbbcfdc484d:body:0008",
+        "chunk:6b55ddbbcfdc484d:body:0009",
+        "chunk:6b55ddbbcfdc484d:table:0000",
+        "chunk:6b55ddbbcfdc484d:body:0010",
+        "chunk:6b55ddbbcfdc484d:list:0000",
+        "chunk:6b55ddbbcfdc484d:table:0001",
+        "chunk:6b55ddbbcfdc484d:body:0011",
+        "chunk:6b55ddbbcfdc484d:table:0002",
+        "chunk:6b55ddbbcfdc484d:list:0001",
+        "chunk:6b55ddbbcfdc484d:body:0012",
+        "chunk:6b55ddbbcfdc484d:body:0013"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+        "locator": "chunk:6b55ddbbcfdc484d:body:0005",
+        "locators": [
+          "chunk:6b55ddbbcfdc484d:body:0000",
+          "chunk:6b55ddbbcfdc484d:body:0001",
+          "chunk:6b55ddbbcfdc484d:body:0002",
+          "chunk:6b55ddbbcfdc484d:body:0003",
+          "chunk:6b55ddbbcfdc484d:heading:0000",
+          "chunk:6b55ddbbcfdc484d:body:0004",
+          "chunk:6b55ddbbcfdc484d:body:0005",
+          "chunk:6b55ddbbcfdc484d:body:0006",
+          "chunk:6b55ddbbcfdc484d:body:0007",
+          "chunk:6b55ddbbcfdc484d:body:0008",
+          "chunk:6b55ddbbcfdc484d:body:0009",
+          "chunk:6b55ddbbcfdc484d:table:0000",
+          "chunk:6b55ddbbcfdc484d:body:0010",
+          "chunk:6b55ddbbcfdc484d:list:0000",
+          "chunk:6b55ddbbcfdc484d:table:0001",
+          "chunk:6b55ddbbcfdc484d:body:0011",
+          "chunk:6b55ddbbcfdc484d:table:0002",
+          "chunk:6b55ddbbcfdc484d:list:0001",
+          "chunk:6b55ddbbcfdc484d:body:0012",
+          "chunk:6b55ddbbcfdc484d:body:0013"
+        ],
+        "scope_id": "scope:120ae276673674369bbd6049560744c2",
+        "view": "compact"
+      },
+      "scope_id": "scope:120ae276673674369bbd6049560744c2",
+      "total_chunks": 20,
+      "by_kind": {
+        "unknown": 20
+      },
+      "table_chunks": 0,
+      "title": "### 大脑二 产业研究员",
+      "published": "undated",
+      "snippet": "<b>AI</b>/服务器<b>收入</b>的人民币切分，",
+      "preview": {
+        "text": "### 大脑二 产业研究员\n商业模式是高端 EMS 加工费叠加系统边界外扩：整机柜、液冷、电源、800G/CPO 跟英伟达和 CSP 的资本开支走，手机机构件跟大客户高端机走。H1 收入 +55%、云计算 +75.7%，量的故事是真的。公司口头「前瞻卡位 Rubin」「第一梯队」，但没有给出 AI / 服务器收入的人民币切分，也没有给 NVIDIA 份额——「占 10% 以上产品」这类定量在本次镜像里没出现。所以产业故事目前停在「出货倍数 + 管理层形容词 + 卖方单柜价值量」，还没有停在报表 mix。\n护城河是认证周期、NVL72 级液冷整柜的良率和已经铺开的墨西哥 / 越南 / 美国近岸产能，不是品牌。真对标是广达、英业达、纬颖、纬创，不是浪潮、紫光、曙光——后三家是 A 股能买到的服务器硬件，商业模式（分销 + 国内招标 + 自有品牌）与 FII 的出口 EMS 不是同一张利润表。浪潮 H1 毛利率 8.75% 只比 FII 厚 1.6 个百分点，OCF 还是 −75 亿，说明「做服务器硬件」这一层全球都薄；曙光 27% 毛利率是另一条曲线，不能拿来给 FII 做估值锚。台系报价本次缺失，不能编 TWD 价；经济观察网只定性「广达是最主要竞争对手、7 月月营收同比高增」。双供是机制，不是已经发生的份额数字。\nQ2 毛利率环比掉 0.36 个百分点，是本轮产业最重要的一张表。",
+        "start": 0,
+        "end": 599,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "ai",
+          "公司",
+          "收入",
+          "电源"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+        "locators": [
+          "chunk:6b55ddbbcfdc484d:body:0005"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+        "locators": [
+          "chunk:6b55ddbbcfdc484d:body:0000",
+          "chunk:6b55ddbbcfdc484d:body:0001",
+          "chunk:6b55ddbbcfdc484d:body:0002",
+          "chunk:6b55ddbbcfdc484d:body:0003",
+          "chunk:6b55ddbbcfdc484d:heading:0000",
+          "chunk:6b55ddbbcfdc484d:body:0004",
+          "chunk:6b55ddbbcfdc484d:body:0005",
+          "chunk:6b55ddbbcfdc484d:body:0006",
+          "chunk:6b55ddbbcfdc484d:body:0007",
+          "chunk:6b55ddbbcfdc484d:body:0008",
+          "chunk:6b55ddbbcfdc484d:body:0009",
+          "chunk:6b55ddbbcfdc484d:table:0000",
+          "chunk:6b55ddbbcfdc484d:body:0010",
+          "chunk:6b55ddbbcfdc484d:list:0000",
+          "chunk:6b55ddbbcfdc484d:table:0001",
+          "chunk:6b55ddbbcfdc484d:body:0011",
+          "chunk:6b55ddbbcfdc484d:table:0002",
+          "chunk:6b55ddbbcfdc484d:list:0001",
+          "chunk:6b55ddbbcfdc484d:body:0012",
+          "chunk:6b55ddbbcfdc484d:body:0013"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:6b55ddbbcfdc484d:body:0000",
+          "chunk:6b55ddbbcfdc484d:body:0001",
+          "chunk:6b55ddbbcfdc484d:body:0002",
+          "chunk:6b55ddbbcfdc484d:body:0003",
+          "chunk:6b55ddbbcfdc484d:heading:0000",
+          "chunk:6b55ddbbcfdc484d:body:0004",
+          "chunk:6b55ddbbcfdc484d:body:0005",
+          "chunk:6b55ddbbcfdc484d:body:0006",
+          "chunk:6b55ddbbcfdc484d:body:0007",
+          "chunk:6b55ddbbcfdc484d:body:0008",
+          "chunk:6b55ddbbcfdc484d:body:0009",
+          "chunk:6b55ddbbcfdc484d:table:0000",
+          "chunk:6b55ddbbcfdc484d:body:0010",
+          "chunk:6b55ddbbcfdc484d:list:0000",
+          "chunk:6b55ddbbcfdc484d:table:0001",
+          "chunk:6b55ddbbcfdc484d:body:0011",
+          "chunk:6b55ddbbcfdc484d:table:0002",
+          "chunk:6b55ddbbcfdc484d:list:0001",
+          "chunk:6b55ddbbcfdc484d:body:0012",
+          "chunk:6b55ddbbcfdc484d:body:0013"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "locator": "chunk:2055995f24f1db3a:body:0011",
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0011",
+      "context_locators": [
+        "chunk:2055995f24f1db3a:body:0000",
+        "chunk:2055995f24f1db3a:body:0001",
+        "chunk:2055995f24f1db3a:body:0002",
+        "chunk:2055995f24f1db3a:body:0003",
+        "chunk:2055995f24f1db3a:body:0004",
+        "chunk:2055995f24f1db3a:body:0005",
+        "chunk:2055995f24f1db3a:body:0006",
+        "chunk:2055995f24f1db3a:body:0007",
+        "chunk:2055995f24f1db3a:body:0008",
+        "chunk:2055995f24f1db3a:body:0009",
+        "chunk:2055995f24f1db3a:body:0010",
+        "chunk:2055995f24f1db3a:body:0011",
+        "chunk:2055995f24f1db3a:body:0012",
+        "chunk:2055995f24f1db3a:heading:0000",
+        "chunk:2055995f24f1db3a:body:0013",
+        "chunk:2055995f24f1db3a:body:0014"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locator": "chunk:2055995f24f1db3a:body:0011",
+        "locators": [
+          "chunk:2055995f24f1db3a:body:0000",
+          "chunk:2055995f24f1db3a:body:0001",
+          "chunk:2055995f24f1db3a:body:0002",
+          "chunk:2055995f24f1db3a:body:0003",
+          "chunk:2055995f24f1db3a:body:0004",
+          "chunk:2055995f24f1db3a:body:0005",
+          "chunk:2055995f24f1db3a:body:0006",
+          "chunk:2055995f24f1db3a:body:0007",
+          "chunk:2055995f24f1db3a:body:0008",
+          "chunk:2055995f24f1db3a:body:0009",
+          "chunk:2055995f24f1db3a:body:0010",
+          "chunk:2055995f24f1db3a:body:0011",
+          "chunk:2055995f24f1db3a:body:0012",
+          "chunk:2055995f24f1db3a:heading:0000",
+          "chunk:2055995f24f1db3a:body:0013",
+          "chunk:2055995f24f1db3a:body:0014"
+        ],
+        "scope_id": "scope:d0cf62c2d99e72685eef7bf2a8810d15",
+        "view": "compact"
+      },
+      "scope_id": "scope:d0cf62c2d99e72685eef7bf2a8810d15",
+      "total_chunks": 16,
+      "by_kind": {
+        "unknown": 16
+      },
+      "table_chunks": 0,
+      "title": "【行业重大事件】",
+      "published": "undated",
+      "snippet": "<b>经营</b>情况。\n\n内容上线",
+      "preview": {
+        "text": "更多信息，请参阅 Amazon Bedrock 滥用检测和 Anthropic 的受保护模型\n页面。Anthropic 还发布了Enterprise Frontier Safeguards，该解决方案将为客户提供安全部署 Anthropic \n最强大模型的选择，同时确保数据保留在他们可控的云基础设施中。（AWS 官方） \n二、风险提示 \n\n后续政策不及预期风险。若提振消费等政策不及预期，将影响相应行业基本面变化节奏，及市场估值中枢。 \n\n中美关系变化风险。中美关系变化将影响中概估值及中国资产的经营情况。 \n\n内容上线及表现不及预期风险。若新游、影视剧等内容上线或表现不及预期，则直接影响相应公司业绩表现。 \n\n宏观经济运行不及预期风险。国内经济由高速度转向高质量发展，若宏观经济不及预期，则广告营销等各板块的\n业绩均将受到影响。 \n\nAI技术迭代和应用不及预期风险。AI产业在逐渐崛起中，对传媒板块来讲是重要变革，影响行业未来发展，若\nAI 技术迭代和应用不及预期，则该变革落地的预期将延后。 \n\n政策监管风险。游戏受版号发放、未成年人保护等政策约束，影视剧正常排播则受内容监管、艺人是否违法或失\n德等影响，若出现相关政策指导或监管事件，则影响内容的正常上架或运营。",
+        "start": 228,
+        "end": 770,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "公司",
+          "经营"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locators": [
+          "chunk:2055995f24f1db3a:body:0011"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locators": [
+          "chunk:2055995f24f1db3a:body:0000",
+          "chunk:2055995f24f1db3a:body:0001",
+          "chunk:2055995f24f1db3a:body:0002",
+          "chunk:2055995f24f1db3a:body:0003",
+          "chunk:2055995f24f1db3a:body:0004",
+          "chunk:2055995f24f1db3a:body:0005",
+          "chunk:2055995f24f1db3a:body:0006",
+          "chunk:2055995f24f1db3a:body:0007",
+          "chunk:2055995f24f1db3a:body:0008",
+          "chunk:2055995f24f1db3a:body:0009",
+          "chunk:2055995f24f1db3a:body:0010",
+          "chunk:2055995f24f1db3a:body:0011",
+          "chunk:2055995f24f1db3a:body:0012",
+          "chunk:2055995f24f1db3a:heading:0000",
+          "chunk:2055995f24f1db3a:body:0013",
+          "chunk:2055995f24f1db3a:body:0014"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:2055995f24f1db3a:body:0000",
+          "chunk:2055995f24f1db3a:body:0001",
+          "chunk:2055995f24f1db3a:body:0002",
+          "chunk:2055995f24f1db3a:body:0003",
+          "chunk:2055995f24f1db3a:body:0004",
+          "chunk:2055995f24f1db3a:body:0005",
+          "chunk:2055995f24f1db3a:body:0006",
+          "chunk:2055995f24f1db3a:body:0007",
+          "chunk:2055995f24f1db3a:body:0008",
+          "chunk:2055995f24f1db3a:body:0009",
+          "chunk:2055995f24f1db3a:body:0010",
+          "chunk:2055995f24f1db3a:body:0011",
+          "chunk:2055995f24f1db3a:body:0012",
+          "chunk:2055995f24f1db3a:heading:0000",
+          "chunk:2055995f24f1db3a:body:0013",
+          "chunk:2055995f24f1db3a:body:0014"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "locator": "chunk:022ae1713fb760ff:body:0000",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0000",
+      "context_locators": [
+        "chunk:022ae1713fb760ff:body:0000",
+        "chunk:022ae1713fb760ff:body:0001",
+        "chunk:022ae1713fb760ff:body:0002",
+        "chunk:022ae1713fb760ff:body:0003",
+        "chunk:022ae1713fb760ff:body:0004",
+        "chunk:022ae1713fb760ff:body:0005",
+        "chunk:022ae1713fb760ff:body:0006",
+        "chunk:022ae1713fb760ff:body:0007",
+        "chunk:022ae1713fb760ff:body:0008",
+        "chunk:022ae1713fb760ff:body:0009",
+        "chunk:022ae1713fb760ff:table:0000",
+        "chunk:022ae1713fb760ff:body:0010",
+        "chunk:022ae1713fb760ff:body:0011",
+        "chunk:022ae1713fb760ff:body:0012",
+        "chunk:022ae1713fb760ff:body:0013",
+        "chunk:022ae1713fb760ff:body:0014",
+        "chunk:022ae1713fb760ff:body:0015"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locator": "chunk:022ae1713fb760ff:body:0000",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015"
+        ],
+        "scope_id": "scope:bda60458a55f0b704376b83854ca8bfb",
+        "view": "compact"
+      },
+      "scope_id": "scope:bda60458a55f0b704376b83854ca8bfb",
+      "total_chunks": 17,
+      "by_kind": {
+        "body": 1,
+        "unknown": 16
+      },
+      "table_chunks": 0,
+      "title": "022ae1713fb760ff:body:0000",
+      "published": "undated",
+      "snippet": "<b>AI</b><b>相关</b><b>订单</b>、<b>收入</b><b>放量</b>的窗口",
+      "preview": {
+        "text": "敬请参阅最后一页特别声明\n1 \n子行业周度核心观点\n整体观点： \n本周我们陆续发布电新板块各子行业半年报总结，整体来看，不同子行业之间业绩表现差异显著：1）锂电板块，在全\n球动储需求同步高增叠加税费政策调整带来的“抢装”需求影响下，上半年整体呈现量价利齐升的景气上行趋势；2）\nAIDC 电源与液冷板块，尽管大部分公司在半年报中呈现的AI 相关收入仍较少，但从存货、购买商品现金流出、在建\n工程等财务指标，以及管理层讨论中呈现的订单展望等方面，已能够看到许多公司开始进入订单储备、客户认证、产\n能建设、备料阶段，预计未来半年内将看到大量企业开始进入AI 相关订单、收入放量的窗口；3）光伏板块，在上半\n年内需低迷的影响下，产业链供需矛盾仍然突出，但企业在盈利承压下普遍以销定产、控制亏损、加强现金管理，夯\n实产业链价格与盈利底部，部分辅材及BC 组件龙头率先呈现拐点迹象；4）电网设备方面，变压器、高压开关等核心\n产品出口维持较快增长。结合行业半年报，AI 基建相关领域（SOFC/电源/液冷/电力设备出口）及基本面景气度持续\n高企但股价背离显著的锂电板块仍是我们当前时点优先推荐方向，同时围绕全球能源自主、细分领域技术迭代相关的\n风光储领域强alpha 个股当前也是低位布局的理想选择。",
+        "start": 0,
+        "end": 544,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "ai",
+          "公司",
+          "收入",
+          "放量",
+          "电源",
+          "相关",
+          "订单",
+          "财务"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015"
+        ],
+        "remaining_after_prior_full_expansions": [],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0038",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0038",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:body:0034",
+        "chunk:568f9e752f0fa65a:body:0035",
+        "chunk:568f9e752f0fa65a:body:0036",
+        "chunk:568f9e752f0fa65a:body:0037",
+        "chunk:568f9e752f0fa65a:body:0038",
+        "chunk:568f9e752f0fa65a:heading:0011"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locator": "chunk:568f9e752f0fa65a:body:0038",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0034",
+          "chunk:568f9e752f0fa65a:body:0035",
+          "chunk:568f9e752f0fa65a:body:0036",
+          "chunk:568f9e752f0fa65a:body:0037",
+          "chunk:568f9e752f0fa65a:body:0038",
+          "chunk:568f9e752f0fa65a:heading:0011"
+        ],
+        "scope_id": "scope:9f69c2a5f5ffb3516eb21b1239a32574",
+        "view": "compact"
+      },
+      "scope_id": "scope:9f69c2a5f5ffb3516eb21b1239a32574",
+      "total_chunks": 6,
+      "by_kind": {
+        "unknown": 6
+      },
+      "table_chunks": 0,
+      "title": "风险提示",
+      "published": "undated",
+      "snippet": "<b>公司</b>该业务<b>收入</b>和盈利贡献可能",
+      "preview": {
+        "text": "如果煤炭企业智能化投入放缓、项目招投标或验收进度延迟，或者市\n场竞争加剧，公司该业务收入和盈利贡献可能低于预期。\n应收账款回收及经营现金流风险\n半导体装备和矿山安全监控项目通常存在一定的设备交付、安装调试、验收和回\n款周期。2025 年公司经营活动产生的现金流量净额仍为负值。随着收入规模快速\n扩大，如果客户验收和回款进度慢于预期，应收账款和存货可能进一步增加，从\n而占用营运资金，并可能带来信用减值、资金成本上升及经营现金流承压的风险。\n资产及商誉减值风险\n公司通过并购拓展半导体封测装备业务，形成一定规模的商誉及无形资产，同时\n存货、应收款项等经营性资产规模有所增加，过往资产及信用减值损失存在一定\n波动。若未来行业景气度下行、并购子公司经营不及预期、新产品验证及订单交\n付进展放缓，或相关资产的可收回金额低于账面价值，公司可能计提商誉、存货\n及应收款项等减值准备，从而对当期经营业绩产生不利影响。\n股东减持风险\n公司实际控制人及其关联股东此前存在股份减持情形，近期实际控制人的近亲属\n股东再次披露股份减持计划。相关股东将根据市场情况、公司股价等因素决定减\n持的具体时间、数量及价格，减持计划的实施进度及最终实施结果存在不确定性。\n若相关股东实施减持，可能增加二级市场股票供给，并对投资者预期及公司股价\n表现造成一定影响。",
+        "start": 263,
+        "end": 826,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "公司",
+          "收入",
+          "相关",
+          "经营",
+          "订单"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0038"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0034",
+          "chunk:568f9e752f0fa65a:body:0035",
+          "chunk:568f9e752f0fa65a:body:0036",
+          "chunk:568f9e752f0fa65a:body:0037",
+          "chunk:568f9e752f0fa65a:body:0038",
+          "chunk:568f9e752f0fa65a:heading:0011"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:568f9e752f0fa65a:body:0034",
+          "chunk:568f9e752f0fa65a:body:0035",
+          "chunk:568f9e752f0fa65a:body:0036",
+          "chunk:568f9e752f0fa65a:body:0037",
+          "chunk:568f9e752f0fa65a:body:0038",
+          "chunk:568f9e752f0fa65a:heading:0011"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "locator": "chunk:16a9a510ef9e405f:body:0006",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0006",
+      "context_locators": [
+        "chunk:16a9a510ef9e405f:heading:0004",
+        "chunk:16a9a510ef9e405f:body:0003",
+        "chunk:16a9a510ef9e405f:body:0004",
+        "chunk:16a9a510ef9e405f:body:0005",
+        "chunk:16a9a510ef9e405f:body:0006",
+        "chunk:16a9a510ef9e405f:body:0007",
+        "chunk:16a9a510ef9e405f:body:0008",
+        "chunk:16a9a510ef9e405f:body:0009",
+        "chunk:16a9a510ef9e405f:body:0010"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locator": "chunk:16a9a510ef9e405f:body:0006",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0004",
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010"
+        ],
+        "scope_id": "scope:6aedbbe94f5b6962d68362a7e4cfa27f",
+        "view": "compact"
+      },
+      "scope_id": "scope:6aedbbe94f5b6962d68362a7e4cfa27f",
+      "total_chunks": 9,
+      "by_kind": {
+        "unknown": 9
+      },
+      "table_chunks": 0,
+      "title": "一、细分板块观点\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩",
+      "published": "undated",
+      "snippet": "<b>AI</b>应用落地：1）<b>AI</b>手机",
+      "preview": {
+        "text": "我们认\n为，随着台积电Rubin 及谷歌/亚马逊等ASIC 厂商新产品的拉货，Q3 环比增长有望加速，继续看好AI 产业链硬件核\n心公司。我们研判谷歌、亚马逊、Meta、Open AI 及微软的ASIC 数量，2026-2027 年将迎来爆发式增长。我们认为\nAI 强劲需求带动PCB 价量齐升，目前多家AI-PCB 公司订单强劲，满产满销，正在大力扩产，业绩高增长有望持续。\nAI 覆铜板也需求旺盛，由于海外覆铜板厂商扩产缓慢，缺货涨价情况持续，大陆覆铜板龙头厂商有望积极受益。整体\n来看，继续看好AI 覆铜板/PCB 及核心算力硬件、半导体设备及苹果产业链。相关标的：长鑫科技、生益科技、北方\n华创、中微公司、拓荆科技、东山精密、沪电股份、鹏鼎控股、景旺电子、微导纳米、胜宏科技、大族数控、蓝特光\n学、南亚新材、三环集团、深南电路、芯原股份、广合科技、生益电子、鼎泰高科、芯碁微装、大族激光、立讯精密、\n寒武纪、长川科技、水晶光电、江海股份、东睦股份、奥海科技、安集科技、江丰电子、鼎龙股份、铂科新材、顺络\n电子、蓝思科技、领益智造。美股建议关注：台积电、美光科技、英伟达、海力士、博通、天弘科技。",
+        "start": 956,
+        "end": 1457,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "ai",
+          "公司",
+          "订单"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0006"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0004",
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010"
+        ],
+        "remaining_after_prior_full_expansions": [],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "locator": "chunk:6b55ddbbcfdc484d:body:0005",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "chunk_id": "6b55ddbbcfdc484d:body:0005",
+      "context_locators": [
+        "chunk:6b55ddbbcfdc484d:body:0000",
+        "chunk:6b55ddbbcfdc484d:body:0001",
+        "chunk:6b55ddbbcfdc484d:body:0002",
+        "chunk:6b55ddbbcfdc484d:body:0003",
+        "chunk:6b55ddbbcfdc484d:heading:0000",
+        "chunk:6b55ddbbcfdc484d:body:0004",
+        "chunk:6b55ddbbcfdc484d:body:0005",
+        "chunk:6b55ddbbcfdc484d:body:0006",
+        "chunk:6b55ddbbcfdc484d:body:0007",
+        "chunk:6b55ddbbcfdc484d:body:0008",
+        "chunk:6b55ddbbcfdc484d:body:0009",
+        "chunk:6b55ddbbcfdc484d:table:0000",
+        "chunk:6b55ddbbcfdc484d:body:0010",
+        "chunk:6b55ddbbcfdc484d:list:0000",
+        "chunk:6b55ddbbcfdc484d:table:0001"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+        "locator": "chunk:6b55ddbbcfdc484d:body:0005",
+        "locators": [
+          "chunk:6b55ddbbcfdc484d:body:0000",
+          "chunk:6b55ddbbcfdc484d:body:0001",
+          "chunk:6b55ddbbcfdc484d:body:0002",
+          "chunk:6b55ddbbcfdc484d:body:0003",
+          "chunk:6b55ddbbcfdc484d:heading:0000",
+          "chunk:6b55ddbbcfdc484d:body:0004",
+          "chunk:6b55ddbbcfdc484d:body:0005",
+          "chunk:6b55ddbbcfdc484d:body:0006",
+          "chunk:6b55ddbbcfdc484d:body:0007",
+          "chunk:6b55ddbbcfdc484d:body:0008",
+          "chunk:6b55ddbbcfdc484d:body:0009",
+          "chunk:6b55ddbbcfdc484d:table:0000",
+          "chunk:6b55ddbbcfdc484d:body:0010",
+          "chunk:6b55ddbbcfdc484d:list:0000",
+          "chunk:6b55ddbbcfdc484d:table:0001"
+        ],
+        "scope_id": "scope:ef9d0cd491909cca53929e43b2ef6fc8",
+        "view": "compact"
+      },
+      "scope_id": "scope:ef9d0cd491909cca53929e43b2ef6fc8",
+      "total_chunks": 15,
+      "by_kind": {
+        "unknown": 15
+      },
+      "table_chunks": 0,
+      "title": "### 大脑二 产业研究员",
+      "published": "undated",
+      "snippet": "<b>AI</b>/服务器<b>收入</b>的人民币切分，",
+      "preview": {
+        "text": "### 大脑二 产业研究员\n商业模式是高端 EMS 加工费叠加系统边界外扩：整机柜、液冷、电源、800G/CPO 跟英伟达和 CSP 的资本开支走，手机机构件跟大客户高端机走。H1 收入 +55%、云计算 +75.7%，量的故事是真的。公司口头「前瞻卡位 Rubin」「第一梯队」，但没有给出 AI / 服务器收入的人民币切分，也没有给 NVIDIA 份额——「占 10% 以上产品」这类定量在本次镜像里没出现。所以产业故事目前停在「出货倍数 + 管理层形容词 + 卖方单柜价值量」，还没有停在报表 mix。\n护城河是认证周期、NVL72 级液冷整柜的良率和已经铺开的墨西哥 / 越南 / 美国近岸产能，不是品牌。真对标是广达、英业达、纬颖、纬创，不是浪潮、紫光、曙光——后三家是 A 股能买到的服务器硬件，商业模式（分销 + 国内招标 + 自有品牌）与 FII 的出口 EMS 不是同一张利润表。浪潮 H1 毛利率 8.75% 只比 FII 厚 1.6 个百分点，OCF 还是 −75 亿，说明「做服务器硬件」这一层全球都薄；曙光 27% 毛利率是另一条曲线，不能拿来给 FII 做估值锚。台系报价本次缺失，不能编 TWD 价；经济观察网只定性「广达是最主要竞争对手、7 月月营收同比高增」。双供是机制，不是已经发生的份额数字。\nQ2 毛利率环比掉 0.36 个百分点，是本轮产业最重要的一张表。",
+        "start": 0,
+        "end": 599,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "ai",
+          "公司",
+          "收入",
+          "电源"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+        "locators": [
+          "chunk:6b55ddbbcfdc484d:body:0005"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+        "locators": [
+          "chunk:6b55ddbbcfdc484d:body:0000",
+          "chunk:6b55ddbbcfdc484d:body:0001",
+          "chunk:6b55ddbbcfdc484d:body:0002",
+          "chunk:6b55ddbbcfdc484d:body:0003",
+          "chunk:6b55ddbbcfdc484d:heading:0000",
+          "chunk:6b55ddbbcfdc484d:body:0004",
+          "chunk:6b55ddbbcfdc484d:body:0005",
+          "chunk:6b55ddbbcfdc484d:body:0006",
+          "chunk:6b55ddbbcfdc484d:body:0007",
+          "chunk:6b55ddbbcfdc484d:body:0008",
+          "chunk:6b55ddbbcfdc484d:body:0009",
+          "chunk:6b55ddbbcfdc484d:table:0000",
+          "chunk:6b55ddbbcfdc484d:body:0010",
+          "chunk:6b55ddbbcfdc484d:list:0000",
+          "chunk:6b55ddbbcfdc484d:table:0001"
+        ],
+        "remaining_after_prior_full_expansions": [],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "locator": "chunk:022ae1713fb760ff:body:0021",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0021",
+      "context_locators": [
+        "chunk:022ae1713fb760ff:heading:0002",
+        "chunk:022ae1713fb760ff:body:0021",
+        "chunk:022ae1713fb760ff:body:0022"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locator": "chunk:022ae1713fb760ff:body:0021",
+        "locators": [
+          "chunk:022ae1713fb760ff:heading:0002",
+          "chunk:022ae1713fb760ff:body:0021",
+          "chunk:022ae1713fb760ff:body:0022"
+        ],
+        "scope_id": "scope:cb47ff527464641955bbaafe1f217a35",
+        "view": "compact"
+      },
+      "scope_id": "scope:cb47ff527464641955bbaafe1f217a35",
+      "total_chunks": 3,
+      "by_kind": {
+        "unknown": 3
+      },
+      "table_chunks": 0,
+      "title": "特别声明：",
+      "published": "undated",
+      "snippet": "<b>公司</b>版权的其他方式使用。经过",
+      "preview": {
+        "text": "证券研究报告是用于服务具备专业知识的投资\n者和投资顾问的专业产品，使用时必须经专业人士进行解读。国金证券建议获取报告人员应考虑本报告的任何意见或建议是否符合其特定状况，以及（若有必要）\n咨询独立投资顾问。报告本身、报告中的信息或所表达意见也不构成投资、法律、会计或税务的最终操作建议，国金证券不就报告中的内容对最终操作建议做出任\n何担保，在任何时候均不构成对任何人的个人推荐。 \n在法律允许的情况下，国金证券的关联机构可能会持有报告中涉及的公司所发行的证券并进行交易，并可能为这些公司正在提供或争取提供多种金融服务。 \n本报告并非意图发送、发布给在当地法律或监管规则下不允许向其发送、发布该研究报告的人员。国金证券并不因收件人收到本报告而视其为国金证券的客\n户。本报告对于收件人而言属高度机密，只有符合条件的收件人才能使用。根据《证券期货投资者适当性管理办法》，本报告仅供国金证券股份有限公司客户中风\n险评级高于C3 级(含C3 级）的投资者使用；本报告所包含的观点及建议并未考虑个别客户的特殊状况、目标或需要，不应被视为对特定客户关于特定证券或金融\n工具的建议或策略。对于本报告中提及的任何证券或金融工具，本报告的收件人须保持自身的独立判断。使用国金证券研究报告进行投资，遭受任何损失，国金证\n券不承担相关法律责任。",
+        "start": 631,
+        "end": 1190,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "公司",
+          "判断",
+          "相关"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0021"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:heading:0002",
+          "chunk:022ae1713fb760ff:body:0021",
+          "chunk:022ae1713fb760ff:body:0022"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:022ae1713fb760ff:heading:0002",
+          "chunk:022ae1713fb760ff:body:0021",
+          "chunk:022ae1713fb760ff:body:0022"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@48e8e60844f69177d5eb672a1d1b1010",
+    "processing": "scoped",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 22,
+      "published": 18,
+      "withdrawn": 0,
+      "pending": 0,
+      "failed_jobs": 0,
+      "builds": 28,
+      "published_with_gaps": 16
+    },
+    "retrieval": {
+      "requested": "hybrid",
+      "used": "hybrid",
+      "reason": null,
+      "profile": "fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107",
+      "expected_chunks": 703,
+      "ready_chunks": 703,
+      "lexical_candidates": 200,
+      "vector_candidates": 200,
+      "query_cache_hit": false,
+      "query_usage": {
+        "prompt_tokens": 56,
+        "total_tokens": 56
+      },
+      "elapsed_ms": 756
+    }
+  },
+  "hint": "preview 是选读预览，不是已取证引用。先用同一命中的 core_fetch_plan 调用 corpus_fetch；问题涉及多个对象、因果链或指代不完整时，再按 fetch_plan 扩展上下文。表格保留原范围以带齐表头、期间和单位。重复 locator 可在相同 doc_id 下去重；不同版本不可混用。",
+  "delivery_preview": "pilot"
+}

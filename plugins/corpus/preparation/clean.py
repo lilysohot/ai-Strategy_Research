@@ -24,6 +24,11 @@
   不得因尾段单独无事实标记而整删）；分析师名单需 ≥2 角色行或角色行+证书编号行。
   风险提示与实际评级不在任何噪声词表内（§6.1 相似前缀不删实际评级/风险提示/
   条件句）。
+- clean-6：精确免责/评级说明标题也可来自 paragraph；扩展“特别声明”等标题，
+  已开启的免责节不因页码或已知装饰标题中断。完整独立免责提醒行单独记噪声；
+  混合正文中包含提醒文字不整块删除，原有非空白全覆盖与数字事实保护保持有效。
+- clean-7：明确邮编不作为证券代码；免责节内表格按连续同表整体结算，联系方式
+  与表格分开，避免邮编保护评级模板或只删除表头。跨段事实句仍整体保留。
 - 读取缺口（空页/图片页/表格冲突/不可读元素/未闭合围栏/未知元素）转为合成区域
   并继承缺口状态与结构化坐标，不静默吞掉；``garbled_text``/``multi_column_*``/
   ``table_text_overlap`` 已由读取单元的状态与原因承载，不重复立区。
@@ -48,7 +53,7 @@ from plugins.corpus.preparation.gaps import (
 )
 from plugins.corpus.preparation.readers.base import CandidateUnit, ReaderIssue, ReaderResult
 
-CLEAN_REV = "clean-5"  # clean-5：免责游程 NOISE verdict 与实际触发 reasons 保持一致
+CLEAN_REV = "clean-7"  # 邮编语境与免责节表格/联系方式边界；保真视图仍只折叠空白
 
 # --- 开发起点参数（架构 §6.1；I3 校准前不外置） ---
 _REPEAT_MIN_PAGES = 3
@@ -62,13 +67,37 @@ _NOISE_TOC_LEADERS = "toc_dot_leaders"
 _NOISE_DISCLAIMER_HEADING = "disclaimer_heading"
 _NOISE_DISCLAIMER_SECTION = "disclaimer_section"
 _NOISE_DISCLAIMER_PREFIX = "disclaimer_prefix"
+_NOISE_DISCLAIMER_REMINDER = "disclaimer_reminder_line"
 _NOISE_ROSTER = "analyst_roster"
 
 _HEADING_KINDS = frozenset({"heading", "title"})
 _DISCLAIMER_HEADINGS = frozenset(
-    {"免责声明", "免责条款", "分析师声明", "分析师申明", "评级说明", "重要声明"}
+    {
+        "免责声明",
+        "免责条款",
+        "分析师声明",
+        "分析师申明",
+        "评级说明",
+        "重要声明",
+        "特别声明",
+        "法律声明",
+        "版权声明",
+        "分析师承诺",
+        "投资评级声明",
+        "投资评级说明",
+        "投资评级标准",
+        "行业投资评级的说明",
+        "公司投资评级的说明",
+    }
 )
 _DISCLAIMER_PREFIXES = ("免责声明：", "免责声明:", "分析师声明：", "分析师声明:")
+# Only a COMPLETE standalone reminder is noise. A financial paragraph containing
+# the same footer remains KEPT, including all its original characters and mapping.
+_DISCLAIMER_REMINDER = re.compile(
+    r"(?:请|敬请)(?:务必)?(?:阅读|参阅)(?:正文之后|正文后|最后一页|末页)"
+    r"(?:的)?(?:免责声明|免责条款|特别声明)(?:及其项下所有内容)?[。.!！]?"
+)
+_DISCLAIMER_LAYOUT_HEADINGS = frozenset({"扫码获取更多服务", "仅供内部参考，请勿外传"})
 _TOC_EXACT = frozenset({"目录", "目錄", "contents"})
 _TOC_LEADER = re.compile(r"[.．·…]{2,}\s*[0-9]{1,4}\s*$")
 _ROLE_LINE = re.compile(r"(?:分析师|研究助理|联系人|报告联系人)\s*[：:]")
@@ -79,6 +108,8 @@ _CERT_PATTERN = re.compile(r"执业证书编号|\bS\d{8,12}\b")
 # 只含裸百分比，不含持股/证券代码/金额语境，故不命中、不误降。
 _NUMERIC_STAKE = re.compile(r"持有.{0,32}?\d+(?:\.\d+)?\s*%(?:[^。]{0,8})?(?:股份|股权|持股|股本)")
 _STOCK_CODE = re.compile(r"(?<![0-9A-Za-z._=\-])[0368]\d{5}(?!\d)")
+_POSTAL_CODE = re.compile(r"(?:邮编|邮政编码)\s*[:：]?\s*\d{6}(?!\d)")
+_CONTACT_FIELD = re.compile(r"^(?:邮编|邮政编码|地址|电话|传真|邮箱)\s*[:：]")
 _MONEY_AMOUNT = re.compile(r"\d+(?:\.\d+)?\s*(?:亿|万|千|百)?\s*元(?!月|本|年)")
 
 # 无对应读取单元的缺口码 → 合成区域状态（每区有状态，不无记录消失）。
@@ -506,6 +537,25 @@ def _disclaimer_prefix_verdict(unit: CandidateUnit) -> NoiseVerdict:
     )
 
 
+def _has_stock_code(raw_text: str) -> bool:
+    # Mask only an explicitly labelled postal code, never all six-digit numbers
+    # in a contact-containing paragraph: it may also disclose a real security.
+    return _STOCK_CODE.search(_POSTAL_CODE.sub(" ", raw_text)) is not None
+
+
+def _disclaimer_table_key(unit: CandidateUnit) -> tuple[int | None, str | None, str] | None:
+    """Consecutive table rows share a fact decision; do not infer cross-page joins."""
+    if unit.kind != "table_row":
+        return None
+    table = next((reason for reason in unit.reasons if reason.startswith("tbl[")), "")
+    # DOCX elements carry a row suffix; preserve the full parent path (including
+    # nested tables), but do not mistake each row for a separate table.
+    element = unit.location.element
+    if element is not None:
+        element = re.sub(r"/row\[\d+\]$", "", element)
+    return unit.location.page, element, table
+
+
 def _has_numeric_fact_sentence(raw_text: str) -> bool:
     """免责节单元是否含『可复核数字事实句』（票 08 三类命中，I-E3 判据）。
 
@@ -515,7 +565,7 @@ def _has_numeric_fact_sentence(raw_text: str) -> bool:
     """
     return bool(
         _NUMERIC_STAKE.search(raw_text)
-        or _STOCK_CODE.search(raw_text)
+        or _has_stock_code(raw_text)
         or _MONEY_AMOUNT.search(raw_text)
     )
 
@@ -537,7 +587,7 @@ def _disclaimer_fact_keep_verdict(
             "run_ordinals": run_ordinals,
             "fact_markers": {
                 "stake": bool(_NUMERIC_STAKE.search(raw_text)),
-                "stock_code": bool(_STOCK_CODE.search(raw_text)),
+                "stock_code": _has_stock_code(raw_text),
                 "money": bool(_MONEY_AMOUNT.search(raw_text)),
             },
         },
@@ -674,9 +724,39 @@ def clean_reader_result(result: ReaderResult) -> CleanResult:
         run = []
 
     for unit in units:
+        if run and (
+            _disclaimer_table_key(run[-1][0]) != _disclaimer_table_key(unit)
+            or (
+                unit.kind == "paragraph" and _CONTACT_FIELD.match(unit.raw_text.strip()) is not None
+            )
+        ):
+            _flush_run()
         is_heading = unit.kind in _HEADING_KINDS
-        heading_is_disclaimer = is_heading and _norm_heading(unit.raw_text) in _DISCLAIMER_HEADINGS
-        if is_heading:
+        # PDF headings may be emitted as plain paragraphs. Require the WHOLE unit
+        # to be a known title; mentioning a disclaimer inside prose is insufficient.
+        heading_is_disclaimer = (
+            unit.kind in {*_HEADING_KINDS, "paragraph"}
+            and "code_fence" not in unit.reasons
+            and _norm_heading(unit.raw_text) in _DISCLAIMER_HEADINGS
+        )
+        reminder = (
+            unit.kind in {*_HEADING_KINDS, "paragraph"}
+            and "code_fence" not in unit.reasons
+            and _DISCLAIMER_REMINDER.fullmatch(_normalized(unit.raw_text)) is not None
+        )
+        layout_heading = (
+            in_disclaimer
+            and is_heading
+            and (
+                reminder
+                or _normalized(unit.raw_text) in _DISCLAIMER_LAYOUT_HEADINGS
+                or (
+                    unit.location.page is not None
+                    and re.fullmatch(r"\d{1,3}", unit.raw_text.strip())
+                )
+            )
+        )
+        if heading_is_disclaimer or (is_heading and not layout_heading):
             _flush_run()  # 标题是句子游程边界：先结算上一节游程，再切换免责节状态
             in_disclaimer = heading_is_disclaimer
             disclaimer_origin = (unit.ordinal, unit.raw_text) if heading_is_disclaimer else None
@@ -709,11 +789,21 @@ def clean_reader_result(result: ReaderResult) -> CleanResult:
         if _is_analyst_roster(unit.raw_text):
             noise.append(_NOISE_ROSTER)
             verdicts.append(_roster_verdict(unit))
+        if reminder:
+            noise.append(_NOISE_DISCLAIMER_REMINDER)
+            verdicts.append(
+                NoiseVerdict(
+                    code=_NOISE_DISCLAIMER_REMINDER,
+                    rule="disclaimer_reminder_full_unit",
+                    observed={"text": unit.raw_text, "ordinal": unit.ordinal},
+                    threshold={"full_unit_match": True, "pattern": _DISCLAIMER_REMINDER.pattern},
+                )
+            )
         if unit.kind == "paragraph" and _normalized(unit.raw_text).startswith(_DISCLAIMER_PREFIXES):
             noise.append(_NOISE_DISCLAIMER_PREFIX)
             verdicts.append(_disclaimer_prefix_verdict(unit))
         buffered = False
-        if is_heading and heading_is_disclaimer:
+        if heading_is_disclaimer:
             noise.append(_NOISE_DISCLAIMER_HEADING)
             verdicts.append(_disclaimer_heading_verdict(unit))
         elif in_disclaimer:
@@ -722,7 +812,10 @@ def clean_reader_result(result: ReaderResult) -> CleanResult:
             # 的追加对结算可见；缓冲后不再走下方统一发射。
             run.append((unit, noise, verdicts))
             buffered = True
-            if _ends_sentence(unit.raw_text):
+            # A table header may end with punctuation before factual data rows.
+            # Keep the contiguous table together so its header is not removed
+            # while the data rows are protected by a numeric fact.
+            if unit.kind != "table_row" and _ends_sentence(unit.raw_text):
                 _flush_run()
         if not buffered:
             status = UnitStatus.NOISE if noise else UnitStatus.KEPT

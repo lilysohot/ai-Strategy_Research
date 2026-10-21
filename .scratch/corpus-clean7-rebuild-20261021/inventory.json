@@ -1,0 +1,1076 @@
+[
+  {
+    "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+    "old_build": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+    "generation": 1,
+    "source": {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "format": "pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 1669289,
+      "archive_path": "00/00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428.pdf",
+      "original_names": [
+        "2026-09-06_2026.09.06-国金证券-电子行业研究-韬定律-与业绩斜率-ai-pcb及半导体设备迎来布局良机-0907c9e9.pdf"
+      ]
+    },
+    "admission": {
+      "decision_id": "f02fde11ea8d7f8dbfbbc12bbfcc05861288efc941f6374aa33b0b480fe36edd",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "material_type": "research_report",
+      "research_domain": "industry",
+      "decision": "in_scope",
+      "policy_rev": "v1-20260915",
+      "reason_codes": [],
+      "scope_ref": null,
+      "evidence_refs": [
+        "title_type_marker=matched:broker",
+        "heading_hierarchy=matched"
+      ],
+      "review_ref": "vector-pilot-inherited-00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "rule_rev": "decision-order-v1-20260915",
+      "metadata_snapshot": {
+        "report_publication": {
+          "value": null,
+          "precision": "unknown",
+          "status": "unknown",
+          "evidence_refs": [],
+          "origin": null,
+          "review_ref": null
+        }
+      }
+    },
+    "build": {
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "decision_id": "f02fde11ea8d7f8dbfbbc12bbfcc05861288efc941f6374aa33b0b480fe36edd",
+      "parse_rev": "7e5614fde9addcf5c96d2fa054f0fb52049ed6cf1a2ea7a42fecc09cf9b89d7e",
+      "clean_rev": "0fea86694f5d68dda9568b38fc81a7f89093706c3058105ff9693400db016853",
+      "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+      "index_rev": "index-4-zhcfg-2",
+      "scope_ref": null,
+      "config_fingerprint": null,
+      "artifact_manifest": [],
+      "quality_report": "{\"gap_regions\": [\"issue:image_region_small:page:1\", \"issue:image_region_small:page:2\", \"issue:image_region_small:page:3\", \"issue:image_region_small:page:4\", \"issue:image_region_small:page:5\", \"issue:image_region_small:page:6\", \"issue:image_region_small:page:7\", \"issue:image_region_small:page:8\", \"issue:image_region_small:page:9\"], \"oversized_chunks\": []}"
+    },
+    "path": "/home/administrator/FrontierAgent/data/vector-pilot-20261020/archive/00/00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428.pdf",
+    "checkpoint_schema": "parse-checkpoint-4",
+    "review_decision_ids": [
+      "vector-pilot-inherited-00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428"
+    ]
+  },
+  {
+    "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+    "old_build": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+    "generation": 1,
+    "source": {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "format": "pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 1710982,
+      "archive_path": "11/11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af.pdf",
+      "original_names": [
+        "2026-09-06_2026.09.06-国泰海通-国泰海通证券-农业-超强厄尔尼诺将至-关注农业板块-29ebd036.pdf"
+      ]
+    },
+    "admission": {
+      "decision_id": "1ce3ee42c695224a8dcbe1631838de7932ddb6cb5a8fef6485268ce499e9022f",
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "material_type": "research_report",
+      "research_domain": "industry",
+      "decision": "in_scope",
+      "policy_rev": "v1-20260915",
+      "reason_codes": [],
+      "scope_ref": null,
+      "evidence_refs": [
+        "title_type_marker=matched:broker",
+        "heading_hierarchy=matched"
+      ],
+      "review_ref": "vector-pilot-inherited-11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "rule_rev": "decision-order-v1-20260915",
+      "metadata_snapshot": {
+        "report_publication": {
+          "value": null,
+          "precision": "unknown",
+          "status": "unknown",
+          "evidence_refs": [],
+          "origin": null,
+          "review_ref": null
+        }
+      }
+    },
+    "build": {
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "decision_id": "1ce3ee42c695224a8dcbe1631838de7932ddb6cb5a8fef6485268ce499e9022f",
+      "parse_rev": "14e494e809421f38571b094163dea281fa7ead5b02aeaab2849cce05364f994f",
+      "clean_rev": "0fea86694f5d68dda9568b38fc81a7f89093706c3058105ff9693400db016853",
+      "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+      "index_rev": "index-4-zhcfg-2",
+      "scope_ref": null,
+      "config_fingerprint": null,
+      "artifact_manifest": [],
+      "quality_report": "{\"gap_regions\": [\"issue:image_region_small:page:1\", \"issue:image_region_small:page:2\", \"issue:image_region_small:page:3\", \"issue:image_region_small:page:4\", \"issue:image_region_small:page:5\", \"issue:image_region_small:page:6\", \"issue:image_region_small:page:7\", \"issue:image_region_small:page:8\"], \"oversized_chunks\": []}"
+    },
+    "path": "/home/administrator/FrontierAgent/data/vector-pilot-20261020/archive/11/11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af.pdf",
+    "checkpoint_schema": "parse-checkpoint-4",
+    "review_decision_ids": [
+      "vector-pilot-inherited-11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af"
+    ]
+  },
+  {
+    "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+    "old_build": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+    "generation": 2,
+    "source": {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "format": "pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 3517093,
+      "archive_path": "17/174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0.pdf",
+      "original_names": [
+        "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf"
+      ]
+    },
+    "admission": {
+      "decision_id": "d242109e8ea4d0e69fee5fc5ed605fd725d4e4881e2f9b4c13ed55546d63f1d2",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "material_type": "research_report",
+      "research_domain": "industry",
+      "decision": "in_scope",
+      "policy_rev": "v1-20260915",
+      "reason_codes": [],
+      "scope_ref": null,
+      "evidence_refs": [
+        "title_type_marker=matched:broker",
+        "heading_hierarchy=matched"
+      ],
+      "review_ref": "i3e1-approved-2cd3cadcf9",
+      "rule_rev": "decision-order-v1-20260915",
+      "metadata_snapshot": {
+        "report_publication": {
+          "value": null,
+          "precision": "unknown",
+          "status": "unknown",
+          "evidence_refs": [],
+          "origin": null,
+          "review_ref": null
+        }
+      }
+    },
+    "build": {
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "decision_id": "d242109e8ea4d0e69fee5fc5ed605fd725d4e4881e2f9b4c13ed55546d63f1d2",
+      "parse_rev": "1839a56224900eb9a6810c490c4e4a6de7de5f8e4955a4bc43613161d37855a9",
+      "clean_rev": "ccadcc7d0756e4b95e1adc508401e7519be708722330ec1e3e63a6f6dbd4745c",
+      "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+      "index_rev": "index-4-zhcfg-2",
+      "scope_ref": null,
+      "config_fingerprint": null,
+      "artifact_manifest": [],
+      "quality_report": "{\"gap_regions\": [\"issue:image_region_small:page:10\", \"issue:image_region_small:page:11\", \"issue:image_region_small:page:12\", \"issue:image_region_small:page:13\", \"issue:image_region_small:page:14\", \"issue:image_region_small:page:15\", \"issue:image_region_small:page:16\", \"issue:image_region_small:page:17\", \"issue:image_region_small:page:18\", \"issue:image_region_small:page:19\", \"issue:image_region_small:page:2\", \"issue:image_region_small:page:20\", \"issue:image_region_small:page:21\", \"issue:image_region_small:page:22\", \"issue:image_region_small:page:23\", \"issue:image_region_small:page:24\", \"issue:image_region_small:page:25\", \"issue:image_region_small:page:3\", \"issue:image_region_small:page:4\", \"issue:image_region_small:page:5\", \"issue:image_region_small:page:6\", \"issue:image_region_small:page:7\", \"issue:image_region_small:page:8\", \"issue:image_region_small:page:9\", \"issue:image_region_unreadable:page:1\", \"issue:image_region_unreadable:page:2\", \"issue:table_lines_without_extraction:page:12\", \"issue:table_lines_without_extraction:page:13\", \"issue:table_lines_without_extraction:page:17\", \"issue:table_lines_without_extraction:page:18\", \"issue:table_lines_without_extraction:page:21\", \"issue:table_lines_without_extraction:page:22\", \"issue:table_lines_without_extraction:page:24\", \"issue:table_lines_without_extraction:page:3\"], \"oversized_chunks\": []}"
+    },
+    "path": "/home/administrator/FrontierAgent/data/corpus-archive/17/174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0.pdf",
+    "checkpoint_schema": "parse-checkpoint-2",
+    "review_decision_ids": [
+      "i3e1-approved-2cd3cadcf9"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "old_build": "d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+    "generation": 1,
+    "source": {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "format": "pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 448620,
+      "archive_path": "1e/1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309.pdf",
+      "original_names": [
+        "2026-09-07_2026.09.07-国盛证券-宏观点评-这次不一样-3600亿增资银行保险的信号-08d04511.pdf"
+      ]
+    },
+    "admission": {
+      "decision_id": "d9180a26bbbbbc73bbef020cd469ea330abf84a84a9619458be77ae1bc14be2f",
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "material_type": "research_report",
+      "research_domain": "macro",
+      "decision": "in_scope",
+      "policy_rev": "v1-20260915",
+      "reason_codes": [],
+      "scope_ref": null,
+      "evidence_refs": [
+        "title_type_marker=matched:broker",
+        "byline_institution=matched:broker"
+      ],
+      "review_ref": "vector-pilot-inherited-1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "rule_rev": "decision-order-v1-20260915",
+      "metadata_snapshot": {
+        "report_publication": {
+          "value": null,
+          "precision": "unknown",
+          "status": "unknown",
+          "evidence_refs": [],
+          "origin": null,
+          "review_ref": null
+        }
+      }
+    },
+    "build": {
+      "build_id": "d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "decision_id": "d9180a26bbbbbc73bbef020cd469ea330abf84a84a9619458be77ae1bc14be2f",
+      "parse_rev": "4aebdac031f7d46415eca8d9036b9d1cced97d41060dfce2f0168d52e54e375f",
+      "clean_rev": "0fea86694f5d68dda9568b38fc81a7f89093706c3058105ff9693400db016853",
+      "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+      "index_rev": "index-4-zhcfg-2",
+      "scope_ref": null,
+      "config_fingerprint": null,
+      "artifact_manifest": [],
+      "quality_report": "{\"gap_regions\": [\"issue:image_region_small:page:1\", \"issue:image_region_small:page:2\", \"issue:image_region_small:page:3\", \"issue:image_region_small:page:4\", \"issue:image_region_small:page:5\"], \"oversized_chunks\": []}"
+    },
+    "path": "/home/administrator/FrontierAgent/data/vector-pilot-20261020/archive/1e/1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309.pdf",
+    "checkpoint_schema": "parse-checkpoint-4",
+    "review_decision_ids": [
+      "vector-pilot-inherited-1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309"
+    ]
+  },
+  {
+    "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+    "old_build": "d2ec2ce01b12450b6090114e23ec01465ea4399b38387c0a83d1808354c6e75f",
+    "generation": 1,
+    "source": {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "format": "pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 716103,
+      "archive_path": "1e/1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12.pdf",
+      "original_names": [
+        "2026-09-06_2026.09.06-国金证券-地产专题分析报告-二手房成交热度仍高-6906d4ad.pdf"
+      ]
+    },
+    "admission": {
+      "decision_id": "b439463bd139c2c30633b04e3a0b582791c14a384f23c9d3b9389fb068373a60",
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "material_type": "research_report",
+      "research_domain": "industry",
+      "decision": "in_scope",
+      "policy_rev": "v1-20260915",
+      "reason_codes": [],
+      "scope_ref": null,
+      "evidence_refs": [
+        "title_type_marker=matched:broker",
+        "heading_hierarchy=matched"
+      ],
+      "review_ref": "vector-pilot-inherited-1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "rule_rev": "decision-order-v1-20260915",
+      "metadata_snapshot": {
+        "report_publication": {
+          "value": null,
+          "precision": "unknown",
+          "status": "unknown",
+          "evidence_refs": [],
+          "origin": null,
+          "review_ref": null
+        }
+      }
+    },
+    "build": {
+      "build_id": "d2ec2ce01b12450b6090114e23ec01465ea4399b38387c0a83d1808354c6e75f",
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "decision_id": "b439463bd139c2c30633b04e3a0b582791c14a384f23c9d3b9389fb068373a60",
+      "parse_rev": "b4f6462c16ad2f6865a85cdf6758c554e8cd77241814eb6afb352798b8cdd385",
+      "clean_rev": "0fea86694f5d68dda9568b38fc81a7f89093706c3058105ff9693400db016853",
+      "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+      "index_rev": "index-4-zhcfg-2",
+      "scope_ref": null,
+      "config_fingerprint": null,
+      "artifact_manifest": [],
+      "quality_report": "{\"gap_regions\": [\"issue:image_region_small:page:1\", \"issue:image_region_small:page:2\", \"issue:image_region_small:page:3\", \"issue:image_region_small:page:4\"], \"oversized_chunks\": []}"
+    },
+    "path": "/home/administrator/FrontierAgent/data/vector-pilot-20261020/archive/1e/1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12.pdf",
+    "checkpoint_schema": "parse-checkpoint-4",
+    "review_decision_ids": [
+      "vector-pilot-inherited-1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12"
+    ]
+  },
+  {
+    "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+    "old_build": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+    "generation": 1,
+    "source": {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "format": "pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 1694025,
+      "archive_path": "3f/3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e.pdf",
+      "original_names": [
+        "2026-09-06_2026.09.06-国金证券-电力设备与新能源行业研究-中报全览-锂电验景气-aidc信号密-光伏底夯实-电网出口增-475e3454.pdf"
+      ]
+    },
+    "admission": {
+      "decision_id": "7166dc996b84193642b8fad3cd5ada3095f92e3c54af083ecb5efd3dd4a72809",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "material_type": "research_report",
+      "research_domain": "industry",
+      "decision": "in_scope",
+      "policy_rev": "v1-20260915",
+      "reason_codes": [],
+      "scope_ref": null,
+      "evidence_refs": [
+        "title_type_marker=matched:broker",
+        "heading_hierarchy=matched"
+      ],
+      "review_ref": "vector-pilot-inherited-3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "rule_rev": "decision-order-v1-20260915",
+      "metadata_snapshot": {
+        "report_publication": {
+          "value": null,
+          "precision": "unknown",
+          "status": "unknown",
+          "evidence_refs": [],
+          "origin": null,
+          "review_ref": null
+        }
+      }
+    },
+    "build": {
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "decision_id": "7166dc996b84193642b8fad3cd5ada3095f92e3c54af083ecb5efd3dd4a72809",
+      "parse_rev": "f502dbb29a8a0ce886799cc67ac4a413068edc81814d9bc24eac8f3ad31fa34c",
+      "clean_rev": "0fea86694f5d68dda9568b38fc81a7f89093706c3058105ff9693400db016853",
+      "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+      "index_rev": "index-4-zhcfg-2",
+      "scope_ref": null,
+      "config_fingerprint": null,
+      "artifact_manifest": [],
+      "quality_report": "{\"gap_regions\": [\"issue:image_region_small:page:1\", \"issue:image_region_small:page:10\", \"issue:image_region_small:page:11\", \"issue:image_region_small:page:12\", \"issue:image_region_small:page:13\", \"issue:image_region_small:page:2\", \"issue:image_region_small:page:3\", \"issue:image_region_small:page:4\", \"issue:image_region_small:page:5\", \"issue:image_region_small:page:6\", \"issue:image_region_small:page:7\", \"issue:image_region_small:page:8\", \"issue:image_region_small:page:9\"], \"oversized_chunks\": []}"
+    },
+    "path": "/home/administrator/FrontierAgent/data/vector-pilot-20261020/archive/3f/3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e.pdf",
+    "checkpoint_schema": "parse-checkpoint-4",
+    "review_decision_ids": [
+      "vector-pilot-inherited-3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e"
+    ]
+  },
+  {
+    "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+    "old_build": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+    "generation": 1,
+    "source": {
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "format": "docx",
+      "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "size_bytes": 25406,
+      "archive_path": "48/48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f.docx",
+      "original_names": [
+        "9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx"
+      ]
+    },
+    "admission": {
+      "decision_id": "a52f9501b5b073d43413501c692e46ca24613a57164afe8c9a6b69fb8379ea9a",
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "material_type": "internal_unattributed",
+      "research_domain": "industry",
+      "decision": "in_scope",
+      "policy_rev": "v2-dev-20260920",
+      "reason_codes": [],
+      "scope_ref": null,
+      "evidence_refs": [
+        "dev_lane=i3-1-dev-lane-md-docx",
+        "admitted_material=internal_unattributed"
+      ],
+      "review_ref": "devlane-docx-48c05895",
+      "rule_rev": "decision-order-v2-dev-20260920",
+      "metadata_snapshot": {
+        "report_publication": {
+          "value": null,
+          "precision": "unknown",
+          "status": "unknown",
+          "evidence_refs": [],
+          "origin": null,
+          "review_ref": null
+        }
+      }
+    },
+    "build": {
+      "build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "decision_id": "a52f9501b5b073d43413501c692e46ca24613a57164afe8c9a6b69fb8379ea9a",
+      "parse_rev": "747860affaab837c29c5f6386cf76b6d0225c03a1490680a277752f03a15524a",
+      "clean_rev": "f17753283f310fe85f66f4b67593b7a24594c001520d3fb0767f7aa9b1dedf57",
+      "chunk_rev": "ff430da84301a9210502a749da48f09f1da39f2ecc82a729336e393c44a04ee3",
+      "index_rev": "index-4-zhcfg-2",
+      "scope_ref": null,
+      "config_fingerprint": null,
+      "artifact_manifest": [],
+      "quality_report": "{\"gap_regions\": [], \"oversized_chunks\": []}"
+    },
+    "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i44-archive/48/48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f.docx",
+    "checkpoint_schema": "parse-checkpoint-2",
+    "review_decision_ids": [
+      "devlane-docx-48c05895"
+    ]
+  },
+  {
+    "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+    "old_build": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+    "generation": 1,
+    "source": {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "format": "pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 916208,
+      "archive_path": "4f/4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0.pdf",
+      "original_names": [
+        "2026-09-06_2026.09.06-平安证券-a股策略周报-轮动整固-攻守均衡-76e079c9.pdf"
+      ]
+    },
+    "admission": {
+      "decision_id": "156b43d3a3488edbaed9ac1eea29fe87003e753d385771c559bc4936ab34664f",
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "material_type": "research_report",
+      "research_domain": "macro",
+      "decision": "in_scope",
+      "policy_rev": "v1-20260915",
+      "reason_codes": [],
+      "scope_ref": null,
+      "evidence_refs": [
+        "title_type_marker=matched:broker",
+        "byline_institution=matched:broker",
+        "heading_hierarchy=matched"
+      ],
+      "review_ref": "vector-pilot-inherited-4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "rule_rev": "decision-order-v1-20260915",
+      "metadata_snapshot": {
+        "report_publication": {
+          "value": null,
+          "precision": "unknown",
+          "status": "unknown",
+          "evidence_refs": [],
+          "origin": null,
+          "review_ref": null
+        }
+      }
+    },
+    "build": {
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "decision_id": "156b43d3a3488edbaed9ac1eea29fe87003e753d385771c559bc4936ab34664f",
+      "parse_rev": "43e1f0734874ae0854675642bf6ca973ec24e899defec0b5e275a100596fd737",
+      "clean_rev": "0fea86694f5d68dda9568b38fc81a7f89093706c3058105ff9693400db016853",
+      "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+      "index_rev": "index-4-zhcfg-2",
+      "scope_ref": null,
+      "config_fingerprint": null,
+      "artifact_manifest": [],
+      "quality_report": "{\"gap_regions\": [\"issue:image_region_small:page:1\", \"issue:image_region_small:page:2\", \"issue:image_region_small:page:3\", \"issue:image_region_small:page:4\", \"issue:image_region_small:page:5\", \"issue:image_region_small:page:6\", \"issue:image_region_small:page:7\", \"issue:image_region_small:page:8\"], \"oversized_chunks\": []}"
+    },
+    "path": "/home/administrator/FrontierAgent/data/vector-pilot-20261020/archive/4f/4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0.pdf",
+    "checkpoint_schema": "parse-checkpoint-4",
+    "review_decision_ids": [
+      "vector-pilot-inherited-4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0"
+    ]
+  },
+  {
+    "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+    "old_build": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+    "generation": 1,
+    "source": {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "format": "pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 309917,
+      "archive_path": "55/5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca.pdf",
+      "original_names": [
+        "2026-09-06_2026.09.06-华源证券-环保行业周报-碳市场四行业配额方案落地-节能降碳赛道有望受益-80b15a61.pdf"
+      ]
+    },
+    "admission": {
+      "decision_id": "95774a221ab0b73eea9f5e416fa6d642d11399018dd1df13d3412b6387cc9b2f",
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "material_type": "research_report",
+      "research_domain": "industry",
+      "decision": "in_scope",
+      "policy_rev": "v1-20260915",
+      "reason_codes": [],
+      "scope_ref": null,
+      "evidence_refs": [
+        "title_type_marker=matched:broker",
+        "byline_institution=matched:broker"
+      ],
+      "review_ref": "vector-pilot-inherited-5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "rule_rev": "decision-order-v1-20260915",
+      "metadata_snapshot": {
+        "report_publication": {
+          "value": null,
+          "precision": "unknown",
+          "status": "unknown",
+          "evidence_refs": [],
+          "origin": null,
+          "review_ref": null
+        }
+      }
+    },
+    "build": {
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "decision_id": "95774a221ab0b73eea9f5e416fa6d642d11399018dd1df13d3412b6387cc9b2f",
+      "parse_rev": "cfcb7b527c7438fe27929a2d6e959b4e2eec2ca1b03270180e346b909e315114",
+      "clean_rev": "0fea86694f5d68dda9568b38fc81a7f89093706c3058105ff9693400db016853",
+      "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+      "index_rev": "index-4-zhcfg-2",
+      "scope_ref": null,
+      "config_fingerprint": null,
+      "artifact_manifest": [],
+      "quality_report": "{\"gap_regions\": [\"issue:image_region_small:page:1\", \"issue:image_region_small:page:2\"], \"oversized_chunks\": []}"
+    },
+    "path": "/home/administrator/FrontierAgent/data/vector-pilot-20261020/archive/55/5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca.pdf",
+    "checkpoint_schema": "parse-checkpoint-4",
+    "review_decision_ids": [
+      "vector-pilot-inherited-5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca"
+    ]
+  },
+  {
+    "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+    "old_build": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+    "generation": 2,
+    "source": {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "format": "pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 2101147,
+      "archive_path": "6f/6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11.pdf",
+      "original_names": [
+        "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf"
+      ]
+    },
+    "admission": {
+      "decision_id": "237bea4b92ca9d90beca14a883183475d90e3dbd2baf62f533bd12468c1c3d20",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "material_type": "research_report",
+      "research_domain": "company",
+      "decision": "in_scope",
+      "policy_rev": "v1-20260915",
+      "reason_codes": [],
+      "scope_ref": null,
+      "evidence_refs": [
+        "title_type_marker=matched:broker",
+        "byline_institution=matched:broker"
+      ],
+      "review_ref": "i3e1-approved-2b36f14b42",
+      "rule_rev": "decision-order-v1-20260915",
+      "metadata_snapshot": {
+        "report_publication": {
+          "value": null,
+          "precision": "unknown",
+          "status": "unknown",
+          "evidence_refs": [],
+          "origin": null,
+          "review_ref": null
+        }
+      }
+    },
+    "build": {
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "decision_id": "237bea4b92ca9d90beca14a883183475d90e3dbd2baf62f533bd12468c1c3d20",
+      "parse_rev": "2b451eec1b815942ac319a5c48629b2189bdac44438b7cc3f9248e4550083a44",
+      "clean_rev": "ccadcc7d0756e4b95e1adc508401e7519be708722330ec1e3e63a6f6dbd4745c",
+      "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+      "index_rev": "index-4-zhcfg-2",
+      "scope_ref": null,
+      "config_fingerprint": null,
+      "artifact_manifest": [],
+      "quality_report": "{\"gap_regions\": [\"issue:image_region_small:page:1\", \"issue:image_region_small:page:2\", \"issue:image_region_small:page:3\", \"issue:image_region_small:page:4\", \"issue:image_region_small:page:5\", \"issue:image_region_small:page:6\", \"issue:image_region_small:page:7\", \"issue:image_region_unreadable:page:2\"], \"oversized_chunks\": []}"
+    },
+    "path": "/home/administrator/FrontierAgent/data/corpus-archive/6f/6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11.pdf",
+    "checkpoint_schema": "parse-checkpoint-2",
+    "review_decision_ids": [
+      "i3e1-approved-2b36f14b42"
+    ]
+  },
+  {
+    "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+    "old_build": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+    "generation": 2,
+    "source": {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "format": "pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 489717,
+      "archive_path": "79/793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a.pdf",
+      "original_names": [
+        "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf"
+      ]
+    },
+    "admission": {
+      "decision_id": "6a3ae1b6c697677e2eb1b16d8438d37b93ff63fbaf8c072d46f639fc7de2e832",
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "material_type": "research_report",
+      "research_domain": "macro",
+      "decision": "in_scope",
+      "policy_rev": "v1-20260915",
+      "reason_codes": [
+        "mixed_material"
+      ],
+      "scope_ref": null,
+      "evidence_refs": [
+        "title_type_marker=matched:broker",
+        "byline_institution=matched:broker",
+        "heading_hierarchy=matched",
+        "speaker_turns=matched",
+        "qa_markers=matched"
+      ],
+      "review_ref": "i3e1-approved-9cdca024d2",
+      "rule_rev": "decision-order-v1-20260915",
+      "metadata_snapshot": {
+        "report_publication": {
+          "value": null,
+          "precision": "unknown",
+          "status": "unknown",
+          "evidence_refs": [],
+          "origin": null,
+          "review_ref": null
+        }
+      }
+    },
+    "build": {
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "decision_id": "6a3ae1b6c697677e2eb1b16d8438d37b93ff63fbaf8c072d46f639fc7de2e832",
+      "parse_rev": "9f3d2b60d51f6b65d07778025e872d75de95d650c2e51bda946f39c3d7994fbf",
+      "clean_rev": "ccadcc7d0756e4b95e1adc508401e7519be708722330ec1e3e63a6f6dbd4745c",
+      "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+      "index_rev": "index-4-zhcfg-2",
+      "scope_ref": null,
+      "config_fingerprint": null,
+      "artifact_manifest": [],
+      "quality_report": "{\"gap_regions\": [\"issue:image_region_small:page:1\", \"issue:image_region_small:page:2\", \"issue:image_region_small:page:3\", \"issue:image_region_small:page:4\", \"issue:image_region_small:page:5\", \"issue:image_region_small:page:6\", \"issue:image_region_small:page:7\", \"issue:image_region_small:page:8\", \"issue:table_lines_without_extraction:page:6\"], \"oversized_chunks\": []}"
+    },
+    "path": "/home/administrator/FrontierAgent/data/corpus-archive/79/793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a.pdf",
+    "checkpoint_schema": "parse-checkpoint-2",
+    "review_decision_ids": [
+      "i3e1-approved-9cdca024d2"
+    ]
+  },
+  {
+    "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+    "old_build": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+    "generation": 1,
+    "source": {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "format": "pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 1565963,
+      "archive_path": "81/8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122.pdf",
+      "original_names": [
+        "2026-09-06_2026.09.06-国联民生证券-通信行业周报-2026-cioe中国光博会前瞻-a87d1d3c.pdf"
+      ]
+    },
+    "admission": {
+      "decision_id": "4409961eea9cd8c6541e7c7b5a25d2abf8fcd56655129be1794071eedbd3ab82",
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "material_type": "research_report",
+      "research_domain": "industry",
+      "decision": "in_scope",
+      "policy_rev": "v1-20260915",
+      "reason_codes": [],
+      "scope_ref": null,
+      "evidence_refs": [
+        "title_type_marker=matched:broker",
+        "byline_institution=matched:broker",
+        "heading_hierarchy=matched"
+      ],
+      "review_ref": "vector-pilot-inherited-8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "rule_rev": "decision-order-v1-20260915",
+      "metadata_snapshot": {
+        "report_publication": {
+          "value": null,
+          "precision": "unknown",
+          "status": "unknown",
+          "evidence_refs": [],
+          "origin": null,
+          "review_ref": null
+        }
+      }
+    },
+    "build": {
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "decision_id": "4409961eea9cd8c6541e7c7b5a25d2abf8fcd56655129be1794071eedbd3ab82",
+      "parse_rev": "c8bfb5ea418a7601bc02ba55426fbf52c7651831816cee539ec82bf8eb611144",
+      "clean_rev": "0fea86694f5d68dda9568b38fc81a7f89093706c3058105ff9693400db016853",
+      "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+      "index_rev": "index-4-zhcfg-2",
+      "scope_ref": null,
+      "config_fingerprint": null,
+      "artifact_manifest": [],
+      "quality_report": "{\"gap_regions\": [\"issue:image_region_small:page:1\", \"issue:image_region_small:page:10\", \"issue:image_region_small:page:11\", \"issue:image_region_small:page:12\", \"issue:image_region_small:page:13\", \"issue:image_region_small:page:14\", \"issue:image_region_small:page:15\", \"issue:image_region_small:page:16\", \"issue:image_region_small:page:2\", \"issue:image_region_small:page:3\", \"issue:image_region_small:page:4\", \"issue:image_region_small:page:5\", \"issue:image_region_small:page:6\", \"issue:image_region_small:page:7\", \"issue:image_region_small:page:8\", \"issue:image_region_small:page:9\"], \"oversized_chunks\": []}"
+    },
+    "path": "/home/administrator/FrontierAgent/data/vector-pilot-20261020/archive/81/8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122.pdf",
+    "checkpoint_schema": "parse-checkpoint-4",
+    "review_decision_ids": [
+      "vector-pilot-inherited-8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122"
+    ]
+  },
+  {
+    "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+    "old_build": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+    "generation": 1,
+    "source": {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "format": "pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 1304429,
+      "archive_path": "98/987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a.pdf",
+      "original_names": [
+        "2026-09-06_2026.09.06-国金证券-互联网行业研究-gpt-6-astra-fable-5-1正式发布-持续看好ai应用-247dc7fb.pdf"
+      ]
+    },
+    "admission": {
+      "decision_id": "82d8f9349aad3fcfb3eed4fab4893e79e5177d1744ad654fa01ca59834da60e8",
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "material_type": "research_report",
+      "research_domain": "industry",
+      "decision": "in_scope",
+      "policy_rev": "v1-20260915",
+      "reason_codes": [
+        "mixed_material"
+      ],
+      "scope_ref": null,
+      "evidence_refs": [
+        "title_type_marker=matched:broker",
+        "heading_hierarchy=matched",
+        "speaker_turns=matched"
+      ],
+      "review_ref": "vector-pilot-inherited-987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "rule_rev": "decision-order-v1-20260915",
+      "metadata_snapshot": {
+        "report_publication": {
+          "value": null,
+          "precision": "unknown",
+          "status": "unknown",
+          "evidence_refs": [],
+          "origin": null,
+          "review_ref": null
+        }
+      }
+    },
+    "build": {
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "decision_id": "82d8f9349aad3fcfb3eed4fab4893e79e5177d1744ad654fa01ca59834da60e8",
+      "parse_rev": "f1ce9cdb9e0a3347cea3b488d3c13bc89aac3f1c47c42e407e070f9d71676815",
+      "clean_rev": "0fea86694f5d68dda9568b38fc81a7f89093706c3058105ff9693400db016853",
+      "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+      "index_rev": "index-4-zhcfg-2",
+      "scope_ref": null,
+      "config_fingerprint": null,
+      "artifact_manifest": [],
+      "quality_report": "{\"gap_regions\": [\"issue:image_region_small:page:1\", \"issue:image_region_small:page:2\", \"issue:image_region_small:page:3\", \"issue:image_region_small:page:4\", \"issue:image_region_small:page:5\", \"issue:image_region_small:page:6\", \"issue:image_region_small:page:7\", \"issue:image_region_small:page:8\"], \"oversized_chunks\": []}"
+    },
+    "path": "/home/administrator/FrontierAgent/data/vector-pilot-20261020/archive/98/987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a.pdf",
+    "checkpoint_schema": "parse-checkpoint-4",
+    "review_decision_ids": [
+      "vector-pilot-inherited-987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a"
+    ]
+  },
+  {
+    "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+    "old_build": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+    "generation": 2,
+    "source": {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "format": "pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 1588565,
+      "archive_path": "cc/cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128.pdf",
+      "original_names": [
+        "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf"
+      ]
+    },
+    "admission": {
+      "decision_id": "952e0137e7511e99d4b99f6092cd2d7710464270f913482fffb41d88c5a6c244",
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "material_type": "research_report",
+      "research_domain": "macro",
+      "decision": "in_scope",
+      "policy_rev": "v1-20260915",
+      "reason_codes": [],
+      "scope_ref": null,
+      "evidence_refs": [
+        "title_type_marker=matched:broker",
+        "byline_institution=matched:broker"
+      ],
+      "review_ref": "i3e1-approved-43300146a2",
+      "rule_rev": "decision-order-v1-20260915",
+      "metadata_snapshot": {
+        "report_publication": {
+          "value": null,
+          "precision": "unknown",
+          "status": "unknown",
+          "evidence_refs": [],
+          "origin": null,
+          "review_ref": null
+        }
+      }
+    },
+    "build": {
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "decision_id": "952e0137e7511e99d4b99f6092cd2d7710464270f913482fffb41d88c5a6c244",
+      "parse_rev": "f57fae4096c0a6ee08052dcab94bdccfbe8eee46d28ed691031c30211a1b29a3",
+      "clean_rev": "ccadcc7d0756e4b95e1adc508401e7519be708722330ec1e3e63a6f6dbd4745c",
+      "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+      "index_rev": "index-4-zhcfg-2",
+      "scope_ref": null,
+      "config_fingerprint": null,
+      "artifact_manifest": [],
+      "quality_report": "{\"gap_regions\": [\"issue:image_region_small:page:1\", \"issue:image_region_small:page:10\", \"issue:image_region_small:page:11\", \"issue:image_region_small:page:12\", \"issue:image_region_small:page:13\", \"issue:image_region_small:page:14\", \"issue:image_region_small:page:15\", \"issue:image_region_small:page:16\", \"issue:image_region_small:page:2\", \"issue:image_region_small:page:3\", \"issue:image_region_small:page:4\", \"issue:image_region_small:page:5\", \"issue:image_region_small:page:6\", \"issue:image_region_small:page:7\", \"issue:image_region_small:page:8\", \"issue:image_region_small:page:9\"], \"oversized_chunks\": []}"
+    },
+    "path": "/home/administrator/FrontierAgent/data/corpus-archive/cc/cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128.pdf",
+    "checkpoint_schema": "parse-checkpoint-2",
+    "review_decision_ids": [
+      "i3e1-approved-43300146a2"
+    ]
+  },
+  {
+    "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+    "old_build": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+    "generation": 1,
+    "source": {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "format": "pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 741895,
+      "archive_path": "d4/d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160.pdf",
+      "original_names": [
+        "2026-09-06_2026.09.06-天风证券-海外跟踪周报-非农清障-通胀定调-5520fab6.pdf"
+      ]
+    },
+    "admission": {
+      "decision_id": "ed12ed47902479c71035ac422eee62fb3e95f7d4f1e3df62a791b83c975b0fbf",
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "material_type": "research_report",
+      "research_domain": "macro",
+      "decision": "in_scope",
+      "policy_rev": "v1-20260915",
+      "reason_codes": [],
+      "scope_ref": null,
+      "evidence_refs": [
+        "title_type_marker=matched:broker",
+        "byline_institution=matched:broker",
+        "heading_hierarchy=matched"
+      ],
+      "review_ref": "vector-pilot-inherited-d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "rule_rev": "decision-order-v1-20260915",
+      "metadata_snapshot": {
+        "report_publication": {
+          "value": null,
+          "precision": "unknown",
+          "status": "unknown",
+          "evidence_refs": [],
+          "origin": null,
+          "review_ref": null
+        }
+      }
+    },
+    "build": {
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "decision_id": "ed12ed47902479c71035ac422eee62fb3e95f7d4f1e3df62a791b83c975b0fbf",
+      "parse_rev": "d7759066f6e2b097acd863be7d8e4fc709a51f6a6e2e248dfc28e220e6c45c32",
+      "clean_rev": "0fea86694f5d68dda9568b38fc81a7f89093706c3058105ff9693400db016853",
+      "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+      "index_rev": "index-4-zhcfg-2",
+      "scope_ref": null,
+      "config_fingerprint": null,
+      "artifact_manifest": [],
+      "quality_report": "{\"gap_regions\": [\"issue:image_region_small:page:1\", \"issue:image_region_small:page:10\", \"issue:image_region_small:page:11\", \"issue:image_region_small:page:12\", \"issue:image_region_small:page:13\", \"issue:image_region_small:page:14\", \"issue:image_region_small:page:15\", \"issue:image_region_small:page:16\", \"issue:image_region_small:page:17\", \"issue:image_region_small:page:2\", \"issue:image_region_small:page:3\", \"issue:image_region_small:page:4\", \"issue:image_region_small:page:5\", \"issue:image_region_small:page:6\", \"issue:image_region_small:page:7\", \"issue:image_region_small:page:8\", \"issue:image_region_small:page:9\"], \"oversized_chunks\": []}"
+    },
+    "path": "/home/administrator/FrontierAgent/data/vector-pilot-20261020/archive/d4/d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160.pdf",
+    "checkpoint_schema": "parse-checkpoint-4",
+    "review_decision_ids": [
+      "vector-pilot-inherited-d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160"
+    ]
+  },
+  {
+    "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+    "old_build": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+    "generation": 2,
+    "source": {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "format": "pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 1643958,
+      "archive_path": "dd/dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa.pdf",
+      "original_names": [
+        "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf"
+      ]
+    },
+    "admission": {
+      "decision_id": "45c1cce0d0fe65fe598533491282ea27d74b5f552ee62e33d745c5516011e9ae",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "material_type": "research_report",
+      "research_domain": "company",
+      "decision": "in_scope",
+      "policy_rev": "v1-20260915",
+      "reason_codes": [],
+      "scope_ref": null,
+      "evidence_refs": [
+        "title_type_marker=matched:broker",
+        "byline_institution=matched:broker"
+      ],
+      "review_ref": "i3e1-approved-dd259586a3",
+      "rule_rev": "decision-order-v1-20260915",
+      "metadata_snapshot": {
+        "report_publication": {
+          "value": null,
+          "precision": "unknown",
+          "status": "unknown",
+          "evidence_refs": [],
+          "origin": null,
+          "review_ref": null
+        }
+      }
+    },
+    "build": {
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "decision_id": "45c1cce0d0fe65fe598533491282ea27d74b5f552ee62e33d745c5516011e9ae",
+      "parse_rev": "b53584814f8304976ecbf8f5830f0fcd414a658ccb5abaa368d5afb2e4f5a8f4",
+      "clean_rev": "ccadcc7d0756e4b95e1adc508401e7519be708722330ec1e3e63a6f6dbd4745c",
+      "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+      "index_rev": "index-4-zhcfg-2",
+      "scope_ref": null,
+      "config_fingerprint": null,
+      "artifact_manifest": [],
+      "quality_report": "{\"gap_regions\": [\"issue:image_region_small:page:1\", \"issue:image_region_small:page:10\", \"issue:image_region_small:page:11\", \"issue:image_region_small:page:12\", \"issue:image_region_small:page:13\", \"issue:image_region_small:page:14\", \"issue:image_region_small:page:15\", \"issue:image_region_small:page:16\", \"issue:image_region_small:page:17\", \"issue:image_region_small:page:18\", \"issue:image_region_small:page:19\", \"issue:image_region_small:page:2\", \"issue:image_region_small:page:20\", \"issue:image_region_small:page:21\", \"issue:image_region_small:page:22\", \"issue:image_region_small:page:3\", \"issue:image_region_small:page:4\", \"issue:image_region_small:page:5\", \"issue:image_region_small:page:6\", \"issue:image_region_small:page:7\", \"issue:image_region_small:page:8\", \"issue:image_region_small:page:9\", \"issue:image_region_unreadable:page:7\"], \"oversized_chunks\": []}"
+    },
+    "path": "/home/administrator/FrontierAgent/data/corpus-archive/dd/dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa.pdf",
+    "checkpoint_schema": "parse-checkpoint-2",
+    "review_decision_ids": [
+      "i3e1-approved-dd259586a3"
+    ]
+  },
+  {
+    "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+    "old_build": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+    "generation": 2,
+    "source": {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "format": "pdf",
+      "mime_type": "application/pdf",
+      "size_bytes": 1709634,
+      "archive_path": "f8/f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560.pdf",
+      "original_names": [
+        "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf"
+      ]
+    },
+    "admission": {
+      "decision_id": "c819129b3ccb4ee1537cc1cd0cc2e8640d91b7fa4f33ef3dce2f74bdee9c1d72",
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "material_type": "research_report",
+      "research_domain": "industry",
+      "decision": "in_scope",
+      "policy_rev": "v1-20260915",
+      "reason_codes": [],
+      "scope_ref": null,
+      "evidence_refs": [
+        "title_type_marker=matched:broker"
+      ],
+      "review_ref": "i3e1-approved-f269774bb4",
+      "rule_rev": "decision-order-v1-20260915",
+      "metadata_snapshot": {
+        "report_publication": {
+          "value": null,
+          "precision": "unknown",
+          "status": "unknown",
+          "evidence_refs": [],
+          "origin": null,
+          "review_ref": null
+        }
+      }
+    },
+    "build": {
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "decision_id": "c819129b3ccb4ee1537cc1cd0cc2e8640d91b7fa4f33ef3dce2f74bdee9c1d72",
+      "parse_rev": "f3264968fb5e8324912ce089bc651ad0f761ac72ac0a0229db72c43654c9c074",
+      "clean_rev": "ccadcc7d0756e4b95e1adc508401e7519be708722330ec1e3e63a6f6dbd4745c",
+      "chunk_rev": "c8a41ddc5ae48e11379a64733867b0c4885b9f9f4b2552541e115e6ac26b826f",
+      "index_rev": "index-4-zhcfg-2",
+      "scope_ref": null,
+      "config_fingerprint": null,
+      "artifact_manifest": [],
+      "quality_report": "{\"gap_regions\": [\"issue:image_region_small:page:1\", \"issue:image_region_small:page:10\", \"issue:image_region_small:page:11\", \"issue:image_region_small:page:2\", \"issue:image_region_small:page:3\", \"issue:image_region_small:page:4\", \"issue:image_region_small:page:5\", \"issue:image_region_small:page:6\", \"issue:image_region_small:page:7\", \"issue:image_region_small:page:8\", \"issue:image_region_small:page:9\"], \"oversized_chunks\": []}"
+    },
+    "path": "/home/administrator/FrontierAgent/data/corpus-archive/f8/f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560.pdf",
+    "checkpoint_schema": "parse-checkpoint-2",
+    "review_decision_ids": [
+      "i3e1-approved-f269774bb4"
+    ]
+  },
+  {
+    "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+    "old_build": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+    "generation": 1,
+    "source": {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "format": "markdown",
+      "mime_type": "text/markdown",
+      "size_bytes": 18558,
+      "archive_path": "f8/f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb.md",
+      "original_names": [
+        "工业富联_投委会决策报告_20260829.md"
+      ]
+    },
+    "admission": {
+      "decision_id": "45d0f545d18619a8c88ccc06443e51bdee3bf4c922e172089adc21c5609d4a1b",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "material_type": "internal_committee_report",
+      "research_domain": "company",
+      "decision": "in_scope",
+      "policy_rev": "v2-dev-20260920",
+      "reason_codes": [],
+      "scope_ref": null,
+      "evidence_refs": [
+        "title_type_marker=matched:committee",
+        "heading_hierarchy=matched",
+        "dev_lane=i3-1-dev-lane-md-docx",
+        "admitted_material=internal_committee_report"
+      ],
+      "review_ref": "devlane-md-f8fa2208",
+      "rule_rev": "decision-order-v2-dev-20260920",
+      "metadata_snapshot": {
+        "report_publication": {
+          "value": null,
+          "precision": "unknown",
+          "status": "unknown",
+          "evidence_refs": [],
+          "origin": null,
+          "review_ref": null
+        }
+      }
+    },
+    "build": {
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "decision_id": "45d0f545d18619a8c88ccc06443e51bdee3bf4c922e172089adc21c5609d4a1b",
+      "parse_rev": "28fd6541c91aad284905e19175272b3fb3133293bd5417675ae9b57f732fdfcf",
+      "clean_rev": "f17753283f310fe85f66f4b67593b7a24594c001520d3fb0767f7aa9b1dedf57",
+      "chunk_rev": "ff430da84301a9210502a749da48f09f1da39f2ecc82a729336e393c44a04ee3",
+      "index_rev": "index-4-zhcfg-2",
+      "scope_ref": null,
+      "config_fingerprint": null,
+      "artifact_manifest": [],
+      "quality_report": "{\"gap_regions\": [], \"oversized_chunks\": []}"
+    },
+    "path": "/home/administrator/FrontierAgent/.scratch/corpus-evidence-pipeline/ingestion-rebuild/audits/20260923-i4-window/i44-archive/f8/f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb.md",
+    "checkpoint_schema": "parse-checkpoint-2",
+    "review_decision_ids": [
+      "devlane-md-f8fa2208"
+    ]
+  }
+]

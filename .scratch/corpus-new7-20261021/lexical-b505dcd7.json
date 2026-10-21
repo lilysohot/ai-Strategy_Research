@@ -1,0 +1,264 @@
+{
+  "query": "DS V4.1 Flash 国产卡 10T",
+  "hits": [
+    {
+      "doc_id": "cv2:e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623",
+      "locator": "chunk:e8a6d70dfee70089:body:0000",
+      "title": "半导体行业AI进化论(23)：DS V4.1 Flash释放硬件潜能国产卡迈向10T模型时代",
+      "snippet": "<b>V4</b>.1<b>Flash</b>的核心意义，",
+      "score": 0.1024929809526856,
+      "published": "undated",
+      "source_id": "b505dcd712bc33050d71b82783fae29bc9e7f61fdc4d8300e2f5e126168ca1c6",
+      "build_id": "e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623",
+      "chunk_id": "e8a6d70dfee70089:body:0000",
+      "context_locators": [
+        "chunk:e8a6d70dfee70089:body:0000",
+        "chunk:e8a6d70dfee70089:heading:0000"
+      ],
+      "scope_id": "scope:0cd49ce929e593416c0716824a7d8d55",
+      "context_by_kind": [
+        [
+          "unknown",
+          2
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698",
+      "locator": "chunk:1e86c00da4097c5c:body:0000",
+      "title": "2026-10-19 研究 LLM：DeepSeek V4.1-Flash-1017\n研究|LLM：DeepSeek V4.1-Flash-1017 跻身开放权重模型第一梯队，仍落后于专\n有模型领跑者\n更快、更低成本的代码与智能体任务加剧竞争",
+      "snippet": "<b>V4</b>.1-<b>Flash</b>-1017，",
+      "score": 0.04566139398874782,
+      "published": "undated",
+      "source_id": "eecaab994514609bf9d459618e9d0cb53c00b5fa4bbebcebf413f6d97c7f4e23",
+      "build_id": "1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698",
+      "chunk_id": "1e86c00da4097c5c:body:0000",
+      "context_locators": [
+        "chunk:1e86c00da4097c5c:heading:0000",
+        "chunk:1e86c00da4097c5c:body:0000",
+        "chunk:1e86c00da4097c5c:body:0001",
+        "chunk:1e86c00da4097c5c:body:0002",
+        "chunk:1e86c00da4097c5c:body:0003",
+        "chunk:1e86c00da4097c5c:body:0004",
+        "chunk:1e86c00da4097c5c:body:0005",
+        "chunk:1e86c00da4097c5c:body:0006",
+        "chunk:1e86c00da4097c5c:body:0007",
+        "chunk:1e86c00da4097c5c:body:0008",
+        "chunk:1e86c00da4097c5c:body:0009",
+        "chunk:1e86c00da4097c5c:body:0010",
+        "chunk:1e86c00da4097c5c:body:0011",
+        "chunk:1e86c00da4097c5c:body:0012",
+        "chunk:1e86c00da4097c5c:body:0013",
+        "chunk:1e86c00da4097c5c:body:0014",
+        "chunk:1e86c00da4097c5c:body:0015",
+        "chunk:1e86c00da4097c5c:body:0016",
+        "chunk:1e86c00da4097c5c:body:0017"
+      ],
+      "scope_id": "scope:c806860c323dbe57fc9047f2379c93bd",
+      "context_by_kind": [
+        [
+          "body",
+          1
+        ],
+        [
+          "unknown",
+          18
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0017",
+      "title": "半导体划片机转入放量进程,煤矿业务企稳",
+      "snippet": "<b>国产</b>划片机仍处渗透初期\nAI",
+      "score": 0.015240163888212697,
+      "published": "undated",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0017",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:table:0014",
+        "chunk:568f9e752f0fa65a:body:0016",
+        "chunk:568f9e752f0fa65a:body:0017",
+        "chunk:568f9e752f0fa65a:body:0018"
+      ],
+      "scope_id": "scope:e5e334d140e469fb3a960900bfa1b8ec",
+      "context_by_kind": [
+        [
+          "unknown",
+          4
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+      "locator": "chunk:c520485162e66660:body:0010",
+      "title": "【行业重大事件】",
+      "snippet": "<b>Flash</b>3.7之后，隆重推出Gemini3.8，",
+      "score": 0.014885988375753311,
+      "published": "undated",
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+      "chunk_id": "c520485162e66660:body:0010",
+      "context_locators": [
+        "chunk:c520485162e66660:body:0009",
+        "chunk:c520485162e66660:body:0010",
+        "chunk:c520485162e66660:body:0011"
+      ],
+      "scope_id": "scope:15e49b55dd9c1b5c4b5bd4fd42b444bc",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "locator": "chunk:668bac61a631636c:body:0004",
+      "title": "一、细分板块观点\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩",
+      "snippet": "<b>国产</b>算力核心发展方向。寒武纪、",
+      "score": 0.012506748079047513,
+      "published": "undated",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "chunk_id": "668bac61a631636c:body:0004",
+      "context_locators": [
+        "chunk:668bac61a631636c:heading:0004",
+        "chunk:668bac61a631636c:body:0003",
+        "chunk:668bac61a631636c:body:0004",
+        "chunk:668bac61a631636c:body:0005",
+        "chunk:668bac61a631636c:body:0006",
+        "chunk:668bac61a631636c:body:0007"
+      ],
+      "scope_id": "scope:da288215e71521f26a1d06e2a6d11f3a",
+      "context_by_kind": [
+        [
+          "unknown",
+          6
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0003",
+      "title": "相关研究报告",
+      "snippet": "<b>国产</b>替代空间较大，且AIDC、",
+      "score": 0.014219097390429463,
+      "published": "undated",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0003",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:body:0002",
+        "chunk:568f9e752f0fa65a:body:0003",
+        "chunk:568f9e752f0fa65a:table:0000"
+      ],
+      "scope_id": "scope:a207be96c099387d8d49600e6ecb0189",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "locator": "chunk:668bac61a631636c:body:0001",
+      "title": "”",
+      "snippet": "<b>国产</b>设备份额提升继续兑现，当前",
+      "score": 0.010030488038549624,
+      "published": "undated",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "chunk_id": "668bac61a631636c:body:0001",
+      "context_locators": [
+        "chunk:668bac61a631636c:heading:0000",
+        "chunk:668bac61a631636c:body:0001",
+        "chunk:668bac61a631636c:body:0002"
+      ],
+      "scope_id": "scope:364b201a642e6b3adac440a47a63d29d",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0012",
+      "title": "半导体加工设备逐步打开业务成长空间",
+      "snippet": "<b>国产</b>主轴已应用于公司部分<b>国产</b>",
+      "score": 0.012506748079047513,
+      "published": "undated",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0012",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:table:0009",
+        "chunk:568f9e752f0fa65a:body:0012",
+        "chunk:568f9e752f0fa65a:table:0010",
+        "chunk:568f9e752f0fa65a:body:0013",
+        "chunk:568f9e752f0fa65a:table:0011",
+        "chunk:568f9e752f0fa65a:body:0014",
+        "chunk:568f9e752f0fa65a:body:0015",
+        "chunk:568f9e752f0fa65a:table:0012"
+      ],
+      "scope_id": "scope:829ae99f0772737e1ad0f7091c58f657",
+      "context_by_kind": [
+        [
+          "unknown",
+          8
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0037",
+      "title": "风险提示",
+      "snippet": "<b>国产</b>替代进程放缓、市场竞争加剧",
+      "score": 0.012506748079047513,
+      "published": "undated",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0037",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:body:0034",
+        "chunk:568f9e752f0fa65a:body:0035",
+        "chunk:568f9e752f0fa65a:body:0036",
+        "chunk:568f9e752f0fa65a:body:0037",
+        "chunk:568f9e752f0fa65a:body:0038"
+      ],
+      "scope_id": "scope:ef002805700b812a9d5c683aa99e5b73",
+      "context_by_kind": [
+        [
+          "unknown",
+          5
+        ]
+      ]
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@b4980af67156a7643bfedfef09f9cac0",
+    "processing": "unknown",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "admission_pending",
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 31,
+      "published": 25,
+      "withdrawn": 0,
+      "pending": 2,
+      "failed_jobs": 0,
+      "builds": 54,
+      "published_with_gaps": 21
+    }
+  }
+}

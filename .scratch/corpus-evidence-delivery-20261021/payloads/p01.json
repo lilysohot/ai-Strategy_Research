@@ -1,0 +1,1000 @@
+{
+  "ok": true,
+  "query": "国金电子报告怎样解释麒麟芯片晶体管更多、做同样工作却更省电？",
+  "count": 10,
+  "hits": [
+    {
+      "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "locator": "chunk:16a9a510ef9e405f:body:0001",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0001",
+      "context_locators": [
+        "chunk:16a9a510ef9e405f:heading:0000",
+        "chunk:16a9a510ef9e405f:body:0001",
+        "chunk:16a9a510ef9e405f:body:0002",
+        "chunk:16a9a510ef9e405f:heading:0001"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locator": "chunk:16a9a510ef9e405f:body:0001",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0000",
+          "chunk:16a9a510ef9e405f:body:0001",
+          "chunk:16a9a510ef9e405f:body:0002",
+          "chunk:16a9a510ef9e405f:heading:0001"
+        ],
+        "scope_id": "scope:f8d03cba8edacc7c5dcdf316c3c361ca",
+        "view": "compact"
+      },
+      "scope_id": "scope:f8d03cba8edacc7c5dcdf316c3c361ca",
+      "total_chunks": 4,
+      "by_kind": {
+        "unknown": 4
+      },
+      "table_chunks": 0,
+      "title": "”",
+      "published": "undated",
+      "snippet": "<b>麒麟</b>2026的<b>芯片</b><b>晶体管</b>密度从约",
+      "preview": {
+        "text": "”\n投资逻辑 \n\n “韬定律”与业绩斜率：AI PCB 及半导体设备迎来布局良机。9 月4 日，华为半导体负责人何庭波在中科院科技\n论文预发布平台ChinaXiv，再次发布相关论文《Huawei's τ Chip Was Supposed to Melt?》，提到热量是韬定律\n最棘手的隐忧，而麒麟芯片实测结果，颠覆了这一质疑。数据显示，麒麟2026 的芯片晶体管密度从约每平方毫\n米1.55 亿提升到2.38 亿个，跃升55%。在同等性能的测试条件下，对比前代平面架构麒麟9030 Pro，麒麟2026\n的NPU 功耗下降66%，GPU 功耗下降58%，CPU 性能大核功耗下降41%，在晶体管数量暴涨的同时，完成同\n等工作的芯片工作温度更低。论文解释了反常识的核心原因：芯片绝大部分能耗，并非消耗在晶体管本身的计算\n运算上，而是消耗在金属走线的数据搬运，如同上班族通勤的能量消耗远大于工位办公。逻辑折叠大幅缩短信号\n走线长度，直接削减占据功耗大头的互连电容开销。走线缩短带来电容层面的功耗缩减，同时走线变短后，电路\n可以进一步降低工作电压；动态功耗与电压平方成正比，由此带来幅度更大的功耗收益。我们认为，华为韬定律\n芯片从平面集成走向立体集成，工艺步骤、互连数量和制造复杂度同步提升，对半导体设备是积极利好，半导体\n设备板块近期股价连续回撤，产业逻辑没有发生变化。",
+        "start": 0,
+        "end": 585,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "工作",
+          "晶体管",
+          "芯片",
+          "解释",
+          "麒麟"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0001"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0000",
+          "chunk:16a9a510ef9e405f:body:0001",
+          "chunk:16a9a510ef9e405f:body:0002",
+          "chunk:16a9a510ef9e405f:heading:0001"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:16a9a510ef9e405f:heading:0000",
+          "chunk:16a9a510ef9e405f:body:0001",
+          "chunk:16a9a510ef9e405f:body:0002",
+          "chunk:16a9a510ef9e405f:heading:0001"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "locator": "chunk:022ae1713fb760ff:body:0001",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0001",
+      "context_locators": [
+        "chunk:022ae1713fb760ff:body:0000",
+        "chunk:022ae1713fb760ff:body:0001",
+        "chunk:022ae1713fb760ff:body:0002",
+        "chunk:022ae1713fb760ff:body:0003",
+        "chunk:022ae1713fb760ff:body:0004",
+        "chunk:022ae1713fb760ff:body:0005",
+        "chunk:022ae1713fb760ff:body:0006",
+        "chunk:022ae1713fb760ff:body:0007",
+        "chunk:022ae1713fb760ff:body:0008",
+        "chunk:022ae1713fb760ff:body:0009"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locator": "chunk:022ae1713fb760ff:body:0001",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009"
+        ],
+        "scope_id": "scope:9ed2380c6fc4063c2cf86aa175daca83",
+        "view": "compact"
+      },
+      "scope_id": "scope:9ed2380c6fc4063c2cf86aa175daca83",
+      "total_chunks": 10,
+      "by_kind": {
+        "body": 1,
+        "unknown": 9
+      },
+      "table_chunks": 0,
+      "title": "022ae1713fb760ff:body:0001",
+      "published": "undated",
+      "snippet": "<b>工作</b>部署会。氢能与燃料电池",
+      "preview": {
+        "text": "风光储：中国光伏行业协会发布《〈光伏行业成本核算模型通则〉问答手册》；国家能源集团启动2026 年第四批5GW 风\n机集采；大金重工KING TWO 轮启动首航，发运BC Wind 项目首批单桩。 \n锂电：中科海钠签约韩国VOLTA；石大胜华拟投建20 万吨电解液项目；9 月碳酸锂需求升至17 万吨、供需趋紧。 \n电网：国网输变电设备第四批中标公示；国家能源局召开新型电网建设工作部署会。 \n氢能与燃料电池：国家能源局推动氢基能源热值核算方法相关标准制定；湖北发布加快氢能产业规模商用行动方案。 \n详见报告正文各子行业观点详情。\n政策调整、执行效果低于预期风险；产业链价格竞争激烈程度超预期风险。",
+        "start": 0,
+        "end": 299,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "工作",
+          "报告"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0001"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "locator": "chunk:2055995f24f1db3a:body:0010",
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0010",
+      "context_locators": [
+        "chunk:2055995f24f1db3a:body:0000",
+        "chunk:2055995f24f1db3a:body:0001",
+        "chunk:2055995f24f1db3a:body:0002",
+        "chunk:2055995f24f1db3a:body:0003",
+        "chunk:2055995f24f1db3a:body:0004",
+        "chunk:2055995f24f1db3a:body:0005",
+        "chunk:2055995f24f1db3a:body:0006",
+        "chunk:2055995f24f1db3a:body:0007",
+        "chunk:2055995f24f1db3a:body:0008",
+        "chunk:2055995f24f1db3a:body:0009",
+        "chunk:2055995f24f1db3a:body:0010",
+        "chunk:2055995f24f1db3a:body:0011",
+        "chunk:2055995f24f1db3a:body:0012",
+        "chunk:2055995f24f1db3a:heading:0000",
+        "chunk:2055995f24f1db3a:body:0013",
+        "chunk:2055995f24f1db3a:body:0014"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locator": "chunk:2055995f24f1db3a:body:0010",
+        "locators": [
+          "chunk:2055995f24f1db3a:body:0000",
+          "chunk:2055995f24f1db3a:body:0001",
+          "chunk:2055995f24f1db3a:body:0002",
+          "chunk:2055995f24f1db3a:body:0003",
+          "chunk:2055995f24f1db3a:body:0004",
+          "chunk:2055995f24f1db3a:body:0005",
+          "chunk:2055995f24f1db3a:body:0006",
+          "chunk:2055995f24f1db3a:body:0007",
+          "chunk:2055995f24f1db3a:body:0008",
+          "chunk:2055995f24f1db3a:body:0009",
+          "chunk:2055995f24f1db3a:body:0010",
+          "chunk:2055995f24f1db3a:body:0011",
+          "chunk:2055995f24f1db3a:body:0012",
+          "chunk:2055995f24f1db3a:heading:0000",
+          "chunk:2055995f24f1db3a:body:0013",
+          "chunk:2055995f24f1db3a:body:0014"
+        ],
+        "scope_id": "scope:d0cf62c2d99e72685eef7bf2a8810d15",
+        "view": "compact"
+      },
+      "scope_id": "scope:d0cf62c2d99e72685eef7bf2a8810d15",
+      "total_chunks": 16,
+      "by_kind": {
+        "unknown": 16
+      },
+      "table_chunks": 0,
+      "title": "【行业重大事件】",
+      "published": "undated",
+      "snippet": "<b>麒麟</b>操作系统和统信操作系统UOS，",
+      "preview": {
+        "text": "6）36 氪获悉，据腾讯安全消息，腾讯正式推出WorkBuddy 金融版，为保险、资管、银行等机构提供覆盖投研、合规、\n客户经营、信贷尽调、财富资配等核心业务的技能矩阵与金融数据源及全链路安全可信底座。（36 氪） \n7）36 氪获悉，9 月3 日，腾讯WorkBuddy 正式登陆银河麒麟操作系统和统信操作系统UOS，并上架其应用商店；同时\n也上架了openKylin 社区和deepin 社区的软件商店。（36 氪） \n8）继三周前发布Flash 3.7 之后，隆重推出 Gemini 3.8，在短短六周内发布的第三个 Flash 版本。Gemini 3.8 是\n我们迄今为止性能最佳的推理和编码模型，速度和成本与 3.7 版本保持一致。Gemini 3.8 包含两个版本：Gemini \n3.8 Flash：我们最智能的主力机型，在软件工程、智能体任务以及特定领域的关键多步骤推理方面，相比 3.7 \nFlash 有了显著提升。它以同样的优惠价格发售。 3.7 Flash 的价格为每百万个输入代币 0.75 美元，每百万\n个输出代币 3.75 美元。Gemini 3.8 Flash Cyber：我们功能最强大的网络安全模型，在漏洞检测和自动修补方\n面具有前沿性能，可通过我们新的Fairwind 计划提供给受信任的防御者。",
+        "start": 0,
+        "end": 566,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "麒麟"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locators": [
+          "chunk:2055995f24f1db3a:body:0010"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locators": [
+          "chunk:2055995f24f1db3a:body:0000",
+          "chunk:2055995f24f1db3a:body:0001",
+          "chunk:2055995f24f1db3a:body:0002",
+          "chunk:2055995f24f1db3a:body:0003",
+          "chunk:2055995f24f1db3a:body:0004",
+          "chunk:2055995f24f1db3a:body:0005",
+          "chunk:2055995f24f1db3a:body:0006",
+          "chunk:2055995f24f1db3a:body:0007",
+          "chunk:2055995f24f1db3a:body:0008",
+          "chunk:2055995f24f1db3a:body:0009",
+          "chunk:2055995f24f1db3a:body:0010",
+          "chunk:2055995f24f1db3a:body:0011",
+          "chunk:2055995f24f1db3a:body:0012",
+          "chunk:2055995f24f1db3a:heading:0000",
+          "chunk:2055995f24f1db3a:body:0013",
+          "chunk:2055995f24f1db3a:body:0014"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:2055995f24f1db3a:body:0000",
+          "chunk:2055995f24f1db3a:body:0001",
+          "chunk:2055995f24f1db3a:body:0002",
+          "chunk:2055995f24f1db3a:body:0003",
+          "chunk:2055995f24f1db3a:body:0004",
+          "chunk:2055995f24f1db3a:body:0005",
+          "chunk:2055995f24f1db3a:body:0006",
+          "chunk:2055995f24f1db3a:body:0007",
+          "chunk:2055995f24f1db3a:body:0008",
+          "chunk:2055995f24f1db3a:body:0009",
+          "chunk:2055995f24f1db3a:body:0010",
+          "chunk:2055995f24f1db3a:body:0011",
+          "chunk:2055995f24f1db3a:body:0012",
+          "chunk:2055995f24f1db3a:heading:0000",
+          "chunk:2055995f24f1db3a:body:0013",
+          "chunk:2055995f24f1db3a:body:0014"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0017",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0017",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:body:0010",
+        "chunk:568f9e752f0fa65a:table:0008",
+        "chunk:568f9e752f0fa65a:body:0011",
+        "chunk:568f9e752f0fa65a:table:0009",
+        "chunk:568f9e752f0fa65a:body:0012",
+        "chunk:568f9e752f0fa65a:table:0010",
+        "chunk:568f9e752f0fa65a:body:0013",
+        "chunk:568f9e752f0fa65a:table:0011",
+        "chunk:568f9e752f0fa65a:body:0014",
+        "chunk:568f9e752f0fa65a:body:0015",
+        "chunk:568f9e752f0fa65a:table:0012",
+        "chunk:568f9e752f0fa65a:table:0013",
+        "chunk:568f9e752f0fa65a:table:0014",
+        "chunk:568f9e752f0fa65a:body:0016",
+        "chunk:568f9e752f0fa65a:body:0017",
+        "chunk:568f9e752f0fa65a:body:0018"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locator": "chunk:568f9e752f0fa65a:body:0017",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0010",
+          "chunk:568f9e752f0fa65a:table:0008",
+          "chunk:568f9e752f0fa65a:body:0011",
+          "chunk:568f9e752f0fa65a:table:0009",
+          "chunk:568f9e752f0fa65a:body:0012",
+          "chunk:568f9e752f0fa65a:table:0010",
+          "chunk:568f9e752f0fa65a:body:0013",
+          "chunk:568f9e752f0fa65a:table:0011",
+          "chunk:568f9e752f0fa65a:body:0014",
+          "chunk:568f9e752f0fa65a:body:0015",
+          "chunk:568f9e752f0fa65a:table:0012",
+          "chunk:568f9e752f0fa65a:table:0013",
+          "chunk:568f9e752f0fa65a:table:0014",
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018"
+        ],
+        "scope_id": "scope:a60cd1d931b4d969143392320af17a22",
+        "view": "compact"
+      },
+      "scope_id": "scope:a60cd1d931b4d969143392320af17a22",
+      "total_chunks": 16,
+      "by_kind": {
+        "unknown": 16
+      },
+      "table_chunks": 0,
+      "title": "半导体划片机转入放量进程,煤矿业务企稳",
+      "published": "undated",
+      "snippet": "<b>芯片</b>与存储器市场扩张。WSTS数据",
+      "preview": {
+        "text": "半导体划片机转入放量进程,煤矿业务企稳\n半导体行业需求增长,国产划片机仍处渗透初期\nAI 需求与先进封装升级推动行业进入新一轮增长周期。高性能计算、数据中心、\nAIPC、AI 手机和智能汽车等领域需求加速释放，带动逻辑芯片与存储器市场扩张。\nWSTS 数据显示，2025 年全球半导体销售额达到7,956 亿美元，同比增长26.2%，\n预计2026 年市场规模有望接近万亿美元。与此同时,异构集成、Chiplet 和HBM\n成为提升芯片性能的重要路径，推动晶圆及封装体向更薄、更复杂和更高集成度\n发展，对切割精度、减薄能力和设备稳定性提出更高要求。2025 年，全球硅晶圆\n出货量增长5.8%至129.73 亿平方英寸，划切、研磨和抛光设备市场需求有望持\n续提升。\n全球高端划片机市场长期由海外厂商主导。日本DISCO、东京精密等海外厂商市\n场占有率极高。由于半导体划切设备直接影响芯片性能、良率与生产成本，对精\n度、稳定性和效率要求高，国产设备通常需要经历较长时间的测试验证和小批量\n导入，因此国产目前替代仍处于由验证向批量采购过渡的阶段。\n图5：全球半导体行业需求增长\n图9：全球硅晶圆出货量增长\n资料来源：WSTS，国信证券经济研究所整理\n资料来源：公司年报，国信证券经济研究所整理\n公司国产划片机已经进入头部封测客户并开始逐步放量。",
+        "start": 0,
+        "end": 570,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "芯片"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0017"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0010",
+          "chunk:568f9e752f0fa65a:table:0008",
+          "chunk:568f9e752f0fa65a:body:0011",
+          "chunk:568f9e752f0fa65a:table:0009",
+          "chunk:568f9e752f0fa65a:body:0012",
+          "chunk:568f9e752f0fa65a:table:0010",
+          "chunk:568f9e752f0fa65a:body:0013",
+          "chunk:568f9e752f0fa65a:table:0011",
+          "chunk:568f9e752f0fa65a:body:0014",
+          "chunk:568f9e752f0fa65a:body:0015",
+          "chunk:568f9e752f0fa65a:table:0012",
+          "chunk:568f9e752f0fa65a:table:0013",
+          "chunk:568f9e752f0fa65a:table:0014",
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:568f9e752f0fa65a:body:0010",
+          "chunk:568f9e752f0fa65a:table:0008",
+          "chunk:568f9e752f0fa65a:body:0011",
+          "chunk:568f9e752f0fa65a:table:0009",
+          "chunk:568f9e752f0fa65a:body:0012",
+          "chunk:568f9e752f0fa65a:table:0010",
+          "chunk:568f9e752f0fa65a:body:0013",
+          "chunk:568f9e752f0fa65a:table:0011",
+          "chunk:568f9e752f0fa65a:body:0014",
+          "chunk:568f9e752f0fa65a:body:0015",
+          "chunk:568f9e752f0fa65a:table:0012",
+          "chunk:568f9e752f0fa65a:table:0013",
+          "chunk:568f9e752f0fa65a:table:0014",
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "locator": "chunk:1d0117eb6e17c63c:body:0007",
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0007",
+      "context_locators": [
+        "chunk:1d0117eb6e17c63c:body:0000",
+        "chunk:1d0117eb6e17c63c:body:0001",
+        "chunk:1d0117eb6e17c63c:heading:0000",
+        "chunk:1d0117eb6e17c63c:body:0002",
+        "chunk:1d0117eb6e17c63c:body:0003",
+        "chunk:1d0117eb6e17c63c:body:0004",
+        "chunk:1d0117eb6e17c63c:heading:0001",
+        "chunk:1d0117eb6e17c63c:body:0005",
+        "chunk:1d0117eb6e17c63c:heading:0002",
+        "chunk:1d0117eb6e17c63c:table:0000",
+        "chunk:1d0117eb6e17c63c:body:0006",
+        "chunk:1d0117eb6e17c63c:heading:0003",
+        "chunk:1d0117eb6e17c63c:table:0001",
+        "chunk:1d0117eb6e17c63c:body:0007",
+        "chunk:1d0117eb6e17c63c:body:0008",
+        "chunk:1d0117eb6e17c63c:body:0009",
+        "chunk:1d0117eb6e17c63c:body:0010",
+        "chunk:1d0117eb6e17c63c:body:0011",
+        "chunk:1d0117eb6e17c63c:body:0012",
+        "chunk:1d0117eb6e17c63c:table:0002",
+        "chunk:1d0117eb6e17c63c:table:0003",
+        "chunk:1d0117eb6e17c63c:body:0013",
+        "chunk:1d0117eb6e17c63c:body:0014"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+        "locator": "chunk:1d0117eb6e17c63c:body:0007",
+        "locators": [
+          "chunk:1d0117eb6e17c63c:body:0000",
+          "chunk:1d0117eb6e17c63c:body:0001",
+          "chunk:1d0117eb6e17c63c:heading:0000",
+          "chunk:1d0117eb6e17c63c:body:0002",
+          "chunk:1d0117eb6e17c63c:body:0003",
+          "chunk:1d0117eb6e17c63c:body:0004",
+          "chunk:1d0117eb6e17c63c:heading:0001",
+          "chunk:1d0117eb6e17c63c:body:0005",
+          "chunk:1d0117eb6e17c63c:heading:0002",
+          "chunk:1d0117eb6e17c63c:table:0000",
+          "chunk:1d0117eb6e17c63c:body:0006",
+          "chunk:1d0117eb6e17c63c:heading:0003",
+          "chunk:1d0117eb6e17c63c:table:0001",
+          "chunk:1d0117eb6e17c63c:body:0007",
+          "chunk:1d0117eb6e17c63c:body:0008",
+          "chunk:1d0117eb6e17c63c:body:0009",
+          "chunk:1d0117eb6e17c63c:body:0010",
+          "chunk:1d0117eb6e17c63c:body:0011",
+          "chunk:1d0117eb6e17c63c:body:0012",
+          "chunk:1d0117eb6e17c63c:table:0002",
+          "chunk:1d0117eb6e17c63c:table:0003",
+          "chunk:1d0117eb6e17c63c:body:0013",
+          "chunk:1d0117eb6e17c63c:body:0014"
+        ],
+        "scope_id": "scope:320ea9cd2511da1e2ace1b50288aa1d8",
+        "view": "compact"
+      },
+      "scope_id": "scope:320ea9cd2511da1e2ace1b50288aa1d8",
+      "total_chunks": 23,
+      "by_kind": {
+        "unknown": 23
+      },
+      "table_chunks": 0,
+      "title": "图表9：本周涨跌幅后十",
+      "published": "undated",
+      "snippet": "<b>更多</b>信息\n披露。该公司目前",
+      "preview": {
+        "text": "这是该公司迄今为止最大的MLCC 供应合同，相当\n于其去年合并收入的9.5%。合同约定的供应量将从2027 年1 月1 日至12 月31 日，\n为期一年。出于保密原因，该公司并未透露客户身份。\n三星电机目前与约10 家全球企业签订了MLCC 长期供应协议。此次披露是在其\n中一家客户确认2027 年供应量之后进行的。该客户与此前已公布的供应合同涉及的\n客户不同。随着与其他长期供应协议客户的供应量最终确定，预计还将有更多信息\n披露。该公司目前也在与多家全球企业洽谈新的长期供应协议。\n包括最新达成的协议在内，三星电机已披露总额达3.32 万亿韩元的LTA 相关供\n应合同。该公司于5 月宣布了一份价值约1.5 万亿韩元的硅电容（Si-Cap）供应合同，\n随后分别在6月和7月签署了价值约4540亿韩元和3000亿韩元的MLCC合同。Si-Cap\n合同有效期为两年，自2027 年起生效；其他MLCC 合同有效期为一年，自2027 年\n起生效。（资料来源：DT 新材料）\n3.3\n松下、住友电木加码电子树脂\n华福证券\n诚信专业\n发现价值\n7\n请务必阅读报告末页的声明\n行业定期报告|基础化工\n近日，松下电子材料（上海）有限公司半导体环氧封装材料（环氧塑封料EMC）\n扩产项目迎来公示。",
+        "start": 645,
+        "end": 1186,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "报告",
+          "电子"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+        "locators": [
+          "chunk:1d0117eb6e17c63c:body:0007"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+        "locators": [
+          "chunk:1d0117eb6e17c63c:body:0000",
+          "chunk:1d0117eb6e17c63c:body:0001",
+          "chunk:1d0117eb6e17c63c:heading:0000",
+          "chunk:1d0117eb6e17c63c:body:0002",
+          "chunk:1d0117eb6e17c63c:body:0003",
+          "chunk:1d0117eb6e17c63c:body:0004",
+          "chunk:1d0117eb6e17c63c:heading:0001",
+          "chunk:1d0117eb6e17c63c:body:0005",
+          "chunk:1d0117eb6e17c63c:heading:0002",
+          "chunk:1d0117eb6e17c63c:table:0000",
+          "chunk:1d0117eb6e17c63c:body:0006",
+          "chunk:1d0117eb6e17c63c:heading:0003",
+          "chunk:1d0117eb6e17c63c:table:0001",
+          "chunk:1d0117eb6e17c63c:body:0007",
+          "chunk:1d0117eb6e17c63c:body:0008",
+          "chunk:1d0117eb6e17c63c:body:0009",
+          "chunk:1d0117eb6e17c63c:body:0010",
+          "chunk:1d0117eb6e17c63c:body:0011",
+          "chunk:1d0117eb6e17c63c:body:0012",
+          "chunk:1d0117eb6e17c63c:table:0002",
+          "chunk:1d0117eb6e17c63c:table:0003",
+          "chunk:1d0117eb6e17c63c:body:0013",
+          "chunk:1d0117eb6e17c63c:body:0014"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:1d0117eb6e17c63c:body:0000",
+          "chunk:1d0117eb6e17c63c:body:0001",
+          "chunk:1d0117eb6e17c63c:heading:0000",
+          "chunk:1d0117eb6e17c63c:body:0002",
+          "chunk:1d0117eb6e17c63c:body:0003",
+          "chunk:1d0117eb6e17c63c:body:0004",
+          "chunk:1d0117eb6e17c63c:heading:0001",
+          "chunk:1d0117eb6e17c63c:body:0005",
+          "chunk:1d0117eb6e17c63c:heading:0002",
+          "chunk:1d0117eb6e17c63c:table:0000",
+          "chunk:1d0117eb6e17c63c:body:0006",
+          "chunk:1d0117eb6e17c63c:heading:0003",
+          "chunk:1d0117eb6e17c63c:table:0001",
+          "chunk:1d0117eb6e17c63c:body:0007",
+          "chunk:1d0117eb6e17c63c:body:0008",
+          "chunk:1d0117eb6e17c63c:body:0009",
+          "chunk:1d0117eb6e17c63c:body:0010",
+          "chunk:1d0117eb6e17c63c:body:0011",
+          "chunk:1d0117eb6e17c63c:body:0012",
+          "chunk:1d0117eb6e17c63c:table:0002",
+          "chunk:1d0117eb6e17c63c:table:0003",
+          "chunk:1d0117eb6e17c63c:body:0013",
+          "chunk:1d0117eb6e17c63c:body:0014"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "locator": "chunk:16a9a510ef9e405f:body:0004",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0004",
+      "context_locators": [
+        "chunk:16a9a510ef9e405f:heading:0002",
+        "chunk:16a9a510ef9e405f:heading:0003",
+        "chunk:16a9a510ef9e405f:heading:0004",
+        "chunk:16a9a510ef9e405f:body:0003",
+        "chunk:16a9a510ef9e405f:body:0004",
+        "chunk:16a9a510ef9e405f:body:0005",
+        "chunk:16a9a510ef9e405f:body:0006",
+        "chunk:16a9a510ef9e405f:body:0007",
+        "chunk:16a9a510ef9e405f:body:0008",
+        "chunk:16a9a510ef9e405f:body:0009",
+        "chunk:16a9a510ef9e405f:body:0010",
+        "chunk:16a9a510ef9e405f:heading:0005",
+        "chunk:16a9a510ef9e405f:body:0011",
+        "chunk:16a9a510ef9e405f:body:0012"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locator": "chunk:16a9a510ef9e405f:body:0004",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0002",
+          "chunk:16a9a510ef9e405f:heading:0003",
+          "chunk:16a9a510ef9e405f:heading:0004",
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010",
+          "chunk:16a9a510ef9e405f:heading:0005",
+          "chunk:16a9a510ef9e405f:body:0011",
+          "chunk:16a9a510ef9e405f:body:0012"
+        ],
+        "scope_id": "scope:ff4934d71911263b3045e0c6765da4c5",
+        "view": "compact"
+      },
+      "scope_id": "scope:ff4934d71911263b3045e0c6765da4c5",
+      "total_chunks": 14,
+      "by_kind": {
+        "unknown": 14
+      },
+      "table_chunks": 0,
+      "title": "一、细分板块观点\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩",
+      "published": "undated",
+      "snippet": "<b>芯片</b>性能、良率与可靠性的",
+      "preview": {
+        "text": "具体来看，长川科技具备由数字SoC 测试向综合Test Cell 平台扩\n展的基础，华峰测控在模拟及功率测试领域积累较深，联动科技则有望依托功率测试优势进一步拓展产品边界。\n封测：先进封装需求旺盛，重视产业链投资机会。算力需求旺盛，地缘政治因素影响下，算力端自主可控成为国产算\n力核心发展方向。寒武纪、华为昇腾等AI算力芯片需求旺盛，先进封装产能紧缺，持续扩产背景下先进封装产业链\n有望深度受益。此外，HBM 产能紧缺，国产HBM 已取得突破，看好相关产业链标的。建议关注：长电科技、甬矽电\n子、通富微电、利扬芯片、伟测科技；封测设备及耗材：华峰测控、金海通、和林微纳。\n当前封测板块景气度稳健向上，随下游需求好转，国内模拟/数字芯片公司库存普遍已筑底回升，开始主动补库。对于\n封测厂来说，其营收与半导体销售额呈高度拟合关系。从产业链位置来看，封测属半导体产业链中位置相对靠后的环\n节，封测厂生产的产品将成为最终产品形态并进入设计厂商库存。因此，在库存水位较高的情况下，受IC设计厂商\n砍单影响，封测厂商表现会相对较弱，业绩出现明显下滑；但若当库存水位较低，且下游需求好转情况下，IC 设计厂\n商会优先向封测厂商加单，加工处理之前积累的未封装晶圆，进而推动整体产业链从底部实现反转。",
+        "start": 583,
+        "end": 1124,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "电子",
+          "芯片"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0004"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0002",
+          "chunk:16a9a510ef9e405f:heading:0003",
+          "chunk:16a9a510ef9e405f:heading:0004",
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010",
+          "chunk:16a9a510ef9e405f:heading:0005",
+          "chunk:16a9a510ef9e405f:body:0011",
+          "chunk:16a9a510ef9e405f:body:0012"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:16a9a510ef9e405f:heading:0002",
+          "chunk:16a9a510ef9e405f:heading:0003",
+          "chunk:16a9a510ef9e405f:heading:0004",
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010",
+          "chunk:16a9a510ef9e405f:heading:0005",
+          "chunk:16a9a510ef9e405f:body:0011",
+          "chunk:16a9a510ef9e405f:body:0012"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "locator": "chunk:022ae1713fb760ff:body:0001",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0001",
+      "context_locators": [
+        "chunk:022ae1713fb760ff:body:0000",
+        "chunk:022ae1713fb760ff:body:0001",
+        "chunk:022ae1713fb760ff:body:0002",
+        "chunk:022ae1713fb760ff:body:0003",
+        "chunk:022ae1713fb760ff:body:0004",
+        "chunk:022ae1713fb760ff:body:0005"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locator": "chunk:022ae1713fb760ff:body:0001",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005"
+        ],
+        "scope_id": "scope:97b563aff74dbe2dac214da4150dace8",
+        "view": "compact"
+      },
+      "scope_id": "scope:97b563aff74dbe2dac214da4150dace8",
+      "total_chunks": 6,
+      "by_kind": {
+        "body": 1,
+        "unknown": 5
+      },
+      "table_chunks": 0,
+      "title": "022ae1713fb760ff:body:0001",
+      "published": "undated",
+      "snippet": "<b>工作</b>部署会。氢能与燃料电池",
+      "preview": {
+        "text": "风光储：中国光伏行业协会发布《〈光伏行业成本核算模型通则〉问答手册》；国家能源集团启动2026 年第四批5GW 风\n机集采；大金重工KING TWO 轮启动首航，发运BC Wind 项目首批单桩。 \n锂电：中科海钠签约韩国VOLTA；石大胜华拟投建20 万吨电解液项目；9 月碳酸锂需求升至17 万吨、供需趋紧。 \n电网：国网输变电设备第四批中标公示；国家能源局召开新型电网建设工作部署会。 \n氢能与燃料电池：国家能源局推动氢基能源热值核算方法相关标准制定；湖北发布加快氢能产业规模商用行动方案。 \n详见报告正文各子行业观点详情。\n政策调整、执行效果低于预期风险；产业链价格竞争激烈程度超预期风险。",
+        "start": 0,
+        "end": 299,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "工作",
+          "报告"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0001"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005"
+        ],
+        "remaining_after_prior_full_expansions": [],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "locator": "chunk:2055995f24f1db3a:body:0010",
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0010",
+      "context_locators": [
+        "chunk:2055995f24f1db3a:body:0006",
+        "chunk:2055995f24f1db3a:body:0007",
+        "chunk:2055995f24f1db3a:body:0008",
+        "chunk:2055995f24f1db3a:body:0009",
+        "chunk:2055995f24f1db3a:body:0010",
+        "chunk:2055995f24f1db3a:body:0011",
+        "chunk:2055995f24f1db3a:body:0012"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locator": "chunk:2055995f24f1db3a:body:0010",
+        "locators": [
+          "chunk:2055995f24f1db3a:body:0006",
+          "chunk:2055995f24f1db3a:body:0007",
+          "chunk:2055995f24f1db3a:body:0008",
+          "chunk:2055995f24f1db3a:body:0009",
+          "chunk:2055995f24f1db3a:body:0010",
+          "chunk:2055995f24f1db3a:body:0011",
+          "chunk:2055995f24f1db3a:body:0012"
+        ],
+        "scope_id": "scope:d435a29f00ab3ff951b4aff40e80539d",
+        "view": "compact"
+      },
+      "scope_id": "scope:d435a29f00ab3ff951b4aff40e80539d",
+      "total_chunks": 7,
+      "by_kind": {
+        "unknown": 7
+      },
+      "table_chunks": 0,
+      "title": "【行业重大事件】",
+      "published": "undated",
+      "snippet": "<b>麒麟</b>操作系统和统信操作系统UOS，",
+      "preview": {
+        "text": "6）36 氪获悉，据腾讯安全消息，腾讯正式推出WorkBuddy 金融版，为保险、资管、银行等机构提供覆盖投研、合规、\n客户经营、信贷尽调、财富资配等核心业务的技能矩阵与金融数据源及全链路安全可信底座。（36 氪） \n7）36 氪获悉，9 月3 日，腾讯WorkBuddy 正式登陆银河麒麟操作系统和统信操作系统UOS，并上架其应用商店；同时\n也上架了openKylin 社区和deepin 社区的软件商店。（36 氪） \n8）继三周前发布Flash 3.7 之后，隆重推出 Gemini 3.8，在短短六周内发布的第三个 Flash 版本。Gemini 3.8 是\n我们迄今为止性能最佳的推理和编码模型，速度和成本与 3.7 版本保持一致。Gemini 3.8 包含两个版本：Gemini \n3.8 Flash：我们最智能的主力机型，在软件工程、智能体任务以及特定领域的关键多步骤推理方面，相比 3.7 \nFlash 有了显著提升。它以同样的优惠价格发售。 3.7 Flash 的价格为每百万个输入代币 0.75 美元，每百万\n个输出代币 3.75 美元。Gemini 3.8 Flash Cyber：我们功能最强大的网络安全模型，在漏洞检测和自动修补方\n面具有前沿性能，可通过我们新的Fairwind 计划提供给受信任的防御者。",
+        "start": 0,
+        "end": 566,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "麒麟"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locators": [
+          "chunk:2055995f24f1db3a:body:0010"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locators": [
+          "chunk:2055995f24f1db3a:body:0006",
+          "chunk:2055995f24f1db3a:body:0007",
+          "chunk:2055995f24f1db3a:body:0008",
+          "chunk:2055995f24f1db3a:body:0009",
+          "chunk:2055995f24f1db3a:body:0010",
+          "chunk:2055995f24f1db3a:body:0011",
+          "chunk:2055995f24f1db3a:body:0012"
+        ],
+        "remaining_after_prior_full_expansions": [],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0017",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0017",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:table:0012",
+        "chunk:568f9e752f0fa65a:table:0013",
+        "chunk:568f9e752f0fa65a:table:0014",
+        "chunk:568f9e752f0fa65a:body:0016",
+        "chunk:568f9e752f0fa65a:body:0017",
+        "chunk:568f9e752f0fa65a:body:0018"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locator": "chunk:568f9e752f0fa65a:body:0017",
+        "locators": [
+          "chunk:568f9e752f0fa65a:table:0012",
+          "chunk:568f9e752f0fa65a:table:0013",
+          "chunk:568f9e752f0fa65a:table:0014",
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018"
+        ],
+        "scope_id": "scope:320731e0c9fc20c9e5442fbda3c7a8c4",
+        "view": "compact"
+      },
+      "scope_id": "scope:320731e0c9fc20c9e5442fbda3c7a8c4",
+      "total_chunks": 6,
+      "by_kind": {
+        "unknown": 6
+      },
+      "table_chunks": 0,
+      "title": "半导体划片机转入放量进程,煤矿业务企稳",
+      "published": "undated",
+      "snippet": "<b>芯片</b>与存储器市场扩张。WSTS数据",
+      "preview": {
+        "text": "半导体划片机转入放量进程,煤矿业务企稳\n半导体行业需求增长,国产划片机仍处渗透初期\nAI 需求与先进封装升级推动行业进入新一轮增长周期。高性能计算、数据中心、\nAIPC、AI 手机和智能汽车等领域需求加速释放，带动逻辑芯片与存储器市场扩张。\nWSTS 数据显示，2025 年全球半导体销售额达到7,956 亿美元，同比增长26.2%，\n预计2026 年市场规模有望接近万亿美元。与此同时,异构集成、Chiplet 和HBM\n成为提升芯片性能的重要路径，推动晶圆及封装体向更薄、更复杂和更高集成度\n发展，对切割精度、减薄能力和设备稳定性提出更高要求。2025 年，全球硅晶圆\n出货量增长5.8%至129.73 亿平方英寸，划切、研磨和抛光设备市场需求有望持\n续提升。\n全球高端划片机市场长期由海外厂商主导。日本DISCO、东京精密等海外厂商市\n场占有率极高。由于半导体划切设备直接影响芯片性能、良率与生产成本，对精\n度、稳定性和效率要求高，国产设备通常需要经历较长时间的测试验证和小批量\n导入，因此国产目前替代仍处于由验证向批量采购过渡的阶段。\n图5：全球半导体行业需求增长\n图9：全球硅晶圆出货量增长\n资料来源：WSTS，国信证券经济研究所整理\n资料来源：公司年报，国信证券经济研究所整理\n公司国产划片机已经进入头部封测客户并开始逐步放量。",
+        "start": 0,
+        "end": 570,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "芯片"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0017"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:table:0012",
+          "chunk:568f9e752f0fa65a:table:0013",
+          "chunk:568f9e752f0fa65a:table:0014",
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018"
+        ],
+        "remaining_after_prior_full_expansions": [],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "locator": "chunk:16a9a510ef9e405f:body:0016",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0016",
+      "context_locators": [
+        "chunk:16a9a510ef9e405f:heading:0006",
+        "chunk:16a9a510ef9e405f:body:0013",
+        "chunk:16a9a510ef9e405f:body:0014",
+        "chunk:16a9a510ef9e405f:body:0015",
+        "chunk:16a9a510ef9e405f:heading:0007",
+        "chunk:16a9a510ef9e405f:body:0016",
+        "chunk:16a9a510ef9e405f:body:0017"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locator": "chunk:16a9a510ef9e405f:body:0016",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0006",
+          "chunk:16a9a510ef9e405f:body:0013",
+          "chunk:16a9a510ef9e405f:body:0014",
+          "chunk:16a9a510ef9e405f:body:0015",
+          "chunk:16a9a510ef9e405f:heading:0007",
+          "chunk:16a9a510ef9e405f:body:0016",
+          "chunk:16a9a510ef9e405f:body:0017"
+        ],
+        "scope_id": "scope:63a5b76ae6fd6bb08c7a870257da8aad",
+        "view": "compact"
+      },
+      "scope_id": "scope:63a5b76ae6fd6bb08c7a870257da8aad",
+      "total_chunks": 7,
+      "by_kind": {
+        "unknown": 7
+      },
+      "table_chunks": 0,
+      "title": "特别声明：",
+      "published": "undated",
+      "snippet": "<b>报告</b>人员应考虑本<b>报告</b>的任何",
+      "preview": {
+        "text": "本报告仅为参考之用，在任何地区均不应被视为买卖任何证券、金融工具的要约或要约邀请。本报告提及的任何证券或金融工具均可能含有重大的风险，可能\n不易变卖以及不适合所有投资者。本报告所提及的证券或金融工具的价格、价值及收益可能会受汇率影响而波动。过往的业绩并不能代表未来的表现。 \n客户应当考虑到国金证券存在可能影响本报告客观性的利益冲突，而不应视本报告为作出投资决策的唯一因素。证券研究报告是用于服务具备专业知识的投资\n者和投资顾问的专业产品，使用时必须经专业人士进行解读。国金证券建议获取报告人员应考虑本报告的任何意见或建议是否符合其特定状况，以及（若有必要）\n咨询独立投资顾问。报告本身、报告中的信息或所表达意见也不构成投资、法律、会计或税务的最终操作建议，国金证券不就报告中的内容对最终操作建议做出任\n何担保，在任何时候均不构成对任何人的个人推荐。 \n在法律允许的情况下，国金证券的关联机构可能会持有报告中涉及的公司所发行的证券并进行交易，并可能为这些公司正在提供或争取提供多种金融服务。 \n本报告并非意图发送、发布给在当地法律或监管规则下不允许向其发送、发布该研究报告的人员。国金证券并不因收件人收到本报告而视其为国金证券的客\n户。本报告对于收件人而言属高度机密，只有符合条件的收件人才能使用。",
+        "start": 515,
+        "end": 1064,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "报告"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0016"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0006",
+          "chunk:16a9a510ef9e405f:body:0013",
+          "chunk:16a9a510ef9e405f:body:0014",
+          "chunk:16a9a510ef9e405f:body:0015",
+          "chunk:16a9a510ef9e405f:heading:0007",
+          "chunk:16a9a510ef9e405f:body:0016",
+          "chunk:16a9a510ef9e405f:body:0017"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:16a9a510ef9e405f:heading:0006",
+          "chunk:16a9a510ef9e405f:body:0013",
+          "chunk:16a9a510ef9e405f:body:0014",
+          "chunk:16a9a510ef9e405f:body:0015",
+          "chunk:16a9a510ef9e405f:heading:0007",
+          "chunk:16a9a510ef9e405f:body:0016",
+          "chunk:16a9a510ef9e405f:body:0017"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@48e8e60844f69177d5eb672a1d1b1010",
+    "processing": "scoped",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 22,
+      "published": 18,
+      "withdrawn": 0,
+      "pending": 0,
+      "failed_jobs": 0,
+      "builds": 28,
+      "published_with_gaps": 16
+    },
+    "retrieval": {
+      "requested": "hybrid",
+      "used": "hybrid",
+      "reason": null,
+      "profile": "fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107",
+      "expected_chunks": 703,
+      "ready_chunks": 703,
+      "lexical_candidates": 152,
+      "vector_candidates": 200,
+      "query_cache_hit": false,
+      "query_usage": {
+        "prompt_tokens": 48,
+        "total_tokens": 48
+      },
+      "elapsed_ms": 654
+    }
+  },
+  "hint": "preview 是选读预览，不是已取证引用。先用同一命中的 core_fetch_plan 调用 corpus_fetch；问题涉及多个对象、因果链或指代不完整时，再按 fetch_plan 扩展上下文。表格保留原范围以带齐表头、期间和单位。重复 locator 可在相同 doc_id 下去重；不同版本不可混用。",
+  "delivery_preview": "pilot"
+}

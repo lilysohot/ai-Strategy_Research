@@ -1,0 +1,936 @@
+{
+  "ok": true,
+  "query": "光模块纪要说五年更换周期，能否在常规需求预测之外再加一笔替换需求？",
+  "count": 10,
+  "hits": [
+    {
+      "doc_id": "cv2:6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+      "locator": "chunk:6475cbacca1575c5:body:0000",
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+      "chunk_id": "6475cbacca1575c5:body:0000",
+      "context_locators": [
+        "chunk:6475cbacca1575c5:body:0000",
+        "chunk:6475cbacca1575c5:body:0001",
+        "chunk:6475cbacca1575c5:body:0002",
+        "chunk:6475cbacca1575c5:body:0003",
+        "chunk:6475cbacca1575c5:body:0004",
+        "chunk:6475cbacca1575c5:body:0005",
+        "chunk:6475cbacca1575c5:body:0006"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+        "locator": "chunk:6475cbacca1575c5:body:0000",
+        "locators": [
+          "chunk:6475cbacca1575c5:body:0000",
+          "chunk:6475cbacca1575c5:body:0001",
+          "chunk:6475cbacca1575c5:body:0002",
+          "chunk:6475cbacca1575c5:body:0003",
+          "chunk:6475cbacca1575c5:body:0004",
+          "chunk:6475cbacca1575c5:body:0005",
+          "chunk:6475cbacca1575c5:body:0006"
+        ],
+        "scope_id": "scope:e011f7e0ba1f8e1028877a420ec450b9",
+        "view": "compact"
+      },
+      "scope_id": "scope:e011f7e0ba1f8e1028877a420ec450b9",
+      "total_chunks": 7,
+      "by_kind": {
+        "unknown": 7
+      },
+      "table_chunks": 0,
+      "title": "6475cbacca1575c5:body:0000",
+      "published": "undated",
+      "snippet": "<b>模块</b>两个是1.5亿只，这是<b>需求</b>",
+      "preview": {
+        "text": "互补关系非完全替代，然后这个东西也是反正也是吹牛的。27年合计的高速光模块两个是1.5亿只，这是需求得出的需求量，需求量没用，要交付量才有用。CPO主要在交换机侧，市场成熟度不高，预计26年很少，26年就忽略不计，27年5万到10万个水平，这是合理的。\n然后价格之前这段之前给大家说过的，价格是一个正常的年降的比正常的年降还要少的一个区间。但是下降肯定是要下降的，下降没什么问题，下降是个好事。长期来说对产业来说降价肯定是好事，这个都明白。\n然后生命周期五年，五年更换，但是你不要去重新去记这个，先把这个说完，26年到30年是1.6T的五年周期，预计到28年出货量达到峰值之后，趋近平缓的增长。但你不要去额外去新增计算，是不是上一代的完了，我这一代还要算个增量。没有的，所有的更换替代，它坏了的替代，全部在我们平时所说的这些需求也好，消费也好，都包含在里面，不要去重复计价。\n你的AI刚爆发，你还没信心，或者你要充分的证据，那你还要保守一点。但是24年也是这样，25年也是这样，就很奇怪。\n学术机构，对，就lightcounting这种就别看了。这个也不对，我都怀疑这不是他的数字，这个数字也不对。如果是旭创的话也不对，不知道是不是旭创的采访。\n二季度800G出货量未达市场预期的原因是什么？实际上这出货量主要原因是1.6T影响了800G，谁说的？这个不太对，那反正不是旭创的数字。",
+        "start": 58,
+        "end": 649,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "周期",
+          "更换",
+          "需求"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+        "locators": [
+          "chunk:6475cbacca1575c5:body:0000"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+        "locators": [
+          "chunk:6475cbacca1575c5:body:0000",
+          "chunk:6475cbacca1575c5:body:0001",
+          "chunk:6475cbacca1575c5:body:0002",
+          "chunk:6475cbacca1575c5:body:0003",
+          "chunk:6475cbacca1575c5:body:0004",
+          "chunk:6475cbacca1575c5:body:0005",
+          "chunk:6475cbacca1575c5:body:0006"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:6475cbacca1575c5:body:0000",
+          "chunk:6475cbacca1575c5:body:0001",
+          "chunk:6475cbacca1575c5:body:0002",
+          "chunk:6475cbacca1575c5:body:0003",
+          "chunk:6475cbacca1575c5:body:0004",
+          "chunk:6475cbacca1575c5:body:0005",
+          "chunk:6475cbacca1575c5:body:0006"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0017",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0017",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:table:0014",
+        "chunk:568f9e752f0fa65a:body:0016",
+        "chunk:568f9e752f0fa65a:body:0017",
+        "chunk:568f9e752f0fa65a:body:0018",
+        "chunk:568f9e752f0fa65a:heading:0006"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locator": "chunk:568f9e752f0fa65a:body:0017",
+        "locators": [
+          "chunk:568f9e752f0fa65a:table:0014",
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018",
+          "chunk:568f9e752f0fa65a:heading:0006"
+        ],
+        "scope_id": "scope:64fff266b74f2e0f9d57ade604136245",
+        "view": "compact"
+      },
+      "scope_id": "scope:64fff266b74f2e0f9d57ade604136245",
+      "total_chunks": 5,
+      "by_kind": {
+        "unknown": 5
+      },
+      "table_chunks": 0,
+      "title": "半导体划片机转入放量进程,煤矿业务企稳",
+      "published": "undated",
+      "snippet": "<b>需求</b>增长,国产划片机仍处",
+      "preview": {
+        "text": "半导体划片机转入放量进程,煤矿业务企稳\n半导体行业需求增长,国产划片机仍处渗透初期\nAI 需求与先进封装升级推动行业进入新一轮增长周期。高性能计算、数据中心、\nAIPC、AI 手机和智能汽车等领域需求加速释放，带动逻辑芯片与存储器市场扩张。\nWSTS 数据显示，2025 年全球半导体销售额达到7,956 亿美元，同比增长26.2%，\n预计2026 年市场规模有望接近万亿美元。与此同时,异构集成、Chiplet 和HBM\n成为提升芯片性能的重要路径，推动晶圆及封装体向更薄、更复杂和更高集成度\n发展，对切割精度、减薄能力和设备稳定性提出更高要求。2025 年，全球硅晶圆\n出货量增长5.8%至129.73 亿平方英寸，划切、研磨和抛光设备市场需求有望持\n续提升。\n全球高端划片机市场长期由海外厂商主导。日本DISCO、东京精密等海外厂商市\n场占有率极高。由于半导体划切设备直接影响芯片性能、良率与生产成本，对精\n度、稳定性和效率要求高，国产设备通常需要经历较长时间的测试验证和小批量\n导入，因此国产目前替代仍处于由验证向批量采购过渡的阶段。\n图5：全球半导体行业需求增长\n图9：全球硅晶圆出货量增长\n资料来源：WSTS，国信证券经济研究所整理\n资料来源：公司年报，国信证券经济研究所整理\n公司国产划片机已经进入头部封测客户并开始逐步放量。",
+        "start": 0,
+        "end": 570,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "周期",
+          "需求"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0017"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:table:0014",
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018",
+          "chunk:568f9e752f0fa65a:heading:0006"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:568f9e752f0fa65a:table:0014",
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018",
+          "chunk:568f9e752f0fa65a:heading:0006"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "locator": "chunk:7ceca88433b092ae:body:0015",
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0015",
+      "context_locators": [
+        "chunk:7ceca88433b092ae:heading:0002",
+        "chunk:7ceca88433b092ae:body:0009",
+        "chunk:7ceca88433b092ae:body:0010",
+        "chunk:7ceca88433b092ae:body:0011",
+        "chunk:7ceca88433b092ae:body:0012",
+        "chunk:7ceca88433b092ae:body:0013",
+        "chunk:7ceca88433b092ae:heading:0003",
+        "chunk:7ceca88433b092ae:body:0014",
+        "chunk:7ceca88433b092ae:body:0015",
+        "chunk:7ceca88433b092ae:heading:0004"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locator": "chunk:7ceca88433b092ae:body:0015",
+        "locators": [
+          "chunk:7ceca88433b092ae:heading:0002",
+          "chunk:7ceca88433b092ae:body:0009",
+          "chunk:7ceca88433b092ae:body:0010",
+          "chunk:7ceca88433b092ae:body:0011",
+          "chunk:7ceca88433b092ae:body:0012",
+          "chunk:7ceca88433b092ae:body:0013",
+          "chunk:7ceca88433b092ae:heading:0003",
+          "chunk:7ceca88433b092ae:body:0014",
+          "chunk:7ceca88433b092ae:body:0015",
+          "chunk:7ceca88433b092ae:heading:0004"
+        ],
+        "scope_id": "scope:df654a8b30374050de168dadffb2b07e",
+        "view": "compact"
+      },
+      "scope_id": "scope:df654a8b30374050de168dadffb2b07e",
+      "total_chunks": 10,
+      "by_kind": {
+        "unknown": 10
+      },
+      "table_chunks": 0,
+      "title": "6 风险提示",
+      "published": "undated",
+      "snippet": "<b>需求</b>增长有望推动高速光<b>模块</b>、",
+      "preview": {
+        "text": "6 风险提示 \n1）AI 需求不及预期：若AI 应用落地不及预期，商业化进展较慢，可能影响\n中外头部科技公司对算力建设的需求，进而影响AI 硬件各产业环节公司业绩。 \n2）行业竞争加剧及产品价格下降风险：AI 光互联需求增长有望推动高速光模\n块、光引擎、激光器及光芯片等环节持续扩产，若行业产能扩张快于需求增长，或\n海外及国内厂商加大市场竞争，可能导致产品价格持续下降。 \n3）核心器件及供应链波动风险：高速光互联产业链涉及高速DSP、EML/硅\n光激光器、CW 光源、光芯片、光引擎及先进光电封装等多个关键环节，部分核心\n器件仍存在技术壁垒及供应链约束。若上游核心芯片、激光器、InP 材料或先进封\n装等环节出现供应不足、成本上涨或供应链扰动，可能影响相关公司生产交付及盈\n利能力。 \n4）展会信息及产品进展存在变化风险：2026 CIOE 中国光博会展前披露的部\n分展品、技术方案及现场Demo 仍处于展示、测试或验证阶段，后续安排、产品\n参数及技术进展可能发生调整。单波400G、3.2T、NPO、CPO、XPO、OCS 等\n新技术从展会展示到客户验证、批量导入及规模量产仍需一定周期，相关产品的商\n业化节奏及产业化进展存在不确定性。",
+        "start": 0,
+        "end": 520,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "模块",
+          "需求"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locators": [
+          "chunk:7ceca88433b092ae:body:0015"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locators": [
+          "chunk:7ceca88433b092ae:heading:0002",
+          "chunk:7ceca88433b092ae:body:0009",
+          "chunk:7ceca88433b092ae:body:0010",
+          "chunk:7ceca88433b092ae:body:0011",
+          "chunk:7ceca88433b092ae:body:0012",
+          "chunk:7ceca88433b092ae:body:0013",
+          "chunk:7ceca88433b092ae:heading:0003",
+          "chunk:7ceca88433b092ae:body:0014",
+          "chunk:7ceca88433b092ae:body:0015",
+          "chunk:7ceca88433b092ae:heading:0004"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:7ceca88433b092ae:heading:0002",
+          "chunk:7ceca88433b092ae:body:0009",
+          "chunk:7ceca88433b092ae:body:0010",
+          "chunk:7ceca88433b092ae:body:0011",
+          "chunk:7ceca88433b092ae:body:0012",
+          "chunk:7ceca88433b092ae:body:0013",
+          "chunk:7ceca88433b092ae:heading:0003",
+          "chunk:7ceca88433b092ae:body:0014",
+          "chunk:7ceca88433b092ae:body:0015",
+          "chunk:7ceca88433b092ae:heading:0004"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "locator": "chunk:16a9a510ef9e405f:body:0002",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0002",
+      "context_locators": [
+        "chunk:16a9a510ef9e405f:heading:0000",
+        "chunk:16a9a510ef9e405f:body:0001",
+        "chunk:16a9a510ef9e405f:body:0002",
+        "chunk:16a9a510ef9e405f:heading:0001",
+        "chunk:16a9a510ef9e405f:heading:0002"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locator": "chunk:16a9a510ef9e405f:body:0002",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0000",
+          "chunk:16a9a510ef9e405f:body:0001",
+          "chunk:16a9a510ef9e405f:body:0002",
+          "chunk:16a9a510ef9e405f:heading:0001",
+          "chunk:16a9a510ef9e405f:heading:0002"
+        ],
+        "scope_id": "scope:159e64e0c53ca04c6fe96b4f2b8fd4c5",
+        "view": "compact"
+      },
+      "scope_id": "scope:159e64e0c53ca04c6fe96b4f2b8fd4c5",
+      "total_chunks": 5,
+      "by_kind": {
+        "unknown": 5
+      },
+      "table_chunks": 0,
+      "title": "”",
+      "published": "undated",
+      "snippet": "<b>模块</b>mSAP<b>需求</b>爆发，下半年进入拉",
+      "preview": {
+        "text": "看好AI覆铜板/PCB及核心算力硬件、半导体设备及苹果产业链。下半年英伟达、AMD等通用GPU及谷歌、\n亚马逊等ASIC 强劲拉货，对HDI 及高多层PCB 需求旺盛，800G/1.6T 光模块mSAP 需求爆发，下半年进入拉\n货旺季，此外下半年还有1.6T 交换机高多层PCB 需求的有望开启，我们继续看好PCB 板块下半年斜率超速发\n展的重要机会。Token 数量的爆发式增长，带动了ASIC 强劲需求，我们研判谷歌、亚马逊、Meta、Open AI 及\n微软的ASIC 数量，2026-2027 年将迎来爆发式增长。整体来看，继续看好AI 覆铜板/PCB 及核心算力硬件、半\n导体设备及苹果产业链。\n\n细分行业景气指标：消费电子（稳健向上）、PCB（加速向上）、半导体芯片（稳健向上）、半导体代工/设备/材料\n/零部件（稳健向上）、显示（底部企稳）、被动元件（加速向上）、封测（稳健向上）。\n风险提示 \n需求恢复不及预期的风险；AIGC 进展不及预期的风险；外部制裁进一步升级的风险。",
+        "start": 0,
+        "end": 446,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "模块",
+          "需求"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0002"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0000",
+          "chunk:16a9a510ef9e405f:body:0001",
+          "chunk:16a9a510ef9e405f:body:0002",
+          "chunk:16a9a510ef9e405f:heading:0001",
+          "chunk:16a9a510ef9e405f:heading:0002"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:16a9a510ef9e405f:heading:0000",
+          "chunk:16a9a510ef9e405f:body:0001",
+          "chunk:16a9a510ef9e405f:body:0002",
+          "chunk:16a9a510ef9e405f:heading:0001",
+          "chunk:16a9a510ef9e405f:heading:0002"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "locator": "chunk:022ae1713fb760ff:body:0011",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0011",
+      "context_locators": [
+        "chunk:022ae1713fb760ff:body:0000",
+        "chunk:022ae1713fb760ff:body:0001",
+        "chunk:022ae1713fb760ff:body:0002",
+        "chunk:022ae1713fb760ff:body:0003",
+        "chunk:022ae1713fb760ff:body:0004",
+        "chunk:022ae1713fb760ff:body:0005",
+        "chunk:022ae1713fb760ff:body:0006",
+        "chunk:022ae1713fb760ff:body:0007",
+        "chunk:022ae1713fb760ff:body:0008",
+        "chunk:022ae1713fb760ff:body:0009",
+        "chunk:022ae1713fb760ff:table:0000",
+        "chunk:022ae1713fb760ff:body:0010",
+        "chunk:022ae1713fb760ff:body:0011",
+        "chunk:022ae1713fb760ff:body:0012",
+        "chunk:022ae1713fb760ff:body:0013",
+        "chunk:022ae1713fb760ff:body:0014",
+        "chunk:022ae1713fb760ff:body:0015",
+        "chunk:022ae1713fb760ff:heading:0000",
+        "chunk:022ae1713fb760ff:heading:0001",
+        "chunk:022ae1713fb760ff:body:0016",
+        "chunk:022ae1713fb760ff:table:0001"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locator": "chunk:022ae1713fb760ff:body:0011",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015",
+          "chunk:022ae1713fb760ff:heading:0000",
+          "chunk:022ae1713fb760ff:heading:0001",
+          "chunk:022ae1713fb760ff:body:0016",
+          "chunk:022ae1713fb760ff:table:0001"
+        ],
+        "scope_id": "scope:681677f30db3ac298ce5018a2283f4ec",
+        "view": "compact"
+      },
+      "scope_id": "scope:681677f30db3ac298ce5018a2283f4ec",
+      "total_chunks": 21,
+      "by_kind": {
+        "body": 1,
+        "unknown": 20
+      },
+      "table_chunks": 0,
+      "title": "光伏：板块半年报整体呈现“景气底部夯实”状态，玻璃、胶膜、高效电池（尤其BC）等部分环节拐点或率先出现。",
+      "published": "undated",
+      "snippet": "<b>周期</b>12个月。项目建成后",
+      "preview": {
+        "text": "短期锂价上涨动力\n仍不足，但若去库延续，价格有望逐步回升。 \n电网：国网输变电设备第4批招标同比-19%，前四批招标同比-12%，主要系25年同期高基数及“十五五”开局部分\n项目仍处于规划阶段影响，新能源扩容&特高压配套需求长期存在，预计27 年招标有望回暖。 \n本周国网输变电设备第四批中标公示，第四批招标114 亿元，同比-19%，前四批累计招标601 亿元，同比-12%，招标\n下滑主要系25 年同期高基数及“十五五”开局部分项目仍处于规划阶段影响。考虑到新能源扩容&特高压配套需求长\n期存在，预计27 年主网招标有望回暖。 \n分产品招标看，组合电器28.81 亿元，变压器20.56 亿元，电力电缆26.10 亿元，开关柜9.95 亿元，继电保护和变\n电站计算机监控系统5.01 亿元，控制电缆2.86 亿元，通信设备5.72 亿元。 \n分上市公司中标看，平高电气8.50 亿元，中国西电7.64 亿元，特变电工7.41 亿元，思源电气7.17 亿元，国网信通\n5.16 亿元，汉缆股份4.85 亿元，中天科技3.16 亿元，长高电新2.80 亿元，国电南瑞2.43 亿元，亨通光电2.31 亿\n元，许继电气2.29 亿元，保变电气1.73 亿元。 \n电力设备板块——以AI 为核心抓手，聚焦电力变压器需求放量与AIDC 供电架构变革，关注国内边际修复。",
+        "start": 284,
+        "end": 865,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "需求"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0011"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015",
+          "chunk:022ae1713fb760ff:heading:0000",
+          "chunk:022ae1713fb760ff:heading:0001",
+          "chunk:022ae1713fb760ff:body:0016",
+          "chunk:022ae1713fb760ff:table:0001"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015",
+          "chunk:022ae1713fb760ff:heading:0000",
+          "chunk:022ae1713fb760ff:heading:0001",
+          "chunk:022ae1713fb760ff:body:0016",
+          "chunk:022ae1713fb760ff:table:0001"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0017",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0017",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:body:0016",
+        "chunk:568f9e752f0fa65a:body:0017",
+        "chunk:568f9e752f0fa65a:body:0018",
+        "chunk:568f9e752f0fa65a:heading:0006"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locator": "chunk:568f9e752f0fa65a:body:0017",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018",
+          "chunk:568f9e752f0fa65a:heading:0006"
+        ],
+        "scope_id": "scope:e3f44b85e1f40829419de77b46d0af66",
+        "view": "compact"
+      },
+      "scope_id": "scope:e3f44b85e1f40829419de77b46d0af66",
+      "total_chunks": 4,
+      "by_kind": {
+        "unknown": 4
+      },
+      "table_chunks": 0,
+      "title": "半导体划片机转入放量进程,煤矿业务企稳",
+      "published": "undated",
+      "snippet": "<b>需求</b>增长,国产划片机仍处",
+      "preview": {
+        "text": "半导体划片机转入放量进程,煤矿业务企稳\n半导体行业需求增长,国产划片机仍处渗透初期\nAI 需求与先进封装升级推动行业进入新一轮增长周期。高性能计算、数据中心、\nAIPC、AI 手机和智能汽车等领域需求加速释放，带动逻辑芯片与存储器市场扩张。\nWSTS 数据显示，2025 年全球半导体销售额达到7,956 亿美元，同比增长26.2%，\n预计2026 年市场规模有望接近万亿美元。与此同时,异构集成、Chiplet 和HBM\n成为提升芯片性能的重要路径，推动晶圆及封装体向更薄、更复杂和更高集成度\n发展，对切割精度、减薄能力和设备稳定性提出更高要求。2025 年，全球硅晶圆\n出货量增长5.8%至129.73 亿平方英寸，划切、研磨和抛光设备市场需求有望持\n续提升。\n全球高端划片机市场长期由海外厂商主导。日本DISCO、东京精密等海外厂商市\n场占有率极高。由于半导体划切设备直接影响芯片性能、良率与生产成本，对精\n度、稳定性和效率要求高，国产设备通常需要经历较长时间的测试验证和小批量\n导入，因此国产目前替代仍处于由验证向批量采购过渡的阶段。\n图5：全球半导体行业需求增长\n图9：全球硅晶圆出货量增长\n资料来源：WSTS，国信证券经济研究所整理\n资料来源：公司年报，国信证券经济研究所整理\n公司国产划片机已经进入头部封测客户并开始逐步放量。",
+        "start": 0,
+        "end": 570,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "周期",
+          "需求"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0017"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018",
+          "chunk:568f9e752f0fa65a:heading:0006"
+        ],
+        "remaining_after_prior_full_expansions": [],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "locator": "chunk:7ceca88433b092ae:body:0006",
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0006",
+      "context_locators": [
+        "chunk:7ceca88433b092ae:heading:0000",
+        "chunk:7ceca88433b092ae:body:0001",
+        "chunk:7ceca88433b092ae:body:0002",
+        "chunk:7ceca88433b092ae:body:0003",
+        "chunk:7ceca88433b092ae:body:0004",
+        "chunk:7ceca88433b092ae:body:0005",
+        "chunk:7ceca88433b092ae:body:0006",
+        "chunk:7ceca88433b092ae:body:0007",
+        "chunk:7ceca88433b092ae:heading:0001"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locator": "chunk:7ceca88433b092ae:body:0006",
+        "locators": [
+          "chunk:7ceca88433b092ae:heading:0000",
+          "chunk:7ceca88433b092ae:body:0001",
+          "chunk:7ceca88433b092ae:body:0002",
+          "chunk:7ceca88433b092ae:body:0003",
+          "chunk:7ceca88433b092ae:body:0004",
+          "chunk:7ceca88433b092ae:body:0005",
+          "chunk:7ceca88433b092ae:body:0006",
+          "chunk:7ceca88433b092ae:body:0007",
+          "chunk:7ceca88433b092ae:heading:0001"
+        ],
+        "scope_id": "scope:98964e8b6827ef89d3b92e15ef51baaa",
+        "view": "compact"
+      },
+      "scope_id": "scope:98964e8b6827ef89d3b92e15ef51baaa",
+      "total_chunks": 9,
+      "by_kind": {
+        "unknown": 9
+      },
+      "table_chunks": 0,
+      "title": "1 2026 CIOE 中国光博会前瞻",
+      "published": "undated",
+      "snippet": "<b>模块</b>。1）单波400G技术",
+      "preview": {
+        "text": "3）50G-\nXGS-GPON Combo OLT SFP-DD：符合ITU-T G.9804.3、G.9807.1、G.987.2、\nG.984.2多项国际标准，采用SFP-DD 封装与SC/UPC光纤接口。模块集成多波\n段收发架构，单模块即可支持运营商网络从GPON 向50G PON 平滑演进，无需\n替换硬件设备，有助于保护既有网络建设投资。4）空芯光纤组件：具备低插入损\n耗、高回波损耗、高功率处理能力与优异的热稳定性，产品结构紧凑坚固、易于安\n装，支持宽工作波长范围，可广泛应用于高功率激光系统与医用激光传输、低延迟\n数据通信与感知系统、超快光学与非线性光子学领域、气相传感与光谱分析系统。\n5）全光交换机：长芯博创基于MEMS 技术方案，形成了从光纤阵列（FA）、光\n引擎到全光交换机（OCS）的产品布局，打造低插损、高灵活度的光交换产品体系，\n并可根据客户需求提供定制化服务。6）Shuffle Box：面向数据中心、AIDC 算力\n中心的专业光纤交叉配线管理设备，主要用于MDA、HDA等区域光纤连接及配\n线管理，适配主流预端接布线方案，助力机房布线高密度、易运维升级。相比传统\n布线方案，不仅能减少高密度环境下的连接操作、提升布线密度和运维效率，还能\n降低误码与错插拔概率，保障网络运行的稳定可靠。",
+        "start": 926,
+        "end": 1484,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "替换",
+          "模块",
+          "需求"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locators": [
+          "chunk:7ceca88433b092ae:body:0006"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locators": [
+          "chunk:7ceca88433b092ae:heading:0000",
+          "chunk:7ceca88433b092ae:body:0001",
+          "chunk:7ceca88433b092ae:body:0002",
+          "chunk:7ceca88433b092ae:body:0003",
+          "chunk:7ceca88433b092ae:body:0004",
+          "chunk:7ceca88433b092ae:body:0005",
+          "chunk:7ceca88433b092ae:body:0006",
+          "chunk:7ceca88433b092ae:body:0007",
+          "chunk:7ceca88433b092ae:heading:0001"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:7ceca88433b092ae:heading:0000",
+          "chunk:7ceca88433b092ae:body:0001",
+          "chunk:7ceca88433b092ae:body:0002",
+          "chunk:7ceca88433b092ae:body:0003",
+          "chunk:7ceca88433b092ae:body:0004",
+          "chunk:7ceca88433b092ae:body:0005",
+          "chunk:7ceca88433b092ae:body:0006",
+          "chunk:7ceca88433b092ae:body:0007",
+          "chunk:7ceca88433b092ae:heading:0001"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "locator": "chunk:16a9a510ef9e405f:body:0004",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0004",
+      "context_locators": [
+        "chunk:16a9a510ef9e405f:body:0003",
+        "chunk:16a9a510ef9e405f:body:0004",
+        "chunk:16a9a510ef9e405f:body:0005",
+        "chunk:16a9a510ef9e405f:body:0006",
+        "chunk:16a9a510ef9e405f:body:0007",
+        "chunk:16a9a510ef9e405f:body:0008",
+        "chunk:16a9a510ef9e405f:body:0009",
+        "chunk:16a9a510ef9e405f:body:0010"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locator": "chunk:16a9a510ef9e405f:body:0004",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010"
+        ],
+        "scope_id": "scope:4a8a7ec9c21d98e485ef5d0d70a23373",
+        "view": "compact"
+      },
+      "scope_id": "scope:4a8a7ec9c21d98e485ef5d0d70a23373",
+      "total_chunks": 8,
+      "by_kind": {
+        "unknown": 8
+      },
+      "table_chunks": 0,
+      "title": "一、细分板块观点\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩",
+      "published": "undated",
+      "snippet": "<b>周期</b>修复转向结构成长。根据SEMI",
+      "preview": {
+        "text": "我们认为，本轮测试设备景气主要是由AI服务器扩容、HBM及先进封装放量共同推动的结构性增长。\n芯片数量增加扩大测试基数，复杂度提升带动单颗测试资源和Test Cell配置升级，测试插入点及测试时间增加则进\n一步推升设备容量需求。建议优先关注已建立核心测试平台、具备头部客户验证和规模化交付能力，并能够向分选机、\n探针台、SLT 及接口件等相邻环节延伸的平台型厂商；同时关注在模拟、功率等细分领域形成稳定优势，并持续向高\n端SoC、存储及混合信号测试拓展的专业化厂商。具体来看，长川科技具备由数字SoC 测试向综合Test Cell 平台扩\n展的基础，华峰测控在模拟及功率测试领域积累较深，联动科技则有望依托功率测试优势进一步拓展产品边界。\n封测：先进封装需求旺盛，重视产业链投资机会。算力需求旺盛，地缘政治因素影响下，算力端自主可控成为国产算\n力核心发展方向。寒武纪、华为昇腾等AI算力芯片需求旺盛，先进封装产能紧缺，持续扩产背景下先进封装产业链\n有望深度受益。此外，HBM 产能紧缺，国产HBM 已取得突破，看好相关产业链标的。建议关注：长电科技、甬矽电\n子、通富微电、利扬芯片、伟测科技；封测设备及耗材：华峰测控、金海通、和林微纳。\n当前封测板块景气度稳健向上，随下游需求好转，国内模拟/数字芯片公司库存普遍已筑底回升，开始主动补库。对于\n封测厂来说，其营收与半导体销售额呈高度拟合关系。",
+        "start": 350,
+        "end": 946,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "需求"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0004"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "locator": "chunk:022ae1713fb760ff:body:0011",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0011",
+      "context_locators": [
+        "chunk:022ae1713fb760ff:body:0000",
+        "chunk:022ae1713fb760ff:body:0001",
+        "chunk:022ae1713fb760ff:body:0002",
+        "chunk:022ae1713fb760ff:body:0003",
+        "chunk:022ae1713fb760ff:body:0004",
+        "chunk:022ae1713fb760ff:body:0005",
+        "chunk:022ae1713fb760ff:body:0006",
+        "chunk:022ae1713fb760ff:body:0007",
+        "chunk:022ae1713fb760ff:body:0008",
+        "chunk:022ae1713fb760ff:body:0009",
+        "chunk:022ae1713fb760ff:table:0000",
+        "chunk:022ae1713fb760ff:body:0010",
+        "chunk:022ae1713fb760ff:body:0011",
+        "chunk:022ae1713fb760ff:body:0012",
+        "chunk:022ae1713fb760ff:body:0013",
+        "chunk:022ae1713fb760ff:body:0014",
+        "chunk:022ae1713fb760ff:body:0015"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locator": "chunk:022ae1713fb760ff:body:0011",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015"
+        ],
+        "scope_id": "scope:bda60458a55f0b704376b83854ca8bfb",
+        "view": "compact"
+      },
+      "scope_id": "scope:bda60458a55f0b704376b83854ca8bfb",
+      "total_chunks": 17,
+      "by_kind": {
+        "body": 1,
+        "unknown": 16
+      },
+      "table_chunks": 0,
+      "title": "光伏：板块半年报整体呈现“景气底部夯实”状态，玻璃、胶膜、高效电池（尤其BC）等部分环节拐点或率先出现。",
+      "published": "undated",
+      "snippet": "<b>周期</b>12个月。项目建成后",
+      "preview": {
+        "text": "短期锂价上涨动力\n仍不足，但若去库延续，价格有望逐步回升。 \n电网：国网输变电设备第4批招标同比-19%，前四批招标同比-12%，主要系25年同期高基数及“十五五”开局部分\n项目仍处于规划阶段影响，新能源扩容&特高压配套需求长期存在，预计27 年招标有望回暖。 \n本周国网输变电设备第四批中标公示，第四批招标114 亿元，同比-19%，前四批累计招标601 亿元，同比-12%，招标\n下滑主要系25 年同期高基数及“十五五”开局部分项目仍处于规划阶段影响。考虑到新能源扩容&特高压配套需求长\n期存在，预计27 年主网招标有望回暖。 \n分产品招标看，组合电器28.81 亿元，变压器20.56 亿元，电力电缆26.10 亿元，开关柜9.95 亿元，继电保护和变\n电站计算机监控系统5.01 亿元，控制电缆2.86 亿元，通信设备5.72 亿元。 \n分上市公司中标看，平高电气8.50 亿元，中国西电7.64 亿元，特变电工7.41 亿元，思源电气7.17 亿元，国网信通\n5.16 亿元，汉缆股份4.85 亿元，中天科技3.16 亿元，长高电新2.80 亿元，国电南瑞2.43 亿元，亨通光电2.31 亿\n元，许继电气2.29 亿元，保变电气1.73 亿元。 \n电力设备板块——以AI 为核心抓手，聚焦电力变压器需求放量与AIDC 供电架构变革，关注国内边际修复。",
+        "start": 284,
+        "end": 865,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "需求"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0011"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015"
+        ],
+        "remaining_after_prior_full_expansions": [],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0013",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0013",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:body:0012",
+        "chunk:568f9e752f0fa65a:table:0010",
+        "chunk:568f9e752f0fa65a:body:0013",
+        "chunk:568f9e752f0fa65a:table:0011",
+        "chunk:568f9e752f0fa65a:body:0014",
+        "chunk:568f9e752f0fa65a:body:0015",
+        "chunk:568f9e752f0fa65a:table:0012"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locator": "chunk:568f9e752f0fa65a:body:0013",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0012",
+          "chunk:568f9e752f0fa65a:table:0010",
+          "chunk:568f9e752f0fa65a:body:0013",
+          "chunk:568f9e752f0fa65a:table:0011",
+          "chunk:568f9e752f0fa65a:body:0014",
+          "chunk:568f9e752f0fa65a:body:0015",
+          "chunk:568f9e752f0fa65a:table:0012"
+        ],
+        "scope_id": "scope:32c586a1e03c7188278bd47c2610e34f",
+        "view": "compact"
+      },
+      "scope_id": "scope:32c586a1e03c7188278bd47c2610e34f",
+      "total_chunks": 7,
+      "by_kind": {
+        "unknown": 7
+      },
+      "table_chunks": 0,
+      "title": "半导体加工设备逐步打开业务成长空间",
+      "published": "undated",
+      "snippet": "<b>更换</b>，随着公司设备保有量和客户",
+      "preview": {
+        "text": "刀片耗材产品加快国产化，具备长期成长空间。公司刀片产品包括软刀和硬刀，\n其中软刀覆盖镍刀、树脂刀和金属烧结刀，可根据不同材料和加工要求进行适配；\n硬刀主要用于硅晶圆及化合物半导体等材料的切割。子公司ADT 在刀片领域拥有\n长期技术和客户积累，产品已向全球客户供货。目前公司正在推进刀片国内产能\n爬坡，国产硬刀处于客户端验证阶段。刀片在切割过程中需要持续更换，随着公\n司设备保有量和客户覆盖范围扩大，耗材业务有望形成较为稳定的重复采购需求。",
+        "start": 0,
+        "end": 219,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "更换",
+          "需求"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0013"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0012",
+          "chunk:568f9e752f0fa65a:table:0010",
+          "chunk:568f9e752f0fa65a:body:0013",
+          "chunk:568f9e752f0fa65a:table:0011",
+          "chunk:568f9e752f0fa65a:body:0014",
+          "chunk:568f9e752f0fa65a:body:0015",
+          "chunk:568f9e752f0fa65a:table:0012"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:568f9e752f0fa65a:body:0012",
+          "chunk:568f9e752f0fa65a:table:0010",
+          "chunk:568f9e752f0fa65a:body:0013",
+          "chunk:568f9e752f0fa65a:table:0011",
+          "chunk:568f9e752f0fa65a:body:0014",
+          "chunk:568f9e752f0fa65a:body:0015",
+          "chunk:568f9e752f0fa65a:table:0012"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@48e8e60844f69177d5eb672a1d1b1010",
+    "processing": "scoped",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 22,
+      "published": 18,
+      "withdrawn": 0,
+      "pending": 0,
+      "failed_jobs": 0,
+      "builds": 28,
+      "published_with_gaps": 16
+    },
+    "retrieval": {
+      "requested": "hybrid",
+      "used": "hybrid",
+      "reason": null,
+      "profile": "fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107",
+      "expected_chunks": 703,
+      "ready_chunks": 703,
+      "lexical_candidates": 119,
+      "vector_candidates": 200,
+      "query_cache_hit": false,
+      "query_usage": {
+        "prompt_tokens": 49,
+        "total_tokens": 49
+      },
+      "elapsed_ms": 502
+    }
+  },
+  "hint": "preview 是选读预览，不是已取证引用。先用同一命中的 core_fetch_plan 调用 corpus_fetch；问题涉及多个对象、因果链或指代不完整时，再按 fetch_plan 扩展上下文。表格保留原范围以带齐表头、期间和单位。重复 locator 可在相同 doc_id 下去重；不同版本不可混用。",
+  "delivery_preview": "pilot"
+}

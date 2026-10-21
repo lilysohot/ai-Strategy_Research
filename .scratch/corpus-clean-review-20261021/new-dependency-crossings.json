@@ -1,0 +1,122 @@
+[
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "kind": "header_for",
+    "source_node": "pdf:p0005:t000:r0000:c0002",
+    "target_node": "pdf:p0005:t000:r0003:c0002",
+    "source_ordinal": 41,
+    "target_ordinal": 45,
+    "source_status": "noise",
+    "target_status": "kept"
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "kind": "header_for",
+    "source_node": "pdf:p0005:t000:r0000:c0003",
+    "target_node": "pdf:p0005:t000:r0003:c0003",
+    "source_ordinal": 41,
+    "target_ordinal": 45,
+    "source_status": "noise",
+    "target_status": "kept"
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "kind": "header_for",
+    "source_node": "pdf:p0005:t000:r0000:c0002",
+    "target_node": "pdf:p0005:t000:r0004:c0002",
+    "source_ordinal": 41,
+    "target_ordinal": 46,
+    "source_status": "noise",
+    "target_status": "kept"
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "kind": "header_for",
+    "source_node": "pdf:p0005:t000:r0000:c0003",
+    "target_node": "pdf:p0005:t000:r0004:c0003",
+    "source_ordinal": 41,
+    "target_ordinal": 46,
+    "source_status": "noise",
+    "target_status": "kept"
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "kind": "header_for",
+    "source_node": "pdf:p0005:t000:r0000:c0002",
+    "target_node": "pdf:p0005:t000:r0005:c0002",
+    "source_ordinal": 41,
+    "target_ordinal": 47,
+    "source_status": "noise",
+    "target_status": "kept"
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "kind": "header_for",
+    "source_node": "pdf:p0005:t000:r0000:c0003",
+    "target_node": "pdf:p0005:t000:r0005:c0003",
+    "source_ordinal": 41,
+    "target_ordinal": 47,
+    "source_status": "noise",
+    "target_status": "kept"
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "kind": "header_for",
+    "source_node": "pdf:p0005:t000:r0000:c0002",
+    "target_node": "pdf:p0005:t000:r0006:c0002",
+    "source_ordinal": 41,
+    "target_ordinal": 48,
+    "source_status": "noise",
+    "target_status": "kept"
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "kind": "header_for",
+    "source_node": "pdf:p0005:t000:r0000:c0003",
+    "target_node": "pdf:p0005:t000:r0006:c0003",
+    "source_ordinal": 41,
+    "target_ordinal": 48,
+    "source_status": "noise",
+    "target_status": "kept"
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "kind": "header_for",
+    "source_node": "pdf:p0005:t000:r0000:c0002",
+    "target_node": "pdf:p0005:t000:r0007:c0002",
+    "source_ordinal": 41,
+    "target_ordinal": 49,
+    "source_status": "noise",
+    "target_status": "kept"
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "kind": "header_for",
+    "source_node": "pdf:p0005:t000:r0000:c0003",
+    "target_node": "pdf:p0005:t000:r0007:c0003",
+    "source_ordinal": 41,
+    "target_ordinal": 49,
+    "source_status": "noise",
+    "target_status": "kept"
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "kind": "continuation_of",
+    "source_node": "pdf:p0005:t000:r0001:c0002",
+    "target_node": "pdf:p0005:t000:r0000:c0002",
+    "source_ordinal": 43,
+    "target_ordinal": 41,
+    "source_status": "kept",
+    "target_status": "noise"
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "kind": "continuation_of",
+    "source_node": "pdf:p0005:t000:r0001:c0003",
+    "target_node": "pdf:p0005:t000:r0000:c0003",
+    "source_ordinal": 43,
+    "target_ordinal": 41,
+    "source_status": "kept",
+    "target_status": "noise"
+  }
+]

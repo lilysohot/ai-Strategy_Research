@@ -1,0 +1,115 @@
+{
+  "query": "DeepSeek V4.1 Flash 1017",
+  "hits": [
+    {
+      "doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698",
+      "locator": "chunk:1e86c00da4097c5c:body:0000",
+      "title": "2026-10-19 研究 LLM：DeepSeek V4.1-Flash-1017\n研究|LLM：DeepSeek V4.1-Flash-1017 跻身开放权重模型第一梯队，仍落后于专\n有模型领跑者\n更快、更低成本的代码与智能体任务加剧竞争",
+      "snippet": "<b>DeepSeek</b>于10月17日发布<b>V4</b>.1-<b>Flash</b>",
+      "score": 0.10639052610117702,
+      "published": "undated",
+      "source_id": "eecaab994514609bf9d459618e9d0cb53c00b5fa4bbebcebf413f6d97c7f4e23",
+      "build_id": "1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698",
+      "chunk_id": "1e86c00da4097c5c:body:0000",
+      "context_locators": [
+        "chunk:1e86c00da4097c5c:heading:0000",
+        "chunk:1e86c00da4097c5c:body:0000",
+        "chunk:1e86c00da4097c5c:body:0001",
+        "chunk:1e86c00da4097c5c:body:0002",
+        "chunk:1e86c00da4097c5c:body:0003",
+        "chunk:1e86c00da4097c5c:body:0004",
+        "chunk:1e86c00da4097c5c:body:0005",
+        "chunk:1e86c00da4097c5c:body:0006",
+        "chunk:1e86c00da4097c5c:body:0007",
+        "chunk:1e86c00da4097c5c:body:0008",
+        "chunk:1e86c00da4097c5c:body:0009",
+        "chunk:1e86c00da4097c5c:body:0010",
+        "chunk:1e86c00da4097c5c:body:0011",
+        "chunk:1e86c00da4097c5c:body:0012",
+        "chunk:1e86c00da4097c5c:body:0013",
+        "chunk:1e86c00da4097c5c:body:0014",
+        "chunk:1e86c00da4097c5c:body:0015",
+        "chunk:1e86c00da4097c5c:body:0016",
+        "chunk:1e86c00da4097c5c:body:0017"
+      ],
+      "scope_id": "scope:c806860c323dbe57fc9047f2379c93bd",
+      "context_by_kind": [
+        [
+          "body",
+          1
+        ],
+        [
+          "unknown",
+          18
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623",
+      "locator": "chunk:e8a6d70dfee70089:body:0000",
+      "title": "半导体行业AI进化论(23)：DS V4.1 Flash释放硬件潜能国产卡迈向10T模型时代",
+      "snippet": "<b>DeepSeek</b><b>V4</b>.1<b>Flash</b>的核心意义",
+      "score": 0.0663748610922595,
+      "published": "undated",
+      "source_id": "b505dcd712bc33050d71b82783fae29bc9e7f61fdc4d8300e2f5e126168ca1c6",
+      "build_id": "e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623",
+      "chunk_id": "e8a6d70dfee70089:body:0000",
+      "context_locators": [
+        "chunk:e8a6d70dfee70089:body:0000",
+        "chunk:e8a6d70dfee70089:heading:0000"
+      ],
+      "scope_id": "scope:0cd49ce929e593416c0716824a7d8d55",
+      "context_by_kind": [
+        [
+          "unknown",
+          2
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+      "locator": "chunk:c520485162e66660:body:0010",
+      "title": "【行业重大事件】",
+      "snippet": "<b>Flash</b>3.7之后，隆重推出Gemini3.8，",
+      "score": 0.017810161319581727,
+      "published": "undated",
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+      "chunk_id": "c520485162e66660:body:0010",
+      "context_locators": [
+        "chunk:c520485162e66660:body:0009",
+        "chunk:c520485162e66660:body:0010",
+        "chunk:c520485162e66660:body:0011"
+      ],
+      "scope_id": "scope:15e49b55dd9c1b5c4b5bd4fd42b444bc",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@b4980af67156a7643bfedfef09f9cac0",
+    "processing": "unknown",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "admission_pending",
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 31,
+      "published": 25,
+      "withdrawn": 0,
+      "pending": 2,
+      "failed_jobs": 0,
+      "builds": 54,
+      "published_with_gaps": 21
+    }
+  }
+}

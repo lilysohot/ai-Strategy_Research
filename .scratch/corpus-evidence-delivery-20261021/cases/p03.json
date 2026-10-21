@@ -1,0 +1,100 @@
+{
+  "case": "p03",
+  "kind": "positive",
+  "review": {
+    "class": "direct",
+    "reason": "同时给出新品出货和价格向客户传导",
+    "markers": [
+      "价格开始传导",
+      "客户传导"
+    ]
+  },
+  "capture_sha256": "6884c6ded17baed2f57d3565ab3c94875d713c76a0b25a39d285c471ac010883",
+  "original_sha256": "74cae3ee45144ea2499ccbbd6f1e3a644e7bd175075dbb035af51b155c7b81cd",
+  "original_retrieval": "hybrid",
+  "top_chunk": "16a9a510ef9e405f:body:0001",
+  "top_original_chars": 1109,
+  "old_snippet": "<b>PCB</b>方向，<b>下半年</b><b>PCB</b><b>有望</b>开启<b>新品</b>",
+  "preview": {
+    "text": "我们认为，华为韬定律\n芯片从平面集成走向立体集成，工艺步骤、互连数量和制造复杂度同步提升，对半导体设备是积极利好，半导体\n设备板块近期股价连续回撤，产业逻辑没有发生变化。国内晶圆厂扩产加速、先进芯片工艺升级、存储芯片扩产\n加速、国产设备份额提升继续兑现，当前位置建议积极抄底半导体设备板块。前道设备受益于国内存储、先进逻\n辑扩产，韬定律有望加速下游扩产节奏，刻蚀、薄膜沉积、涂胶显影及键合设备等需求全面增加。后道测试是韬\n定律更直接的增量方向。芯片堆叠层数和互连数量增加，测试复杂度、测试时长及良率管理要求同步提升，芯片\nCoT 倍数级提升，带动ATE、分选机、探针台、SLT 和老化设备需求量增长。继续看好AI 覆铜板/PCB 方向，下\n半年PCB有望开启新品拉货和盈利修复的双重利好。我们认为从三季度开始PCB的业绩斜率有望启动加速，\nPCB有望成为最亮眼的板块，核心原因在于：1)AI高端新品已经开始出货。根据产业链跟踪，我们观察到部分\nAI高端新品已在7月底实现出货，最晚的料号也有望在8月中旬实现量产，至今年年底都有望保持爆满状态，\nPCB 作为AI 敞口最大的环节，将显著受益；2)PCB 价格开始传导。上半年中上游涨价到PCB 端后，PCB 未完\n全将涨价的部分向客户传导，但我们观察到这一情况正在积极改善，从产业链跟踪角度下半年PCB盈利水平有\n望进一步提升，推高环节的加速斜率。",
+    "start": 500,
+    "end": 1098,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "pcb",
+      "下半年",
+      "改善",
+      "新品",
+      "有望",
+      "盈利"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": [
+      "价格开始传导",
+      "客户传导"
+    ]
+  },
+  "core_chunks": 10,
+  "full_chunks": 173,
+  "original_context_occurrences": 179,
+  "preview_statuses": {
+    "complete_sentence_window": 10
+  },
+  "preview_chars": [
+    598,
+    481,
+    527,
+    313,
+    595,
+    549,
+    559,
+    513,
+    230,
+    570
+  ],
+  "body_chars": {
+    "off": 22324,
+    "pilot": 46247
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 3799,
+        "hits": 1,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 5866,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11354,
+        "hits": 4,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 11872,
+        "hits": 5,
+        "previews": 5,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

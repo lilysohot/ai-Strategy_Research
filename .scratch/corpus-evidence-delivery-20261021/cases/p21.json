@@ -1,0 +1,105 @@
+{
+  "case": "p21",
+  "kind": "positive",
+  "review": {
+    "class": "direct",
+    "reason": "有截止日期、直接持股与合计控制比例",
+    "markers": [
+      "2026年6月30日",
+      "32.60%",
+      "36.60%"
+    ]
+  },
+  "capture_sha256": "3a2dd26d9838b48b3e1858f5725aeab5fba67460c55abb988f7627fab4992351",
+  "original_sha256": "864242e60f04a845dc3a14022b90b2b6207f45067c3f1be08189d6a077680ba0",
+  "original_retrieval": "hybrid",
+  "top_chunk": "568f9e752f0fa65a:body:0014",
+  "top_original_chars": 814,
+  "old_snippet": "<b>实际</b><b>控制</b>人<b>控制</b><b>比例</b>。\n公司",
+  "preview": {
+    "text": "2025 年，公司半导体封测装备制造\n业务实现收入3.62 亿元，同比增长31.16%，占营业收入的53.99%；相关装备销\n量达351 台（套），同比增长28.57%。随着AI、HBM 及先进封装推动设备需求增\n长，公司有望进一步提升国产划切设备的市场份额。\n图2：公司全产业链闭环示意图\n资料来源：公司公告，国信证券经济研究所整理\n请务必阅读正文之后的免责声明及其项下所有内容\n7\n股权结构：实控人合计持有公司36.60%股份\n公司股权结构清晰，实际控制权稳定。截至2026 年6 月30 日，公司控股股东、\n实际控制人赵彤宇直接持有公司32.60%股份，并通过其持股100%的宁波万丰隆贸\n易有限公司间接控制公司4.00%股份，合计控制公司36.60%股份。陈淑兰和赵彤\n亚分别持有公司1.70%和0.57%股份，虽与赵彤宇存在亲属关系，但未计入上述实\n际控制人控制比例。\n公司围绕物联网安全生产监控和半导体封测装备布局子公司体系。传统煤矿检测\n业务主要由上市公司及郑州景旭能源、山西光力智航、郑州汇力科技等主体承担；\n半导体业务以光力瑞弘为国内核心平台，下设先进微电子装备（郑州）、苏州莱\n得博、光力芯越等子公司。其中先进微电子持有孙公司上海精切100%股权，上海\n精切进一步持有海外研发制造基地以色列ADT 公司100%股权。英国LP,LBP 两家\n公司由母公司直接持有。",
+    "start": 117,
+    "end": 708,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "2026",
+      "合计",
+      "实际",
+      "截至",
+      "持股",
+      "控制",
+      "比例",
+      "直接"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": [
+      "2026年6月30日",
+      "32.60%",
+      "36.60%"
+    ]
+  },
+  "core_chunks": 31,
+  "full_chunks": 143,
+  "original_context_occurrences": 179,
+  "preview_statuses": {
+    "complete_sentence_window": 8,
+    "structured_content_requires_fetch": 2
+  },
+  "preview_chars": [
+    591,
+    568,
+    592,
+    576,
+    114,
+    591,
+    587,
+    580,
+    0,
+    0
+  ],
+  "body_chars": {
+    "off": 22441,
+    "pilot": 45411
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 4536,
+        "hits": 1,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 3976,
+        "hits": 1,
+        "previews": 1,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 9550,
+        "hits": 3,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 11039,
+        "hits": 4,
+        "previews": 4,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

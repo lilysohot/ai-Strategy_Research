@@ -67,6 +67,37 @@ def _policy() -> AdmissionPolicy:
     return load_admission_policy(POLICY_PATH)
 
 
+def test_subscription_authorization_is_scoped_to_new_policy_and_selected_sources():
+    from dataclasses import replace
+
+    source = _source()
+    decision = replace(
+        _decision("subscription-approval", source.source_id),
+        material_type=MaterialType.PERSONAL_OR_EXTERNAL_SUBSCRIPTION,
+        research_domain=ResearchDomain.INDUSTRY,
+    )
+    policy = AdmissionPolicy(
+        "v3-dev-20261021",
+        tuple(ResearchDomain),
+        allowed_materials=(
+            MaterialType.RESEARCH_REPORT,
+            MaterialType.PERSONAL_OR_EXTERNAL_SUBSCRIPTION,
+        ),
+        scope="dev",
+        lane_id="test",
+        dev_lane_sources=(source.source_id,),
+    )
+    probes = _probes("Subscription research", "Author")
+    assert (
+        decide_admission(source, (decision,), probes, policy).decision is AdmissionDecision.IN_SCOPE
+    )
+    for other in (_policy(), replace(policy, dev_lane_sources=(_sid("different"),))):
+        assert (
+            decide_admission(source, (decision,), probes, other).decision
+            is AdmissionDecision.REVIEW_REQUIRED
+        )
+
+
 def _decision(
     decision_id: str,
     source_id: str,
@@ -512,9 +543,7 @@ def test_admission_does_not_import_pg_or_model_client() -> None:
         " 'openai', 'anthropic') if m in sys.modules];"
         "print(f'leaked: {bad}'); sys.exit(1 if bad else 0)"
     )
-    proc = subprocess.run(
-        [sys.executable, "-c", code], capture_output=True, text=True, check=False
-    )
+    proc = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, check=False)
     assert proc.returncode == 0, proc.stdout + proc.stderr
 
 
@@ -527,7 +556,9 @@ def test_contract_in_scope_material_bound_to_policy_rev() -> None:
         "decision": AdmissionDecision.IN_SCOPE,
     }
     with pytest.raises(ContractError, match="research_report"):
-        Admission(policy_rev=POLICY_REV_V1, material_type=MaterialType.INTERNAL_COMMITTEE_REPORT, **common)  # type: ignore[arg-type]
+        Admission(
+            policy_rev=POLICY_REV_V1, material_type=MaterialType.INTERNAL_COMMITTEE_REPORT, **common
+        )  # type: ignore[arg-type]
     allowed = Admission(
         policy_rev=POLICY_REV_V2_DEV,
         material_type=MaterialType.INTERNAL_COMMITTEE_REPORT,
@@ -536,4 +567,6 @@ def test_contract_in_scope_material_bound_to_policy_rev() -> None:
     assert allowed.material_type is MaterialType.INTERNAL_COMMITTEE_REPORT
     # 未知 policy_rev 落到最严默认集合（fail-closed）
     with pytest.raises(ContractError, match="research_report"):
-        Admission(policy_rev="v9-future", material_type=MaterialType.INTERNAL_UNATTRIBUTED, **common)  # type: ignore[arg-type]
+        Admission(
+            policy_rev="v9-future", material_type=MaterialType.INTERNAL_UNATTRIBUTED, **common
+        )  # type: ignore[arg-type]

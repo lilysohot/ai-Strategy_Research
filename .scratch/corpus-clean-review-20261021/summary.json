@@ -1,0 +1,29 @@
+{
+  "new_exclusions": 301,
+  "affected_sources": 13,
+  "reviewed_packets": 21,
+  "categories": {
+    "reminder": 6,
+    "rating_definition": 96,
+    "legal": 115,
+    "contact": 83,
+    "layout": 1
+  },
+  "old_offline_chunks": 703,
+  "new_offline_chunks": 678,
+  "published_authority_chunks": 703,
+  "positive_cases": 24,
+  "old_gold_block_occurrences": 39,
+  "unique_old_gold_blocks": 30,
+  "newly_excluded_gold_occurrences": 2,
+  "detailed_positive_blocks": 6,
+  "new_dependency_crossings": 12,
+  "false_stock_code_matches": [
+    {
+      "ordinal": 63,
+      "text": "邮编：330038 ",
+      "matched_stock_code": "330038"
+    }
+  ],
+  "decision": "Hold clean-6 rebuild until partial rating-table boundary is corrected; no research-prose deletion found in this reviewed delta."
+}

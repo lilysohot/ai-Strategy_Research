@@ -1,0 +1,469 @@
+[
+  {
+    "case": "p01",
+    "old_chunks": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "non_referenced_units": [],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p02",
+    "old_chunks": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "non_referenced_units": [],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p03",
+    "old_chunks": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "non_referenced_units": [],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p04",
+    "old_chunks": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "non_referenced_units": [],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p05",
+    "old_chunks": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "non_referenced_units": [],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p06",
+    "old_chunks": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0003"
+    ],
+    "non_referenced_units": [],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p07",
+    "old_chunks": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0005"
+    ],
+    "non_referenced_units": [],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p08",
+    "old_chunks": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "non_referenced_units": [],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p09",
+    "old_chunks": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001"
+    ],
+    "non_referenced_units": [
+      {
+        "chunk": "022ae1713fb760ff:body:0000",
+        "ordinal": 1,
+        "text": "敬请参阅最后一页特别声明",
+        "old_status": "kept",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "022ae1713fb760ff:body:0001",
+        "ordinal": 8,
+        "text": "敬请参阅最后一页特别声明",
+        "old_status": "noise",
+        "new_status": "noise"
+      }
+    ],
+    "newly_excluded": [
+      {
+        "chunk": "022ae1713fb760ff:body:0000",
+        "ordinal": 1,
+        "text": "敬请参阅最后一页特别声明",
+        "old_status": "kept",
+        "new_status": "noise"
+      }
+    ],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p10",
+    "old_chunks": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001",
+      "022ae1713fb760ff:body:0009"
+    ],
+    "non_referenced_units": [
+      {
+        "chunk": "022ae1713fb760ff:body:0000",
+        "ordinal": 1,
+        "text": "敬请参阅最后一页特别声明",
+        "old_status": "kept",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "022ae1713fb760ff:body:0001",
+        "ordinal": 8,
+        "text": "敬请参阅最后一页特别声明",
+        "old_status": "noise",
+        "new_status": "noise"
+      }
+    ],
+    "newly_excluded": [
+      {
+        "chunk": "022ae1713fb760ff:body:0000",
+        "ordinal": 1,
+        "text": "敬请参阅最后一页特别声明",
+        "old_status": "kept",
+        "new_status": "noise"
+      }
+    ],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p11",
+    "old_chunks": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "non_referenced_units": [],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p12",
+    "old_chunks": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "non_referenced_units": [],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p13",
+    "old_chunks": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "non_referenced_units": [],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p14",
+    "old_chunks": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "non_referenced_units": [],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p15",
+    "old_chunks": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "non_referenced_units": [],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p16",
+    "old_chunks": [
+      "7ceca88433b092ae:body:0001",
+      "7ceca88433b092ae:body:0003",
+      "7ceca88433b092ae:body:0004"
+    ],
+    "non_referenced_units": [
+      {
+        "chunk": "7ceca88433b092ae:body:0004",
+        "ordinal": 28,
+        "text": "本公司具备证券投资咨询业务资格，请务必阅读最后一页免责声明 ",
+        "old_status": "noise",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "7ceca88433b092ae:body:0004",
+        "ordinal": 29,
+        "text": "证券研究报告 ",
+        "old_status": "noise",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "7ceca88433b092ae:body:0004",
+        "ordinal": 38,
+        "text": "本公司具备证券投资咨询业务资格，请务必阅读最后一页免责声明 ",
+        "old_status": "noise",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "7ceca88433b092ae:body:0004",
+        "ordinal": 39,
+        "text": "证券研究报告 ",
+        "old_status": "noise",
+        "new_status": "noise"
+      }
+    ],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p17",
+    "old_chunks": [
+      "147e841aab35836a:body:0002",
+      "147e841aab35836a:body:0006"
+    ],
+    "non_referenced_units": [
+      {
+        "chunk": "147e841aab35836a:body:0006",
+        "ordinal": 76,
+        "text": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号",
+        "old_status": "noise",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "147e841aab35836a:body:0006",
+        "ordinal": 90,
+        "text": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号",
+        "old_status": "noise",
+        "new_status": "noise"
+      }
+    ],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p18",
+    "old_chunks": [
+      "628ec76d5b4001b7:body:0002",
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "non_referenced_units": [
+      {
+        "chunk": "628ec76d5b4001b7:body:0007",
+        "ordinal": 93,
+        "text": "      请务必阅读正文之后的信息披露和免责申明",
+        "old_status": "noise",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "628ec76d5b4001b7:body:0007",
+        "ordinal": 123,
+        "text": "      请务必阅读正文之后的信息披露和免责申明",
+        "old_status": "noise",
+        "new_status": "noise"
+      }
+    ],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p19",
+    "old_chunks": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "non_referenced_units": [
+      {
+        "chunk": "568f9e752f0fa65a:body:0016",
+        "ordinal": 166,
+        "text": "请务必阅读正文之后的免责声明及其项下所有内容",
+        "old_status": "noise",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "568f9e752f0fa65a:body:0016",
+        "ordinal": 179,
+        "text": "请务必阅读正文之后的免责声明及其项下所有内容",
+        "old_status": "noise",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "568f9e752f0fa65a:body:0016",
+        "ordinal": 190,
+        "text": "请务必阅读正文之后的免责声明及其项下所有内容",
+        "old_status": "noise",
+        "new_status": "noise"
+      }
+    ],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p20",
+    "old_chunks": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0017"
+    ],
+    "non_referenced_units": [
+      {
+        "chunk": "568f9e752f0fa65a:body:0017",
+        "ordinal": 204,
+        "text": "请务必阅读正文之后的免责声明及其项下所有内容",
+        "old_status": "noise",
+        "new_status": "noise"
+      }
+    ],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p21",
+    "old_chunks": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "non_referenced_units": [
+      {
+        "chunk": "568f9e752f0fa65a:body:0014",
+        "ordinal": 134,
+        "text": "请务必阅读正文之后的免责声明及其项下所有内容",
+        "old_status": "noise",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "568f9e752f0fa65a:body:0014",
+        "ordinal": 141,
+        "text": "请务必阅读正文之后的免责声明及其项下所有内容",
+        "old_status": "noise",
+        "new_status": "noise"
+      }
+    ],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p22",
+    "old_chunks": [
+      "1d0117eb6e17c63c:body:0001",
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "non_referenced_units": [
+      {
+        "chunk": "1d0117eb6e17c63c:body:0008",
+        "ordinal": 158,
+        "text": "诚信专业",
+        "old_status": "noise",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0008",
+        "ordinal": 159,
+        "text": "发现价值",
+        "old_status": "noise",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0008",
+        "ordinal": 161,
+        "text": "请务必阅读报告末页的声明",
+        "old_status": "noise",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0008",
+        "ordinal": 176,
+        "text": "诚信专业",
+        "old_status": "noise",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0008",
+        "ordinal": 177,
+        "text": "发现价值",
+        "old_status": "noise",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0008",
+        "ordinal": 179,
+        "text": "请务必阅读报告末页的声明",
+        "old_status": "noise",
+        "new_status": "noise"
+      }
+    ],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p23",
+    "old_chunks": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "non_referenced_units": [
+      {
+        "chunk": "1d0117eb6e17c63c:body:0007",
+        "ordinal": 122,
+        "text": "诚信专业",
+        "old_status": "noise",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0007",
+        "ordinal": 123,
+        "text": "发现价值",
+        "old_status": "noise",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0007",
+        "ordinal": 125,
+        "text": "请务必阅读报告末页的声明",
+        "old_status": "noise",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0007",
+        "ordinal": 146,
+        "text": "诚信专业",
+        "old_status": "noise",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0007",
+        "ordinal": 147,
+        "text": "发现价值",
+        "old_status": "noise",
+        "new_status": "noise"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0007",
+        "ordinal": 149,
+        "text": "请务必阅读报告末页的声明",
+        "old_status": "noise",
+        "new_status": "noise"
+      }
+    ],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  },
+  {
+    "case": "p24",
+    "old_chunks": [
+      "6b55ddbbcfdc484d:body:0001",
+      "6b55ddbbcfdc484d:body:0003",
+      "6b55ddbbcfdc484d:body:0004",
+      "6b55ddbbcfdc484d:table:0002"
+    ],
+    "non_referenced_units": [],
+    "newly_excluded": [],
+    "finding": "All old evidence units remain referenced except reviewed standalone templates; existing noise is separately identified."
+  }
+]

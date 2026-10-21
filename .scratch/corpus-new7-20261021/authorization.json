@@ -1,0 +1,11 @@
+{
+  "recorded_at": "2026-10-21T09:21:34.592835+00:00",
+  "operator": "codex",
+  "user_requests": [
+    "先发布新增的7份吧。也把整个发布的操作执行详细说明",
+    "历史预检均有图片或表格提取缺口…不能成为阻碍发布的条件",
+    "个人／外部订阅类 PDF 也可以用呀"
+  ],
+  "scope": "Seven listed files only; available text with explicit missing visual coverage. No claim of human visual completeness review.",
+  "target_db": "vector_pilot_clean7_20261021"
+}

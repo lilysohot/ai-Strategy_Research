@@ -1,0 +1,98 @@
+{
+  "case": "p04",
+  "kind": "positive",
+  "review": {
+    "class": "direct",
+    "reason": "乳清蛋白涨价、供给不足，提出微生物蛋白路线",
+    "markers": [
+      "乳清蛋白价格不断上涨",
+      "微生物蛋白"
+    ]
+  },
+  "capture_sha256": "1841b399c65f489573ee8c14818ea5db8ddf43ff4ef355b22fa24c0f433a6d2d",
+  "original_sha256": "f3cda6437fafd30f03faed3aa25ffdfa841c3503ad83123ffc95f58e741ae9a5",
+  "original_retrieval": "hybrid",
+  "top_chunk": "3ed3ecab2fdf5035:body:0002",
+  "top_original_chars": 1172,
+  "old_snippet": "<b>乳清</b><b>蛋白</b>涨价持续传导，<b>关注</b>微生物",
+  "preview": {
+    "text": "国际农产品期货\nCBOT 大豆和玉米持续走强，供给端受气候影响，巴西大豆的播种即\n将开始，目前已经体现了较强的厄尔尼诺天气特征(按照历史规律来\n看，强厄尔尼诺年份，巴西中西部重度干旱蔓延，减产幅度超过南\n部增产幅度)，巴西大豆总产量存在下滑风险。需求端，美国本土压\n榨需求受生物柴油政策驱动的豆油工业消费拉动。建议关注玉米等\n粮价底部抬升的景气机会，以及抗逆性高产品种表现（例如康农种\n业的康农玉8009）。 \n动保：乳清蛋白涨价持续传导，关注微生物蛋白投产进度 \n近年来，乳清蛋白价格不断上涨，全球浓缩乳清蛋白价格在过去两\n年累计上涨108%，分离乳清蛋白价格涨幅高达139%，全球乳清蛋白\n不足，价格预计将维持高位。中国海关总署数据显示，乳清蛋白进\n口均价自2024 年以来持续上涨，涨价已逐步传导至国内市场。在此\n背景下，替代蛋白关注度和需求持续提升，其中微生物蛋白生产效\n率高，商业化逐步落地。建议关注微生物蛋白产能布局以及应用领\n先的公司（例如瑞普生物万吨级别菌丝蛋白项目，预计26 年底竣工\n试生产）。 \n投资建议：生猪推荐标的：牧原股份、温氏股份、神农集团、天康生物、\n新希望、巨星农牧；后周期推荐标的：生物股份、海大集团、禾丰股份。\n农产品产业链推荐标的：晨光生物、诺普信、康农种业。宠物板块推荐\n标的：乖宝宠物、中宠股份、瑞普生物、佩蒂股份。禽板块推荐标的：\n圣农发展、益生股份。",
+    "start": 487,
+    "end": 1086,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "乳清",
+      "关注",
+      "替代",
+      "蛋白"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": [
+      "乳清蛋白价格不断上涨",
+      "微生物蛋白"
+    ]
+  },
+  "core_chunks": 9,
+  "full_chunks": 79,
+  "original_context_occurrences": 89,
+  "preview_statuses": {
+    "complete_sentence_window": 10
+  },
+  "preview_chars": [
+    599,
+    247,
+    554,
+    581,
+    557,
+    103,
+    472,
+    575,
+    557,
+    350
+  ],
+  "body_chars": {
+    "off": 15684,
+    "pilot": 32453
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 4898,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 4849,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11809,
+        "hits": 7,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 11384,
+        "hits": 6,
+        "previews": 6,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

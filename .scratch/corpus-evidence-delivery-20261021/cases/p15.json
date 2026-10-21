@@ -1,0 +1,103 @@
+{
+  "case": "p15",
+  "kind": "positive",
+  "review": {
+    "class": "direct",
+    "reason": "明确旧配额不可用于2025及后续清缴",
+    "markers": [
+      "2019-2024年度配额不可用于2025年度",
+      "后续年度"
+    ]
+  },
+  "capture_sha256": "940ee9fa477949749e9e75d6e94cdd8b45e44fe59ea52d86b9f2bc854de884f3",
+  "original_sha256": "8082d7fbce4ecbb7eed64ee1a2d3983da876d82320fa3692969e725fc098f74c",
+  "original_retrieval": "hybrid",
+  "top_chunk": "1ada4314a25261ea:body:0002",
+  "top_original_chars": 1167,
+  "old_snippet": "<b>2025</b><b>年度</b>及后续<b>年度</b><b>配额</b><b>清缴</b>。",
+  "preview": {
+    "text": "配额发放继续采取“预分配+核定”两步法，预分配原则上按上一年度经核查\n排放量的50%确定，省级主管部门可结合履约风险和生产情况等进一步下调比例；\n重点排放单位应于每年12 月31 日前完成与经核查排放量等量的配额清缴。\n\n激励先进、鞭策落后。单位产品碳排放越低，配额盈余率越高；引导企业将碳排\n放管理深度融入战略规划与生产经营，支持能效提升、原料燃料替代、工艺革新\n等绿色低碳技术应用，推动全社会以较低成本实现减排目标。\n\n存量配额逐步出清，CCER 需求或将抬升。《方案》明确2019-2024 年度配额不\n可用于2025 年度及后续年度配额清缴。2025、2026 年度配额可按有关规定用于\n2025、2026 及后续年度配额清缴，同时允许使用2024 年1 月22 日全国温室气\n体自愿减排交易市场启动后登记的CCER 抵销2025、2026 年度碳排放配额的清\n缴。我们认为企业履约不再能主要依赖历史旧配额，而需要更加重视年度配额盈\n缺测算、交易节奏与CCER 抵销安排。\n\n碳市场有望持续扩容，远期覆盖80%碳排放管控。截至2025 年3 月，我国碳排\n放权交易市场发电行业管控二氧化碳排放占全国总量比重约40%，纳入钢铁、水\n泥、铝冶炼行业后，覆盖全国二氧化碳排放总量占比达到60%以上。",
+    "start": 458,
+    "end": 1011,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "2019",
+      "2024",
+      "2025",
+      "企业",
+      "存量",
+      "年度",
+      "清缴",
+      "配额"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": [
+      "2019-2024年度配额不可用于2025年度",
+      "后续年度"
+    ]
+  },
+  "core_chunks": 9,
+  "full_chunks": 66,
+  "original_context_occurrences": 77,
+  "preview_statuses": {
+    "complete_sentence_window": 6,
+    "no_complete_matching_sentence": 4
+  },
+  "preview_chars": [
+    553,
+    546,
+    0,
+    552,
+    559,
+    546,
+    0,
+    0,
+    559,
+    0
+  ],
+  "body_chars": {
+    "off": 15026,
+    "pilot": 29719
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 5627,
+        "hits": 3,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 4973,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11593,
+        "hits": 7,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 11679,
+        "hits": 6,
+        "previews": 5,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

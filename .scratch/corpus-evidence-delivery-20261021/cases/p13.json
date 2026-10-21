@@ -1,0 +1,93 @@
+{
+  "case": "p13",
+  "kind": "positive",
+  "review": {
+    "class": "background",
+    "reason": "首位是天风非农就业分析，不能代替平安对制造业和服务业景气的判断；目标报告在后续返回",
+    "markers": []
+  },
+  "capture_sha256": "2cc04541533d23ce81e72f49a3f2de205402764457a4e6d2741408188e3c3c2f",
+  "original_sha256": "ad22a3149f4627eb3d75ff631d795dbe99057cfc0d1211dc7fb7f8322af265bc",
+  "original_retrieval": "hybrid",
+  "top_chunk": "628ec76d5b4001b7:body:0002",
+  "top_original_chars": 1230,
+  "old_snippet": "<b>分化</b>趋势或进一步加深。\n<b>服务业</b>",
+  "preview": {
+    "text": "海外跟踪周报 20260906 \n非农清障，通胀定调\n8 月非农大超市场预期。8月美国新增非农就业录得16.2万人，约为市场\n预期（5.5 万人）的三倍，同时6-7 月合计上修5.5 万人，前期担忧或存在\n过度修正。失业率持平于4.1%，劳动参与率超预期上行至61.6%，显示劳动\n力供给端持续改善，而需求端吸纳能力依旧稳固，供需再平衡进程未现断\n裂。\n薪资层面，平均时薪环比提速至0.3%，同比回落至3.1%，薪资增速持续低\n于通胀读数，实际购买力承压，居民部门结构型分化趋势或进一步加深。\n服务业与建筑制造双轮驱动，AI 替代部门承压。从行业贡献度看，休闲和\n酒店业新增6.2万人（前值为-2.1万），其中餐饮机构贡献5.9万人，或受\n暑期消费旺季季节性提振；政府部门新增3.5万人，地方政府教育部门大\n增4.2 万人，与返校季招聘节奏高度吻合。\n制造业新增1.6万人，创2023年12月以来单月最大增幅；建筑业新增2.2\n万人，为今年2 月以来最高。两者同步走强，或反映AI 基础设施投资带动\n的数据中心建设需求，以及制造业回流背景下的订单回暖。\n值得关注的是，金融业（-1.1 万人）与信息业（-2.3 万人）就业持续收缩，\n或在一定程度上体现AI 技术替代对部分知识型岗位的早期冲击，结构性分\n化特征日益显著。\n非农为加息清障，CPI 或最终定调。",
+    "start": 0,
+    "end": 579,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "2026",
+      "周报",
+      "美国"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": []
+  },
+  "core_chunks": 15,
+  "full_chunks": 149,
+  "original_context_occurrences": 171,
+  "preview_statuses": {
+    "complete_sentence_window": 8,
+    "structured_content_requires_fetch": 1,
+    "no_complete_matching_sentence": 1
+  },
+  "preview_chars": [
+    579,
+    545,
+    538,
+    498,
+    515,
+    579,
+    0,
+    120,
+    0,
+    559
+  ],
+  "body_chars": {
+    "off": 21771,
+    "pilot": 43705
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 5570,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 5483,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 10799,
+        "hits": 4,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 10132,
+        "hits": 4,
+        "previews": 4,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

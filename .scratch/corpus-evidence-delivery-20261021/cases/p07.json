@@ -1,0 +1,97 @@
+{
+  "case": "p07",
+  "kind": "positive",
+  "review": {
+    "class": "direct",
+    "reason": "明确保险注资超预期，并给出政策和时点理由",
+    "markers": [
+      "保险增资则属于超预期",
+      "并未提及保险机构"
+    ]
+  },
+  "capture_sha256": "75ce098d0c2a2f3bace231dd31aa877c4f3a8f481042eee8d1dd47d7296131e5",
+  "original_sha256": "2b2e2fbf5340f92dbf04da5d1bfdad08bae8e5cfac0777f6e8187881cf819fad",
+  "original_retrieval": "hybrid",
+  "top_chunk": "d5c99534333873cc:body:0001",
+  "top_original_chars": 864,
+  "old_snippet": "<b>金融机构</b>合计<b>增资</b>3600亿（3000亿",
+  "preview": {
+    "text": "宏观点评\n事件：9 月6 日，工商银行、农业银行分别公告拟定增不超过1000 亿元、\n1600亿元，用于补充核心一级资本。同时，财政部还将向中国进出口银\n行、中国信保、国寿集团、中国太平、中国人保、中再保险等机构注资。\n核心结论：整体看，本轮资本补充规模大、覆盖范围广，8 家中央金融机\n构合计增资3600 亿（3000 亿来自两会已安排的特别国债，工农两行另引\n入烟草体系资金600 亿）。具体看，给银行补充资本延续了2025 年以来思\n路、属于预期内，本次工农两行增资后六家国有大行基本实现全覆盖；给\n保险增资则属于超预期，虽然2025年监管部门已明确表示“大型保险集\n团资本补充已经提上日程”，但年初政府工作报告只是提到发行特别国债\n支持国有大行补充资本、并未提及保险机构，市场此前也普遍预期险企资\n本补充可能更晚落地。归因看，本轮银行补充资本主因净息差持续下行拖\n累盈利，依靠利润留存形成的内源资本积累明显放缓，但信贷投放、重点\n领域融资、风险化解等仍会持续消耗资本，因此需要通过外部注资提前补\n充核心一级资本、降低未来资本约束。保险机构补充资本的逻辑则在于，\n低利率环境压低投资收益并加大资产负债匹配压力，同时保险业务扩张以\n及增加权益等风险资产配置都会持续消耗偿付能力资本，因此需要通过注\n资增厚资本基础、提高偿付能力，并为长期投资打开空间。",
+    "start": 0,
+    "end": 577,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "增资",
+      "金融机构",
+      "预期"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": [
+      "保险增资则属于超预期",
+      "并未提及保险机构"
+    ]
+  },
+  "core_chunks": 8,
+  "full_chunks": 55,
+  "original_context_occurrences": 65,
+  "preview_statuses": {
+    "complete_sentence_window": 10
+  },
+  "preview_chars": [
+    577,
+    590,
+    165,
+    211,
+    241,
+    594,
+    524,
+    571,
+    241,
+    594
+  ],
+  "body_chars": {
+    "off": 13931,
+    "pilot": 28613
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 5330,
+        "hits": 3,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 5996,
+        "hits": 3,
+        "previews": 3,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11204,
+        "hits": 8,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 11718,
+        "hits": 7,
+        "previews": 7,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

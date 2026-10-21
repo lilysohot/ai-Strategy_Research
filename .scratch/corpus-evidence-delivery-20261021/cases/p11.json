@@ -1,0 +1,97 @@
+{
+  "case": "p11",
+  "kind": "positive",
+  "review": {
+    "class": "direct",
+    "reason": "明确替换已包含在需求中，不能重复计算",
+    "markers": [
+      "不要去额外去新增计算",
+      "都包含在里面"
+    ]
+  },
+  "capture_sha256": "9d48a130c85baef46e4fdc3102a82f70aec084d52f2075cb2c2a27af0653421f",
+  "original_sha256": "0225b42aaf040bdb429e2c7a2ab3957e3bd1be20fbf6188234ade1d8402183d8",
+  "original_retrieval": "hybrid",
+  "top_chunk": "6475cbacca1575c5:body:0000",
+  "top_original_chars": 1105,
+  "old_snippet": "<b>模块</b>两个是1.5亿只，这是<b>需求</b>",
+  "preview": {
+    "text": "互补关系非完全替代，然后这个东西也是反正也是吹牛的。27年合计的高速光模块两个是1.5亿只，这是需求得出的需求量，需求量没用，要交付量才有用。CPO主要在交换机侧，市场成熟度不高，预计26年很少，26年就忽略不计，27年5万到10万个水平，这是合理的。\n然后价格之前这段之前给大家说过的，价格是一个正常的年降的比正常的年降还要少的一个区间。但是下降肯定是要下降的，下降没什么问题，下降是个好事。长期来说对产业来说降价肯定是好事，这个都明白。\n然后生命周期五年，五年更换，但是你不要去重新去记这个，先把这个说完，26年到30年是1.6T的五年周期，预计到28年出货量达到峰值之后，趋近平缓的增长。但你不要去额外去新增计算，是不是上一代的完了，我这一代还要算个增量。没有的，所有的更换替代，它坏了的替代，全部在我们平时所说的这些需求也好，消费也好，都包含在里面，不要去重复计价。\n你的AI刚爆发，你还没信心，或者你要充分的证据，那你还要保守一点。但是24年也是这样，25年也是这样，就很奇怪。\n学术机构，对，就lightcounting这种就别看了。这个也不对，我都怀疑这不是他的数字，这个数字也不对。如果是旭创的话也不对，不知道是不是旭创的采访。\n二季度800G出货量未达市场预期的原因是什么？实际上这出货量主要原因是1.6T影响了800G，谁说的？这个不太对，那反正不是旭创的数字。",
+    "start": 58,
+    "end": 649,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "周期",
+      "更换",
+      "需求"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": [
+      "不要去额外去新增计算",
+      "都包含在里面"
+    ]
+  },
+  "core_chunks": 8,
+  "full_chunks": 72,
+  "original_context_occurrences": 93,
+  "preview_statuses": {
+    "complete_sentence_window": 10
+  },
+  "preview_chars": [
+    591,
+    570,
+    520,
+    446,
+    581,
+    570,
+    558,
+    596,
+    581,
+    219
+  ],
+  "body_chars": {
+    "off": 16083,
+    "pilot": 33359
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 5070,
+        "hits": 3,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 4495,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11006,
+        "hits": 7,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 11536,
+        "hits": 6,
+        "previews": 6,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

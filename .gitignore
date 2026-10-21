@@ -99,3 +99,12 @@ server/*.db
 .scratch/corpus-vector-acceptance-20261020/
 .scratch/corpus-vector-pilot-20261020/
 .scratch/corpus-contextual-prefix-20261020
+
+# ── .scratch 通用运行产物 ─────────────────────────────────────────────
+# 不整目录忽略 .scratch：AGENTS.md 将其定义为 issue tracker，docs/ 下 100 个
+# 文件、1729 处相对链接指向 spec / issues / report / 证据 json。
+# 这里只挡可再生成的产物，新实验目录无需再逐条加规则。
+.scratch/**/*.log
+.scratch/**/*.pid
+.scratch/**/live/
+.scratch/corpus-body-ranking-20261021/

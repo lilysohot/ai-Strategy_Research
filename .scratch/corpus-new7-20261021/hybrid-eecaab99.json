@@ -1,0 +1,484 @@
+{
+  "query": "DeepSeek V4.1 Flash 1017",
+  "hits": [
+    {
+      "doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698",
+      "locator": "chunk:1e86c00da4097c5c:heading:0000",
+      "title": "更快、更低成本的代码与智能体任务加剧竞争",
+      "snippet": "<b>DeepSeek</b><b>V4</b>.1-<b>Flash</b>-<b>1017</b>",
+      "score": 0.03252247488101534,
+      "published": "undated",
+      "source_id": "eecaab994514609bf9d459618e9d0cb53c00b5fa4bbebcebf413f6d97c7f4e23",
+      "build_id": "1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698",
+      "chunk_id": "1e86c00da4097c5c:heading:0000",
+      "context_locators": [
+        "chunk:1e86c00da4097c5c:heading:0000",
+        "chunk:1e86c00da4097c5c:body:0000",
+        "chunk:1e86c00da4097c5c:body:0001",
+        "chunk:1e86c00da4097c5c:body:0002",
+        "chunk:1e86c00da4097c5c:body:0003",
+        "chunk:1e86c00da4097c5c:body:0004",
+        "chunk:1e86c00da4097c5c:body:0005",
+        "chunk:1e86c00da4097c5c:body:0006",
+        "chunk:1e86c00da4097c5c:body:0007",
+        "chunk:1e86c00da4097c5c:body:0008",
+        "chunk:1e86c00da4097c5c:body:0009",
+        "chunk:1e86c00da4097c5c:body:0010",
+        "chunk:1e86c00da4097c5c:body:0011",
+        "chunk:1e86c00da4097c5c:body:0012",
+        "chunk:1e86c00da4097c5c:body:0013",
+        "chunk:1e86c00da4097c5c:body:0014",
+        "chunk:1e86c00da4097c5c:body:0015",
+        "chunk:1e86c00da4097c5c:body:0016",
+        "chunk:1e86c00da4097c5c:body:0017"
+      ],
+      "scope_id": "scope:c806860c323dbe57fc9047f2379c93bd",
+      "context_by_kind": [
+        [
+          "body",
+          1
+        ],
+        [
+          "unknown",
+          18
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623",
+      "locator": "chunk:e8a6d70dfee70089:body:0000",
+      "title": "半导体行业AI进化论(23)：DS V4.1 Flash释放硬件潜能国产卡迈向10T模型时代",
+      "snippet": "<b>DeepSeek</b><b>V4</b>.1<b>Flash</b>的核心意义",
+      "score": 0.03278688524590164,
+      "published": "undated",
+      "source_id": "b505dcd712bc33050d71b82783fae29bc9e7f61fdc4d8300e2f5e126168ca1c6",
+      "build_id": "e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623",
+      "chunk_id": "e8a6d70dfee70089:body:0000",
+      "context_locators": [
+        "chunk:e8a6d70dfee70089:body:0000",
+        "chunk:e8a6d70dfee70089:heading:0000"
+      ],
+      "scope_id": "scope:0cd49ce929e593416c0716824a7d8d55",
+      "context_by_kind": [
+        [
+          "unknown",
+          2
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+      "locator": "chunk:c520485162e66660:body:0010",
+      "title": "【行业重大事件】",
+      "snippet": "<b>Flash</b>3.7之后，隆重推出Gemini3.8，",
+      "score": 0.03278688524590164,
+      "published": "undated",
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+      "chunk_id": "c520485162e66660:body:0010",
+      "context_locators": [
+        "chunk:c520485162e66660:body:0006",
+        "chunk:c520485162e66660:body:0007",
+        "chunk:c520485162e66660:body:0008",
+        "chunk:c520485162e66660:body:0009",
+        "chunk:c520485162e66660:body:0010",
+        "chunk:c520485162e66660:body:0011",
+        "chunk:c520485162e66660:heading:0000"
+      ],
+      "scope_id": "scope:b0e240f28fdea08eeb70b111bc17e5fb",
+      "context_by_kind": [
+        [
+          "unknown",
+          7
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+      "locator": "chunk:2696b5d4a615f984:body:0011",
+      "title": "3 行业新闻",
+      "snippet": "英伟达向联发科投资35 亿美元，深化芯片合作\n根据半导体行业观察，英伟达宣布向联发科投资35 亿美元（约235 亿元人民币），购买可转换为联发科股票的债券，深化与这家中国台湾芯片制造商的合作。根据协议，联发科将采用NVIDIA NVLink Fusion 及新发布的NVHBM 技术，双方在人工智能基础设施、本地人工智能计算、汽车三大领域展开合作：联发科将基于NVLink Fusion 平台为超大规模数据中心、云服务商及前沿模型开发者提供预验证路径以开发定制XPU；双方将继续合作开发多代NVIDIA RTX Spark 及DGX Spark PC 芯片；并",
+      "score": 0.01639344262295082,
+      "published": "undated",
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+      "chunk_id": "2696b5d4a615f984:body:0011",
+      "context_locators": [
+        "chunk:2696b5d4a615f984:heading:0002",
+        "chunk:2696b5d4a615f984:body:0009",
+        "chunk:2696b5d4a615f984:body:0010",
+        "chunk:2696b5d4a615f984:body:0011",
+        "chunk:2696b5d4a615f984:body:0012",
+        "chunk:2696b5d4a615f984:body:0013",
+        "chunk:2696b5d4a615f984:heading:0003",
+        "chunk:2696b5d4a615f984:body:0014",
+        "chunk:2696b5d4a615f984:body:0015",
+        "chunk:2696b5d4a615f984:heading:0004"
+      ],
+      "scope_id": "scope:23af948fe2495285d57849735cbc29c4",
+      "context_by_kind": [
+        [
+          "unknown",
+          10
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "locator": "chunk:668bac61a631636c:body:0006",
+      "title": "一、细分板块观点\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩",
+      "snippet": "我们看好存储器持续上行的机会：1）供给端，减产效应显现，存储大厂合约开启涨价。2）需求端，云计算大厂capex 投入开始启动，对应企业级存储需求开始增多；同时消费电子终端为旺季备货，补库需求也在加强。整体，我们认为存储器进入明显的趋势向上阶段。我们持续看好企业级存储需求及利基型DRAM国产替代，建议关注：兆易创新、香农芯创、北京君正、德明利、江波龙、佰维存储等。\n1.5 消费电子：C 端落地场景持续拓展，关注BOMB 成本涨价情况\n随着多模态交互成为标配、Agent 应用生态成熟，以及模型推理成本的进一步优化，大模型调用量有望延续当前的高速增长曲线，AI",
+      "score": 0.01639344262295082,
+      "published": "undated",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "chunk_id": "668bac61a631636c:body:0006",
+      "context_locators": [
+        "chunk:668bac61a631636c:heading:0003",
+        "chunk:668bac61a631636c:heading:0004",
+        "chunk:668bac61a631636c:body:0003",
+        "chunk:668bac61a631636c:body:0004",
+        "chunk:668bac61a631636c:body:0005",
+        "chunk:668bac61a631636c:body:0006",
+        "chunk:668bac61a631636c:body:0007",
+        "chunk:668bac61a631636c:body:0008",
+        "chunk:668bac61a631636c:body:0009",
+        "chunk:668bac61a631636c:body:0010"
+      ],
+      "scope_id": "scope:8b0612113a655b073183c7f5f55cc770",
+      "context_by_kind": [
+        [
+          "unknown",
+          10
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+      "locator": "chunk:2696b5d4a615f984:body:0001",
+      "title": "通信行业周报\n2026 CIOE 中国光博会前瞻",
+      "snippet": "2026 年9 月9-11 日，第27 届中国国际光电博览会（CIOE 中国光博会）将在深圳国际会展中心（宝安）举办。CIOE 中国光博会八大主题展覆盖信息通信、精密光学、摄像头技术及应用、激光及智能制造、红外、紫外、智能传感、新型显示、AR&VR、光电子创新等板块。本届 CIOE 可重点关注光互联高速率演进、互联架构架构变化以及光器件和系统级光网络的技术进展：1）高速光互联继续向更高速率演进，单波400G、3.2T 及更高容量方案成为重要前瞻方向。在1.6T 持续推进的基础上，光迅科技将展示单波400G 核心技术，Coherent 则进一步布局6.4T",
+      "score": 0.015625,
+      "published": "undated",
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+      "chunk_id": "2696b5d4a615f984:body:0001",
+      "context_locators": [
+        "chunk:2696b5d4a615f984:heading:0000",
+        "chunk:2696b5d4a615f984:body:0001",
+        "chunk:2696b5d4a615f984:body:0002",
+        "chunk:2696b5d4a615f984:body:0003",
+        "chunk:2696b5d4a615f984:body:0004",
+        "chunk:2696b5d4a615f984:body:0005",
+        "chunk:2696b5d4a615f984:body:0006",
+        "chunk:2696b5d4a615f984:body:0007",
+        "chunk:2696b5d4a615f984:heading:0001"
+      ],
+      "scope_id": "scope:c339cb99417462e9c1476fe2ac1e1e59",
+      "context_by_kind": [
+        [
+          "unknown",
+          9
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "locator": "chunk:668bac61a631636c:body:0014",
+      "title": "风险提示",
+      "snippet": "AIGC 进展不及预期的风险：科技巨头公司布局AI，存在未来行业竞争进一步加剧、AI 产品不能有效与应用实践相结合的风险。\n外部制裁进一步升级的风险：全球范围内的贸易摩擦不断升级，若美国、日本、荷兰等国出口管制进一步升级，可能会导致相关企业的核心环节受限。\n终端需求不及预期的风险：消费类智能手机创新乏力，对产业链拉动低于预期，换机周期较长；若新能源（电动汽车、风电、光伏、储能）需求不及预期，电动车销量下滑，光储装机量不及预期，可能会对相关公司业绩产生影响。\n(30) (20) (10) 0 10 20 30\n鸿富瀚\n爱克股份\n捷荣技术\n灿瑞科技\n领先股份",
+      "score": 0.015873015873015872,
+      "published": "undated",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "chunk_id": "668bac61a631636c:body:0014",
+      "context_locators": [
+        "chunk:668bac61a631636c:body:0013",
+        "chunk:668bac61a631636c:body:0014",
+        "chunk:668bac61a631636c:heading:0007"
+      ],
+      "scope_id": "scope:5dc68b352da36424d4dc3cb333f450a3",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+      "locator": "chunk:c520485162e66660:body:0000",
+      "title": "c520485162e66660:body:0000",
+      "snippet": "1\n周观点\n\nAI&云：OpenAI 正式发布GPT-6 Astra，并称其为“目前全球最智能、且对齐程度最高的模型”，在计算机操作、\n网页浏览、软件工程、网络安全、科学研究以及专业工作方面均达到当前最先进水平。Claude Fable 5.1 正式发布。本周多模态视频模型迎产业端催化和应用级出圈：芒果TV 推出国内首部AIGC 长剧《后西游记》，为首部上星纯AI 长剧，也是广电21 条后首部边审边播剧集。Fal 基于H3 推出H3 Max，5 秒768P 视频的后端推理时间压缩至3 秒以内，生成速度跨过实时直播门槛。快手更新可灵AI 增资，引入国家人",
+      "score": 0.015384615384615385,
+      "published": "undated",
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+      "chunk_id": "c520485162e66660:body:0000",
+      "context_locators": [
+        "chunk:c520485162e66660:body:0000",
+        "chunk:c520485162e66660:body:0001",
+        "chunk:c520485162e66660:body:0002",
+        "chunk:c520485162e66660:body:0003",
+        "chunk:c520485162e66660:body:0004"
+      ],
+      "scope_id": "scope:6410d55d2d78f0a8ec3891da47a0f1bf",
+      "context_by_kind": [
+        [
+          "unknown",
+          5
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "locator": "chunk:668bac61a631636c:body:0002",
+      "title": "”",
+      "snippet": "看好AI覆铜板/PCB及核心算力硬件、半导体设备及苹果产业链。下半年英伟达、AMD等通用GPU及谷歌、亚马逊等ASIC 强劲拉货，对HDI 及高多层PCB 需求旺盛，800G/1.6T 光模块mSAP 需求爆发，下半年进入拉货旺季，此外下半年还有1.6T 交换机高多层PCB 需求的有望开启，我们继续看好PCB 板块下半年斜率超速发展的重要机会。Token 数量的爆发式增长，带动了ASIC 强劲需求，我们研判谷歌、亚马逊、Meta、Open AI 及微软的ASIC 数量，2026-2027 年将迎来爆发式增长。整体来看，继续看好AI 覆铜板/PCB 及核心",
+      "score": 0.015625,
+      "published": "undated",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "chunk_id": "668bac61a631636c:body:0002",
+      "context_locators": [
+        "chunk:668bac61a631636c:body:0000",
+        "chunk:668bac61a631636c:heading:0000",
+        "chunk:668bac61a631636c:body:0001",
+        "chunk:668bac61a631636c:body:0002",
+        "chunk:668bac61a631636c:heading:0001"
+      ],
+      "scope_id": "scope:56df137fed6df0d7dd2377e505383ec7",
+      "context_by_kind": [
+        [
+          "unknown",
+          5
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "locator": "chunk:668bac61a631636c:body:0011",
+      "title": "图表9：板块周涨跌幅排序（单位：%）（2026.08.31-2026.09.04）",
+      "snippet": "来源：Wind，国金证券研究所\n在电子细分板块中，涨跌幅前三大细分板块为品牌消费电子、LED、模拟芯片设计，涨跌幅分别为2.18 、-0.51 、 -1.39 。涨跌幅靠后的三大细分板块为半导体设备、半导体材料、电子化学品III，涨跌幅分别为-9.10 、-9.12 、- 9.18 。图表10：申万二级电子细分板块周涨跌幅（单位： ）（2026.08.31-2026.09.04）\n图表11：申万三级电子细分板块周涨跌幅（单位： ）（2026.08.31-2026.09.04）\n来源：Wind，国金证券研究所\n来源：Wind，国金证券研究所\n从个股情况来看",
+      "score": 0.014285714285714285,
+      "published": "undated",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "chunk_id": "668bac61a631636c:body:0011",
+      "context_locators": [
+        "chunk:668bac61a631636c:heading:0005",
+        "chunk:668bac61a631636c:body:0011",
+        "chunk:668bac61a631636c:body:0012"
+      ],
+      "scope_id": "scope:a3553d1af7e38a4917b01936e2a357da",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@b4980af67156a7643bfedfef09f9cac0",
+    "processing": "unknown",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "admission_pending",
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 31,
+      "published": 25,
+      "withdrawn": 0,
+      "pending": 2,
+      "failed_jobs": 0,
+      "builds": 54,
+      "published_with_gaps": 21
+    },
+    "retrieval": {
+      "requested": "hybrid",
+      "used": "hybrid",
+      "reason": null,
+      "profile": "fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107",
+      "expected_chunks": 1076,
+      "ready_chunks": 1076,
+      "lexical_candidates": 22,
+      "vector_candidates": 200,
+      "query_cache_hit": false,
+      "query_usage": {
+        "prompt_tokens": 42,
+        "total_tokens": 42
+      },
+      "elapsed_ms": 505
+    },
+    "ranking": {
+      "requested": "body-constraints-v1",
+      "used": "body-constraints-v1",
+      "feature_cache_hit": true,
+      "query_constraints": {
+        "entities": [],
+        "issuers": [],
+        "years": [],
+        "fact_mode": "unspecified"
+      },
+      "matches": [
+        {
+          "build_id": "1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698",
+          "chunk_id": "1e86c00da4097c5c:heading:0000",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623",
+          "chunk_id": "e8a6d70dfee70089:body:0000",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "mixed"
+        },
+        {
+          "build_id": "c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+          "chunk_id": "c520485162e66660:body:0010",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+          "chunk_id": "2696b5d4a615f984:body:0011",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "mixed"
+        },
+        {
+          "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+          "chunk_id": "668bac61a631636c:body:0006",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+          "chunk_id": "2696b5d4a615f984:body:0001",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+          "chunk_id": "668bac61a631636c:body:0014",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+          "chunk_id": "c520485162e66660:body:0000",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+          "chunk_id": "668bac61a631636c:body:0002",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+          "chunk_id": "668bac61a631636c:body:0011",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        }
+      ],
+      "hard_filter": false
+    }
+  }
+}

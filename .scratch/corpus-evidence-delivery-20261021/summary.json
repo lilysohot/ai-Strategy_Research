@@ -1,0 +1,69 @@
+{
+  "manifest_sha256": "50305e59759c13d662dce9ae84001474ae7dec596c55aed1449c9aabf1250a68",
+  "review_sha256": "a3acc23e2632e3223fef08a8d46d8385f44a07c984594c66b98d5120e86229e7",
+  "review_scope": "32 saved top-1 anchor originals, read by agent before preview implementation; not all 320 hits; not human review or verification of source truth",
+  "cases": 32,
+  "top1_classes": {
+    "direct": 24,
+    "background": 5,
+    "partial": 1,
+    "irrelevant": 2
+  },
+  "positive_top1_classes": {
+    "direct": 21,
+    "background": 2,
+    "partial": 1
+  },
+  "direct_count": 24,
+  "all_markers_visible": {
+    "old_snippet": 0,
+    "new_preview": 24
+  },
+  "mean_old_snippet_chars": 15.1125,
+  "mean_preview_chars_all_hits": 420.740625,
+  "mean_core_chunks": 18.3125,
+  "mean_full_chunks": 101.65625,
+  "mean_context_occurrences": 116.4375,
+  "preview_statuses": {
+    "complete_sentence_window": 270,
+    "structured_content_requires_fetch": 26,
+    "no_complete_matching_sentence": 24
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "mean_hits": 2.125,
+        "total_previews": 0,
+        "direct_top1_all_markers": 0,
+        "positive_labelled_chunk_coverage": 23
+      },
+      "pilot": {
+        "mean_hits": 2,
+        "total_previews": 59,
+        "direct_top1_all_markers": 24,
+        "positive_labelled_chunk_coverage": 23
+      }
+    },
+    "12000": {
+      "off": {
+        "mean_hits": 5.78125,
+        "total_previews": 0,
+        "direct_top1_all_markers": 0,
+        "positive_labelled_chunk_coverage": 24
+      },
+      "pilot": {
+        "mean_hits": 5.375,
+        "total_previews": 151,
+        "direct_top1_all_markers": 24,
+        "positive_labelled_chunk_coverage": 24
+      }
+    }
+  },
+  "new_searches": 0,
+  "new_embeddings": 0,
+  "limitations": [
+    "Core-only reading can miss adjacent answer parts (p16); expansion is not removed.",
+    "No autonomous main-agent run; fewer chunks is not measured fewer calls or lower cost.",
+    "Top-1 review does not measure precision across all hits."
+  ]
+}

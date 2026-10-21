@@ -1,0 +1,680 @@
+{
+  "query": "DS V4.1 Flash 国产卡 10T",
+  "hits": [
+    {
+      "doc_id": "cv2:e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623",
+      "locator": "chunk:e8a6d70dfee70089:body:0000",
+      "title": "半导体行业AI进化论(23)：DS V4.1 Flash释放硬件潜能国产卡迈向10T模型时代",
+      "snippet": "<b>V4</b>.1<b>Flash</b>的核心意义，",
+      "score": 0.03278688524590164,
+      "published": "undated",
+      "source_id": "b505dcd712bc33050d71b82783fae29bc9e7f61fdc4d8300e2f5e126168ca1c6",
+      "build_id": "e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623",
+      "chunk_id": "e8a6d70dfee70089:body:0000",
+      "context_locators": [
+        "chunk:e8a6d70dfee70089:body:0000",
+        "chunk:e8a6d70dfee70089:heading:0000"
+      ],
+      "scope_id": "scope:0cd49ce929e593416c0716824a7d8d55",
+      "context_by_kind": [
+        [
+          "unknown",
+          2
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698",
+      "locator": "chunk:1e86c00da4097c5c:heading:0000",
+      "title": "更快、更低成本的代码与智能体任务加剧竞争",
+      "snippet": "<b>V4</b>.1-<b>Flash</b>-1017\n研究",
+      "score": 0.03252247488101534,
+      "published": "undated",
+      "source_id": "eecaab994514609bf9d459618e9d0cb53c00b5fa4bbebcebf413f6d97c7f4e23",
+      "build_id": "1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698",
+      "chunk_id": "1e86c00da4097c5c:heading:0000",
+      "context_locators": [
+        "chunk:1e86c00da4097c5c:heading:0000",
+        "chunk:1e86c00da4097c5c:body:0000",
+        "chunk:1e86c00da4097c5c:body:0001",
+        "chunk:1e86c00da4097c5c:body:0002",
+        "chunk:1e86c00da4097c5c:body:0003",
+        "chunk:1e86c00da4097c5c:body:0004",
+        "chunk:1e86c00da4097c5c:body:0005",
+        "chunk:1e86c00da4097c5c:body:0006",
+        "chunk:1e86c00da4097c5c:body:0007",
+        "chunk:1e86c00da4097c5c:body:0008",
+        "chunk:1e86c00da4097c5c:body:0009",
+        "chunk:1e86c00da4097c5c:body:0010",
+        "chunk:1e86c00da4097c5c:body:0011",
+        "chunk:1e86c00da4097c5c:body:0012",
+        "chunk:1e86c00da4097c5c:body:0013",
+        "chunk:1e86c00da4097c5c:body:0014",
+        "chunk:1e86c00da4097c5c:body:0015",
+        "chunk:1e86c00da4097c5c:body:0016",
+        "chunk:1e86c00da4097c5c:body:0017"
+      ],
+      "scope_id": "scope:c806860c323dbe57fc9047f2379c93bd",
+      "context_by_kind": [
+        [
+          "body",
+          1
+        ],
+        [
+          "unknown",
+          18
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+      "locator": "chunk:c520485162e66660:body:0010",
+      "title": "【行业重大事件】",
+      "snippet": "<b>Flash</b>3.7之后，隆重推出Gemini3.8，",
+      "score": 0.03278688524590164,
+      "published": "undated",
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+      "chunk_id": "c520485162e66660:body:0010",
+      "context_locators": [
+        "chunk:c520485162e66660:body:0006",
+        "chunk:c520485162e66660:body:0007",
+        "chunk:c520485162e66660:body:0008",
+        "chunk:c520485162e66660:body:0009",
+        "chunk:c520485162e66660:body:0010",
+        "chunk:c520485162e66660:body:0011"
+      ],
+      "scope_id": "scope:b7c3302ea46d4f83321db18e9cde8ae0",
+      "context_by_kind": [
+        [
+          "unknown",
+          6
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "locator": "chunk:668bac61a631636c:body:0001",
+      "title": "”",
+      "snippet": "<b>国产</b>设备份额提升继续兑现，当前",
+      "score": 0.03200204813108039,
+      "published": "undated",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "chunk_id": "668bac61a631636c:body:0001",
+      "context_locators": [
+        "chunk:668bac61a631636c:heading:0000",
+        "chunk:668bac61a631636c:body:0001",
+        "chunk:668bac61a631636c:body:0002",
+        "chunk:668bac61a631636c:heading:0001"
+      ],
+      "scope_id": "scope:bad8fd2971f134d5ef70b289e90f9a2c",
+      "context_by_kind": [
+        [
+          "unknown",
+          4
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0017",
+      "title": "半导体划片机转入放量进程,煤矿业务企稳",
+      "snippet": "<b>国产</b>划片机仍处渗透初期\nAI",
+      "score": 0.03278688524590164,
+      "published": "undated",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0017",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:table:0014",
+        "chunk:568f9e752f0fa65a:body:0016",
+        "chunk:568f9e752f0fa65a:body:0017",
+        "chunk:568f9e752f0fa65a:body:0018"
+      ],
+      "scope_id": "scope:e5e334d140e469fb3a960900bfa1b8ec",
+      "context_by_kind": [
+        [
+          "unknown",
+          4
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "locator": "chunk:668bac61a631636c:body:0004",
+      "title": "一、细分板块观点\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩",
+      "snippet": "<b>国产</b>算力核心发展方向。寒武纪、",
+      "score": 0.031544957774465976,
+      "published": "undated",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "chunk_id": "668bac61a631636c:body:0004",
+      "context_locators": [
+        "chunk:668bac61a631636c:heading:0003",
+        "chunk:668bac61a631636c:heading:0004",
+        "chunk:668bac61a631636c:body:0003",
+        "chunk:668bac61a631636c:body:0004",
+        "chunk:668bac61a631636c:body:0005",
+        "chunk:668bac61a631636c:body:0006",
+        "chunk:668bac61a631636c:body:0007",
+        "chunk:668bac61a631636c:body:0008",
+        "chunk:668bac61a631636c:body:0009",
+        "chunk:668bac61a631636c:body:0010"
+      ],
+      "scope_id": "scope:8b0612113a655b073183c7f5f55cc770",
+      "context_by_kind": [
+        [
+          "unknown",
+          10
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0013",
+      "title": "半导体加工设备逐步打开业务成长空间",
+      "snippet": "<b>国产</b>硬刀处于客户端验证阶段。",
+      "score": 0.031024531024531024,
+      "published": "undated",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0013",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:table:0009",
+        "chunk:568f9e752f0fa65a:body:0012",
+        "chunk:568f9e752f0fa65a:table:0010",
+        "chunk:568f9e752f0fa65a:body:0013",
+        "chunk:568f9e752f0fa65a:table:0011",
+        "chunk:568f9e752f0fa65a:body:0014",
+        "chunk:568f9e752f0fa65a:body:0015",
+        "chunk:568f9e752f0fa65a:table:0012"
+      ],
+      "scope_id": "scope:829ae99f0772737e1ad0f7091c58f657",
+      "context_by_kind": [
+        [
+          "unknown",
+          8
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+      "locator": "chunk:c520485162e66660:body:0003",
+      "title": "一、行业情况跟踪",
+      "snippet": "1.1、电商&互联网\n本期（2026年8月31日-9月4日），恒生互联网科技业指数累计涨跌幅-0.57 ，分别较恒生科技指数/恒生指数 +0.19pct/-0.83pct。\n个股涨跌幅表现：美团-W（+5.48 ）、贝壳-W（+1.01 ）、京东集团-SW（-0,09 ）、叮咚买菜（-0.44 ）、京东（- 1.67 ）、贝壳（-2.18 ）、唯品会（-2.22 ）、腾讯控股（-2.72 ）、阿里巴巴-W（-3.34 ）、拼多多（-4.06 ）、阿里巴巴（-4.76 ）。\n图表1：相关行业指数表现（8.31-9.04）\n图表2：重点个股涨跌幅（8.31-",
+      "score": 0.015873015873015872,
+      "published": "undated",
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+      "chunk_id": "c520485162e66660:body:0003",
+      "context_locators": [
+        "chunk:c520485162e66660:body:0000",
+        "chunk:c520485162e66660:body:0001",
+        "chunk:c520485162e66660:body:0002",
+        "chunk:c520485162e66660:body:0003",
+        "chunk:c520485162e66660:body:0004"
+      ],
+      "scope_id": "scope:6410d55d2d78f0a8ec3891da47a0f1bf",
+      "context_by_kind": [
+        [
+          "unknown",
+          5
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0003",
+      "title": "相关研究报告",
+      "snippet": "<b>国产</b>替代空间较大，且AIDC、",
+      "score": 0.030834914611005692,
+      "published": "undated",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0003",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:heading:0001",
+        "chunk:568f9e752f0fa65a:heading:0002",
+        "chunk:568f9e752f0fa65a:heading:0003",
+        "chunk:568f9e752f0fa65a:body:0000",
+        "chunk:568f9e752f0fa65a:body:0001",
+        "chunk:568f9e752f0fa65a:body:0002",
+        "chunk:568f9e752f0fa65a:body:0003",
+        "chunk:568f9e752f0fa65a:table:0000",
+        "chunk:568f9e752f0fa65a:table:0001",
+        "chunk:568f9e752f0fa65a:table:0002",
+        "chunk:568f9e752f0fa65a:heading:0004"
+      ],
+      "scope_id": "scope:bbc84a8a88840d6adc8ca1ea44a14956",
+      "context_by_kind": [
+        [
+          "unknown",
+          11
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "locator": "chunk:668bac61a631636c:body:0014",
+      "title": "风险提示",
+      "snippet": "AIGC 进展不及预期的风险：科技巨头公司布局AI，存在未来行业竞争进一步加剧、AI 产品不能有效与应用实践相结合的风险。\n外部制裁进一步升级的风险：全球范围内的贸易摩擦不断升级，若美国、日本、荷兰等国出口管制进一步升级，可能会导致相关企业的核心环节受限。\n终端需求不及预期的风险：消费类智能手机创新乏力，对产业链拉动低于预期，换机周期较长；若新能源（电动汽车、风电、光伏、储能）需求不及预期，电动车销量下滑，光储装机量不及预期，可能会对相关公司业绩产生影响。\n(30) (20) (10) 0 10 20 30\n鸿富瀚\n爱克股份\n捷荣技术\n灿瑞科技\n领先股份",
+      "score": 0.015384615384615385,
+      "published": "undated",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "chunk_id": "668bac61a631636c:body:0014",
+      "context_locators": [
+        "chunk:668bac61a631636c:body:0013",
+        "chunk:668bac61a631636c:body:0014",
+        "chunk:668bac61a631636c:heading:0007"
+      ],
+      "scope_id": "scope:5dc68b352da36424d4dc3cb333f450a3",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0037",
+      "title": "风险提示",
+      "snippet": "<b>国产</b>替代进程放缓、市场竞争加剧",
+      "score": 0.02967032967032967,
+      "published": "undated",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0037",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:body:0034",
+        "chunk:568f9e752f0fa65a:body:0035",
+        "chunk:568f9e752f0fa65a:body:0036",
+        "chunk:568f9e752f0fa65a:body:0037",
+        "chunk:568f9e752f0fa65a:body:0038",
+        "chunk:568f9e752f0fa65a:heading:0011"
+      ],
+      "scope_id": "scope:9f69c2a5f5ffb3516eb21b1239a32574",
+      "context_by_kind": [
+        [
+          "unknown",
+          6
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:table:0005",
+      "title": "半导体加工设备逐步打开业务成长空间",
+      "snippet": "8230 产品型号 可广泛用于集成电路、功率半导体\n器件、光电器件、传感器等产品的\n划切工艺 产品应用场景 产品示意 具有高效率、高精度、高性能、高可靠\n性等优势，已在先进封装中得到批量应\n用。 产品特点\n产品型号产品应用场景产品示意产品特点\n8230 产品型号 可广泛用于集成电路、功率半导体\n器件、光电器件、传感器等产品的\n划切工艺 产品应用场景 具有高效率、高精度、高性能、高可靠\n性等优势，已在先进封装中得到批量应\n用。 产品特点\n8230 可广泛用于集成电路、功率半导体器件、光电器件、传感器等产品的划切工艺具有高效率、高精度、高性能、高可靠性等优势",
+      "score": 0.015625,
+      "published": "undated",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0005",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:body:0008",
+        "chunk:568f9e752f0fa65a:table:0005",
+        "chunk:568f9e752f0fa65a:table:0006"
+      ],
+      "scope_id": "scope:2c34e3e5462a5fda9b58ccf723c6bde2",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0030",
+      "title": "表10：FCFF 估值表（单位：百万元）",
+      "snippet": "2026E\n2027E\n2028E\n2029E\n2030E\n2031E\n2032E\n2033E\n2034E\n2035E\nTV\nEBIT\n166.28\n274.76\n308.48\n458.18\n644.18\n835.78\n1050.77\n1319.16\n1785.24\n2156.95\n所得税税率\n10.00 \n10.00 \n10.00 \n10.00 \n10.00 \n10.00 \n10.00 \n10.00 \n10.00 \n10.00 ",
+      "score": 0.014925373134328358,
+      "published": "undated",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0030",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:body:0027",
+        "chunk:568f9e752f0fa65a:body:0028",
+        "chunk:568f9e752f0fa65a:heading:0010",
+        "chunk:568f9e752f0fa65a:body:0029",
+        "chunk:568f9e752f0fa65a:body:0030",
+        "chunk:568f9e752f0fa65a:body:0031"
+      ],
+      "scope_id": "scope:6f4d2a60e22c22f887755edf0f979ca5",
+      "context_by_kind": [
+        [
+          "unknown",
+          6
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:table:0008",
+      "title": "半导体加工设备逐步打开业务成长空间",
+      "snippet": "9320 9130 可用于超薄晶圆、碳化\n硅和氮化镓等第三代\n半导体材料及MEMS 等\n器件的高精度、高效率\n隐形切割 可用于半导体行业\n40nm 及以下线宽的\nlow-k 晶圆的表面\n开槽 采用多焦点隐形切割方式，具备自动上下料、对\n焦、校准、切割功能。 采用高分辨CCD 影像定位系统，实现了全闭环数控，\n具有切割道自动纠偏与预警功能，光斑和切割道宽\n度连续可调，槽型品质卓越，热影响极小。\n9130 可用于半导体行业 40nm 及以下线宽的 low-k 晶圆的表面开槽采用高分辨CCD 影像定位系统，实现了全闭环数控，具有切割道自动纠偏与预警功能，光斑和",
+      "score": 0.014492753623188406,
+      "published": "undated",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:table:0008",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:table:0007",
+        "chunk:568f9e752f0fa65a:body:0010",
+        "chunk:568f9e752f0fa65a:table:0008",
+        "chunk:568f9e752f0fa65a:body:0011"
+      ],
+      "scope_id": "scope:2be939af2d417cb7e9fb3c0a2df828dc",
+      "context_by_kind": [
+        [
+          "unknown",
+          4
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0006",
+      "title": "煤矿检测业务作为公司业务基本盘",
+      "snippet": "物联网安全装备\n监控系统\nKJ751 煤矿瓦斯抽（采）管网监控系统瓦斯精准抽采智能管控系统煤矿防突信息动态管理系统等\n采用矿山物联网、大数据分析、数字孪生等 ICT 技术，面向打钻抽采精细化管理；抽采达标智能评判，提高瓦斯抽采效率、降低瓦斯事故风险，助力煤矿智能化与本质安全",
+      "score": 0.01282051282051282,
+      "published": "undated",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0006",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:table:0003",
+        "chunk:568f9e752f0fa65a:body:0006",
+        "chunk:568f9e752f0fa65a:table:0004"
+      ],
+      "scope_id": "scope:8cc984cc3997ed2656139196a5c64387",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@b4980af67156a7643bfedfef09f9cac0",
+    "processing": "unknown",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "admission_pending",
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 31,
+      "published": 25,
+      "withdrawn": 0,
+      "pending": 2,
+      "failed_jobs": 0,
+      "builds": 54,
+      "published_with_gaps": 21
+    },
+    "retrieval": {
+      "requested": "hybrid",
+      "used": "hybrid",
+      "reason": null,
+      "profile": "fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107",
+      "expected_chunks": 1076,
+      "ready_chunks": 1076,
+      "lexical_candidates": 46,
+      "vector_candidates": 200,
+      "query_cache_hit": false,
+      "query_usage": {
+        "prompt_tokens": 43,
+        "total_tokens": 43
+      },
+      "elapsed_ms": 553
+    },
+    "ranking": {
+      "requested": "body-constraints-v1",
+      "used": "body-constraints-v1",
+      "feature_cache_hit": true,
+      "query_constraints": {
+        "entities": [],
+        "issuers": [],
+        "years": [],
+        "fact_mode": "unspecified"
+      },
+      "matches": [
+        {
+          "build_id": "e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623",
+          "chunk_id": "e8a6d70dfee70089:body:0000",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "mixed"
+        },
+        {
+          "build_id": "1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698",
+          "chunk_id": "1e86c00da4097c5c:heading:0000",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+          "chunk_id": "c520485162e66660:body:0010",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+          "chunk_id": "668bac61a631636c:body:0001",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:body:0017",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "mixed"
+        },
+        {
+          "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+          "chunk_id": "668bac61a631636c:body:0004",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "mixed"
+        },
+        {
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:body:0013",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+          "chunk_id": "c520485162e66660:body:0003",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:body:0003",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "mixed"
+        },
+        {
+          "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+          "chunk_id": "668bac61a631636c:body:0014",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:body:0037",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:table:0005",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "observed_cues"
+        },
+        {
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:body:0030",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:table:0008",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "observed_cues"
+        },
+        {
+          "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+          "chunk_id": "568f9e752f0fa65a:body:0006",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        }
+      ],
+      "hard_filter": false
+    }
+  }
+}

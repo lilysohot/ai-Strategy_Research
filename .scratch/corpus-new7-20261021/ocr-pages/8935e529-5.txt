@@ -1,0 +1,77 @@
+Goldman Sachs Kweichow Moutai (600519.SS)
+Disclosure Appendix
+
+Reg AC
+
+We, Leaf Liu, Christina Liu and Valerie Zhou, hereby certify that all of the views expressed in this report accurately reflect our personal views about the
+subject company or companies and its or their securities. We also certify that no part of our compensation was, is or will be, directly or indirectly,
+related to the specific recommendations or views expressed in this report.
+
+Unless otherwise stated, the individuals listed on the cover page of this report are analysts in Goldman Sachs’ Global Investment Research division.
+Contributing Authors: Leaf Liu Goldman Sachs (Asia) L.L.C., Christina Liu Goldman Sachs (Asia) L.L.C., Valerie Zhou Goldman Sachs (Asia) L.L.C..
+
+Unless otherwise stated, the individuals listed in the Contributing Authors disclosure of this report are analysts in Goldman Sachs’ Global Investment
+Research division.
+
+GS Factor Profile
+
+The Goldman Sachs Factor Profile provides investment context for a stock by comparing key attributes to the market (i.e. our universe of rated stocks)
+and its sector peers. The four key attributes depicted are: Growth, Financial Returns, Multiple (e.g. valuation) and Integrated (a composite of Growth,
+Financial Returns and Multiple). Growth, Financial Returns and Multiple are calculated by using normalized ranks for specific metrics for each stock. The
+normalized ranks for the metrics are then averaged and converted into percentiles for the relevant attribute. The precise calculation of each metric may
+vary depending on the fiscal year, industry and region, but the standard approach is as follows:
+
+Growth is based on a stock’s forward-looking sales growth, EBITDA growth and EPS growth (for financial stocks, only EPS and sales growth), witha
+higher percentile indicating a higher growth company. Financial Returns is based on a stock’s forward-looking ROE, ROCE and CROCI (for financial
+stocks, only ROE), with a higher percentile indicating a company with higher financial returns. Multiple is based on a stock’s forward-looking P/E, P/B,
+price/dividend (P/D), EV/EBITDA, EV/FCF and EV/Debt Adjusted Cash Flow (DACF) (for financial stocks, only P/E, P/B and P/D), with a higher percentile
+indicating a stock trading at a higher multiple. The Integrated percentile is calculated as the average of the Growth percentile, Financial Returns
+percentile and (100% - Multiple percentile).
+
+Financial Returns and Multiple use the Goldman Sachs analyst forecasts at the fiscal year-end at least three quarters in the future. Growth uses inputs
+for the fiscal year at least seven quarters in the future compared with the year at least three quarters in the future (on a per-share basis for all metrics).
+
+For a more detailed description of how we calculate the GS Factor Profile, please contact your GS representative.
+
+M&A Rank
+
+Across our global coverage, we examine stocks using an M&A framework, considering both qualitative factors and quantitative factors (which may vary
+across sectors and regions) to incorporate the potential that certain companies could be acquired. We then assign a M&A rank as a means of scoring
+companies under our rated coverage from 1 to 3, with 1 representing high (30%-50%) probability of the company becoming an acquisition target, 2
+representing medium (15%-30%) probability and 3 representing low (0%-15%) probability. For companies ranked 1 or 2, in line with our standard
+departmental guidelines we incorporate an M&A component into our target price. M&A rank of 3 is considered immaterial and therefore does not
+factor into our price target, and may or may not be discussed in research.
+
+Quantum
+Quantum is Goldman Sachs’ proprietary database providing access to detailed financial statement histories, forecasts and ratios. It can be used for
+in-depth analysis of a single company, or to make comparisons between companies in different sectors and markets.
+
+Disclosures
+
+The rating(s) for Kweichow Moutai is/are relative to the other companies in its/their coverage universe: Anhui Gujing Distillery Co., Budweiser
+APAC, Busy Ming Group, China Feihe Ltd., China Resources Beer, China Resources Beverage, Chongqing Brewery, Eastroc Beverage (A), Foshan Haitian
+Flavouring & Food (A), Foshan Haitian Flavouring & Food (H), Fujian Wanchen Food, Jiangsu King’s Luck Brewery, Jiangsu Yanghe, Jiugui Liquor, Jonjee
+Hi-Tech, Kweichow Moutai, Luzhou Laojiao, Mengniu Dairy, Nongfu Spring, Qianhe Condiment and Food, Shanghai Bairun, Shanxi Xinghuacun Fen Wine,
+Sichuan Swellfun Co., Sichuan Teway Food Group, Tingyi, Tsingtao Brewery (A), Tsingtao Brewery (H), Uni-President China, Wuliangye Yibin, Yihai
+International Holding, Yili Industrial, ZJLD
+
+Company-specific regulatory disclosures
+The following disclosures relate to relationships between The Goldman Sachs Group, Inc. (with its affiliates, “Goldman Sachs”) and companies covered
+by Goldman Sachs Global Investment Research and referred to in this research.
+
+There are no company-specific disclosures for: Kweichow Moutai (Rmb1,348.86)
+
+Distribution of ratings/investment banking relationships
+Goldman Sachs Investment Research global Equity coverage universe
+
+Rating Distribution Investment Banking Relationships
+Buy Hold Sell Buy Hold Sell
+Global 50% 34% 16% 65% 59% 43%
+
+As of July 1, 2026, Goldman Sachs Global Investment Research had investment ratings on 3,104 equity securities. Goldman Sachs assigns stocks as Buys
+and Sells on various regional Investment Lists; stocks not so assigned are deemed Neutral. Such assignments equate to Buy, Hold and Sell for the
+purposes of the above disclosure required by the FINRA Rules. See ‘Ratings, Coverage universe and related definitions’ below. The Investment Banking
+Relationships chart reflects the percentage of subject companies within each rating category for whom Goldman Sachs has provided investment
+banking services within the previous twelve months.
+
+10 August 2026 5

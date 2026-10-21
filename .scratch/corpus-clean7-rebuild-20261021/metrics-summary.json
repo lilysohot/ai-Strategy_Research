@@ -1,0 +1,82 @@
+{
+  "old-lexical": {
+    "queries": 32,
+    "statuses": {
+      "lexical": 32
+    },
+    "positive_questions": 24,
+    "gold_blocks": 39,
+    "first_complete_cases": 18,
+    "anchor_complete_cases": 23,
+    "context_complete_cases": 24,
+    "context_complete_blocks": 39,
+    "body_first_complete_cases": 18,
+    "body_anchor_complete_cases": 23,
+    "body_context_complete_blocks": 39,
+    "candidate_complete_blocks": 39,
+    "gold_term_context_cases": 24,
+    "reviewed_template_anchors": 39,
+    "total_anchors": 320,
+    "reviewed_template_contexts": 399
+  },
+  "new-lexical": {
+    "queries": 32,
+    "statuses": {
+      "lexical": 32
+    },
+    "positive_questions": 24,
+    "gold_blocks": 39,
+    "first_complete_cases": 18,
+    "anchor_complete_cases": 22,
+    "context_complete_cases": 24,
+    "context_complete_blocks": 39,
+    "body_first_complete_cases": 18,
+    "body_anchor_complete_cases": 23,
+    "body_context_complete_blocks": 39,
+    "candidate_complete_blocks": 39,
+    "gold_term_context_cases": 24,
+    "reviewed_template_anchors": 0,
+    "total_anchors": 320,
+    "reviewed_template_contexts": 211
+  },
+  "old-hybrid": {
+    "queries": 32,
+    "statuses": {
+      "hybrid": 32
+    },
+    "positive_questions": 24,
+    "gold_blocks": 39,
+    "first_complete_cases": 22,
+    "anchor_complete_cases": 23,
+    "context_complete_cases": 24,
+    "context_complete_blocks": 38,
+    "body_first_complete_cases": 22,
+    "body_anchor_complete_cases": 23,
+    "body_context_complete_blocks": 38,
+    "candidate_complete_blocks": 39,
+    "gold_term_context_cases": 24,
+    "reviewed_template_anchors": 37,
+    "total_anchors": 268,
+    "reviewed_template_contexts": 413
+  },
+  "new-hybrid": {
+    "queries": 32,
+    "statuses": {
+      "hybrid": 32
+    },
+    "positive_questions": 24,
+    "gold_blocks": 39,
+    "first_complete_cases": 21,
+    "anchor_complete_cases": 22,
+    "context_complete_cases": 24,
+    "context_complete_blocks": 38,
+    "body_first_complete_cases": 22,
+    "body_anchor_complete_cases": 23,
+    "body_context_complete_blocks": 38,
+    "candidate_complete_blocks": 39,
+    "gold_term_context_cases": 24,
+    "reviewed_template_anchors": 2,
+    "total_anchors": 265,
+    "reviewed_template_contexts": 259
+  }
+}

@@ -710,8 +710,23 @@ def fetch_bands(
     的块合并取回：一次 chunks + 一次 units（按引用单元并集）。返回按「带序 × 带内
     原文序」的有序列表。band 对象只需携带 ``source_id``/``build_id``/``start``/``end``。
     """
+    if not bands:
+        return ()
     import psycopg
 
+    with psycopg.connect(dsn, autocommit=True) as conn:
+        _check_target(conn, sandbox_db)
+        with conn.transaction(), conn.cursor() as cur:
+            cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
+            return fetch_bands_on(cur, bands, chunk_order_by_source)
+
+
+def fetch_bands_on(
+    cur: psycopg.Cursor,
+    bands: tuple,
+    chunk_order_by_source: dict[str, tuple[str, ...]],
+) -> tuple[ChunkEvidence, ...]:
+    """Read verified bands on the caller's publication snapshot and transaction."""
     from plugins.corpus.preparation.cross_boundary import aggregate_band_chunks_on
 
     wanted: dict[tuple[str, str], str] = {}  # (build_id, chunk_id) -> build_id
@@ -729,72 +744,64 @@ def fetch_bands(
     build_ids = sorted({bid for _, bid in wanted.items()})
     chunk_ids = sorted({cid for _, cid in wanted})
 
-    with psycopg.connect(dsn, autocommit=True) as conn:
-        _check_target(conn, sandbox_db)
-        with conn.transaction(), conn.cursor() as cur:
-            cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
-            cur.execute(
-                _BANDS_CHUNK_SQL,
-                {"build_ids": build_ids, "chunk_ids": chunk_ids},
+    cur.execute(
+        _BANDS_CHUNK_SQL,
+        {"build_ids": build_ids, "chunk_ids": chunk_ids},
+    )
+    chunk_rows = cur.fetchall()
+    unit_ids_by_chunk: dict[tuple[str, str], list[str]] = {}
+    for row in chunk_rows:
+        bid = str(row[0])
+        cid = str(row[1])
+        unit_ids_by_chunk[(bid, cid)] = [str(u) for u in (row[5] or ())]
+    for key in wanted:
+        if key not in unit_ids_by_chunk:
+            raise IntegrityError(f"band 带内块缺失: {key}")
+    pairs = [(bid, uid) for (bid, cid), uids in unit_ids_by_chunk.items() for uid in uids]
+    unit_ids: list[str] = [p[1] for p in pairs]
+    pair_builds: list[str] = [p[0] for p in pairs]
+    units_by_chunk: dict[tuple[str, str], list[tuple]] = {}
+    if pairs:
+        cur.execute(
+            _BANDS_UNITS_SQL,
+            {"build_ids": pair_builds, "unit_ids": unit_ids},
+        )
+        units_by_id: dict[tuple[str, str], tuple] = {
+            (str(r[0]), str(r[1])): r for r in cur.fetchall()
+        }
+        for (bid, cid), uids in unit_ids_by_chunk.items():
+            rows = []
+            for uid in uids:
+                r = units_by_id.get((bid, uid))
+                if r is None:
+                    raise IntegrityError(f"band 块引用悬空单元: {bid[:12]}…/{cid}/{uid}")
+                rows.append(r)
+            # ordinal NULLS LAST, unit_id
+            rows.sort(
+                key=lambda r: (
+                    1 if r[5] is None else 0,
+                    r[5] if r[5] is not None else -1,
+                    str(r[1]),
+                )
             )
-            chunk_rows = cur.fetchall()
-            unit_ids_by_chunk: dict[tuple[str, str], list[str]] = {}
-            for row in chunk_rows:
-                bid = str(row[0])
-                cid = str(row[1])
-                unit_ids_by_chunk[(bid, cid)] = [str(u) for u in (row[5] or ())]
-            for key in wanted:
-                if key not in unit_ids_by_chunk:
-                    raise IntegrityError(f"band 带内块缺失: {key}")
-            pairs = [(bid, uid) for (bid, cid), uids in unit_ids_by_chunk.items() for uid in uids]
-            unit_ids: list[str] = [p[1] for p in pairs]
-            pair_builds: list[str] = [p[0] for p in pairs]
-            units_by_chunk: dict[tuple[str, str], list[tuple]] = {}
-            if pairs:
-                cur.execute(
-                    _BANDS_UNITS_SQL,
-                    {"build_ids": pair_builds, "unit_ids": unit_ids},
-                )
-                units_by_id: dict[tuple[str, str], tuple] = {
-                    (str(r[0]), str(r[1])): r for r in cur.fetchall()
-                }
-                for (bid, cid), uids in unit_ids_by_chunk.items():
-                    rows = []
-                    for uid in uids:
-                        r = units_by_id.get((bid, uid))
-                        if r is None:
-                            raise IntegrityError(f"band 块引用悬空单元: {bid[:12]}…/{cid}/{uid}")
-                        rows.append(r)
-                    # ordinal NULLS LAST, unit_id
-                    rows.sort(
-                        key=lambda r: (
-                            1 if r[5] is None else 0,
-                            r[5] if r[5] is not None else -1,
-                            str(r[1]),
-                        )
-                    )
-                    units_by_chunk[(bid, cid)] = rows
-            by_key = {
-                key: row
-                for key, row in zip(
-                    [(str(r[0]), str(r[1])) for r in chunk_rows], chunk_rows, strict=True
-                )
-            }
-            out: list[ChunkEvidence] = []
-            seen: set[tuple[str, str]] = set()
-            for band in bands:
-                ordered = chunk_order_by_source[band.source_id]
-                for p in range(band.start, band.end + 1):
-                    bid = band.build_id
-                    cid = ordered[p]
-                    key = (bid, cid)
-                    if key in seen:
-                        continue
-                    seen.add(key)
-                    out.append(
-                        _assemble_chunk_evidence(bid, cid, by_key[key], units_by_chunk.get(key, []))
-                    )
-            return aggregate_band_chunks_on(cur, tuple(out))
+            units_by_chunk[(bid, cid)] = rows
+    by_key = {
+        key: row
+        for key, row in zip([(str(r[0]), str(r[1])) for r in chunk_rows], chunk_rows, strict=True)
+    }
+    out: list[ChunkEvidence] = []
+    seen: set[tuple[str, str]] = set()
+    for band in bands:
+        ordered = chunk_order_by_source[band.source_id]
+        for p in range(band.start, band.end + 1):
+            bid = band.build_id
+            cid = ordered[p]
+            key = (bid, cid)
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append(_assemble_chunk_evidence(bid, cid, by_key[key], units_by_chunk.get(key, [])))
+    return aggregate_band_chunks_on(cur, tuple(out))
 
 
 def _assemble_chunk_evidence(

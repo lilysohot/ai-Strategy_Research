@@ -1,0 +1,983 @@
+{
+  "query": "Kweichow Moutai Feitian",
+  "hits": [
+    {
+      "doc_id": "cv2:2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "locator": "chunk:2b4a84ce404709ec:heading:0001",
+      "title": "i-Moutai, allowing Moutai to better capture demand from",
+      "snippet": "<b>Kweichow</b><b>Moutai</b>’ssharepricereactedpositively",
+      "score": 0.032266458495966696,
+      "published": "undated",
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "chunk_id": "2b4a84ce404709ec:heading:0001",
+      "context_locators": [
+        "chunk:2b4a84ce404709ec:heading:0000",
+        "chunk:2b4a84ce404709ec:body:0000",
+        "chunk:2b4a84ce404709ec:heading:0001",
+        "chunk:2b4a84ce404709ec:table:0000",
+        "chunk:2b4a84ce404709ec:body:0001",
+        "chunk:2b4a84ce404709ec:table:0001",
+        "chunk:2b4a84ce404709ec:table:0002",
+        "chunk:2b4a84ce404709ec:body:0002",
+        "chunk:2b4a84ce404709ec:table:0003",
+        "chunk:2b4a84ce404709ec:body:0003",
+        "chunk:2b4a84ce404709ec:table:0004",
+        "chunk:2b4a84ce404709ec:table:0005",
+        "chunk:2b4a84ce404709ec:table:0006",
+        "chunk:2b4a84ce404709ec:heading:0002",
+        "chunk:2b4a84ce404709ec:body:0004",
+        "chunk:2b4a84ce404709ec:heading:0003",
+        "chunk:2b4a84ce404709ec:heading:0004",
+        "chunk:2b4a84ce404709ec:body:0005",
+        "chunk:2b4a84ce404709ec:body:0006",
+        "chunk:2b4a84ce404709ec:body:0007",
+        "chunk:2b4a84ce404709ec:body:0008",
+        "chunk:2b4a84ce404709ec:body:0009",
+        "chunk:2b4a84ce404709ec:body:0010",
+        "chunk:2b4a84ce404709ec:body:0011",
+        "chunk:2b4a84ce404709ec:body:0012",
+        "chunk:2b4a84ce404709ec:body:0013",
+        "chunk:2b4a84ce404709ec:heading:0005",
+        "chunk:2b4a84ce404709ec:table:0007"
+      ],
+      "scope_id": "scope:e873dc312449e8881721ece1271512a0",
+      "context_by_kind": [
+        [
+          "unknown",
+          28
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "locator": "chunk:712e370a7081da17:body:0007",
+      "title": "贵州茅台:双锚定价筑稳价体系,渠道再平衡提盈利",
+      "snippet": "贵州茅台(600519.SH)\u0001白酒II",
+      "score": 0.01639344262295082,
+      "published": "undated",
+      "source_id": "a981b0641542c425a0ebcdb69af2333a8f82c4d65d5f434a6850453463aa0f49",
+      "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "chunk_id": "712e370a7081da17:body:0007",
+      "context_locators": [
+        "chunk:712e370a7081da17:body:0000",
+        "chunk:712e370a7081da17:body:0001",
+        "chunk:712e370a7081da17:table:0000",
+        "chunk:712e370a7081da17:body:0002",
+        "chunk:712e370a7081da17:heading:0000",
+        "chunk:712e370a7081da17:body:0003",
+        "chunk:712e370a7081da17:body:0004",
+        "chunk:712e370a7081da17:body:0005",
+        "chunk:712e370a7081da17:body:0006",
+        "chunk:712e370a7081da17:body:0007",
+        "chunk:712e370a7081da17:body:0008",
+        "chunk:712e370a7081da17:table:0001",
+        "chunk:712e370a7081da17:body:0009",
+        "chunk:712e370a7081da17:body:0010",
+        "chunk:712e370a7081da17:body:0011",
+        "chunk:712e370a7081da17:body:0012",
+        "chunk:712e370a7081da17:body:0013",
+        "chunk:712e370a7081da17:body:0014",
+        "chunk:712e370a7081da17:body:0015",
+        "chunk:712e370a7081da17:body:0016",
+        "chunk:712e370a7081da17:body:0017",
+        "chunk:712e370a7081da17:body:0018",
+        "chunk:712e370a7081da17:body:0019",
+        "chunk:712e370a7081da17:body:0020",
+        "chunk:712e370a7081da17:body:0021",
+        "chunk:712e370a7081da17:body:0022",
+        "chunk:712e370a7081da17:table:0002"
+      ],
+      "scope_id": "scope:fc1bb6f9fed9874602298a4e95856460",
+      "context_by_kind": [
+        [
+          "unknown",
+          27
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "locator": "chunk:9fa4cd7cf1ab602a:body:0005",
+      "title": "评论：",
+      "snippet": "投资建议：报表实质扎实，经营向上明确，重申“强推”评级。尽管宏观消费环境未见明显好转，但茅台通过市场化改革已明确找到破局之道，上半年初步验证公司市场化改革成效，尽管Q2 报表有所下滑，年内看兼顾报表和稳价稳中向好，下半年基数降低后增长确定性提高，且明年通过提价效应和产品结构增长路径清晰，中长期正构建“以需求为导向、消费者为中心”To C 营销体系。综上，茅台经营向上明确，底层逻辑未变，我们维持26-28年EPS预测值 67.74/70.77/73.84 元，维持一年目标价2030 元和“强推”评级。\n\n风险提示：宏观需求持续疲软、消费复苏不及预期、行业",
+      "score": 0.01639344262295082,
+      "published": "undated",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0005",
+      "context_locators": [
+        "chunk:9fa4cd7cf1ab602a:body:0000",
+        "chunk:9fa4cd7cf1ab602a:body:0001",
+        "chunk:9fa4cd7cf1ab602a:heading:0000",
+        "chunk:9fa4cd7cf1ab602a:heading:0001",
+        "chunk:9fa4cd7cf1ab602a:body:0002",
+        "chunk:9fa4cd7cf1ab602a:body:0003",
+        "chunk:9fa4cd7cf1ab602a:body:0004",
+        "chunk:9fa4cd7cf1ab602a:body:0005",
+        "chunk:9fa4cd7cf1ab602a:table:0000",
+        "chunk:9fa4cd7cf1ab602a:body:0006",
+        "chunk:9fa4cd7cf1ab602a:body:0007",
+        "chunk:9fa4cd7cf1ab602a:body:0008",
+        "chunk:9fa4cd7cf1ab602a:heading:0002",
+        "chunk:9fa4cd7cf1ab602a:table:0001",
+        "chunk:9fa4cd7cf1ab602a:table:0002"
+      ],
+      "scope_id": "scope:7f4196b6ce842582596d9f4ec4f7ad61",
+      "context_by_kind": [
+        [
+          "unknown",
+          15
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "locator": "chunk:a76b8ac143ecd5ec:table:0032",
+      "title": "消费周期，关键是选择与自身持仓久期相匹配的景气阶段。",
+      "snippet": "图 30：2021 年以来茅台批价表现（元/瓶）\n中国化工产品价格指数:CCPI（点） 7000 6000 5000 4000 3000 2000 1000 0 14/03 14/10 15/05 15/12 16/07 17/02 17/09 18/04 18/11 19/06 20/01 20/08 21/03 21/10 22/05 22/12 23/07 24/02 24/09 25/04 25/11 26/06",
+      "score": 0.01639344262295082,
+      "published": "undated",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "chunk_id": "a76b8ac143ecd5ec:table:0032",
+      "context_locators": [
+        "chunk:a76b8ac143ecd5ec:body:0061",
+        "chunk:a76b8ac143ecd5ec:heading:0041",
+        "chunk:a76b8ac143ecd5ec:body:0062",
+        "chunk:a76b8ac143ecd5ec:table:0032",
+        "chunk:a76b8ac143ecd5ec:body:0063",
+        "chunk:a76b8ac143ecd5ec:table:0033"
+      ],
+      "scope_id": "scope:d43c61a100771876ff132e4275465aad",
+      "context_by_kind": [
+        [
+          "unknown",
+          6
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969",
+      "locator": "chunk:231ff3a07f5570e9:body:0034",
+      "title": "↑",
+      "snippet": "美元兑人民币\n6.7",
+      "score": 0.01639344262295082,
+      "published": "undated",
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969",
+      "chunk_id": "231ff3a07f5570e9:body:0034",
+      "context_locators": [
+        "chunk:231ff3a07f5570e9:body:0033",
+        "chunk:231ff3a07f5570e9:body:0034",
+        "chunk:231ff3a07f5570e9:body:0035"
+      ],
+      "scope_id": "scope:979dda6cce0e961c5409707a4ac629d6",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "locator": "chunk:2b4a84ce404709ec:heading:0011",
+      "title": "non-standard SKUs enhancing price/data control; Buy",
+      "snippet": "<b>Feitian</b>effectiveimmediately;Buy\n<b>Kweichow</b><b>Moutai</b>",
+      "score": 0.03200204813108039,
+      "published": "undated",
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "chunk_id": "2b4a84ce404709ec:heading:0011",
+      "context_locators": [
+        "chunk:2b4a84ce404709ec:heading:0010",
+        "chunk:2b4a84ce404709ec:body:0023",
+        "chunk:2b4a84ce404709ec:body:0024",
+        "chunk:2b4a84ce404709ec:body:0025",
+        "chunk:2b4a84ce404709ec:heading:0011",
+        "chunk:2b4a84ce404709ec:body:0026",
+        "chunk:2b4a84ce404709ec:heading:0012",
+        "chunk:2b4a84ce404709ec:body:0027",
+        "chunk:2b4a84ce404709ec:body:0028",
+        "chunk:2b4a84ce404709ec:body:0029"
+      ],
+      "scope_id": "scope:53636c2ec60130c2f7d50ba7f956e6ab",
+      "context_by_kind": [
+        [
+          "unknown",
+          10
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "locator": "chunk:712e370a7081da17:body:0029",
+      "title": "盈利预测表",
+      "snippet": "应付账款周转天数\n投资活动现金流\n-31,64\n2\n-2,381\n-1,310\n-1,443\n存货周转天数\n1,399\n1,403\n1,437\n1,437\n资本支出\n-2,978\n-662\n-618\n-574\n每股指标(元)\n股权投资\n-147\n0\n0\n0\n每股收益\n65.85\n70.97\n74.64\n76.61\n其他长期资产变化\n‑28,51\n‑1,719\n-692\n-869\n每股经营现金流\n49.21\n63.23\n70.78\n72.38\n- 7 -\n7",
+      "score": 0.012195121951219513,
+      "published": "undated",
+      "source_id": "a981b0641542c425a0ebcdb69af2333a8f82c4d65d5f434a6850453463aa0f49",
+      "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "chunk_id": "712e370a7081da17:body:0029",
+      "context_locators": [
+        "chunk:712e370a7081da17:heading:0001",
+        "chunk:712e370a7081da17:table:0010",
+        "chunk:712e370a7081da17:body:0025",
+        "chunk:712e370a7081da17:table:0011",
+        "chunk:712e370a7081da17:table:0012",
+        "chunk:712e370a7081da17:table:0013",
+        "chunk:712e370a7081da17:body:0026",
+        "chunk:712e370a7081da17:table:0014",
+        "chunk:712e370a7081da17:table:0015",
+        "chunk:712e370a7081da17:body:0027",
+        "chunk:712e370a7081da17:table:0016",
+        "chunk:712e370a7081da17:table:0017",
+        "chunk:712e370a7081da17:body:0028",
+        "chunk:712e370a7081da17:table:0018",
+        "chunk:712e370a7081da17:body:0029",
+        "chunk:712e370a7081da17:table:0019"
+      ],
+      "scope_id": "scope:f69b33b5d77e7a11c74be400f05b1aa2",
+      "context_by_kind": [
+        [
+          "unknown",
+          16
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "locator": "chunk:9fa4cd7cf1ab602a:body:0021",
+      "title": "华创行业公司投资评级体系",
+      "snippet": "基准指数说明：\nA 股市场基准为沪深300 指数，香港市场基准为恒生指数，美国市场基准为标普500/纳斯达克指数。\n公司投资评级说明：\n强推：预期未来6 个月内超越基准指数20 以上；推荐：预期未来6 个月内超越基准指数10 －20 ；中性：预期未来6 个月内相对基准指数变动幅度在-10 －10 之间；回避：预期未来6 个月内相对基准指数跌幅在10 －20 之间。\n行业投资评级说明：\n推荐：预期未来3-6 个月内该行业指数涨幅超过基准指数5 以上；中性：预期未来3-6 个月内该行业指数变动幅度相对基准指数-5 －5 ；\n回避：预期未来3-6 个月内该行业",
+      "score": 0.014925373134328358,
+      "published": "undated",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0021",
+      "context_locators": [
+        "chunk:9fa4cd7cf1ab602a:body:0020",
+        "chunk:9fa4cd7cf1ab602a:body:0021",
+        "chunk:9fa4cd7cf1ab602a:table:0028"
+      ],
+      "scope_id": "scope:55bebfdbe9068b3c9132fd7000e1de4f",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "locator": "chunk:a76b8ac143ecd5ec:body:0055",
+      "title": "0\n500\n1000\n1500\n2000\n2500\n3000",
+      "snippet": "2017\n2018\n2019\n2020\n2021\n2022\n2023\n2024",
+      "score": 0.015625,
+      "published": "undated",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "chunk_id": "a76b8ac143ecd5ec:body:0055",
+      "context_locators": [
+        "chunk:a76b8ac143ecd5ec:body:0053",
+        "chunk:a76b8ac143ecd5ec:heading:0035",
+        "chunk:a76b8ac143ecd5ec:body:0054",
+        "chunk:a76b8ac143ecd5ec:heading:0036",
+        "chunk:a76b8ac143ecd5ec:body:0055",
+        "chunk:a76b8ac143ecd5ec:heading:0037",
+        "chunk:a76b8ac143ecd5ec:body:0056",
+        "chunk:a76b8ac143ecd5ec:table:0031"
+      ],
+      "scope_id": "scope:b4115f13c720b97c2f5837b881ec03ec",
+      "context_by_kind": [
+        [
+          "unknown",
+          8
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969",
+      "locator": "chunk:231ff3a07f5570e9:body:0012",
+      "title": "A50",
+      "snippet": "期货\n标普",
+      "score": 0.016129032258064516,
+      "published": "undated",
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969",
+      "chunk_id": "231ff3a07f5570e9:body:0012",
+      "context_locators": [
+        "chunk:231ff3a07f5570e9:body:0011",
+        "chunk:231ff3a07f5570e9:body:0012",
+        "chunk:231ff3a07f5570e9:body:0013",
+        "chunk:231ff3a07f5570e9:body:0014",
+        "chunk:231ff3a07f5570e9:body:0015",
+        "chunk:231ff3a07f5570e9:body:0016",
+        "chunk:231ff3a07f5570e9:body:0017",
+        "chunk:231ff3a07f5570e9:body:0018",
+        "chunk:231ff3a07f5570e9:body:0019",
+        "chunk:231ff3a07f5570e9:body:0020",
+        "chunk:231ff3a07f5570e9:body:0021"
+      ],
+      "scope_id": "scope:f28786d20dfcab33a3f3b96430c0ac6b",
+      "context_by_kind": [
+        [
+          "body",
+          1
+        ],
+        [
+          "unknown",
+          10
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "locator": "chunk:2b4a84ce404709ec:body:0068",
+      "title": "Disclosures",
+      "snippet": "<b>Kweichow</b><b>Moutai</b>is/arerelativetothe",
+      "score": 0.030303030303030304,
+      "published": "undated",
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "chunk_id": "2b4a84ce404709ec:body:0068",
+      "context_locators": [
+        "chunk:2b4a84ce404709ec:body:0067",
+        "chunk:2b4a84ce404709ec:body:0068",
+        "chunk:2b4a84ce404709ec:body:0069",
+        "chunk:2b4a84ce404709ec:body:0070",
+        "chunk:2b4a84ce404709ec:table:0027",
+        "chunk:2b4a84ce404709ec:body:0071",
+        "chunk:2b4a84ce404709ec:table:0028",
+        "chunk:2b4a84ce404709ec:body:0072",
+        "chunk:2b4a84ce404709ec:body:0073",
+        "chunk:2b4a84ce404709ec:heading:0035"
+      ],
+      "scope_id": "scope:e9e21f444d0e16a8efc2d614a47c8f7f",
+      "context_by_kind": [
+        [
+          "unknown",
+          10
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "locator": "chunk:9fa4cd7cf1ab602a:body:0018",
+      "title": "食品饮料组团队介绍",
+      "snippet": "研究所所长助理、消费研究中心大组长、食品饮料首席分析师：欧阳予\n浙江大学本科，荷兰伊拉斯姆斯大学研究型硕士，10 年食品饮料研究经验。曾任职于招商证券，2020 年加入华创证券。 2021-2024 年连续四届获新财富最佳分析师评选第一名，并多次获新浪金麒麟、水晶球、上证报和21 世纪金牌分析师等最佳分析师评选第一名，2025 年获新财富最佳分析师评选第二名。\n——酒类研究小组（白酒、啤酒、黄酒、红酒、新酒饮、酒类流通行业）\n酒类研究小组组长、高级分析师：田晨曦\n英国伯明翰大学硕士，2020 年加入华创证券研究所，5 年消费行业研究经验。\n助理研究员：王",
+      "score": 0.014705882352941176,
+      "published": "undated",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0018",
+      "context_locators": [
+        "chunk:9fa4cd7cf1ab602a:body:0017",
+        "chunk:9fa4cd7cf1ab602a:body:0018",
+        "chunk:9fa4cd7cf1ab602a:table:0015"
+      ],
+      "scope_id": "scope:669186c5046b71df24f5163bec25e402",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "locator": "chunk:a76b8ac143ecd5ec:table:0019",
+      "title": "图 6：重点化工品景气一览表（续表）",
+      "snippet": "表观消费量（万吨）以及同比增长 2023 2024 2025 图 6：重点化工品景气一览表（续表） | 产品 | 表观消费量（万吨）以及同比增长 2023 2024 2025 | 价格分位 | 价差分位 | 开工率 | 产能（万吨/年）以及同比增长 2024 2025 2026E 产能（万吨/年）以及同比增长 2024 2025 2026E\n2023 2024 2025 2024 2025 2026E\n产能（万吨/年）以及同比增长 2024 2025 2026E 产品 表观消费量（万吨）以及同比增长 2023 2024 2025 价格分位 价差分位 开工",
+      "score": 0.015384615384615385,
+      "published": "undated",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "chunk_id": "a76b8ac143ecd5ec:table:0019",
+      "context_locators": [
+        "chunk:a76b8ac143ecd5ec:table:0015",
+        "chunk:a76b8ac143ecd5ec:table:0013",
+        "chunk:a76b8ac143ecd5ec:table:0014",
+        "chunk:a76b8ac143ecd5ec:table:0016",
+        "chunk:a76b8ac143ecd5ec:table:0017",
+        "chunk:a76b8ac143ecd5ec:table:0018",
+        "chunk:a76b8ac143ecd5ec:table:0019",
+        "chunk:a76b8ac143ecd5ec:body:0035",
+        "chunk:a76b8ac143ecd5ec:table:0020",
+        "chunk:a76b8ac143ecd5ec:body:0036",
+        "chunk:a76b8ac143ecd5ec:table:0021",
+        "chunk:a76b8ac143ecd5ec:body:0037",
+        "chunk:a76b8ac143ecd5ec:table:0022",
+        "chunk:a76b8ac143ecd5ec:body:0038",
+        "chunk:a76b8ac143ecd5ec:table:0023",
+        "chunk:a76b8ac143ecd5ec:body:0039",
+        "chunk:a76b8ac143ecd5ec:table:0024",
+        "chunk:a76b8ac143ecd5ec:body:0040"
+      ],
+      "scope_id": "scope:32a522c9efd2218ffe85f05b88ccdc2b",
+      "context_by_kind": [
+        [
+          "unknown",
+          18
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969",
+      "locator": "chunk:231ff3a07f5570e9:body:0041",
+      "title": "↓",
+      "snippet": "日均成交额（亿元）\n19697.8",
+      "score": 0.015873015873015872,
+      "published": "undated",
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969",
+      "chunk_id": "231ff3a07f5570e9:body:0041",
+      "context_locators": [
+        "chunk:231ff3a07f5570e9:body:0039",
+        "chunk:231ff3a07f5570e9:body:0040",
+        "chunk:231ff3a07f5570e9:body:0041",
+        "chunk:231ff3a07f5570e9:body:0042",
+        "chunk:231ff3a07f5570e9:body:0043",
+        "chunk:231ff3a07f5570e9:body:0044",
+        "chunk:231ff3a07f5570e9:table:0007",
+        "chunk:231ff3a07f5570e9:body:0045"
+      ],
+      "scope_id": "scope:605b72ce429cd61a64cdfbdbfc324762",
+      "context_by_kind": [
+        [
+          "unknown",
+          8
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "locator": "chunk:2b4a84ce404709ec:heading:0014",
+      "title": "Feitian Moutai (53%, 1 litre)",
+      "snippet": "<b>Feitian</b><b>Moutai</b>(53,1litre)",
+      "score": 0.029906956136464335,
+      "published": "undated",
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "chunk_id": "2b4a84ce404709ec:heading:0014",
+      "context_locators": [
+        "chunk:2b4a84ce404709ec:body:0030",
+        "chunk:2b4a84ce404709ec:body:0031",
+        "chunk:2b4a84ce404709ec:body:0032",
+        "chunk:2b4a84ce404709ec:body:0033",
+        "chunk:2b4a84ce404709ec:heading:0014",
+        "chunk:2b4a84ce404709ec:body:0034"
+      ],
+      "scope_id": "scope:4f151a204654ee0b4e68b1071b2fe144",
+      "context_by_kind": [
+        [
+          "unknown",
+          6
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "locator": "chunk:9fa4cd7cf1ab602a:table:0013",
+      "title": "利润表",
+      "snippet": "每股收益 位：百万元 每股收益 2025A 每股收益 2026E 每股收益 2027E 每股收益 2028E\n每股收益 65.85 67.74 70.77 73.84\n每股经营现金流 位：百万元 每股经营现金流 2025A 每股经营现金流 2026E 每股经营现金流 2027E 每股经营现金流 2028E\n每股经营现金流 49.21 20.60 24.07 28.01\n每股净资产 位：百万元 每股净资产 2025A 每股净资产 2026E 每股净资产 2027E 每股净资产 2028E\n每股净资产 195.70 218.35 238.39 259.22",
+      "score": 0.0136986301369863,
+      "published": "undated",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:table:0013",
+      "context_locators": [
+        "chunk:9fa4cd7cf1ab602a:table:0001",
+        "chunk:9fa4cd7cf1ab602a:body:0015",
+        "chunk:9fa4cd7cf1ab602a:table:0013",
+        "chunk:9fa4cd7cf1ab602a:body:0016"
+      ],
+      "scope_id": "scope:867ba3c2044bd431a7988cf398198e6a",
+      "context_by_kind": [
+        [
+          "unknown",
+          4
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "locator": "chunk:a76b8ac143ecd5ec:table:0003",
+      "title": "一、为什么化工行业是一个好赛道？",
+      "snippet": "2022 年 化工板块涨幅TOP5 涨幅 2022 年 化工板块涨幅TOP5 涨幅 | 2022 年 化工板块涨幅TOP5 公司名称 | 2022 年 化工板块涨幅TOP5 主要产品 | 2023 年 化工板块涨幅TOP5 涨幅 | 2023 年 化工板块涨幅TOP5 公司名称 | 2023 年 化工板块涨幅TOP5 主要产品 2023 年 化工板块涨幅TOP5 涨幅\n2022 年 化工板块涨幅TOP5 2023 年 化工板块涨幅TOP5\n2022 年 化工板块涨幅TOP5 涨幅 2022 年 化工板块涨幅TOP5 公司名称 2022 年 化工板块涨幅T",
+      "score": 0.015151515151515152,
+      "published": "undated",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "chunk_id": "a76b8ac143ecd5ec:table:0003",
+      "context_locators": [
+        "chunk:a76b8ac143ecd5ec:body:0017",
+        "chunk:a76b8ac143ecd5ec:table:0000",
+        "chunk:a76b8ac143ecd5ec:body:0018",
+        "chunk:a76b8ac143ecd5ec:table:0001",
+        "chunk:a76b8ac143ecd5ec:body:0019",
+        "chunk:a76b8ac143ecd5ec:table:0002",
+        "chunk:a76b8ac143ecd5ec:body:0020",
+        "chunk:a76b8ac143ecd5ec:table:0003",
+        "chunk:a76b8ac143ecd5ec:body:0021",
+        "chunk:a76b8ac143ecd5ec:table:0004",
+        "chunk:a76b8ac143ecd5ec:body:0022"
+      ],
+      "scope_id": "scope:f438dd0963d3e3d03c6952f7904a4876",
+      "context_by_kind": [
+        [
+          "unknown",
+          11
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969",
+      "locator": "chunk:231ff3a07f5570e9:body:0028",
+      "title": "Kimi",
+      "snippet": "指数\n网红经济指数\n稳定币指数\n培育钻石指数\n小红书平台指数\n直播带货指数\n保险精选指数\n谷子经济指数",
+      "score": 0.015625,
+      "published": "undated",
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969",
+      "chunk_id": "231ff3a07f5570e9:body:0028",
+      "context_locators": [
+        "chunk:231ff3a07f5570e9:body:0024",
+        "chunk:231ff3a07f5570e9:table:0005",
+        "chunk:231ff3a07f5570e9:table:0006",
+        "chunk:231ff3a07f5570e9:body:0025",
+        "chunk:231ff3a07f5570e9:heading:0009",
+        "chunk:231ff3a07f5570e9:body:0026",
+        "chunk:231ff3a07f5570e9:body:0027",
+        "chunk:231ff3a07f5570e9:body:0028",
+        "chunk:231ff3a07f5570e9:body:0029",
+        "chunk:231ff3a07f5570e9:body:0030",
+        "chunk:231ff3a07f5570e9:body:0031",
+        "chunk:231ff3a07f5570e9:body:0032"
+      ],
+      "scope_id": "scope:846f345f38424383cb24bee104d012cc",
+      "context_by_kind": [
+        [
+          "unknown",
+          12
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "locator": "chunk:2b4a84ce404709ec:body:0062",
+      "title": "Price Target Risks and Methodology - Kweichow Moutai",
+      "snippet": "<b>Kweichow</b><b>Moutai</b>Valuationmethodology:Our12mTP",
+      "score": 0.02862400327131466,
+      "published": "undated",
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "chunk_id": "2b4a84ce404709ec:body:0062",
+      "context_locators": [
+        "chunk:2b4a84ce404709ec:heading:0029",
+        "chunk:2b4a84ce404709ec:body:0049",
+        "chunk:2b4a84ce404709ec:body:0050",
+        "chunk:2b4a84ce404709ec:body:0051",
+        "chunk:2b4a84ce404709ec:body:0052",
+        "chunk:2b4a84ce404709ec:body:0053",
+        "chunk:2b4a84ce404709ec:heading:0030",
+        "chunk:2b4a84ce404709ec:body:0054",
+        "chunk:2b4a84ce404709ec:body:0055",
+        "chunk:2b4a84ce404709ec:body:0056",
+        "chunk:2b4a84ce404709ec:body:0057",
+        "chunk:2b4a84ce404709ec:body:0058",
+        "chunk:2b4a84ce404709ec:heading:0031",
+        "chunk:2b4a84ce404709ec:body:0059",
+        "chunk:2b4a84ce404709ec:heading:0032",
+        "chunk:2b4a84ce404709ec:heading:0033",
+        "chunk:2b4a84ce404709ec:body:0060",
+        "chunk:2b4a84ce404709ec:body:0061",
+        "chunk:2b4a84ce404709ec:body:0062",
+        "chunk:2b4a84ce404709ec:heading:0034"
+      ],
+      "scope_id": "scope:a9f9b0a3ed6d9817c5bdda4ce82858e9",
+      "context_by_kind": [
+        [
+          "unknown",
+          20
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "locator": "chunk:a76b8ac143ecd5ec:body:0049",
+      "title": "需求增速放缓后，供给的重要性明显提高。随着中国GDP 增长回归新常态，全球GDP\n增速也在放缓，未来的需求预计保持稳健增长，各消费领域可能维持在2%-5%的增速\n水平，不构成非常大的变量。那么未来周期行业的研究就需要把着眼点放在供给的增速\n上。即使需求仅保持温和增长，只要行业长期缺少资本开支、新增产能有限，或者存量\n产能持续退出，供需关系仍可能逐年收紧。如近年来的有色行业，诸如铜、铝等；以及\n化工子行业的钾肥、制冷剂等。",
+      "snippet": "中国:现货价:螺纹钢(φ25mm,元/吨) 钢铁综合表观消费量:累计同比（右） 6000 60  5000 40  4000 20  3000 0  2000 -20  1000 -40  0 -60  17/06 17/12 18/06 18/12 19/06 19/12 20/06 20/12 21/06 21/12 22/06 22/12 23/06 23/12 24/06 24/12 25/06 25/12 26/06\n水泥市场均价（元/吨） 水泥表观消费量:累计同比（右） 600 80  500 60  40  400 20  300 0  2",
+      "score": 0.014925373134328358,
+      "published": "undated",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "chunk_id": "a76b8ac143ecd5ec:body:0049",
+      "context_locators": [
+        "chunk:a76b8ac143ecd5ec:heading:0011",
+        "chunk:a76b8ac143ecd5ec:body:0049",
+        "chunk:a76b8ac143ecd5ec:heading:0012"
+      ],
+      "scope_id": "scope:58eff35327da13d52d8dbca31b026743",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@b4980af67156a7643bfedfef09f9cac0",
+    "processing": "unknown",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "admission_pending",
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 31,
+      "published": 25,
+      "withdrawn": 0,
+      "pending": 2,
+      "failed_jobs": 0,
+      "builds": 54,
+      "published_with_gaps": 21
+    },
+    "retrieval": {
+      "requested": "hybrid",
+      "used": "hybrid",
+      "reason": null,
+      "profile": "fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107",
+      "expected_chunks": 1076,
+      "ready_chunks": 1076,
+      "lexical_candidates": 25,
+      "vector_candidates": 200,
+      "query_cache_hit": false,
+      "query_usage": {
+        "prompt_tokens": 39,
+        "total_tokens": 39
+      },
+      "elapsed_ms": 481
+    },
+    "ranking": {
+      "requested": "body-constraints-v1",
+      "used": "body-constraints-v1",
+      "feature_cache_hit": true,
+      "query_constraints": {
+        "entities": [],
+        "issuers": [],
+        "years": [],
+        "fact_mode": "unspecified"
+      },
+      "matches": [
+        {
+          "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+          "chunk_id": "2b4a84ce404709ec:heading:0001",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+          "chunk_id": "712e370a7081da17:body:0007",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "chunk_id": "9fa4cd7cf1ab602a:body:0005",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+          "chunk_id": "a76b8ac143ecd5ec:table:0032",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969",
+          "chunk_id": "231ff3a07f5570e9:body:0034",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+          "chunk_id": "2b4a84ce404709ec:heading:0011",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+          "chunk_id": "712e370a7081da17:body:0029",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "chunk_id": "9fa4cd7cf1ab602a:body:0021",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+          "chunk_id": "a76b8ac143ecd5ec:body:0055",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969",
+          "chunk_id": "231ff3a07f5570e9:body:0012",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+          "chunk_id": "2b4a84ce404709ec:body:0068",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "chunk_id": "9fa4cd7cf1ab602a:body:0018",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+          "chunk_id": "a76b8ac143ecd5ec:table:0019",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969",
+          "chunk_id": "231ff3a07f5570e9:body:0041",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+          "chunk_id": "2b4a84ce404709ec:heading:0014",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "chunk_id": "9fa4cd7cf1ab602a:table:0013",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+          "chunk_id": "a76b8ac143ecd5ec:table:0003",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969",
+          "chunk_id": "231ff3a07f5570e9:body:0028",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+          "chunk_id": "2b4a84ce404709ec:body:0062",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+          "chunk_id": "a76b8ac143ecd5ec:body:0049",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "observed_cues"
+        }
+      ],
+      "hard_filter": false
+    }
+  }
+}

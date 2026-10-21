@@ -1,0 +1,958 @@
+{
+  "ok": true,
+  "query": "天风是否认为一次强非农就足以决定9月加息？还要看什么？",
+  "count": 10,
+  "hits": [
+    {
+      "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "locator": "chunk:628ec76d5b4001b7:body:0019",
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0019",
+      "context_locators": [
+        "chunk:628ec76d5b4001b7:table:0018",
+        "chunk:628ec76d5b4001b7:body:0019",
+        "chunk:628ec76d5b4001b7:table:0019",
+        "chunk:628ec76d5b4001b7:body:0020",
+        "chunk:628ec76d5b4001b7:heading:0002",
+        "chunk:628ec76d5b4001b7:body:0021",
+        "chunk:628ec76d5b4001b7:body:0022",
+        "chunk:628ec76d5b4001b7:body:0023",
+        "chunk:628ec76d5b4001b7:body:0024",
+        "chunk:628ec76d5b4001b7:heading:0003",
+        "chunk:628ec76d5b4001b7:body:0025",
+        "chunk:628ec76d5b4001b7:heading:0004"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+        "locator": "chunk:628ec76d5b4001b7:body:0019",
+        "locators": [
+          "chunk:628ec76d5b4001b7:table:0018",
+          "chunk:628ec76d5b4001b7:body:0019",
+          "chunk:628ec76d5b4001b7:table:0019",
+          "chunk:628ec76d5b4001b7:body:0020",
+          "chunk:628ec76d5b4001b7:heading:0002",
+          "chunk:628ec76d5b4001b7:body:0021",
+          "chunk:628ec76d5b4001b7:body:0022",
+          "chunk:628ec76d5b4001b7:body:0023",
+          "chunk:628ec76d5b4001b7:body:0024",
+          "chunk:628ec76d5b4001b7:heading:0003",
+          "chunk:628ec76d5b4001b7:body:0025",
+          "chunk:628ec76d5b4001b7:heading:0004"
+        ],
+        "scope_id": "scope:e1bf9b10d4ecb4f215542d0775b5d0c2",
+        "view": "compact"
+      },
+      "scope_id": "scope:e1bf9b10d4ecb4f215542d0775b5d0c2",
+      "total_chunks": 12,
+      "by_kind": {
+        "unknown": 12
+      },
+      "table_chunks": 0,
+      "title": "2、海外政策跟踪",
+      "published": "undated",
+      "snippet": "<b>非农</b>大爆表！美国8月",
+      "preview": {
+        "text": "资料来源：华尔街见闻，富途牛牛，天风证券研究所\n除了伊朗局势以外，海外新闻关注美联储、日元、经济数据等：\n1）8 月 31 日，日元再破160。贝森特发声：日元“已得到控制”，日本央行“将做正确\n的事”，“安倍经济学”已走到尽头。\n2）9 月2 日，美联储褐皮书显示，经济活动温和扩张、就业小幅增长、价格温和上涨。\n3）9 月4 日，非农大爆表！美国8 月新增就业16.2万人，预期仅5.5 万人，失业率维持在\n4.1%不变。",
+        "start": 0,
+        "end": 213,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "非农"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+        "locators": [
+          "chunk:628ec76d5b4001b7:body:0019"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+        "locators": [
+          "chunk:628ec76d5b4001b7:table:0018",
+          "chunk:628ec76d5b4001b7:body:0019",
+          "chunk:628ec76d5b4001b7:table:0019",
+          "chunk:628ec76d5b4001b7:body:0020",
+          "chunk:628ec76d5b4001b7:heading:0002",
+          "chunk:628ec76d5b4001b7:body:0021",
+          "chunk:628ec76d5b4001b7:body:0022",
+          "chunk:628ec76d5b4001b7:body:0023",
+          "chunk:628ec76d5b4001b7:body:0024",
+          "chunk:628ec76d5b4001b7:heading:0003",
+          "chunk:628ec76d5b4001b7:body:0025",
+          "chunk:628ec76d5b4001b7:heading:0004"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:628ec76d5b4001b7:table:0018",
+          "chunk:628ec76d5b4001b7:body:0019",
+          "chunk:628ec76d5b4001b7:table:0019",
+          "chunk:628ec76d5b4001b7:body:0020",
+          "chunk:628ec76d5b4001b7:heading:0002",
+          "chunk:628ec76d5b4001b7:body:0021",
+          "chunk:628ec76d5b4001b7:body:0022",
+          "chunk:628ec76d5b4001b7:body:0023",
+          "chunk:628ec76d5b4001b7:body:0024",
+          "chunk:628ec76d5b4001b7:heading:0003",
+          "chunk:628ec76d5b4001b7:body:0025",
+          "chunk:628ec76d5b4001b7:heading:0004"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "locator": "chunk:022ae1713fb760ff:body:0003",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0003",
+      "context_locators": [
+        "chunk:022ae1713fb760ff:body:0001",
+        "chunk:022ae1713fb760ff:body:0002",
+        "chunk:022ae1713fb760ff:body:0003",
+        "chunk:022ae1713fb760ff:body:0004",
+        "chunk:022ae1713fb760ff:body:0005",
+        "chunk:022ae1713fb760ff:body:0006",
+        "chunk:022ae1713fb760ff:body:0007"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locator": "chunk:022ae1713fb760ff:body:0003",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007"
+        ],
+        "scope_id": "scope:868d5a64875264509c82bca5045bb713",
+        "view": "compact"
+      },
+      "scope_id": "scope:868d5a64875264509c82bca5045bb713",
+      "total_chunks": 7,
+      "by_kind": {
+        "body": 1,
+        "unknown": 6
+      },
+      "table_chunks": 0,
+      "title": "022ae1713fb760ff:body:0003",
+      "published": "undated",
+      "snippet": "<b>认为</b>当前市场风险偏好仍受北美",
+      "preview": {
+        "text": "AIDC 液冷：持续关注9-10 月产业端积极变化及新技术叙事，坚定看好国内企业在全球液冷市场份额渗透所带来的板\n块投资机会。 \n本周液冷板块情绪空前旺盛，但交易面存在明显分化，市值小、机构持仓占比少、新进液冷概念的标的涨幅相对突出。\n我们认为当前市场风险偏好仍受北美宏观数据及加息预期扰动，前期交易较为拥挤、预期相对充分的主流科技环节阶\n段性承压，在液冷需求受益于芯片功耗上行与平台迭代、国内标的具备明确渗透率拐点、且板块此前配置和交易密度\n相对较低的背景下，资金转向具备补涨空间和预期差的一些国内液冷标的。往后看，我们认为液冷板块在9-10月有\n两个方向值得关注：1）跟随行业端的实际进展推进的头部公司，预计订单、出货、业绩拐点等密集变化在10月份；\n2）交易超远期新技术方向，如金刚石散热、光模块导热材料等。 \n9 月2 日，TrendForce 援引台积电先进封装研发主管在 SEMICON Taiwan 2026 的公开演讲称，未来五年AI 系统总功\n耗或提升约6 倍；相关预测显示，单封装功耗可由约600W 升至4100W。报道提到，台积电已将微通道冷却纳入研发路\n线，方向是在封装盖板中集成微型流道以缩短热传路径。 \n9 月3 日，光宝科技宣布策略投资波兰液冷厂商DCX，交易完成后拟持有其约25%股权，交易金额约1.76 亿美元。",
+        "start": 254,
+        "end": 827,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "加息",
+          "认为"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0003"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "locator": "chunk:2055995f24f1db3a:body:0000",
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0000",
+      "context_locators": [
+        "chunk:2055995f24f1db3a:body:0000",
+        "chunk:2055995f24f1db3a:body:0001"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locator": "chunk:2055995f24f1db3a:body:0000",
+        "locators": [
+          "chunk:2055995f24f1db3a:body:0000",
+          "chunk:2055995f24f1db3a:body:0001"
+        ],
+        "scope_id": "scope:ee000d67a29fd5aa4f7d0156a2bf1684",
+        "view": "compact"
+      },
+      "scope_id": "scope:ee000d67a29fd5aa4f7d0156a2bf1684",
+      "total_chunks": 2,
+      "by_kind": {
+        "unknown": 2
+      },
+      "table_chunks": 0,
+      "title": "2055995f24f1db3a:body:0000",
+      "published": "undated",
+      "snippet": "<b>非农</b>数据超预期，9月<b>加息</b>",
+      "preview": {
+        "text": "Claude Fable 5.1 正式发\n布。本周多模态视频模型迎产业端催化和应用级出圈：芒果TV 推出国内首部AIGC 长剧《后西游记》，为首部上\n星纯AI 长剧，也是广电21 条后首部边审边播剧集。Fal 基于H3 推出H3 Max，5 秒768P 视频的后端推理时间压\n缩至3 秒以内，生成速度跨过实时直播门槛。快手更新可灵AI 增资，引入国家人工智能产业投资基金。AI 办公\n领域：腾讯WorkBuddy 开放底层Agent 能力。阿里升级Qwen3.8-Max，强化Coding 与Agent 能力。 \n\n游戏：8 月增速预期5-8%，持续稳健增长。 \n\n流媒体平台：音乐行业竞争加剧，订阅收入增速放缓，关注非订阅音乐收入开启第二增长曲线。持续关注竞争和\nAI 带来的行业影响。 \n\n电商：电商整体受宏观经济影响，仍呈现疲弱的态势。 \n\n虚拟资产&资产交易平台：美国非农数据超预期，9 月加息概率提升，对币价造成影响。关注9 月加息情况，整体\nWeb3.0 趋势上行。 \n风险提示\n\n后续政策不及预期风险；中美关系变化风险；内容上线及表现不及预期风险；宏观经济运行不及预期风险；AI 技\n术迭代和应用不及预期风险；政策监管风险。",
+        "start": 122,
+        "end": 646,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "加息",
+          "非农"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locators": [
+          "chunk:2055995f24f1db3a:body:0000"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locators": [
+          "chunk:2055995f24f1db3a:body:0000",
+          "chunk:2055995f24f1db3a:body:0001"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:2055995f24f1db3a:body:0000",
+          "chunk:2055995f24f1db3a:body:0001"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+      "locator": "chunk:6475cbacca1575c5:body:0001",
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+      "chunk_id": "6475cbacca1575c5:body:0001",
+      "context_locators": [
+        "chunk:6475cbacca1575c5:body:0000",
+        "chunk:6475cbacca1575c5:body:0001",
+        "chunk:6475cbacca1575c5:body:0002",
+        "chunk:6475cbacca1575c5:body:0003",
+        "chunk:6475cbacca1575c5:body:0004",
+        "chunk:6475cbacca1575c5:body:0005"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+        "locator": "chunk:6475cbacca1575c5:body:0001",
+        "locators": [
+          "chunk:6475cbacca1575c5:body:0000",
+          "chunk:6475cbacca1575c5:body:0001",
+          "chunk:6475cbacca1575c5:body:0002",
+          "chunk:6475cbacca1575c5:body:0003",
+          "chunk:6475cbacca1575c5:body:0004",
+          "chunk:6475cbacca1575c5:body:0005"
+        ],
+        "scope_id": "scope:0addcc0011a8410a17e2bb26df69c659",
+        "view": "compact"
+      },
+      "scope_id": "scope:0addcc0011a8410a17e2bb26df69c659",
+      "total_chunks": 6,
+      "by_kind": {
+        "unknown": 6
+      },
+      "table_chunks": 0,
+      "title": "6475cbacca1575c5:body:0001",
+      "published": "undated",
+      "snippet": "<b>认为</b>是同步启动，这个是公允",
+      "preview": {
+        "text": "关心的少，NPO在国内国外是否存在差异？事实是国内的进展比国外要快，可以认为是同步启动，这个是公允的。国外本身也想要在互联这一块取得一些战略要地。国内因为芯片比不过，你只能从这些方面去比，这是事实。预计27年全球NPO出货量在800万到1200万之间，其中中国市场将三四百万只，这个数字现在都是各说各的，会相差很大。这个现在也完全没有办法去预测究竟出的是多少万只，你可以相差特别大，这里面的误差会特别大，800万也有可能，2000万也有可能，可以相差好几倍。国内市场主要包括H企业、阿里，然后供应侧旭创、新易盛、华工等。\n3.2T的分布，28年总需求可能是500万，其中Meta 150，谷歌120，亚马逊70，微软50。当前光模块供应链是否存在紧张的环节，还是DSP，27年下半年，28年缓解。\n长期来看，为规避风险，都在泰国布局产能，未来60%以上的将通过泰国或者台湾生产，由于台湾海鸥基地有免税政策，这部分会转嫁给客户，因此对竞争力和毛利影响不大。这句话是不对的，是电话会还是什么忘了。这个已经是免税，应该是最后的事情了，以后再往下就不免税了，你免了税还要按15%税率给你补上，以前都是零，前几年没有说是几年，可能是三年，反正之前几年是零，但是后面都是要算了，对吧？这个事情当时已经说过了，以后都是要算的，所以这部分是在强掰。然后这里面税率加上去，你转嫁给客户不一定能够很好地转嫁的。",
+        "start": 0,
+        "end": 595,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "认为"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+        "locators": [
+          "chunk:6475cbacca1575c5:body:0001"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+        "locators": [
+          "chunk:6475cbacca1575c5:body:0000",
+          "chunk:6475cbacca1575c5:body:0001",
+          "chunk:6475cbacca1575c5:body:0002",
+          "chunk:6475cbacca1575c5:body:0003",
+          "chunk:6475cbacca1575c5:body:0004",
+          "chunk:6475cbacca1575c5:body:0005"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:6475cbacca1575c5:body:0000",
+          "chunk:6475cbacca1575c5:body:0001",
+          "chunk:6475cbacca1575c5:body:0002",
+          "chunk:6475cbacca1575c5:body:0003",
+          "chunk:6475cbacca1575c5:body:0004",
+          "chunk:6475cbacca1575c5:body:0005"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "locator": "chunk:9ebd323f89e55cc1:body:0001",
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0001",
+      "context_locators": [
+        "chunk:9ebd323f89e55cc1:body:0000",
+        "chunk:9ebd323f89e55cc1:heading:0000",
+        "chunk:9ebd323f89e55cc1:body:0001",
+        "chunk:9ebd323f89e55cc1:table:0000",
+        "chunk:9ebd323f89e55cc1:table:0001",
+        "chunk:9ebd323f89e55cc1:body:0002",
+        "chunk:9ebd323f89e55cc1:body:0003",
+        "chunk:9ebd323f89e55cc1:body:0004",
+        "chunk:9ebd323f89e55cc1:heading:0001",
+        "chunk:9ebd323f89e55cc1:body:0005",
+        "chunk:9ebd323f89e55cc1:body:0006",
+        "chunk:9ebd323f89e55cc1:body:0007",
+        "chunk:9ebd323f89e55cc1:table:0002",
+        "chunk:9ebd323f89e55cc1:body:0008",
+        "chunk:9ebd323f89e55cc1:body:0009",
+        "chunk:9ebd323f89e55cc1:heading:0002",
+        "chunk:9ebd323f89e55cc1:body:0010",
+        "chunk:9ebd323f89e55cc1:table:0003",
+        "chunk:9ebd323f89e55cc1:body:0011",
+        "chunk:9ebd323f89e55cc1:body:0012",
+        "chunk:9ebd323f89e55cc1:heading:0003",
+        "chunk:9ebd323f89e55cc1:heading:0004",
+        "chunk:9ebd323f89e55cc1:body:0013",
+        "chunk:9ebd323f89e55cc1:body:0014",
+        "chunk:9ebd323f89e55cc1:body:0015"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locator": "chunk:9ebd323f89e55cc1:body:0001",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:body:0000",
+          "chunk:9ebd323f89e55cc1:heading:0000",
+          "chunk:9ebd323f89e55cc1:body:0001",
+          "chunk:9ebd323f89e55cc1:table:0000",
+          "chunk:9ebd323f89e55cc1:table:0001",
+          "chunk:9ebd323f89e55cc1:body:0002",
+          "chunk:9ebd323f89e55cc1:body:0003",
+          "chunk:9ebd323f89e55cc1:body:0004",
+          "chunk:9ebd323f89e55cc1:heading:0001",
+          "chunk:9ebd323f89e55cc1:body:0005",
+          "chunk:9ebd323f89e55cc1:body:0006",
+          "chunk:9ebd323f89e55cc1:body:0007",
+          "chunk:9ebd323f89e55cc1:table:0002",
+          "chunk:9ebd323f89e55cc1:body:0008",
+          "chunk:9ebd323f89e55cc1:body:0009",
+          "chunk:9ebd323f89e55cc1:heading:0002",
+          "chunk:9ebd323f89e55cc1:body:0010",
+          "chunk:9ebd323f89e55cc1:table:0003",
+          "chunk:9ebd323f89e55cc1:body:0011",
+          "chunk:9ebd323f89e55cc1:body:0012",
+          "chunk:9ebd323f89e55cc1:heading:0003",
+          "chunk:9ebd323f89e55cc1:heading:0004",
+          "chunk:9ebd323f89e55cc1:body:0013",
+          "chunk:9ebd323f89e55cc1:body:0014",
+          "chunk:9ebd323f89e55cc1:body:0015"
+        ],
+        "scope_id": "scope:9169d74e55431276b5ef211bd5d27c89",
+        "view": "compact"
+      },
+      "scope_id": "scope:9169d74e55431276b5ef211bd5d27c89",
+      "total_chunks": 25,
+      "by_kind": {
+        "unknown": 25
+      },
+      "table_chunks": 0,
+      "title": "总量研究\n强非农降低了年内加息的门槛\n——2026 年8 月美国非农数据点评",
+      "published": "undated",
+      "snippet": "<b>非农</b>数据：新增<b>非农</b>就业16.2万",
+      "preview": {
+        "text": "（二）信息业：信息业就业再次转负至-2.3万人，反映AI\n对科技行业就业的冲击。（三）政府部门：政府部门新增就业从前值的-5.0 万人\n升至+3.5 万人，其中地方政府教育行业新增就业增加4.2 万人，由于暑期的季节\n性调整有关，近期地方政府部门就业波动较大。 \n劳动参与率回升，失业率持平于前值。 \n8 月劳动参与率为61.6%，高于上月的61.4%，中青年群体就业意愿回升。从失\n业人口看，8 月失业人口增加了11.5 万人，8 月U3 失业率（=失业人数/劳动力\n人数）稳定在4.1%。从结构看，8月暂时性失业者减少8.2万人，前值为增加\n15.3 万人，永久性失业者增加6.2 万人，前值为减少5.4 万人，反映临时性工作\n需求增加。 \n从加息角度看，在杰克逊霍尔会议上，沃什主张“通胀优先”，以鹰派措辞抬高\n了加息预期，8 月就业数据整体偏强，大大减少了加息的“顾虑”，也让8 月通\n胀数据变得更为关键。\n8 月超预期的非农数据、回升的劳动参与率、处于低位的失业率数据，都指向就\n业市场韧性比之前市场预期的更强，若后续公布的通胀数据下行幅度有限，美联\n储9 月加息的可能性将很难被忽视。在非农数据公布后，市场预期9 月加息的概\n率已经超过60%。 \n风险提示：美国经济超预期回落；国际贸易摩擦加剧；地缘政治形势超预期演变。",
+        "start": 657,
+        "end": 1223,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "加息",
+          "非农"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:body:0001"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:body:0000",
+          "chunk:9ebd323f89e55cc1:heading:0000",
+          "chunk:9ebd323f89e55cc1:body:0001",
+          "chunk:9ebd323f89e55cc1:table:0000",
+          "chunk:9ebd323f89e55cc1:table:0001",
+          "chunk:9ebd323f89e55cc1:body:0002",
+          "chunk:9ebd323f89e55cc1:body:0003",
+          "chunk:9ebd323f89e55cc1:body:0004",
+          "chunk:9ebd323f89e55cc1:heading:0001",
+          "chunk:9ebd323f89e55cc1:body:0005",
+          "chunk:9ebd323f89e55cc1:body:0006",
+          "chunk:9ebd323f89e55cc1:body:0007",
+          "chunk:9ebd323f89e55cc1:table:0002",
+          "chunk:9ebd323f89e55cc1:body:0008",
+          "chunk:9ebd323f89e55cc1:body:0009",
+          "chunk:9ebd323f89e55cc1:heading:0002",
+          "chunk:9ebd323f89e55cc1:body:0010",
+          "chunk:9ebd323f89e55cc1:table:0003",
+          "chunk:9ebd323f89e55cc1:body:0011",
+          "chunk:9ebd323f89e55cc1:body:0012",
+          "chunk:9ebd323f89e55cc1:heading:0003",
+          "chunk:9ebd323f89e55cc1:heading:0004",
+          "chunk:9ebd323f89e55cc1:body:0013",
+          "chunk:9ebd323f89e55cc1:body:0014",
+          "chunk:9ebd323f89e55cc1:body:0015"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:9ebd323f89e55cc1:body:0000",
+          "chunk:9ebd323f89e55cc1:heading:0000",
+          "chunk:9ebd323f89e55cc1:body:0001",
+          "chunk:9ebd323f89e55cc1:table:0000",
+          "chunk:9ebd323f89e55cc1:table:0001",
+          "chunk:9ebd323f89e55cc1:body:0002",
+          "chunk:9ebd323f89e55cc1:body:0003",
+          "chunk:9ebd323f89e55cc1:body:0004",
+          "chunk:9ebd323f89e55cc1:heading:0001",
+          "chunk:9ebd323f89e55cc1:body:0005",
+          "chunk:9ebd323f89e55cc1:body:0006",
+          "chunk:9ebd323f89e55cc1:body:0007",
+          "chunk:9ebd323f89e55cc1:table:0002",
+          "chunk:9ebd323f89e55cc1:body:0008",
+          "chunk:9ebd323f89e55cc1:body:0009",
+          "chunk:9ebd323f89e55cc1:heading:0002",
+          "chunk:9ebd323f89e55cc1:body:0010",
+          "chunk:9ebd323f89e55cc1:table:0003",
+          "chunk:9ebd323f89e55cc1:body:0011",
+          "chunk:9ebd323f89e55cc1:body:0012",
+          "chunk:9ebd323f89e55cc1:heading:0003",
+          "chunk:9ebd323f89e55cc1:heading:0004",
+          "chunk:9ebd323f89e55cc1:body:0013",
+          "chunk:9ebd323f89e55cc1:body:0014",
+          "chunk:9ebd323f89e55cc1:body:0015"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "locator": "chunk:628ec76d5b4001b7:body:0002",
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0002",
+      "context_locators": [
+        "chunk:628ec76d5b4001b7:body:0000",
+        "chunk:628ec76d5b4001b7:body:0001",
+        "chunk:628ec76d5b4001b7:body:0002",
+        "chunk:628ec76d5b4001b7:body:0003",
+        "chunk:628ec76d5b4001b7:heading:0000",
+        "chunk:628ec76d5b4001b7:body:0004",
+        "chunk:628ec76d5b4001b7:body:0005",
+        "chunk:628ec76d5b4001b7:body:0006",
+        "chunk:628ec76d5b4001b7:table:0000",
+        "chunk:628ec76d5b4001b7:table:0001",
+        "chunk:628ec76d5b4001b7:table:0002",
+        "chunk:628ec76d5b4001b7:table:0003",
+        "chunk:628ec76d5b4001b7:body:0007",
+        "chunk:628ec76d5b4001b7:body:0008",
+        "chunk:628ec76d5b4001b7:body:0009",
+        "chunk:628ec76d5b4001b7:table:0004"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+        "locator": "chunk:628ec76d5b4001b7:body:0002",
+        "locators": [
+          "chunk:628ec76d5b4001b7:body:0000",
+          "chunk:628ec76d5b4001b7:body:0001",
+          "chunk:628ec76d5b4001b7:body:0002",
+          "chunk:628ec76d5b4001b7:body:0003",
+          "chunk:628ec76d5b4001b7:heading:0000",
+          "chunk:628ec76d5b4001b7:body:0004",
+          "chunk:628ec76d5b4001b7:body:0005",
+          "chunk:628ec76d5b4001b7:body:0006",
+          "chunk:628ec76d5b4001b7:table:0000",
+          "chunk:628ec76d5b4001b7:table:0001",
+          "chunk:628ec76d5b4001b7:table:0002",
+          "chunk:628ec76d5b4001b7:table:0003",
+          "chunk:628ec76d5b4001b7:body:0007",
+          "chunk:628ec76d5b4001b7:body:0008",
+          "chunk:628ec76d5b4001b7:body:0009",
+          "chunk:628ec76d5b4001b7:table:0004"
+        ],
+        "scope_id": "scope:57894cc0753d61591331328e118aadc2",
+        "view": "compact"
+      },
+      "scope_id": "scope:57894cc0753d61591331328e118aadc2",
+      "total_chunks": 16,
+      "by_kind": {
+        "unknown": 16
+      },
+      "table_chunks": 0,
+      "title": "海外跟踪周报 20260906",
+      "published": "undated",
+      "snippet": "<b>非农</b>为<b>加息</b>清障，CPI或",
+      "preview": {
+        "text": "制造业新增1.6万人，创2023年12月以来单月最大增幅；建筑业新增2.2\n万人，为今年2 月以来最高。两者同步走强，或反映AI 基础设施投资带动\n的数据中心建设需求，以及制造业回流背景下的订单回暖。\n值得关注的是，金融业（-1.1 万人）与信息业（-2.3 万人）就业持续收缩，\n或在一定程度上体现AI 技术替代对部分知识型岗位的早期冲击，结构性分\n化特征日益显著。\n非农为加息清障，CPI 或最终定调。8 月非农数据或为美联储9 月行动打开\n了政策空间。考虑到就业数据本身存在季节性扰动（暑期服务业、返校招\n聘）且薪资同比仍处下行通道，我们认为单月非农超预期尚不足以驱动联\n储作出加息决策。\n我们认为，下周发布的8月CPI 通胀数据或将是决定9月FOMC会议最终\n取向的关键变量。若核心通胀环比未现显著降温，则加息落地概率将进一\n步上升；反之，若通胀读数低于预期，则即便就业坚挺，联储仍有理由维\n持观望姿态。\n海外市场复盘（8.31-9.4）\n美伊冲突反复，全球主要股指表现分化。当地时间2026年8月30日，美\n军对拉腊克岛上两处伊朗伊斯兰革命卫队的军事设施实施轰炸，这是美军\n一个月来首次对伊朗采取军事行动。伊朗方面随即对多个美军目标发动报\n复性打击。\n伊朗局势再度反复，美元小幅走弱，美债收益率上行。美元本周小幅走弱。\n油价反弹，受期限溢价抬升等驱动，本周各期限美债收益率上行。",
+        "start": 376,
+        "end": 970,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "决定",
+          "加息",
+          "认为",
+          "足以",
+          "非农"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+        "locators": [
+          "chunk:628ec76d5b4001b7:body:0002"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+        "locators": [
+          "chunk:628ec76d5b4001b7:body:0000",
+          "chunk:628ec76d5b4001b7:body:0001",
+          "chunk:628ec76d5b4001b7:body:0002",
+          "chunk:628ec76d5b4001b7:body:0003",
+          "chunk:628ec76d5b4001b7:heading:0000",
+          "chunk:628ec76d5b4001b7:body:0004",
+          "chunk:628ec76d5b4001b7:body:0005",
+          "chunk:628ec76d5b4001b7:body:0006",
+          "chunk:628ec76d5b4001b7:table:0000",
+          "chunk:628ec76d5b4001b7:table:0001",
+          "chunk:628ec76d5b4001b7:table:0002",
+          "chunk:628ec76d5b4001b7:table:0003",
+          "chunk:628ec76d5b4001b7:body:0007",
+          "chunk:628ec76d5b4001b7:body:0008",
+          "chunk:628ec76d5b4001b7:body:0009",
+          "chunk:628ec76d5b4001b7:table:0004"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:628ec76d5b4001b7:body:0000",
+          "chunk:628ec76d5b4001b7:body:0001",
+          "chunk:628ec76d5b4001b7:body:0002",
+          "chunk:628ec76d5b4001b7:body:0003",
+          "chunk:628ec76d5b4001b7:heading:0000",
+          "chunk:628ec76d5b4001b7:body:0004",
+          "chunk:628ec76d5b4001b7:body:0005",
+          "chunk:628ec76d5b4001b7:body:0006",
+          "chunk:628ec76d5b4001b7:table:0000",
+          "chunk:628ec76d5b4001b7:table:0001",
+          "chunk:628ec76d5b4001b7:table:0002",
+          "chunk:628ec76d5b4001b7:table:0003",
+          "chunk:628ec76d5b4001b7:body:0007",
+          "chunk:628ec76d5b4001b7:body:0008",
+          "chunk:628ec76d5b4001b7:body:0009",
+          "chunk:628ec76d5b4001b7:table:0004"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "locator": "chunk:022ae1713fb760ff:body:0011",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0011",
+      "context_locators": [
+        "chunk:022ae1713fb760ff:body:0010",
+        "chunk:022ae1713fb760ff:body:0011",
+        "chunk:022ae1713fb760ff:body:0012"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locator": "chunk:022ae1713fb760ff:body:0011",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012"
+        ],
+        "scope_id": "scope:31317a2afcc0bb3da888c74902e495d9",
+        "view": "compact"
+      },
+      "scope_id": "scope:31317a2afcc0bb3da888c74902e495d9",
+      "total_chunks": 3,
+      "by_kind": {
+        "unknown": 3
+      },
+      "table_chunks": 0,
+      "title": "光伏：板块半年报整体呈现“景气底部夯实”状态，玻璃、胶膜、高效电池（尤其BC）等部分环节拐点或率先出现。",
+      "published": "undated",
+      "snippet": "<b>决定</b>AIDC投产进度的核心瓶颈。",
+      "preview": {
+        "text": "分上市公司中标看，平高电气8.50 亿元，中国西电7.64 亿元，特变电工7.41 亿元，思源电气7.17 亿元，国网信通\n5.16 亿元，汉缆股份4.85 亿元，中天科技3.16 亿元，长高电新2.80 亿元，国电南瑞2.43 亿元，亨通光电2.31 亿\n元，许继电气2.29 亿元，保变电气1.73 亿元。 \n电力设备板块——以AI 为核心抓手，聚焦电力变压器需求放量与AIDC 供电架构变革，关注国内边际修复。 \n主线一：电力变压器（全球供需错配之下的硬通货）——数据中心供电架构正从终端负荷，转向需要专属230-500kV\n变电站支撑的枢纽级负荷。变电站作为发电、电网、算力三方需求的“公约数”，其建设具备极高的底层通用性。北美\n电力变压器进口依赖度高达80%，受原材料及人工短缺限制，产能扩张计划普遍推迟至27-28 年释放。目前北美电力\n变压器交期拉长至100 周以上，成为决定AIDC 投产进度的核心瓶颈。预计美国电力变压器供需错配将延续至2030 年，\n具备渠道优势与快速交付能力的出口龙头将持续兑现高溢价订单，建议关注海外市场渠道布局领先，具备客户基础、\n竞争优势的电力变压器出口公司思源电气、安靠智电、特变电工、中国西电；零部件供应商神马电力、华明装备；配\n电变压器制造商向高压突破的金盘科技、伊戈尔、明阳电气。",
+        "start": 657,
+        "end": 1223,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "决定"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0011"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "locator": "chunk:2055995f24f1db3a:body:0013",
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0013",
+      "context_locators": [
+        "chunk:2055995f24f1db3a:heading:0000",
+        "chunk:2055995f24f1db3a:body:0013",
+        "chunk:2055995f24f1db3a:body:0014"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locator": "chunk:2055995f24f1db3a:body:0013",
+        "locators": [
+          "chunk:2055995f24f1db3a:heading:0000",
+          "chunk:2055995f24f1db3a:body:0013",
+          "chunk:2055995f24f1db3a:body:0014"
+        ],
+        "scope_id": "scope:f1efa68d68307f0f3be25d679fc1e739",
+        "view": "compact"
+      },
+      "scope_id": "scope:f1efa68d68307f0f3be25d679fc1e739",
+      "total_chunks": 3,
+      "by_kind": {
+        "unknown": 3
+      },
+      "table_chunks": 0,
+      "title": "特别声明：",
+      "published": "undated",
+      "snippet": "<b>认为</b>可信的公开资料或实地调研",
+      "preview": {
+        "text": "特别声明： \n国金证券股份有限公司经中国证券监督管理委员会批准，已具备证券投资咨询业务资格。 \n本报告版权归“国金证券股份有限公司”（以下简称“国金证券”）所有，未经事先书面授权，任何机构和个人均不得以任何方式对本报告的任何部分制作任\n何形式的复制、转发、转载、引用、修改、仿制、刊发，或以任何侵犯本公司版权的其他方式使用。经过书面授权的引用、刊发，需注明出处为“国金证券股份有\n限公司”，且不得对本报告进行任何有悖原意的删节和修改。 \n本报告的产生基于国金证券及其研究人员认为可信的公开资料或实地调研资料，但国金证券及其研究人员对这些信息的准确性和完整性不作任何保证。本报告\n反映撰写研究人员的不同设想、见解及分析方法，故本报告所载观点可能与其他类似研究报告的观点及市场实际情况不一致，国金证券不对使用本报告所包含的材\n料产生的任何直接或间接损失或与此有关的其他任何损失承担任何责任。且本报告中的资料、意见、预测均反映报告初次公开发布时的判断，在不作事先通知的情\n况下，可能会随时调整，亦可因使用不同假设和标准、采用不同观点和分析方法而与国金证券其它业务部门、单位或附属机构在制作类似的其他材料时所给出的意\n见不同或者相反。 \n本报告仅为参考之用，在任何地区均不应被视为买卖任何证券、金融工具的要约或要约邀请。本报告提及的任何证券或金融工具均可能含有重大的风险，可能\n不易变卖以及不适合所有投资者。",
+        "start": 0,
+        "end": 600,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "认为"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locators": [
+          "chunk:2055995f24f1db3a:body:0013"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locators": [
+          "chunk:2055995f24f1db3a:heading:0000",
+          "chunk:2055995f24f1db3a:body:0013",
+          "chunk:2055995f24f1db3a:body:0014"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:2055995f24f1db3a:heading:0000",
+          "chunk:2055995f24f1db3a:body:0013",
+          "chunk:2055995f24f1db3a:body:0014"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "locator": "chunk:9ebd323f89e55cc1:body:0016",
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0016",
+      "context_locators": [
+        "chunk:9ebd323f89e55cc1:body:0014",
+        "chunk:9ebd323f89e55cc1:body:0015",
+        "chunk:9ebd323f89e55cc1:heading:0005",
+        "chunk:9ebd323f89e55cc1:heading:0006",
+        "chunk:9ebd323f89e55cc1:body:0016",
+        "chunk:9ebd323f89e55cc1:table:0004",
+        "chunk:9ebd323f89e55cc1:body:0017",
+        "chunk:9ebd323f89e55cc1:heading:0007",
+        "chunk:9ebd323f89e55cc1:body:0018",
+        "chunk:9ebd323f89e55cc1:table:0005",
+        "chunk:9ebd323f89e55cc1:body:0019",
+        "chunk:9ebd323f89e55cc1:table:0006",
+        "chunk:9ebd323f89e55cc1:body:0020",
+        "chunk:9ebd323f89e55cc1:table:0007",
+        "chunk:9ebd323f89e55cc1:body:0021",
+        "chunk:9ebd323f89e55cc1:body:0022",
+        "chunk:9ebd323f89e55cc1:body:0023",
+        "chunk:9ebd323f89e55cc1:body:0024",
+        "chunk:9ebd323f89e55cc1:body:0025",
+        "chunk:9ebd323f89e55cc1:body:0026"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locator": "chunk:9ebd323f89e55cc1:body:0016",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:body:0014",
+          "chunk:9ebd323f89e55cc1:body:0015",
+          "chunk:9ebd323f89e55cc1:heading:0005",
+          "chunk:9ebd323f89e55cc1:heading:0006",
+          "chunk:9ebd323f89e55cc1:body:0016",
+          "chunk:9ebd323f89e55cc1:table:0004",
+          "chunk:9ebd323f89e55cc1:body:0017",
+          "chunk:9ebd323f89e55cc1:heading:0007",
+          "chunk:9ebd323f89e55cc1:body:0018",
+          "chunk:9ebd323f89e55cc1:table:0005",
+          "chunk:9ebd323f89e55cc1:body:0019",
+          "chunk:9ebd323f89e55cc1:table:0006",
+          "chunk:9ebd323f89e55cc1:body:0020",
+          "chunk:9ebd323f89e55cc1:table:0007",
+          "chunk:9ebd323f89e55cc1:body:0021",
+          "chunk:9ebd323f89e55cc1:body:0022",
+          "chunk:9ebd323f89e55cc1:body:0023",
+          "chunk:9ebd323f89e55cc1:body:0024",
+          "chunk:9ebd323f89e55cc1:body:0025",
+          "chunk:9ebd323f89e55cc1:body:0026"
+        ],
+        "scope_id": "scope:da272af87e828beaa924eacd1f4eb664",
+        "view": "compact"
+      },
+      "scope_id": "scope:da272af87e828beaa924eacd1f4eb664",
+      "total_chunks": 20,
+      "by_kind": {
+        "unknown": 20
+      },
+      "table_chunks": 0,
+      "title": "2%\n4%\n6%\n8%",
+      "published": "undated",
+      "snippet": "<b>非农</b>整体时薪（环比，右",
+      "preview": {
+        "text": "",
+        "start": null,
+        "end": null,
+        "status": "no_complete_matching_sentence",
+        "matched_terms": [],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:body:0016"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:body:0014",
+          "chunk:9ebd323f89e55cc1:body:0015",
+          "chunk:9ebd323f89e55cc1:heading:0005",
+          "chunk:9ebd323f89e55cc1:heading:0006",
+          "chunk:9ebd323f89e55cc1:body:0016",
+          "chunk:9ebd323f89e55cc1:table:0004",
+          "chunk:9ebd323f89e55cc1:body:0017",
+          "chunk:9ebd323f89e55cc1:heading:0007",
+          "chunk:9ebd323f89e55cc1:body:0018",
+          "chunk:9ebd323f89e55cc1:table:0005",
+          "chunk:9ebd323f89e55cc1:body:0019",
+          "chunk:9ebd323f89e55cc1:table:0006",
+          "chunk:9ebd323f89e55cc1:body:0020",
+          "chunk:9ebd323f89e55cc1:table:0007",
+          "chunk:9ebd323f89e55cc1:body:0021",
+          "chunk:9ebd323f89e55cc1:body:0022",
+          "chunk:9ebd323f89e55cc1:body:0023",
+          "chunk:9ebd323f89e55cc1:body:0024",
+          "chunk:9ebd323f89e55cc1:body:0025",
+          "chunk:9ebd323f89e55cc1:body:0026"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:9ebd323f89e55cc1:heading:0005",
+          "chunk:9ebd323f89e55cc1:heading:0006",
+          "chunk:9ebd323f89e55cc1:body:0016",
+          "chunk:9ebd323f89e55cc1:table:0004",
+          "chunk:9ebd323f89e55cc1:body:0017",
+          "chunk:9ebd323f89e55cc1:heading:0007",
+          "chunk:9ebd323f89e55cc1:body:0018",
+          "chunk:9ebd323f89e55cc1:table:0005",
+          "chunk:9ebd323f89e55cc1:body:0019",
+          "chunk:9ebd323f89e55cc1:table:0006",
+          "chunk:9ebd323f89e55cc1:body:0020",
+          "chunk:9ebd323f89e55cc1:table:0007",
+          "chunk:9ebd323f89e55cc1:body:0021",
+          "chunk:9ebd323f89e55cc1:body:0022",
+          "chunk:9ebd323f89e55cc1:body:0023",
+          "chunk:9ebd323f89e55cc1:body:0024",
+          "chunk:9ebd323f89e55cc1:body:0025",
+          "chunk:9ebd323f89e55cc1:body:0026"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "locator": "chunk:628ec76d5b4001b7:body:0036",
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0036",
+      "context_locators": [
+        "chunk:628ec76d5b4001b7:table:0022",
+        "chunk:628ec76d5b4001b7:body:0036",
+        "chunk:628ec76d5b4001b7:body:0037"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+        "locator": "chunk:628ec76d5b4001b7:body:0036",
+        "locators": [
+          "chunk:628ec76d5b4001b7:table:0022",
+          "chunk:628ec76d5b4001b7:body:0036",
+          "chunk:628ec76d5b4001b7:body:0037"
+        ],
+        "scope_id": "scope:8568cb26777d79680f5607f61fc15310",
+        "view": "compact"
+      },
+      "scope_id": "scope:8568cb26777d79680f5607f61fc15310",
+      "total_chunks": 3,
+      "by_kind": {
+        "unknown": 3
+      },
+      "table_chunks": 0,
+      "title": "五、下周海外重要事件提醒",
+      "published": "undated",
+      "snippet": "<b>认为</b>可靠的已公开资料，但",
+      "preview": {
+        "text": "我们所得报酬的任何部分不曾与，不与，也将不会与本报告中\n的具体投资建议或观点有直接或间接联系。\n一般声明\n除非另有规定，本报告中的所有材料版权均属天风证券股份有限公司（已获中国证监会许可的证券投资咨询业务资格）及其附\n属机构（以下统称“天风证券”）。未经天风证券事先书面授权，不得以任何方式修改、发送或者复制本报告及其所包含的材料、\n内容。所有本报告中使用的商标、服务标识及标记均为天风证券的商标、服务标识及标记。\n本报告是机密的，仅供我们的客户使用，天风证券不因收件人收到本报告而视其为天风证券的客户。本报告中的信息均来源于\n我们认为可靠的已公开资料，但天风证券对这些信息的准确性及完整性不作任何保证。本报告中的信息、意见等均仅供客户参\n考，不构成所述证券买卖的出价或征价邀请或要约。该等信息、意见并未考虑到获取本报告人员的具体投资目的、财务状况以\n及特定需求，在任何时候均不构成对任何人的个人推荐。客户应当对本报告中的信息和意见进行独立评估，并应同时考量各自\n的投资目的、财务状况和特定需求，必要时就法律、商业、财务、税收等方面咨询专家的意见。对依据或者使用本报告所造成\n的一切后果，天风证券及/或其关联人员均不承担任何法律责任。\n本报告所载的意见、评估及预测仅为本报告出具日的观点和判断。该等意见、评估及预测无需通知即可随时更改。过往的表现\n亦不应作为日后表现的预示和担保。",
+        "start": 140,
+        "end": 730,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "认为"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+        "locators": [
+          "chunk:628ec76d5b4001b7:body:0036"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+        "locators": [
+          "chunk:628ec76d5b4001b7:table:0022",
+          "chunk:628ec76d5b4001b7:body:0036",
+          "chunk:628ec76d5b4001b7:body:0037"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:628ec76d5b4001b7:table:0022",
+          "chunk:628ec76d5b4001b7:body:0036",
+          "chunk:628ec76d5b4001b7:body:0037"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@48e8e60844f69177d5eb672a1d1b1010",
+    "processing": "scoped",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 22,
+      "published": 18,
+      "withdrawn": 0,
+      "pending": 0,
+      "failed_jobs": 0,
+      "builds": 28,
+      "published_with_gaps": 16
+    },
+    "retrieval": {
+      "requested": "hybrid",
+      "used": "lexical",
+      "reason": "provider_transport_uncertain",
+      "elapsed_ms": 15288
+    }
+  },
+  "hint": "preview 是选读预览，不是已取证引用。先用同一命中的 core_fetch_plan 调用 corpus_fetch；问题涉及多个对象、因果链或指代不完整时，再按 fetch_plan 扩展上下文。表格保留原范围以带齐表头、期间和单位。重复 locator 可在相同 doc_id 下去重；不同版本不可混用。",
+  "delivery_preview": "pilot"
+}

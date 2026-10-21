@@ -1,0 +1,19 @@
+[
+  {
+    "case": "p20",
+    "old_gold": "568f9e752f0fa65a:body:0017",
+    "candidate_matches": [
+      {
+        "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+        "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "chunk_id": "568f9e752f0fa65a:body:0017",
+        "lexical_rank": 5,
+        "dense_rank": 13,
+        "fused_rank": 8,
+        "delivery": "omitted",
+        "baseline_source_gate": true,
+        "omission_stage": "output_limit"
+      }
+    ]
+  }
+]

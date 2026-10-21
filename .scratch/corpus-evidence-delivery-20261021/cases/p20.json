@@ -1,0 +1,103 @@
+{
+  "case": "p20",
+  "kind": "positive",
+  "review": {
+    "class": "direct",
+    "reason": "明确半导体3.51亿元、安全业务1.01亿元",
+    "markers": [
+      "半导体封测装备制造业务实现收入3.51亿元",
+      "实现收入1.01亿元"
+    ]
+  },
+  "capture_sha256": "e0be9253a042b2531fae6767249c1f79441d32fc8eb7f489b9846725a107b3a5",
+  "original_sha256": "73fb477de12fe4c375fac07f9d74b2ff30a70a21285554180775f8919ed7a7c1",
+  "original_retrieval": "hybrid",
+  "top_chunk": "568f9e752f0fa65a:body:0003",
+  "top_original_chars": 1122,
+  "old_snippet": "<b>半导体</b><b>装备</b><b>收入</b>占比提升带来<b>业务</b>",
+  "preview": {
+    "text": "2026 年上半年公\n司实现营业收入4.53 亿元，同比+57.23%；实现归母净利润0.74 亿元，\n同比+194.56%；扣非归母净利润0.70 亿元，同比+552.69%。公司综合\n毛利率为50.39%，同比下降6.87 个百分点，毛利率回落主要系半导体\n装备收入占比提升带来业务结构变化。其中2026Q2 单季度实现营业收\n入2.46 亿元，同比+82.16%，实现归母净利润0.43 亿元，同比+481.60%，\n盈利能力显著改善。\n半导体封测装备成为业绩增长核心，安全监控业务短期承压。2026 年上半\n年半导体封测装备制造业务实现收入3.51 亿元，同比增长162.25%，收\n入占比提升至77.63%；毛利率44.97%，同比提升3.4 个百分点。国产\n划片机加速放量，国内半导体收入超过海外业务，国产半导体业务实现\n扭亏。安全生产及节能监控业务短期承压，实现收入1.01 亿元，同比\n下降34.20%，毛利率维持69.20%的较高水平，仍是公司业务基本盘。\n公司发布新一期股权激励，订单承接向好，有望进入经营拐点。",
+    "start": 199,
+    "end": 665,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "2026",
+      "上半年",
+      "业务",
+      "半导体",
+      "安全",
+      "收入",
+      "监控",
+      "装备"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": [
+      "半导体封测装备制造业务实现收入3.51亿元",
+      "实现收入1.01亿元"
+    ]
+  },
+  "core_chunks": 8,
+  "full_chunks": 123,
+  "original_context_occurrences": 142,
+  "preview_statuses": {
+    "complete_sentence_window": 8,
+    "no_complete_matching_sentence": 2
+  },
+  "preview_chars": [
+    466,
+    592,
+    576,
+    468,
+    0,
+    466,
+    600,
+    580,
+    468,
+    0
+  ],
+  "body_chars": {
+    "off": 19737,
+    "pilot": 39831
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 5493,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 5427,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 10421,
+        "hits": 4,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 11926,
+        "hits": 5,
+        "previews": 4,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

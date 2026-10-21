@@ -1,0 +1,131 @@
+[
+  {
+    "parent_source_id": "8935e5291a43a0251b35b7c82e6a228d86f41929f9c19acda8f3d8cf168defb1",
+    "parent_path": "/home/administrator/FrontierAgent/data/corpus/2026-08-13_2026.08.13-goldman-sachs-国外研报-高盛-贵州茅台-600519-sh-市场化改革方案六-全国42家直营店四款产品提价-维持-买入-评级-a1454167.pdf",
+    "derived_path": "/home/administrator/FrontierAgent/data/vector-pilot-clean7-20261021/ocr-derivatives/2026-08-13_2026.08.13-goldman-sachs-国外研报-高盛-贵州茅台-600519-sh-市场化改革方案六-全国42家直营店四款产品提价-维持-买入-评级-a1454167.local-ocr.pdf",
+    "derived_source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+    "method": "local-tesseract-300dpi",
+    "version": "tesseract 5.5.0",
+    "language": "eng",
+    "pages": [
+      {
+        "page": 1,
+        "text_chars": 3944,
+        "language": "eng",
+        "text_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/8935e529-1.txt",
+        "tsv_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/8935e529-1.tsv"
+      },
+      {
+        "page": 2,
+        "text_chars": 5061,
+        "language": "eng",
+        "text_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/8935e529-2.txt",
+        "tsv_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/8935e529-2.tsv"
+      },
+      {
+        "page": 3,
+        "text_chars": 1646,
+        "language": "eng",
+        "text_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/8935e529-3.txt",
+        "tsv_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/8935e529-3.tsv"
+      },
+      {
+        "page": 4,
+        "text_chars": 1998,
+        "language": "eng",
+        "text_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/8935e529-4.txt",
+        "tsv_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/8935e529-4.tsv"
+      },
+      {
+        "page": 5,
+        "text_chars": 5960,
+        "language": "eng",
+        "text_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/8935e529-5.txt",
+        "tsv_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/8935e529-5.tsv"
+      },
+      {
+        "page": 6,
+        "text_chars": 4573,
+        "language": "eng",
+        "text_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/8935e529-6.txt",
+        "tsv_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/8935e529-6.tsv"
+      },
+      {
+        "page": 7,
+        "text_chars": 10136,
+        "language": "eng",
+        "text_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/8935e529-7.txt",
+        "tsv_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/8935e529-7.tsv"
+      },
+      {
+        "page": 8,
+        "text_chars": 8806,
+        "language": "eng",
+        "text_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/8935e529-8.txt",
+        "tsv_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/8935e529-8.tsv"
+      },
+      {
+        "page": 9,
+        "text_chars": 987,
+        "language": "eng",
+        "text_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/8935e529-9.txt",
+        "tsv_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/8935e529-9.tsv"
+      }
+    ],
+    "coverage_claim": "ocr_text_not_verified_transcription"
+  },
+  {
+    "parent_source_id": "004303e2ff4f9acd4f315c909c098ebe0af5d2d1b7f537dc701b5e1fc02caa7e",
+    "parent_path": "/home/administrator/FrontierAgent/data/corpus/2026-09-30_2026.09.30-国内研报-长江消费周周谈20260928-5f4db7fb.pdf",
+    "derived_path": "/home/administrator/FrontierAgent/data/vector-pilot-clean7-20261021/ocr-derivatives/2026-09-30_2026.09.30-国内研报-长江消费周周谈20260928-5f4db7fb.local-ocr.pdf",
+    "derived_source_id": "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+    "method": "local-tesseract-300dpi",
+    "version": "tesseract 5.5.0",
+    "language": "chi_sim+eng",
+    "pages": [
+      {
+        "page": 1,
+        "text_chars": 832,
+        "language": "chi_sim+eng",
+        "text_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/004303e2-1.txt",
+        "tsv_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/004303e2-1.tsv"
+      },
+      {
+        "page": 2,
+        "text_chars": 1148,
+        "language": "chi_sim+eng",
+        "text_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/004303e2-2.txt",
+        "tsv_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/004303e2-2.tsv"
+      },
+      {
+        "page": 3,
+        "text_chars": 1049,
+        "language": "chi_sim+eng",
+        "text_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/004303e2-3.txt",
+        "tsv_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/004303e2-3.tsv"
+      },
+      {
+        "page": 4,
+        "text_chars": 1264,
+        "language": "chi_sim+eng",
+        "text_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/004303e2-4.txt",
+        "tsv_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/004303e2-4.tsv"
+      },
+      {
+        "page": 5,
+        "text_chars": 1207,
+        "language": "chi_sim+eng",
+        "text_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/004303e2-5.txt",
+        "tsv_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/004303e2-5.tsv"
+      },
+      {
+        "page": 6,
+        "text_chars": 312,
+        "language": "chi_sim+eng",
+        "text_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/004303e2-6.txt",
+        "tsv_path": "/home/administrator/FrontierAgent/.scratch/corpus-new7-20261021/ocr-pages/004303e2-6.tsv"
+      }
+    ],
+    "coverage_claim": "ocr_text_not_verified_transcription"
+  }
+]

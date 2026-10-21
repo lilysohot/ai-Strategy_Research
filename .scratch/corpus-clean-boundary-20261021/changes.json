@@ -1,0 +1,334 @@
+[
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 43,
+    "old": "kept",
+    "new": "noise",
+    "kind": "table_row",
+    "page": 5,
+    "text": "股票评级\n买入\n相对同期基准指数涨幅在15%以上",
+    "raw_hash": "26d59caa3f050ac91c895b23fa98aa628375498a67b1a0e0f5c14951904a0d11",
+    "reasons": [
+      "tbl[0]",
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 44,
+    "old": "kept",
+    "new": "noise",
+    "kind": "table_row",
+    "page": 5,
+    "text": "增持\n相对同期基准指数涨幅在5%~15%之间",
+    "raw_hash": "068cdc8add5f22f4fcf981d767cdbc15aa1f9408b398717ade9dd7dbc4495c73",
+    "reasons": [
+      "tbl[0]",
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 45,
+    "old": "kept",
+    "new": "noise",
+    "kind": "table_row",
+    "page": 5,
+    "text": "持有\n相对同期基准指数涨幅在-5%~+5%之间",
+    "raw_hash": "e49a62ee277d37db9e64f1c1daa87bf908900e55809761e0a6a04be12294e45a",
+    "reasons": [
+      "tbl[0]",
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 46,
+    "old": "kept",
+    "new": "noise",
+    "kind": "table_row",
+    "page": 5,
+    "text": "减持\n相对同期基准指数跌幅在5%以上",
+    "raw_hash": "54ed6986b86e8309cfd366e0fa62ec889578937cae670ba6cdaaca53a62b140e",
+    "reasons": [
+      "tbl[0]",
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 47,
+    "old": "kept",
+    "new": "noise",
+    "kind": "table_row",
+    "page": 5,
+    "text": "行业评级\n增持\n相对同期基准指数涨幅在10%以上",
+    "raw_hash": "dcd073e092852a3145a55cdee35e8922bf00e129b69abb0419b958375f01f107",
+    "reasons": [
+      "tbl[0]",
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 48,
+    "old": "kept",
+    "new": "noise",
+    "kind": "table_row",
+    "page": 5,
+    "text": "中性\n相对同期基准指数涨幅在-10%~+10%\n之间",
+    "raw_hash": "2a52276f335070d9d7b1540f4cca0a2c7779635cf876397858f29ce8875fabf6",
+    "reasons": [
+      "tbl[0]",
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 49,
+    "old": "kept",
+    "new": "noise",
+    "kind": "table_row",
+    "page": 5,
+    "text": "减持\n相对同期基准指数跌幅在10%以上",
+    "raw_hash": "aed1024d206e727547d1e9fb643a6abe5ed58cd76f8c253cb098523e490695dd",
+    "reasons": [
+      "tbl[0]",
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 50,
+    "old": "kept",
+    "new": "noise",
+    "kind": "paragraph",
+    "page": 5,
+    "text": "国盛证券研究所",
+    "raw_hash": "d151775a05195a01673e3cfbba2c55ee44bdfb59b89675ae434a8ecd221f2c90",
+    "reasons": [
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 51,
+    "old": "kept",
+    "new": "noise",
+    "kind": "paragraph",
+    "page": 5,
+    "text": "北京",
+    "raw_hash": "68c77e155132565e1cbbace574552fedbb9e769c147d0e9e5ed64701f0cdf82d",
+    "reasons": [
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 52,
+    "old": "kept",
+    "new": "noise",
+    "kind": "paragraph",
+    "page": 5,
+    "text": "上海",
+    "raw_hash": "4906a49adc5c472b34483976104ec1d76992745367cc22d5fbc2a4db8e8e1ed7",
+    "reasons": [
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 53,
+    "old": "kept",
+    "new": "noise",
+    "kind": "paragraph",
+    "page": 5,
+    "text": "地址：北京市丰台区丽泽路22号院新华社国家金融信息大\n厦西塔B 座38 层",
+    "raw_hash": "527a0000972ccc00398116b4a4b9032553c289df2a0f56dda7349ca260015b36",
+    "reasons": [
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 54,
+    "old": "kept",
+    "new": "noise",
+    "kind": "paragraph",
+    "page": 5,
+    "text": "地址：上海市浦东新区南洋泾路555号陆家嘴金融街区22\n栋",
+    "raw_hash": "ba6be2fe4c02bf78af88138711400a81b11cc4dc095d9349c8c44ed02c676bbf",
+    "reasons": [
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 55,
+    "old": "kept",
+    "new": "noise",
+    "kind": "paragraph",
+    "page": 5,
+    "text": "邮编：100077 ",
+    "raw_hash": "d9b3c36ab0a506f8e98754c291531cbb92a007aebf1e9e763d0c8b507d4dd1d3",
+    "reasons": [
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 56,
+    "old": "kept",
+    "new": "noise",
+    "kind": "paragraph",
+    "page": 5,
+    "text": "邮编：200120 ",
+    "raw_hash": "8a071090204a6589a3d2cb903a9d26bde57c7e2a648d7e54b646b5afe2afd59b",
+    "reasons": [
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 57,
+    "old": "kept",
+    "new": "noise",
+    "kind": "paragraph",
+    "page": 5,
+    "text": "邮箱：gsresearch@gszq.com ",
+    "raw_hash": "5d83b943722767385c18001de66c81d4e3f3ff1d0997f58ef7631bded1ffc0a4",
+    "reasons": [
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 58,
+    "old": "kept",
+    "new": "noise",
+    "kind": "paragraph",
+    "page": 5,
+    "text": "电话：021-38124100 ",
+    "raw_hash": "6aff9f8e87dfa3c110f63b9d90f5921a72723187998584660b3117074a18c312",
+    "reasons": [
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 59,
+    "old": "kept",
+    "new": "noise",
+    "kind": "paragraph",
+    "page": 5,
+    "text": "邮箱：gsresearch@gszq.com ",
+    "raw_hash": "5d83b943722767385c18001de66c81d4e3f3ff1d0997f58ef7631bded1ffc0a4",
+    "reasons": [
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 60,
+    "old": "kept",
+    "new": "noise",
+    "kind": "paragraph",
+    "page": 5,
+    "text": "南昌",
+    "raw_hash": "a02251f7201578b1f3054e75c574017a30cc81b6cd76a6adef0a8320dcc15131",
+    "reasons": [
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 61,
+    "old": "kept",
+    "new": "noise",
+    "kind": "paragraph",
+    "page": 5,
+    "text": "深圳",
+    "raw_hash": "1bb5e3986433569ca4e9201a3367313421e6962a713a57daf7bfbcbe507e502c",
+    "reasons": [
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 62,
+    "old": "kept",
+    "new": "noise",
+    "kind": "paragraph",
+    "page": 5,
+    "text": "地址：南昌市红谷滩新区凤凰中大道1115 号北京银行大厦地址：深圳市福田区福华三路100 号鼎和大厦24 楼",
+    "raw_hash": "55efd5c761efb7d24ddfefbe3efe5386f571b3bc50fc6672c6f4c4e28ec656d1",
+    "reasons": [
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 63,
+    "old": "kept",
+    "new": "noise",
+    "kind": "paragraph",
+    "page": 5,
+    "text": "邮编：330038 ",
+    "raw_hash": "e07becbb412a5ced5eba2d45903a2df1c6a311a63ef9c54471ce45f2d8a2bf00",
+    "reasons": [
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 64,
+    "old": "kept",
+    "new": "noise",
+    "kind": "paragraph",
+    "page": 5,
+    "text": "邮编：518033 ",
+    "raw_hash": "4a3dd1303e325ba31ab48aef2ffbdc492ed1e8695941a0627d5121fd26a440da",
+    "reasons": [
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 65,
+    "old": "kept",
+    "new": "noise",
+    "kind": "paragraph",
+    "page": 5,
+    "text": "传真：0791-86281485 ",
+    "raw_hash": "1ed29513aed9868b55bdcf50f67a372a275bc07714b17047ad2968fea11d0c8a",
+    "reasons": [
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 66,
+    "old": "kept",
+    "new": "noise",
+    "kind": "paragraph",
+    "page": 5,
+    "text": "邮箱：gsresearch@gszq.com ",
+    "raw_hash": "5d83b943722767385c18001de66c81d4e3f3ff1d0997f58ef7631bded1ffc0a4",
+    "reasons": [
+      "disclaimer_section"
+    ]
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "ordinal": 67,
+    "old": "kept",
+    "new": "noise",
+    "kind": "paragraph",
+    "page": 5,
+    "text": "邮箱：gsresearch@gszq.com ",
+    "raw_hash": "5d83b943722767385c18001de66c81d4e3f3ff1d0997f58ef7631bded1ffc0a4",
+    "reasons": [
+      "disclaimer_section"
+    ]
+  }
+]

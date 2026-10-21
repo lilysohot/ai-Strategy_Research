@@ -1,0 +1,88 @@
+{
+  "case": "n02",
+  "kind": "future_actual",
+  "review": {
+    "class": "background",
+    "reason": "同公司表格仅2025A至2028E，没有2035实际收入",
+    "markers": []
+  },
+  "capture_sha256": "48cf71ac213040d1e327a775a29bcee5299581e9107074cbcd4ea3ad1412915f",
+  "original_sha256": "0db7cb0cb28d96b6f8a7eca9198b717c2a0314b515a148752869bcbdb842108d",
+  "original_retrieval": "hybrid",
+  "top_chunk": "9fa4cd7cf1ab602a:table:0000",
+  "top_original_chars": 273,
+  "old_snippet": "<b>营业</b>总收入(百万)2025A<b>营业</b>",
+  "preview": {
+    "text": "",
+    "start": null,
+    "end": null,
+    "status": "structured_content_requires_fetch",
+    "matched_terms": [],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": []
+  },
+  "core_chunks": 61,
+  "full_chunks": 89,
+  "original_context_occurrences": 109,
+  "preview_statuses": {
+    "structured_content_requires_fetch": 4,
+    "complete_sentence_window": 6
+  },
+  "preview_chars": [
+    0,
+    0,
+    593,
+    597,
+    521,
+    0,
+    0,
+    593,
+    597,
+    521
+  ],
+  "body_chars": {
+    "off": 17229,
+    "pilot": 35938
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 5422,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      },
+      "pilot": {
+        "chars": 5518,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11927,
+        "hits": 6,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      },
+      "pilot": {
+        "chars": 10931,
+        "hits": 5,
+        "previews": 3,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      }
+    }
+  }
+}

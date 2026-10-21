@@ -1,0 +1,83 @@
+{
+  "target_db": "vector_pilot_clean7_20261021",
+  "archive_root": "/home/administrator/FrontierAgent/data/vector-pilot-clean7-20261021/archive",
+  "sources": [
+    {
+      "path": "/home/administrator/FrontierAgent/data/corpus/2026-08-13_2026.08.13-goldman-sachs-国外研报-高盛-贵州茅台-600519-sh-市场化改革方案六-全国42家直营店四款产品提价-维持-买入-评级-a1454167.pdf",
+      "original_name": "2026-08-13_2026.08.13-goldman-sachs-国外研报-高盛-贵州茅台-600519-sh-市场化改革方案六-全国42家直营店四款产品提价-维持-买入-评级-a1454167.pdf",
+      "source_id": "8935e5291a43a0251b35b7c82e6a228d86f41929f9c19acda8f3d8cf168defb1",
+      "domain_hint": "company",
+      "material_type": "research_report",
+      "has_usable_text": false,
+      "review_decision_ids": [
+        "new7-user-20261021-8935e5291a43a0251b35b7c82e6a228d86f41929f9c19acda8f3d8cf168defb1"
+      ]
+    },
+    {
+      "path": "/home/administrator/FrontierAgent/data/corpus/2026-08-14_2026.08.14-中泰证券-何长天-田海川-公司研究-事件点评-贵州茅台-600519-双锚定价筑稳价体系-渠道再平衡提盈利-eed1869f.bilingual.pdf",
+      "original_name": "2026-08-14_2026.08.14-中泰证券-何长天-田海川-公司研究-事件点评-贵州茅台-600519-双锚定价筑稳价体系-渠道再平衡提盈利-eed1869f.bilingual.pdf",
+      "source_id": "a981b0641542c425a0ebcdb69af2333a8f82c4d65d5f434a6850453463aa0f49",
+      "domain_hint": "company",
+      "material_type": "research_report",
+      "has_usable_text": true,
+      "review_decision_ids": [
+        "new7-user-20261021-a981b0641542c425a0ebcdb69af2333a8f82c4d65d5f434a6850453463aa0f49"
+      ]
+    },
+    {
+      "path": "/home/administrator/FrontierAgent/data/corpus/2026-09-22_2026.09.22-国内研报-中金公司-半导体行业ai进化论-23-ds-v4-1-flash释放硬件潜能-国产卡迈向10t模型时代-acb605cd.pdf",
+      "original_name": "2026-09-22_2026.09.22-国内研报-中金公司-半导体行业ai进化论-23-ds-v4-1-flash释放硬件潜能-国产卡迈向10t模型时代-acb605cd.pdf",
+      "source_id": "b505dcd712bc33050d71b82783fae29bc9e7f61fdc4d8300e2f5e126168ca1c6",
+      "domain_hint": "industry",
+      "material_type": "research_report",
+      "has_usable_text": true,
+      "review_decision_ids": [
+        "new7-user-20261021-b505dcd712bc33050d71b82783fae29bc9e7f61fdc4d8300e2f5e126168ca1c6"
+      ]
+    },
+    {
+      "path": "/home/administrator/FrontierAgent/data/corpus/2026-09-30_2026.09.30-国内研报-长江消费周周谈20260928-5f4db7fb.pdf",
+      "original_name": "2026-09-30_2026.09.30-国内研报-长江消费周周谈20260928-5f4db7fb.pdf",
+      "source_id": "004303e2ff4f9acd4f315c909c098ebe0af5d2d1b7f537dc701b5e1fc02caa7e",
+      "domain_hint": "industry",
+      "material_type": "research_report",
+      "has_usable_text": false,
+      "review_decision_ids": [
+        "new7-user-20261021-004303e2ff4f9acd4f315c909c098ebe0af5d2d1b7f537dc701b5e1fc02caa7e"
+      ]
+    },
+    {
+      "path": "/home/administrator/FrontierAgent/data/corpus/2026-10-02_FundaAI_专栏  光通信FCC 光模块规则可能好于悲观预期对中国头部厂商的利好或超想象.pdf",
+      "original_name": "2026-10-02_FundaAI_专栏  光通信FCC 光模块规则可能好于悲观预期对中国头部厂商的利好或超想象.pdf",
+      "source_id": "8b11fbdd67b1d0a215c39c3155799e12cb9c259d6a7b40066d6efa557434ed39",
+      "domain_hint": "industry",
+      "material_type": "personal_or_external_subscription",
+      "has_usable_text": true,
+      "review_decision_ids": [
+        "new7-user-20261021-8b11fbdd67b1d0a215c39c3155799e12cb9c259d6a7b40066d6efa557434ed39"
+      ]
+    },
+    {
+      "path": "/home/administrator/FrontierAgent/data/corpus/2026-10-19_研究_LLM：DeepSeek_V4.1-Flash-1017_.pdf",
+      "original_name": "2026-10-19_研究_LLM：DeepSeek_V4.1-Flash-1017_.pdf",
+      "source_id": "eecaab994514609bf9d459618e9d0cb53c00b5fa4bbebcebf413f6d97c7f4e23",
+      "domain_hint": "industry",
+      "material_type": "personal_or_external_subscription",
+      "has_usable_text": true,
+      "review_decision_ids": [
+        "new7-user-20261021-eecaab994514609bf9d459618e9d0cb53c00b5fa4bbebcebf413f6d97c7f4e23"
+      ]
+    },
+    {
+      "path": "/home/administrator/FrontierAgent/data/corpus/2026-10-21_研究｜光互连：OCP_2026_预示_NPO_落地与替代铜缆带来.pdf",
+      "original_name": "2026-10-21_研究｜光互连：OCP_2026_预示_NPO_落地与替代铜缆带来.pdf",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "domain_hint": "industry",
+      "material_type": "personal_or_external_subscription",
+      "has_usable_text": true,
+      "review_decision_ids": [
+        "new7-user-20261021-cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7"
+      ]
+    }
+  ]
+}

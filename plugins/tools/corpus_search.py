@@ -17,12 +17,16 @@ snippet 故意给不全，不是偷懒：如果这里就把整段原文吐出来
 from __future__ import annotations
 
 import json
+import os
 from typing import Any
 
 from frontier_agent.core.tool import tool
 from plugins.corpus.service import get_service
 
 MAX_LIMIT = 20
+
+# CORPUS_EVIDENCE_PREVIEW=pilot adds sentence previews and core read plans only
+# in the isolated database. Previews never register as fetched/delivered evidence.
 
 #: 超预算压缩时逐命中保留的核心字段（模型据此定位并复取，缺一不可）。
 _HIT_CORE_KEYS = (
@@ -34,9 +38,10 @@ _HIT_CORE_KEYS = (
     "scope_id",
     "context_locators",
     "fetch_plan",
+    "core_fetch_plan",
 )
 #: 核心字段之外按预算余量保留的可选字段（顺序即保留优先级）。
-_HIT_OPTIONAL_KEYS = ("title", "published", "snippet", "by_kind")
+_HIT_OPTIONAL_KEYS = ("title", "published", "snippet", "by_kind", "preview")
 
 #: 命中被按预算整条舍弃时替换的提示（明确后续动作，不让模型以为检索已取全）。
 _ELIDED_HINT = (
@@ -172,7 +177,7 @@ async def corpus_search(query: str, limit: int = 10) -> str:
             },
             ensure_ascii=False,
         )
-    return json.dumps(
+    body = json.dumps(
         {
             "ok": True,
             "query": query,
@@ -220,6 +225,29 @@ async def corpus_search(query: str, limit: int = 10) -> str:
         },
         ensure_ascii=False,
     )
+    if os.environ.get("CORPUS_EVIDENCE_PREVIEW", "off") == "pilot":
+        payload = json.loads(body)
+        try:
+            views = svc.evidence_previews(query, hits)
+            if len(views) != len(hits):
+                raise ValueError("preview_count_mismatch")
+            for row, view in zip(payload["hits"], views, strict=True):
+                row.update(view)
+            payload["delivery_preview"] = "pilot"
+            payload["hint"] = (
+                "preview 是选读预览，不是已取证引用。先用同一命中的 core_fetch_plan 调用 "
+                "corpus_fetch；问题涉及多个对象、因果链或指代不完整时，再按 fetch_plan "
+                "扩展上下文。表格保留原范围以带齐表头、期间和单位。"
+                "重复 locator 可在相同 doc_id 下去重；不同版本不可混用。"
+            )
+        except Exception as exc:
+            # Preview reads can race retraction; never expose a partial preview batch.
+            # Original handles remain subject to the normal fetch revocation checks.
+            payload = json.loads(body)
+            payload["delivery_preview"] = "unavailable"
+            payload["delivery_preview_error"] = type(exc).__name__
+        return json.dumps(payload, ensure_ascii=False)
+    return body
 
 
 def _compact_hit(hit: dict[str, Any]) -> dict[str, Any]:
@@ -258,6 +286,23 @@ def fit_search_payload(body: str, budget: int) -> str | None:
         return None
     if len(body) <= budget:
         return body
+    # The full plan duplicates doc_id/context_locators. In the pilot compact
+    # representation preserve those handles and core plan; do not spend the
+    # budget twice on identical locator arrays before showing readable text.
+    if payload.get("delivery_preview") == "pilot":
+        for hit in payload.get("hits", []):
+            hit.pop("expansion", None)
+            hit.pop("delivery_hint", None)
+            hit.pop("fetch_plan", None)
+        payload["hint"] = (
+            "preview 仅供选读，不是引用证据。先用 core_fetch_plan 调用 corpus_fetch；"
+            "需要扩展时用同一命中的 doc_id 和完整 context_locators，view=compact。"
+            "多个对象、因果链或指代不完整时应扩展。不同版本不可混用。"
+        )
+        payload["plans_compacted"] = True
+        compact = json.dumps(payload, ensure_ascii=False)
+        if len(compact) <= budget:
+            return compact
 
     hits = [hit for hit in (payload.get("hits") or []) if isinstance(hit, dict)]
     if not hits:
@@ -275,9 +320,18 @@ def fit_search_payload(body: str, budget: int) -> str | None:
             "hint": payload.get("hint"),
             "diagnostics_elided": True,
         }
+        if payload.get("delivery_preview") == "pilot":
+            out["delivery_preview"] = "pilot"
+            out["plans_compacted"] = True
+            if any("preview" not in hit for hit in keep):
+                out["previews_elided"] = True
         if len(keep) < len(hits):
             out["hits_elided"] = len(hits) - len(keep)
-            out["hint"] = _ELIDED_HINT
+            out["hint"] = (
+                "尾部命中因预算被整条省略。" + str(payload["hint"])
+                if payload.get("delivery_preview") == "pilot"
+                else _ELIDED_HINT
+            )
         return json.dumps(out, ensure_ascii=False)
 
     candidate = render(compact_hits)
@@ -288,6 +342,16 @@ def fit_search_payload(body: str, budget: int) -> str | None:
         candidate = render(compact_hits[:keep])
         if len(candidate) <= budget:
             return candidate
+
+    # If even one complete hit with its preview cannot fit, discard only that
+    # optional text before emitting a budget error; never clip a sentence/scope.
+    if payload.get("delivery_preview") == "pilot":
+        for hit in compact_hits:
+            hit.pop("preview", None)
+        for keep in range(len(compact_hits), 0, -1):
+            candidate = render(compact_hits[:keep])
+            if len(candidate) <= budget:
+                return candidate
 
     return json.dumps(
         {

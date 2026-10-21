@@ -1,0 +1,881 @@
+{
+  "ok": true,
+  "query": "按照华源报告，企业能否用2019至2024年的存量碳配额抵扣2025年度清缴？",
+  "count": 10,
+  "hits": [
+    {
+      "doc_id": "cv2:1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "locator": "chunk:1ada4314a25261ea:body:0002",
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0002",
+      "context_locators": [
+        "chunk:1ada4314a25261ea:body:0000",
+        "chunk:1ada4314a25261ea:heading:0000",
+        "chunk:1ada4314a25261ea:body:0001",
+        "chunk:1ada4314a25261ea:heading:0001",
+        "chunk:1ada4314a25261ea:body:0002",
+        "chunk:1ada4314a25261ea:body:0003",
+        "chunk:1ada4314a25261ea:body:0004",
+        "chunk:1ada4314a25261ea:body:0005",
+        "chunk:1ada4314a25261ea:body:0006",
+        "chunk:1ada4314a25261ea:body:0007",
+        "chunk:1ada4314a25261ea:heading:0002"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+        "locator": "chunk:1ada4314a25261ea:body:0002",
+        "locators": [
+          "chunk:1ada4314a25261ea:body:0000",
+          "chunk:1ada4314a25261ea:heading:0000",
+          "chunk:1ada4314a25261ea:body:0001",
+          "chunk:1ada4314a25261ea:heading:0001",
+          "chunk:1ada4314a25261ea:body:0002",
+          "chunk:1ada4314a25261ea:body:0003",
+          "chunk:1ada4314a25261ea:body:0004",
+          "chunk:1ada4314a25261ea:body:0005",
+          "chunk:1ada4314a25261ea:body:0006",
+          "chunk:1ada4314a25261ea:body:0007",
+          "chunk:1ada4314a25261ea:heading:0002"
+        ],
+        "scope_id": "scope:5f0d44c7e0cf2252a5058e3dbb483b3e",
+        "view": "compact"
+      },
+      "scope_id": "scope:5f0d44c7e0cf2252a5058e3dbb483b3e",
+      "total_chunks": 11,
+      "by_kind": {
+        "unknown": 11
+      },
+      "table_chunks": 0,
+      "title": "——环保行业周报（20260831~20260906）\n投资要点：",
+      "published": "undated",
+      "snippet": "<b>2025</b><b>年度</b>及后续<b>年度</b><b>配额</b><b>清缴</b>。",
+      "preview": {
+        "text": "配额发放继续采取“预分配+核定”两步法，预分配原则上按上一年度经核查\n排放量的50%确定，省级主管部门可结合履约风险和生产情况等进一步下调比例；\n重点排放单位应于每年12 月31 日前完成与经核查排放量等量的配额清缴。\n\n激励先进、鞭策落后。单位产品碳排放越低，配额盈余率越高；引导企业将碳排\n放管理深度融入战略规划与生产经营，支持能效提升、原料燃料替代、工艺革新\n等绿色低碳技术应用，推动全社会以较低成本实现减排目标。\n\n存量配额逐步出清，CCER 需求或将抬升。《方案》明确2019-2024 年度配额不\n可用于2025 年度及后续年度配额清缴。2025、2026 年度配额可按有关规定用于\n2025、2026 及后续年度配额清缴，同时允许使用2024 年1 月22 日全国温室气\n体自愿减排交易市场启动后登记的CCER 抵销2025、2026 年度碳排放配额的清\n缴。我们认为企业履约不再能主要依赖历史旧配额，而需要更加重视年度配额盈\n缺测算、交易节奏与CCER 抵销安排。\n\n碳市场有望持续扩容，远期覆盖80%碳排放管控。截至2025 年3 月，我国碳排\n放权交易市场发电行业管控二氧化碳排放占全国总量比重约40%，纳入钢铁、水\n泥、铝冶炼行业后，覆盖全国二氧化碳排放总量占比达到60%以上。",
+        "start": 458,
+        "end": 1011,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "2019",
+          "2024",
+          "2025",
+          "企业",
+          "存量",
+          "年度",
+          "清缴",
+          "配额"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+        "locators": [
+          "chunk:1ada4314a25261ea:body:0002"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+        "locators": [
+          "chunk:1ada4314a25261ea:body:0000",
+          "chunk:1ada4314a25261ea:heading:0000",
+          "chunk:1ada4314a25261ea:body:0001",
+          "chunk:1ada4314a25261ea:heading:0001",
+          "chunk:1ada4314a25261ea:body:0002",
+          "chunk:1ada4314a25261ea:body:0003",
+          "chunk:1ada4314a25261ea:body:0004",
+          "chunk:1ada4314a25261ea:body:0005",
+          "chunk:1ada4314a25261ea:body:0006",
+          "chunk:1ada4314a25261ea:body:0007",
+          "chunk:1ada4314a25261ea:heading:0002"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:1ada4314a25261ea:body:0000",
+          "chunk:1ada4314a25261ea:heading:0000",
+          "chunk:1ada4314a25261ea:body:0001",
+          "chunk:1ada4314a25261ea:heading:0001",
+          "chunk:1ada4314a25261ea:body:0002",
+          "chunk:1ada4314a25261ea:body:0003",
+          "chunk:1ada4314a25261ea:body:0004",
+          "chunk:1ada4314a25261ea:body:0005",
+          "chunk:1ada4314a25261ea:body:0006",
+          "chunk:1ada4314a25261ea:body:0007",
+          "chunk:1ada4314a25261ea:heading:0002"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "locator": "chunk:147e841aab35836a:body:0007",
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0007",
+      "context_locators": [
+        "chunk:147e841aab35836a:body:0000",
+        "chunk:147e841aab35836a:body:0001",
+        "chunk:147e841aab35836a:body:0002",
+        "chunk:147e841aab35836a:body:0003",
+        "chunk:147e841aab35836a:body:0004",
+        "chunk:147e841aab35836a:body:0005",
+        "chunk:147e841aab35836a:body:0006",
+        "chunk:147e841aab35836a:body:0007",
+        "chunk:147e841aab35836a:body:0008",
+        "chunk:147e841aab35836a:body:0009",
+        "chunk:147e841aab35836a:body:0010",
+        "chunk:147e841aab35836a:body:0011",
+        "chunk:147e841aab35836a:table:0000"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+        "locator": "chunk:147e841aab35836a:body:0007",
+        "locators": [
+          "chunk:147e841aab35836a:body:0000",
+          "chunk:147e841aab35836a:body:0001",
+          "chunk:147e841aab35836a:body:0002",
+          "chunk:147e841aab35836a:body:0003",
+          "chunk:147e841aab35836a:body:0004",
+          "chunk:147e841aab35836a:body:0005",
+          "chunk:147e841aab35836a:body:0006",
+          "chunk:147e841aab35836a:body:0007",
+          "chunk:147e841aab35836a:body:0008",
+          "chunk:147e841aab35836a:body:0009",
+          "chunk:147e841aab35836a:body:0010",
+          "chunk:147e841aab35836a:body:0011",
+          "chunk:147e841aab35836a:table:0000"
+        ],
+        "scope_id": "scope:3e2d4094249317b0d01919b84152bca8",
+        "view": "compact"
+      },
+      "scope_id": "scope:3e2d4094249317b0d01919b84152bca8",
+      "total_chunks": 13,
+      "by_kind": {
+        "unknown": 13
+      },
+      "table_chunks": 0,
+      "title": "图表目录",
+      "published": "undated",
+      "snippet": "<b>企业</b>财务数据作为观察对象。<b>2025</b>",
+      "preview": {
+        "text": "地方国企A股股权资产与有息债务规模之比为12.3%，低\n于央企的51%。地方分省中，比值相对偏高的是福建、安徽、贵州。二是国有股权获得\n的A 股分红相比其有息债务的利息，依然偏低。我们根据今年2 季度一般贷款利率测算\n国有企业有息负债的付息规模。地方国企A 股分红与债务利息之比仅为6.6%。\n3、国企的支出现状如何？我们借助其有息负债的增速观察其支出情况。选择发债企业财\n务数据作为观察对象。2025 年，央企样本企业的有息负债增速为4.6%，低于2024 年的\n5.9%。2025 年，地方国有企业样本企业的有息负债增速为6.1%，低于2024 年的6.2%。\n若相比2019年，地方国有企业样本企业的有息负债增速下降幅度较大，2019年，增速\n高达14.5%。\n4、政策建议：进一步培育壮大资本市场，鼓励和规范发展天使投资、风险投资、私募股\n权投资，支持科创上市。\n图表 5  国有企业股权、分红与债务、利息对比\n资料来源：Wind，华创证券测算；注：有息债务根据国有企业负债余额*有息债务占比进行估算。其中\n负债余额为2024 年数据。有息负债占比根据样本企业估算。股权价值为A 股市值中前十大股东中国\n有企业的持股。分红为2025 年数据。债务利息按照2 季度一般贷款利率进行测算。",
+        "start": 643,
+        "end": 1189,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "2019",
+          "2024",
+          "2025",
+          "企业"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+        "locators": [
+          "chunk:147e841aab35836a:body:0007"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+        "locators": [
+          "chunk:147e841aab35836a:body:0000",
+          "chunk:147e841aab35836a:body:0001",
+          "chunk:147e841aab35836a:body:0002",
+          "chunk:147e841aab35836a:body:0003",
+          "chunk:147e841aab35836a:body:0004",
+          "chunk:147e841aab35836a:body:0005",
+          "chunk:147e841aab35836a:body:0006",
+          "chunk:147e841aab35836a:body:0007",
+          "chunk:147e841aab35836a:body:0008",
+          "chunk:147e841aab35836a:body:0009",
+          "chunk:147e841aab35836a:body:0010",
+          "chunk:147e841aab35836a:body:0011",
+          "chunk:147e841aab35836a:table:0000"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:147e841aab35836a:body:0000",
+          "chunk:147e841aab35836a:body:0001",
+          "chunk:147e841aab35836a:body:0002",
+          "chunk:147e841aab35836a:body:0003",
+          "chunk:147e841aab35836a:body:0004",
+          "chunk:147e841aab35836a:body:0005",
+          "chunk:147e841aab35836a:body:0006",
+          "chunk:147e841aab35836a:body:0007",
+          "chunk:147e841aab35836a:body:0008",
+          "chunk:147e841aab35836a:body:0009",
+          "chunk:147e841aab35836a:body:0010",
+          "chunk:147e841aab35836a:body:0011",
+          "chunk:147e841aab35836a:table:0000"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "locator": "chunk:9ebd323f89e55cc1:body:0017",
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0017",
+      "context_locators": [
+        "chunk:9ebd323f89e55cc1:heading:0006",
+        "chunk:9ebd323f89e55cc1:body:0016",
+        "chunk:9ebd323f89e55cc1:table:0004",
+        "chunk:9ebd323f89e55cc1:body:0017",
+        "chunk:9ebd323f89e55cc1:heading:0007"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locator": "chunk:9ebd323f89e55cc1:body:0017",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:heading:0006",
+          "chunk:9ebd323f89e55cc1:body:0016",
+          "chunk:9ebd323f89e55cc1:table:0004",
+          "chunk:9ebd323f89e55cc1:body:0017",
+          "chunk:9ebd323f89e55cc1:heading:0007"
+        ],
+        "scope_id": "scope:6b9c22d04a580757842384ba4960116b",
+        "view": "compact"
+      },
+      "scope_id": "scope:6b9c22d04a580757842384ba4960116b",
+      "total_chunks": 5,
+      "by_kind": {
+        "unknown": 5
+      },
+      "table_chunks": 0,
+      "title": "8%",
+      "published": "undated",
+      "snippet": "<b>2025</b>-09\n<b>2025</b>-10\n<b>2025</b>",
+      "preview": {
+        "text": "",
+        "start": null,
+        "end": null,
+        "status": "no_complete_matching_sentence",
+        "matched_terms": [],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:body:0017"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:heading:0006",
+          "chunk:9ebd323f89e55cc1:body:0016",
+          "chunk:9ebd323f89e55cc1:table:0004",
+          "chunk:9ebd323f89e55cc1:body:0017",
+          "chunk:9ebd323f89e55cc1:heading:0007"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:9ebd323f89e55cc1:heading:0006",
+          "chunk:9ebd323f89e55cc1:body:0016",
+          "chunk:9ebd323f89e55cc1:table:0004",
+          "chunk:9ebd323f89e55cc1:body:0017",
+          "chunk:9ebd323f89e55cc1:heading:0007"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "locator": "chunk:82dac0d446ef83cd:body:0052",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0052",
+      "context_locators": [
+        "chunk:82dac0d446ef83cd:body:0050",
+        "chunk:82dac0d446ef83cd:body:0051",
+        "chunk:82dac0d446ef83cd:heading:0033",
+        "chunk:82dac0d446ef83cd:body:0052",
+        "chunk:82dac0d446ef83cd:heading:0034",
+        "chunk:82dac0d446ef83cd:body:0053"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locator": "chunk:82dac0d446ef83cd:body:0052",
+        "locators": [
+          "chunk:82dac0d446ef83cd:body:0050",
+          "chunk:82dac0d446ef83cd:body:0051",
+          "chunk:82dac0d446ef83cd:heading:0033",
+          "chunk:82dac0d446ef83cd:body:0052",
+          "chunk:82dac0d446ef83cd:heading:0034",
+          "chunk:82dac0d446ef83cd:body:0053"
+        ],
+        "scope_id": "scope:8559c17c820e58fd410d46f43fda66ac",
+        "view": "compact"
+      },
+      "scope_id": "scope:8559c17c820e58fd410d46f43fda66ac",
+      "total_chunks": 6,
+      "by_kind": {
+        "unknown": 6
+      },
+      "table_chunks": 0,
+      "title": "-4\n-2\n0\n2\n4\n6\n8\n10\n12\n14\n16",
+      "published": "undated",
+      "snippet": "<b>2024</b>\n<b>2025</b>\n2026E\n2027E\n2028E",
+      "preview": {
+        "text": "-4\n2000\n2001\n2002\n2003\n2004\n2005\n2006\n2007\n2008\n2009\n2010\n2011\n2012\n2013\n2014\n2015\n2016\n2017\n2018\n2019\n2020\n2021\n2022\n2023\n2024\n2025\n2026E\n2027E\n2028E\n2029E\n2030E\n2031E\nIMF预测:中国:GDP实际增长率（%）\nIMF预测:全球:GDP实际增长率（%）\n0%\n20%\n40%\n60%\n80%\n100%\n120%\n0\n200\n400\n600\n800\n1000\n1200\n2013\n2014\n2015\n2016\n2017\n2018\n2019\n2020\n2021\n2022\n2023\n2024\n2025\n年产能（万吨）\n产量（万吨）\n开工率（右）\n-3.0%\n-2.0%\n-1.0%\n0.0%\n1.0%\n2.0%\n0\n5\n10\n15\n20\n25\n30\nR22\nR32\nR134a\nR125\nR143a\nR152a\nR227ea\n2024\n2025\n2026\n2026年同比（右轴）\n12\n请阅读最后评级说明和重要声明\n13 / 25 \n五、化工品需求看国内还是全球？供给又应看哪\n里？\n国内化工品出口占比较多，需求立足于全球，产品由全球定价。",
+        "start": 0,
+        "end": 552,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "2019",
+          "2024",
+          "2025"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locators": [
+          "chunk:82dac0d446ef83cd:body:0052"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locators": [
+          "chunk:82dac0d446ef83cd:body:0050",
+          "chunk:82dac0d446ef83cd:body:0051",
+          "chunk:82dac0d446ef83cd:heading:0033",
+          "chunk:82dac0d446ef83cd:body:0052",
+          "chunk:82dac0d446ef83cd:heading:0034",
+          "chunk:82dac0d446ef83cd:body:0053"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:82dac0d446ef83cd:body:0050",
+          "chunk:82dac0d446ef83cd:body:0051",
+          "chunk:82dac0d446ef83cd:heading:0033",
+          "chunk:82dac0d446ef83cd:body:0052",
+          "chunk:82dac0d446ef83cd:heading:0034",
+          "chunk:82dac0d446ef83cd:body:0053"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "locator": "chunk:022ae1713fb760ff:body:0007",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0007",
+      "context_locators": [
+        "chunk:022ae1713fb760ff:body:0000",
+        "chunk:022ae1713fb760ff:body:0001",
+        "chunk:022ae1713fb760ff:body:0002",
+        "chunk:022ae1713fb760ff:body:0003",
+        "chunk:022ae1713fb760ff:body:0004",
+        "chunk:022ae1713fb760ff:body:0005",
+        "chunk:022ae1713fb760ff:body:0006",
+        "chunk:022ae1713fb760ff:body:0007",
+        "chunk:022ae1713fb760ff:body:0008",
+        "chunk:022ae1713fb760ff:body:0009",
+        "chunk:022ae1713fb760ff:table:0000",
+        "chunk:022ae1713fb760ff:body:0010",
+        "chunk:022ae1713fb760ff:body:0011",
+        "chunk:022ae1713fb760ff:body:0012",
+        "chunk:022ae1713fb760ff:body:0013",
+        "chunk:022ae1713fb760ff:body:0014",
+        "chunk:022ae1713fb760ff:body:0015",
+        "chunk:022ae1713fb760ff:heading:0000"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locator": "chunk:022ae1713fb760ff:body:0007",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015",
+          "chunk:022ae1713fb760ff:heading:0000"
+        ],
+        "scope_id": "scope:d209117def97941a4235074a9109d79a",
+        "view": "compact"
+      },
+      "scope_id": "scope:d209117def97941a4235074a9109d79a",
+      "total_chunks": 18,
+      "by_kind": {
+        "body": 1,
+        "unknown": 17
+      },
+      "table_chunks": 0,
+      "title": "022ae1713fb760ff:body:0007",
+      "published": "undated",
+      "snippet": "<b>企业</b>来看，2026年1-8月",
+      "preview": {
+        "text": "而当前绿醇产能供给仅小几十万吨，供不应求窗口期机遇显现，带来绿醇价格高\n弹性。率先落地项目、与绿色甲醇船东合作的绿醇生产商弹性最高，能够获取高额收益，建议关注：金风科技、电投\n绿能、中集安瑞科、中国天楹、佛燃能源、嘉泽新能、复洁科技等。 \n2）电解槽设备受益下游绿氢需求提升带动。各大绿醇项目的建设周期在1~2年，为匹配绿色甲醇船的运营周期，存\n量备案但未开工绿氢氨醇项目将加速动工，带动上游制氢设备商的需求爆发。此外，其他领域绿氢渗透率的提高将进\n一步带动绿氢设备需求量的提升，设备环节弹性高。招标倾向于央国企下属及相关合作企业，重点推荐已具备项目经\n验的设备企业：华电科工、华光环能。 \n3）多省市发布氢能高速过路费减免政策，燃料电池汽车场景迎来突破。25 年是示范城市群政策的最后一年，也是氢\n能中长期规划的第一个结算时点，城市群扩容、补贴下发等政策将加速燃料电池车量的释放，后续相关接续性政策也\n将陆续出台，建议关注燃料电池零部件头部企业：亿华通、重塑能源、国鸿氢能。 \n风电：8 月国内风机新增招标6GW，同比-43%，主要受短期招采节奏影响，9 月首周已有近6GW 招标落地；陆风机组环\n比小幅上涨，持续看好风机环节。大金BC Wind 项目发货，KING TWO 启动首航，看好下半年业绩、订单迎来拐点。",
+        "start": 654,
+        "end": 1213,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "企业",
+          "存量"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0007"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015",
+          "chunk:022ae1713fb760ff:heading:0000"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015",
+          "chunk:022ae1713fb760ff:heading:0000"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "locator": "chunk:147e841aab35836a:body:0007",
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "chunk_id": "147e841aab35836a:body:0007",
+      "context_locators": [
+        "chunk:147e841aab35836a:body:0001",
+        "chunk:147e841aab35836a:body:0002",
+        "chunk:147e841aab35836a:body:0003",
+        "chunk:147e841aab35836a:body:0004",
+        "chunk:147e841aab35836a:body:0005",
+        "chunk:147e841aab35836a:body:0006",
+        "chunk:147e841aab35836a:body:0007",
+        "chunk:147e841aab35836a:body:0008",
+        "chunk:147e841aab35836a:body:0009",
+        "chunk:147e841aab35836a:body:0010",
+        "chunk:147e841aab35836a:body:0011"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+        "locator": "chunk:147e841aab35836a:body:0007",
+        "locators": [
+          "chunk:147e841aab35836a:body:0001",
+          "chunk:147e841aab35836a:body:0002",
+          "chunk:147e841aab35836a:body:0003",
+          "chunk:147e841aab35836a:body:0004",
+          "chunk:147e841aab35836a:body:0005",
+          "chunk:147e841aab35836a:body:0006",
+          "chunk:147e841aab35836a:body:0007",
+          "chunk:147e841aab35836a:body:0008",
+          "chunk:147e841aab35836a:body:0009",
+          "chunk:147e841aab35836a:body:0010",
+          "chunk:147e841aab35836a:body:0011"
+        ],
+        "scope_id": "scope:8620691761b7b19e26c98b3a8578490a",
+        "view": "compact"
+      },
+      "scope_id": "scope:8620691761b7b19e26c98b3a8578490a",
+      "total_chunks": 11,
+      "by_kind": {
+        "unknown": 11
+      },
+      "table_chunks": 0,
+      "title": "图表目录",
+      "published": "undated",
+      "snippet": "<b>企业</b>财务数据作为观察对象。<b>2025</b>",
+      "preview": {
+        "text": "地方国企A股股权资产与有息债务规模之比为12.3%，低\n于央企的51%。地方分省中，比值相对偏高的是福建、安徽、贵州。二是国有股权获得\n的A 股分红相比其有息债务的利息，依然偏低。我们根据今年2 季度一般贷款利率测算\n国有企业有息负债的付息规模。地方国企A 股分红与债务利息之比仅为6.6%。\n3、国企的支出现状如何？我们借助其有息负债的增速观察其支出情况。选择发债企业财\n务数据作为观察对象。2025 年，央企样本企业的有息负债增速为4.6%，低于2024 年的\n5.9%。2025 年，地方国有企业样本企业的有息负债增速为6.1%，低于2024 年的6.2%。\n若相比2019年，地方国有企业样本企业的有息负债增速下降幅度较大，2019年，增速\n高达14.5%。\n4、政策建议：进一步培育壮大资本市场，鼓励和规范发展天使投资、风险投资、私募股\n权投资，支持科创上市。\n图表 5  国有企业股权、分红与债务、利息对比\n资料来源：Wind，华创证券测算；注：有息债务根据国有企业负债余额*有息债务占比进行估算。其中\n负债余额为2024 年数据。有息负债占比根据样本企业估算。股权价值为A 股市值中前十大股东中国\n有企业的持股。分红为2025 年数据。债务利息按照2 季度一般贷款利率进行测算。",
+        "start": 643,
+        "end": 1189,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "2019",
+          "2024",
+          "2025",
+          "企业"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+        "locators": [
+          "chunk:147e841aab35836a:body:0007"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+        "locators": [
+          "chunk:147e841aab35836a:body:0001",
+          "chunk:147e841aab35836a:body:0002",
+          "chunk:147e841aab35836a:body:0003",
+          "chunk:147e841aab35836a:body:0004",
+          "chunk:147e841aab35836a:body:0005",
+          "chunk:147e841aab35836a:body:0006",
+          "chunk:147e841aab35836a:body:0007",
+          "chunk:147e841aab35836a:body:0008",
+          "chunk:147e841aab35836a:body:0009",
+          "chunk:147e841aab35836a:body:0010",
+          "chunk:147e841aab35836a:body:0011"
+        ],
+        "remaining_after_prior_full_expansions": [],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "locator": "chunk:9ebd323f89e55cc1:body:0010",
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0010",
+      "context_locators": [
+        "chunk:9ebd323f89e55cc1:heading:0002",
+        "chunk:9ebd323f89e55cc1:body:0010",
+        "chunk:9ebd323f89e55cc1:table:0003"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locator": "chunk:9ebd323f89e55cc1:body:0010",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:heading:0002",
+          "chunk:9ebd323f89e55cc1:body:0010",
+          "chunk:9ebd323f89e55cc1:table:0003"
+        ],
+        "scope_id": "scope:4091a8e677d0adc62457539871482740",
+        "view": "compact"
+      },
+      "scope_id": "scope:4091a8e677d0adc62457539871482740",
+      "total_chunks": 3,
+      "by_kind": {
+        "unknown": 3
+      },
+      "table_chunks": 0,
+      "title": "图4：非农数据公布后，市场预期美联储2026 年9 月加息概率超过60%\n资料来源：CME，光大证券研究所（更新截至北京时间2026 年9 月5 日上午）\n二、非农数据高于预期，就业市场尚稳健",
+      "published": "undated",
+      "snippet": "<b>2019</b>-04\n<b>2019</b>-07\n<b>2019</b>",
+      "preview": {
+        "text": "",
+        "start": null,
+        "end": null,
+        "status": "no_complete_matching_sentence",
+        "matched_terms": [],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:body:0010"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:heading:0002",
+          "chunk:9ebd323f89e55cc1:body:0010",
+          "chunk:9ebd323f89e55cc1:table:0003"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:9ebd323f89e55cc1:heading:0002",
+          "chunk:9ebd323f89e55cc1:body:0010",
+          "chunk:9ebd323f89e55cc1:table:0003"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "locator": "chunk:82dac0d446ef83cd:body:0014",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0014",
+      "context_locators": [
+        "chunk:82dac0d446ef83cd:body:0013",
+        "chunk:82dac0d446ef83cd:body:0014",
+        "chunk:82dac0d446ef83cd:heading:0004"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locator": "chunk:82dac0d446ef83cd:body:0014",
+        "locators": [
+          "chunk:82dac0d446ef83cd:body:0013",
+          "chunk:82dac0d446ef83cd:body:0014",
+          "chunk:82dac0d446ef83cd:heading:0004"
+        ],
+        "scope_id": "scope:950531d5d3c8f50e220c0f953f8b718f",
+        "view": "compact"
+      },
+      "scope_id": "scope:950531d5d3c8f50e220c0f953f8b718f",
+      "total_chunks": 3,
+      "by_kind": {
+        "unknown": 3
+      },
+      "table_chunks": 0,
+      "title": "风险提示",
+      "published": "undated",
+      "snippet": "<b>2025</b>/8\n<b>2025</b>/12\n2026",
+      "preview": {
+        "text": "",
+        "start": null,
+        "end": null,
+        "status": "no_complete_matching_sentence",
+        "matched_terms": [],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locators": [
+          "chunk:82dac0d446ef83cd:body:0014"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locators": [
+          "chunk:82dac0d446ef83cd:body:0013",
+          "chunk:82dac0d446ef83cd:body:0014",
+          "chunk:82dac0d446ef83cd:heading:0004"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:82dac0d446ef83cd:body:0013",
+          "chunk:82dac0d446ef83cd:body:0014",
+          "chunk:82dac0d446ef83cd:heading:0004"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "locator": "chunk:022ae1713fb760ff:body:0021",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0021",
+      "context_locators": [
+        "chunk:022ae1713fb760ff:heading:0002",
+        "chunk:022ae1713fb760ff:body:0021",
+        "chunk:022ae1713fb760ff:body:0022"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locator": "chunk:022ae1713fb760ff:body:0021",
+        "locators": [
+          "chunk:022ae1713fb760ff:heading:0002",
+          "chunk:022ae1713fb760ff:body:0021",
+          "chunk:022ae1713fb760ff:body:0022"
+        ],
+        "scope_id": "scope:cb47ff527464641955bbaafe1f217a35",
+        "view": "compact"
+      },
+      "scope_id": "scope:cb47ff527464641955bbaafe1f217a35",
+      "total_chunks": 3,
+      "by_kind": {
+        "unknown": 3
+      },
+      "table_chunks": 0,
+      "title": "特别声明：",
+      "published": "undated",
+      "snippet": "<b>报告</b>人员应考虑本<b>报告</b>的任何",
+      "preview": {
+        "text": "证券研究报告是用于服务具备专业知识的投资\n者和投资顾问的专业产品，使用时必须经专业人士进行解读。国金证券建议获取报告人员应考虑本报告的任何意见或建议是否符合其特定状况，以及（若有必要）\n咨询独立投资顾问。报告本身、报告中的信息或所表达意见也不构成投资、法律、会计或税务的最终操作建议，国金证券不就报告中的内容对最终操作建议做出任\n何担保，在任何时候均不构成对任何人的个人推荐。 \n在法律允许的情况下，国金证券的关联机构可能会持有报告中涉及的公司所发行的证券并进行交易，并可能为这些公司正在提供或争取提供多种金融服务。 \n本报告并非意图发送、发布给在当地法律或监管规则下不允许向其发送、发布该研究报告的人员。国金证券并不因收件人收到本报告而视其为国金证券的客\n户。本报告对于收件人而言属高度机密，只有符合条件的收件人才能使用。根据《证券期货投资者适当性管理办法》，本报告仅供国金证券股份有限公司客户中风\n险评级高于C3 级(含C3 级）的投资者使用；本报告所包含的观点及建议并未考虑个别客户的特殊状况、目标或需要，不应被视为对特定客户关于特定证券或金融\n工具的建议或策略。对于本报告中提及的任何证券或金融工具，本报告的收件人须保持自身的独立判断。使用国金证券研究报告进行投资，遭受任何损失，国金证\n券不承担相关法律责任。",
+        "start": 631,
+        "end": 1190,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "报告"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0021"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:heading:0002",
+          "chunk:022ae1713fb760ff:body:0021",
+          "chunk:022ae1713fb760ff:body:0022"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:022ae1713fb760ff:heading:0002",
+          "chunk:022ae1713fb760ff:body:0021",
+          "chunk:022ae1713fb760ff:body:0022"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "locator": "chunk:9ebd323f89e55cc1:body:0014",
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0014",
+      "context_locators": [
+        "chunk:9ebd323f89e55cc1:heading:0004",
+        "chunk:9ebd323f89e55cc1:body:0013",
+        "chunk:9ebd323f89e55cc1:body:0014",
+        "chunk:9ebd323f89e55cc1:body:0015"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locator": "chunk:9ebd323f89e55cc1:body:0014",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:heading:0004",
+          "chunk:9ebd323f89e55cc1:body:0013",
+          "chunk:9ebd323f89e55cc1:body:0014",
+          "chunk:9ebd323f89e55cc1:body:0015"
+        ],
+        "scope_id": "scope:d988ca8ed596bead35661fdc348879ac",
+        "view": "compact"
+      },
+      "scope_id": "scope:d988ca8ed596bead35661fdc348879ac",
+      "total_chunks": 4,
+      "by_kind": {
+        "unknown": 4
+      },
+      "table_chunks": 0,
+      "title": "55\n60\n65",
+      "published": "undated",
+      "snippet": "<b>2025</b>/08\n<b>2025</b>/11\n2026",
+      "preview": {
+        "text": "",
+        "start": null,
+        "end": null,
+        "status": "no_complete_matching_sentence",
+        "matched_terms": [],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:body:0014"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:heading:0004",
+          "chunk:9ebd323f89e55cc1:body:0013",
+          "chunk:9ebd323f89e55cc1:body:0014",
+          "chunk:9ebd323f89e55cc1:body:0015"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:9ebd323f89e55cc1:heading:0004",
+          "chunk:9ebd323f89e55cc1:body:0013",
+          "chunk:9ebd323f89e55cc1:body:0014",
+          "chunk:9ebd323f89e55cc1:body:0015"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@48e8e60844f69177d5eb672a1d1b1010",
+    "processing": "scoped",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 22,
+      "published": 18,
+      "withdrawn": 0,
+      "pending": 0,
+      "failed_jobs": 0,
+      "builds": 28,
+      "published_with_gaps": 16
+    },
+    "retrieval": {
+      "requested": "hybrid",
+      "used": "hybrid",
+      "reason": null,
+      "profile": "fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107",
+      "expected_chunks": 703,
+      "ready_chunks": 703,
+      "lexical_candidates": 198,
+      "vector_candidates": 200,
+      "query_cache_hit": false,
+      "query_usage": {
+        "prompt_tokens": 60,
+        "total_tokens": 60
+      },
+      "elapsed_ms": 550
+    }
+  },
+  "hint": "preview 是选读预览，不是已取证引用。先用同一命中的 core_fetch_plan 调用 corpus_fetch；问题涉及多个对象、因果链或指代不完整时，再按 fetch_plan 扩展上下文。表格保留原范围以带齐表头、期间和单位。重复 locator 可在相同 doc_id 下去重；不同版本不可混用。",
+  "delivery_preview": "pilot"
+}

@@ -1,0 +1,93 @@
+{
+  "case": "n07",
+  "kind": "wrong_institution",
+  "review": {
+    "class": "background",
+    "reason": "实际来源国信且内容为未来估值，不能充当国泰海通半年报点评",
+    "markers": []
+  },
+  "capture_sha256": "71493fc2013ba7f9c1a1776e81404d545adb4bc1659fe64c909a46ff2a64ccd4",
+  "original_sha256": "d77a2a8040aada005369a3f00553618735d190531610d52134001727e5c73334",
+  "original_retrieval": "hybrid",
+  "top_chunk": "568f9e752f0fa65a:body:0035",
+  "top_original_chars": 513,
+  "old_snippet": "<b>公司</b>。\n综合考虑可比<b>公司</b><b>2026</b>",
+  "preview": {
+    "text": "相对估值\n公司聚焦半导体封测装备领域，核心业务涵盖机械划切设备、激光划切设备、研\n磨抛光设备及核心零部件与耗材等产品线，且在国内半导体切割划片装备市场具\n备较强竞争力，同时积极推进半导体封测设备国产替代与海外市场拓展。结合公\n司主营业务及产品属性，我们选取半导体设备行业内的华峰测控、长川科技2 家\n企业作为可比公司。\n综合考虑可比公司2026 年—2028 年平均PE 分别为85/62/46 倍，以及光力科技\n在半导体封测设备国产替代进程中的优势、划切与研磨设备业务的增长潜力，我\n们预计2026 年—2028 年归属于母公司净利润分别为1.32/2.19/3.43 亿元，对应\nPE 分别为79/48/30 倍。\n我们考虑到目前已经2026 年9 月，根据公司2026 年5 月8 日的投资者关系活动\n记录表，公司正在全力加紧航空港厂区二期产能扩建项目的建设，预计在2027年\n一季度建筑工程全部完工，我们预计2027 年公司划片机产能有望逐步开始释放，\n我们以2027 年盈利预测2.19 亿元为参考，给予公司目标估值倍数为2027 年PE\n55-68 倍，对应公司未来一年期合理估值区间为32.54-39.98 元。",
+    "start": 0,
+    "end": 513,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "2026",
+      "公司",
+      "净利润",
+      "科技"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": []
+  },
+  "core_chunks": 33,
+  "full_chunks": 134,
+  "original_context_occurrences": 140,
+  "preview_statuses": {
+    "complete_sentence_window": 9,
+    "structured_content_requires_fetch": 1
+  },
+  "preview_chars": [
+    513,
+    109,
+    559,
+    576,
+    0,
+    533,
+    509,
+    600,
+    580,
+    103
+  ],
+  "body_chars": {
+    "off": 19503,
+    "pilot": 40571
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 4976,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      },
+      "pilot": {
+        "chars": 4672,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 10236,
+        "hits": 4,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      },
+      "pilot": {
+        "chars": 9462,
+        "hits": 4,
+        "previews": 4,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      }
+    }
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "case": "n03",
+  "kind": "forecast_actual",
+  "review": {
+    "class": "direct",
+    "reason": "预计措辞可直接否定已经实现的前提，不判定预测真伪",
+    "markers": [
+      "预计",
+      "27年三季度",
+      "500万只"
+    ]
+  },
+  "capture_sha256": "2a4687b99a2941ae3790d198feb357bcf334d95c6ab7dab47a37411de9d50dd8",
+  "original_sha256": "d35911800c34c79639e1da69e8ceb3ea35886521b68c13124115bdf86a029bcf",
+  "original_retrieval": "hybrid",
+  "top_chunk": "6475cbacca1575c5:body:0000",
+  "top_original_chars": 1105,
+  "old_snippet": "<b>3.2</b>T看看行业，我们<b>3.2</b>T预计",
+  "preview": {
+    "text": "没有的，所有的更换替代，它坏了的替代，全部在我们平时所说的这些需求也好，消费也好，都包含在里面，不要去重复计价。\n你的AI刚爆发，你还没信心，或者你要充分的证据，那你还要保守一点。但是24年也是这样，25年也是这样，就很奇怪。\n学术机构，对，就lightcounting这种就别看了。这个也不对，我都怀疑这不是他的数字，这个数字也不对。如果是旭创的话也不对，不知道是不是旭创的采访。\n二季度800G出货量未达市场预期的原因是什么？实际上这出货量主要原因是1.6T影响了800G，谁说的？这个不太对，那反正不是旭创的数字。3.2T看看行业，我们3.2T预计将在27年三季度左右实现批量供应，这是个预计的，预计到28年整个行业的出货量将达到500万只的水平。价格方面预计3.2T单价在1800美元左右，这是个比较早期的一些预计，可以先看看2.4T未来如何。2.4T 27年的出货量预期在200万只，这个是之前传的，也是200万只，这是可能的。到28年预计增长至300至500万只，这个就是金像电的这个产品。然后EML和硅光26年初是4比6，预计到年底是规划到65%比35%。\n1.6T里面，全行业的占比到70%。海外的需求量26年的需求量，26年其实意义已经不大了，买800G 200万只，1.6T 100万只。谷歌800G 250万只，1.6T 180万只，不用拆这么细。",
+    "start": 389,
+    "end": 974,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "3.2",
+      "500",
+      "万只",
+      "出货",
+      "实际"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [
+      "预计"
+    ],
+    "new_preview": [
+      "预计",
+      "27年三季度",
+      "500万只"
+    ]
+  },
+  "core_chunks": 7,
+  "full_chunks": 83,
+  "original_context_occurrences": 110,
+  "preview_statuses": {
+    "complete_sentence_window": 10
+  },
+  "preview_chars": [
+    585,
+    551,
+    576,
+    513,
+    573,
+    551,
+    576,
+    591,
+    573,
+    583
+  ],
+  "body_chars": {
+    "off": 17257,
+    "pilot": 36020
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 4757,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      },
+      "pilot": {
+        "chars": 5080,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": false
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11887,
+        "hits": 6,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      },
+      "pilot": {
+        "chars": 11021,
+        "hits": 5,
+        "previews": 5,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": false
+      }
+    }
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "case": "n08",
+  "kind": "unknown_price",
+  "review": {
+    "class": "irrelevant",
+    "reason": "首位是美国汽油、通胀与利差图，不能回答工业富联收盘价",
+    "markers": []
+  },
+  "capture_sha256": "e112a318c113e6c046e416d610b783347845ed31c20781573cc95c0669f8e628",
+  "original_sha256": "5cfb00827cbd0e9cb98fd2406c82c19d16a9dc647ea8e5408e9b5c2d863f0993",
+  "original_retrieval": "hybrid",
+  "top_chunk": "628ec76d5b4001b7:body:0032",
+  "top_original_chars": 934,
+  "old_snippet": "<b>2026</b>-02-<b>20</b>\n<b>2026</b>-03",
+  "preview": {
+    "text": "",
+    "start": null,
+    "end": null,
+    "status": "no_complete_matching_sentence",
+    "matched_terms": [],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": []
+  },
+  "core_chunks": 10,
+  "full_chunks": 111,
+  "original_context_occurrences": 113,
+  "preview_statuses": {
+    "no_complete_matching_sentence": 5,
+    "complete_sentence_window": 5
+  },
+  "preview_chars": [
+    0,
+    513,
+    0,
+    0,
+    593,
+    0,
+    591,
+    397,
+    552,
+    0
+  ],
+  "body_chars": {
+    "off": 18040,
+    "pilot": 35022
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 5547,
+        "hits": 3,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      },
+      "pilot": {
+        "chars": 5295,
+        "hits": 3,
+        "previews": 1,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11822,
+        "hits": 6,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      },
+      "pilot": {
+        "chars": 10629,
+        "hits": 6,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      }
+    }
+  }
+}

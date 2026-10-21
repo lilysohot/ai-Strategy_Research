@@ -1,0 +1,99 @@
+{
+  "case": "p08",
+  "kind": "positive",
+  "review": {
+    "class": "direct",
+    "reason": "1998年特别国债2700亿元及分配用途",
+    "markers": [
+      "1998年",
+      "2700亿元"
+    ]
+  },
+  "capture_sha256": "180c293b8a8d223493f2c211edc7acc5bc889958488e6e190541cd1d8330f6ab",
+  "original_sha256": "f53abeb5b78aa1d399c6f15d3fb78c472bb29cee0ccc5a2357359877712f4412",
+  "original_retrieval": "hybrid",
+  "top_chunk": "d5c99534333873cc:body:0002",
+  "top_original_chars": 1379,
+  "old_snippet": "<b>资本</b>对大型<b>银行</b>进行系统性<b>资本</b><b>补充</b>",
+  "preview": {
+    "text": "一、历史上有过几轮？国家资本对大型银行进行系统性资本补充并不罕\n见，但本轮财政部集中注资保险企业应是历史首次。\n1、回顾看，国家资本对大型银行进行系统性资本补充，大致可以划分为\n1998 年、2003—2008 年、2025 年至今三轮。\n>1998年的资本补充主要用于满足国有大行资本充足率的要求。1998年\n亚洲金融危机后，四大国有银行资本充足率普遍偏低，财政部定向发行\n2700 亿元特别国债，工行、农行、中行、建行分别获得850 亿元、933 亿\n元、425 亿元和492 亿元资本金，核心目的在于使银行资本充足率达到8%\n的监管要求，并与后续不良资产剥离共同推进银行体系风险化解。\n>2003—2008 年的资本补充则更多服务于国有商业银行股份制改革，本质\n上是一轮系统性财务重组。2003年国家运用外汇储备分别向中行、建行\n注资225 亿美元，2005 年向工行注资150 亿美元，此后农行改革同样获\n作者\n分析师\n熊园\n执业证书编号：S0680518050004 \n邮箱：xiongyuan@gszq.com \n分析师\n穆仁文\n执业证书编号：S0680523060001 \n邮箱：murenwen@gszq.com \n相关研究\n1、《信贷社融的新特征、新框架》2026-09-04 \n2、《4 大关注点》2026-08-30 \n3、《8 月PMI 超季节回升，成色几何？",
+    "start": 0,
+    "end": 592,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "1998",
+      "别国",
+      "补充",
+      "资本",
+      "银行"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": [
+      "1998年",
+      "2700亿元"
+    ]
+  },
+  "core_chunks": 6,
+  "full_chunks": 64,
+  "original_context_occurrences": 78,
+  "preview_statuses": {
+    "complete_sentence_window": 10
+  },
+  "preview_chars": [
+    592,
+    205,
+    205,
+    579,
+    120,
+    205,
+    205,
+    579,
+    120,
+    583
+  ],
+  "body_chars": {
+    "off": 14879,
+    "pilot": 29439
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 4104,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 4418,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11827,
+        "hits": 8,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 11367,
+        "hits": 7,
+        "previews": 7,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

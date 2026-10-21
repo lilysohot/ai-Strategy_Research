@@ -1,0 +1,103 @@
+{
+  "case": "p06",
+  "kind": "positive",
+  "review": {
+    "class": "direct",
+    "reason": "净息差拖累内源资本积累，需为未来扩张腾出空间",
+    "markers": [
+      "净息差下降",
+      "内源资本积累",
+      "资本空间"
+    ]
+  },
+  "capture_sha256": "26d908041cd81079bd8fe0761d688acfe3a0090612b16805a9cf3c98b7f1fba6",
+  "original_sha256": "7e569585f9a4d4426f8582bb6d58bb4b04fe3cbc57f8b34dcf30b9a39c720be9",
+  "original_retrieval": "hybrid",
+  "top_chunk": "d5c99534333873cc:body:0003",
+  "top_original_chars": 1176,
+  "old_snippet": "<b>银行</b><b>补充</b><b>资本</b>的主要矛盾不是当前<b>资本</b>",
+  "preview": {
+    "text": "二、为什么是现在？银行与保险资本都不算紧张，但内生资本积累和未来\n资本需求之间的矛盾正在上升。\n1、银行补充资本的主要矛盾不是当前资本已经不足，而是净息差下降拖\n累银行盈利，导致内源资本积累速度放缓，未来继续承担稳增长和信用扩\n张职能需要提前腾出资本空间。\n>当前银行补充资本的主要矛盾不是当前资本已经不足，而是净息差下降\n拖累银行盈利，导致内源资本积累速度放缓。目前大行并不存在资本不足\n甚至触碰监管红线的问题，截至2026 年6 月末，工行核心一级资本充足\n率为13.21%，农行为10.80%，均明显高于监管要求，但分别较2025 年\n末下降0.36 和0.28 个百分点。与此同时，两家银行净息差分别仅为1.29%\n和1.28%左右，均低于1.8%的警戒线水平。\n>本轮银行注资主要旨在“提前降低资本约束”，为未来继续承担稳增长和\n信用扩张职能需要腾出资本空间。资本金增加后，银行将具备更强的资产\n承载能力，2025 年财政部曾表示5000 亿元大行注资能够增加约6 万亿元\n信贷投放空间。特别是大行还承担科技金融、绿色金融、普惠金融、养老\n金融以及地方债务化解等政策功能，且全球系统重要性银行面临更高资本\n和总损失吸收能力要求。财政注资能够直接提高最优质的核心一级资本，\n而不是单纯依赖二级资本债、永续债等外源资本工具，相当于从资产负债\n表最底层提高银行的风险承受和扩表能力。",
+    "start": 0,
+    "end": 593,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "2026",
+      "补充",
+      "资本",
+      "银行",
+      "需要"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": [
+      "净息差下降",
+      "内源资本积累",
+      "资本空间"
+    ]
+  },
+  "core_chunks": 59,
+  "full_chunks": 148,
+  "original_context_occurrences": 152,
+  "preview_statuses": {
+    "complete_sentence_window": 5,
+    "structured_content_requires_fetch": 3,
+    "no_complete_matching_sentence": 2
+  },
+  "preview_chars": [
+    593,
+    517,
+    0,
+    0,
+    558,
+    0,
+    0,
+    530,
+    211,
+    0
+  ],
+  "body_chars": {
+    "off": 20391,
+    "pilot": 41546
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 5400,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 5381,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11839,
+        "hits": 5,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 11655,
+        "hits": 5,
+        "previews": 3,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

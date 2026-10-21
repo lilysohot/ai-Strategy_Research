@@ -229,6 +229,82 @@ def built_pdf(tmp_path):
     return _build_pdf(tmp_path)
 
 
+def text_acceptance(target):
+    from plugins.corpus.preparation.text_publication import TextPublication
+
+    return TextPublication(
+        target.source_id,
+        target.build_id,
+        canonical_fingerprint(asdict(target)),
+        "test-operator",
+        NOW.isoformat(),
+        "user-request:test-partial-text",
+        tuple(json.loads(target.quality_report)["gap_regions"]),
+    )
+
+
+def test_partial_text_publication_preserves_gap_and_supports_idempotent_retry(built_pdf):
+    from plugins.corpus.preparation.contract import JobStage
+    from plugins.corpus.preparation.engine import EngineError, gap_records_of, publish_build
+    from plugins.corpus.preparation.repository import StoreError
+    from plugins.corpus.preparation.text_publication import STAGE_PREFIX
+
+    store, target = built_pdf
+    before = (store.get_units(target.build_id), store.get_chunks(target.build_id))
+    with pytest.raises(EngineError, match="gap_regions"):
+        publish_build(store, target.build_id, activated_at=NOW)
+    acceptance = text_acceptance(target)
+    store.put_text_publication(acceptance)
+    store.put_text_publication(acceptance)
+    with pytest.raises(StoreError):
+        store.put_text_publication(replace(acceptance, operator="different"))
+    with pytest.raises(StoreError):
+        store.put_source_checkpoint(target.source_id, STAGE_PREFIX + target.build_id, "{}")
+    publication = publish_build(store, target.build_id, activated_at=NOW)
+    assert publish_build(store, target.build_id, activated_at=NOW) == publication
+    checkpoint = json.loads(store.get_job(target.build_id, JobStage.PUBLISHED).checkpoint)
+    assert checkpoint["text_publication_id"] == acceptance.acceptance_id
+    assert checkpoint["human_gap_review_id"] is None
+    assert checkpoint["coverage_claim"] == "available_text_only_incomplete"
+    assert before == (store.get_units(target.build_id), store.get_chunks(target.build_id))
+    assert gap_records_of(target, store=store)[0].basis.startswith("text_publication:")
+    assert gap_records_of(target)[0].lifecycle is GapLifecycle.BLOCKING
+    del store._source_checkpoints[(target.source_id, STAGE_PREFIX + target.build_id)]
+    with pytest.raises(EngineError, match="acceptance missing"):
+        publish_build(store, target.build_id, activated_at=NOW)
+
+
+@pytest.mark.parametrize(
+    "key",
+    [
+        "issue:unknown_body_element:page:2",
+        "issue:future_code:page:2",
+        "issue:image_only_page:unknown",
+        "issue:table_extraction_failed:char:0-8",
+    ],
+)
+def test_text_publication_does_not_accept_unknown_or_unlocated_gaps(key):
+    from plugins.corpus.preparation.text_publication import apply_text_publication
+
+    target = replace(build(), quality_report=json.dumps({"gap_regions": [key]}))
+    with pytest.raises(ValueError):
+        apply_text_publication(text_acceptance(target), target, units(), gap_records([key]))
+
+
+def test_text_publication_requires_text_exact_build_and_complete_ledger():
+    from plugins.corpus.preparation.text_publication import apply_text_publication
+
+    target = build()
+    acceptance = text_acceptance(target)
+    for changed, retained, records in (
+        (target, (), gap_records([GAP])),
+        (replace(target, clean_rev="different"), units(), gap_records([GAP])),
+        (target, units(), gap_records([GAP, "issue:image_only_page:page:3"])),
+    ):
+        with pytest.raises(ValueError):
+            apply_text_publication(acceptance, changed, retained, records)
+
+
 def test_real_reader_build_publish_and_retry_keep_gap_and_audit(built_pdf):
     from plugins.corpus.preparation.contract import JobStage
     from plugins.corpus.preparation.engine import (

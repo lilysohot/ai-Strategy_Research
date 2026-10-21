@@ -1,0 +1,505 @@
+[
+  {
+    "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+    "old_build": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+    "old_schema": "parse-checkpoint-4",
+    "admission": "in_scope",
+    "units": 196,
+    "chunks": 23,
+    "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+    "clean_rev": "2eeef8e3714109270dc33c08165156d586cd813db827c686d3a1cc591640d44c",
+    "quality_report": {
+      "gap_regions": [
+        "issue:image_region_small:page:1",
+        "issue:image_region_small:page:2",
+        "issue:image_region_small:page:3",
+        "issue:image_region_small:page:4",
+        "issue:image_region_small:page:5",
+        "issue:image_region_small:page:6",
+        "issue:image_region_small:page:7",
+        "issue:image_region_small:page:8",
+        "issue:image_region_small:page:9"
+      ],
+      "oversized_chunks": []
+    },
+    "status": "published",
+    "generation": 2
+  },
+  {
+    "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+    "old_build": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+    "old_schema": "parse-checkpoint-4",
+    "admission": "in_scope",
+    "units": 205,
+    "chunks": 25,
+    "build_id": "7d23fc247bda199b79b6de93cb4b21eaa74bcaf9c39a0f348b6c0685adefc28f",
+    "clean_rev": "2eeef8e3714109270dc33c08165156d586cd813db827c686d3a1cc591640d44c",
+    "quality_report": {
+      "gap_regions": [
+        "issue:image_region_small:page:1",
+        "issue:image_region_small:page:2",
+        "issue:image_region_small:page:3",
+        "issue:image_region_small:page:4",
+        "issue:image_region_small:page:5",
+        "issue:image_region_small:page:6",
+        "issue:image_region_small:page:7",
+        "issue:image_region_small:page:8"
+      ],
+      "oversized_chunks": []
+    },
+    "status": "published",
+    "generation": 2
+  },
+  {
+    "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+    "old_build": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+    "old_schema": "parse-checkpoint-2",
+    "admission": "in_scope",
+    "units": 1329,
+    "chunks": 147,
+    "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+    "clean_rev": "2eeef8e3714109270dc33c08165156d586cd813db827c686d3a1cc591640d44c",
+    "quality_report": {
+      "gap_regions": [
+        "issue:image_region_small:page:1",
+        "issue:image_region_small:page:10",
+        "issue:image_region_small:page:11",
+        "issue:image_region_small:page:12",
+        "issue:image_region_small:page:13",
+        "issue:image_region_small:page:14",
+        "issue:image_region_small:page:15",
+        "issue:image_region_small:page:16",
+        "issue:image_region_small:page:17",
+        "issue:image_region_small:page:18",
+        "issue:image_region_small:page:19",
+        "issue:image_region_small:page:2",
+        "issue:image_region_small:page:20",
+        "issue:image_region_small:page:21",
+        "issue:image_region_small:page:22",
+        "issue:image_region_small:page:23",
+        "issue:image_region_small:page:24",
+        "issue:image_region_small:page:25",
+        "issue:image_region_small:page:3",
+        "issue:image_region_small:page:4",
+        "issue:image_region_small:page:5",
+        "issue:image_region_small:page:6",
+        "issue:image_region_small:page:7",
+        "issue:image_region_small:page:8",
+        "issue:image_region_small:page:9"
+      ],
+      "oversized_chunks": []
+    },
+    "status": "published",
+    "generation": 3
+  },
+  {
+    "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+    "old_build": "d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+    "old_schema": "parse-checkpoint-4",
+    "admission": "in_scope",
+    "units": 69,
+    "chunks": 8,
+    "build_id": "7ed6e0b7e6f46d309af19d8f39bb4732a8dbeaf4d9b22e09a543521170e1b8e1",
+    "clean_rev": "2eeef8e3714109270dc33c08165156d586cd813db827c686d3a1cc591640d44c",
+    "quality_report": {
+      "gap_regions": [
+        "issue:image_region_small:page:1",
+        "issue:image_region_small:page:2",
+        "issue:image_region_small:page:3",
+        "issue:image_region_small:page:4",
+        "issue:image_region_small:page:5"
+      ],
+      "oversized_chunks": []
+    },
+    "status": "published",
+    "generation": 2
+  },
+  {
+    "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+    "old_build": "d2ec2ce01b12450b6090114e23ec01465ea4399b38387c0a83d1808354c6e75f",
+    "old_schema": "parse-checkpoint-4",
+    "admission": "in_scope",
+    "units": 195,
+    "chunks": 10,
+    "build_id": "4149b21d55663c1bfefb0234260c53c476885db329588eaf3c05dc557a11b64c",
+    "clean_rev": "2eeef8e3714109270dc33c08165156d586cd813db827c686d3a1cc591640d44c",
+    "quality_report": {
+      "gap_regions": [
+        "issue:image_region_small:page:1",
+        "issue:image_region_small:page:2",
+        "issue:image_region_small:page:3",
+        "issue:image_region_small:page:4"
+      ],
+      "oversized_chunks": []
+    },
+    "status": "published",
+    "generation": 2
+  },
+  {
+    "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+    "old_build": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+    "old_schema": "parse-checkpoint-4",
+    "admission": "in_scope",
+    "units": 314,
+    "chunks": 27,
+    "build_id": "510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24",
+    "clean_rev": "2eeef8e3714109270dc33c08165156d586cd813db827c686d3a1cc591640d44c",
+    "quality_report": {
+      "gap_regions": [
+        "issue:image_region_small:page:1",
+        "issue:image_region_small:page:10",
+        "issue:image_region_small:page:11",
+        "issue:image_region_small:page:12",
+        "issue:image_region_small:page:13",
+        "issue:image_region_small:page:2",
+        "issue:image_region_small:page:3",
+        "issue:image_region_small:page:4",
+        "issue:image_region_small:page:5",
+        "issue:image_region_small:page:6",
+        "issue:image_region_small:page:7",
+        "issue:image_region_small:page:8",
+        "issue:image_region_small:page:9"
+      ],
+      "oversized_chunks": []
+    },
+    "status": "published",
+    "generation": 2
+  },
+  {
+    "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+    "old_build": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+    "old_schema": "parse-checkpoint-4",
+    "admission": "in_scope",
+    "units": 375,
+    "chunks": 72,
+    "build_id": "231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969",
+    "clean_rev": "2eeef8e3714109270dc33c08165156d586cd813db827c686d3a1cc591640d44c",
+    "quality_report": {
+      "gap_regions": [
+        "issue:image_region_small:page:1",
+        "issue:image_region_small:page:2",
+        "issue:image_region_small:page:3",
+        "issue:image_region_small:page:4",
+        "issue:image_region_small:page:5",
+        "issue:image_region_small:page:6",
+        "issue:image_region_small:page:7",
+        "issue:image_region_small:page:8"
+      ],
+      "oversized_chunks": []
+    },
+    "status": "published",
+    "generation": 2
+  },
+  {
+    "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+    "old_build": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+    "old_schema": "parse-checkpoint-4",
+    "admission": "in_scope",
+    "units": 51,
+    "chunks": 9,
+    "build_id": "43db124db26de27ff8ee32f28f9307cb4c34dac060eb5dcea7202c1611b911ff",
+    "clean_rev": "2eeef8e3714109270dc33c08165156d586cd813db827c686d3a1cc591640d44c",
+    "quality_report": {
+      "gap_regions": [
+        "issue:image_region_small:page:1",
+        "issue:image_region_small:page:2"
+      ],
+      "oversized_chunks": []
+    },
+    "status": "published",
+    "generation": 2
+  },
+  {
+    "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+    "old_build": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+    "old_schema": "parse-checkpoint-2",
+    "admission": "in_scope",
+    "units": 325,
+    "chunks": 60,
+    "build_id": "30b69494f09addd38888900a889d2168289e350ff25526b032e99b2afd52a299",
+    "clean_rev": "2eeef8e3714109270dc33c08165156d586cd813db827c686d3a1cc591640d44c",
+    "quality_report": {
+      "gap_regions": [
+        "issue:image_region_small:page:1",
+        "issue:image_region_small:page:2",
+        "issue:image_region_small:page:3",
+        "issue:image_region_small:page:4",
+        "issue:image_region_small:page:5",
+        "issue:image_region_small:page:6",
+        "issue:image_region_small:page:7",
+        "issue:image_region_unreadable:page:2"
+      ],
+      "oversized_chunks": []
+    },
+    "status": "blocked_by_gate",
+    "error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:2']（image_region_unreadable@page:2）"
+  },
+  {
+    "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+    "old_build": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+    "old_schema": "parse-checkpoint-2",
+    "admission": "in_scope",
+    "units": 474,
+    "chunks": 42,
+    "build_id": "3d17f758d795ee7195254f9b831cdf96c7ffa510f45c7445645314524d9e0185",
+    "clean_rev": "2eeef8e3714109270dc33c08165156d586cd813db827c686d3a1cc591640d44c",
+    "quality_report": {
+      "gap_regions": [
+        "issue:image_region_small:page:1",
+        "issue:image_region_small:page:2",
+        "issue:image_region_small:page:3",
+        "issue:image_region_small:page:4",
+        "issue:image_region_small:page:5",
+        "issue:image_region_small:page:6",
+        "issue:image_region_small:page:7",
+        "issue:image_region_small:page:8"
+      ],
+      "oversized_chunks": []
+    },
+    "status": "published",
+    "generation": 3
+  },
+  {
+    "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+    "old_build": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+    "old_schema": "parse-checkpoint-4",
+    "admission": "in_scope",
+    "units": 239,
+    "chunks": 21,
+    "build_id": "2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+    "clean_rev": "2eeef8e3714109270dc33c08165156d586cd813db827c686d3a1cc591640d44c",
+    "quality_report": {
+      "gap_regions": [
+        "issue:image_region_small:page:1",
+        "issue:image_region_small:page:10",
+        "issue:image_region_small:page:11",
+        "issue:image_region_small:page:12",
+        "issue:image_region_small:page:13",
+        "issue:image_region_small:page:14",
+        "issue:image_region_small:page:15",
+        "issue:image_region_small:page:16",
+        "issue:image_region_small:page:2",
+        "issue:image_region_small:page:3",
+        "issue:image_region_small:page:4",
+        "issue:image_region_small:page:5",
+        "issue:image_region_small:page:6",
+        "issue:image_region_small:page:7",
+        "issue:image_region_small:page:8",
+        "issue:image_region_small:page:9"
+      ],
+      "oversized_chunks": []
+    },
+    "status": "published",
+    "generation": 2
+  },
+  {
+    "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+    "old_build": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+    "old_schema": "parse-checkpoint-4",
+    "admission": "in_scope",
+    "units": 243,
+    "chunks": 13,
+    "build_id": "c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+    "clean_rev": "2eeef8e3714109270dc33c08165156d586cd813db827c686d3a1cc591640d44c",
+    "quality_report": {
+      "gap_regions": [
+        "issue:image_region_small:page:1",
+        "issue:image_region_small:page:2",
+        "issue:image_region_small:page:3",
+        "issue:image_region_small:page:4",
+        "issue:image_region_small:page:5",
+        "issue:image_region_small:page:6",
+        "issue:image_region_small:page:7",
+        "issue:image_region_small:page:8"
+      ],
+      "oversized_chunks": []
+    },
+    "status": "published",
+    "generation": 2
+  },
+  {
+    "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+    "old_build": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+    "old_schema": "parse-checkpoint-2",
+    "admission": "in_scope",
+    "units": 268,
+    "chunks": 35,
+    "build_id": "9bebd13a330d0b61530cda4732548eb1659a9af8004ea887a0e81b2cc2a42f9b",
+    "clean_rev": "2eeef8e3714109270dc33c08165156d586cd813db827c686d3a1cc591640d44c",
+    "quality_report": {
+      "gap_regions": [
+        "issue:image_region_small:page:1",
+        "issue:image_region_small:page:10",
+        "issue:image_region_small:page:11",
+        "issue:image_region_small:page:12",
+        "issue:image_region_small:page:13",
+        "issue:image_region_small:page:14",
+        "issue:image_region_small:page:15",
+        "issue:image_region_small:page:16",
+        "issue:image_region_small:page:2",
+        "issue:image_region_small:page:3",
+        "issue:image_region_small:page:4",
+        "issue:image_region_small:page:5",
+        "issue:image_region_small:page:6",
+        "issue:image_region_small:page:7",
+        "issue:image_region_small:page:8",
+        "issue:image_region_small:page:9"
+      ],
+      "oversized_chunks": []
+    },
+    "status": "published",
+    "generation": 3
+  },
+  {
+    "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+    "old_build": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+    "old_schema": "parse-checkpoint-4",
+    "admission": "in_scope",
+    "units": 607,
+    "chunks": 68,
+    "build_id": "8fe537bdac281f396c7007db6dcea8cbec44ff8d6640bd597e1f4dce47c49424",
+    "clean_rev": "2eeef8e3714109270dc33c08165156d586cd813db827c686d3a1cc591640d44c",
+    "quality_report": {
+      "gap_regions": [
+        "issue:image_region_small:page:1",
+        "issue:image_region_small:page:10",
+        "issue:image_region_small:page:11",
+        "issue:image_region_small:page:12",
+        "issue:image_region_small:page:13",
+        "issue:image_region_small:page:14",
+        "issue:image_region_small:page:15",
+        "issue:image_region_small:page:16",
+        "issue:image_region_small:page:17",
+        "issue:image_region_small:page:2",
+        "issue:image_region_small:page:3",
+        "issue:image_region_small:page:4",
+        "issue:image_region_small:page:5",
+        "issue:image_region_small:page:6",
+        "issue:image_region_small:page:7",
+        "issue:image_region_small:page:8",
+        "issue:image_region_small:page:9"
+      ],
+      "oversized_chunks": []
+    },
+    "status": "published",
+    "generation": 2
+  },
+  {
+    "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+    "old_build": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+    "old_schema": "parse-checkpoint-2",
+    "admission": "in_scope",
+    "units": 604,
+    "chunks": 81,
+    "build_id": "75ea80ddca098f96db22a1e4b3a79e6689ff8b177ea072822ef90d1440753c20",
+    "clean_rev": "2eeef8e3714109270dc33c08165156d586cd813db827c686d3a1cc591640d44c",
+    "quality_report": {
+      "gap_regions": [
+        "issue:image_region_small:page:1",
+        "issue:image_region_small:page:10",
+        "issue:image_region_small:page:11",
+        "issue:image_region_small:page:12",
+        "issue:image_region_small:page:13",
+        "issue:image_region_small:page:14",
+        "issue:image_region_small:page:15",
+        "issue:image_region_small:page:16",
+        "issue:image_region_small:page:17",
+        "issue:image_region_small:page:18",
+        "issue:image_region_small:page:19",
+        "issue:image_region_small:page:2",
+        "issue:image_region_small:page:20",
+        "issue:image_region_small:page:21",
+        "issue:image_region_small:page:22",
+        "issue:image_region_small:page:3",
+        "issue:image_region_small:page:4",
+        "issue:image_region_small:page:5",
+        "issue:image_region_small:page:6",
+        "issue:image_region_small:page:7",
+        "issue:image_region_small:page:8",
+        "issue:image_region_small:page:9",
+        "issue:image_region_unreadable:page:7"
+      ],
+      "oversized_chunks": []
+    },
+    "status": "blocked_by_gate",
+    "error": "publish 拒绝：存在未解决的质量缺口（gap_regions 非空，须按架构 §7.3 处置）: ['issue:image_region_unreadable:page:7']（image_region_unreadable@page:7）"
+  },
+  {
+    "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+    "old_build": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+    "old_schema": "parse-checkpoint-2",
+    "admission": "in_scope",
+    "units": 230,
+    "chunks": 19,
+    "build_id": "bbddcfe7ee8c592bb2551296fc524d8ae75dfbd8446285f9ba6ba82bbeb3a98c",
+    "clean_rev": "2eeef8e3714109270dc33c08165156d586cd813db827c686d3a1cc591640d44c",
+    "quality_report": {
+      "gap_regions": [
+        "issue:image_region_small:page:1",
+        "issue:image_region_small:page:10",
+        "issue:image_region_small:page:11",
+        "issue:image_region_small:page:2",
+        "issue:image_region_small:page:3",
+        "issue:image_region_small:page:4",
+        "issue:image_region_small:page:5",
+        "issue:image_region_small:page:6",
+        "issue:image_region_small:page:7",
+        "issue:image_region_small:page:8",
+        "issue:image_region_small:page:9"
+      ],
+      "oversized_chunks": []
+    },
+    "status": "published",
+    "generation": 3
+  },
+  {
+    "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+    "old_build": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+    "old_schema": "parse-checkpoint-2",
+    "admission": "in_scope",
+    "units": 44,
+    "chunks": 7,
+    "build_id": "5be178f951c61eaed04c68c5266f658804efe2088da606ca1ee28ce997af5f7b",
+    "clean_rev": "2eeef8e3714109270dc33c08165156d586cd813db827c686d3a1cc591640d44c",
+    "quality_report": {
+      "gap_regions": [],
+      "oversized_chunks": []
+    },
+    "status": "published",
+    "generation": 2,
+    "previous_attempt": {
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "old_build": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+      "old_schema": "parse-checkpoint-2",
+      "admission": "review_required",
+      "units": 0,
+      "chunks": 0,
+      "status": "no_build"
+    }
+  },
+  {
+    "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+    "old_build": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+    "old_schema": "parse-checkpoint-2",
+    "admission": "in_scope",
+    "units": 91,
+    "chunks": 20,
+    "build_id": "3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4",
+    "clean_rev": "2eeef8e3714109270dc33c08165156d586cd813db827c686d3a1cc591640d44c",
+    "quality_report": {
+      "gap_regions": [],
+      "oversized_chunks": []
+    },
+    "status": "published",
+    "generation": 2,
+    "previous_attempt": {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "old_build": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "old_schema": "parse-checkpoint-2",
+      "admission": "review_required",
+      "units": 0,
+      "chunks": 0,
+      "status": "no_build"
+    }
+  }
+]

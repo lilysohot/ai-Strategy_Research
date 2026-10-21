@@ -1,0 +1,979 @@
+{
+  "ok": true,
+  "query": "华源环保报告中，铝冶炼配额管理覆盖的温室气体与发电行业有什么区别？",
+  "count": 10,
+  "hits": [
+    {
+      "doc_id": "cv2:1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "locator": "chunk:1ada4314a25261ea:body:0002",
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "chunk_id": "1ada4314a25261ea:body:0002",
+      "context_locators": [
+        "chunk:1ada4314a25261ea:body:0000",
+        "chunk:1ada4314a25261ea:heading:0000",
+        "chunk:1ada4314a25261ea:body:0001",
+        "chunk:1ada4314a25261ea:heading:0001",
+        "chunk:1ada4314a25261ea:body:0002",
+        "chunk:1ada4314a25261ea:body:0003",
+        "chunk:1ada4314a25261ea:body:0004",
+        "chunk:1ada4314a25261ea:body:0005",
+        "chunk:1ada4314a25261ea:body:0006",
+        "chunk:1ada4314a25261ea:body:0007",
+        "chunk:1ada4314a25261ea:heading:0002"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+        "locator": "chunk:1ada4314a25261ea:body:0002",
+        "locators": [
+          "chunk:1ada4314a25261ea:body:0000",
+          "chunk:1ada4314a25261ea:heading:0000",
+          "chunk:1ada4314a25261ea:body:0001",
+          "chunk:1ada4314a25261ea:heading:0001",
+          "chunk:1ada4314a25261ea:body:0002",
+          "chunk:1ada4314a25261ea:body:0003",
+          "chunk:1ada4314a25261ea:body:0004",
+          "chunk:1ada4314a25261ea:body:0005",
+          "chunk:1ada4314a25261ea:body:0006",
+          "chunk:1ada4314a25261ea:body:0007",
+          "chunk:1ada4314a25261ea:heading:0002"
+        ],
+        "scope_id": "scope:5f0d44c7e0cf2252a5058e3dbb483b3e",
+        "view": "compact"
+      },
+      "scope_id": "scope:5f0d44c7e0cf2252a5058e3dbb483b3e",
+      "total_chunks": 11,
+      "by_kind": {
+        "unknown": 11
+      },
+      "table_chunks": 0,
+      "title": "——环保行业周报（20260831~20260906）\n投资要点：",
+      "published": "undated",
+      "snippet": "<b>发电</b>、钢铁、水泥<b>行业</b><b>覆盖</b><b>温室</b>",
+      "preview": {
+        "text": "钢铁、水泥、铝冶炼已在24 年度首次纳入\n管控并基于实际碳排放量等量分配配额，25、26 年度配额采用碳排放强度控制的\n思路分配，行业整体配额盈亏基本平衡。后续年度基准值或将逐步收紧，推动行\n业低碳转型。\n\n延续“强度控制+免费分配”，履约与交易约束边际收紧。《方案》明确各行业继\n续基于碳排放强度控制实施配额免费分配，发电行业适用于2025、2026 年度，\n钢铁、水泥、铝冶炼适用于2026 年度；发电、钢铁、水泥行业覆盖温室气体种\n类为二氧化碳，铝冶炼行业覆盖二氧化碳、四氟化碳、六氟化二碳3 种温室气体；\n其中发电行业采用碳排放强度基准法，钢铁、水泥、铝冶炼采用碳排放强度系数\n法。配额发放继续采取“预分配+核定”两步法，预分配原则上按上一年度经核查\n排放量的50%确定，省级主管部门可结合履约风险和生产情况等进一步下调比例；\n重点排放单位应于每年12 月31 日前完成与经核查排放量等量的配额清缴。\n\n激励先进、鞭策落后。单位产品碳排放越低，配额盈余率越高；引导企业将碳排\n放管理深度融入战略规划与生产经营，支持能效提升、原料燃料替代、工艺革新\n等绿色低碳技术应用，推动全社会以较低成本实现减排目标。\n\n存量配额逐步出清，CCER 需求或将抬升。《方案》明确2019-2024 年度配额不\n可用于2025 年度及后续年度配额清缴。",
+        "start": 162,
+        "end": 735,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "冶炼",
+          "发电",
+          "气体",
+          "温室",
+          "行业",
+          "覆盖",
+          "配额"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+        "locators": [
+          "chunk:1ada4314a25261ea:body:0002"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+        "locators": [
+          "chunk:1ada4314a25261ea:body:0000",
+          "chunk:1ada4314a25261ea:heading:0000",
+          "chunk:1ada4314a25261ea:body:0001",
+          "chunk:1ada4314a25261ea:heading:0001",
+          "chunk:1ada4314a25261ea:body:0002",
+          "chunk:1ada4314a25261ea:body:0003",
+          "chunk:1ada4314a25261ea:body:0004",
+          "chunk:1ada4314a25261ea:body:0005",
+          "chunk:1ada4314a25261ea:body:0006",
+          "chunk:1ada4314a25261ea:body:0007",
+          "chunk:1ada4314a25261ea:heading:0002"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:1ada4314a25261ea:body:0000",
+          "chunk:1ada4314a25261ea:heading:0000",
+          "chunk:1ada4314a25261ea:body:0001",
+          "chunk:1ada4314a25261ea:heading:0001",
+          "chunk:1ada4314a25261ea:body:0002",
+          "chunk:1ada4314a25261ea:body:0003",
+          "chunk:1ada4314a25261ea:body:0004",
+          "chunk:1ada4314a25261ea:body:0005",
+          "chunk:1ada4314a25261ea:body:0006",
+          "chunk:1ada4314a25261ea:body:0007",
+          "chunk:1ada4314a25261ea:heading:0002"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "locator": "chunk:022ae1713fb760ff:body:0001",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0001",
+      "context_locators": [
+        "chunk:022ae1713fb760ff:body:0000",
+        "chunk:022ae1713fb760ff:body:0001",
+        "chunk:022ae1713fb760ff:body:0002",
+        "chunk:022ae1713fb760ff:body:0003",
+        "chunk:022ae1713fb760ff:body:0004",
+        "chunk:022ae1713fb760ff:body:0005",
+        "chunk:022ae1713fb760ff:body:0006",
+        "chunk:022ae1713fb760ff:body:0007",
+        "chunk:022ae1713fb760ff:body:0008",
+        "chunk:022ae1713fb760ff:body:0009",
+        "chunk:022ae1713fb760ff:table:0000",
+        "chunk:022ae1713fb760ff:body:0010",
+        "chunk:022ae1713fb760ff:body:0011",
+        "chunk:022ae1713fb760ff:body:0012",
+        "chunk:022ae1713fb760ff:body:0013",
+        "chunk:022ae1713fb760ff:body:0014",
+        "chunk:022ae1713fb760ff:body:0015",
+        "chunk:022ae1713fb760ff:heading:0000",
+        "chunk:022ae1713fb760ff:heading:0001",
+        "chunk:022ae1713fb760ff:body:0016",
+        "chunk:022ae1713fb760ff:table:0001",
+        "chunk:022ae1713fb760ff:body:0017",
+        "chunk:022ae1713fb760ff:table:0002",
+        "chunk:022ae1713fb760ff:body:0018",
+        "chunk:022ae1713fb760ff:table:0003"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locator": "chunk:022ae1713fb760ff:body:0001",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015",
+          "chunk:022ae1713fb760ff:heading:0000",
+          "chunk:022ae1713fb760ff:heading:0001",
+          "chunk:022ae1713fb760ff:body:0016",
+          "chunk:022ae1713fb760ff:table:0001",
+          "chunk:022ae1713fb760ff:body:0017",
+          "chunk:022ae1713fb760ff:table:0002",
+          "chunk:022ae1713fb760ff:body:0018",
+          "chunk:022ae1713fb760ff:table:0003"
+        ],
+        "scope_id": "scope:c2ac565c49943d3bf5af1a9c26063b73",
+        "view": "compact"
+      },
+      "scope_id": "scope:c2ac565c49943d3bf5af1a9c26063b73",
+      "total_chunks": 25,
+      "by_kind": {
+        "body": 1,
+        "unknown": 24
+      },
+      "table_chunks": 0,
+      "title": "022ae1713fb760ff:body:0001",
+      "published": "undated",
+      "snippet": "<b>报告</b>正文各子<b>行业</b>观点详情。",
+      "preview": {
+        "text": "电网：国网输变电设备第四批中标公示；国家能源局召开新型电网建设工作部署会。 \n氢能与燃料电池：国家能源局推动氢基能源热值核算方法相关标准制定；湖北发布加快氢能产业规模商用行动方案。 \n详见报告正文各子行业观点详情。\n政策调整、执行效果低于预期风险；产业链价格竞争激烈程度超预期风险。 \n下载日志已记录，仅供内部参考\n行业周报\n敬请参阅最后一页特别声明\n2 \n整体观点： \n本周我们陆续发布电新板块各子行业半年报总结，整体来看，不同子行业之间业绩表现差异显著：1）锂电板块，在全\n球动储需求同步高增叠加税费政策调整带来的“抢装”需求影响下，上半年整体呈现量价利齐升的景气上行趋势；2）\nAIDC 电源与液冷板块，尽管大部分公司在半年报中呈现的AI 相关收入仍较少，但从存货、购买商品现金流出、在建\n工程等财务指标，以及管理层讨论中呈现的订单展望等方面，已能够看到许多公司开始进入订单储备、客户认证、产\n能建设、备料阶段，预计未来半年内将看到大量企业开始进入AI 相关订单、收入放量的窗口；3）光伏板块，在上半\n年内需低迷的影响下，产业链供需矛盾仍然突出，但企业在盈利承压下普遍以销定产、控制亏损、加强现金管理，夯\n实产业链价格与盈利底部，部分辅材及BC 组件龙头率先呈现拐点迹象；4）电网设备方面，变压器、高压开关等核心\n产品出口维持较快增长。",
+        "start": 158,
+        "end": 729,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "报告",
+          "管理",
+          "行业"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0001"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015",
+          "chunk:022ae1713fb760ff:heading:0000",
+          "chunk:022ae1713fb760ff:heading:0001",
+          "chunk:022ae1713fb760ff:body:0016",
+          "chunk:022ae1713fb760ff:table:0001",
+          "chunk:022ae1713fb760ff:body:0017",
+          "chunk:022ae1713fb760ff:table:0002",
+          "chunk:022ae1713fb760ff:body:0018",
+          "chunk:022ae1713fb760ff:table:0003"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015",
+          "chunk:022ae1713fb760ff:heading:0000",
+          "chunk:022ae1713fb760ff:heading:0001",
+          "chunk:022ae1713fb760ff:body:0016",
+          "chunk:022ae1713fb760ff:table:0001",
+          "chunk:022ae1713fb760ff:body:0017",
+          "chunk:022ae1713fb760ff:table:0002",
+          "chunk:022ae1713fb760ff:body:0018",
+          "chunk:022ae1713fb760ff:table:0003"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "locator": "chunk:82dac0d446ef83cd:heading:0007",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:heading:0007",
+      "context_locators": [
+        "chunk:82dac0d446ef83cd:table:0007",
+        "chunk:82dac0d446ef83cd:body:0027",
+        "chunk:82dac0d446ef83cd:heading:0007",
+        "chunk:82dac0d446ef83cd:body:0028"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locator": "chunk:82dac0d446ef83cd:heading:0007",
+        "locators": [
+          "chunk:82dac0d446ef83cd:table:0007",
+          "chunk:82dac0d446ef83cd:body:0027",
+          "chunk:82dac0d446ef83cd:heading:0007",
+          "chunk:82dac0d446ef83cd:body:0028"
+        ],
+        "scope_id": "scope:62898236850c57c3f75b1dec8ac12987",
+        "view": "compact"
+      },
+      "scope_id": "scope:62898236850c57c3f75b1dec8ac12987",
+      "total_chunks": 4,
+      "by_kind": {
+        "unknown": 4
+      },
+      "table_chunks": 0,
+      "title": "可以发现，每一个子行业的情况和钢铁、铜等周期品区别不大。",
+      "published": "undated",
+      "snippet": "<b>行业</b>众多，产业链不同。但如果",
+      "preview": {
+        "text": "",
+        "start": null,
+        "end": null,
+        "status": "structured_content_requires_fetch",
+        "matched_terms": [],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locators": [
+          "chunk:82dac0d446ef83cd:table:0007",
+          "chunk:82dac0d446ef83cd:body:0027",
+          "chunk:82dac0d446ef83cd:heading:0007",
+          "chunk:82dac0d446ef83cd:body:0028"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locators": [
+          "chunk:82dac0d446ef83cd:table:0007",
+          "chunk:82dac0d446ef83cd:body:0027",
+          "chunk:82dac0d446ef83cd:heading:0007",
+          "chunk:82dac0d446ef83cd:body:0028"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:82dac0d446ef83cd:table:0007",
+          "chunk:82dac0d446ef83cd:body:0027",
+          "chunk:82dac0d446ef83cd:heading:0007",
+          "chunk:82dac0d446ef83cd:body:0028"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "locator": "chunk:7ceca88433b092ae:body:0002",
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0002",
+      "context_locators": [
+        "chunk:7ceca88433b092ae:heading:0000",
+        "chunk:7ceca88433b092ae:body:0001",
+        "chunk:7ceca88433b092ae:body:0002",
+        "chunk:7ceca88433b092ae:body:0003",
+        "chunk:7ceca88433b092ae:body:0004",
+        "chunk:7ceca88433b092ae:body:0005",
+        "chunk:7ceca88433b092ae:body:0006",
+        "chunk:7ceca88433b092ae:body:0007"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locator": "chunk:7ceca88433b092ae:body:0002",
+        "locators": [
+          "chunk:7ceca88433b092ae:heading:0000",
+          "chunk:7ceca88433b092ae:body:0001",
+          "chunk:7ceca88433b092ae:body:0002",
+          "chunk:7ceca88433b092ae:body:0003",
+          "chunk:7ceca88433b092ae:body:0004",
+          "chunk:7ceca88433b092ae:body:0005",
+          "chunk:7ceca88433b092ae:body:0006",
+          "chunk:7ceca88433b092ae:body:0007"
+        ],
+        "scope_id": "scope:f5264a3b57c2c806dca458fdec19d0f0",
+        "view": "compact"
+      },
+      "scope_id": "scope:f5264a3b57c2c806dca458fdec19d0f0",
+      "total_chunks": 8,
+      "by_kind": {
+        "unknown": 8
+      },
+      "table_chunks": 0,
+      "title": "通信行业周报\n2026 CIOE 中国光博会前瞻",
+      "published": "undated",
+      "snippet": "外传\n2\n<b>行业</b>定期<b>报告</b>/通信\n3",
+      "preview": {
+        "text": "",
+        "start": null,
+        "end": null,
+        "status": "no_complete_matching_sentence",
+        "matched_terms": [],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locators": [
+          "chunk:7ceca88433b092ae:body:0002"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locators": [
+          "chunk:7ceca88433b092ae:heading:0000",
+          "chunk:7ceca88433b092ae:body:0001",
+          "chunk:7ceca88433b092ae:body:0002",
+          "chunk:7ceca88433b092ae:body:0003",
+          "chunk:7ceca88433b092ae:body:0004",
+          "chunk:7ceca88433b092ae:body:0005",
+          "chunk:7ceca88433b092ae:body:0006",
+          "chunk:7ceca88433b092ae:body:0007"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:7ceca88433b092ae:heading:0000",
+          "chunk:7ceca88433b092ae:body:0001",
+          "chunk:7ceca88433b092ae:body:0002",
+          "chunk:7ceca88433b092ae:body:0003",
+          "chunk:7ceca88433b092ae:body:0004",
+          "chunk:7ceca88433b092ae:body:0005",
+          "chunk:7ceca88433b092ae:body:0006",
+          "chunk:7ceca88433b092ae:body:0007"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0018",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0018",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:table:0010",
+        "chunk:568f9e752f0fa65a:body:0013",
+        "chunk:568f9e752f0fa65a:table:0011",
+        "chunk:568f9e752f0fa65a:body:0014",
+        "chunk:568f9e752f0fa65a:body:0015",
+        "chunk:568f9e752f0fa65a:table:0012",
+        "chunk:568f9e752f0fa65a:table:0013",
+        "chunk:568f9e752f0fa65a:table:0014",
+        "chunk:568f9e752f0fa65a:body:0016",
+        "chunk:568f9e752f0fa65a:body:0017",
+        "chunk:568f9e752f0fa65a:body:0018",
+        "chunk:568f9e752f0fa65a:heading:0006"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locator": "chunk:568f9e752f0fa65a:body:0018",
+        "locators": [
+          "chunk:568f9e752f0fa65a:table:0010",
+          "chunk:568f9e752f0fa65a:body:0013",
+          "chunk:568f9e752f0fa65a:table:0011",
+          "chunk:568f9e752f0fa65a:body:0014",
+          "chunk:568f9e752f0fa65a:body:0015",
+          "chunk:568f9e752f0fa65a:table:0012",
+          "chunk:568f9e752f0fa65a:table:0013",
+          "chunk:568f9e752f0fa65a:table:0014",
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018",
+          "chunk:568f9e752f0fa65a:heading:0006"
+        ],
+        "scope_id": "scope:356e4c8e8ca9be24a8dfbd1054ac9cda",
+        "view": "compact"
+      },
+      "scope_id": "scope:356e4c8e8ca9be24a8dfbd1054ac9cda",
+      "total_chunks": 12,
+      "by_kind": {
+        "unknown": 12
+      },
+      "table_chunks": 0,
+      "title": "半导体划片机转入放量进程,煤矿业务企稳",
+      "published": "undated",
+      "snippet": "<b>温室</b><b>气体</b>监测等新场景。2025",
+      "preview": {
+        "text": "煤矿安全生产监控业务具备政策刚性和存量更新需求。根据国家能源局数据显示，\n“十四五”期间全国煤矿智能化建设累计投入1,071 亿元。截至2025 年底已建成\n1,066 处智能化煤矿，智能化产能占比超过65%。根据国家发改委、国家能源局发\n布的《煤炭工业发展“十五五”规划》提出，到2030 年智能化煤矿产能比例提升\n至75%，行业仍有较大的建设升级空间。瓦斯治理、灾害预警、安全监控和智能\n化改造仍是煤矿资本开支的重要方向。\n公司发挥物联网煤矿安全检测的产业优势。公司现已形成覆盖智能感知设备、智\n能分站、控制设备及软件平台的产品体系，并持续推进AI、数字孪生等技术与矿\n山安全监控产品融合，同时拓展低浓瓦斯利用、井工煤矿温室气体监测等新场景。\n2025 年，公司安全生产及节能监控业务实现收入3.08 亿元，同比增长3.69%；2026\n年上半年受行业周期、下游采购节奏和政策调整影响，该业务收入同比下降\n34.20%至1.01 亿元，短期仍存在一定压力。随着煤矿智能化建设持续推进以及下\n游招投标和项目验收节奏恢复，公司煤矿业务有望逐步企稳，并继续发挥高毛利\n业务的压舱石作用。",
+        "start": 0,
+        "end": 492,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "气体",
+          "温室",
+          "行业",
+          "覆盖"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0018"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:table:0010",
+          "chunk:568f9e752f0fa65a:body:0013",
+          "chunk:568f9e752f0fa65a:table:0011",
+          "chunk:568f9e752f0fa65a:body:0014",
+          "chunk:568f9e752f0fa65a:body:0015",
+          "chunk:568f9e752f0fa65a:table:0012",
+          "chunk:568f9e752f0fa65a:table:0013",
+          "chunk:568f9e752f0fa65a:table:0014",
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018",
+          "chunk:568f9e752f0fa65a:heading:0006"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:568f9e752f0fa65a:table:0010",
+          "chunk:568f9e752f0fa65a:body:0013",
+          "chunk:568f9e752f0fa65a:table:0011",
+          "chunk:568f9e752f0fa65a:body:0014",
+          "chunk:568f9e752f0fa65a:body:0015",
+          "chunk:568f9e752f0fa65a:table:0012",
+          "chunk:568f9e752f0fa65a:table:0013",
+          "chunk:568f9e752f0fa65a:table:0014",
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018",
+          "chunk:568f9e752f0fa65a:heading:0006"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "locator": "chunk:022ae1713fb760ff:body:0019",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0019",
+      "context_locators": [
+        "chunk:022ae1713fb760ff:body:0018",
+        "chunk:022ae1713fb760ff:table:0003",
+        "chunk:022ae1713fb760ff:body:0019",
+        "chunk:022ae1713fb760ff:body:0020",
+        "chunk:022ae1713fb760ff:heading:0002",
+        "chunk:022ae1713fb760ff:body:0021",
+        "chunk:022ae1713fb760ff:body:0022"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locator": "chunk:022ae1713fb760ff:body:0019",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0018",
+          "chunk:022ae1713fb760ff:table:0003",
+          "chunk:022ae1713fb760ff:body:0019",
+          "chunk:022ae1713fb760ff:body:0020",
+          "chunk:022ae1713fb760ff:heading:0002",
+          "chunk:022ae1713fb760ff:body:0021",
+          "chunk:022ae1713fb760ff:body:0022"
+        ],
+        "scope_id": "scope:89678244d50a97e1f468ddd05631668b",
+        "view": "compact"
+      },
+      "scope_id": "scope:89678244d50a97e1f468ddd05631668b",
+      "total_chunks": 7,
+      "by_kind": {
+        "unknown": 7
+      },
+      "table_chunks": 0,
+      "title": "图表11：本周新能源与电力设备板块景气度",
+      "published": "undated",
+      "snippet": "<b>发电</b>已逐步实现平价上网，能源",
+      "preview": {
+        "text": "氢能与燃料电池 \n稳健向上 \n来源：国金证券研究所 \n政策调整、执行效果低于预期：虽然风光发电已逐步实现平价上网，能源转型及双碳目标任务仍然高度依赖政策指引，\n若相关政策的出台、执行效果低于预期，可能会影响相关产业链的发展。 \n产业链价格竞争激烈程度超预期：在明确的双碳目标背景下，新能源行业的产能扩张明显加速，并出现跨界资本大量\n进入的迹象，可能导致部分环节因产能过剩程度超预期而出现阶段性竞争格局和盈利能力恶化的风险。",
+        "start": 0,
+        "end": 211,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "发电",
+          "行业"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0019"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0018",
+          "chunk:022ae1713fb760ff:table:0003",
+          "chunk:022ae1713fb760ff:body:0019",
+          "chunk:022ae1713fb760ff:body:0020",
+          "chunk:022ae1713fb760ff:heading:0002",
+          "chunk:022ae1713fb760ff:body:0021",
+          "chunk:022ae1713fb760ff:body:0022"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:022ae1713fb760ff:body:0019",
+          "chunk:022ae1713fb760ff:body:0020",
+          "chunk:022ae1713fb760ff:heading:0002",
+          "chunk:022ae1713fb760ff:body:0021",
+          "chunk:022ae1713fb760ff:body:0022"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "locator": "chunk:82dac0d446ef83cd:body:0067",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0067",
+      "context_locators": [
+        "chunk:82dac0d446ef83cd:body:0065",
+        "chunk:82dac0d446ef83cd:body:0066",
+        "chunk:82dac0d446ef83cd:body:0067",
+        "chunk:82dac0d446ef83cd:body:0068",
+        "chunk:82dac0d446ef83cd:body:0069",
+        "chunk:82dac0d446ef83cd:body:0070"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locator": "chunk:82dac0d446ef83cd:body:0067",
+        "locators": [
+          "chunk:82dac0d446ef83cd:body:0065",
+          "chunk:82dac0d446ef83cd:body:0066",
+          "chunk:82dac0d446ef83cd:body:0067",
+          "chunk:82dac0d446ef83cd:body:0068",
+          "chunk:82dac0d446ef83cd:body:0069",
+          "chunk:82dac0d446ef83cd:body:0070"
+        ],
+        "scope_id": "scope:f464d19588bcd7823bf2828af6621ed5",
+        "view": "compact"
+      },
+      "scope_id": "scope:f464d19588bcd7823bf2828af6621ed5",
+      "total_chunks": 6,
+      "by_kind": {
+        "unknown": 6
+      },
+      "table_chunks": 0,
+      "title": "投资评级说明",
+      "published": "undated",
+      "snippet": "<b>行业</b>评级\n<b>报告</b>发布日后的12",
+      "preview": {
+        "text": "投资评级说明\n行业评级\n报告发布日后的12个月内行业股票指数的涨跌幅相对同期相关证券市场代表性指数的涨跌幅为基准，投资建议的评\n级标准为：\n看好：\n相对表现优于同期相关证券市场代表性指数\n中性：\n相对表现与同期相关证券市场代表性指数持平\n看淡：\n相对表现弱于同期相关证券市场代表性指数\n公司评级\n报告发布日后的12 个月内公司的涨跌幅相对同期相关证券市场代表性指数的涨跌幅为基准，投资建议的评级标准为：\n买入：\n相对同期相关证券市场代表性指数涨幅大于10% \n增持：\n相对同期相关证券市场代表性指数涨幅在5%～10%之间\n中性：\n相对同期相关证券市场代表性指数涨幅在-5%～5%之间\n减持：\n相对同期相关证券市场代表性指数涨幅小于-5% \n无投资评级：由于我们无法获取必要的资料，或者公司面临无法预见结果的重大不确定性事件，或者其他原因，致使\n我们无法给出明确的投资评级。\n相关证券市场代表性指数说明：A股市场以沪深300指数为基准；新三板市场以三板成指（针对协议转让标的）或三板做市指数\n（针对做市转让标的）为基准；香港市场以恒生指数为基准。",
+        "start": 0,
+        "end": 472,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "报告",
+          "行业"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locators": [
+          "chunk:82dac0d446ef83cd:body:0067"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locators": [
+          "chunk:82dac0d446ef83cd:body:0065",
+          "chunk:82dac0d446ef83cd:body:0066",
+          "chunk:82dac0d446ef83cd:body:0067",
+          "chunk:82dac0d446ef83cd:body:0068",
+          "chunk:82dac0d446ef83cd:body:0069",
+          "chunk:82dac0d446ef83cd:body:0070"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:82dac0d446ef83cd:body:0065",
+          "chunk:82dac0d446ef83cd:body:0066",
+          "chunk:82dac0d446ef83cd:body:0067",
+          "chunk:82dac0d446ef83cd:body:0068",
+          "chunk:82dac0d446ef83cd:body:0069",
+          "chunk:82dac0d446ef83cd:body:0070"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "locator": "chunk:7ceca88433b092ae:body:0016",
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0016",
+      "context_locators": [
+        "chunk:7ceca88433b092ae:body:0010",
+        "chunk:7ceca88433b092ae:body:0011",
+        "chunk:7ceca88433b092ae:body:0012",
+        "chunk:7ceca88433b092ae:body:0013",
+        "chunk:7ceca88433b092ae:heading:0003",
+        "chunk:7ceca88433b092ae:body:0014",
+        "chunk:7ceca88433b092ae:body:0015",
+        "chunk:7ceca88433b092ae:heading:0004",
+        "chunk:7ceca88433b092ae:body:0016"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locator": "chunk:7ceca88433b092ae:body:0016",
+        "locators": [
+          "chunk:7ceca88433b092ae:body:0010",
+          "chunk:7ceca88433b092ae:body:0011",
+          "chunk:7ceca88433b092ae:body:0012",
+          "chunk:7ceca88433b092ae:body:0013",
+          "chunk:7ceca88433b092ae:heading:0003",
+          "chunk:7ceca88433b092ae:body:0014",
+          "chunk:7ceca88433b092ae:body:0015",
+          "chunk:7ceca88433b092ae:heading:0004",
+          "chunk:7ceca88433b092ae:body:0016"
+        ],
+        "scope_id": "scope:4c25228d631496c1b8ad56359a91c8a7",
+        "view": "compact"
+      },
+      "scope_id": "scope:4c25228d631496c1b8ad56359a91c8a7",
+      "total_chunks": 9,
+      "by_kind": {
+        "unknown": 9
+      },
+      "table_chunks": 0,
+      "title": "插图目录\n分析师承诺",
+      "published": "undated",
+      "snippet": "<b>报告</b>，并对本<b>报告</b>的内容和",
+      "preview": {
+        "text": "插图目录 \n本报告署名分析师具有中国证券业协会授予的证券投资咨询执业资格并登记为注册分析师，基于认真审慎的工作态度、专业严谨的研\n究方法与分析逻辑得出研究结论，独立、客观地出具本报告，并对本报告的内容和观点负责。本报告清晰准确地反映了研究人员的研\n究观点，结论不受任何第三方的授意、影响，研究人员不曾因、不因、也将不会因本报告中的具体推荐意见或观点而直接或间接收到\n任何形式的利益。",
+        "start": 0,
+        "end": 191,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "报告"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locators": [
+          "chunk:7ceca88433b092ae:body:0016"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locators": [
+          "chunk:7ceca88433b092ae:body:0010",
+          "chunk:7ceca88433b092ae:body:0011",
+          "chunk:7ceca88433b092ae:body:0012",
+          "chunk:7ceca88433b092ae:body:0013",
+          "chunk:7ceca88433b092ae:heading:0003",
+          "chunk:7ceca88433b092ae:body:0014",
+          "chunk:7ceca88433b092ae:body:0015",
+          "chunk:7ceca88433b092ae:heading:0004",
+          "chunk:7ceca88433b092ae:body:0016"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:7ceca88433b092ae:body:0010",
+          "chunk:7ceca88433b092ae:body:0011",
+          "chunk:7ceca88433b092ae:body:0012",
+          "chunk:7ceca88433b092ae:body:0013",
+          "chunk:7ceca88433b092ae:heading:0003",
+          "chunk:7ceca88433b092ae:body:0014",
+          "chunk:7ceca88433b092ae:body:0015",
+          "chunk:7ceca88433b092ae:heading:0004",
+          "chunk:7ceca88433b092ae:body:0016"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0039",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0039",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:table:0026",
+        "chunk:568f9e752f0fa65a:table:0027",
+        "chunk:568f9e752f0fa65a:body:0039",
+        "chunk:568f9e752f0fa65a:table:0028",
+        "chunk:568f9e752f0fa65a:body:0040",
+        "chunk:568f9e752f0fa65a:body:0041"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locator": "chunk:568f9e752f0fa65a:body:0039",
+        "locators": [
+          "chunk:568f9e752f0fa65a:table:0026",
+          "chunk:568f9e752f0fa65a:table:0027",
+          "chunk:568f9e752f0fa65a:body:0039",
+          "chunk:568f9e752f0fa65a:table:0028",
+          "chunk:568f9e752f0fa65a:body:0040",
+          "chunk:568f9e752f0fa65a:body:0041"
+        ],
+        "scope_id": "scope:05af2a36c089ad50cb773b289212aa63",
+        "view": "compact"
+      },
+      "scope_id": "scope:05af2a36c089ad50cb773b289212aa63",
+      "total_chunks": 6,
+      "by_kind": {
+        "unknown": 6
+      },
+      "table_chunks": 0,
+      "title": "国信证券投资评级",
+      "published": "undated",
+      "snippet": "<b>报告</b>中投资建议所涉及的评级（",
+      "preview": {
+        "text": "报告中投资建议所涉及的评级（如有）分为股票评\n级和行业评级（另有说明的除外）。评级标准为报\n告发布日后6 到12 个月内的相对市场表现，也即报\n告发布日后的6 到12 个月内公司股价（或行业指数）\n相对同期相关证券市场代表性指数的涨跌幅作为基\n准。A 股市场以沪深300 指数（000300.SH）作为基\n准；新三板市场以三板成指（899001.CSI）为基准；\n香港市场以恒生指数(HSI.HI)作为基准；美国市场\n以标普500 指数(SPX.GI)或纳斯达克指数\n（IXIC.GI）为基准。",
+        "start": 0,
+        "end": 247,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "报告",
+          "行业"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0039"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:table:0026",
+          "chunk:568f9e752f0fa65a:table:0027",
+          "chunk:568f9e752f0fa65a:body:0039",
+          "chunk:568f9e752f0fa65a:table:0028",
+          "chunk:568f9e752f0fa65a:body:0040",
+          "chunk:568f9e752f0fa65a:body:0041"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:568f9e752f0fa65a:table:0026",
+          "chunk:568f9e752f0fa65a:table:0027",
+          "chunk:568f9e752f0fa65a:body:0039",
+          "chunk:568f9e752f0fa65a:table:0028",
+          "chunk:568f9e752f0fa65a:body:0040",
+          "chunk:568f9e752f0fa65a:body:0041"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "locator": "chunk:82dac0d446ef83cd:body:0067",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0067",
+      "context_locators": [
+        "chunk:82dac0d446ef83cd:table:0030",
+        "chunk:82dac0d446ef83cd:body:0063",
+        "chunk:82dac0d446ef83cd:table:0031",
+        "chunk:82dac0d446ef83cd:body:0064",
+        "chunk:82dac0d446ef83cd:table:0032",
+        "chunk:82dac0d446ef83cd:body:0065",
+        "chunk:82dac0d446ef83cd:body:0066",
+        "chunk:82dac0d446ef83cd:body:0067",
+        "chunk:82dac0d446ef83cd:body:0068",
+        "chunk:82dac0d446ef83cd:body:0069",
+        "chunk:82dac0d446ef83cd:body:0070"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locator": "chunk:82dac0d446ef83cd:body:0067",
+        "locators": [
+          "chunk:82dac0d446ef83cd:table:0030",
+          "chunk:82dac0d446ef83cd:body:0063",
+          "chunk:82dac0d446ef83cd:table:0031",
+          "chunk:82dac0d446ef83cd:body:0064",
+          "chunk:82dac0d446ef83cd:table:0032",
+          "chunk:82dac0d446ef83cd:body:0065",
+          "chunk:82dac0d446ef83cd:body:0066",
+          "chunk:82dac0d446ef83cd:body:0067",
+          "chunk:82dac0d446ef83cd:body:0068",
+          "chunk:82dac0d446ef83cd:body:0069",
+          "chunk:82dac0d446ef83cd:body:0070"
+        ],
+        "scope_id": "scope:eca05449d9f041825565579af5238459",
+        "view": "compact"
+      },
+      "scope_id": "scope:eca05449d9f041825565579af5238459",
+      "total_chunks": 11,
+      "by_kind": {
+        "unknown": 11
+      },
+      "table_chunks": 0,
+      "title": "投资评级说明",
+      "published": "undated",
+      "snippet": "<b>行业</b>评级\n<b>报告</b>发布日后的12",
+      "preview": {
+        "text": "投资评级说明\n行业评级\n报告发布日后的12个月内行业股票指数的涨跌幅相对同期相关证券市场代表性指数的涨跌幅为基准，投资建议的评\n级标准为：\n看好：\n相对表现优于同期相关证券市场代表性指数\n中性：\n相对表现与同期相关证券市场代表性指数持平\n看淡：\n相对表现弱于同期相关证券市场代表性指数\n公司评级\n报告发布日后的12 个月内公司的涨跌幅相对同期相关证券市场代表性指数的涨跌幅为基准，投资建议的评级标准为：\n买入：\n相对同期相关证券市场代表性指数涨幅大于10% \n增持：\n相对同期相关证券市场代表性指数涨幅在5%～10%之间\n中性：\n相对同期相关证券市场代表性指数涨幅在-5%～5%之间\n减持：\n相对同期相关证券市场代表性指数涨幅小于-5% \n无投资评级：由于我们无法获取必要的资料，或者公司面临无法预见结果的重大不确定性事件，或者其他原因，致使\n我们无法给出明确的投资评级。\n相关证券市场代表性指数说明：A股市场以沪深300指数为基准；新三板市场以三板成指（针对协议转让标的）或三板做市指数\n（针对做市转让标的）为基准；香港市场以恒生指数为基准。",
+        "start": 0,
+        "end": 472,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "报告",
+          "行业"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locators": [
+          "chunk:82dac0d446ef83cd:body:0067"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locators": [
+          "chunk:82dac0d446ef83cd:table:0030",
+          "chunk:82dac0d446ef83cd:body:0063",
+          "chunk:82dac0d446ef83cd:table:0031",
+          "chunk:82dac0d446ef83cd:body:0064",
+          "chunk:82dac0d446ef83cd:table:0032",
+          "chunk:82dac0d446ef83cd:body:0065",
+          "chunk:82dac0d446ef83cd:body:0066",
+          "chunk:82dac0d446ef83cd:body:0067",
+          "chunk:82dac0d446ef83cd:body:0068",
+          "chunk:82dac0d446ef83cd:body:0069",
+          "chunk:82dac0d446ef83cd:body:0070"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:82dac0d446ef83cd:table:0030",
+          "chunk:82dac0d446ef83cd:body:0063",
+          "chunk:82dac0d446ef83cd:table:0031",
+          "chunk:82dac0d446ef83cd:body:0064",
+          "chunk:82dac0d446ef83cd:table:0032"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@48e8e60844f69177d5eb672a1d1b1010",
+    "processing": "scoped",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 22,
+      "published": 18,
+      "withdrawn": 0,
+      "pending": 0,
+      "failed_jobs": 0,
+      "builds": 28,
+      "published_with_gaps": 16
+    },
+    "retrieval": {
+      "requested": "hybrid",
+      "used": "hybrid",
+      "reason": null,
+      "profile": "fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107",
+      "expected_chunks": 703,
+      "ready_chunks": 703,
+      "lexical_candidates": 200,
+      "vector_candidates": 200,
+      "query_cache_hit": false,
+      "query_usage": {
+        "prompt_tokens": 51,
+        "total_tokens": 51
+      },
+      "elapsed_ms": 597
+    }
+  },
+  "hint": "preview 是选读预览，不是已取证引用。先用同一命中的 core_fetch_plan 调用 corpus_fetch；问题涉及多个对象、因果链或指代不完整时，再按 fetch_plan 扩展上下文。表格保留原范围以带齐表头、期间和单位。重复 locator 可在相同 doc_id 下去重；不同版本不可混用。",
+  "delivery_preview": "pilot"
+}

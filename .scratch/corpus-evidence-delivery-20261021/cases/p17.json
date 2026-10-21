@@ -1,0 +1,104 @@
+{
+  "case": "p17",
+  "kind": "positive",
+  "review": {
+    "class": "direct",
+    "reason": "财政依赖旧动能，且新动能税负偏低；本题原运行降级词法",
+    "markers": [
+      "33.8%",
+      "12.8%",
+      "综合税负"
+    ]
+  },
+  "capture_sha256": "fcfcf1ac8d82574e7f1ada9c667182bbd6b79ff60e3a4689db3f96e3be182c2d",
+  "original_sha256": "ed3781af90c1c27b3f5b53a06cd07c04a1f1139fd713addaf6ffd33889e3a12a",
+  "original_retrieval": "lexical",
+  "top_chunk": "147e841aab35836a:body:0006",
+  "top_original_chars": 1260,
+  "old_snippet": "<b>财政</b><b>收入</b><b>改善</b>—><b>财政</b>支出增加",
+  "preview": {
+    "text": "第二步，“K 型”的收敛路径，我们聚焦需求层面。即，新动能的增长，会影响五个主体\n的收入或财富，这五个主体有可能通过支出的增加，助力产业层面的增长收敛。这五个\n主体分别是政府、准财政（如城投等）、企业、居民、海外。其中海外的需求增加，传递\n至国内的路径较为复杂（如，可能带来的是海外服务需求增加或中国之外的出口增加），\n我们本篇报告关注前面四个主体。\n因而，从分化到收敛的思考，可以转化为，政府、准财政、企业、居民的支出增速是否\n在加快，如是，收敛可能性在增加。如否，则分化加剧可能性在增加。\n图表 1  经济走向更加均衡的可能路径\n资料来源：华创证券\n二、路径1：带动财政支出增加\n1、路径1 的理论猜想：新动能快速增长—>税收增加，财政收入改善—>财政支出增加，\n财政支出带动旧动能、新旧之外的其他板块增速加快，经济从分化逐步走向收敛。\n2、路径1 的堵点在哪？在两点。一是财政的收入端较为依赖旧动能，旧动能的增速下行\n仍在负向拖累财政收入。根据2024 年的财政数据，财政两本账的合计收入中，有33.8%\n来自旧动能（土地出让收入以及旧动能贡献的税收），仅12.8%来自新动能（新动能贡献\n的税收）。二是新动能的综合税负（每百元收入缴纳的税收）偏低，不利于财政收入增加。\n根据2025 年的A 股财务数据，新动能的典型代表，装备制造业，综合税负为2.0%。",
+    "start": 223,
+    "end": 804,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "分化",
+      "动能",
+      "增长",
+      "收入",
+      "收敛",
+      "改善",
+      "财政"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": [
+      "33.8%",
+      "12.8%",
+      "综合税负"
+    ]
+  },
+  "core_chunks": 25,
+  "full_chunks": 83,
+  "original_context_occurrences": 85,
+  "preview_statuses": {
+    "complete_sentence_window": 7,
+    "structured_content_requires_fetch": 3
+  },
+  "preview_chars": [
+    581,
+    230,
+    530,
+    592,
+    593,
+    0,
+    0,
+    0,
+    584,
+    358
+  ],
+  "body_chars": {
+    "off": 15206,
+    "pilot": 31404
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 4506,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 4527,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11773,
+        "hits": 7,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 11349,
+        "hits": 6,
+        "previews": 5,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

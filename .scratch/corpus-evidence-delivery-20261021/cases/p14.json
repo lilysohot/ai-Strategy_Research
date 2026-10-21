@@ -1,0 +1,109 @@
+{
+  "case": "p14",
+  "kind": "positive",
+  "review": {
+    "class": "direct",
+    "reason": "列明发电与铝冶炼的温室气体覆盖差异",
+    "markers": [
+      "发电",
+      "二氧化碳",
+      "四氟化碳",
+      "六氟化二碳"
+    ]
+  },
+  "capture_sha256": "8199345e937298f6f2ea0db5a28e600a75646f985ce15fe8663559ae543ae9d5",
+  "original_sha256": "bce56e93dbd2740201092c77b078f69371b42c407cff78f433458a3486764a82",
+  "original_retrieval": "hybrid",
+  "top_chunk": "1ada4314a25261ea:body:0002",
+  "top_original_chars": 1167,
+  "old_snippet": "<b>发电</b>、钢铁、水泥<b>行业</b><b>覆盖</b><b>温室</b>",
+  "preview": {
+    "text": "钢铁、水泥、铝冶炼已在24 年度首次纳入\n管控并基于实际碳排放量等量分配配额，25、26 年度配额采用碳排放强度控制的\n思路分配，行业整体配额盈亏基本平衡。后续年度基准值或将逐步收紧，推动行\n业低碳转型。\n\n延续“强度控制+免费分配”，履约与交易约束边际收紧。《方案》明确各行业继\n续基于碳排放强度控制实施配额免费分配，发电行业适用于2025、2026 年度，\n钢铁、水泥、铝冶炼适用于2026 年度；发电、钢铁、水泥行业覆盖温室气体种\n类为二氧化碳，铝冶炼行业覆盖二氧化碳、四氟化碳、六氟化二碳3 种温室气体；\n其中发电行业采用碳排放强度基准法，钢铁、水泥、铝冶炼采用碳排放强度系数\n法。配额发放继续采取“预分配+核定”两步法，预分配原则上按上一年度经核查\n排放量的50%确定，省级主管部门可结合履约风险和生产情况等进一步下调比例；\n重点排放单位应于每年12 月31 日前完成与经核查排放量等量的配额清缴。\n\n激励先进、鞭策落后。单位产品碳排放越低，配额盈余率越高；引导企业将碳排\n放管理深度融入战略规划与生产经营，支持能效提升、原料燃料替代、工艺革新\n等绿色低碳技术应用，推动全社会以较低成本实现减排目标。\n\n存量配额逐步出清，CCER 需求或将抬升。《方案》明确2019-2024 年度配额不\n可用于2025 年度及后续年度配额清缴。",
+    "start": 162,
+    "end": 735,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "冶炼",
+      "发电",
+      "气体",
+      "温室",
+      "行业",
+      "覆盖",
+      "配额"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [
+      "发电"
+    ],
+    "new_preview": [
+      "发电",
+      "二氧化碳",
+      "四氟化碳",
+      "六氟化二碳"
+    ]
+  },
+  "core_chunks": 12,
+  "full_chunks": 91,
+  "original_context_occurrences": 99,
+  "preview_statuses": {
+    "complete_sentence_window": 8,
+    "structured_content_requires_fetch": 1,
+    "no_complete_matching_sentence": 1
+  },
+  "preview_chars": [
+    573,
+    571,
+    0,
+    0,
+    492,
+    211,
+    472,
+    191,
+    247,
+    472
+  ],
+  "body_chars": {
+    "off": 16507,
+    "pilot": 32842
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 5383,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 5451,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11931,
+        "hits": 7,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 10853,
+        "hits": 6,
+        "previews": 4,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

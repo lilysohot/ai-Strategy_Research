@@ -1,0 +1,532 @@
+{
+  "query": "中泰 双锚 定价 贵州茅台",
+  "hits": [
+    {
+      "doc_id": "cv2:712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "locator": "chunk:712e370a7081da17:body:0018",
+      "title": "双锚点定价机制带来更强的稳价预期",
+      "snippet": "<b>中泰</b>证券研究所\n\n我们认为",
+      "score": 0.11646968539850663,
+      "published": "undated",
+      "source_id": "a981b0641542c425a0ebcdb69af2333a8f82c4d65d5f434a6850453463aa0f49",
+      "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "chunk_id": "712e370a7081da17:body:0018",
+      "context_locators": [
+        "chunk:712e370a7081da17:body:0000",
+        "chunk:712e370a7081da17:body:0001",
+        "chunk:712e370a7081da17:table:0000",
+        "chunk:712e370a7081da17:body:0002",
+        "chunk:712e370a7081da17:heading:0000",
+        "chunk:712e370a7081da17:body:0003",
+        "chunk:712e370a7081da17:body:0004",
+        "chunk:712e370a7081da17:body:0005",
+        "chunk:712e370a7081da17:body:0006",
+        "chunk:712e370a7081da17:body:0007",
+        "chunk:712e370a7081da17:body:0008",
+        "chunk:712e370a7081da17:table:0001",
+        "chunk:712e370a7081da17:body:0009",
+        "chunk:712e370a7081da17:body:0010",
+        "chunk:712e370a7081da17:body:0011",
+        "chunk:712e370a7081da17:body:0012",
+        "chunk:712e370a7081da17:body:0013",
+        "chunk:712e370a7081da17:body:0014",
+        "chunk:712e370a7081da17:body:0015",
+        "chunk:712e370a7081da17:body:0016",
+        "chunk:712e370a7081da17:body:0017",
+        "chunk:712e370a7081da17:body:0018",
+        "chunk:712e370a7081da17:body:0019",
+        "chunk:712e370a7081da17:body:0020",
+        "chunk:712e370a7081da17:body:0021"
+      ],
+      "scope_id": "scope:7d6366b146162af58e9a0a6d95c7e01b",
+      "context_by_kind": [
+        [
+          "unknown",
+          25
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "locator": "chunk:2b4a84ce404709ec:body:0091",
+      "title": "General disclosures",
+      "snippet": "Allresearchreportsaredisseminatedandavailableto",
+      "score": 0.05188195654957947,
+      "published": "undated",
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "chunk_id": "2b4a84ce404709ec:body:0091",
+      "context_locators": [
+        "chunk:2b4a84ce404709ec:body:0072",
+        "chunk:2b4a84ce404709ec:body:0073",
+        "chunk:2b4a84ce404709ec:heading:0035",
+        "chunk:2b4a84ce404709ec:body:0074",
+        "chunk:2b4a84ce404709ec:body:0075",
+        "chunk:2b4a84ce404709ec:body:0076",
+        "chunk:2b4a84ce404709ec:body:0077",
+        "chunk:2b4a84ce404709ec:body:0078",
+        "chunk:2b4a84ce404709ec:body:0079",
+        "chunk:2b4a84ce404709ec:body:0080",
+        "chunk:2b4a84ce404709ec:body:0081",
+        "chunk:2b4a84ce404709ec:body:0082",
+        "chunk:2b4a84ce404709ec:body:0083",
+        "chunk:2b4a84ce404709ec:body:0084",
+        "chunk:2b4a84ce404709ec:body:0085",
+        "chunk:2b4a84ce404709ec:body:0086",
+        "chunk:2b4a84ce404709ec:body:0087",
+        "chunk:2b4a84ce404709ec:body:0088",
+        "chunk:2b4a84ce404709ec:body:0089",
+        "chunk:2b4a84ce404709ec:body:0090",
+        "chunk:2b4a84ce404709ec:body:0091",
+        "chunk:2b4a84ce404709ec:body:0092"
+      ],
+      "scope_id": "scope:79de35268a33d56b7f7af854e08edc20",
+      "context_by_kind": [
+        [
+          "unknown",
+          22
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "locator": "chunk:9fa4cd7cf1ab602a:body:0006",
+      "title": "评论：",
+      "snippet": "<b>贵州茅台</b>（600519）2025年度股东大会",
+      "score": 0.05627590687381555,
+      "published": "undated",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0006",
+      "context_locators": [
+        "chunk:9fa4cd7cf1ab602a:body:0000",
+        "chunk:9fa4cd7cf1ab602a:body:0001",
+        "chunk:9fa4cd7cf1ab602a:heading:0000",
+        "chunk:9fa4cd7cf1ab602a:heading:0001",
+        "chunk:9fa4cd7cf1ab602a:body:0002",
+        "chunk:9fa4cd7cf1ab602a:body:0003",
+        "chunk:9fa4cd7cf1ab602a:body:0004",
+        "chunk:9fa4cd7cf1ab602a:body:0005",
+        "chunk:9fa4cd7cf1ab602a:table:0000",
+        "chunk:9fa4cd7cf1ab602a:body:0006",
+        "chunk:9fa4cd7cf1ab602a:body:0007",
+        "chunk:9fa4cd7cf1ab602a:body:0008",
+        "chunk:9fa4cd7cf1ab602a:heading:0002",
+        "chunk:9fa4cd7cf1ab602a:table:0001",
+        "chunk:9fa4cd7cf1ab602a:table:0002",
+        "chunk:9fa4cd7cf1ab602a:table:0003",
+        "chunk:9fa4cd7cf1ab602a:body:0009",
+        "chunk:9fa4cd7cf1ab602a:table:0004",
+        "chunk:9fa4cd7cf1ab602a:table:0005",
+        "chunk:9fa4cd7cf1ab602a:table:0006",
+        "chunk:9fa4cd7cf1ab602a:table:0007",
+        "chunk:9fa4cd7cf1ab602a:body:0010",
+        "chunk:9fa4cd7cf1ab602a:table:0008",
+        "chunk:9fa4cd7cf1ab602a:body:0011",
+        "chunk:9fa4cd7cf1ab602a:table:0009"
+      ],
+      "scope_id": "scope:b9d306ccb110889358b554f6162d4f82",
+      "context_by_kind": [
+        [
+          "unknown",
+          25
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4",
+      "locator": "chunk:3d9805f1aac9767a:body:0003",
+      "title": "## 第零步数据验证",
+      "snippet": "<b>定价</b>、卖方按H2Rubin加速<b>定价</b>",
+      "score": 0.020267153880442354,
+      "published": "undated",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4",
+      "chunk_id": "3d9805f1aac9767a:body:0003",
+      "context_locators": [
+        "chunk:3d9805f1aac9767a:body:0000",
+        "chunk:3d9805f1aac9767a:body:0001",
+        "chunk:3d9805f1aac9767a:body:0002",
+        "chunk:3d9805f1aac9767a:body:0003",
+        "chunk:3d9805f1aac9767a:heading:0000"
+      ],
+      "scope_id": "scope:59732303b2913539bc3d81b60f39328f",
+      "context_by_kind": [
+        [
+          "unknown",
+          5
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "locator": "chunk:a76b8ac143ecd5ec:heading:0034",
+      "title": "图 17：国内和海外纯碱年度均价走势对比",
+      "snippet": "<b>定价</b>，海内外纯碱价格\n联动性强",
+      "score": 0.0186435366591576,
+      "published": "undated",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "chunk_id": "a76b8ac143ecd5ec:heading:0034",
+      "context_locators": [
+        "chunk:a76b8ac143ecd5ec:heading:0033",
+        "chunk:a76b8ac143ecd5ec:body:0052",
+        "chunk:a76b8ac143ecd5ec:heading:0034",
+        "chunk:a76b8ac143ecd5ec:body:0053"
+      ],
+      "scope_id": "scope:b1d46b155ad13099830253ace804395a",
+      "context_by_kind": [
+        [
+          "unknown",
+          4
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "locator": "chunk:712e370a7081da17:body:0021",
+      "title": "盈利预测与投资建议",
+      "snippet": "<b>中泰</b>证券研究所\n而对比i茅台",
+      "score": 0.09615732876298738,
+      "published": "undated",
+      "source_id": "a981b0641542c425a0ebcdb69af2333a8f82c4d65d5f434a6850453463aa0f49",
+      "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "chunk_id": "712e370a7081da17:body:0021",
+      "context_locators": [
+        "chunk:712e370a7081da17:body:0020",
+        "chunk:712e370a7081da17:body:0021",
+        "chunk:712e370a7081da17:body:0022",
+        "chunk:712e370a7081da17:table:0002",
+        "chunk:712e370a7081da17:table:0003",
+        "chunk:712e370a7081da17:table:0004",
+        "chunk:712e370a7081da17:table:0005",
+        "chunk:712e370a7081da17:table:0006"
+      ],
+      "scope_id": "scope:dbae26a88229837e45644afc6b0970a4",
+      "context_by_kind": [
+        [
+          "unknown",
+          8
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "locator": "chunk:2b4a84ce404709ec:body:0063",
+      "title": "Disclosure Appendix\nReg AC",
+      "snippet": "We,LeafLiu,ChristinaLiuand",
+      "score": 0.05000812137541497,
+      "published": "undated",
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "chunk_id": "2b4a84ce404709ec:body:0063",
+      "context_locators": [
+        "chunk:2b4a84ce404709ec:heading:0034",
+        "chunk:2b4a84ce404709ec:body:0063",
+        "chunk:2b4a84ce404709ec:body:0064",
+        "chunk:2b4a84ce404709ec:body:0065",
+        "chunk:2b4a84ce404709ec:body:0066",
+        "chunk:2b4a84ce404709ec:body:0067",
+        "chunk:2b4a84ce404709ec:body:0068"
+      ],
+      "scope_id": "scope:9b3e8ce2244bbed24aac5fe989bda1ac",
+      "context_by_kind": [
+        [
+          "unknown",
+          7
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "locator": "chunk:9fa4cd7cf1ab602a:body:0021",
+      "title": "华创行业公司投资评级体系",
+      "snippet": "<b>贵州茅台</b>（600519），根据上市公司公告",
+      "score": 0.05392008771356704,
+      "published": "undated",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0021",
+      "context_locators": [
+        "chunk:9fa4cd7cf1ab602a:table:0027",
+        "chunk:9fa4cd7cf1ab602a:body:0020",
+        "chunk:9fa4cd7cf1ab602a:body:0021",
+        "chunk:9fa4cd7cf1ab602a:table:0028"
+      ],
+      "scope_id": "scope:c56a439a8f377c02e52e1a48ab0a4822",
+      "context_by_kind": [
+        [
+          "unknown",
+          4
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4",
+      "locator": "chunk:3d9805f1aac9767a:table:0000",
+      "title": "## 估值拆解",
+      "snippet": "<b>定价</b>，毛利率在6.5–7.5消化",
+      "score": 0.0186435366591576,
+      "published": "undated",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4",
+      "chunk_id": "3d9805f1aac9767a:table:0000",
+      "context_locators": [
+        "chunk:3d9805f1aac9767a:body:0007",
+        "chunk:3d9805f1aac9767a:body:0008",
+        "chunk:3d9805f1aac9767a:body:0009",
+        "chunk:3d9805f1aac9767a:table:0000",
+        "chunk:3d9805f1aac9767a:body:0010"
+      ],
+      "scope_id": "scope:88aa7b686be6146a048cb017770d8281",
+      "context_by_kind": [
+        [
+          "unknown",
+          5
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "locator": "chunk:712e370a7081da17:body:0031",
+      "title": "盈利预测表",
+      "snippet": "WIND,<b>中泰</b>证券研究所\n-8-",
+      "score": 0.09615732876298738,
+      "published": "undated",
+      "source_id": "a981b0641542c425a0ebcdb69af2333a8f82c4d65d5f434a6850453463aa0f49",
+      "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "chunk_id": "712e370a7081da17:body:0031",
+      "context_locators": [
+        "chunk:712e370a7081da17:table:0017",
+        "chunk:712e370a7081da17:body:0028",
+        "chunk:712e370a7081da17:table:0018",
+        "chunk:712e370a7081da17:body:0029",
+        "chunk:712e370a7081da17:table:0019",
+        "chunk:712e370a7081da17:body:0030",
+        "chunk:712e370a7081da17:table:0020",
+        "chunk:712e370a7081da17:body:0031"
+      ],
+      "scope_id": "scope:b1c8b764acf8729b01914cd01d40bf36",
+      "context_by_kind": [
+        [
+          "unknown",
+          8
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "locator": "chunk:2b4a84ce404709ec:body:0013",
+      "title": "oo 600519.SS relative to Asia ex. Japan Coverage",
+      "snippet": "600519.SSrelativetoChinaConsumerStaples",
+      "score": 0.04360632304032457,
+      "published": "undated",
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "chunk_id": "2b4a84ce404709ec:body:0013",
+      "context_locators": [
+        "chunk:2b4a84ce404709ec:heading:0000",
+        "chunk:2b4a84ce404709ec:body:0000",
+        "chunk:2b4a84ce404709ec:heading:0001",
+        "chunk:2b4a84ce404709ec:table:0000",
+        "chunk:2b4a84ce404709ec:body:0001",
+        "chunk:2b4a84ce404709ec:table:0001",
+        "chunk:2b4a84ce404709ec:table:0002",
+        "chunk:2b4a84ce404709ec:body:0002",
+        "chunk:2b4a84ce404709ec:table:0003",
+        "chunk:2b4a84ce404709ec:body:0003",
+        "chunk:2b4a84ce404709ec:table:0004",
+        "chunk:2b4a84ce404709ec:table:0005",
+        "chunk:2b4a84ce404709ec:table:0006",
+        "chunk:2b4a84ce404709ec:heading:0002",
+        "chunk:2b4a84ce404709ec:body:0004",
+        "chunk:2b4a84ce404709ec:heading:0003",
+        "chunk:2b4a84ce404709ec:heading:0004",
+        "chunk:2b4a84ce404709ec:body:0005",
+        "chunk:2b4a84ce404709ec:body:0006",
+        "chunk:2b4a84ce404709ec:body:0007",
+        "chunk:2b4a84ce404709ec:body:0008",
+        "chunk:2b4a84ce404709ec:body:0009",
+        "chunk:2b4a84ce404709ec:body:0010",
+        "chunk:2b4a84ce404709ec:body:0011",
+        "chunk:2b4a84ce404709ec:body:0012",
+        "chunk:2b4a84ce404709ec:body:0013",
+        "chunk:2b4a84ce404709ec:heading:0005"
+      ],
+      "scope_id": "scope:73f87742ee3acdfc0dddfacfe3e71992",
+      "context_by_kind": [
+        [
+          "body",
+          1
+        ],
+        [
+          "unknown",
+          26
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "locator": "chunk:9fa4cd7cf1ab602a:table:0014",
+      "title": "利润表",
+      "snippet": "P/E位：百万元",
+      "score": 0.03660463349191368,
+      "published": "undated",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:table:0014",
+      "context_locators": [
+        "chunk:9fa4cd7cf1ab602a:table:0001",
+        "chunk:9fa4cd7cf1ab602a:body:0011",
+        "chunk:9fa4cd7cf1ab602a:table:0009",
+        "chunk:9fa4cd7cf1ab602a:body:0012",
+        "chunk:9fa4cd7cf1ab602a:table:0010",
+        "chunk:9fa4cd7cf1ab602a:body:0013",
+        "chunk:9fa4cd7cf1ab602a:table:0011",
+        "chunk:9fa4cd7cf1ab602a:body:0014",
+        "chunk:9fa4cd7cf1ab602a:table:0012",
+        "chunk:9fa4cd7cf1ab602a:body:0015",
+        "chunk:9fa4cd7cf1ab602a:table:0013",
+        "chunk:9fa4cd7cf1ab602a:body:0016",
+        "chunk:9fa4cd7cf1ab602a:table:0014",
+        "chunk:9fa4cd7cf1ab602a:body:0017",
+        "chunk:9fa4cd7cf1ab602a:body:0018",
+        "chunk:9fa4cd7cf1ab602a:table:0015"
+      ],
+      "scope_id": "scope:0fc05074000fb888e074db987da5d181",
+      "context_by_kind": [
+        [
+          "unknown",
+          16
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "locator": "chunk:712e370a7081da17:heading:0001",
+      "title": "‑\u00016\u0001‑",
+      "snippet": "‑6‑",
+      "score": 0.08356852821092772,
+      "published": "undated",
+      "source_id": "a981b0641542c425a0ebcdb69af2333a8f82c4d65d5f434a6850453463aa0f49",
+      "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "chunk_id": "712e370a7081da17:heading:0001",
+      "context_locators": [
+        "chunk:712e370a7081da17:table:0007",
+        "chunk:712e370a7081da17:body:0023",
+        "chunk:712e370a7081da17:table:0008",
+        "chunk:712e370a7081da17:table:0009",
+        "chunk:712e370a7081da17:body:0024",
+        "chunk:712e370a7081da17:heading:0001",
+        "chunk:712e370a7081da17:table:0010",
+        "chunk:712e370a7081da17:body:0025",
+        "chunk:712e370a7081da17:table:0011",
+        "chunk:712e370a7081da17:table:0012",
+        "chunk:712e370a7081da17:table:0013",
+        "chunk:712e370a7081da17:body:0026",
+        "chunk:712e370a7081da17:table:0014",
+        "chunk:712e370a7081da17:table:0015",
+        "chunk:712e370a7081da17:body:0027",
+        "chunk:712e370a7081da17:table:0016"
+      ],
+      "scope_id": "scope:0a8a6e447d0c27dd4351a18ee21c857f",
+      "context_by_kind": [
+        [
+          "unknown",
+          16
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "locator": "chunk:2b4a84ce404709ec:body:0019",
+      "title": "Total liabilities & equity",
+      "snippet": "303,834.8\n332,638.1\n",
+      "score": 0.02949967278049983,
+      "published": "undated",
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "chunk_id": "2b4a84ce404709ec:body:0019",
+      "context_locators": [
+        "chunk:2b4a84ce404709ec:table:0012",
+        "chunk:2b4a84ce404709ec:body:0014",
+        "chunk:2b4a84ce404709ec:heading:0006",
+        "chunk:2b4a84ce404709ec:heading:0007",
+        "chunk:2b4a84ce404709ec:body:0015",
+        "chunk:2b4a84ce404709ec:heading:0008",
+        "chunk:2b4a84ce404709ec:heading:0009",
+        "chunk:2b4a84ce404709ec:body:0016",
+        "chunk:2b4a84ce404709ec:table:0015",
+        "chunk:2b4a84ce404709ec:table:0013",
+        "chunk:2b4a84ce404709ec:table:0014",
+        "chunk:2b4a84ce404709ec:table:0016",
+        "chunk:2b4a84ce404709ec:table:0017",
+        "chunk:2b4a84ce404709ec:table:0018",
+        "chunk:2b4a84ce404709ec:table:0019",
+        "chunk:2b4a84ce404709ec:table:0020",
+        "chunk:2b4a84ce404709ec:table:0021",
+        "chunk:2b4a84ce404709ec:table:0022",
+        "chunk:2b4a84ce404709ec:table:0023",
+        "chunk:2b4a84ce404709ec:table:0024",
+        "chunk:2b4a84ce404709ec:table:0025",
+        "chunk:2b4a84ce404709ec:table:0026",
+        "chunk:2b4a84ce404709ec:body:0017",
+        "chunk:2b4a84ce404709ec:body:0018",
+        "chunk:2b4a84ce404709ec:body:0019",
+        "chunk:2b4a84ce404709ec:body:0020"
+      ],
+      "scope_id": "scope:1eca6bd4df314e683f389c8709c2ee9d",
+      "context_by_kind": [
+        [
+          "unknown",
+          26
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "locator": "chunk:9fa4cd7cf1ab602a:body:0019",
+      "title": "华创证券机构销售通讯录",
+      "snippet": "021-20572536\n6",
+      "score": 0.03660463349191368,
+      "published": "undated",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0019",
+      "context_locators": [
+        "chunk:9fa4cd7cf1ab602a:table:0024",
+        "chunk:9fa4cd7cf1ab602a:body:0019",
+        "chunk:9fa4cd7cf1ab602a:table:0025"
+      ],
+      "scope_id": "scope:fbb1950c7775141d0133b64b67989aa7",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@b4980af67156a7643bfedfef09f9cac0",
+    "processing": "unknown",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "admission_pending",
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 31,
+      "published": 25,
+      "withdrawn": 0,
+      "pending": 2,
+      "failed_jobs": 0,
+      "builds": 54,
+      "published_with_gaps": 21
+    }
+  }
+}

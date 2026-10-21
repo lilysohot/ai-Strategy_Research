@@ -1,0 +1,29 @@
+{
+  "clean_rev": "clean-7",
+  "sources": 18,
+  "changed_sources": 1,
+  "transitions": {
+    "kept->noise": 25
+  },
+  "old_chunks": 678,
+  "new_chunks": 676,
+  "newly_lost_evidence_units": 0,
+  "remaining_dependency_crossings": 0,
+  "fixed_table_units": [
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49
+  ],
+  "hashes": {
+    ".scratch/corpus-clean-boundary-20261021/baseline.json": "59b1a2a88ed6a912a9c15edf5a0e602f44273f3456c92752b850af8d6be04b8a",
+    "plugins/corpus/preparation/clean.py": "76dc0c5ac09b15abac86206e1d8896755b9dc12c391af53e531d97f93f3fd0da",
+    ".scratch/corpus-vector-acceptance-20261020/manifest.json": "50305e59759c13d662dce9ae84001474ae7dec596c55aed1449c9aabf1250a68"
+  }
+}

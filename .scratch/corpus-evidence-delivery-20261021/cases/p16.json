@@ -1,0 +1,101 @@
+{
+  "case": "p16",
+  "kind": "positive",
+  "review": {
+    "class": "partial",
+    "reason": "本锚点有立讯3.2T NPO展示，但缺华工正源对应产品；须读相邻片段",
+    "markers": [
+      "3.2TNPO",
+      "立讯技术"
+    ]
+  },
+  "capture_sha256": "f170ebd4df5d930556af56d581789d77b683aafa91ccf853a2b74f1e6f65033e",
+  "original_sha256": "6d227ae8f4d9337dfd7515734cc0967647b92773ae96b91073cdf3cfc18cda36",
+  "original_retrieval": "hybrid",
+  "top_chunk": "7ceca88433b092ae:body:0005",
+  "top_original_chars": 1294,
+  "old_snippet": "<b>华工</b>正源公众号，<b>国联</b><b>民生</b>",
+  "preview": {
+    "text": "同时对外提供 COC、TO、TOSA、BOX、Butterfly \n及各类定制化封装代工服务。产品广泛应用于接入网、传输网、硅光通信、模拟通\n信、激光雷达、光计算、激光传感、卫星通信、激光测距、测量测绘、仪器仪表、\n医疗美容、风电等领域，支持商业级、工业级、车规级、宇航级多等级应用，工作\n温度可达 ‑40℃~125℃。 \n本公司具备证券投资咨询业务资格，请务必阅读最后一页免责声明 \n证券研究报告 \n6 \n图3：仕佳光子CIOE 2026 展位 \n资料来源：仕佳光子公众号，国联民生证券研究所 \n立讯技术：系统级高速互联布局全面升级，NPO 与CPC 同步演进 \n立讯技术将携全新轩辕3.0系统级零组件解决方案、先进算力零组件矩阵及\n多项高速互联技术动态演示成果参展。1）轩辕3.0 系统级零组件解决方案：聚焦\nAI 超节点全域高速互联，立讯技术将首次以ORW 标准机柜形式完整展示轩辕3.0\n零组件系统级解决方案，该方案整合高速互联、热管理、电源管理产品，支持多高\n带宽域（HBD）与大规模GPU 集群部署。2）先进算力体系核心零组件矩阵：CIOE\n现场还将展出适配先进算力体系的全套核心零组件矩阵，涵盖NEXUS 高速互联组\n件、OSFP 光电组件、5000A 液冷Busbar 等核心产品。全系产品适配高密、高速、\n低功耗算力设备需求，为新一代算力底座升级提供核心硬件支撑。",
+    "start": 436,
+    "end": 1027,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "cioe",
+      "npo",
+      "产品",
+      "国联",
+      "展示",
+      "技术",
+      "民生"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": [
+      "立讯技术"
+    ]
+  },
+  "core_chunks": 36,
+  "full_chunks": 99,
+  "original_context_occurrences": 106,
+  "preview_statuses": {
+    "complete_sentence_window": 9,
+    "structured_content_requires_fetch": 1
+  },
+  "preview_chars": [
+    591,
+    544,
+    506,
+    0,
+    559,
+    566,
+    569,
+    559,
+    549,
+    568
+  ],
+  "body_chars": {
+    "off": 17054,
+    "pilot": 36572
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 4839,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 5139,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 10916,
+        "hits": 5,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 11687,
+        "hits": 5,
+        "previews": 4,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

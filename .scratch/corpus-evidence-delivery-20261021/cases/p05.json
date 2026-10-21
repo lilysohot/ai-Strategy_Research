@@ -1,0 +1,99 @@
+{
+  "case": "p05",
+  "kind": "positive",
+  "review": {
+    "class": "direct",
+    "reason": "猪价上涨后仍亏损，母猪折价和政策推动淘汰",
+    "markers": [
+      "行业仍旧亏损",
+      "政策推动"
+    ]
+  },
+  "capture_sha256": "8cd1d562d1022ae8ef68694db79d83921a1ae591138410f52e625003f95b48b2",
+  "original_sha256": "f5dd616fb95fe21d0640dd7fc2b76c01a879ad66151720301b0dd1e38aecd3ec",
+  "original_retrieval": "hybrid",
+  "top_chunk": "3ed3ecab2fdf5035:body:0002",
+  "top_original_chars": 1172,
+  "old_snippet": "<b>产能</b><b>加速</b><b>淘汰</b>。种植:超强厄尔尼诺",
+  "preview": {
+    "text": "张彦博(分析师) \n021-23185661 \nzhangyanbo2@gtht.com \nS0880526040005 \n本报告导读：\n生猪：产能加速淘汰。种植: 超强厄尔尼诺将至，部分农产品价格上涨。动保：乳\n清蛋白涨价持续传导，关注微生物蛋白投产进度。 \n投资要点：\n生猪：产能加速淘汰 \n2026 年8-9 月，生猪价格虽有上涨但行业仍旧亏损，同时仔猪进入\n淡季价格低迷，育肥猪和种猪继续亏损，26Q3 我们预计行业继续亏\n损利润，大部分公司亏损现金流。淘汰母猪价格在8-9 月将会继续\n走低，淘汰母猪/育肥猪折扣降到5-6 折，因此我们认为行业亏损，\n尤其是政策推动，生猪养殖行业产能在当前加速淘汰，继续推荐养\n殖行业。 \n种植: 超强厄尔尼诺将至，部分农产品价格上涨 \n世界气象组织9 月3 日发布公报，厄尔尼诺事件已确认出现，预计\n将在数月内增强为超强厄尔尼诺事件。国家气候中心预计，今年11\n月至12 月前后将达到峰值，形成一次超强厄尔尼诺事件，大概率成\n为有观测记录以来最强的一次；今年秋冬季将继续受到向峰值发展\n的厄尔尼诺影响，明年夏天受影响将尤为显著。",
+    "start": 0,
+    "end": 487,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "产能",
+      "加速",
+      "淘汰"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": [
+      "行业仍旧亏损",
+      "政策推动"
+    ]
+  },
+  "core_chunks": 21,
+  "full_chunks": 77,
+  "original_context_occurrences": 90,
+  "preview_statuses": {
+    "complete_sentence_window": 8,
+    "structured_content_requires_fetch": 1,
+    "no_complete_matching_sentence": 1
+  },
+  "preview_chars": [
+    487,
+    0,
+    554,
+    582,
+    581,
+    0,
+    247,
+    554,
+    38,
+    600
+  ],
+  "body_chars": {
+    "off": 15839,
+    "pilot": 32027
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 5513,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 5242,
+        "hits": 2,
+        "previews": 1,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11302,
+        "hits": 7,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 11230,
+        "hits": 6,
+        "previews": 4,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

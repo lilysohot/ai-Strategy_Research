@@ -1,0 +1,102 @@
+{
+  "case": "p22",
+  "kind": "positive",
+  "review": {
+    "class": "direct",
+    "reason": "有两个时点、价格、单位与涨幅",
+    "markers": [
+      "2459元/吨",
+      "720元/吨",
+      "240%"
+    ]
+  },
+  "capture_sha256": "c3cc3d15a7a73b73f1ba009f49cd85a1747d5163825ea86b03c84b1d46d0e5ac",
+  "original_sha256": "4d6181d7c38fb09ae6f8a04c123c6d8b57318de519664ebffc749ec2fdf5586c",
+  "original_retrieval": "hybrid",
+  "top_chunk": "1d0117eb6e17c63c:body:0008",
+  "top_original_chars": 547,
+  "old_snippet": "<b>氩气</b><b>价格</b>报2459元/吨，",
+  "preview": {
+    "text": "由于市场需求和公司战略发展需要，松下电子材料（上海）有限公司拟在环城\n北路148 号现有厂区内新建生产厂房，扩大环氧树脂成型材料产能，本项目新增生\n产环氧树脂成型材料2840t/a。（资料来源：化工新材料）\n3.4\n电子特气，涨幅超240%\n国内氩气市场又走出一轮暴涨行情。自今年5 月涨价以来，7—8 月价格加速拉\n升，部分区域单日涨幅显著。数据显示，截至9 月2 日，氩气价格报2459 元/吨，相\n比5 月初的720 元/吨，在4 个月时间里涨幅超过240%。（资料来源：化工新材料）\n华福证券\n诚信专业\n发现价值\n8\n请务必阅读报告末页的声明\n4\n相关数据追踪\n本周，费城半导体指数收报11735.26 点，环比上涨2.32%。\n图表10：费城半导体指数\n来源：Wind，华福证券研究所\n7 月，中国集成电路出口金额达到387.39 亿美元，同比上涨116.57%，环比上涨\n1.4%；集成电路进口金额达到638.32 亿美元，同比上涨71.12%，环比上涨7.11%。",
+    "start": 0,
+    "end": 439,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "价格",
+      "月初",
+      "氩气"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [
+      "2459元/吨"
+    ],
+    "new_preview": [
+      "2459元/吨",
+      "720元/吨",
+      "240%"
+    ]
+  },
+  "core_chunks": 19,
+  "full_chunks": 117,
+  "original_context_occurrences": 120,
+  "preview_statuses": {
+    "complete_sentence_window": 9,
+    "structured_content_requires_fetch": 1
+  },
+  "preview_chars": [
+    439,
+    557,
+    600,
+    0,
+    584,
+    211,
+    184,
+    371,
+    211,
+    213
+  ],
+  "body_chars": {
+    "off": 18033,
+    "pilot": 36440
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 5879,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 5511,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11201,
+        "hits": 6,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 11815,
+        "hits": 6,
+        "previews": 5,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

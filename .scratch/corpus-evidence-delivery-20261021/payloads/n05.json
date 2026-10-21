@@ -1,0 +1,941 @@
+{
+  "ok": true,
+  "query": "华福周报中三星电机1.0722万亿韩元MLCC合同的客户全名是什么？",
+  "count": 10,
+  "hits": [
+    {
+      "doc_id": "cv2:1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "locator": "chunk:1d0117eb6e17c63c:body:0007",
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0007",
+      "context_locators": [
+        "chunk:1d0117eb6e17c63c:body:0000",
+        "chunk:1d0117eb6e17c63c:body:0001",
+        "chunk:1d0117eb6e17c63c:heading:0000",
+        "chunk:1d0117eb6e17c63c:body:0002",
+        "chunk:1d0117eb6e17c63c:body:0003",
+        "chunk:1d0117eb6e17c63c:body:0004",
+        "chunk:1d0117eb6e17c63c:heading:0001",
+        "chunk:1d0117eb6e17c63c:body:0005",
+        "chunk:1d0117eb6e17c63c:heading:0002",
+        "chunk:1d0117eb6e17c63c:table:0000",
+        "chunk:1d0117eb6e17c63c:body:0006",
+        "chunk:1d0117eb6e17c63c:heading:0003",
+        "chunk:1d0117eb6e17c63c:table:0001",
+        "chunk:1d0117eb6e17c63c:body:0007",
+        "chunk:1d0117eb6e17c63c:body:0008",
+        "chunk:1d0117eb6e17c63c:body:0009",
+        "chunk:1d0117eb6e17c63c:body:0010",
+        "chunk:1d0117eb6e17c63c:body:0011",
+        "chunk:1d0117eb6e17c63c:body:0012",
+        "chunk:1d0117eb6e17c63c:table:0002",
+        "chunk:1d0117eb6e17c63c:table:0003",
+        "chunk:1d0117eb6e17c63c:body:0013",
+        "chunk:1d0117eb6e17c63c:body:0014"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+        "locator": "chunk:1d0117eb6e17c63c:body:0007",
+        "locators": [
+          "chunk:1d0117eb6e17c63c:body:0000",
+          "chunk:1d0117eb6e17c63c:body:0001",
+          "chunk:1d0117eb6e17c63c:heading:0000",
+          "chunk:1d0117eb6e17c63c:body:0002",
+          "chunk:1d0117eb6e17c63c:body:0003",
+          "chunk:1d0117eb6e17c63c:body:0004",
+          "chunk:1d0117eb6e17c63c:heading:0001",
+          "chunk:1d0117eb6e17c63c:body:0005",
+          "chunk:1d0117eb6e17c63c:heading:0002",
+          "chunk:1d0117eb6e17c63c:table:0000",
+          "chunk:1d0117eb6e17c63c:body:0006",
+          "chunk:1d0117eb6e17c63c:heading:0003",
+          "chunk:1d0117eb6e17c63c:table:0001",
+          "chunk:1d0117eb6e17c63c:body:0007",
+          "chunk:1d0117eb6e17c63c:body:0008",
+          "chunk:1d0117eb6e17c63c:body:0009",
+          "chunk:1d0117eb6e17c63c:body:0010",
+          "chunk:1d0117eb6e17c63c:body:0011",
+          "chunk:1d0117eb6e17c63c:body:0012",
+          "chunk:1d0117eb6e17c63c:table:0002",
+          "chunk:1d0117eb6e17c63c:table:0003",
+          "chunk:1d0117eb6e17c63c:body:0013",
+          "chunk:1d0117eb6e17c63c:body:0014"
+        ],
+        "scope_id": "scope:320ea9cd2511da1e2ace1b50288aa1d8",
+        "view": "compact"
+      },
+      "scope_id": "scope:320ea9cd2511da1e2ace1b50288aa1d8",
+      "total_chunks": 23,
+      "by_kind": {
+        "unknown": 23
+      },
+      "table_chunks": 0,
+      "title": "图表9：本周涨跌幅后十",
+      "published": "undated",
+      "snippet": "<b>韩元</b>和3000亿<b>韩元</b>的<b>MLCC</b><b>合同</b>",
+      "preview": {
+        "text": "信号越快，对传输介质的要求越高，传统热固性树脂在超\n高频信号传输下，“介电损耗”很严重。\n而PTFE 是当前商用体系中介电性能最优的聚合物之一，从分子结构角度，PTFE\n具备高度对称分子结构，氟原子均匀包裹碳主链骨架、分子几乎无净极性；10GHz\n条件下介电常数Dk=2.1，介质损耗Dk 低至0.0004，且介电参数随频率、温度波动\n极小。\n对比高速PCB 常用的PPE 材料和环氧树脂材料，PTFE 具备更低介电常数和更\n低介电损耗，更适配更高频段的信号传输，通俗讲，在超高频信号传输这条“高速\n路”上，PTFE 是阻力最小、信号跑得最稳的材料。（资料来源：化工新材料）\n3.2\nMLCC 巨头，签订万亿订单\n三星电机于9 月1 日宣布，已与一家全球知名企业签署了一份价值1.0722 万亿\n韩元（约52.69 亿人民币）的长期供应协议（LTA），为其人工智能（AI）服务器供\n应多层陶瓷电容器（MLCC）。这是该公司迄今为止最大的MLCC 供应合同，相当\n于其去年合并收入的9.5%。合同约定的供应量将从2027 年1 月1 日至12 月31 日，\n为期一年。出于保密原因，该公司并未透露客户身份。\n三星电机目前与约10 家全球企业签订了MLCC 长期供应协议。此次披露是在其\n中一家客户确认2027 年供应量之后进行的。该客户与此前已公布的供应合同涉及的\n客户不同。",
+        "start": 239,
+        "end": 826,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "1.0722",
+          "mlcc",
+          "万亿",
+          "三星",
+          "合同",
+          "电机",
+          "韩元"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+        "locators": [
+          "chunk:1d0117eb6e17c63c:body:0007"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+        "locators": [
+          "chunk:1d0117eb6e17c63c:body:0000",
+          "chunk:1d0117eb6e17c63c:body:0001",
+          "chunk:1d0117eb6e17c63c:heading:0000",
+          "chunk:1d0117eb6e17c63c:body:0002",
+          "chunk:1d0117eb6e17c63c:body:0003",
+          "chunk:1d0117eb6e17c63c:body:0004",
+          "chunk:1d0117eb6e17c63c:heading:0001",
+          "chunk:1d0117eb6e17c63c:body:0005",
+          "chunk:1d0117eb6e17c63c:heading:0002",
+          "chunk:1d0117eb6e17c63c:table:0000",
+          "chunk:1d0117eb6e17c63c:body:0006",
+          "chunk:1d0117eb6e17c63c:heading:0003",
+          "chunk:1d0117eb6e17c63c:table:0001",
+          "chunk:1d0117eb6e17c63c:body:0007",
+          "chunk:1d0117eb6e17c63c:body:0008",
+          "chunk:1d0117eb6e17c63c:body:0009",
+          "chunk:1d0117eb6e17c63c:body:0010",
+          "chunk:1d0117eb6e17c63c:body:0011",
+          "chunk:1d0117eb6e17c63c:body:0012",
+          "chunk:1d0117eb6e17c63c:table:0002",
+          "chunk:1d0117eb6e17c63c:table:0003",
+          "chunk:1d0117eb6e17c63c:body:0013",
+          "chunk:1d0117eb6e17c63c:body:0014"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:1d0117eb6e17c63c:body:0000",
+          "chunk:1d0117eb6e17c63c:body:0001",
+          "chunk:1d0117eb6e17c63c:heading:0000",
+          "chunk:1d0117eb6e17c63c:body:0002",
+          "chunk:1d0117eb6e17c63c:body:0003",
+          "chunk:1d0117eb6e17c63c:body:0004",
+          "chunk:1d0117eb6e17c63c:heading:0001",
+          "chunk:1d0117eb6e17c63c:body:0005",
+          "chunk:1d0117eb6e17c63c:heading:0002",
+          "chunk:1d0117eb6e17c63c:table:0000",
+          "chunk:1d0117eb6e17c63c:body:0006",
+          "chunk:1d0117eb6e17c63c:heading:0003",
+          "chunk:1d0117eb6e17c63c:table:0001",
+          "chunk:1d0117eb6e17c63c:body:0007",
+          "chunk:1d0117eb6e17c63c:body:0008",
+          "chunk:1d0117eb6e17c63c:body:0009",
+          "chunk:1d0117eb6e17c63c:body:0010",
+          "chunk:1d0117eb6e17c63c:body:0011",
+          "chunk:1d0117eb6e17c63c:body:0012",
+          "chunk:1d0117eb6e17c63c:table:0002",
+          "chunk:1d0117eb6e17c63c:table:0003",
+          "chunk:1d0117eb6e17c63c:body:0013",
+          "chunk:1d0117eb6e17c63c:body:0014"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "locator": "chunk:16a9a510ef9e405f:body:0005",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0005",
+      "context_locators": [
+        "chunk:16a9a510ef9e405f:heading:0003",
+        "chunk:16a9a510ef9e405f:heading:0004",
+        "chunk:16a9a510ef9e405f:body:0003",
+        "chunk:16a9a510ef9e405f:body:0004",
+        "chunk:16a9a510ef9e405f:body:0005",
+        "chunk:16a9a510ef9e405f:body:0006",
+        "chunk:16a9a510ef9e405f:body:0007",
+        "chunk:16a9a510ef9e405f:body:0008",
+        "chunk:16a9a510ef9e405f:body:0009",
+        "chunk:16a9a510ef9e405f:body:0010",
+        "chunk:16a9a510ef9e405f:heading:0005",
+        "chunk:16a9a510ef9e405f:body:0011",
+        "chunk:16a9a510ef9e405f:body:0012"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locator": "chunk:16a9a510ef9e405f:body:0005",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0003",
+          "chunk:16a9a510ef9e405f:heading:0004",
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010",
+          "chunk:16a9a510ef9e405f:heading:0005",
+          "chunk:16a9a510ef9e405f:body:0011",
+          "chunk:16a9a510ef9e405f:body:0012"
+        ],
+        "scope_id": "scope:15228c5974b006fc41e9afd624b4c639",
+        "view": "compact"
+      },
+      "scope_id": "scope:15228c5974b006fc41e9afd624b4c639",
+      "total_chunks": 13,
+      "by_kind": {
+        "unknown": 13
+      },
+      "table_chunks": 0,
+      "title": "一、细分板块观点\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩",
+      "published": "undated",
+      "snippet": "<b>MLCC</b>相较于其他细分，有",
+      "preview": {
+        "text": "行业周报\n扫码获取更多服务 \n来源：Wind，国金证券研究所 \n来源：Wind，国金证券研究所 \n26Q1 各厂商淡季不淡，有望形成结构性需求旺盛+上游成本增加的顺价涨价，目前综合行业稼动率处于较高水平，复\n盘之前周期，MLCC 相较于其他细分，有明显的渠道代理商放大效应，且宏观流动性增加的背景下，龙头公司的上游\n采购能力、成本传导过程中超额收益的能力更强。\nAI端测的升级有望带来估值弹性，AI手机单机电感用量预计增长，价格提升； MLCC手机用量增加，均价有提升，\n主要是产品升级（高容高压耐温、低损耗）。端侧笔电以WoA 笔电（低能耗见长的精简指令集 RISC ，ARM 设计\n架构）为例，ARM 架构下MLCC 容值规格提高，其中1u 以上MLCC 用量占总用量近八成，每台WoA 笔电MLCC\n总价大幅提高到5.5~6.5 美金。",
+        "start": 0,
+        "end": 371,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "mlcc"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0005"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0003",
+          "chunk:16a9a510ef9e405f:heading:0004",
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010",
+          "chunk:16a9a510ef9e405f:heading:0005",
+          "chunk:16a9a510ef9e405f:body:0011",
+          "chunk:16a9a510ef9e405f:body:0012"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:16a9a510ef9e405f:heading:0003",
+          "chunk:16a9a510ef9e405f:heading:0004",
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010",
+          "chunk:16a9a510ef9e405f:heading:0005",
+          "chunk:16a9a510ef9e405f:body:0011",
+          "chunk:16a9a510ef9e405f:body:0012"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "locator": "chunk:7ceca88433b092ae:body:0011",
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0011",
+      "context_locators": [
+        "chunk:7ceca88433b092ae:body:0010",
+        "chunk:7ceca88433b092ae:body:0011",
+        "chunk:7ceca88433b092ae:body:0012",
+        "chunk:7ceca88433b092ae:body:0013"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locator": "chunk:7ceca88433b092ae:body:0011",
+        "locators": [
+          "chunk:7ceca88433b092ae:body:0010",
+          "chunk:7ceca88433b092ae:body:0011",
+          "chunk:7ceca88433b092ae:body:0012",
+          "chunk:7ceca88433b092ae:body:0013"
+        ],
+        "scope_id": "scope:4e63d6ea3c366255e9c775b12cce6954",
+        "view": "compact"
+      },
+      "scope_id": "scope:4e63d6ea3c366255e9c775b12cce6954",
+      "total_chunks": 4,
+      "by_kind": {
+        "unknown": 4
+      },
+      "table_chunks": 0,
+      "title": "3 行业新闻",
+      "published": "undated",
+      "snippet": "<b>合同</b>，该<b>合同</b>价值可能高达7亿",
+      "preview": {
+        "text": "NASA 向蓝色起源授予火星通信网络开发合同，该合同价值可能高达7 亿美\n元 \n根据科创板日报，美国宇航局（NASA）宣布将火星通信网络开发合同授予蓝\n色起源公司，为其火星任务提供高带宽通信和导航服务，该合同价值可能高达7 亿\n美元。蓝色起源将于2028 年12 月31 日前为NASA 建造火星通信轨道器，用于\n传输科学数据、图像、导航信息及关键任务通信。此前，蓝色起源已获得NASA 月\n球着陆器建造合同，但其新格伦火箭项目因今年5月发射台爆炸受挫，NASA预\n计相关发射台将停用至2028年，公司称修复工作将于2026年底前完成。截至\n2026 年9 月，新格伦火箭已三次成功入轨，但发射频率仍显著落后于SpaceX。\n同期，蓝色起源正寻求通过新一轮融资筹集100 亿美元，届时公司估值将达1300\n亿美元。 \n慧与、戴尔AI 服务器业绩超预期，AI 基础设施建设需求旺盛 \n根据科创板日报，美国AI 服务器厂商慧与（HPE）公布2026 财年第三财季\n业绩：调整后每股收益同比增长152%至1.11 美元，超市场预期0.93 美元；营收\n122 亿美元，同比增长34%，高于市场预期120 亿美元；云与AI 板块营收90 亿\n美元，同比增长25%。公司将2026 财年营收增长指引上调至34%-37%，2027\n财年上调至13%-17%，并宣布与甲骨文达成AI 数据中心合作协议。",
+        "start": 449,
+        "end": 1043,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "合同"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locators": [
+          "chunk:7ceca88433b092ae:body:0011"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locators": [
+          "chunk:7ceca88433b092ae:body:0010",
+          "chunk:7ceca88433b092ae:body:0011",
+          "chunk:7ceca88433b092ae:body:0012",
+          "chunk:7ceca88433b092ae:body:0013"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:7ceca88433b092ae:body:0010",
+          "chunk:7ceca88433b092ae:body:0011",
+          "chunk:7ceca88433b092ae:body:0012",
+          "chunk:7ceca88433b092ae:body:0013"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "locator": "chunk:022ae1713fb760ff:body:0011",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0011",
+      "context_locators": [
+        "chunk:022ae1713fb760ff:body:0000",
+        "chunk:022ae1713fb760ff:body:0001",
+        "chunk:022ae1713fb760ff:body:0002",
+        "chunk:022ae1713fb760ff:body:0003",
+        "chunk:022ae1713fb760ff:body:0004",
+        "chunk:022ae1713fb760ff:body:0005",
+        "chunk:022ae1713fb760ff:body:0006",
+        "chunk:022ae1713fb760ff:body:0007",
+        "chunk:022ae1713fb760ff:body:0008",
+        "chunk:022ae1713fb760ff:body:0009",
+        "chunk:022ae1713fb760ff:table:0000",
+        "chunk:022ae1713fb760ff:body:0010",
+        "chunk:022ae1713fb760ff:body:0011",
+        "chunk:022ae1713fb760ff:body:0012",
+        "chunk:022ae1713fb760ff:body:0013",
+        "chunk:022ae1713fb760ff:body:0014",
+        "chunk:022ae1713fb760ff:body:0015",
+        "chunk:022ae1713fb760ff:heading:0000",
+        "chunk:022ae1713fb760ff:heading:0001",
+        "chunk:022ae1713fb760ff:body:0016"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locator": "chunk:022ae1713fb760ff:body:0011",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015",
+          "chunk:022ae1713fb760ff:heading:0000",
+          "chunk:022ae1713fb760ff:heading:0001",
+          "chunk:022ae1713fb760ff:body:0016"
+        ],
+        "scope_id": "scope:8456523a62befad4635f6afec082ab6f",
+        "view": "compact"
+      },
+      "scope_id": "scope:8456523a62befad4635f6afec082ab6f",
+      "total_chunks": 20,
+      "by_kind": {
+        "body": 1,
+        "unknown": 19
+      },
+      "table_chunks": 0,
+      "title": "光伏：板块半年报整体呈现“景气底部夯实”状态，玻璃、胶膜、高效电池（尤其BC）等部分环节拐点或率先出现。",
+      "published": "undated",
+      "snippet": "<b>客户</b>，具有区位优势，有利于增强抗",
+      "preview": {
+        "text": "9 月3 日，石大胜华公告称，公司控股子公司胜华新材料科技(连江)有限公司拟投资建设20 万吨/年锂电池电解液项\n目，预计总投资6.87 亿元，建设周期12 个月。项目建成后预计年产值54.41 亿元，年均净利润8860.01 万元。公司\n表示，该项目贴近核心客户，具有区位优势，有利于增强抗风险能力和市场竞争能力，促进公司利润增长。  \n锂电需求旺盛，碳酸锂供需趋紧 \n9 月国内锂电市场需求持续旺盛，磷酸铁锂、三元电芯排产环比增长，碳酸锂需求预计升至17 万吨。受国内部分产能\n检修、锂矿复产不及预期及进口偏低影响，碳酸锂供给增幅有限，库存持续下降，市场供需趋紧。短期锂价上涨动力\n仍不足，但若去库延续，价格有望逐步回升。 \n电网：国网输变电设备第4批招标同比-19%，前四批招标同比-12%，主要系25年同期高基数及“十五五”开局部分\n项目仍处于规划阶段影响，新能源扩容&特高压配套需求长期存在，预计27 年招标有望回暖。 \n本周国网输变电设备第四批中标公示，第四批招标114 亿元，同比-19%，前四批累计招标601 亿元，同比-12%，招标\n下滑主要系25 年同期高基数及“十五五”开局部分项目仍处于规划阶段影响。考虑到新能源扩容&特高压配套需求长\n期存在，预计27 年主网招标有望回暖。",
+        "start": 0,
+        "end": 549,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "客户"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0011"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015",
+          "chunk:022ae1713fb760ff:heading:0000",
+          "chunk:022ae1713fb760ff:heading:0001",
+          "chunk:022ae1713fb760ff:body:0016"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:022ae1713fb760ff:body:0000",
+          "chunk:022ae1713fb760ff:body:0001",
+          "chunk:022ae1713fb760ff:body:0002",
+          "chunk:022ae1713fb760ff:body:0003",
+          "chunk:022ae1713fb760ff:body:0004",
+          "chunk:022ae1713fb760ff:body:0005",
+          "chunk:022ae1713fb760ff:body:0006",
+          "chunk:022ae1713fb760ff:body:0007",
+          "chunk:022ae1713fb760ff:body:0008",
+          "chunk:022ae1713fb760ff:body:0009",
+          "chunk:022ae1713fb760ff:table:0000",
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015",
+          "chunk:022ae1713fb760ff:heading:0000",
+          "chunk:022ae1713fb760ff:heading:0001",
+          "chunk:022ae1713fb760ff:body:0016"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "locator": "chunk:e1b21386e9b62dde:body:0003",
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0003",
+      "context_locators": [
+        "chunk:e1b21386e9b62dde:body:0001",
+        "chunk:e1b21386e9b62dde:body:0002",
+        "chunk:e1b21386e9b62dde:body:0003",
+        "chunk:e1b21386e9b62dde:heading:0002",
+        "chunk:e1b21386e9b62dde:body:0004",
+        "chunk:e1b21386e9b62dde:heading:0003",
+        "chunk:e1b21386e9b62dde:body:0005",
+        "chunk:e1b21386e9b62dde:body:0006"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+        "locator": "chunk:e1b21386e9b62dde:body:0003",
+        "locators": [
+          "chunk:e1b21386e9b62dde:body:0001",
+          "chunk:e1b21386e9b62dde:body:0002",
+          "chunk:e1b21386e9b62dde:body:0003",
+          "chunk:e1b21386e9b62dde:heading:0002",
+          "chunk:e1b21386e9b62dde:body:0004",
+          "chunk:e1b21386e9b62dde:heading:0003",
+          "chunk:e1b21386e9b62dde:body:0005",
+          "chunk:e1b21386e9b62dde:body:0006"
+        ],
+        "scope_id": "scope:c2864059681e1bb521b98da60189a0b6",
+        "view": "compact"
+      },
+      "scope_id": "scope:c2864059681e1bb521b98da60189a0b6",
+      "total_chunks": 8,
+      "by_kind": {
+        "unknown": 8
+      },
+      "table_chunks": 0,
+      "title": "平安观点：",
+      "published": "undated",
+      "snippet": "<b>MLCC</b>等）则更具增长想象空间",
+      "preview": {
+        "text": "证\n券\n研\n究\n报\n告\n下载日志已记录，仅供内部参考\n请通过合法途径获取本公司研究报告，如经由未经许可的渠道获得研究报告，请慎重使用并注意阅读研究报告尾页的声明内容。\n策略配置·策略周报 \n2/ 8 \n并强化穿透监管要求。\n\n综合来看，考虑到海外地缘与流动性扰动、以及AI 前景担忧仍存，短期权益市场大概率维持震荡，结构性轮动修复格局或延\n续，结构上建议攻守均衡，关注三条线索：一是AI科技中期主线逻辑未变，但短期产业缺乏大级别正向催化，修复过程和细\n分方向的研究颗粒度需更加细致。海外链（CPO/PCB 等）、存储板块目前基本面相对坚实，国产链（算力芯片/半导体材料\n设备/电子布/MLCC 等）则更具增长想象空间，云厂商等则有望受益于中期商业化兑现逐步推进的逻辑（中资互联网）。二是\n部分绩优、筹码相对出清的非科技方向可能成为资金再均衡的重要承接方向，包括医药、涨价资源品（有色/能化）、非银等。\n三是长线资金稳步入市格局下红利资产仍具备较好底仓价值（银行、煤炭等）。\n\n风险提示：1）宏观经济修复不及预期；2）货币政策超预期收紧；3）海外资本市场波动加大。",
+        "start": 0,
+        "end": 483,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "mlcc"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+        "locators": [
+          "chunk:e1b21386e9b62dde:body:0003"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+        "locators": [
+          "chunk:e1b21386e9b62dde:body:0001",
+          "chunk:e1b21386e9b62dde:body:0002",
+          "chunk:e1b21386e9b62dde:body:0003",
+          "chunk:e1b21386e9b62dde:heading:0002",
+          "chunk:e1b21386e9b62dde:body:0004",
+          "chunk:e1b21386e9b62dde:heading:0003",
+          "chunk:e1b21386e9b62dde:body:0005",
+          "chunk:e1b21386e9b62dde:body:0006"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:e1b21386e9b62dde:body:0001",
+          "chunk:e1b21386e9b62dde:body:0002",
+          "chunk:e1b21386e9b62dde:body:0003",
+          "chunk:e1b21386e9b62dde:heading:0002",
+          "chunk:e1b21386e9b62dde:body:0004",
+          "chunk:e1b21386e9b62dde:heading:0003",
+          "chunk:e1b21386e9b62dde:body:0005",
+          "chunk:e1b21386e9b62dde:body:0006"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "locator": "chunk:1d0117eb6e17c63c:body:0007",
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "chunk_id": "1d0117eb6e17c63c:body:0007",
+      "context_locators": [
+        "chunk:1d0117eb6e17c63c:table:0001",
+        "chunk:1d0117eb6e17c63c:body:0007",
+        "chunk:1d0117eb6e17c63c:body:0008"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+        "locator": "chunk:1d0117eb6e17c63c:body:0007",
+        "locators": [
+          "chunk:1d0117eb6e17c63c:table:0001",
+          "chunk:1d0117eb6e17c63c:body:0007",
+          "chunk:1d0117eb6e17c63c:body:0008"
+        ],
+        "scope_id": "scope:3ecfdc461ec038c2d9870217e9c17ad9",
+        "view": "compact"
+      },
+      "scope_id": "scope:3ecfdc461ec038c2d9870217e9c17ad9",
+      "total_chunks": 3,
+      "by_kind": {
+        "unknown": 3
+      },
+      "table_chunks": 0,
+      "title": "图表9：本周涨跌幅后十",
+      "published": "undated",
+      "snippet": "<b>韩元</b>和3000亿<b>韩元</b>的<b>MLCC</b><b>合同</b>",
+      "preview": {
+        "text": "信号越快，对传输介质的要求越高，传统热固性树脂在超\n高频信号传输下，“介电损耗”很严重。\n而PTFE 是当前商用体系中介电性能最优的聚合物之一，从分子结构角度，PTFE\n具备高度对称分子结构，氟原子均匀包裹碳主链骨架、分子几乎无净极性；10GHz\n条件下介电常数Dk=2.1，介质损耗Dk 低至0.0004，且介电参数随频率、温度波动\n极小。\n对比高速PCB 常用的PPE 材料和环氧树脂材料，PTFE 具备更低介电常数和更\n低介电损耗，更适配更高频段的信号传输，通俗讲，在超高频信号传输这条“高速\n路”上，PTFE 是阻力最小、信号跑得最稳的材料。（资料来源：化工新材料）\n3.2\nMLCC 巨头，签订万亿订单\n三星电机于9 月1 日宣布，已与一家全球知名企业签署了一份价值1.0722 万亿\n韩元（约52.69 亿人民币）的长期供应协议（LTA），为其人工智能（AI）服务器供\n应多层陶瓷电容器（MLCC）。这是该公司迄今为止最大的MLCC 供应合同，相当\n于其去年合并收入的9.5%。合同约定的供应量将从2027 年1 月1 日至12 月31 日，\n为期一年。出于保密原因，该公司并未透露客户身份。\n三星电机目前与约10 家全球企业签订了MLCC 长期供应协议。此次披露是在其\n中一家客户确认2027 年供应量之后进行的。该客户与此前已公布的供应合同涉及的\n客户不同。",
+        "start": 239,
+        "end": 826,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "1.0722",
+          "mlcc",
+          "万亿",
+          "三星",
+          "合同",
+          "电机",
+          "韩元"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+        "locators": [
+          "chunk:1d0117eb6e17c63c:body:0007"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+        "locators": [
+          "chunk:1d0117eb6e17c63c:table:0001",
+          "chunk:1d0117eb6e17c63c:body:0007",
+          "chunk:1d0117eb6e17c63c:body:0008"
+        ],
+        "remaining_after_prior_full_expansions": [],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "locator": "chunk:16a9a510ef9e405f:body:0005",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0005",
+      "context_locators": [
+        "chunk:16a9a510ef9e405f:body:0003",
+        "chunk:16a9a510ef9e405f:body:0004",
+        "chunk:16a9a510ef9e405f:body:0005",
+        "chunk:16a9a510ef9e405f:body:0006",
+        "chunk:16a9a510ef9e405f:body:0007",
+        "chunk:16a9a510ef9e405f:body:0008",
+        "chunk:16a9a510ef9e405f:body:0009",
+        "chunk:16a9a510ef9e405f:body:0010"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locator": "chunk:16a9a510ef9e405f:body:0005",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010"
+        ],
+        "scope_id": "scope:4a8a7ec9c21d98e485ef5d0d70a23373",
+        "view": "compact"
+      },
+      "scope_id": "scope:4a8a7ec9c21d98e485ef5d0d70a23373",
+      "total_chunks": 8,
+      "by_kind": {
+        "unknown": 8
+      },
+      "table_chunks": 0,
+      "title": "一、细分板块观点\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩",
+      "published": "undated",
+      "snippet": "<b>MLCC</b>相较于其他细分，有",
+      "preview": {
+        "text": "行业周报\n扫码获取更多服务 \n来源：Wind，国金证券研究所 \n来源：Wind，国金证券研究所 \n26Q1 各厂商淡季不淡，有望形成结构性需求旺盛+上游成本增加的顺价涨价，目前综合行业稼动率处于较高水平，复\n盘之前周期，MLCC 相较于其他细分，有明显的渠道代理商放大效应，且宏观流动性增加的背景下，龙头公司的上游\n采购能力、成本传导过程中超额收益的能力更强。\nAI端测的升级有望带来估值弹性，AI手机单机电感用量预计增长，价格提升； MLCC手机用量增加，均价有提升，\n主要是产品升级（高容高压耐温、低损耗）。端侧笔电以WoA 笔电（低能耗见长的精简指令集 RISC ，ARM 设计\n架构）为例，ARM 架构下MLCC 容值规格提高，其中1u 以上MLCC 用量占总用量近八成，每台WoA 笔电MLCC\n总价大幅提高到5.5~6.5 美金。",
+        "start": 0,
+        "end": 371,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "mlcc"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0005"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010"
+        ],
+        "remaining_after_prior_full_expansions": [],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "locator": "chunk:7ceca88433b092ae:body:0001",
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "chunk_id": "7ceca88433b092ae:body:0001",
+      "context_locators": [
+        "chunk:7ceca88433b092ae:heading:0000",
+        "chunk:7ceca88433b092ae:body:0001",
+        "chunk:7ceca88433b092ae:body:0002",
+        "chunk:7ceca88433b092ae:body:0003",
+        "chunk:7ceca88433b092ae:body:0004"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locator": "chunk:7ceca88433b092ae:body:0001",
+        "locators": [
+          "chunk:7ceca88433b092ae:heading:0000",
+          "chunk:7ceca88433b092ae:body:0001",
+          "chunk:7ceca88433b092ae:body:0002",
+          "chunk:7ceca88433b092ae:body:0003",
+          "chunk:7ceca88433b092ae:body:0004"
+        ],
+        "scope_id": "scope:eba2ee45bab21ca397e9c9c2f102094e",
+        "view": "compact"
+      },
+      "scope_id": "scope:eba2ee45bab21ca397e9c9c2f102094e",
+      "total_chunks": 5,
+      "by_kind": {
+        "unknown": 5
+      },
+      "table_chunks": 0,
+      "title": "通信行业周报\n2026 CIOE 中国光博会前瞻",
+      "published": "undated",
+      "snippet": "<b>合同</b>，该<b>合同</b>价值可能高达7亿",
+      "preview": {
+        "text": "行业要闻：\n英伟达向联发科投资35 亿美元，深化芯片合作\nNASA 向蓝色起源授予火星通信网络开发合同，该合同价值可能高达7 亿美元\n公司动态：\n中际旭创：9 月1 日，中际旭创发布关于首次回购公司股份的公告。公司于9 月\n1 日首次通过股份回购专用证券账户以集中竞价交易方式回购公司股份 37.41 万\n股，占公司总股本的0.0318%，最高成交价为870.00 元/股，最低成交价为838.16\n元/股，支付总金额为3.18 亿元（不含交易费用）。\n投资建议：CIOE 2026 参展企业展品预告显示，AI 算力集群扩张仍在推动光互联\n向更高速率、更低功耗方向演进，产业技术有望从800G 进一步向1.6T 升级。从\n参展企业披露的产品进展看，1.6T 正逐步进入规模上量阶段，3.2T 及更高阶产品\n则陆续推进送样与客户验证。随着AI 集群规模持续扩大，NPO、CPO、XPO 等\n新型架构的产业化进展有望成为本届展会的重要看点。从产业链布局看，参展产\n品进一步向高速 DSP 及模拟芯片、EML/硅光激光器、CW 光源、光引擎、光芯\n片、高密度连接及先进光电封装等环节延伸，随着速率和架构持续升级，核心光\n电器件和光引擎的重要性有望进一步提升。建议关注高速光模块相关标的：中际\n旭创、新易盛等；同时建议关注CPO 及光器件相关标的：天孚通信、炬光科技、\n蘅东光、光库科技、致尚科技、长盈通等。",
+        "start": 859,
+        "end": 1459,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "客户"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locators": [
+          "chunk:7ceca88433b092ae:body:0001"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+        "locators": [
+          "chunk:7ceca88433b092ae:heading:0000",
+          "chunk:7ceca88433b092ae:body:0001",
+          "chunk:7ceca88433b092ae:body:0002",
+          "chunk:7ceca88433b092ae:body:0003",
+          "chunk:7ceca88433b092ae:body:0004"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:7ceca88433b092ae:heading:0000",
+          "chunk:7ceca88433b092ae:body:0001",
+          "chunk:7ceca88433b092ae:body:0002",
+          "chunk:7ceca88433b092ae:body:0003",
+          "chunk:7ceca88433b092ae:body:0004"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "locator": "chunk:022ae1713fb760ff:body:0011",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0011",
+      "context_locators": [
+        "chunk:022ae1713fb760ff:body:0010",
+        "chunk:022ae1713fb760ff:body:0011",
+        "chunk:022ae1713fb760ff:body:0012",
+        "chunk:022ae1713fb760ff:body:0013",
+        "chunk:022ae1713fb760ff:body:0014",
+        "chunk:022ae1713fb760ff:body:0015"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locator": "chunk:022ae1713fb760ff:body:0011",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015"
+        ],
+        "scope_id": "scope:2c861ee037daea6dd800eded48e89224",
+        "view": "compact"
+      },
+      "scope_id": "scope:2c861ee037daea6dd800eded48e89224",
+      "total_chunks": 6,
+      "by_kind": {
+        "unknown": 6
+      },
+      "table_chunks": 0,
+      "title": "光伏：板块半年报整体呈现“景气底部夯实”状态，玻璃、胶膜、高效电池（尤其BC）等部分环节拐点或率先出现。",
+      "published": "undated",
+      "snippet": "<b>客户</b>，具有区位优势，有利于增强抗",
+      "preview": {
+        "text": "9 月3 日，石大胜华公告称，公司控股子公司胜华新材料科技(连江)有限公司拟投资建设20 万吨/年锂电池电解液项\n目，预计总投资6.87 亿元，建设周期12 个月。项目建成后预计年产值54.41 亿元，年均净利润8860.01 万元。公司\n表示，该项目贴近核心客户，具有区位优势，有利于增强抗风险能力和市场竞争能力，促进公司利润增长。  \n锂电需求旺盛，碳酸锂供需趋紧 \n9 月国内锂电市场需求持续旺盛，磷酸铁锂、三元电芯排产环比增长，碳酸锂需求预计升至17 万吨。受国内部分产能\n检修、锂矿复产不及预期及进口偏低影响，碳酸锂供给增幅有限，库存持续下降，市场供需趋紧。短期锂价上涨动力\n仍不足，但若去库延续，价格有望逐步回升。 \n电网：国网输变电设备第4批招标同比-19%，前四批招标同比-12%，主要系25年同期高基数及“十五五”开局部分\n项目仍处于规划阶段影响，新能源扩容&特高压配套需求长期存在，预计27 年招标有望回暖。 \n本周国网输变电设备第四批中标公示，第四批招标114 亿元，同比-19%，前四批累计招标601 亿元，同比-12%，招标\n下滑主要系25 年同期高基数及“十五五”开局部分项目仍处于规划阶段影响。考虑到新能源扩容&特高压配套需求长\n期存在，预计27 年主网招标有望回暖。",
+        "start": 0,
+        "end": 549,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "客户"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0011"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0010",
+          "chunk:022ae1713fb760ff:body:0011",
+          "chunk:022ae1713fb760ff:body:0012",
+          "chunk:022ae1713fb760ff:body:0013",
+          "chunk:022ae1713fb760ff:body:0014",
+          "chunk:022ae1713fb760ff:body:0015"
+        ],
+        "remaining_after_prior_full_expansions": [],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "locator": "chunk:e1b21386e9b62dde:body:0049",
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "chunk_id": "e1b21386e9b62dde:body:0049",
+      "context_locators": [
+        "chunk:e1b21386e9b62dde:body:0048",
+        "chunk:e1b21386e9b62dde:body:0049",
+        "chunk:e1b21386e9b62dde:body:0050"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+        "locator": "chunk:e1b21386e9b62dde:body:0049",
+        "locators": [
+          "chunk:e1b21386e9b62dde:body:0048",
+          "chunk:e1b21386e9b62dde:body:0049",
+          "chunk:e1b21386e9b62dde:body:0050"
+        ],
+        "scope_id": "scope:00c0634d9685a976b81caa6f2cca87bb",
+        "view": "compact"
+      },
+      "scope_id": "scope:00c0634d9685a976b81caa6f2cca87bb",
+      "total_chunks": 3,
+      "by_kind": {
+        "unknown": 3
+      },
+      "table_chunks": 0,
+      "title": "公司声明及风险提示：",
+      "published": "undated",
+      "snippet": "<b>客户</b>的专属研究产品，为该类",
+      "preview": {
+        "text": "公司声明及风险提示： \n负责撰写此报告的分析师（一人或多人）就本研究报告确认：本人具有中国证券业协会授予的证券投资咨询执业资格。\n平安证券股份有限公司具备证券投资咨询业务资格。本公司研究报告是针对与公司签署服务协议的签约客户的专属研\n究产品，为该类客户进行投资决策时提供辅助和参考，双方对权利与义务均有严格约定。本公司研究报告仅提供给上\n述特定客户，并不面向公众发布。未经书面授权刊载或者转发的，本公司将采取维权措施追究其侵权责任。\n证券市场是一个风险无时不在的市场。您在进行证券交易时存在赢利的可能，也存在亏损的风险。请您务必对此有清\n醒的认识，认真考虑是否进行证券交易。\n市场有风险，投资需谨慎。",
+        "start": 0,
+        "end": 300,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "客户"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+        "locators": [
+          "chunk:e1b21386e9b62dde:body:0049"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+        "locators": [
+          "chunk:e1b21386e9b62dde:body:0048",
+          "chunk:e1b21386e9b62dde:body:0049",
+          "chunk:e1b21386e9b62dde:body:0050"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:e1b21386e9b62dde:body:0048",
+          "chunk:e1b21386e9b62dde:body:0049",
+          "chunk:e1b21386e9b62dde:body:0050"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@48e8e60844f69177d5eb672a1d1b1010",
+    "processing": "scoped",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 22,
+      "published": 18,
+      "withdrawn": 0,
+      "pending": 0,
+      "failed_jobs": 0,
+      "builds": 28,
+      "published_with_gaps": 16
+    },
+    "retrieval": {
+      "requested": "hybrid",
+      "used": "hybrid",
+      "reason": null,
+      "profile": "fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107",
+      "expected_chunks": 703,
+      "ready_chunks": 703,
+      "lexical_candidates": 62,
+      "vector_candidates": 200,
+      "query_cache_hit": false,
+      "query_usage": {
+        "prompt_tokens": 52,
+        "total_tokens": 52
+      },
+      "elapsed_ms": 599
+    }
+  },
+  "hint": "preview 是选读预览，不是已取证引用。先用同一命中的 core_fetch_plan 调用 corpus_fetch；问题涉及多个对象、因果链或指代不完整时，再按 fetch_plan 扩展上下文。表格保留原范围以带齐表头、期间和单位。重复 locator 可在相同 doc_id 下去重；不同版本不可混用。",
+  "delivery_preview": "pilot"
+}

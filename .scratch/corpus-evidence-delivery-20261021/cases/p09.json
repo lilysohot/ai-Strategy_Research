@@ -1,0 +1,106 @@
+{
+  "case": "p09",
+  "kind": "positive",
+  "review": {
+    "class": "direct",
+    "reason": "列出存货、采购现金、在建工程和管理层订单展望",
+    "markers": [
+      "存货",
+      "购买商品现金流出",
+      "在建工程",
+      "订单展望"
+    ]
+  },
+  "capture_sha256": "f3df26c39f9df58c139bd8a8c202955fbf979c14251a2a2f07235ae37e67c5fd",
+  "original_sha256": "99ed3b02c24fdfc70dab7beac3dcb5dca7fd253223062a1b9ab08f80aba6a35b",
+  "original_retrieval": "hybrid",
+  "top_chunk": "022ae1713fb760ff:body:0000",
+  "top_original_chars": 1340,
+  "old_snippet": "<b>AI</b><b>相关</b><b>订单</b>、<b>收入</b><b>放量</b>的窗口",
+  "preview": {
+    "text": "敬请参阅最后一页特别声明\n1 \n子行业周度核心观点\n整体观点： \n本周我们陆续发布电新板块各子行业半年报总结，整体来看，不同子行业之间业绩表现差异显著：1）锂电板块，在全\n球动储需求同步高增叠加税费政策调整带来的“抢装”需求影响下，上半年整体呈现量价利齐升的景气上行趋势；2）\nAIDC 电源与液冷板块，尽管大部分公司在半年报中呈现的AI 相关收入仍较少，但从存货、购买商品现金流出、在建\n工程等财务指标，以及管理层讨论中呈现的订单展望等方面，已能够看到许多公司开始进入订单储备、客户认证、产\n能建设、备料阶段，预计未来半年内将看到大量企业开始进入AI 相关订单、收入放量的窗口；3）光伏板块，在上半\n年内需低迷的影响下，产业链供需矛盾仍然突出，但企业在盈利承压下普遍以销定产、控制亏损、加强现金管理，夯\n实产业链价格与盈利底部，部分辅材及BC 组件龙头率先呈现拐点迹象；4）电网设备方面，变压器、高压开关等核心\n产品出口维持较快增长。结合行业半年报，AI 基建相关领域（SOFC/电源/液冷/电力设备出口）及基本面景气度持续\n高企但股价背离显著的锂电板块仍是我们当前时点优先推荐方向，同时围绕全球能源自主、细分领域技术迭代相关的\n风光储领域强alpha 个股当前也是低位布局的理想选择。",
+    "start": 0,
+    "end": 544,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "ai",
+      "公司",
+      "收入",
+      "放量",
+      "电源",
+      "相关",
+      "订单",
+      "财务"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": [
+      "存货",
+      "购买商品现金流出",
+      "在建工程",
+      "订单展望"
+    ]
+  },
+  "core_chunks": 7,
+  "full_chunks": 93,
+  "original_context_occurrences": 134,
+  "preview_statuses": {
+    "complete_sentence_window": 10
+  },
+  "preview_chars": [
+    544,
+    587,
+    501,
+    599,
+    542,
+    544,
+    563,
+    501,
+    599,
+    559
+  ],
+  "body_chars": {
+    "off": 19092,
+    "pilot": 39063
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 5534,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 5525,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11182,
+        "hits": 5,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 11446,
+        "hits": 5,
+        "previews": 5,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

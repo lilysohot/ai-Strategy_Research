@@ -1,0 +1,2822 @@
+{
+  "baseline_sha256": "b352a38faed405d53ba45f74a864869a3c57e80b3ef2b910a309769be1146ed3",
+  "sources": [
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "old_kept": 165,
+      "new_kept": 117,
+      "removed": [
+        {
+          "ordinal": 1,
+          "kind": "paragraph",
+          "text": "敬请参阅最后一页特别声明",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_reminder_line"
+          ]
+        },
+        {
+          "ordinal": 144,
+          "kind": "paragraph",
+          "text": "行业投资评级的说明： ",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_heading"
+          ]
+        },
+        {
+          "ordinal": 145,
+          "kind": "paragraph",
+          "text": "买入：预期未来3－6 个月内该行业上涨幅度超过大盘在15%以上； ",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 146,
+          "kind": "paragraph",
+          "text": "增持：预期未来3－6 个月内该行业上涨幅度超过大盘在\n5%－15%； ",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 147,
+          "kind": "paragraph",
+          "text": "中性：预期未来3－6 个月内该行业变动幅度相对大盘在 -5%－5%； \n减持：预期未来3－6 个月内该行业下跌幅度超过大盘在 5%以上。 ",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 153,
+          "kind": "heading",
+          "text": "特别声明： ",
+          "reasons": [
+            "heading_by_font_size",
+            "disclaimer_heading"
+          ]
+        },
+        {
+          "ordinal": 154,
+          "kind": "paragraph",
+          "text": "国金证券股份有限公司经中国证券监督管理委员会批准，已具备证券投资咨询业务资格。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 155,
+          "kind": "paragraph",
+          "text": "本报告版权归“国金证券股份有限公司”（以下简称“国金证券”）所有，未经事先书面授权，任何机构和个人均不得以任何方式对本报告的任何部分制作任何",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 156,
+          "kind": "paragraph",
+          "text": "形式的复制、转发、转载、引用、修改、仿制、刊发，或以任何侵犯本公司版权的其他方式使用。经过书面授权的引用、刊发，需注明出处为“国金证券股份有限",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 157,
+          "kind": "paragraph",
+          "text": "公司”，且不得对本报告进行任何有悖原意的删节和修改。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 158,
+          "kind": "paragraph",
+          "text": "本报告的产生基于国金证券及其研究人员认为可信的公开资料或实地调研资料，但国金证券及其研究人员对这些信息的准确性和完整性不作任何保证。本报告",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 159,
+          "kind": "paragraph",
+          "text": "反映撰写研究人员的不同设想、见解及分析方法，故本报告所载观点可能与其他类似研究报告的观点及市场实际情况不一致，国金证券不对使用本报告所包含的材",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 160,
+          "kind": "paragraph",
+          "text": "料产生的任何直接或间接损失或与此有关的其他任何损失承担任何责任。且本报告中的资料、意见、预测均反映报告初次公开发布时的判断，在不作事先通知的情",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 161,
+          "kind": "paragraph",
+          "text": "况下，可能会随时调整，亦可因使用不同假设和标准、采用不同观点和分析方法而与国金证券其它业务部门、单位或附属机构在制作类似的其他材料时所给出的意",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 162,
+          "kind": "paragraph",
+          "text": "见不同或者相反。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 163,
+          "kind": "paragraph",
+          "text": "本报告仅为参考之用，在任何地区均不应被视为买卖任何证券、金融工具的要约或要约邀请。本报告提及的任何证券或金融工具均可能含有重大的风险，可能",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 164,
+          "kind": "paragraph",
+          "text": "不易变卖以及不适合所有投资者。本报告所提及的证券或金融工具的价格、价值及收益可能会受汇率影响而波动。过往的业绩并不能代表未来的表现。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 165,
+          "kind": "paragraph",
+          "text": "客户应当考虑到国金证券存在可能影响本报告客观性的利益冲突，而不应视本报告为作出投资决策的唯一因素。证券研究报告是用于服务具备专业知识的投资",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 166,
+          "kind": "paragraph",
+          "text": "者和投资顾问的专业产品，使用时必须经专业人士进行解读。国金证券建议获取报告人员应考虑本报告的任何意见或建议是否符合其特定状况，以及（若有必要）",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 167,
+          "kind": "paragraph",
+          "text": "咨询独立投资顾问。报告本身、报告中的信息或所表达意见也不构成投资、法律、会计或税务的最终操作建议，国金证券不就报告中的内容对最终操作建议做出任",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 168,
+          "kind": "paragraph",
+          "text": "何担保，在任何时候均不构成对任何人的个人推荐。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 169,
+          "kind": "paragraph",
+          "text": "在法律允许的情况下，国金证券的关联机构可能会持有报告中涉及的公司所发行的证券并进行交易，并可能为这些公司正在提供或争取提供多种金融服务。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 170,
+          "kind": "paragraph",
+          "text": "本报告并非意图发送、发布给在当地法律或监管规则下不允许向其发送、发布该研究报告的人员。国金证券并不因收件人收到本报告而视其为国金证券的客",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 171,
+          "kind": "paragraph",
+          "text": "户。本报告对于收件人而言属高度机密，只有符合条件的收件人才能使用。根据《证券期货投资者适当性管理办法》，本报告仅供国金证券股份有限公司客户中风",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 172,
+          "kind": "paragraph",
+          "text": "险评级高于C3 级(含C3 级）的投资者使用；本报告所包含的观点及建议并未考虑个别客户的特殊状况、目标或需要，不应被视为对特定客户关于特定证券或金融",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 173,
+          "kind": "paragraph",
+          "text": "工具的建议或策略。对于本报告中提及的任何证券或金融工具，本报告的收件人须保持自身的独立判断。使用国金证券研究报告进行投资，遭受任何损失，国金证",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 174,
+          "kind": "paragraph",
+          "text": "券不承担相关法律责任。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 175,
+          "kind": "paragraph",
+          "text": "若国金证券以外的任何机构或个人发送本报告，则由该机构或个人为此发送行为承担全部责任。本报告不构成国金证券向发送本报告机构或个人的收件人提供",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 176,
+          "kind": "paragraph",
+          "text": "投资建议，国金证券不为此承担任何责任。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 177,
+          "kind": "paragraph",
+          "text": "此报告仅限于中国境内使用。国金证券版权所有，保留一切权利。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 178,
+          "kind": "paragraph",
+          "text": "上海 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 179,
+          "kind": "paragraph",
+          "text": "北京 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 180,
+          "kind": "paragraph",
+          "text": "深圳 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 181,
+          "kind": "paragraph",
+          "text": "电话：021-80234211 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 182,
+          "kind": "paragraph",
+          "text": "邮箱：researchsh@gjzq.com.cn ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 183,
+          "kind": "paragraph",
+          "text": "邮编：201204 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 184,
+          "kind": "paragraph",
+          "text": "地址：上海浦东新区芳甸路1088 号 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 185,
+          "kind": "paragraph",
+          "text": "      紫竹国际大厦5 楼 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 186,
+          "kind": "paragraph",
+          "text": "电话：010-85950438 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 187,
+          "kind": "paragraph",
+          "text": "邮箱：researchbj@gjzq.com.cn ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 188,
+          "kind": "paragraph",
+          "text": "邮编：100005 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 189,
+          "kind": "paragraph",
+          "text": "地址：北京市东城区建内大街26 号 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 190,
+          "kind": "paragraph",
+          "text": "      新闻大厦8 层南侧 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 191,
+          "kind": "paragraph",
+          "text": "电话：0755-86695353 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 192,
+          "kind": "paragraph",
+          "text": "邮箱：researchsz@gjzq.com.cn ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 193,
+          "kind": "paragraph",
+          "text": "邮编：518000 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 194,
+          "kind": "paragraph",
+          "text": "地址：深圳市福田区金田路2028 号皇岗商务中心 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 195,
+          "kind": "paragraph",
+          "text": "      18 楼1806 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        }
+      ],
+      "new_chunks_before_admission": 23
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "3ed3ecab2fdf5035c48a45dd5461f849b2d017f9615d7466f2a26a25fae422e8",
+      "old_kept": 189,
+      "new_kept": 166,
+      "removed": [
+        {
+          "ordinal": 175,
+          "kind": "paragraph",
+          "text": "评级说明",
+          "reasons": [
+            "disclaimer_heading"
+          ]
+        },
+        {
+          "ordinal": 176,
+          "kind": "paragraph",
+          "text": "评级",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 177,
+          "kind": "paragraph",
+          "text": "说明",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 178,
+          "kind": "paragraph",
+          "text": "投资建议的比较标准\n投资评级分为股票评级和行业评级。",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 179,
+          "kind": "paragraph",
+          "text": "以报告发布后的12 个月内的市场表现为比\n较标准，报告发布日后的12 个月内的公司\n股价（或行业指数）的涨跌幅相对同期的\n沪深300 指数涨跌幅为基准。",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 180,
+          "kind": "paragraph",
+          "text": "股票投资评级",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 181,
+          "kind": "paragraph",
+          "text": "增持",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 182,
+          "kind": "paragraph",
+          "text": "相对沪深300 指数涨幅10%以上",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 183,
+          "kind": "paragraph",
+          "text": "谨慎增持",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 184,
+          "kind": "paragraph",
+          "text": "相对沪深300 指数涨幅介于5%～10%之间",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 185,
+          "kind": "paragraph",
+          "text": "中性",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 186,
+          "kind": "paragraph",
+          "text": "相对沪深300 指数涨幅介于-5%～5% ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 187,
+          "kind": "paragraph",
+          "text": "减持",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 188,
+          "kind": "paragraph",
+          "text": "相对沪深300 指数下跌5%以上",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 189,
+          "kind": "paragraph",
+          "text": "无评级",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 190,
+          "kind": "paragraph",
+          "text": "对于个股未来市场表现与基准指数相比无\n明确观点",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 191,
+          "kind": "paragraph",
+          "text": "行业投资评级",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 192,
+          "kind": "paragraph",
+          "text": "增持",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 193,
+          "kind": "paragraph",
+          "text": "明显强于沪深300 指数",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 194,
+          "kind": "paragraph",
+          "text": "中性",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 195,
+          "kind": "paragraph",
+          "text": "基本与沪深300 指数持平",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 196,
+          "kind": "paragraph",
+          "text": "减持",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 197,
+          "kind": "paragraph",
+          "text": "明显弱于沪深300 指数",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        }
+      ],
+      "new_chunks_before_admission": 25
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "old_kept": 1177,
+      "new_kept": 1156,
+      "removed": [
+        {
+          "ordinal": 1282,
+          "kind": "heading",
+          "text": "投资评级说明",
+          "reasons": [
+            "multi_column_order_flagged",
+            "heading_by_font_size",
+            "disclaimer_heading"
+          ]
+        },
+        {
+          "ordinal": 1283,
+          "kind": "paragraph",
+          "text": "行业评级",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1284,
+          "kind": "paragraph",
+          "text": "报告发布日后的12个月内行业股票指数的涨跌幅相对同期相关证券市场代表性指数的涨跌幅为基准，投资建议的评",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1285,
+          "kind": "paragraph",
+          "text": "级标准为：",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1286,
+          "kind": "paragraph",
+          "text": "看好：",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1287,
+          "kind": "paragraph",
+          "text": "相对表现优于同期相关证券市场代表性指数",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1288,
+          "kind": "paragraph",
+          "text": "中性：",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1289,
+          "kind": "paragraph",
+          "text": "相对表现与同期相关证券市场代表性指数持平",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1290,
+          "kind": "paragraph",
+          "text": "看淡：",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1291,
+          "kind": "paragraph",
+          "text": "相对表现弱于同期相关证券市场代表性指数",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1292,
+          "kind": "paragraph",
+          "text": "公司评级",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1293,
+          "kind": "paragraph",
+          "text": "报告发布日后的12 个月内公司的涨跌幅相对同期相关证券市场代表性指数的涨跌幅为基准，投资建议的评级标准为：",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1294,
+          "kind": "paragraph",
+          "text": "买入：",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1295,
+          "kind": "paragraph",
+          "text": "相对同期相关证券市场代表性指数涨幅大于10% ",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1296,
+          "kind": "paragraph",
+          "text": "增持：",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1297,
+          "kind": "paragraph",
+          "text": "相对同期相关证券市场代表性指数涨幅在5%～10%之间",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1298,
+          "kind": "paragraph",
+          "text": "中性：",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1299,
+          "kind": "paragraph",
+          "text": "相对同期相关证券市场代表性指数涨幅在-5%～5%之间",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1300,
+          "kind": "paragraph",
+          "text": "减持：",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1301,
+          "kind": "paragraph",
+          "text": "相对同期相关证券市场代表性指数涨幅小于-5% ",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 1302,
+          "kind": "paragraph",
+          "text": "无投资评级：由于我们无法获取必要的资料，或者公司面临无法预见结果的重大不确定性事件，或者其他原因，致使\n我们无法给出明确的投资评级。\n相关证券市场代表性指数说明：A股市场以沪深300指数为基准；新三板市场以三板成指（针对协议转让标的）或三板做市指数\n（针对做市转让标的）为基准；香港市场以恒生指数为基准。",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        }
+      ],
+      "new_chunks_before_admission": 145
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "build_id": "d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+      "old_kept": 61,
+      "new_kept": 56,
+      "removed": [
+        {
+          "ordinal": 38,
+          "kind": "paragraph",
+          "text": "分析师声明",
+          "reasons": [
+            "disclaimer_heading"
+          ]
+        },
+        {
+          "ordinal": 39,
+          "kind": "paragraph",
+          "text": "本报告署名分析师在此声明：我们具有中国证券业协会授予的证券投资咨询执业资格或相当的专业胜任能力，本报告所表\n述的任何观点均精准地反映了我们对标的证券和发行人的个人看法，结论不受任何第三方的授意或影响。我们所得报酬的\n任何部分无论是在过去、现在及将来均不会与本报告中的具体投资建议或观点有直接或间接联系。",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 40,
+          "kind": "paragraph",
+          "text": "投资评级说明",
+          "reasons": [
+            "disclaimer_heading"
+          ]
+        },
+        {
+          "ordinal": 41,
+          "kind": "table_row",
+          "text": "投资建议的评级标准\n评级\n说明",
+          "reasons": [
+            "tbl[0]",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 42,
+          "kind": "table_row",
+          "text": "评级标准为报告发布日后的6 个月内公司股价（或行业\n指数）相对同期基准指数的相对市场表现。其中A 股市\n场以沪深300 指数为基准；新三板市场以三板成指（针\n对协议转让标的）或三板做市指数（针对做市转让标的）\n为基准；香港市场以摩根士丹利中国指数为基准，美股\n市场以标普500 指数或纳斯达克综合指数为基准。",
+          "reasons": [
+            "tbl[0]",
+            "disclaimer_section"
+          ]
+        }
+      ],
+      "new_chunks_before_admission": 10
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "build_id": "d2ec2ce01b12450b6090114e23ec01465ea4399b38387c0a83d1808354c6e75f",
+      "old_kept": 185,
+      "new_kept": 139,
+      "removed": [
+        {
+          "ordinal": 1,
+          "kind": "paragraph",
+          "text": "敬请参阅最后一页特别声明",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_reminder_line"
+          ]
+        },
+        {
+          "ordinal": 150,
+          "kind": "heading",
+          "text": "特别声明： ",
+          "reasons": [
+            "heading_by_font_size",
+            "disclaimer_heading"
+          ]
+        },
+        {
+          "ordinal": 151,
+          "kind": "paragraph",
+          "text": "国金证券股份有限公司经中国证券监督管理委员会批准，已具备证券投资咨询业务资格。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 152,
+          "kind": "paragraph",
+          "text": "本报告版权归“国金证券股份有限公司”（以下简称“国金证券”）所有，未经事先书面授权，任何机构和个人均不得以任何方式对本报告的任何部分制作任何",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 153,
+          "kind": "paragraph",
+          "text": "形式的复制、转发、转载、引用、修改、仿制、刊发，或以任何侵犯本公司版权的其他方式使用。经过书面授权的引用、刊发，需注明出处为“国金证券股份有限",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 154,
+          "kind": "paragraph",
+          "text": "公司”，且不得对本报告进行任何有悖原意的删节和修改。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 155,
+          "kind": "paragraph",
+          "text": "本报告的产生基于国金证券及其研究人员认为可信的公开资料或实地调研资料，但国金证券及其研究人员对这些信息的准确性和完整性不作任何保证。本报告",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 156,
+          "kind": "paragraph",
+          "text": "反映撰写研究人员的不同设想、见解及分析方法，故本报告所载观点可能与其他类似研究报告的观点及市场实际情况不一致，国金证券不对使用本报告所包含的材",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 157,
+          "kind": "paragraph",
+          "text": "料产生的任何直接或间接损失或与此有关的其他任何损失承担任何责任。且本报告中的资料、意见、预测均反映报告初次公开发布时的判断，在不作事先通知的情",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 158,
+          "kind": "paragraph",
+          "text": "况下，可能会随时调整，亦可因使用不同假设和标准、采用不同观点和分析方法而与国金证券其它业务部门、单位或附属机构在制作类似的其他材料时所给出的意",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 159,
+          "kind": "paragraph",
+          "text": "见不同或者相反。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 160,
+          "kind": "paragraph",
+          "text": "本报告仅为参考之用，在任何地区均不应被视为买卖任何证券、金融工具的要约或要约邀请。本报告提及的任何证券或金融工具均可能含有重大的风险，可能",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 161,
+          "kind": "paragraph",
+          "text": "不易变卖以及不适合所有投资者。本报告所提及的证券或金融工具的价格、价值及收益可能会受汇率影响而波动。过往的业绩并不能代表未来的表现。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 162,
+          "kind": "paragraph",
+          "text": "客户应当考虑到国金证券存在可能影响本报告客观性的利益冲突，而不应视本报告为作出投资决策的唯一因素。证券研究报告是用于服务具备专业知识的投资",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 163,
+          "kind": "paragraph",
+          "text": "者和投资顾问的专业产品，使用时必须经专业人士进行解读。国金证券建议获取报告人员应考虑本报告的任何意见或建议是否符合其特定状况，以及（若有必要）",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 164,
+          "kind": "paragraph",
+          "text": "咨询独立投资顾问。报告本身、报告中的信息或所表达意见也不构成投资、法律、会计或税务的最终操作建议，国金证券不就报告中的内容对最终操作建议做出任",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 165,
+          "kind": "paragraph",
+          "text": "何担保，在任何时候均不构成对任何人的个人推荐。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 166,
+          "kind": "paragraph",
+          "text": "在法律允许的情况下，国金证券的关联机构可能会持有报告中涉及的公司所发行的证券并进行交易，并可能为这些公司正在提供或争取提供多种金融服务。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 167,
+          "kind": "paragraph",
+          "text": "本报告并非意图发送、发布给在当地法律或监管规则下不允许向其发送、发布该研究报告的人员。国金证券并不因收件人收到本报告而视其为国金证券的客",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 168,
+          "kind": "paragraph",
+          "text": "户。本报告对于收件人而言属高度机密，只有符合条件的收件人才能使用。根据《证券期货投资者适当性管理办法》，本报告仅供国金证券股份有限公司客户中风",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 169,
+          "kind": "paragraph",
+          "text": "险评级高于C3 级(含C3 级）的投资者使用；本报告所包含的观点及建议并未考虑个别客户的特殊状况、目标或需要，不应被视为对特定客户关于特定证券或金融",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 170,
+          "kind": "paragraph",
+          "text": "工具的建议或策略。对于本报告中提及的任何证券或金融工具，本报告的收件人须保持自身的独立判断。使用国金证券研究报告进行投资，遭受任何损失，国金证",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 171,
+          "kind": "paragraph",
+          "text": "券不承担相关法律责任。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 172,
+          "kind": "paragraph",
+          "text": "若国金证券以外的任何机构或个人发送本报告，则由该机构或个人为此发送行为承担全部责任。本报告不构成国金证券向发送本报告机构或个人的收件人提供",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 173,
+          "kind": "paragraph",
+          "text": "投资建议，国金证券不为此承担任何责任。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 174,
+          "kind": "paragraph",
+          "text": "此报告仅限于中国境内使用。国金证券版权所有，保留一切权利。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 175,
+          "kind": "paragraph",
+          "text": "上海 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 176,
+          "kind": "paragraph",
+          "text": "北京 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 177,
+          "kind": "paragraph",
+          "text": "深圳 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 178,
+          "kind": "paragraph",
+          "text": "电话：021-80234211 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 179,
+          "kind": "paragraph",
+          "text": "邮箱：researchsh@gjzq.com.cn ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 180,
+          "kind": "paragraph",
+          "text": "邮编：201204 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 181,
+          "kind": "paragraph",
+          "text": "地址：上海浦东新区芳甸路1088 号 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 182,
+          "kind": "paragraph",
+          "text": "      紫竹国际大厦5 楼 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 183,
+          "kind": "paragraph",
+          "text": "电话：010-85950438 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 184,
+          "kind": "paragraph",
+          "text": "邮箱：researchbj@gjzq.com.cn ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 185,
+          "kind": "paragraph",
+          "text": "邮编：100005 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 186,
+          "kind": "paragraph",
+          "text": "地址：北京市东城区建内大街26 号 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 187,
+          "kind": "paragraph",
+          "text": "      新闻大厦8 层南侧 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 188,
+          "kind": "paragraph",
+          "text": "电话：0755-86695353 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 189,
+          "kind": "paragraph",
+          "text": "邮箱：researchsz@gjzq.com.cn ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 190,
+          "kind": "paragraph",
+          "text": "邮编：518000 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 191,
+          "kind": "paragraph",
+          "text": "地址：深圳市福田区金田路2028 号皇岗商务中心 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 192,
+          "kind": "paragraph",
+          "text": "      18 楼1806 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 193,
+          "kind": "paragraph",
+          "text": "【小程序】 \n国金证券研究服务 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 194,
+          "kind": "paragraph",
+          "text": "【公众号】 \n国金证券研究 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        }
+      ],
+      "new_chunks_before_admission": 10
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "old_kept": 281,
+      "new_kept": 236,
+      "removed": [
+        {
+          "ordinal": 1,
+          "kind": "paragraph",
+          "text": "敬请参阅最后一页特别声明",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_reminder_line"
+          ]
+        },
+        {
+          "ordinal": 266,
+          "kind": "paragraph",
+          "text": "行业投资评级的说明： ",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_heading"
+          ]
+        },
+        {
+          "ordinal": 267,
+          "kind": "paragraph",
+          "text": "买入：预期未来3－6 个月内该行业上涨幅度超过大盘在15%以上； \n增持：预期未来3－6 个月内该行业上涨幅度超过大盘在5%－15%； \n中性：预期未来3－6 个月内该行业变动幅度相对大盘在 -5%－5%； \n减持：预期未来3－6 个月内该行业下跌幅度超过大盘在 5%以上。 ",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 272,
+          "kind": "heading",
+          "text": "特别声明： ",
+          "reasons": [
+            "heading_by_font_size",
+            "disclaimer_heading"
+          ]
+        },
+        {
+          "ordinal": 273,
+          "kind": "paragraph",
+          "text": "国金证券股份有限公司经中国证券监督管理委员会批准，已具备证券投资咨询业务资格。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 274,
+          "kind": "paragraph",
+          "text": "形式的复制、转发、转载、引用、修改、仿制、刊发，或以任何侵犯本公司版权的其他方式使用。经过书面授权的引用、刊发，需注明出处为“国金证券股份有限",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 275,
+          "kind": "paragraph",
+          "text": "公司”，且不得对本报告进行任何有悖原意的删节和修改。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 276,
+          "kind": "paragraph",
+          "text": "本报告的产生基于国金证券及其研究人员认为可信的公开资料或实地调研资料，但国金证券及其研究人员对这些信息的准确性和完整性不作任何保证。本报告",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 277,
+          "kind": "paragraph",
+          "text": "反映撰写研究人员的不同设想、见解及分析方法，故本报告所载观点可能与其他类似研究报告的观点及市场实际情况不一致，国金证券不对使用本报告所包含的材",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 278,
+          "kind": "paragraph",
+          "text": "料产生的任何直接或间接损失或与此有关的其他任何损失承担任何责任。且本报告中的资料、意见、预测均反映报告初次公开发布时的判断，在不作事先通知的情",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 279,
+          "kind": "paragraph",
+          "text": "况下，可能会随时调整，亦可因使用不同假设和标准、采用不同观点和分析方法而与国金证券其它业务部门、单位或附属机构在制作类似的其他材料时所给出的意",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 280,
+          "kind": "paragraph",
+          "text": "见不同或者相反。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 281,
+          "kind": "paragraph",
+          "text": "本报告仅为参考之用，在任何地区均不应被视为买卖任何证券、金融工具的要约或要约邀请。本报告提及的任何证券或金融工具均可能含有重大的风险，可能",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 282,
+          "kind": "paragraph",
+          "text": "不易变卖以及不适合所有投资者。本报告所提及的证券或金融工具的价格、价值及收益可能会受汇率影响而波动。过往的业绩并不能代表未来的表现。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 283,
+          "kind": "paragraph",
+          "text": "客户应当考虑到国金证券存在可能影响本报告客观性的利益冲突，而不应视本报告为作出投资决策的唯一因素。证券研究报告是用于服务具备专业知识的投资",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 284,
+          "kind": "paragraph",
+          "text": "者和投资顾问的专业产品，使用时必须经专业人士进行解读。国金证券建议获取报告人员应考虑本报告的任何意见或建议是否符合其特定状况，以及（若有必要）",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 285,
+          "kind": "paragraph",
+          "text": "咨询独立投资顾问。报告本身、报告中的信息或所表达意见也不构成投资、法律、会计或税务的最终操作建议，国金证券不就报告中的内容对最终操作建议做出任",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 286,
+          "kind": "paragraph",
+          "text": "何担保，在任何时候均不构成对任何人的个人推荐。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 287,
+          "kind": "paragraph",
+          "text": "在法律允许的情况下，国金证券的关联机构可能会持有报告中涉及的公司所发行的证券并进行交易，并可能为这些公司正在提供或争取提供多种金融服务。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 288,
+          "kind": "paragraph",
+          "text": "本报告并非意图发送、发布给在当地法律或监管规则下不允许向其发送、发布该研究报告的人员。国金证券并不因收件人收到本报告而视其为国金证券的客",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 289,
+          "kind": "paragraph",
+          "text": "户。本报告对于收件人而言属高度机密，只有符合条件的收件人才能使用。根据《证券期货投资者适当性管理办法》，本报告仅供国金证券股份有限公司客户中风",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 290,
+          "kind": "paragraph",
+          "text": "险评级高于C3 级(含C3 级）的投资者使用；本报告所包含的观点及建议并未考虑个别客户的特殊状况、目标或需要，不应被视为对特定客户关于特定证券或金融",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 291,
+          "kind": "paragraph",
+          "text": "工具的建议或策略。对于本报告中提及的任何证券或金融工具，本报告的收件人须保持自身的独立判断。使用国金证券研究报告进行投资，遭受任何损失，国金证",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 292,
+          "kind": "paragraph",
+          "text": "券不承担相关法律责任。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 293,
+          "kind": "paragraph",
+          "text": "若国金证券以外的任何机构或个人发送本报告，则由该机构或个人为此发送行为承担全部责任。本报告不构成国金证券向发送本报告机构或个人的收件人提供",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 294,
+          "kind": "paragraph",
+          "text": "投资建议，国金证券不为此承担任何责任。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 295,
+          "kind": "paragraph",
+          "text": "此报告仅限于中国境内使用。国金证券版权所有，保留一切权利。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 296,
+          "kind": "paragraph",
+          "text": "上海 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 297,
+          "kind": "paragraph",
+          "text": "北京 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 298,
+          "kind": "paragraph",
+          "text": "深圳 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 299,
+          "kind": "paragraph",
+          "text": "电话：021-80234211 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 300,
+          "kind": "paragraph",
+          "text": "邮箱：researchsh@gjzq.com.cn ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 301,
+          "kind": "paragraph",
+          "text": "邮编：201204 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 302,
+          "kind": "paragraph",
+          "text": "地址：上海浦东新区芳甸路1088 号 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 303,
+          "kind": "paragraph",
+          "text": "      紫竹国际大厦5 楼 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 304,
+          "kind": "paragraph",
+          "text": "电话：010-85950438 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 305,
+          "kind": "paragraph",
+          "text": "邮箱：researchbj@gjzq.com.cn ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 306,
+          "kind": "paragraph",
+          "text": "邮编：100005 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 307,
+          "kind": "paragraph",
+          "text": "地址：北京市东城区建内大街26 号 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 308,
+          "kind": "paragraph",
+          "text": "      新闻大厦8 层南侧 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 309,
+          "kind": "paragraph",
+          "text": "电话：0755-86695353 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 310,
+          "kind": "paragraph",
+          "text": "邮箱：researchsz@gjzq.com.cn ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 311,
+          "kind": "paragraph",
+          "text": "邮编：518000 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 312,
+          "kind": "paragraph",
+          "text": "地址：深圳市福田区金田路2028 号皇岗商务中心 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 313,
+          "kind": "paragraph",
+          "text": "      18 楼1806 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        }
+      ],
+      "new_chunks_before_admission": 27
+    },
+    {
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "6475cbacca1575c5e791924d6843da313e70866f22451c45e82e3984516322b2",
+      "old_kept": 44,
+      "new_kept": 44,
+      "removed": [],
+      "new_chunks_before_admission": 7
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "e1b21386e9b62dde82ac2e48649146177ef290c8f847551e7a838bba9e108e7c",
+      "old_kept": 351,
+      "new_kept": 351,
+      "removed": [],
+      "new_chunks_before_admission": 72
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "1ada4314a25261eaca3ee1d538dc100f7d090f3005ae13e5b794c1e55cedc5aa",
+      "old_kept": 51,
+      "new_kept": 43,
+      "removed": [
+        {
+          "ordinal": 44,
+          "kind": "heading",
+          "text": "投资评级说明",
+          "reasons": [
+            "multi_column_order_flagged",
+            "heading_by_font_size",
+            "disclaimer_heading"
+          ]
+        },
+        {
+          "ordinal": 45,
+          "kind": "paragraph",
+          "text": "证券的投资评级：以报告日后的6 个月内，证券相对于同期市场基准指数的涨跌幅为标准，定义如下：",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 46,
+          "kind": "paragraph",
+          "text": "买入：相对同期市场基准指数涨跌幅在20％以上；\n增持：相对同期市场基准指数涨跌幅在5％～20％之间；\n中性：相对同期市场基准指数涨跌幅在－5％～＋5％之间；\n减持：相对同期市场基准指数涨跌幅低于-5％及以下。\n无：由于我们无法获取必要的资料，或者公司面临无法预见结果的重大不确定性事件，或者其他原因，致使我们无法给出明确的投资评级。",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 47,
+          "kind": "paragraph",
+          "text": "行业的投资评级：以报告日后的6 个月内，行业股票指数相对于同期市场基准指数的涨跌幅为标准，定义如下：",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 48,
+          "kind": "paragraph",
+          "text": "看好：行业股票指数超越同期市场基准指数；\n中性：行业股票指数与同期市场基准指数基本持平；\n看淡：行业股票指数弱于同期市场基准指数。",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 49,
+          "kind": "paragraph",
+          "text": "我们在此提醒您，不同证券研究机构采用不同的评级术语及评级标准。我们采用的是相对评级体系，表示投资的相对比重建议；\n投资者买入或者卖出证券的决定取决于个人的实际情况，比如当前的持仓结构以及其他需要考虑的因素。投资者应阅读整篇报告，以获取比较\n完整的观点与信息，不应仅仅依靠投资评级来推断结论。",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 50,
+          "kind": "paragraph",
+          "text": "本报告采用的基准指数：A股市场基准为沪深300指数，香港市场基准为恒生中国企业指数（HSCEI），美国市场基准为标普500指数\n或者纳斯达克指数。",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 51,
+          "kind": "heading",
+          "text": "仅供内部参考，请勿外传",
+          "reasons": [
+            "multi_column_order_flagged",
+            "heading_by_font_size",
+            "disclaimer_section"
+          ]
+        }
+      ],
+      "new_chunks_before_admission": 9
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "old_kept": 310,
+      "new_kept": 310,
+      "removed": [],
+      "new_chunks_before_admission": 55
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "old_kept": 442,
+      "new_kept": 432,
+      "removed": [
+        {
+          "ordinal": 1,
+          "kind": "paragraph",
+          "text": "敬请参阅最后一页特别声明 ",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_reminder_line"
+          ]
+        },
+        {
+          "ordinal": 456,
+          "kind": "heading",
+          "text": "特别声明 ",
+          "reasons": [
+            "heading_by_font_size",
+            "disclaimer_heading"
+          ]
+        },
+        {
+          "ordinal": 457,
+          "kind": "paragraph",
+          "text": "光大证券股份有限公司（以下简称“本公司”）成立于1996 年，是中国证监会批准的首批三家创新试点证券公司之一，也是世界500 强企业—\n—中国光大集团股份公司的核心金融服务平台之一。根据中国证监会核发的经营证券期货业务许可，本公司的经营范围包括证券投资咨询业务。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 458,
+          "kind": "paragraph",
+          "text": "本公司经营范围：证券经纪；证券投资咨询；与证券交易、证券投资活动有关的财务顾问；证券承销与保荐；证券自营；为期货公司提供中间介\n绍业务；证券投资基金代销；融资融券业务；中国证监会批准的其他业务。此外，本公司还通过全资或控股子公司开展资产管理、直接投资、期货、\n基金管理以及香港证券业务。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 459,
+          "kind": "paragraph",
+          "text": "本报告由光大证券股份有限公司研究所（以下简称“光大证券研究所”）编写，以合法获得的我们相信为可靠、准确、完整的信息为基础，但不\n保证我们所获得的原始信息以及报告所载信息之准确性和完整性。光大证券研究所可能将不时补充、修订或更新有关信息，但不保证及时发布该等更\n新。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 460,
+          "kind": "paragraph",
+          "text": "本报告中的资料、意见、预测均反映报告初次发布时光大证券研究所的判断，可能需随时进行调整且不予通知。在任何情况下，本报告中的信息\n或所表述的意见并不构成对任何人的投资建议。客户应自主作出投资决策并自行承担投资风险。本报告中的信息或所表述的意见并未考虑到个别投资\n者的具体投资目的、财务状况以及特定需求。投资者应当充分考虑自身特定状况，并完整理解和使用本报告内容，不应视本报告为做出投资决策的唯\n一因素。对依据或者使用本报告所造成的一切后果，本公司及作者均不承担任何法律责任。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 461,
+          "kind": "paragraph",
+          "text": "不同时期，本公司可能会撰写并发布与本报告所载信息、建议及预测不一致的报告。本公司的销售人员、交易人员和其他专业人员可能会向客户\n提供与本报告中观点不同的口头或书面评论或交易策略。本公司的资产管理子公司、自营部门以及其他投资业务板块可能会独立做出与本报告的意见\n或建议不相一致的投资决策。本公司提醒投资者注意并理解投资证券及投资产品存在的风险，在做出投资决策前，建议投资者务必向专业人士咨询并\n谨慎抉择。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 462,
+          "kind": "paragraph",
+          "text": "在法律允许的情况下，本公司及其附属机构可能持有报告中提及的公司所发行证券的头寸并进行交易，也可能为这些公司提供或正在争取提供投\n资银行、财务顾问或金融产品等相关服务。投资者应当充分考虑本公司及本公司附属机构就报告内容可能存在的利益冲突，勿将本报告作为投资决策\n的唯一信赖依据。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 463,
+          "kind": "paragraph",
+          "text": "本报告根据中华人民共和国法律在中华人民共和国境内分发，仅向特定客户传送。本报告的版权仅归本公司所有，未经书面许可，任何机构和个\n人不得以任何形式、任何目的进行翻版、复制、转载、刊登、发表、篡改或引用。如因侵权行为给本公司造成任何直接或间接的损失，本公司保留追\n究一切法律责任的权利。所有本报告中使用的商标、服务标记及标记均为本公司的商标、服务标记及标记。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 464,
+          "kind": "paragraph",
+          "text": "光大证券股份有限公司版权所有。保留一切权利。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        }
+      ],
+      "new_chunks_before_admission": 42
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "7ceca88433b092aef112bb25c95d221665080c5f9c979ad37eb4cbeeee40e509",
+      "old_kept": 153,
+      "new_kept": 150,
+      "removed": [
+        {
+          "ordinal": 207,
+          "kind": "heading",
+          "text": "分析师承诺 ",
+          "reasons": [
+            "heading_by_font_size",
+            "disclaimer_heading"
+          ]
+        },
+        {
+          "ordinal": 208,
+          "kind": "paragraph",
+          "text": "本报告署名分析师具有中国证券业协会授予的证券投资咨询执业资格并登记为注册分析师，基于认真审慎的工作态度、专业严谨的研\n究方法与分析逻辑得出研究结论，独立、客观地出具本报告，并对本报告的内容和观点负责。本报告清晰准确地反映了研究人员的研\n究观点，结论不受任何第三方的授意、影响，研究人员不曾因、不因、也将不会因本报告中的具体推荐意见或观点而直接或间接收到",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 209,
+          "kind": "paragraph",
+          "text": "任何形式的利益。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        }
+      ],
+      "new_chunks_before_admission": 21
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "old_kept": 218,
+      "new_kept": 172,
+      "removed": [
+        {
+          "ordinal": 1,
+          "kind": "paragraph",
+          "text": "敬请参阅最后一页特别声明",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_reminder_line"
+          ]
+        },
+        {
+          "ordinal": 193,
+          "kind": "paragraph",
+          "text": "行业投资评级的说明： ",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_heading"
+          ]
+        },
+        {
+          "ordinal": 194,
+          "kind": "paragraph",
+          "text": "买入：预期未来3－6 个月内该行业上涨幅度超过大盘在15%以上； \n增持：预期未来3－6 个月内该行业上涨幅度超过大盘在5%－15%； \n中性：预期未来3－6 个月内该行业变动幅度相对大盘在 -5%－5%； \n减持：预期未来3－6 个月内该行业下跌幅度超过大盘在 5%以上。 ",
+          "reasons": [
+            "multi_column_order_flagged",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 200,
+          "kind": "heading",
+          "text": "特别声明： ",
+          "reasons": [
+            "heading_by_font_size",
+            "disclaimer_heading"
+          ]
+        },
+        {
+          "ordinal": 201,
+          "kind": "paragraph",
+          "text": "国金证券股份有限公司经中国证券监督管理委员会批准，已具备证券投资咨询业务资格。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 202,
+          "kind": "paragraph",
+          "text": "本报告版权归“国金证券股份有限公司”（以下简称“国金证券”）所有，未经事先书面授权，任何机构和个人均不得以任何方式对本报告的任何部分制作任",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 203,
+          "kind": "paragraph",
+          "text": "何形式的复制、转发、转载、引用、修改、仿制、刊发，或以任何侵犯本公司版权的其他方式使用。经过书面授权的引用、刊发，需注明出处为“国金证券股份有",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 204,
+          "kind": "paragraph",
+          "text": "限公司”，且不得对本报告进行任何有悖原意的删节和修改。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 205,
+          "kind": "paragraph",
+          "text": "本报告的产生基于国金证券及其研究人员认为可信的公开资料或实地调研资料，但国金证券及其研究人员对这些信息的准确性和完整性不作任何保证。本报告",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 206,
+          "kind": "paragraph",
+          "text": "反映撰写研究人员的不同设想、见解及分析方法，故本报告所载观点可能与其他类似研究报告的观点及市场实际情况不一致，国金证券不对使用本报告所包含的材",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 207,
+          "kind": "paragraph",
+          "text": "料产生的任何直接或间接损失或与此有关的其他任何损失承担任何责任。且本报告中的资料、意见、预测均反映报告初次公开发布时的判断，在不作事先通知的情",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 208,
+          "kind": "paragraph",
+          "text": "况下，可能会随时调整，亦可因使用不同假设和标准、采用不同观点和分析方法而与国金证券其它业务部门、单位或附属机构在制作类似的其他材料时所给出的意",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 209,
+          "kind": "paragraph",
+          "text": "见不同或者相反。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 210,
+          "kind": "paragraph",
+          "text": "本报告仅为参考之用，在任何地区均不应被视为买卖任何证券、金融工具的要约或要约邀请。本报告提及的任何证券或金融工具均可能含有重大的风险，可能",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 211,
+          "kind": "paragraph",
+          "text": "不易变卖以及不适合所有投资者。本报告所提及的证券或金融工具的价格、价值及收益可能会受汇率影响而波动。过往的业绩并不能代表未来的表现。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 212,
+          "kind": "paragraph",
+          "text": "客户应当考虑到国金证券存在可能影响本报告客观性的利益冲突，而不应视本报告为作出投资决策的唯一因素。证券研究报告是用于服务具备专业知识的投资",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 213,
+          "kind": "paragraph",
+          "text": "者和投资顾问的专业产品，使用时必须经专业人士进行解读。国金证券建议获取报告人员应考虑本报告的任何意见或建议是否符合其特定状况，以及（若有必要）",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 214,
+          "kind": "paragraph",
+          "text": "咨询独立投资顾问。报告本身、报告中的信息或所表达意见也不构成投资、法律、会计或税务的最终操作建议，国金证券不就报告中的内容对最终操作建议做出任",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 215,
+          "kind": "paragraph",
+          "text": "何担保，在任何时候均不构成对任何人的个人推荐。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 216,
+          "kind": "paragraph",
+          "text": "在法律允许的情况下，国金证券的关联机构可能会持有报告中涉及的公司所发行的证券并进行交易，并可能为这些公司正在提供或争取提供多种金融服务。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 217,
+          "kind": "paragraph",
+          "text": "本报告并非意图发送、发布给在当地法律或监管规则下不允许向其发送、发布该研究报告的人员。国金证券并不因收件人收到本报告而视其为国金证券的客",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 218,
+          "kind": "paragraph",
+          "text": "户。本报告对于收件人而言属高度机密，只有符合条件的收件人才能使用。根据《证券期货投资者适当性管理办法》，本报告仅供国金证券股份有限公司客户中风",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 219,
+          "kind": "paragraph",
+          "text": "险评级高于C3 级(含C3 级）的投资者使用；本报告所包含的观点及建议并未考虑个别客户的特殊状况、目标或需要，不应被视为对特定客户关于特定证券或金融",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 220,
+          "kind": "paragraph",
+          "text": "工具的建议或策略。对于本报告中提及的任何证券或金融工具，本报告的收件人须保持自身的独立判断。使用国金证券研究报告进行投资，遭受任何损失，国金证",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 221,
+          "kind": "paragraph",
+          "text": "券不承担相关法律责任。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 222,
+          "kind": "paragraph",
+          "text": "若国金证券以外的任何机构或个人发送本报告，则由该机构或个人为此发送行为承担全部责任。本报告不构成国金证券向发送本报告机构或个人的收件人提供",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 223,
+          "kind": "paragraph",
+          "text": "投资建议，国金证券不为此承担任何责任。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 224,
+          "kind": "paragraph",
+          "text": "此报告仅限于中国境内使用。国金证券版权所有，保留一切权利。 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 225,
+          "kind": "paragraph",
+          "text": "上海 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 226,
+          "kind": "paragraph",
+          "text": "北京 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 227,
+          "kind": "paragraph",
+          "text": "深圳 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 228,
+          "kind": "paragraph",
+          "text": "电话：021-80234211 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 229,
+          "kind": "paragraph",
+          "text": "邮箱：researchsh@gjzq.com.cn ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 230,
+          "kind": "paragraph",
+          "text": "邮编：201204 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 231,
+          "kind": "paragraph",
+          "text": "地址：上海浦东新区芳甸路1088 号 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 232,
+          "kind": "paragraph",
+          "text": "      紫竹国际大厦5 楼 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 233,
+          "kind": "paragraph",
+          "text": "电话：010-85950438 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 234,
+          "kind": "paragraph",
+          "text": "邮箱：researchbj@gjzq.com.cn ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 235,
+          "kind": "paragraph",
+          "text": "邮编：100005 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 236,
+          "kind": "paragraph",
+          "text": "地址：北京市东城区建内大街26 号 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 237,
+          "kind": "paragraph",
+          "text": "      新闻大厦8 层南侧 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 238,
+          "kind": "paragraph",
+          "text": "电话：0755-86695353 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 239,
+          "kind": "paragraph",
+          "text": "邮箱：researchsz@gjzq.com.cn ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 240,
+          "kind": "paragraph",
+          "text": "邮编：518000 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 241,
+          "kind": "paragraph",
+          "text": "地址：深圳市福田区金田路2028 号皇岗商务中心 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 242,
+          "kind": "paragraph",
+          "text": "      18 楼1806 ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        }
+      ],
+      "new_chunks_before_admission": 13
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "147e841aab35836a7045f12f657922a8243351c6187c01306ca7663f18fde4ac",
+      "old_kept": 223,
+      "new_kept": 223,
+      "removed": [],
+      "new_chunks_before_admission": 30
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "old_kept": 559,
+      "new_kept": 527,
+      "removed": [
+        {
+          "ordinal": 576,
+          "kind": "paragraph",
+          "text": "投资评级声明",
+          "reasons": [
+            "disclaimer_heading"
+          ]
+        },
+        {
+          "ordinal": 577,
+          "kind": "paragraph",
+          "text": "类别",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 578,
+          "kind": "paragraph",
+          "text": "说明",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 579,
+          "kind": "paragraph",
+          "text": "评级",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 580,
+          "kind": "paragraph",
+          "text": "体系",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 581,
+          "kind": "paragraph",
+          "text": "股票投资评级",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 582,
+          "kind": "paragraph",
+          "text": "自报告日后的6 个月内，相对同期沪\n深300 指数的涨跌幅",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 583,
+          "kind": "paragraph",
+          "text": "行业投资评级",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 584,
+          "kind": "paragraph",
+          "text": "自报告日后的6 个月内，相对同期沪\n深300 指数的涨跌幅",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 585,
+          "kind": "paragraph",
+          "text": "买入",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 586,
+          "kind": "paragraph",
+          "text": "预期股价相对收益20%以上",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 587,
+          "kind": "paragraph",
+          "text": "增持",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 588,
+          "kind": "paragraph",
+          "text": "预期股价相对收益10%-20% ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 589,
+          "kind": "paragraph",
+          "text": "持有",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 590,
+          "kind": "paragraph",
+          "text": "预期股价相对收益-10%-10% ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 591,
+          "kind": "paragraph",
+          "text": "卖出",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 592,
+          "kind": "paragraph",
+          "text": "预期股价相对收益-10%以下",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 593,
+          "kind": "paragraph",
+          "text": "强于大市",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 594,
+          "kind": "paragraph",
+          "text": "预期行业指数涨幅5%以上",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 595,
+          "kind": "paragraph",
+          "text": "中性",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 596,
+          "kind": "paragraph",
+          "text": "预期行业指数涨幅-5%-5% ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 597,
+          "kind": "paragraph",
+          "text": "弱于大市",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 598,
+          "kind": "paragraph",
+          "text": "预期行业指数涨幅-5%以下",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 599,
+          "kind": "paragraph",
+          "text": "天风证券研究",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 600,
+          "kind": "paragraph",
+          "text": "北京",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 601,
+          "kind": "paragraph",
+          "text": "海口",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 602,
+          "kind": "paragraph",
+          "text": "上海",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 603,
+          "kind": "paragraph",
+          "text": "深圳",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 604,
+          "kind": "paragraph",
+          "text": "北京市西城区德胜国际中心B\n座11 层\n邮编：100088 \n邮箱：research@tfzq.com ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 605,
+          "kind": "paragraph",
+          "text": "海南省海口市美兰区国兴大\n道3 号互联网金融大厦\nA 栋23 层2301 房\n邮编：570102 \n电话：(0898)-65365390 \n邮箱：research@tfzq.com ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 606,
+          "kind": "paragraph",
+          "text": "上海市虹口区东长治路855 \n号北外滩金茂中心T1栋19\n楼\n邮编：200082 \n电话：(8621)-60256006 \n邮箱：research@tfzq.com ",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 607,
+          "kind": "paragraph",
+          "text": "深圳市福田区益田路5033 号\n平安金融中心71 楼\n邮编：518000 \n电话：(86755)-23915663 \n传真：(86755)-82571995 \n邮箱：research@tfzq.com \n下载日志已记录，仅供内部参考",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        }
+      ],
+      "new_chunks_before_admission": 68
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "old_kept": 542,
+      "new_kept": 541,
+      "removed": [
+        {
+          "ordinal": 1,
+          "kind": "heading",
+          "text": "请务必阅读正文之后的免责声明及其项下所有内容",
+          "reasons": [
+            "multi_column_order_flagged",
+            "heading_by_font_size",
+            "disclaimer_reminder_line"
+          ]
+        }
+      ],
+      "new_chunks_before_admission": 82
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "1d0117eb6e17c63c225674d57950ace3e0d56eb974132c0742919324b5fc3f31",
+      "old_kept": 167,
+      "new_kept": 154,
+      "removed": [
+        {
+          "ordinal": 213,
+          "kind": "heading",
+          "text": "特别声明",
+          "reasons": [
+            "heading_by_font_size",
+            "disclaimer_heading"
+          ]
+        },
+        {
+          "ordinal": 214,
+          "kind": "paragraph",
+          "text": "投资者应注意，在法律许可的情况下，本公司及其本公司的关联机构可能会持有本报告中涉及的公司所发行的证券并进行交易，也\n可能为这些公司正在提供或争取提供投资银行、财务顾问和金融产品等各种金融服务。投资者请勿将本报告视为投资或其他决定的\n唯一参考依据。",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 215,
+          "kind": "heading",
+          "text": "投资评级声明",
+          "reasons": [
+            "heading_by_font_size",
+            "disclaimer_heading"
+          ]
+        },
+        {
+          "ordinal": 216,
+          "kind": "table_row",
+          "text": "类别\n评级\n评级说明",
+          "reasons": [
+            "tbl[0]",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 217,
+          "kind": "table_row",
+          "text": "华福证券\n公司评级\n买入\n未来6 个月内，个股相对市场基准指数指数涨幅在20%以上",
+          "reasons": [
+            "tbl[0]",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 218,
+          "kind": "table_row",
+          "text": "持有\n未来6 个月内，个股相对市场基准指数指数涨幅介于10%与20%之间",
+          "reasons": [
+            "tbl[0]",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 219,
+          "kind": "table_row",
+          "text": "中性\n未来6 个月内，个股相对市场基准指数涨幅介于-10%与10%之间",
+          "reasons": [
+            "tbl[0]",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 220,
+          "kind": "table_row",
+          "text": "回避\n未来6 个月内，个股相对市场基准指数涨幅介于-20%与-10%之间",
+          "reasons": [
+            "tbl[0]",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 221,
+          "kind": "table_row",
+          "text": "卖出\n未来6 个月内，个股相对市场基准指数涨幅在-20%以下",
+          "reasons": [
+            "tbl[0]",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 222,
+          "kind": "table_row",
+          "text": "行业评级\n强于大市\n未来6 个月内，行业整体回报高于市场基准指数5%以上",
+          "reasons": [
+            "tbl[0]",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 223,
+          "kind": "table_row",
+          "text": "跟随大市\n未来6 个月内，行业整体回报介于市场基准指数-5%与 5%之间",
+          "reasons": [
+            "tbl[0]",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 224,
+          "kind": "table_row",
+          "text": "弱于大市\n未来6 个月内，行业整体回报低于市场基准指数-5%以下",
+          "reasons": [
+            "tbl[0]",
+            "disclaimer_section"
+          ]
+        },
+        {
+          "ordinal": 225,
+          "kind": "paragraph",
+          "text": "备注：评级标准为报告发布日后的6~12个月内公司股价（或行业指数）相对同期基准指数的相对市场表现。其中A 股市场以沪\n深300指数为基准；香港市场以恒生指数为基准，美股市场以标普500指数或纳斯达克综合指数为基准（另有说明的除外）",
+          "reasons": [
+            "disclaimer_section"
+          ]
+        }
+      ],
+      "new_chunks_before_admission": 19
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "6b55ddbbcfdc484db0a1c5b72831cced9934f77a4d65ed4d5ca7fda8ff031768",
+      "old_kept": 91,
+      "new_kept": 91,
+      "removed": [],
+      "new_chunks_before_admission": 20
+    }
+  ],
+  "positive_checks": [
+    {
+      "id": "p01",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p02",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p03",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p04",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p05",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p06",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p07",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p08",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p09",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p10",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p11",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p12",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p13",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p14",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p15",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p16",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p17",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p18",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p19",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p20",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p21",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p22",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p23",
+      "gold_term_retained": true
+    },
+    {
+      "id": "p24",
+      "gold_term_retained": true
+    }
+  ],
+  "reviewed_support_checks": [
+    {
+      "case": "p01",
+      "chunk": "16a9a510ef9e405f:body:0001",
+      "markers": [
+        "互连电容",
+        "降低工作电压"
+      ],
+      "all_retained": true
+    },
+    {
+      "case": "p13",
+      "chunk": "e1b21386e9b62dde:body:0002",
+      "markers": [
+        "54.6%",
+        "55.4%",
+        "服务通胀粘性"
+      ],
+      "all_retained": true
+    },
+    {
+      "case": "p16",
+      "chunk": "7ceca88433b092ae:body:0001",
+      "markers": [
+        "华工正源",
+        "6.4T",
+        "立讯技术",
+        "3.2T"
+      ],
+      "all_retained": true
+    },
+    {
+      "case": "p16",
+      "chunk": "7ceca88433b092ae:body:0003",
+      "markers": [
+        "华工正源",
+        "6.4T",
+        "立讯技术",
+        "3.2T"
+      ],
+      "all_retained": true
+    },
+    {
+      "case": "p16",
+      "chunk": "7ceca88433b092ae:body:0004",
+      "markers": [
+        "华工正源",
+        "6.4T",
+        "去 DSP"
+      ],
+      "all_retained": true
+    },
+    {
+      "case": "p16",
+      "chunk": "7ceca88433b092ae:body:0005",
+      "markers": [
+        "立讯技术",
+        "3.2T NPO",
+        "Live Demo"
+      ],
+      "all_retained": true
+    }
+  ],
+  "disclaimer_anchor_checks": [
+    {
+      "old_chunk": "16a9a510ef9e405f:body:0016",
+      "retained_units": []
+    },
+    {
+      "old_chunk": "16a9a510ef9e405f:body:0017",
+      "retained_units": []
+    }
+  ],
+  "summary": {
+    "source_count": 18,
+    "affected_sources": 13,
+    "newly_excluded_units": 301,
+    "positive_gold_terms_retained": 24,
+    "reviewed_positive_chunks": 6,
+    "removed_reasons": {
+      "multi_column_order_flagged": 43,
+      "disclaimer_reminder_line": 6,
+      "disclaimer_heading": 17,
+      "disclaimer_section": 278,
+      "heading_by_font_size": 12,
+      "tbl[0]": 11
+    }
+  }
+}

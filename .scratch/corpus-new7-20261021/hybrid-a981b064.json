@@ -1,0 +1,913 @@
+{
+  "query": "中泰 双锚 定价 贵州茅台",
+  "hits": [
+    {
+      "doc_id": "cv2:712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "locator": "chunk:712e370a7081da17:body:0018",
+      "title": "双锚点定价机制带来更强的稳价预期",
+      "snippet": "<b>中泰</b>证券研究所\n\n我们认为",
+      "score": 0.06403688524590165,
+      "published": "undated",
+      "source_id": "a981b0641542c425a0ebcdb69af2333a8f82c4d65d5f434a6850453463aa0f49",
+      "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "chunk_id": "712e370a7081da17:body:0018",
+      "context_locators": [
+        "chunk:712e370a7081da17:body:0000",
+        "chunk:712e370a7081da17:body:0001",
+        "chunk:712e370a7081da17:table:0000",
+        "chunk:712e370a7081da17:body:0002",
+        "chunk:712e370a7081da17:heading:0000",
+        "chunk:712e370a7081da17:body:0003",
+        "chunk:712e370a7081da17:body:0004",
+        "chunk:712e370a7081da17:body:0005",
+        "chunk:712e370a7081da17:body:0006",
+        "chunk:712e370a7081da17:body:0007",
+        "chunk:712e370a7081da17:body:0008",
+        "chunk:712e370a7081da17:table:0001",
+        "chunk:712e370a7081da17:body:0009",
+        "chunk:712e370a7081da17:body:0010",
+        "chunk:712e370a7081da17:body:0011",
+        "chunk:712e370a7081da17:body:0012",
+        "chunk:712e370a7081da17:body:0013",
+        "chunk:712e370a7081da17:body:0014",
+        "chunk:712e370a7081da17:body:0015",
+        "chunk:712e370a7081da17:body:0016",
+        "chunk:712e370a7081da17:body:0017",
+        "chunk:712e370a7081da17:body:0018",
+        "chunk:712e370a7081da17:body:0019",
+        "chunk:712e370a7081da17:body:0020",
+        "chunk:712e370a7081da17:body:0021"
+      ],
+      "scope_id": "scope:7d6366b146162af58e9a0a6d95c7e01b",
+      "context_by_kind": [
+        [
+          "unknown",
+          25
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "locator": "chunk:2b4a84ce404709ec:body:0073",
+      "title": "ASONDIFMAMIIASONOJFMAMITASONOI FMAM)",
+      "snippet": "S\n3\n2023\n|\n",
+      "score": 0.052307692307692305,
+      "published": "undated",
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "chunk_id": "2b4a84ce404709ec:body:0073",
+      "context_locators": [
+        "chunk:2b4a84ce404709ec:body:0065",
+        "chunk:2b4a84ce404709ec:body:0066",
+        "chunk:2b4a84ce404709ec:body:0067",
+        "chunk:2b4a84ce404709ec:body:0068",
+        "chunk:2b4a84ce404709ec:body:0069",
+        "chunk:2b4a84ce404709ec:body:0070",
+        "chunk:2b4a84ce404709ec:table:0027",
+        "chunk:2b4a84ce404709ec:body:0071",
+        "chunk:2b4a84ce404709ec:table:0028",
+        "chunk:2b4a84ce404709ec:body:0072",
+        "chunk:2b4a84ce404709ec:body:0073",
+        "chunk:2b4a84ce404709ec:heading:0035",
+        "chunk:2b4a84ce404709ec:body:0074",
+        "chunk:2b4a84ce404709ec:body:0075",
+        "chunk:2b4a84ce404709ec:body:0076",
+        "chunk:2b4a84ce404709ec:body:0077",
+        "chunk:2b4a84ce404709ec:body:0078",
+        "chunk:2b4a84ce404709ec:body:0079",
+        "chunk:2b4a84ce404709ec:body:0080",
+        "chunk:2b4a84ce404709ec:body:0081",
+        "chunk:2b4a84ce404709ec:body:0082",
+        "chunk:2b4a84ce404709ec:body:0083",
+        "chunk:2b4a84ce404709ec:body:0084",
+        "chunk:2b4a84ce404709ec:body:0085",
+        "chunk:2b4a84ce404709ec:body:0086",
+        "chunk:2b4a84ce404709ec:body:0087",
+        "chunk:2b4a84ce404709ec:body:0088",
+        "chunk:2b4a84ce404709ec:body:0089",
+        "chunk:2b4a84ce404709ec:body:0090",
+        "chunk:2b4a84ce404709ec:body:0091",
+        "chunk:2b4a84ce404709ec:body:0092"
+      ],
+      "scope_id": "scope:34d57a6aa59f92d13d3b72f4972d993f",
+      "context_by_kind": [
+        [
+          "unknown",
+          31
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "locator": "chunk:9fa4cd7cf1ab602a:body:0008",
+      "title": "图表 1 茅台分季度拆分表（百万元，%）",
+      "snippet": "<b>贵州茅台</b>PEBand\n图表3<b>贵州茅台</b>PB",
+      "score": 0.06451612903225806,
+      "published": "undated",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0008",
+      "context_locators": [
+        "chunk:9fa4cd7cf1ab602a:body:0000",
+        "chunk:9fa4cd7cf1ab602a:body:0001",
+        "chunk:9fa4cd7cf1ab602a:heading:0000",
+        "chunk:9fa4cd7cf1ab602a:heading:0001",
+        "chunk:9fa4cd7cf1ab602a:body:0002",
+        "chunk:9fa4cd7cf1ab602a:body:0003",
+        "chunk:9fa4cd7cf1ab602a:body:0004",
+        "chunk:9fa4cd7cf1ab602a:body:0005",
+        "chunk:9fa4cd7cf1ab602a:table:0000",
+        "chunk:9fa4cd7cf1ab602a:body:0006",
+        "chunk:9fa4cd7cf1ab602a:body:0007",
+        "chunk:9fa4cd7cf1ab602a:body:0008",
+        "chunk:9fa4cd7cf1ab602a:heading:0002",
+        "chunk:9fa4cd7cf1ab602a:table:0001",
+        "chunk:9fa4cd7cf1ab602a:table:0002",
+        "chunk:9fa4cd7cf1ab602a:table:0003",
+        "chunk:9fa4cd7cf1ab602a:body:0009",
+        "chunk:9fa4cd7cf1ab602a:table:0004",
+        "chunk:9fa4cd7cf1ab602a:table:0005",
+        "chunk:9fa4cd7cf1ab602a:table:0006",
+        "chunk:9fa4cd7cf1ab602a:table:0007",
+        "chunk:9fa4cd7cf1ab602a:body:0010",
+        "chunk:9fa4cd7cf1ab602a:table:0008",
+        "chunk:9fa4cd7cf1ab602a:body:0011",
+        "chunk:9fa4cd7cf1ab602a:table:0009"
+      ],
+      "scope_id": "scope:b9d306ccb110889358b554f6162d4f82",
+      "context_by_kind": [
+        [
+          "unknown",
+          25
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "locator": "chunk:a76b8ac143ecd5ec:body:0052",
+      "title": "-4\n-2\n0\n2\n4\n6\n8\n10\n12\n14\n16",
+      "snippet": "<b>定价</b>。市场通常更关注国内需求",
+      "score": 0.03009207275993712,
+      "published": "undated",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "chunk_id": "a76b8ac143ecd5ec:body:0052",
+      "context_locators": [
+        "chunk:a76b8ac143ecd5ec:heading:0033",
+        "chunk:a76b8ac143ecd5ec:body:0052",
+        "chunk:a76b8ac143ecd5ec:heading:0034",
+        "chunk:a76b8ac143ecd5ec:body:0053",
+        "chunk:a76b8ac143ecd5ec:heading:0035",
+        "chunk:a76b8ac143ecd5ec:body:0054"
+      ],
+      "scope_id": "scope:d7c780535422f5b147a04ed25e954dc0",
+      "context_by_kind": [
+        [
+          "unknown",
+          6
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4",
+      "locator": "chunk:3d9805f1aac9767a:body:0003",
+      "title": "## 第零步数据验证",
+      "snippet": "<b>定价</b>、卖方按H2Rubin加速<b>定价</b>",
+      "score": 0.03252247488101534,
+      "published": "undated",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4",
+      "chunk_id": "3d9805f1aac9767a:body:0003",
+      "context_locators": [
+        "chunk:3d9805f1aac9767a:body:0000",
+        "chunk:3d9805f1aac9767a:body:0001",
+        "chunk:3d9805f1aac9767a:body:0002",
+        "chunk:3d9805f1aac9767a:body:0003",
+        "chunk:3d9805f1aac9767a:heading:0000",
+        "chunk:3d9805f1aac9767a:body:0004",
+        "chunk:3d9805f1aac9767a:body:0005",
+        "chunk:3d9805f1aac9767a:body:0006",
+        "chunk:3d9805f1aac9767a:body:0007",
+        "chunk:3d9805f1aac9767a:body:0008",
+        "chunk:3d9805f1aac9767a:body:0009",
+        "chunk:3d9805f1aac9767a:table:0000",
+        "chunk:3d9805f1aac9767a:body:0010",
+        "chunk:3d9805f1aac9767a:list:0000"
+      ],
+      "scope_id": "scope:13001d932553ac61a37a8d73c3a4d5cf",
+      "context_by_kind": [
+        [
+          "unknown",
+          14
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "locator": "chunk:712e370a7081da17:body:0021",
+      "title": "盈利预测与投资建议",
+      "snippet": "<b>中泰</b>证券研究所\n而对比i茅台",
+      "score": 0.05517503805175038,
+      "published": "undated",
+      "source_id": "a981b0641542c425a0ebcdb69af2333a8f82c4d65d5f434a6850453463aa0f49",
+      "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "chunk_id": "712e370a7081da17:body:0021",
+      "context_locators": [
+        "chunk:712e370a7081da17:body:0020",
+        "chunk:712e370a7081da17:body:0021",
+        "chunk:712e370a7081da17:body:0022",
+        "chunk:712e370a7081da17:table:0002",
+        "chunk:712e370a7081da17:table:0003",
+        "chunk:712e370a7081da17:table:0004",
+        "chunk:712e370a7081da17:table:0005",
+        "chunk:712e370a7081da17:table:0006"
+      ],
+      "scope_id": "scope:dbae26a88229837e45644afc6b0970a4",
+      "context_by_kind": [
+        [
+          "unknown",
+          8
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "locator": "chunk:9fa4cd7cf1ab602a:body:0021",
+      "title": "华创行业公司投资评级体系",
+      "snippet": "<b>贵州茅台</b>（600519），根据上市公司公告",
+      "score": 0.06251526251526252,
+      "published": "undated",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0021",
+      "context_locators": [
+        "chunk:9fa4cd7cf1ab602a:table:0027",
+        "chunk:9fa4cd7cf1ab602a:body:0020",
+        "chunk:9fa4cd7cf1ab602a:body:0021",
+        "chunk:9fa4cd7cf1ab602a:table:0028"
+      ],
+      "scope_id": "scope:c56a439a8f377c02e52e1a48ab0a4822",
+      "context_by_kind": [
+        [
+          "unknown",
+          4
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "locator": "chunk:712e370a7081da17:body:0030",
+      "title": "盈利预测表",
+      "snippet": "<b>中泰</b>证券研究所\n‑7‑\n7",
+      "score": 0.05334281650071124,
+      "published": "undated",
+      "source_id": "a981b0641542c425a0ebcdb69af2333a8f82c4d65d5f434a6850453463aa0f49",
+      "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "chunk_id": "712e370a7081da17:body:0030",
+      "context_locators": [
+        "chunk:712e370a7081da17:table:0017",
+        "chunk:712e370a7081da17:body:0028",
+        "chunk:712e370a7081da17:table:0018",
+        "chunk:712e370a7081da17:body:0029",
+        "chunk:712e370a7081da17:table:0019",
+        "chunk:712e370a7081da17:body:0030",
+        "chunk:712e370a7081da17:table:0020",
+        "chunk:712e370a7081da17:body:0031"
+      ],
+      "scope_id": "scope:b1c8b764acf8729b01914cd01d40bf36",
+      "context_by_kind": [
+        [
+          "unknown",
+          8
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "locator": "chunk:2b4a84ce404709ec:body:0013",
+      "title": "oo 600519.SS relative to Asia ex. Japan Coverage",
+      "snippet": "600519.SSrelativetoChinaConsumerStaples",
+      "score": 0.050412175015852885,
+      "published": "undated",
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "chunk_id": "2b4a84ce404709ec:body:0013",
+      "context_locators": [
+        "chunk:2b4a84ce404709ec:body:0012",
+        "chunk:2b4a84ce404709ec:body:0013",
+        "chunk:2b4a84ce404709ec:heading:0005",
+        "chunk:2b4a84ce404709ec:table:0007"
+      ],
+      "scope_id": "scope:55ee52fbee07468a9a6926e2060980f1",
+      "context_by_kind": [
+        [
+          "unknown",
+          4
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "locator": "chunk:9fa4cd7cf1ab602a:body:0018",
+      "title": "食品饮料组团队介绍",
+      "snippet": "研究所所长助理、消费研究中心大组长",
+      "score": 0.05410312273057371,
+      "published": "undated",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0018",
+      "context_locators": [
+        "chunk:9fa4cd7cf1ab602a:body:0011",
+        "chunk:9fa4cd7cf1ab602a:table:0009",
+        "chunk:9fa4cd7cf1ab602a:body:0012",
+        "chunk:9fa4cd7cf1ab602a:table:0010",
+        "chunk:9fa4cd7cf1ab602a:body:0013",
+        "chunk:9fa4cd7cf1ab602a:table:0011",
+        "chunk:9fa4cd7cf1ab602a:body:0014",
+        "chunk:9fa4cd7cf1ab602a:table:0012",
+        "chunk:9fa4cd7cf1ab602a:body:0015",
+        "chunk:9fa4cd7cf1ab602a:table:0013",
+        "chunk:9fa4cd7cf1ab602a:body:0016",
+        "chunk:9fa4cd7cf1ab602a:table:0014",
+        "chunk:9fa4cd7cf1ab602a:body:0017",
+        "chunk:9fa4cd7cf1ab602a:body:0018",
+        "chunk:9fa4cd7cf1ab602a:table:0015"
+      ],
+      "scope_id": "scope:42b652fe0a3074e3f6eeb0077adef21b",
+      "context_by_kind": [
+        [
+          "unknown",
+          15
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "locator": "chunk:a76b8ac143ecd5ec:table:0032",
+      "title": "消费周期，关键是选择与自身持仓久期相匹配的景气阶段。",
+      "snippet": "图 30：2021 年以来茅台批价表现（元/瓶）\n中国化工产品价格指数:CCPI（点） 7000 6000 5000 4000 3000 2000 1000 0 14/03 14/10 15/05 15/12 16/07 17/02 17/09 18/04 18/11 19/06 20/01 20/08 21/03 21/10 22/05 22/12 23/07 24/02 24/09 25/04 25/11 26/06",
+      "score": 0.01639344262295082,
+      "published": "undated",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "chunk_id": "a76b8ac143ecd5ec:table:0032",
+      "context_locators": [
+        "chunk:a76b8ac143ecd5ec:body:0059",
+        "chunk:a76b8ac143ecd5ec:heading:0039",
+        "chunk:a76b8ac143ecd5ec:body:0060",
+        "chunk:a76b8ac143ecd5ec:heading:0040",
+        "chunk:a76b8ac143ecd5ec:body:0061",
+        "chunk:a76b8ac143ecd5ec:heading:0041",
+        "chunk:a76b8ac143ecd5ec:body:0062",
+        "chunk:a76b8ac143ecd5ec:table:0032",
+        "chunk:a76b8ac143ecd5ec:body:0063",
+        "chunk:a76b8ac143ecd5ec:table:0033"
+      ],
+      "scope_id": "scope:4c36a483ef63d42d814d552f71bf75b9",
+      "context_by_kind": [
+        [
+          "unknown",
+          10
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4",
+      "locator": "chunk:3d9805f1aac9767a:list:0001",
+      "title": "## 数据来源声明",
+      "snippet": "- 行情、同业、52 周、融资、链条报价：mx-xuangu 2026-08-28\n- 中报质量：公司 2026-08-11 半年度报告全文及 8/12 摘要（上交所 / 新浪指定披露镜像）；mx-search NOTICE 同日\n- 预告：中金 2026-07-10、华泰 2026-07-12 转述 7/9 预增\n- 研报：mx-search「最新研报 机构评级 目标价」；国海三年盈利来自慧博 8/16 摘要；申万目标市值来自 MX 6/29 原文\n- Q2 毛利率：国信 2026-08-17；Q1 毛利率：经济观察网 2026-08-12\n- 回购：",
+      "score": 0.01639344262295082,
+      "published": "undated",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4",
+      "chunk_id": "3d9805f1aac9767a:list:0001",
+      "context_locators": [
+        "chunk:3d9805f1aac9767a:table:0001",
+        "chunk:3d9805f1aac9767a:body:0011",
+        "chunk:3d9805f1aac9767a:table:0002",
+        "chunk:3d9805f1aac9767a:list:0001",
+        "chunk:3d9805f1aac9767a:body:0012",
+        "chunk:3d9805f1aac9767a:body:0013"
+      ],
+      "scope_id": "scope:13d63ae29e4f81d9d2d2ec6103651d1c",
+      "context_by_kind": [
+        [
+          "unknown",
+          6
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "locator": "chunk:712e370a7081da17:body:0023",
+      "title": "盈利预测表",
+      "snippet": "偿债能力",
+      "score": 0.023255813953488372,
+      "published": "undated",
+      "source_id": "a981b0641542c425a0ebcdb69af2333a8f82c4d65d5f434a6850453463aa0f49",
+      "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "chunk_id": "712e370a7081da17:body:0023",
+      "context_locators": [
+        "chunk:712e370a7081da17:table:0007",
+        "chunk:712e370a7081da17:body:0023",
+        "chunk:712e370a7081da17:table:0008",
+        "chunk:712e370a7081da17:table:0009",
+        "chunk:712e370a7081da17:body:0024",
+        "chunk:712e370a7081da17:heading:0001",
+        "chunk:712e370a7081da17:table:0010",
+        "chunk:712e370a7081da17:body:0025",
+        "chunk:712e370a7081da17:table:0011",
+        "chunk:712e370a7081da17:table:0012",
+        "chunk:712e370a7081da17:table:0013",
+        "chunk:712e370a7081da17:body:0026",
+        "chunk:712e370a7081da17:table:0014",
+        "chunk:712e370a7081da17:table:0015",
+        "chunk:712e370a7081da17:body:0027",
+        "chunk:712e370a7081da17:table:0016"
+      ],
+      "scope_id": "scope:0a8a6e447d0c27dd4351a18ee21c857f",
+      "context_by_kind": [
+        [
+          "unknown",
+          16
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "locator": "chunk:2b4a84ce404709ec:body:0000",
+      "title": "Equity Research",
+      "snippet": "10August2026|\n11:49",
+      "score": 0.04939024390243903,
+      "published": "undated",
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "chunk_id": "2b4a84ce404709ec:body:0000",
+      "context_locators": [
+        "chunk:2b4a84ce404709ec:heading:0000",
+        "chunk:2b4a84ce404709ec:body:0000",
+        "chunk:2b4a84ce404709ec:heading:0001",
+        "chunk:2b4a84ce404709ec:table:0000",
+        "chunk:2b4a84ce404709ec:body:0001",
+        "chunk:2b4a84ce404709ec:table:0001",
+        "chunk:2b4a84ce404709ec:table:0002",
+        "chunk:2b4a84ce404709ec:body:0002",
+        "chunk:2b4a84ce404709ec:table:0003",
+        "chunk:2b4a84ce404709ec:body:0003",
+        "chunk:2b4a84ce404709ec:table:0004",
+        "chunk:2b4a84ce404709ec:table:0005",
+        "chunk:2b4a84ce404709ec:table:0006",
+        "chunk:2b4a84ce404709ec:heading:0002",
+        "chunk:2b4a84ce404709ec:body:0004",
+        "chunk:2b4a84ce404709ec:heading:0003",
+        "chunk:2b4a84ce404709ec:heading:0004",
+        "chunk:2b4a84ce404709ec:body:0005",
+        "chunk:2b4a84ce404709ec:body:0006",
+        "chunk:2b4a84ce404709ec:body:0007",
+        "chunk:2b4a84ce404709ec:body:0008",
+        "chunk:2b4a84ce404709ec:body:0009",
+        "chunk:2b4a84ce404709ec:body:0010",
+        "chunk:2b4a84ce404709ec:body:0011",
+        "chunk:2b4a84ce404709ec:body:0012",
+        "chunk:2b4a84ce404709ec:body:0013"
+      ],
+      "scope_id": "scope:d2223290aee29c54a031021454d01637",
+      "context_by_kind": [
+        [
+          "body",
+          1
+        ],
+        [
+          "unknown",
+          25
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "locator": "chunk:9fa4cd7cf1ab602a:body:0019",
+      "title": "华创证券机构销售通讯录",
+      "snippet": "021-20572536\n6",
+      "score": 0.024390243902439025,
+      "published": "undated",
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "chunk_id": "9fa4cd7cf1ab602a:body:0019",
+      "context_locators": [
+        "chunk:9fa4cd7cf1ab602a:table:0024",
+        "chunk:9fa4cd7cf1ab602a:body:0019",
+        "chunk:9fa4cd7cf1ab602a:table:0025"
+      ],
+      "scope_id": "scope:fbb1950c7775141d0133b64b67989aa7",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "locator": "chunk:a76b8ac143ecd5ec:body:0049",
+      "title": "需求增速放缓后，供给的重要性明显提高。随着中国GDP 增长回归新常态，全球GDP\n增速也在放缓，未来的需求预计保持稳健增长，各消费领域可能维持在2%-5%的增速\n水平，不构成非常大的变量。那么未来周期行业的研究就需要把着眼点放在供给的增速\n上。即使需求仅保持温和增长，只要行业长期缺少资本开支、新增产能有限，或者存量\n产能持续退出，供需关系仍可能逐年收紧。如近年来的有色行业，诸如铜、铝等；以及\n化工子行业的钾肥、制冷剂等。",
+      "snippet": "中国:现货价:螺纹钢(φ25mm,元/吨) 钢铁综合表观消费量:累计同比（右） 6000 60  5000 40  4000 20  3000 0  2000 -20  1000 -40  0 -60  17/06 17/12 18/06 18/12 19/06 19/12 20/06 20/12 21/06 21/12 22/06 22/12 23/06 23/12 24/06 24/12 25/06 25/12 26/06\n水泥市场均价（元/吨） 水泥表观消费量:累计同比（右） 600 80  500 60  40  400 20  300 0  2",
+      "score": 0.015873015873015872,
+      "published": "undated",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "chunk_id": "a76b8ac143ecd5ec:body:0049",
+      "context_locators": [
+        "chunk:a76b8ac143ecd5ec:body:0048",
+        "chunk:a76b8ac143ecd5ec:heading:0011",
+        "chunk:a76b8ac143ecd5ec:body:0049",
+        "chunk:a76b8ac143ecd5ec:heading:0012"
+      ],
+      "scope_id": "scope:28502c32766dea5985fbe862d7b75ebe",
+      "context_by_kind": [
+        [
+          "unknown",
+          4
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4",
+      "locator": "chunk:3d9805f1aac9767a:body:0008",
+      "title": "### 大脑五 投资决策者",
+      "snippet": "<b>定价</b>，近端赚的是出货",
+      "score": 0.031754032258064516,
+      "published": "undated",
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4",
+      "chunk_id": "3d9805f1aac9767a:body:0008",
+      "context_locators": [
+        "chunk:3d9805f1aac9767a:body:0007",
+        "chunk:3d9805f1aac9767a:body:0008",
+        "chunk:3d9805f1aac9767a:body:0009",
+        "chunk:3d9805f1aac9767a:table:0000",
+        "chunk:3d9805f1aac9767a:body:0010"
+      ],
+      "scope_id": "scope:88aa7b686be6146a048cb017770d8281",
+      "context_by_kind": [
+        [
+          "unknown",
+          5
+        ]
+      ]
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@b4980af67156a7643bfedfef09f9cac0",
+    "processing": "unknown",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "admission_pending",
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 31,
+      "published": 25,
+      "withdrawn": 0,
+      "pending": 2,
+      "failed_jobs": 0,
+      "builds": 54,
+      "published_with_gaps": 21
+    },
+    "retrieval": {
+      "requested": "hybrid",
+      "used": "hybrid",
+      "reason": null,
+      "profile": "fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107",
+      "expected_chunks": 1076,
+      "ready_chunks": 1076,
+      "lexical_candidates": 132,
+      "vector_candidates": 200,
+      "query_cache_hit": false,
+      "query_usage": {
+        "prompt_tokens": 40,
+        "total_tokens": 40
+      },
+      "elapsed_ms": 1396
+    },
+    "ranking": {
+      "requested": "body-constraints-v1",
+      "used": "body-constraints-v1",
+      "feature_cache_hit": false,
+      "query_constraints": {
+        "entities": [
+          {
+            "surface": "贵州茅台",
+            "identities": [
+              "贵州茅台"
+            ],
+            "evidence_refs": [
+              "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a:unit:0003",
+              "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a:unit:0099",
+              "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745:unit:0005",
+              "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745:unit:0034",
+              "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745:unit:0037",
+              "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745:unit:0065",
+              "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745:unit:0077",
+              "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745:unit:0102",
+              "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745:unit:0213",
+              "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745:unit:0236",
+              "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745:unit:0286",
+              "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745:unit:0303",
+              "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745:unit:0315",
+              "source:17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365:original_names",
+              "source:6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11:original_names",
+              "source:a981b0641542c425a0ebcdb69af2333a8f82c4d65d5f434a6850453463aa0f49:original_names"
+            ]
+          }
+        ],
+        "issuers": [],
+        "years": [],
+        "fact_mode": "unspecified"
+      },
+      "matches": [
+        {
+          "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+          "chunk_id": "712e370a7081da17:body:0018",
+          "entity_status": "matched",
+          "entity_fraction": 1.0,
+          "direct_entities": [],
+          "inherited_entities": [
+            "贵州茅台"
+          ],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "mixed"
+        },
+        {
+          "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+          "chunk_id": "2b4a84ce404709ec:body:0073",
+          "entity_status": "matched",
+          "entity_fraction": 1.0,
+          "direct_entities": [
+            "贵州茅台"
+          ],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "chunk_id": "9fa4cd7cf1ab602a:body:0008",
+          "entity_status": "matched",
+          "entity_fraction": 1.0,
+          "direct_entities": [
+            "贵州茅台"
+          ],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+          "chunk_id": "a76b8ac143ecd5ec:body:0052",
+          "entity_status": "not_observed",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4",
+          "chunk_id": "3d9805f1aac9767a:body:0003",
+          "entity_status": "not_observed",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+          "chunk_id": "712e370a7081da17:body:0021",
+          "entity_status": "matched",
+          "entity_fraction": 1.0,
+          "direct_entities": [],
+          "inherited_entities": [
+            "贵州茅台"
+          ],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "mixed"
+        },
+        {
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "chunk_id": "9fa4cd7cf1ab602a:body:0021",
+          "entity_status": "matched",
+          "entity_fraction": 1.0,
+          "direct_entities": [
+            "贵州茅台"
+          ],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+          "chunk_id": "712e370a7081da17:body:0030",
+          "entity_status": "matched",
+          "entity_fraction": 1.0,
+          "direct_entities": [],
+          "inherited_entities": [
+            "贵州茅台"
+          ],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+          "chunk_id": "2b4a84ce404709ec:body:0013",
+          "entity_status": "matched",
+          "entity_fraction": 1.0,
+          "direct_entities": [
+            "贵州茅台"
+          ],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "chunk_id": "9fa4cd7cf1ab602a:body:0018",
+          "entity_status": "matched",
+          "entity_fraction": 1.0,
+          "direct_entities": [],
+          "inherited_entities": [
+            "贵州茅台"
+          ],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+          "chunk_id": "a76b8ac143ecd5ec:table:0032",
+          "entity_status": "not_observed",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4",
+          "chunk_id": "3d9805f1aac9767a:list:0001",
+          "entity_status": "not_observed",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+          "chunk_id": "712e370a7081da17:body:0023",
+          "entity_status": "matched",
+          "entity_fraction": 1.0,
+          "direct_entities": [],
+          "inherited_entities": [
+            "贵州茅台"
+          ],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+          "chunk_id": "2b4a84ce404709ec:body:0000",
+          "entity_status": "matched",
+          "entity_fraction": 1.0,
+          "direct_entities": [],
+          "inherited_entities": [
+            "贵州茅台"
+          ],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+          "chunk_id": "9fa4cd7cf1ab602a:body:0019",
+          "entity_status": "matched",
+          "entity_fraction": 1.0,
+          "direct_entities": [],
+          "inherited_entities": [
+            "贵州茅台"
+          ],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+          "chunk_id": "a76b8ac143ecd5ec:body:0049",
+          "entity_status": "not_observed",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "observed_cues"
+        },
+        {
+          "build_id": "3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4",
+          "chunk_id": "3d9805f1aac9767a:body:0008",
+          "entity_status": "not_observed",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        }
+      ],
+      "hard_filter": false
+    }
+  }
+}

@@ -1,0 +1,429 @@
+{
+  "query": "FCC 光模块 规则",
+  "hits": [
+    {
+      "doc_id": "cv2:730433bdccf660aa5cd0b055a50dbc1b4c28371b7291b740ff03ac9c4e8cf333",
+      "locator": "chunk:730433bdccf660aa:body:0000",
+      "title": "730433bdccf660aa:body:0000",
+      "snippet": "<b>FCC</b>光<b>模块</b><b>规则</b>可能好于悲观",
+      "score": 0.13232818167581534,
+      "published": "undated",
+      "source_id": "8b11fbdd67b1d0a215c39c3155799e12cb9c259d6a7b40066d6efa557434ed39",
+      "build_id": "730433bdccf660aa5cd0b055a50dbc1b4c28371b7291b740ff03ac9c4e8cf333",
+      "chunk_id": "730433bdccf660aa:body:0000",
+      "context_locators": [
+        "chunk:730433bdccf660aa:body:0000",
+        "chunk:730433bdccf660aa:body:0001",
+        "chunk:730433bdccf660aa:heading:0000",
+        "chunk:730433bdccf660aa:body:0002",
+        "chunk:730433bdccf660aa:heading:0001",
+        "chunk:730433bdccf660aa:body:0003",
+        "chunk:730433bdccf660aa:body:0004",
+        "chunk:730433bdccf660aa:body:0005",
+        "chunk:730433bdccf660aa:body:0006",
+        "chunk:730433bdccf660aa:body:0007",
+        "chunk:730433bdccf660aa:body:0008",
+        "chunk:730433bdccf660aa:body:0009",
+        "chunk:730433bdccf660aa:body:0010",
+        "chunk:730433bdccf660aa:body:0011",
+        "chunk:730433bdccf660aa:body:0012",
+        "chunk:730433bdccf660aa:body:0013",
+        "chunk:730433bdccf660aa:heading:0002",
+        "chunk:730433bdccf660aa:body:0014",
+        "chunk:730433bdccf660aa:heading:0003",
+        "chunk:730433bdccf660aa:body:0015",
+        "chunk:730433bdccf660aa:heading:0004",
+        "chunk:730433bdccf660aa:body:0016",
+        "chunk:730433bdccf660aa:heading:0005",
+        "chunk:730433bdccf660aa:body:0017",
+        "chunk:730433bdccf660aa:body:0018"
+      ],
+      "scope_id": "scope:ea6aa09396dbee7bd1a303916bbc1b2f",
+      "context_by_kind": [
+        [
+          "unknown",
+          25
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:5be178f951c61eaed04c68c5266f658804efe2088da606ca1ee28ce997af5f7b",
+      "locator": "chunk:5be178f951c61eae:body:0006",
+      "title": "5be178f951c61eae:body:0006",
+      "snippet": "<b>模块</b>这一段的对吧？",
+      "score": 0.057308756011211416,
+      "published": "undated",
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "5be178f951c61eaed04c68c5266f658804efe2088da606ca1ee28ce997af5f7b",
+      "chunk_id": "5be178f951c61eae:body:0006",
+      "context_locators": [
+        "chunk:5be178f951c61eae:body:0000",
+        "chunk:5be178f951c61eae:body:0001",
+        "chunk:5be178f951c61eae:body:0002",
+        "chunk:5be178f951c61eae:body:0003",
+        "chunk:5be178f951c61eae:body:0004",
+        "chunk:5be178f951c61eae:body:0005",
+        "chunk:5be178f951c61eae:body:0006"
+      ],
+      "scope_id": "scope:fdac23324474c54d1057c0f7239a8f44",
+      "context_by_kind": [
+        [
+          "unknown",
+          7
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24",
+      "locator": "chunk:510f83c463db4121:body:0005",
+      "title": "510f83c463db4121:body:0005",
+      "snippet": "<b>规则</b>草案提出，自2027年7月",
+      "score": 0.0186435366591576,
+      "published": "undated",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24",
+      "chunk_id": "510f83c463db4121:body:0005",
+      "context_locators": [
+        "chunk:510f83c463db4121:body:0002",
+        "chunk:510f83c463db4121:body:0003",
+        "chunk:510f83c463db4121:body:0004",
+        "chunk:510f83c463db4121:body:0005",
+        "chunk:510f83c463db4121:body:0006"
+      ],
+      "scope_id": "scope:04adcf1091749d77f67545159d3c3170",
+      "context_by_kind": [
+        [
+          "unknown",
+          5
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0028",
+      "title": "XPO 是展会上最常见的产品之一：它将液冷系统集成到可插拔模块内部，单个 12.8T",
+      "snippet": "<b>模块</b>相当于8个1.6TOSFP<b>模块</b>",
+      "score": 0.023318011372243305,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0028",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:body:0026",
+        "chunk:47cc0b9dd2aeeced:body:0027",
+        "chunk:47cc0b9dd2aeeced:body:0028",
+        "chunk:47cc0b9dd2aeeced:body:0029"
+      ],
+      "scope_id": "scope:a3ab494464556910faa18fe7f83b3ef8",
+      "context_by_kind": [
+        [
+          "unknown",
+          4
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+      "locator": "chunk:2696b5d4a615f984:body:0006",
+      "title": "1 2026 CIOE 中国光博会前瞻",
+      "snippet": "<b>模块</b>。1）单波400G技术",
+      "score": 0.0231315157078173,
+      "published": "undated",
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+      "chunk_id": "2696b5d4a615f984:body:0006",
+      "context_locators": [
+        "chunk:2696b5d4a615f984:heading:0000",
+        "chunk:2696b5d4a615f984:body:0001",
+        "chunk:2696b5d4a615f984:body:0002",
+        "chunk:2696b5d4a615f984:body:0003",
+        "chunk:2696b5d4a615f984:body:0004",
+        "chunk:2696b5d4a615f984:body:0005",
+        "chunk:2696b5d4a615f984:body:0006",
+        "chunk:2696b5d4a615f984:body:0007",
+        "chunk:2696b5d4a615f984:heading:0001"
+      ],
+      "scope_id": "scope:c339cb99417462e9c1476fe2ac1e1e59",
+      "context_by_kind": [
+        [
+          "body",
+          1
+        ],
+        [
+          "unknown",
+          8
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:730433bdccf660aa5cd0b055a50dbc1b4c28371b7291b740ff03ac9c4e8cf333",
+      "locator": "chunk:730433bdccf660aa:body:0024",
+      "title": "禁止商业用途：未经本公司事先明确书面许可，任何个人或机构均不得以任何商业或营\n利目的复制、重新发布、分发、转售、重新包装或以其他方式使用本报告或其任何部\n分。",
+      "snippet": "ProhibitiononCommercialUse:Withouttheprior",
+      "score": 0.10138640124109463,
+      "published": "undated",
+      "source_id": "8b11fbdd67b1d0a215c39c3155799e12cb9c259d6a7b40066d6efa557434ed39",
+      "build_id": "730433bdccf660aa5cd0b055a50dbc1b4c28371b7291b740ff03ac9c4e8cf333",
+      "chunk_id": "730433bdccf660aa:body:0024",
+      "context_locators": [
+        "chunk:730433bdccf660aa:body:0017",
+        "chunk:730433bdccf660aa:body:0018",
+        "chunk:730433bdccf660aa:heading:0006",
+        "chunk:730433bdccf660aa:body:0019",
+        "chunk:730433bdccf660aa:body:0020",
+        "chunk:730433bdccf660aa:heading:0007",
+        "chunk:730433bdccf660aa:body:0021",
+        "chunk:730433bdccf660aa:heading:0008",
+        "chunk:730433bdccf660aa:body:0022",
+        "chunk:730433bdccf660aa:heading:0009",
+        "chunk:730433bdccf660aa:body:0023",
+        "chunk:730433bdccf660aa:heading:0010",
+        "chunk:730433bdccf660aa:body:0024",
+        "chunk:730433bdccf660aa:heading:0011",
+        "chunk:730433bdccf660aa:body:0025",
+        "chunk:730433bdccf660aa:body:0026",
+        "chunk:730433bdccf660aa:heading:0012",
+        "chunk:730433bdccf660aa:body:0027"
+      ],
+      "scope_id": "scope:d8557613ae71e24125e14761658af20f",
+      "context_by_kind": [
+        [
+          "unknown",
+          18
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0047",
+      "title": "图 24：Credo 微型发射器（micro-emitter）路线图：2027 年推出 6.4T NPO 与\n1.6T",
+      "snippet": "<b>模块</b>，公司告诉我们该<b>模块</b>将",
+      "score": 0.02216401636719113,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0047",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:heading:0023",
+        "chunk:47cc0b9dd2aeeced:body:0045",
+        "chunk:47cc0b9dd2aeeced:body:0046",
+        "chunk:47cc0b9dd2aeeced:body:0047",
+        "chunk:47cc0b9dd2aeeced:body:0048",
+        "chunk:47cc0b9dd2aeeced:body:0049",
+        "chunk:47cc0b9dd2aeeced:body:0050",
+        "chunk:47cc0b9dd2aeeced:body:0051",
+        "chunk:47cc0b9dd2aeeced:body:0052"
+      ],
+      "scope_id": "scope:da3bf6b8a87d2de8995061ab6e99514b",
+      "context_by_kind": [
+        [
+          "unknown",
+          9
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+      "locator": "chunk:2696b5d4a615f984:body:0015",
+      "title": "6 风险提示",
+      "snippet": "<b>模块</b>、光引擎、激光器及光",
+      "score": 0.01497065104380151,
+      "published": "undated",
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+      "chunk_id": "2696b5d4a615f984:body:0015",
+      "context_locators": [
+        "chunk:2696b5d4a615f984:heading:0003",
+        "chunk:2696b5d4a615f984:body:0014",
+        "chunk:2696b5d4a615f984:body:0015",
+        "chunk:2696b5d4a615f984:heading:0004"
+      ],
+      "scope_id": "scope:dc0190a3500ac9999e60027b5edc422d",
+      "context_by_kind": [
+        [
+          "unknown",
+          4
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0015",
+      "title": "图 5：Microsoft：将 FIT 视为系统级属性，比较可插拔、NPO 与 CPO 的故障影响\n范\n支持 CPO 的论据：博通表示，CPO 的核心价值在于链路稳定性，因为一次链路抖动",
+      "snippet": "<b>模块</b>，而该<b>模块</b>支持现场更换",
+      "score": 0.020267153880442354,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0015",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:body:0010",
+        "chunk:47cc0b9dd2aeeced:body:0011",
+        "chunk:47cc0b9dd2aeeced:body:0012",
+        "chunk:47cc0b9dd2aeeced:heading:0004",
+        "chunk:47cc0b9dd2aeeced:body:0013",
+        "chunk:47cc0b9dd2aeeced:heading:0005",
+        "chunk:47cc0b9dd2aeeced:body:0014",
+        "chunk:47cc0b9dd2aeeced:heading:0006",
+        "chunk:47cc0b9dd2aeeced:body:0015",
+        "chunk:47cc0b9dd2aeeced:heading:0007"
+      ],
+      "scope_id": "scope:60c89b8f9f6b37a6a16e13686da30a27",
+      "context_by_kind": [
+        [
+          "unknown",
+          10
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0022",
+      "title": "微软：NPO 是通往 CPO 的桥梁，前提是 FIT 指标改善 10 倍",
+      "snippet": "<b>模块</b>正同时撞上三堵墙（",
+      "score": 0.020267153880442354,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0022",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:heading:0008",
+        "chunk:47cc0b9dd2aeeced:body:0018",
+        "chunk:47cc0b9dd2aeeced:heading:0009",
+        "chunk:47cc0b9dd2aeeced:body:0019",
+        "chunk:47cc0b9dd2aeeced:heading:0010",
+        "chunk:47cc0b9dd2aeeced:body:0020",
+        "chunk:47cc0b9dd2aeeced:heading:0011",
+        "chunk:47cc0b9dd2aeeced:body:0021",
+        "chunk:47cc0b9dd2aeeced:body:0022",
+        "chunk:47cc0b9dd2aeeced:body:0023",
+        "chunk:47cc0b9dd2aeeced:heading:0012"
+      ],
+      "scope_id": "scope:c5473cc26e182e339d70fcfe0186826d",
+      "context_by_kind": [
+        [
+          "unknown",
+          11
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0004",
+      "title": "主题 2：XPO 和 USFP 及其对 NPO 和 CPO 采用的影响",
+      "snippet": "<b>模块</b>在横向扩展网络中再延续",
+      "score": 0.0186435366591576,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0004",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:body:0002",
+        "chunk:47cc0b9dd2aeeced:body:0003",
+        "chunk:47cc0b9dd2aeeced:body:0004",
+        "chunk:47cc0b9dd2aeeced:body:0005",
+        "chunk:47cc0b9dd2aeeced:body:0006",
+        "chunk:47cc0b9dd2aeeced:body:0007"
+      ],
+      "scope_id": "scope:e183022884b23af3e63d74d4318c85d2",
+      "context_by_kind": [
+        [
+          "unknown",
+          6
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0000",
+      "title": "2026-10-21 研究｜光互连：OCP 2026 预示 NPO 落地与替代铜缆\n带来\n研究｜光互连：OCP 2026 预示 NPO 落地与替代铜缆带来的新增需求\nOCP 指向光互连需求上升：NPO 采用率提升，且铜缆在更大规模的 AI 集群中被\n逐步替代",
+      "snippet": "<b>模块</b>的反击：XPO与USFP及其",
+      "score": 0.01497065104380151,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0000",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:heading:0000",
+        "chunk:47cc0b9dd2aeeced:body:0000",
+        "chunk:47cc0b9dd2aeeced:heading:0001"
+      ],
+      "scope_id": "scope:2c6fbf75ff47578e2cbd3e87afb04b3f",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0034",
+      "title": "OpenCPX：将 NPO 转变为“可插拔插座”",
+      "snippet": "<b>模块</b>正在送样；v2.0（",
+      "score": 0.01497065104380151,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0034",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:body:0033",
+        "chunk:47cc0b9dd2aeeced:body:0034",
+        "chunk:47cc0b9dd2aeeced:heading:0015"
+      ],
+      "scope_id": "scope:4385ad0c9c4123e0155294c859af94c1",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:heading:0016",
+      "title": "功",
+      "snippet": "可插拔光<b>模块</b>的\n功",
+      "score": 0.01497065104380151,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:heading:0016",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:body:0035",
+        "chunk:47cc0b9dd2aeeced:heading:0016",
+        "chunk:47cc0b9dd2aeeced:body:0036",
+        "chunk:47cc0b9dd2aeeced:heading:0017"
+      ],
+      "scope_id": "scope:bdceb8378788bc632b58fee517656543",
+      "context_by_kind": [
+        [
+          "unknown",
+          4
+        ]
+      ]
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@b4980af67156a7643bfedfef09f9cac0",
+    "processing": "unknown",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "admission_pending",
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 31,
+      "published": 25,
+      "withdrawn": 0,
+      "pending": 2,
+      "failed_jobs": 0,
+      "builds": 54,
+      "published_with_gaps": 21
+    }
+  }
+}

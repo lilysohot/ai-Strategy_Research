@@ -404,6 +404,10 @@ class ReviewedDecision:
 # 未知 policy_rev 落到默认（最严）集合，fail-closed。
 DEFAULT_IN_SCOPE_MATERIALS: tuple[MaterialType, ...] = (MaterialType.RESEARCH_REPORT,)
 IN_SCOPE_MATERIALS_BY_POLICY_REV: dict[str, tuple[MaterialType, ...]] = {
+    "v3-dev-20261021": (
+        MaterialType.RESEARCH_REPORT,
+        MaterialType.PERSONAL_OR_EXTERNAL_SUBSCRIPTION,
+    ),
     "v1-20260915": DEFAULT_IN_SCOPE_MATERIALS,
     # dev lane（U 2026-09-20 裁决）：仅新增 U 指定两份来源的材料类型，
     # 逐源由 admission-policy-dev.json 的 dev_lane.sources 限定。

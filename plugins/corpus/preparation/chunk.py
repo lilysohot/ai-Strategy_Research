@@ -11,7 +11,7 @@
 规则（开发起点冻结于代码）：
 
 - 正文：先章节、再完整段落、再安全句界；段落跨上限时只在句界切分（句点仅取
-  中日韩终止符与分号，不含英文句点，避免切断小数）；不默认一页一块、不跨报告
+  中日韩终止符与分号，以及保守英文句界，跳过小数与常见缩写）；不默认一页一块、不跨报告
   拼接；默认核心区域不重叠。
 - 标题/短评级：与所属后文关联（``title_text`` + ``section_path``）；无后文时
   独立保留为 heading 块，不删除。
@@ -44,7 +44,7 @@ from plugins.corpus.preparation.clean import CleanRegion, CleanResult
 from plugins.corpus.preparation.contract import CHUNK_KINDS, UnitStatus
 from plugins.corpus.preparation.readers.base import CandidateUnit, ReaderResult
 
-CHUNK_REV = "chunk-5"
+CHUNK_REV = "chunk-6"
 
 
 def normalize_search_text(text: str) -> str:
@@ -76,6 +76,39 @@ _LIST_KIND = "list_item"
 
 _QUESTION_TURN = re.compile(r"^(?:问|提问者|提问|投资者)\s*[：:]")
 _SENTENCE_END = re.compile(r"[。！？!?；;…]")
+_ENGLISH_SENTENCE_END = re.compile(r"(?<=[a-z])\.(?=\s+(?:[A-Z]|\d+\.\s+[A-Z]))")
+_ENGLISH_ABBREVIATIONS = frozenset(
+    {
+        "mr",
+        "mrs",
+        "ms",
+        "dr",
+        "prof",
+        "sr",
+        "jr",
+        "st",
+        "vs",
+        "etc",
+        "inc",
+        "ltd",
+        "corp",
+        "co",
+        "fig",
+        "no",
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "sept",
+        "oct",
+        "nov",
+        "dec",
+    }
+)
 # E3 守卫信号（chunk-5）：注释/来源框前缀（R1 不并入正文）；新章节序号起头
 # （R2 文档收尾连续标题保守不合并）。
 _NOTE_TEXT_PREFIX = re.compile(
@@ -135,8 +168,12 @@ class _Piece:
 def _split_sentences(text: str) -> list[str]:
     parts: list[str] = []
     start = 0
-    for match in _SENTENCE_END.finditer(text):
-        end = match.end()
+    ends = {match.end() for match in _SENTENCE_END.finditer(text)}
+    for match in _ENGLISH_SENTENCE_END.finditer(text):
+        word = re.search(r"[A-Za-z]+$", text[: match.start()])
+        if word and len(word[0]) >= 3 and word[0].lower() not in _ENGLISH_ABBREVIATIONS:
+            ends.add(match.end())
+    for end in sorted(ends):
         parts.append(text[start:end])
         start = end
     if start < len(text):

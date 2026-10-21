@@ -1,0 +1,745 @@
+{
+  "query": "FCC 光模块 规则",
+  "hits": [
+    {
+      "doc_id": "cv2:730433bdccf660aa5cd0b055a50dbc1b4c28371b7291b740ff03ac9c4e8cf333",
+      "locator": "chunk:730433bdccf660aa:body:0000",
+      "title": "730433bdccf660aa:body:0000",
+      "snippet": "<b>FCC</b>光<b>模块</b><b>规则</b>可能好于悲观",
+      "score": 0.03278688524590164,
+      "published": "undated",
+      "source_id": "8b11fbdd67b1d0a215c39c3155799e12cb9c259d6a7b40066d6efa557434ed39",
+      "build_id": "730433bdccf660aa5cd0b055a50dbc1b4c28371b7291b740ff03ac9c4e8cf333",
+      "chunk_id": "730433bdccf660aa:body:0000",
+      "context_locators": [
+        "chunk:730433bdccf660aa:body:0000",
+        "chunk:730433bdccf660aa:body:0001",
+        "chunk:730433bdccf660aa:heading:0000",
+        "chunk:730433bdccf660aa:body:0002",
+        "chunk:730433bdccf660aa:heading:0001",
+        "chunk:730433bdccf660aa:body:0003",
+        "chunk:730433bdccf660aa:body:0004",
+        "chunk:730433bdccf660aa:body:0005",
+        "chunk:730433bdccf660aa:body:0006",
+        "chunk:730433bdccf660aa:body:0007",
+        "chunk:730433bdccf660aa:body:0008",
+        "chunk:730433bdccf660aa:body:0009",
+        "chunk:730433bdccf660aa:body:0010",
+        "chunk:730433bdccf660aa:body:0011",
+        "chunk:730433bdccf660aa:body:0012",
+        "chunk:730433bdccf660aa:body:0013",
+        "chunk:730433bdccf660aa:heading:0002",
+        "chunk:730433bdccf660aa:body:0014",
+        "chunk:730433bdccf660aa:heading:0003",
+        "chunk:730433bdccf660aa:body:0015",
+        "chunk:730433bdccf660aa:heading:0004",
+        "chunk:730433bdccf660aa:body:0016",
+        "chunk:730433bdccf660aa:heading:0005",
+        "chunk:730433bdccf660aa:body:0017",
+        "chunk:730433bdccf660aa:body:0018"
+      ],
+      "scope_id": "scope:ea6aa09396dbee7bd1a303916bbc1b2f",
+      "context_by_kind": [
+        [
+          "unknown",
+          25
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:5be178f951c61eaed04c68c5266f658804efe2088da606ca1ee28ce997af5f7b",
+      "locator": "chunk:5be178f951c61eae:body:0006",
+      "title": "5be178f951c61eae:body:0006",
+      "snippet": "<b>模块</b>这一段的对吧？",
+      "score": 0.03278688524590164,
+      "published": "undated",
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "5be178f951c61eaed04c68c5266f658804efe2088da606ca1ee28ce997af5f7b",
+      "chunk_id": "5be178f951c61eae:body:0006",
+      "context_locators": [
+        "chunk:5be178f951c61eae:body:0000",
+        "chunk:5be178f951c61eae:body:0001",
+        "chunk:5be178f951c61eae:body:0002",
+        "chunk:5be178f951c61eae:body:0003",
+        "chunk:5be178f951c61eae:body:0004",
+        "chunk:5be178f951c61eae:body:0005",
+        "chunk:5be178f951c61eae:body:0006"
+      ],
+      "scope_id": "scope:fdac23324474c54d1057c0f7239a8f44",
+      "context_by_kind": [
+        [
+          "unknown",
+          7
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0028",
+      "title": "XPO 是展会上最常见的产品之一：它将液冷系统集成到可插拔模块内部，单个 12.8T",
+      "snippet": "<b>模块</b>相当于8个1.6TOSFP<b>模块</b>",
+      "score": 0.032018442622950824,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0028",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:body:0026",
+        "chunk:47cc0b9dd2aeeced:body:0027",
+        "chunk:47cc0b9dd2aeeced:body:0028",
+        "chunk:47cc0b9dd2aeeced:body:0029",
+        "chunk:47cc0b9dd2aeeced:body:0030",
+        "chunk:47cc0b9dd2aeeced:heading:0014",
+        "chunk:47cc0b9dd2aeeced:body:0031",
+        "chunk:47cc0b9dd2aeeced:body:0032",
+        "chunk:47cc0b9dd2aeeced:body:0033",
+        "chunk:47cc0b9dd2aeeced:body:0034",
+        "chunk:47cc0b9dd2aeeced:heading:0015",
+        "chunk:47cc0b9dd2aeeced:body:0035",
+        "chunk:47cc0b9dd2aeeced:heading:0016",
+        "chunk:47cc0b9dd2aeeced:body:0036",
+        "chunk:47cc0b9dd2aeeced:heading:0017",
+        "chunk:47cc0b9dd2aeeced:body:0037",
+        "chunk:47cc0b9dd2aeeced:heading:0018",
+        "chunk:47cc0b9dd2aeeced:body:0038",
+        "chunk:47cc0b9dd2aeeced:body:0039"
+      ],
+      "scope_id": "scope:64d29e05d710009cecee4d3c05215cc7",
+      "context_by_kind": [
+        [
+          "unknown",
+          19
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+      "locator": "chunk:2696b5d4a615f984:body:0006",
+      "title": "1 2026 CIOE 中国光博会前瞻",
+      "snippet": "<b>模块</b>。1）单波400G技术",
+      "score": 0.03252247488101534,
+      "published": "undated",
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+      "chunk_id": "2696b5d4a615f984:body:0006",
+      "context_locators": [
+        "chunk:2696b5d4a615f984:body:0000",
+        "chunk:2696b5d4a615f984:heading:0000",
+        "chunk:2696b5d4a615f984:body:0001",
+        "chunk:2696b5d4a615f984:body:0002",
+        "chunk:2696b5d4a615f984:body:0003",
+        "chunk:2696b5d4a615f984:body:0004",
+        "chunk:2696b5d4a615f984:body:0005",
+        "chunk:2696b5d4a615f984:body:0006",
+        "chunk:2696b5d4a615f984:body:0007",
+        "chunk:2696b5d4a615f984:heading:0001",
+        "chunk:2696b5d4a615f984:body:0008",
+        "chunk:2696b5d4a615f984:heading:0002",
+        "chunk:2696b5d4a615f984:body:0009",
+        "chunk:2696b5d4a615f984:body:0010",
+        "chunk:2696b5d4a615f984:body:0011",
+        "chunk:2696b5d4a615f984:body:0012",
+        "chunk:2696b5d4a615f984:body:0013",
+        "chunk:2696b5d4a615f984:heading:0003",
+        "chunk:2696b5d4a615f984:body:0014",
+        "chunk:2696b5d4a615f984:body:0015",
+        "chunk:2696b5d4a615f984:heading:0004"
+      ],
+      "scope_id": "scope:6b8aca81cf191befba5341a976450e53",
+      "context_by_kind": [
+        [
+          "body",
+          1
+        ],
+        [
+          "unknown",
+          20
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "locator": "chunk:668bac61a631636c:body:0002",
+      "title": "”",
+      "snippet": "<b>模块</b>mSAP需求爆发，下半年进入拉",
+      "score": 0.03252247488101534,
+      "published": "undated",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "chunk_id": "668bac61a631636c:body:0002",
+      "context_locators": [
+        "chunk:668bac61a631636c:heading:0000",
+        "chunk:668bac61a631636c:body:0001",
+        "chunk:668bac61a631636c:body:0002",
+        "chunk:668bac61a631636c:heading:0001"
+      ],
+      "scope_id": "scope:bad8fd2971f134d5ef70b289e90f9a2c",
+      "context_by_kind": [
+        [
+          "unknown",
+          4
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:730433bdccf660aa5cd0b055a50dbc1b4c28371b7291b740ff03ac9c4e8cf333",
+      "locator": "chunk:730433bdccf660aa:heading:0006",
+      "title": "相关信息可能随时间推移而失效。FUNDA 没有实时更新本报告内容的义务。",
+      "snippet": "鉴于市场环境与技术趋势的快速",
+      "score": 0.023513328776486674,
+      "published": "undated",
+      "source_id": "8b11fbdd67b1d0a215c39c3155799e12cb9c259d6a7b40066d6efa557434ed39",
+      "build_id": "730433bdccf660aa5cd0b055a50dbc1b4c28371b7291b740ff03ac9c4e8cf333",
+      "chunk_id": "730433bdccf660aa:heading:0006",
+      "context_locators": [
+        "chunk:730433bdccf660aa:body:0017",
+        "chunk:730433bdccf660aa:body:0018",
+        "chunk:730433bdccf660aa:heading:0006",
+        "chunk:730433bdccf660aa:body:0019",
+        "chunk:730433bdccf660aa:body:0020",
+        "chunk:730433bdccf660aa:heading:0007",
+        "chunk:730433bdccf660aa:body:0021",
+        "chunk:730433bdccf660aa:heading:0008",
+        "chunk:730433bdccf660aa:body:0022",
+        "chunk:730433bdccf660aa:heading:0009",
+        "chunk:730433bdccf660aa:body:0023",
+        "chunk:730433bdccf660aa:heading:0010",
+        "chunk:730433bdccf660aa:body:0024",
+        "chunk:730433bdccf660aa:heading:0011",
+        "chunk:730433bdccf660aa:body:0025",
+        "chunk:730433bdccf660aa:body:0026",
+        "chunk:730433bdccf660aa:heading:0012",
+        "chunk:730433bdccf660aa:body:0027"
+      ],
+      "scope_id": "scope:d8557613ae71e24125e14761658af20f",
+      "context_by_kind": [
+        [
+          "unknown",
+          18
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0047",
+      "title": "图 24：Credo 微型发射器（micro-emitter）路线图：2027 年推出 6.4T NPO 与\n1.6T",
+      "snippet": "<b>模块</b>，公司告诉我们该<b>模块</b>将",
+      "score": 0.03200204813108039,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0047",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:heading:0023",
+        "chunk:47cc0b9dd2aeeced:body:0045",
+        "chunk:47cc0b9dd2aeeced:body:0046",
+        "chunk:47cc0b9dd2aeeced:body:0047",
+        "chunk:47cc0b9dd2aeeced:body:0048",
+        "chunk:47cc0b9dd2aeeced:body:0049",
+        "chunk:47cc0b9dd2aeeced:body:0050",
+        "chunk:47cc0b9dd2aeeced:body:0051",
+        "chunk:47cc0b9dd2aeeced:body:0052"
+      ],
+      "scope_id": "scope:da3bf6b8a87d2de8995061ab6e99514b",
+      "context_by_kind": [
+        [
+          "unknown",
+          9
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+      "locator": "chunk:2696b5d4a615f984:body:0014",
+      "title": "5 投资建议：AI 光互联加速升级，高速率与新架构\n协同演进",
+      "snippet": "<b>模块</b>相关标的：中际旭创",
+      "score": 0.03131881575727918,
+      "published": "undated",
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+      "chunk_id": "2696b5d4a615f984:body:0014",
+      "context_locators": [
+        "chunk:2696b5d4a615f984:heading:0003",
+        "chunk:2696b5d4a615f984:body:0014",
+        "chunk:2696b5d4a615f984:body:0015",
+        "chunk:2696b5d4a615f984:heading:0004"
+      ],
+      "scope_id": "scope:dc0190a3500ac9999e60027b5edc422d",
+      "context_by_kind": [
+        [
+          "unknown",
+          4
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "locator": "chunk:668bac61a631636c:body:0007",
+      "title": "一、细分板块观点\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩",
+      "snippet": "长鑫科技：公司于2026 年08 月28 日公布财报。2026 年上半年，公司实现营业收入1,503.10 亿元，归属于母公司净利润达776.05 亿元，净利润率高达51.6 ，创历史新高；毛利率达84.84 ，显著高于行业均值，主因DRAM 价格上行与销量双升，叠加IDM 模式成本优势，盈利质量优异且非经常性损益影响极小。公司构建覆盖设计、制造、封装到模组的全链条IDM 模式，第四代工艺平台已量产，第五代平台进入客户认证，核心技术达国际先进水平；拥有境内专利 4,484 项（含发明专利3,744 项）及境外专利3,400 项，支撑DDR5、LPDDR5",
+      "score": 0.01639344262295082,
+      "published": "undated",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "chunk_id": "668bac61a631636c:body:0007",
+      "context_locators": [
+        "chunk:668bac61a631636c:heading:0003",
+        "chunk:668bac61a631636c:heading:0004",
+        "chunk:668bac61a631636c:body:0003",
+        "chunk:668bac61a631636c:body:0004",
+        "chunk:668bac61a631636c:body:0005",
+        "chunk:668bac61a631636c:body:0006",
+        "chunk:668bac61a631636c:body:0007",
+        "chunk:668bac61a631636c:body:0008",
+        "chunk:668bac61a631636c:body:0009",
+        "chunk:668bac61a631636c:body:0010",
+        "chunk:668bac61a631636c:heading:0005"
+      ],
+      "scope_id": "scope:8f9f8b125d4192863c9162e7cbd15535",
+      "context_by_kind": [
+        [
+          "unknown",
+          11
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0012",
+      "title": "图 4：英伟达对 NPO 的态度：可能在 NPO 上与 ODM 厂商展开合作，并将通过",
+      "snippet": "<b>模块</b>也将继续留存。DanielKuchta",
+      "score": 0.030536130536130537,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0012",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:heading:0003",
+        "chunk:47cc0b9dd2aeeced:body:0010",
+        "chunk:47cc0b9dd2aeeced:body:0011",
+        "chunk:47cc0b9dd2aeeced:body:0012",
+        "chunk:47cc0b9dd2aeeced:heading:0004",
+        "chunk:47cc0b9dd2aeeced:body:0013",
+        "chunk:47cc0b9dd2aeeced:heading:0005",
+        "chunk:47cc0b9dd2aeeced:body:0014",
+        "chunk:47cc0b9dd2aeeced:heading:0006",
+        "chunk:47cc0b9dd2aeeced:body:0015",
+        "chunk:47cc0b9dd2aeeced:heading:0007"
+      ],
+      "scope_id": "scope:99bddf452561cfd7bc11398b33001578",
+      "context_by_kind": [
+        [
+          "unknown",
+          11
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "locator": "chunk:668bac61a631636c:body:0014",
+      "title": "风险提示",
+      "snippet": "AIGC 进展不及预期的风险：科技巨头公司布局AI，存在未来行业竞争进一步加剧、AI 产品不能有效与应用实践相结合的风险。\n外部制裁进一步升级的风险：全球范围内的贸易摩擦不断升级，若美国、日本、荷兰等国出口管制进一步升级，可能会导致相关企业的核心环节受限。\n终端需求不及预期的风险：消费类智能手机创新乏力，对产业链拉动低于预期，换机周期较长；若新能源（电动汽车、风电、光伏、储能）需求不及预期，电动车销量下滑，光储装机量不及预期，可能会对相关公司业绩产生影响。\n(30) (20) (10) 0 10 20 30\n鸿富瀚\n爱克股份\n捷荣技术\n灿瑞科技\n领先股份",
+      "score": 0.014925373134328358,
+      "published": "undated",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "chunk_id": "668bac61a631636c:body:0014",
+      "context_locators": [
+        "chunk:668bac61a631636c:body:0013",
+        "chunk:668bac61a631636c:body:0014",
+        "chunk:668bac61a631636c:heading:0007"
+      ],
+      "scope_id": "scope:5dc68b352da36424d4dc3cb333f450a3",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0004",
+      "title": "主题 2：XPO 和 USFP 及其对 NPO 和 CPO 采用的影响",
+      "snippet": "<b>模块</b>在横向扩展网络中再延续",
+      "score": 0.02967032967032967,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0004",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:body:0002",
+        "chunk:47cc0b9dd2aeeced:body:0003",
+        "chunk:47cc0b9dd2aeeced:body:0004",
+        "chunk:47cc0b9dd2aeeced:body:0005",
+        "chunk:47cc0b9dd2aeeced:body:0006",
+        "chunk:47cc0b9dd2aeeced:body:0007"
+      ],
+      "scope_id": "scope:e183022884b23af3e63d74d4318c85d2",
+      "context_by_kind": [
+        [
+          "unknown",
+          6
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0022",
+      "title": "微软：NPO 是通往 CPO 的桥梁，前提是 FIT 指标改善 10 倍",
+      "snippet": "<b>模块</b>正同时撞上三堵墙（",
+      "score": 0.027583600982429624,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0022",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:body:0016",
+        "chunk:47cc0b9dd2aeeced:body:0017",
+        "chunk:47cc0b9dd2aeeced:heading:0008",
+        "chunk:47cc0b9dd2aeeced:body:0018",
+        "chunk:47cc0b9dd2aeeced:heading:0009",
+        "chunk:47cc0b9dd2aeeced:body:0019",
+        "chunk:47cc0b9dd2aeeced:heading:0010",
+        "chunk:47cc0b9dd2aeeced:body:0020",
+        "chunk:47cc0b9dd2aeeced:heading:0011",
+        "chunk:47cc0b9dd2aeeced:body:0021",
+        "chunk:47cc0b9dd2aeeced:body:0022",
+        "chunk:47cc0b9dd2aeeced:body:0023",
+        "chunk:47cc0b9dd2aeeced:heading:0012"
+      ],
+      "scope_id": "scope:cf73df43902e584061b92e8deb4ef161",
+      "context_by_kind": [
+        [
+          "unknown",
+          13
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0043",
+      "title": "Amphenol（安费诺）：其差分对（differential pairs）日出货量约 4000 万对，大\n致相",
+      "snippet": "<b>模块</b>全年的用量；在其给出",
+      "score": 0.02594183740912095,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0043",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:heading:0021",
+        "chunk:47cc0b9dd2aeeced:body:0043",
+        "chunk:47cc0b9dd2aeeced:heading:0022"
+      ],
+      "scope_id": "scope:265222dfb06ecf797f5259ec897004d3",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0000",
+      "title": "2026-10-21 研究｜光互连：OCP 2026 预示 NPO 落地与替代铜缆\n带来\n研究｜光互连：OCP 2026 预示 NPO 落地与替代铜缆带来的新增需求\nOCP 指向光互连需求上升：NPO 采用率提升，且铜缆在更大规模的 AI 集群中被\n逐步替代",
+      "snippet": "<b>模块</b>的反击：XPO与USFP及其",
+      "score": 0.02538152610441767,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0000",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:heading:0000",
+        "chunk:47cc0b9dd2aeeced:body:0000",
+        "chunk:47cc0b9dd2aeeced:heading:0001",
+        "chunk:47cc0b9dd2aeeced:body:0001",
+        "chunk:47cc0b9dd2aeeced:heading:0002"
+      ],
+      "scope_id": "scope:ae7ec762c7a5739ec3b28f95801d5d70",
+      "context_by_kind": [
+        [
+          "unknown",
+          5
+        ]
+      ]
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@b4980af67156a7643bfedfef09f9cac0",
+    "processing": "unknown",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "admission_pending",
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 31,
+      "published": 25,
+      "withdrawn": 0,
+      "pending": 2,
+      "failed_jobs": 0,
+      "builds": 54,
+      "published_with_gaps": 21
+    },
+    "retrieval": {
+      "requested": "hybrid",
+      "used": "hybrid",
+      "reason": null,
+      "profile": "fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107",
+      "expected_chunks": 1076,
+      "ready_chunks": 1076,
+      "lexical_candidates": 92,
+      "vector_candidates": 200,
+      "query_cache_hit": false,
+      "query_usage": {
+        "prompt_tokens": 37,
+        "total_tokens": 37
+      },
+      "elapsed_ms": 509
+    },
+    "ranking": {
+      "requested": "body-constraints-v1",
+      "used": "body-constraints-v1",
+      "feature_cache_hit": true,
+      "query_constraints": {
+        "entities": [],
+        "issuers": [],
+        "years": [],
+        "fact_mode": "unspecified"
+      },
+      "matches": [
+        {
+          "build_id": "730433bdccf660aa5cd0b055a50dbc1b4c28371b7291b740ff03ac9c4e8cf333",
+          "chunk_id": "730433bdccf660aa:body:0000",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "5be178f951c61eaed04c68c5266f658804efe2088da606ca1ee28ce997af5f7b",
+          "chunk_id": "5be178f951c61eae:body:0006",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+          "chunk_id": "47cc0b9dd2aeeced:body:0028",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+          "chunk_id": "2696b5d4a615f984:body:0006",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "observed_cues"
+        },
+        {
+          "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+          "chunk_id": "668bac61a631636c:body:0002",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "730433bdccf660aa5cd0b055a50dbc1b4c28371b7291b740ff03ac9c4e8cf333",
+          "chunk_id": "730433bdccf660aa:heading:0006",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+          "chunk_id": "47cc0b9dd2aeeced:body:0047",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+          "chunk_id": "2696b5d4a615f984:body:0014",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+          "chunk_id": "668bac61a631636c:body:0007",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "observed_cues"
+        },
+        {
+          "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+          "chunk_id": "47cc0b9dd2aeeced:body:0012",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        },
+        {
+          "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+          "chunk_id": "668bac61a631636c:body:0014",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+          "chunk_id": "47cc0b9dd2aeeced:body:0004",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "observed_cues"
+        },
+        {
+          "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+          "chunk_id": "47cc0b9dd2aeeced:body:0022",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+          "chunk_id": "47cc0b9dd2aeeced:body:0043",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "forecast_cues"
+        },
+        {
+          "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+          "chunk_id": "47cc0b9dd2aeeced:body:0000",
+          "entity_status": "unconstrained",
+          "entity_fraction": 0.0,
+          "direct_entities": [],
+          "inherited_entities": [],
+          "source_status": "unconstrained",
+          "year_status": "unconstrained",
+          "matched_years": [],
+          "abbreviated_years": [],
+          "year_fraction": 0.0,
+          "dated_clauses": [],
+          "fact_status": "unknown"
+        }
+      ],
+      "hard_filter": false
+    }
+  }
+}

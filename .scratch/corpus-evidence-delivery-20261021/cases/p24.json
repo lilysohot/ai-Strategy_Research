@@ -1,0 +1,102 @@
+{
+  "case": "p24",
+  "kind": "positive",
+  "review": {
+    "class": "direct",
+    "reason": "解释存货应收占款，含经营现金流、扣非及比率",
+    "markers": [
+      "229.84",
+      "73.91",
+      "OCF/扣非",
+      "0.32"
+    ]
+  },
+  "capture_sha256": "ec4e8cb65989e5cfb203f0671865114c7b08f646337bfab7410512e49fab0591",
+  "original_sha256": "93a79e6f204e2186a7afb466e663c90058386cd10ab441173491f3615fe2ec89",
+  "original_retrieval": "hybrid",
+  "top_chunk": "6b55ddbbcfdc484d:body:0004",
+  "top_original_chars": 955,
+  "old_snippet": "<b>利润</b>已经确认、<b>现金</b>还在存货",
+  "preview": {
+    "text": "OCF / 扣非 ≈ 0.32，不及格；OCF / 归母 ≈ 0.31，同样不及格。公司解释是「销售回款增加」——同比确实从 14.07 亿跳到 73.91 亿（+425%），但分母利润跳得更快。已终止确认的保理应收 485.64 亿、保理损失 6.67 亿，说明现金有一部分是贴现买来的，不是客户把货款结清。\n毛利率 7.15% 与成本增速略慢于收入一致，审计不否定「结构略有改善」；但 Q2 6.99% 环比回落，改善没有在更高收入的季度里加厚。资产减值 12.93 亿（存货跌价）是经常性，不能当一次性。财务费用 19.12 亿（+750%），利息 20.02 亿、汇兑 5.23 亿，美元短贷 约 140 亿美元账面，Q3 若汇率再摆，经常性还会再打一刀。预告交叉：扣非 229.84 落在 227–237 的中上沿，主业是打满预告，不是卡下沿。\n少数股东 0.086 亿，几乎可忽略，所以「净利润 237.49 亿」和「归母 237.40 亿」不必像生益那样拆并表子公司。中期不分红、应付股利 130.52 亿是上年股利落账；筹资现金流 −86.61 亿里分配股利/利息 84.39 亿，现金在往外走的同时短贷在滚动（借 960 亿、还 951 亿）。审计结论：「利润质量相对扣非是干净的，现金质量相对扣非是差的；AI 放量把资产负债表做成了服务器厂的标准形状——存贷双高、保理托底。」",
+    "start": 357,
+    "end": 955,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "利润",
+      "现金",
+      "现金流",
+      "质量"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": [
+      "229.84",
+      "73.91",
+      "OCF/扣非",
+      "0.32"
+    ]
+  },
+  "core_chunks": 8,
+  "full_chunks": 105,
+  "original_context_occurrences": 132,
+  "preview_statuses": {
+    "complete_sentence_window": 10
+  },
+  "preview_chars": [
+    598,
+    571,
+    509,
+    549,
+    532,
+    571,
+    597,
+    549,
+    549,
+    549
+  ],
+  "body_chars": {
+    "off": 18875,
+    "pilot": 39237
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 5325,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 5403,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11537,
+        "hits": 6,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 10784,
+        "hits": 5,
+        "previews": 5,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

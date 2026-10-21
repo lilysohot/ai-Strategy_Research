@@ -51,11 +51,12 @@ POLICY_REV_V1 = "v1-20260915"
 # dev lane 政策修订（U 2026-09-20 裁决：新建 dev lane，只对 dev 构建生效，
 # 不改变任何生产 in_scope 判定；material_type 如实保持 internal_committee_report）。
 POLICY_REV_V2_DEV = "v2-dev-20260920"
+POLICY_REV_V3_DEV = "v3-dev-20261021"
 RULE_REV = f"decision-order-{POLICY_REV_V1}"
 PROBE_REV = "admission-probe-1"
 
 # 本实现可执行的冻结政策版本集（复核 R5：版本绑定，拒绝未支持版本）。
-_SUPPORTED_POLICY_REVS = (POLICY_REV_V1, POLICY_REV_V2_DEV)
+_SUPPORTED_POLICY_REVS = (POLICY_REV_V1, POLICY_REV_V2_DEV, POLICY_REV_V3_DEV)
 # v1 冻结语义：in_scope 只接受 research_report；dev 政策在文件里显式声明放宽集合。
 _DEFAULT_ALLOWED_MATERIALS: tuple[MaterialType, ...] = (MaterialType.RESEARCH_REPORT,)
 _SCOPE_PRODUCTION = "production"

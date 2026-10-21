@@ -1,0 +1,184 @@
+{
+  "query": "Kweichow Moutai Feitian",
+  "hits": [
+    {
+      "doc_id": "cv2:2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "locator": "chunk:2b4a84ce404709ec:table:0001",
+      "title": "i-Moutai, allowing Moutai to better capture demand from",
+      "snippet": "<b>Moutai</b>’scorporate/group-buycustomeretail",
+      "score": 1.0221640163671912,
+      "published": "undated",
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "chunk_id": "2b4a84ce404709ec:table:0001",
+      "context_locators": [
+        "chunk:2b4a84ce404709ec:heading:0000",
+        "chunk:2b4a84ce404709ec:body:0000",
+        "chunk:2b4a84ce404709ec:heading:0001",
+        "chunk:2b4a84ce404709ec:table:0000",
+        "chunk:2b4a84ce404709ec:body:0001",
+        "chunk:2b4a84ce404709ec:table:0001",
+        "chunk:2b4a84ce404709ec:table:0002",
+        "chunk:2b4a84ce404709ec:body:0002",
+        "chunk:2b4a84ce404709ec:table:0003",
+        "chunk:2b4a84ce404709ec:body:0003",
+        "chunk:2b4a84ce404709ec:table:0004",
+        "chunk:2b4a84ce404709ec:table:0005",
+        "chunk:2b4a84ce404709ec:table:0006",
+        "chunk:2b4a84ce404709ec:heading:0002",
+        "chunk:2b4a84ce404709ec:body:0004",
+        "chunk:2b4a84ce404709ec:heading:0003",
+        "chunk:2b4a84ce404709ec:heading:0004",
+        "chunk:2b4a84ce404709ec:body:0005",
+        "chunk:2b4a84ce404709ec:body:0006",
+        "chunk:2b4a84ce404709ec:body:0007",
+        "chunk:2b4a84ce404709ec:body:0008",
+        "chunk:2b4a84ce404709ec:body:0009",
+        "chunk:2b4a84ce404709ec:body:0010",
+        "chunk:2b4a84ce404709ec:body:0011",
+        "chunk:2b4a84ce404709ec:body:0012",
+        "chunk:2b4a84ce404709ec:body:0013",
+        "chunk:2b4a84ce404709ec:heading:0005",
+        "chunk:2b4a84ce404709ec:table:0007"
+      ],
+      "scope_id": "scope:e873dc312449e8881721ece1271512a0",
+      "context_by_kind": [
+        [
+          "body",
+          1
+        ],
+        [
+          "unknown",
+          27
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "locator": "chunk:2b4a84ce404709ec:table:0027",
+      "title": "Price target and rating history chart(s)",
+      "snippet": "<b>Kweichow</b>Mou2,400p212--21",
+      "score": 1.0217601840865385,
+      "published": "undated",
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "chunk_id": "2b4a84ce404709ec:table:0027",
+      "context_locators": [
+        "chunk:2b4a84ce404709ec:body:0067",
+        "chunk:2b4a84ce404709ec:body:0068",
+        "chunk:2b4a84ce404709ec:body:0069",
+        "chunk:2b4a84ce404709ec:body:0070",
+        "chunk:2b4a84ce404709ec:table:0027",
+        "chunk:2b4a84ce404709ec:body:0071",
+        "chunk:2b4a84ce404709ec:table:0028",
+        "chunk:2b4a84ce404709ec:body:0072",
+        "chunk:2b4a84ce404709ec:body:0073",
+        "chunk:2b4a84ce404709ec:heading:0035"
+      ],
+      "scope_id": "scope:e9e21f444d0e16a8efc2d614a47c8f7f",
+      "context_by_kind": [
+        [
+          "unknown",
+          10
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "locator": "chunk:2b4a84ce404709ec:heading:0011",
+      "title": "non-standard SKUs enhancing price/data control; Buy",
+      "snippet": "<b>Feitian</b>effectiveimmediately;Buy\n<b>Kweichow</b><b>Moutai</b>",
+      "score": 0.04360632218845418,
+      "published": "undated",
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "chunk_id": "2b4a84ce404709ec:heading:0011",
+      "context_locators": [
+        "chunk:2b4a84ce404709ec:heading:0010",
+        "chunk:2b4a84ce404709ec:body:0023",
+        "chunk:2b4a84ce404709ec:body:0024",
+        "chunk:2b4a84ce404709ec:body:0025",
+        "chunk:2b4a84ce404709ec:heading:0011",
+        "chunk:2b4a84ce404709ec:body:0026",
+        "chunk:2b4a84ce404709ec:heading:0012",
+        "chunk:2b4a84ce404709ec:body:0027",
+        "chunk:2b4a84ce404709ec:body:0028"
+      ],
+      "scope_id": "scope:6d33353943c78420de6a7ad961be48c7",
+      "context_by_kind": [
+        [
+          "unknown",
+          9
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "locator": "chunk:2b4a84ce404709ec:body:0062",
+      "title": "Price Target Risks and Methodology - Kweichow Moutai",
+      "snippet": "<b>Kweichow</b><b>Moutai</b>Valuationmethodology:Our12mTP",
+      "score": 0.033065205503705626,
+      "published": "undated",
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "chunk_id": "2b4a84ce404709ec:body:0062",
+      "context_locators": [
+        "chunk:2b4a84ce404709ec:body:0061",
+        "chunk:2b4a84ce404709ec:body:0062",
+        "chunk:2b4a84ce404709ec:heading:0034"
+      ],
+      "scope_id": "scope:74988884cc2ce42baa68384a47944f1b",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "locator": "chunk:2b4a84ce404709ec:heading:0014",
+      "title": "Feitian Moutai (53%, 1 litre)",
+      "snippet": "<b>Feitian</b><b>Moutai</b>(53,1litre)",
+      "score": 0.02949967278049983,
+      "published": "undated",
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "build_id": "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+      "chunk_id": "2b4a84ce404709ec:heading:0014",
+      "context_locators": [
+        "chunk:2b4a84ce404709ec:body:0033",
+        "chunk:2b4a84ce404709ec:heading:0014",
+        "chunk:2b4a84ce404709ec:body:0034"
+      ],
+      "scope_id": "scope:3a472213aba5366a61c9ddb90561c848",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@b4980af67156a7643bfedfef09f9cac0",
+    "processing": "unknown",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "admission_pending",
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 31,
+      "published": 25,
+      "withdrawn": 0,
+      "pending": 2,
+      "failed_jobs": 0,
+      "builds": 54,
+      "published_with_gaps": 21
+    }
+  }
+}

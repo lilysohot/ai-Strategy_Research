@@ -32,6 +32,13 @@ from plugins.corpus.preparation.contract import (
     canonical_fingerprint,
 )
 from plugins.corpus.preparation.gap_review import REVIEW_STAGE_PREFIX, GapReview, apply_gap_review
+from plugins.corpus.preparation.text_publication import (
+    STAGE_PREFIX as TEXT_PUBLICATION_PREFIX,
+)
+from plugins.corpus.preparation.text_publication import (
+    TextPublication,
+    apply_text_publication,
+)
 
 
 class StoreError(RuntimeError):
@@ -78,6 +85,30 @@ class Store(ABC):
 
     @abstractmethod
     def get_build(self, build_id: str) -> Build | None: ...
+
+    def get_text_publication(self, build_id: str) -> TextPublication | None:
+        """Read explicit incomplete-coverage acceptance for one immutable build."""
+        build = self.get_build(build_id)
+        if build is None:
+            return None
+        payload = self.get_source_checkpoint(build.source_id, TEXT_PUBLICATION_PREFIX + build_id)
+        return TextPublication.from_json(payload) if payload is not None else None
+
+    def put_text_publication(self, acceptance: TextPublication) -> None:
+        """Validate and append; this does not attest to completeness or publish."""
+        from plugins.corpus.preparation.engine import gap_records_of
+
+        build = self.get_build(acceptance.build_id)
+        if build is None:
+            raise StoreError("text publication build does not exist")
+        if self.get_gap_review(build.build_id) is not None:
+            raise StoreError("text acceptance cannot replace a human completeness review")
+        apply_text_publication(acceptance, build, self.get_units(build.build_id), gap_records_of(build))
+        self._put_text_publication(build, acceptance.to_json())
+
+    @abstractmethod
+    def _put_text_publication(self, build: Build, payload: str) -> None:
+        """Append to the reserved immutable acceptance namespace."""
 
     def get_gap_review(self, build_id: str) -> GapReview | None:
         """Read a credential from the reserved, immutable checkpoint namespace."""
@@ -352,7 +383,15 @@ class MemoryStore(Store):
             raise StoreError("source_checkpoint.stage 不能为空")
         if stage.startswith(REVIEW_STAGE_PREFIX):
             raise StoreError("human gap review namespace requires put_gap_review")
+        if stage.startswith(TEXT_PUBLICATION_PREFIX):
+            raise StoreError("text publication namespace requires put_text_publication")
         self._source_checkpoints[(source_id, stage)] = checkpoint
+
+    def _put_text_publication(self, build: Build, payload: str) -> None:
+        key = (build.source_id, TEXT_PUBLICATION_PREFIX + build.build_id)
+        existing = self._source_checkpoints.setdefault(key, payload)
+        if existing != payload:
+            raise StoreError("text publication acceptance cannot be replaced")
 
     def _put_gap_review(self, build: Build, payload: str) -> None:
         key = (build.source_id, REVIEW_STAGE_PREFIX + build.build_id)

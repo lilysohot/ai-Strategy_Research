@@ -1,0 +1,20 @@
+{
+  "old_and_production_publications_unchanged": true,
+  "updated_sources": 16,
+  "active_sources": 18,
+  "active_chunks": 684,
+  "ready_chunks": 684,
+  "captures": 128,
+  "query_count": 32,
+  "all_candidates_match_active_build": true,
+  "idempotent_document_requests": 0,
+  "cost": {
+    "document_successes": 63,
+    "document_attempts": 65,
+    "document_reported_tokens": 29306,
+    "query_successes": 32,
+    "query_reported_tokens": 1633,
+    "uncertain_attempts_retried_once": 2,
+    "billing_note": "Provider billing of the 2 transport-uncertain attempts is unknown; usage is provider-reported, not monetary cost."
+  }
+}

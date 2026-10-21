@@ -1,0 +1,351 @@
+{
+  "query": "OCP NPO 铜缆",
+  "hits": [
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0000",
+      "title": "2026-10-21 研究｜光互连：OCP 2026 预示 NPO 落地与替代铜缆\n带来\n研究｜光互连：OCP 2026 预示 NPO 落地与替代铜缆带来的新增需求\nOCP 指向光互连需求上升：NPO 采用率提升，且铜缆在更大规模的 AI 集群中被\n逐步替代",
+      "snippet": "<b>NPO</b>保留在选项中\n3.<b>NPO</b>",
+      "score": 0.12192947090160626,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0000",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:heading:0000",
+        "chunk:47cc0b9dd2aeeced:body:0000",
+        "chunk:47cc0b9dd2aeeced:heading:0001"
+      ],
+      "scope_id": "scope:2c6fbf75ff47578e2cbd3e87afb04b3f",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+      "locator": "chunk:2696b5d4a615f984:body:0004",
+      "title": "1 2026 CIOE 中国光博会前瞻",
+      "snippet": "<b>NPO</b>/XPO)：覆盖硅光",
+      "score": 0.02972478006790498,
+      "published": "undated",
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+      "chunk_id": "2696b5d4a615f984:body:0004",
+      "context_locators": [
+        "chunk:2696b5d4a615f984:heading:0000",
+        "chunk:2696b5d4a615f984:body:0001",
+        "chunk:2696b5d4a615f984:body:0002",
+        "chunk:2696b5d4a615f984:body:0003",
+        "chunk:2696b5d4a615f984:body:0004",
+        "chunk:2696b5d4a615f984:body:0005",
+        "chunk:2696b5d4a615f984:body:0006"
+      ],
+      "scope_id": "scope:8e9000d478a91b1fe50a619177f5c111",
+      "context_by_kind": [
+        [
+          "body",
+          1
+        ],
+        [
+          "unknown",
+          6
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:5be178f951c61eaed04c68c5266f658804efe2088da606ca1ee28ce997af5f7b",
+      "locator": "chunk:5be178f951c61eae:body:0001",
+      "title": "5be178f951c61eae:body:0001",
+      "snippet": "<b>NPO</b>，<b>NPO</b>可以理解为一种",
+      "score": 0.028039498422017466,
+      "published": "undated",
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "5be178f951c61eaed04c68c5266f658804efe2088da606ca1ee28ce997af5f7b",
+      "chunk_id": "5be178f951c61eae:body:0001",
+      "context_locators": [
+        "chunk:5be178f951c61eae:body:0000",
+        "chunk:5be178f951c61eae:body:0001",
+        "chunk:5be178f951c61eae:body:0002"
+      ],
+      "scope_id": "scope:8ff2e400591f313b1fb4cb121821e923",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24",
+      "locator": "chunk:510f83c463db4121:body:0004",
+      "title": "510f83c463db4121:body:0004",
+      "snippet": "<b>NPO</b>液冷散热方案的研发、",
+      "score": 0.019861753001196122,
+      "published": "undated",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24",
+      "chunk_id": "510f83c463db4121:body:0004",
+      "context_locators": [
+        "chunk:510f83c463db4121:body:0003",
+        "chunk:510f83c463db4121:body:0004",
+        "chunk:510f83c463db4121:body:0005"
+      ],
+      "scope_id": "scope:cc236e587352ba3da53ae96ac2dd1250",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0021",
+      "title": "与英伟达联合构建了扁平化平面架构（Flattened Planar Fabric）：每颗 GPU 拆分\n为",
+      "snippet": "<b>OCP</b>的ESUN规范作为scale-up数据平面",
+      "score": 0.11814176854800035,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0021",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:heading:0009",
+        "chunk:47cc0b9dd2aeeced:body:0019",
+        "chunk:47cc0b9dd2aeeced:heading:0010",
+        "chunk:47cc0b9dd2aeeced:body:0020",
+        "chunk:47cc0b9dd2aeeced:heading:0011",
+        "chunk:47cc0b9dd2aeeced:body:0021",
+        "chunk:47cc0b9dd2aeeced:body:0022",
+        "chunk:47cc0b9dd2aeeced:body:0023",
+        "chunk:47cc0b9dd2aeeced:heading:0012",
+        "chunk:47cc0b9dd2aeeced:body:0024"
+      ],
+      "scope_id": "scope:5ebc195bb850ee6ba497894dafc78e19",
+      "context_by_kind": [
+        [
+          "unknown",
+          10
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+      "locator": "chunk:2696b5d4a615f984:body:0015",
+      "title": "6 风险提示",
+      "snippet": "<b>NPO</b>、CPO、XPO、OCS等",
+      "score": 0.019861753001196122,
+      "published": "undated",
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+      "chunk_id": "2696b5d4a615f984:body:0015",
+      "context_locators": [
+        "chunk:2696b5d4a615f984:heading:0003",
+        "chunk:2696b5d4a615f984:body:0014",
+        "chunk:2696b5d4a615f984:body:0015",
+        "chunk:2696b5d4a615f984:heading:0004"
+      ],
+      "scope_id": "scope:dc0190a3500ac9999e60027b5edc422d",
+      "context_by_kind": [
+        [
+          "unknown",
+          4
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0049",
+      "title": "天弘（Celestica）",
+      "snippet": "<b>OCP</b>ORv3-HPR机架，全液冷设计",
+      "score": 0.11638728953016127,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0049",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:heading:0022",
+        "chunk:47cc0b9dd2aeeced:body:0044",
+        "chunk:47cc0b9dd2aeeced:heading:0023",
+        "chunk:47cc0b9dd2aeeced:body:0045",
+        "chunk:47cc0b9dd2aeeced:body:0046",
+        "chunk:47cc0b9dd2aeeced:body:0047",
+        "chunk:47cc0b9dd2aeeced:body:0048",
+        "chunk:47cc0b9dd2aeeced:body:0049",
+        "chunk:47cc0b9dd2aeeced:body:0050",
+        "chunk:47cc0b9dd2aeeced:body:0051",
+        "chunk:47cc0b9dd2aeeced:body:0052"
+      ],
+      "scope_id": "scope:aad0f463f7c261c87b0adddbf333934a",
+      "context_by_kind": [
+        [
+          "unknown",
+          11
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0005",
+      "title": "主题 3：Micro-VCSEL 及其对 NPO 和 CPO 的影响",
+      "snippet": "<b>NPO</b>或CPO竞争，因为它们主要",
+      "score": 0.11241406916554728,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0005",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:body:0002",
+        "chunk:47cc0b9dd2aeeced:body:0003",
+        "chunk:47cc0b9dd2aeeced:body:0004",
+        "chunk:47cc0b9dd2aeeced:body:0005",
+        "chunk:47cc0b9dd2aeeced:body:0006",
+        "chunk:47cc0b9dd2aeeced:body:0007",
+        "chunk:47cc0b9dd2aeeced:body:0008",
+        "chunk:47cc0b9dd2aeeced:body:0009",
+        "chunk:47cc0b9dd2aeeced:heading:0003",
+        "chunk:47cc0b9dd2aeeced:body:0010",
+        "chunk:47cc0b9dd2aeeced:body:0011",
+        "chunk:47cc0b9dd2aeeced:body:0012",
+        "chunk:47cc0b9dd2aeeced:heading:0004",
+        "chunk:47cc0b9dd2aeeced:body:0013",
+        "chunk:47cc0b9dd2aeeced:heading:0005",
+        "chunk:47cc0b9dd2aeeced:body:0014",
+        "chunk:47cc0b9dd2aeeced:heading:0006",
+        "chunk:47cc0b9dd2aeeced:body:0015",
+        "chunk:47cc0b9dd2aeeced:heading:0007"
+      ],
+      "scope_id": "scope:4f6bb61ce41f46843e55d3ffb89a204f",
+      "context_by_kind": [
+        [
+          "unknown",
+          19
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0027",
+      "title": "华为：从连接器入手，推动 Open NPO 标准化",
+      "snippet": "<b>NPO</b>已被中国互联网公司、运营商",
+      "score": 0.09902226267449374,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0027",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:heading:0013",
+        "chunk:47cc0b9dd2aeeced:body:0025",
+        "chunk:47cc0b9dd2aeeced:body:0026",
+        "chunk:47cc0b9dd2aeeced:body:0027",
+        "chunk:47cc0b9dd2aeeced:body:0028",
+        "chunk:47cc0b9dd2aeeced:body:0029",
+        "chunk:47cc0b9dd2aeeced:body:0030",
+        "chunk:47cc0b9dd2aeeced:heading:0014"
+      ],
+      "scope_id": "scope:e37d21d3435f37327b59c74333218e94",
+      "context_by_kind": [
+        [
+          "unknown",
+          8
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0034",
+      "title": "OpenCPX：将 NPO 转变为“可插拔插座”",
+      "snippet": "<b>NPO</b>）插座系列”。该联盟",
+      "score": 0.09799298091981595,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0034",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:body:0032",
+        "chunk:47cc0b9dd2aeeced:body:0033",
+        "chunk:47cc0b9dd2aeeced:body:0034",
+        "chunk:47cc0b9dd2aeeced:heading:0015",
+        "chunk:47cc0b9dd2aeeced:body:0035",
+        "chunk:47cc0b9dd2aeeced:heading:0016"
+      ],
+      "scope_id": "scope:5f0bbcfa48c42d332e95d12de900db1a",
+      "context_by_kind": [
+        [
+          "unknown",
+          6
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0037",
+      "title": "标准推进时间线一览\n源杰科技（Genuine Optics）梳理的时间线可作为跟进参考：OIF 预计将于 2027 年\n8",
+      "snippet": "<b>NPO</b>标准；IPEC预计将于2027年",
+      "score": 0.09799298091981595,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0037",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:heading:0017",
+        "chunk:47cc0b9dd2aeeced:body:0037",
+        "chunk:47cc0b9dd2aeeced:heading:0018"
+      ],
+      "scope_id": "scope:2ba865fd2f2246f3c783379cdb9b7b9c",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    },
+    {
+      "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "locator": "chunk:47cc0b9dd2aeeced:body:0017",
+      "title": "我们认为值得讨论的一点是： 商用（merchant）生态仍然缺少一家供应商，能够同时",
+      "snippet": "<b>NPO</b>配第三方光引擎的路线。",
+      "score": 0.09615732800216056,
+      "published": "undated",
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "chunk_id": "47cc0b9dd2aeeced:body:0017",
+      "context_locators": [
+        "chunk:47cc0b9dd2aeeced:body:0016",
+        "chunk:47cc0b9dd2aeeced:body:0017",
+        "chunk:47cc0b9dd2aeeced:heading:0008"
+      ],
+      "scope_id": "scope:67586006694fddec883b97b0faf7901a",
+      "context_by_kind": [
+        [
+          "unknown",
+          3
+        ]
+      ]
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@b4980af67156a7643bfedfef09f9cac0",
+    "processing": "unknown",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "admission_pending",
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 31,
+      "published": 25,
+      "withdrawn": 0,
+      "pending": 2,
+      "failed_jobs": 0,
+      "builds": 54,
+      "published_with_gaps": 21
+    }
+  }
+}

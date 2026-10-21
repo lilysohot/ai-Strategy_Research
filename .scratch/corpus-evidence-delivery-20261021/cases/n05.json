@@ -1,0 +1,101 @@
+{
+  "case": "n05",
+  "kind": "undisclosed",
+  "review": {
+    "class": "direct",
+    "reason": "明确因保密未披露客户身份，可回答未披露",
+    "markers": [
+      "保密原因",
+      "并未透露客户身份"
+    ]
+  },
+  "capture_sha256": "466d6aee95219e7ffe2c8667ff674defe6f65d8398c9fd51287e602e176fa9e0",
+  "original_sha256": "16b07e2c269b1a2c0a867da9da03f2fdc09eb614e1e1dcc7c36ba0a09cd13a76",
+  "original_retrieval": "hybrid",
+  "top_chunk": "1d0117eb6e17c63c:body:0007",
+  "top_original_chars": 1186,
+  "old_snippet": "<b>韩元</b>和3000亿<b>韩元</b>的<b>MLCC</b><b>合同</b>",
+  "preview": {
+    "text": "信号越快，对传输介质的要求越高，传统热固性树脂在超\n高频信号传输下，“介电损耗”很严重。\n而PTFE 是当前商用体系中介电性能最优的聚合物之一，从分子结构角度，PTFE\n具备高度对称分子结构，氟原子均匀包裹碳主链骨架、分子几乎无净极性；10GHz\n条件下介电常数Dk=2.1，介质损耗Dk 低至0.0004，且介电参数随频率、温度波动\n极小。\n对比高速PCB 常用的PPE 材料和环氧树脂材料，PTFE 具备更低介电常数和更\n低介电损耗，更适配更高频段的信号传输，通俗讲，在超高频信号传输这条“高速\n路”上，PTFE 是阻力最小、信号跑得最稳的材料。（资料来源：化工新材料）\n3.2\nMLCC 巨头，签订万亿订单\n三星电机于9 月1 日宣布，已与一家全球知名企业签署了一份价值1.0722 万亿\n韩元（约52.69 亿人民币）的长期供应协议（LTA），为其人工智能（AI）服务器供\n应多层陶瓷电容器（MLCC）。这是该公司迄今为止最大的MLCC 供应合同，相当\n于其去年合并收入的9.5%。合同约定的供应量将从2027 年1 月1 日至12 月31 日，\n为期一年。出于保密原因，该公司并未透露客户身份。\n三星电机目前与约10 家全球企业签订了MLCC 长期供应协议。此次披露是在其\n中一家客户确认2027 年供应量之后进行的。该客户与此前已公布的供应合同涉及的\n客户不同。",
+    "start": 239,
+    "end": 826,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "1.0722",
+      "mlcc",
+      "万亿",
+      "三星",
+      "合同",
+      "电机",
+      "韩元"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": [
+      "保密原因",
+      "并未透露客户身份"
+    ]
+  },
+  "core_chunks": 7,
+  "full_chunks": 76,
+  "original_context_occurrences": 93,
+  "preview_statuses": {
+    "complete_sentence_window": 10
+  },
+  "preview_chars": [
+    587,
+    371,
+    594,
+    549,
+    483,
+    587,
+    371,
+    600,
+    549,
+    300
+  ],
+  "body_chars": {
+    "off": 16117,
+    "pilot": 33352
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 5373,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      },
+      "pilot": {
+        "chars": 5236,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": false
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11009,
+        "hits": 6,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      },
+      "pilot": {
+        "chars": 10620,
+        "hits": 5,
+        "previews": 5,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": false
+      }
+    }
+  }
+}

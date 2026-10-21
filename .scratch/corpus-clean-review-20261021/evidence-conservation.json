@@ -1,0 +1,306 @@
+[
+  {
+    "id": "p01",
+    "question": "国金电子报告怎样解释麒麟芯片晶体管更多、做同样工作却更省电？",
+    "retained_unit_occurrences": 5,
+    "excluded": []
+  },
+  {
+    "id": "p02",
+    "question": "芯片从平面走向立体堆叠，为什么会拉动后道测试设备需求？",
+    "retained_unit_occurrences": 5,
+    "excluded": []
+  },
+  {
+    "id": "p03",
+    "question": "国金为什么判断2026年下半年PCB盈利有望改善？除了新品交付，还有什么因素？",
+    "retained_unit_occurrences": 5,
+    "excluded": []
+  },
+  {
+    "id": "p04",
+    "question": "国泰海通农业报告为何开始关注乳清蛋白替代品？看好哪类替代路线？",
+    "retained_unit_occurrences": 13,
+    "excluded": []
+  },
+  {
+    "id": "p05",
+    "question": "猪价回升为什么没有让国泰海通改变产能加速淘汰的判断？",
+    "retained_unit_occurrences": 13,
+    "excluded": []
+  },
+  {
+    "id": "p06",
+    "question": "国盛如何解释2026年银行仍需要外部补充资本？",
+    "retained_unit_occurrences": 4,
+    "excluded": []
+  },
+  {
+    "id": "p07",
+    "question": "这轮金融机构增资中，国盛认为哪一部分超出预期，为什么？",
+    "retained_unit_occurrences": 7,
+    "excluded": []
+  },
+  {
+    "id": "p08",
+    "question": "按国盛报告的历史回顾，1998年银行补充资本使用了多少特别国债？",
+    "retained_unit_occurrences": 14,
+    "excluded": []
+  },
+  {
+    "id": "p09",
+    "question": "AI电源和液冷公司的相关收入还不多时，国金通过哪些财务和经营线索判断订单即将放量？",
+    "retained_unit_occurrences": 11,
+    "excluded": [
+      {
+        "chunk": "022ae1713fb760ff:body:0000",
+        "ordinal": 1,
+        "text": "敬请参阅最后一页特别声明"
+      },
+      {
+        "chunk": "022ae1713fb760ff:body:0001",
+        "ordinal": 8,
+        "text": "敬请参阅最后一页特别声明"
+      }
+    ]
+  },
+  {
+    "id": "p10",
+    "question": "国金电新报告认为光伏企业怎样应对上半年盈利压力？",
+    "retained_unit_occurrences": 32,
+    "excluded": [
+      {
+        "chunk": "022ae1713fb760ff:body:0000",
+        "ordinal": 1,
+        "text": "敬请参阅最后一页特别声明"
+      },
+      {
+        "chunk": "022ae1713fb760ff:body:0001",
+        "ordinal": 8,
+        "text": "敬请参阅最后一页特别声明"
+      }
+    ]
+  },
+  {
+    "id": "p11",
+    "question": "光模块纪要说五年更换周期，能否在常规需求预测之外再加一笔替换需求？",
+    "retained_unit_occurrences": 8,
+    "excluded": []
+  },
+  {
+    "id": "p12",
+    "question": "9月8日光模块纪要对3.2T批量供应时间及2028年出货量作了什么判断？这是已经实现的数据吗？",
+    "retained_unit_occurrences": 8,
+    "excluded": []
+  },
+  {
+    "id": "p13",
+    "question": "平安策略周报如何描述2026年8月美国制造业和服务业景气的分化？",
+    "retained_unit_occurrences": 10,
+    "excluded": []
+  },
+  {
+    "id": "p14",
+    "question": "华源环保报告中，铝冶炼配额管理覆盖的温室气体与发电行业有什么区别？",
+    "retained_unit_occurrences": 18,
+    "excluded": []
+  },
+  {
+    "id": "p15",
+    "question": "按照华源报告，企业能否用2019至2024年的存量碳配额抵扣2025年度清缴？",
+    "retained_unit_occurrences": 18,
+    "excluded": []
+  },
+  {
+    "id": "p16",
+    "question": "国联民生的CIOE前瞻里，华工正源和立讯技术分别计划展示什么NPO产品？",
+    "retained_unit_occurrences": 16,
+    "excluded": [
+      {
+        "chunk": "7ceca88433b092ae:body:0004",
+        "ordinal": 28,
+        "text": "本公司具备证券投资咨询业务资格，请务必阅读最后一页免责声明 "
+      },
+      {
+        "chunk": "7ceca88433b092ae:body:0004",
+        "ordinal": 29,
+        "text": "证券研究报告 "
+      },
+      {
+        "chunk": "7ceca88433b092ae:body:0004",
+        "ordinal": 38,
+        "text": "本公司具备证券投资咨询业务资格，请务必阅读最后一页免责声明 "
+      },
+      {
+        "chunk": "7ceca88433b092ae:body:0004",
+        "ordinal": 39,
+        "text": "证券研究报告 "
+      }
+    ]
+  },
+  {
+    "id": "p17",
+    "question": "华创《从分化到收敛》为什么认为新动能增长未必自动带来财政收入改善？",
+    "retained_unit_occurrences": 39,
+    "excluded": [
+      {
+        "chunk": "147e841aab35836a:body:0006",
+        "ordinal": 76,
+        "text": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+      },
+      {
+        "chunk": "147e841aab35836a:body:0006",
+        "ordinal": 90,
+        "text": "证监会审核华创证券投资咨询业务资格批文号：证监许可（2009）1210 号"
+      }
+    ]
+  },
+  {
+    "id": "p18",
+    "question": "天风是否认为一次强非农就足以决定9月加息？还要看什么？",
+    "retained_unit_occurrences": 44,
+    "excluded": [
+      {
+        "chunk": "628ec76d5b4001b7:body:0007",
+        "ordinal": 93,
+        "text": "      请务必阅读正文之后的信息披露和免责申明"
+      },
+      {
+        "chunk": "628ec76d5b4001b7:body:0007",
+        "ordinal": 123,
+        "text": "      请务必阅读正文之后的信息披露和免责申明"
+      }
+    ]
+  },
+  {
+    "id": "p19",
+    "question": "光力科技2026年上半年营业收入和归母净利润分别是多少亿元？",
+    "retained_unit_occurrences": 27,
+    "excluded": [
+      {
+        "chunk": "568f9e752f0fa65a:body:0016",
+        "ordinal": 166,
+        "text": "请务必阅读正文之后的免责声明及其项下所有内容"
+      },
+      {
+        "chunk": "568f9e752f0fa65a:body:0016",
+        "ordinal": 179,
+        "text": "请务必阅读正文之后的免责声明及其项下所有内容"
+      },
+      {
+        "chunk": "568f9e752f0fa65a:body:0016",
+        "ordinal": 190,
+        "text": "请务必阅读正文之后的免责声明及其项下所有内容"
+      }
+    ]
+  },
+  {
+    "id": "p20",
+    "question": "光力科技2026年上半年半导体封测装备收入与安全监控业务收入分别是多少？",
+    "retained_unit_occurrences": 22,
+    "excluded": [
+      {
+        "chunk": "568f9e752f0fa65a:body:0017",
+        "ordinal": 204,
+        "text": "请务必阅读正文之后的免责声明及其项下所有内容"
+      }
+    ]
+  },
+  {
+    "id": "p21",
+    "question": "截至2026年6月末，光力科技实际控制人直接持股和合计控制比例分别是多少？",
+    "retained_unit_occurrences": 9,
+    "excluded": [
+      {
+        "chunk": "568f9e752f0fa65a:body:0014",
+        "ordinal": 134,
+        "text": "请务必阅读正文之后的免责声明及其项下所有内容"
+      },
+      {
+        "chunk": "568f9e752f0fa65a:body:0014",
+        "ordinal": 141,
+        "text": "请务必阅读正文之后的免责声明及其项下所有内容"
+      }
+    ]
+  },
+  {
+    "id": "p22",
+    "question": "华福新材料周报披露的氩气价格，从5月初到9月2日怎样变化？",
+    "retained_unit_occurrences": 26,
+    "excluded": [
+      {
+        "chunk": "1d0117eb6e17c63c:body:0008",
+        "ordinal": 158,
+        "text": "诚信专业"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0008",
+        "ordinal": 159,
+        "text": "发现价值"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0008",
+        "ordinal": 161,
+        "text": "请务必阅读报告末页的声明"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0008",
+        "ordinal": 176,
+        "text": "诚信专业"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0008",
+        "ordinal": 177,
+        "text": "发现价值"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0008",
+        "ordinal": 179,
+        "text": "请务必阅读报告末页的声明"
+      }
+    ]
+  },
+  {
+    "id": "p23",
+    "question": "三星电机这份新披露的AI服务器MLCC长期协议金额及供货期限是什么？",
+    "retained_unit_occurrences": 22,
+    "excluded": [
+      {
+        "chunk": "1d0117eb6e17c63c:body:0007",
+        "ordinal": 122,
+        "text": "诚信专业"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0007",
+        "ordinal": 123,
+        "text": "发现价值"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0007",
+        "ordinal": 125,
+        "text": "请务必阅读报告末页的声明"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0007",
+        "ordinal": 146,
+        "text": "诚信专业"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0007",
+        "ordinal": 147,
+        "text": "发现价值"
+      },
+      {
+        "chunk": "1d0117eb6e17c63c:body:0007",
+        "ordinal": 149,
+        "text": "请务必阅读报告末页的声明"
+      }
+    ]
+  },
+  {
+    "id": "p24",
+    "question": "工业富联投委会报告为何认为利润与现金质量存在分歧？用上半年经营现金流和扣非利润说明。",
+    "retained_unit_occurrences": 27,
+    "excluded": []
+  }
+]

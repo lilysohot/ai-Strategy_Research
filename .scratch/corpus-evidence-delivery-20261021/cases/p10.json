@@ -1,0 +1,99 @@
+{
+  "case": "p10",
+  "kind": "positive",
+  "review": {
+    "class": "direct",
+    "reason": "以销定产、控亏、加强现金管理和降低资本开支",
+    "markers": [
+      "以销定产",
+      "现金管理"
+    ]
+  },
+  "capture_sha256": "bd3e4618b47513a5f28c52eea1efcf99930a186fd3ced19b83ea8b20816c73c0",
+  "original_sha256": "b713c57af2b1b43a4bc9e2f03da1a2ca0bb282f43a292e20221a5277f9686df3",
+  "original_retrieval": "hybrid",
+  "top_chunk": "022ae1713fb760ff:body:0009",
+  "top_original_chars": 707,
+  "old_snippet": "<b>盈利</b>承压，26H1【SW<b>光伏</b>设备",
+  "preview": {
+    "text": "26H1 国内新增装机72GW、同比-66%，主要因25H1 电力市场化政策窗口期抢装导致高基数导致，产业链供需矛盾进一\n步凸显，价格持续处于低位，各环节盈利承压，26H1【SW 光伏设备】口径实现营收2209 亿元、同比-16%；实现归母\n净利润-123 亿元、同比减亏18%，销售毛利率9.9%、同增0.7PCT，经营能力略改善。其中26Q2 实现营收1193 亿元，\n同比/环比-19%/+17%；实现归母净利-55 亿元、同环比基本持稳，销售毛利率10.4%、同比/环比+0.6/+1.2PCT，毛利\n率有所修复，产业链底部夯实。 \n盈利能力：26Q1 退税取消前抢运需求带动部分企业盈利改善，26Q2 抢运结束后盈利承压，部分BC 龙头毛利率优势逐\n步凸显。辅材方面，金刚线、胶膜等环节顺价原材料涨价，盈利有所改善；光伏玻璃价格下跌至历史较低水平，盈利\n显著承压。 \n资产结构：盈利承压背景下主链企业以销定产、控制亏损规模，但随着前期借款逐步到期，测算大部分短期资金压力\n有所加大，大部分企业资产负债率有所上升。 \n现金流及资本开支：盈利承压背景下企业加强现金管理，但因亏损幅度较深，26Q2光伏主要标的经营现金流同比承\n压；投资现金流自24H2 起下降，整体维持较低水平，26H1 资本开支降至较低水平。",
+    "start": 54,
+    "end": 612,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "企业",
+      "光伏",
+      "压力",
+      "盈利"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": [
+      "以销定产",
+      "现金管理"
+    ]
+  },
+  "core_chunks": 8,
+  "full_chunks": 76,
+  "original_context_occurrences": 89,
+  "preview_statuses": {
+    "complete_sentence_window": 9,
+    "no_complete_matching_sentence": 1
+  },
+  "preview_chars": [
+    558,
+    559,
+    466,
+    600,
+    557,
+    211,
+    598,
+    466,
+    0,
+    557
+  ],
+  "body_chars": {
+    "off": 15718,
+    "pilot": 32359
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 5540,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 5469,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11056,
+        "hits": 6,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 11928,
+        "hits": 6,
+        "previews": 6,
+        "previews_elided": false,
+        "top1_markers_visible": true,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

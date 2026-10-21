@@ -19,6 +19,7 @@ from plugins.corpus.preparation.search_pg import (
     build_search_params,
     search_chunks_on,
 )
+from plugins.corpus.retrieval.diagnostics import RetrievalTrace
 from plugins.corpus.retrieval.embedding import (
     DoubaoEmbedder,
     EmbeddingError,
@@ -26,6 +27,7 @@ from plugins.corpus.retrieval.embedding import (
     text_hash,
 )
 from plugins.corpus.retrieval.index_pg import ready_counts
+from plugins.corpus.retrieval.ranking import RankingSession
 
 _VECTOR_SQL = """
 WITH matches AS (
@@ -133,6 +135,8 @@ def search(
     domain: ResearchDomain | None = None,
     published_from: str | None = None,
     published_to: str | None = None,
+    trace: RetrievalTrace | None = None,
+    ranking: RankingSession | None = None,
 ) -> tuple[
     tuple[SearchHit, ...],
     dict[str, tuple[str, ...]],
@@ -150,7 +154,13 @@ def search(
     }
 
     def fallback(reason: str) -> tuple:
+        if ranking is not None:
+            ranking.constraints = None
+            ranking.features.clear()
         hits, order, coverage = read_pg.search_with_coverage_bands(dsn, query, **kwargs)
+        if trace is not None:
+            trace.lexical, trace.dense, trace.fused = hits, (), hits
+            trace.chunk_order, trace.status = order, "lexical_fallback"
         coverage["retrieval"] = {
             "requested": "hybrid",
             "used": "lexical",
@@ -220,10 +230,22 @@ def search(
                         ),
                     )
                 hits = fuse(lexical, dense) if complete else lexical
+                original_lexical = lexical
+                if complete and ranking is not None:
+                    from plugins.corpus.retrieval.ranking_pg import load_corpus_on
+
+                    corpus, ranking.cache_hit = load_corpus_on(cur)
+                    ranking.prepare(corpus, hits)
+                    hits = ranking.rerank(hits)
+                    lexical = ranking.rerank(lexical)
                 coverage = read_pg.coverage_snapshot_on(
                     cur, query_status="matched" if hits else "no_match"
                 )
                 order = read_pg._chunk_order_by_source_on(cur, hits)
+                if trace is not None:
+                    trace.lexical, trace.dense, trace.fused = original_lexical, dense, hits
+                    trace.chunk_order = order
+                    trace.status = "hybrid" if complete else "lexical_fallback"
         coverage["retrieval"] = {
             "requested": "hybrid",
             "used": "hybrid" if complete else "lexical",
@@ -240,6 +262,8 @@ def search(
         return hits, order, coverage, lexical if complete else None
     except EmbeddingError as exc:
         return fallback(exc.code)
+    except read_pg.IntegrityError:
+        raise
     except (ValueError, psycopg.Error):
         # A failed vector SQL transaction is discarded; fallback reads all lexical
         # candidates, ordering and coverage again in a fresh consistent snapshot.

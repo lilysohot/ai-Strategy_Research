@@ -62,6 +62,7 @@ if TYPE_CHECKING:
     from plugins.corpus.preparation.read_pg import CellEvidence, ChunkEvidence, ChunkStructure
     from plugins.corpus.preparation.search_pg import SearchHit as SearchPgHit
     from plugins.corpus.preparation.selection import SelectedBand
+    from plugins.corpus.retrieval.diagnostics import RetrievalTrace
     from plugins.corpus.structured.roles import RoleDispatch, RoleExecution
     from plugins.corpus.structured.snapshot import EvidenceSnapshot
 
@@ -1212,6 +1213,7 @@ class CorpusService:
         *,
         lexemes: tuple[str, ...] = (),
         lexical_fallback_hits: tuple[SearchPgHit, ...] | None = None,
+        trace: RetrievalTrace | None = None,
     ) -> tuple[SearchPgHit, ...]:
         """Return one document-bound hit per selected evidence band.
 
@@ -1278,6 +1280,8 @@ class CorpusService:
                 dataclass_replace(hit, score=structural_score(hit)) for hit in raw_hits
             )
         policy = SelectionPolicy(top_k=min(SelectionPolicy().top_k, limit))
+        if trace is not None:
+            trace.source_limit = policy.top_k
         band_policy = BandPolicy()
         bands = select_band(
             raw_hits,
@@ -1323,6 +1327,8 @@ class CorpusService:
                     if len(seen) >= band_policy.band_cap:
                         break
             bands = tuple(interleaved)
+        if trace is not None:
+            trace.selectable_bands = bands
         by_source: dict[str, list[SelectedBand]] = {}
         order: list[str] = []
         for band in bands:
@@ -1416,7 +1422,7 @@ class CorpusService:
         return tuple(enriched)
 
     def search_with_coverage(
-        self, query: str, *, limit: int = 10
+        self, query: str, *, limit: int = 10, trace: RetrievalTrace | None = None
     ) -> tuple[list[SearchHit], dict[str, object]]:
         """检索 + 覆盖元数据取自**同一数据库快照**（§7.3 并发发布一致性）。
 
@@ -1446,6 +1452,24 @@ class CorpusService:
         if mode not in ("lexical", "hybrid"):
             raise StoreError("CORPUS_RETRIEVAL_MODE must be lexical or hybrid")
         lexical_fallback_hits = None
+        ranking = None
+        ranking_mode = os.environ.get("CORPUS_RETRIEVAL_RANKING", "off").strip().lower()
+        if ranking_mode not in ("off", "body-constraints-v1"):
+            raise StoreError("CORPUS_RETRIEVAL_RANKING must be off or body-constraints-v1")
+        if ranking_mode != "off":
+            target = os.environ.get("CORPUS_RETRIEVAL_RANKING_TARGET_DB", "").strip()
+            if (
+                not target.startswith("vector_pilot_")
+                or target != self._target_db
+                or mode != "hybrid"
+            ):
+                raise StoreError(
+                    "body ranking requires hybrid mode and an explicit matching target DB"
+                )
+            if not is_corpus_availability_query(query):
+                from plugins.corpus.retrieval.ranking import RankingSession
+
+                ranking = RankingSession(query, lexemes)
         if mode == "hybrid" and not is_corpus_availability_query(query):
             from plugins.corpus.retrieval.hybrid import search as hybrid_search
 
@@ -1455,6 +1479,8 @@ class CorpusService:
                 original_query=query,
                 limit=max(limit, _SELECTION_POOL_MIN),
                 sandbox_db=self._target_db,
+                trace=trace,
+                **({"ranking": ranking} if ranking is not None else {}),
             )
         else:
             raw_hits, chunk_order, coverage = read_pg.search_with_coverage_bands(
@@ -1463,7 +1489,12 @@ class CorpusService:
                 limit=max(limit, _SELECTION_POOL_MIN),
                 sandbox_db=self._target_db,
             )
+            if trace is not None:
+                trace.lexical, trace.fused = raw_hits, raw_hits
+                trace.chunk_order, trace.status = chunk_order, "lexical"
         if self._abstain_decision(query):
+            if trace is not None:
+                trace.status = "abstained"
             abstain_cov = read_pg.coverage_snapshot(
                 self._dsn,
                 sandbox_db=self._target_db,
@@ -1478,7 +1509,10 @@ class CorpusService:
             limit,
             lexemes=lexemes,
             lexical_fallback_hits=lexical_fallback_hits,
+            trace=trace,
         )
+        if ranking is not None:
+            raw_hits = ranking.order_selected(raw_hits)
         table_sources = {
             hit.source_id: (hit.build_id, chunk_order[hit.source_id])
             for hit in raw_hits
@@ -1494,6 +1528,13 @@ class CorpusService:
             for source_id, (build_id, chunk_ids) in table_sources.items()
         }
         raw_hits = self._attach_table_header_context(raw_hits, chunk_order, structures_by_source)
+        from plugins.corpus.retrieval.dedup import dedupe_contained_hits
+
+        raw_hits = dedupe_contained_hits(raw_hits)
+        if ranking is not None:
+            coverage["ranking"] = ranking.diagnostics(raw_hits)
+        if trace is not None:
+            trace.selected = raw_hits
         # A1：内联 scope 摘要——成员范围身份 + 按 kind 计数（只读块种类，不读几何）。
         pairs = [(hit.build_id, cid) for hit in raw_hits for cid in hit.context_chunk_ids]
         kinds = (
@@ -1525,6 +1566,12 @@ class CorpusService:
                 )
             )
         return hits_out, coverage
+
+    def evidence_previews(self, query: str, hits: Sequence[SearchHit]) -> list[dict[str, object]]:
+        """Pilot-only first-read plans; does not alter retrieval or citation receipts."""
+        from plugins.corpus.retrieval.delivery import load_delivery_views
+
+        return load_delivery_views(self._dsn, self._target_db or "", query, hits)
 
     def search_bands(
         self, query: str, *, limit: int = 10

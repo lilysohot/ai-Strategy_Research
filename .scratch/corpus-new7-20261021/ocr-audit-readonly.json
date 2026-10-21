@@ -1,0 +1,255 @@
+{
+  "target_db": "vector_pilot_clean7_20261021",
+  "scope": "No OCR rerun, no publication mutation, no external model call",
+  "sources": [
+    {
+      "parent_source_id": "8935e5291a43a0251b35b7c82e6a228d86f41929f9c19acda8f3d8cf168defb1",
+      "derived_source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "pages": [
+        {
+          "page": 1,
+          "dimensions_match": true,
+          "ocr_words": 588,
+          "mean_tesseract_confidence": 93.42,
+          "words_below_70": 17,
+          "extracted_chars": 4029,
+          "render_mean_absolute_difference_0_255": 3.1495
+        },
+        {
+          "page": 2,
+          "dimensions_match": true,
+          "ocr_words": 735,
+          "mean_tesseract_confidence": 91.92,
+          "words_below_70": 21,
+          "extracted_chars": 5569,
+          "render_mean_absolute_difference_0_255": 2.453
+        },
+        {
+          "page": 3,
+          "dimensions_match": true,
+          "ocr_words": 230,
+          "mean_tesseract_confidence": 82.39,
+          "words_below_70": 36,
+          "extracted_chars": 1681,
+          "render_mean_absolute_difference_0_255": 1.5237
+        },
+        {
+          "page": 4,
+          "dimensions_match": true,
+          "ocr_words": 354,
+          "mean_tesseract_confidence": 67.9,
+          "words_below_70": 134,
+          "extracted_chars": 2158,
+          "render_mean_absolute_difference_0_255": 1.8026
+        },
+        {
+          "page": 5,
+          "dimensions_match": true,
+          "ocr_words": 881,
+          "mean_tesseract_confidence": 95.78,
+          "words_below_70": 0,
+          "extracted_chars": 6010,
+          "render_mean_absolute_difference_0_255": 3.7613
+        },
+        {
+          "page": 6,
+          "dimensions_match": true,
+          "ocr_words": 693,
+          "mean_tesseract_confidence": 90.95,
+          "words_below_70": 46,
+          "extracted_chars": 4721,
+          "render_mean_absolute_difference_0_255": 2.5099
+        },
+        {
+          "page": 7,
+          "dimensions_match": true,
+          "ocr_words": 1487,
+          "mean_tesseract_confidence": 95.87,
+          "words_below_70": 5,
+          "extracted_chars": 10203,
+          "render_mean_absolute_difference_0_255": 6.2714
+        },
+        {
+          "page": 8,
+          "dimensions_match": true,
+          "ocr_words": 1283,
+          "mean_tesseract_confidence": 95.87,
+          "words_below_70": 5,
+          "extracted_chars": 8858,
+          "render_mean_absolute_difference_0_255": 5.4403
+        },
+        {
+          "page": 9,
+          "dimensions_match": true,
+          "ocr_words": 155,
+          "mean_tesseract_confidence": 96.29,
+          "words_below_70": 0,
+          "extracted_chars": 995,
+          "render_mean_absolute_difference_0_255": 0.6617
+        }
+      ],
+      "parent_hash_ok": true,
+      "derived_hash_ok": true,
+      "parent_publication": null,
+      "parent_archive_hash_ok": true,
+      "derived_publication": [
+        "2b4a84ce404709ec8c83ea5c560c095bb0d8f8fa63d1f76731cae08744ed82ba",
+        1
+      ],
+      "derived_archive_hash_ok": true,
+      "quality_report": {
+        "gap_regions": [
+          "issue:image_region_small:page:1",
+          "issue:image_region_small:page:2",
+          "issue:image_region_small:page:3",
+          "issue:image_region_small:page:4",
+          "issue:image_region_small:page:5",
+          "issue:image_region_small:page:6",
+          "issue:image_region_small:page:7",
+          "issue:image_region_small:page:8",
+          "issue:image_region_small:page:9"
+        ],
+        "oversized_chunks": []
+      }
+    },
+    {
+      "parent_source_id": "004303e2ff4f9acd4f315c909c098ebe0af5d2d1b7f537dc701b5e1fc02caa7e",
+      "derived_source_id": "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+      "pages": [
+        {
+          "page": 1,
+          "dimensions_match": true,
+          "ocr_words": 563,
+          "mean_tesseract_confidence": 88.98,
+          "words_below_70": 31,
+          "extracted_chars": 1400,
+          "render_mean_absolute_difference_0_255": 1.6681
+        },
+        {
+          "page": 2,
+          "dimensions_match": true,
+          "ocr_words": 814,
+          "mean_tesseract_confidence": 90.71,
+          "words_below_70": 33,
+          "extracted_chars": 1978,
+          "render_mean_absolute_difference_0_255": 2.2379
+        },
+        {
+          "page": 3,
+          "dimensions_match": true,
+          "ocr_words": 749,
+          "mean_tesseract_confidence": 91.73,
+          "words_below_70": 21,
+          "extracted_chars": 1830,
+          "render_mean_absolute_difference_0_255": 2.0902
+        },
+        {
+          "page": 4,
+          "dimensions_match": true,
+          "ocr_words": 953,
+          "mean_tesseract_confidence": 87.64,
+          "words_below_70": 76,
+          "extracted_chars": 2313,
+          "render_mean_absolute_difference_0_255": 2.6578
+        },
+        {
+          "page": 5,
+          "dimensions_match": true,
+          "ocr_words": 845,
+          "mean_tesseract_confidence": 88.8,
+          "words_below_70": 56,
+          "extracted_chars": 2074,
+          "render_mean_absolute_difference_0_255": 2.3986
+        },
+        {
+          "page": 6,
+          "dimensions_match": true,
+          "ocr_words": 226,
+          "mean_tesseract_confidence": 91.74,
+          "words_below_70": 6,
+          "extracted_chars": 547,
+          "render_mean_absolute_difference_0_255": 0.5656
+        }
+      ],
+      "parent_hash_ok": true,
+      "derived_hash_ok": true,
+      "parent_publication": null,
+      "parent_archive_hash_ok": true,
+      "derived_publication": [
+        "c6ac6af0940230eddd4b4195e2f6a0dfe54cbb6ef9932357e36ab63e768717a9",
+        1
+      ],
+      "derived_archive_hash_ok": true,
+      "quality_report": {
+        "gap_regions": [
+          "issue:image_region_small:page:1",
+          "issue:image_region_small:page:2",
+          "issue:image_region_small:page:3",
+          "issue:image_region_small:page:4",
+          "issue:image_region_small:page:5",
+          "issue:image_region_small:page:6"
+        ],
+        "oversized_chunks": []
+      }
+    }
+  ],
+  "downstream_checks": [
+    {
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "persisted_sample_errors": [
+        {
+          "unit_id": "unit:0003",
+          "text": "Kweichow Moutal (600519.SS) "
+        },
+        {
+          "unit_id": "unit:0411",
+          "text": "AISKSKSARAASSRRAARALLIS "
+        }
+      ],
+      "fetch_evidence_fields": [
+        "source_id",
+        "build_id",
+        "chunk_id",
+        "kind",
+        "title_text",
+        "section_path",
+        "units",
+        "text",
+        "source_ranges",
+        "spans",
+        "active",
+        "context_unit_ids"
+      ],
+      "explicit_ocr_origin_or_review_field_present": false
+    },
+    {
+      "source_id": "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+      "persisted_sample_errors": [
+        {
+          "unit_id": "unit:0005",
+          "text": "殖 出 清 、 乳 品 修复 与 高 股 姑 红 利 "
+        },
+        {
+          "unit_id": "unit:0020",
+          "text": "轻 工 出 口 链 受 中 美 关 税 窖 免 情 绪 提 振 ， 康 耐 特 光 学 凭借 AR 眼镜 供应 链 进 \n入 第 二 增长 曲线 ， 预 \n计 202604 放量 \n;， 乐 歌 股 份 受益 于 非洲 及 拉美 市 场 红 "
+        }
+      ],
+      "fetch_evidence_fields": [
+        "source_id",
+        "build_id",
+        "chunk_id",
+        "kind",
+        "title_text",
+        "section_path",
+        "units",
+        "text",
+        "source_ranges",
+        "spans",
+        "active",
+        "context_unit_ids"
+      ],
+      "explicit_ocr_origin_or_review_field_present": false
+    }
+  ],
+  "conclusion": "OCR pipeline execution verified; OCR accuracy not accepted. Image gap grading and downstream OCR disclosure need work before treating this as a regular ingestion path."
+}

@@ -1,0 +1,1027 @@
+{
+  "ok": true,
+  "query": "只根据资料库，工业富联2026年10月20日收盘价是多少？",
+  "count": 10,
+  "hits": [
+    {
+      "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "locator": "chunk:628ec76d5b4001b7:body:0032",
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0032",
+      "context_locators": [
+        "chunk:628ec76d5b4001b7:heading:0007",
+        "chunk:628ec76d5b4001b7:body:0032",
+        "chunk:628ec76d5b4001b7:body:0033",
+        "chunk:628ec76d5b4001b7:table:0020"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+        "locator": "chunk:628ec76d5b4001b7:body:0032",
+        "locators": [
+          "chunk:628ec76d5b4001b7:heading:0007",
+          "chunk:628ec76d5b4001b7:body:0032",
+          "chunk:628ec76d5b4001b7:body:0033",
+          "chunk:628ec76d5b4001b7:table:0020"
+        ],
+        "scope_id": "scope:b71b677951c2f6583bec81c44617b312",
+        "view": "compact"
+      },
+      "scope_id": "scope:b71b677951c2f6583bec81c44617b312",
+      "total_chunks": 4,
+      "by_kind": {
+        "unknown": 4
+      },
+      "table_chunks": 0,
+      "title": "美国-AAA全美平均汽油价格-普通无铅\n（美元/加仑）",
+      "published": "undated",
+      "snippet": "<b>2026</b>-02-<b>20</b>\n<b>2026</b>-03",
+      "preview": {
+        "text": "",
+        "start": null,
+        "end": null,
+        "status": "no_complete_matching_sentence",
+        "matched_terms": [],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+        "locators": [
+          "chunk:628ec76d5b4001b7:body:0032"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+        "locators": [
+          "chunk:628ec76d5b4001b7:heading:0007",
+          "chunk:628ec76d5b4001b7:body:0032",
+          "chunk:628ec76d5b4001b7:body:0033",
+          "chunk:628ec76d5b4001b7:table:0020"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:628ec76d5b4001b7:heading:0007",
+          "chunk:628ec76d5b4001b7:body:0032",
+          "chunk:628ec76d5b4001b7:body:0033",
+          "chunk:628ec76d5b4001b7:table:0020"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0035",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0035",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:body:0034",
+        "chunk:568f9e752f0fa65a:body:0035",
+        "chunk:568f9e752f0fa65a:body:0036",
+        "chunk:568f9e752f0fa65a:body:0037",
+        "chunk:568f9e752f0fa65a:body:0038",
+        "chunk:568f9e752f0fa65a:heading:0011",
+        "chunk:568f9e752f0fa65a:table:0020",
+        "chunk:568f9e752f0fa65a:table:0021",
+        "chunk:568f9e752f0fa65a:table:0022",
+        "chunk:568f9e752f0fa65a:table:0023",
+        "chunk:568f9e752f0fa65a:table:0024",
+        "chunk:568f9e752f0fa65a:table:0025",
+        "chunk:568f9e752f0fa65a:table:0026",
+        "chunk:568f9e752f0fa65a:table:0027",
+        "chunk:568f9e752f0fa65a:body:0039",
+        "chunk:568f9e752f0fa65a:table:0028",
+        "chunk:568f9e752f0fa65a:body:0040"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locator": "chunk:568f9e752f0fa65a:body:0035",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0034",
+          "chunk:568f9e752f0fa65a:body:0035",
+          "chunk:568f9e752f0fa65a:body:0036",
+          "chunk:568f9e752f0fa65a:body:0037",
+          "chunk:568f9e752f0fa65a:body:0038",
+          "chunk:568f9e752f0fa65a:heading:0011",
+          "chunk:568f9e752f0fa65a:table:0020",
+          "chunk:568f9e752f0fa65a:table:0021",
+          "chunk:568f9e752f0fa65a:table:0022",
+          "chunk:568f9e752f0fa65a:table:0023",
+          "chunk:568f9e752f0fa65a:table:0024",
+          "chunk:568f9e752f0fa65a:table:0025",
+          "chunk:568f9e752f0fa65a:table:0026",
+          "chunk:568f9e752f0fa65a:table:0027",
+          "chunk:568f9e752f0fa65a:body:0039",
+          "chunk:568f9e752f0fa65a:table:0028",
+          "chunk:568f9e752f0fa65a:body:0040"
+        ],
+        "scope_id": "scope:d56b7e51655e5dee8c8948af43a77170",
+        "view": "compact"
+      },
+      "scope_id": "scope:d56b7e51655e5dee8c8948af43a77170",
+      "total_chunks": 17,
+      "by_kind": {
+        "unknown": 17
+      },
+      "table_chunks": 0,
+      "title": "相对估值",
+      "published": "undated",
+      "snippet": "<b>2026</b>年9月，<b>根据</b>公司<b>2026</b>",
+      "preview": {
+        "text": "相对估值\n公司聚焦半导体封测装备领域，核心业务涵盖机械划切设备、激光划切设备、研\n磨抛光设备及核心零部件与耗材等产品线，且在国内半导体切割划片装备市场具\n备较强竞争力，同时积极推进半导体封测设备国产替代与海外市场拓展。结合公\n司主营业务及产品属性，我们选取半导体设备行业内的华峰测控、长川科技2 家\n企业作为可比公司。\n综合考虑可比公司2026 年—2028 年平均PE 分别为85/62/46 倍，以及光力科技\n在半导体封测设备国产替代进程中的优势、划切与研磨设备业务的增长潜力，我\n们预计2026 年—2028 年归属于母公司净利润分别为1.32/2.19/3.43 亿元，对应\nPE 分别为79/48/30 倍。\n我们考虑到目前已经2026 年9 月，根据公司2026 年5 月8 日的投资者关系活动\n记录表，公司正在全力加紧航空港厂区二期产能扩建项目的建设，预计在2027年\n一季度建筑工程全部完工，我们预计2027 年公司划片机产能有望逐步开始释放，\n我们以2027 年盈利预测2.19 亿元为参考，给予公司目标估值倍数为2027 年PE\n55-68 倍，对应公司未来一年期合理估值区间为32.54-39.98 元。",
+        "start": 0,
+        "end": 513,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "20",
+          "2026",
+          "根据"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0035"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0034",
+          "chunk:568f9e752f0fa65a:body:0035",
+          "chunk:568f9e752f0fa65a:body:0036",
+          "chunk:568f9e752f0fa65a:body:0037",
+          "chunk:568f9e752f0fa65a:body:0038",
+          "chunk:568f9e752f0fa65a:heading:0011",
+          "chunk:568f9e752f0fa65a:table:0020",
+          "chunk:568f9e752f0fa65a:table:0021",
+          "chunk:568f9e752f0fa65a:table:0022",
+          "chunk:568f9e752f0fa65a:table:0023",
+          "chunk:568f9e752f0fa65a:table:0024",
+          "chunk:568f9e752f0fa65a:table:0025",
+          "chunk:568f9e752f0fa65a:table:0026",
+          "chunk:568f9e752f0fa65a:table:0027",
+          "chunk:568f9e752f0fa65a:body:0039",
+          "chunk:568f9e752f0fa65a:table:0028",
+          "chunk:568f9e752f0fa65a:body:0040"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:568f9e752f0fa65a:body:0034",
+          "chunk:568f9e752f0fa65a:body:0035",
+          "chunk:568f9e752f0fa65a:body:0036",
+          "chunk:568f9e752f0fa65a:body:0037",
+          "chunk:568f9e752f0fa65a:body:0038",
+          "chunk:568f9e752f0fa65a:heading:0011",
+          "chunk:568f9e752f0fa65a:table:0020",
+          "chunk:568f9e752f0fa65a:table:0021",
+          "chunk:568f9e752f0fa65a:table:0022",
+          "chunk:568f9e752f0fa65a:table:0023",
+          "chunk:568f9e752f0fa65a:table:0024",
+          "chunk:568f9e752f0fa65a:table:0025",
+          "chunk:568f9e752f0fa65a:table:0026",
+          "chunk:568f9e752f0fa65a:table:0027",
+          "chunk:568f9e752f0fa65a:body:0039",
+          "chunk:568f9e752f0fa65a:table:0028",
+          "chunk:568f9e752f0fa65a:body:0040"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "locator": "chunk:9ebd323f89e55cc1:body:0017",
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0017",
+      "context_locators": [
+        "chunk:9ebd323f89e55cc1:heading:0006",
+        "chunk:9ebd323f89e55cc1:body:0016",
+        "chunk:9ebd323f89e55cc1:table:0004",
+        "chunk:9ebd323f89e55cc1:body:0017",
+        "chunk:9ebd323f89e55cc1:heading:0007",
+        "chunk:9ebd323f89e55cc1:body:0018",
+        "chunk:9ebd323f89e55cc1:table:0005"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locator": "chunk:9ebd323f89e55cc1:body:0017",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:heading:0006",
+          "chunk:9ebd323f89e55cc1:body:0016",
+          "chunk:9ebd323f89e55cc1:table:0004",
+          "chunk:9ebd323f89e55cc1:body:0017",
+          "chunk:9ebd323f89e55cc1:heading:0007",
+          "chunk:9ebd323f89e55cc1:body:0018",
+          "chunk:9ebd323f89e55cc1:table:0005"
+        ],
+        "scope_id": "scope:3d54c6e04889eeee8eaffbab78361c83",
+        "view": "compact"
+      },
+      "scope_id": "scope:3d54c6e04889eeee8eaffbab78361c83",
+      "total_chunks": 7,
+      "by_kind": {
+        "unknown": 7
+      },
+      "table_chunks": 0,
+      "title": "8%",
+      "published": "undated",
+      "snippet": "<b>2026</b>-01\n<b>2026</b>-02\n<b>2026</b>",
+      "preview": {
+        "text": "",
+        "start": null,
+        "end": null,
+        "status": "no_complete_matching_sentence",
+        "matched_terms": [],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:body:0017"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:heading:0006",
+          "chunk:9ebd323f89e55cc1:body:0016",
+          "chunk:9ebd323f89e55cc1:table:0004",
+          "chunk:9ebd323f89e55cc1:body:0017",
+          "chunk:9ebd323f89e55cc1:heading:0007",
+          "chunk:9ebd323f89e55cc1:body:0018",
+          "chunk:9ebd323f89e55cc1:table:0005"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:9ebd323f89e55cc1:heading:0006",
+          "chunk:9ebd323f89e55cc1:body:0016",
+          "chunk:9ebd323f89e55cc1:table:0004",
+          "chunk:9ebd323f89e55cc1:body:0017",
+          "chunk:9ebd323f89e55cc1:heading:0007",
+          "chunk:9ebd323f89e55cc1:body:0018",
+          "chunk:9ebd323f89e55cc1:table:0005"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "locator": "chunk:82dac0d446ef83cd:body:0059",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0059",
+      "context_locators": [
+        "chunk:82dac0d446ef83cd:heading:0038",
+        "chunk:82dac0d446ef83cd:body:0059",
+        "chunk:82dac0d446ef83cd:heading:0039"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locator": "chunk:82dac0d446ef83cd:body:0059",
+        "locators": [
+          "chunk:82dac0d446ef83cd:heading:0038",
+          "chunk:82dac0d446ef83cd:body:0059",
+          "chunk:82dac0d446ef83cd:heading:0039"
+        ],
+        "scope_id": "scope:337e76dd4c0286b1d0da3454bb2d67b7",
+        "view": "compact"
+      },
+      "scope_id": "scope:337e76dd4c0286b1d0da3454bb2d67b7",
+      "total_chunks": 3,
+      "by_kind": {
+        "unknown": 3
+      },
+      "table_chunks": 0,
+      "title": "为什么化工有些行业开工率很高，能够达到80-90%，可是景气还是没有大的上升呢？\n（比如2025 年涤纶长丝、纯碱）。\n历史上，部分化工行业集中度较低，中小企业数量较多，单套装置规模较小，同时存在\n较多老旧产能，受装置稳定性、环保、检修及经营效率等因素影响，行业整体开工率通\n常难以长期维持在较高水平。近年来，行业新增产能主要由大中型企业投资建设，投产\n技术先进、生产规模大的生产线，行业集中度明显提升，这些企业的开工率可以长期维\n持在较高水平，甚至高达100%。所以，部分行业的开工率即使呈现出接近历史较高水\n平的现象，也未必意味着供给已经明显不足，实际景气依然不高。",
+      "published": "undated",
+      "snippet": "<b>20</b>25.6<b>10</b>18.96020122015",
+      "preview": {
+        "text": "",
+        "start": null,
+        "end": null,
+        "status": "no_complete_matching_sentence",
+        "matched_terms": [],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locators": [
+          "chunk:82dac0d446ef83cd:body:0059"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locators": [
+          "chunk:82dac0d446ef83cd:heading:0038",
+          "chunk:82dac0d446ef83cd:body:0059",
+          "chunk:82dac0d446ef83cd:heading:0039"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:82dac0d446ef83cd:heading:0038",
+          "chunk:82dac0d446ef83cd:body:0059",
+          "chunk:82dac0d446ef83cd:heading:0039"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "locator": "chunk:16a9a510ef9e405f:body:0009",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0009",
+      "context_locators": [
+        "chunk:16a9a510ef9e405f:body:0000",
+        "chunk:16a9a510ef9e405f:heading:0000",
+        "chunk:16a9a510ef9e405f:body:0001",
+        "chunk:16a9a510ef9e405f:body:0002",
+        "chunk:16a9a510ef9e405f:heading:0001",
+        "chunk:16a9a510ef9e405f:heading:0002",
+        "chunk:16a9a510ef9e405f:heading:0003",
+        "chunk:16a9a510ef9e405f:heading:0004",
+        "chunk:16a9a510ef9e405f:body:0003",
+        "chunk:16a9a510ef9e405f:body:0004",
+        "chunk:16a9a510ef9e405f:body:0005",
+        "chunk:16a9a510ef9e405f:body:0006",
+        "chunk:16a9a510ef9e405f:body:0007",
+        "chunk:16a9a510ef9e405f:body:0008",
+        "chunk:16a9a510ef9e405f:body:0009",
+        "chunk:16a9a510ef9e405f:body:0010",
+        "chunk:16a9a510ef9e405f:heading:0005",
+        "chunk:16a9a510ef9e405f:body:0011",
+        "chunk:16a9a510ef9e405f:body:0012",
+        "chunk:16a9a510ef9e405f:heading:0006",
+        "chunk:16a9a510ef9e405f:body:0013",
+        "chunk:16a9a510ef9e405f:body:0014",
+        "chunk:16a9a510ef9e405f:body:0015",
+        "chunk:16a9a510ef9e405f:heading:0007",
+        "chunk:16a9a510ef9e405f:body:0016"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locator": "chunk:16a9a510ef9e405f:body:0009",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0000",
+          "chunk:16a9a510ef9e405f:heading:0000",
+          "chunk:16a9a510ef9e405f:body:0001",
+          "chunk:16a9a510ef9e405f:body:0002",
+          "chunk:16a9a510ef9e405f:heading:0001",
+          "chunk:16a9a510ef9e405f:heading:0002",
+          "chunk:16a9a510ef9e405f:heading:0003",
+          "chunk:16a9a510ef9e405f:heading:0004",
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010",
+          "chunk:16a9a510ef9e405f:heading:0005",
+          "chunk:16a9a510ef9e405f:body:0011",
+          "chunk:16a9a510ef9e405f:body:0012",
+          "chunk:16a9a510ef9e405f:heading:0006",
+          "chunk:16a9a510ef9e405f:body:0013",
+          "chunk:16a9a510ef9e405f:body:0014",
+          "chunk:16a9a510ef9e405f:body:0015",
+          "chunk:16a9a510ef9e405f:heading:0007",
+          "chunk:16a9a510ef9e405f:body:0016"
+        ],
+        "scope_id": "scope:b8466b92e64863be3d8bc7d02c3e6398",
+        "view": "compact"
+      },
+      "scope_id": "scope:b8466b92e64863be3d8bc7d02c3e6398",
+      "total_chunks": 25,
+      "by_kind": {
+        "body": 1,
+        "unknown": 24
+      },
+      "table_chunks": 0,
+      "title": "一、细分板块观点\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩",
+      "published": "undated",
+      "snippet": "<b>10</b>用于特色制程，<b>10</b>至<b>20</b>",
+      "preview": {
+        "text": "同时公司预计2027 年Non-GAAP EPS 增速将超过27 年营收的增速。公司26Q2 数据\n中心收入快速增长，公司连接与云端解决方案（CCS）业务收入达38.1 亿美元，同比+84%，其中通信终端市场收入\n达到26.5 亿美元，同比+62%，企业终端市场收入达11.6 亿美元，同比+167%。公司预计26Q3 通信终端市场收入\n同比增长约60%，企业终端市场收入同比增长约190%。公司全年CAPEX 维持之前指引，预计26 年为10 亿美元。\n公司预计全年CCS业务增速为85%，主要驱动力来自800G交换机需求高速增长，以及1.6T 交换机在26H2的产\n能爬坡。公司预计交换机需求将在2027 年继续保持强劲。公司企业终端市场需求主要来自客户AI 算力项目需求的持\n续增长，公司预计2027年多个AI算力项目将成为快速增长的驱动力。公司预计2026年高级技术解决方案（ATS）\n业务收入同比增长10%，ATS 下游应用包括设备、工业、医疗以及军工等。公司数据中心新项目推进顺利。公司确认\n与OpenAI 的合作，27 年有望量产Jalapeno 芯片的整机柜，OpenAI 项目有望在27 年产生数十亿美金收入。公司将\n参与AMD Helios 机柜的scale up 网络部署，预计27 年将产生数十亿美元收入。同时所有部署AMD 机柜的大型CSP\n项目公司均有参与。",
+        "start": 854,
+        "end": 1447,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "10",
+          "20",
+          "2026",
+          "工业"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0009"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0000",
+          "chunk:16a9a510ef9e405f:heading:0000",
+          "chunk:16a9a510ef9e405f:body:0001",
+          "chunk:16a9a510ef9e405f:body:0002",
+          "chunk:16a9a510ef9e405f:heading:0001",
+          "chunk:16a9a510ef9e405f:heading:0002",
+          "chunk:16a9a510ef9e405f:heading:0003",
+          "chunk:16a9a510ef9e405f:heading:0004",
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010",
+          "chunk:16a9a510ef9e405f:heading:0005",
+          "chunk:16a9a510ef9e405f:body:0011",
+          "chunk:16a9a510ef9e405f:body:0012",
+          "chunk:16a9a510ef9e405f:heading:0006",
+          "chunk:16a9a510ef9e405f:body:0013",
+          "chunk:16a9a510ef9e405f:body:0014",
+          "chunk:16a9a510ef9e405f:body:0015",
+          "chunk:16a9a510ef9e405f:heading:0007",
+          "chunk:16a9a510ef9e405f:body:0016"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:16a9a510ef9e405f:body:0000",
+          "chunk:16a9a510ef9e405f:heading:0000",
+          "chunk:16a9a510ef9e405f:body:0001",
+          "chunk:16a9a510ef9e405f:body:0002",
+          "chunk:16a9a510ef9e405f:heading:0001",
+          "chunk:16a9a510ef9e405f:heading:0002",
+          "chunk:16a9a510ef9e405f:heading:0003",
+          "chunk:16a9a510ef9e405f:heading:0004",
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010",
+          "chunk:16a9a510ef9e405f:heading:0005",
+          "chunk:16a9a510ef9e405f:body:0011",
+          "chunk:16a9a510ef9e405f:body:0012",
+          "chunk:16a9a510ef9e405f:heading:0006",
+          "chunk:16a9a510ef9e405f:body:0013",
+          "chunk:16a9a510ef9e405f:body:0014",
+          "chunk:16a9a510ef9e405f:body:0015",
+          "chunk:16a9a510ef9e405f:heading:0007",
+          "chunk:16a9a510ef9e405f:body:0016"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "locator": "chunk:628ec76d5b4001b7:body:0010",
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+      "chunk_id": "628ec76d5b4001b7:body:0010",
+      "context_locators": [
+        "chunk:628ec76d5b4001b7:body:0000",
+        "chunk:628ec76d5b4001b7:body:0001",
+        "chunk:628ec76d5b4001b7:body:0002",
+        "chunk:628ec76d5b4001b7:body:0003",
+        "chunk:628ec76d5b4001b7:heading:0000",
+        "chunk:628ec76d5b4001b7:body:0004",
+        "chunk:628ec76d5b4001b7:body:0005",
+        "chunk:628ec76d5b4001b7:body:0006",
+        "chunk:628ec76d5b4001b7:table:0000",
+        "chunk:628ec76d5b4001b7:table:0001",
+        "chunk:628ec76d5b4001b7:table:0002",
+        "chunk:628ec76d5b4001b7:table:0003",
+        "chunk:628ec76d5b4001b7:body:0007",
+        "chunk:628ec76d5b4001b7:body:0008",
+        "chunk:628ec76d5b4001b7:body:0009",
+        "chunk:628ec76d5b4001b7:table:0004",
+        "chunk:628ec76d5b4001b7:table:0005",
+        "chunk:628ec76d5b4001b7:table:0006",
+        "chunk:628ec76d5b4001b7:table:0007",
+        "chunk:628ec76d5b4001b7:body:0010",
+        "chunk:628ec76d5b4001b7:heading:0001"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+        "locator": "chunk:628ec76d5b4001b7:body:0010",
+        "locators": [
+          "chunk:628ec76d5b4001b7:body:0000",
+          "chunk:628ec76d5b4001b7:body:0001",
+          "chunk:628ec76d5b4001b7:body:0002",
+          "chunk:628ec76d5b4001b7:body:0003",
+          "chunk:628ec76d5b4001b7:heading:0000",
+          "chunk:628ec76d5b4001b7:body:0004",
+          "chunk:628ec76d5b4001b7:body:0005",
+          "chunk:628ec76d5b4001b7:body:0006",
+          "chunk:628ec76d5b4001b7:table:0000",
+          "chunk:628ec76d5b4001b7:table:0001",
+          "chunk:628ec76d5b4001b7:table:0002",
+          "chunk:628ec76d5b4001b7:table:0003",
+          "chunk:628ec76d5b4001b7:body:0007",
+          "chunk:628ec76d5b4001b7:body:0008",
+          "chunk:628ec76d5b4001b7:body:0009",
+          "chunk:628ec76d5b4001b7:table:0004",
+          "chunk:628ec76d5b4001b7:table:0005",
+          "chunk:628ec76d5b4001b7:table:0006",
+          "chunk:628ec76d5b4001b7:table:0007",
+          "chunk:628ec76d5b4001b7:body:0010",
+          "chunk:628ec76d5b4001b7:heading:0001"
+        ],
+        "scope_id": "scope:61a161860ef1922c1e40c2ae3526fc23",
+        "view": "compact"
+      },
+      "scope_id": "scope:61a161860ef1922c1e40c2ae3526fc23",
+      "total_chunks": 21,
+      "by_kind": {
+        "unknown": 21
+      },
+      "table_chunks": 0,
+      "title": "本周黄金收涨，白银下跌。本周美伊局势反复，美元指数小幅回落，黄金小幅收涨。",
+      "published": "undated",
+      "snippet": "<b>2026</b>/2\n<b>2026</b>/4\n<b>2026</b>",
+      "preview": {
+        "text": "",
+        "start": null,
+        "end": null,
+        "status": "no_complete_matching_sentence",
+        "matched_terms": [],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+        "locators": [
+          "chunk:628ec76d5b4001b7:body:0010"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:628ec76d5b4001b72767f742adfa4c3d4a69f20d4a3ac3706d719a4b2ddea39c",
+        "locators": [
+          "chunk:628ec76d5b4001b7:body:0000",
+          "chunk:628ec76d5b4001b7:body:0001",
+          "chunk:628ec76d5b4001b7:body:0002",
+          "chunk:628ec76d5b4001b7:body:0003",
+          "chunk:628ec76d5b4001b7:heading:0000",
+          "chunk:628ec76d5b4001b7:body:0004",
+          "chunk:628ec76d5b4001b7:body:0005",
+          "chunk:628ec76d5b4001b7:body:0006",
+          "chunk:628ec76d5b4001b7:table:0000",
+          "chunk:628ec76d5b4001b7:table:0001",
+          "chunk:628ec76d5b4001b7:table:0002",
+          "chunk:628ec76d5b4001b7:table:0003",
+          "chunk:628ec76d5b4001b7:body:0007",
+          "chunk:628ec76d5b4001b7:body:0008",
+          "chunk:628ec76d5b4001b7:body:0009",
+          "chunk:628ec76d5b4001b7:table:0004",
+          "chunk:628ec76d5b4001b7:table:0005",
+          "chunk:628ec76d5b4001b7:table:0006",
+          "chunk:628ec76d5b4001b7:table:0007",
+          "chunk:628ec76d5b4001b7:body:0010",
+          "chunk:628ec76d5b4001b7:heading:0001"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:628ec76d5b4001b7:body:0000",
+          "chunk:628ec76d5b4001b7:body:0001",
+          "chunk:628ec76d5b4001b7:body:0002",
+          "chunk:628ec76d5b4001b7:body:0003",
+          "chunk:628ec76d5b4001b7:heading:0000",
+          "chunk:628ec76d5b4001b7:body:0004",
+          "chunk:628ec76d5b4001b7:body:0005",
+          "chunk:628ec76d5b4001b7:body:0006",
+          "chunk:628ec76d5b4001b7:table:0000",
+          "chunk:628ec76d5b4001b7:table:0001",
+          "chunk:628ec76d5b4001b7:table:0002",
+          "chunk:628ec76d5b4001b7:table:0003",
+          "chunk:628ec76d5b4001b7:body:0007",
+          "chunk:628ec76d5b4001b7:body:0008",
+          "chunk:628ec76d5b4001b7:body:0009",
+          "chunk:628ec76d5b4001b7:table:0004",
+          "chunk:628ec76d5b4001b7:table:0005",
+          "chunk:628ec76d5b4001b7:table:0006",
+          "chunk:628ec76d5b4001b7:table:0007",
+          "chunk:628ec76d5b4001b7:body:0010",
+          "chunk:628ec76d5b4001b7:heading:0001"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "locator": "chunk:568f9e752f0fa65a:body:0016",
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "chunk_id": "568f9e752f0fa65a:body:0016",
+      "context_locators": [
+        "chunk:568f9e752f0fa65a:table:0010",
+        "chunk:568f9e752f0fa65a:body:0013",
+        "chunk:568f9e752f0fa65a:table:0011",
+        "chunk:568f9e752f0fa65a:body:0014",
+        "chunk:568f9e752f0fa65a:body:0015",
+        "chunk:568f9e752f0fa65a:table:0012",
+        "chunk:568f9e752f0fa65a:table:0013",
+        "chunk:568f9e752f0fa65a:table:0014",
+        "chunk:568f9e752f0fa65a:body:0016",
+        "chunk:568f9e752f0fa65a:body:0017",
+        "chunk:568f9e752f0fa65a:body:0018",
+        "chunk:568f9e752f0fa65a:heading:0006"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locator": "chunk:568f9e752f0fa65a:body:0016",
+        "locators": [
+          "chunk:568f9e752f0fa65a:table:0010",
+          "chunk:568f9e752f0fa65a:body:0013",
+          "chunk:568f9e752f0fa65a:table:0011",
+          "chunk:568f9e752f0fa65a:body:0014",
+          "chunk:568f9e752f0fa65a:body:0015",
+          "chunk:568f9e752f0fa65a:table:0012",
+          "chunk:568f9e752f0fa65a:table:0013",
+          "chunk:568f9e752f0fa65a:table:0014",
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018",
+          "chunk:568f9e752f0fa65a:heading:0006"
+        ],
+        "scope_id": "scope:356e4c8e8ca9be24a8dfbd1054ac9cda",
+        "view": "compact"
+      },
+      "scope_id": "scope:356e4c8e8ca9be24a8dfbd1054ac9cda",
+      "total_chunks": 12,
+      "by_kind": {
+        "unknown": 12
+      },
+      "table_chunks": 0,
+      "title": "8",
+      "published": "undated",
+      "snippet": "<b>2026</b>年上半年实现营业收入4.53亿",
+      "preview": {
+        "text": "2026 年上半\n年，公司综合毛利率为50.39%，同比下降6.87 个百分点，主要系毛利率相对较\n低的半导体装备业务收入占比快速提升。分业务看，半导体封测装备制造业务毛\n利率为44.97%，同比提升3.40 个百分点；安全生产及节能监控业务毛利率为\n69.20%，同比下降1.72 个百分点。同期公司期间费用率由上年同期的50.64%下\n降至34.02%，其中销售、管理和研发费用率分别下降至12.50%、8.29%和12.21%，\n收入增速显著高于费用增速，规模效应逐步释放。\n图10：公司毛利率水平较高\n图9：公司费用率得到良好控制\n请务必阅读正文之后的免责声明及其项下所有内容\n10\n公司保持较高研发投入，ROE 明显修复。2025 年公司研发费用为1.11 亿元，2026\n年上半年研发投入0.55 亿元，同比增长2.52%；在收入快速增长带动下，研发费\n用率由上年同期的18.72%下降至12.21%。公司ROE由2021年的高点8.8%降至2024\n年的−8.7%，主要受公司2021 年并购收益抬高基数，叠加研发及市场投入增加以\n及2024 年收入下降,大额商誉减值影响。2025 年国产半导体业务加速放量、减值\n损失大幅减少，公司实现扭亏，ROE 回升至3.1%；2026H1 归母净利润高速增长，\nROE 进一步升至4.1%（未年化),公司盈利能力进入修复通道。",
+        "start": 484,
+        "end": 1075,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "10",
+          "20",
+          "2026"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:body:0016"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+        "locators": [
+          "chunk:568f9e752f0fa65a:table:0010",
+          "chunk:568f9e752f0fa65a:body:0013",
+          "chunk:568f9e752f0fa65a:table:0011",
+          "chunk:568f9e752f0fa65a:body:0014",
+          "chunk:568f9e752f0fa65a:body:0015",
+          "chunk:568f9e752f0fa65a:table:0012",
+          "chunk:568f9e752f0fa65a:table:0013",
+          "chunk:568f9e752f0fa65a:table:0014",
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018",
+          "chunk:568f9e752f0fa65a:heading:0006"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:568f9e752f0fa65a:table:0010",
+          "chunk:568f9e752f0fa65a:body:0013",
+          "chunk:568f9e752f0fa65a:table:0011",
+          "chunk:568f9e752f0fa65a:body:0014",
+          "chunk:568f9e752f0fa65a:body:0015",
+          "chunk:568f9e752f0fa65a:table:0012",
+          "chunk:568f9e752f0fa65a:table:0013",
+          "chunk:568f9e752f0fa65a:table:0014",
+          "chunk:568f9e752f0fa65a:body:0016",
+          "chunk:568f9e752f0fa65a:body:0017",
+          "chunk:568f9e752f0fa65a:body:0018",
+          "chunk:568f9e752f0fa65a:heading:0006"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "locator": "chunk:9ebd323f89e55cc1:body:0010",
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0010",
+      "context_locators": [
+        "chunk:9ebd323f89e55cc1:table:0001",
+        "chunk:9ebd323f89e55cc1:body:0002",
+        "chunk:9ebd323f89e55cc1:body:0003",
+        "chunk:9ebd323f89e55cc1:body:0004",
+        "chunk:9ebd323f89e55cc1:heading:0001",
+        "chunk:9ebd323f89e55cc1:body:0005",
+        "chunk:9ebd323f89e55cc1:body:0006",
+        "chunk:9ebd323f89e55cc1:body:0007",
+        "chunk:9ebd323f89e55cc1:table:0002",
+        "chunk:9ebd323f89e55cc1:body:0008",
+        "chunk:9ebd323f89e55cc1:body:0009",
+        "chunk:9ebd323f89e55cc1:heading:0002",
+        "chunk:9ebd323f89e55cc1:body:0010",
+        "chunk:9ebd323f89e55cc1:table:0003",
+        "chunk:9ebd323f89e55cc1:body:0011",
+        "chunk:9ebd323f89e55cc1:body:0012",
+        "chunk:9ebd323f89e55cc1:heading:0003"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locator": "chunk:9ebd323f89e55cc1:body:0010",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:table:0001",
+          "chunk:9ebd323f89e55cc1:body:0002",
+          "chunk:9ebd323f89e55cc1:body:0003",
+          "chunk:9ebd323f89e55cc1:body:0004",
+          "chunk:9ebd323f89e55cc1:heading:0001",
+          "chunk:9ebd323f89e55cc1:body:0005",
+          "chunk:9ebd323f89e55cc1:body:0006",
+          "chunk:9ebd323f89e55cc1:body:0007",
+          "chunk:9ebd323f89e55cc1:table:0002",
+          "chunk:9ebd323f89e55cc1:body:0008",
+          "chunk:9ebd323f89e55cc1:body:0009",
+          "chunk:9ebd323f89e55cc1:heading:0002",
+          "chunk:9ebd323f89e55cc1:body:0010",
+          "chunk:9ebd323f89e55cc1:table:0003",
+          "chunk:9ebd323f89e55cc1:body:0011",
+          "chunk:9ebd323f89e55cc1:body:0012",
+          "chunk:9ebd323f89e55cc1:heading:0003"
+        ],
+        "scope_id": "scope:90c758f57f36b4614c4ec938193409f2",
+        "view": "compact"
+      },
+      "scope_id": "scope:90c758f57f36b4614c4ec938193409f2",
+      "total_chunks": 17,
+      "by_kind": {
+        "unknown": 17
+      },
+      "table_chunks": 0,
+      "title": "图4：非农数据公布后，市场预期美联储2026 年9 月加息概率超过60%\n资料来源：CME，光大证券研究所（更新截至北京时间2026 年9 月5 日上午）\n二、非农数据高于预期，就业市场尚稳健",
+      "published": "undated",
+      "snippet": "<b>10</b>\n<b>2026</b>-01\n<b>2026</b>-04",
+      "preview": {
+        "text": "图4：非农数据公布后，市场预期美联储2026 年9 月加息概率超过60% \n2026 年8 月非农就业人口为+16.2 万人，高于前值的+5.6 万人。分行业来看，\n商品生产部门新增就业+4.1万人，其中，建筑业新增就业+2.2万人，制造业新\n增就业+1.6万人。服务业新增就业回暖，录得+8.6万人，休闲酒店业、教育保\n健业就业表现较好。 \n一方面，休闲酒店业就业明显趋强，回补动能明显，但信息业就业偏弱，反映\nAI对科技行业就业的冲击。8月休闲酒店业新增就业+6.2万人，大幅高于前值\n的-2.1万人，回补迹象明显。此外，信息业就业再次转负至-2.3万人，反映AI\n对科技行业就业的冲击。 \n另一方面，政府部门新增就业同步反弹，8 月政府部门新增就业从前值的-5.0 万\n人升至+3.5万人，其中地方政府教育行业新增就业4.2万人，由于暑期的季节\n性调整有关，近期地方政府部门就业波动较大。",
+        "start": 0,
+        "end": 397,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "20",
+          "2026"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:body:0010"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:table:0001",
+          "chunk:9ebd323f89e55cc1:body:0002",
+          "chunk:9ebd323f89e55cc1:body:0003",
+          "chunk:9ebd323f89e55cc1:body:0004",
+          "chunk:9ebd323f89e55cc1:heading:0001",
+          "chunk:9ebd323f89e55cc1:body:0005",
+          "chunk:9ebd323f89e55cc1:body:0006",
+          "chunk:9ebd323f89e55cc1:body:0007",
+          "chunk:9ebd323f89e55cc1:table:0002",
+          "chunk:9ebd323f89e55cc1:body:0008",
+          "chunk:9ebd323f89e55cc1:body:0009",
+          "chunk:9ebd323f89e55cc1:heading:0002",
+          "chunk:9ebd323f89e55cc1:body:0010",
+          "chunk:9ebd323f89e55cc1:table:0003",
+          "chunk:9ebd323f89e55cc1:body:0011",
+          "chunk:9ebd323f89e55cc1:body:0012",
+          "chunk:9ebd323f89e55cc1:heading:0003"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:9ebd323f89e55cc1:table:0001",
+          "chunk:9ebd323f89e55cc1:body:0002",
+          "chunk:9ebd323f89e55cc1:body:0003",
+          "chunk:9ebd323f89e55cc1:body:0004",
+          "chunk:9ebd323f89e55cc1:heading:0001",
+          "chunk:9ebd323f89e55cc1:body:0005",
+          "chunk:9ebd323f89e55cc1:body:0006",
+          "chunk:9ebd323f89e55cc1:body:0007",
+          "chunk:9ebd323f89e55cc1:table:0002",
+          "chunk:9ebd323f89e55cc1:body:0008",
+          "chunk:9ebd323f89e55cc1:body:0009",
+          "chunk:9ebd323f89e55cc1:heading:0002",
+          "chunk:9ebd323f89e55cc1:body:0010",
+          "chunk:9ebd323f89e55cc1:table:0003",
+          "chunk:9ebd323f89e55cc1:body:0011",
+          "chunk:9ebd323f89e55cc1:body:0012",
+          "chunk:9ebd323f89e55cc1:heading:0003"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "locator": "chunk:82dac0d446ef83cd:body:0052",
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+      "chunk_id": "82dac0d446ef83cd:body:0052",
+      "context_locators": [
+        "chunk:82dac0d446ef83cd:body:0051",
+        "chunk:82dac0d446ef83cd:heading:0033",
+        "chunk:82dac0d446ef83cd:body:0052",
+        "chunk:82dac0d446ef83cd:heading:0034"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locator": "chunk:82dac0d446ef83cd:body:0052",
+        "locators": [
+          "chunk:82dac0d446ef83cd:body:0051",
+          "chunk:82dac0d446ef83cd:heading:0033",
+          "chunk:82dac0d446ef83cd:body:0052",
+          "chunk:82dac0d446ef83cd:heading:0034"
+        ],
+        "scope_id": "scope:220970b8932d625278ae5c10040a9495",
+        "view": "compact"
+      },
+      "scope_id": "scope:220970b8932d625278ae5c10040a9495",
+      "total_chunks": 4,
+      "by_kind": {
+        "unknown": 4
+      },
+      "table_chunks": 0,
+      "title": "-4\n-2\n0\n2\n4\n6\n8\n10\n12\n14\n16",
+      "published": "undated",
+      "snippet": "<b>10</b>15<b>20</b>2530\nR22\nR32",
+      "preview": {
+        "text": "-4\n2000\n2001\n2002\n2003\n2004\n2005\n2006\n2007\n2008\n2009\n2010\n2011\n2012\n2013\n2014\n2015\n2016\n2017\n2018\n2019\n2020\n2021\n2022\n2023\n2024\n2025\n2026E\n2027E\n2028E\n2029E\n2030E\n2031E\nIMF预测:中国:GDP实际增长率（%）\nIMF预测:全球:GDP实际增长率（%）\n0%\n20%\n40%\n60%\n80%\n100%\n120%\n0\n200\n400\n600\n800\n1000\n1200\n2013\n2014\n2015\n2016\n2017\n2018\n2019\n2020\n2021\n2022\n2023\n2024\n2025\n年产能（万吨）\n产量（万吨）\n开工率（右）\n-3.0%\n-2.0%\n-1.0%\n0.0%\n1.0%\n2.0%\n0\n5\n10\n15\n20\n25\n30\nR22\nR32\nR134a\nR125\nR143a\nR152a\nR227ea\n2024\n2025\n2026\n2026年同比（右轴）\n12\n请阅读最后评级说明和重要声明\n13 / 25 \n五、化工品需求看国内还是全球？供给又应看哪\n里？\n国内化工品出口占比较多，需求立足于全球，产品由全球定价。",
+        "start": 0,
+        "end": 552,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "10",
+          "20",
+          "2026"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locators": [
+          "chunk:82dac0d446ef83cd:body:0052"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:82dac0d446ef83cd1a63766e6177a5c35fcfa5868eed3de51d5b42f2af10796c",
+        "locators": [
+          "chunk:82dac0d446ef83cd:body:0051",
+          "chunk:82dac0d446ef83cd:heading:0033",
+          "chunk:82dac0d446ef83cd:body:0052",
+          "chunk:82dac0d446ef83cd:heading:0034"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:82dac0d446ef83cd:body:0051",
+          "chunk:82dac0d446ef83cd:heading:0033",
+          "chunk:82dac0d446ef83cd:body:0052",
+          "chunk:82dac0d446ef83cd:heading:0034"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "locator": "chunk:16a9a510ef9e405f:body:0016",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0016",
+      "context_locators": [
+        "chunk:16a9a510ef9e405f:heading:0007",
+        "chunk:16a9a510ef9e405f:body:0016",
+        "chunk:16a9a510ef9e405f:body:0017"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locator": "chunk:16a9a510ef9e405f:body:0016",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0007",
+          "chunk:16a9a510ef9e405f:body:0016",
+          "chunk:16a9a510ef9e405f:body:0017"
+        ],
+        "scope_id": "scope:6d807d9a8c0c5cf7f8773ae33702716b",
+        "view": "compact"
+      },
+      "scope_id": "scope:6d807d9a8c0c5cf7f8773ae33702716b",
+      "total_chunks": 3,
+      "by_kind": {
+        "unknown": 3
+      },
+      "table_chunks": 0,
+      "title": "特别声明：",
+      "published": "undated",
+      "snippet": "<b>根据</b>《证券期货投资者适当性管理办法",
+      "preview": {
+        "text": "",
+        "start": null,
+        "end": null,
+        "status": "no_complete_matching_sentence",
+        "matched_terms": [],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0016"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0007",
+          "chunk:16a9a510ef9e405f:body:0016",
+          "chunk:16a9a510ef9e405f:body:0017"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:16a9a510ef9e405f:body:0017"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@48e8e60844f69177d5eb672a1d1b1010",
+    "processing": "scoped",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 22,
+      "published": 18,
+      "withdrawn": 0,
+      "pending": 0,
+      "failed_jobs": 0,
+      "builds": 28,
+      "published_with_gaps": 16
+    },
+    "retrieval": {
+      "requested": "hybrid",
+      "used": "hybrid",
+      "reason": null,
+      "profile": "fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107",
+      "expected_chunks": 703,
+      "ready_chunks": 703,
+      "lexical_candidates": 200,
+      "vector_candidates": 200,
+      "query_cache_hit": false,
+      "query_usage": {
+        "prompt_tokens": 52,
+        "total_tokens": 52
+      },
+      "elapsed_ms": 646
+    }
+  },
+  "hint": "preview 是选读预览，不是已取证引用。先用同一命中的 core_fetch_plan 调用 corpus_fetch；问题涉及多个对象、因果链或指代不完整时，再按 fetch_plan 扩展上下文。表格保留原范围以带齐表头、期间和单位。重复 locator 可在相同 doc_id 下去重；不同版本不可混用。",
+  "delivery_preview": "pilot"
+}

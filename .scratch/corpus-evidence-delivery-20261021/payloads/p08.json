@@ -1,0 +1,883 @@
+{
+  "ok": true,
+  "query": "按国盛报告的历史回顾，1998年银行补充资本使用了多少特别国债？",
+  "count": 10,
+  "hits": [
+    {
+      "doc_id": "cv2:d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+      "locator": "chunk:d5c99534333873cc:body:0002",
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "build_id": "d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+      "chunk_id": "d5c99534333873cc:body:0002",
+      "context_locators": [
+        "chunk:d5c99534333873cc:body:0000",
+        "chunk:d5c99534333873cc:heading:0000",
+        "chunk:d5c99534333873cc:body:0001",
+        "chunk:d5c99534333873cc:body:0002",
+        "chunk:d5c99534333873cc:body:0003",
+        "chunk:d5c99534333873cc:body:0004",
+        "chunk:d5c99534333873cc:body:0005",
+        "chunk:d5c99534333873cc:body:0006",
+        "chunk:d5c99534333873cc:table:0000",
+        "chunk:d5c99534333873cc:body:0007",
+        "chunk:d5c99534333873cc:table:0001",
+        "chunk:d5c99534333873cc:body:0008"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+        "locator": "chunk:d5c99534333873cc:body:0002",
+        "locators": [
+          "chunk:d5c99534333873cc:body:0000",
+          "chunk:d5c99534333873cc:heading:0000",
+          "chunk:d5c99534333873cc:body:0001",
+          "chunk:d5c99534333873cc:body:0002",
+          "chunk:d5c99534333873cc:body:0003",
+          "chunk:d5c99534333873cc:body:0004",
+          "chunk:d5c99534333873cc:body:0005",
+          "chunk:d5c99534333873cc:body:0006",
+          "chunk:d5c99534333873cc:table:0000",
+          "chunk:d5c99534333873cc:body:0007",
+          "chunk:d5c99534333873cc:table:0001",
+          "chunk:d5c99534333873cc:body:0008"
+        ],
+        "scope_id": "scope:e429a466187d5138b12f87a7d0b1dde1",
+        "view": "compact"
+      },
+      "scope_id": "scope:e429a466187d5138b12f87a7d0b1dde1",
+      "total_chunks": 12,
+      "by_kind": {
+        "unknown": 12
+      },
+      "table_chunks": 0,
+      "title": "宏观点评\n这次不一样—3600 亿增资银行保险的信号",
+      "published": "undated",
+      "snippet": "<b>资本</b>对大型<b>银行</b>进行系统性<b>资本</b><b>补充</b>",
+      "preview": {
+        "text": "一、历史上有过几轮？国家资本对大型银行进行系统性资本补充并不罕\n见，但本轮财政部集中注资保险企业应是历史首次。\n1、回顾看，国家资本对大型银行进行系统性资本补充，大致可以划分为\n1998 年、2003—2008 年、2025 年至今三轮。\n>1998年的资本补充主要用于满足国有大行资本充足率的要求。1998年\n亚洲金融危机后，四大国有银行资本充足率普遍偏低，财政部定向发行\n2700 亿元特别国债，工行、农行、中行、建行分别获得850 亿元、933 亿\n元、425 亿元和492 亿元资本金，核心目的在于使银行资本充足率达到8%\n的监管要求，并与后续不良资产剥离共同推进银行体系风险化解。\n>2003—2008 年的资本补充则更多服务于国有商业银行股份制改革，本质\n上是一轮系统性财务重组。2003年国家运用外汇储备分别向中行、建行\n注资225 亿美元，2005 年向工行注资150 亿美元，此后农行改革同样获\n作者\n分析师\n熊园\n执业证书编号：S0680518050004 \n邮箱：xiongyuan@gszq.com \n分析师\n穆仁文\n执业证书编号：S0680523060001 \n邮箱：murenwen@gszq.com \n相关研究\n1、《信贷社融的新特征、新框架》2026-09-04 \n2、《4 大关注点》2026-08-30 \n3、《8 月PMI 超季节回升，成色几何？",
+        "start": 0,
+        "end": 592,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "1998",
+          "别国",
+          "补充",
+          "资本",
+          "银行"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+        "locators": [
+          "chunk:d5c99534333873cc:body:0002"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:d5c99534333873cc24d88d08112dbebcb4e5b2405eb54db389662ddecf1bf2d3",
+        "locators": [
+          "chunk:d5c99534333873cc:body:0000",
+          "chunk:d5c99534333873cc:heading:0000",
+          "chunk:d5c99534333873cc:body:0001",
+          "chunk:d5c99534333873cc:body:0002",
+          "chunk:d5c99534333873cc:body:0003",
+          "chunk:d5c99534333873cc:body:0004",
+          "chunk:d5c99534333873cc:body:0005",
+          "chunk:d5c99534333873cc:body:0006",
+          "chunk:d5c99534333873cc:table:0000",
+          "chunk:d5c99534333873cc:body:0007",
+          "chunk:d5c99534333873cc:table:0001",
+          "chunk:d5c99534333873cc:body:0008"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:d5c99534333873cc:body:0000",
+          "chunk:d5c99534333873cc:heading:0000",
+          "chunk:d5c99534333873cc:body:0001",
+          "chunk:d5c99534333873cc:body:0002",
+          "chunk:d5c99534333873cc:body:0003",
+          "chunk:d5c99534333873cc:body:0004",
+          "chunk:d5c99534333873cc:body:0005",
+          "chunk:d5c99534333873cc:body:0006",
+          "chunk:d5c99534333873cc:table:0000",
+          "chunk:d5c99534333873cc:body:0007",
+          "chunk:d5c99534333873cc:table:0001",
+          "chunk:d5c99534333873cc:body:0008"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "locator": "chunk:16a9a510ef9e405f:body:0017",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0017",
+      "context_locators": [
+        "chunk:16a9a510ef9e405f:heading:0006",
+        "chunk:16a9a510ef9e405f:body:0013",
+        "chunk:16a9a510ef9e405f:body:0014",
+        "chunk:16a9a510ef9e405f:body:0015",
+        "chunk:16a9a510ef9e405f:heading:0007",
+        "chunk:16a9a510ef9e405f:body:0016",
+        "chunk:16a9a510ef9e405f:body:0017"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locator": "chunk:16a9a510ef9e405f:body:0017",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0006",
+          "chunk:16a9a510ef9e405f:body:0013",
+          "chunk:16a9a510ef9e405f:body:0014",
+          "chunk:16a9a510ef9e405f:body:0015",
+          "chunk:16a9a510ef9e405f:heading:0007",
+          "chunk:16a9a510ef9e405f:body:0016",
+          "chunk:16a9a510ef9e405f:body:0017"
+        ],
+        "scope_id": "scope:63a5b76ae6fd6bb08c7a870257da8aad",
+        "view": "compact"
+      },
+      "scope_id": "scope:63a5b76ae6fd6bb08c7a870257da8aad",
+      "total_chunks": 7,
+      "by_kind": {
+        "unknown": 7
+      },
+      "table_chunks": 0,
+      "title": "特别声明：",
+      "published": "undated",
+      "snippet": "<b>报告</b>仅限于中国境内<b>使用</b>。国",
+      "preview": {
+        "text": "工具的建议或策略。对于本报告中提及的任何证券或金融工具，本报告的收件人须保持自身的独立判断。使用国金证券研究报告进行投资，遭受任何损失，国金证\n券不承担相关法律责任。 \n若国金证券以外的任何机构或个人发送本报告，则由该机构或个人为此发送行为承担全部责任。本报告不构成国金证券向发送本报告机构或个人的收件人提供\n投资建议，国金证券不为此承担任何责任。 \n此报告仅限于中国境内使用。国金证券版权所有，保留一切权利。",
+        "start": 0,
+        "end": 205,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "使用",
+          "报告"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0017"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0006",
+          "chunk:16a9a510ef9e405f:body:0013",
+          "chunk:16a9a510ef9e405f:body:0014",
+          "chunk:16a9a510ef9e405f:body:0015",
+          "chunk:16a9a510ef9e405f:heading:0007",
+          "chunk:16a9a510ef9e405f:body:0016",
+          "chunk:16a9a510ef9e405f:body:0017"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:16a9a510ef9e405f:heading:0006",
+          "chunk:16a9a510ef9e405f:body:0013",
+          "chunk:16a9a510ef9e405f:body:0014",
+          "chunk:16a9a510ef9e405f:body:0015",
+          "chunk:16a9a510ef9e405f:heading:0007",
+          "chunk:16a9a510ef9e405f:body:0016",
+          "chunk:16a9a510ef9e405f:body:0017"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "locator": "chunk:2055995f24f1db3a:body:0014",
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0014",
+      "context_locators": [
+        "chunk:2055995f24f1db3a:body:0000",
+        "chunk:2055995f24f1db3a:body:0001",
+        "chunk:2055995f24f1db3a:body:0002",
+        "chunk:2055995f24f1db3a:body:0003",
+        "chunk:2055995f24f1db3a:body:0004",
+        "chunk:2055995f24f1db3a:body:0005",
+        "chunk:2055995f24f1db3a:body:0006",
+        "chunk:2055995f24f1db3a:body:0007",
+        "chunk:2055995f24f1db3a:body:0008",
+        "chunk:2055995f24f1db3a:body:0009",
+        "chunk:2055995f24f1db3a:body:0010",
+        "chunk:2055995f24f1db3a:body:0011",
+        "chunk:2055995f24f1db3a:body:0012",
+        "chunk:2055995f24f1db3a:heading:0000",
+        "chunk:2055995f24f1db3a:body:0013",
+        "chunk:2055995f24f1db3a:body:0014"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locator": "chunk:2055995f24f1db3a:body:0014",
+        "locators": [
+          "chunk:2055995f24f1db3a:body:0000",
+          "chunk:2055995f24f1db3a:body:0001",
+          "chunk:2055995f24f1db3a:body:0002",
+          "chunk:2055995f24f1db3a:body:0003",
+          "chunk:2055995f24f1db3a:body:0004",
+          "chunk:2055995f24f1db3a:body:0005",
+          "chunk:2055995f24f1db3a:body:0006",
+          "chunk:2055995f24f1db3a:body:0007",
+          "chunk:2055995f24f1db3a:body:0008",
+          "chunk:2055995f24f1db3a:body:0009",
+          "chunk:2055995f24f1db3a:body:0010",
+          "chunk:2055995f24f1db3a:body:0011",
+          "chunk:2055995f24f1db3a:body:0012",
+          "chunk:2055995f24f1db3a:heading:0000",
+          "chunk:2055995f24f1db3a:body:0013",
+          "chunk:2055995f24f1db3a:body:0014"
+        ],
+        "scope_id": "scope:d0cf62c2d99e72685eef7bf2a8810d15",
+        "view": "compact"
+      },
+      "scope_id": "scope:d0cf62c2d99e72685eef7bf2a8810d15",
+      "total_chunks": 16,
+      "by_kind": {
+        "unknown": 16
+      },
+      "table_chunks": 0,
+      "title": "特别声明：",
+      "published": "undated",
+      "snippet": "<b>报告</b>仅限于中国境内<b>使用</b>。国",
+      "preview": {
+        "text": "工具的建议或策略。对于本报告中提及的任何证券或金融工具，本报告的收件人须保持自身的独立判断。使用国金证券研究报告进行投资，遭受任何损失，国金证\n券不承担相关法律责任。 \n若国金证券以外的任何机构或个人发送本报告，则由该机构或个人为此发送行为承担全部责任。本报告不构成国金证券向发送本报告机构或个人的收件人提供\n投资建议，国金证券不为此承担任何责任。 \n此报告仅限于中国境内使用。国金证券版权所有，保留一切权利。",
+        "start": 0,
+        "end": 205,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "使用",
+          "报告"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locators": [
+          "chunk:2055995f24f1db3a:body:0014"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locators": [
+          "chunk:2055995f24f1db3a:body:0000",
+          "chunk:2055995f24f1db3a:body:0001",
+          "chunk:2055995f24f1db3a:body:0002",
+          "chunk:2055995f24f1db3a:body:0003",
+          "chunk:2055995f24f1db3a:body:0004",
+          "chunk:2055995f24f1db3a:body:0005",
+          "chunk:2055995f24f1db3a:body:0006",
+          "chunk:2055995f24f1db3a:body:0007",
+          "chunk:2055995f24f1db3a:body:0008",
+          "chunk:2055995f24f1db3a:body:0009",
+          "chunk:2055995f24f1db3a:body:0010",
+          "chunk:2055995f24f1db3a:body:0011",
+          "chunk:2055995f24f1db3a:body:0012",
+          "chunk:2055995f24f1db3a:heading:0000",
+          "chunk:2055995f24f1db3a:body:0013",
+          "chunk:2055995f24f1db3a:body:0014"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:2055995f24f1db3a:body:0000",
+          "chunk:2055995f24f1db3a:body:0001",
+          "chunk:2055995f24f1db3a:body:0002",
+          "chunk:2055995f24f1db3a:body:0003",
+          "chunk:2055995f24f1db3a:body:0004",
+          "chunk:2055995f24f1db3a:body:0005",
+          "chunk:2055995f24f1db3a:body:0006",
+          "chunk:2055995f24f1db3a:body:0007",
+          "chunk:2055995f24f1db3a:body:0008",
+          "chunk:2055995f24f1db3a:body:0009",
+          "chunk:2055995f24f1db3a:body:0010",
+          "chunk:2055995f24f1db3a:body:0011",
+          "chunk:2055995f24f1db3a:body:0012",
+          "chunk:2055995f24f1db3a:heading:0000",
+          "chunk:2055995f24f1db3a:body:0013",
+          "chunk:2055995f24f1db3a:body:0014"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "locator": "chunk:9ebd323f89e55cc1:body:0024",
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0024",
+      "context_locators": [
+        "chunk:9ebd323f89e55cc1:body:0019",
+        "chunk:9ebd323f89e55cc1:table:0006",
+        "chunk:9ebd323f89e55cc1:body:0020",
+        "chunk:9ebd323f89e55cc1:table:0007",
+        "chunk:9ebd323f89e55cc1:body:0021",
+        "chunk:9ebd323f89e55cc1:body:0022",
+        "chunk:9ebd323f89e55cc1:body:0023",
+        "chunk:9ebd323f89e55cc1:body:0024",
+        "chunk:9ebd323f89e55cc1:body:0025",
+        "chunk:9ebd323f89e55cc1:body:0026"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locator": "chunk:9ebd323f89e55cc1:body:0024",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:body:0019",
+          "chunk:9ebd323f89e55cc1:table:0006",
+          "chunk:9ebd323f89e55cc1:body:0020",
+          "chunk:9ebd323f89e55cc1:table:0007",
+          "chunk:9ebd323f89e55cc1:body:0021",
+          "chunk:9ebd323f89e55cc1:body:0022",
+          "chunk:9ebd323f89e55cc1:body:0023",
+          "chunk:9ebd323f89e55cc1:body:0024",
+          "chunk:9ebd323f89e55cc1:body:0025",
+          "chunk:9ebd323f89e55cc1:body:0026"
+        ],
+        "scope_id": "scope:880576e5b621b189dee661967987ccf7",
+        "view": "compact"
+      },
+      "scope_id": "scope:880576e5b621b189dee661967987ccf7",
+      "total_chunks": 10,
+      "by_kind": {
+        "unknown": 10
+      },
+      "table_chunks": 0,
+      "title": "特别声明",
+      "published": "undated",
+      "snippet": "<b>使用</b>本<b>报告</b>内容，不应视",
+      "preview": {
+        "text": "本报告中的资料、意见、预测均反映报告初次发布时光大证券研究所的判断，可能需随时进行调整且不予通知。在任何情况下，本报告中的信息\n或所表述的意见并不构成对任何人的投资建议。客户应自主作出投资决策并自行承担投资风险。本报告中的信息或所表述的意见并未考虑到个别投资\n者的具体投资目的、财务状况以及特定需求。投资者应当充分考虑自身特定状况，并完整理解和使用本报告内容，不应视本报告为做出投资决策的唯\n一因素。对依据或者使用本报告所造成的一切后果，本公司及作者均不承担任何法律责任。 \n不同时期，本公司可能会撰写并发布与本报告所载信息、建议及预测不一致的报告。本公司的销售人员、交易人员和其他专业人员可能会向客户\n提供与本报告中观点不同的口头或书面评论或交易策略。本公司的资产管理子公司、自营部门以及其他投资业务板块可能会独立做出与本报告的意见\n或建议不相一致的投资决策。本公司提醒投资者注意并理解投资证券及投资产品存在的风险，在做出投资决策前，建议投资者务必向专业人士咨询并\n谨慎抉择。 \n在法律允许的情况下，本公司及其附属机构可能持有报告中提及的公司所发行证券的头寸并进行交易，也可能为这些公司提供或正在争取提供投\n资银行、财务顾问或金融产品等相关服务。投资者应当充分考虑本公司及本公司附属机构就报告内容可能存在的利益冲突，勿将本报告作为投资决策\n的唯一信赖依据。",
+        "start": 418,
+        "end": 997,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "使用",
+          "报告"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:body:0024"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:body:0019",
+          "chunk:9ebd323f89e55cc1:table:0006",
+          "chunk:9ebd323f89e55cc1:body:0020",
+          "chunk:9ebd323f89e55cc1:table:0007",
+          "chunk:9ebd323f89e55cc1:body:0021",
+          "chunk:9ebd323f89e55cc1:body:0022",
+          "chunk:9ebd323f89e55cc1:body:0023",
+          "chunk:9ebd323f89e55cc1:body:0024",
+          "chunk:9ebd323f89e55cc1:body:0025",
+          "chunk:9ebd323f89e55cc1:body:0026"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:9ebd323f89e55cc1:body:0019",
+          "chunk:9ebd323f89e55cc1:table:0006",
+          "chunk:9ebd323f89e55cc1:body:0020",
+          "chunk:9ebd323f89e55cc1:table:0007",
+          "chunk:9ebd323f89e55cc1:body:0021",
+          "chunk:9ebd323f89e55cc1:body:0022",
+          "chunk:9ebd323f89e55cc1:body:0023",
+          "chunk:9ebd323f89e55cc1:body:0024",
+          "chunk:9ebd323f89e55cc1:body:0025",
+          "chunk:9ebd323f89e55cc1:body:0026"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "locator": "chunk:022ae1713fb760ff:body:0022",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0022",
+      "context_locators": [
+        "chunk:022ae1713fb760ff:body:0018",
+        "chunk:022ae1713fb760ff:table:0003",
+        "chunk:022ae1713fb760ff:body:0019",
+        "chunk:022ae1713fb760ff:body:0020",
+        "chunk:022ae1713fb760ff:heading:0002",
+        "chunk:022ae1713fb760ff:body:0021",
+        "chunk:022ae1713fb760ff:body:0022"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locator": "chunk:022ae1713fb760ff:body:0022",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0018",
+          "chunk:022ae1713fb760ff:table:0003",
+          "chunk:022ae1713fb760ff:body:0019",
+          "chunk:022ae1713fb760ff:body:0020",
+          "chunk:022ae1713fb760ff:heading:0002",
+          "chunk:022ae1713fb760ff:body:0021",
+          "chunk:022ae1713fb760ff:body:0022"
+        ],
+        "scope_id": "scope:89678244d50a97e1f468ddd05631668b",
+        "view": "compact"
+      },
+      "scope_id": "scope:89678244d50a97e1f468ddd05631668b",
+      "total_chunks": 7,
+      "by_kind": {
+        "body": 1,
+        "unknown": 6
+      },
+      "table_chunks": 0,
+      "title": "特别声明：",
+      "published": "undated",
+      "snippet": "<b>报告</b>仅限于中国境内<b>使用</b>。国",
+      "preview": {
+        "text": "若国金证券以外的任何机构或个人发送本报告，则由该机构或个人为此发送行为承担全部责任。本报告不构成国金证券向发送本报告机构或个人的收件人提供\n投资建议，国金证券不为此承担任何责任。 \n此报告仅限于中国境内使用。国金证券版权所有，保留一切权利。",
+        "start": 0,
+        "end": 120,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "使用",
+          "报告"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0022"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0018",
+          "chunk:022ae1713fb760ff:table:0003",
+          "chunk:022ae1713fb760ff:body:0019",
+          "chunk:022ae1713fb760ff:body:0020",
+          "chunk:022ae1713fb760ff:heading:0002",
+          "chunk:022ae1713fb760ff:body:0021",
+          "chunk:022ae1713fb760ff:body:0022"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:022ae1713fb760ff:body:0018",
+          "chunk:022ae1713fb760ff:table:0003",
+          "chunk:022ae1713fb760ff:body:0019",
+          "chunk:022ae1713fb760ff:body:0020",
+          "chunk:022ae1713fb760ff:heading:0002",
+          "chunk:022ae1713fb760ff:body:0021",
+          "chunk:022ae1713fb760ff:body:0022"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "locator": "chunk:16a9a510ef9e405f:body:0017",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0017",
+      "context_locators": [
+        "chunk:16a9a510ef9e405f:heading:0007",
+        "chunk:16a9a510ef9e405f:body:0016",
+        "chunk:16a9a510ef9e405f:body:0017"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locator": "chunk:16a9a510ef9e405f:body:0017",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0007",
+          "chunk:16a9a510ef9e405f:body:0016",
+          "chunk:16a9a510ef9e405f:body:0017"
+        ],
+        "scope_id": "scope:6d807d9a8c0c5cf7f8773ae33702716b",
+        "view": "compact"
+      },
+      "scope_id": "scope:6d807d9a8c0c5cf7f8773ae33702716b",
+      "total_chunks": 3,
+      "by_kind": {
+        "unknown": 3
+      },
+      "table_chunks": 0,
+      "title": "特别声明：",
+      "published": "undated",
+      "snippet": "<b>报告</b>仅限于中国境内<b>使用</b>。国",
+      "preview": {
+        "text": "工具的建议或策略。对于本报告中提及的任何证券或金融工具，本报告的收件人须保持自身的独立判断。使用国金证券研究报告进行投资，遭受任何损失，国金证\n券不承担相关法律责任。 \n若国金证券以外的任何机构或个人发送本报告，则由该机构或个人为此发送行为承担全部责任。本报告不构成国金证券向发送本报告机构或个人的收件人提供\n投资建议，国金证券不为此承担任何责任。 \n此报告仅限于中国境内使用。国金证券版权所有，保留一切权利。",
+        "start": 0,
+        "end": 205,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "使用",
+          "报告"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0017"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0007",
+          "chunk:16a9a510ef9e405f:body:0016",
+          "chunk:16a9a510ef9e405f:body:0017"
+        ],
+        "remaining_after_prior_full_expansions": [],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "locator": "chunk:2055995f24f1db3a:body:0014",
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+      "chunk_id": "2055995f24f1db3a:body:0014",
+      "context_locators": [
+        "chunk:2055995f24f1db3a:heading:0000",
+        "chunk:2055995f24f1db3a:body:0013",
+        "chunk:2055995f24f1db3a:body:0014"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locator": "chunk:2055995f24f1db3a:body:0014",
+        "locators": [
+          "chunk:2055995f24f1db3a:heading:0000",
+          "chunk:2055995f24f1db3a:body:0013",
+          "chunk:2055995f24f1db3a:body:0014"
+        ],
+        "scope_id": "scope:f1efa68d68307f0f3be25d679fc1e739",
+        "view": "compact"
+      },
+      "scope_id": "scope:f1efa68d68307f0f3be25d679fc1e739",
+      "total_chunks": 3,
+      "by_kind": {
+        "unknown": 3
+      },
+      "table_chunks": 0,
+      "title": "特别声明：",
+      "published": "undated",
+      "snippet": "<b>报告</b>仅限于中国境内<b>使用</b>。国",
+      "preview": {
+        "text": "工具的建议或策略。对于本报告中提及的任何证券或金融工具，本报告的收件人须保持自身的独立判断。使用国金证券研究报告进行投资，遭受任何损失，国金证\n券不承担相关法律责任。 \n若国金证券以外的任何机构或个人发送本报告，则由该机构或个人为此发送行为承担全部责任。本报告不构成国金证券向发送本报告机构或个人的收件人提供\n投资建议，国金证券不为此承担任何责任。 \n此报告仅限于中国境内使用。国金证券版权所有，保留一切权利。",
+        "start": 0,
+        "end": 205,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "使用",
+          "报告"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locators": [
+          "chunk:2055995f24f1db3a:body:0014"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:2055995f24f1db3a4bdaecdf6f1ad1abcc44e2548440763f3c05c9e6889151de",
+        "locators": [
+          "chunk:2055995f24f1db3a:heading:0000",
+          "chunk:2055995f24f1db3a:body:0013",
+          "chunk:2055995f24f1db3a:body:0014"
+        ],
+        "remaining_after_prior_full_expansions": [],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "locator": "chunk:9ebd323f89e55cc1:body:0024",
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+      "chunk_id": "9ebd323f89e55cc1:body:0024",
+      "context_locators": [
+        "chunk:9ebd323f89e55cc1:body:0021",
+        "chunk:9ebd323f89e55cc1:body:0022",
+        "chunk:9ebd323f89e55cc1:body:0023",
+        "chunk:9ebd323f89e55cc1:body:0024",
+        "chunk:9ebd323f89e55cc1:body:0025"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locator": "chunk:9ebd323f89e55cc1:body:0024",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:body:0021",
+          "chunk:9ebd323f89e55cc1:body:0022",
+          "chunk:9ebd323f89e55cc1:body:0023",
+          "chunk:9ebd323f89e55cc1:body:0024",
+          "chunk:9ebd323f89e55cc1:body:0025"
+        ],
+        "scope_id": "scope:55769a5e2b35c624b1d29f6eb63d486c",
+        "view": "compact"
+      },
+      "scope_id": "scope:55769a5e2b35c624b1d29f6eb63d486c",
+      "total_chunks": 5,
+      "by_kind": {
+        "unknown": 5
+      },
+      "table_chunks": 0,
+      "title": "特别声明",
+      "published": "undated",
+      "snippet": "<b>使用</b>本<b>报告</b>内容，不应视",
+      "preview": {
+        "text": "本报告中的资料、意见、预测均反映报告初次发布时光大证券研究所的判断，可能需随时进行调整且不予通知。在任何情况下，本报告中的信息\n或所表述的意见并不构成对任何人的投资建议。客户应自主作出投资决策并自行承担投资风险。本报告中的信息或所表述的意见并未考虑到个别投资\n者的具体投资目的、财务状况以及特定需求。投资者应当充分考虑自身特定状况，并完整理解和使用本报告内容，不应视本报告为做出投资决策的唯\n一因素。对依据或者使用本报告所造成的一切后果，本公司及作者均不承担任何法律责任。 \n不同时期，本公司可能会撰写并发布与本报告所载信息、建议及预测不一致的报告。本公司的销售人员、交易人员和其他专业人员可能会向客户\n提供与本报告中观点不同的口头或书面评论或交易策略。本公司的资产管理子公司、自营部门以及其他投资业务板块可能会独立做出与本报告的意见\n或建议不相一致的投资决策。本公司提醒投资者注意并理解投资证券及投资产品存在的风险，在做出投资决策前，建议投资者务必向专业人士咨询并\n谨慎抉择。 \n在法律允许的情况下，本公司及其附属机构可能持有报告中提及的公司所发行证券的头寸并进行交易，也可能为这些公司提供或正在争取提供投\n资银行、财务顾问或金融产品等相关服务。投资者应当充分考虑本公司及本公司附属机构就报告内容可能存在的利益冲突，勿将本报告作为投资决策\n的唯一信赖依据。",
+        "start": 418,
+        "end": 997,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "使用",
+          "报告"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:body:0024"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:9ebd323f89e55cc197a429a631a2856dfb81281309e6b764b69de8e946e1b99a",
+        "locators": [
+          "chunk:9ebd323f89e55cc1:body:0021",
+          "chunk:9ebd323f89e55cc1:body:0022",
+          "chunk:9ebd323f89e55cc1:body:0023",
+          "chunk:9ebd323f89e55cc1:body:0024",
+          "chunk:9ebd323f89e55cc1:body:0025"
+        ],
+        "remaining_after_prior_full_expansions": [],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "locator": "chunk:022ae1713fb760ff:body:0022",
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+      "chunk_id": "022ae1713fb760ff:body:0022",
+      "context_locators": [
+        "chunk:022ae1713fb760ff:heading:0002",
+        "chunk:022ae1713fb760ff:body:0021",
+        "chunk:022ae1713fb760ff:body:0022"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locator": "chunk:022ae1713fb760ff:body:0022",
+        "locators": [
+          "chunk:022ae1713fb760ff:heading:0002",
+          "chunk:022ae1713fb760ff:body:0021",
+          "chunk:022ae1713fb760ff:body:0022"
+        ],
+        "scope_id": "scope:cb47ff527464641955bbaafe1f217a35",
+        "view": "compact"
+      },
+      "scope_id": "scope:cb47ff527464641955bbaafe1f217a35",
+      "total_chunks": 3,
+      "by_kind": {
+        "unknown": 3
+      },
+      "table_chunks": 0,
+      "title": "特别声明：",
+      "published": "undated",
+      "snippet": "<b>报告</b>仅限于中国境内<b>使用</b>。国",
+      "preview": {
+        "text": "若国金证券以外的任何机构或个人发送本报告，则由该机构或个人为此发送行为承担全部责任。本报告不构成国金证券向发送本报告机构或个人的收件人提供\n投资建议，国金证券不为此承担任何责任。 \n此报告仅限于中国境内使用。国金证券版权所有，保留一切权利。",
+        "start": 0,
+        "end": 120,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "使用",
+          "报告"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:body:0022"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:022ae1713fb760ffa04efb1939fc0ce25a330aecf0df7350c954ccbe8a7a66ef",
+        "locators": [
+          "chunk:022ae1713fb760ff:heading:0002",
+          "chunk:022ae1713fb760ff:body:0021",
+          "chunk:022ae1713fb760ff:body:0022"
+        ],
+        "remaining_after_prior_full_expansions": [],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    },
+    {
+      "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "locator": "chunk:16a9a510ef9e405f:body:0004",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+      "chunk_id": "16a9a510ef9e405f:body:0004",
+      "context_locators": [
+        "chunk:16a9a510ef9e405f:heading:0004",
+        "chunk:16a9a510ef9e405f:body:0003",
+        "chunk:16a9a510ef9e405f:body:0004",
+        "chunk:16a9a510ef9e405f:body:0005",
+        "chunk:16a9a510ef9e405f:body:0006",
+        "chunk:16a9a510ef9e405f:body:0007",
+        "chunk:16a9a510ef9e405f:body:0008",
+        "chunk:16a9a510ef9e405f:body:0009",
+        "chunk:16a9a510ef9e405f:body:0010",
+        "chunk:16a9a510ef9e405f:heading:0005",
+        "chunk:16a9a510ef9e405f:body:0011",
+        "chunk:16a9a510ef9e405f:body:0012"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locator": "chunk:16a9a510ef9e405f:body:0004",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0004",
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010",
+          "chunk:16a9a510ef9e405f:heading:0005",
+          "chunk:16a9a510ef9e405f:body:0011",
+          "chunk:16a9a510ef9e405f:body:0012"
+        ],
+        "scope_id": "scope:bf5793fcb4c0264250c8c99d42ea91c4",
+        "view": "compact"
+      },
+      "scope_id": "scope:bf5793fcb4c0264250c8c99d42ea91c4",
+      "total_chunks": 12,
+      "by_kind": {
+        "unknown": 12
+      },
+      "table_chunks": 0,
+      "title": "一、细分板块观点\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩",
+      "published": "undated",
+      "snippet": "<b>资本</b>开支回升、先进封装项目密集",
+      "preview": {
+        "text": "半导体后道设备：半导体测试是保障芯片性能、良率与可靠性的关键环节，AI 正在推动行业景气由传统周期修复转向\n结构成长。根据SEMI 预测，全球半导体测试设备销售额预计于2026 年同比增长31.0%至153 亿美元，并于2028\n年达到208 亿美元，2025—2028 年复合增速约21%。其中，SoC 测试机受益于GPU、ASIC 等高端逻辑芯片扩产，\n存储测试机则受益于HBM 堆叠层数、接口速度及质量要求提升。与此同时，下游封测厂资本开支回升、先进封装项\n目密集落地，测试机、分选机及接口件需求有望持续释放。全球高端ATE 市场高度集中，竞争优势已由单机参数延伸\n至核心平台、客户验证、测试程序生态、量产交付及Test Cell 协同能力，国内测试设备行业有望由单品突破逐步迈向\n平台化扩张。我们认为，本轮测试设备景气主要是由AI服务器扩容、HBM及先进封装放量共同推动的结构性增长。\n芯片数量增加扩大测试基数，复杂度提升带动单颗测试资源和Test Cell配置升级，测试插入点及测试时间增加则进\n一步推升设备容量需求。建议优先关注已建立核心测试平台、具备头部客户验证和规模化交付能力，并能够向分选机、\n探针台、SLT 及接口件等相邻环节延伸的平台型厂商；同时关注在模拟、功率等细分领域形成稳定优势，并持续向高\n端SoC、存储及混合信号测试拓展的专业化厂商。",
+        "start": 0,
+        "end": 583,
+        "status": "complete_sentence_window",
+        "matched_terms": [
+          "资本"
+        ],
+        "citation_ready": false
+      },
+      "core_fetch_plan": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:body:0004"
+        ],
+        "view": "compact"
+      },
+      "expansion": {
+        "doc_id": "cv2:16a9a510ef9e405fa8fd97df975b23b009e728c983c04cafda8bcf0973eed287",
+        "locators": [
+          "chunk:16a9a510ef9e405f:heading:0004",
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010",
+          "chunk:16a9a510ef9e405f:heading:0005",
+          "chunk:16a9a510ef9e405f:body:0011",
+          "chunk:16a9a510ef9e405f:body:0012"
+        ],
+        "remaining_after_prior_full_expansions": [
+          "chunk:16a9a510ef9e405f:heading:0004",
+          "chunk:16a9a510ef9e405f:body:0003",
+          "chunk:16a9a510ef9e405f:body:0004",
+          "chunk:16a9a510ef9e405f:body:0005",
+          "chunk:16a9a510ef9e405f:body:0006",
+          "chunk:16a9a510ef9e405f:body:0007",
+          "chunk:16a9a510ef9e405f:body:0008",
+          "chunk:16a9a510ef9e405f:body:0009",
+          "chunk:16a9a510ef9e405f:body:0010",
+          "chunk:16a9a510ef9e405f:heading:0005",
+          "chunk:16a9a510ef9e405f:body:0011",
+          "chunk:16a9a510ef9e405f:body:0012"
+        ],
+        "view": "compact",
+        "may_contain_additional_answer_parts": true
+      },
+      "delivery_hint": "先读核心锚点；比较、原因链或指代未完整时继续扩展。预览仅供选读，不是已取证或已送达的引用。"
+    }
+  ],
+  "coverage": {
+    "requested_scope_ref": "corpus_schema",
+    "effective_scope_ref": "corpus_publications.active_build_id",
+    "publication_snapshot_ref": "corpus_publications@48e8e60844f69177d5eb672a1d1b1010",
+    "processing": "scoped",
+    "query_status": "matched",
+    "availability": "unknown",
+    "reason_codes": [
+      "partial_published",
+      "gap_regions_present"
+    ],
+    "counts": {
+      "sources": 22,
+      "published": 18,
+      "withdrawn": 0,
+      "pending": 0,
+      "failed_jobs": 0,
+      "builds": 28,
+      "published_with_gaps": 16
+    },
+    "retrieval": {
+      "requested": "hybrid",
+      "used": "hybrid",
+      "reason": null,
+      "profile": "fbd9941b77ff17a534932b7bbec32358ae5088df9854d62a93b2e38801c3e107",
+      "expected_chunks": 703,
+      "ready_chunks": 703,
+      "lexical_candidates": 127,
+      "vector_candidates": 200,
+      "query_cache_hit": false,
+      "query_usage": {
+        "prompt_tokens": 52,
+        "total_tokens": 52
+      },
+      "elapsed_ms": 580
+    }
+  },
+  "hint": "preview 是选读预览，不是已取证引用。先用同一命中的 core_fetch_plan 调用 corpus_fetch；问题涉及多个对象、因果链或指代不完整时，再按 fetch_plan 扩展上下文。表格保留原范围以带齐表头、期间和单位。重复 locator 可在相同 doc_id 下去重；不同版本不可混用。",
+  "delivery_preview": "pilot"
+}

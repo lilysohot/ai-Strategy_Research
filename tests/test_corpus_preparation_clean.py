@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
@@ -65,6 +66,55 @@ def _regions_by_ordinal(result) -> dict[int, object]:
 
 
 # --- 保真视图与锚点映射 ---
+
+
+@pytest.mark.parametrize("kind", ["heading", "paragraph"])
+@pytest.mark.parametrize("title", ["特别声明：", "法律声明", "投资评级声明"])
+def test_legal_title_variants_cover_continuation_but_stop_at_body_heading(kind, title):
+    units = [
+        _unit(1, title, kind=kind, page=2),
+        _unit(2, "本报告版权归本公司所有，未经授权不得转载。", page=2),
+        _unit(3, "3", kind="heading", page=3),
+        _unit(4, "扫码获取更多服务", kind="heading", page=3),
+        _unit(5, "本报告不构成投资建议，本公司不承担相关责任。", page=3),
+        _unit(6, "风险提示", kind="heading", page=3),
+        _unit(7, "需求下降可能影响公司盈利。", page=3),
+    ]
+    regions = _regions_by_ordinal(clean_reader_result(_result(units)))
+    assert all(regions[i].status is UnitStatus.NOISE for i in range(1, 6))
+    assert all(regions[i].status is UnitStatus.KEPT for i in (6, 7))
+    assert "disclaimer_section" in regions[5].reasons
+
+
+def test_reminder_matches_only_whole_unit_and_never_drops_financial_prose():
+    reminder = "请务必阅读正文之后的免责声明及其项下所有内容"
+    mixed = reminder + "\n2026年上半年营业收入4.53亿元，归母净利润0.74亿元。"
+    units = [
+        _unit(1, reminder),
+        _unit(2, mixed),
+        _unit(3, "敬请参阅最后一页特别声明"),
+        _unit(4, "报告为何要求阅读免责声明？"),
+        _unit(5, "特别声明", reasons=("code_fence",)),
+        _unit(6, "投资建议：维持买入评级。"),
+    ]
+    regions = _regions_by_ordinal(clean_reader_result(_result(units)))
+    assert regions[1].status is regions[3].status is UnitStatus.NOISE
+    assert "disclaimer_reminder_line" in regions[1].reasons
+    for i in (2, 4, 5, 6):
+        assert regions[i].status is UnitStatus.KEPT
+        verify_clean_region(units[i - 1].raw_text, regions[i].clean_view, regions[i].mapping)
+
+
+def test_plain_legal_title_retains_cross_unit_numeric_fact():
+    units = [
+        _unit(1, "特别声明"),
+        _unit(2, "本公司持有标的4.06%的股"),
+        _unit(3, "份。"),
+        _unit(4, "未经授权不得转载。"),
+    ]
+    regions = _regions_by_ordinal(clean_reader_result(_result(units)))
+    assert regions[1].status is regions[4].status is UnitStatus.NOISE
+    assert regions[2].status is regions[3].status is UnitStatus.KEPT
 
 
 def test_cjk_join_and_ascii_join_mapping() -> None:
@@ -203,7 +253,9 @@ def test_header_footer_requires_repetition_and_band() -> None:
     ordinal = 0
     for page in (1, 2, 3, 4):
         for text, bbox in (
-            ("请务必阅读正文之后的免责条款", (60.0, 20.0, 500.0, 40.0)),
+            # Generic header tests geometry/first-occurrence protection separately
+            # from clean-6's explicit whole-unit disclaimer-reminder rule.
+            ("行业研究周报", (60.0, 20.0, 500.0, 40.0)),
             (f"第{page}页正文内容", (60.0, 100.0, 500.0, 120.0)),
         ):
             ordinal += 1
@@ -296,7 +348,9 @@ def test_noise_verdicts_record_machine_readable_basis() -> None:
         ordinal += 1
         units.append(_unit(ordinal, "华创证券研究", page=page, bbox=(60.0, 20.0, 500.0, 40.0)))
         ordinal += 1
-        units.append(_unit(ordinal, f"第{page}页正文内容", page=page, bbox=(60.0, 100.0, 500.0, 720.0)))
+        units.append(
+            _unit(ordinal, f"第{page}页正文内容", page=page, bbox=(60.0, 100.0, 500.0, 720.0))
+        )
     units.extend(
         [
             _unit(10, "免责声明", kind="heading"),
@@ -349,9 +403,12 @@ def test_disclaimer_fact_sentence_kept_instead_of_noise() -> None:
     """免责节单元含『可复核数字事实句』→ 整段降 KEPT，不整段剔除（I-E3）。"""
     units = [
         _unit(1, "分析师声明", kind="heading"),
-        _unit(2, "每位分析师在此作以下声明：\n分析师对本报告任何建议均反映其个人判断。\n"
-                 "本报告涉及股票贵州茅台（600519），根据上市公司公告，贵州茅台的控股股东"
-                 "茅台集团持有本公司的控股股东华创云信4.06%的股份。"),
+        _unit(
+            2,
+            "每位分析师在此作以下声明：\n分析师对本报告任何建议均反映其个人判断。\n"
+            "本报告涉及股票贵州茅台（600519），根据上市公司公告，贵州茅台的控股股东"
+            "茅台集团持有本公司的控股股东华创云信4.06%的股份。",
+        ),
         _unit(3, "免责声明", kind="heading"),
         _unit(4, "本报告仅供签约客户使用，不构成投资建议。市场有风险，投资需谨慎。"),
     ]
@@ -389,6 +446,78 @@ def test_disclaimer_rating_rule_threshold_stays_noise() -> None:
     regions = _regions_by_ordinal(clean_reader_result(_result(units)))
     assert regions[2].status is UnitStatus.NOISE  # type: ignore[attr-defined]
     assert "disclaimer_section" in regions[2].reasons  # type: ignore[operator]
+
+
+@pytest.mark.parametrize("postal", ["邮编：330038", "邮政编码: 330038", "邮编\n330038"])
+def test_postal_code_does_not_protect_disclaimer(postal):
+    units = [_unit(1, "特别声明", kind="heading"), _unit(2, postal)]
+    regions = _regions_by_ordinal(clean_reader_result(_result(units)))
+    assert regions[2].status is UnitStatus.NOISE
+
+
+@pytest.mark.parametrize("fact", ["证券代码600519", "投资金额1.5亿元", "持有4.06%的股份"])
+def test_postal_code_does_not_hide_real_fact_in_same_unit(fact):
+    units = [_unit(1, "特别声明", kind="heading"), _unit(2, f"邮编：330038；{fact}。")]
+    regions = _regions_by_ordinal(clean_reader_result(_result(units)))
+    assert regions[2].status is UnitStatus.KEPT
+    verify_clean_region(units[1].raw_text, regions[2].clean_view, regions[2].mapping)
+
+
+def test_rating_table_and_contacts_do_not_share_fact_protection():
+    units = [
+        _unit(1, "投资评级说明", kind="heading"),
+        _unit(2, "评级、说明。", kind="table_row"),
+        _unit(3, "买入：相对基准涨幅超过15%", kind="table_row"),
+        _unit(4, "减持：相对基准跌幅超过5%", kind="table_row"),
+        _unit(5, "研究所联系方式"),
+        _unit(6, "邮编：330038"),
+        _unit(7, "本机构持有600519股票。"),
+    ]
+    result = clean_reader_result(_result(units))
+    regions = _regions_by_ordinal(result)
+    assert all(regions[i].status is UnitStatus.NOISE for i in range(1, 6))
+    assert regions[7].status is UnitStatus.KEPT
+    verify_noise_verdicts(result.regions)
+
+
+def test_table_fact_protects_its_header_but_not_neighboring_table():
+    units = [
+        _unit(1, "特别声明", kind="heading"),
+        _unit(2, "项目及金额。", kind="table_row", reasons=("tbl[0]",)),
+        _unit(3, "本公司持有标的公司投资1.5亿元", kind="table_row", reasons=("tbl[0]",)),
+        _unit(4, "评级及说明", kind="table_row", reasons=("tbl[1]",)),
+        _unit(5, "买入：相对基准涨幅超过15%", kind="table_row", reasons=("tbl[1]",)),
+        _unit(6, "邮编：330038"),
+    ]
+    regions = _regions_by_ordinal(clean_reader_result(_result(units)))
+    assert all(regions[i].status is UnitStatus.KEPT for i in (2, 3))
+    assert all(regions[i].status is UnitStatus.NOISE for i in (4, 5, 6))
+
+
+def test_contact_field_starts_new_run_after_split_fact_sentence():
+    units = [
+        _unit(1, "特别声明", kind="heading"),
+        _unit(2, "本公司持有标的公司4.06%的股"),
+        _unit(3, "份"),
+        _unit(4, "邮编：330038"),
+    ]
+    regions = _regions_by_ordinal(clean_reader_result(_result(units)))
+    assert regions[2].status is regions[3].status is UnitStatus.KEPT
+    assert regions[4].status is UnitStatus.NOISE
+
+
+def test_docx_table_header_and_data_share_parent_not_row_element():
+    units = [
+        _unit(1, "特别声明", kind="heading"),
+        _unit(2, "持股信息。", kind="table_row", reasons=("tbl[0]",)),
+        _unit(3, "本机构持有600519股票", kind="table_row", reasons=("tbl[0]",)),
+    ]
+    for index in (1, 2):
+        units[index] = replace(
+            units[index], location=UnitLocation(element=f"body:tbl[0]/row[{index - 1}]")
+        )
+    regions = _regions_by_ordinal(clean_reader_result(_result(units)))
+    assert regions[2].status is regions[3].status is UnitStatus.KEPT
 
 
 def test_header_repeated_two_pages_is_kept_with_repeat_pages_observed() -> None:
@@ -553,7 +682,5 @@ def test_clean_does_not_import_pg_or_model_client() -> None:
         " 'openai', 'anthropic') if m in sys.modules];"
         "print(f'leaked: {bad}'); sys.exit(1 if bad else 0)"
     )
-    proc = subprocess.run(
-        [sys.executable, "-c", code], capture_output=True, text=True, check=False
-    )
+    proc = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, check=False)
     assert proc.returncode == 0, proc.stdout + proc.stderr

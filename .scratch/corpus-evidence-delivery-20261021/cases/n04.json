@@ -1,0 +1,93 @@
+{
+  "case": "n04",
+  "kind": "wrong_period",
+  "review": {
+    "class": "background",
+    "reason": "仅2026至2028预测，不能用单锚点证明全报告是否披露2034数据",
+    "markers": []
+  },
+  "capture_sha256": "cf1ea794b1632fd76eb87120a583941cabdc478fb47a2fdd6cafaaf43bd6d5f8",
+  "original_sha256": "629e72e19c0c1799482c7ed0f01fb3ba417c69b3297611ed18d52902991def93",
+  "original_retrieval": "hybrid",
+  "top_chunk": "568f9e752f0fa65a:body:0036",
+  "top_original_chars": 587,
+  "old_snippet": "<b>科技</b>无评级\n254.23\n1641.26\n2.12",
+  "preview": {
+    "text": "表12：可比公司估值表（截止至2026 年9 月6 日）\n证券代码公司简称投资评级股价（元）市值（亿元）\nEPS\nPE\n2025A\n2026E\n2027E\n2028E\n2025A\n2026E\n2027E\n2028E\n688200.SH华峰测控无评级\n354.71\n712.25\n3.96\n3.74\n4.84\n6.44\n89.6\n94.9\n73.3\n55.1\n300604.SZ长川科技无评级\n254.23\n1641.26\n2.12\n3.39\n5.02\n6.84\n119.9\n75.0\n50.7\n37.2\n平均值\n104.7\n84.9\n62.0\n46.1\n300480.SZ光力科技优于大市\n28.07\n103.92\n0.11\n0.36\n0.59\n0.93\n245.9\n78.6\n47.5\n30.3\n请务必阅读正文之后的免责声明及其项下所有内容\n17\n资料来源:Wind、国信证券经济研究所整理及预测。注：可比公司取Wind 一致预期。\n投资建议\n综合以上，我们预计2026 年—2028 年归属于母公司净利润分别为1.32/2.19/3.43\n亿元，对应PE 分别为79/48/30 倍。敏感性分析对应的一年期合理价值区间为\n32.54-39.98 元（对应2027 年PE 55-68x），首次覆盖给予“优于大市”评级。",
+    "start": 0,
+    "end": 561,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "净利润",
+      "国信",
+      "科技"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": []
+  },
+  "core_chunks": 17,
+  "full_chunks": 82,
+  "original_context_occurrences": 106,
+  "preview_statuses": {
+    "complete_sentence_window": 6,
+    "no_complete_matching_sentence": 2,
+    "structured_content_requires_fetch": 2
+  },
+  "preview_chars": [
+    561,
+    559,
+    0,
+    576,
+    0,
+    548,
+    559,
+    576,
+    0,
+    0
+  ],
+  "body_chars": {
+    "off": 16927,
+    "pilot": 33716
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 3979,
+        "hits": 2,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      },
+      "pilot": {
+        "chars": 4722,
+        "hits": 2,
+        "previews": 2,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11387,
+        "hits": 6,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      },
+      "pilot": {
+        "chars": 11774,
+        "hits": 6,
+        "previews": 4,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      }
+    }
+  }
+}

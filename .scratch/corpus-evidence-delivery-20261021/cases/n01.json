@@ -1,0 +1,95 @@
+{
+  "case": "n01",
+  "kind": "wrong_company",
+  "review": {
+    "class": "irrelevant",
+    "reason": "返回光力科技数据，不是问题中的公司",
+    "markers": []
+  },
+  "capture_sha256": "21d6002ec07cfbd64427d94f34d1837745ea86160fb7ad26119b40982c2f46ed",
+  "original_sha256": "f59df892fa8dccde7618a37acbe9f444248ea3095428ce6f764c830973348068",
+  "original_retrieval": "hybrid",
+  "top_chunk": "568f9e752f0fa65a:body:0003",
+  "top_original_chars": 1122,
+  "old_snippet": "<b>2026</b>年<b>上半年</b>公司实现<b>营业</b><b>收入</b>4.53",
+  "preview": {
+    "text": "相关研究报告\n2026 年上半年业绩高速增长，半导体封测装备快速放量。公司主营半导体\n划片机，并布局研磨抛光设备、空气主轴及刀片耗材等产品，主要用于\n晶圆及封装体切割、晶圆减薄等环节，其划片设备技术及客户验证壁垒\n较高，长期由海外厂商主导，国产替代空间较大，且AIDC、HBM 及先进\n封装发展进一步提升划切和减薄设备需求，目前公司国产机械划片机已\n实现批量销售，并向激光划切、研磨抛光及耗材延伸。2026 年上半年公\n司实现营业收入4.53 亿元，同比+57.23%；实现归母净利润0.74 亿元，\n同比+194.56%；扣非归母净利润0.70 亿元，同比+552.69%。公司综合\n毛利率为50.39%，同比下降6.87 个百分点，毛利率回落主要系半导体\n装备收入占比提升带来业务结构变化。其中2026Q2 单季度实现营业收\n入2.46 亿元，同比+82.16%，实现归母净利润0.43 亿元，同比+481.60%，\n盈利能力显著改善。\n半导体封测装备成为业绩增长核心，安全监控业务短期承压。2026 年上半\n年半导体封测装备制造业务实现收入3.51 亿元，同比增长162.25%，收\n入占比提升至77.63%；毛利率44.97%，同比提升3.4 个百分点。国产\n划片机加速放量，国内半导体收入超过海外业务，国产半导体业务实现\n扭亏。",
+    "start": 0,
+    "end": 569,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "2026",
+      "上半年",
+      "净利润",
+      "收入",
+      "营业"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": []
+  },
+  "core_chunks": 46,
+  "full_chunks": 169,
+  "original_context_occurrences": 176,
+  "preview_statuses": {
+    "complete_sentence_window": 7,
+    "structured_content_requires_fetch": 2,
+    "no_complete_matching_sentence": 1
+  },
+  "preview_chars": [
+    569,
+    559,
+    0,
+    468,
+    591,
+    548,
+    600,
+    0,
+    580,
+    0
+  ],
+  "body_chars": {
+    "off": 22252,
+    "pilot": 46365
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 4162,
+        "hits": 1,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      },
+      "pilot": {
+        "chars": 3742,
+        "hits": 1,
+        "previews": 1,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11802,
+        "hits": 4,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      },
+      "pilot": {
+        "chars": 10966,
+        "hits": 4,
+        "previews": 3,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      }
+    }
+  }
+}

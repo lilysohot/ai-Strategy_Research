@@ -1,0 +1,16 @@
+{
+  "hashes": {
+    ".scratch/corpus-clean-disclaimer-20261021/baseline.json": "b352a38faed405d53ba45f74a864869a3c57e80b3ef2b910a309769be1146ed3",
+    ".scratch/corpus-clean-disclaimer-20261021/evaluation.json": "b4cb712b478ef5f2e0d2c0de288dfbcd670a13b2ba27bc53c4041709db8aa4d9",
+    "plugins/corpus/preparation/clean.py": "b3f500b96870b6e389ceed6beb1ae2874dedf59e7f6d0b0a479c71ad2bf0288d",
+    ".scratch/corpus-relevance-audit-20261021/authority.json": "78664f61c4ae204b25b3273086cee21732789a4499ceead21463414659db506a",
+    ".scratch/corpus-vector-acceptance-20261020/manifest.json": "50305e59759c13d662dce9ae84001474ae7dec596c55aed1449c9aabf1250a68"
+  },
+  "scope": "All 301 newly excluded units, surrounding boundaries, 24 positive full evidence packages. Agent review, not human/blind adjudication. No DB/index/model calls.",
+  "rules": {
+    "safe_noise": "legal boilerplate, rating definitions, contact details, standalone reminder",
+    "unsafe": "research prose, actual rating/recommendation, financial facts or necessary table header/period/unit/footnote",
+    "uncertain": "ambiguous role or lost dependency; must not pass as safe"
+  },
+  "authority_chunks_raw_aligned": 703
+}

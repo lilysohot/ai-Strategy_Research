@@ -1,0 +1,3015 @@
+{
+  "reviewer": "agent, full packet reading; not independent human or blind review",
+  "units": [
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 1,
+      "raw_hash": "65c88d62796609c7eb59e87630505f46ab35dae3fe13ac9dd97bb689b2ef21a7",
+      "packet": "00f08e66-0001-0001",
+      "category": "reminder",
+      "content_decision": "non_research_template",
+      "reason": "整单元只有阅读声明提醒，无正文事实。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 144,
+      "raw_hash": "8f69f903c7f64b62fb1059d223707f3eb1655534266f90ce0190a4fab89e44a0",
+      "packet": "00f08e66-0144-0147",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 145,
+      "raw_hash": "f4fd85e2d76dbfef049c3c96dbfc9ad2ae1f060e5acfb8f139d2ba544261273d",
+      "packet": "00f08e66-0144-0147",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 146,
+      "raw_hash": "d7b61aece8f79bcf3ea0e3fa028ab036c1c15e986e3d451ce9f02e7a8578dc56",
+      "packet": "00f08e66-0144-0147",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 147,
+      "raw_hash": "66b063103c6c62334f231eb85294f47609140123dd3f691be83acd189eae13be",
+      "packet": "00f08e66-0144-0147",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 153,
+      "raw_hash": "640bceeff92fa4caea853af3802537e158d719ae92994c5c5cfee75b28cc9b56",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 154,
+      "raw_hash": "3d5ca1642c2f2750d7fd44d5a84b6bea61b4537a5bdc0922f77e42c9b4576a77",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 155,
+      "raw_hash": "975cebe0f3d546034bf99a0fc5bfb8573a8158d9a059f80da4cc6d31dc2878a3",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 156,
+      "raw_hash": "b006b91b3a5c8e51e4b977f810db1adea44b51283fa7fb7ad01b948f5a834de9",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 157,
+      "raw_hash": "e660ad1e9ff440fc2d655cf538833c187f9759181f2a24a9014b4e23280a7f46",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 158,
+      "raw_hash": "4b17b9f8e97e32e7490bdcef0f2c4b638f3a7833bdab1207e4f37847eabf57f6",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 159,
+      "raw_hash": "3035c9104a477c544927bfbbccfafbd264072bc5b237e053fda831cd4ba4b749",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 160,
+      "raw_hash": "44daeb40259bdc059e4fbcbf9f435c9455f3ebfc9307d696bb4012c4764e1ed2",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 161,
+      "raw_hash": "5ce58edcaaea8bc1fa52462c625fdf339f6a7d8f8bc9e4d8eb63e9e8e65715da",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 162,
+      "raw_hash": "b072f732bbbcae6bba162e3fb54d8898b9f8dac659b064b49f827094ca968951",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 163,
+      "raw_hash": "9b3eb1f9fcfc9a206a7ec8142bfc6e861fb44b269c3327141745fde254c1180b",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 164,
+      "raw_hash": "6c416f82d9e584be6882fc2bc5e86e2f1f585bd000785e7a14ac894514727eea",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 165,
+      "raw_hash": "54844bb734eed55701f800301b7b2876bfee362f850779e5c261249eb2e8df94",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 166,
+      "raw_hash": "9407fa63095076c2776248cbf9687905fe977e6df22bd1f43fe1994d7d5b5188",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 167,
+      "raw_hash": "ec4ae6cf0f38e84a53dae7da4fb8ff731e874d1b70a3ee3e16b57cfea60579f0",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 168,
+      "raw_hash": "4cf6f014f23a1f41ef4a8fddf0e73ed496d495d64c601058e65e3817b1f6703e",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 169,
+      "raw_hash": "fcc9269dfe73ef563a3ce4cebb7393312ef5a18af07ac74d6aadb238419a9e03",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 170,
+      "raw_hash": "75eb7686495e63c028d38074dd7eb6bd4f28c12190ef4cee784f2f6455b9d880",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 171,
+      "raw_hash": "f1bd10747d9887d9ecf0c0a998c7a02d7399a4aa57230ea9596783ddd762688e",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 172,
+      "raw_hash": "f4f02f3f10d384c8a837b217a8a573ba14a0b8f588bdb406b1be8e71ecb9afe0",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 173,
+      "raw_hash": "c9a6eee9f91183c733e3e81422d1b0ada779a198e88810e3612d0966e3c180b3",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 174,
+      "raw_hash": "4b26dfeaf2d11bfdce1f40ad40cafa677e0239c5edf7c576cb1f1c935e7bdf3c",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 175,
+      "raw_hash": "6b37f86b3ca73ed1cb8bcdbd197f52873d025376e8a9a9fb0619b1f60a62aa67",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 176,
+      "raw_hash": "79049f2253f2e98c6c6ce099aeb0f515587028565ff2a6c6173b8485b71fe139",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 177,
+      "raw_hash": "b17b4d46fc6e0078a2c2f9561dd477715edc21fd984ca5b61b83c33770b3eca6",
+      "packet": "00f08e66-0153-0195",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 178,
+      "raw_hash": "b54f8f6cf4fb1026e0f9b1df74cb981db6854ef0cd427cdb3a20285191ed5201",
+      "packet": "00f08e66-0153-0195",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 179,
+      "raw_hash": "7d1a286931910ed12868bd2ce2f39c37e4cde4811d9107c275342ea519d7a802",
+      "packet": "00f08e66-0153-0195",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 180,
+      "raw_hash": "63c23abfffa393b085d26c7305eede9f1d3db36cb257f88e481daf3d5ab1f8ac",
+      "packet": "00f08e66-0153-0195",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 181,
+      "raw_hash": "b09236f07ab4ef00c0a5d7e99b73c336673372ac4f90b2fe9eb3848ba318588b",
+      "packet": "00f08e66-0153-0195",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 182,
+      "raw_hash": "2b1673fe29a671458c67f78a06a915317ce38ab5313e894ae7c18ab8608be3ab",
+      "packet": "00f08e66-0153-0195",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 183,
+      "raw_hash": "5d045997b8ad0a3c1d800f1b2b30c64e54786ec040a6fb028cdeddebd938cf4c",
+      "packet": "00f08e66-0153-0195",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 184,
+      "raw_hash": "367ef131392097755ab4dfbede6804d59a095c98451b9bf5d286e111d0b5cfc9",
+      "packet": "00f08e66-0153-0195",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 185,
+      "raw_hash": "16e958bd22e3db86ffbea98044b4131c583d4d30fce16f69045b5c31f5a77dfa",
+      "packet": "00f08e66-0153-0195",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 186,
+      "raw_hash": "c55212edbb3998af5a7b58f77aa891248ce425ece996324ff08221ff94ca6d3b",
+      "packet": "00f08e66-0153-0195",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 187,
+      "raw_hash": "ec1a682badf09cfcdcdceff7b574f6f5a889031a0593c60c5908f64dc549820a",
+      "packet": "00f08e66-0153-0195",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 188,
+      "raw_hash": "5bed65221fabe6e2b3085bdca14b4b3bc55bdede5733217648cfe3c9ad8e2dd4",
+      "packet": "00f08e66-0153-0195",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 189,
+      "raw_hash": "2f57620a8c6cdb61a4b6f5ad0d0b7179bc741c78bf403000bdebf397764c72cb",
+      "packet": "00f08e66-0153-0195",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 190,
+      "raw_hash": "88ddbecc5b282f02761125d3d3bbe245cd2234a48329ce39cebb733ea546601e",
+      "packet": "00f08e66-0153-0195",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 191,
+      "raw_hash": "36076d9c94056c006ee279ac0b8223cb882bde25635fcd5c44745bd7aadb64a8",
+      "packet": "00f08e66-0153-0195",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 192,
+      "raw_hash": "c18e273679e424b574b0057a0675a76ad4f9989f632cc830d375a12a48c61c49",
+      "packet": "00f08e66-0153-0195",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 193,
+      "raw_hash": "2fc864742d954ddac86e1cc3e6e103855540dc7e4bc279f5271564b673a9a77e",
+      "packet": "00f08e66-0153-0195",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 194,
+      "raw_hash": "816fa53a4ff9ca20e456981256682d085402b698f42f3dd8f77869e3ddc6edef",
+      "packet": "00f08e66-0153-0195",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "ordinal": 195,
+      "raw_hash": "93a4efddfb23ec03aa874d43d9883bcbb373276ca67cd09bd402b3b76d566c30",
+      "packet": "00f08e66-0153-0195",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 175,
+      "raw_hash": "99cce30985bc37ef3e06b8a96af2ba19e83114ae95180bab3406870e54868240",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 176,
+      "raw_hash": "0cc6b0da2518fe6a89014de748dd20b5f7ae11f91312cc8103d9ae68c1e97f5f",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 177,
+      "raw_hash": "4262c45dc797bb0cd5008331ef25b684413859f55b73c71fb4e2c01b645dbbb7",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 178,
+      "raw_hash": "78e6db862fbcef732948312fb9f241546c86fda1a3799c9c15d6c3bad5678cff",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 179,
+      "raw_hash": "61976ae83fee7e4a2e9f06f20de64761ec8cf4f8e787a6398e14b272d2691863",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 180,
+      "raw_hash": "ce4f3566a074be7abb7056f3a67f2edaa8b156dd98223079b77b36374d518241",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 181,
+      "raw_hash": "3bb9cfa8679d8ff053d7bae1da49dc34495a12a23c2d55210ea82e21ea2d81e0",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 182,
+      "raw_hash": "0136ac31c24cc569c2446eb9f6ea58d80ca83020567fdc757bb306dbc0313e8c",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 183,
+      "raw_hash": "a89999d01b51932d63b7a2220424781a88d633139142d944780c96b10da6e08c",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 184,
+      "raw_hash": "000257356073ff47bac3d8f1ae8d4865931b001b86b9509718382d3a78a00db1",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 185,
+      "raw_hash": "574ce385b86dddcc4d2d007d4bd09e908b59c9938691e26f9d1648ed18b2783c",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 186,
+      "raw_hash": "5051e8fa326ce5f3cb796e9fb02a171e0e92a8f262813993d4196bd85107dc98",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 187,
+      "raw_hash": "3e982d630b9ab4543b9845372109ac13a42a28ceb9c6fae04138d4c7b23066aa",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 188,
+      "raw_hash": "5087b81bce8c384f21878675027609d5ccb97bc371e93bd598ae3cfdfaf92677",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 189,
+      "raw_hash": "27c768f65cc19ab5de7d9a451dc2a57299f200ccc4a461b072633e92e4f4b879",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 190,
+      "raw_hash": "3dfc2c158f059ecd6aba3e923c2f5735bf0181e3ccd796f8557552c0ecf31578",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 191,
+      "raw_hash": "a806041f6d4c679be91556db93ce5e083fbff99b6cb1c79232772eeafc598ed0",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 192,
+      "raw_hash": "3bb9cfa8679d8ff053d7bae1da49dc34495a12a23c2d55210ea82e21ea2d81e0",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 193,
+      "raw_hash": "2033c4591af3e4a9318b9cdc0dac395c509a53e56ae4e8b93e22f2cf117fd1db",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 194,
+      "raw_hash": "574ce385b86dddcc4d2d007d4bd09e908b59c9938691e26f9d1648ed18b2783c",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 195,
+      "raw_hash": "404846b82a389dc6f219ceca4938218f82b878910510f157584ac5047ffafc93",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 196,
+      "raw_hash": "3e982d630b9ab4543b9845372109ac13a42a28ceb9c6fae04138d4c7b23066aa",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "ordinal": 197,
+      "raw_hash": "4c51c1c5abd658eb520bbd53fb5726ac7cc38a906abe1125ce8f9c736b168736",
+      "packet": "11ea15ac-0175-0197",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1282,
+      "raw_hash": "b631e097d8440b367c60ed9b5d2b2254784a83d54a02dd7643701aee6f8b34a8",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1283,
+      "raw_hash": "ede6558683d7e72e19261dc56a3cc99333c01c947e8440ac2ccb33aa21a7ff37",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1284,
+      "raw_hash": "978ac76bce35e33e828ff128499bbd2cc8cd09b734353066d3e85e8bde4eea58",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1285,
+      "raw_hash": "172ff613c65c4be44b8b47438b9d2729c32434ccf58d97157f404fe08c8bf392",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1286,
+      "raw_hash": "25d9d6b9e7860c6eb39e7650c74d3e16454d1b7a6d30460afbdb477b711143c6",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1287,
+      "raw_hash": "a61ba95d1fe82e82094d5d90391e98037a5e49925f954b2a31b40c876aaed951",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1288,
+      "raw_hash": "0c7851d2f00a9d3f99f37daba1d8acfd4db75ce376af9a0436003cdd597971ec",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1289,
+      "raw_hash": "7bb2ea237545b3f3330dbb799446e5f0596634edf8fcb59875e75047f1ee2035",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1290,
+      "raw_hash": "712457efc72dc59f315e85e90ed2f230ed15e02388f2bbd1407be22d4a669dc4",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1291,
+      "raw_hash": "71023ef30cd33c0612031b4f9c17f9d816652680aadb7cf6997340aa3a193c41",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1292,
+      "raw_hash": "fee9a77837228eb57b7f64def67046bf47cf5206dee5906347d819c6b74af420",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1293,
+      "raw_hash": "c58e0405a976ea4f571ef34505782e81d7942c46c5ba1fd162cd88a277c501b8",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1294,
+      "raw_hash": "4a739debeb0a5d48d2bc82d7ad7369d8b35c564ba97ba797a79450f2c71a3a05",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1295,
+      "raw_hash": "f030ea68a4dc177f8862c5910d3ce1b022364e201ce737769bb16e1ee2690f65",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1296,
+      "raw_hash": "db2c0af42570c371e48abcc9be187058020963edce9b5760b1a0a479d8f0bea1",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1297,
+      "raw_hash": "36fcddae63a682ebdf342d7d9c61eb23f8c1fa1a8ecec2ac48aae9db8d257af7",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1298,
+      "raw_hash": "0c7851d2f00a9d3f99f37daba1d8acfd4db75ce376af9a0436003cdd597971ec",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1299,
+      "raw_hash": "dfbdbcfea4eed961eadb0696f118297140efaaecd778ca1428a3743509da4819",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1300,
+      "raw_hash": "19c41256ae2a1c72d7b0032c647cc0530492c7c0ce2ae73c21a851699ed45ba4",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1301,
+      "raw_hash": "b48b4a5cd2b5ff0dec09f056e8942616babc10ddd467077626ad740d852a33f1",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "ordinal": 1302,
+      "raw_hash": "62e5f3b5301e9a67bf092006af4200d2c30709b4246f7968902c9ea9d1a6b728",
+      "packet": "174b6462-1282-1302",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "ordinal": 38,
+      "raw_hash": "e94709e702c3c1b06cb41b97d7158b61d1621f25eef131ec6ef6f16950536277",
+      "packet": "1e021a8c-0038-0042",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "ordinal": 39,
+      "raw_hash": "90e8b7f126ecf0873f8ad5876d416a474087d0d8ee52767804440493f8d16646",
+      "packet": "1e021a8c-0038-0042",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "ordinal": 40,
+      "raw_hash": "b631e097d8440b367c60ed9b5d2b2254784a83d54a02dd7643701aee6f8b34a8",
+      "packet": "1e021a8c-0038-0042",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": "partial_rating_table"
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "ordinal": 41,
+      "raw_hash": "54e884d05051c890f32432fe45d1226b97d1631ac1f42f6b292e23c3fbd503de",
+      "packet": "1e021a8c-0038-0042",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": "partial_rating_table"
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "ordinal": 42,
+      "raw_hash": "f93f37aa39b4512ab730de8e61786d3f5c3253978271d63ba687f567c6f63399",
+      "packet": "1e021a8c-0038-0042",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": "partial_rating_table"
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 1,
+      "raw_hash": "65c88d62796609c7eb59e87630505f46ab35dae3fe13ac9dd97bb689b2ef21a7",
+      "packet": "1e141ab0-0001-0001",
+      "category": "reminder",
+      "content_decision": "non_research_template",
+      "reason": "整单元只有阅读声明提醒，无正文事实。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 150,
+      "raw_hash": "640bceeff92fa4caea853af3802537e158d719ae92994c5c5cfee75b28cc9b56",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 151,
+      "raw_hash": "3d5ca1642c2f2750d7fd44d5a84b6bea61b4537a5bdc0922f77e42c9b4576a77",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 152,
+      "raw_hash": "975cebe0f3d546034bf99a0fc5bfb8573a8158d9a059f80da4cc6d31dc2878a3",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 153,
+      "raw_hash": "b006b91b3a5c8e51e4b977f810db1adea44b51283fa7fb7ad01b948f5a834de9",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 154,
+      "raw_hash": "e660ad1e9ff440fc2d655cf538833c187f9759181f2a24a9014b4e23280a7f46",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 155,
+      "raw_hash": "4b17b9f8e97e32e7490bdcef0f2c4b638f3a7833bdab1207e4f37847eabf57f6",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 156,
+      "raw_hash": "3035c9104a477c544927bfbbccfafbd264072bc5b237e053fda831cd4ba4b749",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 157,
+      "raw_hash": "44daeb40259bdc059e4fbcbf9f435c9455f3ebfc9307d696bb4012c4764e1ed2",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 158,
+      "raw_hash": "5ce58edcaaea8bc1fa52462c625fdf339f6a7d8f8bc9e4d8eb63e9e8e65715da",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 159,
+      "raw_hash": "b072f732bbbcae6bba162e3fb54d8898b9f8dac659b064b49f827094ca968951",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 160,
+      "raw_hash": "9b3eb1f9fcfc9a206a7ec8142bfc6e861fb44b269c3327141745fde254c1180b",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 161,
+      "raw_hash": "6c416f82d9e584be6882fc2bc5e86e2f1f585bd000785e7a14ac894514727eea",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 162,
+      "raw_hash": "54844bb734eed55701f800301b7b2876bfee362f850779e5c261249eb2e8df94",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 163,
+      "raw_hash": "9407fa63095076c2776248cbf9687905fe977e6df22bd1f43fe1994d7d5b5188",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 164,
+      "raw_hash": "ec4ae6cf0f38e84a53dae7da4fb8ff731e874d1b70a3ee3e16b57cfea60579f0",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 165,
+      "raw_hash": "4cf6f014f23a1f41ef4a8fddf0e73ed496d495d64c601058e65e3817b1f6703e",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 166,
+      "raw_hash": "fcc9269dfe73ef563a3ce4cebb7393312ef5a18af07ac74d6aadb238419a9e03",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 167,
+      "raw_hash": "75eb7686495e63c028d38074dd7eb6bd4f28c12190ef4cee784f2f6455b9d880",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 168,
+      "raw_hash": "f1bd10747d9887d9ecf0c0a998c7a02d7399a4aa57230ea9596783ddd762688e",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 169,
+      "raw_hash": "f4f02f3f10d384c8a837b217a8a573ba14a0b8f588bdb406b1be8e71ecb9afe0",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 170,
+      "raw_hash": "c9a6eee9f91183c733e3e81422d1b0ada779a198e88810e3612d0966e3c180b3",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 171,
+      "raw_hash": "4b26dfeaf2d11bfdce1f40ad40cafa677e0239c5edf7c576cb1f1c935e7bdf3c",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 172,
+      "raw_hash": "6b37f86b3ca73ed1cb8bcdbd197f52873d025376e8a9a9fb0619b1f60a62aa67",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 173,
+      "raw_hash": "79049f2253f2e98c6c6ce099aeb0f515587028565ff2a6c6173b8485b71fe139",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 174,
+      "raw_hash": "b17b4d46fc6e0078a2c2f9561dd477715edc21fd984ca5b61b83c33770b3eca6",
+      "packet": "1e141ab0-0150-0194",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 175,
+      "raw_hash": "b54f8f6cf4fb1026e0f9b1df74cb981db6854ef0cd427cdb3a20285191ed5201",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 176,
+      "raw_hash": "7d1a286931910ed12868bd2ce2f39c37e4cde4811d9107c275342ea519d7a802",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 177,
+      "raw_hash": "63c23abfffa393b085d26c7305eede9f1d3db36cb257f88e481daf3d5ab1f8ac",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 178,
+      "raw_hash": "b09236f07ab4ef00c0a5d7e99b73c336673372ac4f90b2fe9eb3848ba318588b",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 179,
+      "raw_hash": "2b1673fe29a671458c67f78a06a915317ce38ab5313e894ae7c18ab8608be3ab",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 180,
+      "raw_hash": "5d045997b8ad0a3c1d800f1b2b30c64e54786ec040a6fb028cdeddebd938cf4c",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 181,
+      "raw_hash": "367ef131392097755ab4dfbede6804d59a095c98451b9bf5d286e111d0b5cfc9",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 182,
+      "raw_hash": "16e958bd22e3db86ffbea98044b4131c583d4d30fce16f69045b5c31f5a77dfa",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 183,
+      "raw_hash": "c55212edbb3998af5a7b58f77aa891248ce425ece996324ff08221ff94ca6d3b",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 184,
+      "raw_hash": "ec1a682badf09cfcdcdceff7b574f6f5a889031a0593c60c5908f64dc549820a",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 185,
+      "raw_hash": "5bed65221fabe6e2b3085bdca14b4b3bc55bdede5733217648cfe3c9ad8e2dd4",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 186,
+      "raw_hash": "2f57620a8c6cdb61a4b6f5ad0d0b7179bc741c78bf403000bdebf397764c72cb",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 187,
+      "raw_hash": "88ddbecc5b282f02761125d3d3bbe245cd2234a48329ce39cebb733ea546601e",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 188,
+      "raw_hash": "36076d9c94056c006ee279ac0b8223cb882bde25635fcd5c44745bd7aadb64a8",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 189,
+      "raw_hash": "c18e273679e424b574b0057a0675a76ad4f9989f632cc830d375a12a48c61c49",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 190,
+      "raw_hash": "2fc864742d954ddac86e1cc3e6e103855540dc7e4bc279f5271564b673a9a77e",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 191,
+      "raw_hash": "816fa53a4ff9ca20e456981256682d085402b698f42f3dd8f77869e3ddc6edef",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 192,
+      "raw_hash": "93a4efddfb23ec03aa874d43d9883bcbb373276ca67cd09bd402b3b76d566c30",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 193,
+      "raw_hash": "1d5a5978dc501b70f425485e5bd81c3ee65469d55c51d1946bd204a80544475d",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "ordinal": 194,
+      "raw_hash": "32c8833a4b00646f005eed788a97674cf75f48b2526070664ac10c7900c0d943",
+      "packet": "1e141ab0-0150-0194",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 1,
+      "raw_hash": "65c88d62796609c7eb59e87630505f46ab35dae3fe13ac9dd97bb689b2ef21a7",
+      "packet": "3f634514-0001-0001",
+      "category": "reminder",
+      "content_decision": "non_research_template",
+      "reason": "整单元只有阅读声明提醒，无正文事实。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 266,
+      "raw_hash": "8f69f903c7f64b62fb1059d223707f3eb1655534266f90ce0190a4fab89e44a0",
+      "packet": "3f634514-0266-0267",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 267,
+      "raw_hash": "8f8b8674eb727e4c0c626f30d13a2f38ba819435bc64aee0b475811ab3ff22db",
+      "packet": "3f634514-0266-0267",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 272,
+      "raw_hash": "640bceeff92fa4caea853af3802537e158d719ae92994c5c5cfee75b28cc9b56",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 273,
+      "raw_hash": "3d5ca1642c2f2750d7fd44d5a84b6bea61b4537a5bdc0922f77e42c9b4576a77",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 274,
+      "raw_hash": "b006b91b3a5c8e51e4b977f810db1adea44b51283fa7fb7ad01b948f5a834de9",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 275,
+      "raw_hash": "e660ad1e9ff440fc2d655cf538833c187f9759181f2a24a9014b4e23280a7f46",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 276,
+      "raw_hash": "4b17b9f8e97e32e7490bdcef0f2c4b638f3a7833bdab1207e4f37847eabf57f6",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 277,
+      "raw_hash": "3035c9104a477c544927bfbbccfafbd264072bc5b237e053fda831cd4ba4b749",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 278,
+      "raw_hash": "44daeb40259bdc059e4fbcbf9f435c9455f3ebfc9307d696bb4012c4764e1ed2",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 279,
+      "raw_hash": "5ce58edcaaea8bc1fa52462c625fdf339f6a7d8f8bc9e4d8eb63e9e8e65715da",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 280,
+      "raw_hash": "b072f732bbbcae6bba162e3fb54d8898b9f8dac659b064b49f827094ca968951",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 281,
+      "raw_hash": "9b3eb1f9fcfc9a206a7ec8142bfc6e861fb44b269c3327141745fde254c1180b",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 282,
+      "raw_hash": "6c416f82d9e584be6882fc2bc5e86e2f1f585bd000785e7a14ac894514727eea",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 283,
+      "raw_hash": "54844bb734eed55701f800301b7b2876bfee362f850779e5c261249eb2e8df94",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 284,
+      "raw_hash": "9407fa63095076c2776248cbf9687905fe977e6df22bd1f43fe1994d7d5b5188",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 285,
+      "raw_hash": "ec4ae6cf0f38e84a53dae7da4fb8ff731e874d1b70a3ee3e16b57cfea60579f0",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 286,
+      "raw_hash": "4cf6f014f23a1f41ef4a8fddf0e73ed496d495d64c601058e65e3817b1f6703e",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 287,
+      "raw_hash": "fcc9269dfe73ef563a3ce4cebb7393312ef5a18af07ac74d6aadb238419a9e03",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 288,
+      "raw_hash": "75eb7686495e63c028d38074dd7eb6bd4f28c12190ef4cee784f2f6455b9d880",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 289,
+      "raw_hash": "f1bd10747d9887d9ecf0c0a998c7a02d7399a4aa57230ea9596783ddd762688e",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 290,
+      "raw_hash": "f4f02f3f10d384c8a837b217a8a573ba14a0b8f588bdb406b1be8e71ecb9afe0",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 291,
+      "raw_hash": "c9a6eee9f91183c733e3e81422d1b0ada779a198e88810e3612d0966e3c180b3",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 292,
+      "raw_hash": "4b26dfeaf2d11bfdce1f40ad40cafa677e0239c5edf7c576cb1f1c935e7bdf3c",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 293,
+      "raw_hash": "6b37f86b3ca73ed1cb8bcdbd197f52873d025376e8a9a9fb0619b1f60a62aa67",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 294,
+      "raw_hash": "79049f2253f2e98c6c6ce099aeb0f515587028565ff2a6c6173b8485b71fe139",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 295,
+      "raw_hash": "b17b4d46fc6e0078a2c2f9561dd477715edc21fd984ca5b61b83c33770b3eca6",
+      "packet": "3f634514-0272-0313",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 296,
+      "raw_hash": "b54f8f6cf4fb1026e0f9b1df74cb981db6854ef0cd427cdb3a20285191ed5201",
+      "packet": "3f634514-0272-0313",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 297,
+      "raw_hash": "7d1a286931910ed12868bd2ce2f39c37e4cde4811d9107c275342ea519d7a802",
+      "packet": "3f634514-0272-0313",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 298,
+      "raw_hash": "63c23abfffa393b085d26c7305eede9f1d3db36cb257f88e481daf3d5ab1f8ac",
+      "packet": "3f634514-0272-0313",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 299,
+      "raw_hash": "b09236f07ab4ef00c0a5d7e99b73c336673372ac4f90b2fe9eb3848ba318588b",
+      "packet": "3f634514-0272-0313",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 300,
+      "raw_hash": "2b1673fe29a671458c67f78a06a915317ce38ab5313e894ae7c18ab8608be3ab",
+      "packet": "3f634514-0272-0313",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 301,
+      "raw_hash": "5d045997b8ad0a3c1d800f1b2b30c64e54786ec040a6fb028cdeddebd938cf4c",
+      "packet": "3f634514-0272-0313",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 302,
+      "raw_hash": "367ef131392097755ab4dfbede6804d59a095c98451b9bf5d286e111d0b5cfc9",
+      "packet": "3f634514-0272-0313",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 303,
+      "raw_hash": "16e958bd22e3db86ffbea98044b4131c583d4d30fce16f69045b5c31f5a77dfa",
+      "packet": "3f634514-0272-0313",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 304,
+      "raw_hash": "c55212edbb3998af5a7b58f77aa891248ce425ece996324ff08221ff94ca6d3b",
+      "packet": "3f634514-0272-0313",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 305,
+      "raw_hash": "ec1a682badf09cfcdcdceff7b574f6f5a889031a0593c60c5908f64dc549820a",
+      "packet": "3f634514-0272-0313",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 306,
+      "raw_hash": "5bed65221fabe6e2b3085bdca14b4b3bc55bdede5733217648cfe3c9ad8e2dd4",
+      "packet": "3f634514-0272-0313",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 307,
+      "raw_hash": "2f57620a8c6cdb61a4b6f5ad0d0b7179bc741c78bf403000bdebf397764c72cb",
+      "packet": "3f634514-0272-0313",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 308,
+      "raw_hash": "88ddbecc5b282f02761125d3d3bbe245cd2234a48329ce39cebb733ea546601e",
+      "packet": "3f634514-0272-0313",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 309,
+      "raw_hash": "36076d9c94056c006ee279ac0b8223cb882bde25635fcd5c44745bd7aadb64a8",
+      "packet": "3f634514-0272-0313",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 310,
+      "raw_hash": "c18e273679e424b574b0057a0675a76ad4f9989f632cc830d375a12a48c61c49",
+      "packet": "3f634514-0272-0313",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 311,
+      "raw_hash": "2fc864742d954ddac86e1cc3e6e103855540dc7e4bc279f5271564b673a9a77e",
+      "packet": "3f634514-0272-0313",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 312,
+      "raw_hash": "816fa53a4ff9ca20e456981256682d085402b698f42f3dd8f77869e3ddc6edef",
+      "packet": "3f634514-0272-0313",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "ordinal": 313,
+      "raw_hash": "93a4efddfb23ec03aa874d43d9883bcbb373276ca67cd09bd402b3b76d566c30",
+      "packet": "3f634514-0272-0313",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "ordinal": 44,
+      "raw_hash": "b631e097d8440b367c60ed9b5d2b2254784a83d54a02dd7643701aee6f8b34a8",
+      "packet": "5525b384-0044-0051",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "ordinal": 45,
+      "raw_hash": "0f7ac12a2ed951b2468ad55972bb87a380b83d5aee9398a56f04a9357d9f97cc",
+      "packet": "5525b384-0044-0051",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "ordinal": 46,
+      "raw_hash": "0b4c283bede1f4e4a752b0d9ddb94d69cba2d691c1109ed00ab6110ca8874da3",
+      "packet": "5525b384-0044-0051",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "ordinal": 47,
+      "raw_hash": "8492690882f0644e4a3004e8f187371c1fefd197e2c2238a2a97b0fa19ad2344",
+      "packet": "5525b384-0044-0051",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "ordinal": 48,
+      "raw_hash": "b9a285ff9e449a855196af07fac64dc58bf9fc9b4459cee73e96a0de3783df10",
+      "packet": "5525b384-0044-0051",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "ordinal": 49,
+      "raw_hash": "6f911550649c3275a8bd2bdd8deeb3884702d873352e55743193b070081f8309",
+      "packet": "5525b384-0044-0051",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "ordinal": 50,
+      "raw_hash": "0bd12fd58c513544cb5290cc9257426e4ce886a1e639f460a41f10bf28878278",
+      "packet": "5525b384-0044-0051",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "ordinal": 51,
+      "raw_hash": "7d715ef21e1985c139c7f3af4009604225302ad9f41c13a568989e8d2e8505f7",
+      "packet": "5525b384-0044-0051",
+      "category": "layout",
+      "content_decision": "non_research_template",
+      "reason": "完整内部传播提示。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "ordinal": 1,
+      "raw_hash": "0f427204cc0e7ad5b3d273a2988bde7a582cc70ec3de3123992669d9f31ef71e",
+      "packet": "793b3967-0001-0001",
+      "category": "reminder",
+      "content_decision": "non_research_template",
+      "reason": "整单元只有阅读声明提醒，无正文事实。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "ordinal": 456,
+      "raw_hash": "2d4bb3f50170b9b20968f4b7280f461a3b6ea581aff09db3c0de1fb0f46e2ad4",
+      "packet": "793b3967-0456-0464",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "ordinal": 457,
+      "raw_hash": "29cee6aa1579debf0e3e063321ecc2cfb93777803f0c8df8340b4693ee71a159",
+      "packet": "793b3967-0456-0464",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "ordinal": 458,
+      "raw_hash": "4c87cba750107064bdfc8093b3cdaff4c5f69707e0b3a5dcd165357db70d3044",
+      "packet": "793b3967-0456-0464",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "ordinal": 459,
+      "raw_hash": "0158323cbb028baf4f6c3aba38a065e646325d350a4c7783f066e73cd7484f00",
+      "packet": "793b3967-0456-0464",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "ordinal": 460,
+      "raw_hash": "c5d5768dcc121781ad7e94ddaa3a866e7a710ed32347df42c05819055e6aff8a",
+      "packet": "793b3967-0456-0464",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "ordinal": 461,
+      "raw_hash": "178d3431e9de990b58429bd42f25470c2a323d7ca2ca7499451c50ce3ff9882f",
+      "packet": "793b3967-0456-0464",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "ordinal": 462,
+      "raw_hash": "243ffb84b708bbe57f9b0c7ecbc3ebe8a703c5d8fc2ccfb9bb3cab2d9e561fbe",
+      "packet": "793b3967-0456-0464",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "ordinal": 463,
+      "raw_hash": "145f058e088b863b9d627b1646ec2d9cf97e14ebd4bc3b083172469fc0272f22",
+      "packet": "793b3967-0456-0464",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "ordinal": 464,
+      "raw_hash": "4777d13f6c5df517c25d38306b62008ff90c7791aa053853116797d3e7c3d0f8",
+      "packet": "793b3967-0456-0464",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "ordinal": 207,
+      "raw_hash": "54524a37aa2f874a0c06bab7d8ffb5ec3aec1729023400b716cc8557001b50bb",
+      "packet": "8158cbb9-0207-0209",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "ordinal": 208,
+      "raw_hash": "f5cea65f43c102e09e15915d182c8cef76ee8cf2af1aefbc7866c897177d0134",
+      "packet": "8158cbb9-0207-0209",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "ordinal": 209,
+      "raw_hash": "b98c130bbe1689cdecdcc0c5de8a3684f6bcbbd120b319bb2428b9d9482d106d",
+      "packet": "8158cbb9-0207-0209",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 1,
+      "raw_hash": "65c88d62796609c7eb59e87630505f46ab35dae3fe13ac9dd97bb689b2ef21a7",
+      "packet": "987d9f69-0001-0001",
+      "category": "reminder",
+      "content_decision": "non_research_template",
+      "reason": "整单元只有阅读声明提醒，无正文事实。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 193,
+      "raw_hash": "8f69f903c7f64b62fb1059d223707f3eb1655534266f90ce0190a4fab89e44a0",
+      "packet": "987d9f69-0193-0194",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 194,
+      "raw_hash": "8f8b8674eb727e4c0c626f30d13a2f38ba819435bc64aee0b475811ab3ff22db",
+      "packet": "987d9f69-0193-0194",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 200,
+      "raw_hash": "640bceeff92fa4caea853af3802537e158d719ae92994c5c5cfee75b28cc9b56",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 201,
+      "raw_hash": "3d5ca1642c2f2750d7fd44d5a84b6bea61b4537a5bdc0922f77e42c9b4576a77",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 202,
+      "raw_hash": "dc84f91bdbf32cbce72d73a7efd626962ca64b27a9b78a2a8678daba5966d0b7",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 203,
+      "raw_hash": "e1867e7250510fc282519da16518d91428f6fb78090f86c2a3303889c25d1ff3",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 204,
+      "raw_hash": "5f4f932179f9890448cbfa8b3a1d99e9de81c5d9a45614d0788e810518b388bf",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 205,
+      "raw_hash": "4b17b9f8e97e32e7490bdcef0f2c4b638f3a7833bdab1207e4f37847eabf57f6",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 206,
+      "raw_hash": "3035c9104a477c544927bfbbccfafbd264072bc5b237e053fda831cd4ba4b749",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 207,
+      "raw_hash": "44daeb40259bdc059e4fbcbf9f435c9455f3ebfc9307d696bb4012c4764e1ed2",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 208,
+      "raw_hash": "5ce58edcaaea8bc1fa52462c625fdf339f6a7d8f8bc9e4d8eb63e9e8e65715da",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 209,
+      "raw_hash": "b072f732bbbcae6bba162e3fb54d8898b9f8dac659b064b49f827094ca968951",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 210,
+      "raw_hash": "9b3eb1f9fcfc9a206a7ec8142bfc6e861fb44b269c3327141745fde254c1180b",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 211,
+      "raw_hash": "6c416f82d9e584be6882fc2bc5e86e2f1f585bd000785e7a14ac894514727eea",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 212,
+      "raw_hash": "54844bb734eed55701f800301b7b2876bfee362f850779e5c261249eb2e8df94",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 213,
+      "raw_hash": "9407fa63095076c2776248cbf9687905fe977e6df22bd1f43fe1994d7d5b5188",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 214,
+      "raw_hash": "ec4ae6cf0f38e84a53dae7da4fb8ff731e874d1b70a3ee3e16b57cfea60579f0",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 215,
+      "raw_hash": "4cf6f014f23a1f41ef4a8fddf0e73ed496d495d64c601058e65e3817b1f6703e",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 216,
+      "raw_hash": "fcc9269dfe73ef563a3ce4cebb7393312ef5a18af07ac74d6aadb238419a9e03",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 217,
+      "raw_hash": "75eb7686495e63c028d38074dd7eb6bd4f28c12190ef4cee784f2f6455b9d880",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 218,
+      "raw_hash": "f1bd10747d9887d9ecf0c0a998c7a02d7399a4aa57230ea9596783ddd762688e",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 219,
+      "raw_hash": "f4f02f3f10d384c8a837b217a8a573ba14a0b8f588bdb406b1be8e71ecb9afe0",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 220,
+      "raw_hash": "c9a6eee9f91183c733e3e81422d1b0ada779a198e88810e3612d0966e3c180b3",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 221,
+      "raw_hash": "4b26dfeaf2d11bfdce1f40ad40cafa677e0239c5edf7c576cb1f1c935e7bdf3c",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 222,
+      "raw_hash": "6b37f86b3ca73ed1cb8bcdbd197f52873d025376e8a9a9fb0619b1f60a62aa67",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 223,
+      "raw_hash": "79049f2253f2e98c6c6ce099aeb0f515587028565ff2a6c6173b8485b71fe139",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 224,
+      "raw_hash": "b17b4d46fc6e0078a2c2f9561dd477715edc21fd984ca5b61b83c33770b3eca6",
+      "packet": "987d9f69-0200-0242",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 225,
+      "raw_hash": "b54f8f6cf4fb1026e0f9b1df74cb981db6854ef0cd427cdb3a20285191ed5201",
+      "packet": "987d9f69-0200-0242",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 226,
+      "raw_hash": "7d1a286931910ed12868bd2ce2f39c37e4cde4811d9107c275342ea519d7a802",
+      "packet": "987d9f69-0200-0242",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 227,
+      "raw_hash": "63c23abfffa393b085d26c7305eede9f1d3db36cb257f88e481daf3d5ab1f8ac",
+      "packet": "987d9f69-0200-0242",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 228,
+      "raw_hash": "b09236f07ab4ef00c0a5d7e99b73c336673372ac4f90b2fe9eb3848ba318588b",
+      "packet": "987d9f69-0200-0242",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 229,
+      "raw_hash": "2b1673fe29a671458c67f78a06a915317ce38ab5313e894ae7c18ab8608be3ab",
+      "packet": "987d9f69-0200-0242",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 230,
+      "raw_hash": "5d045997b8ad0a3c1d800f1b2b30c64e54786ec040a6fb028cdeddebd938cf4c",
+      "packet": "987d9f69-0200-0242",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 231,
+      "raw_hash": "367ef131392097755ab4dfbede6804d59a095c98451b9bf5d286e111d0b5cfc9",
+      "packet": "987d9f69-0200-0242",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 232,
+      "raw_hash": "16e958bd22e3db86ffbea98044b4131c583d4d30fce16f69045b5c31f5a77dfa",
+      "packet": "987d9f69-0200-0242",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 233,
+      "raw_hash": "c55212edbb3998af5a7b58f77aa891248ce425ece996324ff08221ff94ca6d3b",
+      "packet": "987d9f69-0200-0242",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 234,
+      "raw_hash": "ec1a682badf09cfcdcdceff7b574f6f5a889031a0593c60c5908f64dc549820a",
+      "packet": "987d9f69-0200-0242",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 235,
+      "raw_hash": "5bed65221fabe6e2b3085bdca14b4b3bc55bdede5733217648cfe3c9ad8e2dd4",
+      "packet": "987d9f69-0200-0242",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 236,
+      "raw_hash": "2f57620a8c6cdb61a4b6f5ad0d0b7179bc741c78bf403000bdebf397764c72cb",
+      "packet": "987d9f69-0200-0242",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 237,
+      "raw_hash": "88ddbecc5b282f02761125d3d3bbe245cd2234a48329ce39cebb733ea546601e",
+      "packet": "987d9f69-0200-0242",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 238,
+      "raw_hash": "36076d9c94056c006ee279ac0b8223cb882bde25635fcd5c44745bd7aadb64a8",
+      "packet": "987d9f69-0200-0242",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 239,
+      "raw_hash": "c18e273679e424b574b0057a0675a76ad4f9989f632cc830d375a12a48c61c49",
+      "packet": "987d9f69-0200-0242",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 240,
+      "raw_hash": "2fc864742d954ddac86e1cc3e6e103855540dc7e4bc279f5271564b673a9a77e",
+      "packet": "987d9f69-0200-0242",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 241,
+      "raw_hash": "816fa53a4ff9ca20e456981256682d085402b698f42f3dd8f77869e3ddc6edef",
+      "packet": "987d9f69-0200-0242",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "ordinal": 242,
+      "raw_hash": "93a4efddfb23ec03aa874d43d9883bcbb373276ca67cd09bd402b3b76d566c30",
+      "packet": "987d9f69-0200-0242",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 576,
+      "raw_hash": "07cc77d17e4c7713b775cfc58a9899789ac10715835fbfc0cc255c38ea5fef81",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 577,
+      "raw_hash": "0d12cbd6562bfbff0a014d1aa01f0238922600b42553d0c198f2564bbea25fee",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 578,
+      "raw_hash": "4262c45dc797bb0cd5008331ef25b684413859f55b73c71fb4e2c01b645dbbb7",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 579,
+      "raw_hash": "0cc6b0da2518fe6a89014de748dd20b5f7ae11f91312cc8103d9ae68c1e97f5f",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 580,
+      "raw_hash": "53ff29bd1507ab35dbea2f83e8d31364a01fd154ef94fce0986bc3f18e71beb0",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 581,
+      "raw_hash": "ce4f3566a074be7abb7056f3a67f2edaa8b156dd98223079b77b36374d518241",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 582,
+      "raw_hash": "bad640927ca3df8bd0c2420d1ba179d73ee63da9af02c1c286e91f85f5e3d019",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 583,
+      "raw_hash": "a806041f6d4c679be91556db93ce5e083fbff99b6cb1c79232772eeafc598ed0",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 584,
+      "raw_hash": "bad640927ca3df8bd0c2420d1ba179d73ee63da9af02c1c286e91f85f5e3d019",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 585,
+      "raw_hash": "a1557ec3b0779ac2d5b7b7da25e6e237c92f79e478d3e0ae913f618944ed33b2",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 586,
+      "raw_hash": "395466084b0f5f754d54e52b1e7130c64a275c61a49065f620ab7ef739a682e4",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 587,
+      "raw_hash": "3bb9cfa8679d8ff053d7bae1da49dc34495a12a23c2d55210ea82e21ea2d81e0",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 588,
+      "raw_hash": "632342af077dca07fa1fec1b9561d08596ef83b37f18178de52d14c04395640e",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 589,
+      "raw_hash": "f8c020830cd4aeafbc596ed51151f2be34cb32481692f5abb3ee23042722ed7c",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 590,
+      "raw_hash": "58e862df53d03d9744b8870db645c70d5dec0980e5a7e76ac5a47c2d2cfd0e74",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 591,
+      "raw_hash": "fb28ba14091d4ffa528d70359561f4b69c5e1cc56293c2f7f0b6288a5e170571",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 592,
+      "raw_hash": "d961d875b612178b31fb5f74643953cb10ed261a1cf453349a3ca0a2ac52efb6",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 593,
+      "raw_hash": "0a44fc1daa5349e18d64c68d948fc99191d9ea2017be79b8b8cf4a8008da1874",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 594,
+      "raw_hash": "a2abeb3b4cb505e74c7c69090a35a596bbf474bb922755e3107acf07b960d624",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 595,
+      "raw_hash": "574ce385b86dddcc4d2d007d4bd09e908b59c9938691e26f9d1648ed18b2783c",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 596,
+      "raw_hash": "81f78ecd2265b578c6ab767c9078db1394bc596875dceb336e0b7198d391a2f9",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 597,
+      "raw_hash": "8e2b30bda1f231d84f8f99fb2a95da1fd1372746b841de45e1143437eb7c9aeb",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 598,
+      "raw_hash": "68536a54cb8c2dbf1aa5254a49dbb155e0f15b256fe669f4b3a179ba69ae2c78",
+      "packet": "d441478b-0576-0607",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 599,
+      "raw_hash": "325bd9acc65fac78c004271fa72f594200095cc6001e074a69dc697696f54dc9",
+      "packet": "d441478b-0576-0607",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 600,
+      "raw_hash": "68c77e155132565e1cbbace574552fedbb9e769c147d0e9e5ed64701f0cdf82d",
+      "packet": "d441478b-0576-0607",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 601,
+      "raw_hash": "88ba446ffa5b8cadfd33ba1017a61d03e0a6d0f4df98dec5ac4da37814eacb29",
+      "packet": "d441478b-0576-0607",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 602,
+      "raw_hash": "4906a49adc5c472b34483976104ec1d76992745367cc22d5fbc2a4db8e8e1ed7",
+      "packet": "d441478b-0576-0607",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 603,
+      "raw_hash": "1bb5e3986433569ca4e9201a3367313421e6962a713a57daf7bfbcbe507e502c",
+      "packet": "d441478b-0576-0607",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 604,
+      "raw_hash": "f1c7d3e6353bcec0156350d96ce13f71f92068b19cf65da478b5d0bff0bfc393",
+      "packet": "d441478b-0576-0607",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 605,
+      "raw_hash": "ae0f27bd476f66c78a6df6c7c17960c73bbb3826596236c4ccec2b05e9ad8ec2",
+      "packet": "d441478b-0576-0607",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 606,
+      "raw_hash": "725a7358c84a610aca9d57609b17811b67c23fef0da5978c857992ce576519ce",
+      "packet": "d441478b-0576-0607",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "ordinal": 607,
+      "raw_hash": "0db86384f5b630bc2b6b2a5b4bdd0246ca2988da187a778232f8326ed4ab35cd",
+      "packet": "d441478b-0576-0607",
+      "category": "contact",
+      "content_decision": "non_research_template",
+      "reason": "出具机构研究所城市、电话、地址或推广入口，不是公司经营地点/经营数据。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "ordinal": 1,
+      "raw_hash": "06b8a92fa19942587d0bd3445142b64c01ae779d2e437b5e87f5b9ba7d651da5",
+      "packet": "dddc7cd0-0001-0001",
+      "category": "reminder",
+      "content_decision": "non_research_template",
+      "reason": "整单元只有阅读声明提醒，无正文事实。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "ordinal": 213,
+      "raw_hash": "750f4899973766891cc45e5af0e0fe05870b84b9dec221dc7aaa75ea94d09bdf",
+      "packet": "f8e31696-0213-0225",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "ordinal": 214,
+      "raw_hash": "c1c0a3f4edd8b3c17c82213052550e7475fe0131a600e17ddbe6f14eee74df97",
+      "packet": "f8e31696-0213-0225",
+      "category": "legal",
+      "content_decision": "non_research_template",
+      "reason": "末页法律、版权、分析师独立性或出具机构资质说明，无本报告研究对象的分析正文。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "ordinal": 215,
+      "raw_hash": "07cc77d17e4c7713b775cfc58a9899789ac10715835fbfc0cc255c38ea5fef81",
+      "packet": "f8e31696-0213-0225",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "ordinal": 216,
+      "raw_hash": "71ab2557275c4ca24625c53717e44a2993d7e9092e7be65d996d2e738a7732ec",
+      "packet": "f8e31696-0213-0225",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "ordinal": 217,
+      "raw_hash": "acfe58a4efe574c069f5602d37807997a7c101615d6998970516b460d698f8fe",
+      "packet": "f8e31696-0213-0225",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "ordinal": 218,
+      "raw_hash": "008994873106e47d2fd52bb5b4830f93bb233b4c1de13489400375113173c333",
+      "packet": "f8e31696-0213-0225",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "ordinal": 219,
+      "raw_hash": "7aec0e482f6b3773d75ed3d41a294211fd4dac50652f6cc37355e5080b87b099",
+      "packet": "f8e31696-0213-0225",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "ordinal": 220,
+      "raw_hash": "a91a81b19989fa8ed865b9b9df33b9624d9954fd83c8818125e7c2d4f2365e97",
+      "packet": "f8e31696-0213-0225",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "ordinal": 221,
+      "raw_hash": "0ebe0677ec0c701a87f6cfe482f3a29e5aed552f34571c6020a9202d82f0bc44",
+      "packet": "f8e31696-0213-0225",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "ordinal": 222,
+      "raw_hash": "12d690a73476f37b2ccd8520d5ed7a7114d9bc43cb25c2ddb62cdcb1d1a847a8",
+      "packet": "f8e31696-0213-0225",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "ordinal": 223,
+      "raw_hash": "e721bbf95be5ba190d53244482a8a2678e8185e0efe20f5ccb1dc14cb55d55a4",
+      "packet": "f8e31696-0213-0225",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "ordinal": 224,
+      "raw_hash": "6c3c933db4bd6c8128e9f569a74386ab35d3167b41b2f3336d88c47005d0a786",
+      "packet": "f8e31696-0213-0225",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "ordinal": 225,
+      "raw_hash": "9ebce9429b3a98b659e680932e810f0ff8472d3f1ef8bff0ef594a3c371298d8",
+      "packet": "f8e31696-0213-0225",
+      "category": "rating_definition",
+      "content_decision": "non_research_template",
+      "reason": "评级定义及适用基准/期限，不是对某只股票或本行业的实际评级。",
+      "dependency_issue": null
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "case": "p18",
+  "kind": "positive",
+  "review": {
+    "class": "background",
+    "reason": "本题降级词法，首位只有非农和新闻摘要，缺加息条件判断",
+    "markers": []
+  },
+  "capture_sha256": "f97d5d6e793a7941f627c6f7338e3ecc04e7ae4b2fa22f9b202ef5ceaba5665d",
+  "original_sha256": "2bd28623a5c3da7f5fe652878a32a76bac728b02e798bc2991e327ae450c4872",
+  "original_retrieval": "lexical",
+  "top_chunk": "628ec76d5b4001b7:body:0019",
+  "top_original_chars": 264,
+  "old_snippet": "<b>非农</b>大爆表！美国8月",
+  "preview": {
+    "text": "资料来源：华尔街见闻，富途牛牛，天风证券研究所\n除了伊朗局势以外，海外新闻关注美联储、日元、经济数据等：\n1）8 月 31 日，日元再破160。贝森特发声：日元“已得到控制”，日本央行“将做正确\n的事”，“安倍经济学”已走到尽头。\n2）9 月2 日，美联储褐皮书显示，经济活动温和扩张、就业小幅增长、价格温和上涨。\n3）9 月4 日，非农大爆表！美国8 月新增就业16.2万人，预期仅5.5 万人，失业率维持在\n4.1%不变。",
+    "start": 0,
+    "end": 213,
+    "status": "complete_sentence_window",
+    "matched_terms": [
+      "非农"
+    ],
+    "citation_ready": false
+  },
+  "marker_coverage": {
+    "old_snippet": [],
+    "new_preview": []
+  },
+  "core_chunks": 10,
+  "full_chunks": 95,
+  "original_context_occurrences": 97,
+  "preview_statuses": {
+    "complete_sentence_window": 9,
+    "no_complete_matching_sentence": 1
+  },
+  "preview_chars": [
+    213,
+    573,
+    524,
+    595,
+    566,
+    594,
+    566,
+    600,
+    0,
+    590
+  ],
+  "body_chars": {
+    "off": 16110,
+    "pilot": 33956
+  },
+  "budget": {
+    "6000": {
+      "off": {
+        "chars": 5963,
+        "hits": 4,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      },
+      "pilot": {
+        "chars": 5587,
+        "hits": 3,
+        "previews": 3,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": false
+      }
+    },
+    "12000": {
+      "off": {
+        "chars": 11536,
+        "hits": 7,
+        "previews": 0,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      },
+      "pilot": {
+        "chars": 11688,
+        "hits": 6,
+        "previews": 6,
+        "previews_elided": false,
+        "top1_markers_visible": false,
+        "labelled_chunk_in_returned_scope": true
+      }
+    }
+  }
+}

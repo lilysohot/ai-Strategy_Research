@@ -73,6 +73,7 @@ from plugins.corpus.preparation.contract import (
 from plugins.corpus.preparation.gap_review import REVIEW_STAGE_PREFIX
 from plugins.corpus.preparation.pg_target import production_instance_authorized
 from plugins.corpus.preparation.repository import Store, StoreError
+from plugins.corpus.preparation.text_publication import STAGE_PREFIX as TEXT_PUBLICATION_PREFIX
 
 _TERMINAL_STATES: frozenset[JobState] = frozenset(
     {JobState.SUCCEEDED, JobState.FAILED, JobState.CANCELLED}
@@ -754,6 +755,8 @@ class PgStore(Store):
             raise StoreError("source_checkpoint.stage 不能为空")
         if stage.startswith(REVIEW_STAGE_PREFIX):
             raise StoreError("human gap review namespace requires put_gap_review")
+        if stage.startswith(TEXT_PUBLICATION_PREFIX):
+            raise StoreError("text publication namespace requires put_text_publication")
         with self._conn.transaction(), self._conn.cursor() as cur:
             cur.execute(
                 "INSERT INTO corpus.corpus_source_checkpoints (source_id, stage, checkpoint, "
@@ -763,10 +766,16 @@ class PgStore(Store):
                 (source_id, stage, Jsonb(json.loads(checkpoint))),
             )
 
+    def _put_text_publication(self, build: Build, payload: str) -> None:
+        self._put_immutable_checkpoint(build, TEXT_PUBLICATION_PREFIX, payload)
+
     def _put_gap_review(self, build: Build, payload: str) -> None:
+        self._put_immutable_checkpoint(build, REVIEW_STAGE_PREFIX, payload)
+
+    def _put_immutable_checkpoint(self, build: Build, prefix: str, payload: str) -> None:
         from psycopg.types.json import Jsonb
 
-        stage = REVIEW_STAGE_PREFIX + build.build_id
+        stage = prefix + build.build_id
         data = json.loads(payload)
         with self._conn.transaction(), self._conn.cursor() as cur:
             # INSERT-first + DO NOTHING serializes concurrent first writers. Compare

@@ -1285,6 +1285,16 @@ def gap_records_of(build: Build, *, store: Store | None = None) -> tuple[GapReco
                 records = apply_gap_review(review, build, store.get_units(build.build_id), records)
         except GapReviewError as exc:
             raise EngineError(f"gap_regions human review rejected: {exc}") from exc
+        from plugins.corpus.preparation.text_publication import apply_text_publication
+
+        try:
+            acceptance = store.get_text_publication(build.build_id)
+            if acceptance is not None:
+                records = apply_text_publication(
+                    acceptance, build, store.get_units(build.build_id), records
+                )
+        except (ValueError, TypeError) as exc:
+            raise EngineError(f"gap_regions text publication rejected: {exc}") from exc
     return records
 
 
@@ -1440,6 +1450,7 @@ def _publish_record(
     owner_id: str,
     acknowledged_gap_keys: tuple[str, ...] = (),
     human_gap_review_id: str | None = None,
+    text_publication_id: str | None = None,
 ) -> str:
     """PUBLISHED job 成功检查点：记录操作者、generation 与已放行缺口（I2-4 审计口径）。
 
@@ -1466,6 +1477,8 @@ def _publish_record(
             "gap_policy_rev": GAP_POLICY_REV,
             "acknowledged_gaps": sorted(acknowledged_gap_keys),
             "human_gap_review_id": human_gap_review_id,
+            "text_publication_id": text_publication_id,
+            "coverage_claim": "available_text_only_incomplete" if text_publication_id else None,
         },
         ensure_ascii=False,
         sort_keys=True,
@@ -1506,6 +1519,7 @@ def _reconcile_published_job(
             owner_id=owner_id,
             acknowledged_gap_keys=_acknowledged_keys_of(build, store),
             human_gap_review_id=_human_gap_review_id(store, build_id),
+            text_publication_id=_text_publication_id(store, build_id),
         )
         if publication is not None
         else None
@@ -1541,6 +1555,14 @@ def _reconcile_published_job(
         JobState.SUCCEEDED,
         checkpoint=record,
     )
+
+
+def _text_publication_id(store: Store, build_id: str) -> str | None:
+    try:
+        acceptance = store.get_text_publication(build_id)
+        return acceptance.acceptance_id if acceptance is not None else None
+    except (ValueError, TypeError) as exc:
+        raise EngineError(f"gap_regions text publication rejected: {exc}") from exc
 
 
 def _human_gap_review_id(store: Store, build_id: str) -> str | None:
@@ -1582,20 +1604,24 @@ def publish_build(
     # Human approval is a live precondition even for retries/rollback. Never reuse
     # an old success checkpoint after its credential is missing, stale or corrupt.
     review_id = _human_gap_review_id(store, build_id)
+    text_acceptance_id = _text_publication_id(store, build_id)
     published_job = store.get_job(build_id, JobStage.PUBLISHED)
     recorded_review_id = None
     if published_job is not None and published_job.checkpoint:
         try:
             recorded_review_id = json.loads(published_job.checkpoint).get("human_gap_review_id")
+            recorded_text_id = json.loads(published_job.checkpoint).get("text_publication_id")
         except (ValueError, AttributeError) as exc:
             raise EngineError(
                 "published checkpoint cannot verify human gap review identity"
             ) from exc
+        if recorded_text_id is not None and recorded_text_id != text_acceptance_id:
+            raise EngineError("text publication acceptance missing or changed")
     if recorded_review_id is not None and recorded_review_id != review_id:
         raise EngineError(
             "gap_regions human review is missing or differs from published credential"
         )
-    if review_id is not None:
+    if review_id is not None or text_acceptance_id is not None:
         _verify_publication_ready(store, build)
     # 幂等重放短路：目标状态 (决定, build) 已发布 → 先补齐一致性再返回
     # （不以时间为键，响应丢失+时钟前进的重试恒幂等）。
@@ -1665,6 +1691,7 @@ def publish_build(
             owner_id=owner_id,
             acknowledged_gap_keys=_acknowledged_keys_of(build, store),
             human_gap_review_id=review_id,
+            text_publication_id=text_acceptance_id,
         ),
     )
     return publication

@@ -1,0 +1,4100 @@
+[
+  {
+    "case": "p01",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 260.1860280010442,
+    "gold_blocks": 1,
+    "first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "candidate_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "reviewed_template_anchors": 2,
+    "reviewed_template_contexts": 18,
+    "unique_contexts": 72,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p01",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 7,
+    "elapsed_ms": 673.5045950008498,
+    "gold_blocks": 1,
+    "first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "candidate_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 19,
+    "unique_contexts": 90,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p01",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 193.5930619983992,
+    "gold_blocks": 1,
+    "first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "candidate_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 8,
+    "unique_contexts": 68,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p01",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 7,
+    "elapsed_ms": 271.8643189982686,
+    "gold_blocks": 1,
+    "first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "candidate_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 10,
+    "unique_contexts": 91,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p02",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 176.573331002146,
+    "gold_blocks": 1,
+    "first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "candidate_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 5,
+    "unique_contexts": 60,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p02",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 7,
+    "elapsed_ms": 230.74366999935592,
+    "gold_blocks": 1,
+    "first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "candidate_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 7,
+    "unique_contexts": 74,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p02",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 174.64703900259337,
+    "gold_blocks": 1,
+    "first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "candidate_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 5,
+    "unique_contexts": 60,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p02",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 7,
+    "elapsed_ms": 579.6751649977523,
+    "gold_blocks": 1,
+    "first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "candidate_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 7,
+    "unique_contexts": 74,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p03",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 390.4333239988773,
+    "gold_blocks": 1,
+    "first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "candidate_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "reviewed_template_anchors": 2,
+    "reviewed_template_contexts": 27,
+    "unique_contexts": 151,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p03",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 10,
+    "elapsed_ms": 837.9272269994544,
+    "gold_blocks": 1,
+    "first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "candidate_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "reviewed_template_anchors": 2,
+    "reviewed_template_contexts": 23,
+    "unique_contexts": 173,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p03",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 388.39162399744964,
+    "gold_blocks": 1,
+    "first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "candidate_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 15,
+    "unique_contexts": 143,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p03",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 10,
+    "elapsed_ms": 472.5253070027975,
+    "gold_blocks": 1,
+    "first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "candidate_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_first_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_anchor_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "body_context_complete": [
+      "16a9a510ef9e405f:body:0001"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 15,
+    "unique_contexts": 167,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p04",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 186.4977990007901,
+    "gold_blocks": 1,
+    "first_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "anchor_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "context_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "candidate_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_first_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_anchor_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_context_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "reviewed_template_anchors": 2,
+    "reviewed_template_contexts": 4,
+    "unique_contexts": 74,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p04",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 9,
+    "elapsed_ms": 267.9792800008727,
+    "gold_blocks": 1,
+    "first_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "anchor_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "context_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "candidate_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_first_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_anchor_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_context_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "reviewed_template_anchors": 3,
+    "reviewed_template_contexts": 5,
+    "unique_contexts": 79,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p04",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 175.0092809998023,
+    "gold_blocks": 1,
+    "first_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "anchor_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "context_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "candidate_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_first_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_anchor_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_context_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 1,
+    "unique_contexts": 73,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p04",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 10,
+    "elapsed_ms": 560.3767720022006,
+    "gold_blocks": 1,
+    "first_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "anchor_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "context_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "candidate_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_first_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_anchor_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_context_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 0,
+    "unique_contexts": 96,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p05",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 174.7111410004436,
+    "gold_blocks": 1,
+    "first_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "anchor_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "context_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "candidate_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_first_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_anchor_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_context_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 3,
+    "unique_contexts": 83,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p05",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 9,
+    "elapsed_ms": 575.4547070027911,
+    "gold_blocks": 1,
+    "first_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "anchor_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "context_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "candidate_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_first_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_anchor_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_context_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 4,
+    "unique_contexts": 77,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p05",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 170.16523600250366,
+    "gold_blocks": 1,
+    "first_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "anchor_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "context_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "candidate_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_first_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_anchor_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_context_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 2,
+    "unique_contexts": 82,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p05",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 8,
+    "elapsed_ms": 254.3581229983829,
+    "gold_blocks": 1,
+    "first_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "anchor_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "context_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "candidate_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_first_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_anchor_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "body_context_complete": [
+      "3ed3ecab2fdf5035:body:0002"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 3,
+    "unique_contexts": 91,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p06",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 312.5290120005957,
+    "gold_blocks": 2,
+    "first_complete": [
+      "d5c99534333873cc:body:0003"
+    ],
+    "anchor_complete": [
+      "d5c99534333873cc:body:0003"
+    ],
+    "context_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0003"
+    ],
+    "candidate_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0003"
+    ],
+    "body_first_complete": [
+      "d5c99534333873cc:body:0003"
+    ],
+    "body_anchor_complete": [
+      "d5c99534333873cc:body:0003"
+    ],
+    "body_context_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0003"
+    ],
+    "reviewed_template_anchors": 2,
+    "reviewed_template_contexts": 21,
+    "unique_contexts": 127,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p06",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 10,
+    "elapsed_ms": 418.3213310025167,
+    "gold_blocks": 2,
+    "first_complete": [
+      "d5c99534333873cc:body:0003"
+    ],
+    "anchor_complete": [
+      "d5c99534333873cc:body:0003"
+    ],
+    "context_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0003"
+    ],
+    "candidate_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0003"
+    ],
+    "body_first_complete": [
+      "d5c99534333873cc:body:0003"
+    ],
+    "body_anchor_complete": [
+      "d5c99534333873cc:body:0003"
+    ],
+    "body_context_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0003"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 15,
+    "unique_contexts": 144,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p06",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 310.26201599888736,
+    "gold_blocks": 2,
+    "first_complete": [
+      "d5c99534333873cc:body:0003"
+    ],
+    "anchor_complete": [
+      "d5c99534333873cc:body:0003"
+    ],
+    "context_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0003"
+    ],
+    "candidate_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0003"
+    ],
+    "body_first_complete": [
+      "d5c99534333873cc:body:0003"
+    ],
+    "body_anchor_complete": [
+      "d5c99534333873cc:body:0003"
+    ],
+    "body_context_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0003"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 10,
+    "unique_contexts": 124,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p06",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 10,
+    "elapsed_ms": 730.0425079993147,
+    "gold_blocks": 2,
+    "first_complete": [
+      "d5c99534333873cc:body:0003"
+    ],
+    "anchor_complete": [
+      "d5c99534333873cc:body:0003"
+    ],
+    "context_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0003"
+    ],
+    "candidate_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0003"
+    ],
+    "body_first_complete": [
+      "d5c99534333873cc:body:0003"
+    ],
+    "body_anchor_complete": [
+      "d5c99534333873cc:body:0003"
+    ],
+    "body_context_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0003"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 9,
+    "unique_contexts": 142,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p07",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 152.59817299738643,
+    "gold_blocks": 2,
+    "first_complete": [
+      "d5c99534333873cc:body:0001"
+    ],
+    "anchor_complete": [
+      "d5c99534333873cc:body:0001"
+    ],
+    "context_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0005"
+    ],
+    "candidate_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0005"
+    ],
+    "body_first_complete": [
+      "d5c99534333873cc:body:0001"
+    ],
+    "body_anchor_complete": [
+      "d5c99534333873cc:body:0001"
+    ],
+    "body_context_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0005"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 9,
+    "unique_contexts": 47,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p07",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 8,
+    "elapsed_ms": 553.5684950009454,
+    "gold_blocks": 2,
+    "first_complete": [
+      "d5c99534333873cc:body:0001"
+    ],
+    "anchor_complete": [
+      "d5c99534333873cc:body:0001"
+    ],
+    "context_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0005"
+    ],
+    "candidate_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0005"
+    ],
+    "body_first_complete": [
+      "d5c99534333873cc:body:0001"
+    ],
+    "body_anchor_complete": [
+      "d5c99534333873cc:body:0001"
+    ],
+    "body_context_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0005"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 18,
+    "unique_contexts": 55,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p07",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 164.9435799990897,
+    "gold_blocks": 2,
+    "first_complete": [
+      "d5c99534333873cc:body:0001"
+    ],
+    "anchor_complete": [
+      "d5c99534333873cc:body:0001"
+    ],
+    "context_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0005"
+    ],
+    "candidate_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0005"
+    ],
+    "body_first_complete": [
+      "d5c99534333873cc:body:0001"
+    ],
+    "body_anchor_complete": [
+      "d5c99534333873cc:body:0001"
+    ],
+    "body_context_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0005"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 1,
+    "unique_contexts": 50,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p07",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 7,
+    "elapsed_ms": 249.64584999906947,
+    "gold_blocks": 2,
+    "first_complete": [
+      "d5c99534333873cc:body:0001"
+    ],
+    "anchor_complete": [
+      "d5c99534333873cc:body:0001"
+    ],
+    "context_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0005"
+    ],
+    "candidate_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0005"
+    ],
+    "body_first_complete": [
+      "d5c99534333873cc:body:0001"
+    ],
+    "body_anchor_complete": [
+      "d5c99534333873cc:body:0001"
+    ],
+    "body_context_complete": [
+      "d5c99534333873cc:body:0001",
+      "d5c99534333873cc:body:0005"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 5,
+    "unique_contexts": 57,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p08",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 174.6185450028861,
+    "gold_blocks": 1,
+    "first_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "anchor_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "context_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "candidate_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "body_first_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "body_anchor_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "body_context_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "reviewed_template_anchors": 3,
+    "reviewed_template_contexts": 15,
+    "unique_contexts": 62,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p08",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 6,
+    "elapsed_ms": 227.94348599927616,
+    "gold_blocks": 1,
+    "first_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "anchor_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "context_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "candidate_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "body_first_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "body_anchor_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "body_context_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "reviewed_template_anchors": 4,
+    "reviewed_template_contexts": 19,
+    "unique_contexts": 64,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p08",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 155.67868599828216,
+    "gold_blocks": 1,
+    "first_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "anchor_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "context_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "candidate_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "body_first_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "body_anchor_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "body_context_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 4,
+    "unique_contexts": 68,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p08",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 8,
+    "elapsed_ms": 560.4860019993794,
+    "gold_blocks": 1,
+    "first_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "anchor_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "context_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "candidate_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "body_first_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "body_anchor_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "body_context_complete": [
+      "d5c99534333873cc:body:0002"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 2,
+    "unique_contexts": 52,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p09",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 260.05107600212796,
+    "gold_blocks": 2,
+    "first_complete": [
+      "022ae1713fb760ff:body:0000"
+    ],
+    "anchor_complete": [
+      "022ae1713fb760ff:body:0000"
+    ],
+    "context_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001"
+    ],
+    "candidate_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001"
+    ],
+    "body_first_complete": [
+      "022ae1713fb760ff:body:0000"
+    ],
+    "body_anchor_complete": [
+      "022ae1713fb760ff:body:0000"
+    ],
+    "body_context_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 14,
+    "unique_contexts": 110,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p09",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 7,
+    "elapsed_ms": 694.9107949985773,
+    "gold_blocks": 2,
+    "first_complete": [
+      "022ae1713fb760ff:body:0000"
+    ],
+    "anchor_complete": [
+      "022ae1713fb760ff:body:0000"
+    ],
+    "context_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001"
+    ],
+    "candidate_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001"
+    ],
+    "body_first_complete": [
+      "022ae1713fb760ff:body:0000"
+    ],
+    "body_anchor_complete": [
+      "022ae1713fb760ff:body:0000"
+    ],
+    "body_context_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 12,
+    "unique_contexts": 93,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p09",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 270.2116830005252,
+    "gold_blocks": 2,
+    "first_complete": [
+      "022ae1713fb760ff:body:0000"
+    ],
+    "anchor_complete": [
+      "022ae1713fb760ff:body:0000"
+    ],
+    "context_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001"
+    ],
+    "candidate_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001"
+    ],
+    "body_first_complete": [
+      "022ae1713fb760ff:body:0000"
+    ],
+    "body_anchor_complete": [
+      "022ae1713fb760ff:body:0000"
+    ],
+    "body_context_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 9,
+    "unique_contexts": 110,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p09",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 7,
+    "elapsed_ms": 352.45485699852,
+    "gold_blocks": 2,
+    "first_complete": [
+      "022ae1713fb760ff:body:0000"
+    ],
+    "anchor_complete": [
+      "022ae1713fb760ff:body:0000"
+    ],
+    "context_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001"
+    ],
+    "candidate_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001"
+    ],
+    "body_first_complete": [
+      "022ae1713fb760ff:body:0000"
+    ],
+    "body_anchor_complete": [
+      "022ae1713fb760ff:body:0000"
+    ],
+    "body_context_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 7,
+    "unique_contexts": 91,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p10",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 194.1989820006711,
+    "gold_blocks": 3,
+    "first_complete": [
+      "022ae1713fb760ff:body:0009"
+    ],
+    "anchor_complete": [
+      "022ae1713fb760ff:body:0009"
+    ],
+    "context_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001",
+      "022ae1713fb760ff:body:0009"
+    ],
+    "candidate_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001",
+      "022ae1713fb760ff:body:0009"
+    ],
+    "body_first_complete": [
+      "022ae1713fb760ff:body:0009"
+    ],
+    "body_anchor_complete": [
+      "022ae1713fb760ff:body:0009"
+    ],
+    "body_context_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001",
+      "022ae1713fb760ff:body:0009"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 8,
+    "unique_contexts": 75,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p10",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 8,
+    "elapsed_ms": 254.95153400333948,
+    "gold_blocks": 3,
+    "first_complete": [
+      "022ae1713fb760ff:body:0009"
+    ],
+    "anchor_complete": [
+      "022ae1713fb760ff:body:0009"
+    ],
+    "context_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001",
+      "022ae1713fb760ff:body:0009"
+    ],
+    "candidate_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001",
+      "022ae1713fb760ff:body:0009"
+    ],
+    "body_first_complete": [
+      "022ae1713fb760ff:body:0009"
+    ],
+    "body_anchor_complete": [
+      "022ae1713fb760ff:body:0009"
+    ],
+    "body_context_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001",
+      "022ae1713fb760ff:body:0009"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 14,
+    "unique_contexts": 76,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p10",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 189.84453799930634,
+    "gold_blocks": 3,
+    "first_complete": [
+      "022ae1713fb760ff:body:0009"
+    ],
+    "anchor_complete": [
+      "022ae1713fb760ff:body:0009"
+    ],
+    "context_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001",
+      "022ae1713fb760ff:body:0009"
+    ],
+    "candidate_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001",
+      "022ae1713fb760ff:body:0009"
+    ],
+    "body_first_complete": [
+      "022ae1713fb760ff:body:0009"
+    ],
+    "body_anchor_complete": [
+      "022ae1713fb760ff:body:0009"
+    ],
+    "body_context_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001",
+      "022ae1713fb760ff:body:0009"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 5,
+    "unique_contexts": 72,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p10",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 7,
+    "elapsed_ms": 499.62445499841124,
+    "gold_blocks": 3,
+    "first_complete": [
+      "022ae1713fb760ff:body:0009"
+    ],
+    "anchor_complete": [
+      "022ae1713fb760ff:body:0009"
+    ],
+    "context_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001",
+      "022ae1713fb760ff:body:0009"
+    ],
+    "candidate_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001",
+      "022ae1713fb760ff:body:0009"
+    ],
+    "body_first_complete": [
+      "022ae1713fb760ff:body:0009"
+    ],
+    "body_anchor_complete": [
+      "022ae1713fb760ff:body:0009"
+    ],
+    "body_context_complete": [
+      "022ae1713fb760ff:body:0000",
+      "022ae1713fb760ff:body:0001",
+      "022ae1713fb760ff:body:0009"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 9,
+    "unique_contexts": 73,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p11",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 185.73624399869004,
+    "gold_blocks": 1,
+    "first_complete": [],
+    "anchor_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "context_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "candidate_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_first_complete": [],
+    "body_anchor_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_context_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 2,
+    "unique_contexts": 72,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p11",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 8,
+    "elapsed_ms": 829.3711619990063,
+    "gold_blocks": 1,
+    "first_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "anchor_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "context_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "candidate_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_first_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_anchor_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_context_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 4,
+    "unique_contexts": 70,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p11",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 186.49985100273625,
+    "gold_blocks": 1,
+    "first_complete": [],
+    "anchor_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "context_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "candidate_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_first_complete": [],
+    "body_anchor_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_context_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 2,
+    "unique_contexts": 72,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p11",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 8,
+    "elapsed_ms": 260.7873169981758,
+    "gold_blocks": 1,
+    "first_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "anchor_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "context_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "candidate_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_first_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_anchor_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_context_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 5,
+    "unique_contexts": 72,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p12",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 242.76496000311454,
+    "gold_blocks": 1,
+    "first_complete": [],
+    "anchor_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "context_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "candidate_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_first_complete": [],
+    "body_anchor_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_context_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 6,
+    "unique_contexts": 54,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p12",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 7,
+    "elapsed_ms": 308.3118199974706,
+    "gold_blocks": 1,
+    "first_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "anchor_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "context_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "candidate_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_first_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_anchor_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_context_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 4,
+    "unique_contexts": 60,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p12",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 259.4023540004855,
+    "gold_blocks": 1,
+    "first_complete": [],
+    "anchor_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "context_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "candidate_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_first_complete": [],
+    "body_anchor_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_context_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 3,
+    "unique_contexts": 62,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p12",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 6,
+    "elapsed_ms": 602.5962489984522,
+    "gold_blocks": 1,
+    "first_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "anchor_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "context_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "candidate_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_first_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_anchor_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "body_context_complete": [
+      "6475cbacca1575c5:body:0000"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 5,
+    "unique_contexts": 65,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p13",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 415.390064001258,
+    "gold_blocks": 1,
+    "first_complete": [],
+    "anchor_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "context_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "candidate_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "body_first_complete": [],
+    "body_anchor_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "body_context_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 14,
+    "unique_contexts": 157,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p13",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 9,
+    "elapsed_ms": 778.1151229974057,
+    "gold_blocks": 1,
+    "first_complete": [],
+    "anchor_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "context_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "candidate_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "body_first_complete": [],
+    "body_anchor_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "body_context_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "reviewed_template_anchors": 2,
+    "reviewed_template_contexts": 13,
+    "unique_contexts": 149,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p13",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 446.69367199821863,
+    "gold_blocks": 1,
+    "first_complete": [],
+    "anchor_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "context_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "candidate_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "body_first_complete": [],
+    "body_anchor_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "body_context_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 9,
+    "unique_contexts": 152,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p13",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 9,
+    "elapsed_ms": 458.6738250000053,
+    "gold_blocks": 1,
+    "first_complete": [],
+    "anchor_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "context_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "candidate_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "body_first_complete": [],
+    "body_anchor_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "body_context_complete": [
+      "e1b21386e9b62dde:body:0002"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 10,
+    "unique_contexts": 129,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p14",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 264.22036399890203,
+    "gold_blocks": 1,
+    "first_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "anchor_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "context_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "candidate_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_first_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_anchor_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_context_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "reviewed_template_anchors": 2,
+    "reviewed_template_contexts": 13,
+    "unique_contexts": 89,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p14",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 10,
+    "elapsed_ms": 312.2518800009857,
+    "gold_blocks": 1,
+    "first_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "anchor_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "context_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "candidate_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_first_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_anchor_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_context_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "reviewed_template_anchors": 2,
+    "reviewed_template_contexts": 10,
+    "unique_contexts": 93,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p14",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 254.49824600218562,
+    "gold_blocks": 1,
+    "first_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "anchor_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "context_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "candidate_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_first_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_anchor_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_context_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 4,
+    "unique_contexts": 90,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p14",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 9,
+    "elapsed_ms": 674.0105450007832,
+    "gold_blocks": 1,
+    "first_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "anchor_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "context_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "candidate_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_first_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_anchor_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_context_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 4,
+    "unique_contexts": 83,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p15",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 265.4147270004614,
+    "gold_blocks": 1,
+    "first_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "anchor_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "context_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "candidate_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_first_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_anchor_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_context_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 6,
+    "unique_contexts": 74,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p15",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 9,
+    "elapsed_ms": 622.152718999132,
+    "gold_blocks": 1,
+    "first_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "anchor_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "context_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "candidate_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_first_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_anchor_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_context_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 7,
+    "unique_contexts": 66,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p15",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 273.34642699861433,
+    "gold_blocks": 1,
+    "first_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "anchor_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "context_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "candidate_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_first_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_anchor_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_context_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 1,
+    "unique_contexts": 76,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p15",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 9,
+    "elapsed_ms": 363.502015999984,
+    "gold_blocks": 1,
+    "first_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "anchor_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "context_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "candidate_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_first_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_anchor_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "body_context_complete": [
+      "1ada4314a25261ea:body:0002"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 3,
+    "unique_contexts": 70,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p16",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 223.84534799857647,
+    "gold_blocks": 3,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [
+      "7ceca88433b092ae:body:0001",
+      "7ceca88433b092ae:body:0003",
+      "7ceca88433b092ae:body:0004"
+    ],
+    "candidate_complete": [
+      "7ceca88433b092ae:body:0001",
+      "7ceca88433b092ae:body:0003",
+      "7ceca88433b092ae:body:0004"
+    ],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [
+      "7ceca88433b092ae:body:0001",
+      "7ceca88433b092ae:body:0003",
+      "7ceca88433b092ae:body:0004"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 6,
+    "unique_contexts": 91,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p16",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 9,
+    "elapsed_ms": 299.75778100197203,
+    "gold_blocks": 3,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [
+      "7ceca88433b092ae:body:0001",
+      "7ceca88433b092ae:body:0003",
+      "7ceca88433b092ae:body:0004"
+    ],
+    "candidate_complete": [
+      "7ceca88433b092ae:body:0001",
+      "7ceca88433b092ae:body:0003",
+      "7ceca88433b092ae:body:0004"
+    ],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [
+      "7ceca88433b092ae:body:0001",
+      "7ceca88433b092ae:body:0003",
+      "7ceca88433b092ae:body:0004"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 10,
+    "unique_contexts": 99,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p16",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 217.1219990013924,
+    "gold_blocks": 3,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [
+      "7ceca88433b092ae:body:0001",
+      "7ceca88433b092ae:body:0003",
+      "7ceca88433b092ae:body:0004"
+    ],
+    "candidate_complete": [
+      "7ceca88433b092ae:body:0001",
+      "7ceca88433b092ae:body:0003",
+      "7ceca88433b092ae:body:0004"
+    ],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [
+      "7ceca88433b092ae:body:0001",
+      "7ceca88433b092ae:body:0003",
+      "7ceca88433b092ae:body:0004"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 2,
+    "unique_contexts": 101,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p16",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 9,
+    "elapsed_ms": 625.8643639994261,
+    "gold_blocks": 3,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [
+      "7ceca88433b092ae:body:0001",
+      "7ceca88433b092ae:body:0003",
+      "7ceca88433b092ae:body:0004"
+    ],
+    "candidate_complete": [
+      "7ceca88433b092ae:body:0001",
+      "7ceca88433b092ae:body:0003",
+      "7ceca88433b092ae:body:0004"
+    ],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [
+      "7ceca88433b092ae:body:0001",
+      "7ceca88433b092ae:body:0003",
+      "7ceca88433b092ae:body:0004"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 7,
+    "unique_contexts": 98,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p17",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 223.69569599686656,
+    "gold_blocks": 2,
+    "first_complete": [
+      "147e841aab35836a:body:0006"
+    ],
+    "anchor_complete": [
+      "147e841aab35836a:body:0006"
+    ],
+    "context_complete": [
+      "147e841aab35836a:body:0002",
+      "147e841aab35836a:body:0006"
+    ],
+    "candidate_complete": [
+      "147e841aab35836a:body:0002",
+      "147e841aab35836a:body:0006"
+    ],
+    "body_first_complete": [
+      "147e841aab35836a:body:0006"
+    ],
+    "body_anchor_complete": [
+      "147e841aab35836a:body:0006"
+    ],
+    "body_context_complete": [
+      "147e841aab35836a:body:0002",
+      "147e841aab35836a:body:0006"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 4,
+    "unique_contexts": 83,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p17",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 8,
+    "elapsed_ms": 591.5131500005373,
+    "gold_blocks": 2,
+    "first_complete": [
+      "147e841aab35836a:body:0006"
+    ],
+    "anchor_complete": [
+      "147e841aab35836a:body:0006"
+    ],
+    "context_complete": [
+      "147e841aab35836a:body:0002",
+      "147e841aab35836a:body:0006"
+    ],
+    "candidate_complete": [
+      "147e841aab35836a:body:0002",
+      "147e841aab35836a:body:0006"
+    ],
+    "body_first_complete": [
+      "147e841aab35836a:body:0006"
+    ],
+    "body_anchor_complete": [
+      "147e841aab35836a:body:0006"
+    ],
+    "body_context_complete": [
+      "147e841aab35836a:body:0002",
+      "147e841aab35836a:body:0006"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 6,
+    "unique_contexts": 71,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p17",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 209.4941920004203,
+    "gold_blocks": 2,
+    "first_complete": [
+      "147e841aab35836a:body:0006"
+    ],
+    "anchor_complete": [
+      "147e841aab35836a:body:0006"
+    ],
+    "context_complete": [
+      "147e841aab35836a:body:0002",
+      "147e841aab35836a:body:0006"
+    ],
+    "candidate_complete": [
+      "147e841aab35836a:body:0002",
+      "147e841aab35836a:body:0006"
+    ],
+    "body_first_complete": [
+      "147e841aab35836a:body:0006"
+    ],
+    "body_anchor_complete": [
+      "147e841aab35836a:body:0006"
+    ],
+    "body_context_complete": [
+      "147e841aab35836a:body:0002",
+      "147e841aab35836a:body:0006"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 5,
+    "unique_contexts": 89,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p17",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 8,
+    "elapsed_ms": 313.8083779995213,
+    "gold_blocks": 2,
+    "first_complete": [
+      "147e841aab35836a:body:0006"
+    ],
+    "anchor_complete": [
+      "147e841aab35836a:body:0006"
+    ],
+    "context_complete": [
+      "147e841aab35836a:body:0002",
+      "147e841aab35836a:body:0006"
+    ],
+    "candidate_complete": [
+      "147e841aab35836a:body:0002",
+      "147e841aab35836a:body:0006"
+    ],
+    "body_first_complete": [
+      "147e841aab35836a:body:0006"
+    ],
+    "body_anchor_complete": [
+      "147e841aab35836a:body:0006"
+    ],
+    "body_context_complete": [
+      "147e841aab35836a:body:0002",
+      "147e841aab35836a:body:0006"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 7,
+    "unique_contexts": 77,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p18",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 152.3912910015497,
+    "gold_blocks": 2,
+    "first_complete": [],
+    "anchor_complete": [
+      "628ec76d5b4001b7:body:0002"
+    ],
+    "context_complete": [
+      "628ec76d5b4001b7:body:0002",
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "candidate_complete": [
+      "628ec76d5b4001b7:body:0002",
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "body_first_complete": [],
+    "body_anchor_complete": [
+      "628ec76d5b4001b7:body:0002"
+    ],
+    "body_context_complete": [
+      "628ec76d5b4001b7:body:0002",
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 7,
+    "unique_contexts": 95,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p18",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 7,
+    "elapsed_ms": 242.42057300216402,
+    "gold_blocks": 2,
+    "first_complete": [
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "anchor_complete": [
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "context_complete": [
+      "628ec76d5b4001b7:body:0002",
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "candidate_complete": [
+      "628ec76d5b4001b7:body:0002",
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "body_first_complete": [
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "body_anchor_complete": [
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "body_context_complete": [
+      "628ec76d5b4001b7:body:0002",
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 6,
+    "unique_contexts": 118,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p18",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 150.8181679964764,
+    "gold_blocks": 2,
+    "first_complete": [],
+    "anchor_complete": [
+      "628ec76d5b4001b7:body:0002"
+    ],
+    "context_complete": [
+      "628ec76d5b4001b7:body:0002",
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "candidate_complete": [
+      "628ec76d5b4001b7:body:0002",
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "body_first_complete": [],
+    "body_anchor_complete": [
+      "628ec76d5b4001b7:body:0002"
+    ],
+    "body_context_complete": [
+      "628ec76d5b4001b7:body:0002",
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 3,
+    "unique_contexts": 112,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p18",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 7,
+    "elapsed_ms": 580.4504159968928,
+    "gold_blocks": 2,
+    "first_complete": [
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "anchor_complete": [
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "context_complete": [
+      "628ec76d5b4001b7:body:0002",
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "candidate_complete": [
+      "628ec76d5b4001b7:body:0002",
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "body_first_complete": [
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "body_anchor_complete": [
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "body_context_complete": [
+      "628ec76d5b4001b7:body:0002",
+      "628ec76d5b4001b7:body:0007"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 3,
+    "unique_contexts": 85,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p19",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 323.3206400000199,
+    "gold_blocks": 2,
+    "first_complete": [
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "anchor_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "context_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "candidate_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "body_first_complete": [
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "body_anchor_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "body_context_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 25,
+    "unique_contexts": 157,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p19",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 10,
+    "elapsed_ms": 745.8157820001361,
+    "gold_blocks": 2,
+    "first_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "anchor_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "context_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "candidate_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "body_first_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "body_anchor_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "body_context_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 26,
+    "unique_contexts": 168,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p19",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 317.28016099805245,
+    "gold_blocks": 2,
+    "first_complete": [
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "anchor_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "context_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "candidate_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "body_first_complete": [
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "body_anchor_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "body_context_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 17,
+    "unique_contexts": 153,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p19",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 10,
+    "elapsed_ms": 402.2403589988244,
+    "gold_blocks": 2,
+    "first_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "anchor_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "context_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "candidate_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "body_first_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "body_anchor_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "body_context_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0016"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 19,
+    "unique_contexts": 165,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p20",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 366.6540869999153,
+    "gold_blocks": 2,
+    "first_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "anchor_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "context_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0017"
+    ],
+    "candidate_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0017"
+    ],
+    "body_first_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "body_anchor_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "body_context_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0017"
+    ],
+    "reviewed_template_anchors": 2,
+    "reviewed_template_contexts": 25,
+    "unique_contexts": 127,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p20",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 8,
+    "elapsed_ms": 427.6566059998004,
+    "gold_blocks": 2,
+    "first_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "anchor_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "context_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "candidate_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0017"
+    ],
+    "body_first_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "body_anchor_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "body_context_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "reviewed_template_anchors": 2,
+    "reviewed_template_contexts": 18,
+    "unique_contexts": 123,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p20",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 369.289715999912,
+    "gold_blocks": 2,
+    "first_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "anchor_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "context_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0017"
+    ],
+    "candidate_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0017"
+    ],
+    "body_first_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "body_anchor_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "body_context_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0017"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 15,
+    "unique_contexts": 136,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p20",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 8,
+    "elapsed_ms": 798.5772360007104,
+    "gold_blocks": 2,
+    "first_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "anchor_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "context_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "candidate_complete": [
+      "568f9e752f0fa65a:body:0003",
+      "568f9e752f0fa65a:body:0017"
+    ],
+    "body_first_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "body_anchor_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "body_context_complete": [
+      "568f9e752f0fa65a:body:0003"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 12,
+    "unique_contexts": 108,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p21",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 353.67573500116123,
+    "gold_blocks": 1,
+    "first_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "anchor_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "context_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "candidate_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "body_first_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "body_anchor_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "body_context_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 17,
+    "unique_contexts": 157,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p21",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 10,
+    "elapsed_ms": 839.3402799993055,
+    "gold_blocks": 1,
+    "first_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "anchor_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "context_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "candidate_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "body_first_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "body_anchor_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "body_context_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "reviewed_template_anchors": 2,
+    "reviewed_template_contexts": 23,
+    "unique_contexts": 143,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p21",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 354.3228479975369,
+    "gold_blocks": 1,
+    "first_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "anchor_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "context_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "candidate_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "body_first_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "body_anchor_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "body_context_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 11,
+    "unique_contexts": 150,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p21",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 10,
+    "elapsed_ms": 524.9624850002874,
+    "gold_blocks": 1,
+    "first_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "anchor_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "context_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "candidate_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "body_first_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "body_anchor_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "body_context_complete": [
+      "568f9e752f0fa65a:body:0014"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 16,
+    "unique_contexts": 156,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p22",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 204.8133019998204,
+    "gold_blocks": 2,
+    "first_complete": [
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "anchor_complete": [
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "context_complete": [
+      "1d0117eb6e17c63c:body:0001",
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "candidate_complete": [
+      "1d0117eb6e17c63c:body:0001",
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "body_first_complete": [
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "body_anchor_complete": [
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "body_context_complete": [
+      "1d0117eb6e17c63c:body:0001",
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 16,
+    "unique_contexts": 149,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p22",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 9,
+    "elapsed_ms": 268.64384100190364,
+    "gold_blocks": 2,
+    "first_complete": [
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "anchor_complete": [
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "context_complete": [
+      "1d0117eb6e17c63c:body:0001",
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "candidate_complete": [
+      "1d0117eb6e17c63c:body:0001",
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "body_first_complete": [
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "body_anchor_complete": [
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "body_context_complete": [
+      "1d0117eb6e17c63c:body:0001",
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 17,
+    "unique_contexts": 117,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p22",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 212.2987180009659,
+    "gold_blocks": 2,
+    "first_complete": [
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "anchor_complete": [
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "context_complete": [
+      "1d0117eb6e17c63c:body:0001",
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "candidate_complete": [
+      "1d0117eb6e17c63c:body:0001",
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "body_first_complete": [
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "body_anchor_complete": [
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "body_context_complete": [
+      "1d0117eb6e17c63c:body:0001",
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 7,
+    "unique_contexts": 153,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p22",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 10,
+    "elapsed_ms": 636.1149900003511,
+    "gold_blocks": 2,
+    "first_complete": [
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "anchor_complete": [
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "context_complete": [
+      "1d0117eb6e17c63c:body:0001",
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "candidate_complete": [
+      "1d0117eb6e17c63c:body:0001",
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "body_first_complete": [
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "body_anchor_complete": [
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "body_context_complete": [
+      "1d0117eb6e17c63c:body:0001",
+      "1d0117eb6e17c63c:body:0008"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 9,
+    "unique_contexts": 113,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p23",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 131.23741500021424,
+    "gold_blocks": 1,
+    "first_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "anchor_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "context_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "candidate_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "body_first_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "body_anchor_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "body_context_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 1,
+    "unique_contexts": 55,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p23",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 7,
+    "elapsed_ms": 626.2737270008074,
+    "gold_blocks": 1,
+    "first_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "anchor_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "context_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "candidate_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "body_first_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "body_anchor_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "body_context_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 5,
+    "unique_contexts": 68,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p23",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 143.35918199867592,
+    "gold_blocks": 1,
+    "first_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "anchor_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "context_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "candidate_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "body_first_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "body_anchor_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "body_context_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 1,
+    "unique_contexts": 55,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p23",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 7,
+    "elapsed_ms": 240.38305299836793,
+    "gold_blocks": 1,
+    "first_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "anchor_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "context_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "candidate_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "body_first_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "body_anchor_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "body_context_complete": [
+      "1d0117eb6e17c63c:body:0007"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 5,
+    "unique_contexts": 69,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p24",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 333.70234899848583,
+    "gold_blocks": 4,
+    "first_complete": [],
+    "anchor_complete": [
+      "6b55ddbbcfdc484d:body:0004"
+    ],
+    "context_complete": [
+      "6b55ddbbcfdc484d:body:0001",
+      "6b55ddbbcfdc484d:body:0003",
+      "6b55ddbbcfdc484d:body:0004",
+      "6b55ddbbcfdc484d:table:0002"
+    ],
+    "candidate_complete": [
+      "6b55ddbbcfdc484d:body:0001",
+      "6b55ddbbcfdc484d:body:0003",
+      "6b55ddbbcfdc484d:body:0004",
+      "6b55ddbbcfdc484d:table:0002"
+    ],
+    "body_first_complete": [],
+    "body_anchor_complete": [
+      "6b55ddbbcfdc484d:body:0004"
+    ],
+    "body_context_complete": [
+      "6b55ddbbcfdc484d:body:0001",
+      "6b55ddbbcfdc484d:body:0003",
+      "6b55ddbbcfdc484d:body:0004",
+      "6b55ddbbcfdc484d:table:0002"
+    ],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 12,
+    "unique_contexts": 116,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p24",
+    "kind": "positive",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 8,
+    "elapsed_ms": 344.72772700246423,
+    "gold_blocks": 4,
+    "first_complete": [
+      "6b55ddbbcfdc484d:body:0004"
+    ],
+    "anchor_complete": [
+      "6b55ddbbcfdc484d:body:0004"
+    ],
+    "context_complete": [
+      "6b55ddbbcfdc484d:body:0001",
+      "6b55ddbbcfdc484d:body:0003",
+      "6b55ddbbcfdc484d:body:0004",
+      "6b55ddbbcfdc484d:table:0002"
+    ],
+    "candidate_complete": [
+      "6b55ddbbcfdc484d:body:0001",
+      "6b55ddbbcfdc484d:body:0003",
+      "6b55ddbbcfdc484d:body:0004",
+      "6b55ddbbcfdc484d:table:0002"
+    ],
+    "body_first_complete": [
+      "6b55ddbbcfdc484d:body:0004"
+    ],
+    "body_anchor_complete": [
+      "6b55ddbbcfdc484d:body:0004"
+    ],
+    "body_context_complete": [
+      "6b55ddbbcfdc484d:body:0001",
+      "6b55ddbbcfdc484d:body:0003",
+      "6b55ddbbcfdc484d:body:0004",
+      "6b55ddbbcfdc484d:table:0002"
+    ],
+    "reviewed_template_anchors": 2,
+    "reviewed_template_contexts": 14,
+    "unique_contexts": 105,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p24",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 313.4166820018436,
+    "gold_blocks": 4,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [
+      "6b55ddbbcfdc484d:body:0001",
+      "6b55ddbbcfdc484d:body:0003",
+      "6b55ddbbcfdc484d:body:0004",
+      "6b55ddbbcfdc484d:table:0002"
+    ],
+    "candidate_complete": [
+      "6b55ddbbcfdc484d:body:0001",
+      "6b55ddbbcfdc484d:body:0003",
+      "6b55ddbbcfdc484d:body:0004",
+      "6b55ddbbcfdc484d:table:0002"
+    ],
+    "body_first_complete": [],
+    "body_anchor_complete": [
+      "6b55ddbbcfdc484d:body:0004"
+    ],
+    "body_context_complete": [
+      "6b55ddbbcfdc484d:body:0001",
+      "6b55ddbbcfdc484d:body:0003",
+      "6b55ddbbcfdc484d:body:0004",
+      "6b55ddbbcfdc484d:table:0002"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 7,
+    "unique_contexts": 120,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "p24",
+    "kind": "positive",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 7,
+    "elapsed_ms": 646.4023859989538,
+    "gold_blocks": 4,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [
+      "6b55ddbbcfdc484d:body:0001",
+      "6b55ddbbcfdc484d:body:0003",
+      "6b55ddbbcfdc484d:body:0004",
+      "6b55ddbbcfdc484d:table:0002"
+    ],
+    "candidate_complete": [
+      "6b55ddbbcfdc484d:body:0001",
+      "6b55ddbbcfdc484d:body:0003",
+      "6b55ddbbcfdc484d:body:0004",
+      "6b55ddbbcfdc484d:table:0002"
+    ],
+    "body_first_complete": [
+      "6b55ddbbcfdc484d:body:0004"
+    ],
+    "body_anchor_complete": [
+      "6b55ddbbcfdc484d:body:0004"
+    ],
+    "body_context_complete": [
+      "6b55ddbbcfdc484d:body:0001",
+      "6b55ddbbcfdc484d:body:0003",
+      "6b55ddbbcfdc484d:body:0004",
+      "6b55ddbbcfdc484d:table:0002"
+    ],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 8,
+    "unique_contexts": 99,
+    "gold_term_in_context": true
+  },
+  {
+    "case": "n01",
+    "kind": "wrong_company",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 368.96905599860474,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 2,
+    "reviewed_template_contexts": 26,
+    "unique_contexts": 164
+  },
+  {
+    "case": "n01",
+    "kind": "wrong_company",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 10,
+    "elapsed_ms": 884.0014710003743,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 2,
+    "reviewed_template_contexts": 26,
+    "unique_contexts": 167
+  },
+  {
+    "case": "n01",
+    "kind": "wrong_company",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 395.30741199996555,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 18,
+    "unique_contexts": 160
+  },
+  {
+    "case": "n01",
+    "kind": "wrong_company",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 10,
+    "elapsed_ms": 464.9583110003732,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 19,
+    "unique_contexts": 164
+  },
+  {
+    "case": "n02",
+    "kind": "future_actual",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 156.71177800322766,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 7,
+    "unique_contexts": 77
+  },
+  {
+    "case": "n02",
+    "kind": "future_actual",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 7,
+    "elapsed_ms": 292.23356999864336,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 4,
+    "unique_contexts": 89
+  },
+  {
+    "case": "n02",
+    "kind": "future_actual",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 164.69000900178798,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 5,
+    "unique_contexts": 78
+  },
+  {
+    "case": "n02",
+    "kind": "future_actual",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 7,
+    "elapsed_ms": 679.8220330019831,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 4,
+    "unique_contexts": 92
+  },
+  {
+    "case": "n03",
+    "kind": "forecast_actual",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 181.9922159993439,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 4,
+    "unique_contexts": 57
+  },
+  {
+    "case": "n03",
+    "kind": "forecast_actual",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 6,
+    "elapsed_ms": 571.3236430019606,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 3,
+    "unique_contexts": 77
+  },
+  {
+    "case": "n03",
+    "kind": "forecast_actual",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 159.01162900263444,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 1,
+    "unique_contexts": 59
+  },
+  {
+    "case": "n03",
+    "kind": "forecast_actual",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 6,
+    "elapsed_ms": 226.1318909986585,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 3,
+    "unique_contexts": 77
+  },
+  {
+    "case": "n04",
+    "kind": "wrong_period",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 190.95712099806406,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 6,
+    "unique_contexts": 70
+  },
+  {
+    "case": "n04",
+    "kind": "wrong_period",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 8,
+    "elapsed_ms": 261.97467100064387,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 10,
+    "unique_contexts": 82
+  },
+  {
+    "case": "n04",
+    "kind": "wrong_period",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 174.5753169998352,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 3,
+    "unique_contexts": 67
+  },
+  {
+    "case": "n04",
+    "kind": "wrong_period",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 8,
+    "elapsed_ms": 705.671858999267,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 7,
+    "unique_contexts": 79
+  },
+  {
+    "case": "n05",
+    "kind": "undisclosed",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 123.2446189969778,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 2,
+    "reviewed_template_contexts": 8,
+    "unique_contexts": 41
+  },
+  {
+    "case": "n05",
+    "kind": "undisclosed",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 7,
+    "elapsed_ms": 621.6107309992367,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 9,
+    "unique_contexts": 76
+  },
+  {
+    "case": "n05",
+    "kind": "undisclosed",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 120.51915399933932,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 1,
+    "unique_contexts": 44
+  },
+  {
+    "case": "n05",
+    "kind": "undisclosed",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 7,
+    "elapsed_ms": 189.67227900066064,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 5,
+    "unique_contexts": 72
+  },
+  {
+    "case": "n06",
+    "kind": "false_premise",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 328.6399460012035,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 2,
+    "reviewed_template_contexts": 25,
+    "unique_contexts": 133
+  },
+  {
+    "case": "n06",
+    "kind": "false_premise",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 10,
+    "elapsed_ms": 469.33960800015484,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 25,
+    "unique_contexts": 141
+  },
+  {
+    "case": "n06",
+    "kind": "false_premise",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 316.3152560009621,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 15,
+    "unique_contexts": 133
+  },
+  {
+    "case": "n06",
+    "kind": "false_premise",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 10,
+    "elapsed_ms": 789.153873000032,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 15,
+    "unique_contexts": 141
+  },
+  {
+    "case": "n07",
+    "kind": "wrong_institution",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 420.7330329991237,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 3,
+    "reviewed_template_contexts": 25,
+    "unique_contexts": 130
+  },
+  {
+    "case": "n07",
+    "kind": "wrong_institution",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 10,
+    "elapsed_ms": 762.934853999468,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 3,
+    "reviewed_template_contexts": 23,
+    "unique_contexts": 134
+  },
+  {
+    "case": "n07",
+    "kind": "wrong_institution",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 413.482780000777,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 8,
+    "unique_contexts": 114
+  },
+  {
+    "case": "n07",
+    "kind": "wrong_institution",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 10,
+    "elapsed_ms": 500.5236149991106,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 17,
+    "unique_contexts": 132
+  },
+  {
+    "case": "n08",
+    "kind": "unknown_price",
+    "tag": "old",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 326.7367059997923,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 2,
+    "reviewed_template_contexts": 20,
+    "unique_contexts": 121
+  },
+  {
+    "case": "n08",
+    "kind": "unknown_price",
+    "tag": "old",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 10,
+    "elapsed_ms": 406.7925599993032,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 1,
+    "reviewed_template_contexts": 14,
+    "unique_contexts": 111
+  },
+  {
+    "case": "n08",
+    "kind": "unknown_price",
+    "tag": "new",
+    "mode": "lexical",
+    "status": "lexical",
+    "rows": 10,
+    "elapsed_ms": 343.20629899957567,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 13,
+    "unique_contexts": 135
+  },
+  {
+    "case": "n08",
+    "kind": "unknown_price",
+    "tag": "new",
+    "mode": "hybrid",
+    "status": "hybrid",
+    "rows": 9,
+    "elapsed_ms": 675.0949240013142,
+    "gold_blocks": 0,
+    "first_complete": [],
+    "anchor_complete": [],
+    "context_complete": [],
+    "candidate_complete": [],
+    "body_first_complete": [],
+    "body_anchor_complete": [],
+    "body_context_complete": [],
+    "reviewed_template_anchors": 0,
+    "reviewed_template_contexts": 9,
+    "unique_contexts": 98
+  }
+]

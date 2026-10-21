@@ -1,0 +1,32 @@
+[
+  {
+    "case": "p01",
+    "chunk": "16a9a510ef9e405f:body:0001",
+    "newly_lost_units": []
+  },
+  {
+    "case": "p13",
+    "chunk": "e1b21386e9b62dde:body:0002",
+    "newly_lost_units": []
+  },
+  {
+    "case": "p16",
+    "chunk": "7ceca88433b092ae:body:0001",
+    "newly_lost_units": []
+  },
+  {
+    "case": "p16",
+    "chunk": "7ceca88433b092ae:body:0003",
+    "newly_lost_units": []
+  },
+  {
+    "case": "p16",
+    "chunk": "7ceca88433b092ae:body:0004",
+    "newly_lost_units": []
+  },
+  {
+    "case": "p16",
+    "chunk": "7ceca88433b092ae:body:0005",
+    "newly_lost_units": []
+  }
+]

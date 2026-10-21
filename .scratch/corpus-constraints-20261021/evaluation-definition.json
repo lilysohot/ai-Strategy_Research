@@ -1,0 +1,5 @@
+{
+  "rankings_sha256": "1475a2e47b8ccf82f0474bea49001123f02ef84b25bee9abb59d5943040e2cb5",
+  "gold_definition_sha256": "b370ebf825584ea21c96a20c3f91dbe36760716753615cea6cda478ce37ac94d",
+  "scope": "Same 24 positive / 8 stress development questions. Exact old evidence fragments, same source. Detailed checks use old support markers in role-cleaned body; require manual review before semantic claims. No unjudged precision or global recall claims."
+}
