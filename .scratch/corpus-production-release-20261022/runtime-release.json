@@ -1,0 +1,22 @@
+{
+  "old_pid": 34178,
+  "new_pid": 844002,
+  "checkout": "/home/administrator/FrontierAgent",
+  "settings": {
+    "CORPUS_TARGET_DB": "postgres",
+    "CORPUS_READ_CHAIN": "new",
+    "CORPUS_RETRIEVAL_MODE": "lexical",
+    "CORPUS_RETRIEVAL_RANKING": "off",
+    "CORPUS_NATIVE_RETRIEVAL": "release",
+    "CORPUS_NATIVE_TARGET_DB": "postgres",
+    "CORPUS_NATIVE_INDEX": "/home/administrator/FrontierAgent/data/corpus-native-release/20261022/manifest.json",
+    "CORPUS_VECTOR_TARGET_DB": "postgres",
+    "CORPUS_VECTOR_TIMEOUT_SECONDS": "15"
+  },
+  "health": {
+    "healthz": 200,
+    "readyz": 200
+  },
+  "active_runs_before": 0,
+  "restart_seconds": 1.6
+}

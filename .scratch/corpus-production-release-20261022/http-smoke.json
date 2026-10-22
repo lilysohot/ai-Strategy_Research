@@ -1,0 +1,25 @@
+{
+  "target": "postgres",
+  "query": "DeepSeek通过哪些训练和推理设计降低计算成本？",
+  "mode": "hybrid",
+  "sources": 23,
+  "hits": 7,
+  "body_characters": 15987,
+  "cold_search_ms": 2330,
+  "warm_search_ms": 1552,
+  "http_limit_50_preserves_block_budget": true,
+  "fetches": [
+    {
+      "doc_id": "cv2:e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623",
+      "locator": "chunk:native1/e8a6d70dfee70089%3Abody%3A0000/8c9ba39f20c00832e461e2b6421bfa6d388e3490214a4ae78d65a35536dbbb83",
+      "characters": 1000
+    },
+    {
+      "doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698",
+      "locator": "chunk:native1/1e86c00da4097c5c%3Abody%3A0003/e88453c118a9091a0fddf08d05eb91092881621e8cec3324a2ef36c2ab2a38bb",
+      "characters": 577
+    }
+  ],
+  "healthz": 200,
+  "readyz": 200
+}

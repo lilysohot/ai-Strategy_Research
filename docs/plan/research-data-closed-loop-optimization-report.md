@@ -1,12 +1,12 @@
 # 投研双数据链路优化报告：Claims × 同花顺
 
-| 项 | 内容 |
-|---|---|
-| 状态 | **评审草案** |
-| 日期 | 2026-09-12 |
-| 目标 | 将“研报观点”和“市场实际”从两条并列取数链路，升级为可追溯、可比较、可被现实证伪的投研闭环 |
+| 项    | 内容                                                                                                                               |
+| ---- | -------------------------------------------------------------------------------------------------------------------------------- |
+| 状态   | **评审草案**                                                                                                                         |
+| 日期   | 2026-09-12                                                                                                                       |
+| 目标   | 将“研报观点”和“市场实际”从两条并列取数链路，升级为可追溯、可比较、可被现实证伪的投研闭环                                                                                   |
 | 关联方案 | [D2 Claims 设计](./d2-claims-design.md) · [D2 Claims 优化改进执行计划](./d2-claims-optimization-plan.md) · [同花顺接入设计](./ths-market-data.md) |
-| 本期边界 | 不把同花顺原始响应写入 `claims` 表；不在 market 模块内建设数据仓库；保留 market 取回即用的原则 |
+| 本期边界 | 不把同花顺原始响应写入 `claims` 表；不在 market 模块内建设数据仓库；保留 market 取回即用的原则                                                                     |
 
 ## 1. 执行结论
 
@@ -50,7 +50,7 @@ data_coverage：判断“优先查研报”或“优先查市场”
    `quote_text` 留痕。
 2. 四个市场工具返回值没有携带 Agent 可直接复制的 `source_ref` 或逻辑调用 ID；模型不能可靠构造
    `ths:` evidence。
-3. [trace_store.py](../../plugins/market/trace_store.py) 解析了 `request_id`，但解析后并未用于筛选；
+3. [trace\_store.py](../../plugins/market/trace_store.py) 解析了 `request_id`，但解析后并未用于筛选；
    resolver 实际按 `thscode` 返回该代码的所有留痕。默认目录也不是 run 专属目录。
 
 现有黄金测试通过直接给 `MarketService` 与 transport 注入 `FileSink` 验证，因此不能覆盖
@@ -80,14 +80,14 @@ service 与 transport。这会使缓存、单飞去重、熔断器、调用计�
 
 不要合并原始数据表；需要的是一个轻量、只读的比较模型。
 
-| 术语 | 定义 | 归属 |
-|---|---|---|
-| `Claim` | 研报中可以定位的事实、预测或观点；观点不一定可数值比较 | D2 corpus |
-| `MarketObservation` | 供应商在特定端点、特定时点返回的实际观察值 | market run artifact / 工具返回 |
-| `ComparableObservation` | 经过受控标的、指标、单位与时间映射后，可参与比较的数值投影 | 连接层，只读 |
-| `MarketCall` | 一次逻辑市场动作；可包含行情和估值等多个供应商请求 | 单次 run |
-| `EvidenceEnvelope` | 策略卡可直接引用的 `source_ref`、定位、原样 quote、时点和口径 | 工具返回 |
-| `MetricMap` | 将 D2 标准指标映射到市场字段的受控规则 | 连接层配置/代码 |
+| 术语                      | 定义                                       | 归属                         |
+| ----------------------- | ---------------------------------------- | -------------------------- |
+| `Claim`                 | 研报中可以定位的事实、预测或观点；观点不一定可数值比较              | D2 corpus                  |
+| `MarketObservation`     | 供应商在特定端点、特定时点返回的实际观察值                    | market run artifact / 工具返回 |
+| `ComparableObservation` | 经过受控标的、指标、单位与时间映射后，可参与比较的数值投影            | 连接层，只读                     |
+| `MarketCall`            | 一次逻辑市场动作；可包含行情和估值等多个供应商请求                | 单次 run                     |
+| `EvidenceEnvelope`      | 策略卡可直接引用的 `source_ref`、定位、原样 quote、时点和口径 | 工具返回                       |
+| `MetricMap`             | 将 D2 标准指标映射到市场字段的受控规则                    | 连接层配置/代码                   |
 
 ### 3.1 统一标的和指标，而非统一原始记录
 
@@ -108,12 +108,12 @@ ComparableObservation
 
 时间字段必须分开：
 
-| 场景 | 可比的时间语义 |
-|---|---|
-| 研报预测 | `period_end` 是预测期；`known_at` 是报告发布日期/预测时点 |
-| 研报事实 | `period_end` 是事实期；`known_at` 是文档发布日期或原文明确时点 |
-| 财务报表 | `period_end` 是报告期末；`known_at` 必须是 `report_date_ms`（披露日） |
-| 行情/估值 | `observed_at` 是供应商快照时点；行情与估值各自保留自己的时点 |
+| 场景    | 可比的时间语义                                                 |
+| ----- | ------------------------------------------------------- |
+| 研报预测  | `period_end` 是预测期；`known_at` 是报告发布日期/预测时点               |
+| 研报事实  | `period_end` 是事实期；`known_at` 是文档发布日期或原文明确时点             |
+| 财务报表  | `period_end` 是报告期末；`known_at` 必须是 `report_date_ms`（披露日） |
+| 行情/估值 | `observed_at` 是供应商快照时点；行情与估值各自保留自己的时点                   |
 
 任何历史验证均要求：`known_at <= 决策时点`。禁止用报告期末替代披露日，禁止把现价快照当作
 历史决策时已经可知的数据。
@@ -122,17 +122,17 @@ ComparableObservation
 
 先只建立并审计以下映射，禁止以 LLM 自由匹配所有财务指标：
 
-| `MetricId` | claims 标准指标 | 市场字段 | 主要风险 |
-|---|---|---|---|
-| `eps.basic` | 每股收益 / EPS | `basic_eps`（以实际响应字段确认） | 单位“元/股”、稀释口径差异 |
-| `revenue.operating` | 营业收入 | `operating_income` | 单位、合并范围、季度/年度混淆 |
-| `net_income.parent` | 归母净利润 | 经确认的归母净利润字段 | 非归母/扣非/持续经营口径误配 |
+| `MetricId`          | claims 标准指标 | 市场字段                   | 主要风险            |
+| ------------------- | ----------- | ---------------------- | --------------- |
+| `eps.basic`         | 每股收益 / EPS  | `basic_eps`（以实际响应字段确认） | 单位“元/股”、稀释口径差异  |
+| `revenue.operating` | 营业收入        | `operating_income`     | 单位、合并范围、季度/年度混淆 |
+| `net_income.parent` | 归母净利润       | 经确认的归母净利润字段            | 非归母/扣非/持续经营口径误配 |
 
 每条 `MetricMap` 都必须声明：适用文档类型、别名、单位换算、允许期间、不可映射的反例及测试样本。
 
 ## 4. 优化后的完整流程图
 
-```mermaid
+```C
 flowchart TD
     subgraph Offline[离线语料链路：D2 与质量治理]
         A[研报/PDF 入库] --> B[Document 与 Block]
@@ -272,15 +272,15 @@ sequenceDiagram
 
 ## 6. 验证矩阵
 
-| 层级 | 必须验证的场景 |
-|---|---|
-| Provider contract | 响应字段、`null`、错误码、端点参数、时间戳变化；CI 使用固定响应，受控环境可跑 live smoke |
-| Market runtime | 同一 run 缓存/熔断生效；不同 run 不串留痕；运行结束关闭 client |
-| Evidence | 正确逻辑调用通过；错误调用 ID、跨 run、篡改数值、缺失留痕均失败 |
-| Time semantics | 财报披露日前不可被历史决策使用；行情和估值不同时间不得伪装为同一快照 |
-| Metric mapping | 三个首批指标的别名、单位、期间、反例与不可比较理由 |
-| End-to-end | `tool registry → strategy.json → verify`；而非只测试直接构造的 service |
-| Claims regression | 纯评级、行业/宏观分类、表格期间、JSON 截断、单位/负号、`as_of` 回填 |
+| 层级                | 必须验证的场景                                                     |
+| ----------------- | ----------------------------------------------------------- |
+| Provider contract | 响应字段、`null`、错误码、端点参数、时间戳变化；CI 使用固定响应，受控环境可跑 live smoke      |
+| Market runtime    | 同一 run 缓存/熔断生效；不同 run 不串留痕；运行结束关闭 client                    |
+| Evidence          | 正确逻辑调用通过；错误调用 ID、跨 run、篡改数值、缺失留痕均失败                         |
+| Time semantics    | 财报披露日前不可被历史决策使用；行情和估值不同时间不得伪装为同一快照                          |
+| Metric mapping    | 三个首批指标的别名、单位、期间、反例与不可比较理由                                   |
+| End-to-end        | `tool registry → strategy.json → verify`；而非只测试直接构造的 service |
+| Claims regression | 纯评级、行业/宏观分类、表格期间、JSON 截断、单位/负号、`as_of` 回填                   |
 
 ## 7. 明确不做的事
 
@@ -303,3 +303,4 @@ sequenceDiagram
 届时，系统的核心能力将不再只是“查到研报、查到行情”，而是：
 
 > **在当时可获得的信息下形成判断，并在后来用实际结果与可追溯证据检验它。**
+

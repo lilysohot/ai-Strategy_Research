@@ -386,7 +386,24 @@ async def _run_loop_inner(
                 cfg.loop_policy.no_tool_behavior != "nudge"
                 or no_tool_retries >= cfg.no_tool_max_retries
             ):
-                stop_reason = "no_tool"
+                # An interrupted reasoning-only response is not a final answer.
+                # call_llm returns it so nudge policies may still recover; once
+                # that allowance ends (or stop mode disables it), preserve the
+                # failure signal for workflow salvage and Web terminal status.
+                # Otherwise finalization walks back to an old tool preamble and
+                # publishes that progress message as a completed research result.
+                runaway = metadata.get(RUNAWAY_STATE_KEY) or {}
+                reason = runaway.get("last_call_reason")
+                if reason in {"reasoning_runaway", "reasoning_runaway_early"} and not runaway.get(
+                    "last_call_recovered", False,
+                ):
+                    stop_reason = "llm_error"
+                    metadata["llm_error_reason"] = reason
+                    metadata["llm_error"] = (
+                        "Model exhausted reasoning recovery without a visible answer or tool call"
+                    )
+                else:
+                    stop_reason = "no_tool"
                 break
             messages.append(user_msg(_build_no_tool_nudge(cfg.loop_policy)))
             continue

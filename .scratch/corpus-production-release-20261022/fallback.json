@@ -1,0 +1,128 @@
+{
+  "ok": true,
+  "query": "国金电子报告怎样解释麒麟芯片晶体管更多、做同样工作却更省电？",
+  "count": 2,
+  "hits": [
+    {
+      "doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "locator": "chunk:native1/668bac61a631636c%3Abody%3A0001/0e2a18cf9a2766afdee33e9a9e3c12c2d3030957d00bd0a6005e2c9581222244",
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "chunk_id": "668bac61a631636c:body:0001",
+      "context_locators": [
+        "chunk:native1/668bac61a631636c%3Abody%3A0001/0e2a18cf9a2766afdee33e9a9e3c12c2d3030957d00bd0a6005e2c9581222244",
+        "chunk:native1/668bac61a631636c%3Abody%3A0004/d0e14f705defc169bfe7ed2ab582c8ad71dee45628811810e5e6c779ce3eb94a",
+        "chunk:native1/668bac61a631636c%3Abody%3A0006/a9258fc630fe916703184507dfef5b4d38c97419c9a0644cc2a4a3e9fbd744c3",
+        "chunk:native1/668bac61a631636c%3Abody%3A0002/863f4816e5963698d0557c4d8cb420c86f03c4c75a905561234a22d993f9510c",
+        "chunk:native1/668bac61a631636c%3Abody%3A0007/cf54f590184b224f70cd160aff440fe0025f29df1a34e6f82cedbb5127f49dbc",
+        "chunk:native1/668bac61a631636c%3Abody%3A0009/0c429c86c5f1155e63a9d0f695b5165fa54a9bac059f9fd3ebce891eee28538e",
+        "chunk:native1/668bac61a631636c%3Abody%3A0010/65ed3c7f7d1fe21e1c9237eea6b2786babeb6a8b9e4b6d6efb55aeafecbdfeff",
+        "chunk:native1/668bac61a631636c%3Aheading%3A0003/cde616e71f2a20115e768c426126e81ee0db5f0fb0f0c705fb83c9053203ea76"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+        "locator": "chunk:native1/668bac61a631636c%3Abody%3A0001/0e2a18cf9a2766afdee33e9a9e3c12c2d3030957d00bd0a6005e2c9581222244",
+        "locators": [
+          "chunk:native1/668bac61a631636c%3Abody%3A0001/0e2a18cf9a2766afdee33e9a9e3c12c2d3030957d00bd0a6005e2c9581222244",
+          "chunk:native1/668bac61a631636c%3Abody%3A0004/d0e14f705defc169bfe7ed2ab582c8ad71dee45628811810e5e6c779ce3eb94a",
+          "chunk:native1/668bac61a631636c%3Abody%3A0006/a9258fc630fe916703184507dfef5b4d38c97419c9a0644cc2a4a3e9fbd744c3",
+          "chunk:native1/668bac61a631636c%3Abody%3A0002/863f4816e5963698d0557c4d8cb420c86f03c4c75a905561234a22d993f9510c",
+          "chunk:native1/668bac61a631636c%3Abody%3A0007/cf54f590184b224f70cd160aff440fe0025f29df1a34e6f82cedbb5127f49dbc",
+          "chunk:native1/668bac61a631636c%3Abody%3A0009/0c429c86c5f1155e63a9d0f695b5165fa54a9bac059f9fd3ebce891eee28538e",
+          "chunk:native1/668bac61a631636c%3Abody%3A0010/65ed3c7f7d1fe21e1c9237eea6b2786babeb6a8b9e4b6d6efb55aeafecbdfeff",
+          "chunk:native1/668bac61a631636c%3Aheading%3A0003/cde616e71f2a20115e768c426126e81ee0db5f0fb0f0c705fb83c9053203ea76"
+        ],
+        "scope_id": "scope:c48624879883bf786a138bbbdc073346",
+        "view": "compact"
+      },
+      "scope_id": "scope:c48624879883bf786a138bbbdc073346",
+      "total_chunks": 8,
+      "by_kind": {
+        "body": 7,
+        "heading": 1
+      },
+      "table_chunks": 0,
+      "title": "”",
+      "published": "2026-09-06",
+      "snippet": "…投资逻辑\n\n“韬定律”与业绩斜率：AI PCB 及半导体设备迎来布局良机。9 月4 日，华为半导体负责人何庭波在中科院科技\n论文预发布平台ChinaXiv，再次发布相关论文《Huawei's τ Chip Was Supposed to Melt?》，提到热量是韬定律\n最棘手的隐忧，而麒麟芯片实测结果，颠覆了这一质疑。数据显示，麒麟2026 的芯片晶体管密度从约每平方毫\n米1.55 亿提升到2.38 亿个，跃升55%。在同等性能的测试条件下，对比前代平面架构麒麟9030 P…"
+    },
+    {
+      "doc_id": "cv2:730433bdccf660aa5cd0b055a50dbc1b4c28371b7291b740ff03ac9c4e8cf333",
+      "locator": "chunk:native1/730433bdccf660aa%3Abody%3A0012/ea80a6ab1e907ca8a7f2f404bf4e7a995c2e5a1e4a00dc725c5a0e2e1b43da64",
+      "source_id": "8b11fbdd67b1d0a215c39c3155799e12cb9c259d6a7b40066d6efa557434ed39",
+      "build_id": "730433bdccf660aa5cd0b055a50dbc1b4c28371b7291b740ff03ac9c4e8cf333",
+      "chunk_id": "730433bdccf660aa:body:0012",
+      "context_locators": [
+        "chunk:native1/730433bdccf660aa%3Abody%3A0012/ea80a6ab1e907ca8a7f2f404bf4e7a995c2e5a1e4a00dc725c5a0e2e1b43da64",
+        "chunk:native1/730433bdccf660aa%3Abody%3A0008/300f9b69e8ea36dd2e3b7ddc6b24b6dffdb7c288caaa6db02739a62d4da0531d",
+        "chunk:native1/730433bdccf660aa%3Abody%3A0011/10423802c50a0099475db18ed04cd6e43d6cb52b92b70a61719d9386a80b1bdc",
+        "chunk:native1/730433bdccf660aa%3Abody%3A0000/2162e89f0fcd0a33c8a5ee3bec9ea0e27609be59886ed8951843256b0b315eaa",
+        "chunk:native1/730433bdccf660aa%3Aheading%3A0006/cb3d09871478e06f9018f232f1beac6b2aa4fc3c5cf30799d3399817bba9c0ee",
+        "chunk:native1/730433bdccf660aa%3Aheading%3A0008/79bcdc7439e35e970705201bbc6ae419a99e76fdcd85ea0aa1e9de1a22c9c5f9",
+        "chunk:native1/730433bdccf660aa%3Aheading%3A0012/7efb4f179aa5751960f969c0088b5f8dcd16dff219f5cf59dfeed89e5f2e427c",
+        "chunk:native1/730433bdccf660aa%3Abody%3A0001/b5c6931492c9a778a16db87b8c604e20646870b5b2ba8e3e4b04ccbfda6f3ae7",
+        "chunk:native1/730433bdccf660aa%3Abody%3A0004/a2e9d6d3e9af77d67c8601636e9a45a96a36c6a811cc7fa2876f02595b2f8336",
+        "chunk:native1/730433bdccf660aa%3Abody%3A0010/55e6373a0ea6edd5889454d4f7dd48c8aa3ffc036eb46deefb573232c6cb2f31",
+        "chunk:native1/730433bdccf660aa%3Aheading%3A0000/802e16c798877a5d2a1ea54545bc37cb08066695213697bd54131520a4f4102e",
+        "chunk:native1/730433bdccf660aa%3Aheading%3A0002/78416af7cf05338d5fc2249ef65b2d0e4f16df72242e90db63ca3fcb9b351405"
+      ],
+      "fetch_plan": {
+        "doc_id": "cv2:730433bdccf660aa5cd0b055a50dbc1b4c28371b7291b740ff03ac9c4e8cf333",
+        "locator": "chunk:native1/730433bdccf660aa%3Abody%3A0012/ea80a6ab1e907ca8a7f2f404bf4e7a995c2e5a1e4a00dc725c5a0e2e1b43da64",
+        "locators": [
+          "chunk:native1/730433bdccf660aa%3Abody%3A0012/ea80a6ab1e907ca8a7f2f404bf4e7a995c2e5a1e4a00dc725c5a0e2e1b43da64",
+          "chunk:native1/730433bdccf660aa%3Abody%3A0008/300f9b69e8ea36dd2e3b7ddc6b24b6dffdb7c288caaa6db02739a62d4da0531d",
+          "chunk:native1/730433bdccf660aa%3Abody%3A0011/10423802c50a0099475db18ed04cd6e43d6cb52b92b70a61719d9386a80b1bdc",
+          "chunk:native1/730433bdccf660aa%3Abody%3A0000/2162e89f0fcd0a33c8a5ee3bec9ea0e27609be59886ed8951843256b0b315eaa",
+          "chunk:native1/730433bdccf660aa%3Aheading%3A0006/cb3d09871478e06f9018f232f1beac6b2aa4fc3c5cf30799d3399817bba9c0ee",
+          "chunk:native1/730433bdccf660aa%3Aheading%3A0008/79bcdc7439e35e970705201bbc6ae419a99e76fdcd85ea0aa1e9de1a22c9c5f9",
+          "chunk:native1/730433bdccf660aa%3Aheading%3A0012/7efb4f179aa5751960f969c0088b5f8dcd16dff219f5cf59dfeed89e5f2e427c",
+          "chunk:native1/730433bdccf660aa%3Abody%3A0001/b5c6931492c9a778a16db87b8c604e20646870b5b2ba8e3e4b04ccbfda6f3ae7",
+          "chunk:native1/730433bdccf660aa%3Abody%3A0004/a2e9d6d3e9af77d67c8601636e9a45a96a36c6a811cc7fa2876f02595b2f8336",
+          "chunk:native1/730433bdccf660aa%3Abody%3A0010/55e6373a0ea6edd5889454d4f7dd48c8aa3ffc036eb46deefb573232c6cb2f31",
+          "chunk:native1/730433bdccf660aa%3Aheading%3A0000/802e16c798877a5d2a1ea54545bc37cb08066695213697bd54131520a4f4102e",
+          "chunk:native1/730433bdccf660aa%3Aheading%3A0002/78416af7cf05338d5fc2249ef65b2d0e4f16df72242e90db63ca3fcb9b351405"
+        ],
+        "scope_id": "scope:0af72d66a7532c6480d838e8757a37a6",
+        "view": "compact"
+      },
+      "scope_id": "scope:0af72d66a7532c6480d838e8757a37a6",
+      "total_chunks": 12,
+      "by_kind": {
+        "body": 7,
+        "heading": 5
+      },
+      "table_chunks": 0,
+      "title": "商业层面的影响",
+      "published": "2026-10-02",
+      "snippet": "…本报告中所表达的观点，准确反映了分析师就文中所讨论证券及发行人所持有的个人独\n立观点。分析师薪酬的任何部分在过去、现在或未来，均未直接或间接与本报告中提出\n的具体建议或观点挂钩。本公司遵循严格的合规流程，以确保所采用数据来源与信息的\n完整性、安全性及合法性。\nThe views expressed in this report accurately reflect the personal and independent views of the\nanalyst(s) reg…"
+    }
+  ],
+  "coverage": {
+    "processing": "partial",
+    "availability": "unknown",
+    "query_status": "matched",
+    "retrieval_mode": "lexical",
+    "fallback_reason": "embedding_test_unavailable",
+    "native": {
+      "policy": "native1",
+      "index_id": "60cb1c339b48f84c9b53b89140dc4ba42fbe2d229133b0c9ff63d7e9bbf74993",
+      "sources": 23,
+      "chunks": 585,
+      "ready_vectors": 585,
+      "body_characters": 14326,
+      "char_budget": 16000,
+      "hit_limit": 10,
+      "block_limit": 20,
+      "cutoff": "2026-10-22",
+      "unknown_date_sources": [
+        "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+      ]
+    },
+    "reason_codes": [
+      "native_prose_scope",
+      "embedding_test_unavailable"
+    ]
+  },
+  "hint": "snippet仅供定位，不能直接引用。每条命中合并同一版本内已选中的正文块；请将该命中的fetch_plan.doc_id、locators、view传给corpus_fetch取证，有next_cursor时继续分页。各句柄限定原文区间，不要改写为普通chunk句柄扩读。结果仅覆盖本次允许的原生正文；未命中不等于全库没有相关资料。"
+}
