@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import os
+import re
 import time
 from pathlib import Path
 from typing import Any
@@ -113,6 +114,42 @@ from workflows.stateful_react_agent.prompts import (
 )
 
 logger = logging.getLogger(__name__)
+
+#: 这些停止原因意味着本轮没有形成结论，即使模型留下了一段像答案的文字。
+_INFRA_STOP_REASONS = frozenset(
+    {
+        "llm_error",
+        "wall_deadline",
+        "budget_exhausted",
+        "max_attempts",
+        "reasoning_runaway",
+        "cancelled",
+    }
+)
+#: 末尾仍在宣告下一步动作的文字，是进度说明，不是结论。
+_PENDING_ACTION_RE = re.compile(
+    r"(正在|接下来|随后|稍后|待|将继续|再补取|还需|下一步)[^。！？]{0,24}"
+    r"(取回|检索|提交|读取|确认|补取|验证|整理|核对|回验)"
+)
+
+
+def _downgrade_unfinished(status: str, stopped_by: str | None, text: str) -> str:
+    """A progress note is not a finished answer.
+
+    Two ways a run can look complete without one: it was cut off (model failure,
+    wall clock, budget, runaway) or its last text still announces the next step.
+    Both are published as ``partial`` so evaluation stops counting them as success.
+    """
+    if status != "complete":
+        return status
+    if str(stopped_by or "") in _INFRA_STOP_REASONS:
+        return "partial"
+    tail = (text or "").strip()[-200:]
+    if not tail:
+        return "partial"
+    if tail.endswith(("：", ":")):
+        return "partial"
+    return "partial" if _PENDING_ACTION_RE.search(tail) else status
 
 REACT_MAX_TURNS = 100
 REACT_TOOL_TIMEOUT_S = 1800
@@ -1304,6 +1341,9 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
             "collected_reports",
         }
         else "complete"
+    )
+    answer_status = _downgrade_unfinished(
+        answer_status, result.stopped_by, final_text
     )
     # A4 消费账本（评审 C5：这是 stateful_react 的唯一最终发布出口）。A4_ENFORCE
     # 关闭（默认）仅记录校验状态与工件；开启时未通过的答案追加锚定限定块并降级

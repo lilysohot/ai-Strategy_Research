@@ -224,11 +224,40 @@ def refresh(dsn: str, target: str, seed: NativeIndex) -> NativeIndex:
             return refresh_on(cur, seed)
 
 
-SNIPPET_BLOCKS = 2
+#: 默认只展示 1 块。实测多块只减少重搜、却让取证与 token 上升，因此改为显式开关：
+#: ``CORPUS_NATIVE_SNIPPET_BLOCKS=2|3`` 固定块数，``=auto`` 按剩余预算自适应。
+SNIPPET_BLOCKS = 1
 SNIPPET_BLOCK_CHARS = 180
+#: 展示预算目标：只决定“展示几块”，不改返回体上限，也不改句柄格式。
+SNIPPET_TARGET_PAYLOAD = 12_000
+META_PER_HIT = 500
+LOCATOR_CHARS_ESTIMATE = 64
 
 
-def compose_snippet(blocks: list[Any]) -> str:
+def choose_snippet_blocks(block_counts: list[int], locator_chars: int) -> int:
+    """Pick 1–3 displayed blocks per hit from the payload each hit already costs.
+
+    The locator array and per-hit metadata dominate the message; only what is left
+    can be spent on readable text. This never raises the tool budget and never
+    changes the handles, so fetch keeps using the same locators.
+    """
+    fixed = os.environ.get("CORPUS_NATIVE_SNIPPET_BLOCKS", "").strip()
+    if fixed and fixed != "auto":
+        value = int(fixed)
+        if not 1 <= value <= 3:
+            raise ValueError("CORPUS_NATIVE_SNIPPET_BLOCKS must be 1..3 or auto")
+        return value
+    if fixed != "auto" or not block_counts:
+        return SNIPPET_BLOCKS
+    spent = META_PER_HIT * len(block_counts) + locator_chars
+    per_hit = (SNIPPET_TARGET_PAYLOAD - spent) / len(block_counts)
+    for n in (3, 2):
+        if per_hit >= n * (SNIPPET_BLOCK_CHARS + 8):
+            return n
+    return 1
+
+
+def compose_snippet(blocks: list[Any], limit: int = SNIPPET_BLOCKS) -> str:
     """Show the leading text of several blocks from one hit, never joined as one quote.
 
     Each part is prefixed with its rank in the hit and the page, and the tail states
@@ -236,13 +265,16 @@ def compose_snippet(blocks: list[Any]) -> str:
     this is navigation, not evidence.
     """
     total = len(blocks)
+    shown = max(1, min(limit, total))
     parts = []
-    for i, block in enumerate(blocks[:SNIPPET_BLOCKS], start=1):
+    for i, block in enumerate(blocks[:shown], start=1):
         page = next((s.page for s in block.slices if s.page), None)
         label = f"【{i}/{total}" + (f"｜p{page}" if page else "") + "】"
-        text = " ".join(block.text.split())[:SNIPPET_BLOCK_CHARS]
+        # 保留原始空白（换行、全角空格）：模型会从展示文本里复制引文，
+        # 折叠空白后复制的字符串在原文里不再逐字出现，会触发 quote_not_found。
+        text = block.text[:SNIPPET_BLOCK_CHARS].rstrip()
         parts.append(f"{label}{text}…")
-    hidden = total - min(total, SNIPPET_BLOCKS)
+    hidden = total - shown
     if hidden > 0:
         parts.append(f"（同源另有{hidden}块未展示，可按句柄补读）")
     return "\n".join(parts)
@@ -288,6 +320,10 @@ def search(
         if b.build_id not in groups and len(groups) == limit:
             continue
         groups.setdefault(b.build_id, []).append(b)
+    shown_blocks = choose_snippet_blocks(
+        [len(bs) for bs in groups.values()],
+        sum(len(bs) for bs in groups.values()) * LOCATOR_CHARS_ESTIMATE,
+    )
     for blocks in groups.values():
         b = blocks[0]
         c = chunks[b.build_id, b.chunk_id]
@@ -304,7 +340,7 @@ def search(
                 doc_id=read_pg.build_handle(b.build_id),
                 locator=locator,
                 title=c["title_text"] or "",
-                snippet=compose_snippet(blocks),
+                snippet=compose_snippet(blocks, shown_blocks),
                 score=0.0,
                 published=b.published or "",
                 source_id=b.source_id,

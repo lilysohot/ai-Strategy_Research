@@ -86,7 +86,7 @@ ABSTAIN_HINT = (
 #: 原生检索的下一步指令：句柄只保留一份，补读按同一命中的 doc_id + context_locators。
 NATIVE_HINT = (
     "snippet仅供定位，不能直接引用。snippet 会按块序展示同一命中内的前几段，"
-    "段首标注块序与页码，不同段不是连续原文；"
+    "段首【i/N】的第 i 段对应 context_locators 的第 i 个，不同段不是连续原文；"
     "context_locators 已与该命中的 doc_id 绑定，取证时传 corpus_fetch(doc_id=..., "
     "locators=context_locators, view='compact')，有 next_cursor 时继续分页。"
     "各句柄限定原文区间，不要改写为普通chunk句柄扩读。"
