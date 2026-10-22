@@ -267,7 +267,8 @@ def _content_cursor(
             "mi": member_index,
             "off": offset,
             "unresolved": list(unresolved),
-        }
+        },
+        compressed=any(locator.startswith("chunk:native1/") for locator in request),
     )
 
 
@@ -296,6 +297,8 @@ def _item(
         "text_sha256": hashlib.sha256(text.encode()).hexdigest(),
         "structure_status": status,
     }
+    if getattr(evidence, "native_slices", ()):
+        item["native_slices"] = _native_slices(evidence, start, end)
     if extra:  # A3：content_role／relations／relation_status（小字段，正文之后、诊断之前）
         item.update(extra)
     if view == "full":
@@ -307,6 +310,24 @@ def _item(
                 {"unit_id": unit.unit_id, "page": unit.page} for unit in evidence.units
             ]
     return item
+
+
+def _native_slices(evidence: Any, start: int, end: int) -> list[dict[str, Any]]:
+    """Map only this delivered fragment to raw-unit offsets, never expand a unit."""
+    result = []
+    for source, (_, lo, hi) in zip(evidence.native_slices, evidence.spans, strict=True):
+        a, b = max(start, lo), min(end, hi)
+        if a < b:
+            result.append(
+                {
+                    **source,
+                    "start": source["start"] + a - lo,
+                    "end": source["start"] + b - lo,
+                    "text_start": a - start,
+                    "text_end": b - start,
+                }
+            )
+    return result
 
 
 def _compact_structure_metadata_variants(extra: dict[str, Any]) -> list[dict[str, Any]]:
@@ -388,6 +409,8 @@ def _compact_payload(full: dict[str, Any]) -> dict[str, Any]:
         "spans": full.get("spans"),
         "source_ranges": full.get("source_ranges"),
     }
+    if "native_slices" in full:
+        compact["native_slices"] = full["native_slices"]
     for key in ("content_role", "relations", "relation_status", "label_path"):
         if key in full:
             compact[key] = full[key]
@@ -561,6 +584,8 @@ def _full_payload(
         "source_ranges": [list(span) for span in evidence.source_ranges],
         "hint": _FULL_HINT,
     }
+    if getattr(evidence, "native_slices", ()):
+        payload["native_slices"] = _native_slices(evidence, 0, len(evidence.text))
     if extra:  # A3：content_role／relations／relation_status（正文与控制字段之后、诊断之前）
         payload.update(extra)
     # ── 诊断 / 结构元数据（体积较大，置于正文与控制字段之后）──
@@ -789,7 +814,48 @@ def _page(
                     continue
                 budget_ok = True
                 try:
-                    candidate_ranges = _fragment_ranges(text, evidence.kind, candidate_budget, off)
+                    if getattr(evidence, "native_slices", ()):
+                        # Raw-coordinate metadata grows with the fragment. Include
+                        # it in the serialized probe instead of budgeting text alone.
+                        candidate_ranges = []
+                        begin = off
+                        while begin < len(text):
+                            low, high, best = begin + 1, len(text), begin
+                            while low <= high:
+                                stop = (low + high) // 2
+                                probe_item = _item(
+                                    evidence,
+                                    locator,
+                                    begin,
+                                    stop,
+                                    candidate,
+                                    status,
+                                    candidate_extra,
+                                    include_units=block_evidence is None,
+                                )
+                                probe = envelope(
+                                    [probe_item],
+                                    _content_cursor(
+                                        doc_id, build_id, request, view, mi, stop, unresolved
+                                    ),
+                                    False,
+                                    diagnostics=candidate == "full",
+                                )
+                                if (
+                                    len(json.dumps(probe, ensure_ascii=False)) + _MARGIN
+                                    <= max_chars
+                                ):
+                                    best, low = stop, stop + 1
+                                else:
+                                    high = stop - 1
+                            if best == begin:
+                                raise _AtomTooLarge(begin, begin + 1)
+                            candidate_ranges.append((begin, best))
+                            begin = best
+                    else:
+                        candidate_ranges = _fragment_ranges(
+                            text, evidence.kind, candidate_budget, off
+                        )
                 except _AtomTooLarge as exc:
                     atom_chars = max(atom_chars, exc.chars)  # 原子粒度与视图无关，记录供报错
                     continue

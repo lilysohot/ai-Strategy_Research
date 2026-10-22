@@ -1,0 +1,25 @@
+{
+  "queries": 57,
+  "native_projection_matches_frozen585": true,
+  "new_embedding_calls": 0,
+  "default_tool_limit": 10,
+  "all_selected_blocks_delivered": true,
+  "raw_pages_verified": true,
+  "regressions": [],
+  "off_restores_existing_service": true,
+  "native_handles_work_when_off": true,
+  "embedding_failure_scoped_lexical_fallback": true,
+  "publications_unchanged": true,
+  "search_budget_elisions": [
+    "p01",
+    "p07",
+    "p08",
+    "p15",
+    "N5-05",
+    "N5-07",
+    "N5-08",
+    "N5-09",
+    "N5-11",
+    "N5-25"
+  ]
+}

@@ -84,6 +84,8 @@ class ChunkEvidence:
 
     ``text`` 是该 chunk 引用单元 ``raw_text`` 的逐字拼接（不清洗、不摘要、不拼接展示）；
     引用区间一律用权威原文的 code point 偏移，不用清洗文本偏移（§4.2）。
+    显式 ``chunk:native1/`` 句柄只拼接其绑定的原文区间，由 ``native_slices``
+    提供单元内偏移；``units`` 仍保留经过哈希核验的完整权威单元。
     """
 
     source_id: str
@@ -101,6 +103,8 @@ class ChunkEvidence:
     active: bool
     #: Explicit contextual units; source_ranges still describes the original chunk only.
     context_unit_ids: tuple[str, ...] = ()
+    #: Explicit native projection: exact offsets in each full authoritative unit.
+    native_slices: tuple[dict[str, object], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -249,6 +253,11 @@ def fetch_verbatim(
     Context is the same bounded structural projection used by fetch_bands. The
     original chunk ranges remain unchanged; added units are explicitly identified.
     """
+    if locator.startswith("chunk:native1/"):
+        from plugins.corpus.retrieval.native_live import fetch
+
+        return fetch(dsn, sandbox_db, doc_id, locator)
+
     import psycopg
 
     from plugins.corpus.preparation.cross_boundary import aggregate_band_chunks_on

@@ -225,6 +225,15 @@ async def corpus_search(query: str, limit: int = 10) -> str:
         },
         ensure_ascii=False,
     )
+    if coverage.get("native"):
+        payload = json.loads(body)
+        payload["hint"] = (
+            "snippet仅供定位，不能直接引用。每条命中合并同一版本内已选中的正文块；"
+            "请将该命中的fetch_plan.doc_id、locators、view传给corpus_fetch取证，"
+            "有next_cursor时继续分页。各句柄限定原文区间，不要改写为普通chunk句柄扩读。"
+            "结果仅覆盖本次允许的原生正文；未命中不等于全库没有相关资料。"
+        )
+        return json.dumps(payload, ensure_ascii=False)
     if os.environ.get("CORPUS_EVIDENCE_PREVIEW", "off") == "pilot":
         payload = json.loads(body)
         try:
@@ -286,6 +295,20 @@ def fit_search_payload(body: str, budget: int) -> str | None:
         return None
     if len(body) <= budget:
         return body
+    native = bool((payload.get("coverage") or {}).get("native"))
+    if native:
+        # Preserve each complete native scope without duplicating its locator
+        # array in fetch_plan and context_locators under a small message budget.
+        for hit in payload.get("hits", []):
+            hit.pop("fetch_plan", None)
+        payload["hint"] = (
+            "snippet仅供定位。用同一命中的doc_id与完整context_locators调用corpus_fetch"
+            "（参数名locators，view=compact），并继续next_cursor；勿混用版本或扩写句柄。"
+        )
+        payload["plans_compacted"] = True
+        candidate = json.dumps(payload, ensure_ascii=False)
+        if len(candidate) <= budget:
+            return candidate
     # The full plan duplicates doc_id/context_locators. In the pilot compact
     # representation preserve those handles and core plan; do not spend the
     # budget twice on identical locator arrays before showing readable text.
@@ -309,6 +332,12 @@ def fit_search_payload(body: str, budget: int) -> str | None:
         return None
 
     compact_hits = [_compact_hit(hit) for hit in hits]
+    if native:
+        for hit in compact_hits:
+            for key in ("title", "published", "by_kind"):
+                hit.pop(key, None)
+            if "snippet" in hit:
+                hit["snippet"] = str(hit["snippet"])[:120] + "…"
 
     def render(keep: list[dict[str, Any]]) -> str:
         out: dict[str, Any] = {
@@ -325,11 +354,13 @@ def fit_search_payload(body: str, budget: int) -> str | None:
             out["plans_compacted"] = True
             if any("preview" not in hit for hit in keep):
                 out["previews_elided"] = True
+        if native:
+            out["plans_compacted"] = True
         if len(keep) < len(hits):
             out["hits_elided"] = len(hits) - len(keep)
             out["hint"] = (
                 "尾部命中因预算被整条省略。" + str(payload["hint"])
-                if payload.get("delivery_preview") == "pilot"
+                if payload.get("delivery_preview") == "pilot" or native
                 else _ELIDED_HINT
             )
         return json.dumps(out, ensure_ascii=False)

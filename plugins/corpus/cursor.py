@@ -20,6 +20,7 @@ from __future__ import annotations
 import base64
 import hashlib
 import json
+import zlib
 from typing import Any
 
 #: 游标 schema 版本；变更绑定语义时递增，旧游标随即显式失效。
@@ -47,7 +48,7 @@ def _checksum(payload: dict[str, Any]) -> str:
     return hashlib.sha256(_canonical(payload).encode("utf-8")).hexdigest()[:_CHECKSUM_CHARS]
 
 
-def encode_cursor(payload: dict[str, Any]) -> str:
+def encode_cursor(payload: dict[str, Any], *, compressed: bool = False) -> str:
     """把绑定项编码为不透明游标字符串（URL 安全、无填充）。
 
     ``payload`` 应含 ``type`` 与各绑定字段；本函数补 ``v`` 与 ``sum``，不改调用方
@@ -57,6 +58,8 @@ def encode_cursor(payload: dict[str, Any]) -> str:
     body["v"] = CURSOR_SCHEMA_VERSION
     body["sum"] = _checksum(body)
     raw = _canonical(body).encode("utf-8")
+    if compressed:
+        return "z1_" + base64.urlsafe_b64encode(zlib.compress(raw)).decode("ascii").rstrip("=")
     return base64.urlsafe_b64encode(raw).decode("ascii").rstrip("=")
 
 
@@ -64,9 +67,18 @@ def decode_cursor(token: str) -> dict[str, Any]:
     """解码并校验游标；任何异常一律 :class:`CursorError`。"""
     if not isinstance(token, str) or not token.strip():
         raise CursorError("游标必须是非空字符串")
-    padded = token + "=" * (-len(token) % 4)
+    compressed = token.startswith("z1_")
+    encoded = token[3:] if compressed else token
+    if compressed and len(encoded) > 100000:
+        raise CursorError("压缩游标过长")
+    padded = encoded + "=" * (-len(encoded) % 4)
     try:
         raw = base64.urlsafe_b64decode(padded.encode("ascii"))
+        if compressed:
+            decoder = zlib.decompressobj()
+            raw = decoder.decompress(raw, 65537)
+            if len(raw) > 65536 or not decoder.eof or decoder.unused_data:
+                raise ValueError("compressed_cursor_invalid_or_too_large")
         payload = json.loads(raw.decode("utf-8"))
     except Exception as exc:
         raise CursorError(f"游标不可解析：{exc}") from exc

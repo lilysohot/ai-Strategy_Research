@@ -20,7 +20,7 @@ from plugins.corpus.preparation.search_pg import (
     build_search_params,
 )
 from plugins.corpus.retrieval.diagnostics import RetrievalTrace, global_rrf
-from plugins.corpus.retrieval.embedding import VectorConfig, validate_vector
+from plugins.corpus.retrieval.embedding import EmbeddingError, VectorConfig, validate_vector
 from plugins.corpus.retrieval.hybrid import fuse, query_vector
 from plugins.corpus.retrieval.native import (
     NativeBlock,
@@ -55,10 +55,14 @@ def _snapshot(cur: psycopg.Cursor, index: NativeIndex) -> None:
     if [list(row) for row in cur.fetchall()] != index.manifest["publications"]:
         raise read_pg.IntegrityError("native_index_publications_changed_rebuild_required")
     cur.execute(
-        "SELECT p.source_id,a.decision,s.original_names,m.confirmed_publication_date::text "
+        "SELECT p.source_id,a.decision,s.original_names,m.confirmed_publication_date::text,sa.decision,"
+        "ba.metadata_snapshot->'report_publication'->>'value' "
         "FROM corpus.corpus_publications p "
         "JOIN corpus.corpus_sources s ON s.source_id=p.source_id "
+        "JOIN corpus.corpus_builds b ON b.build_id=p.active_build_id "
+        "LEFT JOIN corpus.corpus_admissions ba ON ba.decision_id=b.decision_id "
         "LEFT JOIN corpus.corpus_admissions a ON a.decision_id=p.current_decision_id "
+        "LEFT JOIN corpus.corpus_admissions sa ON sa.decision_id=s.current_decision_id "
         "LEFT JOIN corpus_retrieval.source_metadata m ON m.source_id=p.source_id "
         "WHERE p.source_id=ANY(%s::text[])",
         (index.manifest["source_allowlist"],),
@@ -66,12 +70,15 @@ def _snapshot(cur: psycopg.Cursor, index: NativeIndex) -> None:
     live = {r[0]: r for r in cur.fetchall()}
     for d in index.dates:
         row = live.get(d["source_id"])
-        if row is None or row[1] != "in_scope":
+        if row is None or row[1] != "in_scope" or row[4] != "in_scope":
             raise read_pg.WithdrawnError("native_source_not_in_scope")
         if sorted(row[2]) != sorted(d["names"]):
             raise read_pg.IntegrityError("native_source_names_changed_rebuild_required")
-        if (row[3] and row[3] != d["date"]) or (
-            d["basis"] == "reviewed_metadata" and row[3] != d["date"]
+        if (
+            (row[3] and row[3] != d["date"])
+            or (d["basis"] == "reviewed_metadata" and row[3] != d["date"])
+            or (not row[3] and row[5] and row[5] != d["date"])
+            or (d["basis"] == "admission" and not row[3] and row[5] != d["date"])
         ):
             raise read_pg.IntegrityError("native_source_date_changed_rebuild_required")
 
@@ -151,7 +158,9 @@ def _prepare(conn: psycopg.Connection, index: NativeIndex) -> None:
                     c["search_text"],
                     c["search_text"],
                     [],
-                    json.dumps(index.vectors[c["input_hash"]]["vector"]),
+                    json.dumps(index.vectors[c["input_hash"]]["vector"])
+                    if c["input_hash"] in index.vectors
+                    else None,
                 )
                 for c in index.chunks
             ],
@@ -167,6 +176,7 @@ def search_native(
     limit: int = 20,
     char_budget: int = 16000,
     trace: RetrievalTrace | None = None,
+    allow_fallback: bool = False,
 ) -> NativeResult:
     """Return the final bounded evidence; callers must not expand it with old fetch."""
     if target != index.target or not index.target.startswith("vector_pilot_"):
@@ -186,8 +196,19 @@ def search_native(
         with conn.transaction(), conn.cursor() as cur:
             cur.execute("SET TRANSACTION READ ONLY")
             _snapshot(cur, index)
-        vector, _, _ = query_vector(config, query)
-        vector = validate_vector(vector, config.dimensions)
+        vector = None
+        fallback_reason = None
+        complete = all(c["input_hash"] in index.vectors for c in index.chunks)
+        if not complete and allow_fallback:
+            fallback_reason = "native_vectors_pending"
+        else:
+            try:
+                vector, _, _ = query_vector(config, query)
+                vector = validate_vector(vector, config.dimensions)
+            except EmbeddingError as exc:
+                if not allow_fallback:
+                    raise
+                fallback_reason = "embedding_" + exc.code
         _prepare(conn, index)
         with conn.transaction(), conn.cursor() as cur:
             cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
@@ -227,8 +248,18 @@ def search_native(
                 )
                 for r in cur.fetchall()
             )
-            params["vector"] = json.dumps(vector)
-            cur.execute(_DENSE_SQL, params)
+            dense_rows = []
+            if vector is not None:
+                params["vector"] = json.dumps(vector)
+                try:
+                    # A savepoint prevents a vector SQL failure poisoning lexical reads.
+                    with conn.transaction():
+                        cur.execute(_DENSE_SQL, params)
+                        dense_rows = cur.fetchall()
+                except psycopg.Error:
+                    if not allow_fallback:
+                        raise
+                    fallback_reason = "native_vector_query_failed"
             dense = tuple(
                 SearchHit(
                     source_id=r[0],
@@ -242,7 +273,7 @@ def search_native(
                     published=r[8],
                     score=1 - float(r[9]),
                 )
-                for r in cur.fetchall()
+                for r in dense_rows
             )
             current = fuse(lexical, dense)
             global_rank = global_rrf(RetrievalTrace(lexical=lexical, dense=dense))
@@ -250,6 +281,8 @@ def search_native(
             guarded = current[:1] + tuple(
                 h for h in global_rank if (h.build_id, h.chunk_id) != first
             )
+            if fallback_reason:
+                guarded = lexical
             blocks = _load_blocks(cur, index)
             chosen = select_native(
                 [(h.build_id, h.chunk_id) for h in guarded],
@@ -263,7 +296,7 @@ def search_native(
                 trace.selected = tuple(
                     h for h in guarded if (h.build_id, h.chunk_id) in selected_keys
                 )
-                trace.status = "native_hybrid"
+                trace.status = "native_lexical_fallback" if fallback_reason else "native_hybrid"
     return NativeResult(
         query,
         index.index_id,
@@ -274,4 +307,6 @@ def search_native(
         cutoff,
         tuple(d["source_id"] for d in index.dates if d["date"] is None),
         bool(chosen and (chosen[0].build_id, chosen[0].chunk_id) == first),
+        "lexical" if fallback_reason else "hybrid",
+        fallback_reason,
     )

@@ -161,7 +161,7 @@ def test_bundle_requires_dates_for_entire_allowlist(tmp_path):
 def test_snapshot_rejects_withdrawal_or_metadata_drift(tmp_path, live, error):
     index = NativeIndex(bundle(tmp_path))
     cur = Mock()
-    cur.fetchall.side_effect = [[("s", "b", 1)], live]
+    cur.fetchall.side_effect = [[("s", "b", 1)], [(*row, "in_scope", None) for row in live]]
     with pytest.raises(error):
         _snapshot(cur, index)
 
@@ -171,6 +171,17 @@ def test_snapshot_rejects_changed_generation(tmp_path):
     cur = Mock()
     cur.fetchall.return_value = [("s", "b", 2)]
     with pytest.raises(IntegrityError, match="publications_changed"):
+        _snapshot(cur, index)
+
+
+def test_snapshot_rejects_admission_date_changed_without_new_generation(tmp_path):
+    index = NativeIndex(bundle(tmp_path))
+    cur = Mock()
+    cur.fetchall.side_effect = [
+        [("s", "b", 1)],
+        [("s", "in_scope", ["x"], None, "in_scope", "2026-10-22")],
+    ]
+    with pytest.raises(IntegrityError, match="date_changed"):
         _snapshot(cur, index)
 
 

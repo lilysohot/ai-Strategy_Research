@@ -1435,6 +1435,13 @@ class CorpusService:
         返回**空命中** + ``query_status="abstain"`` 的拒检覆盖信号（评分器对空观测
         不计误报；与 ``no_match``「无研报覆盖」机器可区分）。开关默认关闭，不改返回。
         """
+        if os.environ.get("CORPUS_NATIVE_RETRIEVAL", "off").strip() != "off":
+            from plugins.corpus.retrieval import native_live
+
+            if native_live.enabled(self._target_db):
+                if self.read_chain() != "new":
+                    raise StoreError("native_tools_require_new_read_chain")
+                return native_live.search(self._dsn, self._target_db or "", query, limit, trace)
         if self.read_chain() != "new":
             hits = self.search(query, limit=limit)
             return hits, self.coverage(query_status="matched" if hits else "no_match")

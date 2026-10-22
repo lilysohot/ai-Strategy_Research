@@ -1,0 +1,33 @@
+{
+  "queries": 57,
+  "off_queries": 57,
+  "ledger_complete_queries": 57,
+  "search_messages_max_chars": 11757,
+  "fetch_pages": 983,
+  "max_page_chars": 5999,
+  "max_body_chars": 15998,
+  "elapsed_includes_all_fetches_cached_embeddings_ms": {
+    "p50": 2570,
+    "p95": 3182
+  },
+  "sync_first": {
+    "requests_this_run": 0,
+    "reused_this_run": 575,
+    "imported_cached_vectors": 102,
+    "blocked_this_run": 0,
+    "error_code": null,
+    "active_chunks": 585,
+    "pending_chunks": 0,
+    "index_id": "0e2cf9ba22447ede1e715c70f45bef2c775cd23330d1b12b28fd5667581321a0"
+  },
+  "sync_repeat": {
+    "requests_this_run": 0,
+    "reused_this_run": 575,
+    "imported_cached_vectors": 0,
+    "blocked_this_run": 0,
+    "error_code": null,
+    "active_chunks": 585,
+    "pending_chunks": 0,
+    "index_id": "0e2cf9ba22447ede1e715c70f45bef2c775cd23330d1b12b28fd5667581321a0"
+  }
+}

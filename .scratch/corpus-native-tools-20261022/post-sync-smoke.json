@@ -1,0 +1,20 @@
+[
+  {
+    "id": "p01",
+    "mode": "hybrid",
+    "raw_chars": 15948,
+    "elapsed_ms": 2787
+  },
+  {
+    "id": "p16",
+    "mode": "hybrid",
+    "raw_chars": 14006,
+    "elapsed_ms": 2533
+  },
+  {
+    "id": "N5-25",
+    "mode": "hybrid",
+    "raw_chars": 15420,
+    "elapsed_ms": 2541
+  }
+]

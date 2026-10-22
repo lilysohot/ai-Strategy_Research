@@ -37,9 +37,18 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "command",
-        choices=("status", "init", "metadata", "build", "query", "compare", "native-query"),
+        choices=(
+            "status",
+            "init",
+            "metadata",
+            "build",
+            "query",
+            "compare",
+            "native-query",
+            "native-sync",
+        ),
     )
-    parser.add_argument("--max-requests", type=int, default=10)
+    parser.add_argument("--max-requests", type=int)
     parser.add_argument("--retry-failed", action="store_true")
     parser.add_argument(
         "--retry-uncertain",
@@ -53,6 +62,8 @@ def main() -> int:
     parser.add_argument("--native-index", type=Path)
     parser.add_argument("--char-budget", type=int, default=16000)
     args = parser.parse_args()
+    if args.max_requests is None:
+        args.max_requests = 0 if args.command == "native-sync" else 10
     if args.limit is None:
         args.limit = 20 if args.command == "native-query" else 10
     if args.max_requests < 0 or not 1 <= args.limit <= 20:
@@ -80,6 +91,20 @@ def main() -> int:
                 max_requests=args.max_requests,
                 retry_failed=args.retry_failed,
                 retry_uncertain=args.retry_uncertain,
+            )
+        elif args.command == "native-sync":
+            if args.native_index is None:
+                parser.error("native-sync requires --native-index")
+            from plugins.corpus.retrieval.native import NativeIndex
+            from plugins.corpus.retrieval.native_sync import sync
+
+            output = sync(
+                target,
+                config.target_db,
+                NativeIndex(args.native_index),
+                config,
+                DoubaoEmbedder(config).embed,
+                max_requests=args.max_requests,
             )
         elif args.command == "native-query":
             if not args.query.strip() or args.native_index is None:

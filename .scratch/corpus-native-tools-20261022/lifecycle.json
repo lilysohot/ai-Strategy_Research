@@ -1,0 +1,53 @@
+{
+  "publish_refresh": {
+    "new_build_visible": true,
+    "old_build_not_retrieved": true,
+    "pending_chunks": 1
+  },
+  "historical_handle": {
+    "exact_text_retained": true,
+    "active": false
+  },
+  "pending_fallback": {
+    "mode": "lexical",
+    "reason": "native_vectors_pending"
+  },
+  "sync_and_recover": {
+    "simulated_document_calls": 1,
+    "first": {
+      "requests_this_run": 1,
+      "reused_this_run": 577,
+      "imported_cached_vectors": 0,
+      "blocked_this_run": 0,
+      "error_code": null,
+      "active_chunks": 588,
+      "pending_chunks": 0,
+      "index_id": "07d02a485f787a41c8aebeb1daada0f1ef25a38bd342fda2869cb16bcb11a370"
+    },
+    "repeat": {
+      "requests_this_run": 0,
+      "reused_this_run": 578,
+      "imported_cached_vectors": 0,
+      "blocked_this_run": 0,
+      "error_code": null,
+      "active_chunks": 588,
+      "pending_chunks": 0,
+      "index_id": "07d02a485f787a41c8aebeb1daada0f1ef25a38bd342fda2869cb16bcb11a370"
+    },
+    "recovered": "hybrid"
+  },
+  "vector_sql_failure": {
+    "reason": "native_vector_query_failed",
+    "transaction_usable": true
+  },
+  "withdrawal": {
+    "excluded_from_candidates": true,
+    "old_handle_rejected": true
+  },
+  "audit": {
+    "all_fixture_mutations_rolled_back": true,
+    "provider_calls": 0,
+    "publication_generation_changes_committed": 0,
+    "lifecycle_uses_real_pg_with_borrowed_transaction": true
+  }
+}
