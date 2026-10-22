@@ -167,18 +167,29 @@ def select_native(
 
 
 class NativeIndex:
-    """Hash-checked pilot bundle. No queries or gold annotations belong in it."""
+    """Hash-checked scope bundle. No queries or gold annotations belong in it."""
 
     def __init__(self, manifest_path: Path) -> None:
         manifest_path = manifest_path.resolve()
         raw = manifest_path.read_bytes()
         self.index_id = hashlib.sha256(raw).hexdigest()
         self.manifest: dict[str, Any] = json.loads(raw)
-        if self.manifest.get("schema") != "native-evidence-pilot-1":
+        if self.manifest.get("schema") not in (
+            "native-evidence-pilot-1",
+            "native-evidence-release-1",
+        ):
             raise ValueError("native_index_schema_unsupported")
         self.target: str = self.manifest["target_db"]
-        if not self.target.startswith("vector_pilot_"):
+        if self.manifest["schema"] == "native-evidence-pilot-1" and not self.target.startswith(
+            "vector_pilot_"
+        ):
             raise ValueError("native_index_requires_pilot_target")
+        if not self.target or self.target in {"apodex", "template0", "template1"}:
+            raise ValueError("native_index_target_invalid")
+        if self.manifest["schema"] == "native-evidence-release-1" and not self.manifest.get(
+            "release_id"
+        ):
+            raise ValueError("native_release_id_required")
         expected_files = {"chunks.json", "units.json", "vectors.json", "dates.json"}
         if set(self.manifest["files"]) != expected_files:
             raise ValueError("native_index_files_invalid")

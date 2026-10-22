@@ -61,6 +61,7 @@ def main() -> int:
     parser.add_argument("--metadata-file", type=Path)
     parser.add_argument("--native-index", type=Path)
     parser.add_argument("--char-budget", type=int, default=16000)
+    parser.add_argument("--deployment", choices=("pilot", "release"), default="pilot")
     args = parser.parse_args()
     if args.max_requests is None:
         args.max_requests = 0 if args.command == "native-sync" else 10
@@ -71,7 +72,19 @@ def main() -> int:
     load_dotenv()
     try:
         config = VectorConfig.from_env()
-        target = pilot_dsn(config)
+        if args.deployment == "release":
+            from plugins.corpus.retrieval.native_live import enabled
+            from plugins.corpus.service import dsn
+
+            if args.command not in ("query", "native-query", "native-sync"):
+                parser.error("release deployment supports query, native-query and native-sync")
+            if os.getenv("CORPUS_NATIVE_RETRIEVAL") != "release" or not enabled(config.target_db):
+                raise EmbeddingError("native_release_not_enabled")
+            target = dsn()
+            if conninfo_to_dict(target).get("dbname") != config.target_db:
+                raise EmbeddingError("native_release_dsn_mismatch")
+        else:
+            target = pilot_dsn(config)
         index = VectorIndex(target, config)
         if args.command == "init":
             index.initialize()

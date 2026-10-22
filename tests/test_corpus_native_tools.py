@@ -38,6 +38,57 @@ def test_source_bundle_required_and_target_bound(monkeypatch):
         native_live.configured_seed("vector_pilot_test")
 
 
+def test_release_requires_explicit_production_binding(monkeypatch):
+    monkeypatch.setenv("CORPUS_NATIVE_RETRIEVAL", "release")
+    monkeypatch.setenv("CORPUS_NATIVE_TARGET_DB", "postgres")
+    monkeypatch.delenv("CORPUS_TARGET_DB", raising=False)
+    with pytest.raises(ValueError, match="explicitly_bound"):
+        native_live.enabled("postgres")
+    monkeypatch.setenv("CORPUS_TARGET_DB", "postgres")
+    assert native_live.enabled("postgres")
+    with pytest.raises(ValueError):
+        native_live.enabled("different_database")
+    monkeypatch.setenv("CORPUS_NATIVE_RETRIEVAL", "pilot")
+    with pytest.raises(ValueError, match="pilot_target"):
+        native_live.enabled("postgres")
+
+
+def test_release_read_binding_survives_switch_off(monkeypatch):
+    from plugins.corpus.retrieval.native_target import check_native_target
+
+    monkeypatch.setenv("CORPUS_NATIVE_RETRIEVAL", "off")
+    monkeypatch.setenv("CORPUS_NATIVE_TARGET_DB", "postgres")
+    monkeypatch.setenv("CORPUS_TARGET_DB", "postgres")
+    assert not native_live.enabled("postgres")
+    check_native_target("postgres")
+    monkeypatch.setenv("CORPUS_TARGET_DB", "apodex")
+    monkeypatch.setenv("CORPUS_NATIVE_TARGET_DB", "apodex")
+    with pytest.raises(ValueError):
+        check_native_target("apodex")
+
+
+def test_http_source_limit_does_not_expand_native_block_budget(monkeypatch):
+    index = SimpleNamespace(dates=[], chunks=[], vectors={})
+    result = SimpleNamespace(
+        blocks=[],
+        retrieval_mode="hybrid",
+        fallback_reason=None,
+        index_id="test",
+        char_budget=16000,
+        block_limit=20,
+        cutoff="2026-10-22",
+        unknown_date_sources=[],
+    )
+    monkeypatch.setattr(native_live, "configured_seed", lambda target: index)
+    monkeypatch.setattr(native_live, "refresh", lambda *args: index)
+    search = Mock(return_value=result)
+    monkeypatch.setattr(native_live, "search_native", search)
+    hits, coverage = native_live.search("", "postgres", "query", 50)
+    assert hits == [] and coverage["native"]["hit_limit"] == 50
+    assert search.call_args.kwargs["limit"] == 20
+    assert coverage["native"]["block_limit"] == 20
+
+
 def _unit(text, eligible=True):
     return {
         "unit_id": "u",

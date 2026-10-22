@@ -23,6 +23,7 @@ from plugins.corpus.preparation.chunk import normalize_search_text
 from plugins.corpus.retrieval.embedding import text_hash, validate_vector
 from plugins.corpus.retrieval.native import SAFE_KINDS, NativeIndex, normalized, raw_slices
 from plugins.corpus.retrieval.native_pg import search_native
+from plugins.corpus.retrieval.native_target import check_native_target
 
 PREFIX = "chunk:native1/"
 CAPTION = re.compile(
@@ -33,12 +34,13 @@ CAPTION = re.compile(
 
 def enabled(target: str | None) -> bool:
     mode = os.getenv("CORPUS_NATIVE_RETRIEVAL", "off").strip()
-    if mode not in ("off", "pilot"):
-        raise ValueError("CORPUS_NATIVE_RETRIEVAL must be off or pilot")
+    if mode not in ("off", "pilot", "release"):
+        raise ValueError("CORPUS_NATIVE_RETRIEVAL must be off, pilot or release")
     if mode == "off":
         return False
-    if not target or not target.startswith("vector_pilot_"):
+    if mode == "pilot" and (not target or not target.startswith("vector_pilot_")):
         raise ValueError("native_tools_require_pilot_target")
+    check_native_target(target)
     if target != os.getenv("CORPUS_NATIVE_TARGET_DB", ""):
         raise ValueError("native_tools_target_mismatch")
     return True
@@ -51,6 +53,11 @@ def configured_seed(target: str) -> NativeIndex:
     seed = NativeIndex(Path(path))
     if seed.target != target:
         raise ValueError("native_seed_target_mismatch")
+    if (
+        not target.startswith("vector_pilot_")
+        and seed.manifest["schema"] != "native-evidence-release-1"
+    ):
+        raise ValueError("native_release_bundle_required")
     return seed
 
 
@@ -207,7 +214,8 @@ def refresh_on(cur: psycopg.Cursor, seed: NativeIndex) -> NativeIndex:
 
 
 def refresh(dsn: str, target: str, seed: NativeIndex) -> NativeIndex:
-    if target != seed.target or not target.startswith("vector_pilot_"):
+    check_native_target(target)
+    if target != seed.target:
         raise ValueError("native_refresh_target_mismatch")
     with psycopg.connect(dsn, autocommit=True) as conn:
         read_pg._check_target(conn, target)
@@ -233,7 +241,9 @@ def search(
 
     seed = configured_seed(target)
     index = refresh(dsn, target, seed)
-    if not 1 <= limit <= 20:
+    # The HTTP search contract accepts up to 50 sources. Native retrieval still
+    # selects at most 20 blocks; a larger source limit cannot expand that budget.
+    if not 1 <= limit <= 50:
         raise ValueError("native_hit_limit_invalid")
     result = search_native(dsn, target, query, index, limit=20, trace=trace, allow_fallback=True)
     chunks = {(c["build_id"], c["chunk_id"]): c for c in index.chunks}
@@ -301,8 +311,7 @@ def search(
 
 def fetch(dsn: str, target: str | None, doc_id: str, locator: str) -> read_pg.ChunkEvidence:
     """Reconstruct a version-bound projection even after the trial switch is off."""
-    if not target or not target.startswith("vector_pilot_"):
-        raise ValueError("native_fetch_requires_pilot_target")
+    check_native_target(target)
     bid = read_pg.parse_build_handle(doc_id)
     try:
         encoded, expected = locator[len(PREFIX) :].rsplit("/", 1)

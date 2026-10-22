@@ -135,6 +135,26 @@ def test_bundle_hash_must_match_before_any_search(tmp_path):
         NativeIndex(path)
 
 
+def test_production_bundle_requires_explicit_release_schema(tmp_path):
+    path = bundle(tmp_path)
+    manifest = json.loads(path.read_text())
+    manifest["target_db"] = "postgres"
+    path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="pilot_target"):
+        NativeIndex(path)
+    manifest["schema"] = "native-evidence-release-1"
+    path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="release_id"):
+        NativeIndex(path)
+    manifest["release_id"] = "test-release"
+    path.write_text(json.dumps(manifest))
+    assert NativeIndex(path).target == "postgres"
+    manifest["target_db"] = "apodex"
+    path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="target_invalid"):
+        NativeIndex(path)
+
+
 def test_bundle_cannot_attach_chunk_to_wrong_active_build(tmp_path):
     path = bundle(tmp_path)
     manifest = json.loads(path.read_text())

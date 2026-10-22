@@ -1,4 +1,4 @@
-"""Pilot-only search and exact native delivery in one publication read snapshot."""
+"""Target-bound search and exact native delivery in one publication read snapshot."""
 
 from __future__ import annotations
 
@@ -30,6 +30,7 @@ from plugins.corpus.retrieval.native import (
     raw_slices,
     select_native,
 )
+from plugins.corpus.retrieval.native_target import check_native_target
 
 _DENSE_SQL = """
 WITH matches AS (
@@ -179,7 +180,8 @@ def search_native(
     allow_fallback: bool = False,
 ) -> NativeResult:
     """Return the final bounded evidence; callers must not expand it with old fetch."""
-    if target != index.target or not index.target.startswith("vector_pilot_"):
+    check_native_target(target)
+    if target != index.target:
         raise ValueError("native_pilot_target_mismatch")
     if not query.strip() or not 1 <= limit <= 20 or not 1 <= char_budget <= 16000:
         raise ValueError("native_query_or_budget_invalid")
