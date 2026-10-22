@@ -36,9 +36,13 @@ CLI在该进程内复用已有连接凭据并切换数据库名。实际CLI/TUI/
 
 搜索保持默认最多10条命中。同一build中选中的多个正文块合并成一条命中，取证计划包含完整的多个定位符。因此“10条命中”与“最多20个正文块”并不冲突；若调用方要求更小的命中数，尾部来源可能被省去，不能据此继承默认预算的覆盖成绩。
 
-`corpus_search`只返回预览和取证句柄，预览不算证据。通常将命中的 `fetch_plan.doc_id`、`fetch_plan.locators`、`fetch_plan.view`传给 `corpus_fetch`；参数使用`locators`时不要同时传`locator`。搜索消息压缩时可能省去重复的`fetch_plan`，此时使用同一命中的`doc_id`与完整`context_locators`，参数名仍为`locators`，`view=compact`。
+每条命中的 `snippet` 展示该命中内按融合名次的前 2 个块：每段以 `【序号/总块数｜页码】` 开头、只取块首约 180 字符，末尾注明还有多少块未展示。不同段来自不同位置，**不是连续原文**，仍只用于定位。
 
-新句柄形如 `chunk:native1/<编码后的原chunk_id>/<内容及坐标摘要>`，与 `cv2:<build_id>`共同绑定。不要把它改写成普通chunk句柄；普通句柄仍保留原来的整块及上下文读取语义。
+`corpus_search`只返回预览和取证句柄，预览不算证据。原生检索的命中只保留一份句柄数组：直接用同一命中的 `doc_id` 与完整 `context_locators` 调用 `corpus_fetch`，参数名用 `locators`，`view=compact`；参数使用`locators`时不要同时传`locator`。该路径不再返回与 `context_locators` 内容相同的 `fetch_plan`，以免重复占用返回预算。非原生路径仍保留 `fetch_plan`。
+
+返回体超出工具预算时按**整条命中**让位，不再把每条 `snippet` 统一截短；`hits_elided` 给出被省去的命中数。`coverage.native.blocks_returned` 是本次实际合并进命中的块数，`blocks_ranked` 是参与排序的候选块数。
+
+新句柄形如 `chunk:native1/<编码后的原chunk_id>/<内容及坐标摘要>`，与 `cv2:<build_id>`共同绑定。摘要取完整 sha256 的前 16 位（64 bit），用于确认补读到的是搜索时展示的那一份；`corpus_fetch` 仍按完整摘要比对前缀，早先发出的 64 位句柄继续可读。不要把它改写成普通chunk句柄；普通句柄仍保留原来的整块及上下文读取语义。
 
 `corpus_fetch`原有单块、批量、分页接口保持不变。`text`或`items[].text`是实际原文；`native_slices`说明每段正文在权威单元中的字符区间、页码、原文哈希，以及在本次返回片段中的偏移。普通`source_ranges`不冒充这些新映射。多个不连续区间用换行分开，不把它们描述为源文档中连续的一整句。
 

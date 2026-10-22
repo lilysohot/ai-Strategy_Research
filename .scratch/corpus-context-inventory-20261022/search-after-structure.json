@@ -1,0 +1,82 @@
+[
+ {
+  "id": "Q1",
+  "payload": 5062,
+  "hits": 2,
+  "body": 484,
+  "blocks_returned": 20,
+  "blocks_ranked": 250,
+  "ms": 2129,
+  "has_fetch_plan": false
+ },
+ {
+  "id": "Q2",
+  "payload": 4851,
+  "hits": 2,
+  "body": 323,
+  "blocks_returned": 20,
+  "blocks_ranked": 223,
+  "ms": 2159,
+  "has_fetch_plan": false
+ },
+ {
+  "id": "Q3",
+  "payload": 4854,
+  "hits": 2,
+  "body": 266,
+  "blocks_returned": 20,
+  "blocks_ranked": 288,
+  "ms": 2060,
+  "has_fetch_plan": false
+ },
+ {
+  "id": "Q4",
+  "payload": 5681,
+  "hits": 3,
+  "body": 535,
+  "blocks_returned": 20,
+  "blocks_ranked": 251,
+  "ms": 1843,
+  "has_fetch_plan": false
+ },
+ {
+  "id": "Q5",
+  "payload": 7385,
+  "hits": 5,
+  "body": 971,
+  "blocks_returned": 20,
+  "blocks_ranked": 215,
+  "ms": 1877,
+  "has_fetch_plan": false
+ },
+ {
+  "id": "Q6",
+  "payload": 5866,
+  "hits": 3,
+  "body": 726,
+  "blocks_returned": 20,
+  "blocks_ranked": 247,
+  "ms": 1895,
+  "has_fetch_plan": false
+ },
+ {
+  "id": "Q7",
+  "payload": 4948,
+  "hits": 2,
+  "body": 415,
+  "blocks_returned": 20,
+  "blocks_ranked": 308,
+  "ms": 1989,
+  "has_fetch_plan": false
+ },
+ {
+  "id": "Q8",
+  "payload": 4165,
+  "hits": 1,
+  "body": 242,
+  "blocks_returned": 20,
+  "blocks_ranked": 240,
+  "ms": 1843,
+  "has_fetch_plan": false
+ }
+]

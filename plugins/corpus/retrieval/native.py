@@ -65,6 +65,7 @@ class NativeResult:
     first_anchor_preserved: bool
     retrieval_mode: str = "hybrid"
     fallback_reason: str | None = None
+    blocks_ranked: int = 0
 
 
 def raw_slices(projection: str, units: list[dict[str, Any]]) -> tuple[NativeSlice, ...]:

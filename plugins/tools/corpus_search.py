@@ -83,6 +83,19 @@ ABSTAIN_HINT = (
 )
 
 
+#: 原生检索的下一步指令：句柄只保留一份，补读按同一命中的 doc_id + context_locators。
+NATIVE_HINT = (
+    "snippet仅供定位，不能直接引用。snippet 会按块序展示同一命中内的前几段，"
+    "段首标注块序与页码，不同段不是连续原文；"
+    "context_locators 已与该命中的 doc_id 绑定，取证时传 corpus_fetch(doc_id=..., "
+    "locators=context_locators, view='compact')，有 next_cursor 时继续分页。"
+    "各句柄限定原文区间，不要改写为普通chunk句柄扩读。"
+    "coverage.native.blocks_returned 是本次实际合并进命中的块数，blocks_ranked 是参与排序的候选块数；"
+    "未合并的候选不代表资料不存在，可用更具体的 query 或按句柄补读。"
+    "结果仅覆盖本次允许的原生正文；未命中不等于全库没有相关资料。"
+)
+
+
 @tool
 async def corpus_search(query: str, limit: int = 10) -> str:
     """在研报语料库里检索，返回命中的文档与定位句柄（**不含**完整原文）。
@@ -177,63 +190,75 @@ async def corpus_search(query: str, limit: int = 10) -> str:
             },
             ensure_ascii=False,
         )
+    native = bool(coverage.get("native"))
+    payload_hits = []
+    for hit in hits:
+        # I2-8 §7.2 版本句柄：doc_id=cv2:<build_id>、locator=chunk:<chunk_id>
+        head = {
+            "doc_id": hit.doc_id,
+            "locator": hit.locator,
+            "source_id": hit.source_id,
+            "build_id": hit.build_id,
+            "chunk_id": hit.chunk_id,
+            "context_locators": list(hit.context_locators),
+        }
+        # fetch_plan 把文档句柄与上下文范围组成一个不可拆的复取计划，避免调用方
+        # 从不同命中拼接 doc_id 与 locator。原生检索的 context_locators 已经与
+        # doc_id 同属一条命中，再写一份完全相同的 locator 数组只会重复占用预算，
+        # 因此该路径只保留一份句柄数组；调用方用同一命中的 doc_id + context_locators。
+        plan = (
+            {}
+            if native
+            else {
+                "fetch_plan": {
+                    "doc_id": hit.doc_id,
+                    "locator": hit.locator,
+                    "locators": list(hit.context_locators),
+                    "scope_id": hit.scope_id,
+                    "view": "compact",
+                }
+            }
+        )
+        # A1 内联 scope 摘要：成员范围身份 + 按 kind 计数 + 表块数。
+        # 只报告**块**统计，不声称「共有几张表」（表身份未知时为 null）。
+        payload_hits.append(
+            {
+                **head,
+                **plan,
+                "scope_id": hit.scope_id,
+                "total_chunks": len(hit.context_locators),
+                "by_kind": dict(hit.context_by_kind),
+                "table_chunks": dict(hit.context_by_kind).get("table", 0),
+                "title": hit.title,
+                "published": hit.published,
+                "snippet": hit.snippet,
+            }
+        )
     body = json.dumps(
         {
             "ok": True,
             "query": query,
             "count": len(hits),
-            "hits": [
-                {
-                    # I2-8 §7.2 版本句柄：doc_id=cv2:<build_id>、locator=chunk:<chunk_id>
-                    "doc_id": hit.doc_id,
-                    "locator": hit.locator,
-                    "source_id": hit.source_id,
-                    "build_id": hit.build_id,
-                    "chunk_id": hit.chunk_id,
-                    "context_locators": list(hit.context_locators),
-                    # 把文档句柄与上下文范围组成一个不可拆的复取计划。
-                    # 这避免调用方从不同命中拼接 doc_id 与 locator。
-                    "fetch_plan": {
-                        "doc_id": hit.doc_id,
-                        "locator": hit.locator,
-                        "locators": list(hit.context_locators),
-                        "scope_id": hit.scope_id,
-                        "view": "compact",
-                    },
-                    # A1 内联 scope 摘要：成员范围身份 + 按 kind 计数 + 表块数。
-                    # 只报告**块**统计，不声称「共有几张表」（表身份未知时为 null）。
-                    "scope_id": hit.scope_id,
-                    "total_chunks": len(hit.context_locators),
-                    "by_kind": dict(hit.context_by_kind),
-                    "table_chunks": dict(hit.context_by_kind).get("table", 0),
-                    "title": hit.title,
-                    "published": hit.published,
-                    "snippet": hit.snippet,
-                }
-                for hit in hits
-            ],
+            "hits": payload_hits,
             "coverage": coverage,
             # hint 显式告诉模型下一步该做什么，而不是让它自己领会
             "hint": (
-                "snippet 已截断，仅用于定位，禁止直接引用。"
-                "写 evidence 前请严格使用同一命中的 fetch_plan.doc_id 与"
-                "fetch_plan.locators 和 fetch_plan.view 调用 corpus_fetch；不得把不同命中的 doc_id、"
-                "locator 或 context_locators 混在一起。这些句柄共同构成有界的文档证据区。"
-                "需要先看清这批上下文候选的结构（哪些是标题、哪些是表格块、"
-                "各自覆盖哪些页与区间）时，用 corpus_inventory(doc_id, locators=context_locators)。"
+                NATIVE_HINT
+                if native
+                else (
+                    "snippet 已截断，仅用于定位，禁止直接引用。"
+                    "写 evidence 前请严格使用同一命中的 fetch_plan.doc_id 与"
+                    "fetch_plan.locators 和 fetch_plan.view 调用 corpus_fetch；不得把不同命中的 doc_id、"
+                    "locator 或 context_locators 混在一起。这些句柄共同构成有界的文档证据区。"
+                    "需要先看清这批上下文候选的结构（哪些是标题、哪些是表格块、"
+                    "各自覆盖哪些页与区间）时，用 corpus_inventory(doc_id, locators=context_locators)。"
+                )
             ),
         },
         ensure_ascii=False,
     )
-    if coverage.get("native"):
-        payload = json.loads(body)
-        payload["hint"] = (
-            "snippet仅供定位，不能直接引用。每条命中合并同一版本内已选中的正文块；"
-            "请将该命中的fetch_plan.doc_id、locators、view传给corpus_fetch取证，"
-            "有next_cursor时继续分页。各句柄限定原文区间，不要改写为普通chunk句柄扩读。"
-            "结果仅覆盖本次允许的原生正文；未命中不等于全库没有相关资料。"
-        )
-        return json.dumps(payload, ensure_ascii=False)
+    if native:
+        return body
     if os.environ.get("CORPUS_EVIDENCE_PREVIEW", "off") == "pilot":
         payload = json.loads(body)
         try:
@@ -334,10 +359,10 @@ def fit_search_payload(body: str, budget: int) -> str | None:
     compact_hits = [_compact_hit(hit) for hit in hits]
     if native:
         for hit in compact_hits:
-            for key in ("title", "published", "by_kind"):
-                hit.pop(key, None)
-            if "snippet" in hit:
-                hit["snippet"] = str(hit["snippet"])[:120] + "…"
+            # 只删可由 context_locators 推导的统计；title/published 是主体与时点，
+            # snippet 是这条命中唯一的正文，二者都不再按字符截断——装不下就整条让位，
+            # 避免"每条截到 120 字"把不同长度的正文压成同样不可用的残句。
+            hit.pop("by_kind", None)
 
     def render(keep: list[dict[str, Any]]) -> str:
         out: dict[str, Any] = {

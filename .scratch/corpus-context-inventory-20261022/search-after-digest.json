@@ -1,0 +1,66 @@
+[
+ {
+  "id": "Q1",
+  "payload": 4006,
+  "hits": 2,
+  "body": 484,
+  "locator_chars": 1226,
+  "ms": 2032
+ },
+ {
+  "id": "Q2",
+  "payload": 3795,
+  "hits": 2,
+  "body": 323,
+  "locator_chars": 1235,
+  "ms": 1958
+ },
+ {
+  "id": "Q3",
+  "payload": 3798,
+  "hits": 2,
+  "body": 266,
+  "locator_chars": 1223,
+  "ms": 2465
+ },
+ {
+  "id": "Q4",
+  "payload": 4577,
+  "hits": 3,
+  "body": 535,
+  "locator_chars": 1223,
+  "ms": 1790
+ },
+ {
+  "id": "Q5",
+  "payload": 6185,
+  "hits": 5,
+  "body": 971,
+  "locator_chars": 1229,
+  "ms": 2038
+ },
+ {
+  "id": "Q6",
+  "payload": 4762,
+  "hits": 3,
+  "body": 726,
+  "locator_chars": 1223,
+  "ms": 1819
+ },
+ {
+  "id": "Q7",
+  "payload": 3892,
+  "hits": 2,
+  "body": 415,
+  "locator_chars": 1226,
+  "ms": 2026
+ },
+ {
+  "id": "Q8",
+  "payload": 3157,
+  "hits": 1,
+  "body": 242,
+  "locator_chars": 1250,
+  "ms": 1743
+ }
+]

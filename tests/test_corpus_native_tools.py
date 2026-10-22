@@ -11,7 +11,12 @@ from unittest.mock import MagicMock, Mock
 import pytest
 
 from plugins.corpus.cursor import CursorError, decode_cursor, encode_cursor
-from plugins.corpus.preparation.read_pg import ChunkEvidence, IntegrityError, UnitEvidence
+from plugins.corpus.preparation.read_pg import (
+    ChunkEvidence,
+    IntegrityError,
+    UnitEvidence,
+    UnknownHandleError,
+)
 from plugins.corpus.retrieval import native_live
 from plugins.corpus.retrieval.embedding import text_hash
 
@@ -296,3 +301,92 @@ def test_native_search_message_compaction_keeps_all_scope_members():
     fitted = json.loads(search.fit_search_payload(json.dumps(payload, ensure_ascii=False), 8000))
     assert fitted["ok"] and not fitted.get("hits_elided")
     assert [h["context_locators"] for h in fitted["hits"]] == [h["context_locators"] for h in hits]
+
+
+def test_native_over_budget_drops_whole_hits_and_keeps_snippet_intact():
+    """约束区不再把正文统一截到 120 字，而是整条命中让位并显式计数。"""
+    search = importlib.import_module("plugins.tools.corpus_search")
+    hits = []
+    for i in range(8):
+        locators = [native_live.locator_for(f"b:body:{i}-{j}", "原文", []) for j in range(6)]
+        hits.append(
+            {
+                "doc_id": "cv2:" + str(i) * 64,
+                "locator": locators[0],
+                "source_id": str(i) * 64,
+                "build_id": str(i) * 64,
+                "chunk_id": f"b:body:{i}",
+                "context_locators": locators,
+                "scope_id": f"scope:{i}",
+                "title": "光力科技：煤矿检测转型半导体划片机龙头",
+                "published": "2026-09-06",
+                "fetch_plan": {"doc_id": "cv2:" + str(i) * 64, "locators": locators},
+                "snippet": "正" * 240,
+            }
+        )
+    body = json.dumps(
+        {"ok": True, "hits": hits, "coverage": {"native": {"policy": "native1"}}, "hint": "提示"},
+        ensure_ascii=False,
+    )
+
+    fitted = json.loads(search.fit_search_payload(body, 6_000))
+
+    assert fitted["ok"] is True
+    assert fitted["hits_elided"] >= 1
+    assert fitted["plans_compacted"] is True
+    for hit in fitted["hits"]:
+        assert len(hit["snippet"]) == 240  # 不再被截成 120 字残句
+        assert hit["title"]  # 主体留在这条命中里
+        assert "fetch_plan" not in hit  # locator 只保留一份
+        assert len(hit["context_locators"]) == 6
+
+
+def test_locator_carries_short_digest_and_old_handles_still_parse():
+    span = {"unit_id": "u", "page": 1, "start": 3, "end": 5, "raw_sha256": "hash"}
+    locator = native_live.locator_for("b:body:0001", "正文", [span])
+    cid, expected = native_live.parse_locator(locator)
+    assert cid == "b:body:0001"
+    assert len(expected) == native_live.DIGEST_CHARS == 16
+
+    # 已经发出的 64 位句柄必须继续可读（会话里可能仍持有旧值）。
+    old_cid, old_expected = native_live.parse_locator("chunk:native1/b%3Abody%3A0001/" + "a" * 64)
+    assert old_cid == "b:body:0001" and len(old_expected) == 64
+
+    with pytest.raises(UnknownHandleError):
+        native_live.parse_locator("chunk:native1/b%3Abody%3A0001/not-a-digest")
+
+
+def test_digest_matches_accepts_prefix_only():
+    full = "abcdef0123456789" + "f" * 48
+    assert native_live.digest_matches(full[:16], full)
+    assert native_live.digest_matches(full, full)
+    assert not native_live.digest_matches("0" * 16, full)
+    assert not native_live.digest_matches("", full)
+
+
+def test_compose_snippet_labels_blocks_and_counts_hidden():
+    from types import SimpleNamespace
+
+    blocks = [
+        SimpleNamespace(text="第一块正文 " * 40, slices=[SimpleNamespace(page=6)]),
+        SimpleNamespace(text="第二块正文 " * 40, slices=[SimpleNamespace(page=13)]),
+        SimpleNamespace(text="第三块正文", slices=[SimpleNamespace(page=19)]),
+    ]
+    snippet = native_live.compose_snippet(blocks)
+
+    assert snippet.startswith("【1/3｜p6】")
+    assert "【2/3｜p13】" in snippet
+    assert "【3/3" not in snippet  # 只展示前两块
+    assert "同源另有1块未展示" in snippet
+    # 每段是独立前缀，不应把两块拼成一句连续正文
+    assert snippet.count("…") >= 2
+    assert len(snippet) < 500
+
+
+def test_compose_snippet_single_block_has_no_hidden_note():
+    from types import SimpleNamespace
+
+    snippet = native_live.compose_snippet(
+        [SimpleNamespace(text="只有一个块", slices=[SimpleNamespace(page=1)])]
+    )
+    assert "未展示" not in snippet

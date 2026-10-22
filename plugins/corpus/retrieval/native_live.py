@@ -224,14 +224,49 @@ def refresh(dsn: str, target: str, seed: NativeIndex) -> NativeIndex:
             return refresh_on(cur, seed)
 
 
+SNIPPET_BLOCKS = 2
+SNIPPET_BLOCK_CHARS = 180
+
+
+def compose_snippet(blocks: list[Any]) -> str:
+    """Show the leading text of several blocks from one hit, never joined as one quote.
+
+    Each part is prefixed with its rank in the hit and the page, and the tail states
+    how many selected blocks are not shown. Text is only ever a prefix of a block —
+    this is navigation, not evidence.
+    """
+    total = len(blocks)
+    parts = []
+    for i, block in enumerate(blocks[:SNIPPET_BLOCKS], start=1):
+        page = next((s.page for s in block.slices if s.page), None)
+        label = f"【{i}/{total}" + (f"｜p{page}" if page else "") + "】"
+        text = " ".join(block.text.split())[:SNIPPET_BLOCK_CHARS]
+        parts.append(f"{label}{text}…")
+    hidden = total - min(total, SNIPPET_BLOCKS)
+    if hidden > 0:
+        parts.append(f"（同源另有{hidden}块未展示，可按句柄补读）")
+    return "\n".join(parts)
+
+
 def _digest(text: str, slices: list[dict[str, Any]]) -> str:
     return text_hash(
         json.dumps({"text": text, "slices": slices}, ensure_ascii=False, sort_keys=True)
     )
 
 
+#: 句柄携带的摘要前缀长度。完整摘要是 sha256(正文+各段坐标)，用于确认「补读到
+#: 的就是搜索时展示的那一份」；句中重复出现时保留 16 位（64 bit）即可发现漂移，
+#: 而每条 locator 可省 48 字符——20 个块的命中约省 1k。旧 64 位句柄继续可读。
+DIGEST_CHARS = 16
+
+
 def locator_for(chunk_id: str, text: str, slices: list[dict[str, Any]]) -> str:
-    return PREFIX + quote(chunk_id, safe="") + "/" + _digest(text, slices)
+    return PREFIX + quote(chunk_id, safe="") + "/" + _digest(text, slices)[:DIGEST_CHARS]
+
+
+def digest_matches(expected: str, actual: str) -> bool:
+    """Compare a stored digest prefix with the digest recomputed at fetch time."""
+    return bool(expected) and actual.startswith(expected)
 
 
 def search(
@@ -269,7 +304,7 @@ def search(
                 doc_id=read_pg.build_handle(b.build_id),
                 locator=locator,
                 title=c["title_text"] or "",
-                snippet="…" + b.text[:240] + "…",
+                snippet=compose_snippet(blocks),
                 score=0.0,
                 published=b.published or "",
                 source_id=b.source_id,
@@ -298,6 +333,8 @@ def search(
             "char_budget": result.char_budget,
             "hit_limit": limit,
             "block_limit": result.block_limit,
+            "blocks_returned": sum(len(bs) for bs in groups.values()),
+            "blocks_ranked": getattr(result, "blocks_ranked", 0),
             "cutoff": result.cutoff,
             "unknown_date_sources": list(result.unknown_date_sources),
         },
@@ -309,17 +346,23 @@ def search(
     return hits, coverage
 
 
+def parse_locator(locator: str) -> tuple[str, str]:
+    """Split ``chunk:native1/<chunk_id>/<digest>``; 16- and 64-hex both accepted."""
+    try:
+        encoded, expected = locator[len(PREFIX) :].rsplit("/", 1)
+        cid = unquote(encoded)
+        if not re.fullmatch(r"[0-9a-f]{16}|[0-9a-f]{64}", expected) or not cid:
+            raise ValueError
+    except (AttributeError, ValueError) as exc:
+        raise read_pg.UnknownHandleError("native_locator_invalid") from exc
+    return cid, expected
+
+
 def fetch(dsn: str, target: str | None, doc_id: str, locator: str) -> read_pg.ChunkEvidence:
     """Reconstruct a version-bound projection even after the trial switch is off."""
     check_native_target(target)
     bid = read_pg.parse_build_handle(doc_id)
-    try:
-        encoded, expected = locator[len(PREFIX) :].rsplit("/", 1)
-        cid = unquote(encoded)
-        if not re.fullmatch(r"[0-9a-f]{64}", expected) or not cid:
-            raise ValueError
-    except ValueError as exc:
-        raise read_pg.UnknownHandleError("native_locator_invalid") from exc
+    cid, expected = parse_locator(locator)
     with psycopg.connect(dsn, autocommit=True) as conn:
         read_pg._check_target(conn, target)
         with conn.transaction(), conn.cursor() as cur:
@@ -351,7 +394,7 @@ def fetch(dsn: str, target: str | None, doc_id: str, locator: str) -> read_pg.Ch
             slices = raw_slices(c["search_text"], [units[uid] for uid in c["unit_refs"]])
             body = "\n".join(s.text for s in slices)
             raw_spans = [{k: v for k, v in asdict(s).items() if k != "text"} for s in slices]
-            if _digest(body, raw_spans) != expected:
+            if not digest_matches(expected, _digest(body, raw_spans)):
                 raise read_pg.IntegrityError("native_projection_hash_changed")
             spans = []
             offset = 0

@@ -1,0 +1,798 @@
+[
+ {
+  "id": "Q1",
+  "query": "光力科技2025年半导体封测装备收入是多少？",
+  "elapsed_ms": 2515,
+  "retrieval_mode": "hybrid",
+  "fallback": null,
+  "native": {
+   "policy": "native1",
+   "index_id": "60cb1c339b48f84c9b53b89140dc4ba42fbe2d229133b0c9ff63d7e9bbf74993",
+   "sources": 23,
+   "chunks": 585,
+   "ready_vectors": 585,
+   "body_characters": 11867,
+   "char_budget": 16000,
+   "hit_limit": 10,
+   "block_limit": 20,
+   "cutoff": "2026-10-22",
+   "unknown_date_sources": [
+    "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+   ]
+  },
+  "hits": [
+   {
+    "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+    "locator": "chunk:native1/568f9e752f0fa65a%3Abody%3A0019/0a0443378968ad6cab71109bc16759775449e68ef790cdfc454177241945e620",
+    "title": "盈利预测\n假设前提\n我们的盈利预测主要基于以下假设条件：",
+    "snippet": "…半导体封测业务：2023-2025 年，公司半导体封测业务收入分别为3.50/2.76/3.62\n亿元，增速分别为7.97%/-21.07%/31.16%，2025 年业务收入已呈现恢复态势。考\n虑到公司未来机械划片机交付放量、研磨设备及激光划片机贡献增量带来的业绩\n增长。从量价假设看，公司机械划片机单价预计维持在100 万元左右，研磨设备\n及激光划片机单价约为250 万元，随着设备交付规模扩大、新产品收入贡献提升\n以及耗材业务逐步放量，半导体封测业务将成为公司未来收入的主要…",
+    "score": 0.0,
+    "published": "2026-09-06",
+    "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+    "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+    "chunk_id": "568f9e752f0fa65a:body:0019",
+    "context_locators": [
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0019/0a0443378968ad6cab71109bc16759775449e68ef790cdfc454177241945e620",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0037/8fb892937725d02ce8bcd530974dda8024259459a31be45195b739603cd22902",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0014/652acaaae42bf2a01d2ffbf97139a6994a32717559c1eb60ba041af9bff20a80",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0035/8b21d667232460254bb9b956ca8d2f029b8fdbdf90c67b388eeb0d88540d0035",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0038/27b6a242f573a577978318ffda6adcede5534a11a0beacce43b4cbcf2199a6bf",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0003/a361bdf8514c72049c7714cd7e41c589bf6d361065f089bd62468ae686405eff",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0024/ba4d60ab3de653a44c8293815eb3bf8393f75ed13f684a9d026aae2669b9c33d",
+     "chunk:native1/568f9e752f0fa65a%3Aheading%3A0002/15b53676eb4b60dfd9918f0e8023507da7dd5179b66652008552edc400698c2d",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0008/5dc3dad5b2de3bde22b08997ea953a74d7a72f444fa77078b122d46ba131b809",
+     "chunk:native1/568f9e752f0fa65a%3Aheading%3A0005/94f44cdb44d9e7fc3806c02d0e0e6d79762484131af7a2e8da4ec21b2cc88da7",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0018/0554071c7a1fccd075275882eb3d973e81b8a88155b8509a7449364e9a19d1fb",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0023/86c4d6347aa5f290033cc551af73e7bc6b5445401c6f04a1f7e58db5445d5716",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0027/8ccf66e49c34fc86821c2546db5d52253038a40f983417907201eaff30a83034",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0022/be2bd14c13f202707ecd6949e8037c14657dfeddb9a7446c7ceee1738a16bb3b",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0028/b26ade86275ae8039ffc2e0046248c18282d9748b88d052055b5db7d7eb55505"
+    ],
+    "scope_id": "scope:387dd9a7ab703ac7e1e61fea3cea8f05",
+    "context_by_kind": [
+     [
+      "body",
+      13
+     ],
+     [
+      "heading",
+      2
+     ]
+    ]
+   },
+   {
+    "doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+    "locator": "chunk:native1/668bac61a631636c%3Abody%3A0007/cf54f590184b224f70cd160aff440fe0025f29df1a34e6f82cedbb5127f49dbc",
+    "title": "一、细分板块观点\n1.1 PCB：高景气度继续维持，下半年算力出货将大面积释放业绩",
+    "snippet": "…长鑫科技：公司于2026 年08 月28 日公布财报。2026 年上半年，公司实现营业收入1,503.10 亿元，归属于母公司净\n利润达776.05 亿元，净利润率高达51.6%，创历史新高；毛利率达84.84%，显著高于行业均值，主因DRAM 价格上行\n与销量双升，叠加IDM 模式成本优势，盈利质量优异且非经常性损益影响极小。公司构建覆盖设计、制造、封装到模\n组的全链条IDM 模式，第四代工艺平台已量产，第五代平台进入客户认证，核心技术达国际先进水平；拥有境内专利\n4,48…",
+    "score": 0.0,
+    "published": "2026-09-06",
+    "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+    "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+    "chunk_id": "668bac61a631636c:body:0007",
+    "context_locators": [
+     "chunk:native1/668bac61a631636c%3Abody%3A0007/cf54f590184b224f70cd160aff440fe0025f29df1a34e6f82cedbb5127f49dbc",
+     "chunk:native1/668bac61a631636c%3Abody%3A0004/d0e14f705defc169bfe7ed2ab582c8ad71dee45628811810e5e6c779ce3eb94a",
+     "chunk:native1/668bac61a631636c%3Abody%3A0009/0c429c86c5f1155e63a9d0f695b5165fa54a9bac059f9fd3ebce891eee28538e",
+     "chunk:native1/668bac61a631636c%3Abody%3A0014/27e86188d1f3de7bdce5b5e6b8ae5816c0057c2e99ae66f4607cde96c319b3f4",
+     "chunk:native1/668bac61a631636c%3Abody%3A0001/0e2a18cf9a2766afdee33e9a9e3c12c2d3030957d00bd0a6005e2c9581222244"
+    ],
+    "scope_id": "scope:05c836a1c3ba6e7cd9bd4b6604bcacc5",
+    "context_by_kind": [
+     [
+      "body",
+      5
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Q2",
+  "query": "光力科技的估值假设和目标价区间是什么？",
+  "elapsed_ms": 2019,
+  "retrieval_mode": "hybrid",
+  "fallback": null,
+  "native": {
+   "policy": "native1",
+   "index_id": "60cb1c339b48f84c9b53b89140dc4ba42fbe2d229133b0c9ff63d7e9bbf74993",
+   "sources": 23,
+   "chunks": 585,
+   "ready_vectors": 585,
+   "body_characters": 6335,
+   "char_budget": 16000,
+   "hit_limit": 10,
+   "block_limit": 20,
+   "cutoff": "2026-10-22",
+   "unknown_date_sources": [
+    "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+   ]
+  },
+  "hits": [
+   {
+    "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+    "locator": "chunk:native1/568f9e752f0fa65a%3Abody%3A0037/8fb892937725d02ce8bcd530974dda8024259459a31be45195b739603cd22902",
+    "title": "风险提示",
+    "snippet": "…估值的风险\n考虑公司的业务特点，我们采用绝对估值和相对估值两种方法测算公司的合理价\n值。其中，绝对估值采用FCFF 估值法，测算得到公司合理价值区间为32.54-39.98\n元。但上述估值结果建立在公司未来经营业绩、自由现金流、资本成本和永续增\n长率等假设基础上，相关参数包含一定的主观判断，可能导致估值结果出现偏差。\n具体而言：\n公司未来价值高度依赖半导体封测装备业务收入快速增长以及盈利能力持续改\n善。如果机械划片机、激光划片机、研磨抛光设备和耗材的客户验证、订单获取\n及交付…",
+    "score": 0.0,
+    "published": "2026-09-06",
+    "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+    "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+    "chunk_id": "568f9e752f0fa65a:body:0037",
+    "context_locators": [
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0037/8fb892937725d02ce8bcd530974dda8024259459a31be45195b739603cd22902",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0035/8b21d667232460254bb9b956ca8d2f029b8fdbdf90c67b388eeb0d88540d0035",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0026/801ef8e3593265f5659aa7a01183c9d43a92fc0fa2f4853448008a30e57d0d8c",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0033/8a5ac91e25926d52f9cb825a003a09bf1204067d3a031844939ae1889e1196a9",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0027/8ccf66e49c34fc86821c2546db5d52253038a40f983417907201eaff30a83034",
+     "chunk:native1/568f9e752f0fa65a%3Aheading%3A0010/fe4d1b6f6c1a12a80962bfbe453624fa0488122d73ba78305cb0d0a282276846",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0028/b26ade86275ae8039ffc2e0046248c18282d9748b88d052055b5db7d7eb55505",
+     "chunk:native1/568f9e752f0fa65a%3Aheading%3A0002/15b53676eb4b60dfd9918f0e8023507da7dd5179b66652008552edc400698c2d",
+     "chunk:native1/568f9e752f0fa65a%3Aheading%3A0005/94f44cdb44d9e7fc3806c02d0e0e6d79762484131af7a2e8da4ec21b2cc88da7",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0001/e34b9bb98ebdcdfe79a3fa8da6a834ead9e6a4d1b3b538e0fef4363fdb22bb45",
+     "chunk:native1/568f9e752f0fa65a%3Aheading%3A0009/e2afbdf396b4183fe952ccb5b5c988912fd315c530ebf010b47e1a5101def83e",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0014/652acaaae42bf2a01d2ffbf97139a6994a32717559c1eb60ba041af9bff20a80",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0023/86c4d6347aa5f290033cc551af73e7bc6b5445401c6f04a1f7e58db5445d5716",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0019/0a0443378968ad6cab71109bc16759775449e68ef790cdfc454177241945e620",
+     "chunk:native1/568f9e752f0fa65a%3Aheading%3A0007/02bbc8075859accc8e4384654604995a7087f9be8a8a8f2026bc86ebdf8b79b5",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0015/71b3733a32a53bcb4cee234112110ca4113e933c18c459397e35e9eafebde669",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0003/a361bdf8514c72049c7714cd7e41c589bf6d361065f089bd62468ae686405eff",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0029/26aa5343c1a1b8056e420edac93c9f684b49d72f195d30d180928d92cad33fc0",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0038/27b6a242f573a577978318ffda6adcede5534a11a0beacce43b4cbcf2199a6bf"
+    ],
+    "scope_id": "scope:aebdad2364d908bba77c783c02fa29e1",
+    "context_by_kind": [
+     [
+      "body",
+      14
+     ],
+     [
+      "heading",
+      5
+     ]
+    ]
+   },
+   {
+    "doc_id": "cv2:3d17f758d795ee7195254f9b831cdf96c7ffa510f45c7445645314524d9e0185",
+    "locator": "chunk:native1/3d17f758d795ee71%3Abody%3A0022/451bcb97b2314fd264157f72fe6daa3e9283bd4ccf462d28df21f58f2dd9a9b2",
+    "title": "分析、估值方法的局限性说明",
+    "snippet": "…本报告所包含的分析基于各种假设，不同假设可能导致分析结果出现重大不同。本报告采用的各种估值方法及模型均有其局限性，估值结果不保\n证所涉及证券能够在该价格交易。…",
+    "score": 0.0,
+    "published": "2026-09-05",
+    "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+    "build_id": "3d17f758d795ee7195254f9b831cdf96c7ffa510f45c7445645314524d9e0185",
+    "chunk_id": "3d17f758d795ee71:body:0022",
+    "context_locators": [
+     "chunk:native1/3d17f758d795ee71%3Abody%3A0022/451bcb97b2314fd264157f72fe6daa3e9283bd4ccf462d28df21f58f2dd9a9b2"
+    ],
+    "scope_id": "scope:23713abb616d3c47c9e6208a2dcd7ef6",
+    "context_by_kind": [
+     [
+      "body",
+      1
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Q3",
+  "query": "贵州茅台2026年8月提价后的双价格体系如何运作？",
+  "elapsed_ms": 1968,
+  "retrieval_mode": "hybrid",
+  "fallback": null,
+  "native": {
+   "policy": "native1",
+   "index_id": "60cb1c339b48f84c9b53b89140dc4ba42fbe2d229133b0c9ff63d7e9bbf74993",
+   "sources": 23,
+   "chunks": 585,
+   "ready_vectors": 585,
+   "body_characters": 9813,
+   "char_budget": 16000,
+   "hit_limit": 10,
+   "block_limit": 20,
+   "cutoff": "2026-10-22",
+   "unknown_date_sources": [
+    "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+   ]
+  },
+  "hits": [
+   {
+    "doc_id": "cv2:712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+    "locator": "chunk:native1/712e370a7081da17%3Abody%3A0011/9571c4dcf4d51790d3aa64457b4c6519627cdfcb6733ba5812ab03dcec9935cf",
+    "title": "报告摘要",
+    "snippet": "…\n双锚点定价机制带来更强的稳价预期。2026\u0001年\u00018\u0001月\u00018\u0001日,茅台线下自营门店完成新\u0001一轮调价,\n飞天、五星、马年生肖、精品茅台自营零售价分别上调至\u00011753元/瓶、1743\u0001元/瓶、1951\u0001元/瓶、\n2410\u0001元/瓶,正式形成\u0001i\u0001茅台线上、线下自营店双价格体系,并\u0001落地批价与终端成交价双锚点定\n价机制。本次调价并非简单终端涨价,而是公司稳价\u0001管理、渠道结构优化、旺季需求刺激多重\n战略协同举措,短期拉动旺季动销,中长期\u0001强化价格管控、提升盈利与渠道话语权。\n\n双价…",
+    "score": 0.0,
+    "published": "2026-08-14",
+    "source_id": "a981b0641542c425a0ebcdb69af2333a8f82c4d65d5f434a6850453463aa0f49",
+    "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+    "chunk_id": "712e370a7081da17:body:0011",
+    "context_locators": [
+     "chunk:native1/712e370a7081da17%3Abody%3A0011/9571c4dcf4d51790d3aa64457b4c6519627cdfcb6733ba5812ab03dcec9935cf",
+     "chunk:native1/712e370a7081da17%3Abody%3A0005/a85f8ae282ebe68bfebfb40f02027153bbc9fa4acc0b35042b04dc419522e151",
+     "chunk:native1/712e370a7081da17%3Abody%3A0017/4ea57fe018bc72c4c7e0770edea0ee98de0a75816686f5bd4e7d983e0f1a7aca",
+     "chunk:native1/712e370a7081da17%3Abody%3A0019/8a1e162aae7a743c8b05203f1783e9e6eba708eda1840842e2f7ab547fdb7c2a",
+     "chunk:native1/712e370a7081da17%3Abody%3A0018/7207d5159c62ad6963f79596985de938f2b92b53165e5cae146c8dd78a4cba23",
+     "chunk:native1/712e370a7081da17%3Abody%3A0021/19eb15d3853e73bee78b6e7c2c8feb90d07f5d1db14be65c7bd3003503c783ed",
+     "chunk:native1/712e370a7081da17%3Abody%3A0015/284c64e68049a0312a4661f9168747b2807838caf0acb0c3c9ae91a4ac3b5f33",
+     "chunk:native1/712e370a7081da17%3Abody%3A0010/032bf674d7b5865b7f624f2468e4e85651307d4921a3b9de28d181631ff25763",
+     "chunk:native1/712e370a7081da17%3Abody%3A0006/b88d356f894fbc8b8b2c3c26a33585aa3824baf673ef8b7b2b8d094fd2acf8f7",
+     "chunk:native1/712e370a7081da17%3Abody%3A0020/421b23fc8676bdb92ac5416a7cce4e1b42257617ae984236d5afbfef6139cd6b",
+     "chunk:native1/712e370a7081da17%3Abody%3A0003/dc73f69c8d8cef452c66ac3382bf593884f40bc261048533f3637c7286251563",
+     "chunk:native1/712e370a7081da17%3Abody%3A0022/c068cf106f0e7a0dd877f79e4744f89c4d6c323dbc0022001e878c09dba48ac8",
+     "chunk:native1/712e370a7081da17%3Abody%3A0001/39099f2de900c921c3e1ea5a508ffa8b6d6b2aefd897559c63c17f0e90026f8a",
+     "chunk:native1/712e370a7081da17%3Abody%3A0013/80009abcc7ec4180e4b44c22dae85c4e38a72f92a7fcd2f769ff407f662bfe88",
+     "chunk:native1/712e370a7081da17%3Abody%3A0012/12e113238250c3fb824854bdbaf3937a9d9cda71caa9f6045fd92c57f12cbc24",
+     "chunk:native1/712e370a7081da17%3Abody%3A0007/3b836373ffa98a8fb6e77f8c1f908795ab3cf1cabe234bf3fefc78128d87cb25",
+     "chunk:native1/712e370a7081da17%3Abody%3A0004/002e5e80d98a1319136a6826d1cb74302c3af081bc2591929426914529bab8b5"
+    ],
+    "scope_id": "scope:9254bf7fd7859bc1c462752fc4efcbee",
+    "context_by_kind": [
+     [
+      "body",
+      17
+     ]
+    ]
+   },
+   {
+    "doc_id": "cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+    "locator": "chunk:native1/9fa4cd7cf1ab602a%3Aheading%3A0000/05845b1a1cd36231b20f1e9f10fb994223c9e1299540ce4e2773b852eb315d9b",
+    "title": "",
+    "snippet": "…贵州茅台（600519）2026 年中报点评…",
+    "score": 0.0,
+    "published": "2026-08-16",
+    "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+    "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+    "chunk_id": "9fa4cd7cf1ab602a:heading:0000",
+    "context_locators": [
+     "chunk:native1/9fa4cd7cf1ab602a%3Aheading%3A0000/05845b1a1cd36231b20f1e9f10fb994223c9e1299540ce4e2773b852eb315d9b",
+     "chunk:native1/9fa4cd7cf1ab602a%3Abody%3A0006/534d4df7999114d265aae17d12ecf9803804df1a1bf77fc5d23aa97dfd690f62",
+     "chunk:native1/9fa4cd7cf1ab602a%3Abody%3A0005/d2b3b9eb575dee328ce8767145a96258d657098a05c0921eae7c85e84026bba4"
+    ],
+    "scope_id": "scope:4abd0e9839a64792ad57d736cd93ff0e",
+    "context_by_kind": [
+     [
+      "heading",
+      1
+     ],
+     [
+      "body",
+      2
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Q4",
+  "query": "工业富联中报的利润质量和经营现金流怎么样？",
+  "elapsed_ms": 1738,
+  "retrieval_mode": "hybrid",
+  "fallback": null,
+  "native": {
+   "policy": "native1",
+   "index_id": "60cb1c339b48f84c9b53b89140dc4ba42fbe2d229133b0c9ff63d7e9bbf74993",
+   "sources": 23,
+   "chunks": 585,
+   "ready_vectors": 585,
+   "body_characters": 13381,
+   "char_budget": 16000,
+   "hit_limit": 10,
+   "block_limit": 20,
+   "cutoff": "2026-10-22",
+   "unknown_date_sources": [
+    "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+   ]
+  },
+  "hits": [
+   {
+    "doc_id": "cv2:3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4",
+    "locator": "chunk:native1/3d9805f1aac9767a%3Abody%3A0004/82a4eb0d23d3358e51cb2f305b2e42efd3d68978a9af3310b6c85513355154c3",
+    "title": "## 五脑辩论\n### 大脑一 财务审计师",
+    "snippet": "…关键发现：这不是「投资收益把归母顶起来」的中报，主业扣非几乎等于标题；审计要盯的是「利润已经确认、现金还在存货和应收里」。\n扣非 229.84 亿，归母 237.40 亿，差额 7.56 亿，与非经常性损益合计一致。里面最大一块是金融资产公允价值 5.95 亿、政府补助 2.06 亿，利润表公允价值变动只有 1.82 亿（衍生工具对冲）。投资收益是 −2.69 亿，不是正贡献。所以质量矛盾不在「炒股」，在营运资本：存货 1921 亿较年初 +27.3%，应收账款 1275 亿…",
+    "score": 0.0,
+    "published": "2026-08-29",
+    "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+    "build_id": "3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4",
+    "chunk_id": "3d9805f1aac9767a:body:0004",
+    "context_locators": [
+     "chunk:native1/3d9805f1aac9767a%3Abody%3A0004/82a4eb0d23d3358e51cb2f305b2e42efd3d68978a9af3310b6c85513355154c3",
+     "chunk:native1/3d9805f1aac9767a%3Abody%3A0001/3f9fbc1e6bf039b7f623f902b3b7272cfe154df431a2495ce990d3669f3f1af8",
+     "chunk:native1/3d9805f1aac9767a%3Alist%3A0001/4f4d54f138d9f6b50dff1df3377fbfbe1d1adbcb786a65becaf36bd169d68821",
+     "chunk:native1/3d9805f1aac9767a%3Abody%3A0007/8f4ad1f62d532f2ad6d017a908217a50f6e54cec8d4567f5a35986e6df65444d",
+     "chunk:native1/3d9805f1aac9767a%3Abody%3A0008/faa1cda35fa1a280c4251dce54d5fb433346587ba55241fe4ab69a6a9abce9e3",
+     "chunk:native1/3d9805f1aac9767a%3Abody%3A0005/492b80054b6fd210a4f9aad797e4e5ebe8d2bde7ab56cee09ee1071ced0d3f91",
+     "chunk:native1/3d9805f1aac9767a%3Abody%3A0002/578126dbf0ce3fde908692927ede1ac7cf9427ccd74604abd93d6a23f5b42158",
+     "chunk:native1/3d9805f1aac9767a%3Alist%3A0000/7a349bec49d62f5b228ac16da370560d0b9bf80867ca669cec66ddaf6f7bc51b",
+     "chunk:native1/3d9805f1aac9767a%3Abody%3A0000/3bbbc24764807c5ebee69d849083af601ffaf23d6dd8faed24ab67f9f4859e1e",
+     "chunk:native1/3d9805f1aac9767a%3Abody%3A0003/cfeb0b4e3da417a55810af87241527d448151086f024e409ec9f8ff822ef4509",
+     "chunk:native1/3d9805f1aac9767a%3Abody%3A0009/b03c839d394715b5b6c92032e06717ff97a6312f192350c3d69025f15e734183",
+     "chunk:native1/3d9805f1aac9767a%3Abody%3A0006/4844dc69e36fea140bb46389571ceeee891d9a998084063e0880e878b2e7abfc",
+     "chunk:native1/3d9805f1aac9767a%3Abody%3A0013/42afa01602eeafcc34ec1d477786445ecf289b9c953d3ff6d9f4d42eb0563685"
+    ],
+    "scope_id": "scope:e56d21bea288bd98721718d9ead78608",
+    "context_by_kind": [
+     [
+      "body",
+      11
+     ],
+     [
+      "list",
+      2
+     ]
+    ]
+   },
+   {
+    "doc_id": "cv2:510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24",
+    "locator": "chunk:native1/510f83c463db4121%3Abody%3A0000/544f6067ff45e5f9618f6ae5ac19969578d62a81361db5071603dabc061bcffd",
+    "title": "",
+    "snippet": "…1\n子行业周度核心观点\n整体观点： \n本周我们陆续发布电新板块各子行业半年报总结，整体来看，不同子行业之间业绩表现差异显著：1）锂电板块，在全\n球动储需求同步高增叠加税费政策调整带来的“抢装”需求影响下，上半年整体呈现量价利齐升的景气上行趋势；2）\nAIDC 电源与液冷板块，尽管大部分公司在半年报中呈现的AI 相关收入仍较少，但从存货、购买商品现金流出、在建\n工程等财务指标，以及管理层讨论中呈现的订单展望等方面，已能够看到许多公司开始进入订单储备、客户认证、产\n能建设、备料阶…",
+    "score": 0.0,
+    "published": "2026-09-06",
+    "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+    "build_id": "510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24",
+    "chunk_id": "510f83c463db4121:body:0000",
+    "context_locators": [
+     "chunk:native1/510f83c463db4121%3Abody%3A0000/544f6067ff45e5f9618f6ae5ac19969578d62a81361db5071603dabc061bcffd",
+     "chunk:native1/510f83c463db4121%3Abody%3A0004/834ab451764b35189121a8f98e5347a04a24e48bde8b778ec2557af1e89fd722",
+     "chunk:native1/510f83c463db4121%3Abody%3A0001/32d69a35c099ee613c3b7cce919a0089f37f15ec30208674a8a9bdee9e2754b1",
+     "chunk:native1/510f83c463db4121%3Abody%3A0003/be60978937b55f7c46368a1ebfcfc5101e002acb961ea20229d9764179f189a9"
+    ],
+    "scope_id": "scope:884622bfcfe43848d6a4b5d0298f9b42",
+    "context_by_kind": [
+     [
+      "body",
+      4
+     ]
+    ]
+   },
+   {
+    "doc_id": "cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+    "locator": "chunk:native1/568f9e752f0fa65a%3Aheading%3A0002/15b53676eb4b60dfd9918f0e8023507da7dd5179b66652008552edc400698c2d",
+    "title": "",
+    "snippet": "…光力科技（300480.SZ）\n2026 年中报点评：半导体划片机国内龙头，经营拐点向上\n核心观点…",
+    "score": 0.0,
+    "published": "2026-09-06",
+    "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+    "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+    "chunk_id": "568f9e752f0fa65a:heading:0002",
+    "context_locators": [
+     "chunk:native1/568f9e752f0fa65a%3Aheading%3A0002/15b53676eb4b60dfd9918f0e8023507da7dd5179b66652008552edc400698c2d",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0038/27b6a242f573a577978318ffda6adcede5534a11a0beacce43b4cbcf2199a6bf",
+     "chunk:native1/568f9e752f0fa65a%3Abody%3A0003/a361bdf8514c72049c7714cd7e41c589bf6d361065f089bd62468ae686405eff"
+    ],
+    "scope_id": "scope:1f6986a3d8f8ff69fe26473a1818eb98",
+    "context_by_kind": [
+     [
+      "heading",
+      1
+     ],
+     [
+      "body",
+      2
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Q5",
+  "query": "AI数据中心800V高压直流与液冷的技术方向是什么？",
+  "elapsed_ms": 1855,
+  "retrieval_mode": "hybrid",
+  "fallback": null,
+  "native": {
+   "policy": "native1",
+   "index_id": "60cb1c339b48f84c9b53b89140dc4ba42fbe2d229133b0c9ff63d7e9bbf74993",
+   "sources": 23,
+   "chunks": 585,
+   "ready_vectors": 585,
+   "body_characters": 15994,
+   "char_budget": 16000,
+   "hit_limit": 10,
+   "block_limit": 20,
+   "cutoff": "2026-10-22",
+   "unknown_date_sources": [
+    "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+   ]
+  },
+  "hits": [
+   {
+    "doc_id": "cv2:510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24",
+    "locator": "chunk:native1/510f83c463db4121%3Abody%3A0002/866f96bc00d18cc678425afd30dd0241dfdaf25f4d37904785166e658fc9c721",
+    "title": "",
+    "snippet": "…全球AI 服务器需求持续高景气，服务器整机厂订单、积压订单及业绩指引进一步上修。9 月1 日，Dell 公布最新业\n绩，Q2实现收入470亿美元，同比增长58%，并在强劲AI服务器需求推动下将全年收入预期由1670亿美元上调至\n1920 亿美元；公司AI 服务器订单达到600 亿美元，积压订单达到950亿美元，显示全球AI基础设施建设需求仍保\n持较高强度。HPE 9 月2 日披露FY2026Q3 业绩，实现收入122 亿美元，同比增长34%；其中Cloud & AI 业务收入…",
+    "score": 0.0,
+    "published": "2026-09-06",
+    "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+    "build_id": "510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24",
+    "chunk_id": "510f83c463db4121:body:0002",
+    "context_locators": [
+     "chunk:native1/510f83c463db4121%3Abody%3A0002/866f96bc00d18cc678425afd30dd0241dfdaf25f4d37904785166e658fc9c721",
+     "chunk:native1/510f83c463db4121%3Abody%3A0003/be60978937b55f7c46368a1ebfcfc5101e002acb961ea20229d9764179f189a9",
+     "chunk:native1/510f83c463db4121%3Abody%3A0000/544f6067ff45e5f9618f6ae5ac19969578d62a81361db5071603dabc061bcffd",
+     "chunk:native1/510f83c463db4121%3Abody%3A0001/32d69a35c099ee613c3b7cce919a0089f37f15ec30208674a8a9bdee9e2754b1",
+     "chunk:native1/510f83c463db4121%3Abody%3A0004/834ab451764b35189121a8f98e5347a04a24e48bde8b778ec2557af1e89fd722",
+     "chunk:native1/510f83c463db4121%3Abody%3A0006/f9f66486bdc6ae467cf1c572625b76ad5d46e75c1979e30303a7b1500c534d73",
+     "chunk:native1/510f83c463db4121%3Abody%3A0012/ab6283f8712975a4354db57038bf82cc986c2f55d3a97c1f5f589b540229560b",
+     "chunk:native1/510f83c463db4121%3Abody%3A0011/295ff6f85b078e5d3ae05a97656cf14652b1aa98ea868bcf2e64c662066e2c3e"
+    ],
+    "scope_id": "scope:fdc40e5936c919f971e838190fe752f6",
+    "context_by_kind": [
+     [
+      "body",
+      8
+     ]
+    ]
+   },
+   {
+    "doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+    "locator": "chunk:native1/668bac61a631636c%3Abody%3A0001/0e2a18cf9a2766afdee33e9a9e3c12c2d3030957d00bd0a6005e2c9581222244",
+    "title": "”",
+    "snippet": "…投资逻辑\n\n“韬定律”与业绩斜率：AI PCB 及半导体设备迎来布局良机。9 月4 日，华为半导体负责人何庭波在中科院科技\n论文预发布平台ChinaXiv，再次发布相关论文《Huawei's τ Chip Was Supposed to Melt?》，提到热量是韬定律\n最棘手的隐忧，而麒麟芯片实测结果，颠覆了这一质疑。数据显示，麒麟2026 的芯片晶体管密度从约每平方毫\n米1.55 亿提升到2.38 亿个，跃升55%。在同等性能的测试条件下，对比前代平面架构麒麟9030 P…",
+    "score": 0.0,
+    "published": "2026-09-06",
+    "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+    "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+    "chunk_id": "668bac61a631636c:body:0001",
+    "context_locators": [
+     "chunk:native1/668bac61a631636c%3Abody%3A0001/0e2a18cf9a2766afdee33e9a9e3c12c2d3030957d00bd0a6005e2c9581222244",
+     "chunk:native1/668bac61a631636c%3Abody%3A0002/863f4816e5963698d0557c4d8cb420c86f03c4c75a905561234a22d993f9510c",
+     "chunk:native1/668bac61a631636c%3Abody%3A0008/4cbc7af0a3c83cd88000a2749b69ec0121df1727e395093e432b84956899799c",
+     "chunk:native1/668bac61a631636c%3Abody%3A0009/0c429c86c5f1155e63a9d0f695b5165fa54a9bac059f9fd3ebce891eee28538e",
+     "chunk:native1/668bac61a631636c%3Abody%3A0003/9d9b61d0cf9c192ccc727358a036b91e62136d8886743a3a059a3c627351f68c"
+    ],
+    "scope_id": "scope:e22db02e8d9abaf93f967a82e43913c5",
+    "context_by_kind": [
+     [
+      "body",
+      5
+     ]
+    ]
+   },
+   {
+    "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+    "locator": "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0007/4976e0635fd43107d66cb4d1b053902f310d53a6ca1a4023233c485e9ce29a7d",
+    "title": "主题演讲：CPO 版本的 NVL576",
+    "snippet": "…英伟达首日主题演讲的大部分篇幅都留给了 MGX 1.2、800V 直流（800VDC）以及Vera CPU；光\n互连部分虽然只占了最后几分钟，却带来了最重磅的消息：Vera Rubin Ultra NVL576 通过下一代 \nNVLink 7 CPO 交换机托盘，利用 NVLink 将 576 颗 GPU互联，面向 10 万亿以上（10T+）参数\n模型，并预计于“明年”面世。这大概是英伟达首次在如此大型的公开场合宣布光学纵向扩展（\noptical scale-up）；此前在 …",
+    "score": 0.0,
+    "published": "2026-10-21",
+    "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+    "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+    "chunk_id": "47cc0b9dd2aeeced:body:0007",
+    "context_locators": [
+     "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0007/4976e0635fd43107d66cb4d1b053902f310d53a6ca1a4023233c485e9ce29a7d",
+     "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0032/7109c02beea5becebc2c63279a802793a0e2704e6450c2da0e89774b7c7f0cb2",
+     "chunk:native1/47cc0b9dd2aeeced%3Aheading%3A0000/d3cb3c6c2eabdd81a76465de5464edf9c2a22ff155bb5641bdc181bed00180a1"
+    ],
+    "scope_id": "scope:45566a82559d7b7a9e3be534a74af049",
+    "context_by_kind": [
+     [
+      "body",
+      2
+     ],
+     [
+      "heading",
+      1
+     ]
+    ]
+   },
+   {
+    "doc_id": "cv2:2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+    "locator": "chunk:native1/2696b5d4a615f984%3Abody%3A0014/6a8277fe518162f515d3d6c0783a2219381f1aed4a2bdc746918908e5ef6de19",
+    "title": "5 投资建议：AI 光互联加速升级，高速率与新架构\n协同演进",
+    "snippet": "…CIOE 2026 参展企业展品预告显示，AI 算力集群扩张仍在推动光互联向更高\n速率、更低功耗方向演进，产业技术有望从800G 进一步向1.6T 升级。从参展企\n业披露的产品进展看，1.6T 正逐步进入规模上量阶段，3.2T 及更高阶产品则陆续\n推进送样与客户验证。随着AI集群规模持续扩大，NPO、CPO、XPO等新型架\n构的产业化进展有望成为本届展会的重要看点。从产业链布局看，参展产品进一步\n向高速DSP 及模拟芯片、EML/硅光激光器、CW 光源、光引擎、光芯片、高密度…",
+    "score": 0.0,
+    "published": "2026-09-06",
+    "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+    "build_id": "2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+    "chunk_id": "2696b5d4a615f984:body:0014",
+    "context_locators": [
+     "chunk:native1/2696b5d4a615f984%3Abody%3A0014/6a8277fe518162f515d3d6c0783a2219381f1aed4a2bdc746918908e5ef6de19",
+     "chunk:native1/2696b5d4a615f984%3Aheading%3A0003/43c5467f2c4b352c9dfd1af238d327d8a51c7d5f2285011c09e0c2d532f4bf4a"
+    ],
+    "scope_id": "scope:5029f098ff6bef81c7b7413d11e9d625",
+    "context_by_kind": [
+     [
+      "body",
+      1
+     ],
+     [
+      "heading",
+      1
+     ]
+    ]
+   },
+   {
+    "doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+    "locator": "chunk:native1/c520485162e66660%3Abody%3A0002/d6c8309070d9d69720aa0500b4b209be3b1634e015a941fa165f7ec5ef2fb385",
+    "title": "图表目录",
+    "snippet": "…3…",
+    "score": 0.0,
+    "published": "2026-09-06",
+    "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+    "build_id": "c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+    "chunk_id": "c520485162e66660:body:0002",
+    "context_locators": [
+     "chunk:native1/c520485162e66660%3Abody%3A0002/d6c8309070d9d69720aa0500b4b209be3b1634e015a941fa165f7ec5ef2fb385",
+     "chunk:native1/c520485162e66660%3Aheading%3A0000/e9a676769a6196ac76951565da580d1d476ffd6be29445d3a91d27f1e9b65c9a"
+    ],
+    "scope_id": "scope:7849945df0c0ad3928ae392d7907ac0c",
+    "context_by_kind": [
+     [
+      "body",
+      1
+     ],
+     [
+      "heading",
+      1
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Q6",
+  "query": "光模块厂商在CPO价值链中能获得多少价值？",
+  "elapsed_ms": 1876,
+  "retrieval_mode": "hybrid",
+  "fallback": null,
+  "native": {
+   "policy": "native1",
+   "index_id": "60cb1c339b48f84c9b53b89140dc4ba42fbe2d229133b0c9ff63d7e9bbf74993",
+   "sources": 23,
+   "chunks": 585,
+   "ready_vectors": 585,
+   "body_characters": 15986,
+   "char_budget": 16000,
+   "hit_limit": 10,
+   "block_limit": 20,
+   "cutoff": "2026-10-22",
+   "unknown_date_sources": [
+    "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+   ]
+  },
+  "hits": [
+   {
+    "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+    "locator": "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0004/5081ac9e3024aafd46f80bf46f899c81ef6f85fe06b33e7c9eab94315e9dee1d",
+    "title": "主题 2：XPO 和 USFP 及其对 NPO 和 CPO 采用的影响",
+    "snippet": "…在每通道 400G 的硅光芯片经过测试并得到验证之前，这两种形态都不会改变 NPO 或CPO 的格局。\n XPO 距离上市更近，它已经实现每通道 200G，而 Google 和微软是对这一形态最感兴趣的超大规\n模云厂商。每通道 400G 的 USFP 将需要供应商目前尚未提供的 DSP、TIA 和驱动器。一旦这些器\n件到位，两者将让可插拔光模块在横向扩展网络中再延续一代，并可能延缓 NPO 和 CPO 在该领域的\n采用。纵向扩展领域仍是NPO 与 CPO 之争（见高密度可插拔…",
+    "score": 0.0,
+    "published": "2026-10-21",
+    "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+    "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+    "chunk_id": "47cc0b9dd2aeeced:body:0004",
+    "context_locators": [
+     "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0004/5081ac9e3024aafd46f80bf46f899c81ef6f85fe06b33e7c9eab94315e9dee1d",
+     "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0050/304641042cbef7398bf11fdba3859d3f45e3bda0d07c6f0e575857e43b0b73b4",
+     "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0028/0e00bb251890ef043727159b1eb52e197ea759b17f0e02a3c0e9befb608a8895",
+     "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0027/38df451eca6f2281961d3178aae6244b04bf1a91c10a29782d7fd1ba5311f7ab",
+     "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0019/4d3d264757effabfdc0153e84735e8c7c8ba97df4232e706024f43c666a0b48b",
+     "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0000/884ce731ba746125ba92b461c23a3724f47687aa542c9fc6af79b7846f2f7101",
+     "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0007/4976e0635fd43107d66cb4d1b053902f310d53a6ca1a4023233c485e9ce29a7d",
+     "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0049/7fa118b5dd5018e7342de27554af9d3826393151c48767e40c179588b9c771aa",
+     "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0030/dfb1174564e1a1d4e0de1939738f070088f7064f3e0101bf3ef762383179c1fc",
+     "chunk:native1/47cc0b9dd2aeeced%3Aheading%3A0006/407b3a68590662ba372edcb57b6ec00389f7dfe2243ede98cfe509afd6afcb8c",
+     "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0031/bddfa70d1f6f9c6a9ee6e1cdb961195d7f3d4ce869a66659dcec8a890a4be2d2"
+    ],
+    "scope_id": "scope:9836994482ab64211f6a68ff1d5fc757",
+    "context_by_kind": [
+     [
+      "body",
+      10
+     ],
+     [
+      "heading",
+      1
+     ]
+    ]
+   },
+   {
+    "doc_id": "cv2:730433bdccf660aa5cd0b055a50dbc1b4c28371b7291b740ff03ac9c4e8cf333",
+    "locator": "chunk:native1/730433bdccf660aa%3Abody%3A0004/a2e9d6d3e9af77d67c8601636e9a45a96a36c6a811cc7fa2876f02595b2f8336",
+    "title": "FCC 潜在限制框架",
+    "snippet": "…Possible Framework for FCC Restrictions\n华盛顿流出的讨论表明，针对中国光模块的限制最有可能在 3.2T 世代分阶段引入。\n3.2T 的初期放量预计在 2028 年，更大规模的普及在 2029 年左右；行业机构\nLightCounting 则预计在 2028 年底至 2029 年初。\nThe reported discussions in Washington suggest that restrictions on Chinese op…",
+    "score": 0.0,
+    "published": "2026-10-02",
+    "source_id": "8b11fbdd67b1d0a215c39c3155799e12cb9c259d6a7b40066d6efa557434ed39",
+    "build_id": "730433bdccf660aa5cd0b055a50dbc1b4c28371b7291b740ff03ac9c4e8cf333",
+    "chunk_id": "730433bdccf660aa:body:0004",
+    "context_locators": [
+     "chunk:native1/730433bdccf660aa%3Abody%3A0004/a2e9d6d3e9af77d67c8601636e9a45a96a36c6a811cc7fa2876f02595b2f8336",
+     "chunk:native1/730433bdccf660aa%3Abody%3A0008/300f9b69e8ea36dd2e3b7ddc6b24b6dffdb7c288caaa6db02739a62d4da0531d",
+     "chunk:native1/730433bdccf660aa%3Abody%3A0000/2162e89f0fcd0a33c8a5ee3bec9ea0e27609be59886ed8951843256b0b315eaa",
+     "chunk:native1/730433bdccf660aa%3Abody%3A0010/55e6373a0ea6edd5889454d4f7dd48c8aa3ffc036eb46deefb573232c6cb2f31",
+     "chunk:native1/730433bdccf660aa%3Abody%3A0009/3a88f71fc16af948be77d54d6556ef45d087ffee9faa8f22922811cc79c8b3f3",
+     "chunk:native1/730433bdccf660aa%3Abody%3A0006/738e81405ea09b263012974b836003465982cf056725b53c1eab92ae61d8ee71",
+     "chunk:native1/730433bdccf660aa%3Abody%3A0007/b993a7169b24f15bc6e596298302d731d74b706abebd1e898a4ff2915bbbe235",
+     "chunk:native1/730433bdccf660aa%3Abody%3A0011/10423802c50a0099475db18ed04cd6e43d6cb52b92b70a61719d9386a80b1bdc"
+    ],
+    "scope_id": "scope:7190d0b92e808bf448cfd30508c62058",
+    "context_by_kind": [
+     [
+      "body",
+      8
+     ]
+    ]
+   },
+   {
+    "doc_id": "cv2:5be178f951c61eaed04c68c5266f658804efe2088da606ca1ee28ce997af5f7b",
+    "locator": "chunk:native1/5be178f951c61eae%3Abody%3A0002/c8f0648cbb4f776b9615b4effe1133ad51e0b2ed66ff6a1b77eee4db21022c0e",
+    "title": "",
+    "snippet": "…光模块提供的价值量相对有限，大约20%左右。这个数字加起来好像不是100%，但是意思就是这个意思，大量的价值不在光模块厂商手中。光模块厂商可以提供半导体级别的能力，但整体的方案主导权不在手中。你不要管这个，不要看这9%的数字，反正你就理解是大部分。大部分你也不能完全去看这个大部分的数字，因为怎么说呢？这里面它是个交换机，对不对？你原来交换机就有这个部件这个功能，它包括了光模块的功能，也包括了交换机的功能，对不对？那你交换机这么大一个机器里面有这么多东西，你原来也不是光模块厂商…",
+    "score": 0.0,
+    "published": "",
+    "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+    "build_id": "5be178f951c61eaed04c68c5266f658804efe2088da606ca1ee28ce997af5f7b",
+    "chunk_id": "5be178f951c61eae:body:0002",
+    "context_locators": [
+     "chunk:native1/5be178f951c61eae%3Abody%3A0002/c8f0648cbb4f776b9615b4effe1133ad51e0b2ed66ff6a1b77eee4db21022c0e"
+    ],
+    "scope_id": "scope:8a3af166cd4407aad6ca904fa94c8f7d",
+    "context_by_kind": [
+     [
+      "body",
+      1
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Q7",
+  "query": "美国2026年8月非农数据对加息预期有什么影响？",
+  "elapsed_ms": 2249,
+  "retrieval_mode": "hybrid",
+  "fallback": null,
+  "native": {
+   "policy": "native1",
+   "index_id": "60cb1c339b48f84c9b53b89140dc4ba42fbe2d229133b0c9ff63d7e9bbf74993",
+   "sources": 23,
+   "chunks": 585,
+   "ready_vectors": 585,
+   "body_characters": 5378,
+   "char_budget": 16000,
+   "hit_limit": 10,
+   "block_limit": 20,
+   "cutoff": "2026-10-22",
+   "unknown_date_sources": [
+    "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+   ]
+  },
+  "hits": [
+   {
+    "doc_id": "cv2:8fe537bdac281f396c7007db6dcea8cbec44ff8d6640bd597e1f4dce47c49424",
+    "locator": "chunk:native1/8fe537bdac281f39%3Abody%3A0002/14508d7781048c18a17004da25c572305aa9f38098e1b2922d4619598db8f15c",
+    "title": "海外跟踪周报 20260906",
+    "snippet": "…非农清障，通胀定调\n8 月非农大超市场预期。8月美国新增非农就业录得16.2万人，约为市场\n预期（5.5 万人）的三倍，同时6-7 月合计上修5.5 万人，前期担忧或存在\n过度修正。失业率持平于4.1%，劳动参与率超预期上行至61.6%，显示劳动\n力供给端持续改善，而需求端吸纳能力依旧稳固，供需再平衡进程未现断\n裂。\n薪资层面，平均时薪环比提速至0.3%，同比回落至3.1%，薪资增速持续低\n于通胀读数，实际购买力承压，居民部门结构型分化趋势或进一步加深。\n服务业与建筑制造双轮…",
+    "score": 0.0,
+    "published": "2026-09-06",
+    "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+    "build_id": "8fe537bdac281f396c7007db6dcea8cbec44ff8d6640bd597e1f4dce47c49424",
+    "chunk_id": "8fe537bdac281f39:body:0002",
+    "context_locators": [
+     "chunk:native1/8fe537bdac281f39%3Abody%3A0002/14508d7781048c18a17004da25c572305aa9f38098e1b2922d4619598db8f15c",
+     "chunk:native1/8fe537bdac281f39%3Abody%3A0005/53747491d1fe32df9d5f5fa8c7cf59ed5673b6a3ca094f69f495a201fd35c317",
+     "chunk:native1/8fe537bdac281f39%3Abody%3A0003/18d99f1b57647dab42a9af08b0b9be713ffed0918d9ed5bec0706c7adf061611",
+     "chunk:native1/8fe537bdac281f39%3Abody%3A0022/0bd20b00f5dd0bbf67315752180dbaf84530296eab8acc33789fa51517e57a3e",
+     "chunk:native1/8fe537bdac281f39%3Abody%3A0023/1798ba4c1a6536a6511e69b37b8cee8fc6c1de22b81a74b8b66a62fb3d6ec777",
+     "chunk:native1/8fe537bdac281f39%3Abody%3A0019/b339bdc4217e98cbfc3b640861eb24679e5c9758c11d7c9ed46a5a782965df2c",
+     "chunk:native1/8fe537bdac281f39%3Abody%3A0034/c1affb315b8404ef7366c787e57997a1b2c08a2074761de4e2a27c69cccc1bcd",
+     "chunk:native1/8fe537bdac281f39%3Abody%3A0011/2c5361d8d9bf0cd9d166a79d5fab3c05777527abc20247dd2a75dd9b796dcfa0",
+     "chunk:native1/8fe537bdac281f39%3Abody%3A0024/76f46a25a580237caf0de9ac7aebfdc529f50d37c7d3277a113db7ec36a75a74",
+     "chunk:native1/8fe537bdac281f39%3Abody%3A0015/02ffa309ae5fc46815b47eb0f6af52c96a29e36193034aa77d213c25bbf2b535",
+     "chunk:native1/8fe537bdac281f39%3Abody%3A0028/9610c542d9629b58349ef2466ac148c6bd56bf1e7c3e0a38a27154955813a06e",
+     "chunk:native1/8fe537bdac281f39%3Abody%3A0026/32b115d238e81c44486338d7fcc3f379aeb60bdbc0f0787926fec84659eb8d65",
+     "chunk:native1/8fe537bdac281f39%3Abody%3A0035/8e896680446cf921929ce5d35e21cb38124c39bf2c9e2eb135f5b76c9cf18dbd",
+     "chunk:native1/8fe537bdac281f39%3Abody%3A0008/5b6a1f6a1d8acae0fc83d33c5c8b34472166c473bec83ba59beb9f22790902fe",
+     "chunk:native1/8fe537bdac281f39%3Abody%3A0001/e74871394dae0cabfd60f8c34a374f0b8f05f3cef51c42489fd95114ed622642",
+     "chunk:native1/8fe537bdac281f39%3Abody%3A0033/87208feee0e286866eea5a6ee8cec598c4332ab39d4b81b4c44315be1ade69a7",
+     "chunk:native1/8fe537bdac281f39%3Abody%3A0025/0305ebd9f445cf3701f311636435be808eb5457e4e3c787a828d0bbb386c58b7"
+    ],
+    "scope_id": "scope:054d093364f8df3f42dec881edf40099",
+    "context_by_kind": [
+     [
+      "body",
+      17
+     ]
+    ]
+   },
+   {
+    "doc_id": "cv2:3d17f758d795ee7195254f9b831cdf96c7ffa510f45c7445645314524d9e0185",
+    "locator": "chunk:native1/3d17f758d795ee71%3Aheading%3A0001/0e8d6b5195341cada82c97dcf8c6e548388d152187256037edd195845e200721",
+    "title": "",
+    "snippet": "…一、8 月非农数据回暖，加息门槛降低\n事件：\n2026 年9 月4 日，美国劳工部公布2026 年8 月非农数据：\n【1】新增非农就业16.2 万人，预期5.6 万人，前值由-2.3 万人修正为2.1 万人；\n【2】8 月失业率4.1%，预期4.1%，前值4.1%；\n【3】平均时薪同比升3.1%，预期升3.0%，前值升3.2%。\n市场反应：…",
+    "score": 0.0,
+    "published": "2026-09-05",
+    "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+    "build_id": "3d17f758d795ee7195254f9b831cdf96c7ffa510f45c7445645314524d9e0185",
+    "chunk_id": "3d17f758d795ee71:heading:0001",
+    "context_locators": [
+     "chunk:native1/3d17f758d795ee71%3Aheading%3A0001/0e8d6b5195341cada82c97dcf8c6e548388d152187256037edd195845e200721",
+     "chunk:native1/3d17f758d795ee71%3Aheading%3A0000/ce36c092606954f1781322812363c75e634ab75ea5fb845156501baac832f139",
+     "chunk:native1/3d17f758d795ee71%3Abody%3A0001/eb215e782d2fec7af65b91a88f831cb2f148eae91b8904246850855e11a6e43b"
+    ],
+    "scope_id": "scope:532e3ce9675106834322ab946699f78f",
+    "context_by_kind": [
+     [
+      "heading",
+      2
+     ],
+     [
+      "body",
+      1
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "id": "Q8",
+  "query": "化工景气应该看产品价格还是价差？",
+  "elapsed_ms": 1805,
+  "retrieval_mode": "hybrid",
+  "fallback": null,
+  "native": {
+   "policy": "native1",
+   "index_id": "60cb1c339b48f84c9b53b89140dc4ba42fbe2d229133b0c9ff63d7e9bbf74993",
+   "sources": 23,
+   "chunks": 585,
+   "ready_vectors": 585,
+   "body_characters": 5642,
+   "char_budget": 16000,
+   "hit_limit": 10,
+   "block_limit": 20,
+   "cutoff": "2026-10-22",
+   "unknown_date_sources": [
+    "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+   ]
+  },
+  "hits": [
+   {
+    "doc_id": "cv2:a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+    "locator": "chunk:native1/a76b8ac143ecd5ec%3Aheading%3A0005/3edbc3ad1efc168282af9718c882e3cb5cbe8af10c963ca93f217156fd744b26",
+    "title": "",
+    "snippet": "…二、判断化工景气，应看产品价格还是价差？\n对于大多数化工产品而言，更准确的景气指标是产品价差。不少人认为，化工景气的变\n化主要看产品价格，但如果价格变化是由原材料上涨推动，那产品盈利其实未必变好，\n此时不能简单定义为景气上行。实际上，化工产品景气主要观察产品价差的变化，价差\n等于产品价格减去消耗的原材料价格后的部分。所以，当原材料价格变动不大的前提下，\n产品价格就可以近似代表景气的变化。举例来说，2024年以来受上游硫磺等原料价格\n显著上涨的影响，磷酸二铵价格虽然有所上升，但…",
+    "score": 0.0,
+    "published": "2026-08-13",
+    "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+    "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+    "chunk_id": "a76b8ac143ecd5ec:heading:0005",
+    "context_locators": [
+     "chunk:native1/a76b8ac143ecd5ec%3Aheading%3A0005/3edbc3ad1efc168282af9718c882e3cb5cbe8af10c963ca93f217156fd744b26",
+     "chunk:native1/a76b8ac143ecd5ec%3Abody%3A0001/99bc08df31dc60021ccd9cbe6c09aaad70116e1d8917fbf3409a24ff0863c454",
+     "chunk:native1/a76b8ac143ecd5ec%3Aheading%3A0009/02b4175e8f0dce8376f02f1a343747bee632ad6ed0b95860d6bb9fed5257be21",
+     "chunk:native1/a76b8ac143ecd5ec%3Abody%3A0005/8d196392cd443d918ef53de6648f85071ca185e9057b57c74949216fe935ece2",
+     "chunk:native1/a76b8ac143ecd5ec%3Aheading%3A0041/f542868a1a8fcffa0e076918f5db91efaf805911fd8ab752e18b0c7c5db97a79",
+     "chunk:native1/a76b8ac143ecd5ec%3Abody%3A0063/6b8d1ef842b92cf942e6eb53d157ccece430728d027151658dd87c5ae62ff53f",
+     "chunk:native1/a76b8ac143ecd5ec%3Aheading%3A0039/d00196777fa9754699b4c0fa811e599488dd8ece64e2f7cb42d5a6222870ac32",
+     "chunk:native1/a76b8ac143ecd5ec%3Abody%3A0004/43dd89d5b81dd941bb8dd46e073e329484618a8a0cc7d30f3cd900cd1b327e54",
+     "chunk:native1/a76b8ac143ecd5ec%3Abody%3A0052/632c19b15a588ff23b3062ce39d6a03b32deff73ca06e4cec30866c4f76bcef1",
+     "chunk:native1/a76b8ac143ecd5ec%3Abody%3A0017/79b5b4e9d4175c21cc95dc83adcb7350874a5ec6ddfe5de531e8cb8e889cbe73",
+     "chunk:native1/a76b8ac143ecd5ec%3Aheading%3A0006/997b0b2414c4ab916f5a187ce8cb8f8df371cb2528fc5afc22d73c67141ea5c2",
+     "chunk:native1/a76b8ac143ecd5ec%3Aheading%3A0003/72cae6ae4fb6e0b917896c433f90d6fce407bc255a04ff4642971d03a76ec3aa",
+     "chunk:native1/a76b8ac143ecd5ec%3Aheading%3A0040/6cc2f3d9c051bc179f35b6ec6a87a8c13e74309ce9e78623ff6d5d3cceaae9dc",
+     "chunk:native1/a76b8ac143ecd5ec%3Aheading%3A0000/deb3c11a203af6afa90ab56a68d524b49d5332fa956d538e9308b281f90cc64b",
+     "chunk:native1/a76b8ac143ecd5ec%3Aheading%3A0004/7d69c411394f9e6ab29a144b3e39b6ea51a95846ae68b4721d0efba44476c48e",
+     "chunk:native1/a76b8ac143ecd5ec%3Abody%3A0029/1ffaf7c37bd6d41e61d559f64ecb3affccb8f46df3bf3c2051c6e5b4ea713e06",
+     "chunk:native1/a76b8ac143ecd5ec%3Abody%3A0006/5eaf2065dfa78df924dbe66400636f45398c7241e0cb6ada031c3dc1c692d325",
+     "chunk:native1/a76b8ac143ecd5ec%3Abody%3A0010/7b1265003835facc92aff1bbeb377ec90c21a7944ccda8a36d18e5699300aeac",
+     "chunk:native1/a76b8ac143ecd5ec%3Aheading%3A0038/511b32d0289f5fe21dd741d32f56c555f3475befa1a2ca1ab55ebe9f0d3e95f0",
+     "chunk:native1/a76b8ac143ecd5ec%3Abody%3A0022/46ed00dc4582adf81da7874abdf03d7e2411b2f77ded249c297cab4bb12c0176"
+    ],
+    "scope_id": "scope:eb8950f57b5b4ee1a9720a79265503f3",
+    "context_by_kind": [
+     [
+      "heading",
+      10
+     ],
+     [
+      "body",
+      10
+     ]
+    ]
+   }
+  ]
+ }
+]

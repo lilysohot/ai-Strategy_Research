@@ -299,6 +299,7 @@ def search_native(
                     h for h in guarded if (h.build_id, h.chunk_id) in selected_keys
                 )
                 trace.status = "native_lexical_fallback" if fallback_reason else "native_hybrid"
+    ranked_keys = dict.fromkeys((h.build_id, h.chunk_id) for h in guarded)
     return NativeResult(
         query,
         index.index_id,
@@ -311,4 +312,5 @@ def search_native(
         bool(chosen and (chosen[0].build_id, chosen[0].chunk_id) == first),
         "lexical" if fallback_reason else "hybrid",
         fallback_reason,
+        len(ranked_keys),
     )

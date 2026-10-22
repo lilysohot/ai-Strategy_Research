@@ -129,7 +129,7 @@ reference; keeping those roles separate avoids duplicating setup instructions.
 | Compare context-offloading changes with an A/B run | [Tool-result truncation A/B](tool-result-truncation-ab.md) |
 | Pick up the deferred context-offloading work | [Context offloading follow-ups](context-offloading-followups.md) |
 | Replicate the CLI/TUI panes and workflows in the web app | [CLI → Web parity](plan/cli-web-parity.md) **(design record, Chinese)** |
-| Plan Web Agent Team and switch modes between runs in one research | [Web team and per-run modes](plan/web-agent-team-run-mode.md) **(active design draft, not implemented)** |
+| Switch Web agent modes while preserving research context | [Per-run modes and context continuity](plan/web-agent-team-run-mode.md) **(v3.1; end-to-end gap assessment and 22 acceptance groups, implementation pending)** |
 | Bring 同花顺 market data into the research chain | [同花顺数据接入](plan/ths-market-data.md) **(Chinese, 需求与设计)** |
 | Decompose research claims by document domain (company / industry / macro) and add a corpus audit layer | [D2 Claims 设计](plan/d2-claims-design.md) **(Chinese, 需求与设计)** |
 | Continue the active Claims release validation and hardening work | [D2 Claims 优化执行计划](plan/d2-claims-optimization-plan.md) **(active plan, Chinese)** |
