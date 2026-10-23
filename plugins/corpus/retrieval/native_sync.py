@@ -16,7 +16,7 @@ from plugins.corpus.retrieval.embedding import (
     VectorConfig,
     validate_vector,
 )
-from plugins.corpus.retrieval.native import NativeIndex
+from plugins.corpus.retrieval.native import NativeIndex, index_input
 from plugins.corpus.retrieval.native_live import refresh
 
 
@@ -33,7 +33,8 @@ def sync(
     if max_requests < 0 or target != config.target_db or config.profile != seed.manifest["profile"]:
         raise ValueError("native_sync_config_mismatch")
     index = refresh(dsn, target, seed)
-    inputs = {c["input_hash"]: c["search_text"] for c in index.chunks}
+    # 上下文包的向量输入是 index_text；原文投影只用于切片与取证。
+    inputs = {c["input_hash"]: index_input(c) for c in index.chunks}
     requested = reused = imported = blocked = 0
     error = None
     with psycopg.connect(dsn, autocommit=True) as conn:

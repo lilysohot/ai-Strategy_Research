@@ -1,12 +1,12 @@
 # 研报上下文向量检索小样本实施方案
 
-状态：**历史隔离检索接入已验收；原生混合检索已于 2026-10-22 正式发布；§30 展示选择已局部实现，上下文索引与直接证据交付待实施**。2026-10-21 验收结论与范围见 §29，真实入口和版本缓存验证见 §28；§25–29 的开关及数据范围属于当时的实验记录，当前正式配置以发布说明为准。
+状态：**历史隔离检索接入已验收；原生混合检索已于 2026-10-22 正式发布；§30 展示选择已局部实现；§33 Contextual Retrieval 已跑通首轮（585 条说明 + 上下文索引包 + 57 题结构 A/B），默认检索未切换**。2026-10-21 验收结论与范围见 §29，真实入口和版本缓存验证见 §28；§25–29 的开关及数据范围属于当时的实验记录，当前正式配置以发布说明为准。
 
 后续进展（2026-10-22）：原生正文有界交付已接入现有搜索／取证工具，新增默认关闭的试用开关；23来源、585块的旧32＋新25题工具回归与更新／降级／关闭恢复验证完成。使用方式见 [原生正文工具试用](../corpus-native-trial.md)，执行证据见 [本轮报告](../../.scratch/corpus-native-tools-20261022/report.md)。这不改写§29的历史验收范围，也不表示已默认启用。
 
 正式发布进展（2026-10-22）：用户随后明确授权“可以直接发到正式库中”。已将已验证的23个原生来源及检索策略发布至 `postgres`，在本机8000服务启用 `release` 开关，正式库57题工具回归和真实HTTP搜索／取证通过；保留关闭、降级及历史版本回读。详见 [正式发布说明](../corpus-native-release.md)。上下文增强尚未完成完整对照，按用户决定延后，不作为此次混合检索发布条件。此前§29及试用记录保留为历史阶段结论。
 
-后续执行入口：§30 记录 2026-10-22 讨论确认的上下文感知策略、执行顺序和效果判断，与 [search/fetch 内容保留讨论稿](corpus-search-evidence-delivery-redesign.md) 配套；§31 定第一步（片段上下文组织方式）的字段、存储、消费边界与验收口径。此次仅补充文档，未实施代码、索引或配置变更。
+后续执行入口：§30 记录 2026-10-22 讨论确认的上下文感知策略、执行顺序和效果判断，与 [search/fetch 内容保留讨论稿](corpus-search-evidence-delivery-redesign.md) 配套；§31 定第一步（片段上下文组织方式）的字段、存储、消费边界与验收口径。§33（2026-10-23）把 Anthropic Contextual Retrieval 的「文档+块→说明→说明+块→双索引→融合」落到现有 native 链，代码与只读盘点已实跑，说明生成与向量构建需显式付费执行。
 
 关联需求：[PR-DATA-01、04、05、09、12、14，PR-OUT-06、07](../product-requirements.md)。本方案是本次检索试验的实施入口，不替代跨层总计划，不重新开启已关闭的 S5 评测。
 
@@ -1772,3 +1772,142 @@ flowchart TD
 23 来源 / 888 块：可关联章节 860（96.8%）、可关联页码 861（96.9%）、相邻块间跳号 88 处（跳过 273 单元）；同章节相邻块**约 45% 在句子中间切开**（光力 38/83、天风 37/68、长江 67/147、中泰 31/55），实证「…应收 | 账款回收…」；表格块 196 个（长江 35、光力 29、天风 23），表头常落在相邻块（天风：数据行在前块、`季调，万人`在后块），且 `project()` 排除 table ⇒ 不可检索、不能用 native 句柄取证。单元未进块 1,058 个，绝大多数为零长度、目录行、免责声明与页眉水印，丢弃策略本身合理。
 
 由此定第 2 步的最小范围：**句界补全 + 表头绑定 + 块级上下文说明**，不改块正文、不重切。
+
+## 33. Contextual Retrieval 落地（2026-10-23）
+
+日期：2026-10-23。状态：**流程已跑通首轮：585 条说明入库、上下文索引包已生成、57 题结构 A/B 已跑**；默认检索配置与线上索引包未切换。本节把 Anthropic 的 Contextual Retrieval 流程按本项目现状改写为可执行步骤，并给出已实跑的盘点与首轮执行结果。
+
+### 33.1 流程映射
+
+| Anthropic 步骤 | 本项目落点 | 现状 |
+|---|---|---|
+| 1. 文档切块 | 已发布 `corpus_chunks` → native 投影（排除 table） | 已有，585 块 |
+| 2. 整篇文档 + 单块 → 模型生成 50–100 token 上下文 | 整篇 build 文本（`corpus_units.raw_text` 按 `ordinal` 确定性拼接）+ 该块投影文本 → 说明 ≤120 字 | 新增，未执行 |
+| 3. 说明 + 原文块 | `index_text = note + "\n" + chunk_text` | 已实现 |
+| 4. 建向量索引 | 新 profile（`CORPUS_VECTOR_INPUT_VARIANT=contextual-note-v1`），`input_hash = sha256(index_text)` | 已实现（未生成向量） |
+| 5. 建 BM25 索引 | 仍用 PG `ts_rank`，但 `search_tsv` 建在 `index_text` 上 | 已实现 |
+| 6. 混合检索 + 融合 | `native_pg.search_native`：词法 `_SEARCH_SQL` + 稠密 `<=>`，两级 RRF + `global_rrf` 首条保护 | 复用，未改 |
+| 7. 可选重排序 | 预留接缝，本轮不接 | 未实现（触发条件见 §33.6） |
+| 8. 交付相关内容 | `select_native` + `display.compose` + `corpus_fetch` | 复用，未改 |
+
+与 Anthropic 原文的三处有意差异，不是遗漏：
+
+1. **词法不换 BM25。** 项目已有 `zhcfg` 分词、词元规范化、来源覆盖排序，方案 §4 已明确不替换；「BM25 索引」在这里的等价物是「同一份 `index_text` 生成的 `tsvector`」，检索仍按 `ts_rank`。二者都是词法通道，信号不同但角色相同。
+2. **没有持久词法索引。** 检索在 `pg_temp.native_chunks` 里按 `index_text` 现算 `tsvector`（585 块可接受）；量大后若时延不可接受，再评估物化 GIN，不在本轮。
+3. **说明不进返回体。** Anthropic 的上下文用于提高命中率，本项目额外把「说明不得成为证据」写成硬约束（§33.3）。
+
+```mermaid
+flowchart TD
+    A["已发布 build 的 corpus_units"] --> B["整篇文档文本（ordinal 拼接）"]
+    C["native 投影块（585）"] --> D["说明生成：文档 + 块 → note"]
+    B --> D
+    D --> E["chunk_context 侧表（note / 依据 hash / 模型 / 状态）"]
+    E --> F["索引包：index_text = note + 原文块"]
+    C --> F
+    F --> G["tsvector（词法）"]
+    F --> H["向量（新 profile）"]
+    G --> I["两级 RRF + 首条保护"]
+    H --> I
+    I --> J["选块 / 展示 / fetch（只用原文）"]
+    E -.说明不进入.- J
+```
+
+### 33.2 三个硬边界
+
+1. **说明不是证据。** 说明只存 `corpus_retrieval.chunk_context` 与包的 `notes.json`；`NativeBlock.text`、切片映射、`corpus_fetch` 全部只读 `chunk["search_text"]`（原文投影）。包加载时校验 `index_text` 必须以 `search_text` 结尾，说明一旦挤掉原文就整包拒绝。
+2. **原文身份不变。** `index_text` 只影响 `input_hash` 与 `tsvector`；`search_text`、`unit_refs`、切片坐标、`locator` 摘要口径都不变，旧句柄继续可回读。
+3. **新向量空间。** 改 embedding 输入即产生新 `input_hash`，旧「原始 search_text」向量不得当作「已含上下文」复用；两套 profile 并存对照，不原地混写。
+
+### 33.3 生成与校验
+
+- 提示词版本 `PROMPT_VERSION=contextual-note-v1`，单条说明上限 `NOTE_MAX_CHARS=120`。要求写清讨论对象（公司／行业／产品／宏观）、章节主题、时间或数据期、计划／进行／完成状态；原文没写就不写。
+- **一批一次请求**：同一文档的多个块放在同一请求里，文档只出现一次（`build_messages`），减少重复发送整篇文档。
+- **四条离线校验**（不需要模型即可判）：
+  1. 非空、单行、≤120 字；
+  2. 不出现 `[原文片段]`／`[来源元数据]` 等内部标记（防串入模板）；
+  3. 说明里的每个阿拉伯数字都必须在文档原文出现过（防编造年份／金额）；
+  4. 说明里的归属／预测／完成措辞（预计、预测、认为、表示、承诺、宣布、已经、尚未…）必须在原文出现过（防把「计划」写成「已投产」）。
+- 不合格说明记 `status='rejected'` + `reject_code`，并保留模型原文供复核（不参与索引）；缺说明的块让索引包构建直接失败（`contextual_pack_notes_incomplete`）。
+- **碎片不叠说明**（首轮实测后补）：正文短于 `FRAGMENT_MIN_CHARS=12` 的片段（页码 `3/ 8`、图表轴数字残片、图表注记）本身不表意，补说明会让它们带上整篇语义而被排到前面。这类片段只索引原文，`notes.json` 只记录实际生效的说明，包加载时双向校验（叠了必须有记录、没叠不能有记录）。
+- `temperature=0`，不可重试的不确定结果不自动重发（同一纪律见 §13.3）：超时／5xx 落 `running`，鉴权／格式错误落 `rejected`，都要人工确认后再跑。
+
+### 33.4 双索引与检索
+
+`native_pg._prepare` 把 `index_text` 灌进 `pg_temp.native_chunks.search_text` 的 `tsvector`，`search_text` 列仍存原文投影（`ts_headline` 片段只用于诊断）。稠密侧读包的 `vectors.json`（按 `input_hash`），其余流程一行未改：
+
+- 词法：`_SEARCH_SQL`（`ts_rank` + 来源原名加权 + 每来源 ≤40 + 全局 200）
+- 稠密：`_DENSE_SQL`（`<=>`，每来源 ≤40 + 全局 200）
+- 融合：`hybrid.fuse` 两级 RRF → `diagnostics.global_rrf` → 首条保护
+- 交付：`select_native`（≤20 块 / ≤16,000 字符）→ `display.compose` → `corpus_fetch`
+
+上下文包在 `refresh_on` 里按活动发布重建：有说明的块用 `note + 当前原文` 重算 `input_hash`，新发布的 build 没有说明就退回纯原文（向量查询不到 → `native_vectors_pending` 词法降级并报原因），不会拿旧 build 补位。
+
+### 33.5 盘点实跑（零模型调用）
+
+```bash
+uv run python -m plugins.corpus.retrieval.cli context-plan --deployment release
+```
+
+2026-10-23 实跑结果：23 来源、**585 投影块**、575 个不同块文本、23 篇文档、文档合计 299,524 字符、说明就绪 0、缺失 585。`--chunks-per-request` 的取舍（估算 token 含整篇文档重复发送）：
+
+| 每请求块数 | 请求次数 | 估算输入 token |
+|---:|---:|---:|
+| 4 | 156 | 1,969,148 |
+| 6 | 109 | 1,388,735 |
+| 12 | 60 | 808,897 |
+| 20 | 41 | 590,357 |
+
+批越大越省，但单个响应越长、缺项风险越高。首轮建议 12（约 81 万输入 token，输出约 2–3 万）。**金额以供应商账单为准，本节不承诺价格**；未返回 usage 的失败请求可能已计费。
+
+### 33.5.1 首轮执行结果（2026-10-23）
+
+- **说明：585/585 ready，0 rejected**，`context_version=chunk-note-1`，16 块/请求，模型 `doubao-seed-2.1-lite`，报告 token 975,772（批次记账；最早 43 条因重复记账已清零，另有探针约 1.6 万）。
+- 首轮有 5 条被校验拒绝（1 条归属措辞、4 条数字不在原文，集中在同一份文档），只重跑这 5 条后通过；拒绝时现在保留模型原文，便于复核。
+- **索引包已生成**：`data/corpus-native-context/20261023`（`native-evidence-contextual-1`，`index_id=1f8a0e04…`），585 块、577 个不同索引输入、492 条说明生效、93 个碎片不叠说明。
+- **57 题结构 A/B**（两包均 0 错误）：原包 top1 **57/57** 仍在上下文包候选池；同一文档内 top1 变化 8 题；平均 top-20 重合 0.809。金标只覆盖 2 题（p19/p20，且 p19 目标块名次 1→2），因此**不报准确率**，只报结构信号。
+- **首版发现并已修的问题**：给所有块叠说明时，`3/ 8` 这类页码／图表残片被“抬”到首位（p13 首位变 `heading:0002`）。140 个 ≤20 字块的索引/正文长度比达 **8.5 倍**（全库中位 1.5 倍）。已加 `FRAGMENT_MIN_CHARS=12`：短于 12 字的片段只索引原文、不叠说明，`notes.json` 只记实际生效的说明，包加载双向校验；重建后 p13 恢复原位。
+- **未解问题（下一轮）**：说明会强调“年份＋主题”，但不区分实际／预测。p19 新首位是“我们测算 2026-2028 年营收…”的预测段，压过了上半年实际业绩段；而 N5-04（问 2026-2028 预期）新首位命中预测段、方向正确。⇒ 说明需带状态词并与片段核对，而不是只查数字。
+- 逐条记录与复跑命令见 [首轮实施记录](../../.scratch/corpus-contextual-20261023/report.md)。
+
+### 33.6 融合之外：重排序的接缝与触发条件
+
+本轮不接 reranker，也不加 LLM 多查询改写。判据是先看失败归因：
+
+- 目标块**不在**候选池 → 上下文没解决召回，继续改说明或词法，不上 rerank；
+- 目标块**在**候选池但排名靠后 → 才考虑 rerank，接缝放在 `native_pg.search_native` 的 `fuse` 之后、`select_native` 之前，输入是候选并集，输出是重排后的顺序，不得改变块身份与预算；
+- 目标块**已交付**但模型没读懂 → 属交付问题（§32.3 保留判断），rerank 无效。
+
+### 33.7 执行步骤（尚未执行的部分）
+
+```bash
+# 0) 只读盘点（已完成，见 §33.5）
+uv run python -m plugins.corpus.retrieval.cli context-plan --deployment release
+
+# 1) 生成说明（付费；--max-requests 是硬上限，默认 10 次）
+#    需先在 .env 配置 CORPUS_CONTEXT_API_URL / API_KEY / MODEL / REVISION
+uv run python -m plugins.corpus.retrieval.cli context-generate \
+  --deployment release --chunks-per-request 12 --max-requests 60
+
+# 2) 构建上下文索引包（向量缺失会显式报 contextual_pack_vectors_pending）
+uv run python -m plugins.corpus.retrieval.cli native-pack \
+  --deployment release --out data/corpus-native-context/20261023 \
+  --max-requests 600 --release-id native-contextual-20261023
+
+# 3) 切换与回退（只改进程环境，不改库）
+#    CORPUS_NATIVE_INDEX=data/corpus-native-context/20261023/manifest.json
+#    CORPUS_VECTOR_INPUT_VARIANT=contextual-note-v1
+#    回退：改回原 manifest + published-search-text-v1
+```
+
+顺序约束：`context-generate` 只依赖活动发布和 `corpus_units`；`native-pack` 依赖说明齐备；检索侧只认「包 + 同 profile 的 ready 向量」。三步都可重跑，已 ready 的说明与向量不重复付费。
+
+### 33.8 验收口径（两段分开，不许合并成一句「效果更好」）
+
+1. **找得更准**：同一批冻结问题，对比原包与上下文包的候选池与首位命中；记录「目标块是否在候选池」「在池内的名次」「是否被来源门槛／选块／预算丢掉」。样本必须包含同报告不同章节（§16 的 p18 型回归）与跨段条件（§30.1 的例子型）。
+2. **返回得更完整**：在同一 payload 预算下比较 `search` 实际交付的正文字符、可判断率、需要 fetch 补读的次数。展示层已冻结（§32.3），本轮不改选段规则。
+3. **不许越界**：说明不得出现在 `snippet`／证据文本里；`corpus_fetch` 的原文与哈希与旧包逐字一致；撤回／排除语义不变。
+4. **成本与降级**：报告说明生成的实际 token 与请求数、索引包大小、检索 p50/p95、降级次数与原因。
+
+### 33.9 明确不做
+
+重切块；改 `corpus_units`／`corpus_chunks`／发布指针；表格块入索引（196 块仍排除，属 §32.4 的表头绑定议题）；全库清洗与 Claims/items 重抽；rerank 与查询改写；持久词法索引；把说明写进返回体或引用清单。

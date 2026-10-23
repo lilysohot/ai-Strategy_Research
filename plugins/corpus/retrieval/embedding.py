@@ -14,7 +14,11 @@ from urllib.parse import urlsplit
 import httpx
 
 Role = Literal["document", "query"]
-InputVariant = Literal["published-search-text-v1", "reviewed-context-prefix-v1"]
+#: ``contextual-note-v1`` = 说明 + 原文片段（Contextual Retrieval）；只用于原生索引包，
+#: 旧 ``VectorIndex`` 侧表构建会显式拒绝，避免两种输入口径混进同一向量空间。
+InputVariant = Literal[
+    "published-search-text-v1", "reviewed-context-prefix-v1", "contextual-note-v1"
+]
 
 
 class EmbeddingError(RuntimeError):
@@ -79,6 +83,7 @@ class VectorConfig:
         if cfg.input_variant not in (
             "published-search-text-v1",
             "reviewed-context-prefix-v1",
+            "contextual-note-v1",
         ):
             raise EmbeddingError("unsupported_input_variant")
         if not math.isfinite(cfg.timeout) or not 0 < cfg.timeout <= 120 or cfg.max_chars < 1:

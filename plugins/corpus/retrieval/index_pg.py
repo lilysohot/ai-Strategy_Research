@@ -389,11 +389,14 @@ class VectorIndex:
         two builders from charging the same profile/input simultaneously. A crash
         leaves `running`, treated exactly like `uncertain` on the next invocation.
         """
-        if max_requests < 0:
-            raise ValueError("max_requests must be nonnegative")
         requested = reused = bound = blocked = 0
         error: str | None = None
         cfg = self.config
+        if max_requests < 0:
+            raise ValueError("max_requests must be nonnegative")
+        if cfg.input_variant == "contextual-note-v1":
+            # 该口径的输入是「说明 + 片段」，只能由 contextual_pg 建包，不在这里拼。
+            raise EmbeddingError("contextual_variant_native_only")
         with self.connect() as conn, conn.cursor() as cur:
             cur.execute(
                 "SELECT pg_try_advisory_lock(hashtextextended(%s, 0))",

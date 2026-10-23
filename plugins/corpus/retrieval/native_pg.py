@@ -27,6 +27,7 @@ from plugins.corpus.retrieval.native import (
     NativeIndex,
     NativeResult,
     NativeSpan,
+    index_input,
     raw_slices,
     select_native,
 )
@@ -158,7 +159,7 @@ def _prepare(conn: psycopg.Connection, index: NativeIndex) -> None:
                     c["section_path"],
                     c["unit_refs"],
                     c["search_text"],
-                    c["search_text"],
+                    index_input(c),
                     [],
                     json.dumps(index.vectors[c["input_hash"]]["vector"])
                     if c["input_hash"] in index.vectors

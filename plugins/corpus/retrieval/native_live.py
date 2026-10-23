@@ -20,6 +20,7 @@ import psycopg
 
 from plugins.corpus.preparation import read_pg
 from plugins.corpus.preparation.chunk import normalize_search_text
+from plugins.corpus.retrieval import contextual
 from plugins.corpus.retrieval.display import compose
 from plugins.corpus.retrieval.embedding import text_hash, validate_vector
 from plugins.corpus.retrieval.native import SAFE_KINDS, NativeIndex, normalized, raw_slices
@@ -190,6 +191,15 @@ def refresh_on(cur: psycopg.Cursor, seed: NativeIndex) -> NativeIndex:
         )
         if c:
             result.chunks.append(c)
+    if getattr(seed, "contextual", False):
+        # 上下文包：索引输入 = 说明 + 当前原文。缺失说明的块退回纯原文，其
+        # input_hash 不再命中已缓存向量 ⇒ search_native 走词法降级并报原因。
+        for c in result.chunks:
+            note = seed.notes.get((c["build_id"], c["chunk_id"]))
+            if note is None:
+                continue
+            c["index_text"] = contextual.index_text(note, c["search_text"])
+            c["input_hash"] = contextual.input_hash(note, c["search_text"])
     result.vectors = dict(seed.vectors)
     cur.execute(
         "SELECT input_hash,embedding::text FROM corpus_retrieval.embeddings "

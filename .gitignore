@@ -112,3 +112,4 @@ server/*.db
 .scratch/corpus-native5-eval-20261021/
 .scratch/corpus-combined57-20261021/
 .scratch/corpus-native-integration-20261021/
+.scratch/corpus-context-inventory-20261022/

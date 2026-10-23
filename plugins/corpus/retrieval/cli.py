@@ -14,6 +14,7 @@ from dotenv import load_dotenv
 from psycopg.conninfo import conninfo_to_dict, make_conninfo
 
 from plugins.corpus.retrieval.context import load_source_metadata
+from plugins.corpus.retrieval.contextual import ContextNoteError
 from plugins.corpus.retrieval.embedding import DoubaoEmbedder, EmbeddingError, VectorConfig
 from plugins.corpus.retrieval.index_pg import VectorIndex
 
@@ -46,6 +47,10 @@ def main() -> int:
             "compare",
             "native-query",
             "native-sync",
+            "context-plan",
+            "context-status",
+            "context-generate",
+            "native-pack",
         ),
     )
     parser.add_argument("--max-requests", type=int)
@@ -62,9 +67,17 @@ def main() -> int:
     parser.add_argument("--native-index", type=Path)
     parser.add_argument("--char-budget", type=int, default=16000)
     parser.add_argument("--deployment", choices=("pilot", "release"), default="pilot")
+    parser.add_argument("--context-version", default=None)
+    parser.add_argument("--chunks-per-request", type=int, default=6)
+    parser.add_argument("--out", type=Path)
+    parser.add_argument("--release-id", default=None)
     args = parser.parse_args()
     if args.max_requests is None:
-        args.max_requests = 0 if args.command == "native-sync" else 10
+        args.max_requests = (
+            0
+            if args.command in ("native-sync", "native-pack", "context-plan", "context-status")
+            else 10
+        )
     if args.limit is None:
         args.limit = 20 if args.command == "native-query" else 10
     if args.max_requests < 0 or not 1 <= args.limit <= 20:
@@ -72,17 +85,23 @@ def main() -> int:
     load_dotenv()
     try:
         config = VectorConfig.from_env()
+        context_commands = ("context-plan", "context-status", "context-generate", "native-pack")
         if args.deployment == "release":
             from plugins.corpus.retrieval.native_live import enabled
             from plugins.corpus.service import dsn
 
-            if args.command not in ("query", "native-query", "native-sync"):
-                parser.error("release deployment supports query, native-query and native-sync")
-            if os.getenv("CORPUS_NATIVE_RETRIEVAL") != "release" or not enabled(config.target_db):
-                raise EmbeddingError("native_release_not_enabled")
+            if args.command not in ("query", "native-query", "native-sync", *context_commands):
+                parser.error(
+                    "release deployment supports query, native-query, native-sync and context commands"
+                )
             target = dsn()
             if conninfo_to_dict(target).get("dbname") != config.target_db:
                 raise EmbeddingError("native_release_dsn_mismatch")
+            # 上下文命令只读写衍生表，不依赖 native 开关；检索类命令仍要求显式发布绑定。
+            if args.command not in context_commands and (
+                os.getenv("CORPUS_NATIVE_RETRIEVAL") != "release" or not enabled(config.target_db)
+            ):
+                raise EmbeddingError("native_release_not_enabled")
         else:
             target = pilot_dsn(config)
         index = VectorIndex(target, config)
@@ -135,6 +154,44 @@ def main() -> int:
                     char_budget=args.char_budget,
                 )
             )
+        elif args.command in context_commands:
+            from plugins.corpus.retrieval import contextual, contextual_pg
+
+            version = args.context_version or contextual.CONTEXT_VERSION
+            if args.command == "context-plan":
+                output = contextual_pg.plan(
+                    target,
+                    config.target_db,
+                    context_version=version,
+                    chunks_per_request=args.chunks_per_request,
+                )
+            elif args.command == "context-status":
+                output = contextual_pg.status(target, config.target_db, context_version=version)
+            elif args.command == "context-generate":
+                notes = contextual.NoteConfig.from_env()
+                output = contextual_pg.generate(
+                    target,
+                    config.target_db,
+                    notes,
+                    contextual.ChatNoteGenerator(notes).generate,
+                    max_requests=args.max_requests,
+                    context_version=version,
+                )
+            else:
+                if args.out is None:
+                    parser.error("native-pack requires --out")
+                if args.max_requests < 1:
+                    parser.error("native-pack requires --max-requests >= 1 to embed missing inputs")
+                output = contextual_pg.build_pack(
+                    target,
+                    config.target_db,
+                    args.out,
+                    config,
+                    embed=DoubaoEmbedder(config).embed,
+                    max_requests=args.max_requests,
+                    context_version=version,
+                    release_id=args.release_id,
+                )
         else:
             if not args.query.strip():
                 parser.error("--query is required")
@@ -155,7 +212,7 @@ def main() -> int:
             output = {"query": args.query, "results": results}
         print(json.dumps(output, ensure_ascii=False, indent=2))
         return 1 if output.get("error_code") else 0
-    except EmbeddingError as exc:
+    except (EmbeddingError, ContextNoteError) as exc:
         print(json.dumps({"error_code": exc.code}), file=sys.stderr)
         return 2
 

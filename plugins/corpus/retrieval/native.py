@@ -17,11 +17,24 @@ from plugins.corpus.preparation.read_pg import IntegrityError
 from plugins.corpus.retrieval.embedding import validate_vector
 
 SAFE_KINDS = frozenset({"paragraph", "quote", "list_item", "heading", "title"})
+BASE_FILES = frozenset({"chunks.json", "units.json", "vectors.json", "dates.json"})
+#: 上下文增强包：索引输入是「说明 + 原文片段」，原文与切片身份仍由 chunk_text 决定。
+CONTEXTUAL_SCHEMAS = frozenset({"native-evidence-contextual-1"})
+RELEASE_SCHEMAS = frozenset({"native-evidence-release-1", "native-evidence-contextual-1"})
+SCHEMAS = CONTEXTUAL_SCHEMAS | RELEASE_SCHEMAS | frozenset({"native-evidence-pilot-1"})
 
 
 def normalized(text: str) -> str:
     """Match the pilot projection's whitespace and percentage normalization only."""
     return "".join(text.replace("%", " ").replace("％", " ").split())
+
+
+def index_input(chunk: dict[str, Any]) -> str:
+    """词法与稠密共用的索引文本：有上下文包用 ``index_text``，否则就是原文投影。
+
+    切片与取证永远走 ``chunk["search_text"]``，本函数不参与证据装配。
+    """
+    return chunk.get("index_text") or chunk["search_text"]
 
 
 @dataclass(frozen=True)
@@ -177,10 +190,7 @@ class NativeIndex:
         raw = manifest_path.read_bytes()
         self.index_id = hashlib.sha256(raw).hexdigest()
         self.manifest: dict[str, Any] = json.loads(raw)
-        if self.manifest.get("schema") not in (
-            "native-evidence-pilot-1",
-            "native-evidence-release-1",
-        ):
+        if self.manifest.get("schema") not in SCHEMAS:
             raise ValueError("native_index_schema_unsupported")
         self.target: str = self.manifest["target_db"]
         if self.manifest["schema"] == "native-evidence-pilot-1" and not self.target.startswith(
@@ -189,11 +199,12 @@ class NativeIndex:
             raise ValueError("native_index_requires_pilot_target")
         if not self.target or self.target in {"apodex", "template0", "template1"}:
             raise ValueError("native_index_target_invalid")
-        if self.manifest["schema"] == "native-evidence-release-1" and not self.manifest.get(
-            "release_id"
-        ):
+        if self.manifest["schema"] in RELEASE_SCHEMAS and not self.manifest.get("release_id"):
             raise ValueError("native_release_id_required")
-        expected_files = {"chunks.json", "units.json", "vectors.json", "dates.json"}
+        self.contextual = self.manifest["schema"] in CONTEXTUAL_SCHEMAS
+        if self.contextual and not self.manifest.get("context_version"):
+            raise ValueError("native_context_version_required")
+        expected_files = BASE_FILES | ({"notes.json"} if self.contextual else set())
         if set(self.manifest["files"]) != expected_files:
             raise ValueError("native_index_files_invalid")
         payload = {}
@@ -209,6 +220,13 @@ class NativeIndex:
         self.units = {(u["build_id"], u["unit_id"]): u for u in payload["units.json"]}
         self.vectors: dict[str, Any] = payload["vectors.json"]
         self.dates: list[dict[str, Any]] = payload["dates.json"]
+        self.notes: dict[tuple[str, str], str] = {}
+        if self.contextual:
+            for entry in payload["notes.json"]:
+                key = (entry["build_id"], entry["chunk_id"])
+                if key in self.notes or not isinstance(entry["note"], str):
+                    raise IntegrityError("native_context_notes_invalid")
+                self.notes[key] = entry["note"]
         allowed = set(self.manifest["source_allowlist"])
         if allowed.intersection(self.manifest["excluded_source_ids"]):
             raise IntegrityError("native_source_scope_conflict")
@@ -226,8 +244,19 @@ class NativeIndex:
             ):
                 raise IntegrityError("native_chunk_scope_invalid")
             seen.add(key)
-            if hashlib.sha256(chunk["search_text"].encode()).hexdigest() != chunk["input_hash"]:
+            if hashlib.sha256(index_input(chunk).encode()).hexdigest() != chunk["input_hash"]:
                 raise IntegrityError("native_chunk_text_hash_mismatch")
+            if self.contextual:
+                # 原文必须整段留在索引输入尾部：切片只从 search_text 映射。
+                if not chunk["index_text"].endswith(chunk["search_text"]):
+                    raise IntegrityError("native_context_index_text_not_tail")
+                applied = chunk["index_text"] != chunk["search_text"]
+                # 说明与索引输入必须一一对应：叠了说明就要有记录，没叠就不能留记录
+                # （否则 refresh 重算出的 input_hash 与包内向量不一致）。
+                if applied and self.notes.get(key) is None:
+                    raise IntegrityError("native_context_notes_incomplete")
+                if not applied and key in self.notes:
+                    raise IntegrityError("native_context_note_not_applied")
             for uid in chunk["unit_refs"]:
                 if not self.units[key[0], uid]["eligible"]:
                     raise IntegrityError("native_unit_scope_invalid")
