@@ -10,17 +10,24 @@ import re
 import unicodedata
 from collections.abc import Sequence
 from dataclasses import dataclass
+from itertools import pairwise
 from typing import Any
 
 from plugins.corpus.preparation.negative_query import abstain_content_lexemes
+from plugins.corpus.retrieval.passage_coverage import PassageCoverage, answer_roles, content_query
+from plugins.corpus.retrieval.text_quality import comparison_text, noise_reason
 
 # Language scaffolding only: no financial indicators, companies or product vocabulary.
 _FILLER = re.compile(r"请问|请|如何|为什么|为何|哪些|多少|什么|是否|怎么样|怎样|怎么|是多少|你好")
-_BOUNDARY = re.compile(r'[。！？!?；;][”’」』"]*|(?<!\d)\.(?!\d)[”’"]*|\n[ \t]*\n')
+# Semicolons link clauses of one explanation; do not drop a limitation after one.
+_BOUNDARY = re.compile(r'[。！？!?][”’」』"]*|(?<!\d)\.(?!\d)[”’"]*|\n[ \t]*\n')
 _DEPENDENT = re.compile(r"^\s*(?:该|其|上述|这些|这种|这个|因此|由此|其中|这意味着)")
 _QUALIFIER = re.compile(
-    r"^\s*(?:但|然而|不过|其中|若|如果|除非|仅|需要注意|值得注意|前提|这意味着)"
+    r"^\s*(?:但|然而|不过|其中|若|如果|除非|仅|需要注意|值得注意|前提|这意味着|[一二三四五六七八九十]是)"
 )
+_PARAGRAPH_BREAK = re.compile(r"\n[ \t]*\n|(?m:^[ \t]*[•●▪■\uf06e][ \t]*(?:\n|$))")
+_SENTENCE_END = re.compile(r'[。！？!?][”’」』"]*\s*$|(?<!\d)\.[”’"]*\s*$')
+_NUMBERED_LINE = re.compile(r"(?m)^\s*\d+[.)、]\s*\S")
 
 
 @dataclass(frozen=True)
@@ -147,10 +154,72 @@ def _sentences(text: str, start: int, end: int) -> list[tuple[int, int]]:
     return result
 
 
-def _candidates(blocks: Sequence[Any]) -> list[Passage]:
+def _paragraph_regions(block: Any) -> list[tuple[int, int]]:
+    """Use source-unit paragraph boundaries, retaining verified wrapped sentences.
+
+    A complete sentence at the end of a raw unit is a paragraph boundary. A
+    wrapped sentence may cross adjacent units only under _reading_regions' rules.
+    Bare PDF line wraps are never interpreted as paragraph boundaries.
+    """
+    raw_regions = _regions(block)
+    result = []
+    for start, end in _reading_regions(block):
+        cuts = {start, end}
+        for a, b, _ in raw_regions:
+            if (
+                start <= a < b < end
+                and _SENTENCE_END.search(block.text[a:b])
+                and not _QUALIFIER.match(block.text[b + 1 : end])
+                and not _DEPENDENT.match(block.text[b + 1 : end])
+            ):
+                cuts.add(b + 1)
+        for match in _PARAGRAPH_BREAK.finditer(block.text, start, end):
+            cuts.update((match.start(), match.end()))
+        boundaries = sorted(cuts)
+        for a, b in pairwise(boundaries):
+            raw = block.text[a:b]
+            if raw.strip() and not _PARAGRAPH_BREAK.fullmatch(raw):
+                result.append((a, b))
+    return result
+
+
+def _navigation(text: str) -> bool:
+    """Detect numbered topic lists, not substantive numbered prose statements."""
+    # Topic headings can be questions; a question mark does not make a TOC prose.
+    return len(_NUMBERED_LINE.findall(text)) >= 3 and "。" not in text
+
+
+def _heading_only(text: str) -> bool:
+    """Display preference only; unpunctuated numeric/table evidence remains eligible."""
+    return not re.search(r"[。！？!?；;]|(?<!\d)\.(?!\d)|\d|[:：=]", text)
+
+
+def substantive_text(block: Any, query: str) -> str:
+    """Scoring-only view; preserve source text and offsets for actual delivery."""
+    return "\n".join(
+        block.text[a:b]
+        for a, b in _paragraph_regions(block)
+        if noise_reason(block.text[a:b], query) is None
+    )
+
+
+def _candidates(blocks: Sequence[Any], chars_per_block: int) -> list[Passage]:
+    """Prefer bounded source paragraphs; long/unstructured text uses sentence windows.
+
+    Paragraph selection sees the explanation's combined relevance, so a short
+    fragment repeating query words cannot split the explanation into losing seeds.
+    Context inside a paragraph does not need to add new query terms.
+    """
     result = []
     for index, block in enumerate(blocks):
-        for start, end in _reading_regions(block):
+        spans = getattr(block, "slices", ())
+        mapped = bool(spans) and all(hasattr(s, "start") and hasattr(s, "end") for s in spans)
+        structured = mapped or bool(_PARAGRAPH_BREAK.search(block.text))
+        for start, end in _paragraph_regions(block):
+            raw = block.text[start:end]
+            if structured and end - start <= chars_per_block and _SENTENCE_END.search(raw):
+                result.append(Passage(index, start, end))
+                continue
             sentences = _sentences(block.text, start, end)
             for i, (a, b) in enumerate(sentences):
                 # Keep explicit dependencies with the matching sentence, within its raw slice.
@@ -205,21 +274,47 @@ def select_passages(
     max_blocks: int = 1,
     chars_per_block: int = 180,
 ) -> tuple[list[Passage], bool]:
-    """Greedily cover query terms with nonduplicate, sentence-local passages.
+    """Choose complete source paragraphs, with sentence windows for oversized text.
 
-    Candidate counts and original RRF order never change. A second passage must
-    add query coverage; unmatched queries retain the first block as a labelled fallback.
+    Discount query aspects repeated throughout the source and across selected
+    passages. A new block may explain already-covered terms; lexical novelty is
+    not required. Source admission uses the unchanged lexical helpers above.
+    With multiple display slots, retain a relevant prose anchor from the first
+    retrieved block before adding lexical complements. Otherwise display would
+    throw away semantic retrieval's first hit using only word overlap again.
+    Original RRF order and handles never change. Unmatched queries retain the
+    first block as a labelled fallback.
     """
     if not blocks or chars_per_block < 1 or max_blocks < 1:
         return [], False
-    terms = query_terms(query, lexemes)
-    candidates = _candidates(blocks)
+    terms = query_terms(content_query(query), lexemes)
+    candidates = [
+        p
+        for p in _candidates(blocks, chars_per_block)
+        if not any(
+            a <= p.start and p.end <= b and noise_reason(blocks[p.block].text[a:b], query)
+            for a, b in _paragraph_regions(blocks[p.block])
+        )
+    ]
+    navigation = [
+        any(
+            a <= p.start and p.end <= b and _navigation(blocks[p.block].text[a:b])
+            for a, b in _paragraph_regions(blocks[p.block])
+        )
+        for p in candidates
+    ]
+    wants_navigation = bool(re.search(r"目录|章节|议程|contents|agenda", query, re.I))
     matches = [_matches(blocks[p.block].text[p.start : p.end], terms) for p in candidates]
+    coverage = PassageCoverage(
+        [blocks[p.block].text[p.start : p.end] for p in candidates],
+        [
+            _coverage(query, matching) | answer_roles(query, blocks[p.block].text[p.start : p.end])
+            for p, matching in zip(candidates, matches, strict=True)
+        ],
+    )
     topics = {t for t in terms if not t.isdecimal()}
     years = set(re.findall(r"(?<!\d)(?:19|20)\d{2}(?!\d)", query))
-    query_coverage: set[int] = set()
     selected: list[Passage] = []
-    covered: set[str] = set()
     used: dict[int, int] = {}
     seen: set[str] = set()
     # Bound fragments per block as well as text; this is a display limit, not a semantic rule.
@@ -228,8 +323,6 @@ def select_passages(
         for order, (p, matching) in enumerate(zip(candidates, matches, strict=True)):
             if topics and not (matching & topics):
                 continue  # a year alone cannot replace the requested subject
-            if not matching - covered:
-                continue
             if p.block not in used and len(used) >= max_blocks:
                 continue
             if any(p.block == s.block and p.start < s.end and s.start < p.end for s in selected):
@@ -242,15 +335,15 @@ def select_passages(
             actual_matches = _matches(raw, terms)
             if topics and not actual_matches & topics:
                 continue
-            gain = actual_matches - covered
-            if not gain or _norm(raw) in seen:
+            if comparison_text(raw) in seen:
                 continue
             # Prefer a complete dependency window when both alternatives cover the same terms.
             # Explicit conflicting years must not displace an available compatible passage.
             passage_years = set(re.findall(r"(?<!\d)(?:19|20)\d{2}(?!\d)", raw))
             conflict = bool(years and passage_years and not years & passage_years)
-            score = len(_coverage(query, actual_matches) - query_coverage)
-            if score == 0:
+            positions = _coverage(query, actual_matches) | answer_roles(query, raw)
+            score = coverage.score(raw, positions)
+            if score <= 0:
                 continue
             question_only = raw.rstrip().endswith(("？", "?"))
             # A quantitative statement breaks otherwise equal lexical ties. A bare year
@@ -260,6 +353,7 @@ def select_passages(
             choices.append(
                 (
                     (
+                        wants_navigation or not (navigation[order] or _heading_only(raw)),
                         not question_only,
                         not conflict,
                         score,
@@ -276,12 +370,22 @@ def select_passages(
             )
         if not choices:
             break
+        if not selected and max_blocks > 1:
+            # Do not reserve the retrieval anchor for a weak incidental match:
+            # it must cover at least half as much query text as the best candidate.
+            best_coverage = max(c[0][4] for c in choices)
+            anchors = [
+                c
+                for c in choices
+                if c[1].block == 0 and all(c[0][:3]) and c[0][4] * 2 >= best_coverage
+            ]
+            if anchors:
+                choices = anchors
         _, selected_passage, matching, raw = max(choices, key=lambda c: c[0])
         selected.append(selected_passage)
-        covered.update(matching)
-        query_coverage.update(_coverage(query, matching))
+        coverage.add(raw, _coverage(query, matching) | answer_roles(query, raw))
         used[selected_passage.block] = used.get(selected_passage.block, 0) + len(raw)
-        seen.add(_norm(raw))
+        seen.add(comparison_text(raw))
     if selected:
         return selected, True
     # No matching terms: retain original fused order, without claiming an answer was found.
@@ -293,18 +397,27 @@ def select_passages(
     return fallback, False
 
 
-def compose(
+def compose_with_evidence(
     blocks: Sequence[Any],
     query: str = "",
     *,
     lexemes: Sequence[str] = (),
     max_blocks: int = 1,
     chars_per_block: int = 180,
-) -> str:
+) -> tuple[str, tuple[dict[str, Any], ...]]:
+    """Render once; bind complete verbatim passages to source and snippet offsets.
+
+    Offsets count Unicode code points, before JSON escaping. Metadata refers to
+    the existing context_locators array; no new handles or duplicate text.
+    """
+    from plugins.corpus.retrieval.embedding import text_hash
+
     passages, matched = select_passages(
         blocks, query, lexemes=lexemes, max_blocks=max_blocks, chars_per_block=chars_per_block
     )
     parts = []
+    evidence = []
+    offset = 0
     for p in passages:
         block = blocks[p.block]
         pages = tuple(
@@ -326,10 +439,39 @@ def compose(
             location += "；句内节选，上下文不完整"
         location += "〕"
         raw = block.text[p.start : p.end]
-        parts.append(label + location + raw)
+        prefix = label + location
+        if p.complete:
+            evidence.append(
+                {
+                    "member": p.block + 1,
+                    "start": p.start,
+                    "end": p.end,
+                    "snippet_start": offset + len(prefix),
+                    "snippet_end": offset + len(prefix) + len(raw),
+                    "text_chars": len(block.text),
+                    "text_sha256": text_hash(block.text),
+                    "quote_sha256": text_hash(raw),
+                }
+            )
+        part = prefix + raw
+        parts.append(part)
+        offset += len(part) + 1
     hidden = len(blocks) - len({p.block for p in passages})
     if hidden:
         parts.append(f"（同源另有{hidden}块未展示，可按句柄补读）")
     if query and not matched:
         parts.append("（未找到明确的查询词匹配，保留原排序预览；不代表资料无答案）")
-    return "\n".join(parts)
+    return "\n".join(parts), tuple(evidence)
+
+
+def compose(
+    blocks: Sequence[Any],
+    query: str = "",
+    *,
+    lexemes: Sequence[str] = (),
+    max_blocks: int = 1,
+    chars_per_block: int = 180,
+) -> str:
+    return compose_with_evidence(
+        blocks, query, lexemes=lexemes, max_blocks=max_blocks, chars_per_block=chars_per_block
+    )[0]

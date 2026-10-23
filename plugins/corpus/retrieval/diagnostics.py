@@ -29,6 +29,7 @@ class RetrievalTrace:
     source_limit: int = 5
     chunk_order: dict[str, tuple[str, ...]] = field(default_factory=dict)
     status: str = "not_captured"
+    purity_decisions: tuple[dict[str, object], ...] = ()
 
     def as_dict(self) -> dict[str, object]:
         return asdict(self)
@@ -102,9 +103,7 @@ def candidate_fates(
         for chunk in (hit.context_chunk_ids or (hit.chunk_id,))
     }
     anchors = {(hit.build_id, hit.chunk_id) for hit in selected}
-    first_sources = list(dict.fromkeys(hit.source_id for hit in trace.fused))[
-        : trace.source_limit
-    ]
+    first_sources = list(dict.fromkeys(hit.source_id for hit in trace.fused))[: trace.source_limit]
     selectable = {
         (band.build_id, chunk)
         for band in trace.selectable_bands

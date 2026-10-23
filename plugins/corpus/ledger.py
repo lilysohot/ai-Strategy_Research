@@ -1,6 +1,6 @@
 """A4 消费账本与结论证据校验：offered／requested／fetched／delivered + 两类完整性。
 
-为什么需要这一层：``corpus_search`` 提供了上下文候选、``corpus_fetch`` 返回了原文，
+为什么需要这一层：``corpus_search`` 提供上下文候选及有界原文，``corpus_fetch`` 补读原文，
 但「检索提供了什么」与「模型最终看到了什么」之间隔着两层截断——工作流后处理
 （``ReactToolResultPostProcessor``）与单轮聚合预算（``_overflow``）。全部落在
 trajectory 里的全文，并不等于进入了**最终模型请求**。本模块把这条链路的四个
@@ -10,7 +10,7 @@ trajectory 里的全文，并不等于进入了**最终模型请求**。本模�
 |---|---|---|
 | ``offered`` | 检索提供的完整候选范围 | 已被要求读取的范围 |
 | ``requested`` | Agent 显式选定并请求的范围 | 已取回 |
-| ``fetched`` | 服务成功返回的块／片段 | 已完整送达模型 |
+| ``fetched`` | search 或 fetch 成功返回的已核验块／片段 | 已完整送达模型 |
 | ``delivered`` | 最终消息里经后处理／聚合后**仍完整存在**的片段 | 已理解 |
 
 两类完整性**分开算**：范围完整性（提供范围是否取回／送达）与结论证据充分性
@@ -47,6 +47,7 @@ from frontier_agent.core.loop_types import (
     TurnContext,
 )
 from frontier_agent.core.messages import Message, text_of
+from plugins.corpus.search_evidence import search_evidence_items
 from plugins.corpus.structured.consumption import (
     SEMANTIC_TOOL,
     ReportSemanticReference,
@@ -149,7 +150,7 @@ def _covers_whole(intervals: list[tuple[int, int]], chars: int) -> bool:
     if chars <= 0:
         return False
     merged = _merge_intervals(intervals)
-    return bool(merged) and merged[0][0] == 0 and merged[-1][1] >= chars
+    return len(merged) == 1 and merged[0][0] == 0 and merged[0][1] >= chars
 
 
 def _covers_interval(
@@ -286,6 +287,10 @@ class ConsumptionLedger:
         repr=False,
     )
     _offered_scopes: set[str] = field(default_factory=set, repr=False)
+    #: fetched means retrieved raw evidence, not necessarily a corpus_fetch call.
+    _fragment_origins: dict[tuple[str, str, int, int], set[str]] = field(
+        default_factory=dict, repr=False
+    )
     semantic: SemanticConsumption = field(default_factory=SemanticConsumption)
 
     # ── 采集：offered ──────────────────────────────────────────────────
@@ -296,6 +301,9 @@ class ConsumptionLedger:
         for hit in payload.get("hits") or []:
             if not isinstance(hit, dict):
                 continue
+            # Repeated searches can expose new passages within the same scope.
+            for item in search_evidence_items(hit):
+                self._add_fragment(item, hit["doc_id"], turn, origin=TOOL_SEARCH)
             locators = [str(x) for x in (hit.get("context_locators") or [])]
             if not locators:
                 continue
@@ -391,10 +399,13 @@ class ConsumptionLedger:
     def record_skip(self, locator: str, *, reason: str, turn: int = 0) -> None:
         self.skipped.append({"locator": str(locator), "reason": reason, "turn": turn})
 
-    def _add_fragment(self, item: dict[str, Any], doc_id: str, turn: int) -> None:
+    def _add_fragment(
+        self, item: dict[str, Any], doc_id: str, turn: int, *, origin: str = TOOL_FETCH
+    ) -> None:
         ref = _fragment_from_item(item, turn, doc_id)
         if ref is None:
             return
+        self._fragment_origins.setdefault(ref.identity, set()).add(origin)
         if any(existing.identity == ref.identity for existing in self.fetched):
             return
         self.fetched.append(ref)
@@ -408,9 +419,9 @@ class ConsumptionLedger:
     def finalize(self, messages: list[Message] | None) -> None:
         """在消息里核验每个 fetched 片段是否**仍完整存在**。
 
-        比对用片段文本的 JSON 转义形式（消息正文是 ``json.dumps(..., ensure_ascii=False)``
-        的结果），既覆盖未截断的合法 JSON，也覆盖被 head-cap 切坏的 JSON。核验不了
-        的片段保持 ``unknown``——不推断为已送达。合并只取更强状态。
+        search 原文必须在合法 tool JSON 中同时保留句柄、范围和原文摘要；单独出现
+        同文、模型总结或损坏 JSON 均不计送达。纯 fetch 历史路径仍用 JSON 转义文本
+        核验。核验不了的片段保持 ``unknown``，合并只取更强状态。
 
         已判定 ``delivered`` 的片段直接跳过（状态只会更强，重复扫描是纯浪费）；
         这让观察者可以**每个 turn 边界增量调用**（评审 C3：环内校验依赖及时更新
@@ -419,13 +430,19 @@ class ConsumptionLedger:
         blob = _messages_blob(messages)
         if not blob:
             return
+        source_refs = _delivered_corpus_refs(messages)
         for ref in self.fetched:
             if self.delivered.get(ref.identity) == DELIVERED:
                 continue
             text = self._fragment_text.get(ref.identity)
             if text is None:
                 continue
-            status = _delivery_status(text, blob)
+            if TOOL_SEARCH in self._fragment_origins.get(ref.identity, ()):
+                # Text alone is insufficient: dropped hits may share identical text
+                # with retained hits. Bind delivery to the complete wire identity.
+                status = DELIVERED if _search_signature(ref) in source_refs else UNKNOWN
+            else:
+                status = _delivery_status(text, blob)
             current = self.delivered.get(ref.identity, UNKNOWN)
             if delivery_rank(status) > delivery_rank(current):
                 self.delivered[ref.identity] = status
@@ -519,7 +536,13 @@ class ConsumptionLedger:
             "offered": self.offered,
             "requested": self.requested,
             "semantic": self.semantic.to_dict(),
-            "fetched": [ref.to_dict() for ref in self.fetched],
+            "fetched": [
+                {
+                    **ref.to_dict(),
+                    "retrieved_via": sorted(self._fragment_origins.get(ref.identity, ())),
+                }
+                for ref in self.fetched
+            ],
             "delivered": [
                 {
                     "doc_id": ref.doc_id,
@@ -536,6 +559,44 @@ class ConsumptionLedger:
             "range_completeness": self.range_completeness(),
             "all_offered_fetched": self.all_offered_fetched(),
         }
+
+
+def _search_signature(ref: FragmentRef) -> tuple[Any, ...]:
+    return (*ref.identity, ref.build_id, ref.chars, ref.content_sha256, ref.fragment_sha256)
+
+
+def _delivered_corpus_refs(messages: list[Message] | None) -> set[tuple[Any, ...]]:
+    """Recognize intact search/fetch evidence in final tool messages, never summaries."""
+    refs = set()
+    for message in messages or []:
+        name = message.get("name")
+        if message.get("role") != "tool" or name not in (None, TOOL_SEARCH, TOOL_FETCH):
+            continue
+        payload = _loads(text_of(message.get("content")))
+        if not isinstance(payload, dict) or payload.get("ok") is not True:
+            continue
+        hits = payload.get("hits")
+        if not isinstance(hits, list):
+            # A later fetch can deliver the same interval that search offered.
+            if name != TOOL_SEARCH and isinstance(payload.get("doc_id"), str):
+                items = payload.get("items", [payload])
+                for item in items if isinstance(items, list) else []:
+                    if not isinstance(item, dict):
+                        continue
+                    ref = _fragment_from_item(item, 0, payload["doc_id"])
+                    if ref is not None:
+                        refs.add(_search_signature(ref))
+            continue
+        if name == TOOL_FETCH:
+            continue
+        for hit in hits:
+            if not isinstance(hit, dict):
+                continue
+            for item in search_evidence_items(hit):
+                ref = _fragment_from_item(item, 0, hit["doc_id"])
+                if ref is not None:
+                    refs.add(_search_signature(ref))
+    return refs
 
 
 def _loads(text: Any) -> Any:
@@ -1163,33 +1224,29 @@ def _verify_conclusion(
                     }
                 )
                 continue
-            if pending_aware:
-                delivery = evidence_delivery_for_submit(
-                    ledger,
-                    doc_id,
-                    locator,
-                    offset,
-                    offset + len(quote),
+            # A search excerpt may expose a later occurrence of the same quote.
+            # The first textual match alone must not hide a delivered interval.
+            check_delivery = evidence_delivery_for_submit if pending_aware else _evidence_delivery
+            delivery = UNKNOWN
+            ranks = {UNKNOWN: 0, "partial": 1, "pending": 2, DELIVERED: 3}
+            while offset >= 0:
+                candidate = check_delivery(ledger, doc_id, locator, offset, offset + len(quote))
+                if ranks.get(candidate, 0) > ranks.get(delivery, 0):
+                    delivery = candidate
+                if delivery == DELIVERED:
+                    break
+                offset = source_text.find(quote, offset + 1)
+            if pending_aware and delivery == "pending":
+                problems.append(
+                    {
+                        "code": "pending_delivery",
+                        "message": (
+                            f"{label} 的片段已取回但尚未经过下一轮消息边界核验；"
+                            "请下一轮重新提交完整清单确认"
+                        ),
+                    }
                 )
-                if delivery == "pending":
-                    problems.append(
-                        {
-                            "code": "pending_delivery",
-                            "message": (
-                                f"{label} 的片段已取回但尚未经过下一轮消息边界核验；"
-                                "请下一轮重新提交完整清单确认"
-                            ),
-                        }
-                    )
-                    continue
-            else:
-                delivery = _evidence_delivery(
-                    ledger,
-                    doc_id,
-                    locator,
-                    offset,
-                    offset + len(quote),
-                )
+                continue
             deliveries.append(delivery)
             if delivery != DELIVERED:
                 problems.append(

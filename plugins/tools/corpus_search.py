@@ -1,17 +1,7 @@
-"""corpus_search — 语料检索。**只定位，不取证。**
+"""corpus_search — 定位并交付有界原文证据；缺失上下文由 corpus_fetch 补读。
 
-与 ``corpus_fetch`` 的分工是整个硬闸①的机制核心：
-
-- 本工具返回**截断的** snippet（两端带省略号）+ 取证句柄（``doc_id`` + ``locator``）
-- 要逐字原文，必须再调 ``corpus_fetch``
-
-snippet 故意给不全，不是偷懒：如果这里就把整段原文吐出来，Agent 没有任何
-理由再去调 fetch，于是「引用必须逐字来自原文」就退化成一句提示词，
-而提示词是最容易被绕过的一层。把原文锁在另一个工具里，
-溯源就从「叮嘱」变成了「路径」。
-
-返回体里带 ``hint`` 字段而不是只在文档串里写：Agent 读到工具输出时，
-``hint`` 就在眼前；文档串里的说明它未必看得到。
+原生命中的 evidence_spans 只标记经原文校验的完整节选。实际送达后可逐字引用，
+仍由账本核对范围、resolver 核对来源；无标记的旧 snippet 和预览不获得引用资格。
 """
 
 from __future__ import annotations
@@ -21,6 +11,7 @@ import os
 from typing import Any
 
 from frontier_agent.core.tool import tool
+from plugins.corpus.search_evidence import SEARCH_EVIDENCE_CONTRACT
 from plugins.corpus.service import get_service
 
 MAX_LIMIT = 20
@@ -39,6 +30,8 @@ _HIT_CORE_KEYS = (
     "context_locators",
     "fetch_plan",
     "core_fetch_plan",
+    "evidence_contract",
+    "evidence_spans",
 )
 #: 核心字段之外按预算余量保留的可选字段（顺序即保留优先级）。
 _HIT_OPTIONAL_KEYS = ("title", "published", "snippet", "by_kind", "preview")
@@ -85,13 +78,20 @@ ABSTAIN_HINT = (
 
 #: 原生检索的下一步指令：句柄只保留一份，补读按同一命中的 doc_id + context_locators。
 NATIVE_HINT = (
-    "snippet 是按本次查询选取的原文预览，仅供定位，不能直接引用。"
+    "仅 evidence_contract=native-search-evidence-v1 且 evidence_spans 标记的 snippet 区间"
+    "是已核验原文，实际送达后可逐字写入 evidence.quote；证据足够时无需重复 fetch。"
+    "无标记文本、索引说明及句内节选不能直接引用。"
+    "每个 span.member 对应同一命中的 context_locators[member-1]，引用该句柄，"
+    "不要一律使用命中首 locator；所有偏移按解码后的 Unicode 字符计，左闭右开。"
+    "snippet_start:snippet_end 对应展示原文，start:end 对应块内原文。"
     "【i/N】表示原 context_locators 数组的第 i 个成员，不是展示顺序；"
     "原文字符 a:b 是该块取回正文中的零基、左闭右开位置。不同节选不代表连续原文。"
-    "取证时用同一命中的 doc_id 与所需成员 context_locators[i-1] 调用 corpus_fetch，"
+    "若缺论证、限定条件、指代、单位/期间/表头/脚注或全文，用同一命中的 doc_id 与"
+    "所需成员 context_locators[i-1] 调用 corpus_fetch，"
     "view='compact'；需要其他上下文时再选择对应成员，不必默认申请整个数组。"
     "若已申请内容分页，按 next_cursor 续读；未读完不能声称整个申请范围完整。"
-    "句内节选已标明上下文不完整，必要时补读。不得混用版本或扩写句柄。"
+    "句内节选必须补读后再作证据；完整节选不等于整块/整篇已读或结论充分。"
+    "不得混用版本或扩写句柄。"
     "blocks_returned 是合并进命中的块数，blocks_ranked 是参与排序的候选块数；"
     "未展示不等于不存在，未合并的候选需要继续检索，不能凭空构造句柄。"
     "结果仅覆盖本次允许的原生正文；未命中不等于全库没有相关资料。"
@@ -100,11 +100,13 @@ NATIVE_HINT = (
 
 @tool
 async def corpus_search(query: str, limit: int = 10) -> str:
-    """在研报语料库里检索，返回命中的文档与定位句柄（**不含**完整原文）。
+    """检索研报，返回定位句柄及有界原文；缺失上下文用 corpus_fetch 补读。
 
-    用于**定位**：找到哪些研报的哪些页/章节在谈这个话题。
-    拿到句柄后，必须调用 ``corpus_fetch`` 取回逐字原文才能写入 evidence——
-    本工具返回的 snippet 是**截断**的，禁止直接引用。
+    原生命中 evidence_contract=native-search-evidence-v1 的 evidence_spans 标记
+    snippet 中可逐字引用的原文区间；实际送达且足以支撑结论时无需例行 fetch。
+    引用使用同一命中的 doc_id 与 context_locators[span.member-1]。未标记文本、
+    旧 snippet、索引说明和句内节选仅供定位。缺条件、指代、表格依赖或更多原文时，
+    用原句柄 corpus_fetch(view="compact") 补读；节选完整不代表全篇已读或结论充分。
 
     Args:
         query: 检索词。可以是关键词、数字（如 ``47.3亿``、``30%``）
@@ -114,7 +116,7 @@ async def corpus_search(query: str, limit: int = 10) -> str:
     Returns:
         JSON 字符串：``{"ok": true, "hits": [{"doc_id", "locator", "source_id",
         "build_id", "chunk_id", "context_locators", "fetch_plan", "title",
-        "published", "snippet"}],
+        "published", "snippet", "evidence_contract", "evidence_spans"}],
         "coverage": {...}, "hint": ...}``（I2-8：``doc_id`` 为 ``cv2:<build_id>``、
         ``locator`` 为 ``chunk:<chunk_id>``；``coverage`` 为 §7.3 三轴对象）；
         语料库不存在时返回 ``ok=false``。结果超过本轮工具结果预算时不会按字符硬切
@@ -188,7 +190,12 @@ async def corpus_search(query: str, limit: int = 10) -> str:
                 "count": 0,
                 "hits": [],
                 "coverage": coverage,
-                "hint": NO_COVERAGE_HINT,
+                "hint": (
+                    "本次候选经相关性与结构筛选后未获得可展示正文，不代表资料库无答案。"
+                    "可改写或拆分查询继续检索；已有句柄仍可按原范围 fetch。"
+                    if coverage.get("purity", {}).get("sources_filtered")
+                    else NO_COVERAGE_HINT
+                ),
             },
             ensure_ascii=False,
         )
@@ -234,6 +241,14 @@ async def corpus_search(query: str, limit: int = 10) -> str:
                 "title": hit.title,
                 "published": hit.published,
                 "snippet": hit.snippet,
+                **(
+                    {
+                        "evidence_contract": SEARCH_EVIDENCE_CONTRACT,
+                        "evidence_spans": list(hit.evidence_spans),
+                    }
+                    if native and getattr(hit, "evidence_spans", ())
+                    else {}
+                ),
             }
         )
     body = json.dumps(

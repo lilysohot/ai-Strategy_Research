@@ -9,7 +9,7 @@
 |---|---|
 | [search 与 fetch 内容保留优化讨论稿](corpus-search-evidence-delivery-redesign.md) | v1.4；2026-10-23 查询相关展示选择已本地实现，129 项回归及固定句柄回放通过；未重启服务，直接证据交付与上下文索引仍待实施，Claims/items 暂缓 |
 | [资料库研究链路改造](corpus-research-chain-redesign.md) | 较早的完整架构讨论，非本轮实施清单；当前范围以 search/fetch 讨论稿为准，Claims/items 与团队改造暂缓 |
-| [Web 同一研究逐轮切换 Agent 模式](web-agent-team-run-mode.md) | 2026-10-22 v3.1，PR-RUN-08；正常窗口/压缩和缓存失效可接受；§13 补齐原文归档、约束、重复转换、历史读取、恢复及入口等 10 类遗漏，22 类验收；实际工作流切换待 M0 验证，未实施 |
+| [Web 同一研究逐轮切换 Agent 模式](web-agent-team-run-mode.md) | 2026-10-23 v3.2，PR-RUN-08；接受正常上下文窗口/压缩及缓存失效；§13 全链路查漏、§14 MiniDAG/流式兼容评估：跨 Run 换图，不迁移图内执行状态，补齐输入/事件/结果契约；25 类验收，待 M0 验证，未实施 |
 | [研报上下文向量检索小样本实施方案](corpus-contextual-vector-retrieval-pilot.md) | §29 保留历史隔离检索验收；2026-10-22 原生混合检索已正式发布。§30 是后续上下文感知策略与执行入口：对象、关系、时间、条件及索引/返回两处接入，主验收为 search 内容充分性；本节待实施，Claims/items 暂缓 |
 | [研究材料 × 同花顺数据 × 分析总计划](claims-market-closed-loop-plan.md) | 当前唯一跨层进度真源；I0 细任务台账已回填：守卫已放行、I0A-1～5 与 I0-B 完成（M1/M2 达成），I1-1～I1-9 完成、F1—F7/R1—R6 整改收口后当前候选 i1-r3，**M4 已独立复核放行并由 U 签认（2026-09-16）**；I0-C（M3）待执行、I2 not_ready。R2 历史失败保留，R3 未开始 |
 | [语料清洗、切块、入库与索引重构草案](corpus-ingestion-rebuild-architecture.md) | 唯一当前基础链路候选设计 v1.1；I0-A/B/C 门后才冻结物理架构，I4 另核最新备份；强制零模型，I0-A/B 已完成、I0-C 待执行，业务新链未落地、未清库 |

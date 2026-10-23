@@ -65,10 +65,14 @@ RESEARCH_DISCIPLINE_ADDENDUM = """\
 - 顶层 `sources` 段必须**声明所有被引用的来源**（每条含 `id`，以及
   `url` / `title` 至少一项）。`evidence[].source_ref` 必须能在其中找到——
   指向未声明来源的引用视为悬空，同样被拦下。
-- `corpus_search` 返回的 **snippet 是截断的，仅用于定位，禁止直接引用**。
-  写 `evidence.quote` 前须取得逐字原文：可用 `corpus_fetch(doc_id, locator)`，
-  或使用 `corpus_semantic_query` 返回且已实际送达的完整原文证据单元。
-  后者须连同 publication_id、record_id、用途、精确区间及必要依赖提交报告清单，
+- `evidence.quote` 必须来自已实际送达的逐字原文。`corpus_search` 命中带
+  `evidence_contract=native-search-evidence-v1` 时，`evidence_spans` 标记的 snippet
+  区间可直接引用；使用该命中的 doc_id 和 `context_locators[span.member-1]`，
+  不要误用首 locator。无标记的旧 snippet、索引说明、句内节选不得直接作证据。
+  缺论证、限定条件、指代、表头/期间/单位/脚注或全文时，按原句柄用
+  `corpus_fetch(view="compact")` 补读。节选完整不等于整篇已读或结论充分。
+  也可使用 `corpus_semantic_query` 已送达的完整原文证据单元；该路径须连同
+  publication_id、record_id、用途、精确区间及必要依赖提交报告清单，
   充分证据不要求例行重复 fetch；后台 resolver 核验不等于 Agent 已读。
   原文路径的 `locator` 要原样填进 `evidence.page`。
 - 分析研报内容时**优先用 `corpus_search` 查本地语料库**。网页检索只用于

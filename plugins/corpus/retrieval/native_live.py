@@ -21,9 +21,15 @@ import psycopg
 from plugins.corpus.preparation import read_pg
 from plugins.corpus.preparation.chunk import normalize_search_text
 from plugins.corpus.retrieval import contextual
-from plugins.corpus.retrieval.display import compose
+from plugins.corpus.retrieval.display import compose, compose_with_evidence
 from plugins.corpus.retrieval.embedding import text_hash, validate_vector
-from plugins.corpus.retrieval.native import SAFE_KINDS, NativeIndex, normalized, raw_slices
+from plugins.corpus.retrieval.native import (
+    RELEASE_SCHEMAS,
+    SAFE_KINDS,
+    NativeIndex,
+    normalized,
+    raw_slices,
+)
 from plugins.corpus.retrieval.native_pg import search_native
 from plugins.corpus.retrieval.native_target import check_native_target
 
@@ -55,10 +61,8 @@ def configured_seed(target: str) -> NativeIndex:
     seed = NativeIndex(Path(path))
     if seed.target != target:
         raise ValueError("native_seed_target_mismatch")
-    if (
-        not target.startswith("vector_pilot_")
-        and seed.manifest["schema"] != "native-evidence-release-1"
-    ):
+    if not target.startswith("vector_pilot_") and seed.manifest["schema"] not in RELEASE_SCHEMAS:
+        # 上下文包与正式包同为“正式目标可用”，区别只在索引输入是否含说明。
         raise ValueError("native_release_bundle_required")
     return seed
 
@@ -235,10 +239,12 @@ def refresh(dsn: str, target: str, seed: NativeIndex) -> NativeIndex:
             return refresh_on(cur, seed)
 
 
-#: 默认只展示 1 块。实测多块只减少重搜、却让取证与 token 上升，因此改为显式开关：
-#: ``CORPUS_NATIVE_SNIPPET_BLOCKS=2|3`` 固定块数，``=auto`` 按剩余预算自适应。
-SNIPPET_BLOCKS = 1
-SNIPPET_BLOCK_CHARS = 180
+#: 默认最多展示 2 个互补块，避免复合问题只交付一半；总工具预算仍由 fitter 限制。
+#: ``CORPUS_NATIVE_SNIPPET_BLOCKS=1|2|3`` 固定块数，``=auto`` 按剩余预算自适应。
+SNIPPET_BLOCKS = 2
+# Room for a complete explanatory paragraph plus the query's other anchors.
+# The final tool payload still passes through its existing hard budget fitter.
+SNIPPET_BLOCK_CHARS = 600
 #: 展示预算目标：只决定“展示几块”，不改返回体上限，也不改句柄格式。
 SNIPPET_TARGET_PAYLOAD = 12_000
 META_PER_HIT = 500
@@ -320,6 +326,19 @@ def search(
         if b.build_id not in groups and len(groups) == limit:
             continue
         groups.setdefault(b.build_id, []).append(b)
+    from plugins.corpus.retrieval.purity import REVISION, select_sources
+
+    decisions = select_sources(
+        groups,
+        chunks,
+        query,
+        result.query_terms,
+        names={d["source_id"]: d.get("names", ()) for d in index.dates},
+    )
+    if trace is not None:
+        trace.purity_decisions = tuple(asdict(d) for d in decisions)
+    kept = {d.build_id for d in decisions if d.keep}
+    groups = {bid: blocks for bid, blocks in groups.items() if bid in kept}
     shown_blocks = choose_snippet_blocks(
         [len(bs) for bs in groups.values()],
         sum(len(bs) for bs in groups.values()) * LOCATOR_CHARS_ESTIMATE,
@@ -331,6 +350,13 @@ def search(
             locator_for(x.chunk_id, x.text, [asdict(s) for s in x.slices]) for x in blocks
         )
         locator = locators[0]
+        snippet, evidence_spans = compose_with_evidence(
+            blocks,
+            query,
+            lexemes=result.query_terms,
+            max_blocks=shown_blocks,
+            chars_per_block=SNIPPET_BLOCK_CHARS,
+        )
         counts: dict[str, int] = {}
         for x in blocks:
             kind = chunks[x.build_id, x.chunk_id]["kind"]
@@ -340,7 +366,7 @@ def search(
                 doc_id=read_pg.build_handle(b.build_id),
                 locator=locator,
                 title=c["title_text"] or "",
-                snippet=compose_snippet(blocks, shown_blocks, query, result.query_terms),
+                snippet=snippet,
                 score=0.0,
                 published=b.published or "",
                 source_id=b.source_id,
@@ -351,6 +377,7 @@ def search(
                     b.build_id, [read_pg.parse_chunk_locator(loc) for loc in locators]
                 ),
                 context_by_kind=tuple(counts.items()),
+                evidence_spans=evidence_spans,
             )
         )
     coverage: dict[str, object] = {
@@ -359,6 +386,16 @@ def search(
         "query_status": "matched" if hits else "no_match",
         "retrieval_mode": result.retrieval_mode,
         "fallback_reason": result.fallback_reason,
+        "purity": {
+            "policy": REVISION,
+            "sources_considered": len(decisions),
+            "sources_filtered": sum(not d.keep for d in decisions),
+            "filter_reasons": {
+                reason: sum(not d.keep and d.reason == reason for d in decisions)
+                for reason in sorted({d.reason for d in decisions if not d.keep})
+            },
+            "scope": "bounded_candidates_not_corpus_absence",
+        },
         "native": {
             "policy": "native1",
             "index_id": result.index_id,
@@ -376,6 +413,7 @@ def search(
         },
         "reason_codes": [
             "native_prose_scope",
+            *(["native_purity_filtered"] if any(not d.keep for d in decisions) else []),
             *([result.fallback_reason] if result.fallback_reason else []),
         ],
     }

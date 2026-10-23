@@ -8,7 +8,7 @@
 - 中文全文用 **zhparser**（PG 内置 FTS 无中文分词）
 - 向量用 **pgvector**，但**判据驱动**：当前 FTS Recall@5=100%，无缺口，暂不建列
 
-读侧语义不变（硬闸①依赖）：``search`` 返回截断 snippet（只定位），
+读侧：旧 ``search`` snippet 只定位；原生检索额外标记经原文校验的 evidence_spans，
 ``fetch`` 返回逐字原文（取证）。
 
 检索排序（**已于 2026-09-08 校准定稿**，黄金集 Recall@5 = 100%）：
@@ -213,6 +213,8 @@ class SearchHit:
     scope_id: str | None = None
     #: A1：成员按 ``kind`` 的计数（内联 scope 摘要；须与成员集合核对，不补造）。
     context_by_kind: tuple[tuple[str, int], ...] = ()
+    #: Verified native passages only; source and snippet offsets, never index notes.
+    evidence_spans: tuple[dict[str, Any], ...] = ()
 
 
 @dataclass

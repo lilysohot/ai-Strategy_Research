@@ -1,7 +1,7 @@
 """corpus_fetch — 按取证句柄取回**逐字**原文（单块 / 批量 / 游标分页）。
 
-硬闸①「数字可溯源」的在线落点：``evidence.quote`` 必须来自这里返回的文本，
-而不是来自 ``corpus_search`` 的 snippet，更不是来自模型的记忆。
+补读 search 未交付的原文及必要依赖。``evidence.quote`` 必须来自实际送达的
+逐字原文；search 的已核验 evidence_spans 足够时无需重复调用本工具。
 
 设计上只做一件事——给 ``(doc_id, locator)`` 返回该块原文，不做摘要、不做改写；
 结构性上下文以明确单元标识附带，逐单元哈希验证，单元间以换行分隔，spans 保留各单元
@@ -960,7 +960,10 @@ async def corpus_fetch(
 ) -> str:
     """取回语料中指定块的逐字原文，用于写入 ``evidence.quote``。
 
-    在 ``corpus_search`` 之后调用：search 给句柄，本工具给原文。单块结果装得下时
+    当 search 已核验并送达的节选足以支撑结论时，无需例行调用。缺论证、限定条件、
+    指代、表头/期间/单位/脚注或更多原文时，使用同一命中的 doc_id 和所需
+    context_locators 成员补读，推荐 view="compact"；旧 snippet 和句内节选须先补读。
+    分页时按 next_cursor 续读，未读完不能声称申请范围完整。单块结果装得下时
     维持既有单块字段语义；批量／游标模式返回一致的分页信封；单块超限自动分片。
 
     Args:
