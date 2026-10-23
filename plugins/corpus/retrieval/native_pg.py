@@ -131,6 +131,7 @@ def _load_blocks(cur: psycopg.Cursor, index: NativeIndex) -> dict[tuple[str, str
             dates[c["source_id"]],
             "\n".join(s.text for s in slices),
             tuple(NativeSpan(s.unit_id, s.page, s.start, s.end, s.raw_sha256) for s in slices),
+            unit_lengths=tuple(len(units[c["build_id"], s.unit_id]["raw_text"]) for s in slices),
         )
     return result
 
@@ -220,6 +221,7 @@ def search_native(
                 (normalize_search_text(query),),
             )
             row = cur.fetchone()
+            query_terms = tuple(row[0] or ()) if row else ()
             candidate_query = retrieval_query(tuple(row[0])) if row else query
             params = build_search_params(candidate_query or query, limit=200, published_to=cutoff)
             params["rank_query"] = _rank_query_on(cur, candidate_query or query)
@@ -313,4 +315,5 @@ def search_native(
         "lexical" if fallback_reason else "hybrid",
         fallback_reason,
         len(ranked_keys),
+        query_terms=query_terms,
     )

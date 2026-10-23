@@ -7,7 +7,7 @@
 
 | 文档 | 当前职责 |
 |---|---|
-| [search 与 fetch 内容保留优化讨论稿](corpus-search-evidence-delivery-redesign.md) | 2026-10-22 v1.4；与混合检索方案 §30 衔接上下文组装、内容充分性验证和必要补读；直接证据交付需配套登记，Claims/items 暂缓；未实施 |
+| [search 与 fetch 内容保留优化讨论稿](corpus-search-evidence-delivery-redesign.md) | v1.4；2026-10-23 查询相关展示选择已本地实现，129 项回归及固定句柄回放通过；未重启服务，直接证据交付与上下文索引仍待实施，Claims/items 暂缓 |
 | [资料库研究链路改造](corpus-research-chain-redesign.md) | 较早的完整架构讨论，非本轮实施清单；当前范围以 search/fetch 讨论稿为准，Claims/items 与团队改造暂缓 |
 | [Web 同一研究逐轮切换 Agent 模式](web-agent-team-run-mode.md) | 2026-10-22 v3.1，PR-RUN-08；正常窗口/压缩和缓存失效可接受；§13 补齐原文归档、约束、重复转换、历史读取、恢复及入口等 10 类遗漏，22 类验收；实际工作流切换待 M0 验证，未实施 |
 | [研报上下文向量检索小样本实施方案](corpus-contextual-vector-retrieval-pilot.md) | §29 保留历史隔离检索验收；2026-10-22 原生混合检索已正式发布。§30 是后续上下文感知策略与执行入口：对象、关系、时间、条件及索引/返回两处接入，主验收为 search 内容充分性；本节待实施，Claims/items 暂缓 |

@@ -85,13 +85,15 @@ ABSTAIN_HINT = (
 
 #: 原生检索的下一步指令：句柄只保留一份，补读按同一命中的 doc_id + context_locators。
 NATIVE_HINT = (
-    "snippet仅供定位，不能直接引用。snippet 会按块序展示同一命中内的前几段，"
-    "段首【i/N】的第 i 段对应 context_locators 的第 i 个，不同段不是连续原文；"
-    "context_locators 已与该命中的 doc_id 绑定，取证时传 corpus_fetch(doc_id=..., "
-    "locators=context_locators, view='compact')，有 next_cursor 时继续分页。"
-    "各句柄限定原文区间，不要改写为普通chunk句柄扩读。"
-    "coverage.native.blocks_returned 是本次实际合并进命中的块数，blocks_ranked 是参与排序的候选块数；"
-    "未合并的候选不代表资料不存在，可用更具体的 query 或按句柄补读。"
+    "snippet 是按本次查询选取的原文预览，仅供定位，不能直接引用。"
+    "【i/N】表示原 context_locators 数组的第 i 个成员，不是展示顺序；"
+    "原文字符 a:b 是该块取回正文中的零基、左闭右开位置。不同节选不代表连续原文。"
+    "取证时用同一命中的 doc_id 与所需成员 context_locators[i-1] 调用 corpus_fetch，"
+    "view='compact'；需要其他上下文时再选择对应成员，不必默认申请整个数组。"
+    "若已申请内容分页，按 next_cursor 续读；未读完不能声称整个申请范围完整。"
+    "句内节选已标明上下文不完整，必要时补读。不得混用版本或扩写句柄。"
+    "blocks_returned 是合并进命中的块数，blocks_ranked 是参与排序的候选块数；"
+    "未展示不等于不存在，未合并的候选需要继续检索，不能凭空构造句柄。"
     "结果仅覆盖本次允许的原生正文；未命中不等于全库没有相关资料。"
 )
 
@@ -326,10 +328,7 @@ def fit_search_payload(body: str, budget: int) -> str | None:
         # array in fetch_plan and context_locators under a small message budget.
         for hit in payload.get("hits", []):
             hit.pop("fetch_plan", None)
-        payload["hint"] = (
-            "snippet仅供定位。用同一命中的doc_id与完整context_locators调用corpus_fetch"
-            "（参数名locators，view=compact），并继续next_cursor；勿混用版本或扩写句柄。"
-        )
+        payload["hint"] = NATIVE_HINT
         payload["plans_compacted"] = True
         candidate = json.dumps(payload, ensure_ascii=False)
         if len(candidate) <= budget:

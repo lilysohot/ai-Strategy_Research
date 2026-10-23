@@ -20,6 +20,7 @@ import psycopg
 
 from plugins.corpus.preparation import read_pg
 from plugins.corpus.preparation.chunk import normalize_search_text
+from plugins.corpus.retrieval.display import compose
 from plugins.corpus.retrieval.embedding import text_hash, validate_vector
 from plugins.corpus.retrieval.native import SAFE_KINDS, NativeIndex, normalized, raw_slices
 from plugins.corpus.retrieval.native_pg import search_native
@@ -257,27 +258,16 @@ def choose_snippet_blocks(block_counts: list[int], locator_chars: int) -> int:
     return 1
 
 
-def compose_snippet(blocks: list[Any], limit: int = SNIPPET_BLOCKS) -> str:
-    """Show the leading text of several blocks from one hit, never joined as one quote.
-
-    Each part is prefixed with its rank in the hit and the page, and the tail states
-    how many selected blocks are not shown. Text is only ever a prefix of a block —
-    this is navigation, not evidence.
-    """
-    total = len(blocks)
-    shown = max(1, min(limit, total))
-    parts = []
-    for i, block in enumerate(blocks[:shown], start=1):
-        page = next((s.page for s in block.slices if s.page), None)
-        label = f"【{i}/{total}" + (f"｜p{page}" if page else "") + "】"
-        # 保留原始空白（换行、全角空格）：模型会从展示文本里复制引文，
-        # 折叠空白后复制的字符串在原文里不再逐字出现，会触发 quote_not_found。
-        text = block.text[:SNIPPET_BLOCK_CHARS].rstrip()
-        parts.append(f"{label}{text}…")
-    hidden = total - shown
-    if hidden > 0:
-        parts.append(f"（同源另有{hidden}块未展示，可按句柄补读）")
-    return "\n".join(parts)
+def compose_snippet(
+    blocks: list[Any],
+    limit: int = SNIPPET_BLOCKS,
+    query: str = "",
+    lexemes: tuple[str, ...] = (),
+) -> str:
+    """Select verbatim query-relevant passages without changing scope or RRF order."""
+    return compose(
+        blocks, query, lexemes=lexemes, max_blocks=limit, chars_per_block=SNIPPET_BLOCK_CHARS
+    )
 
 
 def _digest(text: str, slices: list[dict[str, Any]]) -> str:
@@ -340,7 +330,7 @@ def search(
                 doc_id=read_pg.build_handle(b.build_id),
                 locator=locator,
                 title=c["title_text"] or "",
-                snippet=compose_snippet(blocks, shown_blocks),
+                snippet=compose_snippet(blocks, shown_blocks, query, result.query_terms),
                 score=0.0,
                 published=b.published or "",
                 source_id=b.source_id,

@@ -372,15 +372,15 @@ def test_compose_snippet_labels_blocks_and_counts_hidden():
         SimpleNamespace(text="第二块正文 " * 40, slices=[SimpleNamespace(page=13)]),
         SimpleNamespace(text="第三块正文", slices=[SimpleNamespace(page=19)]),
     ]
-    snippet = native_live.compose_snippet(blocks)
+    snippet = native_live.compose_snippet(blocks, 2)
 
     assert snippet.startswith("【1/3｜p6】")
     assert "【2/3｜p13】" in snippet
     assert "【3/3" not in snippet  # 只展示前两块
     assert "同源另有1块未展示" in snippet
     # 每段是独立前缀，不应把两块拼成一句连续正文
-    assert snippet.count("…") >= 2
-    assert len(snippet) < 500
+    assert snippet.count("句内节选，上下文不完整") == 2
+    assert len(snippet) < 550
 
 
 def test_compose_snippet_single_block_has_no_hidden_note():
@@ -390,3 +390,117 @@ def test_compose_snippet_single_block_has_no_hidden_note():
         [SimpleNamespace(text="只有一个块", slices=[SimpleNamespace(page=1)])]
     )
     assert "未展示" not in snippet
+
+
+def test_choose_snippet_blocks_uses_remaining_budget(monkeypatch):
+    monkeypatch.setenv("CORPUS_NATIVE_SNIPPET_BLOCKS", "auto")
+    # 单条命中、20 个块：正文预算充足 → 展示 3 块
+    assert native_live.choose_snippet_blocks([20], 20 * 64) == 3
+    # 5 条命中、句柄更贵时只够 2 块
+    assert native_live.choose_snippet_blocks([20] * 5, 7_000) == 2
+    # 10 条命中×20 块：句柄已吃掉目标预算 → 至少保留 1 块
+    assert native_live.choose_snippet_blocks([20] * 10, 200 * 64) == 1
+    assert native_live.choose_snippet_blocks([], 0) == native_live.SNIPPET_BLOCKS
+
+
+def test_compose_snippet_respects_explicit_limit():
+    from types import SimpleNamespace
+
+    blocks = [
+        SimpleNamespace(text=f"第{i}块正文", slices=[SimpleNamespace(page=i)]) for i in range(1, 6)
+    ]
+    snippet = native_live.compose_snippet(blocks, 3)
+    assert "【3/5｜p3】" in snippet
+    assert "【4/5" not in snippet
+    assert "同源另有2块未展示" in snippet
+
+
+def test_choose_snippet_blocks_defaults_to_one(monkeypatch):
+    monkeypatch.delenv("CORPUS_NATIVE_SNIPPET_BLOCKS", raising=False)
+    assert native_live.choose_snippet_blocks([20], 1_280) == 1
+    assert native_live.SNIPPET_BLOCKS == 1
+
+
+def test_choose_snippet_blocks_env_override(monkeypatch):
+    monkeypatch.setenv("CORPUS_NATIVE_SNIPPET_BLOCKS", "1")
+    assert native_live.choose_snippet_blocks([20], 20 * 64) == 1
+    monkeypatch.setenv("CORPUS_NATIVE_SNIPPET_BLOCKS", "3")
+    assert native_live.choose_snippet_blocks([20] * 10, 200 * 64) == 3
+    monkeypatch.setenv("CORPUS_NATIVE_SNIPPET_BLOCKS", "auto")
+    assert native_live.choose_snippet_blocks([20], 1_280) == 3
+    monkeypatch.setenv("CORPUS_NATIVE_SNIPPET_BLOCKS", "4")
+    with pytest.raises(ValueError):
+        native_live.choose_snippet_blocks([20], 0)
+
+
+def test_compose_snippet_keeps_raw_whitespace_for_verbatim_copy():
+    """展示文本里的空白必须与原文一致，否则复制出的引文无法逐字命中。"""
+    from types import SimpleNamespace
+
+    raw = "第一行数据\n  第二行缩进　全角空格"
+    snippet = native_live.compose_snippet(
+        [SimpleNamespace(text=raw, slices=[SimpleNamespace(page=1)])]
+    )
+    assert "\n" in snippet
+    assert "　" in snippet
+    assert raw.split("。")[0] in snippet
+
+
+def test_search_forwards_pg_terms_without_reordering_handles(monkeypatch):
+    from plugins.corpus.retrieval.native import NativeBlock, NativeResult, NativeSpan
+
+    span = NativeSpan("unit:0001", 1, 0, 10, "hash")
+    blocks = (
+        NativeBlock("source", "b" * 64, "b:body:0001", None, "其他公司收入增长。", (span,)),
+        NativeBlock("source", "b" * 64, "b:body:0002", None, "光力科技收入增长。", (span,)),
+    )
+    result = NativeResult(
+        "光力科技收入",
+        "index",
+        blocks,
+        20,
+        16000,
+        20,
+        "2026-10-23",
+        (),
+        True,
+        query_terms=("光力科技", "收入"),
+    )
+    index = SimpleNamespace(
+        dates=[],
+        vectors={},
+        chunks=[
+            {
+                "build_id": b.build_id,
+                "chunk_id": b.chunk_id,
+                "kind": "body",
+                "title_text": "公司材料",
+                "input_hash": "",
+            }
+            for b in blocks
+        ],
+    )
+    monkeypatch.setattr(native_live, "configured_seed", lambda _: index)
+    monkeypatch.setattr(native_live, "refresh", lambda *_: index)
+    monkeypatch.setattr(native_live, "search_native", lambda *_, **__: result)
+    hits, _ = native_live.search("", "postgres", "光力科技收入", 10)
+    expected = tuple(
+        native_live.locator_for(
+            b.chunk_id,
+            b.text,
+            [
+                {
+                    "unit_id": span.unit_id,
+                    "page": span.page,
+                    "start": span.start,
+                    "end": span.end,
+                    "raw_sha256": span.raw_sha256,
+                }
+            ],
+        )
+        for b in blocks
+    )
+    assert hits[0].context_locators == expected
+    assert hits[0].locator == expected[0]
+    assert hits[0].snippet.startswith("【2/2")
+    assert "光力科技收入增长" in hits[0].snippet

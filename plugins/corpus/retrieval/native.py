@@ -50,6 +50,7 @@ class NativeBlock:
     published: str | None
     text: str
     slices: tuple[NativeSpan, ...]
+    unit_lengths: tuple[int, ...] = ()  # verified raw lengths; display continuity only
 
 
 @dataclass(frozen=True)
@@ -66,6 +67,7 @@ class NativeResult:
     retrieval_mode: str = "hybrid"
     fallback_reason: str | None = None
     blocks_ranked: int = 0
+    query_terms: tuple[str, ...] = ()  # existing PG query lexemes, for display only
 
 
 def raw_slices(projection: str, units: list[dict[str, Any]]) -> tuple[NativeSlice, ...]:
