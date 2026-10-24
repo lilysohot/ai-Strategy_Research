@@ -45,6 +45,19 @@ class Tool:
         }
 
 
+@dataclass(frozen=True)
+class ToolOutcome:
+    """Explicit result returned by a tool when success cannot be inferred safely.
+
+    Most legacy tools return plain strings. New or migrated tools can return this
+    wrapper so the runtime does not have to infer execution state from display
+    text or from a tool-specific JSON schema.
+    """
+
+    result: Any
+    is_error: bool = False
+
+
 _PRIMITIVE_TYPES: dict[Any, str] = {
     str: "string", int: "integer", float: "number", bool: "boolean",
     type(None): "null",

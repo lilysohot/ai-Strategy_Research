@@ -1224,6 +1224,11 @@ class BwrapSandbox:
             that omit it retain the larger file-processing limit.
     """
 
+    # Commands run in the mount namespace assembled below. Paths advertised to
+    # the model therefore remain the canonical mount paths; translating them to
+    # host directories would make those paths disappear inside the jail.
+    uses_canonical_mount_paths = True
+
     def __init__(
         self,
         *,
@@ -2147,6 +2152,11 @@ class CurrentSandbox:
                     identity.name, identity.uid,
                 )
             self.commands = _CurrentCommands(self._workdir, private_tmp=private_tmp)
+        # Ordinary container/native commands share the harness filesystem and
+        # need canonical aliases translated to their physical roots. The
+        # optional inner bwrap instead executes in a mount namespace and must
+        # retain those aliases, exactly like BwrapSandbox itself.
+        self.uses_canonical_mount_paths = self._inner is not None
         self.sandbox_id = f"current-{os.getpid()}"
         logger.info("CurrentSandbox attached: workdir=%s", self._workdir)
 
@@ -2564,15 +2574,18 @@ def resolve_runtime_path(path: str) -> str:
     given. Nothing here canonicalises the *result* — collapsing ``..`` against
     a symlinked directory would name a different file than the caller asked for.
 
-    Docker, container and bwrap modes expose real ``/workspace``, ``/outputs``
-    and ``/inputs`` mounts, so their configured roots equal the aliases and
-    this is a no-op. Native mode uses physical run-local directories because
-    hosts such as macOS do not allow creating writable mount points below ``/``.
+    A live bwrap or inner-bwrap sandbox executes in its own mount namespace, so
+    canonical paths must stay canonical even when the harness environment names
+    physical host roots. Ordinary container and native commands share the harness
+    filesystem and translate aliases to those physical roots.
 
     Only an exact alias or a component beneath it is rewritten. Relative paths
     and sibling names such as ``/outputs-old`` are intentionally unchanged.
     """
     if not path or not os.path.isabs(path):
+        return path
+    active_sandbox = get_existing_sandbox()
+    if bool(getattr(active_sandbox, "uses_canonical_mount_paths", False)):
         return path
     normalized = os.path.normpath(path)
     workspace, outputs, inputs = resolve_mount_dirs()

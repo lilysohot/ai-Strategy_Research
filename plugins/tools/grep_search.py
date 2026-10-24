@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import base64
+import json
 import logging
 import re
 from pathlib import Path
@@ -13,6 +15,109 @@ logger = logging.getLogger(__name__)
 
 _MAX_RESULT_CHARS = 8_000
 _MAX_MATCHES = 50
+
+_CONTEXT_RENDERER = r"""
+import base64
+import json
+import sys
+
+payload = json.loads(base64.b64decode(sys.argv[1]).decode("utf-8"))
+context = int(payload["context"])
+grouped = {}
+for item in payload["matches"]:
+    grouped.setdefault(item["path"], []).append(int(item["line"]))
+
+for file_index, (path, selected_lines) in enumerate(grouped.items()):
+    selected = set(selected_lines)
+    ranges = []
+    for line_number in sorted(selected):
+        start = max(1, line_number - context)
+        end = line_number + context
+        if ranges and start <= ranges[-1][1] + 1:
+            ranges[-1][1] = max(ranges[-1][1], end)
+        else:
+            ranges.append([start, end])
+    wanted = {number for start, end in ranges for number in range(start, end + 1)}
+    found = {}
+    try:
+        with open(path, "r", encoding="utf-8", errors="ignore") as handle:
+            for number, line in enumerate(handle, start=1):
+                if number in wanted:
+                    found[number] = line.rstrip("\n\r")
+                if ranges and number >= ranges[-1][1]:
+                    break
+    except OSError as exc:
+        print(f"cannot read {path}: {exc}", file=sys.stderr)
+        raise SystemExit(2)
+
+    if file_index:
+        print()
+    print(f"## {path}")
+    for range_index, (start, end) in enumerate(ranges):
+        if range_index:
+            print("--")
+        for number in range(start, end + 1):
+            if number not in found:
+                continue
+            prefix = ">" if number in selected else " "
+            print(f"{prefix}{number}: {found[number]}")
+""".strip()
+
+
+def _bounded_grep_command(command: str, limit: int) -> str:
+    """Limit stdout while preserving grep's own exit status.
+
+    ``head`` may close the pipe after the requested prefix, in which case grep
+    exits with SIGPIPE (141). That is a successful truncated probe; genuine grep
+    errors such as an invalid expression or missing path must still propagate.
+    """
+    return (
+        "set -o pipefail; "
+        f"{command} | head -n {limit}; "
+        "grep_status=${PIPESTATUS[0]}; "
+        'if [ "$grep_status" -eq 141 ]; then exit 0; fi; '
+        'exit "$grep_status"'
+    )
+
+
+def _parse_sandbox_matches(output: str, default_path: str) -> list[tuple[str, int, str]]:
+    """Parse ``grep -H -Z -n`` output, tolerating the legacy test shape."""
+    matches: list[tuple[str, int, str]] = []
+    for row in output.splitlines():
+        if "\0" in row:
+            file_path, location = row.split("\0", 1)
+        else:
+            file_path, location = default_path, row
+            with_file = re.match(r"^(.*):(\d+):(.*)$", row)
+            if with_file:
+                file_path = with_file.group(1)
+                location = f"{with_file.group(2)}:{with_file.group(3)}"
+        parsed = re.match(r"^(\d+):(.*)$", location)
+        if parsed:
+            matches.append((file_path, int(parsed.group(1)), parsed.group(2)))
+    return matches
+
+
+def _format_sandbox_matches(matches: list[tuple[str, int, str]], requested_path: str) -> str:
+    rows: list[str] = []
+    for file_path, line_number, content in matches:
+        prefix = "" if file_path == requested_path else f"{file_path}:"
+        rows.append(f"{prefix}{line_number}:{content}")
+    return "\n".join(rows)
+
+
+def _context_render_command(matches: list[tuple[str, int, str]], context_lines: int) -> str:
+    payload = {
+        "context": context_lines,
+        "matches": [
+            {"path": path, "line": line_number}
+            for path, line_number, _content in matches
+        ],
+    }
+    encoded = base64.b64encode(
+        json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+    ).decode("ascii")
+    return f"python3 -c {_shell_quote(_CONTEXT_RENDERER)} {_shell_quote(encoded)}"
 
 
 def _local_grep(
@@ -169,9 +274,15 @@ async def grep_search(
             # piped directly through ``head`` and returned a plausible-looking
             # prefix with no indication that more rows existed; a coordinator
             # could then cite that preview as the complete input.
-            cmd = f"grep -rn --include='*' -E {_shell_quote(pattern)} {_shell_quote(path)}"
+            cmd = (
+                "grep -rnH -Z --include='*' -E "
+                f"{_shell_quote(pattern)} -- {_shell_quote(path)}"
+            )
             if glob:
-                cmd = f"grep -rn --include={_shell_quote(glob)} -E {_shell_quote(pattern)} {_shell_quote(path)}"
+                cmd = (
+                    f"grep -rnH -Z --include={_shell_quote(glob)} -E "
+                    f"{_shell_quote(pattern)} -- {_shell_quote(path)}"
+                )
             # Same rule as ``_local_grep``: the spill store stays out of ordinary
             # recursive discovery — surfacing it lets the agent re-read bodies
             # compaction just dropped — but an explicit recovery path is an
@@ -179,8 +290,8 @@ async def grep_search(
             # this branch is the one real workspace paths take, so it needs the
             # same rule or the store is only hidden when the sandbox is absent.
             if ".spill" not in Path(path).parts:
-                cmd = cmd.replace("grep -rn", "grep -rn --exclude-dir=.spill", 1)
-            probe_cmd = cmd + f" | head -n {max_results + 1}"
+                cmd = cmd.replace("grep -rnH", "grep -rnH --exclude-dir=.spill", 1)
+            probe_cmd = _bounded_grep_command(cmd, max_results + 1)
 
             result = sandbox.commands.run(probe_cmd, timeout=30)
             probe_output = result.stdout or ""
@@ -194,24 +305,22 @@ async def grep_search(
             if not probe_output.strip():
                 return f"No matches found for pattern '{pattern}' in {path}"
 
-            probe_lines = probe_output.splitlines()
-            truncated = len(probe_lines) > max_results
+            probe_matches = _parse_sandbox_matches(probe_output, path)
+            if not probe_matches:
+                return "Error: grep returned output in an unsupported format"
+            truncated = len(probe_matches) > max_results
+            displayed_matches = probe_matches[:max_results]
             if context_lines > 0:
-                contextual_cmd = cmd.replace(
-                    "grep -rn", f"grep -rn -C {context_lines}", 1,
-                )
-                # N disjoint matches have at most N*(1+2C) context lines and
-                # N-1 ``--`` separators. Keep this second read bounded.
-                line_limit = max_results * (1 + 2 * context_lines) + max_results - 1
                 context_result = sandbox.commands.run(
-                    contextual_cmd + f" | head -n {line_limit}", timeout=30,
+                    _context_render_command(displayed_matches, context_lines),
+                    timeout=30,
                 )
-                if context_result.exit_code not in (0, 1):
+                if context_result.exit_code != 0:
                     error = context_result.stderr or "unknown error"
-                    return f"Error: grep failed: {error}"
+                    return f"Error: context rendering failed: {error}"
                 output = context_result.stdout or ""
             else:
-                output = "\n".join(probe_lines[:max_results])
+                output = _format_sandbox_matches(displayed_matches, path)
 
             if truncated:
                 output += (

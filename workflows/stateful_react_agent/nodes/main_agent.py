@@ -94,6 +94,10 @@ from plugins.tools.task_board import (
     restore_board_from_messages,
 )
 from workflows._shared.cross_mode_context import append_context_to_question
+from workflows._shared.sandbox_mounts import (
+    resolve_sandbox_mount_metadata,
+    workspace_root_override,
+)
 from workflows.stateful_react_agent._runtime import (
     ReactToolResultPostProcessor,
     _minimal_best_effort_answer,
@@ -447,8 +451,8 @@ def _resolve_conversation_path(state: dict[str, Any], task_id: str) -> Path:
 
 def _resolve_worktree_root(state: dict[str, Any], task_id: str) -> Path:
     md = state.get("metadata") or {}
-    if md.get("_sandbox_workspace_root"):
-        return Path(md["_sandbox_workspace_root"])
+    if override := workspace_root_override(md):
+        return override
     trial_dir = md.get("_trial_dir")
     if trial_dir:
         return Path(trial_dir) / "sandbox" / "worktree"
@@ -467,27 +471,11 @@ def _resolve_sandbox_binds(
     worktree_root: Path,
 ) -> tuple[tuple[tuple[str, str, bool], ...], Path]:
     """Resolve benchmark-provided ``/inputs`` and shared ``/outputs`` mounts."""
-    metadata = state.get("metadata") or {}
-    outputs_dir = Path(metadata.get("_sandbox_outputs_dir") or worktree_root.parent / "outputs")
-
-    binds: list[tuple[str, str, bool]] = []
-    dataset_root = str(metadata.get("_dataset_root") or "")
-    for mount in metadata.get("_sandbox_mounts") or []:
-        src = str(mount.get("src", "")).strip()
-        dst = str(mount.get("dst", "")).strip()
-        if not src or not dst:
-            continue
-        if not dst.startswith("/inputs"):
-            logger.warning("sandbox mount dst not under /inputs, skipped: %s", dst)
-            continue
-        src_path = Path(src)
-        if not src_path.is_absolute() and dataset_root:
-            src_path = Path(dataset_root) / src_path
-        read_only = str(mount.get("mode", "ro")).lower() != "rw"
-        binds.append((str(src_path.expanduser().resolve()), dst, read_only))
-
-    binds.append((str(outputs_dir), "/outputs", False))
-    return tuple(binds), outputs_dir
+    inputs, outputs_dir = resolve_sandbox_mount_metadata(
+        state.get("metadata") or {},
+        worktree_root,
+    )
+    return (*inputs, (str(outputs_dir), "/outputs", False)), outputs_dir
 
 
 def _shallow_entries(root: str, *, limit: int = 40) -> list[str]:

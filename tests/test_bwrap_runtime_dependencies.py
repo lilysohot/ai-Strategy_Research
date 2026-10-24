@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import os
 import sys
 from pathlib import Path
@@ -108,3 +109,161 @@ def test_bwrap_can_read_resolver_and_run_the_configured_venv(
     assert resolver.exit_code == 0, resolver.stderr
     assert interpreter.exit_code == 0, interpreter.stderr
     assert interpreter.stdout.strip() == sys.prefix
+
+
+@pytest.mark.skipif(sys.platform != "linux", reason="bubblewrap is Linux-only")
+def test_sandbox_grep_preserves_errors_and_limits_context_matches(tmp_path: Path) -> None:
+    """The sandbox branch must count matches and retain grep's own failures."""
+    from plugins.tools import _sandbox
+    from plugins.tools._sandbox import (
+        BwrapSandbox,
+        clear_task_sandbox,
+        set_task_sandbox,
+    )
+    from plugins.tools.grep_search import grep_search
+
+    if not _sandbox.bwrap_available():
+        pytest.skip("bubblewrap unavailable")
+    workspace = tmp_path / "workspace"
+    workspace.mkdir()
+    (workspace / "dense.txt").write_text(
+        "\n".join(f"match {index}" for index in range(1, 21)),
+        encoding="utf-8",
+    )
+    sandbox = BwrapSandbox(workspace=workspace)
+    token = set_task_sandbox(sandbox)
+    try:
+        output = asyncio.run(grep_search.ainvoke({
+            "pattern": "match",
+            "path": "/workspace/dense.txt",
+            "max_results": 3,
+            "context_lines": 1,
+        }))
+        invalid = asyncio.run(grep_search.ainvoke({
+            "pattern": "[",
+            "path": "/workspace/dense.txt",
+        }))
+        missing = asyncio.run(grep_search.ainvoke({
+            "pattern": "match",
+            "path": "/workspace/missing.txt",
+        }))
+    finally:
+        clear_task_sandbox(token)
+        sandbox.kill()
+
+    match_rows = [line for line in output.splitlines() if line.startswith(">")]
+    assert len(match_rows) == 3, output
+    assert "Results truncated" in output
+    assert invalid.startswith("Error: grep failed:"), invalid
+    assert missing.startswith("Error: grep failed:"), missing
+
+
+@pytest.mark.skipif(sys.platform != "linux", reason="bubblewrap is Linux-only")
+def test_read_file_recovers_a_spilled_result_through_the_bwrap_mount(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A model-visible ``/spill`` path must stay in the bwrap namespace.
+
+    The harness writes the body to a host directory and BwrapSandbox mounts that
+    directory read-only at ``/spill``. Rewriting the visible path back to the
+    host directory before invoking the sandbox makes read_file target a path the
+    jail cannot see, even though ``cat /spill/...`` succeeds in the same jail.
+    """
+    from frontier_agent.core.execution_context import (
+        ExecutionScope,
+        reset_current_execution_scope,
+        set_current_execution_scope,
+    )
+    from plugins.tools import _overflow, _sandbox
+    from plugins.tools._sandbox import (
+        BwrapSandbox,
+        clear_task_sandbox,
+        set_task_sandbox,
+    )
+    from plugins.tools.glob_search import glob_search
+    from plugins.tools.grep_search import grep_search
+    from plugins.tools.read_file import read_file
+
+    if not _sandbox.bwrap_available():
+        pytest.skip("bubblewrap unavailable")
+
+    monkeypatch.setenv("SANDBOX_BACKEND", "bwrap")
+    monkeypatch.setenv("APODEX_SPILL_DIR", str(tmp_path / "spill-store"))
+    scope_token = set_current_execution_scope(
+        ExecutionScope(task_id="spill-read", metadata={"llm_session_id": "session"}),
+    )
+    saved_stores = set(_overflow._created_stores)
+    sandbox: BwrapSandbox | None = None
+    sandbox_token = None
+    try:
+        visible = _overflow.spill_compacted_body(
+            "bash", "RECOVERED THROUGH BWRAP\n" + "detail " * 400,
+        )
+        assert visible and visible.startswith("/spill/")
+
+        sandbox = BwrapSandbox(workspace=tmp_path / "workspace")
+        sandbox_token = set_task_sandbox(sandbox)
+        shell_read = sandbox.commands.run(f"grep -q 'RECOVERED THROUGH BWRAP' {visible}")
+        readout = asyncio.run(
+            read_file.ainvoke({"path": visible, "max_chars": 8_000}),
+        )
+        grep_out = asyncio.run(
+            grep_search.ainvoke({
+                "pattern": "RECOVERED THROUGH BWRAP",
+                "path": visible,
+            }),
+        )
+        glob_out = asyncio.run(
+            glob_search.ainvoke({
+                "pattern": "*.md",
+                "path": visible.rsplit("/", 1)[0],
+            }),
+        )
+    finally:
+        if sandbox_token is not None:
+            clear_task_sandbox(sandbox_token)
+        if sandbox is not None:
+            sandbox.kill()
+        reset_current_execution_scope(scope_token)
+        _overflow._created_stores.clear()
+        _overflow._created_stores.update(saved_stores)
+
+    assert shell_read.exit_code == 0, shell_read.stderr
+    assert "RECOVERED THROUGH BWRAP" in readout, readout
+    assert "RECOVERED THROUGH BWRAP" in grep_out, grep_out
+    assert visible.rsplit("/", 1)[1] in glob_out, glob_out
+
+
+def test_current_namespace_still_resolves_canonical_paths_to_physical_roots(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Native/ordinary-container commands share the harness filesystem."""
+    from types import SimpleNamespace
+
+    from plugins.tools._sandbox import (
+        clear_task_sandbox,
+        resolve_runtime_path,
+        set_task_sandbox,
+    )
+
+    workspace = tmp_path / "workspace"
+    outputs = tmp_path / "outputs"
+    inputs = tmp_path / "inputs"
+    spill = tmp_path / "spill"
+    for directory in (workspace, outputs, inputs, spill):
+        directory.mkdir()
+    monkeypatch.setenv("FRONTIER_AGENT_WORKSPACE_DIR", str(workspace))
+    monkeypatch.setenv("FRONTIER_AGENT_OUTPUTS_DIR", str(outputs))
+    monkeypatch.setenv("FRONTIER_AGENT_INPUTS_DIR", str(inputs))
+    monkeypatch.setenv("APODEX_SPILL_DIR", str(spill))
+
+    token = set_task_sandbox(SimpleNamespace(uses_canonical_mount_paths=False))
+    try:
+        assert resolve_runtime_path("/workspace/a.txt") == str(workspace / "a.txt")
+        assert resolve_runtime_path("/outputs/a.txt") == str(outputs / "a.txt")
+        assert resolve_runtime_path("/inputs/a.txt") == str(inputs / "a.txt")
+        assert resolve_runtime_path("/spill/a.txt") == str(spill / "a.txt")
+    finally:
+        clear_task_sandbox(token)

@@ -2,8 +2,8 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 日期 | v3.10 · 2026-10-24，基础接线见 §15，前端入口见 §17，简单单轮实测见 §19，复杂工具链审计及首批修复见 §20 |
-| 状态 | **有效 · 简单团队单轮与停止通过；复杂工具任务尚未通过，T03/T04 已修复并局部实测，其他缺口及完整端到端重验仍待完成；既有服务功能开关保持关闭** |
+| 版本 / 日期 | v3.12 · 2026-10-24，基础接线见 §15，前端入口见 §17，简单单轮实测见 §19，复杂工具链审计及复核修复见 §20 |
+| 状态 | **有效 · 简单团队单轮与停止通过；复杂工具任务尚未通过，T03/T04/T06/T07 已修复并局部实测，其他缺口及完整端到端重验仍待完成；既有服务功能开关保持关闭** |
 | 需求 | PR-RUN-08；关联 PR-RUN-01—06、PR-DATA-04、PR-BIZ-04 |
 | 产品依据 | [产品需求基线](../product-requirements.md) · [业务流程](../business-process.md) |
 | 历史方案 | [v1.4 双工作流交接](web-agent-team-run-mode-v1-history.md) · [v2.1 固定主 Agent 与团队阶段](web-agent-team-run-mode-v2-history.md)；均为历史，不再作为执行清单 |
@@ -738,3 +738,55 @@ Bridge、SSE 轨迹回放及 `/trace` 投影复用同一规则。`/trace` 仅在
 状态栏、正常终态、F05/F06、bwrap 与上传链路 **110 passed**；Ruff 通过，Pyright 0
 errors，stage-1 import smoke **427/427**，目标 diff check 通过。下一项为 T07 spill
 恢复路径；T05 仍只完成错误事件投影，团队多轨迹定位与合并尚未关闭。
+
+### 20.7 T03/T06 关闭结论复核与二次修复（2026-10-24）
+
+对 §20.5—20.6 按生产调用链重新审查后，原“关闭”结论发现三个漏测反例，先重新打开、
+补失败测试，再完成二次修复：
+
+- `grep_search(context_lines>0)` 原先按最大输出行数截断完整 `grep -C`，连续匹配时
+  `max_results=3` 实际可显示 11 条匹配。现在先取得前 `N+1` 个无上下文匹配，再只为前
+  `N` 个匹配生成合并上下文；匹配上限由高亮匹配数决定，截断标记仍由第 `N+1` 条判定。
+- `grep | head` 原先返回 `head` 的状态，非法正则和不存在路径都会伪装成
+  `No matches found`。现在保留 grep 自身退出状态，仅将因截断产生的 SIGPIPE 视为成功；
+  真实 grep 错误返回 `Error: grep failed` 并由统一工具错误契约标记失败。
+- T06 原先只识别文本前缀，漏掉团队默认 `download_file` 的
+  `{"status":"error"}` 及其他工具的 `{"ok":false}` / `{"success":false}`。
+  kernel 现在在字符串化前检查结构化返回值，兼容解析上述 JSON 协议，并新增
+  `ToolOutcome(result, is_error)` 作为新工具可显式使用的结果契约；`[no error]` 不再误判。
+  实时 Bridge、SSE 回放和分页 `/trace` 共用同一投影，旧轨迹仍只在读取时修正。
+
+同时将 single/team 重复的 `_sandbox_mounts` 解析收敛到共享模块，并拒绝
+`/inputs_evil`、`/inputs/../etc` 等并不真正位于 `/inputs` 下的目标；两条工作流对 `~`
+来源路径的处理也已一致，任何 `mode=rw` 输入声明都会被强制降为只读。T04 的 resolver、
+uv 解释器与 Web 附件挂载结论未被推翻。
+
+本轮以 9 个可稳定复现的失败断言起步，修复后 Agent Team、AgentBus、single、跨模式上下文、
+实时/分页回放、上传、bwrap、路径授权和工具截断相关回归 **357 passed**；目标 Ruff、目标
+Pyright、stage-1 import smoke **428/428**、symbol closure（526 文件、0 缺失）及目标
+diff check 通过。T03 与 T06 据此再次关闭；T05/T07/T08 仍保持开放，下一项仍为 T07 spill
+恢复路径，之后必须重跑 §20.1 的完整对账与联网任务，不能用本轮组件回归代替端到端验收。
+
+### 20.8 T07 spill 恢复路径关闭（2026-10-24）
+
+T07 已关闭。根因是 `resolve_runtime_path` 只根据宿主环境中的物理目录改写规范路径，未识别
+当前工具命令实际运行在 bwrap 的挂载命名空间中。bwrap 已将宿主 spill 根只读挂载为
+`/spill`；`read_file` 却把有效的 `/spill/<scope>/<file>` 改回宿主绝对路径，再把该路径传入
+沙箱，因而同一文件可由沙箱内 shell 读取，却被 reader 报为不存在。
+
+现在相关 sandbox 显式声明其命令是否使用规范挂载路径：BwrapSandbox 及启用
+inner-bwrap 的 CurrentSandbox 保留 `/workspace`、`/inputs`、`/outputs`、`/spill`；
+普通 container/native CurrentSandbox 仍按既有规则映射到物理目录。改动位于共享路径解析
+层，因此 `read_file`、`grep_search`、`glob_search` 及写入工具使用同一命名空间语义，没有
+增加 reader 专用旁路。`recover_result(turn, call_id)` 直接读取当前 Agent 的轨迹并分页返回
+文本，不接受 spill 文件路径，属于独立恢复机制，本缺陷未经过该入口。
+
+新增真实 bwrap 回归先稳定复现：沙箱 shell 能读 spill，而 `read_file` 收到
+`FileNotFoundError`；修复后同一 `/spill/...` 引用经 shell、`read_file`、`grep_search` 均
+读回标记内容，`glob_search` 也能列出该恢复文件。另锁定普通 native/container 命名空间
+仍将四个规范根映射到物理目录。
+相关 bwrap、路径授权、长上下文压缩、文件工具、挂载固定、single 与 Agent Team 工作流
+回归 **324 passed**；目标 Ruff、Pyright（0 errors）、stage-1 import smoke **428/428**、
+symbol closure（526 文件、0 缺失）及目标 diff check 通过。
+这只关闭恢复入口的一致性问题，不替代 §20.1 的复杂任务端到端复测；下一项按 §20.4
+处理 T02 首包预算传递，再处理 T01 队伍收尾顺序，T05/T08 仍保持开放。

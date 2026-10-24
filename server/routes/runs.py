@@ -793,7 +793,7 @@ async def run_trace(
     records, next_line, has_more = await asyncio.to_thread(trajectory_page, run_id, after, limit)
     return {
         "run_id": run_id,
-        "records": [redact_deep(rec) for rec in records],
+        "records": records,
         "completeness": inspect_trajectory(run_id).as_dict(),
         "next_line": next_line,
         "has_more": has_more,

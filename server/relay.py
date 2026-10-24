@@ -177,20 +177,25 @@ def trajectory_records_for_egress(run_id: str, after_line: int = 0) -> list[dict
     The record SHAPE is deliberately unchanged: the timeline view consumes these
     records directly, so only the values are masked.
     """
-    projected: list[dict] = []
-    for rec in trajectory_records(run_id, after_line=after_line):
-        safe = redact_deep(rec)
-        if (
-            safe.get("t") == "result"
-            and not safe.get("error")
-            and tool_result_text_is_error(str(safe.get("result", "") or ""))
-        ):
-            # Compatibility for trajectories written before the kernel derived
-            # ``is_error`` from legacy bracketed tool results. Keep disk audit
-            # bytes immutable while repairing the Web projection.
-            safe["error"] = True
-        projected.append(safe)
-    return projected
+    return [
+        project_trajectory_record_for_egress(rec)
+        for rec in trajectory_records(run_id, after_line=after_line)
+    ]
+
+
+def project_trajectory_record_for_egress(record: dict) -> dict:
+    """Redact one record and repair legacy tool-error flags for Web clients."""
+    safe = redact_deep(record)
+    if (
+        safe.get("t") == "result"
+        and not safe.get("error")
+        and tool_result_text_is_error(str(safe.get("result", "") or ""))
+    ):
+        # Compatibility for trajectories written before the kernel derived
+        # ``is_error`` from legacy string/JSON results. Keep disk audit bytes
+        # immutable while repairing every Web projection.
+        safe["error"] = True
+    return safe
 
 
 def trajectory_page(run_id: str, after_line: int = 0, limit: int = 0) -> tuple[list[dict], int, bool]:
@@ -228,7 +233,7 @@ def trajectory_page(run_id: str, after_line: int = 0, limit: int = 0) -> tuple[l
             # not return them either.
             if isinstance(rec, dict) and rec.get("t") == "attempt":
                 continue
-            out.append(rec)
+            out.append(project_trajectory_record_for_egress(rec))
             consumed_last = i
     return out, consumed_last, False
 

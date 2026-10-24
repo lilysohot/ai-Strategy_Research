@@ -100,6 +100,10 @@ from plugins.tools.task_board import (
     start_planning,
 )
 from workflows._shared.cross_mode_context import append_context_to_question
+from workflows._shared.sandbox_mounts import (
+    resolve_sandbox_mount_metadata,
+    workspace_root_override,
+)
 from workflows.agent_team.citation_url_repair import repair_citation_urls
 from workflows.agent_team.identity import (
     MAIN_AGENT_ID,
@@ -365,8 +369,8 @@ def _resolve_worktree_root(state: dict[str, Any], task_id: str) -> Path:
     _resolve_sandbox_binds); only ``/workspace`` lives under the returned root.
     """
     md = state.get("metadata") or {}
-    if md.get("_sandbox_workspace_root"):
-        return Path(md["_sandbox_workspace_root"])
+    if override := workspace_root_override(md):
+        return override
     trial_dir = md.get("_trial_dir")
     if trial_dir:
         return Path(trial_dir) / "sandbox" / "worktree"
@@ -408,26 +412,10 @@ def _resolve_sandbox_binds(
     Benchmarks with no input files (OneMillion, browsecomp) yield only the
     /outputs bind.
     """
-    md = state.get("metadata") or {}
-    outputs_dir = Path(md.get("_sandbox_outputs_dir") or worktree_root.parent / "outputs")
-
-    inputs: list[tuple[str, str, bool]] = []
-    dataset_root = str(md.get("_dataset_root") or "")
-    for m in md.get("_sandbox_mounts") or []:
-        src = str(m.get("src", "")).strip()
-        dst = str(m.get("dst", "")).strip()
-        if not src or not dst:
-            continue
-        if not dst.startswith("/inputs"):
-            logger.warning("sandbox mount dst not under /inputs, skipped: %s", dst)
-            continue
-        p = Path(src)
-        if not p.is_absolute() and dataset_root:
-            p = Path(dataset_root) / p
-        ro = str(m.get("mode", "ro")).lower() != "rw"
-        inputs.append((str(p.resolve()), dst, ro))
-
-    inputs_t = tuple(inputs)
+    inputs_t, outputs_dir = resolve_sandbox_mount_metadata(
+        state.get("metadata") or {},
+        worktree_root,
+    )
     main_binds = (*inputs_t, (str(outputs_dir), "/outputs", False))
     sub_binds = (*inputs_t, (str(outputs_dir), "/outputs", False))  # rw for subs too
     return main_binds, sub_binds, outputs_dir

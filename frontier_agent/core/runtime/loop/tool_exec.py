@@ -3,15 +3,16 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import re
 import time
-from collections.abc import Callable, Coroutine
+from collections.abc import Callable, Coroutine, Mapping
 from contextlib import suppress
 from dataclasses import replace
 from typing import Any, Protocol, runtime_checkable
 
 from frontier_agent.core.loop_types import ToolResult
-from frontier_agent.core.tool import Tool
+from frontier_agent.core.tool import Tool, ToolOutcome
 
 __all__ = [
     "PROTECTED_FANIN_TOOLS",
@@ -30,7 +31,25 @@ _BRACKETED_ERROR_RE = re.compile(
     r"^\[[^\]\r\n]*\berror\b[^\]\r\n]*\]",
     re.IGNORECASE,
 )
+_NEGATED_BRACKETED_ERROR_RE = re.compile(
+    r"^\[[^\]\r\n]*\b(?:no|without)\s+error\b[^\]\r\n]*\]",
+    re.IGNORECASE,
+)
 _EXIT_CODE_PREFIX_RE = re.compile(r"^\[Exit code\s+(-?\d+)\]", re.IGNORECASE)
+_ERROR_STATUSES = frozenset({"error", "failed", "failure", "timed_out", "timeout"})
+
+
+def _structured_result_is_error(value: Mapping[object, object]) -> bool:
+    """Classify the small set of success fields used by built-in tools."""
+    lowered = {str(key).lower(): item for key, item in value.items()}
+    ok = lowered.get("ok")
+    if isinstance(ok, bool):
+        return not ok
+    success = lowered.get("success")
+    if isinstance(success, bool):
+        return not success
+    status = lowered.get("status")
+    return isinstance(status, str) and status.strip().lower() in _ERROR_STATUSES
 
 
 def tool_result_text_is_error(text: str) -> bool:
@@ -39,13 +58,31 @@ def tool_result_text_is_error(text: str) -> bool:
     Tool implementations historically returned both ordinary strings and
     bracketed error strings. Keep the compatibility rule prefix-scoped so a
     successful document containing words such as ``Error rate`` is not marked
-    failed. New callers should still set ``ToolResult.is_error`` explicitly.
+    failed. New callers should return :class:`~frontier_agent.core.tool.ToolOutcome`
+    when they need to classify a result explicitly.
     """
     value = str(text or "").lstrip()
-    if _ERROR_PREFIX_RE.match(value) or _BRACKETED_ERROR_RE.match(value):
+    if _ERROR_PREFIX_RE.match(value):
+        return True
+    if _BRACKETED_ERROR_RE.match(value) and not _NEGATED_BRACKETED_ERROR_RE.match(value):
         return True
     match = _EXIT_CODE_PREFIX_RE.match(value)
-    return bool(match and int(match.group(1)) != 0)
+    if match:
+        return int(match.group(1)) != 0
+    if value.startswith("{"):
+        try:
+            payload = json.loads(value)
+        except (TypeError, ValueError):
+            return False
+        if isinstance(payload, Mapping):
+            return _structured_result_is_error(payload)
+    return False
+
+
+def _tool_return_is_error(raw: Any, rendered: str) -> bool:
+    if isinstance(raw, Mapping):
+        return _structured_result_is_error(raw)
+    return tool_result_text_is_error(rendered)
 
 
 def _result_cap() -> int:
@@ -264,6 +301,10 @@ async def execute_tools(
                     tool.ainvoke(args),
                     timeout=effective_timeout,
                 )
+            explicit_error: bool | None = None
+            if isinstance(raw, ToolOutcome):
+                explicit_error = raw.is_error
+                raw = raw.result
             result_str = str(raw) if raw is not None else ""
             if len(result_str) > _result_cap():
                 result_str = _truncate_with_recovery(name, result_str)
@@ -274,7 +315,11 @@ async def execute_tools(
                 result=result_str,
                 duration_ms=elapsed,
                 tool_call_id=tool_call_id,
-                is_error=tool_result_text_is_error(result_str),
+                is_error=(
+                    explicit_error
+                    if explicit_error is not None
+                    else _tool_return_is_error(raw, result_str)
+                ),
                 # If a report and a user message became ready in the same event
                 # loop tick, preserve the real report and still tell the loop
                 # to inject the already-claimed user message before its next

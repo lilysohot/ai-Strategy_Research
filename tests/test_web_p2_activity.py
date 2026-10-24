@@ -112,6 +112,18 @@ async def test_bridge_does_not_scan_success_body_for_error_words():
     assert queue.get_nowait()["ok"] is True
 
 
+async def test_bridge_classifies_json_error_result():
+    queue: asyncio.Queue = asyncio.Queue()
+    obs = BridgeObserver(queue=queue)
+
+    await obs.on_tool_result(
+        SimpleNamespace(turn=1),
+        _result('{"status": "error", "error": "download timed out"}'),
+    )
+
+    assert queue.get_nowait()["ok"] is False
+
+
 # — relay (replay path) ———————————————————————————————
 def test_replay_marks_synthetic_result_skipped():
     events = _traj_record_to_events({
@@ -153,6 +165,21 @@ def test_replay_classifies_legacy_error_text_when_error_flag_is_false():
         "tool_call_id": "call_9",
         "name": "read_file",
         "result": "[read_file error] exit=1: FileNotFoundError",
+        "error": False,
+        "ms": 5,
+    })
+
+    finished = [event for event in events if event["type"] == "tool_finished"]
+    assert finished[0]["ok"] is False
+
+
+def test_replay_classifies_json_error_when_error_flag_is_false():
+    events = _traj_record_to_events({
+        "t": "result",
+        "turn": 3,
+        "tool_call_id": "call_10",
+        "name": "download_file",
+        "result": '{"status": "error", "error": "download timed out"}',
         "error": False,
         "ms": 5,
     })

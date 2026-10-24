@@ -15,7 +15,7 @@ import json
 
 import pytest
 
-from server.relay import trajectory_records_for_egress
+from server.relay import trajectory_page, trajectory_records_for_egress
 
 _SECRET = "sk-abcdef1234567890"
 
@@ -93,3 +93,16 @@ def test_trace_repairs_legacy_string_error_flag(run_dir):
 
 def test_missing_trajectory_file_yields_no_records(run_dir):
     assert trajectory_records_for_egress("run-f05") == []
+
+
+def test_paged_trace_egress_repairs_legacy_json_error(run_dir):
+    _write(run_dir, [{
+        "t": "result",
+        "name": "download_file",
+        "result": '{"status": "error", "error": "download timed out"}',
+        "error": False,
+    }])
+
+    records, _next_line, _has_more = trajectory_page("run-f05", limit=10)
+
+    assert records[0]["error"] is True
