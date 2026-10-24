@@ -100,16 +100,35 @@ server/*.db
 .scratch/corpus-vector-pilot-20261020/
 .scratch/corpus-contextual-prefix-20261020
 
-# ── .scratch 通用运行产物 ─────────────────────────────────────────────
-# 不整目录忽略 .scratch：AGENTS.md 将其定义为 issue tracker，docs/ 下 100 个
-# 文件、1729 处相对链接指向 spec / issues / report / 证据 json。
-# 这里只挡可再生成的产物，新实验目录无需再逐条加规则。
+# ── .scratch 实验产物：默认忽略，白名单放行 ─────────────────────────
+# 背景：AGENTS.md 把 .scratch/<slug>/ 定义为 issue tracker，docs/ 与 README
+# 有大量相对链接指向 spec.md / issues/ / report.md / 证据 json；但每个隔离实验
+# 都会新开一个目录，逐条加规则不可持续（且日期后缀无法区分两类目录）。
+#
+# 方案：默认忽略 .scratch 下所有一级子目录，仅显式放行被仓库文档引用的目录。
+# 新增实验目录无需改本文件；某目录确实要入库时，在下方加一行 ! 放行。
+# 注意：gitignore 不解除已跟踪文件，历史产物需 `git rm -r --cached <dir>` 清理。
+.scratch/*/
+
+# 白名单：被 docs/ AGENTS.md 引用、需要入库的目录
+!.scratch/corpus-evidence-pipeline/
+!.scratch/claims-r2-role-isolation/
+!.scratch/web-runtime-trace-hardening/
+!.scratch/web-business-repairs/
+!.scratch/web-business-session-plan/
+!.scratch/web-business-context/
+!.scratch/web-input-request-fix-20261009/
+!.scratch/cli-web-parity/
+!.scratch/a4-loop-20260929/
+!.scratch/m6-retrieval-fix-20260923/
+!.scratch/m6-repair-20260923/
+!.scratch/corpus-new7-20261021/
+!.scratch/corpus-native-tools-20261022/
+!.scratch/corpus-production-release-20261022/
+!.scratch/corpus-production-release-20261024/
+!.scratch/p0a-research-kernel/
+
+# 兜底：即使在白名单目录内，也忽略可再生成的产物
 .scratch/**/*.log
 .scratch/**/*.pid
 .scratch/**/live/
-.scratch/corpus-body-ranking-20261021/
-.scratch/corpus-native5-ranking-20261021/
-.scratch/corpus-native5-eval-20261021/
-.scratch/corpus-combined57-20261021/
-.scratch/corpus-native-integration-20261021/
-.scratch/corpus-context-inventory-20261022/
