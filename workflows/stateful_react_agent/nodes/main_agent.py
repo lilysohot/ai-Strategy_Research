@@ -118,6 +118,7 @@ logger = logging.getLogger(__name__)
 #: 这些停止原因意味着本轮没有形成结论，即使模型留下了一段像答案的文字。
 _INFRA_STOP_REASONS = frozenset(
     {
+        "strategy_validation_failed",
         "llm_error",
         "wall_deadline",
         "budget_exhausted",
@@ -1073,6 +1074,10 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     # Task-board mode: re-inject the board on a cooldown so it survives
     # KeepLastN compaction (parity with agent_team). No-op if the agent never
     # writes a board; meaningless in direct mode (no tools).
+    if "investment_strategy_lint" in tool_names:
+        from plugins.tools.investment_strategy import InvestmentStrategyObserver
+
+        observers.append(InvestmentStrategyObserver())
     if task_board and not direct:
         observers.append(build_task_board_observer())
     if not direct:
@@ -1362,6 +1367,15 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
             type(exc).__name__,
             exc,
         )
+    from plugins.tools.investment_strategy import publication_boundary as strategy_boundary
+    from plugins.tools.investment_strategy import validation_snapshot
+
+    strategy_result = strategy_boundary(final_text, answer_status)
+    final_text = strategy_result["final_text"]
+    answer_status = strategy_result["answer_status"]
+    strategy_verdict = validation_snapshot()
+    if strategy_verdict and not strategy_verdict.get("passed") and result.stopped_by == "no_tool":
+        result.stopped_by = "strategy_validation_failed"
     return {
         "final_answer": final_text,
         "final_content": final_text,

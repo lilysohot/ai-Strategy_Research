@@ -35,6 +35,7 @@ import json
 import logging
 import os
 from collections.abc import Callable
+from contextlib import suppress
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
@@ -48,6 +49,7 @@ from frontier_agent.core.loop_types import (
 )
 from frontier_agent.core.messages import Message, text_of
 from plugins.corpus.search_evidence import search_evidence_items
+from plugins.corpus.search_refs import SearchReferenceError, canonical_locator, offered_hit
 from plugins.corpus.structured.consumption import (
     SEMANTIC_TOOL,
     ReportSemanticReference,
@@ -304,6 +306,7 @@ class ConsumptionLedger:
             # Repeated searches can expose new passages within the same scope.
             for item in search_evidence_items(hit):
                 self._add_fragment(item, hit["doc_id"], turn, origin=TOOL_SEARCH)
+            hit = offered_hit(hit)
             locators = [str(x) for x in (hit.get("context_locators") or [])]
             if not locators:
                 continue
@@ -337,6 +340,9 @@ class ConsumptionLedger:
         else:
             mode = "single"
             locators = [str(args.get("locator") or "")] if args.get("locator") else []
+        # Failed aliases remain recorded as attempts; they grant no evidence.
+        with suppress(SearchReferenceError):
+            locators = [canonical_locator(str(args.get("doc_id") or ""), loc) for loc in locators]
         self.requested.append(
             {
                 "doc_id": str(args.get("doc_id") or ""),
@@ -1192,6 +1198,7 @@ def _verify_conclusion(
                 )
                 continue
             try:
+                locator = canonical_locator(doc_id, locator)
                 source_text = resolve(doc_id, locator)
             except Exception as exc:
                 # 评审 C7：基础设施故障与确定性缺口分开——

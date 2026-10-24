@@ -143,3 +143,204 @@ Agent 应能说明当前还需要什么，例如缺期间、另一家公司、�
 5. 以内容是否足够为主比较结果，再确定实现细节与启用范围；执行产物见混合检索方案 §30.4。
 
 现有版本、范围、权限和引用规则在实现正式调整前继续有效；这不要求把优化方案写成僵硬流程。展示选择的本地实现进展见页首；其余讨论不表示已经批准某种新协议或开始生产改造。
+
+## 8. 2026-10-24 返回结构精简（兼容版）
+
+用户在正式发布后提出“那么先从返回结构上做优化”，本阶段只调整工具输出适配器
+`plugins/tools/corpus_search.py`。上轮检索排序、来源过滤、片段选择与索引冻结继续有效；
+102 个原冻结文件中只有该工具适配器变化，其余 101 个哈希不变。
+
+### 已实现
+
+- 原生正常命中的重复 `hint` 从 712 字符缩为 93 字符。固定证据资格、成员映射、
+  Unicode 坐标、分页、范围边界规则移至工具定义的模型可见说明（位于 Args 之前）。
+  没有有效证据区间的预览结果使用单独提示，明确需 fetch；预算省略时追加省略提示。
+- 每条命中先放标题、日期、正文和证据坐标，再放长句柄数组及统计。字段值保持原样，
+  原生 JSON 去除键值分隔处的空格；不会改动字符串内部的空白、换行或证据偏移。
+- 新增顶层 `delivery.evidence_characters` 与 `delivery.evidence_blocks`，统计实际
+  返回消息中可校验的原文字符数、不同证据块数。使用同一证据解码器验证区间和哈希；
+  不把标签、句内预览、索引说明或未展示候选算入。块数按 doc_id + locator 去重；
+  字符数是展示证据区间长度之和，不代表全文覆盖率或结论充分性。
+- 原生结果被预算裁剪后，`count` 等于实际保留的命中数；`hits_total` 与
+  `hits_elided` 保留原数量和累计省略数。每次裁剪重算 delivery，不沿用裁剪前统计。
+  命中仍按尾部整条省略，不截断正文、证据描述或候选数组。
+- `coverage.native.body_characters` / `blocks_returned` 保留原候选范围统计，
+  在工具定义中明确其与 delivery 的区别。`title` 仍是首命中块标题，本阶段不
+  新增元数据查询或将章节名冒充文档名。
+
+例如工业富联样例新增的字段为：
+
+```json
+"delivery": {"evidence_characters": 807, "evidence_blocks": 2}
+```
+
+它与候选范围的 7135 字、17 块是不同口径。只剩预览时两项为零，不代表没有资料。
+
+### 同结果对照
+
+每题只执行一次真实检索，将同一批 SearchHit/coverage 交给新旧工具序列化，排除
+独立查询、embedding 与排序波动的干扰。三题均 hybrid，无降级；全部命中字段值、
+正文、句柄、顺序、区间、哈希和 coverage 逐项相同，差别仅为字段排列、hint、
+delivery 和 JSON 分隔空格。引用经真实 PG fetch 和账本 resolver 校验通过。
+
+| 查询 | 原返回字符 | 新返回字符 | 减少 |
+|---|---:|---:|---:|
+| 工业富联 竞争优势 | 4778 | 4075 | 14.71% |
+| 茅台双锚定价 | 6403 | 5637 | 11.96% |
+| NPO/CPO | 4856 | 4154 | 14.46% |
+
+6000 字符预算下，茅台旧格式返回预算错误，新格式能完整保留 1052 字原文证据。
+三题在 3000/4000/6000/8000/12000 五档预算下均无证据交付退步；预算足够时
+没有扩大原文选段。以上是 JSON 字符数，不是 token 或整体调用费用：工具定义
+说明同时由 310 增至 895 字符，规则仍占模型输入，只是不再在每条工具结果中重复。
+
+对照脚本及完整数据：[compare.py](../../.scratch/corpus-search-wire-20261024/compare.py)、
+[comparison.json](../../.scratch/corpus-search-wire-20261024/comparison.json)。
+可直接审核 [工业富联新返回](../../.scratch/corpus-search-wire-20261024/query-1-after.json)。
+
+### 验证与启用边界
+
+156 项直接相关测试通过；扩展至账本、证据流程、guard 和会话继承后，308 项通过、
+1 项失败。失败为 `test_the_session_store_revision_is_wired_into_the_graph` 将迁移
+head 写死为 0020，但已有 0021；用修改前 search 模块仍可复现，未修改此无关测试。
+Ruff、格式检查、定向 Pyright 通过；真实模型 preflight、两阶段 import smoke
+（419/419、468/468）与符号闭合检查（517 文件）通过。
+
+保留 `native-search-evidence-v1`、snippet、evidence_spans 及完整 context_locators，
+历史消息无需迁移；账本仍只认可完整实际送达的工具原文，摘要不自动升级为证据。
+尚未实施 excerpts 新协议、候选范围句柄替换或文档级标题统一，也未改 fetch 返回。
+正常空命中及旧检索分流提示保持原行为。
+
+Web Agent 的研究 worker 每轮以新进程加载工具，因此修改后新启动的任务可读取
+此适配器；已有运行中进程及历史轨迹不会自动替换。本阶段没有重启 API、创建真实
+用户对话或执行浏览器端完整 Agent 作答。`/api/corpus/search` 资料列表接口仍直接
+返回服务层 SearchHit，不包含工具层新加的 delivery/hint；不能将两种返回结构混同。
+本轮只验证结构与证据兼容，不宣称选段质量或模型引用正确率已经提高。
+
+## 9. 2026-10-24 v2 原文与持久化引用分离（已启用）
+
+用户要求继续优化 evidence_spans、by_kind 等结构占位后，已实现原生 search v2。
+该阶段取代 §8 的默认原生返回，v1 解码及存储故障时的完整 v1 返回继续支持。
+
+### 模型看到的结构
+
+每条命中保留 `doc_id`、`title`、`published`，正文改为
+`excerpts: [{text, ref}]`；`scope_ref` 指向原有完整候选范围，`available_blocks`
+给出候选总数。`evidence_contract=native-search-evidence-v2`。句内节选等未获
+证据资格的内容单独放入 `preview`，不会被隐式升级为证据。
+
+`evidence_spans`、整组 `context_locators`、`by_kind`、重复 source/build/chunk
+字段不再默认交给模型；它们与原 snippet 一起保存在完整收据中。
+
+- 引用：`evidence.doc_id=hit.doc_id`，`evidence.locator=excerpt.ref`，quote 取 text。
+- 补读该段所属整块：`corpus_fetch(doc_id, locator=ref, view="compact")`；
+  返回规范 native 句柄，分页沿用原 next_cursor，仍需读取全部申请页才能声称完整。
+- 选择其他候选：`corpus_inventory(doc_id, scope_ref=scope_ref)`；清单按原范围和
+  原顺序展开，通过当前源检查后返回结构，不把后台读取登记为 Agent 已读。
+
+`eref:<receipt-sha256>:<index>` 和 `sref:<receipt-sha256>` 是不可拼接的别名。
+不是把原校验信息编码成另一个长 token，而是按内容哈希寻址服务端的完整 JSON
+收据。收据绑定目标库、doc_id/build、候选范围、展示区间和哈希；加载时核对文件
+哈希与绑定项。原证据解码器复用 v1 校验，再检查实际消息中的 text 与对应记录
+逐字相同。仅出现 ref、scope_ref、摘要或后台文件，均不获得送达资格。
+
+### 持久化及兼容
+
+新模块 `plugins/corpus/search_refs.py` 负责收据存储和别名解析。默认目录为仓库
+`data/corpus-search-refs`，可用 `CORPUS_SEARCH_REF_ROOT` 指定。使用临时文件、
+fsync 与原子替换；目录新建权限 0700、文件 0600。API 和所有研究 worker 必须共享
+此持久目录；当前 Compose 的 `/app/data` 已有持久挂载。更换主机需同步该目录，
+没有自动过期清理。仅有 v2 历史消息而丢失收据时，显式报告引用不可用并重新检索，
+不猜测映射或冒称已取证。目录不可写时 search 自动回退完整 v1，显式标记
+`reference_storage=unavailable_v1_fallback`。
+
+账本区分“收据中的完整候选范围”和“实际送达的 excerpts”；预算丢弃的命中即使
+仍有后台收据也不能借用证据。报告清单、fetch 与 HTTP fetch 解析 eref 后继续走
+当前权威来源检查；来源撤销或投影哈希变化不会借缓存绕过。旧 v1 工具消息及旧
+native 句柄仍可读取。service 层 SearchHit 和资料搜索 HTTP 返回保持原格式，
+v2 是 Agent 工具输出协议。
+
+真实验证发现旧 `context_inventory` 将 native 投影句柄当作原 chunk_id 查询，
+导致全被标成 unknown。已补上 native 分支：逐成员校验现有句柄，只返回对应
+权威块的标题、章节、页码和 kind；未知表格关系/区域不补造。另修正 inventory
+分页预算，完整计算游标和页身份，游标使用已有压缩格式。单成员装不下时明确
+返回预算错误，不返回超预算页。
+
+### 对照结果与验证
+
+每题只检索一次，将同一批候选交给上一版与 v2 序列化；23 个 retrieval 模块哈希
+均未变。正文证据、原 scope 成员、顺序与 coverage 保持一致。
+
+| 查询 | 上一版字符 | v2 字符 | 进一步减少 | 原文证据字符 |
+|---|---:|---:|---:|---:|
+| 工业富联 竞争优势 | 4075 | 2280 | 44.05% | 807 |
+| 茅台双锚定价 | 5637 | 2968 | 47.35% | 1052 |
+| NPO/CPO | 4154 | 2178 | 47.57% | 693 |
+
+三题在 1800/2400/3000/4000/6000/12000 字符预算下无证据交付退步，3000 字符
+均可完整返回。原生检索规则和两块选段未改，原有来源清单占位问题仍保留。
+收据持久化与序列化的本次单样本耗时为 6–12ms；这不是全链路延迟或并发结论。
+
+319 项针对性测试通过，覆盖 v1/v2、跨进程恢复、修改 text/ref/scope/版本、收据
+缺失/损坏、权限故障回退、完整范围与实际送达分离、引用校验、fetch、inventory
+和分页预算。真实 PG 三题的短引用 citation resolver、补读及全部清单页通过，
+每页不超过 6000 字符，拼回成员与原 context_locators 完全一致。
+
+Ruff 通过；新增引用模块、证据解码、账本及三个工具的定向 Pyright 为 0 错误。
+将整个 service.py 一并检查时仍有 1493 行旧 RankingSession kwargs 引起的三个
+类型错误，本阶段没有改动该代码。真实模型 preflight、import smoke
+（420/420、469/469）和符号闭合检查（518 文件）通过。
+
+确认用户 queued/running 任务为 0 后，现有 API 正常重启，PID 1332234 → 1956077，
+至就绪耗时 1.589 秒。健康、就绪、认证 HTTP 短引用回读和旧句柄回读均为 200。
+没有改 .env、迁移数据库或重新构建索引；未创建浏览器内完整 Agent 测试对话。
+
+执行记录：[comparison.json](../../.scratch/corpus-search-refs-20261024/comparison.json)、
+[runtime.json](../../.scratch/corpus-search-refs-20261024/runtime.json)。
+完整新返回：[工业富联](../../.scratch/corpus-search-refs-20261024/query-1-after.json)、
+[茅台](../../.scratch/corpus-search-refs-20261024/query-2-after.json)、
+[NPO/CPO](../../.scratch/corpus-search-refs-20261024/query-3-after.json)。
+
+## 10. 2026-10-24 已有片段容量扩大（已启用）
+
+先验证 fetch，再提高正文额度：4 个真实查询首次运行共 16 个可见 `eref`，
+全部直接传入 `corpus_fetch(doc_id, locator=ref, view="compact")`，所属原文块
+均成功返回。按收据中的原文区间逐字核对 excerpt，并与旧 native 句柄读回的
+整块比较，全部一致，manifest 校验全部通过。单次工具 fetch 为 23–73ms，
+这是本轮本地样本耗时，不含模型决策时间。
+
+`native_live.SNIPPET_BLOCK_CHARS` 从 600 改为 1000；默认每个 hit 仍最多展示
+两个块。检索候选、排序实现、来源筛选、句柄及总体工具预算不变；选段器仍按
+相关性和完整句段取舍，不强行填满额度，也不保证所有旧节选都是新节选的子集。
+本阶段未实现新的动态预算分配或改变 auto 模式的结构开销估计。
+
+每题只检索一次，将同一批候选分别按 600/1000 字预算展示，断言 doc/build、
+首句柄、完整 scope 成员及顺序、coverage 不变。两侧全部短引用均实际 fetch
+及引用校验通过。以下是该次成对对照，不能与另一次检索的基线混用：
+
+| 查询 | 600 字/块的证据字符 | 1000 字/块的证据字符 |
+|---|---:|---:|
+| 工业富联竞争优势 | 807 | 807 |
+| 茅台双锚定价 | 1067 | 1218 |
+| NPO/CPO | 693 | 693 |
+| 贵州茅台2026目标价 | 459 | 459 |
+
+容量增加不是强制扩写；这四题中只有双锚问题增加正文，补入直销渠道解释。
+不能据此声称整体答案质量提高或目标价问题已修复。6000/12000/15000 字符
+返回预算下四题均完整保留；3000 字符下双锚问题返回明确预算错误，仍不会硬切
+证据或句柄。本次只提高每块容量，未改变已有的整条命中预算裁剪策略。
+
+321 项相关测试通过，真实例子的工具→账本→manifest 测试同时覆盖 600/1000
+字预算；截断测试的输入长度改为显式超过当前预算，继续验证不完整片段标记。
+Ruff、格式检查、真实模型 preflight、两阶段 import smoke（420/420、469/469）
+及符号检查（518 文件）通过。
+
+确认 queued/running 为 0 后加载到现有 API，PID 1956077 → 2266731，1.616 秒
+就绪，healthz/readyz 均 200。扩容前后的 28 个短引用跨进程、重启后经认证 HTTP
+回读均为 200，对应的旧 native 句柄也全部为 200，正文一致。未改 .env、索引
+或数据库；这是工具及 HTTP 链路实测，没有另开完整模型研究任务。
+
+记录：[补读前置验证](../../.scratch/corpus-snippet-capacity-20261024/fetch-baseline.json)、
+[同候选容量对照](../../.scratch/corpus-snippet-capacity-20261024/comparison.json)、
+[API 加载及 HTTP 验证](../../.scratch/corpus-snippet-capacity-20261024/runtime.json)。
+扩容示例：[茅台返回正文](../../.scratch/corpus-snippet-capacity-20261024/query-2-1000.json)。

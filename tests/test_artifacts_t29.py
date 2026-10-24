@@ -305,32 +305,6 @@ def isolated_orchestrator(monkeypatch):
     return orch
 
 
-def _spawn_approver(orch, run_id: str, client, headers):
-    """Answer the P3.2 approval gate the way a user would.
-
-    Since the gate landed (P3.2), a worker's ``create_file`` suspends on
-    ``approval_requested`` until a decision arrives — an old e2e that never
-    answers would hang the worker for the gate's 300s timeout. This task
-    subscribes to the run's event fan-out and approves ``once`` via the real
-    API route, so the approval path itself stays exercised.
-    """
-
-    async def run() -> None:
-        q = orch.subscribe(run_id)
-        while True:
-            evt = await asyncio.wait_for(q.get(), timeout=90)
-            if evt and evt.get("type") == "approval_requested":
-                resp = await client.post(
-                    f"/api/runs/{run_id}/approve",
-                    json={"approval_id": evt["approval_id"], "decision": "once"},
-                    headers=headers,
-                )
-                assert resp.status_code == 200, resp.text
-                return
-
-    return asyncio.ensure_future(run())
-
-
 @pytest.mark.asyncio
 async def test_run_scans_outputs_and_downloads(mock_llm_report, app_client,
                                                auth_headers, isolated_orchestrator,
@@ -351,8 +325,8 @@ async def test_run_scans_outputs_and_downloads(mock_llm_report, app_client,
     assert resp.status_code == 202
     run_id = resp.json()["run_id"]
 
-    # A create_file now suspends on the approval gate (P3.2) — answer it.
-    approver = _spawn_approver(isolated_orchestrator, run_id, app_client, auth_headers)
+    # Run-scoped create_file is auto-approved by assess_web_tool_risk.
+    # Approval behavior is covered by the approval tests; await the artifact here.
 
     # The orchestrator scans outputs after the worker exits; poll for the index.
     listed = None
@@ -366,9 +340,6 @@ async def test_run_scans_outputs_and_downloads(mock_llm_report, app_client,
     assert listed is not None and listed.status_code == 200
     artifacts = listed.json()["artifacts"]
     assert artifacts, "no artifact indexed for the run"
-    # The run cannot have produced a deliverable without passing the gate.
-    await asyncio.wait_for(approver, timeout=5)
-
     entry = next(a for a in artifacts if a["rel_path"] == "report.md")
     assert entry["size"] and entry["size"] > 0
     assert entry["sha256"] and len(entry["sha256"]) == 64

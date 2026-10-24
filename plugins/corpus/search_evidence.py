@@ -18,6 +18,10 @@ _HASH = re.compile(r"[0-9a-f]{64}")
 
 def search_evidence_items(hit: dict[str, Any]) -> list[dict[str, Any]]:
     """Decode only intact, explicitly marked ranges; legacy snippets stay previews."""
+    from plugins.corpus.search_refs import CONTRACT, evidence_items
+
+    if hit.get("evidence_contract") == CONTRACT:
+        return evidence_items(hit)
     if hit.get("evidence_contract") != SEARCH_EVIDENCE_CONTRACT:
         return []
     snippet = hit.get("snippet")

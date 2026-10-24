@@ -242,9 +242,9 @@ def refresh(dsn: str, target: str, seed: NativeIndex) -> NativeIndex:
 #: 默认最多展示 2 个互补块，避免复合问题只交付一半；总工具预算仍由 fitter 限制。
 #: ``CORPUS_NATIVE_SNIPPET_BLOCKS=1|2|3`` 固定块数，``=auto`` 按剩余预算自适应。
 SNIPPET_BLOCKS = 2
-# Room for a complete explanatory paragraph plus the query's other anchors.
-# The final tool payload still passes through its existing hard budget fitter.
-SNIPPET_BLOCK_CHARS = 600
+# Compact v2 receipts leave more room for complete explanatory paragraphs.
+# Keep the same block count; the final payload still obeys the existing hard cap.
+SNIPPET_BLOCK_CHARS = 1000
 #: 展示预算目标：只决定“展示几块”，不改返回体上限，也不改句柄格式。
 SNIPPET_TARGET_PAYLOAD = 12_000
 META_PER_HIT = 500

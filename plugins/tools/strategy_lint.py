@@ -156,7 +156,9 @@ def _declared_source_ids(card: dict[str, Any]) -> set[str] | None:
     return ids
 
 
-def lint_strategy(card: dict[str, Any]) -> dict[str, Any]:
+def lint_strategy(
+    card: dict[str, Any], *, validate_sizing: bool = True,
+) -> dict[str, Any]:
     """校验一张策略卡。纯函数：同样的输入永远给同样的输出。
 
     规则，与 ``docs/p0-implementation-spec.md`` §3.2 一致：
@@ -235,33 +237,34 @@ def lint_strategy(card: dict[str, Any]) -> dict[str, Any]:
             )
         )
 
-    # ── ERROR：风险预算区间 ────────────────────────────────────────────
-    if risk_budget_pct is None:
-        errors.append(
-            _err(
-                "missing_risk_budget_pct",
-                "sizing.risk_budget_pct 必填且必须为数字",
+    if validate_sizing:
+        # ── ERROR：风险预算区间 ────────────────────────────────────────────
+        if risk_budget_pct is None:
+            errors.append(
+                _err(
+                    "missing_risk_budget_pct",
+                    "sizing.risk_budget_pct 必填且必须为数字",
+                )
             )
-        )
-    elif not RISK_BUDGET_MIN_PCT <= risk_budget_pct <= RISK_BUDGET_MAX_PCT:
-        errors.append(
-            _err(
-                "risk_budget_out_of_range",
-                f"risk_budget_pct 应在 [{RISK_BUDGET_MIN_PCT}, {RISK_BUDGET_MAX_PCT}]，"
-                f"实际 {risk_budget_pct}",
+        elif not RISK_BUDGET_MIN_PCT <= risk_budget_pct <= RISK_BUDGET_MAX_PCT:
+            errors.append(
+                _err(
+                    "risk_budget_out_of_range",
+                    f"risk_budget_pct 应在 [{RISK_BUDGET_MIN_PCT}, {RISK_BUDGET_MAX_PCT}]，"
+                    f"实际 {risk_budget_pct}",
+                )
             )
-        )
 
-    # ── ERROR：单票权重上限 ────────────────────────────────────────────
-    if weight_pct is None:
-        errors.append(_err("missing_weight_pct", "sizing.weight_pct 必填且必须为数字"))
-    elif weight_pct > max_weight_pct:
-        errors.append(
-            _err(
-                "weight_over_limit",
-                f"weight_pct 应 <= max_weight_pct ({max_weight_pct})，实际 {weight_pct}",
+        # ── ERROR：单票权重上限 ────────────────────────────────────────────
+        if weight_pct is None:
+            errors.append(_err("missing_weight_pct", "sizing.weight_pct 必填且必须为数字"))
+        elif weight_pct > max_weight_pct:
+            errors.append(
+                _err(
+                    "weight_over_limit",
+                    f"weight_pct 应 <= max_weight_pct ({max_weight_pct})，实际 {weight_pct}",
+                )
             )
-        )
 
     # ── ERROR：失效条件（无失效条件的策略不允许落卡）────────────────────
     invalidation = str(position.get("invalidation") or "").strip()
@@ -285,80 +288,81 @@ def lint_strategy(card: dict[str, Any]) -> dict[str, Any]:
             )
         )
 
-    # ── ERROR：最小交易单位 ────────────────────────────────────────────
-    if shares is None:
-        errors.append(_err("missing_shares", "sizing.shares 必填且必须为数字"))
-    elif shares < lot_size:
-        errors.append(
-            _err(
-                "shares_below_one_lot",
-                f"shares 应 >= lot_size ({lot_size:g})，实际 {shares:g}——"
-                "风险预算不足以买入一手时不应落卡，请报告不可行",
+    if validate_sizing:
+        # ── ERROR：最小交易单位 ────────────────────────────────────────────
+        if shares is None:
+            errors.append(_err("missing_shares", "sizing.shares 必填且必须为数字"))
+        elif shares < lot_size:
+            errors.append(
+                _err(
+                    "shares_below_one_lot",
+                    f"shares 应 >= lot_size ({lot_size:g})，实际 {shares:g}——"
+                    "风险预算不足以买入一手时不应落卡，请报告不可行",
+                )
             )
-        )
-    elif shares % lot_size != 0:
-        errors.append(
-            _err(
-                "shares_not_multiple_of_lot",
-                f"shares 必须是 lot_size ({lot_size:g}) 的整数倍，实际 {shares:g}",
+        elif shares % lot_size != 0:
+            errors.append(
+                _err(
+                    "shares_not_multiple_of_lot",
+                    f"shares 必须是 lot_size ({lot_size:g}) 的整数倍，实际 {shares:g}",
+                )
             )
-        )
 
-    # ── ERROR：算术出工具（硬闸②）──────────────────────────────────────
-    # 这条是整个 P0a 的支点：任何绕过 position_sizing 自行编造仓位的策略
-    # 都无法通过校验。删掉 computed_by 必须 ERROR——见
-    # tests/test_strategy_lint.py::test_missing_computed_by_is_error。
-    computed_by = str(sizing.get("computed_by") or "").strip()
-    if not computed_by:
-        errors.append(
-            _err(
-                "missing_computed_by",
-                f"sizing.computed_by 必填，且只能来自 position_sizing 的返回值"
-                f"（期望 {POSITION_SIZING_ID}）——禁止手填仓位",
+        # ── ERROR：算术出工具（硬闸②）──────────────────────────────────────
+        # 这条是整个 P0a 的支点：任何绕过 position_sizing 自行编造仓位的策略
+        # 都无法通过校验。删掉 computed_by 必须 ERROR——见
+        # tests/test_strategy_lint.py::test_missing_computed_by_is_error。
+        computed_by = str(sizing.get("computed_by") or "").strip()
+        if not computed_by:
+            errors.append(
+                _err(
+                    "missing_computed_by",
+                    f"sizing.computed_by 必填，且只能来自 position_sizing 的返回值"
+                    f"（期望 {POSITION_SIZING_ID}）——禁止手填仓位",
+                )
             )
-        )
-    elif computed_by != POSITION_SIZING_ID:
-        errors.append(
-            _err(
-                "unknown_computed_by",
-                f"sizing.computed_by 应为 {POSITION_SIZING_ID}，实际 {computed_by!r}",
+        elif computed_by != POSITION_SIZING_ID:
+            errors.append(
+                _err(
+                    "unknown_computed_by",
+                    f"sizing.computed_by 应为 {POSITION_SIZING_ID}，实际 {computed_by!r}",
+                )
             )
-        )
 
-    # ── ERROR：sizing 内部自洽（硬闸②的在线形态）──────────────────────
-    # 规格把「重算一遍、不信任字段」留给离线校验脚本；这里再做一次是为了让
-    # 手改过数字的策略**当场**被挡住，而不是等跑完写进文件才发现。
-    # 容差 0.01（金额到分、权重到 1bp）：足够宽，能容忍 position_sizing 的
-    # 四舍五入与 JSON 序列化；又足够窄，改一手股就必定被抓到。
-    capital_total = _number(card.get("capital_total"))
-    if (
-        shares is not None
-        and entry_high is not None
-        and amount is not None
-        and abs(shares * entry_high - amount) > 0.01
-    ):
-        errors.append(
-            _err(
-                "amount_mismatch",
-                f"sizing.amount 应等于 shares × entry.high = {shares:g} × {entry_high:g} "
-                f"= {shares * entry_high:.2f}，实际 {amount:g}——sizing 必须原样来自 "
-                "position_sizing，不得手改",
+        # ── ERROR：sizing 内部自洽（硬闸②的在线形态）──────────────────────
+        # 规格把「重算一遍、不信任字段」留给离线校验脚本；这里再做一次是为了让
+        # 手改过数字的策略**当场**被挡住，而不是等跑完写进文件才发现。
+        # 容差 0.01（金额到分、权重到 1bp）：足够宽，能容忍 position_sizing 的
+        # 四舍五入与 JSON 序列化；又足够窄，改一手股就必定被抓到。
+        capital_total = _number(card.get("capital_total"))
+        if (
+            shares is not None
+            and entry_high is not None
+            and amount is not None
+            and abs(shares * entry_high - amount) > 0.01
+        ):
+            errors.append(
+                _err(
+                    "amount_mismatch",
+                    f"sizing.amount 应等于 shares × entry.high = {shares:g} × {entry_high:g} "
+                    f"= {shares * entry_high:.2f}，实际 {amount:g}——sizing 必须原样来自 "
+                    "position_sizing，不得手改",
+                )
             )
-        )
-    if (
-        amount is not None
-        and weight_pct is not None
-        and capital_total is not None
-        and capital_total > 0
-        and abs(amount / capital_total * 100 - weight_pct) > 0.01
-    ):
-        errors.append(
-            _err(
-                "weight_mismatch",
-                f"sizing.weight_pct 应等于 amount / capital_total × 100 = "
-                f"{amount / capital_total * 100:.4f}，实际 {weight_pct:g}",
+        if (
+            amount is not None
+            and weight_pct is not None
+            and capital_total is not None
+            and capital_total > 0
+            and abs(amount / capital_total * 100 - weight_pct) > 0.01
+        ):
+            errors.append(
+                _err(
+                    "weight_mismatch",
+                    f"sizing.weight_pct 应等于 amount / capital_total × 100 = "
+                    f"{amount / capital_total * 100:.4f}，实际 {weight_pct:g}",
+                )
             )
-        )
 
     # ── ERROR：evidence 可溯源（硬闸①的在线形态）──────────────────────
     # 「引用是否真能在原文里逐字找到」留给离线脚本；这里挡的是结构性问题：

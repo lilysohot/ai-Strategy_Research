@@ -1692,6 +1692,9 @@ class CorpusService:
         """
         from plugins.corpus.preparation import read_pg
 
+        if any(locator.startswith("chunk:native1/") for locator in locators):
+            return self._native_context_inventory(doc_id, locators)
+
         build_id = read_pg.parse_build_handle(doc_id)
         chunk_ids: list[str] = []
         seen: set[str] = set()
@@ -1770,6 +1773,58 @@ class CorpusService:
             "regions": regions,
             "members": members,
             "unknown_members": unknown_members,
+        }
+
+    def _native_context_inventory(self, doc_id: str, locators: Sequence[str]) -> dict[str, object]:
+        """Inventory exact projected handles, validating live access and every digest.
+
+        Native locators contain a projection hash and cannot be looked up as raw
+        chunk IDs. Do not replace them with full-unit handles or fabricate table
+        relations from the projection. Backend reads here are not agent delivery.
+        """
+        from plugins.corpus.preparation import read_pg
+
+        build_id = read_pg.parse_build_handle(doc_id)
+        request = list(dict.fromkeys(locators))
+        members: list[dict[str, object]] = []
+        by_kind: dict[str, int] = {}
+        for locator in request:
+            evidence = self.fetch_verbatim(doc_id, locator)
+            pages = sorted({unit.page for unit in evidence.units if unit.page is not None})
+            by_kind[evidence.kind] = by_kind.get(evidence.kind, 0) + 1
+            members.append(
+                {
+                    "locator": locator,
+                    "chunk_id": evidence.chunk_id,
+                    "kind": evidence.kind,
+                    "title": evidence.title_text,
+                    "section_path": list(evidence.section_path),
+                    "page_range": [pages[0], pages[-1]] if pages else None,
+                    "region_ids": [],
+                    "table_ref": None,
+                    "structure_status": "unknown",
+                    "covered_rows": None,
+                    "header_refs": None,
+                    "label_path": None,
+                    "table_rows": None,
+                    "table_cols": None,
+                    "content_role": content_role_for_kind(evidence.kind),
+                    "relations": [],
+                    "relation_status": "unknown",
+                }
+            )
+        return {
+            "doc_id": doc_id,
+            "build_id": build_id,
+            "scope_id": context_scope_id(
+                build_id, [read_pg.parse_chunk_locator(x) for x in request]
+            ),
+            "total_chunks": len(members),
+            "by_kind": by_kind,
+            "table_chunks": by_kind.get("table", 0),
+            "regions": [],
+            "members": members,
+            "unknown_members": [],
         }
 
     def context_relations(
@@ -1944,11 +1999,13 @@ class CorpusService:
         ``archive_required``（旧句柄）与"不存在"，而不是一律得到 None。
         """
         from plugins.corpus.preparation import read_pg
+        from plugins.corpus.search_refs import canonical_locator
 
         if self.read_chain() != "new":
             raise read_pg.LegacyHandleError(
                 f"目标库未承载新链（read_chain={self.read_chain()}），句柄 {doc_id!r} 不可取证"
             )
+        locator = canonical_locator(doc_id, locator)
         return read_pg.fetch_verbatim(self._dsn, doc_id, locator, sandbox_db=self._target_db)
 
     def search(self, query: str, *, limit: int = 10) -> list[SearchHit]:

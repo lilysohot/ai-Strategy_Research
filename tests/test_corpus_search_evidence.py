@@ -14,6 +14,7 @@ from plugins.corpus.retrieval.display import compose, compose_with_evidence
 from plugins.corpus.retrieval.embedding import text_hash
 from plugins.corpus.retrieval.native import NativeBlock, NativeSpan
 from plugins.corpus.search_evidence import SEARCH_EVIDENCE_CONTRACT, search_evidence_items
+from plugins.corpus.search_refs import offered_hit
 from plugins.corpus.service import SearchHit
 from plugins.tools.corpus_search import NATIVE_HINT, corpus_search, fit_search_payload
 
@@ -93,14 +94,15 @@ def _verify(ledger, hit, quote, source):
 
 
 @pytest.mark.parametrize("case", FIXTURES, ids=lambda case: case["id"])
-async def test_real_examples_tool_to_manifest_without_fetch(monkeypatch, case):
+@pytest.mark.parametrize("chars", [600, 1000])
+async def test_real_examples_tool_to_manifest_without_fetch(monkeypatch, case, chars):
     blocks = [
         NativeBlock(**{**b, "slices": tuple(NativeSpan(**s) for s in b["slices"])})
         for b in case["blocks"]
     ]
-    hit = _hit(blocks, case["query"], case["lexemes"])
+    hit = _hit(blocks, case["query"], case["lexemes"], chars=chars)
     assert hit.snippet == compose(
-        blocks, case["query"], lexemes=case["lexemes"], max_blocks=2, chars_per_block=600
+        blocks, case["query"], lexemes=case["lexemes"], max_blocks=2, chars_per_block=chars
     )
     # Exposes only search; a tool fetch would fail this integration test.
     svc = SimpleNamespace(search_with_coverage=lambda *a, **kw: ([hit], {"native": True}))
@@ -111,8 +113,8 @@ async def test_real_examples_tool_to_manifest_without_fetch(monkeypatch, case):
     final = fit_search_payload(raw, 12000)
     payload = json.loads(final)
     wire = payload["hits"][0]
-    assert wire["context_locators"] == list(hit.context_locators)
-    assert wire["locator"] == hit.locator
+    assert offered_hit(wire)["context_locators"] == list(hit.context_locators)
+    assert offered_hit(wire)["locator"] == hit.locator
     ledger = ConsumptionLedger()
     ledger.record_search(raw)
     ledger.finalize(_messages(final))
@@ -130,7 +132,7 @@ async def test_real_examples_tool_to_manifest_without_fetch(monkeypatch, case):
                 "evidence": [
                     {
                         "doc_id": hit.doc_id,
-                        "locator": item["locator"],
+                        "locator": wire["excerpts"][i]["ref"],
                         "quote": item["text"],
                     }
                 ],
@@ -150,9 +152,15 @@ def test_budget_dropped_hit_cannot_borrow_identical_retained_text():
     ledger = ConsumptionLedger()
     ledger.record_search(raw)
     # Enough for one intact hit with all descriptors; forces whole-hit elision.
-    final = fit_search_payload(raw, 1800)
+    final = fit_search_payload(raw, 1300)
     payload = json.loads(final)
     assert payload["ok"] and payload["hits_elided"] == 1
+    assert payload["count"] == len(payload["hits"]) == 1
+    assert payload["hits_total"] == 2
+    assert payload["delivery"] == {
+        "evidence_characters": len(_block().text),
+        "evidence_blocks": 1,
+    }
     assert payload["hits"][0]["evidence_spans"] == list(first.evidence_spans)
     ledger.finalize(_messages(final))
     assert _verify(ledger, first, "价格挂钩批价", _block().text) == "verified"
@@ -299,3 +307,69 @@ def test_first_and_last_excerpts_do_not_cover_omitted_middle():
     ledger.finalize(_messages(_body(hit)))
     assert not ledger.all_offered_fetched()
     assert _verify(ledger, hit, "未展示的背景说明", block.text) == "partial"
+
+
+async def test_delivery_counts_visible_evidence_not_candidate_scope(monkeypatch):
+    block = _block("价格甲。未展示的背景说明。价格乙。")
+    hit = _hit([block], "价格", chars=10)
+    coverage = {"native": {"body_characters": 16000, "blocks_returned": 20}}
+    monkeypatch.setattr(
+        importlib.import_module("plugins.tools.corpus_search"),
+        "get_service",
+        lambda: SimpleNamespace(search_with_coverage=lambda *a, **kw: ([hit], coverage)),
+    )
+    raw = await corpus_search.func("价格")
+    payload = json.loads(raw)
+    assert payload["delivery"] == {"evidence_characters": 8, "evidence_blocks": 1}
+    assert payload["coverage"] == coverage
+    assert offered_hit(payload["hits"][0])["snippet"] == hit.snippet
+    assert raw.index('"excerpts"') < raw.index('"scope_ref"')
+    assert len(payload["hint"]) < 150
+
+
+async def test_preview_only_result_never_claims_citable_delivery(monkeypatch):
+    hit = _hit([_block("价格" + "波动" * 80 + "。")], "价格", chars=20)
+    monkeypatch.setattr(
+        importlib.import_module("plugins.tools.corpus_search"),
+        "get_service",
+        lambda: SimpleNamespace(search_with_coverage=lambda *a, **kw: ([hit], {"native": True})),
+    )
+    payload = json.loads(await corpus_search.func("价格"))
+    assert payload["hits"][0]["preview"] == hit.snippet
+    assert payload["delivery"] == {"evidence_characters": 0, "evidence_blocks": 0}
+    assert "仅有定位预览" in payload["hint"]
+
+
+def test_smaller_wire_fits_two_intact_evidence_hits_in_previous_one_hit_budget():
+    first, second = (_hit([_block(build=b)], "价格") for b in ("a", "b"))
+    final = fit_search_payload(_body(first, second), 1800)
+    payload = json.loads(final)
+    assert len(final) <= 1800 and len(payload["hits"]) == 2
+    assert not payload.get("hits_elided")
+    assert [search_evidence_items(h) for h in payload["hits"]] == [
+        search_evidence_items(h) for h in json.loads(_body(first, second))["hits"]
+    ]
+
+
+def test_repeated_budget_reduction_keeps_total_and_recounts_delivery():
+    hits = [_hit([_block(build=b)], "价格") for b in ("a", "b", "c")]
+    first = fit_search_payload(_body(*hits), 1800)
+    assert len(json.loads(first)["hits"]) == 2
+    second = json.loads(fit_search_payload(first, 1300))
+    assert second["count"] == 1 and second["hits_total"] == 3 and second["hits_elided"] == 2
+    assert second["delivery"]["evidence_blocks"] == 1
+
+
+def test_coordinate_and_scope_rules_are_in_model_visible_tool_definition():
+    # The decorator drops Returns from the model description: rules must precede Args.
+    description = corpus_search.description
+    for rule in (
+        "Unicode",
+        "snippet_start:snippet_end",
+        "next_cursor",
+        "body_characters",
+        "context_locators[span.member-1]",
+        "摘要",
+        "未命中不等于全库无资料",
+    ):
+        assert rule in description

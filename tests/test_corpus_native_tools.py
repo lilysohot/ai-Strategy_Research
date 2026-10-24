@@ -368,9 +368,10 @@ def test_digest_matches_accepts_prefix_only():
 def test_compose_snippet_labels_blocks_and_counts_hidden():
     from types import SimpleNamespace
 
+    repeats = native_live.SNIPPET_BLOCK_CHARS // len("第一块正文 ") + 40
     blocks = [
-        SimpleNamespace(text="第一块正文 " * 140, slices=[SimpleNamespace(page=6)]),
-        SimpleNamespace(text="第二块正文 " * 140, slices=[SimpleNamespace(page=13)]),
+        SimpleNamespace(text="第一块正文 " * repeats, slices=[SimpleNamespace(page=6)]),
+        SimpleNamespace(text="第二块正文 " * repeats, slices=[SimpleNamespace(page=13)]),
         SimpleNamespace(text="第三块正文", slices=[SimpleNamespace(page=19)]),
     ]
     snippet = native_live.compose_snippet(blocks, 2)

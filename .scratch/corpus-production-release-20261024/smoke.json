@@ -1,0 +1,73 @@
+{
+  "cases": [
+    {
+      "query": "2026年8月茅台调价后，线上和自营店的价格分别怎么跟批价、成交价联动？为什么这样能稳价？",
+      "mode": "hybrid",
+      "native": {
+        "policy": "native1",
+        "index_id": "b5c07e4222806b334ff35372b1313a5e5bd20200d4bbcb5b99c4ab29a79666c2",
+        "sources": 23,
+        "chunks": 585,
+        "ready_vectors": 585,
+        "body_characters": 9107,
+        "char_budget": 16000,
+        "hit_limit": 1,
+        "block_limit": 20,
+        "blocks_returned": 19,
+        "blocks_ranked": 276,
+        "cutoff": "2026-10-24",
+        "unknown_date_sources": [
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        ]
+      },
+      "evidence_contract": "native-search-evidence-v1",
+      "verified_spans": 6,
+      "fetched_members": 2,
+      "http_search_ms": 1693,
+      "http_fetch_ms": 41,
+      "tool_search_ms": 1929,
+      "tool_fetch_ms": 64,
+      "tool_mode": "hybrid",
+      "tool_fallback": null,
+      "http_tool_handles_identical": false,
+      "all_quotes_match_raw_and_hashes": true
+    },
+    {
+      "query": "可插拔光模块现在卡在哪些系统瓶颈上？改用NPO或CPO，对可靠性有什么更高要求？",
+      "mode": "hybrid",
+      "native": {
+        "policy": "native1",
+        "index_id": "b5c07e4222806b334ff35372b1313a5e5bd20200d4bbcb5b99c4ab29a79666c2",
+        "sources": 23,
+        "chunks": 585,
+        "ready_vectors": 585,
+        "body_characters": 8794,
+        "char_budget": 16000,
+        "hit_limit": 1,
+        "block_limit": 20,
+        "blocks_returned": 20,
+        "blocks_ranked": 234,
+        "cutoff": "2026-10-24",
+        "unknown_date_sources": [
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        ]
+      },
+      "evidence_contract": "native-search-evidence-v1",
+      "verified_spans": 2,
+      "fetched_members": 2,
+      "http_search_ms": 1869,
+      "http_fetch_ms": 40,
+      "tool_search_ms": 1883,
+      "tool_fetch_ms": 24,
+      "tool_mode": "hybrid",
+      "tool_fallback": null,
+      "http_tool_handles_identical": false,
+      "all_quotes_match_raw_and_hashes": true
+    }
+  ],
+  "historical_handles_readable": 2,
+  "health": {
+    "healthz": 200,
+    "readyz": 200
+  }
+}

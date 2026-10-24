@@ -28,6 +28,12 @@ import pytest
 
 
 @pytest.fixture(autouse=True)
+def _isolated_search_receipts(tmp_path, monkeypatch):
+    """Search serialization must never write receipts into the live corpus cache."""
+    monkeypatch.setenv("CORPUS_SEARCH_REF_ROOT", str(tmp_path / "search-receipts"))
+
+
+@pytest.fixture(autouse=True)
 async def _isolated_database(tmp_path, monkeypatch):
     """Point the server store at a throwaway SQLite file for every test."""
     try:

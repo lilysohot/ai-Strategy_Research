@@ -184,9 +184,7 @@ def test_cursor_rejects_tampering_and_garbage() -> None:
 
 def test_cursor_rejects_unknown_type_and_version() -> None:
     with pytest.raises(cursor_mod.CursorError):
-        cursor_mod.decode_cursor(
-            cursor_mod.encode_cursor({"type": "sideways", "doc_id": _DOC})
-        )
+        cursor_mod.decode_cursor(cursor_mod.encode_cursor({"type": "sideways", "doc_id": _DOC}))
     # 伪造版本号会被校验和挡住（encode 只写当前版本），此处直接改载荷再签也无效
     token = cursor_mod.encode_cursor({"type": cursor_mod.INVENTORY, "doc_id": _DOC})
     payload = cursor_mod.decode_cursor(token)
@@ -254,18 +252,20 @@ def test_inventory_tool_requires_exactly_one_selector(stub_service) -> None:
 
 
 def test_inventory_tool_paginates_and_replays_identically(stub_service) -> None:
-    first = json.loads(_call(doc_id=_DOC, locators=["chunk:c0"], max_chars=900))
+    raw = _call(doc_id=_DOC, locators=["chunk:c0"], max_chars=1600)
+    assert len(raw) <= 1600  # Include cursor and page identity in the actual budget.
+    first = json.loads(raw)
     assert first["ok"] is True
     assert first["cursor_type"] == "inventory"
     assert first["exhausted"] is False and first["next_cursor"]
     assert len(first["items"]) < first["total_chunks"]
 
-    again = json.loads(_call(doc_id=_DOC, locators=["chunk:c0"], max_chars=900))
+    again = json.loads(_call(doc_id=_DOC, locators=["chunk:c0"], max_chars=1600))
     # 固定请求 + 相同预算 → 同一页（成员与 page_id 一致）
     assert again["page_id"] == first["page_id"]
     assert again["items"] == first["items"]
 
-    second = json.loads(_call(doc_id=_DOC, cursor=first["next_cursor"], max_chars=900))
+    second = json.loads(_call(doc_id=_DOC, cursor=first["next_cursor"], max_chars=1600))
     assert second["page_id"] != first["page_id"]
     # 续取不重复上一页成员，逐页累积直到终点
     seen = {m["chunk_id"] for m in first["items"]}
@@ -273,7 +273,9 @@ def test_inventory_tool_paginates_and_replays_identically(stub_service) -> None:
     seen |= {m["chunk_id"] for m in second["items"]}
     tail = second
     while not tail["exhausted"]:
-        tail = json.loads(_call(doc_id=_DOC, cursor=tail["next_cursor"], max_chars=900))
+        raw = _call(doc_id=_DOC, cursor=tail["next_cursor"], max_chars=1600)
+        assert len(raw) <= 1600
+        tail = json.loads(raw)
         page = {m["chunk_id"] for m in tail["items"]}
         assert not (seen & page)  # 页间不重叠
         seen |= page
@@ -287,6 +289,12 @@ def test_inventory_tool_rejects_content_cursor(stub_service) -> None:
     out = json.loads(_call(doc_id=_DOC, cursor=content_cursor))
     assert out["ok"] is False
     assert "游标类型不符" in out["error"]
+
+
+def test_inventory_rejects_budget_that_cannot_fit_member_and_cursor(stub_service) -> None:
+    raw = _call(doc_id=_DOC, locators=["chunk:c0"], max_chars=900)
+    assert len(raw) <= 900
+    assert not json.loads(raw)["ok"]
 
 
 def test_inventory_tool_rejects_legacy_handle(stub_service) -> None:

@@ -70,7 +70,14 @@ BUSINESS_CONTEXT_POLICY = """BUSINESS CONTEXT POLICY:
   risk-validated position. Optional risk fields must not be invented. Legacy frozen prices remain binding.
 - In a price/position recommendation that uses a bound account, include a short "账户依据" line with the
   authenticated total capital, available capital and as-of time actually used, so the user can verify the context.
-- Validate strategy cards with investment_strategy_lint; the raw strategy_lint is not a business-Run gate.
+- Validate strategy cards with investment_strategy_lint using a structured strategy proposal and this Run's
+  calculation_id from investment_position_sizing. The server fills position.entry, sizing and account values;
+  never copy, edit or fabricate those fields. The raw strategy_lint is not a business-Run gate.
+- delivery_mode=capital_analysis validates ONLY an affordable-share ceiling, not a buy/sell recommendation.
+  Do not suggest first purchases or additions from that number. Deliver the limited analysis explicitly.
+- Use field paths in errors to revise the proposal. Three failed validations per Run exhaust the revision
+  budget (initial attempt plus two corrections). Do not repeat with changed formatting or new calculations.
+  retry_allowed=false means finish with the exact unresolved issues, not an unvalidated strategy report.
 - When you are about to give a price/position conclusion but required user facts are missing, call
   request_investment_input(use_case, reason) once; the server derives the exact missing fields.
 - Follow the tool verdict: recording an intent does not prove a form was created. When facts are sufficient,
@@ -135,6 +142,8 @@ def build_profile_overrides(*, has_investment_context: bool = False) -> dict[str
             # A healthy shared gateway starts streaming within seconds. Bound only
             # the zero-chunk wait; inter-chunk stalls keep the runtime's 180s leash.
             "first_chunk_s": 45,
+            # Research-only cap; the platform wall must also permit this budget.
+            "research_wall_time_s": 700,
             "thinking_format": "tag",
         },
     }

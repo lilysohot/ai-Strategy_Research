@@ -72,7 +72,9 @@ class ServerConfig(BaseSettings):
     worker_pool_size: int = 2
     # Hard wall-clock budget per run, applied by the orchestrator (SIGKILL
     # fallback) and also handed to the worker via FRONTIER_AGENT_TASK_WALL_TIME_S.
-    wall_timeout_s: int = 900
+    # Keep the runtime's half-wall research floor at 700s; profile caps research
+    # there explicitly, leaving the remaining time for finalization.
+    wall_timeout_s: int = 1400
     # Max agent turns before the worker stops the loop on its own.
     max_turns: int = 60
     # Grace period the orchestrator waits for a worker to exit before SIGKILL.

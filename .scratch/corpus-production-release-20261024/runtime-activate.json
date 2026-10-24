@@ -1,0 +1,20 @@
+{
+  "time_utc": "2026-10-24T01:36:40.608840+00:00",
+  "command": "activate",
+  "head": "7653973e61c6052d6f8747997c0d34b7975ae193",
+  "old_pid": 568838,
+  "new_pid": 1332234,
+  "active_runs_before": 0,
+  "settings_changed": {
+    "CORPUS_NATIVE_INDEX": "/home/administrator/FrontierAgent/data/corpus-native-context/20261023/manifest.json",
+    "CORPUS_VECTOR_INPUT_VARIANT": "contextual-note-v1",
+    "CORPUS_NATIVE_SNIPPET_BLOCKS": "2"
+  },
+  "restart_seconds": 1.6,
+  "health": {
+    "healthz": 200,
+    "readyz": 200
+  },
+  "backup": "/home/administrator/FrontierAgent/data/corpus-native-context/20261024-release-backup",
+  "data_migration": false
+}

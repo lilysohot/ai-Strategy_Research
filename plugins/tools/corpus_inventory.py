@@ -83,12 +83,14 @@ async def corpus_inventory(
     locators: list[str] | None = None,
     cursor: str | None = None,
     max_chars: int = 6000,
+    scope_ref: str | None = None,
 ) -> str:
     """取回一组上下文候选 locator 的**有依据结构清单**（分页）。
 
     在 ``corpus_search`` 之后调用：把该次检索提供的上下文候选（``context_locators``，
     或续取用的 ``cursor``）展开为逐成员的结构清单。清单只描述结构，不含正文——
     逐字原文请用 ``corpus_fetch``。
+    原生 search v2 可传 ``scope_ref`` 展开持久化候选范围；它只表示候选，不表示已读。
 
     Args:
         doc_id: 版本句柄（来自 ``corpus_search`` 的 ``doc_id``，形如 ``cv2:<build_id>``）。
@@ -97,6 +99,7 @@ async def corpus_inventory(
         cursor: 续取游标（上一页返回的 ``next_cursor``；类型必须为 ``inventory``）。
             与 ``locators`` 恰选其一；游标已绑定请求集合、顺序与视图，续取时不得改动。
         max_chars: 本页序列化 JSON 的字符上限（含信封与转义）；服务按实际路径预算收紧。
+        scope_ref: search v2 返回的范围引用；与 locators、cursor 三者恰选其一。
 
     Returns:
         JSON 字符串页信封：``{"ok": true, "schema_version", "cursor_type": "inventory",
@@ -114,8 +117,15 @@ async def corpus_inventory(
             "archive_required：该 doc_id 是旧句柄（非 cv2:<build_id>），新链不以其取清单",
             doc_id=doc_id,
         )
-    if (locators is None) == (cursor is None):
-        return _error("locators 与 cursor 恰选其一（不得同时给出或同时省略）")
+    if sum(value is not None for value in (locators, cursor, scope_ref)) != 1:
+        return _error("locators、cursor 与 scope_ref 恰选其一（不得同时给出或同时省略）")
+    if scope_ref is not None:
+        from plugins.corpus.search_refs import SearchReferenceError, resolve_scope
+
+        try:
+            locators = resolve_scope(doc_id, scope_ref)["context_locators"]
+        except SearchReferenceError as exc:
+            return _error(f"search_reference_unavailable：{exc}；请重新检索")
     if not isinstance(max_chars, int) or isinstance(max_chars, bool) or max_chars < _MIN_BUDGET:
         return _error(
             f"max_chars 必须是 ≥ {_MIN_BUDGET} 的整数（收到 {max_chars!r}）；"
@@ -188,31 +198,45 @@ async def corpus_inventory(
             scope_id=inventory["scope_id"],
         )
 
+    def render(items: list[dict[str, object]], end: int) -> str:
+        exhausted = end >= len(members)
+        next_cursor = (
+            None
+            if exhausted
+            else encode_cursor(
+                {
+                    "type": INVENTORY,
+                    "doc_id": doc_id,
+                    "build_id": inventory["build_id"],
+                    "scope_id": inventory["scope_id"],
+                    "req": request,
+                    "pos": end,
+                },
+                compressed=True,
+            )
+        )
+        return json.dumps(
+            {
+                **envelope,
+                "items": items,
+                "next_cursor": next_cursor,
+                "exhausted": exhausted,
+                "page_id": _page_id(str(inventory["scope_id"]), start, end, max_chars),
+            },
+            ensure_ascii=False,
+        )
+
     page_items: list[dict[str, object]] = []
     index = start
     while index < len(members):
         candidate = [*page_items, members[index]]
-        probe = json.dumps({**envelope, "items": candidate}, ensure_ascii=False)
-        if len(probe) > max_chars and page_items:
+        if len(render(candidate, index + 1)) > max_chars:
+            if not page_items:
+                return _error("budget_exceeded：单成员与分页游标无法装入预算；请提高 max_chars")
             break
         page_items = candidate
         index += 1
-
-    exhausted = index >= len(members)
-    next_cursor = None
-    if not exhausted:
-        next_cursor = encode_cursor(
-            {
-                "type": INVENTORY,
-                "doc_id": doc_id,
-                "build_id": inventory["build_id"],
-                "scope_id": inventory["scope_id"],
-                "req": request,
-                "pos": index,
-            }
-        )
-    envelope["items"] = page_items
-    envelope["next_cursor"] = next_cursor
-    envelope["exhausted"] = exhausted
-    envelope["page_id"] = _page_id(str(inventory["scope_id"]), start, index, max_chars)
-    return json.dumps(envelope, ensure_ascii=False)
+    result = render(page_items, index)
+    if len(result) > max_chars:
+        return _error("budget_exceeded：分页信封无法装入预算；请提高 max_chars")
+    return result

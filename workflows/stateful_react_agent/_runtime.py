@@ -154,7 +154,7 @@ _GRACEFUL_FINAL_STOP_REASONS = frozenset({
 # still returns an explicit deterministic partial-status answer rather than an
 # error sentinel.
 _INFRA_FINAL_STOP_REASONS = frozenset(
-    {"llm_error", "budget_exhausted", "wall_deadline", "max_attempts"},
+    {"llm_error", "budget_exhausted", "wall_deadline", "max_attempts", "strategy_validation_failed"},
 )
 
 

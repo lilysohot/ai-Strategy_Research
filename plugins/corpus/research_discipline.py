@@ -66,6 +66,10 @@ RESEARCH_DISCIPLINE_ADDENDUM = """\
   `url` / `title` 至少一项）。`evidence[].source_ref` 必须能在其中找到——
   指向未声明来源的引用视为悬空，同样被拦下。
 - `evidence.quote` 必须来自已实际送达的逐字原文。`corpus_search` 命中带
+  `evidence_contract=native-search-evidence-v2` 时，可引用 `excerpts[].text`，
+  使用该命中的 doc_id 和该段 ref 原样作为 locator/page；需要更多原文时把 ref
+  传给 corpus_fetch 的 locator。scope_ref 只用于 corpus_inventory 展开候选，
+  preview 不可引用；持有短引用或后台保存记录不代表原文已读。历史消息带
   `evidence_contract=native-search-evidence-v1` 时，`evidence_spans` 标记的 snippet
   区间可直接引用；使用该命中的 doc_id 和 `context_locators[span.member-1]`，
   不要误用首 locator。无标记的旧 snippet、索引说明、句内节选不得直接作证据。

@@ -33,6 +33,7 @@ from collections.abc import Iterator
 from pathlib import Path
 
 from server.config import run_dir_for
+from server.strategy_delivery import RECEIPT_NAME, artifact_allowed
 
 # Outputs sit inside the workspace root (see module docstring); this is the
 # single place that fact is encoded, so a layout change touches one function.
@@ -124,6 +125,9 @@ def scan_outputs(run_id: str) -> list[dict]:
         if len(out) >= _MAX_FILES:
             break
         rel = path.relative_to(root).as_posix()
+        digest = _sha256_of(path)
+        if not artifact_allowed(run_dir_for(run_id), rel, digest):
+            continue
         try:
             size: int | None = path.stat().st_size
         except OSError:
@@ -131,7 +135,7 @@ def scan_outputs(run_id: str) -> list[dict]:
         out.append({
             "rel_path": rel,
             "size": size,
-            "sha256": _sha256_of(path),
+            "sha256": digest,
         })
     return out
 
@@ -163,6 +167,10 @@ def resolve_artifact_path(run_id: str, rel_path: str) -> Path | None:
     if candidate == root_resolved or not candidate.is_relative_to(root_resolved):
         return None
     if not candidate.is_file():
+        return None
+    if (run_dir_for(run_id) / RECEIPT_NAME).exists() and not artifact_allowed(
+        run_dir_for(run_id), candidate.relative_to(root_resolved).as_posix(), _sha256_of(candidate),
+    ):
         return None
     return candidate
 

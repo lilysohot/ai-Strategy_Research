@@ -6,7 +6,7 @@
 !.env.transformers.example
 !**/.env.space.example
 config.yaml
-.omx/
+
 .apodex/
 .vscode/
 

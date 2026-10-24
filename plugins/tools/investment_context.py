@@ -9,6 +9,16 @@ from decimal import Decimal, InvalidOperation
 from typing import Any
 
 from frontier_agent.core.tool import tool
+from plugins.tools.investment_strategy import (
+    StrategyProposal,
+    bind_strategy_state,
+    failure,
+    finish_validation,
+    register_calculation,
+    reset_strategy_state,
+    validate_proposal,
+    validation_exhausted,
+)
 from plugins.tools.position_sizing import position_sizing
 from plugins.tools.strategy_lint import strategy_lint
 
@@ -24,20 +34,19 @@ _CONTEXT_LINT_ID = "investment_strategy_lint@v1"
 
 def bind_investment_context(
     context: dict[str, Any],
-) -> tuple[contextvars.Token[dict[str, Any] | None], contextvars.Token[dict[str, int] | None]]:
+) -> tuple[Any, ...]:
     """Bind one immutable Run context to tool execution in this worker task."""
-    return _CONTEXT.set(context), _METRICS.set(
+    return (_CONTEXT.set(context), _METRICS.set(
         {"context_reads": 0, "sizing_calls": 0, "lint_calls": 0}
-    )
+    ), bind_strategy_state())
 
 
 def reset_investment_context(
-    tokens: tuple[
-        contextvars.Token[dict[str, Any] | None], contextvars.Token[dict[str, int] | None]
-    ],
+    tokens: tuple[Any, ...],
 ) -> None:
     _CONTEXT.reset(tokens[0])
     _METRICS.reset(tokens[1])
+    reset_strategy_state(tokens[2])
 
 
 def investment_context_metrics() -> dict[str, int]:
@@ -264,6 +273,8 @@ async def _investment_position_sizing(
     )
     result = json.loads(raw)
     result["context_run_id"] = context.get("run_id")
+    result["entry_low"] = entry_low
+    result["risk_validated"] = bool(result.get("ok"))
     result["bound_inputs"] = [
         capital_name,
         "plan.risk_budget_value",
@@ -301,11 +312,10 @@ async def investment_position_sizing(
     elif result.get("risk_validated") is False:
         detail = "资金股数上限计算完成；未确认风险预算，风险仓位未验证"
     record_verification("investment_position_sizing", passed=bool(result.get("ok")), detail=detail)
-    return raw
+    return json.dumps(register_calculation(result), ensure_ascii=False)
 
 
-@tool
-async def investment_strategy_lint(strategy_json: str) -> str:
+async def _legacy_strategy_lint(strategy_json: str) -> str:
     """校验策略卡，并强制其资金、入场价和仓位结果匹配当前 Run 快照。
 
     Args:
@@ -314,7 +324,6 @@ async def investment_strategy_lint(strategy_json: str) -> str:
     Returns:
         JSON 校验结果；上下文或绑定数字不一致时 ``passed=false``。
     """
-    _count("lint_calls")
     raw_lint = json.loads(await strategy_lint.func(strategy_json=strategy_json))
     context = _context()
     if context is None:
@@ -351,7 +360,7 @@ async def investment_strategy_lint(strategy_json: str) -> str:
         expected = {"ok": False}
     else:
         expected = json.loads(
-            await investment_position_sizing.func(
+            await _investment_position_sizing(
                 stop_loss=float(stop_loss),
                 lot_size=lot_size,
                 entry_low=entry.get("low"),
@@ -417,3 +426,47 @@ def _same_number(left: Any, right: Any) -> bool:
         return Decimal(str(left)) == Decimal(str(right))
     except (InvalidOperation, ValueError, TypeError):
         return False
+
+
+@tool
+async def investment_strategy_lint(
+    strategy: StrategyProposal | None = None, **legacy: Any,
+) -> str:
+    """用当前 Run 的 calculation_id 组装并校验策略卡；禁止手填资金和 sizing。
+
+    Args:
+        strategy: 结构化分析提案。入场价、止损、资金、仓位全部从计算结果绑定。
+
+    Returns:
+        passed、字段路径、剩余修订次数及服务端策略卡。capital_analysis 仅为资金上限分析。
+        每 Run 最多三次失败（初次加两次修订），届时停止研究并交付未完成说明。
+    """
+    _count("lint_calls")
+    context = _context()
+    if validation_exhausted():
+        result = failure("strategy_revision_limit", "策略卡已失败三次，停止重试并说明未通过项")
+    elif context is None:
+        result = failure("missing_investment_context", "当前 Run 未绑定业务快照")
+    elif strategy is not None:
+        if legacy:
+            result = failure("mixed_strategy_contract", "不能同时使用结构化提案和旧策略卡")
+        else:
+            result = validate_proposal(strategy, context=context, capital=_capital(context)[1])
+    elif "strategy_json" in legacy:
+        # Kept only for old direct callers/replays; never advertised to the model.
+        result = json.loads(await _legacy_strategy_lint(legacy["strategy_json"]))
+        for error in result.get("errors", []):
+            if error["code"] == "missing_entry_low":
+                error["field"] = "position.entry.low"
+                error["message"] = "position.entry.low 必填且必须为数字；顶层 entry 不属于策略卡结构"
+        if result.get("passed"):
+            result.update(risk_validated=True, delivery_mode="strategy")
+    else:
+        result = failure("missing_strategy", "请传入结构化 strategy，并引用本 Run 的 calculation_id")
+    return json.dumps(finish_validation(result, (context or {}).get("run_id")), ensure_ascii=False)
+
+
+# The only public contract is the structured proposal; legacy kwargs are Python compatibility.
+investment_strategy_lint.parameters["required"] = ["strategy"]
+investment_strategy_lint.parameters["properties"]["strategy"].pop("default", None)
+investment_strategy_lint.parameters["additionalProperties"] = False

@@ -135,7 +135,7 @@ def _load_investment_context(run_root: Path, run_id: str) -> dict[str, Any] | No
     return context
 
 
-def _finalize_investment_context(run_root: Path, context_tokens: tuple[Any, Any] | None) -> None:
+def _finalize_investment_context(run_root: Path, context_tokens: tuple[Any, ...] | None) -> None:
     """Persist best-effort tool metrics and always release the Run binding."""
     if context_tokens is None:
         return
@@ -143,8 +143,10 @@ def _finalize_investment_context(run_root: Path, context_tokens: tuple[Any, Any]
         investment_context_metrics,
         reset_investment_context,
     )
+    from server.strategy_delivery import persist_strategy_verification
 
     try:
+        persist_strategy_verification(run_root)
         (run_root / "investment-context-tools.json").write_text(
             json.dumps(investment_context_metrics(), sort_keys=True), encoding="utf-8"
         )
@@ -537,6 +539,7 @@ async def run_once(args: argparse.Namespace) -> int:
     # here for the same reason as the decision above: the pipeline call below can
     # fail before ever producing a state.
     summary_usage: dict[str, Any] = {}
+    workflow_stop_reason = ""
 
     # Cross-turn continuity (issue 01 §9.4): the orchestrator stages the session's
     # stored conversation dump in this run root. The worker never parses it —
@@ -582,6 +585,7 @@ async def run_once(args: argparse.Namespace) -> int:
             )
         replay_decision = state.get("replay_decision") or {}
         summary_usage = state.get("summary_usage") or {}
+        workflow_stop_reason = str(state.get("stopped_by") or "")
         for key in ("final_answer", "final_content", "report", "answer", "output"):
             value = state.get(key)
             if isinstance(value, dict):
@@ -597,9 +601,9 @@ async def run_once(args: argparse.Namespace) -> int:
             final_answer = bridge.final_content.strip()
         # Merge stopped_by: the worker's own stop paths (user_stop / deadline)
         # take precedence; otherwise use the loop result's own reason (e.g.
-        # "max_turns", "context_limit", "paused"). The pipeline state never
-        # carries this — it comes only from the observer (§5.2).
-        stopped_by = stop.stopped_by or bridge.stopped_by or ""
+        # "max_turns", "context_limit", "paused"). The workflow may also
+        # downgrade a natural completion at its business publication boundary.
+        stopped_by = stop.stopped_by or workflow_stop_reason or bridge.stopped_by or ""
         _frame(
             "run_finished",
             ok=True,
@@ -640,7 +644,7 @@ async def run_once(args: argparse.Namespace) -> int:
     # Persist a small summary the orchestrator/relay can read for the runs table.
     # stopped_by precedence mirrors the run_finished frame above. ``bridge`` is
     # unconditionally bound above, so no fallback is needed here.
-    _stopped_by = stop.stopped_by or bridge.stopped_by
+    _stopped_by = stop.stopped_by or workflow_stop_reason or bridge.stopped_by
     summary = {
         "run_id": args.run_id,
         # Survives ingestion, which deletes run/conversation.json. Directory

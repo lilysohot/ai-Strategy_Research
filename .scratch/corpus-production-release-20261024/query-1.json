@@ -1,0 +1,293 @@
+{
+  "http": {
+    "query": "2026年8月茅台调价后，线上和自营店的价格分别怎么跟批价、成交价联动？为什么这样能稳价？",
+    "hits": [
+      {
+        "doc_id": "cv2:712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+        "locator": "chunk:native1/712e370a7081da17%3Abody%3A0005/a85f8ae282ebe68b",
+        "title": "报告摘要",
+        "snippet": "【1/19｜p1】〔原文字符2:229〕双锚点定价机制带来更强的稳价预期。2026 年8 月8 日，茅台线下自营门店完成新\n一轮调价，飞天、五星、马年生肖、精品茅台自营零售价分别上调至1753 元/瓶、1743\n元/瓶、1951 元/瓶、2410 元/瓶，正式形成i 茅台线上、线下自营店双价格体系，并\n落地批价与终端成交价双锚点定价机制。本次调价并非简单终端涨价，而是公司稳价\n管理、渠道结构优化、旺季需求刺激多重战略协同举措，短期拉动旺季动销，中长期\n强化价格管控、提升盈利与渠道话语权。\n\n【7/19｜p5】〔原文字符695:798〕而对比i 茅台渠道与自营店渠道中飞天茅台114 元的价差，在客观上形成对\n于i 茅台的引流效应，理性消费者会优先选择价格更低、同为官方正品的i\n茅台平台购买，从而提升i 茅台的活跃客户、订单量与直营比例。\n\n【1/19｜p1】〔原文字符231:514〕双价格体系通过分层匹配消费需求，区分差异化价值与服务。i 茅台1639 元定价面向\n价格敏感、可接受抢购等待与不确定性的客群；自营店溢价对应即时提货、保真、线\n下体验等增值服务，承接宴请、送礼等时效要求高的消费场景，解决单一指导价无法\n适配多元消费的痛点。配套的双锚点机制构建长效稳价框架：一是i 茅台价格直接挂\n钩流通批价，2026 年平台售价随市场供需动态调整，持续收窄官方价与批发价剪刀差，\n成为反映市场流通行情的“温度计”；二是自营店1753 元锚定终端真实成交价，充当\n市场价格“稳定器”，双向夹持流通批价，平抑价格波动效果显著优于过往单一指导\n价模式。\n\n【7/19｜p4】〔原文字符284:491；跨原文单元〕当官方释放涨价信号,市场会将其解读为“底部确认”,进而提前入场,买\u0001盘涌入又反\n过来支撑批价,使预期兑现。茅台的礼品属性进一步放大了这一\u0001效应—中秋、国庆的礼\n赠需求具有刚性时间窗口,收礼方与送礼方都更关心\u0001“到时候是否买得到、是否更贵”,\n官方提价等于为旺季礼赠需求提供了“现\u0001在买更划算”的紧迫感。换言之,涨价本身未\n必带来多少增量投放,但它制\u0001造的价格预期,足以撬动原本观望的确定性需求在旺季前集\n中释放。\n\n【7/19｜p5】〔原文字符900:1034〕考虑到公司一季度i 茅台渠道占比，自营店提价目的在于在“增量有限”的\n背景下，把需求引导至i 茅台，既稳价又增利，是性价比极高的渠道再平衡。\n总体而言，我们认为自营店提价是“前台信号”，i 茅台放量才是“后台目的”，\n共同服务与直销占比提升与渠道主动权回收的长期战略。\n【7/19｜p5】〔原文字符800:898〕而提升直营比例对于公司而言具备多重战略价值：（1）掌握终端消费者数据\n与复购行为，强化用户运营；（2）减少中间环节、提升吨酒利润；（3）以平\n台真实成交价反哺批价管理，削弱传统渠道的信息不对称。\n\n（同源另有17块未展示，可按句柄补读）",
+        "score": 0.0,
+        "published": "2026-08-14",
+        "source_id": "a981b0641542c425a0ebcdb69af2333a8f82c4d65d5f434a6850453463aa0f49",
+        "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+        "chunk_id": "712e370a7081da17:body:0005",
+        "context_locators": [
+          "chunk:native1/712e370a7081da17%3Abody%3A0005/a85f8ae282ebe68b",
+          "chunk:native1/712e370a7081da17%3Abody%3A0011/9571c4dcf4d51790",
+          "chunk:native1/712e370a7081da17%3Abody%3A0018/7207d5159c62ad69",
+          "chunk:native1/712e370a7081da17%3Abody%3A0017/4ea57fe018bc72c4",
+          "chunk:native1/712e370a7081da17%3Abody%3A0021/19eb15d3853e73be",
+          "chunk:native1/712e370a7081da17%3Abody%3A0019/8a1e162aae7a743c",
+          "chunk:native1/712e370a7081da17%3Abody%3A0020/421b23fc8676bdb9",
+          "chunk:native1/712e370a7081da17%3Abody%3A0022/c068cf106f0e7a0d",
+          "chunk:native1/712e370a7081da17%3Abody%3A0006/b88d356f894fbc8b",
+          "chunk:native1/712e370a7081da17%3Abody%3A0015/284c64e68049a031",
+          "chunk:native1/712e370a7081da17%3Abody%3A0003/dc73f69c8d8cef45",
+          "chunk:native1/712e370a7081da17%3Abody%3A0010/032bf674d7b5865b",
+          "chunk:native1/712e370a7081da17%3Abody%3A0013/80009abcc7ec4180",
+          "chunk:native1/712e370a7081da17%3Abody%3A0001/39099f2de900c921",
+          "chunk:native1/712e370a7081da17%3Abody%3A0008/e49a6f36f4a1b1c1",
+          "chunk:native1/712e370a7081da17%3Abody%3A0012/12e113238250c3fb",
+          "chunk:native1/712e370a7081da17%3Abody%3A0004/002e5e80d98a1319",
+          "chunk:native1/712e370a7081da17%3Aheading%3A0000/3e6f0999c3591f10",
+          "chunk:native1/712e370a7081da17%3Abody%3A0002/cd2639a1c1779ca8"
+        ],
+        "scope_id": "scope:fdcad51857d8f0e6b41ab8eae4d2619a",
+        "context_by_kind": [
+          [
+            "body",
+            18
+          ],
+          [
+            "heading",
+            1
+          ]
+        ],
+        "evidence_spans": [
+          {
+            "member": 1,
+            "start": 2,
+            "end": 229,
+            "snippet_start": 20,
+            "snippet_end": 247,
+            "text_chars": 980,
+            "text_sha256": "87057f903f88133be075c184c17cae8f50b6ccc0512cacf0c878d2ab4b2d483e",
+            "quote_sha256": "403275394847e249bb5058c51ead1f6f6337edb77f3ac3943dc32822c7de4b90"
+          },
+          {
+            "member": 7,
+            "start": 695,
+            "end": 798,
+            "snippet_start": 270,
+            "snippet_end": 373,
+            "text_chars": 1034,
+            "text_sha256": "ce478b6727e25e8456310dd67f72f14c82c70bc35c68810196824a84de367dff",
+            "quote_sha256": "c04e8af5c4c0625a4697b4cb1aed10a92b4b6e18f886ec1591e0b7ef76095f20"
+          },
+          {
+            "member": 1,
+            "start": 231,
+            "end": 514,
+            "snippet_start": 396,
+            "snippet_end": 679,
+            "text_chars": 980,
+            "text_sha256": "87057f903f88133be075c184c17cae8f50b6ccc0512cacf0c878d2ab4b2d483e",
+            "quote_sha256": "efa3357cfb2eb642bfa53c5785a3dc54007e51c0bf2c6bdff7e96d3c279f0a2a"
+          },
+          {
+            "member": 7,
+            "start": 284,
+            "end": 491,
+            "snippet_start": 708,
+            "snippet_end": 915,
+            "text_chars": 1034,
+            "text_sha256": "ce478b6727e25e8456310dd67f72f14c82c70bc35c68810196824a84de367dff",
+            "quote_sha256": "fb2b6de450c750b302f233e0d8894dfd1c1abfabb132d14f88c68738bfdac9f2"
+          },
+          {
+            "member": 7,
+            "start": 900,
+            "end": 1034,
+            "snippet_start": 939,
+            "snippet_end": 1073,
+            "text_chars": 1034,
+            "text_sha256": "ce478b6727e25e8456310dd67f72f14c82c70bc35c68810196824a84de367dff",
+            "quote_sha256": "9eab20301e55a030ce3d5ce396b14777969d1877d995f0d435e2eca9aa2c34bc"
+          },
+          {
+            "member": 7,
+            "start": 800,
+            "end": 898,
+            "snippet_start": 1096,
+            "snippet_end": 1194,
+            "text_chars": 1034,
+            "text_sha256": "ce478b6727e25e8456310dd67f72f14c82c70bc35c68810196824a84de367dff",
+            "quote_sha256": "b987acf644f00a7e483a60a0cee95003220bb49e3f3ca19262d85725e1f16b92"
+          }
+        ]
+      }
+    ],
+    "coverage": {
+      "processing": "partial",
+      "availability": "unknown",
+      "query_status": "matched",
+      "retrieval_mode": "hybrid",
+      "fallback_reason": null,
+      "purity": {
+        "policy": "native-purity-v1",
+        "sources_considered": 1,
+        "sources_filtered": 0,
+        "filter_reasons": {},
+        "scope": "bounded_candidates_not_corpus_absence"
+      },
+      "native": {
+        "policy": "native1",
+        "index_id": "b5c07e4222806b334ff35372b1313a5e5bd20200d4bbcb5b99c4ab29a79666c2",
+        "sources": 23,
+        "chunks": 585,
+        "ready_vectors": 585,
+        "body_characters": 9107,
+        "char_budget": 16000,
+        "hit_limit": 1,
+        "block_limit": 20,
+        "blocks_returned": 19,
+        "blocks_ranked": 276,
+        "cutoff": "2026-10-24",
+        "unknown_date_sources": [
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        ]
+      },
+      "reason_codes": [
+        "native_prose_scope"
+      ]
+    }
+  },
+  "tool": {
+    "ok": true,
+    "query": "2026年8月茅台调价后，线上和自营店的价格分别怎么跟批价、成交价联动？为什么这样能稳价？",
+    "count": 1,
+    "hits": [
+      {
+        "doc_id": "cv2:712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+        "locator": "chunk:native1/712e370a7081da17%3Abody%3A0005/a85f8ae282ebe68b",
+        "source_id": "a981b0641542c425a0ebcdb69af2333a8f82c4d65d5f434a6850453463aa0f49",
+        "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+        "chunk_id": "712e370a7081da17:body:0005",
+        "context_locators": [
+          "chunk:native1/712e370a7081da17%3Abody%3A0005/a85f8ae282ebe68b",
+          "chunk:native1/712e370a7081da17%3Abody%3A0011/9571c4dcf4d51790",
+          "chunk:native1/712e370a7081da17%3Abody%3A0018/7207d5159c62ad69",
+          "chunk:native1/712e370a7081da17%3Abody%3A0017/4ea57fe018bc72c4",
+          "chunk:native1/712e370a7081da17%3Abody%3A0021/19eb15d3853e73be",
+          "chunk:native1/712e370a7081da17%3Abody%3A0019/8a1e162aae7a743c",
+          "chunk:native1/712e370a7081da17%3Abody%3A0020/421b23fc8676bdb9",
+          "chunk:native1/712e370a7081da17%3Abody%3A0022/c068cf106f0e7a0d",
+          "chunk:native1/712e370a7081da17%3Abody%3A0006/b88d356f894fbc8b",
+          "chunk:native1/712e370a7081da17%3Abody%3A0015/284c64e68049a031",
+          "chunk:native1/712e370a7081da17%3Abody%3A0003/dc73f69c8d8cef45",
+          "chunk:native1/712e370a7081da17%3Abody%3A0010/032bf674d7b5865b",
+          "chunk:native1/712e370a7081da17%3Abody%3A0008/e49a6f36f4a1b1c1",
+          "chunk:native1/712e370a7081da17%3Abody%3A0013/80009abcc7ec4180",
+          "chunk:native1/712e370a7081da17%3Abody%3A0001/39099f2de900c921",
+          "chunk:native1/712e370a7081da17%3Abody%3A0012/12e113238250c3fb",
+          "chunk:native1/712e370a7081da17%3Abody%3A0004/002e5e80d98a1319",
+          "chunk:native1/712e370a7081da17%3Aheading%3A0000/3e6f0999c3591f10",
+          "chunk:native1/712e370a7081da17%3Abody%3A0002/cd2639a1c1779ca8"
+        ],
+        "scope_id": "scope:9ab31fc9b370628cda0d4f05c18c9daa",
+        "total_chunks": 19,
+        "by_kind": {
+          "body": 18,
+          "heading": 1
+        },
+        "table_chunks": 0,
+        "title": "报告摘要",
+        "published": "2026-08-14",
+        "snippet": "【1/19｜p1】〔原文字符2:229〕双锚点定价机制带来更强的稳价预期。2026 年8 月8 日，茅台线下自营门店完成新\n一轮调价，飞天、五星、马年生肖、精品茅台自营零售价分别上调至1753 元/瓶、1743\n元/瓶、1951 元/瓶、2410 元/瓶，正式形成i 茅台线上、线下自营店双价格体系，并\n落地批价与终端成交价双锚点定价机制。本次调价并非简单终端涨价，而是公司稳价\n管理、渠道结构优化、旺季需求刺激多重战略协同举措，短期拉动旺季动销，中长期\n强化价格管控、提升盈利与渠道话语权。\n\n【7/19｜p5】〔原文字符695:798〕而对比i 茅台渠道与自营店渠道中飞天茅台114 元的价差，在客观上形成对\n于i 茅台的引流效应，理性消费者会优先选择价格更低、同为官方正品的i\n茅台平台购买，从而提升i 茅台的活跃客户、订单量与直营比例。\n\n【1/19｜p1】〔原文字符231:514〕双价格体系通过分层匹配消费需求，区分差异化价值与服务。i 茅台1639 元定价面向\n价格敏感、可接受抢购等待与不确定性的客群；自营店溢价对应即时提货、保真、线\n下体验等增值服务，承接宴请、送礼等时效要求高的消费场景，解决单一指导价无法\n适配多元消费的痛点。配套的双锚点机制构建长效稳价框架：一是i 茅台价格直接挂\n钩流通批价，2026 年平台售价随市场供需动态调整，持续收窄官方价与批发价剪刀差，\n成为反映市场流通行情的“温度计”；二是自营店1753 元锚定终端真实成交价，充当\n市场价格“稳定器”，双向夹持流通批价，平抑价格波动效果显著优于过往单一指导\n价模式。\n\n【7/19｜p4】〔原文字符284:491；跨原文单元〕当官方释放涨价信号,市场会将其解读为“底部确认”,进而提前入场,买\u0001盘涌入又反\n过来支撑批价,使预期兑现。茅台的礼品属性进一步放大了这一\u0001效应—中秋、国庆的礼\n赠需求具有刚性时间窗口,收礼方与送礼方都更关心\u0001“到时候是否买得到、是否更贵”,\n官方提价等于为旺季礼赠需求提供了“现\u0001在买更划算”的紧迫感。换言之,涨价本身未\n必带来多少增量投放,但它制\u0001造的价格预期,足以撬动原本观望的确定性需求在旺季前集\n中释放。\n\n【7/19｜p5】〔原文字符900:1034〕考虑到公司一季度i 茅台渠道占比，自营店提价目的在于在“增量有限”的\n背景下，把需求引导至i 茅台，既稳价又增利，是性价比极高的渠道再平衡。\n总体而言，我们认为自营店提价是“前台信号”，i 茅台放量才是“后台目的”，\n共同服务与直销占比提升与渠道主动权回收的长期战略。\n【7/19｜p5】〔原文字符800:898〕而提升直营比例对于公司而言具备多重战略价值：（1）掌握终端消费者数据\n与复购行为，强化用户运营；（2）减少中间环节、提升吨酒利润；（3）以平\n台真实成交价反哺批价管理，削弱传统渠道的信息不对称。\n\n（同源另有17块未展示，可按句柄补读）",
+        "evidence_contract": "native-search-evidence-v1",
+        "evidence_spans": [
+          {
+            "member": 1,
+            "start": 2,
+            "end": 229,
+            "snippet_start": 20,
+            "snippet_end": 247,
+            "text_chars": 980,
+            "text_sha256": "87057f903f88133be075c184c17cae8f50b6ccc0512cacf0c878d2ab4b2d483e",
+            "quote_sha256": "403275394847e249bb5058c51ead1f6f6337edb77f3ac3943dc32822c7de4b90"
+          },
+          {
+            "member": 7,
+            "start": 695,
+            "end": 798,
+            "snippet_start": 270,
+            "snippet_end": 373,
+            "text_chars": 1034,
+            "text_sha256": "ce478b6727e25e8456310dd67f72f14c82c70bc35c68810196824a84de367dff",
+            "quote_sha256": "c04e8af5c4c0625a4697b4cb1aed10a92b4b6e18f886ec1591e0b7ef76095f20"
+          },
+          {
+            "member": 1,
+            "start": 231,
+            "end": 514,
+            "snippet_start": 396,
+            "snippet_end": 679,
+            "text_chars": 980,
+            "text_sha256": "87057f903f88133be075c184c17cae8f50b6ccc0512cacf0c878d2ab4b2d483e",
+            "quote_sha256": "efa3357cfb2eb642bfa53c5785a3dc54007e51c0bf2c6bdff7e96d3c279f0a2a"
+          },
+          {
+            "member": 7,
+            "start": 284,
+            "end": 491,
+            "snippet_start": 708,
+            "snippet_end": 915,
+            "text_chars": 1034,
+            "text_sha256": "ce478b6727e25e8456310dd67f72f14c82c70bc35c68810196824a84de367dff",
+            "quote_sha256": "fb2b6de450c750b302f233e0d8894dfd1c1abfabb132d14f88c68738bfdac9f2"
+          },
+          {
+            "member": 7,
+            "start": 900,
+            "end": 1034,
+            "snippet_start": 939,
+            "snippet_end": 1073,
+            "text_chars": 1034,
+            "text_sha256": "ce478b6727e25e8456310dd67f72f14c82c70bc35c68810196824a84de367dff",
+            "quote_sha256": "9eab20301e55a030ce3d5ce396b14777969d1877d995f0d435e2eca9aa2c34bc"
+          },
+          {
+            "member": 7,
+            "start": 800,
+            "end": 898,
+            "snippet_start": 1096,
+            "snippet_end": 1194,
+            "text_chars": 1034,
+            "text_sha256": "ce478b6727e25e8456310dd67f72f14c82c70bc35c68810196824a84de367dff",
+            "quote_sha256": "b987acf644f00a7e483a60a0cee95003220bb49e3f3ca19262d85725e1f16b92"
+          }
+        ]
+      }
+    ],
+    "coverage": {
+      "processing": "partial",
+      "availability": "unknown",
+      "query_status": "matched",
+      "retrieval_mode": "hybrid",
+      "fallback_reason": null,
+      "purity": {
+        "policy": "native-purity-v1",
+        "sources_considered": 1,
+        "sources_filtered": 0,
+        "filter_reasons": {},
+        "scope": "bounded_candidates_not_corpus_absence"
+      },
+      "native": {
+        "policy": "native1",
+        "index_id": "b5c07e4222806b334ff35372b1313a5e5bd20200d4bbcb5b99c4ab29a79666c2",
+        "sources": 23,
+        "chunks": 585,
+        "ready_vectors": 585,
+        "body_characters": 9107,
+        "char_budget": 16000,
+        "hit_limit": 1,
+        "block_limit": 20,
+        "blocks_returned": 19,
+        "blocks_ranked": 275,
+        "cutoff": "2026-10-24",
+        "unknown_date_sources": [
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        ]
+      },
+      "reason_codes": [
+        "native_prose_scope"
+      ]
+    },
+    "hint": "仅 evidence_contract=native-search-evidence-v1 且 evidence_spans 标记的 snippet 区间是已核验原文，实际送达后可逐字写入 evidence.quote；证据足够时无需重复 fetch。无标记文本、索引说明及句内节选不能直接引用。每个 span.member 对应同一命中的 context_locators[member-1]，引用该句柄，不要一律使用命中首 locator；所有偏移按解码后的 Unicode 字符计，左闭右开。snippet_start:snippet_end 对应展示原文，start:end 对应块内原文。【i/N】表示原 context_locators 数组的第 i 个成员，不是展示顺序；原文字符 a:b 是该块取回正文中的零基、左闭右开位置。不同节选不代表连续原文。若缺论证、限定条件、指代、单位/期间/表头/脚注或全文，用同一命中的 doc_id 与所需成员 context_locators[i-1] 调用 corpus_fetch，view='compact'；需要其他上下文时再选择对应成员，不必默认申请整个数组。若已申请内容分页，按 next_cursor 续读；未读完不能声称整个申请范围完整。句内节选必须补读后再作证据；完整节选不等于整块/整篇已读或结论充分。不得混用版本或扩写句柄。blocks_returned 是合并进命中的块数，blocks_ranked 是参与排序的候选块数；未展示不等于不存在，未合并的候选需要继续检索，不能凭空构造句柄。结果仅覆盖本次允许的原生正文；未命中不等于全库没有相关资料。"
+  },
+  "fetch_texts": {
+    "chunk:native1/712e370a7081da17%3Abody%3A0005/a85f8ae282ebe68b": "\n双锚点定价机制带来更强的稳价预期。2026 年8 月8 日，茅台线下自营门店完成新\n一轮调价，飞天、五星、马年生肖、精品茅台自营零售价分别上调至1753 元/瓶、1743\n元/瓶、1951 元/瓶、2410 元/瓶，正式形成i 茅台线上、线下自营店双价格体系，并\n落地批价与终端成交价双锚点定价机制。本次调价并非简单终端涨价，而是公司稳价\n管理、渠道结构优化、旺季需求刺激多重战略协同举措，短期拉动旺季动销，中长期\n强化价格管控、提升盈利与渠道话语权。\n\n双价格体系通过分层匹配消费需求，区分差异化价值与服务。i 茅台1639 元定价面向\n价格敏感、可接受抢购等待与不确定性的客群；自营店溢价对应即时提货、保真、线\n下体验等增值服务，承接宴请、送礼等时效要求高的消费场景，解决单一指导价无法\n适配多元消费的痛点。配套的双锚点机制构建长效稳价框架：一是i 茅台价格直接挂\n钩流通批价，2026 年平台售价随市场供需动态调整，持续收窄官方价与批发价剪刀差，\n成为反映市场流通行情的“温度计”；二是自营店1753 元锚定终端真实成交价，充当\n市场价格“稳定器”，双向夹持流通批价，平抑价格波动效果显著优于过往单一指导\n价模式。\n\n淡季尾声主动提价，依托“买涨不买跌”心理前置释放旺季需求。白酒批价与市场情\n绪高度相关，价格下行预期易引发经销商与消费者观望，压制节前备货。本次官方涨\n价向市场传递价格底部确认信号，消除悲观预期，刺激观望客群集中采购。中秋、国\n庆礼赠需求存在刚性时间窗口，涨价制造短期采购紧迫感，推动潜在需求提前落地，\n无需大幅放量即可改善终端动销，形成预期回暖、成交增长、批价走强的正向循环。\n\n调价核心目标之一是推动直销渠道再平衡。2026 年一季度公司直营收入295.04 亿元，\n同比增27.06%；其中i 茅台收入215.53亿元，同比大涨267.16%，占直营总收入\n73.05%，线下自营渠道占比仅26.95%，直营增量高度依赖线上。飞天线上线下114\n元价差，自然引导消费者流向i 茅台，持续提升平台活跃度与直营销售占比。扩大直\n营规模可直接沉淀终端消费数据、减少分销环节增厚吨酒利润，同时依托真实成交数\n据打破传统渠道信息壁垒，巩固公司终端管控主动权。自营提价是表层信号，引导i\n茅台放量、提升直营占比才是长期战略核心。\n",
+    "chunk:native1/712e370a7081da17%3Abody%3A0020/421b23fc8676bdb9": "市场指引效应与“买涨不买跌”的心理博弈\n\n对于白酒消费而言,批价与市场情绪长期保持一致。当批价回落时市场情绪\u0001一度偏谨慎,\n部分消费者与经销商采取“观望”策略,在消费旺季反而压制\u0001了节前备货的动销。\n\n消费者在备货前存在典型的“买涨不买跌”的心理,价格上涨预期会催化即\u0001时\n购买与囤货需求,而价格下跌预期将诱发延迟消费。站在当前时间点来看,\u0001二季\n度与三季度初作为传统白酒消费淡季尾声,以及三季度末为传统消费旺\u0001季的前\n夕,公司在当前时间点主动提价,有助于把持币观望的需求转换为真\u0001实成交,尤其\n是能够激活对于价格敏感、但受预期驱动的中高端自饮和礼赠\u0001人群。\n\n当官方释放涨价信号,市场会将其解读为“底部确认”,进而提前入场,买\u0001盘涌入又反\n过来支撑批价,使预期兑现。茅台的礼品属性进一步放大了这一\u0001效应—中秋、国庆的礼\n赠需求具有刚性时间窗口,收礼方与送礼方都更关心\u0001“到时候是否买得到、是否更贵”,\n官方提价等于为旺季礼赠需求提供了“现\u0001在买更划算”的紧迫感。换言之,涨价本身未\n必带来多少增量投放,但它制\u0001造的价格预期,足以撬动原本观望的确定性需求在旺季前集\n中释放。\n为\u0001i\u0001茅台渠道引流,直销渠道战略再平衡\n\n从直营渠道结构来看,2026\u0001年一季度,公司直营渠道销售收入\u0001295.04\u0001亿元,\u0001同比提升\u0001\n27.06%,其中\u0001i茅台渠道实现收入\u0001215.53\u0001亿元,同比提升\u0001267.16%,\u0001i\u0001茅台渠道收入占\n据公司整体直营渠道的\u000173.05%,整体来看我们认为目前\u0001i\u0001茅台渠道已经承接公司直\n营渠道中绝大多数增量。\n- 5 -\n来源：WIND，中泰证券研究所\n\n而对比i 茅台渠道与自营店渠道中飞天茅台114 元的价差，在客观上形成对\n于i 茅台的引流效应，理性消费者会优先选择价格更低、同为官方正品的i\n茅台平台购买，从而提升i 茅台的活跃客户、订单量与直营比例。\n\n而提升直营比例对于公司而言具备多重战略价值：（1）掌握终端消费者数据\n与复购行为，强化用户运营；（2）减少中间环节、提升吨酒利润；（3）以平\n台真实成交价反哺批价管理，削弱传统渠道的信息不对称。\n\n考虑到公司一季度i 茅台渠道占比，自营店提价目的在于在“增量有限”的\n背景下，把需求引导至i 茅台，既稳价又增利，是性价比极高的渠道再平衡。\n总体而言，我们认为自营店提价是“前台信号”，i 茅台放量才是“后台目的”，\n共同服务与直销占比提升与渠道主动权回收的长期战略。"
+  }
+}

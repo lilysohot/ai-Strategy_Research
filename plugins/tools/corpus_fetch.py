@@ -965,10 +965,12 @@ async def corpus_fetch(
     context_locators 成员补读，推荐 view="compact"；旧 snippet 和句内节选须先补读。
     分页时按 next_cursor 续读，未读完不能声称申请范围完整。单块结果装得下时
     维持既有单块字段语义；批量／游标模式返回一致的分页信封；单块超限自动分片。
+    search v2 的 excerpts.ref 可原样作为 locator，补读其所属完整块；返回规范块句柄。
+    scope_ref 先交给 corpus_inventory 展开候选，不能作为本工具的 locator。
 
     Args:
         doc_id: 版本句柄（来自 ``corpus_search`` 的 ``doc_id``，形如 ``cv2:<build_id>``）。
-        locator: 单块句柄（来自 ``corpus_search`` 的 ``locator``，形如 ``chunk:<chunk_id>``）。
+        locator: 单块句柄（``chunk:<chunk_id>``）或 search v2 的 excerpts.ref。
         locators: 批量块句柄（有序，按首次出现去重）；表格块请附带必要表头、期间、单位。
         cursor: 续取游标（上一页返回的 ``next_cursor``；类型必须为 ``content``）；
             游标已绑定请求集合、顺序、视图与位置，续取时不得改动，视图由游标决定。
@@ -1020,6 +1022,20 @@ async def corpus_fetch(
             "locator、locators、cursor 三者恰选其一（不得同时给出或同时省略）",
             doc_id=doc_id,
         )
+
+    # v2 search references are aliases only. Resolve before paging/relations so
+    # all existing source validation and canonical fetch-result semantics apply.
+    from plugins.corpus.search_refs import SearchReferenceError, canonical_locator
+
+    try:
+        if isinstance(locator, str):
+            locator = canonical_locator(doc_id, locator)
+        if isinstance(locators, list):
+            locators = [
+                canonical_locator(doc_id, loc) if isinstance(loc, str) else loc for loc in locators
+            ]
+    except SearchReferenceError as exc:
+        return _json_error(f"search_reference_unavailable：{exc}；请重新检索", doc_id=doc_id)
 
     # ── 游标模式：视图、请求集合与起点都由游标决定（A2.2） ──
     if cursor is not None:

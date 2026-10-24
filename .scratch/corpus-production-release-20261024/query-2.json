@@ -1,0 +1,215 @@
+{
+  "http": {
+    "query": "可插拔光模块现在卡在哪些系统瓶颈上？改用NPO或CPO，对可靠性有什么更高要求？",
+    "hits": [
+      {
+        "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+        "locator": "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0022/205a4072c924eabd",
+        "title": "微软：NPO 是通往 CPO 的桥梁，前提是 FIT 指标改善 10 倍",
+        "snippet": "【1/20｜p10】〔原文字符0:251〕微软的 Yawei Yin 表示，可插拔模块正同时撞上三堵墙（面板密度、模块散热和电信号传输距离），\n这是系统层面的约束，而非单个元器件的问题。CPO 是终极目标，NPO 则是通往它的桥梁；大多数\n通道可以采用线性驱动，仅在需要处做重定时。真正的障碍在于故障率：一旦没有可插拔模块，元器件\n和系统层面的 FIT（平均失效率单位）至少要改善 10 倍，而且运营商需要新的机制模型，确保故障发\n生时流量仍能持续传输。Yin 预计，NPO/CPO 系统将按数据中心逐个进行协同设计，封装形态可以\n自由变化。\n\n【4/20｜p11】〔原文字符0:442〕甲骨文 OCI 架构师 Kannan Raj 提醒在场听众，甲骨文在大约十二年前就出货过板载插槽式光互连器\n件（board-mounted socketed optics），这是 NPO（近封装光学）的前身。他给出的数据包括：\n“低速宽总线（slow and wide）”纵向扩展的能耗可降至 1–2pJ/bit 以下，传统纵向/横向扩展（\nscale-up/out）为 5–10 pJ/bit，比完全重定时（fully retimed）的 200G 可插拔光模块功耗降低\n约 50%，理论成本节省 30% 以上；在大规模部署 LPO（线性驱动可插拔光学）后，完全重定时链路\n记录到的状态转换次数是LPO 的 1.75 倍。问题同样切切实实存在：插槽本身会引入独特的失效模式\n；外置激光器虽然支持现场更换，但需要昂贵的保偏光纤（PM fiber）；而内置激光器成本更低，但\n一旦损坏就意味着必须整机返修。他的核心结论是：NPO 必须证明自身具备与焊接式 CPO 相当的可\n靠性与能效。\n（同源另有18块未展示，可按句柄补读）",
+        "score": 0.0,
+        "published": "2026-10-21",
+        "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+        "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+        "chunk_id": "47cc0b9dd2aeeced:body:0022",
+        "context_locators": [
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0022/205a4072c924eabd",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0027/38df451eca6f2281",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0028/0e00bb251890ef04",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0023/a1576bde09e4f496",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0004/5081ac9e3024aafd",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0014/8fc1804e58ddd5b8",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0006/e520931c8085168a",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0000/884ce731ba746125",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0033/63447bea33a7c102",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0030/dfb1174564e1a1d4",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0019/4d3d264757effabf",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0003/e3e856a7a9cfb097",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0050/304641042cbef739",
+          "chunk:native1/47cc0b9dd2aeeced%3Aheading%3A0005/aa957989cc0969d7",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0009/ae4fdc1ae4b74fb3",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0034/3cb2169200ba8848",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0011/bfd1acb2ded393cd",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0031/bddfa70d1f6f9c6a",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0007/4976e0635fd43107",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0047/dc24a5b93b20b52e"
+        ],
+        "scope_id": "scope:e26d197f60228630c51d2411f0e8a7ad",
+        "context_by_kind": [
+          [
+            "body",
+            19
+          ],
+          [
+            "heading",
+            1
+          ]
+        ],
+        "evidence_spans": [
+          {
+            "member": 1,
+            "start": 0,
+            "end": 251,
+            "snippet_start": 21,
+            "snippet_end": 272,
+            "text_chars": 843,
+            "text_sha256": "167b611e0107d2f42f0a6c6d67626260a2025e585aacb8099837c9cd08cae2f3",
+            "quote_sha256": "96afdf43b50cd5dfab52547a8d86a6c733a76b875a24d026a029e48f6aa366ba"
+          },
+          {
+            "member": 4,
+            "start": 0,
+            "end": 442,
+            "snippet_start": 294,
+            "snippet_end": 736,
+            "text_chars": 442,
+            "text_sha256": "912f1cf18f471c2d51f92de976c2ab9298a92402ffefbdc991c315b2452cfae0",
+            "quote_sha256": "912f1cf18f471c2d51f92de976c2ab9298a92402ffefbdc991c315b2452cfae0"
+          }
+        ]
+      }
+    ],
+    "coverage": {
+      "processing": "partial",
+      "availability": "unknown",
+      "query_status": "matched",
+      "retrieval_mode": "hybrid",
+      "fallback_reason": null,
+      "purity": {
+        "policy": "native-purity-v1",
+        "sources_considered": 1,
+        "sources_filtered": 0,
+        "filter_reasons": {},
+        "scope": "bounded_candidates_not_corpus_absence"
+      },
+      "native": {
+        "policy": "native1",
+        "index_id": "b5c07e4222806b334ff35372b1313a5e5bd20200d4bbcb5b99c4ab29a79666c2",
+        "sources": 23,
+        "chunks": 585,
+        "ready_vectors": 585,
+        "body_characters": 8794,
+        "char_budget": 16000,
+        "hit_limit": 1,
+        "block_limit": 20,
+        "blocks_returned": 20,
+        "blocks_ranked": 234,
+        "cutoff": "2026-10-24",
+        "unknown_date_sources": [
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        ]
+      },
+      "reason_codes": [
+        "native_prose_scope"
+      ]
+    }
+  },
+  "tool": {
+    "ok": true,
+    "query": "可插拔光模块现在卡在哪些系统瓶颈上？改用NPO或CPO，对可靠性有什么更高要求？",
+    "count": 1,
+    "hits": [
+      {
+        "doc_id": "cv2:47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+        "locator": "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0022/205a4072c924eabd",
+        "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+        "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+        "chunk_id": "47cc0b9dd2aeeced:body:0022",
+        "context_locators": [
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0022/205a4072c924eabd",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0027/38df451eca6f2281",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0028/0e00bb251890ef04",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0023/a1576bde09e4f496",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0004/5081ac9e3024aafd",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0014/8fc1804e58ddd5b8",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0006/e520931c8085168a",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0000/884ce731ba746125",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0033/63447bea33a7c102",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0030/dfb1174564e1a1d4",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0019/4d3d264757effabf",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0003/e3e856a7a9cfb097",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0009/ae4fdc1ae4b74fb3",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0050/304641042cbef739",
+          "chunk:native1/47cc0b9dd2aeeced%3Aheading%3A0005/aa957989cc0969d7",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0034/3cb2169200ba8848",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0011/bfd1acb2ded393cd",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0031/bddfa70d1f6f9c6a",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0047/dc24a5b93b20b52e",
+          "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0007/4976e0635fd43107"
+        ],
+        "scope_id": "scope:1531c08a10ff73eff70c70952bc8375b",
+        "total_chunks": 20,
+        "by_kind": {
+          "body": 19,
+          "heading": 1
+        },
+        "table_chunks": 0,
+        "title": "微软：NPO 是通往 CPO 的桥梁，前提是 FIT 指标改善 10 倍",
+        "published": "2026-10-21",
+        "snippet": "【1/20｜p10】〔原文字符0:251〕微软的 Yawei Yin 表示，可插拔模块正同时撞上三堵墙（面板密度、模块散热和电信号传输距离），\n这是系统层面的约束，而非单个元器件的问题。CPO 是终极目标，NPO 则是通往它的桥梁；大多数\n通道可以采用线性驱动，仅在需要处做重定时。真正的障碍在于故障率：一旦没有可插拔模块，元器件\n和系统层面的 FIT（平均失效率单位）至少要改善 10 倍，而且运营商需要新的机制模型，确保故障发\n生时流量仍能持续传输。Yin 预计，NPO/CPO 系统将按数据中心逐个进行协同设计，封装形态可以\n自由变化。\n\n【4/20｜p11】〔原文字符0:442〕甲骨文 OCI 架构师 Kannan Raj 提醒在场听众，甲骨文在大约十二年前就出货过板载插槽式光互连器\n件（board-mounted socketed optics），这是 NPO（近封装光学）的前身。他给出的数据包括：\n“低速宽总线（slow and wide）”纵向扩展的能耗可降至 1–2pJ/bit 以下，传统纵向/横向扩展（\nscale-up/out）为 5–10 pJ/bit，比完全重定时（fully retimed）的 200G 可插拔光模块功耗降低\n约 50%，理论成本节省 30% 以上；在大规模部署 LPO（线性驱动可插拔光学）后，完全重定时链路\n记录到的状态转换次数是LPO 的 1.75 倍。问题同样切切实实存在：插槽本身会引入独特的失效模式\n；外置激光器虽然支持现场更换，但需要昂贵的保偏光纤（PM fiber）；而内置激光器成本更低，但\n一旦损坏就意味着必须整机返修。他的核心结论是：NPO 必须证明自身具备与焊接式 CPO 相当的可\n靠性与能效。\n（同源另有18块未展示，可按句柄补读）",
+        "evidence_contract": "native-search-evidence-v1",
+        "evidence_spans": [
+          {
+            "member": 1,
+            "start": 0,
+            "end": 251,
+            "snippet_start": 21,
+            "snippet_end": 272,
+            "text_chars": 843,
+            "text_sha256": "167b611e0107d2f42f0a6c6d67626260a2025e585aacb8099837c9cd08cae2f3",
+            "quote_sha256": "96afdf43b50cd5dfab52547a8d86a6c733a76b875a24d026a029e48f6aa366ba"
+          },
+          {
+            "member": 4,
+            "start": 0,
+            "end": 442,
+            "snippet_start": 294,
+            "snippet_end": 736,
+            "text_chars": 442,
+            "text_sha256": "912f1cf18f471c2d51f92de976c2ab9298a92402ffefbdc991c315b2452cfae0",
+            "quote_sha256": "912f1cf18f471c2d51f92de976c2ab9298a92402ffefbdc991c315b2452cfae0"
+          }
+        ]
+      }
+    ],
+    "coverage": {
+      "processing": "partial",
+      "availability": "unknown",
+      "query_status": "matched",
+      "retrieval_mode": "hybrid",
+      "fallback_reason": null,
+      "purity": {
+        "policy": "native-purity-v1",
+        "sources_considered": 1,
+        "sources_filtered": 0,
+        "filter_reasons": {},
+        "scope": "bounded_candidates_not_corpus_absence"
+      },
+      "native": {
+        "policy": "native1",
+        "index_id": "b5c07e4222806b334ff35372b1313a5e5bd20200d4bbcb5b99c4ab29a79666c2",
+        "sources": 23,
+        "chunks": 585,
+        "ready_vectors": 585,
+        "body_characters": 8794,
+        "char_budget": 16000,
+        "hit_limit": 1,
+        "block_limit": 20,
+        "blocks_returned": 20,
+        "blocks_ranked": 234,
+        "cutoff": "2026-10-24",
+        "unknown_date_sources": [
+          "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f"
+        ]
+      },
+      "reason_codes": [
+        "native_prose_scope"
+      ]
+    },
+    "hint": "仅 evidence_contract=native-search-evidence-v1 且 evidence_spans 标记的 snippet 区间是已核验原文，实际送达后可逐字写入 evidence.quote；证据足够时无需重复 fetch。无标记文本、索引说明及句内节选不能直接引用。每个 span.member 对应同一命中的 context_locators[member-1]，引用该句柄，不要一律使用命中首 locator；所有偏移按解码后的 Unicode 字符计，左闭右开。snippet_start:snippet_end 对应展示原文，start:end 对应块内原文。【i/N】表示原 context_locators 数组的第 i 个成员，不是展示顺序；原文字符 a:b 是该块取回正文中的零基、左闭右开位置。不同节选不代表连续原文。若缺论证、限定条件、指代、单位/期间/表头/脚注或全文，用同一命中的 doc_id 与所需成员 context_locators[i-1] 调用 corpus_fetch，view='compact'；需要其他上下文时再选择对应成员，不必默认申请整个数组。若已申请内容分页，按 next_cursor 续读；未读完不能声称整个申请范围完整。句内节选必须补读后再作证据；完整节选不等于整块/整篇已读或结论充分。不得混用版本或扩写句柄。blocks_returned 是合并进命中的块数，blocks_ranked 是参与排序的候选块数；未展示不等于不存在，未合并的候选需要继续检索，不能凭空构造句柄。结果仅覆盖本次允许的原生正文；未命中不等于全库没有相关资料。"
+  },
+  "fetch_texts": {
+    "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0022/205a4072c924eabd": "微软的 Yawei Yin 表示，可插拔模块正同时撞上三堵墙（面板密度、模块散热和电信号传输距离），\n这是系统层面的约束，而非单个元器件的问题。CPO 是终极目标，NPO 则是通往它的桥梁；大多数\n通道可以采用线性驱动，仅在需要处做重定时。真正的障碍在于故障率：一旦没有可插拔模块，元器件\n和系统层面的 FIT（平均失效率单位）至少要改善 10 倍，而且运营商需要新的机制模型，确保故障发\n生时流量仍能持续传输。Yin 预计，NPO/CPO 系统将按数据中心逐个进行协同设计，封装形态可以\n自由变化。\n微软官方博客详细介绍了 Maia 300 的网络架构。Maia 300 计划自 2027 年起展开数吉瓦（\n10 / 37\nmulti-gigawatt）规模部署，并将成为微软自家产品的主要推理平台。单个机架容纳 96 个加速器（\n24 个托盘，每盘 4 个），机架内的所有纵向扩展（scale-up）互连均采用电气连接：托盘内部的加\n速器两两直接配对，其余连接则通过 3 个液冷交换机托盘中的 6 颗高基数（high-radix）交换芯片完\n成。机架之间，二级交换机通过光互连将最多 128 个机架组成一个包含 12,288 个加速器的\nSuperpod，且每个加速器均能以高达 750 GB/s 的速率与 Pod 内的任意对等节点通信。延迟分为三\n层：直接配对的对等节点延迟最低，机架内为单跳（one switch hop），跨机架则为三跳。传输层采\n用定制的基于以太网的 AI 协议，加速器无需经过主机或独立网卡（NIC）即可主动发起流量。在标准\n制定方面，微软正在推进 MRC 多平面网络（两层架构即可支持超过 10 万颗 GPU）、OCI MSA（\n微软称其为首个面向多机架纵向扩展的光学规范）以及ESUN。在 Arista 的新闻稿中，负责微软芯片\n与云硬件工程的 Reynold D’Sa 表示，微软正与 Arista 合作，为 Maia 打造高带宽纵向扩展设计方\n案。",
+    "chunk:native1/47cc0b9dd2aeeced%3Abody%3A0023/a1576bde09e4f496": "甲骨文 OCI 架构师 Kannan Raj 提醒在场听众，甲骨文在大约十二年前就出货过板载插槽式光互连器\n件（board-mounted socketed optics），这是 NPO（近封装光学）的前身。他给出的数据包括：\n“低速宽总线（slow and wide）”纵向扩展的能耗可降至 1–2pJ/bit 以下，传统纵向/横向扩展（\nscale-up/out）为 5–10 pJ/bit，比完全重定时（fully retimed）的 200G 可插拔光模块功耗降低\n约 50%，理论成本节省 30% 以上；在大规模部署 LPO（线性驱动可插拔光学）后，完全重定时链路\n记录到的状态转换次数是LPO 的 1.75 倍。问题同样切切实实存在：插槽本身会引入独特的失效模式\n；外置激光器虽然支持现场更换，但需要昂贵的保偏光纤（PM fiber）；而内置激光器成本更低，但\n一旦损坏就意味着必须整机返修。他的核心结论是：NPO 必须证明自身具备与焊接式 CPO 相当的可\n靠性与能效。"
+  }
+}

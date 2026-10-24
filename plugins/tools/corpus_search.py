@@ -11,7 +11,9 @@ import os
 from typing import Any
 
 from frontier_agent.core.tool import tool
-from plugins.corpus.search_evidence import SEARCH_EVIDENCE_CONTRACT
+from plugins.corpus.search_evidence import SEARCH_EVIDENCE_CONTRACT, search_evidence_items
+from plugins.corpus.search_refs import CONTRACT as REFERENCE_CONTRACT
+from plugins.corpus.search_refs import SearchReferenceError, compact_hit
 from plugins.corpus.service import get_service
 
 MAX_LIMIT = 20
@@ -32,6 +34,9 @@ _HIT_CORE_KEYS = (
     "core_fetch_plan",
     "evidence_contract",
     "evidence_spans",
+    "excerpts",
+    "scope_ref",
+    "available_blocks",
 )
 #: 核心字段之外按预算余量保留的可选字段（顺序即保留优先级）。
 _HIT_OPTIONAL_KEYS = ("title", "published", "snippet", "by_kind", "preview")
@@ -76,37 +81,73 @@ ABSTAIN_HINT = (
 )
 
 
-#: 原生检索的下一步指令：句柄只保留一份，补读按同一命中的 doc_id + context_locators。
+#: 每次结果只提示当前动作；固定坐标、范围及分页规则放在工具定义中。
 NATIVE_HINT = (
-    "仅 evidence_contract=native-search-evidence-v1 且 evidence_spans 标记的 snippet 区间"
-    "是已核验原文，实际送达后可逐字写入 evidence.quote；证据足够时无需重复 fetch。"
-    "无标记文本、索引说明及句内节选不能直接引用。"
-    "每个 span.member 对应同一命中的 context_locators[member-1]，引用该句柄，"
-    "不要一律使用命中首 locator；所有偏移按解码后的 Unicode 字符计，左闭右开。"
-    "snippet_start:snippet_end 对应展示原文，start:end 对应块内原文。"
-    "【i/N】表示原 context_locators 数组的第 i 个成员，不是展示顺序；"
-    "原文字符 a:b 是该块取回正文中的零基、左闭右开位置。不同节选不代表连续原文。"
-    "若缺论证、限定条件、指代、单位/期间/表头/脚注或全文，用同一命中的 doc_id 与"
-    "所需成员 context_locators[i-1] 调用 corpus_fetch，"
-    "view='compact'；需要其他上下文时再选择对应成员，不必默认申请整个数组。"
-    "若已申请内容分页，按 next_cursor 续读；未读完不能声称整个申请范围完整。"
-    "句内节选必须补读后再作证据；完整节选不等于整块/整篇已读或结论充分。"
-    "不得混用版本或扩写句柄。"
-    "blocks_returned 是合并进命中的块数，blocks_ranked 是参与排序的候选块数；"
-    "未展示不等于不存在，未合并的候选需要继续检索，不能凭空构造句柄。"
-    "结果仅覆盖本次允许的原生正文；未命中不等于全库没有相关资料。"
+    "仅 evidence_spans 标记的原文可引用，句柄用 context_locators[member-1]。"
+    "证据足够时无需重复 fetch；缺上下文时按需补读。未标记文本仅供定位。"
 )
+NATIVE_PREVIEW_HINT = "本次仅返回定位预览，无可直接引用的原文区间；请按原句柄 fetch 补读。"
+REFERENCE_HINT = (
+    "excerpts 原文可引用，使用同一 doc_id 和 ref 作为 locator。缺上下文时 fetch 补读；"
+    "其他候选用 scope_ref 调用 corpus_inventory。preview 不可引用。"
+)
+
+
+def _native_delivery(hits: list[dict[str, Any]]) -> dict[str, int]:
+    """Count only intact evidence in this message, never the unshown candidate text."""
+    characters = 0
+    blocks: set[tuple[str, str]] = set()
+    for hit in hits:
+        for item in search_evidence_items(hit):
+            characters += len(item["text"])
+            blocks.add((hit["doc_id"], item["locator"]))
+    return {"evidence_characters": characters, "evidence_blocks": len(blocks)}
+
+
+def _native_hint(delivery: dict[str, int], elided: int = 0, *, references: bool = False) -> str:
+    hint = NATIVE_HINT if delivery["evidence_blocks"] else NATIVE_PREVIEW_HINT
+    if references:
+        hint = (
+            REFERENCE_HINT
+            if delivery["evidence_blocks"]
+            else ("本次仅有定位预览；用 scope_ref 调用 corpus_inventory 选择候选，再 fetch 补读。")
+        )
+    return ("尾部命中因预算被整条省略。" if elided else "") + hint
 
 
 @tool
 async def corpus_search(query: str, limit: int = 10) -> str:
     """检索研报，返回定位句柄及有界原文；缺失上下文用 corpus_fetch 补读。
 
-    原生命中 evidence_contract=native-search-evidence-v1 的 evidence_spans 标记
+    原生 v2 命中 evidence_contract=native-search-evidence-v2 的 excerpts 是原文证据，
+    每项含 text 和 ref。引用时使用同一命中的 doc_id，以 ref 原样作为 evidence.locator
+    （或 evidence.page）；补读使用 corpus_fetch(doc_id, locator=ref, view="compact")，
+    返回该片段所属整块，超预算时分页。不得自行解析、拼接或扩写短引用。
+    available_blocks 是原候选范围块数，不是已读数；用 corpus_inventory(doc_id,
+    scope_ref=scope_ref) 展开其他候选，再按需 fetch。完整校验记录保存在后台，
+    引用丢失/损坏/跨版本时显式失败，需重新检索；持有 ref 不代表原文已送达。
+    preview 只用于定位，不可引用。excerpts 充分时无需重复 fetch，缺条件时必须补读。
+
+    历史 v1 命中 evidence_contract=native-search-evidence-v1 的 evidence_spans 标记
     snippet 中可逐字引用的原文区间；实际送达且足以支撑结论时无需例行 fetch。
     引用使用同一命中的 doc_id 与 context_locators[span.member-1]。未标记文本、
     旧 snippet、索引说明和句内节选仅供定位。缺条件、指代、表格依赖或更多原文时，
     用原句柄 corpus_fetch(view="compact") 补读；节选完整不代表全篇已读或结论充分。
+
+    坐标规则：所有偏移按解码后的 Unicode 字符计，零基、左闭右开。
+    snippet_start:snippet_end 是展示区间，start:end 是 fetch 块内区间。
+    【i/N】中的 i 是 context_locators 的一基成员号，不是展示顺序；不同节选不连续。
+    不得混用版本、扩写句柄或一律引用命中首 locator。补读按需选择成员，
+    不必默认申请整个数组；分页按 next_cursor 续读，未读完不声称申请范围完整。
+
+    数量规则：原生结果 count 是本次返回命中数；预算省略时 hits_total 是省略前
+    命中数，hits_elided 是省略数。delivery.evidence_characters / evidence_blocks
+    仅统计本消息中可核验的原文字符 / 不同块数，不含标签、预览和未展示正文，
+    不代表结论充分；被压成摘要的文本不自动取得原文证据资格。
+    coverage.native.body_characters / blocks_returned 是预算裁剪前合并的候选正文
+    字符 / 块数，blocks_ranked 是排序候选数，都不等于已交付正文。
+    title 是首命中块标题，未必是报告名称。结果只覆盖允许的原生正文；
+    未展示不等于不存在，未合并的候选需继续检索，未命中不等于全库无资料。
 
     Args:
         query: 检索词。可以是关键词、数字（如 ``47.3亿``、``30%``）
@@ -114,11 +155,12 @@ async def corpus_search(query: str, limit: int = 10) -> str:
         limit: 返回条数上限，默认 10。
 
     Returns:
-        JSON 字符串：``{"ok": true, "hits": [{"doc_id", "locator", "source_id",
-        "build_id", "chunk_id", "context_locators", "fetch_plan", "title",
-        "published", "snippet", "evidence_contract", "evidence_spans"}],
-        "coverage": {...}, "hint": ...}``（I2-8：``doc_id`` 为 ``cv2:<build_id>``、
-        ``locator`` 为 ``chunk:<chunk_id>``；``coverage`` 为 §7.3 三轴对象）；
+        原生 v2：``{"ok": true, "hits": [{"doc_id", "title", "published",
+        "excerpts": [{"text", "ref"}], "scope_ref", "available_blocks",
+        "evidence_contract", "preview"?}], "coverage": {...}, "delivery": {...}, "hint": ...}``。
+        存储不可用时返回自包含 v1（snippet/evidence_spans/context_locators），
+        标记 reference_storage=unavailable_v1_fallback。旧检索保持原定位结构。
+        doc_id 仍为 cv2:<build_id>，短引用不能更改版本；coverage 为 §7.3 三轴对象。
         语料库不存在时返回 ``ok=false``。结果超过本轮工具结果预算时不会按字符硬切
         （那样会破坏 JSON 与句柄），而是整条舍弃尾部命中并标 ``hits_elided``、
         去掉可推导字段并标 ``diagnostics_elided``；连一条都装不下时返回
@@ -232,12 +274,6 @@ async def corpus_search(query: str, limit: int = 10) -> str:
         # 只报告**块**统计，不声称「共有几张表」（表身份未知时为 null）。
         payload_hits.append(
             {
-                **head,
-                **plan,
-                "scope_id": hit.scope_id,
-                "total_chunks": len(hit.context_locators),
-                "by_kind": dict(hit.context_by_kind),
-                "table_chunks": dict(hit.context_by_kind).get("table", 0),
                 "title": hit.title,
                 "published": hit.published,
                 "snippet": hit.snippet,
@@ -249,18 +285,38 @@ async def corpus_search(query: str, limit: int = 10) -> str:
                     if native and getattr(hit, "evidence_spans", ())
                     else {}
                 ),
+                **head,
+                **plan,
+                "scope_id": hit.scope_id,
+                "total_chunks": len(hit.context_locators),
+                "by_kind": dict(hit.context_by_kind),
+                "table_chunks": dict(hit.context_by_kind).get("table", 0),
             }
         )
+    reference_storage_failed = False
+    if native:
+        try:
+            payload_hits = [compact_hit(hit) for hit in payload_hits]
+        except (OSError, SearchReferenceError):
+            # Retain the complete self-contained v1 result if durable storage is
+            # unavailable; never issue references that only this process can read.
+            reference_storage_failed = True
+    references = native and not reference_storage_failed
+    delivery = _native_delivery(payload_hits) if native else {}
     body = json.dumps(
         {
             "ok": True,
             "query": query,
             "count": len(hits),
             "hits": payload_hits,
+            **({"delivery": delivery} if native else {}),
+            **(
+                {"reference_storage": "unavailable_v1_fallback"} if reference_storage_failed else {}
+            ),
             "coverage": coverage,
             # hint 显式告诉模型下一步该做什么，而不是让它自己领会
             "hint": (
-                NATIVE_HINT
+                _native_hint(delivery, references=references)
                 if native
                 else (
                     "snippet 已截断，仅用于定位，禁止直接引用。"
@@ -273,6 +329,7 @@ async def corpus_search(query: str, limit: int = 10) -> str:
             ),
         },
         ensure_ascii=False,
+        separators=(",", ":") if native else None,
     )
     if native:
         return body
@@ -303,10 +360,11 @@ async def corpus_search(query: str, limit: int = 10) -> str:
 
 def _compact_hit(hit: dict[str, Any]) -> dict[str, Any]:
     """逐命中只保留定位与复取必需字段（其余为可推导／诊断字段）。"""
-    out = {key: hit[key] for key in _HIT_CORE_KEYS if key in hit}
+    out = {}
     for key in _HIT_OPTIONAL_KEYS:
         if key in hit:
             out[key] = hit[key]
+    out.update({key: hit[key] for key in _HIT_CORE_KEYS if key in hit})
     return out
 
 
@@ -338,14 +396,20 @@ def fit_search_payload(body: str, budget: int) -> str | None:
     if len(body) <= budget:
         return body
     native = bool((payload.get("coverage") or {}).get("native"))
+    references = any(
+        hit.get("evidence_contract") == REFERENCE_CONTRACT for hit in payload.get("hits", [])
+    )
     if native:
         # Preserve each complete native scope without duplicating its locator
         # array in fetch_plan and context_locators under a small message budget.
         for hit in payload.get("hits", []):
             hit.pop("fetch_plan", None)
-        payload["hint"] = NATIVE_HINT
+        payload["delivery"] = _native_delivery(payload.get("hits", []))
+        payload["hint"] = _native_hint(
+            payload["delivery"], payload.get("hits_elided", 0), references=references
+        )
         payload["plans_compacted"] = True
-        candidate = json.dumps(payload, ensure_ascii=False)
+        candidate = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
         if len(candidate) <= budget:
             return candidate
     # The full plan duplicates doc_id/context_locators. In the pilot compact
@@ -395,14 +459,21 @@ def fit_search_payload(body: str, budget: int) -> str | None:
                 out["previews_elided"] = True
         if native:
             out["plans_compacted"] = True
-        if len(keep) < len(hits):
+            out["count"] = len(keep)
+            out["delivery"] = _native_delivery(keep)
+            elided = payload.get("hits_elided", 0) + len(hits) - len(keep)
+            out["hint"] = _native_hint(out["delivery"], elided, references=references)
+            if elided:
+                out["hits_total"] = len(keep) + elided
+                out["hits_elided"] = elided
+        if not native and len(keep) < len(hits):
             out["hits_elided"] = len(hits) - len(keep)
             out["hint"] = (
                 "尾部命中因预算被整条省略。" + str(payload["hint"])
-                if payload.get("delivery_preview") == "pilot" or native
+                if payload.get("delivery_preview") == "pilot"
                 else _ELIDED_HINT
             )
-        return json.dumps(out, ensure_ascii=False)
+        return json.dumps(out, ensure_ascii=False, separators=(",", ":") if native else None)
 
     candidate = render(compact_hits)
     if len(candidate) <= budget:
