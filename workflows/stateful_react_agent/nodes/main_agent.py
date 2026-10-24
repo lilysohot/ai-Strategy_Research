@@ -93,6 +93,7 @@ from plugins.tools.task_board import (
     clear_board,
     restore_board_from_messages,
 )
+from workflows._shared.cross_mode_context import append_context_to_question
 from workflows.stateful_react_agent._runtime import (
     ReactToolResultPostProcessor,
     _minimal_best_effort_answer,
@@ -152,6 +153,7 @@ def _downgrade_unfinished(status: str, stopped_by: str | None, text: str) -> str
         return "partial"
     return "partial" if _PENDING_ACTION_RE.search(tail) else status
 
+
 REACT_MAX_TURNS = 100
 REACT_TOOL_TIMEOUT_S = 1800
 REACT_LLM_TIMEOUT_S = 1800
@@ -194,7 +196,9 @@ def _resolve_research_wall(
         else max(float(hard_wall_reserve_s), 0.0)
     )
     return resolve_research_wall(
-        agent_cfg, reserve_s=reserve_s, label_prefix="stateful",
+        agent_cfg,
+        reserve_s=reserve_s,
+        label_prefix="stateful",
     )
 
 
@@ -205,7 +209,8 @@ def _resolve_wall_deadline_s(
 ) -> float:
     """Research-only deadline for :class:`WallClockDeadlineObserver`."""
     return _resolve_research_wall(
-        agent_cfg, hard_wall_reserve_s=hard_wall_reserve_s,
+        agent_cfg,
+        hard_wall_reserve_s=hard_wall_reserve_s,
     ).research_deadline_s
 
 
@@ -366,11 +371,7 @@ async def _resolve_answer_language_with_llm(
             )
             or "",
         )
-        model = (
-            getattr(resp, "model", "")
-            or extract_model_name(llm, profile)
-            or ""
-        )
+        model = getattr(resp, "model", "") or extract_model_name(llm, profile) or ""
         from workflows._shared.sdk_shim import (
             record_language_detect_usage,
         )
@@ -383,10 +384,7 @@ async def _resolve_answer_language_with_llm(
         )
         return _strip_thinking(text_of(resp.content))
 
-    return (
-        await detect_language_from_prompt(question, _detect_ask)
-        or answer_language
-    )
+    return await detect_language_from_prompt(question, _detect_ask) or answer_language
 
 
 def _resolve_llm_and_profile(
@@ -449,19 +447,15 @@ def _resolve_conversation_path(state: dict[str, Any], task_id: str) -> Path:
 
 def _resolve_worktree_root(state: dict[str, Any], task_id: str) -> Path:
     md = state.get("metadata") or {}
+    if md.get("_sandbox_workspace_root"):
+        return Path(md["_sandbox_workspace_root"])
     trial_dir = md.get("_trial_dir")
     if trial_dir:
         return Path(trial_dir) / "sandbox" / "worktree"
     experiment = md.get("experiment")
     bench_task_id = md.get("bench_task_id")
     if experiment and bench_task_id:
-        return (
-            Path("experiments")
-            / str(experiment)
-            / "questions"
-            / str(bench_task_id)
-            / "worktree"
-        )
+        return Path("experiments") / str(experiment) / "questions" / str(bench_task_id) / "worktree"
     coding_root = md.get("coding_workspace_root")
     if coding_root:
         return Path(coding_root)
@@ -474,7 +468,7 @@ def _resolve_sandbox_binds(
 ) -> tuple[tuple[tuple[str, str, bool], ...], Path]:
     """Resolve benchmark-provided ``/inputs`` and shared ``/outputs`` mounts."""
     metadata = state.get("metadata") or {}
-    outputs_dir = worktree_root.parent / "outputs"
+    outputs_dir = Path(metadata.get("_sandbox_outputs_dir") or worktree_root.parent / "outputs")
 
     binds: list[tuple[str, str, bool]] = []
     dataset_root = str(metadata.get("_dataset_root") or "")
@@ -546,7 +540,10 @@ def _log_inputs_dir_contents(
             is_dir = exists and p.is_dir()
             logger.info(
                 "[stateful_react inputs] %s path=%s exists=%s is_dir=%s",
-                label, p, exists, is_dir,
+                label,
+                p,
+                exists,
+                is_dir,
             )
             if not is_dir:
                 continue
@@ -562,13 +559,17 @@ def _log_inputs_dir_contents(
             if not files:
                 logger.warning(
                     "[stateful_react inputs] %s path=%s is EMPTY — read_file / "
-                    "glob_search will find nothing here", label, p,
+                    "glob_search will find nothing here",
+                    label,
+                    p,
                 )
                 continue
             found_any = True
             logger.info(
                 "[stateful_react inputs] %s path=%s has %d file(s):",
-                label, p, len(files),
+                label,
+                p,
+                len(files),
             )
             for f in files:
                 try:
@@ -576,12 +577,17 @@ def _log_inputs_dir_contents(
                 except OSError:
                     size = -1
                 logger.info(
-                    "[stateful_react inputs]   name=%r abs=%s size=%s", f.name, f, size,
+                    "[stateful_react inputs]   name=%r abs=%s size=%s",
+                    f.name,
+                    f,
+                    size,
                 )
         except Exception as exc:
             logger.warning(
                 "[stateful_react inputs] failed to scan %s path=%s: %s",
-                label, root, exc,
+                label,
+                root,
+                exc,
             )
 
     if not found_any and fallback_roots:
@@ -593,7 +599,10 @@ def _log_inputs_dir_contents(
             p = Path(root)
             logger.warning(
                 "[stateful_react inputs] fallback %s path=%s exists=%s entries=%s",
-                label, p, p.exists(), _shallow_entries(root) or "(none/not-a-dir)",
+                label,
+                p,
+                p.exists(),
+                _shallow_entries(root) or "(none/not-a-dir)",
             )
 
 
@@ -622,15 +631,20 @@ def _tools_for_stateful_react(
     import os as _os
 
     from workflows.stateful_react_agent import WEB_TOOL_NAMES
+
     no_web = _os.environ.get("REACT_NO_WEB", "").strip().lower() in (
-        "1", "true", "yes", "on",
+        "1",
+        "true",
+        "yes",
+        "on",
     )
     if no_web:
         dropped = [n for n in names if n in WEB_TOOL_NAMES]
         if dropped:
             names = [n for n in names if n not in WEB_TOOL_NAMES]
             logger.info(
-                "closed-book (REACT_NO_WEB): dropped profile web tools %s", dropped,
+                "closed-book (REACT_NO_WEB): dropped profile web tools %s",
+                dropped,
             )
     # Profiles created before controlled downloads existed commonly list
     # web_fetch explicitly. Preserve that narrowing while adding its new
@@ -682,6 +696,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     if question.startswith("# Task\n\n"):
         question = question[len("# Task\n\n") :]
     question = question.rstrip()
+    model_question = append_context_to_question(question, state.get("cross_mode_context"))
 
     metadata = state.get("metadata") or {}
     profile_name = (
@@ -815,17 +830,14 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         default=180,
         label="stateful wall_deadline_reserve_s",
     )
-    landing_budget_s = (
-        reporter_phase_timeout_s
-        if reporter_enabled
-        else finalization_timeout_s
-    )
+    landing_budget_s = reporter_phase_timeout_s if reporter_enabled else finalization_timeout_s
     # A tool may start just before the turn-end observer checks the research
     # deadline. Reserve enough for that complete overrun plus the bounded
     # reporter/finalization phase. The overrun is the tool's OUTER wait, not
     # the configured timeout — budget-aware tools get a grace on top so they
     # can report their own timeout — so ask the loop rather than assuming.
     from frontier_agent.core.runtime.loop.tool_exec import max_tool_wall_time_s
+
     worst_case_tool_s = max_tool_wall_time_s(tool_timeout)
     wall_deadline_reserve_s = max(
         configured_wall_reserve_s,
@@ -856,9 +868,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         label_prefix="stateful",
     )
     reporter_context_default = (
-        max(1_024, max_input_tokens - 4_096)
-        if max_input_tokens > 0
-        else 220_000
+        max(1_024, max_input_tokens - 4_096) if max_input_tokens > 0 else 220_000
     )
     reporter_context_max_tokens = int(
         agent_cfg.get(
@@ -994,7 +1004,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     # The request tail: this run's own directories, appended where per-run content
     # belongs. Everything above it is byte-identical to the previous turn, which is
     # what lets the provider reuse the conversation prefix (issue 01 §9.4/§9.15).
-    loop_user_message = f"{question}{run_tail_notes}" if run_tail_notes else question
+    loop_user_message = f"{model_question}{run_tail_notes}" if run_tail_notes else model_question
 
     # Watch-triggered runs read the human conversation but do not write their raw
     # tool trace back (issue 01 §13). The legacy combined flag keeps direct
@@ -1043,6 +1053,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
                 pipeline_id="stateful-react-agent",
                 node_id="react_agent",
                 role_id="stateful_react",
+                run_id=str(metadata.get("run_id") or ""),
                 session_id=str(metadata.get("session_id") or ""),
                 model_name=model_name,
                 max_replay_turns=replay_max_turns,
@@ -1054,9 +1065,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
                 # of disappearing. Built only when a bound is actually in force —
                 # a run that can never trim has nothing to summarize.
                 summarizer=(
-                    build_summarizer(llm)
-                    if (replay_max_turns or replay_max_tokens)
-                    else None
+                    build_summarizer(llm) if (replay_max_turns or replay_max_tokens) else None
                 ),
             )
         )
@@ -1081,32 +1090,40 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     if task_board and not direct:
         observers.append(build_task_board_observer())
     if not direct:
-        observers.append(FinalizationReserveObserver(
-            reserve_turns=finalization_reserve_turns,
-            message=_STATEFUL_FINALIZATION_MESSAGE,
-        ))
+        observers.append(
+            FinalizationReserveObserver(
+                reserve_turns=finalization_reserve_turns,
+                message=_STATEFUL_FINALIZATION_MESSAGE,
+            )
+        )
         # The reserved turns above are tool-enabled so artifacts can still be
         # completed.  Strip tools only for the actual landing turn.
         observers.append(LastTurnForcer(terminal_tool=""))
     if max_input_tokens > 0:
-        observers.append(ContextSizeGuard(
-            max_input_tokens=max_input_tokens,
-            force_compaction_first=(context_compaction == "tiered" and max_len > 0),
-        ))
+        observers.append(
+            ContextSizeGuard(
+                max_input_tokens=max_input_tokens,
+                force_compaction_first=(context_compaction == "tiered" and max_len > 0),
+            )
+        )
     # Stop-loss, both no-ops unless the profile opts in (see above).
     if stuck_hint_after > 0 and not direct:
-        observers.append(StuckTargetGuard(
-            hint_after=stuck_hint_after,
-            escalate_after=stuck_escalate_after or stuck_hint_after * 2,
-            window=stuck_window,
-        ))
+        observers.append(
+            StuckTargetGuard(
+                hint_after=stuck_hint_after,
+                escalate_after=stuck_escalate_after or stuck_hint_after * 2,
+                window=stuck_window,
+            )
+        )
     if wall_deadline_s > 0:
-        observers.append(WallClockDeadlineObserver(
-            deadline_s=wall_deadline_s,
-            # ``_resolve_wall_deadline_s`` already converted any hard
-            # operational wall into this research-only soft deadline.
-            reserve_s=0,
-        ))
+        observers.append(
+            WallClockDeadlineObserver(
+                deadline_s=wall_deadline_s,
+                # ``_resolve_wall_deadline_s`` already converted any hard
+                # operational wall into this research-only soft deadline.
+                reserve_s=0,
+            )
+        )
     if event_store is not None:
         observers.append(
             SSEObserver(
@@ -1121,17 +1138,19 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     # LLM synthesis chain, so a coordinator rescue here would duplicate the
     # largest call immediately before it.
     if not reporter_enabled:
-        observers.append(FinalAnswerSalvageObserver(
-            llm=llm,
-            timeout=finalization_timeout_s,
-            phase_deadline_monotonic=hard_deadline_monotonic,
-            language=answer_language,
-            task_description=question,
-            thinking_format=(
-                model_profile.thinking_format if model_profile is not None else "tag"
-            ),
-            salvage_infra_errors=salvage_infra_errors,
-        ))
+        observers.append(
+            FinalAnswerSalvageObserver(
+                llm=llm,
+                timeout=finalization_timeout_s,
+                phase_deadline_monotonic=hard_deadline_monotonic,
+                language=answer_language,
+                task_description=question,
+                thinking_format=(
+                    model_profile.thinking_format if model_profile is not None else "tag"
+                ),
+                salvage_infra_errors=salvage_infra_errors,
+            )
+        )
 
     # Reporter output stream (serve stdout): re-emit the final answer as
     # ``response.swarm.llm_delta`` frames with ``agent_id="reporter"`` at
@@ -1149,36 +1168,35 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     #     answer (no-op without an emitter, so wire it only when one is present).
     sdk_emitter = metadata.get("sdk_protocol_emitter")
     if reporter_enabled:
-        thinking_fmt = (
-            model_profile.thinking_format if model_profile is not None else "tag"
-        )
+        thinking_fmt = model_profile.thinking_format if model_profile is not None else "tag"
         # Inline-thinking risk: tag-mode + ``enable_thinking`` means the endpoint
         # MAY return ``<think>…</think>`` inside ``content`` — and SGLang/Qwen
         # often drop the opening tag while always emitting the closing one. The
         # reporter's stream filter needs to know so it never ships reasoning as
         # report text (it self-releases the hold on a native reasoning delta).
-        chat_template_kwargs = (
-            ((profile or {}).get("llm") or {}).get("extra_body") or {}
-        ).get("chat_template_kwargs") or {}
-        observers.append(ReportSynthesisObserver(
-            llm=llm,
-            # Finite timeout per fallback leg; deliberately no whole-reporter
-            # phase wall, so the chain can advance after research has stopped.
-            timeout=reporter_timeout_s,
-            task_description=question,
-            emitter=sdk_emitter,
-            usage_aggregator=metadata.get("sdk_protocol_usage_aggregator"),
-            language=answer_language,
-            thinking_format=thinking_fmt,
-            inline_thinking=(
-                thinking_fmt == "tag"
-                and bool(chat_template_kwargs.get("enable_thinking"))
-            ),
-            extra_observers=metadata.get("sdk_extra_observers"),
-            context_max_tokens=reporter_context_max_tokens,
-            phase_timeout=reporter_phase_timeout_s,
-            phase_deadline_monotonic=hard_deadline_monotonic,
-        ))
+        chat_template_kwargs = (((profile or {}).get("llm") or {}).get("extra_body") or {}).get(
+            "chat_template_kwargs"
+        ) or {}
+        observers.append(
+            ReportSynthesisObserver(
+                llm=llm,
+                # Finite timeout per fallback leg; deliberately no whole-reporter
+                # phase wall, so the chain can advance after research has stopped.
+                timeout=reporter_timeout_s,
+                task_description=question,
+                emitter=sdk_emitter,
+                usage_aggregator=metadata.get("sdk_protocol_usage_aggregator"),
+                language=answer_language,
+                thinking_format=thinking_fmt,
+                inline_thinking=(
+                    thinking_fmt == "tag" and bool(chat_template_kwargs.get("enable_thinking"))
+                ),
+                extra_observers=metadata.get("sdk_extra_observers"),
+                context_max_tokens=reporter_context_max_tokens,
+                phase_timeout=reporter_phase_timeout_s,
+                phase_deadline_monotonic=hard_deadline_monotonic,
+            )
+        )
     elif sdk_emitter is not None:
         observers.append(ReporterStreamObserver(sdk_emitter))
 
@@ -1218,7 +1236,8 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
             summary_retry_timeout_s=llm_timeout,
         )
         compaction_policy = InputTokenThresholdPolicy(
-            gauge, compaction_trigger_tokens(max_len),
+            gauge,
+            compaction_trigger_tokens(max_len),
         )
     else:
         compactor = KeepLastNToolResultsCompactor(keep_tool_result=keep_last_k)
@@ -1229,7 +1248,18 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     # history it never saw.
     replay_payload = str(state.get("replay_payload") or "")
     replay_decision: dict[str, Any]
-    if continuity_read_enabled:
+    # Native replay is valid only for the immediately preceding compatible
+    # single-agent prefix.  A cross-mode import is the committed continuity
+    # source for this Run, so a stale earlier single snapshot must not be
+    # replayed alongside it (which would duplicate and potentially supersede
+    # the intervening team turn).
+    if state.get("cross_mode_context") not in (None, ""):
+        replay_messages = None
+        replay_decision = {
+            "decision": "skipped",
+            "reason": "cross_mode_context_is_authoritative",
+        }
+    elif continuity_read_enabled:
         replay_messages, replay_decision = select_replay(
             replay_payload,
             system_prompt=system_prompt,
@@ -1248,7 +1278,8 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         logger.info(
             "stateful_react replay %s%s",
             replay_decision.get("decision"),
-            "" if replay_decision.get("decision") == "used"
+            ""
+            if replay_decision.get("decision") == "used"
             else f": {replay_decision.get('reason')}",
         )
 
@@ -1276,9 +1307,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
                 role_id="stateful_react",
                 tool_timeout=int(tool_timeout),
                 llm_timeout=int(llm_timeout),
-                first_chunk_timeout=(
-                    float(first_chunk_s) if first_chunk_s is not None else None
-                ),
+                first_chunk_timeout=(float(first_chunk_s) if first_chunk_s is not None else None),
                 reasoning_only_timeout_s=reasoning_only_timeout_s,
                 reasoning_only_max_tokens=reasoning_only_max_tokens,
                 logical_call_timeout_s=logical_call_timeout_s,
@@ -1304,9 +1333,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
                 # in-process soft deadline follows the same sliding window.
                 # Binding creates a per-loop deadline view; never forward the
                 # view itself to sibling/concurrent loops.
-                WALL_TIME_LEASE_SCOPE_KEY: metadata.get(
-                    WALL_TIME_LEASE_SCOPE_KEY
-                ),
+                WALL_TIME_LEASE_SCOPE_KEY: metadata.get(WALL_TIME_LEASE_SCOPE_KEY),
                 # Container mode: authorize file tools' direct-local access to
                 # the mounted /workspace (consumed by plugins.tools._path_auth).
                 # Empty string in bwrap mode → no host-workspace authorization.
@@ -1332,7 +1359,9 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     final_text = _strip_leaked_tool_calls(str(final_text or ""))
     if not final_text:
         final_text = _minimal_best_effort_answer(
-            question, result.stopped_by, language=answer_language,
+            question,
+            result.stopped_by,
+            language=answer_language,
         )
         result.metadata["final_answer_source"] = "deterministic_fallback"
     answer_source = str(result.metadata.get("final_answer_source") or "agent")
@@ -1340,24 +1369,35 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         "not_found"
         if answer_source == "deterministic_fallback"
         else "best_effort"
-        if answer_source in {
+        if answer_source
+        in {
             "clean_context_llm",
             "existing_partial",
             "collected_reports",
         }
         else "complete"
     )
-    answer_status = _downgrade_unfinished(
-        answer_status, result.stopped_by, final_text
-    )
+    answer_status = _downgrade_unfinished(answer_status, result.stopped_by, final_text)
     # A4 消费账本（评审 C5：这是 stateful_react 的唯一最终发布出口）。A4_ENFORCE
     # 关闭（默认）仅记录校验状态与工件；开启时未通过的答案追加锚定限定块并降级
     # answer_status（评审 C6）。
     try:
         from plugins.corpus.ledger import get_run_ledger, publish_boundary
+        from plugins.corpus.recovery import verified_excerpt_fallback
 
+        if answer_source == "deterministic_fallback":
+            recovered = verified_excerpt_fallback(
+                get_run_ledger(), stopped_by=result.stopped_by,
+                error_reason=str(result.metadata.get("llm_error_reason") or ""),
+            )
+            if recovered:
+                final_text = recovered
+                answer_status = "partial"
+                answer_source = "verified_corpus_excerpts"
         boundary = publish_boundary(
-            get_run_ledger(), final_text=final_text, answer_status=answer_status,
+            get_run_ledger(),
+            final_text=final_text,
+            answer_status=answer_status,
         )
         final_text = boundary["final_text"]
         answer_status = boundary["answer_status"]
@@ -1397,9 +1437,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         # Keep the user-facing answer non-empty while preserving the old
         # machine-readable infra/eval failure signal out of band.
         "answer_status": answer_status,
-        "answer_sentinel": (
-            "<ANSWER_NOT_FOUND>" if answer_status == "not_found" else ""
-        ),
+        "answer_sentinel": ("<ANSWER_NOT_FOUND>" if answer_status == "not_found" else ""),
         "final_answer_rescued": bool(
             result.metadata.get("final_answer_rescued", False),
         ),
@@ -1413,4 +1451,5 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         # mislabeling the fallback as a completed report.
         "llm_error": str(result.metadata.get("llm_error") or ""),
         "llm_error_reason": str(result.metadata.get("llm_error_reason") or ""),
+        "llm_retry_blocked_by": str(result.metadata.get("llm_retry_blocked_by") or ""),
     }

@@ -71,6 +71,47 @@ async def test_bridge_error_result_is_not_skipped():
     assert not event.get("skipped")
 
 
+async def test_bridge_classifies_legacy_bracketed_error_text():
+    queue: asyncio.Queue = asyncio.Queue()
+    obs = BridgeObserver(queue=queue)
+
+    await obs.on_tool_result(
+        SimpleNamespace(turn=1),
+        _result(
+            "[read_file error] exit=1: FileNotFoundError: /inputs/missing.csv",
+        ),
+    )
+
+    event = queue.get_nowait()
+    assert event["ok"] is False
+    assert event["skipped"] is False
+    assert obs.tool_errors == ["bash"]
+
+
+async def test_bridge_classifies_nonzero_bash_exit_text():
+    queue: asyncio.Queue = asyncio.Queue()
+    obs = BridgeObserver(queue=queue)
+
+    await obs.on_tool_result(
+        SimpleNamespace(turn=1),
+        _result("[Exit code 2]\npython: cannot open file"),
+    )
+
+    assert queue.get_nowait()["ok"] is False
+
+
+async def test_bridge_does_not_scan_success_body_for_error_words():
+    queue: asyncio.Queue = asyncio.Queue()
+    obs = BridgeObserver(queue=queue)
+
+    await obs.on_tool_result(
+        SimpleNamespace(turn=1),
+        _result("Processed 4 rows. Error rate: 0%."),
+    )
+
+    assert queue.get_nowait()["ok"] is True
+
+
 # — relay (replay path) ———————————————————————————————
 def test_replay_marks_synthetic_result_skipped():
     events = _traj_record_to_events({
@@ -103,3 +144,18 @@ def test_replay_normal_result_is_not_skipped():
     finished = [e for e in events if e["type"] == "tool_finished"]
     assert len(finished) == 1
     assert not finished[0].get("skipped")
+
+
+def test_replay_classifies_legacy_error_text_when_error_flag_is_false():
+    events = _traj_record_to_events({
+        "t": "result",
+        "turn": 3,
+        "tool_call_id": "call_9",
+        "name": "read_file",
+        "result": "[read_file error] exit=1: FileNotFoundError",
+        "error": False,
+        "ms": 5,
+    })
+
+    finished = [event for event in events if event["type"] == "tool_finished"]
+    assert finished[0]["ok"] is False

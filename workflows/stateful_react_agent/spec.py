@@ -40,6 +40,11 @@ REACT_SPEC = PipelineSpec(
                     "continuity_read_enabled",
                     "continuity_write_enabled",
                     "continuity_enabled",
+                    # Workflow-neutral history exported by a completed run of a
+                    # different pipeline.  Native replay remains the preferred
+                    # same-pipeline path; this value is appended as attributed
+                    # data only when the server explicitly supplies it.
+                    "cross_mode_context",
                 ],
             ),
             compression=CompressionConfig(enabled=False),
@@ -49,6 +54,7 @@ REACT_SPEC = PipelineSpec(
                 "answer_status", "answer_sentinel",
                 "final_answer_rescued", "final_answer_rescue_mode",
                 "final_answer_source", "stopped_by",
+                "llm_error_reason", "llm_retry_blocked_by",
                 # Whether the cross-turn dump was replayed, and why not.
                 "replay_decision",
                 # The write-time summary call's own tokens (issue 01 §12.11 待办 2).

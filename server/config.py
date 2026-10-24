@@ -72,9 +72,9 @@ class ServerConfig(BaseSettings):
     worker_pool_size: int = 2
     # Hard wall-clock budget per run, applied by the orchestrator (SIGKILL
     # fallback) and also handed to the worker via FRONTIER_AGENT_TASK_WALL_TIME_S.
-    # Keep the runtime's half-wall research floor at 700s; profile caps research
+    # Keep the runtime's half-wall research floor at 450s; profile caps research
     # there explicitly, leaving the remaining time for finalization.
-    wall_timeout_s: int = 1400
+    wall_timeout_s: int = 900
     # Max agent turns before the worker stops the loop on its own.
     max_turns: int = 60
     # Grace period the orchestrator waits for a worker to exit before SIGKILL.
@@ -187,6 +187,10 @@ class ServerConfig(BaseSettings):
 
     # — Pipeline ——————————————————————————————————————————————
     pipeline_id: str = "stateful-react-agent"
+    # The per-Run mode contract can land before the multi-source Web event and
+    # permission gates are ready. Keep user-selected team Runs fail-closed until
+    # an operator explicitly enables the completed stack.
+    agent_team_enabled: bool = False
 
     @property
     def fernet_key(self) -> bytes:

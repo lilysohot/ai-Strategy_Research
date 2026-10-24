@@ -30,6 +30,7 @@ import type {
   PostRunInputRequestResponse,
   ResearchLink,
   RunControlsResponse,
+  RunModeCapabilities,
   RunDiff,
   RunRerunResponse,
   RunRevertResponse,
@@ -147,6 +148,7 @@ export const sessions = {
 
 // ── Runs (server/routes/runs.py) ────────────────────────────────
 export const runs = {
+  modes: () => request<RunModeCapabilities>('/runs/modes'),
   /**
    * Submit a run. Pass ``FormData`` to attach input files (T2.10); the browser
    * sets the multipart boundary and the server writes the files into the run's
@@ -156,6 +158,7 @@ export const runs = {
   submit: (body: {
     message: string
     session_id?: string
+    mode?: 'single' | 'team'
     investment_input?: Record<string, unknown> | null
   } | FormData) =>
     request<RunSubmitResponse>('/runs', { method: 'POST', body }),
@@ -180,7 +183,7 @@ export const runs = {
    * that points back at the old one via ``rerun_of_run_id``. Idempotency-keyed
    * so a timeout retry must not create two runs.
    */
-  rerun: (runId: string, body: { message?: string; session_id?: string }, idempotencyKey: string) =>
+  rerun: (runId: string, body: { message?: string; session_id?: string; mode?: 'single' | 'team' }, idempotencyKey: string) =>
     request<RunRerunResponse>(`/runs/${encodeURIComponent(runId)}/rerun`, {
       method: 'POST',
       body,

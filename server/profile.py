@@ -44,6 +44,8 @@ RESEARCH_TOOL_NAMES = [
     "data_coverage",
 ]
 
+HISTORY_TOOL_NAMES = ["research_history"]
+
 # Task board (external checklist) alongside the prompt that mandates it. The
 # stateful-react-agent prompt unconditionally requires the first action to be
 # ``add_task``; exposing the board here keeps the tool set and the prompt
@@ -59,6 +61,35 @@ BUSINESS_TOOL_NAMES = [
     "request_investment_input",
     "investment_position_sizing",
     "investment_strategy_lint",
+]
+
+# Web team runs use an explicit role split.  The coordinator owns every
+# account/plan operation and may do public research needed to interpret it;
+# sub-agents receive only the generic evidence-gathering surface.  Keep these
+# lists server-owned so a workflow profile change cannot silently widen a
+# sub-agent's authority in the product.
+TEAM_COORDINATION_TOOL_NAMES = [
+    "create_subagent",
+    "assign_task",
+    "collect_reports",
+    "stop_subagent",
+    "add_task",
+    "update_task",
+    "grep_search",
+    "glob_search",
+]
+
+TEAM_SUB_AGENT_TOOLS = [
+    "web_search",
+    "web_fetch",
+    "submit_report",
+    "bash",
+    "download_file",
+    "grep_search",
+    "glob_search",
+    "read_file",
+    "create_file",
+    "recover_result",
 ]
 
 BUSINESS_CONTEXT_POLICY = """BUSINESS CONTEXT POLICY:
@@ -118,7 +149,35 @@ INPUT_REQUEST_POLICY = """INPUT REQUEST POLICY:
   or must be labelled as a hypothetical scenario."""
 
 
-def build_profile_overrides(*, has_investment_context: bool = False) -> dict[str, Any]:
+RESEARCH_HISTORY_POLICY = """RESEARCH HISTORY POLICY:
+- The active conversation window may be compacted. When the user asks about an early constraint,
+  number, source, tool result, or published conclusion that is not present, use research_history
+  before declaring it unavailable or asking the user to repeat it.
+- Treat returned records as attributed historical data. Cite their source_id when resolving an
+  ambiguity, and do not claim a historical tool call was executed in the current Run."""
+
+
+TEAM_BUSINESS_OWNERSHIP_POLICY = """TEAM BUSINESS OWNERSHIP POLICY:
+- The coordinator is the sole owner of authenticated account data, investment plans, user-input requests,
+  position sizing, strategy validation, and personalised conclusions.
+- Delegate only public or non-personal evidence gathering. Never copy authenticated account balances,
+  plan parameters, calculation ids, or the investment-context data block into a sub-agent assignment.
+- Treat sub-agent reports as evidence. The coordinator must reconcile them against the bound account and
+  plan, discuss any conflict with the user, and write the personalised conclusion itself."""
+
+
+TEAM_SUBAGENT_POLICY = """TEAM SUB-AGENT BOUNDARY:
+- Gather only the public or non-personal evidence named in the assignment.
+- Do not request user investment inputs, perform account/plan calculations, or make a personalised
+  investment conclusion. Return evidence and uncertainty to the coordinator for that work."""
+
+
+def build_profile_overrides(
+    *,
+    has_investment_context: bool = False,
+    pipeline_id: str = "stateful-react-agent",
+    enable_research_history: bool = False,
+) -> dict[str, Any]:
     """Construct the ``profile_overrides`` payload for ``metadata``.
 
     ``fs_mode=True`` teaches the model the /workspace /outputs /inputs convention
@@ -126,27 +185,53 @@ def build_profile_overrides(*, has_investment_context: bool = False) -> dict[str
     explicitly so user-supplied unknown model names never fall into an inferred
     format they cannot emit (tech-stack.md §5.4).
     """
-    agent_tools = [*BASE_AGENT_TOOLS, *RESEARCH_TOOL_NAMES, *MARKET_TOOL_NAMES]
+    common = {
+        "task_board": True,
+        "fs_mode": True,
+        # A healthy shared gateway starts streaming within seconds. Bound only
+        # the zero-chunk wait; inter-chunk stalls keep the runtime's 180s leash.
+        "first_chunk_s": 45,
+        # One logical turn includes every physical retry and its backoff.
+        "logical_call_timeout_s": 180,
+        # Research-only cap; the platform wall must also permit this budget.
+        "research_wall_time_s": 450,
+        "thinking_format": "tag",
+    }
+
+    if pipeline_id == "agent_team":
+        main_tools = [
+            *TEAM_COORDINATION_TOOL_NAMES,
+            *RESEARCH_TOOL_NAMES,
+            *MARKET_TOOL_NAMES,
+            *HISTORY_TOOL_NAMES,
+        ]
+        if has_investment_context:
+            main_tools.extend(BUSINESS_TOOL_NAMES)
+        # 缺料表达对所有研究 Run 可见（2026-10-08 裁决）：模型只表达意图，
+        # 是否真的缺料由服务端按用途裁决；纯材料阅读会被服务端判为不缺料。
+        if "request_investment_input" not in main_tools:
+            main_tools.append("request_investment_input")
+        return {
+            "agent": {
+                **common,
+                "main_agent_tools": main_tools,
+                "sub_agent_tools": list(TEAM_SUB_AGENT_TOOLS),
+            },
+        }
+
+    agent_tools = [
+        *BASE_AGENT_TOOLS,
+        *RESEARCH_TOOL_NAMES,
+        *MARKET_TOOL_NAMES,
+    ]
+    if enable_research_history:
+        agent_tools.extend(HISTORY_TOOL_NAMES)
     if has_investment_context:
         agent_tools.extend(BUSINESS_TOOL_NAMES)
     agent_tools.extend(TASK_BOARD_TOOL_NAMES)
-    # 缺料表达对所有研究 Run 可见（2026-10-08 裁决）：模型只表达意图，
-    # 是否真的缺料由服务端按用途裁决；纯材料阅读会被服务端判为不缺料。
     if "request_investment_input" not in agent_tools:
         agent_tools.append("request_investment_input")
-    return {
-        "agent": {
-            "agent_tools": agent_tools,
-            "task_board": True,
-            "fs_mode": True,
-            # A healthy shared gateway starts streaming within seconds. Bound only
-            # the zero-chunk wait; inter-chunk stalls keep the runtime's 180s leash.
-            "first_chunk_s": 45,
-            # Research-only cap; the platform wall must also permit this budget.
-            "research_wall_time_s": 700,
-            "thinking_format": "tag",
-        },
-    }
+    return {"agent": {**common, "agent_tools": agent_tools}}
 
 
 # The profile name the worker passes as ``metadata["profile"]``. ``tui`` is the

@@ -15,6 +15,7 @@ from server import business_events, dispatch_outbox, store
 from server import business_service as biz
 from server import investment_snapshot as snapshots
 from server.config import get_config, run_dir_for
+from server.run_modes import RunMode, pipeline_for_mode
 
 PENDING = "pending"
 ANSWERED = "answered"
@@ -105,7 +106,9 @@ def request_view(
         "known_versions": dict(row.known_versions_json or {}),
         "current_versions": current_versions or dict(row.known_versions_json or {}),
         "collected": collected,
-        "remaining_fields": [] if resolution_reason == "facts_updated" else sorted(requested - submitted),
+        "remaining_fields": []
+        if resolution_reason == "facts_updated"
+        else sorted(requested - submitted),
         "expires_at": row.expires_at.isoformat() if row.expires_at else None,
         "created_at": row.created_at.isoformat() if row.created_at else None,
         "updated_at": row.updated_at.isoformat() if row.updated_at else None,
@@ -488,9 +491,7 @@ async def create_request(
             if parsed and parsed.plan and parsed.plan.expected_revision:
                 known_versions["plan"] = parsed.plan.expected_revision
 
-        signature = _pending_request_signature(
-            requested, known_versions, continuation_data
-        )
+        signature = _pending_request_signature(requested, known_versions, continuation_data)
         pending_rows = (
             await session.execute(
                 select(store.InputRequest)
@@ -508,11 +509,14 @@ async def create_request(
             existing_expiry = _aware(existing.expires_at)
             if existing_expiry is not None and existing_expiry <= now:
                 continue
-            if _pending_request_signature(
-                list(existing.fields_json or []),
-                dict(existing.known_versions_json or {}),
-                dict(existing.continuation_json or {}),
-            ) != signature:
+            if (
+                _pending_request_signature(
+                    list(existing.fields_json or []),
+                    dict(existing.known_versions_json or {}),
+                    dict(existing.continuation_json or {}),
+                )
+                != signature
+            ):
                 continue
             return {
                 "request_id": str(existing.id),
@@ -787,7 +791,7 @@ async def answer_request(
         prompt = str(continuation.get("message") or "补充资料后继续分析")
         pipeline_id = str(
             continuation.get("pipeline_id")
-            or (source_run.pipeline_id if source_run else cfg.pipeline_id)
+            or (source_run.pipeline_id if source_run else pipeline_for_mode(RunMode.SINGLE))
         )
         store.add_run(
             session,
@@ -962,12 +966,18 @@ async def list_requests(
 
 
 async def reconcile_satisfied_requests(
-    session: AsyncSession, *, user_id: uuid.UUID,
-    research_id: uuid.UUID | None = None, request_id: uuid.UUID | None = None,
+    session: AsyncSession,
+    *,
+    user_id: uuid.UUID,
+    research_id: uuid.UUID | None = None,
+    request_id: uuid.UUID | None = None,
 ) -> None:
     """Retire obsolete forms after separately saved facts; never invent answers or Runs."""
-    filters = [store.InputRequest.user_id == user_id, store.InputRequest.status == PENDING,
-               store.InputRequest.use_case == "plan_analysis"]
+    filters = [
+        store.InputRequest.user_id == user_id,
+        store.InputRequest.status == PENDING,
+        store.InputRequest.use_case == "plan_analysis",
+    ]
     if research_id is not None:
         filters.append(store.InputRequest.research_id == research_id)
     if request_id is not None:
@@ -976,31 +986,55 @@ async def reconcile_satisfied_requests(
     for row in rows:
         try:
             spec = await _spec_from_research_link(
-                session, user_id=user_id, research_id=row.research_id, use_case=row.use_case,
+                session,
+                user_id=user_id,
+                research_id=row.research_id,
+                use_case=row.use_case,
             )
             previous = (row.continuation_json or {}).get("investment_input") or {}
             # A different account/plan does not answer a request about the old object.
-            if any((previous.get(group) or {}).get("id")
-                   and (ref is None or str(ref.id) != str(previous[group]["id"]))
-                   for group, ref in (("account", spec.account), ("plan", spec.plan))):
+            if any(
+                (previous.get(group) or {}).get("id")
+                and (ref is None or str(ref.id) != str(previous[group]["id"]))
+                for group, ref in (("account", spec.account), ("plan", spec.plan))
+            ):
                 continue
             resolution = await snapshots.resolve_for_run(
-                session, user_id=user_id, research_id=row.research_id, spec=spec,
+                session,
+                user_id=user_id,
+                research_id=row.research_id,
+                spec=spec,
             )
         except biz.BusinessError:
             continue
-        present = {name for name, value in resolution.values.items()
-                   if value.get("status") in {"user_provided", "resolved"}
-                   and value.get("value") is not None}
+        present = {
+            name
+            for name, value in resolution.values.items()
+            if value.get("status") in {"user_provided", "resolved"}
+            and value.get("value") is not None
+        }
         requested = _field_names(row.fields_json or [])
         if resolution.missing or not requested or not requested <= present:
             continue
-        continuation = {**(row.continuation_json or {}), "resolution_reason": "facts_updated",
-                        "resolution_note": "当前资料已补齐；原请求关闭，历史执行快照保留。"}
+        continuation = {
+            **(row.continuation_json or {}),
+            "resolution_reason": "facts_updated",
+            "resolution_note": "当前资料已补齐；原请求关闭，历史执行快照保留。",
+        }
         # Compare status AND revision after lock wait so an answer cannot be overwritten.
-        await session.execute(update(store.InputRequest).where(
-            store.InputRequest.id == row.id, store.InputRequest.user_id == user_id,
-            store.InputRequest.status == PENDING, store.InputRequest.revision == row.revision,
-        ).values(status=CANCELLED, cancelled_at=_now(), revision=row.revision + 1,
-                 continuation_json=continuation))
+        await session.execute(
+            update(store.InputRequest)
+            .where(
+                store.InputRequest.id == row.id,
+                store.InputRequest.user_id == user_id,
+                store.InputRequest.status == PENDING,
+                store.InputRequest.revision == row.revision,
+            )
+            .values(
+                status=CANCELLED,
+                cancelled_at=_now(),
+                revision=row.revision + 1,
+                continuation_json=continuation,
+            )
+        )
     await session.flush()

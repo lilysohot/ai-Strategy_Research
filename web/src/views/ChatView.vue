@@ -31,7 +31,8 @@ import { useBusinessStore } from '@/stores/business'
 import { useRunStreamStore } from '@/stores/runs'
 import { openRunStream, type SseEvent } from '@/sse'
 import { useSessionsStore } from '@/stores/sessions'
-import type { DiffFile } from '@/types'
+import type { DiffFile, RunMode } from '@/types'
+import { buildRunPayload } from '@/utils/runSubmission'
 import { renderMarkdown } from '@/utils/markdown'
 import { redactSecrets } from '@/utils/redact'
 import {
@@ -53,11 +54,41 @@ const runStream = useRunStreamStore()
 const authStore = useAuthStore()
 
 const scrollEl = ref<HTMLElement | null>(null)
-const composerRef = ref<{ focus: () => Promise<void> } | null>(null)
+const composerRef = ref<{
+  focus: () => Promise<void>
+  clearSubmittedDraft: (message: string, files: File[]) => void
+} | null>(null)
 const canvasRef = ref<{ load: () => Promise<void> | void } | null>(null)
 const runDetailRef = ref<{ load: () => Promise<void> | void } | null>(null)
 
 const sending = ref(false)
+const modeLoading = ref(false)
+const teamAvailable = ref(false)
+const teamUnavailableReason = ref('尚未获取团队研究的可用状态')
+// A disconnected SSE transport does not mean the server has finished the run.
+const runInProgress = computed(() => runStream.isStreaming
+  || runStream.status === 'queued' || runStream.status === 'running')
+const activeRunMode = computed<RunMode | undefined>(() => {
+  const pipeline = runStream.meta.pipelineId
+  return pipeline === 'agent_team' ? 'team' : pipeline === 'stateful-react-agent' ? 'single' : undefined
+})
+
+async function loadRunModes(): Promise<void> {
+  if (modeLoading.value) return
+  modeLoading.value = true
+  try {
+    const capabilities = await runsApi.modes()
+    teamAvailable.value = capabilities.team.available === true
+    teamUnavailableReason.value = capabilities.team.reason || '团队研究暂未开放，请使用单 Agent'
+  } catch {
+    teamAvailable.value = false
+    teamUnavailableReason.value = '暂时无法确认团队研究是否可用，请刷新状态或使用单 Agent'
+  } finally {
+    modeLoading.value = false
+  }
+}
+
+onMounted(() => { void loadRunModes() })
 const stopping = ref(false)
 const steering = ref(false)
 const railOpen = ref(false)
@@ -181,6 +212,7 @@ function rehydrateThinking(runId: string): void {
     after: 0,
     onEvent: (event: SseEvent) => {
       if (event.type !== 'assistant_delta') return
+      if (event.agent_kind === 'subagent') return
       const thinking = (event as { thinking?: string }).thinking ?? ''
       const delta = (event as { thinking_text?: string }).thinking_text ?? ''
       const text = thinking !== '' ? thinking : delta
@@ -458,23 +490,18 @@ async function onInputAnswered(followUpRunId: string | null): Promise<void> {
   runStream.watch(followUpRunId, undefined, sessions.activeId)
 }
 
-function buildRunPayload(text: string, files: File[], sessionId: string): { message: string; session_id: string } | FormData {
-  if (!files.length) return { session_id: sessionId, message: text }
-  const form = new FormData()
-  form.append('session_id', sessionId)
-  form.append('message', text)
-  for (const file of files) form.append('files', file)
-  return form
-}
-
-async function onSend(text: string, files: File[]): Promise<void> {
+async function onSend(text: string, files: File[], mode: RunMode): Promise<void> {
   if (!text.trim() || sending.value) return
   if (!sessions.activeId) {
     ElMessage.warning('请先新建或选择一项研究')
     return
   }
-  if (runStream.isStreaming) {
+  if (runInProgress.value) {
     ElMessage.warning('上一条还在运行，请等它结束或点击停止')
+    return
+  }
+  if (mode === 'team' && (!teamAvailable.value || modeLoading.value)) {
+    ElMessage.warning(teamUnavailableReason.value)
     return
   }
 
@@ -483,24 +510,27 @@ async function onSend(text: string, files: File[]): Promise<void> {
   try {
     await reloadTurns()
     if (sessions.activeId !== submittedSessionId) return
+    const res = await runsApi.submit(buildRunPayload(text, files, submittedSessionId, mode))
+    runStream.rememberRun(submittedSessionId, res.run_id)
+    if (sessions.activeId !== submittedSessionId) return
+    composerRef.value?.clearSubmittedDraft(text, files)
     sessions.appendLocalTurn({
       seq: (sessions.activeTurns.at(-1)?.seq ?? 0) + 1,
       role: 'user',
       content: text,
-      run_id: null,
+      run_id: res.run_id,
       created_at: null,
     })
-    const res = await runsApi.submit(buildRunPayload(text, files, submittedSessionId))
     // F21: remember the newest submitted run per session so a refresh can
     // re-subscribe it while it is still active (a run parked on the approval
     // gate has no assistant turn yet — turns alone cannot point at it).
-    runStream.rememberRun(submittedSessionId, res.run_id)
     detailsOpen.value = false
     runStream.watch(res.run_id, undefined, submittedSessionId)
     // Metadata refresh must not turn a successful submission into a send error.
     void sessions.refreshMetadata(submittedSessionId).catch(() => {})
   } catch (err) {
     ElMessage.error(err instanceof Error ? err.message : '发送失败')
+    if (mode === 'team') void loadRunModes()
   } finally {
     sending.value = false
   }
@@ -920,14 +950,20 @@ watch(
 
       <ResearchComposer
         ref="composerRef"
+        :session-id="sessions.activeId"
+        :team-available="teamAvailable"
+        :team-unavailable-reason="teamUnavailableReason"
+        :mode-loading="modeLoading"
+        :active-mode="activeRunMode"
         :disabled="!sessions.activeId"
         :sending="sending"
-        :streaming="runStream.isStreaming"
+        :streaming="runInProgress"
         :stopping="stopping"
         :steering="steering"
         @send="onSend"
         @stop="onStop"
         @steer="onSteer"
+        @refresh-modes="loadRunModes"
       />
       </main>
 

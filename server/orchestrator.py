@@ -40,6 +40,8 @@ from server.config import REPO_ROOT, build_run_paths, get_config, run_dir_for
 from server.events import EventType, is_droppable, make_event
 from server.history import (
     CONVERSATION_DUMP_RELPATH,
+    CROSS_MODE_CONTEXT_RELPATH,
+    RESEARCH_HISTORY_STAGE,
     STEER_TURN_PREFIX,
     extract_final_answer,
 )
@@ -61,10 +63,11 @@ from server.store import (
     get_control,
     is_watch_run,
     list_active_runs,
+    list_session_archived_contexts,
     list_turns,
     mark_run_failed_if_active,
     mark_run_started,
-    read_session_conversation,
+    read_session_context_head,
     record_artifacts,
     resolve_control,
     resolve_user_llm_env,
@@ -173,8 +176,8 @@ def _signal_worker(proc: asyncio.subprocess.Process, sig: int) -> None:
         killpg(getpgid(proc.pid), sig)
 
 
-def _stage_prior_payload(run_dir: Path, payload: str | None) -> None:
-    """Write the session's stored conversation into *run_dir* (issue 01 §11.4).
+def _stage_payload(run_dir: Path, payload: str | None, *, filename: str) -> None:
+    """Atomically stage one committed continuity payload into a Run directory.
 
     The bytes come from the session store (``session_conversations``), not from
     the previous run's directory, and land in the run root so the worker and the
@@ -188,7 +191,7 @@ def _stage_prior_payload(run_dir: Path, payload: str | None) -> None:
     first, so an absent payload can never resurrect an earlier launch's
     conversation.
     """
-    dest = run_dir / "prior_conversation.json"
+    dest = run_dir / filename
     dest.unlink(missing_ok=True)
     if not payload:
         return
@@ -200,12 +203,46 @@ def _stage_prior_payload(run_dir: Path, payload: str | None) -> None:
             # Best effort: a platform without fsync still writes the file.
             with contextlib.suppress(OSError):
                 os.fsync(handle.fileno())
+        tmp.chmod(0o600)
         os.replace(tmp, dest)
     except OSError:
         logger.warning("could not stage prior conversation in %s", run_dir, exc_info=True)
         with contextlib.suppress(OSError):
             tmp.unlink(missing_ok=True)
         dest.unlink(missing_ok=True)
+
+
+def _stage_prior_payload(run_dir: Path, payload: str | None) -> None:
+    """Stage the native replay carrier under its compatibility filename."""
+
+    _stage_payload(run_dir, payload, filename="prior_conversation.json")
+
+
+def _stage_prior_cross_mode_context(run_dir: Path, payload: str | None) -> None:
+    """Stage the workflow-neutral carrier exported by the committed head."""
+
+    _stage_payload(run_dir, payload, filename="prior_cross_mode_context.json")
+
+
+def _stage_research_history(run_dir: Path, payloads: list[str]) -> None:
+    """Stage portable history for in-memory binding inside the worker."""
+
+    payload = (
+        json.dumps(
+            {"schema": "research-history-stage/1", "contexts": payloads},
+            ensure_ascii=False,
+            separators=(",", ":"),
+        )
+        if payloads
+        else None
+    )
+    _stage_payload(run_dir, payload, filename=RESEARCH_HISTORY_STAGE)
+
+
+def _needs_mixed_mode_history(target_pipeline_id: str, archived_pipeline_ids: list[str]) -> bool:
+    """Keep pure-single prefixes unchanged until a research actually uses team."""
+
+    return target_pipeline_id == "agent_team" or "agent_team" in archived_pipeline_ids
 
 
 def _read_run_summary(run_dir: str | Path) -> dict[str, Any]:
@@ -334,6 +371,7 @@ class Orchestrator:
         user_id: uuid.UUID | None = None,
         agent_tools: str = "",
         prompt_addendum: str = "",
+        pipeline_id: str | None = None,
         turn_index: int = 1,
         backfill_turn: bool = True,
     ) -> None:
@@ -393,6 +431,7 @@ class Orchestrator:
             "user_id": user_id,
             "agent_tools": agent_tools,
             "prompt_addendum": prompt_addendum,
+            "pipeline_id": pipeline_id or self._cfg.pipeline_id,
             "turn_index": turn_index,
         }
         await q.put(params)
@@ -690,6 +729,7 @@ class Orchestrator:
                     final_answer=final_answer,
                     stopped_by="server_restart",
                     error=error,
+                    pipeline_id=row.pipeline_id,
                 )
             except Exception:
                 # One unrecoverable run must not abort the sweep — the remaining
@@ -784,6 +824,11 @@ class Orchestrator:
         run_id = params["run_id"]
         session_uuid = params.get("session_uuid")
         prior_payload: str | None = None
+        prior_cross_mode_context: str | None = None
+        prior_pipeline_id = ""
+        prior_head_run_id: uuid.UUID | None = None
+        archived_contexts: list[str] = []
+        has_team_archive = False
         continuity = "on"
         if session_uuid is not None:
             current = uuid.UUID(run_id) if _looks_like_uuid(run_id) else None
@@ -800,7 +845,15 @@ class Orchestrator:
             # store means this run starts a fresh conversation, never a failed
             # launch.
             try:
-                prior_payload = await read_session_conversation(session_id=session_uuid)
+                head = await read_session_context_head(session_id=session_uuid)
+                if head is not None:
+                    prior_head_run_id = head.run_id
+                    prior_payload = head.native_payload
+                    prior_cross_mode_context = head.portable_payload
+                    prior_pipeline_id = head.pipeline_id
+                archived = await list_session_archived_contexts(session_id=session_uuid)
+                archived_contexts = [item.portable_payload for item in archived]
+                has_team_archive = any(item.pipeline_id == "agent_team" for item in archived)
             except Exception:
                 logger.warning(
                     "could not read the stored conversation for session %s; "
@@ -809,6 +862,14 @@ class Orchestrator:
                     exc_info=True,
                 )
         params["_prior_payload"] = prior_payload
+        params["_prior_cross_mode_context"] = prior_cross_mode_context
+        params["_prior_pipeline_id"] = prior_pipeline_id
+        params["_prior_head_run_id"] = prior_head_run_id
+        params["_archived_contexts"] = archived_contexts
+        params["_mixed_mode_history"] = _needs_mixed_mode_history(
+            str(params.get("pipeline_id") or ""),
+            ["agent_team"] if has_team_archive else [],
+        )
         params["_continuity"] = continuity
         handle: RunHandle | None = None
         try:
@@ -845,6 +906,9 @@ class Orchestrator:
                             handle.run_id,
                             session_uuid=params.get("session_uuid"),
                             continuity=params.get("_continuity", "on"),
+                            pipeline_id=str(params.get("pipeline_id") or ""),
+                            expected_head_run_id=params.get("_prior_head_run_id"),
+                            enforce_expected_head=True,
                         ),
                         timeout=15,
                     )
@@ -1050,6 +1114,9 @@ class Orchestrator:
         *,
         session_uuid: uuid.UUID | None,
         continuity: str = "on",
+        pipeline_id: str = "",
+        expected_head_run_id: uuid.UUID | None = None,
+        enforce_expected_head: bool = False,
     ) -> None:
         """Store a run's conversation dump, then drop the file (issue 01 §11.3).
 
@@ -1072,7 +1139,9 @@ class Orchestrator:
         if not _looks_like_uuid(run_id) or session_uuid is None:
             return
 
-        dump = run_dir_for(run_id).joinpath(*CONVERSATION_DUMP_RELPATH)
+        run_root = run_dir_for(run_id)
+        dump = run_root.joinpath(*CONVERSATION_DUMP_RELPATH)
+        portable = run_root.joinpath(*CROSS_MODE_CONTEXT_RELPATH)
         try:
             if not dump.is_file():
                 return
@@ -1091,11 +1160,28 @@ class Orchestrator:
             logger.warning("conversation dump at %s is not UTF-8 text; not stored", dump)
             return
 
+        portable_payload: str | None = None
         try:
+            if portable.is_file():
+                portable_raw = portable.read_bytes()
+                if b"cross-mode-context/" not in portable_raw[:200]:
+                    logger.warning(
+                        "unrecognised cross-mode context at %s; archiving native only",
+                        portable,
+                    )
+                else:
+                    portable_payload = portable_raw.decode("utf-8")
             await upsert_session_conversation(
                 session_id=session_uuid,
                 payload=payload,
                 run_id=uuid.UUID(run_id),
+                pipeline_id=pipeline_id,
+                portable_payload=portable_payload,
+                completeness={
+                    "portable": "available" if portable_payload is not None else "missing"
+                },
+                expected_head_run_id=expected_head_run_id,
+                enforce_expected_head=enforce_expected_head,
             )
         except Exception:
             # Keep the file: the store may come back, and the old carrier still
@@ -1109,6 +1195,9 @@ class Orchestrator:
             return
         with contextlib.suppress(OSError):
             dump.unlink()
+        if portable_payload is not None:
+            with contextlib.suppress(OSError):
+                portable.unlink()
 
     def _usage_with_replay(self, run_id: str) -> dict[str, Any]:
         """A run's token aggregate plus its cross-turn replay window (S1-a).
@@ -1241,6 +1330,13 @@ class Orchestrator:
             await assert_watch_launch_ready(run_uuid)
         run_dir.mkdir(parents=True, exist_ok=True)
         _stage_prior_payload(run_dir, params.get("_prior_payload"))
+        _stage_prior_cross_mode_context(run_dir, params.get("_prior_cross_mode_context"))
+        _stage_research_history(
+            run_dir,
+            list(params.get("_archived_contexts") or [])
+            if params.get("_mixed_mode_history")
+            else [],
+        )
         cmd = [
             sys.executable,
             "-m",
@@ -1260,10 +1356,14 @@ class Orchestrator:
             "--max-turns",
             str(self._cfg.max_turns),
             "--pipeline-id",
-            self._cfg.pipeline_id,
+            str(params.get("pipeline_id") or self._cfg.pipeline_id),
+            "--prior-pipeline-id",
+            str(params.get("_prior_pipeline_id") or ""),
             "--require-semantic-store",
         ]
         cmd += ["--business-prefix", "1" if business_prefix else "0"]
+        if params.get("_mixed_mode_history"):
+            cmd.append("--mixed-mode-history")
         cmd += ["--continuity", str(params.get("_continuity") or "on")]
         if params.get("agent_tools"):
             cmd += ["--agent-tools", params["agent_tools"]]
@@ -1595,6 +1695,7 @@ class Orchestrator:
         final_answer: str,
         stopped_by: str,
         error: str,
+        pipeline_id: str = "",
     ) -> None:
         """Rebuild the parts of a crashed run's record that live outside its row.
 
@@ -1629,7 +1730,23 @@ class Orchestrator:
         # begin with (they write nothing), so the two-way rule still holds.
         if await is_watch_run(run_id=run_id):
             return
-        await self._ingest_conversation(run_id.hex, session_uuid=session_id)
+        head = await read_session_context_head(session_id=session_id)
+        if head is not None and head.run_id != run_id:
+            logger.warning(
+                "recovery kept stale context source for run %s; session %s already "
+                "advanced to run %s",
+                run_id,
+                session_id,
+                head.run_id,
+            )
+            return
+        await self._ingest_conversation(
+            run_id.hex,
+            session_uuid=session_id,
+            pipeline_id=pipeline_id,
+            expected_head_run_id=head.run_id if head is not None else None,
+            enforce_expected_head=True,
+        )
 
     def _session_uuid_for(self, handle: RunHandle) -> uuid.UUID | None:
         """Resolve the session UUID for a handle from its enqueued params."""

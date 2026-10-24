@@ -97,6 +97,141 @@ def persist_summary(run_root: Path, summary: dict[str, Any]) -> None:
         logging.getLogger("worker").warning("summary write failed", exc_info=True)
 
 
+def _export_cross_mode_context(
+    run_root: Path,
+    *,
+    inherited_context: str | None = None,
+    published_answer: str = "",
+    answer_status: str = "",
+) -> Path | None:
+    """Export this Run's validated native dump for a future mode change.
+
+    The converter lives with the workflows; this worker-side seam only moves
+    bytes between the workflow-owned native and portable contracts. A missing
+    native dump is valid for a Run that ended before its loop snapshot existed.
+    """
+
+    from frontier_agent.components.observers.conversation_snapshot import canonical_json
+    from server.history import CONVERSATION_DUMP_RELPATH, CROSS_MODE_CONTEXT_RELPATH
+    from workflows._shared.cross_mode_context import (
+        export_conversation_context,
+        with_published_answer,
+    )
+
+    native_path = run_root.joinpath(*CONVERSATION_DUMP_RELPATH)
+    if not native_path.is_file():
+        return None
+    portable_max_tokens = int(
+        os.environ.get("REPLAY_MAX_TOKENS")
+        or max(1, int(os.environ.get("OPENAI_CONTEXT_WINDOW", "262144")) // 2)
+    )
+    context = export_conversation_context(
+        native_path.read_text(encoding="utf-8"),
+        inherited_context=inherited_context,
+        max_tokens=portable_max_tokens,
+    )
+    context = with_published_answer(
+        context,
+        content=published_answer,
+        answer_status=answer_status,
+        max_tokens=portable_max_tokens,
+    )
+    output_path = run_root.joinpath(*CROSS_MODE_CONTEXT_RELPATH)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = output_path.with_suffix(output_path.suffix + ".tmp")
+    tmp.write_text(canonical_json(context), encoding="utf-8")
+    try:
+        fd = os.open(str(tmp), os.O_RDONLY)
+        try:
+            os.fsync(fd)
+        finally:
+            os.close(fd)
+    except OSError:
+        pass
+    os.replace(tmp, output_path)
+    return output_path
+
+
+def _load_continuity_inputs(
+    run_root: Path,
+    *,
+    target_pipeline_id: str,
+    prior_pipeline_id: str = "",
+) -> tuple[str, str]:
+    """Return ``(native replay, portable context)`` for one target workflow."""
+
+    replay_payload = ""
+    replay_path = run_root / "prior_conversation.json"
+    if replay_path.exists():
+        replay_payload = replay_path.read_text(encoding="utf-8")
+
+    cross_mode_context = ""
+    use_cross_mode_context = target_pipeline_id == "agent_team" or (
+        bool(prior_pipeline_id) and prior_pipeline_id != target_pipeline_id
+    )
+    if use_cross_mode_context:
+        portable_path = run_root / "prior_cross_mode_context.json"
+        if portable_path.exists():
+            cross_mode_context = portable_path.read_text(encoding="utf-8")
+        elif replay_payload:
+            # Legacy heads predate the portable archive. Convert their validated
+            # native bytes at the workflow boundary instead of starting team (or
+            # a switched single Run) with empty history.
+            from frontier_agent.components.observers.conversation_snapshot import (
+                canonical_json,
+            )
+            from workflows._shared.cross_mode_context import export_conversation_context
+
+            cross_mode_context = canonical_json(export_conversation_context(replay_payload))
+    return replay_payload, cross_mode_context
+
+
+def _load_research_history_contexts(run_root: Path) -> list[str]:
+    """Load and remove the parent's owner-only portable-history staging file."""
+
+    from server.history import RESEARCH_HISTORY_STAGE
+
+    path = run_root / RESEARCH_HISTORY_STAGE
+    if not path.is_file():
+        return []
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(value, dict) or value.get("schema") != "research-history-stage/1":
+            raise RuntimeError("research history stage schema mismatch")
+        contexts = value.get("contexts")
+        if not isinstance(contexts, list) or any(not isinstance(item, str) for item in contexts):
+            raise RuntimeError("research history stage contexts is not a string list")
+        return list(contexts)
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError("research history stage is unreadable") from exc
+    finally:
+        path.unlink(missing_ok=True)
+
+
+def _compose_run_instruction(
+    prompt: str,
+    *,
+    prompt_addendum: str = "",
+    investment_context: dict[str, Any] | None = None,
+) -> tuple[str, str]:
+    """Return ``(coordinator instruction, safe delegation question)``.
+
+    The delegation form is frozen before authenticated business data is added.
+    Agent Team may prepend it to sub-agent assignments; the full form is for
+    the user-facing coordinator only.
+    """
+
+    delegation_question = prompt
+    if prompt_addendum:
+        delegation_question = f"{delegation_question}\n\n{prompt_addendum}"
+    instruction = delegation_question
+    if investment_context is not None:
+        from server.investment_context import render_context_data
+
+        instruction = f"{instruction}\n\n{render_context_data(investment_context)}"
+    return instruction, delegation_question
+
+
 def _assert_llm_env(model: str, base_url: str, api_key: str) -> None:
     """Reject partial LLM injection (tech-stack.md §5.3).
 
@@ -193,14 +328,18 @@ def apply_env(
     model: str,
     base_url: str,
     api_key: str,
+    require_role_isolation: bool = False,
+    canonical_mounts: bool = False,
 ) -> None:
     """Install per-run environment before any ``infra.config`` import."""
     os.environ.update(
         {
             "SANDBOX_BACKEND": backend,
-            "FRONTIER_AGENT_WORKSPACE_DIR": str(paths["workspace"]),
-            "FRONTIER_AGENT_OUTPUTS_DIR": str(paths["outputs"]),
-            "FRONTIER_AGENT_INPUTS_DIR": str(paths["inputs"]),
+            "FRONTIER_AGENT_WORKSPACE_DIR": "/workspace"
+            if canonical_mounts
+            else str(paths["workspace"]),
+            "FRONTIER_AGENT_OUTPUTS_DIR": "/outputs" if canonical_mounts else str(paths["outputs"]),
+            "FRONTIER_AGENT_INPUTS_DIR": "/inputs" if canonical_mounts else str(paths["inputs"]),
             "CODING_WORKSPACE_ROOT": str(paths["workspace"]),
             "APODEX_SPILL_DIR": str(paths["spill"]),
             # Corpus consumption ledgers and A4 manifests are run artifacts too.
@@ -210,9 +349,19 @@ def apply_env(
             "FRONTIER_AGENT_TASK_WALL_TIME_S": str(wall_time_s),
             "FRONTIER_AGENT_MAX_TURNS": str(max_turns),
             "BASH_ALLOWLIST_MODE": "enforce",
-            "FRONTIER_AGENT_TOOL_USER": "off",
         }
     )
+    if require_role_isolation:
+        # CurrentSandbox is a working-directory facade, not a chroot.  Team
+        # role isolation therefore requires a distinct OS identity so a
+        # sub-agent's shell cannot traverse into owner-only coordinator/run
+        # artifacts.  tool_identity() fails closed when the image is missing
+        # the account or the worker cannot drop privileges.
+        os.environ.pop("FRONTIER_AGENT_TOOL_USER", None)
+        os.environ["FRONTIER_AGENT_REQUIRE_TOOL_USER"] = "1"
+    else:
+        os.environ["FRONTIER_AGENT_TOOL_USER"] = "off"
+        os.environ.pop("FRONTIER_AGENT_REQUIRE_TOOL_USER", None)
     if model:
         os.environ["OPENAI_MODEL"] = model
     if base_url:
@@ -359,6 +508,9 @@ async def run_once(args: argparse.Namespace) -> int:
         CONTEXT_INTEGRITY_POLICY,
         INPUT_REQUEST_POLICY,
         PROFILE_NAME,
+        RESEARCH_HISTORY_POLICY,
+        TEAM_BUSINESS_OWNERSHIP_POLICY,
+        TEAM_SUBAGENT_POLICY,
         build_profile_overrides,
     )
 
@@ -385,6 +537,13 @@ async def run_once(args: argparse.Namespace) -> int:
         model=model,
         base_url=base_url,
         api_key=api_key,
+        require_role_isolation=(
+            args.pipeline_id == "agent_team" and args.backend in {"native", "container"}
+        ),
+        # Bwrap tools execute in a separate mount namespace for either workflow.
+        # Keep aliases canonical; physical per-Run directories are supplied
+        # through metadata below.
+        canonical_mounts=args.backend in {"bwrap", "auto"},
     )
 
     # ``.env`` at repo root is loaded at import with override=False, so the
@@ -422,10 +581,16 @@ async def run_once(args: argparse.Namespace) -> int:
     # the pump drains continuously; a bounded queue would stall generation on a
     # slow reader.
     live_events: asyncio.Queue[dict[str, Any] | None] = asyncio.Queue()
+    team_source_meta = (
+        {"agent_id": "coordinator", "agent_kind": "coordinator"}
+        if args.pipeline_id == "agent_team"
+        else {}
+    )
     approval_observer = ApprovalObserver(
         gate,
         live_events.put_nowait,
         cwd=str(paths["workspace"]),
+        source_meta=team_source_meta,
     )
     stdin_task = asyncio.create_task(_stdin_watch(stop, steer_inbox, gate))
 
@@ -445,6 +610,7 @@ async def run_once(args: argparse.Namespace) -> int:
             "model_name": model,
             "max_turns": args.max_turns,
         },
+        source_meta=team_source_meta,
     )
     pump_task = asyncio.create_task(_bridge_pump(live_events))
 
@@ -483,7 +649,11 @@ async def run_once(args: argparse.Namespace) -> int:
         business_prefix = investment_context is not None
     business_prefix = bool(business_prefix)
 
-    overrides = build_profile_overrides(has_investment_context=business_prefix)
+    overrides = build_profile_overrides(
+        has_investment_context=business_prefix,
+        pipeline_id=args.pipeline_id,
+        enable_research_history=bool(getattr(args, "mixed_mode_history", False)),
+    )
     # Parse any extra agent_tools the orchestrator appends (e.g. market tools
     # once registered in T4.2).
     if args.agent_tools:
@@ -492,7 +662,8 @@ async def run_once(args: argparse.Namespace) -> int:
             # Raw position_sizing accepts model-supplied capital. A business Run
             # may only expose the snapshot-bound wrapper.
             extra = [name for name in extra if name not in {"position_sizing", "strategy_lint"}]
-        overrides["agent"]["agent_tools"] = [*overrides["agent"]["agent_tools"], *extra]
+        target_key = "main_agent_tools" if args.pipeline_id == "agent_team" else "agent_tools"
+        overrides["agent"][target_key] = [*overrides["agent"][target_key], *extra]
 
     metadata: dict[str, Any] = {
         "profile": PROFILE_NAME,
@@ -522,11 +693,25 @@ async def run_once(args: argparse.Namespace) -> int:
             "\n" + CONTEXT_INTEGRITY_POLICY
         ),
     }
+    # Web storage and bwrap must name the same per-Run directories. Both the
+    # stateful and team workflows consume these fields when constructing their
+    # private mount namespaces; container/native modes keep using apply_env's
+    # physical paths directly.
+    metadata["_sandbox_workspace_root"] = str(paths["workspace"])
+    metadata["_sandbox_outputs_dir"] = str(paths["outputs"])
+    metadata["_sandbox_mounts"] = [
+        {"src": str(paths["inputs"]), "dst": "/inputs", "mode": "ro"},
+    ]
     if business_prefix:
         metadata["_sys_prompt_addendum"] += "\n" + BUSINESS_CONTEXT_POLICY
     # 缺料表达对**所有**研究 Run 生效（2026-10-08 实测补充）：只有工具描述不够，
     # 必须有 prompt 级指令，否则模型会把“缺资料”写成一段说明而不调用工具。
     metadata["_sys_prompt_addendum"] += "\n" + INPUT_REQUEST_POLICY
+    if getattr(args, "mixed_mode_history", False):
+        metadata["_sys_prompt_addendum"] += "\n" + RESEARCH_HISTORY_POLICY
+    if args.pipeline_id == "agent_team":
+        metadata["_sys_prompt_addendum"] += "\n" + TEAM_BUSINESS_OWNERSHIP_POLICY
+        metadata["_subagent_prompt_addendum"] = TEAM_SUBAGENT_POLICY
 
     started = time.time()
     _frame("run_started", run_dir=str(run_root))
@@ -540,15 +725,22 @@ async def run_once(args: argparse.Namespace) -> int:
     # fail before ever producing a state.
     summary_usage: dict[str, Any] = {}
     workflow_stop_reason = ""
+    answer_outcome: dict[str, str] = {}
 
     # Cross-turn continuity (issue 01 §9.4): the orchestrator stages the session's
     # stored conversation dump in this run root. The worker never parses it —
     # it is handed to the workflow as an opaque payload, and the workflow
     # validates it before replaying anything.
-    replay_payload = ""
-    replay_path = run_root / "prior_conversation.json"
-    if replay_path.exists():
-        replay_payload = replay_path.read_text(encoding="utf-8")
+    replay_payload, cross_mode_context = _load_continuity_inputs(
+        run_root,
+        target_pipeline_id=args.pipeline_id,
+        prior_pipeline_id=str(getattr(args, "prior_pipeline_id", "") or ""),
+    )
+    history_token = None
+    if getattr(args, "mixed_mode_history", False):
+        from plugins.tools.research_history import bind_research_history
+
+        history_token = bind_research_history(_load_research_history_contexts(run_root))
 
     # The request *tail*: everything that differs between turns of ONE
     # conversation. The uploaded-file note names this run's inputs and the
@@ -557,13 +749,17 @@ async def run_once(args: argparse.Namespace) -> int:
     # whole conversation (issue 01 §9.15). The model sees the same bytes as
     # before; they are simply appended after the user's prompt instead of before
     # it. The workflow adds this run's own directory notes to the same tail.
-    instruction = args.prompt
-    if args.prompt_addendum:
-        instruction = f"{instruction}\n\n{args.prompt_addendum}"
-    if investment_context is not None:
-        from server.investment_context import render_context_data
-
-        instruction = f"{instruction}\n\n{render_context_data(investment_context)}"
+    instruction, subagent_original_question = _compose_run_instruction(
+        args.prompt,
+        prompt_addendum=args.prompt_addendum,
+        investment_context=investment_context,
+    )
+    # Agent Team's assign_task prepends this value to every delegated prompt.
+    # Keep the useful user scope and input-file note, but freeze it before the
+    # authenticated investment block is appended below.  The complete
+    # instruction remains available to the coordinator only.
+    if args.pipeline_id == "agent_team":
+        metadata["_subagent_original_question"] = subagent_original_question
 
     continuity_mode = (getattr(args, "continuity", "on") or "on").strip().lower()
     try:
@@ -579,6 +775,9 @@ async def run_once(args: argparse.Namespace) -> int:
                         "continuity_read_enabled": continuity_mode != "off",
                         "continuity_write_enabled": continuity_mode == "on",
                         **({"replay_payload": replay_payload} if replay_payload else {}),
+                        **(
+                            {"cross_mode_context": cross_mode_context} if cross_mode_context else {}
+                        ),
                     },
                 ),
                 timeout=args.wall_time + 30,
@@ -586,6 +785,15 @@ async def run_once(args: argparse.Namespace) -> int:
         replay_decision = state.get("replay_decision") or {}
         summary_usage = state.get("summary_usage") or {}
         workflow_stop_reason = str(state.get("stopped_by") or "")
+        answer_outcome = {
+            key: str(state.get(key) or "")
+            for key in (
+                "answer_status",
+                "final_answer_source",
+                "llm_error_reason",
+                "llm_retry_blocked_by",
+            )
+        }
         for key in ("final_answer", "final_content", "report", "answer", "output"):
             value = state.get(key)
             if isinstance(value, dict):
@@ -599,6 +807,15 @@ async def run_once(args: argparse.Namespace) -> int:
         # fall back to the observer's partial so the user still sees progress.
         if not final_answer and bridge.final_content.strip():
             final_answer = bridge.final_content.strip()
+        try:
+            _export_cross_mode_context(
+                run_root,
+                inherited_context=cross_mode_context or None,
+                published_answer=final_answer,
+                answer_status=str(state.get("answer_status") or ""),
+            )
+        except Exception:
+            logging.getLogger("worker").warning("cross-mode context export failed", exc_info=True)
         # Merge stopped_by: the worker's own stop paths (user_stop / deadline)
         # take precedence; otherwise use the loop result's own reason (e.g.
         # "max_turns", "context_limit", "paused"). The workflow may also
@@ -611,6 +828,7 @@ async def run_once(args: argparse.Namespace) -> int:
             answer_len=len(final_answer),
             stopped_by=stopped_by,
             final_answer=final_answer[:50_000],
+            **answer_outcome,
         )
     except TimeoutError:
         error = "wall timeout exceeded"
@@ -640,6 +858,10 @@ async def run_once(args: argparse.Namespace) -> int:
             logging.getLogger("worker").warning("diff generation failed", exc_info=True)
         _finalize_investment_context(run_root, context_tokens)
         _finalize_input_intent(run_root, intent_token)
+        if history_token is not None:
+            from plugins.tools.research_history import reset_research_history
+
+            reset_research_history(history_token)
 
     # Persist a small summary the orchestrator/relay can read for the runs table.
     # stopped_by precedence mirrors the run_finished frame above. ``bridge`` is
@@ -653,6 +875,7 @@ async def run_once(args: argparse.Namespace) -> int:
         "final_answer": final_answer[:50_000],
         "error": error,
         "stopped_by": _stopped_by,
+        **answer_outcome,
         "duration_s": round(time.time() - started, 2),
         # Cross-turn replay outcome (issue 01 §9.8): "used" / "skipped" + reason.
         "replay": replay_decision,
@@ -676,6 +899,7 @@ def main() -> int:
     parser.add_argument("--prompt", required=True)
     parser.add_argument("--prompt-addendum", default="")
     parser.add_argument("--pipeline-id", default="stateful-react-agent")
+    parser.add_argument("--prior-pipeline-id", default="")
     parser.add_argument("--backend", default="native")
     parser.add_argument("--wall-time", type=int, default=900)
     parser.add_argument("--max-turns", type=int, default=60)
@@ -683,6 +907,7 @@ def main() -> int:
     parser.add_argument("--base-url", default="")
     parser.add_argument("--api-key", default="")
     parser.add_argument("--agent-tools", default="")
+    parser.add_argument("--mixed-mode-history", action="store_true")
     parser.add_argument(
         "--require-semantic-store",
         action="store_true",

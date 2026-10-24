@@ -265,6 +265,9 @@ async def call_llm(
             else _default_backoff(attempt)
         )
 
+    # A retry needs enough time both to receive its first chunk and to make
+    # useful progress. Otherwise a silent endpoint consumes the last minute.
+    retry_floor_s = _WALL_DEADLINE_FLOOR_S + max(float(first_chunk_s or 0), 0.0)
     logical_timeout_s = max(float(logical_call_timeout_s or 0), 0.0)
     logical_deadline = (
         time.monotonic() + logical_timeout_s if logical_timeout_s else None
@@ -289,18 +292,19 @@ async def call_llm(
     ) -> float:
         effective_timeout = timeout
         deadline_remaining, deadline_reason = _nearest_deadline()
+        floor_s = retry_floor_s if attempt > 0 else _WALL_DEADLINE_FLOOR_S
         if deadline_remaining is not None and deadline_remaining < timeout:
-            if deadline_remaining < _WALL_DEADLINE_FLOOR_S:
+            if deadline_remaining < floor_s:
                 deadline_exc = TimeoutError(
                     f"{deadline_reason} reached ({deadline_remaining:.0f}s left "
-                    f"< {_WALL_DEADLINE_FLOOR_S:.0f}s floor)",
+                    f"< {floor_s:.0f}s floor)",
                 )
                 logger.warning(
                     "LLM call refused: %.0fs to %s (< %.0fs "
                     "floor; turn=%d, attempt=%d/%d, reason=%s) — surfacing "
                     "deadline for clean loop exit",
                     deadline_remaining, deadline_reason,
-                    _WALL_DEADLINE_FLOOR_S,
+                    floor_s,
                     turn, attempt + 1, max_retries, reason,
                 )
                 raise LLMCallExhausted(
@@ -320,7 +324,7 @@ async def call_llm(
         deadline_remaining, _deadline_reason = _nearest_deadline()
         return (
             deadline_remaining is None
-            or delay_s + _WALL_DEADLINE_FLOOR_S < deadline_remaining
+            or delay_s + retry_floor_s < deadline_remaining
         )
 
     async def _emit_attempt(event: dict[str, Any]) -> None:
@@ -354,6 +358,7 @@ async def call_llm(
         runaway_state["last_call_runaway_reasoning_chars"] = 0
         runaway_state["last_call_recovered"] = False
         runaway_state["last_call_reason"] = ""
+        runaway_state["last_call_retry_blocked_by"] = ""
     # ``llm_active`` may be re-bound with a reduced max_tokens after a
     # repeated reasoning runaway — error retries then reuse the bound
     # variant too, which is fine (the cap only applies post-runaway).
@@ -472,7 +477,8 @@ async def call_llm(
                     gate_wait_timeout = None
                     if deadline_remaining is not None:
                         gate_wait_timeout = (
-                            deadline_remaining - _WALL_DEADLINE_FLOOR_S
+                            deadline_remaining
+                            - (retry_floor_s if attempt > 0 else _WALL_DEADLINE_FLOOR_S)
                         )
                         if gate_wait_timeout <= 0:
                             _effective_timeout_or_deadline_exhausted(
@@ -499,10 +505,37 @@ async def call_llm(
                         timeout=effective_timeout,
                     )
                 else:
+                    attempt_reasoning_timeout = reasoning_only_timeout_s
+                    if (
+                        attempt == 0
+                        and logical_deadline is not None
+                        and max_retries > 1
+                        and _RUNAWAY_MAX_RETRIES > 0
+                        and first_chunk_s is not None and first_chunk_s > 0
+                        and reasoning_only_timeout_s is not None
+                        and reasoning_only_timeout_s > 0
+                    ):
+                        # Reserve a useful recovery request BEFORE spending the
+                        # first attempt on reasoning. Include worst-case TTFT,
+                        # backoff, and 10s for stream closure/scheduling; closure
+                        # alone may take 5s. Never extend the logical/run wall.
+                        available, _ = _nearest_deadline()
+                        reasoning_room = (
+                            min(effective_timeout, available or 0)
+                            - first_chunk_s - retry_floor_s - _RUNAWAY_BACKOFF_S - 10
+                        )
+                        if _WALL_DEADLINE_FLOOR_S <= reasoning_room < reasoning_only_timeout_s:
+                            attempt_reasoning_timeout = reasoning_room
+                            logger.info(
+                                "Reasoning watchdog reserves one recovery: %.1fs -> %.1fs "
+                                "(turn=%d, logical_remaining=%.1fs, retry_floor=%.1fs)",
+                                reasoning_only_timeout_s, reasoning_room, turn,
+                                available, retry_floor_s,
+                            )
                     response = await _stream_llm_response(
                         llm_active, messages_active, effective_timeout, attempt_delta,
                         first_chunk_s=first_chunk_s,
-                        reasoning_only_timeout_s=reasoning_only_timeout_s,
+                        reasoning_only_timeout_s=attempt_reasoning_timeout,
                         reasoning_only_max_tokens=reasoning_only_max_tokens,
                     )
                     empty_arg_tools = _stream_tool_calls_missing_required_arguments(
@@ -766,12 +799,21 @@ async def call_llm(
                 runaway_state["last_call_reason"] = (
                     "reasoning_runaway_early"
                 )
+            remaining, deadline_reason = _nearest_deadline()
+            blocked_by = (
+                "runaway_retry_limit" if runaway_retries >= _RUNAWAY_MAX_RETRIES
+                else "attempt_limit" if attempt >= max_retries - 1
+                else deadline_reason or "retry_budget"
+            )
+            if runaway_state is not None:
+                runaway_state["last_call_retry_blocked_by"] = blocked_by
             logger.error(
-                "LLM reasoning runaway stopped early but no resample slot "
-                "remains (turn=%d, trigger=%s, elapsed=%.1fs, "
-                "estimated_tokens=%d); returning partial response for "
-                "loop-level nudge handling",
-                turn, exc.trigger, exc.elapsed_s, exc.estimated_tokens,
+                "LLM reasoning recovery unavailable: blocked_by=%s "
+                "(turn=%d, attempt=%d/%d, trigger=%s, elapsed=%.1fs, "
+                "remaining_s=%s, retry_floor_s=%.1f, estimated_tokens=%d); "
+                "returning incomplete response for workflow recovery",
+                blocked_by, turn, attempt + 1, max_retries, exc.trigger,
+                exc.elapsed_s, remaining, retry_floor_s, exc.estimated_tokens,
             )
             await _finish_attempt(
                 outcome=ATTEMPT_ACCEPTED_DEGRADED,
@@ -968,7 +1010,7 @@ async def call_llm(
             deadline_remaining, deadline_reason = _nearest_deadline()
             if (
                 deadline_remaining is not None
-                and backoff + _WALL_DEADLINE_FLOOR_S > deadline_remaining
+                and backoff + retry_floor_s > deadline_remaining
             ):
                 logger.warning(
                     "Abandoning LLM retries: backoff %ds would cross the "

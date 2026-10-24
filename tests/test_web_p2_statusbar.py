@@ -48,3 +48,23 @@ async def test_loop_start_without_meta_omits_fields():
     assert event["type"] == "run_started"
     assert "pipeline_id" not in event
     assert "model_name" not in event
+
+
+async def test_subagent_bridge_stamps_source_without_restarting_product_run():
+    queue: asyncio.Queue = asyncio.Queue()
+    root = BridgeObserver(
+        queue=queue,
+        source_meta={"agent_id": "coordinator", "agent_kind": "coordinator"},
+    )
+    member = root.for_subagent("evidence_1")
+
+    await member.on_loop_start(SimpleNamespace(context_token_limit=1000))
+    assert queue.empty()
+    await member.on_llm_delta(
+        SimpleNamespace(delta="evidence", thinking_delta="", turn=1)
+    )
+
+    event = queue.get_nowait()
+    assert event["type"] == "assistant_delta"
+    assert event["agent_id"] == "evidence_1"
+    assert event["agent_kind"] == "subagent"

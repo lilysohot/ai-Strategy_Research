@@ -75,5 +75,21 @@ def test_trace_still_redacts_tool_results(run_dir):
     assert _SECRET not in json.dumps(records, ensure_ascii=False)
 
 
+def test_trace_repairs_legacy_string_error_flag(run_dir):
+    """Old trajectories must not keep showing bracketed failures as success."""
+    _write(
+        run_dir,
+        [{
+            "t": "result",
+            "name": "read_file",
+            "result": "[read_file error] exit=1: FileNotFoundError",
+            "error": False,
+        }],
+    )
+
+    record = trajectory_records_for_egress("run-f05")[0]
+    assert record["error"] is True
+
+
 def test_missing_trajectory_file_yields_no_records(run_dir):
     assert trajectory_records_for_egress("run-f05") == []

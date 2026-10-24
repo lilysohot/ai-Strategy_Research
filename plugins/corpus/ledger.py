@@ -48,6 +48,7 @@ from frontier_agent.core.loop_types import (
     TurnContext,
 )
 from frontier_agent.core.messages import Message, text_of
+from plugins.corpus.quote_match import find_quote_matches
 from plugins.corpus.search_evidence import search_evidence_items
 from plugins.corpus.search_refs import SearchReferenceError, canonical_locator, offered_hit
 from plugins.corpus.structured.consumption import (
@@ -1114,6 +1115,7 @@ def _verify_conclusion(
     covered_purposes: set[str] = set()
     deliveries: list[str] = []
     semantic_out: list[dict[str, Any]] = []
+    matched_evidence: list[dict[str, Any]] = []
 
     # 评审 C4：报告绑定——结论必须能在最终报告中定位；清单与报告脱节即降级。
     report_quote = str(conclusion.get("report_quote") or "").strip()
@@ -1222,8 +1224,8 @@ def _verify_conclusion(
                     }
                 )
                 continue
-            offset = source_text.find(quote)
-            if offset < 0:
+            matches = list(find_quote_matches(source_text, quote))
+            if not matches:
                 problems.append(
                     {
                         "code": "quote_not_found",
@@ -1236,13 +1238,19 @@ def _verify_conclusion(
             check_delivery = evidence_delivery_for_submit if pending_aware else _evidence_delivery
             delivery = UNKNOWN
             ranks = {UNKNOWN: 0, "partial": 1, "pending": 2, DELIVERED: 3}
-            while offset >= 0:
-                candidate = check_delivery(ledger, doc_id, locator, offset, offset + len(quote))
+            chosen = matches[0]
+            for match in matches:
+                candidate = check_delivery(ledger, doc_id, locator, match.start, match.end)
                 if ranks.get(candidate, 0) > ranks.get(delivery, 0):
                     delivery = candidate
+                    chosen = match
                 if delivery == DELIVERED:
                     break
-                offset = source_text.find(quote, offset + 1)
+            matched_evidence.append({
+                "doc_id": doc_id, "locator": locator, "start": chosen.start,
+                "end": chosen.end, "quote": chosen.text, "match_kind": chosen.kind,
+                "delivery": delivery,
+            })
             if pending_aware and delivery == "pending":
                 problems.append(
                     {
@@ -1292,6 +1300,7 @@ def _verify_conclusion(
         "missing_dependencies": missing_deps,
         "delivery": sorted(set(deliveries)),
         "semantic_references": semantic_out,
+        "matched_evidence": matched_evidence,
         "problems": problems,
         # 明确忽略模型自报：字段仅记录，不参与判定。
         "model_claimed_complete": conclusion.get("complete"),

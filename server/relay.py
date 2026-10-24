@@ -25,6 +25,7 @@ import os
 from collections.abc import AsyncIterator
 from typing import Any
 
+from frontier_agent.core.runtime.loop.tool_exec import tool_result_text_is_error
 from server.bridge import _is_skipped_result, redact_deep
 from server.config import run_dir_for
 from server.events import EventType, is_droppable, make_event, to_sse
@@ -176,7 +177,20 @@ def trajectory_records_for_egress(run_id: str, after_line: int = 0) -> list[dict
     The record SHAPE is deliberately unchanged: the timeline view consumes these
     records directly, so only the values are masked.
     """
-    return [redact_deep(rec) for rec in trajectory_records(run_id, after_line=after_line)]
+    projected: list[dict] = []
+    for rec in trajectory_records(run_id, after_line=after_line):
+        safe = redact_deep(rec)
+        if (
+            safe.get("t") == "result"
+            and not safe.get("error")
+            and tool_result_text_is_error(str(safe.get("result", "") or ""))
+        ):
+            # Compatibility for trajectories written before the kernel derived
+            # ``is_error`` from legacy bracketed tool results. Keep disk audit
+            # bytes immutable while repairing the Web projection.
+            safe["error"] = True
+        projected.append(safe)
+    return projected
 
 
 def trajectory_page(run_id: str, after_line: int = 0, limit: int = 0) -> tuple[list[dict], int, bool]:
@@ -402,6 +416,7 @@ def _traj_record_to_events(rec: dict, *, seq: int | None = None) -> list[dict]:
     elif t == "result":
         name = rec.get("name")
         result_text = str(rec.get("result", "") or "")
+        failed = bool(rec.get("error")) or tool_result_text_is_error(result_text)
         events.append(
             make_event(
                 EventType.TOOL_FINISHED.value,
@@ -410,7 +425,7 @@ def _traj_record_to_events(rec: dict, *, seq: int | None = None) -> list[dict]:
                 tool_call_id=rec.get("tool_call_id") or "",
                 name=name,
                 tool_name=name,
-                ok=not rec.get("error"),
+                ok=not failed,
                 # Same never-ran semantics as the live bridge, so a replayed
                 # skipped call does not present as a clean success.
                 skipped=_is_skipped_result(result_text),

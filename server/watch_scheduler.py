@@ -36,6 +36,7 @@ from server import (
 )
 from server import business_service as biz
 from server.config import get_config, run_dir_for
+from server.run_modes import RunMode, pipeline_for_mode
 from server.store import build_llm_snapshot, get_default_llm_config
 
 logger = logging.getLogger(__name__)
@@ -379,7 +380,7 @@ async def schedule_event(
         session_id=event.research_id,
         user_id=event.user_id,
         prompt=prompt,
-        pipeline_id=cfg.pipeline_id,
+        pipeline_id=pipeline_for_mode(RunMode.SINGLE),
         run_dir=str(run_dir_for(run_id.hex)),
         status="queued",
         llm_config_id=default_llm.id if default_llm is not None else None,

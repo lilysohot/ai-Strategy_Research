@@ -358,6 +358,38 @@ async def test_sandbox_search_branch_prunes_spill_unless_targeted(
     assert ("-name .spill -prune" in find_cmd) is expect_excluded, find_cmd
 
 
+async def test_sandbox_grep_marks_a_capped_preview_incomplete(monkeypatch) -> None:
+    """A coordinator must not mistake a ``head`` preview for the whole file."""
+    from plugins.tools import _sandbox
+    from plugins.tools.grep_search import grep_search
+
+    commands: list[str] = []
+
+    class _Commands:
+        def run(self, command: str, timeout: int = 30):
+            commands.append(command)
+            return SimpleNamespace(
+                stdout="1:header\n2:A1\n3:A2\n4:A3\n",
+                stderr="",
+                exit_code=0,
+            )
+
+    monkeypatch.setattr(_sandbox, "sandbox_available", lambda: True)
+    monkeypatch.setattr(
+        _sandbox, "get_sandbox", lambda: SimpleNamespace(commands=_Commands()),
+    )
+
+    output = await grep_search.ainvoke({
+        "pattern": ".", "path": "/inputs/orders.csv", "max_results": 3,
+    })
+
+    assert commands and "head -n 4" in commands[0]
+    assert "1:header\n2:A1\n3:A2" in output
+    assert "4:A3" not in output
+    assert "truncated" in output.lower()
+    assert "max_results=3" in output
+
+
 # ── the spill store's containment ────────────────────────────────────────
 
 

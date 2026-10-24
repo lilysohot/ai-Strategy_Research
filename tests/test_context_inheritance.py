@@ -663,18 +663,16 @@ def test_the_session_store_revision_is_wired_into_the_graph() -> None:
     repo_root = Path(__file__).resolve().parents[1]
     carrier_migration = (
         repo_root / "server/alembic/versions/0019_session_conversations.py"
-    ).read_text(
+    ).read_text(encoding="utf-8")
+    head_migration = (repo_root / "server/alembic/versions/0022_run_context_sources.py").read_text(
         encoding="utf-8"
     )
-    head_migration = (
-        repo_root / "server/alembic/versions/0020_default_investment_account.py"
-    ).read_text(encoding="utf-8")
 
-    assert expected_heads() == ("0020_default_investment_account",)
+    assert expected_heads() == ("0022_run_context_sources",)
     assert SessionConversation.__tablename__ == "session_conversations"
     assert 'down_revision = "0018_plan_capital_terms"' in carrier_migration
     assert f'"{SessionConversation.__tablename__}"' in carrier_migration
-    assert 'down_revision = "0019_session_conversations"' in head_migration
+    assert 'down_revision = "0021_monitor_streams"' in head_migration
 
 
 # ── writing the carrier: the parent's ingest (issue 01 §11.3) ────────
@@ -1029,9 +1027,7 @@ async def test_a_watch_run_reads_the_chat_carrier_without_replacing_it(db, tmp_p
     from server.store import reset_engine, upsert_session_conversation
 
     stored = '{"schema": "conversation-dump/1", "marker": "from-store"}'
-    await upsert_session_conversation(
-        session_id=session_uuid, payload=stored, run_id=prior_run
-    )
+    await upsert_session_conversation(session_id=session_uuid, payload=stored, run_id=prior_run)
     # Drop every in-process handle on the store before the read: continuity must
     # come from the row, so an engine nobody has touched yet proves the point
     # (this is the cheap form of "survives a process restart", issue 01 §11.7-4).
@@ -1428,7 +1424,9 @@ async def test_worker_puts_per_run_guidance_in_the_request_tail(db, monkeypatch)
     assert note in captured["instruction"]
     # Prefix: the system-prompt addendum carries only what is constant per turn.
     assert note not in captured["meta"]["_sys_prompt_addendum"]
-    assert "Input files are mounted read-only at /inputs." in captured["meta"]["_sys_prompt_addendum"]
+    assert (
+        "Input files are mounted read-only at /inputs." in captured["meta"]["_sys_prompt_addendum"]
+    )
 
 
 # ── S3: the summary block a trim leaves behind (issue 01 §12) ────────
@@ -1883,7 +1881,10 @@ async def test_a_long_conversation_cuts_on_a_fixed_cadence(tmp_path) -> None:
             appended += 1
 
     assert appended == 12, "17 transitions, 5 of them cuts"
-    assert len([m for m in documents[-1]["messages"] if SUMMARY_TAG in str(m.get("content") or "")]) == 1
+    assert (
+        len([m for m in documents[-1]["messages"] if SUMMARY_TAG in str(m.get("content") or "")])
+        == 1
+    )
 
 
 async def test_the_hysteresis_buys_back_the_cacheable_prefix(tmp_path) -> None:

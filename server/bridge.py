@@ -17,6 +17,7 @@ import asyncio
 import re
 from typing import Any
 
+from frontier_agent.core.runtime.loop.tool_exec import tool_result_text_is_error
 from server.events import EventType, make_event
 from server.run_outcome import interruption_reason
 
@@ -92,6 +93,8 @@ class BridgeObserver:
         queue: asyncio.Queue[dict[str, Any] | None] | None = None,
         *,
         run_meta: dict[str, Any] | None = None,
+        source_meta: dict[str, Any] | None = None,
+        emit_loop_lifecycle: bool = True,
     ) -> None:
         # ``queue`` is optional: the worker uses this observer purely as a capture
         # sink for ``stopped_by`` / ``final_content`` and never drains the queue,
@@ -101,6 +104,8 @@ class BridgeObserver:
         # The worker knows these before the loop starts; the loop config itself
         # only carries the context window, stamped at ``on_loop_start``.
         self._run_meta = dict(run_meta or {})
+        self._source_meta = dict(source_meta or {})
+        self._emit_loop_lifecycle = emit_loop_lifecycle
         self.tool_calls: list[str] = []
         self.tool_errors: list[str] = []
         self.deltas = 0
@@ -120,11 +125,23 @@ class BridgeObserver:
         safe = {
             k: (_redact(v) if isinstance(v, str) else v) for k, v in data.items()
         }
-        await self._queue.put(make_event(type_, **safe))
+        await self._queue.put(make_event(type_, **safe, **self._source_meta))
+
+    def for_subagent(self, agent_id: str) -> BridgeObserver:
+        """Create an event sink for one member without product-Run lifecycle events."""
+
+        return BridgeObserver(
+            self._queue,
+            run_meta=self._run_meta,
+            source_meta={"agent_id": agent_id, "agent_kind": "subagent"},
+            emit_loop_lifecycle=False,
+        )
 
     # — loop lifecycle ————————————————————————————————————————
     async def on_loop_start(self, config: Any) -> None:
         """Emit ``run_started`` with the run's status-bar facts and context limit."""
+        if not self._emit_loop_lifecycle:
+            return
         await self._emit(
             EventType.RUN_STARTED.value,
             **self._run_meta,
@@ -144,7 +161,7 @@ class BridgeObserver:
         # ``BenchmarkSession.run``. Capture it so a stopped run can still show a
         # useful partial result to the user.
         self.final_content = str(getattr(result, "final_content", "") or "")
-        if interruption_reason(self.stopped_by):
+        if self._emit_loop_lifecycle and interruption_reason(self.stopped_by):
             await self._emit(EventType.RUN_STOPPED.value, stopped_by=self.stopped_by)
 
     # — streaming ——————————————————————————————————————————————
@@ -192,9 +209,7 @@ class BridgeObserver:
         """Emit ``tool_finished`` with the redacted output and outcome classification."""
         text = str(getattr(result, "result", "") or "")
         name = str(getattr(result, "name", "") or "")
-        failed = bool(getattr(result, "is_error", False)) or text.lstrip().startswith(
-            "Error"
-        )
+        failed = bool(getattr(result, "is_error", False)) or tool_result_text_is_error(text)
         if failed:
             self.tool_errors.append(name)
         ms = getattr(result, "duration_ms", None)

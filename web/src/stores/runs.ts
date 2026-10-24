@@ -72,6 +72,8 @@ export interface RunStep {
   ms?: number
   /** Correlation id pairing a started call with its result. */
   callId?: string
+  /** Agent source for multi-agent tool-call correlation. */
+  agentId?: string
   /** When the call started (epoch ms) — live ``Date.now()``, replay from ``ts``. */
   startedAt?: number
 }
@@ -235,6 +237,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
         return { outcome: 'finished', runId: remembered }
       }
       watch(remembered, undefined, researchId)
+      if (summary.pipeline_id) meta.value = { ...meta.value, pipelineId: summary.pipeline_id }
       return { outcome: 'attached', runId: remembered }
     } catch {
       // Best-effort resume: an unreadable summary must never break restoring
@@ -253,8 +256,11 @@ export const useRunStreamStore = defineStore('runStream', () => {
    */
   function upsertToolStep(event: SseEvent): RunStep | undefined {
     const callId = event.tool_call_id
+    const agentId = event.agent_id
     if (callId) {
-      const existing = steps.value.find((s) => s.kind === 'tool' && s.id >= 0 && s.callId === callId)
+      const existing = steps.value.find(
+        (s) => s.kind === 'tool' && s.id >= 0 && s.callId === callId && s.agentId === agentId,
+      )
       if (existing) return existing
     }
     const step: RunStep = {
@@ -265,6 +271,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
       status: 'running',
       input: event.input,
       callId,
+      agentId,
       // Live events are stamped at emit time; replayed ones carry the original
       // trajectory ``ts`` (epoch seconds) so elapsed time stays truthful.
       startedAt: typeof event.ts === 'number' ? event.ts * 1000 : Date.now(),
@@ -329,6 +336,11 @@ export const useRunStreamStore = defineStore('runStream', () => {
         }
         break
       case 'assistant_delta': {
+        // Member prose is working material for the coordinator. Folding it into
+        // the user-visible answer would interleave several agents that reuse
+        // the same turn numbers. Member tool lifecycle remains visible and is
+        // source-correlated; the coordinator alone owns the published answer.
+        if (event.agent_kind === 'subagent') break
         if (status.value !== 'running') status.value = 'running'
         // Two producers feed this event type and they carry the SAME text:
         //   * live   — one event per token fragment (`text` / `thinking_text`)
@@ -598,6 +610,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
         // it would overwrite the run now on screen with the old run's outcome.
         if (runId.value !== requestedRunId || generation !== requestedGeneration) return
         if (runDir.value === null) runDir.value = summary.run_dir ?? null
+        if (summary.pipeline_id) meta.value = { ...meta.value, pipelineId: summary.pipeline_id }
         const remoteStatus = summary.status as RunStatus
         const streamEnded = connection.value === 'closed'
         status.value = mergeReconciledRunStatus(status.value, remoteStatus, streamEnded)

@@ -399,6 +399,7 @@ async def _run_loop_inner(
                 ):
                     stop_reason = "llm_error"
                     metadata["llm_error_reason"] = reason
+                    metadata["llm_retry_blocked_by"] = runaway.get("last_call_retry_blocked_by", "")
                     metadata["llm_error"] = (
                         "Model exhausted reasoning recovery without a visible answer or tool call"
                     )

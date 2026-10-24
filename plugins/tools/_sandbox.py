@@ -423,7 +423,17 @@ def _build_tool_env(
     else:
         projected["PIP_TARGET"] = site
         projected["PYTHONPATH"] = site
-        projected["PATH"] = f"{site}/bin:{home}/.local/bin:" + projected.get("PATH", "")
+        path_prefix = f"{site}/bin:{home}/.local/bin:"
+        # ``uv run`` normally places the project venv on PATH, but invoking the
+        # exact ``.venv/bin/python`` path does not. The latter is also a valid
+        # service launch shape; without this prefix every document tool silently
+        # falls through to /usr/bin/python3 and loses the installed reader/writer
+        # stack. The venv is host-controlled and mounted read-only by bwrap.
+        runtime_bin = Path(sys.prefix) / "bin"
+        if sys.prefix != sys.base_prefix and (runtime_bin / "python3").exists():
+            projected["VIRTUAL_ENV"] = sys.prefix
+            path_prefix = f"{runtime_bin}:" + path_prefix
+        projected["PATH"] = path_prefix + projected.get("PATH", "")
     # setdefault, not assignment: a trusted caller passing an ``env_allow``
     # prefix that covers these (e.g. ``MPL``) means to supply its own.
     projected.setdefault("MPLCONFIGDIR", f"{home}/.cache/matplotlib")
@@ -870,6 +880,60 @@ _BWRAP_SYSTEM_PATHS = ("/usr", "/bin", "/lib", "/lib64", "/etc")
 _SPILL_SUBDIR = ".spill"
 
 
+def _external_symlink_target_bind_args(
+    paths: tuple[str | Path, ...],
+    *,
+    covered_roots: tuple[str | Path, ...],
+) -> list[str]:
+    """Expose trusted symlink targets that sit outside existing bwrap binds.
+
+    A read-only bind of ``/etc`` or a venv preserves the symlink entry but not
+    an absolute target elsewhere on the host. Bind only that immediate target
+    at the exact path stored in the link; this repairs the link without exposing
+    the target's parent directory.
+
+    Callers pass only host-controlled runtime paths.  Model-controlled paths
+    must never reach this helper because every returned source becomes visible
+    read-only inside the jail.
+    """
+    covered = tuple(os.path.normpath(str(root)) for root in covered_roots)
+    args: list[str] = []
+    emitted: set[str] = set()
+    for raw_path in paths:
+        link = Path(raw_path)
+        seen: set[str] = set()
+        while link.is_symlink():
+            lexical_link = os.path.normpath(str(link))
+            if lexical_link in seen:
+                break
+            seen.add(lexical_link)
+            try:
+                raw_target = Path(os.readlink(link))
+            except OSError:
+                break
+            target = raw_target if raw_target.is_absolute() else link.parent / raw_target
+            target = Path(os.path.normpath(str(target)))
+
+            destination = target
+            destination_s = os.path.normpath(str(destination))
+            destination_covered = any(
+                _path_within(destination_s, root) for root in covered
+            )
+            if not destination_covered and destination_s not in emitted:
+                try:
+                    source = destination.resolve(strict=True)
+                except OSError:
+                    break
+                args.extend(["--ro-bind", str(source), destination_s])
+                emitted.add(destination_s)
+                break
+
+            # Relative chains such as ``python -> python3 -> /external/python``
+            # remain inside the already-bound venv for one or more hops.
+            link = target
+    return args
+
+
 def _interpreter_bind_args() -> list[str]:
     """Expose the running interpreter read-only at its real path(s).
 
@@ -900,6 +964,29 @@ def _interpreter_bind_args() -> list[str]:
             continue
         emitted.append(prefix)
         args.extend(["--ro-bind", prefix, prefix])
+
+    # A uv-managed venv stores an absolute executable target below a
+    # version-neutral directory symlink. Mount that one Python distribution
+    # alias as a unit so the executable can find ``lib`` beside ``bin``. Do not
+    # walk arbitrary symlink ancestors: an aliased /home would expose far more
+    # than the runtime this jail needs.
+    executable = Path(sys.executable)
+    if executable.is_symlink():
+        raw_target = Path(os.readlink(executable))
+        target = raw_target if raw_target.is_absolute() else executable.parent / raw_target
+        target = Path(os.path.normpath(str(target)))
+        distribution = target.parent.parent if target.parent.name in {"bin", "Scripts"} else None
+        if distribution is not None and distribution.is_symlink():
+            destination = os.path.normpath(str(distribution))
+            if not any(
+                _path_within(destination, root) for root in (*_BWRAP_SYSTEM_PATHS, *emitted)
+            ):
+                args.extend(["--ro-bind", str(distribution.resolve(strict=True)), destination])
+                emitted.append(destination)
+    args.extend(_external_symlink_target_bind_args(
+        (executable,),
+        covered_roots=(*_BWRAP_SYSTEM_PATHS, *emitted),
+    ))
     return args
 
 
@@ -945,6 +1032,13 @@ def _bwrap_base_args() -> list[str]:
     for path in _BWRAP_SYSTEM_PATHS:
         if Path(path).exists():
             args.extend(["--ro-bind", path, path])
+    # WSL makes /etc/resolv.conf an absolute link into /mnt/wsl. Binding /etc
+    # alone leaves a dangling resolver path and every sandbox download fails
+    # DNS. Expose only the host-controlled target file, never the /mnt tree.
+    args.extend(_external_symlink_target_bind_args(
+        (Path("/etc/resolv.conf"),),
+        covered_roots=_BWRAP_SYSTEM_PATHS,
+    ))
     args.extend(_interpreter_bind_args())
     args.extend(_extra_tool_root_bind_args())
     # The tool user's overlay venv sits outside the system paths above, so bind
@@ -1024,7 +1118,8 @@ class _BwrapCommands:
 
     def run(self, command: str, timeout: int = 60,
             input: str | None = None, allow_net: bool = False,
-            env_allow: tuple[str, ...] = ()) -> _CommandResult:
+            env_allow: tuple[str, ...] = (),
+            _cancel_event: threading.Event | None = None) -> _CommandResult:
         if _BWRAP_PATH is None:
             return _CommandResult(stderr="bubblewrap (bwrap) is not installed", exit_code=127)
         mem_limit_mb = (
@@ -1055,6 +1150,19 @@ class _BwrapCommands:
             capped,
         ]
         try:
+            if _cancel_event is not None:
+                from plugins.tools._cancellable_process import run_cancellable
+
+                result = run_cancellable(
+                    argv, timeout=timeout, input=input, cancel=_cancel_event,
+                    env=_build_tool_env(
+                        os.environ.copy(), home="/workspace",
+                        env_allow=env_allow, overlay_writable=False,
+                    ),
+                )
+                return _CommandResult(
+                    stdout=result.stdout, stderr=result.stderr, exit_code=result.returncode,
+                )
             result = subprocess.run(
                 argv,
                 capture_output=True,
@@ -3183,9 +3291,20 @@ async def arun_sandbox_cmd(
             pass
     if isinstance(sandbox, BwrapSandbox):
         async with _get_local_exec_sem(asyncio):
-            return await asyncio.to_thread(
-                sandbox.commands.run, command, **kw,
-            )
+            cancel = threading.Event()
+            execution = asyncio.create_task(asyncio.to_thread(
+                sandbox.commands.run, command, _cancel_event=cancel, **kw,
+            ))
+            try:
+                return await asyncio.shield(execution)
+            except asyncio.CancelledError:
+                cancel.set()
+                # Do not release the concurrency slot or sandbox until the
+                # thread has killed/reaped its command. Cancelling to_thread
+                # alone leaves shell processes alive after a stopped Web Run.
+                with contextlib.suppress(Exception):
+                    await asyncio.shield(execution)
+                raise
     try:
         return await asyncio.to_thread(
             sandbox.commands.run, command, **kw,

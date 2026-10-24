@@ -41,6 +41,16 @@ def _trajectory_start(run_id: str) -> dict:
     raise AssertionError(f"no start record in {path}")
 
 
+def _trajectory_tool_result(run_id: str, name: str) -> dict:
+    """Return the first persisted result for *name* from the real worker."""
+    path = run_dir_for(run_id) / "run" / "agent" / "trajectories" / "react_agent.jsonl"
+    for line in path.read_text(encoding="utf-8").splitlines():
+        record = json.loads(line)
+        if record.get("t") == "result" and record.get("name") == name:
+            return record
+    raise AssertionError(f"no {name} result record in {path}")
+
+
 @pytest.fixture
 async def app_client():
     from httpx import ASGITransport, AsyncClient
@@ -76,32 +86,6 @@ def isolated_orchestrator(monkeypatch):
     orch = orch_mod.Orchestrator()
     monkeypatch.setattr(orch_mod, "_orchestrator", orch)
     return orch
-
-
-def _spawn_approver(orch, run_id: str, client, headers):
-    """Answer the P3.2 approval gate the way a user would.
-
-    Since the gate landed (P3.2), a worker's ``create_file`` suspends on
-    ``approval_requested`` until a decision arrives — an old e2e that never
-    answers would hang the worker for the gate's 300s timeout. This task
-    subscribes to the run's event fan-out and approves ``once`` via the real
-    API route, so the approval path itself stays exercised.
-    """
-
-    async def run() -> None:
-        q = orch.subscribe(run_id)
-        while True:
-            evt = await asyncio.wait_for(q.get(), timeout=90)
-            if evt and evt.get("type") == "approval_requested":
-                resp = await client.post(
-                    f"/api/runs/{run_id}/approve",
-                    json={"approval_id": evt["approval_id"], "decision": "once"},
-                    headers=headers,
-                )
-                assert resp.status_code == 200, resp.text
-                return
-
-    return asyncio.ensure_future(run())
 
 
 def _user_id(auth_headers: dict) -> uuid.UUID:
@@ -229,6 +213,7 @@ async def test_upload_reaches_agent_via_prompt_addendum(
     cfg = get_config()
     monkeypatch.setattr(cfg, "wall_timeout_s", 120)
     monkeypatch.setattr(cfg, "worker_pool_size", 1)
+    monkeypatch.setattr(cfg, "sandbox_backend", "bwrap")
     await init_db()
 
     resp = await app_client.post(
@@ -239,10 +224,6 @@ async def test_upload_reaches_agent_via_prompt_addendum(
     )
     assert resp.status_code == 202, resp.text
     run_id = resp.json()["run_id"]
-    approver = _spawn_approver(
-        isolated_orchestrator, run_id, app_client, auth_headers
-    )
-
     # Wait for the run to finish and its deliverable to be scanned.
     done = False
     for _ in range(120):
@@ -270,5 +251,10 @@ async def test_upload_reaches_agent_via_prompt_addendum(
     assert "/inputs/brief.md" in start["user_message"]
     assert "The user attached" not in start["system_prompt"]
 
-    # The approver task has posted its decision and returned.
-    await asyncio.wait_for(approver, timeout=5)
+    # Prove the tool consumed the uploaded bytes. A scripted second tool call can
+    # create ``echo.md`` even when ``read_file`` failed, so artifact existence by
+    # itself is not evidence that the bwrap /inputs mount is wired correctly.
+    read_result = _trajectory_tool_result(run_id, "read_file")
+    assert read_result["error"] is False
+    assert "# Brief" in read_result["result"]
+    assert "Read this." in read_result["result"]

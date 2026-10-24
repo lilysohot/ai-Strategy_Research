@@ -23,7 +23,7 @@ from typing import Any, Literal
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 
 # NOTE: import UploadFile from Starlette, not FastAPI. Starlette's multipart
 # parser instantiates *its own* UploadFile, which is the BASE class of
@@ -41,6 +41,7 @@ from server.diff import revert_paths
 from server.orchestrator import Orchestrator, _session_uuid, get_orchestrator
 from server.readiness import probe_data_root
 from server.relay import sse_for_run, trajectory_page
+from server.run_modes import RunMode, mode_for_pipeline, pipeline_for_mode
 from server.store import (
     ACTIVE_RUN_STATUSES,
     CONTROL_KIND_APPROVAL,
@@ -71,6 +72,39 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/runs", tags=["runs"])
 
 
+def _require_team_mode_available(cfg: Any) -> None:
+    """Fail before creating a Run unless team role isolation is enforceable."""
+
+    if not cfg.agent_team_enabled:
+        raise HTTPException(status_code=503, detail="团队研究模式尚未启用")
+    backend = str(cfg.sandbox_backend or "").strip().lower()
+    if backend in {"auto", "bwrap"}:
+        return
+    if backend in {"native", "container"}:
+        from plugins.tools._sandbox import tool_identity_or_none
+
+        if tool_identity_or_none() is not None:
+            return
+        raise HTTPException(
+            status_code=503,
+            detail="团队研究模式缺少主 Agent/成员所需的工具用户隔离",
+        )
+    raise HTTPException(status_code=503, detail="团队研究模式的沙箱配置不受支持")
+
+
+@router.get("/modes")
+async def run_mode_capabilities(user: UserModel = Depends(get_current_user)) -> dict[str, Any]:
+    """Expose the same team admission gate used by submit, without starting a Run."""
+    del user
+    try:
+        _require_team_mode_available(get_config())
+    except HTTPException:
+        team = {"available": False, "reason": "团队研究暂未开放，请使用单 Agent"}
+    else:
+        team = {"available": True, "reason": None}
+    return {"single": {"available": True, "reason": None}, "team": team}
+
+
 class RunRequest(BaseModel):
     """Run submission payload (T2.5 security contract, T2.10 multipart).
 
@@ -83,6 +117,7 @@ class RunRequest(BaseModel):
 
     message: str
     session_id: str = "default"
+    mode: RunMode = RunMode.SINGLE
     # Accepted for backwards compatibility only; ignored when auth is on (T2.7) —
     # identity is always the authenticated user.
     user_id: str | None = None
@@ -90,7 +125,7 @@ class RunRequest(BaseModel):
 
 async def _parse_submit(
     request: Request,
-) -> tuple[str, str, list[UploadFile], Any]:
+) -> tuple[str, str, RunMode, list[UploadFile], Any]:
     """Accept either JSON or multipart for run submission (T2.10).
 
     JSON keeps the M1/M2 ``{"message": ...}`` contract intact (so existing clients
@@ -107,23 +142,32 @@ async def _parse_submit(
         # values, so it drops ``UploadFile`` parts. Iterate ``multi_items`` instead,
         # which yields every part including file uploads.
         files = [v for _, v in form.multi_items() if isinstance(v, UploadFile)]
-        req = RunRequest(
-            message=str(form.get("message", "")),
-            session_id=str(form.get("session_id", "default")),
-        )
+        try:
+            req = RunRequest.model_validate(
+                {
+                    "message": str(form.get("message", "")),
+                    "session_id": str(form.get("session_id", "default")),
+                    "mode": str(form.get("mode", RunMode.SINGLE.value)),
+                }
+            )
+        except ValidationError as exc:
+            raise HTTPException(status_code=422, detail=exc.errors()) from exc
         # DATA-05: the business structure rides along as a JSON TEXT form field.
         # It must be parsed, not silently dropped by the legacy form parser —
         # otherwise a multipart submit would bypass every business check.
-        return req.message, req.session_id, files, form.get("investment_input")
+        return req.message, req.session_id, req.mode, files, form.get("investment_input")
     # Fall back to the legacy JSON body.
     body = await request.json()
     # A missing/None session_id is valid (the orchestrator synthesises a stable
     # UUID from it); normalise before validation so a null payload doesn't 500.
     if isinstance(body, dict) and body.get("session_id") is None:
         body["session_id"] = "default"
-    req = RunRequest.model_validate(body)
+    try:
+        req = RunRequest.model_validate(body)
+    except ValidationError as exc:
+        raise HTTPException(status_code=422, detail=exc.errors()) from exc
     investment_input = body.get("investment_input") if isinstance(body, dict) else None
-    return req.message, req.session_id, [], investment_input
+    return req.message, req.session_id, req.mode, [], investment_input
 
 
 @router.post("", status_code=202)
@@ -150,7 +194,7 @@ async def submit_run(
             detail="恢复/迁移模式：禁止派发新的分析；核对恢复清单后显式关闭该模式",
         )
 
-    message, session_id, files, raw_investment_input = await _parse_submit(request)
+    message, session_id, mode, files, raw_investment_input = await _parse_submit(request)
     if not message:
         raise HTTPException(status_code=422, detail="message is required")
 
@@ -183,6 +227,9 @@ async def submit_run(
     run_id_hex = run_id.hex
 
     cfg = get_config()
+    if mode is RunMode.TEAM:
+        _require_team_mode_available(cfg)
+    pipeline_id = pipeline_for_mode(mode)
 
     # F08 — session admission BEFORE any side effect. A session belongs to
     # exactly one user, and a foreign (or soft-deleted) one must read as absent:
@@ -257,7 +304,7 @@ async def submit_run(
             session_id=session_uuid,
             user_id=user_id,
             prompt=message,
-            pipeline_id=cfg.pipeline_id,
+            pipeline_id=pipeline_id,
             run_dir=str(run_dir_for(run_id_hex)),
             status="queued",
             llm_config_id=default_llm.id if default_llm is not None else None,
@@ -274,6 +321,7 @@ async def submit_run(
         payload = {
             "session_id": str(session_uuid),
             "message": message,
+            "mode": mode.value,
             "investment_input": json.loads(raw_investment_input)
             if isinstance(raw_investment_input, str)
             else raw_investment_input,
@@ -313,7 +361,7 @@ async def submit_run(
                 session_id=session_uuid,
                 user_id=user_id,
                 prompt=message,
-                pipeline_id=cfg.pipeline_id,
+                pipeline_id=pipeline_id,
                 run_dir=str(run_dir_for(run_id_hex)),
                 status="queued",
                 llm_config_id=default_llm.id if default_llm is not None else None,
@@ -395,6 +443,7 @@ async def submit_run(
             prompt=message,
             user_id=user_id,
             prompt_addendum=prompt_addendum,
+            pipeline_id=pipeline_id,
         )
     dispatch_info = outcome.result.get("dispatch") if outcome is not None else None
     status = "queued"
@@ -403,6 +452,7 @@ async def submit_run(
         status = existing.status if existing is not None else "queued"
     return {
         "run_id": run_id_hex,
+        "mode": mode.value,
         "operation_id": outcome.operation_id if outcome is not None else None,
         "saved": outcome.result.get("saved", {}) if outcome is not None else {},
         "status": status,
@@ -505,6 +555,23 @@ async def rerun_run(
         )
 
     cfg = get_config()
+    requested_mode = body.get("mode")
+    if requested_mode is None:
+        try:
+            rerun_mode: RunMode | None = mode_for_pipeline(old_run.pipeline_id)
+        except ValueError:
+            rerun_mode = None
+        rerun_pipeline_id = old_run.pipeline_id
+    else:
+        try:
+            rerun_mode = RunMode(str(requested_mode))
+        except ValueError as exc:
+            raise biz.ValidationError(
+                "无效运行模式", fields={"mode": "只支持 single 或 team"}
+            ) from exc
+        rerun_pipeline_id = pipeline_for_mode(rerun_mode)
+    if rerun_mode is RunMode.TEAM:
+        _require_team_mode_available(cfg)
 
     # 旧执行的处置：排队中且派发未投出 → 取消重提（DATA-06）；运行中 → 请求停止，
     # 并在停止超时内等它确认退出。``Orchestrator.stop`` is async: without the await
@@ -566,7 +633,7 @@ async def rerun_run(
             session_id=old_run.session_id,
             user_id=user.id,
             prompt=prompt,
-            pipeline_id=cfg.pipeline_id,
+            pipeline_id=rerun_pipeline_id,
             run_dir=str(run_dir_for(new_run_id_hex)),
             status="queued",
             llm_config_id=default_llm.id if default_llm is not None else None,
@@ -597,6 +664,7 @@ async def rerun_run(
         await session.flush()
         return {
             "run_id": new_run_id_hex,
+            "mode": rerun_mode.value if rerun_mode is not None else None,
             "snapshot_id": str(row.id),
             "dispatch": dispatch_outbox.dispatch_view(dispatch),
         }
@@ -607,13 +675,19 @@ async def rerun_run(
             user_id=user.id,
             scope="run.rerun",
             idempotency_key=idempotency_key.strip(),
-            payload={"rerun_of_run_id": str(old_run_uuid), "message": prompt},
+            payload={
+                "rerun_of_run_id": str(old_run_uuid),
+                "message": prompt,
+                "mode": rerun_mode.value if rerun_mode is not None else None,
+                "pipeline_id": rerun_pipeline_id,
+            },
             execute=_execute,
         )
 
     # 新 Run 由 outbox 派发；研究忙时派发自动延后，串行由库级判定保证（DATA-06）。
     return {
         "run_id": outcome.result["run_id"],
+        "mode": outcome.result.get("mode"),
         "operation_id": outcome.operation_id,
         "status": "queued",
         "snapshot_id": outcome.result.get("snapshot_id"),
@@ -947,6 +1021,7 @@ class RunSummaryResponse(BaseModel):
     prompt: str
     status: str
     pipeline_id: str | None = None
+    mode: RunMode | None = None
     model: str | None = None
     final_answer: str | None = None
     error: str | None = None
@@ -970,6 +1045,10 @@ async def run_get(
     run = await get_run(run_id=rid, user_id=user.id)
     if run is None:
         raise HTTPException(status_code=404, detail="run not found")
+    try:
+        mode = mode_for_pipeline(run.pipeline_id)
+    except ValueError:
+        mode = None
     return RunSummaryResponse(
         run_id=str(run.id),
         session_id=str(run.session_id),
@@ -977,6 +1056,7 @@ async def run_get(
         prompt=run.prompt,
         status=run.status,
         pipeline_id=run.pipeline_id,
+        mode=mode,
         model=(run.llm_snapshot_json or {}).get("model"),
         final_answer=run.final_answer,
         error=run.error,

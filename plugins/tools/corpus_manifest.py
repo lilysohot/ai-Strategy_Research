@@ -282,6 +282,7 @@ async def corpus_submit_manifest(conclusions: list[dict[str, Any]]) -> str:
             "id": row.get("id"),
             "status": row.get("status"),
             "delivery": row.get("delivery"),
+            "matched_evidence": row.get("matched_evidence", []),
             "semantic_references": row.get("semantic_references", []),
             "problems": problems,
         })

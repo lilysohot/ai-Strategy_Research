@@ -10,7 +10,9 @@ are defined now so Alembic can autogenerate the initial migration.
 
 from __future__ import annotations
 
+import hashlib
 import uuid
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from decimal import Decimal
 
@@ -168,6 +170,34 @@ class SessionConversation(Base):
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
     updated_by_run_id: Mapped[uuid.UUID] = mapped_column(nullable=False)
+
+
+class RunContextSource(Base):
+    """Immutable context material produced by one completed research Run.
+
+    ``session_conversations`` remains the compatibility head used by existing
+    single-agent turns. This table is the audit/archive side of that write: a
+    later Run may advance the head, but it cannot erase the exact source bytes
+    that an earlier mixed-mode conversion cited.
+
+    ``run_id`` is deliberately not a foreign key. Run retention may remove the
+    mutable execution row before the research itself expires; the context source
+    follows the session retention boundary instead.
+    """
+
+    __tablename__ = "run_context_sources"
+
+    run_id: Mapped[uuid.UUID] = mapped_column(primary_key=True)
+    session_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("sessions.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    pipeline_id: Mapped[str] = mapped_column(String, nullable=False, default="")
+    native_payload: Mapped[str] = mapped_column(Text, nullable=False)
+    native_sha256: Mapped[str] = mapped_column(String(64), nullable=False)
+    portable_payload: Mapped[str | None] = mapped_column(Text)
+    portable_sha256: Mapped[str | None] = mapped_column(String(64))
+    completeness_json: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
 class Turn(Base):
@@ -2585,8 +2615,92 @@ async def read_session_conversation(*, session_id: uuid.UUID) -> str | None:
     return row.payload if row is not None else None
 
 
+class ContextSourceConflictError(RuntimeError):
+    """One Run id was presented with different immutable context bytes."""
+
+
+class ContextHeadConflictError(RuntimeError):
+    """The session head changed after a Run selected its continuity source."""
+
+
+@dataclass(frozen=True)
+class SessionContextHead:
+    """Outer metadata and payloads of the latest committed context source."""
+
+    run_id: uuid.UUID
+    revision: int
+    pipeline_id: str
+    native_payload: str
+    portable_payload: str | None
+
+
+@dataclass(frozen=True)
+class ArchivedContext:
+    """Portable historical context retained for one committed Run."""
+
+    run_id: uuid.UUID
+    pipeline_id: str
+    portable_payload: str
+
+
+async def read_run_context_source(*, run_id: uuid.UUID) -> RunContextSource | None:
+    """Return an immutable per-Run context source, when one was archived."""
+
+    async with get_sessionmaker()() as session:
+        return await session.get(RunContextSource, run_id)
+
+
+async def read_session_context_head(*, session_id: uuid.UUID) -> SessionContextHead | None:
+    """Read the latest source with a legacy-compatible native fallback."""
+
+    async with get_sessionmaker()() as session:
+        carrier = await session.get(SessionConversation, session_id)
+        if carrier is None:
+            return None
+        source = await session.get(RunContextSource, carrier.updated_by_run_id)
+        return SessionContextHead(
+            run_id=carrier.updated_by_run_id,
+            revision=int(carrier.revision),
+            pipeline_id=source.pipeline_id if source is not None else "",
+            native_payload=carrier.payload,
+            portable_payload=source.portable_payload if source is not None else None,
+        )
+
+
+async def list_session_archived_contexts(*, session_id: uuid.UUID) -> list[ArchivedContext]:
+    """Return every available portable source in stable commit order."""
+
+    async with get_sessionmaker()() as session:
+        rows = (
+            await session.execute(
+                select(RunContextSource)
+                .where(
+                    RunContextSource.session_id == session_id,
+                    RunContextSource.portable_payload.is_not(None),
+                )
+                .order_by(RunContextSource.created_at, RunContextSource.run_id)
+            )
+        ).scalars()
+        return [
+            ArchivedContext(
+                run_id=row.run_id,
+                pipeline_id=row.pipeline_id,
+                portable_payload=str(row.portable_payload),
+            )
+            for row in rows
+        ]
+
+
 async def upsert_session_conversation(
-    *, session_id: uuid.UUID, payload: str, run_id: uuid.UUID
+    *,
+    session_id: uuid.UUID,
+    payload: str,
+    run_id: uuid.UUID,
+    pipeline_id: str = "",
+    portable_payload: str | None = None,
+    completeness: dict | None = None,
+    expected_head_run_id: uuid.UUID | None = None,
+    enforce_expected_head: bool = False,
 ) -> None:
     """Store one session's conversation payload, idempotently (issue 01 §11.3).
 
@@ -2596,8 +2710,67 @@ async def upsert_session_conversation(
     Re-ingesting the run that is already recorded is a no-op, so the
     crash-recovery pass cannot inflate ``revision``.
     """
+    native_sha256 = hashlib.sha256(payload.encode("utf-8")).hexdigest()
+    portable_sha256 = (
+        hashlib.sha256(portable_payload.encode("utf-8")).hexdigest()
+        if portable_payload is not None
+        else None
+    )
     async with get_sessionmaker()() as session:
-        row = await session.get(SessionConversation, session_id)
+        # Serialize every head transition on the parent session row. Locking
+        # only SessionConversation would leave the first-write case unlocked
+        # because that row does not exist yet; two instances could both accept
+        # the same expected empty head. PostgreSQL honours FOR UPDATE, while
+        # SQLite keeps its existing test/development transaction semantics.
+        await session.execute(
+            select(Session.id).where(Session.id == session_id).with_for_update()
+        )
+        source = await session.get(RunContextSource, run_id)
+        if source is None:
+            session.add(
+                RunContextSource(
+                    run_id=run_id,
+                    session_id=session_id,
+                    pipeline_id=pipeline_id,
+                    native_payload=payload,
+                    native_sha256=native_sha256,
+                    portable_payload=portable_payload,
+                    portable_sha256=portable_sha256,
+                    completeness_json=dict(completeness or {}),
+                )
+            )
+        elif (
+            source.session_id != session_id
+            or source.pipeline_id != pipeline_id
+            or source.native_payload != payload
+            or source.native_sha256 != native_sha256
+            or source.portable_payload != portable_payload
+            or source.portable_sha256 != portable_sha256
+            or source.completeness_json != dict(completeness or {})
+        ):
+            raise ContextSourceConflictError(
+                f"run {run_id} already has different immutable context material"
+            )
+
+        row = (
+            await session.execute(
+                select(SessionConversation)
+                .where(SessionConversation.session_id == session_id)
+                .with_for_update()
+            )
+        ).scalar_one_or_none()
+        if enforce_expected_head:
+            actual_head = row.updated_by_run_id if row is not None else None
+            if actual_head not in {expected_head_run_id, run_id}:
+                # The Run's immutable evidence remains useful even though it
+                # lost the race to become the next continuity head. Preserve
+                # the archive, then surface the conflict so callers never
+                # mistake it for the active source.
+                await session.commit()
+                raise ContextHeadConflictError(
+                    f"session {session_id} context head changed from "
+                    f"{expected_head_run_id} to {actual_head}"
+                )
         if row is None:
             session.add(
                 SessionConversation(
@@ -2608,6 +2781,9 @@ async def upsert_session_conversation(
                 )
             )
         elif row.updated_by_run_id == run_id:
+            # The latest carrier may predate the immutable archive table. Commit
+            # the idempotent source insert above without advancing revision.
+            await session.commit()
             return
         else:
             row.payload = payload

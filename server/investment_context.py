@@ -117,6 +117,11 @@ def materialize_context(
     context_path = run_dir / "investment-context.json"
     tmp = context_path.with_suffix(".json.tmp")
     tmp.write_text(json.dumps(result.data, ensure_ascii=False, sort_keys=True), encoding="utf-8")
+    # Model-authored shell commands run as a separate tool uid in Web team
+    # mode.  Owner-only bytes make the authenticated snapshot inaccessible
+    # through parent-directory traversal while the trusted worker can still
+    # bind it to the coordinator's in-process business tools.
+    tmp.chmod(0o600)
     tmp.replace(context_path)
     metrics = {
         "context_digest": result.digest,

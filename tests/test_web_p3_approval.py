@@ -176,6 +176,69 @@ async def test_observer_confirm_emits_request_and_once_allows(tmp_path) -> None:
     assert resolved["decision"] == "once"
 
 
+async def test_subagent_approval_shares_gate_and_stamps_member_identity(tmp_path) -> None:
+    from server.approval import ApprovalDecision, ApprovalGate, ApprovalObserver
+
+    events: list[dict] = []
+    gate = ApprovalGate()
+    root = ApprovalObserver(gate, events.append, cwd=str(tmp_path), timeout=5.0)
+    member = root.for_subagent("member_a")
+    task = asyncio.create_task(
+        member.on_tool_call(
+            None,
+            {
+                "id": "member-call",
+                "name": "delete_file",
+                "args": {"path": str(tmp_path / "draft.md")},
+            },
+        )
+    )
+    request = await _wait_for_event(events)
+
+    assert request["agent_id"] == "member_a"
+    assert request["agent_kind"] == "subagent"
+    assert gate.resolve(
+        request["approval_id"], ApprovalDecision(decision="once")
+    )
+    assert await asyncio.wait_for(task, timeout=2.0) is None
+
+
+async def test_team_approvals_are_serialized_for_single_dialog(tmp_path) -> None:
+    from server.approval import ApprovalDecision, ApprovalGate, ApprovalObserver
+
+    events: list[dict] = []
+    gate = ApprovalGate()
+    root = ApprovalObserver(gate, events.append, cwd=str(tmp_path), timeout=5.0)
+    first = root.for_subagent("member_1")
+    second = root.for_subagent("member_2")
+    tasks = [
+        asyncio.create_task(
+            observer.on_tool_call(
+                None,
+                {
+                    "name": "delete_file",
+                    "args": {"path": str(tmp_path / f"{index}.md")},
+                },
+            )
+        )
+        for index, observer in enumerate((first, second), start=1)
+    ]
+    await asyncio.sleep(0.05)
+    requests = [event for event in events if event["type"] == "approval_requested"]
+    assert len(requests) == 1
+
+    gate.resolve(requests[0]["approval_id"], ApprovalDecision(decision="once"))
+    for _ in range(200):
+        requests = [event for event in events if event["type"] == "approval_requested"]
+        if len(requests) == 2:
+            break
+        await asyncio.sleep(0.01)
+    assert len(requests) == 2
+    assert requests[0]["agent_id"] != requests[1]["agent_id"]
+    gate.resolve(requests[1]["approval_id"], ApprovalDecision(decision="once"))
+    assert await asyncio.gather(*tasks) == [None, None]
+
+
 async def test_observer_pure_reject_uses_marker_text(tmp_path) -> None:
     from server.approval import ApprovalDecision, ApprovalGate, ApprovalObserver
 

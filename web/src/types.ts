@@ -89,9 +89,17 @@ export type ApprovalDecisionValue =
   | 'session_all'
   | 'persist'
 
+export type RunMode = 'single' | 'team'
+
+export type RunModeCapabilities = Record<RunMode, {
+  available: boolean
+  reason: string | null
+}>
+
 export interface RunSubmitResponse {
   run_id: string
   status: string
+  mode?: RunMode
 }
 
 export type InputRequestStatus = 'pending' | 'answered' | 'cancelled' | 'expired'
@@ -357,6 +365,7 @@ export interface RunRerunResponse {
   rerun_of_run_id: string
   old_run_stop_requested: boolean
   old_run_stop_confirmed: boolean
+  mode?: RunMode | null
   [field: string]: unknown
 }
 
@@ -447,6 +456,7 @@ export interface RunSummary {
   status: RunStatus
   prompt?: string
   pipeline_id?: string | null
+  mode?: RunMode | null
   model?: string | null
   final_answer?: string | null
   error?: string | null
@@ -521,6 +531,10 @@ export interface SseEvent {
   // context window from LoopConfig, both stamped on run_started.
   pipeline_id?: string | null
   context_limit?: number | null
+  // Multi-agent source identity. Coordinator/single frames may omit these for
+  // backward compatibility; member frames always carry both.
+  agent_id?: string
+  agent_kind?: 'single' | 'coordinator' | 'subagent' | string
   // Tool-call frames (used by T3.3 timeline cards)
   tool_call_id?: string
   tool_name?: string

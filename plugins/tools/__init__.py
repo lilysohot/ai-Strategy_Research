@@ -37,6 +37,7 @@ from plugins.tools.market_resolve import market_resolve
 from plugins.tools.position_sizing import position_sizing
 from plugins.tools.read_file import read_file
 from plugins.tools.recover_result import recover_result
+from plugins.tools.research_history import research_history
 from plugins.tools.run_python_code import run_python_code
 from plugins.tools.stop_subagent import stop_subagent
 from plugins.tools.strategy_lint import strategy_lint
@@ -99,6 +100,7 @@ _BUILTIN_TOOLS: list[Tool] = [
     glob_search,
     run_python_code,
     recover_result,
+    research_history,
 ]
 
 

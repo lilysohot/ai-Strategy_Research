@@ -30,9 +30,11 @@ over the trajectory — and it is absent on runs that reported no decision.
 
 from __future__ import annotations
 
+import json
 from collections.abc import Iterable
 from typing import Any
 
+from server.config import run_dir_for
 from server.relay import trajectory_records
 
 #: Summed integer fields, in the shape they are persisted on the Run row.
@@ -140,13 +142,33 @@ def usage_for_run(run_id: str) -> dict[str, Any]:
     try:
         records = trajectory_records(run_id)
     except OSError:
-        return {**aggregate_usage([]), "status": "unavailable"}
+        records = []
+    sources = ["react_agent.jsonl"] if records else []
+    if not records:
+        # Agent Team writes one coordinator trajectory plus one file per member
+        # (and, when enabled, a separate planning trajectory). Aggregate every
+        # JSONL source exactly once so the product Run includes the whole team
+        # instead of reporting the coordinator as zero usage.
+        root = run_dir_for(run_id) / "run" / "agent" / "trajectories"
+        for path in sorted(root.rglob("*.jsonl")) if root.is_dir() else []:
+            try:
+                with path.open("r", encoding="utf-8") as handle:
+                    for line in handle:
+                        try:
+                            record = json.loads(line)
+                        except json.JSONDecodeError:
+                            continue
+                        if isinstance(record, dict):
+                            records.append(record)
+                sources.append(str(path.relative_to(root)))
+            except OSError:
+                continue
     if not records:
         return {**aggregate_usage([]), "status": "unavailable"}
     aggregate = aggregate_usage(records)
     if not aggregate["llm_calls"]:
-        return {**aggregate, "status": "partial"}
-    return {**aggregate, "status": "complete"}
+        return {**aggregate, "status": "partial", "trajectory_files": sources}
+    return {**aggregate, "status": "complete", "trajectory_files": sources}
 
 
 def replay_block_from_summary(summary: dict[str, Any] | None) -> dict[str, Any]:

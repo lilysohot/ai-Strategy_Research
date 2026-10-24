@@ -76,3 +76,13 @@ def extract_final_answer(state_or_summary: dict[str, Any]) -> str:
 #: message list, written by the workflow's observer). Single source of truth so
 #: the writer and the ingest step that reads it cannot drift.
 CONVERSATION_DUMP_RELPATH: tuple[str, ...] = ("run", "conversation.json")
+
+#: Workflow-neutral export written by the worker after the native dump is
+#: complete. The parent stores these bytes beside the immutable native source;
+#: it never renders this value back into a prompt itself.
+CROSS_MODE_CONTEXT_RELPATH: tuple[str, ...] = ("run", "cross_mode_context.json")
+
+#: Ephemeral worker staging file containing portable archived contexts. The
+#: worker validates, binds, and unlinks it before any model-controlled tool can
+#: run; it is never a prompt carrier and is not persisted as a Run artifact.
+RESEARCH_HISTORY_STAGE = "prior_research_history.json"

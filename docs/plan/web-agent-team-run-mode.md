@@ -2,12 +2,12 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 日期 | v3.2 · 2026-10-23，补充 MiniDAG、节点内流式与跨 Run 切换评估（§14） |
-| 状态 | **有效 · 需求边界已澄清；推荐路线待 M0 验证，未实现、未验收** |
+| 版本 / 日期 | v3.10 · 2026-10-24，基础接线见 §15，前端入口见 §17，简单单轮实测见 §19，复杂工具链审计及首批修复见 §20 |
+| 状态 | **有效 · 简单团队单轮与停止通过；复杂工具任务尚未通过，T03/T04 已修复并局部实测，其他缺口及完整端到端重验仍待完成；既有服务功能开关保持关闭** |
 | 需求 | PR-RUN-08；关联 PR-RUN-01—06、PR-DATA-04、PR-BIZ-04 |
 | 产品依据 | [产品需求基线](../product-requirements.md) · [业务流程](../business-process.md) |
 | 历史方案 | [v1.4 双工作流交接](web-agent-team-run-mode-v1-history.md) · [v2.1 固定主 Agent 与团队阶段](web-agent-team-run-mode-v2-history.md)；均为历史，不再作为执行清单 |
-| 本次交付 | 确认需求、调整技术方向和验证范围；仅修改文档 |
+| 本次交付 | `cross-mode-context/1` 等基础接线、前端逐轮入口、隔离团队单轮与停止实测；完整跨轮连续性、输入采用、成员报告/产物索引与轨迹回放待后续批次 |
 
 ## 1. 已确认的上下文标准
 
@@ -43,10 +43,14 @@
 - workflows/stateful_react_agent/spec.py 与 nodes/main_agent.py 已接收 replay_payload，工作流验证后通过 initial_messages 回放；server 只运输不透明载荷。
 - frontier_agent/components/observers/conversation_snapshot.py 已实现近期窗口、token 上限与累计摘要；select_replay 校验 pipeline/node、system、工具及消息格式。跨模式不能直接拿原生载荷强行回放。
 - 现有摘要失败有 fallback/裁剪路径，不能把当前机制描述成无损记忆。切换需保留已有摘要与来源，不额外放大其损失。
-- workflows/agent_team/spec.py 尚未接入同等跨轮回放；coordinator 原生续接也需要实现，不是仅首次从 single 导入。
+- workflows/agent_team/spec.py 与 coordinator 已接入便携上下文，并在最终 coordinator loop
+  产出原生快照；成员进程不跨 Run 复活，团队同模式续接仍走同一便携来源规则。
 - plugins/tools/assign_task.py、collect_reports.py 与 AgentBus 已支持队内任务追加/报告收集，有现成预算与次数限制。团队模式不必变成固定的一次批处理。
-- server/orchestrator.py 目前读取会话失败可能无上下文启动，快照写回为 best-effort；历史是否可读也须逐类核实。沿用 single 的策略不等于上述异常已达到新验收条件。
-- server/relay.py 固定 react_agent 轨迹，workflows/_shared/sdk_shim.py 的成员 trace observer 为空；Web 事件/审批/停止/用量仍需接线。
+- server/orchestrator.py 已归档每 Run 来源并用期望 head 做比较交换，迟到 Run 不能覆盖
+  新来源；读取/转换失败的产品可见状态、输入采用和跨 Run 历史详情读取仍须补齐。
+- 成员 loop 已通过按成员构造的 Web observer 发出带 agent 身份的实时事件，并复用产品
+  Run 的审批门；全队 JSONL 用量也已聚合。server/relay.py 仍固定读取
+  react_agent 轨迹，因此刷新后的团队轨迹回放、完整度判断和全队停止验收仍需接线。
 
 ## 4. 上下文的职责划分
 
@@ -130,7 +134,7 @@ M0 的关键止损条件：若只做到摘要传递而原始细节不可读，�
 
 ## 11. 验收矩阵
 
-当前均未实施验证；替代历史版本的 A/B 编号。
+状态以 §15 的执行证据为准；下表仍是发布前必须完成的完整验收矩阵，用于替代历史版本的 A/B 编号。
 
 | ID | 场景 | 必须满足 |
 |---|---|---|
@@ -164,7 +168,8 @@ M0 的关键止损条件：若只做到摘要传递而原始细节不可读，�
 
 2026-10-22 用户确认：接受当前单 Agent 的正常上下文处理方式及切换缓存失效，要求切换不主动删信息、重要约束直接继承、历史细节可读取。据此撤回固定主 Agent 与一次研究阶段作为必要前提，重新以实际工作流切换加上下文适配作为推荐方向。
 
-本次只更新需求和设计；没有实现模式切换、执行真实模型实验或验证全部历史可读。需求边界明确不等于实现已经保证。
+2026-10-24 已开始基础实现，当前代码仍由默认关闭的团队功能开关保护。尚未执行真实模型、
+真实 PostgreSQL、多实例及全部 C01—C25 验收，因此基础接线不等于功能已可发布。
 
 ## 13. 全链路遗漏审查（v3.1）
 
@@ -224,7 +229,10 @@ manifest、实际挂载/读取授权与工具白名单一起验证；成员只�
 
 ### 13.7 模式选择尚未覆盖全部入口（阻断 M1）
 
-代码事实：server/routes/runs.py 的 RunRequest/JSON/multipart 当前没有 mode；创建和业务重算使用 cfg.pipeline_id，orchestrator 启动也使用全局 pipeline。server/worker.py 的覆盖项主要是单 Agent 的 agent_tools，team 则读取 main_agent_tools/sub_agent_tools。这些层必须一起调整，单改数据库 pipeline_id 无效。
+执行更新：server/routes/runs.py 的 RunRequest/JSON/multipart 已接收 mode，创建、重算、
+补数继续与 watch 的选择规则见 §15；orchestrator 与 worker 使用持久化到 Run 的 pipeline。
+team 的 `main_agent_tools/sub_agent_tools` 也已由服务端分别覆盖。前端选择器、配置能力
+协商与真实部署验证尚未完成，因此本节仍作为完整入口验收要求。
 
 补齐要求：mode 采用 single/team 枚举，非法值拒绝；旧请求缺省 single；不得静默忽略 team 字段。前端提交、JSON/multipart、业务保存并分析、补数后续 Run、重算与自动派发都持久化并传递相同选择。内部重试保留原 Run 模式与配置；用户重算是新 Run，默认沿用来源模式，可显式改选，按新 Run 规则解析业务快照。补数触发的后续 Run 沿用其发起来源模式，不能取浏览器当前选择。
 
@@ -276,7 +284,7 @@ frontier_agent/core/runtime/dag/minidag.py::MiniDAGRunner.astream 按顺序 awai
 
 | 层次 | 当前代码事实 | 跨模式要求 |
 |---|---|---|
-| 节点输入 | graph_builder.apply_context_filter 只放行 include_fields/inject_fields；single 声明 replay_payload，team 尚未声明 | 在对应 spec/节点接收并校验正确上下文；server 发出了字段不代表节点收到 |
+| 节点输入 | graph_builder.apply_context_filter 只放行 include_fields/inject_fields；single 与 team 已声明各自连续性字段 | 继续用契约测试确认目标节点实际收到并校验正确上下文；server 发出了字段不代表节点收到 |
 | 图状态合并 | MiniDAG 按 reducer 或后写覆盖合并 dict；不理解业务事实/约束的版本 | 新 Run 初始化新执行状态，只导入获准上下文；不复制旧图完整 state |
 | 节点输出 | output_fields 被 generic executor 使用；自定义 node_function 并没有因此获得跨工作流的强类型输出校验 | 每个具体 workflow 明确导出结果、连续性载荷及状态，不能靠同名字段假定语义一致 |
 | token/工具流 | BridgeObserver 用 loop 回调发送 run_started/run_stopped，delta 主要以 turn 标识；不天然具备完整节点/成员身份 | 将内部事件转为有 run/node/agent/attempt 身份及作用范围的对外事件；不能把同一 Bridge 实例直接共享给全部成员 |
@@ -309,3 +317,424 @@ frontier_agent/core/runtime/dag/minidag.py::MiniDAGRunner.astream 按顺序 awai
 M0 在原六类契约之外，增加 C23—C25 的执行契约验证：以确定性节点/模型替身执行不同 spec，验证字段过滤没有丢失必要输入；节点内连续发流和多个成员结束时不会提前终止 Run；长节点 stop 后新 Run 可启动另一图且无旧执行状态污染。随后再验证真实模型的上下文理解，不能只凭最终文本看起来连贯宣布编排兼容。
 
 本次核查修正了“上下文适配器就足够”的不完整表述。完整成本包括输入、流式事件、结果及生命周期适配；当前仍为中高复杂度设计，未实施、未运行验证。§11 现共 25 类验收，§13 的 22 类数量为该轮历史记录。
+
+## 15. M0 执行记录（2026-10-24）
+
+### 15.1 已实现的第一批接缝
+
+- 新增 `workflows/_shared/cross_mode_context.py`，定义
+  `cross-mode-context/1`。转换入口只接受通过现有
+  `conversation-dump/1` 消息合法性校验的载荷；源 system 和私有 reasoning
+  不进入目标上下文。
+- 记录使用由 source pipeline、run、node、消息位置和消息内容生成的稳定
+  source ID。导出时合并继承来源并去重；再次导出会去掉精确生成的上下文块，
+  不把旧交接递归包进新交接。
+- `stateful-react-agent` 与 `agent_team` 的 ContextPolicy 和主节点均接收该
+  字段。缺少字段时 single 原问题字符串保持原样；存在字段时，目标模型收到
+  明确标为历史数据的来源记录，不把源工具调用伪装成本轮已执行调用。
+- 跨模式来源存在时，single 不再同时回放旧 single 原生快照。该 Run 接受
+  KV 冷启动，以最新跨模式来源为权威，避免跳过中间 team 回合或重复历史。
+- 新增 `run_context_sources` 不可变档案（迁移 `0022_run_context_sources`）。
+  single 的 worker 在原生快照完成后生成便携载荷；父编排在同一数据库事务内
+  插入该 Run 的原生/便携字节、SHA-256、pipeline 与完整度，再更新既有
+  `session_conversations` 兼容 head。相同 Run 同内容可重入，不同内容失败关闭。
+- Orchestrator 已按 Run 携带 pipeline id 到 worker，避免选择 team 后仍被全局默认
+  pipeline 覆盖。Run API、JSON/multipart 与重算已接受 `single/team`；旧请求缺省
+  single，非法值返回 422，重试/补数沿用来源模式，watch 固定 single。
+- team 最终 coordinator loop 也写入原生会话快照；worker 将其与继承来源合并为
+  便携载荷，并追加实际发布答案及状态。下一轮按来源/目标 pipeline 选择原生或
+  便携载荷，`single → team → single` 不会复活切换前的旧 single 快照。
+- 最新来源更新在 session 行锁内执行期望 Run 的比较交换。相同 Run/相同字节可
+  重入；迟到完成若发现会话 head 已推进则只保留不可变来源、拒绝覆盖 head，恢复
+  路径也执行同一检查。
+- Web 团队 profile 使用服务端固定的角色白名单：coordinator 独占账户、计划、
+  缺料请求、仓位与策略校验工具，成员只保留通用证据采集工具。框架自动附给成员
+  的“原始问题”在认证投资快照注入前冻结，避免把完整业务块广播给团队；native/
+  container 团队执行还要求独立工具用户，账户快照以 owner-only 文件保存。
+- `SERVER_AGENT_TEAM_ENABLED` 默认关闭。团队入口在开关关闭、沙箱类型不受支持，
+  或 native/container 缺少工具用户隔离时返回 503；前端尚未展示模式选择器。
+- 新增主 Agent 专用 `research_history`：父编排按研究读取已提交的便携来源，以
+  owner-only 临时文件交给 worker；worker 在任何模型工具启动前完成校验、绑定到
+  内存并删除临时文件。工具按关键词/source ID 与字符偏移分页，single 主 Agent
+  和 team coordinator 可用，成员白名单不含该工具。
+- 直接拼入下一轮的便携窗口按 `REPLAY_MAX_TOKENS`（缺省为模型上下文一半）限制，
+  保留最新原生摘要与已发布答案；被窗口裁掉的记录继续留在不可变 Run 档案，通过
+  `research_history` 读取，不再让连续切换产生无限增长的 prompt。
+- team coordinator 与每个成员现在各自构造 Web bridge/approval observer。成员事件带
+  `agent_id/agent_kind`，成员 loop 不发产品级 `run_started/run_stopped`；前端按
+  `(agent_id, tool_call_id)` 关联工具调用，并只把 coordinator 的文本作为发布回答。
+  所有角色共用一个 Run 审批门，多成员确认请求串行进入现有单审批对话框，等待期间会
+  重新检查会话级授权。
+- 用量收集在 single 固定轨迹不存在时遍历团队的 coordinator、planning 和成员 JSONL，
+  将全部模型调用聚合到产品 Run，并记录实际计入的轨迹文件；没有可用记录时仍标记
+  `unavailable`，不把缺失用量写成零。
+
+### 15.2 已验证证据
+
+`tests/test_cross_mode_context.py` 覆盖非法/未配对工具载荷拒绝、
+system/reasoning 降权、结构化内容保留、跨研究拒绝、无字段字节不变、
+single → team → single 与连续十个交替 Run 的往返去重、两个图入口字段过滤，
+以及陈旧原生 replay 禁用。迁移 head 断言已更新；现有上下文与团队工作流回归通过。相关 Ruff、
+目标 Pyright、stage-1 import smoke（423/423）和 symbol closure（521 文件、0 缺失）通过。
+`tests/test_context_source_archive.py` 覆盖原生/便携双载荷归档、哈希、
+同 Run 重入、冲突失败关闭，以及 worker 导出到父编排提交的完整路径。相关上下文、
+另有 `tests/test_run_modes.py` 与 Web profile/worker 回归覆盖 mode 默认、功能门、
+角色白名单、委派问题脱敏、工具用户隔离、历史分页读取和便携窗口上限。团队通道测试
+还覆盖成员身份、产品生命周期隔离、并发审批串行化、前端调用 ID 隔离及全队用量聚合。
+收尾聚焦回归为 204 passed；
+Ruff、目标 Pyright、stage-1 import smoke（423/423）、symbol closure（521 文件、0 缺失）与
+前端 `vue-tsc --noEmit` 通过。
+
+### 15.3 仍然阻断用户启用的事项
+
+这批代码已经证明“独立图在 Run 边界交换研究上下文”并由 Web 后端按 Run 保存
+模式和最新来源可行，但尚无已采用用户输入/约束记录及跨 Run 原文分页读取入口。
+当前便携载荷及 `research_history` 已覆盖迁移后各 Run 实际归档的原生窗口、累计
+摘要、工具记录与发布答案；但迁移前旧会话本来没有的逐 Run 档案无法补造，未进入
+coordinator 会话的成员报告、产物版本和外部附件仍没有统一 history manifest。
+因此只能认定“已归档记录可读”的最小闭环，尚不能宣称所有历史细节类别均已覆盖。
+团队成员实时 Web 事件身份、并发审批和完整 JSONL 用量聚合已经接通；刷新后的多轨迹
+有序回放及轨迹完整度仍受 `server/relay.py` 的单文件游标契约限制，全队停止后的成员/
+工具进程清理也尚未完成 Web 端到端验收。
+
+因此本节完成 M0 的 Interface spike、不可变来源归档、双向生产与 CAS head，
+并完成后端 mode/角色隔离与团队实时通道的首段接线，只覆盖
+C02/C04/C07/C09/C15/C18—C21/C23/C24 的一部分，不能据此开放 team 执行能力，
+也不能宣称 C01—C25 已验收。下一批先完成输入采用、成员报告/产物索引、团队轨迹回放
+和停止清理验证，再进行真实模型、PostgreSQL 迁移与多实例故障验证；通过发布门后才
+打开执行开关。前端选择器按用户后续要求提前搭建，保留可用性门禁，见 §17。
+
+## 16. 执行回溯：基础接线不等于连续性验收
+
+本次按用户要求回溯已修改的生产路径，并运行无真实模型、无数据库写入的最小复现。
+§15 的 204 passed 是上一批聚焦回归结果，不覆盖下列反例；本次没有修复生产代码，
+不能将下列发现理解为已经关闭。当前仍不满足启用团队模式的条件。
+
+### 16.1 已确认的实现遗漏
+
+| 编号 / 优先级 | 触发与影响 | 代码依据 / 所需修正 |
+|---|---|---|
+| E01 / P1 | 本轮首次出现的长记录在便携导出时即被裁掉，原生档案仍有内容，但历史工具查不到。上一批“裁掉的记录仍可读”的表述过宽。 | `server/worker.py::_export_cross_mode_context` 在写 portable 文件前裁剪；`server/store.py::list_session_archived_contexts` 及 `plugins/tools/research_history.py` 只读取 portable。必须分离完整可读档案与 prompt 窗口，或提供授权原生记录读取。 |
+| E02 / P1 | team → single → single 后再切 team，第二个 single 使用原生 replay，导出却没有传入当初导入的上下文身份；旧交接块被当成新用户内容重新包装，来源 ID 改变。连续交替十轮的测试没有覆盖这个路径。 | `server/worker.py::_load_continuity_inputs`、导出调用与 `workflows/_shared/cross_mode_context.py::_message_record`。原生回放与来源血缘应分别携带；记录身份不能随承载它的后续 Run 改变。 |
+| E03 / P1 | 读取 head、暂存或提交失败仍记录日志后继续；worker 的 portable 导出失败也不阻止成功终态。混合会话可能以空历史或旧 head 继续。 | `server/orchestrator.py::_spawn/_stage_payload/_ingest_conversation`、`server/worker.py::run_once`。混合会话需要可见的 continuity 状态、失败关闭及提交完成门禁。CAS 本身没有解决终态早于提交的问题。 |
+| E04 / P1 | Run B 已落快照、提交前崩溃，head 仍是合法前驱 A；恢复逻辑只因 A != B 就跳过提交，把正常前驱误认成更新的后继。该逻辑也作用于纯 single。 | `server/orchestrator.py::_recover_finished_run`。必须持久化 B 启动时的期望 head，以其进行恢复 CAS；不能将所有不同 Run 都判为迟到。 |
+| E05 / P1 | worker 写入 `metadata.pause_check`，team coordinator 调用 `run_agent_loop` 时未传入这个回调。Web stop 的协作停止在这里断开，可能依赖父进程超时强杀。 | `workflows/agent_team/nodes/main_agent.py::_run_main_loop`。补齐 coordinator 停止、成员取消、工具进程清理和提交顺序；不能只增加 UI 停止事件。 |
+| E06 / P1 | 两个成员排队审批时，stop 只拒绝当前已注册 Future；第二个请求随后取得锁并再次弹窗。 | `server/approval.py::ApprovalGate.reject_pending/ApprovalObserver.on_tool_call`。审批门需有永久关闭状态，锁内检查停止并拒绝所有后续请求。 |
+| E07 / P2 | 全队 JSONL 扫描能合计已有 usage，但不等于完整成本：team snapshot 的摘要用量未从 result.metadata 返回 state；没有 replay decision 时汇总函数也丢弃 summary_usage。某成员缺 usage 或文件损坏时，只要另一个调用有数字，仍会标 complete。 | team main 返回值、`server/worker.py`、`server/usage.py::usage_for_run/replay_block_from_summary`。摘要计费须独立接线，完整度按预期调用/来源核对，不能由“至少一个调用有 usage”推断。 |
+| E08 / P2 | CAS 冲突时来源被归档而未推进 head，但归档表没有采用状态；历史读取又返回所有 portable 来源并称之为 committed，无法分辨未采用/迟到材料。 | `server/store.py::upsert_session_conversation/list_session_archived_contexts`。保存前驱与提交/采用状态，历史返回保留材料但显式标注未采用，不能与当前有效结论混淆。 |
+
+### 16.2 最小复现结果与测试缺口
+
+- E01：构造含本轮唯一长细节的合法原生消息，用小 token 窗口导出。原生载荷包含该细节，
+  portable 不包含；绑定 portable 后，`research_history` 对该唯一标记返回 `total=0`。
+- E02：按实际 worker 分支模拟 team → single → single，最后一次导出没有 inherited_context。
+  结果仍包含 `<cross-mode-context ...>` 嵌套块，原 team 的独立 source ID 未保留。
+- E04：以 mock 保留正常前驱 head 调用真实 `_recover_finished_run`，
+  `_ingest_conversation` 调用次数为 0。未连接生产数据库。
+- E06：同一 gate 同时创建两个确认请求，首个弹出后调用 `reject_pending`；
+  随后累计出现 2 个 `approval_requested`，仍有 pending Future。探针退出前取消全部任务。
+- 现有窗口测试先人工保留 `full`，再裁剪另一轮；它没有证明生产导出链会归档本轮新记录的
+  完整可读形式。现有十轮测试每次显式传 inherited_context，也没有模拟同模式 single 分支。
+- E03/E05/E07/E08 为源码链路确认；真实 PostgreSQL 并发、进程停止和模型计费仍需专项验收。
+
+### 16.3 尚未闭合的既定要求与执行顺序
+
+重要约束仍没有直接继承的硬保证：当前裁剪只优先保留 user 记录，预算继续不足时仍会删除；
+必须补齐有效约束/修正/输入采用记录，并在关键约束无法容纳时明确处理。成员报告、反证、
+附件和产物版本索引、团队轨迹刷新回放仍属于明确未完成项。
+
+角色工具白名单及自动注入业务块隔离已经接线，但不能据此宣称所有文件旁路已隔离。
+native/container 的主与成员共享工作目录/工具用户；轨迹、消息 spool、日志、快照与产物的
+实际读权限尚须逐类验证，不能只检查 investment_context 文件的 0600。可选双 loop planning
+分支也未接入相同的外部 observers；默认 Web profile 关闭该分支，开放配置前仍须补验证。
+
+纯 single 没有新增模型交接调用，不代表存储路径没有变化：现已依赖新 archive 表，且每轮
+查询整个 portable 档案。需补迁移/旧版本兼容和长会话读取量基线，避免开关关闭时也出现
+连续性或性能回归。正常纯 single 的模型路径与混合会话的读取能力应分别验收。
+
+下一步先处理 E04 和 E01—E03，再闭合有效约束与输入采用；之后完成 E05/E06、角色文件
+边界、E07/E08 及轨迹回放，最后执行真实 PG/多实例/模型验证与前端选择器验收。
+本轮结论保留“按 Run 换图”的方向，但撤回对可读性、崩溃恢复及全队完整用量已闭环的判断。
+
+## 17. 前端逐轮模式入口（执行能力仍关闭）
+
+按用户要求先搭建可核实的页面入口；本批没有修复 §16 的 E01—E08，也没有开启团队执行。
+
+- 输入框底部工具栏以下拉框提供“单 Agent / 团队研究”，默认 single，切换研究时重置为 single。
+  附件入口与模式在左侧，发送/停止在右侧；取消常驻模式说明，仅在所选团队不可用时提示原因。
+  选择只属于下一次发送，保持当前研究 ID、账户及计划绑定；不修改研究级模式。
+- 新增需登录的 `GET /api/runs/modes`，与提交接口复用团队功能/运行环境门禁。
+  未开放或查询失败时仍展示入口和原因，允许选择查看说明，但禁止按钮或 Enter 提交 team；
+  可刷新状态，服务端允许后发送真实 `mode=team`，不静默降级为 single。
+- JSON 和携带附件的 multipart 请求均冻结本次 mode。提交成功才清理匹配草稿，
+  失败保留文字和附件；等待响应期间修改的草稿也不会被清掉。
+- 发送中、运行中及停止处理中禁止切换。SSE 断线但服务端仍为 queued/running 时保持锁定；
+  刷新恢复从 Run 摘要读取实际 pipeline，避免把进行中的 team 显示为 single。
+  停止动作仍依赖既有后端，不能将这项 UI 门禁视为 E05/E06 已修复。
+- 范围为对话输入框的新问题入口；计划业务动作和“用新资料重算”的既有模式规则不在本批扩展。
+
+验证：`tests/test_run_modes.py` 9 passed；消息构造与聊天工具测试 12 passed；
+`vue-tsc --noEmit`、目标 Ruff 和 Vite 生产构建通过（保留现有大 chunk 提示）。
+`web/tests/run-modes.cjs` 使用真实页面及隔离 API fixtures，通过关闭/开放门禁、
+JSON/multipart 参数、失败草稿、team 完成后 single 追问、刷新/断线锁定和 390px 布局检查。
+浏览器验收没有调用真实模型、写入研究或改变团队开关，不代表跨模式上下文端到端验收。
+
+本机现有前端开发服务已能展示新入口，生产构建产物也已更新；现有 8000 后端进程的
+OpenAPI 尚不含 `/api/runs/modes`，本批未重启它。该进程更新前，页面会提示无法确认
+团队可用性并阻止 team 发送，single 入口可继续使用。后端更新仍须连同迁移与 §16
+阻断项核实，不能仅为点亮按钮直接打开功能开关。
+
+## 18. 优先级调整：先跑通 Web 团队研究
+
+用户明确要求暂缓主 Agent 的账户、计划问题，先把多 Agent 跑起来。本节替代 §16.3
+的近期执行顺序；逐轮切换与上下文标准保持有效，不能把首次团队运行成功视为完整验收。
+
+### 第一批目标：可实际执行的团队单轮闭环
+
+使用无账户/计划资料、无历史业务上下文的独立测试用户和新研究，验证：
+Web 选择 team → 后端接受 → coordinator 派发任务 → 至少两个成员实际执行且有并发区间
+→ 回传结果 → coordinator 汇总 → 页面展示最终回答与正确终态。
+成员执行必须有真实轨迹与身份，不能以 coordinator 自称已分工代替证据。
+
+1. 核对后端加载版本、数据库迁移、工具执行环境及团队开关；在隔离测试环境启用，
+   不直接对已有含业务资料的研究全面开放。
+2. 先补 E05/E06：贯通停止回调、成员取消与审批门关闭；验收停止后不再派生任务、
+   不重新弹出排队审批，相关成员和工具执行能结束。
+3. 用一个可拆成两项独立取证工作的简短问题跑真实模型；核实工具可用、成员结果汇入
+   主 Agent、SSE 身份与最终回答一致，失败/超时原因可见。
+4. 保存正常完成与中途停止的验收证据；只在此范围内认定“团队执行已跑通”。
+
+### 本批暂缓与后续顺序
+
+- 暂缓账户/计划的新增团队适配、主 Agent 业务讨论流程、仓位/计划操作的团队验收。
+  已有角色白名单及认证隔离保留；“暂缓业务适配”不等于将业务工具下放给成员。
+- 首次团队运行成功后，回到 E04、E01—E03/E08 和有效约束继承，验收
+  single → team → single，以及 team → single → single → team。
+  既有纯 single 的持久化回归仍须修复，不能因团队开关关闭就假定不受影响。
+- 完整团队轨迹刷新回放、E07 用量完整度、成员报告/产物索引、PG 多实例故障验证
+  继续列为后续验收；账户/计划专题待用户重新纳入近期范围。
+
+此处是执行计划调整，不是运行验收记录；当前尚未开启团队开关，也尚未完成上述真实模型验证。
+
+## 19. 隔离环境团队单轮执行（2026-10-24）
+
+本批按 §18 执行，账户与计划适配继续暂缓。测试使用独立用户、新研究、独立 SQLite
+数据库、空语料库和 bubblewrap，通过真实 Web 页面选择 team、上传附件并发送请求。
+模型为当前配置的 `glm-5.3-flash`，不是 mock。测试服务使用 8001，未重启既有 8000
+服务、修改其配置或全局开启 team。SQLite 建表不等同于 PostgreSQL 迁移验收。
+
+### 19.1 本批修复
+
+- E05：coordinator 接入 Web `pause_check`；等待 `collect_reports` 时可被停止信号唤醒；
+  暂停、取消、异常退出时取消并清理成员任务。默认 Web 单 loop 路径为本批验收范围。
+- E06：审批 gate 停止后永久关闭，排队成员不能再次发出审批；晚到的同意不能放行工具。
+  回归覆盖来自 stdin 线程的停止与两个成员排队，不仅是单一 pending Future。
+- Web 团队的工作目录、输入只读挂载和输出目录接到真实 Web run 路径。
+  bwrap 使用 `/workspace`、`/inputs`、`/outputs`，避免文档工具把容器内路径改写为宿主机路径。
+  原单 Agent 的路径配置保持原分支；原 native/container 角色隔离门禁保持有效。
+- Web 将正常 `final_answer` 视为完成，保留 `llm_error`、`wall_deadline`、`user_stop`
+  等中断原因；不会因已有一段最终文字就把失败改成完成。
+- 实测发现 `asyncio.to_thread` 取消后 shell 仍存活：为 bwrap 的异步执行增加每次调用的
+  取消信号和独立进程组，取消时终止并回收进程，再释放并发名额。一个调用取消不影响兄弟调用。
+
+### 19.2 正常完成证据
+
+Run：`2c6e2b7d-0c20-4c50-9e56-ccd6fee6d442`，约 104 秒。
+
+- 页面 multipart 提交包含 team 与两个文件。`alpha_reader`、`beta_reader` 各实际调用一次
+  `read_file` 和一次 `submit_report`；两个轨迹的执行区间重叠 **9.141 秒**。
+- 输入分别为 `[12,18,30]`、`[5,15,25,35]`。主 Agent 回收两份报告后输出数量 3/4、
+  总和 60/80、均值 20，合并总和 **140**。
+- 数据库/API 为 `completed`、`stopped_by=null`；实时 SSE 有两个成员的独立身份与
+  `run_completed`，页面截图显示“已完成”和正确答案，浏览器无 JavaScript 异常。
+- 实验数据与原始轨迹位于
+  `/home/administrator/.local/share/frontier-agent/team-web-smoke-20261024/runs/`；
+  浏览器脚本、SSE、截图、进程检查位于 `.scratch/team-web-smoke/`。
+
+调试失败记录保留：`7cb78743…` 遇到旧文件路径错误，继而成员模型超时，最终
+`wall_deadline`，不是成功；`5a7efbb1…` 数值正确但旧 Web 终态误标 stopped，也不算通过。
+停止实验 `735a6c91…` 只覆盖模型/汇总等待，因为 shell 被安全规则拦截；`eff59cda…`
+确实启动两个 sleep，但暴露“已 stopped 而 shell 仍存活”，据此补上进程取消。
+
+### 19.3 中途停止证据
+
+Run：`1843c222-2955-4e6d-8a52-24a0a4e877f0`。
+
+- 两个成员各实际执行 `sleep 120`，浏览器验收同时核实两个独立成员事件与两个存活
+  sleep PID 后，才点击页面“停止”。不以被安全规则拦截的调用代替实际执行。
+- 从点击到观测 `stopped/user_stop` 及全部进程退出约 **2.06 秒**（包含轮询与一秒观察等待）。
+  记录的 7 个进程为 worker、外层 bwrap、两个工具 bwrap 及两个 sleep；终态检查 `alive=[]`。
+- 停止后没有新增成员派发或审批请求。仍有一条在途 coordinator `collect_reports`
+  事件，由关闭的审批门跳过；不能把 `tool_started` 展示事件误认为工具获得执行许可。
+- E05/E06 在默认 Web profile + bwrap 的这一范围内通过。排队审批由并发回归覆盖；
+  非默认双 loop planning、native/container、任意后台脱离进程等未据此宣称全面验收。
+
+### 19.4 验证边界与下一步
+
+已通过 164 项聚焦测试（另排除 1 个旧 mock 审批端到端用例），覆盖审批并发、停止、
+工作流、mode 门禁、桥接事件、文件工具、真实 bwrap 读取/写入及取消隔离。
+旧 mock 用例依赖语料库启动环境，本批以真实隔离服务验证启动与停止，不宣称其通过。
+真实 `agent_team/tui` 模型 preflight、427 个框架模块 import smoke、525 个文件符号闭包检查通过。
+修改文件的 Ruff 与 Pyright 检查通过。Pyright 的 Python 启动包装器发生等待后，改用本机已缓存的
+1.1.414 Node 入口完成检查；没有修改项目依赖。验收结束后关闭本批临时 8001 服务，保留数据库与证据。
+
+本批证明的是无业务资料的团队单轮执行。§16 的 E01—E04/E08、有效约束直接继承、
+历史细节可读性、混合模式多轮、纯 single 存储回归仍需后续闭合；E07 全量用量、
+团队轨迹刷新回放、报告/产物索引、PG 迁移和多实例故障验证也未因本次成功而完成。
+SQLite 验收服务的监控 heartbeat 出现既有时区比较异常，未纳入本批修复或监控验收。
+下一批优先回到跨轮连续性，执行 single → team → single 与 team → single → single → team；
+账户/计划专题继续暂缓。
+
+## 20. 复杂工具链实测与遗漏审计（2026-10-24）
+
+按用户新增要求，本批先测试有实际工具难度的团队任务。结论：**§19 的简单并行与停止
+闭环仍成立，但不能扩展为复杂任务已经跑通。** 三次真实模型验收均未交付所需文件；
+另以实际 bwrap 工具和局部对照实验定位缺口。本批仅增加验收脚本、证据及本节，
+没有将对照实验的临时修改写入生产实现，也未重启既有 8000 服务或打开其 team 开关。
+
+### 20.1 场景、结果与证据
+
+真实请求经 Web 页面选择 team、提交附件/问题、接收 SSE，并查询终态、产物及轨迹接口。
+使用当前配置的 `glm-5.3-flash`、独立用户/研究、SQLite、空语料库及 bwrap。
+600 秒服务沿用 §19 验收配置；另建 900 秒服务与 `ServerConfig` 默认总预算对照，
+不将测试配置解释为既有服务的实际配置。按当前预留规则，两者研究阶段分别约 300/450 秒。
+
+| 场景 | Run ID | 实际结果 |
+|---|---|---|
+| 四附件订单对账，600 秒总预算 | `d18e474c-3875-44c0-935b-71d93aaa7541` | 约 370 秒结束，`stopped/wall_deadline`。两个成员都真实读取四个附件并执行 Python；未回收报告、未进入发布任务，产物为空。最终文本给出错误数字，见 T01。 |
+| 官方网页检索 + PDF 下载/读取 + 发布报告 | `b26807f3-7647-44d0-9828-5ffd0fa0d198` | 约 223 秒结束，`stopped/llm_error`。首轮模型推理/调用预算耗尽，未派发成员、没有工具执行或产物。不能将此 Run 当成网络工具已执行后失败。 |
+| 同一订单提示与附件，900 秒总预算 | `154a83a4-1797-4774-a635-58fed443a181` | 约 258 秒结束，`stopped/llm_error`。首轮 180 秒无 chunk，耗尽 logical-call 预算；未派发成员。最终文本如实列为待核实。增加总预算未解决这次模型调用失败，但不足以估计模型总体成功率。 |
+
+对账附件包含 12 行订单、6 行退款、汇率及明确规则，涵盖版本选择、重复行、取消、
+缺汇率、超额退款、全额退款和孤立退款。独立 Decimal oracle 为：
+`eligible_orders=7, gross_usd=941, refund_usd=138, net_usd=803`。
+oracle 仅供验收程序使用，未上传给模型。成员 auditor 的实际 Python 输出与 oracle 一致。
+
+证据保留位置：
+
+- `.scratch/team-web-smoke/challenge.cjs`：真实浏览器/模型验收；
+  `make_challenge.py` 与 `challenge/`：输入与独立期望值。
+- `orders600-evidence/`、`network-evidence/`、`orders-evidence/`：按上述三次顺序保存
+  API 终态、SSE、产物列表、轨迹响应、完成和刷新截图；三次页面均无 JavaScript 异常。
+- `.scratch/team-web-smoke/audit_probes.py`、`audit-probes.json`：约一秒的确定性失败复现，
+  覆盖轨迹入口、grep 截断标记、错误状态、spill；当前退出码 1 是发现缺陷的预期信号。
+- `direct_network.py` / `direct-network.json`、`document_probe.py` / `document-probe.json`：
+  实际工具与单变量对照，临时 monkeypatch 均在退出前恢复；不是已修复的生产行为。
+- 原始 engine.log、成员 JSONL 和运行快照分别位于
+  `/home/administrator/.local/share/frontier-agent/team-web-smoke-20261024/runs/` 与
+  `/home/administrator/.local/share/frontier-agent/team-chain900-20261024/runs/`。
+  本批结束已关闭临时 8001/8002 服务，保留数据库与证据。
+
+### 20.2 已确认的问题与能力边界
+
+以下编号 T01—T08 是本批发现，不替代 §16 的 E01—E08。
+
+| 编号 / 优先级 | 发现与证据 | 修复或设计落点 |
+|---|---|---|
+| T01 / P1 | **局部证据被汇总成错误的完整结论。** 对账最终文本称“完整读入”原始 CSV，却输出 `2 / 380 / 0 / 380`，把实际存在的 A5/A6/A10 误认成不存在。coordinator 仅拿到 grep 预览，两个成员尚未 submit_report。研究截止后 auditor 仍算出正确的 `7 / 941 / 138 / 803`，却未进入最终答案。Web 终态正确标 stopped，不代表回答内容可靠。 | `workflows/agent_team/nodes/main_agent.py` 在 `force_final_answer` 之后才 drain/cleanup bus；`subagent_runtime.py::force_final_answer` 使用 coordinator 已有消息。需要先冻结派发、限时回收/保留成员已验证结果及完成状态，再生成带证据完整度的汇总；无完整依据时不得给出确定汇总数字。必须增加“主控只有预览，成员有完整结果，截止发生在回收前”的回归。 |
+| T02 / P1 | **首包预算未贯通团队。** `server/profile.py` 配置 `first_chunk_s=45`，但 coordinator 和成员构造 `LoopConfig` 时均未传 `first_chunk_timeout`。900 秒实测首轮无 chunk 等到 180 秒 logical-call deadline 才退出。 | 主、成员 runtime 显式传递首包配置并测试实际流式等待；不得用增加整轮时间替代。队伍收尾另需协调主控研究截止与成员任务/恢复预算：600 秒实测主控截止后，成员仍开始新工具/模型调用。 |
+| T03 / P1 | **grep 预览静默截断。** bwrap 路径用 `head` 截取，`max_results=3` 返回 6 行，无“还有更多”标记。真实订单表 13 行含表头，主控只看见前 6 行；确定性探针同样复现。这是 T01 的证据完整度缺口之一，不能把错误全归为模型口算。 | `plugins/tools/grep_search.py` 的 sandbox 分支需要准确限制、显式 `truncated`/后续读取指引；local 分支已有 first-matches 提示，两个分支行为不一致。它是共享工具问题，也可能影响 single。 |
+| T04 / P1 | **bwrap 外部符号链接依赖未闭合。** 本机 `/etc/resolv.conf` 指向 `/mnt/wsl/resolv.conf`，目标未挂入工具沙箱；实际 download_file DNS 失败，只补只读 DNS 文件挂载后即可下载 13,264 字节 PDF。uv 虚拟环境的 python 又通过无版本目录别名指向解释器；即使 PATH 包含 `.venv/bin`，别名未挂入仍回退 `/usr/bin/python3`，PDF/XLSX 缺依赖。 | `plugins/tools/_sandbox.py::_bwrap_base_args/_interpreter_bind_args` 应覆盖受信任运行依赖的符号链接链，并在沙箱内做 DNS/解释器/必要库预检。不要开放整个宿主目录或要求模型反复安装库。此结论针对实测 WSL+uv+bwrap，不能外推所有 container 部署。 |
+| T05 / P1 | **团队轨迹刷新回放不可用。** 正常成功 Run 磁盘有 main + 两个成员 JSONL，Web reader 返回 0 条并判 unavailable；仅把 reader 文件路径改为 main 后即读出 15 条，仍不包含成员。三次新 Run 的 `/trace` 也为空。 | `server/relay.py` 与 `server/trajectory_status.py` 硬编码 `react_agent.jsonl`。需要按 pipeline 定位、跨成员身份/游标合并、终态完整度与去重；不是简单改成另一个固定文件名。实时 SSE 已带成员身份，不应与回放缺失混淆。 |
+| T06 / P2 | **工具错误可能显示为成功。** 实际 read_file 返回 `[read_file error] ... FileNotFoundError`，以普通字符串结果经过真实 BridgeObserver 得到 `ok=true`；显式传 `is_error=true` 后变为 false。 | `server/bridge.py` 仅检查 is_error 或 `Error` 前缀，kernel 对普通字符串不自动识别括号式/JSON 错误。需要统一工具结果错误契约，同时覆盖实时事件及回放，避免不断堆叠字符串前缀。 |
+| T07 / P1 | **长结果恢复路径不一致。** 同一 `/spill/body.txt` 在 bwrap 中 shell 能读，read_file 却先将其转换为宿主机路径，随后在沙箱内报不存在。只保留沙箱内路径的对照立即读回原文。 | `plugins/tools/_sandbox.py::resolve_runtime_path` 与 reader 的命名空间契约应区分 native/bwrap/container。此实测证明 read_file 恢复入口失效，不等于磁盘信息已删除，也不等于 recover_result 的所有路径都失效。 |
+| T08 / 设计缺口 | **成员之间不能直接交接私有工作文件。** producer 的 `/workspace/candidate.csv` 存在，consumer 同一路径不可读。`render_sandbox_fs_note` 明确规定 bwrap 私有 workspace，只可依赖报告附件文本；这属于现有设计限制，不是权限检查误拦。 | 小结果可以 submit_report 文本传递；大表格、下载文件和阶段性数据集需要受控的文件交接/只读引用、来源及版本索引。不能把共享整个 workspace 当作修复。未证明当前所有任务都必须跨成员传文件，但复杂任务开放前应明确支持范围。 |
+
+T04 的依赖归因经过纠正：临时服务最初未将 `.venv/bin` 加入 PATH，而既有服务已经加入。
+补 PATH 后仍失败，进一步只补 uv 解释器别名挂载即恢复；因此既不能只怪测试启动脚本，
+也不能称项目未安装 pypdf/openpyxl。二者在宿主虚拟环境中都已存在。
+
+### 20.3 实际覆盖与尚未通过的门槛
+
+| 链路 | 验证结论 |
+|---|---|
+| Web mode、附件暂存、worker 启动、主控派发、两个成员真实读取及计算 | 已在真实任务中触达；简单报告回收/最终汇总另见 §19。复杂场景的回收与发布没有完成。 |
+| web_search → web_fetch | 脱离模型规划直接调用真实工具通过，取得 Python 官方 csv 页面；不算本批团队联网场景端到端通过。 |
+| download_file → PDF read_file | 原环境失败；分别补 DNS 挂载、解释器别名后真实下载和读取到 `Dummy PDF file`。生产未修复。 |
+| 发布 manifest → create_file → 回读 | 在已修正环境的局部对照中，真实生成 XLSX/JSON/Markdown；read_file 回读及独立 openpyxl 检查均正确，明细合计 803；未声明输出路径确实被拒绝。文件工具和发布权限不是全无实现。 |
+| 成员报告 → 主控采用 → 发布者 → Web 产物注册/下载/hash | 三次真实任务均没有走完，没有可下载产物；局部文件工具成功不能替代此端到端门槛。 |
+| 实时事件 → 错误分类 → 刷新/断线回放 | 实时身份可见；错误分类和团队回放存在 T05/T06，尚未完整。 |
+| 停止/取消、审批关闭、发布竞争与清理 | 本批相关自动测试通过；真实中途停止仍引用 §19 的验收，不宣称本批重新执行了停止场景。 |
+
+本批运行的聚焦回归共 **144 passed**：
+
+- 52 项：`test_team_web_stop.py`、`test_agent_team_workflow.py`、`test_web_normal_completion.py`。
+- 92 项：AgentBus 等待、发布兼容/独占与停止、发布死锁、拒绝升级、共享 fan-in、
+  artifacts、F05/F06 轨迹投影和完整度等既有测试。
+
+这些通过项包含 mock/组件测试，不能覆盖上述真实失败；确定性探针当前保持失败以供后续修复。
+用量亦不能据零值判断免费或未调用：两个 `llm_error` Run 已生成恢复汇总文字，API 却返回
+`llm_calls=0, total_tokens=0, status=partial`。恢复汇总调用的计量也应纳入 E07 后续验收，
+保留 partial，不能把可读最终文本当作轨迹/费用已经完整的证据。
+本批未修改生产 Python/前端代码，未重新声称全库 lint/typecheck、PG 迁移或部署通过。
+
+### 20.4 下一批执行顺序
+
+近期先闭合复杂单轮，再恢复 §19 末尾的跨模式连续性验收；账户/计划专题继续暂缓。
+
+1. 修复 T04 环境预检/最小挂载、T03 预览完整度、T06 错误契约、T07 恢复路径；
+   保持 single 的行为回归覆盖，因为这些是共享工具路径。
+2. 修复 T02 的预算传递，并实现 T01 的队伍收尾顺序。成员已计算结果应有可读取的检查点，
+   不以又一次长模型调用作为保留事实的唯一途径；汇总保留未完成项，禁止局部表冒充全表。
+3. 完成 T05 回放；为 T08 明确报告文本上限与受控文件交接契约。
+4. 重跑同一对账及联网场景，必须完成两份报告回收、确定发布者、真实落盘、回读、
+   Web 下载/hash 与刷新回放。失败仍如实保留 stopped/failed，不能通过放宽断言冒充验收。
+5. 再处理 §16 的 E01—E04/E07/E08、多轮约束/历史继承与 PG/多实例故障验证。
+
+当前无需因这些缺口更换 miniDAG 或推翻按 Run 换图方向；本批失败证据首先指向工具环境、
+预算/收尾和可观测接线。是否需要进一步改编排，应在上述链路修复后的同一任务复测中判断。
+
+### 20.5 首批修复：工具环境与输入完整度标记
+
+本批按 §20.4 第 1 项先处理 T03/T04；未同时修改 T01/T02/T05—T08。实现已写入工作区，
+既有 8000 服务未重启，team 开关未打开，状态仍不是完整团队任务通过。
+
+- bwrap 现在识别受信任运行路径的外部符号链接目标。WSL 的 `/etc/resolv.conf` 若指向
+  `/mnt/wsl/resolv.conf`，只读挂载该目标文件，不暴露整个 `/mnt`；uv 虚拟环境若通过
+  无版本 Python 目录别名指向实际版本，只读挂载该 Python 发行目录，不遍历或暴露任意
+  符号链接祖先。普通容器/系统路径已覆盖时不增加挂载。
+- 没有 `/opt/tool-venv` overlay 时，工具环境显式把当前运行中的虚拟环境 `bin` 放在 PATH
+  首位并设置 `VIRTUAL_ENV`。因此直接执行 `.venv/bin/python` 与 `uv run` 两种启动方式
+  都使用同一套 pypdf/openpyxl 等已安装依赖；模型的安装目标仍指向任务 workspace，
+  受信任 venv 在 bwrap 中保持只读。
+- sandbox 分支的 `grep_search` 先读取 `max_results + 1` 条匹配用于判断完整度，仅展示请求
+  上限；存在更多匹配时追加明确的 `Results truncated`、`max_results=N` 及缩小查询/提高
+  上限的指引。`context_lines` 仍提供上下文，但另用无上下文探针判定是否还有匹配，避免
+  上下文行数与匹配数混淆。local 分支原有截断提示保持。
+
+修复前新增四个失败信号：外部 resolver 目标未挂载、uv 别名目录未挂载、bwrap 内不能
+读取 resolver/启动项目 venv、grep 预览无截断标记；另补“外层 PATH 不含 venv 时仍选中
+当前 venv”的回归。修复后：
+
+- 相关工具、路径授权、网络、截断、团队工作流、停止/发布/轨迹测试 **260 passed**；
+  目标 Ruff 通过，Pyright 为 0 errors，目标 diff check 通过。
+- 原确定性审计探针中 `grep_preview.truncation_disclosed` 已由 false 变为 true；探针整体仍
+  退出 1，因为 T05/T06/T07 按预期继续失败，不能用局部转绿掩盖它们。
+- 不使用 monkeypatch 的真实工具复测通过 `web_search → web_fetch → download_file →
+  read_file`；W3C PDF 为 13,264 字节、SHA-256
+  `3df79d34abbca99308e79cb94461c1893582604d68329a41fd4bec1885e6adb4`，读取文本包含
+  `Dummy PDF file`。
+- 不使用 monkeypatch 的文档复测通过 PDF 读取、XLSX/JSON/Markdown 生成、XLSX 回读与
+  独立 openpyxl 数值检查、未声明产物路径拒绝，共 6/6。T04 据此关闭；这仍是工具链
+  局部验收，尚未覆盖“成员报告 → 主控采用 → 发布者 → Web 下载”的完整任务。
+
+下一步转到 T06 错误契约与 T07 spill 恢复路径，然后处理 T02 预算传递和 T01 收尾顺序；
+T05 团队轨迹回放可与错误事件投影一并闭合。完成后重跑 §20.1 的同一对账及联网场景。
+
+### 20.6 T06 工具错误契约关闭（2026-10-24）
+
+T06 已关闭。共享执行层新增前缀限定的兼容判定，识别 `Error:`、`[... error]` 与非零
+`[Exit code N]`，不扫描结果正文，因而不会把“Error rate: 0%”一类成功内容误判为失败。
+kernel 在生成 `ToolResult` 时即设置 `is_error`，新轨迹从源头写入正确的 `error`；实时
+Bridge、SSE 轨迹回放及 `/trace` 投影复用同一规则。`/trace` 仅在输出投影中修正旧轨迹的
+错误标记，不改写既有审计文件。用户拒绝、策略阻止和调用上限仍保持 `skipped=true`，
+不混同为已执行失败。
+
+上传端到端测试同步删除过期的 `create_file` 审批监听器：Web 对运行目录内的可逆写入已
+自动放行，不再产生 `approval_requested`。该测试现强制使用 bwrap，并直接断言真实
+`read_file` 轨迹包含上传字节，避免用后续脚本创建的产物冒充附件读取成功。
+
+验证：错误契约/实时/回放/轨迹投影/上传聚焦测试 **21 passed**；扩大到 tool execution、
+状态栏、正常终态、F05/F06、bwrap 与上传链路 **110 passed**；Ruff 通过，Pyright 0
+errors，stage-1 import smoke **427/427**，目标 diff check 通过。下一项为 T07 spill
+恢复路径；T05 仍只完成错误事件投影，团队多轨迹定位与合并尚未关闭。

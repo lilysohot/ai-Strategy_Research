@@ -21,6 +21,7 @@ any event is emitted), so no decision can bypass it.
 from __future__ import annotations
 
 import asyncio
+import threading
 import uuid
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -109,6 +110,12 @@ class ApprovalGate:
 
     def __init__(self) -> None:
         self._pending: dict[str, asyncio.Future[ApprovalDecision]] = {}
+        self._closed = threading.Event()
+        # The Web UI exposes one approval dialog. Multiple team members may
+        # reach confirm-level tools concurrently, so serialize prompts at the
+        # shared run gate instead of letting a later request overwrite the one
+        # the user is currently deciding.
+        self.confirmation_lock = asyncio.Lock()
         # In-memory per-run allowlist (§6.1 session_bash / session_all; the
         # persist decision also lands here — this distribution owns no
         # cross-run rule store, so it grants for the rest of the run).
@@ -137,7 +144,14 @@ class ApprovalGate:
         """Register a pending approval and return its id."""
         aid = uuid.uuid4().hex
         self._pending[aid] = asyncio.get_running_loop().create_future()
+        if self.closed:
+            self._pending[aid].set_result(ApprovalDecision(decision="reject", source="stopped"))
         return aid
+
+    @property
+    def closed(self) -> bool:
+        """A stopped Run can never open its approval gate again."""
+        return self._closed.is_set()
 
     async def wait(
         self,
@@ -151,7 +165,10 @@ class ApprovalGate:
             # already spent. Never the user's verdict (F21).
             return ApprovalDecision(decision="reject", source="unknown")
         try:
-            return await asyncio.wait_for(fut, timeout=timeout)
+            decision = await asyncio.wait_for(fut, timeout=timeout)
+            if self.closed and decision.decision != "reject":
+                return ApprovalDecision(decision="reject", source="stopped")
+            return decision
         except TimeoutError:
             # Fail-closed is not the user rejecting: the durable record must
             # keep the two apart (F21).
@@ -162,13 +179,19 @@ class ApprovalGate:
     def resolve(self, approval_id: str, decision: ApprovalDecision) -> bool:
         """Deliver a decision from any thread; ``False`` for unknown/spent ids."""
         fut = self._pending.get(approval_id)
+        if self.closed and decision.source != "stopped":
+            return False
         if fut is None or fut.done():
             return False
         loop = fut.get_loop()
 
         def _set() -> None:
             if not fut.done():
-                fut.set_result(decision)
+                fut.set_result(
+                    ApprovalDecision(decision="reject", source="stopped")
+                    if self.closed and decision.decision != "reject"
+                    else decision
+                )
 
         try:
             running = asyncio.get_running_loop()
@@ -188,6 +211,7 @@ class ApprovalGate:
         turn boundary where ``pause_check`` lands the cooperative stop instead
         of suspending on the gate until its 300s timeout.
         """
+        self._closed.set()
         for aid in list(self._pending):
             self.resolve(aid, ApprovalDecision(decision="reject", source="stopped"))
 
@@ -214,11 +238,31 @@ class ApprovalObserver:
         emit: Callable[[dict[str, Any]], None],
         cwd: str,
         timeout: float = DEFAULT_TIMEOUT_S,
+        source_meta: dict[str, Any] | None = None,
     ) -> None:
         self.gate = gate
         self._emit = emit
         self.cwd = cwd
         self.timeout = timeout
+        self._source_meta = dict(source_meta or {})
+
+    def for_subagent(self, agent_id: str) -> ApprovalObserver:
+        """Share the run gate while stamping one member's approval events."""
+
+        return ApprovalObserver(
+            self.gate,
+            self._emit,
+            self.cwd,
+            timeout=self.timeout,
+            source_meta={"agent_id": agent_id, "agent_kind": "subagent"},
+        )
+
+    async def wait_for_tool_interrupt(self, ctx: Any, tool_call: dict) -> bool:
+        """Wake parked collect_reports when the Web stdin reader closes the Run."""
+        del ctx, tool_call
+        while not self.gate.closed:
+            await asyncio.sleep(0.1)
+        return True
 
     async def on_tool_call(
         self,
@@ -226,6 +270,10 @@ class ApprovalObserver:
         tool_call: dict,
     ) -> ToolCallIntervention | None:
         del ctx  # unused; signature fixed by notify_tool_call
+        if self.gate.closed:
+            return ToolCallIntervention(
+                skip_with_result="[user rejected this tool call: run stopped]"
+            )
         name = str(tool_call.get("name", ""))
         args = tool_call.get("args", {}) or {}
         risk = assess_web_tool_risk(name, args, self.cwd)
@@ -239,11 +287,36 @@ class ApprovalObserver:
         if risk.level == RISK_SAFE or self.gate.is_allowed(name, args):
             return None
 
+        async with self.gate.confirmation_lock:
+            if self.gate.closed:
+                return ToolCallIntervention(
+                    skip_with_result="[user rejected this tool call: run stopped]",
+                )
+            # A preceding approval may have granted this exact call/tool for
+            # the rest of the Run while this member waited for the dialog slot.
+            if self.gate.is_allowed(name, args):
+                return None
+            return await self._request_confirmation(name=name, args=args, risk=risk)
+
+    async def _request_confirmation(
+        self,
+        *,
+        name: str,
+        args: dict[str, Any],
+        risk: ToolRisk,
+    ) -> ToolCallIntervention | None:
+        """Publish and resolve one confirmation while holding the run slot."""
+
         # confirm: show the human exactly what will run, then suspend.
         preview = ""
         if name == "bash":
             preview = str(args.get("command", "")).strip()
         approval_id = self.gate.open()
+        if self.gate.closed:
+            await self.gate.wait(approval_id, timeout=self.timeout)
+            return ToolCallIntervention(
+                skip_with_result="[user rejected this tool call: run stopped]"
+            )
         self._publish(
             "approval_requested",
             approval_id=approval_id,
@@ -288,4 +361,4 @@ class ApprovalObserver:
     def _publish(self, type_: str, **data: Any) -> None:
         # §7 出口统一脱敏: every string crossing to the SSE layer is masked,
         # same as BridgeObserver / the replay path.
-        self._emit(redact_deep(make_event(type_, **data)))
+        self._emit(redact_deep(make_event(type_, **data, **self._source_meta)))

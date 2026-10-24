@@ -133,6 +133,7 @@ def test_web_worker_routes_semantic_audit_artifacts_to_run_dir(
         "FRONTIER_AGENT_MAX_TURNS",
         "BASH_ALLOWLIST_MODE",
         "FRONTIER_AGENT_TOOL_USER",
+        "FRONTIER_AGENT_REQUIRE_TOOL_USER",
         "OPENAI_MODEL",
         "OPENAI_BASE_URL",
         "OPENAI_API_KEY",
@@ -156,3 +157,54 @@ def test_web_worker_routes_semantic_audit_artifacts_to_run_dir(
         api_key="key",
     )
     assert os.environ["APODEX_RUN_DIR"] == str(paths["run"])
+
+
+def test_team_current_sandbox_requires_role_identity(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    from server.worker import apply_env
+
+    # apply_env intentionally mutates the worker process environment. Preserve
+    # every key it can touch so this in-process test cannot leak the team
+    # policy into later approval/profile tests.
+    for key in (
+        "SANDBOX_BACKEND",
+        "FRONTIER_AGENT_WORKSPACE_DIR",
+        "FRONTIER_AGENT_OUTPUTS_DIR",
+        "FRONTIER_AGENT_INPUTS_DIR",
+        "CODING_WORKSPACE_ROOT",
+        "APODEX_SPILL_DIR",
+        "APODEX_RUN_DIR",
+        "FRONTIER_AGENT_TASK_WALL_TIME_S",
+        "FRONTIER_AGENT_MAX_TURNS",
+        "BASH_ALLOWLIST_MODE",
+        "FRONTIER_AGENT_TOOL_USER",
+        "FRONTIER_AGENT_REQUIRE_TOOL_USER",
+        "OPENAI_MODEL",
+        "OPENAI_BASE_URL",
+        "OPENAI_API_KEY",
+    ):
+        monkeypatch.setenv(key, os.environ.get(key, ""))
+    monkeypatch.setenv("FRONTIER_AGENT_TOOL_USER", "off")
+    monkeypatch.delenv("FRONTIER_AGENT_REQUIRE_TOOL_USER", raising=False)
+    paths = {
+        "workspace": tmp_path / "ws",
+        "outputs": tmp_path / "outputs",
+        "inputs": tmp_path / "inputs",
+        "spill": tmp_path / "spill",
+        "run": tmp_path / "run",
+    }
+
+    apply_env(
+        paths,
+        backend="native",
+        wall_time_s=60,
+        max_turns=4,
+        model="model",
+        base_url="https://example.test/v1",
+        api_key="key",
+        require_role_isolation=True,
+    )
+
+    assert "FRONTIER_AGENT_TOOL_USER" not in os.environ
+    assert os.environ["FRONTIER_AGENT_REQUIRE_TOOL_USER"] == "1"

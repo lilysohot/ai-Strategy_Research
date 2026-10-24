@@ -53,8 +53,11 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 # so the spike must run from the repository root. Chdir rather than assert: the
 # layout is a property of the runtime, not something a caller should remember.
 os.chdir(REPO_ROOT)
+
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
+
+from frontier_agent.core.runtime.loop.tool_exec import tool_result_text_is_error  # noqa: E402
 
 SPIKE_PROMPT = (
     "Read the brief mounted at /inputs/brief.md, then write a short markdown "
@@ -165,7 +168,7 @@ class BridgeObserver:
 
     async def on_tool_result(self, ctx: Any, result: Any) -> None:
         text = str(getattr(result, "result", "") or "")
-        failed = bool(getattr(result, "is_error", False)) or text.lstrip().startswith("Error")
+        failed = bool(getattr(result, "is_error", False)) or tool_result_text_is_error(text)
         name = str(getattr(result, "name", "") or "")
         if failed:
             self.tool_errors.append(name)

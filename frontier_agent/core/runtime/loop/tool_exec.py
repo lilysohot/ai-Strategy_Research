@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import re
 import time
 from collections.abc import Callable, Coroutine
 from contextlib import suppress
@@ -19,9 +20,32 @@ __all__ = [
     "ToolResultPostProcessor",
     "execute_tools",
     "max_tool_wall_time_s",
+    "tool_result_text_is_error",
 ]
 
 TOOL_RESULT_MAX_CHARS = 150_000
+
+_ERROR_PREFIX_RE = re.compile(r"^Error(?:\s*:|\s|$)", re.IGNORECASE)
+_BRACKETED_ERROR_RE = re.compile(
+    r"^\[[^\]\r\n]*\berror\b[^\]\r\n]*\]",
+    re.IGNORECASE,
+)
+_EXIT_CODE_PREFIX_RE = re.compile(r"^\[Exit code\s+(-?\d+)\]", re.IGNORECASE)
+
+
+def tool_result_text_is_error(text: str) -> bool:
+    """Recognise legacy string failures at the tool-result protocol boundary.
+
+    Tool implementations historically returned both ordinary strings and
+    bracketed error strings. Keep the compatibility rule prefix-scoped so a
+    successful document containing words such as ``Error rate`` is not marked
+    failed. New callers should still set ``ToolResult.is_error`` explicitly.
+    """
+    value = str(text or "").lstrip()
+    if _ERROR_PREFIX_RE.match(value) or _BRACKETED_ERROR_RE.match(value):
+        return True
+    match = _EXIT_CODE_PREFIX_RE.match(value)
+    return bool(match and int(match.group(1)) != 0)
 
 
 def _result_cap() -> int:
@@ -250,7 +274,7 @@ async def execute_tools(
                 result=result_str,
                 duration_ms=elapsed,
                 tool_call_id=tool_call_id,
-                is_error=False,
+                is_error=tool_result_text_is_error(result_str),
                 # If a report and a user message became ready in the same event
                 # loop tick, preserve the real report and still tell the loop
                 # to inject the already-claimed user message before its next

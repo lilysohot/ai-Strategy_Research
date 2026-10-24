@@ -22,6 +22,10 @@ from frontier_agent.components.finalization import (
 )
 from frontier_agent.components.observers.budget_observer import BudgetObserver
 from frontier_agent.components.observers.context_size_guard import ContextSizeGuard
+from frontier_agent.components.observers.conversation_snapshot import (
+    ConversationSnapshotObserver,
+    build_summarizer,
+)
 from frontier_agent.components.observers.duplicate_query_rollback import (
     DuplicateQueryRollbackObserver,
 )
@@ -57,6 +61,7 @@ from frontier_agent.core.runtime.loop.budget_consistency import (
     check_context_budget,
 )
 from frontier_agent.core.runtime.loop.compact import KeepLastNToolResultsCompactor
+from frontier_agent.core.runtime.loop.llm_client import extract_model_name
 from frontier_agent.core.runtime.loop.model_profile import (
     ModelProfile,
     resolve_history_policy,
@@ -94,6 +99,7 @@ from plugins.tools.task_board import (
     render_board,
     start_planning,
 )
+from workflows._shared.cross_mode_context import append_context_to_question
 from workflows.agent_team.citation_url_repair import repair_citation_urls
 from workflows.agent_team.identity import (
     MAIN_AGENT_ID,
@@ -101,6 +107,7 @@ from workflows.agent_team.identity import (
     SUB_ROLE_ID,
     llm_session_id,
 )
+from workflows.agent_team.lifecycle import run_with_member_cleanup
 from workflows.agent_team.observers.auto_fan_in import AutoFanInObserver
 from workflows.agent_team.observers.bare_text_finalize import (
     BareTextFinalizeObserver,
@@ -180,7 +187,9 @@ def _resolve_research_wall(
         else max(float(hard_wall_reserve_s), 0.0)
     )
     return resolve_research_wall(
-        agent_cfg, reserve_s=reserve_s, label_prefix="agent_team",
+        agent_cfg,
+        reserve_s=reserve_s,
+        label_prefix="agent_team",
     )
 
 
@@ -191,7 +200,8 @@ def _resolve_wall_deadline_s(
 ) -> float:
     """Research-only deadline for :class:`WallClockDeadlineObserver`."""
     return _resolve_research_wall(
-        agent_cfg, hard_wall_reserve_s=hard_wall_reserve_s,
+        agent_cfg,
+        hard_wall_reserve_s=hard_wall_reserve_s,
     ).research_deadline_s
 
 
@@ -223,6 +233,7 @@ def _resolve_reporter_wall_time_s(agent_cfg: dict[str, Any]) -> float:
 
 # ── Helpers: profile / trajectory / observers / runtime --------------------
 
+
 def _resolve_llm_and_profile(
     profile_name: str | None,
     *,
@@ -249,6 +260,7 @@ def _resolve_llm_and_profile(
                 create_swarm_llm,
                 load_swarm_profile,
             )
+
             profile = load_swarm_profile(
                 profile_name or "",
                 overrides=profile_overrides,
@@ -300,7 +312,9 @@ def _resolve_reporter_backend(profile: dict[str, Any] | None) -> str:
 
 
 def _resolve_trajectory_dir(
-    state: dict[str, Any], task_id: str, subdir: str = "",
+    state: dict[str, Any],
+    task_id: str,
+    subdir: str = "",
 ) -> Path:
     """Trajectory directory: ``<trial_dir>/agent/trajectories/`` for Harbor
     runs, ``logs/swarm/<task_id>/trajectories/`` for standalone runs.
@@ -318,6 +332,17 @@ def _resolve_trajectory_dir(
     else:
         base = Path("logs") / "swarm" / task_id / "trajectories"
     return base / subdir if subdir else base
+
+
+def _resolve_conversation_path(state: dict[str, Any], task_id: str) -> Path:
+    """Place the coordinator dump beside, not inside, trajectory storage."""
+
+    trial_dir = (state.get("metadata") or {}).get("_trial_dir")
+    if trial_dir:
+        return Path(trial_dir) / "conversation.json"
+    if run_dir := os.environ.get("APODEX_RUN_DIR", "").strip():
+        return Path(run_dir) / "conversation.json"
+    return Path("logs") / "swarm" / task_id / "conversation.json"
 
 
 def _resolve_worktree_root(state: dict[str, Any], task_id: str) -> Path:
@@ -340,16 +365,15 @@ def _resolve_worktree_root(state: dict[str, Any], task_id: str) -> Path:
     _resolve_sandbox_binds); only ``/workspace`` lives under the returned root.
     """
     md = state.get("metadata") or {}
+    if md.get("_sandbox_workspace_root"):
+        return Path(md["_sandbox_workspace_root"])
     trial_dir = md.get("_trial_dir")
     if trial_dir:
         return Path(trial_dir) / "sandbox" / "worktree"
     experiment = md.get("experiment")
     bench_task_id = md.get("bench_task_id")
     if experiment and bench_task_id:
-        return (
-            Path("experiments") / str(experiment)
-            / "questions" / str(bench_task_id) / "worktree"
-        )
+        return Path("experiments") / str(experiment) / "questions" / str(bench_task_id) / "worktree"
     coding_root = md.get("coding_workspace_root")
     if coding_root:
         return Path(coding_root)
@@ -357,7 +381,8 @@ def _resolve_worktree_root(state: dict[str, Any], task_id: str) -> Path:
 
 
 def _resolve_sandbox_binds(
-    state: dict[str, Any], worktree_root: Path,
+    state: dict[str, Any],
+    worktree_root: Path,
 ) -> tuple[
     tuple[tuple[str, str, bool], ...],
     tuple[tuple[str, str, bool], ...],
@@ -384,7 +409,7 @@ def _resolve_sandbox_binds(
     /outputs bind.
     """
     md = state.get("metadata") or {}
-    outputs_dir = worktree_root.parent / "outputs"
+    outputs_dir = Path(md.get("_sandbox_outputs_dir") or worktree_root.parent / "outputs")
 
     inputs: list[tuple[str, str, bool]] = []
     dataset_root = str(md.get("_dataset_root") or "")
@@ -432,9 +457,7 @@ def _has_input_files(path: str) -> bool:
     """Best-effort truth signal for prompt routing; never raises."""
     try:
         root = Path(path)
-        return root.is_file() or (
-            root.is_dir() and any(item.is_file() for item in root.rglob("*"))
-        )
+        return root.is_file() or (root.is_dir() and any(item.is_file() for item in root.rglob("*")))
     except OSError:
         return False
 
@@ -478,7 +501,10 @@ def _log_inputs_dir_contents(
             is_dir = exists and p.is_dir()
             logger.info(
                 "[agent_team inputs] %s path=%s exists=%s is_dir=%s",
-                label, p, exists, is_dir,
+                label,
+                p,
+                exists,
+                is_dir,
             )
             if not is_dir:
                 continue
@@ -494,13 +520,17 @@ def _log_inputs_dir_contents(
             if not files:
                 logger.warning(
                     "[agent_team inputs] %s path=%s is EMPTY — read_file / "
-                    "glob_search will find nothing here", label, p,
+                    "glob_search will find nothing here",
+                    label,
+                    p,
                 )
                 continue
             found_any = True
             logger.info(
                 "[agent_team inputs] %s path=%s has %d file(s):",
-                label, p, len(files),
+                label,
+                p,
+                len(files),
             )
             for f in files:
                 try:
@@ -508,11 +538,17 @@ def _log_inputs_dir_contents(
                 except OSError:
                     size = -1
                 logger.info(
-                    "[agent_team inputs]   name=%r abs=%s size=%s", f.name, f, size,
+                    "[agent_team inputs]   name=%r abs=%s size=%s",
+                    f.name,
+                    f,
+                    size,
                 )
         except Exception as exc:
             logger.warning(
-                "[agent_team inputs] failed to scan %s path=%s: %s", label, root, exc,
+                "[agent_team inputs] failed to scan %s path=%s: %s",
+                label,
+                root,
+                exc,
             )
 
     if not found_any and fallback_roots:
@@ -524,7 +560,10 @@ def _log_inputs_dir_contents(
             p = Path(root)
             logger.warning(
                 "[agent_team inputs] fallback %s path=%s exists=%s entries=%s",
-                label, p, p.exists(), _shallow_entries(root) or "(none/not-a-dir)",
+                label,
+                p,
+                p.exists(),
+                _shallow_entries(root) or "(none/not-a-dir)",
             )
 
 
@@ -562,11 +601,14 @@ def _resolve_profile_tools(
     # them name the web tools explicitly.
     if os.environ.get("SWARM_NO_WEB", "").strip().lower() in ("1", "true", "yes", "on"):
         from workflows.agent_team import WEB_TOOL_NAMES
+
         dropped = [n for n in requested if n in WEB_TOOL_NAMES]
         if dropped:
             requested = [n for n in requested if n not in WEB_TOOL_NAMES]
             logger.info(
-                "closed-book (SWARM_NO_WEB): dropped %s web tools %s", label, dropped,
+                "closed-book (SWARM_NO_WEB): dropped %s web tools %s",
+                label,
+                dropped,
             )
     # Compatibility migration for pre-download profiles: web-enabled agents
     # receive the bounded binary-file companion to web_fetch automatically.
@@ -604,7 +646,8 @@ def _apply_agent_team_tool_contract(tools: list[Any]) -> list[Any]:
 
 
 def _replace_profile_tool_impls(
-    tools: list[Any], agent_cfg: dict[str, Any],
+    tools: list[Any],
+    agent_cfg: dict[str, Any],
 ) -> list[Any]:
     """Select profile-scoped web tool implementations without global mutation."""
     resolved = list(tools)
@@ -700,9 +743,13 @@ def _build_observers(
     # fetched，并在各自 loop 结束核验 delivered、落盘工件；绝不阻断运行。
     from plugins.corpus.ledger import ConsumptionLedgerObserver
 
-    observers.append(ConsumptionLedgerObserver(
-        task_id=task_id, role_id="main_agent", pipeline_id="agent_team",
-    ))
+    observers.append(
+        ConsumptionLedgerObserver(
+            task_id=task_id,
+            role_id="main_agent",
+            pipeline_id="agent_team",
+        )
+    )
 
     if DuplicateQueryRollbackObserver.DEFAULT_TOOL_NAMES.intersection(tool_names):
         # The benchmark profile gives the coordinator web_search; the TUI one
@@ -711,23 +758,31 @@ def _build_observers(
     if budget_tokens:
         observers.append(BudgetObserver(max_tokens=budget_tokens))
     if max_input_tokens:
-        observers.append(ContextSizeGuard(
-            max_input_tokens=max_input_tokens,
-            force_compaction_first=force_compaction_first,
-        ))
+        observers.append(
+            ContextSizeGuard(
+                max_input_tokens=max_input_tokens,
+                force_compaction_first=force_compaction_first,
+            )
+        )
     if wall_deadline_s > 0:
-        observers.append(WallClockDeadlineObserver(
-            deadline_s=wall_deadline_s,
-            # The resolver already converted any operational hard wall into
-            # this research-only soft deadline.
-            reserve_s=0,
-            warn_ratio=0.75,
-        ))
+        observers.append(
+            WallClockDeadlineObserver(
+                deadline_s=wall_deadline_s,
+                # The resolver already converted any operational hard wall into
+                # this research-only soft deadline.
+                reserve_s=0,
+                warn_ratio=0.75,
+            )
+        )
     if event_store is not None:
-        observers.append(SSEObserver(
-            event_store=event_store, task_id=task_id,
-            run_id=run_id, run_type=run_type,
-        ))
+        observers.append(
+            SSEObserver(
+                event_store=event_store,
+                task_id=task_id,
+                run_id=run_id,
+                run_type=run_type,
+            )
+        )
     return observers
 
 
@@ -771,6 +826,7 @@ def _planning_loop_policy() -> LoopPolicy:
 
 # ── Helper: derive frontend-facing sub-question list ----------------------
 
+
 def _tool_call_name_args(tc: ToolCall) -> tuple[str, dict[str, Any]]:
     """Read ``(name, args)`` from an OpenAI-wire tool_call dict.
 
@@ -794,7 +850,9 @@ def _tool_call_name_args(tc: ToolCall) -> tuple[str, dict[str, Any]]:
 
 
 def _extract_sub_questions(
-    messages: list[Message], bus: AgentBus, task_id: str,
+    messages: list[Message],
+    bus: AgentBus,
+    task_id: str,
 ) -> list[dict[str, Any]]:
     """Synthesise ``clarified_questions`` from the main agent's tool calls.
 
@@ -808,12 +866,14 @@ def _extract_sub_questions(
     covered: set[str] = set()
 
     def _add(agent: str, text: str) -> None:
-        sub_questions.append({
-            "id": f"sq-{len(sub_questions) + 1:03d}",
-            "text": text,
-            "question": text,
-            "agent": agent,
-        })
+        sub_questions.append(
+            {
+                "id": f"sq-{len(sub_questions) + 1:03d}",
+                "text": text,
+                "question": text,
+                "agent": agent,
+            }
+        )
 
     for msg in messages:
         if not is_assistant_msg(msg):
@@ -873,7 +933,9 @@ def _collect_live_followups(observers: list[Any]) -> list[str]:
     seen: set[str] = set()
     for observer in observers:
         snapshot: Callable[[], list[str] | None] | None = getattr(
-            observer, "live_followups_snapshot", None,
+            observer,
+            "live_followups_snapshot",
+            None,
         )
         if not callable(snapshot):
             continue
@@ -895,27 +957,24 @@ def _compose_effective_question(question: str, followups: list[str]) -> str:
     if not followups:
         return question
     additions = "\n".join(f"- {text}" for text in followups)
-    return (
-        f"{question}\n\n"
-        "Additional user requests received during execution:\n"
-        f"{additions}"
-    )
+    return f"{question}\n\nAdditional user requests received during execution:\n{additions}"
 
 
 # ── Node entry point ------------------------------------------------------
 
+
 async def main_agent_node(
-    state: dict[str, Any], ctx: NodeContext,
+    state: dict[str, Any],
+    ctx: NodeContext,
 ) -> dict[str, Any]:
     """Run the agent-team main coordinator as a ReAct loop."""
     question = state.get("original_question", "")
     if not question:
         raise ValueError("main_agent_node requires 'original_question' in state")
+    model_question = append_context_to_question(question, state.get("cross_mode_context"))
 
     metadata = state.get("metadata") or {}
-    profile_name: str | None = (
-        metadata.get("profile") or metadata.get("swarm_profile")
-    )
+    profile_name: str | None = metadata.get("profile") or metadata.get("swarm_profile")
     llm, profile, model_profile = _resolve_llm_and_profile(
         profile_name,
         profile_overrides=metadata.get("profile_overrides"),
@@ -965,14 +1024,10 @@ async def main_agent_node(
         "reasoning_only_max_tokens",
     )
     reasoning_only_max_tokens = (
-        int(reasoning_only_max_tokens_raw)
-        if reasoning_only_max_tokens_raw
-        else None
+        int(reasoning_only_max_tokens_raw) if reasoning_only_max_tokens_raw else None
     )
     logical_call_timeout_raw = agent_cfg.get("logical_call_timeout_s")
-    logical_call_timeout_s = (
-        float(logical_call_timeout_raw) if logical_call_timeout_raw else None
-    )
+    logical_call_timeout_s = float(logical_call_timeout_raw) if logical_call_timeout_raw else None
     finalization_timeout_s = _resolve_finalization_timeout_s(
         agent_cfg,
         llm_timeout_s=llm_timeout,
@@ -986,15 +1041,14 @@ async def main_agent_node(
         default=180,
         label="agent_team wall_deadline_reserve_s",
     )
-    landing_budget_s = (
-        reporter_wall_time_s if reporter_enabled else finalization_timeout_s
-    )
+    landing_budget_s = reporter_wall_time_s if reporter_enabled else finalization_timeout_s
     # WallClockDeadlineObserver runs at turn end, so a tool launched just
     # before the deadline can consume its full timeout. Keep room for both that
     # overrun and the now-bounded reporter/finalization phase. "Full timeout"
     # is the OUTER wait, which carries a grace over the configured value for
     # budget-aware tools — ask the loop instead of assuming they are equal.
     from frontier_agent.core.runtime.loop.tool_exec import max_tool_wall_time_s
+
     worst_case_tool_s = max_tool_wall_time_s(tool_timeout)
     wall_deadline_reserve_s = max(
         configured_wall_reserve_s,
@@ -1012,9 +1066,7 @@ async def main_agent_node(
     # mid-call by the platform ceiling (the live serve ``RenewableWallTimeLease``
     # gives only a few seconds of grace).
     hard_deadline_monotonic = (
-        time.monotonic() + research_wall.hard_total_s
-        if research_wall.hard_total_s > 0
-        else None
+        time.monotonic() + research_wall.hard_total_s if research_wall.hard_total_s > 0 else None
     )
     check_wall_feasibility(
         hard_total_s=research_wall.hard_total_s,
@@ -1026,6 +1078,16 @@ async def main_agent_node(
     history_policy = resolve_history_policy(agent_cfg)
     compact_after_turns = int(agent_cfg.get("compact_after_turns", MAIN_COMPACT_AFTER_TURNS))
     context_token_limit = int(agent_cfg.get("context_token_limit", MAIN_CONTEXT_TOKEN_LIMIT))
+    replay_max_turns = int(agent_cfg.get("replay_max_turns", 10) or 0)
+    replay_max_turn_step = int(agent_cfg.get("replay_max_turn_step", 5) or 0)
+    raw_replay_tokens = agent_cfg.get("replay_max_tokens")
+    replay_max_tokens = (
+        int(raw_replay_tokens or 0)
+        if raw_replay_tokens is not None
+        else max(0, context_token_limit // 2)
+    )
+    legacy_continuity = state.get("continuity_enabled", True) is not False
+    continuity_write_enabled = state.get("continuity_write_enabled", legacy_continuity) is not False
     main_keep_tool_result = int(agent_cfg.get("main_keep_tool_result", MAIN_KEEP_TOOL_RESULT))
     sub_keep_tool_result = int(agent_cfg.get("sub_keep_tool_result", SUB_KEEP_TOOL_RESULT))
     # Tiered context compaction (opt-in via profile ``context_compaction``); see
@@ -1115,7 +1177,8 @@ async def main_agent_node(
             summary_retry_timeout_s=llm_timeout,
         )
         main_compaction_policy = InputTokenThresholdPolicy(
-            main_gauge, compaction_trigger_tokens(max_len),
+            main_gauge,
+            compaction_trigger_tokens(max_len),
         )
     else:
         main_compactor = KeepLastNToolResultsCompactor(keep_tool_result=main_keep_tool_result)
@@ -1135,10 +1198,12 @@ async def main_agent_node(
         trajectory_per_task = env_val not in ("0", "false", "no", "off")
 
     resource_mgr = registry.get(ResourceManager)
-    dynamic_tool_names = _dedupe_tool_names([
-        *(metadata.get("sdk_dynamic_tool_names") or []),
-        *(metadata.get("sdk_mcp_tool_names") or []),
-    ])
+    dynamic_tool_names = _dedupe_tool_names(
+        [
+            *(metadata.get("sdk_dynamic_tool_names") or []),
+            *(metadata.get("sdk_mcp_tool_names") or []),
+        ]
+    )
     tools, tool_names = _resolve_profile_tools(
         resource_mgr,
         role_id=MAIN_ROLE_ID,
@@ -1245,6 +1310,33 @@ async def main_agent_node(
     if planning_mode and not fresh_execution_context:
         observers.append(PlanningGateObserver(planning_max_turns=planning_max_turns))
 
+    def _with_conversation_snapshot(loop_observers: list[Any], *, system_prompt: str) -> list[Any]:
+        if not continuity_write_enabled:
+            return loop_observers
+        thinking_format = str(getattr(model_profile, "thinking_format", "") or "none")
+        return [
+            *loop_observers,
+            ConversationSnapshotObserver(
+                _resolve_conversation_path(state, ctx.task_id),
+                system_prompt=system_prompt,
+                tools=tools,
+                tool_names=tool_names,
+                thinking_format=thinking_format,
+                pipeline_id="agent_team",
+                node_id="main_agent",
+                role_id=MAIN_ROLE_ID,
+                run_id=str(metadata.get("run_id") or ""),
+                session_id=str(metadata.get("session_id") or ""),
+                model_name=extract_model_name(llm, profile),
+                max_replay_turns=replay_max_turns,
+                max_replay_tokens=replay_max_tokens,
+                max_replay_turn_step=replay_max_turn_step,
+                summarizer=(
+                    build_summarizer(llm) if (replay_max_turns or replay_max_tokens) else None
+                ),
+            ),
+        ]
+
     # WORKER_TRACE_DIR plumbing: SDK driver puts trace_dir + workflow_id
     # into state.metadata so sub-agents write per-session JSON files.
     worker_trace_dir = metadata.get("worker_trace_dir")
@@ -1284,7 +1376,8 @@ async def main_agent_node(
     else:
         worktree_root = _resolve_worktree_root(state, ctx.task_id)
         main_binds, sub_binds, _outputs_dir = _resolve_sandbox_binds(
-            state, worktree_root,
+            state,
+            worktree_root,
         )
         # bwrap mode: the model sees each bind's host ``src`` as ``/inputs/…``.
         _log_inputs_dir_contents(
@@ -1295,8 +1388,12 @@ async def main_agent_node(
             ]
         )
 
+    subagent_original_question = str(
+        metadata.get("_subagent_original_question") or question
+    ).strip()
+    subagent_prompt_addendum = str(metadata.get("_subagent_prompt_addendum") or "").strip()
     swarm_runtime = SwarmSubagentRuntime(
-        original_question=question,
+        original_question=subagent_original_question,
         trajectory_dir=traj_dir,
         worktree_root=worktree_root,
         sub_binds=sub_binds,
@@ -1305,6 +1402,7 @@ async def main_agent_node(
         sub_prompt_suffix=(
             (sub_fs_note if fs_enabled else "")
             + sub_document_toolchain_note
+            + (f"\n\n{subagent_prompt_addendum}" if subagent_prompt_addendum else "")
         ),
         sub_agent_llm=sub_agent_llm if profile_name else None,
         llm_max_tokens=llm_max_tokens,
@@ -1318,9 +1416,7 @@ async def main_agent_node(
             agent_cfg.get("sub_finalization_reserve_turns", 6) or 6,
         ),
         sub_agent_thinking_in_history=history_policy.thinking_in_history,
-        sub_agent_thinking_history_max_tokens=(
-            history_policy.thinking_history_max_tokens
-        ),
+        sub_agent_thinking_history_max_tokens=(history_policy.thinking_history_max_tokens),
         sub_agent_model_profile=model_profile,
         sub_keep_tool_result=sub_keep_tool_result,
         sub_compact_after_turns=compact_after_turns,
@@ -1353,11 +1449,17 @@ async def main_agent_node(
         stream_repetition_config=stream_repetition_config,
         sub_agent_tool_names=sub_agent_tool_names,
         sub_agent_tools=sub_agent_tools,
+        subagent_observer_factories=tuple(
+            factory
+            for observer in (metadata.get("sdk_extra_observers") or [])
+            if callable(factory := getattr(observer, "for_subagent", None))
+        ),
     )
 
     logger.info(
         "Swarm main agent starting (task_id=%s, tools=%s)",
-        ctx.task_id, [getattr(t, "name", str(t)) for t in tools],
+        ctx.task_id,
+        [getattr(t, "name", str(t)) for t in tools],
     )
 
     bus = registry.get(AgentBus)
@@ -1374,9 +1476,12 @@ async def main_agent_node(
     if sandbox_mode in ("container", "native"):
         main_sb_token = set_task_sandbox(make_current_sandbox(worktree_root))
     elif bwrap_available():
-        main_sb_token = set_task_sandbox(BwrapSandbox(
-            workspace=str(worktree_root), binds=main_binds,
-        ))
+        main_sb_token = set_task_sandbox(
+            BwrapSandbox(
+                workspace=str(worktree_root),
+                binds=main_binds,
+            )
+        )
 
     # Planning Mode (toggle via profile agent.planning_mode, default on). Mark
     # this run as planning so the gates (PlanningGateObserver, finalize_answer)
@@ -1402,9 +1507,7 @@ async def main_agent_node(
         # run then dies with ``status=running`` and no terminal). Mirrors
         # the coordinator node's scope_metadata.
         "sdk_protocol_emitter": metadata.get("sdk_protocol_emitter"),
-        "sdk_protocol_usage_aggregator": metadata.get(
-            "sdk_protocol_usage_aggregator"
-        ),
+        "sdk_protocol_usage_aggregator": metadata.get("sdk_protocol_usage_aggregator"),
         # Local TUI observers consume collect_reports progress snapshots while
         # the coordinator loop is blocked inside the tool. Keep them in the
         # execution scope as well as the loop observer list.
@@ -1422,43 +1525,51 @@ async def main_agent_node(
     }
 
     async def _run_main_loop(
-        *, system_prompt: str, user_message: str, loop_tools: list[Any],
-        loop_observers: list[Any], loop_policy: LoopPolicy, turns: int,
+        *,
+        system_prompt: str,
+        user_message: str,
+        loop_tools: list[Any],
+        loop_observers: list[Any],
+        loop_policy: LoopPolicy,
+        turns: int,
     ) -> AgentLoopResult:
-        return await run_agent_loop(
-            system_prompt=system_prompt,
-            user_message=user_message,
-            llm=llm,
-            tools=loop_tools,
-            config=LoopConfig(
-                max_turns=turns,
-                task_id=ctx.task_id,
-                llm_session_id=llm_session_id(
-                    str(metadata.get("session_id") or bus_task_id),
-                    MAIN_AGENT_ID,
+        return await run_with_member_cleanup(
+            run_agent_loop(
+                system_prompt=system_prompt,
+                user_message=user_message,
+                llm=llm,
+                tools=loop_tools,
+                config=LoopConfig(
+                    max_turns=turns,
+                    task_id=ctx.task_id,
+                    llm_session_id=llm_session_id(
+                        str(metadata.get("session_id") or bus_task_id),
+                        MAIN_AGENT_ID,
+                    ),
+                    role_id=MAIN_ROLE_ID,
+                    no_tool_max_retries=3,
+                    tool_timeout=int(tool_timeout),
+                    llm_timeout=int(llm_timeout),
+                    reasoning_only_timeout_s=reasoning_only_timeout_s,
+                    reasoning_only_max_tokens=reasoning_only_max_tokens,
+                    logical_call_timeout_s=logical_call_timeout_s,
+                    max_completion_tokens=(llm_max_tokens or LoopConfig.max_completion_tokens),
+                    context_token_limit=context_token_limit,
+                    compact_after_turns=compact_after_turns,
+                    keep_recent=main_keep_recent_msgs,
+                    loop_policy=loop_policy,
+                    compactor=main_compactor,
+                    compaction_policy=main_compaction_policy,
+                    tool_result_post_processor=SwarmToolResultPostProcessor(),
                 ),
-                role_id=MAIN_ROLE_ID,
-                no_tool_max_retries=3,
-                tool_timeout=int(tool_timeout),
-                llm_timeout=int(llm_timeout),
-                reasoning_only_timeout_s=reasoning_only_timeout_s,
-                reasoning_only_max_tokens=reasoning_only_max_tokens,
-                logical_call_timeout_s=logical_call_timeout_s,
-                max_completion_tokens=(
-                    llm_max_tokens or LoopConfig.max_completion_tokens
-                ),
-                context_token_limit=context_token_limit,
-                compact_after_turns=compact_after_turns,
-                keep_recent=main_keep_recent_msgs,
-                loop_policy=loop_policy,
-                compactor=main_compactor,
-                compaction_policy=main_compaction_policy,
-                tool_result_post_processor=SwarmToolResultPostProcessor(),
+                model_profile=model_profile,
+                history_policy=history_policy,
+                observers=loop_observers,
+                pause_check=metadata.get("pause_check"),
+                scope_metadata=_scope_meta,
             ),
-            model_profile=model_profile,
-            history_policy=history_policy,
-            observers=loop_observers,
-            scope_metadata=_scope_meta,
+            bus=bus,
+            task_id=bus_task_id,
         )
 
     if planning_mode and fresh_execution_context:
@@ -1468,9 +1579,7 @@ async def main_agent_node(
         # this loop's context and start a fresh execution loop, handing the
         # task board in via the user message (the board lives outside context,
         # so dropping the messages does not lose it).
-        planning_tools = [
-            t for t in tools if is_planning_allowed(getattr(t, "name", ""))
-        ]
+        planning_tools = [t for t in tools if is_planning_allowed(getattr(t, "name", ""))]
         planning_tool_names = [
             getattr(t, "name", "") for t in planning_tools if getattr(t, "name", "")
         ]
@@ -1497,19 +1606,27 @@ async def main_agent_node(
             # the smaller planning_max_turns budget.
             planning_observers.append(DuplicateQueryRollbackObserver())
         if event_store is not None:
-            planning_observers.append(SSEObserver(
-                event_store=event_store, task_id=ctx.task_id,
-                run_id=str(metadata.get("run_id") or ""),
-                run_type=str(metadata.get("run_type") or ""),
-            ))
+            planning_observers.append(
+                SSEObserver(
+                    event_store=event_store,
+                    task_id=ctx.task_id,
+                    run_id=str(metadata.get("run_id") or ""),
+                    run_type=str(metadata.get("run_type") or ""),
+                )
+            )
         await _run_main_loop(
-            system_prompt=_decorate(get_main_system_prompt(
-                date_str, fs_mode=fs_mode, phase="planning",
-                sub_agent_tools=sub_agent_tool_names,
-                mcp_tool_names=mcp_tool_names, mcp_tool_specs=mcp_tool_specs,
-                document_toolchain_note=main_document_toolchain_note,
-            )),
-            user_message=question,
+            system_prompt=_decorate(
+                get_main_system_prompt(
+                    date_str,
+                    fs_mode=fs_mode,
+                    phase="planning",
+                    sub_agent_tools=sub_agent_tool_names,
+                    mcp_tool_names=mcp_tool_names,
+                    mcp_tool_specs=mcp_tool_specs,
+                    document_toolchain_note=main_document_toolchain_note,
+                )
+            ),
+            user_message=model_question,
             loop_tools=planning_tools,
             loop_observers=planning_observers,
             loop_policy=_planning_loop_policy(),
@@ -1519,19 +1636,27 @@ async def main_agent_node(
         # (no-op if already in execution; force_finish_planning self-guards.)
         force_finish_planning(ctx.task_id)
         exec_user = (
-            f"{question}\n\n--- YOUR TASK BOARD (from planning) ---\n"
+            f"{model_question}\n\n--- YOUR TASK BOARD (from planning) ---\n"
             f"{render_board(ctx.task_id, bus_task_id=bus_task_id)}"
         )
-        result = await _run_main_loop(
-            system_prompt=_decorate(get_main_system_prompt(
-                date_str, fs_mode=fs_mode, phase="execution",
+        execution_system_prompt = _decorate(
+            get_main_system_prompt(
+                date_str,
+                fs_mode=fs_mode,
+                phase="execution",
                 sub_agent_tools=sub_agent_tool_names,
-                mcp_tool_names=mcp_tool_names, mcp_tool_specs=mcp_tool_specs,
+                mcp_tool_names=mcp_tool_names,
+                mcp_tool_specs=mcp_tool_specs,
                 document_toolchain_note=main_document_toolchain_note,
-            )),
+            )
+        )
+        result = await _run_main_loop(
+            system_prompt=execution_system_prompt,
             user_message=exec_user,
             loop_tools=tools,
-            loop_observers=observers,
+            loop_observers=_with_conversation_snapshot(
+                observers, system_prompt=execution_system_prompt
+            ),
             loop_policy=_swarm_main_loop_policy(),
             turns=max_turns,
         )
@@ -1540,17 +1665,25 @@ async def main_agent_node(
         # planning_mode off → no gate; planning_mode on + fresh off → planning
         # and execution share this one loop/context (PlanningGateObserver gates
         # tools while planning and auto-finishes at planning_max_turns).
-        result = await _run_main_loop(
-            system_prompt=_decorate(get_main_system_prompt(
-                date_str, fs_mode=fs_mode, planning_mode=planning_mode,
+        combined_system_prompt = _decorate(
+            get_main_system_prompt(
+                date_str,
+                fs_mode=fs_mode,
+                planning_mode=planning_mode,
                 phase="combined",
                 sub_agent_tools=sub_agent_tool_names,
-                mcp_tool_names=mcp_tool_names, mcp_tool_specs=mcp_tool_specs,
+                mcp_tool_names=mcp_tool_names,
+                mcp_tool_specs=mcp_tool_specs,
                 document_toolchain_note=main_document_toolchain_note,
-            )),
-            user_message=question,
+            )
+        )
+        result = await _run_main_loop(
+            system_prompt=combined_system_prompt,
+            user_message=model_question,
             loop_tools=tools,
-            loop_observers=observers,
+            loop_observers=_with_conversation_snapshot(
+                observers, system_prompt=combined_system_prompt
+            ),
             loop_policy=_swarm_main_loop_policy(),
             turns=max_turns,
         )
@@ -1583,28 +1716,35 @@ async def main_agent_node(
     main_assertions = list(result.metadata.get("assertions", []))
 
     clarified_questions = _extract_sub_questions(
-        result.messages, bus, bus_task_id,
+        result.messages,
+        bus,
+        bus_task_id,
     )
     live_followups = _collect_live_followups(observers)
     effective_question = _compose_effective_question(question, live_followups)
 
     logger.info(
-        "Swarm main done (task=%s): sub_ev=%d sub_as=%d main_ev=%d "
-        "main_as=%d sub_questions=%d",
-        ctx.task_id, len(sub_evidence), len(sub_assertions),
-        len(main_evidence), len(main_assertions), len(clarified_questions),
+        "Swarm main done (task=%s): sub_ev=%d sub_as=%d main_ev=%d main_as=%d sub_questions=%d",
+        ctx.task_id,
+        len(sub_evidence),
+        len(sub_assertions),
+        len(main_evidence),
+        len(main_assertions),
+        len(clarified_questions),
     )
 
     try:
         cleaned = await asyncio.wait_for(
-            bus.cleanup_task(bus_task_id), timeout=45.0,
+            bus.cleanup_task(bus_task_id),
+            timeout=45.0,
         )
         if cleaned:
             logger.info("Swarm cleanup: dropped %d session(s)", cleaned)
     except TimeoutError:
         logger.warning(
             "AgentBus cleanup exceeded 45s (task=%s) — detaching stuck "
-            "sessions and proceeding to report", bus_task_id,
+            "sessions and proceeding to report",
+            bus_task_id,
         )
     except Exception as exc:
         logger.warning("AgentBus cleanup failed: %s", exc)
@@ -1618,7 +1758,9 @@ async def main_agent_node(
         sub_assertions.extend(rescued_as)
         logger.info(
             "Swarm rescued post-cleanup (task=%s): ev=%d as=%d",
-            ctx.task_id, len(rescued_ev), len(rescued_as),
+            ctx.task_id,
+            len(rescued_ev),
+            len(rescued_as),
         )
 
     research_notebook: dict[str, Any] = {}
@@ -1638,10 +1780,13 @@ async def main_agent_node(
         logger.warning(
             "swarm main: stripped leaked tool_call XML from final_answer "
             "(stopped_by=%s, before=%d chars, after=%d chars)",
-            result.stopped_by, len(final_text or ""), len(cleaned),
+            result.stopped_by,
+            len(final_text or ""),
+            len(cleaned),
         )
     final_text = cleaned or _minimal_best_effort_answer(
-        question, result.stopped_by,
+        question,
+        result.stopped_by,
     )
     if not cleaned:
         result.metadata["final_answer_source"] = "deterministic_fallback"
@@ -1650,7 +1795,8 @@ async def main_agent_node(
         "not_found"
         if answer_source == "deterministic_fallback"
         else "best_effort"
-        if answer_source in {
+        if answer_source
+        in {
             "clean_context_llm",
             "existing_partial",
             "collected_reports",
@@ -1669,10 +1815,11 @@ async def main_agent_node(
     final_text, url_repair_stats = repair_citation_urls(final_text, merged_evidence)
     if url_repair_stats["repaired"] or url_repair_stats["ambiguous"]:
         logger.info(
-            "agent_team citation URLs: repaired=%d ambiguous=%d unmatched=%d "
-            "checked=%d",
-            url_repair_stats["repaired"], url_repair_stats["ambiguous"],
-            url_repair_stats["unmatched"], url_repair_stats["checked"],
+            "agent_team citation URLs: repaired=%d ambiguous=%d unmatched=%d checked=%d",
+            url_repair_stats["repaired"],
+            url_repair_stats["ambiguous"],
+            url_repair_stats["unmatched"],
+            url_repair_stats["checked"],
         )
 
     if reporter_enabled and result.metadata.get("report_handoff"):
@@ -1693,7 +1840,9 @@ async def main_agent_node(
         from plugins.corpus.ledger import get_run_ledger, publish_boundary
 
         boundary = publish_boundary(
-            get_run_ledger(), final_text=final_text, answer_status=answer_status,
+            get_run_ledger(),
+            final_text=final_text,
+            answer_status=answer_status,
         )
         final_text = boundary["final_text"]
         answer_status = boundary["answer_status"]
@@ -1725,9 +1874,7 @@ async def main_agent_node(
         "live_followups": live_followups,
         "effective_question": effective_question,
         "answer_status": answer_status,
-        "answer_sentinel": (
-            "<ANSWER_NOT_FOUND>" if answer_status == "not_found" else ""
-        ),
+        "answer_sentinel": ("<ANSWER_NOT_FOUND>" if answer_status == "not_found" else ""),
         "final_answer_rescued": bool(
             result.metadata.get("final_answer_rescued", False),
         ),

@@ -41,6 +41,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from plugins.corpus.quote_match import find_quote_matches
 from plugins.corpus.service import get_service
 from plugins.corpus.strategy_schema import (
     HORIZONS,
@@ -167,7 +168,7 @@ def _gate_traceability(
                 )
             )
             continue
-        if quote not in source_text:
+        if next(find_quote_matches(source_text, quote), None) is None:
             problems.append(
                 _problem(
                     GATE_TRACEABILITY,

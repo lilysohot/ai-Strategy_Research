@@ -567,6 +567,10 @@ class SwarmSubagentRuntime:
     # Concrete per-run tool objects. This lets profiles replace an implementation
     # while retaining the public tool name and without mutating the registry.
     sub_agent_tools: list[Any] | None = None
+    # Factories supplied by an external driver for per-member observers. Each
+    # receives the stable sub-agent session name and returns a fresh observer;
+    # Web uses this for source-stamped streaming and approval gates.
+    subagent_observer_factories: tuple[Any, ...] = ()
     # Fail-closed role id for this workflow's sub-agents. Distinct from swarm's
     # ``swarm_sub`` so the two workflows' AgentDefinitions don't overwrite each
     # other when both are dir-scanned into one registry (create_subagent reads
@@ -955,6 +959,10 @@ def _swarm_observers(
         # this session_id; we inject the stop prompt at the next turn boundary.
         StopSignalObserver(session_id=f"{task_id}::{session_name}"),
     ]
+    for factory in runtime.subagent_observer_factories:
+        observer = factory(session_name)
+        if observer is not None:
+            observers.append(observer)
     # A4 消费账本（观测模式）：子代理是取证主体，与主代理共用同一 run 账本；
     # 记录 offered/requested/fetched，loop 结束核验 delivered 并落盘工件。
     from plugins.corpus.ledger import ConsumptionLedgerObserver

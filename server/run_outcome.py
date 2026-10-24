@@ -4,12 +4,12 @@ from __future__ import annotations
 
 
 def interruption_reason(reason: str | None) -> str:
-    """A text-only ``no_tool`` finish is normal, not an interrupted answer.
+    """Recognize natural single-agent and team completion markers.
 
     Keep unknown reasons conservative. Errors are checked separately by the
     caller, so this never promotes a failed worker to a successful run.
     """
-    return "" if reason == "no_tool" else reason or ""
+    return "" if reason in {"no_tool", "final_answer"} else reason or ""
 
 
 def is_legacy_normal_completion(status: str, reason: str | None, error: str | None) -> bool:

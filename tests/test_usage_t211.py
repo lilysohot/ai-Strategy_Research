@@ -202,6 +202,38 @@ def test_usage_for_run_reads_trajectory_file(monkeypatch, tmp_path):
     assert agg["llm_calls"] == 1
 
 
+def test_usage_for_run_aggregates_coordinator_and_all_team_members(monkeypatch, tmp_path):
+    monkeypatch.setattr(get_config(), "runs_root", tmp_path)
+    run_id = "team123"
+    root = tmp_path / run_id / "run" / "agent" / "trajectories"
+    members = root / "subagents"
+    members.mkdir(parents=True)
+    (root / "main_agent.jsonl").write_text(
+        json.dumps(_llm_rec({"prompt_tokens": 10, "completion_tokens": 2})) + "\n",
+        encoding="utf-8",
+    )
+    (members / "evidence_1.t01.jsonl").write_text(
+        json.dumps(_llm_rec({"prompt_tokens": 20, "completion_tokens": 3})) + "\n",
+        encoding="utf-8",
+    )
+    (members / "evidence_2.t01.jsonl").write_text(
+        json.dumps(_llm_rec({"prompt_tokens": 30, "completion_tokens": 4})) + "\n",
+        encoding="utf-8",
+    )
+
+    agg = usage_for_run(run_id)
+
+    assert agg["prompt_tokens"] == 60
+    assert agg["completion_tokens"] == 9
+    assert agg["llm_calls"] == 3
+    assert agg["status"] == "complete"
+    assert set(agg["trajectory_files"]) == {
+        "main_agent.jsonl",
+        "subagents/evidence_1.t01.jsonl",
+        "subagents/evidence_2.t01.jsonl",
+    }
+
+
 # ── persistence ─────────────────────────────────────────────────
 
 
@@ -265,32 +297,6 @@ def isolated_orchestrator(monkeypatch):
     return orch
 
 
-def _spawn_approver(orch, run_id: str, client, headers):
-    """Answer the P3.2 approval gate the way a user would.
-
-    Since the gate landed (P3.2), a worker's ``create_file`` suspends on
-    ``approval_requested`` until a decision arrives — an old e2e that never
-    answers would hang the worker for the gate's 300s timeout. This task
-    subscribes to the run's event fan-out and approves ``once`` via the real
-    API route, so the approval path itself stays exercised.
-    """
-
-    async def run() -> None:
-        q = orch.subscribe(run_id)
-        while True:
-            evt = await asyncio.wait_for(q.get(), timeout=90)
-            if evt and evt.get("type") == "approval_requested":
-                resp = await client.post(
-                    f"/api/runs/{run_id}/approve",
-                    json={"approval_id": evt["approval_id"], "decision": "once"},
-                    headers=headers,
-                )
-                assert resp.status_code == 200, resp.text
-                return
-
-    return asyncio.ensure_future(run())
-
-
 @pytest.mark.asyncio
 async def test_run_is_metered_from_trajectory(mock_llm_two_turns, app_client,
                                               auth_headers, isolated_orchestrator,
@@ -312,9 +318,6 @@ async def test_run_is_metered_from_trajectory(mock_llm_two_turns, app_client,
     )
     assert resp.status_code == 202, resp.text
     run_id = resp.json()["run_id"]
-    approver = _spawn_approver(
-        isolated_orchestrator, run_id, app_client, auth_headers
-    )
 
     # The orchestrator meters once the worker is gone; poll for the counters.
     row = None
@@ -352,6 +355,3 @@ async def test_run_is_metered_from_trajectory(mock_llm_two_turns, app_client,
     # replay" — the point is that the verdict is *there* and machine-readable.
     assert row.usage_json["replay"]["decision"] == "skipped"
     assert row.usage_json["replay"]["reason"] == "no_payload"
-
-    # The approver task has posted its decision and returned.
-    await asyncio.wait_for(approver, timeout=5)

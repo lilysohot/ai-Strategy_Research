@@ -14,13 +14,13 @@ from server.bridge import BridgeObserver
 from server.orchestrator import Orchestrator
 
 
-@pytest.mark.parametrize("reason", ["no_tool", "wall_deadline", "user_stop", "response_truncated"])
+@pytest.mark.parametrize("reason", ["no_tool", "final_answer", "wall_deadline", "user_stop", "response_truncated"])
 async def test_bridge_only_emits_stopped_for_interruptions(reason):
     queue = asyncio.Queue()
     bridge = BridgeObserver(queue)
     await bridge.on_loop_end(SimpleNamespace(stopped_by=reason, final_content="你好"))
     assert bridge.stopped_by == reason  # retain the engine's audit fact
-    if reason == "no_tool":
+    if reason in {"no_tool", "final_answer"}:
         assert queue.empty(), "normal completion must wait for the final run_completed event"
     else:
         assert queue.get_nowait()["type"] == "run_stopped"
@@ -28,6 +28,9 @@ async def test_bridge_only_emits_stopped_for_interruptions(reason):
 
 @pytest.mark.parametrize(("reason", "ok", "error", "status", "tag"), [
     ("no_tool", True, "", "completed", ""),
+    ("final_answer", True, "", "completed", ""),
+    ("final_answer", False, "provider failed", "failed", "error"),
+    ("final_answer", True, "provider failed", "failed", "error"),
     ("no_tool", False, "provider failed", "failed", "error"),
     ("no_tool", True, "provider failed", "failed", "error"),
     ("no_tool", False, "", "failed", "error"),

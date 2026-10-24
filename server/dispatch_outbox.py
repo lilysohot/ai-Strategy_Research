@@ -418,6 +418,7 @@ async def dispatch_once(orch: Any) -> int:
                     user_id=user_id,
                     agent_tools="",
                     prompt_addendum=addendum,
+                    pipeline_id=run.pipeline_id,
                     backfill_turn=False,
                 )
                 await mark_dispatched(session, row_id, claim_version=claim_version)

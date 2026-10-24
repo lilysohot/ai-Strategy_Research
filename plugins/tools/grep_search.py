@@ -165,12 +165,13 @@ async def grep_search(
         if sandbox_available() and not local_allowed:
             sandbox = get_sandbox()
 
-            # Build grep command
+            # Probe one match beyond the requested limit. The old sandbox path
+            # piped directly through ``head`` and returned a plausible-looking
+            # prefix with no indication that more rows existed; a coordinator
+            # could then cite that preview as the complete input.
             cmd = f"grep -rn --include='*' -E {_shell_quote(pattern)} {_shell_quote(path)}"
             if glob:
                 cmd = f"grep -rn --include={_shell_quote(glob)} -E {_shell_quote(pattern)} {_shell_quote(path)}"
-            if context_lines > 0:
-                cmd = cmd.replace("grep -rn", f"grep -rn -C {context_lines}")
             # Same rule as ``_local_grep``: the spill store stays out of ordinary
             # recursive discovery — surfacing it lets the agent re-read bodies
             # compaction just dropped — but an explicit recovery path is an
@@ -179,19 +180,45 @@ async def grep_search(
             # same rule or the store is only hidden when the sandbox is absent.
             if ".spill" not in Path(path).parts:
                 cmd = cmd.replace("grep -rn", "grep -rn --exclude-dir=.spill", 1)
-            cmd += f" | head -n {max_results * (1 + 2 * context_lines + 1)}"
+            probe_cmd = cmd + f" | head -n {max_results + 1}"
 
-            result = sandbox.commands.run(cmd, timeout=30)
-            output = result.stdout or ""
-            if result.exit_code == 1 and not output:
+            result = sandbox.commands.run(probe_cmd, timeout=30)
+            probe_output = result.stdout or ""
+            if result.exit_code == 1 and not probe_output:
                 return f"No matches found for pattern '{pattern}' in {path}"
             if result.exit_code not in (0, 1):
                 # grep returns 1 for no matches, other codes are errors
                 error = result.stderr or "unknown error"
                 return f"Error: grep failed: {error}"
 
-            if not output.strip():
+            if not probe_output.strip():
                 return f"No matches found for pattern '{pattern}' in {path}"
+
+            probe_lines = probe_output.splitlines()
+            truncated = len(probe_lines) > max_results
+            if context_lines > 0:
+                contextual_cmd = cmd.replace(
+                    "grep -rn", f"grep -rn -C {context_lines}", 1,
+                )
+                # N disjoint matches have at most N*(1+2C) context lines and
+                # N-1 ``--`` separators. Keep this second read bounded.
+                line_limit = max_results * (1 + 2 * context_lines) + max_results - 1
+                context_result = sandbox.commands.run(
+                    contextual_cmd + f" | head -n {line_limit}", timeout=30,
+                )
+                if context_result.exit_code not in (0, 1):
+                    error = context_result.stderr or "unknown error"
+                    return f"Error: grep failed: {error}"
+                output = context_result.stdout or ""
+            else:
+                output = "\n".join(probe_lines[:max_results])
+
+            if truncated:
+                output += (
+                    "\n\n[Results truncated: this is an incomplete preview for "
+                    f"max_results={max_results}. Additional matches exist; narrow "
+                    "pattern/path or increase max_results.]"
+                )
 
             # Apply overflow handling (truncate + save full to disk if needed)
             from plugins.tools._overflow import maybe_overflow
