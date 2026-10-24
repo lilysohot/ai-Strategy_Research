@@ -1,8 +1,10 @@
 # 原生正文混合检索正式发布
 
-2026-10-22。用户明确授权“可以直接发到正式库中”后，已将当前已验收策略发布至 `postgres.corpus`，并在本机 8000 服务启用。上下文增强保持后续独立实验，OCR 不在此次发布范围内。
+2026-10-24 更新：用户授权“开始正式发布，结束本轮优化”后，已在本机 8000 API 启用上下文索引、两块正文展示及 search/fetch 新证据契约。发布代码为 `7653973e`，102 个冻结文件哈希保持一致；185 项相关测试和发布检查通过。来源仍为 23 个、原生块及就绪向量覆盖均为 585。本轮未迁移资料、覆盖原文或改写句柄。
 
-## 发布结果
+正式配置及执行证据见 [2026-10-24 发布报告](../.scratch/corpus-production-release-20261024/report.md)。下文数据迁移记录保留 2026-10-22 的历史操作；上下文增强现已启用，OCR 仍不在范围内。已知的目标价片段遗漏和 embedding 超时降级作为本轮已知局限保留，不将本次发布描述为所有问题质量均提高。
+
+## 2026-10-22 首次发布结果（历史）
 
 - 正式活动来源由 8 个增至 23 个，包含已验证的旧资料和新增原生文字研报。原有历史 build 保留，既有原文不覆盖。
 - 23 个活动来源对应 585 个原生正文投影，复用 575 个精确输入匹配的向量。正文及引用坐标仍以 PG 权威单元为准。
@@ -21,16 +23,22 @@
 | `CORPUS_NATIVE_RETRIEVAL` | `release` |
 | `CORPUS_NATIVE_TARGET_DB` | `postgres` |
 | `CORPUS_VECTOR_TARGET_DB` | `postgres` |
-| `CORPUS_NATIVE_INDEX` | `/home/administrator/FrontierAgent/data/corpus-native-release/20261022/manifest.json` |
+| `CORPUS_NATIVE_INDEX` | `/home/administrator/FrontierAgent/data/corpus-native-context/20261023/manifest.json` |
+| `CORPUS_VECTOR_INPUT_VARIANT` | `contextual-note-v1` |
+| `CORPUS_NATIVE_SNIPPET_BLOCKS` | `2` |
 | `CORPUS_VECTOR_TIMEOUT_SECONDS` | `15` |
 | `CORPUS_RETRIEVAL_MODE` | `lexical`，作为关闭 native 开关后的原策略 |
 | `CORPUS_RETRIEVAL_RANKING` | `off`，旧的独立试验排序开关不参与此次发布 |
 
 `CORPUS_NATIVE_RETRIEVAL=release` 优先选择已验证的混合检索链；上表中的 `CORPUS_RETRIEVAL_MODE=lexical` 不表示当前运行关键词检索。实际结果的 `coverage.retrieval_mode` 为 `hybrid`，发生故障才返回 `lexical` 和具体 `fallback_reason`。
 
-三个目标库设置必须匹配实际连接的数据库。正式范围包使用 `native-evidence-release-1` 并带 `release_id`；旧试验包仍只允许 `vector_pilot_*`。业务库 `apodex` 和 PostgreSQL 模板库不能成为 native 检索目标。
+三个目标库设置必须匹配实际连接的数据库。当前范围包使用 `native-evidence-contextual-1`，其向量输入必须匹配 `contextual-note-v1`；原包 `native-evidence-release-1` 保留。旧试验包仍只允许 `vector_pilot_*`。业务库 `apodex` 和 PostgreSQL 模板库不能成为 native 检索目标。
 
-## 本次数据发布操作
+当前 search 仅将 `evidence_contract=native-search-evidence-v1` 的 `evidence_spans` 标记区间作为可引用原文。实际送达且足够支撑结论时无需例行 fetch；缺失限定条件、解释或其他正文时，使用同一命中的 `doc_id` 与对应 `context_locators` 补读。说明仅参与索引，不能当作原文证据。结果压缩仍需保留完整证据映射；摘要不能替代原文凭证。
+
+仅回退本次上下文配置，可运行 `PYTHONPATH=. uv run --no-sync python .scratch/corpus-production-release-20261024/runtime.py rollback`：恢复切换前的三个配置项并正常重启 API，保留本轮代码和资料。脚本要求当前 API 就绪且没有 queued/running 用户任务。此操作未在正式环境来回演练；不是代码版本回退。
+
+## 2026-10-22 数据发布操作（历史）
 
 1. 只读核对正式库和试验库的身份、来源、活动版本、扩展和原生范围包。
 2. 在真实 PG 的回滚事务内预演资料迁移、现有发布检查、版本发布和向量复用；确认当前正文投影与冻结的 585 块一致。
@@ -50,17 +58,19 @@
 ```bash
 uv run python -m plugins.corpus.retrieval.cli native-sync \
   --deployment release \
-  --native-index data/corpus-native-release/20261022/manifest.json \
+  --native-index data/corpus-native-context/20261023/manifest.json \
   --max-requests 0
 ```
 
 `--max-requests 0` 仅检查及复用缓存；需要新向量时显式设置本次请求上限。新来源需要更新允许范围包，不会因入库自动加入当前 23 来源的策略。失败或结果不确定的向量任务不自动重试。
 
+上下文说明绑定 build/chunk。新 build 缺少对应说明时不会借用旧 build 的说明；需要按 [上下文包流程](plan/corpus-contextual-vector-retrieval-pilot.md) 生成说明并构建新的版本化包，再校验切换。仅同步向量不会自动补出说明。
+
 ## 关闭与回退
 
 将 `.env` 中 `CORPUS_NATIVE_RETRIEVAL` 改为 `off` 并重启服务，即恢复原关键词检索路径。保留目标库、范围包及历史数据，已经发出的 native 句柄仍能按原版本回读。关闭功能不撤销本次资料发布。
 
-本次发布目录中的回退助手会先检查没有活动用户任务，再修改开关并正常重启：
+以下是 2026-10-22 的完整 native 功能关闭助手，会先检查没有活动用户任务，再修改开关并正常重启。仅撤销 2026-10-24 上下文配置应使用前文的新助手，不要混用：
 
 ```bash
 PYTHONPATH=. uv run python \
@@ -71,10 +81,10 @@ PYTHONPATH=. uv run python \
 
 ## 验证边界
 
-57 题是开发／回归集。它们的工具输出与冻结结果一致，不能表述为 57 题全部回答正确；旧历史标注缺口和信息不足题的口径没有改变。真实 HTTP 的一次冷／暖查询只证明发布路径可用，不构成全库吞吐或延迟分位数结论。上下文增强、独立题验证和扩大来源范围按后续工作推进。
+57 题是 2026-10-22 的开发／回归集。它们的工具输出与当时冻结结果一致，不能表述为 57 题全部回答正确。2026-10-24 的 185 项测试和两题正式接口探针证明工程链路可用，不构成全库质量、吞吐或延迟分位数结论。独立真实查询盲测及已知回退见本轮发布报告；扩大来源范围不在本次发布中。
 
-## 上下文感知后续执行入口
+## 上下文感知方案与范围
 
 2026-10-22 已将讨论确认的上下文策略与执行安排补入 [混合检索方案 §30](plan/corpus-contextual-vector-retrieval-pilot.md#30-面向研究命题的上下文感知与执行安排)，内容交付配套见 [search/fetch 讨论稿](plan/corpus-search-evidence-delivery-redesign.md)。
 
-后续围绕行业、产品、公司、宏观、实物、执行内容、时间及讨论对象，保留原文中的关系、条件和观点归属；在索引前辅助理解片段，在 search 返回前组装必要原文，缺失时 fetch 补读。首要验证是 search 上下文是否足以支持当前问题，Claims/items 暂缓。该方案尚未实施，不改变本文的正式配置、向量输入或已发布范围。
+截至 2026-10-24，片段说明增强索引、有界原文组装与缺失时 fetch 补读已正式启用。方案中的更广泛关系理解、Claims/items 等未因此全部实现；以当前发布报告中的明确范围为准。本轮优化已经结束。

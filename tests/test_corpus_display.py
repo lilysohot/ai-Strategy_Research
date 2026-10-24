@@ -1,10 +1,62 @@
 """Behavioral regressions for general query-guided raw passage delivery."""
 
+import json
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
 
 from plugins.corpus.retrieval.display import compose, query_terms, select_passages
+
+
+@pytest.mark.parametrize(
+    "case",
+    json.loads((Path(__file__).parent / "fixtures/corpus_display_context.json").read_text()),
+    ids=lambda case: case["id"],
+)
+def test_real_search_preserves_explanation_in_final_payload(case):
+    """Replay verified search blocks through display and the final output budget."""
+    from dataclasses import asdict
+
+    from plugins.corpus.retrieval import native_live
+    from plugins.corpus.retrieval.native import NativeBlock, NativeSpan
+    from plugins.tools.corpus_search import NATIVE_HINT, fit_search_payload
+
+    blocks = [
+        NativeBlock(**{**b, "slices": tuple(NativeSpan(**s) for s in b["slices"])})
+        for b in case["blocks"]
+    ]
+    locators = [
+        native_live.locator_for(b.chunk_id, b.text, [asdict(s) for s in b.slices]) for b in blocks
+    ]
+    snippet = native_live.compose_snippet(
+        blocks, native_live.SNIPPET_BLOCKS, case["query"], tuple(case["lexemes"])
+    )
+    body = json.dumps(
+        {
+            "ok": True,
+            "query": case["query"],
+            "coverage": {"native": {"policy": "native1"}},
+            "hint": NATIVE_HINT,
+            "hits": [
+                {
+                    "doc_id": "cv2:" + blocks[0].build_id,
+                    "locator": locators[0],
+                    "context_locators": locators,
+                    "snippet": snippet,
+                }
+            ],
+        },
+        ensure_ascii=False,
+    )
+    fitted = fit_search_payload(body, 12_000)
+    assert fitted and len(fitted) <= 12_000
+    payload = json.loads(fitted)
+    delivered = "".join(payload["hits"][0]["snippet"].split())
+    assert all(part in delivered for part in case["expected"])
+    assert "核心主题" not in delivered
+    assert payload["hits"][0]["context_locators"] == locators
+    assert "证据足够时无需重复 fetch" in payload["hint"]
 
 
 def block(text, page=1):
@@ -265,3 +317,54 @@ def test_long_sentence_window_does_not_anchor_only_on_early_year():
     assert matched
     assert "钙钛矿封装寿命" in texts(blocks, passages)[0]
     assert not passages[0].complete
+
+
+def mapped_paragraphs(parts, *, gap=False):
+    return SimpleNamespace(
+        text="\n".join(parts),
+        slices=[
+            SimpleNamespace(
+                unit_id=f"unit:{i * (2 if gap else 1) + 1:04d}", start=0, end=len(text), page=1
+            )
+            for i, text in enumerate(parts)
+        ],
+        unit_lengths=tuple(map(len, parts)),
+    )
+
+
+def test_complete_paragraph_keeps_mechanism_without_extra_query_words():
+    parts = ["双轨定价由线上与门店共同执行。", "双轨定价分工如下：一是跟随批价；二是锚定成交价。"]
+    b = mapped_paragraphs(parts)
+    passages, _ = select_passages([b], "双轨定价线上门店", chars_per_block=120)
+    assert all(part in "".join(texts([b], passages)) for part in parts)
+
+
+def test_qualification_across_verified_units_stays_with_paragraph():
+    parts = ["封装寿命提升30%。", "但仅在低湿度条件下成立。"]
+    b = mapped_paragraphs(parts)
+    output = compose([b], "封装寿命", chars_per_block=120)
+    assert "低湿度" in output
+    assert "跨原文单元" in output
+
+
+def test_paragraph_expansion_never_bridges_a_missing_source_unit():
+    parts = ["封装寿命提升30%。", "但仅在低湿度条件下成立。"]
+    b = mapped_paragraphs(parts, gap=True)
+    passages, _ = select_passages([b], "封装寿命低湿度", chars_per_block=600)
+    assert all(not (p.start < len(parts[0]) and p.end > len(parts[0])) for p in passages)
+    assert all(part in "".join(texts([b], passages)) for part in parts)
+
+
+def test_substantive_numbered_prose_is_not_discarded_as_a_directory():
+    answer = "1.封装受水汽影响。\n2.封装需要密封。\n3.寿命须在高湿度下验证。"
+    blocks = [block("封装寿命主题。"), mapped_paragraphs([answer])]
+    passages, _ = select_passages(blocks, "封装寿命高湿度", chars_per_block=120)
+    assert texts(blocks, passages) == [answer]
+
+
+def test_oversized_paragraph_retains_qualifier_and_respects_budget():
+    raw = "背景。" * 50 + "封装寿命提升30%。但仅在低湿度条件下成立。" + "其他背景。" * 50
+    b = mapped_paragraphs([raw])
+    passages, _ = select_passages([b], "封装寿命", chars_per_block=80)
+    assert sum(p.end - p.start for p in passages) <= 80
+    assert "低湿度" in "".join(texts([b], passages))

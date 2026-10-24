@@ -83,6 +83,7 @@ def test_http_source_limit_does_not_expand_native_block_budget(monkeypatch):
         block_limit=20,
         cutoff="2026-10-22",
         unknown_date_sources=[],
+        query_terms=(),
     )
     monkeypatch.setattr(native_live, "configured_seed", lambda target: index)
     monkeypatch.setattr(native_live, "refresh", lambda *args: index)
@@ -368,8 +369,8 @@ def test_compose_snippet_labels_blocks_and_counts_hidden():
     from types import SimpleNamespace
 
     blocks = [
-        SimpleNamespace(text="第一块正文 " * 40, slices=[SimpleNamespace(page=6)]),
-        SimpleNamespace(text="第二块正文 " * 40, slices=[SimpleNamespace(page=13)]),
+        SimpleNamespace(text="第一块正文 " * 140, slices=[SimpleNamespace(page=6)]),
+        SimpleNamespace(text="第二块正文 " * 140, slices=[SimpleNamespace(page=13)]),
         SimpleNamespace(text="第三块正文", slices=[SimpleNamespace(page=19)]),
     ]
     snippet = native_live.compose_snippet(blocks, 2)
@@ -380,7 +381,7 @@ def test_compose_snippet_labels_blocks_and_counts_hidden():
     assert "同源另有1块未展示" in snippet
     # 每段是独立前缀，不应把两块拼成一句连续正文
     assert snippet.count("句内节选，上下文不完整") == 2
-    assert len(snippet) < 550
+    assert len(snippet) < 2 * native_live.SNIPPET_BLOCK_CHARS + 200
 
 
 def test_compose_snippet_single_block_has_no_hidden_note():
@@ -396,8 +397,8 @@ def test_choose_snippet_blocks_uses_remaining_budget(monkeypatch):
     monkeypatch.setenv("CORPUS_NATIVE_SNIPPET_BLOCKS", "auto")
     # 单条命中、20 个块：正文预算充足 → 展示 3 块
     assert native_live.choose_snippet_blocks([20], 20 * 64) == 3
-    # 5 条命中、句柄更贵时只够 2 块
-    assert native_live.choose_snippet_blocks([20] * 5, 7_000) == 2
+    # 更完整的段落预算下，5 条命中、昂贵句柄只能展示 1 块。
+    assert native_live.choose_snippet_blocks([20] * 5, 7_000) == 1
     # 10 条命中×20 块：句柄已吃掉目标预算 → 至少保留 1 块
     assert native_live.choose_snippet_blocks([20] * 10, 200 * 64) == 1
     assert native_live.choose_snippet_blocks([], 0) == native_live.SNIPPET_BLOCKS
@@ -415,10 +416,10 @@ def test_compose_snippet_respects_explicit_limit():
     assert "同源另有2块未展示" in snippet
 
 
-def test_choose_snippet_blocks_defaults_to_one(monkeypatch):
+def test_choose_snippet_blocks_defaults_to_two(monkeypatch):
     monkeypatch.delenv("CORPUS_NATIVE_SNIPPET_BLOCKS", raising=False)
-    assert native_live.choose_snippet_blocks([20], 1_280) == 1
-    assert native_live.SNIPPET_BLOCKS == 1
+    assert native_live.choose_snippet_blocks([20], 1_280) == 2
+    assert native_live.SNIPPET_BLOCKS == 2
 
 
 def test_choose_snippet_blocks_env_override(monkeypatch):

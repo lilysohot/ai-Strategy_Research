@@ -246,3 +246,17 @@ def test_lexical_index_uses_context_text_but_display_keeps_projection(tmp_path):
     assert search_text == TEXT  # snippet/展示仍取原文
     assert tsv_text.endswith(TEXT) and tsv_text != TEXT  # 词法索引吃上下文
     assert index_input(index.chunks[0]) == tsv_text
+
+
+def test_release_tool_path_can_load_contextual_bundle(monkeypatch, tmp_path):
+    """工具链（configured_seed）必须能加载上下文包，否则线上根本用不上。"""
+    from plugins.corpus.retrieval import native_live
+
+    path = bundle(tmp_path, schema_extra={"target_db": "postgres"})
+    monkeypatch.setenv("CORPUS_NATIVE_INDEX", str(path))
+    monkeypatch.setenv("CORPUS_NATIVE_TARGET_DB", "postgres")
+    monkeypatch.setenv("CORPUS_TARGET_DB", "postgres")
+    monkeypatch.setenv("CORPUS_NATIVE_RETRIEVAL", "release")
+    seed = native_live.configured_seed("postgres")
+    assert seed.contextual is True
+    assert seed.manifest["schema"] == "native-evidence-contextual-1"
