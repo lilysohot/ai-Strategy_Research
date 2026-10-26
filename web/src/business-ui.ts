@@ -32,8 +32,6 @@ export interface SessionPlanPreview {
   status: 'draft'
 }
 
-export type SessionPlanInput = Omit<SessionPlanPreview, 'id' | 'sessionId' | 'sessionTitle' | 'status'>
-
 /** 会话规划资金（会话 ↔ 规划资金 1:1）：只保存资金分配，不含价格。 */
 export interface SessionCapitalPlan {
   id: string

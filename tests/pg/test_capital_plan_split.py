@@ -6,7 +6,9 @@
 * 规划资金累加：多次 ``allocations`` 在现值上相加，不互相覆盖；
 * 规划资金重置：显式重设为指定总额，历史版本仍按 ``op_type`` 可追溯；
 * 买卖计划与规划资金一对多：同一规划资金可登记多笔实际买卖价格；
-* 买卖计划登记必须落在既有规划资金下，缺失所属对象按 ``not_found`` 处理。
+* 买卖计划登记必须落在既有规划资金下，缺失所属对象按 ``not_found`` 处理；
+* Run 准入门禁：计划版本不再携带 ``allocated_capital`` 时，会话规划资金注入计划组，
+  ``plan_analysis`` 用途不再因规划资金缺失被拒，且解析值来源标注 ``capital_plan``。
 """
 
 from __future__ import annotations
@@ -18,6 +20,7 @@ import pytest
 from sqlalchemy import select
 
 from server import business_service as biz
+from server import investment_snapshot as snapshots
 from server import store
 
 pytestmark = pytest.mark.pg
@@ -224,3 +227,91 @@ async def test_buy_sell_plan_requires_existing_capital_plan() -> None:
                 },
                 idempotency_key="cp-bs-missing-1",
             )
+
+
+async def _analysis_context(name: str) -> tuple[uuid.UUID, uuid.UUID, uuid.UUID, uuid.UUID]:
+    """绑定账户+计划的完整分析上下文：计划版本不带 ``allocated_capital``。"""
+    async with biz.business_transaction() as session:
+        user_id = await _new_user(session, name)
+        research_id = await _new_research(session, user_id)
+    async with biz.business_transaction() as session:
+        account = await biz.create_account(
+            session,
+            user_id=user_id,
+            name=f"主账户-{name}",
+            base_currency="CNY",
+            declared={
+                "total_capital": {"value": "100000"},
+                "available_capital": {"value": "60000"},
+                "capital_basis": {"value": "total"},
+                "currency": {"value": "CNY"},
+                "as_of": {"value": "2026-10-26T00:00:00Z"},
+            },
+            idempotency_key=f"{name}-acc",
+        )
+        plan = await biz.create_plan(
+            session,
+            user_id=user_id,
+            research_id=research_id,
+            name="计划",
+            declared={
+                "symbol": {"value": "600519.SH"},
+                "market": {"value": "CN"},
+                "direction": {"value": "buy"},
+                "currency": {"value": "CNY"},
+            },
+            idempotency_key=f"{name}-plan",
+        )
+        account_id = uuid.UUID(account.result["account_id"])
+        plan_id = uuid.UUID(plan.result["plan_id"])
+        link = (
+            await session.execute(
+                select(store.ResearchInvestmentLink).where(
+                    store.ResearchInvestmentLink.research_id == research_id
+                )
+            )
+        ).scalar_one_or_none()
+        if link is None:
+            link = store.ResearchInvestmentLink(
+                research_id=research_id, user_id=user_id, account_id=account_id
+            )
+            session.add(link)
+        link.primary_plan_id = plan_id
+    return user_id, research_id, account_id, plan_id
+
+
+async def test_run_gate_accepts_capital_plan_without_plan_allocated_capital() -> None:
+    """计划版本缺 allocated_capital 时，会话规划资金补齐门禁并注入解析值。"""
+    user_id, research_id, account_id, plan_id = await _analysis_context("cp-gate")
+    await _create_capital(user_id, research_id, "20000", "cp-gate-capital")
+
+    spec = snapshots.InvestmentInputSpec(
+        use_case="plan_analysis",
+        account=snapshots.ObjectRef(account_id, 1),
+        plan=snapshots.ObjectRef(plan_id, 1),
+    )
+    async with biz.business_transaction() as session:
+        resolution = await snapshots.resolve_for_run(
+            session, user_id=user_id, research_id=research_id, spec=spec
+        )
+    assert resolution.missing == {}, resolution.missing
+    entry = resolution.values["plan.allocated_capital"]
+    assert Decimal(entry["value"]) == Decimal("20000")
+    assert entry["source"]["kind"] == "capital_plan"
+    assert entry["currency"] == "CNY"
+
+
+async def test_run_gate_still_fails_without_capital_plan() -> None:
+    """没有会话规划资金时，门禁维持原样报缺 ``plan.allocated_capital``。"""
+    user_id, research_id, account_id, plan_id = await _analysis_context("cp-gate-none")
+    spec = snapshots.InvestmentInputSpec(
+        use_case="plan_analysis",
+        account=snapshots.ObjectRef(account_id, 1),
+        plan=snapshots.ObjectRef(plan_id, 1),
+    )
+    with pytest.raises(biz.PurposeRequirementError) as err:
+        async with biz.business_transaction() as session:
+            await snapshots.resolve_for_run(
+                session, user_id=user_id, research_id=research_id, spec=spec
+            )
+    assert "plan.allocated_capital" in err.value.fields

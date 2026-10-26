@@ -2,12 +2,12 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-import { accounts as accountsApi, link as linkApi, runs as runsApi } from '@/api'
+import { accounts as accountsApi, link as linkApi, runs as runsApi, trades as tradesApi } from '@/api'
 import { ApiError } from '@/api/client'
 import type { SessionPlanPreview } from '@/business-ui'
 import { useBusinessStore } from '@/stores/business'
 import { useSessionsStore } from '@/stores/sessions'
-import type { Account } from '@/types'
+import type { Account, Trade } from '@/types'
 import {
   countDraftErrors,
   type BusinessDraft,
@@ -384,6 +384,95 @@ onMounted(async () => {
 })
 onBeforeUnmount(() => window.removeEventListener('beforeunload', beforeUnload))
 defineExpose({ clearDraft })
+
+// ——— 实际记录（成交）：列表与更正 ———
+// 更正遵循 AC-22：新行生效、旧行保留并标记 corrected；不覆盖、不删除。
+const tradeRows = ref<Trade[]>([])
+const loadingTrades = ref(false)
+const tradesError = ref('')
+const correctingId = ref<string | null>(null)
+const correctBusy = ref(false)
+const correctError = ref('')
+const correction = reactive({
+  side: 'buy' as 'buy' | 'sell',
+  quantity: '',
+  price: '',
+  currency: 'CNY',
+  tradedAt: '',
+  fees: '',
+})
+
+watch(section, (value) => {
+  if (value === 'records') void loadTrades()
+})
+
+async function loadTrades(): Promise<void> {
+  loadingTrades.value = true
+  tradesError.value = ''
+  try {
+    const res = await tradesApi.list({ limit: 100 })
+    tradeRows.value = res.trades
+  } catch (err) {
+    tradesError.value = err instanceof Error ? err.message : '加载实际记录失败'
+  } finally {
+    loadingTrades.value = false
+  }
+}
+
+function startCorrect(trade: Trade): void {
+  correctError.value = ''
+  correctingId.value = trade.id
+  Object.assign(correction, {
+    side: trade.side === 'sell' ? 'sell' : 'buy',
+    quantity: trade.quantity ?? '',
+    price: trade.price ?? '',
+    currency: trade.currency || 'CNY',
+    tradedAt: trade.traded_at ?? '',
+    fees: trade.fees ?? '',
+  })
+}
+
+function cancelCorrect(): void {
+  correctingId.value = null
+  correctError.value = ''
+}
+
+function decimalTextOk(value: string): boolean {
+  return value.trim() !== '' && /^(?:0|[1-9]\d*)(?:\.\d+)?$/.test(value.trim())
+}
+
+async function submitCorrection(): Promise<void> {
+  if (correctBusy.value || !correctingId.value) return
+  correctError.value = ''
+  if (!decimalTextOk(correction.price)) {
+    correctError.value = '请填写非负十进制成交价'
+    return
+  }
+  if (!decimalTextOk(correction.quantity)) {
+    correctError.value = '请填写非负十进制成交量'
+    return
+  }
+  correctBusy.value = true
+  try {
+    await tradesApi.correct(correctingId.value, {
+      declared: {
+        side: { value: correction.side },
+        quantity: { value: correction.quantity.trim() },
+        price: { value: correction.price.trim() },
+        currency: { value: correction.currency.trim() },
+        ...(correction.tradedAt.trim() ? { traded_at: { value: correction.tradedAt.trim() } } : {}),
+        ...(correction.fees.trim() ? { fees: { value: correction.fees.trim() } } : {}),
+      },
+    }, `trade.correct:${crypto.randomUUID()}`)
+    ElMessage.success('成交已更正：原记录保留，新记录生效')
+    cancelCorrect()
+    await loadTrades()
+  } catch (err) {
+    correctError.value = err instanceof Error ? err.message : '更正失败，请重试'
+  } finally {
+    correctBusy.value = false
+  }
+}
 </script>
 
 <template>
@@ -537,14 +626,98 @@ defineExpose({ clearDraft })
         </div>
       </section>
 
-      <section v-else class="form-section">
+      <section v-else class="form-section" v-loading="loadingTrades">
         <header class="section-heading">
           <div>
             <span>实际记录</span>
-            <h3>计划、成交与持仓互不冒充</h3>
+            <h3>成交记录与更正</h3>
           </div>
+          <span class="section-note">价格唯一真源 · 更正保留前值</span>
         </header>
-        <p class="record-placeholder">成交登记与更正将在后续按同一版本契约接入；本页不根据持仓反推成交。</p>
+
+        <div v-if="tradeRows.length" class="trade-records">
+          <article
+            v-for="trade in tradeRows"
+            :key="trade.id"
+            class="trade-record-row"
+            :class="{ 'is-corrected': trade.status !== 'active' }"
+          >
+            <div class="trade-record-identity">
+              <strong>{{ trade.symbol }} · {{ trade.side === 'buy' ? '买入' : '卖出' }}</strong>
+              <span>
+                {{ trade.quantity ?? '—' }} @ {{ trade.price ?? '—' }} {{ trade.currency }}
+                <template v-if="trade.fees"> · 费用 {{ trade.fees }}</template>
+              </span>
+            </div>
+            <span class="trade-record-time">{{ trade.traded_at || '未填时间' }}</span>
+            <span v-if="trade.status === 'active'" class="trade-status ok">有效</span>
+            <span v-else class="trade-status">已更正</span>
+            <el-button
+              v-if="trade.status === 'active' && correctingId !== trade.id"
+              size="small"
+              :disabled="correctBusy"
+              @click="startCorrect(trade)"
+            >
+              更正
+            </el-button>
+            <span v-else-if="trade.status !== 'active'" class="trade-record-note">被更正记录替代，原值保留</span>
+          </article>
+        </div>
+        <div v-else-if="!loadingTrades" class="record-placeholder">
+          还没有成交记录。在研究会话的「会话资金」里保存实际买卖价格后会自动登记到这里。
+        </div>
+        <p v-if="tradesError" class="record-placeholder" role="alert">{{ tradesError }}</p>
+
+        <div v-if="correctingId" class="correction-form">
+          <header>
+            <h4>更正成交</h4>
+            <span>新记录生效，原记录保留为“已更正”</span>
+          </header>
+          <div class="correction-grid">
+            <label class="correction-field">
+              <span>方向</span>
+              <el-segmented
+                v-model="correction.side"
+                :options="[{ label: '买入', value: 'buy' }, { label: '卖出', value: 'sell' }]"
+              />
+            </label>
+            <label class="correction-field">
+              <span>数量 <em>必填</em></span>
+              <el-input v-model="correction.quantity" inputmode="decimal" placeholder="股数/份数" />
+            </label>
+            <label class="correction-field">
+              <span>实际成交价 <em>必填</em></span>
+              <el-input v-model="correction.price" inputmode="decimal" placeholder="不得用现价或建议价代替" />
+            </label>
+            <label class="correction-field">
+              <span>币种</span>
+              <el-select v-model="correction.currency">
+                <el-option label="人民币 CNY" value="CNY" />
+                <el-option label="港币 HKD" value="HKD" />
+                <el-option label="美元 USD" value="USD" />
+              </el-select>
+            </label>
+            <label class="correction-field">
+              <span>成交时间</span>
+              <el-date-picker
+                v-model="correction.tradedAt"
+                type="datetime"
+                format="YYYY-MM-DD HH:mm:ss"
+                value-format="YYYY-MM-DDTHH:mm:ssZ"
+                placeholder="可留空"
+              />
+            </label>
+            <label class="correction-field">
+              <span>费用（可选）</span>
+              <el-input v-model="correction.fees" inputmode="decimal" placeholder="可留空" />
+            </label>
+          </div>
+          <p v-if="correctError" class="record-placeholder" role="alert">{{ correctError }}</p>
+          <div class="correction-actions">
+            <el-button :disabled="correctBusy" @click="cancelCorrect">取消</el-button>
+            <el-button type="primary" :loading="correctBusy" @click="submitCorrection">提交更正</el-button>
+          </div>
+        </div>
       </section>
     </main>
 
@@ -622,6 +795,26 @@ defineExpose({ clearDraft })
 .field i { color: var(--muted); font-size: 11px; font-style: normal; font-weight: 400; }
 .field small { color: var(--danger); font-size: 12px; }
 .form-section { padding: 26px 0 10px; }
+.trade-records { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+.trade-record-row { display: grid; grid-template-columns: minmax(0, 1.4fr) auto auto auto; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.trade-record-row.is-corrected { opacity: .55; }
+.trade-record-identity { display: flex; min-width: 0; flex-direction: column; }
+.trade-record-identity strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trade-record-identity span, .trade-record-time, .trade-record-note, .trade-status { color: var(--muted); font-size: 12px; }
+.trade-status.ok { color: var(--accent); font-weight: 600; }
+.correction-form { margin-top: 22px; padding: 18px; border: 1px solid var(--line-strong); border-radius: 10px; }
+.correction-form header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+.correction-form h4 { margin: 0; font-size: 15px; }
+.correction-form header span { color: var(--muted); font-size: 12px; }
+.correction-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 18px; }
+.correction-field { display: flex; min-width: 0; flex-direction: column; gap: 7px; }
+.correction-field > span { font-size: 13px; font-weight: 600; }
+.correction-field em { color: var(--warning); font-style: normal; }
+.correction-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+@media (max-width: 720px) {
+  .trade-record-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .correction-grid { grid-template-columns: 1fr; }
+}
 .section-heading { display: flex; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
 .section-heading h3 { margin: 3px 0 0; font-size: 20px; }
 .section-note { color: var(--muted); letter-spacing: .03em; }

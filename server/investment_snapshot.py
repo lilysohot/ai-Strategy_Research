@@ -337,6 +337,46 @@ async def resolve_for_run(
         }
         add(group, values, pending)
 
+    # 规划资金已从计划拆分到 ``capital_plans``（会话 1:1，累加/重置）：用途门禁仍以
+    # ``plan.allocated_capital`` 表达"本标的规划资金"，这里把会话规划资金注入计划组，
+    # 满足门禁并随快照冻结，下游仓位分析据此取数。显式 declared 优先（见下方合并）。
+    if "plan" in entries and "allocated_capital" not in entries["plan"]:
+        capital = (
+            await session.execute(
+                select(store.CapitalPlan).where(
+                    store.CapitalPlan.research_id == research_id,
+                    store.CapitalPlan.user_id == user_id,
+                )
+            )
+        ).scalar_one_or_none()
+        if capital is not None and capital.allocated_capital is not None:
+            entries["plan"]["allocated_capital"] = _entry(
+                capital.allocated_capital,
+                status="user_provided",
+                source={
+                    "kind": "capital_plan",
+                    "id": str(capital.id),
+                    "revision": capital.current_revision,
+                },
+                currency=capital.currency,
+                as_of=capital.as_of,
+            )
+            groups["plan"] = biz.AdmissionResult(
+                values={
+                    **groups["plan"].values,
+                    "allocated_capital": biz.AdmittedValue(
+                        value=capital.allocated_capital, status="user_provided"
+                    ),
+                },
+                # 规划资金已由会话资金补齐：把该字段从待补充清单里移除，
+                # 否则 incomplete 会覆盖注入值，门禁依旧被拒。
+                incomplete={
+                    name: reason
+                    for name, reason in groups["plan"].incomplete.items()
+                    if name != "allocated_capital"
+                },
+            )
+
     for group, ref, model, columns in (
         (
             "trade",

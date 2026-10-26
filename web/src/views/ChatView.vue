@@ -6,7 +6,6 @@ import { onBeforeRouteLeave } from 'vue-router'
 import { artifacts as artifactsApi, runs as runsApi, monitor as monitorApi } from '@/api'
 import { ApiError } from '@/api/client'
 import type {
-  SessionPlanInput,
   SessionPlanPreview,
   WorkspaceArea,
   WorkspaceTarget,
@@ -46,7 +45,6 @@ import {
 } from '@/utils/chat'
 import { summarizeDiff } from '@/utils/diff'
 import { formatElapsed } from '@/utils/statusbar'
-import { createPlanWriter } from '@/utils/saveResearchPlan'
 import RunDetailView from '@/views/RunDetailView.vue'
 
 const sessions = useSessionsStore()
@@ -341,9 +339,6 @@ const canvasAnswer = computed(() =>
 )
 
 const canvasTitle = computed(() => sessions.activeSession?.title || '本次研究')
-const activeSessionPlanCount = computed(
-  () => sessionPlans.value.filter((plan) => plan.sessionId === sessions.activeId).length,
-)
 
 const diffFiles = ref<DiffFile[]>([])
 const diffSummary = computed(() => summarizeDiff(diffFiles.value))
@@ -399,10 +394,6 @@ import { dialogCoversRequest } from '@/utils/inputRequest'
 const inputDialogOpen = ref(false)
 const inputDialogRequest = ref<InputRequest | null>(null)
 const preparingPostRunInput = ref(false)
-const pendingPlanContinuation = ref<{ researchId: string; runId: string } | null>(null)
-watch(sessionPlanOpen, (open) => {
-  if (!open) pendingPlanContinuation.value = null
-})
 const promptedRequestIds = new Set<string>()
 
 async function maybeOpenInputRequest(): Promise<void> {
@@ -446,13 +437,10 @@ async function preparePostRunInput(): Promise<void> {
   if (!runId || !researchId || preparingPostRunInput.value) return
   preparingPostRunInput.value = true
   try {
-    // A plan supplies the security/market/direction portion of plan_analysis.
-    // Ask the user to create it through the existing structured form before
-    // creating a request that this focused dialog could never complete.
+    // 会话计划创建入口已移除：没有主计划时补数请求无法落地到计划对象，
+    // 这里明确告知而不是生成一个回答必然失败的请求。
     if (!business.link?.primary_plan_id) {
-      pendingPlanContinuation.value = { researchId, runId }
-      sessionPlanOpen.value = true
-      ElMessage.info('请先创建并选择当前会话的主计划，再补充资金后继续分析')
+      ElMessage.info('当前会话尚未绑定计划，无法按计划补数；请先在资金模块维护规划资金与实际买卖价格')
       return
     }
     const prepared = await inputRequestsApi.prepareAfterRun(
@@ -677,33 +665,6 @@ async function onNavigate(area: WorkspaceArea, target?: WorkspaceTarget): Promis
   if (area === 'research') void composerRef.value?.focus()
 }
 
-const planWriter = createPlanWriter()
-
-async function saveSessionPlan(input: SessionPlanInput): Promise<void> {
-  const sessionId = sessions.activeId
-  if (!sessionId) {
-    throw new Error('请先选择研究会话')
-  }
-
-  await planWriter.save(sessionId, input)
-  // Only a confirmed save clears the dialog. Failures propagate to its inline error.
-  if (sessions.activeId !== sessionId) return
-  await Promise.all([
-    business.loadPlans(sessionId),
-    business.loadLink(sessionId),
-    business.loadCapitalPlan(sessionId),
-  ])
-  planWriter.reset()
-  ElMessage.success(input.isPrimary ? '计划已创建并设为本会话主计划' : '计划已添加到当前会话')
-  const continuation = pendingPlanContinuation.value
-  if (input.isPrimary && continuation?.researchId === sessionId && continuation.runId === runStream.runId) {
-    sessionPlanOpen.value = false
-    pendingPlanContinuation.value = null
-    // Let the successful save settle before opening the next form.
-    void nextTick().then(() => preparePostRunInput())
-  }
-}
-
 const lastSessionKey = computed(
   () => `frontier-agent.lastSession:${authStore.user?.id ?? 'anon'}`,
 )
@@ -839,8 +800,7 @@ watch(
             :disabled="!sessions.activeId"
             @click="sessionPlanOpen = true"
           >
-            会话计划
-            <span v-if="activeSessionPlanCount" class="plan-count">{{ activeSessionPlanCount }}</span>
+            会话资金
           </el-button>
           <el-button class="canvas-toggle" plain size="small" @click="canvasFocus = !canvasFocus">
             {{ canvasFocus ? '回到对话' : '打开画布' }}
@@ -977,7 +937,6 @@ watch(
         :session-id="sessions.activeId"
         :session-title="sessions.activeSession?.title || '未命名研究'"
         :plans="sessionPlans"
-        :save-plan="saveSessionPlan"
         @dirty-change="planDirty = $event"
         @run-submitted="onPlanRunSubmitted"
       />
@@ -1073,7 +1032,6 @@ watch(
 
 .thread-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
 .thread-actions :deep(.el-button + .el-button) { margin-left: 0; }
-.plan-count { display: inline-grid; place-items: center; min-width: 18px; height: 18px; margin-left: 5px; border-radius: 9px; background: var(--accent); color: var(--accent-text); font-size: 10px; }
 
 .run-error-banner {
   border-radius: 0;
