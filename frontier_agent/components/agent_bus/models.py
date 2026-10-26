@@ -137,8 +137,11 @@ class SessionWaitOutcome:
     """
 
     result: tuple[str, SubAgentResult] | None
-    reason: Literal["ready", "timeout", "no_pending", "unpublished"]
+    reason: Literal[
+        "ready", "timeout", "no_pending", "unpublished", "progress_alert"
+    ]
     elapsed_s: float
+    alert: dict[str, str] | None = None
 
 
 @dataclass(slots=True)

@@ -47,6 +47,27 @@ async def test_hint_fires_on_the_third_identical_turn() -> None:
 
 
 @pytest.mark.asyncio
+async def test_hint_publishes_actionable_alert() -> None:
+    alerts: list[dict] = []
+    guard = RepetitionGuard(on_alert=alerts.append)
+
+    for turn in (1, 2, 3):
+        await guard.on_turn_end(_ctx(turn, [_fetch()]))
+
+    assert alerts == [{
+        "kind": "repeated_tool_calls",
+        "tools": "web_fetch",
+        "repetitions": 3,
+        "turn": 3,
+        "action": "hint",
+        "detail": (
+            "web_fetch repeated 3 consecutive turns with identical arguments; "
+            "guard action=hint"
+        ),
+    }]
+
+
+@pytest.mark.asyncio
 async def test_hint_fires_once_per_streak_not_every_later_turn() -> None:
     guard = RepetitionGuard()
 

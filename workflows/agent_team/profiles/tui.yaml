@@ -94,6 +94,7 @@ agent:
   main_agent_tools: [create_subagent, assign_task, collect_reports, stop_subagent, add_task, update_task, grep_search, glob_search]
   sub_agent_tools: [web_search, web_fetch, publish_handoff, submit_report, bash, download_file, grep_search, glob_search, read_file, create_file, recover_result]
   # Warn/escalate when one host repeatedly fails within this many network turns.
-  sub_stuck_target_hint_after: 5
-  sub_stuck_target_escalate_after: 8
-  sub_stuck_target_window: 15
+  # Wake the coordinator early enough to redirect or stop a stalled member.
+  sub_stuck_target_hint_after: 3
+  sub_stuck_target_escalate_after: 5
+  sub_stuck_target_window: 12

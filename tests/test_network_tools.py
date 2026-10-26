@@ -18,6 +18,53 @@ def test_raw_web_search_remains_available_to_resource_manager() -> None:
 
 
 @pytest.mark.asyncio
+async def test_web_search_exposes_provider_failure_as_structured_error(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    web_search_module = importlib.import_module("plugins.tools.web_search")
+
+    async def failed_search(*args: object, **kwargs: object) -> dict:
+        return web_search_module._error_response("failed", "provider timed out")
+
+    monkeypatch.setattr(web_search_module, "raw_web_search", failed_search)
+
+    result = await web_search_module.web_search.ainvoke({"q": "test query"})
+
+    assert isinstance(result, ToolOutcome) and result.is_error
+    payload = json.loads(result.result)
+    assert payload == {
+        "ok": False,
+        "status": "failed",
+        "source": "test query",
+        "content": "",
+        "detail": "provider timed out",
+    }
+
+
+@pytest.mark.asyncio
+async def test_parallel_web_search_keeps_empty_results_distinct_from_failure(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    web_search_module = importlib.import_module("plugins.tools.web_search")
+
+    async def mixed_search(query: str, *args: object, **kwargs: object) -> dict:
+        if query == "failed":
+            return web_search_module._error_response("failed", "HTTP 429")
+        return {}
+
+    monkeypatch.setattr(web_search_module, "raw_web_search", mixed_search)
+
+    result = await web_search_module.web_search.ainvoke({"q": ["empty", "failed"]})
+
+    assert isinstance(result, ToolOutcome) and result.is_error
+    payload = json.loads(result.result)
+    assert payload["status"] == "partial"
+    assert payload["items"][0]["ok"] is True
+    assert payload["items"][0]["content"].endswith("No results found.")
+    assert payload["items"][1]["status"] == "failed"
+
+
+@pytest.mark.asyncio
 async def test_download_file_executes_bundled_runner(monkeypatch: pytest.MonkeyPatch) -> None:
     captured: dict[str, object] = {}
     sandbox = object()

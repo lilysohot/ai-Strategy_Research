@@ -40,8 +40,10 @@ IS the run.
 from __future__ import annotations
 
 import hashlib
+import inspect
 import json
 import logging
+from collections.abc import Callable
 from typing import Any
 
 from frontier_agent.core.loop_types import (
@@ -92,7 +94,13 @@ class RepetitionGuard(BaseObserver):
 
     critical: bool = True
 
-    def __init__(self, threshold: int = 3, *, stop_after: int = 0) -> None:
+    def __init__(
+        self,
+        threshold: int = 3,
+        *,
+        stop_after: int = 0,
+        on_alert: Callable[[dict[str, Any]], Any] | None = None,
+    ) -> None:
         # 2 is the floor: a threshold of 1 would fire on every tool call.
         self.threshold = max(2, int(threshold))
         # 0 disables stopping. Anything positive is raised past ``threshold``
@@ -101,6 +109,7 @@ class RepetitionGuard(BaseObserver):
         self.stop_after = (
             max(self.threshold + 1, int(stop_after)) if stop_after else 0
         )
+        self.on_alert = on_alert
         self._last_signature = ""
         self._streak = 0
 
@@ -137,6 +146,7 @@ class RepetitionGuard(BaseObserver):
                 "arguments — stopping the loop.",
                 ctx.turn, names, self._streak,
             )
+            await self._publish_alert(names, ctx.turn, "stop")
             return Intervention(stop_reason=REPEATED_TOOL_CALLS_STOP_REASON)
 
         # Re-hint every ``threshold`` turns rather than once per streak: a
@@ -150,9 +160,31 @@ class RepetitionGuard(BaseObserver):
             "arguments — injecting a corrective hint.",
             ctx.turn, names, self._streak,
         )
+        await self._publish_alert(names, ctx.turn, "hint")
         return Intervention(inject_messages=[
             f"You have now called {names} {self._streak} times in a row "
             "with identical arguments, and the results are not changing. "
             "Repeating it again will not help. Change the arguments, use a "
             "different tool, or work with what you already have."
         ])
+
+    async def _publish_alert(self, names: str, turn: int, action: str) -> None:
+        if self.on_alert is None:
+            return
+        payload = {
+            "kind": "repeated_tool_calls",
+            "tools": names,
+            "repetitions": self._streak,
+            "turn": turn,
+            "action": action,
+            "detail": (
+                f"{names} repeated {self._streak} consecutive turns with "
+                f"identical arguments; guard action={action}"
+            ),
+        }
+        try:
+            result = self.on_alert(payload)
+            if inspect.isawaitable(result):
+                await result
+        except Exception:
+            logger.debug("repetition alert callback failed", exc_info=True)

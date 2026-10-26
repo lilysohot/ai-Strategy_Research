@@ -330,6 +330,20 @@ async def collect_reports(timeout: int = 1800) -> str:
                 extra_status=status,
                 track_churn=False,
             )
+        if wait_outcome.reason == "progress_alert":
+            alert = wait_outcome.alert or {}
+            agent = alert.get("agent") or "unknown member"
+            detail = alert.get("detail") or "actionable member stall detected"
+            return _status_notice(
+                scope,
+                "member_progress_alert",
+                f"Member {agent!r} raised an actionable progress alert: {detail}. "
+                "The member is still running. Decide now whether to stop it and "
+                "salvage completed observations, redirect it with a focused task, "
+                "or accept the limitation; do not blindly resume a long wait.",
+                extra_status=status,
+                track_churn=False,
+            )
         return _status_notice(
             scope, "wait_timeout",
             f"No completion arrived during an actual {elapsed:.1f}s wait "

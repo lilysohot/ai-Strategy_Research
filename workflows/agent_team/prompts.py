@@ -422,10 +422,13 @@ exactly and do NOT append a References section.**
 Create a `final_verifier` and include the original question + your \
 complete draft answer (copy the full text into the task prompt). For a task \
 that requires files under `/outputs`, do this verification BEFORE assigning \
-the final publisher. If the wall-time warning or finalization reserve has \
-already started, skip a new verifier and publish the best verified reports \
-immediately. A publishing assignment starts a one-way publication phase: no \
-new research or verifier may compete with its remaining budget.
+the final publisher. The workflow reserves the post-research verification / \
+publication window for this Step 5 verifier, so dispatch it as soon as the \
+draft exists; do not spend that slice on more exploratory research. If the \
+finalization reserve has already started, skip a new verifier and publish the \
+best verified reports immediately. A publishing assignment starts a one-way \
+publication phase: no new research or verifier may compete with its remaining \
+budget.
 
 ### Step 6: Revise & Submit
 Fix any issues the verifier identifies. Ensure every sub-question is \
@@ -549,11 +552,16 @@ Sub-agents run **asynchronously**. Reports reach you two ways:
    report injected before your next turn.
 2. **Explicit wait** — agents still running at the start of your next turn do
    NOT appear on their own; call `collect_reports(timeout=1800)` to block-wait
-   (up to 30 min) for the next completion and drain any others that finished.
+   for the next completion and drain any others that finished. The tool clamps
+   this maximum to the current workflow phase and returns early when a member
+   guard reports an actionable stall.
 
 Call `collect_reports` whenever you need running agents' results to proceed —
-polling is fine. Short timeouts (<300s) are a poll, not a wait; hard questions
-routinely take 3-10 minutes, so default to `timeout=1800`.
+one blocking call is enough; do not repeatedly poll. On
+`[status] member_progress_alert`, immediately choose one action: stop the member
+and salvage its completed observations, redirect it with one focused follow-up,
+or accept the access limitation. Blindly starting another long wait consumes
+the verification and synthesis reserve.
 
 Each `<report>` carries a `status`: `complete` (final answer), `incomplete`
 (out of turns / budget, or stopped early), or `failed` (cancelled / crashed).
@@ -562,6 +570,13 @@ answer — close the gap with a focused follow-up, or state the uncertainty when
 synthesizing. Each fan-in batch ends with a `[status] …` line summarising what
 is still `running` / `paused` / `all_collected`; `incomplete_this_batch=N`
 flags N partial reports in that batch.
+
+Every member has a handoff obligation stronger than optional completeness. If
+access failures repeat, a guard warns you, or the research window is closing,
+stop opening new retrieval routes and call `submit_report` with the useful
+findings already obtained plus explicit `Unresolved` and `Conflicts` sections.
+An honest partial report is valuable; unsubmitted private work can otherwise be
+lost when the member is cancelled inside its next slow operation.
 """
 
 
@@ -705,7 +720,8 @@ the one that ENDS your run:
 or candidate file from your private `/workspace` into the controlled shared \
 handoff store. Preserve the returned `/outputs/scratch/handoffs/...` ref exactly.
 - `submit_report(content=..., confidence=..., attachments=[...])`: **Terminal.** Call it once, \
-when every aspect is settled, with your complete report (the format below) as \
+when the requested core is settled OR further retrieval is no longer producing \
+new evidence within the available phase, with your best report (the format below) as \
 `content`. Report text is limited to 24,000 characters; keep conclusions and \
 critical evidence inline, and pass any `publish_handoff` refs in `attachments`. \
 The loop exits after this call — make no further tool calls.

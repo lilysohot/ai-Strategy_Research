@@ -5,9 +5,11 @@ successful fetch clears the host's failure history.
 """
 from __future__ import annotations
 
+import inspect
 import logging
 import re
 from collections import Counter, deque
+from collections.abc import Callable
 from typing import Any
 
 from frontier_agent.core.loop_types import (
@@ -317,10 +319,12 @@ class StuckTargetGuard(BaseObserver):
         hint_after: int = 6,
         escalate_after: int = 10,
         window: int = 20,
+        on_alert: Callable[[dict[str, Any]], Any] | None = None,
     ) -> None:
         self.hint_after = max(2, int(hint_after))
         self.escalate_after = max(self.hint_after + 1, int(escalate_after))
         self.window = max(self.escalate_after, int(window))
+        self.on_alert = on_alert
         # Per network turn: (hard failures, soft failures) by host.
         self._recent: deque[tuple[frozenset[str], frozenset[str]]] = deque(
             maxlen=self.window,
@@ -430,6 +434,7 @@ class StuckTargetGuard(BaseObserver):
                 self._fired.add((host, "block"))
                 self._blocked_hosts.add(host)
                 self._log(seen, host, ctx.turn, "quarantining")
+                await self._publish_alert(host, seen, ctx.turn, "block")
                 return Intervention(
                     inject_messages=[self._message(host, seen, "block")],
                 )
@@ -437,10 +442,34 @@ class StuckTargetGuard(BaseObserver):
             if seen >= self.hint_after and (host, "hint") not in self._fired:
                 self._fired.add((host, "hint"))
                 self._log(seen, host, ctx.turn, "nudging")
+                await self._publish_alert(host, seen, ctx.turn, "hint")
                 return Intervention(
                     inject_messages=[self._message(host, seen, "hint")],
                 )
         return None
+
+    async def _publish_alert(
+        self, host: str, seen: int, turn: int, kind: str,
+    ) -> None:
+        if self.on_alert is None:
+            return
+        payload = {
+            "kind": "stuck_target",
+            "host": host,
+            "failures": seen,
+            "turn": turn,
+            "action": kind,
+            "detail": (
+                f"{seen} failed network turns targeted {host}; "
+                f"guard action={kind}"
+            ),
+        }
+        try:
+            result = self.on_alert(payload)
+            if inspect.isawaitable(result):
+                await result
+        except Exception:
+            logger.debug("stuck target alert callback failed", exc_info=True)
 
     def _threshold_for(self, kind: str) -> int:
         return self.escalate_after if kind == "block" else self.hint_after

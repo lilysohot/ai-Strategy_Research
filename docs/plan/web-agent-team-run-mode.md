@@ -1745,3 +1745,79 @@ force_finalizer 中使用，主 Agent 直接调用 `force_final_answer` 时绕�
 check_symbols、agent_team/tui preflight 通过（preflight 使用 glm-5.3-flash，不能等同于
 本次 deepseek Web 模型重跑）。本次未重新启动真实研究或更改其磁盘产物；生产登录页面
 未作端到端验收，浏览器验证使用隔离页面与受控 API。
+
+### 20.25 成员空等、阶段取消与重复检索修复（2026-10-27）
+
+来源 Run：`69c2ada082c44c5883611079c2694e67`。本次总耗时 1020.83 秒，三个研究成员
+并行派发后，协调者在一次 `collect_reports` 中等待约 628 秒。技术、行业和市场成员分别已有
+17、14、53 条工具结果，但前两者被研究阶段外层 timeout 取消后只交回空 report 和空
+metadata；市场成员在 wall deadline 下保留了工具观测。终审成员只创建未派发，主 Agent
+最后又经历 reasoning runaway、stream stall 和 wall deadline，最终只能发布确定性状态报告。
+
+#### 20.25.1 结论：观察器存在，但此前没有形成调度闭环
+
+旧链路不是完全没有事件驱动：成员工具和思考活动持续写入 UI，精确重复调用由
+`RepetitionGuard` 观察，同一网络目标连续失败由 `StuckTargetGuard` 观察。但这些观察只影响
+成员自己的下一轮；`collect_reports` 只等待 job 完成，既不监听成员告警，也不会因工具活动
+醒来。因此协调者无法在 628 秒等待期间依据“已经重复/已经卡住”及时止损。
+
+本 Run 中大量调用也不全是参数完全相同的重复。模型不断改写 query、URL 或脚本参数，绕过
+精确签名守卫；同时提示词要求继续收集完整证据和终审，却没有把“研究窗口关闭前必须提交
+partial handoff”设为更强义务。故障是提示词、等待协议、预算节点和取消交接共同造成，不能
+只归因于模型，也不能只靠再写一句“避免重复”解决。
+
+#### 20.25.2 成员告警进入协调者等待协议
+
+AgentBus 新增任务级进度告警队列与事件。`RepetitionGuard` 达到提示/停止阈值、
+`StuckTargetGuard` 达到提示/隔离阈值时，成员 runtime 将结构化告警发布到自己的根任务。
+`wait_any_session_detailed` 同时等待成员完成和告警事件；告警先到时返回
+`progress_alert`，成员保持运行，不伪装为完成结果。
+
+`collect_reports` 把它投影成 `member_progress_alert`，要求协调者立即在三种动作中选择：停止
+成员并回收完成观测、以更聚焦任务重派，或接受访问限制。团队提示词禁止收到告警后盲目再
+启动一次长等待。Web/TUI profile 的同目标失败阈值由 5/8 调整为 3/5，窗口由 15 调整为
+12，使告警在研究预算尚可调整时出现。任务清理同步删除告警队列和 Event，避免跨 Run 残留。
+
+#### 20.25.3 阶段取消保留最后完整回合
+
+成员活动观察器现在在每次 `on_turn_end` 保存 workflow-neutral 的
+`AgentLoopResult` checkpoint。若外层阶段 timeout 正好取消下一次模型或工具 await，AgentBus
+使用该 checkpoint 调用既有 `force_finalizer` 和 `result_adapter`，两步各自限制为 2 秒；返回
+结果仍强制标记 `success=false`、`error=timeout`，但不再丢弃此前已经完成的消息、工具观测、
+内容获取状态和核验元数据。若一个完整回合都没有，仍走原确定性空失败路径。
+
+这项保全以完整 turn 为一致性边界，不尝试从正在写入的半个工具结果中拼接状态。它提高
+partial handoff 的可回收性，不会把 timeout 结果升级为 complete，也不会把已有证据自动解释
+为已通过验证。
+
+#### 20.25.4 终审预算与成员交接义务
+
+旧提示词要求先汇总报告再创建 `final_verifier`，但 `assign_task` 在 research window 关闭后把
+它仍视为新研究，导致“应该执行终审”和“节点拒绝终审”互相冲突。现在名称为 verifier 或
+携带 `verification_checks` 的 workspace-only assignment，在 draining/consolidating 阶段显式
+标记 `uses_publication_budget`，job deadline 使用预留的验证/发布窗口。真正的 publisher
+开始后仍维持单向发布门禁，不能再插入终审与研究竞争最终写入。
+
+成员提示词同时要求：重复访问失败、守卫告警或研究窗口将关闭时，停止开辟新检索路线，
+调用 `submit_report` 交回已有发现，并列出 `Unresolved` 与 `Conflicts`。这保证诚实 partial
+优先于把私有成果留到下一次慢调用中再被取消。
+
+#### 20.25.5 联网搜索错误语义
+
+`web_search` 不再把未配置、超时、HTTP 错误、传输异常和重试耗尽全部压成空字典。单查询
+失败返回结构化 `ToolOutcome(is_error=true)`；多查询部分失败返回逐项 partial envelope。
+供应商正常返回空结果仍是成功状态和 `No results found`，从而让观察器、轨迹、模型和最终
+完整度判断能够区分“没有命中”与“根本没有成功搜索”。
+
+#### 20.25.6 回归证据与剩余边界
+
+定向回归覆盖：阶段 timeout 保全、进度告警唤醒但不终止成员、终审使用预留窗口、发布门禁、
+重复守卫告警、同目标失败告警，以及搜索错误/空结果分离。Agent Team、收尾、核验、联网与
+重复保护扩大回归 **296 passed**；单 Agent、上下文与工具错误合同隔离回归 **105 passed**。
+目标 Ruff、变更文件 Pyright、两阶段 import smoke、check_symbols 和 agent_team/tui preflight
+均通过。
+
+修复没有承诺模型或供应商一定可用，也没有让活动心跳本身触发协调者调度；只有达到可行动
+阈值的守卫事件才会中断等待，避免正常研究过程产生高频调度抖动。真实 Web 长任务仍需在加载
+新代码后验证首次告警时间、成员 partial 的内容质量、终审实际获得的秒数和最终报告对缺口的
+披露。preflight 使用当前配置的 `glm-5.3-flash`，不能替代失败 Run 所用模型的真实长任务验收。

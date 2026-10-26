@@ -146,7 +146,7 @@ async def test_team_phase_observer_publishes_absolute_coordinator_deadline() -> 
     assert scope.metadata[WALL_DEADLINE_MONOTONIC_KEY] == deadline
 
 
-def test_member_jobs_receive_distinct_research_and_publication_deadlines() -> None:
+def test_member_jobs_receive_distinct_research_verification_and_publication_deadlines() -> None:
     now = time.monotonic()
     budget = TeamPhaseBudget(
         started_monotonic_s=now,
@@ -163,14 +163,21 @@ def test_member_jobs_receive_distinct_research_and_publication_deadlines() -> No
     )
 
     research = SubTask("research", metadata={"can_publish": False})
+    verifier = SubTask(
+        "verify",
+        metadata={"can_publish": False, "uses_publication_budget": True},
+    )
     publisher = SubTask("publish", metadata={"can_publish": True})
     assert spec.run_timeout_builder is not None
     research_timeout = spec.run_timeout_builder(research)
+    verifier_timeout = spec.run_timeout_builder(verifier)
     publisher_timeout = spec.run_timeout_builder(publisher)
 
     assert research_timeout is not None
+    assert verifier_timeout is not None
     assert publisher_timeout is not None
     assert 9 <= research_timeout <= 10
+    assert 39 <= verifier_timeout <= 40
     assert 39 <= publisher_timeout <= 40
 
 

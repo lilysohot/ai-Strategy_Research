@@ -161,6 +161,35 @@ def test_research_assignment_is_rejected_after_admission_closes(dispatch) -> Non
     assert bus.submitted == []
 
 
+def test_final_verifier_uses_reserved_verification_window(dispatch) -> None:
+    """Step 5 starts after reports; the verifier must survive research close."""
+    budget = TeamPhaseBudget(
+        started_monotonic_s=0,
+        research_dispatch_deadline_s=1,
+        research_deadline_s=1,
+        publication_deadline_s=10**12,
+        finalization_deadline_s=None,
+        state={},
+    )
+
+    result, bus, _ = dispatch(
+        {f"{TASK_ID}::final_verifier": _session("final_verifier")},
+        [{"agent": "final_verifier", "prompt": "Audit the complete draft."}],
+        phase_budget=budget,
+    )
+
+    assert "Error:" not in result
+    assert bus.submitted == [(
+        f"{TASK_ID}::final_verifier",
+        {
+            "required_for_completion": True,
+            "can_publish": False,
+            "uses_publication_budget": True,
+            "output_paths": [],
+        },
+    )]
+
+
 # ── the capacity predicate both guards now share ─────────────────────────────
 
 

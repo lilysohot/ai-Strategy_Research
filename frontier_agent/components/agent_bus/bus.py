@@ -70,7 +70,7 @@ from frontier_agent.components.agent_bus.shared_pool import SharedArtifactPool
 from frontier_agent.components.agent_bus.spawn_guard import SpawnGuard
 from frontier_agent.components.observers.wall_clock_guard import WallClockGuard
 from frontier_agent.core.events import EventType
-from frontier_agent.core.loop_types import BaseObserver
+from frontier_agent.core.loop_types import AgentLoopResult, BaseObserver
 from frontier_agent.core.messages import (
     Message,
     assistant_msg,
@@ -175,6 +175,12 @@ class _SessionActivityObserver(BaseObserver):
         self.session = session
         self._sequence = 0
         self._thinking_by_turn: dict[int, dict[str, Any]] = {}
+        # Last fully completed turn. The outer phase timeout can cancel the
+        # loop inside its next model/tool await, before run_agent_loop has a
+        # chance to return an AgentLoopResult. Keep this workflow-neutral
+        # checkpoint so the bus can still hand completed observations to the
+        # runtime's normal finalizer and result adapter.
+        self.latest_checkpoint: AgentLoopResult | None = None
 
     def _append(
         self, kind: str, title: str, detail: str, *, turn: int = 0,
@@ -247,6 +253,14 @@ class _SessionActivityObserver(BaseObserver):
             str(getattr(result, "result", "") or ""),
             turn=int(getattr(ctx, "turn", 0) or 0),
             is_error=bool(getattr(result, "is_error", False)),
+        )
+
+    async def on_turn_end(self, ctx: Any) -> None:
+        self.latest_checkpoint = AgentLoopResult(
+            messages=list(getattr(ctx, "messages", []) or []),
+            turns_used=int(getattr(ctx, "turn", 0) or 0),
+            stopped_by="wall_deadline",
+            metadata=dict(getattr(ctx, "metadata", {}) or {}),
         )
 
 
@@ -336,6 +350,11 @@ class AgentBus:
         # (or collect_reports) harvest completed SubAgentResults, drained
         # by the pipeline node at phase end for the report node to consume.
         self._task_aggregates: dict[str, dict[str, list[dict[str, Any]]]] = {}
+        # Actionable member alerts are separate from completion results. A
+        # collect_reports wait listens to both so a stalled member can wake the
+        # coordinator without pretending the member has finished.
+        self._task_progress_alerts: dict[str, deque[dict[str, str]]] = {}
+        self._task_progress_events: dict[str, asyncio.Event] = {}
         self._event_sink_injected: EventSink | None = event_sink
         self._pause_check_factory: PauseCheckFactory | None = pause_check_factory
         self._agent_registry_injected: AgentRegistry | None = agent_registry
@@ -1300,6 +1319,7 @@ class AgentBus:
             # web_search work but tripped on post-loop bookkeeping
             # would leak their evidence silently.
             raw_result: Any = None
+            activity_observer: _SessionActivityObserver | None = None
             try:
                 if active_runtime.config_builder is not None:
                     loop_config = active_runtime.config_builder(
@@ -1344,7 +1364,8 @@ class AgentBus:
                 # Always expose recent worker reasoning/tool activity to local
                 # team UIs. This observer is bounded and independent of the
                 # workflow's full trajectory recorder.
-                loop_observers.append(_SessionActivityObserver(session))
+                activity_observer = _SessionActivityObserver(session)
+                loop_observers.append(activity_observer)
                 loop_observers = _with_wall_clock_guard(loop_observers, guard)
 
                 # Resolve the per-job wall before constructing the coroutine.
@@ -1475,6 +1496,65 @@ class AgentBus:
                 )
             except TimeoutError:
                 logger.warning("Session task %s timed out", job_id)
+                if (
+                    raw_result is None
+                    and activity_observer is not None
+                    and activity_observer.latest_checkpoint is not None
+                ):
+                    raw_result = activity_observer.latest_checkpoint
+                    # At the phase boundary, Agent Team's finalizer takes its
+                    # deterministic observation-stitching path. Bound the hook
+                    # as a defence for generic/custom runtimes.
+                    if active_runtime.force_finalizer is not None:
+                        try:
+                            forced = active_runtime.force_finalizer(
+                                raw_result, session_item,
+                            )
+                            if inspect.isawaitable(forced):
+                                forced = await asyncio.wait_for(forced, timeout=2.0)
+                            if forced is not None:
+                                raw_result = forced
+                        except Exception as exc:
+                            logger.warning(
+                                "Timeout salvage finalizer failed for session %s: %s",
+                                session.session_id,
+                                exc,
+                            )
+
+                    new_turns = list(raw_result.messages[prefix_count:])
+                    session.messages.extend(new_turns)
+                    final_text = (raw_result.final_content or "").strip()
+                    start_idx, _ = session.task_boundaries[-1]
+                    if find_final_assistant(
+                        session.messages, start_idx + 1, len(session.messages) - 1,
+                    ) is None:
+                        session.messages.append(assistant_msg(
+                            final_text
+                            or "[task reached its deadline with partial observations]"
+                        ))
+                    session.task_boundaries[-1] = (
+                        start_idx, len(session.messages) - 1,
+                    )
+                    if final_text:
+                        session.last_report = final_text
+                        session.last_report_metadata = dict(raw_result.metadata or {})
+                    if active_runtime.result_adapter is not None:
+                        try:
+                            adapted = active_runtime.result_adapter(
+                                raw_result, job_id, session_item,
+                            )
+                            if inspect.isawaitable(adapted):
+                                adapted = await asyncio.wait_for(adapted, timeout=2.0)
+                            adapted.success = False
+                            adapted.error = "timeout"
+                            adapted.error_class = "TimeoutError"
+                            return adapted
+                        except Exception as exc:
+                            logger.warning(
+                                "Timeout salvage adapter failed for session %s: %s",
+                                session.session_id,
+                                exc,
+                            )
                 _close_session_boundary_aborted(session)
                 return SubAgentResult(
                     question=task_prompt,
@@ -1787,6 +1867,12 @@ class AgentBus:
         if ready is not None:
             return SessionWaitOutcome(ready, "ready", time.monotonic() - started)
 
+        alert = self._pop_task_progress_alert(task_id)
+        if alert is not None:
+            return SessionWaitOutcome(
+                None, "progress_alert", time.monotonic() - started, alert,
+            )
+
         pending: set[asyncio.Task[SubAgentResult]] = set()
         for session in self._sessions.values():
             if session.task_id != task_id or session.current_job_id is None:
@@ -1803,28 +1889,100 @@ class AgentBus:
         if not pending:
             return SessionWaitOutcome(None, "no_pending", time.monotonic() - started)
 
-        done, _ = await asyncio.wait(
-            pending,
-            timeout=max(0.0, float(timeout)),
-            return_when=asyncio.FIRST_COMPLETED,
-        )
-        if done:
+        alert_event = self._task_progress_events.setdefault(task_id, asyncio.Event())
+        alert_waiter = asyncio.create_task(alert_event.wait())
+        try:
+            done, _ = await asyncio.wait(
+                {*pending, alert_waiter},
+                timeout=max(0.0, float(timeout)),
+                return_when=asyncio.FIRST_COMPLETED,
+            )
+        except BaseException:
+            alert_waiter.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await alert_waiter
+            raise
+        completed_jobs = done - {alert_waiter}
+        if completed_jobs:
+            if alert_waiter not in done:
+                alert_waiter.cancel()
+                with contextlib.suppress(asyncio.CancelledError):
+                    await alert_waiter
             await self._reconcile_terminal_session_jobs(task_id)
             ready = self._pop_ready_result(task_id)
             if ready is not None:
                 return SessionWaitOutcome(
                     ready, "ready", time.monotonic() - started,
                 )
+            return SessionWaitOutcome(
+                None, "unpublished", time.monotonic() - started,
+            )
+        if alert_waiter in done:
+            alert = self._pop_task_progress_alert(task_id)
+            if alert is not None:
+                return SessionWaitOutcome(
+                    None, "progress_alert", time.monotonic() - started, alert,
+                )
+        else:
+            alert_waiter.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await alert_waiter
 
-        # ``done`` non-empty means a task really did finish during the wait —
-        # it just left nothing collectable behind. Reporting that as
-        # ``no_pending`` would tell the caller no time passed, when the full
-        # budget may well have.
         return SessionWaitOutcome(
-            None,
-            "unpublished" if done else "timeout",
-            time.monotonic() - started,
+            None, "timeout", time.monotonic() - started,
         )
+
+    def publish_task_progress_alert(
+        self,
+        task_id: str,
+        *,
+        agent: str,
+        kind: str,
+        detail: str,
+    ) -> None:
+        """Wake a report wait for an actionable, non-terminal member event."""
+        # Observer builders receive a concrete job id, while collect_reports
+        # waits on the root task id. Normalize here so workflow code cannot
+        # accidentally publish into an unwatched queue.
+        job_id = ""
+        root_task_id = task_id
+        entry = self._jobs.get(task_id)
+        if entry is not None:
+            job_id = task_id
+            root_task_id = entry.parent_task_id
+        alert = {
+            "agent": str(agent),
+            "kind": str(kind),
+            "detail": str(detail),
+        }
+        if job_id:
+            alert["_job_id"] = job_id
+        self._task_progress_alerts.setdefault(root_task_id, deque()).append(alert)
+        self._task_progress_events.setdefault(root_task_id, asyncio.Event()).set()
+
+    def _pop_task_progress_alert(self, task_id: str) -> dict[str, str] | None:
+        queue = self._task_progress_alerts.get(task_id)
+        if not queue:
+            event = self._task_progress_events.get(task_id)
+            if event is not None:
+                event.clear()
+            return None
+        while queue:
+            alert = queue.popleft()
+            job_id = alert.pop("_job_id", "")
+            if job_id:
+                entry = self._jobs.get(job_id)
+                if entry is None or entry.status not in ("submitted", "running"):
+                    continue
+            if not queue:
+                event = self._task_progress_events.get(task_id)
+                if event is not None:
+                    event.clear()
+            return alert
+        event = self._task_progress_events.get(task_id)
+        if event is not None:
+            event.clear()
+        return None
 
     async def wait_any_session(
         self, task_id: str, *, timeout: float = 1800.0,
@@ -2111,5 +2269,7 @@ class AgentBus:
         # Files remain for audit; only the live binding is released. A detached
         # late worker can no longer overwrite or append snapshots after cleanup.
         self._task_result_stores.pop(task_id, None)
+        self._task_progress_alerts.pop(task_id, None)
+        self._task_progress_events.pop(task_id, None)
         self.unfreeze_task_dispatch(task_id)
         return cleaned

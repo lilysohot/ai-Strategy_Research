@@ -1114,6 +1114,19 @@ def _swarm_observers(
 
     tool_names = _sub_tool_names(runtime)
     terminal = "submit_report" if "submit_report" in tool_names else None
+    from frontier_agent.components.agent_bus import AgentBus
+
+    bus = registry.get_optional(AgentBus)
+
+    def _publish_member_alert(payload: dict[str, Any]) -> None:
+        if bus is None:
+            return
+        bus.publish_task_progress_alert(
+            task_id,
+            agent=session_name,
+            kind=str(payload.get("kind") or "member_progress"),
+            detail=str(payload.get("detail") or "member progress stalled"),
+        )
 
     observers: list[Any] = [
         SubAgentLoggingObserver(session_name=session_name),
@@ -1130,7 +1143,7 @@ def _swarm_observers(
         # reaches fan-in through ``force_final_answer``. Stopping is only
         # affordable for a sub-agent — the coordinator IS the run and gets a
         # hint at most.
-        RepetitionGuard(stop_after=6),
+        RepetitionGuard(stop_after=6, on_alert=_publish_member_alert),
         TextRepetitionGuard(enable_stop=True),
         ReactStepTracker(),
         EvidenceObserver(),
@@ -1168,6 +1181,7 @@ def _swarm_observers(
             hint_after=runtime.stuck_target_hint_after,
             escalate_after=runtime.stuck_target_escalate_after,
             window=runtime.stuck_target_window,
+            on_alert=_publish_member_alert,
         ))
     if runtime.stream_repetition_config is not None:
         from workflows.agent_team.stream_repetition import StreamRepetitionDeltaSink
@@ -1362,7 +1376,10 @@ def build_swarm_session_runtime_spec(
         if budget is None:
             return inherited_deadline
         return budget.deadline_for_job(
-            can_publish=bool((item.metadata or {}).get("can_publish")),
+            can_publish=bool(
+                (item.metadata or {}).get("can_publish")
+                or (item.metadata or {}).get("uses_publication_budget")
+            ),
         )
 
     # Per-job real-token gauge, shared between _config (the trigger policy) and

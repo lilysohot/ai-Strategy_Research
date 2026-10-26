@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 from types import SimpleNamespace
 
 import pytest
@@ -18,7 +19,7 @@ from frontier_agent.core.execution_context import (
     set_current_execution_scope,
 )
 from frontier_agent.core.loop_types import AgentLoopResult
-from frontier_agent.core.messages import assistant_msg, system_msg, user_msg
+from frontier_agent.core.messages import assistant_msg, system_msg, tool_msg, user_msg
 from frontier_agent.core.runtime.loop.message_trimmer import NullTrimmer
 from frontier_agent.core.runtime.loop.tool_exec import execute_tools
 from frontier_agent.core.runtime.registries import services as registry
@@ -75,6 +76,151 @@ async def test_session_runtime_enforces_workflow_phase_timeout(monkeypatch) -> N
     assert cancelled is True
     assert result.success is False
     assert result.error == "timeout"
+
+
+@pytest.mark.asyncio
+async def test_session_phase_timeout_salvages_last_completed_turn(monkeypatch) -> None:
+    """A phase timeout must return work completed before the in-flight call."""
+    finalizer_inputs: list[AgentLoopResult] = []
+
+    async def fake_run_agent_loop(**kwargs):
+        ctx = SimpleNamespace(
+            turn=1,
+            messages=[
+                system_msg(kwargs["system_prompt"]),
+                user_msg(kwargs["user_message"]),
+                tool_msg("RETAINED_OBSERVATION", tool_call_id="read-1"),
+            ],
+            metadata={"content_acquisition": [{"status": "success"}]},
+            tool_calls=[],
+        )
+        for observer in kwargs["observers"]:
+            callback = getattr(observer, "on_turn_end", None)
+            if callback is not None:
+                await callback(ctx)
+        await asyncio.Event().wait()
+
+    async def force_finalizer(result, _item):
+        finalizer_inputs.append(result)
+        result.final_content = "RETAINED_OBSERVATION"
+        return result
+
+    monkeypatch.setattr(
+        "frontier_agent.components.agent_bus.bus.run_agent_loop",
+        fake_run_agent_loop,
+    )
+    bus = AgentBus()
+    session_id = await bus.create_session(
+        task_id="root",
+        name="worker",
+        role_id="researcher",
+        system_prompt="test",
+        tools_override=[],
+        llm_override=object(),
+        runtime_spec=SubAgentRuntimeSpec(
+            run_timeout_builder=lambda _item: 0.02,
+            force_finalizer=force_finalizer,
+        ),
+    )
+    await bus.submit_task_to_session(session_id, "do work")
+
+    outcome = await bus.wait_any_session_detailed("root", timeout=1)
+
+    assert outcome.result is not None
+    _, result = outcome.result
+    assert len(finalizer_inputs) == 1
+    assert result.success is False
+    assert result.error == "timeout"
+    assert result.final_content == "RETAINED_OBSERVATION"
+    assert result.metadata["content_acquisition"] == [{"status": "success"}]
+
+
+@pytest.mark.asyncio
+async def test_progress_alert_wakes_report_wait_without_finishing_member() -> None:
+    bus = AgentBus()
+    session = _session()
+    job_id = "root::worker::1"
+    task = asyncio.create_task(asyncio.sleep(60))
+    session.current_job_id = job_id
+    session.total_task_count = 1
+    bus._sessions[session.session_id] = session
+    bus._jobs[job_id] = JobEntry(
+        job_id=job_id,
+        parent_task_id="root",
+        item=SubTask(question="work", role_id="researcher"),
+        task=task,
+        status="running",
+    )
+
+    async def alert() -> None:
+        await asyncio.sleep(0.02)
+        bus.publish_task_progress_alert(
+            "root",
+            agent="worker",
+            kind="stuck_target",
+            detail="five failed attempts against example.com",
+        )
+
+    alert_task = asyncio.create_task(alert())
+    try:
+        outcome = await bus.wait_any_session_detailed("root", timeout=5)
+    finally:
+        await alert_task
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+
+    assert outcome.reason == "progress_alert"
+    assert outcome.result is None
+    assert outcome.alert == {
+        "agent": "worker",
+        "kind": "stuck_target",
+        "detail": "five failed attempts against example.com",
+    }
+    assert not task.done() or task.cancelled()
+
+
+@pytest.mark.asyncio
+async def test_job_progress_alert_is_routed_to_root_and_stale_alert_is_dropped() -> None:
+    bus = AgentBus()
+    session = _session()
+    job_id = "root::worker::1"
+    task = asyncio.create_task(asyncio.sleep(60))
+    session.current_job_id = job_id
+    bus._sessions[session.session_id] = session
+    entry = JobEntry(
+        job_id=job_id,
+        parent_task_id="root",
+        item=SubTask(question="work", role_id="researcher"),
+        task=task,
+        status="running",
+    )
+    bus._jobs[job_id] = entry
+
+    bus.publish_task_progress_alert(
+        job_id,
+        agent="worker",
+        kind="stuck_target",
+        detail="repeated failures",
+    )
+    outcome = await bus.wait_any_session_detailed("root", timeout=0)
+    assert outcome.reason == "progress_alert"
+
+    bus.publish_task_progress_alert(
+        job_id,
+        agent="worker",
+        kind="stuck_target",
+        detail="obsolete alert",
+    )
+    entry.status = "completed"
+    session.current_job_id = None
+    outcome = await bus.wait_any_session_detailed("root", timeout=0)
+
+    task.cancel()
+    with contextlib.suppress(asyncio.CancelledError):
+        await task
+    assert outcome.reason == "no_pending"
+    assert outcome.alert is None
 
 
 @pytest.mark.asyncio
@@ -203,10 +349,8 @@ async def test_wait_reports_actual_timeout_only_for_live_task() -> None:
         outcome = await bus.wait_any_session_detailed("root", timeout=0.02)
     finally:
         task.cancel()
-        try:
+        with contextlib.suppress(asyncio.CancelledError):
             await task
-        except asyncio.CancelledError:
-            pass
 
     assert outcome.reason == "timeout"
     assert outcome.result is None
@@ -352,10 +496,8 @@ async def test_collect_reports_describes_actual_wait_not_requested_ceiling() -> 
         reset_current_execution_scope(token)
         registry.restore(services_before)
         task.cancel()
-        try:
+        with contextlib.suppress(asyncio.CancelledError):
             await task
-        except asyncio.CancelledError:
-            pass
         await asyncio.sleep(0)
 
     assert "actual 0.1s wait" in text
@@ -464,10 +606,8 @@ async def test_intervention_cancels_collect_reports_wait_immediately() -> None:
         reset_current_execution_scope(token)
         registry.restore(services_before)
         worker_task.cancel()
-        try:
+        with contextlib.suppress(asyncio.CancelledError):
             await worker_task
-        except asyncio.CancelledError:
-            pass
 
     assert len(results) == 1
     assert results[0].interrupted is True
@@ -516,10 +656,8 @@ async def test_progress_heartbeat_survives_a_failing_observer() -> None:
         reset_current_execution_scope(token)
         registry.restore(services_before)
         task.cancel()
-        try:
+        with contextlib.suppress(asyncio.CancelledError):
             await task
-        except asyncio.CancelledError:
-            pass
 
     assert "actual 0.1s wait" in text
     assert calls and calls[-1] is True

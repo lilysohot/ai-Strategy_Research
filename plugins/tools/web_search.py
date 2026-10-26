@@ -6,14 +6,16 @@ import asyncio
 import logging
 from contextvars import ContextVar, Token
 from functools import lru_cache
+from typing import cast
 from urllib.parse import unquote, urlsplit
 
 import httpx
 
-from frontier_agent.core.tool import tool
+from frontier_agent.core.tool import ToolOutcome, tool
 from frontier_agent.infra.config import get_config
 from frontier_agent.infra.usage_meter import record_api_request
 from plugins.tools._coerce import coerce_json_list
+from plugins.tools._content_outcome import combine_content_outcomes, content_limitation
 from plugins.tools._single_flight import SingleFlightCoalescer
 
 logger = logging.getLogger(__name__)
@@ -32,6 +34,23 @@ _search_coalescer = SingleFlightCoalescer("web_search", meter_provider="serper")
 # otherwise-identical sibling queries share one cache entry. Bucketing *up*
 # only ever returns >= the requested count, so the tool can slice down safely.
 _NUM_BUCKETS = (10, 20, 50, 100)
+
+_ERROR_KEY = "_frontier_search_error"
+
+
+def _error_response(status: str, detail: str) -> dict:
+    """Keep provider failure distinct from a valid search with zero hits."""
+    return {_ERROR_KEY: {"status": status, "detail": detail}}
+
+
+def _provider_failure(data: dict) -> tuple[str, str] | None:
+    payload = data.get(_ERROR_KEY)
+    if not isinstance(payload, dict):
+        return None
+    return (
+        str(payload.get("status") or "failed"),
+        str(payload.get("detail") or "search provider unavailable"),
+    )
 
 
 def _canonical_num(n: int) -> int:
@@ -299,7 +318,7 @@ async def _do_web_search(
     config = get_config()
 
     if not config.serper_api_key:
-        return {}
+        return _error_response("unavailable", "SERPER_API_KEY is not configured")
 
     url = f"{config.serper_base_url}/search"
     headers = {"X-API-KEY": config.serper_api_key, "Content-Type": "application/json"}
@@ -343,20 +362,22 @@ async def _do_web_search(
             if attempt < _MAX_RETRIES - 1:
                 await asyncio.sleep(1)
                 continue
-            return {}
+            return _error_response("failed", "search provider timed out after retries")
 
         except httpx.HTTPStatusError as e:
             logger.error("Serper HTTP error %d for '%s': %s", e.response.status_code, query[:50], e)
             record_api_request("serper", requests=0, errors=1)
-            return {}
+            return _error_response(
+                "failed", f"search provider returned HTTP {e.response.status_code}",
+            )
 
         except Exception as e:
             logger.error("Serper unexpected error for '%s': %s", query[:50], e)
             record_api_request("serper", requests=0, errors=1)
-            return {}
+            return _error_response("failed", f"search provider transport error: {type(e).__name__}")
 
     logger.error("Serper search exhausted retries for '%s'", query[:50])
-    return {}
+    return _error_response("failed", "search provider exhausted retries")
 
 
 def _format_results(data: dict, max_organic: int | None = None) -> str:
@@ -432,7 +453,7 @@ async def web_search(
     gl: str = "us",
     hl: str = "en",
     tbs: str = "",
-) -> str:
+) -> str | ToolOutcome:
     """Search the web for information about a topic.
 
     ``q`` accepts a single string or a list of strings. List queries
@@ -459,14 +480,21 @@ async def web_search(
 
     if len(queries) == 1:
         data = await raw_web_search(queries[0], num_results, gl, hl, tbs)
+        if failure := _provider_failure(data):
+            status, detail = failure
+            return content_limitation(
+                queries[0],
+                detail,
+                status="unavailable" if status == "unavailable" else "failed",
+            )
         if not data:
             return f"No results found for: {queries[0]}"
         return maybe_overflow("web_search", _format_results(data, max_organic=num_results))
 
-    return maybe_overflow(
-        "web_search",
-        await _run_parallel_queries(queries, num_results, gl, hl, tbs),
-    )
+    parallel_result = await _run_parallel_queries(queries, num_results, gl, hl, tbs)
+    if isinstance(parallel_result, ToolOutcome):
+        return parallel_result
+    return maybe_overflow("web_search", parallel_result)
 
 
 def _normalise_queries(query: str | list[str]) -> list[str]:
@@ -485,24 +513,44 @@ def _normalise_queries(query: str | list[str]) -> list[str]:
 
 async def _run_parallel_queries(
     queries: list[str], num_results: int, gl: str, hl: str, tbs: str,
-) -> str:
+) -> str | ToolOutcome:
     """Dispatch every query in parallel and merge with URL de-duplication."""
     datas = await asyncio.gather(
         *(raw_web_search(q, num_results, gl, hl, tbs) for q in queries),
         return_exceptions=True,
     )
     seen_urls: set[str] = set()
-    blocks: list[str] = []
+    blocks: list[str | ToolOutcome] = []
     for q, data in zip(queries, datas, strict=False):
-        if isinstance(data, BaseException) or not data:
-            blocks.append(f"## Query: {q}\n\nNo results (error or empty).")
+        if isinstance(data, BaseException):
+            blocks.append(
+                content_limitation(
+                    q, f"search provider raised {type(data).__name__}", status="failed",
+                )
+            )
+            continue
+        if failure := _provider_failure(data):
+            status, detail = failure
+            blocks.append(
+                content_limitation(
+                    q,
+                    detail,
+                    status="unavailable" if status == "unavailable" else "failed",
+                )
+            )
+            continue
+        if not data:
+            blocks.append(f"## Query: {q}\n\nNo results found.")
             continue
         deduped = _dedupe_display_organic(data.get("organic") or [], seen_urls, num_results)
         blocks.append(
             f"## Query: {q}\n\n"
             f"{_format_results({**data, 'organic': deduped}, max_organic=num_results)}"
         )
-    return "\n\n---\n\n".join(blocks)
+    combined = combine_content_outcomes(queries, blocks)
+    if combined is not None:
+        return combined
+    return "\n\n---\n\n".join(cast(str, block) for block in blocks)
 
 
 def _dedupe_display_organic(

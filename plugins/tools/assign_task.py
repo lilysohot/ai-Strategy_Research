@@ -572,22 +572,32 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
             errors.append(f"Skipping empty task for {agent_name!r}")
             continue
         publication_phase = ""
+        budget_phase = ""
         active_publisher = ""
         if is_agent_team and runtime is not None:
             active_publication = getattr(runtime, "publication_state", None) or {}
             phase_budget = getattr(runtime, "phase_budget", None)
             if phase_budget is not None:
-                phase_budget.sync_phase()
+                budget_phase = phase_budget.sync_phase()
             publication_phase = str(active_publication.get("phase") or "")
             active_publisher = str(
                 active_publication.get("publisher_agent_name") or ""
             )
         is_publication_assignment = bool(getattr(spec, "output_paths", ()))
+        is_verification_assignment = (
+            "verifier" in agent_name.lower()
+            or bool(getattr(spec, "verification_checks", ()))
+        )
+        uses_publication_budget = bool(
+            is_verification_assignment
+            and budget_phase in {"draining", "consolidating"}
+        )
         if (
             is_agent_team
             and runtime is not None
             and getattr(runtime, "phase_budget", None) is not None
             and not is_publication_assignment
+            and not uses_publication_budget
             and not runtime.phase_budget.can_dispatch_research()
         ):
             errors.append(
@@ -601,7 +611,7 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
             is_agent_team
             and runtime is not None
             and getattr(runtime, "phase_budget", None) is not None
-            and is_publication_assignment
+            and (is_publication_assignment or uses_publication_budget)
             and not runtime.phase_budget.can_dispatch_publication()
         ):
             errors.append(
@@ -665,6 +675,8 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                     "can_publish": False,
                     "output_paths": [],
                 }
+                if uses_publication_budget:
+                    task_metadata["uses_publication_budget"] = True
                 # The coordinator's own wording can direct the same write the
                 # question does. Both are neutralised the same way; only this
                 # one is worth reporting back, because only this one is a
