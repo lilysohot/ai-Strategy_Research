@@ -15,15 +15,12 @@ from server.orchestrator import Orchestrator
 
 
 @pytest.mark.parametrize("reason", ["no_tool", "final_answer", "wall_deadline", "user_stop", "response_truncated"])
-async def test_bridge_only_emits_stopped_for_interruptions(reason):
+async def test_bridge_captures_loop_outcome_without_emitting_run_terminal(reason):
     queue = asyncio.Queue()
     bridge = BridgeObserver(queue)
     await bridge.on_loop_end(SimpleNamespace(stopped_by=reason, final_content="你好"))
     assert bridge.stopped_by == reason  # retain the engine's audit fact
-    if reason in {"no_tool", "final_answer"}:
-        assert queue.empty(), "normal completion must wait for the final run_completed event"
-    else:
-        assert queue.get_nowait()["type"] == "run_stopped"
+    assert queue.empty(), "workflow finalization owns the product-Run terminal event"
 
 
 @pytest.mark.parametrize(("reason", "ok", "error", "status", "tag"), [
@@ -54,8 +51,11 @@ async def test_message_database_status_and_live_event_agree(monkeypatch, reason,
     expected = "你好" if not tag else f"你好\n\n_[partial: {tag}]_"
     assert append.call_args.kwargs["content"] == expected
     assert update.call_args.kwargs["status"] == status
-    if status != "stopped":
-        assert publish.call_args.args[1]["type"] == f"run_{status}"
+    assert publish.call_args.args[1]["type"] == f"run_{status}"
+    if status == "stopped":
+        assert publish.call_args.args[1]["stopped_by"] == reason
+        assert publish.call_args.args[1]["final_answer"] == "你好"
+    else:
         assert update.call_args.kwargs["stopped_by"] is None
 
 

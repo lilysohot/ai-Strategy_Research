@@ -41,6 +41,7 @@ _policy_var: contextvars.ContextVar[object | _Policy] = contextvars.ContextVar(
 # persisted volume without bound. The quota is enforced at write time with an
 # error the model can act on (delete files, then retry).
 _SCRATCH_DIR = "/outputs/scratch"
+_HANDOFF_DIR = "/outputs/scratch/handoffs"
 _SCRATCH_QUOTA_ENV = "FRONTIER_AGENT_SCRATCH_QUOTA_BYTES"
 _DEFAULT_SCRATCH_QUOTA_BYTES = 536_870_912  # 512 MiB
 
@@ -255,6 +256,11 @@ _SCRATCH_ROOT_WRITE_ERROR = (
     "/outputs/scratch must remain a directory. Write files to an explicit "
     "child path such as /outputs/scratch/<name>; only mkdir and cleanup "
     "operations may target the directory itself."
+)
+_HANDOFF_WRITE_ERROR = (
+    "/outputs/scratch/handoffs is a controlled read-only store. Publish a new "
+    "content-addressed version with publish_handoff; do not edit, replace, "
+    "rename, or delete an existing handoff reference."
 )
 
 _SPILL_WRITE_ERROR = (
@@ -515,6 +521,10 @@ def _is_scratch_path(normalised: str) -> bool:
     return normalised == _SCRATCH_DIR or normalised.startswith(_SCRATCH_DIR + "/")
 
 
+def _is_handoff_path(normalised: str) -> bool:
+    return normalised == _HANDOFF_DIR or normalised.startswith(_HANDOFF_DIR + "/")
+
+
 def scratch_quota_bytes() -> int:
     """Read the quota per call so ``.env`` values and monkeypatch stay live.
 
@@ -576,6 +586,8 @@ def output_write_error(path: str) -> str | None:
     if error := spill_write_error(path):
         return error
     normalised = _canonical_output_path(path)
+    if _is_handoff_path(normalised):
+        return _HANDOFF_WRITE_ERROR
     if normalised == _SCRATCH_DIR:
         # Direct file tools cannot create a directory, so an exact-root write
         # would replace the reserved namespace with a hidden regular file.
@@ -1293,6 +1305,20 @@ def bash_output_write_error(command: str) -> str | None:
         return None
     segments = _split_segments(command)
     for segment in segments:
+        handoff_refs = tuple(
+            path
+            for path in _referenced_output_paths(segment)
+            if _is_handoff_path(path)
+        )
+        if handoff_refs:
+            verb = _head_verb(segment)
+            if (
+                _definite_write_signal(segment)
+                or _opaque_write_shape(segment)
+                or (verb is not None and _is_interpreter(verb))
+                or not _segment_reads_only(segment)
+            ):
+                return _HANDOFF_WRITE_ERROR
         error = _scratch_link_error(segment)
         if error:
             return error

@@ -74,6 +74,8 @@ export interface RunStep {
   callId?: string
   /** Agent source for multi-agent tool-call correlation. */
   agentId?: string
+  agentKind?: SseEvent['agent_kind']
+  trajectorySource?: string
   /** When the call started (epoch ms) — live ``Date.now()``, replay from ``ts``. */
   startedAt?: number
 }
@@ -272,6 +274,8 @@ export const useRunStreamStore = defineStore('runStream', () => {
       input: event.input,
       callId,
       agentId,
+      agentKind: event.agent_kind,
+      trajectorySource: event.trajectory_source,
       // Live events are stamped at emit time; replayed ones carry the original
       // trajectory ``ts`` (epoch seconds) so elapsed time stays truthful.
       startedAt: typeof event.ts === 'number' ? event.ts * 1000 : Date.now(),
@@ -419,6 +423,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
         break
       case 'run_completed':
         status.value = 'completed'
+        if (typeof event.final_answer === 'string') finalAnswer.value = event.final_answer
         endedAtMs.value = typeof event.ts === 'number' ? event.ts * 1000 : Date.now()
         break
       case 'run_failed':
@@ -429,6 +434,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
         break
       case 'run_stopped':
         status.value = 'stopped'
+        if (typeof event.final_answer === 'string') finalAnswer.value = event.final_answer
         endedAtMs.value = typeof event.ts === 'number' ? event.ts * 1000 : Date.now()
         interruptInFlight(steps.value)
         break

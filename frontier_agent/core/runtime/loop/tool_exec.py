@@ -146,7 +146,7 @@ _BUDGET_GRACE_S = 30
 # findings. Single source of truth for the set that tiered compaction PROTECTS
 # from Tier1 age-based blanking in agent_team (imported by nodes/main_agent.py).
 PROTECTED_FANIN_TOOLS = _AGGREGATION_TOOLS | frozenset(
-    {"assign_task", "submit_report", "create_subagent"}
+    {"assign_task", "submit_report", "create_subagent", "publish_handoff"}
 )
 
 

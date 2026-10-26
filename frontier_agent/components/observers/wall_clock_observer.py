@@ -1,4 +1,5 @@
 """WallClockDeadlineObserver — stop the loop gracefully before a hard."""
+
 from __future__ import annotations
 
 import time
@@ -73,7 +74,8 @@ class WallClockDeadlineObserver:
         # Soft deadline never goes below half the budget — a tiny budget
         # with a large reserve must not stop the loop before turn one.
         self.soft_deadline_s = max(
-            self.deadline_s - self.reserve_s, self.deadline_s * 0.5,
+            self.deadline_s - self.reserve_s,
+            self.deadline_s * 0.5,
         )
         self._start: float | None = None
         self._warned: bool = False
@@ -99,13 +101,34 @@ class WallClockDeadlineObserver:
                     self._lease = lease
                     self._renewable_deadline = renewable_deadline
                     self._lease_sequence = lease.sequence
-                    scope.metadata[WALL_DEADLINE_MONOTONIC_KEY] = renewable_deadline
+                    candidate: float | RenewableWallTimeDeadline = renewable_deadline
                 else:
-                    scope.metadata[WALL_DEADLINE_MONOTONIC_KEY] = (
-                        self._start + self.soft_deadline_s
-                    )
+                    candidate = self._start + self.soft_deadline_s
+                existing = scope.metadata.get(WALL_DEADLINE_MONOTONIC_KEY)
+                existing_remaining = self._remaining_s(existing)
+                candidate_remaining = self._remaining_s(candidate)
+                # Nested loops can inherit a shorter parent research window.
+                # Never replace it with the member's much longer SpawnGuard
+                # budget; the closest deadline must govern new work.
+                if (
+                    existing_remaining is None
+                    or candidate_remaining is None
+                    or candidate_remaining < existing_remaining
+                ):
+                    scope.metadata[WALL_DEADLINE_MONOTONIC_KEY] = candidate
         except Exception:
             pass
+
+    @staticmethod
+    def _remaining_s(deadline: object) -> float | None:
+        if isinstance(deadline, RenewableWallTimeDeadline):
+            try:
+                return float(deadline.remaining_s())
+            except Exception:
+                return None
+        if isinstance(deadline, (int, float)):
+            return float(deadline) - time.monotonic()
+        return None
 
     async def on_llm_response(self, ctx: TurnContext) -> None:
         pass
@@ -136,7 +159,8 @@ class WallClockDeadlineObserver:
                 stop_reason="wall_deadline",
                 inject_messages=[
                     self.STOP_MESSAGE.format(
-                        elapsed=int(elapsed), budget=int(self.deadline_s),
+                        elapsed=int(elapsed),
+                        budget=int(self.deadline_s),
                     )
                 ],
             )

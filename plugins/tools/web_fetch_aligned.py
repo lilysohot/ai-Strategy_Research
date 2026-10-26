@@ -15,7 +15,7 @@ from typing import Any
 
 import httpx
 
-from frontier_agent.core.tool import tool
+from frontier_agent.core.tool import ToolOutcome, tool
 from frontier_agent.infra.summary_llm import (
     FALLBACK_TRUNCATE,
     summary_llm_candidates,
@@ -34,6 +34,7 @@ from plugins.tools._bounded_fetch import (
     strip_cross_origin_credentials,
     vet_public_url,
 )
+from plugins.tools._content_outcome import combine_content_outcomes, content_limitation
 from plugins.tools._render_check import (
     MIN_RENDERED_BODY_CHARS,
     reader_body,
@@ -551,7 +552,7 @@ async def _fetch_single(
     url: str,
     info_to_extract: str,
     custom_headers: dict[str, str] | None = None,
-) -> str:
+) -> str | ToolOutcome:
     """Scrape one URL (Jina → fallback to direct) then run LLM extraction.
 
     The scrape is served through ``scrape_result_cache`` (single-flight,
@@ -566,21 +567,24 @@ async def _fetch_single(
     # only in ``plugins/tools/web_fetch.py``.
     non_public = await non_public_url_error(url)
     if non_public:
-        return (
+        return content_limitation(url, (
             f"Blocked: {non_public}. Only public http(s) endpoints may be "
             "fetched. Use a public source."
-        )
+        ), status="policy_blocked")
 
     if any(pat in url for pat in _BANNED_URL_PATTERNS):
-        return "Blocked: scraping Hugging Face datasets/spaces is not allowed."
+        return content_limitation(
+            url, "Blocked: scraping Hugging Face datasets/spaces is not allowed.",
+            status="policy_blocked",
+        )
 
     blocked_ext = blocked_download_url(url)
     if blocked_ext:
-        return (
+        return content_limitation(url, (
             f"Blocked: this URL is a dataset/archive download ({blocked_ext}), "
             "not a web page. Do not download data files — read the dataset's "
             "documentation/landing page instead, or use aggregate API queries."
-        )
+        ), status="policy_blocked")
 
     # The initial body and browser retry each flow through several decisions
     # (retry, selection, cache admission, and the final warning). Reuse each
@@ -670,20 +674,19 @@ async def _fetch_single(
                 should_cache=lambda scraped: _render_kind(scraped) is None,
             )
     except ScrapeUnavailable as exc:
-        return f"[ERROR]: Scraping failed: {exc}"
+        return content_limitation(url, f"[ERROR]: Scraping failed: {exc}")
 
     result = await _extract_info_with_llm(content, info_to_extract)
     if not result["success"]:
-        return f"[ERROR]: Extraction failed: {result['error']}"
+        return content_limitation(url, f"[ERROR]: Extraction failed: {result['error']}", status="failed")
     extracted = result["extracted_info"]
     if _render_kind(content) == "empty":
-        return (
+        return content_limitation(url, (
             f"[POSSIBLY NOT RENDERED] The page at {url} remained suspiciously "
             "short after the browser-render retry. This result was deliberately "
             "not cached. Use it if it answers the question; otherwise switch to "
             "another source instead of repeatedly fetching this URL.\n\n"
-            f"{extracted}"
-        )
+        ), status="partial", content=extracted)
     return extracted
 
 
@@ -695,7 +698,7 @@ async def web_fetch_aligned(
     url: str | list[str],
     info_to_extract: str | list[str] = "",
     custom_headers: dict[str, str] | None = None,
-) -> str:
+) -> str | ToolOutcome:
     """Fetch content from a URL and extract specific types of information.
 
     Args:
@@ -705,6 +708,8 @@ async def web_fetch_aligned(
 
     Returns:
         Extracted information as plain text. For multiple URLs, results are numbered
+        Failed or partial acquisition returns a JSON status; mixed batches retain
+        both the available text and each URL's acquisition status.
     """
     # The reference tool accepts JSON-encoded lists for both fields — mirror that.
     url = _ensure_list(url)
@@ -752,6 +757,11 @@ async def web_fetch_aligned(
                 for u, info in zip(urls, infos, strict=False)
             ],
         )
+
+        if len(results) == 1 and isinstance(results[0], ToolOutcome):
+            return results[0]
+        if limitation := combine_content_outcomes(urls, results):
+            return limitation
 
         # The reference tool formats single and multi-URL identically:
         # ``[N] URL: <u>\n    Info: <text>``.

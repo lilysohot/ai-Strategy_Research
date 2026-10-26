@@ -311,14 +311,27 @@ _PATH_TOOLS = frozenset({
 
 
 def localize_path_args(name: str, args: dict, cwd: str) -> dict | None:
-    """If a tool's ``path`` is an absolute path *inside* cwd, return a copy of
-    ``args`` with it rewritten relative to cwd; else ``None`` (no rewrite).
+    """Rewrite an absolute tool path relative to the directory it executes in.
 
     Avoids the absolute-path sandbox slow path in read_file/file_editor.
     """
     if name not in _PATH_TOOLS:
         return None
     cwd_real = os.path.realpath(cwd)
+    # Workflow-backed terminal modes execute read/search tools in the active
+    # run workspace, which can be a stable symlink into
+    # ``.apodex/runs/<session>/workspace``.  Relativizing its resolved target
+    # against the project cwd produces a path with that whole run prefix; the
+    # sandbox then resolves the prefix *inside* the run workspace and misses
+    # the file.  Read-only tools have no journal/diff paths to preserve, so use
+    # their real execution root.  Mutating tools keep the project cwd because
+    # the approval and revert layers resolve their rewritten paths there.
+    workspace_raw = os.environ.get("FRONTIER_AGENT_WORKSPACE_DIR", "").strip()
+    tool_cwd_real = (
+        os.path.realpath(workspace_raw)
+        if workspace_raw and name not in MUTATING_TOOLS
+        else cwd_real
+    )
     inputs_raw = os.environ.get("FRONTIER_AGENT_INPUTS_DIR", "").strip()
     inputs_real = os.path.realpath(inputs_raw) if inputs_raw else ""
     for key in ("path", "file_path"):
@@ -335,7 +348,7 @@ def localize_path_args(name: str, args: dict, cwd: str) -> dict | None:
         ):
             return None
         try:
-            rel = os.path.relpath(p_real, cwd_real)
+            rel = os.path.relpath(p_real, tool_cwd_real)
         except Exception:
             continue
         if not (rel == ".." or rel.startswith(".." + os.sep)):
@@ -345,10 +358,12 @@ def localize_path_args(name: str, args: dict, cwd: str) -> dict | None:
         # Absolute path OUTSIDE cwd: if the model meant a repo-root path like
         # "/README.md" and "<cwd>/README.md" exists, rewrite to that relative
         # form (avoids the absolute-path sandbox slow path for all file tools).
-        alt = os.path.realpath(os.path.join(cwd_real, p.lstrip("/")))
-        if (alt == cwd_real or alt.startswith(cwd_real + os.sep)) and os.path.exists(alt):
+        alt = os.path.realpath(os.path.join(tool_cwd_real, p.lstrip("/")))
+        if (
+            alt == tool_cwd_real or alt.startswith(tool_cwd_real + os.sep)
+        ) and os.path.exists(alt):
             new = dict(args)
-            new[key] = os.path.relpath(alt, cwd_real)
+            new[key] = os.path.relpath(alt, tool_cwd_real)
             return new
     return None
 

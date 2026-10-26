@@ -69,6 +69,9 @@ class JobEntry:
     parent_task_id: str
     item: SubTask
     task: asyncio.Task[SubAgentResult] | None = None
+    # Persistent-session jobs record their owning session so a later task can
+    # attach an exact completed job instead of whichever report is latest.
+    session_id: str = ""
     status: Literal[
         "queued", "submitted", "running", "completed", "failed", "aborted"
     ] = "submitted"
@@ -149,6 +152,10 @@ class SubAgentRuntimeSpec:
     observers_builder: Callable[
         [str, SubTask, int], list[Any]
     ] | None = None
+    # Optional per-job hard runtime. Agent Team uses this to make research and
+    # publication deadlines effective even while a model or tool call is in
+    # flight, rather than relying only on a between-turn observer.
+    run_timeout_builder: Callable[[SubTask], float | None] | None = None
     # Sync or async — bus awaits when the return is a coroutine.
     result_adapter: Callable[
         [Any, str, SubTask],
@@ -225,6 +232,10 @@ class SubAgentSession:
     # running.
     last_task_elapsed_s: float = 0.0
     last_report: str = ""
+    # Metadata belonging to ``last_report``. Workflow-specific attach
+    # expansion can recover structured references without teaching AgentBus
+    # their domain vocabulary.
+    last_report_metadata: dict[str, Any] = field(default_factory=dict)
     runtime_spec: SubAgentRuntimeSpec | None = None
     pending_results: list[SubAgentResult] = field(default_factory=list)
     # Tasks queued behind the currently-running one. Sessions execute

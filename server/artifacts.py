@@ -29,6 +29,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import posixpath
 from collections.abc import Iterator
 from pathlib import Path
 
@@ -38,12 +39,21 @@ from server.strategy_delivery import RECEIPT_NAME, artifact_allowed
 # Outputs sit inside the workspace root (see module docstring); this is the
 # single place that fact is encoded, so a layout change touches one function.
 _OUTPUTS_REL = Path("ws") / "outputs"
+_RESERVED_TOP_LEVEL = frozenset({"scratch"})
 
 # Bounds: a run should deliver a handful of files, not a filesystem. Exceeding
 # these is not an error — we simply stop recording, so a pathological run cannot
 # stall the orchestrator or blow up the artifacts table.
 _MAX_FILES = 500
 _MAX_FILE_BYTES = 256 * 1024 * 1024  # skip hashing anything larger
+
+
+def is_reserved_output_path(rel_path: str) -> bool:
+    """Whether a relative output handle points into an internal namespace."""
+    raw = str(rel_path or "").replace("\\", "/")
+    normalised = posixpath.normpath(raw)
+    first = normalised.split("/", 1)[0]
+    return first in _RESERVED_TOP_LEVEL
 
 
 def outputs_dir_for(run_id: str) -> Path:
@@ -100,7 +110,10 @@ def _iter_files(root: Path) -> Iterator[Path]:
     for dirpath, dirnames, filenames in os.walk(root, followlinks=False):
         # Prune symlinked directories so we never walk outside the root.
         dirnames[:] = [
-            d for d in dirnames if not (Path(dirpath) / d).is_symlink()
+            d
+            for d in dirnames
+            if not (Path(dirpath) / d).is_symlink()
+            and not (Path(dirpath) == root and d in _RESERVED_TOP_LEVEL)
         ]
         for name in filenames:
             candidate = Path(dirpath) / name
@@ -150,6 +163,8 @@ def resolve_artifact_path(run_id: str, rel_path: str) -> Path | None:
     """
     if not rel_path or rel_path.startswith("/") or "\x00" in rel_path:
         return None
+    if is_reserved_output_path(rel_path):
+        return None
     # Reject Windows-style absolute paths too (``C:\...``) — we only ever accept
     # a relative, posix-shaped path.
     if len(rel_path) > 1 and rel_path[1] == ":":
@@ -166,13 +181,21 @@ def resolve_artifact_path(run_id: str, rel_path: str) -> Path | None:
     # rejected (that would be a directory, not a file).
     if candidate == root_resolved or not candidate.is_relative_to(root_resolved):
         return None
+    resolved_relative = candidate.relative_to(root_resolved)
+    if resolved_relative.parts and resolved_relative.parts[0] in _RESERVED_TOP_LEVEL:
+        return None
     if not candidate.is_file():
         return None
     if (run_dir_for(run_id) / RECEIPT_NAME).exists() and not artifact_allowed(
-        run_dir_for(run_id), candidate.relative_to(root_resolved).as_posix(), _sha256_of(candidate),
+        run_dir_for(run_id), resolved_relative.as_posix(), _sha256_of(candidate),
     ):
         return None
     return candidate
 
 
-__all__ = ["outputs_dir_for", "resolve_artifact_path", "scan_outputs"]
+__all__ = [
+    "is_reserved_output_path",
+    "outputs_dir_for",
+    "resolve_artifact_path",
+    "scan_outputs",
+]

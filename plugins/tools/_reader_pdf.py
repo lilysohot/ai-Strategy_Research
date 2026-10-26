@@ -580,7 +580,10 @@ def _deep_page(path, p, pagew, pageh, outdir):
     # reading). With no figure present the prompt returns NO_FIGURE and only the text layer remains.
     # The body text stays the high-quality pdftotext output; vision only adds figures and never re-transcribes the text.
     body = _text_body(path, p, pagew, text)
+    vision_attempted = False
+    vision_succeeded = False
     if _pos.environ.get("READDOC_VISION_URL"):
+        vision_attempted = True
         imgs = _pdf_to_images(path, [p])
         if imgs:
             try:
@@ -589,8 +592,23 @@ def _deep_page(path, p, pagew, pageh, outdir):
             except Exception:
                 vt = None
             if vt and "NO_FIGURE" not in vt:
+                vision_succeeded = True
                 return (body + "\n\n`[figure on this page, read via vision]`\n\n" + vt,
                         " | vision", False)
+            if vt and "NO_FIGURE" in vt:
+                vision_succeeded = True
+    sig = d.get("sig", {})
+    has_visual_signal = (
+        sig.get("img_cover", 0) > _PDF_INLINE_IMG_COVER
+        or sig.get("vec_ops", 0) > _PDF_DRAW_OPS_FLOOR
+    )
+    if has_visual_signal and not vision_succeeded:
+        reason = "vision failed" if vision_attempted else "vision endpoint unavailable"
+        return (
+            body + f"\n\n`[figure not read: {reason}]`",
+            " | figure not read",
+            True,
+        )
     return (body, "", True)
 
 

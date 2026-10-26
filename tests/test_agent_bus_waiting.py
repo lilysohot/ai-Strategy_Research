@@ -8,6 +8,7 @@ import pytest
 from frontier_agent.components.agent_bus import (
     AgentBus,
     JobEntry,
+    SubAgentRuntimeSpec,
     SubAgentSession,
     SubTask,
 )
@@ -21,7 +22,9 @@ from frontier_agent.core.messages import assistant_msg, system_msg, user_msg
 from frontier_agent.core.runtime.loop.message_trimmer import NullTrimmer
 from frontier_agent.core.runtime.loop.tool_exec import execute_tools
 from frontier_agent.core.runtime.registries import services as registry
+from plugins.tools._bus_scope import SWARM_SCOPE_KEY
 from plugins.tools.collect_reports import collect_reports
+from workflows.agent_team.phase_budget import TeamPhaseBudget
 
 
 def _session(task_id: str = "root") -> SubAgentSession:
@@ -35,6 +38,43 @@ def _session(task_id: str = "root") -> SubAgentSession:
         llm=None,
         trimmer=NullTrimmer(),
     )
+
+
+@pytest.mark.asyncio
+async def test_session_runtime_enforces_workflow_phase_timeout(monkeypatch) -> None:
+    cancelled = False
+
+    async def fake_run_agent_loop(**_kwargs):
+        nonlocal cancelled
+        try:
+            await asyncio.sleep(1)
+        except asyncio.CancelledError:
+            cancelled = True
+            raise
+
+    monkeypatch.setattr(
+        "frontier_agent.components.agent_bus.bus.run_agent_loop",
+        fake_run_agent_loop,
+    )
+    bus = AgentBus()
+    session_id = await bus.create_session(
+        task_id="root",
+        name="worker",
+        role_id="researcher",
+        system_prompt="test",
+        tools_override=[],
+        llm_override=object(),
+        runtime_spec=SubAgentRuntimeSpec(run_timeout_builder=lambda _item: 0.02),
+    )
+    await bus.submit_task_to_session(session_id, "do work")
+
+    outcome = await bus.wait_any_session_detailed("root", timeout=1)
+
+    assert outcome.result is not None
+    _, result = outcome.result
+    assert cancelled is True
+    assert result.success is False
+    assert result.error == "timeout"
 
 
 @pytest.mark.asyncio
@@ -330,6 +370,51 @@ async def test_collect_reports_describes_actual_wait_not_requested_ceiling() -> 
     # follow-up collect_reports can have its fresh progress card torn down by
     # the previous call's late callback.
     assert progress[-1][1] is True
+
+
+@pytest.mark.asyncio
+async def test_collect_reports_does_not_wait_past_research_phase() -> None:
+    bus = AgentBus()
+    session = _session()
+    job_id = "root::worker::1"
+    task = asyncio.create_task(asyncio.sleep(60))
+    session.current_job_id = job_id
+    session.total_task_count = 1
+    bus._sessions[session.session_id] = session
+    bus._jobs[job_id] = JobEntry(
+        job_id=job_id,
+        parent_task_id="root",
+        item=SubTask(question="work", role_id="researcher"),
+        task=task,
+        status="running",
+    )
+    now = asyncio.get_running_loop().time()
+    phase_budget = TeamPhaseBudget(
+        started_monotonic_s=now - 20,
+        research_dispatch_deadline_s=now - 10,
+        research_deadline_s=now - 1,
+        publication_deadline_s=now + 30,
+        finalization_deadline_s=now + 60,
+        state={},
+    )
+    services_before = registry.snapshot()
+    registry.register(AgentBus, bus)
+    token = set_current_execution_scope(ExecutionScope(
+        task_id="root",
+        metadata={SWARM_SCOPE_KEY: SimpleNamespace(phase_budget=phase_budget)},
+    ))
+    started = asyncio.get_running_loop().time()
+    try:
+        text = await collect_reports.ainvoke({"timeout": 1800})
+    finally:
+        reset_current_execution_scope(token)
+        registry.restore(services_before)
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+
+    assert asyncio.get_running_loop().time() - started < 0.2
+    assert "research collection window is closed" in text
 
 
 @pytest.mark.asyncio

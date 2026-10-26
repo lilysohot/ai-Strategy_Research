@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 from collections.abc import Mapping
 from dataclasses import dataclass, field
+from html import escape
 from typing import TYPE_CHECKING, Any, Literal
 
 from frontier_agent.components.agent_bus.models import SubAgentResult
@@ -165,6 +166,13 @@ def classify_completion(
     md = result.metadata or {}
     stopped_by = (md.get("stopped_by") or "").strip()
 
+    if md.get("result_snapshot_error"):
+        return CompletionInfo(
+            status="incomplete",
+            reason="checkpoint_error",
+            note="member report was returned but its durable result snapshot could not be saved",
+        )
+
     if not result.success:
         err = (result.error or "unknown error").strip()
         cls = (result.error_class or "").strip() if policy.include_error_class else ""
@@ -219,14 +227,33 @@ def format_report_block(
     if info is None:
         info = classify_completion(result, policy=policy)
     body = (result.final_content or "(empty report)").strip()
+    raw_attachments = (result.metadata or {}).get("report_attachments", [])
+    if not isinstance(raw_attachments, (list, tuple)):
+        raw_attachments = []
+    attachments = [
+        str(ref).strip()
+        for ref in raw_attachments
+        if str(ref).strip()
+    ]
+    if attachments:
+        rendered = "\n".join(
+            f'<attachment ref="{escape(ref, quote=True)}" />' for ref in attachments
+        )
+        body = (
+            f"{body}\n<attachments count=\"{len(attachments)}\">\n"
+            f"{rendered}\n</attachments>"
+        )
     if info.note:
         body = f"[NOTE: {info.note}.]\n{body}"
+    job_attr = ""
+    if result.job_id and re.fullmatch(r"[A-Za-z0-9_.:-]{1,180}", result.job_id):
+        job_attr = f' job="{escape(result.job_id, quote=True)}"'
     if info.reason:
         return (
-            f'<report agent="{name}" status="{info.status}" '
+            f'<report agent="{name}"{job_attr} status="{info.status}" '
             f'reason="{info.reason}">\n{body}\n</report>'
         )
-    return f'<report agent="{name}" status="{info.status}">\n{body}\n</report>'
+    return f'<report agent="{name}"{job_attr} status="{info.status}">\n{body}\n</report>'
 
 
 # Synthetic agent name for orchestrator-level status notices. The

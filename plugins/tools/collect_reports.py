@@ -9,6 +9,7 @@ from __future__ import annotations
 import asyncio
 import inspect
 import logging
+import time
 from typing import Any
 
 from frontier_agent.components.agent_bus import (
@@ -26,7 +27,8 @@ from frontier_agent.core.execution_context import get_current_execution_scope
 from frontier_agent.core.loop_types import wall_deadline_remaining_s
 from frontier_agent.core.runtime.registries import services as registry
 from frontier_agent.core.tool import tool
-from plugins.tools._bus_scope import resolve_bus_task_id
+from plugins.tools._bus_scope import SWARM_SCOPE_KEY, resolve_bus_task_id
+from plugins.tools._verification import render_verification_status
 
 logger = logging.getLogger(__name__)
 
@@ -124,6 +126,9 @@ def _status_notice(
     out = f"{format_status_report_block(reason, body)}\n\n[status] {state}"
     if extra_status:
         out += f"\n{extra_status}"
+    bus = registry.get_optional(AgentBus)
+    if bus is not None:
+        out += render_verification_status(bus, resolve_bus_task_id(scope))
     return out
 
 
@@ -186,6 +191,18 @@ async def collect_reports(timeout: int = 1800) -> str:
     # tests) the caller's ``timeout`` is used unchanged.
     wall_budget_exhausted = False
     remaining = wall_deadline_remaining_s()
+    phase_name = ""
+    runtime = (scope.metadata or {}).get(SWARM_SCOPE_KEY)
+    phase_budget = getattr(runtime, "phase_budget", None)
+    if phase_budget is not None:
+        phase_name, phase_deadline = phase_budget.wait_deadline()
+        if phase_deadline is not None:
+            phase_remaining = float(phase_deadline) - time.monotonic()
+            remaining = (
+                phase_remaining
+                if remaining is None
+                else min(remaining, phase_remaining)
+            )
     if remaining is not None:
         wall_budget_exhausted = remaining <= _WALL_FINALIZE_BUFFER_S
         # ``max(0, …)`` turns an already-passed deadline into a final
@@ -280,9 +297,16 @@ async def collect_reports(timeout: int = 1800) -> str:
             # Steer the agent to finalize with the evidence already gathered.
             return _status_notice(
                 scope, "wall_deadline",
-                "The time budget is nearly exhausted — do NOT call "
-                "collect_reports again. Finalize your answer now using the "
-                "evidence already collected.",
+                (
+                    "The research collection window is closed — do NOT wait "
+                    "for more research. Dispatch the sole publisher now if "
+                    "files are required; otherwise finalize using the evidence "
+                    "already collected."
+                    if phase_name in {"draining", "consolidating"}
+                    else "The time budget is nearly exhausted — do NOT call "
+                    "collect_reports again. Finalize your answer now using the "
+                    "evidence already collected."
+                ),
                 extra_status=status,
                 track_churn=False,
             )
@@ -328,7 +352,7 @@ async def collect_reports(timeout: int = 1800) -> str:
             f" harvested={batch.evidence_count} evidence "
             f"+ {batch.assertion_count} assertions"
         )
-    return "\n\n".join([*batch.blocks, status])
+    return "\n\n".join([*batch.blocks, status]) + render_verification_status(bus, task_id)
 
 
 def _start_heartbeat(

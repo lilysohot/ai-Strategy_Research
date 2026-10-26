@@ -34,6 +34,7 @@ from frontier_agent.core.execution_context import (
     reset_current_execution_scope,
     set_current_execution_scope,
 )
+from frontier_agent.core.loop_types import TurnContext
 from frontier_agent.core.runtime import registry
 from plugins.tools._bus_scope import SWARM_SCOPE_KEY
 from plugins.tools.assign_task import (
@@ -42,6 +43,9 @@ from plugins.tools.assign_task import (
     _session_has_publish_work,
     agent_team_assign_task,
 )
+from plugins.tools.create_subagent import create_subagent
+from workflows.agent_team.observers.unassigned_nudge import UnassignedAgentNudge
+from workflows.agent_team.phase_budget import TeamPhaseBudget
 
 TASK_ID = "current-run"
 MANIFEST = ["/outputs/answer.md"]
@@ -49,6 +53,7 @@ MANIFEST = ["/outputs/answer.md"]
 
 def _session(name: str, *, dispatched: int = 0, queued: int = 0) -> Any:
     return SimpleNamespace(
+        name=name,
         session_id=f"{TASK_ID}::{name}",
         total_task_count=dispatched,
         pending_tasks=deque(range(queued)),
@@ -67,6 +72,9 @@ class _FakeBus:
 
     def get_session(self, session_id: str) -> Any:
         return self._sessions.get(session_id)
+
+    def list_sessions_for_task(self, _task_id: str) -> list[Any]:
+        return list(self._sessions.values())
 
     def current_job_metadata(self, session_id: str) -> dict[str, Any]:
         session = self._sessions.get(session_id)
@@ -94,6 +102,7 @@ def dispatch(monkeypatch: pytest.MonkeyPatch):
         sessions: dict[str, Any],
         tasks: list[dict[str, Any]],
         publication_state: dict[str, Any] | None = None,
+        phase_budget: TeamPhaseBudget | None = None,
     ) -> tuple[str, _FakeBus, dict[str, Any]]:
         bus = _FakeBus(sessions)
         state = publication_state if publication_state is not None else {}
@@ -101,6 +110,7 @@ def dispatch(monkeypatch: pytest.MonkeyPatch):
             publication_state=state,
             publication_lock=asyncio.Lock(),
             original_question="what is the net consumer intent?",
+            phase_budget=phase_budget,
         )
         scope = ExecutionScope(
             task_id=TASK_ID,
@@ -117,6 +127,38 @@ def dispatch(monkeypatch: pytest.MonkeyPatch):
         return result, bus, state
 
     return _run
+
+
+@pytest.mark.parametrize("required", [True, False])
+def test_required_status_is_fixed_in_dispatch_metadata(dispatch, required) -> None:
+    result, bus, _ = dispatch(
+        {f"{TASK_ID}::researcher": _session("researcher")},
+        [{"agent": "researcher", "prompt": "Investigate source", "required_for_completion": required}],
+    )
+    assert "Error:" not in result
+    assert bus.submitted[0][1]["required_for_completion"] is required
+
+
+def test_research_assignment_is_rejected_after_admission_closes(dispatch) -> None:
+    state: dict[str, Any] = {}
+    budget = TeamPhaseBudget(
+        started_monotonic_s=0,
+        research_dispatch_deadline_s=1,
+        research_deadline_s=10**12,
+        publication_deadline_s=10**12 + 100,
+        finalization_deadline_s=None,
+        state=state,
+    )
+
+    result, bus, _ = dispatch(
+        {f"{TASK_ID}::researcher": _session("researcher")},
+        [{"agent": "researcher", "prompt": "start another search"}],
+        state,
+        budget,
+    )
+
+    assert "research admission window is closed" in result
+    assert bus.submitted == []
 
 
 # ── the capacity predicate both guards now share ─────────────────────────────
@@ -316,3 +358,116 @@ def test_the_capped_incumbent_is_still_refused_its_own_retry(
     assert f"reached the {MAX_TASKS_PER_SESSION}-task limit" in result
     assert "create a fresh sub-agent" in result
     assert bus.submitted == []
+
+
+def test_publisher_assignment_closes_research_dispatch_in_the_same_turn(
+    dispatch,
+) -> None:
+    """The live network run assigned its publisher, then assigned a fresh
+    verifier that competed for the last wall-time slice.  Once publication is
+    queued, later workspace-only work in that dispatch must be refused.
+    """
+    sessions = {
+        f"{TASK_ID}::report_publisher": _session("report_publisher"),
+        f"{TASK_ID}::final_verifier": _session("final_verifier"),
+    }
+
+    result, bus, state = dispatch(
+        sessions,
+        [
+            {
+                "agent": "report_publisher",
+                "prompt": "Publish the collected reports.",
+                "output_paths": MANIFEST,
+            },
+            {
+                "agent": "final_verifier",
+                "prompt": "Re-check the draft after publication starts.",
+            },
+        ],
+    )
+
+    assert [session_id for session_id, _metadata in bus.submitted] == [
+        f"{TASK_ID}::report_publisher",
+    ]
+    assert state["phase"] == "publishing"
+    assert "publication phase is active" in result
+    assert "Collect this publisher next" in result
+
+
+def test_publication_phase_rejects_new_verifier_before_session_creation() -> None:
+    """Creating another verifier after the publisher starts still burns a
+    coordinator turn and invites a later competing assignment.  Reject it at
+    the creation boundary and direct the coordinator back to the publisher.
+    """
+    runtime = SimpleNamespace(
+        publication_state={
+            "phase": "publishing",
+            "publisher_agent_name": "report_publisher",
+            "deliverable_manifest": tuple(MANIFEST),
+        },
+        publication_lock=asyncio.Lock(),
+        original_question="publish the final report",
+    )
+    scope = ExecutionScope(
+        task_id=TASK_ID,
+        metadata={SWARM_SCOPE_KEY: runtime, "run_id": "run-1"},
+    )
+    saved = registry.snapshot()
+    registry.register(AgentBus, _FakeBus({}))  # type: ignore[arg-type]
+    token = set_current_execution_scope(scope)
+    try:
+        result = asyncio.run(
+            create_subagent.func(
+                agents=[
+                    {
+                        "name": "final_verifier",
+                        "system_prompt": "Verify the final report.",
+                    },
+                ],
+            )
+        )
+    finally:
+        reset_current_execution_scope(token)
+        registry.restore(saved)
+
+    assert "publication phase is active" in result
+    assert "report_publisher" in result
+
+
+def test_publication_phase_does_not_nudge_obsolete_unassigned_agents() -> None:
+    """A verifier pre-created during planning must not pull the coordinator
+    back into assignments after the one-way publisher phase begins.
+    """
+    bus = _FakeBus({f"{TASK_ID}::final_verifier": _session("final_verifier")})
+    runtime = SimpleNamespace(
+        publication_state={
+            "phase": "publishing",
+            "publisher_agent_name": "publisher",
+            "deliverable_manifest": tuple(MANIFEST),
+        },
+    )
+    scope = ExecutionScope(
+        task_id=TASK_ID,
+        metadata={SWARM_SCOPE_KEY: runtime, "run_id": "run-1"},
+    )
+    ctx = TurnContext(
+        turn=3,
+        max_turns=10,
+        task_id=TASK_ID,
+        role_id="agent_team_main",
+        ai_text="Publisher is complete.",
+        thinking="",
+        tool_calls=[],
+        messages=[],
+        usage=None,
+        metadata={},
+    )
+    saved = registry.snapshot()
+    registry.register(AgentBus, bus)  # type: ignore[arg-type]
+    token = set_current_execution_scope(scope)
+    try:
+        assert asyncio.run(UnassignedAgentNudge().on_turn_end(ctx)) is None
+    finally:
+        reset_current_execution_scope(token)
+        registry.restore(saved)

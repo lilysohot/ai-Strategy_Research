@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from collections.abc import Iterable
 from typing import Any
 
@@ -19,10 +20,17 @@ from frontier_agent.components.task_board_types import (
 from frontier_agent.core.execution_context import get_current_execution_scope
 from frontier_agent.core.runtime import registry
 from frontier_agent.core.tool import tool
-from plugins.tools._bus_scope import resolve_bus_task_id
+from plugins.tools._bus_scope import SWARM_SCOPE_KEY, resolve_bus_task_id
 from plugins.tools._coerce import coerce_json_list, coerce_json_object
 
 logger = logging.getLogger(__name__)
+
+_VERIFICATION_TASK = re.compile(
+    r"^\s*(?:核验|验证|复核|交叉核验|交叉验证|终审)"
+    r"|(?:最终|终审|独立|交叉|全面|全部|所有).{0,12}(?:核验|验证|复核)"
+    r"|^\s*(?:verify|validate|audit|cross[- ]?check)\b",
+    re.IGNORECASE,
+)
 
 # task_id -> {"seq": int, "tasks": {id: {description, resolution, owners, group}}}
 _BOARDS: dict[str, dict[str, Any]] = {}
@@ -55,6 +63,52 @@ def _record_op(task_id: str, op: str, ids: list[str] | None = None) -> None:
 
 def _board(task_id: str) -> dict[str, Any]:
     return _BOARDS.setdefault(task_id, {"seq": 0, "tasks": {}})
+
+
+def _verification_required(item: dict[str, Any], description: str) -> bool:
+    """Recognize explicit verification gates; ordinary research stays unchanged."""
+    return (
+        item.get("verification_required") is True
+        or bool(coerce_json_list(item.get("verification_requirements")))
+        or bool(_VERIFICATION_TASK.search(description))
+    )
+
+
+_CHECK_ID = re.compile(r"^[A-Za-z0-9_.:-]{1,80}$")
+
+
+def _verification_requirements(
+    item: dict[str, Any],
+    *,
+    task_id: str,
+    description: str,
+    required: bool,
+) -> list[dict[str, str]]:
+    """Give every planned verification gate stable, externally visible checks."""
+    if not required:
+        return []
+    out: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for raw in coerce_json_list(item.get("verification_requirements")) or []:
+        requirement = coerce_json_object(raw)
+        if requirement is None:
+            continue
+        check_id = str(requirement.get("check_id") or "").strip()
+        criterion = str(requirement.get("criterion") or "").strip()
+        if not _CHECK_ID.fullmatch(check_id) or not criterion or check_id in seen:
+            continue
+        seen.add(check_id)
+        out.append({"check_id": check_id, "criterion": criterion[:2000]})
+    # Auto-recognized verification tasks still become durable plan entries.
+    # If the model never dispatches this identity, finalization reports it as a
+    # missing check instead of forgetting the intent entirely.
+    return out or [{"check_id": f"{task_id}.required", "criterion": description[:2000]}]
+
+
+def _team_verification_gate_enabled(scope: Any) -> bool:
+    """Identify team coordinator runs, including planning_mode=false profiles."""
+    metadata = getattr(scope, "metadata", None) or {}
+    return SWARM_SCOPE_KEY in metadata or planning_enabled(scope.task_id)
 
 
 def board_size(task_id: str) -> int:
@@ -149,15 +203,38 @@ def restore_board_from_messages(task_id: str, messages: Iterable[Any]) -> int:
                     if item is None:
                         continue
                     description = str(item.get("description") or "").strip()
-                    if not description or description in existing:
+                    if not description:
+                        continue
+                    if description in existing:
+                        tid = existing[description]
+                        required = _verification_required(item, description)
+                        if required:
+                            board["tasks"][tid]["verification_required"] = True
+                            if item.get("verification_requirements") is not None:
+                                board["tasks"][tid]["verification_requirements"] = (
+                                    _verification_requirements(
+                                        item,
+                                        task_id=tid,
+                                        description=description,
+                                        required=True,
+                                    )
+                                )
                         continue
                     board["seq"] += 1
                     tid = f"t{board['seq']}"
+                    required = _verification_required(item, description)
                     board["tasks"][tid] = {
                         "description": description,
                         "resolution": "open",
                         "owners": _as_owner_list(item.get("owner") or item.get("owners")),
                         "group": str(item.get("group") or "").strip(),
+                        "verification_required": required,
+                        "verification_requirements": _verification_requirements(
+                            item,
+                            task_id=tid,
+                            description=description,
+                            required=required,
+                        ),
                     }
                     existing[description] = tid
             elif name == "update_task":
@@ -220,13 +297,19 @@ def serialize_tasks(task_id: str, ids: list[str]) -> list[dict[str, Any]]:
         t = b["tasks"].get(tid)
         if t is None:
             continue
-        out.append({
+        serialized = {
             "id": tid,
             "description": t.get("description", ""),
             "resolution": t.get("resolution", "open"),
             "owners": list(t.get("owners") or []),
             "group": t.get("group", ""),
-        })
+        }
+        if t.get("verification_required"):
+            serialized["verification_required"] = True
+            serialized["verification_requirements"] = [
+                dict(item) for item in t.get("verification_requirements") or []
+            ]
+        out.append(serialized)
     return out
 
 
@@ -424,6 +507,14 @@ async def add_task(tasks: list[Any]) -> str:
             - owner (OPTIONAL, multi-agent runs only): if a teammate sub-agent is
               already assigned to this item, name it here (a name, comma-string,
               or list — a task may have many). In a solo run, just OMIT it.
+            - verification_required (OPTIONAL): set true when completion means an
+              independent, version-bound check. Tasks explicitly beginning with
+              Verify/核验/验证/复核 are treated this way automatically. Such an item
+              cannot resolve until its required verification_checks pass.
+            - verification_requirements (OPTIONAL): stable planned checks as
+              ``[{"check_id": "amount", "criterion": "Recompute total"}]``.
+              Dispatch verification_checks with the same ids. An auto-recognized
+              verification task gets ``<task-id>.required`` when this is omitted.
 
     Returns:
         The assigned ids plus the rendered board.
@@ -448,15 +539,38 @@ async def add_task(tasks: list[Any]) -> str:
             skipped += 1
             continue
         if desc in existing:  # dedup re-decomposition
-            new_ids.append(existing[desc])
+            tid = existing[desc]
+            task = b["tasks"][tid]
+            required = _verification_required(it, desc)
+            if required:
+                task["verification_required"] = True
+                if (
+                    it.get("verification_requirements") is not None
+                    or not task.get("verification_requirements")
+                ):
+                    task["verification_requirements"] = _verification_requirements(
+                        it,
+                        task_id=tid,
+                        description=desc,
+                        required=True,
+                    )
+            new_ids.append(tid)
             continue
         b["seq"] += 1
         tid = f"t{b['seq']}"
+        required = _verification_required(it, desc)
         b["tasks"][tid] = {
             "description": desc,
             "resolution": "open",
             "owners": _as_owner_list(it.get("owner") or it.get("owners")),
             "group": str(it.get("group", "")).strip(),
+            "verification_required": required,
+            "verification_requirements": _verification_requirements(
+                it,
+                task_id=tid,
+                description=desc,
+                required=required,
+            ),
         }
         existing[desc] = tid
         new_ids.append(tid)
@@ -532,6 +646,43 @@ async def update_task(updates: list[Any]) -> str:
             errors.append(f"{tid}: bad resolution {res!r} (use {VALID_RESOLUTION})")
             continue
         t = b["tasks"][tid]
+        if (
+            res == "resolved"
+            and t.get("verification_required")
+            and _team_verification_gate_enabled(scope)
+        ):
+            bus = registry.get_optional(AgentBus)
+            if bus is None:
+                verification_status = "not_registered"
+            else:
+                from plugins.tools._verification import work_item_verification_status
+
+                try:
+                    verification_status = work_item_verification_status(
+                        bus,
+                        resolve_bus_task_id(scope),
+                        tid,
+                        required_check_ids=[
+                            str(item.get("check_id") or "")
+                            for item in t.get("verification_requirements") or []
+                            if isinstance(item, dict) and item.get("check_id")
+                        ],
+                    )
+                except Exception:
+                    logger.exception("could not project verification state for %s", tid)
+                    verification_status = "unavailable"
+            if verification_status != "passed":
+                detail = {
+                    "not_registered": "尚未登记版本绑定检查",
+                    "unchecked": "检查尚未提交结论",
+                    "partial": "仅部分检查通过",
+                    "failed": "至少一项检查未通过",
+                    "unavailable": "检查状态暂不可用",
+                }.get(verification_status, verification_status)
+                errors.append(
+                    f"{tid}: {detail}；请通过 verification_checks 分派必要检查并取得 pass 后再完成"
+                )
+                continue
         if t.get("verification_ok") is False:
             if res == "resolved":
                 errors.append(f"{tid}: 工具校验未通过，须重试成功后才可完成")
@@ -566,6 +717,8 @@ async def update_task(updates: list[Any]) -> str:
         _record_op(scope.task_id, "update", changed)
     msg = f"Updated {changed}.\n{render_board(scope.task_id, bus_task_id=resolve_bus_task_id(scope))}"
     if errors:
+        if not changed:
+            return "Error: no task was updated; " + "; ".join(errors) + "\n" + msg
         msg += "\nerrors: " + "; ".join(errors)
     return msg
 

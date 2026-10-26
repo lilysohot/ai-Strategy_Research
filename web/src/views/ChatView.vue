@@ -876,7 +876,7 @@ watch(
             <PlanPanel :steps="runStream.steps" />
           </el-tab-pane>
           <el-tab-pane label="活动" name="activity">
-            <ActivityPanel :steps="runStream.steps" />
+            <ActivityPanel :steps="runStream.steps" :status="runStream.status" />
           </el-tab-pane>
           <el-tab-pane v-if="diffFiles.length" label="变更" name="diff">
             <DiffPanel :files="diffFiles" :run-id="runStream.runId" @reverted="onReverted" />
@@ -887,7 +887,7 @@ watch(
             <AnalysisEvidence :run-id="runStream.runId" />
           </el-tab-pane>
           <el-tab-pane label="轨迹" name="trace" lazy>
-            <RunDetailView ref="runDetailRef" :run-id="runStream.runId" />
+            <RunDetailView ref="runDetailRef" :run-id="runStream.runId" :active="detailTab === 'trace'" />
           </el-tab-pane>
         </el-tabs>
       </section>

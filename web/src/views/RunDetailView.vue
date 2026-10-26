@@ -2,8 +2,8 @@
 /**
  * Run detail / trajectory timeline replay (T3.5).
  *
- * Source of truth is ``GET /api/runs/{run_id}/trace`` which returns the raw
- * ``react_agent.jsonl`` records. Each record carries a ``t`` discriminator:
+ * Source of truth is ``GET /api/runs/{run_id}/trace`` which returns the merged
+ * single- or multi-agent trajectory. Each record carries a ``t`` discriminator:
  *   - ``start``      run bootstrap (model, tool set, max_turns)
  *   - ``llm``        one model turn: assistant content + tool_calls + usage
  *   - ``result``     a tool call result (name, ok/error, short result, ms)
@@ -13,7 +13,7 @@
  * agent/LLM output) so assistant text goes through the shared markdown sanitizer.
  */
 
-import { computed, ref, watch } from 'vue'
+import { computed, onUnmounted, ref, watch } from 'vue'
 
 import { ApiError } from '@/api/client'
 import { runs as runsApi } from '@/api'
@@ -29,8 +29,11 @@ import {
 } from '@/utils/traceView'
 import type { RunTraceRecord, TraceCompleteness } from '@/types'
 import { useRunStreamStore } from '@/stores/runs'
+import { isActiveRunStatus } from '@/utils/runStatus'
 
-const props = defineProps<{ runId: string | null }>()
+const props = withDefaults(defineProps<{ runId: string | null; active?: boolean }>(), {
+  active: true,
+})
 
 const runStream = useRunStreamStore()
 
@@ -39,6 +42,10 @@ const loading = ref(false)
 const errorMsg = ref('')
 /** F06: null until the server reports it — never assume "complete". */
 const completeness = ref<TraceCompleteness | null>(null)
+let loadVersion = 0
+let refreshTimer: ReturnType<typeof setInterval> | null = null
+const running = computed(() => runStream.runId === props.runId
+  && isActiveRunStatus(runStream.status))
 
 const hasContent = computed(() => records.value.length > 0)
 
@@ -48,23 +55,35 @@ const hasContent = computed(() => records.value.length > 0)
  */
 const completenessNotice = computed(() => {
   const c = completeness.value
-  if (!c || c.state === 'complete') return ''
+  if (!c) return ''
+  const partialSources = c.sources?.filter((source) => source.state !== 'complete') ?? []
+  if (c.state === 'complete') {
+    if (!partialSources.length) return ''
+    return `主 Agent 已完成；${partialSources.length} 条成员/阶段轨迹不完整，已保留可读取部分`
+  }
+  if (running.value) return '运行仍在进行中，轨迹会自动更新；尚未写入结束记录'
   if (c.state === 'unavailable') return c.reason || '没有可读的轨迹记录'
   return c.reason || '运行未正常结束，已保存的记录可能缺少最后一部分内容'
 })
 
 async function load() {
-  if (!props.runId) {
+  const runId = props.runId
+  const version = ++loadVersion
+  if (!runId) {
     records.value = []
+    completeness.value = null
+    loading.value = false
     return
   }
   loading.value = true
   errorMsg.value = ''
   try {
-    const res = await runsApi.trace(props.runId)
+    const res = await runsApi.trace(runId)
+    if (version !== loadVersion || runId !== props.runId) return
     records.value = res.records
     completeness.value = res.completeness ?? null
   } catch (err) {
+    if (version !== loadVersion || runId !== props.runId) return
     if (err instanceof ApiError && err.status === 404) {
       errorMsg.value = '该运行不存在或无权限查看'
     } else {
@@ -73,7 +92,7 @@ async function load() {
     records.value = []
     completeness.value = null
   } finally {
-    loading.value = false
+    if (version === loadVersion) loading.value = false
   }
 }
 
@@ -82,17 +101,36 @@ async function load() {
 // never leaks into the next one (F05: reading is progressive, not lossy).
 const revealed = ref<Record<number, number>>({})
 
-// Reload whenever the active run changes (drawer may be reused across runs).
+// The same component survives follow-up turns and tab switches. Refresh on
+// terminal status too: a snapshot read during execution is not the final trace.
 watch(
-  () => props.runId,
-  (id) => {
-    revealed.value = {}
-    completeness.value = null
-    if (id) load()
-    else records.value = []
+  [() => props.runId, () => props.active, () => runStream.status],
+  ([id, active], previous) => {
+    ++loadVersion
+    if (refreshTimer !== null) clearInterval(refreshTimer)
+    refreshTimer = null
+    loading.value = false
+    if (id !== previous?.[0]) {
+      revealed.value = {}
+      completeness.value = null
+      records.value = []
+      errorMsg.value = ''
+    }
+    if (!id || !active) return
+    void load()
+    if (running.value) {
+      refreshTimer = setInterval(() => {
+        if (!loading.value) void load()
+      }, 3000)
+    }
   },
   { immediate: true },
 )
+
+onUnmounted(() => {
+  ++loadVersion
+  if (refreshTimer !== null) clearInterval(refreshTimer)
+})
 
 function kindLabel(t: string): string {
   switch (t) {
@@ -107,6 +145,16 @@ function kindLabel(t: string): string {
     default:
       return t
   }
+}
+
+/** Human-readable owner of a replay record (T05 multi-agent refresh). */
+function agentLabel(rec: RunTraceRecord): string {
+  if (rec.agent_kind === 'subagent') return `成员 · ${rec.agent_id || '未知'}`
+  if (rec.agent_kind === 'coordinator') {
+    return rec.trajectory_source === 'main_planning' ? '主 Agent · 规划' : '主 Agent'
+  }
+  if (rec.agent_kind === 'single') return '单 Agent'
+  return ''
 }
 
 function renderContent(c: string | null | undefined): string {
@@ -214,6 +262,7 @@ defineExpose({ load })
       <div v-for="(rec, i) in records" :key="i" class="tl-item" :class="`tl-${rec.t}`">
         <div class="tl-dot" />
         <div class="tl-body">
+          <div v-if="agentLabel(rec)" class="tl-source">{{ agentLabel(rec) }}</div>
           <!-- start -->
           <template v-if="rec.t === 'start'">
             <div class="tl-head">
@@ -394,6 +443,16 @@ defineExpose({ load })
   gap: 8px;
   flex-wrap: wrap;
   margin-bottom: 4px;
+}
+
+.tl-source {
+  display: inline-block;
+  margin-bottom: 4px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--el-fill-color);
+  color: var(--el-text-color-secondary);
+  font-size: 11px;
 }
 
 .tl-kind {

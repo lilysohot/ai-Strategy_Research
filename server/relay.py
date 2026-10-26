@@ -6,10 +6,10 @@ Two sources feed a run's SSE stream (tech-stack.md §5.2):
      orchestrator drains the worker and emits run-level events. Delta/tool events
      will come from an in-process BridgeObserver once runs are in-process (M2+);
      at M1 the worker is a subprocess and emits only lifecycle frames.
-  2. **Replay**: the runtime trajectory file
-     ``<run_dir>/run/agent/trajectories/react_agent.jsonl`` is tailed from a
-     line-number cursor. This is the authoritative L3 timeline and the only
-     source for tool argument previews and token usage.
+  2. **Replay**: the runtime trajectory stream(s) are tailed from a merged
+     line-number cursor. Single-Agent has ``react_agent.jsonl``; Agent Team has
+     coordinator/planning/member files. Together they are the authoritative L3
+     timeline and the source for tool argument previews and token usage.
 
 Backpressure (§5.2): under pressure we may drop assistant_delta frames, never
 lifecycle events — the trajectory always holds the full per-turn content for
@@ -23,12 +23,14 @@ import asyncio
 import json
 import os
 from collections.abc import AsyncIterator
+from pathlib import Path
 from typing import Any
 
 from frontier_agent.core.runtime.loop.tool_exec import tool_result_text_is_error
 from server.bridge import _is_skipped_result, redact_deep
 from server.config import run_dir_for
 from server.events import EventType, is_droppable, make_event, to_sse
+from server.trajectory_sources import discover_trajectory_sources, iter_merged_records
 
 _TRAJ = "run/agent/trajectories/react_agent.jsonl"
 
@@ -61,7 +63,10 @@ def _locate_offset(path: os.PathLike[str], after_line: int) -> tuple[int, int]:
     return offset, count
 
 
-async def trajectory_tail(run_id: str, after_line: int = 0) -> AsyncIterator[tuple[int, dict]]:
+async def _legacy_trajectory_tail(
+    run_id: str,
+    after_line: int = 0,
+) -> AsyncIterator[tuple[int, dict]]:
     """Yield ``(line_number, record)`` from ``after_line`` (1-based) onward.
 
     Blocks (polling) for new lines until the run's summary.json appears, then
@@ -137,6 +142,48 @@ async def trajectory_tail(run_id: str, after_line: int = 0) -> AsyncIterator[tup
         await asyncio.sleep(0.25)
 
 
+async def trajectory_tail(run_id: str, after_line: int = 0) -> AsyncIterator[tuple[int, dict]]:
+    """Tail either the legacy single stream or all Agent Team streams.
+
+    Team cursors are positions in the timestamp-merged record stream. Runtime
+    records use one process clock and are append-only, so new records extend the
+    merged order while reconnect can deterministically rebuild its prefix.
+    """
+    run_dir = run_dir_for(run_id)
+    finished = run_dir / "summary.json"
+    while True:
+        sources = discover_trajectory_sources(run_dir)
+        if sources:
+            break
+        if finished.exists():
+            return
+        await asyncio.sleep(0.25)
+
+    if len(sources) == 1 and sources[0].source == "react_agent":
+        async for item in _legacy_trajectory_tail(run_id, after_line=after_line):
+            yield item
+        return
+
+    offsets: dict[Path, int] = {}
+    source_lines: dict[Path, int] = {}
+    line_no = 0
+    while True:
+        sources = discover_trajectory_sources(run_dir)
+        terminal = finished.exists()
+        for record, _path, _offset in iter_merged_records(
+            sources,
+            offsets=offsets,
+            line_numbers=source_lines,
+            terminal=terminal,
+        ):
+            line_no += 1
+            if line_no > after_line:
+                yield line_no, record
+        if terminal:
+            return
+        await asyncio.sleep(0.25)
+
+
 def trajectory_records(run_id: str, after_line: int = 0) -> list[dict]:
     """Synchronous, one-shot read of the trajectory up to ``after_line``.
 
@@ -147,7 +194,18 @@ def trajectory_records(run_id: str, after_line: int = 0) -> list[dict]:
     needs the real token counts). Anything that crosses the HTTP boundary must
     go through :func:`trajectory_records_for_egress` instead.
     """
-    traj = run_dir_for(run_id) / _TRAJ
+    run_dir = run_dir_for(run_id)
+    sources = discover_trajectory_sources(run_dir)
+    if sources and not (len(sources) == 1 and sources[0].source == "react_agent"):
+        return [
+            record
+            for index, (record, _path, _offset) in enumerate(
+                iter_merged_records(sources),
+                start=1,
+            )
+            if index > after_line
+        ]
+    traj = run_dir / _TRAJ
     if not traj.exists():
         return []
     out: list[dict] = []
@@ -198,7 +256,9 @@ def project_trajectory_record_for_egress(record: dict) -> dict:
     return safe
 
 
-def trajectory_page(run_id: str, after_line: int = 0, limit: int = 0) -> tuple[list[dict], int, bool]:
+def trajectory_page(
+    run_id: str, after_line: int = 0, limit: int = 0
+) -> tuple[list[dict], int, bool]:
     """Paged trajectory read (F13): ``(records, next_line, has_more)``.
 
     ``limit`` bounds how many records are read at once, so a very large
@@ -208,7 +268,27 @@ def trajectory_page(run_id: str, after_line: int = 0, limit: int = 0) -> tuple[l
     ``limit=0`` keeps the historical behaviour: everything is returned and
     ``has_more`` is always False.
     """
-    traj = run_dir_for(run_id) / _TRAJ
+    run_dir = run_dir_for(run_id)
+    sources = discover_trajectory_sources(run_dir)
+    if sources and not (len(sources) == 1 and sources[0].source == "react_agent"):
+        out: list[dict] = []
+        consumed_last = after_line
+        for position, (rec, _path, _offset) in enumerate(
+            iter_merged_records(sources),
+            start=1,
+        ):
+            if position <= after_line:
+                continue
+            if isinstance(rec, dict) and rec.get("t") == "attempt":
+                consumed_last = position
+                continue
+            if limit and len(out) >= limit:
+                return out, position - 1, True
+            out.append(project_trajectory_record_for_egress(rec))
+            consumed_last = position
+        return out, consumed_last, False
+
+    traj = run_dir / _TRAJ
     if not traj.exists():
         return [], after_line, False
     out: list[dict] = []
@@ -378,14 +458,27 @@ def _traj_record_to_events(rec: dict, *, seq: int | None = None) -> list[dict]:
     """
     t = rec.get("t")
     events: list[dict] = []
+    source_meta = {
+        key: rec[key]
+        for key in ("agent_id", "agent_kind", "role_id", "trajectory_source")
+        if rec.get(key) is not None
+    }
+    if isinstance(rec.get("ts"), (int, float)):
+        source_meta["ts"] = rec["ts"]
 
     if t == "start":
+        # A member loop is not a second product run. Its identity is carried on
+        # subsequent replay events; emitting run_started here would reset the
+        # Web run status and overwrite coordinator metadata on reconnect.
+        if rec.get("agent_kind") == "subagent":
+            return []
         events.append(
             make_event(
                 EventType.RUN_STARTED.value,
                 model_name=rec.get("model_name"),
                 tool_names=rec.get("tool_names"),
                 max_turns=rec.get("max_turns"),
+                **source_meta,
             )
         )
     elif t == "llm":
@@ -400,6 +493,7 @@ def _traj_record_to_events(rec: dict, *, seq: int | None = None) -> list[dict]:
                 thinking=rec.get("thinking") or "",
                 tool_calls=rec.get("tool_calls"),
                 usage=rec.get("usage"),
+                **source_meta,
             )
         )
         for idx, call in enumerate(rec.get("tool_calls") or []):
@@ -416,6 +510,7 @@ def _traj_record_to_events(rec: dict, *, seq: int | None = None) -> list[dict]:
                     tool_call_id=call_id,
                     tool_name=call.get("name") or "tool",
                     input=call.get("args"),
+                    **source_meta,
                 )
             )
     elif t == "result":
@@ -437,10 +532,11 @@ def _traj_record_to_events(rec: dict, *, seq: int | None = None) -> list[dict]:
                 detail=result_text[:400],
                 output=rec.get("result"),
                 ms=rec.get("ms"),
+                **source_meta,
             )
         )
     elif t == "compaction":
-        events.append(make_event(EventType.WARNING.value, detail="compaction"))
+        events.append(make_event(EventType.WARNING.value, detail="compaction", **source_meta))
     elif t == "end":
         # Terminal bookkeeping (turns used / stop reason). The stream is closed
         # by the summary.json watcher in trajectory_tail, so there is nothing
@@ -457,7 +553,13 @@ def _traj_record_to_events(rec: dict, *, seq: int | None = None) -> list[dict]:
         # without emitting a bogus "unknown traj record" warning.
         return []
     else:
-        events.append(make_event("warning", detail=f"unknown traj record: {t}"))
+        events.append(
+            make_event(
+                "warning",
+                detail=f"unknown traj record: {t}",
+                **source_meta,
+            )
+        )
 
     # Replay egress masking: the trajectory is persisted unredacted by the
     # runtime, so without this a secret a tool echoed would reach the browser

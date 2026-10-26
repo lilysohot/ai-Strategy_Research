@@ -26,13 +26,18 @@ from server.store import init_db
 
 @pytest.fixture
 async def mock_llm():
-    server = MockLLMServer(script=[
-        tool_call_turn("create_file", {
-            "path": "/outputs/report.md",
-            "content": "# Report\n\nDeliverable written by create_file.\n",
-        }),
-        text_turn("Report written to /outputs/report.md."),
-    ]).start()
+    server = MockLLMServer(
+        script=[
+            tool_call_turn(
+                "create_file",
+                {
+                    "path": "/outputs/report.md",
+                    "content": "# Report\n\nDeliverable written by create_file.\n",
+                },
+            ),
+            text_turn("Report written to /outputs/report.md."),
+        ]
+    ).start()
     yield server
     server.stop()
 
@@ -59,45 +64,12 @@ async def auth_headers(app_client):
 
     await init_db()
     pwd = "Str0ngPass1"
-    reg = await app_client.post(
-        "/api/auth/register", json={"username": "m1-user", "password": pwd}
-    )
+    reg = await app_client.post("/api/auth/register", json={"username": "m1-user", "password": pwd})
     # A 409 just means a prior test in this process already created the user.
     assert reg.status_code in (201, 409), reg.text
-    login = await app_client.post(
-        "/api/auth/login", json={"username": "m1-user", "password": pwd}
-    )
+    login = await app_client.post("/api/auth/login", json={"username": "m1-user", "password": pwd})
     assert login.status_code == 200, login.text
     return {"Authorization": f"Bearer {login.json()['access_token']}"}
-
-
-def _spawn_approver(run_id: str, client, headers):
-    """Answer the P3.2 approval gate the way a user would.
-
-    Since the gate landed (P3.2), a worker's ``create_file`` suspends on
-    ``approval_requested`` until a decision arrives — an old e2e that never
-    answers would hang the worker for the gate's 300s timeout. This task
-    subscribes to the run's event fan-out and approves ``once`` via the real
-    API route, so the approval path itself stays exercised.
-    """
-    from server.orchestrator import get_orchestrator
-
-    orch = get_orchestrator()
-
-    async def run() -> None:
-        q = orch.subscribe(run_id)
-        while True:
-            evt = await asyncio.wait_for(q.get(), timeout=90)
-            if evt and evt.get("type") == "approval_requested":
-                resp = await client.post(
-                    f"/api/runs/{run_id}/approve",
-                    json={"approval_id": evt["approval_id"], "decision": "once"},
-                    headers=headers,
-                )
-                assert resp.status_code == 200, resp.text
-                return
-
-    return asyncio.ensure_future(run())
 
 
 @pytest.mark.asyncio
@@ -115,16 +87,18 @@ async def test_m1_run_chain_writes_trajectory(mock_llm, app_client, auth_headers
     await init_db()
 
     prompt = (
-        "Read /inputs/brief.md and write a short summary to /outputs/report.md "
-        "using create_file."
+        "Read /inputs/brief.md and write a short summary to /outputs/report.md using create_file."
     )
-    resp = await app_client.post("/api/runs", json={
-        "message": prompt,
-        "session_id": "test-session",
-    }, headers=auth_headers)
+    resp = await app_client.post(
+        "/api/runs",
+        json={
+            "message": prompt,
+            "session_id": "test-session",
+        },
+        headers=auth_headers,
+    )
     assert resp.status_code == 202
     run_id = resp.json()["run_id"]
-    approver = _spawn_approver(run_id, app_client, auth_headers)
 
     # Poll the trajectory until the run finishes (summary.json appears).
     run_dir = run_dir_for(run_id)
@@ -142,15 +116,16 @@ async def test_m1_run_chain_writes_trajectory(mock_llm, app_client, auth_headers
     records = trajectory_records(run_id)
     types = {r.get("t") for r in records}
     assert "start" in types
-    assert any(r.get("t") == "llm" and r.get("tool_calls") for r in records), \
+    assert any(r.get("t") == "llm" and r.get("tool_calls") for r in records), (
         "no tool_call recorded in trajectory"
-    assert any(r.get("t") == "llm" and r.get("usage") for r in records), \
+    )
+    assert any(r.get("t") == "llm" and r.get("usage") for r in records), (
         "no usage recorded in trajectory"
+    )
     # Tool arguments must be present (L3 参数摘要 comes from the trajectory,
     # never from on_tool_call — tech-stack.md §5.2).
     llm_with_calls = [r for r in records if r.get("t") == "llm" and r.get("tool_calls")]
-    assert llm_with_calls[0]["tool_calls"][0].get("args"), \
-        "tool args missing from trajectory"
+    assert llm_with_calls[0]["tool_calls"][0].get("args"), "tool args missing from trajectory"
 
     # Replay via the /trace endpoint honours the line-number cursor.
     trace = await app_client.get(f"/api/runs/{run_id}/trace", headers=auth_headers)
@@ -166,9 +141,6 @@ async def test_m1_run_chain_writes_trajectory(mock_llm, app_client, auth_headers
         f"/api/runs/{run_id}/trace?after={len(records)}", headers=auth_headers
     )
     assert tail.json()["records"] == []
-
-    # The approver task has posted its decision and returned.
-    await asyncio.wait_for(approver, timeout=5)
 
 
 @pytest.mark.asyncio
@@ -200,10 +172,14 @@ async def test_worker_killed_api_survives(mock_llm, app_client, auth_headers, mo
 
     from server.orchestrator import get_orchestrator
 
-    resp = await app_client.post("/api/runs", json={
-        "message": "write a report to /outputs/kill.md using create_file",
-        "session_id": "kill-session",
-    }, headers=auth_headers)
+    resp = await app_client.post(
+        "/api/runs",
+        json={
+            "message": "write a report to /outputs/kill.md using create_file",
+            "session_id": "kill-session",
+        },
+        headers=auth_headers,
+    )
     assert resp.status_code == 202
     run_id = resp.json()["run_id"]
 
@@ -224,8 +200,12 @@ async def test_worker_killed_api_survives(mock_llm, app_client, auth_headers, mo
     assert health.status_code == 200
     assert health.json()["status"] == "ok"
 
-    again = await app_client.post("/api/runs", json={
-        "message": "a second run after the kill",
-        "session_id": "kill-session-2",
-    }, headers=auth_headers)
+    again = await app_client.post(
+        "/api/runs",
+        json={
+            "message": "a second run after the kill",
+            "session_id": "kill-session-2",
+        },
+        headers=auth_headers,
+    )
     assert again.status_code == 202

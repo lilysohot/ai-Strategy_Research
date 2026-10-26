@@ -7,6 +7,7 @@ from types import SimpleNamespace
 
 import pytest
 
+from frontier_agent.core.tool import ToolOutcome
 from plugins.tools.web_search import raw_web_search
 
 download_module = importlib.import_module("plugins.tools.download_file")
@@ -75,7 +76,10 @@ async def test_web_fetch_refuses_non_public_targets(
 
     result = await web_fetch_module._fetch_one(url, "anything")
 
-    assert result.startswith("[BLOCKED]")
+    assert isinstance(result, ToolOutcome) and result.is_error
+    payload = json.loads(result.result)
+    assert payload["status"] == "policy_blocked"
+    assert payload["detail"].startswith("[BLOCKED]")
 
 
 async def test_private_fetch_opt_in_restores_access(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -105,7 +109,10 @@ async def test_aligned_web_fetch_refuses_non_public_targets(
 
     result = await aligned._fetch_single(url, "anything")
 
-    assert result.startswith("Blocked:")
+    assert isinstance(result, ToolOutcome) and result.is_error
+    payload = json.loads(result.result)
+    assert payload["status"] == "policy_blocked"
+    assert payload["detail"].startswith("Blocked:")
 
 
 def test_terminal_modes_only_select_guarded_web_fetch_implementations() -> None:

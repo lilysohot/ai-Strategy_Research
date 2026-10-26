@@ -79,6 +79,15 @@ TOOL_META: dict[str, ToolMeta] = {
         category="file",
     ),
     "write_file": ToolMeta(is_read_only=False, concurrency_safe=False, timeout=15, category="file"),
+    # Copies one private workspace file into the run-scoped immutable handoff
+    # store. The operation is content-addressed and serialized in-process.
+    "publish_handoff": ToolMeta(
+        is_read_only=False,
+        is_destructive=False,
+        concurrency_safe=True,
+        timeout=120,
+        category="file",
+    ),
     "file_editor_create": ToolMeta(is_read_only=False, concurrency_safe=False, timeout=15, category="file"),
     "file_editor_str_replace": ToolMeta(is_read_only=False, concurrency_safe=False, timeout=15, category="file"),
 

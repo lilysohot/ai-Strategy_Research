@@ -35,6 +35,7 @@ from plugins.tools.market_history import market_history
 from plugins.tools.market_quote import market_quote
 from plugins.tools.market_resolve import market_resolve
 from plugins.tools.position_sizing import position_sizing
+from plugins.tools.publish_handoff import publish_handoff
 from plugins.tools.read_file import read_file
 from plugins.tools.recover_result import recover_result
 from plugins.tools.research_history import research_history
@@ -94,6 +95,7 @@ _BUILTIN_TOOLS: list[Tool] = [
     file_editor_view,
     file_editor_create,
     file_editor_str_replace,
+    publish_handoff,
     submit_report,
     view_image,
     grep_search,

@@ -7,9 +7,12 @@ previously-created session; the task runs in the background. Use
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import os
 import re
+from html import escape
+from pathlib import Path
 from typing import Any
 
 from pydantic import (
@@ -39,6 +42,7 @@ from plugins.tools._deliverable_policy import (
     render_retirement_note,
     render_workspace_assignment,
 )
+from plugins.tools._verification import VerificationCheck, bind_checks
 from plugins.tools.create_subagent import (
     _normalize_agent_name,
     _resolve_runtime,
@@ -122,10 +126,12 @@ def _session_has_publish_work(bus: AgentBus, session: Any) -> bool:
 
 # Cross-agent report attachment:
 #   <attach agent="q1_lit"/>
+#   <attach agent="q1_lit" job="root.job.1"/>
 # The main agent puts these tags inside a task prompt to feed another
-# session's last report into this new task. We expand them here before
-# dispatch so the downstream sub-agent sees the literal report text.
-_ATTACH_RE = re.compile(r'<attach\s+agent="([^"]+)"\s*/>')
+# session's last report, or an exact immutable job result, into a new task.
+_ATTACH_RE = re.compile(
+    r'<attach\s+agent="([^"]+)"(?:\s+job="([^"]+)")?\s*/>',
+)
 
 
 class AssignmentSpec(BaseModel):
@@ -169,6 +175,21 @@ class AgentTeamAssignmentSpec(AssignmentSpec):
     those ``/outputs`` paths; without them the task runs workspace-only."""
 
     model_config = ConfigDict(extra="forbid")
+
+    verification_checks: list[VerificationCheck] = Field(
+        default_factory=list, max_length=16,
+        description="Check-only assignment bound to exact completed job reports or handoffs. "
+        "Rechecks must name the latest replaces_job_id; version changes need revision_reason.",
+    )
+
+    required_for_completion: StrictBool = Field(
+        default=True,
+        description=(
+            "Whether this assignment is necessary for the requested delivery. "
+            "Set false only for optional exploration, before dispatch. A failed "
+            "required assignment cannot be erased by marking the task board resolved."
+        ),
+    )
 
     publish: StrictBool | None = Field(
         default=None,
@@ -238,6 +259,8 @@ class AgentTeamAssignmentSpec(AssignmentSpec):
         (the shape that loses the deliverable), and honouring the manifest
         would widen authority on the strength of a call that says not to.
         """
+        if self.verification_checks and self.output_paths:
+            raise ValueError("verification_checks are check-only and cannot publish outputs")
         if not self.output_paths:
             if self.publish is True:
                 raise ValueError(
@@ -305,34 +328,75 @@ def _unknown_agent_validation_errors(
 
 
 def _expand_attach_tags(task_prompt: str, task_id: str, bus: AgentBus) -> str:
-    """Replace ``<attach agent="NAME"/>`` with the named session's last report.
+    """Replace attach tags with a latest or exact completed member report.
 
     If the referenced agent doesn't exist or has no report yet, leave a
     visible placeholder rather than silently dropping the tag — that
     gives the sub-agent a chance to say "referenced report missing" in
     its output instead of blindly proceeding on an incomplete task.
+
+    ``job=`` is the stable form for multi-wave work: a reused agent's latest
+    report may change, while the completed job snapshot is immutable.
     """
     if "<attach" not in task_prompt:
         return task_prompt
 
     def _sub(match: re.Match[str]) -> str:
         name = match.group(1).strip()
+        job_id = (match.group(2) or "").strip()
         session = bus.get_session(f"{task_id}::{name}")
         if session is None:
             return (
                 f"[attach agent={name!r}: agent not found — "
                 f"main must create it before attaching]"
             )
-        report = (session.last_report or "").strip()
+        if job_id:
+            exact = bus.get_job_result(task_id, job_id)
+            if exact is None:
+                return (
+                    f"[attach agent={name!r} job={job_id!r}: exact report not "
+                    "found or job has not completed]"
+                )
+            session_id, result = exact
+            if session_id != session.session_id:
+                return (
+                    f"[attach agent={name!r} job={job_id!r}: job belongs to "
+                    "a different agent]"
+                )
+            report = (result.final_content or "").strip()
+            metadata = result.metadata or {}
+        else:
+            report = (session.last_report or "").strip()
+            metadata = getattr(session, "last_report_metadata", {}) or {}
         if not report:
             return (
-                f"[attach agent={name!r}: no report yet — "
-                f"the agent has not completed a task]"
+                f"[attach agent={name!r}{f' job={job_id!r}' if job_id else ''}: "
+                "no report content was submitted]"
+            )
+        raw_attachments = metadata.get("report_attachments")
+        if raw_attachments is None:
+            raw_attachments = metadata.get("final_answer_attachments", [])
+        attachments = (
+            [str(ref).strip() for ref in raw_attachments if str(ref).strip()]
+            if isinstance(raw_attachments, (list, tuple))
+            else []
+        )
+        attachment_block = ""
+        if attachments:
+            rendered = "\n".join(
+                f'<attachment ref="{escape(ref, quote=True)}" />'
+                for ref in attachments
+            )
+            attachment_block = (
+                f"\n<attachments count=\"{len(attachments)}\">\n"
+                f"{rendered}\n</attachments>"
             )
         return (
-            f"\n\n--- BEGIN REPORT FROM {name} ---\n"
-            f"{report}\n"
-            f"--- END REPORT FROM {name} ---\n\n"
+            f"\n\n--- BEGIN REPORT FROM {name}"
+            f"{f' (job {job_id})' if job_id else ''} ---\n"
+            f"{report}{attachment_block}\n"
+            f"--- END REPORT FROM {name}"
+            f"{f' (job {job_id})' if job_id else ''} ---\n\n"
         )
 
     return _ATTACH_RE.sub(_sub, task_prompt)
@@ -507,6 +571,54 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         if not task_prompt:
             errors.append(f"Skipping empty task for {agent_name!r}")
             continue
+        publication_phase = ""
+        active_publisher = ""
+        if is_agent_team and runtime is not None:
+            active_publication = getattr(runtime, "publication_state", None) or {}
+            phase_budget = getattr(runtime, "phase_budget", None)
+            if phase_budget is not None:
+                phase_budget.sync_phase()
+            publication_phase = str(active_publication.get("phase") or "")
+            active_publisher = str(
+                active_publication.get("publisher_agent_name") or ""
+            )
+        is_publication_assignment = bool(getattr(spec, "output_paths", ()))
+        if (
+            is_agent_team
+            and runtime is not None
+            and getattr(runtime, "phase_budget", None) is not None
+            and not is_publication_assignment
+            and not runtime.phase_budget.can_dispatch_research()
+        ):
+            errors.append(
+                f"{agent_name}: the research admission window is closed "
+                f"(phase={publication_phase or 'draining'}). Collect existing "
+                "reports and synthesize now; if files are required, dispatch "
+                "only the sole publisher with output_paths"
+            )
+            continue
+        if (
+            is_agent_team
+            and runtime is not None
+            and getattr(runtime, "phase_budget", None) is not None
+            and is_publication_assignment
+            and not runtime.phase_budget.can_dispatch_publication()
+        ):
+            errors.append(
+                f"{agent_name}: the publication window is closed. Preserve "
+                "files already present and let the workflow finalize its "
+                "best-effort status report"
+            )
+            continue
+        if publication_phase == "publishing" and not is_publication_assignment:
+            errors.append(
+                f"{agent_name}: publication phase is active under "
+                f"{active_publisher!r}; no new research or verification task "
+                "may compete with the final files. Collect the publisher "
+                "report now, or re-assign that publisher with the same "
+                "output_paths if a correction is required"
+            )
+            continue
         session_id = f"{bus_task_id}::{agent_name}"
         session = bus.get_session(session_id)
         if session is None:
@@ -518,6 +630,8 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
             continue
 
         task_metadata: dict[str, Any] = {}
+        if isinstance(spec, AgentTeamAssignmentSpec):
+            task_metadata["required_for_completion"] = spec.required_for_completion
         publication_claim: tuple[str, ...] = ()
         publication_state: dict[str, Any] | None = None
         previous_publisher = ""
@@ -540,12 +654,17 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                 replace_manifest = spec.replace_manifest
                 publication_claim = output_paths
                 task_metadata = {
+                    **task_metadata,
                     "can_publish": True,
                     "output_paths": list(output_paths),
                 }
                 task_prompt += render_publish_assignment(output_paths)
             else:
-                task_metadata = {"can_publish": False, "output_paths": []}
+                task_metadata = {
+                    **task_metadata,
+                    "can_publish": False,
+                    "output_paths": [],
+                }
                 # The coordinator's own wording can direct the same write the
                 # question does. Both are neutralised the same way; only this
                 # one is worth reporting back, because only this one is a
@@ -641,6 +760,7 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                     previous_manifest = tuple(
                         publication_state.get("deliverable_manifest") or ()
                     )
+                    previous_phase = str(publication_state.get("phase") or "")
                     previous_retired = tuple(
                         publication_state.get("retired_paths") or ()
                     )
@@ -720,6 +840,17 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                             spawn_context=spawn_context,
                             task_metadata=task_metadata,
                         )
+                        # Publication is a one-way phase boundary for ordinary
+                        # research work.  Follow-up publication assignments are
+                        # still allowed (including a safe publisher transfer),
+                        # but verifiers/researchers can no longer consume the
+                        # wall slice reserved for the deliverable.
+                        publication_state["phase"] = "publishing"
+                        notices.append(
+                            f"{agent_name}: publication phase is active. "
+                            "Collect this publisher next; do not create or "
+                            "assign more research or verifier work."
+                        )
                     except Exception:
                         if previous_publisher:
                             publication_state["publisher_agent_name"] = (
@@ -737,7 +868,39 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                             publication_state["retired_paths"] = previous_retired
                         else:
                             publication_state.pop("retired_paths", None)
+                        if previous_phase:
+                            publication_state["phase"] = previous_phase
+                        else:
+                            publication_state.pop("phase", None)
                         raise
+            elif isinstance(spec, AgentTeamAssignmentSpec) and spec.verification_checks:
+                from plugins.tools._sandbox import resolve_mount_dirs
+                from plugins.tools.task_board import snapshot_tasks
+
+                lock = getattr(runtime, "verification_lock", None)
+                if runtime is None or lock is None:
+                    raise RuntimeError("verification dispatch requires the team runtime lock")
+                async with lock:
+                    root = Path(next(
+                        (src for src, dst, _ro in runtime.sub_binds if dst == "/outputs"),
+                        resolve_mount_dirs()[1],
+                    ))
+                    bound, check_prompt = await asyncio.to_thread(
+                        bind_checks, spec.verification_checks, bus=bus, task_id=bus_task_id,
+                        work_item_ids={t["id"] for t in snapshot_tasks(scope.task_id)},
+                        required=spec.required_for_completion, outputs_root=root,
+                    )
+                    task_metadata["verification_checks"] = bound
+                    # AgentBus copies metadata dictionaries for its queue, job
+                    # and runtime item. Allocate the shared event list before
+                    # those copies so cancellation preserves accepted verdicts.
+                    task_metadata["verification_events"] = []
+                    expanded_prompt += check_prompt
+                    spawn_context["delegation_prompt"] = expanded_prompt
+                    job_id = await bus.submit_task_to_session(
+                        session_id, expanded_prompt, spawn_context=spawn_context,
+                        task_metadata=task_metadata,
+                    )
             else:
                 job_id = await bus.submit_task_to_session(
                     session_id,
@@ -803,7 +966,7 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         f"(agents run concurrently in the background):"
     ]
     for s in submitted:
-        lines.append(f"  - {s['agent']}")
+        lines.append(f"  - {s['agent']} (job_id={s['job_id']})")
     if all_errors:
         lines.append("")
         lines.append("Warnings:")

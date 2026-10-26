@@ -9,8 +9,9 @@ from pathlib import Path
 
 import httpx
 
-from frontier_agent.core.tool import tool
+from frontier_agent.core.tool import ToolOutcome, tool
 from frontier_agent.infra.config import get_config
+from plugins.tools._content_outcome import content_limitation
 
 logger = logging.getLogger(__name__)
 
@@ -136,7 +137,7 @@ def _unsafe_shell_word(text: str) -> bool:
 async def view_image(
     image_path_or_url: str,
     question: str = "Describe this image in detail. Extract any text visible in the image.",
-) -> str:
+) -> str | ToolOutcome:
     """Analyze an image using vision AI. Supports local files and URLs.
 
     Performs OCR text extraction and visual question answering.
@@ -218,10 +219,16 @@ async def view_image(
 
     result = await _call_vision_api(image_content, question)
 
-    # Graceful fallback for vision service outages — return metadata
-    # instead of a hard error so the agent can continue with partial info.
+    # Keep the run usable, but do not present an outage as image analysis.
     if _is_vision_service_unavailable(result):
-        return _vision_unavailable_fallback(image_path_or_url, result)
+        return content_limitation(
+            image_path_or_url, _vision_unavailable_fallback(image_path_or_url, result),
+        )
+
+    if not result or result.startswith("Error:"):
+        return content_limitation(
+            image_path_or_url, result or "Vision API returned no analysis.", status="failed",
+        )
 
     return result
 
@@ -245,15 +252,8 @@ def _vision_unavailable_fallback(image_path: str, error_msg: str) -> str:
     if m:
         status = m.group(1)
 
-    path = Path(image_path)
-    size_info = ""
-    if path.is_file():
-        size_kb = path.stat().st_size / 1024
-        size_info = f" ({size_kb:.0f} KB)"
-
     return (
-        f"Vision API unavailable HTTP {status} — image was loaded successfully"
-        f" from {image_path}{size_info} but could not be analyzed."
-        f" The image file exists and is readable."
-        f" Proceed with text-based reasoning."
+        f"Vision API unavailable HTTP {status} — {image_path} was not analyzed. "
+        "Image contents remain unread. Do not infer that it is decorative or "
+        "contains no data. Disclose this coverage gap when using the surrounding text."
     )

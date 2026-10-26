@@ -25,7 +25,7 @@ from pathlib import Path
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.responses import FileResponse
 
-from server.artifacts import resolve_artifact_path
+from server.artifacts import is_reserved_output_path, resolve_artifact_path
 from server.config import run_dir_for
 from server.deps import get_current_user
 from server.store import User as UserModel
@@ -72,7 +72,14 @@ async def list_run_artifacts(
     # normalised id used for the store lookup.
     rid = await _owned_run(run_id, user.id)
     rows = await list_artifacts(run_id=rid, user_id=user.id)
-    return {"run_id": str(rid), "artifacts": [_artifact_view(a) for a in rows]}
+    return {
+        "run_id": str(rid),
+        "artifacts": [
+            _artifact_view(a)
+            for a in rows
+            if not is_reserved_output_path(str(a.rel_path))
+        ],
+    }
 
 
 @router.get("/{run_id}/artifacts/download")

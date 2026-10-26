@@ -535,6 +535,7 @@ export interface SseEvent {
   // backward compatibility; member frames always carry both.
   agent_id?: string
   agent_kind?: 'single' | 'coordinator' | 'subagent' | string
+  trajectory_source?: string
   // Tool-call frames (used by T3.3 timeline cards)
   tool_call_id?: string
   tool_name?: string
@@ -584,7 +585,7 @@ export const TERMINAL_EVENT_TYPES: readonly string[] = [
 ]
 
 /**
- * One raw record from ``run/agent/trajectories/react_agent.jsonl`` as returned by
+ * One record from the run's single- or multi-agent trajectory as returned by
  * ``GET /api/runs/{run_id}/trace``. The ``t`` field discriminates the record kind
  * (start / llm / result / compaction); only the fields relevant to each kind are
  * populated. Kept permissive (unknown extras) because the runtime may add fields.
@@ -593,6 +594,12 @@ export interface RunTraceRecord {
   t: 'start' | 'llm' | 'result' | 'compaction' | string
   ts?: number | string | null
   turn?: number | null
+  /** Stable source identity added by the replay merger. */
+  agent_id?: string
+  agent_kind?: 'single' | 'coordinator' | 'subagent' | string
+  role_id?: string
+  trajectory_source?: string
+  source_line?: number
   // start
   model_name?: string | null
   tool_names?: string[] | null
@@ -639,6 +646,17 @@ export interface TraceCompleteness {
   trailing_partial_line: boolean
   corrupt_lines: number
   reason: string
+  /** Per-stream detail for Agent Team; absent for the legacy single stream. */
+  sources?: Array<{
+    source: string
+    agent_id: string
+    agent_kind: string
+    state: 'complete' | 'partial' | 'unavailable'
+    valid_lines: number
+    trailing_partial_line: boolean
+    corrupt_lines: number
+    reason: string
+  }>
 }
 
 export interface RunTraceResponse {

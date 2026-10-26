@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 
 from frontier_agent.components.agent_bus import AgentBus
+from frontier_agent.core.execution_context import get_current_execution_scope
 from frontier_agent.core.loop_types import (
     BaseObserver,
     Intervention,
@@ -47,6 +48,21 @@ class UnassignedAgentNudge(BaseObserver):
         }
         if attempted & {"assign_task", "create_subagent"}:
             return None
+
+        # Publication is a one-way phase. A verifier or researcher created
+        # speculatively during planning may still have zero tasks, but nudging
+        # the coordinator to assign it now directly conflicts with the
+        # publication gate and burns finalization turns. The publisher was
+        # already queued before the phase flag was set, so collect/finalize is
+        # the only useful direction from here.
+        scope = get_current_execution_scope()
+        if scope is not None:
+            from plugins.tools._bus_scope import SWARM_SCOPE_KEY
+
+            runtime = scope.metadata.get(SWARM_SCOPE_KEY)
+            publication_state = getattr(runtime, "publication_state", None) or {}
+            if str(publication_state.get("phase") or "") == "publishing":
+                return None
 
         # Don't nag while the main agent is legitimately waiting on work.
         if any(s.current_job_id is not None for s in sessions):

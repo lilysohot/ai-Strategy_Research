@@ -33,23 +33,92 @@ def test_invalid_mode_is_rejected_instead_of_falling_back() -> None:
         mode_for_pipeline("agent_team_report")
 
 
-def test_team_profile_keeps_business_tools_on_coordinator_only() -> None:
-    from server.profile import BUSINESS_TOOL_NAMES, build_profile_overrides
+@pytest.mark.parametrize("bound", [False, True])
+def test_team_profile_reuses_cli_roles_without_business_tools(bound) -> None:
+    from server.profile import (
+        BUSINESS_TOOL_NAMES,
+        MARKET_TOOL_NAMES,
+        PROFILE_NAME,
+        RESEARCH_TOOL_NAMES,
+        build_profile_overrides,
+    )
+    from workflows.agent_team.profile import load_swarm_profile
 
     agent = build_profile_overrides(
-        has_investment_context=True,
+        has_investment_context=bound,
         pipeline_id="agent_team",
     )["agent"]
+    cli = load_swarm_profile(PROFILE_NAME)["agent"]
     main_tools = set(agent["main_agent_tools"])
     sub_tools = set(agent["sub_agent_tools"])
 
-    assert set(BUSINESS_TOOL_NAMES) <= main_tools
-    assert "request_investment_input" in main_tools
-    assert set(BUSINESS_TOOL_NAMES).isdisjoint(sub_tools)
-    assert "request_investment_input" not in sub_tools
-    assert "research_history" in main_tools
+    assert agent["main_agent_tools"] == [*cli["main_agent_tools"], "research_history"]
+    assert agent["sub_agent_tools"] == cli["sub_agent_tools"]
+    unavailable = set(BUSINESS_TOOL_NAMES + MARKET_TOOL_NAMES + RESEARCH_TOOL_NAMES)
+    assert unavailable.isdisjoint(main_tools | sub_tools)
+    assert "publish_handoff" in sub_tools
+    assert {"web_search", "web_fetch", "bash", "read_file", "create_file"}.isdisjoint(main_tools)
     assert "research_history" not in sub_tools
     assert {"create_subagent", "assign_task", "collect_reports"} <= main_tools
+    assert agent["fs_mode"] == cli.get("fs_mode", False)
+
+
+@pytest.mark.parametrize("bound", [False, True])
+def test_team_prompt_additions_preserve_roles_and_history_without_unavailable_tools(bound):
+    from server.profile import (
+        BUSINESS_CONTEXT_POLICY,
+        CONTEXT_INTEGRITY_POLICY,
+        INPUT_REQUEST_POLICY,
+        RESEARCH_HISTORY_POLICY,
+        build_prompt_addenda,
+    )
+
+    additions = build_prompt_addenda(pipeline_id="agent_team", has_investment_context=bound)
+    main = additions["_sys_prompt_addendum"]
+    sub = additions["_subagent_prompt_addendum"]
+    assert BUSINESS_CONTEXT_POLICY not in main
+    assert INPUT_REQUEST_POLICY not in main
+    assert RESEARCH_HISTORY_POLICY in main
+    assert "single publisher carrying output_paths" in main
+    assert "unavailable" in main
+    assert CONTEXT_INTEGRITY_POLICY in main and CONTEXT_INTEGRITY_POLICY in sub
+    assert "research_history" not in sub
+
+
+@pytest.mark.parametrize("bound", [False, True])
+@pytest.mark.parametrize("history", [False, True])
+def test_single_prompt_prefix_is_byte_identical(bound, history):
+    from server.profile import (
+        BUSINESS_CONTEXT_POLICY,
+        CONTEXT_INTEGRITY_POLICY,
+        INPUT_REQUEST_POLICY,
+        RESEARCH_HISTORY_POLICY,
+        build_prompt_addenda,
+    )
+
+    expected = (
+        "Input files are mounted read-only at /inputs. Write the final deliverable to /outputs."
+        "\n" + CONTEXT_INTEGRITY_POLICY
+    )
+    if bound:
+        expected += "\n" + BUSINESS_CONTEXT_POLICY
+    expected += "\n" + INPUT_REQUEST_POLICY
+    if history:
+        expected += "\n" + RESEARCH_HISTORY_POLICY
+    assert build_prompt_addenda(
+        pipeline_id="stateful-react-agent",
+        has_investment_context=bound,
+        enable_research_history=history,
+    ) == {"_sys_prompt_addendum": expected}
+
+
+async def test_team_worker_rejects_tool_override_before_initializing_run():
+    from types import SimpleNamespace
+
+    from server.worker import run_once
+
+    with pytest.raises(ValueError, match="CLI role tools"):
+        await run_once(SimpleNamespace(pipeline_id="agent_team", agent_tools="market_quote"))
 
 
 def test_pure_single_profile_is_unchanged_until_session_uses_team() -> None:

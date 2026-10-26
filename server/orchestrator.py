@@ -37,6 +37,7 @@ from server import investment_snapshot
 from server.artifacts import scan_outputs
 from server.bridge import redact_deep
 from server.config import REPO_ROOT, build_run_paths, get_config, run_dir_for
+from server.continuity_resources import continuity_resource_prompt, stage_continuity_resources
 from server.events import EventType, is_droppable, make_event
 from server.history import (
     CONVERSATION_DUMP_RELPATH,
@@ -76,6 +77,7 @@ from server.store import (
     update_run_usage,
     upsert_session_conversation,
 )
+from server.trajectory_sources import discover_trajectory_sources
 from server.usage import replay_block_from_summary, usage_for_run
 
 logger = logging.getLogger(__name__)
@@ -316,6 +318,9 @@ class RunHandle:
     run_id: str
     session_id: str
     proc: asyncio.subprocess.Process
+    # Per-pipeline hard wall passed to this worker. Zero preserves compatibility
+    # with tests and synthetic handles that predate mode-specific budgets.
+    wall_timeout_s: int = 0
     frames: list[dict[str, Any]] = field(default_factory=list)
     stopped: bool = False
     _params: dict[str, Any] = field(default_factory=dict)
@@ -335,6 +340,15 @@ class RunHandle:
     # exactly why an in-process map is sufficient.
     steer_controls: dict[str, int] = field(default_factory=dict)
     steer_texts: dict[str, str] = field(default_factory=dict)
+
+
+def _pipeline_wall_timeout_s(config: Any, pipeline_id: str) -> int:
+    """Return the hard Run wall for one pipeline without coupling modes."""
+    if pipeline_id == "agent_team":
+        return int(
+            getattr(config, "agent_team_wall_timeout_s", config.wall_timeout_s)
+        )
+    return int(config.wall_timeout_s)
 
 
 class Orchestrator:
@@ -828,6 +842,7 @@ class Orchestrator:
         prior_pipeline_id = ""
         prior_head_run_id: uuid.UUID | None = None
         archived_contexts: list[str] = []
+        archived_run_ids: list[str] = []
         has_team_archive = False
         continuity = "on"
         if session_uuid is not None:
@@ -853,6 +868,7 @@ class Orchestrator:
                     prior_pipeline_id = head.pipeline_id
                 archived = await list_session_archived_contexts(session_id=session_uuid)
                 archived_contexts = [item.portable_payload for item in archived]
+                archived_run_ids = [item.run_id.hex for item in archived]
                 has_team_archive = any(item.pipeline_id == "agent_team" for item in archived)
             except Exception:
                 logger.warning(
@@ -866,6 +882,7 @@ class Orchestrator:
         params["_prior_pipeline_id"] = prior_pipeline_id
         params["_prior_head_run_id"] = prior_head_run_id
         params["_archived_contexts"] = archived_contexts
+        params["_archived_run_ids"] = archived_run_ids
         params["_mixed_mode_history"] = _needs_mixed_mode_history(
             str(params.get("pipeline_id") or ""),
             ["agent_team"] if has_team_archive else [],
@@ -1337,6 +1354,24 @@ class Orchestrator:
             if params.get("_mixed_mode_history")
             else [],
         )
+        source_runs = [
+            (source_id, run_dir_for(source_id))
+            for source_id in params.get("_archived_run_ids") or []
+            if source_id != run_id
+        ]
+        resource_manifest = await asyncio.to_thread(
+            stage_continuity_resources,
+            target_run_dir=run_dir,
+            source_runs=source_runs,
+        )
+        resource_addendum = continuity_resource_prompt(resource_manifest)
+        if resource_addendum:
+            prior_addendum = str(params.get("prompt_addendum") or "").strip()
+            params["prompt_addendum"] = "\n\n".join(
+                part for part in (prior_addendum, resource_addendum) if part
+            )
+        pipeline_id = str(params.get("pipeline_id") or self._cfg.pipeline_id)
+        wall_timeout_s = _pipeline_wall_timeout_s(self._cfg, pipeline_id)
         cmd = [
             sys.executable,
             "-m",
@@ -1352,11 +1387,11 @@ class Orchestrator:
             "--backend",
             self._cfg.sandbox_backend,
             "--wall-time",
-            str(self._cfg.wall_timeout_s),
+            str(wall_timeout_s),
             "--max-turns",
             str(self._cfg.max_turns),
             "--pipeline-id",
-            str(params.get("pipeline_id") or self._cfg.pipeline_id),
+            pipeline_id,
             "--prior-pipeline-id",
             str(params.get("_prior_pipeline_id") or ""),
             "--require-semantic-store",
@@ -1400,7 +1435,12 @@ class Orchestrator:
             start_new_session=True,  # → own process group, killable as a unit
             env=child_env,
         )
-        return RunHandle(run_id=run_id, session_id=params["session_id"], proc=proc)
+        return RunHandle(
+            run_id=run_id,
+            session_id=params["session_id"],
+            proc=proc,
+            wall_timeout_s=wall_timeout_s,
+        )
 
     async def _resolve_llm_env(self, user_id: uuid.UUID | None) -> dict[str, str] | None:
         """Resolve a user's default config to ``OPENAI_*`` env vars, or None.
@@ -1470,7 +1510,7 @@ class Orchestrator:
         path (worker emits ``run_finished``) is handled inline below.
         """
         assert handle.proc.stdout is not None
-        wall = self._cfg.wall_timeout_s
+        wall = handle.wall_timeout_s or self._cfg.wall_timeout_s
         try:
             async with asyncio.timeout(wall + self._cfg.stop_grace_period_s):
                 async for raw in self._iter_worker_frames(handle.proc.stdout):
@@ -1530,7 +1570,7 @@ class Orchestrator:
 
     @staticmethod
     def _trajectory_degraded(run_id: str) -> bool:
-        """True when the run's trajectory file exists but holds no data (F22).
+        """True when the authoritative trajectory exists but holds no data (F22).
 
         The trajectory JSONL is created on the observer's first write. An
         existing-but-empty file therefore means every write failed (a full
@@ -1541,8 +1581,13 @@ class Orchestrator:
         if not _looks_like_uuid(run_id):
             return False
         try:
-            path = build_run_paths(run_id)["run"] / "agent" / "trajectories" / "react_agent.jsonl"
-            return path.exists() and path.stat().st_size == 0
+            sources = discover_trajectory_sources(build_run_paths(run_id)["root"])
+            if not sources:
+                return False
+            authoritative = next((source for source in sources if source.authoritative), None)
+            # A cleanly finished team run with only member/planning traces lost
+            # the coordinator's audit stream and is therefore degraded.
+            return authoritative is None or authoritative.path.stat().st_size == 0
         except OSError:
             return False
 
@@ -1638,25 +1683,35 @@ class Orchestrator:
         # Live terminal parity (cli-web-parity §5.6 / T3.1): the SSE stream must
         # carry the run's outcome, not just a closed socket that the client then
         # guesses as "completed". Without this a *failed* run is shown as completed.
-        # Stops are owned by the bridge's run_stopped event, so we only emit the
-        # other two outcomes here.
-        if not stopped_by:
-            if status == "completed":
-                self._publish(
-                    handle.run_id,
-                    make_event(
-                        EventType.RUN_COMPLETED.value,
-                        final_answer=answer or "",
-                    ),
-                )
-            else:
-                self._publish(
-                    handle.run_id,
-                    make_event(
-                        EventType.RUN_FAILED.value,
-                        error=error or "",
-                    ),
-                )
+        # Publish the terminal event only now, after the worker has emitted its
+        # run_finished frame and the authoritative row is durable.  An inner agent
+        # loop can stop before workflow finalization (notably Agent Team's salvage
+        # synthesis), so BridgeObserver.on_loop_end is too early for run_stopped.
+        if stopped_by:
+            self._publish(
+                handle.run_id,
+                make_event(
+                    EventType.RUN_STOPPED.value,
+                    stopped_by=stopped_by,
+                    final_answer=answer or "",
+                ),
+            )
+        elif status == "completed":
+            self._publish(
+                handle.run_id,
+                make_event(
+                    EventType.RUN_COMPLETED.value,
+                    final_answer=answer or "",
+                ),
+            )
+        else:
+            self._publish(
+                handle.run_id,
+                make_event(
+                    EventType.RUN_FAILED.value,
+                    error=error or "",
+                ),
+            )
 
     async def _synthesize_terminal_frame(self, handle: RunHandle) -> None:
         """Build a terminal frame when the worker died without one (e.g. SIGKILL).

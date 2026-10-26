@@ -15,6 +15,7 @@ from frontier_agent.core.loop_types import (
     TurnContext,
 )
 from frontier_agent.core.runtime import registry
+from plugins.tools._verification import render_verification_status
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +57,9 @@ class AutoFanInObserver(BaseObserver):
             ctx.task_id, ctx.turn, len(collected),
             batch.evidence_count, batch.assertion_count, batch.incomplete_count,
         )
-        return Intervention(inject_messages=["\n\n".join([*batch.blocks, status])])
+        return Intervention(inject_messages=[
+            "\n\n".join([*batch.blocks, status]) + render_verification_status(bus, ctx.task_id),
+        ])
 
 
 __all__ = ["AutoFanInObserver"]

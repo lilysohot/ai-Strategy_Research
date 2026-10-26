@@ -68,18 +68,21 @@ def persist_summary(run_root: Path, summary: dict[str, Any]) -> None:
     summary, and an OSError from the write itself is logged, never raised (it
     must not mask the run outcome).
     """
+    from server.trajectory_sources import discover_trajectory_sources
     from server.trajectory_status import fsync_directory
 
-    traj = run_root / "run" / "agent" / "trajectories" / "react_agent.jsonl"
-    try:
-        if traj.exists():
-            fd = os.open(str(traj), os.O_RDONLY)
+    # Team runs own several append-only streams. Flush every discovered stream
+    # before publishing summary.json, otherwise refresh can observe a terminal
+    # product run while a member's final records still live only in page cache.
+    for source in discover_trajectory_sources(run_root):
+        try:
+            fd = os.open(str(source.path), os.O_RDONLY)
             try:
                 os.fsync(fd)
             finally:
                 os.close(fd)
-    except OSError:
-        pass
+        except OSError:
+            pass
     try:
         summary_tmp = run_root / "summary.json.tmp"
         summary_tmp.write_text(json.dumps(summary, ensure_ascii=False), encoding="utf-8")
@@ -504,15 +507,16 @@ async def run_once(args: argparse.Namespace) -> int:
     from server.config import build_run_paths, run_dir_for
     from server.diff import DiffRecorder
     from server.profile import (
-        BUSINESS_CONTEXT_POLICY,
-        CONTEXT_INTEGRITY_POLICY,
-        INPUT_REQUEST_POLICY,
         PROFILE_NAME,
-        RESEARCH_HISTORY_POLICY,
-        TEAM_BUSINESS_OWNERSHIP_POLICY,
-        TEAM_SUBAGENT_POLICY,
         build_profile_overrides,
+        build_prompt_addenda,
     )
+
+    # Team capabilities come from the CLI profile. Do not let an optional
+    # caller tool list silently turn the coordinator back into a researcher.
+    # Validate before starting the bridge pump or binding any run resources.
+    if args.pipeline_id == "agent_team" and args.agent_tools:
+        raise ValueError("agent_team uses CLI role tools; --agent-tools is single-agent only")
 
     paths = build_run_paths(args.run_id)
     run_root = run_dir_for(args.run_id)
@@ -582,7 +586,10 @@ async def run_once(args: argparse.Namespace) -> int:
     # slow reader.
     live_events: asyncio.Queue[dict[str, Any] | None] = asyncio.Queue()
     team_source_meta = (
-        {"agent_id": "coordinator", "agent_kind": "coordinator"}
+        # Match the canonical workflow identity used by persisted team traces.
+        # Tool-call ids are only unique within an agent, so live and replay
+        # must agree here or reconnect creates a duplicate coordinator card.
+        {"agent_id": "agent_team_main", "agent_kind": "coordinator"}
         if args.pipeline_id == "agent_team"
         else {}
     )
@@ -668,7 +675,7 @@ async def run_once(args: argparse.Namespace) -> int:
     metadata: dict[str, Any] = {
         "profile": PROFILE_NAME,
         "profile_overrides": overrides,
-        "fs_mode": True,
+        "fs_mode": overrides["agent"]["fs_mode"],
         "_trial_dir": str(paths["run"]),
         "coding_workspace_root": str(paths["workspace"]),
         "session_id": args.session_id,
@@ -684,13 +691,10 @@ async def run_once(args: argparse.Namespace) -> int:
             steer_observer,
             approval_observer,
         ],
-        "_sys_prompt_addendum": (
-            # Constant for every run, so it belongs to the request *prefix*.
-            # Per-run guidance (the uploaded-file note, the business data) is
-            # appended to the instruction tail below instead — see issue 01 §10.2
-            # S1-b and `_per_run_tail`.
-            "Input files are mounted read-only at /inputs. Write the final deliverable to /outputs."
-            "\n" + CONTEXT_INTEGRITY_POLICY
+        **build_prompt_addenda(
+            pipeline_id=args.pipeline_id,
+            has_investment_context=business_prefix,
+            enable_research_history=bool(getattr(args, "mixed_mode_history", False)),
         ),
     }
     # Web storage and bwrap must name the same per-Run directories. Both the
@@ -702,17 +706,6 @@ async def run_once(args: argparse.Namespace) -> int:
     metadata["_sandbox_mounts"] = [
         {"src": str(paths["inputs"]), "dst": "/inputs", "mode": "ro"},
     ]
-    if business_prefix:
-        metadata["_sys_prompt_addendum"] += "\n" + BUSINESS_CONTEXT_POLICY
-    # 缺料表达对**所有**研究 Run 生效（2026-10-08 实测补充）：只有工具描述不够，
-    # 必须有 prompt 级指令，否则模型会把“缺资料”写成一段说明而不调用工具。
-    metadata["_sys_prompt_addendum"] += "\n" + INPUT_REQUEST_POLICY
-    if getattr(args, "mixed_mode_history", False):
-        metadata["_sys_prompt_addendum"] += "\n" + RESEARCH_HISTORY_POLICY
-    if args.pipeline_id == "agent_team":
-        metadata["_sys_prompt_addendum"] += "\n" + TEAM_BUSINESS_OWNERSHIP_POLICY
-        metadata["_subagent_prompt_addendum"] = TEAM_SUBAGENT_POLICY
-
     started = time.time()
     _frame("run_started", run_dir=str(run_root))
     final_answer = ""
@@ -725,7 +718,7 @@ async def run_once(args: argparse.Namespace) -> int:
     # fail before ever producing a state.
     summary_usage: dict[str, Any] = {}
     workflow_stop_reason = ""
-    answer_outcome: dict[str, str] = {}
+    answer_outcome: dict[str, Any] = {}
 
     # Cross-turn continuity (issue 01 §9.4): the orchestrator stages the session's
     # stored conversation dump in this run root. The worker never parses it —
@@ -789,11 +782,14 @@ async def run_once(args: argparse.Namespace) -> int:
             key: str(state.get(key) or "")
             for key in (
                 "answer_status",
+                "team_completeness",
                 "final_answer_source",
                 "llm_error_reason",
                 "llm_retry_blocked_by",
             )
         }
+        if args.pipeline_id == "agent_team" and isinstance(state.get("report_contract"), dict):
+            answer_outcome["report_contract"] = state["report_contract"]
         for key in ("final_answer", "final_content", "report", "answer", "output"):
             value = state.get(key)
             if isinstance(value, dict):

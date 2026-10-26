@@ -6,6 +6,7 @@ the coordinator answer, and no trajectory files are required.
 
 from __future__ import annotations
 
+import json
 import logging
 import os
 from collections.abc import Awaitable, Callable
@@ -319,13 +320,21 @@ async def _run_fast_reporter(state: dict[str, Any], ctx: Any) -> str:
         or "",
     ).strip()
     native_draft = str(
-        state.get("final_answer") or state.get("final_content") or "",
+        state.get("report_handoff_context") or state.get("final_answer")
+        or state.get("final_content") or "",
     ).strip()
     if not native_draft:
         logger.info(
             "fast_reporter_v1: no native draft — keeping main_agent answer",
         )
         return ""
+
+    from workflows.agent_team.prompts import EVIDENCE_LIMITS_NOTE
+
+    native_draft += "\n\n" + EVIDENCE_LIMITS_NOTE
+    native_draft += "\nExecution coverage constraints (not source evidence):\n" + json.dumps(
+        state.get("report_contract") or {}, ensure_ascii=False,
+    )
 
     # Resolve the full reporter profile contract before opening the protocol
     # run. This honors report_profile, swarm_profile, profile_inline, and

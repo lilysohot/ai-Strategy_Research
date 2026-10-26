@@ -28,6 +28,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from server import store
 from server.config import REPO_ROOT, get_config, run_dir_for
+from server.trajectory_sources import discover_trajectory_sources
 
 logger = logging.getLogger(__name__)
 
@@ -122,8 +123,10 @@ async def check_restore(
             for rel in REQUIRED_RUN_DIRS:
                 if not (run_dir / rel).exists():
                     missing_dirs.append(f"{run_id.hex}/{rel}")
-            if run_status != "queued" and not (run_dir / TRAJECTORY_RELPATH).exists():
-                missing_trajectories.append(run_id.hex)
+            if run_status != "queued":
+                sources = discover_trajectory_sources(run_dir)
+                if not any(source.authoritative for source in sources):
+                    missing_trajectories.append(run_id.hex)
         if missing_dirs:
             errors.append(f"missing run dirs: {sorted(missing_dirs)[:20]}")
         if missing_trajectories:

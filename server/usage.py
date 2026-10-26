@@ -1,9 +1,9 @@
 """Token-usage aggregation from the runtime trajectory (T2.11).
 
 The platform does **not** write its own UsageObserver. The runtime already
-records one ``{"t": "llm", ...}`` line per LLM turn into
-``<run_dir>/run/agent/trajectories/react_agent.jsonl``, each carrying the
-normalised ``usage`` dict produced by
+records one ``{"t": "llm", ...}`` line per LLM turn into the run trajectory
+(one file for Single-Agent; coordinator/planning/member files for Agent Team),
+each carrying the normalised ``usage`` dict produced by
 ``frontier_agent.core.runtime.loop._response.extract_usage``::
 
     {"provider": ..., "model": ..., "prompt_tokens": N, "completion_tokens": N,
@@ -30,12 +30,12 @@ over the trajectory — and it is absent on runs that reported no decision.
 
 from __future__ import annotations
 
-import json
 from collections.abc import Iterable
 from typing import Any
 
 from server.config import run_dir_for
 from server.relay import trajectory_records
+from server.trajectory_sources import discover_trajectory_sources
 
 #: Summed integer fields, in the shape they are persisted on the Run row.
 _TOKEN_FIELDS = (
@@ -143,26 +143,11 @@ def usage_for_run(run_id: str) -> dict[str, Any]:
         records = trajectory_records(run_id)
     except OSError:
         records = []
-    sources = ["react_agent.jsonl"] if records else []
-    if not records:
-        # Agent Team writes one coordinator trajectory plus one file per member
-        # (and, when enabled, a separate planning trajectory). Aggregate every
-        # JSONL source exactly once so the product Run includes the whole team
-        # instead of reporting the coordinator as zero usage.
-        root = run_dir_for(run_id) / "run" / "agent" / "trajectories"
-        for path in sorted(root.rglob("*.jsonl")) if root.is_dir() else []:
-            try:
-                with path.open("r", encoding="utf-8") as handle:
-                    for line in handle:
-                        try:
-                            record = json.loads(line)
-                        except json.JSONDecodeError:
-                            continue
-                        if isinstance(record, dict):
-                            records.append(record)
-                sources.append(str(path.relative_to(root)))
-            except OSError:
-                continue
+    root = run_dir_for(run_id) / "run" / "agent" / "trajectories"
+    sources = [
+        str(source.path.relative_to(root))
+        for source in discover_trajectory_sources(run_dir_for(run_id))
+    ]
     if not records:
         return {**aggregate_usage([]), "status": "unavailable"}
     aggregate = aggregate_usage(records)

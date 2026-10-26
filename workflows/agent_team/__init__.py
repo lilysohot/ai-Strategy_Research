@@ -35,7 +35,13 @@ if not _NO_WEB:
     _SUB_TOOLS += ["web_search", "web_fetch", "download_file"]
 # ``read_file`` = the sandbox-aware structured reader (office/pdf/csv -> markdown);
 # sub-agents read fetched/input files with it.
-_SUB_TOOLS += ["submit_report", "read_file", "recover_result", *_FS_TOOLS]
+_SUB_TOOLS += [
+    "publish_handoff",
+    "submit_report",
+    "read_file",
+    "recover_result",
+    *_FS_TOOLS,
+]
 
 # Placeholders — real prompts are built at runtime by main_agent_node /
 # create_subagent so they always reflect the current date and

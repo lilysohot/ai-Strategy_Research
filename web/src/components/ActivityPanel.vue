@@ -18,8 +18,9 @@ import { computed, onUnmounted, ref, watch } from 'vue'
 import type { RunStep } from '@/stores/runs'
 import { statusLabel, statusTagType, stepSummary } from '@/utils/activity'
 import { redactDeep, redactSecrets } from '@/utils/redact'
+import { isTerminalRunStatus, type VisibleRunStatus } from '@/utils/runStatus'
 
-const props = defineProps<{ steps: RunStep[] }>()
+const props = defineProps<{ steps: RunStep[]; status?: VisibleRunStatus }>()
 
 /** Only tool calls form the activity timeline (thinking/text stay in chat). */
 const toolSteps = computed(() => props.steps.filter((s) => s.kind === 'tool'))
@@ -62,6 +63,12 @@ function durationOf(step: RunStep): string {
   return '—'
 }
 
+function agentLabel(step: RunStep): string {
+  if (step.agentKind === 'subagent') return `成员 · ${step.agentId || '未知'}`
+  if (step.agentKind === 'coordinator') return '主 Agent'
+  return ''
+}
+
 /**
  * Pretty-print for the expand area, with secrets masked first (defence in
  * depth: the relay already redacts replay server-side, but the platform
@@ -83,7 +90,9 @@ function pretty(value: unknown): string {
   <div class="activity">
     <el-empty
       v-if="!toolSteps.length"
-      description="暂无工具调用（运行中产生的调用会实时出现在这里）"
+      :description="isTerminalRunStatus(props.status ?? 'idle')
+        ? '本轮没有记录到工具调用；主 Agent 的回答请查看轨迹或结论'
+        : '暂无工具调用（运行中产生的调用会实时出现在这里）'"
       :image-size="60"
     />
 
@@ -95,6 +104,7 @@ function pretty(value: unknown): string {
               {{ statusLabel(s.status) || '…' }}
             </el-tag>
             <span class="activity__name">{{ s.name ?? 'tool' }}</span>
+            <span v-if="agentLabel(s)" class="activity__agent">{{ agentLabel(s) }}</span>
             <span class="activity__duration">{{ durationOf(s) }}</span>
             <span class="activity__summary">{{ redactSecrets(stepSummary(s)) }}</span>
           </span>
@@ -114,6 +124,10 @@ function pretty(value: unknown): string {
             <dd>
               <code>{{ s.callId || '—' }}</code>
             </dd>
+          </div>
+          <div v-if="agentLabel(s)" class="activity__kv">
+            <dt>执行者</dt>
+            <dd>{{ agentLabel(s) }}</dd>
           </div>
           <div class="activity__kv">
             <dt>输入</dt>
@@ -167,6 +181,15 @@ function pretty(value: unknown): string {
   color: var(--el-text-color-secondary);
   flex: none;
   min-width: 48px;
+}
+
+.activity__agent {
+  flex: none;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--el-fill-color);
+  color: var(--el-text-color-secondary);
+  font-size: 11px;
 }
 
 .activity__summary {

@@ -638,7 +638,7 @@ oracle 仅供验收程序使用，未上传给模型。成员 auditor 的实际 
 | T05 / P1 | **团队轨迹刷新回放不可用。** 正常成功 Run 磁盘有 main + 两个成员 JSONL，Web reader 返回 0 条并判 unavailable；仅把 reader 文件路径改为 main 后即读出 15 条，仍不包含成员。三次新 Run 的 `/trace` 也为空。 | `server/relay.py` 与 `server/trajectory_status.py` 硬编码 `react_agent.jsonl`。需要按 pipeline 定位、跨成员身份/游标合并、终态完整度与去重；不是简单改成另一个固定文件名。实时 SSE 已带成员身份，不应与回放缺失混淆。 |
 | T06 / P2 | **工具错误可能显示为成功。** 实际 read_file 返回 `[read_file error] ... FileNotFoundError`，以普通字符串结果经过真实 BridgeObserver 得到 `ok=true`；显式传 `is_error=true` 后变为 false。 | `server/bridge.py` 仅检查 is_error 或 `Error` 前缀，kernel 对普通字符串不自动识别括号式/JSON 错误。需要统一工具结果错误契约，同时覆盖实时事件及回放，避免不断堆叠字符串前缀。 |
 | T07 / P1 | **长结果恢复路径不一致。** 同一 `/spill/body.txt` 在 bwrap 中 shell 能读，read_file 却先将其转换为宿主机路径，随后在沙箱内报不存在。只保留沙箱内路径的对照立即读回原文。 | `plugins/tools/_sandbox.py::resolve_runtime_path` 与 reader 的命名空间契约应区分 native/bwrap/container。此实测证明 read_file 恢复入口失效，不等于磁盘信息已删除，也不等于 recover_result 的所有路径都失效。 |
-| T08 / 设计缺口 | **成员之间不能直接交接私有工作文件。** producer 的 `/workspace/candidate.csv` 存在，consumer 同一路径不可读。`render_sandbox_fs_note` 明确规定 bwrap 私有 workspace，只可依赖报告附件文本；这属于现有设计限制，不是权限检查误拦。 | 小结果可以 submit_report 文本传递；大表格、下载文件和阶段性数据集需要受控的文件交接/只读引用、来源及版本索引。不能把共享整个 workspace 当作修复。未证明当前所有任务都必须跨成员传文件，但复杂任务开放前应明确支持范围。 |
+| T08 / 设计缺口 | **成员之间不能直接交接私有工作文件。** producer 的 `/workspace/candidate.csv` 存在，consumer 同一路径不可读。`render_sandbox_fs_note` 明确规定 bwrap 私有 workspace，只可依赖报告附件文本；这属于现有设计限制，不是权限检查误拦。 | 小结果可以 submit_report 文本传递；大表格、下载文件和阶段性数据集需要受控的文件交接/只读引用、来源及版本索引。不能把共享整个 workspace 当作修复。代码与组件验收已于 §20.12 关闭；真实模型复杂任务复测仍属于 §20.4 第 4 项。 |
 
 T04 的依赖归因经过纠正：临时服务最初未将 `.venv/bin` 加入 PATH，而既有服务已经加入。
 补 PATH 后仍失败，进一步只补 uv 解释器别名挂载即恢复；因此既不能只怪测试启动脚本，
@@ -790,3 +790,958 @@ inner-bwrap 的 CurrentSandbox 保留 `/workspace`、`/inputs`、`/outputs`、`/
 symbol closure（526 文件、0 缺失）及目标 diff check 通过。
 这只关闭恢复入口的一致性问题，不替代 §20.1 的复杂任务端到端复测；下一项按 §20.4
 处理 T02 首包预算传递，再处理 T01 队伍收尾顺序，T05/T08 仍保持开放。
+
+### 20.9 T02 首包与团队研究截止预算关闭（2026-10-25）
+
+T02 已关闭。Web 的 `agent.first_chunk_s=45` 现在经统一的团队超时解析同时进入 coordinator
+与成员的 `LoopConfig.first_chunk_timeout`；`llm_timeout_s`、工具、reasoning-only 和 logical-call
+预算仍沿用原值，没有以放宽整轮时间替代首包限制。回归不仅检查配置字段，还让成员配置驱动
+真实异步流：无首包的流按首包预算抛出 `LLMStreamStalled`，而不是继续等待 180 秒 logical-call
+上限。
+
+成员会话创建时会捕获 coordinator 已发布的绝对研究截止对象。固定 monotonic 时间与 Web 的
+`RenewableWallTimeDeadline` 都按对象本身传递，因此 Web 接受续期后成员读取到同一续期状态，
+不复制一个立即过期的时间值。成员启动后把该截止写入自己的 execution scope，内核已有的
+LLM deadline clamp 会阻止截止后的新模型调用；成员自己的 `WallClockGuard` 只可收紧，不能用
+更长的 SpawnGuard 预算覆盖较早的团队截止。工具调用在 observer 的 `on_tool_call` 再检查一次，
+截止后返回结构化短路结果，不启动工具。
+
+原先遗漏的 loop 后恢复调用也纳入同一预算。`force_final_answer` 在截止已过时跳过恢复 LLM，
+直接从已有消息、已收集报告或确定性状态文本形成部分结果；在截止前启动但跨过截止的恢复
+调用会被取消，再走同一无模型兜底。由此，排队的后续成员任务、正常成员轮次和恢复阶段都
+不能在 coordinator 研究窗口关闭后开启新模型/工具工作。截止前已经启动的普通工具不会被
+强杀；它仍按自己的工具超时结束，后续 T01 的限时回收负责保留已完成事实并形成最终汇总。
+
+新增 9 项回归覆盖 Web 配置解析、成员 LoopConfig、真实首包等待、截止后成员模型零调用、
+截止前/后工具判断、较早父截止不被成员 guard 覆盖、截止后的恢复零 LLM 调用，以及跨截止
+恢复取消。T02 聚焦与相邻 AgentBus、团队工作流、Web stop/research-budget、
+runaway/finalization 回归 **113 passed**；
+目标 Ruff 与 Pyright 通过。全量 `tests/` 运行在既有语料/日期/环境相关用例处出现红灯，未把
+该次未完成全量运行计作 T02 通过证据。
+
+### 20.10 T01 队伍收尾与证据完整度关闭（2026-10-25）
+
+T01 已按“先收尾、后综合”的顺序关闭。coordinator 退出研究循环后，AgentBus 先冻结该 Run
+的派发入口：新建成员和新任务会被拒绝，已有队列立即标为 aborted，当前正在执行的成员则
+保留最多 15 秒的收尾宽限。宽限期内已经发布或刚完成的报告通过共享 fan-in 逻辑分类、回收
+evidence/assertions，并作为一组协议合法的 `collect_reports` 调用/结果写入 coordinator 消息
+轨迹；随后才进入 reporter handoff 或 `force_final_answer`。因此检查点本身可读且可进入下轮
+上下文，不依赖又一次模型调用才能保存成员事实。
+
+收尾检查点同时记录 `complete|partial`、收回报告数、不完整报告数、被中止队列数和仍未完成
+数。只要仍有未完成、失败或被中止的成员工作，`answer_status` 就降为 `partial`；fast reporter
+也继承该状态，不再把 reporter 成功生成文本误写为完整覆盖。Web worker 的 `run_finished` 与
+`summary.json` 额外保留 `team_completeness`，可区分“流程已正常停机”和“研究证据已完整”。
+部分检查点明确要求不得把预览或局部样本写成全量统计；由完整成员报告直接验证的汇总仍可
+采用。
+
+T02 与 T01 的交界也补了确定性保存：成员在团队截止前已经启动的工具可以结束，但截止后
+不得再启动恢复 LLM。若来不及 `submit_report`，成员 finalizer 会把最近的工具观察按 24,000
+字符上限保存为部分报告，避免正确的 Python/文件计算只存在于即将清理的原始消息中。Web
+配置中 600 秒的 LLM ceiling 可能大于硬墙剩余时间；收尾不再为整个 ceiling 预留而被压成
+0 秒，而是先使用最多 15 秒真实宽限，再把最终综合动态收紧到硬截止的实际剩余时间。
+
+新增回归覆盖：冻结后队列不再启动、冻结后拒绝新派发、成员在宽限内刚完成可被收回、主控
+只有错误预览而成员持有 `7 / 941 / 138 / 803` 全量结果时成员结果优先、未完成成员触发
+partial、fast reporter 保留 partial，以及截止后零恢复 LLM 但仍保存最新工具计算。相关
+Agent Team、AgentBus、Web stop/预算、finalization 与 reporter 回归 **151 passed**；目标
+Ruff 与 Pyright 通过，stage-1 import smoke **428/428**，symbol closure（526 文件、0 缺失）
+及 diff check 通过。本节关闭代码和组件级回归，尚未替代 §20.4 第 4 项的真实 Web 对账、
+联网、产物下载/hash 及刷新回放复测；T05/T08 仍保持开放。
+
+### 20.11 T05 团队轨迹刷新与断线回放关闭（2026-10-25）
+
+T05 的代码与组件回归已关闭。根因不是团队运行没有写轨迹，而是 Web 读取端只认识
+`react_agent.jsonl`：Agent Team 实际写入 `main_planning.jsonl`、`main_agent.jsonl` 和
+`subagents/<session>.tNN.jsonl`，因此刷新后的 `/trace`、SSE reconnect、完整度检查、恢复核对
+和“轨迹是否退化”判断都可能把已有数据当成不存在。
+
+新增共享轨迹源定位层，按运行目录识别 single/team 布局。团队记录以运行时 `ts`、稳定 source
+id 和源文件行号做确定性 k-way merge；对外仍使用原有整数 `after` 游标，游标计入
+`attempt` 审计记录但不把它返回给 Web，分页因此不会重叠或漏读。每条团队回放记录附带
+`agent_id`、`agent_kind`、`role_id`、`trajectory_source` 和 `source_line`。SSE 投影保留这些字段，
+工具调用以 Agent 身份隔离；主 Agent 的实时身份也统一为规范的 `agent_team_main`，避免实时与
+回放把同一工具调用显示成两张卡。成员的 `start` 不再伪装成第二个产品 Run 的启动事件。
+
+完整度以 `main_agent` 为产品 Run 的权威终态，同时返回各 planning/member source 的独立状态。
+因此主 Agent 已完成、某成员仅留下部分轨迹时，Run 仍是 complete，但页面会明确提示成员/阶段
+轨迹不完整；只有成员文件而缺少主 Agent 时为 partial，不再误报 unavailable。终态写入前会
+fsync 所有已发现的团队 JSONL；用量聚合、恢复清单和 clean-run 退化检测也复用同一定位规则，
+不再各自硬编码 single 文件名。
+
+Web 历史轨迹现在显示“主 Agent / 主 Agent·规划 / 成员·名称”，实时与回放 Activity 工具卡也
+显示执行者。新增 7 项 T05 回归覆盖跨三文件时间归并、分页和 filtered-attempt 游标、断线恢复、
+成员身份、主/成员完整度以及缺失/空主轨迹退化检测；相邻 replay/status/usage/capacity 回归
+**94 passed**，目标 Ruff、Pyright 通过，前端 **104 tests passed**，`vue-tsc` 与 Vite 生产构建
+通过。该结论仍需在 §20.4 第 4 项真实 Web 团队 Run 中做刷新与中途断线复测；T08 文件交接仍
+开放，下一项按既定顺序处理 T08。
+
+### 20.12 T08 成员报告与受控文件交接关闭（2026-10-25）
+
+T08 的代码与组件验收已关闭，方案继续保留 bwrap 下每个成员独立的 `/workspace`，没有把
+整个工作目录共享给其他成员。小结果仍通过 `submit_report` 正文交接，正文现在有明确的
+24,000 字符上限；超限会作为工具错误返回，成员可压缩决策所需结论，并将大表格、下载文件
+或阶段性数据集改由 `publish_handoff` 交接。
+
+`publish_handoff` 只接受当前成员 workspace 内的普通文件。可信工具层把文件复制到运行级
+`/outputs/scratch/handoffs/<producer>/<label>/`，按 SHA-256 形成内容版本，并写入同名
+provenance 清单，记录 ref、完整哈希、字节数、producer、job_id、原文件名、逻辑标签和创建
+时间。同一内容重复发布复用既有版本；内容变化产生新 ref。路径解析会拒绝 workspace 外部
+目标、目录、`..` 及伪造 handoff ref，发布前还计入既有 512MB scratch 配额。
+
+`submit_report(attachments=[...])` 只接受最多 8 个已发布 ref，并在终止前重新读取 provenance、
+计算文件 SHA-256。引用随后经过 `FinalizeAnswerObserver`、成员结果适配器和共享 fan-in，成为
+`<report>` 内的结构化 `<attachments>` 块；coordinator 可将原样 ref 交给验证者或最终发布者。
+AgentBus 还会把最后报告对应的通用 metadata 随会话保留，因此后续标准
+`<attach agent="producer"/>` 展开也会恢复同一附件块，不要求 coordinator 手工复制路径。
+提示词明确要求不能把 ref 改写回 producer 的私有 workspace 路径，文件变化时必须重新发布
+新版本。
+
+本次回溯还发现两个原设计与实现不一致的边界并一并修复：
+
+- 非发布成员过去会把整个 `/outputs` 只读挂载，文档宣称可写的 `/outputs/scratch` 实际也不可写。
+  bwrap 现在先挂只读 final-output 根，再覆盖可写 scratch，最后把 handoffs 子树覆盖为只读；
+  因而普通中间文件仍可跨轮保留，而已发布版本不能由模型命令改写。container/native 的文件
+  工具和 bash 策略也拒绝编辑、替换、移动或删除 handoff；读取及复制到 `/workspace` 仍允许。
+- Web 产物扫描器过去会递归登记 `/outputs/scratch`，与“中间文件不展示给用户”的契约相反。
+  扫描和下载解析现在同时排除顶层 `scratch`，包括借助内部 `..` 拼出的等价路径；最终发布者
+  写到普通 `/outputs/<manifest-file>` 的文件仍照常登记、计算哈希并可下载。
+
+新增回归覆盖报告超限、未发布/伪造引用拒绝、内容寻址与 provenance、终止观察器和 bus 元数据
+传递、fan-in 附件块、bwrap 的 scratch 可写/final 与 handoff 只读、container/native 写策略，
+以及 producer handoff → publisher 最终文件 → Web 扫描/下载解析/SHA-256 的确定性闭环。该闭环
+验证了接口和文件边界，不替代 §20.4 第 4 项使用真实模型重跑订单对账与联网文件任务；真实
+任务还必须同时证明两份报告回收、coordinator 采用、发布、刷新回放和最终下载一致。
+
+验证：Agent Team、AgentBus、发布权限、sandbox、产物、回放及工具结果相关回归
+**263 passed**；stateful-react-agent、上下文继承、运行模式与 Web M1 回归 **91 passed**。
+修改目标 Ruff 与 Pyright（0 errors）通过，stage-1 import smoke **430/430**，symbol closure
+（528 文件、0 缺失）及 diff check 通过。既有 8000 服务未在本批重启；上述结论不声称该
+进程已加载新工具，也不把确定性文件闭环冒充真实模型复杂任务复测。
+
+### 20.13 §20.4 第 4 项真实模型隔离复测（2026-10-25）
+
+本次重新构建 `web/dist`，并从当前工作区启动独立 Web 服务加载新代码。服务使用独立 SQLite、
+运行目录和语料目录，端口为 8003，开启 `agent_team` 与 bwrap；没有复用既有 8000 进程或其
+运行状态。两个场景沿用 §20.1 的同一提示词、订单附件、固定对账 oracle 及 W3C/Python 官方
+URL，模型均为 `glm-5-3-flash-260828`。本节只记录本次真实运行，不用旧 Run 或组件测试补齐
+缺失的验收项。
+
+| 场景 | Run | 成员研究与工具 | 正式发布 | 终态 | 刷新/重启回放 |
+|---|---|---|---|---|---|
+| 订单对账 | `6eb0667ae7e74f3289c8a417f116987e` | 甲、乙均读取四个附件、执行 Python/bash 并各自 `submit_report`；两份报告一致得到 `eligible_orders=7`、`gross=941`、`refund=138`、`net=803` | 未创建发布者，`/outputs/summary.json`、`summary.xlsx`、`report.md` 均不存在 | `stopped_by=llm_error`，`answer_status=best_effort`，`team_completeness=complete`，486.23 秒 | 服务重启前后最终文本均可见；62 条 Web 记录回放，120 行源轨迹完整、0 损坏 |
+| 联网文件 | `5a58887a1ab846288e2028bdffbc16a2` | 甲完成 `web_search` 与两次 `web_fetch`；乙完成 `download_file`、`read_file`、bash 核验并各自 `submit_report`。PDF 为 13,264 字节，SHA-256 `3df79d34abbca99308e79cb94461c1893582604d68329a41fd4bec1885e6adb4`，读取文本为 `Dummy PDF file` | 已确定并派发 `report_publisher`，但其首轮模型调用未返回可用内容，0 次工具调用；`/outputs/network-report.md` 不存在 | `stopped_by=wall_deadline`，`answer_status=partial`，`team_completeness=partial`，502.27 秒 | 服务重启前后最终文本均可见；47 条 Web 记录回放，87 行源轨迹完整、0 损坏 |
+
+订单 Run 共 24 次模型调用、401,108 tokens（其中 cache read 324,480）；联网 Run 共 16 次调用、
+235,586 tokens（其中 cache read 186,816）。订单场景两份报告回收后，主 Agent 第 6 轮模型流
+45 秒无首包，T02 的首包保护正确中断该调用；距研究墙只剩 23 秒，不再重试，因此发布者尚未
+创建。联网场景在两份报告完成后才启动发布者，此时仅余约 140 秒；发布者首次调用无可用输出，
+主 Agent 又派发了非任务必需的 `final_verifier`，二者最终都在研究墙处以 `llm_error` 结束且
+没有执行工具。T01/T02 已能保住报告和正确事实，也能如实降级终态，但还没有保证“报告齐备后
+必定进入发布”的预算与入口。
+
+本次 §20.4 第 4 项结论为 **未通过，保持开放**。已通过的子项是两份报告回收、订单正确性、
+联网/下载/读取、错误终态保真及服务重启后的完整轨迹/答案回放；未通过的子项是真实正式落盘、
+正式文件回读、Web artifact 登记、下载及 SHA-256 核对。两个 Run 的 artifact 列表都为空，
+所以 `downloadHashes=false` 是正确结果，不能用成员私有 `/workspace` 文件替代 `/outputs`
+交付物。联网浏览器采集进程曾收到一次 `ECONNRESET`，隔离服务和 Run 未退出；后续使用同一
+用户、Session、Run 做只读恢复并在服务重启后重新取得终态与轨迹，没有重新提交模型任务。
+
+复测新增 **T09（P1）：发布阶段没有保底预算和确定性入口**。修复方向是报告条件满足后立即
+冻结研究派发并进入唯一发布阶段，为发布者保留独立硬预算；在剩余时间不足时禁止再创建复核员，
+并让发布检查点明确区分“已选择发布者”“已实际写盘”“已回读”“已登记下载”四个状态。若发布
+仍依赖一次新的长模型调用，至少要在研究成员启动前预留该调用和必要文件工具的时间；更稳妥的
+实现是让已确定的 manifest、报告与发布任务通过确定性检查点直接交给发布者，避免主 Agent 再
+进行一轮开放式规划。
+
+原始运行汇总、合并轨迹、浏览器刷新截图和本次机器审计保存在
+`.scratch/team-web-smoke/orders-rerun-20261025-evidence/`、
+`.scratch/team-web-smoke/network-rerun-20261025-evidence/` 与
+`.scratch/team-web-smoke/rerun-20261025-summary.json`。隔离运行目录保存在
+`/home/administrator/.local/share/frontier-agent/team-web-rerun-20261025/runs/`，复测结束后
+停止临时 8003 服务，保留数据库、日志和运行证据供 T09 修复后使用同一验收条件重跑。
+
+### 20.14 T09 发布阶段预算与确定性入口关闭（2026-10-25）
+
+T09 已按真实失败链路修复并关闭。实现把“正式发布”设为单向阶段：第一份带
+`output_paths` manifest 的任务成功入队后，运行状态进入 `publishing`。此后普通研究和复核任务
+在 `assign_task` 边界被拒绝，`create_subagent` 只允许替换发布者；同一发布者或安全转移后的
+发布者仍可携带同一 manifest 做修正。发布阶段开始前应完成必要核验，时间不足时直接发布。
+规划期预创建但未派发的研究员/复核员在发布阶段不再触发 `UnassignedAgentNudge`，避免提醒器与
+单向门互相矛盾、消耗主 Agent 收尾回合。
+
+预算采用按模式隔离，而非抬高所有 Run：
+
+| 模式 | 硬墙 | 工作流研究/执行窗 | 工具上限 | 最终综合上限 |
+|---|---:|---:|---:|---:|
+| `stateful-react-agent` | 900 秒 | 450 秒 | 沿用既有配置 | 沿用既有配置 |
+| `agent_team` | 1050 秒 | 720 秒 | 135 秒 | 120 秒 |
+
+团队硬墙由 `SERVER_AGENT_TEAM_WALL_TIMEOUT_S` 独立配置，worker 命令和 orchestrator stdout
+泵使用同一个 per-Run 值；单 Agent 仍读取 `SERVER_WALL_TIMEOUT_S`。团队执行窗之外继续保留
+至少 300 秒，覆盖普通工具最坏外层等待、15 秒 team wind-down 和最终综合。首包 45 秒、单次
+逻辑模型调用 180 秒保持不变。
+
+终态另加确定性完整度守门。若主循环只触及工作流软截止，只有在 team wind-down 为
+`complete`、最终答案不是确定性兜底、manifest 非空且每个路径都安全落在 `/outputs`、每个文件
+真实存在时，才可把 `wall_deadline` 归一为 `final_answer/complete`，并保留
+`soft_wall_deadline_reached` 审计位。缺任一文件都继续报告 stopped/partial，不以正确数值或
+scratch 草稿冒充完整交付。
+
+修复中保留了两个有诊断价值的订单 Run：`8e151df193c540b7a3392a82fb09fdc7` 在 600 秒软墙
+后 12 秒完成三份产物，文件与哈希均正确，但旧终态仍为 stopped；随后加入完整度守门。
+`af90a7440303495a84ce73ecaca90c39` 的发布者在第 446 秒左右启动，只剩约 154 秒，成功写入
+`summary.json` 后生成 XLSX 的参数首次无效，第二次调用仅余 8 秒。守门因此正确保留
+`wall_deadline/partial`，也证明 600+300 的旧划分不能把后 300 秒交给仍运行的发布成员，必须
+适度放宽团队专属硬墙和执行窗。
+
+最终隔离 Web+bwrap+真实模型验收：
+
+| 场景 | Run | 终态 | 工具与发布 | Web 下载校验 |
+|---|---|---|---|---|
+| 订单对账 | `86a5dfaf8a2b42a1b457c649601c3a45` | `completed / final_answer / complete`，594.67 秒 | 两个成员均读取四个附件并执行 bash/Python 后提交报告；唯一 publisher 写入并回读 `summary.json`、`summary.xlsx`、`report.md`；数值为 7 / 941 / 138 / 803 | 三文件均 HTTP 200；SHA-256 分别为 `e3538381…714f0a`、`b26167ac…d0b5c4`、`c375aaa3…df79ec`，全部与 artifact 登记一致 |
+| 联网文件 | `655fafa03f2c43748a9f361ee6bddcbc` | `completed / final_answer / complete`，331.28 秒 | 两成员实际执行 web_search/web_fetch 与 download/read/bash；publisher 写入并回读 `network-report.md` | HTTP 200，SHA-256 `9d910418…ae3683`，与登记一致 |
+
+机器汇总保存在 `.scratch/team-web-smoke/t09-20261025-summary.json`，各轮浏览器事件、刷新截图、
+产物和结果分别保存在同目录的 `orders-t09-*`、`orders-t09b-*`、`orders-t09c-*` 与
+`network-t09-*` evidence 目录；隔离 Run 日志保存在
+`/home/administrator/.local/share/frontier-agent/team-web-t09-20261025/runs/`。临时 8004 服务已
+停止。最终两场均验证了真实成员工具、报告 fan-in、唯一发布、正式文件回读、artifact 登记及
+下载哈希，§20.4 第 4 项与 T09 验收现在为 **通过**。
+
+验证结果：T09、Agent Team、运行模式和 Web M1 的聚焦回归 **95 passed**；扩大到
+`test_agent_team*.py + test_run_modes.py + test_web*.py` 为 **384 passed、1 failed**。唯一失败
+仍是既有 `test_web_p3_steer.py::test_steer_reaches_next_llm_request`：测试仍等待 `create_file`
+审批事件，而该操作已经改为自动批准；移除该等待后又能复现其 opaque conversation payload
+未落盘，故没有通过删除断言掩盖，应作为 steer/上下文连续性的独立缺陷处理。T09 修改目标 Ruff、Pyright
+（0 errors）、stage-1 import smoke（430/430）、symbol closure（528 文件、0 缺失）及 diff
+check 均通过。
+
+### 20.15 Web 团队角色、提示词与 CLI 对齐（2026-10-25）
+
+本节更新首版职责边界：按用户要求，暂缓团队模式中的账户/计划计算和补料表单，先复用
+CLI 已有的团队研究能力。早期章节中“Web 主 Agent 直接调用行情/语料、承担账户计算”的
+工具配置以本节为准。绑定信息、会话历史和运行产物仍保留；本次不删除已有上下文。
+
+配置只保留一个来源：`workflows/agent_team/profiles/tui.yaml`。`server/profile.py` 通过
+`load_swarm_profile("tui")` 获取主、子 Agent 工具清单，不再维护另一份团队工具列表。
+主 Agent 唯一的 Web 工具扩展为 `research_history`，用于恢复早期约束和历史证据。
+行情、语料、账户计算及补料工具不再出现在团队任一角色的工具列表中。单 Agent 保持原配置。
+worker 拒绝团队模式的 `--agent-tools` 扩展，避免旁路重新扩大主 Agent 的能力。
+
+运行链路如下：
+
+```text
+用户本轮问题 + 既有上下文
+  → 主 Agent 理解范围，add_task 建任务板
+  → create_subagent 按角色创建成员
+  → assign_task 批量派发独立工作；有依赖的任务按批次派发
+  → 研究成员：读取附件 / 联网 / 代码计算 / 生成 workspace 候选文件
+  → submit_report；大文件先 publish_handoff，再通过 attachments 返回引用
+  → AutoFanIn / collect_reports 回收，主 Agent 检查缺口并复用成员补充
+  → local_verifier 仲裁冲突，final_verifier 验证草稿
+  → 如需正式文件：唯一 publisher 携带 output_paths 写入 /outputs 并回读
+  → 主 Agent 更新任务板、合成回答；Web 登记产物并持久化上下文
+```
+
+| 角色 | 共用提示词入口 | 职责和工具边界 |
+|---|---|---|
+| 主 Agent | `get_main_system_prompt`，`TEAM_MANAGEMENT`、`ASYNC_SECTION` | 理解、分派、回收、补缺、统筹验证、合成；协调工具与 grep/glob 定位，Web 额外可查历史 |
+| 普通研究成员 | `get_subagent_system_prompt` → `SUBAGENT_RESEARCH` + 角色说明 | 搜索、抓取、读文件、bash、候选生成、文件交接、提交报告 |
+| 冲突核验员 | `LOCAL_VERIFIER` | 对照两份报告与证据解决具体分歧 |
+| 最终核验员 | `FINAL_VERIFIER` | 检查草稿是否覆盖原始问题、证据和数字是否准确 |
+| 唯一发布者 | 普通成员提示词 + 带 `output_paths` 的任务 | 只有该结构化 manifest 授予正式输出权限；其他成员只能生成候选与交接文件 |
+
+Web 不复制上述提示词文本。`build_prompt_addenda` 只追加上下文可信度规则、成员业务隔离、
+主 Agent 历史查询及当前业务能力暂缓说明。移除原来要求主 Agent 直接写文件、调用未开放的
+账户/补料/行情工具的附加指令。团队模式的 `fs_mode` 同样继承 CLI：该参数在团队工作流中
+意味着科学题解题指南，并非文件挂载开关；附件路径和 sandbox 说明仍由工作流按实际挂载生成。
+
+CLI 的 `planning_mode=false`、`reporter=false`、`team_effort=max` 继续由共用配置提供。
+Web 仍使用现有 720 秒执行窗、1050 秒硬墙和 300 秒收尾预留，不照搬 CLI 的长时间预算。
+这次没有增加“第两轮必须派发”规则；首次派发时间和多轮验证仍由 CLI 协调策略决定，
+角色对齐不等于保证任何研究都在截止前完成。
+
+验证新增 Web worker+bwrap 回归：使用脚本模型驱动实际主 Agent 建板、创建研究员/核验员、
+分派、实际读取 `/inputs/brief.txt`、报告回收、`<attach>` 传递、独立重读、更新任务板和
+最终回答。检查实际模型请求中主/子工具清单与 CLI 一致（主 Agent 仅增加历史查询），
+且不再带账户/补料/科学题指南。该测试不替代真实模型的调度质量评估。
+
+本次聚焦回归共 **197 passed**，包含团队工具/文件交接/发布/超时、Web worker、单 Agent
+Web M1、上下文继承、账户工具和 CLI profile。单 Agent 的四种业务绑定/历史查询组合均校验
+system prompt 附加部分逐字节不变。目标 Ruff、目标 Pyright（`server/profile.py`、
+`server/worker.py`，0 errors）、两阶段 import smoke（430/430、479/479）、symbol closure
+（528 文件、0 缺失）、真实模型 preflight 和 diff check 通过。全仓 Pyright 仍报告 21 项错误，
+位于本次未修改的 gradio 依赖、corpus、retention、monitor/watch 文件；未将全仓类型检查记为通过。
+
+### 20.16 基础链路 S1：最终报告契约与可读兜底（2026-10-26）
+
+本节承接 §20.15，作为本轮实施与验收记录。架构及后续监管设计参见
+[Agent Team 全流程设计](../design/agent-team-supervision-and-finalization.md)，设计文档不替代
+本计划的执行记录。按确认顺序，先完成基础执行、收尾、交付链路，再考虑扩展 Orchestrator
+的执行监管。本轮仅实施 S1，不新增外部监督、worker 接管或跨重启恢复协议。
+
+执行状态：**S1 已实现，聚焦回归通过**。此状态仅指下述报告边界，不代表基础链路 S2～S5
+或外部监管已经完成。
+
+已定位的缺口：`force_final_answer` 为保全信息可以拼接原始成员报告，Reporter 失败时会
+保留主节点答案；这使内部 `<report>` 有机会直接进入用户正文。现有
+`minimal_best_effort_answer` 已能不依赖模型生成说明，本次复用它并完善最终输出契约。
+
+实施内容：团队最终输出边界检查、结构化报告来源与完整度、任务板未解决项及 wind-down
+统计。原始材料继续留在内部报告交接和轨迹中，不删除上下文；正常文本报告保留。
+任务板的 resolved 是协调者声明，wind-down complete 是收尾回收结果，都不能直接代表
+独立事实核验。程序状态报告不得声称文件已经核验或下载可用。
+
+#### 20.16.1 实现与字段
+
+- `workflows/agent_team/final_report.py`：统一团队最终报告边界。空输出、内部 report/tool
+  协议、调用形状的 JSON、未闭合 thinking 和 Python 堆栈不得成为最终正文；来自
+  `collected_reports` / `tool_observations` 的内部兜底转为程序状态报告。正常完整答案原文保留。
+- `nodes/main_agent.py`：在清除任务板前快照；未解决事项会降低完整度并追加具体缺口。
+  保留既有软截止完成逻辑，但原始拼接报告、无效正文或未解决任务不得据此升为完整交付。
+  用户报告与内部 `report_handoff_context` 分开，原始材料仍在历史/轨迹中供后续读取。
+- `nodes/reporter.py` / `nodes/fast_reporter_v1.py`：Reporter 继续接收内部综合材料；异常、
+  空输出或协议文本保留主节点已处理的安全基线。成功输出也继承任务板缺口，不能仅因生成
+  了新文字就抹掉未完成事项。两份 pipeline spec 同步传递相关字段。
+- `server/worker.py`：仅团队模式在 `run_finished` 帧和 `summary.json` 中携带结构化
+  `report_contract`。本次不增加数据库字段或页面卡片，用户直接看到正文中的状态说明。
+
+`report_contract.version=1` 的主要内容：
+
+| 字段 | 语义 |
+|---|---|
+| `source` / `input_source` | 最终来源为 model/system；保留进入边界前的具体来源 |
+| `kind` | `complete`、`partial`、`system_status` |
+| `answer_status` | 兼容已有状态；程序兜底保留 `not_found`，表示没有可用综合结论，不表示所有中间工作都不存在 |
+| `stopped_by` / `gaps` | 运行终止原因、未解决任务、未回收/取消/不完整计数及综合不可用等结构化缺口 |
+| `task_board` / `task_board_basis` | 原任务描述和状态；明确 `coordinator_declared`，不冒充独立核验 |
+| `wind_down` | 只覆盖收尾边界的统计，不能解释为全 Run 的完成任务总数 |
+| `artifact_verification` | 本报告边界固定为 `not_assessed`；文件存在、核验与下载仍由原产物链路负责 |
+
+例如订单匹配已经结束，但“重复退款核验”仍为 in_progress：即便 wind-down 已收齐剩余
+报告，最终状态也降为 partial，正文列出该未解决项。若综合模型不可用，程序说明来自系统、
+列出可确认的任务板和收尾事实，不把成员的原始计算输出直接作为已核验结论发布。
+任务名在正文中按文本转义并限制展示长度；完整描述保留在结构化契约中。
+
+#### 20.16.2 验证结果与限制
+
+聚焦回归 **198 passed**：报告边界、团队 wind-down/超时/工作流、Web worker、语料发布边界、
+运行模式、上下文继承、单 Agent Web M1 和单 Agent 模型失败兜底均通过。
+
+新增验证包括：
+
+1. 综合调用抛异常，内部成员报告仍保留，用户正文只输出系统说明与可信计数。
+2. 任务板尚有未解决项但 fan-in complete，不得显示为完整；cancelled 按现有任务板规则视为撤回。
+3. Reporter 异常/空内容/协议内容保留安全基线；成功时仍携带原任务缺口。
+4. Web worker＋bwrap 实际调用主/子协调与文件工具：正常最终答案逐字保留；模型返回原始
+   `<report>` 时变为系统状态报告。两种情况下终态帧和 summary 的答案、契约均一致。
+
+目标 Ruff、目标 Pyright（0 errors）、两阶段 import smoke（431/431、480/480）、symbol
+closure（529 文件、0 缺失）、diff check 通过。真实模型 `agent_team / tui` preflight 的
+一次轻量调用通过；上述 Web 故障与链路测试使用脚本模型，未重跑长时间真实研究，未重启在线服务。
+
+本次未改变单 Agent 的提示词、工具、预算或共享程序兜底；变更位于团队最终输出边界，CLI
+团队模式同样受该边界保护。检查仅识别明确的格式问题与可观察缺口，不声称能检测所有自然
+语言截断、事实错误或用户要求遗漏。尚未提交的成员进度、全任务核验与产物交付完整度留待
+后续基础链路补齐；worker 卡死/被杀后的外部接管仍不在本轮范围内。
+
+下一项 **S2：团队内部结果与交接**。沿现有任务、成员报告和文件交接路径核对可保存、
+可读取的结果及缺口，先完成正常执行和进程仍可响应时的闭环，不提前启动 Orchestrator 监管扩展。
+
+### 20.17 基础链路 S2：团队内部结果与精确交接（2026-10-26）
+
+执行状态：**S2 已实现，聚焦与扩大回归通过**。本节只保证同一次正常 Run 内已结束 job 的
+结果能够稳定保存、精确引用和交接；不把它描述为 worker 重启续跑或 Orchestrator 接管。
+
+#### 20.17.1 找到的实际缺口
+
+原有文件链路已经具备内容寻址、SHA-256、只读 handoff、`submit_report` 引用复验、唯一
+publisher 和 Web artifact 隔离。报告链路仍只有 `<attach agent="name"/>`，它读取成员当前的
+`last_report`。同一成员执行第二批任务后，第一批已经回收的报告便失去稳定的模型可见引用；
+核验员可能收到“该成员最新报告”，而不是主 Agent真正准备交给它的那一份。
+
+此外，成员报告主要存在 AgentBus 内存、主 Agent 消息历史和轨迹中，没有按 job 单独形成
+易核对的结果快照。消息压缩不会删除原始轨迹，但诊断或后续交接仍要从长历史中反查内容。
+
+#### 20.17.2 实现
+
+1. `AgentBus` 为团队 Run 增加可选的 task 级结果存储。每个 session job 结束后，先把规范化
+   `SubAgentResult` 写成 JSON 快照，再放入可回收队列。Web/benchmark 的位置为
+   `<run>/agent/team-results/<task-id>/<job-id>.json`；CLI 使用其 `APODEX_RUN_DIR` 下的同类目录。
+   普通未配置该目录的 AgentBus 仍保持原来的内存行为。
+2. 快照使用临时文件加原子替换，写成只读文件。相同 job 再写入相同内容视为幂等；不同内容
+   被拒绝，不能静默覆盖第一份结果。快照包括 task/session/agent/job、原问题、角色、正文、
+   成功状态、错误分类和报告元数据。清理阶段解除活动存储绑定，文件保留供审计，迟到的已
+   脱离 worker 不能继续写入该 Run 的结果存储。
+3. 如果快照写入失败，报告仍在内存链路返回，避免把研究结果一并丢弃；同时写入
+   `result_snapshot_error`，fan-in 将该报告标记为 `incomplete/checkpoint_error`，主 Agent
+   能看见“报告已返回但持久化失败”，不能把它误算为无缺口完成。
+4. `assign_task` 的成功返回现在列出每个 `job_id`；`collect_reports` / AutoFanIn 的
+   `<report>` 同样携带 `job="..."`。主 Agent 可将派发结果和回收结果按同一 ID 对齐。
+5. 新增 `<attach agent="name" job="job-id"/>`：读取指定已完成 job，并核对 task 和 agent
+   归属；不存在、尚未结束或归属不符时，在下游 prompt 中留下明确缺失标记，不回退到另一份
+   报告。`<attach agent="name"/>` 继续表示最近报告，兼容已有 prompt 和旧模型行为。
+6. 精确 attach 仍携带该报告已验证的 handoff refs。下游成员读的是原内容摘要及不可变
+   `/outputs/scratch/handoffs/...` 版本，不能借报告引用访问生产者私有 `/workspace`。
+
+示例：`analyst` 的 `root.job.1` 生成初筛表，随后 `root.job.3` 做补充调查。核验任务使用：
+
+```text
+<attach agent="analyst" job="root.job.1"/>
+```
+
+即使 `last_report` 已经变为 job 3，核验员仍收到 job 1 的正文和它提交的精确文件 ref。
+
+#### 20.17.3 验证与边界
+
+S2 新增回归覆盖：成员复用后 latest/exact 两种 attach 的差异；跨 agent 错误引用拒绝；job ID
+在 fan-in 报告中可见；JSON 快照落盘及新 AgentBus 只读恢复；同 job 不同内容不可覆盖；
+快照失败降级为 incomplete；Web worker＋bwrap 实际执行 reader → 精确 job attach → verifier，
+两名成员的快照均真实落盘。旧式 latest attach、handoff SHA-256、只读挂载、唯一发布及 Web
+下载隔离继续通过。
+
+受影响链路聚焦回归 **167 passed**；加入最后的不可覆盖/失败可见用例后，S2 文件交接集
+**15 passed**。扩大到 Agent Team、AgentBus、运行模式、Web、上下文与单 Agent 回归为
+**512 passed、1 failed**。唯一失败仍是既有
+`test_web_p3_steer.py::test_steer_reaches_next_llm_request`：测试等待已经改为自动批准的
+`create_file` 审批事件，和 S2 代码路径无关；未删除断言掩盖该问题。
+
+目标 Ruff、目标 Pyright（0 errors）、两阶段 import smoke（431/431、480/480）、symbol
+closure（529 文件、0 缺失）及 WSL `git diff --check` 通过。真实模型 `agent_team / tui`
+preflight 轻量调用通过；本轮端到端交接使用可重复的脚本模型，未重新运行长时间真实研究，
+也未重启当前在线 Web 服务。
+
+本阶段没有把 job 快照接入跨进程调度：新进程可以读取 JSON 供诊断，但不会重建 session、
+任务队列或模型上下文；整机/存储故障仍遵循设计文档的保证边界。下一项 **S3：工作流内阶段
+预算与收尾**，重点是研究/发布准入、可唤醒等待和主 Agent 最终综合资源，不提前建设
+Orchestrator 外部监管。
+
+### 20.18 基础链路 S3：工作流内阶段预算与收尾（2026-10-26）
+
+执行状态：**S3 已实现，团队扩大回归与单 Agent 隔离回归通过**。本节实现的是 worker 和事件
+循环仍可运行时的工作流内控制；没有提前实现设计文档 S4/S5 的外部 watchdog、租约接管或
+进程级恢复。
+
+#### 20.18.1 原链路为什么仍会挤掉发布
+
+T09 已把发布设为单向阶段，但“进入发布阶段”仍由主 Agent 在同一个 720 秒 loop 内决定。
+成员 session 创建时捕获同一研究截止，后来分派的 publisher 也继承它；因此报告在第 600 秒
+回收时，publisher 只有约 120 秒，配置中的 1050 秒总墙和 300 秒收尾预留不会自动成为成员
+可用时间。`collect_reports(timeout=1800)` 虽会被 loop 墙截断，却不认识“研究回收”和“发布”
+是两个边界。两 loop 规划模式还会在 execution loop 开始时重新建立相对计时，不能作为整轮的
+可靠绝对计划。
+
+#### 20.18.2 实现的绝对阶段计划
+
+新增 `TeamPhaseBudget`，在 `main_agent_node` 开始时一次生成绝对 monotonic 截止，并由主 Agent、
+团队工具、成员 runtime 和 AgentBus 共用。Web 当前参数形成以下计划：
+
+| 阶段边界 | Web 当前值 | 程序行为 |
+| --- | ---: | --- |
+| 研究准入截止 | 最迟约第 555 秒 | 720 秒研究执行墙减去 135 秒工具上限和 30 秒 teardown；此后拒绝新研究/核验派发 |
+| 已接收研究执行截止 | 第 720 秒 | 普通成员 job 到点真实取消并作为 timeout/incomplete 回收，不允许工具调用越过边界继续占用发布窗 |
+| 整理与唯一发布截止 | 最迟第 900 秒 | 新增 `publication_phase_timeout_s=180`；只有带 `output_paths` 的 publisher job 使用该截止 |
+| bounded wind-down | 最多 15 秒 | 冻结新派发、终止队列，有限等待已经在运行的成员并回收可用结果 |
+| 主 Agent 最终综合 | 最多 120 秒 | 按 1050 秒硬墙的实际剩余时间收缩；模型调用失败走既有程序状态报告 |
+
+第 900 秒是 `720 + 180`；如果外部总墙更短，发布截止会提前到“硬墙减最终综合、wind-down
+和一秒提交余量”的位置。配置不可行时不伪造时间：阶段会缩短，最后仍按已保存结果生成
+best-effort/partial 状态。
+
+阶段按 `research → draining → consolidating → publishing → finalizing` 单向推进。时间到达
+`draining` 后，`assign_task` 从程序边界拒绝普通任务；到 `consolidating` 后不再等待研究，仍可
+把已经回收的报告和确定的 manifest 交给唯一 publisher；进入 `publishing` 后继续沿 T09 的
+发布锁拒绝其他研究者竞争正式文件。规划 loop 和 execution loop 使用同一组绝对截止，因此
+切 loop 不会重新获得一份完整预算。
+
+#### 20.18.3 等待、成员 deadline 与程序兜底
+
+1. `collect_reports` 读取当前阶段：研究/回收期间最多等到研究执行截止；publisher 已激活时
+   才能等到发布截止。截止已过时先非阻塞回收已完成结果，然后立即把控制权交回主 Agent，
+   不把 1800 秒参数当成继续占用时间的许可。
+2. `SwarmSubagentRuntime` 按 job 元数据选截止。`can_publish=false` 使用研究截止，
+   `can_publish=true` 使用发布截止；同一持久 session 的前一批研究任务和后一批发布任务可以
+   获得不同 deadline，不再受“session 创建时捕获的旧截止”限制。
+3. `SubAgentRuntimeSpec.run_timeout_builder` 把该绝对截止交给 AgentBus。AgentBus 取它和
+   SpawnGuard 两者的较短值，用 `asyncio.wait_for` 覆盖整个成员 loop，所以卡在模型、工具或排队
+   后才启动的 job 都不能只靠下一次 turn-end 才发现超时。超时仍产生规范化失败结果并进入
+   S2 快照/fan-in 链路。
+4. 主 loop 退出后仍执行既有 `wind_down_team`，然后才调用无工具最终综合。若距硬墙不足一秒，
+   不再发起注定不能完成的最终模型请求，直接使用 `force_final_answer` 的确定性程序兜底；模型
+   报错、空输出或协议损坏继续由 S1 的用户报告边界转换为可读状态报告。
+5. 最终 state 增加 `team_phase_budget`，记录阶段、各相对截止和返回时剩余时间，供工作流结果
+   诊断和后续 S4 监管接线；它不是外部接管租约，也未单独扩展 Web summary 契约。
+
+例：两名研究成员在第 500 秒已运行，主 Agent 第 560 秒试图再派复核员会收到程序拒绝；已有
+成员最多运行到第 720 秒。报告齐备后，第 730 秒分派的 publisher 可运行到第 900 秒，而不会
+继承第 720 秒的旧截止。若 publisher 到点仍卡在模型或工具，AgentBus 将其标记为 timeout，
+wind-down 保存已存在文件，最终回复明确列出已完成、未验证和缺失项。
+
+#### 20.18.4 验证与边界
+
+新增回归覆盖：阶段状态和准入单向推进；主 Agent 发布绝对截止；研究/publisher job 获得不同
+deadline；AgentBus 实际取消越界成员；研究阶段结束后 `collect_reports` 立即返回；研究派发在
+准入截止后被拒绝。发布死锁、唯一 publisher、成员继承截止、wind-down、报告交接和 Web
+预算原有用例继续通过。
+
+Agent Team、AgentBus、运行模式和 Web 相关扩大回归 **192 passed**；stateful workflow、上下文
+继承和运行模式的单 Agent 隔离回归 **97 passed**。目标源码 Ruff、Pyright（0 errors）、两阶段
+import smoke（432/432、481/481）、symbol closure（530 文件、0 缺失）和 WSL diff check 通过。
+真实模型 preflight 使用当前 `glm-5.3-flash` 完成一次工作流调用并通过。本轮没有重启在线 Web
+服务，也没有再次运行 15 分钟级真实研究任务；阶段边界的时间推进和取消使用可重复的异步测试
+验证。下一步在当前基础链路上做 S3 的隔离服务真实模型验收，随后再进入 S4 Orchestrator
+执行监管；两者不在本次工作流内实现中混为一项。
+
+### 20.19 缺陷修复第一批：整轮执行缺口与内容读取状态（2026-10-26）
+
+执行状态：**第一批的首个实现增量完成**。依据
+[缺陷修复报告 v2](../design/agent-team-defects-and-remediation.md)，本次落实 D16 的整轮
+执行记录、D15 的网页/图片工具结果及 D18 的明确矛盾声明防线，并同步加入 R13 的确定性
+反例。尚未完成整个 R1 的“检查项—证据—版本—补验”协议，不能称第一批全部完成。
+后续编号以设计文档为准：S4 为正常提交、页面与连续性，S6 才是外部监管；上节旧记录中的
+“S4 Orchestrator 执行监管”不作为本次扩大范围的依据。
+
+#### 20.19.1 先复现，再修复
+
+新增最小反例经真实 AgentBus 派发、回收、wind-down、finalize_team_report 链路：成员
+`wall_deadline`，协调者提前收回报告，任务板仍写 resolved。修复前最终返回 complete；
+命令 `uv run pytest tests/test_agent_team_final_report.py -q -k collected_deadline` 稳定失败。
+
+另经 `execute_tools` 复现三种业务失败却 `is_error=false` 的情况：正文提取为空、批量抓取
+仅部分成功、Vision 服务 503。`tests/test_content_acquisition_outcomes.py` 的三个初始用例
+均先失败，再改到通过。修复针对结果来源，未在通用错误分类器中扩充大量关键词。
+
+#### 20.19.2 实际修改
+
+1. **整轮 job 记录不随回收消失。** AgentBus 提供按 task 查询全部 job 的只读使用接口。
+   wind-down 在清理前记录各 job 的 ID、成员、派发必要性、完成分类、截止原因、报告来源
+   和内容读取观测。`status` 仍表示最后一批收尾；新增 `run_status` 表示整轮执行覆盖。
+   此前已经回收的失败、超时和仅含原始观测的结果，仍进入最终 `member_job_incomplete`
+   缺口，resolved 不再能消除它。
+2. **必要性在派发时声明。** 团队专用 `assign_task` 增加
+   `required_for_completion`，默认 true；确属可选探索可在派发前设 false。声明保存在 job
+   元数据、结果快照的 `assignment_metadata` 及最终报告契约中。新派发可选 job 不会修改
+   旧必要 job。该字段仍是协调者的派发声明，契约标记 `required_work_basis=dispatch_declared`，
+   不能声称程序已经理解并证明全部用户要求。失败是否必需不靠 agent 名称猜测。
+3. **收尾与最终声明一致。** 整轮必要 job 有缺口时，即便最后一批计数为零，也追加检查点并
+   触发现有有界综合；沿用原阶段预算，不增加重试循环或扩展总墙。主输出与 Reporter 都
+   重新应用报告边界；`team_completeness` 根据最终契约产生，Reporter 不得洗掉已记录缺口。
+   `report_contract` 升为 v2，记录 job_outcomes，并明确 `verification=not_assessed`：
+   本次状态机制不是事实核验器。
+4. **拦截明确矛盾的候选正文。** 有必要 job 未完成时，若综合后仍明确声称“已获充分交叉验证”
+   或“all findings are verified”等，候选正文不发布，转为列出缺口的系统状态报告；不能只在
+   原文后加免责声明。有限范围的通过和诚实的未完成说明保留。该检测是有限措辞防线，不是
+   通用语义检测器，也不能证明未命中的其他表达准确。
+5. **工具执行成功与内容取得分开。** 原版及 aligned 两条 web_fetch 路径在内容不可用、策略
+   拒绝或低覆盖时返回显式 ToolOutcome 和 JSON 状态。批量部分成功逐项保留正文与状态；
+   全成功保持原有文本格式。view_image 服务不可用时明确图片未分析，删除原回退文本中
+   “图片已成功加载且可读”的无依据断言，也不再为回退说明读取宿主文件状态。
+   新 JSON 的 `ok=false` 与 ToolOutcome 的错误位一致，供实时事件和回放沿现有路径读取。
+6. **读取限制独立于成员自述。** 团队成员增加 ContentAcquisitionObserver，经实际工具结果
+   记录网页/图片取得情况，并进入成员元数据、快照、整轮记录和最终 `acquisition_limits`。
+   后一次失败不会抹掉同一来源已成功取得内容的事实；同源后续成功可以消除读取不足记录。
+   这里仅表示工具取得了返回内容，不代表取得全文或该内容支持某条结论。不同来源之间不自动
+   判为替代核验。读取失败可能只是可选探索，因此单独披露，不一律将整轮降级。
+7. **提示词对齐证据边界。** 主 Agent、研究成员、核验成员及 Reporter 明确区分原文摘要、
+   独立事实核查、多解析器一致性和同模型重复判断；搜索片段不等于抓回原文；未读图片不能
+   由像素统计认定为装饰图。Reporter 接收当前执行约束，不能依靠任务板文字授予核验通过。
+
+例：t3 已写 resolved，job.3 却为 wall_deadline。最终契约仍保留 job.3 的缺口；模型可以
+输出“前八项已核对，后两项未检查”的部分报告，但不能输出“全部已验证”。如果综合模型仍
+忽略该约束，系统报告会列出未完成成员及原因，原始候选和成员证据继续留在审计轨迹。
+
+#### 20.19.3 原运行回放与验收
+
+对 run `3b810e3b72cb4a5c8034ec8cba389f4c` 做只读离线回放：加载三个已保存的 job 快照、
+原始最终正文和任务板，通过新 wind-down/最终报告边界，不重启服务、不重新请求原研报。
+回放曾检出一个二次遗漏：原文“虽因时限未给出书面结论，但……已获充分交叉验证”中的
+前半句否定被错误套到后半句。现按具体声明的附近限定语判断，并将该反例加入测试。
+
+最终回放结果：`snapshot_count=3`、`wind_down_collected=0`、`run_status=partial`、
+`answer_status=not_found`、`kind=system_status`，缺口包括 member_job_incomplete、
+unsupported_verification_claim、synthesis_unavailable。该回放刻意直接检查原候选，没有调用
+模型修订；not_found 表示没有发布可用综合正文，不表示原始研究材料不存在。旧运行文件未改写。
+
+最终扩大回归 **320 passed**，覆盖团队、AgentBus、文件交接、共享工具、Web worker+bwrap、
+Reporter、运行模式、单 Agent 工作流、跨轮上下文及低覆盖网页。正常完整报告仍可原样交付，
+局部通过/否定声明不会因为包含“verified”就被
+统一拒绝。工具的策略拒绝测试已更新为断言显式错误状态，仍确保不发出网络请求。
+
+目标 Ruff 通过、目标 Pyright 为 0 errors；两阶段 import smoke 为 434/434、483/483，
+symbol closure 为 532 文件、0 缺失，git diff check 通过。真实模型 preflight 使用
+`agent_team / tui`、`glm-5.3-flash` 完成一次轻量调用；本轮 Web 端到端使用脚本模型，
+未重新执行长篇真实模型研究，也未重启当前在线服务。
+
+#### 20.19.4 明确保留的下一项
+
+下一项优先完成 R1 剩余协议：必要检查绑定工作项、证据和受检版本，局部检查结果、补验
+job 的替代关系及变更后的失效规则。当前旧必要 job 的失败不会因后续无关联 job 成功而自动
+消失；这是尚未实现补验关系的保守边界，不应包装成完整的核验生命周期。
+
+还未实现：逐条引用对结论的语义支持判定、所有文档输入的完整覆盖清单、全自然语言矛盾
+识别、新的通用质量评测集、历史原始轨迹修订及 S4/S5 全链路验收。新增读取观测当前只覆盖
+web_fetch/view_image，不能代表所有 bash/文档解析工具。正式文件正文的语义验收也不由
+本次聊天报告边界替代。账户/计划、阶段预算优化和 S6 外部监管继续按原顺序处理。
+
+### 20.20 R1 续项：检查项与证据版本绑定、补验关闭旧缺口（2026-10-26）
+
+本节延续 §20.19，落实设计文档 `agent-team-defects-and-remediation.md` §3.1 的范围、
+版本、局部结果和替代关系。执行状态、检查结果与交付完整度分别保存；通过检查不等于模型
+判断已被程序证明正确。没有扩展 Orchestrator，也没有调整总墙钟或账户/计划策略。
+
+#### 20.20.1 派发协议与版本身份
+
+团队专用 `assign_task` 增加 `verification_checks`。每项包含：
+
+| 字段 | 含义与约束 |
+|---|---|
+| `check_id` | 当前 Run 内稳定的检查身份；不能用它指代另一个标准 |
+| `work_item_id` | 已存在的任务板事项 ID |
+| `criterion` | 精确检查标准；后续补验不能改变标准或所属事项 |
+| `subject` | 受检候选：同 Run 已完成 job 的报告，或该报告提交的不可变 handoff |
+| `evidence` | 1–8 个证据引用；引用同样由 `job_id` 和可选 `ref` 指定 |
+| `replaces_job_id` | 补验必须指向该检查最近一次派发的 job，不接受跳过新版本的旧前驱 |
+| `revision_reason` | 候选或证据版本变更时必填，说明为何重验 |
+
+`required_for_completion` 仍在派发时决定必要性，适用于该 assignment 的所有检查。
+必要检查不能通过后续派发降为可选。检查专用任务不能同时携带 `output_paths`，避免用
+“检查补齐”抵消实际生产/发布未完成的缺口；普通研究 job 也不能被无关补验抵消。
+
+`plugins/tools/_verification.py::bind_checks` 根据实际报告 UTF-8 字节或 handoff 文件
+SHA-256 构造 `binding_id`，绑定检查身份、标准、候选和证据。模型不能自行指定可信哈希。
+文件引用必须出现在所指 job 的 `report_attachments` 中，且通过既有 handoff 路径、清单和
+摘要校验。跨 Run job、未完成 job、任意 workspace 路径和伪造附件均不能作为绑定来源。
+同一来源重复引用被拒绝；多个检查共用来源时，派发上下文只注入一次来源内容。
+
+版本验证和 job 提交共用当前团队的 `verification_lock`。两个并发请求若都试图替代同一个
+前驱，只接受第一个，第二个会收到“必须替代最新 job”的错误；失败派发不会建立悬空替代链。
+
+示例：已有任务板 t3、候选 job `run.job.1`、证据 job `run.job.2`，协调者派发：
+
+```json
+{
+  "agent": "amount_checker",
+  "prompt": "按原始数据重新计算总额，说明计算方法和结果。",
+  "verification_checks": [{
+    "check_id": "amount-total",
+    "work_item_id": "t3",
+    "criterion": "订单净额等于逐行金额之和，币种与小数位一致",
+    "subject": {"job_id": "run.job.1"},
+    "evidence": [{"job_id": "run.job.2"}]
+  }]
+}
+```
+
+若需绑定文件，在对应引用内增加 `ref`，必须使用该 job 实际提交的 handoff ref；不能拿
+最终可变 `/outputs/report.md` 路径冒充不可变版本。新派发的任务正文包含程序计算的
+`binding_id`、来源摘要和 `evidence_keys`，成员原样引用这些标识提交检查结果。
+
+#### 20.20.2 局部提交与旧缺口关闭
+
+`submit_report` 增加 `verification_results` 和默认 true 的 `finish`。每个结果必须包含
+`check_id`、`binding_id`、`verdict`（pass/fail/unchecked）、`method`、`detail`、
+`evidence_keys`。只接受当前 job 被分配的精确绑定；pass 必须引用全部绑定证据，fail 必须
+引用至少一个绑定证据。方法、详情不能空白。文件证据在提交时再次核对摘要。
+
+成员可用 `finish=false` 提交已完成的检查并继续工作。只有非空、有效的结构化检查结果才
+允许这种非终止提交；默认调用与旧行为一致，成功后结束任务。校验失败不终止任务，也不
+提交同一批中的其他结果。耗时文件校验在线程中只读执行，取消后不能由后台线程补写结论。
+
+局部结论列表在派发前建立，由 AgentBus 的队列、job 和运行元数据副本共同引用。这样，即便
+成员随后触发外部 TimeoutError、跳过正常结果适配，已接受的局部结论仍进入 job 快照的
+`assignment_metadata`。这是 Web 链路测试实际发现并补齐的一处遗漏：只在运行上下文中
+新建列表会导致最终汇总看不到已提交结果。
+
+`project_checks` 按派发顺序投影检查链，完整保留 attempts、旧执行失败、旧结果及替代关系：
+
+| 情况 | 当前结果 |
+|---|---|
+| 旧 job 超时，没有提交检查结论 | 对应检查 unchecked，必要缺口保持打开 |
+| 十项中八项已经提交 pass，随后超时 | 八项保留，另两项 unchecked，整体 partial |
+| 新 job 明确补验同一检查/版本并 pass | 只关闭所覆盖的旧检查缺口，旧 job 超时事实不改写 |
+| 同一版本再次出现明确 fail | 最新补验结论生效，不能继续沿用旧 pass |
+| 候选或证据换版 | 相关检查需要新结论；未换版的其他检查仍保留 |
+| 换版后又回到早先版本 | 不跨越中间版本复活更早的 pass，仍须提交新结论 |
+| 同版本补验没有新结论 | 保留该连续版本链中此前已接受的局部结论 |
+| 普通研究失败或结果快照写入失败 | 不被检查通过抵消，保持独立缺口 |
+
+例如 job.3 检查“净额”和“单位”，净额已 pass，单位未提交就超时。job.4 使用原标准、
+原候选和证据，声明单位检查 `replaces_job_id=job.3`，并提交 pass。两项必要检查现在
+覆盖完整；job.3 的原始 `status=incomplete` 仍在，另有 `coverage_status=complete` 和
+`coverage_resolved_by` 解释其检查缺口如何补齐。若 job.4 改用了新版输入，则须声明
+`revision_reason`，程序生成新的绑定，不会把旧版本的 pass 当成新版本通过。
+
+#### 20.20.3 收尾、汇报与兼容性
+
+`collect_reports`、自动 fan-in、wind-down 向主 Agent 提供当前版本检查摘要；同一摘要也能
+在仅有状态返回时读取。`TeamWindDown.run_status` 和最终报告边界按必要工作的有效覆盖
+汇总，不再让已经明确补齐的旧超时永久锁死完整度。未绑定检查的旧 job 保留 §20.19 的
+保守行为，不能根据历史自然语言“通过”或任务板 resolved 自动补造协议记录。
+
+`report_contract` 升为 v3，增加 `verification_checks`，包含当前绑定、当前结论、结论 job、
+全部 attempts；`job_outcomes` 保留执行状态和覆盖状态。`verification` 可以是
+`passed_for_declared_checks`、failed、partial、unchecked 或 not_assessed；其依据明确为
+`version_bound_member_verdicts`。只有可选检查时，必要核验聚合仍为 not_assessed，各项
+结论单独披露。`artifact_verification` 继续是 not_assessed，不能误读为正式文件已验收。
+
+最终聊天正文由程序追加“核验范围”，包括标准、结果和绑定版本；即使所有声明检查通过，
+也明确不代表整份报告、未列事项或其他版本通过。Reporter 重新投影同一组 job 记录，不能
+丢失替代关系或复活已失效版本。共享终止观察器只对成功的 `submit_report(finish=false)`
+跳过终止；单 Agent 默认工具调用、会话快照和上下文继承路径不变。
+
+#### 20.20.4 验证与边界
+
+首个回归先复现“旧检查超时、同版本补验成功后仍永久 partial”，修复后通过。新增协议测试
+覆盖精确绑定、跨 Run 拒绝、过期前驱、标准/必要性不可弱化、文件篡改、批次原子校验、
+换版/回滚、局部结果、可选失败、持久化独立缺口和并发补验竞争。真实 AgentBus 测试执行
+实际派发、局部 submit_report、硬超时取消、结果快照、补验和最终汇总，不只测试模拟字典。
+
+Web 测试通过真实 worker 子进程和 bwrap，以脚本模型依次派发读取、绑定检查、非终止提交、
+终止提交，核对摘要、终态事件和磁盘快照中的绑定与结论一致。保留未使用新协议的正常/内部
+输出反例。没有重启在线服务，没有重新运行原始长篇研报任务。
+
+最终扩大回归 **370 passed**，其中版本核验协议 26 项、Web worker+bwrap 三个用例，亦包含
+单 Agent 工作流、跨轮上下文、共享工具、AgentBus 与 Reporter。目标 Ruff、Pyright（0 errors）、
+两阶段 import smoke（435/435、484/484）、symbol closure（533 文件、0 缺失）通过。
+真实模型 `agent_team / tui` preflight 使用 glm-5.3-flash，一次轻量调用通过。
+
+边界：本次绑定已完成 job 的精确报告或不可变 handoff，受影响版本在显式补验派发时切换。
+不监视任意 workspace 的文件改写，不自动判断两篇候选报告是同一内容的修订，不将终稿
+发布自动关联到某一受检版本；正式文件正文验收与发布后复验仍待后续闭环。结果证明的是
+“哪项检查对哪些字节作出什么结论”，不是语义正确性或证据独立性的证明。局部提交在当前
+进程内保留并随 job 结束快照落盘，不构成主机崩溃时的逐次提交恢复保证。跨 Run 续跑、
+外部监管、输入完整覆盖清单、引用语义支持及 S4/S5 真实模型验收继续按原顺序实施。
+
+### 20.21 执行链路加固：核验关闭门禁与失败成员快速交接（2026-10-26）
+
+本节继续处理两次同会话 Web 实测暴露的执行链路缺口，不扩大到模型推理质量、图片读取能力
+或 S4 Orchestrator 监管。实现目标是让已有 R1 协议真正约束任务关闭和最终声明，并避免失败
+成员在已经无法形成结论后继续占用主 Agent 的回收时间。
+
+#### 20.21.1 核验事项不能仅凭任务板文字关闭
+
+`add_task` 现在支持 `verification_required: true`。团队规划运行中，描述明确以
+“核验/验证/复核/Verify/Validate/Audit/Cross-check”开头，或明确写出最终、独立、交叉、
+全面核验的事项，也会被识别为核验事项。识别范围刻意保持窄，普通研究、摘要和分析任务
+不被自动提升为结构化核验。
+
+当主 Agent 尝试把这类事项设为 `resolved` 时，`update_task` 读取当前 AgentBus 中同一
+`work_item_id` 的 `verification_checks` 和 `verification_events`，通过与 wind-down、Reporter
+相同的 `project_checks` 投影判断状态：
+
+| 当前状态 | 任务板行为 |
+|---|---|
+| 未派发必要的版本绑定检查 | 拒绝 resolved，并提示先登记检查 |
+| 检查未提交、仅部分通过或明确失败 | 拒绝 resolved，并返回具体状态 |
+| 所有当前必要检查均 pass | 允许 resolved |
+
+这不是自然语言事实验证器；它只保证“主 Agent 声称这是核验任务”与“存在对应结构化结论”
+之间不再断链。检查本身仍受 §20.20 的版本、证据、范围及补验规则约束。
+
+门禁只在团队协调者执行域中生效，以既有 `SWARM_SCOPE_KEY` 识别，并兼容 Web/CLI 当前的
+`planning_mode: false` profile；开启 Planning Mode 的兼容路径同样识别。单 Agent 即便建立
+名为 `Verify ...` 的任务，也保持原有任务板关闭语义，不要求 AgentBus 或团队检查协议。
+
+#### 20.21.2 最终报告独立复核任务状态和验证措辞
+
+任务板字段会进入快照与 `report_contract.task_board`。最终报告边界重新按
+`work_item_id` 投影必要检查；即使异常路径或历史状态留下了“核验事项 resolved/cancelled，
+但没有检查或检查未通过”，仍写入 `task_verification_incomplete`，并把完整结果降为 partial。
+因此任务板门禁不是唯一防线。
+
+无结构化检查时，“全部数字均已核对”“已获充分交叉验证”等笼统声明也会被
+`unsupported_verification_claim` 拦截并转为系统状态报告。即使所有已声明检查通过，程序也
+只允许针对“已声明/列明检查”的范围化表述；声明检查通过不能自动升级为整份报告全部核验。
+
+#### 20.21.3 失败成员快速进入可回收状态
+
+成员 loop 以 `llm_error` 结束后，不再对同一模型立刻发起第二次完整恢复调用。系统直接保留
+已有 final_content、已完成成员报告或最近工具观测；都不存在时生成明确的确定性失败说明。
+这使失败 job 可以尽快完成结果适配、写入快照并唤醒 `collect_reports`。
+
+其他可恢复终止原因仍允许一次清洁上下文综合，但其等待由
+`sub_recovery_timeout_s` 单独限制，默认 20 秒，同时受 job 阶段截止约束。该调用只是交接优化，
+不再复用最长可达 180 秒的成员模型上限。Web 运行仍可通过 profile 覆盖该值。
+
+#### 20.21.4 回归证据与保留边界
+
+新增回归先分别复现：没有任何检查记录却发布“全部核对”、核验任务无检查仍 resolved、
+`llm_error` 后再次调用模型，以及无 job deadline 时恢复调用长时间悬挂。修复后，Agent Team、
+任务板、deadline、最终报告、补验协议和 Web/CLI 团队链路相关测试共 **205 passed**；新增
+单 Agent 隔离用例确认原任务板语义不变。目标 Ruff 检查通过。
+
+本节没有解决视觉模型不可用、图片 OCR/读取失败、外部网页抓取失败或模型对研究内容的判断
+错误；这些能力缺口继续按内容采集状态如实披露。下一步应在 Web 真实模型任务中验证：失败
+成员是否在短时间内可回收、主 Agent 是否按工具错误继续补派，以及核验事项是否会实际派发
+版本绑定检查并在不足时保留 partial。
+
+### 20.22 内容覆盖、计划检查与跨轮资源继承（2026-10-26）
+
+本节补齐 §20.21 保留的四个执行缺口。目标仍是明确系统实际完成的范围，不把工具成功、文本
+抽取或历史结论扩大为整份文档已经核验。
+
+#### 20.22.1 `read_file` 的图片与 PDF 覆盖结果
+
+`read_file` 对普通文本和完整成功的读取继续返回原有字符串。以下媒体限制改为
+`ToolOutcome(is_error=true)` 的结构化 JSON，并保留可用的部分正文：
+
+| 读取情况 | 状态 | 结构化覆盖字段 |
+|---|---|---|
+| 单张图片的视觉服务不可用 | unavailable | media_type=image、limitations |
+| 图片批次部分失败、跳过或达到批次上限 | partial | requested_items、limitations |
+| PDF auto/text | partial | pdf_mode、requested_pages、document_complete=false |
+| PDF image 仅选择部分页 | partial | requested_pages、selected_pages_only |
+| PDF image 全页但 OCR/vision/figure 读取失败 | partial/unavailable | 明确失败标记与限制 |
+| PDF image 全页且无读取限制 | 原成功字符串 | 不制造额外缺口 |
+
+PDF 深读原先有一个静默分支：文本页检测到栅格/矢量信号，但 vision endpoint 不存在或调用
+失败时仍返回普通正文。现在 `_reader_pdf.py::_deep_page` 写出 `figure not read` 标记，外层
+`_structured_read_outcome` 将其转成 partial。sandbox 建立失败、reader 非零退出和超时也改为
+failed ToolOutcome，避免错误文本被当成正常工具成果。
+
+`ContentAcquisitionObserver` 新增 `read_file`，把 `detail` 与 `coverage` 保留在成员结果和
+`report_contract.acquisition_limits` 中。最终报告的“内容读取边界”会显示具体限制；部分正文
+仍可供分析，但不能证明图片、未选页面或整份 PDF 已读取。
+
+#### 20.22.2 计划阶段的必要检查清单
+
+任务板核验事项新增 `verification_requirements`：每项包含稳定 `check_id` 和 `criterion`。
+协调者应在计划阶段声明它们，派发时使用同一组 ID。若只声明
+`verification_required=true`，或任务描述被窄规则识别为核验事项，系统生成
+`<task-id>.required` 作为稳定默认检查，标准为任务描述。
+
+任务板关闭门禁和最终报告都会按计划 ID 精确比对 AgentBus 的版本绑定检查。没有派发、没有
+执行、派发了无关 check_id，或只完成其中一部分，都不能关闭计划缺口。即使另一个检查在同一
+work_item 上 pass，计划中的 ID 仍写入 `missing_check_ids`。这些字段随任务板序列化和跨轮恢复，
+因此“曾计划核验但后来忘记派发”不会从最终合同中消失。单 Agent 不启用团队关闭门禁。
+
+#### 20.22.3 失败成员恢复预算
+
+恢复调用现在先检查是否存在可综合材料：成员 final_content、已回收报告、工具观测或可用的
+assistant 正文。四者都不存在时，不再调用模型，直接生成确定性失败说明。存在材料时仍允许
+一次受 `sub_recovery_timeout_s` 和 job deadline 双重限制的清洁综合；原有 20 秒默认上限保留。
+这将“空失败成员”从可能再等待一次模型调用缩短为立即可回收，同时不牺牲有实际工具成果的
+成员交接。
+
+#### 20.22.4 跨轮附件和 handoff 的受控引用
+
+父 Orchestrator 只使用 `list_session_archived_contexts` 返回的同会话、已提交 Run ID 作为来源。
+`server/continuity_resources.py` 从这些 Run 读取顶层上传附件及带 manifest 的 handoff，重新计算
+SHA-256，拒绝 symlink、越界引用和摘要不一致。通过的文件按内容摘要复制到当前 Run 的
+`/inputs/history/<source-run>/<kind>/` 并设为只读；新 worker 不获得旧 Run 目录访问权。
+
+当前 Run 写入 `prior_resources.json`，每个资源保留：
+
+- 当前只读 path；
+- `source_run_id` 与原 `source_ref`；
+- SHA-256、字节数、producer 和 job_id；
+- 只与该 handoff 精确 ref 相关的版本绑定检查及 verdict。
+
+提示词只加入这份有界资源目录，不注入旧文件正文。主 Agent 按需用 `read_file` 读取，引用时
+保留 Run 与摘要。历史 `passed_for_declared_checks` 只适用于原检查和原版本；上传附件默认
+`not_assessed`，转换或重写后的内容不能继承旧 verdict。当前上限为 40 个文件、100 MiB，超限、
+损坏和摘要不匹配进入 manifest limitations。历史 `/inputs/history` 不再递归继承，避免每轮复制
+继续膨胀。单 Agent 与团队使用同一受控输入机制；没有历史资源时不增加提示内容。
+
+#### 20.22.5 推断标签与扩大声明
+
+团队提示词明确要求 `[推断]` / `[Inference]` 标签在 handoff 和 Reporter 改写中保留。
+Reporter 发布前比较基线与候选的显式推断标签数量；候选删除标签时 fail-open 回到主 Agent
+基线，不发布被强化的改写。
+
+程序侧扩大声明守卫增加“全文已验证”“整份研报已经完成核验”及英文 entire/full/whole
+document/report/paper verified。即使所有已声明检查通过，这类整篇声明仍被拒绝；允许的表述是
+“列明检查均通过”，并由报告合同列出标准、版本和 verdict。
+
+#### 20.22.6 回归证据与边界
+
+新增回归覆盖媒体结构化结果、观察器元数据、稳定计划检查、无关检查不能补缺、无证据恢复
+跳过、推断标签保留、整篇核验声明拦截、跨轮附件/handoff 的来源与摘要，以及篡改 handoff
+拒绝。Agent Team、上下文、上传、Web/CLI、单 Agent 相关扩大回归 **341 passed**；工具注册、
+错误合同、bwrap 运行依赖、挂载和 CLI 附件回归另有 **43 passed**。目标 Ruff 与 Pyright
+（0 errors）通过。
+
+这些措施不判断模型结论在语义上是否正确，不把同一模型的重复读取变成独立证据，也不保证
+外部网页或不可用视觉服务能够恢复。跨轮资源继承的是已归档字节、来源和旧核验范围；当前轮
+若提出新主张、改变文件或扩大检查范围，仍须重新派发并产生当前版本的检查结论。
+
+### 20.23 同会话第二轮首调用失败诊断与空成果收尾修复（2026-10-26）
+
+实测来源：同会话 `e236a21c-be7b-4367-b5b0-a02cabc32c7d` 的第一轮
+`0d2c5865d398402990b6d9dc9c4bcf28` 和第二轮 `0fc2dc1e3e774655933543e2b4cd9529`。
+以下时间按原 `run/engine.log` 时间戳记录。
+
+第二轮总耗时 265.37 秒，`stopped_by=llm_error`、
+`llm_error_reason=logical_call_deadline`。仅进入主 Agent 第 1 轮，工具调用 0 次，
+子 Agent 派发 0 次。因此本次失败发生在研究执行开始前，不是成员 deadline 或整个 Run
+的墙钟预算耗尽。
+
+| 阶段 | 轨迹证据 |
+|---|---|
+| 18:08:04 首次逻辑调用开始 | 配置的单次模型上限被 180 秒 logical_call_deadline 限制 |
+| 第 1 次尝试 | 约 61 秒含首包等待；持续约 58 秒仅 reasoning，触发 reasoning_runaway_early |
+| 第 2 次尝试 | 45 秒没有流片段，触发 stream_stalled |
+| 第 3 次尝试 | 约 68 秒后耗尽同一逻辑调用剩余预算，触发 logical_call_deadline |
+| 18:11:04 执行退出 | wind-down 回收与未完成成员均为 0 |
+| 18:12:29 恢复调用返回 | 额外约 85 秒，只返回“将检查输入文件并分解任务”的计划句 |
+
+模型调用链无有效进展是直接终止原因。记录不足以区分供应商负载、网络传输和模型生成
+状态对各次超时的贡献；HTTP 200 不代表模型已经形成可用工具调用。没有证据说明重复提问
+本身必然触发失败，也不能把附件缺失认定为模型超时的原因。
+
+同时确认一个部署状态问题：Web 父进程 PID 2390978 启动于 13:17，早于 §20.22 的
+Orchestrator 修改；该进程没有 reload 参数。两次 Run 均无 `prior_resources.json`，第二轮
+`/inputs` 为空。新 worker 能加载磁盘上的工具/工作流修复，但长期驻留的父进程仍使用旧的
+跨轮暂存实现，所以这次并非整条新代码链路的上线验收。用当前暂存函数在临时目录对第一轮
+真实来源验证，可得到 PDF（527952 bytes）和 handoff（15642 bytes），来源 Run 正确，
+均为 `not_assessed`，无暂存限制。生产父进程仍需重载后再检验实际挂载。
+
+文字继承没有整体丢失：第二轮存在 167280 bytes native carrier 与 130808 bytes portable
+carrier；portable 含 25 条记录，其 published_answer 与第一轮 summary 完全一致，状态
+partial。真实 worker 的加载/渲染函数可消费这份上下文。第一轮本身也不是完整核验成功：
+`report_contract.gaps` 留有 `t3.required` 未登记缺口；自然语言声称实质核验完成不能抵消它。
+portable 当前保留发布答案与状态，但不单独承载完整 report_contract 的结构化缺口，此项
+仍是后续跨轮证据状态完善点，不能据本次检查宣称所有核验元数据已完整继承。
+
+本次代码修复限定为已经确定复现的空成果收尾问题。§20.22 的无证据恢复门禁此前只在成员
+force_finalizer 中使用，主 Agent 直接调用 `force_final_answer` 时绕过了它。现在共享函数
+本身也检查可综合材料：无正文、无工具观测、无成员报告时，跳过恢复模型并进入确定性系统
+状态输出；已有材料的收尾仍保留。回归复现真实 Run 的空消息结果和同类未来时计划回复，
+先验证旧代码会调用模型并错误接纳计划，再验证修复后不调用模型且发布 system_status。
+
+验证：团队、跨轮上下文、Web/CLI 与资源暂存相关 **285 passed**，额外恢复/重复保护相关
+**18 passed**；目标 Ruff、Pyright 通过。本次未重启在线服务，也未重跑长篇真实模型任务。
+
+### 20.24 同会话续问的轨迹页面快照未刷新（2026-10-26）
+
+来源 Run：`09d65cbe36114ad4aa2fba0cb5d6bb29`。截图中状态已完成，但轨迹仅有
+“运行开始”，并提示运行未正常结束。磁盘与当前后端读取结果证明记录并未丢失：
+
+- `summary.json`：176.73 秒，`stopped_by=final_answer`、`answer_status=complete`、
+  `final_answer_source=agent`，无执行错误。
+- `main_agent.jsonl`：7 条有效记录，无损坏，含 start、4 条模型 attempt 审计记录、
+  5513 字正文的 llm 记录和 end。第一次尝试触发 reasoning watchdog，重试得到正文。
+- 当前 `trajectory_page` 返回 start/llm/end 三条展示记录，`inspect_trajectory` 返回
+  complete。attempt 仍按既定约定仅用于审计，不混入用户轨迹。
+- 本轮工具调用及成员派发均为 0；活动页专门展示工具调用，所以没有成员活动符合实际。
+  本轮回答复用了历史文字，不代表重新执行过提取或核验，也不能据此升级历史核验状态。
+
+根因在前端快照生命周期：`RunDetailView` 原先只监听 runId，首次读取之后不会随执行
+结束重新加载；`ChatView` 的完成回调刷新对话、产物和画布，但未刷新轨迹。运行中打开
+轨迹，可能正好读到仅 start 的 partial 快照，随后一直保留，形成“完成 + 异常结束”的
+矛盾。真实 Vue 组件浏览器回归在修复前可稳定复现：接口已可返回完整轨迹，store 已
+切到 completed，页面仍无法出现正文。文件时间表明团队轨迹读取代码早于当前后端启动，
+不能把本问题归因于 §20.23 所述资源暂存代码尚未重载。
+
+修复：轨迹标签可见且运行活跃时每 3 秒刷新（请求未完成时不重叠轮询）；状态变化、
+重新进入标签页时立即读取；隐藏或卸载时停止轮询。请求序号与 runId 双重检查，阻止旧
+请求覆盖下一轮记录。运行中的 partial 状态改为“仍在进行中”，已结束的真实不完整轨迹
+仍保留警告。活动页在终态无工具记录时明确说明，并引导查看主 Agent 的轨迹或结论。
+
+验证：新增 `web/tests/trace-lifecycle.cjs`，以真实组件和受控接口覆盖完成后刷新、
+跨轮迟到响应、运行中刷新及提示语，修复前失败、修复后通过；前端 **104** 项单测、
+类型检查与 WSL 生产构建通过；后端轨迹回放/投影 **13 passed**。两阶段 import smoke、
+check_symbols、agent_team/tui preflight 通过（preflight 使用 glm-5.3-flash，不能等同于
+本次 deepseek Web 模型重跑）。本次未重新启动真实研究或更改其磁盘产物；生产登录页面
+未作端到端验收，浏览器验证使用隔离页面与受控 API。

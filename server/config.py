@@ -75,6 +75,11 @@ class ServerConfig(BaseSettings):
     # Keep the runtime's half-wall research floor at 450s; profile caps research
     # there explicitly, leaving the remaining time for finalization.
     wall_timeout_s: int = 900
+    # Team runs include parallel research, fan-in, and a single formal publisher.
+    # Give that pipeline a modestly larger hard ceiling without changing the
+    # established single-Agent limit. The workflow still enforces a shorter
+    # research/publication phase and reserves the remainder for clean shutdown.
+    agent_team_wall_timeout_s: int = 1050
     # Max agent turns before the worker stops the loop on its own.
     max_turns: int = 60
     # Grace period the orchestrator waits for a worker to exit before SIGKILL.

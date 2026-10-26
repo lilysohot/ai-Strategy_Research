@@ -791,10 +791,11 @@ async def run_trace(
     # The read now happens in a worker thread and is paged when ``limit`` is
     # given; ``limit=0`` keeps the historical "return everything" contract.
     records, next_line, has_more = await asyncio.to_thread(trajectory_page, run_id, after, limit)
+    completeness = await asyncio.to_thread(inspect_trajectory, run_id)
     return {
         "run_id": run_id,
         "records": records,
-        "completeness": inspect_trajectory(run_id).as_dict(),
+        "completeness": completeness.as_dict(),
         "next_line": next_line,
         "has_more": has_more,
     }

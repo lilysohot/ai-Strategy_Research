@@ -509,6 +509,32 @@ async def create_subagent(agents: list[Any] | str = "") -> str:
         )
 
     runtime = _resolve_runtime(scope.metadata)
+    publication_state = (
+        getattr(runtime, "publication_state", None) or {}
+        if runtime is not None
+        else {}
+    )
+    if str(publication_state.get("phase") or "") == "publishing":
+        publisher = str(
+            publication_state.get("publisher_agent_name") or "publisher"
+        )
+        requested_names = [
+            str(spec.get("name", "")).strip()
+            for spec in agents
+            if isinstance(spec, dict)
+        ]
+        disallowed = [
+            name for name in requested_names if "publisher" not in name.lower()
+        ]
+        if disallowed:
+            return (
+                "Error: publication phase is active under "
+                f"{publisher!r}; do not create new research or verifier "
+                f"agents ({', '.join(repr(name) for name in disallowed)}). "
+                "Collect the current publisher report now. If the incumbent "
+                "publisher is unavailable, only a replacement publisher may "
+                "be created and it must receive the same output_paths manifest."
+            )
     sub_role_id = _resolve_sub_role_id(runtime)
     fs_mode = bool(getattr(runtime, "fs_mode", False))
     # Online prompt enhancements gate — same ``sdk_protocol_emitter`` signal

@@ -184,7 +184,9 @@ def test_a_workspace_only_agent_is_told_who_owns_the_inherited_path(
 
     assert "Submitted 1 task(s)" in result
     (_session_id, prompt, metadata) = bus.submitted[0]
-    assert metadata == {"can_publish": False, "output_paths": []}
+    assert metadata == {
+        "can_publish": False, "output_paths": [], "required_for_completion": True,
+    }
     # The user's instruction really is in this prompt — that is the conflict.
     assert "Write your reply to the user as /outputs/answer.md" in prompt
     # ...and now something in the prompt resolves it.

@@ -284,6 +284,22 @@ def test_localize_absolute_path_inside_cwd(tmp_path):
     assert out is not None and out["path"] == "sub/f.py"
 
 
+def test_localize_native_workspace_symlink_against_tool_root(tmp_path, monkeypatch):
+    project = tmp_path / "project"
+    run_workspace = project / ".apodex" / "runs" / "run-1" / "workspace"
+    run_workspace.mkdir(parents=True)
+    workspace_link = project / ".apodex" / "runtime" / "native" / "workspace"
+    workspace_link.parent.mkdir(parents=True)
+    workspace_link.symlink_to(run_workspace, target_is_directory=True)
+    target = workspace_link / "single_check.txt"
+    target.write_text("SINGLE_AGENT_OK\n")
+    monkeypatch.setenv("FRONTIER_AGENT_WORKSPACE_DIR", str(workspace_link))
+
+    out = localize_path_args("read_file", {"path": str(target)}, str(project))
+
+    assert out is not None and out["path"] == "single_check.txt"
+
+
 def test_localize_preserves_absolute_task_input_path(tmp_path, monkeypatch):
     inputs = tmp_path / ".apodex" / "inputs" / "run"
     inputs.mkdir(parents=True)

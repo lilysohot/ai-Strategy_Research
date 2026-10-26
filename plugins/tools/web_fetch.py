@@ -7,7 +7,7 @@ import logging
 
 import httpx
 
-from frontier_agent.core.tool import tool
+from frontier_agent.core.tool import ToolOutcome, tool
 from frontier_agent.infra.config import FrontierAgentConfig, get_config
 from frontier_agent.infra.summary_llm import summarize as _summary_llm_summarize
 from frontier_agent.infra.usage_meter import record_api_request
@@ -33,6 +33,7 @@ from plugins.tools._bounded_fetch import (
     strip_cross_origin_credentials,
     vet_public_url,
 )
+from plugins.tools._content_outcome import combine_content_outcomes, content_limitation
 from plugins.tools._render_check import unrendered_kind
 from plugins.tools._scrape_cache import (
     ScrapeUnavailable,
@@ -68,7 +69,7 @@ _SUMMARY_MIN_CHARS = 12_000
 async def web_fetch(
     url: str | list[str],
     info_to_extract: str | list[str] = "",
-) -> str:
+) -> str | ToolOutcome:
     """Scrape and extract content from one or more web pages.
 
     Automatic backend selection based on URL domain: PMC / PubMed / bioRxiv /
@@ -88,6 +89,8 @@ async def web_fetch(
     Returns:
         For a single URL, the extracted content directly. For a list, a
         numbered block per URL: ``[i] URL: …\\n    Info: …``.
+        Failed or partial acquisition returns a JSON status with the source,
+        available content and limitation; mixed batches retain per-item status.
     """
     urls, focuses = _normalise_inputs(url, info_to_extract)
     if not urls:
@@ -99,6 +102,8 @@ async def web_fetch(
     results = await asyncio.gather(
         *(_fetch_one(u, f) for u, f in zip(urls, focuses, strict=False))
     )
+    if limitation := combine_content_outcomes(urls, results):
+        return limitation
     return "\n\n".join(
         f"[{i}] URL: {u}\n    Info: {r}"
         for i, (u, r) in enumerate(zip(urls, results, strict=False), 1)
@@ -132,10 +137,10 @@ def _normalise_inputs(
     return urls, focuses
 
 
-async def _fetch_one(url: str, info_to_extract: str) -> str:
+async def _fetch_one(url: str, info_to_extract: str) -> str | ToolOutcome:
     """Run the full fetch pipeline for a single URL."""
     if not url or not url.strip():
-        return "Error: URL is required."
+        return content_limitation(url, "Error: URL is required.", status="failed")
 
     url = url.strip()
     if not url.startswith(("http://", "https://")):
@@ -145,28 +150,28 @@ async def _fetch_one(url: str, info_to_extract: str) -> str:
     # provider's request, which would otherwise be handed an internal URL.
     non_public = await non_public_url_error(url)
     if non_public:
-        return (
+        return content_limitation(url, (
             f"[BLOCKED] {non_public}. Only public http(s) endpoints may be "
             "fetched. Use a public source."
-        )
+        ), status="policy_blocked")
 
     # Operator hard-block (WEB_DOMAIN_BLACKLIST_EXTRA) — same list that
     # filters web_search results, enforced here so a direct URL from page
     # content cannot bypass it.
     from plugins.tools.web_search import is_domain_blocked
     if is_domain_blocked(url):
-        return (
+        return content_limitation(url, (
             f"[BLOCKED] The domain of {url} is on the operator blocklist "
             f"and must not be accessed. Use a different source."
-        )
+        ), status="policy_blocked")
 
     blocked_ext = blocked_download_url(url)
     if blocked_ext:
-        return (
+        return content_limitation(url, (
             f"[BLOCKED] This URL is a dataset/archive download ({blocked_ext}), "
             "not a web page. Do not download data files — read the dataset's "
             "documentation/landing page instead, or use aggregate API queries."
-        )
+        ), status="policy_blocked")
 
     # arXiv PDFs consistently fail extraction — redirect to HTML abstract page.
     if "arxiv.org/pdf/" in url:
@@ -183,7 +188,7 @@ async def _fetch_one(url: str, info_to_extract: str) -> str:
     if cached is not None:
         msg = format_skip_message(url, cached)
         logger.info("web_fetch skipped (cached %d): %s", cached.status, url[:60])
-        return msg
+        return content_limitation(url, msg)
 
     config = get_config()
     route = route_url(url)
@@ -234,20 +239,20 @@ async def _fetch_one(url: str, info_to_extract: str) -> str:
         )
     except ScrapeUnavailable as exc:
         if str(exc) == "unrendered":
-            return (
+            return content_limitation(url, (
                 f"[NOT RENDERED] The page at {url} is a JavaScript app that "
                 f"served no content even with browser rendering. Fetching it "
                 f"again the same way will not help: look for the same material "
                 f"at another source (the site's own API/JSON endpoint, a PDF, "
                 f"or an archive copy), or search for the page title instead."
-            )
+            ))
         if str(exc) == "garbage":
-            return (
+            return content_limitation(url, (
                 f"[ACCESS BLOCKED] The page at {url} is behind a paywall or "
                 f"anti-bot protection. Please try searching for an open-access "
                 f"version (arxiv.org, PMC, institutional repositories)."
-            )
-        return f"Could not extract content from {url}"
+            ))
+        return content_limitation(url, f"Could not extract content from {url}")
 
     _scrape_cache.record_success(url)
 
@@ -268,13 +273,12 @@ async def _fetch_one(url: str, info_to_extract: str) -> str:
         output = maybe_overflow("web_fetch", content)
 
     if _render_kind(content) == "empty":
-        return (
+        return content_limitation(url, (
             f"[POSSIBLY NOT RENDERED] The page at {url} remained suspiciously "
             "short after the browser-render retry. This result was deliberately "
             "not cached. Use it if it answers the question; otherwise switch to "
             "another source instead of repeatedly fetching this URL.\n\n"
-            f"{output}"
-        )
+        ), status="partial", content=output)
     return output
 
 

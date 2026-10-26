@@ -19,7 +19,6 @@ from typing import Any
 
 from frontier_agent.core.runtime.loop.tool_exec import tool_result_text_is_error
 from server.events import EventType, make_event
-from server.run_outcome import interruption_reason
 
 # Secrets that must never appear in a pushed event, even inside an argument blob.
 _SECRET_RE = re.compile(
@@ -151,18 +150,25 @@ class BridgeObserver:
         )
 
     async def on_loop_end(self, result: Any) -> None:
-        """Capture terminal facts and emit ``run_stopped`` when the loop ended early."""
+        """Capture loop-terminal facts for the worker's run-level outcome.
+
+        A workflow may keep running after its primary agent loop ends.  Agent Team,
+        for example, still winds down members and synthesizes a report after the
+        coordinator reaches its wall deadline.  Emitting ``run_stopped`` here made
+        the browser treat that inner-loop boundary as the end of the whole Run and
+        close SSE before the synthesized report existed.  The orchestrator now
+        publishes every terminal event only after the worker's ``run_finished``
+        frame has been persisted.
+        """
         # ``stopped_by`` is the authoritative source for the runs table (§5.2):
         # it lives on ``AgentLoopResult``, never on the pipeline state. We capture
-        # it here and surface a run_stopped event when the run ended early.
+        # it here so the worker can put it on the final ``run_finished`` frame.
         self.stopped_by = str(getattr(result, "stopped_by", "") or "")
         # The partial answer (text produced before the loop ended) is only
         # observable here, not in the pipeline state returned by
         # ``BenchmarkSession.run``. Capture it so a stopped run can still show a
         # useful partial result to the user.
         self.final_content = str(getattr(result, "final_content", "") or "")
-        if self._emit_loop_lifecycle and interruption_reason(self.stopped_by):
-            await self._emit(EventType.RUN_STOPPED.value, stopped_by=self.stopped_by)
 
     # — streaming ——————————————————————————————————————————————
     async def on_llm_delta(self, ctx: Any) -> None:

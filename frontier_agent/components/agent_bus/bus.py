@@ -8,9 +8,13 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import hashlib
 import inspect
 import json
 import logging
+import os
+import re
+import tempfile
 import time
 from collections import deque
 from collections.abc import Awaitable, Callable
@@ -324,6 +328,10 @@ class AgentBus:
         self._spawn_guard: SpawnGuard | None = None
         self._sub_agent_profiles: dict[str, dict[str, SubAgentProfile]] = {}
         self._sessions: dict[str, SubAgentSession] = {}
+        # A task enters this set when its coordinator leaves the research
+        # loop.  Existing workers may finish, but no new work may start while
+        # the workflow performs its bounded final fan-in and synthesis.
+        self._frozen_task_dispatch: set[str] = set()
         # Per-task evidence / assertion pool — populated when main agents
         # (or collect_reports) harvest completed SubAgentResults, drained
         # by the pipeline node at phase end for the report node to consume.
@@ -333,6 +341,141 @@ class AgentBus:
         self._agent_registry_injected: AgentRegistry | None = agent_registry
         self._resource_manager_injected: Any = resource_manager
         self._session_history_dir: Path | None = session_history_dir
+        # Optional per-task immutable result stores. Team workflows bind one
+        # inside the Run directory; the generic bus remains in-memory by default.
+        self._task_result_stores: dict[str, Path] = {}
+
+    @staticmethod
+    def _result_snapshot_name(job_id: str) -> str:
+        token = str(job_id or "").strip()
+        if re.fullmatch(r"[A-Za-z0-9_.:-]{1,180}", token):
+            return f"{token}.json"
+        digest = hashlib.sha256(token.encode("utf-8", errors="replace")).hexdigest()
+        return f"job-{digest[:24]}.json"
+
+    def configure_task_result_store(self, task_id: str, directory: str | Path) -> Path:
+        """Bind an immutable JSON snapshot directory for one task's results."""
+        target = Path(directory).expanduser().resolve()
+        target.mkdir(parents=True, exist_ok=True)
+        self._task_result_stores[str(task_id)] = target
+        return target
+
+    def _write_result_snapshot(
+        self,
+        *,
+        task_id: str,
+        session: SubAgentSession,
+        result: SubAgentResult,
+    ) -> dict[str, Any] | None:
+        store = self._task_result_stores.get(task_id)
+        if store is None:
+            return None
+        destination = store / self._result_snapshot_name(result.job_id)
+        metadata = dict(result.metadata or {})
+        metadata.pop("result_snapshot", None)
+        metadata.pop("result_snapshot_error", None)
+        payload = {
+            "schema_version": 1,
+            "task_id": task_id,
+            "session_id": session.session_id,
+            "agent_name": session.name,
+            "job_id": result.job_id,
+            "question": result.question,
+            "role_id": result.role_id,
+            "final_content": result.final_content,
+            "success": result.success,
+            "error": result.error,
+            "error_class": result.error_class,
+            "metadata": metadata,
+            "assignment_metadata": dict(self._jobs[result.job_id].item.metadata)
+            if result.job_id in self._jobs else {},
+        }
+        body = json.dumps(
+            payload, ensure_ascii=False, sort_keys=True, indent=2, default=str,
+        ).encode("utf-8")
+        if destination.exists():
+            if destination.read_bytes() != body:
+                raise RuntimeError(f"result snapshot already exists with different content: {result.job_id}")
+            return {
+                "schema_version": 1,
+                "ref": destination.name,
+                "size_bytes": len(body),
+                "sha256": hashlib.sha256(body).hexdigest(),
+            }
+        with tempfile.NamedTemporaryFile(dir=store, delete=False) as stream:
+            stream.write(body)
+            temporary = Path(stream.name)
+        os.replace(temporary, destination)
+        destination.chmod(0o444)
+        return {
+            "schema_version": 1,
+            "ref": destination.name,
+            "size_bytes": len(body),
+            "sha256": hashlib.sha256(body).hexdigest(),
+        }
+
+    async def _checkpoint_session_result(
+        self,
+        *,
+        session: SubAgentSession,
+        result: SubAgentResult,
+    ) -> None:
+        if not isinstance(result.metadata, dict):
+            result.metadata = {}
+        try:
+            snapshot = await asyncio.to_thread(
+                self._write_result_snapshot,
+                task_id=session.task_id,
+                session=session,
+                result=result,
+            )
+        except Exception as exc:
+            logger.warning("Could not checkpoint team result %s: %s", result.job_id, exc)
+            result.metadata["result_snapshot_error"] = type(exc).__name__
+            return
+        if snapshot is not None:
+            result.metadata["result_snapshot"] = snapshot
+
+    def get_job_result(
+        self,
+        task_id: str,
+        job_id: str,
+    ) -> tuple[str, SubAgentResult] | None:
+        """Read an exact completed job from memory or its immutable snapshot."""
+        entry = self._jobs.get(job_id)
+        if entry is not None:
+            if entry.parent_task_id != task_id or entry.result is None:
+                return None
+            return entry.session_id, entry.result
+        store = self._task_result_stores.get(task_id)
+        if store is None:
+            return None
+        path = store / self._result_snapshot_name(job_id)
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError, TypeError):
+            return None
+        if payload.get("task_id") != task_id or payload.get("job_id") != job_id:
+            return None
+        result = SubAgentResult(
+            question=str(payload.get("question") or ""),
+            role_id=str(payload.get("role_id") or ""),
+            final_content=str(payload.get("final_content") or ""),
+            success=payload.get("success") is True,
+            error=str(payload.get("error") or "") or None,
+            error_class=str(payload.get("error_class") or "") or None,
+            job_id=job_id,
+            metadata=dict(payload.get("metadata") or {}),
+        )
+        return str(payload.get("session_id") or ""), result
+
+    def list_task_jobs(self, task_id: str) -> list[JobEntry]:
+        """Inspect all dispatched jobs, including reports already collected.
+
+        Callers must treat entries as read-only. Collection consumes delivery
+        queues, not this execution history; workflow coverage must use both.
+        """
+        return [entry for entry in self._jobs.values() if entry.parent_task_id == task_id]
 
     def _event_sink(self) -> Any:
         """Resolve the active event sink.
@@ -451,6 +594,11 @@ class AgentBus:
             SpawnDepthExceeded: SpawnGuard depth limit
             BudgetExhausted: SpawnGuard token budget exceeded
         """
+        if parent_task_id in self._frozen_task_dispatch:
+            raise RuntimeError(
+                f"Task {parent_task_id!r} is finalizing; new sub-agent "
+                "dispatch is frozen"
+            )
         guard = self._spawn_guard
 
         # Use SpawnGuard depth limit if stricter
@@ -612,6 +760,8 @@ class AgentBus:
             entry.status = "running"
             try:
                 result = await _run()
+                if not result.job_id:
+                    result.job_id = job_id
                 entry.result = result
                 entry.completed_at = time.monotonic()
                 if result.error == "aborted":
@@ -890,6 +1040,11 @@ class AgentBus:
         this field — it is treated as a runtime knob, not part of the
         session's identity.
         """
+        if task_id in self._frozen_task_dispatch:
+            raise RuntimeError(
+                f"Task {task_id!r} is finalizing; new sub-agent dispatch "
+                "is frozen"
+            )
         prompt = system_prompt
         if prompt is None:
             agent_registry = self._agent_registry(required=False)
@@ -1002,6 +1157,11 @@ class AgentBus:
         session = self._sessions.get(session_id)
         if session is None:
             raise KeyError(f"Session {session_id!r} not found")
+        if session.task_id in self._frozen_task_dispatch:
+            raise RuntimeError(
+                f"Task {session.task_id!r} is finalizing; new sub-agent "
+                "dispatch is frozen"
+            )
 
         guard = self._spawn_guard
         # Sessions are spawned by the main agent (depth 0) → session tasks
@@ -1057,6 +1217,7 @@ class AgentBus:
                     metadata=dict(task_metadata or {}),
                 ),
                 task=None,
+                session_id=session.session_id,
                 status="queued",
                 submitted_at=time.monotonic(),
             )
@@ -1186,6 +1347,20 @@ class AgentBus:
                 loop_observers.append(_SessionActivityObserver(session))
                 loop_observers = _with_wall_clock_guard(loop_observers, guard)
 
+                # Resolve the per-job wall before constructing the coroutine.
+                # An already-expired queued job must fail without leaking an
+                # un-awaited run_agent_loop coroutine.
+                timeout_candidates: list[float] = []
+                if guard and float(guard.timeout_s) > 0:
+                    timeout_candidates.append(float(guard.timeout_s))
+                if active_runtime.run_timeout_builder is not None:
+                    phase_timeout = active_runtime.run_timeout_builder(session_item)
+                    if phase_timeout is not None:
+                        if phase_timeout <= 0:
+                            raise TimeoutError
+                        timeout_candidates.append(float(phase_timeout))
+                timeout = min(timeout_candidates) if timeout_candidates else None
+
                 coro = run_agent_loop(
                     system_prompt=session.system_prompt,
                     user_message=task_prompt,
@@ -1202,9 +1377,9 @@ class AgentBus:
                     coro = _run_within_context(
                         active_runtime.context_setup, job_id, session_item, coro,
                     )
-                # Layer 2: per-job wall-time timeout (from guard).
-                timeout = float(guard.timeout_s) if guard else None
-                if timeout and timeout > 0:
+                # Layer 2: per-job wall-time timeout. The workflow-specific
+                # phase cap may be shorter than SpawnGuard and therefore wins.
+                if timeout is not None:
                     raw_result = await asyncio.wait_for(coro, timeout=timeout)
                 else:
                     raw_result = await coro
@@ -1267,10 +1442,11 @@ class AgentBus:
                 # Fall back to the previous last_report when the new
                 # run produced nothing — keeps cross-agent <attach/>
                 # references stable mid-session.
-                session.last_report = (
-                    final_text
-                    or session.last_report
-                )
+                if final_text:
+                    session.last_report = final_text
+                    session.last_report_metadata = dict(
+                        getattr(raw_result, "metadata", {}) or {}
+                    )
 
                 # Bubble evidence + assertions harvested by observers up
                 # to the caller so collect_reports / main_agent_node
@@ -1334,7 +1510,10 @@ class AgentBus:
             entry.status = "running"
             try:
                 result = await _run()
+                if not result.job_id:
+                    result.job_id = job_id
                 entry.result = result
+                await self._checkpoint_session_result(session=session, result=result)
                 entry.completed_at = time.monotonic()
                 if result.error == "aborted":
                     entry.status = "aborted"
@@ -1408,6 +1587,7 @@ class AgentBus:
                     metadata=dict(pending.task_metadata),
                 ),
                 task=None,
+                session_id=session.session_id,
                 status="submitted",
                 submitted_at=time.monotonic(),
             )
@@ -1493,6 +1673,14 @@ class AgentBus:
         """
         if not session.pending_tasks:
             return
+        if session.task_id in self._frozen_task_dispatch:
+            while session.pending_tasks:
+                pending = session.pending_tasks.popleft()
+                self._mark_job_aborted(
+                    pending.job_id,
+                    self._jobs.get(pending.job_id),
+                )
+            return
         next_pending = session.pending_tasks.popleft()
         # A queued entry may have been aborted before dispatch.
         entry = self._jobs.get(next_pending.job_id)
@@ -1556,6 +1744,10 @@ class AgentBus:
                 _close_session_boundary_aborted(session)
 
             entry.result = result
+            if not result.job_id:
+                result.job_id = job_id
+            if "result_snapshot" not in result.metadata:
+                await self._checkpoint_session_result(session=session, result=result)
             entry.completed_at = entry.completed_at or time.monotonic()
             entry.status = (
                 "completed" if result.success
@@ -1688,6 +1880,41 @@ class AgentBus:
 
     def list_sessions_for_task(self, task_id: str) -> list[SubAgentSession]:
         return [s for s in self._sessions.values() if s.task_id == task_id]
+
+    def freeze_task_dispatch(self, task_id: str) -> int:
+        """Stop new work from starting while preserving running results.
+
+        Running session tasks are intentionally left alone so the workflow can
+        give them a short grace period to publish their final report. Queued
+        successors are aborted immediately: starting them after the
+        coordinator has entered finalization would consume the synthesis
+        reserve and could produce results too late to reach the user.
+
+        Returns the number of queued session tasks aborted by the freeze.
+        Repeated calls are idempotent.
+        """
+        self._frozen_task_dispatch.add(task_id)
+        aborted = 0
+        for session in self.list_sessions_for_task(task_id):
+            while session.pending_tasks:
+                pending = session.pending_tasks.popleft()
+                entry = self._jobs.get(pending.job_id)
+                if entry is None or entry.status not in (
+                    "completed", "failed", "aborted",
+                ):
+                    aborted += 1
+                self._mark_job_aborted(pending.job_id, entry)
+        if aborted:
+            logger.info(
+                "freeze_task_dispatch: aborted %d queued task(s) for %s",
+                aborted,
+                task_id,
+            )
+        return aborted
+
+    def unfreeze_task_dispatch(self, task_id: str) -> None:
+        """Release finalization state after all task sessions are closed."""
+        self._frozen_task_dispatch.discard(task_id)
 
     def describe_sessions_for_task(self, task_id: str) -> list[dict[str, Any]]:
         """Return a small, UI-safe snapshot of every sub-agent session.
@@ -1881,4 +2108,8 @@ class AgentBus:
                 "detaching so pipeline can progress: %s",
                 len(stuck), cancel_timeout_s, stuck,
             )
+        # Files remain for audit; only the live binding is released. A detached
+        # late worker can no longer overwrite or append snapshots after cleanup.
+        self._task_result_stores.pop(task_id, None)
+        self.unfreeze_task_dispatch(task_id)
         return cleaned

@@ -55,6 +55,40 @@ CHART_NOTE = (
 # Main agent base template
 # =====================================================================
 
+EVIDENCE_LIMITS_NOTE = """
+
+# Evidence and completion limits
+Execution success, submit_report and task-board resolved are not verification verdicts.
+An incomplete/timed-out member's raw tool observations do not establish a passed review.
+Retain its useful findings, list the unchecked scope, and never claim full verification.
+Separate fidelity to the supplied document from independent real-world fact checking.
+Several parsers reading one file test extraction consistency, not independent sources;
+several agents using one model do not become independent evidence by agreeing.
+For each important claim, state the method and exact source/page/row actually checked.
+Search snippets are discovery leads, not fetched primary-source text. A failed fetch does
+not establish corroboration. Distinguish source attribution, inference and verified facts.
+Preserve every explicit [推断]/[Inference] label through handoff and final rewriting; never
+turn a labelled inference into an unqualified fact by editing away its uncertainty marker.
+Unread images, tables, attachments and truncated content remain coverage limits. Pixel
+statistics cannot establish that an unread image is decorative. Disclose those limits.
+Do not silently reclassify necessary checks as optional after they fail. Optional
+exploration must be declared with required_for_completion=false before assignment.
+Return scoped PASS/FAIL/UNCHECKED findings; a global confidence score is not a substitute.
+For required verification, dispatch a check-only assignment using verification_checks:
+stable check_id, existing work_item_id, precise criterion, subject and evidence sources
+({job_id, ref}; omit ref for the exact completed job report, or use its published handoff).
+During planning, register these stable check_id/criterion pairs on the task-board item as
+verification_requirements. Undispatched or unexecuted planned checks remain report gaps.
+The system hashes these exact versions. Reviewers must submit verification_results with
+the supplied binding_id, verdict, method, detail and evidence_keys. Checkpoint completed
+checks with submit_report(finish=false) before doing more work. Execution timeout alone
+does not discard accepted partial verdicts. Only an explicit same-check recheck can close
+an earlier check gap: cite its latest replaces_job_id; never weaken its criterion or
+necessity. A changed subject/evidence needs revision_reason and a new verdict. Passing
+declared checks does not certify unlisted claims, new versions or the final publication.
+Ordinary research failures cannot be closed by an unrelated successful checking job.
+"""
+
 ENHANCED_PROMPT = """You are a professional and meticulous expert in \
 information collection and organization. Today's date (UTC): {date}.
 You fully understand user needs, think deeply, and complete tasks with \
@@ -133,6 +167,7 @@ _NOTABLE_SUB_CAPS = {
     "scholar_search": "scholarly search",
     "bash": "shell and Python execution",
     "create_file": "file creation",
+    "publish_handoff": "controlled file handoff",
 }
 # Fallback capability phrase when the caller passes no sub_agent_tools (old
 # callers / tests) — mirrors the default SUB role minus SWARM_NO_WEB.
@@ -385,7 +420,12 @@ exactly and do NOT append a References section.**
 
 ### Step 5: Verify the Draft
 Create a `final_verifier` and include the original question + your \
-complete draft answer (copy the full text into the task prompt).
+complete draft answer (copy the full text into the task prompt). For a task \
+that requires files under `/outputs`, do this verification BEFORE assigning \
+the final publisher. If the wall-time warning or finalization reserve has \
+already started, skip a new verifier and publish the best verified reports \
+immediately. A publishing assignment starts a one-way publication phase: no \
+new research or verifier may compete with its remaining budget.
 
 ### Step 6: Revise & Submit
 Fix any issues the verifier identifies. Ensure every sub-question is \
@@ -436,7 +476,7 @@ right method, precision of every atom, and compliance with the required \
 answer format / deliverable. Use it in Step 5, and pass the original question \
 plus your full draft.
 - **`local_verifier`** — arbitrates ONE specific disagreement between \
-reports. Attach both sides with `<attach agent="..."/>` and let it decide \
+reports. Attach both sides with `<attach agent="..." job="..."/>` and let it decide \
 from the sources.
 
 ## Assigning Tasks
@@ -444,11 +484,14 @@ from the sources.
 other, assign them in dependency-ordered batches instead — dispatch a wave, \
 `collect_reports`, then assign the next wave using what came back. Original \
 question is auto-prepended.
-- You can assign new tasks to existing agents — they retain context.
+- You can assign new tasks to existing agents — they retain context. Each
+  accepted assignment returns a `job_id`; each collected report repeats it.
 - Authority to write `/outputs` comes from one structured field: the
   `output_paths` manifest. Omit it for research, candidate production, and
-  verification; those agents put candidates under `/workspace` and return exact
-  paths in their report. Nothing in prompt text grants that authority — not
+  verification. Members keep private work under `/workspace`; when another
+  member must consume a candidate, the producer calls `publish_handoff` and
+  returns the exact ref through `submit_report(attachments=[...])`. Nothing in
+  prompt text grants final-output authority — not
   naming the path, not the word publish, not telling the agent it may write.
 - After research and verification converge, choose ONE final integrator and
   assign it with the already-fixed exact `output_paths` manifest. Reuse that
@@ -459,24 +502,36 @@ question is auto-prepended.
 - Verifiers never publish files. Their output is the `submit_report` text.
 
 ## Passing Information Between Agents
-Use `<attach agent="name"/>` inside a task prompt to embed the full \
-text of that agent's most recent report into this new task. Example:
+Use `<attach agent="name" job="job_id"/>` inside a task prompt to embed one \
+exact completed result. Prefer this form whenever an agent has been reused or \
+the downstream decision must be auditable. `<attach agent="name"/>` remains a \
+compatibility shorthand for that agent's most recent report. Example:
 
 ```
 Review the following two reports and resolve any conflict:
 
 Report A:
-<attach agent="q1_lit"/>
+<attach agent="q1_lit" job="root.job.1"/>
 
 Report B:
-<attach agent="q1_reason"/>
+<attach agent="q1_reason" job="root.job.2"/>
 ```
 
-The orchestrator expands the tags before dispatching the task.
+The orchestrator expands the tags before dispatching the task. If an exact job
+does not exist, has not completed, or belongs to another agent, the downstream
+prompt receives an explicit missing-reference marker instead of a different
+report.
+
+An attached report may contain an `<attachments>` block whose refs point under
+`/outputs/scratch/handoffs/`. Preserve each ref character-for-character. Give
+the exact ref to the downstream member and tell it to read that path; never
+translate it into the producer's private `/workspace` path. Handoff refs are
+versioned by content digest and read-only. If the producer changes a file, it
+must publish the changed file again and return the new ref.
 
 ## Resolving Conflicts
-If agents disagree, create a `local_verifier` and attach both agents' \
-reports using `<attach agent="..."/>`. Do not try to resolve conflicts \
+If agents disagree, create a `local_verifier` and attach both exact jobs using \
+`<attach agent="..." job="..."/>`. Do not try to resolve conflicts \
 from your own memory.
 """
 
@@ -646,9 +701,14 @@ pages, and running code (the code tool is `bash` — run Python via `bash`, e.g.
 `python3 -c '...'`); their exact signatures are provided to you separately — \
 use them as your sub-task requires. The only tool worth spelling out here is \
 the one that ENDS your run:
-- `submit_report(content=..., confidence=...)`: **Terminal.** Call it once, \
+- `publish_handoff(source_path=..., label=...)`: copy a large table, dataset, \
+or candidate file from your private `/workspace` into the controlled shared \
+handoff store. Preserve the returned `/outputs/scratch/handoffs/...` ref exactly.
+- `submit_report(content=..., confidence=..., attachments=[...])`: **Terminal.** Call it once, \
 when every aspect is settled, with your complete report (the format below) as \
-`content`. The loop exits after this call — make no further tool calls.
+`content`. Report text is limited to 24,000 characters; keep conclusions and \
+critical evidence inline, and pass any `publish_handoff` refs in `attachments`. \
+The loop exits after this call — make no further tool calls.
 
 # Output Format (MANDATORY — pass this as `content` to submit_report)
 ```
@@ -766,7 +826,7 @@ only for an answer in text.
 You have tools for search, fetching pages, and running code (their signatures \
 are provided to you separately) — use whichever the verification needs. Only \
 the terminal tool is spelled out here:
-- `submit_report(content=..., confidence=...)`: **Terminal.** Call once with \
+- `submit_report(content=..., confidence=..., attachments=[...])`: **Terminal.** Call once with \
 your complete verification report as `content`. The loop exits after it.
 
 # Output Format (MANDATORY — pass this as `content` to submit_report)
@@ -823,7 +883,7 @@ needed, search independently to find which claim the evidence supports.
 You have tools for search, fetching pages, and running code (signatures \
 provided separately) — use whichever the conflict needs. Only the terminal \
 tool is spelled out here:
-- `submit_report(content=..., confidence=...)`: **Terminal.** Call once with \
+- `submit_report(content=..., confidence=..., attachments=[...])`: **Terminal.** Call once with \
 your resolution as `content`. The loop exits after it.
 
 # Output Format (MANDATORY — pass this as `content` to submit_report)
@@ -1030,6 +1090,7 @@ def get_main_system_prompt(
         team_management=team_section,
     )
     prompt += SEARCH_QUERY_LANGUAGE_NOTE
+    prompt += EVIDENCE_LIMITS_NOTE
     if fs_mode:
         prompt += FS_PROBLEM_GUIDE
     prompt += CHART_NOTE
@@ -1074,6 +1135,7 @@ def get_subagent_system_prompt(
     if "local_verifier" in name_lower or "conflict" in role_lower:
         return (
             LOCAL_VERIFIER
+            + EVIDENCE_LIMITS_NOTE
             + SEARCH_QUERY_LANGUAGE_NOTE
             + mcp_section
             + runtime_suffix
@@ -1081,12 +1143,14 @@ def get_subagent_system_prompt(
     if "verifier" in name_lower:
         return (
             FINAL_VERIFIER
+            + EVIDENCE_LIMITS_NOTE
             + SEARCH_QUERY_LANGUAGE_NOTE
             + mcp_section
             + runtime_suffix
         )
 
     prompt = SUBAGENT_RESEARCH
+    prompt += EVIDENCE_LIMITS_NOTE
     prompt += SEARCH_QUERY_LANGUAGE_NOTE
     if include_domain_guide:
         prompt += DOMAIN_GUIDE_APPENDIX

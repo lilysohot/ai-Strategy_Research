@@ -6,8 +6,10 @@ import hashlib
 import logging
 import os
 import shlex
+from pathlib import Path
 
-from frontier_agent.core.tool import tool
+from frontier_agent.core.tool import ToolOutcome, tool
+from plugins.tools._content_outcome import content_limitation
 from plugins.tools._deliverable_policy import spill_write_error
 from plugins.tools._doc_reader import reader_src
 from plugins.tools._sandbox import (
@@ -116,6 +118,92 @@ def _looks_like_batch(path: str) -> bool:
     return all(
         part and part.lower().endswith(_BATCH_SUFFIXES) for part in parts
     )
+
+
+_LIMIT_MARKERS = (
+    "vision unavailable",
+    "vision unavailable/failed",
+    "figure not read",
+    "not read:",
+    "ocr failed",
+    "ocr endpoint not configured",
+    "<img",
+    "[read_file] partial read",
+    "skipped (not found",
+    "more images matched",
+    "extraction may be limited",
+    "may be hidden",
+    "embedded files:",
+)
+
+
+def _structured_read_outcome(
+    path: str,
+    pdf_mode: str,
+    pages: str | None,
+    output: str,
+) -> str | ToolOutcome:
+    """Preserve readable text while making image/PDF coverage machine-readable.
+
+    ``read_file`` historically returned limitation prose as an ordinary success.
+    That let a coordinator treat text-only PDF extraction, selected pages, or an
+    unavailable vision service as full-document acquisition.  Only media reads
+    need this envelope; ordinary text and office documents retain the old string
+    result for compatibility.
+    """
+    lowered = output.casefold()
+    raw_parts = [item.strip() for item in path.split(",")] if _looks_like_batch(path) else [path]
+    suffixes = {Path(item).suffix.casefold() for item in raw_parts}
+    is_image = bool(suffixes) and suffixes.issubset(set(_BATCH_SUFFIXES))
+    is_pdf = len(raw_parts) == 1 and Path(path).suffix.casefold() == ".pdf"
+    if not (is_image or is_pdf):
+        return output
+
+    markers = [marker for marker in _LIMIT_MARKERS if marker in lowered]
+    if is_image:
+        if not markers:
+            return output
+        # A batch may contain useful transcripts beside failed/skipped images;
+        # keep those bytes but never call the batch complete.
+        batch = len(raw_parts) > 1 or any(char in path for char in "*?[")
+        coverage = {
+            "media_type": "image",
+            "requested_items": len(raw_parts) if not any(char in path for char in "*?[") else "glob",
+            "document_complete": False,
+            "limitations": markers,
+        }
+        return content_limitation(
+            path,
+            "Image pixels were not fully interpreted: " + ", ".join(markers),
+            status="partial" if batch else "unavailable",
+            content=output if batch else "",
+            coverage=coverage,
+        )
+
+    mode = pdf_mode if pdf_mode in {"auto", "text", "image"} else "auto"
+    limitations = list(markers)
+    if mode in {"auto", "text"}:
+        limitations.append("visual_content_not_fully_assessed")
+    if pages:
+        limitations.append("selected_pages_only")
+    # An all-page image-mode read with no explicit reader limitation is the one
+    # PDF path that can represent visual coverage of the requested document.
+    if mode == "image" and not pages and not limitations:
+        return output
+    coverage = {
+        "media_type": "pdf",
+        "pdf_mode": mode,
+        "requested_pages": pages or "all",
+        "document_complete": False,
+        "limitations": list(dict.fromkeys(limitations)),
+    }
+    return content_limitation(
+        path,
+        "PDF extraction did not establish full visual and whole-document coverage.",
+        status="partial" if output.strip() and output != "(empty)" else "unavailable",
+        content=output if output.strip() and output != "(empty)" else "",
+        coverage=coverage,
+    )
 # Feed the reader to python3 via stdin in a SINGLE sandbox command (no temp
 # file). Under bwrap each command gets a fresh /tmp tmpfs, so a reader written
 # to /tmp in one command is gone by the next — same reason run_python_code
@@ -137,7 +225,7 @@ async def read_file(
     save_to: str | None = None,
     pdf_mode: str = "auto",
     pages: str | None = None,
-) -> str:
+) -> str | ToolOutcome:
     """Read a document. Structured parsing of office/PDF/csv files into markdown.
 
     Use this to READ any file under /inputs (or anywhere) — do NOT write parsing
@@ -223,7 +311,7 @@ async def read_file(
     try:
         sandbox = await aget_sandbox()
     except RuntimeError as e:
-        return f"Error: {e}"
+        return content_limitation(path, f"sandbox unavailable: {e}", status="failed")
 
     try:
         # argv = path max_chars [cell_range|-] [offset] [pdf_mode] [pages|-]
@@ -270,16 +358,21 @@ async def read_file(
         result = await arun_sandbox_cmd(sandbox, cmd, timeout=_TIMEOUT, input=_READER_SRC,
                                         allow_net=True, env_allow=("READDOC_",))
         if result.exit_code != 0:
-            return f"[read_file error] exit={result.exit_code}: {result.stderr or result.stdout}"
+            detail = f"[read_file error] exit={result.exit_code}: {result.stderr or result.stdout}"
+            return content_limitation(path, detail, status="failed")
         if save_to:
             size = (result.stdout or "?").strip()
             return (f"[read_file] markdown saved to {save_to} ({size} bytes). "
                     "Inspect with read_file/grep; for xlsx use cell_range for targeted re-reads.")
         out = result.stdout or "(empty)"
         _dump_readout(path, out)
-        return out
+        return _structured_read_outcome(path, pdf_mode, pages, out)
     except TimeoutError:
-        return f"Error: read_file timed out after {_TIMEOUT}s"
+        return content_limitation(
+            path, f"read_file timed out after {_TIMEOUT}s", status="failed",
+        )
     except Exception as e:
         logger.warning("read_file error for '%s': %s", path, e)
-        return f"[read_file error] {type(e).__name__}: {e}"
+        return content_limitation(
+            path, f"[read_file error] {type(e).__name__}: {e}", status="failed",
+        )

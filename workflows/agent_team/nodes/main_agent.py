@@ -6,10 +6,12 @@ import asyncio
 import json
 import logging
 import os
+import re
 import time
 from collections.abc import Callable
+from dataclasses import dataclass
 from datetime import UTC, datetime
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 from frontier_agent.components.agent_bus import AgentBus
@@ -18,6 +20,7 @@ from frontier_agent.components.finalization import (
     check_wall_feasibility,
     nonnegative_seconds,
     positive_seconds,
+    remaining_phase_budget_s,
     resolve_research_wall,
 )
 from frontier_agent.components.observers.budget_observer import BudgetObserver
@@ -97,6 +100,7 @@ from plugins.tools.task_board import (
     force_finish_planning,
     is_planning_allowed,
     render_board,
+    snapshot_tasks,
     start_planning,
 )
 from workflows._shared.cross_mode_context import append_context_to_question
@@ -105,13 +109,18 @@ from workflows._shared.sandbox_mounts import (
     workspace_root_override,
 )
 from workflows.agent_team.citation_url_repair import repair_citation_urls
+from workflows.agent_team.final_report import finalize_team_report, is_user_report
 from workflows.agent_team.identity import (
     MAIN_AGENT_ID,
     MAIN_ROLE_ID,
     SUB_ROLE_ID,
     llm_session_id,
 )
-from workflows.agent_team.lifecycle import run_with_member_cleanup
+from workflows.agent_team.lifecycle import (
+    append_team_wind_down_checkpoint,
+    run_with_member_cleanup,
+    wind_down_team,
+)
 from workflows.agent_team.observers.auto_fan_in import AutoFanInObserver
 from workflows.agent_team.observers.bare_text_finalize import (
     BareTextFinalizeObserver,
@@ -120,6 +129,7 @@ from workflows.agent_team.observers.console import RichConsoleObserver
 from workflows.agent_team.observers.no_progress_guard import NoProgressGuard
 from workflows.agent_team.observers.planning_gate import PlanningGateObserver
 from workflows.agent_team.observers.unassigned_nudge import UnassignedAgentNudge
+from workflows.agent_team.phase_budget import TeamPhaseBudget, TeamPhaseBudgetObserver
 from workflows.agent_team.prompts import (
     get_main_system_prompt,
     render_team_effort,
@@ -132,8 +142,6 @@ from workflows.agent_team.subagent_runtime import (
     SWARM_SCOPE_KEY,
     SwarmSubagentRuntime,
     SwarmToolResultPostProcessor,
-    _minimal_best_effort_answer,
-    _strip_leaked_tool_calls,
     force_final_answer,
     prepare_report_handoff,
     render_sandbox_fs_note,
@@ -154,6 +162,8 @@ MAIN_COMPACT_AFTER_TURNS = 100
 MAIN_CONTEXT_TOKEN_LIMIT = 180_000
 MAIN_KEEP_TOOL_RESULT = 20
 SUB_KEEP_TOOL_RESULT = 10
+TEAM_WIND_DOWN_TIMEOUT_S = 15.0
+PUBLICATION_PHASE_TIMEOUT_S = 180.0
 
 _TEAM_FINALIZATION_MESSAGE = (
     "Finalization phase has started. Stop creating new research branches. "
@@ -167,6 +177,56 @@ _TEAM_FINALIZATION_MESSAGE = (
 
 # Module-level LLM cache — one client per profile name, shared across tasks.
 _llm_cache: dict[str, tuple[dict[str, Any], Any, ModelProfile | None]] = {}
+
+
+@dataclass(frozen=True)
+class TeamLoopTimeouts:
+    tool_timeout_s: float
+    llm_timeout_s: float
+    first_chunk_timeout_s: float | None
+    reasoning_only_timeout_s: float | None
+    reasoning_only_max_tokens: int | None
+    logical_call_timeout_s: float | None
+
+    def loop_config_kwargs(self) -> dict[str, Any]:
+        """Return the exact timeout arguments accepted by ``LoopConfig``."""
+        return {
+            # Preserve the existing whole-second LoopConfig contract while
+            # retaining floats for wall-budget arithmetic outside the loop.
+            "tool_timeout": int(self.tool_timeout_s),
+            "llm_timeout": int(self.llm_timeout_s),
+            "first_chunk_timeout": self.first_chunk_timeout_s,
+            "reasoning_only_timeout_s": self.reasoning_only_timeout_s,
+            "reasoning_only_max_tokens": self.reasoning_only_max_tokens,
+            "logical_call_timeout_s": self.logical_call_timeout_s,
+        }
+
+
+def _resolve_team_loop_timeouts(agent_cfg: dict[str, Any]) -> TeamLoopTimeouts:
+    """Resolve the timeout knobs shared by coordinator and team members.
+
+    Keeping this as the single profile-to-``LoopConfig`` translation prevents
+    Web-only controls such as ``first_chunk_s`` from reaching the stateful
+    workflow while silently disappearing in either agent-team loop.
+    """
+    reasoning_only_timeout_raw = agent_cfg.get("reasoning_only_timeout_s")
+    reasoning_only_max_tokens_raw = agent_cfg.get("reasoning_only_max_tokens")
+    logical_call_timeout_raw = agent_cfg.get("logical_call_timeout_s")
+    first_chunk_raw = agent_cfg.get("first_chunk_s")
+    return TeamLoopTimeouts(
+        tool_timeout_s=float(agent_cfg.get("tool_timeout_s", MAIN_TOOL_TIMEOUT_S)),
+        llm_timeout_s=float(agent_cfg.get("llm_timeout_s", MAIN_LLM_TIMEOUT_S)),
+        first_chunk_timeout_s=(float(first_chunk_raw) if first_chunk_raw is not None else None),
+        reasoning_only_timeout_s=(
+            float(reasoning_only_timeout_raw) if reasoning_only_timeout_raw else None
+        ),
+        reasoning_only_max_tokens=(
+            int(reasoning_only_max_tokens_raw) if reasoning_only_max_tokens_raw else None
+        ),
+        logical_call_timeout_s=(
+            float(logical_call_timeout_raw) if logical_call_timeout_raw else None
+        ),
+    )
 
 
 # Wall-clock arithmetic lives in the shared finalization component; these
@@ -219,6 +279,88 @@ def _resolve_finalization_timeout_s(
         label="agent_team finalization_timeout_s",
     )
     return value or max(float(llm_timeout_s), 1.0)
+
+
+def _resolve_team_wind_down_timeout_s(agent_cfg: dict[str, Any]) -> float:
+    """Grace for already-running members to publish before synthesis."""
+    return _nonnegative_seconds(
+        agent_cfg.get("team_wind_down_timeout_s"),
+        default=TEAM_WIND_DOWN_TIMEOUT_S,
+        label="agent_team team_wind_down_timeout_s",
+    )
+
+
+def _resolve_publication_phase_timeout_s(agent_cfg: dict[str, Any]) -> float:
+    """Time reserved after research for consolidation and sole publication."""
+    return _nonnegative_seconds(
+        agent_cfg.get("publication_phase_timeout_s"),
+        default=PUBLICATION_PHASE_TIMEOUT_S,
+        label="agent_team publication_phase_timeout_s",
+    )
+
+
+def _build_team_phase_budget(
+    *,
+    started_monotonic_s: float,
+    research_wall_s: float,
+    publication_phase_timeout_s: float,
+    hard_deadline_monotonic_s: float | None,
+    finalization_timeout_s: float,
+    wind_down_timeout_s: float,
+    worst_case_tool_s: float,
+    publication_state: dict[str, Any],
+) -> TeamPhaseBudget:
+    """Turn relative profile values into one shared absolute phase plan."""
+    research_deadline = (
+        started_monotonic_s + research_wall_s if research_wall_s > 0 else None
+    )
+    publication_deadline = (
+        research_deadline + publication_phase_timeout_s
+        if research_deadline is not None
+        else None
+    )
+    if hard_deadline_monotonic_s is not None:
+        latest_publication = max(
+            started_monotonic_s,
+            hard_deadline_monotonic_s
+            - finalization_timeout_s
+            - wind_down_timeout_s
+            - 1.0,
+        )
+        publication_deadline = (
+            latest_publication
+            if publication_deadline is None
+            else min(publication_deadline, latest_publication)
+        )
+    if research_deadline is not None and publication_deadline is not None:
+        publication_deadline = max(research_deadline, publication_deadline)
+    research_dispatch_deadline = (
+        max(started_monotonic_s, research_deadline - worst_case_tool_s)
+        if research_deadline is not None
+        else None
+    )
+    return TeamPhaseBudget(
+        started_monotonic_s=started_monotonic_s,
+        research_dispatch_deadline_s=research_dispatch_deadline,
+        research_deadline_s=research_deadline,
+        publication_deadline_s=publication_deadline,
+        finalization_deadline_s=hard_deadline_monotonic_s,
+        state=publication_state,
+    )
+
+
+def _bounded_wind_down_wait_s(
+    configured_s: float,
+    hard_deadline_monotonic: float | None,
+    *,
+    now_monotonic: float | None = None,
+) -> float:
+    """Keep a real fan-in grace while leaving one second for synthesis."""
+    configured_s = max(float(configured_s), 0.0)
+    if hard_deadline_monotonic is None:
+        return configured_s
+    now = time.monotonic() if now_monotonic is None else now_monotonic
+    return min(configured_s, max(0.0, hard_deadline_monotonic - now - 1.0))
 
 
 def _resolve_reporter_wall_time_s(agent_cfg: dict[str, Any]) -> float:
@@ -349,6 +491,20 @@ def _resolve_conversation_path(state: dict[str, Any], task_id: str) -> Path:
     return Path("logs") / "swarm" / task_id / "conversation.json"
 
 
+def _resolve_team_result_store(state: dict[str, Any], task_id: str) -> Path | None:
+    """Durable per-job snapshots for the current Run, outside model workspaces."""
+    metadata = state.get("metadata") or {}
+    trial_dir = metadata.get("_trial_dir")
+    if trial_dir:
+        base = Path(trial_dir) / "agent" / "team-results"
+    elif run_dir := os.environ.get("APODEX_RUN_DIR", "").strip():
+        base = Path(run_dir) / "team-results"
+    else:
+        return None
+    safe_task = re.sub(r"[^A-Za-z0-9_.-]+", "-", task_id).strip("-.") or "task"
+    return base / safe_task[:120]
+
+
 def _resolve_worktree_root(state: dict[str, Any], task_id: str) -> Path:
     """Per-task worktree root (the agents' *working* dir, distinct from the
     trajectory/log dir).
@@ -417,8 +573,67 @@ def _resolve_sandbox_binds(
         worktree_root,
     )
     main_binds = (*inputs_t, (str(outputs_dir), "/outputs", False))
-    sub_binds = (*inputs_t, (str(outputs_dir), "/outputs", False))  # rw for subs too
+    # Per-member context setup overlays writable scratch and a read-only
+    # handoff store on this shared root. Final-output authority still comes
+    # only from the assignment's exact output_paths manifest.
+    sub_binds = (*inputs_t, (str(outputs_dir), "/outputs", False))
     return main_binds, sub_binds, outputs_dir
+
+
+def _publication_manifest_complete(
+    publication_state: dict[str, Any],
+    outputs_dir: str | Path,
+) -> bool:
+    """Return whether the active publisher produced every declared final file.
+
+    The team research deadline is a soft phase boundary.  A Run may be
+    normalized to normal completion after that boundary only when wind-down
+    collected all work *and* this deterministic filesystem check proves the
+    manifest exists.  Private member files and ``/outputs/scratch`` never
+    satisfy it.
+    """
+    if str(publication_state.get("phase") or "") != "publishing":
+        return False
+    raw_manifest: object = publication_state.get("deliverable_manifest")
+    if not isinstance(raw_manifest, (list, tuple)) or not raw_manifest:
+        return False
+    manifest = tuple(str(item) for item in raw_manifest)
+    try:
+        root = Path(outputs_dir).resolve(strict=True)
+    except OSError:
+        return False
+    for raw_path in manifest:
+        virtual = PurePosixPath(str(raw_path))
+        try:
+            relative = virtual.relative_to("/outputs")
+        except ValueError:
+            return False
+        if not relative.parts or relative.parts[0] == "scratch" or ".." in relative.parts:
+            return False
+        try:
+            candidate = root.joinpath(*relative.parts).resolve(strict=True)
+        except OSError:
+            return False
+        if not candidate.is_relative_to(root) or not candidate.is_file():
+            return False
+    return True
+
+
+def _soft_wall_publication_finalized(
+    *,
+    stopped_by: str,
+    team_status: str,
+    answer_source: str,
+    publication_state: dict[str, Any],
+    outputs_dir: str | Path,
+) -> bool:
+    """Whether a soft research stop became a verified normal completion."""
+    return (
+        stopped_by == "wall_deadline"
+        and team_status == "complete"
+        and answer_source in {"agent", "clean_context_llm", "reporter_llm"}
+        and _publication_manifest_complete(publication_state, outputs_dir)
+    )
 
 
 def _shallow_entries(root: str, *, limit: int = 40) -> list[str]:
@@ -956,6 +1171,7 @@ async def main_agent_node(
     ctx: NodeContext,
 ) -> dict[str, Any]:
     """Run the agent-team main coordinator as a ReAct loop."""
+    node_started_monotonic = time.monotonic()
     question = state.get("original_question", "")
     if not question:
         raise ValueError("main_agent_node requires 'original_question' in state")
@@ -1002,24 +1218,19 @@ async def main_agent_node(
     # because ``_effective_tool_timeout`` already floors the outer wait for
     # ``_AGGREGATION_TOOLS`` at the tool's own ``timeout`` argument, so
     # ``collect_reports(timeout=1800)`` gets 1805s regardless of this value.
-    tool_timeout = float(agent_cfg.get("tool_timeout_s", MAIN_TOOL_TIMEOUT_S))
-    llm_timeout = float(agent_cfg.get("llm_timeout_s", MAIN_LLM_TIMEOUT_S))
-    reasoning_only_timeout_raw = agent_cfg.get("reasoning_only_timeout_s")
-    reasoning_only_timeout_s = (
-        float(reasoning_only_timeout_raw) if reasoning_only_timeout_raw else None
-    )
-    reasoning_only_max_tokens_raw = agent_cfg.get(
-        "reasoning_only_max_tokens",
-    )
-    reasoning_only_max_tokens = (
-        int(reasoning_only_max_tokens_raw) if reasoning_only_max_tokens_raw else None
-    )
-    logical_call_timeout_raw = agent_cfg.get("logical_call_timeout_s")
-    logical_call_timeout_s = float(logical_call_timeout_raw) if logical_call_timeout_raw else None
+    loop_timeouts = _resolve_team_loop_timeouts(agent_cfg)
+    tool_timeout = loop_timeouts.tool_timeout_s
+    llm_timeout = loop_timeouts.llm_timeout_s
+    first_chunk_timeout = loop_timeouts.first_chunk_timeout_s
+    reasoning_only_timeout_s = loop_timeouts.reasoning_only_timeout_s
+    reasoning_only_max_tokens = loop_timeouts.reasoning_only_max_tokens
+    logical_call_timeout_s = loop_timeouts.logical_call_timeout_s
     finalization_timeout_s = _resolve_finalization_timeout_s(
         agent_cfg,
         llm_timeout_s=llm_timeout,
     )
+    team_wind_down_timeout_s = _resolve_team_wind_down_timeout_s(agent_cfg)
+    publication_phase_timeout_s = _resolve_publication_phase_timeout_s(agent_cfg)
     reporter_wall_time_s = _resolve_reporter_wall_time_s(agent_cfg)
     finalization_reserve_turns = int(
         agent_cfg.get("finalization_reserve_turns", 8) or 8,
@@ -1029,7 +1240,10 @@ async def main_agent_node(
         default=180,
         label="agent_team wall_deadline_reserve_s",
     )
-    landing_budget_s = reporter_wall_time_s if reporter_enabled else finalization_timeout_s
+    synthesis_budget_s = (
+        reporter_wall_time_s if reporter_enabled else finalization_timeout_s
+    )
+    landing_budget_s = synthesis_budget_s + team_wind_down_timeout_s
     # WallClockDeadlineObserver runs at turn end, so a tool launched just
     # before the deadline can consume its full timeout. Keep room for both that
     # overrun and the now-bounded reporter/finalization phase. "Full timeout"
@@ -1054,7 +1268,20 @@ async def main_agent_node(
     # mid-call by the platform ceiling (the live serve ``RenewableWallTimeLease``
     # gives only a few seconds of grace).
     hard_deadline_monotonic = (
-        time.monotonic() + research_wall.hard_total_s if research_wall.hard_total_s > 0 else None
+        node_started_monotonic + research_wall.hard_total_s
+        if research_wall.hard_total_s > 0
+        else None
+    )
+    publication_state: dict[str, Any] = {}
+    phase_budget = _build_team_phase_budget(
+        started_monotonic_s=node_started_monotonic,
+        research_wall_s=wall_deadline_s,
+        publication_phase_timeout_s=publication_phase_timeout_s,
+        hard_deadline_monotonic_s=hard_deadline_monotonic,
+        finalization_timeout_s=finalization_timeout_s,
+        wind_down_timeout_s=team_wind_down_timeout_s,
+        worst_case_tool_s=worst_case_tool_s,
+        publication_state=publication_state,
     )
     check_wall_feasibility(
         hard_total_s=research_wall.hard_total_s,
@@ -1276,9 +1503,12 @@ async def main_agent_node(
         run_id=str(metadata.get("run_id") or ""),
         run_type=str(metadata.get("run_type") or ""),
         finalization_reserve_turns=finalization_reserve_turns,
-        wall_deadline_s=wall_deadline_s,
+        # TeamPhaseBudgetObserver owns the absolute coordinator boundary. This
+        # avoids restarting a relative wall after a separate planning loop.
+        wall_deadline_s=0,
         force_compaction_first=(context_compaction == "tiered" and max_len > 0),
     )
+    observers.insert(0, TeamPhaseBudgetObserver(phase_budget))
     # A serve/CLI driver injects its own protocol-stream and worker-trace
     # observers via state.metadata["sdk_extra_observers"] (see
     # ``workflows/_shared/sdk_shim``). The HTTP API path leaves this key
@@ -1340,6 +1570,7 @@ async def main_agent_node(
     main_binds: tuple[tuple[str, str, bool], ...] = ()
     sub_binds: tuple[tuple[str, str, bool], ...] = ()
     shared_workspace_dir = ""
+    outputs_dir: str | Path
     if sandbox_mode in ("container", "native"):
         workspace_dir, outputs_dir, inputs_dir = resolve_mount_dirs()
         worktree_root = Path(workspace_dir)
@@ -1363,7 +1594,7 @@ async def main_agent_node(
         )
     else:
         worktree_root = _resolve_worktree_root(state, ctx.task_id)
-        main_binds, sub_binds, _outputs_dir = _resolve_sandbox_binds(
+        main_binds, sub_binds, outputs_dir = _resolve_sandbox_binds(
             state,
             worktree_root,
         )
@@ -1395,7 +1626,11 @@ async def main_agent_node(
         sub_agent_llm=sub_agent_llm if profile_name else None,
         llm_max_tokens=llm_max_tokens,
         sub_agent_llm_timeout=llm_timeout,
+        sub_agent_recovery_timeout_s=float(
+            agent_cfg.get("sub_recovery_timeout_s", 20) or 20,
+        ),
         sub_agent_tool_timeout=tool_timeout,
+        first_chunk_timeout_s=first_chunk_timeout,
         reasoning_only_timeout_s=reasoning_only_timeout_s,
         reasoning_only_max_tokens=reasoning_only_max_tokens,
         logical_call_timeout_s=logical_call_timeout_s,
@@ -1442,6 +1677,8 @@ async def main_agent_node(
             for observer in (metadata.get("sdk_extra_observers") or [])
             if callable(factory := getattr(observer, "for_subagent", None))
         ),
+        publication_state=publication_state,
+        phase_budget=phase_budget,
     )
 
     logger.info(
@@ -1451,6 +1688,9 @@ async def main_agent_node(
     )
 
     bus = registry.get(AgentBus)
+    result_store = _resolve_team_result_store(state, bus_task_id)
+    if result_store is not None:
+        bus.configure_task_result_store(bus_task_id, result_store)
 
     # Main agent's task sandbox:
     #   container mode — a CurrentSandbox on the shared mounted /workspace; the
@@ -1536,11 +1776,7 @@ async def main_agent_node(
                     ),
                     role_id=MAIN_ROLE_ID,
                     no_tool_max_retries=3,
-                    tool_timeout=int(tool_timeout),
-                    llm_timeout=int(llm_timeout),
-                    reasoning_only_timeout_s=reasoning_only_timeout_s,
-                    reasoning_only_max_tokens=reasoning_only_max_tokens,
-                    logical_call_timeout_s=logical_call_timeout_s,
+                    **loop_timeouts.loop_config_kwargs(),
                     max_completion_tokens=(llm_max_tokens or LoopConfig.max_completion_tokens),
                     context_token_limit=context_token_limit,
                     compact_after_turns=compact_after_turns,
@@ -1572,6 +1808,7 @@ async def main_agent_node(
             getattr(t, "name", "") for t in planning_tools if getattr(t, "name", "")
         ]
         planning_observers: list[Any] = [
+            TeamPhaseBudgetObserver(phase_budget),
             LeakedToolCallRetryObserver(tool_names=planning_tool_names),
             build_task_board_observer(),
             RichConsoleObserver(),
@@ -1676,6 +1913,20 @@ async def main_agent_node(
             turns=max_turns,
         )
 
+    # Configured LLM/reporter ceilings can be larger than the whole Web wall
+    # (for example 600s under a 700s run). Reserving that entire ceiling would
+    # reduce fan-in to zero even when hundreds of real seconds remain.
+    wind_down_wait_s = _bounded_wind_down_wait_s(
+        team_wind_down_timeout_s,
+        hard_deadline_monotonic,
+    )
+    wind_down = await wind_down_team(
+        bus=bus,
+        task_id=bus_task_id,
+        wait_s=wind_down_wait_s,
+    )
+    append_team_wind_down_checkpoint(result, wind_down)
+
     if main_sb_token is not None:
         clear_task_sandbox(main_sb_token)
     if reporter_enabled:
@@ -1686,14 +1937,28 @@ async def main_agent_node(
         result = prepare_report_handoff(
             result,
             task_description=question,
+            force_refresh=wind_down.requires_resynthesis,
+            prefer_collected_reports=wind_down.requires_resynthesis,
         )
     else:
+        hard_remaining_s = (
+            hard_deadline_monotonic - time.monotonic()
+            if hard_deadline_monotonic is not None
+            else None
+        )
+        effective_finalization_timeout_s = remaining_phase_budget_s(
+            finalization_timeout_s,
+            hard_deadline_monotonic,
+        )
         result = await force_final_answer(
             result,
             llm,
-            finalization_timeout_s,
+            effective_finalization_timeout_s,
             task_description=question,
             structured_report=False,
+            force_recovery=wind_down.requires_resynthesis,
+            prefer_collected_reports=wind_down.requires_resynthesis,
+            run_recovery_llm=hard_remaining_s is None or hard_remaining_s > 1.0,
         )
 
     aggregate = bus.drain_task_metadata(bus_task_id)
@@ -1736,6 +2001,10 @@ async def main_agent_node(
         )
     except Exception as exc:
         logger.warning("AgentBus cleanup failed: %s", exc)
+    finally:
+        # The outer cleanup timeout can cancel ``cleanup_task`` before it
+        # reaches its own release. Never poison a reused bus task id.
+        bus.unfreeze_task_dispatch(bus_task_id)
 
     # Drain post-cleanup rescue (see AgentBus.cleanup_task).
     rescued = bus.drain_task_metadata(bus_task_id)
@@ -1754,30 +2023,10 @@ async def main_agent_node(
     research_notebook: dict[str, Any] = {}
     merged_evidence = sub_evidence + main_evidence
 
-    # Last-line defense: even after the report handoff / force-final strip pass,
-    # paranoid double-check that the harness never writes leaked
-    # ``<tool_call>`` XML as the final answer (e.g. qwen text-mode
-    # tool-call collapse on ``stopped_by={max_turns,no_tool,llm_error}``
-    # paths). Both finalization paths already sanitise their baseline, so
-    # this is defense-in-depth — covers the rare edge case where
-    # ``metadata["final_answer"]`` was set by a different observer
-    # earlier in the loop with leaked content.
-    final_text = result.metadata.get("final_answer") or result.final_content
-    cleaned = _strip_leaked_tool_calls(final_text or "")
-    if cleaned != (final_text or "").strip():
-        logger.warning(
-            "swarm main: stripped leaked tool_call XML from final_answer "
-            "(stopped_by=%s, before=%d chars, after=%d chars)",
-            result.stopped_by,
-            len(final_text or ""),
-            len(cleaned),
-        )
-    final_text = cleaned or _minimal_best_effort_answer(
-        question,
-        result.stopped_by,
-    )
-    if not cleaned:
-        result.metadata["final_answer_source"] = "deterministic_fallback"
+    # Keep internal evidence available to the optional reporter, but never use
+    # raw member report blocks as the fail-open user answer.
+    final_text = str(result.metadata.get("final_answer") or result.final_content or "")
+    report_handoff_context = final_text if reporter_enabled else ""
     answer_source = str(result.metadata.get("final_answer_source") or "agent")
     answer_status = (
         "not_found"
@@ -1791,6 +2040,47 @@ async def main_agent_node(
         }
         else "complete"
     )
+    if wind_down.run_status == "partial" and answer_status != "not_found":
+        answer_status = "partial"
+    report_tasks = snapshot_tasks(ctx.task_id)
+    soft_wall_finalized = _soft_wall_publication_finalized(
+        stopped_by=result.stopped_by,
+        team_status=wind_down.run_status,
+        answer_source=answer_source,
+        publication_state=swarm_runtime.publication_state,
+        outputs_dir=outputs_dir,
+    )
+    if not is_user_report(final_text) or any(
+        task.get("resolution") not in {"resolved", "cancelled"} for task in report_tasks
+    ):
+        soft_wall_finalized = False
+    if soft_wall_finalized:
+        # ``wall_deadline`` here is the workflow's configured research boundary,
+        # not the external Web hard wall. The sole publisher finished during the
+        # bounded wind-down, every declared file exists, and final synthesis
+        # succeeded. Surface that as a completed Run while retaining an audit
+        # bit that the soft boundary was crossed.
+        result.metadata["soft_wall_deadline_reached"] = True
+        result.metadata["soft_wall_finalized"] = True
+        result.stopped_by = "final_answer"
+        answer_status = "complete"
+        logger.info(
+            "agent_team: publication completed during soft-wall wind-down; "
+            "normalizing terminal status to final_answer"
+        )
+    terminal_report = finalize_team_report(
+        final_text,
+        source=answer_source,
+        answer_status=answer_status,
+        stopped_by=result.stopped_by,
+        question=question,
+        language=str(state.get("language") or ""),
+        wind_down=wind_down.as_dict(),
+        tasks=report_tasks,
+    )
+    final_text = terminal_report["final_answer"]
+    answer_source = terminal_report["final_answer_source"]
+    answer_status = terminal_report["answer_status"]
     # Citation URLs the coordinator wrote are free text: it has no search
     # tool, so it copies whatever spelling its sub-agents reported, and a
     # sub-agent that "tidied" a URL (dropped a query string, appended
@@ -1841,6 +2131,11 @@ async def main_agent_node(
             exc,
         )
 
+    report_contract = terminal_report["report_contract"]
+    report_contract["answer_status"] = answer_status
+    if report_contract["source"] == "model":
+        report_contract["kind"] = "complete" if answer_status == "complete" else "partial"
+
     return {
         "final_answer": final_text,
         # Mirror to ``final_content`` so the scheduler's terminal-output
@@ -1853,7 +2148,10 @@ async def main_agent_node(
             final_text,
             steps=result.metadata.get("react_steps", []),
         ),
-        "answer_confidence": result.metadata.get("final_answer_confidence", ""),
+        "answer_confidence": (
+            "" if answer_source == "deterministic_fallback"
+            else result.metadata.get("final_answer_confidence", "")
+        ),
         "evidence_cards": merged_evidence,
         "assertions": sub_assertions + main_assertions,
         "clarified_questions": clarified_questions,
@@ -1862,14 +2160,22 @@ async def main_agent_node(
         "live_followups": live_followups,
         "effective_question": effective_question,
         "answer_status": answer_status,
+        "team_completeness": "complete" if report_contract["kind"] == "complete" else "partial",
+        "team_wind_down": wind_down.as_dict(),
+        "team_phase_budget": phase_budget.as_dict(),
+        "soft_wall_finalized": soft_wall_finalized,
         "answer_sentinel": ("<ANSWER_NOT_FOUND>" if answer_status == "not_found" else ""),
         "final_answer_rescued": bool(
-            result.metadata.get("final_answer_rescued", False),
+            answer_source == "deterministic_fallback"
+            or result.metadata.get("final_answer_rescued", False),
         ),
         "final_answer_rescue_mode": str(
-            result.metadata.get("final_answer_rescue_mode") or "",
+            "deterministic_fallback" if answer_source == "deterministic_fallback"
+            else result.metadata.get("final_answer_rescue_mode") or "",
         ),
         "final_answer_source": answer_source,
+        "report_contract": report_contract,
+        "report_handoff_context": report_handoff_context,
         # Conditional edge in both agent-team specs consumes this resolved
         # per-request value. False routes directly to END, preserving the
         # coordinator's answer as the protocol final.

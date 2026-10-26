@@ -36,6 +36,8 @@ class FinalizeAnswerObserver(BaseObserver):
             return
 
         args = result.args if isinstance(result.args, dict) else {}
+        if result.name == "submit_report" and args.get("finish") is False:
+            return
         content = (args.get(self._content_arg_name) or "").strip()
         if not content:
             return
@@ -49,6 +51,13 @@ class FinalizeAnswerObserver(BaseObserver):
         if isinstance(ctx.metadata, dict):
             ctx.metadata["final_answer"] = content
             ctx.metadata["final_answer_confidence"] = confidence
+            attachments = args.get("attachments")
+            if isinstance(attachments, list):
+                ctx.metadata["final_answer_attachments"] = [
+                    str(ref)
+                    for ref in attachments
+                    if isinstance(ref, str) and ref.strip()
+                ]
 
         logger.info(
             "FinalizeAnswerObserver latched via %s: turn=%d, len=%d, conf=%.2f",

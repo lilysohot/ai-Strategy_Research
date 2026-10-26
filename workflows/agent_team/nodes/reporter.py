@@ -10,11 +10,13 @@ import asyncio
 import copy
 import logging
 import os
+import re
 from datetime import UTC, datetime
 from typing import Any
 
 from frontier_agent.components.finalization import remaining_phase_budget_s
 from frontier_agent.models.node_context import NodeContext
+from workflows.agent_team.final_report import finalize_team_report, is_user_report
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +24,17 @@ logger = logging.getLogger(__name__)
 # report_llm/dag_llm/outline_llm sections (and the main_agent ``llm:``).
 # Lives in ``workflows/agent_team/profiles/``.
 _DEFAULT_REPORT_PROFILE = "benchmark"
+
+_INFERENCE_LABEL = re.compile(
+    r"\[(?:推断|推测|inference)\]|【(?:推断|推测|inference)】"
+    r"|(?:^|[\n;；])\s*(?:推断|推测|inference)\s*[:：]",
+    re.IGNORECASE,
+)
+
+
+def _preserves_inference_labels(source: str, candidate: str) -> bool:
+    """A stylistic rewrite may not silently promote explicitly inferred claims."""
+    return len(_INFERENCE_LABEL.findall(candidate)) >= len(_INFERENCE_LABEL.findall(source))
 
 
 def _set_reporter_extension(
@@ -334,23 +347,25 @@ async def agent_team_reporter(
         )
         return {}
 
-    if not report_md.strip():
+    if not is_user_report(report_md):
+        logger.warning("agent_team_reporter: empty/internal output — keeping safe main_agent answer")
         return {}
 
-    try:
-        _refresh_trace_terminal(state.get("metadata") or {}, report_md)
-    except Exception as exc:
+    baseline = str(state.get("report_handoff_context") or state.get("final_answer") or "")
+    if not _preserves_inference_labels(baseline, report_md):
         logger.warning(
-            "agent_team_reporter: failed to refresh terminal trace "
-            "(%s: %s)",
-            type(exc).__name__,
-            exc,
+            "agent_team_reporter: inference labels were dropped — keeping main_agent answer"
         )
+        return {}
 
     # A4 消费账本（评审 C5：reporter 是最终发布出口之一）：在**最终报告边界**重算
     # 证据校验状态并刷新工件。A4_ENFORCE 关闭（默认）时仅记录不阻断；开启时未
     # 通过的报告追加锚定限定块并降级 answer_status（评审 C6）。
-    answer_status = "complete"
+    answer_status = (
+        "partial"
+        if str(state.get("team_completeness") or "") == "partial"
+        else "complete"
+    )
     try:
         from plugins.corpus.ledger import get_run_ledger, publish_boundary
 
@@ -366,13 +381,30 @@ async def agent_team_reporter(
             exc,
         )
 
+    prior_contract = state.get("report_contract") or {}
+    terminal = finalize_team_report(
+        report_md,
+        source="reporter_llm",
+        answer_status=answer_status,
+        stopped_by=str(state.get("stopped_by") or ""),
+        question=str(state.get("original_question") or state.get("current_query") or ""),
+        language=str(state.get("language") or ""),
+        wind_down={
+            **(prior_contract.get("wind_down") or {}),
+            **(state.get("team_wind_down") or {}),
+            "job_outcomes": prior_contract.get("job_outcomes") or
+                (state.get("team_wind_down") or {}).get("job_outcomes", []),
+        },
+        tasks=prior_contract.get("task_board") or [],
+    )
+    try:
+        _refresh_trace_terminal(state.get("metadata") or {}, terminal["final_answer"])
+    except Exception as exc:
+        logger.warning("agent_team_reporter: failed to refresh terminal trace (%s: %s)",
+                       type(exc).__name__, exc)
     return {
-        "final_answer": report_md,
-        "final_content": report_md,
-        "report_markdown": report_md,
-        "answer_status": answer_status,
-        "answer_sentinel": "",
-        "final_answer_source": "reporter_llm",
+        **terminal,
+        "report_markdown": terminal["final_answer"],
         "final_answer_rescued": False,
         "final_answer_rescue_mode": "",
     }

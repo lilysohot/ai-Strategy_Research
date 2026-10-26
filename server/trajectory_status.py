@@ -37,6 +37,7 @@ from enum import StrEnum
 from pathlib import Path
 
 from server.config import run_dir_for
+from server.trajectory_sources import TrajectorySource, discover_trajectory_sources
 
 # Kept in sync with the runtime writer (components/observers/trajectory.py).
 _TRAJECTORY_RELPATH = "run/agent/trajectories/react_agent.jsonl"
@@ -64,6 +65,9 @@ class TrajectoryInspection:
     corrupt_lines: int = 0
     # Why the state was chosen — shown to the user, so keep it human-readable.
     reason: str = ""
+    # Present only for multi-file Agent Team traces. Keeping the single-file
+    # payload unchanged preserves the original Web/API contract.
+    sources: tuple[dict[str, object], ...] = ()
 
     @property
     def readable(self) -> bool:
@@ -71,13 +75,16 @@ class TrajectoryInspection:
         return self.state is not TrajectoryCompleteness.UNAVAILABLE
 
     def as_dict(self) -> dict[str, object]:
-        return {
+        payload: dict[str, object] = {
             "state": str(self.state),
             "valid_lines": self.valid_lines,
             "trailing_partial_line": self.trailing_partial_line,
             "corrupt_lines": self.corrupt_lines,
             "reason": self.reason,
         }
+        if self.sources:
+            payload["sources"] = list(self.sources)
+        return payload
 
 
 def trajectory_path(run_id: str) -> Path:
@@ -85,29 +92,31 @@ def trajectory_path(run_id: str) -> Path:
     return run_dir_for(run_id) / _TRAJECTORY_RELPATH
 
 
-def inspect_trajectory(run_id: str) -> TrajectoryInspection:
-    """Classify one run's trajectory without trusting any in-memory state.
+def _inspect_path(path: Path) -> TrajectoryInspection:
+    """Inspect one JSONL stream without trusting any in-memory state.
 
     A half-written final line is reported as ``trailing_partial_line`` and never
     hides the records before it: every other line still parses, so a crash in the
     middle of a write costs the last record, not the whole file.
     """
-    path = trajectory_path(run_id)
     if not path.exists():
         return TrajectoryInspection(
-            TrajectoryCompleteness.UNAVAILABLE, reason="轨迹文件不存在（运行可能未产生输出）",
+            TrajectoryCompleteness.UNAVAILABLE,
+            reason="轨迹文件不存在（运行可能未产生输出）",
         )
 
     try:
         raw = path.read_text(encoding="utf-8")
     except OSError as exc:
         return TrajectoryInspection(
-            TrajectoryCompleteness.UNAVAILABLE, reason=f"轨迹文件不可读：{exc.strerror or exc}",
+            TrajectoryCompleteness.UNAVAILABLE,
+            reason=f"轨迹文件不可读：{exc.strerror or exc}",
         )
 
     if not raw.strip():
         return TrajectoryInspection(
-            TrajectoryCompleteness.UNAVAILABLE, reason="轨迹文件为空（运行尚未写入记录）",
+            TrajectoryCompleteness.UNAVAILABLE,
+            reason="轨迹文件为空（运行尚未写入记录）",
         )
 
     lines = raw.split("\n")
@@ -153,6 +162,68 @@ def inspect_trajectory(run_id: str) -> TrajectoryInspection:
         trailing_partial_line=trailing_partial,
         corrupt_lines=corrupt,
         reason=reason,
+    )
+
+
+def _source_payload(
+    source: TrajectorySource,
+    inspection: TrajectoryInspection,
+) -> dict[str, object]:
+    return {
+        "source": source.source,
+        "agent_id": source.agent_id,
+        "agent_kind": source.agent_kind,
+        **inspection.as_dict(),
+    }
+
+
+def inspect_trajectory(run_id: str) -> TrajectoryInspection:
+    """Classify the complete single- or multi-agent trajectory of one run.
+
+    The coordinator stream is authoritative for the product run's terminal
+    state. A member can be cancelled after its findings were collected without
+    turning an otherwise completed team run into a false platform failure; its
+    own partial state is still exposed in ``sources`` for audit.
+    """
+    run_dir = run_dir_for(run_id)
+    sources = discover_trajectory_sources(run_dir)
+    if not sources:
+        return _inspect_path(trajectory_path(run_id))
+    if len(sources) == 1 and sources[0].source == "react_agent":
+        return _inspect_path(sources[0].path)
+
+    inspected = [(source, _inspect_path(source.path)) for source in sources]
+    source_payloads = tuple(_source_payload(source, result) for source, result in inspected)
+    valid = sum(result.valid_lines for _, result in inspected)
+    corrupt = sum(result.corrupt_lines for _, result in inspected)
+    trailing = any(result.trailing_partial_line for _, result in inspected)
+    authoritative = next(
+        ((source, result) for source, result in inspected if source.authoritative),
+        None,
+    )
+
+    if authoritative is None:
+        if valid:
+            state = TrajectoryCompleteness.PARTIAL
+            reason = "团队轨迹缺少主 Agent 记录；已有成员记录仍可读取"
+        else:
+            state = TrajectoryCompleteness.UNAVAILABLE
+            reason = "团队轨迹中没有可解析的记录"
+    else:
+        _source, main_result = authoritative
+        state = main_result.state
+        reason = main_result.reason
+        if state is TrajectoryCompleteness.UNAVAILABLE and valid:
+            state = TrajectoryCompleteness.PARTIAL
+            reason = "主 Agent 轨迹不可读；已有团队成员记录仍可读取"
+
+    return TrajectoryInspection(
+        state=state,
+        valid_lines=valid,
+        trailing_partial_line=trailing,
+        corrupt_lines=corrupt,
+        reason=reason,
+        sources=source_payloads,
     )
 
 
