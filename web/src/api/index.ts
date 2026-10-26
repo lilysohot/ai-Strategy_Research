@@ -20,6 +20,9 @@ import type {
   ArtifactPreview,
   BusinessEventListResponse,
   BusinessOperationResponse,
+  BuySellPlanListResponse,
+  CapitalPlanResponse,
+  CapitalPlanRevisionsResponse,
   InputRequest,
   InputRequestAnswerResponse,
   InputRequestListResponse,
@@ -424,6 +427,99 @@ export const plans = {
       method: 'POST',
       headers: IDEMPOTENCY_HEADER(idempotencyKey),
     })
+  },
+}
+
+/**
+ * 规划资金：会话 1:1，只有累加与重置两种写入语义，不接受覆盖式更新。
+ */
+export const capitalPlans = {
+  get(researchId: string) {
+    return request<CapitalPlanResponse>(
+      `/business/sessions/${encodeURIComponent(researchId)}/capital-plan`,
+    )
+  },
+
+  create(researchId: string, body: {
+    declared: Record<string, unknown>
+  }, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(
+      `/business/sessions/${encodeURIComponent(researchId)}/capital-plan`,
+      {
+        method: 'POST',
+        body: { ...body, source_kind: 'form' },
+        headers: IDEMPOTENCY_HEADER(idempotencyKey),
+      },
+    )
+  },
+
+  allocate(id: string, body: {
+    allocation_delta: string
+    expected_revision: number
+  }, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(
+      `/business/capital-plans/${encodeURIComponent(id)}/allocations`,
+      { method: 'POST', body, headers: IDEMPOTENCY_HEADER(idempotencyKey) },
+    )
+  },
+
+  reset(id: string, body: {
+    allocated_capital: string
+    expected_revision: number
+  }, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(
+      `/business/capital-plans/${encodeURIComponent(id)}/reset`,
+      { method: 'POST', body, headers: IDEMPOTENCY_HEADER(idempotencyKey) },
+    )
+  },
+
+  revisions(id: string, params?: { limit?: number; offset?: number }) {
+    return request<CapitalPlanRevisionsResponse>(
+      `/business/capital-plans/${encodeURIComponent(id)}/revisions`,
+      { query: params },
+    )
+  },
+}
+
+/**
+ * 买卖计划：规划资金 1:N，每行是一条实际买入/卖出价格。
+ */
+export const buySellPlans = {
+  list(capitalPlanId: string, params?: { limit?: number; offset?: number }) {
+    return request<BuySellPlanListResponse>(
+      `/business/capital-plans/${encodeURIComponent(capitalPlanId)}/buy-sell-plans`,
+      { query: params },
+    )
+  },
+
+  create(capitalPlanId: string, body: {
+    declared: Record<string, unknown>
+  }, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(
+      `/business/capital-plans/${encodeURIComponent(capitalPlanId)}/buy-sell-plans`,
+      {
+        method: 'POST',
+        body: { ...body, source_kind: 'form' },
+        headers: IDEMPOTENCY_HEADER(idempotencyKey),
+      },
+    )
+  },
+
+  update(id: string, body: {
+    declared: Record<string, unknown>
+    expected_revision: number
+  }, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(
+      `/business/buy-sell-plans/${encodeURIComponent(id)}`,
+      { method: 'PATCH', body, headers: IDEMPOTENCY_HEADER(idempotencyKey) },
+    )
+  },
+
+  archive(id: string, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(
+      `/business/buy-sell-plans/${encodeURIComponent(id)}/archive`,
+      { method: 'POST', headers: IDEMPOTENCY_HEADER(idempotencyKey) },
+    )
   },
 }
 

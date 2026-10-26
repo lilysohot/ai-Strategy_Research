@@ -3,7 +3,11 @@ import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 
 import { runs as runsApi } from '@/api'
-import type { SessionPlanInput, SessionPlanPreview } from '@/business-ui'
+import type {
+  SessionBuySellPlanInput,
+  SessionPlanInput,
+  SessionPlanPreview,
+} from '@/business-ui'
 import { useBusinessStore } from '@/stores/business'
 
 const props = defineProps<{
@@ -30,15 +34,50 @@ const draft = reactive<SessionPlanInput>({
   isPrimary: false,
 })
 
+const business = useBusinessStore()
+
 const currentPlans = computed(() => props.plans.filter((plan) => plan.sessionId === props.sessionId))
 const canSave = computed(() => !!props.sessionId && !!draft.name.trim() && !!draft.symbol.trim())
 const saving = ref(false)
 const saveError = ref('')
 
-watch(() => props.sessionId, () => resetDraft(), { flush: 'sync' })
+// ——— 规划资金（会话 1:1）：只累加或重置，不做覆盖式更新 ———
+const capitalDraft = reactive({
+  amount: '',
+  currency: 'CNY',
+  delta: '',
+  resetAmount: '',
+})
+const capitalBusy = ref(false)
+const capitalError = ref('')
+
+// ——— 实际买卖价格（规划资金 1:N）———
+const buySellDraft = reactive<SessionBuySellPlanInput>({
+  symbol: '',
+  market: 'CN',
+  side: 'buy',
+  price: '',
+  quantity: '',
+  tradedAt: '',
+  currency: 'CNY',
+})
+const buySellBusy = ref(false)
+const buySellError = ref('')
+
+watch(() => props.sessionId, () => {
+  resetDraft()
+  resetCapitalDraft()
+  resetBuySellDraft()
+}, { flush: 'sync' })
 watch(() => props.modelValue, (open) => {
-  if (!open) resetDraft()
-  else draft.isPrimary = currentPlans.value.length === 0
+  if (!open) {
+    resetDraft()
+    resetCapitalDraft()
+    resetBuySellDraft()
+  } else {
+    draft.isPrimary = currentPlans.value.length === 0
+    if (props.sessionId) void business.loadCapitalPlan(props.sessionId)
+  }
 })
 watch(draft, () => emit('dirtyChange', isDirty()), { deep: true, flush: 'sync' })
 function beforeUnload(event: BeforeUnloadEvent): void {
@@ -54,7 +93,131 @@ onBeforeUnmount(() => {
 
 function isDirty(): boolean {
   return !!(draft.name || draft.symbol || draft.allocatedCapital
+    || capitalDraft.amount || capitalDraft.delta || capitalDraft.resetAmount
+    || buySellDraft.symbol || buySellDraft.price
     || draft.market !== 'CN' || draft.direction !== 'buy')
+}
+
+function resetCapitalDraft(): void {
+  capitalError.value = ''
+  Object.assign(capitalDraft, { amount: '', delta: '', resetAmount: '' })
+}
+
+function resetBuySellDraft(): void {
+  buySellError.value = ''
+  Object.assign(buySellDraft, {
+    symbol: '',
+    market: 'CN',
+    side: 'buy',
+    price: '',
+    quantity: '',
+    tradedAt: '',
+    currency: 'CNY',
+  } satisfies SessionBuySellPlanInput)
+}
+
+function decimalOk(value: string): boolean {
+  return /^(?:0|[1-9]\d*)(?:\.\d+)?$/.test(value.trim())
+}
+
+/** 创建会话唯一的规划资金；已存在时服务端拒绝，不会覆盖原值。 */
+async function createCapitalPlan(): Promise<void> {
+  if (capitalBusy.value || !props.sessionId) return
+  capitalError.value = ''
+  if (!decimalOk(capitalDraft.amount)) {
+    capitalError.value = '请输入非负十进制金额'
+    return
+  }
+  capitalBusy.value = true
+  try {
+    await business.createCapitalPlan(props.sessionId, {
+      allocatedCapital: capitalDraft.amount,
+      currency: capitalDraft.currency,
+    })
+    capitalDraft.amount = ''
+    ElMessage.success('规划资金已创建')
+  } catch (err) {
+    capitalError.value = err instanceof Error ? err.message : '保存失败，请重试'
+  } finally {
+    capitalBusy.value = false
+  }
+}
+
+/** 在现有累计值上增加分配，而不是覆盖成新总额。 */
+async function allocateCapital(): Promise<void> {
+  if (capitalBusy.value) return
+  capitalError.value = ''
+  if (!decimalOk(capitalDraft.delta) || Number(capitalDraft.delta) <= 0) {
+    capitalError.value = '请输入大于 0 的累加金额'
+    return
+  }
+  capitalBusy.value = true
+  try {
+    await business.allocateCapital(capitalDraft.delta)
+    capitalDraft.delta = ''
+    ElMessage.success('已累加分配资金')
+  } catch (err) {
+    capitalError.value = err instanceof Error ? err.message : '累加失败，请重试'
+  } finally {
+    capitalBusy.value = false
+  }
+}
+
+/** 重置为指定总额；与累加共用版本流，历史仍可追溯。 */
+async function resetCapital(): Promise<void> {
+  if (capitalBusy.value) return
+  capitalError.value = ''
+  if (!decimalOk(capitalDraft.resetAmount)) {
+    capitalError.value = '请输入非负十进制金额'
+    return
+  }
+  if (!window.confirm('重置会用新总额覆盖当前累计值（历史版本保留）。是否继续？')) return
+  capitalBusy.value = true
+  try {
+    await business.resetCapital(capitalDraft.resetAmount)
+    capitalDraft.resetAmount = ''
+    ElMessage.success('规划资金已重置')
+  } catch (err) {
+    capitalError.value = err instanceof Error ? err.message : '重置失败，请重试'
+  } finally {
+    capitalBusy.value = false
+  }
+}
+
+async function saveBuySellPlan(): Promise<void> {
+  if (buySellBusy.value) return
+  buySellError.value = ''
+  if (!buySellDraft.symbol.trim() || !buySellDraft.price.trim()) {
+    buySellError.value = '请填写标的与实际买卖价格'
+    return
+  }
+  if (!decimalOk(buySellDraft.price)) {
+    buySellError.value = '价格必须是十进制文本，不使用千分位或科学计数法'
+    return
+  }
+  buySellBusy.value = true
+  try {
+    await business.createBuySellPlan(buySellDraft)
+    resetBuySellDraft()
+    ElMessage.success('实际买卖价格已保存')
+  } catch (err) {
+    buySellError.value = err instanceof Error ? err.message : '保存失败，请重试'
+  } finally {
+    buySellBusy.value = false
+  }
+}
+
+async function archiveBuySellPlan(id: string): Promise<void> {
+  if (buySellBusy.value) return
+  buySellError.value = ''
+  buySellBusy.value = true
+  try {
+    await business.archiveBuySellPlan(id)
+  } catch (err) {
+    buySellError.value = err instanceof Error ? err.message : '归档失败，请重试'
+  } finally {
+    buySellBusy.value = false
+  }
 }
 
 function resetDraft(): void {
@@ -143,14 +306,13 @@ async function submitTrade(): Promise<void> {
     tradeError.value = '请填写成交量、实际成交价与成交时间'
     return
   }
-  const store = useBusinessStore()
-  const accountId = store.link?.account_id ?? null
-  const planId = store.link?.primary_plan_id ?? null
+  const accountId = business.link?.account_id ?? null
+  const planId = business.link?.primary_plan_id ?? null
   if (!props.sessionId || !accountId || !planId) {
     tradeError.value = '请先把主账户与当前主计划绑定到本会话'
     return
   }
-  const plan = store.plans.find((item) => item.id === planId)
+  const plan = business.plans.find((item) => item.id === planId)
   const symbol = plan?.values?.symbol ?? ''
   const currency = plan?.values?.currency ?? 'CNY'
   const sessionId = props.sessionId
@@ -221,9 +383,6 @@ defineExpose({ resetDraft })
             <strong>{{ plan.name }}</strong>
             <span>{{ plan.symbol }} · {{ marketLabel(plan.market) }} · {{ plan.direction === 'buy' ? '买入' : '卖出' }}</span>
           </div>
-          <div class="plan-prices">
-            <span>规划资金 {{ plan.allocatedCapital || '待补充' }}</span>
-          </div>
           <span v-if="plan.isPrimary" class="primary-label">当前主计划</span>
           <span v-else class="draft-label">草稿</span>
         </article>
@@ -262,14 +421,6 @@ defineExpose({ resetDraft })
             :options="[{ label: '买入', value: 'buy' }, { label: '卖出', value: 'sell' }]"
           />
         </label>
-        <label class="field">
-          <span>本标的规划资金</span>
-          <el-input
-            v-model="draft.allocatedCapital"
-            inputmode="decimal"
-            placeholder="从主账户可用资金中划出，不得超过可用资金"
-          />
-        </label>
         <label class="primary-choice field--wide">
           <el-switch v-model="draft.isPrimary" />
           <span>
@@ -280,6 +431,135 @@ defineExpose({ resetDraft })
       </div>
       </el-form>
       <p v-if="saveError" class="trade-error" role="alert">{{ saveError }}；填写内容已保留。</p>
+    </section>
+
+    <section class="capital-plan" aria-labelledby="session-capital-plan-title">
+      <header>
+        <span>规划资金</span>
+        <h3 id="session-capital-plan-title">本会话的规划资金</h3>
+        <p>一个会话只有一条规划资金；多次分配按累加记录，不会互相覆盖。</p>
+      </header>
+
+      <div v-if="business.capitalPlanPreview" class="capital-current">
+        <div class="capital-amount">
+          <strong>{{ business.capitalPlanPreview.allocatedCapital || '待补充' }}</strong>
+          <span>{{ business.capitalPlanPreview.currency || 'CNY' }} · 版本 {{ business.capitalPlanPreview.revision }}</span>
+        </div>
+        <div class="capital-actions">
+          <label class="field">
+            <span>增加分配</span>
+            <el-input v-model="capitalDraft.delta" inputmode="decimal" placeholder="在现值上累加，例如 5000" />
+          </label>
+          <el-button :loading="capitalBusy" @click="allocateCapital">累加</el-button>
+          <label class="field">
+            <span>重置为</span>
+            <el-input v-model="capitalDraft.resetAmount" inputmode="decimal" placeholder="新的规划资金总额" />
+          </label>
+          <el-button :loading="capitalBusy" @click="resetCapital">重置</el-button>
+        </div>
+      </div>
+      <div v-else class="capital-create">
+        <label class="field">
+          <span>规划资金</span>
+          <el-input v-model="capitalDraft.amount" inputmode="decimal" placeholder="本会话从账户可用资金中划出的金额" />
+        </label>
+        <label class="field">
+          <span>币种</span>
+          <el-select v-model="capitalDraft.currency">
+            <el-option label="人民币 CNY" value="CNY" />
+            <el-option label="港币 HKD" value="HKD" />
+            <el-option label="美元 USD" value="USD" />
+          </el-select>
+        </label>
+        <el-button type="primary" :loading="capitalBusy" @click="createCapitalPlan">创建规划资金</el-button>
+      </div>
+      <p v-if="capitalError" class="trade-error" role="alert">{{ capitalError }}</p>
+    </section>
+
+    <section class="buy-sell-plans" aria-labelledby="session-buy-sell-title">
+      <header>
+        <h3 id="session-buy-sell-title">实际买卖价格</h3>
+        <span>{{ business.buySellPlanPreviews.length }} 笔 · 与规划资金一对多</span>
+      </header>
+
+      <div v-if="business.buySellPlanPreviews.length" class="plan-stack">
+        <article
+          v-for="entry in business.buySellPlanPreviews"
+          :key="entry.id"
+          class="plan-row"
+          :class="{ 'is-archived': entry.archived }"
+        >
+          <div class="plan-identity">
+            <strong>{{ entry.symbol }} · {{ entry.side === 'buy' ? '买入' : '卖出' }}</strong>
+            <span>{{ entry.price }} {{ entry.currency }}<template v-if="entry.quantity"> · {{ entry.quantity }}</template></span>
+          </div>
+          <span class="draft-label">{{ entry.tradedAt || '未填时间' }}</span>
+          <el-button
+            v-if="!entry.archived"
+            size="small"
+            :disabled="buySellBusy"
+            @click="archiveBuySellPlan(entry.id)"
+          >
+            归档
+          </el-button>
+          <span v-else class="draft-label">已归档</span>
+        </article>
+      </div>
+      <div v-else class="plan-empty">
+        还没有实际买卖价格。{{ business.capitalPlanPreview ? '可在下方登记每笔买入/卖出。' : '请先创建规划资金。' }}
+      </div>
+
+      <div v-if="business.capitalPlanPreview" class="plan-form buy-sell-form">
+        <label class="field">
+          <span>标的</span>
+          <el-input v-model="buySellDraft.symbol" placeholder="代码或标准标识" />
+        </label>
+        <label class="field">
+          <span>市场</span>
+          <el-select v-model="buySellDraft.market">
+            <el-option label="中国内地" value="CN" />
+            <el-option label="香港" value="HK" />
+            <el-option label="美国" value="US" />
+          </el-select>
+        </label>
+        <label class="field">
+          <span>方向</span>
+          <el-segmented
+            v-model="buySellDraft.side"
+            :options="[{ label: '买入', value: 'buy' }, { label: '卖出', value: 'sell' }]"
+          />
+        </label>
+        <label class="field">
+          <span>实际价格 <em>必填</em></span>
+          <el-input v-model="buySellDraft.price" inputmode="decimal" placeholder="实际成交价，不得用现价代替" />
+        </label>
+        <label class="field">
+          <span>数量</span>
+          <el-input v-model="buySellDraft.quantity" inputmode="decimal" placeholder="股数/份数，可留空" />
+        </label>
+        <label class="field">
+          <span>成交时间</span>
+          <el-date-picker
+            v-model="buySellDraft.tradedAt"
+            type="datetime"
+            format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY-MM-DDTHH:mm:ssZ"
+            placeholder="可留空"
+          />
+        </label>
+        <label class="field">
+          <span>币种</span>
+          <el-select v-model="buySellDraft.currency">
+            <el-option label="人民币 CNY" value="CNY" />
+            <el-option label="港币 HKD" value="HKD" />
+            <el-option label="美元 USD" value="USD" />
+          </el-select>
+        </label>
+        <div class="field buy-sell-submit">
+          <el-button type="primary" :loading="buySellBusy" @click="saveBuySellPlan">保存实际买卖价格</el-button>
+        </div>
+      </div>
+      <p v-if="buySellError" class="trade-error" role="alert">{{ buySellError }}</p>
     </section>
 
     <section class="trade-fill" aria-labelledby="session-trade-fill-title">
@@ -360,6 +640,20 @@ defineExpose({ resetDraft })
 .new-plan { padding-top: 22px; }
 .new-plan > header { margin-bottom: 14px; }
 .new-plan h3 { margin-top: 3px; }
+.capital-plan, .buy-sell-plans { padding-top: 22px; margin-top: 22px; border-top: 1px solid var(--line); }
+.capital-plan > header, .buy-sell-plans > header { margin-bottom: 14px; }
+.capital-plan h3, .buy-sell-plans h3 { margin: 3px 0; font-size: 15px; }
+.capital-plan > header p { margin: 0; color: var(--muted); font-size: 12px; }
+.buy-sell-plans > header span { color: var(--muted); font-size: 12px; }
+.capital-current { display: flex; flex-direction: column; gap: 14px; }
+.capital-amount { display: flex; align-items: baseline; gap: 10px; }
+.capital-amount strong { font-family: 'Songti SC', 'Source Han Serif SC', serif; font-size: 26px; }
+.capital-amount span { color: var(--muted); font-size: 12px; }
+.capital-actions, .capital-create { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) auto; gap: 12px; align-items: end; }
+.capital-create { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto; }
+.buy-sell-form { margin-top: 14px; }
+.buy-sell-submit { justify-content: flex-end; }
+.plan-row.is-archived { opacity: .55; }
 .plan-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; }
 .field { display: flex; min-width: 0; flex-direction: column; gap: 7px; }
 .field--wide { grid-column: 1 / -1; }
@@ -376,6 +670,7 @@ defineExpose({ resetDraft })
 .dialog-actions > span { margin-right: auto; }
 @media (max-width: 640px) {
   .plan-form { grid-template-columns: 1fr; }
+  .capital-actions, .capital-create { grid-template-columns: 1fr; }
   .field--wide { grid-column: auto; }
   .plan-row { grid-template-columns: minmax(0, 1fr) auto; }
   .plan-prices { grid-column: 1 / -1; flex-direction: row; gap: 12px; }

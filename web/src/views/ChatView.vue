@@ -688,7 +688,11 @@ async function saveSessionPlan(input: SessionPlanInput): Promise<void> {
   await planWriter.save(sessionId, input)
   // Only a confirmed save clears the dialog. Failures propagate to its inline error.
   if (sessions.activeId !== sessionId) return
-  await Promise.all([business.loadPlans(sessionId), business.loadLink(sessionId)])
+  await Promise.all([
+    business.loadPlans(sessionId),
+    business.loadLink(sessionId),
+    business.loadCapitalPlan(sessionId),
+  ])
   planWriter.reset()
   ElMessage.success(input.isPrimary ? '计划已创建并设为本会话主计划' : '计划已添加到当前会话')
   const continuation = pendingPlanContinuation.value

@@ -1,5 +1,61 @@
 # 原生正文混合检索正式发布
 
+## 2026-10-26 新增三份研报：库与配置完成，Web 启动待业务库修复
+
+用户将三份 PDF 放入 `data/corpus-incoming/20261026/`，按约定的正式发布流程处理。
+三份均已通过正常 `check_build_publishable → publish_build` 发布到 `postgres`，
+原始文件按 SHA-256 归档至 `data/corpus-archive`；原有 24 条发布指针及代次未变。
+当前 native 允许范围只增加这三份：23 → 26，未把范围外的其他已发布资料顺带加入。
+
+| 新资料 | 页数 | 构建块数 | 纳入 native 的块数 |
+|---|---:|---:|---:|
+| NOW 2026 财年第三季度前瞻 | 9 | 42 | 42 |
+| M365 Copilot 销售进展与展望 | 22 | 70 | 69 |
+| Neocloud 融资等主题周报 | 7 | 49 | 49 |
+
+按外部订阅研究如实分类，不伪装成券商报告。7 处较大图像提取缺口通过绑定确切
+build 的可用文字发布记录保留，另有 6 处 small-image 记录；未做 OCR，不声称图表
+数字或全文已完整识别。M365 第 20 页主要是图片财务表，仍属于明确缺失的覆盖范围。
+1 个表格块按原 native 策略排除。
+
+新增 160 个上下文说明全部通过校验，15 次生成请求，新增说明的供应商报告 token
+合计 233,215（不是累计历史 token）。一条 ServiceNow 向量请求传输结果不确定，
+保留初次状态后只对确切输入恢复一次，attempts=2，60 秒超时；成功后沿用相同 profile。
+未修改线上查询的 15 秒超时。最终包有 745 块、735 个唯一向量输入，全量就绪；
+原有 585 个 live 块及旧包 577 个向量逐项一致。
+
+新包：`data/corpus-native-context/20261026-new3/manifest.json`，已写入 `.env` 的
+`CORPUS_NATIVE_INDEX`。其他检索开关、排序、来源过滤和片段额度不变。
+正式库备份位于 `data/corpus-native-context/20261026-new3-backup/postgres-before.dump`，
+已核对哈希并确认 pg_restore 可读取目录；这不是完整恢复演练。
+
+验收：三份新报告各一题，加工业富联、茅台两题，共 5 个真实查询全部 hybrid。
+35 个返回节选用自己的 eref 调用 fetch，逐字比对及 manifest 校验全部通过。
+临时 API 上同样 5 个认证 HTTP search、35 个短引用补读均为 200；10 月 24 日的
+历史短引用也为 200。实际工具 search 约 2.2–2.7 秒，是这次样本，不是延迟上界。
+preflight、两阶段 import smoke（435/435、484/484）、符号检查（533 文件）通过。
+未另跑完整模型研究任务，也未修改生产算法。
+
+**Web 服务尚未正式恢复。** 切换前没有 8000 端口监听，旧日志显示正常退出，
+queued/running 为 0。临时启动验证后 `/healthz=200`，但 `/readyz=503 schema_behind`：
+业务库 `apodex` 的版本是 `0022_run_context_sources`，当前代码要求
+`0023_capital_trade_plans`；观察到四张新表已存在且为空，缺少迁移要求的历史保护
+触发器，旧投资计划有 4 条。不能直接改版本号，也不能将此描述为研报入库失败。
+
+用户明确选择“先完成研报配置，业务库另行处理”。因此没有执行 0023 迁移或投资
+计划回填；已正常关闭本轮临时 API，保留新检索包配置。后续先核对并修复业务库
+结构/版本，再启动正常 Web 服务并确认 readyz=200；不要在四张表已存在时盲目
+重复运行原建表迁移。10 月 24 日的旧回退脚本只用于其历史版本，勿当作本批回退。
+
+执行证据：[输入与页数](../.scratch/corpus-new3-20261026/inventory.json)、
+[构建与发布](../.scratch/corpus-new3-20261026/build-results.json)、
+[检索包](../.scratch/corpus-new3-20261026/pack.json)、
+[工具验收](../.scratch/corpus-new3-20261026/verification.json)、
+[HTTP 与最终状态](../.scratch/corpus-new3-20261026/runtime.json)、
+[业务库阻塞详情](../.scratch/corpus-new3-20261026/web-blocker.json)。
+
+## 2026-10-24 返回结构与容量优化（历史）
+
 2026-10-24 后续更新：Agent search 默认输出已升级为 v2 原文＋持久化短引用，
 并正常重启现有 API。旧 v1 消息/句柄继续兼容。随后完成短引用补读实测，
 将每块正文额度从 600 提高到 1000 字，每个 hit 默认仍最多展示两块；检索排序
@@ -32,7 +88,7 @@
 | `CORPUS_NATIVE_RETRIEVAL` | `release` |
 | `CORPUS_NATIVE_TARGET_DB` | `postgres` |
 | `CORPUS_VECTOR_TARGET_DB` | `postgres` |
-| `CORPUS_NATIVE_INDEX` | `/home/administrator/FrontierAgent/data/corpus-native-context/20261023/manifest.json` |
+| `CORPUS_NATIVE_INDEX` | `/home/administrator/FrontierAgent/data/corpus-native-context/20261026-new3/manifest.json` |
 | `CORPUS_VECTOR_INPUT_VARIANT` | `contextual-note-v1` |
 | `CORPUS_NATIVE_SNIPPET_BLOCKS` | `2` |
 | `CORPUS_VECTOR_TIMEOUT_SECONDS` | `15` |
@@ -43,7 +99,10 @@
 
 三个目标库设置必须匹配实际连接的数据库。当前范围包使用 `native-evidence-contextual-1`，其向量输入必须匹配 `contextual-note-v1`；原包 `native-evidence-release-1` 保留。旧试验包仍只允许 `vector_pilot_*`。业务库 `apodex` 和 PostgreSQL 模板库不能成为 native 检索目标。
 
-当前 search 仅将 `evidence_contract=native-search-evidence-v1` 的 `evidence_spans` 标记区间作为可引用原文。实际送达且足够支撑结论时无需例行 fetch；缺失限定条件、解释或其他正文时，使用同一命中的 `doc_id` 与对应 `context_locators` 补读。说明仅参与索引，不能当作原文证据。结果压缩仍需保留完整证据映射；摘要不能替代原文凭证。
+当前 Agent search 默认使用 `native-search-evidence-v2`：实际送达的 `excerpts[].text`
+可作原文证据，补读使用同一 `doc_id` 与该节选的 `ref`；其他候选通过 `scope_ref`
+展开。后台持久收据保留原句柄、范围及哈希。历史 v1 的 `evidence_spans` 继续支持。
+说明仅参与索引，摘要不能替代原文凭证。
 
 仅回退本次上下文配置，可运行 `PYTHONPATH=. uv run --no-sync python .scratch/corpus-production-release-20261024/runtime.py rollback`：恢复切换前的三个配置项并正常重启 API，保留本轮代码和资料。脚本要求当前 API 就绪且没有 queued/running 用户任务。此操作未在正式环境来回演练；不是代码版本回退。
 
@@ -62,16 +121,16 @@
 
 ## 后续更新
 
-既有 23 个允许来源发布新 build 后，检索重新读取 PG 活动版本。缺少向量时先降级，手动同步后自动恢复混合检索：
+既有 26 个允许来源发布新 build 后，检索重新读取 PG 活动版本。缺少向量时先降级，手动同步后自动恢复混合检索：
 
 ```bash
 uv run python -m plugins.corpus.retrieval.cli native-sync \
   --deployment release \
-  --native-index data/corpus-native-context/20261023/manifest.json \
+  --native-index data/corpus-native-context/20261026-new3/manifest.json \
   --max-requests 0
 ```
 
-`--max-requests 0` 仅检查及复用缓存；需要新向量时显式设置本次请求上限。新来源需要更新允许范围包，不会因入库自动加入当前 23 来源的策略。失败或结果不确定的向量任务不自动重试。
+`--max-requests 0` 仅检查及复用缓存；需要新向量时显式设置本次请求上限。新来源需要更新允许范围包，不会因入库自动加入当前 26 来源的策略。失败或结果不确定的向量任务不自动重试。
 
 上下文说明绑定 build/chunk。新 build 缺少对应说明时不会借用旧 build 的说明；需要按 [上下文包流程](plan/corpus-contextual-vector-retrieval-pilot.md) 生成说明并构建新的版本化包，再校验切换。仅同步向量不会自动补出说明。
 

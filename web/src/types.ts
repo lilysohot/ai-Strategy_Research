@@ -273,6 +273,67 @@ export interface PlanRevisionsResponse {
   revisions: PlanRevision[]
 }
 
+/** 规划资金：一个会话至多一条（1:1），只保存资金分配。 */
+export interface CapitalPlanValues {
+  allocated_capital: string | null
+  currency: string | null
+  as_of: string | null
+}
+
+export interface CapitalPlan {
+  capital_plan_id: string
+  research_id: string
+  account_id: string | null
+  revision: number
+  record_state: string
+  values: CapitalPlanValues
+}
+
+export interface CapitalPlanResponse {
+  capital_plan: CapitalPlan | null
+}
+
+export interface CapitalPlanRevision {
+  revision: number
+  op_type: 'initial' | 'alloc' | 'reset' | string
+  allocation_delta: string | null
+  allocated_capital: string | null
+  currency: string | null
+  record_state: string | null
+  source_kind: string | null
+  created_at: string | null
+}
+
+export interface CapitalPlanRevisionsResponse {
+  revisions: CapitalPlanRevision[]
+}
+
+/** 买卖计划 = 实际买卖价格；一个规划资金下可有多个（1:N）。 */
+export interface BuySellPlanValues {
+  symbol: string | null
+  market: string | null
+  asset_type: string | null
+  side: TradeSide | null
+  price: string | null
+  quantity: string | null
+  traded_at: string | null
+  currency: string | null
+}
+
+export interface BuySellPlan {
+  buy_sell_plan_id: string
+  capital_plan_id: string
+  research_id: string
+  status: string
+  archived: boolean
+  revision: number
+  values: BuySellPlanValues
+}
+
+export interface BuySellPlanListResponse {
+  buy_sell_plans: BuySellPlan[]
+}
+
 export interface ResearchLink {
   research_id: string
   account_id: string | null

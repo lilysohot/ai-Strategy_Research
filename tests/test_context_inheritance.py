@@ -664,15 +664,15 @@ def test_the_session_store_revision_is_wired_into_the_graph() -> None:
     carrier_migration = (
         repo_root / "server/alembic/versions/0019_session_conversations.py"
     ).read_text(encoding="utf-8")
-    head_migration = (repo_root / "server/alembic/versions/0022_run_context_sources.py").read_text(
+    head_migration = (repo_root / "server/alembic/versions/0023_capital_trade_plans.py").read_text(
         encoding="utf-8"
     )
 
-    assert expected_heads() == ("0022_run_context_sources",)
+    assert expected_heads() == ("0023_capital_trade_plans",)
     assert SessionConversation.__tablename__ == "session_conversations"
     assert 'down_revision = "0018_plan_capital_terms"' in carrier_migration
     assert f'"{SessionConversation.__tablename__}"' in carrier_migration
-    assert 'down_revision = "0021_monitor_streams"' in head_migration
+    assert 'down_revision = "0022_run_context_sources"' in head_migration
 
 
 # ── writing the carrier: the parent's ingest (issue 01 §11.3) ────────

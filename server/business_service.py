@@ -88,6 +88,12 @@ PLAN_FIELDS = frozenset(
 TRADE_FIELDS = frozenset(
     {"symbol", "market", "side", "quantity", "price", "currency", "fees", "traded_at"}
 )
+#: 规划资金（会话 1:1）：只保存资金分配，不保存任何价格。
+CAPITAL_PLAN_FIELDS = frozenset({"allocated_capital", "currency", "as_of"})
+#: 买卖计划（规划资金 1:N）= 实际买卖价格：每笔买入/卖出一条。
+BUY_SELL_PLAN_FIELDS = frozenset(
+    {"symbol", "market", "asset_type", "side", "price", "quantity", "traded_at", "currency"}
+)
 
 #: 需要十进制校验并按精确数值存储的字段。
 NUMERIC_FIELDS = frozenset(
@@ -122,6 +128,8 @@ GROUP_FIELDS: dict[str, frozenset[str]] = {
     "account": ACCOUNT_FIELDS,
     "plan": PLAN_FIELDS,
     "trade": TRADE_FIELDS,
+    "capital_plan": CAPITAL_PLAN_FIELDS,
+    "buy_sell_plan": BUY_SELL_PLAN_FIELDS,
 }
 
 _ACCOUNT_VALUE_COLUMNS = (
@@ -152,10 +160,23 @@ _PLAN_VALUE_COLUMNS = (
     "as_of",
 )
 _TRADE_COLUMNS = ("symbol", "market", "side", "quantity", "price", "currency", "fees", "traded_at")
+_CAPITAL_PLAN_VALUE_COLUMNS = ("allocated_capital", "currency", "as_of")
+_BUY_SELL_PLAN_VALUE_COLUMNS = (
+    "symbol",
+    "market",
+    "asset_type",
+    "side",
+    "price",
+    "quantity",
+    "traded_at",
+    "currency",
+)
 
 #: 供快照/解析器复用的版本值列名（见 :mod:`server.investment_snapshot`）。
 ACCOUNT_VALUE_COLUMNS = _ACCOUNT_VALUE_COLUMNS
 PLAN_VALUE_COLUMNS = _PLAN_VALUE_COLUMNS
+CAPITAL_PLAN_VALUE_COLUMNS = _CAPITAL_PLAN_VALUE_COLUMNS
+BUY_SELL_PLAN_VALUE_COLUMNS = _BUY_SELL_PLAN_VALUE_COLUMNS
 
 
 # ——— 错误模型 ——————————————————————————————————————————————————————————
@@ -1216,6 +1237,700 @@ async def update_plan(
         session,
         user_id=user_id,
         scope="plan.update",
+        idempotency_key=idempotency_key,
+        payload=payload,
+        execute=_execute,
+    )
+
+
+# ——— 规划资金（会话 1:1）与买卖计划（规划资金 1:N） ————————————————————————
+
+
+def _parse_decimal_input(raw: Any, field: str) -> Decimal:
+    """解析直接提交的金额（累加增量/重置值），与字段准入同一套十进制口径。"""
+    if not isinstance(raw, str):
+        raise ValidationError(
+            "数值必须作为十进制字符串传输", fields={field: "请以字符串形式提交，不要使用 Number"}
+        )
+    text = raw.strip()
+    if not DECIMAL_TEXT.match(text):
+        raise ValidationError(
+            "数值格式不正确", fields={field: "请填写非负十进制文本，不使用千分位或科学计数法"}
+        )
+    if text.startswith("-"):
+        raise ValidationError("金额不接受负数", fields={field: "请填写非负数值"})
+    return Decimal(text)
+
+
+def _decimal_text(value: Decimal | None) -> str | None:
+    return None if value is None else str(value)
+
+
+def _json_safe_values(values: dict[str, Any]) -> dict[str, Any]:
+    """版本值转成可写入幂等台账 JSON 的形式（Decimal/时间不能直接序列化）。"""
+    out: dict[str, Any] = {}
+    for name, value in values.items():
+        if isinstance(value, Decimal):
+            out[name] = str(value)
+        elif isinstance(value, datetime):
+            out[name] = value.isoformat()
+        else:
+            out[name] = value
+    return out
+
+
+async def get_capital_plan(
+    session: AsyncSession, *, user_id: Any, research_id: Any
+) -> dict[str, Any] | None:
+    """读取会话的规划资金（1:1）；没有则返回 None，由调用方决定 404 还是空态。"""
+    plan = (
+        await session.execute(
+            select(store.CapitalPlan).where(
+                store.CapitalPlan.research_id == research_id,
+                store.CapitalPlan.user_id == user_id,
+            )
+        )
+    ).scalar_one_or_none()
+    if plan is None:
+        return None
+    values = await _load_revision_values(
+        session, store.CapitalPlanRevision, "capital_plan_id", plan.id, plan.current_revision
+    )
+    return {
+        "capital_plan_id": str(plan.id),
+        "research_id": str(plan.research_id),
+        "account_id": str(plan.account_id) if plan.account_id else None,
+        "revision": plan.current_revision,
+        "record_state": plan.record_state,
+        "values": {
+            name: values.get(name) for name in _CAPITAL_PLAN_VALUE_COLUMNS if name in values
+        },
+    }
+
+
+async def create_capital_plan(
+    session: AsyncSession,
+    *,
+    user_id: Any,
+    research_id: Any,
+    declared: dict[str, Any],
+    idempotency_key: str,
+    source_kind: str = "form",
+    source_ref: str | None = None,
+) -> WriteOutcome:
+    """为会话创建唯一的规划资金（会话 ↔ 规划资金 1:1）。"""
+    admission = admit_group("capital_plan", declared)
+    payload = {"research_id": str(research_id), "declared": declared}
+
+    async def _execute() -> dict[str, Any]:
+        research = (
+            await session.execute(
+                select(store.Session).where(
+                    store.Session.id == research_id, store.Session.user_id == user_id
+                )
+            )
+        ).scalar_one_or_none()
+        if research is None:
+            raise NotFoundOrForbiddenError("研究不存在或无权访问")
+        existing = (
+            await session.execute(
+                select(store.CapitalPlan).where(store.CapitalPlan.research_id == research.id)
+            )
+        ).scalar_one_or_none()
+        if existing is not None:
+            raise RevisionConflictError(
+                "本会话已有规划资金，请使用累加或重置",
+                current={
+                    "capital_plan_id": str(existing.id),
+                    "revision": existing.current_revision,
+                },
+            )
+        link = (
+            await session.execute(
+                select(store.ResearchInvestmentLink).where(
+                    store.ResearchInvestmentLink.research_id == research.id
+                )
+            )
+        ).scalar_one_or_none()
+        account = None
+        if link is not None and link.account_id is not None:
+            account = await session.get(store.InvestmentAccount, link.account_id)
+        allocated_value = admission.values.get("allocated_capital")
+        allocated = allocated_value.value if allocated_value is not None else None
+        await _assert_allocation_within_available(
+            session, research_id=research.id, allocated=allocated
+        )
+        missing = {} if allocated is not None else {"allocated_capital": "请填写本会话规划资金"}
+        record_state, pending = _require_complete(admission, allow_incomplete=True, missing=missing)
+        values = _column_values(admission, _CAPITAL_PLAN_VALUE_COLUMNS)
+        currency = values.get("currency") or (account.base_currency if account else None)
+        plan = store.CapitalPlan(
+            research_id=research.id,
+            user_id=user_id,
+            account_id=account.id if account else None,
+            allocated_capital=values.get("allocated_capital"),
+            currency=currency,
+            as_of=values.get("as_of"),
+            record_state=record_state,
+            source_kind=source_kind,
+            source_ref=source_ref,
+        )
+        session.add(plan)
+        await session.flush()
+        session.add(
+            store.CapitalPlanRevision(
+                capital_plan_id=plan.id,
+                revision=1,
+                op_type="initial",
+                allocation_delta=values.get("allocated_capital"),
+                allocated_capital=values.get("allocated_capital"),
+                currency=currency,
+                account_id=plan.account_id,
+                as_of=values.get("as_of"),
+                record_state=record_state,
+                source_kind=source_kind,
+                source_ref=source_ref,
+            )
+        )
+        plan.current_revision = 1
+        await session.flush()
+        _append_audit(
+            session,
+            user_id=user_id,
+            action="business.capital_plan.create",
+            detail={
+                "capital_plan_id": str(plan.id),
+                "research_id": str(research.id),
+                "revision": 1,
+                "record_state": record_state,
+            },
+        )
+        await session.flush()
+        return {
+            "capital_plan_id": str(plan.id),
+            "research_id": str(research.id),
+            "account_id": str(plan.account_id) if plan.account_id else None,
+            "revision": 1,
+            "record_state": record_state,
+            "allocated_capital": _decimal_text(plan.allocated_capital),
+            "incomplete": pending,
+        }
+
+    return await run_write(
+        session,
+        user_id=user_id,
+        scope="capital_plan.create",
+        idempotency_key=idempotency_key,
+        payload=payload,
+        execute=_execute,
+    )
+
+
+async def _locked_capital_plan(
+    session: AsyncSession, *, user_id: Any, capital_plan_id: Any
+) -> store.CapitalPlan:
+    plan = (
+        await session.execute(
+            select(store.CapitalPlan)
+            .where(
+                store.CapitalPlan.id == capital_plan_id,
+                store.CapitalPlan.user_id == user_id,
+            )
+            .with_for_update()
+        )
+    ).scalar_one_or_none()
+    if plan is None:
+        raise NotFoundOrForbiddenError("规划资金不存在或无权访问")
+    return plan
+
+
+def _check_expected_revision(current: int, expected: int | None) -> None:
+    if expected is None:
+        raise ValidationError(
+            "缺少预期版本", fields={"expected_revision": "修改必须携带当前版本号"}
+        )
+    if expected != current:
+        raise RevisionConflictError(
+            "对象已被其他窗口修改",
+            current={"revision": current},
+            fields={"expected_revision": f"当前版本为 {current}"},
+        )
+
+
+async def allocate_capital(
+    session: AsyncSession,
+    *,
+    user_id: Any,
+    capital_plan_id: Any,
+    allocation_delta: Any,
+    expected_revision: int | None,
+    idempotency_key: str,
+    source_kind: str = "form",
+    source_ref: str | None = None,
+) -> WriteOutcome:
+    """累加分配资金：新累计 = 现值 + 本次增量，重复写入不再互相覆盖。"""
+    delta = _parse_decimal_input(allocation_delta, "allocation_delta")
+    if delta <= 0:
+        raise ValidationError("累加金额必须大于 0", fields={"allocation_delta": "请填写正数金额"})
+    payload = {
+        "capital_plan_id": str(capital_plan_id),
+        "allocation_delta": str(delta),
+        "expected_revision": expected_revision,
+    }
+
+    async def _execute() -> dict[str, Any]:
+        plan = await _locked_capital_plan(
+            session, user_id=user_id, capital_plan_id=capital_plan_id
+        )
+        _check_expected_revision(plan.current_revision, expected_revision)
+        current = Decimal(plan.allocated_capital) if plan.allocated_capital is not None else Decimal(0)
+        new_total = current + delta
+        await _assert_allocation_within_available(
+            session, research_id=plan.research_id, allocated=new_total
+        )
+        new_revision = plan.current_revision + 1
+        session.add(
+            store.CapitalPlanRevision(
+                capital_plan_id=plan.id,
+                revision=new_revision,
+                op_type="alloc",
+                allocation_delta=delta,
+                allocated_capital=new_total,
+                currency=plan.currency,
+                account_id=plan.account_id,
+                as_of=plan.as_of,
+                record_state="submitted",
+                source_kind=source_kind,
+                source_ref=source_ref,
+            )
+        )
+        plan.allocated_capital = new_total
+        plan.record_state = "submitted"
+        plan.current_revision = new_revision
+        await session.flush()
+        _append_audit(
+            session,
+            user_id=user_id,
+            action="business.capital_plan.allocate",
+            detail={
+                "capital_plan_id": str(plan.id),
+                "revision": new_revision,
+                "allocation_delta": str(delta),
+                "allocated_capital": str(new_total),
+            },
+        )
+        await session.flush()
+        return {
+            "capital_plan_id": str(plan.id),
+            "revision": new_revision,
+            "op_type": "alloc",
+            "allocation_delta": str(delta),
+            "allocated_capital": str(new_total),
+        }
+
+    return await run_write(
+        session,
+        user_id=user_id,
+        scope="capital_plan.allocate",
+        idempotency_key=idempotency_key,
+        payload=payload,
+        execute=_execute,
+    )
+
+
+async def reset_capital(
+    session: AsyncSession,
+    *,
+    user_id: Any,
+    capital_plan_id: Any,
+    allocated_capital: Any,
+    expected_revision: int | None,
+    idempotency_key: str,
+    source_kind: str = "form",
+    source_ref: str | None = None,
+) -> WriteOutcome:
+    """重置规划资金为指定值（与累加同表同版本流，重置也可追溯）。"""
+    amount = _parse_decimal_input(allocated_capital, "allocated_capital")
+    payload = {
+        "capital_plan_id": str(capital_plan_id),
+        "allocated_capital": str(amount),
+        "expected_revision": expected_revision,
+    }
+
+    async def _execute() -> dict[str, Any]:
+        plan = await _locked_capital_plan(
+            session, user_id=user_id, capital_plan_id=capital_plan_id
+        )
+        _check_expected_revision(plan.current_revision, expected_revision)
+        await _assert_allocation_within_available(
+            session, research_id=plan.research_id, allocated=amount
+        )
+        previous = plan.allocated_capital
+        new_revision = plan.current_revision + 1
+        session.add(
+            store.CapitalPlanRevision(
+                capital_plan_id=plan.id,
+                revision=new_revision,
+                op_type="reset",
+                allocation_delta=None,
+                allocated_capital=amount,
+                currency=plan.currency,
+                account_id=plan.account_id,
+                as_of=plan.as_of,
+                record_state="submitted",
+                source_kind=source_kind,
+                source_ref=source_ref,
+            )
+        )
+        plan.allocated_capital = amount
+        plan.record_state = "submitted"
+        plan.current_revision = new_revision
+        await session.flush()
+        _append_audit(
+            session,
+            user_id=user_id,
+            action="business.capital_plan.reset",
+            detail={
+                "capital_plan_id": str(plan.id),
+                "revision": new_revision,
+                "previous_allocated_capital": _decimal_text(previous),
+                "allocated_capital": str(amount),
+            },
+        )
+        await session.flush()
+        return {
+            "capital_plan_id": str(plan.id),
+            "revision": new_revision,
+            "op_type": "reset",
+            "previous_allocated_capital": _decimal_text(previous),
+            "allocated_capital": str(amount),
+        }
+
+    return await run_write(
+        session,
+        user_id=user_id,
+        scope="capital_plan.reset",
+        idempotency_key=idempotency_key,
+        payload=payload,
+        execute=_execute,
+    )
+
+
+async def list_capital_plan_revisions(
+    session: AsyncSession, *, user_id: Any, capital_plan_id: Any, limit: int, offset: int
+) -> list[dict[str, Any]]:
+    plan = await _locked_capital_plan_read(
+        session, user_id=user_id, capital_plan_id=capital_plan_id
+    )
+    rows = (
+        (
+            await session.execute(
+                select(store.CapitalPlanRevision)
+                .where(store.CapitalPlanRevision.capital_plan_id == plan.id)
+                .order_by(store.CapitalPlanRevision.revision.desc())
+                .limit(limit)
+                .offset(offset)
+            )
+        )
+        .scalars()
+        .all()
+    )
+    return [
+        {
+            "revision": row.revision,
+            "op_type": row.op_type,
+            "allocation_delta": _decimal_text(row.allocation_delta),
+            "allocated_capital": _decimal_text(row.allocated_capital),
+            "currency": row.currency,
+            "record_state": row.record_state,
+            "source_kind": row.source_kind,
+            "created_at": row.created_at.isoformat() if row.created_at else None,
+        }
+        for row in rows
+    ]
+
+
+async def _locked_capital_plan_read(
+    session: AsyncSession, *, user_id: Any, capital_plan_id: Any
+) -> store.CapitalPlan:
+    plan = (
+        await session.execute(
+            select(store.CapitalPlan).where(
+                store.CapitalPlan.id == capital_plan_id,
+                store.CapitalPlan.user_id == user_id,
+            )
+        )
+    ).scalar_one_or_none()
+    if plan is None:
+        raise NotFoundOrForbiddenError("规划资金不存在或无权访问")
+    return plan
+
+
+async def list_buy_sell_plans(
+    session: AsyncSession, *, user_id: Any, capital_plan_id: Any, limit: int, offset: int
+) -> list[dict[str, Any]]:
+    capital = await _locked_capital_plan_read(
+        session, user_id=user_id, capital_plan_id=capital_plan_id
+    )
+    rows = (
+        (
+            await session.execute(
+                select(store.BuySellPlan)
+                .where(store.BuySellPlan.capital_plan_id == capital.id)
+                .order_by(store.BuySellPlan.created_at.desc())
+                .limit(limit)
+                .offset(offset)
+            )
+        )
+        .scalars()
+        .all()
+    )
+    out: list[dict[str, Any]] = []
+    for row in rows:
+        values = await _load_revision_values(
+            session,
+            store.BuySellPlanRevision,
+            "buy_sell_plan_id",
+            row.id,
+            row.current_revision,
+        )
+        out.append(
+            {
+                "buy_sell_plan_id": str(row.id),
+                "capital_plan_id": str(row.capital_plan_id),
+                "research_id": str(row.research_id),
+                "status": row.status,
+                "archived": row.archived,
+                "revision": row.current_revision,
+                "values": {
+                    name: values.get(name)
+                    for name in _BUY_SELL_PLAN_VALUE_COLUMNS
+                    if name in values
+                },
+            }
+        )
+    return out
+
+
+async def create_buy_sell_plan(
+    session: AsyncSession,
+    *,
+    user_id: Any,
+    capital_plan_id: Any,
+    declared: dict[str, Any],
+    idempotency_key: str,
+    source_kind: str = "form",
+    source_ref: str | None = None,
+) -> WriteOutcome:
+    """登记一笔实际买卖价格；一条规划资金下可有多条（1:N）。"""
+    admission = admit_group("buy_sell_plan", declared)
+    required = {"symbol", "side", "price", "currency"}
+    absent = sorted(required - set(admission.values))
+    if absent:
+        raise PurposeRequirementError(
+            "买卖计划缺少必要字段", fields={name: "请填写该笔实际买卖信息" for name in absent}
+        )
+    payload = {"capital_plan_id": str(capital_plan_id), "declared": declared}
+
+    async def _execute() -> dict[str, Any]:
+        capital = await _locked_capital_plan_read(
+            session, user_id=user_id, capital_plan_id=capital_plan_id
+        )
+        values = _column_values(admission, _BUY_SELL_PLAN_VALUE_COLUMNS)
+        plan = store.BuySellPlan(
+            capital_plan_id=capital.id,
+            research_id=capital.research_id,
+            user_id=user_id,
+        )
+        session.add(plan)
+        await session.flush()
+        session.add(
+            store.BuySellPlanRevision(
+                buy_sell_plan_id=plan.id,
+                revision=1,
+                source_kind=source_kind,
+                source_ref=source_ref,
+                **values,
+            )
+        )
+        plan.current_revision = 1
+        await session.flush()
+        _append_audit(
+            session,
+            user_id=user_id,
+            action="business.buy_sell_plan.create",
+            detail={
+                "buy_sell_plan_id": str(plan.id),
+                "capital_plan_id": str(capital.id),
+                "revision": 1,
+                "side": values.get("side"),
+            },
+        )
+        await session.flush()
+        return {
+            "buy_sell_plan_id": str(plan.id),
+            "capital_plan_id": str(capital.id),
+            "research_id": str(capital.research_id),
+            "revision": 1,
+            "values": _json_safe_values(
+                {
+                    name: values.get(name)
+                    for name in _BUY_SELL_PLAN_VALUE_COLUMNS
+                    if name in values
+                }
+            ),
+        }
+
+    return await run_write(
+        session,
+        user_id=user_id,
+        scope="buy_sell_plan.create",
+        idempotency_key=idempotency_key,
+        payload=payload,
+        execute=_execute,
+    )
+
+
+async def update_buy_sell_plan(
+    session: AsyncSession,
+    *,
+    user_id: Any,
+    buy_sell_plan_id: Any,
+    expected_revision: int | None,
+    declared: dict[str, Any],
+    idempotency_key: str,
+    source_kind: str = "form",
+    source_ref: str | None = None,
+) -> WriteOutcome:
+    admission = admit_group("buy_sell_plan", declared)
+    payload = {
+        "buy_sell_plan_id": str(buy_sell_plan_id),
+        "declared": declared,
+        "expected_revision": expected_revision,
+    }
+
+    async def _execute() -> dict[str, Any]:
+        plan = (
+            await session.execute(
+                select(store.BuySellPlan)
+                .where(
+                    store.BuySellPlan.id == buy_sell_plan_id,
+                    store.BuySellPlan.user_id == user_id,
+                )
+                .with_for_update()
+            )
+        ).scalar_one_or_none()
+        if plan is None:
+            raise NotFoundOrForbiddenError("买卖计划不存在或无权访问")
+        if plan.archived:
+            raise ObjectArchivedError("买卖计划已归档", current={"archived": True})
+        _check_expected_revision(plan.current_revision, expected_revision)
+        prev = await _load_revision_values(
+            session,
+            store.BuySellPlanRevision,
+            "buy_sell_plan_id",
+            plan.id,
+            plan.current_revision,
+        )
+        merged = {name: prev.get(name) for name in _BUY_SELL_PLAN_VALUE_COLUMNS}
+        merged.update(_column_values(admission, _BUY_SELL_PLAN_VALUE_COLUMNS))
+        absent = sorted(
+            {"symbol", "side", "price", "currency"}
+            - {name for name, value in merged.items() if value is not None}
+        )
+        if absent:
+            raise PurposeRequirementError(
+                "买卖计划缺少必要字段",
+                fields={name: "请填写该笔实际买卖信息" for name in absent},
+            )
+        new_revision = plan.current_revision + 1
+        session.add(
+            store.BuySellPlanRevision(
+                buy_sell_plan_id=plan.id,
+                revision=new_revision,
+                source_kind=source_kind,
+                source_ref=source_ref,
+                **merged,
+            )
+        )
+        plan.current_revision = new_revision
+        await session.flush()
+        _append_audit(
+            session,
+            user_id=user_id,
+            action="business.buy_sell_plan.update",
+            detail={"buy_sell_plan_id": str(plan.id), "revision": new_revision},
+        )
+        await session.flush()
+        return {
+            "buy_sell_plan_id": str(plan.id),
+            "capital_plan_id": str(plan.capital_plan_id),
+            "revision": new_revision,
+            "values": _json_safe_values(
+                {
+                    name: merged.get(name)
+                    for name in _BUY_SELL_PLAN_VALUE_COLUMNS
+                    if name in merged
+                }
+            ),
+        }
+
+    return await run_write(
+        session,
+        user_id=user_id,
+        scope="buy_sell_plan.update",
+        idempotency_key=idempotency_key,
+        payload=payload,
+        execute=_execute,
+    )
+
+
+async def archive_buy_sell_plan(
+    session: AsyncSession,
+    *,
+    user_id: Any,
+    buy_sell_plan_id: Any,
+    idempotency_key: str,
+    source_kind: str = "form",
+    source_ref: str | None = None,
+) -> WriteOutcome:
+    payload = {"buy_sell_plan_id": str(buy_sell_plan_id)}
+
+    async def _execute() -> dict[str, Any]:
+        plan = (
+            await session.execute(
+                select(store.BuySellPlan)
+                .where(
+                    store.BuySellPlan.id == buy_sell_plan_id,
+                    store.BuySellPlan.user_id == user_id,
+                )
+                .with_for_update()
+            )
+        ).scalar_one_or_none()
+        if plan is None:
+            raise NotFoundOrForbiddenError("买卖计划不存在或无权访问")
+        if plan.archived:
+            return {
+                "buy_sell_plan_id": str(plan.id),
+                "archived": True,
+                "already_archived": True,
+            }
+        plan.archived = True
+        plan.status = "archived"
+        await session.flush()
+        _append_audit(
+            session,
+            user_id=user_id,
+            action="business.buy_sell_plan.archive",
+            detail={"buy_sell_plan_id": str(plan.id)},
+        )
+        await session.flush()
+        return {"buy_sell_plan_id": str(plan.id), "archived": True}
+
+    return await run_write(
+        session,
+        user_id=user_id,
+        scope="buy_sell_plan.archive",
         idempotency_key=idempotency_key,
         payload=payload,
         execute=_execute,

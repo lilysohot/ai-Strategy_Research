@@ -17,6 +17,15 @@
   GET    /api/business/sessions/{rid}/plans          该研究的计划集合
   PATCH  /api/business/plans/{id}                    修改计划（写）
   GET    /api/business/plans/{id}/revisions          版本历史
+  GET    /api/business/sessions/{rid}/capital-plan   会话的规划资金（1:1）
+  POST   /api/business/sessions/{rid}/capital-plan   创建会话规划资金（写）
+  POST   /api/business/capital-plans/{id}/allocations 累加分配资金（写）
+  POST   /api/business/capital-plans/{id}/reset      重置规划资金（写）
+  GET    /api/business/capital-plans/{id}/revisions  规划资金版本历史
+  GET    /api/business/capital-plans/{id}/buy-sell-plans 买卖计划列表（1:N）
+  POST   /api/business/capital-plans/{id}/buy-sell-plans 登记实际买卖价格（写）
+  PATCH  /api/business/buy-sell-plans/{id}           修改买卖计划（写）
+  POST   /api/business/buy-sell-plans/{id}/archive   归档买卖计划（写）
   PUT    /api/business/sessions/{rid}/link           设置引用账户与主计划（写）
   GET    /api/business/sessions/{rid}/link           读取研究绑定
   POST   /api/business/accounts/{aid}/trades         登记成交（写）
@@ -92,10 +101,12 @@ async def business_error_handler(request: Request, exc: Exception) -> JSONRespon
 # ——— 序列化辅助 ——————————————————————————————————————————————————————————
 
 
-def _decimal_text(value: Decimal | None) -> str | None:
+def _decimal_text(value: Decimal | str | None) -> str | None:
     """十进制以字符串出网，去掉无意义的尾随零但保留用户输入的小数位。"""
     if value is None:
         return None
+    if isinstance(value, str):
+        return value
     text = format(value, "f")
     if "." in text:
         text = text.rstrip("0").rstrip(".")
@@ -103,6 +114,8 @@ def _decimal_text(value: Decimal | None) -> str | None:
 
 
 def _iso(value: Any) -> str | None:
+    if isinstance(value, str):
+        return value
     return value.isoformat() if value is not None else None
 
 
@@ -565,6 +578,236 @@ async def list_plan_revisions(
             for row in rows
         ]
     }
+
+
+# ——— 规划资金（会话 1:1）与买卖计划（规划资金 1:N） ————————————————
+
+
+def _capital_plan_view(values: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "allocated_capital": _decimal_text(values.get("allocated_capital")),
+        "currency": values.get("currency"),
+        "as_of": _iso(values.get("as_of")),
+    }
+
+
+def _buy_sell_values(values: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "symbol": values.get("symbol"),
+        "market": values.get("market"),
+        "asset_type": values.get("asset_type"),
+        "side": values.get("side"),
+        "price": _decimal_text(values.get("price")),
+        "quantity": _decimal_text(values.get("quantity")),
+        "traded_at": _iso(values.get("traded_at")),
+        "currency": values.get("currency"),
+    }
+
+
+def _buy_sell_plan_view(row: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "buy_sell_plan_id": row["buy_sell_plan_id"],
+        "capital_plan_id": row["capital_plan_id"],
+        "research_id": row["research_id"],
+        "status": row["status"],
+        "archived": row["archived"],
+        "revision": row["revision"],
+        "values": _buy_sell_values(row.get("values") or {}),
+    }
+
+
+@router.get("/sessions/{research_id}/capital-plan")
+async def get_capital_plan(
+    research_id: str, user: UserModel = Depends(get_current_user)
+) -> dict[str, Any]:
+    async with biz.business_transaction() as session:
+        plan = await biz.get_capital_plan(
+            session,
+            user_id=user.id,
+            research_id=_as_uuid(research_id, "research_id"),
+        )
+    if plan is None:
+        return {"capital_plan": None}
+    return {
+        "capital_plan": {
+            "capital_plan_id": plan["capital_plan_id"],
+            "research_id": plan["research_id"],
+            "account_id": plan["account_id"],
+            "revision": plan["revision"],
+            "record_state": plan["record_state"],
+            "values": _capital_plan_view(plan["values"]),
+        }
+    }
+
+
+@router.post("/sessions/{research_id}/capital-plan", status_code=201)
+async def create_capital_plan(
+    research_id: str,
+    body: dict[str, Any],
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    key = _require_key(idempotency_key)
+    async with biz.business_transaction() as session:
+        outcome = await biz.create_capital_plan(
+            session,
+            user_id=user.id,
+            research_id=_as_uuid(research_id, "research_id"),
+            declared=_body_declared(body, "declared"),
+            idempotency_key=key,
+            source_kind=str(body.get("source_kind") or "form"),
+            source_ref=body.get("source_ref"),
+        )
+    return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
+
+
+@router.post("/capital-plans/{capital_plan_id}/allocations")
+async def allocate_capital(
+    capital_plan_id: str,
+    body: dict[str, Any],
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    key = _require_key(idempotency_key)
+    expected = body.get("expected_revision")
+    async with biz.business_transaction() as session:
+        outcome = await biz.allocate_capital(
+            session,
+            user_id=user.id,
+            capital_plan_id=_as_uuid(capital_plan_id, "capital_plan_id"),
+            allocation_delta=body.get("allocation_delta"),
+            expected_revision=int(expected) if expected is not None else None,
+            idempotency_key=key,
+            source_kind=str(body.get("source_kind") or "form"),
+            source_ref=body.get("source_ref"),
+        )
+    return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
+
+
+@router.post("/capital-plans/{capital_plan_id}/reset")
+async def reset_capital(
+    capital_plan_id: str,
+    body: dict[str, Any],
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    key = _require_key(idempotency_key)
+    expected = body.get("expected_revision")
+    async with biz.business_transaction() as session:
+        outcome = await biz.reset_capital(
+            session,
+            user_id=user.id,
+            capital_plan_id=_as_uuid(capital_plan_id, "capital_plan_id"),
+            allocated_capital=body.get("allocated_capital"),
+            expected_revision=int(expected) if expected is not None else None,
+            idempotency_key=key,
+            source_kind=str(body.get("source_kind") or "form"),
+            source_ref=body.get("source_ref"),
+        )
+    return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
+
+
+@router.get("/capital-plans/{capital_plan_id}/revisions")
+async def list_capital_plan_revisions(
+    capital_plan_id: str,
+    user: UserModel = Depends(get_current_user),
+    limit: int = Query(DEFAULT_LIMIT, ge=1, le=MAX_LIMIT),
+    offset: int = Query(0, ge=0),
+) -> dict[str, Any]:
+    async with biz.business_transaction() as session:
+        rows = await biz.list_capital_plan_revisions(
+            session,
+            user_id=user.id,
+            capital_plan_id=_as_uuid(capital_plan_id, "capital_plan_id"),
+            limit=limit,
+            offset=offset,
+        )
+    return {"revisions": rows}
+
+
+@router.get("/capital-plans/{capital_plan_id}/buy-sell-plans")
+async def list_buy_sell_plans(
+    capital_plan_id: str,
+    user: UserModel = Depends(get_current_user),
+    limit: int = Query(DEFAULT_LIMIT, ge=1, le=MAX_LIMIT),
+    offset: int = Query(0, ge=0),
+) -> dict[str, Any]:
+    async with biz.business_transaction() as session:
+        rows = await biz.list_buy_sell_plans(
+            session,
+            user_id=user.id,
+            capital_plan_id=_as_uuid(capital_plan_id, "capital_plan_id"),
+            limit=limit,
+            offset=offset,
+        )
+    return {"buy_sell_plans": [_buy_sell_plan_view(row) for row in rows]}
+
+
+@router.post("/capital-plans/{capital_plan_id}/buy-sell-plans", status_code=201)
+async def create_buy_sell_plan(
+    capital_plan_id: str,
+    body: dict[str, Any],
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    key = _require_key(idempotency_key)
+    async with biz.business_transaction() as session:
+        outcome = await biz.create_buy_sell_plan(
+            session,
+            user_id=user.id,
+            capital_plan_id=_as_uuid(capital_plan_id, "capital_plan_id"),
+            declared=_body_declared(body, "declared"),
+            idempotency_key=key,
+            source_kind=str(body.get("source_kind") or "form"),
+            source_ref=body.get("source_ref"),
+        )
+    result = dict(outcome.result)
+    if "values" in result:
+        result["values"] = _buy_sell_values(result["values"])
+    return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **result}
+
+
+@router.patch("/buy-sell-plans/{buy_sell_plan_id}")
+async def update_buy_sell_plan(
+    buy_sell_plan_id: str,
+    body: dict[str, Any],
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    key = _require_key(idempotency_key)
+    expected = body.get("expected_revision")
+    async with biz.business_transaction() as session:
+        outcome = await biz.update_buy_sell_plan(
+            session,
+            user_id=user.id,
+            buy_sell_plan_id=_as_uuid(buy_sell_plan_id, "buy_sell_plan_id"),
+            expected_revision=int(expected) if expected is not None else None,
+            declared=_body_declared(body, "declared"),
+            idempotency_key=key,
+            source_kind=str(body.get("source_kind") or "form"),
+            source_ref=body.get("source_ref"),
+        )
+    result = dict(outcome.result)
+    if "values" in result:
+        result["values"] = _buy_sell_values(result["values"])
+    return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **result}
+
+
+@router.post("/buy-sell-plans/{buy_sell_plan_id}/archive")
+async def archive_buy_sell_plan(
+    buy_sell_plan_id: str,
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    key = _require_key(idempotency_key)
+    async with biz.business_transaction() as session:
+        outcome = await biz.archive_buy_sell_plan(
+            session,
+            user_id=user.id,
+            buy_sell_plan_id=_as_uuid(buy_sell_plan_id, "buy_sell_plan_id"),
+            idempotency_key=key,
+        )
+    return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
 
 
 # ——— 研究绑定（账户引用 + 当前主计划） ——————————————————————————————————

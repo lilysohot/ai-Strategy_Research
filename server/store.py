@@ -390,6 +390,121 @@ class InvestmentAccountRevision(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
+class CapitalPlan(Base):
+    """会话（研究）的规划资金计划，**一个会话至多一条**（1:1）。
+
+    归属资金模块（``account_id``）同时属于一个会话。``allocated_capital`` 是累计值：
+    只允许通过 ``allocation_delta`` 累加或显式 ``reset`` 重设，不能直接覆盖，
+    从而避免多次写入互相覆盖（规划资金累加语义）。
+    """
+
+    __tablename__ = "capital_plans"
+    __table_args__ = (
+        # 一个研究会话至多一条当前规划资金（1:1）。
+        UniqueConstraint("research_id", name="uq_capital_plans_research"),
+        Index("ix_capital_plans_research", "research_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    account_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("investment_accounts.id"))
+    #: 累计分配资金（从账户可用资金划出）；币种取 ``currency``。累加/重置后不可回退覆盖。
+    allocated_capital: Mapped[Decimal | None] = mapped_column(MONEY)
+    currency: Mapped[str | None] = mapped_column(String)
+    as_of: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    record_state: Mapped[str] = mapped_column(String, nullable=False, default="submitted")
+    source_kind: Mapped[str] = mapped_column(String, nullable=False, default="form")
+    source_ref: Mapped[str | None] = mapped_column(String)
+    current_revision: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class CapitalPlanRevision(Base):
+    """规划资金版本行：记录每次累加/重置的增量与累计结果。"""
+
+    __tablename__ = "capital_plan_revisions"
+    __table_args__ = (
+        UniqueConstraint("capital_plan_id", "revision", name="uq_capital_plan_revisions_ver"),
+        Index("ix_capital_plan_revisions_plan", "capital_plan_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    capital_plan_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("capital_plans.id"), nullable=False
+    )
+    revision: Mapped[int] = mapped_column(Integer, nullable=False)
+    #: 本次操作类型：``initial`` / ``alloc``（累加）/ ``reset``（重设）。
+    op_type: Mapped[str] = mapped_column(String, nullable=False)
+    #: 累加增量（op_type 为 ``alloc`` 时有值）；``reset`` 时为 ``null``。
+    allocation_delta: Mapped[Decimal | None] = mapped_column(MONEY)
+    allocated_capital: Mapped[Decimal | None] = mapped_column(MONEY)
+    currency: Mapped[str | None] = mapped_column(String)
+    account_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("investment_accounts.id"))
+    as_of: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    record_state: Mapped[str] = mapped_column(String, nullable=False, default="submitted")
+    source_kind: Mapped[str] = mapped_column(String, nullable=False, default="form")
+    source_ref: Mapped[str | None] = mapped_column(String)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class BuySellPlan(Base):
+    """买卖计划/实际买卖价格当前指针行；一个规划资金下可有多个（1:N）。
+
+    买卖计划与规划资金同层、脱离成独立实体：每行是一条实际的买入或卖出记录
+    （``side=buy|sell``），承载成交价 ``price``、数量、成交时点与来源，
+    是规划资金模块下按会话登记的实际买卖价格，不依赖 deprecated 计划价列。
+    """
+
+    __tablename__ = "buy_sell_plans"
+    __table_args__ = (Index("ix_buy_sell_plans_capital", "capital_plan_id"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    capital_plan_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("capital_plans.id"), nullable=False
+    )
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    status: Mapped[str] = mapped_column(String, nullable=False, default="active")
+    archived: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    current_revision: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class BuySellPlanRevision(Base):
+    """买卖计划/实际买卖价格版本行：每笔买入/卖出一条实际的成交价格。"""
+
+    __tablename__ = "buy_sell_plan_revisions"
+    __table_args__ = (
+        UniqueConstraint("buy_sell_plan_id", "revision", name="uq_buy_sell_plan_ver"),
+        Index("ix_buy_sell_plan_revisions_plan", "buy_sell_plan_id"),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    buy_sell_plan_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("buy_sell_plans.id"), nullable=False
+    )
+    revision: Mapped[int] = mapped_column(Integer, nullable=False)
+    symbol: Mapped[str] = mapped_column(String, nullable=False)
+    market: Mapped[str | None] = mapped_column(String)
+    asset_type: Mapped[str | None] = mapped_column(String)
+    side: Mapped[str] = mapped_column(String, nullable=False)
+    #: 实际买卖价格（成交价）。
+    price: Mapped[Decimal] = mapped_column(MONEY, nullable=False)
+    quantity: Mapped[Decimal | None] = mapped_column(MONEY)
+    traded_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    currency: Mapped[str] = mapped_column(String, nullable=False)
+    source_kind: Mapped[str] = mapped_column(String, nullable=False, default="form")
+    source_ref: Mapped[str | None] = mapped_column(String)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
 class InvestmentPlan(Base):
     """投资计划的当前指针行。**必须且只能属于一个研究**（AC-01）。"""
 

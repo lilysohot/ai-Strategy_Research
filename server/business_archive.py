@@ -292,6 +292,24 @@ async def delete_research(
         for plan in plans:
             plan.archived = True
 
+        # 5b) 归档该研究的买卖计划（规划资金与买卖计划分离后各自停用）。
+        buy_sell_plans = (
+            (
+                await session.execute(
+                    select(store.BuySellPlan).where(
+                        store.BuySellPlan.user_id == user_id,
+                        store.BuySellPlan.research_id == research.id,
+                        store.BuySellPlan.archived.is_(False),
+                    )
+                )
+            )
+            .scalars()
+            .all()
+        )
+        for buy_sell_plan in buy_sell_plans:
+            buy_sell_plan.archived = True
+            buy_sell_plan.status = "archived"
+
         # 6) 软删除研究（软删除≠擦除）。
         research.deleted_at = now
         await session.flush()
@@ -304,6 +322,7 @@ async def delete_research(
                 "cancelled_rules": len(rules),
                 "expired_events": len(events),
                 "archived_plans": len(plans),
+                "archived_buy_sell_plans": len(buy_sell_plans),
             },
         )
         await session.flush()
@@ -313,6 +332,7 @@ async def delete_research(
             "cancelled_rules": len(rules),
             "expired_events": len(events),
             "archived_plans": len(plans),
+            "archived_buy_sell_plans": len(buy_sell_plans),
         }
 
     return await biz.run_write(

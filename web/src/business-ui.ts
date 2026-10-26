@@ -34,6 +34,40 @@ export interface SessionPlanPreview {
 
 export type SessionPlanInput = Omit<SessionPlanPreview, 'id' | 'sessionId' | 'sessionTitle' | 'status'>
 
+/** 会话规划资金（会话 ↔ 规划资金 1:1）：只保存资金分配，不含价格。 */
+export interface SessionCapitalPlan {
+  id: string
+  revision: number
+  allocatedCapital: string
+  currency: string
+  accountId: string | null
+  recordState: string
+}
+
+/** 实际买卖价格（规划资金 1:N）：每笔买入/卖出各一条。 */
+export interface SessionBuySellPlan {
+  id: string
+  revision: number
+  symbol: string
+  market: 'CN' | 'HK' | 'US'
+  side: 'buy' | 'sell'
+  price: string
+  quantity: string
+  tradedAt: string
+  currency: string
+  archived: boolean
+}
+
+export interface SessionBuySellPlanInput {
+  symbol: string
+  market: 'CN' | 'HK' | 'US'
+  side: 'buy' | 'sell'
+  price: string
+  quantity: string
+  tradedAt: string
+  currency: string
+}
+
 export const WORKSPACE_NAV_ITEMS: readonly WorkspaceNavItem[] = [
   { id: 'research', label: '研究对话', caption: '会话与分析' },
   { id: 'profiles', label: '交易账户资料', caption: '账户、计划关系与实际记录' },
