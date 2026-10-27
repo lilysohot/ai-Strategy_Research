@@ -153,6 +153,14 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(monkeypatc
         assert "BUSINESS CONTEXT POLICY:" not in prompt
         assert "INPUT REQUEST POLICY:" not in prompt
         assert "Scientific Problem-Solving Guide" not in prompt
+        if role == "main":
+            # Inspect what the real worker sends, not only the YAML or renderer:
+            # team mode must not silently opt a simple task into MAX research.
+            assert prompt.endswith("<team_effort>high</team_effort>")
+            assert "# Proportionate Research" in prompt
+            assert "MAXIMUM effort" not in prompt
+            assert "When unsure whether to fan out again or finalize, fan out" not in prompt
+            assert "Aggregate detail, do not shrink" not in prompt
 
     for role in ("reader", "verifier"):
         observations = [m for req in requests[role] for m in req["messages"] if m["role"] == "tool"]

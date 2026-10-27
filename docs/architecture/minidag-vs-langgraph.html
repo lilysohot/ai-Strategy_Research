@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MiniDAG 与 LangGraph · 编排架构图解</title>
+<!-- Assumptions: 面向理解 FrontierAgent 的开发者；比较当前源码与 LangGraph Graph API。
+     Design: 阅读型技术图解，图形表达执行边界，交互只解释执行语义；不模拟真实运行。
+     所有图形为架构示意，不是性能数据或品牌界面；无外部资源依赖。 -->
+<style>
+:root{--paper:#f7f6f2;--ink:#202b35;--muted:#58636b;--rule:#d6dcd9;--mini:#176c57;--mini-soft:#e6f1eb;--lang:#315ba3;--lang-soft:#eaf0fa;--white:#fff;--amber:#835018;--amber-soft:#f6ecd9}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.8 system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif}a{color:var(--lang);text-underline-offset:4px}button,a{touch-action:manipulation}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--lang);outline-offset:4px}header,main,footer{max-width:1180px;margin:auto;padding:0 40px}header{padding-top:50px}.eyebrow{font:12px/1.5 ui-monospace,Consolas,monospace;letter-spacing:2px;color:var(--muted)}h1{font-size:clamp(36px,5.7vw,66px);line-height:1.16;letter-spacing:-2px;font-weight:650;margin:22px 0}h1 span{display:block;font-size:.48em;letter-spacing:0;font-weight:450;margin-top:16px}h2{font-size:29px;line-height:1.35;letter-spacing:-.6px;margin:0 0 18px}h3{font-size:20px;line-height:1.4;margin:0 0 12px}p{margin:12px 0}.lead{max-width:880px;font-size:19px;line-height:1.85}.meta{font-size:12px;color:var(--muted);margin:24px 0}.nav{display:flex;gap:22px;flex-wrap:wrap;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:17px 0;margin-top:30px}.nav a{text-decoration:none;font-size:14px;color:var(--ink)}section{padding:48px 0;border-bottom:1px solid var(--rule)}.number{font:12px/1.5 ui-monospace,monospace;letter-spacing:1px;color:var(--muted);margin-bottom:12px}.columns{display:grid;grid-template-columns:1fr 1fr;gap:28px}.mini{color:var(--mini)}.lang{color:var(--lang)}.intro{border-top:3px solid currentColor;padding-top:18px}.intro p{color:var(--ink)}.caption{font-size:13px;color:var(--muted);line-height:1.7}.note{padding:18px 22px;background:#edf0ed;margin:22px 0}.note p:first-child{margin-top:0}.note p:last-child{margin-bottom:0}code{font: .88em/1.7 ui-monospace,Consolas,monospace;overflow-wrap:anywhere}.tag{font:11px/1.5 ui-monospace,monospace;letter-spacing:1px;display:block;margin-bottom:6px}.diagram{background:var(--white);border:1px solid var(--rule);padding:20px;margin:18px 0}.diagram svg{display:block;width:100%;height:auto;overflow:visible}svg text{font-family:system-ui,"Microsoft YaHei",sans-serif;fill:var(--ink);font-size:14px}svg .small{font-size:12px;fill:var(--muted)}svg .node{fill:var(--white);stroke:var(--rule);stroke-width:1.5}svg .mnode{fill:var(--mini-soft);stroke:var(--mini);stroke-width:1.3}svg .lnode{fill:var(--lang-soft);stroke:var(--lang);stroke-width:1.3}svg .edge{fill:none;stroke:#75818a;stroke-width:1.6}svg .zone{fill:#f7f9f7;stroke:#aab9b0;stroke-dasharray:5 4}svg .checkpoint{fill:var(--amber-soft);stroke:#c7aa72}svg .active{stroke-width:3;stroke:var(--amber);fill:var(--amber-soft)}.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--muted)}.legend span:before{content:"";display:inline-block;width:11px;height:11px;background:var(--mini-soft);border:1px solid var(--mini);margin-right:7px;vertical-align:-1px}.legend span:nth-child(2):before{background:var(--lang-soft);border-color:var(--lang)}.legend span:nth-child(3):before{background:var(--amber-soft);border-color:#c7aa72}.pipeline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:18px 0}.pill{border:1px solid var(--rule);background:var(--white);padding:8px 14px;font:13px/1.5 ui-monospace,monospace}.pipeline .green{background:var(--mini-soft);border-color:#7cae98}.pipeline .arrow{color:var(--muted)}.scenario{margin:22px 0 10px;padding:18px 0;border-top:1px solid var(--rule)}.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:18px 0}button{border:1px solid #aab4b8;border-radius:4px;padding:8px 17px;background:var(--white);color:var(--ink)}button.primary{background:var(--ink);border-color:var(--ink);color:white}button:disabled{opacity:.4;cursor:default}.counter{margin-left:auto;font:13px/1.5 ui-monospace,monospace;color:var(--muted)}.stage-track{display:flex;gap:5px;margin:12px 0 25px}.stage-track span{height:4px;flex:1;background:#dce1de}.stage-track span.filled{background:var(--ink)}.sim-head{display:flex;justify-content:space-between;gap:12px;align-items:baseline}.sim-head h3{margin:0}.status{font:11px/1.5 ui-monospace,monospace;color:var(--muted)}.sim-flow{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0;align-items:center}.sim-node{padding:9px 10px;background:var(--white);border:1px solid var(--rule);font-size:13px}.sim-node.active{background:var(--amber-soft);border-color:#bd9659;font-weight:600}.sim-panel{border-top:2px solid var(--rule);padding-top:18px}.sim-panel.m{border-color:var(--mini)}.sim-panel.l{border-color:var(--lang)}.sim-body{min-height:155px}.state{padding:12px 14px;background:#edf0ed;font:12px/1.7 ui-monospace,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;min-height:74px}.sim-note{font-size:14px;font-weight:550;min-height:50px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:14px;min-width:670px}th{text-align:left;padding:15px 16px;border-bottom:2px solid #a8b5af;vertical-align:top}td{padding:16px;border-bottom:1px solid var(--rule);vertical-align:top}th:first-child,td:first-child{width:18%;padding-left:0}td p{margin:0}td .caption{display:block;margin-top:6px}th:nth-child(2){color:var(--mini)}th:nth-child(3){color:var(--lang)}.insights{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:24px}.insight{border-top:2px solid var(--ink);padding-top:18px}.insight b{font-size:17px}.insight p{font-size:14px}.tradeoff{padding:20px 0}.tradeoff+.tradeoff{border-top:1px solid var(--rule)}.tradeoff b{font-size:18px}.tradeoff p{max-width:880px}details{margin:15px 0;border-top:1px solid var(--rule);padding:15px 0}summary{cursor:pointer;font-weight:550}pre{white-space:pre-wrap;background:#eaf0ec;padding:20px;font-size:12px;line-height:1.7;overflow-wrap:anywhere}.sources{display:grid;grid-template-columns:1fr 1fr;gap:25px}.sources ol{padding-left:22px;font-size:13px}.sources li{margin-bottom:12px;overflow-wrap:anywhere}footer{padding-top:24px;padding-bottom:35px;color:var(--muted);font-size:12px}.print-button{float:right;font-size:12px;padding:6px 13px}sup a{font:11px/1 monospace;text-decoration:none;margin-left:3px}.print-only{display:none}li{padding-left:3px}ul{padding-left:20px}
+@media(max-width:800px){header,main,footer{padding-left:22px;padding-right:22px}.columns,.sources{grid-template-columns:1fr}.insights{grid-template-columns:1fr;gap:14px}.sim-body{min-height:0}.sim-note{min-height:0}h2{font-size:25px}.diagram{padding:12px}.nav{gap:14px}.lead{font-size:17px}section{padding:35px 0}.print-button{float:none;margin-top:12px}.counter{margin-left:0}svg text{font-size:15px}svg .small{font-size:13px}}
+@media(max-width:420px){header,main,footer{padding-left:16px;padding-right:16px}h1{font-size:36px;letter-spacing:-1px}.diagram{padding:7px}.controls button{padding:8px 13px}.pill{padding:7px 9px;font-size:12px}.sim-node{font-size:12px}table{font-size:13px}}
+@media print{@page{size:A4;margin:16mm}body{background:white;font-size:10pt}header,main,footer{max-width:none;padding:0}header{padding-top:10px}h1{font-size:32pt}h2{font-size:19pt}.lead{font-size:12pt}.nav,.controls,.stage-track,.print-button{display:none}section{padding:24px 0}.columns{gap:16px}.diagram,.insight,tr,details{break-inside:avoid}.diagram{padding:12px}svg text{font-size:14px}table{min-width:0;font-size:9pt}td,th{padding:9px}.sources{grid-template-columns:1fr}.print-only{display:block}.sim-panel{break-inside:avoid}a{color:inherit}.note{background:#f2f2f2}.caption{font-size:9pt}}
+</style>
+</head>
+<body>
+<header>
+<div class="eyebrow">FRONTIERAGENT / ARCHITECTURE FIELD NOTES</div>
+<h1>MiniDAG 与 LangGraph<span>编排的差异，藏在“谁来调度下一步”里。</span></h1>
+<p class="lead">把长任务想成一个研究项目：<strong>本项目的 MiniDAG 像一位阶段主持人</strong>，按顺序把工作交给各阶段负责人；<strong>LangGraph 像一个通用流程调度台</strong>，可以直接管理多条分支、汇合、循环与持久化中断。两者都能承载 Agent，但复杂性放在了不同层。</p>
+<div class="meta">核对日期：2026-10-27 · 项目基线：7b6e4811 的当前工作区 · 对照范围：LangGraph Python Graph API<br>图中“项目现状”来自本地源码；LangGraph 图为同类任务的示例建模，不代表项目已经接入。本文没有性能基准或模型效果对比。</div>
+<nav class="nav" aria-label="文档目录"><a href="#graphs">01 两种编排图</a><a href="#walkthrough">02 逐步演示</a><a href="#compare">03 能力对照</a><a href="#longtask">04 长任务取舍</a><a href="#sources">05 源码与来源</a></nav>
+</header>
+<main>
+<section id="graphs">
+<div class="number">01 / WHERE ORCHESTRATION LIVES</div>
+<h2>外层推进阶段，还是图层管理分支？</h2>
+<div class="columns">
+<article class="intro mini"><span class="tag">CURRENT IMPLEMENTATION</span><h3>MiniDAG：一个当前节点，一次选择</h3><p>运行器维护 <code>current_node</code>，等待节点执行完，合并返回的状态增量，再选出唯一的下一节点。节点内部可以很复杂，甚至包含整个 Agent 团队。<sup><a href="#s1">[1]</a></sup></p></article>
+<article class="intro lang"><span class="tag">LANGGRAPH GRAPH API</span><h3>LangGraph：一组活跃节点，一轮推进</h3><p>编译后的图由 Pregel 运行时驱动。每个 super-step（超级步）选定活跃节点并执行，再统一更新状态通道；同轮的节点可以并行。<sup><a href="#s7">[7]</a></sup></p></article>
+</div>
+<div class="columns">
+<figure class="diagram" style="margin-left:0;margin-right:0">
+<svg viewBox="0 0 480 615" role="img" aria-labelledby="mini-title mini-desc"><title id="mini-title">项目 MiniDAG 与 Agent Team 的编排边界</title><desc id="mini-desc">PipelineSpec 经 DynamicGraphBuilder 编译，Scheduler 驱动 MiniDAGRunner。main_agent 节点内部由 AgentBus 并行派发子代理并收集报告。节点返回之后，外层图按条件进入 reporter 或结束。</desc>
+<defs><marker id="ma" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="#75818a"/></marker></defs>
+<text x="20" y="22" font-weight="600">项目真实调用结构</text><text x="20" y="43" class="small">实线：阶段推进 · 虚线框：一个图节点内部</text>
+<rect x="20" y="64" width="440" height="45" rx="4" class="node"/><text x="240" y="92" text-anchor="middle">PipelineSpec → DynamicGraphBuilder</text>
+<path d="M240 109 V133" class="edge" marker-end="url(#ma)"/>
+<rect x="20" y="136" width="440" height="45" rx="4" class="mnode"/><text x="240" y="164" text-anchor="middle">Scheduler → MiniDAGRunner.astream()</text>
+<path d="M240 181 V207" class="edge" marker-end="url(#ma)"/>
+<rect x="20" y="210" width="440" height="249" rx="5" class="zone"/><text x="38" y="236" font-weight="600">main_agent · 外层只看到一个节点</text>
+<rect x="126" y="251" width="228" height="40" rx="4" class="mnode"/><text x="240" y="277" text-anchor="middle">协调器 / ReAct 循环</text>
+<path d="M240 291 V311 H94 V330 M240 311 V330 M240 311 H386 V330" class="edge" marker-end="url(#ma)"/>
+<rect x="36" y="333" width="116" height="40" rx="4" class="node"/><text x="94" y="359" text-anchor="middle">子代理 A</text>
+<rect x="182" y="333" width="116" height="40" rx="4" class="node"/><text x="240" y="359" text-anchor="middle">子代理 B</text>
+<rect x="328" y="333" width="116" height="40" rx="4" class="node"/><text x="386" y="359" text-anchor="middle">子代理 C</text>
+<path d="M94 373 V391 H240 M386 373 V391 H240 M240 373 V404" class="edge" marker-end="url(#ma)"/>
+<rect x="106" y="407" width="268" height="34" rx="4" class="mnode"/><text x="240" y="430" text-anchor="middle">AgentBus 收报告 → 协调器综合</text>
+<path d="M240 459 V483" class="edge" marker-end="url(#ma)"/>
+<text x="240" y="503" text-anchor="middle">reporter_enabled ?</text>
+<path d="M172 507 H112 V535 M310 507 H390 V575" class="edge" marker-end="url(#ma)"/>
+<text x="115" y="525" class="small">是</text><text x="400" y="539" class="small">否</text>
+<rect x="20" y="538" width="226" height="39" rx="4" class="mnode"/><text x="133" y="563" text-anchor="middle">agent_team_reporter</text>
+<path d="M246 557 H310 V589 H354" class="edge" marker-end="url(#ma)"/>
+<rect x="357" y="577" width="87" height="30" rx="15" class="node"/><text x="400" y="598" text-anchor="middle">END</text>
+</svg>
+<figcaption class="caption">并行发生在 <code>main_agent</code> 内部，由 AgentBus 与工作流管理。图运行器本身顺序执行。reporter 是否启用由配置和路由决定。<sup><a href="#s2">[2]</a><a href="#s3">[3]</a></sup></figcaption>
+</figure>
+<figure class="diagram" style="margin-left:0;margin-right:0">
+<svg viewBox="0 0 480 615" role="img" aria-labelledby="lg-title lg-desc"><title id="lg-title">LangGraph 的并行研究和审核流程示例</title><desc id="lg-desc">输入进入规划，图层并行运行研究 A B C，归并后评估证据，不足则循环研究，足够则人工审核。interrupt 和持久化 checkpointer 支持等待后恢复，最后生成报告。</desc>
+<defs><marker id="la" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7" fill="#75818a"/></marker></defs>
+<text x="20" y="22" font-weight="600">同类研究任务的示例建模</text><text x="20" y="43" class="small">研究与汇合直接成为图的一部分</text>
+<rect x="184" y="64" width="112" height="30" rx="15" class="node"/><text x="240" y="85" text-anchor="middle">START</text>
+<path d="M240 94 V117" class="edge" marker-end="url(#la)"/>
+<rect x="135" y="120" width="210" height="42" rx="4" class="lnode"/><text x="240" y="147" text-anchor="middle">plan · 规划</text>
+<path d="M240 162 V188 H94 V213 M240 188 V213 M240 188 H386 V213" class="edge" marker-end="url(#la)"/>
+<text x="240" y="205" text-anchor="middle" class="small">同一个 super-step</text>
+<rect x="36" y="216" width="116" height="43" rx="4" class="lnode"/><text x="94" y="243" text-anchor="middle">research A</text>
+<rect x="182" y="216" width="116" height="43" rx="4" class="lnode"/><text x="240" y="243" text-anchor="middle">research B</text>
+<rect x="328" y="216" width="116" height="43" rx="4" class="lnode"/><text x="386" y="243" text-anchor="middle">research C</text>
+<path d="M94 259 V283 H240 M386 259 V283 H240 M240 259 V308" class="edge" marker-end="url(#la)"/>
+<rect x="120" y="311" width="240" height="43" rx="4" class="lnode"/><text x="240" y="338" text-anchor="middle">join / review · 汇合与评估</text>
+<path d="M360 333 H464 V142 H347" class="edge" marker-end="url(#la)"/><text x="452" y="393" text-anchor="end" class="small">证据不足 → 再研究</text>
+<path d="M240 354 V412" class="edge" marker-end="url(#la)"/><text x="250" y="382" class="small">证据足够</text>
+<rect x="40" y="415" width="400" height="65" rx="4" class="checkpoint"/><text x="240" y="442" text-anchor="middle">approval · interrupt() 等待审核</text><text x="240" y="465" text-anchor="middle" class="small">配置 checkpointer 后保存 / Command 恢复</text>
+<path d="M240 480 V505" class="edge" marker-end="url(#la)"/>
+<rect x="135" y="508" width="210" height="42" rx="4" class="lnode"/><text x="240" y="535" text-anchor="middle">report · 生成报告</text>
+<path d="M240 550 V574" class="edge" marker-end="url(#la)"/>
+<rect x="184" y="577" width="112" height="30" rx="15" class="node"/><text x="240" y="598" text-anchor="middle">END</text>
+</svg>
+<figcaption class="caption">并行分支通过边或 <code>Send</code> 表达，状态通过 reducer 合并，汇合条件需显式设计。人工审核是示例中的可选阶段，并非每个 LangGraph 图都必须有。<sup><a href="#s8">[8]</a><a href="#s10">[10]</a></sup></figcaption>
+</figure>
+</div>
+<div class="legend"><span>MiniDAG 阶段 / 内部协调</span><span>LangGraph 图节点</span><span>等待与恢复边界</span></div>
+<div class="note"><strong>别被 DAG 这个名字误导。</strong><p>当前 <code>MiniDAG.validate()</code> 检查入口、引用、可达性等，但没有检查环。运行器可以沿回边继续执行，并以 <code>_MAX_STEPS = 100</code> 限制步数。因此这里更准确的描述是“轻量、单路径的状态图执行器”，不能简单说成“MiniDAG 无环，LangGraph 有环”。<sup><a href="#s1">[1]</a></sup></p></div>
+<h3>项目里另一个真实图：Stateful ReAct</h3>
+<div class="pipeline" aria-label="Stateful ReAct 只有一个外层业务节点"><span class="pill">输入</span><span class="arrow">→</span><span class="pill green">react_agent</span><span class="arrow">→</span><span class="pill">END</span></div>
+<p>看起来只有一站，却可以在这一站内部多次“调用模型 → 执行工具 → 观察结果”。<strong>外层图的节点数，不等于模型轮数，也不等于任务复杂度。</strong>LangGraph 同样可以把完整 Agent 循环装进一个节点；右图只是展示其图层拆分能力。<sup><a href="#s3">[3]</a></sup></p>
+</section>
+<section id="walkthrough">
+<div class="number">02 / FOLLOW ONE TASK</div>
+<h2>让同一个长任务，分别走一遍</h2>
+<p class="lead">任务：调查三家供应商，核对证据，生成采购研究报告。点击“下一步”，看两种方案把控制权、进度和恢复责任放在哪里。</p>
+<p class="caption">概念演示，不调用模型，不计量耗时。MiniDAG 一侧按当前 Agent Team 结构解释；LangGraph 一侧假设已拆成细粒度节点，并配置了持久化 checkpointer。</p>
+<div class="controls"><button id="prev" type="button">← 上一步</button><button id="next" class="primary" type="button">下一步 →</button><button id="reset" type="button">重置</button><span id="counter" class="counter">01 / 06</span></div>
+<div class="stage-track" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+<h3 id="step-title">1. 接到任务：决定工作如何被分解</h3>
+<div class="columns" aria-live="polite" aria-atomic="true">
+<article class="sim-panel m"><div class="sim-head"><h3 class="mini">MiniDAG / 当前项目</h3><span class="status">SINGLE CURRENT NODE</span></div><div class="sim-flow" id="mini-flow"><span class="sim-node" data-node="main">main_agent</span><span>→</span><span class="sim-node" data-node="reporter">reporter?</span><span>→</span><span class="sim-node" data-node="end">END</span></div><p id="mini-body" class="sim-body"></p><div id="mini-state" class="state"></div><p id="mini-note" class="sim-note"></p></article>
+<article class="sim-panel l"><div class="sim-head"><h3 class="lang">LangGraph / 示例方案</h3><span class="status">ACTIVE NODE SET</span></div><div class="sim-flow" id="lang-flow"><span class="sim-node" data-node="plan">规划</span><span>→</span><span class="sim-node" data-node="research">A ∥ B ∥ C</span><span>→</span><span class="sim-node" data-node="review">评估</span><span>→</span><span class="sim-node" data-node="report">报告</span></div><p id="lang-body" class="sim-body"></p><div id="lang-state" class="state"></div><p id="lang-note" class="sim-note"></p></article>
+</div>
+<p id="step-takeaway" class="note"></p>
+<p class="print-only">纸面阅读提示：演示依次经过接任务、并行调查、某分支失败、证据不足、人工纠偏、最终交付。下方对照表和长任务分析包含完整结论。</p>
+<noscript><p class="note">交互演示需要 JavaScript。两张编排图、能力对照、长任务分析和参考来源仍可直接阅读。</p></noscript>
+</section>
+<section id="compare">
+<div class="number">03 / CAPABILITY BOUNDARIES</div>
+<h2>相同的节点与边，不同的运行语义</h2>
+<div class="table-wrap"><table><thead><tr><th scope="col">比较维度</th><th scope="col">项目 MiniDAG</th><th scope="col">LangGraph Graph API</th></tr></thead><tbody>
+<tr><th scope="row">编排声明</th><td><code>PipelineSpec</code> 描述节点、角色、上下文策略和迁移；Builder 包装节点并编译。<sup><a href="#s2">[2]</a></sup></td><td><code>StateGraph</code> 声明状态、节点和边，编译为 Pregel 应用；也有共享运行时的 Functional API。<sup><a href="#s7">[7]</a><a href="#s8">[8]</a></sup></td></tr>
+<tr><th scope="row">并行与汇合</th><td>运行器只有一个 <code>current_node</code>。多个无条件出边在 Builder 中只取第一条。团队并行由节点内 AgentBus 承担。<sup><a href="#s1">[1]</a><a href="#s2">[2]</a></sup></td><td>图层支持多分支、并行节点与汇合；<code>Send</code> 可为动态数量的任务传递不同输入。<sup><a href="#s7">[7]</a><a href="#s8">[8]</a></sup></td></tr>
+<tr><th scope="row">条件与循环</th><td>路由函数返回一个键，选一个目标。支持沿回边执行；100 个节点步数上限是当前实现的固定兜底。<sup><a href="#s1">[1]</a></sup></td><td>支持条件分支、循环与 <code>Command</code> 路由；执行有可配置的 super-step 递归上限。<sup><a href="#s8">[8]</a></sup></td></tr>
+<tr><th scope="row">状态合并</th><td>节点返回 delta；带 <code>Annotated</code> reducer 的字段归并，其他字段覆盖。reducer 抛出 TypeError / ValueError 时会警告并回退为覆盖。<sup><a href="#s1">[1]</a></sup></td><td>状态字段同样可指定 reducer。并行分支写同一个默认单值字段需要处理冲突，不能把它理解成任意“最后写入者胜出”。<sup><a href="#s8">[8]</a><a href="#s11">[11]</a></sup></td></tr>
+<tr><th scope="row">上下文与压缩</th><td>Builder 可按 <code>ContextPolicy</code> 过滤输入并截断字段；Agent 对话压缩另在 loop / 工作流中处理。<sup><a href="#s2">[2]</a></sup></td><td>可设计节点输入输出 schema；对话裁剪和摘要仍需在应用中设计。图状态持久化本身不会自动解决模型上下文过长。<sup><a href="#s8">[8]</a><a href="#s12">[12]</a></sup></td></tr>
+<tr><th scope="row">检查点与恢复</th><td>有 <code>save / load_latest / load_history</code> 接口，节点完成后可保存 state 与 next_node。当前运行入口显式传 <code>None</code>，没有启用该能力。<sup><a href="#s1">[1]</a><a href="#s4">[4]</a></sup></td><td>配置 checkpointer 后按 super-step 保存检查点，并记录任务级 pending writes。跨进程恢复需持久化后端；内存 saver 不够。<sup><a href="#s9">[9]</a><a href="#s13">[13]</a></sup></td></tr>
+<tr><th scope="row">人工参与</th><td>apodex 的工具审批、steering、会话存档属于终端与 Agent loop 层，MiniDAG 内没有等价的 <code>interrupt()</code> 原语。<sup><a href="#s5">[5]</a></sup></td><td><code>interrupt()</code> 配合 checkpointer 暂停，<code>Command(resume=...)</code> 继续。恢复会重新进入所在节点，因此中断前的副作用需要幂等。<sup><a href="#s10">[10]</a></sup></td></tr>
+<tr><th scope="row">可观测性</th><td>MiniDAG 按节点完成输出 updates；模型 token、工具事件、团队活动由 observers / apodex trace 呈现。<sup><a href="#s1">[1]</a><a href="#s5">[5]</a></sup></td><td>提供多种流式投影及状态检查能力；拆进图里的步骤也更适合按图追踪。图形可见程度仍取决于节点粒度。<sup><a href="#s14">[14]</a></sup></td></tr>
+</tbody></table></div>
+<details><summary>展开：两种调度循环的最小心智模型</summary><div class="columns"><div><h3 class="mini">MiniDAG：顺序推进</h3><pre><code># 语义示意，省略中间件和错误处理
+node = entry_point
+while node is not None:
+    delta = await nodes[node](state)
+    state = merge_with_reducers(state, delta)
+    next_node = route(node, state)
+    if checkpointer:
+        await save(state, next_node)
+    yield {node: delta}
+    node = next_node</code></pre></div><div><h3 class="lang">LangGraph：超级步推进</h3><pre><code># 语义示意，不是 LangGraph 的源码
+while active_nodes:
+    # Plan：按上一轮通道更新确定活跃节点
+    # Execute：运行本轮节点，可并行
+    writes = execute(active_nodes, channels)
+    # Update：归并本轮写入，下一轮才可见
+    channels = apply_updates(channels, writes)
+    checkpoint_if_configured()
+    active_nodes = plan_next_step(channels)</code></pre></div></div><p class="caption">节点可以继续封装自己的循环；图层没有展开的细节，不会因为使用 LangGraph 就自动获得细粒度恢复。</p></details>
+</section>
+<section id="longtask">
+<div class="number">04 / WHAT CHANGES IN LONG TASKS</div>
+<h2>“长”有三种，优势也分三种</h2>
+<div class="insights">
+<article class="insight"><b>推理过程长</b><p>几十轮工具调用、检索、纠错。项目把这些交给成熟的 ReAct loop、压缩和 guardrails，MiniDAG 只管阶段交接。这种分工紧凑，也容易定制。</p></article>
+<article class="insight"><b>分支数量多</b><p>很多独立分支，且希望逐分支观察、重试、汇合。LangGraph 可将它们直接放进图，减少自行维护调度状态的工作；当前项目由 AgentBus 管理团队任务。</p></article>
+<article class="insight"><b>跨时间持续久</b><p>进程重启、等待隔天审批、从历史状态重放。LangGraph 的持久化检查点与中断原语更贴近这些需求；MiniDAG 当前入口仍需补齐持久化接线和恢复语义。</p></article>
+</div>
+<div class="note"><strong>更细的节点，才有更细的恢复边界。</strong><p>如果把两个小时的研究放在一个节点里，外层 MiniDAG 在该节点完成前不会保存它的节点后检查点。把同一整段代码直接塞进一个 LangGraph 节点，也不会自动让每次 LLM 调用都变成可恢复步骤。需要拆分节点，或正确使用其任务与持久化机制。<sup><a href="#s1">[1]</a><a href="#s9">[9]</a></sup></p></div>
+<div class="tradeoff"><b>项目当前选择的收益：让图层保持小，把 Agent 行为留在自己的框架中。</b><p>已有工作流的外层只有一个主节点，或主节点加可选 reporter。此时 MiniDAG 的实现范围与实际拓扑相匹配，模型调用、工具授权、团队通信和上下文管理都能继续独立演化。这是基于代码结构的工程判断，不是运行速度或成功率的实测结论。</p></div>
+<div class="tradeoff"><b>需要承担的成本：复杂恢复和图级并行，要自己补。</b><p>如果需求变成“100 个分支各自保存进度、跨进程重试、人工审批后继续、历史状态分叉”，单一路由指针与可选保存钩子就不足以提供完整语义。届时引入 LangGraph，或系统扩展自研运行器，才有明确的收益。</p></div>
+<div class="tradeoff"><b>采用 LangGraph 的成本：学习并遵守它的状态与恢复模型。</b><p>需要设计状态 schema、reducer、分支汇合、检查点后端，以及外部操作的幂等性。编排框架提供机制，工具权限、模型判断质量、证据核验和应用业务约束仍由应用负责。</p></div>
+<details open><summary>四个容易误读的源码细节</summary><ul>
+<li><strong>“兼容接口”不是完整替代。</strong>MiniDAG 提供部分相似的方法名，但 checkpointer 使用自定义 <code>save/load_latest</code> 协议，不能直接假定 LangGraph saver 即插即用。</li>
+<li><strong>会话恢复与图恢复分层。</strong>apodex 的 <code>session.json</code> 由终端层保存；项目当前 <code>EventStore</code> 即使文件名为 <code>sqlite.py</code>，实现仍是 no-op，不能当作持久化数据库。<sup><a href="#s5">[5]</a><a href="#s6">[6]</a></sup></li>
+<li><strong>terminal_nodes 不会覆盖显式出边。</strong>Builder 只给没有出边的 terminal node 补结束边，所以 <code>main_agent</code> 虽列为 terminal，仍能按条件进入 reporter。<sup><a href="#s2">[2]</a><a href="#s3">[3]</a></sup></li>
+<li><strong>恢复钩子还需语义验收。</strong>当前 MiniDAG 若读到带 next_node 的检查点，会优先恢复它；即使调用方给了新 input_data 也如此。扩展持久化时，应明确“继续旧任务”和“开始新任务”的区别。<sup><a href="#s1">[1]</a></sup></li>
+</ul></details>
+</section>
+<section id="sources">
+<div class="number">05 / EVIDENCE & FURTHER READING</div>
+<h2>回到源码与官方文档</h2>
+<p class="caption">本地链接按本文件位于 <code>docs/architecture/</code> 解析。行号为本次核对定位；工作区后续修改可能使其变化。外部文档按本次访问内容引用，没有把官网最新示例当作本仓库依赖版本。</p>
+<div class="sources"><div><h3>项目证据</h3><ol>
+<li id="s1"><a href="../../frontier_agent/core/runtime/dag/minidag.py">MiniDAG / MiniDAGRunner</a><br>69：单目标边；94：校验；192：顺序执行；300：恢复；324：reducer；346：路由。</li>
+<li id="s2"><a href="../../frontier_agent/core/runtime/dag/graph_builder.py">DynamicGraphBuilder</a> · <a href="../../frontier_agent/models/pipeline_spec.py">PipelineSpec</a><br>Builder 35：构建；78 起：迁移分组；上下文过滤和中间件包装。</li>
+<li id="s3"><a href="../../workflows/stateful_react_agent/spec.py">ReAct spec</a> · <a href="../../workflows/agent_team/spec.py">Agent Team spec</a> · <a href="../../workflows/agent_team/edges.py">reporter 路由</a> · <a href="../../workflows/agent_team/README.md">AgentBus 与团队边界</a></li>
+<li id="s4"><a href="../../benchmarks/public/core/kernel_adapter.py">运行时启动入口</a>（237–242：Scheduler / checkpointer=None） · <a href="../../apodex/task_runner.py">apodex 工作流调用路径</a> · <a href="../../frontier_agent/scheduling/scheduler.py">Scheduler</a></li>
+<li id="s5"><a href="../../apodex/session.py">会话存档</a> · <a href="../../apodex/steer.py">运行中纠偏</a> · <a href="../../apodex/README.md">终端功能</a> · <a href="../run-artifacts.md">运行产物</a></li>
+<li id="s6"><a href="../../frontier_agent/state/event_store/sqlite.py">EventStore 当前实现</a>（no-op compatibility sink）。</li>
+</ol></div><div><h3>LangGraph 官方文档</h3><ol start="7">
+<li id="s7"><a href="https://docs.langchain.com/oss/python/langgraph/pregel">LangGraph runtime / Pregel</a>：超级步、执行与通道更新。</li>
+<li id="s8"><a href="https://docs.langchain.com/oss/python/langgraph/graph-api">Graph API overview</a>：状态、边、reducer、Send、Command。</li>
+<li id="s9"><a href="https://docs.langchain.com/oss/python/langgraph/checkpointers">Checkpointers</a>：超级步检查点、任务写入与故障恢复。</li>
+<li id="s10"><a href="https://docs.langchain.com/oss/python/langgraph/interrupts">Interrupts</a>：暂停、恢复与节点重入。</li>
+<li id="s11"><a href="https://docs.langchain.com/oss/python/langgraph/errors/INVALID_CONCURRENT_GRAPH_UPDATE">并发状态更新冲突</a>：同一状态字段的并行更新。</li>
+<li id="s12"><a href="https://docs.langchain.com/oss/python/langgraph/add-memory">Memory</a>：消息裁剪和摘要。</li>
+<li id="s13"><a href="https://docs.langchain.com/oss/python/langgraph/persistence">Persistence</a>：checkpointer、store 与内存后端的边界。</li>
+<li id="s14"><a href="https://docs.langchain.com/oss/python/langgraph/streaming">Streaming</a>：状态、消息与事件流。</li>
+</ol></div></div>
+</section>
+</main>
+<footer><button type="button" class="print-button" id="print">打印 / 保存 PDF</button>FrontierAgent 架构阅读笔记 · 单文件 HTML · 图与演示可离线使用 · 外部参考链接需联网</footer>
+<script>
+const stages=[
+{title:'1. 接到任务：决定工作如何被分解',m:'MiniDAG 进入 main_agent。协调器阅读任务，并在节点内部决定如何分工。外层图不需要知道供应商有三家还是十家。',ms:'current_node = main_agent\n任务分解由节点内协调器负责',mn:'图层关心阶段；工作流关心团队。',ma:'main',l:'图从 plan 开始。规划结果决定研究分支；若数量动态变化，可以用 Send 给每个研究任务传入各自的数据。',ls:'active = {plan}\n下一轮 = {research(A), research(B), research(C)}',ln:'分支成为图运行时可管理的任务。',la:'plan',take:'第一处差异：工作被拆到节点内部，还是拆到图层。两者都允许在节点中调用模型和工具。'},
+{title:'2. 并行调查：三位研究员同时工作',m:'协调器通过 AgentBus 派发子代理并收集报告。研究员可以同时执行，但 MiniDAG 仍在 await main_agent，尚未收到这个节点的最终 delta。',ms:'current_node = main_agent（等待完成）\nAgentBus: A ∥ B ∥ C',mn:'“外层顺序”不等于“整个项目不能并行”。',ma:'main',l:'research A、B、C 可在同一超级步运行。本轮节点读取既有状态，输出在通道更新阶段归并，供后续步骤使用。',ls:'super-step: {A, B, C}\n证据字段按 reducer 合并',ln:'超级步内的写入不会立即成为同轮其他节点的新输入。',la:'research',take:'并行本身两边都能实现；不同的是并行任务由 AgentBus 还是图引擎掌握。'},
+{title:'3. B 调查失败：谁记住 A 和 C 已经完成？',m:'MiniDAG 没有子代理级检查点语义，也没有配置图 checkpointer。A、C 的报告能否保留、B 如何重试，依赖 AgentBus、工作流与上层产物；不能由外层图接口直接保证。',ms:'图层：仍在 main_agent 内\n子任务恢复责任 → 团队 / 应用层',mn:'给 MiniDAG 加节点后存档，也不会自动保存节点内部每个子任务。',ma:'main',l:'在正确配置 checkpointer 的前提下，已成功任务的 pending writes 可保存。恢复同一线程时，运行时可复用 A、C 的成功写入，再继续失败的工作。',ls:'已完成写入：A, C\n待继续：B',ln:'跨进程保留这些信息，需要持久化后端。',la:'research',take:'恢复粒度由建模与持久化共同决定。这里比较的是节点内部团队和图层分支，并非所有 MiniDAG / LangGraph 应用的唯一写法。'},
+{title:'4. 证据不足：回去继续调查',m:'协调器在自己的 ReAct 循环中补充检索、再派任务或核验来源。外层 current_node 仍是 main_agent。MiniDAG 本身也能表达单一路径回边，但现有团队 spec 没有把调查循环展开。',ms:'main_agent 内部：研究 → 核验 → 补充研究\n外层节点未切换',mn:'复杂循环封装在工作流内部。',ma:'main',l:'review 可以通过条件边返回 plan 或研究节点。回路显式出现在图中，状态与检查点随这些节点边界推进。',ls:'review → plan / research\n通过评估后 → approval',ln:'把审核与重做画进图，有助于按阶段定位问题。',la:'review',take:'两者都可以循环。应比较循环位于哪一层，而不是仅凭 DAG 名字断言不支持循环。'},
+{title:'5. 人工纠偏：保留预算上限，明天再批准',m:'apodex 可通过 steering 向协调器注入补充要求，并有工具审批与会话存档。这些属于终端 / loop 层；已派出的子代理不会仅因输入一条 steer 就被自动中断。',ms:'用户输入 → SteerInbox → 协调器\n会话存档 ≠ 图内持久化 interrupt',mn:'协作方式贴近交互式终端。',ma:'main',l:'approval 节点可调用 interrupt() 暂停。配置持久化 checkpointer 后，稍后用相同 thread_id 和 Command(resume=...) 恢复；节点会从头重新进入。',ls:'approval: 等待外部输入\nresume → 重新进入节点并取回审核值',ln:'中断之前的外部操作必须考虑重复执行。',la:'review',take:'运行中补充要求与持久化审批流程，是两种相关但不同的能力。选择取决于实际交互与恢复需求。'},
+{title:'6. 最终交付：把成果交给下一阶段',m:'main_agent 完成后，MiniDAG 才合并其 delta 并判断 reporter_enabled。启用则进入 agent_team_reporter，否则直接结束；报告和会话产物由上层保存。',ms:'main_agent → reporter（若启用）→ END\n未启用 reporter：main_agent → END',mn:'适合少量阶段 + 复杂 Agent 内部行为。',ma:'reporter',l:'所有研究与审核条件满足后，图进入 report 再结束。若把整段研究包成一个大节点，也可以实现更接近 MiniDAG 的粗粒度结构。',ls:'research → review → approval → report → END\n图粒度由开发者设计',ln:'适合需要显式分支、等待点与恢复边界的流程。',la:'report',take:'框架决定可用机制，节点设计决定实际收益。没有证据表明换一个图框架就能让模型更聪明或任务必然更快。'}
+];
+let index=0;const get=id=>document.getElementById(id);
+function render(){const s=stages[index];get('step-title').textContent=s.title;get('mini-body').textContent=s.m;get('mini-state').textContent=s.ms;get('mini-note').textContent=s.mn;get('lang-body').textContent=s.l;get('lang-state').textContent=s.ls;get('lang-note').textContent=s.ln;get('step-takeaway').textContent=s.take;get('counter').textContent=String(index+1).padStart(2,'0')+' / 06';get('prev').disabled=index===0;get('next').disabled=index===stages.length-1;document.querySelectorAll('.stage-track span').forEach((n,i)=>n.classList.toggle('filled',i<=index));document.querySelectorAll('#mini-flow [data-node]').forEach(n=>n.classList.toggle('active',n.dataset.node===s.ma));document.querySelectorAll('#lang-flow [data-node]').forEach(n=>n.classList.toggle('active',n.dataset.node===s.la));}
+get('next').addEventListener('click',()=>{if(index<stages.length-1){index++;render();}});get('prev').addEventListener('click',()=>{if(index>0){index--;render();}});get('reset').addEventListener('click',()=>{index=0;render();});get('print').addEventListener('click',()=>window.print());render();
+</script>
+</body>
+</html>

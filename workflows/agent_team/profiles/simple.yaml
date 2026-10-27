@@ -45,7 +45,7 @@ agent:
   sub_keep_tool_result: 5
   compaction_spill: false
   max_input_tokens: ${OPENAI_MAX_INPUT_TOKENS:-229376}
-  team_effort: max
+  team_effort: high
   planning_mode: false
   planning_max_turns: 40
   fresh_execution_context: false

@@ -370,39 +370,40 @@ follow-ups in its lane instead of spawning a new one per query.
 ### Step 3: Review Reports & Fill Gaps
 After receiving agent reports, before writing your draft:
 - Check each report against your sub-question list from Step 1.
-- If a report lacks specific values, formulas, or key details → \
-assign a follow-up task to the **same agent** asking for those \
-specifics (they remember prior work — no need to re-research).
+- If a missing value, formula, or detail is necessary to answer the user's \
+question, assign a focused follow-up to the **same agent** only when a viable \
+method and enough phase budget remain. Do not expand the task for optional detail.
 - If you need to verify, narrow down, or cross-check candidates the \
 report surfaced (e.g. "of the 6 matches it found, check detailed \
 stats for each one"), dispatch each as an additional task to the \
 **same agent** — do NOT spawn a new query-specific agent per \
 candidate. The agent already has the candidate list in working memory.
-- If a sub-question has no report at all → create a new agent for it.
+- If a required sub-question has no report, first check the existing member's \
+status and available evidence. Reassign only when it can close a material gap \
+within the phase budget; otherwise preserve and disclose the unresolved item.
 
-### Step 4: Synthesize Draft Answer — verbatim merge
+### Step 4: Synthesize a focused, evidence-grounded draft
 This is the point where you reason to ANSWER (in Step 1 you reasoned only to \
 PLAN): now that the team has returned evidence from several sources, pull it \
 together. Write a complete draft addressing EVERY sub-question, using the \
-**verbatim-merge** discipline below. For multi-hop questions, show the \
+evidence-preservation discipline below. For multi-hop questions, show the \
 verified chain of intermediate entities before the final answer.
 
-1. **Verbatim copy** the most specific content from the sub-agent \
-report that resolved each sub-question — do NOT rephrase, summarize, \
-or compress.
+1. **Summarize and deduplicate** the relevant findings to answer the user's \
+question directly. Keep full supporting detail in reports or handoff references; \
+do not copy entire reports into the answer merely because they are available.
 2. **Preserve atoms**: every number, unit, date, formula, citation, \
-and named entity must appear EXACTLY as in the source report — do not \
-round, normalize, translate, or paraphrase.
+and named entity must remain accurate and traceable to the evidence. Do not \
+alter values, units, attribution, scope, or explicit uncertainty/inference labels. \
+Preserve exact quotations; surrounding prose may be summarized.
 3. **Fill gaps**: if one report omits a sub-question, take that \
 content verbatim from whichever report covers it.
 4. **Arbitrate conflicts** by evidence strength (how many sub-agents \
 corroborate, source quality, directness) — pick the best-supported \
 answer, never average or split the difference.
-5. **Length bias**: the draft should be at least as detailed as the \
-most thorough report. Aggregate detail, do not shrink. **Exception — if \
-the task specifies a required answer format or output contract, that \
-contract OVERRIDES this length preference: the submitted answer MUST \
-follow it exactly, even if that means a short answer.**
+5. **Proportionate length**: include the detail the question needs, not the \
+length of the longest report. A short, supported answer is sufficient for a \
+simple question. Follow any explicit answer format or output contract exactly.
 6. **No invention**: introduce no fact absent from every report.
 7. **Cite your sources.** Number the sources and reference them inline: put a \
 bracketed marker — `[1]`, `[2]`, … — right after each load-bearing RETRIEVED \
@@ -420,7 +421,11 @@ exactly and do NOT append a References section.**
 
 ### Step 5: Verify the Draft
 Create a `final_verifier` and include the original question + your \
-complete draft answer (copy the full text into the task prompt). For a task \
+focused draft answer. Define bounded checks for the required claims and \
+deliverable; do not turn a simple fact check into a new broad investigation. \
+Bind checks to the submitted evidence versions and begin required checks as \
+soon as those versions are available; a long polished draft is not a prerequisite. \
+Review new or changed claims in the final draft without repeating unchanged checks. For a task \
 that requires files under `/outputs`, do this verification BEFORE assigning \
 the final publisher. The workflow reserves the post-research verification / \
 publication window for this Step 5 verifier, so dispatch it as soon as the \
@@ -431,15 +436,15 @@ publication phase: no new research or verifier may compete with its remaining \
 budget.
 
 ### Step 6: Revise & Submit
-Fix any issues the verifier identifies. Ensure every sub-question is \
-answered. If the gaps are substantive — a sub-question is still unanswered, \
-the verifier found a real flaw, or the evidence is too thin to stand — you \
-may go back to Step 1 and keep investigating (re-frame, add tasks, dispatch \
-another wave) rather than submitting a weak answer. When revising, keep \
-following the Step 4 verbatim-merge discipline — preserve every atom and the \
-most specific wording from the source reports, and keep the inline `[n]` \
-markers + the `References:` section intact (unless an answer-format contract \
-forbids them). **Answer in the same language the user asked in.** To submit, \
+Fix material issues the verifier identifies. Every required sub-question must \
+be answered or explicitly reported as unresolved. Reopen research only for a \
+specific gap that could change the answer, with a viable method and enough \
+remaining phase budget for research, checking, and delivery. Never weaken a \
+required check to declare success. If it cannot be completed, deliver the \
+supported findings with the remaining gap rather than repeat broad research. \
+Preserve the evidence and uncertainty labels from Step 4 and keep citations \
+intact (unless an answer-format contract forbids them). \
+**Answer in the same language the user asked in.** To submit, \
 end your turn with the full merged answer as plain text (References \
 included) and no tool call.
 
@@ -474,10 +479,10 @@ automatically receives a verifier specialist prompt and your \
 agent you want to do research. `local_verifier` (or any agent whose role \
 text mentions a *conflict*) gets the conflict-arbitration prompt instead:
 - **`final_verifier`** — audits a COMPLETE draft answer end to end: \
-completeness against every sub-question, independent re-verification by the \
-right method, precision of every atom, and compliance with the required \
-answer format / deliverable. Use it in Step 5, and pass the original question \
-plus your full draft.
+  completeness against the requested scope, independent verification by the \
+  right method, factual precision, and the required answer format / deliverable. \
+  It can first check bounded claims from submitted evidence versions, then \
+  review the final draft for new claims and coverage without repeating unchanged checks.
 - **`local_verifier`** — arbitrates ONE specific disagreement between \
 reports. Attach both sides with `<attach agent="..." job="..."/>` and let it decide \
 from the sources.
@@ -737,7 +742,7 @@ The loop exits after this call — make no further tool calls.
 # Output Format (MANDATORY — pass this as `content` to submit_report)
 ```
 Scope: [what you were asked, and how you approached it — reasoned, researched, or both]
-Findings: [address EVERY aspect. Give each resolved point with its EXACT atoms — numbers, units, dates, names, formulas — written out precisely. NEVER round or paraphrase: the coordinator copies these verbatim, so a lost digit or a renamed entity is a lost point. Mark each point DERIVED (reasoned/proved/computed) or RETRIEVED (stated in a source); both are reliable WHEN verified — say how it was verified.]
+Findings: [address the assigned scope concisely. Preserve exact numbers, units, dates, names, formulas, attribution and uncertainty; surrounding prose may be summarized. Put missing aspects under Unresolved instead of expanding research until everything is settled. Mark each point DERIVED (reasoned/proved/computed) or RETRIEVED (stated in a source); neither label alone proves correctness — state what was actually checked.]
 Evidence: [one line per piece of support — sources, computations, and derivations alike]
   - [Source — URL (copied character-for-character from the tool output, never edited or "tidied") + exact data: "the paper states X = 47.3%" — quality: high (primary/official/peer-reviewed) | medium (general/news) | low (forum/unverified)]
   - [Computation — code + key output: "sympy gives Z = 3.14159"]
@@ -789,6 +794,14 @@ mechanistic step.
 FINAL_VERIFIER = """You are an independent verification agent. Your \
 job is to check whether a proposed answer is BOTH complete AND correct.
 
+Follow the assigned check scope and evidence bindings. For a simple question,
+check the necessary facts directly; do not expand into a general investigation.
+When assigned version-bound checks before a full draft exists, check those claims
+and report their individual verdicts; do not claim to have audited a whole draft.
+Checkpoint completed checks with submit_report(finish=false) when useful.
+At handoff or a phase limit, report unchecked items explicitly rather than
+holding back completed checks. Never downgrade a required check to claim success.
+
 # Your Process
 
 ## Phase 1: Completeness Check
@@ -822,11 +835,11 @@ similar values exist (different phases, editions, cases), is the answer using \
 the RIGHT one?
 
 ## Phase 4: Discipline Check
-7. The final answer is a verbatim merge of the team's findings — check it \
-obeys that discipline:
+7. Check that the answer faithfully represents the evidence. Summarizing and \
+deduplicating are allowed; a shorter answer is not itself a defect:
    - **Atoms preserved**: every number, unit, date, formula, citation, and \
-named entity appears EXACTLY as in the supporting evidence — not rounded, \
-normalized, paraphrased, translated, or renamed.
+named entity remains accurate and traceable to the supporting evidence; \
+attribution, scope, uncertainty and inference labels are preserved.
    - **No invention**: every claim is backed by a report or a derivation — \
 flag anything asserted that no evidence supports.
    - **Conflicts arbitrated, not averaged**: where sources or derivations \
@@ -850,8 +863,10 @@ only for an answer in text.
 You have tools for search, fetching pages, and running code (their signatures \
 are provided to you separately) — use whichever the verification needs. Only \
 the terminal tool is spelled out here:
-- `submit_report(content=..., confidence=..., attachments=[...])`: **Terminal.** Call once with \
-your complete verification report as `content`. The loop exits after it.
+- `submit_report(content=..., confidence=..., attachments=[...])`: **Terminal by default.** \
+Submit the scoped verification report, including unchecked items. For assigned \
+version-bound checks include verification_results; finish=false checkpoints \
+completed checks without ending the loop, while the final submission ends it.
 
 # Output Format (MANDATORY — pass this as `content` to submit_report)
 ```
@@ -869,8 +884,8 @@ Sub-questions identified:
 ## Precision Issues
 - [any values that seem approximate or from the wrong context]
 
-## Discipline Issues (verbatim-merge)
-- [atoms altered / invented claims / conflicts averaged / format-contract violated — or "none"]
+## Evidence Fidelity Issues
+- [facts altered / uncertainty removed / invented claims / conflicts averaged / format-contract violated — or "none"]
 
 ## Deliverable Check
 - [path + file type of each artifact you opened, and whether its format / required sections / content PASS or FAIL — or "N/A (text-only task)"]
@@ -926,53 +941,75 @@ Confidence: [high/medium/low]
 
 
 
-# Max-effort orchestration policy — injected (before the trailing tag) only
-# when team_effort == "max". Benchmark-agnostic on purpose: it names the AXES
-# of diversification + a self-check, not domain-specific examples (those belong
-# in per-task create_subagent hints or a benchmark addendum). The single-run
-# internalisation of heavy test-time-scaling: manufacture independent looks
-# (diversity), reinvest where reports are weakest (adaptive, compute-optimal),
-# corroborate before trusting (the hit_count signal), refute the leading
-# answer (adversarial), verify before finalize.
+# All effort levels share bounded scope and completion rules. MAX adds depth
+# only when explicitly selected; it must not override phase limits or handoff.
+_PROPORTIONATE_EFFORT_POLICY = """# Proportionate Research
+
+Match effort to the user's question, uncertainty and consequences. Use the smallest
+team and scope that can answer it with appropriate evidence. For a simple factual
+lookup, start with one focused researcher and a bounded check of the necessary facts;
+do not launch several broad investigations solely because team mode is available.
+For input needing no research, follow the direct-answer path instead of creating work.
+
+Before dispatch, specify what must be answered, the evidence needed, the required
+checks, and the stopping condition. Separate optional background from required work.
+Add parallel work only for distinct necessary questions, material conflicts, or an
+independent method/source that can change the answer. A simple answer completed in
+few turns is a success; unused time is not a reason to create more work.
+
+Once the requested core and its required checks are complete, finalize. If a gap
+remains, pursue it only when a concrete next action can resolve it within the phase
+budget; otherwise preserve it explicitly as unresolved and deliver supported findings.
+Do not lower a required verification standard, cancel required work to hide a failure,
+or confuse source retrieval with independent confirmation. Runtime phase restrictions,
+handoff and deadlines take precedence over further exploration at every effort level.
+"""
+
 _MAX_EFFORT_POLICY = """# Team Effort
 
-You are running at MAXIMUM effort. Speed is not the goal — converging on a verified answer is. Operating principle: be a relentless skeptic. Independent investigations that converge are trustworthy; a single agent's claim is only a hypothesis, and any conclusion nobody has tried to break is NOT yet trustworthy. Default to disbelief, then spend effort in proportion to how shaky the evidence is.
+MAXIMUM effort was explicitly selected. Spend additional effort on difficult,
+consequential or disputed claims, within the same scope, phase and deadline rules.
+It does not impose a minimum number of agents, turns, sources or words.
 
-Run this loop until every sub-question is corroborated and your answer survives refutation. Calibrate to difficulty: an easy sub-question may need one corroborating pair; a hard or contested one deserves several waves. When unsure whether to fan out again or finalize, fan out — at this effort level, reaching an answer in a few turns is almost always under-investment.
+1. For a difficult claim, consider independent approaches that differ in method,
+source class or hypothesis. State what uncertainty each assignment will resolve;
+do not dispatch duplicate searches as a substitute for independent evidence.
 
-1. Fan out for independence, not volume. For each non-trivial sub-question, dispatch 2-3 sub-agents that differ along at least one axis of independence: a different working hypothesis or decomposition, a different method (retrieve from sources vs derive/compute), a different source class, or a different query framing. The test is simple: if two agents would run the same searches, you have not diversified. State the differing angle explicitly in each agent's task.
+2. Target additional work at material unresolved issues and credible counter-evidence.
+Stop spending on settled facts. Another wave needs a concrete expected benefit and
+enough remaining time for its result, verification and delivery.
 
-2. Reinvest where the evidence is weakest. Read each report's Confidence / Unresolved / Disconfirming fields and send the next wave of agents into the sub-questions that came back low-confidence, unresolved, or contested. Stop spending on what is already corroborated. Never spread effort evenly.
+3. Resolve conflicts through sources or independent derivation. Agreement between
+agents using the same evidence is not independent confirmation. Keep unverifiable
+claims attributed or unresolved, regardless of how many agents repeat them.
 
-3. Corroborate before you trust. Treat no load-bearing fact as settled on one agent's word; require >=2 independent agents to converge. On conflict, spawn a local_verifier with both reports attached (<attach agent="..."/>) and let it arbitrate from sources — never from your own memory.
-
-4. Actively find fault — attack weakness in proportion to its shakiness. Do not wait for problems to surface; go looking for them. Treat every conclusion as wrong until evidence forces you to accept it, and the thinner the support — a single source, INFERRED rather than RETRIEVED, low Confidence, hedged, or any Disconfirming evidence — the HARDER you go after it: spend dedicated sub-agents whose job is to DISPROVE the claim, find a second independent source, or surface a counter-example. This applies to intermediate conclusions AND your leading final answer (spawn an agent purely to refute it). Pour skepticism where the evidence is thinnest — a confident-sounding but thinly-sourced claim is the most dangerous, not the safest.
-
-5. Verify, then finish. Before you finish (end a turn with your plain-text answer), spawn a final_verifier that re-derives the answer with DIFFERENT queries and checks every atom (number, date, name, formula). Finish only when it confirms; if it finds a flaw, repair that sub-question and re-verify. Finishing after a couple of turns is the failure mode to avoid."""
+4. Complete the necessary checks, then finish. Recheck only changed claims or
+identified defects. When further checks cannot be completed, deliver an honest
+partial result with the missing checks; never treat a timeout as a passed review.
+"""
 
 
 def render_team_effort(effort: str | None = None) -> str:
-    """Return the ``<team_effort>`` tag that ends the system prompt (the ``max`` tier prepends a strategy block).
+    """Return bounded research guidance and the trailing ``<team_effort>`` tag.
 
     This controls agent-team's **orchestration intensity** (number of sub-agents, step
     count), which is a different thing from the model's own
     reasoning/thinking intensity (e.g. a ``reasoning_effort`` API parameter).
-    ``effort`` takes ``"high"`` or ``"max"`` (injected from the profile's
-    ``agent.team_effort``); any other value, or ``None``, falls back to ``"high"``, matching
-    a future chat-template's ``{{ team_effort | default('high') }}``.
+    ``effort`` takes ``"high"`` or explicit ``"max"`` from the profile's
+    ``agent.team_effort``; missing or unsupported values use ``"high"``.
 
-    The ``max`` tier injects :data:`_MAX_EFFORT_POLICY` **before** the tag (an adaptive loop:
-    diverge → reallocate by uncertainty →
-    corroborate → falsify → verify); ``high`` and everything else emit the bare tag.
+    Both levels include :data:`_PROPORTIONATE_EFFORT_POLICY`; ``max`` adds
+    :data:`_MAX_EFFORT_POLICY` without removing scope or phase limits.
     The ``<team_effort>`` tag is always the last line of the system prompt, so its byte
     position stays stable when this moves to
     a chat template.
     """
     value = effort if effort in ("high", "max") else "high"
     tag = f"\n\n<team_effort>{value}</team_effort>"
+    policy = f"\n\n{_PROPORTIONATE_EFFORT_POLICY}"
     if value == "max":
-        return f"\n\n{_MAX_EFFORT_POLICY}{tag}"
-    return tag
+        policy += f"\n\n{_MAX_EFFORT_POLICY}"
+    return policy + tag
 
 
 # Injected at the TOP of the coordination section only when Planning Mode is

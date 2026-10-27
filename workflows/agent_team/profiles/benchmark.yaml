@@ -91,8 +91,8 @@ agent:
   # Hard input guard. Keep it below the endpoint context window minus the output
   # allowance, and above 80% of max_len so tiered compaction can trigger first.
   max_input_tokens: ${OPENAI_MAX_INPUT_TOKENS:-229376}
-  # Adds the most thorough coordinator strategy prompt.
-  team_effort: max
+  # Use an explicit override for maximum-effort benchmark comparisons.
+  team_effort: high
   # Planning is disabled here; the keys below document the available two-phase
   # controls for custom profiles derived from this file.
   planning_mode: false

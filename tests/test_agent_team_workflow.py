@@ -25,7 +25,7 @@ from workflows.agent_team.profile import (
     resolve_reporter_backend,
     resolve_reporter_enabled,
 )
-from workflows.agent_team.prompts import _render_tools_main
+from workflows.agent_team.prompts import _render_tools_main, render_team_effort
 from workflows.agent_team.subagent_runtime import render_sandbox_fs_note
 
 
@@ -90,6 +90,29 @@ def test_agent_team_ships_consistent_profiles() -> None:
         "benchmark.yaml",
         "tui.yaml",
     }
+
+
+@pytest.mark.parametrize("profile_name", ["tui", "simple", "benchmark", "default"])
+def test_team_profiles_do_not_opt_users_into_maximum_effort(profile_name) -> None:
+    profile = load_swarm_profile(profile_name)
+    rendered = render_team_effort(profile["agent"].get("team_effort"))
+    assert rendered.endswith("<team_effort>high</team_effort>")
+    assert "MAXIMUM effort" not in rendered
+
+
+@pytest.mark.parametrize("value", ["high", "max", None, "unsupported"])
+def test_team_effort_override_and_removal_preserve_explicit_opt_in(value) -> None:
+    from server.profile import PROFILE_NAME, build_profile_overrides
+
+    overrides = build_profile_overrides(pipeline_id="agent_team")
+    overrides["agent"]["team_effort"] = value
+    profile = load_swarm_profile(PROFILE_NAME, overrides=overrides)
+    if value is None:
+        assert "team_effort" not in profile["agent"]
+    rendered = render_team_effort(profile["agent"].get("team_effort"))
+    expected = "max" if value == "max" else "high"
+    assert rendered.endswith(f"<team_effort>{expected}</team_effort>")
+    assert ("MAXIMUM effort" in rendered) == (value == "max")
 
 
 def test_main_prompt_requires_read_file_delegation() -> None:

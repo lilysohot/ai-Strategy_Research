@@ -1488,7 +1488,7 @@ async def main_agent_node(
             p = f"{p}\n\n{_prompt_addendum}"
         if fs_enabled:
             p = f"{p}{main_fs_note}"
-        return f"{p}{render_team_effort(agent_cfg.get('team_effort', 'max'))}"
+        return f"{p}{render_team_effort(agent_cfg.get('team_effort'))}"
 
     event_store = registry.get_optional(EventStore)
     traj_dir = _resolve_trajectory_dir(state, ctx.task_id, trajectory_subdir)
