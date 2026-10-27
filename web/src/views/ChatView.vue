@@ -437,10 +437,11 @@ async function preparePostRunInput(): Promise<void> {
   if (!runId || !researchId || preparingPostRunInput.value) return
   preparingPostRunInput.value = true
   try {
-    // 会话计划创建入口已移除：没有主计划时补数请求无法落地到计划对象，
-    // 这里明确告知而不是生成一个回答必然失败的请求。
-    if (!business.link?.primary_plan_id) {
-      ElMessage.info('当前会话尚未绑定计划，无法按计划补数；请先在资金模块维护规划资金与实际买卖价格')
+    // 绑定口径（2026-10-27）与监控一致：补数需要会话已配置规划资金（含实际买卖
+    // 价格），计划口径由规划资金下的买卖价格供给；主计划不再是必要条件。
+    if (!business.capitalPlan) {
+      sessionPlanOpen.value = true
+      ElMessage.info('请先在会话资金中创建规划资金与实际买卖价格，再补充资料继续分析')
       return
     }
     const prepared = await inputRequestsApi.prepareAfterRun(

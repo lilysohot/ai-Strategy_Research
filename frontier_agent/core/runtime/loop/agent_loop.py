@@ -771,7 +771,7 @@ async def _execute_tool_calls(
             synthetic.append((idx, ToolResult(
                 name=tc.get("name", ""), args=tc.get("args", {}) or {},
                 result=tcv.skip_with_result, duration_ms=0,
-                tool_call_id=tc.get("id") or f"call_{turn}_{idx}", is_error=False,
+                tool_call_id=tc.get("id") or f"call_{turn}_{idx}", is_error=tcv.skip_is_error,
             )))
         else:
             executable.append((idx, tc))

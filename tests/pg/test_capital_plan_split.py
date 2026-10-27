@@ -315,3 +315,215 @@ async def test_run_gate_still_fails_without_capital_plan() -> None:
                 session, user_id=user_id, research_id=research_id, spec=spec
             )
     assert "plan.allocated_capital" in err.value.fields
+
+
+async def _unbind_primary_plan(user_id: uuid.UUID, research_id: uuid.UUID) -> None:
+    async with biz.business_transaction() as session:
+        link = (
+            await session.execute(
+                select(store.ResearchInvestmentLink).where(
+                    store.ResearchInvestmentLink.research_id == research_id
+                )
+            )
+        ).scalar_one()
+        link.primary_plan_id = None
+
+
+async def test_auto_analysis_spec_derives_plan_from_capital_plan() -> None:
+    """无主计划时，监控自动分析以规划资金 + 最新有效买卖价格构造解析输入。"""
+    from types import SimpleNamespace
+
+    from server import watch_scheduler
+
+    user_id, research_id, _account_id, _plan_id = await _analysis_context("cp-autospec")
+    await _create_capital(user_id, research_id, "20000", "cp-autospec-capital")
+    async with biz.business_transaction() as session:
+        capital = (
+            await session.execute(
+                select(store.CapitalPlan).where(store.CapitalPlan.research_id == research_id)
+            )
+        ).scalar_one()
+        await biz.create_buy_sell_plan(
+            session,
+            user_id=user_id,
+            capital_plan_id=capital.id,
+            declared={
+                "symbol": {"value": "601138.SH"},
+                "market": {"value": "CN"},
+                "side": {"value": "buy"},
+                "price": {"value": "47.25"},
+                "currency": {"value": "CNY"},
+            },
+            idempotency_key="cp-autospec-bs",
+        )
+    await _unbind_primary_plan(user_id, research_id)
+
+    event = SimpleNamespace(id=uuid.uuid4(), generation=1, research_id=research_id, user_id=user_id)
+    async with biz.business_transaction() as session:
+        link = (
+            await session.execute(
+                select(store.ResearchInvestmentLink).where(
+                    store.ResearchInvestmentLink.research_id == research_id
+                )
+            )
+        ).scalar_one()
+        spec, failure = await watch_scheduler._auto_analysis_spec(session, event=event, link=link)
+    assert failure is None
+    assert spec is not None and spec.plan is None
+    async with biz.business_transaction() as session:
+        resolution = await snapshots.resolve_for_run(
+            session, user_id=user_id, research_id=research_id, spec=spec
+        )
+    assert resolution.missing == {}, resolution.missing
+    assert resolution.values["plan.symbol"]["value"] == "601138.SH"
+    assert resolution.values["plan.direction"]["value"] == "buy"
+    assert Decimal(resolution.values["plan.allocated_capital"]["value"]) == Decimal("20000")
+    assert resolution.values["plan.allocated_capital"]["source"]["kind"] == "capital_plan"
+
+
+async def test_auto_analysis_spec_requires_capital_plan_when_unbound() -> None:
+    """未绑定主计划且没有规划资金 → 拒绝并返回 research_binding_missing。"""
+    from types import SimpleNamespace
+
+    from server import watch_scheduler
+
+    user_id, research_id, _account_id, _plan_id = await _analysis_context("cp-autospec-none")
+    await _unbind_primary_plan(user_id, research_id)
+    event = SimpleNamespace(id=uuid.uuid4(), generation=1, research_id=research_id, user_id=user_id)
+    async with biz.business_transaction() as session:
+        link = (
+            await session.execute(
+                select(store.ResearchInvestmentLink).where(
+                    store.ResearchInvestmentLink.research_id == research_id
+                )
+            )
+        ).scalar_one()
+        spec, failure = await watch_scheduler._auto_analysis_spec(session, event=event, link=link)
+    assert spec is None
+    assert failure == "research_binding_missing"
+
+
+async def test_input_request_spec_uses_capital_plan_when_primary_plan_missing() -> None:
+    """补数弹窗路径：无主计划时以规划资金 + 买卖价格构造 spec，回答持久化后门禁仍通过。"""
+    from dataclasses import replace
+
+    from server import input_requests
+
+    user_id, research_id, _account_id, _plan_id = await _analysis_context("cp-irq-spec")
+    await _create_capital(user_id, research_id, "20000", "cp-irq-capital")
+    async with biz.business_transaction() as session:
+        capital = (
+            await session.execute(
+                select(store.CapitalPlan).where(store.CapitalPlan.research_id == research_id)
+            )
+        ).scalar_one()
+        await biz.create_buy_sell_plan(
+            session,
+            user_id=user_id,
+            capital_plan_id=capital.id,
+            declared={
+                "symbol": {"value": "601138.SH"},
+                "market": {"value": "CN"},
+                "side": {"value": "buy"},
+                "price": {"value": "47.25"},
+                "currency": {"value": "CNY"},
+            },
+            idempotency_key="cp-irq-bs",
+        )
+    await _unbind_primary_plan(user_id, research_id)
+
+    async with biz.business_transaction() as session:
+        spec = await input_requests._spec_from_research_link(
+            session, user_id=user_id, research_id=research_id, use_case="plan_analysis"
+        )
+    assert spec.plan is None
+    assert spec.account is not None
+    assert spec.declared["plan"]["symbol"]["value"] == "601138.SH"
+
+    # 模拟回答路径：账户字段持久化；无引用的 plan declared 不报错、原样保留。
+    async with biz.business_transaction() as session:
+        saved_spec, saved = await snapshots.persist_declared(
+            session,
+            user_id=user_id,
+            research_id=research_id,
+            spec=replace(
+                spec,
+                declared={
+                    **spec.declared,
+                    "account": {"as_of": {"value": "2026-10-27T00:00:00Z"}},
+                },
+            ),
+        )
+    assert "account" in saved
+    assert set(saved_spec.declared) == {"plan"}
+
+    async with biz.business_transaction() as session:
+        resolution = await snapshots.resolve_for_run(
+            session, user_id=user_id, research_id=research_id, spec=saved_spec
+        )
+    assert resolution.missing == {}, resolution.missing
+    assert resolution.values["plan.symbol"]["value"] == "601138.SH"
+    assert Decimal(resolution.values["plan.allocated_capital"]["value"]) == Decimal("20000")
+    assert resolution.values["plan.allocated_capital"]["source"]["kind"] == "capital_plan"
+
+
+async def test_context_carries_active_buy_sell_prices_only() -> None:
+    """快照上下文携带未归档实际买卖价格列表；软删除（归档）被过滤。"""
+    user_id, research_id, _account_id, _plan_id = await _analysis_context("cp-bsctx")
+    await _create_capital(user_id, research_id, "20000", "cp-bsctx-capital")
+    async with biz.business_transaction() as session:
+        capital = (
+            await session.execute(
+                select(store.CapitalPlan).where(store.CapitalPlan.research_id == research_id)
+            )
+        ).scalar_one()
+        first = await biz.create_buy_sell_plan(
+            session,
+            user_id=user_id,
+            capital_plan_id=capital.id,
+            declared={
+                "symbol": {"value": "601138.SH"},
+                "market": {"value": "CN"},
+                "side": {"value": "buy"},
+                "price": {"value": "46.75"},
+                "quantity": {"value": "100"},
+                "currency": {"value": "CNY"},
+            },
+            idempotency_key="cp-bsctx-1",
+        )
+        await biz.create_buy_sell_plan(
+            session,
+            user_id=user_id,
+            capital_plan_id=capital.id,
+            declared={
+                "symbol": {"value": "601138.SH"},
+                "market": {"value": "CN"},
+                "side": {"value": "buy"},
+                "price": {"value": "48.12"},
+                "currency": {"value": "CNY"},
+            },
+            idempotency_key="cp-bsctx-2",
+        )
+        archived = await biz.archive_buy_sell_plan(
+            session,
+            user_id=user_id,
+            buy_sell_plan_id=first.result["buy_sell_plan_id"],
+            idempotency_key="cp-bsctx-arch",
+        )
+        assert archived.result["archived"] is True
+
+    spec = snapshots.InvestmentInputSpec(
+        use_case="plan_analysis",
+        account=snapshots.ObjectRef(_account_id, 1),
+        plan=snapshots.ObjectRef(_plan_id, 1),
+    )
+    async with biz.business_transaction() as session:
+        resolution = await snapshots.resolve_for_run(
+            session, user_id=user_id, research_id=research_id, spec=spec
+        )
+    assert Decimal(resolution.values["buy_sell.count"]["value"]) == 1
+    # 最新有效记录在前；被归档的 46.75 不得出现。
+    assert Decimal(resolution.values["buy_sell.1.price"]["value"]) == Decimal("48.12")
+    assert resolution.values["buy_sell.1.side"]["value"] == "buy"
+    assert resolution.values["buy_sell.1.price"]["source"]["kind"] == "capital_plan"
+    assert all(not key.startswith("buy_sell.2.") for key in resolution.values)

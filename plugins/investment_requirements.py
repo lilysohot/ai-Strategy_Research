@@ -11,7 +11,7 @@ def missing_facts(use_case: str, present: set[str]) -> dict[str, str]:
         "plan.symbol": "请填写标的",
         "plan.market": "请选择市场",
         "plan.direction": "请选择方向",
-        "plan.allocated_capital": "请填写本标的规划资金（从主账户可用资金中划出）",
+        "plan.allocated_capital": "请先在会话资金中创建规划资金（从主账户可用资金中划出）",
     }
     if use_case == "holding_cost":
         required.update(

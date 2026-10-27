@@ -166,6 +166,9 @@ def _spec_json(
         "plan": ref(spec.plan),
         "trade": ref(spec.trade),
         "position": ref(spec.position),
+        # 无主计划路径的计划口径（规划资金 + 买卖价格）以 declared 随续接冻结，
+        # 回答端 parse_investment_input 会原样读回（persist 后保留给解析）。
+        "declared": spec.declared,
     }
 
 
@@ -358,19 +361,31 @@ async def materialize_post_run_request(
 async def _spec_from_research_link(
     session: AsyncSession, *, user_id: uuid.UUID, research_id: uuid.UUID, use_case: str
 ) -> snapshots.InvestmentInputSpec:
-    """无业务快照的研究 Run：按该研究当前绑定的账户/计划构造 spec。
+    """无业务快照的研究 Run：按该研究当前绑定构造 spec（与监控触发同一口径）。
 
-    未绑定账户或主计划时引用为空——裁决会因此报缺字段，正好驱动“先创建主账户”的引导。
-    引用带上**当时版本**：续接要记录 ``known_versions``，否则回答时没有任何可比版本，
-    用户填好的资料会被“回答缺少资料版本”挡在门外。
+    有主计划 → 引用账户与计划；无主计划 → 以**规划资金 + 最新有效买卖价格**的
+    declared 计划口径进入解析（标的/市场/方向/币种来自买卖价格，规划资金由解析注入）。
+    账户未绑定或规划资金不满足时引用/声明为空——裁决会因此报缺字段，正好驱动
+    “先创建主账户 / 先在会话资金中配置”的引导。引用带上**当时版本**：续接要记录
+    ``known_versions``，否则回答时没有任何可比版本，用户填好的资料会被
+    “回答缺少资料版本”挡在门外。
     """
     link = await _research_link(session, user_id=user_id, research_id=research_id)
     if link is None:
         return snapshots.InvestmentInputSpec(use_case=use_case)
+    declared: dict[str, Any] = {}
+    if link.primary_plan_id is None:
+        declared = (
+            await snapshots.declared_plan_from_capital(
+                session, user_id=user_id, research_id=research_id
+            )
+            or {}
+        )
     return snapshots.InvestmentInputSpec(
         use_case=use_case,
         account=await _live_ref(session, store.InvestmentAccount, link.account_id),
         plan=await _live_ref(session, store.InvestmentPlan, link.primary_plan_id),
+        declared=declared,
     )
 
 

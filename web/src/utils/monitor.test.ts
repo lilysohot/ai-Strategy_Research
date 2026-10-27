@@ -3,20 +3,30 @@ import assert from 'node:assert/strict'
 
 import { activeMonitorRunId, autoAnalysisBindingIssue } from './monitor.ts'
 
-test('auto analysis requires a confirmed main account and primary plan', () => {
-  assert.match(autoAnalysisBindingIssue(null, 'loading') ?? '', /正在核对/)
-  assert.match(autoAnalysisBindingIssue(null, 'error') ?? '', /无法确认/)
+test('auto analysis requires a confirmed main account and a capital plan', () => {
+  assert.match(autoAnalysisBindingIssue(null, null, 'loading') ?? '', /正在核对/)
+  assert.match(autoAnalysisBindingIssue(null, null, 'error') ?? '', /无法确认/)
   assert.match(
-    autoAnalysisBindingIssue({ account_id: null, primary_plan_id: null }, 'ready') ?? '',
+    autoAnalysisBindingIssue({ account_id: null, primary_plan_id: null }, null, 'ready') ?? '',
     /未绑定主账户/,
   )
   assert.match(
-    autoAnalysisBindingIssue({ account_id: 'account-1', primary_plan_id: null }, 'ready') ?? '',
-    /未创建并选择主计划/,
+    autoAnalysisBindingIssue({ account_id: 'account-1', primary_plan_id: null }, null, 'ready') ?? '',
+    /未配置规划资金/,
+  )
+  // 主计划不再是必要条件：绑定规划资金即可开启自动分析。
+  assert.equal(
+    autoAnalysisBindingIssue(
+      { account_id: 'account-1', primary_plan_id: null },
+      'capital-1',
+      'ready',
+    ),
+    null,
   )
   assert.equal(
     autoAnalysisBindingIssue(
       { account_id: 'account-1', primary_plan_id: 'plan-1' },
+      'capital-1',
       'ready',
     ),
     null,

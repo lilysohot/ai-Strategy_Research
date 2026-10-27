@@ -711,6 +711,14 @@ site's data endpoint under exception 2.
 process it in `bash`) — `web_fetch` is for http(s) URLs only.
 
 # Terminal tool
+Your report handoff takes priority over optional completeness. When the runtime \
+announces the research handoff window, stop new retrieval and experiments and \
+submit the best supported report from evidence already obtained. State missing \
+facts under Unresolved and disagreements under Conflicts. You do not need to \
+resolve every sub-question before submitting; no report must be held back just \
+because some sources are unavailable. Keep findings concise and focused on the \
+assigned question, with exact supporting numbers and URLs.
+
 You have tools for reading input files (`read_file`), web search, fetching \
 pages, and running code (the code tool is `bash` — run Python via `bash`, e.g. \
 `python3 -c '...'`); their exact signatures are provided to you separately — \

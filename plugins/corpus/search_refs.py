@@ -54,7 +54,7 @@ def _store(hit: dict[str, Any]) -> str:
     return digest
 
 
-def _load(digest: str, doc_id: str) -> dict[str, Any]:
+def _load(digest: str, doc_id: str | None) -> dict[str, Any]:
     try:
         with (_root() / (digest + ".json")).open("rb") as stream:
             raw = stream.read(_MAX_BYTES + 1)
@@ -65,8 +65,8 @@ def _load(digest: str, doc_id: str) -> dict[str, Any]:
         if (
             record["version"] != 1
             or record["target"] != os.environ.get("CORPUS_TARGET_DB", "")
-            or hit["doc_id"] != doc_id
-            or doc_id != "cv2:" + hit["build_id"]
+            or (doc_id is not None and hit["doc_id"] != doc_id)
+            or hit["doc_id"] != "cv2:" + hit["build_id"]
             or hit.get("evidence_contract") not in (None, "native-search-evidence-v1")
         ):
             raise SearchReferenceError("search_receipt_binding_mismatch")
@@ -102,6 +102,19 @@ def canonical_locator(doc_id: str, locator: str) -> str:
     if locator.startswith("eref:"):
         return str(resolve_evidence(doc_id, locator)["locator"])
     return locator
+
+
+def resolve_evidence_selection(ref: str) -> dict[str, Any]:
+    """Bind an ID-only selection to its original document, block and exact text."""
+    match = _EVIDENCE.fullmatch(ref) if isinstance(ref, str) else None
+    if not match:
+        raise SearchReferenceError("invalid_search_evidence_reference")
+    hit = _load(match[1], None)
+    item = resolve_evidence(hit["doc_id"], ref)
+    return {
+        "doc_id": hit["doc_id"], "locator": item["locator"], "quote": item["text"],
+        "source_start": item["fragment"]["start"], "source_end": item["fragment"]["end"],
+    }
 
 
 def offered_hit(hit: dict[str, Any]) -> dict[str, Any]:

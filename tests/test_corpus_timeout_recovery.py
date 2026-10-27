@@ -321,8 +321,9 @@ def test_failed_claim_can_preserve_only_verified_delivered_excerpts(tmp_path, de
 
 @pytest.mark.parametrize("first_chunk_delay", [2.082, 44.9])
 @pytest.mark.parametrize("recovery_succeeds", [True, False])
+@pytest.mark.parametrize("wall_remaining", [450, 130])
 async def test_web_runaway_reserves_one_recovery_within_logical_budget(
-    monkeypatch, first_chunk_delay, recovery_succeeds
+    monkeypatch, first_chunk_delay, recovery_succeeds, wall_remaining
 ):
     from types import SimpleNamespace
 
@@ -359,7 +360,7 @@ async def test_web_runaway_reserves_one_recovery_within_logical_budget(
         now[0] += delay
 
     monkeypatch.setattr(_call, "time", SimpleNamespace(monotonic=lambda: now[0]))
-    monkeypatch.setattr(_call, "wall_deadline_remaining_s", lambda: 450 - now[0])
+    monkeypatch.setattr(_call, "wall_deadline_remaining_s", lambda: wall_remaining - now[0])
     monkeypatch.setattr(_call, "_llm_gate", lambda: None)
     monkeypatch.setattr(_call, "_stream_llm_response", stream)
     monkeypatch.setattr(_call.asyncio, "sleep", sleep)
@@ -386,5 +387,7 @@ async def test_web_runaway_reserves_one_recovery_within_logical_budget(
         assert result.stopped_by == "no_tool"
     else:
         assert result.stopped_by == "llm_error"
-        assert result.metadata["llm_error_reason"] == "logical_call_deadline"
-    assert now[0] <= cfg["logical_call_timeout_s"]
+        assert result.metadata["llm_error_reason"] == (
+            "exhausted" if wall_remaining < 180 else "logical_call_deadline"
+        )
+    assert now[0] <= min(wall_remaining, cfg["logical_call_timeout_s"])

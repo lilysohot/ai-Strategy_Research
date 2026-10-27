@@ -199,6 +199,10 @@ class ToolCallIntervention:
     rewrite_args: dict | None = None
     skip_with_result: str | None = None
     metadata_updates: dict | None = None
+    # A short-circuit can return a cached success OR a denial. Keep this flag
+    # attached to the winning skip result so observers never infer success for
+    # a tool that was blocked before execution.
+    skip_is_error: bool = False
 
 
 @dataclass
@@ -411,6 +415,7 @@ async def notify_tool_call(
     """Merge tool-call hooks; last rewrite and first skip win."""
     rewrite: dict | None = None
     skip: str | None = None
+    skip_is_error = False
     meta_updates: dict = {}
 
     for obs in observers:
@@ -428,6 +433,7 @@ async def notify_tool_call(
             rewrite = rv.rewrite_args
         if skip is None and rv.skip_with_result is not None:
             skip = rv.skip_with_result
+            skip_is_error = rv.skip_is_error
         if rv.metadata_updates:
             meta_updates.update(rv.metadata_updates)
 
@@ -435,6 +441,7 @@ async def notify_tool_call(
         rewrite_args=rewrite,
         skip_with_result=skip,
         metadata_updates=meta_updates or None,
+        skip_is_error=skip_is_error,
     )
 
 

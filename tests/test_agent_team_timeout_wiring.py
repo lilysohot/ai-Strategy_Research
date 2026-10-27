@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import time
 from types import SimpleNamespace
 
@@ -15,6 +16,7 @@ from frontier_agent.core.execution_context import (
     reset_current_execution_scope,
     set_current_execution_scope,
 )
+from frontier_agent.core.llm import LLMResponse
 from frontier_agent.core.loop_types import (
     WALL_DEADLINE_MONOTONIC_KEY,
     AgentLoopResult,
@@ -24,6 +26,7 @@ from frontier_agent.core.messages import tool_msg
 from frontier_agent.core.runtime.loop._streaming import _stream_llm_response
 from frontier_agent.core.runtime.loop.agent_loop import run_agent_loop
 from frontier_agent.core.runtime.loop.tool_exec import max_tool_wall_time_s
+from frontier_agent.core.tool import tool
 from server.orchestrator import _pipeline_wall_timeout_s
 from server.profile import PROFILE_NAME, build_profile_overrides
 from workflows.agent_team.nodes.main_agent import (
@@ -105,6 +108,146 @@ def test_team_phase_budget_closes_research_before_publication() -> None:
     assert budget.can_dispatch_publication(700) is True
     assert budget.sync_phase(880) == "finalizing"
     assert budget.can_dispatch_publication(880) is False
+
+
+def test_consolidating_report_wait_preserves_verification_budget() -> None:
+    now = time.monotonic()
+    budget = TeamPhaseBudget(
+        started_monotonic_s=now - 720,
+        research_dispatch_deadline_s=now - 165,
+        research_deadline_s=now - 1,
+        publication_deadline_s=now + 179,
+        finalization_deadline_s=now + 300,
+        state={},
+    )
+    phase, deadline = budget.wait_deadline(publication_pending=True)
+    assert phase == "consolidating"
+    assert deadline == budget.publication_deadline_s
+
+
+@pytest.mark.asyncio
+async def test_research_member_enters_handoff_before_hard_deadline() -> None:
+    now = time.monotonic()
+    budget = TeamPhaseBudget(
+        started_monotonic_s=now - 560,
+        research_dispatch_deadline_s=now - 5,
+        research_deadline_s=now + 160,
+        publication_deadline_s=now + 340,
+        finalization_deadline_s=now + 460,
+        state={},
+    )
+    spec = build_swarm_session_runtime_spec(
+        SwarmSubagentRuntime(phase_budget=budget), session_name="worker", task_id="root",
+    )
+    observers = spec.observers_builder("root.job.1", SubTask("research"), 1)
+    inherited = next(o for o in observers if isinstance(o, InheritedWallClockDeadlineObserver))
+    ctx = SimpleNamespace(metadata={})
+    decision = await inherited.on_tool_call(
+        ctx, {"name": "web_fetch", "args": {"url": "https://example.test/new"}},
+    )
+    assert decision is not None, "late exploration must yield to a real report window"
+    assert "submit_report" in decision.skip_with_result
+    for name in ("submit_report", "publish_handoff"):
+        assert await inherited.on_tool_call(ctx, {"name": name, "args": {}}) is None
+    hint = await inherited.on_turn_end(ctx)
+    assert hint is not None and hint.stop_reason is None
+    assert "submit_report" in hint.inject_messages[0]
+
+    # A verifier/publisher is doing the reserved work, so research handoff
+    # must not block its evidence reads or file writes.
+    for metadata in (
+        {"uses_publication_budget": True}, {"can_publish": True},
+        {"verification_checks": [{"check_id": "c1"}]},
+    ):
+        observers = spec.observers_builder("root.job.2", SubTask("reserved", metadata=metadata), 1)
+        observer = next(o for o in observers if isinstance(o, InheritedWallClockDeadlineObserver))
+        assert await observer.on_tool_call(ctx, {"name": "read_file", "args": {}}) is None
+
+    early_verifier = build_swarm_session_runtime_spec(
+        SwarmSubagentRuntime(phase_budget=budget), session_name="final_verifier", task_id="root",
+    )
+    observers = early_verifier.observers_builder("root.job.3", SubTask("verify"), 1)
+    observer = next(o for o in observers if isinstance(o, InheritedWallClockDeadlineObserver))
+    assert await observer.on_tool_call(ctx, {"name": "web_fetch", "args": {}}) is None
+
+
+@pytest.mark.asyncio
+async def test_member_loop_can_submit_report_when_new_retrieval_is_blocked() -> None:
+    from workflows._shared.research.observers.finalize_answer_observer import FinalizeAnswerObserver
+    from workflows.agent_team.observers.content_acquisition import ContentAcquisitionObserver
+
+    @tool
+    async def web_fetch(url: list[str]) -> str:
+        """Fake retrieval which must never execute in the handoff window."""
+        raise AssertionError("new retrieval ran after the handoff cutoff")
+
+    @tool
+    async def submit_report(content: str) -> str:
+        """Submit a report."""
+        return "accepted"
+
+    class HandoffLLM:
+        model = "scripted"
+        calls = 0
+
+        async def chat(self, messages, **kwargs):
+            self.calls += 1
+            if self.calls == 1:
+                name, args = "web_fetch", {"url": ["https://example.org/a", "https://example.org/b"]}
+            else:
+                assert any("research handoff window" in str(m) for m in messages)
+                name, args = "submit_report", {"content": "Findings: partial evidence. Unresolved: checks."}
+            return LLMResponse(content="", tool_calls=[{
+                "id": f"call-{self.calls}", "type": "function",
+                "function": {"name": name, "arguments": json.dumps(args)},
+            }], finish_reason="tool_calls")
+
+    spec = build_swarm_session_runtime_spec(
+        SwarmSubagentRuntime(), session_name="researcher", task_id="root",
+    )
+    result = await run_agent_loop(
+        system_prompt="research", user_message="answer using gathered evidence",
+        llm=HandoffLLM(), tools=[web_fetch, submit_report],
+        config=spec.config_builder("root.job.1", SubTask("research"), 4),
+        observers=[
+            InheritedWallClockDeadlineObserver(time.monotonic() + 60, handoff_at=time.monotonic() - 1),
+            ContentAcquisitionObserver(),
+            FinalizeAnswerObserver(tool_names=["submit_report"]),
+        ],
+    )
+    assert result.stopped_by == "final_answer"
+    assert "Unresolved: checks" in result.final_content
+    acquired = result.metadata["content_acquisition"]
+    assert len(acquired) == 2
+    assert all(not source["obtained"] for source in acquired), "blocked retrieval is not evidence"
+    assert all(source["last_attempt_status"] != "success" for source in acquired)
+
+
+def test_report_wait_wakes_at_handoff_transition_without_guard_alerts() -> None:
+    now = time.monotonic()
+    budget = TeamPhaseBudget(
+        started_monotonic_s=now, research_dispatch_deadline_s=now + 555,
+        research_deadline_s=now + 720, publication_deadline_s=now + 900,
+        finalization_deadline_s=now + 1050, state={},
+    )
+    assert budget.wait_deadline() == ("research", budget.research_dispatch_deadline_s)
+
+
+@pytest.mark.asyncio
+async def test_draining_instruction_allows_reserved_verification() -> None:
+    now = time.monotonic()
+    budget = TeamPhaseBudget(
+        started_monotonic_s=now - 560,
+        research_dispatch_deadline_s=now - 5,
+        research_deadline_s=now + 160,
+        publication_deadline_s=now + 340,
+        finalization_deadline_s=now + 460,
+        state={},
+    )
+    decision = await TeamPhaseBudgetObserver(budget).on_turn_end(SimpleNamespace(metadata={}))
+    assert decision is not None
+    assert "research or verification" not in decision.inject_messages[0]
+    assert "final_verifier" in decision.inject_messages[0]
 
 
 def test_web_phase_plan_reserves_a_distinct_publication_slice() -> None:

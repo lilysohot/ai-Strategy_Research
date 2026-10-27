@@ -167,6 +167,32 @@ def test_short_ref_citation_needs_actual_delivery_and_live_authority():
     assert verify(ledger, hit, lambda *a: None) == "unsupported"  # withdrawn/missing source
 
 
+async def test_manifest_selects_search_excerpt_without_recopying_text(monkeypatch, tmp_path):
+    from plugins.corpus.ledger import get_run_ledger, reset_run_ledgers
+    from plugins.tools import corpus_manifest
+
+    monkeypatch.setenv("APODEX_RUN_DIR", str(tmp_path / "run"))
+    reset_run_ledgers()
+    full = original(text=" 光学器件直接焊接在\nNVLink\u00a07\u00a0交换机托盘上。\n")
+    hit = compact_hit(full)
+    ledger = get_run_ledger()
+    ledger.record_search(body(hit))
+    ledger.finalize(messages(body(hit)))
+    monkeypatch.setattr(corpus_manifest, "get_service", lambda: SimpleNamespace(
+        fetch_verbatim=lambda d, loc: SimpleNamespace(text=full["snippet"]),
+    ))
+    out = json.loads(await corpus_manifest.corpus_submit_manifest.func(conclusions=[{
+        "report_quote": "光学器件的位置", "evidence": [{
+            "evidence_ref": hit["excerpts"][0]["ref"], "purpose": "value",
+        }],
+    }]))
+    assert out["publish_status"] == "verified"
+    match = out["conclusions"][0]["matched_evidence"][0]
+    assert match["quote"] == full["snippet"]  # including leading/trailing whitespace
+    assert match["locator"] == full["locator"]
+    assert (match["start"], match["end"]) == (0, len(full["snippet"]))
+
+
 def test_budget_elision_does_not_deliver_receipt_text():
     first, second = (compact_hit(original(b, "价格" * 250 + "。")) for b in ("a", "b"))
     raw = body(first, second)

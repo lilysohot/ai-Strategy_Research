@@ -31,6 +31,7 @@ import pytest
 def _isolated_search_receipts(tmp_path, monkeypatch):
     """Search serialization must never write receipts into the live corpus cache."""
     monkeypatch.setenv("CORPUS_SEARCH_REF_ROOT", str(tmp_path / "search-receipts"))
+    monkeypatch.setenv("CORPUS_TOOL_REF_ROOT", str(tmp_path / "tool-receipts"))
 
 
 @pytest.fixture(autouse=True)

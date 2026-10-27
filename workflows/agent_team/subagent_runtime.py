@@ -129,8 +129,21 @@ class InheritedWallClockDeadlineObserver:
         "or tool work and return the verified work already available."
     )
 
-    def __init__(self, deadline: Any) -> None:
+    def __init__(self, deadline: Any, *, handoff_at: float | None = None) -> None:
         self.deadline = deadline
+        self.handoff_at = handoff_at
+        self._handoff_announced = False
+
+    def _handoff_due(self) -> bool:
+        return self.handoff_at is not None and time.monotonic() >= self.handoff_at
+
+    _HANDOFF_MESSAGE = (
+        "The research handoff window has started. Stop new retrieval and experiments. "
+        "Use the completed observations to submit_report now: concise Findings, "
+        "exact Evidence URLs, Unresolved and Conflicts. Publish an already-created "
+        "file with publish_handoff only if needed. Missing evidence must remain "
+        "explicitly unresolved; do not turn raw observations into verification."
+    )
 
     def _remaining_s(self) -> float | None:
         return _deadline_remaining_s(self.deadline)
@@ -147,15 +160,28 @@ class InheritedWallClockDeadlineObserver:
     ) -> ToolCallIntervention | None:
         remaining = self._remaining_s()
         if remaining is None or remaining > 0:
+            if self._handoff_due() and _tool_call.get("name") not in {
+                "submit_report", "publish_handoff",
+            }:
+                return ToolCallIntervention(
+                    skip_with_result=self._HANDOFF_MESSAGE,
+                    skip_is_error=True,
+                    metadata_updates={"team_handoff_started": True},
+                )
             return None
         return ToolCallIntervention(
             skip_with_result=self._STOP_RESULT,
+            skip_is_error=True,
             metadata_updates={"team_research_deadline_reached": True},
         )
 
     async def on_turn_end(self, _ctx: Any) -> Intervention | None:
         remaining = self._remaining_s()
         if remaining is None or remaining > 0:
+            if self._handoff_due() and not self._handoff_announced:
+                self._handoff_announced = True
+                _ctx.metadata["team_handoff_started"] = True
+                return Intervention(inject_messages=[self._HANDOFF_MESSAGE])
             return None
         return Intervention(
             stop_reason="wall_deadline",
@@ -1453,7 +1479,18 @@ def build_swarm_session_runtime_spec(
         )
         job_deadline = _job_deadline(_item)
         if job_deadline is not None:
-            obs = [InheritedWallClockDeadlineObserver(job_deadline), *list(obs)]
+            handoff_at = None
+            if runtime.phase_budget is not None and not (
+                _item.metadata.get("can_publish")
+                or _item.metadata.get("uses_publication_budget")
+                or _item.metadata.get("verification_checks")
+                or "verifier" in session_name.lower()
+            ):
+                handoff_at = runtime.phase_budget.research_dispatch_deadline_s
+            obs = [
+                InheritedWallClockDeadlineObserver(job_deadline, handoff_at=handoff_at),
+                *list(obs),
+            ]
         if _tiered:
             obs = [*list(obs), _gauges.setdefault(_job_id, InputTokenGauge())]
             if runtime.max_input_tokens:

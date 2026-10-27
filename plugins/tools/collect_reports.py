@@ -195,7 +195,17 @@ async def collect_reports(timeout: int = 1800) -> str:
     runtime = (scope.metadata or {}).get(SWARM_SCOPE_KEY)
     phase_budget = getattr(runtime, "phase_budget", None)
     if phase_budget is not None:
-        phase_name, phase_deadline = phase_budget.wait_deadline()
+        publication_pending = any(
+            metadata.get("can_publish") or metadata.get("uses_publication_budget")
+            for session in bus.list_sessions_for_task(task_id)
+            for metadata in (
+                bus.current_job_metadata(session.session_id),
+                *(pending.task_metadata for pending in session.pending_tasks),
+            )
+        )
+        phase_name, phase_deadline = phase_budget.wait_deadline(
+            publication_pending=publication_pending,
+        )
         if phase_deadline is not None:
             phase_remaining = float(phase_deadline) - time.monotonic()
             remaining = (

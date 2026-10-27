@@ -72,6 +72,27 @@
 当前 `data_coverage` 还在返回 `full/partial/research_only/none`，上表是已批准的目标语义；
 实现完成前不得把 `none` 直接宣传为来源确定不存在相关资料。
 
+### 2.4 分页与原文引用的持久化句柄（2026-10-27）
+
+当前原生检索已提供可核验的 `excerpts`；本节描述新接口，旧的未标记 snippet
+仍只用于定位。提交 `corpus_submit_manifest` 时，`evidence` 条目优先使用
+`{"evidence_ref": "工具返回的引用 ID", "purpose": "value"}`：
+
+- `corpus_search` 的 `excerpts.ref` 可直接作为 `evidence_ref`。
+- `corpus_fetch` 的单块结果及分页 `items` 均返回 `evidence_ref`，绑定本次返回的
+  完整片段。系统自动填入文档、块位置、原文码点区间和原始文字，保留换行、页码与
+  Unicode 空格；不允许同时提供另外的 doc_id/locator/quote 覆盖引用身份。
+- 原始 doc_id/locator/quote 形式继续兼容。清单落盘会保存展开后的原文与区间，
+  发布时仍对照权威原文及消费账本核验；句柄存在不代表该片段已送达或结论已成立。
+- `corpus_fetch.next_cursor` 返回 `cpage:` 短句柄，原样作为 `cursor` 续读；历史
+  自描述长游标仍可使用。文档、请求顺序、视图和分页位置的校验保持不变。
+
+新增回执默认存于 `data/corpus-tool-refs/`，可用 `CORPUS_TOOL_REF_ROOT` 配置。
+检索回执继续使用 `CORPUS_SEARCH_REF_ROOT`。跨进程/跨回合复用需要访问相同的持久目录
+和语料目标；多 worker 部署应共享相应目录。回执缺失、损坏或目标不匹配时显式拒绝，
+需重新检索或取回原文。回执存储不可写时，fetch 返回自包含的原文和旧式游标，
+不发放无法解析的引用 ID；该次调用仍需使用旧式逐字引用。
+
 ## 3. 上下文的四条独立通道
 
 Agent 不应把所有“记忆”交给同一种检索算法：
@@ -144,4 +165,3 @@ Web 的接线 seam 应只暴露一个小界面：根据用户、Run 与 `corpus_
 | [PostgreSQL 迁移报告](corpus-pg-migration-report.md) | 2026-09-08 迁移与排序校准的验证记录，其 17 份/298 块不是当前库容量承诺 |
 | [Web 语料库接入方案](plan/web-corpus-integration.md) | 历史需求输入；当前缺口以 `PR-DATA-04` 和本文 §5–6 为准 |
 | [召回校准教程](guide-recall-calibration.md) | 解释迁移时的检索原理和实验，不定义产品状态 |
-

@@ -1187,7 +1187,10 @@ def _verify_conclusion(
                 continue
             doc_id = str(item.get("doc_id") or "").strip()
             locator = str(item.get("locator") or "").strip()
-            quote = str(item.get("quote") or "").strip()
+            pinned_range = "source_start" in item or "source_end" in item
+            quote = str(item.get("quote") or "")
+            if not pinned_range:
+                quote = quote.strip()
             purpose = str(item.get("purpose") or "").strip()
             if purpose:
                 covered_purposes.add(purpose)
@@ -1225,6 +1228,16 @@ def _verify_conclusion(
                 )
                 continue
             matches = list(find_quote_matches(source_text, quote))
+            if pinned_range:
+                start, end = item.get("source_start"), item.get("source_end")
+                # Receipt-derived coordinates select this exact occurrence, not
+                # another identical quote in a delivered part of the same block.
+                if (type(start) is not int or type(end) is not int
+                        or not 0 <= start < end <= len(source_text)
+                        or source_text[start:end] != quote):
+                    matches = []
+                else:
+                    matches = [m for m in matches if m.start == start and m.end == end]
             if not matches:
                 problems.append(
                     {

@@ -54,6 +54,11 @@ const boundAccount = computed(() => {
 const totalCapital = computed(() => boundAccount.value?.values?.total_capital ?? null)
 const availableCapital = computed(() => boundAccount.value?.values?.available_capital ?? null)
 const missingFields = computed(() => props.request?.remaining_fields ?? [])
+/** 会话已有规划资金：本标的规划资金以其为准，预填并锁定（多次分配按累加语义维护）。 */
+const capitalPlanAmount = computed(() => {
+  const amount = store.capitalPlan?.values?.allocated_capital
+  return amount ? String(amount) : null
+})
 
 watch(
   () => props.modelValue,
@@ -73,6 +78,7 @@ watch(
       currency: 'CNY',
       capitalBasis: 'tradable_assets',
     })
+    if (capitalPlanAmount.value) form.allocatedCapital = capitalPlanAmount.value
   },
 )
 
@@ -262,11 +268,14 @@ async function submit(): Promise<void> {
 
     <section class="field-stack">
       <label class="answer-field">
-        <span>本标的规划资金（必需）</span>
+        <span>{{ capitalPlanAmount ? '本标的规划资金（取自会话规划资金）' : '本标的规划资金（必需）' }}</span>
         <el-input
           v-model="form.allocatedCapital"
           inputmode="decimal"
-          placeholder="从主账户可用资金中划出，不得超过可用资金"
+          :disabled="!!capitalPlanAmount"
+          :placeholder="capitalPlanAmount
+            ? '已使用会话规划资金；调整请到会话资金（累加/重置）'
+            : '从主账户可用资金中划出，不得超过可用资金'"
         />
       </label>
       <label class="answer-field">

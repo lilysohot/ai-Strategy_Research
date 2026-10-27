@@ -60,6 +60,11 @@ from frontier_agent.core.tool import tool
 from plugins.corpus.cursor import CONTENT, CursorError, decode_cursor, encode_cursor
 from plugins.corpus.preparation.read_pg import AUTHORITY_REV
 from plugins.corpus.service import content_role_for_kind, context_scope_id, get_service
+from plugins.corpus.tool_refs import (
+    fetch_evidence_ref,
+    publish_fetch_references,
+    resolve_cursor_reference,
+)
 
 #: 允许的返回视图；未知取值 fail-closed 拒绝，不静默退回默认视图。
 _VALID_VIEWS = ("full", "compact")
@@ -75,6 +80,7 @@ _MARGIN = 64
 
 #: 正文优先的引用提示（full 视图）。
 _FULL_HINT = (
+    "提交清单优先用 evidence_ref，由系统填入本段原文及位置，无需重写 quote。"
     "evidence.quote 必须逐字取自本 text；evidence.page 填本 locator；"
     "跨 unit 的精确区间用 spans（text 内偏移）与 source_ranges（原文 code point）。"
     "kind=heading 时 content_role=heading_only：只证明标题被取回，不含表体／数值。"
@@ -88,15 +94,11 @@ _COMPACT_HINT = (
 )
 #: 分页信封提示。
 _PAGE_HINT = (
-    "本页 items 是取回的正文（可能为整块或分片）；quote 必须逐字取自 item.text。"
-    "ok=false 表示本次没有取回任何权威正文；fetch_complete=false 表示仍有未解决项"
-    "或分页未结束；这两种状态下都不得把 items 当作完整证据。"
-    "分片用 fragment.start/end 标注**本块 text 内**的 Unicode 码点区间，"
-    "text_sha256/text_chars 是整块内容身份，可用于校验分片确来自该块。"
-    "续取用 next_cursor；exhausted 只表示这轮遍历到终点——有失败项时 fetch_complete "
-    "仍为 false 且见 unresolved，不得把游标前移当作已取全。"
-    "kind=heading 的 item content_role=heading_only（只证明标题被取回）；relations 是"
-    "本次请求范围内的结构关联（verified／candidate 严格分开）。"
+    "提交清单优先用 item.evidence_ref，系统填入该片段原文及位置；缺此字段时逐字引用 item.text。"
+    "fragment.start/end 是块内码点区间，text_sha256/text_chars 标识整块。"
+    "续取传 next_cursor；exhausted 仅表示遍历终止，fetch_complete=false 时须检查 unresolved。"
+    "ok=false 无权威正文；未完成不得声称已取全。heading_only 仅证明标题；"
+    "relations 的 candidate 不是已验证依赖。"
 )
 
 #: 正文块的优先切分边界（按出现顺序尝试，越靠前越优先）。
@@ -309,6 +311,7 @@ def _item(
             item["units"] = [
                 {"unit_id": unit.unit_id, "page": unit.page} for unit in evidence.units
             ]
+    item["evidence_ref"] = fetch_evidence_ref("cv2:" + evidence.build_id, item)
     return item
 
 
@@ -411,6 +414,8 @@ def _compact_payload(full: dict[str, Any]) -> dict[str, Any]:
     }
     if "native_slices" in full:
         compact["native_slices"] = full["native_slices"]
+    if "evidence_ref" in full:
+        compact["evidence_ref"] = full["evidence_ref"]
     for key in ("content_role", "relations", "relation_status", "label_path"):
         if key in full:
             compact[key] = full[key]
@@ -958,7 +963,11 @@ async def corpus_fetch(
     view: str = "full",
     max_chars: int = 6000,
 ) -> str:
-    """取回语料中指定块的逐字原文，用于写入 ``evidence.quote``。
+    """取回语料中指定块的逐字原文，返回可直接提交清单的 ``evidence_ref``。
+
+    清单 evidence 优先只填本结果（或分页 item）的 evidence_ref，可附 purpose；
+    系统自动绑定该片段的文档、块和精确原文，不要再生成 quote。存储不可用而未返回
+    evidence_ref 时，兼容原 doc_id/locator/quote 方式，quote 须逐字保留换行与页码。
 
     当 search 已核验并送达的节选足以支撑结论时，无需例行调用。缺论证、限定条件、
     指代、表头/期间/单位/脚注或更多原文时，使用同一命中的 doc_id 和所需
@@ -972,7 +981,7 @@ async def corpus_fetch(
         doc_id: 版本句柄（来自 ``corpus_search`` 的 ``doc_id``，形如 ``cv2:<build_id>``）。
         locator: 单块句柄（``chunk:<chunk_id>``）或 search v2 的 excerpts.ref。
         locators: 批量块句柄（有序，按首次出现去重）；表格块请附带必要表头、期间、单位。
-        cursor: 续取游标（上一页返回的 ``next_cursor``；类型必须为 ``content``）；
+        cursor: 上一页返回的 ``next_cursor`` 短句柄，原样传回即可；兼容历史长游标。
             游标已绑定请求集合、顺序、视图与位置，续取时不得改动，视图由游标决定。
         view: 返回视图。``"full"``（默认）保留完整诊断／结构元数据；``"compact"``
             只保留正文、引用最小映射、单元身份与结构状态，并给出可取回完整元数据的
@@ -997,6 +1006,17 @@ async def corpus_fetch(
         ``label_path_count`` 明示省略；提高预算可重取完整诊断。旧句柄／来源已撤销／
         游标类型不符时返回 ``ok=false``。
     """
+    return publish_fetch_references(await _fetch(doc_id, locator, locators, cursor, view, max_chars))
+
+
+async def _fetch(
+    doc_id: str,
+    locator: str | None,
+    locators: list[str] | None,
+    cursor: str | None,
+    view: str,
+    max_chars: int,
+) -> str:
     if not isinstance(doc_id, str) or not doc_id.strip():
         return _json_error("doc_id 必须是非空字符串")
 
@@ -1040,7 +1060,7 @@ async def corpus_fetch(
     # ── 游标模式：视图、请求集合与起点都由游标决定（A2.2） ──
     if cursor is not None:
         try:
-            payload = decode_cursor(cursor)
+            payload = decode_cursor(resolve_cursor_reference(cursor))
         except CursorError as exc:
             return _json_error(f"游标不可用：{exc}", cursor_type=CONTENT)
         if payload.get("type") != CONTENT:
@@ -1115,6 +1135,7 @@ async def corpus_fetch(
         "relation_status": "unknown",
     }
     full = _full_payload(doc_id, locator, evidence, semantic_cells, extra)
+    full["evidence_ref"] = fetch_evidence_ref(doc_id, full)
     body = json.dumps(_compact_payload(full) if view == "compact" else full, ensure_ascii=False)
     if len(body) <= max_chars:
         return body

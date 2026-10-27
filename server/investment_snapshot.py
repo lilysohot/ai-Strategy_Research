@@ -204,6 +204,64 @@ def split_declared(declared: dict[str, Any]) -> dict[str, dict[str, Any]]:
     return groups
 
 
+async def declared_plan_from_capital(
+    session: AsyncSession, *, user_id: uuid.UUID, research_id: uuid.UUID
+) -> dict[str, dict[str, Any]] | None:
+    """会话规划资金 + 其下最新一笔有效买卖价格 → ``declared`` 计划口径。
+
+    主计划已随计划创建入口下线（2026-10-27）：无主计划的会话以**规划资金 + 实际
+    买卖价格**表达计划口径——标的/市场/方向/币种取最新一笔有效（未归档）买卖价格，
+    规划资金由 :func:`resolve_for_run` 注入 ``plan.allocated_capital``。不满足
+    （无规划资金、资金未填、无有效买卖价格）返回 ``None``，调用方按绑定缺失处理。
+    """
+    capital = (
+        await session.execute(
+            select(store.CapitalPlan).where(
+                store.CapitalPlan.research_id == research_id,
+                store.CapitalPlan.user_id == user_id,
+            )
+        )
+    ).scalar_one_or_none()
+    if capital is None or capital.allocated_capital is None:
+        return None
+    buy_sell = (
+        (
+            await session.execute(
+                select(store.BuySellPlan)
+                .where(
+                    store.BuySellPlan.capital_plan_id == capital.id,
+                    store.BuySellPlan.archived.is_(False),
+                    store.BuySellPlan.status == "active",
+                )
+                .order_by(store.BuySellPlan.created_at.desc())
+                .limit(1)
+            )
+        )
+        .scalars()
+        .first()
+    )
+    if buy_sell is None:
+        return None
+    revision = (
+        await session.execute(
+            select(store.BuySellPlanRevision).where(
+                store.BuySellPlanRevision.buy_sell_plan_id == buy_sell.id,
+                store.BuySellPlanRevision.revision == buy_sell.current_revision,
+            )
+        )
+    ).scalar_one_or_none()
+    if revision is None:
+        return None
+    return {
+        "plan": {
+            "symbol": {"value": revision.symbol},
+            "market": {"value": revision.market or "CN"},
+            "direction": {"value": revision.side},
+            "currency": {"value": revision.currency},
+        }
+    }
+
+
 # ——— 解析有效值 ————————————————————————————————————————————————————————
 
 
@@ -303,9 +361,7 @@ async def resolve_for_run(
                 select(model).where(model.id == ref.id, model.user_id == user_id).with_for_update()
             )
         ).scalar_one_or_none()
-        if obj is None or (
-            group == "plan" and getattr(obj, "research_id", None) != research_id
-        ):
+        if obj is None or (group == "plan" and getattr(obj, "research_id", None) != research_id):
             raise biz.NotFoundOrForbiddenError("资料不存在或不属于该研究")
         if obj.archived:
             raise biz.ObjectArchivedError("资料已归档，不能用于新的分析")
@@ -336,46 +392,6 @@ async def resolve_for_run(
             if getattr(revision, name, None) is not None
         }
         add(group, values, pending)
-
-    # 规划资金已从计划拆分到 ``capital_plans``（会话 1:1，累加/重置）：用途门禁仍以
-    # ``plan.allocated_capital`` 表达"本标的规划资金"，这里把会话规划资金注入计划组，
-    # 满足门禁并随快照冻结，下游仓位分析据此取数。显式 declared 优先（见下方合并）。
-    if "plan" in entries and "allocated_capital" not in entries["plan"]:
-        capital = (
-            await session.execute(
-                select(store.CapitalPlan).where(
-                    store.CapitalPlan.research_id == research_id,
-                    store.CapitalPlan.user_id == user_id,
-                )
-            )
-        ).scalar_one_or_none()
-        if capital is not None and capital.allocated_capital is not None:
-            entries["plan"]["allocated_capital"] = _entry(
-                capital.allocated_capital,
-                status="user_provided",
-                source={
-                    "kind": "capital_plan",
-                    "id": str(capital.id),
-                    "revision": capital.current_revision,
-                },
-                currency=capital.currency,
-                as_of=capital.as_of,
-            )
-            groups["plan"] = biz.AdmissionResult(
-                values={
-                    **groups["plan"].values,
-                    "allocated_capital": biz.AdmittedValue(
-                        value=capital.allocated_capital, status="user_provided"
-                    ),
-                },
-                # 规划资金已由会话资金补齐：把该字段从待补充清单里移除，
-                # 否则 incomplete 会覆盖注入值，门禁依旧被拒。
-                incomplete={
-                    name: reason
-                    for name, reason in groups["plan"].incomplete.items()
-                    if name != "allocated_capital"
-                },
-            )
 
     for group, ref, model, columns in (
         (
@@ -446,6 +462,48 @@ async def resolve_for_run(
             )
         add(group, values, list(pending))
 
+    # 规划资金已从计划拆分到 ``capital_plans``（会话 1:1，累加/重置）：用途门禁仍以
+    # ``plan.allocated_capital`` 表达"本标的规划资金"，这里把会话规划资金注入计划组，
+    # 满足门禁并随快照冻结，下游仓位分析据此取数。放在 declared 合并之后：
+    # 计划组既可能来自主计划引用，也可能来自监控触发的 declared（无主计划路径），
+    # 两种来源都由本注入补齐资金；显式 declared 的 allocated_capital 仍然优先。
+    if "plan" in entries and "allocated_capital" not in entries["plan"]:
+        capital = (
+            await session.execute(
+                select(store.CapitalPlan).where(
+                    store.CapitalPlan.research_id == research_id,
+                    store.CapitalPlan.user_id == user_id,
+                )
+            )
+        ).scalar_one_or_none()
+        if capital is not None and capital.allocated_capital is not None:
+            entries["plan"]["allocated_capital"] = _entry(
+                capital.allocated_capital,
+                status="user_provided",
+                source={
+                    "kind": "capital_plan",
+                    "id": str(capital.id),
+                    "revision": capital.current_revision,
+                },
+                currency=capital.currency,
+                as_of=capital.as_of,
+            )
+            groups["plan"] = biz.AdmissionResult(
+                values={
+                    **groups["plan"].values,
+                    "allocated_capital": biz.AdmittedValue(
+                        value=capital.allocated_capital, status="user_provided"
+                    ),
+                },
+                # 规划资金已由会话资金补齐：把该字段从待补充清单里移除，
+                # 否则 incomplete 会覆盖注入值，门禁依旧被拒。
+                incomplete={
+                    name: reason
+                    for name, reason in groups["plan"].incomplete.items()
+                    if name != "allocated_capital"
+                },
+            )
+
     # Shared names never manufacture another object's fields. No implicit FX or
     # borrowing a different security's trade price to satisfy plan requirements.
     for name in ("symbol", "market", "currency"):
@@ -471,6 +529,77 @@ async def resolve_for_run(
             # projection consumed by older snapshot readers.
             resolution.values[f"{group}.{name}"] = item
             resolution.values.setdefault(name, item)
+
+    # 实际买卖价格列表（只读事实，随快照冻结）：会话规划资金下**未归档**的有效
+    # 买卖价格，最新在前、最多 10 笔。软删除（archived）不进入上下文。它们不参与
+    # 用途门禁，也不进入 groups——仅供模型经 ``investment_context`` 对比参考，
+    # 真源仍是 trade_records / buy_sell_plans，入场区间仍是分析情景。
+    capital = (
+        await session.execute(
+            select(store.CapitalPlan).where(
+                store.CapitalPlan.research_id == research_id,
+                store.CapitalPlan.user_id == user_id,
+            )
+        )
+    ).scalar_one_or_none()
+    if capital is not None:
+        buy_sell_rows = (
+            (
+                await session.execute(
+                    select(store.BuySellPlan)
+                    .where(
+                        store.BuySellPlan.capital_plan_id == capital.id,
+                        store.BuySellPlan.archived.is_(False),
+                        store.BuySellPlan.status == "active",
+                    )
+                    .order_by(store.BuySellPlan.created_at.desc())
+                    .limit(10)
+                )
+            )
+            .scalars()
+            .all()
+        )
+        capital_source = {
+            "kind": "capital_plan",
+            "id": str(capital.id),
+            "revision": capital.current_revision,
+        }
+        resolution.values["buy_sell.count"] = _entry(
+            str(len(buy_sell_rows)), status="user_provided", source=capital_source
+        )
+        for index, row in enumerate(buy_sell_rows, start=1):
+            revision = await _latest(
+                session,
+                store.BuySellPlanRevision,
+                "buy_sell_plan_id",
+                row.id,
+                row.current_revision,
+            )
+            if revision is None:
+                continue
+            row_source = {
+                "kind": "capital_plan",
+                "id": str(row.id),
+                "revision": row.current_revision,
+            }
+            facts = {
+                "symbol": revision.symbol,
+                "market": revision.market,
+                "side": revision.side,
+                "price": revision.price,
+                "quantity": revision.quantity,
+                "traded_at": revision.traded_at,
+                "currency": revision.currency,
+            }
+            for name, value in facts.items():
+                if value is None:
+                    continue
+                resolution.values[f"buy_sell.{index}.{name}"] = _entry(
+                    value,
+                    status="user_provided",
+                    source=row_source,
+                    currency=revision.currency if name == "price" else None,
+                )
     return resolution
 
 
@@ -484,10 +613,15 @@ async def persist_declared(
     """Save explicit edits in the caller's Run transaction, then freeze saved revisions."""
     saved: dict[str, Any] = {}
     result = spec
+    persisted: set[str] = set()
     for group, declared in split_declared(spec.declared).items():
         ref = getattr(spec, group)
         #: trade 允许没有既有引用：2026-10-08 口径下“回填实际成交价”就是新登记一条成交。
+        #: plan 无引用时（规划资金 + 实际买卖价格路径）没有可写的计划对象——计划口径
+        #: 以 declared 原样保留给解析，不做持久化、也不报错（2026-10-27）。
         if ref is None and group != "trade":
+            if group == "plan":
+                continue
             raise biz.ValidationError(
                 "保存资料需要明确的目标对象", fields={group: "请先选择或创建资料对象"}
             )
@@ -544,8 +678,14 @@ async def persist_declared(
                 idempotency_key=child_key,
             )
             result = replace(result, trade=ObjectRef(uuid.UUID(outcome.result["trade_id"])))
+        persisted.add(group)
         saved[group] = outcome.result
-    return replace(result, declared={}), saved
+    # 已持久化的组清空 declared（事实已落对象，解析走引用）；未持久化的组
+    # （无主计划的 plan）原样保留，供随后的 resolve_for_run 使用。
+    return replace(
+        result,
+        declared={k: v for k, v in spec.declared.items() if k not in persisted},
+    ), saved
 
 
 # ——— 冻结与读取 ————————————————————————————————————————————————————————

@@ -165,6 +165,43 @@ async def _needs_input(
     event.detail_json = detail
 
 
+async def _auto_analysis_spec(
+    session: AsyncSession, *, event: store.WatchEvent, link: store.ResearchInvestmentLink
+) -> tuple[investment_snapshot.InvestmentInputSpec | None, str | None]:
+    """构造监控自动分析的业务输入（返回 ``(spec, None)`` 或 ``(None, 失败原因)``）。
+
+    绑定口径（2026-10-27）：主计划不再是必要条件——会话绑定**规划资金**且其下存在
+    有效买卖价格即可。计划口径（标的/市场/方向/币种）取该规划资金最新一笔有效
+    买卖价格，以 ``declared`` 进入解析；规划资金本身由快照解析注入
+    ``plan.allocated_capital``。仍有主计划绑定的会话沿用原引用路径。
+    """
+    plan_ref = (
+        investment_snapshot.ObjectRef(id=link.primary_plan_id)
+        if link.primary_plan_id is not None
+        else None
+    )
+    declared: dict[str, Any] = {}
+    if plan_ref is None:
+        declared = (
+            await investment_snapshot.declared_plan_from_capital(
+                session, user_id=event.user_id, research_id=event.research_id
+            )
+            or {}
+        )
+        if not declared:
+            return None, "research_binding_missing"
+    return (
+        investment_snapshot.InvestmentInputSpec(
+            use_case="plan_analysis",
+            account=investment_snapshot.ObjectRef(id=link.account_id),
+            plan=plan_ref,
+            declared=declared,
+            idempotency_key=f"watch:{event.id}:{event.generation}",
+        ),
+        None,
+    )
+
+
 async def schedule_event(
     session: AsyncSession, *, event_id: Any, now: datetime | None = None
 ) -> dict[str, Any]:
@@ -309,7 +346,8 @@ async def schedule_event(
             "max_runs": max_runs,
         }
 
-    # 研究绑定：自动分析需要该研究已绑定的账户与当前主计划。
+    # 研究绑定：自动分析需要主账户；主计划已非必要——绑定规划资金且其下有
+    # 有效买卖价格即可（计划口径取最新买卖价格，规划资金由快照解析注入）。
     link = (
         await session.execute(
             select(store.ResearchInvestmentLink).where(
@@ -318,22 +356,22 @@ async def schedule_event(
             )
         )
     ).scalar_one_or_none()
-    if link is None or link.account_id is None or link.primary_plan_id is None:
+    spec: investment_snapshot.InvestmentInputSpec | None = None
+    binding_failure: str | None = "research_binding_missing"
+    if link is None or link.account_id is None:
+        spec = None
+    else:
+        spec, binding_failure = await _auto_analysis_spec(session, event=event, link=link)
+    if spec is None:
         event.status = FAILED
         event.budget_reason = None
         event.attempted_at = now
         detail = dict(event.detail_json or {})
-        detail["failure_reason"] = "research_binding_missing"
+        detail["failure_reason"] = binding_failure
         event.detail_json = detail
         await session.flush()
-        return {"status": FAILED, "reason": "research_binding_missing"}
+        return {"status": FAILED, "reason": binding_failure}
 
-    spec = investment_snapshot.InvestmentInputSpec(
-        use_case="plan_analysis",
-        account=investment_snapshot.ObjectRef(id=link.account_id),
-        plan=investment_snapshot.ObjectRef(id=link.primary_plan_id),
-        idempotency_key=f"watch:{event.id}:{event.generation}",
-    )
     try:
         resolution = await investment_snapshot.resolve_for_run(
             session, user_id=event.user_id, research_id=event.research_id, spec=spec
@@ -356,7 +394,7 @@ async def schedule_event(
     prompt = (
         f"价格监控触发：{event.symbol}，{event.trigger_reason}；触发价 {event.price} {event.currency}；"
         f"供应商行情时间戳 {event.observed_at_ms}，规则版本 {event.rule_version}。\n"
-        f"{rev.task or '请按当前研究的账户与计划重新分析。'}\n"
+        f"{rev.task or '请按当前研究的账户、规划资金与实际买卖价格重新分析。'}\n"
         "这是 HTTP 定时采样触发，不代表完整的盘中价格路径；请核验最新行情后给出研究结论。"
     )
     event.detail_json = {
@@ -627,7 +665,14 @@ async def assert_watch_launch_ready(run_id: uuid.UUID) -> None:
                 spec = investment_snapshot.InvestmentInputSpec(
                     use_case=snapshot.use_case,
                     account=investment_snapshot.ObjectRef(id=snapshot.account_id),
-                    plan=investment_snapshot.ObjectRef(id=snapshot.plan_id),
+                    plan=(
+                        investment_snapshot.ObjectRef(id=snapshot.plan_id)
+                        if snapshot.plan_id is not None
+                        else None
+                    ),
+                    # 无主计划路径：计划口径以 declared 冻结在快照里，重校验按原样
+                    # 重建，使重新解析得到与冻结时逐字段一致的有效值。
+                    declared=dict(snapshot.declared_json or {}),
                 )
                 try:
                     current = await investment_snapshot.resolve_for_run(

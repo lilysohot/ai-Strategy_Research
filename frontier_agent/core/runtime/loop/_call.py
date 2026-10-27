@@ -524,12 +524,16 @@ async def call_llm(
                             min(effective_timeout, available or 0)
                             - first_chunk_s - retry_floor_s - _RUNAWAY_BACKOFF_S - 10
                         )
-                        if _WALL_DEADLINE_FLOOR_S <= reasoning_room < reasoning_only_timeout_s:
-                            attempt_reasoning_timeout = reasoning_room
+                        if reasoning_room < reasoning_only_timeout_s:
+                            # A nearly spent wall must not restore the full 120s
+                            # watchdog when the reservation drops below 20s.
+                            # Even when recovery no longer fits, stop promptly;
+                            # the deadline gate still decides whether to retry.
+                            attempt_reasoning_timeout = max(1.0, reasoning_room)
                             logger.info(
                                 "Reasoning watchdog reserves one recovery: %.1fs -> %.1fs "
                                 "(turn=%d, logical_remaining=%.1fs, retry_floor=%.1fs)",
-                                reasoning_only_timeout_s, reasoning_room, turn,
+                                reasoning_only_timeout_s, attempt_reasoning_timeout, turn,
                                 available, retry_floor_s,
                             )
                     response = await _stream_llm_response(

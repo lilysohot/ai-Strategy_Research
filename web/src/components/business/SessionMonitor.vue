@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { link as researchLink, monitor, watchRules, type MonitorStatus } from '@/api'
+import { capitalPlans, link as researchLink, monitor, watchRules, type MonitorStatus } from '@/api'
 import type { ResearchLink, WatchRule } from '@/types'
 import {
   activeMonitorRunId,
@@ -20,6 +20,7 @@ const saving = ref(false)
 const editing = ref<string | null>(null)
 const showForm = ref(false)
 const binding = ref<ResearchLink | null>(null)
+const capitalPlanId = ref<string | null>(null)
 const bindingState = ref<MonitorBindingState>('loading')
 let timer: ReturnType<typeof setInterval> | null = null
 let epoch = 0
@@ -31,7 +32,7 @@ const form = reactive({ symbol: '', direction: 'up', threshold: '', upper: '', e
   task: '', alreadyMet: 'wait_requalify' })
 const current = computed(() => status.value?.rules ?? [])
 const autoAnalysisIssue = computed(() =>
-  autoAnalysisBindingIssue(binding.value, bindingState.value),
+  autoAnalysisBindingIssue(binding.value, capitalPlanId.value, bindingState.value),
 )
 const health = computed(() => {
   if (error.value) return error.value
@@ -54,7 +55,7 @@ const labels: Record<string, string> = {
   rule_lifecycle_changed: '规则曾暂停或恢复，旧触发已失效', prior_online_period: '上次在线期间的旧触发已失效',
   awaiting_fresh_quote: '等待下一次有效行情', condition_no_longer_met: '最新价格已不满足条件',
   max_delay: '超过触发有效期', rule_inactive: '规则已暂停或取消', rule_obsoleted: '规则已改版',
-  research_binding_missing: '请在会话计划中绑定账户与主计划',
+  research_binding_missing: '请绑定主账户并配置规划资金（含实际买卖价格）',
 }
 const label = (value: unknown) => labels[String(value)] ?? String(value ?? '—')
 const time = (value: unknown) => value ? new Date(String(value)).toLocaleString() : '尚无'
@@ -79,11 +80,13 @@ async function load(): Promise<void> {
   const requestEpoch = epoch
   if (binding.value?.research_id !== id) {
     binding.value = null
+    capitalPlanId.value = null
     bindingState.value = 'loading'
   }
-  const [monitorResult, bindingResult] = await Promise.allSettled([
+  const [monitorResult, bindingResult, capitalResult] = await Promise.allSettled([
     monitor.status(id),
     researchLink.get(id),
+    capitalPlans.get(id),
   ])
   try {
     if (requestEpoch !== epoch) return
@@ -106,6 +109,9 @@ async function load(): Promise<void> {
       } else {
         bindingState.value = 'error'
       }
+      capitalPlanId.value = capitalResult.status === 'fulfilled'
+        ? capitalResult.value.capital_plan?.capital_plan_id ?? null
+        : null
     }
     loading = false
   }
@@ -122,6 +128,13 @@ async function refreshBinding(): Promise<void> {
     bindingState.value = 'ready'
   } catch {
     if (requestEpoch === epoch) bindingState.value = 'error'
+  }
+  try {
+    const capital = await capitalPlans.get(id)
+    if (requestEpoch !== epoch || id !== props.researchId) return
+    capitalPlanId.value = capital.capital_plan?.capital_plan_id ?? null
+  } catch {
+    if (requestEpoch === epoch) capitalPlanId.value = null
   }
 }
 function edit(rule?: WatchRule): void {
@@ -244,7 +257,7 @@ onBeforeUnmount(() => { epoch++; if (timer) clearInterval(timer) })
           <el-form-item label="触发后的操作"><el-radio-group v-model="form.action"><el-radio-button value="notify">仅提醒</el-radio-button><el-radio-button value="auto_analyze" :disabled="!!autoAnalysisIssue">在当前会话自动分析</el-radio-button></el-radio-group></el-form-item>
           <el-alert v-if="autoAnalysisIssue" :title="autoAnalysisIssue" type="warning" :closable="false" show-icon />
           <template v-if="form.action === 'auto_analyze'">
-            <p>自动分析将使用当前研究绑定的主账户和主计划。每个版本最多发起一次分析；当前研究运行中时等待，新行情仍满足条件才执行。</p>
+            <p>自动分析将使用当前研究绑定的主账户、规划资金与其下实际买卖价格（未绑定主计划时，计划口径取最新一笔有效买卖价格）。每个版本最多发起一次分析；当前研究运行中时等待，新行情仍满足条件才执行。</p>
             <el-form-item label="分析任务" required><el-input v-model="form.task" type="textarea" :rows="3" placeholder="达到目标价时，结合当前账户和计划重新评估买入条件" /></el-form-item>
           </template>
           <el-button native-type="submit" type="primary" :loading="saving" :disabled="form.action === 'auto_analyze' && !!autoAnalysisIssue">保存监控</el-button>

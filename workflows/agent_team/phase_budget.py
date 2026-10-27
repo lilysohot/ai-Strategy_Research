@@ -73,11 +73,17 @@ class TeamPhaseBudget:
     def remaining_for_job(self, *, can_publish: bool) -> float | None:
         return self._remaining(self.deadline_for_job(can_publish=can_publish))
 
-    def wait_deadline(self) -> tuple[str, float | None]:
+    def wait_deadline(self, *, publication_pending: bool = False) -> tuple[str, float | None]:
         """Return the boundary a report wait must not cross."""
         phase = self.sync_phase()
-        if phase == "publishing":
+        if phase == "publishing" or (
+            publication_pending and phase in {"draining", "consolidating", "finalizing"}
+        ):
             return phase, self.publication_deadline_s
+        if phase == "research" and self.research_dispatch_deadline_s is not None:
+            # Wake the coordinator when admission closes, even if every member
+            # is still gathering distinct (non-repetitive) evidence.
+            return phase, self.research_dispatch_deadline_s
         return phase, self.research_deadline_s
 
     def as_dict(self, now: float | None = None) -> dict[str, Any]:
@@ -136,14 +142,20 @@ class TeamPhaseBudgetObserver:
         if phase == "draining":
             return Intervention(inject_messages=[
                 "Research admission is now closed. Do not create or assign new "
-                "research or verification work. Collect already-running reports, "
-                "then select the sole publisher if files are required."
+                "exploratory research. Members are entering their report handoff "
+                "window. Collect their reports and dispatch final_verifier with "
+                "bounded verification_checks using the reserved verification / "
+                "publication window, before selecting the sole publisher if "
+                "files are required."
             ])
         if phase == "consolidating":
             return Intervention(inject_messages=[
                 "The research execution window is closed. Do not wait for more "
-                "research. Consolidate available evidence now and either dispatch "
-                "the sole publisher or finalize the text answer."
+                "exploratory research. Collect preserved reports and consolidate "
+                "available evidence. A bounded final_verifier assignment and its "
+                "collect_reports wait are still allowed in the reserved "
+                "verification / publication window. Then dispatch the sole "
+                "publisher or finalize the text answer; disclose unfinished checks."
             ])
         return None
 

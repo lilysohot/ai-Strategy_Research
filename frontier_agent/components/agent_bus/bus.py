@@ -1855,6 +1855,7 @@ class AgentBus:
 
     async def wait_any_session_detailed(
         self, task_id: str, *, timeout: float = 1800.0,
+        include_progress_alerts: bool = True,
     ) -> SessionWaitOutcome:
         """Wait for one result and preserve why the wait ended."""
         started = time.monotonic()
@@ -1867,7 +1868,7 @@ class AgentBus:
         if ready is not None:
             return SessionWaitOutcome(ready, "ready", time.monotonic() - started)
 
-        alert = self._pop_task_progress_alert(task_id)
+        alert = self._pop_task_progress_alert(task_id) if include_progress_alerts else None
         if alert is not None:
             return SessionWaitOutcome(
                 None, "progress_alert", time.monotonic() - started, alert,
@@ -1889,7 +1890,10 @@ class AgentBus:
         if not pending:
             return SessionWaitOutcome(None, "no_pending", time.monotonic() - started)
 
-        alert_event = self._task_progress_events.setdefault(task_id, asyncio.Event())
+        alert_event = (
+            self._task_progress_events.setdefault(task_id, asyncio.Event())
+            if include_progress_alerts else asyncio.Event()
+        )
         alert_waiter = asyncio.create_task(alert_event.wait())
         try:
             done, _ = await asyncio.wait(
@@ -2002,7 +2006,11 @@ class AgentBus:
         would prematurely return ``None`` while sub-agents were still
         genuinely researching.
         """
-        outcome = await self.wait_any_session_detailed(task_id, timeout=timeout)
+        # This compatibility API cannot represent alerts. In particular the
+        # nonblocking fan-in drain must not consume one and silently return None.
+        outcome = await self.wait_any_session_detailed(
+            task_id, timeout=timeout, include_progress_alerts=False,
+        )
         return outcome.result
 
     def _pop_ready_result(

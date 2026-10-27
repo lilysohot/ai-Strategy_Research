@@ -88,7 +88,8 @@ NATIVE_HINT = (
 )
 NATIVE_PREVIEW_HINT = "本次仅返回定位预览，无可直接引用的原文区间；请按原句柄 fetch 补读。"
 REFERENCE_HINT = (
-    "excerpts 原文可引用，使用同一 doc_id 和 ref 作为 locator。缺上下文时 fetch 补读；"
+    "excerpts 原文可引用，提交清单优先只填 evidence_ref=ref，由系统补齐原文及位置。"
+    "缺上下文时用同一 doc_id 和 ref 作为 locator 调用 fetch 补读；"
     "其他候选用 scope_ref 调用 corpus_inventory。preview 不可引用。"
 )
 
@@ -120,8 +121,9 @@ async def corpus_search(query: str, limit: int = 10) -> str:
     """检索研报，返回定位句柄及有界原文；缺失上下文用 corpus_fetch 补读。
 
     原生 v2 命中 evidence_contract=native-search-evidence-v2 的 excerpts 是原文证据，
-    每项含 text 和 ref。引用时使用同一命中的 doc_id，以 ref 原样作为 evidence.locator
-    （或 evidence.page）；补读使用 corpus_fetch(doc_id, locator=ref, view="compact")，
+    每项含 text 和 ref。提交 corpus_submit_manifest 时优先只填 evidence_ref=ref，
+    系统补齐文档、位置和逐字原文，无需重写 quote。旧引用仍可用同一 doc_id 与
+    ref 作为 evidence.locator；补读使用 corpus_fetch(doc_id, locator=ref, view="compact")，
     返回该片段所属整块，超预算时分页。不得自行解析、拼接或扩写短引用。
     available_blocks 是原候选范围块数，不是已读数；用 corpus_inventory(doc_id,
     scope_ref=scope_ref) 展开其他候选，再按需 fetch。完整校验记录保存在后台，

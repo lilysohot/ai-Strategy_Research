@@ -9,6 +9,7 @@ import pytest
 from frontier_agent.components.agent_bus import (
     AgentBus,
     JobEntry,
+    SubAgentResult,
     SubAgentRuntimeSpec,
     SubAgentSession,
     SubTask,
@@ -39,6 +40,87 @@ def _session(task_id: str = "root") -> SubAgentSession:
         llm=None,
         trimmer=NullTrimmer(),
     )
+
+
+@pytest.mark.asyncio
+async def test_collect_reports_preserves_alert_queued_before_nonblocking_drain() -> None:
+    bus = AgentBus()
+    session = _session()
+    job_id = "root.job.1"
+    worker = asyncio.create_task(asyncio.sleep(60))
+    session.current_job_id = job_id
+    session.total_task_count = 1
+    bus._sessions[session.session_id] = session
+    bus._jobs[job_id] = JobEntry(
+        job_id=job_id, parent_task_id="root",
+        item=SubTask(question="work"), task=worker, status="running",
+    )
+    before = registry.snapshot()
+    registry.register(AgentBus, bus)
+    token = set_current_execution_scope(ExecutionScope(task_id="root", metadata={}))
+    try:
+        bus.publish_task_progress_alert(
+            job_id, agent="worker", kind="stuck_target", detail="action required",
+        )
+        result = await collect_reports.ainvoke({"timeout": 0.02})
+        assert "member_progress_alert" in result
+        assert "action required" in result
+        assert not worker.done()
+    finally:
+        reset_current_execution_scope(token)
+        registry.restore(before)
+        worker.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            await worker
+
+
+@pytest.mark.asyncio
+async def test_collect_reports_waits_for_verifier_after_research_cutoff() -> None:
+    bus = AgentBus()
+    session = _session()
+    job_id = "root.job.1"
+    session.current_job_id = job_id
+    session.total_task_count = 1
+    bus._sessions[session.session_id] = session
+    report = SubAgentResult(
+        question="verify", role_id="researcher", final_content="CHECK REPORT", success=True,
+        job_id=job_id,
+    )
+
+    async def publish_report():
+        await asyncio.sleep(0.02)
+        session.pending_results.append(report)
+        session.current_job_id = None
+        bus._jobs[job_id].status = "completed"
+        bus._jobs[job_id].result = report
+        return report
+
+    worker = asyncio.create_task(publish_report())
+    bus._jobs[job_id] = JobEntry(
+        job_id=job_id, parent_task_id="root",
+        item=SubTask(question="verify", metadata={"uses_publication_budget": True}),
+        task=worker, status="running",
+    )
+    now = asyncio.get_running_loop().time()
+    budget = TeamPhaseBudget(
+        started_monotonic_s=now - 720, research_dispatch_deadline_s=now - 165,
+        research_deadline_s=now - 1, publication_deadline_s=now + 30,
+        finalization_deadline_s=now + 60, state={},
+    )
+    before = registry.snapshot()
+    registry.register(AgentBus, bus)
+    token = set_current_execution_scope(ExecutionScope(
+        task_id="root", metadata={SWARM_SCOPE_KEY: SimpleNamespace(phase_budget=budget)},
+    ))
+    try:
+        result = await collect_reports.ainvoke({"timeout": 1})
+        assert "CHECK REPORT" in result
+    finally:
+        reset_current_execution_scope(token)
+        registry.restore(before)
+        worker.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            await worker
 
 
 @pytest.mark.asyncio

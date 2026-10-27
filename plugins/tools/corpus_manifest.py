@@ -46,10 +46,12 @@ from plugins.corpus.structured.consumption import (
     ReportSemanticReference,
     reference_for_record,
 )
+from plugins.corpus.tool_refs import resolve_evidence_reference
 
 logger = logging.getLogger(__name__)
 
 _SUBMIT_HINT = (
+    "原文证据优先用 evidence_ref（search 的 excerpts.ref 或 fetch 的 evidence_ref），无需重写原文。"
     "对非 supported 的结论：按需补取原文、重新查询失效语义版本、修改表述或移除结论；"
     "已完整送达的语义证据不必例行 corpus_fetch。"
     "然后重新提交**完整**清单（每次提交生成新的候选文件，边界以汇总校验为准）。"
@@ -82,7 +84,9 @@ MANIFEST_PROMPT_NOTE = (
     "\n\n## 报告证据清单（A4）\n"
     "你绑定了 `corpus_submit_manifest`。在产出基于语料库结论的报告或最终回复之前：\n"
     "1. 把每条基于语料的结论登记进清单：结论 id、`report_quote`（该结论在最终报告"
-    "中的逐字锚点）、逐字 `quote` 证据（doc_id/locator/quote）与必要依赖"
+    "中的逐字锚点）、证据与必要依赖。证据优先只填 `evidence_ref`（search 的 excerpts.ref "
+    "或 fetch 的 evidence_ref），系统补齐原文、文档及区间，不要重写引文。"
+    "兼容旧 doc_id/locator/quote；依赖可附 purpose"
     "（period/unit/header/footnote 用途）；\n"
     "2. 按工具返回的逐条问题修正：补取原文（corpus_fetch）、修改表述或移除结论，"
     "然后重新提交完整清单；\n"
@@ -149,6 +153,28 @@ def _validate_conclusions(conclusions: Any) -> list[str]:
     return errors
 
 
+def _expand_evidence_references(conclusions: Any) -> Any:
+    """Resolve selections before schema validation; conflicting overrides are errors."""
+    if not isinstance(conclusions, list):
+        return conclusions
+    rows = []
+    for row in conclusions:
+        if not isinstance(row, dict) or not isinstance(row.get("evidence"), list):
+            rows.append(row)
+            continue
+        evidence = []
+        for item in row["evidence"]:
+            if not isinstance(item, dict) or "evidence_ref" not in item:
+                evidence.append(item)
+                continue
+            if set(item) - {"evidence_ref", "purpose"}:
+                raise ValueError("evidence_ref 仅可附 purpose；doc_id/locator/quote/区间由系统填写")
+            resolved = resolve_evidence_reference(item["evidence_ref"])
+            evidence.append({**resolved, **({"purpose": item["purpose"]} if "purpose" in item else {})})
+        rows.append({**row, "evidence": evidence})
+    return rows
+
+
 def _expand_semantic_references(conclusions: Any) -> Any:
     """Resolve short record selections to frozen references, never to delivered flags."""
     if not isinstance(conclusions, list):
@@ -208,8 +234,10 @@ async def corpus_submit_manifest(conclusions: list[dict[str, Any]]) -> str:
         conclusions: 结论数组。每条结论：
             ``id``（可选，缺省自动编号）、``text_location``（结论文本位置描述）、
             ``report_quote``（该结论在**最终报告**中的逐字锚点；报告未成文时可先
-            缺省，边界校验时必须能定位）、``evidence``（非空数组，每项含
-            ``doc_id``／``locator``／``quote``（权威原文逐字片段）及可选
+            缺省，边界校验时必须能定位）、``evidence``（非空数组，每项
+            优先只填 ``evidence_ref``（search 的 excerpts.ref 或 fetch 的 evidence_ref），
+            系统自动绑定文档、块、字符区间和逐字原文，不要再抄写或整理原文。
+            也兼容 ``doc_id``／``locator``／``quote``（权威原文逐字片段）。可选
             ``purpose``：value|period|unit|header|footnote|condition|negation|attribution）、
             ``required_dependencies``（可选，结论成立必需的用途列表，须与某条
             证据的 purpose 对应）。语义查询证据可改用 ``semantic_references``
@@ -225,6 +253,7 @@ async def corpus_submit_manifest(conclusions: list[dict[str, Any]]) -> str:
         ``hint``（修正指引）；schema 不合法时 ``ok=false`` 且 ``errors`` 逐条列出。
     """
     try:
+        conclusions = _expand_evidence_references(conclusions)
         conclusions = _expand_semantic_references(conclusions)
         errors = _validate_conclusions(conclusions)
     except (ValueError, TypeError) as exc:
