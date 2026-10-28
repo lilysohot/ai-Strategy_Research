@@ -857,6 +857,11 @@ def _merge_manifests(
             )
             continue
         for row in rows:
+            if isinstance(row, dict):
+                row = dict(row)
+                row.pop("report_binding", None)
+                if "report_binding" in payload:
+                    row["report_binding"] = payload["report_binding"]
             if multi and isinstance(row, dict):
                 row = {**row, "id": f"{owner}/{row.get('id') or ''}"}
             conclusions.append(row)
@@ -1049,16 +1054,22 @@ def verify_manifest(
                 }
             )
             continue
-        conclusions_out.append(
-            _verify_conclusion(
-                conclusion,
-                index,
-                ledger,
-                resolve,
-                final_text,
-                pending_aware=pending_aware,
-            ),
+        binding = conclusion.get("report_binding", manifest.get("report_binding"))
+        report_text = final_text
+        binding_problems: list[dict[str, str]] = []
+        if binding is not None:
+            from plugins.corpus.report_binding import bound_report
+            report_text, binding_problems = bound_report(binding)
+        row = _verify_conclusion(
+            conclusion, index, ledger, resolve, report_text, pending_aware=pending_aware,
         )
+        if binding is not None:
+            row["report_binding"] = binding
+        if binding_problems:
+            row["problems"].extend(binding_problems)
+            if row["status"] == SUPPORTED:
+                row["status"] = PARTIAL
+        conclusions_out.append(row)
     counts = {SUPPORTED: 0, PARTIAL: 0, UNSUPPORTED: 0}
     for row in conclusions_out:
         counts[row["status"]] = counts.get(row["status"], 0) + 1
@@ -1388,6 +1399,7 @@ def publish_boundary(
     answer_status: str,
     directory: Path | None = None,
     resolver: SourceResolver | None = None,
+    announce_status: bool = False,
 ) -> dict[str, Any]:
     """所有最终发布路径共用的 A4 边界（评审 C5）。
 
@@ -1427,12 +1439,25 @@ def publish_boundary(
         )
         outcome["verification"] = verification
         outcome["publish_status"] = verification.get("status") or ""
+        if announce_status:
+            passed = outcome["publish_status"] == PUBLISH_VERIFIED
+            status_text = "已通过" if passed else "未全部通过，以本次最终核验为准"
+            counts = verification.get("counts") or {}
+            supported = counts.get("supported", 0)
+            total = sum(counts.values())
+            notice = (
+                f"最终证据核验：{status_text}（{supported}/{total} 条清单结论）。"
+                "仅核验清单所绑定的内容，不代表全文事实已独立核实。"
+            )
+            outcome["final_text"] = f"{final_text.rstrip()}\n\n> {notice}"
+            if not passed and answer_status == "complete":
+                outcome["answer_status"] = "partial"
         if outcome["publish_status"] == PUBLISH_VERIFIED:
             outcome["boundary_action"] = "publish"
             return outcome
         if not enforcement_enabled():
             return outcome
-        outcome["final_text"] = f"{final_text.rstrip()}\n\n{_limitation_block(verification)}"
+        outcome["final_text"] += f"\n\n{_limitation_block(verification)}"
         if outcome["answer_status"] == "complete":
             outcome["answer_status"] = "partial"
         outcome["boundary_action"] = "downgrade"

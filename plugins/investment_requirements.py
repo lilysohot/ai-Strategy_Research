@@ -1,7 +1,9 @@
 """Shared required facts for admission and run-bound input requests."""
 
 
-def missing_facts(use_case: str, present: set[str]) -> dict[str, str]:
+def missing_facts(
+    use_case: str, present: set[str], *, session_allocation: bool = False,
+) -> dict[str, str]:
     if use_case not in {"plan_analysis", "holding_cost"}:
         return {}
     required = {
@@ -11,8 +13,12 @@ def missing_facts(use_case: str, present: set[str]) -> dict[str, str]:
         "plan.symbol": "请填写标的",
         "plan.market": "请选择市场",
         "plan.direction": "请选择方向",
-        "plan.allocated_capital": "请先在会话资金中创建规划资金（从主账户可用资金中划出）",
+        "plan.allocated_capital": "请填写本会话规划资金；当前不会自动扣减总账户余额",
     }
+    if session_allocation:
+        # Research scenarios do not require a recorded trade or a retired plan.
+        for name in ("plan.symbol", "plan.market", "plan.direction"):
+            required.pop(name)
     if use_case == "holding_cost":
         required.update(
             {

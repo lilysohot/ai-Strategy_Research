@@ -87,14 +87,16 @@ async def test_deadline_wind_down_replaces_preview_with_member_full_result() -> 
     session = bus.get_session(session_id)
     assert session is not None
     session.total_task_count = 1
-    session.pending_results.append(SubAgentResult(
-        question="count the complete CSV",
-        role_id="researcher",
-        final_content="Verified full CSV totals: 7 / 941 / 138 / 803.",
-        success=True,
-        job_id="root.job.1",
-        metadata={"stopped_by": "submit_report"},
-    ))
+    session.pending_results.append(
+        SubAgentResult(
+            question="count the complete CSV",
+            role_id="researcher",
+            final_content="Verified full CSV totals: 7 / 941 / 138 / 803.",
+            success=True,
+            job_id="root.job.1",
+            metadata={"stopped_by": "submit_report"},
+        )
+    )
     result = AgentLoopResult(
         messages=[user_msg("count the CSV"), assistant_msg("Preview: 2 / 380 / 0 / 380")],
         final_content="Preview: 2 / 380 / 0 / 380",
@@ -184,7 +186,8 @@ async def test_wind_down_marks_unresolved_member_as_partial() -> None:
     wind_down = await wind_down_team(bus=bus, task_id="root", wait_s=0)
 
     assert wind_down.status == "partial"
-    assert wind_down.unresolved_count == 1
+    assert wind_down.unresolved_count == 0
+    assert wind_down.incomplete_count == 1
     assert "do not claim exhaustive coverage" in wind_down.checkpoint
     await bus.cleanup_task("root", cancel_timeout_s=0.1)
 
@@ -236,20 +239,146 @@ def test_soft_wall_can_finish_only_after_publisher_report_and_manifest(
     (outputs / "report.md").write_text("verified", encoding="utf-8")
 
     assert _publication_manifest_complete(state, outputs) is True
-    assert _publication_manifest_complete(
-        {**state, "phase": "research"}, outputs,
-    ) is False
-    assert _soft_wall_publication_finalized(
-        stopped_by="wall_deadline",
-        team_status="complete",
-        answer_source="clean_context_llm",
-        publication_state=state,
-        outputs_dir=outputs,
-    ) is True
-    assert _soft_wall_publication_finalized(
-        stopped_by="wall_deadline",
-        team_status="partial",
-        answer_source="clean_context_llm",
-        publication_state=state,
-        outputs_dir=outputs,
-    ) is False
+    assert (
+        _publication_manifest_complete(
+            {**state, "phase": "research"},
+            outputs,
+        )
+        is False
+    )
+    assert (
+        _soft_wall_publication_finalized(
+            stopped_by="wall_deadline",
+            team_status="complete",
+            answer_source="clean_context_llm",
+            publication_state=state,
+            outputs_dir=outputs,
+        )
+        is True
+    )
+    assert (
+        _soft_wall_publication_finalized(
+            stopped_by="wall_deadline",
+            team_status="partial",
+            answer_source="clean_context_llm",
+            publication_state=state,
+            outputs_dir=outputs,
+        )
+        is False
+    )
+
+
+@pytest.mark.asyncio
+async def test_wind_down_salvages_cancelled_member_before_refresh(monkeypatch, tmp_path):
+    """The 318a2c run lost counterevidence while a member was composing its report."""
+    from types import SimpleNamespace
+
+    from frontier_agent.components.agent_bus.models import SubAgentRuntimeSpec
+    from frontier_agent.core.messages import tool_msg
+
+    ready = asyncio.Event()
+    observed = "SOURCE: https://example.org/report — some training used domestic chips"
+
+    async def loop(**kwargs):
+        ctx = SimpleNamespace(
+            turn=1,
+            messages=[
+                system_msg(kwargs["system_prompt"]),
+                user_msg(kwargs["user_message"]),
+                assistant_msg(
+                    "",
+                    tool_calls=[
+                        {
+                            "id": "fetch-1",
+                            "type": "function",
+                            "function": {
+                                "name": "web_fetch",
+                                "arguments": '{"url":"https://example.org/report"}',
+                            },
+                        }
+                    ],
+                ),
+                tool_msg(observed, "fetch-1"),
+            ],
+            metadata={
+                "content_acquisition": [
+                    {"source": "https://example.org/report", "obtained": True, "status": "success"}
+                ]
+            },
+        )
+        for observer in kwargs["observers"]:
+            await observer.on_turn_end(ctx)
+        ready.set()
+        await asyncio.Event().wait()
+
+    from workflows.agent_team.subagent_runtime import (
+        SwarmSubagentRuntime,
+        build_swarm_session_runtime_spec,
+    )
+
+    class NoRecoveryLLM:
+        calls = 0
+
+        async def chat(self, *args, **kwargs):
+            self.calls += 1
+            raise AssertionError("Cancellation salvage must not start another model call")
+
+    llm = NoRecoveryLLM()
+    runtime = build_swarm_session_runtime_spec(
+        SwarmSubagentRuntime(sub_agent_llm=llm),
+        session_name="worker",
+        task_id="salvage",
+    )
+
+    monkeypatch.setattr("frontier_agent.components.agent_bus.bus.run_agent_loop", loop)
+    bus = AgentBus()
+    bus.configure_task_result_store("salvage", tmp_path)
+    sid = await bus.create_session(
+        task_id="salvage",
+        name="worker",
+        role_id="researcher",
+        system_prompt="research",
+        tools_override=[],
+        llm_override=object(),
+        runtime_spec=SubAgentRuntimeSpec(
+            force_finalizer=runtime.force_finalizer, result_adapter=runtime.result_adapter
+        ),
+    )
+    job = await bus.submit_task_to_session(sid, "Find training hardware evidence")
+    await asyncio.wait_for(ready.wait(), 1)
+    draft = AgentLoopResult(
+        messages=[
+            user_msg("Training hardware?"),
+            assistant_msg("There is no evidence of domestic training."),
+        ],
+        final_content="There is no evidence of domestic training.",
+        stopped_by="final_answer",
+        metadata={"final_answer": "There is no evidence of domestic training."},
+    )
+    try:
+        wind = await wind_down_team(bus=bus, task_id="salvage", wait_s=0)
+        assert observed in wind.checkpoint
+        assert bus._jobs[job].result.error == "aborted"
+        assert bus._jobs[job].result.metadata["final_answer_source"] == "tool_observations"
+        assert (tmp_path / f"{job}.json").exists()
+        assert wind.collected_count == 1
+        assert wind.incomplete_count == 1
+        assert llm.calls == 0
+        assert wind.run_status == "partial"
+        assert wind.should_refresh_answer(draft)
+        assert bus._jobs[job].result.metadata["content_acquisition"][0]["obtained"]
+        append_team_wind_down_checkpoint(draft, wind)
+        await force_final_answer(
+            draft,
+            object(),
+            1,
+            run_recovery_llm=False,
+            force_recovery=wind.should_refresh_answer(draft),
+            prefer_collected_reports=True,
+        )
+        assert observed in draft.final_content
+        assert "There is no evidence of domestic training." not in draft.final_content
+        again = await wind_down_team(bus=bus, task_id="salvage", wait_s=0)
+        assert again.collected_count == 0
+    finally:
+        await bus.cleanup_task("salvage")

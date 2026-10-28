@@ -51,6 +51,7 @@ from plugins.corpus.tool_refs import resolve_evidence_reference
 logger = logging.getLogger(__name__)
 
 _SUBMIT_HINT = (
+    "未绑定报告时仅完成证据预检，不能宣称报告已通过；请先写报告，再传 report_path 提交。"
     "原文证据优先用 evidence_ref（search 的 excerpts.ref 或 fetch 的 evidence_ref），无需重写原文。"
     "对非 supported 的结论：按需补取原文、重新查询失效语义版本、修改表述或移除结论；"
     "已完整送达的语义证据不必例行 corpus_fetch。"
@@ -91,7 +92,9 @@ MANIFEST_PROMPT_NOTE = (
     "2. 按工具返回的逐条问题修正：补取原文（corpus_fetch）、修改表述或移除结论，"
     "然后重新提交完整清单；\n"
     "3. 新取片段下一轮才能确认送达（pending），届时重新提交确认；\n"
-    "4. 最终报告不得主张清单标记为 unsupported 的结论。\n"
+    "4. 交付文件时先写入 /outputs 报告，提交时指定 report_path；report_quote 必须逐字复制"
+    "报告内容（保留 Markdown、标点与空格）。文件修改后重新提交。无 report_path 仅证据预检，"
+    "不可宣称报告通过；聊天回复只概述交付结果，最终核验状态由发布边界给出。\n"
     "5. 若使用 corpus_semantic_query 已送达的完整原文，可用 semantic_references："
     "每项给 publication_id、record_id、purpose（cite/compare/calculate）；系统从本运行"
     "查询记录补齐精确原文范围及依赖，生成正式语义报告引用，无需例行 fetch。"
@@ -223,7 +226,9 @@ def _current_owner() -> str:
 
 
 @tool
-async def corpus_submit_manifest(conclusions: list[dict[str, Any]]) -> str:
+async def corpus_submit_manifest(
+    conclusions: list[dict[str, Any]], report_path: str | None = None,
+) -> str:
     """提交报告结论证据清单（A4），立即回验并返回逐条问题以驱动环内修正。
 
     在报告成稿（或最终回复撰写）**之前**调用：把报告中每条基于语料的结论登记成
@@ -231,6 +236,8 @@ async def corpus_submit_manifest(conclusions: list[dict[str, Any]]) -> str:
     会汇总全部候选并对照最终报告与消费账本重算校验。
 
     Args:
+        report_path: 已写入的 /outputs/*.md 或 *.txt 报告；填写后立即核验逐字锚点，
+            并绑定文件哈希供发布时复核。未填写仅核验证据，不代表报告通过。
         conclusions: 结论数组。每条结论：
             ``id``（可选，缺省自动编号）、``text_location``（结论文本位置描述）、
             ``report_quote``（该结论在**最终报告**中的逐字锚点；报告未成文时可先
@@ -268,6 +275,14 @@ async def corpus_submit_manifest(conclusions: list[dict[str, Any]]) -> str:
             ensure_ascii=False,
         )
 
+    report_text = None
+    binding = None
+    if report_path is not None:
+        from plugins.corpus.report_binding import read_report
+        try:
+            report_text, binding = read_report(report_path)
+        except (OSError, ValueError) as exc:
+            return json.dumps({"ok": False, "errors": [str(exc)]}, ensure_ascii=False)
     rows = [row for row in conclusions if isinstance(row, dict)]  # schema 已保证
     numbered: list[dict[str, Any]] = []
     for index, row in enumerate(rows):
@@ -280,6 +295,8 @@ async def corpus_submit_manifest(conclusions: list[dict[str, Any]]) -> str:
         "schema_version": MANIFEST_SCHEMA_VERSION,
         "conclusions": numbered,
     }
+    if binding is not None:
+        payload["report_binding"] = binding
     path = write_manifest_file(payload, owner=owner)
 
     # 即时回验（评审 C3）：用当前送达快照重算，新取片段标 pending；环内无最终
@@ -288,7 +305,7 @@ async def corpus_submit_manifest(conclusions: list[dict[str, Any]]) -> str:
     resolve = _resolver()
     try:
         verification = verify_manifest(
-            payload, ledger, resolver=resolve, pending_aware=True,
+            payload, ledger, resolver=resolve, pending_aware=True, final_text=report_text,
         )
     except Exception as exc:
         return json.dumps(
@@ -320,7 +337,13 @@ async def corpus_submit_manifest(conclusions: list[dict[str, Any]]) -> str:
             "ok": True,
             "manifest_file": str(path) if path else None,
             "owner": owner or None,
-            "publish_status": verification.get("status"),
+            "evidence_status": verification.get("status"),
+            "report_bound": binding is not None,
+            "publish_status": (
+                verification.get("status") if binding is not None
+                else "pending_report" if verification.get("status") == "verified"
+                else verification.get("status")
+            ),
             "counts": verification.get("counts"),
             "conclusions": conclusions_out,
             "hint": _SUBMIT_HINT,

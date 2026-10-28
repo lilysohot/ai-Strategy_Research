@@ -524,9 +524,7 @@ async def test_research_history_searches_and_pages_archived_records() -> None:
     token = bind_research_history([payload, payload])
     try:
         result = json.loads(
-            await research_history.ainvoke(
-                {"query": "7.5 percent", "content_limit": 12}
-            )
+            await research_history.ainvoke({"query": "7.5 percent", "content_limit": 12})
         )
         assert result["ok"] is True
         assert result["total"] == 1
@@ -554,11 +552,113 @@ def test_worker_history_stage_is_consumed_before_model_tools_start(tmp_path) -> 
 
     path = tmp_path / RESEARCH_HISTORY_STAGE
     path.write_text(
-        json.dumps(
-            {"schema": "research-history-stage/1", "contexts": ["context-a"]}
-        ),
+        json.dumps({"schema": "research-history-stage/1", "contexts": ["context-a"]}),
         encoding="utf-8",
     )
 
     assert _load_research_history_contexts(tmp_path) == ["context-a"]
     assert not path.exists()
+
+
+@pytest.mark.parametrize("legacy", [False, True])
+def test_portable_context_drops_runtime_controls_and_inline_reasoning(legacy):
+    messages = [
+        system_msg("system"),
+        user_msg("Compare hardware, keep sources."),
+        assistant_msg("<think>PRIVATE_REASONING</think>Visible finding with source."),
+        user_msg("Current task board (keep it current via add_task / update_task): old tasks"),
+        user_msg("The research admission window is closed. Collect the available findings."),
+        assistant_msg("<think>UNFINISHED_PRIVATE_REASONING"),
+    ]
+    doc = _dump(pipeline_id="agent_team", run_id="clean", messages=messages)
+    if legacy:
+        context = {
+            "schema": SCHEMA,
+            "session_id": "research-1",
+            "records": [
+                {"source_id": f"old-{i}", "source": {"run_id": "old"}, **m}
+                for i, m in enumerate(messages[1:])
+            ],
+            "sources": [],
+            "completeness": {},
+        }
+        text = append_context_to_question("Follow up", context)
+    else:
+        text = json.dumps(export_conversation_context(doc))
+    assert "PRIVATE_REASONING" not in text
+    assert "Current task board" not in text
+    assert "research admission window" not in text
+    assert "Visible finding with source." in text
+    assert "Compare hardware, keep sources." in text
+
+
+def test_sanitized_legacy_tail_is_not_nested_on_export():
+    from workflows._shared.cross_mode_context import TAIL_END
+
+    old = {
+        "schema": SCHEMA,
+        "session_id": "research-1",
+        "records": [
+            {
+                "source_id": "legacy-1",
+                "source": {"run_id": "old"},
+                "role": "assistant",
+                "content": "<think>PRIVATE_REASONING</think>Old finding",
+            }
+        ],
+        "sources": [],
+        "completeness": {},
+    }
+    old_tail = f"\n\n{TAIL_START}\nOld wrapper\n{json.dumps(old)}\n{TAIL_END}"
+    doc = _dump(
+        pipeline_id="agent_team",
+        run_id="new",
+        messages=[
+            system_msg("system"),
+            user_msg("Follow up" + old_tail),
+            assistant_msg("New answer"),
+        ],
+    )
+    exported = export_conversation_context(doc, inherited_context=old)
+    assert len(exported["records"]) == 3
+    assert exported["records"][0]["source_id"] == "legacy-1"
+    assert exported["records"][1]["content"] == "Follow up"
+    assert TAIL_START not in json.dumps(exported)
+    assert "PRIVATE_REASONING" not in json.dumps(exported)
+
+
+def test_portable_cleaning_keeps_tool_evidence_and_quoted_user_text():
+    context = {
+        "schema": SCHEMA,
+        "session_id": "research-1",
+        "records": [
+            {
+                "source_id": "tool",
+                "source": {},
+                "role": "tool",
+                "content": "<think>quoted source</think>",
+            },
+            {
+                "source_id": "user",
+                "source": {},
+                "role": "user",
+                "content": 'Explain the message "The research admission window is closed."',
+            },
+            {
+                "source_id": "assistant",
+                "source": {},
+                "role": "assistant",
+                "content": [
+                    {"type": "thinking", "thinking": "PRIVATE_REASONING"},
+                    {"type": "text", "text": "<think>PRIVATE_REASONING</think>Visible text"},
+                ],
+            },
+        ],
+        "sources": [],
+        "completeness": {},
+    }
+    rendered = append_context_to_question("Current question", context)
+    assert "PRIVATE_REASONING" not in rendered
+    assert "Visible text" in rendered
+    assert "quoted source" in rendered
+    assert "Explain the message" in rendered

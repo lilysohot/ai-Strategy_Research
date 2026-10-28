@@ -117,3 +117,23 @@ async def test_history_corrects_only_verified_legacy_markers_without_rewriting_s
         assert raw.status == "stopped"
         raw_turn = await session.get(store.Turn, turns[0].id)
         assert raw_turn.content == original
+
+
+async def test_materialized_input_request_controls_terminal_event_and_answer(monkeypatch):
+    orch = Orchestrator()
+    handle = SimpleNamespace(run_id=uuid.uuid4().hex, _params={"session_uuid": uuid.uuid4()})
+    request = {"request_id": str(uuid.uuid4()), "status": "pending"}
+    monkeypatch.setattr(orch, "_materialize_input_intent", AsyncMock(return_value=request))
+    update, append, publish = AsyncMock(), AsyncMock(), Mock()
+    monkeypatch.setattr("server.orchestrator.update_run_result", update)
+    monkeypatch.setattr("server.orchestrator.append_turn", append)
+    monkeypatch.setattr(orch, "_publish", publish)
+    frame = {"ok": True, "stopped_by": "no_tool", "final_answer": "研究正文"}
+    await orch._persist_run_result(handle, frame)
+    await orch._backfill_assistant_turn(handle, frame)
+    assert update.call_args.kwargs["stopped_by"] == "input_required"
+    assert publish.call_args.args[1]["type"] == "run_stopped"
+    assert publish.call_args.args[1]["stopped_by"] == "input_required"
+    assert "已创建待补资料请求" in update.call_args.kwargs["final_answer"]
+    assert "已创建待补资料请求" in append.call_args.kwargs["content"]
+    assert frame["input_request"] == request

@@ -19,7 +19,6 @@ from frontier_agent.core.loop_types import ToolResult, TurnContext
 from plugins.corpus.ledger import (
     DELIVERED,
     PUBLISH_PARTIAL,
-    PUBLISH_VERIFIED,
     reset_run_ledgers,
 )
 from plugins.corpus.ledger import (
@@ -143,7 +142,7 @@ def test_valid_submission_verifies_supported_and_writes_manifest(run_env) -> Non
 
     out = _submit([_conclusion()])
     assert out["ok"] is True
-    assert out["publish_status"] == PUBLISH_VERIFIED
+    assert out["publish_status"] == "pending_report"
     assert out["conclusions"][0]["status"] == "supported"
     manifest_file = run_env / "corpus" / "manifests" / "manifest-000.json"
     assert out["manifest_file"] == str(manifest_file)
@@ -290,3 +289,75 @@ async def test_on_turn_end_moves_pending_to_delivered(run_env) -> None:
     await observer.on_turn_end(_turn(1, [{"role": "tool", "content": body}]))
     assert ledger.last_finalized_turn == 1
     assert ledger_delivery_for_submit(ledger, DOC, "chunk:c1", start, end) == DELIVERED
+
+
+@pytest.mark.parametrize("changed", [False, True])
+def test_report_file_binding_survives_summary_but_detects_edits(run_env, monkeypatch, changed):
+    from plugins.corpus.ledger import get_run_ledger, verify_and_record
+    ledger = get_run_ledger()
+    ledger.record_fetch_result(_fetch_body())
+    ledger.finalize([{"role": "tool", "content": _fetch_body()}])
+    outputs = run_env / "outputs"
+    outputs.mkdir()
+    monkeypatch.setenv("FRONTIER_AGENT_OUTPUTS_DIR", str(outputs))
+    path = outputs / "report.md"
+    path.write_text("# Research\n" + TEXT, encoding="utf-8")
+    out = json.loads(asyncio.run(corpus_submit_manifest.func(
+        conclusions=[_conclusion(report_quote=TEXT)], report_path="/outputs/report.md",
+    )))
+    assert out["publish_status"] == "verified"
+    assert out["report_bound"] is True
+    if changed:
+        path.write_text("Different report", encoding="utf-8")
+    verified = verify_and_record(
+        ledger, resolver=lambda *_: TEXT, final_text="报告已生成，请查看附件。",
+    )
+    assert verified["status"] == ("partial" if changed else "verified")
+
+
+def test_submission_without_final_text_is_only_evidence_check(run_env):
+    from plugins.corpus.ledger import get_run_ledger
+    ledger = get_run_ledger()
+    ledger.record_fetch_result(_fetch_body())
+    ledger.finalize([{"role": "tool", "content": _fetch_body()}])
+    out = _submit([_conclusion()])
+    assert out["evidence_status"] == "verified"
+    assert out["publish_status"] == "pending_report"
+    assert out["report_bound"] is False
+
+
+@pytest.mark.parametrize("path", ["/etc/passwd", "/outputs/../secret.md", "/outputs/link.md"])
+def test_report_binding_rejects_paths_outside_outputs(run_env, monkeypatch, path):
+    outputs = run_env / "outputs"
+    outputs.mkdir()
+    outside = run_env / "secret.md"
+    outside.write_text(TEXT)
+    (outputs / "link.md").symlink_to(outside)
+    monkeypatch.setenv("FRONTIER_AGENT_OUTPUTS_DIR", str(outputs))
+    out = json.loads(asyncio.run(corpus_submit_manifest.func(
+        conclusions=[_conclusion(report_quote=TEXT)], report_path=path,
+    )))
+    assert out["ok"] is False
+    assert not (run_env / "corpus" / "manifests").exists()
+
+
+def test_report_anchor_mismatch_is_reported_before_final_answer(run_env, monkeypatch):
+    from plugins.corpus.ledger import get_run_ledger, publish_boundary
+    ledger = get_run_ledger()
+    ledger.record_fetch_result(_fetch_body())
+    ledger.finalize([{"role": "tool", "content": _fetch_body()}])
+    outputs = run_env / "outputs"
+    outputs.mkdir()
+    monkeypatch.setenv("FRONTIER_AGENT_OUTPUTS_DIR", str(outputs))
+    (outputs / "report.md").write_text("**营业收入** 1,234 万元。")
+    out = json.loads(asyncio.run(corpus_submit_manifest.func(
+        conclusions=[_conclusion(report_quote=TEXT)], report_path="/outputs/report.md",
+    )))
+    assert out["publish_status"] == "partial"
+    assert out["conclusions"][0]["problems"][0]["code"] == "not_in_report"
+    final = publish_boundary(
+        ledger, resolver=lambda *_: TEXT, final_text="报告已生成。", answer_status="complete",
+        announce_status=True,
+    )
+    assert "最终证据核验：未全部通过" in final["final_text"]
+    assert final["answer_status"] == "partial"

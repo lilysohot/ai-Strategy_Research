@@ -44,7 +44,7 @@ def _context() -> dict[str, object]:
 @pytest.mark.asyncio
 async def test_bound_sizing_schema_cannot_accept_capital_or_plan_overrides() -> None:
     properties = investment_position_sizing.parameters["properties"]
-    assert set(properties) == {"stop_loss", "lot_size", "entry_low", "entry_high"}
+    assert set(properties) == {"stop_loss", "lot_size", "entry_low", "entry_high", "market"}
     assert "capital_total" not in properties
     assert "risk_budget_pct" not in properties
 

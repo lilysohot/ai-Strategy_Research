@@ -74,7 +74,9 @@ async def request_investment_input(use_case: str, reason: str) -> str:
     context = _context()
     if context is not None:
         present = {name for name in context.get("values", {}) if _entry_value(context, name) is not None}
-        if not missing_facts(use_case, present):
+        if not missing_facts(
+            use_case, present, session_allocation="capital.allocated_capital" in context.get("values", {}),
+        ):
             state["requested"] = None
             return (
                 "当前冻结资料已满足该用途，无需创建补数请求。不要声称已创建弹窗或待办。"

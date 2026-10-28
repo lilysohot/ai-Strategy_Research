@@ -1320,6 +1320,7 @@ class AgentBus:
             # would leak their evidence silently.
             raw_result: Any = None
             activity_observer: _SessionActivityObserver | None = None
+            history_absorbed = False
             try:
                 if active_runtime.config_builder is not None:
                     loop_config = active_runtime.config_builder(
@@ -1432,6 +1433,7 @@ class AgentBus:
                 # Absorb new turns back into session.messages.
                 new_turns = list(raw_result.messages[prefix_count:])
                 session.messages.extend(new_turns)
+                history_absorbed = True
 
                 # Boundary closure invariant: the slice (start..end) must
                 # contain at least one clean AIMessage so the trimmer can
@@ -1482,26 +1484,19 @@ class AgentBus:
                 return _adapt_default_session_result(
                     raw_result, job_id, session, task_prompt,
                 )
-            except asyncio.CancelledError:
-                _close_session_boundary_aborted(session)
-                return SubAgentResult(
-                    question=task_prompt,
-                    role_id=session.role_id,
-                    final_content=_safe_final_content(raw_result),
-                    success=False,
-                    error="aborted",
-                    error_class="CancelledError",
-                    job_id=job_id,
-                    metadata=_safe_metadata(raw_result),
-                )
-            except TimeoutError:
-                logger.warning("Session task %s timed out", job_id)
+            except (asyncio.CancelledError, TimeoutError) as exc:
+                cancelled = isinstance(exc, asyncio.CancelledError)
+                interruption = "aborted" if cancelled else "timeout"
+                error_class = "CancelledError" if cancelled else "TimeoutError"
+                logger.info("Session task %s interrupted: %s", job_id, interruption)
                 if (
                     raw_result is None
                     and activity_observer is not None
                     and activity_observer.latest_checkpoint is not None
                 ):
                     raw_result = activity_observer.latest_checkpoint
+                if raw_result is not None and not history_absorbed:
+                    raw_result.metadata["interrupted_checkpoint"] = interruption
                     # At the phase boundary, Agent Team's finalizer takes its
                     # deterministic observation-stitching path. Bound the hook
                     # as a defence for generic/custom runtimes.
@@ -1516,7 +1511,7 @@ class AgentBus:
                                 raw_result = forced
                         except Exception as exc:
                             logger.warning(
-                                "Timeout salvage finalizer failed for session %s: %s",
+                                "Interrupted-job salvage finalizer failed for session %s: %s",
                                 session.session_id,
                                 exc,
                             )
@@ -1546,12 +1541,12 @@ class AgentBus:
                             if inspect.isawaitable(adapted):
                                 adapted = await asyncio.wait_for(adapted, timeout=2.0)
                             adapted.success = False
-                            adapted.error = "timeout"
-                            adapted.error_class = "TimeoutError"
+                            adapted.error = interruption
+                            adapted.error_class = error_class
                             return adapted
                         except Exception as exc:
                             logger.warning(
-                                "Timeout salvage adapter failed for session %s: %s",
+                                "Interrupted-job salvage adapter failed for session %s: %s",
                                 session.session_id,
                                 exc,
                             )
@@ -1561,8 +1556,8 @@ class AgentBus:
                     role_id=session.role_id,
                     final_content=_safe_final_content(raw_result),
                     success=False,
-                    error="timeout",
-                    error_class="TimeoutError",
+                    error=interruption,
+                    error_class=error_class,
                     job_id=job_id,
                     metadata=_safe_metadata(raw_result),
                 )
