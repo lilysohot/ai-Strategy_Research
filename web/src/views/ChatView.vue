@@ -838,7 +838,7 @@ watch(
       <section v-if="detailsOpen && runStream.runId" class="run-disclosure" aria-label="运行过程">
         <el-tabs v-model="detailTab">
           <el-tab-pane label="计划" name="plan">
-            <PlanPanel :steps="runStream.steps" />
+            <PlanPanel :steps="runStream.steps" :terminal-board="runStream.taskBoard" />
           </el-tab-pane>
           <el-tab-pane label="活动" name="activity">
             <ActivityPanel :steps="runStream.steps" :status="runStream.status" />

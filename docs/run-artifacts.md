@@ -76,3 +76,39 @@ Older checkpoints under `~/.apodex/sessions` and the previous native runtime
 tree are still discovered and can be resumed. They are not renamed or moved;
 after an old session is resumed, subsequent checkpoints use the unified run
 directory under the selected `--cwd`.
+
+
+## Web research receipts and task progress
+
+Agent Team stores its post-loop coordinator recovery in
+`<web-run>/run/agent/trajectories/main_finalization.jsonl` (and its JSON snapshot).
+This separate stream joins coordinator and member streams in Web replay and
+usage aggregation. Its start/end span covers one logical recovery call, including
+any internal fallback; it does not enumerate provider retries. Missing usage
+makes the run's usage status partial even when other calls were metered.
+Cancelled member loops flush their latest snapshot and emit an `end` record with
+`stopped_by="cancelled"`; a complete trace is not a claim of completed research.
+
+Web workers keep corpus aliases beside their consumption ledger under
+`<web-run>/run/corpus/tool-refs/` and `search-refs/`. These writable directories
+are selected by `CORPUS_TOOL_REF_ROOT` and `CORPUS_SEARCH_REF_ROOT` in the worker;
+the installed source tree can remain read-only. The parent carries hash-checked
+receipts from committed runs in the same research into the next run, bounded to
+4096 files / 16 MiB. Missing receipts still require fetching the source again.
+Receipt availability never substitutes for source or delivery verification.
+
+The Web single-agent profile enables `research_convergence`. Previous task IDs
+remain addressable but are excluded from the current round's progress until an
+explicit `add_task`/`update_task` resumes them. Tasks can retain `kind`
+(research/verification/delivery), `done_when`, `notes`, `gap`, and `evidence_refs`.
+The notes and pointers are model declarations, not verification verdicts.
+
+After each acquisition batch, another discovery search requires a progress
+update naming what was learned and the remaining gap. Completed research tasks
+or the time reserve trigger finalization, which blocks discovery searches while
+allowing exact source fetches, manifest repair and artifact production. The
+180-second reserve is independent of the maximum turn count and cannot extend
+the outer run deadline. One reasoning-only interruption after evidence acquisition
+may continue through the same authorized tool loop, within the remaining reserve;
+repeat failure keeps the existing deterministic partial fallback. Corpus and
+investment publication checks continue to apply.

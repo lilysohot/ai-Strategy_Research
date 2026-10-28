@@ -4,6 +4,77 @@
 
 ## 日常增量
 
+### 正式库入库流程（2026-10-28）
+
+把 PDF 放进 `data/corpus-incoming/<批次>/` 只是待入库，**文件出现不等于已发布，
+数据库发布也不等于 Web 已切换新索引**。本项目现行流程如下：
+
+```mermaid
+flowchart TD
+    A[待入库 PDF] --> B[逐文件 SHA-256 与正式发布记录去重]
+    B -->|已发布| C[保留原版本并跳过]
+    B -->|新增| D[冻结清单、分类、备份正式库]
+    D --> E[原件归档、准入、解析、清洗、切块]
+    E --> F[检查原文引用、超长块、图像与表格缺口]
+    F -->|检查通过或已有明确的可用文字授权| G[check 后 publish]
+    F -->|空正文或未解决的阻断| H[保留状态，处理缺口后再检查]
+    G --> I[补齐上下文说明与缺失向量]
+    I --> J[生成新版本检索包，保留旧包]
+    J --> K[核验旧块不变、新查询和短句柄 fetch]
+    K --> L[切换配置并核验 Web search 与 fetch]
+```
+
+1. **清点与去重**：读取所有文件的哈希、页数和文字量，与正式库活动来源比对。
+   文件名相同不能证明内容相同；重复文件不重新发布，也不重算说明和向量。
+2. **冻结与备份**：记录输入清单、用户指令、材料类型、研究领域及现有发布指针，
+   对明确目标 `postgres` 做备份。检索范围仅为旧允许清单与本批新来源的并集。
+3. **构建正文**：使用 `plan_builds → execute_builds`，原字节按 SHA-256 存入
+   `data/corpus-archive/<前两位>/<完整哈希>.pdf`，保留单元、页码、原文哈希及引用。
+4. **处理覆盖缺口**：文字 PDF 中的行情截图不自动变成可搜索正文。按已授权的可用
+   文字模式登记确切 build 的 `TextPublication` 后，仍走正常检查；不隐藏缺口。
+   扫描件如使用 OCR，应另存衍生文件，名称注明 OCR，保存原件与衍生件的哈希关系，
+   不将识别文字描述成人工校对原文。
+5. **正式发布**：执行 `check_build_publishable → publish_build`。旧来源的活动版本
+   和 generation 应逐条不变；待处理和失败构建不冒充已发布。
+6. **更新检索包**：沿用当前上下文说明版本与 embedding profile，仅补齐缺失项。
+   说明用于索引，返回证据仍来自正文；原 native 投影继续排除表格块。请求失败时
+   先查看确切状态，不能清空失败记录后无条件重跑全部请求。
+   本批有说明经受控重试后仍未通过数字／归属校验，随后逐段核对原文，只保留章节
+   与讨论对象描述。这样的 Codex 校订须单独标记 `agent_source_review` 并保留原拒绝
+   记录，仍通过同一校验器；不能冒充原供应商生成结果，也不能改正文来迁就说明。
+7. **验收与切换**：比较旧块与旧向量；针对新资料执行查询，使用每段实际返回的
+   `ref` 做 fetch 并逐字比对。验证成功后更新 `CORPUS_NATIVE_INDEX`。运行中的
+   Web 应在没有 queued/running 任务时切换，并检查 `healthz`、`readyz` 和认证接口。
+   业务数据库迁移属于独立事项。
+
+本批可审计脚本位于 `.scratch/corpus-incoming-20261028/`。它是**绑定确切输入清单、
+备份和范围的执行记录**，不是自动扫描所有目录的通用发布器；下一批应先重新清点和
+冻结清单，不能直接替换文件后重跑旧 `prepare`。
+
+```bash
+cd /home/administrator/FrontierAgent
+# 以下为本批实际阶段；按先后检查结果，不是无条件一键串行发布。
+uv run --no-sync python .scratch/corpus-incoming-20261028/run.py prepare
+uv run --no-sync python .scratch/corpus-incoming-20261028/run.py build
+uv run --no-sync python .scratch/corpus-incoming-20261028/archive_ocr.py
+# 检查 build-results.json，保留 OCR 父子溯源及图表缺口后：
+uv run --no-sync python .scratch/corpus-incoming-20261028/run.py publish
+uv run --no-sync python .scratch/corpus-incoming-20261028/run.py index
+uv run --no-sync python .scratch/corpus-incoming-20261028/verify.py
+# 验收通过，并确认现有 API 就绪且没有活动任务后切换：
+uv run --no-sync python .scratch/corpus-incoming-20261028/activate.py
+```
+
+本批供应商传输结果不确定后的续跑记录在 `context-resume-before/after.json`，
+第二次异常及未完成项保存在 `context-final-pending-before.json`、`pending-source-review.json`。
+校订依据和结果在 `rejected-source-review.json`、`note-review-before.json` 与
+`note-review-applied.json`。对应的 `resume_notes.py`、`apply_reviewed_notes.py` 和
+`pack.py` 是绑定本批失败项的恢复步骤，不能当作任意新批次的自动重试入口。
+
+本批逐份结果与 Web 验收见 [正式发布记录](corpus-native-release.md)。
+
+### 2026-10-21 隔离试验记录
+
 2026-10-21 新增 7 份资料的实际操作与逐份结果见
 [本批执行说明](../.scratch/corpus-new7-20261021/report.md)。目标为
 `vector_pilot_clean7_20261021`，其中 5 份按原生文字发布，2 份扫描件发布为标明来源的本地 OCR 衍生版。

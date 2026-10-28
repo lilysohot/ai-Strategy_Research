@@ -170,32 +170,21 @@ async def _auto_analysis_spec(
 ) -> tuple[investment_snapshot.InvestmentInputSpec | None, str | None]:
     """构造监控自动分析的业务输入（返回 ``(spec, None)`` 或 ``(None, 失败原因)``）。
 
-    绑定口径（2026-10-27）：主计划不再是必要条件——会话绑定**规划资金**且其下存在
-    有效买卖价格即可。计划口径（标的/市场/方向/币种）取该规划资金最新一笔有效
-    买卖价格，以 ``declared`` 进入解析；规划资金本身由快照解析注入
-    ``plan.allocated_capital``。仍有主计划绑定的会话沿用原引用路径。
+    优先采用当前会话规划资金和与监控标的匹配的最新有效实际买卖。
+    ``plan.*`` 仅为兼容投影；存在规划资金时不再采用历史主计划绑定。
+    仅没有规划资金的历史会话保留旧引用路径。
     """
-    plan_ref = (
-        investment_snapshot.ObjectRef(id=link.primary_plan_id)
-        if link.primary_plan_id is not None
-        else None
+    spec = await investment_snapshot.current_research_input(
+        session, link=link, use_case="plan_analysis", symbol=getattr(event, "symbol", None),
     )
-    declared: dict[str, Any] = {}
-    if plan_ref is None:
-        declared = (
-            await investment_snapshot.declared_plan_from_capital(
-                session, user_id=event.user_id, research_id=event.research_id
-            )
-            or {}
-        )
-        if not declared:
-            return None, "research_binding_missing"
+    if spec.account is None or (spec.plan is None and not spec.declared):
+        return None, "research_binding_missing"
     return (
         investment_snapshot.InvestmentInputSpec(
             use_case="plan_analysis",
-            account=investment_snapshot.ObjectRef(id=link.account_id),
-            plan=plan_ref,
-            declared=declared,
+            account=spec.account,
+            plan=spec.plan,
+            declared=spec.declared,
             idempotency_key=f"watch:{event.id}:{event.generation}",
         ),
         None,
@@ -658,7 +647,7 @@ async def assert_watch_launch_ready(run_id: uuid.UUID) -> None:
             if (
                 link is None
                 or link.account_id != snapshot.account_id
-                or link.primary_plan_id != snapshot.plan_id
+                or (snapshot.plan_id is not None and link.primary_plan_id != snapshot.plan_id)
             ):
                 reason = "monitor_business_snapshot_changed"
             else:

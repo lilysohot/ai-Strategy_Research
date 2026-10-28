@@ -111,8 +111,9 @@ class TeamPhaseBudgetObserver:
 
     critical = True
 
-    def __init__(self, budget: TeamPhaseBudget) -> None:
+    def __init__(self, budget: TeamPhaseBudget, *, prompt_mode: str = "research") -> None:
         self.budget = budget
+        self.prompt_mode = prompt_mode
         self._last_phase = "research"
 
     async def on_loop_start(self, config: LoopConfig) -> None:
@@ -139,6 +140,15 @@ class TeamPhaseBudgetObserver:
         if phase == self._last_phase:
             return None
         self._last_phase = phase
+        if self.prompt_mode == "standard" and phase in {"draining", "consolidating"}:
+            return Intervention(inject_messages=[
+                "The research admission window is closed. Collect the available "
+                "findings and finish the requested answer. Do not add optional "
+                "research or a whole-answer audit. Complete only outstanding "
+                "required checks with attached evidence and bounded scope; preserve "
+                "unchecked items honestly. If files were requested, use the sole "
+                "authorized publisher. Keep the board truthful and prepare delivery."
+            ])
         if phase == "draining":
             return Intervention(inject_messages=[
                 "Research admission is now closed. Do not create or assign new "

@@ -27,7 +27,7 @@ test('buildPlan applies update_task resolutions in order', () => {
     {
       name: 'update_task',
       input: { updates: [{ id: 't1', resolution: 'in_progress' }] },
-      output: 'board...',
+      output: "Updated ['t1'].",
     },
     {
       name: 'update_task',
@@ -37,7 +37,7 @@ test('buildPlan applies update_task resolutions in order', () => {
           { id: 't3', resolution: 'cancelled' },
         ],
       },
-      output: 'board...',
+      output: "Updated ['t1', 't3'].",
     },
   ])
   assert.deepEqual(
@@ -73,13 +73,58 @@ test('buildPlan ignores unrelated tools and malformed shapes', () => {
   assert.deepEqual(plan, [])
 })
 
-test('buildPlan falls back to synthetic ids when output has none', () => {
+test('buildPlan waits for accepted ids instead of creating optimistic rows', () => {
   const plan = buildPlan([
     { name: 'add_task', input: { tasks: [{ description: 'Only step' }] }, output: '' },
   ])
-  assert.equal(plan.length, 1)
-  assert.equal(plan[0].id.length > 0, true)
-  assert.equal(plan[0].description, 'Only step')
+  assert.equal(plan.length, 0)
+})
+
+test('rejected resolutions and duplicate retries preserve the actual board', () => {
+  const plan = buildPlan([
+    addStep(['Verify'], ['t1']),
+    {
+      name: 'update_task',
+      input: { updates: [{ id: 't1', resolution: 'resolved' }] },
+      output: "Error: checks not passed\nUpdated [].\n  ○ t1 open        Verify\nProgress recorded ['t1']; requested resolution rejected.",
+    },
+    addStep(['Verify'], ['t1']),
+  ])
+  assert.deepEqual(plan, [{ id: 't1', description: 'Verify', status: 'open' }])
+})
+
+test('partial batch accepts only returned ids and blocked is not successful', () => {
+  const plan = buildPlan([
+    addStep(['Verify', 'Research'], ['t1', 't2']),
+    {
+      name: 'update_task',
+      input: { updates: [{ id: 't1', resolution: 'resolved' }, { id: 't2', resolution: 'resolved' }] },
+      output: "Updated ['t2'].\nerrors: t1 rejected",
+    },
+    {
+      name: 'update_task',
+      input: { updates: [{ id: 't1', resolution: 'blocked' }] },
+      output: "Updated ['t1'].\n  ! t1 blocked     Verify",
+    },
+  ])
+  assert.deepEqual(plan.map((t) => t.status), ['blocked', 'resolved'])
+  assert.equal(planDoneCount(plan), 1)
+})
+
+test('failed add never creates a ghost row', () => {
+  assert.deepEqual(buildPlan([{
+    name: 'add_task', input: { tasks: [{ description: 'Verify', bad_field: 1 }] },
+    output: 'Error: unknown field',
+  }]), [])
+})
+
+test('terminal board overrides staged delivery on reconnect', () => {
+  const steps = [addStep(['Write answer'], ['t1'])]
+  assert.deepEqual(buildPlan(steps, [
+    { id: 't1', description: 'Write answer', resolution: 'resolved' },
+    { id: 't2', description: 'Verify', resolution: 'blocked' },
+  ]).map((t) => t.status), ['resolved', 'blocked'])
+  assert.deepEqual(buildPlan(steps, []), [])
 })
 
 test('planDoneCount counts resolved only (cancelled stays unfinished)', () => {

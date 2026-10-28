@@ -22,7 +22,8 @@ from plugins.tools.task_board import (
 
 _REMINDER = (
     "Current task board (keep it current via add_task / update_task; "
-    "finalize only once every task is resolved):\nboard"
+    "finish after resolving work or recording blocked work with notes and gap; "
+    "blocked work permits only partial delivery):\nboard"
 )
 
 

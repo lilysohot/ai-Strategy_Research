@@ -759,6 +759,44 @@ async def _execute_tool_calls(
     cfg: LoopConfig, obs: list, tool_map: dict[str, Tool], messages: list[Message], metadata: dict[str, Any],
     turn: int, total_tool_calls: int, ctx: TurnContext, parsed_calls: list[dict]
 ) -> tuple[str, int]:
+    # State-changing tools may declare a barrier. Complete their execution AND
+    # result observers before authorizing later calls, preserving model order.
+    # Ordinary tools still execute in parallel; the kernel knows no domain names.
+    batches: list[list[dict]] = []
+    parallel: list[dict] = []
+    for call in parsed_calls:
+        tool = tool_map.get(call.get("name", ""))
+        if tool is not None and tool.metadata.get("execution_barrier") is True:
+            if parallel:
+                batches.append(parallel)
+                parallel = []
+            batches.append([call])
+        else:
+            parallel.append(call)
+    if parallel:
+        batches.append(parallel)
+    processed = 0
+    for batch in batches:
+        reason, count = await _execute_tool_batch(
+            cfg, obs, tool_map, messages, metadata, turn, total_tool_calls + processed, ctx, batch,
+        )
+        processed += count
+        if reason:
+            # Keep every assistant tool call paired even when an interrupt stops
+            # execution before a later batch can be authorized.
+            for offset, call in enumerate(parsed_calls[processed:], start=processed):
+                messages.append(tool_msg(
+                    "[tool call skipped] Execution stopped before this call was authorized.",
+                    call.get("id") or f"call_{turn}_{total_tool_calls + offset}",
+                ))
+            return reason, len(parsed_calls)
+    return "", len(parsed_calls)
+
+
+async def _execute_tool_batch(
+    cfg: LoopConfig, obs: list, tool_map: dict[str, Tool], messages: list[Message], metadata: dict[str, Any],
+    turn: int, total_tool_calls: int, ctx: TurnContext, parsed_calls: list[dict]
+) -> tuple[str, int]:
     executable: list[tuple[int, dict]] = []
     synthetic: list[tuple[int, ToolResult]] = []
     for idx, tc in enumerate(parsed_calls):

@@ -109,6 +109,9 @@ async def stop_subagent(agent_name: str, force: bool = False) -> str:
     # Tag the request with the running job so a stop that outlives its job
     # can't roll back a later task on this (reusable) session.
     get_stop_registry().request_stop(session_id, session.current_job_id or "")
+    pending = scope.metadata.get("collect_reports_pending_alert")
+    if pending and pending[0] == session_id:
+        scope.metadata.pop("collect_reports_pending_alert", None)
     logger.info("stop_subagent: stop signal queued for %s", session_id)
     return (
         f"Stop signal sent to {name}; it will stop exploring shortly and "

@@ -23,7 +23,10 @@ class _StrictModel(BaseModel):
 
 
 class StrategyEvidence(_StrictModel):
-    source_ref: str = Field(min_length=1)
+    source_ref: str = Field(
+        min_length=1,
+        description="sources 中的文档 id，或本 Run 工具返回的 eref:/ce: 原文引用；服务端解析对应文档",
+    )
     page: str | int
     quote: str = Field(min_length=1)
     kind: Literal["fact", "forecast", "opinion"]
@@ -35,14 +38,25 @@ class StrategySource(_StrictModel):
     title: str = ""
 
 
+class StrategyEvidenceRef(_StrictModel):
+    evidence_ref: str = Field(
+        min_length=1,
+        description="优先使用本 Run 返回的 eref:/ce: 引用；仅提交 ID 和 kind，原文及位置由服务端恢复",
+    )
+    kind: Literal["fact", "forecast", "opinion"]
+
+
 class StrategyProposal(_StrictModel):
     calculation_id: str = Field(min_length=1, description="本 Run 仓位工具返回的 calculation_id")
     horizon: Literal["1-5D", "1-4W", "1-3M", "3-6M", "6-12M", "12M+"]
     invalidation: str = Field(min_length=1)
-    evidence: list[StrategyEvidence] = Field(min_length=1)
+    evidence: list[StrategyEvidenceRef | StrategyEvidence] = Field(min_length=1)
     sources: list[StrategySource] = Field(min_length=1)
     thesis: str = ""
-    target: float | None = Field(default=None, gt=0)
+    target: float | None = Field(
+        default=None, gt=0,
+        description="有证据支持的分析目标价；不得为消除风险收益比 warning 而抬高目标价",
+    )
 
 
 @dataclass
@@ -50,6 +64,7 @@ class StrategyState:
     calculations: dict[str, dict[str, Any]] = field(default_factory=dict)
     failed_validations: int = 0
     last_result: dict[str, Any] | None = None
+    published_research: str = ""
 
 
 _STATE: contextvars.ContextVar[StrategyState | None] = contextvars.ContextVar(
@@ -82,6 +97,12 @@ def validation_exhausted() -> bool:
 def validation_snapshot() -> dict[str, Any] | None:
     state = _STATE.get()
     return deepcopy(state.last_result) if state else None
+
+
+def published_research_text() -> str:
+    """Research is a separate partial deliverable, never a validated strategy card."""
+    state = _STATE.get()
+    return state.published_research if state else ""
 
 
 def failure(code: str, message: str, path: str = "strategy") -> dict[str, Any]:
@@ -123,6 +144,7 @@ def finish_validation(result: dict[str, Any], run_id: Any) -> dict[str, Any]:
         )
     if state is not None:
         state.last_result = deepcopy(result)
+        state.published_research = ""
     record_verification(
         "investment_strategy_lint",
         passed=passed,
@@ -135,6 +157,65 @@ def finish_validation(result: dict[str, Any], run_id: Any) -> dict[str, Any]:
         ),
     )
     return result
+
+
+def _resolve_evidence_refs(
+    position: dict[str, Any], sources: list[StrategySource],
+) -> dict[str, Any] | None:
+    """Normalize receipt aliases, without guessing sources or rewriting claims.
+
+    This binds identifiers and excerpt coordinates only; corpus delivery/live
+    source verification remains owned by the corpus publication boundary.
+    """
+    from plugins.corpus.tool_refs import resolve_evidence_reference
+
+    declared = {source.id for source in sources}
+    normalized = []
+    selected: dict[str, dict[str, Any]] = {}
+    for index, evidence in enumerate(position["evidence"]):
+        selection = "evidence_ref" in evidence
+        ref = evidence["evidence_ref"] if selection else evidence["source_ref"]
+        if not ref.startswith(("eref:", "ce:")):
+            if selection:
+                return failure(
+                    "unresolved_evidence_ref", "evidence_ref 必须是本 Run 返回的 eref:/ce: 引用",
+                    f"strategy.evidence.{index}.evidence_ref",
+                )
+            normalized.append(evidence)
+            continue
+        path = f"strategy.evidence.{index}." + ("evidence_ref" if selection else "source_ref")
+        try:
+            resolved = resolve_evidence_reference(ref)
+        except ValueError:
+            return failure(
+                "unresolved_evidence_ref", "原文引用不存在或已损坏；请使用本 Run 返回的有效引用", path,
+            )
+        if resolved.get("doc_id") not in declared:
+            return failure(
+                "evidence_source_not_declared", "原文引用对应的文档未在 sources 中声明", path,
+            )
+        quote = resolved.get("quote")
+        if not isinstance(quote, str) or (not selection and evidence["quote"] not in quote):
+            return failure(
+                "evidence_quote_mismatch",
+                "quote 与该原文引用不符；请仅提交 evidence_ref 和 kind，由服务端恢复原文",
+                f"strategy.evidence.{index}.quote",
+            )
+        if selection:
+            # Selecting the same excerpt twice adds no evidence. Retain fact
+            # classification if either selection used it; never duplicate text.
+            if ref in selected:
+                if evidence["kind"] == "fact":
+                    selected[ref]["kind"] = "fact"
+                continue
+            evidence["quote"] = quote
+            selected[ref] = evidence
+        evidence["source_ref"] = resolved["doc_id"]
+        evidence["page"] = resolved["locator"]
+        evidence["evidence_ref"] = ref
+        normalized.append(evidence)
+    position["evidence"] = normalized
+    return None
 
 
 def validate_proposal(
@@ -166,6 +247,8 @@ def validate_proposal(
         )
     sizing = deepcopy(sizing)
     position = proposal.model_dump(exclude={"calculation_id", "sources"}, exclude_none=True)
+    if error := _resolve_evidence_refs(position, proposal.sources):
+        return error
     position.update(
         {
             "entry": {"low": sizing["entry_low"], "high": sizing["entry_high"]},
@@ -185,6 +268,8 @@ def validate_proposal(
         entry = context.get("values", {}).get("plan." + name, {})
         if entry.get("status") in {"resolved", "user_provided"}:
             card[name] = entry.get("value")
+    if sizing.get("analysis_direction"):
+        card["direction"] = sizing["analysis_direction"]
     risk_validated = sizing.get("risk_validated") is True
     # Only a server-registered capital ceiling can take the non-risk path.
     capital_only = (
@@ -209,27 +294,47 @@ def validate_proposal(
     return result
 
 
-def publication_boundary(final_text: str, answer_status: str) -> dict[str, str]:
-    """Publish a deterministic limited result when no risk strategy can be delivered.
+def capital_analysis_text(result: dict[str, Any]) -> str:
+    """Render the authenticated calculation separately from research prose."""
+    sizing = result["card"]["position"]["sizing"]
+    return (
+        "本次完成了资金上限分析，尚未生成风险仓位建议。\n\n"
+        f"分析入场区间：{sizing['entry_low']:g}–{sizing['entry_high']:g} 元；"
+        f"分析止损价：{sizing['stop_loss']:g} 元。\n"
+        f"按冻结资金约束，可用预算为 {sizing['capital_budget']:,.2f} 元，"
+        f"按区间上沿计算，最多覆盖 {sizing['max_affordable_shares']} 股、"
+        f"金额 {sizing['max_affordable_amount']:,.2f} 元。\n\n"
+        "这是会话规划资金对应的购买力上限，不是可追加买入数量；"
+        "账户资金与会话规划资金尚未自动联动，本计算未改写账户余额。\n"
+        "以上不是建议买入数量。本 Run 未确认风险预算，"
+        "不能据此给出首仓、加仓或最终仓位建议。"
+    )
 
-    A disclaimer appended to unverified buy instructions is not a validation gate.
-    The full research trace and model-written files remain in the Run for audit.
+
+def publication_boundary(
+    final_text: str, answer_status: str, *, preserve_research: bool = True,
+) -> dict[str, str]:
+    """Keep research prose separate from the server's position-validation verdict.
+
+    A capital ceiling cannot authorize a strategy card. It also cannot erase
+    independently produced research. Failed card validation still fails closed;
+    only a successful capital calculation has the partial-research delivery path.
     """
     result = validation_snapshot()
     if result is None or result.get("recommendation_allowed"):
         return {"final_text": final_text, "answer_status": answer_status}
     if result.get("passed") and result.get("delivery_mode") == "capital_analysis":
-        sizing = result["card"]["position"]["sizing"]
-        text = (
-            "本次完成了资金上限分析，尚未生成风险仓位建议。\n\n"
-            f"分析入场区间：{sizing['entry_low']:g}–{sizing['entry_high']:g} 元；"
-            f"分析止损价：{sizing['stop_loss']:g} 元。\n"
-            f"按冻结资金约束，可用预算为 {sizing['capital_budget']:,.2f} 元，"
-            f"按区间上沿计算，最多覆盖 {sizing['max_affordable_shares']} 股、"
-            f"金额 {sizing['max_affordable_amount']:,.2f} 元。\n\n"
-            "以上只是资金可覆盖上限，不是建议买入数量。"
-            "本 Run 未确认风险预算，不能据此给出首仓、加仓或最终仓位建议。"
-        )
+        text = capital_analysis_text(result)
+        if preserve_research and final_text.strip():
+            text = (
+                "## 研究分析\n\n"
+                "以下研究正文不属于已通过风险仓位校验的策略卡；"
+                "仓位校验结果见文末。\n\n"
+                + final_text.strip() + "\n\n## 资金计算与交付范围\n\n" + text
+            )
+            state = _STATE.get()
+            if state is not None:
+                state.published_research = text
     else:
         details = "\n".join(
             f"- {error.get('field', 'strategy')}：{error['message']}（{error['code']}）"

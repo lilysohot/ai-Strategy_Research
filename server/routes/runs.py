@@ -42,6 +42,7 @@ from server.orchestrator import Orchestrator, _session_uuid, get_orchestrator
 from server.readiness import probe_data_root
 from server.relay import sse_for_run, trajectory_page
 from server.run_modes import RunMode, mode_for_pipeline, pipeline_for_mode
+from server.run_outcome import read_terminal_task_board
 from server.store import (
     ACTIVE_RUN_STATUSES,
     CONTROL_KIND_APPROVAL,
@@ -1025,6 +1026,7 @@ class RunSummaryResponse(BaseModel):
     mode: RunMode | None = None
     model: str | None = None
     final_answer: str | None = None
+    task_board: list[dict[str, str]] | None = None
     error: str | None = None
     stopped_by: str | None = None
     usage: dict[str, Any] | None = None
@@ -1060,6 +1062,7 @@ async def run_get(
         mode=mode,
         model=(run.llm_snapshot_json or {}).get("model"),
         final_answer=run.final_answer,
+        task_board=await asyncio.to_thread(read_terminal_task_board, str(run.id)),
         error=run.error,
         stopped_by=run.stopped_by,
         usage=run.usage_json,

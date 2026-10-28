@@ -15,9 +15,11 @@ from frontier_agent.components.agent_bus.fan_in import (
     classify_completion,
     process_collected,
 )
+from frontier_agent.components.agent_bus.stop_signal import get_stop_registry
 from frontier_agent.core.loop_types import AgentLoopResult
 from frontier_agent.core.messages import assistant_msg, tool_msg
 from plugins.tools._verification import project_checks
+from workflows.agent_team.final_report import is_user_report
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +59,14 @@ class TeamWindDown:
         """Whether the coordinator's pre-fan-in draft is no longer final."""
         return self.collected_count > 0 or self.run_status == "partial"
 
+    def should_refresh_answer(self, result: AgentLoopResult) -> bool:
+        """New evidence invalidates a draft; partial execution alone does not."""
+        return self.collected_count > 0 or (
+            self.requires_resynthesis and not is_user_report(str(
+                result.metadata.get("final_answer_candidate") or result.final_content
+            ))
+        )
+
     def as_dict(self) -> dict[str, Any]:
         return {
             "status": self.status,
@@ -92,6 +102,9 @@ async def wind_down_team(
         for session in sessions
     )
     queued_aborted = bus.freeze_task_dispatch(task_id)
+    for session in sessions:
+        if session.current_job_id:
+            get_stop_registry().request_stop(session.session_id, session.current_job_id)
     collected = []
     deadline = time.monotonic() + max(float(wait_s), 0.0)
 
@@ -118,6 +131,23 @@ async def wind_down_team(
             collected.append(outcome.result)
             continue
         break
+
+    # Stop and checkpoint unfinished loops BEFORE synthesis. Cleanup after final
+    # publication is too late: completed tool observations would never reach it.
+    running = [session.current_job_id for session in bus.list_sessions_for_task(task_id)
+               if session.current_job_id]
+    if running:
+        try:
+            await asyncio.wait_for(
+                asyncio.gather(*(bus.abort(job_id) for job_id in running)), timeout=5.0,
+            )
+        except TimeoutError:
+            logger.warning("Team checkpoint cancellation exceeded grace (task=%s)", task_id)
+        while True:
+            outcome = await bus.wait_any_session_detailed(task_id, timeout=0)
+            if outcome.result is None:
+                break
+            collected.append(outcome.result)
 
     batch = process_collected(bus, task_id, collected)
     infos = [classify_completion(result) for _, result in collected]

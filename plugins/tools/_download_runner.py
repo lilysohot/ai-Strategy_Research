@@ -10,6 +10,7 @@ import hashlib
 import http.client
 import ipaddress
 import json
+import logging
 import os
 import re
 import shutil
@@ -23,6 +24,8 @@ import uuid
 from collections.abc import Callable, Iterator
 from pathlib import Path
 from typing import IO, Any
+
+logger = logging.getLogger(__name__)
 
 _LOCK_NAME = ".frontier_agent-download.lock"
 # Disk head start demanded before a response with no Content-Length starts
@@ -134,12 +137,18 @@ def _opener(ip: str) -> urllib.request.OpenerDirector:
 
 
 def _validate_public_url(url: str) -> tuple[str, ...]:
-    """Vet *url* and return every public IP the request may be sent to.
+    """Vet *url* and return the public IPs the request may be sent to.
 
-    Every resolved address must be global — retaining only the usable-looking
-    answers would let a split-horizon answer through. IPv4 is attempted first
-    because task containers commonly have no IPv6 route; all other vetted
-    addresses remain available for connection failover.
+    Only global addresses are returned; non-public answers are dropped before
+    any connection is attempted. At least one global address must remain, so a
+    host that resolves exclusively to a private/metadata address is still
+    refused. Filtering matter for real launches: a resolver that answers with a
+    Teredo/synthetic IPv6 record (``2001::/32``) alongside a perfectly good A
+    record used to poison the whole host and surface as ``policy_blocked`` —
+    huggingface.co and en.wikipedia.org both failed that way. Filtering keeps
+    the host reachable without ever dialing a private address.
+    IPv4 is attempted first because task containers commonly have no IPv6
+    route; all other vetted addresses remain available for connection failover.
     """
     parsed = urllib.parse.urlsplit(url)
     if parsed.scheme not in {"http", "https"}:
@@ -162,13 +171,25 @@ def _validate_public_url(url: str) -> tuple[str, ...]:
     if not addresses:
         raise DownloadError(f"cannot resolve {parsed.hostname}")
     validated: list[tuple[int, str]] = []
+    refused: list[str] = []
     for address in addresses:
         ip = ipaddress.ip_address(address)
         if not ip.is_global:
-            raise DownloadError(
-                f"refusing non-public address for {parsed.hostname}: {ip}",
-            )
+            refused.append(str(ip))
+            continue
         validated.append((ip.version, str(ip)))
+    if not validated:
+        raise DownloadError(
+            f"refusing non-public address for {parsed.hostname}: "
+            f"{', '.join(refused)}",
+        )
+    if refused:
+        # Kept at debug: this is a per-request property of the resolver, not a
+        # failure, and the same host may answer differently on the next call.
+        logger.debug(
+            "ignoring non-public address(es) for %s: %s",
+            parsed.hostname, ", ".join(refused),
+        )
     return tuple(address for _version, address in sorted(validated, key=lambda item: item[0]))
 
 

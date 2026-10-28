@@ -133,6 +133,7 @@ from workflows.agent_team.phase_budget import TeamPhaseBudget, TeamPhaseBudgetOb
 from workflows.agent_team.prompts import (
     get_main_system_prompt,
     render_team_effort,
+    resolve_prompt_mode,
 )
 from workflows.agent_team.stream_repetition import (
     parse_stream_repetition_config,
@@ -334,8 +335,12 @@ def _build_team_phase_budget(
         )
     if research_deadline is not None and publication_deadline is not None:
         publication_deadline = max(research_deadline, publication_deadline)
+    # Closing retrieval must leave time for BOTH an in-flight tool and a
+    # concise member report. A tool-only reserve lets reports consume the
+    # coordinator's final synthesis window.
+    member_report_reserve_s = min(60.0, max(0.0, (research_wall_s - worst_case_tool_s) * 0.2))
     research_dispatch_deadline = (
-        max(started_monotonic_s, research_deadline - worst_case_tool_s)
+        max(started_monotonic_s, research_deadline - worst_case_tool_s - member_report_reserve_s)
         if research_deadline is not None
         else None
     )
@@ -1461,6 +1466,8 @@ async def main_agent_node(
         mcp_tool_names = [name for name in tool_names if name.startswith("mcp_")]
     mcp_tool_specs = list(metadata.get("sdk_mcp_tool_specs") or [])
     planning_mode = bool(agent_cfg.get("planning_mode", True))
+    prompt_mode = resolve_prompt_mode(agent_cfg.get("prompt_mode"))
+    logger.info("Agent Team prompt mode: %s", prompt_mode)
     # When leaving planning: false = continue the SAME loop (planning reasoning
     # stays in context, turn counter keeps running); true = drop the planning
     # context and run a FRESH execution loop (board injected into the new user
@@ -1508,7 +1515,7 @@ async def main_agent_node(
         wall_deadline_s=0,
         force_compaction_first=(context_compaction == "tiered" and max_len > 0),
     )
-    observers.insert(0, TeamPhaseBudgetObserver(phase_budget))
+    observers.insert(0, TeamPhaseBudgetObserver(phase_budget, prompt_mode=prompt_mode))
     # A serve/CLI driver injects its own protocol-stream and worker-trace
     # observers via state.metadata["sdk_extra_observers"] (see
     # ``workflows/_shared/sdk_shim``). The HTTP API path leaves this key
@@ -1613,6 +1620,7 @@ async def main_agent_node(
     subagent_prompt_addendum = str(metadata.get("_subagent_prompt_addendum") or "").strip()
     swarm_runtime = SwarmSubagentRuntime(
         original_question=subagent_original_question,
+        prompt_mode=prompt_mode,
         trajectory_dir=traj_dir,
         worktree_root=worktree_root,
         sub_binds=sub_binds,
@@ -1808,7 +1816,7 @@ async def main_agent_node(
             getattr(t, "name", "") for t in planning_tools if getattr(t, "name", "")
         ]
         planning_observers: list[Any] = [
-            TeamPhaseBudgetObserver(phase_budget),
+            TeamPhaseBudgetObserver(phase_budget, prompt_mode=prompt_mode),
             LeakedToolCallRetryObserver(tool_names=planning_tool_names),
             build_task_board_observer(),
             RichConsoleObserver(),
@@ -1845,6 +1853,7 @@ async def main_agent_node(
                     date_str,
                     fs_mode=fs_mode,
                     phase="planning",
+                    prompt_mode=prompt_mode,
                     sub_agent_tools=sub_agent_tool_names,
                     mcp_tool_names=mcp_tool_names,
                     mcp_tool_specs=mcp_tool_specs,
@@ -1869,6 +1878,7 @@ async def main_agent_node(
                 date_str,
                 fs_mode=fs_mode,
                 phase="execution",
+                prompt_mode=prompt_mode,
                 sub_agent_tools=sub_agent_tool_names,
                 mcp_tool_names=mcp_tool_names,
                 mcp_tool_specs=mcp_tool_specs,
@@ -1896,6 +1906,7 @@ async def main_agent_node(
                 fs_mode=fs_mode,
                 planning_mode=planning_mode,
                 phase="combined",
+                prompt_mode=prompt_mode,
                 sub_agent_tools=sub_agent_tool_names,
                 mcp_tool_names=mcp_tool_names,
                 mcp_tool_specs=mcp_tool_specs,
@@ -1956,9 +1967,10 @@ async def main_agent_node(
             effective_finalization_timeout_s,
             task_description=question,
             structured_report=False,
-            force_recovery=wind_down.requires_resynthesis,
-            prefer_collected_reports=wind_down.requires_resynthesis,
+            force_recovery=wind_down.should_refresh_answer(result),
+            prefer_collected_reports=wind_down.collected_count > 0,
             run_recovery_llm=hard_remaining_s is None or hard_remaining_s > 1.0,
+            recovery_trace_path=traj_dir / "main_finalization.jsonl",
         )
 
     aggregate = bus.drain_task_metadata(bus_task_id)

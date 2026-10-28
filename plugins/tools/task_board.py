@@ -2,11 +2,16 @@
 
 from __future__ import annotations
 
+import ast
 import json
 import logging
 import re
 from collections.abc import Iterable
+from contextlib import suppress
+from copy import deepcopy
 from typing import Any
+
+from pydantic import ValidationError
 
 from frontier_agent.components.agent_bus import AgentBus
 from frontier_agent.components.observers.task_board import TaskBoardObserver
@@ -22,6 +27,7 @@ from frontier_agent.core.runtime import registry
 from frontier_agent.core.tool import tool
 from plugins.tools._bus_scope import SWARM_SCOPE_KEY, resolve_bus_task_id
 from plugins.tools._coerce import coerce_json_list, coerce_json_object
+from plugins.tools._task_board_contract import BoardAdd, BoardUpdate
 
 logger = logging.getLogger(__name__)
 
@@ -111,10 +117,59 @@ def _team_verification_gate_enabled(scope: Any) -> bool:
     return SWARM_SCOPE_KEY in metadata or planning_enabled(scope.task_id)
 
 
+def _planned_check_update(
+    scope: Any, tid: str, task: dict[str, Any], item: dict[str, Any],
+    *, tasks: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Validate one authoritative definition before changing any task fields."""
+    if not _verification_required(item, str(task.get("description") or "")):
+        return {}
+    proposed = _verification_requirements(
+        item, task_id=tid, description=task["description"], required=True,
+    ) if item.get("verification_requirements") is not None else (
+        task.get("verification_requirements") or _verification_requirements(
+            {}, task_id=tid, description=task["description"], required=True,
+        )
+    )
+    if proposed != task.get("verification_requirements"):
+        bus = registry.get_optional(AgentBus)
+        if bus and any(
+            check.get("work_item_id") == tid
+            for entry in bus.list_task_jobs(resolve_bus_task_id(scope))
+            for check in entry.item.metadata.get("verification_checks", [])
+        ):
+            raise ValueError("dispatched verification requirements are immutable; recheck the same IDs")
+    occupied = {
+        check["check_id"] for other_id, other in (
+            tasks if tasks is not None else _board(scope.task_id)["tasks"]
+        ).items()
+        if other_id != tid and not other.get("archived")
+        for check in other.get("verification_requirements", [])
+    }
+    if occupied.intersection(check["check_id"] for check in proposed):
+        raise ValueError("planned check_id already belongs to another task")
+    return {"verification_required": True, "verification_requirements": proposed}
+
+
 def board_size(task_id: str) -> int:
     """Number of tasks on this task's board (0 if no board)."""
     b = _BOARDS.get(task_id)
-    return len(b["tasks"]) if b else 0
+    return sum(not t.get("archived") for t in b["tasks"].values()) if b else 0
+
+
+def _progress_fields(item: dict[str, Any]) -> dict[str, Any]:
+    """Retain model-declared progress separately from tool verification verdicts."""
+    fields: dict[str, Any] = {}
+    for key in ("done_when", "notes", "gap"):
+        if key in item and isinstance(item[key], str):
+            fields[key] = item[key].strip()[:2000]
+    if item.get("kind") in ("research", "verification", "delivery"):
+        fields["kind"] = item["kind"]
+    if isinstance(item.get("evidence_refs"), list):
+        fields["evidence_refs"] = list(dict.fromkeys(
+            ref[:1000] for ref in item["evidence_refs"] if isinstance(ref, str) and ref.strip()
+        ))[:20]
+    return fields
 
 
 def record_verification(name: str, *, passed: bool, detail: str) -> None:
@@ -151,7 +206,9 @@ def clear_board(task_id: str) -> None:
     _PENDING_OPS.pop(task_id, None)
 
 
-def restore_board_from_messages(task_id: str, messages: Iterable[Any]) -> int:
+def restore_board_from_messages(
+    task_id: str, messages: Iterable[Any], *, archive: bool = False,
+) -> int:
     """Rebuild a continued Run's task board from replayed tool calls.
 
     Conversation replay preserves the model-visible add_task and update_task
@@ -160,12 +217,18 @@ def restore_board_from_messages(task_id: str, messages: Iterable[Any]) -> int:
     board transcript and no matching state. Rebuild that state before the loop so
     the first resumed update_task addresses the same ids the model can see.
 
-    The assistant's call arguments are the source of truth. Tool-result text is a
-    human-readable projection and may be clipped, so it is never parsed. Malformed
-    calls are ignored; the ordinary tool path can still create a fresh board.
+    Call arguments carry task data. The short update receipt identifies accepted
+    ids so a rejected update cannot become successful on replay. Legacy receipts
+    without structured id lists remain readable. Malformed calls are ignored.
     """
     clear_board(task_id)
     board = _board(task_id)
+    messages = list(messages)
+    receipts = {
+        str(message.get("tool_call_id")): message.get("content")
+        for message in messages
+        if isinstance(message, dict) and message.get("role") == "tool"
+    }
 
     def arguments(call: Any) -> tuple[str, dict[str, Any] | None]:
         if not isinstance(call, dict):
@@ -193,6 +256,9 @@ def restore_board_from_messages(task_id: str, messages: Iterable[Any]) -> int:
             if args is None:
                 continue
             if name == "add_task":
+                receipt = receipts.get(str(call.get("id")))
+                if isinstance(receipt, str) and receipt.startswith("Error:"):
+                    continue
                 items = coerce_json_list(args.get("tasks")) or []
                 existing = {
                     task["description"].strip(): tid
@@ -207,6 +273,7 @@ def restore_board_from_messages(task_id: str, messages: Iterable[Any]) -> int:
                         continue
                     if description in existing:
                         tid = existing[description]
+                        board["tasks"][tid].update(_progress_fields(item))
                         required = _verification_required(item, description)
                         if required:
                             board["tasks"][tid]["verification_required"] = True
@@ -224,6 +291,7 @@ def restore_board_from_messages(task_id: str, messages: Iterable[Any]) -> int:
                     tid = f"t{board['seq']}"
                     required = _verification_required(item, description)
                     board["tasks"][tid] = {
+                        **_progress_fields(item),
                         "description": description,
                         "resolution": "open",
                         "owners": _as_owner_list(item.get("owner") or item.get("owners")),
@@ -238,17 +306,49 @@ def restore_board_from_messages(task_id: str, messages: Iterable[Any]) -> int:
                     }
                     existing[description] = tid
             elif name == "update_task":
+                receipt = receipts.get(str(call.get("id")))
+                accepted: set[str] | None = None
+                progress_ids: set[str] = set()
+                actual_resolutions: dict[str, str] = {}
+                if isinstance(receipt, str):
+                    actual_resolutions = dict(re.findall(
+                        r"^\s*[○▶✓⊘!]\s+(t\d+)\s+(open|in_progress|resolved|cancelled|blocked)\s",
+                        receipt, re.MULTILINE,
+                    ))
+                    progress_match = re.search(r"Progress recorded (\[[^\n]*\]);", receipt)
+                    if progress_match:
+                        with suppress(ValueError, SyntaxError, TypeError):
+                            progress_ids = set(ast.literal_eval(progress_match[1]))
+                    match = re.search(r"^Updated (\[[^\n]*\])\.", receipt, re.MULTILINE)
+                    if match:
+                        try:
+                            accepted = set(ast.literal_eval(match[1]))
+                        except (ValueError, SyntaxError, TypeError):
+                            accepted = set()
+                    elif receipt.startswith("Error:"):
+                        accepted = set()
                 for raw in coerce_json_list(args.get("updates")) or []:
                     update = coerce_json_object(raw)
                     if update is None:
                         continue
                     tid = str(update.get("id") or "")
+                    if accepted is not None and tid not in accepted and tid not in progress_ids:
+                        continue
                     task = board["tasks"].get(tid)
                     if task is None:
                         continue
-                    resolution = str(update.get("resolution") or "").strip()
+                    if update.get("verification_requirements") is not None:
+                        task["verification_required"] = True
+                        task["verification_requirements"] = _verification_requirements(
+                            update, task_id=tid, description=task["description"], required=True,
+                        )
+                    if tid in progress_ids and (accepted is None or tid not in accepted):
+                        task.update(_progress_fields(update))
+                        continue
+                    resolution = actual_resolutions.get(tid, str(update.get("resolution") or "").strip())
                     if resolution in VALID_RESOLUTION:
                         task["resolution"] = resolution
+                    task.update(_progress_fields(update))
                     owners = _as_owner_list(update.get("owner") or update.get("owners"))
                     if owners:
                         if update.get("replace_owners"):
@@ -262,7 +362,12 @@ def restore_board_from_messages(task_id: str, messages: Iterable[Any]) -> int:
         _BOARDS.pop(task_id, None)
         return 0
     # Make the restored snapshot visible to the stream/UI on the resumed Run.
-    _record_op(task_id, "add", list(board["tasks"]))
+    if archive:
+        # Preserve identities for explicit continuation, outside this round's progress.
+        for task in board["tasks"].values():
+            task["archived"] = True
+    else:
+        _record_op(task_id, "add", list(board["tasks"]))
     return len(board["tasks"])
 
 
@@ -295,9 +400,10 @@ def serialize_tasks(task_id: str, ids: list[str]) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     for tid in ids:
         t = b["tasks"].get(tid)
-        if t is None:
+        if t is None or t.get("archived"):
             continue
         serialized = {
+            **_progress_fields(t),
             "id": tid,
             "description": t.get("description", ""),
             "resolution": t.get("resolution", "open"),
@@ -309,6 +415,16 @@ def serialize_tasks(task_id: str, ids: list[str]) -> list[dict[str, Any]]:
             serialized["verification_requirements"] = [
                 dict(item) for item in t.get("verification_requirements") or []
             ]
+            bus = registry.get_optional(AgentBus)
+            scope = get_current_execution_scope()
+            bus_task_id = resolve_bus_task_id(scope) if scope and scope.task_id == task_id else task_id
+            if bus is not None:
+                from plugins.tools._verification import work_item_verification_progress
+
+                serialized.update(work_item_verification_progress(
+                    bus, bus_task_id, tid,
+                    [item["check_id"] for item in serialized["verification_requirements"]],
+                ))
         out.append(serialized)
     return out
 
@@ -394,17 +510,34 @@ def planning_block_message(task_id: str, tool_name: str) -> str | None:
 
 
 def unresolved_task_ids(task_id: str) -> list[str]:
-    """Ids not yet finished — open or in_progress. ``[]`` if no board.
+    """Ids still requiring work — open or in_progress. ``[]`` if no board.
 
     Cancelled tasks are retracted work (dropped on purpose / created in error),
-    so they do NOT count as unresolved and never hold back the finalize gate."""
+    while blocked tasks retain gaps for partial publication. Neither prevents
+    ending execution; blocked tasks still downgrade the final report."""
     b = _BOARDS.get(task_id)
     if not b:
         return []
     return [
         tid for tid, t in b["tasks"].items()
-        if t.get("resolution") not in ("resolved", "cancelled")
+        if not t.get("archived") and t.get("resolution") not in ("resolved", "cancelled", "blocked")
     ]
+
+
+def complete_delivery_tasks(task_id: str) -> None:
+    """Only an accepted final answer, not a board claim, completes delivery."""
+    board = _BOARDS.get(task_id)
+    if not board:
+        return
+    changed = []
+    for tid, task in board["tasks"].items():
+        if (not task.get("archived") and task.get("kind") == "delivery"
+                and not task.get("verification_required")
+                and task.get("resolution") in {"open", "in_progress"}):
+            task["resolution"] = "resolved"
+            changed.append(tid)
+    if changed:
+        _record_op(task_id, "update", changed)
 
 
 def _exec_status_by_owner(task_id: str) -> dict[str, str]:
@@ -439,12 +572,12 @@ def render_board(task_id: str, *, bus_task_id: str | None = None) -> str:
     b = _BOARDS.get(task_id)
     if not b or not b["tasks"]:
         return "[task board] empty — call add_task to register sub-questions."
-    tasks = b["tasks"]
+    tasks = {tid: t for tid, t in b["tasks"].items() if not t.get("archived")}
     c = count_resolutions(t["resolution"] for t in tasks.values())
     lines = [
         f"[task board] resolved {c.resolved}/{c.active} · "
         f"in-progress {c.in_progress} · "
-        f"open {c.open} · cancelled {c.cancelled}"
+        f"open {c.open} · cancelled {c.cancelled} · blocked {c.blocked}"
     ]
     # The owners/exec column only makes sense when there IS a team: in a solo
     # run (e.g. react) no task is ever assigned, so showing "agents=[unassigned]"
@@ -467,6 +600,19 @@ def render_board(task_id: str, *, bus_task_id: str | None = None) -> str:
             )
             row += f"agents=[{agents}]  "
         lines.append(f"{row}{t['description'][:80]}")
+        for key in ("done_when", "notes", "gap"):
+            if t.get(key):
+                lines.append(f"    {key}: {t[key]}")
+        if t.get("verification_required"):
+            lines.append("    verification_requirements: " + json.dumps(
+                t.get("verification_requirements", []), ensure_ascii=False,
+            ))
+            projected = serialize_tasks(task_id, [tid])[0]
+            if "verification_status" in projected:
+                lines.append(
+                    f"    verification_execution_status: {projected['verification_execution_status']}; "
+                    f"verification_status: {projected['verification_status']}"
+                )
     return "\n".join(lines)
 
 
@@ -489,7 +635,7 @@ def _as_owner_list(val: Any) -> list[str]:
 
 
 @tool
-async def add_task(tasks: list[Any]) -> str:
+async def add_task(tasks: list[BoardAdd]) -> str:
     """Register the work items / sub-questions for this run on the task board.
 
     This is your plan and external memory. Call it up front — before doing any
@@ -504,6 +650,12 @@ async def add_task(tasks: list[Any]) -> str:
             - description (required): ONE concrete, checkable work item, e.g.
               "Verify the Markov condition Δω ≫ system rate holds" — not a vague
               area like "look into the math".
+            - notes: completion basis or reason for cancelling; required in Web research.
+            - gap: the specific remaining question; empty once answered.
+            - evidence_refs: source URLs or evidence handles supporting the progress claim.
+              These are model-declared pointers, not proof of successful verification.
+            - kind: research | verification | delivery. Keep delivery separate from research.
+            - done_when: finite acceptance criterion tied to the user's question.
             - owner (OPTIONAL, multi-agent runs only): if a teammate sub-agent is
               already assigned to this item, name it here (a name, comma-string,
               or list — a task may have many). In a solo run, just OMIT it.
@@ -525,15 +677,21 @@ async def add_task(tasks: list[Any]) -> str:
         return "Error: add_task can only be called inside an active run."
     if not items:
         return "Error: add_task requires at least one {description} item."
-    b = _board(scope.task_id)
+    # A rejected batch must not leave unreceipted rows or half-written definitions.
+    b = deepcopy(_board(scope.task_id))
     existing = {t["description"].strip(): tid for tid, t in b["tasks"].items()}
     new_ids: list[str] = []
+    reused_ids: list[str] = []
     skipped = 0  # items that weren't usable {description} objects
     for raw in items:
-        it = coerce_json_object(raw)
+        it = raw.model_dump(exclude_unset=True) if isinstance(raw, BoardAdd) else coerce_json_object(raw)
         if it is None:
             skipped += 1
             continue
+        try:
+            it = BoardAdd.model_validate(it).model_dump(exclude_unset=True, exclude_none=True)
+        except ValidationError as exc:
+            return f"Error: invalid add_task item: {exc}"
         desc = str(it.get("description", "")).strip()
         if not desc:
             skipped += 1
@@ -541,25 +699,25 @@ async def add_task(tasks: list[Any]) -> str:
         if desc in existing:  # dedup re-decomposition
             tid = existing[desc]
             task = b["tasks"][tid]
-            required = _verification_required(it, desc)
-            if required:
-                task["verification_required"] = True
-                if (
-                    it.get("verification_requirements") is not None
-                    or not task.get("verification_requirements")
-                ):
-                    task["verification_requirements"] = _verification_requirements(
-                        it,
-                        task_id=tid,
-                        description=desc,
-                        required=True,
-                    )
+            try:
+                planned = _planned_check_update(scope, tid, task, it, tasks=b["tasks"])
+            except ValueError as exc:
+                return f"Error: {tid}: {exc}"
+            task.pop("archived", None)
+            task.update(_progress_fields(it))
+            task.update(planned)
             new_ids.append(tid)
+            reused_ids.append(tid)
             continue
+        tid = f"t{b['seq'] + 1}"
+        try:
+            _planned_check_update(scope, tid, {"description": desc}, it, tasks=b["tasks"])
+        except ValueError as exc:
+            return f"Error: {tid}: {exc}"
         b["seq"] += 1
-        tid = f"t{b['seq']}"
         required = _verification_required(it, desc)
         b["tasks"][tid] = {
+            **_progress_fields(it),
             "description": desc,
             "resolution": "open",
             "owners": _as_owner_list(it.get("owner") or it.get("owners")),
@@ -588,8 +746,11 @@ async def add_task(tasks: list[Any]) -> str:
             'was added. Re-call with each task as its own '
             '{"description": "<one concrete work item>"}.'
         )
+    _BOARDS[scope.task_id] = b
     _record_op(scope.task_id, "add", new_ids)
     msg = f"Added {new_ids}.\n{render_board(scope.task_id, bus_task_id=resolve_bus_task_id(scope))}"
+    if reused_ids:
+        msg += f"\nReused existing IDs {reused_ids}; no duplicate tasks created for these items."
     if skipped:
         msg += (
             f'\nNote: {skipped} item(s) were skipped (not a {{"description": ...}} '
@@ -599,9 +760,10 @@ async def add_task(tasks: list[Any]) -> str:
 
 
 @tool
-async def update_task(updates: list[Any]) -> str:
+async def update_task(updates: list[BoardUpdate]) -> str:
     """Mark progress on the board — call this the MOMENT a task finishes.
 
+    Updating a historical task explicitly resumes it in the current round.
     Update each task as soon as it is done, before starting the next one; don't
     let finished tasks pile up. The arg is a LIST only to cover the case where
     two tasks finished in the SAME turn (resolve both at once) — it is NOT a
@@ -616,6 +778,17 @@ async def update_task(updates: list[Any]) -> str:
               at it") | "cancelled" (retract a task you no longer need or created
               in error — it stops counting toward unresolved work; the id stays
               on the board for the trail) | "open" (the default; not started).
+            - notes: completion basis or cancellation reason; required to close Web tasks.
+            - gap: exact remaining question; empty once answered.
+            - evidence_refs: model-declared source URLs or evidence handles (not validation).
+            - kind: research | verification | delivery.
+            - done_when: finite completion criterion for this user question.
+            - verification_requirements: planned check IDs and criteria. May be
+              updated before dispatch; dispatched definitions are immutable.
+            - resolution='blocked': stop work with an explicit notes and gap.
+              Allows partial delivery, never marks missing checks as passed.
+            - Team delivery items become resolved only when the final answer is
+              accepted. Marking them resolved here stages them as in_progress.
             - owner (OPTIONAL, multi-agent runs only): teammate sub-agent
               name(s) now working it — ADDED to the task's owner list (a name,
               comma-string, or list). Set "replace_owners": true to overwrite
@@ -632,10 +805,16 @@ async def update_task(updates: list[Any]) -> str:
     if not b:
         return "Error: no task board yet — call add_task first."
     changed: list[str] = []
+    progress_only: list[str] = []
     errors: list[str] = []
     for raw in items:
-        u = coerce_json_object(raw)
+        u = raw.model_dump(exclude_unset=True) if isinstance(raw, BoardUpdate) else coerce_json_object(raw)
         if u is None:
+            continue
+        try:
+            u = BoardUpdate.model_validate(u).model_dump(exclude_unset=True, exclude_none=True)
+        except ValidationError as exc:
+            errors.append(f"invalid update_task item: {exc}")
             continue
         tid = str(u.get("id", ""))
         if tid not in b["tasks"]:
@@ -646,9 +825,27 @@ async def update_task(updates: list[Any]) -> str:
             errors.append(f"{tid}: bad resolution {res!r} (use {VALID_RESOLUTION})")
             continue
         t = b["tasks"][tid]
+        progress = _progress_fields(u)
+        try:
+            planned = _planned_check_update(scope, tid, t, u)
+        except ValueError as exc:
+            errors.append(f"{tid}: {exc}")
+            continue
+        if res == "blocked" and not (
+            (progress.get("notes") or t.get("notes"))
+            and (progress.get("gap") or t.get("gap"))
+        ):
+            errors.append(f"{tid}: blocked requires notes and gap explaining the remaining limitation")
+            continue
+        if res == "cancelled" and not progress.get("notes") and u.get("reason"):
+            progress["notes"] = str(u["reason"]).strip()[:2000]
+        if (scope.metadata.get("research_convergence") and res in ("resolved", "cancelled")
+                and not (progress.get("notes") or t.get("notes") or u.get("reason"))):
+            errors.append(f"{tid}: provide notes with the completion basis or cancellation reason")
+            continue
         if (
             res == "resolved"
-            and t.get("verification_required")
+            and (planned.get("verification_required") or t.get("verification_required"))
             and _team_verification_gate_enabled(scope)
         ):
             bus = registry.get_optional(AgentBus)
@@ -664,7 +861,8 @@ async def update_task(updates: list[Any]) -> str:
                         tid,
                         required_check_ids=[
                             str(item.get("check_id") or "")
-                            for item in t.get("verification_requirements") or []
+                            for item in planned.get("verification_requirements",
+                                                    t.get("verification_requirements")) or []
                             if isinstance(item, dict) and item.get("check_id")
                         ],
                     )
@@ -680,8 +878,16 @@ async def update_task(updates: list[Any]) -> str:
                     "unavailable": "检查状态暂不可用",
                 }.get(verification_status, verification_status)
                 errors.append(
-                    f"{tid}: {detail}；请通过 verification_checks 分派必要检查并取得 pass 后再完成"
+                    f"{tid}: {detail}；取得 pass 后才可 resolved；若无法继续，"
+                    "请设 resolution='blocked' 并填写 notes、gap，交付带限制的部分结果"
                 )
+                # Reject the success claim, not truthful observations or the
+                # explicitly registered plan. Keep the receipt distinct so a
+                # client cannot project the rejected resolution as successful.
+                t.update(planned)
+                t.update(progress)
+                if planned or progress:
+                    progress_only.append(tid)
                 continue
         if t.get("verification_ok") is False:
             if res == "resolved":
@@ -694,8 +900,16 @@ async def update_task(updates: list[Any]) -> str:
                     continue
                 t["description"] += f"；未完成原因：{reason}"
         t.setdefault("owners", [])
+        if t.pop("archived", False):
+            _record_op(scope.task_id, "add", [tid])
+        t.update(progress)
+        t.update(planned)
         if res:
-            t["resolution"] = res
+            t["resolution"] = (
+                "in_progress" if res == "resolved" and t.get("kind") == "delivery"
+                and not t.get("verification_required")
+                and _team_verification_gate_enabled(scope) else res
+            )
         # owners ACCUMULATE — assigning another agent to the same task adds it,
         # it does not replace the existing owner(s). ``replace_owners: true``
         # overwrites (e.g. to drop an agent that was reassigned elsewhere).
@@ -715,7 +929,11 @@ async def update_task(updates: list[Any]) -> str:
     # bad resolution) stay off the wire so the frontend never builds ghost rows.
     if changed:
         _record_op(scope.task_id, "update", changed)
+    if progress_only:
+        _record_op(scope.task_id, "update", progress_only)
     msg = f"Updated {changed}.\n{render_board(scope.task_id, bus_task_id=resolve_bus_task_id(scope))}"
+    if progress_only:
+        msg += f"\nProgress recorded {progress_only}; requested resolution rejected."
     if errors:
         if not changed:
             return "Error: no task was updated; " + "; ".join(errors) + "\n" + msg
@@ -747,6 +965,12 @@ async def finish_planning() -> str:
         "assign_task to build and dispatch the team.\n"
         + render_board(scope.task_id, bus_task_id=resolve_bus_task_id(scope))
     )
+
+
+# Later tools may depend on the board's updated phase/progress. Their guards
+# must inspect completed mutations, not merely a proposed update in the batch.
+for _board_mutation in (add_task, update_task, finish_planning):
+    _board_mutation.metadata["execution_barrier"] = True
 
 
 __all__ = [

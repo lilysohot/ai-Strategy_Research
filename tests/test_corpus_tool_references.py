@@ -87,7 +87,8 @@ async def test_quote_selected_by_id_survives_layout_and_binds_correct_block(sour
             ]
         )
     )
-    assert out["publish_status"] == "verified"
+    assert out["publish_status"] == "pending_report"
+    assert out["evidence_status"] == "verified"
     match = out["conclusions"][0]["matched_evidence"][0]
     assert (match["locator"], match["quote"]) == (LOC, TEXT)
     saved = json.loads(Path(out["manifest_file"]).read_text())
@@ -272,3 +273,70 @@ async def test_receipt_size_limit_does_not_break_fetch_or_page_sizing(sources, m
     out = json.loads(raw)
     assert out["ok"] and out["text"] == TEXT
     assert "evidence_ref" not in out
+
+
+@pytest.mark.parametrize("repair", [True, False])
+async def test_runaway_recovery_repairs_real_manifest_before_publication(sources, monkeypatch, repair):
+    from frontier_agent.core.errors import LLMReasoningRunaway
+    from frontier_agent.core.llm import LLMResponse
+    from frontier_agent.core.loop_types import LoopConfig, LoopPolicy
+    from frontier_agent.core.runtime.loop.agent_loop import run_agent_loop
+    from plugins.corpus import ledger as ledger_module
+    from plugins.corpus.ledger import ConsumptionLedgerObserver, publish_boundary
+    from workflows.stateful_react_agent.convergence import ResearchConvergenceObserver
+
+    monkeypatch.setenv("A4_ENFORCE", "1")
+    monkeypatch.setattr(ledger_module, "_default_resolver", lambda *_: TEXT)
+    verdicts = []
+
+    class Model:
+        model = "stub"
+
+        def __init__(self):
+            self.count = 0
+            self.ref = ""
+
+        async def chat(self, messages, **kwargs):
+            self.count += 1
+            if self.count == 1:
+                name = "corpus_fetch"
+                args = {"doc_id": DOC, "locator": LOC, "view": "compact"}
+            elif self.count in (2, 4):
+                if self.count == 2:
+                    self.ref = json.loads(messages[-2]["content"])["evidence_ref"]
+                evidence = (
+                    {"evidence_ref": self.ref} if self.count == 4 and repair else
+                    {"doc_id": DOC, "locator": LOC, "quote": TEXT.replace("\n", " ")}
+                )
+                name = "corpus_submit_manifest"
+                args = {"conclusions": [{"id": "c1", "report_quote": "生态参与",
+                                          "evidence": [evidence]}]}
+            elif self.count == 3:
+                verdicts.append(json.loads(messages[-1]["content"])["publish_status"])
+                raise LLMReasoningRunaway(
+                    elapsed_s=120, estimated_tokens=4000, trigger="time",
+                    partial_response=LLMResponse(content="", reasoning_content="repairing citation"),
+                )
+            else:
+                verdicts.append(json.loads(messages[-1]["content"])["publish_status"])
+                return LLMResponse(content="生态参与")
+            return LLMResponse(tool_calls=[{
+                "id": f"c{self.count}", "type": "function",
+                "function": {"name": name, "arguments": json.dumps(args)},
+            }])
+
+    model = Model()
+    ledger = get_run_ledger()
+    result = await run_agent_loop(
+        system_prompt="Answer with sources", user_message="Explain ecosystem participation",
+        llm=model, tools=[fetch.corpus_fetch, manifest.corpus_submit_manifest],
+        config=LoopConfig(task_id="receipt-repair", role_id="stateful_react", max_turns=600,
+                          max_llm_retries=1, loop_policy=LoopPolicy(no_tool_behavior="stop")),
+        observers=[ConsumptionLedgerObserver(ledger=ledger),
+                   ResearchConvergenceObserver(research_s=450, reserve_s=180)],
+    )
+    assert model.count == 5
+    assert verdicts[0] == "unsupported"
+    boundary = publish_boundary(ledger, final_text=result.final_content, answer_status="complete")
+    assert boundary["answer_status"] == ("complete" if repair else "partial")
+    assert boundary["publish_status"] == ("verified" if repair else "unsupported")

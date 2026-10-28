@@ -1,6 +1,78 @@
 # 原生正文混合检索正式发布
 
-## 2026-10-26 新增三份研报：库与配置完成，Web 启动待业务库修复
+## 2026-10-28 增量入库与 Web 生效
+
+本轮扫描 `data/corpus-incoming/20261026/` 的 21 份 PDF，按 SHA-256 跳过 8 份已发布
+资料，新增发布 13 份：11 份带文字层 PDF，以及 2 份扫描原件的既有本地 OCR 衍生版。
+正式库活动发布数 27 → 40；旧 27 条 active build / generation 逐条不变。
+检索允许范围 26 → 39，范围外的另一份已有资料未随本批加入。
+
+| 新增资料 | 页数 | 构建块数 | 当前正文检索块数 |
+|---|---:|---:|---:|
+| 高盛贵州茅台（本地 OCR 衍生） | 9 | 158 | 125 |
+| 长江消费周周谈（本地 OCR 衍生） | 6 | 30 | 30 |
+| James Bulltard 10/16 复盘 | 17 | 11 | 11 |
+| 科技股终于破位下行 | 6 | 5 | 5 |
+| James Bulltard 10/20 复盘 | 5 | 9 | 9 |
+| James Bulltard 10/21 复盘 | 15 | 12 | 12 |
+| James Bulltard 10/22 复盘 | 18 | 10 | 10 |
+| James Bulltard 10/23 复盘 | 16 | 10 | 10 |
+| Discover 工具更新 #1 | 4 | 6 | 6 |
+| James Bulltard 10/26 复盘 | 15 | 9 | 9 |
+| James Bulltard 10/27 复盘 | 5 | 5 | 5 |
+| PLTR 26Q3 / FDE 产能前瞻 | 11 | 65 | 65 |
+| 网络安全：AI 漏洞修复与持续防护 | 6 | 26 | 25 |
+
+共构建 356 块，322 块进入 native 正文投影，34 个表格块按既有规则排除。
+74 处较大图像缺口绑定确切 build 登记可用文字发布依据，另保留 37 处 small-image 记录。
+行情截图中的曲线和数值未因此变成已识别正文。全部 21 份输入原字节不变，新活动来源
+的 13 份归档已逐一核对哈希；两个扫描父来源另行归档，父子哈希写入溯源检查点。
+OCR 来源名称明确带“本地OCR衍生”；这是可检索的识别文字，未经人工逐字校验。
+日期仍按当前元数据与文件名规则处理，不代表逐份完成发布日期人工确认；例如高盛
+原页显示 8 月 10 日，输入文件名为 8 月 13 日，阅读和引用应核对原页。
+
+新增上下文说明沿用当前 prompt、校验器和 context version。失败说明先留存拒绝记录，
+再用同一提示词限定重试；共 14 条重试项次（跨轮可能重复），未放宽数字或归属校验。
+最终共有 53 条由 Codex 按对应原文整理为章节主题说明（13 条拒绝项、40 条
+传输异常或尚未尝试的项），单独标记
+`agent_source_review`，保留原拒绝记录，不冒充原供应商的生成结果，不改原始正文。
+首轮一批 10 个输入遇到供应商传输结果不确定后停止，记录后由 Codex 决定限定续跑，
+仅该生成进程超时由 240 秒调至 300 秒。随后网络安全报告的一批 12 个输入再次遇到
+传输不确定，停止继续请求，余下说明按原文逐项整理。没有修改查询超时，两次异常
+请求的供应商侧计费结果无法确认。
+新包共 1067 块、1050 个唯一向量输入，全部就绪。
+其中 910 块叠加说明，157 个过短片段按原规则只索引原文。
+本批涉及 318 个唯一输入，3 个复用旧缓存，新增 315 个向量；4 个传输不确定输入各
+恢复一次后成功，attempts 保留为 2。仅恢复进程采用 60 秒超时，查询仍沿用原配置。
+旧 745 个 live 块和 735 个旧向量逐项一致。
+排序、来源过滤、snippet 额度与查询超时配置不变；两份 OCR 衍生来源是本次显式范围扩展。
+
+工具验收使用 13 道新增资料查询及 2 道旧资料查询；新增指定来源命中 13/13。
+共 109 个 search 节选以实际 ref 调用 fetch，原文区间逐字比对与证据 manifest 校验通过。
+本次 search 耗时范围 2.89–3.39 秒，是样本结果，非延迟上界。
+同组 15 个认证 HTTP search 和对应短引用补读通过；10 月 24 日历史短引用仍可取回。
+这些是入库可用性验收，不是模型研究答案质量盲测。
+
+本轮开始时现有 Web 已 `healthz=200 / readyz=200`，此前业务库问题不再阻断。
+确认 queued/running 为 0 后切换检索配置并正常重启，最终两项健康检查仍为 200。
+本轮没有执行业务库迁移、投资计划回填，也没有修改生产检索算法。
+preflight、两阶段 import smoke（438/438、487/487）及符号检查（536 文件）通过。
+
+当前索引：`data/corpus-native-context/20261028-incoming/manifest.json`。
+正式库及配置备份：`data/corpus-native-context/20261028-incoming-backup/`。
+如需回退本批检索范围，应恢复 `settings-before.json` 中的上一份 manifest 并核验服务，
+保留新增资料和历史句柄；不要用下文 10 月 22/24 日的历史回退脚本替代本批回退。
+
+流程图、阶段说明和本批命令见 [入库操作说明](corpus-ingestion-operations.md)。
+执行证据：[全部输入](../.scratch/corpus-incoming-20261028/inventory-all.json)、
+[逐份发布记录](../.scratch/corpus-incoming-20261028/build-results.json)、
+[来源与块统计](../.scratch/corpus-incoming-20261028/source-summary.json)、
+[完整性检查](../.scratch/corpus-incoming-20261028/integrity.json)、
+[检索包](../.scratch/corpus-incoming-20261028/pack.json)、
+[工具验收](../.scratch/corpus-incoming-20261028/verification.json)、
+[Web 验收](../.scratch/corpus-incoming-20261028/runtime.json)。
+
+## 2026-10-26 新增三份研报（历史，当时 Web 待业务库修复）
 
 用户将三份 PDF 放入 `data/corpus-incoming/20261026/`，按约定的正式发布流程处理。
 三份均已通过正常 `check_build_publishable → publish_build` 发布到 `postgres`，
@@ -88,7 +160,7 @@ queued/running 为 0。临时启动验证后 `/healthz=200`，但 `/readyz=503 s
 | `CORPUS_NATIVE_RETRIEVAL` | `release` |
 | `CORPUS_NATIVE_TARGET_DB` | `postgres` |
 | `CORPUS_VECTOR_TARGET_DB` | `postgres` |
-| `CORPUS_NATIVE_INDEX` | `/home/administrator/FrontierAgent/data/corpus-native-context/20261026-new3/manifest.json` |
+| `CORPUS_NATIVE_INDEX` | `/home/administrator/FrontierAgent/data/corpus-native-context/20261028-incoming/manifest.json` |
 | `CORPUS_VECTOR_INPUT_VARIANT` | `contextual-note-v1` |
 | `CORPUS_NATIVE_SNIPPET_BLOCKS` | `2` |
 | `CORPUS_VECTOR_TIMEOUT_SECONDS` | `15` |
@@ -121,16 +193,16 @@ queued/running 为 0。临时启动验证后 `/healthz=200`，但 `/readyz=503 s
 
 ## 后续更新
 
-既有 26 个允许来源发布新 build 后，检索重新读取 PG 活动版本。缺少向量时先降级，手动同步后自动恢复混合检索：
+既有 39 个允许来源发布新 build 后，检索重新读取 PG 活动版本。缺少向量时先降级，手动同步后自动恢复混合检索：
 
 ```bash
 uv run python -m plugins.corpus.retrieval.cli native-sync \
   --deployment release \
-  --native-index data/corpus-native-context/20261026-new3/manifest.json \
+  --native-index data/corpus-native-context/20261028-incoming/manifest.json \
   --max-requests 0
 ```
 
-`--max-requests 0` 仅检查及复用缓存；需要新向量时显式设置本次请求上限。新来源需要更新允许范围包，不会因入库自动加入当前 26 来源的策略。失败或结果不确定的向量任务不自动重试。
+`--max-requests 0` 仅检查及复用缓存；需要新向量时显式设置本次请求上限。新来源需要更新允许范围包，不会因入库自动加入当前 39 来源的策略。失败或结果不确定的向量任务不自动重试。
 
 上下文说明绑定 build/chunk。新 build 缺少对应说明时不会借用旧 build 的说明；需要按 [上下文包流程](plan/corpus-contextual-vector-retrieval-pilot.md) 生成说明并构建新的版本化包，再校验切换。仅同步向量不会自动补出说明。
 

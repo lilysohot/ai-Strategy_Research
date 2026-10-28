@@ -17,7 +17,7 @@ def test_web_profile_bounds_zero_chunk_wait_without_overriding_other_timeouts() 
 
     assert agent["first_chunk_s"] == 45
     assert "llm_timeout_s" not in agent
-    assert "tool_timeout_s" not in agent
+    assert agent["tool_timeout_s"] == 90
 
 
 def test_web_profile_exposes_semantic_query_with_manifest_companion() -> None:
@@ -129,6 +129,8 @@ def test_web_worker_routes_semantic_audit_artifacts_to_run_dir(
         "CODING_WORKSPACE_ROOT",
         "APODEX_SPILL_DIR",
         "APODEX_RUN_DIR",
+        "CORPUS_TOOL_REF_ROOT",
+        "CORPUS_SEARCH_REF_ROOT",
         "FRONTIER_AGENT_TASK_WALL_TIME_S",
         "FRONTIER_AGENT_MAX_TURNS",
         "BASH_ALLOWLIST_MODE",
@@ -157,6 +159,8 @@ def test_web_worker_routes_semantic_audit_artifacts_to_run_dir(
         api_key="key",
     )
     assert os.environ["APODEX_RUN_DIR"] == str(paths["run"])
+    assert os.environ["CORPUS_TOOL_REF_ROOT"] == str(paths["run"] / "corpus/tool-refs")
+    assert os.environ["CORPUS_SEARCH_REF_ROOT"] == str(paths["run"] / "corpus/search-refs")
 
 
 def test_team_current_sandbox_requires_role_identity(
@@ -175,6 +179,8 @@ def test_team_current_sandbox_requires_role_identity(
         "CODING_WORKSPACE_ROOT",
         "APODEX_SPILL_DIR",
         "APODEX_RUN_DIR",
+        "CORPUS_TOOL_REF_ROOT",
+        "CORPUS_SEARCH_REF_ROOT",
         "FRONTIER_AGENT_TASK_WALL_TIME_S",
         "FRONTIER_AGENT_MAX_TURNS",
         "BASH_ALLOWLIST_MODE",

@@ -124,6 +124,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
   const answer = ref('')
   /** Authoritative final answer from GET /api/runs/{id}; live deltas stay in answer. */
   const finalAnswer = ref<string | null>(null)
+  const taskBoard = ref<unknown[] | null>(null)
   /** Ordered reasoning/tool steps for the active run. */
   const steps = ref<RunStep[]>([])
   // — status bar (§5.6): run facts + wall clock + token totals —
@@ -502,6 +503,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
       pendingApproval.value = null
       errorMessage.value = null
       finalAnswer.value = null
+      taskBoard.value = null
       runDir.value = null
       startedAtMs.value = null
       endedAtMs.value = null
@@ -621,6 +623,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
         const streamEnded = connection.value === 'closed'
         status.value = mergeReconciledRunStatus(status.value, remoteStatus, streamEnded)
         finalAnswer.value = summary.final_answer ?? finalAnswer.value
+        if (Array.isArray(summary.task_board)) taskBoard.value = summary.task_board
         const reason = summary.error || (summary.stopped_by ? `已停止（${summary.stopped_by}）` : null)
         if (reason) errorMessage.value = reason
         if (summary.finished_at && isTerminalRunStatus(remoteStatus)) {
@@ -700,6 +703,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
     cursor.value = 0
     answer.value = ''
     finalAnswer.value = null
+    taskBoard.value = null
     lastError.value = null
     connection.value = 'idle'
   }
@@ -715,6 +719,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
     lastError,
     answer,
     finalAnswer,
+    taskBoard,
     meta,
     usage,
     steerQueued,

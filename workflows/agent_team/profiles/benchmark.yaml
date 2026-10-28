@@ -93,6 +93,8 @@ agent:
   max_input_tokens: ${OPENAI_MAX_INPUT_TOKENS:-229376}
   # Use an explicit override for maximum-effort benchmark comparisons.
   team_effort: high
+  # Preserve the scientific coordinator/researcher/verifier templates for evaluation.
+  prompt_mode: research
   # Planning is disabled here; the keys below document the available two-phase
   # controls for custom profiles derived from this file.
   planning_mode: false

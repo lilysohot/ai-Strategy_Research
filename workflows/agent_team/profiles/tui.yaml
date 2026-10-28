@@ -85,6 +85,8 @@ agent:
   keep_recent_turns: 5
   # Scale research to the question; maximum effort requires an explicit override.
   team_effort: high
+  # Future UI choices can override this per run without changing workflow identity.
+  prompt_mode: standard
   # The interactive profile executes immediately rather than using a planning phase.
   planning_mode: false
   # Select legacy web implementations for both coordinator and sub-agents.

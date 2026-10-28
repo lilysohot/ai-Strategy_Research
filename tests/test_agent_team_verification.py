@@ -32,6 +32,15 @@ def binding(check_id="amount", version="v1", replaces=""):
     }
 
 
+def planned_items(*ids):
+    return [
+        {"id": tid, "verification_required": True, "verification_requirements": [{
+            "check_id": "amount", "criterion": "Recompute the amount",
+        }]}
+        for tid in (ids or ("t1",))
+    ]
+
+
 def add_job(bus, job_id, checks, *, stop="submit_report", verdicts=None):
     events = [
         {
@@ -323,7 +332,7 @@ def make_bound(tmp_path):
         [spec],
         bus=bus,
         task_id="run",
-        work_item_ids={"t1"},
+        work_items=planned_items(),
         required=True,
         outputs_root=tmp_path,
     )
@@ -369,7 +378,7 @@ def test_dispatch_rejects_invalid_recheck_relationship(tmp_path, change):
             [spec],
             bus=bus,
             task_id="run",
-            work_item_ids={"t1", "t2"},
+            work_items=planned_items("t1", "t2"),
             required=required,
             outputs_root=tmp_path,
         )
@@ -381,14 +390,14 @@ def test_binding_versions_are_content_derived_and_scope_stable(tmp_path):
     add_job(bus, "review", bound)
     spec.replaces_job_id = "review"
     same, _ = bind_checks(
-        [spec], bus=bus, task_id="run", work_item_ids={"t1"}, required=True, outputs_root=tmp_path
+        [spec], bus=bus, task_id="run", work_items=planned_items(), required=True, outputs_root=tmp_path
     )
     assert same[0]["binding_id"] == bound[0]["binding_id"]
     add_job(bus, "newdraft", [])
     spec.subject.job_id = "newdraft"
     spec.revision_reason = "corrected candidate"
     new, _ = bind_checks(
-        [spec], bus=bus, task_id="run", work_item_ids={"t1"}, required=True, outputs_root=tmp_path
+        [spec], bus=bus, task_id="run", work_items=planned_items(), required=True, outputs_root=tmp_path
     )
     assert new[0]["binding_id"] != bound[0]["binding_id"]
 
@@ -441,7 +450,7 @@ def test_handoff_bytes_and_provenance_are_checked_at_dispatch_and_submission(tmp
                 [spec],
                 bus=bus,
                 task_id="run",
-                work_item_ids={"t1"},
+                work_items=planned_items(),
                 required=True,
                 outputs_root=outputs,
             )
@@ -450,7 +459,7 @@ def test_handoff_bytes_and_provenance_are_checked_at_dispatch_and_submission(tmp
             [spec],
             bus=bus,
             task_id="run",
-            work_item_ids={"t1"},
+            work_items=planned_items(),
             required=True,
             outputs_root=outputs,
         )
@@ -541,7 +550,11 @@ async def test_real_dispatch_timeout_recheck_race_and_snapshot(tmp_path, monkeyp
         )
     )
     try:
-        await add_task.func(tasks=[{"description": "Recompute"}])
+        await add_task.func(tasks=[{
+            "description": "Recompute", "verification_requirements": [
+                {"check_id": key, "criterion": spec.criterion} for key in ("amount", "units")
+            ],
+        }])
         units = spec.model_copy(update={"check_id": "units"})
         first = await agent_team_assign_task.func(
             tasks=[

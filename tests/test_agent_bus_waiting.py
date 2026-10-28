@@ -66,12 +66,42 @@ async def test_collect_reports_preserves_alert_queued_before_nonblocking_drain()
         assert "member_progress_alert" in result
         assert "action required" in result
         assert not worker.done()
+        # Repeating a long wait without acting must request a bounded handoff,
+        # not put the coordinator back to sleep for the entire research wall.
+        result = await asyncio.wait_for(collect_reports.ainvoke({"timeout": 1800}), 0.2)
+        assert "handoff_requested" in result
+        from frontier_agent.components.agent_bus.stop_signal import get_stop_registry
+
+        assert get_stop_registry().consume(session.session_id)
     finally:
         reset_current_execution_scope(token)
         registry.restore(before)
         worker.cancel()
         with contextlib.suppress(asyncio.CancelledError):
             await worker
+
+
+@pytest.mark.parametrize("metadata", [
+    {"can_publish": True}, {"uses_publication_budget": True},
+    {"verification_checks": [{"id": "check-1"}]},
+])
+def test_unanswered_alert_never_auto_stops_publication_or_verification(metadata):
+    from frontier_agent.components.agent_bus.stop_signal import get_stop_registry
+    from plugins.tools.collect_reports import _handoff_unanswered_alert
+
+    bus = AgentBus()
+    session = _session()
+    session.current_job_id = "root.job.1"
+    bus._sessions[session.session_id] = session
+    bus._jobs[session.current_job_id] = JobEntry(
+        job_id=session.current_job_id, parent_task_id="root",
+        item=SubTask(question="finish", metadata=metadata), status="running",
+    )
+    scope = ExecutionScope(task_id="root", metadata={
+        "collect_reports_pending_alert": (session.session_id, session.current_job_id),
+    })
+    assert _handoff_unanswered_alert(scope, bus, "root") is None
+    assert not get_stop_registry().is_requested(session.session_id)
 
 
 @pytest.mark.asyncio
@@ -823,3 +853,37 @@ async def test_immediate_dispatch_preserves_current_job_metadata(
     finally:
         release.set()
         await bus.wait_any_session_detailed("root", timeout=1)
+
+
+@pytest.mark.asyncio
+async def test_cancel_during_member_finalizer_keeps_completed_observations(monkeypatch):
+    ready = asyncio.Event()
+
+    async def loop(**kwargs):
+        return AgentLoopResult(messages=[system_msg("system"), user_msg("task"),
+            tool_msg("RECOVER_DURING_FINALIZER", "read-1")], stopped_by="max_turns")
+
+    async def finalizer(result, item):
+        if not result.metadata.get("interrupted_checkpoint"):
+            ready.set()
+            await asyncio.Event().wait()
+        result.final_content = "RECOVER_DURING_FINALIZER"
+        return result
+
+    monkeypatch.setattr("frontier_agent.components.agent_bus.bus.run_agent_loop", loop)
+    bus = AgentBus()
+    sid = await bus.create_session(task_id="finalizer-cancel", name="worker", role_id="researcher",
+        system_prompt="system", tools_override=[], llm_override=object(),
+        runtime_spec=SubAgentRuntimeSpec(force_finalizer=finalizer))
+    job = await bus.submit_task_to_session(sid, "task")
+    await asyncio.wait_for(ready.wait(), 1)
+    try:
+        await bus.abort(job)
+        outcome = await bus.wait_any_session_detailed("finalizer-cancel", timeout=0)
+        assert outcome.result is not None
+        result = outcome.result[1]
+        assert result.final_content == "RECOVER_DURING_FINALIZER"
+        assert result.error == "aborted"
+        assert not result.success
+    finally:
+        await bus.cleanup_task("finalizer-cancel")

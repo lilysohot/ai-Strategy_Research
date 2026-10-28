@@ -277,6 +277,8 @@ def _resolve_specialist_prompt(
     # remains compatible with workflows that do not expose them.
     if "enhancements" in params:
         kwargs["enhancements"] = enhancements
+    if "prompt_mode" in params:
+        kwargs["prompt_mode"] = getattr(runtime, "prompt_mode", "standard")
     # Two blocks of runtime facts the static templates cannot know. Both are
     # task-level constants — identical for every sub-agent of one task — so
     # both belong in the shared KV-cache prefix, ahead of the per-agent role.

@@ -46,8 +46,9 @@ def discover_trajectory_sources(run_dir: Path) -> tuple[TrajectorySource, ...]:
     root = trajectory_root(run_dir)
     main = root / "main_agent.jsonl"
     planning = root / "main_planning.jsonl"
+    finalization = root / "main_finalization.jsonl"
     members = sorted((root / "subagents").glob("*.jsonl"))
-    if main.exists() or planning.exists() or members:
+    if main.exists() or planning.exists() or finalization.exists() or members:
         sources: list[TrajectorySource] = []
         if planning.exists():
             sources.append(
@@ -81,6 +82,12 @@ def discover_trajectory_sources(run_dir: Path) -> tuple[TrajectorySource, ...]:
                     role_id="agent_team_sub",
                 )
             )
+        if finalization.exists():
+            sources.append(TrajectorySource(
+                source="main_finalization", path=finalization,
+                agent_id="agent_team_main", agent_kind="coordinator",
+                role_id="agent_team_main",
+            ))
         return tuple(sources)
 
     legacy = root / "react_agent.jsonl"

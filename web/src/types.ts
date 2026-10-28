@@ -520,6 +520,7 @@ export interface RunSummary {
   mode?: RunMode | null
   model?: string | null
   final_answer?: string | null
+  task_board?: unknown[] | null
   error?: string | null
   stopped_by?: string | null
   created_at?: string | null

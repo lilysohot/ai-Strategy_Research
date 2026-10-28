@@ -142,6 +142,12 @@ async def load_current_versions(
         current = await session.get(model, ref.id)
         if current is not None and current.user_id == row.user_id:
             versions[group] = current.current_revision
+    capital = await session.scalar(select(store.CapitalPlan).where(
+        store.CapitalPlan.user_id == row.user_id,
+        store.CapitalPlan.research_id == row.research_id,
+    ))
+    if capital is not None:
+        versions["capital"] = capital.current_revision
     return versions
 
 
@@ -363,8 +369,8 @@ async def _spec_from_research_link(
 ) -> snapshots.InvestmentInputSpec:
     """无业务快照的研究 Run：按该研究当前绑定构造 spec（与监控触发同一口径）。
 
-    有主计划 → 引用账户与计划；无主计划 → 以**规划资金 + 最新有效买卖价格**的
-    declared 计划口径进入解析（标的/市场/方向/币种来自买卖价格，规划资金由解析注入）。
+    当前会话优先采用规划资金与最新有效实际买卖；历史主计划仅在无规划资金时兼容。
+    标的/市场/历史方向/币种来自实际记录，最新规划资金由解析注入。
     账户未绑定或规划资金不满足时引用/声明为空——裁决会因此报缺字段，正好驱动
     “先创建主账户 / 先在会话资金中配置”的引导。引用带上**当时版本**：续接要记录
     ``known_versions``，否则回答时没有任何可比版本，用户填好的资料会被
@@ -373,19 +379,12 @@ async def _spec_from_research_link(
     link = await _research_link(session, user_id=user_id, research_id=research_id)
     if link is None:
         return snapshots.InvestmentInputSpec(use_case=use_case)
-    declared: dict[str, Any] = {}
-    if link.primary_plan_id is None:
-        declared = (
-            await snapshots.declared_plan_from_capital(
-                session, user_id=user_id, research_id=research_id
-            )
-            or {}
-        )
+    current = await snapshots.current_research_input(session, link=link, use_case=use_case)
     return snapshots.InvestmentInputSpec(
         use_case=use_case,
         account=await _live_ref(session, store.InvestmentAccount, link.account_id),
-        plan=await _live_ref(session, store.InvestmentPlan, link.primary_plan_id),
-        declared=declared,
+        plan=await _live_ref(session, store.InvestmentPlan, current.plan.id) if current.plan else None,
+        declared=current.declared,
     )
 
 
@@ -506,6 +505,11 @@ async def create_request(
             if parsed and parsed.plan and parsed.plan.expected_revision:
                 known_versions["plan"] = parsed.plan.expected_revision
 
+        capital = await session.scalar(select(store.CapitalPlan).where(
+            store.CapitalPlan.user_id == user_id, store.CapitalPlan.research_id == research_id,
+        ))
+        if capital is not None:
+            known_versions["capital"] = capital.current_revision
         signature = _pending_request_signature(requested, known_versions, continuation_data)
         pending_rows = (
             await session.execute(
@@ -684,11 +688,14 @@ async def _adopt_research_bindings(
         return spec, frozenset()
     updates: dict[str, Any] = {}
     adopted: set[str] = set()
+    capital = await session.scalar(select(store.CapitalPlan).where(
+        store.CapitalPlan.user_id == user_id, store.CapitalPlan.research_id == research_id,
+    ))
     for group, bound, model in (
         ("account", link.account_id, store.InvestmentAccount),
         ("plan", link.primary_plan_id, store.InvestmentPlan),
     ):
-        if getattr(spec, group) is not None:
+        if getattr(spec, group) is not None or (group == "plan" and capital is not None):
             continue
         live = await _live_ref(session, model, bound)
         if live is None:
@@ -788,6 +795,33 @@ async def answer_request(
             expected_versions,
             adopted=adopted_groups,
         )
+        # The form retains plan.allocated_capital as its transport alias. Persist
+        # the user's answer to session capital, never a transient declared plan.
+        if spec.plan is None and "allocated_capital" in collected.get("plan", {}):
+            capital = await session.scalar(select(store.CapitalPlan).where(
+                store.CapitalPlan.user_id == user_id,
+                store.CapitalPlan.research_id == row.research_id,
+            ).with_for_update())
+            allocation = collected["plan"]["allocated_capital"]
+            if capital is None:
+                await biz.create_capital_plan(
+                    session, user_id=user_id, research_id=row.research_id,
+                    declared={"allocated_capital": allocation},
+                    idempotency_key=f"{idempotency_key}:capital", source_kind="input_answer",
+                    source_ref=str(row.id),
+                )
+            else:
+                admitted = biz.admit_group("capital_plan", {"allocated_capital": allocation})
+                amount = admitted.values["allocated_capital"].value
+                await biz.reset_capital(
+                    session, user_id=user_id, capital_plan_id=capital.id,
+                    allocated_capital=str(amount),
+                    expected_revision=expected_versions.get(
+                        "capital", (row.known_versions_json or {}).get("capital"),
+                    ),
+                    idempotency_key=f"{idempotency_key}:capital", source_kind="input_answer",
+                    source_ref=str(row.id),
+                )
         saved_spec, saved = await snapshots.persist_declared(
             session, user_id=user_id, research_id=row.research_id, spec=spec
         )

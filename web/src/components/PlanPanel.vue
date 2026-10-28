@@ -13,9 +13,9 @@ import { computed } from 'vue'
 import type { RunStep } from '@/stores/runs'
 import { buildPlan, planDoneCount, type PlanTaskStatus } from '@/utils/plan'
 
-const props = defineProps<{ steps: RunStep[] }>()
+const props = defineProps<{ steps: RunStep[]; terminalBoard?: unknown[] | null }>()
 
-const plan = computed(() => buildPlan(props.steps))
+const plan = computed(() => buildPlan(props.steps, props.terminalBoard))
 const done = computed(() => planDoneCount(plan.value))
 
 const STATUS_META: Record<PlanTaskStatus, { label: string; tag: 'info' | 'warning' | 'success' | 'danger' }> = {
@@ -23,6 +23,7 @@ const STATUS_META: Record<PlanTaskStatus, { label: string; tag: 'info' | 'warnin
   in_progress: { label: '进行中', tag: 'warning' },
   resolved: { label: '完成', tag: 'success' },
   cancelled: { label: '取消', tag: 'danger' },
+  blocked: { label: '受阻', tag: 'warning' },
 }
 </script>
 

@@ -20,7 +20,7 @@ from datetime import UTC, datetime
 from decimal import Decimal
 from typing import Any
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from server import business_service as biz
@@ -205,13 +205,14 @@ def split_declared(declared: dict[str, Any]) -> dict[str, dict[str, Any]]:
 
 
 async def declared_plan_from_capital(
-    session: AsyncSession, *, user_id: uuid.UUID, research_id: uuid.UUID
+    session: AsyncSession, *, user_id: uuid.UUID, research_id: uuid.UUID,
+    symbol: str | None = None,
 ) -> dict[str, dict[str, Any]] | None:
     """会话规划资金 + 其下最新一笔有效买卖价格 → ``declared`` 计划口径。
 
-    主计划已随计划创建入口下线（2026-10-27）：无主计划的会话以**规划资金 + 实际
-    买卖价格**表达计划口径——标的/市场/方向/币种取最新一笔有效（未归档）买卖价格，
-    规划资金由 :func:`resolve_for_run` 注入 ``plan.allocated_capital``。不满足
+    主计划已随计划创建入口下线：当前会话以规划资金和实际买卖表达业务事实。
+    标的/市场/历史方向/币种取最新一笔有效买卖记录，监控只选匹配标的的记录。
+    规划资金由 :func:`resolve_for_run` 注入，``plan.*`` 仅为兼容投影。不满足
     （无规划资金、资金未填、无有效买卖价格）返回 ``None``，调用方按绑定缺失处理。
     """
     capital = (
@@ -224,32 +225,44 @@ async def declared_plan_from_capital(
     ).scalar_one_or_none()
     if capital is None or capital.allocated_capital is None:
         return None
-    buy_sell = (
+    revisions = (
         (
             await session.execute(
-                select(store.BuySellPlan)
+                select(store.BuySellPlanRevision)
+                .join(store.BuySellPlan, (
+                    (store.BuySellPlanRevision.buy_sell_plan_id == store.BuySellPlan.id)
+                    & (store.BuySellPlanRevision.revision == store.BuySellPlan.current_revision)
+                ))
                 .where(
                     store.BuySellPlan.capital_plan_id == capital.id,
+                    store.BuySellPlan.user_id == user_id,
+                    store.BuySellPlan.research_id == research_id,
                     store.BuySellPlan.archived.is_(False),
                     store.BuySellPlan.status == "active",
                 )
-                .order_by(store.BuySellPlan.created_at.desc())
-                .limit(1)
+                .order_by(
+                    store.BuySellPlanRevision.traded_at.desc().nulls_last(),
+                    store.BuySellPlan.created_at.desc(), store.BuySellPlan.id.desc(),
+                )
             )
         )
         .scalars()
-        .first()
+        .all()
     )
-    if buy_sell is None:
-        return None
-    revision = (
-        await session.execute(
-            select(store.BuySellPlanRevision).where(
-                store.BuySellPlanRevision.buy_sell_plan_id == buy_sell.id,
-                store.BuySellPlanRevision.revision == buy_sell.current_revision,
-            )
+    def matches(row: store.BuySellPlanRevision) -> bool:
+        if symbol is None:
+            return True
+        actual, requested = row.symbol.upper(), symbol.upper()
+        if actual == requested:
+            return True
+        # Accept a bare mainland code, but never merge two distinct exchanges.
+        bare, qualified = (actual, requested) if "." not in actual else (requested, actual)
+        return (
+            row.market == "CN" and "." not in bare and bare.isdigit() and len(bare) == 6
+            and qualified in {f"{bare}.SH", f"{bare}.SZ", f"{bare}.BJ"}
         )
-    ).scalar_one_or_none()
+
+    revision = next((row for row in revisions if matches(row)), None)
     if revision is None:
         return None
     return {
@@ -260,6 +273,27 @@ async def declared_plan_from_capital(
             "currency": {"value": revision.currency},
         }
     }
+
+
+async def current_research_input(
+    session: AsyncSession, *, link: store.ResearchInvestmentLink, use_case: str,
+    symbol: str | None = None,
+) -> InvestmentInputSpec:
+    """New research uses session capital; retired links are legacy-only fallback."""
+    capital = await session.scalar(select(store.CapitalPlan).where(
+        store.CapitalPlan.user_id == link.user_id,
+        store.CapitalPlan.research_id == link.research_id,
+    ))
+    declared = await declared_plan_from_capital(
+        session, user_id=link.user_id, research_id=link.research_id, symbol=symbol,
+    ) if capital is not None else None
+    return InvestmentInputSpec(
+        use_case=use_case,
+        account=ObjectRef(link.account_id) if link.account_id else None,
+        plan=(ObjectRef(link.primary_plan_id)
+              if capital is None and link.primary_plan_id else None),
+        declared=declared or {},
+    )
 
 
 # ——— 解析有效值 ————————————————————————————————————————————————————————
@@ -462,22 +496,23 @@ async def resolve_for_run(
             )
         add(group, values, list(pending))
 
-    # 规划资金已从计划拆分到 ``capital_plans``（会话 1:1，累加/重置）：用途门禁仍以
-    # ``plan.allocated_capital`` 表达"本标的规划资金"，这里把会话规划资金注入计划组，
-    # 满足门禁并随快照冻结，下游仓位分析据此取数。放在 declared 合并之后：
-    # 计划组既可能来自主计划引用，也可能来自监控触发的 declared（无主计划路径），
-    # 两种来源都由本注入补齐资金；显式 declared 的 allocated_capital 仍然优先。
-    if "plan" in entries and "allocated_capital" not in entries["plan"]:
-        capital = (
-            await session.execute(
-                select(store.CapitalPlan).where(
-                    store.CapitalPlan.research_id == research_id,
-                    store.CapitalPlan.user_id == user_id,
-                )
-            )
-        ).scalar_one_or_none()
-        if capital is not None and capital.allocated_capital is not None:
-            entries["plan"]["allocated_capital"] = _entry(
+    # The session allocation is authoritative even for clients carrying retired
+    # plan refs or declared amounts. plan.* is only the compatibility projection.
+    capital = await session.scalar(select(store.CapitalPlan).where(
+        store.CapitalPlan.research_id == research_id,
+        store.CapitalPlan.user_id == user_id,
+    ).with_for_update())
+    if capital is not None:
+        if (capital.account_id is not None and resolution.account_id is not None
+                and capital.account_id != resolution.account_id):
+            raise biz.ValidationError("规划资金与账户不一致", fields={"account": "请选择规划资金所属账户"})
+        values = entries.setdefault("plan", {})
+        # An absent current amount must never silently revive the retired amount.
+        values.pop("allocated_capital", None)
+        pending = dict(groups["plan"].incomplete) if "plan" in groups else {}
+        pending.pop("allocated_capital", None)
+        if capital.allocated_capital is not None and capital.record_state == "submitted":
+            values["allocated_capital"] = _entry(
                 capital.allocated_capital,
                 status="user_provided",
                 source={
@@ -488,21 +523,29 @@ async def resolve_for_run(
                 currency=capital.currency,
                 as_of=capital.as_of,
             )
-            groups["plan"] = biz.AdmissionResult(
-                values={
-                    **groups["plan"].values,
-                    "allocated_capital": biz.AdmittedValue(
-                        value=capital.allocated_capital, status="user_provided"
-                    ),
-                },
-                # 规划资金已由会话资金补齐：把该字段从待补充清单里移除，
-                # 否则 incomplete 会覆盖注入值，门禁依旧被拒。
-                incomplete={
-                    name: reason
-                    for name, reason in groups["plan"].incomplete.items()
-                    if name != "allocated_capital"
-                },
+            resolution.values["capital.allocated_capital"] = dict(values["allocated_capital"])
+            resolution.values["capital.currency"] = _entry(
+                capital.currency, status="user_provided", source=values["allocated_capital"]["source"],
             )
+            if capital.currency:
+                values["currency"] = _entry(
+                    capital.currency, status="user_provided", source=values["allocated_capital"]["source"],
+                )
+        else:
+            pending["allocated_capital"] = "请填写并提交本会话规划资金"
+            resolution.values["capital.allocated_capital"] = _entry(
+                None, status="missing",
+                source={"kind": "capital_plan", "id": str(capital.id),
+                        "revision": capital.current_revision},
+                currency=capital.currency,
+            )
+        add("plan", values, list(pending))
+
+    current_allocation = capital is not None or (spec.plan is None and not spec.declared.get("plan"))
+    if current_allocation and capital is None:
+        resolution.values["capital.allocated_capital"] = _entry(
+            None, status="missing", source={"kind": "session_allocation"},
+        )
 
     # Shared names never manufacture another object's fields. No implicit FX or
     # borrowing a different security's trade price to satisfy plan requirements.
@@ -514,7 +557,11 @@ async def resolve_for_run(
                 fields={name: "请采用同一标的和币种的资料；不进行隐式换汇"},
             )
 
-    missing = biz.evaluate_purpose(spec.use_case, groups)
+    from plugins.investment_requirements import missing_facts
+
+    missing = missing_facts(spec.use_case, {
+        f"{group}.{name}" for group, admission in groups.items() for name in admission.values
+    }, session_allocation=current_allocation)
     for group, admission in groups.items():
         for name, reason in admission.incomplete.items():
             missing[f"{group}.{name}"] = reason
@@ -534,25 +581,23 @@ async def resolve_for_run(
     # 买卖价格，最新在前、最多 10 笔。软删除（archived）不进入上下文。它们不参与
     # 用途门禁，也不进入 groups——仅供模型经 ``investment_context`` 对比参考，
     # 真源仍是 trade_records / buy_sell_plans，入场区间仍是分析情景。
-    capital = (
-        await session.execute(
-            select(store.CapitalPlan).where(
-                store.CapitalPlan.research_id == research_id,
-                store.CapitalPlan.user_id == user_id,
-            )
-        )
-    ).scalar_one_or_none()
     if capital is not None:
+        trade_filter = (
+            store.BuySellPlan.capital_plan_id == capital.id,
+            store.BuySellPlan.user_id == user_id,
+            store.BuySellPlan.research_id == research_id,
+            store.BuySellPlan.archived.is_(False),
+            store.BuySellPlan.status == "active",
+        )
+        total_count = await session.scalar(
+            select(func.count()).select_from(store.BuySellPlan).where(*trade_filter)
+        ) or 0
         buy_sell_rows = (
             (
                 await session.execute(
                     select(store.BuySellPlan)
-                    .where(
-                        store.BuySellPlan.capital_plan_id == capital.id,
-                        store.BuySellPlan.archived.is_(False),
-                        store.BuySellPlan.status == "active",
-                    )
-                    .order_by(store.BuySellPlan.created_at.desc())
+                    .where(*trade_filter)
+                    .order_by(store.BuySellPlan.created_at.desc(), store.BuySellPlan.id.desc())
                     .limit(10)
                 )
             )
@@ -567,6 +612,13 @@ async def resolve_for_run(
         resolution.values["buy_sell.count"] = _entry(
             str(len(buy_sell_rows)), status="user_provided", source=capital_source
         )
+        resolution.values["buy_sell.total_count"] = _entry(
+            total_count, status="user_provided", source=capital_source,
+        )
+        resolution.values["buy_sell.truncated"] = _entry(
+            "true" if total_count > len(buy_sell_rows) else "false",
+            status="user_provided", source=capital_source,
+        )
         for index, row in enumerate(buy_sell_rows, start=1):
             revision = await _latest(
                 session,
@@ -577,11 +629,7 @@ async def resolve_for_run(
             )
             if revision is None:
                 continue
-            row_source = {
-                "kind": "capital_plan",
-                "id": str(row.id),
-                "revision": row.current_revision,
-            }
+            row_source = {"kind": "buy_sell_revision", "id": str(row.id), "revision": row.current_revision}
             facts = {
                 "symbol": revision.symbol,
                 "market": revision.market,
@@ -727,8 +775,8 @@ async def ensure_research_bound_snapshot(*, run_id: uuid.UUID, user_id: uuid.UUI
     """Freeze a plain Run's current research binding exactly once.
 
     Explicit submission snapshots (manual/input_answer/watch_event) always win.
-    For a Run without one, lock the Run, resolve the account and primary plan
-    currently bound to its authenticated research, and insert an immutable
+    For a Run without one, lock the Run, resolve the account, current session
+    allocation and recorded trades, and insert an immutable
     ``research_bound`` snapshot.  ``unspecified`` deliberately records facts
     without applying a purpose gate; the agent declares plan_analysis or
     holding_cost later if it needs a personalised conclusion.
@@ -761,11 +809,7 @@ async def ensure_research_bound_snapshot(*, run_id: uuid.UUID, user_id: uuid.UUI
         if link is None or (link.account_id is None and link.primary_plan_id is None):
             return False
 
-        spec = InvestmentInputSpec(
-            use_case="unspecified",
-            account=ObjectRef(link.account_id) if link.account_id else None,
-            plan=ObjectRef(link.primary_plan_id) if link.primary_plan_id else None,
-        )
+        spec = await current_research_input(session, link=link, use_case="unspecified")
         resolution = await resolve_for_run(
             session,
             user_id=user_id,

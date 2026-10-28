@@ -349,6 +349,10 @@ def apply_env(
             # Without this, Web workers verify only in process memory and leave
             # no durable semantic audit trail after exit.
             "APODEX_RUN_DIR": str(paths["run"]),
+            # The source checkout may be read-only to isolated workers. Receipts
+            # belong beside the run ledger, not under the installed package.
+            "CORPUS_TOOL_REF_ROOT": str(paths["run"] / "corpus" / "tool-refs"),
+            "CORPUS_SEARCH_REF_ROOT": str(paths["run"] / "corpus" / "search-refs"),
             "FRONTIER_AGENT_TASK_WALL_TIME_S": str(wall_time_s),
             "FRONTIER_AGENT_MAX_TURNS": str(max_turns),
             "BASH_ALLOWLIST_MODE": "enforce",

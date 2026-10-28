@@ -4,9 +4,13 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
+import re
 
 import httpx
 
+from frontier_agent.core.execution_context import get_current_tool_budget
+from frontier_agent.core.loop_types import wall_deadline_remaining_s
 from frontier_agent.core.tool import ToolOutcome, tool
 from frontier_agent.infra.config import FrontierAgentConfig, get_config
 from frontier_agent.infra.summary_llm import summarize as _summary_llm_summarize
@@ -47,6 +51,34 @@ logger = logging.getLogger(__name__)
 _MAX_RETRIES = 3
 _SHORT_CONTENT_THRESHOLD = 500       # re-try via Unpaywall when content is this short
 _PAYWALL_SHORT_THRESHOLD = 500       # tighter check used for known paywall domains
+
+# Per-URL direct scrape bound. The old 60 s ceiling was paid in full by every
+# anti-bot / JS-only origin (measured on a live team run: eight 61 s failures
+# against one member's 720 s research window). Twenty seconds still covers a
+# slow but readable page, and a timeout now returns fast enough to try another
+# source. Override with FRONTIER_AGENT_WEB_FETCH_TIMEOUT_S when a deployment
+# knows its origins are slower.
+_DIRECT_SCRAPE_TIMEOUT_ENV = "FRONTIER_AGENT_WEB_FETCH_TIMEOUT_S"
+_DIRECT_SCRAPE_TIMEOUT_DEFAULT_S = 20.0
+# Bound the entire route, retries and extraction, not just one HTTP request.
+_FETCH_ONE_TIMEOUT_S = 90.0
+
+# Only DOI-bearing URLs can be helped by an Unpaywall lookup; generic pages
+# (news, blogs, vendor docs) never resolve there.
+_DOI_URL_RE = re.compile(r"(?:doi\.org/|/10\.\d{4,9}/)")
+
+
+def _direct_scrape_timeout_s() -> float:
+    raw = os.environ.get(_DIRECT_SCRAPE_TIMEOUT_ENV, "").strip()
+    if not raw:
+        return _DIRECT_SCRAPE_TIMEOUT_DEFAULT_S
+    try:
+        value = float(raw)
+    except ValueError:
+        logger.warning("Invalid %s=%r; using %.0fs", _DIRECT_SCRAPE_TIMEOUT_ENV, raw,
+                       _DIRECT_SCRAPE_TIMEOUT_DEFAULT_S)
+        return _DIRECT_SCRAPE_TIMEOUT_DEFAULT_S
+    return value if value > 0 else _DIRECT_SCRAPE_TIMEOUT_DEFAULT_S
 
 # Below this many chars the raw page is returned verbatim instead of being
 # routed through the summary LLM, even when ``info_to_extract`` is set. The
@@ -97,10 +129,10 @@ async def web_fetch(
         return "Error: URL is required."
 
     if len(urls) == 1:
-        return await _fetch_one(urls[0], focuses[0])
+        return await _fetch_with_budget(urls[0], focuses[0])
 
     results = await asyncio.gather(
-        *(_fetch_one(u, f) for u, f in zip(urls, focuses, strict=False))
+        *(_fetch_with_budget(u, f) for u, f in zip(urls, focuses, strict=False))
     )
     if limitation := combine_content_outcomes(urls, results):
         return limitation
@@ -108,6 +140,24 @@ async def web_fetch(
         f"[{i}] URL: {u}\n    Info: {r}"
         for i, (u, r) in enumerate(zip(urls, results, strict=False), 1)
     )
+
+
+async def _fetch_with_budget(url: str, focus: str) -> str | ToolOutcome:
+    """Return a per-source limitation before a slow sibling loses the batch."""
+    bounds = [_FETCH_ONE_TIMEOUT_S]
+    if (budget := get_current_tool_budget()) is not None:
+        bounds.append(max(0.0, budget - 1.0))
+    if (remaining := wall_deadline_remaining_s()) is not None:
+        bounds.append(max(0.0, remaining - 2.0))
+    try:
+        async with asyncio.timeout(min(bounds)):
+            return await _fetch_one(url, focus)
+    except TimeoutError:
+        return content_limitation(url, "Per-source fetch/extraction deadline exceeded.")
+    except Exception as exc:
+        # Cancellation still propagates; one ordinary failure must not discard
+        # successful siblings or expose provider credentials in an exception.
+        return content_limitation(url, f"Fetch failed ({type(exc).__name__}).", status="failed")
 
 
 def _normalise_inputs(
@@ -252,7 +302,12 @@ async def _fetch_one(url: str, info_to_extract: str) -> str | ToolOutcome:
                 f"anti-bot protection. Please try searching for an open-access "
                 f"version (arxiv.org, PMC, institutional repositories)."
             ))
-        return content_limitation(url, f"Could not extract content from {url}")
+        return content_limitation(url, (
+            f"Could not extract content from {url}: the fetch timed out or the "
+            "page returned no readable text. Repeating the same URL is unlikely "
+            "to help — use a different source, the site's own API/PDF, or an "
+            "archived copy."
+        ))
 
     _scrape_cache.record_success(url)
 
@@ -372,6 +427,12 @@ async def _maybe_recover_via_unpaywall(
     """
     if route in ("pmc", "pubmed"):
         return content
+    if route != "paywall" and not _DOI_URL_RE.search(url):
+        # A generic web page (news, blog, vendor docs) has no DOI to resolve.
+        # Attempting Unpaywall there cost a CrossRef round-trip plus a second
+        # Jina call for every anti-bot page — measured across one run as 13
+        # pointless fallbacks while members were already out of budget.
+        return content
 
     garbage = is_garbage_content(content)
     short_on_paywall = (
@@ -460,7 +521,11 @@ async def _jina_request(
         headers["X-No-Cache"] = "true"
 
     try:
-        async with httpx.AsyncClient(timeout=60) as client:
+        # Client wait = the server-side X-Timeout plus one scheduling/queue
+        # grace. The old flat 60 s let a stalled reader hold the tool open far
+        # past its own advertised bound.
+        client_timeout = float(headers["X-Timeout"]) + 10.0
+        async with httpx.AsyncClient(timeout=client_timeout) as client:
             async with client.stream(
                 "POST",
                 base_url,
@@ -591,7 +656,9 @@ async def _direct_scrape(url: str) -> str:
         # Redirects are walked by hand so every hop is vetted: following them
         # automatically would let a vetted public URL hand us a 302 to
         # localhost or a metadata endpoint (see ``next_hop``).
-        async with httpx.AsyncClient(timeout=60, follow_redirects=False) as client:
+        async with httpx.AsyncClient(
+            timeout=_direct_scrape_timeout_s(), follow_redirects=False,
+        ) as client:
             hop_url, hop_headers = url, headers
             for _ in range(MAX_REDIRECT_HOPS):
                 refusal, addresses = await vet_public_url(hop_url)

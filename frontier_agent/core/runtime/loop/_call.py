@@ -144,6 +144,79 @@ _WALL_DEADLINE_FLOOR_S = 20.0
 # rest of the turn on a doomed second request.
 _STREAM_RECOVERY_MIN_TIMEOUT_S = 10.0
 
+# ── First-attempt reasoning watchdog under a spent wall ───────────────
+# The first streamed attempt normally reserves budget for one recovery
+# request: worst-case TTFT, the retry admission floor, one backoff, and a
+# closure/scheduling margin. That reservation is only worth making when the
+# budget can actually hold BOTH the current attempt and the retry — the
+# arithmetic shrinks the current attempt's semantic watchdog, and shrinking
+# it to an unusable sliver kills a healthy response that would have finished.
+#
+# Measured failure this guards against (Run eedcd41c, 2026-10-27): with
+# ``first_chunk_s=45`` and ``retry_floor_s=65`` the reservation needed 122 s,
+# so at 95.8 s / 55.8 s remaining the watchdog was clamped to 1 s, then the
+# retry it had reserved for was refused (53.1 s < 65 s) and the run ended
+# with an incomplete response.
+_RESERVE_CLOSURE_S = 10.0
+# Smallest reserved window that still counts as a real attempt. Below this the
+# reservation cannot buy anything a plain last chance would not, so it must
+# not be taken. 5 s keeps the established 130 s boundary a reservation while
+# leaving 96 s and below in the last-chance branch.
+_RESERVE_MIN_S = 5.0
+# A last chance still needs to be able to receive a first chunk and produce
+# something. When even that does not fit, the semantic watchdog is disabled
+# and only the absolute deadline (outer timeout) plus the first-chunk bound
+# apply — never a 1 s kill of an otherwise healthy request.
+_LAST_CHANCE_MIN_S = 1.0
+
+
+def _first_attempt_reasoning_watchdog(
+    *,
+    available_s: float | None,
+    effective_timeout_s: float,
+    configured_s: float,
+    first_chunk_s: float,
+    retry_floor_s: float,
+) -> tuple[float | None, str]:
+    """Choose the reasoning-only watchdog for the first streamed attempt.
+
+    Returns ``(timeout_s, mode)`` where ``mode`` is one of:
+
+    - ``configured``: no reservation applies (or the budget already holds the
+      full watchdog and a retry); the caller's value is used unchanged.
+    - ``reserved``: both this attempt and one recovery fit, so the watchdog is
+      shortened to leave the retry its admission floor.
+    - ``last_chance``: a retry cannot fit at all, so this request gets one
+      bounded chance instead of being killed early. The window is the whole
+      remaining budget minus the closure margin, capped by the configured
+      watchdog. The watchdog starts at the first reasoning delta, so TTFT is
+      already inside ``first_chunk_s`` and must not be subtracted again; the
+      absolute deadline stays enforced by the outer ``asyncio.timeout`` and
+      the stream's own ``timeout``.
+    - ``deadline_only``: not even a last chance fits; ``None`` disables the
+      semantic guard and the absolute deadline alone bounds the attempt.
+
+    ``available_s`` is the nearest of the wall and logical-call deadlines.
+    """
+    if available_s is None:
+        return configured_s, "configured"
+    budget = min(float(effective_timeout_s), float(available_s))
+    reasoning_room = (
+        budget
+        - float(first_chunk_s)
+        - float(retry_floor_s)
+        - _RUNAWAY_BACKOFF_S
+        - _RESERVE_CLOSURE_S
+    )
+    if reasoning_room >= configured_s:
+        return configured_s, "configured"
+    if reasoning_room >= _RESERVE_MIN_S:
+        return reasoning_room, "reserved"
+    last_chance = min(configured_s, budget - _RESERVE_CLOSURE_S)
+    if last_chance < _LAST_CHANCE_MIN_S:
+        return None, "deadline_only"
+    return last_chance, "last_chance"
+
 
 def _stream_recovery_budget_too_small(
     remaining_s: float,
@@ -506,6 +579,7 @@ async def call_llm(
                     )
                 else:
                     attempt_reasoning_timeout = reasoning_only_timeout_s
+                    watchdog_mode = "configured"
                     if (
                         attempt == 0
                         and logical_deadline is not None
@@ -519,22 +593,31 @@ async def call_llm(
                         # first attempt on reasoning. Include worst-case TTFT,
                         # backoff, and 10s for stream closure/scheduling; closure
                         # alone may take 5s. Never extend the logical/run wall.
+                        # The reservation is only taken when the budget holds
+                        # both this attempt and the retry; otherwise the request
+                        # gets one bounded last chance rather than a 1s kill.
                         available, _ = _nearest_deadline()
-                        reasoning_room = (
-                            min(effective_timeout, available or 0)
-                            - first_chunk_s - retry_floor_s - _RUNAWAY_BACKOFF_S - 10
+                        attempt_reasoning_timeout, watchdog_mode = (
+                            _first_attempt_reasoning_watchdog(
+                                available_s=available,
+                                effective_timeout_s=effective_timeout,
+                                configured_s=reasoning_only_timeout_s,
+                                first_chunk_s=first_chunk_s,
+                                retry_floor_s=retry_floor_s,
+                            )
                         )
-                        if reasoning_room < reasoning_only_timeout_s:
-                            # A nearly spent wall must not restore the full 120s
-                            # watchdog when the reservation drops below 20s.
-                            # Even when recovery no longer fits, stop promptly;
-                            # the deadline gate still decides whether to retry.
-                            attempt_reasoning_timeout = max(1.0, reasoning_room)
+                        if watchdog_mode != "configured":
                             logger.info(
-                                "Reasoning watchdog reserves one recovery: %.1fs -> %.1fs "
-                                "(turn=%d, logical_remaining=%.1fs, retry_floor=%.1fs)",
-                                reasoning_only_timeout_s, attempt_reasoning_timeout, turn,
-                                available, retry_floor_s,
+                                "Reasoning watchdog %s: %.1fs -> %s "
+                                "(turn=%d, available=%.1fs, retry_floor=%.1fs)",
+                                watchdog_mode,
+                                reasoning_only_timeout_s,
+                                "off"
+                                if attempt_reasoning_timeout is None
+                                else f"{attempt_reasoning_timeout:.1f}s",
+                                turn,
+                                available,
+                                retry_floor_s,
                             )
                     response = await _stream_llm_response(
                         llm_active, messages_active, effective_timeout, attempt_delta,
@@ -645,10 +728,31 @@ async def call_llm(
                                 "max_tokens": active_cap,
                             })
                             response = recovered
+                            # The replay is the second and last recovery. If it
+                            # ALSO lost required arguments, say so instead of
+                            # reporting a clean fallback: the loop will surface
+                            # the tool error, and a post-mortem needs to know the
+                            # replay did not fix it. Observed live as
+                            # ``assign_task({})`` after a non-streaming replay,
+                            # which left the verifier undispatched.
+                            still_missing = (
+                                _stream_tool_calls_missing_required_arguments(
+                                    response, llm_active,
+                                )
+                            )
+                            if still_missing:
+                                logger.warning(
+                                    "Non-streaming replay still lost required "
+                                    "arguments for %s (turn=%d, attempt=%d/%d); "
+                                    "leaving the tool error to the loop",
+                                    still_missing, turn, attempt + 1, max_retries,
+                                )
                             response.response_metadata = {
                                 **(response.response_metadata or {}),
                                 "stream_empty_args_fallback": True,
                                 "stream_empty_args_tools": empty_arg_tools,
+                                "stream_empty_args_recovered": not still_missing,
+                                "stream_empty_args_still_missing": still_missing,
                                 "stream_finish_reason": (
                                     streamed_response.finish_reason or ""
                                 ),

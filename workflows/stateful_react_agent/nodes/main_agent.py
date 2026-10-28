@@ -763,6 +763,11 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     # in_progress → resolved / cancelled). Off by default; the board tools must
     # also be in the profile's ``agent_tools``.
     task_board = bool(agent_cfg.get("task_board", False))
+    research_convergence = bool(agent_cfg.get("research_convergence", False))
+    finalization_reserve_s = _nonnegative_seconds(
+        agent_cfg.get("finalization_reserve_s"), default=180,
+        label="stateful finalization_reserve_s",
+    )
     # Opt-in direct-inference mode: NO tools are bound, so the model
     # answers from its own knowledge in a single turn (the first tool-free reply
     # is the final answer). Uses the tool-free direct system prompt and skips the
@@ -904,7 +909,12 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         system_prompt = f"{system_prompt}\n\n{addendum}"
     # task-board + sandbox-FS notes are tool-dependent — skip them in direct mode.
     if task_board and not direct:
-        system_prompt = f"{system_prompt}{BOARD_PROMPT_ADDENDUM}"
+        if research_convergence:
+            from workflows.stateful_react_agent.convergence import RESEARCH_BOARD_PROMPT
+
+            system_prompt += RESEARCH_BOARD_PROMPT
+        else:
+            system_prompt += BOARD_PROMPT_ADDENDUM
     if reporter_enabled:
         # Keep the research agent's draft/salvage answer in the same language
         # as the reporter.  This also makes the fail-open path language-stable
@@ -1075,7 +1085,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         from plugins.tools.investment_strategy import InvestmentStrategyObserver
 
         observers.append(InvestmentStrategyObserver())
-    if task_board and not direct:
+    if task_board and not direct and not research_convergence:
         observers.append(build_task_board_observer())
     if not direct:
         observers.append(
@@ -1103,10 +1113,23 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
                 window=stuck_window,
             )
         )
+    if research_convergence and not direct:
+        from workflows.stateful_react_agent.convergence import ResearchConvergenceObserver
+
+        observers.append(ResearchConvergenceObserver(
+            research_s=wall_deadline_s, reserve_s=finalization_reserve_s,
+        ))
     if wall_deadline_s > 0:
+        loop_wall_s = wall_deadline_s
+        if research_convergence:
+            # Repair and delivery share the existing loop, tools and authorization
+            # chain, but receive a bounded reserve inside the product hard wall.
+            loop_wall_s += finalization_reserve_s
+            if research_wall.hard_total_s > 0:
+                loop_wall_s = min(loop_wall_s, research_wall.hard_total_s)
         observers.append(
             WallClockDeadlineObserver(
-                deadline_s=wall_deadline_s,
+                deadline_s=loop_wall_s,
                 # ``_resolve_wall_deadline_s`` already converted any hard
                 # operational wall into this research-only soft deadline.
                 reserve_s=0,
@@ -1272,7 +1295,9 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         )
 
     if task_board and replay_messages:
-        restored_tasks = restore_board_from_messages(ctx.task_id, replay_messages)
+        restored_tasks = restore_board_from_messages(
+            ctx.task_id, replay_messages, archive=research_convergence,
+        )
         if restored_tasks:
             replay_decision["task_board_restored"] = restored_tasks
 
@@ -1312,6 +1337,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
             observers=observers,
             pause_check=pause_check_from_state(state),
             scope_metadata={
+                "research_convergence": research_convergence,
                 "root_task_id": ctx.task_id,
                 "run_id": metadata.get("run_id"),
                 "run_type": metadata.get("run_type"),
@@ -1386,6 +1412,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
             get_run_ledger(),
             final_text=final_text,
             answer_status=answer_status,
+            announce_status=True,
         )
         final_text = boundary["final_text"]
         answer_status = boundary["answer_status"]
@@ -1398,7 +1425,10 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     from plugins.tools.investment_strategy import publication_boundary as strategy_boundary
     from plugins.tools.investment_strategy import validation_snapshot
 
-    strategy_result = strategy_boundary(final_text, answer_status)
+    strategy_result = strategy_boundary(
+        final_text, answer_status,
+        preserve_research=answer_source != "deterministic_fallback",
+    )
     final_text = strategy_result["final_text"]
     answer_status = strategy_result["answer_status"]
     strategy_verdict = validation_snapshot()

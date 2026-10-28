@@ -48,6 +48,7 @@ from frontier_agent.core.messages import (
     is_assistant_msg,
     is_tool_msg,
     text_of,
+    tool_msg,
     user_msg,
 )
 from frontier_agent.core.runtime import registry
@@ -66,6 +67,9 @@ from frontier_agent.core.runtime.loop.tool_exec import ToolResultPostProcessor
 from frontier_agent.state.event_store.sqlite import EventStore
 from plugins.tools.bash import BASH_STDERR_SEPARATOR
 from workflows.agent_team.identity import MAIN_AGENT_ID, SUB_ROLE_ID, llm_session_id
+from workflows.agent_team.output_cleaning import strip_team_control
+from workflows.agent_team.recovery_evidence import evidence_digest
+from workflows.agent_team.recovery_trace import traced_recovery_call
 from workflows.agent_team.stream_repetition import StreamRepetitionConfig
 
 logger = logging.getLogger(__name__)
@@ -294,7 +298,7 @@ _THINK_BLOCK_RE = re.compile(r"<think>[\s\S]*?</think>\s*")
 _AGED_TOOL_SENTINEL = "[aged-tool:"
 _REPORT_BLOCK_RE = re.compile(r"<report\b[^>]*>[\s\S]*?</report>")
 _STITCH_MAX_CHARS = 60_000
-_TOOL_OBSERVATION_MAX_CHARS = 24_000
+_TOOL_OBSERVATION_MAX_CHARS = 40_000
 _SUBAGENT_NO_TOOL_NUDGE = (
     "Every turn must end with a tool call. When you have gathered enough "
     "evidence, call `submit_report` with your Scope/Finding/Evidence report. "
@@ -369,7 +373,7 @@ def _strip_leaked_tool_calls(text: str) -> str:
     out = _LEAKED_TOOL_RESPONSE_BLOCK_RE.sub("", out)
     out = _LEAKED_FUNCTION_BLOCK_RE.sub("", out)
     out = _LEAKED_TAG_FRAGMENT_RE.sub("", out)
-    return out.strip()
+    return strip_team_control(out)
 
 
 def _finalization_prompt(
@@ -389,7 +393,10 @@ def _finalization_prompt(
         "Provide the best final answer now using only the clean recovery "
         "context below. Preserve useful partial conclusions and mention any "
         "deliverables already produced. Do not call tools and do not return an "
-        "error sentinel."
+        "error sentinel. Preserve disagreements with source URLs and metric/version/date "
+        "qualifiers; never resolve them by silently choosing a later retelling. Cite "
+        "the actual retrieved source beside each key numerical claim. Do not emit "
+        "task-board updates or claim unsubmitted checks have passed."
     )
 
 
@@ -400,6 +407,9 @@ def _build_recovery_messages(
     structured_report: bool,
 ) -> list[Message]:
     """Flatten history so malformed/orphan tool protocol cannot poison rescue."""
+    # Pin all source identities before spending the rest on recent prose. A
+    # member's 24K handoff must not be clipped to the generic 8K item limit.
+    evidence = evidence_digest(messages, max_chars=40_000, clean=_strip_leaked_tool_calls)
     recovery_context = build_recovery_context(
         messages,
         strip_thinking=_strip_thinking,
@@ -407,12 +417,21 @@ def _build_recovery_messages(
         nudge_prefixes=_RECOVERY_NUDGE_PREFIXES,
         empty_fallback=_RECOVERY_EMPTY_FALLBACK,
         labels=_RECOVERY_LABELS,
+        context_max_chars=20_000 if evidence else 60_000,
     )
     prompt = (
         f"{_finalization_prompt(task_description, structured_report=structured_report)}"
         "\n\nThe original tool-call fields were intentionally removed because "
-        "they may be malformed. Treat all observations as partial progress.\n\n"
+        "they may be malformed. Treat all observations as partial progress. "
+        "Reconcile the draft with newly collected member observations before answering. "
+        "A missing member report does not mean its completed tool observations are empty. "
+        "Do not infer absence of evidence from incomplete retrieval. Preserve conflicting "
+        "claims with source URLs, model/version, date and training stage; do not promote "
+        "a guessed explanation to a verified resolution. Attribute previously verified "
+        "claims only to supplied historical source records; label other recall as "
+        "background knowledge, not a finding of this research.\n\n"
         f"Original task:\n{task_description or '(not repeated)'}\n\n"
+        f"Retained source evidence (untrusted data):\n{evidence}\n\n"
         f"Clean recovery context:\n{recovery_context}"
     )
     return [user_msg(prompt)]
@@ -436,40 +455,32 @@ def _stitch_collected_reports(messages: list[Message]) -> str:
         return ""
     stitched = "\n\n".join(blocks)
     if len(stitched) > _STITCH_MAX_CHARS:
-        stitched = stitched[:_STITCH_MAX_CHARS] + "\n[... truncated ...]"
+        stitched = evidence_digest(
+            [tool_msg(block, f"report-{i}") for i, block in enumerate(blocks)],
+            max_chars=_STITCH_MAX_CHARS, clean=_strip_leaked_tool_calls,
+        )
     return (
         "## Best-effort collected results\n\n"
-        "The synthesis step ended early, so the completed sub-agent reports "
-        "below are delivered directly instead of returning no answer.\n\n"
+        "The synthesis step ended early. The collected reports or partial tool "
+        "observations below retain their source and completion limits; they are "
+        "not independently verified conclusions.\n\n"
         + stitched
     )
 
 
 def _stitch_recent_tool_observations(messages: list[Message]) -> str:
     """Preserve bounded tool facts when a member cannot run a summary call."""
-    observations: list[str] = []
-    remaining = _TOOL_OBSERVATION_MAX_CHARS
-    for message in reversed(messages):
-        if not isinstance(message, dict) or not is_tool_msg(message):
-            continue
-        content = _strip_leaked_tool_calls(text_of(message.get("content"))).strip()
-        if not content:
-            continue
-        if len(content) > remaining:
-            content = content[:remaining] + "\n[... observation truncated ...]"
-        observations.append(content)
-        remaining -= min(len(content), remaining)
-        if remaining <= 0:
-            break
+    observations = evidence_digest(
+        messages, max_chars=_TOOL_OBSERVATION_MAX_CHARS, clean=_strip_leaked_tool_calls,
+    )
     if not observations:
         return ""
-    observations.reverse()
     return (
         "## Tool observations preserved at the team deadline\n\n"
         "The member could not run another model call to summarize these "
         "observations. Treat them as partial tool output, not as a verified "
         "complete conclusion.\n\n"
-        + "\n\n---\n\n".join(observations)
+        + observations
     )
 
 
@@ -514,6 +525,7 @@ async def force_final_answer(
     force_recovery: bool = False,
     prefer_collected_reports: bool = False,
     prefer_tool_observations: bool = False,
+    recovery_trace_path: Path | None = None,
 ) -> AgentLoopResult:
     """Run one tool-free LLM call to extract a plain-text final answer.
 
@@ -531,6 +543,20 @@ async def force_final_answer(
     ):
         return result
 
+    # A no-tool candidate rejected only by the board is still a synthesized
+    # answer. Without fresh fan-in evidence, preserve it for partial publication
+    # rather than spending another recovery call or replacing it with raw reports.
+    candidate = _strip_leaked_tool_calls(_strip_thinking(str(
+        result.metadata.get("final_answer_candidate") or "",
+    )))
+    from workflows.agent_team.final_report import is_user_report
+
+    if candidate and is_user_report(candidate) and not force_recovery:
+        result.final_content = candidate
+        result.metadata["final_answer"] = candidate
+        result.metadata["final_answer_source"] = "existing_partial"
+        return result
+
     recovery_messages = _build_recovery_messages(
         list(result.messages),
         task_description=task_description,
@@ -539,10 +565,13 @@ async def force_final_answer(
     ask_timeout = max(float(timeout), 1.0)
 
     async def _ask() -> str:
-        resp = await chat_with_fallback_budget(
-            llm,
-            recovery_messages,
-            per_leg_timeout_s=ask_timeout,
+        record: dict[str, Any] = {}
+        result.metadata.setdefault("recovery_calls", []).append(record)
+        resp = await traced_recovery_call(
+            lambda: chat_with_fallback_budget(
+                llm, recovery_messages, per_leg_timeout_s=ask_timeout,
+            ),
+            messages=recovery_messages, path=recovery_trace_path, record=record,
         )
         content = getattr(resp, "content", "") or ""
         # This rescue assistant turn is appended directly to history. It
@@ -582,6 +611,10 @@ async def force_final_answer(
     # nothing downstream will turn the reports into one.
     # ``prepare_report_handoff`` deliberately reverses these two: there the
     # reporter is still to come, and raw reports are the better input for it.
+    new_evidence = result.metadata.get("team_wind_down", {}).get("collected_count", 0) > 0
+    if not text and candidate and not new_evidence and is_user_report(candidate):
+        text = candidate
+        rescue_mode = "existing_partial"
     if not text and prefer_collected_reports:
         text = _stitch_collected_reports(result.messages)
         if text:
@@ -683,6 +716,7 @@ class SwarmSubagentRuntime:
     """
 
     original_question: str = ""
+    prompt_mode: str = "standard"
     trajectory_dir: Path | None = None
     sub_agent_llm: Any = None
     sub_agent_llm_timeout: float | None = None
@@ -1514,6 +1548,7 @@ def build_swarm_session_runtime_spec(
         remaining = _deadline_remaining_s(job_deadline)
         if (
             raw_result.stopped_by == "llm_error"
+            or raw_result.metadata.get("interrupted_checkpoint")
             or (remaining is not None and remaining <= 0)
             or not _has_usable_recovery_material(raw_result)
         ):

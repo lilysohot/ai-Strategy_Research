@@ -133,7 +133,7 @@ _SELF_TIMING_TOOL_FLOORS: dict[str, int] = {
 # regardless of ``tool_timeout_s``, so on the Frontier Challenge every ORCA /
 # GROMACS / LAMMPS run died at 5 minutes inside an 1800s budget and the model
 # burned turns on chunk-and-restart workarounds. See issue #53.
-_BUDGET_AWARE_TOOLS = frozenset({"bash"})
+_BUDGET_AWARE_TOOLS = frozenset({"bash", "web_fetch"})
 
 # Headroom granted to a budget-aware tool between its own deadline and the
 # outer wait. Must exceed the sandbox's post-exit output drain
@@ -345,7 +345,7 @@ async def execute_tools(
             return ToolResult(
                 name=name,
                 args=args,
-                result=f"Error: {type(exc).__name__}: {exc}",
+                result=_invocation_error_text(name, args, tool, exc),
                 duration_ms=elapsed,
                 tool_call_id=tool_call_id,
                 is_error=True,
@@ -366,6 +366,39 @@ async def execute_tools(
     tasks = [_run_one(call, i) for i, call in enumerate(tool_calls)]
     results = await asyncio.gather(*tasks)
     return _apply_aggregate_budget(list(results))
+
+
+def _required_argument_names(tool: Tool) -> list[str]:
+    """Required argument names from the tool's JSON schema, in declared order."""
+    parameters = getattr(tool, "parameters", None) or {}
+    required = parameters.get("required") if isinstance(parameters, dict) else None
+    if not isinstance(required, list):
+        return []
+    return [str(field) for field in required]
+
+
+def _invocation_error_text(
+    name: str, args: object, tool: Tool, exc: BaseException,
+) -> str:
+    """Model-facing text for a tool that failed before doing any work.
+
+    A missing required argument arrives as ``TypeError: web_search() missing 1
+    required positional argument: 'q'``. That says nothing about what the model
+    should do next, and in a live team run it was the only signal the model got
+    for a call it could have trivially corrected. Name the missing fields and
+    the full required set instead; the tool never ran, so nothing is ambiguous.
+    """
+    if isinstance(exc, TypeError) and "required positional argument" in str(exc):
+        required = _required_argument_names(tool)
+        supplied = args if isinstance(args, dict) else {}
+        missing = [field for field in required if field not in supplied]
+        if missing:
+            return (
+                f"Error: tool '{name}' was called without required argument(s): "
+                f"{', '.join(missing)}. Pass every required field as a named "
+                f"argument (required: {', '.join(required)}); the tool did not run."
+            )
+    return f"Error: {type(exc).__name__}: {exc}"
 
 
 def _effective_tool_timeout(name: str, args: dict, default_timeout: int) -> int:

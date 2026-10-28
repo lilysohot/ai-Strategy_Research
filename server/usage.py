@@ -136,7 +136,7 @@ def usage_for_run(run_id: str) -> dict[str, Any]:
     spent nothing — and the UI showed the same thing for both.
 
       ``complete``     every recorded turn reported usage
-      ``partial``      the trajectory exists but no turn was metered
+      ``partial``      at least one recorded call lacks usage, or none was metered
       ``unavailable``  no trajectory file (never written, or already gone)
     """
     try:
@@ -151,9 +151,13 @@ def usage_for_run(run_id: str) -> dict[str, Any]:
     if not records:
         return {**aggregate_usage([]), "status": "unavailable"}
     aggregate = aggregate_usage(records)
-    if not aggregate["llm_calls"]:
-        return {**aggregate, "status": "partial", "trajectory_files": sources}
-    return {**aggregate, "status": "complete", "trajectory_files": sources}
+    observed_calls = sum(rec.get("t") == "llm" for rec in records)
+    missing_usage = max(0, observed_calls - aggregate["llm_calls"])
+    status = "partial" if missing_usage or not aggregate["llm_calls"] else "complete"
+    return {
+        **aggregate, "status": status, "trajectory_files": sources,
+        "unmetered_calls": missing_usage,
+    }
 
 
 def replay_block_from_summary(summary: dict[str, Any] | None) -> dict[str, Any]:

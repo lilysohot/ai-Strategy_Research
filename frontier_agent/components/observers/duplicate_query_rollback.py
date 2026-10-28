@@ -142,10 +142,25 @@ def _normalise_q(value: Any) -> str | None:
     return None
 
 
+def _successful_batch_queries(result: ToolResult) -> list[str]:
+    """Read the acquisition envelope without depending on the tool package."""
+    try:
+        payload = json.loads(result.result or "")
+    except (TypeError, ValueError):
+        return []
+    if not isinstance(payload, dict) or not isinstance(payload.get("items"), list):
+        return []
+    return [
+        item["source"] for item in payload["items"]
+        if isinstance(item, dict) and item.get("ok") is True
+        and isinstance(item.get("source"), str) and item.get("content")
+    ]
+
+
 def _is_failed_search(result: ToolResult) -> bool:
     """True when a search result carries no usable content."""
     if result.is_error:
-        return True
+        return not _successful_batch_queries(result)
     text = (result.result or "").strip()
     if not text or text in _FAILED_RESULT_EXACT:
         return True
@@ -309,4 +324,8 @@ class DuplicateQueryRollbackObserver(BaseObserver):
         key = _dedup_key({"name": result.name, "args": result.args})
         if key:
             self._seen[key] = self._seen.get(key, 0) + 1
+        for query in _successful_batch_queries(result):
+            key = _dedup_key({"name": result.name, "args": {**result.args, "q": query}})
+            if key:
+                self._seen[key] = self._seen.get(key, 0) + 1
         return None

@@ -14,7 +14,12 @@ ToolFn = Callable[..., Awaitable[Any]]
 
 @dataclass
 class Tool:
-    """A callable tool with an OpenAI-compatible JSON-schema signature."""
+    """A callable tool with an OpenAI-compatible JSON-schema signature.
+
+    ``metadata["execution_barrier"] = True`` makes the loop await preceding
+    calls, this tool, and its result observers before authorizing following
+    calls. This execution property is not part of the model-facing schema.
+    """
 
     name: str
     description: str

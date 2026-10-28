@@ -136,10 +136,12 @@ async def non_public_url_error(url: str) -> str:
     scrape provider before the fetch is even attempted.
 
     Reuses ``download_file``'s vetting so both tools share one definition of
-    "public": http(s) only, no credentials in the URL, and EVERY resolved
-    address global, so a split-horizon DNS answer cannot slip a private address
-    through. Fail-closed — a name that cannot be resolved cannot be vetted.
-    Resolution is off-loaded because it blocks.
+    "public": http(s) only, no credentials in the URL, and only global addresses
+    are ever dialed — a non-public answer from a split-horizon resolver is
+    dropped rather than allowed to poison a host that also has a public record.
+    A name that resolves exclusively to non-public addresses is still refused.
+    Fail-closed on resolution failure. Resolution is off-loaded because it
+    blocks.
 
     Set ``FRONTIER_AGENT_ALLOW_PRIVATE_FETCH=1`` to fetch a localhost or
     intranet service deliberately.

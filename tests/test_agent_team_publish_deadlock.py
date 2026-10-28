@@ -22,6 +22,7 @@ deliverable. It just is not permanent any more.
 from __future__ import annotations
 
 import asyncio
+import time
 from collections import deque
 from types import SimpleNamespace
 from typing import Any
@@ -159,6 +160,28 @@ def test_research_assignment_is_rejected_after_admission_closes(dispatch) -> Non
 
     assert "research admission window is closed" in result
     assert bus.submitted == []
+
+
+@pytest.mark.parametrize("remaining,admitted", [(69, False), (180, True)])
+def test_verification_requires_time_to_review_and_submit(dispatch, remaining, admitted) -> None:
+    now = time.monotonic()
+    budget = TeamPhaseBudget(
+        started_monotonic_s=now - 800,
+        research_dispatch_deadline_s=now - 60,
+        research_deadline_s=now - 1,
+        publication_deadline_s=now + remaining,
+        finalization_deadline_s=now + remaining + 100,
+        state={},
+    )
+    result, bus, _ = dispatch(
+        {f"{TASK_ID}::final_verifier": _session("final_verifier")},
+        [{"agent": "final_verifier", "prompt": "Check source attribution."}],
+        phase_budget=budget,
+    )
+    assert bool(bus.submitted) is admitted
+    if not admitted:
+        assert "insufficient verification budget" in result
+        assert "unchecked" in result
 
 
 def test_final_verifier_uses_reserved_verification_window(dispatch) -> None:

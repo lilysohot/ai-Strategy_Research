@@ -19,6 +19,7 @@ RESOLUTION_MARKS: dict[str, str] = {
     "in_progress": "▶",
     "resolved": "✓",
     "cancelled": "⊘",
+    "blocked": "!",
 }
 VALID_RESOLUTION = tuple(RESOLUTION_MARKS)
 
@@ -31,6 +32,7 @@ class BoardCounts(NamedTuple):
     in_progress: int
     open: int
     cancelled: int
+    blocked: int = 0
 
     @property
     def active(self) -> int:
@@ -54,6 +56,7 @@ def count_resolutions(resolutions: Iterable[str]) -> BoardCounts:
         in_progress=counts["in_progress"],
         open=counts["open"],
         cancelled=counts["cancelled"],
+        blocked=counts["blocked"],
     )
 
 

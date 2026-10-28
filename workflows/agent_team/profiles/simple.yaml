@@ -46,6 +46,7 @@ agent:
   compaction_spill: false
   max_input_tokens: ${OPENAI_MAX_INPUT_TOKENS:-229376}
   team_effort: high
+  prompt_mode: research
   planning_mode: false
   planning_max_turns: 40
   fresh_execution_context: false

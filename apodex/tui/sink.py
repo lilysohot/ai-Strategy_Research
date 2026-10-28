@@ -14,6 +14,7 @@ Rich formatting (glyphs, arg summaries) is reused from the line-mode
 from __future__ import annotations
 
 import logging
+import re
 from collections import deque
 from collections.abc import Callable
 from copy import deepcopy
@@ -501,6 +502,26 @@ class TuiSink:
     ) -> None:
         activity_id = self._result_activity_id(call_id)
         task_board_op = self._task_board_calls.pop(activity_id, None)
+        if task_board_op and task_board_op[0] == "update_task":
+            rows = re.findall(
+                r"^\s*[○▶✓⊘!]\s+(t\d+)\s+(open|in_progress|resolved|cancelled|blocked)\s",
+                str(result), re.MULTILINE,
+            )
+            if rows:
+                task_board_op = ("update_task", {
+                    "updates": [{"id": tid, "resolution": resolution} for tid, resolution in rows],
+                })
+            else:
+                # Compatibility receipts have no full board: filter by accepted
+                # IDs rather than applying every requested resolution.
+                from plugins.tools._coerce import coerce_json_list, coerce_json_object
+
+                accepted = re.search(r"^Updated\s*\[([^\]]*)\]", str(result), re.MULTILINE)
+                ids = set(re.findall(r"['\"]([^'\"]+)['\"]", accepted[1])) if accepted else set()
+                task_board_op = ("update_task", {"updates": [
+                    item for raw in coerce_json_list(task_board_op[1].get("updates")) or []
+                    if (item := coerce_json_object(raw)) is not None and item.get("id") in ids
+                ]})
         body = result if isinstance(result, str) else str(result)
         truncated = ""
         if len(body) > _MAX_RESULT_CHARS:

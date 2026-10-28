@@ -67,15 +67,23 @@ def finalize_gate(
     from plugins.tools.task_board import (
         in_planning,
         planning_enabled,
+        snapshot_tasks,
         unresolved_task_ids,
     )
-    pending = unresolved_task_ids(task_id)
+    # Delivery completes with this accepted answer, so it cannot be a
+    # prerequisite for accepting that same answer.
+    delivery_ids = {
+        task["id"] for task in snapshot_tasks(task_id)
+        if task.get("kind") == "delivery" and not task.get("verification_required")
+    }
+    pending = [tid for tid in unresolved_task_ids(task_id) if tid not in delivery_ids]
     if pending:
         return (
             f"Cannot finish: task board has unresolved item(s) {pending}. For "
             "each, call update_task(id, resolution='resolved') once it is "
             "answered AND corroborated, or resolution='cancelled' if no longer "
-            "needed — then deliver your answer."
+            "needed. If work cannot proceed, use resolution='blocked' with notes "
+            "and gap, then deliver the supported partial answer with its limitations."
         )
     if in_planning(task_id):
         return (
@@ -140,6 +148,9 @@ async def finalize_answer(content: str, confidence: float = 0.7) -> str:
         )
         if err:
             raise ValueError(err)
+        from plugins.tools.task_board import complete_delivery_tasks
+
+        complete_delivery_tasks(scope.task_id)
 
     try:
         conf = max(0.0, min(1.0, float(confidence)))

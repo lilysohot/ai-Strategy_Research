@@ -262,7 +262,7 @@ def test_web_phase_plan_reserves_a_distinct_publication_slice() -> None:
         publication_state={},
     )
 
-    assert budget.research_dispatch_deadline_s == 1_555
+    assert budget.research_dispatch_deadline_s == 1_495
     assert budget.research_deadline_s == 1_720
     assert budget.publication_deadline_s == 1_900
     assert budget.finalization_deadline_s == 2_050
@@ -335,8 +335,9 @@ def test_web_single_research_budget_remains_450_seconds() -> None:
     single = build_profile_overrides(pipeline_id="stateful-react-agent")["agent"]
 
     assert single["research_wall_time_s"] == 450
-    assert "finalization_timeout_s" not in single
-    assert "tool_timeout_s" not in single
+    assert single["finalization_timeout_s"] == 120
+    assert single["finalization_reserve_s"] == 180
+    assert single["tool_timeout_s"] == 90
 
 
 def test_wind_down_uses_real_remaining_wall_not_full_llm_ceiling() -> None:

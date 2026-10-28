@@ -17,12 +17,18 @@ from plugins.tools._sandbox import bwrap_available
 from server.config import build_run_paths, run_dir_for
 from server.profile import PROFILE_NAME
 from workflows.agent_team.profile import load_swarm_profile
-from workflows.agent_team.prompts import FINAL_VERIFIER, SUBAGENT_RESEARCH
+from workflows.agent_team.prompt_standard import RESEARCHER, VERIFIER
 
 
 @pytest.mark.skipif(sys.platform != "linux", reason="Web bwrap worker requires Linux")
-@pytest.mark.parametrize("internal_final,versioned", [(False, False), (True, False), (False, True)])
-async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(monkeypatch, internal_final, versioned):
+@pytest.mark.parametrize("internal_final,versioned,verify,verdict", [
+    (False, False, True, "pass"), (True, False, True, "pass"),
+    (False, True, True, "pass"), (False, False, False, "pass"),
+    (False, True, True, "unchecked"),
+])
+async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
+    monkeypatch, internal_final, versioned, verify, verdict,
+):
     if not bwrap_available():
         pytest.skip("bubblewrap unavailable")
 
@@ -30,7 +36,10 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(monkeypatc
     paths = build_run_paths(run_id)
     (paths["inputs"] / "brief.txt").write_text("PARITY_SOURCE_VALUE=42\n", encoding="utf-8")
     answer = ('<report agent="reader">RAW_INTERNAL_RESULT: 42</report>' if internal_final else
-              "The independently verified value is 42.")
+              "The independently verified value is 42." if verify else
+              "The supplied file states that the value is 42.")
+    if verdict == "unchecked":
+        answer = "The source states 42; independent confirmation remains unavailable."
     main_script = [
         tool_call_turn("add_task", {"tasks": [{"description": "Read and verify value"}]}),
         tool_call_turn("create_subagent", {"agents": [
@@ -59,9 +68,27 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(monkeypatc
             tool_call_turn("submit_report", {"content": "VERIFIER_REPORT: independently read 42."}),
         ],
     }
+    if not verify:
+        main_script[1] = tool_call_turn("create_subagent", {"agents": [
+            {"name": "reader", "system_prompt": "Read the supplied file."},
+        ]})
+        main_script[6] = tool_call_turn("update_task", {"updates": [{
+            "id": "t1", "resolution": "resolved", "notes": "Read the requested source: 42",
+        }]})
+        scripts["main"] = [main_script[i] for i in (0, 1, 2, 3, 6, 7)]
+        del scripts["verifier"]
     requests = {role: [] for role in scripts}
     if versioned:
+        main_script[0] = tool_call_turn("add_task", {"tasks": [{
+            "description": "Read and verify value",
+            "verification_requirements": [{"check_id": "value", "criterion": "Check value is 42"}],
+        }]})
         scripts["verifier"].append(scripts["verifier"][-1])
+        if verdict == "unchecked":
+            main_script[6] = tool_call_turn("update_task", {"updates": [{
+                "id": "t1", "resolution": "blocked", "notes": "Review finished",
+                "gap": "Independent confirmation unavailable",
+            }]})
     server = MockLLMServer().start()
 
     def next_turn(payload):
@@ -69,15 +96,15 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(monkeypatc
         system = str(payload["messages"][0]["content"])
         if "create_subagent" in tools:
             role = "main"
-        elif system.startswith(FINAL_VERIFIER):
+        elif system.startswith(VERIFIER):
             role = "verifier"
-        elif system.startswith(SUBAGENT_RESEARCH):
+        elif system.startswith(RESEARCHER):
             role = "reader"
         else:
             return text_turn(answer)
         index = len(requests[role])
         requests[role].append(payload)
-        if role == "main" and index == 4:
+        if role == "main" and index == 4 and verify:
             history = "\n".join(
                 str(message.get("content") or "")
                 for message in (payload.get("messages") or [])
@@ -106,7 +133,7 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(monkeypatc
             return tool_call_turn("submit_report", {
                 "content": "VERIFIER_REPORT: independently read 42.", "finish": False,
                 "verification_results": [{
-                    "check_id": "value", "binding_id": check["binding_id"], "verdict": "pass",
+                    "check_id": "value", "binding_id": check["binding_id"], "verdict": verdict,
                     "method": "read original input and compare", "detail": "Both contain 42",
                     "evidence_keys": [check["evidence"][0]["key"]],
                 }],
@@ -128,7 +155,10 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(monkeypatc
             "--session-id", uuid.uuid4().hex, "--pipeline-id", "agent_team",
             "--backend", "bwrap", "--wall-time", "400", "--max-turns", "20",
             "--business-prefix", "1", "--mixed-mode-history", "--continuity", "off",
-            "--prompt", "Read /inputs/brief.txt, independently verify its value, and answer in text.",
+            "--prompt", (
+                "Read /inputs/brief.txt, independently verify its value, and answer in text."
+                if verify else "What value does /inputs/brief.txt state? Answer briefly."
+            ),
             cwd=Path(__file__).resolve().parents[1], env=env,
             stdin=asyncio.subprocess.DEVNULL,
             stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE,
@@ -153,6 +183,7 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(monkeypatc
         assert "BUSINESS CONTEXT POLICY:" not in prompt
         assert "INPUT REQUEST POLICY:" not in prompt
         assert "Scientific Problem-Solving Guide" not in prompt
+        assert "ALL search queries MUST be in English" not in prompt
         if role == "main":
             # Inspect what the real worker sends, not only the YAML or renderer:
             # team mode must not silently opt a simple task into MAX research.
@@ -161,15 +192,19 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(monkeypatc
             assert "MAXIMUM effort" not in prompt
             assert "When unsure whether to fan out again or finalize, fan out" not in prompt
             assert "Aggregate detail, do not shrink" not in prompt
+            assert "# Everyday team coordination" in prompt
+            assert "Create a `final_verifier` and include the original question" not in prompt
 
-    for role in ("reader", "verifier"):
+    for role in (["reader", "verifier"] if verify else ["reader"]):
         observations = [m for req in requests[role] for m in req["messages"] if m["role"] == "tool"]
         assert any("PARITY_SOURCE_VALUE=42" in str(m["content"]) for m in observations)
     main_history = json.dumps(requests["main"][-1]["messages"])
-    assert "READER_REPORT" in main_history and "VERIFIER_REPORT" in main_history
-    verifier_history = json.dumps(requests["verifier"][0]["messages"])
-    assert "READER_REPORT" in verifier_history
-    assert "job " in verifier_history
+    assert "READER_REPORT" in main_history
+    if verify:
+        assert "VERIFIER_REPORT" in main_history
+        verifier_history = json.dumps(requests["verifier"][0]["messages"])
+        assert "READER_REPORT" in verifier_history
+        assert "job " in verifier_history
     summary = json.loads((run_dir_for(run_id) / "summary.json").read_text())
     assert summary["stopped_by"] == "final_answer"
     if internal_final:
@@ -179,22 +214,29 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(monkeypatc
         assert summary["answer_status"] == "not_found"
     else:
         assert summary["final_answer"].startswith(answer)
-        assert summary["report_contract"]["kind"] == "complete"
-        assert summary["report_contract"]["task_board"][0]["resolution"] == "resolved"
+        assert summary["report_contract"]["kind"] == ("partial" if verdict == "unchecked" else "complete")
+        assert summary["report_contract"]["task_board"][0]["resolution"] == (
+            "blocked" if verdict == "unchecked" else "resolved"
+        )
     frames = [json.loads(line) for line in stdout.decode().splitlines() if line.startswith("{")]
     terminal = next(frame for frame in frames if frame.get("type") == "run_finished")
     assert terminal["report_contract"] == summary["report_contract"]
     assert terminal["final_answer"] == summary["final_answer"]
     snapshots = sorted((paths["run"] / "agent" / "team-results").rglob("*.json"))
-    assert len(snapshots) == 2
+    assert len(snapshots) == (2 if verify else 1)
     saved = [json.loads(path.read_text(encoding="utf-8")) for path in snapshots]
-    assert {item["agent_name"] for item in saved} == {"reader", "final_verifier"}
+    assert {item["agent_name"] for item in saved} == (
+        {"reader", "final_verifier"} if verify else {"reader"}
+    )
     assert all(item["final_content"] for item in saved)
     if versioned:
         contract = summary["report_contract"]
-        assert contract["verification"] == "passed_for_declared_checks"
+        assert contract["verification"] == (
+            "unchecked" if verdict == "unchecked" else "passed_for_declared_checks"
+        )
         verifier = next(item for item in saved if item["agent_name"] == "final_verifier")
-        assert verifier["assignment_metadata"]["verification_events"][0]["verdict"] == "pass"
+        assert verifier["assignment_metadata"]["verification_events"][0]["verdict"] == verdict
+        assert contract["task_board"][0]["verification_execution_status"] == "complete"
         assert contract["verification_checks"][0]["binding_id"] == (
             verifier["assignment_metadata"]["verification_checks"][0]["binding_id"]
         )

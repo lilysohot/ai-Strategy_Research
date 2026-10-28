@@ -525,5 +525,5 @@ async def test_context_carries_active_buy_sell_prices_only() -> None:
     # 最新有效记录在前；被归档的 46.75 不得出现。
     assert Decimal(resolution.values["buy_sell.1.price"]["value"]) == Decimal("48.12")
     assert resolution.values["buy_sell.1.side"]["value"] == "buy"
-    assert resolution.values["buy_sell.1.price"]["source"]["kind"] == "capital_plan"
+    assert resolution.values["buy_sell.1.price"]["source"]["kind"] == "buy_sell_revision"
     assert all(not key.startswith("buy_sell.2.") for key in resolution.values)

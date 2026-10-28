@@ -48,7 +48,8 @@ class TaskBoardObserver(BaseObserver):
         )
         return Intervention(inject_messages=[
             "Current task board (keep it current via add_task / update_task; "
-            "finalize only once every task is resolved):\n"
+            "finish after resolving work or recording blocked work with notes and gap; "
+            "blocked work permits only partial delivery):\n"
             + self._render_board(ctx.task_id, bus_task_id)
         ])
 

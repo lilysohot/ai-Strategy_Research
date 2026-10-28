@@ -2,6 +2,17 @@
 
 from __future__ import annotations
 
+from workflows.agent_team import prompt_standard
+
+
+def resolve_prompt_mode(value: str | None = None) -> str:
+    """Resolve a run's prompt family independently of effort and model settings."""
+    if value is None:
+        return "standard"
+    if value not in {"standard", "research"}:
+        raise ValueError("agent.prompt_mode must be 'standard' or 'research'")
+    return value
+
 # =====================================================================
 # Search query language rule
 # =====================================================================
@@ -283,6 +294,8 @@ def _render_tools_main(
     show_finish_planning: bool,
     web_search: bool = True,
     sub_agent_tools: list[str] | tuple[str, ...] = (),
+    *,
+    prompt_mode: str = "research",
 ) -> str:
     """Render the Available Tools section.
 
@@ -299,7 +312,10 @@ def _render_tools_main(
     subline = _SUBLINE_WITH_WS_TMPL if web_search else _SUBLINE_NO_WS_TMPL
     item1 = item1.replace("@@SUB_CAPS@@", sub_caps).replace("@@READ_CLAUSE@@", read_clause)
     subline = subline.replace("@@SUB_CAPS@@", sub_caps)
-    out = _TOOLS_MAIN_TMPL
+    out = (
+        prompt_standard.TOOLS if resolve_prompt_mode(prompt_mode) == "standard"
+        else _TOOLS_MAIN_TMPL
+    )
     out = out.replace("@@TOOLS_ITEM1@@", item1)
     out = out.replace("@@SUB_TOOLS_LINE@@", subline)
     if show_finish_planning:
@@ -1093,12 +1109,14 @@ def get_main_system_prompt(
     mcp_tool_names: list[str] | tuple[str, ...] = (),
     mcp_tool_specs: list[dict] | tuple[dict, ...] = (),
     document_toolchain_note: str = "",
+    prompt_mode: str = "standard",
 ) -> str:
     """Build the full main agent system prompt.
 
     Args:
         date_str: Current date string, e.g. ``"2026-04-21"``.
-        fs_mode: If True, append the FS problem-solving guide.
+        fs_mode: In research mode, append the FS problem-solving guide.
+        prompt_mode: Run-scoped standard or research family; independent of effort.
         sub_agent_tools: The resolved sub-agent tool list (profile
             ``sub_agent_tools``). The coordinator's description of what its
             sub-agents can do — and the "delegate file reading" hint — is built
@@ -1130,16 +1148,20 @@ def get_main_system_prompt(
     # so it applies in every mode. Planning additionally prepends the gated
     # _PLANNING_MODE_CLAUSE; the fresh-context execution loop prepends
     # _EXECUTION_CLAUSE.
+    mode = resolve_prompt_mode(prompt_mode)
+    coordination = prompt_standard.COORDINATION if mode == "standard" else TEAM_MANAGEMENT
+    planning = prompt_standard.PLANNING if mode == "standard" else _PLANNING_MODE_CLAUSE
+    execution = prompt_standard.EXECUTION if mode == "standard" else _EXECUTION_CLAUSE
     if phase == "planning":
-        team_section = _PLANNING_MODE_CLAUSE
+        team_section = planning
         show_finish_planning = True
     elif phase == "execution":
-        team_section = _EXECUTION_CLAUSE + TEAM_MANAGEMENT + ASYNC_SECTION
+        team_section = execution + coordination + ASYNC_SECTION
         show_finish_planning = False
     else:  # "combined" — single loop does both phases in one context
-        team_section = TEAM_MANAGEMENT + ASYNC_SECTION
+        team_section = coordination + ASYNC_SECTION
         if planning_mode:
-            team_section = _PLANNING_MODE_CLAUSE + team_section
+            team_section = planning + team_section
         show_finish_planning = planning_mode
     # The MAIN agent has web_search only on planning runs (to clarify a term
     # while planning); no-plan drops it so the model reasons + decomposes
@@ -1147,12 +1169,14 @@ def get_main_system_prompt(
     main_web_search = planning_mode or phase in ("planning", "execution")
     prompt = ENHANCED_PROMPT.format(
         date=date_str,
-        tools=_render_tools_main(show_finish_planning, main_web_search, sub_agent_tools),
+        tools=_render_tools_main(
+            show_finish_planning, main_web_search, sub_agent_tools, prompt_mode=mode,
+        ),
         team_management=team_section,
     )
-    prompt += SEARCH_QUERY_LANGUAGE_NOTE
+    prompt += prompt_standard.SEARCH_LANGUAGE if mode == "standard" else SEARCH_QUERY_LANGUAGE_NOTE
     prompt += EVIDENCE_LIMITS_NOTE
-    if fs_mode:
+    if fs_mode and mode == "research":
         prompt += FS_PROBLEM_GUIDE
     prompt += CHART_NOTE
     prompt += document_toolchain_note
@@ -1165,6 +1189,7 @@ def get_subagent_system_prompt(
     mcp_tool_names: list[str] | tuple[str, ...] = (),
     mcp_tool_specs: list[dict] | tuple[dict, ...] = (),
     runtime_suffix: str = "",
+    prompt_mode: str = "standard",
 ) -> str:
     """Route a sub-agent to the correct specialist prompt based on name.
 
@@ -1185,35 +1210,41 @@ def get_subagent_system_prompt(
         runtime_suffix: Task-level runtime instructions shared by every
             sub-agent. Inserted before the per-agent role so these stable
             instructions remain part of the common KV-cache prefix.
+        prompt_mode: The coordinator's run-scoped prompt family. Research uses
+            the preserved scientific templates; standard uses focused task prompts.
 
     Returns:
         System prompt string for the sub-agent.
     """
+    mode = resolve_prompt_mode(prompt_mode)
+    search_language = (
+        prompt_standard.SEARCH_LANGUAGE if mode == "standard" else SEARCH_QUERY_LANGUAGE_NOTE
+    )
     name_lower = (name or "").lower()
     role_lower = (role or "").lower()
     mcp_section = render_client_mcp_tools_section(mcp_tool_names, mcp_tool_specs)
 
     if "local_verifier" in name_lower or "conflict" in role_lower:
         return (
-            LOCAL_VERIFIER
+            (prompt_standard.CONFLICT_REVIEWER if mode == "standard" else LOCAL_VERIFIER)
             + EVIDENCE_LIMITS_NOTE
-            + SEARCH_QUERY_LANGUAGE_NOTE
+            + search_language
             + mcp_section
             + runtime_suffix
         )
     if "verifier" in name_lower:
         return (
-            FINAL_VERIFIER
+            (prompt_standard.VERIFIER if mode == "standard" else FINAL_VERIFIER)
             + EVIDENCE_LIMITS_NOTE
-            + SEARCH_QUERY_LANGUAGE_NOTE
+            + search_language
             + mcp_section
             + runtime_suffix
         )
 
-    prompt = SUBAGENT_RESEARCH
+    prompt = prompt_standard.RESEARCHER if mode == "standard" else SUBAGENT_RESEARCH
     prompt += EVIDENCE_LIMITS_NOTE
-    prompt += SEARCH_QUERY_LANGUAGE_NOTE
-    if include_domain_guide:
+    prompt += search_language
+    if include_domain_guide and mode == "research":
         prompt += DOMAIN_GUIDE_APPENDIX
     # Preserve the cache hierarchy when adding prompt sections:
     # cross-task constants → task-level runtime facts → per-agent role.

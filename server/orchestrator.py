@@ -1359,6 +1359,17 @@ class Orchestrator:
             for source_id in params.get("_archived_run_ids") or []
             if source_id != run_id
         ]
+        from server.corpus_receipts import stage_corpus_receipts
+
+        receipt_sources = list(source_runs)
+        prior_head = params.get("_prior_head_run_id")
+        if prior_head is not None:
+            prior_id = prior_head.hex
+            if prior_id != run_id and all(item[0] != prior_id for item in receipt_sources):
+                receipt_sources.append((prior_id, run_dir_for(prior_id)))
+        await asyncio.to_thread(
+            stage_corpus_receipts, target_run_dir=run_dir, source_runs=receipt_sources,
+        )
         resource_manifest = await asyncio.to_thread(
             stage_continuity_resources,
             target_run_dir=run_dir,
@@ -1556,8 +1567,8 @@ class Orchestrator:
                             # so the conversation showed the answer twice.
                             continue
                         handle._finished = True
-                        await self._backfill_assistant_turn(handle, frame)
                         await self._persist_run_result(handle, frame)
+                        await self._backfill_assistant_turn(handle, frame)
         except TimeoutError:
             # Worker overran; _spawn's finally will SIGKILL it and synthesize a
             # terminal frame. We must not block on proc.wait() here.
@@ -1628,7 +1639,7 @@ class Orchestrator:
             run_id=uuid.UUID(handle.run_id) if _looks_like_uuid(handle.run_id) else None,
         )
 
-    async def _materialize_input_intent(self, run_id: str) -> None:
+    async def _materialize_input_intent(self, run_id: str) -> dict[str, Any] | None:
         """Best-effort：把 worker 的缺料意图落库（方案 A）。
 
         失败只记日志，绝不能影响 Run 终态写入；幂等由 ``worker-intent:<run_id>`` 保证，
@@ -1640,11 +1651,12 @@ class Orchestrator:
             from server import input_requests as _input_requests
 
             async with _biz.business_transaction() as session:
-                await _input_requests.materialize_worker_intent(session, run_id=uuid.UUID(run_id))
+                return await _input_requests.materialize_worker_intent(session, run_id=uuid.UUID(run_id))
         except Exception:
             logging.getLogger("orchestrator").warning(
                 "worker input intent materialize failed", exc_info=True
             )
+        return None
 
     async def _persist_run_result(self, handle: RunHandle, frame: dict[str, Any]) -> None:
         """Persist the run's terminal state (T2.7 / T2.8).
@@ -1658,7 +1670,10 @@ class Orchestrator:
             return
         # 方案 A：先按 worker 留下的意图建补数请求（此时 Run 仍活跃，会被置
         # stopped/input_required），再落终态；update_run_result 对该原因有防复活保护。
-        await self._materialize_input_intent(handle.run_id)
+        from server.run_outcome import apply_input_request_outcome
+
+        request = await self._materialize_input_intent(handle.run_id)
+        apply_input_request_outcome(frame, request)
         ok = frame.get("ok")
         stopped_by = interruption_reason(frame.get("stopped_by"))
         error = frame.get("error") or ""
@@ -1739,8 +1754,8 @@ class Orchestrator:
         handle.frames.append(frame)
         if self._on_frame is not None:
             self._on_frame(handle.run_id, frame)
-        await self._backfill_assistant_turn(handle, frame)
         await self._persist_run_result(handle, frame)
+        await self._backfill_assistant_turn(handle, frame)
 
     async def _recover_finished_run(
         self,
@@ -1763,7 +1778,18 @@ class Orchestrator:
         over the trajectory.
         """
         # 方案 A：API 崩溃后由本进程重启收尾时，同样要把 worker 留下的缺料意图落库。
-        await self._materialize_input_intent(str(run_id))
+        from server.run_outcome import apply_input_request_outcome
+
+        request = await self._materialize_input_intent(str(run_id))
+        terminal = {"final_answer": final_answer, "stopped_by": stopped_by}
+        apply_input_request_outcome(terminal, request)
+        final_answer = terminal["final_answer"]
+        stopped_by = terminal["stopped_by"]
+        if isinstance(request, dict) and request.get("status") == "pending":
+            await update_run_result(
+                run_id=run_id, status="stopped", stopped_by=stopped_by,
+                final_answer=final_answer, error=error or None,
+            )
         if final_answer:
             existing = await list_turns(session_id=session_id)
             already_recorded = any(

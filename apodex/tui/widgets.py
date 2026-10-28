@@ -1794,7 +1794,7 @@ class TodoPane(Static):
                     continue
                 item = by_id.get(str(update.get("id", "")))
                 resolution = str(update.get("resolution", "")).strip()
-                if item is not None and resolution in {"open", "in_progress", "resolved", "cancelled"}:
+                if item is not None and resolution in {"open", "in_progress", "resolved", "cancelled", "blocked"}:
                     item["status"] = resolution
         self._update_view()
 
@@ -1820,6 +1820,7 @@ class TodoPane(Static):
         glyphs = {
             "completed": GLYPHS["ok"], "resolved": GLYPHS["ok"],
             "in_progress": GLYPHS["in_progress"], "cancelled": GLYPHS["cancelled"],
+            "blocked": "!",
         }
         for item in self._items:
             status = item["status"]

@@ -719,7 +719,15 @@ class TrajectoryFileObserver(BaseObserver):
             self._close_message_spool(cleanup=snapshot_written)
 
     async def on_loop_cancelled(self) -> None:
-        """Close live handles while preserving crash-forensic sidecars."""
-        self._close_jsonl()
-        self._withdraw_jsonl_path()
-        self._close_message_spool()
+        """Persist the observed tail and cancellation, keeping forensic sidecars."""
+        self._stopped_by = "cancelled"
+        try:
+            self._write_jsonl({
+                "t": "end", "turns": self._turns_used,
+                "tool_calls": self._tool_calls_count, "stopped_by": "cancelled",
+            })
+            self._flush_json(force=True)
+        finally:
+            self._close_jsonl()
+            self._withdraw_jsonl_path()
+            self._close_message_spool()

@@ -36,11 +36,9 @@ def bind_investment_context(
     context: dict[str, Any],
 ) -> tuple[Any, ...]:
     """Bind one immutable Run context to tool execution in this worker task."""
-    return (
-        _CONTEXT.set(context),
-        _METRICS.set({"context_reads": 0, "sizing_calls": 0, "lint_calls": 0}),
-        bind_strategy_state(),
-    )
+    return (_CONTEXT.set(context), _METRICS.set(
+        {"context_reads": 0, "sizing_calls": 0, "lint_calls": 0}
+    ), bind_strategy_state())
 
 
 def reset_investment_context(
@@ -109,11 +107,11 @@ async def investment_context() -> str:
     返回服务端按认证用户和 Run 精确解析的最小必要快照。上下文在同一 Run 内不可变；
     需要资金、成本或计划数值时只使用此结果，不从聊天摘要或历史资料猜测。
 
-    绑定口径（2026-10-27）：``plan.allocated_capital`` 是**会话规划资金**（来源标注
-    ``source.kind="capital_plan"``，多次分配按累加维护）；未绑定主计划的会话，
+    ``capital.allocated_capital`` 是会话规划资金，``plan.allocated_capital`` 仅为兼容别名。
+    新运行优先使用会话规划资金（``source.kind="capital_plan"``）；没有旧计划也可分析。
     ``plan.symbol/market/direction`` 来自规划资金下**最新一笔有效实际买卖价格**
     （来源标注 ``source.kind="declared"``）。上下文同时携带 ``buy_sell.*`` 实际买卖
-    价格列表（``buy_sell.count`` + ``buy_sell.<序号>.{symbol,side,price,quantity,
+    价格列表（``buy_sell.count/total_count/truncated`` + ``buy_sell.<序号>.{symbol,side,price,quantity,
     traded_at,currency}``，最新在前，已归档/软删除的不在内）——它们是已登记事实的
     参考价，不是入场依据；分析入场区间仍由 ``investment_position_sizing`` 的分析
     情景提供。
@@ -134,16 +132,32 @@ async def _allocation_sizing(
     lot_size: int,
     entry_low: float | None,
     entry_high: float | None,
+    market: str = "CN",
 ) -> str:
     """Price scenarios are analytical inputs; capital and risk remain frozen facts."""
     capital_name, capital = _capital(context)
     cash = _number(context, "account.available_capital")
-    allocation = _number(context, "plan.allocated_capital")
-    if any(value is None or value <= 0 for value in (capital, cash, allocation)):
-        return _error("需要有效的冻结资金基数、可用资金和会话规划资金")
-    if _entry_value(context, "plan.direction") != "buy":
+    allocation_name = (
+        "capital.allocated_capital" if "capital.allocated_capital" in context.get("values", {})
+        else "plan.allocated_capital"
+    )
+    allocation = _number(context, allocation_name)
+    missing = [name for name, value in (
+        (capital_name or "account.capital_basis", capital),
+        ("account.available_capital", cash), ("plan.allocated_capital", allocation),
+    ) if value is None]
+    if missing:
+        return _error("需要有效的冻结资金基数、可用资金和会话规划资金", missing=missing)
+    assert capital is not None and cash is not None and allocation is not None
+    if any(value <= 0 for value in (capital, cash, allocation)):
+        return _error("本会话没有可用于买入的规划资金或账户资金；无需补旧计划字段")
+    current_allocation = allocation_name == "capital.allocated_capital"
+    if not current_allocation and _entry_value(context, "plan.direction") != "buy":
         return _error("资金上限计算仅支持买入计划；卖出须使用已确认持仓数量")
-    frozen_prices = {"plan.plan_price", "plan.plan_price_low", "plan.plan_price_high"}
+    # Recorded trade direction/prices are facts, not instructions for this scenario.
+    frozen_prices = set() if current_allocation else {
+        "plan.plan_price", "plan.plan_price_low", "plan.plan_price_high"
+    }
     if frozen_prices & context.get("values", {}).keys():
         price = _number(context, "plan.plan_price")
         entry_low = price or _number(context, "plan.plan_price_low")
@@ -159,7 +173,7 @@ async def _allocation_sizing(
         return _error("分析情景必须满足 0 < 止损价 < 入场低价 <= 入场高价")
     if isinstance(lot_size, bool) or not isinstance(lot_size, int) or lot_size <= 0:
         return _error("最小交易单位必须为正整数")
-    market = _entry_value(context, "plan.market")
+    market = market if current_allocation else (_entry_value(context, "plan.market") or "")
     currency = _entry_value(context, "account.currency")
     if market != "CN" or currency != "CNY":
         return _error("当前资金上限计算要求 CN 标的与 CNY 账户；跨币种需要确认汇率")
@@ -172,7 +186,10 @@ async def _allocation_sizing(
         budget = min(budget, Decimal(str(capital)) * Decimal(str(limit)) / 100)
     common = {
         "context_run_id": context.get("run_id"),
-        "bound_inputs": [capital_name, "account.available_capital", "plan.allocated_capital"],
+        "bound_inputs": [capital_name, "account.available_capital", allocation_name],
+        "budget_basis": "session_total_allocation",
+        "analysis_direction": "buy",
+        "additional_buying_capacity": None,
         "price_source": "frozen_plan"
         if frozen_prices & context.get("values", {}).keys()
         else "analysis_scenario",
@@ -222,18 +239,20 @@ async def _investment_position_sizing(
     lot_size: int = 100,
     entry_low: float | None = None,
     entry_high: float | None = None,
+    market: str = "CN",
 ) -> str:
     """使用冻结资金与约束计算仓位；未确认风险预算时仅给资金上限。
 
     总资金、会话规划资金、风险预算和仓位上限由服务端绑定，模型不能覆盖。
     入场价格由分析情景提供；旧快照带计划价格时仍使用冻结价格。
-    未绑定主计划的会话，标的/市场/方向取规划资金下最新一笔有效实际买卖价格。
+    当前会话的标的/市场可取实际买卖记录；历史买卖方向不决定本次分析方向。
 
     Args:
         stop_loss: 止损价，必须严格低于冻结的入场区间。
         lot_size: 最小交易单位；默认 100 股。
         entry_low: 分析情景入场低价，不是用户承诺价格。
         entry_high: 分析情景入场高价，不是用户承诺价格。
+        market: 分析情景市场，目前仅支持 CN；不要求登记实际买卖。
 
     Returns:
         与 ``position_sizing`` 相同的确定性 JSON，并附冻结 ``context_run_id``。
@@ -243,8 +262,8 @@ async def _investment_position_sizing(
     if context is None:
         return _error("当前 Run 未绑定业务快照")
 
-    if "plan.allocated_capital" in context.get("values", {}):
-        return await _allocation_sizing(context, stop_loss, lot_size, entry_low, entry_high)
+    if {"capital.allocated_capital", "plan.allocated_capital"} & context.get("values", {}).keys():
+        return await _allocation_sizing(context, stop_loss, lot_size, entry_low, entry_high, market)
 
     capital_name, capital = _capital(context)
     risk = _number(context, "plan.risk_budget_value")
@@ -302,24 +321,26 @@ async def investment_position_sizing(
     lot_size: int = 100,
     entry_low: float | None = None,
     entry_high: float | None = None,
+    market: str = "CN",
 ) -> str:
     """使用冻结资金、风险约束与分析入场情景计算仓位或资金上限。
 
     资金基数与会话规划资金由服务端冻结绑定；风险预算/仓位上限存在时一并绑定。
-    未绑定主计划的会话，计划口径（标的/市场/方向）取规划资金下最新有效实际买卖价格。
+    本工具计算假设买入的资金上限，实际买卖方向不决定分析方向，也不据此推算可追加股数。
 
     Args:
         stop_loss: 分析止损价，必须低于入场区间。
         lot_size: 最小交易单位，默认 100 股。
-        entry_low: 新计划的分析情景入场低价，不是用户承诺价格。
-        entry_high: 新计划的分析情景入场高价，不是用户承诺价格。
+        entry_low: 分析情景入场低价，不是用户承诺价格。
+        entry_high: 分析情景入场高价，不是用户承诺价格。
+        market: 分析情景市场，目前仅支持 CN；不要求登记实际买卖。
 
     Returns:
         JSON；risk_validated=false 时只得到资金上限，不能称为建议仓位。
     """
     from plugins.tools.task_board import record_verification
 
-    raw = await _investment_position_sizing(stop_loss, lot_size, entry_low, entry_high)
+    raw = await _investment_position_sizing(stop_loss, lot_size, entry_low, entry_high, market)
     result = json.loads(raw)
     detail = "仓位计算通过"
     if not result.get("ok"):
@@ -445,8 +466,7 @@ def _same_number(left: Any, right: Any) -> bool:
 
 @tool
 async def investment_strategy_lint(
-    strategy: StrategyProposal | None = None,
-    **legacy: Any,
+    strategy: StrategyProposal | None = None, **legacy: Any,
 ) -> str:
     """用当前 Run 的 calculation_id 组装并校验策略卡；禁止手填资金和 sizing。
 
@@ -474,15 +494,11 @@ async def investment_strategy_lint(
         for error in result.get("errors", []):
             if error["code"] == "missing_entry_low":
                 error["field"] = "position.entry.low"
-                error["message"] = (
-                    "position.entry.low 必填且必须为数字；顶层 entry 不属于策略卡结构"
-                )
+                error["message"] = "position.entry.low 必填且必须为数字；顶层 entry 不属于策略卡结构"
         if result.get("passed"):
             result.update(risk_validated=True, delivery_mode="strategy")
     else:
-        result = failure(
-            "missing_strategy", "请传入结构化 strategy，并引用本 Run 的 calculation_id"
-        )
+        result = failure("missing_strategy", "请传入结构化 strategy，并引用本 Run 的 calculation_id")
     return json.dumps(finish_validation(result, (context or {}).get("run_id")), ensure_ascii=False)
 
 

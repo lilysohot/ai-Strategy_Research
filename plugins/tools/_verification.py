@@ -88,12 +88,13 @@ def bind_checks(
     *,
     bus: AgentBus,
     task_id: str,
-    work_item_ids: set[str],
+    work_items: list[dict[str, Any]],
     required: bool,
     outputs_root: Path,
 ) -> tuple[list[dict[str, Any]], str]:
     """Validate a dispatch against prior accepted bindings; never mutate the bus."""
     latest: dict[str, tuple[str, dict[str, Any]]] = {}
+    plans = {item["id"]: item for item in work_items}
     for entry in bus.list_task_jobs(task_id):
         for check in entry.item.metadata.get("verification_checks", []):
             latest[check["check_id"]] = (entry.job_id, check)
@@ -106,8 +107,18 @@ def bind_checks(
         if spec.check_id in seen:
             raise ValueError("duplicate check_id in one assignment")
         seen.add(spec.check_id)
-        if spec.work_item_id not in work_item_ids:
+        if spec.work_item_id not in plans:
             raise ValueError(f"unknown task-board item {spec.work_item_id!r}")
+        plan = plans[spec.work_item_id]
+        planned = {item["check_id"]: item for item in plan.get("verification_requirements", [])}
+        requirement = planned.get(spec.check_id)
+        if requirement is None or requirement["criterion"] != spec.criterion:
+            raise ValueError(
+                f"check {spec.check_id!r} must match a planned requirement ID and criterion "
+                f"on {spec.work_item_id!r}; register it with update_task before dispatch"
+            )
+        if plan.get("verification_required") and not required:
+            raise ValueError("a planned required check cannot be dispatched as optional")
         subject, body = _resolve_source(spec.subject, bus, task_id, outputs_root)
         context[subject["key"]] = body
         evidence = []
@@ -363,30 +374,56 @@ def work_item_verification_status(
     required_check_ids: list[str] | None = None,
 ) -> str:
     """Return the required-check status for one task-board item."""
+    return verification_progress(
+        project_bus_checks(bus, task_id)["checks"], work_item_id, required_check_ids,
+    )["verification_status"]
+
+
+def verification_progress(
+    projected: list[dict[str, Any]], work_item_id: str,
+    required_check_ids: list[str] | None = None,
+) -> dict[str, str]:
+    """Project execution and verdict independently, also after the live bus is gone."""
     checks = [
         check
-        for check in project_bus_checks(bus, task_id)["checks"]
+        for check in projected
         if check["work_item_id"] == work_item_id and check["required"]
     ]
+    missing: list[str] = []
     if required_check_ids:
         by_id = {check["check_id"]: check for check in checks}
         checks = [by_id[check_id] for check_id in required_check_ids if check_id in by_id]
         missing = [check_id for check_id in required_check_ids if check_id not in by_id]
-        if not checks:
-            return "not_registered"
-        if any(check["verdict"] == "fail" for check in checks):
-            return "failed"
-        if missing:
-            return "partial" if any(check["verdict"] == "pass" for check in checks) else "unchecked"
     if not checks:
-        return "not_registered"
-    if all(check["verdict"] == "pass" for check in checks):
-        return "passed"
-    if any(check["verdict"] == "fail" for check in checks):
-        return "failed"
-    if any(check["verdict"] == "pass" for check in checks):
-        return "partial"
-    return "unchecked"
+        status = "not_registered"
+    elif any(check["verdict"] == "fail" for check in checks):
+        status = "failed"
+    elif not missing and all(check["verdict"] == "pass" for check in checks):
+        status = "passed"
+    elif any(check["verdict"] == "pass" for check in checks):
+        status = "partial"
+    else:
+        status = "unchecked"
+    execution = "not_started"
+    if checks:
+        execution = "complete" if not missing and all(
+            check.get("result") is not None
+            and check["attempts"][-1]["execution_status"] in {
+                "completed", "complete", "incomplete", "failed", "aborted", "cancelled",
+            }
+            and check["attempts"][-1]["valid_lineage"]
+            for check in checks
+        ) else "incomplete"
+    return {"verification_status": status, "verification_execution_status": execution}
+
+
+def work_item_verification_progress(
+    bus: AgentBus, task_id: str, work_item_id: str, required_check_ids: list[str],
+) -> dict[str, str]:
+    """Execution completion and evidence verdict are independent projections."""
+    return verification_progress(
+        project_bus_checks(bus, task_id)["checks"], work_item_id, required_check_ids,
+    )
 
 
 def render_verification_status(bus: AgentBus, task_id: str) -> str:

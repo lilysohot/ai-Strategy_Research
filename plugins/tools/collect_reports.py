@@ -23,6 +23,7 @@ from frontier_agent.components.agent_bus.fan_in import (
     process_collected,
     session_state,
 )
+from frontier_agent.components.agent_bus.stop_signal import get_stop_registry
 from frontier_agent.core.execution_context import get_current_execution_scope
 from frontier_agent.core.loop_types import wall_deadline_remaining_s
 from frontier_agent.core.runtime.registries import services as registry
@@ -66,6 +67,36 @@ _WALL_FINALIZE_BUFFER_S = 10.0
 # back.
 _STATUS_CHURN_KEY = "collect_reports_status_churn"
 _STATUS_CHURN_LIMIT = 2
+_PENDING_ALERT_KEY = "collect_reports_pending_alert"
+
+
+def _handoff_unanswered_alert(scope: Any, bus: AgentBus, task_id: str) -> str | None:
+    """A second blind wait requests handoff for the same research job only."""
+    pending = scope.metadata.pop(_PENDING_ALERT_KEY, None)
+    if not pending:
+        return None
+    session_id, job_id = pending
+    session = bus.get_session(session_id)
+    if (
+        session is None or session.task_id != task_id
+        or session.current_job_id != job_id
+        or get_stop_registry().is_requested(session_id)
+    ):
+        return None
+    metadata = bus.current_job_metadata(session_id)
+    if (
+        metadata.get("can_publish") or metadata.get("uses_publication_budget")
+        or metadata.get("verification_checks") or "verifier" in session.name.lower()
+    ):
+        return None
+    get_stop_registry().request_stop(session_id, job_id)
+    return _status_notice(
+        scope, "handoff_requested",
+        f"The progress alert for {session.name!r} was followed by another wait. "
+        "A cooperative handoff has now been requested for that research job. "
+        "Collect its preserved observations; this is not a completed verification.",
+        track_churn=False,
+    )
 
 
 def _bump_status_churn(scope: Any, state: str) -> int:
@@ -248,6 +279,8 @@ async def collect_reports(timeout: int = 1800) -> str:
     if not collected:
         sessions = bus.list_sessions_for_task(task_id)
         state = session_state(sessions)
+        if notice := _handoff_unanswered_alert(scope, bus, task_id):
+            return notice
 
         if state == "no_subagents":
             return _status_notice(
@@ -344,6 +377,12 @@ async def collect_reports(timeout: int = 1800) -> str:
             alert = wait_outcome.alert or {}
             agent = alert.get("agent") or "unknown member"
             detail = alert.get("detail") or "actionable member stall detected"
+            for session in bus.list_sessions_for_task(task_id):
+                if session.name == agent and session.current_job_id:
+                    scope.metadata[_PENDING_ALERT_KEY] = (
+                        session.session_id, session.current_job_id,
+                    )
+                    break
             return _status_notice(
                 scope,
                 "member_progress_alert",
@@ -365,6 +404,8 @@ async def collect_reports(timeout: int = 1800) -> str:
         )
 
     _reset_status_churn(scope)
+    # Any completed report gives the coordinator new evidence to act on.
+    scope.metadata.pop(_PENDING_ALERT_KEY, None)
     batch = process_collected(bus, task_id, collected)
     status = format_status_line(
         bus, task_id,

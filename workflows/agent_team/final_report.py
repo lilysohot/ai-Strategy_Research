@@ -12,6 +12,7 @@ import re
 from typing import Any
 
 from frontier_agent.components.finalization.recovery import minimal_best_effort_answer
+from workflows.agent_team.output_cleaning import strip_team_control
 
 _INTERNAL_SOURCES = {"collected_reports", "tool_observations", "deterministic_fallback"}
 _PROTOCOL = re.compile(
@@ -121,6 +122,7 @@ def finalize_team_report(
     Board resolutions are coordinator declarations. Wind-down counts cover only
     work outstanding at that boundary, not all jobs performed in the Run.
     """
+    text = strip_team_control(text)
     wind = wind_down or {}
     counts = {
         key: value
@@ -132,6 +134,12 @@ def finalize_team_report(
             "id": str(task.get("id") or ""),
             "description": str(task.get("description") or ""),
             "resolution": str(task.get("resolution") or "open"),
+            "notes": str(task.get("notes") or ""),
+            "gap": str(task.get("gap") or ""),
+            "verification_status": str(task.get("verification_status") or "not_assessed"),
+            "verification_execution_status": str(
+                task.get("verification_execution_status") or "not_started"
+            ),
             "verification_required": task.get("verification_required") is True,
             "verification_requirements": [
                 {
@@ -147,9 +155,15 @@ def finalize_team_report(
     unresolved = [task for task in board if task["resolution"] not in {"resolved", "cancelled"}]
     gaps: list[dict[str, Any]] = []
     jobs = [dict(job) for job in wind.get("job_outcomes", []) if isinstance(job, dict)]
-    from plugins.tools._verification import project_checks
+    from plugins.tools._verification import project_checks, verification_progress
 
     verification = project_checks(jobs)
+    for task in board:
+        if task["verification_required"]:
+            task.update(verification_progress(
+                verification["checks"], task["id"],
+                [item["check_id"] for item in task["verification_requirements"]],
+            ))
     required_gaps = [
         job for job in jobs if job.get("required") is not False
         and job.get("coverage_status", job.get("status")) != "complete"
@@ -160,10 +174,12 @@ def finalize_team_report(
         if isinstance(observation, dict) and not observation.get("obtained")
     ]
     for job in required_gaps:
+        check_gap = job.get("status") == "complete" and job.get("verification_checks")
         gaps.append({
-            "code": "member_job_incomplete", "job_id": str(job.get("job_id") or ""),
+            "code": "verification_not_passed" if check_gap else "member_job_incomplete",
+            "job_id": str(job.get("job_id") or ""),
             "agent": str(job.get("agent") or ""),
-            "reason": str(job.get("reason") or (
+            "reason": "verification_not_passed" if check_gap else str(job.get("reason") or (
                 "verification_not_passed" if job.get("verification_checks") else "unknown"
             )),
         })
@@ -176,7 +192,7 @@ def finalize_team_report(
         if check["required"]:
             required_checks_by_work_item.setdefault(check["work_item_id"], []).append(check)
     for task in board:
-        if not task["verification_required"] or task["resolution"] not in {"resolved", "cancelled"}:
+        if not task["verification_required"]:
             continue
         checks = required_checks_by_work_item.get(task["id"], [])
         planned_ids = [
@@ -261,7 +277,7 @@ def finalize_team_report(
             "以下结论仅针对列明版本与检查项，不代表整份报告或其他版本已通过核验："
             if zh else "Verdicts cover only the declared checks and versions, not the entire report:"
         )
-        labels = {"pass": "通过", "fail": "未通过", "unchecked": "未检查"}
+        labels = {"pass": "通过", "fail": "未通过", "unchecked": "未能确认"}
         for check in verification["checks"]:
             verdict = labels.get(check["verdict"], "未检查") if zh else check["verdict"]
             verification_notes.append(
@@ -305,7 +321,11 @@ def finalize_team_report(
         )
     if unresolved:
         notes.append("任务板尚未解决的事项：" if zh else "Unresolved task-board items:")
-        notes.extend(f"- {_label(task['description'] or task['id'])}" for task in unresolved[:20])
+        notes.extend(
+            f"- {_label(task['description'] or task['id'])}"
+            + (f": {_label(task['gap'] or task['notes'])}" if task['gap'] or task['notes'] else "")
+            for task in unresolved[:20]
+        )
         if len(unresolved) > 20:
             notes.append(
                 f"另有 {len(unresolved) - 20} 项，详见任务板。"

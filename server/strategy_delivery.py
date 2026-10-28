@@ -12,7 +12,11 @@ RECEIPT_NAME = "investment-strategy-verification.json"
 
 
 def persist_strategy_verification(run_root: Path) -> None:
-    from plugins.tools.investment_strategy import publication_boundary, validation_snapshot
+    from plugins.tools.investment_strategy import (
+        capital_analysis_text,
+        published_research_text,
+        validation_snapshot,
+    )
 
     result = validation_snapshot()
     if result is None:
@@ -27,14 +31,20 @@ def persist_strategy_verification(run_root: Path) -> None:
         if output_root.is_symlink() or output_root.parent.is_symlink():
             return
         output_root.mkdir(parents=True, exist_ok=True)
-        name = "investment-analysis.md"
-        content = publication_boundary("", "partial")["final_text"].encode("utf-8")
-        temporary = output_root / ".investment-analysis.tmp"
-        # Exclusive creation avoids following a model-created temporary symlink.
-        with temporary.open("xb") as handle:
-            handle.write(content)
-        os.replace(temporary, output_root / name)
-        result["allowed_artifacts"] = {name: hashlib.sha256(content).hexdigest()}
+        deliverables = {"investment-analysis.md": capital_analysis_text(result)}
+        research = published_research_text()
+        if research:
+            deliverables["research-analysis.md"] = research
+        allowed = {}
+        for name, text in deliverables.items():
+            content = text.encode("utf-8")
+            temporary = output_root / ("." + name + ".tmp")
+            # Exclusive creation avoids following a model-created temporary symlink.
+            with temporary.open("xb") as handle:
+                handle.write(content)
+            os.replace(temporary, output_root / name)
+            allowed[name] = hashlib.sha256(content).hexdigest()
+        result["allowed_artifacts"] = allowed
         _write_json(receipt, result)
 
 

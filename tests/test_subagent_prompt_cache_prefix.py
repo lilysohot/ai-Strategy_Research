@@ -13,22 +13,24 @@ _ROLE_HEADER = "\n\n# Your Role\n"
 _MCP_TOOL = "mcp__demo__lookup"
 
 
-def _resolve(role: str, *, tools: list[str] | None = None) -> str:
+def _resolve(role: str, *, tools: list[str] | None = None, mode: str = "standard") -> str:
     return _resolve_specialist_prompt(
         name="topic_research",
         role_hint=role,
         fs_mode=True,
         mcp_tool_names=[_MCP_TOOL],
         runtime=SwarmSubagentRuntime(
+            prompt_mode=mode,
             sub_prompt_suffix=_SUFFIX,
             sub_agent_tool_names=tools or ["web_search", "web_fetch"],
         ),
     )
 
 
-def test_sibling_prompts_diverge_only_at_role_text() -> None:
-    prompt_a = _resolve("ROLE-ALPHA")
-    prompt_b = _resolve("ROLE-BETA")
+@pytest.mark.parametrize("mode", ["standard", "research"])
+def test_sibling_prompts_diverge_only_at_role_text(mode: str) -> None:
+    prompt_a = _resolve("ROLE-ALPHA", mode=mode)
+    prompt_b = _resolve("ROLE-BETA", mode=mode)
 
     assert prompt_a.count(_ROLE_HEADER) == 1
     boundary = prompt_a.index(_ROLE_HEADER) + len(_ROLE_HEADER)

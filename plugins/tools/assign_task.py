@@ -440,7 +440,12 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
     # ``coerce_json_list`` handles that.
     raw_tasks = coerce_json_list(tasks) or []
     if not raw_tasks:
-        return "Error: assign_task requires at least one task."
+        return (
+            "Error: assign_task requires at least one task. Pass tasks as a JSON "
+            'array of objects, e.g. [{"agent": "<name from create_subagent>", '
+            '"prompt": "<concrete task>"}]. An empty object will fail again; '
+            "if you have nothing to assign, do not call this tool."
+        )
     if not isinstance(raw_tasks, list):
         return (
             "Error: assign_task.tasks must be a JSON array of assignment "
@@ -592,6 +597,24 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
             is_verification_assignment
             and budget_phase in {"draining", "consolidating"}
         )
+        if (
+            is_agent_team and is_verification_assignment and runtime is not None
+            and getattr(runtime, "phase_budget", None) is not None
+        ):
+            remaining = runtime.phase_budget.remaining_for_job(
+                can_publish=is_publication_assignment or uses_publication_budget,
+            )
+            # Reserve one first-response window plus evidence review/report
+            # submission. Admitting a job that cannot finish fabricates progress.
+            minimum = max(90.0, float(getattr(runtime, "first_chunk_timeout_s", 45) or 45) + 45)
+            if remaining is not None and remaining < minimum:
+                errors.append(
+                    f"{agent_name}: insufficient verification budget "
+                    f"({max(0.0, remaining):.0f}s remaining; {minimum:.0f}s required). "
+                    "Keep unresolved checks unchecked and disclose the limitation; "
+                    "dispatch required verification earlier in the next run"
+                )
+                continue
         if (
             is_agent_team
             and runtime is not None
@@ -899,7 +922,7 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                     ))
                     bound, check_prompt = await asyncio.to_thread(
                         bind_checks, spec.verification_checks, bus=bus, task_id=bus_task_id,
-                        work_item_ids={t["id"] for t in snapshot_tasks(scope.task_id)},
+                        work_items=snapshot_tasks(scope.task_id),
                         required=spec.required_for_completion, outputs_root=root,
                     )
                     task_metadata["verification_checks"] = bound

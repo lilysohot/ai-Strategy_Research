@@ -41,14 +41,39 @@ def combine_content_outcomes(
         else {"ok": True, "status": "success", "source": source, "content": result}
         for source, result in zip(sources, results, strict=True)
     ]
+    # A mixed batch is not an all-or-nothing failure: the caller already paid
+    # for the items that succeeded (one live batch returned 17K usable chars
+    # while the envelope only said ok=false, which invites a full re-buy).
+    # Name both sides so the model can keep the good half and change route for
+    # the rest instead of repeating the same URLs.
+    succeeded = [
+        str(item.get("source") or "")
+        for item in items
+        if item.get("ok") is True and str(item.get("content") or "").strip()
+    ]
+    failed = [
+        str(item.get("source") or "")
+        for item in items
+        if str(item.get("source") or "") not in succeeded
+    ]
     return ToolOutcome(
         json.dumps(
             {
                 "ok": False,
-                "status": "partial"
-                if any(item.get("content") for item in items)
-                else "unavailable",
+                "status": "partial" if succeeded else "unavailable",
+                "acquired_count": len(succeeded),
+                "failed_count": len(failed),
+                "succeeded": succeeded,
+                "failed": failed,
                 "items": items,
+                "advice": (
+                    "Use the succeeded sources; do not re-fetch this whole batch. "
+                    "For the failed ones, change route (site API, PDF, archive) "
+                    "instead of repeating the same URL."
+                    if succeeded
+                    else "No source in this batch produced content. Switch to "
+                    "different sources instead of retrying these URLs."
+                ),
             },
             ensure_ascii=False,
         ),
