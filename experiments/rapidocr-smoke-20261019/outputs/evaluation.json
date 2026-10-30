@@ -1,0 +1,318 @@
+{
+  "method": "Manually transcribed from rendered original PDFs before inspecting OCR output. Whitespace is ignored; punctuation remains significant. Selected excerpts only, not full-document ground truth.",
+  "notes": "Best-span excerpt edit distance; not full document accuracy. Body subset excludes user1 subtitle and user2 title. Body key subset excludes stock quote +4.80%; key presence anywhere does not prove contextual correctness. Tesseract timings are historical same 2CPU/4GiB cap, not simultaneous benchmarking.",
+  "evaluations": [
+    {
+      "family": "rapidocr",
+      "sample": "user1",
+      "engine": "small",
+      "excerpt_cer": 0.0,
+      "body_cer": 0.0,
+      "body_chars": 190,
+      "body_edits": 0,
+      "key_total": 12,
+      "missing_keys": [],
+      "body_key_total": 12,
+      "missing_body_keys": [],
+      "median_seconds": 9.125,
+      "max_sampled_peak_mib": 648.8,
+      "repeat_text_identical": true,
+      "excerpts": [
+        {
+          "reference": "财联社9月17日电，格芯与迈威尔科技扩大合作，共同推进下一代光学连接技术。受此提振，格芯股价盘前涨幅扩大至7%。",
+          "matched": "财联社9月17日电，格芯与迈威尔科技扩大合作，共同推进下一代光学连接技术。受此提振，格芯股价盘前涨幅扩大至7%。",
+          "edits": 0,
+          "chars": 56,
+          "body": true
+        },
+        {
+          "reference": "传统的铜线互连技术正面临物理极限，光互连已站在AI产业链的核心",
+          "matched": "传统的铜线互连技术正面临物理极限，光互连已站在AI产业链的核心",
+          "edits": 0,
+          "chars": 31,
+          "body": false
+        },
+        {
+          "reference": "绿通科技：2025年9月，公司完成对江苏大摩半导体科技有限公司收购。大摩半导体的设备及技术服务全面覆盖6英寸至12英寸晶圆产线，并最高可支持14nm制程工艺。",
+          "matched": "绿通科技：2025年9月，公司完成对江苏大摩半导体科技有限公司收购。大摩半导体的设备及技术服务全面覆盖6英寸至12英寸晶圆产线，并最高可支持14nm制程工艺。",
+          "edits": 0,
+          "chars": 79,
+          "body": true
+        },
+        {
+          "reference": "广立微：公司全资子公司LUCEDA主营业务涵盖硅光芯片设计成套软件、PDK开发、设计流程优化及专业培训等服务。",
+          "matched": "广立微：公司全资子公司LUCEDA主营业务涵盖硅光芯片设计成套软件、PDK开发、设计流程优化及专业培训等服务。",
+          "edits": 0,
+          "chars": 55,
+          "body": true
+        }
+      ]
+    },
+    {
+      "family": "rapidocr",
+      "sample": "user1",
+      "engine": "medium",
+      "status": "timeout",
+      "median_seconds": 90.015,
+      "max_sampled_peak_mib": 785.3
+    },
+    {
+      "family": "rapidocr",
+      "sample": "user2",
+      "engine": "small",
+      "excerpt_cer": 0.004464285714285714,
+      "body_cer": 0.005847953216374269,
+      "body_chars": 171,
+      "body_edits": 1,
+      "key_total": 6,
+      "missing_keys": [
+        "6.4TOPS/W@INT8"
+      ],
+      "body_key_total": 5,
+      "missing_body_keys": [
+        "6.4TOPS/W@INT8"
+      ],
+      "median_seconds": 9.147,
+      "max_sampled_peak_mib": 736.9,
+      "repeat_text_identical": true,
+      "excerpts": [
+        {
+          "reference": "【机构调研】这家底层芯片平台供应商业绩创历史同期新高，多款搭载公司芯片的终端硬件接入WorkBuddy生态",
+          "matched": "【机构调研】这家底层芯片平台供应商业绩创历史同期新高，多款搭载公司芯片的终端硬件接入WorkBuddy生态",
+          "edits": 0,
+          "chars": 53,
+          "body": false
+        },
+        {
+          "reference": "炬芯科技于9月15-16日接待机构调研时表示，今年上半年，公司业绩创下历史同期新高，核心驱动来自端侧AI芯片持续放量",
+          "matched": "炬芯科技于9月15-16日接待机构调研时表示，今年上半年，公司业绩创下历史同期新高，核心驱动来自端侧AI芯片持续放量",
+          "edits": 0,
+          "chars": 58,
+          "body": true
+        },
+        {
+          "reference": "公司第一代存内计算NPU能效比达到6.4TOPS/W@INT8，第二代存内计算技术将进一步提升至7.8TOPS/W@INT8",
+          "matched": "公司第一代存内计算NPU能效比达到6.4TOPS/WW@INT8，第二代存内计算技术将进一步提升至7.8TOPS/W@INT8",
+          "edits": 1,
+          "chars": 62,
+          "body": true
+        },
+        {
+          "reference": "当前，端云协同仍然属于早期上升阶段，存量设备AI升级、全新AI硬件带来双重增长机会，长期成长空间广阔。",
+          "matched": "当前，端云协同仍然属于早期上升阶段，存量设备AI升级、全新AI硬件带来双重增长机会，长期成长空间广阔。",
+          "edits": 0,
+          "chars": 51,
+          "body": true
+        }
+      ]
+    },
+    {
+      "family": "rapidocr",
+      "sample": "user2",
+      "engine": "medium",
+      "status": "timeout",
+      "median_seconds": 90.034,
+      "max_sampled_peak_mib": 1310.4
+    },
+    {
+      "family": "tesseract",
+      "sample": "user1",
+      "engine": "pymupdf",
+      "excerpt_cer": 0.049773755656108594,
+      "body_cer": 0.04736842105263158,
+      "body_chars": 190,
+      "body_edits": 9,
+      "key_total": 12,
+      "missing_keys": [],
+      "body_key_total": 12,
+      "missing_body_keys": [],
+      "median_seconds": 14.459,
+      "max_sampled_peak_mib": 290.2,
+      "repeat_text_identical": true,
+      "excerpts": [
+        {
+          "reference": "财联社9月17日电，格芯与迈威尔科技扩大合作，共同推进下一代光学连接技术。受此提振，格芯股价盘前涨幅扩大至7%。",
+          "matched": "财联社9月17日电，格世与迈威尔科技扩大合作，共同推进下一代光学连接技术。受此提振，格六股价盘前涨幅扩大至7%",
+          "edits": 3,
+          "chars": 56,
+          "body": true
+        },
+        {
+          "reference": "传统的铜线互连技术正面临物理极限，光互连已站在AI产业链的核心",
+          "matched": "传统的鲍绕互连技术正面临物理极限，光互连已站在AI产业链的核心",
+          "edits": 2,
+          "chars": 31,
+          "body": false
+        },
+        {
+          "reference": "绿通科技：2025年9月，公司完成对江苏大摩半导体科技有限公司收购。大摩半导体的设备及技术服务全面覆盖6英寸至12英寸晶圆产线，并最高可支持14nm制程工艺。",
+          "matched": "绿通科技:2025年9月，公司完成对江苏大摩半导体科技有限公司收购。大摩半导体的设备及技术服务全面覆关6英寸至12苋十晶圆产线，并最高可支持14nm制程工艺。",
+          "edits": 4,
+          "chars": 79,
+          "body": true
+        },
+        {
+          "reference": "广立微：公司全资子公司LUCEDA主营业务涵盖硅光芯片设计成套软件、PDK开发、设计流程优化及专业培训等服务。",
+          "matched": "广立微:公司全资子公司LUCEDA主营业务涵盖硅光芯片设计成套软件、PDK开发、设计流程优化及专业培训做服务。",
+          "edits": 2,
+          "chars": 55,
+          "body": true
+        }
+      ]
+    },
+    {
+      "family": "tesseract",
+      "sample": "user1",
+      "engine": "cli",
+      "excerpt_cer": 0.08597285067873303,
+      "body_cer": 0.02631578947368421,
+      "body_chars": 190,
+      "body_edits": 5,
+      "key_total": 12,
+      "missing_keys": [],
+      "body_key_total": 12,
+      "missing_body_keys": [],
+      "median_seconds": 11.455,
+      "max_sampled_peak_mib": 288.6,
+      "repeat_text_identical": true,
+      "excerpts": [
+        {
+          "reference": "财联社9月17日电，格芯与迈威尔科技扩大合作，共同推进下一代光学连接技术。受此提振，格芯股价盘前涨幅扩大至7%。",
+          "matched": "财联社9月17日电，格心与迈威尔科技扩大合作，共同推进下一代光学连接技术。受此提振，格芯股价盘前涨幅扩大至7%。",
+          "edits": 1,
+          "chars": 56,
+          "body": true
+        },
+        {
+          "reference": "传统的铜线互连技术正面临物理极限，光互连已站在AI产业链的核心",
+          "matched": "传统的铜线互连技术正面临物理极限，",
+          "edits": 14,
+          "chars": 31,
+          "body": false
+        },
+        {
+          "reference": "绿通科技：2025年9月，公司完成对江苏大摩半导体科技有限公司收购。大摩半导体的设备及技术服务全面覆盖6英寸至12英寸晶圆产线，并最高可支持14nm制程工艺。",
+          "matched": "绿通科技:2025年9月，公司完成对江苏大摩半导体科技有限公司收购。大摩半导体的设备及技术服务全面覆盖6英寸至12英十量圆产线，并最高可支持14nm制程工艺。",
+          "edits": 3,
+          "chars": 79,
+          "body": true
+        },
+        {
+          "reference": "广立微：公司全资子公司LUCEDA主营业务涵盖硅光芯片设计成套软件、PDK开发、设计流程优化及专业培训等服务。",
+          "matched": "广立微:公司全资子公司LUCEDA主营业务涵盖硅光芯片设计成套软件、PDK开发、设计流程优化及专业培训等服务。",
+          "edits": 1,
+          "chars": 55,
+          "body": true
+        }
+      ]
+    },
+    {
+      "family": "tesseract",
+      "sample": "user2",
+      "engine": "pymupdf",
+      "excerpt_cer": 0.08482142857142858,
+      "body_cer": 0.07602339181286549,
+      "body_chars": 171,
+      "body_edits": 13,
+      "key_total": 6,
+      "missing_keys": [
+        "6.4TOPS/W@INT8",
+        "7.8TOPS/W@INT8",
+        "+4.80%"
+      ],
+      "body_key_total": 5,
+      "missing_body_keys": [
+        "6.4TOPS/W@INT8",
+        "7.8TOPS/W@INT8"
+      ],
+      "median_seconds": 7.718,
+      "max_sampled_peak_mib": 231.8,
+      "repeat_text_identical": true,
+      "excerpts": [
+        {
+          "reference": "【机构调研】这家底层芯片平台供应商业绩创历史同期新高，多款搭载公司芯片的终端硬件接入WorkBuddy生态",
+          "matched": "【机构调研】这家岳层必片平台供应商业绩创历史同期新宙，多款措载公司心片的终刀硬件接入WorkBuddy生态",
+          "edits": 6,
+          "chars": 53,
+          "body": false
+        },
+        {
+          "reference": "炬芯科技于9月15-16日接待机构调研时表示，今年上半年，公司业绩创下历史同期新高，核心驱动来自端侧AI芯片持续放量",
+          "matched": "炬芯科技于9月15-16日接待机构调研时表示，今年上半年，公司业绩创下历史同鞭新高，核心驱动来自铅侧和芯片持续放量",
+          "edits": 4,
+          "chars": 58,
+          "body": true
+        },
+        {
+          "reference": "公司第一代存内计算NPU能效比达到6.4TOPS/W@INT8，第二代存内计算技术将进一步提升至7.8TOPS/W@INT8",
+          "matched": "公司第一代存内计算NPU能效比达到56.4TOPSAW@@INT8，第二代存内计算技术梅进一步提升至7.8TOPSANW名INT8",
+          "edits": 7,
+          "chars": 62,
+          "body": true
+        },
+        {
+          "reference": "当前，端云协同仍然属于早期上升阶段，存量设备AI升级、全新AI硬件带来双重增长机会，长期成长空间广阔。",
+          "matched": "当前，庙云协同仍然属于早期上升阶段，存量设备AI升级、全新AI硬件带来双重增长机会，长期成长空间广阔",
+          "edits": 2,
+          "chars": 51,
+          "body": true
+        }
+      ]
+    },
+    {
+      "family": "tesseract",
+      "sample": "user2",
+      "engine": "cli",
+      "excerpt_cer": 0.44642857142857145,
+      "body_cer": 0.543859649122807,
+      "body_chars": 171,
+      "body_edits": 93,
+      "key_total": 6,
+      "missing_keys": [
+        "炬芯科技",
+        "6.4TOPS/W@INT8",
+        "7.8TOPS/W@INT8",
+        "+4.80%"
+      ],
+      "body_key_total": 5,
+      "missing_body_keys": [
+        "炬芯科技",
+        "6.4TOPS/W@INT8",
+        "7.8TOPS/W@INT8"
+      ],
+      "median_seconds": 4.573,
+      "max_sampled_peak_mib": 246.6,
+      "repeat_text_identical": true,
+      "excerpts": [
+        {
+          "reference": "【机构调研】这家底层芯片平台供应商业绩创历史同期新高，多款搭载公司芯片的终端硬件接入WorkBuddy生态",
+          "matched": "【机构调研】这家克层必片平台供应商业绩创历史同期高，多款拉载公司心户的终凯硬件接入WorkBuddy生态",
+          "edits": 7,
+          "chars": 53,
+          "body": false
+        },
+        {
+          "reference": "炬芯科技于9月15-16日接待机构调研时表示，今年上半年，公司业绩创下历史同期新高，核心驱动来自端侧AI芯片持续放量",
+          "matched": "炬艺科技于9月15-16日接待机构调研时表示，今年上半年，公司业绩创下历匈同好新高，核心驱动来自负侧Al芯片持续放量",
+          "edits": 5,
+          "chars": 58,
+          "body": true
+        },
+        {
+          "reference": "公司第一代存内计算NPU能效比达到6.4TOPS/W@INT8，第二代存内计算技术将进一步提升至7.8TOPS/W@INT8",
+          "matched": "E,2x5)BFPNPUREREGASIG4TOPSW@INTS,AeSiASSTOPSW@INT",
+          "edits": 42,
+          "chars": 62,
+          "body": true
+        },
+        {
+          "reference": "当前，端云协同仍然属于早期上升阶段，存量设备AI升级、全新AI硬件带来双重增长机会，长期成长空间广阔。",
+          "matched": "商业绩创历史同期高，多款拉载公司心户的终凯硬件",
+          "edits": 46,
+          "chars": 51,
+          "body": true
+        }
+      ]
+    }
+  ]
+}

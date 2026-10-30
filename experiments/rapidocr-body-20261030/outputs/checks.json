@@ -1,0 +1,108 @@
+{
+  "baseline_cases": 78,
+  "baseline_equal": true,
+  "inputs_unchanged": true,
+  "reference_unchanged": true,
+  "workers_remaining": [],
+  "probes": {
+    "blank": {
+      "status": "empty",
+      "source": "native",
+      "text": "",
+      "native_text": "",
+      "native_quality": {
+        "characters": 0,
+        "cjk": 0,
+        "latin_words": 0,
+        "language_share": 0.0,
+        "unmapped_share": 0.0
+      },
+      "route_reason": "no_native_text",
+      "needs_review": false,
+      "issues": [],
+      "lines": [],
+      "layout": [],
+      "ocr_original": {
+        "status": "empty",
+        "text": "",
+        "lines": [],
+        "scores": [],
+        "boxes": [],
+        "render_pixels": [
+          2481,
+          3508
+        ],
+        "init_seconds": 0.012193809998279903,
+        "ocr_seconds": 0.0,
+        "engine": "small"
+      },
+      "wall_seconds": 4.98,
+      "sampled_peak_tree_mib": 644.9,
+      "exit_code": 0,
+      "timed_out": false,
+      "stderr": ""
+    },
+    "damaged": {
+      "status": "error",
+      "source": "none",
+      "text": "",
+      "native_text": "",
+      "needs_review": true,
+      "issues": [
+        {
+          "code": "native_read_error",
+          "severity": "warning",
+          "message": "Stream has ended unexpectedly"
+        }
+      ],
+      "lines": [],
+      "layout": [],
+      "wall_seconds": 0.163,
+      "sampled_peak_tree_mib": 34.5,
+      "exit_code": 0,
+      "timed_out": false,
+      "stderr": "EOF marker not found\n"
+    },
+    "adapter_timeout": {
+      "status": "timeout",
+      "source": "native",
+      "text": "5ERHYEjBoU9ZcW9PcM8OtRqQoMqOeRnNwOkPrQpO9PmNrRxNnPoRMYtQrP\n",
+      "native_text": "5ERHYEjBoU9ZcW9PcM8OtRqQoMqOeRnNwOkPrQpO9PmNrRxNnPoRMYtQrP\n",
+      "native_quality": {
+        "characters": 58,
+        "cjk": 0,
+        "latin_words": 5,
+        "language_share": 0.9137931034482759,
+        "unmapped_share": 0.0
+      },
+      "route_reason": "sparse_native_text",
+      "needs_review": true,
+      "issues": [
+        {
+          "code": "ocr_timeout",
+          "severity": "warning",
+          "message": "forced bounded adapter timeout"
+        }
+      ],
+      "lines": [],
+      "layout": [],
+      "wall_seconds": 0.224,
+      "sampled_peak_tree_mib": 48.7,
+      "exit_code": 0,
+      "timed_out": false,
+      "stderr": ""
+    },
+    "outer_timeout": {
+      "text": "",
+      "status": "timeout",
+      "wall_seconds": 0.266,
+      "sampled_peak_tree_mib": 73.3,
+      "exit_code": -9,
+      "timed_out": true,
+      "stderr": ""
+    }
+  },
+  "all_pages_completed": true,
+  "native_exact": true,
+  "ocr_lines_once": true
+}

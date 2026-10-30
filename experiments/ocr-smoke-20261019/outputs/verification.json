@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "scope": "synthetic controls only; real user PDFs pending",
+  "native_content_checked": true,
+  "scan_did_not_auto_enable_ocr": true,
+  "forced_ocr_timeout_reaped": true,
+  "scan_key_numbers_preserved": true
+}

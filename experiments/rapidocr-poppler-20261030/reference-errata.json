@@ -1,0 +1,9 @@
+{
+  "method": "After scoring, ambiguous source characters were checked in 240dpi crops rendered directly from the PDF copies. Frozen reference.json is unchanged. These are human transcription corrections, not OCR text corrections. Raw frozen and source-corrected scores are both retained.",
+  "corrections": [
+    {"id":"d007-p01","index":1,"old":"团购渠道","new":"国外渠道","source_crop":"outputs/d007-source-detail.png"},
+    {"id":"d017-p01","index":1,"old":"科技成长方向需","new":"科技成长方需","source_crop":"outputs/d017-source-detail.png"},
+    {"id":"d050-p01","index":0,"old":"算力项目继续扩张","new":"算力项目继续扩建","source_crop":"outputs/d050-source-detail.png"},
+    {"id":"d050-p01","index":0,"old":"医药等垂直应用","new":"医疗等垂直应用","source_crop":"outputs/d050-source-detail.png"}
+  ]
+}

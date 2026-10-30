@@ -1,0 +1,49 @@
+{
+  "python": "3.12.16 (main, Oct 28 2026, 02:01:20) [GCC 14.2.0]",
+  "platform": "linux",
+  "packages": {
+    "rapidocr": "3.10.0",
+    "onnxruntime": "1.31.0",
+    "pymupdf": "1.28.2",
+    "pypdf": "6.21.1",
+    "numpy": "2.5.4",
+    "pillow": "13.0.0"
+  },
+  "cpu_max": "200000 100000\n",
+  "memory_max": "4294967296\n",
+  "models": {
+    "PP-OCRv6_rec_small.onnx": {
+      "bytes": 21234383,
+      "sha256": "6f327246b50388f3c176ae304bd95767ea6dc0c9ae92153ef8cbe210b3c14884"
+    },
+    "PP-OCRv6_det_small.onnx": {
+      "bytes": 9929594,
+      "sha256": "090f04abcd9d9a7498bc4ebf677e4cb9bdce1fe4197ddb7e529f1ef44e1ff94f"
+    },
+    "ch_ppocr_mobile_v2.0_cls_mobile.onnx": {
+      "bytes": 585532,
+      "sha256": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+    }
+  },
+  "input_sha256": {
+    "/samples/d001.pdf": "f0e67b732b3f6d7b8e59329fdb769b33ffcb05709521a42d1f7d441241d0f71f",
+    "/samples/d002.pdf": "8935e5291a43a0251b35b7c82e6a228d86f41929f9c19acda8f3d8cf168defb1",
+    "/samples/d005.pdf": "7d3ca3b90deaafe68f4eae4de6013bcc7a924d59a9e3d7e4b02e4b4d68d428c8",
+    "/samples/d021.pdf": "c27ec5c878b92f5ec735afdd152e2d1b69c01863bebe57212888c991db8e58d6",
+    "/samples/d035.pdf": "d0668d5a77f9f71385b63d3555136425a62624c86f288df22664211dc3b4f8ae",
+    "/samples/d039.pdf": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+    "/samples/d054.pdf": "1ccf5074e6ee188a2e1c6ed9644a69c934d547413630dac856a91d675f05ec0b",
+    "/samples/d061.pdf": "004303e2ff4f9acd4f315c909c098ebe0af5d2d1b7f537dc701b5e1fc02caa7e",
+    "/samples/d062.pdf": "8b11fbdd67b1d0a215c39c3155799e12cb9c259d6a7b40066d6efa557434ed39",
+    "/samples/d064.pdf": "373c75e2a67817622a143c7a508e6f5465ad14808fe4151186facdf0d26be0e7",
+    "/samples/d065.pdf": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+    "/samples/d066.pdf": "b279daa0bc90403376daddbc40f2d42a5c90c8c479c74ef63c3346ae30b58fad",
+    "/samples/d067.pdf": "c06a68fa3f1f2d87f90953286d34354286be659764077df181e22645401a41dd",
+    "/samples/d068.pdf": "3738c927c6fb11b8f795d6d76ebf33294e8aef88ed7c98d16e55c56cf80c6c49"
+  },
+  "reference_sha256": "9ac4fbc5c5e4ec1060f8bb2ef482f37fb9dfdc3f100cd2c8faa8850421583820",
+  "network": "docker --network none; PDF copies read-only; no original directory mounted",
+  "rendering": "300dpi RGB to BGR, 25 megapixel pre-render cap",
+  "preprocessing": "RapidOCR default max_side_len=2000, detector min side736, text_score=0.5, small det+rec, v4 cls, ONNX intra/inter1",
+  "measurement": "Each page in fresh process. Wall includes imports/render/model/OCR. RSS tree sampled20ms. Serial 2CPU/4GiB. 90-second deadline. Primary26 pages once; 5 sentinel pages twice more."
+}

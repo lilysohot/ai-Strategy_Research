@@ -1,0 +1,43 @@
+{
+  "baseline_outputs_equal": true,
+  "baseline_case_count": 6,
+  "inputs_unchanged": true,
+  "baseline_has_pymupdf": "False",
+  "probes": {
+    "blank_page": {
+      "words": 0,
+      "status": "empty",
+      "wall_seconds": 0.306,
+      "sampled_peak_tree_mib": 176.0,
+      "exit_code": 0,
+      "timed_out": false,
+      "stderr": "OCR_STARTED\n"
+    },
+    "missing_language": {
+      "status": "error",
+      "wall_seconds": 0.327,
+      "sampled_peak_tree_mib": 108.8,
+      "exit_code": 1,
+      "timed_out": false,
+      "stderr": "OCR_STARTED\nError opening data file /usr/share/tesseract-ocr/5/tessdata/not_installed.traineddata\nPlease make sure the TESSDATA_PREFIX environment variable is set to your \"tessdata\" directory.\nFailed loading language 'not_installed'\nTesseract couldn't load any languages!\nTraceback (most recent call last):\n  File \"/lab/lab.py\", line 282, in <module>\n    worker(args)\n  File \"/lab/lab.py\", line 83, in worker\n    tp = page.get_textpage_ocr(language=args.lang, dpi=args.dpi, full=True,\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/candidate/lib/python3.12/site-packages/pymupdf/__init__.py\", line 12346, in get_textpage_ocr\n    return utils.get_textpage_ocr(self, *args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/candidate/lib/python3.12/site-packages/pymupdf/utils.py\", line 452, in get_textpage_ocr\n    return full_ocr(page, dpi, language, flags)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/candidate/lib/python3.12/site-packages/pymupdf/utils.py\", line 349, in full_ocr\n    stream=pix.pdfocr_tobytes(\n           ^^^^^^^^^^^^^^^^^^^\n  File \"/opt/candidate/lib/python3.12/site-packages/pymupdf/__init__.py\", line 13924, in pdfocr_tobytes\n    self.pdfocr_save(bio, compress=compress, language=language, tessdata=tessdata)\n  File \"/opt/candidate/lib/python3.12/site-packages/pymupdf/__init__.py\", line 13902, in pdfocr_save\n    mupdf.fz_write_pixmap_as_pdfocr( out, pix, opts)\n  File \"/opt/candidate/lib/python3.12/site-packages/pymupdf/mupdf.py\", line 57482, in fz_write_pixmap_as_pdfocr\n    return _mupdf.fz_write_pixmap_as_pdfocr(out, pixmap, options)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\npymupdf.mupdf.FzErrorLibrary: code=3: Tesseract language initialisation failed\n"
+    },
+    "damaged_pdf": {
+      "status": "error",
+      "wall_seconds": 0.204,
+      "sampled_peak_tree_mib": 56.4,
+      "exit_code": 1,
+      "timed_out": false,
+      "stderr": "Traceback (most recent call last):\n  File \"/opt/candidate/lib/python3.12/site-packages/pymupdf/__init__.py\", line 3013, in __init__\n    doc = mupdf.fz_open_document_with_stream_and_dir(suffix, fz_stream, archive.this)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/candidate/lib/python3.12/site-packages/pymupdf/mupdf.py\", line 53426, in fz_open_document_with_stream_and_dir\n    return _mupdf.fz_open_document_with_stream_and_dir(magic, stream, dir)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\npymupdf.mupdf.FzErrorFormat: code=7: no objects found\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/lab/lab.py\", line 282, in <module>\n    worker(args)\n  File \"/lab/lab.py\", line 77, in worker\n    with pymupdf.open(args.pdf) as doc:\n         ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/candidate/lib/python3.12/site-packages/pymupdf/__init__.py\", line 3016, in __init__\n    raise FileDataError(f'Failed to open file {filename!r} as type {suffix}.') from e\npymupdf.FileDataError: Failed to open file '/lab/samples/damaged.pdf' as type pdf.\n"
+    },
+    "forced_timeout": {
+      "status": "timeout",
+      "wall_seconds": 0.514,
+      "sampled_peak_tree_mib": 201.5,
+      "exit_code": -9,
+      "timed_out": true,
+      "stderr": "OCR_STARTED\n"
+    }
+  },
+  "timeout_after_ocr_started": true,
+  "worker_processes_remaining": "[]"
+}

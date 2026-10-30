@@ -1,0 +1,50 @@
+{
+  "method": "Four pages not in the previous 26. Source images inspected before inference and references frozen before run. Two body pages, one table control, one section-cover control. Whitespace-only normalization. These do not independently validate unseen two-column templates.",
+  "pages": {
+    "d061-p05": {
+      "language": "zh",
+      "source_type": "scan",
+      "excerpts": [
+        "当前乳制品板块正进入量价双重修复通道，具备较好的投资价值。",
+        "最后，龙头企业具备高股息回报的特点。爱玛、雅迪的股息率基本在5%及以上水平。"
+      ],
+      "keys": [
+        "2027",
+        "75%",
+        "5%",
+        "20%至30%"
+      ]
+    },
+    "d068-p04": {
+      "language": "en",
+      "source_type": "scan",
+      "control": "table; no body CER",
+      "excerpts": [],
+      "keys": []
+    },
+    "d021-p05": {
+      "language": "zh",
+      "source_type": "native",
+      "control": "section cover; no body CER",
+      "excerpts": [],
+      "keys": [
+        "全球市场表现及估值水平"
+      ]
+    },
+    "d065-p04": {
+      "language": "zh",
+      "source_type": "native",
+      "excerpts": [
+        "主题演讲明确传达的一点是，英伟达的下一代纵向扩展（scale-up）网络域将走向光互连。",
+        "我们并不认为主题演讲代表了最终定论，而只是表明CPO依然具有极强的竞争力。"
+      ],
+      "keys": [
+        "NVL576",
+        "512,000",
+        "2.6",
+        "40%",
+        "MTBI"
+      ]
+    }
+  }
+}

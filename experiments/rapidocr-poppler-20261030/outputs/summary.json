@@ -1,0 +1,106 @@
+{
+  "groups": {
+    "old26": {
+      "pages": 26,
+      "body_pages": 23,
+      "routes": {
+        "native": 11,
+        "ocr": 15
+      },
+      "hybrid": {
+        "chars": 3341,
+        "edits": 54,
+        "cer": 0.016162825501346904,
+        "keys_total": 127,
+        "keys_present": 126
+      },
+      "raw_ocr": {
+        "chars": 3341,
+        "edits": 233,
+        "cer": 0.0697395989224783,
+        "keys_total": 127,
+        "keys_present": 124
+      },
+      "ordered_ocr": {
+        "chars": 3341,
+        "edits": 15,
+        "cer": 0.004489673750374139,
+        "keys_total": 127,
+        "keys_present": 124
+      },
+      "production_auto": {
+        "chars": 3341,
+        "edits": 2376,
+        "cer": 0.7111643220592637,
+        "keys_total": 127,
+        "keys_present": 41
+      }
+    },
+    "new8": {
+      "pages": 8,
+      "body_pages": 7,
+      "routes": {
+        "native": 7,
+        "ocr": 1
+      },
+      "hybrid": {
+        "chars": 1117,
+        "edits": 116,
+        "cer": 0.10384959713518353,
+        "keys_total": 39,
+        "keys_present": 39
+      },
+      "raw_ocr": {
+        "chars": 1117,
+        "edits": 144,
+        "cer": 0.12891674127126232,
+        "keys_total": 39,
+        "keys_present": 39
+      },
+      "ordered_ocr": {
+        "chars": 1117,
+        "edits": 24,
+        "cer": 0.021486123545210387,
+        "keys_total": 39,
+        "keys_present": 39
+      },
+      "production_auto": {
+        "chars": 1117,
+        "edits": 242,
+        "cer": 0.21665174574753804,
+        "keys_total": 39,
+        "keys_present": 34
+      }
+    }
+  },
+  "partial_native": {
+    "cases": 14,
+    "detected": 0,
+    "missed": 14
+  },
+  "frozen_reference_scores": {
+    "frozen_hybrid": {
+      "chars": 1118,
+      "edits": 121
+    },
+    "frozen_ordered_ocr": {
+      "chars": 1118,
+      "edits": 29
+    }
+  },
+  "gates": {
+    "new_body_excerpt_cer": false,
+    "new_key_presence": true,
+    "partial_native_detection": false,
+    "production_outputs_unchanged": true
+  },
+  "ready_for_unattended_use": false,
+  "fresh_ocr_timing": {
+    "pages": 8,
+    "total_seconds": 107.02,
+    "median_seconds": 12.6375,
+    "max_seconds": 22.16,
+    "max_sampled_tree_mib": 680.1
+  },
+  "timing_scope": "Only eight forced OCR inference runs. Hybrid selection and ordering used cached OCR; no end-to-end hybrid timing claim."
+}

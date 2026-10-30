@@ -1,0 +1,67 @@
+{
+  "d001-p01": {
+    "text_identical": true,
+    "statuses": [
+      "ok",
+      "ok",
+      "ok"
+    ],
+    "wall_seconds": [
+      12.453,
+      11.906,
+      11.867
+    ]
+  },
+  "d002-p01": {
+    "text_identical": true,
+    "statuses": [
+      "ok",
+      "ok",
+      "ok"
+    ],
+    "wall_seconds": [
+      14.244,
+      13.862,
+      13.809
+    ]
+  },
+  "d061-p02": {
+    "text_identical": true,
+    "statuses": [
+      "ok",
+      "ok",
+      "ok"
+    ],
+    "wall_seconds": [
+      10.075,
+      9.947,
+      9.97
+    ]
+  },
+  "d066-p01": {
+    "text_identical": true,
+    "statuses": [
+      "ok",
+      "ok",
+      "ok"
+    ],
+    "wall_seconds": [
+      9.579,
+      9.639,
+      9.454
+    ]
+  },
+  "d067-p01": {
+    "text_identical": true,
+    "statuses": [
+      "ok",
+      "ok",
+      "ok"
+    ],
+    "wall_seconds": [
+      8.866,
+      8.971,
+      8.803
+    ]
+  }
+}

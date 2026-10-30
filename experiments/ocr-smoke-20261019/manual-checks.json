@@ -1,0 +1,21 @@
+{
+  "method": "Manually transcribed from rendered original PDFs before inspecting OCR output. Whitespace is ignored; punctuation remains significant. Selected excerpts only, not full-document ground truth.",
+  "user1": {
+    "excerpts": [
+      "财联社9月17日电，格芯与迈威尔科技扩大合作，共同推进下一代光学连接技术。受此提振，格芯股价盘前涨幅扩大至7%。",
+      "传统的铜线互连技术正面临物理极限，光互连已站在AI产业链的核心",
+      "绿通科技：2025年9月，公司完成对江苏大摩半导体科技有限公司收购。大摩半导体的设备及技术服务全面覆盖6英寸至12英寸晶圆产线，并最高可支持14nm制程工艺。",
+      "广立微：公司全资子公司LUCEDA主营业务涵盖硅光芯片设计成套软件、PDK开发、设计流程优化及专业培训等服务。"
+    ],
+    "key_tokens": ["格芯", "迈威尔", "7%", "GlobalFoundries", "1.6T", "3.2T", "6.4T", "14nm", "LUCEDA", "PDK", "绿通科技", "广立微"]
+  },
+  "user2": {
+    "excerpts": [
+      "【机构调研】这家底层芯片平台供应商业绩创历史同期新高，多款搭载公司芯片的终端硬件接入WorkBuddy生态",
+      "炬芯科技于9月15-16日接待机构调研时表示，今年上半年，公司业绩创下历史同期新高，核心驱动来自端侧AI芯片持续放量",
+      "公司第一代存内计算NPU能效比达到6.4TOPS/W@INT8，第二代存内计算技术将进一步提升至7.8TOPS/W@INT8",
+      "当前，端云协同仍然属于早期上升阶段，存量设备AI升级、全新AI硬件带来双重增长机会，长期成长空间广阔。"
+    ],
+    "key_tokens": ["炬芯科技", "9月15-16日", "6.4TOPS/W@INT8", "7.8TOPS/W@INT8", "WorkBuddy", "+4.80%"]
+  }
+}

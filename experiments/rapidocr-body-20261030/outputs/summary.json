@@ -1,0 +1,143 @@
+{
+  "original26": {
+    "pages": 26,
+    "body_pages": 23,
+    "chars": 3341,
+    "edits": 4,
+    "cer": 0.001197246333433104,
+    "keys_total": 127,
+    "keys_present": 126,
+    "routes": {
+      "native": 11,
+      "ocr": 15
+    },
+    "review_pages": 7,
+    "total_seconds": 173.27800000000002,
+    "median_seconds": 8.656500000000001,
+    "p95_seconds": 17.496,
+    "max_peak_mib": 811.5
+  },
+  "heldout4": {
+    "pages": 4,
+    "body_pages": 2,
+    "chars": 148,
+    "edits": 0,
+    "cer": 0.0,
+    "keys_total": 10,
+    "keys_present": 10,
+    "routes": {
+      "ocr": 3,
+      "native": 1
+    },
+    "review_pages": 0,
+    "total_seconds": 26.597,
+    "median_seconds": 7.2010000000000005,
+    "p95_seconds": 11.951,
+    "max_peak_mib": 658.8
+  },
+  "all30": {
+    "pages": 30,
+    "body_pages": 25,
+    "chars": 3489,
+    "edits": 4,
+    "cer": 0.0011464603038119805,
+    "keys_total": 137,
+    "keys_present": 136,
+    "routes": {
+      "native": 12,
+      "ocr": 18
+    },
+    "review_pages": 7,
+    "total_seconds": 199.875,
+    "median_seconds": 8.656500000000001,
+    "p95_seconds": 17.496,
+    "max_peak_mib": 811.5
+  },
+  "zh": {
+    "pages": 16,
+    "body_pages": 16,
+    "chars": 1772,
+    "edits": 3,
+    "cer": 0.001693002257336343,
+    "keys_total": 90,
+    "keys_present": 89,
+    "routes": {
+      "native": 8,
+      "ocr": 8
+    },
+    "review_pages": 1,
+    "total_seconds": 77.731,
+    "median_seconds": 4.329000000000001,
+    "p95_seconds": 10.85,
+    "max_peak_mib": 811.5
+  },
+  "en": {
+    "pages": 8,
+    "body_pages": 5,
+    "chars": 1230,
+    "edits": 1,
+    "cer": 0.0008130081300813008,
+    "keys_total": 27,
+    "keys_present": 27,
+    "routes": {
+      "ocr": 7,
+      "native": 1
+    },
+    "review_pages": 6,
+    "total_seconds": 94.95600000000002,
+    "median_seconds": 11.915,
+    "p95_seconds": 19.46,
+    "max_peak_mib": 702.4
+  },
+  "mixed": {
+    "pages": 2,
+    "body_pages": 2,
+    "chars": 339,
+    "edits": 0,
+    "cer": 0.0,
+    "keys_total": 10,
+    "keys_present": 10,
+    "routes": {
+      "native": 2
+    },
+    "review_pages": 0,
+    "total_seconds": 0.591,
+    "median_seconds": 0.2955,
+    "p95_seconds": 0.326,
+    "max_peak_mib": 38.7
+  },
+  "ocr26": {
+    "pages": 15,
+    "body_pages": 12,
+    "chars": 2090,
+    "edits": 4,
+    "cer": 0.0019138755980861245,
+    "keys_total": 74,
+    "keys_present": 73,
+    "routes": {
+      "ocr": 15
+    },
+    "review_pages": 7,
+    "total_seconds": 170.34400000000002,
+    "median_seconds": 9.94,
+    "p95_seconds": 19.46,
+    "max_peak_mib": 811.5
+  },
+  "native26": {
+    "pages": 11,
+    "body_pages": 11,
+    "chars": 1251,
+    "edits": 0,
+    "cer": 0.0,
+    "keys_total": 53,
+    "keys_present": 53,
+    "routes": {
+      "native": 11
+    },
+    "review_pages": 0,
+    "total_seconds": 2.934,
+    "median_seconds": 0.265,
+    "p95_seconds": 0.387,
+    "max_peak_mib": 44.3
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "poppler": "pdftotext version 25.03.0\nCopyright 2005-2025 The Poppler Developers - http://poppler.freedesktop.org\nCopyright 1996-2011, 2022 Glyph & Cog, LLC\n",
+  "packages": "libpoppler147:amd64\t25.03.0-5+deb13u4\npoppler-utils\t25.03.0-5+deb13u4\n",
+  "python": "3.12.16 (main, Oct 28 2026, 02:01:20) [GCC 14.2.0]",
+  "cpu_max": "200000 100000\n",
+  "memory_max": "4294967296\n",
+  "network": "none",
+  "runtime_scope": "Isolated reproduction of production Poppler code path; not an observed live deployment sandbox.",
+  "ocr_settings": "Same immutable base as prior small model, 300dpi, ONNX threads1, fresh process per new page; 90s outer limit."
+}

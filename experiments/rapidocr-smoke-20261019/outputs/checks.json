@@ -1,0 +1,45 @@
+{
+  "baseline_outputs_equal": true,
+  "baseline_case_count": 6,
+  "inputs_unchanged": true,
+  "worker_processes_remaining": [],
+  "probes": {
+    "blank": {
+      "status": "empty",
+      "text": "",
+      "lines": [],
+      "scores": [],
+      "boxes": [],
+      "render_pixels": [
+        2481,
+        3508
+      ],
+      "init_seconds": 0.010590825999315712,
+      "ocr_seconds": 0.0,
+      "engine": "small",
+      "wall_seconds": 5.097,
+      "sampled_peak_tree_mib": 617.4,
+      "exit_code": 0,
+      "timed_out": false,
+      "stderr": "OCR_STARTED\n\u001b[33m[WARNING] 2026-10-19 03:25:11,861 [RapidOCR] main.py:164: The text detection result is empty\u001b[0m\n"
+    },
+    "damaged": {
+      "text": "",
+      "status": "error",
+      "wall_seconds": 0.734,
+      "sampled_peak_tree_mib": 106.3,
+      "exit_code": 1,
+      "timed_out": false,
+      "stderr": "Traceback (most recent call last):\n  File \"/opt/rapid/lib/python3.12/site-packages/pymupdf/__init__.py\", line 3013, in __init__\n    doc = mupdf.fz_open_document_with_stream_and_dir(suffix, fz_stream, archive.this)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/rapid/lib/python3.12/site-packages/pymupdf/mupdf.py\", line 53426, in fz_open_document_with_stream_and_dir\n    return _mupdf.fz_open_document_with_stream_and_dir(magic, stream, dir)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\npymupdf.mupdf.FzErrorFormat: code=7: no objects found\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/lab/test_ocr.py\", line 159, in <module>\n    if args.action=='worker': worker(args.pdf,args.size,args.page)\n                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/lab/test_ocr.py\", line 31, in worker\n    with pymupdf.open(pdf) as doc:\n         ^^^^^^^^^^^^^^^^^\n  File \"/opt/rapid/lib/python3.12/site-packages/pymupdf/__init__.py\", line 3016, in __init__\n    raise FileDataError(f'Failed to open file {filename!r} as type {suffix}.') from e\npymupdf.FileDataError: Failed to open file '/previous/samples/damaged.pdf' as type pdf.\n"
+    },
+    "forced_timeout": {
+      "text": "",
+      "status": "timeout",
+      "wall_seconds": 0.207,
+      "sampled_peak_tree_mib": 70.2,
+      "exit_code": -9,
+      "timed_out": true,
+      "stderr": ""
+    }
+  }
+}

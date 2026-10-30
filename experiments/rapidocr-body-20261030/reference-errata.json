@@ -1,0 +1,10 @@
+{
+  "corrections": [
+    {
+      "id": "d065-p04", "field": "excerpts", "index": 1,
+      "old": "我们尚不认为主题演讲代表了最终定论，而只是表明CPO依然具有极强的竞争力。",
+      "new": "我们并不认为主题演讲代表了最终定论，而只是表明CPO依然具有极强的竞争力。",
+      "reason": "Source page preview, middle body paragraph, reads 并不 rather than 尚不. Manual transcription error discovered after scoring. Frozen reference retained unchanged; both raw and corrected scores are recorded. No module/output text changed."
+    }
+  ]
+}

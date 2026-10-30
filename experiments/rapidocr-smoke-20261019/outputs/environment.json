@@ -1,0 +1,41 @@
+{
+  "python": "3.12.14 (main, Sep 19 2026, 01:04:57) [GCC 14.2.0]",
+  "packages": {
+    "rapidocr": "3.10.0",
+    "onnxruntime": "1.31.0",
+    "pymupdf": "1.28.2",
+    "pypdf": "6.21.1",
+    "numpy": "2.5.4",
+    "opencv-python-headless": "5.0.0.93"
+  },
+  "cpu_max": "200000 100000\n",
+  "memory_max": "4294967296\n",
+  "model_manifest": {
+    "/opt/ocr-models/PP-OCRv6_rec_small.onnx": {
+      "bytes": 21234383,
+      "sha256": "6f327246b50388f3c176ae304bd95767ea6dc0c9ae92153ef8cbe210b3c14884"
+    },
+    "/opt/ocr-models/PP-OCRv6_rec_medium.onnx": {
+      "bytes": 76629984,
+      "sha256": "eef444829dbbe18d7fea59a3f6eb75647518d2b3a9568d27c92e42940204894b"
+    },
+    "/opt/ocr-models/PP-OCRv6_det_medium.onnx": {
+      "bytes": 62119454,
+      "sha256": "92078b7355007ccfffcd4c8cd441a3afd4538904d06881b29a155e1e679907c2"
+    },
+    "/opt/ocr-models/PP-OCRv6_det_small.onnx": {
+      "bytes": 9929594,
+      "sha256": "090f04abcd9d9a7498bc4ebf677e4cb9bdce1fe4197ddb7e529f1ef44e1ff94f"
+    },
+    "/opt/ocr-models/ch_ppocr_mobile_v2.0_cls_mobile.onnx": {
+      "bytes": 585532,
+      "sha256": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+    }
+  },
+  "input_sha256": {
+    "user1": "c06a68fa3f1f2d87f90953286d34354286be659764077df181e22645401a41dd",
+    "user2": "b279daa0bc90403376daddbc40f2d42a5c90c8c479c74ef63c3346ae30b58fad"
+  },
+  "settings": "300dpi RGB rendered then BGR; RapidOCR defaults except v6 small/medium, model directory, warning log, ONNX intra/inter threads=1. Default global max_side_len=2000, det limit_side_len=736 limit_type=min, text_score=0.5; no layout filtering, no visual LLM.",
+  "measurement": "3 serial fresh processes per sample/model; wall includes imports, rasterization, model initialization and OCR; tree RSS sampled every20ms; no GPU; network disabled"
+}

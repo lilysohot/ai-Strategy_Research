@@ -1,0 +1,22 @@
+[
+  {
+    "truth": {
+      "1": "OCR isolated control sample 2026\nOrder number: FA-2026-1019\nQuantity: 125 units. Total: 3,750.50 CNY.\n中文识别测试：这是用于验证的扫描页面。\n项目编号：20261019，数量：125，总计：3750.50 元。\n原始文件保持不变，识别结果另存。"
+    },
+    "pages": [
+      1
+    ],
+    "path": "/lab/samples/control.pdf",
+    "id": "control-native"
+  },
+  {
+    "truth": {
+      "2": "OCR isolated control sample 2026\nOrder number: FA-2026-1019\nQuantity: 125 units. Total: 3,750.50 CNY.\n中文识别测试：这是用于验证的扫描页面。\n项目编号：20261019，数量：125，总计：3750.50 元。\n原始文件保持不变，识别结果另存。"
+    },
+    "pages": [
+      2
+    ],
+    "path": "/lab/samples/control.pdf",
+    "id": "control-scan"
+  }
+]

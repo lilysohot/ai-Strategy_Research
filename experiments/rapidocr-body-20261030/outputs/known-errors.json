@@ -1,0 +1,29 @@
+[
+  {
+    "id": "d054-p01",
+    "source": "native",
+    "original_present": true,
+    "garble_present": false,
+    "matching_issue_codes": []
+  },
+  {
+    "id": "d068-p03",
+    "source": "ocr",
+    "original_present": false,
+    "garble_present": true,
+    "matching_issue_codes": [
+      "low_confidence_line",
+      "fragmented_line",
+      "ambiguous_numeric_token"
+    ]
+  },
+  {
+    "id": "d066-p01",
+    "source": "ocr",
+    "original_present": false,
+    "garble_present": true,
+    "matching_issue_codes": [
+      "suspicious_repeated_unit"
+    ]
+  }
+]

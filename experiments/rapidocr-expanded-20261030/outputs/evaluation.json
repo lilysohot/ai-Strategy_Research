@@ -1,0 +1,1060 @@
+[
+  {
+    "id": "d001-p01",
+    "language": "zh",
+    "source_type": "native",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 12.453,
+    "peak_mib": 647.1,
+    "text_chars": 1697,
+    "line_count": 79,
+    "reference_chars": 112,
+    "edits": 4,
+    "native_edits": 0,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "本次公开发行股票数量为6570.00万股，发行后总股本为26270.00万股，公开发行股份数量占公司本次公开发行后总股本的比例为25.01%。",
+        "matched": "本次公开发行股票数量为6570.00万股，发行相关报告后总股本为26270.00万股，公开发行股份数量占公司本次公开发行后总股本的比例为25.01%。",
+        "edits": 4,
+        "chars": 71,
+        "native_edits": 0,
+        "native_match": "本次公开发行股票数量为6570.00万股，发行后总股本为26270.00万股，公开发行股份数量占公司本次公开发行后总股本的比例为25.01%。",
+        "missing": false
+      },
+      {
+        "reference": "2023~2025年公司营收和归母净利润复合增速分别为26.66%和16.42%。",
+        "matched": "2023~2025年公司营收和归母净利润复合增速分别为26.66%和16.42%。",
+        "edits": 0,
+        "chars": 41,
+        "native_edits": 0,
+        "native_match": "2023~2025年公司营收和归母净利润复合增速分别为26.66%和16.42%。",
+        "missing": false
+      }
+    ],
+    "keys_total": 5,
+    "missing_keys": [],
+    "native_missing_keys": []
+  },
+  {
+    "id": "d001-p03",
+    "language": "zh",
+    "source_type": "native",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 12.803,
+    "peak_mib": 618.1,
+    "text_chars": 1696,
+    "line_count": 97,
+    "reference_chars": 101,
+    "edits": 0,
+    "native_edits": 0,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "2024年度，公司主营业务收入同比增长12.04%，主要受益于银价上涨带动的银粉销售收入增加以及2024年新增的HJT浆料收入。",
+        "matched": "2024年度，公司主营业务收入同比增长12.04%，主要受益于银价上涨带动的银粉销售收入增加以及2024年新增的HJT浆料收入。",
+        "edits": 0,
+        "chars": 64,
+        "native_edits": 0,
+        "native_match": "2024年度，公司主营业务收入同比增长12.04%，主要受益于银价上涨带动的银粉销售收入增加以及2024年新增的HJT浆料收入。",
+        "missing": false
+      },
+      {
+        "reference": "2024年度和2025年度，HJT浆料毛利率为11.47%和16.52%。",
+        "matched": "2024年度和2025年度，HJT浆料毛利率为11.47%和16.52%。",
+        "edits": 0,
+        "chars": 37,
+        "native_edits": 0,
+        "native_match": "2024年度和2025年度，HJT浆料毛利率为11.47%和16.52%。",
+        "missing": false
+      }
+    ],
+    "keys_total": 4,
+    "missing_keys": [],
+    "native_missing_keys": []
+  },
+  {
+    "id": "d002-p01",
+    "language": "en",
+    "source_type": "scan",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 14.244,
+    "peak_mib": 651.5,
+    "text_chars": 3317,
+    "line_count": 140,
+    "reference_chars": 321,
+    "edits": 99,
+    "native_edits": 284,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "Kweichow Moutai’s share price reacted positively on Aug 10 by 3% post the news of raising prices for four products across its 42 self-operating stores across regions on Aug 8:",
+        "matched": "@gs.comGoldmanSachs(Asia)L.L.C.Aug10by3%postthenewsofraisingpricesforfourproductsChristinaLiuacrossits42self-operatingstoresacrossregionsonAug8:",
+        "edits": 49,
+        "chars": 146,
+        "native_edits": 129,
+        "native_match": "(PDF:9pages(pages1))<!--page1-->5ERHYEjBoU9ZcW9PcM8OtRqQoMqOeRnNwOkPrQpO9PmNrRxNnPo",
+        "missing": false
+      },
+      {
+        "reference": "More importantly, we expect 2H26 Feitian supply to tighten, making price stabilization rather than volume growth as the key operating focus for Feitian in 2H26 to support wholesale prices into peak seasons.",
+        "matched": "00thimportantly,weexpect2H26Feitiansupplytotighten,makingpricestabilizationratherthanvolumegrowthasthekeyoperatingfocus600519.SSrelativetoAsiaex.",
+        "edits": 50,
+        "chars": 175,
+        "native_edits": 155,
+        "native_match": "(PDF:9pages(pages1))<!--page1-->5ERHYEjBoU9ZcW9PcM8OtRqQoMqOeRnNwOkPrQpO9PmNrRxNnPo",
+        "missing": false
+      }
+    ],
+    "keys_total": 6,
+    "missing_keys": [],
+    "native_missing_keys": [
+      "Kweichow Moutai",
+      "3%",
+      "42",
+      "Rmb1,753",
+      "Rmb1,639",
+      "2H26"
+    ]
+  },
+  {
+    "id": "d002-p02",
+    "language": "en",
+    "source_type": "scan",
+    "control": "financial table; no body CER",
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 19.656,
+    "peak_mib": 649.2,
+    "text_chars": 4270,
+    "line_count": 472,
+    "reference_chars": 0,
+    "edits": 0,
+    "native_edits": 0,
+    "missing_excerpts": 0,
+    "excerpts": [],
+    "keys_total": 0,
+    "missing_keys": [],
+    "native_missing_keys": []
+  },
+  {
+    "id": "d002-p03",
+    "language": "en",
+    "source_type": "scan",
+    "control": "bibliography and chart; no body CER",
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 10.271,
+    "peak_mib": 634.6,
+    "text_chars": 1468,
+    "line_count": 65,
+    "reference_chars": 0,
+    "edits": 0,
+    "native_edits": 0,
+    "missing_excerpts": 0,
+    "excerpts": [],
+    "keys_total": 0,
+    "missing_keys": [],
+    "native_missing_keys": []
+  },
+  {
+    "id": "d002-p04",
+    "language": "en",
+    "source_type": "scan",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 10.127,
+    "peak_mib": 660.4,
+    "text_chars": 1208,
+    "line_count": 81,
+    "reference_chars": 247,
+    "edits": 0,
+    "native_edits": 225,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "Valuation methodology: Our 12m TP of Rmb1,667 is based on a 23.4x 2027E P/E, discounted back to mid-2027 using an 8.5% COE.",
+        "matched": "Valuationmethodology:Our12mTPofRmb1,667isbasedona23.4x2027EP/E,discountedbacktomid-2027usingan8.5%COE.",
+        "edits": 0,
+        "chars": 102,
+        "native_edits": 95,
+        "native_match": "(PDF:9pages(pages4))<!--pa",
+        "missing": false
+      },
+      {
+        "reference": "Key downside risks: 1) Potential regulation changes such as a consumption tax rate hike; 2) Environmental pollution; 3) A slower-than-expected macroeconomic recovery;",
+        "matched": "Keydownsiderisks:1)Potentialregulationchangessuchasaconsumptiontaxratehike;2)Environmentalpollution;3)Aslower-than-expectedmacroeconomicrecovery;",
+        "edits": 0,
+        "chars": 145,
+        "native_edits": 130,
+        "native_match": "(PDF:9pages(pages4))<!--page",
+        "missing": false
+      }
+    ],
+    "keys_total": 5,
+    "missing_keys": [],
+    "native_missing_keys": [
+      "Rmb1,667",
+      "23.4x",
+      "2027E",
+      "8.5%",
+      "COE"
+    ]
+  },
+  {
+    "id": "d005-p01",
+    "language": "en",
+    "source_type": "native",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 12.522,
+    "peak_mib": 642.1,
+    "text_chars": 2969,
+    "line_count": 69,
+    "reference_chars": 181,
+    "edits": 18,
+    "native_edits": 0,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "We raise our 2026-27 revenue forecasts by 6-9% and 0-11%, respectively, and lift our PTs to HK$1,800 and HK$260.",
+        "matched": "ternet2026-27revenueforecastsby6-9%and0-11%,respectively,andliftourPTsOliviaXuACtoHK$1,800andHK$260.",
+        "edits": 17,
+        "chars": 94,
+        "native_edits": 0,
+        "native_match": "Weraiseour2026-27revenueforecastsby6-9%and0-11%,respectively,andliftourPTstoHK$1,800andHK$260.",
+        "missing": false
+      },
+      {
+        "reference": "MiniMax’s current M3 has yet to establish a clear advantage on either capability or cost-performance.",
+        "matched": "MiniMax'scurrentM3hasyettoestablishaclearadvantageoneithercapabilityorcost-performance.",
+        "edits": 1,
+        "chars": 87,
+        "native_edits": 0,
+        "native_match": "MiniMax’scurrentM3hasyettoestablishaclearadvantageoneithercapabilityorcost-performance.",
+        "missing": false
+      }
+    ],
+    "keys_total": 5,
+    "missing_keys": [],
+    "native_missing_keys": []
+  },
+  {
+    "id": "d021-p02",
+    "language": "zh",
+    "source_type": "native",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 9.98,
+    "peak_mib": 782.1,
+    "text_chars": 1013,
+    "line_count": 23,
+    "reference_chars": 86,
+    "edits": 0,
+    "native_edits": 67,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "港股行业层面，银行、计算机和家电行业领涨，轻工制造、电力设备及新能源和汽车行业领跌。",
+        "matched": "港股行业层面，银行、计算机和家电行业领涨，轻工制造、电力设备及新能源和汽车行业领跌。",
+        "edits": 0,
+        "chars": 42,
+        "native_edits": 41,
+        "native_match": "20.8vs9.017040仅供内部参考，",
+        "missing": false
+      },
+      {
+        "reference": "美国企业投资级债券信用利差+2bp至0.80%，高收益债券信用利差+7bp至2.67%。",
+        "matched": "美国企业投资级债券信用利差+2bp至0.80%，高收益债券信用利差+7bp至2.67%。",
+        "edits": 0,
+        "chars": 44,
+        "native_edits": 26,
+        "native_match": "+4bp2.4%83194+2bp0.80%+7bp2.67%",
+        "missing": false
+      }
+    ],
+    "keys_total": 5,
+    "missing_keys": [],
+    "native_missing_keys": []
+  },
+  {
+    "id": "d021-p03",
+    "language": "zh",
+    "source_type": "native",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 8.542,
+    "peak_mib": 725.3,
+    "text_chars": 723,
+    "line_count": 18,
+    "reference_chars": 131,
+    "edits": 0,
+    "native_edits": 94,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "截至9月4日，港股近5日日均卖空成交额为359亿港元，占市场成交总额日均比例为【18.4%】，目前位于近三年【43.7%】分位水平，",
+        "matched": "截至9月4日，港股近5日日均卖空成交额为359亿港元，占市场成交总额日均比例为【18.4%】，目前位于近三年【43.7%】分位水平，",
+        "edits": 0,
+        "chars": 66,
+        "native_edits": 50,
+        "native_match": ">⚫94535918.4%43.7%",
+        "missing": false
+      },
+      {
+        "reference": "截至9月4日，港股市场当周解禁规模120.9亿港元，下周预计解禁12.0亿港元；2026年初至今解禁市值总额达5995.2亿港元。",
+        "matched": "截至9月4日，港股市场当周解禁规模120.9亿港元，下周预计解禁12.0亿港元；2026年初至今解禁市值总额达5995.2亿港元。",
+        "edits": 0,
+        "chars": 65,
+        "native_edits": 44,
+        "native_match": "2%94120.912.020265995.2",
+        "missing": false
+      }
+    ],
+    "keys_total": 6,
+    "missing_keys": [],
+    "native_missing_keys": [
+      "359亿港元",
+      "120.9亿港元",
+      "12.0亿港元",
+      "5995.2亿港元"
+    ]
+  },
+  {
+    "id": "d035-p02",
+    "language": "zh",
+    "source_type": "native",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 8.212,
+    "peak_mib": 669.0,
+    "text_chars": 608,
+    "line_count": 19,
+    "reference_chars": 86,
+    "edits": 0,
+    "native_edits": 0,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "德国对华出口和车企在华份额持续下降，叠加贸易逆差扩大，推动其政策趋硬。",
+        "matched": "德国对华出口和车企在华份额持续下降，叠加贸易逆差扩大，推动其政策趋硬。",
+        "edits": 0,
+        "chars": 35,
+        "native_edits": 0,
+        "native_match": "德国对华出口和车企在华份额持续下降，叠加贸易逆差扩大，推动其政策趋硬。",
+        "missing": false
+      },
+      {
+        "reference": "8月制造业PMI升至49.8%，新订单指数重返扩张区间，需求回暖带动景气修复，但改善仍集中于大型企业；",
+        "matched": "8月制造业PMI升至49.8%，新订单指数重返扩张区间，需求回暖带动景气修复，但改善仍集中于大型企业；",
+        "edits": 0,
+        "chars": 51,
+        "native_edits": 0,
+        "native_match": "8月制造业PMI升至49.8%，新订单指数重返扩张区间，需求回暖带动景气修复，但改善仍集中于大型企业；",
+        "missing": false
+      }
+    ],
+    "keys_total": 5,
+    "missing_keys": [],
+    "native_missing_keys": []
+  },
+  {
+    "id": "d035-p05",
+    "language": "zh",
+    "source_type": "native",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 8.441,
+    "peak_mib": 567.2,
+    "text_chars": 900,
+    "line_count": 61,
+    "reference_chars": 84,
+    "edits": 0,
+    "native_edits": 0,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "2023年来，欧盟对华汽车政策工具不断增加，从反补贴调查、加征关税，逐步扩展至价格承诺和企业个案安排；",
+        "matched": "2023年来，欧盟对华汽车政策工具不断增加，从反补贴调查、加征关税，逐步扩展至价格承诺和企业个案安排；",
+        "edits": 0,
+        "chars": 51,
+        "native_edits": 0,
+        "native_match": "2023年来，欧盟对华汽车政策工具不断增加，从反补贴调查、加征关税，逐步扩展至价格承诺和企业个案安排；",
+        "missing": false
+      },
+      {
+        "reference": "但并未新增价格底线和处罚条款，短期内对出口和盈利的直接影响或有限。",
+        "matched": "但并未新增价格底线和处罚条款，短期内对出口和盈利的直接影响或有限。",
+        "edits": 0,
+        "chars": 33,
+        "native_edits": 0,
+        "native_match": "但并未新增价格底线和处罚条款，短期内对出口和盈利的直接影响或有限。",
+        "missing": false
+      }
+    ],
+    "keys_total": 4,
+    "missing_keys": [],
+    "native_missing_keys": []
+  },
+  {
+    "id": "d035-p13",
+    "language": "zh",
+    "source_type": "native",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 7.368,
+    "peak_mib": 519.3,
+    "text_chars": 534,
+    "line_count": 51,
+    "reference_chars": 78,
+    "edits": 0,
+    "native_edits": 0,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "8月原材料购进和出厂价格指数分别升至56.6%和50.4%，需求改善带动企业定价能力修复；",
+        "matched": "8月原材料购进和出厂价格指数分别升至56.6%和50.4%，需求改善带动企业定价能力修复；",
+        "edits": 0,
+        "chars": 45,
+        "native_edits": 0,
+        "native_match": "8月原材料购进和出厂价格指数分别升至56.6%和50.4%，需求改善带动企业定价能力修复；",
+        "missing": false
+      },
+      {
+        "reference": "同时非制造业商务活动指数仍为49.0%，表明需求修复尚未广泛扩散。",
+        "matched": "同时非制造业商务活动指数仍为49.0%，表明需求修复尚未广泛扩散。",
+        "edits": 0,
+        "chars": 33,
+        "native_edits": 0,
+        "native_match": "同时非制造业商务活动指数仍为49.0%，表明需求修复尚未广泛扩散。",
+        "missing": false
+      }
+    ],
+    "keys_total": 4,
+    "missing_keys": [],
+    "native_missing_keys": []
+  },
+  {
+    "id": "d039-p01",
+    "language": "zh",
+    "source_type": "native",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 9.031,
+    "peak_mib": 665.9,
+    "text_chars": 775,
+    "line_count": 31,
+    "reference_chars": 74,
+    "edits": 0,
+    "native_edits": 0,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "游戏：8月增速预期5-8%，持续稳健增长。",
+        "matched": "游戏：8月增速预期5-8%，持续稳健增长。",
+        "edits": 0,
+        "chars": 21,
+        "native_edits": 0,
+        "native_match": "游戏：8月增速预期5-8%，持续稳健增长。",
+        "missing": false
+      },
+      {
+        "reference": "音乐行业竞争加剧，订阅收入增速放缓，关注非订阅音乐收入开启第二增长曲线。持续关注竞争和AI带来的行业影响。",
+        "matched": "音乐行业竞争加剧，订阅收入增速放缓，关注非订阅音乐收入开启第二增长曲线。持续关注竞争和AI带来的行业影响。",
+        "edits": 0,
+        "chars": 53,
+        "native_edits": 0,
+        "native_match": "音乐行业竞争加剧，订阅收入增速放缓，关注非订阅音乐收入开启第二增长曲线。持续关注竞争和AI带来的行业影响。",
+        "missing": false
+      }
+    ],
+    "keys_total": 4,
+    "missing_keys": [],
+    "native_missing_keys": []
+  },
+  {
+    "id": "d054-p01",
+    "language": "mixed",
+    "source_type": "native",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 9.373,
+    "peak_mib": 617.9,
+    "text_chars": 1184,
+    "line_count": 27,
+    "reference_chars": 149,
+    "edits": 0,
+    "native_edits": 0,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "We initiate coverage of Delta Electronics (2308.TW), the broadest play on AI power spanning the grid-to-core value chain.",
+        "matched": "WeinitiatecoverageofDeltaElectronics(2308.TW),thebroadestplayonAIpowerspanningthegrid-to-corevaluechain.",
+        "edits": 0,
+        "chars": 104,
+        "native_edits": 0,
+        "native_match": "WeinitiatecoverageofDeltaElectronics(2308.TW),thebroadestplayonAIpowerspanningthegrid-to-corevaluechain.",
+        "missing": false
+      },
+      {
+        "reference": "我们预计，受AI电源供应需求增强及VPD模块爆发式增长的推动，2H26营收将重新加速增长；",
+        "matched": "我们预计，受AI电源供应需求增强及VPD模块爆发式增长的推动，2H26营收将重新加速增长；",
+        "edits": 0,
+        "chars": 45,
+        "native_edits": 0,
+        "native_match": "我们预计，受AI电源供应需求增强及VPD模块爆发式增长的推动，2H26营收将重新加速增长；",
+        "missing": false
+      }
+    ],
+    "keys_total": 5,
+    "missing_keys": [],
+    "native_missing_keys": []
+  },
+  {
+    "id": "d061-p01",
+    "language": "zh",
+    "source_type": "scan",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 8.584,
+    "peak_mib": 625.8,
+    "text_chars": 739,
+    "line_count": 29,
+    "reference_chars": 159,
+    "edits": 0,
+    "native_edits": 155,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "生猪市场进入深度产能出清阶段，仔猪价格跌破130元/公斤，全行业现金流连续亏损超7个月，预计去化延续至2027Q1，累计幅度约15%，支撑未来猪价回升至18元/公斤。",
+        "matched": "生猪市场进入深度产能出清阶段，仔猪价格跌破130元/公斤，全行业现金流连续亏损超7个月，预计去化延续至2027Q1，累计幅度约15%，支撑未来猪价回升至18元/公斤。",
+        "edits": 0,
+        "chars": 83,
+        "native_edits": 81,
+        "native_match": "(PDF:6pages(pages1))<!--page1",
+        "missing": false
+      },
+      {
+        "reference": "轻工出口链受中美关税豁免情绪提振，康耐特光学凭借AR眼镜供应链进入第二增长曲线，预计2026Q4放量；乐歌股份受益于非洲及拉美市场红利，估值低于15倍。",
+        "matched": "轻工出口链受中美关税豁免情绪提振，康耐特光学凭借AR眼镜供应链进入第二增长曲线，预计2026Q4放量；乐歌股份受益于非洲及拉美市场红利，估值低于15倍。",
+        "edits": 0,
+        "chars": 76,
+        "native_edits": 74,
+        "native_match": "(PDF:6pages(pages1",
+        "missing": false
+      }
+    ],
+    "keys_total": 7,
+    "missing_keys": [],
+    "native_missing_keys": [
+      "130元/公斤",
+      "2027Q1",
+      "15%",
+      "18元/公斤",
+      "康耐特光学",
+      "2026Q4",
+      "乐歌股份"
+    ]
+  },
+  {
+    "id": "d061-p02",
+    "language": "zh",
+    "source_type": "scan",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 10.075,
+    "peak_mib": 607.5,
+    "text_chars": 1050,
+    "line_count": 33,
+    "reference_chars": 86,
+    "edits": 0,
+    "native_edits": 85,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "截至9月18日，根据航班管家的数据，统计区间为9月25日至10月7日的航空口径出行人次同比增长3.1%。",
+        "matched": "截至9月18日，根据航班管家的数据，统计区间为9月25日至10月7日的航空口径出行人次同比增长3.1%。",
+        "edits": 0,
+        "chars": 52,
+        "native_edits": 51,
+        "native_match": "(PDF:6pages(pages2",
+        "missing": false
+      },
+      {
+        "reference": "近期，全国近半省份的生猪均价已跌破10元/公斤，呈现二次探底的迹象。",
+        "matched": "近期，全国近半省份的生猪均价已跌破10元/公斤，呈现二次探底的迹象。",
+        "edits": 0,
+        "chars": 34,
+        "native_edits": 34,
+        "native_match": "",
+        "missing": false
+      }
+    ],
+    "keys_total": 6,
+    "missing_keys": [],
+    "native_missing_keys": [
+      "9月18日",
+      "3.1%",
+      "10元/公斤",
+      "珀莱雅",
+      "若羽臣",
+      "朗姿股份"
+    ]
+  },
+  {
+    "id": "d061-p03",
+    "language": "zh",
+    "source_type": "scan",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 9.741,
+    "peak_mib": 625.6,
+    "text_chars": 980,
+    "line_count": 32,
+    "reference_chars": 98,
+    "edits": 2,
+    "native_edits": 97,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "8月份跌破200元，9月份跌破150元，近期已全面降至130元以内，部分省份甚至跌破100元。全行业断奶仔猪的平均成本约为280元，",
+        "matched": "8月份跌破200元，9月份跌破150元，近期已全面降至130元以内，部分省份甚至跌破100元。全行业断奶仔猪的平均成本约为280元，",
+        "edits": 0,
+        "chars": 66,
+        "native_edits": 65,
+        "native_match": "(PDF:6pages(pages3",
+        "missing": false
+      },
+      {
+        "reference": "乐歌股份和康耐特光学是两个具备中长期成长性且当前估值合适的标的。",
+        "matched": "乐歌股份和康耐特光学是两个具备中长期成长性且当前位置合适的标的。",
+        "edits": 2,
+        "chars": 32,
+        "native_edits": 32,
+        "native_match": "",
+        "missing": false
+      }
+    ],
+    "keys_total": 6,
+    "missing_keys": [],
+    "native_missing_keys": [
+      "200元",
+      "150元",
+      "130元",
+      "280元",
+      "牧原股份",
+      "康耐特光学"
+    ]
+  },
+  {
+    "id": "d061-p04",
+    "language": "zh",
+    "source_type": "scan",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 10.99,
+    "peak_mib": 625.3,
+    "text_chars": 1200,
+    "line_count": 37,
+    "reference_chars": 120,
+    "edits": 0,
+    "native_edits": 120,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "具体来看，美国对中国豁免关税的品类中，主要涵盖了轻工行业的不锈钢保温杯、塑料餐厨具、玩具、家纺以及户外用品等子品类。",
+        "matched": "具体来看，美国对中国豁免关税的品类中，主要涵盖了轻工行业的不锈钢保温杯、塑料餐厨具、玩具、家纺以及户外用品等子品类。",
+        "edits": 0,
+        "chars": 58,
+        "native_edits": 58,
+        "native_match": "",
+        "missing": false
+      },
+      {
+        "reference": "在华南地区，低温产品的阿尔法效应更为凸显，以君乐宝为代表的全国性低温品牌通过自建工厂突破了本地品牌300公里的运输半径壁垒，",
+        "matched": "在华南地区，低温产品的阿尔法效应更为凸显，以君乐宝为代表的全国性低温品牌通过自建工厂突破了本地品牌300公里的运输半径壁垒，",
+        "edits": 0,
+        "chars": 62,
+        "native_edits": 62,
+        "native_match": "",
+        "missing": false
+      }
+    ],
+    "keys_total": 5,
+    "missing_keys": [],
+    "native_missing_keys": [
+      "不锈钢保温杯",
+      "君乐宝",
+      "300公里",
+      "比音勒芬",
+      "波司登"
+    ]
+  },
+  {
+    "id": "d062-p02",
+    "language": "mixed",
+    "source_type": "native",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 14.485,
+    "peak_mib": 599.0,
+    "text_chars": 1824,
+    "line_count": 39,
+    "reference_chars": 190,
+    "edits": 4,
+    "native_edits": 0,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "First, there is no public draft of the proposed transceiver rules. The note appears to relay an external senior legal team’s account of discussions with the White House and the FCC.",
+        "matched": "First,thereisnopublicdraftoftheproposedtransceiverrules.Thenoteappearstorelay●anexternalseniorlegalteam'saccountofdiscussionswiththeWhiteHouseandtheFCC.",
+        "edits": 2,
+        "chars": 151,
+        "native_edits": 0,
+        "native_match": "First,thereisnopublicdraftoftheproposedtransceiverrules.Thenoteappearstorelayanexternalseniorlegalteam’saccountofdiscussionswiththeWhiteHouseandtheFCC.",
+        "missing": false
+      },
+      {
+        "reference": "该法案明确点名了中际旭创（InnoLight）和新易盛（Eoptolink）。",
+        "matched": "该法案明确点名了中际旭创（InnoLight)和新易盛（Eoptolink)。",
+        "edits": 2,
+        "chars": 39,
+        "native_edits": 0,
+        "native_match": "该法案明确点名了中际旭创（InnoLight）和新易盛（Eoptolink）。",
+        "missing": false
+      }
+    ],
+    "keys_total": 5,
+    "missing_keys": [],
+    "native_missing_keys": []
+  },
+  {
+    "id": "d064-p01",
+    "language": "zh",
+    "source_type": "native",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 10.313,
+    "peak_mib": 624.1,
+    "text_chars": 1274,
+    "line_count": 36,
+    "reference_chars": 101,
+    "edits": 2,
+    "native_edits": 0,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "我们认为第三季度cRPO增速超预期150-200个基点是合理的，而第四季度cRPO增速指引可能与买方预期基本一致，约为20%。",
+        "matched": "我们认为第三季度cRPO增速超预期150-200个基点是合理的，而第四季度cRPO增速指引可能与买方预期基本一致，约为20%。",
+        "edits": 0,
+        "chars": 63,
+        "native_edits": 0,
+        "native_match": "我们认为第三季度cRPO增速超预期150-200个基点是合理的，而第四季度cRPO增速指引可能与买方预期基本一致，约为20%。",
+        "missing": false
+      },
+      {
+        "reference": "该专家预计2027年增速区间为31%–35%；若要达到34%–35%的上限，",
+        "matched": "该专家预计2027年增速区间为31%-35%；若要达到34%-35%的上限，",
+        "edits": 2,
+        "chars": 38,
+        "native_edits": 0,
+        "native_match": "该专家预计2027年增速区间为31%–35%；若要达到34%–35%的上限，",
+        "missing": false
+      }
+    ],
+    "keys_total": 6,
+    "missing_keys": [
+      "31%–35%",
+      "34%–35%"
+    ],
+    "native_missing_keys": []
+  },
+  {
+    "id": "d065-p03",
+    "language": "zh",
+    "source_type": "native",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 9.213,
+    "peak_mib": 616.0,
+    "text_chars": 965,
+    "line_count": 25,
+    "reference_chars": 95,
+    "edits": 4,
+    "native_edits": 0,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "Credo的ZeroFlap ALC替代的是AEC（有源电缆），而非可插拔光模块或NPO插槽。",
+        "matched": "Credo的ZeroFlapALC替代的是AEC(有源电缆)，而非可插拔光模块或NPO插槽。",
+        "edits": 2,
+        "chars": 46,
+        "native_edits": 0,
+        "native_match": "Credo的ZeroFlapALC替代的是AEC（有源电缆），而非可插拔光模块或NPO插槽。",
+        "missing": false
+      },
+      {
+        "reference": "利用NVLink将576颗GPU互联，面向10万亿以上（10T+）参数模型，并预计于“明年”面世。",
+        "matched": "利用NVLink将576颗GPU互联，面向10万亿以上(10T+)参数模型，并预计于“明年”面世。",
+        "edits": 2,
+        "chars": 49,
+        "native_edits": 0,
+        "native_match": "利用NVLink将576颗GPU互联，面向10万亿以上（10T+）参数模型，并预计于“明年”面世。",
+        "missing": false
+      }
+    ],
+    "keys_total": 6,
+    "missing_keys": [],
+    "native_missing_keys": []
+  },
+  {
+    "id": "d066-p01",
+    "language": "zh",
+    "source_type": "scan",
+    "control": null,
+    "previous_sample": true,
+    "status": "ok",
+    "wall_seconds": 9.579,
+    "peak_mib": 718.6,
+    "text_chars": 755,
+    "line_count": 21,
+    "reference_chars": 171,
+    "edits": 1,
+    "native_edits": 168,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "炬芯科技于9月15-16日接待机构调研时表示，今年上半年，公司业绩创下历史同期新高，核心驱动来自端侧AI芯片持续放量",
+        "matched": "炬芯科技于9月15-16日接待机构调研时表示，今年上半年，公司业绩创下历史同期新高，核心驱动来自端侧AI芯片持续放量",
+        "edits": 0,
+        "chars": 58,
+        "native_edits": 56,
+        "native_match": "!--page1-",
+        "missing": false
+      },
+      {
+        "reference": "公司第一代存内计算NPU能效比达到6.4TOPS/W@INT8，第二代存内计算技术将进一步提升至7.8TOPS/W@INT8",
+        "matched": "公司第一代存内计算NPU能效比达到6.4TOPS/WW@INT8，第二代存内计算技术将进一步提升至7.8TOPS/W@INT8",
+        "edits": 1,
+        "chars": 62,
+        "native_edits": 61,
+        "native_match": "(P",
+        "missing": false
+      },
+      {
+        "reference": "当前，端云协同仍然属于早期上升阶段，存量设备AI升级、全新AI硬件带来双重增长机会，长期成长空间广阔。",
+        "matched": "当前，端云协同仍然属于早期上升阶段，存量设备AI升级、全新AI硬件带来双重增长机会，长期成长空间广阔。",
+        "edits": 0,
+        "chars": 51,
+        "native_edits": 51,
+        "native_match": "",
+        "missing": false
+      }
+    ],
+    "keys_total": 5,
+    "missing_keys": [
+      "6.4TOPS/W@INT8"
+    ],
+    "native_missing_keys": [
+      "炬芯科技",
+      "9月15-16日",
+      "6.4TOPS/W@INT8",
+      "7.8TOPS/W@INT8",
+      "WorkBuddy"
+    ]
+  },
+  {
+    "id": "d067-p01",
+    "language": "zh",
+    "source_type": "scan",
+    "control": null,
+    "previous_sample": true,
+    "status": "ok",
+    "wall_seconds": 8.866,
+    "peak_mib": 641.0,
+    "text_chars": 1325,
+    "line_count": 52,
+    "reference_chars": 190,
+    "edits": 0,
+    "native_edits": 185,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "财联社9月17日电，格芯与迈威尔科技扩大合作，共同推进下一代光学连接技术。受此提振，格芯股价盘前涨幅扩大至7%。",
+        "matched": "财联社9月17日电，格芯与迈威尔科技扩大合作，共同推进下一代光学连接技术。受此提振，格芯股价盘前涨幅扩大至7%。",
+        "edits": 0,
+        "chars": 56,
+        "native_edits": 55,
+        "native_match": "(PDF:1",
+        "missing": false
+      },
+      {
+        "reference": "绿通科技：2025年9月，公司完成对江苏大摩半导体科技有限公司收购。大摩半导体的设备及技术服务全面覆盖6英寸至12英寸晶圆产线，并最高可支持14nm制程工艺。",
+        "matched": "绿通科技：2025年9月，公司完成对江苏大摩半导体科技有限公司收购。大摩半导体的设备及技术服务全面覆盖6英寸至12英寸晶圆产线，并最高可支持14nm制程工艺。",
+        "edits": 0,
+        "chars": 79,
+        "native_edits": 77,
+        "native_match": "(PDF:1pages(pages1",
+        "missing": false
+      },
+      {
+        "reference": "广立微：公司全资子公司LUCEDA主营业务涵盖硅光芯片设计成套软件、PDK开发、设计流程优化及专业培训等服务。",
+        "matched": "广立微：公司全资子公司LUCEDA主营业务涵盖硅光芯片设计成套软件、PDK开发、设计流程优化及专业培训等服务。",
+        "edits": 0,
+        "chars": 55,
+        "native_edits": 53,
+        "native_match": "(PD",
+        "missing": false
+      }
+    ],
+    "keys_total": 12,
+    "missing_keys": [],
+    "native_missing_keys": [
+      "格芯",
+      "迈威尔",
+      "7%",
+      "GlobalFoundries",
+      "1.6T",
+      "3.2T",
+      "6.4T",
+      "14nm",
+      "LUCEDA",
+      "PDK",
+      "绿通科技",
+      "广立微"
+    ]
+  },
+  {
+    "id": "d068-p01",
+    "language": "en",
+    "source_type": "scan",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 13.683,
+    "peak_mib": 626.5,
+    "text_chars": 3363,
+    "line_count": 141,
+    "reference_chars": 286,
+    "edits": 99,
+    "native_edits": 267,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "Kweichow Moutai raised the ex-factory price of Feitian Moutai (53% vol, 500ml, 2026 edition) by 7.9% or Rmb100/bottle from Rmb1,269/bottle to Rmb1,369/bottle",
+        "matched": "983|christina.liu@gs.comFeitianMoutai(53%vol,500ml,2026edition)by7.9%orGoldmanSachs(Asia)L.L.C.ValerieZhouRmb100/bottlefromRmb1,269/bottletoRmb1,369/bottle",
+        "edits": 66,
+        "chars": 136,
+        "native_edits": 128,
+        "native_match": "(PDF:6pages(pages1))<!--page1",
+        "missing": false
+      },
+      {
+        "reference": "We estimate a 1.2% incremental sales, and 1.6% incremental earnings contribution to 2026 applying a 30% pro-rata to wholesale channels/c.40% pro-rata to Direct sales channels",
+        "matched": "Weestimatea1.2%Integratedincrementalsales,and1.6%incrementalearningscontributionto2026applyinga30%pro-ratatowholesalechannels/c.40%Percentile20th40the",
+        "edits": 33,
+        "chars": 150,
+        "native_edits": 139,
+        "native_match": "(PDF:6pages(pages1))<!--page",
+        "missing": false
+      }
+    ],
+    "keys_total": 6,
+    "missing_keys": [],
+    "native_missing_keys": [
+      "7.9%",
+      "Rmb1,269/bottle",
+      "Rmb1,369/bottle",
+      "1.2%",
+      "1.6%",
+      "Kweichow Moutai"
+    ]
+  },
+  {
+    "id": "d068-p02",
+    "language": "en",
+    "source_type": "scan",
+    "control": "financial table; no body CER",
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 18.8,
+    "peak_mib": 645.9,
+    "text_chars": 4255,
+    "line_count": 472,
+    "reference_chars": 0,
+    "edits": 0,
+    "native_edits": 0,
+    "missing_excerpts": 0,
+    "excerpts": [],
+    "keys_total": 0,
+    "missing_keys": [],
+    "native_missing_keys": []
+  },
+  {
+    "id": "d068-p03",
+    "language": "en",
+    "source_type": "scan",
+    "control": null,
+    "previous_sample": false,
+    "status": "ok",
+    "wall_seconds": 11.277,
+    "peak_mib": 624.9,
+    "text_chars": 2315,
+    "line_count": 42,
+    "reference_chars": 195,
+    "edits": 0,
+    "native_edits": 175,
+    "missing_excerpts": 0,
+    "excerpts": [
+      {
+        "reference": "We also estimate that c. 9,400 tons of Feitian volume sold was already in i-Moutai in 5M26 at a weighted average RSP of Rmb1,512",
+        "matched": "Wealsoestimatethatc.9,400tonsofFeitianvolumesoldwasalreadyini-Moutaiin5M26ataweightedaverageRSPofRmb1,512",
+        "edits": 0,
+        "chars": 105,
+        "native_edits": 95,
+        "native_match": "(PDF:6pages(pages3))<!--page",
+        "missing": false
+      },
+      {
+        "reference": "We now expect 2026 sales/NP growth at 3.9%/3.1% yoy. We expect 2027 sales/NP growth to accelerate to 8%/9%.",
+        "matched": "Wenowexpect2026sales/NPgrowthat3.9%/3.1%yoy.Weexpect2027sales/NPgrowthtoaccelerateto8%/9%.",
+        "edits": 0,
+        "chars": 90,
+        "native_edits": 80,
+        "native_match": "(PDF:6pages(pages3))<!--page",
+        "missing": false
+      }
+    ],
+    "keys_total": 5,
+    "missing_keys": [],
+    "native_missing_keys": [
+      "9,400",
+      "5M26",
+      "Rmb1,512",
+      "3.9%/3.1%",
+      "8%/9%"
+    ]
+  }
+]

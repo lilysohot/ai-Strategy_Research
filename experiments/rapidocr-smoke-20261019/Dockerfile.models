@@ -1,0 +1,3 @@
+FROM frontier-rapidocr-deps:20261019-5db5
+COPY config.py prepare.py /opt/prep/
+RUN /opt/rapid/bin/python /opt/prep/prepare.py

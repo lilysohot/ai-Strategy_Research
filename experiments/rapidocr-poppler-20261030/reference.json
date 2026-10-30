@@ -1,0 +1,14 @@
+{
+  "method": "Source PNGs rendered by Poppler and inspected in full before fresh OCR. Two manually checked body excerpts per body page, whitespace-only normalization. d004 is a two-panel spread with similar text: best-span matches cannot prove either panel is complete. d003 is a TOC control. This is not a full-page recall test.",
+  "gates": {"new_body_excerpt_cer_max": 0.03, "new_key_presence_min": 0.98, "partial_native_detection_min": 1.0, "production_output_equality_required": true},
+  "pages": {
+    "d004-p01": {"language":"zh", "layout":"two-panel spread, each panel main body and left sidebar", "excerpts":["双锚点定价机制带来更强的稳价预期。2026年8月8日，茅台线下自营门店完成新一轮调价，飞天、五星、马年生肖、精品茅台自营零售价分别上调至1753元/瓶、1743元/瓶、1951元/瓶、2410元/瓶", "双价格体系通过分层匹配消费需求，区分差异化价值与服务。i茅台1639元定价面向价格敏感、可接受抢购等待与不确定性的客群"], "keys":["1753", "1743", "1951", "2410", "1639"]},
+    "d006-p01": {"language":"zh", "layout":"left main body, right sidebar, bottom table", "excerpts":["公司公布2026年中报，26H1实现总收入922.8亿元，同增1.3%，归母净利润445.2亿元，同降2.0%。单Q2总收入375.8亿元，同降5.2%，归母净利润172.7亿元，同降6.9%。", "不唯指标论，Q2茅台酒平稳，i茅台增长亮眼，系列酒大幅调整拖累。公司上半年收入同增1.3%相对稳健，单Q2收入同降5.2%略低于市场预期。"], "keys":["922.8", "445.2", "375.8", "172.7", "2030"]},
+    "d007-p01": {"language":"zh", "layout":"left main body, right sidebar, bottom table", "excerpts":["茅台酒保持韧性，系列酒短期承压。分产品看，茅台酒2026Q2收入317.2亿元，同比-1.0%。我们判断飞天仍是茅台酒韧性的核心支撑，预计价格方面受内部产品结构影响。", "市场化改革深化，i茅台保持高增长。分渠道看，i茅台继续放量，批发代理收缩，我们判断系关联交易减少和团购渠道发货减少所致。"], "keys":["317.2", "50.5", "224.6", "83.3%", "143.1"]},
+    "d024-p01": {"language":"zh", "layout":"left main body, right analyst sidebar, diagonal watermark", "excerpts":["美国与伊朗爆发新一轮军事冲突，推高全球油价；联储理事沃勒和纽约联储行长表态偏鸽，强调通胀呈现趋势性放缓。市场加息预期进一步分化，需观察CPI数据以及9月FOMC投票结果来明确本届联储的反应函数。", "美国增长与消费维持韧性，就业边际走弱，住房市场仍然偏弱。增长方面，亚特兰大联储GDPNow上调三季度GDP增速预测至4.7%。"], "keys":["GDPNow", "4.7%", "Nowcast", "3.8%", "6.71%"]},
+    "d028-p01": {"language":"zh", "layout":"left main body, right sidebar and chart, bottom table", "excerpts":["2026年上半年业绩高速增长，半导体封测装备快速放量。公司主营半导体划片机，并布局研磨抛光设备、空气主轴及刀片耗材等产品", "半导体封测装备成为业绩增长核心，安全监控业务短期承压。2026年上半年半导体封测装备制造业务实现收入3.51亿元，同比增长162.25%，收入占比提升至77.63%；毛利率44.97%，同比提升3.4个百分点。"], "keys":["3.51", "162.25%", "77.63%", "44.97%", "3.4"]},
+    "d003-p04": {"language":"zh", "layout":"single-column TOC", "control":true,"excerpts":[],"keys":["为什么化工行业是一个好赛道", "图表目录", "MDI"]},
+    "d017-p01": {"language":"zh", "layout":"right main body, left shaded sidebar", "excerpts":["非农强化加息预期，短期利率扰动难消。8月非农数据发布后，市场对9月加息的定价进一步抬升。当前CME隐含的9月加息概率已升至59%，美债长端利率随之走高，10年期收益率一度触及4.79%。", "我们维持前期判断，9月FOMC会议落地前，市场将处于等待数据验证的观察期，科技成长方向需等待海外风险落地与情绪修复。"], "keys":["CME", "59%", "4.79%", "FOMC", "PCB", "CPO"]},
+    "d050-p01": {"language":"zh", "layout":"left main body, right analyst sidebar, interrupted headings", "excerpts":["算力项目继续扩张，前沿模型向复杂执行任务升级，医药等垂直应用开始接入真实业务数据。AMD、Cisco与HUMAIN的沙特AI基础设施正式上线，说明大型算力项目仍在从规划进入实际运营", "并于2027年下半年部署。这些项目说明AI算力建设仍在从美国头部云厂商向中东、欧洲等区域扩散。后续除了GPU供给，还要看高速网络、电源、液冷、存储以及数据中心能否按期交付"], "keys":["HUMAIN", "250MW", "1GW", "MI430X", "EPYC"]}
+  }
+}

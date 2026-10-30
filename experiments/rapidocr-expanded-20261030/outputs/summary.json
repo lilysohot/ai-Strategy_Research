@@ -1,0 +1,155 @@
+{
+  "pages": 26,
+  "ok": 26,
+  "groups": {
+    "all": {
+      "pages": 26,
+      "body_pages": 23,
+      "chars": 3341,
+      "edits": 233,
+      "cer": 0.0697395989224783,
+      "native_cer": 0.5752768632146064,
+      "keys_total": 127,
+      "keys_present": 124,
+      "missing_excerpts": 0
+    },
+    "new_only": {
+      "pages": 24,
+      "body_pages": 21,
+      "chars": 2980,
+      "edits": 232,
+      "cer": 0.07785234899328859,
+      "native_cer": 0.526510067114094,
+      "keys_total": 110,
+      "keys_present": 108,
+      "missing_excerpts": 0
+    },
+    "source_type:native": {
+      "pages": 13,
+      "body_pages": 13,
+      "chars": 1468,
+      "edits": 32,
+      "cer": 0.021798365122615803,
+      "native_cer": 0.10967302452316076,
+      "keys_total": 64,
+      "keys_present": 62,
+      "missing_excerpts": 0
+    },
+    "source_type:scan": {
+      "pages": 13,
+      "body_pages": 10,
+      "chars": 1873,
+      "edits": 201,
+      "cer": 0.10731446876668446,
+      "native_cer": 0.9402028830752803,
+      "keys_total": 63,
+      "keys_present": 62,
+      "missing_excerpts": 0
+    },
+    "language:en": {
+      "pages": 8,
+      "body_pages": 5,
+      "chars": 1230,
+      "edits": 216,
+      "cer": 0.17560975609756097,
+      "native_cer": 0.7731707317073171,
+      "keys_total": 27,
+      "keys_present": 27,
+      "missing_excerpts": 0
+    },
+    "language:mixed": {
+      "pages": 2,
+      "body_pages": 2,
+      "chars": 339,
+      "edits": 4,
+      "cer": 0.011799410029498525,
+      "native_cer": 0.0,
+      "keys_total": 10,
+      "keys_present": 10,
+      "missing_excerpts": 0
+    },
+    "language:zh": {
+      "pages": 16,
+      "body_pages": 16,
+      "chars": 1772,
+      "edits": 13,
+      "cer": 0.007336343115124154,
+      "native_cer": 0.5479683972911964,
+      "keys_total": 90,
+      "keys_present": 87,
+      "missing_excerpts": 0
+    },
+    "scan:zh": {
+      "pages": 6,
+      "body_pages": 6,
+      "chars": 824,
+      "edits": 3,
+      "cer": 0.0036407766990291263,
+      "native_cer": 0.9830097087378641,
+      "keys_total": 41,
+      "keys_present": 40,
+      "missing_excerpts": 0
+    },
+    "scan:en": {
+      "pages": 7,
+      "body_pages": 4,
+      "chars": 1049,
+      "edits": 198,
+      "cer": 0.18875119161105816,
+      "native_cer": 0.9065776930409915,
+      "keys_total": 22,
+      "keys_present": 22,
+      "missing_excerpts": 0
+    },
+    "native:zh": {
+      "pages": 10,
+      "body_pages": 10,
+      "chars": 948,
+      "edits": 10,
+      "cer": 0.010548523206751054,
+      "native_cer": 0.169831223628692,
+      "keys_total": 49,
+      "keys_present": 47,
+      "missing_excerpts": 0
+    },
+    "native:en": {
+      "pages": 1,
+      "body_pages": 1,
+      "chars": 181,
+      "edits": 18,
+      "cer": 0.09944751381215469,
+      "native_cer": 0.0,
+      "keys_total": 5,
+      "keys_present": 5,
+      "missing_excerpts": 0
+    },
+    "native:mixed": {
+      "pages": 2,
+      "body_pages": 2,
+      "chars": 339,
+      "edits": 4,
+      "cer": 0.011799410029498525,
+      "native_cer": 0.0,
+      "keys_total": 10,
+      "keys_present": 10,
+      "missing_excerpts": 0
+    }
+  },
+  "timing": {
+    "total_wall_seconds": 288.629,
+    "median": 10.100999999999999,
+    "p95_nearest_rank": 18.8,
+    "max": 19.656
+  },
+  "max_sampled_worker_mib": 782.1,
+  "gate_results": {
+    "success": true,
+    "median_time": true,
+    "p95_time": true,
+    "memory": true,
+    "zh_cer": true,
+    "en_cer": false,
+    "exact_key_presence": false,
+    "no_missing_excerpts": true
+  }
+}

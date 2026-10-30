@@ -1,0 +1,399 @@
+{
+  "method": "Manually transcribed from complete rendered source pages before OCR; prior two pages reuse pre-existing fixed body references. Whitespace ignored; punctuation and case remain significant. 2 excerpts per new body page, 3 per prior page. No full-document truth or recall claim.",
+  "created_utc": "2026-10-30T11:19:47.622192+00:00",
+  "predeclared_gates": {
+    "success_rate": 1.0,
+    "median_wall_seconds_max": 15,
+    "p95_wall_seconds_max": 30,
+    "peak_worker_mib_max": 2048,
+    "weighted_body_cer_zh_max": 0.02,
+    "weighted_body_cer_en_max": 0.03,
+    "exact_key_presence_min": 0.98,
+    "max_missing_excerpt_count": 0,
+    "missing_excerpt_definition": "best-span edit distance / reference length >= 0.5"
+  },
+  "pages": {
+    "d001-p01": {
+      "language": "zh",
+      "source_type": "native",
+      "excerpts": [
+        "本次公开发行股票数量为6570.00万股，发行后总股本为26270.00万股，公开发行股份数量占公司本次公开发行后总股本的比例为25.01%。",
+        "2023~2025年公司营收和归母净利润复合增速分别为26.66%和16.42%。"
+      ],
+      "keys": [
+        "6570.00万股",
+        "26270.00万股",
+        "25.01%",
+        "26.66%",
+        "16.42%"
+      ]
+    },
+    "d001-p03": {
+      "language": "zh",
+      "source_type": "native",
+      "excerpts": [
+        "2024年度，公司主营业务收入同比增长12.04%，主要受益于银价上涨带动的银粉销售收入增加以及2024年新增的HJT浆料收入。",
+        "2024年度和2025年度，HJT浆料毛利率为11.47%和16.52%。"
+      ],
+      "keys": [
+        "12.04%",
+        "HJT",
+        "11.47%",
+        "16.52%"
+      ]
+    },
+    "d002-p01": {
+      "language": "en",
+      "source_type": "scan",
+      "excerpts": [
+        "Kweichow Moutai’s share price reacted positively on Aug 10 by 3% post the news of raising prices for four products across its 42 self-operating stores across regions on Aug 8:",
+        "More importantly, we expect 2H26 Feitian supply to tighten, making price stabilization rather than volume growth as the key operating focus for Feitian in 2H26 to support wholesale prices into peak seasons."
+      ],
+      "keys": [
+        "Kweichow Moutai",
+        "3%",
+        "42",
+        "Rmb1,753",
+        "Rmb1,639",
+        "2H26"
+      ]
+    },
+    "d002-p02": {
+      "language": "en",
+      "source_type": "scan",
+      "control": "financial table; no body CER",
+      "excerpts": [],
+      "keys": []
+    },
+    "d002-p03": {
+      "language": "en",
+      "source_type": "scan",
+      "control": "bibliography and chart; no body CER",
+      "excerpts": [],
+      "keys": []
+    },
+    "d002-p04": {
+      "language": "en",
+      "source_type": "scan",
+      "excerpts": [
+        "Valuation methodology: Our 12m TP of Rmb1,667 is based on a 23.4x 2027E P/E, discounted back to mid-2027 using an 8.5% COE.",
+        "Key downside risks: 1) Potential regulation changes such as a consumption tax rate hike; 2) Environmental pollution; 3) A slower-than-expected macroeconomic recovery;"
+      ],
+      "keys": [
+        "Rmb1,667",
+        "23.4x",
+        "2027E",
+        "8.5%",
+        "COE"
+      ]
+    },
+    "d005-p01": {
+      "language": "en",
+      "source_type": "native",
+      "excerpts": [
+        "We raise our 2026-27 revenue forecasts by 6-9% and 0-11%, respectively, and lift our PTs to HK$1,800 and HK$260.",
+        "MiniMax’s current M3 has yet to establish a clear advantage on either capability or cost-performance."
+      ],
+      "keys": [
+        "6-9%",
+        "0-11%",
+        "HK$1,800",
+        "HK$260",
+        "MiniMax"
+      ]
+    },
+    "d021-p02": {
+      "language": "zh",
+      "source_type": "native",
+      "excerpts": [
+        "港股行业层面，银行、计算机和家电行业领涨，轻工制造、电力设备及新能源和汽车行业领跌。",
+        "美国企业投资级债券信用利差+2bp至0.80%，高收益债券信用利差+7bp至2.67%。"
+      ],
+      "keys": [
+        "+2bp",
+        "0.80%",
+        "+7bp",
+        "2.67%",
+        "104.45bp"
+      ]
+    },
+    "d021-p03": {
+      "language": "zh",
+      "source_type": "native",
+      "excerpts": [
+        "截至9月4日，港股近5日日均卖空成交额为359亿港元，占市场成交总额日均比例为【18.4%】，目前位于近三年【43.7%】分位水平，",
+        "截至9月4日，港股市场当周解禁规模120.9亿港元，下周预计解禁12.0亿港元；2026年初至今解禁市值总额达5995.2亿港元。"
+      ],
+      "keys": [
+        "359亿港元",
+        "18.4%",
+        "43.7%",
+        "120.9亿港元",
+        "12.0亿港元",
+        "5995.2亿港元"
+      ]
+    },
+    "d061-p01": {
+      "language": "zh",
+      "source_type": "scan",
+      "excerpts": [
+        "生猪市场进入深度产能出清阶段，仔猪价格跌破130元/公斤，全行业现金流连续亏损超7个月，预计去化延续至2027Q1，累计幅度约15%，支撑未来猪价回升至18元/公斤。",
+        "轻工出口链受中美关税豁免情绪提振，康耐特光学凭借AR眼镜供应链进入第二增长曲线，预计2026Q4放量；乐歌股份受益于非洲及拉美市场红利，估值低于15倍。"
+      ],
+      "keys": [
+        "130元/公斤",
+        "2027Q1",
+        "15%",
+        "18元/公斤",
+        "康耐特光学",
+        "2026Q4",
+        "乐歌股份"
+      ]
+    },
+    "d061-p02": {
+      "language": "zh",
+      "source_type": "scan",
+      "excerpts": [
+        "截至9月18日，根据航班管家的数据，统计区间为9月25日至10月7日的航空口径出行人次同比增长3.1%。",
+        "近期，全国近半省份的生猪均价已跌破10元/公斤，呈现二次探底的迹象。"
+      ],
+      "keys": [
+        "9月18日",
+        "3.1%",
+        "10元/公斤",
+        "珀莱雅",
+        "若羽臣",
+        "朗姿股份"
+      ]
+    },
+    "d061-p03": {
+      "language": "zh",
+      "source_type": "scan",
+      "excerpts": [
+        "8月份跌破200元，9月份跌破150元，近期已全面降至130元以内，部分省份甚至跌破100元。全行业断奶仔猪的平均成本约为280元，",
+        "乐歌股份和康耐特光学是两个具备中长期成长性且当前估值合适的标的。"
+      ],
+      "keys": [
+        "200元",
+        "150元",
+        "130元",
+        "280元",
+        "牧原股份",
+        "康耐特光学"
+      ]
+    },
+    "d061-p04": {
+      "language": "zh",
+      "source_type": "scan",
+      "excerpts": [
+        "具体来看，美国对中国豁免关税的品类中，主要涵盖了轻工行业的不锈钢保温杯、塑料餐厨具、玩具、家纺以及户外用品等子品类。",
+        "在华南地区，低温产品的阿尔法效应更为凸显，以君乐宝为代表的全国性低温品牌通过自建工厂突破了本地品牌300公里的运输半径壁垒，"
+      ],
+      "keys": [
+        "不锈钢保温杯",
+        "君乐宝",
+        "300公里",
+        "比音勒芬",
+        "波司登"
+      ]
+    },
+    "d068-p01": {
+      "language": "en",
+      "source_type": "scan",
+      "excerpts": [
+        "Kweichow Moutai raised the ex-factory price of Feitian Moutai (53% vol, 500ml, 2026 edition) by 7.9% or Rmb100/bottle from Rmb1,269/bottle to Rmb1,369/bottle",
+        "We estimate a 1.2% incremental sales, and 1.6% incremental earnings contribution to 2026 applying a 30% pro-rata to wholesale channels/c.40% pro-rata to Direct sales channels"
+      ],
+      "keys": [
+        "7.9%",
+        "Rmb1,269/bottle",
+        "Rmb1,369/bottle",
+        "1.2%",
+        "1.6%",
+        "Kweichow Moutai"
+      ]
+    },
+    "d068-p02": {
+      "language": "en",
+      "source_type": "scan",
+      "control": "financial table; no body CER",
+      "excerpts": [],
+      "keys": []
+    },
+    "d068-p03": {
+      "language": "en",
+      "source_type": "scan",
+      "excerpts": [
+        "We also estimate that c. 9,400 tons of Feitian volume sold was already in i-Moutai in 5M26 at a weighted average RSP of Rmb1,512",
+        "We now expect 2026 sales/NP growth at 3.9%/3.1% yoy. We expect 2027 sales/NP growth to accelerate to 8%/9%."
+      ],
+      "keys": [
+        "9,400",
+        "5M26",
+        "Rmb1,512",
+        "3.9%/3.1%",
+        "8%/9%"
+      ]
+    },
+    "d035-p02": {
+      "language": "zh",
+      "source_type": "native",
+      "excerpts": [
+        "德国对华出口和车企在华份额持续下降，叠加贸易逆差扩大，推动其政策趋硬。",
+        "8月制造业PMI升至49.8%，新订单指数重返扩张区间，需求回暖带动景气修复，但改善仍集中于大型企业；"
+      ],
+      "keys": [
+        "49.8%",
+        "PMI",
+        "9月7日",
+        "9月8日",
+        "9月9日"
+      ]
+    },
+    "d035-p05": {
+      "language": "zh",
+      "source_type": "native",
+      "excerpts": [
+        "2023年来，欧盟对华汽车政策工具不断增加，从反补贴调查、加征关税，逐步扩展至价格承诺和企业个案安排；",
+        "但并未新增价格底线和处罚条款，短期内对出口和盈利的直接影响有限。"
+      ],
+      "keys": [
+        "2023年",
+        "价格底线",
+        "处罚条款",
+        "反补贴调查"
+      ]
+    },
+    "d035-p13": {
+      "language": "zh",
+      "source_type": "native",
+      "excerpts": [
+        "8月原材料购进和出厂价格指数分别升至56.6%和50.4%，需求改善带动企业定价能力修复；",
+        "同时非制造业商务活动指数仍为49.0%，表明需求修复尚未广泛扩散。"
+      ],
+      "keys": [
+        "56.6%",
+        "50.4%",
+        "49.0%",
+        "0.2个百分点"
+      ]
+    },
+    "d039-p01": {
+      "language": "zh",
+      "source_type": "native",
+      "excerpts": [
+        "游戏：8月增速预期5-8%，持续稳健增长。",
+        "音乐行业竞争加剧，订阅收入增速放缓，关注非订阅音乐收入开启第二增长曲线。持续关注竞争和AI带来的行业影响。"
+      ],
+      "keys": [
+        "5-8%",
+        "WorkBuddy",
+        "Qwen3.8-Max",
+        "H3 Max"
+      ]
+    },
+    "d054-p01": {
+      "language": "mixed",
+      "source_type": "native",
+      "excerpts": [
+        "We initiate coverage of Delta Electronics (2308.TW), the broadest play on AI power spanning the grid-to-core value chain.",
+        "我们预计，受AI电源供应需求增强及VPD模块爆发式增长的推动，2H26营收将重新加速增长；"
+      ],
+      "keys": [
+        "2308.TW",
+        "VPD",
+        "2H26",
+        "53%/28%",
+        "TWD77.3/102.4"
+      ]
+    },
+    "d062-p02": {
+      "language": "mixed",
+      "source_type": "native",
+      "excerpts": [
+        "First, there is no public draft of the proposed transceiver rules. The note appears to relay an external senior legal team’s account of discussions with the White House and the FCC.",
+        "该法案明确点名了中际旭创（InnoLight）和新易盛（Eoptolink）。"
+      ],
+      "keys": [
+        "中际旭创",
+        "InnoLight",
+        "新易盛",
+        "Eoptolink",
+        "FCC"
+      ]
+    },
+    "d064-p01": {
+      "language": "zh",
+      "source_type": "native",
+      "excerpts": [
+        "我们认为第三季度cRPO增速超预期150-200个基点是合理的，而第四季度cRPO增速指引可能与买方预期基本一致，约为20%。",
+        "该专家预计2027年增速区间为31%-35%；若要达到34%-35%的上限，"
+      ],
+      "keys": [
+        "cRPO",
+        "150-200个基点",
+        "20%",
+        "31%-35%",
+        "34%-35%",
+        "ServiceNow"
+      ]
+    },
+    "d065-p03": {
+      "language": "zh",
+      "source_type": "native",
+      "excerpts": [
+        "Credo的ZeroFlap ALC替代的是AEC（有源电缆），而非可插拔光模块或NPO插槽。",
+        "利用NVLink将576颗GPU互联，面向10万亿以上（10T+）参数模型，并预计于“明年”面世。"
+      ],
+      "keys": [
+        "Credo",
+        "ZeroFlap ALC",
+        "AEC",
+        "576颗GPU",
+        "10T+",
+        "800VDC"
+      ]
+    },
+    "d066-p01": {
+      "language": "zh",
+      "source_type": "scan",
+      "previous_sample": true,
+      "excerpts": [
+        "炬芯科技于9月15-16日接待机构调研时表示，今年上半年，公司业绩创下历史同期新高，核心驱动来自端侧AI芯片持续放量",
+        "公司第一代存内计算NPU能效比达到6.4TOPS/W@INT8，第二代存内计算技术将进一步提升至7.8TOPS/W@INT8",
+        "当前，端云协同仍然属于早期上升阶段，存量设备AI升级、全新AI硬件带来双重增长机会，长期成长空间广阔。"
+      ],
+      "keys": [
+        "炬芯科技",
+        "9月15-16日",
+        "6.4TOPS/W@INT8",
+        "7.8TOPS/W@INT8",
+        "WorkBuddy"
+      ]
+    },
+    "d067-p01": {
+      "language": "zh",
+      "source_type": "scan",
+      "previous_sample": true,
+      "excerpts": [
+        "财联社9月17日电，格芯与迈威尔科技扩大合作，共同推进下一代光学连接技术。受此提振，格芯股价盘前涨幅扩大至7%。",
+        "绿通科技：2025年9月，公司完成对江苏大摩半导体科技有限公司收购。大摩半导体的设备及技术服务全面覆盖6英寸至12英寸晶圆产线，并最高可支持14nm制程工艺。",
+        "广立微：公司全资子公司LUCEDA主营业务涵盖硅光芯片设计成套软件、PDK开发、设计流程优化及专业培训等服务。"
+      ],
+      "keys": [
+        "格芯",
+        "迈威尔",
+        "7%",
+        "GlobalFoundries",
+        "1.6T",
+        "3.2T",
+        "6.4T",
+        "14nm",
+        "LUCEDA",
+        "PDK",
+        "绿通科技",
+        "广立微"
+      ]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "reason": "Source-only verification against page renders and embedded source text, before inspecting OCR text. Original frozen references and hash are retained. These correct manual transcription, not model outputs.",
+  "corrections": [
+    {"id":"d035-p05","field":"excerpts","index":1,"old":"但并未新增价格底线和处罚条款，短期内对出口和盈利的直接影响有限。","new":"但并未新增价格底线和处罚条款，短期内对出口和盈利的直接影响或有限。","reason":"Source contains 或 before 有限; omitted during manual transcription."},
+    {"id":"d064-p01","field":"excerpts","index":1,"old":"该专家预计2027年增速区间为31%-35%；若要达到34%-35%的上限，","new":"该专家预计2027年增速区间为31%–35%；若要达到34%–35%的上限，","reason":"Source uses en dash for both ranges; verified via embedded text."},
+    {"id":"d064-p01","field":"keys","index":3,"old":"31%-35%","new":"31%–35%","reason":"Source uses en dash."},
+    {"id":"d064-p01","field":"keys","index":4,"old":"34%-35%","new":"34%–35%","reason":"Source uses en dash."}
+  ]
+}
