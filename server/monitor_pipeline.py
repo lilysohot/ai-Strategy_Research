@@ -92,6 +92,9 @@ async def request_check(session: Any, rule: store.WatchRule) -> None:
 
 
 async def collect_once(source: PriceSource, *, now: datetime | None = None) -> int:
+    from server import monitor_longterm
+
+    continuous_count = await monitor_longterm.collect_once(source, now=now)
     cfg = get_config()
     now = now or utcnow()
     async with biz.business_transaction() as session:
@@ -102,7 +105,7 @@ async def collect_once(source: PriceSource, *, now: datetime | None = None) -> i
                 store.MonitorMessage.state.in_(["pending", "accepted"]),
             )
         )
-        if backlog >= cfg.monitor_queue_limit:
+        if (backlog or 0) >= cfg.monitor_queue_limit:
             raise RuntimeError("monitor_backpressure")
         rows = (
             await session.execute(
@@ -117,6 +120,7 @@ async def collect_once(source: PriceSource, *, now: datetime | None = None) -> i
                 )
                 .where(
                     store.WatchRule.status == "active",
+                    store.WatchRuleRevision.trigger_mode.not_in(("continuous", "crossing")),
                     store.MonitorPresence.expires_at > now,
                     or_(
                         store.WatchRuleRevision.expires_at.is_(None),
@@ -236,7 +240,7 @@ async def collect_once(source: PriceSource, *, now: datetime | None = None) -> i
         async with gate:
             return await acquire(item)
 
-    return sum(await asyncio.gather(*(bounded(item) for item in claimed)))
+    return continuous_count + sum(await asyncio.gather(*(bounded(item) for item in claimed)))
 
 
 class Delivery:
@@ -359,6 +363,9 @@ async def process_message(mid: uuid.UUID, *, channel: str) -> None:
                 results.append({"id": frozen["id"], "status": "offline"})
                 continue
             presence = await session.get(store.MonitorPresence, rule.user_id)
+            if presence is None:
+                results.append({"id": frozen["id"], "status": "offline"})
+                continue
             if observation.received_at_ms < int(presence.started_at.timestamp() * 1000):
                 results.append({"id": frozen["id"], "status": "prior_online_period"})
                 continue

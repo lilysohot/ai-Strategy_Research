@@ -55,6 +55,64 @@ def test_complete_text_is_unchanged_and_board_claims_are_not_verification():
     assert out["report_contract"]["artifact_verification"] == "not_assessed"
 
 
+def test_resolved_board_retains_declared_evidence_gap_and_prefixes_partial_answer():
+    draft = "按当前已读来源，A 的成本较低；B 的现价未确认。"
+    out = publish(
+        draft,
+        question="比较成本",
+        tasks=[
+            {
+                "id": "t1",
+                "description": "比较现价",
+                "resolution": "resolved",
+                "gap": "B 的官方现价未确认",
+                "owners": ["pricing"],
+            }
+        ],
+    )
+    assert out["answer_status"] == "partial"
+    assert any(
+        g["code"] == "task_evidence_gap" and g["task_id"] == "t1"
+        for g in out["report_contract"]["gaps"]
+    )
+    assert out["final_answer"].index("部分完成") < out["final_answer"].index(draft)
+    assert "B 的官方现价未确认" in out["final_answer"]
+
+
+def test_task_resolution_is_separate_from_observed_member_execution():
+    draft = "Available evidence supports a provisional comparison."
+    out = publish(
+        draft,
+        tasks=[
+            {
+                "id": "t1",
+                "description": "pricing",
+                "resolution": "resolved",
+                "owners": ["pricing"],
+            }
+        ],
+        wind_down={
+            "job_outcomes": [
+                {
+                    "job_id": "job-1",
+                    "agent": "pricing",
+                    "required": True,
+                    "status": "incomplete",
+                    "reason": "wall_deadline",
+                    "source": "tool_observations",
+                }
+            ]
+        },
+    )
+    task = out["report_contract"]["task_board"][0]
+    assert task["resolution"] == "resolved"  # Retain the coordinator's declaration.
+    assert task["execution_status"] == "incomplete"
+    assert task["execution_job_ids"] == ["job-1"]
+    assert task["verification_status"] == "not_assessed"
+    assert out["answer_status"] == "partial"
+    assert out["final_answer"].index("Partial result") < out["final_answer"].index(draft)
+
+
 def test_blanket_verification_claim_is_withheld_when_no_checks_were_registered():
     out = publish("以上全部数字均已核对。", question="总结这份研报")
 
@@ -67,11 +125,14 @@ def test_blanket_verification_claim_is_withheld_when_no_checks_were_registered()
     }
 
 
-@pytest.mark.parametrize("claim", [
-    "全文已验证。",
-    "整份研报已经完成核验。",
-    "The entire document has been verified.",
-])
+@pytest.mark.parametrize(
+    "claim",
+    [
+        "全文已验证。",
+        "整份研报已经完成核验。",
+        "The entire document has been verified.",
+    ],
+)
 def test_whole_document_verification_claims_require_scoped_language(claim):
     out = publish(claim, question="总结这份研报")
 
@@ -83,18 +144,21 @@ def test_resolved_verification_task_without_bound_check_remains_a_report_gap():
     out = publish(
         "已形成研报摘要。",
         question="总结这份研报",
-        tasks=[{
-            "id": "t3",
-            "description": "核验所有提炼观点",
-            "resolution": "resolved",
-            "verification_required": True,
-        }],
+        tasks=[
+            {
+                "id": "t3",
+                "description": "核验所有提炼观点",
+                "resolution": "resolved",
+                "verification_required": True,
+            }
+        ],
     )
 
     assert out["answer_status"] == "partial"
     assert out["report_contract"]["kind"] == "partial"
     assert any(
-        gap == {
+        gap
+        == {
             "code": "task_verification_incomplete",
             "task_id": "t3",
             "status": "not_registered",
@@ -107,35 +171,57 @@ def test_planned_check_identity_cannot_be_satisfied_by_an_unrelated_check():
     out = publish(
         "已形成研报摘要。",
         question="总结这份研报",
-        tasks=[{
-            "id": "t3",
-            "description": "核验关键数字",
-            "resolution": "resolved",
-            "verification_required": True,
-            "verification_requirements": [{
-                "check_id": "expected.amount", "criterion": "复算金额",
-            }],
-        }],
-        wind_down={"job_outcomes": [{
-            "job_id": "verify.1",
-            "required": True,
-            "status": "complete",
-            "verification_checks": [{
-                "check_id": "other.check",
-                "work_item_id": "t3",
-                "criterion": "检查别的内容",
-                "binding_id": "b" * 64,
-                "required": True,
-                "replaces_job_id": "",
-                "revision_reason": "",
-                "subject": {"job_id": "source.1", "ref": "", "sha256": "s", "key": "source.1"},
-                "evidence": [{"job_id": "source.2", "ref": "", "sha256": "e", "key": "source.2"}],
-            }],
-            "verification_events": [{
-                "check_id": "other.check", "binding_id": "b" * 64,
-                "verdict": "pass", "job_id": "verify.1",
-            }],
-        }]},
+        tasks=[
+            {
+                "id": "t3",
+                "description": "核验关键数字",
+                "resolution": "resolved",
+                "verification_required": True,
+                "verification_requirements": [
+                    {
+                        "check_id": "expected.amount",
+                        "criterion": "复算金额",
+                    }
+                ],
+            }
+        ],
+        wind_down={
+            "job_outcomes": [
+                {
+                    "job_id": "verify.1",
+                    "required": True,
+                    "status": "complete",
+                    "verification_checks": [
+                        {
+                            "check_id": "other.check",
+                            "work_item_id": "t3",
+                            "criterion": "检查别的内容",
+                            "binding_id": "b" * 64,
+                            "required": True,
+                            "replaces_job_id": "",
+                            "revision_reason": "",
+                            "subject": {
+                                "job_id": "source.1",
+                                "ref": "",
+                                "sha256": "s",
+                                "key": "source.1",
+                            },
+                            "evidence": [
+                                {"job_id": "source.2", "ref": "", "sha256": "e", "key": "source.2"}
+                            ],
+                        }
+                    ],
+                    "verification_events": [
+                        {
+                            "check_id": "other.check",
+                            "binding_id": "b" * 64,
+                            "verdict": "pass",
+                            "job_id": "verify.1",
+                        }
+                    ],
+                }
+            ]
+        },
     )
 
     gap = next(gap for gap in out["report_contract"]["gaps"] if gap.get("task_id") == "t3")
@@ -206,7 +292,10 @@ async def test_empty_coordinator_failure_does_not_publish_a_recovery_plan(monkey
     monkeypatch.setattr("workflows.agent_team.subagent_runtime.chat_with_fallback_budget", recover)
     result = AgentLoopResult(messages=[], stopped_by="llm_error")
     await force_final_answer(
-        result, object(), 120, task_description="完整读取研报并核验关键事实",
+        result,
+        object(),
+        120,
+        task_description="完整读取研报并核验关键事实",
     )
     out = publish(
         result.final_content,
@@ -282,29 +371,38 @@ async def test_reporter_failure_preserves_safe_baseline_and_success_preserves_ga
         assert state["report_contract"]["kind"] == "system_status"
 
 
-@pytest.mark.parametrize("draft", [
-    "已获充分交叉验证。",
-    "final_verifier 虽因时限未给出书面结论，但其工具观测与草稿吻合，草稿已获充分交叉验证。",
-    "The reviewer did not finish, but all findings are verified.",
-])
+@pytest.mark.parametrize(
+    "draft",
+    [
+        "已获充分交叉验证。",
+        "final_verifier 虽因时限未给出书面结论，但其工具观测与草稿吻合，草稿已获充分交叉验证。",
+        "The reviewer did not finish, but all findings are verified.",
+    ],
+)
 async def test_collected_deadline_report_cannot_be_erased_by_resolved_board(monkeypatch, draft):
     from frontier_agent.components.agent_bus import AgentBus
     from workflows.agent_team.lifecycle import wind_down_team
 
     async def stopped_member(**kwargs):
         return AgentLoopResult(
-            messages=[], final_content="RAW_OBSERVATIONS_ONLY",
+            messages=[],
+            final_content="RAW_OBSERVATIONS_ONLY",
             stopped_by="wall_deadline",
             metadata={"final_answer_source": "tool_observations", "stopped_by": "wall_deadline"},
         )
 
     monkeypatch.setattr(
-        "frontier_agent.components.agent_bus.bus.run_agent_loop", stopped_member,
+        "frontier_agent.components.agent_bus.bus.run_agent_loop",
+        stopped_member,
     )
     bus = AgentBus()
     session = await bus.create_session(
-        task_id="review-run", name="final_verifier", role_id="researcher",
-        system_prompt="Verify the source", tools_override=[], llm_override=object(),
+        task_id="review-run",
+        name="final_verifier",
+        role_id="researcher",
+        system_prompt="Verify the source",
+        tools_override=[],
+        llm_override=object(),
     )
     job = await bus.submit_task_to_session(session, "Verify all figures")
     try:
@@ -312,7 +410,8 @@ async def test_collected_deadline_report_cannot_be_erased_by_resolved_board(monk
         wind = await wind_down_team(bus=bus, task_id="review-run", wait_s=0)
         assert wind.collected_count == 0
         out = publish(
-            draft, question="这份研报说了什么",
+            draft,
+            question="这份研报说了什么",
             wind_down=wind.as_dict(),
             tasks=[{"id": "t3", "description": "终审核验", "resolution": "resolved"}],
         )
@@ -328,25 +427,35 @@ async def test_collected_deadline_report_cannot_be_erased_by_resolved_board(monk
 @pytest.mark.parametrize("early_collection", [False, True])
 @pytest.mark.parametrize("required", [False, True])
 async def test_optional_failure_is_audited_without_becoming_required(
-    monkeypatch, early_collection, required,
+    monkeypatch,
+    early_collection,
+    required,
 ):
     from frontier_agent.components.agent_bus import AgentBus
     from workflows.agent_team.lifecycle import wind_down_team
 
     async def stopped(**kwargs):
         return AgentLoopResult(
-            messages=[], final_content="partial", stopped_by="wall_deadline",
+            messages=[],
+            final_content="partial",
+            stopped_by="wall_deadline",
             metadata={"stopped_by": "wall_deadline"},
         )
 
     monkeypatch.setattr("frontier_agent.components.agent_bus.bus.run_agent_loop", stopped)
     bus = AgentBus()
     session = await bus.create_session(
-        task_id="optional", name="explorer", role_id="researcher",
-        system_prompt="Explore", tools_override=[], llm_override=object(),
+        task_id="optional",
+        name="explorer",
+        role_id="researcher",
+        system_prompt="Explore",
+        tools_override=[],
+        llm_override=object(),
     )
     job = await bus.submit_task_to_session(
-        session, "Explore background", task_metadata={"required_for_completion": required},
+        session,
+        "Explore background",
+        task_metadata={"required_for_completion": required},
     )
     try:
         # Await execution, without consuming its delivery queue.
@@ -364,21 +473,34 @@ async def test_optional_failure_is_audited_without_becoming_required(
 
 
 def incomplete_wind():
-    return {"status": "complete", "run_status": "partial", "job_outcomes": [{
-        "job_id": "run.job.3", "agent": "reviewer", "required": True,
-        "status": "incomplete", "reason": "wall_deadline",
-    }]}
+    return {
+        "status": "complete",
+        "run_status": "partial",
+        "job_outcomes": [
+            {
+                "job_id": "run.job.3",
+                "agent": "reviewer",
+                "required": True,
+                "status": "incomplete",
+                "reason": "wall_deadline",
+            }
+        ],
+    }
 
 
-@pytest.mark.parametrize("text", [
-    "已完成前八项核验，后两项尚未检查。",
-    "Rows 1–8 are fully verified. Rows 9–10 remain unchecked.",
-    "Not all findings are verified.",
-    "全部核验任务失败，当前仅有原始观测。",
-])
+@pytest.mark.parametrize(
+    "text",
+    [
+        "已完成前八项核验，后两项尚未检查。",
+        "Rows 1–8 are fully verified. Rows 9–10 remain unchecked.",
+        "Not all findings are verified.",
+        "全部核验任务失败，当前仅有原始观测。",
+    ],
+)
 def test_scoped_or_negative_verification_statements_keep_useful_content(text):
     out = publish(text, wind_down=incomplete_wind())
-    assert out["final_answer"].startswith(text)
+    assert text in out["final_answer"]
+    assert out["final_answer"].startswith("**Partial result:")
     assert out["answer_status"] == "partial"
     assert out["report_contract"]["source"] == "model"
 
@@ -390,9 +512,15 @@ async def test_reporter_cannot_erase_previously_collected_job_gap(monkeypatch):
         return "已获充分交叉验证。"
 
     monkeypatch.setattr("workflows.agent_team.nodes.fast_reporter_v1._run_fast_reporter", report)
-    out = await agent_team_reporter({
-        **baseline, "original_question": "总结", "metadata": {}, "team_completeness": "partial",
-    }, object())
+    out = await agent_team_reporter(
+        {
+            **baseline,
+            "original_question": "总结",
+            "metadata": {},
+            "team_completeness": "partial",
+        },
+        object(),
+    )
     assert out["report_contract"]["kind"] == "system_status"
     assert "已获充分交叉验证" not in out["final_answer"]
     assert any(gap.get("job_id") == "run.job.3" for gap in out["report_contract"]["gaps"])
@@ -405,12 +533,15 @@ async def test_reporter_cannot_drop_explicit_inference_labels(monkeypatch):
         return "GPU 租赁价格将继续承压。"
 
     monkeypatch.setattr("workflows.agent_team.nodes.fast_reporter_v1._run_fast_reporter", report)
-    out = await agent_team_reporter({
-        **baseline,
-        "original_question": "总结",
-        "metadata": {},
-        "team_completeness": "complete",
-        "report_handoff_context": baseline["final_answer"],
-    }, object())
+    out = await agent_team_reporter(
+        {
+            **baseline,
+            "original_question": "总结",
+            "metadata": {},
+            "team_completeness": "complete",
+            "report_handoff_context": baseline["final_answer"],
+        },
+        object(),
+    )
 
     assert out == {}

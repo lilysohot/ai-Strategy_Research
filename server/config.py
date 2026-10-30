@@ -121,7 +121,7 @@ class ServerConfig(BaseSettings):
     monitor_streams_enabled: bool = False
     monitor_redis_url: str = "redis://127.0.0.1:6379/0"
     monitor_stream_prefix: str = "frontier:monitor:v1"
-    monitor_session_limit: int = Field(default=1, ge=1, le=100)
+    monitor_session_limit: int = Field(default=3, ge=1, le=3)
     monitor_presence_seconds: int = Field(default=120, ge=60)
     monitor_quote_max_age_seconds: int = Field(default=120, ge=1)
     monitor_replay_seconds: int = Field(default=60, ge=1)

@@ -62,9 +62,10 @@ class TeamWindDown:
     def should_refresh_answer(self, result: AgentLoopResult) -> bool:
         """New evidence invalidates a draft; partial execution alone does not."""
         return self.collected_count > 0 or (
-            self.requires_resynthesis and not is_user_report(str(
-                result.metadata.get("final_answer_candidate") or result.final_content
-            ))
+            self.requires_resynthesis
+            and not is_user_report(
+                str(result.metadata.get("final_answer_candidate") or result.final_content)
+            )
         )
 
     def as_dict(self) -> dict[str, Any]:
@@ -79,6 +80,38 @@ class TeamWindDown:
             "untracked_work": self.untracked_work,
             "verification": self.verification,
         }
+
+
+def snapshot_job_outcomes(bus: AgentBus, task_id: str) -> list[dict[str, Any]]:
+    """Read execution and evidence status without draining or mutating jobs."""
+    job_outcomes: list[dict[str, Any]] = []
+    for entry in bus.list_task_jobs(task_id):
+        info = classify_completion(entry.result) if entry.result is not None else None
+        metadata = entry.result.metadata if entry.result is not None else {}
+        source = str(metadata.get("final_answer_source") or "")
+        completion = info.status if info is not None else "incomplete"
+        reason = info.reason if info is not None else entry.status
+        if completion == "complete" and source in {
+            "tool_observations",
+            "collected_reports",
+            "deterministic_fallback",
+        }:
+            completion, reason = "incomplete", "synthesis_unavailable"
+        job_outcomes.append(
+            {
+                "job_id": entry.job_id,
+                "agent": entry.session_id.rsplit("::", 1)[-1],
+                "required": entry.item.metadata.get("required_for_completion") is not False,
+                "status": completion,
+                "reason": reason,
+                "source": source,
+                "content_acquisition": list(metadata.get("content_acquisition") or []),
+                "verification_checks": list(entry.item.metadata.get("verification_checks") or []),
+                "verification_events": list(entry.item.metadata.get("verification_events") or []),
+            }
+        )
+
+    return job_outcomes
 
 
 async def wind_down_team(
@@ -118,8 +151,7 @@ async def wind_down_team(
 
         remaining = deadline - time.monotonic()
         has_running = any(
-            session.current_job_id is not None
-            for session in bus.list_sessions_for_task(task_id)
+            session.current_job_id is not None for session in bus.list_sessions_for_task(task_id)
         )
         if remaining <= 0 or not has_running:
             break
@@ -134,12 +166,16 @@ async def wind_down_team(
 
     # Stop and checkpoint unfinished loops BEFORE synthesis. Cleanup after final
     # publication is too late: completed tool observations would never reach it.
-    running = [session.current_job_id for session in bus.list_sessions_for_task(task_id)
-               if session.current_job_id]
+    running = [
+        session.current_job_id
+        for session in bus.list_sessions_for_task(task_id)
+        if session.current_job_id
+    ]
     if running:
         try:
             await asyncio.wait_for(
-                asyncio.gather(*(bus.abort(job_id) for job_id in running)), timeout=5.0,
+                asyncio.gather(*(bus.abort(job_id) for job_id in running)),
+                timeout=5.0,
             )
         except TimeoutError:
             logger.warning("Team checkpoint cancellation exceeded grace (task=%s)", task_id)
@@ -170,42 +206,28 @@ async def wind_down_team(
         else "complete"
     )
 
-    job_outcomes: list[dict[str, Any]] = []
-    for entry in bus.list_task_jobs(task_id):
-        info = classify_completion(entry.result) if entry.result is not None else None
-        metadata = entry.result.metadata if entry.result is not None else {}
-        source = str(metadata.get("final_answer_source") or "")
-        completion = info.status if info is not None else "incomplete"
-        reason = info.reason if info is not None else entry.status
-        if completion == "complete" and source in {
-            "tool_observations", "collected_reports", "deterministic_fallback",
-        }:
-            completion, reason = "incomplete", "synthesis_unavailable"
-        job_outcomes.append({
-            "job_id": entry.job_id,
-            "agent": entry.session_id.rsplit("::", 1)[-1],
-            "required": entry.item.metadata.get("required_for_completion") is not False,
-            "status": completion,
-            "reason": reason,
-            "source": source,
-            "content_acquisition": list(metadata.get("content_acquisition") or []),
-            "verification_checks": list(entry.item.metadata.get("verification_checks") or []),
-            "verification_events": list(entry.item.metadata.get("verification_events") or []),
-        })
+    job_outcomes = snapshot_job_outcomes(bus, task_id)
 
     verification = project_checks(job_outcomes)
-    required_gaps = [j for j in job_outcomes
-                     if j["required"] and j.get("coverage_status", j["status"]) != "complete"]
+    required_gaps = [
+        j
+        for j in job_outcomes
+        if j["required"] and j.get("coverage_status", j["status"]) != "complete"
+    ]
     known_jobs = {job["job_id"] for job in job_outcomes}
     untracked_work = (
         accounted < outstanding_at_freeze
         or bool(outstanding_at_freeze and not job_outcomes)
         or any(result.job_id not in known_jobs for _, result in collected)
-        or any(session.current_job_id and session.current_job_id not in known_jobs
-               for session in bus.list_sessions_for_task(task_id))
+        or any(
+            session.current_job_id and session.current_job_id not in known_jobs
+            for session in bus.list_sessions_for_task(task_id)
+        )
     )
-    overall = "partial" if required_gaps else (
-        "complete" if job_outcomes and not untracked_work else status
+    overall = (
+        "partial"
+        if required_gaps
+        else ("complete" if job_outcomes and not untracked_work else status)
     )
     if overall == "complete":
         guidance = (
@@ -227,7 +249,11 @@ async def wind_down_team(
         f"Whole-run required job gaps: {json.dumps(required_gaps, ensure_ascii=False)}\n"
         f"Version-bound checks: {json.dumps(verification, ensure_ascii=False)}\n"
         "Do not upgrade raw tool observations or a resolved board item to a verification "
-        "verdict. State precisely what was checked and what remains unchecked.\n"
+        "verdict. State precisely what was checked and what remains unchecked. "
+        "Qualify each affected conclusion inline as observed fact, attributed claim, "
+        "inference, or unknown. A failed fetch is not evidence of absence or equality. "
+        "Do not assert a lowest price, identical cost or overall winner without matched "
+        "versions, dates, units, conditions and coverage. A footer alone is insufficient.\n"
         "</report>"
     )
     checkpoint = "\n\n".join([*batch.blocks, status_block])
@@ -264,14 +290,21 @@ def append_team_wind_down_checkpoint(
     if not wind_down.requires_resynthesis:
         return
     call_id = "team_wind_down_checkpoint"
-    result.messages.append(assistant_msg("", tool_calls=[{
-        "id": call_id,
-        "type": "function",
-        "function": {
-            "name": "collect_reports",
-            "arguments": json.dumps({"phase": "wind_down"}),
-        },
-    }]))
+    result.messages.append(
+        assistant_msg(
+            "",
+            tool_calls=[
+                {
+                    "id": call_id,
+                    "type": "function",
+                    "function": {
+                        "name": "collect_reports",
+                        "arguments": json.dumps({"phase": "wind_down"}),
+                    },
+                }
+            ],
+        )
+    )
     result.messages.append(tool_msg(wind_down.checkpoint, call_id))
 
 

@@ -2,19 +2,19 @@ from __future__ import annotations
 
 import asyncio
 import json
+from typing import ClassVar
 
-from frontier_agent.components.agent_bus import SubAgentResult
+from frontier_agent.components.agent_bus import SubAgentResult, fan_in
 from frontier_agent.components.observers.task_board import TaskBoardObserver
 from frontier_agent.components.observers.trajectory import TrajectoryFileObserver
 from frontier_agent.core.loop_types import LoopConfig, TurnContext
 from plugins.tools.task_board import build_task_board_observer
-from frontier_agent.components.agent_bus import fan_in
 
 
 class _NativeTool:
     name = "search"
     description = "Search"
-    parameters = {"type": "object", "properties": {"q": {"type": "string"}}}
+    parameters: ClassVar[dict] = {"type": "object", "properties": {"q": {"type": "string"}}}
 
     def __init__(self) -> None:
         self.schema_calls = 0
@@ -123,7 +123,8 @@ def test_shared_task_board_observer_preserves_reminder_cooldown() -> None:
     assert first is not None
     assert first.inject_messages == [
         "Current task board (keep it current via add_task / update_task; "
-        "finalize only once every task is resolved):\nboard"
+        "finish after resolving work or recording blocked work with notes and gap; "
+        "blocked work permits only partial delivery):\nboard"
     ]
     assert asyncio.run(observer.on_turn_end(context(5))) is None
     assert asyncio.run(observer.on_turn_end(context(6))) is not None

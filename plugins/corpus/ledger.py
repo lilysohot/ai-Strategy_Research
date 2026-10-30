@@ -279,6 +279,8 @@ class ConsumptionLedger:
     errors: list[dict[str, Any]] = field(default_factory=list)
     skipped: list[dict[str, Any]] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
+    # Historical originals are usable evidence, not a new request to publish a report.
+    replayed_only: bool = False
     #: identity -> 交付状态（delivered／truncated／unknown），跨路径取强。
     delivered: dict[tuple[str, str, int, int], str] = field(default_factory=dict)
     #: 最近一次在真实消息边界完成送达核验的 turn（-1 = 尚未核验过）。
@@ -1384,7 +1386,7 @@ def _limitation_block(verification: dict[str, Any]) -> str:
                 "---",
                 "",
                 head,
-                "> 以下结论未获「逐字可溯源且完整送达」的原文支持，请按未校验内容对待：",
+                "> 以下结论存在证据支持、送达或报告对应问题，具体原因如下：",
                 *lines,
                 tail,
             ]
@@ -1422,6 +1424,9 @@ def publish_boundary(
         "verification": None,
     }
     try:
+        if ledger.replayed_only:
+            outcome["boundary_action"] = "skip"
+            return outcome
         if (
             not ledger.offered
             and not ledger.fetched
@@ -1449,6 +1454,24 @@ def publish_boundary(
                 f"最终证据核验：{status_text}（{supported}/{total} 条清单结论）。"
                 "仅核验清单所绑定的内容，不代表全文事实已独立核实。"
             )
+            report_codes = {"not_in_report", "report_changed_or_unavailable"}
+            rows = verification.get("conclusions") or []
+            report_failures = sum(
+                any(p.get("code") in report_codes for p in row.get("problems", []))
+                for row in rows
+            )
+            if report_failures:
+                evidence_supported = sum(
+                    bool(row.get("evidence_count") or row.get("semantic_references"))
+                    and not any(p.get("code") not in report_codes for p in row.get("problems", []))
+                    for row in rows
+                )
+                notice = (
+                    f"最终证据核验：未全部通过。原文证据及送达核验 {evidence_supported}/{total}；"
+                    f"报告引用对应核验 {total - report_failures}/{total}。"
+                    "部分引用未对应最终报告，或绑定文件已变化/不可读；交付未完成核验。"
+                    "报告对应失败不等于原文证据全部错误。"
+                )
             outcome["final_text"] = f"{final_text.rstrip()}\n\n> {notice}"
             if not passed and answer_status == "complete":
                 outcome["answer_status"] = "partial"
@@ -1527,13 +1550,56 @@ class ConsumptionLedgerObserver(BaseObserver):
             )
         return self._ledger
 
+    def _restore_replayed_evidence(self, messages: list) -> None:
+        """Recover receipts only from paired tool messages in the validated replay.
+
+        Never hydrate summaries or unpaired user/assistant text. Reuse the ordinary
+        parsers and delivery checks; final verification still resolves source text.
+        This does not rewrite history or make an archived file visible to the model.
+        """
+        if getattr(self, "_replay_restored", False):
+            return
+        self._replay_restored = True
+        ledger = self._get_ledger()
+        had_activity = bool(ledger.offered or ledger.fetched or ledger.semantic.calls)
+        calls: dict[str, tuple[str, dict]] = {}
+        for message in messages:
+            if not isinstance(message, dict):
+                continue
+            if message.get("role") == "assistant":
+                for call in message.get("tool_calls") or []:
+                    fn = call.get("function") or {}
+                    if fn.get("name") not in {TOOL_SEARCH, TOOL_FETCH}:
+                        continue
+                    args = _loads(fn.get("arguments") or "{}")
+                    if isinstance(args, dict) and call.get("id"):
+                        calls[call["id"]] = (fn["name"], args)
+            elif message.get("role") == "tool":
+                prior = calls.pop(str(message.get("tool_call_id") or ""), None)
+                content = message.get("content")
+                if prior is None or not isinstance(content, str):
+                    continue
+                name, args = prior
+                if name == TOOL_SEARCH:
+                    ledger.record_search(content, turn=0)
+                else:
+                    ledger.record_fetch_call(args, turn=0)
+                    ledger.record_fetch_result(content, turn=0)
+        ledger.finalize(messages)
+        ledger.last_finalized_turn = max(0, ledger.last_finalized_turn)
+        if not had_activity:
+            ledger.replayed_only = bool(ledger.offered or ledger.fetched)
+
     async def on_tool_call(
         self,
         ctx: TurnContext,
         tool_call: dict,
     ) -> None:
         try:
+            self._restore_replayed_evidence(list(getattr(ctx, "messages", None) or []))
             name = str(tool_call.get("name") or "")
+            if name in {TOOL_SEARCH, TOOL_FETCH, SEMANTIC_TOOL, "corpus_submit_manifest"}:
+                self._get_ledger().replayed_only = False
             if name not in {TOOL_FETCH, SEMANTIC_TOOL}:
                 return
             args = tool_call.get("args")
@@ -1555,7 +1621,10 @@ class ConsumptionLedgerObserver(BaseObserver):
         result: ToolResult,
     ) -> None:
         try:
+            self._restore_replayed_evidence(list(getattr(ctx, "messages", None) or []))
             name = result.name
+            if name in {TOOL_SEARCH, TOOL_FETCH, SEMANTIC_TOOL}:
+                self._get_ledger().replayed_only = False
             if name == TOOL_SEARCH:
                 self._get_ledger().record_search(result.result, turn=ctx.turn)
             elif name == TOOL_FETCH:
@@ -1583,6 +1652,7 @@ class ConsumptionLedgerObserver(BaseObserver):
         历史时按更坏情况整表重扫一次，合并取强不会降级）。
         """
         try:
+            self._restore_replayed_evidence(list(getattr(ctx, "messages", None) or []))
             ledger = self._get_ledger()
             messages = list(ctx.messages or [])
             start = self._scanned_messages if self._scanned_messages <= len(messages) else 0

@@ -1,7 +1,15 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import { activeMonitorRunId, autoAnalysisBindingIssue } from './monitor.ts'
+import { activeMonitorRunId, autoAnalysisBindingIssue, monitorConditionLabel, monitorModeLabel } from './monitor.ts'
+
+test('monitor labels distinguish persistent conditions from crossings', () => {
+  assert.equal(monitorConditionLabel('up', 'continuous'), '大于等于')
+  assert.equal(monitorConditionLabel('down', 'crossing'), '下穿')
+  assert.equal(monitorConditionLabel('range', 'continuous'), '处于区间')
+  assert.equal(monitorModeLabel('crossing'), '穿越时触发')
+  assert.equal(monitorModeLabel('single'), '单次触发')
+})
 
 test('auto analysis requires a confirmed main account and a capital plan', () => {
   assert.match(autoAnalysisBindingIssue(null, null, 'loading') ?? '', /正在核对/)

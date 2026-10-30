@@ -38,7 +38,7 @@ from ._streaming import (
     _stream_llm_response,
     _stream_stall_max_before_advance,
 )
-from ._tool import _stream_tool_calls_missing_required_arguments
+from ._tool import _stream_tool_calls_missing_required_arguments, tool_argument_repair_message
 
 logger = logging.getLogger(__name__)
 
@@ -638,7 +638,7 @@ async def call_llm(
                         logger.warning(
                             "Streamed tool call(s) %s had blank arguments despite "
                             "required schema fields (turn=%d, attempt=%d/%d); "
-                            "replaying the same request non-streaming",
+                            "replaying non-streaming with schema repair feedback",
                             empty_arg_tools, turn, attempt + 1, max_retries,
                         )
                         recovered: LLMResponse | None = None
@@ -671,7 +671,9 @@ async def call_llm(
                                 )
                             recovered = await asyncio.wait_for(
                                 llm_active.chat(
-                                    messages_active, timeout=recovery_timeout,
+                                    [*messages_active, user_msg(tool_argument_repair_message(
+                                        streamed_response, llm_active,
+                                    ))], timeout=recovery_timeout,
                                 ),
                                 timeout=recovery_timeout,
                             )

@@ -147,8 +147,9 @@ async def test_research_member_enters_handoff_before_hard_deadline() -> None:
     )
     assert decision is not None, "late exploration must yield to a real report window"
     assert "submit_report" in decision.skip_with_result
-    for name in ("submit_report", "publish_handoff"):
-        assert await inherited.on_tool_call(ctx, {"name": name, "args": {}}) is None
+    assert await inherited.on_tool_call(ctx, {"name": "submit_report", "args": {}}) is None
+    denied_publish = await inherited.on_tool_call(ctx, {"name": "publish_handoff", "args": {}})
+    assert denied_publish is not None and denied_publish.skip_is_error
     hint = await inherited.on_turn_end(ctx)
     assert hint is not None and hint.stop_reason is None
     assert "submit_report" in hint.inject_messages[0]
@@ -162,6 +163,7 @@ async def test_research_member_enters_handoff_before_hard_deadline() -> None:
         observers = spec.observers_builder("root.job.2", SubTask("reserved", metadata=metadata), 1)
         observer = next(o for o in observers if isinstance(o, InheritedWallClockDeadlineObserver))
         assert await observer.on_tool_call(ctx, {"name": "read_file", "args": {}}) is None
+        assert await observer.on_before_llm(ctx) is None
 
     early_verifier = build_swarm_session_runtime_spec(
         SwarmSubagentRuntime(phase_budget=budget), session_name="final_verifier", task_id="root",
@@ -737,3 +739,86 @@ async def test_member_recovery_is_cancelled_at_team_deadline() -> None:
     assert llm.calls == 1
     assert llm.cancelled is True
     assert finalized.metadata["final_answer_rescue_mode"] == "deterministic_fallback"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("stale_calls", [False, True])
+async def test_handoff_blocked_report_write_routes_directly_to_submission(monkeypatch, stale_calls) -> None:
+    """Replay the create -> publish missing file -> bash loop from run 14756e9."""
+    from plugins.tools.submit_report import submit_report
+    from workflows._shared.research.observers.finalize_answer_observer import FinalizeAnswerObserver
+
+    started = time.monotonic()
+    clock = [started]
+    monkeypatch.setattr("workflows.agent_team.subagent_runtime.time", SimpleNamespace(monotonic=lambda: clock[0]))
+    draft = "Scope: comparison\nFinding: partial\nEvidence: https://example.org/source\nUnresolved: API checks"
+
+    executed = []
+
+    @tool
+    async def create_file(path: str, content: str) -> str:
+        """Must not write during handoff."""
+        executed.append("create_file")
+        raise AssertionError("late file write executed")
+
+    @tool
+    async def publish_handoff(source_path: str) -> str:
+        """Must not publish the file whose creation was rejected."""
+        executed.append("publish_handoff")
+        raise AssertionError("missing-file publication executed")
+
+    @tool
+    async def bash(command: str) -> str:
+        """Must not retry the rejected write through a shell."""
+        executed.append("bash")
+        raise AssertionError("late shell write executed")
+
+    class HandoffLLM:
+        model = "scripted"
+        calls = 0
+
+        async def chat(self, messages, **kwargs):
+            self.calls += 1
+            if self.calls == 1:
+                clock[0] = started + 11  # In-flight research call crosses the handoff boundary.
+                name, args = "create_file", {"path": "/workspace/report.md", "content": draft}
+            else:
+                offered = {schema["function"]["name"] for schema in kwargs["tools"]}
+                assert offered == {"submit_report"}, "handoff still offers the failing artifact route"
+                previous_drafts = [
+                    json.loads(call["function"]["arguments"]).get("content")
+                    for message in messages for call in message.get("tool_calls", [])
+                    if call["function"]["name"] == "create_file"
+                ]
+                assert draft in previous_drafts, "the existing report draft must survive"
+                assert "not created" in str(messages)
+                if stale_calls and self.calls == 2:
+                    name, args = "publish_handoff", {"source_path": "/workspace/report.md"}
+                elif stale_calls and self.calls == 3:
+                    name, args = "bash", {"command": "echo report > /workspace/report.md"}
+                else:
+                    name, args = "submit_report", {"content": draft, "attachments": []}
+            return LLMResponse(content="", tool_calls=[{
+                "id": f"call-{self.calls}", "type": "function",
+                "function": {"name": name, "arguments": json.dumps(args)},
+            }], finish_reason="tool_calls")
+
+    llm = HandoffLLM()
+    spec = build_swarm_session_runtime_spec(
+        SwarmSubagentRuntime(), session_name="researcher", task_id="root",
+    )
+    config = spec.config_builder("root.job.1", SubTask("research"), 4)
+    config.max_llm_retries = 1
+    result = await run_agent_loop(
+        system_prompt="research", user_message="answer using gathered evidence", llm=llm,
+        tools=[create_file, publish_handoff, bash, submit_report], config=config,
+        observers=[
+            InheritedWallClockDeadlineObserver(started + 60, handoff_at=started + 10),
+            FinalizeAnswerObserver(tool_names=["submit_report"]),
+        ],
+    )
+    assert result.stopped_by == "final_answer", result.metadata
+    assert result.final_content == draft
+    assert llm.calls == (4 if stale_calls else 2)
+    assert executed == []
+    assert not result.metadata.get("report_attachments")

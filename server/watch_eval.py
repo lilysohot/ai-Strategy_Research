@@ -113,7 +113,7 @@ def quote_rejection(obs: MonitoringObservation, *, now: datetime) -> str | None:
 def condition_met(
     price: Decimal, direction: str, low: Decimal | None, high: Decimal | None
 ) -> bool:
-    """当前价是否已满足触发条件（上穿/下穿/区间）。精确比较，不用浮点相等。"""
+    """当前价是否达标（大于等于/小于等于/区间内），不表示发生穿越。"""
     if direction == "up":
         return low is not None and price >= low
     if direction == "down":
@@ -349,11 +349,14 @@ async def evaluate(
     rev = await _latest_revision(session, rule.id, rule.current_version)
     if rev is None:
         return {"status": "inactive"}
+    if rev.trigger_mode in {"continuous", "crossing"}:
+        return {"status": "suppressed", "reason": "requires_session_round"}
     rule.last_check_at = now
     quality = quote_rejection(obs, now=now)
     if quality:
         rule.last_suppressed_reason = quality
         return {"status": "invalid_quote", "reason": quality}
+    assert obs.observed_at_ms is not None  # quote_rejection rejects absent vendor time
     if rev.symbol != obs.thscode or rev.market != obs.market or rev.currency != obs.currency:
         rule.last_suppressed_reason = "instrument_mismatch"
         return {"status": "mismatch"}

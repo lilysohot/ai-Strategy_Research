@@ -755,7 +755,12 @@ async def run_events(
 
     async def event_stream() -> AsyncIterator[str]:
         try:
-            async for frame in sse_for_run(run_id, queue=queue, after_line=after):
+            async for frame in sse_for_run(
+                run_id,
+                queue=queue,
+                after_line=after,
+                terminal=row.status not in ACTIVE_RUN_STATUSES,
+            ):
                 yield frame
         finally:
             # A disconnected client must stop receiving fan-out, or its queue
@@ -817,8 +822,13 @@ async def run_control(
     action = body.get("action")
     if action != "stop":
         raise HTTPException(status_code=400, detail="unknown action")
+    if await dispatch_outbox.stop_queued_run(run_id=uuid.UUID(run_id)):
+        return {"run_id": run_id, "stopped": True}
     ok = await get_orchestrator().stop(run_id)
     if not ok:
+        row = await _visible_run(run_id, user.id)
+        if row is not None and row.status not in ACTIVE_RUN_STATUSES:
+            return {"run_id": run_id, "stopped": True}
         raise HTTPException(status_code=409, detail="run not running")
     return {"run_id": run_id, "stopped": True}
 

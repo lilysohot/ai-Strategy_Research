@@ -20,6 +20,7 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
 import { runs as runsApi } from '../api'
+import { ApiError } from '../api/client'
 import { openRunStream, type SseError, type SseStreamHandle } from '../sse'
 import type { ApprovalDecisionValue, RunStatus, SseEvent } from '../types'
 import {
@@ -160,6 +161,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
 
   // Plain (non-reactive) handle to the open stream.
   let handle: SseStreamHandle | null = null
+  let reconcileTimer: ReturnType<typeof setTimeout> | null = null
   let nextId = 0
   let nextStepId = 0
   /** Turns whose usage has been added to the totals (replay dedup). */
@@ -461,6 +463,10 @@ export const useRunStreamStore = defineStore('runStream', () => {
   }
 
   function close(): void {
+    // Ignore callbacks from the aborted stream, including its delayed onDone.
+    generation += 1
+    if (reconcileTimer !== null) clearTimeout(reconcileTimer)
+    reconcileTimer = null
     if (handle) {
       handle.stop()
       handle = null
@@ -512,6 +518,7 @@ export const useRunStreamStore = defineStore('runStream', () => {
     cursor.value = typeof after === 'number' ? after : 0
     nextId = 0
     connection.value = 'connecting'
+    const watchedGeneration = generation
 
     handle = openRunStream({
       url: runsApi.eventsUrl(id),
@@ -519,21 +526,26 @@ export const useRunStreamStore = defineStore('runStream', () => {
       token: () => authStore.token,
       after: cursor.value,
       onOpen: () => {
+        if (generation !== watchedGeneration) return
         connection.value = 'open'
         lastError.value = null
       },
       onCursor: (value) => {
+        if (generation !== watchedGeneration) return
         cursor.value = value
       },
       onEvent: (event) => {
+        if (generation !== watchedGeneration) return
         timeline.value.push({ event, id: nextId++ })
         applyEvent(event)
       },
       onError: (err: SseError) => {
+        if (generation !== watchedGeneration) return
         lastError.value = err.message
         connection.value = 'error'
       },
       onDone: (reason) => {
+        if (generation !== watchedGeneration) return
         handle = null
         if (reason === 'completed') {
           connection.value = 'closed'
@@ -554,6 +566,16 @@ export const useRunStreamStore = defineStore('runStream', () => {
     // subscribe and on a reconnect alike, since the frame may have been missed
     // while disconnected.
     void loadPendingApproval(id, generation)
+    // A silent SSE connection is not evidence that the run is still active.
+    // Poll sequentially so a slow status endpoint cannot accumulate requests.
+    const refresh = async (): Promise<void> => {
+      if (generation !== watchedGeneration) return
+      await reconcile()
+      if (generation === watchedGeneration && isActiveRunStatus(status.value)) {
+        reconcileTimer = setTimeout(() => { void refresh() }, 3000)
+      }
+    }
+    reconcileTimer = setTimeout(() => { void refresh() }, 3000)
   }
 
   /** Re-open the current stream from the saved cursor (manual "retry"). */
@@ -630,18 +652,26 @@ export const useRunStreamStore = defineStore('runStream', () => {
           const finished = Date.parse(summary.finished_at)
           if (Number.isFinite(finished)) endedAtMs.value = finished
         }
-        if (summary.usage) {
+        if (summary.usage && isTerminalRunStatus(remoteStatus)) {
           // F10: the server's whole-run figure is authoritative, so it REPLACES the
           // running total. Adding it instead double-counts every turn the live
           // stream already metered.
           usage.value = usageTotalsFrom(summary.usage)
         }
+        if (isTerminalRunStatus(remoteStatus)) {
+          close()
+          connection.value = 'closed'
+          pendingApproval.value = null
+          interruptInFlight(steps.value)
+          return
+        }
         if (!streamEnded || !isActiveRunStatus(remoteStatus)) return
       } catch {
+        if (runId.value !== requestedRunId || generation !== requestedGeneration) return
         // A later bounded attempt may still succeed while the terminal row is
         // being committed. Only surface the failure after the final attempt.
         if (delay !== retryDelays.at(-1)) continue
-        lastError.value = '运行已结束，但未能与服务端对账，结果待核实'
+        lastError.value = '未能与服务端同步运行状态，请稍后重试'
         return
       }
     }
@@ -653,11 +683,21 @@ export const useRunStreamStore = defineStore('runStream', () => {
 
   async function stop(): Promise<void> {
     if (!runId.value) return
+    const requestedRunId = runId.value
+    const requestedGeneration = generation
     try {
-      await runsApi.stop(runId.value)
-    } catch {
-      // A 409 ("run not running") means it already finished; the stream carries
-      // the terminal frame either way, so there is nothing to surface.
+      await runsApi.stop(requestedRunId)
+    } catch (err) {
+      // A legacy server may return 409 for both queued and finished runs.
+      // Only the authoritative terminal status makes that a successful no-op.
+      if (runId.value === requestedRunId && generation === requestedGeneration) {
+        await reconcile()
+        if (err instanceof ApiError && err.status === 409 && isTerminalRunStatus(status.value)) return
+      }
+      throw err
+    }
+    if (runId.value === requestedRunId && generation === requestedGeneration) {
+      await reconcile()
     }
   }
 

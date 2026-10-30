@@ -300,7 +300,12 @@ const messages = computed<ChatMessage[]>(() => {
         id: `run-${runStream.runId}`,
         role: 'assistant',
         raw: streamText,
-        html: streamingHtml || '<span class="typing">生成中...</span>',
+        html: streamingHtml || (runStream.status === 'queued'
+          ? '<span class="typing">排队中，等待开始...</span>'
+          : runStream.status === 'stopped' ? '<span>已停止</span>'
+          : runStream.status === 'failed' ? '<span>运行失败</span>'
+          : runStream.status === 'completed' ? '<span>运行已结束，未生成回复</span>'
+          : '<span class="typing">生成中...</span>'),
         thinking: thinkingForRun(runStream.runId),
         created_at: null,
         run_id: runStream.runId,
@@ -546,7 +551,7 @@ async function onStop(): Promise<void> {
   if (!runStream.runId || stopping.value) return
   stopping.value = true
   try {
-    await runsApi.stop(runStream.runId)
+    await runStream.stop()
     ElMessage.success('已发送停止请求')
     window.setTimeout(() => {
       void loadDiff()
@@ -555,7 +560,7 @@ async function onStop(): Promise<void> {
     }, 1200)
   } catch (err) {
     if (err instanceof ApiError && err.status === 409) {
-      ElMessage.warning('该运行已结束，无需停止')
+      ElMessage.warning('尚未确认停止，请稍后重试')
     } else {
       ElMessage.error(err instanceof Error ? err.message : '停止失败')
     }
@@ -908,7 +913,7 @@ watch(
             :streaming="sameRunId(runStream.runId, m.run_id) && runStream.isStreaming"
           />
           <div v-if="m.role === 'assistant' && runStream.runId === m.run_id && runStream.isStreaming" class="generating">
-            生成中
+            {{ runStream.status === 'queued' ? '排队中，等待开始' : '生成中' }}
           </div>
         </article>
       </div>

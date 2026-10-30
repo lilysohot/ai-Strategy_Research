@@ -11,15 +11,20 @@ _MAX_REPORT_BYTES = 2 * 1024 * 1024
 
 def read_report(path: str) -> tuple[str, dict[str, str]]:
     """Read one UTF-8 Markdown/text deliverable under this worker's outputs root."""
-    root = Path(os.environ.get("FRONTIER_AGENT_OUTPUTS_DIR") or "/outputs").resolve()
+    root = Path(
+        os.environ.get("FRONTIER_AGENT_HOST_OUTPUTS_DIR")
+        or os.environ.get("FRONTIER_AGENT_OUTPUTS_DIR") or "/outputs"
+    ).resolve()
     requested = Path(path)
     if requested.is_relative_to("/outputs"):
         requested = root / requested.relative_to("/outputs")
     target = requested.resolve()
     if not target.is_relative_to(root) or target.suffix.lower() not in {".md", ".txt"}:
         raise ValueError("report_path 必须是本运行 /outputs 下的 Markdown 或文本报告")
-    if not target.is_file() or target.stat().st_size > _MAX_REPORT_BYTES:
-        raise ValueError("报告不存在或超过 2 MiB，请先写入报告再提交清单")
+    if not target.is_file():
+        raise ValueError("report_not_found：本运行报告不存在；确认文件写入位置，勿反复改名重试")
+    if target.stat().st_size > _MAX_REPORT_BYTES:
+        raise ValueError("report_too_large：报告超过 2 MiB")
     with target.open("rb") as stream:
         raw = stream.read(_MAX_REPORT_BYTES + 1)
     if len(raw) > _MAX_REPORT_BYTES:

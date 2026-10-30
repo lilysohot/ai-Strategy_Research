@@ -248,6 +248,13 @@ async def claim_due(session: AsyncSession, *, limit: int = 8) -> list[store.RunD
             row.status = ABANDONED
             row.last_error = "研究已删除"
             continue
+        from server.monitor_longterm import launch_block_reason, stop_cancelled_launch
+
+        if reason := await launch_block_reason(session, row.run_id):
+            if reason == "monitor_cancelled":
+                await stop_cancelled_launch(session, row.run_id)
+            row.next_attempt_at = now + timedelta(seconds=cfg.dispatch_busy_delay_seconds)
+            continue
         if await _research_has_active_run(session, row.research_id, row.run_id):
             row.next_attempt_at = now + timedelta(seconds=cfg.dispatch_busy_delay_seconds)
             continue
@@ -353,6 +360,36 @@ async def cancel_pending(session: AsyncSession, *, run_id: uuid.UUID, reason: st
     return True
 
 
+async def stop_queued_run(*, run_id: uuid.UUID) -> bool:
+    """Atomically stop an outbox run that cannot yet have a worker.
+
+    Lock the dispatch row before the run, like dispatch_once. A claimed or
+    dispatched intent may already be launching and must use worker control.
+    Exhausted (abandoned) intents are also cancellable: their run stays queued.
+    """
+    async with store.get_sessionmaker()() as session, session.begin():
+        row = (
+            await session.execute(
+                select(store.RunDispatch)
+                .where(store.RunDispatch.run_id == run_id)
+                .with_for_update()
+            )
+        ).scalar_one_or_none()
+        if row is None or row.status not in (PENDING, RETRYABLE_FAILED, ABANDONED):
+            return False
+        run = await session.get(store.Run, run_id, with_for_update=True)
+        if run is None or run.status != "queued":
+            return False
+        row.status = ABANDONED
+        row.last_error = "user_stop"
+        row.lease_owner = None
+        row.lease_expires_at = None
+        run.status = "stopped"
+        run.stopped_by = "user_stop"
+        run.finished_at = _now()
+    return True
+
+
 async def abandon_for_run(session: AsyncSession, *, run_id: uuid.UUID, reason: str) -> bool:
     """孤儿恢复联动：Run 被判定为无人认领时，其派发意图一并作废。"""
     row = await get_for_run(session, run_id=run_id)
@@ -410,6 +447,16 @@ async def dispatch_once(orch: Any) -> int:
                     or research.deleted_at is not None
                 ):
                     row.status = ABANDONED
+                    continue
+                from server.monitor_longterm import launch_block_reason, stop_cancelled_launch
+
+                if reason := await launch_block_reason(session, run_id):
+                    if reason == "monitor_cancelled":
+                        await stop_cancelled_launch(session, run_id)
+                        continue
+                    row.status = PENDING
+                    row.lease_expires_at = None
+                    row.next_attempt_at = _now() + timedelta(seconds=5)
                     continue
                 await orch.submit(
                     run_id=run_id.hex,

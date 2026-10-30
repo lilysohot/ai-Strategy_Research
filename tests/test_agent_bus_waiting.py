@@ -43,7 +43,11 @@ def _session(task_id: str = "root") -> SubAgentSession:
 
 
 @pytest.mark.asyncio
-async def test_collect_reports_preserves_alert_queued_before_nonblocking_drain() -> None:
+@pytest.mark.parametrize("stop_explicitly", [False, True])
+@pytest.mark.parametrize("draining", [False, True])
+async def test_collect_reports_preserves_alert_queued_before_nonblocking_drain(
+    stop_explicitly, draining,
+) -> None:
     bus = AgentBus()
     session = _session()
     job_id = "root.job.1"
@@ -57,7 +61,19 @@ async def test_collect_reports_preserves_alert_queued_before_nonblocking_drain()
     )
     before = registry.snapshot()
     registry.register(AgentBus, bus)
-    token = set_current_execution_scope(ExecutionScope(task_id="root", metadata={}))
+    now = asyncio.get_running_loop().time()
+    budget = TeamPhaseBudget(
+        started_monotonic_s=now - 20,
+        research_dispatch_deadline_s=now - 1 if draining else now + 100,
+        research_deadline_s=now + 200,
+        publication_deadline_s=now + 250,
+        finalization_deadline_s=now + 300,
+        state={},
+    )
+    scope = ExecutionScope(task_id="root", metadata={
+        SWARM_SCOPE_KEY: SimpleNamespace(phase_budget=budget),
+    })
+    token = set_current_execution_scope(scope)
     try:
         bus.publish_task_progress_alert(
             job_id, agent="worker", kind="stuck_target", detail="action required",
@@ -65,13 +81,27 @@ async def test_collect_reports_preserves_alert_queued_before_nonblocking_drain()
         result = await collect_reports.ainvoke({"timeout": 0.02})
         assert "member_progress_alert" in result
         assert "action required" in result
+        assert 'stop_subagent(agent_name="worker")' in result
+        assert "does not update the running task" in result
+        assert "redirect it with a focused task" not in result
         assert not worker.done()
+        from frontier_agent.components.agent_bus.stop_signal import get_stop_registry
+
+        if stop_explicitly:
+            from plugins.tools.stop_subagent import stop_subagent
+
+            result = await stop_subagent.ainvoke({"agent_name": "worker"})
+            assert "Stop signal sent" in result
+            assert scope.metadata.get("collect_reports_pending_alert") is None
+            assert session.current_job_id == job_id
+            assert not session.pending_tasks
+            assert list(bus._jobs) == [job_id]
+            assert get_stop_registry().consume(session.session_id)
+            return
         # Repeating a long wait without acting must request a bounded handoff,
         # not put the coordinator back to sleep for the entire research wall.
         result = await asyncio.wait_for(collect_reports.ainvoke({"timeout": 1800}), 0.2)
         assert "handoff_requested" in result
-        from frontier_agent.components.agent_bus.stop_signal import get_stop_registry
-
         assert get_stop_registry().consume(session.session_id)
     finally:
         reset_current_execution_scope(token)

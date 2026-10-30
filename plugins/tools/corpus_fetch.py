@@ -962,6 +962,7 @@ async def corpus_fetch(
     cursor: str | None = None,
     view: str = "full",
     max_chars: int = 6000,
+    force_refresh: bool = False,
 ) -> str:
     """取回语料中指定块的逐字原文，返回可直接提交清单的 ``evidence_ref``。
 
@@ -982,6 +983,7 @@ async def corpus_fetch(
         locator: 单块句柄（``chunk:<chunk_id>``）或 search v2 的 excerpts.ref。
         locators: 批量块句柄（有序，按首次出现去重）；表格块请附带必要表头、期间、单位。
         cursor: 上一页返回的 ``next_cursor`` 短句柄，原样传回即可；兼容历史长游标。
+        force_refresh: 为 true 时绕过上下文原文复用，重新读取指定文档版本。
             游标已绑定请求集合、顺序、视图与位置，续取时不得改动，视图由游标决定。
         view: 返回视图。``"full"``（默认）保留完整诊断／结构元数据；``"compact"``
             只保留正文、引用最小映射、单元身份与结构状态，并给出可取回完整元数据的

@@ -41,6 +41,7 @@ from frontier_agent.core.loop_types import (
     LoopPolicy,
     ToolCallIntervention,
     ToolResult,
+    TurnContext,
 )
 from frontier_agent.core.messages import (
     Message,
@@ -137,17 +138,55 @@ class InheritedWallClockDeadlineObserver:
         self.deadline = deadline
         self.handoff_at = handoff_at
         self._handoff_announced = False
+        self._direct_submission = False
+        self._direct_submission_announced = False
 
     def _handoff_due(self) -> bool:
         return self.handoff_at is not None and time.monotonic() >= self.handoff_at
 
     _HANDOFF_MESSAGE = (
         "The research handoff window has started. Stop new retrieval and experiments. "
-        "Use the completed observations to submit_report now: concise Findings, "
-        "exact Evidence URLs, Unresolved and Conflicts. Publish an already-created "
-        "file with publish_handoff only if needed. Missing evidence must remain "
+        "Submit the report body directly with submit_report(content=..., attachments=[]). "
+        "No report file is required. Include Findings, exact Evidence URLs, Unresolved "
+        "and Conflicts; keep content within 24,000 characters. If longer, condense it "
+        "without dropping decision-relevant evidence or uncertainty. You may make one "
+        "publish_handoff attempt for an already-created file only if needed, then "
+        "submit_report with the exact returned ref. Missing evidence must remain "
         "explicitly unresolved; do not turn raw observations into verification."
     )
+    _DIRECT_SUBMISSION_MESSAGE = (
+        "The research handoff window now permits only submit_report. "
+        "Reuse the report text already present in your previous tool arguments or "
+        "observations as content; do not create, repair or publish a report file. "
+        "Keep content within 24,000 characters; condense longer drafts while retaining "
+        "key evidence URLs and unresolved gaps. Use attachments=[] unless you already "
+        "have an exact ref from a successful publish_handoff. If publication failed, "
+        "state the missing attachment under Unresolved and submit the available findings."
+    )
+
+    def _handoff_intervention(self, ctx: Any) -> Intervention:
+        ctx.metadata["team_handoff_started"] = True
+        if self._direct_submission:
+            ctx.metadata["team_handoff_direct_submission"] = True
+            messages = None if self._direct_submission_announced else [
+                self._DIRECT_SUBMISSION_MESSAGE,
+            ]
+            self._direct_submission_announced = True
+            self._handoff_announced = True
+            return Intervention(inject_messages=messages, allowed_tool_names=("submit_report",))
+        messages = None if self._handoff_announced else [self._HANDOFF_MESSAGE]
+        self._handoff_announced = True
+        return Intervention(
+            inject_messages=messages, allowed_tool_names=("submit_report", "publish_handoff"),
+        )
+
+    async def on_before_llm(self, ctx: Any) -> Intervention | None:
+        remaining = self._remaining_s()
+        if remaining is not None and remaining <= 0:
+            return Intervention(stop_reason="wall_deadline")
+        if self._handoff_due():
+            return self._handoff_intervention(ctx)
+        return None
 
     def _remaining_s(self) -> float | None:
         return _deadline_remaining_s(self.deadline)
@@ -164,15 +203,29 @@ class InheritedWallClockDeadlineObserver:
     ) -> ToolCallIntervention | None:
         remaining = self._remaining_s()
         if remaining is None or remaining > 0:
-            if self._handoff_due() and _tool_call.get("name") not in {
-                "submit_report", "publish_handoff",
-            }:
-                return ToolCallIntervention(
-                    skip_with_result=self._HANDOFF_MESSAGE,
-                    skip_is_error=True,
-                    metadata_updates={"team_handoff_started": True},
-                )
-            return None
+            if not self._handoff_due():
+                return None
+            name = _tool_call.get("name")
+            if name == "submit_report":
+                return None
+            if name == "publish_handoff" and not self._direct_submission:
+                # Bound the optional attachment path, whether it succeeds or
+                # fails. A second call in the same batch is guarded as well.
+                self._direct_submission = True
+                return None
+            self._direct_submission = True
+            detail = (
+                "The requested file was not created; the write was blocked before execution. "
+                if name == "create_file" else "This tool call was not executed. "
+            )
+            return ToolCallIntervention(
+                skip_with_result=detail + self._DIRECT_SUBMISSION_MESSAGE,
+                skip_is_error=True,
+                metadata_updates={
+                    "team_handoff_started": True,
+                    "team_handoff_direct_submission": True,
+                },
+            )
         return ToolCallIntervention(
             skip_with_result=self._STOP_RESULT,
             skip_is_error=True,
@@ -182,10 +235,8 @@ class InheritedWallClockDeadlineObserver:
     async def on_turn_end(self, _ctx: Any) -> Intervention | None:
         remaining = self._remaining_s()
         if remaining is None or remaining > 0:
-            if self._handoff_due() and not self._handoff_announced:
-                self._handoff_announced = True
-                _ctx.metadata["team_handoff_started"] = True
-                return Intervention(inject_messages=[self._HANDOFF_MESSAGE])
+            if self._handoff_due():
+                return self._handoff_intervention(_ctx)
             return None
         return Intervention(
             stop_reason="wall_deadline",
@@ -1127,6 +1178,23 @@ def _sub_tools(runtime: SwarmSubagentRuntime | None = None) -> list[Any]:
     return list(rm.get_tools_for_role(role_id))
 
 
+def _is_terminal_report_response(ctx: TurnContext) -> bool:
+    """Preserve only a sole final report; mixed research batches still stop.
+
+    This identifies intent, not validity. submit_report and its observers
+    remain responsible for content, attachments and verification checks.
+    """
+    if len(ctx.tool_calls) != 1:
+        return False
+    call = ctx.tool_calls[0]
+    args = call.get("args")
+    return (
+        call.get("name") == "submit_report"
+        and isinstance(args, dict)
+        and args.get("finish", True) is True
+    )
+
+
 def _swarm_observers(
     runtime: SwarmSubagentRuntime,
     *,
@@ -1211,7 +1279,10 @@ def _swarm_observers(
         ContentAcquisitionObserver(),
         # Cooperative stop: main agent's stop_subagent registers a stop for
         # this session_id; we inject the stop prompt at the next turn boundary.
-        StopSignalObserver(session_id=f"{task_id}::{session_name}"),
+        StopSignalObserver(
+            session_id=f"{task_id}::{session_name}",
+            is_terminal_response=_is_terminal_report_response if terminal else None,
+        ),
     ]
     for factory in runtime.subagent_observer_factories:
         observer = factory(session_name)

@@ -14,6 +14,7 @@ from workflows._shared.cross_mode_context import (
     CrossModeContextError,
     append_context_to_question,
     export_conversation_context,
+    render_context_tail,
     with_published_answer,
 )
 from workflows.agent_team.spec import SWARM_SPEC
@@ -274,7 +275,7 @@ def test_ten_alternating_runs_grow_only_by_new_source_records() -> None:
         assert sum(record.get("content") == f"User turn {index}" for record in records) == 1
 
 
-def test_portable_prompt_window_is_bounded_while_archive_record_stays_addressable() -> None:
+async def test_portable_prompt_window_is_bounded_while_archive_record_stays_addressable() -> None:
     full = export_conversation_context(
         _dump(
             pipeline_id="stateful-react-agent",
@@ -309,7 +310,20 @@ def test_portable_prompt_window_is_bounded_while_archive_record_stays_addressabl
     assert "portable_window_trimmed" in bounded["completeness"]["reasons"]
     assert any(record.get("kind") == "published_answer" for record in bounded["records"])
     assert "early-detail-991" in json.dumps(full, ensure_ascii=False)
-    assert "early-detail-991" not in json.dumps(bounded, ensure_ascii=False)
+    assert "early-detail-991" not in render_context_tail(bounded)
+    from plugins.tools.research_history import (
+        bind_research_history,
+        research_history,
+        reset_research_history,
+    )
+
+    token = bind_research_history([json.dumps(bounded)])
+    try:
+        found = json.loads(await research_history.func(query="early-detail-991"))
+        assert found["total"] == 1
+        assert "early-detail-991" in found["records"][0]["content"]
+    finally:
+        reset_research_history(token)
 
 
 def test_both_workflow_entry_nodes_admit_the_portable_context_field() -> None:
@@ -662,3 +676,65 @@ def test_portable_cleaning_keeps_tool_evidence_and_quoted_user_text():
     assert "Visible text" in rendered
     assert "quoted source" in rendered
     assert "Explain the message" in rendered
+
+
+@pytest.mark.parametrize("tamper", ["checksum", "messages", "missing_receipt"])
+def test_native_archive_requires_valid_messages_and_checksum(tamper: str) -> None:
+    import hashlib
+
+    from frontier_agent.components.observers.conversation_snapshot import canonical_json
+
+    doc = _dump(
+        pipeline_id="agent_team",
+        run_id="archived-run",
+        messages=[
+            system_msg("system"),
+            user_msg("latest"),
+            assistant_msg("answer"),
+        ],
+    )
+    archive = [system_msg("system"), user_msg("original evidence")]
+    doc["archive_messages"] = archive
+    doc["trim"] = {
+        "recovery": {"sha256": hashlib.sha256(canonical_json(archive).encode("utf-8")).hexdigest()}
+    }
+    if tamper == "checksum":
+        archive[1]["content"] = "altered"
+    elif tamper == "messages":
+        archive[1]["role"] = "invalid-role"
+    else:
+        doc.pop("trim")
+    with pytest.raises(CrossModeContextError, match="archive"):
+        export_conversation_context(doc)
+
+
+async def test_archive_sanitization_does_not_replay_runtime_guidance_or_reasoning() -> None:
+    from plugins.tools.research_history import (
+        bind_research_history,
+        research_history,
+        reset_research_history,
+    )
+
+    payload = {
+        "schema": SCHEMA,
+        "records": [],
+        "archived_records": [
+            {"source_id": "notice", "role": "user", "content": "[Evidence boundary] old guidance"},
+            {
+                "source_id": "fact",
+                "role": "assistant",
+                "content": "<think>private</think>Public fact",
+                "reasoning_content": "private reasoning",
+            },
+        ],
+    }
+    assert "Public fact" not in render_context_tail(payload)
+    token = bind_research_history([json.dumps(payload)])
+    try:
+        found = json.loads(await research_history.func())
+        assert found["total"] == 1
+        assert found["records"][0]["source_id"] == "fact"
+        assert "Public fact" in found["records"][0]["content"]
+        assert "private" not in json.dumps(found)
+    finally:
+        reset_research_history(token)

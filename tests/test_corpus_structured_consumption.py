@@ -353,7 +353,8 @@ async def test_submit_short_selection_generates_contract_without_trusting_delive
     assert pending["conclusions"][0]["delivery"] == ["pending"]
     await deliver(sample)
     out = json.loads(await corpus_submit_manifest.ainvoke({"conclusions": [selection]}))
-    assert out["publish_status"] == "verified"
+    assert out["evidence_status"] == "verified"
+    assert out["publish_status"] == "pending_report"
     assert len(out["conclusions"][0]["semantic_references"][0]["evidence_ranges"]) == 2
     boundary = publish_boundary(sample.ledger, final_text=sample.quote, answer_status="complete")
     assert boundary["boundary_action"] == "publish"
@@ -426,7 +427,8 @@ async def test_real_loop_query_only_submit_and_a4_verified(tmp_path, monkeypatch
                 result = json.loads(
                     next(m["content"] for m in reversed(messages) if m["role"] == "tool")
                 )
-                assert result["publish_status"] == "verified"
+                assert result["evidence_status"] == "verified"
+                assert result["publish_status"] == "pending_report"
                 return LLMResponse(content=report, finish_reason="stop")
             return LLMResponse(
                 content="",

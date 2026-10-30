@@ -212,6 +212,11 @@ async def schedule_event(
             "generation": event.generation,
         }
 
+    if event.round_id is not None:
+        from server.monitor_longterm import schedule
+
+        return await schedule(session, event, now)
+
     rule = (
         await session.execute(
             select(store.WatchRule).where(store.WatchRule.id == event.rule_id).with_for_update()
@@ -481,7 +486,7 @@ async def merge_pending(session: AsyncSession, *, limit: int, now: datetime) -> 
                 (store.WatchRuleRevision.rule_id == store.WatchEvent.rule_id)
                 & (store.WatchRuleRevision.version == store.WatchEvent.rule_version),
             )
-            .where(store.WatchEvent.status == PENDING)
+            .where(store.WatchEvent.status == PENDING, store.WatchEvent.round_id.is_(None))
             .order_by(store.WatchEvent.received_at_ms.asc())
             .limit(limit * 4)
         )
@@ -618,6 +623,13 @@ async def assert_watch_launch_ready(run_id: uuid.UUID) -> None:
             select(store.WatchEvent).where(store.WatchEvent.run_id == run_id)
         )
         if event is None:
+            return
+        if event.round_id is not None:
+            from server.monitor_longterm import MonitorLaunchDeferred, launch_block_reason
+
+            reason = await launch_block_reason(session, run_id)
+            if reason:
+                raise MonitorLaunchDeferred(reason)
             return
         rule = await session.get(store.WatchRule, event.rule_id)
         rev = await _latest_revision(session, event.rule_id, event.rule_version)

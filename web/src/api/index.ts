@@ -629,6 +629,9 @@ export const watchEvents = {
 }
 
 export interface MonitorStatus {
+  auto_manage: boolean
+  queued_signals: number
+  oldest_queued_at_ms: number | null
   rules: WatchRule[]
   events: WatchEvent[]
   event_total: number
@@ -641,6 +644,7 @@ export interface MonitorStatus {
 }
 
 export const monitor = {
+  settings: (researchId: string, autoManage: boolean) => request<{ auto_manage: boolean }>(`/business/monitor/sessions/${encodeURIComponent(researchId)}/settings`, { method: 'PUT', body: { auto_manage: autoManage } }),
   heartbeat: () => request<{ expires_at: string }>('/business/monitor/heartbeat', { method: 'POST' }),
   status: (researchId: string) => request<MonitorStatus>(`/business/monitor/sessions/${encodeURIComponent(researchId)}`),
 }

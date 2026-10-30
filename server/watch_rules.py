@@ -4,8 +4,7 @@
 不可变 ``WatchRuleRevision``。阈值、方向、有效期、触发资格策略在版本行冻结；计划改版、
 暂停/恢复都不改写既有版本（契约 §9）。
 
-C 阶段只开放 ``trigger_mode=single``；重复模式及其冷却/重新布防参数在 D 阶段开放，
-本阶段收到即明确拒绝，不静默接受。
+single 为历史单次规则；continuous 每轮达标触发；crossing 按采样穿越长期触发。
 """
 
 from __future__ import annotations
@@ -28,8 +27,9 @@ CANCELLED = "cancelled"
 
 DIRECTIONS = frozenset({"up", "down", "range"})
 ACTIONS = frozenset({"notify", "auto_analyze"})
-#: C 阶段只开放单次触发；repeat 及其冷却/重新布防参数属 D 阶段。
-TRIGGER_MODES = frozenset({"single"})
+#: Legacy single rules coexist with session-scoped continuous monitoring.
+LONG_RUNNING_MODES = frozenset({"continuous", "crossing"})
+TRIGGER_MODES = frozenset({"single", *LONG_RUNNING_MODES})
 ON_CREATE_POLICIES = frozenset({"trigger_now", "wait_requalify"})
 DISCONNECT_POLICIES = frozenset({"trigger_once", "wait_requalify"})
 BUDGET_KEYS = frozenset({"max_runs"})
@@ -172,7 +172,7 @@ def _parse_fields(patch: dict[str, Any], *, allow_plan_id: bool) -> tuple[dict[s
             if text not in TRIGGER_MODES:
                 raise biz.ValidationError(
                     "触发模式未开放",
-                    fields={"trigger_mode": "C 阶段仅支持 single，重复模式在 D 阶段开放"},
+                    fields={"trigger_mode": "请选择 single、continuous 或 crossing"},
                 )
             columns[key] = text
         elif key == "action":
@@ -224,6 +224,20 @@ def _defaults() -> dict[str, Any]:
         "on_create_already_met": "trigger_now",
         "disconnect_recovery": "trigger_once",
     }
+
+
+def _continuous_policy(columns: dict[str, Any]) -> None:
+    if columns.get("trigger_mode") not in LONG_RUNNING_MODES:
+        return
+    if columns.get("market") != "CN" or columns.get("currency") != "CNY" or columns.get("quote_basis") not in {"last", "last_trade"}:
+        raise biz.ValidationError("长期监控当前仅支持人民币 A 股最新成交价")
+    if not re.fullmatch(r"(?:6\d{5}\.SH|[03]\d{5}\.SZ)", columns.get("symbol", "")):
+        raise biz.ValidationError("请使用行情源支持的完整 A 股代码")
+    columns["on_create_already_met"] = "trigger_now"
+    columns["disconnect_recovery"] = "trigger_once"
+    columns["budget_json"] = {}
+    if columns.get("action") == "auto_analyze" and not columns.get("task"):
+        raise biz.ValidationError("自动分析需要明确复核任务")
 
 
 def _finalize_threshold(
@@ -297,6 +311,9 @@ def _config_view(rev: store.WatchRuleRevision) -> dict[str, Any]:
 
 def rule_view(rule: store.WatchRule, rev: store.WatchRuleRevision | None) -> dict[str, Any]:
     return {
+        "managed_by": rule.managed_by,
+        "intent_key": rule.agent_intent,
+        "rationale": rule.rationale,
         "id": str(rule.id),
         "research_id": str(rule.research_id),
         "plan_id": str(rule.plan_id) if rule.plan_id else None,
@@ -393,10 +410,10 @@ async def create_rule(
                 store.WatchRule.status != CANCELLED,
             )
         )
-        if current_count >= get_config().monitor_session_limit:
+        if (current_count or 0) >= min(3, get_config().monitor_session_limit):
             raise biz.ValidationError(
                 "当前会话已有监控，请编辑现有监控或先取消",
-                fields={"research_id": "实验阶段每个会话限一个当前监控，暂停不会释放名额"},
+                fields={"research_id": "当前监控名额已满，每会话最多三个，暂停不会释放名额"},
             )
         if plan_id is not None:
             plan = await _load_plan(
@@ -406,6 +423,7 @@ async def create_rule(
                 raise biz.NotFoundOrForbiddenError("计划不存在或不属于该研究")
         columns, threshold_raw = _parse_fields(spec, allow_plan_id=False)
         merged = {**_defaults(), **columns}
+        _continuous_policy(merged)
         missing = [
             key
             for key in ("symbol", "market", "currency", "direction", "action")
@@ -488,6 +506,8 @@ async def update_rule(
             raise biz.NotFoundOrForbiddenError("监控规则不存在或无权访问")
         if rule.status == CANCELLED:
             raise biz.RuleCancelledError("规则已取消，不能修改", current={"status": CANCELLED})
+        if source_kind == "agent" and (rule.status != ACTIVE or rule.managed_by != "agent"):
+            raise biz.ValidationError("目标已暂停或由人工接管，拒绝 Agent 更新")
         if expected_version is None:
             raise biz.ValidationError(
                 "缺少预期版本", fields={"expected_version": "修改必须携带当前版本号"}
@@ -499,8 +519,11 @@ async def update_rule(
                 fields={"expected_version": f"当前版本为 {rule.current_version}"},
             )
         prev = await _latest_revision(session, rule.id, rule.current_version)
+        if source_kind == "form":
+            rule.managed_by = "human"
         columns, threshold_raw = _parse_fields(patch, allow_plan_id=True)
         merged = {**(_revision_columns(prev) if prev else {}), **columns}
+        _continuous_policy(merged)
 
         plan_id = rule.plan_id
         if "plan_id" in patch:

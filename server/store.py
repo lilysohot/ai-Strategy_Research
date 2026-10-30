@@ -855,6 +855,33 @@ class NotificationSettings(Base):
     )
 
 
+class MonitorSession(Base):
+    """Durable session clock, collection lease and Agent maintenance permission."""
+
+    __tablename__ = "monitor_sessions"
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), primary_key=True)
+    auto_manage: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    next_poll_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    sequence: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+
+
+class MonitorRound(Base):
+    """One leased acquisition of all continuous targets in a research session."""
+
+    __tablename__ = "monitor_rounds"
+    __table_args__ = (UniqueConstraint("research_id", "sequence", name="uq_monitor_round_seq"),)
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    research_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sessions.id"), nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    sequence: Mapped[int] = mapped_column(Integer, nullable=False)
+    state: Mapped[str] = mapped_column(String, nullable=False, default="collecting")
+    lease_token: Mapped[str] = mapped_column(String, nullable=False)
+    lease_until: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    targets: Mapped[list] = mapped_column(JSON, nullable=False)
+    results: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
 class MonitorPresence(Base):
     __tablename__ = "monitor_presence"
 
@@ -928,6 +955,9 @@ class WatchRule(Base):
     status: Mapped[str] = mapped_column(String, nullable=False, default="active")
     #: 已落库的最大配置版本号；配置明细读取版本行，不在指针行复制正文。
     current_version: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    agent_intent: Mapped[str | None] = mapped_column(String)
+    managed_by: Mapped[str] = mapped_column(String, nullable=False, default="human", server_default="human")
+    rationale: Mapped[dict | None] = mapped_column(JSON)
     lifecycle_epoch: Mapped[int] = mapped_column(
         Integer, nullable=False, default=0, server_default="0"
     )
@@ -969,12 +999,12 @@ class WatchRuleRevision(Base):
     currency: Mapped[str] = mapped_column(String, nullable=False)
     #: 行情口径（如 last）；实际是否可达由 DATA-10 按供应商核验，本行只冻结用户选择。
     quote_basis: Mapped[str] = mapped_column(String, nullable=False, default="last")
-    #: up=上穿、down=下穿、range=进入区间。up/down 用 threshold_low；range 用 low/high。
+    #: up/down/range 表示比较方向；continuous 为达标，crossing/single 为穿越。
     direction: Mapped[str] = mapped_column(String, nullable=False)
     threshold_low: Mapped[Decimal | None] = mapped_column(MONEY)
     threshold_high: Mapped[Decimal | None] = mapped_column(MONEY)
     expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    #: C 阶段只开放 single；repeat（含冷却/重新布防参数）在 D 阶段。
+    #: single=单次；continuous=每轮达标；crossing=首次达标及后续重新穿越。
     trigger_mode: Mapped[str] = mapped_column(String, nullable=False, default="single")
     #: notify=仅提醒（不调用模型）；auto_analyze=按已保存指令创建分析 Run（DATA-11）。
     action: Mapped[str] = mapped_column(String, nullable=False)
@@ -1039,12 +1069,16 @@ class WatchEvent(Base):
 
     __tablename__ = "watch_events"
     __table_args__ = (
-        UniqueConstraint("rule_id", "rule_version", name="uq_watch_events_rule_version"),
+        Index("uq_watch_events_rule_version", "rule_id", "rule_version", unique=True,
+              postgresql_where=text("round_id IS NULL"), sqlite_where=text("round_id IS NULL")),
+        UniqueConstraint("research_id", "round_id", name="uq_watch_events_round"),
         Index("ix_watch_events_research_status", "research_id", "status"),
         Index("ix_watch_events_user_created", "user_id", "created_at"),
     )
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=_uuid)
+    round_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("monitor_rounds.id"))
+    queue_sequence: Mapped[int | None] = mapped_column(Integer)
     rule_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("watch_rules.id"), nullable=False)
     rule_version: Mapped[int] = mapped_column(Integer, nullable=False)
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)

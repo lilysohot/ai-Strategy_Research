@@ -326,6 +326,46 @@ def test_submission_without_final_text_is_only_evidence_check(run_env):
     assert out["report_bound"] is False
 
 
+def test_worker_canonical_mount_report_uses_host_output_root(run_env, monkeypatch):
+    from plugins.corpus.report_binding import read_report
+    from server.worker import apply_env
+
+    paths = {key: run_env / key for key in ("workspace", "outputs", "inputs", "spill", "run")}
+    paths["outputs"].mkdir()
+    (paths["outputs"] / "报告.md").write_text(TEXT, encoding="utf-8")
+    # apply_env mutates the whole worker environment; isolate it from other tests.
+    import os
+    monkeypatch.setattr(os, "environ", os.environ.copy())
+    apply_env(paths, backend="bwrap", wall_time_s=60, max_turns=10,
+              model="", base_url="", api_key="", canonical_mounts=True)
+    assert os.environ["FRONTIER_AGENT_OUTPUTS_DIR"] == "/outputs"
+    assert read_report("/outputs/报告.md")[0] == TEXT
+
+
+async def test_replayed_corpus_original_can_be_verified_without_refetch(run_env):
+    from plugins.corpus.ledger import ConsumptionLedgerObserver, get_run_ledger
+    ledger = get_run_ledger()
+    observer = ConsumptionLedgerObserver(ledger=ledger)
+    messages = [
+        {"role": "assistant", "tool_calls": [{"id": "old-fetch", "type": "function",
+         "function": {"name": "corpus_fetch", "arguments": json.dumps({"doc_id": DOC, "locator": "chunk:c1"})}}]},
+        {"role": "tool", "tool_call_id": "old-fetch", "content": _fetch_body()},
+        {"role": "user", "content": "沿用原文，调整监控"},
+    ]
+    await observer.on_tool_call(_turn(1, messages), {"name": "corpus_submit_manifest", "args": {}})
+    assert ledger_delivery_for_submit(ledger, DOC, "chunk:c1", 0, len(TEXT)) == DELIVERED
+
+
+@pytest.mark.parametrize("role", ["user", "assistant", "tool"])
+async def test_unpaired_or_summarized_evidence_does_not_restore_delivery(run_env, role):
+    from plugins.corpus.ledger import ConsumptionLedgerObserver, get_run_ledger
+    ledger = get_run_ledger()
+    observer = ConsumptionLedgerObserver(ledger=ledger)
+    messages = [{"role": role, "content": _fetch_body(), "tool_call_id": "unknown"}]
+    await observer.on_tool_call(_turn(1, messages), {"name": "corpus_submit_manifest", "args": {}})
+    assert ledger_delivery_for_submit(ledger, DOC, "chunk:c1", 0, len(TEXT)) != DELIVERED
+
+
 @pytest.mark.parametrize("path", ["/etc/passwd", "/outputs/../secret.md", "/outputs/link.md"])
 def test_report_binding_rejects_paths_outside_outputs(run_env, monkeypatch, path):
     outputs = run_env / "outputs"
@@ -360,4 +400,6 @@ def test_report_anchor_mismatch_is_reported_before_final_answer(run_env, monkeyp
         announce_status=True,
     )
     assert "最终证据核验：未全部通过" in final["final_text"]
+    assert "原文证据及送达核验 1/1" in final["final_text"]
+    assert "报告引用对应核验 0/1" in final["final_text"]
     assert final["answer_status"] == "partial"

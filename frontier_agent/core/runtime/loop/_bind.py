@@ -62,7 +62,7 @@ class _BoundLLM:
         """
         kw: dict[str, Any] = {}
         eff_tools = tools if tools is not None else self.tools
-        if eff_tools:
+        if eff_tools is not None:
             kw["tools"] = eff_tools
         eff_temperature = (
             temperature if temperature is not None else self.temperature
@@ -142,6 +142,18 @@ def bind_tools(llm: Any, tools: list[Any]) -> Any:
         for t in tools
     ]
     return replace(_ensure_bound(llm), tools=schemas)
+
+
+def restrict_tools(llm: Any, allowed_names: tuple[str, ...]) -> Any:
+    """Narrow an existing binding for one request without mutating shared clients."""
+    bound = _ensure_bound(llm)
+    schemas = [
+        schema for schema in bound.tools or []
+        if schema.get("function", {}).get("name") in allowed_names
+    ]
+    # An explicit empty list must reach inner bindings too, never fall back to
+    # their original tools when the intersection is empty.
+    return replace(bound, tools=schemas)
 
 
 def _sticky_session_enabled() -> bool:

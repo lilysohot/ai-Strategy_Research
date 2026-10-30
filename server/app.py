@@ -40,6 +40,18 @@ from server.security import check_startup_secrets
 from server.store import init_db
 
 
+async def _dispatch_when_ready(*, ready: bool) -> None:
+    """Retry a degraded dev boot instead of permanently disabling the outbox."""
+    while not ready:
+        await asyncio.sleep(get_config().dispatch_poll_seconds)
+        try:
+            ready = (await storage_readiness()).ok
+        except Exception:
+            # A transient probe failure must not kill the recovery task.
+            continue
+    await dispatch_loop(get_orchestrator())
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     # Fail before serving traffic: a server started with the shipped keys signs
@@ -71,8 +83,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     # It lives with the API process (start/stop with lifespan); multi-process
     # deployments share dispatching safely via SKIP LOCKED claims + leases.
     dispatch_task: asyncio.Task[None] | None = None
-    if readiness.ok and not get_config().restore_mode and get_config().dispatch_enabled:
-        dispatch_task = asyncio.create_task(dispatch_loop(get_orchestrator()))
+    if not get_config().restore_mode and get_config().dispatch_enabled:
+        dispatch_task = asyncio.create_task(_dispatch_when_ready(ready=readiness.ok))
     # DATA-10: 监控常驻轮询（独立于 API 请求协程与浏览器）。默认关闭，部署时显式开启；
     # 行情源不可用（缺凭据等）时保持"未启用/待核定"，不伪装实时。
     monitor_task: asyncio.Task[None] | None = None

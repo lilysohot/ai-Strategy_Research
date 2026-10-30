@@ -66,6 +66,8 @@ def _locate_offset(path: os.PathLike[str], after_line: int) -> tuple[int, int]:
 async def _legacy_trajectory_tail(
     run_id: str,
     after_line: int = 0,
+    *,
+    terminal: bool = False,
 ) -> AsyncIterator[tuple[int, dict]]:
     """Yield ``(line_number, record)`` from ``after_line`` (1-based) onward.
 
@@ -89,7 +91,7 @@ async def _legacy_trajectory_tail(
         offset, line_no = _locate_offset(traj, after_line)
     else:
         offset, line_no = 0, 0
-    seen_finished = finished.exists()
+    seen_finished = terminal or finished.exists()
     while True:
         partial = ""
         if traj.exists():
@@ -142,7 +144,12 @@ async def _legacy_trajectory_tail(
         await asyncio.sleep(0.25)
 
 
-async def trajectory_tail(run_id: str, after_line: int = 0) -> AsyncIterator[tuple[int, dict]]:
+async def trajectory_tail(
+    run_id: str,
+    after_line: int = 0,
+    *,
+    terminal: bool = False,
+) -> AsyncIterator[tuple[int, dict]]:
     """Tail either the legacy single stream or all Agent Team streams.
 
     Team cursors are positions in the timestamp-merged record stream. Runtime
@@ -155,12 +162,16 @@ async def trajectory_tail(run_id: str, after_line: int = 0) -> AsyncIterator[tup
         sources = discover_trajectory_sources(run_dir)
         if sources:
             break
-        if finished.exists():
+        if terminal or finished.exists():
             return
         await asyncio.sleep(0.25)
 
     if len(sources) == 1 and sources[0].source == "react_agent":
-        async for item in _legacy_trajectory_tail(run_id, after_line=after_line):
+        async for item in _legacy_trajectory_tail(
+            run_id,
+            after_line=after_line,
+            terminal=terminal,
+        ):
             yield item
         return
 
@@ -169,7 +180,7 @@ async def trajectory_tail(run_id: str, after_line: int = 0) -> AsyncIterator[tup
     line_no = 0
     while True:
         sources = discover_trajectory_sources(run_dir)
-        terminal = finished.exists()
+        terminal = terminal or finished.exists()
         for record, _path, _offset in iter_merged_records(
             sources,
             offsets=offsets,
@@ -369,6 +380,7 @@ async def sse_for_run(
     # its element type is ``dict | None`` — matching the orchestrator's fan-out.
     queue: asyncio.Queue[dict[str, Any] | None] | None = None,
     after_line: int = 0,
+    terminal: bool = False,
 ) -> AsyncIterator[str]:
     """Produce the SSE byte stream for a run.
 
@@ -390,7 +402,11 @@ async def sse_for_run(
     """
     if queue is None:
         # Replay-only fallback (tests, and any caller without a live handle).
-        async for line_no, rec in trajectory_tail(run_id, after_line=after_line):
+        async for line_no, rec in trajectory_tail(
+            run_id,
+            after_line=after_line,
+            terminal=terminal,
+        ):
             for event in _traj_record_to_events(rec, seq=line_no):
                 yield to_sse(event)
         return

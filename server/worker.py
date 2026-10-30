@@ -211,6 +211,33 @@ def _load_research_history_contexts(run_root: Path) -> list[str]:
         path.unlink(missing_ok=True)
 
 
+def _load_monitor_history_contexts(run_root: Path) -> list[str]:
+    """Expose the human carrier on demand without replaying its unfinished execution."""
+    from frontier_agent.components.observers.conversation_snapshot import canonical_json
+    from workflows._shared.cross_mode_context import (
+        export_conversation_context,
+        normalise_context,
+    )
+
+    contexts = _load_research_history_contexts(run_root)
+    portable = run_root / "prior_cross_mode_context.json"
+    native = run_root / "prior_conversation.json"
+    try:
+        if portable.is_file():
+            contexts.append(portable.read_text(encoding="utf-8"))
+        elif native.is_file():
+            contexts.append(canonical_json(export_conversation_context(native.read_text(encoding="utf-8"))))
+    except (OSError, ValueError):
+        logging.getLogger("server.worker").warning("Monitoring history head unavailable")
+    valid = []
+    for context in contexts:
+        try:
+            valid.append(canonical_json(normalise_context(context)))
+        except ValueError:
+            logging.getLogger("server.worker").warning("Invalid monitoring history excluded")
+    return valid
+
+
 def _compose_run_instruction(
     prompt: str,
     *,
@@ -342,6 +369,8 @@ def apply_env(
             if canonical_mounts
             else str(paths["workspace"]),
             "FRONTIER_AGENT_OUTPUTS_DIR": "/outputs" if canonical_mounts else str(paths["outputs"]),
+            # Python evidence tools run in the worker, outside command mount namespaces.
+            "FRONTIER_AGENT_HOST_OUTPUTS_DIR": str(paths["outputs"]),
             "FRONTIER_AGENT_INPUTS_DIR": "/inputs" if canonical_mounts else str(paths["inputs"]),
             "CODING_WORKSPACE_ROOT": str(paths["workspace"]),
             "APODEX_SPILL_DIR": str(paths["spill"]),
@@ -660,10 +689,13 @@ async def run_once(args: argparse.Namespace) -> int:
         business_prefix = investment_context is not None
     business_prefix = bool(business_prefix)
 
+    continuity_mode = (getattr(args, "continuity", "on") or "on").strip().lower()
+    monitoring = continuity_mode == "read"
+    history_enabled = monitoring or bool(getattr(args, "mixed_mode_history", False))
     overrides = build_profile_overrides(
         has_investment_context=business_prefix,
         pipeline_id=args.pipeline_id,
-        enable_research_history=bool(getattr(args, "mixed_mode_history", False)),
+        enable_research_history=history_enabled,
     )
     # Parse any extra agent_tools the orchestrator appends (e.g. market tools
     # once registered in T4.2).
@@ -676,7 +708,14 @@ async def run_once(args: argparse.Namespace) -> int:
         target_key = "main_agent_tools" if args.pipeline_id == "agent_team" else "agent_tools"
         overrides["agent"][target_key] = [*overrides["agent"][target_key], *extra]
 
+    if os.environ.get("FRONTIER_WATCH_CHANNEL"):
+        target_key = "main_agent_tools" if args.pipeline_id == "agent_team" else "agent_tools"
+        overrides["agent"][target_key] = list(dict.fromkeys([
+            *overrides["agent"][target_key], "get_watch_targets", "submit_watch_intents",
+        ]))
+
     metadata: dict[str, Any] = {
+        "archive_prior_tasks": True,
         "profile": PROFILE_NAME,
         "profile_overrides": overrides,
         "fs_mode": overrides["agent"]["fs_mode"],
@@ -698,9 +737,24 @@ async def run_once(args: argparse.Namespace) -> int:
         **build_prompt_addenda(
             pipeline_id=args.pipeline_id,
             has_investment_context=business_prefix,
-            enable_research_history=bool(getattr(args, "mixed_mode_history", False)),
+            enable_research_history=history_enabled,
         ),
     }
+    if os.environ.get("FRONTIER_WATCH_CHANNEL"):
+        from server.watch_observer import WatchPauseObserver
+
+        metadata["sdk_extra_observers"].insert(0, WatchPauseObserver())
+        metadata["_sys_prompt_addendum"] = metadata.get("_sys_prompt_addendum", "") + (
+            "\n价格监控：先调用 get_watch_targets 读取授权、现有目标和暂停状态。"
+            "授权开启且分析有明确依据时，用 submit_watch_intents 回填目标；每会话最多三个。"
+            "监控长期每15分钟检查；continuous 每轮达标重复触发，不能称为上穿/下穿。"
+            "用户要求上穿/下穿、避免停留同侧重复触发时，设置 trigger_mode=crossing；"
+            "crossing 首次采样达标立即触发，此后需回到条件外再次穿越。多目标同轮一个信号。"
+            "更新目标必须保留已有模式，除非本轮明确要求改变；不根据名字猜测已保存模式。"
+            "重新设定走势关键价前先获取最新行情，核对目标价、比较条件与依据文字是否一致。"
+            "有持仓时结合行情综合分析，无持仓不阻止研究；多次触发时判断该价是否值得长期监控。"
+            "不得绕过暂停或取消；以工具的真实回执说明保存结果，不以正文代替落库。"
+        )
     # Web storage and bwrap must name the same per-Run directories. Both the
     # stateful and team workflows consume these fields when constructing their
     # private mount namespaces; container/native modes keep using apply_env's
@@ -721,23 +775,33 @@ async def run_once(args: argparse.Namespace) -> int:
     # here for the same reason as the decision above: the pipeline call below can
     # fail before ever producing a state.
     summary_usage: dict[str, Any] = {}
+    evidence_boundary: dict[str, Any] = {}
     workflow_stop_reason = ""
     answer_outcome: dict[str, Any] = {}
 
-    # Cross-turn continuity (issue 01 §9.4): the orchestrator stages the session's
-    # stored conversation dump in this run root. The worker never parses it —
-    # it is handed to the workflow as an opaque payload, and the workflow
-    # validates it before replaying anything.
-    replay_payload, cross_mode_context = _load_continuity_inputs(
-        run_root,
-        target_pipeline_id=args.pipeline_id,
-        prior_pipeline_id=str(getattr(args, "prior_pipeline_id", "") or ""),
-    )
+    # Human turns retain native continuity. A monitoring Run starts a fresh
+    # execution and consults the validated human archive only when necessary.
+    replay_payload, cross_mode_context = "", ""
+    if not monitoring:
+        replay_payload, cross_mode_context = _load_continuity_inputs(
+            run_root,
+            target_pipeline_id=args.pipeline_id,
+            prior_pipeline_id=str(getattr(args, "prior_pipeline_id", "") or ""),
+        )
     history_token = None
-    if getattr(args, "mixed_mode_history", False):
+    if history_enabled:
         from plugins.tools.research_history import bind_research_history
 
-        history_token = bind_research_history(_load_research_history_contexts(run_root))
+        contexts = (_load_monitor_history_contexts(run_root) if monitoring
+                    else _load_research_history_contexts(run_root))
+        history_token = bind_research_history(contexts)
+    if monitoring:
+        metadata["_sys_prompt_addendum"] = metadata.get("_sys_prompt_addendum", "") + (
+            "\n本次是独立的价格监控复核，不接续旧研究的任务板或失败重试。"
+            "历史研究通过 research_history 按关键词、小页查询；仅在缺少设价依据、"
+            "用户约束或证据时读取，不默认检索或复述整份旧报告。"
+            "历史价格、持仓和工具结果有各自时点；本轮最新行情及业务快照优先。"
+        )
 
     # The request *tail*: everything that differs between turns of ONE
     # conversation. The uploaded-file note names this run's inputs and the
@@ -758,7 +822,6 @@ async def run_once(args: argparse.Namespace) -> int:
     if args.pipeline_id == "agent_team":
         metadata["_subagent_original_question"] = subagent_original_question
 
-    continuity_mode = (getattr(args, "continuity", "on") or "on").strip().lower()
     try:
         async with BenchmarkSession() as session:
             state = await asyncio.wait_for(
@@ -767,8 +830,8 @@ async def run_once(args: argparse.Namespace) -> int:
                     meta=metadata,
                     pipeline_id=args.pipeline_id,
                     extra_input={
-                        # Watch mode is read-only (issue 01 §13): it can replay
-                        # the chat carrier but cannot write its raw trace back.
+                        # Watch mode keeps the human carrier read-only; its
+                        # archive is bound to a tool, not replayed into this loop.
                         "continuity_read_enabled": continuity_mode != "off",
                         "continuity_write_enabled": continuity_mode == "on",
                         **({"replay_payload": replay_payload} if replay_payload else {}),
@@ -781,6 +844,7 @@ async def run_once(args: argparse.Namespace) -> int:
             )
         replay_decision = state.get("replay_decision") or {}
         summary_usage = state.get("summary_usage") or {}
+        evidence_boundary = state.get("evidence_boundary") or {}
         workflow_stop_reason = str(state.get("stopped_by") or "")
         answer_outcome = {
             key: str(state.get(key) or "")
@@ -883,6 +947,7 @@ async def run_once(args: argparse.Namespace) -> int:
         # key rather than folded into the run's counters: this call happens in an
         # observer the trajectory never sees, so it was previously unmetered.
         "summary_usage": summary_usage,
+        "evidence_boundary": evidence_boundary,
     }
     # F22 / F06-RUN-3 + F06 power durability: atomic + fsynced persist (see
     # persist_summary). A write failure is logged but must never mask the outcome.

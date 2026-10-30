@@ -59,6 +59,7 @@ from frontier_agent.core.runtime.loop.llm_client import (
     extract_leaked_reasoning,
     extract_usage,
     is_truncated_with_text,
+    restrict_tools,
 )
 from frontier_agent.core.runtime.loop.model_profile import (
     DefaultThinkingParser,
@@ -453,13 +454,6 @@ async def _prepare_llm_request(
 ) -> tuple[Any, list[Message], str]:
     temp_override = metadata.pop("_llm_temp_override", None)
     strip_tools = metadata.pop("_llm_strip_tools", False)
-    llm_base = llm_with_session if strip_tools else llm_with_tools
-    llm_for_turn = (
-        bind_temperature(llm_base, temp_override)
-        if temp_override is not None
-        else llm_base
-    )
-
     before_llm_ctx = TurnContext(
         turn=turn, max_turns=cfg.max_turns, task_id=cfg.task_id, role_id=cfg.role_id,
         ai_text="", thinking="", tool_calls=[], messages=messages, usage=None, metadata=metadata,
@@ -467,6 +461,19 @@ async def _prepare_llm_request(
     before_llm_interventions = await notify_observers(obs, "on_before_llm", before_llm_ctx)
     merged_before_llm = merge_interventions(before_llm_interventions)
 
+    if merged_before_llm.allowed_tool_names is not None:
+        # An explicit workflow restriction preserves its terminal tool even
+        # when a last-turn observer requested a generic no-tools fallback.
+        llm_base = restrict_tools(llm_with_tools, merged_before_llm.allowed_tool_names)
+    else:
+        llm_base = llm_with_session if strip_tools else llm_with_tools
+    llm_for_turn = (
+        bind_temperature(llm_base, temp_override)
+        if temp_override is not None
+        else llm_base
+    )
+
+    metadata["_request_injections"] = list(merged_before_llm.inject_messages or [])
     if merged_before_llm.inject_messages:
         for msg_text in merged_before_llm.inject_messages:
             messages.append(user_msg(msg_text))

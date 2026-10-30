@@ -22,7 +22,7 @@ def bind_research_history(contexts: list[str]) -> contextvars.Token:
     seen: set[str] = set()
     for payload in contexts:
         context = normalise_context(payload)
-        for record in context["records"]:
+        for record in [*context["records"], *context.get("archived_records", [])]:
             source_id = str(record["source_id"])
             if source_id in seen:
                 continue
@@ -108,8 +108,7 @@ async def research_history(
             "offset": offset,
             "next_offset": offset + len(page) if offset + len(page) < len(matches) else None,
             "records": [
-                _page_content(record, start=content_offset, length=content_limit)
-                for record in page
+                _page_content(record, start=content_offset, length=content_limit) for record in page
             ],
         },
         ensure_ascii=False,

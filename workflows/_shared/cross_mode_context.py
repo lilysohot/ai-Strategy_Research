@@ -26,8 +26,10 @@ from frontier_agent.components.observers.conversation_snapshot import (
 )
 from frontier_agent.components.observers.conversation_snapshot import (
     canonical_json,
+    summary_from,
     validate_messages,
 )
+from frontier_agent.core.messages import system_msg, user_msg
 from frontier_agent.core.runtime.loop._response import extract_final_content
 from frontier_agent.core.runtime.loop.context_budget import estimate_tokens
 
@@ -55,6 +57,7 @@ def _object(value: str | dict[str, Any], *, label: str) -> dict[str, Any]:
 
 
 _RUNTIME_NUDGES = (
+    "[Evidence boundary]",
     "Current task board (keep it current via add_task / update_task;",
     "Current task board (keep it current via add_task / update_task):",
     "The research admission window is closed.",
@@ -132,13 +135,22 @@ def _normalise_context(value: str | dict[str, Any]) -> dict[str, Any]:
     completeness = doc.get("completeness") or {}
     if not isinstance(completeness, dict):
         raise CrossModeContextError("cross-mode context completeness is not an object")
-    return {
+    result = {
         "schema": SCHEMA,
         "session_id": str(doc.get("session_id") or ""),
         "records": normalised_records,
         "sources": [dict(item) for item in sources],
         "completeness": dict(completeness),
     }
+    if "archived_records" in doc:
+        # Apply exactly the same validation and sanitization as active records.
+        result["archived_records"] = _normalise_context(
+            {
+                "schema": SCHEMA,
+                "records": doc["archived_records"],
+            }
+        )["records"]
+    return result
 
 
 def normalise_context(value: str | dict[str, Any]) -> dict[str, Any]:
@@ -247,7 +259,8 @@ def _trim_portable_records(
         (
             str(record.get("source_id"))
             for record in reversed(records)
-            if "<conversation-summary>" in str(record.get("content") or "")
+            if record.get("role") == "user"
+            and summary_from([system_msg(""), user_msg(str(record.get("content") or ""))])[1] is not None
         ),
         "",
     )
@@ -311,6 +324,15 @@ def export_conversation_context(
     if invalid:
         raise CrossModeContextError(f"conversation dump has invalid messages: {invalid}")
     assert isinstance(messages, list)
+    archive_messages = dump.get("archive_messages")
+    if archive_messages is not None:
+        invalid = validate_messages(archive_messages)
+        if invalid:
+            raise CrossModeContextError(f"conversation archive has invalid messages: {invalid}")
+        recovery = (dump.get("trim") or {}).get("recovery") or {}
+        checksum = hashlib.sha256(canonical_json(archive_messages).encode("utf-8")).hexdigest()
+        if recovery.get("sha256") != checksum:
+            raise CrossModeContextError("conversation archive checksum mismatch")
 
     inherited = _normalise_context(inherited_context) if inherited_context is not None else None
     pipeline_id = str(dump.get("pipeline_id") or "")
@@ -342,7 +364,30 @@ def export_conversation_context(
         if record is not None and record["source_id"] not in seen:
             records.append(record)
             seen.add(record["source_id"])
+    all_records = list(records)
     records, portable_trimmed = _trim_portable_records(records, max_tokens=max_tokens)
+    active_ids = {record["source_id"] for record in records}
+    archived = [record for record in all_records if record["source_id"] not in active_ids]
+    # Original indices belong to a distinct source node because the trimmed
+    # native window may have renumbered messages or inserted a new summary.
+    # Do not copy inherited archives: immutable prior Runs already own them.
+    if archive_messages is not None:
+        for index, message in enumerate(archive_messages):
+            record = _message_record(
+                dict(message),
+                pipeline_id=pipeline_id,
+                run_id=run_id,
+                node_id=f"{node_id}:archive",
+                index=index,
+                inherited=inherited,
+            )
+            if record is not None and not any(
+                record.get("role") == item.get("role")
+                and record.get("content") == item.get("content")
+                and record.get("tool_calls") == item.get("tool_calls")
+                for item in all_records
+            ):
+                archived.append(record)
 
     source = {
         "pipeline_id": pipeline_id,
@@ -368,6 +413,7 @@ def export_conversation_context(
         "schema": SCHEMA,
         "session_id": session_id or str((inherited or {}).get("session_id") or ""),
         "records": records,
+        "archived_records": archived,
         "sources": sources,
         "completeness": {
             "status": "windowed" if reasons else "available_window",
@@ -380,6 +426,7 @@ def render_context_tail(context: str | dict[str, Any]) -> str:
     """Render context as data appended after the current user request."""
 
     normalised = _normalise_context(context)
+    normalised.pop("archived_records", None)
     payload = canonical_json(normalised)
     return (
         "\n\n"
@@ -442,7 +489,13 @@ def with_published_answer(
                 **message,
             }
         )
-    records, portable_trimmed = _trim_portable_records(normalised["records"], max_tokens=max_tokens)
+    prior_records = normalised["records"]
+    records, portable_trimmed = _trim_portable_records(prior_records, max_tokens=max_tokens)
+    if portable_trimmed:
+        kept_ids = {record["source_id"] for record in records}
+        normalised.setdefault("archived_records", []).extend(
+            record for record in prior_records if record["source_id"] not in kept_ids
+        )
     normalised["records"] = records
     if portable_trimmed:
         reasons = list(normalised["completeness"].get("reasons") or [])

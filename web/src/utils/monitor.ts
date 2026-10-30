@@ -2,6 +2,17 @@ import type { ResearchLink, WatchEvent } from '@/types'
 
 export type MonitorBindingState = 'loading' | 'ready' | 'error'
 
+export function monitorConditionLabel(direction: unknown, mode: unknown): string {
+  if (mode === 'continuous') {
+    return direction === 'up' ? '大于等于' : direction === 'down' ? '小于等于' : '处于区间'
+  }
+  return direction === 'up' ? '上穿' : direction === 'down' ? '下穿' : '进入区间'
+}
+
+export function monitorModeLabel(mode: unknown): string {
+  return mode === 'crossing' ? '穿越时触发' : mode === 'continuous' ? '每轮达标触发' : '单次触发'
+}
+
 /**
  * Explain why this research cannot safely create an automatic-analysis watch.
  *

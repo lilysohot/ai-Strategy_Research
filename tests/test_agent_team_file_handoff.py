@@ -491,3 +491,73 @@ def test_bwrap_handoff_mount_is_read_only_but_scratch_stays_writable(
     assert tamper.exit_code != 0
     assert final_write.exit_code != 0
     assert handoff.read_text(encoding="utf-8") == "verified"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("file_exists", [False, True])
+async def test_research_handoff_publication_attempt_then_direct_report(handoff_runtime, file_exists):
+    import time
+
+    from frontier_agent.core.llm import LLMResponse
+    from frontier_agent.core.runtime.loop.agent_loop import run_agent_loop
+    from workflows.agent_team.subagent_runtime import (
+        InheritedWallClockDeadlineObserver,
+        build_swarm_session_runtime_spec,
+    )
+
+    workspace, _ = handoff_runtime
+    if file_exists:
+        (workspace / "notes.md").write_text("Existing evidence", encoding="utf-8")
+    draft = "Scope: research\nFinding: partial\nEvidence: https://example.org\nUnresolved: checks"
+
+    class HandoffLLM:
+        model = "scripted"
+        calls = 0
+        def __init__(self):
+            self.refs = []
+
+        async def chat(self, messages, **kwargs):
+            self.calls += 1
+            offered = {schema["function"]["name"] for schema in kwargs["tools"]}
+            if self.calls == 1:
+                assert offered == {"submit_report", "publish_handoff"}
+                assert any("No report file is required" in str(m) for m in messages)
+                name, args = "publish_handoff", {"source_path": "/workspace/notes.md"}
+            else:
+                assert offered == {"submit_report"}
+                results = [m["content"] for m in messages if m["role"] == "tool"]
+                assert len(results) == 1
+                if file_exists:
+                    self.refs = [json.loads(results[0])["ref"]]
+                else:
+                    assert "Error" in results[0]
+                name, args = "submit_report", {
+                    "content": draft if file_exists else draft + "; missing attachment",
+                    "attachments": self.refs,
+                }
+            return LLMResponse(content="", tool_calls=[{
+                "id": f"call-{self.calls}", "type": "function",
+                "function": {"name": name, "arguments": json.dumps(args)},
+            }], finish_reason="tool_calls")
+
+    llm = HandoffLLM()
+    spec = build_swarm_session_runtime_spec(
+        SwarmSubagentRuntime(), session_name="researcher", task_id="root",
+    )
+    result = await run_agent_loop(
+        system_prompt="research", user_message="submit existing findings", llm=llm,
+        tools=[publish_handoff, submit_report],
+        config=spec.config_builder("root.job.1", SubTask("research"), 4),
+        observers=[
+            InheritedWallClockDeadlineObserver(time.monotonic() + 60, handoff_at=time.monotonic() - 1),
+            FinalizeAnswerObserver(tool_names=["submit_report"]),
+        ],
+    )
+    assert llm.calls == 2
+    assert result.stopped_by == "final_answer"
+    assert result.final_content == (draft if file_exists else draft + "; missing attachment")
+    if file_exists:
+        assert len(validate_handoff_refs(llm.refs)) == 1
+    else:
+        assert llm.refs == []
+        assert not (workspace / "notes.md").exists()

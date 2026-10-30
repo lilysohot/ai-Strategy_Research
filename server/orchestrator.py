@@ -825,6 +825,11 @@ class Orchestrator:
         run_id = params.get("run_id")
         if not run_id or not _looks_like_uuid(run_id):
             return
+        from server.monitor_longterm import MonitorLaunchDeferred, defer_launch
+
+        if isinstance(exc, MonitorLaunchDeferred):
+            await defer_launch(uuid.UUID(run_id))
+            return
         reason = str(exc).strip().replace("\n", " ")[:500] or type(exc).__name__
         try:
             await mark_run_failed_if_active(
@@ -938,6 +943,9 @@ class Orchestrator:
             # a normally-finished worker exits on its own, so _kill_handle
             # early-returns without touching the semaphore — releasing only
             # there would leak a slot per completed run and wedge the pool.
+            watch_bridge = params.get("_watch_bridge")
+            if watch_bridge is not None:
+                await watch_bridge.close()
             await self._release_slot()
 
     async def _persist_run_started(self, handle: RunHandle) -> None:
@@ -1437,6 +1445,14 @@ class Orchestrator:
             store_root=self._cfg.semantic_store_root,
         )
 
+        if user_id is not None and params.get("session_uuid") is not None:
+            from server.watch_bridge import WatchBridge
+
+            watch_bridge = WatchBridge(run_uuid)
+            params["_watch_bridge"] = watch_bridge
+            child_env["FRONTIER_WATCH_CHANNEL"] = await watch_bridge.start()
+        else:
+            child_env.pop("FRONTIER_WATCH_CHANNEL", None)
         proc = await asyncio.create_subprocess_exec(
             *cmd,
             stdin=asyncio.subprocess.PIPE,

@@ -668,7 +668,7 @@ def test_the_session_store_revision_is_wired_into_the_graph() -> None:
         encoding="utf-8"
     )
 
-    assert expected_heads() == ("0023_capital_trade_plans",)
+    assert expected_heads() == ("0024_continuous_monitoring",)
     assert SessionConversation.__tablename__ == "session_conversations"
     assert 'down_revision = "0018_plan_capital_terms"' in carrier_migration
     assert f'"{SessionConversation.__tablename__}"' in carrier_migration
@@ -1062,7 +1062,7 @@ async def test_a_watch_run_reads_the_chat_carrier_without_replacing_it(db, tmp_p
 
 @pytest.mark.asyncio
 async def test_worker_reports_read_only_continuity_to_the_workflow(db, tmp_path, monkeypatch):
-    """``--continuity read`` reaches the workflow as two explicit directions."""
+    """Monitoring keeps history searchable without replaying the old execution."""
     import os
     import uuid as _uuid
     from argparse import Namespace
@@ -1073,6 +1073,11 @@ async def test_worker_reports_read_only_continuity_to_the_workflow(db, tmp_path,
     run_id = _uuid.uuid4().hex
     run_root = run_dir_for(run_id)
     run_root.mkdir(parents=True, exist_ok=True)
+    prior = canonical_json(_dump(messages=[
+        system_msg(_SYSTEM), user_msg("PRESERVE_USER_CONSTRAINT"),
+        assistant_msg("OLD_RESEARCH_REPORT"),
+    ]))
+    (run_root / "prior_conversation.json").write_text(prior, encoding="utf-8")
 
     captured: dict[str, Any] = {}
 
@@ -1085,6 +1090,9 @@ async def test_worker_reports_read_only_continuity_to_the_workflow(db, tmp_path,
 
         async def run(self, instruction, *, meta=None, pipeline_id="", extra_input=None):
             captured["extra_input"] = extra_input or {}
+            captured["meta"] = meta
+            from plugins.tools.research_history import research_history
+            captured["history"] = await research_history.func(query="PRESERVE_USER_CONSTRAINT")
             return {"final_answer": "ok"}
 
     monkeypatch.setattr(
@@ -1122,6 +1130,29 @@ async def test_worker_reports_read_only_continuity_to_the_workflow(db, tmp_path,
 
     assert captured["extra_input"]["continuity_read_enabled"] is True
     assert captured["extra_input"]["continuity_write_enabled"] is False
+    assert "replay_payload" not in captured["extra_input"]
+    assert "cross_mode_context" not in captured["extra_input"]
+    assert "research_history" in captured["meta"]["profile_overrides"]["agent"]["agent_tools"]
+    assert "PRESERVE_USER_CONSTRAINT" in captured["history"]
+    assert (run_root / "prior_conversation.json").read_text(encoding="utf-8") == prior
+
+
+def test_monitor_history_bad_payload_is_not_replayed(tmp_path):
+    from server.worker import _load_monitor_history_contexts
+
+    (tmp_path / "prior_conversation.json").write_text('{"schema":"invalid"}')
+    assert _load_monitor_history_contexts(tmp_path) == []
+
+
+def test_monitor_history_portable_head_is_searchable_without_native(tmp_path):
+    from server.worker import _load_monitor_history_contexts
+    from workflows._shared.cross_mode_context import export_conversation_context
+
+    payload = canonical_json(export_conversation_context(_dump()))
+    (tmp_path / "prior_cross_mode_context.json").write_text(payload)
+    contexts = _load_monitor_history_contexts(tmp_path)
+    assert len(contexts) == 1
+    assert any(record["content"] == "Q2" for record in json.loads(contexts[0])["records"])
 
 
 @pytest.mark.asyncio
@@ -1664,6 +1695,55 @@ async def test_a_hanging_summarizer_cannot_hold_the_run_open(tmp_path, monkeypat
     assert document["messages"][head:] == _turn("Q2")
 
 
+@pytest.mark.parametrize("old_memory", [False, True])
+async def test_failed_summary_archives_evicted_evidence_for_next_run(tmp_path, monkeypatch, old_memory):
+    import frontier_agent.components.observers.conversation_snapshot as snapshots
+    from plugins.tools.research_history import (
+        bind_research_history,
+        research_history,
+        reset_research_history,
+    )
+    from server.worker import _export_cross_mode_context
+    from workflows._shared.cross_mode_context import render_context_tail
+
+    monkeypatch.setattr(snapshots, "SUMMARY_TIMEOUT_S", 0.01)
+    monkeypatch.setenv("REPLAY_MAX_TOKENS", "300")
+
+    async def hang(*_args):
+        await asyncio.sleep(60)
+
+    messages = [system_msg(_SYSTEM)]
+    if old_memory:
+        messages.append(user_msg(snapshots.render_summary_content("previous memory")))
+    messages.extend([
+        user_msg("First research"),
+        assistant_msg("VERBATIM_COST_173 source https://example.org/pricing " + "detail " * 200),
+        *_turn("latest question"),
+    ])
+    doc = await _dump_with(tmp_path / "run", messages, summarizer=hang,
+                           max_replay_turns=1, max_replay_tokens=300)
+    assert doc["messages_est_tokens"] <= 300
+    assert "VERBATIM_COST_173" not in canonical_json(doc["messages"])
+    assert doc["archive_messages"] == messages
+    assert doc["trim"]["recovery"]["status"] == "archived"
+    assert validate_messages(doc["messages"]) is None
+
+    path = _export_cross_mode_context(tmp_path, published_answer="latest answer", answer_status="complete")
+    payload = path.read_text()
+    assert "VERBATIM_COST_173" not in render_context_tail(payload)
+    token = bind_research_history([payload])
+    try:
+        recovered = json.loads(await research_history.func(query="VERBATIM_COST_173"))
+        assert recovered["total"] == 1
+        record = recovered["records"][0]
+        assert "https://example.org/pricing" in record["content"]
+        assert record["source"]["pipeline_id"] == _PIPELINE
+        by_id = json.loads(await research_history.func(source_id=record["source_id"]))
+        assert by_id["records"] == recovered["records"]
+    finally:
+        reset_research_history(token)
+
+
 def test_the_summary_block_is_not_counted_as_a_real_turn() -> None:
     """Counting it as a turn would evict a real turn to keep a paragraph.
 
@@ -1930,7 +2010,7 @@ async def test_the_summary_call_reports_its_own_tokens(tmp_path) -> None:
     seen: dict[str, Any] = {}
 
     class _UsageLLM:
-        async def chat(self, messages: Any) -> Any:
+        async def chat(self, messages: Any, **kwargs: Any) -> Any:
             return SimpleNamespace(
                 content="S",
                 usage={"prompt_tokens": 120, "completion_tokens": 30, "cached_tokens": 64},
@@ -1963,6 +2043,7 @@ async def test_the_summary_call_reports_its_own_tokens(tmp_path) -> None:
         "completion_tokens": 30,
         "cache_read_tokens": 64,
     }, "the compactor's call must be counted, with cached_tokens normalised"
+    assert seen["summary_usage"].pop("elapsed_s") >= 0
     assert seen["summary_usage"] == {"calls": 1, "status": "updated", **summarizer.usage}
 
 
@@ -1994,6 +2075,7 @@ async def test_a_summarizer_without_usage_still_reports_the_call(tmp_path) -> No
     )
     await observer.on_loop_end(result)
 
+    assert result.metadata["summary_usage"].pop("elapsed_s") >= 0
     assert result.metadata["summary_usage"] == {"calls": 1, "status": "updated"}
 
 
@@ -2014,3 +2096,61 @@ async def test_the_token_budget_keeps_biting_inside_the_band(tmp_path) -> None:
 
     assert document["trim"] is not None, "4 turns is inside the band, the budget still cut"
     assert "replay_max_tokens" in document["trim"]["reason"]
+
+
+async def test_archive_and_replay_commit_together_when_replace_fails(tmp_path, monkeypatch):
+    import frontier_agent.components.observers.conversation_snapshot as snapshots
+
+    previous = await _dump_with(tmp_path, [system_msg(_SYSTEM), *_turn("committed")])
+    path = tmp_path / "conversation.json"
+    previous_bytes = path.read_bytes()
+
+    def fail_replace(source, destination):
+        raise OSError("simulated replacement failure")
+
+    monkeypatch.setattr(snapshots.os, "replace", fail_replace)
+    retained = await _dump_with(
+        tmp_path, [system_msg(_SYSTEM), *_turn("evicted"), *_turn("latest")],
+        max_replay_turns=1, max_replay_turn_step=0,
+    )
+    assert retained == previous
+    assert path.read_bytes() == previous_bytes
+    assert "archive_messages" not in retained
+
+
+async def test_write_summary_has_bounded_input_and_output_for_large_inherited_turn():
+    captured = []
+    class Client:
+        async def chat(self, messages, **kwargs):
+            captured.append((messages, kwargs))
+            return SimpleNamespace(content="Retained constraints; details are archived.", usage={})
+    summarizer = build_summarizer(Client())
+    await summarizer(None, [user_msg("current question\n" + "historical evidence " * 20000),
+                            assistant_msg("latest useful answer")])
+    assert len(captured) == 1
+    messages, kwargs = captured[0]
+    assert len(json.dumps(messages)) < 30000
+    assert 0 < kwargs.get("max_tokens", 0) <= 2048
+    assert "latest useful answer" in json.dumps(messages)
+
+
+def test_summary_marker_inside_portable_history_is_not_the_current_memory():
+    message = user_msg('New question\n<cross-mode-context>{"content":"<conversation-summary>old</conversation-summary>"}</cross-mode-context>')
+    assert summary_from([system_msg(_SYSTEM), message, assistant_msg("answer")]) == (1, None)
+
+
+def test_continuity_client_keeps_main_settings_and_only_disables_supported_reasoning(monkeypatch):
+    from copy import deepcopy
+
+    from frontier_agent.infra.llm import continuity
+    config = {"model": "deepseek-v4-flash-ga-260731", "base_url": "https://ark.cn-beijing.volces.com/api/v3",
+              "extra_body": {"reasoning_effort": "high", "chat_template_kwargs": {"enable_thinking": True}}}
+    original = deepcopy(config)
+    seen = []
+    monkeypatch.setattr(continuity, "build_aux_llm", lambda cfg: seen.append(cfg) or "aux")
+    assert continuity.continuity_client("main", config) == "aux"
+    assert config == original
+    assert seen[0]["extra_body"]["thinking"] == {"type": "disabled"}
+    assert "reasoning_effort" not in seen[0]["extra_body"]
+    assert seen[0]["max_tokens"] == 1024
+    assert continuity.continuity_client("main", {"model": "unknown", "base_url": "https://example.test"}) == "main"

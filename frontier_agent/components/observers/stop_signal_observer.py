@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 
 from frontier_agent.components.agent_bus.stop_signal import (
     SubAgentStopRegistry,
@@ -36,6 +37,10 @@ class StopSignalObserver(BaseObserver):
     let the sub-agent burn one more exploration round before reacting. The
     only delay is physical: a stop requested while the sub-agent is mid
     tool-call lands at its next LLM response.
+
+    Workflows may identify a terminal-only response with
+    ``is_terminal_response``. Such a response proceeds through normal tool
+    validation without a rollback; other responses keep the stop behavior.
     """
 
     critical = True
@@ -44,12 +49,26 @@ class StopSignalObserver(BaseObserver):
         self,
         session_id: str,
         registry: SubAgentStopRegistry | None = None,
+        *,
+        is_terminal_response: Callable[[TurnContext], bool] | None = None,
     ) -> None:
         self._session_id = str(session_id)
         self._registry = registry or get_stop_registry()
+        self._is_terminal_response = is_terminal_response
 
     async def on_llm_response(self, ctx: TurnContext) -> Intervention | None:
         if not self._registry.consume(self._session_id):
+            return None
+        # A cooperative stop requests handoff, not cancellation. Let the
+        # workflow identify an already-generated terminal submission, then
+        # leave its authorization, validation and completion to the normal
+        # tool path. This must not itself latch a successful final answer.
+        if self._is_terminal_response is not None and self._is_terminal_response(ctx):
+            logger.info(
+                "Stop signal -> preserving terminal submission session=%s at turn=%d",
+                self._session_id,
+                ctx.turn,
+            )
             return None
         logger.info(
             "Stop signal -> interrupting session=%s at turn=%d "
@@ -60,9 +79,7 @@ class StopSignalObserver(BaseObserver):
         # Rollback mode (agent_loop Step 6.5): pop this turn's LLM response so
         # the exploration tool_calls it just decided on are never executed
         # (and no dangling tool_calls are left to 400 the next request),
-        # inject the stop prompt, and jump straight to the next turn. If the
-        # sub-agent instead chose submit_report this turn, FinalizeAnswer
-        # Observer's stop_reason fires first and the loop ends before here.
+        # inject the stop prompt, and jump straight to the next turn.
         return Intervention(
             inject_messages=[STOP_SIGNAL_PROMPT],
             pop_last_message=True,

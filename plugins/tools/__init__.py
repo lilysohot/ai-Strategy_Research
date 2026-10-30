@@ -45,6 +45,7 @@ from plugins.tools.strategy_lint import strategy_lint
 from plugins.tools.submit_report import submit_report
 from plugins.tools.task_board import add_task, finish_planning, update_task
 from plugins.tools.view_image import view_image
+from plugins.tools.watch_targets import get_watch_targets, submit_watch_intents
 from plugins.tools.web_fetch import web_fetch
 from plugins.tools.web_search import web_search
 from plugins.tools.write_file import write_file
@@ -52,6 +53,8 @@ from plugins.tools.write_file import write_file
 logger = logging.getLogger(__name__)
 
 _BUILTIN_TOOLS: list[Tool] = [
+    get_watch_targets,
+    submit_watch_intents,
     web_search,
     web_fetch,
     download_file,

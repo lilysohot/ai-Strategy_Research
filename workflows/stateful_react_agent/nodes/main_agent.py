@@ -76,6 +76,7 @@ from frontier_agent.utils.language import (
     language_instruction,
     resolve_language,
 )
+from plugins.corpus.context_reuse import CorpusContextReuseObserver
 from plugins.corpus.ledger import ConsumptionLedgerObserver
 from plugins.tools._bash_policy import reset_policy_mode, set_policy_mode
 from plugins.tools._sandbox import (
@@ -1063,7 +1064,8 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
                 # of disappearing. Built only when a bound is actually in force —
                 # a run that can never trim has nothing to summarize.
                 summarizer=(
-                    build_summarizer(llm) if (replay_max_turns or replay_max_tokens) else None
+                    build_summarizer(llm, llm_config=(profile or {}).get("llm"))
+                    if (replay_max_turns or replay_max_tokens) else None
                 ),
             )
         )
@@ -1214,6 +1216,8 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     extra_observers = metadata.get("sdk_extra_observers") or []
     if extra_observers:
         observers.extend(list(extra_observers))
+    # Approval/pause denials must win before a context-cache success can short-circuit.
+    observers.append(CorpusContextReuseObserver())
 
     sandbox = None
     sb_token = None
@@ -1296,7 +1300,8 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
 
     if task_board and replay_messages:
         restored_tasks = restore_board_from_messages(
-            ctx.task_id, replay_messages, archive=research_convergence,
+            ctx.task_id, replay_messages,
+            archive=research_convergence or bool(metadata.get("archive_prior_tasks")),
         )
         if restored_tasks:
             replay_decision["task_board_restored"] = restored_tasks

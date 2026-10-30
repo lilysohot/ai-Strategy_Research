@@ -432,3 +432,41 @@ async def test_replay_that_still_loses_arguments_is_reported(monkeypatch):
     metadata = got.response_metadata or {}
     assert metadata["stream_empty_args_recovered"] is False
     assert metadata["stream_empty_args_still_missing"] == ["assign_task"]
+
+
+async def test_missing_arguments_replay_gives_schema_feedback_without_mutating_history(monkeypatch):
+    from frontier_agent.core.llm import LLMResponse
+    from frontier_agent.core.runtime.loop import _call
+    from frontier_agent.core.runtime.loop._bind import _BoundLLM
+
+    broken = LLMResponse(content="", tool_calls=[{"id": "fetch", "type": "function",
+        "function": {"name": "web_fetch", "arguments": "{}"}}], finish_reason="tool_calls")
+    captured = []
+    class Client:
+        model = "offline"
+        async def chat(self, messages, **kwargs):
+            captured.append(messages)
+            # A deterministic reproduction of repeating the same invalid request:
+            # this provider only repairs it when told exactly which field is missing.
+            if "required" not in str(messages[-1].get("content")):
+                return broken
+            return LLMResponse(content="", tool_calls=[{"id": "fixed", "type": "function",
+                "function": {"name": "web_fetch", "arguments": '{"url":"https://example.test"}'}}])
+        async def stream(self, *args, **kwargs):
+            if False:
+                yield None
+    async def stream(*args, **kwargs):
+        return broken
+    async def delta(*args, **kwargs):
+        pass
+    monkeypatch.setattr(_call, "_stream_llm_response", stream)
+    monkeypatch.setattr(_call, "_llm_gate", lambda: None)
+    monkeypatch.setattr(_call, "wall_deadline_remaining_s", lambda: None)
+    messages = [{"role": "user", "content": "read the source"}]
+    llm = _BoundLLM(client=Client(), tools=[{"type": "function", "function": {
+        "name": "web_fetch", "parameters": {"type": "object", "required": ["url"]}}}])
+    result = await _call.call_llm(llm, messages, timeout=60, max_retries=2, turn=1, on_delta=delta)
+    assert result.response_metadata["stream_empty_args_recovered"] is True
+    assert "url" in captured[0][-1]["content"]
+    assert len(captured) == 1
+    assert messages == [{"role": "user", "content": "read the source"}]

@@ -387,9 +387,14 @@ async def collect_reports(timeout: int = 1800) -> str:
                 scope,
                 "member_progress_alert",
                 f"Member {agent!r} raised an actionable progress alert: {detail}. "
-                "The member is still running. Decide now whether to stop it and "
-                "salvage completed observations, redirect it with a focused task, "
-                "or accept the limitation; do not blindly resume a long wait.",
+                "The member is still running. To end its research and request "
+                f'handoff of existing findings, call stop_subagent(agent_name="{agent}") '
+                "then collect_reports. assign_task creates a NEW queued job; it "
+                "does not update the running task. Only dispatch follow-up work "
+                "after collecting the current result and while research admission "
+                "is open. For a protected publisher, wait for its deliverable; "
+                "do not force-stop it just because a source failed. If you keep "
+                "waiting, state the remaining need; do not blindly resume a long wait.",
                 extra_status=status,
                 track_churn=False,
             )
@@ -397,7 +402,7 @@ async def collect_reports(timeout: int = 1800) -> str:
             scope, "wait_timeout",
             f"No completion arrived during an actual {elapsed:.1f}s wait "
             f"(requested maximum {timeout}s). If sub-agents are unresponsive, "
-            "consider calling stop_subagent to cancel them and switch to "
+            "consider calling stop_subagent to request handoff and switch to "
             "fallback data or a simplified delivery, rather than waiting indefinitely.",
             extra_status=status,
             track_churn=False,

@@ -70,11 +70,23 @@ before organizing it. When the requested core is supported, stop broad explorati
 Another search or assignment needs a specific gap that could change the answer, a
 credible next method, and enough time to obtain, check and deliver its result. Source
 failure alone is not a reason to enumerate endless mirrors or search variants.
-On progress alerts choose a concrete action: redirect a focused task, stop the member
-and preserve its observations, or acknowledge the limitation. Acknowledge why further
-waiting is still necessary if you choose to wait; do not blindly repeat long waits.
+On progress alerts, use stop_subagent(agent_name=NAME) to ask the CURRENT job to stop
+research and hand off its findings, then collect_reports. assign_task creates NEW
+work; it does not update or redirect a running job. Dispatch a focused follow-up
+only after collecting the current result and while research admission remains open.
+During draining, request handoff and synthesize existing evidence. Respect publisher
+stop protection. Explain why further waiting is necessary if you choose to wait;
+do not blindly repeat long waits.
 
 ## Check in proportion to the claim
+Preserve declared evidence gaps in the task board even if an answer can be delivered.
+Resolution is your declaration about the question; it does not certify member execution
+or independent verification. In the answer, qualify each affected conclusion where it
+appears, not only in a final limitations section. Unknown data cannot establish a winner,
+equal prices, or absence. Compare the same versions, dates, units and conditions before
+claiming a lowest cost or best option. Attribute vendor claims and distinguish inference
+from direct evidence; inherited conclusions are not newly verified facts.
+
 The coordinator checks coverage, internal consistency, assumptions and source fidelity.
 Use computation tools through a member when arithmetic needs checking. An independent
 verifier is NOT mandatory for every everyday answer. Dispatch one when the user asks,
@@ -146,9 +158,14 @@ verification from repeated copies of one source. A short report is sufficient.
 Call submit_report(content=..., confidence=..., attachments=[...]) to finish. Include:
 Scope; Findings relevant to the assignment; Evidence (exact URLs/locators or calculation
 and output); Unresolved/Conflicts. State what was actually checked. Unavailable evidence
-must not hold back completed findings indefinitely. Keep large tables or candidate
-files in /workspace, publish them with publish_handoff, and preserve its exact ref in
-attachments. Other members cannot read your private workspace. Do not create final
+must not hold back completed findings indefinitely. Submit the report body directly
+in content (at most 24,000 characters); creating a report file is not a prerequisite.
+Before handoff, keep large tables or candidate files in /workspace, publish them with
+publish_handoff, and preserve its exact ref in attachments. At handoff, use existing
+text directly; do not create a file or retry a blocked write through bash. Only an
+already-created file may use the optional publication attempt. If it fails, report
+the missing attachment under Unresolved and submit the available findings without
+that attachment. Other members cannot read your private workspace. Do not create final
 /outputs files without the assignment's output_paths authorization.
 """
 

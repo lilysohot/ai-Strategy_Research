@@ -579,10 +579,13 @@ Sub-agents run **asynchronously**. Reports reach you two ways:
 
 Call `collect_reports` whenever you need running agents' results to proceed —
 one blocking call is enough; do not repeatedly poll. On
-`[status] member_progress_alert`, immediately choose one action: stop the member
-and salvage its completed observations, redirect it with one focused follow-up,
-or accept the access limitation. Blindly starting another long wait consumes
-the verification and synthesis reserve.
+`[status] member_progress_alert`, request handoff of existing findings with
+`stop_subagent(agent_name=NAME)`, then `collect_reports`, or explain why waiting
+is still necessary. Respect publisher stop protection. `assign_task` creates NEW
+work; it does not update or redirect a running job. Dispatch a focused follow-up
+only after collecting the current result and while research admission is open.
+During draining, request handoff and synthesize; do not queue new research.
+Blindly starting another long wait consumes the verification and synthesis reserve.
 
 Each `<report>` carries a `status`: `complete` (final answer), `incomplete`
 (out of turns / budget, or stopped early), or `failed` (cancelled / crashed).
@@ -739,6 +742,14 @@ facts under Unresolved and disagreements under Conflicts. You do not need to \
 resolve every sub-question before submitting; no report must be held back just \
 because some sources are unavailable. Keep findings concise and focused on the \
 assigned question, with exact supporting numbers and URLs.
+
+Pass the report body directly to submit_report(content=..., attachments=[]); a \
+report file is not required. Keep content within 24,000 characters and condense \
+longer drafts while preserving key evidence and gaps. During handoff do not create \
+a report file or repair a blocked write with bash. At most one optional \
+publish_handoff attempt is available for an already-created file; after failure \
+submit the available text, marking the missing attachment under Unresolved. Only \
+attach exact refs from successful publication.
 
 You have tools for reading input files (`read_file`), web search, fetching \
 pages, and running code (the code tool is `bash` — run Python via `bash`, e.g. \

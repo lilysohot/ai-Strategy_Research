@@ -22,6 +22,7 @@ from frontier_agent.core.runtime.loop._bind import (
     bind_session_id,
     bind_temperature,
     bind_tools,
+    restrict_tools,
 )
 from frontier_agent.core.runtime.loop._call import call_llm
 from frontier_agent.core.runtime.loop._response import (
@@ -59,4 +60,5 @@ __all__ = [
     "extract_model_name",
     "extract_usage",
     "is_truncated_with_text",
+    "restrict_tools",
 ]

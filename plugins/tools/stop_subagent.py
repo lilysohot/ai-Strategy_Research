@@ -44,13 +44,18 @@ def _current_metadata(bus: AgentBus, session_id: str) -> dict[str, Any]:
 
 @tool
 async def stop_subagent(agent_name: str, force: bool = False) -> str:
-    """Ask a running sub-agent to stop exploring as soon as possible.
+    """Request handoff from the current task: stop research and report findings.
 
     Use this when a sub-agent is clearly going off-track, looping on the same
     searches, no longer needed, or burning budget. The sub-agent is told to
     stop and MAY submit a brief report if it already has valuable findings —
     otherwise it just stops. The sub-agent is NOT destroyed: you can assign it
     new work later. Pick up whatever it returns with ``collect_reports``.
+    Use this to say "finish now" to a running member, including during draining
+    when new research admission is closed. This updates the current job's
+    control signal; it does not create or queue another task. Do not use
+    assign_task for this purpose. A final report already being submitted is
+    allowed through normal validation instead of being regenerated.
 
     A sub-agent running a PUBLISH task is refused unless ``force`` is set: that
     task writes the run's deliverable, and stopping it throws the deliverable

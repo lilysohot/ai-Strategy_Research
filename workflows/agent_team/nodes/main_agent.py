@@ -900,9 +900,13 @@ def _build_observers(
     finalization_reserve_turns: int = 8,
     wall_deadline_s: float = 0,
     force_compaction_first: bool = False,
+    bus_task_id: str = "",
 ) -> list[Any]:
+    from workflows.agent_team.observers.evidence_boundary import EvidenceBoundaryObserver
+
     observers: list[Any] = [
         BareTextFinalizeObserver(),
+        EvidenceBoundaryObserver(task_id=task_id, bus_task_id=bus_task_id),
         LeakedToolCallRetryObserver(tool_names=tool_names),
         AutoFanInObserver(),
         UnassignedAgentNudge(),
@@ -1514,6 +1518,7 @@ async def main_agent_node(
         # avoids restarting a relative wall after a separate planning loop.
         wall_deadline_s=0,
         force_compaction_first=(context_compaction == "tiered" and max_len > 0),
+        bus_task_id=bus_task_id,
     )
     observers.insert(0, TeamPhaseBudgetObserver(phase_budget, prompt_mode=prompt_mode))
     # A serve/CLI driver injects its own protocol-stream and worker-trace
@@ -1557,7 +1562,8 @@ async def main_agent_node(
                 max_replay_tokens=replay_max_tokens,
                 max_replay_turn_step=replay_max_turn_step,
                 summarizer=(
-                    build_summarizer(llm) if (replay_max_turns or replay_max_tokens) else None
+                    build_summarizer(llm, llm_config=(profile or {}).get("llm"))
+                    if (replay_max_turns or replay_max_tokens) else None
                 ),
             ),
         ]
@@ -2175,6 +2181,8 @@ async def main_agent_node(
         "team_completeness": "complete" if report_contract["kind"] == "complete" else "partial",
         "team_wind_down": wind_down.as_dict(),
         "team_phase_budget": phase_budget.as_dict(),
+        "summary_usage": result.metadata.get("summary_usage", {}),
+        "evidence_boundary": result.metadata.get("evidence_boundary", {}),
         "soft_wall_finalized": soft_wall_finalized,
         "answer_sentinel": ("<ANSWER_NOT_FOUND>" if answer_status == "not_found" else ""),
         "final_answer_rescued": bool(

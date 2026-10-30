@@ -190,6 +190,9 @@ class Intervention:
     # Applied after message injection and before continuing the turn.
     pop_last_message: bool = False
     continue_to_next_turn: bool = False
+    # Per-request schema restriction from on_before_llm; None keeps the default.
+    # Execution authorization remains the responsibility of tool-call guards.
+    allowed_tool_names: tuple[str, ...] | None = None
 
 
 @dataclass
@@ -270,6 +273,9 @@ class BaseObserver:
     async def on_llm_attempt(
         self, ctx: LLMAttemptContext,
     ) -> Intervention | None:
+        return None
+
+    async def on_before_llm(self, ctx: TurnContext) -> Intervention | None:
         return None
 
     async def on_llm_response(self, ctx: TurnContext) -> Intervention | None:
@@ -381,12 +387,13 @@ async def drain_background_observers() -> None:
 
 
 def merge_interventions(interventions: list[Intervention]) -> Intervention:
-    """Merge messages, take the first stop reason, and OR boolean controls."""
+    """Merge messages/controls and intersect per-request tool restrictions."""
     all_messages: list[str] = []
     stop_reason: str | None = None
     skip: bool = False
     pop_last: bool = False
     continue_turn: bool = False
+    allowed_tools: tuple[str, ...] | None = None
 
     for iv in interventions:
         if iv.inject_messages:
@@ -399,6 +406,11 @@ def merge_interventions(interventions: list[Intervention]) -> Intervention:
             pop_last = True
         if iv.continue_to_next_turn:
             continue_turn = True
+        if iv.allowed_tool_names is not None:
+            allowed_tools = (
+                iv.allowed_tool_names if allowed_tools is None
+                else tuple(name for name in allowed_tools if name in iv.allowed_tool_names)
+            )
 
     return Intervention(
         inject_messages=all_messages if all_messages else None,
@@ -406,6 +418,7 @@ def merge_interventions(interventions: list[Intervention]) -> Intervention:
         skip_tool_execution=skip,
         pop_last_message=pop_last,
         continue_to_next_turn=continue_turn,
+        allowed_tool_names=allowed_tools,
     )
 
 

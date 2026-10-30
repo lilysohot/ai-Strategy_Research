@@ -3,6 +3,8 @@ from __future__ import annotations
 from plugins.tools import ToolRegistry, get_builtin_tools
 
 EXPECTED_TOOLS = {
+    "get_watch_targets",
+    "submit_watch_intents",
     "add_task",
     "assign_task",
     "bash",

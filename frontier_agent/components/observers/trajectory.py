@@ -543,6 +543,20 @@ class TrajectoryFileObserver(BaseObserver):
     async def on_llm_response(
         self, ctx: TurnContext,
     ) -> Intervention | None:
+        # The envelope formerly emitted user context only on turn one. Record
+        # pre-request observer injections too, so a missing trace entry cannot
+        # be mistaken for a missing runtime guard. These are already on the wire.
+        injected = [
+            {"role": "user", "content": text}
+            for text in ctx.metadata.get("_request_injections", [])
+            if isinstance(text, str)
+        ]
+        if injected:
+            self._write_jsonl({"t": "context", "turn": ctx.turn, "messages": injected})
+            if "json" in self._formats and self._emitted_prior:
+                for message in injected:
+                    self._append_message(message)
+
         # JSONL: append one event
         record: dict = {
             "t": "llm",

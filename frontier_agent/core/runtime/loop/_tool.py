@@ -55,15 +55,17 @@ def _lost_required_tool_arguments(
     """
     if raw_arguments is None:
         return True
+    if isinstance(raw_arguments, dict):
+        return bool(required_fields - set(raw_arguments))
     if not isinstance(raw_arguments, str):
-        return False
+        return True
     if not raw_arguments.strip():
         return True
     try:
         parsed = json.loads(raw_arguments)
     except (ValueError, TypeError):
         return True
-    return isinstance(parsed, dict) and bool(required_fields - set(parsed))
+    return not isinstance(parsed, dict) or bool(required_fields - set(parsed))
 
 
 def _stream_tool_calls_missing_required_arguments(
@@ -97,3 +99,31 @@ def _stream_tool_calls_missing_required_arguments(
         ):
             missing.append(name)
     return missing
+
+
+def tool_argument_repair_message(response: LLMResponse, llm: Any) -> str:
+    """Describe schema failures without executing calls or guessing their values."""
+    required = _required_tool_arguments(llm)
+    failures = []
+    for call in response.tool_calls or []:
+        function = call.get("function") or {}
+        name = str(function.get("name") or "")
+        fields = required.get(name, set())
+        raw = function.get("arguments")
+        if not fields or not _lost_required_tool_arguments(raw, fields):
+            continue
+        try:
+            parsed = json.loads(raw) if isinstance(raw, str) else raw
+        except (ValueError, TypeError):
+            parsed = None
+        missing = sorted(fields - set(parsed)) if isinstance(parsed, dict) else sorted(fields)
+        failures.append({"tool": name, "missing_required_fields": missing})
+    return (
+        "[Tool argument repair] The previous response contained invalid tool arguments. "
+        "No tool from that response has run. Return the intended tool calls with valid JSON "
+        "objects containing every required field. Use values supported by the conversation; "
+        "do not guess missing URLs or other values. If the needed values are unavailable, "
+        "choose a valid next action or explain the missing information. "
+        "Do not repeat empty argument objects. Schema errors (data): "
+        + json.dumps(failures, ensure_ascii=False)
+    )

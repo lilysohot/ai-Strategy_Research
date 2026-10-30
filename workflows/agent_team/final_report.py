@@ -42,7 +42,7 @@ _BLANKET_VERIFICATION = re.compile(
 def _contradicts_incomplete_work(text: str) -> bool:
     for sentence in re.split(r"[。！？\n.!?]", text):
         for match in _BLANKET_VERIFICATION.finditer(sentence):
-            claim = sentence[max(0, match.start() - 24):match.end() + 24]
+            claim = sentence[max(0, match.start() - 24) : match.end() + 24]
             if re.search(
                 r"(?:已声明|列明|上述)(?:的)?(?:检查|核验项)"
                 r"|\b(?:declared|listed) checks?\b",
@@ -52,14 +52,18 @@ def _contradicts_incomplete_work(text: str) -> bool:
                 continue
             # Negation must qualify this claim, not an earlier clause such as
             # "reviewer did not finish, but all findings are verified".
-            prefix = sentence[max(0, match.start() - 24):match.start()]
+            prefix = sentence[max(0, match.start() - 24) : match.start()]
             if re.search(
                 r"(?:尚未|未|不能|无法|并非|不应|不要)[^，,；;但。]{0,6}$"
-                r"|\b(?:not|cannot|can't)(?:\s+\w+){0,2}\s*$", prefix, re.I,
+                r"|\b(?:not|cannot|can't)(?:\s+\w+){0,2}\s*$",
+                prefix,
+                re.I,
             ):
                 continue
             return True
     return False
+
+
 _STOP_LABELS = {
     "llm_error": ("模型调用失败", "A model call failed"),
     "wall_deadline": ("已到研究阶段截止时间", "The research deadline was reached"),
@@ -136,6 +140,7 @@ def finalize_team_report(
             "resolution": str(task.get("resolution") or "open"),
             "notes": str(task.get("notes") or ""),
             "gap": str(task.get("gap") or ""),
+            "owners": list(task.get("owners") or []),
             "verification_status": str(task.get("verification_status") or "not_assessed"),
             "verification_execution_status": str(
                 task.get("verification_execution_status") or "not_started"
@@ -159,30 +164,58 @@ def finalize_team_report(
 
     verification = project_checks(jobs)
     for task in board:
+        assigned = [job for job in jobs if job.get("agent") in task["owners"]]
+        task["execution_job_ids"] = [str(job.get("job_id") or "") for job in assigned]
+        task["execution_status"] = (
+            "not_assessed"
+            if not assigned
+            else "complete"
+            if all(job.get("status") == "complete" for job in assigned)
+            else "incomplete"
+        )
+        if task["gap"].strip() and task["resolution"] != "cancelled":
+            gaps.append(
+                {
+                    "code": "task_evidence_gap",
+                    "task_id": task["id"],
+                    "detail": task["gap"],
+                }
+            )
         if task["verification_required"]:
-            task.update(verification_progress(
-                verification["checks"], task["id"],
-                [item["check_id"] for item in task["verification_requirements"]],
-            ))
+            task.update(
+                verification_progress(
+                    verification["checks"],
+                    task["id"],
+                    [item["check_id"] for item in task["verification_requirements"]],
+                )
+            )
     required_gaps = [
-        job for job in jobs if job.get("required") is not False
+        job
+        for job in jobs
+        if job.get("required") is not False
         and job.get("coverage_status", job.get("status")) != "complete"
     ]
     acquisition_limits = [
         {"job_id": job.get("job_id"), **observation}
-        for job in jobs for observation in job.get("content_acquisition", [])
+        for job in jobs
+        for observation in job.get("content_acquisition", [])
         if isinstance(observation, dict) and not observation.get("obtained")
     ]
     for job in required_gaps:
         check_gap = job.get("status") == "complete" and job.get("verification_checks")
-        gaps.append({
-            "code": "verification_not_passed" if check_gap else "member_job_incomplete",
-            "job_id": str(job.get("job_id") or ""),
-            "agent": str(job.get("agent") or ""),
-            "reason": "verification_not_passed" if check_gap else str(job.get("reason") or (
-                "verification_not_passed" if job.get("verification_checks") else "unknown"
-            )),
-        })
+        gaps.append(
+            {
+                "code": "verification_not_passed" if check_gap else "member_job_incomplete",
+                "job_id": str(job.get("job_id") or ""),
+                "agent": str(job.get("agent") or ""),
+                "reason": "verification_not_passed"
+                if check_gap
+                else str(
+                    job.get("reason")
+                    or ("verification_not_passed" if job.get("verification_checks") else "unknown")
+                ),
+            }
+        )
     for task in unresolved:
         gaps.append(
             {"code": "task_unresolved", "task_id": task["id"], "description": task["description"]}
@@ -195,9 +228,7 @@ def finalize_team_report(
         if not task["verification_required"]:
             continue
         checks = required_checks_by_work_item.get(task["id"], [])
-        planned_ids = [
-            requirement["check_id"] for requirement in task["verification_requirements"]
-        ]
+        planned_ids = [requirement["check_id"] for requirement in task["verification_requirements"]]
         by_id = {check["check_id"]: check for check in checks}
         selected = [by_id[check_id] for check_id in planned_ids if check_id in by_id]
         missing_ids = [check_id for check_id in planned_ids if check_id not in by_id]
@@ -224,8 +255,11 @@ def finalize_team_report(
     for key in ("incomplete_count", "queued_aborted", "unresolved_count"):
         if counts.get(key, 0) and wind.get("run_status") != "complete":
             gaps.append({"code": key, "count": counts[key]})
-    if (wind.get("status") == "partial" and wind.get("run_status") != "complete"
-            and not any(counts.get(k, 0) for k in _COUNTERS[1:])):
+    if (
+        wind.get("status") == "partial"
+        and wind.get("run_status") != "complete"
+        and not any(counts.get(k, 0) for k in _COUNTERS[1:])
+    ):
         gaps.append({"code": "team_coverage_incomplete"})
 
     # Blanket assurance is unsupported even when every *declared* check passed:
@@ -258,24 +292,37 @@ def finalize_team_report(
         "task_board": board,
         "task_board_basis": "coordinator_declared",
         "wind_down": {
-            "status": str(wind.get("status") or "unknown"), **counts,
+            "status": str(wind.get("status") or "unknown"),
+            **counts,
             "run_status": str(wind.get("run_status") or "unknown"),
         },
         "artifact_verification": "not_assessed",
         "job_outcomes": jobs,
         "required_work_basis": "dispatch_declared",
         "verification": verification["status"],
-        "verification_basis": verification["basis"] if verification["checks"] else "execution_limits_only",
+        "verification_basis": verification["basis"]
+        if verification["checks"]
+        else "execution_limits_only",
         "verification_checks": verification["checks"],
         "acquisition_limits": acquisition_limits,
     }
     zh = _chinese(question, language)
     notes: list[str] = []
     verification_notes: list[str] = []
+    declared_gaps = [
+        task for task in board if task["gap"].strip() and task["resolution"] != "cancelled"
+    ]
+    if declared_gaps:
+        notes.append("仍未确认的证据缺口：" if zh else "Unresolved evidence gaps:")
+        notes.extend(
+            f"- {_label(task['description'] or task['id'])}: {_label(task['gap'])}"
+            for task in declared_gaps[:20]
+        )
     if verification["checks"]:
         verification_notes.append(
             "以下结论仅针对列明版本与检查项，不代表整份报告或其他版本已通过核验："
-            if zh else "Verdicts cover only the declared checks and versions, not the entire report:"
+            if zh
+            else "Verdicts cover only the declared checks and versions, not the entire report:"
         )
         labels = {"pass": "通过", "fail": "未通过", "unchecked": "未能确认"}
         for check in verification["checks"]:
@@ -287,7 +334,8 @@ def finalize_team_report(
     if required_gaps:
         notes.append(
             "以下必要成员任务或检查仍有缺口；已返回的工具观测不等于核验通过："
-            if zh else "Required member jobs or checks remain incomplete; observations are not verification:"
+            if zh
+            else "Required member jobs or checks remain incomplete; observations are not verification:"
         )
         notes.extend(
             f"- {_label(job.get('agent') or job.get('job_id'))}: "
@@ -297,12 +345,14 @@ def finalize_team_report(
         if len(required_gaps) > 20:
             notes.append(
                 f"另有 {len(required_gaps) - 20} 项，完整列表见运行记录。"
-                if zh else f"{len(required_gaps) - 20} more jobs are listed in the run record."
+                if zh
+                else f"{len(required_gaps) - 20} more jobs are listed in the run record."
             )
     if contradictory:
         notes.append(
             "候选报告声称核验通过，但与执行记录矛盾，因此未发布该候选正文。"
-            if zh else "The candidate claimed verification contrary to execution records and was withheld."
+            if zh
+            else "The candidate claimed verification contrary to execution records and was withheld."
         )
     if stopped_by and stopped_by not in {"final_answer", "submit_report"}:
         reason = _STOP_LABELS.get(
@@ -323,7 +373,7 @@ def finalize_team_report(
         notes.append("任务板尚未解决的事项：" if zh else "Unresolved task-board items:")
         notes.extend(
             f"- {_label(task['description'] or task['id'])}"
-            + (f": {_label(task['gap'] or task['notes'])}" if task['gap'] or task['notes'] else "")
+            + (f": {_label(task['gap'] or task['notes'])}" if task["gap"] or task["notes"] else "")
             for task in unresolved[:20]
         )
         if len(unresolved) > 20:
@@ -376,6 +426,13 @@ def finalize_team_report(
             else "Final synthesis is unavailable; this status does not verify file contents or downloads."
         )
     elif kind == "partial":
+        # Put the actual delivery status before the conclusion; a footer alone
+        # can leave the headline falsely looking like a fully verified answer.
+        text = (
+            "**部分完成：以下结论仅基于已取得的证据，尚有任务或证据缺口。**\n\n"
+            if zh
+            else "**Partial result: conclusions use available evidence; work or evidence gaps remain.**\n\n"
+        ) + text
         notes.insert(
             0,
             "本次结果为部分完成或尽力结果，不能据此认定所有要求均已完成。"
@@ -388,14 +445,16 @@ def finalize_team_report(
         )
     if verification_notes:
         text += (
-            "\n\n" + ("### 核验范围\n\n" if zh else "### Verification scope\n\n")
+            "\n\n"
+            + ("### 核验范围\n\n" if zh else "### Verification scope\n\n")
             + "\n\n".join(verification_notes)
         )
     if acquisition_limits:
         text += "\n\n" + (
             "### 内容读取边界\n\n以下工具尝试未取得完整内容；是否影响具体结论须按证据判断，"
             "不能将这些尝试当作已读或已核验：\n\n"
-            if zh else "### Content access limits\n\nThese attempts did not obtain complete content. "
+            if zh
+            else "### Content access limits\n\nThese attempts did not obtain complete content. "
             "Their relevance depends on the claim; they are not evidence of reading or verification:\n\n"
         )
         text += "\n".join(
@@ -407,7 +466,8 @@ def finalize_team_report(
         if len(acquisition_limits) > 20:
             text += (
                 f"\n另有 {len(acquisition_limits) - 20} 项读取限制，完整列表见运行记录。"
-                if zh else f"\n{len(acquisition_limits) - 20} more access limits are in the run record."
+                if zh
+                else f"\n{len(acquisition_limits) - 20} more access limits are in the run record."
             )
     return {
         "final_answer": text,

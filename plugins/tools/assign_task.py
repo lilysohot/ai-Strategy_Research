@@ -411,6 +411,10 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
     while another is in flight queues it FIFO behind the running one —
     it starts automatically as soon as the predecessor finalises, and
     its report flows through ``collect_reports`` like any other.
+    This creates NEW work; it never updates or redirects a running task.
+    To ask a running member to finish now and return existing findings, use
+    stop_subagent(agent_name=NAME), then collect_reports. Dispatch a focused
+    follow-up only after collecting its result and while admission is open.
 
     Args:
         tasks: list of dicts with:
@@ -625,8 +629,10 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         ):
             errors.append(
                 f"{agent_name}: the research admission window is closed "
-                f"(phase={publication_phase or 'draining'}). Collect existing "
-                "reports and synthesize now; if files are required, dispatch "
+                f"(phase={publication_phase or 'draining'}). assign_task creates "
+                "new work, not a control message for the current job. To request "
+                f'handoff, use stop_subagent(agent_name="{agent_name}") then '
+                "collect_reports and synthesize; if files are required, dispatch "
                 "only the sole publisher with output_paths"
             )
             continue
