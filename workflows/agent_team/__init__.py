@@ -61,9 +61,9 @@ MAIN_AGENT_DEF = AgentDefinition(
         # Cooperative stop: ask an off-track / looping / no-longer-needed
         # sub-agent to wrap up (kept alive, re-assignable). NOT a hard cancel.
         "stop_subagent",
-        # Task board (Planning Mode): the coordinator plans on the board and
-        # finishes by ending a turn with plain text — there is NO finalize_answer
-        # tool (BareTextFinalizeObserver gates + latches the answer).
+        # Task board (Planning Mode). main_agent_node additionally binds the
+        # workflow-local deliver_answer tool for atomic final submission;
+        # gated plain text remains a compatible terminal path.
         "add_task",
         "update_task",
         "finish_planning",

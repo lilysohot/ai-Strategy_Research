@@ -123,7 +123,7 @@ async def test_deadline_wind_down_replaces_preview_with_member_full_result() -> 
     assert wind_down.collected_count == 1
     assert "7 / 941 / 138 / 803" in result.final_content
     assert "2 / 380 / 0 / 380" not in result.final_content
-    assert result.metadata["final_answer_source"] == "collected_reports"
+    assert result.metadata["final_answer_source"] == "collected_report_fallback"
     await bus.cleanup_task("root")
 
 

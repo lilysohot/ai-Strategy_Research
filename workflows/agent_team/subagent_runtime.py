@@ -32,6 +32,7 @@ from frontier_agent.components.finalization import (
     minimal_best_effort_answer,
 )
 from frontier_agent.components.observers.context_size_guard import ContextSizeGuard
+from frontier_agent.components.observers.stop_signal_observer import StopSignalObserver
 from frontier_agent.core.execution_context import get_current_execution_scope
 from frontier_agent.core.loop_types import (
     WALL_DEADLINE_MONOTONIC_KEY,
@@ -113,6 +114,45 @@ async def _await_before_deadline(awaitable: Any, deadline: Any) -> Any:
         if not task.done():
             task.cancel()
             await asyncio.gather(task, return_exceptions=True)
+
+
+class TeamStopSignalObserver(StopSignalObserver):
+    """A cooperative team stop enters a persistent report-only phase."""
+
+    _stopping = False
+    _announced = False
+
+    async def on_llm_response(self, ctx: TurnContext) -> Intervention | None:
+        if self._registry.is_requested(self._session_id):
+            self._stopping = True
+        return await super().on_llm_response(ctx)
+
+    async def on_before_llm(self, ctx: TurnContext) -> Intervention | None:
+        if not self._stopping and not self._registry.is_requested(self._session_id):
+            return None
+        self._stopping = True
+        ctx.metadata["team_handoff_started"] = True
+        ctx.metadata["team_handoff_direct_submission"] = True
+        prompt = (
+            "[team handoff] Research has stopped. Call submit_report now using existing "
+            "findings, source URLs and explicit gaps. Do not re-plan or repeat the investigation. "
+            "Aim for a concise report (about 4,000 characters); retain material disagreements "
+            "and evidence limits even if more space is needed. No new file is required. "
+            "Use attachments=[] unless a published ref is already available."
+        )
+        messages = None if self._announced else [prompt]
+        self._announced = True
+        return Intervention(inject_messages=messages, allowed_tool_names=("submit_report",))
+
+    async def on_tool_call(
+        self, ctx: TurnContext, tool_call: dict[str, Any],
+    ) -> ToolCallIntervention | None:
+        if self._stopping and tool_call.get("name") != "submit_report":
+            return ToolCallIntervention(
+                skip_with_result="Research stopped; submit existing findings with submit_report.",
+                skip_is_error=True,
+            )
+        return None
 
 
 class InheritedWallClockDeadlineObserver:
@@ -461,8 +501,12 @@ def _build_recovery_messages(
     # Pin all source identities before spending the rest on recent prose. A
     # member's 24K handoff must not be clipped to the generic 8K item limit.
     evidence = evidence_digest(messages, max_chars=40_000, clean=_strip_leaked_tool_calls)
+    # Tool evidence already has its own fair, source-aware budget. Repeating it
+    # alongside obsolete tool preambles wastes input and encourages more planning.
+    prose = [message for message in messages if not is_tool_msg(message)
+             and not (is_assistant_msg(message) and message.get("tool_calls"))]
     recovery_context = build_recovery_context(
-        messages,
+        prose,
         strip_thinking=_strip_thinking,
         strip_leaked_tool_calls=_strip_leaked_tool_calls,
         nudge_prefixes=_RECOVERY_NUDGE_PREFIXES,
@@ -517,6 +561,57 @@ def _stitch_collected_reports(messages: list[Message]) -> str:
         "not independently verified conclusions.\n\n"
         + stitched
     )
+
+
+def _collected_report_fallback(messages: list[Message]) -> str:
+    """Publish attributed member results, never orchestration progress, on failure."""
+    reports: list[tuple[str, str]] = []
+    seen: set[str] = set()
+    for message in messages:
+        if not is_tool_msg(message):
+            continue
+        for match in _REPORT_BLOCK_RE.finditer(text_of(message.get("content"))):
+            block = match.group(0)
+            header, body = block.split(">", 1)
+            attrs = dict(re.findall(r'(\w+)="([^"]*)"', header))
+            if (
+                not all(attrs.get(k) for k in ("agent", "job", "status"))
+                or attrs["agent"] == "orchestrator" or block in seen
+            ):
+                continue
+            seen.add(block)
+            body = _strip_leaked_tool_calls(body.rsplit("</report>", 1)[0]).strip()
+            if body:
+                label = " / ".join(attrs.get(k, "unknown") for k in ("agent", "job", "status"))
+                label = re.sub(r"[\n\r<>`#]", " ", label)[:240]
+                reports.append((label, body))
+    if not reports:
+        return ""
+    share = max(1, _STITCH_MAX_CHARS // len(reports))
+    blocks = []
+    for label, body in reports:
+        if len(body) > share:
+            body = body[:share // 2] + "\n[…摘录；完整报告见运行轨迹…]\n" + body[-share // 2:]
+        blocks.append(f"### {label}\n\n{body}")
+    return (
+        "## 已收集的成员报告 / Collected member reports\n\n"
+        "最终汇总未成功。以下按来源保留成员报告及其缺口，不代表独立核验通过。\n"
+        "Final synthesis failed. These attributed reports retain their limitations; "
+        "they are not independently verified conclusions.\n\n" + "\n\n".join(blocks)
+    )
+
+
+def _usable_final_draft(result: AgentLoopResult) -> str:
+    """A tool-bearing assistant message is progress, not a terminal answer."""
+    draft = _strip_leaked_tool_calls(_strip_thinking(result.final_content))
+    if not draft:
+        return ""
+    for message in reversed(result.messages):
+        if message.get("role") == "assistant" and (
+            _strip_leaked_tool_calls(_strip_thinking(text_of(message.get("content")))) == draft
+        ):
+            return "" if message.get("tool_calls") else draft
+    return draft
 
 
 def _stitch_recent_tool_observations(messages: list[Message]) -> str:
@@ -675,13 +770,18 @@ async def force_final_answer(
         if text:
             rescue_mode = "tool_observations"
     if not text:
-        text = _strip_leaked_tool_calls(_strip_thinking(result.final_content))
+        text = _usable_final_draft(result)
         if text:
             rescue_mode = "existing_partial"
     if not text and not prefer_collected_reports:
         text = _stitch_collected_reports(result.messages)
         if text:
             rescue_mode = "collected_reports"
+    if rescue_mode == "collected_reports":
+        retained = _collected_report_fallback(result.messages)
+        if retained:
+            text = retained
+            rescue_mode = "collected_report_fallback"
     if not text:
         text = _minimal_best_effort_answer(
             task_description, result.stopped_by, language=language,
@@ -1226,7 +1326,6 @@ def _swarm_observers(
     from frontier_agent.components.observers.react_step_tracker import ReactStepTracker
     from frontier_agent.components.observers.repetition_guard import RepetitionGuard
     from frontier_agent.components.observers.sse_observer import SSEObserver
-    from frontier_agent.components.observers.stop_signal_observer import StopSignalObserver
     from frontier_agent.components.observers.text_repetition_guard import (
         TextRepetitionGuard,
     )
@@ -1279,7 +1378,7 @@ def _swarm_observers(
         ContentAcquisitionObserver(),
         # Cooperative stop: main agent's stop_subagent registers a stop for
         # this session_id; we inject the stop prompt at the next turn boundary.
-        StopSignalObserver(
+        (TeamStopSignalObserver if terminal else StopSignalObserver)(
             session_id=f"{task_id}::{session_name}",
             is_terminal_response=_is_terminal_report_response if terminal else None,
         ),

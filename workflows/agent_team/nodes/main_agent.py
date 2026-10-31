@@ -173,7 +173,8 @@ _TEAM_FINALIZATION_MESSAGE = (
     "Collect completed work now. If the task requires files, immediately "
     "assign or reuse exactly one capable publisher carrying the exact "
     "/outputs manifest; have it finish, validate, and publish the best "
-    "current deliverables. Then return the best complete plain-text answer. "
+    "current deliverables. Then use deliver_answer with the complete answer and "
+    "final task dispositions in one call. "
     "If full completion is impossible, preserve existing artifacts and give a "
     "useful partial answer instead of ending with no deliverable and no answer."
 )
@@ -934,7 +935,6 @@ def _build_observers(
             reserve_turns=finalization_reserve_turns,
             message=_TEAM_FINALIZATION_MESSAGE,
         ),
-        LastTurnForcer(terminal_tool=MAIN_TERMINAL_TOOL),
         RichConsoleObserver(),
         TrajectoryFileObserver(
             traj_dir,
@@ -946,6 +946,8 @@ def _build_observers(
         ),
         ReactStepTracker(),
     ]
+    if "deliver_answer" not in tool_names:
+        observers.append(LastTurnForcer(terminal_tool=MAIN_TERMINAL_TOOL))
     # Lazy-imported research observers — keep kernel-only test paths free
     # of research-domain modules.
     from workflows._shared.research.observers.assertion_observer import AssertionObserver
@@ -1001,8 +1003,8 @@ def _build_observers(
 
 
 def _swarm_main_loop_policy() -> LoopPolicy:
-    # No terminal tool: BareTextFinalizeObserver ends the loop when the agent
-    # produces a plain-text answer with no tool call (and the gate passes).
+    # Workflow observers accept atomic delivery and legacy gated plain text.
+    # The kernel must not stop on a rejected deliver_answer tool call.
     # The no-tool nudge below only fires on an EMPTY no-tool turn — a non-empty
     # bare-text turn is handled by the observer before this point.
     return LoopPolicy(
@@ -1011,8 +1013,9 @@ def _swarm_main_loop_policy() -> LoopPolicy:
         no_tool_nudge_message=(
             "You produced no output and called no tool. Either dispatch / "
             "collect from sub-agents (assign_task, collect_reports) to keep "
-            "working, or — once every task-board item is resolved — deliver "
-            "your COMPLETE answer as plain text (no tool call) to finish."
+            "working, or submit your COMPLETE answer and final task dispositions "
+            "together with deliver_answer. Use blocked with notes and gap for "
+            "unfinished work. Settled boards also permit a plain-text answer."
         ),
     )
 
@@ -1452,6 +1455,11 @@ async def main_agent_node(
     # the model-facing schema and executor entry without mutating the global
     # registry or affecting other bindings.
     tools = _apply_agent_team_tool_contract(tools)
+    # Workflow-local terminal contract: do not expose it to members or other modes.
+    from workflows.agent_team.delivery import TeamDeliveryObserver, deliver_answer
+
+    tools = [tool for tool in tools if tool.name != deliver_answer.name] + [deliver_answer]
+    tool_names = [tool.name for tool in tools]
     # ``web_search_impl`` / ``web_fetch_impl`` read as profile-wide switches, so
     # apply them to the coordinator too — benchmark.yaml puts ``web_search`` in
     # ``main_agent_tools``, and a swap that reached only sub-agents would split
@@ -1508,6 +1516,14 @@ async def main_agent_node(
             p = f"{p}\n\n{_prompt_addendum}"
         if fs_enabled:
             p = f"{p}{main_fs_note}"
+        p += (
+            "\n\nFinal delivery: when deliver_answer is available, submit the complete answer "
+            "and outstanding task dispositions together in that single tool call. Do not "
+            "spend a separate model turn updating the board first. Required checks still "
+            "apply; unfinished work must be blocked with notes and gap, disclosed in the "
+            "answer. Plain text remains valid when the board is already settled. During "
+            "planning, finish planning before submitting an answer.\n"
+        )
         return f"{p}{render_team_effort(agent_cfg.get('team_effort'))}"
 
     event_store = registry.get_optional(EventStore)
@@ -1530,6 +1546,8 @@ async def main_agent_node(
         bus_task_id=bus_task_id,
     )
     observers.insert(0, TeamPhaseBudgetObserver(phase_budget, prompt_mode=prompt_mode))
+    delivery_observer = TeamDeliveryObserver(phase_budget)
+    observers.insert(0, delivery_observer)
     # A serve/CLI driver injects its own protocol-stream and worker-trace
     # observers via state.metadata["sdk_extra_observers"] (see
     # ``workflows/_shared/sdk_shim``). The HTTP API path leaves this key
@@ -1949,12 +1967,16 @@ async def main_agent_node(
         team_wind_down_timeout_s,
         hard_deadline_monotonic,
     )
-    wind_down = await wind_down_team(
+    wind_down = delivery_observer.wind_down or await wind_down_team(
         bus=bus,
         task_id=bus_task_id,
         wait_s=wind_down_wait_s,
     )
-    append_team_wind_down_checkpoint(result, wind_down)
+    if delivery_observer.wind_down is not None:
+        # This checkpoint was already presented BEFORE the final generation.
+        result.metadata["team_wind_down"] = wind_down.as_dict()
+    else:
+        append_team_wind_down_checkpoint(result, wind_down)
 
     if main_sb_token is not None:
         clear_task_sandbox(main_sb_token)
@@ -1985,7 +2007,10 @@ async def main_agent_node(
             effective_finalization_timeout_s,
             task_description=question,
             structured_report=False,
-            force_recovery=wind_down.should_refresh_answer(result),
+            force_recovery=(
+                wind_down.should_refresh_answer(result)
+                and not (delivery_observer.wind_down is not None and result.metadata.get("final_answer"))
+            ),
             prefer_collected_reports=wind_down.collected_count > 0,
             run_recovery_llm=hard_remaining_s is None or hard_remaining_s > 1.0,
             recovery_trace_path=traj_dir / "main_finalization.jsonl",
@@ -2067,6 +2092,7 @@ async def main_agent_node(
             "clean_context_llm",
             "existing_partial",
             "collected_reports",
+            "collected_report_fallback",
         }
         else "complete"
     )

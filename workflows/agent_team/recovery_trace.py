@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import json
 import logging
 import time
 from collections.abc import Awaitable, Callable
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 from frontier_agent.components.observers.trajectory import TrajectoryFileObserver
 from frontier_agent.core.loop_types import AgentLoopResult, LoopConfig, TurnContext
@@ -15,6 +17,17 @@ from frontier_agent.core.runtime.loop._response import extract_usage
 from frontier_agent.infra.usage_meter import record_llm_usage
 
 logger = logging.getLogger(__name__)
+
+
+def _recovery_event(path: Path | None, event: dict[str, Any]) -> None:
+    """Keep logical recovery calls distinct from observed provider attempts."""
+    if path is None:
+        return
+    try:
+        with path.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps({"t": "recovery", "ts": time.time(), **event}) + "\n")
+    except Exception:
+        logger.warning("Cannot write recovery timing", exc_info=True)
 
 
 async def traced_recovery_call(
@@ -29,6 +42,7 @@ async def traced_recovery_call(
     started = time.monotonic()
     response = None
     outcome = "cancelled"
+    recovery_id = uuid4().hex
     record.update(usage_status="unavailable", scope="logical_recovery_call")
     try:
         if path is not None:
@@ -43,6 +57,7 @@ async def traced_recovery_call(
     except Exception:
         logger.warning("Cannot initialize recovery trace", exc_info=True)
         observer = None
+    _recovery_event(path, {"recovery_id": recovery_id, "phase": "started"})
     try:
         response = await call()
         outcome = "recovery_complete"
@@ -73,6 +88,7 @@ async def traced_recovery_call(
                     )
                 }
             )
+        _recovery_event(path, {"recovery_id": recovery_id, "phase": "finished", **record})
         if observer is not None:
             try:
                 content = text_of(getattr(response, "content", "")) if response else ""

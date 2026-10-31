@@ -146,7 +146,7 @@ def test_web_tools_auto_approved():
 def test_builtin_workflow_tools_auto_approved():
     cwd = "/tmp"
     for tool_name in ("add_task", "update_task", "finish_planning",
-                      "create_subagent", "assign_task", "collect_reports",
+                      "create_subagent", "assign_task", "collect_reports", "deliver_answer",
                       "stop_subagent", "submit_report", "read_text", "view_image"):
         assert assess_tool_risk(tool_name, {}, cwd).level == RISK_SAFE, tool_name
 

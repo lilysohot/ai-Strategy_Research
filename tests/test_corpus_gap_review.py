@@ -1,6 +1,7 @@
 """Human review never changes default grading, source evidence, or scope coverage."""
 
 import json
+import os
 from dataclasses import asdict, replace
 from datetime import UTC, datetime
 
@@ -168,7 +169,7 @@ def test_unknown_code_and_omitted_gap_cannot_be_signed_away():
         )
 
 
-def _build_pdf(tmp_path, store=None):
+def _build_pdf(tmp_path, store=None, review_id="review-test"):
     import pymupdf
 
     from plugins.corpus.preparation.admission import POLICY_REV_V1, AdmissionPolicy
@@ -192,7 +193,7 @@ def _build_pdf(tmp_path, store=None):
     store = store if store is not None else MemoryStore(clock=lambda: NOW)
     store.put_reviewed_decision(
         ReviewedDecision(
-            "review-test",
+            review_id,
             sha256_of_bytes(path.read_bytes()),
             "test-human",
             NOW,
@@ -204,7 +205,7 @@ def _build_pdf(tmp_path, store=None):
     plan = plan_builds(
         [
             PlanEntry(
-                str(path), domain_hint=ResearchDomain.COMPANY, review_decision_ids=("review-test",)
+                str(path), domain_hint=ResearchDomain.COMPANY, review_decision_ids=(review_id,)
             )
         ],
         policy=policy,
@@ -272,6 +273,89 @@ def test_partial_text_publication_preserves_gap_and_supports_idempotent_retry(bu
     del store._source_checkpoints[(target.source_id, STAGE_PREFIX + target.build_id)]
     with pytest.raises(EngineError, match="acceptance missing"):
         publish_build(store, target.build_id, activated_at=NOW)
+
+
+def test_text_publication_cli_exports_registers_and_preserves_raw_gaps(
+    built_pdf,
+    tmp_path,
+    monkeypatch,
+    capsys,
+):
+    from contextlib import nullcontext
+
+    from plugins.corpus import cli
+    from plugins.corpus.preparation.engine import gap_records_of
+
+    store, target = built_pdf
+    monkeypatch.setattr(cli, "_open_store", lambda _: nullcontext(store))
+    command = ["text-publication", "--build", target.build_id]
+    assert cli.main(command) == 0
+    template = json.loads(capsys.readouterr().out)["template"]
+    path = tmp_path / "acceptance.json"
+    assert cli.main([*command, "--out", str(path)]) == 0
+    capsys.readouterr()
+    assert json.loads(path.read_text()) == template
+    assert cli.main([*command, "--out", str(path)]) == 2
+    capsys.readouterr()
+    assert cli.main([*command, "--record", str(path)]) == 2
+    capsys.readouterr()
+    assert store.get_text_publication(target.build_id) is None
+    template.update(
+        operator="test",
+        authorized_at=NOW.isoformat(),
+        authorization_ref="user-accepts-incomplete-text",
+    )
+    path.write_text(json.dumps(template))
+    for _ in range(2):
+        assert cli.main([*command, "--record", str(path)]) == 0
+        capsys.readouterr()
+    assert gap_records_of(target)[0].lifecycle is GapLifecycle.BLOCKING
+    assert gap_records_of(target, store=store)[0].lifecycle is GapLifecycle.ACKNOWLEDGED
+    assert store.get_publication(target.source_id) is None
+    template["build_fingerprint"] = "0" * 64
+    path.write_text(json.dumps(template))
+    assert cli.main([*command, "--record", str(path)]) == 2
+
+
+@pytest.mark.skipif(not os.getenv("CORPUS_INTAKE_TEST_DB"), reason="dedicated PG database required")
+def test_pg_text_publication_cli(tmp_path, monkeypatch, capsys):
+    from psycopg.conninfo import make_conninfo
+
+    from plugins.corpus import cli
+    from plugins.corpus.preparation.repository_pg import PgStore
+    from plugins.corpus.service import dsn
+
+    db = os.environ["CORPUS_INTAKE_TEST_DB"]
+    assert db.startswith("corpus_intake_test_")
+    connection = make_conninfo(dsn(), dbname=db)
+    monkeypatch.setenv("CORPUS_TARGET_DB", db)
+    monkeypatch.setenv("CORPUS_I2_DSN", connection)
+    monkeypatch.setenv("CORPUS_LOCAL_OCR_ENABLED", "0")
+    with PgStore(connection, sandbox_db=db) as store:
+        _, target = _build_pdf(
+            tmp_path, store=store, review_id="pg-" + sha256_of_bytes(str(tmp_path).encode())
+        )
+    command = ["text-publication", "--build", target.build_id]
+    path = tmp_path / "receipt.json"
+    assert cli.main([*command, "--out", str(path)]) == 0
+    capsys.readouterr()
+    receipt = json.loads(path.read_text())
+    receipt.update(
+        operator="integration-test",
+        authorized_at=NOW.isoformat(),
+        authorization_ref="synthetic-test-user-authorization",
+    )
+    path.write_text(json.dumps(receipt))
+    assert cli.main(["check", "--build", target.build_id]) == 4
+    capsys.readouterr()
+    for _ in range(2):
+        assert cli.main([*command, "--record", str(path)]) == 0
+        capsys.readouterr()
+    assert cli.main(["check", "--build", target.build_id]) == 0
+    capsys.readouterr()
+    assert cli.main(["publish", "--build", target.build_id, "--operator", "test"]) == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["record"]["coverage_claim"] == "available_text_only_incomplete"
 
 
 @pytest.mark.parametrize(

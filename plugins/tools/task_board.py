@@ -6,8 +6,8 @@ import ast
 import json
 import logging
 import re
-from collections.abc import Iterable
-from contextlib import suppress
+from collections.abc import Iterable, Iterator
+from contextlib import contextmanager, suppress
 from copy import deepcopy
 from typing import Any
 
@@ -69,6 +69,28 @@ def _record_op(task_id: str, op: str, ids: list[str] | None = None) -> None:
 
 def _board(task_id: str) -> dict[str, Any]:
     return _BOARDS.setdefault(task_id, {"seq": 0, "tasks": {}})
+
+
+@contextmanager
+def board_transaction(task_id: str) -> Iterator[None]:
+    """Roll back board writes and their UI receipts if final submission fails.
+
+    Only use around synchronous validation/mutation; never yield to external I/O.
+    """
+    original = deepcopy(_BOARDS.get(task_id))
+    pending = deepcopy(_PENDING_OPS.get(task_id))
+    try:
+        yield
+    except BaseException:
+        if original is None:
+            _BOARDS.pop(task_id, None)
+        else:
+            _BOARDS[task_id] = original
+        if pending is None:
+            _PENDING_OPS.pop(task_id, None)
+        else:
+            _PENDING_OPS[task_id] = pending
+        raise
 
 
 def _verification_required(item: dict[str, Any], description: str) -> bool:
@@ -211,7 +233,7 @@ def restore_board_from_messages(
 ) -> int:
     """Rebuild a continued Run's task board from replayed tool calls.
 
-    Conversation replay preserves the model-visible add_task and update_task
+    Conversation replay preserves add_task, update_task, and deliver_answer
     calls, but the in-memory board is intentionally cleared when each Run ends.
     Replaying only the messages therefore leaves the next Run with a convincing
     board transcript and no matching state. Rebuild that state before the loop so
@@ -305,8 +327,12 @@ def restore_board_from_messages(
                         ),
                     }
                     existing[description] = tid
-            elif name == "update_task":
+            elif name in {"update_task", "deliver_answer"}:
                 receipt = receipts.get(str(call.get("id")))
+                if name == "deliver_answer" and receipt != "Final answer and task dispositions accepted.":
+                    # Atomic submission applies only after its positive receipt;
+                    # failed or interrupted submissions must not alter replay.
+                    continue
                 accepted: set[str] | None = None
                 progress_ids: set[str] = set()
                 actual_resolutions: dict[str, str] = {}
@@ -357,6 +383,9 @@ def restore_board_from_messages(
                             for owner in owners:
                                 if owner not in task["owners"]:
                                     task["owners"].append(owner)
+
+                if name == "deliver_answer":
+                    complete_delivery_tasks(task_id)
 
     if not board["tasks"]:
         _BOARDS.pop(task_id, None)
@@ -410,6 +439,8 @@ def serialize_tasks(task_id: str, ids: list[str]) -> list[dict[str, Any]]:
             "owners": list(t.get("owners") or []),
             "group": t.get("group", ""),
         }
+        if t.get("execution_job_ids"):
+            serialized["execution_job_ids"] = list(t["execution_job_ids"])
         if t.get("verification_required"):
             serialized["verification_required"] = True
             serialized["verification_requirements"] = [
@@ -427,6 +458,25 @@ def serialize_tasks(task_id: str, ids: list[str]) -> list[dict[str, Any]]:
                 ))
         out.append(serialized)
     return out
+
+
+def bind_assignment(task_id: str, ids: list[str], agent: str, job_id: str) -> None:
+    """Record a successful enqueue; do not claim findings/checks are complete."""
+    board = _BOARDS.get(task_id, {}).get("tasks", {})
+    changed = []
+    for tid in ids:
+        task = board.get(tid)
+        if task is None or task.get("archived"):
+            continue
+        for key, value in (("owners", agent), ("execution_job_ids", job_id)):
+            entries = task.setdefault(key, [])
+            if value not in entries:
+                entries.append(value)
+        if task.get("resolution") == "open":
+            task["resolution"] = "in_progress"
+        changed.append(tid)
+    if changed:
+        _record_op(task_id, "update", changed)
 
 
 def snapshot_tasks(task_id: str) -> list[dict[str, Any]]:

@@ -16,6 +16,23 @@ from workflows._shared.research.observers.finalize_answer_observer import Finali
 from workflows.agent_team.subagent_runtime import SwarmSubagentRuntime, _swarm_observers
 
 
+async def test_cooperative_stop_restricts_next_request_to_report_submission():
+    from frontier_agent.core.loop_types import TurnContext
+
+    runtime = SwarmSubagentRuntime(sub_agent_tools=[submit_report], sub_agent_tool_names=["submit_report"])
+    observer = next(o for o in _swarm_observers(runtime, task_id="stop-now", session_name="worker")
+                    if isinstance(o, StopSignalObserver))
+    ctx = TurnContext(turn=2, max_turns=20, task_id="stop-now", role_id="worker",
+                      ai_text="", thinking="", tool_calls=[{"name": "web_search"}],
+                      messages=[], usage=None, metadata={})
+    get_stop_registry().request_stop("stop-now::worker", "j")
+    iv = await observer.on_llm_response(ctx)
+    assert iv.pop_last_message
+    next_request = await observer.on_before_llm(ctx)
+    assert next_request is not None
+    assert next_request.allowed_tool_names == ("submit_report",)
+
+
 @pytest.mark.parametrize("first_action", [
     "report", "search", "mixed", "invalid_report", "checkpoint", "cancel",
 ])

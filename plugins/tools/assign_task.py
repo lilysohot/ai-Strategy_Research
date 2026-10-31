@@ -176,6 +176,13 @@ class AgentTeamAssignmentSpec(AssignmentSpec):
 
     model_config = ConfigDict(extra="forbid")
 
+    work_item_ids: list[StrictStr] = Field(
+        default_factory=list, max_length=32,
+        description="Exact task-board IDs covered by this assignment, e.g. ['t1', 't2']. "
+        "Required when a task board exists. Dispatch records ownership and job IDs; "
+        "a completed report does not mark verification as passed.",
+    )
+
     verification_checks: list[VerificationCheck] = Field(
         default_factory=list, max_length=16,
         description="Check-only assignment bound to exact completed job reports or handoffs. "
@@ -522,6 +529,27 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
             validation_errors.append(_assignment_validation_error(index, exc))
             continue
         specs.append(spec)
+    if is_agent_team:
+        from plugins.tools.task_board import snapshot_tasks
+
+        board = {task["id"]: task for task in snapshot_tasks(scope.task_id)}
+        for spec in specs:
+            if not isinstance(spec, AgentTeamAssignmentSpec):
+                continue
+            check_ids = [check.work_item_id for check in spec.verification_checks]
+            # Existing explicit ownership/check bindings are safe compatibility
+            # inputs. Never guess IDs from the assignment's free-text prompt.
+            ids = spec.work_item_ids or check_ids or [
+                tid for tid, task in board.items() if spec.agent in task.get("owners", [])
+            ]
+            ids = list(dict.fromkeys(ids))
+            if board and not ids:
+                validation_errors.append(f"{spec.agent}: work_item_ids required; choose from {list(board)}")
+            elif any(tid not in board or board[tid]["resolution"] == "cancelled" for tid in ids):
+                validation_errors.append(f"{spec.agent}: unknown or cancelled work_item_ids {ids}")
+            elif any(tid not in ids for tid in check_ids):
+                validation_errors.append(f"{spec.agent}: verification checks must belong to work_item_ids")
+            spec.work_item_ids = ids
     if is_agent_team and validation_errors:
         validation_errors.extend(_unknown_agent_validation_errors(
             raw_tasks,
@@ -671,6 +699,8 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         task_metadata: dict[str, Any] = {}
         if isinstance(spec, AgentTeamAssignmentSpec):
             task_metadata["required_for_completion"] = spec.required_for_completion
+            if spec.work_item_ids:
+                task_metadata["work_item_ids"] = list(spec.work_item_ids)
         publication_claim: tuple[str, ...] = ()
         publication_state: dict[str, Any] | None = None
         previous_publisher = ""
@@ -949,6 +979,10 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                     spawn_context=spawn_context,
                     task_metadata=task_metadata,
                 )
+            if isinstance(spec, AgentTeamAssignmentSpec) and spec.work_item_ids:
+                from plugins.tools.task_board import bind_assignment
+
+                bind_assignment(scope.task_id, spec.work_item_ids, agent_name, job_id)
             submitted.append({"agent": agent_name, "job_id": job_id})
         except RuntimeError as exc:
             errors.append(f"{agent_name}: {exc}")

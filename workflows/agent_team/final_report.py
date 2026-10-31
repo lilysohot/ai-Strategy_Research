@@ -141,6 +141,7 @@ def finalize_team_report(
             "notes": str(task.get("notes") or ""),
             "gap": str(task.get("gap") or ""),
             "owners": list(task.get("owners") or []),
+            "execution_job_ids": list(task.get("execution_job_ids") or []),
             "verification_status": str(task.get("verification_status") or "not_assessed"),
             "verification_execution_status": str(
                 task.get("verification_execution_status") or "not_started"
@@ -164,13 +165,17 @@ def finalize_team_report(
 
     verification = project_checks(jobs)
     for task in board:
-        assigned = [job for job in jobs if job.get("agent") in task["owners"]]
-        task["execution_job_ids"] = [str(job.get("job_id") or "") for job in assigned]
+        bound_ids = task["execution_job_ids"]
+        assigned = [job for job in jobs if (
+            job.get("job_id") in bound_ids if bound_ids else job.get("agent") in task["owners"]
+        )]
+        task["execution_job_ids"] = bound_ids or [str(job.get("job_id") or "") for job in assigned]
         task["execution_status"] = (
             "not_assessed"
             if not assigned
             else "complete"
             if all(job.get("status") == "complete" for job in assigned)
+            and (not bound_ids or len(assigned) == len(bound_ids))
             else "incomplete"
         )
         if task["gap"].strip() and task["resolution"] != "cancelled":
@@ -265,7 +270,8 @@ def finalize_team_report(
     # Blanket assurance is unsupported even when every *declared* check passed:
     # declared checks only prove their bounded criteria and versions.  Scoped
     # statements such as "all declared checks passed" remain publishable.
-    contradictory = _contradicts_incomplete_work(text)
+    retained_reports = source == "collected_report_fallback" and is_user_report(text)
+    contradictory = not retained_reports and _contradicts_incomplete_work(text)
     if contradictory:
         gaps.append({"code": "unsupported_verification_claim"})
     system = source in _INTERNAL_SOURCES or not is_user_report(text) or contradictory
@@ -280,10 +286,13 @@ def finalize_team_report(
         status = "partial"
     if system:
         status = "not_found"
+    if retained_reports:
+        status = "best_effort"
+        gaps.append({"code": "synthesis_unavailable"})
     kind = "system_status" if system else "complete" if status == "complete" else "partial"
     contract = {
         "version": 3,
-        "source": "system" if system else "model",
+        "source": "system" if system or retained_reports else "model",
         "kind": kind,
         "answer_status": status,
         "stopped_by": stopped_by,

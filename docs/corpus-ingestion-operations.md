@@ -4,6 +4,167 @@
 
 ## 日常增量
 
+### 新增研报的固定命令流程（2026-10-31，含 OCR）
+
+本节是新批次的操作入口。下方 10 月 28 日的脚本仅是历史执行记录，不要重跑。
+本流程仅构建新增清单中的文件，不重建历史研报。OCR 已接入原生读取器，详见
+[生产 OCR 说明](guide/local-ocr-production.md)。目录不自动监听，放入 PDF 后仍需触发命令。
+
+#### 1. 冻结新增清单与授权记录
+
+先以 SHA-256 与活动发布记录去重；已发布 OCR 衍生版须同时核对父子来源关系，不能
+把已处理的扫描原件误认为新文件。为本批单独建立目录，保留清单、授权、命令输出及备份。
+
+`manifest.json` 示例（所有尖括号内容需替换；每份新增文件一项）：
+
+```json
+{
+  "archive_root": "/home/administrator/FrontierAgent/data/corpus-archive",
+  "sources": [{
+    "path": "/home/administrator/FrontierAgent/data/corpus-incoming/<批次>/<文件>.pdf",
+    "source_id": "<sha256sum 得到的完整64位小写哈希>",
+    "original_name": "<文件>.pdf",
+    "domain_hint": "company",
+    "review_decision_ids": ["<本批唯一决定ID>"]
+  }]
+}
+```
+
+`authorization.json` 记录实际用户指令，不声明人工逐字校对。`operator` 是登记人，
+`authorized_by` 是授权人，两者分开；时间带时区；引用可用本批保存的用户指令文件路径。
+
+```json
+{
+  "operator": "<登记人>",
+  "authorized_by": "<授权人>",
+  "authorized_at": "<实际授权时间，如2026-10-31T12:00:00+08:00>",
+  "authorization_ref": "<用户入库指令的可追溯引用>",
+  "sources": [{
+    "source_id": "<同一文件哈希>",
+    "decision_id": "<与清单相同的决定ID>",
+    "material_type": "research_report",
+    "research_domain": "company"
+  }]
+}
+```
+
+领域为 `company`、`industry` 或 `macro`。材料类型必须如实填写；外部订阅/复盘使用
+`personal_or_external_subscription`，不能为了通过准入而写成分析师研报。
+标准 `v1-20260915` 政策只允许 `research_report`。若本批包含已获授权的订阅材料，
+按已有 `v3-dev-20261021` 流程另存本批 `policy.json`，显式列出本批哈希：
+
+```json
+{
+  "policy_rev": "v3-dev-20261021",
+  "frozen": true,
+  "scope": "dev",
+  "auto_decision": {"enabled": false},
+  "allowed_materials": ["research_report", "personal_or_external_subscription"],
+  "dev_lane": {
+    "lane_id": "<本批ID>",
+    "sources": [{"source_id": "<本批来源哈希>"}]
+  }
+}
+```
+
+为这类清单添加 `"policy": "<本批policy.json绝对路径>"`，并显式设置
+`CORPUS_DEV_LANE=1`。只对清单来源生效，不放宽其他历史来源。`admit` 登记授权，
+实际是否准入仍由 `build` 的既有政策判定。
+
+#### 2. 目标、备份、准入与构建
+
+在仓库根目录执行。`CORPUS_TARGET_DB` 与 `CORPUS_I2_DSN` 必须指向已确认的语料库，
+当前正式目标是 `postgres`，不能使用业务库 `apodex`。可通过受控环境或 `.env` 配置；
+下列命令会加载 `.env`，无需将密钥复制进清单或命令日志。正式写入前按下方备份规程
+备份指定语料库。`BATCH` 指向已创建的本批操作目录。
+
+```bash
+cd /home/administrator/FrontierAgent
+BATCH=.scratch/corpus-incoming-<批次>
+
+uv run --no-sync --env-file .env python -m plugins.corpus.cli admit \
+  --manifest "$BATCH/manifest.json" --record "$BATCH/authorization.json"
+uv run --no-sync --env-file .env python -m plugins.corpus.cli plan \
+  --manifest "$BATCH/manifest.json" > "$BATCH/plan.json"
+uv run --no-sync --env-file .env python -m plugins.corpus.cli build \
+  --manifest "$BATCH/manifest.json" > "$BATCH/build.json"
+```
+
+逐条检查退出码后再执行下一条。相同授权记录可原样重跑；哈希、决定 ID、授权人等
+冲突不会覆盖原记录。清单中的 `source_id` 在 plan/build 时重新核对，改过的文件必须
+重新登记。未获准入的 build 返回非零，不能只看到命令执行结束就认定构建成功。
+
+加载 OCR 配置后，plan/build 会调用本地 OCR 服务，服务可能写识别结果缓存；plan
+不写语料数据库。原生文字保留，OCR 文字另带坐标、版本与 `ocr_unverified` 标记。
+图表语义缺口不自动清除；服务失败、方向未知等状态不能伪装成识别完成。
+
+#### 3. 检查、登记可用文字发布、正式发布
+
+从 `build.json` 取每项 `build_id`，逐份执行：
+
+```bash
+uv run --no-sync --env-file .env python -m plugins.corpus.cli check --build <build_id>
+```
+
+无阻断缺口则直接进入 publish。对于用户已接受“仅发布可用文字”的图片/表格缺口：
+
+```bash
+uv run --no-sync --env-file .env python -m plugins.corpus.cli text-publication \
+  --build <build_id> --out "$BATCH/<build_id>-text-publication.json"
+```
+
+模板只填写 `operator`、`authorized_at`、`authorization_ref` 三项，填入实际授权信息。
+不要修改 source/build 指纹或缺口列表；不需要也不能冒签 `gap-review` 的人工完整性审核。
+`--out` 不覆盖已有文件；重试时使用原凭证。然后执行：
+
+```bash
+uv run --no-sync --env-file .env python -m plugins.corpus.cli text-publication \
+  --build <build_id> --record "$BATCH/<build_id>-text-publication.json"
+uv run --no-sync --env-file .env python -m plugins.corpus.cli check --build <build_id>
+uv run --no-sync --env-file .env python -m plugins.corpus.cli publish \
+  --build <build_id> --operator <登记人>
+```
+
+凭证须覆盖该构建的完整阻断缺口清单。原始缺口、页码和原文保持不变，放行状态标记
+为已接受且覆盖不完整；空正文、未知缺口、无效引用等仍拒绝。登记成功不代表已经发布。
+若中断，用 `status --build <build_id>` 查实际状态，再继续对应步骤。
+
+#### 4. 限定增量检索范围，补说明、向量并生成索引包
+
+`CURRENT_INDEX` 必须填当前正式配置的 manifest 绝对路径；不是旧批次的固定路径。
+
+```bash
+CURRENT_INDEX=<当前CORPUS_NATIVE_INDEX的绝对路径>
+uv run --no-sync --env-file .env python -m plugins.corpus.retrieval.cli scope \
+  --native-index "$CURRENT_INDEX" --manifest "$BATCH/manifest.json" \
+  --out "$BATCH/scope.json"
+uv run --no-sync --env-file .env python -m plugins.corpus.retrieval.cli context-plan \
+  --deployment release --source-scope "$BATCH/scope.json"
+uv run --no-sync --env-file .env python -m plugins.corpus.retrieval.cli context-generate \
+  --deployment release --source-scope "$BATCH/scope.json" --max-requests <本次请求上限>
+uv run --no-sync --env-file .env python -m plugins.corpus.retrieval.cli context-status \
+  --deployment release --source-scope "$BATCH/scope.json"
+uv run --no-sync --env-file .env python -m plugins.corpus.retrieval.cli native-pack \
+  --deployment release --source-scope "$BATCH/scope.json" \
+  --max-requests <本次向量请求上限> --release-id <新发布ID> \
+  --out data/corpus-native-context/<新批次>
+```
+
+`scope` 验证旧包和新增文件哈希，输出两者来源并集；不会自动纳入其他活动来源，也不
+覆盖已有范围文件。正式部署的四个 context/pack 命令现在必须带 `--source-scope`。
+范围中任一来源尚未发布或已撤回时明确失败，不静默丢掉它或扩大范围。只生成缺失说明、
+复用已就绪向量；失败/结果不确定时先检查状态与日志，不盲目重发。说明或向量未齐全
+不会生成可用新包。旧包仍保留，生成包不等于 Web 已切换。
+
+#### 5. 验收与 Web 激活
+
+用新 manifest 路径执行 `native-query --deployment release --native-index <新manifest>
+--query '<新资料问题>'`，检查命中来源、正文和 OCR 标记。再用应用实际 `corpus_search`
+返回的 `ref` 调用 `corpus_fetch` 核验原文；同时抽查旧句柄。确认旧来源活动 build 和
+generation 未变、新范围符合 scope.json 后，再将 `CORPUS_NATIVE_INDEX` 指向新包。
+无 queued/running 任务时按现有 Web 部署方式重启/激活，检查 healthz、readyz 和认证后的
+search/fetch。这里不涉及业务数据库迁移，也不重建历史研报。
+
 ### 正式库入库流程（2026-10-28）
 
 把 PDF 放进 `data/corpus-incoming/<批次>/` 只是待入库，**文件出现不等于已发布，

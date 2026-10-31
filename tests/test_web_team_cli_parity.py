@@ -48,6 +48,7 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
         ]}),
         tool_call_turn("assign_task", {"tasks": [{
             "agent": "reader", "prompt": "Read /inputs/brief.txt and report its value.",
+            "work_item_ids": ["t1"],
         }]}),
         tool_call_turn("collect_reports", {"timeout": 30}),
         None,  # exact reader job is filled from the preceding collect result
@@ -90,9 +91,22 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
                 "gap": "Independent confirmation unavailable",
             }]})
     server = MockLLMServer().start()
+    delivery_attempts = 0
 
     def next_turn(payload):
+        nonlocal delivery_attempts
         tools = {item["function"]["name"] for item in payload.get("tools", [])}
+        if tools == {"deliver_answer"}:
+            requests["main"].append(payload)
+            delivery_attempts += 1
+            body = answer
+            if internal_final and delivery_attempts > 1:
+                body = "The independently verified value is 42."
+            return tool_call_turn("deliver_answer", {
+                "content": body,
+                "updates": [{"id": "t1", "resolution": "blocked" if verdict == "unchecked" else "resolved",
+                             "notes": "Review finished", "gap": "Independent confirmation unavailable" if verdict == "unchecked" else ""}],
+            })
         system = str(payload["messages"][0]["content"])
         if "create_subagent" in tools:
             role = "main"
@@ -113,6 +127,7 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
             assert match, history[-4000:]
             assignment = {
                 "agent": "final_verifier",
+                "work_item_ids": ["t1"],
                 "prompt": (
                     "Verify 42 against /inputs/brief.txt. "
                     f'<attach agent="reader" job="{match.group(1)}"/>'
@@ -177,6 +192,8 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
         names = {item["function"]["name"] for item in seen[0]["tools"]}
         expected = set(cli["main_agent_tools"] if role == "main" else cli["sub_agent_tools"])
         if role == "main":
+            expected.add("deliver_answer")
+        if role == "main":
             expected.add("research_history")
         assert names == expected
         prompt = seen[0]["messages"][0]["content"]
@@ -209,9 +226,10 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
     assert summary["stopped_by"] == "final_answer"
     if internal_final:
         assert "RAW_INTERNAL_RESULT" not in summary["final_answer"]
-        assert "system-generated execution status" in summary["final_answer"]
-        assert summary["report_contract"]["kind"] == "system_status"
-        assert summary["answer_status"] == "not_found"
+        assert delivery_attempts == 2
+        assert "empty/internal tool payload" in main_history
+        assert summary["report_contract"]["kind"] == "complete"
+        assert summary["answer_status"] == "complete"
     else:
         if verdict == "unchecked":
             assert summary["final_answer"].startswith("**Partial result:")

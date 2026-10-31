@@ -137,7 +137,7 @@ class TeamPhaseBudgetObserver:
                     "work now; the workflow will perform bounded final synthesis."
                 ],
             )
-        if phase == self._last_phase:
+        if ctx.metadata.get("team_delivery_started") or phase == self._last_phase:
             return None
         self._last_phase = phase
         if self.prompt_mode == "standard" and phase in {"draining", "consolidating"}:

@@ -61,7 +61,13 @@ def cache_attempt_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
     Legacy traces without attempt identities cannot establish either split.
     """
     attempts: dict[tuple[str, str], dict[str, Any]] = {}
+    recovery: dict[tuple[str, str], dict[str, Any]] = {}
     for index, record in enumerate(records):
+        if record.get("t") == "recovery" and record.get("phase") in {"started", "finished"}:
+            key = (str(record.get("trajectory_source")), str(record.get("recovery_id")))
+            if key not in recovery or record.get("phase") == "finished":
+                recovery[key] = record
+            continue
         if record.get("t") != "attempt":
             continue
         if record.get("phase") not in {"started", "finished"}:
@@ -82,19 +88,21 @@ def cache_attempt_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
         if r.get("turn") == 1 and r.get("trajectory_source") in {"main_agent", "react_agent"}
     ]
     all_attempts = _bucket(values)
+    recovery_calls = _bucket(list(recovery.values()))
     return {
         "version": 1,
         "status": (
             "unavailable"
-            if not values
+            if not values and not recovery
             else "partial"
-            if all_attempts["unknown_usage_attempts"]
+            if all_attempts["unknown_usage_attempts"] or recovery_calls["unknown_usage_attempts"]
             else "complete"
         ),
         "first_attempts": _bucket(first),
         "retries": _bucket(retries),
         "coordinator_entry": _bucket(entry),
         "all_attempts": all_attempts,
+        "recovery_calls": recovery_calls,
     }
 
 

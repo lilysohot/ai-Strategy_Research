@@ -153,7 +153,7 @@ _READ_ONLY = frozenset({
     "add_task", "update_task", "finish_planning",
     # Subagent & report workflow built-ins
     "create_subagent", "assign_task", "collect_reports", "stop_subagent",
-    "submit_report", "finalize_answer",
+    "submit_report", "finalize_answer", "deliver_answer",
     # 投研内核（P0a）：纯计算 + 纯校验，不碰文件系统、不碰网络、无副作用。
     # 不加进来的话，不带 -y 时每一次仓位计算都要人工点确认。
     "position_sizing", "investment_context", "investment_position_sizing",

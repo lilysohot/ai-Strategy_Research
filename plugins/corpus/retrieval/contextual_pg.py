@@ -36,6 +36,7 @@ from plugins.corpus.retrieval.embedding import (
 )
 from plugins.corpus.retrieval.native import NativeIndex
 from plugins.corpus.retrieval.native_live import _date, _units, project, refresh
+from plugins.corpus.retrieval.source_scope import select_sources
 
 DDL = """
 CREATE SCHEMA IF NOT EXISTS corpus_retrieval;
@@ -188,11 +189,12 @@ def plan(
     *,
     context_version: str = contextual.CONTEXT_VERSION,
     chunks_per_request: int = 6,
+    source_ids: Sequence[str] | None = None,
 ) -> dict:
     """只读盘点：多少块、多少文档、要花多少次请求与多少 token。不动库、不调模型。"""
     with _connect(dsn, target) as conn, conn.cursor() as cur:
         cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
-        active = _active(cur)
+        active = select_sources(_active(cur), source_ids)
         chunks = _projected(cur, active)
         documents = _documents(cur, [entry["build_id"] for entry in active.values()])
         have = _ready_notes(cur, context_version) if _schema_ready(cur) else {}
@@ -233,10 +235,16 @@ def _by_build(chunks: Sequence[dict[str, Any]]) -> dict[str, list[dict[str, Any]
     return grouped
 
 
-def status(dsn: str, target: str, *, context_version: str = contextual.CONTEXT_VERSION) -> dict:
+def status(
+    dsn: str,
+    target: str,
+    *,
+    context_version: str = contextual.CONTEXT_VERSION,
+    source_ids: Sequence[str] | None = None,
+) -> dict:
     with _connect(dsn, target) as conn, conn.cursor() as cur:
         cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
-        active = _active(cur)
+        active = select_sources(_active(cur), source_ids)
         chunks = _projected(cur, active)
         if not _schema_ready(cur):
             return {
@@ -246,14 +254,15 @@ def status(dsn: str, target: str, *, context_version: str = contextual.CONTEXT_V
             }
         cur.execute(
             "SELECT status, count(*) FROM corpus_retrieval.chunk_context "
-            "WHERE context_version=%s GROUP BY status",
-            (context_version,),
+            "WHERE context_version=%s AND build_id = ANY(%s::text[]) GROUP BY status",
+            (context_version, [a["build_id"] for a in active.values()]),
         )
         states = {str(row[0]): int(row[1]) for row in cur.fetchall()}
         cur.execute(
             "SELECT coalesce(sum((generator->>'total_tokens')::bigint),0) "
-            "FROM corpus_retrieval.chunk_context WHERE context_version=%s",
-            (context_version,),
+            "FROM corpus_retrieval.chunk_context WHERE context_version=%s "
+            "AND build_id = ANY(%s::text[])",
+            (context_version, [a["build_id"] for a in active.values()]),
         )
         token_row = cur.fetchone()
         tokens = int(token_row[0]) if token_row else 0
@@ -278,6 +287,7 @@ def generate(
     *,
     max_requests: int = 0,
     context_version: str = contextual.CONTEXT_VERSION,
+    source_ids: Sequence[str] | None = None,
 ) -> dict[str, Any]:
     """逐文档批量生成说明；已 ready 的不重发，失败/不确定不自动重试。"""
     if max_requests < 0:
@@ -294,7 +304,7 @@ def generate(
         row = cur.fetchone()
         if row is None or not row[0]:
             raise contextual.ContextNoteError("context_writer_already_running")
-        active = _active(cur)
+        active = select_sources(_active(cur), source_ids)
         chunks = _projected(cur, active)
         documents = _documents(cur, [entry["build_id"] for entry in active.values()])
         have = _ready_notes(cur, context_version)
@@ -391,7 +401,7 @@ def generate(
         "blocked_this_run": blocked,
         "reported_total_tokens": tokens,
         "error_code": error,
-        **status(dsn, target, context_version=context_version),
+        **status(dsn, target, context_version=context_version, source_ids=source_ids),
     }
 
 
@@ -504,6 +514,7 @@ def build_pack(
     max_requests: int = 0,
     context_version: str = contextual.CONTEXT_VERSION,
     release_id: str | None = None,
+    source_ids: Sequence[str] | None = None,
 ) -> dict[str, Any]:
     """写 ``native-evidence-contextual-1``：说明 + 原文片段，词法与向量同一输入。"""
     if config.input_variant != "contextual-note-v1":
@@ -512,7 +523,8 @@ def build_pack(
         raise contextual.ContextNoteError("contextual_pack_output_not_empty")
     with _connect(dsn, target) as conn, conn.cursor() as cur:
         cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
-        active = _active(cur)
+        all_active = _active(cur)
+        active = select_sources(all_active, source_ids)
         chunks = _projected(cur, active)
         documents = _documents(cur, [entry["build_id"] for entry in active.values()])
         units = _units(cur, [entry["build_id"] for entry in active.values()])
@@ -622,7 +634,7 @@ def build_pack(
             [sid, entry["build_id"], entry["generation"]] for sid, entry in sorted(active.items())
         ],
         "source_allowlist": sorted(active),
-        "excluded_source_ids": [],
+        "excluded_source_ids": sorted(set(all_active) - set(active)),
         "files": files,
         "scope_note": (
             "Contextual Retrieval: note+chunk for lexical and dense indexing; "

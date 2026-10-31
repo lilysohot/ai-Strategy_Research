@@ -1,4 +1,4 @@
-"""I2-4 语料 CLI 六职责（架构 §9）：plan / build / check / publish / status / rebuild-plan。
+"""语料准入、构建、缺口登记、检查与发布 CLI（架构 §9）。
 
 纪律：
 
@@ -15,8 +15,8 @@
   ``gaps``（码/坐标/状态/分级/依据/恢复路径）、``gap_summary`` 与 ``recovery``；
   ``check`` 与 ``plan`` 的缺口判定共用 ``engine.gap_records_of``/``gaps.*``
   同一实现（不得各算一套）。被拒的 ``error`` 文案仍保留给人工阅读。
-- **plan 预检**：``plan`` 额外做**只读可发布性预检**（跑读取器 + 缺口记账，同一分级
-  口径；无 PG 写入、无模型）。预检不带 scope（无 PG，取不到准入决定），因此只可能比
+- **plan 预检**：``plan`` 额外做可发布性预检（跑读取器 + 缺口记账，同一分级
+  口径；无 PG 写入，显式启用 OCR 时会调用服务并保存识别结果）。预检不带 scope，因此只可能比
   ``check`` **更严**（有 scope 时部分缺口会被判为「范围外」而放行），不会更宽。
 
 退出码（**同一前置条件跨命令同码**，RM-I28-10）：
@@ -48,14 +48,20 @@ import argparse
 import json
 import os
 import sys
-from dataclasses import dataclass
+from contextlib import redirect_stdout
+from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 
 from plugins.corpus.preparation import read_pg
 from plugins.corpus.preparation.admission import AdmissionPolicy, load_admission_policy
 from plugins.corpus.preparation.clean import clean_reader_result
-from plugins.corpus.preparation.contract import Build, JobStage, ResearchDomain
+from plugins.corpus.preparation.contract import (
+    Build,
+    JobStage,
+    ResearchDomain,
+    canonical_fingerprint,
+)
 from plugins.corpus.preparation.engine import (
     DEFAULT_LEASE,
     EngineError,
@@ -77,10 +83,16 @@ from plugins.corpus.preparation.gaps import (
     gap_summary,
     recovery_paths,
 )
+from plugins.corpus.preparation.intake import (
+    authorization_decisions,
+    register_authorizations,
+    source_hash,
+)
 from plugins.corpus.preparation.pg_target import resolve_target_db
 from plugins.corpus.preparation.readers import read_document
 from plugins.corpus.preparation.repository import Store, StoreError
 from plugins.corpus.preparation.repository_pg import PgStore
+from plugins.corpus.preparation.text_publication import TextPublication
 
 EXIT_OK = 0
 EXIT_INPUT = 2
@@ -135,6 +147,8 @@ def _load_manifest(path: Path) -> tuple[list[PlanEntry], Path | None, Path | Non
     for item in sources:
         if not isinstance(item, dict) or not item.get("path"):
             raise ValueError("每个来源必须含 path 字段")
+        if "source_id" in item and source_hash(str(item["path"])) != item["source_id"]:
+            raise ValueError("manifest source_id 与文件内容不符，请重新清点和授权")
         raw_domain = item.get("domain_hint")
         entries.append(
             PlanEntry(
@@ -254,7 +268,8 @@ def _cmd_plan(args: argparse.Namespace) -> int:
     entries, _manifest_root, manifest_policy = _load_manifest(Path(args.manifest))
     policy = _load_policy(args, manifest_policy)
     plan = plan_builds(entries, policy=policy)
-    prechecks = [_precheck_entry(entry) for entry in plan.entries]
+    with redirect_stdout(sys.stderr):
+        prechecks = [_precheck_entry(entry) for entry in plan.entries]
     _emit(
         {
             "ok": True,
@@ -287,7 +302,7 @@ def _cmd_plan(args: argparse.Namespace) -> int:
                 "scope": "unscoped_precheck",
                 "note": "预检为预判（无 PG/无 scope）；发布门与 check 才是权威判定",
             },
-            "hint": "plan 只读：不写 PG、不调模型；预检读取来源文件以做缺口记账",
+            "hint": "plan 不写语料 PG；启用 OCR 时会调用 OCR 服务并保存识别结果",
         }
     )
     return EXIT_OK
@@ -302,7 +317,7 @@ def _cmd_build(args: argparse.Namespace) -> int:
     archive_root = _resolve_archive_root(args, manifest_root)
     plan = plan_builds(entries, policy=policy)
     owner = args.owner or "cli-build"
-    with _open_store(args) as store:
+    with _open_store(args) as store, redirect_stdout(sys.stderr):
         report = execute_builds(
             store,
             plan,
@@ -326,9 +341,10 @@ def _cmd_build(args: argparse.Namespace) -> int:
         }
         for outcome in report.outcomes
     ]
+    succeeded = all(outcome.build is not None for outcome in report.outcomes)
     _emit(
         {
-            "ok": True,
+            "ok": succeeded,
             "command": "build",
             "owner_id": owner,
             "archive_root": str(archive_root),
@@ -337,7 +353,7 @@ def _cmd_build(args: argparse.Namespace) -> int:
             "hint": "build 不自动发布；发布请用 publish --build <id> --operator <who>",
         }
     )
-    return EXIT_OK
+    return EXIT_OK if succeeded else EXIT_GATE
 
 
 # ── check ─────────────────────────────────────────────────────
@@ -639,12 +655,101 @@ def _cmd_rebuild_plan(args: argparse.Namespace) -> int:
 # ── 入口 ──────────────────────────────────────────────────────
 
 
+def _cmd_admit(args: argparse.Namespace) -> int:
+    entries, _, manifest_policy = _load_manifest(Path(args.manifest))
+    policy = _load_policy(args, manifest_policy)
+    plan_builds(entries, policy=policy)
+    manifest = json.loads(Path(args.manifest).read_text(encoding="utf-8"))
+    record = json.loads(Path(args.record).read_text(encoding="utf-8"))
+    if not isinstance(record, dict):
+        raise ValueError("authorization record must be an object")
+    decisions = authorization_decisions(manifest, record)
+    with _open_store(args) as store:
+        register_authorizations(store, decisions)
+    _emit(
+        {
+            "ok": True,
+            "command": "admit",
+            "count": len(decisions),
+            "decision_ids": [d.decision_id for d in decisions],
+            "hint": "已登记来源授权；build 仍执行准入政策，未构建或发布",
+        }
+    )
+    return EXIT_OK
+
+
+def _cmd_text_publication(args: argparse.Namespace) -> int:
+    with _open_store(args) as store:
+        build = store.get_build(args.build)
+        if build is None:
+            _emit({"ok": False, "command": "text-publication", "error": "build 不存在"})
+            return EXIT_UNAVAILABLE
+        if args.record:
+            acceptance = TextPublication.from_json(Path(args.record).read_text(encoding="utf-8"))
+            if acceptance.build_id != args.build:
+                raise ValueError("record build_id mismatch")
+            store.put_text_publication(acceptance)
+            _emit(
+                {
+                    "ok": True,
+                    "command": "text-publication",
+                    "build_id": args.build,
+                    "acceptance_id": acceptance.acceptance_id,
+                    **_gap_view(build, store).as_payload(),
+                }
+            )
+        else:
+            # Export raw ledger, including on replay; never silently sign an acceptance.
+            template = {
+                "source_id": build.source_id,
+                "build_id": build.build_id,
+                "build_fingerprint": canonical_fingerprint(asdict(build)),
+                "operator": "",
+                "authorized_at": "",
+                "authorization_ref": "",
+                "gap_keys": [g.key for g in blocking_gaps(gap_records_of(build))],
+                "schema_rev": "text-publication-1",
+                "policy_rev": GAP_POLICY_REV,
+                "coverage_claim": "available_text_only_incomplete",
+            }
+            if args.out:
+                with Path(args.out).open("x", encoding="utf-8") as stream:
+                    json.dump(template, stream, ensure_ascii=False, indent=2)
+            _emit(
+                {
+                    "ok": True,
+                    "command": "text-publication",
+                    "template": template,
+                    "existing": (
+                        json.loads(existing.to_json())
+                        if (existing := store.get_text_publication(args.build))
+                        else None
+                    ),
+                    "hint": "填写授权依据后通过 --record 登记；不是人工完整性审核，也不自动发布",
+                }
+            )
+    return EXIT_OK
+
+
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="corpus",
-        description="语料 CLI 六职责（I2-4）：plan/build/check/publish/status/rebuild-plan",
+        description="语料准入、构建、缺口登记、检查和发布",
     )
     sub = parser.add_subparsers(dest="command", required=True)
+
+    admit = sub.add_parser("admit", help="登记绑定文件哈希的用户来源授权，不自动发布")
+    admit.add_argument("--manifest", required=True)
+    admit.add_argument("--record", required=True)
+    admit.add_argument("--policy", default=None)
+    admit.add_argument("--dsn", default=None)
+
+    text_publication = sub.add_parser("text-publication", help="导出或登记可用文字发布凭证")
+    text_publication.add_argument("--build", required=True)
+    text_action = text_publication.add_mutually_exclusive_group()
+    text_action.add_argument("--record", default=None)
+    text_action.add_argument("--out", default=None, help="将未填写的凭证模板另存为 JSON，不覆盖")
+    text_publication.add_argument("--dsn", default=None)
 
     for name in ("plan", "build"):
         cmd = sub.add_parser(name)
@@ -680,6 +785,8 @@ def _build_parser() -> argparse.ArgumentParser:
 
 
 _HANDLERS = {
+    "admit": _cmd_admit,
+    "text-publication": _cmd_text_publication,
     "plan": _cmd_plan,
     "build": _cmd_build,
     "check": _cmd_check,
@@ -698,8 +805,8 @@ def main(argv: list[str] | None = None) -> int:
     parser = _build_parser()
     try:
         args = parser.parse_args(argv)
-    except SystemExit:  # argparse 缺参/非法值：归一为 EXIT_INPUT（返回码而非异常）
-        return EXIT_INPUT
+    except SystemExit as exc:
+        return EXIT_OK if exc.code == 0 else EXIT_INPUT
     handler = _HANDLERS[args.command]
     try:
         return handler(args)

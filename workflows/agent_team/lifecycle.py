@@ -94,6 +94,7 @@ def snapshot_job_outcomes(bus: AgentBus, task_id: str) -> list[dict[str, Any]]:
         if completion == "complete" and source in {
             "tool_observations",
             "collected_reports",
+            "collected_report_fallback",
             "deterministic_fallback",
         }:
             completion, reason = "incomplete", "synthesis_unavailable"

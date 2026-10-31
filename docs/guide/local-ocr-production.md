@@ -36,6 +36,11 @@ CORPUS_LOCAL_OCR_RELEASE=rapidocr-prod-dd340f6c8a6592ff
 API 新建的任务继承这些配置。独立语料 CLI 必须显式加载业务环境；继续使用现有
 正式清单和准入流程，例如：
 
+新增来源的授权登记使用 `corpus.cli admit`；用户接受图片/表格覆盖不完整时使用
+`corpus.cli text-publication`。这两个入口不会自动发布或清除原始缺口。
+完整 JSON 格式、命令顺序和增量索引范围见
+[新增研报固定命令流程](../corpus-ingestion-operations.md#新增研报的固定命令流程2026-10-31含-ocr)。
+
 ```bash
 uv run --env-file .env python -m plugins.corpus.cli plan --manifest <新增清单.json>
 uv run --env-file .env python -m plugins.corpus.cli build --manifest <新增清单.json>

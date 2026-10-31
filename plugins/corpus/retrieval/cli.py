@@ -17,6 +17,7 @@ from plugins.corpus.retrieval.context import load_source_metadata
 from plugins.corpus.retrieval.contextual import ContextNoteError
 from plugins.corpus.retrieval.embedding import DoubaoEmbedder, EmbeddingError, VectorConfig
 from plugins.corpus.retrieval.index_pg import VectorIndex
+from plugins.corpus.retrieval.source_scope import extend_scope, load_scope
 
 
 def pilot_dsn(config: VectorConfig) -> str:
@@ -51,6 +52,7 @@ def main() -> int:
             "context-status",
             "context-generate",
             "native-pack",
+            "scope",
         ),
     )
     parser.add_argument("--max-requests", type=int)
@@ -71,6 +73,8 @@ def main() -> int:
     parser.add_argument("--chunks-per-request", type=int, default=6)
     parser.add_argument("--out", type=Path)
     parser.add_argument("--release-id", default=None)
+    parser.add_argument("--source-scope", type=Path, help="明确的 source_allowlist JSON")
+    parser.add_argument("--manifest", type=Path, help="scope 命令的新增来源清单")
     args = parser.parse_args()
     if args.max_requests is None:
         args.max_requests = (
@@ -84,8 +88,24 @@ def main() -> int:
         parser.error("--max-requests must be >= 0; --limit must be between 1 and 20")
     load_dotenv()
     try:
+        if args.command == "scope":
+            if args.native_index is None or args.manifest is None or args.out is None:
+                parser.error("scope requires --native-index, --manifest and --out")
+            from plugins.corpus.retrieval.native import NativeIndex
+
+            base = NativeIndex(args.native_index)
+            output = extend_scope(base.manifest["source_allowlist"], args.manifest)
+            output["base_index_id"] = base.index_id
+            # Do not overwrite a previously frozen scope, including the base manifest.
+            with args.out.open("x", encoding="utf-8") as stream:
+                json.dump(output, stream, ensure_ascii=False, indent=2)
+            print(json.dumps(output, ensure_ascii=False, indent=2))
+            return 0
         config = VectorConfig.from_env()
         context_commands = ("context-plan", "context-status", "context-generate", "native-pack")
+        if args.source_scope is not None and args.command not in context_commands:
+            parser.error("--source-scope is only supported by context commands and native-pack")
+        source_ids = load_scope(args.source_scope) if args.source_scope else None
         if args.deployment == "release":
             from plugins.corpus.retrieval.native_live import enabled
             from plugins.corpus.service import dsn
@@ -94,6 +114,8 @@ def main() -> int:
                 parser.error(
                     "release deployment supports query, native-query, native-sync and context commands"
                 )
+            if args.command in context_commands and source_ids is None:
+                parser.error("release context commands require --source-scope")
             target = dsn()
             if conninfo_to_dict(target).get("dbname") != config.target_db:
                 raise EmbeddingError("native_release_dsn_mismatch")
@@ -164,9 +186,12 @@ def main() -> int:
                     config.target_db,
                     context_version=version,
                     chunks_per_request=args.chunks_per_request,
+                    source_ids=source_ids,
                 )
             elif args.command == "context-status":
-                output = contextual_pg.status(target, config.target_db, context_version=version)
+                output = contextual_pg.status(
+                    target, config.target_db, context_version=version, source_ids=source_ids
+                )
             elif args.command == "context-generate":
                 notes = contextual.NoteConfig.from_env()
                 output = contextual_pg.generate(
@@ -176,6 +201,7 @@ def main() -> int:
                     contextual.ChatNoteGenerator(notes).generate,
                     max_requests=args.max_requests,
                     context_version=version,
+                    source_ids=source_ids,
                 )
             else:
                 if args.out is None:
@@ -191,6 +217,7 @@ def main() -> int:
                     max_requests=args.max_requests,
                     context_version=version,
                     release_id=args.release_id,
+                    source_ids=source_ids,
                 )
         else:
             if not args.query.strip():
@@ -214,6 +241,9 @@ def main() -> int:
         return 1 if output.get("error_code") else 0
     except (EmbeddingError, ContextNoteError) as exc:
         print(json.dumps({"error_code": exc.code}), file=sys.stderr)
+        return 2
+    except (OSError, ValueError, KeyError) as exc:
+        print(json.dumps({"error": str(exc)}), file=sys.stderr)
         return 2
 
 

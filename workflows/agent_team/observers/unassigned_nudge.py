@@ -24,6 +24,8 @@ class UnassignedAgentNudge(BaseObserver):
         self._last_fired_turn: int = -1
 
     async def on_turn_end(self, ctx: TurnContext) -> Intervention | None:
+        if ctx.metadata.get("team_delivery_started"):
+            return None
         if ctx.turn - self._last_fired_turn < self._cooldown_turns:
             return None
 
