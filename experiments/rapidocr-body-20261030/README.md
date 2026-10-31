@@ -1,23 +1,26 @@
 # RapidOCR small：独立正文读取实验
 
-2026-10-30。代码、结果及报告均在本实验目录；目录由仓库现有规则忽略。没有生产入口、依赖、环境变量或缓存变更。
+2026-10-31 更新：组件已加入原生坐标重排与独立覆盖检查，仍未接入生产。10 月 30 日的报告和 outputs 是旧实现的历史证据，不代表当前代码。新验证入口、结果及限制见 [坐标与覆盖修复](../rapidocr-layout-20261031/README.md)。代码与报告按明确清单跟踪，完整运行产物仍被忽略。
 
 ## 接口
 
-`body_reader.read_page(path, page, *, enabled=False, native_reader, ocr_reader=None)` 接受一页和两个读取函数，返回包含以下字段的字典：
+`body_reader.read_page(path, page, *, enabled=False, native_reader, ocr_reader=None, coverage_reader=None)` 接受一页和读取适配器，返回包含以下字段的字典：
 
-- `text`、`source`：最终候选文字及来源；原生文本通过检查时逐字符保留。
+- `text`、`source`：最终候选文字及来源；原生坐标与原始文字一致时按区域重排，否则保留原始文本并要求复核。
 - `native_text`、`native_quality`、`route_reason`：保留原生读取结果和路由依据。
 - `ocr_original`：调用 OCR 时保留整个原始结果。
-- `lines`：重排后的识别行，含原始 ID、像素四点坐标、归一化矩形、置信度及文字。
+- `lines`：重排后的行及原始 ID；OCR 行含像素四点坐标和分数，原生行含归一化矩形和词框，不伪造 OCR 分数。
+- `coverage`：独立可见文字检测与原生词框的几何覆盖结果；`matched` 也不代表全文语义正确。
 - `layout`：自动检测的栏间位置；没有检测到则为空。
 - `status`、`needs_review`、`issues`：执行情况和需要核验的证据。`needs_review` 仍然返回文字，不等于执行失败或错误已修复。
 
-`native_reader(path, page)` 返回字符串。`ocr_reader(path, page)` 必须自行限制执行时间，返回 `status/text/lines/boxes/scores/render_pixels`，或抛出 `TimeoutError`。示例适配器位于 `experiment.py`；它用 pypdf 读取原生文字，再按需在独立子进程执行既有 small OCR worker。核心模块只依赖 Python 标准库。
+`native_reader(path, page)` 可返回字符串，或 `{text, lines: [{text, rect, word_rects}], page_points}`。仅有字符串时原生覆盖未知，需要复核；坐标采用显示页面左上角原点、0–1 归一化矩形。`native_adapter.py` 使用 Poppler 的 `-layout` 与 `-bbox-layout` 提供这个结构。`coverage_reader(path, page)` 返回 `{status: 'ok', source: 'raster_text_detection', rects, render_pixels}`，检测必须来自独立渲染图像；不得用原生框冒充覆盖证据。
 
-原生门槛适用于中英文，包含非空字符数 160、文字比例 0.45、中文字符 60 或英文词 40，以及未映射字形比例 0.01。它是启发式门槛，不能证明正文完整。标题页和短正文可能多跑一次 OCR；含足够文字的部分残缺层也可能被误放行。读取原生层报错会显式返回错误，不自动猜测 PDF 可修复。
+`ocr_reader(path, page)` 必须自行限制执行时间，返回 `status/text/lines/boxes/scores/render_pixels`，或抛出 `TimeoutError`。旧 `experiment.py` 中的 pypdf 字符串适配器仍兼容，但原生结果不再自动获得 `ok`。核心模块只依赖 Python 标准库。
 
-自动分栏根据重复段落左边缘和右侧文字推断单个栏间位置，全宽文字划分上下区域。没有文档 ID、固定页面裁剪框或人工真值参与路由。所有已识别行保留一次；没有图表语义分析、图片问答或严格正文区域分类。因此图表标签、页眉、侧栏仍可能出现在候选文字里，多栏混合版式仍需验证。
+原生门槛适用于中英文，包含非空字符数 160、文字比例 0.45、中文字符 60 或英文词 40，以及未映射字形比例 0.01。字数只决定候选路线，不能证明正文完整；通过后继续检查原文/坐标一致性及可见文字覆盖。缺证据、检测失败、方向不一致或疑似缺口都需复核。标题页和短正文可能多跑一次 OCR；读取原生层报错会显式返回错误。
+
+自动分栏根据重复段落边缘递归划分区域，支持双页内部继续分栏；跨栏文字划分上下区域，同基线片段按横坐标排序。没有文档 ID、固定页面裁剪框或人工真值参与路由。所有输入行保留一次；没有图表语义分析或严格正文区域分类。图表标签、页眉、侧栏仍保留在候选文字中，表格和目录关系不承诺恢复。
 
 异常规则只标记低置信度行、碎片词、重复单位字母、数字间易混淆字母和未映射字符，不替换任何数字或文字。规则有误报和漏报可能，没有声称能发现全部识别错误。
 

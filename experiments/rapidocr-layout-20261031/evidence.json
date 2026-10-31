@@ -1,0 +1,937 @@
+{
+  "scope": "Isolated reproduction; no live sandbox acceptance, no new-report shadow run, no ingestion",
+  "model_changed": false,
+  "known8": {
+    "pages": 8,
+    "body_chars": 1117,
+    "old_edits": 116,
+    "fixed_edits": 0,
+    "ordered_ocr_edits": 0,
+    "checks": {
+      "baseline_cases": 24,
+      "production_outputs_unchanged": true,
+      "sources_unchanged": true,
+      "native_raw_preserved": true,
+      "historical_cases": 14,
+      "historical_detected": 14,
+      "spatial_cases": 14,
+      "spatial_detected": 14,
+      "scope": "Isolated reproduction, no live deployment verification or ingestion",
+      "ready_for_unattended_use": false
+    },
+    "scores": [
+      {
+        "id": "d004-p01",
+        "status": "needs_review",
+        "source": "native",
+        "issues": [
+          "native_coverage_gap"
+        ],
+        "coverage": "suspected_missing",
+        "layout": [
+          {
+            "type": "vertical_gutter",
+            "x_fraction": 0.4998214320510667,
+            "method": "recursive_text_edges",
+            "depth": 0
+          },
+          {
+            "type": "vertical_gutter",
+            "x_fraction": 0.16533793885435916,
+            "method": "recursive_text_edges",
+            "depth": 1
+          },
+          {
+            "type": "vertical_gutter",
+            "x_fraction": 0.6655337250125988,
+            "method": "recursive_text_edges",
+            "depth": 1
+          }
+        ],
+        "native": {
+          "edits": 51,
+          "chars": 158,
+          "missing_keys": []
+        },
+        "fixed": {
+          "edits": 0,
+          "chars": 158,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "edits": 0,
+          "chars": 158,
+          "missing_keys": []
+        },
+        "native_raw_preserved": true,
+        "line_records_preserved": true
+      },
+      {
+        "id": "d006-p01",
+        "status": "needs_review",
+        "source": "native",
+        "issues": [
+          "native_coverage_gap"
+        ],
+        "coverage": "suspected_missing",
+        "layout": [
+          {
+            "type": "vertical_gutter",
+            "x_fraction": 0.6473661224215548,
+            "method": "recursive_text_edges",
+            "depth": 0
+          }
+        ],
+        "native": {
+          "edits": 18,
+          "chars": 166,
+          "missing_keys": []
+        },
+        "fixed": {
+          "edits": 0,
+          "chars": 166,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "edits": 0,
+          "chars": 166,
+          "missing_keys": []
+        },
+        "native_raw_preserved": true,
+        "line_records_preserved": true
+      },
+      {
+        "id": "d007-p01",
+        "status": "needs_review",
+        "source": "native",
+        "issues": [
+          "native_coverage_gap"
+        ],
+        "coverage": "suspected_missing",
+        "layout": [
+          {
+            "type": "vertical_gutter",
+            "x_fraction": 0.6217789349907611,
+            "method": "recursive_text_edges",
+            "depth": 0
+          }
+        ],
+        "native": {
+          "edits": 27,
+          "chars": 143,
+          "missing_keys": []
+        },
+        "fixed": {
+          "edits": 0,
+          "chars": 143,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "edits": 0,
+          "chars": 143,
+          "missing_keys": []
+        },
+        "native_raw_preserved": true,
+        "line_records_preserved": true
+      },
+      {
+        "id": "d024-p01",
+        "status": "needs_review",
+        "source": "native",
+        "issues": [
+          "native_coverage_gap"
+        ],
+        "coverage": "suspected_missing",
+        "layout": [
+          {
+            "type": "vertical_gutter",
+            "x_fraction": 0.6347678559430222,
+            "method": "recursive_text_edges",
+            "depth": 0
+          }
+        ],
+        "native": {
+          "edits": 11,
+          "chars": 160,
+          "missing_keys": []
+        },
+        "fixed": {
+          "edits": 0,
+          "chars": 160,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "edits": 0,
+          "chars": 160,
+          "missing_keys": []
+        },
+        "native_raw_preserved": true,
+        "line_records_preserved": true
+      },
+      {
+        "id": "d028-p01",
+        "status": "needs_review",
+        "source": "native",
+        "issues": [
+          "native_coverage_gap"
+        ],
+        "coverage": "suspected_missing",
+        "layout": [
+          {
+            "type": "vertical_gutter",
+            "x_fraction": 0.635582563413405,
+            "method": "recursive_text_edges",
+            "depth": 0
+          }
+        ],
+        "native": {
+          "edits": 9,
+          "chars": 165,
+          "missing_keys": []
+        },
+        "fixed": {
+          "edits": 0,
+          "chars": 165,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "edits": 0,
+          "chars": 165,
+          "missing_keys": []
+        },
+        "native_raw_preserved": true,
+        "line_records_preserved": true
+      },
+      {
+        "id": "d003-p04",
+        "status": "ok",
+        "source": "ocr",
+        "issues": [],
+        "coverage": "not_checked",
+        "layout": [],
+        "native": {
+          "edits": 0,
+          "chars": 0,
+          "missing_keys": []
+        },
+        "fixed": {
+          "edits": 0,
+          "chars": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "edits": 0,
+          "chars": 0,
+          "missing_keys": []
+        },
+        "native_raw_preserved": true,
+        "line_records_preserved": null
+      },
+      {
+        "id": "d017-p01",
+        "status": "needs_review",
+        "source": "native",
+        "issues": [
+          "native_coverage_gap"
+        ],
+        "coverage": "suspected_missing",
+        "layout": [
+          {
+            "type": "vertical_gutter",
+            "x_fraction": 0.4121944220430108,
+            "method": "recursive_text_edges",
+            "depth": 0
+          }
+        ],
+        "native": {
+          "edits": 0,
+          "chars": 150,
+          "missing_keys": []
+        },
+        "fixed": {
+          "edits": 0,
+          "chars": 150,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "edits": 0,
+          "chars": 150,
+          "missing_keys": []
+        },
+        "native_raw_preserved": true,
+        "line_records_preserved": true
+      },
+      {
+        "id": "d050-p01",
+        "status": "needs_review",
+        "source": "native",
+        "issues": [
+          "native_coverage_gap"
+        ],
+        "coverage": "suspected_missing",
+        "layout": [
+          {
+            "type": "vertical_gutter",
+            "x_fraction": 0.6596490626889739,
+            "method": "recursive_text_edges",
+            "depth": 0
+          }
+        ],
+        "native": {
+          "edits": 0,
+          "chars": 175,
+          "missing_keys": []
+        },
+        "fixed": {
+          "edits": 0,
+          "chars": 175,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "edits": 0,
+          "chars": 175,
+          "missing_keys": []
+        },
+        "native_raw_preserved": true,
+        "line_records_preserved": true
+      }
+    ],
+    "flagged_regions": {
+      "d024-p01": 2,
+      "d050-p01": 3,
+      "d004-p01": 20,
+      "d017-p01": 1,
+      "d007-p01": 13,
+      "d006-p01": 6,
+      "d003-p04": 0,
+      "d028-p01": 11
+    }
+  },
+  "original26": {
+    "checks": {
+      "pages": 26,
+      "baseline_cases": 78,
+      "production_outputs_unchanged": true,
+      "sources_unchanged": true,
+      "old_edits": 54,
+      "fixed_edits": 5,
+      "chars": 3341,
+      "worse_pages": [],
+      "scope": "Historical OCR replay and fresh Poppler coordinates; not throughput or deployment acceptance."
+    },
+    "scores": [
+      {
+        "id": "d001-p01",
+        "source": "native",
+        "status": "needs_review",
+        "old": {
+          "edits": 33,
+          "chars": 112,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 112,
+          "edits": 1,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 112,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d001-p03",
+        "source": "native",
+        "status": "needs_review",
+        "old": {
+          "edits": 0,
+          "chars": 101,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 101,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 101,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d002-p01",
+        "source": "ocr",
+        "status": "needs_review",
+        "old": {
+          "edits": 1,
+          "chars": 321,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 321,
+          "edits": 1,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 321,
+          "edits": 1,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d002-p02",
+        "source": "ocr",
+        "status": "needs_review",
+        "old": {
+          "edits": 0,
+          "chars": 0,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 0,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 0,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d002-p03",
+        "source": "ocr",
+        "status": "needs_review",
+        "old": {
+          "edits": 0,
+          "chars": 0,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 0,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 0,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d002-p04",
+        "source": "ocr",
+        "status": "ok",
+        "old": {
+          "edits": 0,
+          "chars": 247,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 247,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 247,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d005-p01",
+        "source": "native",
+        "status": "needs_review",
+        "old": {
+          "edits": 17,
+          "chars": 181,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 181,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 181,
+          "edits": 1,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d021-p02",
+        "source": "ocr",
+        "status": "ok",
+        "old": {
+          "edits": 0,
+          "chars": 86,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 86,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 86,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d021-p03",
+        "source": "ocr",
+        "status": "ok",
+        "old": {
+          "edits": 0,
+          "chars": 131,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 131,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 131,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d035-p02",
+        "source": "native",
+        "status": "needs_review",
+        "old": {
+          "edits": 0,
+          "chars": 86,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 86,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 86,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d035-p05",
+        "source": "native",
+        "status": "needs_review",
+        "old": {
+          "edits": 0,
+          "chars": 84,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 84,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 84,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d035-p13",
+        "source": "native",
+        "status": "needs_review",
+        "old": {
+          "edits": 0,
+          "chars": 78,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 78,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 78,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d039-p01",
+        "source": "native",
+        "status": "needs_review",
+        "old": {
+          "edits": 0,
+          "chars": 74,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 74,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 74,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d054-p01",
+        "source": "native",
+        "status": "needs_review",
+        "old": {
+          "edits": 0,
+          "chars": 149,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 149,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 149,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d061-p01",
+        "source": "ocr",
+        "status": "ok",
+        "old": {
+          "edits": 0,
+          "chars": 159,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 159,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 159,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d061-p02",
+        "source": "ocr",
+        "status": "ok",
+        "old": {
+          "edits": 0,
+          "chars": 86,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 86,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 86,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d061-p03",
+        "source": "ocr",
+        "status": "ok",
+        "old": {
+          "edits": 2,
+          "chars": 98,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 98,
+          "edits": 2,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 98,
+          "edits": 2,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d061-p04",
+        "source": "ocr",
+        "status": "ok",
+        "old": {
+          "edits": 0,
+          "chars": 120,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 120,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 120,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d062-p02",
+        "source": "native",
+        "status": "needs_review",
+        "old": {
+          "edits": 0,
+          "chars": 190,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 190,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 190,
+          "edits": 3,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d064-p01",
+        "source": "native",
+        "status": "needs_review",
+        "old": {
+          "edits": 0,
+          "chars": 101,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 101,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 101,
+          "edits": 2,
+          "missing_keys": [
+            "31%–35%",
+            "34%–35%"
+          ]
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d065-p03",
+        "source": "native",
+        "status": "needs_review",
+        "old": {
+          "edits": 0,
+          "chars": 95,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 95,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 95,
+          "edits": 4,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d066-p01",
+        "source": "ocr",
+        "status": "needs_review",
+        "old": {
+          "edits": 1,
+          "chars": 171,
+          "missing_keys": [
+            "6.4TOPS/W@INT8"
+          ]
+        },
+        "fixed": {
+          "chars": 171,
+          "edits": 1,
+          "missing_keys": [
+            "6.4TOPS/W@INT8"
+          ]
+        },
+        "ordered_ocr": {
+          "chars": 171,
+          "edits": 1,
+          "missing_keys": [
+            "6.4TOPS/W@INT8"
+          ]
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d067-p01",
+        "source": "ocr",
+        "status": "ok",
+        "old": {
+          "edits": 0,
+          "chars": 190,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 190,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 190,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d068-p01",
+        "source": "ocr",
+        "status": "needs_review",
+        "old": {
+          "edits": 0,
+          "chars": 286,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 286,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 286,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d068-p02",
+        "source": "ocr",
+        "status": "needs_review",
+        "old": {
+          "edits": 0,
+          "chars": 0,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 0,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 0,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      },
+      {
+        "id": "d068-p03",
+        "source": "ocr",
+        "status": "needs_review",
+        "old": {
+          "edits": 0,
+          "chars": 195,
+          "missing_keys": []
+        },
+        "fixed": {
+          "chars": 195,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "ordered_ocr": {
+          "chars": 195,
+          "edits": 0,
+          "missing_keys": []
+        },
+        "production_outputs_unchanged": true,
+        "coverage_note": "No fresh detection on these 26 regression pages; native coverage remains unknown."
+      }
+    ]
+  },
+  "detection_timing": {
+    "pages": 8,
+    "total_seconds": 43.734142021999105,
+    "median_seconds": 5.291615626999828,
+    "max_seconds": 6.605209190999631,
+    "scope": "Fresh detection-only workers; recognition cached; final ordering replay reused detection."
+  },
+  "verification": {
+    "unit_tests": 23,
+    "document_bundle_tests": 20,
+    "symbols_missing": 0,
+    "framework_imports": "447/447",
+    "eval_imports": "496/496",
+    "preflight": "passed"
+  },
+  "code_sha256": {
+    "experiments/rapidocr-body-20261030/body_reader.py": "8f43ecad620f7689c8768eb0fcad8dd9c9084f3836357378912b02d7b7f4e57d",
+    "experiments/rapidocr-body-20261030/native_adapter.py": "026b1aff5ee69a3d67656482341a6b37a030222ac130bbc59214435b9c170c78",
+    "experiments/rapidocr-layout-20261031/validate.py": "b6788b8c35e11171b83757fe94fa6b7549466533a86ab3d6967674f4c8af6d4f",
+    "experiments/rapidocr-layout-20261031/regression.py": "3bd6cd0df289735046008f93e73e7c2a0e27a84b9402449ce6127cc2fa7607b3"
+  },
+  "new_report_source_check": {
+    "directories": [
+      "data/corpus",
+      "data/corpus/originals"
+    ],
+    "pdf_files": 68,
+    "unique_hashes": 68,
+    "hashes_absent_from_historical_inventory": 0,
+    "status": "awaiting_new_report_directory"
+  }
+}

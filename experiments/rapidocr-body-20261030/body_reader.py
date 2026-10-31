@@ -8,6 +8,7 @@ from __future__ import annotations
 import math
 import re
 import statistics
+from collections import Counter
 from typing import Callable
 
 
@@ -97,20 +98,77 @@ def _column_cut(lines):
         if len(crossing) > max(2, len(lines) * .05):
             continue
         return cut
+    # A narrow LEFT sidebar need not contain paragraph-length anchors. In that
+    # case the repeated start of a RIGHT body column establishes the gutter.
+    for cluster in sorted(clusters, key=lambda group: sum(len(x['text']) for x in group), reverse=True):
+        if len(cluster) < 4 or sum(len(x['text']) for x in cluster) < 150:
+            continue
+        start = statistics.median(x['rect'][0] for x in cluster)
+        if not .2 <= start <= .8:
+            continue
+        aligned = [x for x in cluster if abs(x['rect'][0] - start) <= .01]
+        if len(aligned) < 4:
+            continue
+        top = min(x['rect'][1] for x in aligned)
+        bottom = max(x['rect'][3] for x in aligned)
+        left = [x for x in lines if x['rect'][2] < start - .005 and top <= x['rect'][1] <= bottom]
+        if len(left) < 6 or sum(len(x['text']) for x in left) < 60:
+            continue
+        edge = max(x['rect'][2] for x in left)
+        cut = (edge + start) / 2
+        crossing = [x for x in lines if x['rect'][0] < cut < x['rect'][2]
+                    and x['rect'][2] - x['rect'][0] < .72
+                    and top <= x['rect'][1] <= bottom]
+        if len(crossing) <= max(2, len(lines) * .05):
+            return cut
     return None
 
 
-def _reading_order(lines):
-    cut = _column_cut(lines)
+def _row_order(lines):
+    rows = []
+    for line in sorted(lines, key=lambda x: ((x['rect'][1]+x['rect'][3])/2, x['rect'][0])):
+        center = (line['rect'][1] + line['rect'][3]) / 2
+        height = line['rect'][3] - line['rect'][1]
+        if rows and abs(center - rows[-1][0]) <= .4 * min(height, rows[-1][1]):
+            rows[-1][2].append(line)
+        else:
+            rows.append((center, height, [line]))
+    return [line for _, _, row in rows for line in sorted(row, key=lambda x: (x['rect'][0], x['id']))]
+
+
+def _reading_order(lines, depth=0):
+    if not lines:
+        return [], []
+    # Recompute coordinates inside each region: a spread can contain columns
+    # inside both halves. IDs and original boxes always remain page-relative.
+    xmin = min(x['rect'][0] for x in lines)
+    xmax = max(x['rect'][2] for x in lines)
+    width = max(xmax - xmin, .001)
+    local = [{**x, 'rect': [(x['rect'][0] - xmin) / width, x['rect'][1],
+                            (x['rect'][2] - xmin) / width, x['rect'][3]]} for x in lines]
+    # TOC leaders bind labels to page numbers. They are not prose columns.
+    leaders = sum(bool(re.search(r'[.．·…]{3,}', x['text'])) for x in lines)
+    if depth >= 8 or leaders >= 3:
+        return _row_order(lines), []
+    cut = _column_cut(local)
     if cut is None:
-        return sorted(lines, key=lambda x: (x['rect'][1], x['rect'][0], x['id'])), []
+        mirrored = [{**x, 'rect': [1-x['rect'][2], x['rect'][1],
+                                  1-x['rect'][0], x['rect'][3]]} for x in local]
+        reverse_cut = _column_cut(mirrored)
+        if reverse_cut is not None:
+            cut = 1 - reverse_cut
+    if cut is None:
+        return _row_order(lines), []
+    cut = xmin + cut * width
     # Full-width headings/footers bound independent horizontal bands. Each band
     # is read left column, then right column. Every original line is retained.
-    wide = [x for x in lines if x['rect'][0] < cut < x['rect'][2] and x['rect'][2] - x['rect'][0] >= .72]
+    wide = [x for x in lines if x['rect'][0] < cut < x['rect'][2]]
     spans = sorted(wide, key=lambda x: (x['rect'][1], x['rect'][0]))
     span_ids = {x['id'] for x in spans}
     pending = [x for x in lines if x['id'] not in span_ids]
     ordered = []
+    layout = [{'type': 'vertical_gutter', 'x_fraction': cut,
+               'method': 'recursive_text_edges', 'depth': depth}]
     for span in spans + [None]:
         boundary = span['rect'][1] if span else float('inf')
         band = [x for x in pending if (x['rect'][1] + x['rect'][3]) / 2 < boundary]
@@ -119,11 +177,80 @@ def _reading_order(lines):
         left = [x for x in band if (x['rect'][0] + x['rect'][2]) / 2 < cut]
         right = [x for x in band if (x['rect'][0] + x['rect'][2]) / 2 >= cut]
         for column in (left, right):
-            ordered.extend(sorted(column, key=lambda x: (x['rect'][1], x['rect'][0], x['id'])))
+            if len(column) == len(lines):
+                part, child_layout = _row_order(column), []
+            else:
+                part, child_layout = _reading_order(column, depth + 1)
+            ordered.extend(part)
+            layout.extend(child_layout)
         if span:
             ordered.append(span)
-    assert sorted(x['id'] for x in ordered) == list(range(len(lines)))
-    return ordered, [{'type': 'vertical_gutter', 'x_fraction': cut, 'method': 'repeated_text_edges'}]
+    assert sorted(x['id'] for x in ordered) == sorted(x['id'] for x in lines)
+    return ordered, layout
+
+
+def _rect(value):
+    if len(value) != 4:
+        raise ValueError('Expected normalized rectangle')
+    rect = [float(x) for x in value]
+    if not all(math.isfinite(x) for x in rect):
+        raise ValueError('Non-finite rectangle')
+    x0, y0, x1, y1 = rect
+    if not (0 <= x0 < x1 <= 1 and 0 <= y0 < y1 <= 1):
+        raise ValueError('Rectangle outside page or degenerate')
+    return rect
+
+
+def _native_lines(native):
+    lines = []
+    for i, line in enumerate(native['lines']):
+        if not isinstance(line['text'], str):
+            raise ValueError('Native line text must be a string')
+        rect = _rect(line['rect'])
+        words = [_rect(word) for word in line['word_rects']]
+        if line['text'].strip() and not words:
+            raise ValueError('Native line is missing word rectangles')
+        if any(w[0] < rect[0] - .001 or w[1] < rect[1] - .001
+               or w[2] > rect[2] + .001 or w[3] > rect[3] + .001 for w in words):
+            raise ValueError('Native word lies outside its line')
+        lines.append({'id': i, 'text': line['text'], 'rect': rect,
+                      'box': rect, 'word_rects': words})
+    return lines
+
+
+def _coverage(lines, evidence):
+    """Compare independent raster detections with native WORD boxes, not page
+    hulls or character counts. A match is spatial evidence, not semantic recall.
+    """
+    if evidence.get('status') != 'ok' or evidence.get('source') != 'raster_text_detection':
+        raise ValueError('Independent raster text detection unavailable')
+    detected = [_rect(r) for r in evidence['rects']]
+    if not detected:
+        raise ValueError('No raster text regions; coverage remains unknown')
+    words = [r for line in lines for r in line['word_rects']]
+    regions = []
+    for i, box in enumerate(detected):
+        x0, y0, x1, y1 = box
+        mid = (y0 + y1) / 2
+        intervals = []
+        for a, b, c, d in words:
+            # Centerline test tolerates detector padding without letting a
+            # neighbouring line establish coverage for a missing text row.
+            if b - (d-b)*.15 <= mid <= d + (d-b)*.15:
+                lo, hi = max(a, x0), min(c, x1)
+                if hi > lo:
+                    intervals.append((lo, hi))
+        covered, end = 0., x0
+        for lo, hi in sorted(intervals):
+            covered += max(0., hi - max(lo, end))
+            end = max(end, hi)
+        ratio = covered / (x1-x0)
+        regions.append({'id': i, 'rect': box, 'covered_fraction': ratio,
+                        'suspected_missing': ratio < .65})
+    missing = [r for r in regions if r['suspected_missing']]
+    return {'status': 'suspected_missing' if missing else 'matched',
+            'source': evidence['source'], 'regions': regions, 'missing_regions': missing,
+            'meaning': 'Geometric coverage only; not full-text or semantic accuracy.'}
 
 
 def _quality_issues(lines):
@@ -131,7 +258,9 @@ def _quality_issues(lines):
     for line in lines:
         text, score = line['text'], line['score']
         evidence = {'line_id': line['id'], 'box': line['box'], 'text': text, 'score': score}
-        if score < .8 and len(re.sub(r'\s+', '', text)) >= 6:
+        # Short financial values (e.g. "73%") can lose a decimal point while
+        # falling below the prose-length filter. Preserve and flag them too.
+        if score < .8 and (len(re.sub(r'\s+', '', text)) >= 6 or re.search(r'\d', text)):
             issues.append(_issue('low_confidence_line', 'OCR line requires source review; text retained.', **evidence))
         words = re.findall(r'[A-Za-z0-9]+', text)
         if len(words) >= 4 and score < .85 and sum(len(w) <= 2 for w in words) >= 2 and statistics.median(map(len, words)) <= 2:
@@ -146,8 +275,14 @@ def _quality_issues(lines):
 
 
 def read_page(path: str, page: int, *, enabled: bool = False,
-              native_reader: Callable, ocr_reader: Callable | None = None) -> dict:
-    """Read one page. Disabled by default; usable native text is byte-for-byte retained.
+              native_reader: Callable, ocr_reader: Callable | None = None,
+              coverage_reader: Callable | None = None) -> dict:
+    """Read one page. Disabled by default; raw native text is always retained.
+
+    Native adapters may return a string (coverage unknown) or text + lines with
+    normalized rect/word_rects. Coverage adapters return independent raster
+    detections in the same displayed page coordinate system. Suspected gaps are
+    returned for review, never silently admitted or filled by guessed text.
 
     The OCR adapter must bound execution and return status/text/lines/boxes/scores/
     render_pixels, or raise TimeoutError. Failures retain any native text. This
@@ -156,17 +291,62 @@ def read_page(path: str, page: int, *, enabled: bool = False,
     if not isinstance(page, int) or isinstance(page, bool) or page < 1:
         raise ValueError('page must be a positive one-based integer')
     try:
-        native = native_reader(path, page)
+        native_result = native_reader(path, page)
+        native = native_result['text'] if isinstance(native_result, dict) else native_result
         if not isinstance(native, str):
-            raise ValueError('native_reader must return text')
+            raise ValueError('native_reader must return text or structured text')
     except Exception as exc:
         return {'status': 'error', 'source': 'none', 'text': '', 'native_text': '',
                 'needs_review': True, 'issues': [_issue('native_read_error', str(exc))], 'lines': [], 'layout': []}
     usable, reason, features = _native_quality(native)
     result = {'status': 'disabled' if not enabled else 'ok', 'source': 'native',
               'text': native, 'native_text': native, 'native_quality': features,
-              'route_reason': reason, 'needs_review': False, 'issues': [], 'lines': [], 'layout': []}
-    if not enabled or usable:
+              'route_reason': reason, 'needs_review': False, 'issues': [], 'lines': [], 'layout': [],
+              'coverage': {'status': 'not_checked'}}
+    if not enabled:
+        return result
+    if usable:
+        issues = []
+        try:
+            if not isinstance(native_result, dict):
+                raise ValueError('Native reader supplied no coordinates')
+            lines = _native_lines(native_result)
+            if not lines:
+                raise ValueError('Native text has no coordinate records')
+            # Counts preserve repeated content: presence anywhere in the page
+            # cannot mask a missing copy. Whitespace alone is disregarded.
+            raw_chars = Counter(re.sub(r'\s+', '', native))
+            boxed_chars = Counter(re.sub(r'\s+', '', ''.join(x['text'] for x in lines)))
+            if raw_chars != boxed_chars:
+                issues.append(_issue('native_coordinate_mismatch',
+                    'Raw text and coordinate extraction disagree; raw text retained.',
+                    missing_from_text=sum((boxed_chars - raw_chars).values()),
+                    missing_from_coordinates=sum((raw_chars - boxed_chars).values())))
+            else:
+                ordered, layout = _reading_order(lines)
+                result.update(text='\n'.join(x['text'] for x in ordered), lines=ordered, layout=layout)
+            if coverage_reader is None:
+                raise ValueError('No independent raster detection adapter')
+            evidence = coverage_reader(path, page)
+            if 'page_points' in native_result and 'render_pixels' in evidence:
+                nw, nh = native_result['page_points']
+                rw, rh = evidence['render_pixels']
+                if min(nw, nh, rw, rh) <= 0 or abs((nw/nh)/(rw/rh) - 1) > .01:
+                    raise ValueError('Native and raster page orientations/dimensions disagree')
+            result['coverage'] = _coverage(lines, evidence)
+            if result['coverage']['missing_regions']:
+                issues.append(_issue('native_coverage_gap',
+                    'Visible text regions lack native coverage; inspect source regions.',
+                    regions=result['coverage']['missing_regions']))
+            if any(re.search(r'[.．·…]{3,}', x['text']) for x in lines):
+                issues.append(_issue('structured_layout_review',
+                    'Leader lines may be a contents/table layout; verify row associations.'))
+        except Exception as exc:
+            result['coverage'] = {'status': 'unknown', 'reason': str(exc)}
+            issues.append(_issue('native_coverage_unknown', str(exc)))
+        if issues:
+            result.update(status='needs_review', needs_review=True, issues=issues,
+                          route_reason=issues[0]['code'])
         return result
     if ocr_reader is None:
         result.update(status='unavailable', needs_review=True,

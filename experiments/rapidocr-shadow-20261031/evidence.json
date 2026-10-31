@@ -1,0 +1,203 @@
+{
+  "run_id": "20261030T165838Z",
+  "scope": "Isolated code-path comparison, not live deployment or full-report acceptance.",
+  "summary": {
+    "run_id": "20261030T165838Z",
+    "documents": 3,
+    "pages": 6,
+    "baseline_cases": 18,
+    "baseline_outputs_unchanged": true,
+    "inputs_unchanged": true,
+    "human_review_pending": 6,
+    "production_ingestion": false,
+    "worker_seconds_total": 40.115,
+    "max_sampled_worker_tree_mib": 649.7,
+    "serial_batch_seconds": 48.39300851999997,
+    "timing_scope": "Fresh candidate subprocesses including imports, native extraction, rendering and detection/OCR; no cached inference. Batch also includes baselines and preview generation.",
+    "image_id": "sha256:141ee6ffbc6d0ec0c025f9deccbf93ae832f6721ef90018de93312b6dfc36c1b",
+    "poppler": "pdftotext version 25.03.0\nCopyright 2005-2025 The Poppler Developers - http://poppler.freedesktop.org\nCopyright 1996-2011, 2022 Glyph & Cog, LLC\n",
+    "model_manifest": {
+      "PP-OCRv6_rec_small.onnx": {
+        "bytes": 21234383,
+        "sha256": "6f327246b50388f3c176ae304bd95767ea6dc0c9ae92153ef8cbe210b3c14884"
+      },
+      "PP-OCRv6_det_small.onnx": {
+        "bytes": 9929594,
+        "sha256": "090f04abcd9d9a7498bc4ebf677e4cb9bdce1fe4197ddb7e529f1ef44e1ff94f"
+      },
+      "ch_ppocr_mobile_v2.0_cls_mobile.onnx": {
+        "bytes": 585532,
+        "sha256": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+      }
+    },
+    "scope": "Isolated code-path comparison, not live deployment or full-report acceptance."
+  },
+  "host_checks": {
+    "sources_unchanged": true,
+    "input_copies_unchanged": true,
+    "reader_code_unchanged": true,
+    "reader_files_checked": 82,
+    "formal_database_mounted": false,
+    "production_ingestion": false
+  },
+  "documents": [
+    {
+      "id": "now",
+      "name": "2026-10-29_财报点评_NOW_26Q3：业绩不及预期，部署需求令前景趋于复杂.pdf",
+      "sha256": "ed0f61c99f204ebe664b626d08df57bfad715515b3f401c1ab04978433823feb",
+      "total_pages": 5,
+      "selected_pages": [
+        1,
+        3
+      ],
+      "not_processed_pages": [
+        2,
+        4,
+        5
+      ],
+      "novelty": "Hash absent from historical 68-document OCR inventory; not a claim of unpublished database status."
+    },
+    {
+      "id": "ddog",
+      "name": "2026-10-28_前瞻_DDOG_3Q26：渠道调研向好，企业级_AI_提振核心需.pdf",
+      "sha256": "9b7df6d8973ee04e02e60430d8ad4b57071cc084e73f7561817f9f9cdd5cc145",
+      "total_pages": 7,
+      "selected_pages": [
+        1,
+        7
+      ],
+      "not_processed_pages": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "novelty": "Hash absent from historical 68-document OCR inventory; not a claim of unpublished database status."
+    },
+    {
+      "id": "gemini",
+      "name": "2026-10-29_研报｜大语言模型：Gemini_4_Carbon_助谷歌重回领先.pdf",
+      "sha256": "9967ff8e410a8839bbef24fb0ab8b162693715860e26a3ef7f5c5fa03d6e7932",
+      "total_pages": 5,
+      "selected_pages": [
+        1,
+        3
+      ],
+      "not_processed_pages": [
+        2,
+        4,
+        5
+      ],
+      "novelty": "Hash absent from historical 68-document OCR inventory; not a claim of unpublished database status."
+    }
+  ],
+  "pages": [
+    {
+      "id": "now-p01",
+      "source": "native",
+      "status": "needs_review",
+      "characters": 1305,
+      "seconds": 5.298,
+      "peak_tree_mib": 649.7,
+      "candidate_sha256": "4c016a2e1ebdda053ab8778ccd733af4fe4234b37bb3800d0a1fcbd739047fcc",
+      "baseline_outputs_unchanged": true,
+      "human_review": "pending"
+    },
+    {
+      "id": "now-p03",
+      "source": "native",
+      "status": "needs_review",
+      "characters": 1335,
+      "seconds": 5.218,
+      "peak_tree_mib": 634.2,
+      "candidate_sha256": "9dd396f692d7a2b909292c6ff6b6f38b348969fdfac1712f1c2797b2eb2b3d76",
+      "baseline_outputs_unchanged": true,
+      "human_review": "pending"
+    },
+    {
+      "id": "ddog-p01",
+      "source": "native",
+      "status": "needs_review",
+      "characters": 1236,
+      "seconds": 5.178,
+      "peak_tree_mib": 599.2,
+      "candidate_sha256": "6c1d74c742e41876c3f524afb2dc2fa3ac2b65e08b9e4b57ae5a30ab190ad8fc",
+      "baseline_outputs_unchanged": true,
+      "human_review": "pending"
+    },
+    {
+      "id": "ddog-p07",
+      "source": "ocr",
+      "status": "needs_review",
+      "characters": 2326,
+      "seconds": 13.967,
+      "peak_tree_mib": 617.7,
+      "candidate_sha256": "737b2488d5d9202a3390f734def634e3fbdf1c8c446fe99205de13d289c0f6aa",
+      "baseline_outputs_unchanged": true,
+      "human_review": "pending"
+    },
+    {
+      "id": "gemini-p01",
+      "source": "native",
+      "status": "needs_review",
+      "characters": 836,
+      "seconds": 5.195,
+      "peak_tree_mib": 641.7,
+      "candidate_sha256": "46f332c9e195420b01bbc21045af8b7abd66696e2a3ba50fbd63b6b871912c7a",
+      "baseline_outputs_unchanged": true,
+      "human_review": "pending"
+    },
+    {
+      "id": "gemini-p03",
+      "source": "native",
+      "status": "needs_review",
+      "characters": 1057,
+      "seconds": 5.259,
+      "peak_tree_mib": 625.4,
+      "candidate_sha256": "9fef18e84d0d6b9c4ec3ceaf823f31bd0713da8774449d4db56527ef84587feb",
+      "baseline_outputs_unchanged": true,
+      "human_review": "pending"
+    }
+  ],
+  "agent_precheck": {
+    "human_review": false,
+    "native_gap_regions": 7,
+    "footer_regions": 5,
+    "branding_regions": 2,
+    "priority_page": "ddog-p07",
+    "observed_numeric_errors": [
+      [
+        "7.3%",
+        "73%"
+      ],
+      [
+        "6.3%",
+        "63%"
+      ]
+    ],
+    "full_transcription_accuracy_measured": false
+  },
+  "artifact_hashes": {
+    "summary.json": "d64ac27cf13c19e9baf1f320bf219b6037159ba4dfe9e07711ee4f1a402bf1b9",
+    "manifest.json": "a8b1cd46c9642eaf8dd6f8262a7df03f1dc4e2681af90fc3aec2479e7ca25f27",
+    "records.json": "5d3dd18337f9549c888e328473b103bfd130c1e1c8c4369739ffe15154eac9eb",
+    "host-checks.json": "35ff7ca6d69e9899ed8b7fcece8e2ccaf57687eb3e496f4502a68d330202696e",
+    "AGENT_PRECHECK.zh-CN.md": "9260c551a24b0b819a0d203ee1323066a80b69ab1186bd391eafebea66bdd255"
+  },
+  "validation": {
+    "trial_unit_tests_passed": 5,
+    "ruff_scope": "E9,F new trial scripts",
+    "ruff_passed": true,
+    "diff_check_passed": true,
+    "missing_symbols": 0,
+    "symbol_files": 545,
+    "framework_imports_passed": 447,
+    "eval_imports_passed": 496,
+    "preflight_passed": true,
+    "preflight_scope": "Repository configuration smoke only; not OCR/live deployment acceptance.",
+    "review_links_verified": 52,
+    "review_http_status": 200,
+    "ddog_source_image_http_status": 200
+  }
+}

@@ -1,0 +1,616 @@
+{
+  "source_run": "20261030T165838Z",
+  "fixture_annotation": "Assistant transcription of 19 cells in two whole rows before running variants; not human-approved truth or an unseen evaluation set.",
+  "fixture_sha256": "f1b3af277c3fe509941420f51418cb48db20784e82422877c145b2310a49ec9c",
+  "image_id": "sha256:141ee6ffbc6d0ec0c025f9deccbf93ae832f6721ef90018de93312b6dfc36c1b",
+  "model_manifest": {
+    "PP-OCRv6_rec_small.onnx": {
+      "bytes": 21234383,
+      "sha256": "6f327246b50388f3c176ae304bd95767ea6dc0c9ae92153ef8cbe210b3c14884"
+    },
+    "PP-OCRv6_det_small.onnx": {
+      "bytes": 9929594,
+      "sha256": "090f04abcd9d9a7498bc4ebf677e4cb9bdce1fe4197ddb7e529f1ef44e1ff94f"
+    },
+    "ch_ppocr_mobile_v2.0_cls_mobile.onnx": {
+      "bytes": 585532,
+      "sha256": "e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c"
+    }
+  },
+  "modes": {
+    "baseline": {
+      "correct": 15,
+      "total": 19,
+      "seconds": 12.51683969699991,
+      "sha256": "e0230f34f76994c28d537bbb382f917912cae16345c50cd683f41cef5c02cfde"
+    },
+    "no-cls": {
+      "correct": 19,
+      "total": 19,
+      "seconds": 11.893903572999989,
+      "sha256": "6ff364324b651a6d2fe99d6f839518ced5cf3535f9aae75b7dbd5446ac9331b9"
+    },
+    "table-crop": {
+      "correct": 19,
+      "total": 19,
+      "seconds": 10.872410650999996,
+      "sha256": "5bf569fa7daf241b2af5901342a82c0b1b7bd757802e3ebe12b8802ce105debc"
+    },
+    "trace-cls": {
+      "correct": 15,
+      "total": 19,
+      "seconds": 12.929228006999892,
+      "sha256": "d758b23413b4e100b2bb368768d75ca63be99c52b6654e9a5c4302be19bc01e4"
+    }
+  },
+  "classifier_trace_reproduces_baseline_exactly": true,
+  "no_cls_detection_boxes_identical": true,
+  "failure_rotation_trace": [
+    {
+      "cell": "qoq-Q4-26",
+      "line_index": 53,
+      "angle": "180",
+      "confidence": 0.9850201606750488,
+      "pixels_unchanged": false,
+      "pixels_rotated_180": true,
+      "recognized": "73%"
+    },
+    {
+      "cell": "qoq-Q4-27",
+      "line_index": 57,
+      "angle": "180",
+      "confidence": 0.927344799041748,
+      "pixels_unchanged": false,
+      "pixels_rotated_180": true,
+      "recognized": "85%"
+    },
+    {
+      "cell": "consensus-difference-Q4-26",
+      "line_index": 75,
+      "angle": "180",
+      "confidence": 0.920941174030304,
+      "pixels_unchanged": false,
+      "pixels_rotated_180": true,
+      "recognized": "1.9%"
+    },
+    {
+      "cell": "consensus-difference-FY26",
+      "line_index": 76,
+      "angle": "180",
+      "confidence": 0.9024503231048584,
+      "pixels_unchanged": false,
+      "pixels_rotated_180": true,
+      "recognized": "63%"
+    }
+  ],
+  "guard_replay": {
+    "original_issues": [
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 148,
+        "box": [
+          [
+            1949.82958984375,
+            684.4672241210938
+          ],
+          [
+            2029.0909423828125,
+            684.4672241210938
+          ],
+          [
+            2029.0909423828125,
+            723.3775024414062
+          ],
+          [
+            1949.82958984375,
+            723.3775024414062
+          ]
+        ],
+        "text": "%9.08%",
+        "score": 0.74107
+      },
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 230,
+        "box": [
+          [
+            1720.852294921875,
+            939.1527099609375
+          ],
+          [
+            1796.5909423828125,
+            935.6154174804688
+          ],
+          [
+            1798.352294921875,
+            976.2943725585938
+          ],
+          [
+            1722.6136474609375,
+            979.8316650390625
+          ]
+        ],
+        "text": "-3.1%%",
+        "score": 0.68406
+      },
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 313,
+        "box": [
+          [
+            1601.07958984375,
+            1190.3009033203125
+          ],
+          [
+            1683.8636474609375,
+            1190.3009033203125
+          ],
+          [
+            1683.8636474609375,
+            1234.5172119140625
+          ],
+          [
+            1601.07958984375,
+            1234.5172119140625
+          ]
+        ],
+        "text": "92.7%%",
+        "score": 0.77746
+      }
+    ],
+    "updated_issues": [
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 53,
+        "box": [
+          [
+            1483.068115234375,
+            428.01312255859375
+          ],
+          [
+            1553.522705078125,
+            428.01312255859375
+          ],
+          [
+            1553.522705078125,
+            468.6920471191406
+          ],
+          [
+            1483.068115234375,
+            468.6920471191406
+          ]
+        ],
+        "text": "73%",
+        "score": 0.70409
+      },
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 57,
+        "box": [
+          [
+            2074.88623046875,
+            428.01312255859375
+          ],
+          [
+            2145.3408203125,
+            428.01312255859375
+          ],
+          [
+            2145.3408203125,
+            468.6920471191406
+          ],
+          [
+            2074.88623046875,
+            468.6920471191406
+          ]
+        ],
+        "text": "85%",
+        "score": 0.70794
+      },
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 76,
+        "box": [
+          [
+            1615.17041015625,
+            486.3785400390625
+          ],
+          [
+            1685.625,
+            486.3785400390625
+          ],
+          [
+            1685.625,
+            525.288818359375
+          ],
+          [
+            1615.17041015625,
+            525.288818359375
+          ]
+        ],
+        "text": "63%",
+        "score": 0.73504
+      },
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 130,
+        "box": [
+          [
+            1241.7613525390625,
+            656.1688842773438
+          ],
+          [
+            1326.3067626953125,
+            652.631591796875
+          ],
+          [
+            1328.068115234375,
+            693.3104858398438
+          ],
+          [
+            1243.522705078125,
+            696.8477783203125
+          ]
+        ],
+        "text": "2.9%",
+        "score": 0.60613
+      },
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 148,
+        "box": [
+          [
+            1949.82958984375,
+            684.4672241210938
+          ],
+          [
+            2029.0909423828125,
+            684.4672241210938
+          ],
+          [
+            2029.0909423828125,
+            723.3775024414062
+          ],
+          [
+            1949.82958984375,
+            723.3775024414062
+          ]
+        ],
+        "text": "%9.08%",
+        "score": 0.74107
+      },
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 164,
+        "box": [
+          [
+            1007.5,
+            767.59375
+          ],
+          [
+            1076.193115234375,
+            767.59375
+          ],
+          [
+            1076.193115234375,
+            806.5040283203125
+          ],
+          [
+            1007.5,
+            806.5040283203125
+          ]
+        ],
+        "text": "87%",
+        "score": 0.70569
+      },
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 193,
+        "box": [
+          [
+            1618.693115234375,
+            827.7278442382812
+          ],
+          [
+            1680.3409423828125,
+            827.7278442382812
+          ],
+          [
+            1680.3409423828125,
+            861.3321533203125
+          ],
+          [
+            1618.693115234375,
+            861.3321533203125
+          ]
+        ],
+        "text": "94%",
+        "score": 0.6641
+      },
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 196,
+        "box": [
+          [
+            1965.6817626953125,
+            824.1905517578125
+          ],
+          [
+            2029.0909423828125,
+            824.1905517578125
+          ],
+          [
+            2029.0909423828125,
+            864.8694458007812
+          ],
+          [
+            1965.6817626953125,
+            864.8694458007812
+          ]
+        ],
+        "text": "64%",
+        "score": 0.58976
+      },
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 197,
+        "box": [
+          [
+            2080.17041015625,
+            824.1905517578125
+          ],
+          [
+            2145.3408203125,
+            824.1905517578125
+          ],
+          [
+            2145.3408203125,
+            864.8694458007812
+          ],
+          [
+            2080.17041015625,
+            864.8694458007812
+          ]
+        ],
+        "text": "73%",
+        "score": 0.67594
+      },
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 227,
+        "box": [
+          [
+            1363.29541015625,
+            937.3840942382812
+          ],
+          [
+            1437.272705078125,
+            937.3840942382812
+          ],
+          [
+            1437.272705078125,
+            978.0630493164062
+          ],
+          [
+            1363.29541015625,
+            978.0630493164062
+          ]
+        ],
+        "text": "-2%",
+        "score": 0.57687
+      },
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 228,
+        "box": [
+          [
+            1465.45458984375,
+            937.3840942382812
+          ],
+          [
+            1553.522705078125,
+            937.3840942382812
+          ],
+          [
+            1553.522705078125,
+            976.2943725585938
+          ],
+          [
+            1465.45458984375,
+            976.2943725585938
+          ]
+        ],
+        "text": "-1.4%",
+        "score": 0.52054
+      },
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 230,
+        "box": [
+          [
+            1720.852294921875,
+            939.1527099609375
+          ],
+          [
+            1796.5909423828125,
+            935.6154174804688
+          ],
+          [
+            1798.352294921875,
+            976.2943725585938
+          ],
+          [
+            1722.6136474609375,
+            979.8316650390625
+          ]
+        ],
+        "text": "-3.1%%",
+        "score": 0.68406
+      },
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 231,
+        "box": [
+          [
+            1837.102294921875,
+            939.1527099609375
+          ],
+          [
+            1911.07958984375,
+            935.6154174804688
+          ],
+          [
+            1912.8409423828125,
+            976.2943725585938
+          ],
+          [
+            1838.8636474609375,
+            979.8316650390625
+          ]
+        ],
+        "text": "-.7%",
+        "score": 0.61074
+      },
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 277,
+        "box": [
+          [
+            1613.4090576171875,
+            1078.8759765625
+          ],
+          [
+            1682.102294921875,
+            1078.8759765625
+          ],
+          [
+            1682.102294921875,
+            1119.554931640625
+          ],
+          [
+            1613.4090576171875,
+            1119.554931640625
+          ]
+        ],
+        "text": "8%0.%",
+        "score": 0.68865
+      },
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 313,
+        "box": [
+          [
+            1601.07958984375,
+            1190.3009033203125
+          ],
+          [
+            1683.8636474609375,
+            1190.3009033203125
+          ],
+          [
+            1683.8636474609375,
+            1234.5172119140625
+          ],
+          [
+            1601.07958984375,
+            1234.5172119140625
+          ]
+        ],
+        "text": "92.7%%",
+        "score": 0.77746
+      },
+      {
+        "code": "low_confidence_line",
+        "severity": "warning",
+        "message": "OCR line requires source review; text retained.",
+        "line_id": 314,
+        "box": [
+          [
+            1717.32958984375,
+            1193.8382568359375
+          ],
+          [
+            1796.5909423828125,
+            1193.8382568359375
+          ],
+          [
+            1796.5909423828125,
+            1232.74853515625
+          ],
+          [
+            1717.32958984375,
+            1232.74853515625
+          ]
+        ],
+        "text": "93.9%",
+        "score": 0.61315
+      }
+    ],
+    "text_unchanged": true,
+    "status": "needs_review",
+    "human_review": "pending"
+  },
+  "prior_artifacts_unchanged": true,
+  "input_copies_unchanged": true,
+  "changed_reader_files": [
+    "experiments/rapidocr-body-20261030/body_reader.py"
+  ],
+  "human_review_pending": 6,
+  "production_ingestion": false,
+  "default_ocr_classifier_changed": false,
+  "limits": [
+    "19 assistant-annotated cells, no independent human truth",
+    "No page-wide numeric accuracy or unseen/rotated-page regression",
+    "No live deployment validation"
+  ],
+  "pending_review_sha256": "db1cbc2f3bb57f8360a09954437647dd0fbd3d773d454c0d5aed1b53c3b2c315",
+  "validation": {
+    "body_unit_tests": 25,
+    "trial_unit_tests": 5,
+    "document_bundle_tests": 20,
+    "ruff_E9_F": true,
+    "diff_check": true,
+    "symbols_missing": 0,
+    "framework_imports": 447,
+    "eval_imports": 496,
+    "review_links_valid": 25,
+    "review_http_status": 200,
+    "preflight_passed": true
+  }
+}

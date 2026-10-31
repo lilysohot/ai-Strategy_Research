@@ -1,0 +1,1012 @@
+{
+  "summary": {
+    "real_documents": 4,
+    "selected_pages": 4,
+    "document_total_pages": 21,
+    "oriented": 3,
+    "unknown": 1,
+    "incorrect_accepted_orientation": 0,
+    "reference_checks_matched": 56,
+    "reference_checks_total": 56,
+    "baseline_cases": 12,
+    "baseline_outputs_unchanged": true,
+    "worker_seconds": 103.657,
+    "max_sampled_worker_tree_mib": 840.9,
+    "frozen_files_unchanged": 85,
+    "prior_unique_document_hashes": 75,
+    "inputs_and_originals_unchanged": true,
+    "human_review": "pending",
+    "production_ingestion": false,
+    "live_sandbox_version": "unconfirmed",
+    "model_or_algorithm_changed": false
+  },
+  "manifest": {
+    "documents": [
+      {
+        "id": "review20",
+        "name": "2026-10-20_James-Bulltard_102026 复盘.pdf",
+        "source_path": "/home/administrator/FrontierAgent/data/corpus-incoming/20261026/2026-10-20_James-Bulltard_102026 复盘.pdf",
+        "input": "review20.pdf",
+        "sha256": "dec517dc15fa0e96a8aeee93473d664a921db73d266bd3baf1193f1e6d33ce72",
+        "pages": [
+          2
+        ],
+        "total_pages": 5
+      },
+      {
+        "id": "tech",
+        "name": "2026-10-17_科技股终于破位下行.pdf",
+        "source_path": "/home/administrator/FrontierAgent/data/corpus-incoming/20261026/2026-10-17_科技股终于破位下行.pdf",
+        "input": "tech.pdf",
+        "sha256": "c317fdc23cb4b753fb1defdd40076a4f7f8af7c2be18e6f35ba10830b221378e",
+        "pages": [
+          4
+        ],
+        "total_pages": 6
+      },
+      {
+        "id": "discover",
+        "name": "2026-10-24_Discover_工具更新_#1.pdf",
+        "source_path": "/home/administrator/FrontierAgent/data/corpus-incoming/20261026/2026-10-24_Discover_工具更新_#1.pdf",
+        "input": "discover.pdf",
+        "sha256": "031ec28937c81a3dacd4ef9d42d52ff548ce723e22c205664870eb3a3dfa29a8",
+        "pages": [
+          3
+        ],
+        "total_pages": 4
+      },
+      {
+        "id": "cyber",
+        "name": "2026-10-28_专栏｜网络安全：AI_扩大漏洞修复与持续防护需求.pdf",
+        "source_path": "/home/administrator/FrontierAgent/data/corpus-incoming/20261026/2026-10-28_专栏｜网络安全：AI_扩大漏洞修复与持续防护需求.pdf",
+        "input": "cyber.pdf",
+        "sha256": "83ae41817a4f447aa7f19aefad2058fd5eb3de72f34d291428ae35acf5d25a75",
+        "pages": [
+          4
+        ],
+        "total_pages": 6
+      }
+    ],
+    "checks_sha256": "62c2f164c9a08b9b92034111c8ca6c3c613fa3ea8b26861763a62b51df418913",
+    "source_sha256": {
+      "experiments/rapidocr-page-orientation-20261031/page_orientation.py": "34c70779d93d9a9df8ad561911bb54dc68d68d5e55a92f4761e0b4433933ea1a",
+      "experiments/rapidocr-page-orientation-20261031/regression.py": "746c8fcb754a0731f187e36c9d352d0778434cdf0718db610e934fe0e5adc76d",
+      "experiments/rapidocr-smoke-20261019/config.py": "89fae68d50615ca17fbfb058030ad1454f06daa3f5b54cd86d84c936f2d120b3",
+      "experiments/rapidocr-holdout-20261031/prepare.py": "aa71a4a7c6fe417b74c35bd5f4285b1be1be3144f6f56882611a1b47d6868189",
+      "experiments/rapidocr-holdout-20261031/holdout.py": "44955546b73c13c3978afabb90f530575d361c3bf19911263e06840813ec6a62",
+      "experiments/rapidocr-holdout-20261031/run.sh": "8555707497ac54fbba21da610f1f7ac0386c0094098402426f45f455c4d56858",
+      "plugins/tools/__init__.py": "733d635a26858a36ea1dbfaa2c4bb35ec33d91831f8cc3636da9fa50ebea1035",
+      "plugins/tools/_academic_fetch.py": "2438328498562f3b2d923b4602f9fcb35977cbddb1b4ce3668cc75e4bb850457",
+      "plugins/tools/_bash_policy.py": "295f9a14f7122c2fb477bffeba270ac747e481550dab6f589771e2b4efbcb18a",
+      "plugins/tools/_bounded_fetch.py": "37ba4f8660eabbdb3eadd040cb743e7b4d5452b7c6f716ba99c9910d8f3844af",
+      "plugins/tools/_bus_scope.py": "21196eff9305b1b0c4bc314764214d698ffef7098818e0912755188323d73a7f",
+      "plugins/tools/_cancellable_process.py": "4a75ab584f73da0df28cb1ca1a36f3e3e62bdf93aff41ca8ba38857440e0cbbf",
+      "plugins/tools/_code_sanitize.py": "6e5bbf4b7953257ed35acb1221ce1009000fe78a4c11a86be831aa93330cddaf",
+      "plugins/tools/_coerce.py": "759ad9d62bd9aa7ef0da10061f02700da6ebe269c7a3e6bbec1d7feee6dab562",
+      "plugins/tools/_content_outcome.py": "cdd5729e464fb693cb8ad26080d4af2893035077f780ecaf00954a576d4fb0a8",
+      "plugins/tools/_create_file.py": "17bbe461cf1eeed6be0a9a2e1b1d46da34ffd068157cc8b9f6493d0514f43016",
+      "plugins/tools/_deliverable_policy.py": "3c0d0d3c0ea1771e6a7659a7d62cc00722009caa35c26bfd3f4a0c7e39d022a7",
+      "plugins/tools/_doc_reader.py": "e6c526ac0c3ee4eed343a28741b386fdbe502f76d696cd645e0c6a9ae04b625d",
+      "plugins/tools/_download_runner.py": "646d4d6f8bfb0f6f2ca2834b8efdea937e9fcf817b0f6fa962fc9509f08e1b78",
+      "plugins/tools/_exec_cgroup.py": "6296060bc11baca674f27da0fb2c10f62ecb49ba5983aa6e557fda0068f68fef",
+      "plugins/tools/_handoff.py": "2dfd64e49deba6237b540d2f3fdc808e9a997f467e86ea697fc063633c5b0278",
+      "plugins/tools/_net_guard.py": "ecae18178f91c9256f295a9e0433b677ec238d6c777fed8daff7c2b4b045327e",
+      "plugins/tools/_overflow.py": "58e316b084aba66882bacf51017b7f6c6d40642ccd990b493ea8de3e3ba3f3b6",
+      "plugins/tools/_path_auth.py": "59ab76760ff0b1b7abafaec285daf1a34c4fd2e9f2b4717fa895fcac4977cb6c",
+      "plugins/tools/_paths.py": "2507cce35e18447ee28a14a4899d23fd43965eb5704e9da12cb22d7760971b69",
+      "plugins/tools/_reader_core.py": "3224e75256d9337199661e4e51e20c5d6e25829a1247da8b9bb8fd75bd434def",
+      "plugins/tools/_reader_docx.py": "37c4839fe8eae2f345edfc59884dd521fe291996bc534d74131b93ca8411a392",
+      "plugins/tools/_reader_pdf.py": "418a8554ed08fb174d50fcd6f149f6c5f38b5dfbc0a7b099025706435600fa13",
+      "plugins/tools/_reader_pptx.py": "7c6b12e68d4fe7ee916fbf747890a8168b4b25270f54489447a7898064bdf22b",
+      "plugins/tools/_reader_xlsx.py": "d832af4b4697131a874b03c202fc1d0e3e6a541c053cf402e419c326e298e37e",
+      "plugins/tools/_render_check.py": "e94a212ea1c61000235046638a0375a6cdec1a118a1c6fb5f51c6603bec0fc42",
+      "plugins/tools/_sandbox.py": "82a753f0b467c19049ab90ab53209f2fade051901b2bbfe49dd5ac239f840f58",
+      "plugins/tools/_scrape_cache.py": "a331c8707c9174528dbf539da427616a8bf9d2c1f1c40a32e8ae2dfc7a747a87",
+      "plugins/tools/_single_flight.py": "ff4f93278c2495b3cba96d2ef221d09fe427ced2fe7a0159919a1c746522096d",
+      "plugins/tools/_task_board_contract.py": "518792e2296f620cdefdf220187233cb5a9c15c7d9483a631e9458db2551a6ac",
+      "plugins/tools/_verification.py": "f155c7ebb4813c6ce2e5868f951798108cf70a5a4c632fef323ae979d29f4ccd",
+      "plugins/tools/_writer_core.py": "dc4293e5d7650963448f28136ef5e1b900d7e740fc054d91d9c899c473ea44a3",
+      "plugins/tools/_writer_docx.py": "011ba5663724a0368c25aeb91833cb0ca0483584f5712f10ed98bbfa1a15ec55",
+      "plugins/tools/_writer_pptx.py": "560589c85d117edfa8c9d10b95bbfbc053cfc8d095fef58011b8e85c6726adf9",
+      "plugins/tools/_writer_text.py": "6c914f6b2b1be366694868355624edc68e07a1ae21bf2b98233b738362127e16",
+      "plugins/tools/_writer_xlsx.py": "bdffbdc9ac00d67b3e8094e2639cc60255044e22ca1ac8182d9f378b13647673",
+      "plugins/tools/assign_task.py": "857632d96a3377040bdfb772afd9d6fb6b73b733be03123c98290be212948f42",
+      "plugins/tools/bash.py": "7c2934f71682db175fc35ce8c0406c446676d3675271e2c6dd0789618d66fed9",
+      "plugins/tools/collect_reports.py": "020c9fc46ed9e23401d2de5dd2cdb3e4544cbee98ed381f5c9ae9aad1e1c1af9",
+      "plugins/tools/corpus_fetch.py": "c0e81a72c7e461be084acd283a4acc084b26c3361447fbe17245980c8a615785",
+      "plugins/tools/corpus_inventory.py": "a4579b3703e25864587c531e46cfe9179e58cddc44bf83b4225de5f419eaafe1",
+      "plugins/tools/corpus_manifest.py": "d9040c12a48102f305aa0ec63fd6a98ad0509533ebefc9bda0d81e7662c5b38e",
+      "plugins/tools/corpus_search.py": "1cc9ab45b14ecbe487c2c5b0d5d495d6e00e9ae7dbabd52672a9de1eac7c0756",
+      "plugins/tools/corpus_semantic_query.py": "65361a3e6c0259cc4ae8dcbc38dd9b1172e237d1a096493485180c33d8bdbdda",
+      "plugins/tools/create_file.py": "203626801e58d5c98d8594efa5bf9ae1ca0cdb7c76d13283b96fbd137ccda1b3",
+      "plugins/tools/create_subagent.py": "fd23a4d2db7c81c99707b75a5c2641df44729444233b484f75a84fc3728c27f8",
+      "plugins/tools/data_coverage.py": "9791f21a96fc77aacc867660c49f2b03341ade800cb1b703c4314c0d3eddfddf",
+      "plugins/tools/document_node_toolchain.py": "033b0a51b1c8accc0dc9ba3ab9317d6fa194f2ad83fbd6a55011777113c83a25",
+      "plugins/tools/download_file.py": "27d6a789cea0c0893480034209b12a61f7f9b9d486904bbd47edc6305a7b33ec",
+      "plugins/tools/file_editor.py": "2e6a5a2cf650a3af264ab0273fe09446dda9721388d7bf59e8f94ea2edc0a44d",
+      "plugins/tools/finalize_answer.py": "f6c911f0aa6ac0076ca35c63a687da676b7399f4c10dbfb9dec4792324555c7f",
+      "plugins/tools/glob_search.py": "6d7777e034c68ad61fe5c2a86f010a5dcca0f39cc258b8470835c22d115ce3d1",
+      "plugins/tools/grep_search.py": "5c4741d942ad914fa98e3dca3a69cf0e87dd48df6af5bd2b0d30f1675bc9dd54",
+      "plugins/tools/ignore_rules.py": "a0569776dd9b4182abdae9060d922d9c177db0f1b587ad89b94795f162bd2b7e",
+      "plugins/tools/investment_context.py": "defb2b2dbc72d77de386ddcf3d1e934d92be33090c46cfcda83e0d4bfde55a7d",
+      "plugins/tools/investment_input_request.py": "cffc56ce1acbf6124bdcbd25b9ea55e22db3456c415cd5fe158f425a3c2ea8ae",
+      "plugins/tools/investment_strategy.py": "60a7cd867064f58757f0fbaef4cf2459d39821512e52b4af266b2d690df6f780",
+      "plugins/tools/market_financials.py": "497bad7fa1ea75ada6d9663c1450fdb9037230d84969de4277ba4ce4807ebd7a",
+      "plugins/tools/market_history.py": "74f774ea781e96f3103c03ed9d179fce793266b0020ebc24086756b082979546",
+      "plugins/tools/market_quote.py": "3aa5273789be08ea3aadac7a366c93dfa52fa72d3928f062d3bbc9349db36876",
+      "plugins/tools/market_resolve.py": "608f1f14862d4018546f836058f93ccfb68dbdfcc9c95afa0ec3ee725d8a4800",
+      "plugins/tools/meta.py": "cf1350f765837cd76c1931141822fee5c2d9c2828a3f28a6b4123dc582ef12ca",
+      "plugins/tools/position_sizing.py": "43f3c81db24309a52a2bc6c682ef2e7afda4e357fe542075f075c62a11db1dbc",
+      "plugins/tools/publish_handoff.py": "f252f50a999ed313f7d3090f7318517729a01494335b0fc70986a738d5a212c9",
+      "plugins/tools/read_file.py": "f87c3bf604cdd96814f7a8a8a9d66b05dd93c210eb5fbdd921ccfb2ac7ca06aa",
+      "plugins/tools/read_text.py": "8c24d4751e64410a50481d480be5f69d9ec25a1af412d194a05d9c7373d93a27",
+      "plugins/tools/recover_result.py": "2c93ed5cdfd6ededc3b3a3aa1ade96c26983341cc1e7007b14c070679603fb2a",
+      "plugins/tools/research_history.py": "98aaf9b95d4d894417f0f3f364ade4715605cdc420e24b18fd69c1188051c4a3",
+      "plugins/tools/run_python_code.py": "8e8e377870ec0c6c94c91be30e29f594609ace8c1392d02d834d4a11f1da0e3e",
+      "plugins/tools/stop_subagent.py": "191be6379bb606274644bcb8f751b195c368d8fd031b13149390443eb3629eb4",
+      "plugins/tools/strategy_lint.py": "6d50ba8480ac363405b964230b20d81f398a1cd75a10af1b668366055e8ebe81",
+      "plugins/tools/submit_report.py": "611c71cc4227339d904fe84570097cb2dad3d7f3c32418675629af727d4a956b",
+      "plugins/tools/task_board.py": "fae2b102c369b6c1541d10dc8f0b11914345c013aeed76941b05f1790a79c33e",
+      "plugins/tools/view_image.py": "2f3354ce0380068f015f87a846576333d81836e59102c9449272872502cb7b73",
+      "plugins/tools/watch_targets.py": "d30e197b355c90cb8172c43d983f4c3c4e9000ca03facf19d314b434dfe3bdb3",
+      "plugins/tools/web_fetch.py": "969e75df7dcd5479cfbcc2c9de42c0bf76ac267b8c827d311351805a400fd096",
+      "plugins/tools/web_fetch_aligned.py": "751e0eab81cf351e9f8f43a03eba64d1de9b8e5d26804f13f27d7da05b172ed9",
+      "plugins/tools/web_search.py": "0c42c6113f12c96e004ce10c35cb67a50453578f7703c9c96d03760efcab5272",
+      "plugins/tools/web_search_aligned.py": "ef296497e0e491ad8816f0fe277ec776411411ffbb2d22190499444817bd12a2",
+      "plugins/tools/write_file.py": "8841b496e57e4ef1e7cb53af0ebf59abfe044c1858b0ef201faa20ed88ffeb42"
+    },
+    "image": "sha256:141ee6ffbc6d0ec0c025f9deccbf93ae832f6721ef90018de93312b6dfc36c1b",
+    "scope": "Four unseen real pages, no synthetic rotations; frozen model/algorithm/thresholds.",
+    "major_incidents": [
+      "worker crash or timeout",
+      "incorrect accepted page orientation",
+      "entire text image unreadable without review flag",
+      "material sign/decimal/magnitude errors in checked financial values",
+      "changed existing baseline output"
+    ],
+    "unknown_policy": "Not an automatic pass. Zero-degree candidate assessed only as manual reference.",
+    "human_review": "pending",
+    "production_ingestion": false
+  },
+  "records": [
+    {
+      "id": "review20",
+      "page": 2,
+      "status": "unknown",
+      "correction_clockwise": null,
+      "reason": "weak_or_conflicting_page_direction",
+      "needs_review": true,
+      "score_kind": "zero_degree_candidate_for_manual_reference",
+      "score": {
+        "matched": 7,
+        "total": 7,
+        "checks": [
+          {
+            "id": "high",
+            "expected": "781.62",
+            "actual": "Hi:781.62",
+            "matched": true,
+            "line_indices": [
+              1
+            ]
+          },
+          {
+            "id": "rsi",
+            "expected": "RSI",
+            "actual": "RSI",
+            "matched": true,
+            "line_indices": [
+              14
+            ]
+          },
+          {
+            "id": "macd",
+            "expected": "MACD",
+            "actual": "MACD",
+            "matched": true,
+            "line_indices": [
+              20
+            ]
+          },
+          {
+            "id": "axis-780",
+            "expected": "780",
+            "actual": "780",
+            "matched": true,
+            "line_indices": [
+              2
+            ]
+          },
+          {
+            "id": "axis-750",
+            "expected": "750",
+            "actual": "750",
+            "matched": true,
+            "line_indices": [
+              5
+            ]
+          },
+          {
+            "id": "axis-720",
+            "expected": "720",
+            "actual": "720",
+            "matched": true,
+            "line_indices": [
+              8
+            ]
+          },
+          {
+            "id": "axis--2",
+            "expected": "-2",
+            "actual": "-2",
+            "matched": true,
+            "line_indices": [
+              23
+            ]
+          }
+        ]
+      },
+      "baseline_unchanged": {
+        "auto": true,
+        "text": true,
+        "image": true
+      },
+      "baseline_sha256": {
+        "auto": "2793230f310cff77813252df6e5cf8f4494a0ad2c740c4ab28091fa8ce80782e",
+        "text": "c48d3f72199df259bfbaf273f570e13e46f9efd7ba53242a8e9cb0335ce28c3b",
+        "image": "aa254b2f7d4fa67958d60a00fdd77e6c82b28885f598bf232996fe7043a85bff"
+      },
+      "seconds": 14.584,
+      "peak_tree_mib": 832.0,
+      "normal_status": "ok",
+      "ocr_sha256": "8e412c9de28d0cd739124829411c440abdec68b7f318b0d73c73381a2a6c9ab6",
+      "human_review": "pending",
+      "normal_route_summary": {
+        "source": "ocr",
+        "status": "ok",
+        "needs_review": false,
+        "route_reason": "sparse_native_text"
+      },
+      "normal_issue_codes": []
+    },
+    {
+      "id": "tech",
+      "page": 4,
+      "status": "oriented",
+      "correction_clockwise": 0,
+      "reason": "multi_line_language_agreement",
+      "needs_review": true,
+      "score_kind": "zero_degree_candidate_for_manual_reference",
+      "score": {
+        "matched": 7,
+        "total": 7,
+        "checks": [
+          {
+            "id": "high",
+            "expected": "781.62",
+            "actual": "Hi:781.62",
+            "matched": true,
+            "line_indices": [
+              1
+            ]
+          },
+          {
+            "id": "rsi",
+            "expected": "RSI",
+            "actual": "RSI",
+            "matched": true,
+            "line_indices": [
+              13
+            ]
+          },
+          {
+            "id": "macd",
+            "expected": "MACD",
+            "actual": "MACD",
+            "matched": true,
+            "line_indices": [
+              19
+            ]
+          },
+          {
+            "id": "axis-780",
+            "expected": "780",
+            "actual": "780",
+            "matched": true,
+            "line_indices": [
+              2
+            ]
+          },
+          {
+            "id": "axis-750",
+            "expected": "750",
+            "actual": "750",
+            "matched": true,
+            "line_indices": [
+              5
+            ]
+          },
+          {
+            "id": "axis-720",
+            "expected": "720",
+            "actual": "720",
+            "matched": true,
+            "line_indices": [
+              8
+            ]
+          },
+          {
+            "id": "axis--2",
+            "expected": "-2",
+            "actual": "-2",
+            "matched": true,
+            "line_indices": [
+              23
+            ]
+          }
+        ]
+      },
+      "baseline_unchanged": {
+        "auto": true,
+        "text": true,
+        "image": true
+      },
+      "baseline_sha256": {
+        "auto": "b1243efeaa01002c0745d9b346ccd6aaf5d2338660ff9d2d16a44e71ffe25c45",
+        "text": "f42e5e281b58778d6b7d125e7c0917c4576d32f49058240e3e045c8457d5d891",
+        "image": "739831d7b030c134765606f2d62a305053ebd98340cbbda0051e7ff568a67340"
+      },
+      "seconds": 15.728,
+      "peak_tree_mib": 823.5,
+      "normal_status": "ok",
+      "ocr_sha256": "f3e91129e1ea32c97fb4d6ea515b4f04d59599952e4f801284b21327103a4528",
+      "human_review": "pending",
+      "normal_route_summary": {
+        "source": "ocr",
+        "status": "ok",
+        "needs_review": false,
+        "route_reason": "sparse_native_text"
+      },
+      "normal_issue_codes": []
+    },
+    {
+      "id": "discover",
+      "page": 3,
+      "status": "oriented",
+      "correction_clockwise": 0,
+      "reason": "multi_line_language_agreement",
+      "needs_review": true,
+      "score_kind": "zero_degree_candidate_for_manual_reference",
+      "score": {
+        "matched": 31,
+        "total": 31,
+        "checks": [
+          {
+            "id": "HPQ-ticker",
+            "expected": "HPQ",
+            "actual": "HPQ$33.45LARGETechnolog8/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              227,
+              228,
+              229,
+              230,
+              242,
+              243
+            ]
+          },
+          {
+            "id": "HPQ-price",
+            "expected": "33.45",
+            "actual": "HPQ$33.45LARGETechnolog8/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              227,
+              228,
+              229,
+              230,
+              242,
+              243
+            ]
+          },
+          {
+            "id": "MSI-ticker",
+            "expected": "MSI",
+            "actual": "MSI$479.34LARGETechnolo8/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              231,
+              232,
+              233,
+              234,
+              244,
+              245
+            ]
+          },
+          {
+            "id": "MSI-price",
+            "expected": "479.34",
+            "actual": "MSI$479.34LARGETechnolo8/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              231,
+              232,
+              233,
+              234,
+              244,
+              245
+            ]
+          },
+          {
+            "id": "AAPL-ticker",
+            "expected": "AAPL",
+            "actual": "AAPL$346.59LARGETechnc7/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              235,
+              236,
+              237,
+              246,
+              247
+            ]
+          },
+          {
+            "id": "AAPL-price",
+            "expected": "346.59",
+            "actual": "AAPL$346.59LARGETechnc7/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              235,
+              236,
+              237,
+              246,
+              247
+            ]
+          },
+          {
+            "id": "ADP-ticker",
+            "expected": "ADP",
+            "actual": "ADP$305.88LARGETechnolc7/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              238,
+              239,
+              240,
+              241,
+              248,
+              249
+            ]
+          },
+          {
+            "id": "ADP-price",
+            "expected": "305.88",
+            "actual": "ADP$305.88LARGETechnolc7/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              238,
+              239,
+              240,
+              241,
+              248,
+              249
+            ]
+          },
+          {
+            "id": "ALLE-ticker",
+            "expected": "ALLE",
+            "actual": "ALLE$179.97LARGEService7/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              339,
+              340,
+              341,
+              342,
+              354,
+              355
+            ]
+          },
+          {
+            "id": "ALLE-price",
+            "expected": "179.97",
+            "actual": "ALLE$179.97LARGEService7/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              339,
+              340,
+              341,
+              342,
+              354,
+              355
+            ]
+          },
+          {
+            "id": "ELV-ticker",
+            "expected": "ELV",
+            "actual": "ELV$440.70LARGEFinancialsMomentumbuilding7/12",
+            "matched": true,
+            "line_indices": [
+              343,
+              344,
+              345,
+              346,
+              357,
+              356
+            ]
+          },
+          {
+            "id": "ELV-price",
+            "expected": "440.70",
+            "actual": "ELV$440.70LARGEFinancialsMomentumbuilding7/12",
+            "matched": true,
+            "line_indices": [
+              343,
+              344,
+              345,
+              346,
+              357,
+              356
+            ]
+          },
+          {
+            "id": "FAST-ticker",
+            "expected": "FAST",
+            "actual": "FAST$52.22LARGEConsume7/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              347,
+              348,
+              349,
+              350,
+              358,
+              359
+            ]
+          },
+          {
+            "id": "FAST-price",
+            "expected": "52.22",
+            "actual": "FAST$52.22LARGEConsume7/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              347,
+              348,
+              349,
+              350,
+              358,
+              359
+            ]
+          },
+          {
+            "id": "HAS-ticker",
+            "expected": "HAS",
+            "actual": "HAS$117.23LARGEMomentumbuilding7/12",
+            "matched": true,
+            "line_indices": [
+              351,
+              352,
+              353,
+              361,
+              360
+            ]
+          },
+          {
+            "id": "HAS-price",
+            "expected": "117.23",
+            "actual": "HAS$117.23LARGEMomentumbuilding7/12",
+            "matched": true,
+            "line_indices": [
+              351,
+              352,
+              353,
+              361,
+              360
+            ]
+          },
+          {
+            "id": "RBRK-ticker",
+            "expected": "RBRK",
+            "actual": "RBRK$129.21LARGETechnc7/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              448,
+              449,
+              450,
+              463,
+              464
+            ]
+          },
+          {
+            "id": "RBRK-price",
+            "expected": "129.21",
+            "actual": "RBRK$129.21LARGETechnc7/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              448,
+              449,
+              450,
+              463,
+              464
+            ]
+          },
+          {
+            "id": "RMD-ticker",
+            "expected": "RMD",
+            "actual": "RMD$253.77LARGEHealthc:7/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              451,
+              452,
+              453,
+              454,
+              465,
+              466
+            ]
+          },
+          {
+            "id": "RMD-price",
+            "expected": "253.77",
+            "actual": "RMD$253.77LARGEHealthc:7/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              451,
+              452,
+              453,
+              454,
+              465,
+              466
+            ]
+          },
+          {
+            "id": "SUNB-ticker",
+            "expected": "SUNB",
+            "actual": "SUNB$78.89LARGEService:7/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              455,
+              456,
+              457,
+              458,
+              467,
+              468
+            ]
+          },
+          {
+            "id": "SUNB-price",
+            "expected": "78.89",
+            "actual": "SUNB$78.89LARGEService:7/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              455,
+              456,
+              457,
+              458,
+              467,
+              468
+            ]
+          },
+          {
+            "id": "TW-ticker",
+            "expected": "TW",
+            "actual": "TW$122.54LARGEFinancials7/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              459,
+              460,
+              461,
+              462,
+              469,
+              470
+            ]
+          },
+          {
+            "id": "TW-price",
+            "expected": "122.54",
+            "actual": "TW$122.54LARGEFinancials7/12Momentumbuilding",
+            "matched": true,
+            "line_indices": [
+              459,
+              460,
+              461,
+              462,
+              469,
+              470
+            ]
+          },
+          {
+            "id": "calls",
+            "expected": "Calls Bought (85)",
+            "actual": "CallsBought(85)",
+            "matched": true,
+            "line_indices": [
+              4
+            ]
+          },
+          {
+            "id": "puts",
+            "expected": "Puts Bought (15)",
+            "actual": "PutsBought(15)",
+            "matched": true,
+            "line_indices": [
+              5
+            ]
+          },
+          {
+            "id": "sold",
+            "expected": "Puts Sold (74)",
+            "actual": "PutsSold(74)",
+            "matched": true,
+            "line_indices": [
+              6
+            ]
+          },
+          {
+            "id": "first-call-strike",
+            "expected": "362.5C",
+            "actual": "362.5C",
+            "matched": true,
+            "line_indices": [
+              21
+            ]
+          },
+          {
+            "id": "first-call-date",
+            "expected": "2026-11-20",
+            "actual": "2026-11-20",
+            "matched": true,
+            "line_indices": [
+              22
+            ]
+          },
+          {
+            "id": "first-call-size",
+            "expected": "1500",
+            "actual": "1500",
+            "matched": true,
+            "line_indices": [
+              23
+            ]
+          },
+          {
+            "id": "first-call-value",
+            "expected": "$671K",
+            "actual": "$671K",
+            "matched": true,
+            "line_indices": [
+              24
+            ]
+          }
+        ]
+      },
+      "baseline_unchanged": {
+        "auto": true,
+        "text": true,
+        "image": true
+      },
+      "baseline_sha256": {
+        "auto": "6a1eac3fa4d3b7a98d8514c8823f8f9077dcea21b95f5919c7161ada7755b3b6",
+        "text": "cc1022d9c4cac3eea85480ed5ec56046b4155e891d865c799940aac598ed3388",
+        "image": "17c4dd194ebfcd9c7e918076d4d451e43b6c8ffaa75b00989ced8ad1cb227af0"
+      },
+      "seconds": 44.373,
+      "peak_tree_mib": 826.5,
+      "normal_status": "needs_review",
+      "ocr_sha256": "4c8a95cf3248ad71d4d3cec7c6d0f84985b98f9e5da7ed1f87d918fd0bc81c1f",
+      "human_review": "pending",
+      "normal_route_summary": {
+        "source": "ocr",
+        "status": "needs_review",
+        "needs_review": true,
+        "route_reason": "sparse_native_text"
+      },
+      "normal_issue_codes": [
+        "low_confidence_line"
+      ]
+    },
+    {
+      "id": "cyber",
+      "page": 4,
+      "status": "oriented",
+      "correction_clockwise": 0,
+      "reason": "multi_line_language_agreement",
+      "needs_review": true,
+      "score_kind": "zero_degree_candidate_for_manual_reference",
+      "score": {
+        "matched": 11,
+        "total": 11,
+        "checks": [
+          {
+            "id": "nikesh",
+            "expected": "Nikesh Arora",
+            "actual": "NikeshArora",
+            "matched": true,
+            "line_indices": [
+              8
+            ]
+          },
+          {
+            "id": "sam",
+            "expected": "Sam Altman",
+            "actual": "SamAltmanCEO,OpenAI",
+            "matched": true,
+            "line_indices": [
+              34,
+              39
+            ]
+          },
+          {
+            "id": "greg",
+            "expected": "Greg Brockman",
+            "actual": "GregBrockmanPresident,OpenAl",
+            "matched": true,
+            "line_indices": [
+              54,
+              59
+            ]
+          },
+          {
+            "id": "logan",
+            "expected": "Logan Graham",
+            "actual": "LoganGraham",
+            "matched": true,
+            "line_indices": [
+              77
+            ]
+          },
+          {
+            "id": "dane",
+            "expected": "Dane Knecht",
+            "actual": "DaneKnechtCTO,Cloudflare",
+            "matched": true,
+            "line_indices": [
+              109,
+              114
+            ]
+          },
+          {
+            "id": "george",
+            "expected": "George Kurtz",
+            "actual": "GeorgeKurtzCEO,CrowdStrike",
+            "matched": true,
+            "line_indices": [
+              131,
+              136
+            ]
+          },
+          {
+            "id": "dan",
+            "expected": "Dan Lorenc",
+            "actual": "DanLorencCEO,Chainguard",
+            "matched": true,
+            "line_indices": [
+              154,
+              159
+            ]
+          },
+          {
+            "id": "anand",
+            "expected": "Anand Oswal",
+            "actual": "AnandOswal",
+            "matched": true,
+            "line_indices": [
+              176
+            ]
+          },
+          {
+            "id": "percent",
+            "expected": "25%",
+            "actual": "\"Wetookabout25%ofourproductionengineers\"\"securityspend,shouldactuallyvastlyoutstripsoftwarespend.\"",
+            "matched": true,
+            "line_indices": [
+              55,
+              60,
+              68,
+              72
+            ]
+          },
+          {
+            "id": "months",
+            "expected": "18 months",
+            "actual": "\"you'regoingtomoveforwardallyoursecurityspendoverthenext18months\"\"reduceyourattacksurfacearea\"",
+            "matched": true,
+            "line_indices": [
+              110,
+              115,
+              116,
+              126
+            ]
+          },
+          {
+            "id": "heading",
+            "expected": "Executive Views and Implications",
+            "actual": "ExecutiveViewsandImplications—1/2",
+            "matched": true,
+            "line_indices": [
+              0
+            ]
+          }
+        ]
+      },
+      "baseline_unchanged": {
+        "auto": true,
+        "text": true,
+        "image": true
+      },
+      "baseline_sha256": {
+        "auto": "8a24efe90bd9d1264b69ae665ac68f63eaf3de242448a5aa83a85116b8f4b5bf",
+        "text": "eed3b2e69427050d73cdf989ed4c9df711768a13f8de9ca451d319cc8d35388f",
+        "image": "18601d6dab66b78d42d594c234046886d697b87747478aba7af4fc46658d015a"
+      },
+      "seconds": 28.972,
+      "peak_tree_mib": 840.9,
+      "normal_status": "ok",
+      "ocr_sha256": "2b11b6083b2b836bb780af99b421c402253ad9074182a2ab08b47ed7d0ee33b9",
+      "human_review": "pending",
+      "normal_route_summary": {
+        "source": "ocr",
+        "status": "ok",
+        "needs_review": false,
+        "route_reason": "sparse_native_text"
+      },
+      "normal_issue_codes": []
+    }
+  ],
+  "runtime": {
+    "security_opt": [
+      "no-new-privileges"
+    ],
+    "nano_cpus": 2000000000,
+    "mounts": [
+      {
+        "destination": "/body",
+        "rw": false
+      },
+      {
+        "destination": "/lab",
+        "rw": false
+      },
+      {
+        "destination": "/inputs",
+        "rw": false
+      },
+      {
+        "destination": "/eval",
+        "rw": false
+      },
+      {
+        "destination": "/reference",
+        "rw": false
+      },
+      {
+        "destination": "/modelconfig/config.py",
+        "rw": false
+      },
+      {
+        "destination": "/helpers/lab.py",
+        "rw": false
+      },
+      {
+        "destination": "/out",
+        "rw": true
+      },
+      {
+        "destination": "/orientation",
+        "rw": false
+      },
+      {
+        "destination": "/shadow",
+        "rw": false
+      }
+    ],
+    "memory_bytes": 4294967296,
+    "image_id": "sha256:141ee6ffbc6d0ec0c025f9deccbf93ae832f6721ef90018de93312b6dfc36c1b",
+    "readonly_rootfs": true,
+    "cap_drop": [
+      "ALL"
+    ],
+    "network_mode": "none"
+  },
+  "novelty_sources_sha256": {
+    "/mnt/c/Users/Administrator/.codex/worktrees/5db5/FrontierAgent/experiments/rapidocr-expanded-20261030/outputs/inventory.json": "6af353b37f709412028fe598f2c4930927b52c6d9f64db54532f346775e43400",
+    "/home/administrator/FrontierAgent/experiments/rapidocr-shadow-20261031/outputs/20261030T165838Z/inputs/manifest.json": "a8b1cd46c9642eaf8dd6f8262a7df03f1dc4e2681af90fc3aec2479e7ca25f27",
+    "/home/administrator/FrontierAgent/experiments/rapidocr-orientation-20261031/outputs/batch2/inputs/manifest.json": "1ea6db6a23a18c0f88121c3db53db0b0becabf742efa0f7ffd8476c427fa09b1"
+  }
+}
