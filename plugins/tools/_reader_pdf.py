@@ -138,6 +138,13 @@ def _garble_ratio(text):
 def _image_cover(path, page_no, pagew, pageh):
     """**Total** share of the page area taken by every image on it (placed area, capped at 1.0; smask excluded).
     From pdfimages -list width/height (px) + x/y-ppi → pt."""
+    if _pos.environ.get("READDOC_LOCAL_OCR_RELEASE"):
+        import pymupdf
+        with pymupdf.open(path) as doc:
+            page = doc[page_no - 1]
+            area = max(page.rect.get_area(), 1.0)
+            return min(1.0, sum(pymupdf.Rect(i["bbox"]).get_area()
+                                for i in page.get_image_info()) / area)
     page_area = max(pagew * pageh, 1.0)
     total = 0.0
     try:
@@ -244,6 +251,10 @@ def _reorder_columns(boxes, split):
 
 
 # ---------- OCR port (synchronous POST /ocr; env READDOC_OCR_URL + READDOC_OCR_KEY; returns None when unconfigured) ----------
+class _LocalOCRFailure(RuntimeError):
+    pass
+
+
 def _ocr_base():
     return _pos.environ.get("READDOC_OCR_URL", "").rstrip("/")
 
@@ -265,26 +276,44 @@ def _ocr_page(path, page_no, outdir):
         return None
     import urllib.error
     import urllib.request
-    src = _one_page_pdf(path, page_no, outdir) or path
+    local_release = _pos.environ.get("READDOC_LOCAL_OCR_RELEASE", "")
+    # The local service accepts an explicit page in the original PDF. This also
+    # works in the actual Web sandbox, where pdfseparate may be unavailable.
+    src = path if local_release else _one_page_pdf(path, page_no, outdir)
+    if src is None:
+        raise RuntimeError("Cannot isolate requested OCR page")
     data = open(src, "rb").read()
     headers = {"Content-Type": "application/pdf"}
+    if local_release:
+        headers["X-OCR-Page"] = str(page_no)
     key = _pos.environ.get("READDOC_OCR_KEY", "")
     if key:
         headers["Authorization"] = key
     t0 = _ptime.time()
     # An inference pool returns intermittent 503 "pool not ready" (scale-down, cold start), so 503 is retried with backoff; every other error is raised.
     resp = None
-    for attempt in range(6):
+    for attempt in range(1 if local_release else 6):
         req = urllib.request.Request(f"{base}/ocr", data=data, headers=headers, method="POST")
         try:
-            resp = _pjson.loads(urllib.request.urlopen(req, timeout=300).read())
+            resp = _pjson.loads(urllib.request.urlopen(req, timeout=100 if local_release else 300).read())
             break
         except urllib.error.HTTPError as e:
-            if e.code == 503 and attempt < 5:
+            if local_release and e.code == 422:
+                failed = _pjson.loads(e.read())
+                reason = failed.get("status", "error")
+                if reason not in ("orientation_unknown", "empty", "timeout", "error"):
+                    reason = "error"
+                raise _LocalOCRFailure(reason) from e
+            if not local_release and e.code == 503 and attempt < 5:
                 _ptime.sleep(3 + attempt * 3)
                 continue
             raise
     md = resp.get("text_with_img_link") or resp.get("text") or ""
+    if local_release:
+        import hashlib
+        if resp.get("ocr_release") != local_release or resp.get("source_pdf_sha256") != hashlib.sha256(data).hexdigest() or resp.get("page") != page_no or resp.get("status") != "ok":
+            raise RuntimeError("Local OCR version/provenance/status mismatch")
+        md = ("`[本地 OCR 识别文字；未经逐字人工校验；表格结构与图表语义未验证; figure not read: OCR text only]`\n\n" + md)
     _trace({"stage": "ocr", "page": page_no,
             "ms": int((_ptime.time() - t0) * 1000), "status": "done",
             "has_img": "<img" in md})
@@ -486,7 +515,12 @@ def _pdf_to_images(path, page_nos, dpi=150):
 
 
 def _ocr_workdir(path):
-    stem = _pos.path.splitext(_pos.path.basename(path))[0].replace(" ", "_")
+    import hashlib
+    digest = hashlib.sha256()
+    with open(path, "rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    stem = digest.hexdigest()
     for base in ("/workspace/.readdoc_pdf_img", "/tmp/.readdoc_pdf_img"):
         try:
             d = _pos.path.join(base, stem)
@@ -562,14 +596,18 @@ def _deep_page(path, p, pagew, pageh, outdir):
     Returns (body, tag, is_text)."""
     d = _pdf_route_decide(path, p, pagew, pageh)
     text = d["text"]
-    if d["route"] == "ocr":
+    local_ocr = bool(_pos.environ.get("READDOC_LOCAL_OCR_RELEASE"))
+    if d["route"] == "ocr" or local_ocr:
         try:
             md = _ocr_page(path, p, outdir)
         except Exception as e:
+            failure = str(e) if isinstance(e, _LocalOCRFailure) else type(e).__name__
             return ((text or "(no extractable text)")
-                    + f"\n\n`[OCR failed: {type(e).__name__}; text-layer fallback]`",
+                    + f"\n\n`[OCR failed: {failure}; text-layer fallback]`",
                     " | OCR failed", False)
         if md is not None:
+            if local_ocr and text.strip():
+                md = "`[原生文字层]`\n\n" + _text_body(path, p, pagew, text) + "\n\n" + md
             return (md, " | OCR", False)
         note = (f"`[routed to OCR — {d['reason']}; OCR endpoint not configured "
                 f"(set READDOC_OCR_URL). Showing text-layer fallback below.]`")
@@ -662,8 +700,14 @@ def _pdf_to_md(path, pdf_mode="auto", pages=None):
 
     # auto = overview (verdict only; ocr pages are placeholders) / image = deep read (runs the real routing logic). Concurrent per page.
     if pdf_mode == "image":
+        deferred = []
+        if _pos.environ.get("READDOC_LOCAL_OCR_RELEASE") and len(sel) > 1:
+            deferred, sel = sel[1:], sel[:1]
         results = _map_pages(sel, lambda p: _deep_page(path, p, pagew, pageh, outdir))
         mode_note = f"deep read (pdf_mode=image) — {len(sel)} page(s) executed"
+        if deferred:
+            mode_note += (f"; not read: pages {','.join(map(str, deferred))} "
+                          "— local OCR budget is one page per call; continue with pages=N")
     else:
         results = _map_pages(sel, lambda p: _overview_page(path, p, pagew, pageh))
         mode_note = ("overview (pdf_mode=auto) — figure/scan pages are flagged, not read; "

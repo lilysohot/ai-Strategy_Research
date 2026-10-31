@@ -1,0 +1,41 @@
+{
+  "release": "rapidocr-prod-dd340f6c8a6592ff",
+  "image": "sha256:85671e83e43b537dbfc543bfa903f0441ec9fb8a4d68a6e236efa84df8443ddc",
+  "base_image": "sha256:141ee6ffbc6d0ec0c025f9deccbf93ae832f6721ef90018de93312b6dfc36c1b",
+  "files": {
+    "page_orientation.py": "34c70779d93d9a9df8ad561911bb54dc68d68d5e55a92f4761e0b4433933ea1a",
+    "body_reader.py": "8134306157d6f1f4890cdf9cb933e02b0c247769697ddb8bd1cbf5099739471c",
+    "config.py": "89fae68d50615ca17fbfb058030ad1454f06daa3f5b54cd86d84c936f2d120b3",
+    "service.py": "b04371bc14ae7227e68ff806264054112170b49ca825e93b943312c2d68819c5",
+    "worker.py": "13a45ad1e727de7258eea99368c32a9f23dba720d8b4b4b43bf0e404f3ea2ffd"
+  },
+  "schema_version": 1,
+  "host_files": {
+    "plugins/local_ocr/client.py": "da6f66abe20c3ef1c3a07b956af36c1fda7c52098c160566005f4f4652017738",
+    "plugins/corpus/preparation/readers/local_ocr.py": "aec7533fa3b0a746148cb561209bae60a0f01d919a42a97ab24631b50683b745",
+    "plugins/corpus/preparation/readers/__init__.py": "e88100623849fcd519d85e0ec40e4eec0d1edf061e46d98784ff67a3283bb828",
+    "plugins/tools/_reader_pdf.py": "36933317320859b02971a844c71a0433e088b72aec3cd3af7ddb994103cf526d",
+    "plugins/tools/corpus_fetch.py": "ff76e57318f4a6b123bab459af2135e9f7142e2b155632c217ac8be93fabb345",
+    "server/routes/corpus.py": "17915a713543b791428b481543feda4f3282487f62dd4b048598036fc4e76ddb",
+    "deploy/Dockerfile.ocr": "34087c9b000768cf1e0a9600c3ea2486a5bfee749ca36ead0b881310a1ae2339",
+    "tools/local_ocr_release.py": "f1e553a3df9e4cdf92326da347059b41492f126d0000b15e0b3bb8c5b2f953f0"
+  },
+  "scope": "local WSL production; preparation and read_file; no corpus backfill",
+  "activation_utc": "2026-10-31T05:12:54.281891+00:00",
+  "validation": {
+    "related_tests_passed": 218,
+    "frozen_oriented_checks_passed": 49,
+    "frozen_oriented_checks_total": 49,
+    "unknown_direction_pages_held": 1,
+    "real_bwrap_read_file": "passed",
+    "preparation_native_units_preserved": 3,
+    "preparation_ocr_units": 537,
+    "post_activation_business_search_fetch": "passed",
+    "preflight": "passed",
+    "import_smoke_stage_1": "passed",
+    "import_smoke_stage_2": "passed",
+    "check_symbols": "passed",
+    "targeted_ruff": "passed",
+    "targeted_pyright": "passed"
+  }
+}

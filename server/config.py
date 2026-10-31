@@ -66,6 +66,9 @@ class ServerConfig(BaseSettings):
     host: str = "0.0.0.0"
     port: int = 8000
 
+    # Public account creation is opt-in; existing users can always log in.
+    registration_enabled: bool = False
+
     # — Concurrency / timeouts ————————————————————————————————
     # Worker subprocess pool size. Runs in the *same* session are serialised by
     # the orchestrator; this is the cross-session parallelism ceiling.

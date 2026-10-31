@@ -64,6 +64,7 @@ class _FakeHit:
 class _FakeEvidence:
     def __init__(self, text: str) -> None:
         self.text = text
+        self.units = ()
 
 
 class _FakeService:
@@ -160,6 +161,21 @@ async def test_document_fetch(app_client, auth_headers, fake_service) -> None:
     )
     assert response.status_code == 200
     assert response.json()["text"] == "权威原文"
+
+
+async def test_document_fetch_marks_ocr(app_client, auth_headers, fake_service, monkeypatch) -> None:
+    from types import SimpleNamespace
+
+    evidence = SimpleNamespace(text="识别文字", units=[SimpleNamespace(element="local_ocr:line:1")])
+    monkeypatch.setattr(fake_service, "fetch_verbatim", lambda *_: evidence)
+    response = await app_client.get(
+        "/api/corpus/documents/cv2:abc",
+        params={"locator": "chunk:abc:body:0000"},
+        headers=auth_headers,
+    )
+    assert response.status_code == 200
+    assert response.json()["text"] == "识别文字"
+    assert response.json()["ocr_unverified"] is True
 
 
 def _structured_error(code: str, reason: str) -> Exception:

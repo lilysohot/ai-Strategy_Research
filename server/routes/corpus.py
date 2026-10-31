@@ -178,6 +178,14 @@ async def corpus_document(
         "doc_id": doc_id,
         "locator": locator,
         "text": evidence.text,
+        **(
+            {
+                "ocr_unverified": True,
+                "ocr_notice": "含 OCR 识别文字，未逐字人工校验；表格结构、图表语义未验证。",
+            }
+            if any((unit.element or "").startswith("local_ocr:") for unit in evidence.units)
+            else {}
+        ),
     }
 
 

@@ -57,6 +57,9 @@ import type {
 
 // ── Auth (server/routes/auth.py) ────────────────────────────────
 export const auth = {
+  registrationStatus: () =>
+    request<{ enabled: boolean }>('/auth/registration-status', { anonymous: true }),
+
   register: (username: string, password: string) =>
     request<User>('/auth/register', {
       method: 'POST',

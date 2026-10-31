@@ -1,0 +1,6 @@
+ARG OCR_BASE=frontier-ocr-base:20261031
+FROM ${OCR_BASE}
+COPY code/ /opt/ocr-code/
+ENV PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 OCR_DATA_ROOT=/results OCR_TOKEN_FILE=/run/ocr-token
+WORKDIR /opt/ocr-code
+ENTRYPOINT ["/opt/rapid/bin/python", "/opt/ocr-code/service.py"]

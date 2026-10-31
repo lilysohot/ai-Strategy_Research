@@ -1,0 +1,34 @@
+{
+  "reviewer": "user",
+  "reviewed_at": "2026-10-31T04:42:29.090634+00:00",
+  "scope": "shadow_manual_assistance_only",
+  "user_statement": "4 页均可用于旁路人工辅助读取",
+  "pages": [
+    {
+      "id": "review20",
+      "page": 2,
+      "decision": "accepted_for_shadow_manual_assistance",
+      "source_sha256": "dec517dc15fa0e96a8aeee93473d664a921db73d266bd3baf1193f1e6d33ce72"
+    },
+    {
+      "id": "tech",
+      "page": 4,
+      "decision": "accepted_for_shadow_manual_assistance",
+      "source_sha256": "c317fdc23cb4b753fb1defdd40076a4f7f8af7c2be18e6f35ba10830b221378e"
+    },
+    {
+      "id": "discover",
+      "page": 3,
+      "decision": "accepted_for_shadow_manual_assistance",
+      "source_sha256": "031ec28937c81a3dacd4ef9d42d52ff548ce723e22c205664870eb3a3dfa29a8"
+    },
+    {
+      "id": "cyber",
+      "page": 4,
+      "decision": "accepted_for_shadow_manual_assistance",
+      "source_sha256": "83ae41817a4f447aa7f19aefad2058fd5eb3de72f34d291428ae35acf5d25a75"
+    }
+  ],
+  "production_ingestion": false,
+  "frozen_evidence_sha256": "d7cb32bd6cc079301a2db0fcec0c312d7704939ed2410e86d7237f79716f3486"
+}

@@ -28,6 +28,19 @@ import pytest
 
 
 @pytest.fixture(autouse=True)
+def _isolated_ocr_service(monkeypatch):
+    """Production .env must never opt offline tests into real OCR requests."""
+    monkeypatch.setenv("CORPUS_LOCAL_OCR_ENABLED", "0")
+    for key in (
+        "CORPUS_LOCAL_OCR_RELEASE",
+        "READDOC_LOCAL_OCR_RELEASE",
+        "READDOC_OCR_URL",
+        "READDOC_OCR_KEY",
+    ):
+        monkeypatch.setenv(key, "")
+
+
+@pytest.fixture(autouse=True)
 def _isolated_search_receipts(tmp_path, monkeypatch):
     """Search serialization must never write receipts into the live corpus cache."""
     monkeypatch.setenv("CORPUS_SEARCH_REF_ROOT", str(tmp_path / "search-receipts"))
@@ -47,6 +60,9 @@ async def _isolated_database(tmp_path, monkeypatch):
         return
 
     cfg = get_config()
+    # Existing API fixtures create isolated test users through registration.
+    # Production defaults stay closed; registration-policy tests override this.
+    monkeypatch.setattr(cfg, "registration_enabled", True)
     # Local deployment switches must never silently opt a test into background
     # monitoring. Pipeline tests explicitly enable the mode they exercise.
     monkeypatch.setattr(cfg, "monitor_enabled", False)

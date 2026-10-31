@@ -33,6 +33,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 from typing import Any
 
+from server.cache_metrics import cache_attempt_stats
 from server.config import run_dir_for
 from server.relay import trajectory_records
 from server.trajectory_sources import discover_trajectory_sources
@@ -157,6 +158,7 @@ def usage_for_run(run_id: str) -> dict[str, Any]:
     return {
         **aggregate, "status": status, "trajectory_files": sources,
         "unmetered_calls": missing_usage,
+        "cache_attempts": cache_attempt_stats(records),
     }
 
 

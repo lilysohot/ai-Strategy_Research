@@ -213,7 +213,11 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
         assert summary["report_contract"]["kind"] == "system_status"
         assert summary["answer_status"] == "not_found"
     else:
-        assert summary["final_answer"].startswith(answer)
+        if verdict == "unchecked":
+            assert summary["final_answer"].startswith("**Partial result:")
+            assert f"\n\n{answer}" in summary["final_answer"]
+        else:
+            assert summary["final_answer"].startswith(answer)
         assert summary["report_contract"]["kind"] == ("partial" if verdict == "unchecked" else "complete")
         assert summary["report_contract"]["task_board"][0]["resolution"] == (
             "blocked" if verdict == "unchecked" else "resolved"

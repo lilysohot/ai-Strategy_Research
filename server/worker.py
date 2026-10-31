@@ -128,8 +128,9 @@ def _export_cross_mode_context(
         os.environ.get("REPLAY_MAX_TOKENS")
         or max(1, int(os.environ.get("OPENAI_CONTEXT_WINDOW", "262144")) // 2)
     )
+    native_payload = native_path.read_text(encoding="utf-8")
     context = export_conversation_context(
-        native_path.read_text(encoding="utf-8"),
+        native_payload,
         inherited_context=inherited_context,
         max_tokens=portable_max_tokens,
     )
@@ -139,6 +140,11 @@ def _export_cross_mode_context(
         answer_status=answer_status,
         max_tokens=portable_max_tokens,
     )
+    native_header = json.loads(native_payload)
+    if native_header.get("pipeline_id") == "agent_team":
+        from workflows._shared.team_history import with_team_window
+
+        context = with_team_window(context)
     output_path = run_root.joinpath(*CROSS_MODE_CONTEXT_RELPATH)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     tmp = output_path.with_suffix(output_path.suffix + ".tmp")
@@ -189,14 +195,17 @@ def _load_continuity_inputs(
     return replay_payload, cross_mode_context
 
 
-def _load_research_history_contexts(run_root: Path) -> list[str]:
-    """Load and remove the parent's owner-only portable-history staging file."""
+def _load_research_history_contexts(
+    run_root: Path, *, inherited_context: str = "",
+) -> list[str]:
+    """Load archived sources plus the full head behind the bounded model view."""
 
     from server.history import RESEARCH_HISTORY_STAGE
 
     path = run_root / RESEARCH_HISTORY_STAGE
+    head = [inherited_context] if inherited_context else []
     if not path.is_file():
-        return []
+        return head
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
         if not isinstance(value, dict) or value.get("schema") != "research-history-stage/1":
@@ -204,7 +213,7 @@ def _load_research_history_contexts(run_root: Path) -> list[str]:
         contexts = value.get("contexts")
         if not isinstance(contexts, list) or any(not isinstance(item, str) for item in contexts):
             raise RuntimeError("research history stage contexts is not a string list")
-        return list(contexts)
+        return [*contexts, *head]
     except (OSError, json.JSONDecodeError) as exc:
         raise RuntimeError("research history stage is unreadable") from exc
     finally:
@@ -793,7 +802,9 @@ async def run_once(args: argparse.Namespace) -> int:
         from plugins.tools.research_history import bind_research_history
 
         contexts = (_load_monitor_history_contexts(run_root) if monitoring
-                    else _load_research_history_contexts(run_root))
+                    else _load_research_history_contexts(
+                        run_root, inherited_context=cross_mode_context,
+                    ))
         history_token = bind_research_history(contexts)
     if monitoring:
         metadata["_sys_prompt_addendum"] = metadata.get("_sys_prompt_addendum", "") + (
@@ -949,6 +960,14 @@ async def run_once(args: argparse.Namespace) -> int:
         "summary_usage": summary_usage,
         "evidence_boundary": evidence_boundary,
     }
+    # Attempt diagnostics are separate from accepted-turn billing counters.
+    # A cancelled stream may have no usage; retain that uncertainty explicitly.
+    from server.cache_metrics import cache_stats_for_directory
+
+    try:
+        summary["cache_attempts"] = cache_stats_for_directory(run_root)
+    except OSError:
+        logging.getLogger("worker").warning("Could not read attempt cache diagnostics", exc_info=True)
     # F22 / F06-RUN-3 + F06 power durability: atomic + fsynced persist (see
     # persist_summary). A write failure is logged but must never mask the outcome.
     persist_summary(run_root, summary)

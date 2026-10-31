@@ -312,6 +312,7 @@ def _item(
                 {"unit_id": unit.unit_id, "page": unit.page} for unit in evidence.units
             ]
     item["evidence_ref"] = fetch_evidence_ref("cv2:" + evidence.build_id, item)
+    item.update(_ocr_metadata(evidence))
     return item
 
 
@@ -382,6 +383,15 @@ def _structure_status(payload: dict[str, Any]) -> str:
     return "unknown"
 
 
+def _ocr_metadata(evidence: Any) -> dict[str, Any]:
+    if any((unit.element or "").startswith("local_ocr:") for unit in evidence.units):
+        return {
+            "ocr_unverified": True,
+            "ocr_notice": "含 OCR 识别文字，未逐字人工校验；表格结构、图表语义未验证。",
+        }
+    return {}
+
+
 def _compact_payload(full: dict[str, Any]) -> dict[str, Any]:
     """从 full 结果派生紧凑视图（A0.2）：正文优先 + 最小引用映射 + 结构状态 + 可解析引用。
 
@@ -416,7 +426,14 @@ def _compact_payload(full: dict[str, Any]) -> dict[str, Any]:
         compact["native_slices"] = full["native_slices"]
     if "evidence_ref" in full:
         compact["evidence_ref"] = full["evidence_ref"]
-    for key in ("content_role", "relations", "relation_status", "label_path"):
+    for key in (
+        "content_role",
+        "relations",
+        "relation_status",
+        "label_path",
+        "ocr_unverified",
+        "ocr_notice",
+    ):
         if key in full:
             compact[key] = full[key]
     compact.update(
@@ -588,6 +605,7 @@ def _full_payload(
         # 权威原文 code point 区间（§4.2，来自 corpus_chunks.source_ranges）
         "source_ranges": [list(span) for span in evidence.source_ranges],
         "hint": _FULL_HINT,
+        **_ocr_metadata(evidence),
     }
     if getattr(evidence, "native_slices", ()):
         payload["native_slices"] = _native_slices(evidence, 0, len(evidence.text))
@@ -606,6 +624,11 @@ def _full_payload(
                     "unit_id": unit.unit_id,
                     "page": unit.page,
                     "element": unit.element,
+                    **(
+                        {"text_origin": "ocr", "ocr_unverified": True}
+                        if (unit.element or "").startswith("local_ocr:")
+                        else {}
+                    ),
                     "cells": [list(cell) for cell in unit.cells],
                 }
                 for unit in evidence.units
@@ -733,6 +756,11 @@ def _page(
                         "unit_id": unit.unit_id,
                         "page": unit.page,
                         "element": unit.element,
+                        **(
+                            {"text_origin": "ocr", "ocr_unverified": True}
+                            if (unit.element or "").startswith("local_ocr:")
+                            else {}
+                        ),
                         "cells": [list(cell) for cell in unit.cells],
                     }
                     for unit in evidence.units
@@ -1008,7 +1036,9 @@ async def corpus_fetch(
         ``label_path_count`` 明示省略；提高预算可重取完整诊断。旧句柄／来源已撤销／
         游标类型不符时返回 ``ok=false``。
     """
-    return publish_fetch_references(await _fetch(doc_id, locator, locators, cursor, view, max_chars))
+    return publish_fetch_references(
+        await _fetch(doc_id, locator, locators, cursor, view, max_chars)
+    )
 
 
 async def _fetch(

@@ -5,8 +5,9 @@ happen and cut a healthy request's reasoning watchdog to 1 s at 95.8 s and
 55.8 s remaining; the "reserved" retry was then refused (53.1 s < 65 s floor)
 and the run ended with an incomplete response.
 
-The policy pinned here is: reserve only when the remaining budget holds both
-the current attempt and the retry; otherwise give the request one bounded
+The policy pinned here is: reserve a recovery window, allowing 60 s of first
+reasoning by spending part of the worst-case TTFT reserve when budget allows;
+admit retries only against actual remaining time. Short budgets keep one bounded
 last chance inside the absolute deadline. These tests drive the real
 ``run_agent_loop``/``call_llm`` path with time and the model boundary mocked,
 so they apply identically to team members and the single agent.
@@ -106,12 +107,38 @@ def test_reservation_is_not_taken_when_it_buys_almost_nothing():
     assert timeout == pytest.approx(116.0)
 
 
-@pytest.mark.parametrize(("remaining", "expected"), [(130.0, 8.0), (180.0, 58.0)])
+@pytest.mark.parametrize(("remaining", "expected"), [(130.0, 8.0), (200.0, 78.0)])
 def test_a_retry_that_fits_keeps_its_reserved_window(remaining, expected):
     timeout, mode = _decide(remaining)
 
     assert mode == "reserved"
     assert timeout == pytest.approx(expected)
+
+
+@pytest.mark.parametrize("remaining", [137.0, 164.0, 180.0])
+def test_first_reasoning_window_is_relaxed_to_sixty_seconds(remaining):
+    timeout, mode = _decide(remaining)
+
+    assert (timeout, mode) == (60.0, "reserved_relaxed")
+
+
+@pytest.mark.parametrize(("configured", "expected", "mode"), [
+    (30.0, 30.0, "configured"),
+    (50.0, 42.0, "reserved"),
+])
+def test_relaxation_requires_room_for_recovery_and_respects_explicit_limits(
+    configured, expected, mode,
+):
+    assert _decide(136.0) == (14.0, "reserved")
+    assert _decide(None) == (120.0, "configured")
+    timeout, actual_mode = _call._first_attempt_reasoning_watchdog(
+        available_s=164.0,
+        effective_timeout_s=600.0,
+        configured_s=configured,
+        first_chunk_s=_WEB_FIRST_CHUNK_S,
+        retry_floor_s=_WEB_RETRY_FLOOR_S,
+    )
+    assert (timeout, actual_mode) == (expected, mode)
 
 
 def test_no_last_chance_fits_so_only_the_absolute_deadline_bounds_the_attempt():
@@ -160,7 +187,7 @@ async def test_healthy_response_survives_a_short_remaining_wall(monkeypatch, rem
     assert now[0] < remaining
 
 
-@pytest.mark.parametrize(("remaining", "reserved"), [(130.0, 8.0), (180.0, 58.0)])
+@pytest.mark.parametrize(("remaining", "reserved"), [(130.0, 8.0), (164.0, 60.0)])
 async def test_short_wall_still_recovers_when_retry_fits(monkeypatch, remaining, reserved):
     now = [0.0]
     watchdogs: list[float | None] = []
@@ -193,6 +220,59 @@ async def test_short_wall_still_recovers_when_retry_fits(monkeypatch, remaining,
     # The retry keeps the configured watchdog; only the first attempt reserves.
     assert watchdogs[1] == pytest.approx(float(cfg["reasoning_only_timeout_s"]))
     assert now[0] <= min(remaining, float(cfg["logical_call_timeout_s"]))
+
+
+async def test_answer_after_fifty_seconds_finishes_without_restarting(monkeypatch):
+    now = [0.0]
+    calls = []
+
+    async def stream(llm, messages, timeout, on_delta, **kwargs):
+        calls.append({**kwargs, "timeout": timeout})
+        now[0] += 2.0
+        watchdog = kwargs["reasoning_only_timeout_s"]
+        if watchdog < 50.0:
+            now[0] += watchdog
+            raise LLMReasoningRunaway(
+                elapsed_s=watchdog,
+                estimated_tokens=2500,
+                trigger="time",
+                partial_response=LLMResponse(content="", reasoning_content="unfinished"),
+            )
+        now[0] += 50.0
+        return LLMResponse(content="finished after reasoning", finish_reason="stop")
+
+    _patch_clock(monkeypatch, now, 164.0)
+    monkeypatch.setattr(_call, "_stream_llm_response", stream)
+    result = await _run_single_agent(_web_agent_config())
+
+    assert result.final_content == "finished after reasoning"
+    assert len(calls) == 1
+    assert calls[0]["reasoning_only_timeout_s"] == 60.0
+    assert calls[0]["first_chunk_s"] == 45.0
+    assert calls[0]["timeout"] == 164.0
+
+
+async def test_slow_first_chunk_does_not_launch_retry_without_budget(monkeypatch):
+    now = [0.0]
+    calls = []
+
+    async def stream(llm, messages, timeout, on_delta, **kwargs):
+        calls.append(kwargs)
+        now[0] += 44.0 + kwargs["reasoning_only_timeout_s"]
+        raise LLMReasoningRunaway(
+            elapsed_s=kwargs["reasoning_only_timeout_s"],
+            estimated_tokens=3000,
+            trigger="time",
+            partial_response=LLMResponse(content="", reasoning_content="unfinished"),
+        )
+
+    _patch_clock(monkeypatch, now, 164.0)
+    monkeypatch.setattr(_call, "_stream_llm_response", stream)
+    await _run_single_agent(_web_agent_config())
+
+    assert len(calls) == 1
+    assert calls[0]["reasoning_only_timeout_s"] == 60.0
+    assert now[0] < 164.0
 
 
 # ── Sustained non-progress stays bounded ──────────────────────────────

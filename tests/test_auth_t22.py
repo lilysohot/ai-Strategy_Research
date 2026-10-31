@@ -78,6 +78,49 @@ async def _login(client, username: str = "alice",
 
 
 # ── FR-1.1: registration ───────────────────────────────────────
+def test_registration_defaults_closed(monkeypatch):
+    from server.config import ServerConfig
+
+    monkeypatch.delenv("SERVER_REGISTRATION_ENABLED", raising=False)
+    assert ServerConfig(_env_file=None).registration_enabled is False
+    monkeypatch.setenv("SERVER_REGISTRATION_ENABLED", "true")
+    assert ServerConfig(_env_file=None).registration_enabled is True
+
+
+@pytest.mark.asyncio
+async def test_registration_closed_preserves_login(client, monkeypatch):
+    from server.config import get_config
+    from server.store import get_user_by_username
+
+    await _register(client, "existing")
+    monkeypatch.setattr(get_config(), "registration_enabled", False)
+    response = await client.get("/api/auth/registration-status")
+    assert response.status_code == 200
+    assert response.json() == {"enabled": False}
+    response = await client.post(
+        "/api/auth/register", json={"username": "blocked", "password": "Str0ngPass1"}
+    )
+    assert response.status_code == 403
+    assert response.json()["detail"] == "注册暂未开放"
+    assert await get_user_by_username("blocked") is None
+    token = await _login(client, "existing")
+    response = await client.get("/api/auth/me", headers=_auth(token))
+    assert response.status_code == 200
+    assert response.json()["username"] == "existing"
+
+
+@pytest.mark.asyncio
+async def test_registration_can_be_reopened(client, monkeypatch):
+    from server.config import get_config
+
+    monkeypatch.setattr(get_config(), "registration_enabled", False)
+    monkeypatch.setattr(get_config(), "registration_enabled", True)
+    response = await client.get("/api/auth/registration-status")
+    assert response.status_code == 200
+    assert response.json() == {"enabled": True}
+    await _register(client)
+
+
 @pytest.mark.asyncio
 async def test_register_returns_201_and_user_body(client):
     resp = await client.post("/api/auth/register",

@@ -1,0 +1,225 @@
+{
+  "run": "data\\ocr-shadow-runs\\f61d7cca8ca248a9913dd0ca2b3fb586",
+  "release_id": "rapidocr-small-shadow-20261031-v1",
+  "current_release_sha256": "006b6634b16b5f85192773c2cf3efb5916f9bfe962d1b52e2e7f864170532508",
+  "executed_manifest_sha256": "b1eaca3aadff83ab283f9b56881ae03f842f22b1feed03112ee560c4ff10c341",
+  "adapter_ast_identical_after_final_blank_line_formatting": true,
+  "pages": 5,
+  "image_checks_matched": 56,
+  "image_checks_total": 56,
+  "image_records": [
+    {
+      "id": "doc0-p2",
+      "source_sha256": "dec517dc15fa0e96a8aeee93473d664a921db73d266bd3baf1193f1e6d33ce72",
+      "status": "orientation_unknown",
+      "matched": 7,
+      "total": 7,
+      "orientation_identical_to_holdout": true,
+      "baselines_identical": {
+        "auto": true,
+        "text": true,
+        "image": true
+      },
+      "result_sha256": "4fbdc9cd92e09eb5a7487ac05e2ed9224ce3056ba322f5219e8ef2911f7fb8ee"
+    },
+    {
+      "id": "doc1-p4",
+      "source_sha256": "c317fdc23cb4b753fb1defdd40076a4f7f8af7c2be18e6f35ba10830b221378e",
+      "status": "needs_review",
+      "matched": 7,
+      "total": 7,
+      "orientation_identical_to_holdout": true,
+      "baselines_identical": {
+        "auto": true,
+        "text": true,
+        "image": true
+      },
+      "result_sha256": "27f7693471f0e6f623c19963d2257b700598fb970fc27d85dba465fa8acbbd7a"
+    },
+    {
+      "id": "doc2-p3",
+      "source_sha256": "031ec28937c81a3dacd4ef9d42d52ff548ce723e22c205664870eb3a3dfa29a8",
+      "status": "needs_review",
+      "matched": 31,
+      "total": 31,
+      "orientation_identical_to_holdout": true,
+      "baselines_identical": {
+        "auto": true,
+        "text": true,
+        "image": true
+      },
+      "result_sha256": "9a1c14e3b64e264420d9fad847e0747393b9385177221287cd9b83088e81bdb6"
+    },
+    {
+      "id": "doc3-p4",
+      "source_sha256": "83ae41817a4f447aa7f19aefad2058fd5eb3de72f34d291428ae35acf5d25a75",
+      "status": "needs_review",
+      "matched": 11,
+      "total": 11,
+      "orientation_identical_to_holdout": true,
+      "baselines_identical": {
+        "auto": true,
+        "text": true,
+        "image": true
+      },
+      "result_sha256": "29907f167624a3711b0142b9a4f50880481d9b46d5414afe8da7d840ea712e25"
+    }
+  ],
+  "baseline_outputs_identical": 15,
+  "native_record": {
+    "status": "needs_review",
+    "source": "native",
+    "line_count": 35,
+    "coverage": "suspected_missing",
+    "issue_codes": [
+      "native_coverage_gap"
+    ],
+    "baselines_identical": {
+      "auto": true,
+      "text": true,
+      "image": true
+    }
+  },
+  "environment": {
+    "observed_at_utc": "2026-10-31T04:41:16.339364+00:00",
+    "api_pid": 577202,
+    "api_cwd": "/home/administrator/FrontierAgent",
+    "api_executable": "/home/administrator/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/bin/python3.12",
+    "api_argv0": "/home/administrator/FrontierAgent/.venv/bin/python",
+    "selected_startup_environment": {
+      "VIRTUAL_ENV": "/home/administrator/FrontierAgent/.venv"
+    },
+    "current_checkout_server_config_backend": "bwrap",
+    "probe_interpreter": "/home/administrator/FrontierAgent/.venv/bin/python",
+    "probe_packages": {
+      "rapidocr": null,
+      "onnxruntime": null,
+      "PyMuPDF": "1.28.2",
+      "pypdf": "6.16.2"
+    },
+    "active_worker_pids": [
+      3114493,
+      3114501,
+      3114502
+    ],
+    "live_task_sandbox_verified": false,
+    "notes": "Read-only local process/config observation; no live worker was launched, no claim of remote production identity or loaded source equivalence.",
+    "shadow_containers": [
+      {
+        "name": "/frontier-ocr-shadow-e305ded0dfc646c39e47e33dd34e88a5",
+        "image_id": "sha256:141ee6ffbc6d0ec0c025f9deccbf93ae832f6721ef90018de93312b6dfc36c1b",
+        "network_mode": "none",
+        "readonly_rootfs": true,
+        "memory_bytes": 4294967296,
+        "nano_cpus": 2000000000,
+        "mounts": [
+          {
+            "destination": "/frozen",
+            "rw": false
+          },
+          {
+            "destination": "/inputs",
+            "rw": false
+          },
+          {
+            "destination": "/out",
+            "rw": true
+          }
+        ]
+      }
+    ],
+    "worker_observations": [
+      {
+        "pid": 3114493,
+        "executable": "/usr/bin/bwrap",
+        "argv0": "/usr/bin/bwrap",
+        "cwd": "/home/administrator/FrontierAgent",
+        "namespace_links": {
+          "mnt": "mnt:[4026532392]",
+          "pid": "pid:[4026532394]",
+          "user": "user:[4026531837]"
+        },
+        "environment": {
+          "VIRTUAL_ENV": "/home/administrator/FrontierAgent/.venv",
+          "SERVER_SANDBOX_BACKEND": "bwrap"
+        },
+        "status_fields": [
+          "Name:\tbwrap",
+          "Uid:\t1000\t1000\t1000\t1000",
+          "NSpid:\t3114493"
+        ]
+      },
+      {
+        "pid": 3114501,
+        "executable": "/usr/bin/bwrap",
+        "argv0": "/usr/bin/bwrap",
+        "cwd": "/home/administrator/FrontierAgent",
+        "namespace_links": {
+          "mnt": "mnt:[4026532479]",
+          "pid": "pid:[4026532628]",
+          "user": "user:[4026532476]"
+        },
+        "environment": {
+          "VIRTUAL_ENV": "/home/administrator/FrontierAgent/.venv",
+          "SERVER_SANDBOX_BACKEND": "bwrap"
+        },
+        "status_fields": [
+          "Name:\tbwrap",
+          "Uid:\t1000\t1000\t1000\t1000",
+          "NSpid:\t3114501\t1"
+        ]
+      },
+      {
+        "pid": 3114502,
+        "executable": "/home/administrator/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/bin/python3.12",
+        "argv0": "/home/administrator/FrontierAgent/.venv/bin/python",
+        "cwd": "/home/administrator/FrontierAgent",
+        "namespace_links": {
+          "mnt": "mnt:[4026532479]",
+          "pid": "pid:[4026532628]",
+          "user": "user:[4026532476]"
+        },
+        "environment": {
+          "VIRTUAL_ENV": "/home/administrator/FrontierAgent/.venv",
+          "SERVER_SANDBOX_BACKEND": "bwrap"
+        },
+        "status_fields": [
+          "Name:\tpython",
+          "Uid:\t1000\t1000\t1000\t1000",
+          "NSpid:\t3114502\t2"
+        ]
+      }
+    ],
+    "api_namespaces": {
+      "mnt": "mnt:[4026532392]",
+      "pid": "pid:[4026532394]",
+      "user": "user:[4026531837]"
+    },
+    "observed_worker_packages": {
+      "rapidocr": [],
+      "onnxruntime": [],
+      "pymupdf": [
+        "pymupdf-1.28.2.dist-info"
+      ],
+      "pypdf": [
+        "pypdf-6.16.2.dist-info"
+      ]
+    },
+    "worker_visible_pdf_reader_sha256": "418a8554ed08fb174d50fcd6f149f6c5f38b5dfbc0a7b099025706435600fa13",
+    "checkout_pdf_reader_sha256": "418a8554ed08fb174d50fcd6f149f6c5f38b5dfbc0a7b099025706435600fa13",
+    "local_worker_boundary_observed": true,
+    "live_task_ocr_execution_verified": false
+  },
+  "human_acceptance_scope": "previous_holdout_four_pages_shadow_manual_assistance_only",
+  "human_acceptance_sha256": "290c7b822219e53e92c87b365a507b26ab910d55d6fb2d04734b02a502c35d8a",
+  "production_ingestion": false,
+  "default_enabled": false,
+  "tests": {
+    "targeted_and_reader_bundle": 39,
+    "pyright": "passed",
+    "ruff": "passed",
+    "preflight": "passed",
+    "import_smoke": "passed",
+    "symbols": "passed"
+  }
+}

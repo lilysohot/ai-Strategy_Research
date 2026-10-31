@@ -2154,3 +2154,39 @@ def test_continuity_client_keeps_main_settings_and_only_disables_supported_reaso
     assert "reasoning_effort" not in seen[0]["extra_body"]
     assert seen[0]["max_tokens"] == 1024
     assert continuity.continuity_client("main", {"model": "unknown", "base_url": "https://example.test"}) == "main"
+
+
+def test_team_window_continues_after_round_trip_through_single_mode():
+    from workflows._shared.cross_mode_context import (
+        export_conversation_context,
+        render_context_tail,
+        with_published_answer,
+    )
+    from workflows._shared.team_history import render_team_history, with_team_window
+
+    def dump(messages, pipeline, run):
+        return build_dump(
+            messages=messages, system_prompt=_SYSTEM, tool_names=[], tools_hash="",
+            thinking_format="none", pipeline_id=pipeline, node_id="main_agent",
+            run_id=run, session_id=_SESSION,
+        )
+
+    first = with_team_window(export_conversation_context(dump(
+        [system_msg(_SYSTEM), user_msg("Keep the five-year horizon."), assistant_msg("Initial finding.")],
+        "agent_team", "team-first",
+    )))
+    native = dump(
+        [system_msg(_SYSTEM), user_msg(render_context_tail(first)),
+         user_msg("Also exclude leverage."), assistant_msg("Updated finding.")],
+        "stateful-react-agent", "single-next",
+    )
+    second = with_published_answer(
+        export_conversation_context(native, inherited_context=first), content="Updated finding.",
+    )
+    resumed = with_team_window(json.loads(canonical_json(second)))
+    old_records = first["team_history_window"]["records"]
+    assert resumed["team_history_window"]["records"][:len(old_records)] == old_records
+    rendered = render_team_history(resumed)
+    assert "five-year horizon" in rendered and "exclude leverage" in rendered
+    assert rendered.count("Updated finding.") == 1
+    assert not any("<cross-mode-context" in str(r.get("content")) for r in resumed["records"])

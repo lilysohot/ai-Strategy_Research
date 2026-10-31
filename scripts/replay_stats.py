@@ -29,6 +29,10 @@ Definitions, so the arithmetic cannot drift:
   (``server.usage`` reports ``status`` for exactly this reason).
 * ``summary_usage`` is reported separately from the main loop counters because
   the write-time summary call runs in an observer outside the trajectory.
+* ``reuse%`` is a legacy accepted-turn token ratio, not proof of cross-turn
+  cache reuse: a successful retry can reuse its discarded first request.
+  ``cache_attempts`` separates coordinator entry, first attempts and retries;
+  a bucket with unknown usage has no overall hit rate.
 
 The directory source takes each run's session id from summary.json, with the
 conversation dump as a fallback for older runs. Ingestion deletes that dump,
@@ -47,7 +51,7 @@ import asyncio
 import json
 import sys
 import uuid
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -57,7 +61,6 @@ if str(_REPO_ROOT) not in sys.path:
 
 #: Run-relative locations, as ``server.config.build_run_paths`` lays them out.
 _SUMMARY_RELPATH = ("run", "summary.json")
-_TRAJECTORY_RELPATH = ("run", "agent", "trajectories", "react_agent.jsonl")
 _DUMP_RELPATH = ("run", "conversation.json")
 
 
@@ -85,6 +88,7 @@ class TurnStat:
     summary_completion_tokens: int
     summary_cache_read_tokens: int
     error: str = ""
+    cache_attempts: dict[str, Any] = field(default_factory=dict)
 
     @property
     def replayed(self) -> bool:
@@ -133,6 +137,7 @@ def _turn_stat(
         summary_completion_tokens=int(summary_usage.get("completion_tokens", 0) or 0),
         summary_cache_read_tokens=int(summary_usage.get("cache_read_tokens", 0) or 0),
         error=error,
+        cache_attempts=dict(usage.get("cache_attempts") or {}),
     )
 
 
@@ -168,6 +173,7 @@ async def load_from_db(session_id: str) -> list[TurnStat]:
                     "cache_read_tokens": row.cache_read_tokens,
                     "llm_calls": row.llm_calls,
                     "status": usage_json.get("status"),
+                    "cache_attempts": usage_json.get("cache_attempts") or {},
                 },
                 replay=_replay_of(usage_json),
                 error=str(row.error or ""),
@@ -216,6 +222,8 @@ def load_from_runs_root(runs_root: Path) -> list[TurnStat]:
     restored copy) with no database at all — the same numbers, read from the
     files the run itself wrote.
     """
+    from server.cache_metrics import cache_attempt_stats
+    from server.trajectory_sources import discover_trajectory_sources, iter_merged_records
     from server.usage import aggregate_usage, replay_block_from_summary
 
     candidates: list[tuple[float, Path]] = []
@@ -232,18 +240,11 @@ def load_from_runs_root(runs_root: Path) -> list[TurnStat]:
         summary_file = _summary_path(run_dir)
         assert summary_file is not None  # only candidates were collected
         summary = json.loads(summary_file.read_text(encoding="utf-8"))
-        trajectory = run_dir.joinpath(*_TRAJECTORY_RELPATH)
-        records: list[dict[str, Any]] = []
-        if trajectory.is_file():
-            for line in trajectory.read_text(encoding="utf-8").splitlines():
-                line = line.strip()
-                if not line:
-                    continue
-                try:
-                    records.append(json.loads(line))
-                except ValueError:
-                    continue
+        records = [
+            record for record, _, _ in iter_merged_records(discover_trajectory_sources(run_dir))
+        ]
         usage = dict(aggregate_usage(records))
+        usage["cache_attempts"] = cache_attempt_stats(records)
         # Same three-way verdict as ``server.usage.usage_for_run`` so the two
         # sources cannot disagree about whether a run was metered at all.
         if not records:
@@ -369,6 +370,25 @@ def render(board: dict[str, Any]) -> str:
         )
 
     summary = board["summary"]
+    lines.append("\nAttempt cache diagnostics (unknown is not zero; entry = coordinator first request):")
+    for row in board["turns"]:
+        stats = row.get("cache_attempts") or {}
+        if not stats:
+            continue
+        fields = []
+        for label, key in (
+            ("entry", "coordinator_entry"), ("first", "first_attempts"),
+            ("retry", "retries"), ("all", "all_attempts"),
+        ):
+            bucket = stats.get(key) or {}
+            rate = bucket.get("hit_rate")
+            value = "unknown" if rate is None else f"{rate * 100:.1f}%"
+            fields.append(
+                f"{label}={value} ({bucket.get('attempts', 0)} attempts, "
+                f"{bucket.get('unknown_usage_attempts', 0)} unknown)"
+            )
+        lines.append(f"  {row['run_id'][:12]} " + "; ".join(fields))
+    lines.append("Legacy reuse above is an accepted-turn token ratio, not measured cross-turn cache reuse.")
     sessions = summary["sessions"]
     lines.append("")
     lines.append(

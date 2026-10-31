@@ -1,14 +1,24 @@
 <script setup lang="ts">
-import { computed, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import DisclaimerBar from '@/components/DisclaimerBar.vue'
 import { useAuthStore } from '@/stores/auth'
+import { auth as authApi } from '@/api'
 
 const auth = useAuthStore()
 const router = useRouter()
 
 const mode = ref<'login' | 'register'>('login')
+const registrationEnabled = ref(false)
+onMounted(async () => {
+  try {
+    const status = await authApi.registrationStatus()
+    registrationEnabled.value = status.enabled === true
+  } catch {
+    registrationEnabled.value = false
+  }
+})
 const username = ref('')
 const password = ref('')
 const confirm = ref('')
@@ -93,6 +103,7 @@ async function onSubmit() {
       const redirect = (router.currentRoute.value.query.redirect as string) || '/'
       router.replace(redirect)
     } else {
+      if (!registrationEnabled.value) return
       await auth.register(name, password.value)
       ElMessage.success('注册成功，正在登录…')
       // 注册成功后自动登录，保持流程连贯
@@ -124,6 +135,7 @@ async function onSubmit() {
 }
 
 function toggleMode() {
+  if (!registrationEnabled.value) return
   errorMsg.value = null
   confirm.value = ''
   mode.value = mode.value === 'login' ? 'register' : 'login'
@@ -205,15 +217,16 @@ function toggleMode() {
         </el-button>
       </el-form>
 
-      <div class="switch-row">
+      <div v-if="registrationEnabled" class="switch-row">
         <el-link type="primary" :underline="false" data-testid="switch" @click="toggleMode">
           {{ mode === 'login' ? '没有账号？点击注册' : '已有账号？点击登录' }}
         </el-link>
       </div>
 
-      <p class="hint">
+      <p v-if="registrationEnabled" class="hint">
         注册即表示你已知悉本系统为私有部署，所有 API Key 与对话数据仅存储于本服务器。
       </p>
+      <p v-else class="hint">注册暂未开放，已有账号可正常登录。</p>
     </el-card>
 
     <!-- The login page is outside AppShell, so it carries its own disclaimer. -->

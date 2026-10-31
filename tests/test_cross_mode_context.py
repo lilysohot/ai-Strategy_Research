@@ -442,6 +442,22 @@ def test_export_removes_imported_tail_before_team_generated_task_board() -> None
     assert any("YOUR TASK BOARD" in content for content in new_contents)
 
 
+def test_export_drops_separate_imported_history_message():
+    inherited = export_conversation_context(_dump(
+        pipeline_id="agent_team", run_id="previous",
+        messages=[system_msg("system"), user_msg("Original constraint"),
+                  assistant_msg("Prior answer")],
+    ))
+    exported = export_conversation_context(_dump(
+        pipeline_id="agent_team", run_id="next",
+        messages=[system_msg("system"), user_msg(render_context_tail(inherited)),
+                  user_msg("New question"), assistant_msg("New answer")],
+    ), inherited_context=inherited)
+    assert len(exported["records"]) == 4
+    assert all(TAIL_START not in str(r.get("content")) for r in exported["records"])
+    assert exported["records"][-2]["content"] == "New question"
+
+
 @pytest.mark.asyncio
 async def test_cross_mode_context_replaces_stale_native_replay(tmp_path, monkeypatch) -> None:
     from types import SimpleNamespace

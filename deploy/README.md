@@ -47,6 +47,10 @@ docker compose --profile full logs -f api
 
 ## 端口与域名
 
+公开注册默认关闭：登录页隐藏注册入口，`POST /api/auth/register` 返回 403，
+已有账号仍可登录。需要恢复注册时，在 API 环境中设置
+`SERVER_REGISTRATION_ENABLED=true` 并重启 API；登录页会自动读取该开关。
+
 | 变量 | 默认值 | 说明 |
 | --- | --- | --- |
 | `SITE_ADDRESS` | `localhost` | Caddy 站点地址。设为真实域名即自动申请并续期公开证书 |

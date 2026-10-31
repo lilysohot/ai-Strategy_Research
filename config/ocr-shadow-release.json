@@ -1,0 +1,40 @@
+{
+  "id": "rapidocr-small-shadow-20261031-v1",
+  "image": "sha256:141ee6ffbc6d0ec0c025f9deccbf93ae832f6721ef90018de93312b6dfc36c1b",
+  "default_enabled": false,
+  "production_ingestion": false,
+  "human_review_required": true,
+  "bundle": {
+    "body_reader.py": "experiments/rapidocr-body-20261030/body_reader.py",
+    "native_adapter.py": "experiments/rapidocr-body-20261030/native_adapter.py",
+    "page_orientation.py": "experiments/rapidocr-page-orientation-20261031/page_orientation.py",
+    "config.py": "experiments/rapidocr-smoke-20261019/config.py",
+    "worker.py": "tools/_ocr_shadow_worker.py",
+    "_reader_core.py": "plugins/tools/_reader_core.py",
+    "_reader_xlsx.py": "plugins/tools/_reader_xlsx.py",
+    "_reader_docx.py": "plugins/tools/_reader_docx.py",
+    "_reader_pptx.py": "plugins/tools/_reader_pptx.py",
+    "_reader_pdf.py": "plugins/tools/_reader_pdf.py"
+  },
+  "reader_parts": [
+    "_reader_core.py",
+    "_reader_xlsx.py",
+    "_reader_docx.py",
+    "_reader_pptx.py",
+    "_reader_pdf.py"
+  ],
+  "files": {
+    "experiments/rapidocr-body-20261030/body_reader.py": "8134306157d6f1f4890cdf9cb933e02b0c247769697ddb8bd1cbf5099739471c",
+    "experiments/rapidocr-body-20261030/native_adapter.py": "026b1aff5ee69a3d67656482341a6b37a030222ac130bbc59214435b9c170c78",
+    "experiments/rapidocr-page-orientation-20261031/page_orientation.py": "34c70779d93d9a9df8ad561911bb54dc68d68d5e55a92f4761e0b4433933ea1a",
+    "experiments/rapidocr-smoke-20261019/config.py": "89fae68d50615ca17fbfb058030ad1454f06daa3f5b54cd86d84c936f2d120b3",
+    "tools/_ocr_shadow_worker.py": "c04a50a7d006c7b01b8e6e06c8d8bd0b76cabcf5cd8770f7f82990c069268324",
+    "plugins/tools/_reader_core.py": "3224e75256d9337199661e4e51e20c5d6e25829a1247da8b9bb8fd75bd434def",
+    "plugins/tools/_reader_xlsx.py": "d832af4b4697131a874b03c202fc1d0e3e6a541c053cf402e419c326e298e37e",
+    "plugins/tools/_reader_docx.py": "37c4839fe8eae2f345edfc59884dd521fe291996bc534d74131b93ca8411a392",
+    "plugins/tools/_reader_pptx.py": "7c6b12e68d4fe7ee916fbf747890a8168b4b25270f54489447a7898064bdf22b",
+    "plugins/tools/_reader_pdf.py": "418a8554ed08fb174d50fcd6f149f6c5f38b5dfbc0a7b099025706435600fa13",
+    "tools/ocr_shadow.py": "3fa1efc21874c4c799ab799512adb875cc4001a2ca1f99667c436a99d68659e0",
+    "plugins/tools/_doc_reader.py": "e6c526ac0c3ee4eed343a28741b386fdbe502f76d696cd645e0c6a9ae04b625d"
+  }
+}

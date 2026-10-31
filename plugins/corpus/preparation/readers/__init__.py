@@ -1,8 +1,9 @@
 """PDF/DOCX/MD 统一格式读取 Adapter（架构 v1.1 §5.3/§9 `preparation/readers/`）。
 
 职责边界：输出候选结构单元（单元/坐标/状态）与缺口台账；不判噪声、不决定
-scope、不执行 OCR。只使用本地确定性读取库（PyMuPDF/python-docx），零模型调用、
-零网络；"库已安装"不构成支持声明——格式由扩展名 + 文件签名识别，不一致一律
+scope。默认使用本地读取库；显式启用 CORPUS_LOCAL_OCR_ENABLED 时，对 PDF 图片
+缺口调用固定版本 OCR 服务并保留来源与未解决缺口。"库已安装"不构成支持声明——
+格式由扩展名 + 文件签名识别，不一致一律
 fail-closed 拒绝。
 """
 
@@ -43,9 +44,11 @@ def extractor_rev_for(fmt: DocumentFormat) -> str:
     ``parse_rev``）。惰性导入与 :func:`read_document` 一致，不加重模块装载。
     """
     if fmt is DocumentFormat.PDF:
+        from plugins.corpus.preparation.readers.local_ocr import revision
         from plugins.corpus.preparation.readers.pdf_reader import _extractor_rev
+        from plugins.local_ocr.client import configured_release
 
-        return _extractor_rev()
+        return revision(_extractor_rev(), configured_release())
     if fmt is DocumentFormat.DOCX:
         from plugins.corpus.preparation.readers.docx_reader import _extractor_rev
 
@@ -61,9 +64,10 @@ def read_document(path: str | Path) -> ReaderResult:
     """按扩展名与文件签名分发到对应 Adapter；不支持/不一致一律 ReaderError。"""
     fmt, file_path = detect_format(path)
     if fmt is DocumentFormat.PDF:
+        from plugins.corpus.preparation.readers.local_ocr import enrich
         from plugins.corpus.preparation.readers.pdf_reader import read_pdf
 
-        return read_pdf(file_path)
+        return enrich(read_pdf(file_path), file_path)
     if fmt is DocumentFormat.DOCX:
         from plugins.corpus.preparation.readers.docx_reader import read_docx
 

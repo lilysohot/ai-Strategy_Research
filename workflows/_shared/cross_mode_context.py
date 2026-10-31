@@ -142,6 +142,10 @@ def _normalise_context(value: str | dict[str, Any]) -> dict[str, Any]:
         "sources": [dict(item) for item in sources],
         "completeness": dict(completeness),
     }
+    if isinstance(doc.get("team_history_window"), dict):
+        # Disposable view, validated against source records by team_history
+        # before use. Keep it out of the generic cross-mode renderer.
+        result["team_history_window"] = dict(doc["team_history_window"])
     if "archived_records" in doc:
         # Apply exactly the same validation and sanitization as active records.
         result["archived_records"] = _normalise_context(
@@ -193,6 +197,11 @@ def _message_record(
 
     content = message.get("content")
     if role == "user" and inherited is not None and isinstance(content, str):
+        if content.startswith('<team-history schema="team-history/1">'):
+            from workflows._shared.team_history import render_team_history
+
+            if content == render_team_history(inherited):
+                return None
         tail = render_context_tail(inherited)
         if tail in content:
             content = content.replace(tail, "", 1).rstrip()
@@ -409,7 +418,7 @@ def export_conversation_context(
         reasons.append("source_window_trimmed")
     if portable_trimmed and "portable_window_trimmed" not in reasons:
         reasons.append("portable_window_trimmed")
-    return {
+    result = {
         "schema": SCHEMA,
         "session_id": session_id or str((inherited or {}).get("session_id") or ""),
         "records": records,
@@ -420,6 +429,14 @@ def export_conversation_context(
             "reasons": reasons,
         },
     }
+    if inherited is not None:
+        from workflows._shared.team_history import build_team_window
+
+        if pipeline_id == "agent_team":
+            result["team_history_window"] = build_team_window(inherited)
+        elif "team_history_window" in inherited:
+            result["team_history_window"] = inherited["team_history_window"]
+    return result
 
 
 def render_context_tail(context: str | dict[str, Any]) -> str:
@@ -427,6 +444,7 @@ def render_context_tail(context: str | dict[str, Any]) -> str:
 
     normalised = _normalise_context(context)
     normalised.pop("archived_records", None)
+    normalised.pop("team_history_window", None)
     payload = canonical_json(normalised)
     return (
         "\n\n"

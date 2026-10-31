@@ -20,6 +20,7 @@ useful when changing that subsystem rather than when getting started.
 | Understand the investment-research product requirements | [Product requirements](product-requirements.md) |
 | Understand the current and target research process | [Business process](business-process.md) |
 | Understand how corpus retrieval enters Agent context and what is wired today | [Corpus retrieval and context wiring](corpus-retrieval.md) |
+| Operate production OCR for report preparation and Agent PDF reading | [本地 OCR 生产接入](guide/local-ocr-production.md) |
 
 ## Product and business design
 

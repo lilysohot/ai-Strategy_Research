@@ -163,6 +163,11 @@ _RESERVE_CLOSURE_S = 10.0
 # not be taken. 5 s keeps the established 130 s boundary a reservation while
 # leaving 96 s and below in the last-chance branch.
 _RESERVE_MIN_S = 5.0
+# Give a healthy first stream up to 60 s of reasoning when recovery still fits
+# before accounting for TTFT. This deliberately spends some worst-case TTFT
+# reserve; actual remaining time still controls retry admission. Do not raise
+# an explicitly tighter configured watchdog or extend either absolute deadline.
+_RESERVED_REASONING_TARGET_S = 60.0
 # A last chance still needs to be able to receive a first chunk and produce
 # something. When even that does not fit, the semantic watchdog is disabled
 # and only the absolute deadline (outer timeout) plus the first-chunk bound
@@ -186,6 +191,9 @@ def _first_attempt_reasoning_watchdog(
       full watchdog and a retry); the caller's value is used unchanged.
     - ``reserved``: both this attempt and one recovery fit, so the watchdog is
       shortened to leave the retry its admission floor.
+    - ``reserved_relaxed``: the reserved watchdog is raised to 60 s using part
+      of the worst-case TTFT reserve. Slow first chunks may leave too little
+      time for recovery; retry admission is rechecked against actual deadlines.
     - ``last_chance``: a retry cannot fit at all, so this request gets one
       bounded chance instead of being killed early. The window is the whole
       remaining budget minus the closure margin, capped by the configured
@@ -211,6 +219,12 @@ def _first_attempt_reasoning_watchdog(
     if reasoning_room >= configured_s:
         return configured_s, "configured"
     if reasoning_room >= _RESERVE_MIN_S:
+        recovery_room = budget - float(retry_floor_s) - _RUNAWAY_BACKOFF_S - _RESERVE_CLOSURE_S
+        if (
+            configured_s >= _RESERVED_REASONING_TARGET_S
+            and reasoning_room < _RESERVED_REASONING_TARGET_S <= recovery_room
+        ):
+            return _RESERVED_REASONING_TARGET_S, "reserved_relaxed"
         return reasoning_room, "reserved"
     last_chance = min(configured_s, budget - _RESERVE_CLOSURE_S)
     if last_chance < _LAST_CHANCE_MIN_S:
@@ -411,8 +425,19 @@ async def call_llm(
             logger.warning("LLM attempt callback failed", exc_info=True)
 
     def _response_attempt_fields(response: LLMResponse) -> dict[str, Any]:
+        usage = extract_usage(response)
+        if usage is not None and isinstance(response, LLMResponse):
+            raw = response.usage or {}
+            # Billing normalization fills absent counters with zero. Attempt
+            # diagnostics must preserve absence, or an unsupported cache metric
+            # becomes an apparently measured 0% hit rate.
+            if raw.get("prompt_tokens") is None:
+                usage.pop("prompt_tokens", None)
+            if raw.get("cache_read_tokens") is None and raw.get("cached_tokens") is None:
+                usage.pop("cache_read_tokens", None)
+                usage.pop("cached_tokens", None)
         return {
-            "usage": extract_usage(response),
+            "usage": usage,
             "finish_reason": response.finish_reason or "",
             "visible_chars": len(_visible_response_text(response)),
             "reasoning_chars": len(response.reasoning_content or ""),
@@ -593,9 +618,9 @@ async def call_llm(
                         # first attempt on reasoning. Include worst-case TTFT,
                         # backoff, and 10s for stream closure/scheduling; closure
                         # alone may take 5s. Never extend the logical/run wall.
-                        # The reservation is only taken when the budget holds
-                        # both this attempt and the retry; otherwise the request
-                        # gets one bounded last chance rather than a 1s kill.
+                        # A 60s reasoning window may spend part of the worst-case
+                        # TTFT reserve; retry admission still uses actual time.
+                        # Short budgets retain the bounded last-chance policy.
                         available, _ = _nearest_deadline()
                         attempt_reasoning_timeout, watchdog_mode = (
                             _first_attempt_reasoning_watchdog(

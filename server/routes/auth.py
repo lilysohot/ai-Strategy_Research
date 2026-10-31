@@ -27,6 +27,7 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel, Field
 
+from server.config import get_config
 from server.deps import _client_ip, get_current_user
 from server.security import (
     TokenError,
@@ -118,6 +119,12 @@ async def _audit(action: str, *, user: User | None, request: Request,
         logger.exception("audit_log write failed for action=%s", action)
 
 
+@router.get("/registration-status")
+async def registration_status() -> dict[str, bool]:
+    """Expose the public registration switch to the login page."""
+    return {"enabled": get_config().registration_enabled}
+
+
 @router.post("/register", status_code=status.HTTP_201_CREATED,
              response_model=UserResponse)
 async def register(body: RegisterRequest, request: Request) -> UserResponse:
@@ -126,6 +133,9 @@ async def register(body: RegisterRequest, request: Request) -> UserResponse:
     Password strength is enforced before hashing; storage is argon2id via
     :func:`server.security.hash_password`.
     """
+    if not get_config().registration_enabled:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="注册暂未开放")
+
     username = body.username.strip()
     if not username.isprintable() or "/" in username:
         raise HTTPException(status_code=400, detail="用户名含非法字符")

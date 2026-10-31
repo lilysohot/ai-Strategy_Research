@@ -57,6 +57,8 @@ from frontier_agent.core.messages import (
     Message,
     ToolCall,
     is_assistant_msg,
+    system_msg,
+    user_msg,
 )
 from frontier_agent.core.runtime import registry
 from frontier_agent.core.runtime.loop.agent_loop import run_agent_loop
@@ -103,11 +105,11 @@ from plugins.tools.task_board import (
     snapshot_tasks,
     start_planning,
 )
-from workflows._shared.cross_mode_context import append_context_to_question
 from workflows._shared.sandbox_mounts import (
     resolve_sandbox_mount_metadata,
     workspace_root_override,
 )
+from workflows._shared.team_history import render_team_history
 from workflows.agent_team.citation_url_repair import repair_citation_urls
 from workflows.agent_team.final_report import finalize_team_report, is_user_report
 from workflows.agent_team.identity import (
@@ -1184,7 +1186,14 @@ async def main_agent_node(
     question = state.get("original_question", "")
     if not question:
         raise ValueError("main_agent_node requires 'original_question' in state")
-    model_question = append_context_to_question(question, state.get("cross_mode_context"))
+    model_question = question
+    portable_context = state.get("cross_mode_context")
+    # Keep historical data ahead of per-run questions/business snapshots. It
+    # remains a user-level data message, never a system instruction or a replay
+    # of historical tool calls. The exporter strips this exact imported block.
+    history_prefix = (
+        [user_msg(render_team_history(portable_context))] if portable_context else []
+    )
 
     metadata = state.get("metadata") or {}
     profile_name: str | None = metadata.get("profile") or metadata.get("swarm_profile")
@@ -1779,6 +1788,9 @@ async def main_agent_node(
             run_agent_loop(
                 system_prompt=system_prompt,
                 user_message=user_message,
+                initial_messages=(
+                    [system_msg(system_prompt), *history_prefix] if history_prefix else None
+                ),
                 llm=llm,
                 tools=loop_tools,
                 config=LoopConfig(
