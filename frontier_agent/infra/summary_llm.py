@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
 from contextvars import ContextVar, Token
 from typing import Any
 
@@ -20,7 +21,29 @@ logger = logging.getLogger(__name__)
 FALLBACK_TRUNCATE = 20_000
 _MAX_RETRIES = 4
 _TRUNCATE_STEP = 40_960
-_REQUEST_TIMEOUT = 300
+# A single extraction request must not hold the fetch route open for minutes.
+# When no summary LLM is configured the extraction borrows the primary
+# reasoning model, which can burn the whole 300s on one large page (measured on
+# a live team run: web_fetch batches sat at the 90s route ceiling waiting on
+# extraction). Sixty seconds still covers a normal extraction (measured ~36s on
+# the self-hosted model) while letting a slow request fall back to raw
+# truncation instead of exhausting the research window. Override with
+# SUMMARY_LLM_TIMEOUT_S when a deployment knows its origins are slower.
+_SUMMARY_LLM_TIMEOUT_ENV = "SUMMARY_LLM_TIMEOUT_S"
+_REQUEST_TIMEOUT_DEFAULT_S = 60.0
+
+
+def _request_timeout_s() -> float:
+    raw = os.environ.get(_SUMMARY_LLM_TIMEOUT_ENV, "").strip()
+    if not raw:
+        return _REQUEST_TIMEOUT_DEFAULT_S
+    try:
+        value = float(raw)
+    except ValueError:
+        logger.warning("Invalid %s=%r; using %.0fs", _SUMMARY_LLM_TIMEOUT_ENV, raw,
+                       _REQUEST_TIMEOUT_DEFAULT_S)
+        return _REQUEST_TIMEOUT_DEFAULT_S
+    return value if value > 0 else _REQUEST_TIMEOUT_DEFAULT_S
 
 
 # ── Profile-driven override ───────────────────────────────────────────
@@ -317,7 +340,7 @@ async def _summarize_one(
     current_content = content
     for attempt in range(_MAX_RETRIES):
         try:
-            async with httpx.AsyncClient(timeout=_REQUEST_TIMEOUT) as client:
+            async with httpx.AsyncClient(timeout=_request_timeout_s()) as client:
                 resp = await client.post(endpoint, headers=headers, json=payload)
 
             # Context-too-long: truncate and retry in place.

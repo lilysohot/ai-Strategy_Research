@@ -635,6 +635,7 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         ):
             remaining = runtime.phase_budget.remaining_for_job(
                 can_publish=is_publication_assignment or uses_publication_budget,
+                is_verification=is_verification_assignment,
             )
             # Reserve one first-response window plus evidence review/report
             # submission. Admitting a job that cannot finish fabricates progress.

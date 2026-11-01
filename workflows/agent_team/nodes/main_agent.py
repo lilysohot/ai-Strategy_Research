@@ -303,6 +303,21 @@ def _resolve_publication_phase_timeout_s(agent_cfg: dict[str, Any]) -> float:
     )
 
 
+def _resolve_verification_phase_timeout_s(agent_cfg: dict[str, Any]) -> float:
+    """Time reserved after research for independent verification, before publication.
+
+    Check-only verifier jobs stop at this boundary; the sole publisher then gets
+    the publication window that follows. Defaults to the publication window size
+    so a profile that never sets this key keeps the old shared-window behaviour
+    while still giving verifiers an explicit, earlier boundary.
+    """
+    return _nonnegative_seconds(
+        agent_cfg.get("verification_phase_timeout_s"),
+        default=_resolve_publication_phase_timeout_s(agent_cfg),
+        label="agent_team verification_phase_timeout_s",
+    )
+
+
 def _build_team_phase_budget(
     *,
     started_monotonic_s: float,
@@ -313,14 +328,25 @@ def _build_team_phase_budget(
     wind_down_timeout_s: float,
     worst_case_tool_s: float,
     publication_state: dict[str, Any],
+    verification_phase_timeout_s: float | None = None,
 ) -> TeamPhaseBudget:
     """Turn relative profile values into one shared absolute phase plan."""
     research_deadline = (
         started_monotonic_s + research_wall_s if research_wall_s > 0 else None
     )
-    publication_deadline = (
-        research_deadline + publication_phase_timeout_s
+    verification_timeout = (
+        publication_phase_timeout_s
+        if verification_phase_timeout_s is None
+        else verification_phase_timeout_s
+    )
+    verification_deadline = (
+        research_deadline + verification_timeout
         if research_deadline is not None
+        else None
+    )
+    publication_deadline = (
+        verification_deadline + publication_phase_timeout_s
+        if verification_deadline is not None
         else None
     )
     if hard_deadline_monotonic_s is not None:
@@ -336,8 +362,13 @@ def _build_team_phase_budget(
             if publication_deadline is None
             else min(publication_deadline, latest_publication)
         )
-    if research_deadline is not None and publication_deadline is not None:
-        publication_deadline = max(research_deadline, publication_deadline)
+        if verification_deadline is not None and publication_deadline is not None:
+            verification_deadline = min(verification_deadline, publication_deadline)
+    if research_deadline is not None:
+        if publication_deadline is not None:
+            publication_deadline = max(research_deadline, publication_deadline)
+        if verification_deadline is not None:
+            verification_deadline = max(research_deadline, verification_deadline)
     # Closing retrieval must leave time for BOTH an in-flight tool and a
     # concise member report. A tool-only reserve lets reports consume the
     # coordinator's final synthesis window.
@@ -354,6 +385,7 @@ def _build_team_phase_budget(
         publication_deadline_s=publication_deadline,
         finalization_deadline_s=hard_deadline_monotonic_s,
         state=publication_state,
+        verification_deadline_s=verification_deadline,
     )
 
 
@@ -1252,6 +1284,7 @@ async def main_agent_node(
     )
     team_wind_down_timeout_s = _resolve_team_wind_down_timeout_s(agent_cfg)
     publication_phase_timeout_s = _resolve_publication_phase_timeout_s(agent_cfg)
+    verification_phase_timeout_s = _resolve_verification_phase_timeout_s(agent_cfg)
     reporter_wall_time_s = _resolve_reporter_wall_time_s(agent_cfg)
     finalization_reserve_turns = int(
         agent_cfg.get("finalization_reserve_turns", 8) or 8,
@@ -1303,6 +1336,7 @@ async def main_agent_node(
         wind_down_timeout_s=team_wind_down_timeout_s,
         worst_case_tool_s=worst_case_tool_s,
         publication_state=publication_state,
+        verification_phase_timeout_s=verification_phase_timeout_s,
     )
     check_wall_feasibility(
         hard_total_s=research_wall.hard_total_s,

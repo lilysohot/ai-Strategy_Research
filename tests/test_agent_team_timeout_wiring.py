@@ -266,7 +266,12 @@ def test_web_phase_plan_reserves_a_distinct_publication_slice() -> None:
 
     assert budget.research_dispatch_deadline_s == 1_495
     assert budget.research_deadline_s == 1_720
-    assert budget.publication_deadline_s == 1_900
+    # Verification gets its own slice after research, before publication. With
+    # no verification_phase_timeout_s it defaults to the publication window
+    # size (180s). Publication then opens after verification and is clamped by
+    # the hard wall (2050 - 120 finalization - 15 wind-down - 1 = 1914).
+    assert budget.verification_deadline_s == 1_900
+    assert budget.publication_deadline_s == 1_914
     assert budget.finalization_deadline_s == 2_050
 
 
@@ -324,6 +329,71 @@ def test_member_jobs_receive_distinct_research_verification_and_publication_dead
     assert 9 <= research_timeout <= 10
     assert 39 <= verifier_timeout <= 40
     assert 39 <= publisher_timeout <= 40
+
+
+def test_verifier_job_receives_dedicated_verification_deadline() -> None:
+    now = time.monotonic()
+    budget = TeamPhaseBudget(
+        started_monotonic_s=now,
+        research_dispatch_deadline_s=now + 5,
+        research_deadline_s=now + 10,
+        publication_deadline_s=now + 40,
+        finalization_deadline_s=now + 60,
+        state={},
+        verification_deadline_s=now + 25,
+    )
+    verifier_spec = build_swarm_session_runtime_spec(
+        SwarmSubagentRuntime(phase_budget=budget),
+        session_name="final_verifier",
+        task_id="task",
+    )
+    publisher_spec = build_swarm_session_runtime_spec(
+        SwarmSubagentRuntime(phase_budget=budget),
+        session_name="publisher",
+        task_id="task",
+    )
+
+    verifier = SubTask(
+        "verify",
+        metadata={
+            "can_publish": False,
+            "uses_publication_budget": True,
+            "verification_checks": [{"check_id": "c1"}],
+        },
+    )
+    publisher = SubTask("publish", metadata={"can_publish": True})
+    assert verifier_spec.run_timeout_builder is not None
+    assert publisher_spec.run_timeout_builder is not None
+    verifier_timeout = verifier_spec.run_timeout_builder(verifier)
+    publisher_timeout = publisher_spec.run_timeout_builder(publisher)
+
+    assert verifier_timeout is not None
+    assert publisher_timeout is not None
+    # A check-only verifier stops at the dedicated verification boundary, well
+    # before the publisher's window, so verification can no longer starve it.
+    assert 24 <= verifier_timeout <= 25
+    assert 39 <= publisher_timeout <= 40
+
+
+@pytest.mark.asyncio
+async def test_verifier_checkpoints_completed_checks_before_deadline() -> None:
+    """A verifier entering its checkpoint reserve must submit verdicts, not fetch."""
+    ctx = SimpleNamespace(metadata={})
+    # Far from the deadline: normal tool use is still allowed.
+    early = InheritedWallClockDeadlineObserver(
+        time.monotonic() + 100, verification=True, checkpoint_reserve_s=50,
+    )
+    assert await early.on_tool_call(ctx, {"name": "web_fetch", "args": {}}) is None
+
+    # Inside the reserve: any non-submit_report call is blocked and the model is
+    # pointed at a finish=false checkpoint submission.
+    late = InheritedWallClockDeadlineObserver(
+        time.monotonic() + 30, verification=True, checkpoint_reserve_s=50,
+    )
+    blocked = await late.on_tool_call(ctx, {"name": "web_fetch", "args": {}})
+    assert blocked is not None
+    assert "checkpoint" in blocked.skip_with_result.lower()
+    assert await late.on_tool_call(ctx, {"name": "submit_report", "args": {}}) is None
 
 
 def test_web_team_wall_extension_is_isolated_from_single_agent() -> None:

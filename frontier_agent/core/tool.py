@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 import inspect
 import re
 import typing
@@ -159,6 +160,36 @@ def _hoist_schema_defs(
         _hoist_schema_defs(value, definitions)
 
 
+def _prepare_parameters(
+    parameters: dict[str, Any] | None,
+    fn: Callable[..., Any],
+    arg_docs: dict[str, str],
+) -> dict[str, Any]:
+    """Return a parameters document whose ``$ref`` pointers all resolve.
+
+    The inferred path needs no explanation here, but an explicitly supplied
+    ``parameters`` document does: it is normally a hand-assembled wrapper around
+    ``Model.model_json_schema()`` — e.g. a static
+    ``{"properties": {"tasks": {"items": Model.model_json_schema()}}}``. That
+    embedded sub-schema carries its own ``$defs`` while every reference it emits
+    is document-root-relative, so serving it unchanged sends the provider a
+    dangling pointer and it rejects every request with
+    ``Invalid schema for function ... Pointer '/$defs/X' does not exist``.
+    Hoisting keeps both paths equivalent. The caller's dict is copied, never
+    mutated: it is typically a module-level constant.
+    """
+    # An empty document keeps the historical "nothing supplied" behaviour
+    # instead of advertising a tool that takes no arguments.
+    if not parameters:
+        return _infer_parameters(fn, arg_docs)
+    document = copy.deepcopy(parameters)
+    definitions: dict[str, Any] = {}
+    _hoist_schema_defs(document, definitions)
+    if definitions:
+        document["$defs"] = definitions
+    return document
+
+
 _ARG_HEADER_RE = re.compile(r"^\s*(Args|Arguments|Parameters):\s*$", re.MULTILINE)
 _RETURNS_HEADER_RE = re.compile(
     r"^\s*(Returns|Yields|Raises|Examples):\s*$", re.MULTILINE,
@@ -289,7 +320,7 @@ def tool(
         return Tool(
             name=name or f.__name__,
             description=description or summary or "",
-            parameters=parameters or _infer_parameters(f, arg_docs),
+            parameters=_prepare_parameters(parameters, f, arg_docs),
             func=f,
         )
 

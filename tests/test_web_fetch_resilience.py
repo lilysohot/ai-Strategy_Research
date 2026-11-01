@@ -158,6 +158,21 @@ def test_direct_scrape_timeout_defaults_shorter_and_is_overridable(monkeypatch):
     assert web_fetch._direct_scrape_timeout_s() == 20.0
 
 
+def test_summary_llm_timeout_defaults_shorter_and_is_overridable(monkeypatch):
+    import importlib
+
+    summary_llm = importlib.import_module("frontier_agent.infra.summary_llm")
+
+    monkeypatch.delenv(summary_llm._SUMMARY_LLM_TIMEOUT_ENV, raising=False)
+    assert summary_llm._request_timeout_s() == 60.0
+
+    monkeypatch.setenv(summary_llm._SUMMARY_LLM_TIMEOUT_ENV, "30.5")
+    assert summary_llm._request_timeout_s() == 30.5
+
+    monkeypatch.setenv(summary_llm._SUMMARY_LLM_TIMEOUT_ENV, "not-a-number")
+    assert summary_llm._request_timeout_s() == 60.0
+
+
 async def test_direct_scrape_uses_the_configured_bound(monkeypatch):
     import importlib
 

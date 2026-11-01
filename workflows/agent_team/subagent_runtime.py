@@ -174,14 +174,27 @@ class InheritedWallClockDeadlineObserver:
         "or tool work and return the verified work already available."
     )
 
-    def __init__(self, deadline: Any, *, handoff_at: float | None = None) -> None:
+    def __init__(
+        self,
+        deadline: Any,
+        *,
+        handoff_at: float | None = None,
+        verification: bool = False,
+        checkpoint_reserve_s: float | None = None,
+    ) -> None:
         self.deadline = deadline
         self.handoff_at = handoff_at
+        self.verification = verification
+        self.checkpoint_reserve_s = checkpoint_reserve_s
         self._handoff_announced = False
         self._direct_submission = False
         self._direct_submission_announced = False
 
     def _handoff_due(self) -> bool:
+        if self.checkpoint_reserve_s is not None:
+            remaining = self._remaining_s()
+            if remaining is not None and remaining <= self.checkpoint_reserve_s:
+                return True
         return self.handoff_at is not None and time.monotonic() >= self.handoff_at
 
     _HANDOFF_MESSAGE = (
@@ -203,9 +216,23 @@ class InheritedWallClockDeadlineObserver:
         "have an exact ref from a successful publish_handoff. If publication failed, "
         "state the missing attachment under Unresolved and submit the available findings."
     )
+    _VERIFICATION_CHECKPOINT_MESSAGE = (
+        "The verification window is closing. Call submit_report now with "
+        "verification_results for every check you have already reached, using "
+        "finish=false to checkpoint them, and a short content summary. Use the exact "
+        "assigned check_id and binding_id. Mark any check you could not verify as "
+        "unchecked; never manufacture a pass."
+    )
 
     def _handoff_intervention(self, ctx: Any) -> Intervention:
         ctx.metadata["team_handoff_started"] = True
+        if self.verification:
+            ctx.metadata["team_verification_checkpoint"] = True
+            messages = None if self._handoff_announced else [
+                self._VERIFICATION_CHECKPOINT_MESSAGE,
+            ]
+            self._handoff_announced = True
+            return Intervention(inject_messages=messages, allowed_tool_names=("submit_report",))
         if self._direct_submission:
             ctx.metadata["team_handoff_direct_submission"] = True
             messages = None if self._direct_submission_announced else [
@@ -248,6 +275,15 @@ class InheritedWallClockDeadlineObserver:
             name = _tool_call.get("name")
             if name == "submit_report":
                 return None
+            if self.verification:
+                return ToolCallIntervention(
+                    skip_with_result=(
+                        "This tool call was not executed. The verification window is "
+                        "closing; checkpoint completed checks with submit_report."
+                    ),
+                    skip_is_error=True,
+                    metadata_updates={"team_verification_checkpoint": True},
+                )
             if name == "publish_handoff" and not self._direct_submission:
                 # Bound the optional attachment path, whether it succeeds or
                 # fails. A second call in the same batch is guarded as well.
@@ -883,6 +919,11 @@ class SwarmSubagentRuntime:
     # Reserve several tool-enabled turns to finish assigned artifacts and
     # submit a report before LastTurnForcer strips tools on the landing turn.
     finalization_reserve_turns: int = 6
+    # Check-only verifier jobs checkpoint completed verdicts (submit_report with
+    # finish=false) this many seconds before their dedicated verification
+    # deadline, so an abort never loses a finished check. The reserve must leave
+    # room for one verdict-producing model call.
+    verification_checkpoint_reserve_s: float = 60.0
     sub_agent_thinking_in_history: bool = False
     sub_agent_thinking_history_max_tokens: int | None = None
     # Compaction (loaded from profile yaml `agent:` section). Defaults
@@ -1605,10 +1646,15 @@ def build_swarm_session_runtime_spec(
         budget = runtime.phase_budget
         if budget is None:
             return inherited_deadline
+        metadata = item.metadata or {}
         return budget.deadline_for_job(
             can_publish=bool(
-                (item.metadata or {}).get("can_publish")
-                or (item.metadata or {}).get("uses_publication_budget")
+                metadata.get("can_publish")
+                or metadata.get("uses_publication_budget")
+            ),
+            is_verification=bool(
+                metadata.get("verification_checks")
+                or "verifier" in session_name.lower()
             ),
         )
 
@@ -1683,16 +1729,33 @@ def build_swarm_session_runtime_spec(
         )
         job_deadline = _job_deadline(_item)
         if job_deadline is not None:
-            handoff_at = None
-            if runtime.phase_budget is not None and not (
-                _item.metadata.get("can_publish")
-                or _item.metadata.get("uses_publication_budget")
-                or _item.metadata.get("verification_checks")
+            metadata = _item.metadata or {}
+            is_verifier = bool(
+                metadata.get("verification_checks")
                 or "verifier" in session_name.lower()
-            ):
-                handoff_at = runtime.phase_budget.research_dispatch_deadline_s
+            )
+            handoff_at = None
+            checkpoint_reserve_s = None
+            verification = False
+            if runtime.phase_budget is not None:
+                if is_verifier:
+                    # A verifier checkpoints completed checks shortly before its
+                    # dedicated deadline so a wall cut never loses finished
+                    # verdicts (the abort path has no second model call).
+                    verification = True
+                    checkpoint_reserve_s = runtime.verification_checkpoint_reserve_s
+                elif not (
+                    metadata.get("can_publish")
+                    or metadata.get("uses_publication_budget")
+                ):
+                    handoff_at = runtime.phase_budget.research_dispatch_deadline_s
             obs = [
-                InheritedWallClockDeadlineObserver(job_deadline, handoff_at=handoff_at),
+                InheritedWallClockDeadlineObserver(
+                    job_deadline,
+                    handoff_at=handoff_at,
+                    verification=verification,
+                    checkpoint_reserve_s=checkpoint_reserve_s,
+                ),
                 *list(obs),
             ]
         if _tiered:

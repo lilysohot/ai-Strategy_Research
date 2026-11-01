@@ -1,4 +1,4 @@
-"""In-process negative cache for web scrape URLs."""
+"""In-process negative cache for web scrape origins (host-level)."""
 
 from __future__ import annotations
 
@@ -8,6 +8,7 @@ import threading
 import time
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
+from urllib.parse import urlsplit
 
 from frontier_agent.infra.usage_meter import record_api_request
 
@@ -34,36 +35,62 @@ class _Entry:
     last_failed_at: float = field(default_factory=time.time)
 
 
+def _domain_of(url: str) -> str:
+    """Return the origin (host[:port]) used as the negative-cache key.
+
+    A 403/422/429 is almost always an *origin-level* block — WAF, rate-limit,
+    or anti-bot — not a per-path one. Keying on the netloc means a model that
+    just swaps the path (``zhihu.com/p/A`` → ``zhihu.com/p/B``) is still
+    suppressed instead of re-hammering the same blocked host. The empty string
+    (and any URL with no parseable netloc) is returned unchanged so callers can
+    fall back to the raw URL as their own key.
+    """
+    if not url:
+        return ""
+    try:
+        netloc = urlsplit(url).netloc
+    except ValueError:
+        return url
+    if not netloc:
+        return url
+    # Strip userinfo (``user:pass@host``) — never part of an origin ban.
+    if "@" in netloc:
+        netloc = netloc.rsplit("@", 1)[1]
+    return netloc.lower()
+
+
 class _ScrapeCache:
-    """Thread-safe negative cache for scrape URLs."""
+    """Thread-safe negative cache for scrape origins (host-level)."""
 
     def __init__(self) -> None:
         self._data: dict[str, _Entry] = {}
         self._lock = threading.Lock()
 
     def check(self, url: str, now: float | None = None) -> _Entry | None:
-        """Return active entry if URL is currently banned, else None."""
-        if not url:
+        """Return active entry if the URL's origin is currently banned, else None."""
+        key = _domain_of(url)
+        if not key:
             return None
         t = now if now is not None else time.time()
         with self._lock:
-            entry = self._data.get(url)
+            entry = self._data.get(key)
             if entry is None:
                 return None
             if entry.ban_until > t:
                 return entry
             # Expired — drop it so future failures start fresh.
             if entry.ban_until and entry.ban_until <= t:
-                self._data.pop(url, None)
+                self._data.pop(key, None)
             return None
 
     def record_failure(self, url: str, status: int, now: float | None = None) -> _Entry | None:
-        """Record a failure; set ban_until if rules trigger. Returns updated entry."""
-        if not url or status not in _TRACKED_STATUSES:
+        """Record an origin-level failure; set ban_until if rules trigger."""
+        key = _domain_of(url)
+        if not key or status not in _TRACKED_STATUSES:
             return None
         t = now if now is not None else time.time()
         with self._lock:
-            entry = self._data.get(url)
+            entry = self._data.get(key)
             if entry is None or entry.status != status:
                 # Reset counter if status changed (e.g., 429 → 403).
                 entry = _Entry(status=status, fail_count=0, last_failed_at=t)
@@ -78,15 +105,16 @@ class _ScrapeCache:
             elif status == 422 and entry.fail_count >= _MIN_FAILS_422:
                 entry.ban_until = t + _BAN_422
 
-            self._data[url] = entry
+            self._data[key] = entry
             return entry
 
     def record_success(self, url: str) -> None:
-        """Clear any prior failure record for this URL."""
-        if not url:
+        """Clear any prior failure record for this origin."""
+        key = _domain_of(url)
+        if not key:
             return
         with self._lock:
-            self._data.pop(url, None)
+            self._data.pop(key, None)
 
     def clear(self) -> None:
         """Drop all entries. Primarily for tests."""
@@ -262,7 +290,7 @@ scrape_result_cache = ScrapeResultCache()
 
 
 def format_skip_message(url: str, entry: _Entry, now: float | None = None) -> str:
-    """Format a short, LLM-facing message explaining why the URL was skipped."""
+    """Format a short, LLM-facing message explaining why the origin was skipped."""
     t = now if now is not None else time.time()
     remaining = max(0, int(entry.ban_until - t))
     mins = remaining // 60
@@ -271,7 +299,8 @@ def format_skip_message(url: str, entry: _Entry, now: float | None = None) -> st
         422: f"returned 422 {entry.fail_count}x (paywall, empty, or unparseable content)",
         429: "was rate-limited (429)",
     }.get(entry.status, f"failed with status {entry.status}")
+    domain = _domain_of(url) or url
     return (
-        f"URL skipped: {url} {reason} earlier in this session. "
+        f"Domain skipped: {domain} {reason} earlier in this session. "
         f"Cached for ~{mins} more min. Try a different source or search query."
     )
