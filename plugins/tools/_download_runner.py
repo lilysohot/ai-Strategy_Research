@@ -82,7 +82,7 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
-def _pinned_create_connection(ip: str) -> Callable[..., socket.socket]:
+def _pinned_create_connection(ip: str, connect_timeout: float) -> Callable[..., socket.socket]:
     """``HTTPConnection._create_connection`` that ignores the resolved name.
 
     Validating a hostname and then letting the client resolve it again is a
@@ -91,6 +91,11 @@ def _pinned_create_connection(ip: str) -> Callable[..., socket.socket]:
     Dialling the address we already vetted removes the second lookup. The
     hostname still drives the ``Host`` header and TLS SNI/cert validation
     because only the socket-level address is substituted.
+
+    The dial is bounded by ``connect_timeout``, *not* the caller's read
+    timeout: http.client re-applies its own read timeout to the socket right
+    after ``connect``, so a black-holed origin (e.g. a walled CDN) fails in
+    seconds instead of paying the full read window per address.
     """
     def _create(
         address: tuple[str, int],
@@ -98,11 +103,12 @@ def _pinned_create_connection(ip: str) -> Callable[..., socket.socket]:
         source_address: tuple[str, int] | None = None,
     ) -> socket.socket:
         _host, port = address
-        return socket.create_connection((ip, port), timeout, source_address)
+        del timeout  # read timeout; applied later by http.client after connect
+        return socket.create_connection((ip, port), connect_timeout, source_address)
     return _create
 
 
-def _opener(ip: str) -> urllib.request.OpenerDirector:
+def _opener(ip: str, connect_timeout: float) -> urllib.request.OpenerDirector:
     """Build an opener pinned to one already-validated IP.
 
     Proxy variables are ignored: they can route an otherwise-public URL
@@ -112,12 +118,12 @@ def _opener(ip: str) -> urllib.request.OpenerDirector:
     class _PinnedHTTP(http.client.HTTPConnection):
         def __init__(self, *args: Any, **kwargs: Any) -> None:
             super().__init__(*args, **kwargs)
-            self._create_connection = _pinned_create_connection(ip)
+            self._create_connection = _pinned_create_connection(ip, connect_timeout)
 
     class _PinnedHTTPS(http.client.HTTPSConnection):
         def __init__(self, *args: Any, **kwargs: Any) -> None:
             super().__init__(*args, **kwargs)
-            self._create_connection = _pinned_create_connection(ip)
+            self._create_connection = _pinned_create_connection(ip, connect_timeout)
 
     class _PinnedHTTPHandler(urllib.request.HTTPHandler):
         def http_open(self, req: urllib.request.Request) -> Any:
@@ -198,6 +204,7 @@ def _open_once(
     *,
     method: str,
     timeout: float,
+    connect_timeout: float,
 ) -> Any:
     addresses = _validate_public_url(url)
     # Compatibility for callers/tests that patched the former single-address
@@ -215,7 +222,7 @@ def _open_once(
     )
     last_error: Exception | None = None
     for address in addresses:
-        opener = _opener(address)
+        opener = _opener(address, connect_timeout)
         try:
             return opener.open(request, timeout=timeout)
         except urllib.error.HTTPError as exc:
@@ -236,13 +243,16 @@ def _open_following_redirects(
     *,
     method: str,
     timeout: float,
+    connect_timeout: float,
     max_redirects: int,
 ) -> Any:
     current = url
     for redirect_count in range(max_redirects + 1):
         # Each hop is re-validated *and* re-pinned; a redirect is just another
         # attacker-controlled URL.
-        response = _open_once(current, method=method, timeout=timeout)
+        response = _open_once(
+            current, method=method, timeout=timeout, connect_timeout=connect_timeout,
+        )
         if response.getcode() not in _REDIRECT_CODES:
             return response, current, redirect_count
         location = response.headers.get("Location")
@@ -278,6 +288,7 @@ def _preflight(
             url,
             method="HEAD",
             timeout=timeout,
+            connect_timeout=timeout,
             max_redirects=max_redirects,
         )
     except DownloadError:
@@ -535,6 +546,7 @@ def download(args: argparse.Namespace) -> dict[str, object]:
         args.url,
         method="GET",
         timeout=args.read_timeout,
+        connect_timeout=args.connect_timeout,
         max_redirects=args.max_redirects,
     )
     target: Path | None = None

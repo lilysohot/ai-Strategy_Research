@@ -19,6 +19,13 @@ from frontier_agent.infra.usage_meter import record_llm_usage
 logger = logging.getLogger(__name__)
 
 FALLBACK_TRUNCATE = 20_000
+# Cap the extraction input *before* it reaches the summary LLM. A single
+# first-party page can hand back 100K+ chars, and feeding the whole thing to
+# the (often reasoning) summary model burns the entire request window — 40-46s
+# per large doc measured on a live team run. 60K chars still carries the
+# substantive body of a long article while keeping the prompt bounded.
+_EXTRACT_INPUT_MAX_CHARS_ENV = "SUMMARY_LLM_INPUT_MAX_CHARS"
+_EXTRACT_INPUT_MAX_CHARS_DEFAULT = 60_000
 _MAX_RETRIES = 4
 _TRUNCATE_STEP = 40_960
 # A single extraction request must not hold the fetch route open for minutes.
@@ -243,6 +250,18 @@ CONTENT TO ANALYZE:
 EXTRACTED INFORMATION:"""
 
 
+def _extract_input_max_chars() -> int:
+    raw = os.environ.get(_EXTRACT_INPUT_MAX_CHARS_ENV, "").strip()
+    if raw:
+        try:
+            value = int(raw)
+            if value > 0:
+                return value
+        except ValueError:
+            pass
+    return _EXTRACT_INPUT_MAX_CHARS_DEFAULT
+
+
 def _truncate_fallback(content: str) -> str:
     if len(content) > FALLBACK_TRUNCATE:
         return content[:FALLBACK_TRUNCATE] + "\n\n[Content truncated...]"
@@ -299,6 +318,14 @@ async def summarize(content: str, focus: str) -> str:
     if not candidates:
         logger.debug("Summary LLM not configured — returning truncated raw content")
         return _truncate_fallback(content)
+
+    cap = _extract_input_max_chars()
+    if len(content) > cap:
+        logger.info(
+            "[Summary LLM] Input %d chars exceeds %d cap — truncating for extraction",
+            len(content), cap,
+        )
+        content = content[:cap] + "\n\n[...truncated for extraction]"
 
     for ci, cand in enumerate(candidates):
         summary = await _summarize_one(

@@ -695,6 +695,16 @@ async def _direct_scrape(url: str) -> str:
         return ""
     except httpx.TimeoutException:
         logger.warning("Direct scrape timeout for %s", url[:60])
+        # Record as rate-limited so the origin (not just this URL) backs off —
+        # a direct-scrape timeout is origin-level unavailability, and without
+        # this the Jina-only cache above never learned about it.
+        _scrape_cache.record_failure(url, 429)
+        return ""
+    except httpx.HTTPStatusError as exc:
+        logger.warning("Direct scrape failed for %s: HTTP %d", url[:60], exc.response.status_code)
+        # 403/422/429 are origin-level blocks; record_failure ignores anything
+        # else, so 5xx etc. still fall through to the retry path.
+        _scrape_cache.record_failure(url, exc.response.status_code)
         return ""
     except Exception as e:
         logger.warning("Direct scrape failed for %s: %s", url[:60], e)
