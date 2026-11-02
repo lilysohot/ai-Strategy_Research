@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import contextvars
 import json
 import os
 from typing import Any
@@ -17,6 +18,21 @@ from plugins.corpus.search_refs import SearchReferenceError, compact_hit
 from plugins.corpus.service import get_service
 
 MAX_LIMIT = 20
+
+#: 控制「无匹配/拒检」是否引导切换到行情工具。默认 True（单 Agent 及开放行情工具的
+#: 运行沿用原「切市场数据路径」提示）；团队资料库模式由 agent_team 子代理绑定为 False，
+#: 使提示改为「如实报告无覆盖」，不再指向当前运行未开放的工具。
+_market_redirect: contextvars.ContextVar[bool] = contextvars.ContextVar(
+    "corpus_search_market_redirect", default=True
+)
+
+
+def set_market_redirect(enabled: bool) -> contextvars.Token:
+    return _market_redirect.set(enabled)
+
+
+def reset_market_redirect(token: contextvars.Token) -> None:
+    _market_redirect.reset(token)
 
 # CORPUS_EVIDENCE_PREVIEW=pilot adds sentence previews and core read plans only
 # in the isolated database. Previews never register as fetched/delivered evidence.
@@ -78,6 +94,22 @@ ABSTAIN_HINT = (
     "切换市场数据路径并明确标注『无研报覆盖，结论基于市场数据与技术面』："
     "① 用 market_resolve 消歧；② 用 market_quote 取实时行情；③ 用 market_history 取历史序列。"
     "纪律：禁止编造或引用不存在的研报；最终结论不得凭空给出研报级数字。"
+)
+
+#: 团队资料库模式（成员只接 corpus_*，不开放行情工具）的无匹配 / 拒检提示：
+#: 不再引导调用 market_*，而是要求如实报告「无资料库覆盖」并禁止编造研报。
+TEAM_NO_COVERAGE_HINT = (
+    "当前已发布范围内没有与该查询匹配的研报（query_status=no_match；"
+    "availability=unknown——只说明该范围无匹配，不等于资料不存在）。"
+    "**请立即停止继续检索研报，不要反复重试本工具**。"
+    "如实向协调员报告『无资料库覆盖』，并说明查询了什么、未找到什么；"
+    "禁止编造或引用不存在的研报，也不要改用本运行未提供的行情或其他工具。"
+)
+TEAM_ABSTAIN_HINT = (
+    "查询命中候选，但判定为**无实质答案**（query_status=abstain；availability=unknown"
+    "——只说明判为拒检，不等于资料不存在）。**请立即停止继续检索研报，不要反复重试本工具**。"
+    "如实向协调员报告『无资料库覆盖/无实质答案』；禁止编造或引用不存在的研报，"
+    "也不要改用本运行未提供的行情或其他工具。"
 )
 
 
@@ -214,7 +246,9 @@ async def corpus_search(query: str, limit: int = 10) -> str:
         # I2-8：空命中按 §7.3 表述为"该已查询范围无匹配"，不给 availability=absent。
         # B2：被 abstain 拒检（有检索候选但无实质答案）与 no_match（无研报覆盖）
         # 机器可区分——coverage["abstain"] 为真时走 ABSTAIN_HINT 并置顶层 abstain。
+        redirect_market = _market_redirect.get()
         if coverage.get("abstain"):
+            hint = TEAM_ABSTAIN_HINT if not redirect_market else ABSTAIN_HINT
             return json.dumps(
                 {
                     "ok": True,
@@ -223,10 +257,17 @@ async def corpus_search(query: str, limit: int = 10) -> str:
                     "hits": [],
                     "coverage": coverage,
                     "abstain": True,
-                    "hint": ABSTAIN_HINT,
+                    "hint": hint,
                 },
                 ensure_ascii=False,
             )
+        if coverage.get("purity", {}).get("sources_filtered"):
+            hint = (
+                "本次候选经相关性与结构筛选后未获得可展示正文，不代表资料库无答案。"
+                "可改写或拆分查询继续检索；已有句柄仍可按原范围 fetch。"
+            )
+        else:
+            hint = TEAM_NO_COVERAGE_HINT if not redirect_market else NO_COVERAGE_HINT
         return json.dumps(
             {
                 "ok": True,
@@ -234,12 +275,7 @@ async def corpus_search(query: str, limit: int = 10) -> str:
                 "count": 0,
                 "hits": [],
                 "coverage": coverage,
-                "hint": (
-                    "本次候选经相关性与结构筛选后未获得可展示正文，不代表资料库无答案。"
-                    "可改写或拆分查询继续检索；已有句柄仍可按原范围 fetch。"
-                    if coverage.get("purity", {}).get("sources_filtered")
-                    else NO_COVERAGE_HINT
-                ),
+                "hint": hint,
             },
             ensure_ascii=False,
         )

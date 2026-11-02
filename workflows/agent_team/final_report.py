@@ -6,6 +6,7 @@ user requirement or artifact is correct. It does not supervise worker liveness.
 
 from __future__ import annotations
 
+import hashlib
 import html
 import json
 import re
@@ -13,6 +14,10 @@ from typing import Any
 
 from frontier_agent.components.finalization.recovery import minimal_best_effort_answer
 from workflows.agent_team.output_cleaning import strip_team_control
+from workflows.agent_team.verification_claims import (
+    omit_verification_assurances,
+    verification_claim_findings,
+)
 
 _INTERNAL_SOURCES = {"collected_reports", "tool_observations", "deterministic_fallback"}
 _PROTOCOL = re.compile(
@@ -21,47 +26,11 @@ _PROTOCOL = re.compile(
     re.IGNORECASE,
 )
 _COUNTERS = ("collected_count", "incomplete_count", "queued_aborted", "unresolved_count")
-# A narrow contradiction guard, not a semantic verifier. Recovery synthesis
-# gets the structured gaps first; these explicit blanket claims must not survive
-# when it nevertheless ignores them. Keep scoped/negative statements intact.
-_BLANKET_VERIFICATION = re.compile(
-    r"已获充分交叉验证|(?:全部|所有|全面|整体).{0,16}(?:核验|验证|核对|复核)(?:通过|完成)"
-    r"|(?:全部|所有).{0,12}(?:已|均已|均|通过).{0,4}(?:核验|验证|核对|复核)"
-    r"|(?:已完成|完成了)(?:全部|所有|全面).{0,6}(?:核验|验证|核对|复核)"
-    r"|(?:全文|整份(?:报告|文档|研报)).{0,12}(?:已|已经|完成|通过).{0,6}(?:核验|验证|核对|复核)"
-    r"|(?:全文|整份(?:报告|文档|研报)).{0,8}(?:核验|验证|核对|复核)"
-    r"(?:已)?(?:完成|通过|完毕|无误)"
-    r"|^\s*(?:fully|thoroughly|exhaustively)\s+(?:cross[- ]?)?verified"
-    r"|(?:the\s+)?(?:entire|full|whole)\s+(?:document|report|paper)\s+"
-    r"(?:has been|is|was)\s+(?:fully\s+)?verified"
-    r"|(?:all|every)\s+(?:findings?|claims?|figures?|results?)\s+(?:have been |are )?verified",
-    re.IGNORECASE,
-)
 
 
 def _contradicts_incomplete_work(text: str) -> bool:
-    for sentence in re.split(r"[。！？\n.!?]", text):
-        for match in _BLANKET_VERIFICATION.finditer(sentence):
-            claim = sentence[max(0, match.start() - 24) : match.end() + 24]
-            if re.search(
-                r"(?:已声明|列明|上述)(?:的)?(?:检查|核验项)"
-                r"|\b(?:declared|listed) checks?\b",
-                claim,
-                re.IGNORECASE,
-            ):
-                continue
-            # Negation must qualify this claim, not an earlier clause such as
-            # "reviewer did not finish, but all findings are verified".
-            prefix = sentence[max(0, match.start() - 24) : match.start()]
-            if re.search(
-                r"(?:尚未|未|不能|无法|并非|不应|不要)[^，,；;但。]{0,6}$"
-                r"|\b(?:not|cannot|can't)(?:\s+\w+){0,2}\s*$",
-                prefix,
-                re.I,
-            ):
-                continue
-            return True
-    return False
+    """Compatibility predicate; matches are scope concerns, not verified contradictions."""
+    return bool(verification_claim_findings(text))
 
 
 _STOP_LABELS = {
@@ -99,7 +68,7 @@ def is_user_report(text: str) -> bool:
 
 def _chinese(question: str, language: str) -> bool:
     label = language.strip().lower()
-    if label:
+    if label and label != "auto":
         return "chinese" in label or label in {"zh", "zh-cn", "zh-hans", "中文"}
     return bool(re.search(r"[\u4e00-\u9fff]", question))
 
@@ -126,7 +95,9 @@ def finalize_team_report(
     Board resolutions are coordinator declarations. Wind-down counts cover only
     work outstanding at that boundary, not all jobs performed in the Run.
     """
+    candidate = text
     text = strip_team_control(text)
+    examined = text
     wind = wind_down or {}
     counts = {
         key: value
@@ -166,9 +137,11 @@ def finalize_team_report(
     verification = project_checks(jobs)
     for task in board:
         bound_ids = task["execution_job_ids"]
-        assigned = [job for job in jobs if (
-            job.get("job_id") in bound_ids if bound_ids else job.get("agent") in task["owners"]
-        )]
+        assigned = [
+            job
+            for job in jobs
+            if (job.get("job_id") in bound_ids if bound_ids else job.get("agent") in task["owners"])
+        ]
         task["execution_job_ids"] = bound_ids or [str(job.get("job_id") or "") for job in assigned]
         task["execution_status"] = (
             "not_assessed"
@@ -271,13 +244,36 @@ def finalize_team_report(
     # declared checks only prove their bounded criteria and versions.  Scoped
     # statements such as "all declared checks passed" remain publishable.
     retained_reports = source == "collected_report_fallback" and is_user_report(text)
-    contradictory = not retained_reports and _contradicts_incomplete_work(text)
-    if contradictory:
+    findings = verification_claim_findings(text) if not retained_reports else []
+    contradictory = bool(findings)
+    if findings:
         gaps.append({"code": "unsupported_verification_claim"})
-    system = source in _INTERNAL_SOURCES or not is_user_report(text) or contradictory
+        text = omit_verification_assurances(text, findings)
+    # A local assurance error must not erase unrelated evidence or analysis.
+    # Formatting debris alone is not a useful answer after sentence removal.
+    residual = re.sub(r"(?m)^[ \t]*(?:#{1,6}\s+.*|\d+[.)]\s*|[-*+_>` ]+)$", "", text)
+    useful_text = (
+        bool(re.search(r"[\w\u4e00-\u9fff]", residual)) if findings else bool(text.strip())
+    )
+    system = source in _INTERNAL_SOURCES or not is_user_report(text) or not useful_text
+    publication = {
+        "status": "withheld"
+        if findings and system
+        else "unavailable"
+        if system
+        else "revised"
+        if findings
+        else "published",
+        "candidate_sha256": hashlib.sha256(candidate.encode()).hexdigest(),
+        "candidate_verification": "not_assessed",
+        "findings": findings,
+    }
+    if findings:
+        publication["candidate_text"] = candidate
+        publication["examined_text"] = examined
     if system:
-        gaps.append({"code": "synthesis_unavailable"})
-        if not is_user_report(text) and source not in _INTERNAL_SOURCES:
+        gaps.append({"code": "publication_withheld" if contradictory else "synthesis_unavailable"})
+        if not is_user_report(examined) and source not in _INTERNAL_SOURCES:
             gaps.append({"code": "invalid_user_report"})
     if stopped_by and stopped_by not in {"final_answer", "submit_report"}:
         gaps.append({"code": "execution_stopped", "reason": stopped_by})
@@ -291,7 +287,8 @@ def finalize_team_report(
         gaps.append({"code": "synthesis_unavailable"})
     kind = "system_status" if system else "complete" if status == "complete" else "partial"
     contract = {
-        "version": 3,
+        "version": 4,
+        "publication": publication,
         "source": "system" if system or retained_reports else "model",
         "kind": kind,
         "answer_status": status,
@@ -338,8 +335,14 @@ def finalize_team_report(
             verdict = labels.get(check["verdict"], "未检查") if zh else check["verdict"]
             verification_notes.append(
                 f"- {_label(check['criterion'])}: {verdict} "
-                f"({'版本' if zh else 'version'}={check['binding_id'][:12]})"
+                f"({'版本' if zh else 'version'}={check['binding_id'][:12]}; "
+                f"{'对象' if zh else 'subject'}={_label(check['subject']['key'])}; "
+                f"sha256={_label(check['subject']['sha256'][:12])})"
             )
+            for issue in (check.get("result") or {}).get("unresolved_issues", []):
+                verification_notes.append(
+                    f"  - {'未解决问题' if zh else 'Unresolved issue'}: {_label(issue)}"
+                )
     if required_gaps:
         notes.append(
             "以下必要成员任务或检查仍有缺口；已返回的工具观测不等于核验通过："
@@ -359,9 +362,15 @@ def finalize_team_report(
             )
     if contradictory:
         notes.append(
-            "候选报告声称核验通过，但与执行记录矛盾，因此未发布该候选正文。"
+            "已移除超出可确认核验范围的声明句；其他分析予以保留。原始候选正文与命中位置保存在运行记录中。"
+            if zh and not system
+            else "候选正文已生成，但移除超范围核验声明后没有可交付正文。原始候选与命中位置保存在运行记录中。"
             if zh
-            else "The candidate claimed verification contrary to execution records and was withheld."
+            else "Statements exceeding the recorded verification scope were omitted; other analysis "
+            "is retained. The original candidate and matched spans are preserved in the run record."
+            if not system
+            else "A candidate was generated, but no deliverable prose remains after removing "
+            "unsupported verification assurances. The original and matched spans are preserved."
         )
     if stopped_by and stopped_by not in {"final_answer", "submit_report"}:
         reason = _STOP_LABELS.get(
@@ -427,12 +436,27 @@ def finalize_team_report(
         )
         if safe_stop in {"final_answer", "submit_report"}:
             safe_stop = "report_unavailable"
-        text = minimal_best_effort_answer(question, safe_stop, language=language)
+        if contradictory or safe_stop == "report_unavailable":
+            text = ("## 当前可交付结果\n\n" if zh else "## Publication status\n\n") + (
+                "候选正文已生成，但未通过发布范围检查。"
+                if zh and contradictory
+                else "本次未取得可交付的综合正文。"
+                if zh
+                else "A candidate was generated but withheld by the publication scope check."
+                if contradictory
+                else "No deliverable synthesis is available."
+            )
+        else:
+            text = minimal_best_effort_answer(
+                question,
+                safe_stop,
+                language="zh" if zh else "en",
+            )
         text += "\n\n" + intro
         text += "\n\n" + (
-            "最终综合未形成可用报告；本状态说明未核验文件内容或下载可用性。"
+            "本状态说明不代表已核验文件内容或下载可用性。"
             if zh
-            else "Final synthesis is unavailable; this status does not verify file contents or downloads."
+            else "This status does not verify file contents or downloads."
         )
     elif kind == "partial":
         # Put the actual delivery status before the conclusion; a footer alone

@@ -66,6 +66,44 @@ running sub-agents means calling `collect_reports` repeatedly with identical
 arguments. `NoProgressGuard` owns the coordinator's own spin pathology
 (repeated `create_subagent` / `assign_task` with no work coming back).
 
+## Publication and verification scope
+
+`final_report.py` separates execution completion from publication. Its version 4
+report contract includes `publication.status` (`published`, `revised`, `withheld`,
+or `unavailable`). The narrow language guard in `verification_claims.py` detects
+explicit report-wide verification assurances; it does not judge the truth of
+research claims or require verification of estimates and opinions.
+
+When an assurance exceeds the recorded scope, only its sentence is omitted and
+the remaining answer is delivered as partial, with a visible correction notice.
+If no prose remains, publication is withheld without claiming that execution
+timed out. The contract preserves the original `candidate_text`, its SHA-256,
+and the normalized `examined_text`; finding offsets refer to `examined_text`.
+Each finding records the matched expression, sentence, rule and reason. These
+audit fields are not a verified alternative answer.
+
+Member verdicts still bind exact source versions and criteria; they do not
+automatically certify a later synthesis. `verification_results.unresolved_issues`
+records outstanding defects within the assigned criterion and must be empty for
+PASS. A location error fails a check that requires accurate locations, even when
+the quote is verbatim. Corrections require a revised binding and recheck. Limits
+outside that criterion belong in the report and do not invalidate a scoped pass.
+
+New dispatches use verification protocol version 2. A subject can be a completed
+job report, a published attachment, or `{text: "complete candidate passage"}`.
+Inline text is stored verbatim and hashed; a correction in the assignment's free
+text does not replace the subject. Results must echo `subject_sha256` for the
+actual bound candidate. Rechecks declare `revision_kind`: `subject` must change
+candidate bytes, `evidence` must change evidence while keeping candidate bytes,
+and `retry` changes neither. Changed bindings still need `revision_reason`.
+Historical version 1 records remain readable. These constraints establish object
+identity and declared scope, not proof that the model actually performed the check.
+
+Synthesis prompt experiments are isolated in
+[`benchmarks/team_synthesis`](../../benchmarks/team_synthesis/README.md). Candidate
+instructions are not loaded by this workflow. Fixed-report tests measure local
+synthesis behavior; they do not establish end-to-end effectiveness.
+
 ## Profiles
 
 | Profile | Use | Web implementation | Reporter default | Planning |

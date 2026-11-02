@@ -38,7 +38,10 @@ async def submit_report(
         attachments: Up to eight exact ``ref`` values returned by
             ``publish_handoff``. Ordinary workspace paths are rejected.
         verification_results: Verdicts for the exact check_id/binding_id assigned
-            in the task. A pass must cite every bound evidence key.
+            in the task, including subject_sha256 for protocol version 2.
+            A pass must cite every bound evidence key and have no
+            unresolved_issues within its criterion. Record defects even if minor;
+            use fail/unchecked until the corrected version has been checked.
         finish: End the task by default. False requires verification_results.
 
     Returns:
@@ -47,7 +50,9 @@ async def submit_report(
     """
     text = (content or "").strip()
     if not isinstance(finish, bool) or (not finish and not verification_results):
-        return ToolOutcome("Error: finish must be boolean; false requires check results.", is_error=True)
+        return ToolOutcome(
+            "Error: finish must be boolean; false requires check results.", is_error=True
+        )
     if not text:
         return ToolOutcome(
             "submit_report rejected: `content` was empty. "
@@ -68,7 +73,8 @@ async def submit_report(
         accepted = await asyncio.to_thread(validate_results, verification_results)
     except (OSError, RuntimeError, ValueError, json.JSONDecodeError) as exc:
         return ToolOutcome(
-            f"Error: submit_report attachment or verification rejected: {exc}", is_error=True,
+            f"Error: submit_report attachment or verification rejected: {exc}",
+            is_error=True,
         )
     commit_results(accepted)
 
@@ -79,7 +85,9 @@ async def submit_report(
 
     logger.info(
         "submit_report called: len=%d chars, confidence=%.2f, attachments=%d",
-        len(text), conf, len(manifests),
+        len(text),
+        conf,
+        len(manifests),
     )
     if accepted:
         return json.dumps({"submitted": True, "finish": finish, "verification_results": accepted})

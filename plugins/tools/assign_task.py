@@ -185,8 +185,9 @@ class AgentTeamAssignmentSpec(AssignmentSpec):
 
     verification_checks: list[VerificationCheck] = Field(
         default_factory=list, max_length=16,
-        description="Check-only assignment bound to exact completed job reports or handoffs. "
-        "Rechecks must name the latest replaces_job_id; version changes need revision_reason.",
+        description="Check-only assignment bound to exact job reports, handoffs or subject.text. "
+        "Rechecks must name latest replaces_job_id and revision_kind (subject/evidence/retry); "
+        "version changes need revision_reason. Corrected text in prompt is not a new subject.",
     )
 
     required_for_completion: StrictBool = Field(

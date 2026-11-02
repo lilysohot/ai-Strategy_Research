@@ -13,6 +13,7 @@ def resolve_prompt_mode(value: str | None = None) -> str:
         raise ValueError("agent.prompt_mode must be 'standard' or 'research'")
     return value
 
+
 # =====================================================================
 # Search query language rule
 # =====================================================================
@@ -75,7 +76,11 @@ Retain its useful findings, list the unchecked scope, and never claim full verif
 Separate fidelity to the supplied document from independent real-world fact checking.
 Several parsers reading one file test extraction consistency, not independent sources;
 several agents using one model do not become independent evidence by agreeing.
-For each important claim, state the method and exact source/page/row actually checked.
+For material factual claims, state the source/page/row and method actually checked.
+Estimates, hypotheses, analogies and opposing judgments are welcome with clear
+assumptions and limits; they do not require external agreement or a verifier's PASS.
+Agreement on a calculation does not independently validate its shared assumptions.
+Correct local factual/attribution errors locally while retaining useful analysis.
 Search snippets are discovery leads, not fetched primary-source text. A failed fetch does
 not establish corroboration. Distinguish source attribution, inference and verified facts.
 Preserve every explicit [推断]/[Inference] label through handoff and final rewriting; never
@@ -88,15 +93,25 @@ Return scoped PASS/FAIL/UNCHECKED findings; a global confidence score is not a s
 For required verification, dispatch a check-only assignment using verification_checks:
 stable check_id, existing work_item_id, precise criterion, subject and evidence sources
 ({job_id, ref}; omit ref for the exact completed job report, or use its published handoff).
+Alternatively bind the complete candidate passage as subject: {text: ...}; evidence
+still uses job/handoff sources. Corrections in assignment prose do not replace subject.
 During planning, register these stable check_id/criterion pairs on the task-board item as
 verification_requirements. Undispatched or unexecuted planned checks remain report gaps.
 The system hashes these exact versions. Reviewers must submit verification_results with
-the supplied binding_id, verdict, method, detail and evidence_keys. Checkpoint completed
+the supplied binding_id, subject_sha256, verdict, method, detail and evidence_keys.
+Return unchecked if asked to evaluate a different subject. Checkpoint completed
 checks with submit_report(finish=false) before doing more work. Execution timeout alone
 does not discard accepted partial verdicts. Only an explicit same-check recheck can close
 an earlier check gap: cite its latest replaces_job_id; never weaken its criterion or
-necessity. A changed subject/evidence needs revision_reason and a new verdict. Passing
+necessity. Set revision_kind to subject (candidate bytes changed), evidence (only
+evidence changed), or retry (neither changed). A changed subject/evidence needs
+revision_reason and a new verdict. Passing
 declared checks does not certify unlisted claims, new versions or the final publication.
+Describe the checked source/version rather than claiming every quote in a later
+synthesis was verified. Record known criterion defects in unresolved_issues; even a
+minor location error prevents PASS when correct location is required. Report
+fail/unchecked or request a corrected version for recheck; do not waive the criterion.
+Out-of-scope research limitations do not invalidate a scoped pass.
 Ordinary research failures cannot be closed by an unrelated successful checking job.
 """
 
@@ -176,15 +191,14 @@ _NOTABLE_SUB_CAPS = {
     "web_search": "web search",
     "web_fetch": "web-page fetching",
     "scholar_search": "scholarly search",
+    "corpus_search": "research-corpus search and retrieval",
     "bash": "shell and Python execution",
     "create_file": "file creation",
     "publish_handoff": "controlled file handoff",
 }
 # Fallback capability phrase when the caller passes no sub_agent_tools (old
 # callers / tests) — mirrors the default SUB role minus SWARM_NO_WEB.
-_SUB_CAPS_FALLBACK = (
-    "full file reading, web search, web-page fetching, and shell/Python execution"
-)
+_SUB_CAPS_FALLBACK = "full file reading, web search, web-page fetching, and shell/Python execution"
 
 
 def _sub_caps_phrase(sub_agent_tools: list[str] | tuple[str, ...]) -> str:
@@ -313,7 +327,8 @@ def _render_tools_main(
     item1 = item1.replace("@@SUB_CAPS@@", sub_caps).replace("@@READ_CLAUSE@@", read_clause)
     subline = subline.replace("@@SUB_CAPS@@", sub_caps)
     out = (
-        prompt_standard.TOOLS if resolve_prompt_mode(prompt_mode) == "standard"
+        prompt_standard.TOOLS
+        if resolve_prompt_mode(prompt_mode) == "standard"
         else _TOOLS_MAIN_TMPL
     )
     out = out.replace("@@TOOLS_ITEM1@@", item1)
@@ -611,18 +626,15 @@ def render_client_mcp_tools_section(
     """Render request-scoped MCP tools for main/sub-agent prompts."""
     clean = [name for name in tool_names if name]
     specs = [
-        spec for spec in tool_specs
+        spec
+        for spec in tool_specs
         if isinstance(spec, dict) and spec.get("server_name") and spec.get("tool_name")
     ]
     if not clean and not specs:
         return ""
     if specs:
         tool_list = "\n".join(
-            (
-                f"- `{spec['server_name']}.{spec['tool_name']}` "
-                f"via `use_mcp_tool`"
-            )
-            for spec in specs
+            (f"- `{spec['server_name']}.{spec['tool_name']}` via `use_mcp_tool`") for spec in specs
         )
     else:
         tool_list = "\n".join(f"- `{name}`" for name in clean)
@@ -967,7 +979,6 @@ Confidence: [high/medium/low]
 # =====================================================================
 
 
-
 # All effort levels share bounded scope and completion rules. MAX adds depth
 # only when explicitly selected; it must not override phase limits or handoff.
 _PROPORTIONATE_EFFORT_POLICY = """# Proportionate Research
@@ -1181,7 +1192,10 @@ def get_main_system_prompt(
     prompt = ENHANCED_PROMPT.format(
         date=date_str,
         tools=_render_tools_main(
-            show_finish_planning, main_web_search, sub_agent_tools, prompt_mode=mode,
+            show_finish_planning,
+            main_web_search,
+            sub_agent_tools,
+            prompt_mode=mode,
         ),
         team_management=team_section,
     )
@@ -1196,7 +1210,10 @@ def get_main_system_prompt(
 
 
 def get_subagent_system_prompt(
-    name: str, role: str = "", *, include_domain_guide: bool = False,
+    name: str,
+    role: str = "",
+    *,
+    include_domain_guide: bool = False,
     mcp_tool_names: list[str] | tuple[str, ...] = (),
     mcp_tool_specs: list[dict] | tuple[dict, ...] = (),
     runtime_suffix: str = "",

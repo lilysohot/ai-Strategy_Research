@@ -1906,6 +1906,12 @@ def build_swarm_session_runtime_spec(
         from plugins.tools._verification import reset_verification_scope, set_verification_scope
 
         verification_token = set_verification_scope(job_id, _item.metadata)
+        # 团队成员只接资料库工具，不开放行情工具：关闭 corpus_search 无匹配/拒检时
+        # 的「切市场数据路径」提示，改为要求如实报告无覆盖。协调器不调用 corpus_search，
+        # 因此只在子代理上下文中关闭即可。
+        from plugins.tools.corpus_search import reset_market_redirect, set_market_redirect
+
+        corpus_token = set_market_redirect(False)
         try:
             # Container mode: every sub-agent SHARES the one mounted /workspace
             # (and /outputs) via a CurrentSandbox. AgentBus builds the sub's
@@ -1947,6 +1953,7 @@ def build_swarm_session_runtime_spec(
                         logger.warning("agent_team sub-agent sandbox kill failed", exc_info=True)
         finally:
             reset_verification_scope(verification_token)
+            reset_market_redirect(corpus_token)
             reset_handoff_scope(handoff_token)
             reset_output_write_denial_log(denial_token)
             reset_deliverable_write_paths(deliverable_token)
