@@ -524,6 +524,17 @@ async def resolve_for_run(
                 as_of=capital.as_of,
             )
             resolution.values["capital.allocated_capital"] = dict(values["allocated_capital"])
+            from server import capital_accounting
+
+            funding = await capital_accounting.plan_summary(session, capital)
+            for field in ("remaining_capital", "net_cash_flow", "unbooked_count"):
+                resolution.values[f"capital.{field}"] = _entry(
+                    funding[field], status="derived",
+                    source={"kind": "capital_funding", "id": str(capital.id),
+                            "revision": capital.current_revision,
+                            "account_revision": resolution.account_revision},
+                    currency=capital.currency if field != "unbooked_count" else None,
+                )
             resolution.values["capital.currency"] = _entry(
                 capital.currency, status="user_provided", source=values["allocated_capital"]["source"],
             )

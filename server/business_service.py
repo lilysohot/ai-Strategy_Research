@@ -21,6 +21,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import uuid
 from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
@@ -33,7 +34,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from plugins.investment_requirements import missing_facts
-from server import store
+from server import capital_accounting, store
 
 # ——— 契约常量 ——————————————————————————————————————————————————————————
 
@@ -92,7 +93,7 @@ TRADE_FIELDS = frozenset(
 CAPITAL_PLAN_FIELDS = frozenset({"allocated_capital", "currency", "as_of"})
 #: 买卖计划（规划资金 1:N）= 实际买卖价格：每笔买入/卖出一条。
 BUY_SELL_PLAN_FIELDS = frozenset(
-    {"symbol", "market", "asset_type", "side", "price", "quantity", "traded_at", "currency"}
+    {"symbol", "market", "asset_type", "side", "price", "quantity", "fees", "traded_at", "currency"}
 )
 
 #: 需要十进制校验并按精确数值存储的字段。
@@ -168,6 +169,7 @@ _BUY_SELL_PLAN_VALUE_COLUMNS = (
     "side",
     "price",
     "quantity",
+    "fees",
     "traded_at",
     "currency",
 )
@@ -434,9 +436,7 @@ def admit_group(group: str, declared: dict[str, Any] | None) -> AdmissionResult:
             integer_digits = max(value.adjusted() + 1, 0)
             exponent = value.as_tuple().exponent
             decimal_places = -exponent if isinstance(exponent, int) else 0
-            if decimal_places > 10 or integer_digits > (
-                10 if name == "profit_loss_ratio" else 20
-            ):
+            if decimal_places > 10 or integer_digits > (10 if name == "profit_loss_ratio" else 20):
                 raise ValidationError(
                     "数值超出可精确保存的范围", fields={name: "最多保留 10 位小数"}
                 )
@@ -473,9 +473,10 @@ def evaluate_purpose(
     ``only_groups`` 用于对象级写入：创建账户时只裁决账户字段，计划字段由创建计划
     时裁决；完整分析准入在提交 Run 时一次校验全部组（DATA-05）。
     """
-    missing = missing_facts(use_case, {
-        f"{group}.{name}" for group, admission in groups.items() for name in admission.values
-    })
+    missing = missing_facts(
+        use_case,
+        {f"{group}.{name}" for group, admission in groups.items() for name in admission.values},
+    )
 
     if only_groups:
         allowed = set(only_groups)
@@ -859,9 +860,7 @@ async def create_account(
         if is_default:
             if preference is None:
                 session.add(
-                    store.UserInvestmentPreference(
-                        user_id=user_id, default_account_id=account.id
-                    )
+                    store.UserInvestmentPreference(user_id=user_id, default_account_id=account.id)
                 )
             else:
                 preference.default_account_id = account.id
@@ -928,9 +927,7 @@ async def set_default_account(
         )
         if preference is None:
             session.add(
-                store.UserInvestmentPreference(
-                    user_id=user_id, default_account_id=account.id
-                )
+                store.UserInvestmentPreference(user_id=user_id, default_account_id=account.id)
             )
         else:
             preference.default_account_id = account.id
@@ -1007,6 +1004,18 @@ async def update_account(
         merged, record_state, pending = _merge_revision(
             "account", prev, admission, allow_incomplete=allow_incomplete
         )
+        reserved = await capital_accounting.reservations(session, account.id)
+        if reserved and (
+            merged.get("available_capital") is None or merged["available_capital"] < reserved
+        ):
+            raise ValidationError(
+                "账户现金不能低于会话已预留额度",
+                fields={"available_capital": f"至少保留 {reserved}"},
+            )
+        if merged.get("currency") != account.base_currency:
+            raise ValidationError(
+                "账户资金币种必须与账户基础币种一致", fields={"currency": account.base_currency}
+            )
         changed = _changed_fields(
             {k: v for k, v in prev.items() if k in _ACCOUNT_VALUE_COLUMNS}, merged
         )
@@ -1259,11 +1268,17 @@ def _parse_decimal_input(raw: Any, field: str) -> Decimal:
         )
     if text.startswith("-"):
         raise ValidationError("金额不接受负数", fields={field: "请填写非负数值"})
-    return Decimal(text)
+    value = Decimal(text)
+    exponent = value.as_tuple().exponent
+    if value >= Decimal("1e20") or (isinstance(exponent, int) and exponent < -10):
+        raise ValidationError(
+            "金额超出可精确保存的范围", fields={field: "最多 20 位整数、10 位小数"}
+        )
+    return value
 
 
 def _decimal_text(value: Decimal | None) -> str | None:
-    return None if value is None else str(value)
+    return None if value is None else format(value, "f")
 
 
 def _json_safe_values(values: dict[str, Any]) -> dict[str, Any]:
@@ -1302,6 +1317,8 @@ async def get_capital_plan(
         "account_id": str(plan.account_id) if plan.account_id else None,
         "revision": plan.current_revision,
         "record_state": plan.record_state,
+        "funding": await capital_accounting.plan_summary(session, plan),
+        "account_binding_locked": await capital_accounting.binding_locked(session, plan.id),
         "values": {
             name: values.get(name) for name in _CAPITAL_PLAN_VALUE_COLUMNS if name in values
         },
@@ -1315,19 +1332,26 @@ async def create_capital_plan(
     research_id: Any,
     declared: dict[str, Any],
     idempotency_key: str,
+    account_id: Any | None = None,
     source_kind: str = "form",
     source_ref: str | None = None,
 ) -> WriteOutcome:
     """为会话创建唯一的规划资金（会话 ↔ 规划资金 1:1）。"""
     admission = admit_group("capital_plan", declared)
     payload = {"research_id": str(research_id), "declared": declared}
+    if account_id is not None:
+        payload["account_id"] = str(account_id)
 
     async def _execute() -> dict[str, Any]:
         research = (
             await session.execute(
-                select(store.Session).where(
-                    store.Session.id == research_id, store.Session.user_id == user_id
+                select(store.Session)
+                .where(
+                    store.Session.id == research_id,
+                    store.Session.user_id == user_id,
+                    store.Session.deleted_at.is_(None),
                 )
+                .with_for_update()
             )
         ).scalar_one_or_none()
         if research is None:
@@ -1353,13 +1377,30 @@ async def create_capital_plan(
             )
         ).scalar_one_or_none()
         account = None
-        if link is not None and link.account_id is not None:
+        if account_id is not None:
+            account = (
+                await session.execute(
+                    select(store.InvestmentAccount).where(
+                        store.InvestmentAccount.id == account_id,
+                        store.InvestmentAccount.user_id == user_id,
+                    )
+                )
+            ).scalar_one_or_none()
+            if account is None:
+                raise NotFoundOrForbiddenError("账户不存在或无权访问")
+        elif link is not None and link.account_id is not None:
             account = await session.get(store.InvestmentAccount, link.account_id)
+        if account is None:
+            preference = await session.get(store.UserInvestmentPreference, user_id)
+            if preference is not None:
+                account = await session.get(store.InvestmentAccount, preference.default_account_id)
+        if account is not None:
+            if link is None:
+                link = store.ResearchInvestmentLink(research_id=research.id, user_id=user_id)
+                session.add(link)
+            link.account_id = account.id
         allocated_value = admission.values.get("allocated_capital")
-        allocated = allocated_value.value if allocated_value is not None else None
-        await _assert_allocation_within_available(
-            session, research_id=research.id, allocated=allocated
-        )
+        allocated = Decimal(str(allocated_value.value)) if allocated_value is not None else None
         missing = {} if allocated is not None else {"allocated_capital": "请填写本会话规划资金"}
         record_state, pending = _require_complete(admission, allow_incomplete=True, missing=missing)
         values = _column_values(admission, _CAPITAL_PLAN_VALUE_COLUMNS)
@@ -1375,6 +1416,7 @@ async def create_capital_plan(
             source_kind=source_kind,
             source_ref=source_ref,
         )
+        await capital_accounting.check_budget(session, plan=plan, amount=allocated)
         session.add(plan)
         await session.flush()
         session.add(
@@ -1429,6 +1471,11 @@ async def create_capital_plan(
 async def _locked_capital_plan(
     session: AsyncSession, *, user_id: Any, capital_plan_id: Any
 ) -> store.CapitalPlan:
+    existing = await _locked_capital_plan_read(
+        session, user_id=user_id, capital_plan_id=capital_plan_id
+    )
+    original_account_id = existing.account_id
+    await capital_accounting.lock_account(session, user_id=user_id, account_id=original_account_id)
     plan = (
         await session.execute(
             select(store.CapitalPlan)
@@ -1437,11 +1484,173 @@ async def _locked_capital_plan(
                 store.CapitalPlan.user_id == user_id,
             )
             .with_for_update()
+            .execution_options(populate_existing=True)
         )
     ).scalar_one_or_none()
     if plan is None:
         raise NotFoundOrForbiddenError("规划资金不存在或无权访问")
+    if plan.account_id != original_account_id:
+        raise RevisionConflictError(
+            "资金账户已变更，请刷新后重试", current={"revision": plan.current_revision}
+        )
+    research = await session.get(store.Session, plan.research_id)
+    if research is None or research.deleted_at is not None:
+        raise NotFoundOrForbiddenError("研究已删除")
     return plan
+
+
+async def bind_capital_account(
+    session: AsyncSession,
+    *,
+    user_id: Any,
+    capital_plan_id: Any,
+    account_id: Any,
+    expected_revision: int | None,
+    idempotency_key: str,
+) -> WriteOutcome:
+    """Bind the session budget and research link atomically, before any cash is booked."""
+    payload = {
+        "capital_plan_id": str(capital_plan_id),
+        "account_id": str(account_id),
+        "expected_revision": expected_revision,
+    }
+
+    async def _execute() -> dict[str, Any]:
+        plan = await _locked_capital_plan_read(
+            session, user_id=user_id, capital_plan_id=capital_plan_id
+        )
+        research = await session.scalar(
+            select(store.Session)
+            .where(
+                store.Session.id == plan.research_id,
+                store.Session.user_id == user_id,
+                store.Session.deleted_at.is_(None),
+            )
+            .with_for_update()
+        )
+        if research is None:
+            raise NotFoundOrForbiddenError("研究不存在或无权访问")
+        old_account_id = plan.account_id
+        # Same ordering for A -> B and B -> A transfers; regular writers lock
+        # their account before the plan and reject a concurrently changed binding.
+        target = None
+        for aid in sorted({str(a) for a in (old_account_id, account_id) if a is not None}):
+            account = await session.scalar(
+                select(store.InvestmentAccount)
+                .where(
+                    store.InvestmentAccount.id == uuid.UUID(aid),
+                    store.InvestmentAccount.user_id == user_id,
+                )
+                .with_for_update()
+                .execution_options(populate_existing=True)
+            )
+            if account is None:
+                raise NotFoundOrForbiddenError("账户不存在或无权访问")
+            if str(account.id) == str(account_id):
+                target = account
+        assert target is not None
+        plan = await session.scalar(
+            select(store.CapitalPlan)
+            .where(
+                store.CapitalPlan.id == capital_plan_id,
+            )
+            .with_for_update()
+            .execution_options(populate_existing=True)
+        )
+        assert plan is not None
+        _check_expected_revision(plan.current_revision, expected_revision)
+        if plan.account_id != old_account_id:
+            raise RevisionConflictError("资金账户已变更，请刷新后重试")
+        if plan.account_id == target.id:
+            return {
+                "capital_plan_id": str(plan.id),
+                "account_id": str(target.id),
+                "revision": plan.current_revision,
+            }
+        if await capital_accounting.binding_locked(session, plan.id):
+            raise ValidationError(
+                "已有资金入账，不能切换账户", fields={"account_id": "请保留原资金账户"}
+            )
+        mismatched_fill = await session.scalar(
+            select(store.BuySellPlanRevision.id)
+            .join(
+                store.BuySellPlan,
+                store.BuySellPlan.id == store.BuySellPlanRevision.buy_sell_plan_id,
+            )
+            .where(
+                store.BuySellPlan.capital_plan_id == plan.id,
+                store.BuySellPlanRevision.revision == store.BuySellPlan.current_revision,
+                store.BuySellPlan.archived.is_(False),
+                store.BuySellPlanRevision.currency != target.base_currency,
+            )
+            .limit(1)
+        )
+        if mismatched_fill:
+            raise ValidationError(
+                "现有买卖记录与账户币种不一致", fields={"account_id": "不支持自动换汇"}
+            )
+        plan.account_id = target.id
+        plan.currency = plan.currency or target.base_currency
+        await capital_accounting.check_budget(session, plan=plan, amount=plan.allocated_capital)
+        plan.current_revision += 1
+        session.add(
+            store.CapitalPlanRevision(
+                capital_plan_id=plan.id,
+                revision=plan.current_revision,
+                op_type="bind_account",
+                allocated_capital=plan.allocated_capital,
+                currency=plan.currency,
+                account_id=target.id,
+                as_of=plan.as_of,
+                record_state=plan.record_state,
+                source_kind="form",
+            )
+        )
+        link = await session.scalar(
+            select(store.ResearchInvestmentLink).where(
+                store.ResearchInvestmentLink.research_id == plan.research_id
+            )
+        )
+        if link is None:
+            link = store.ResearchInvestmentLink(research_id=plan.research_id, user_id=user_id)
+            session.add(link)
+        link.account_id = target.id
+        _append_audit(
+            session, user_id=user_id, action="business.capital_plan.bind_account", detail=payload
+        )
+        await session.flush()
+        return {
+            "capital_plan_id": str(plan.id),
+            "account_id": str(target.id),
+            "revision": plan.current_revision,
+        }
+
+    return await run_write(
+        session,
+        user_id=user_id,
+        scope="capital_plan.bind_account",
+        idempotency_key=idempotency_key,
+        payload=payload,
+        execute=_execute,
+    )
+
+
+async def _locked_buy_sell_plan(
+    session: AsyncSession, *, user_id: Any, buy_sell_plan_id: Any
+) -> tuple[store.BuySellPlan, store.CapitalPlan]:
+    query = select(store.BuySellPlan).where(
+        store.BuySellPlan.id == buy_sell_plan_id, store.BuySellPlan.user_id == user_id
+    )
+    plan = (await session.execute(query)).scalar_one_or_none()
+    if plan is None:
+        raise NotFoundOrForbiddenError("买卖计划不存在或无权访问")
+    capital = await _locked_capital_plan(
+        session, user_id=user_id, capital_plan_id=plan.capital_plan_id
+    )
+    plan = (
+        await session.execute(query.with_for_update().execution_options(populate_existing=True))
+    ).scalar_one()
+    return plan, capital
 
 
 def _check_expected_revision(current: int, expected: int | None) -> None:
@@ -1479,15 +1688,13 @@ async def allocate_capital(
     }
 
     async def _execute() -> dict[str, Any]:
-        plan = await _locked_capital_plan(
-            session, user_id=user_id, capital_plan_id=capital_plan_id
-        )
+        plan = await _locked_capital_plan(session, user_id=user_id, capital_plan_id=capital_plan_id)
         _check_expected_revision(plan.current_revision, expected_revision)
-        current = Decimal(plan.allocated_capital) if plan.allocated_capital is not None else Decimal(0)
-        new_total = current + delta
-        await _assert_allocation_within_available(
-            session, research_id=plan.research_id, allocated=new_total
+        current = (
+            Decimal(plan.allocated_capital) if plan.allocated_capital is not None else Decimal(0)
         )
+        new_total = capital_accounting.money_sum(current, delta)
+        await capital_accounting.check_budget(session, plan=plan, amount=new_total)
         new_revision = plan.current_revision + 1
         session.add(
             store.CapitalPlanRevision(
@@ -1558,13 +1765,9 @@ async def reset_capital(
     }
 
     async def _execute() -> dict[str, Any]:
-        plan = await _locked_capital_plan(
-            session, user_id=user_id, capital_plan_id=capital_plan_id
-        )
+        plan = await _locked_capital_plan(session, user_id=user_id, capital_plan_id=capital_plan_id)
         _check_expected_revision(plan.current_revision, expected_revision)
-        await _assert_allocation_within_available(
-            session, research_id=plan.research_id, allocated=amount
-        )
+        await capital_accounting.check_budget(session, plan=plan, amount=amount)
         previous = plan.allocated_capital
         new_revision = plan.current_revision + 1
         session.add(
@@ -1701,6 +1904,7 @@ async def list_buy_sell_plans(
                 "research_id": str(row.research_id),
                 "status": row.status,
                 "archived": row.archived,
+                "cash_effect": _decimal_text(row.cash_effect),
                 "revision": row.current_revision,
                 "values": {
                     name: values.get(name)
@@ -1733,7 +1937,7 @@ async def create_buy_sell_plan(
     payload = {"capital_plan_id": str(capital_plan_id), "declared": declared}
 
     async def _execute() -> dict[str, Any]:
-        capital = await _locked_capital_plan_read(
+        capital = await _locked_capital_plan(
             session, user_id=user_id, capital_plan_id=capital_plan_id
         )
         values = _column_values(admission, _BUY_SELL_PLAN_VALUE_COLUMNS)
@@ -1744,6 +1948,7 @@ async def create_buy_sell_plan(
         )
         session.add(plan)
         await session.flush()
+        await capital_accounting.book_fill(session, capital=capital, fill=plan, values=values)
         session.add(
             store.BuySellPlanRevision(
                 buy_sell_plan_id=plan.id,
@@ -1771,13 +1976,10 @@ async def create_buy_sell_plan(
             "buy_sell_plan_id": str(plan.id),
             "capital_plan_id": str(capital.id),
             "research_id": str(capital.research_id),
+            "cash_effect": _decimal_text(plan.cash_effect),
             "revision": 1,
             "values": _json_safe_values(
-                {
-                    name: values.get(name)
-                    for name in _BUY_SELL_PLAN_VALUE_COLUMNS
-                    if name in values
-                }
+                {name: values.get(name) for name in _BUY_SELL_PLAN_VALUE_COLUMNS if name in values}
             ),
         }
 
@@ -1810,18 +2012,9 @@ async def update_buy_sell_plan(
     }
 
     async def _execute() -> dict[str, Any]:
-        plan = (
-            await session.execute(
-                select(store.BuySellPlan)
-                .where(
-                    store.BuySellPlan.id == buy_sell_plan_id,
-                    store.BuySellPlan.user_id == user_id,
-                )
-                .with_for_update()
-            )
-        ).scalar_one_or_none()
-        if plan is None:
-            raise NotFoundOrForbiddenError("买卖计划不存在或无权访问")
+        plan, capital = await _locked_buy_sell_plan(
+            session, user_id=user_id, buy_sell_plan_id=buy_sell_plan_id
+        )
         if plan.archived:
             raise ObjectArchivedError("买卖计划已归档", current={"archived": True})
         _check_expected_revision(plan.current_revision, expected_revision)
@@ -1834,6 +2027,9 @@ async def update_buy_sell_plan(
         )
         merged = {name: prev.get(name) for name in _BUY_SELL_PLAN_VALUE_COLUMNS}
         merged.update(_column_values(admission, _BUY_SELL_PLAN_VALUE_COLUMNS))
+        for name in admission.incomplete:
+            if name in merged:
+                merged[name] = None
         absent = sorted(
             {"symbol", "side", "price", "currency"}
             - {name for name, value in merged.items() if value is not None}
@@ -1843,6 +2039,14 @@ async def update_buy_sell_plan(
                 "买卖计划缺少必要字段",
                 fields={name: "请填写该笔实际买卖信息" for name in absent},
             )
+        # An unrelated edit must not silently book a legacy fill whose amount
+        # may already be included in the user's opening cash balance.
+        if (
+            plan.cash_effect is not None
+            or prev.get("quantity") is None
+            or "quantity" in admission.values
+        ):
+            await capital_accounting.book_fill(session, capital=capital, fill=plan, values=merged)
         new_revision = plan.current_revision + 1
         session.add(
             store.BuySellPlanRevision(
@@ -1865,13 +2069,10 @@ async def update_buy_sell_plan(
         return {
             "buy_sell_plan_id": str(plan.id),
             "capital_plan_id": str(plan.capital_plan_id),
+            "cash_effect": _decimal_text(plan.cash_effect),
             "revision": new_revision,
             "values": _json_safe_values(
-                {
-                    name: merged.get(name)
-                    for name in _BUY_SELL_PLAN_VALUE_COLUMNS
-                    if name in merged
-                }
+                {name: merged.get(name) for name in _BUY_SELL_PLAN_VALUE_COLUMNS if name in merged}
             ),
         }
 
@@ -1897,24 +2098,16 @@ async def archive_buy_sell_plan(
     payload = {"buy_sell_plan_id": str(buy_sell_plan_id)}
 
     async def _execute() -> dict[str, Any]:
-        plan = (
-            await session.execute(
-                select(store.BuySellPlan)
-                .where(
-                    store.BuySellPlan.id == buy_sell_plan_id,
-                    store.BuySellPlan.user_id == user_id,
-                )
-                .with_for_update()
-            )
-        ).scalar_one_or_none()
-        if plan is None:
-            raise NotFoundOrForbiddenError("买卖计划不存在或无权访问")
+        plan, capital = await _locked_buy_sell_plan(
+            session, user_id=user_id, buy_sell_plan_id=buy_sell_plan_id
+        )
         if plan.archived:
             return {
                 "buy_sell_plan_id": str(plan.id),
                 "archived": True,
                 "already_archived": True,
             }
+        await capital_accounting.book_fill(session, capital=capital, fill=plan, values=None)
         plan.archived = True
         plan.status = "archived"
         await session.flush()
@@ -2106,13 +2299,27 @@ async def set_research_link(
     async def _execute() -> dict[str, Any]:
         research = (
             await session.execute(
-                select(store.Session).where(
-                    store.Session.id == research_id, store.Session.user_id == user_id
-                )
+                select(store.Session)
+                .where(store.Session.id == research_id, store.Session.user_id == user_id)
+                .with_for_update()
             )
         ).scalar_one_or_none()
         if research is None:
             raise NotFoundOrForbiddenError("研究不存在或无权访问")
+        capital = (
+            await session.execute(
+                select(store.CapitalPlan).where(store.CapitalPlan.research_id == research.id)
+            )
+        ).scalar_one_or_none()
+        if (
+            capital is not None
+            and account_id is not None
+            and str(capital.account_id) != str(account_id)
+        ):
+            raise ValidationError(
+                "请通过会话规划资金绑定账户",
+                fields={"account_id": "请在规划资金中绑定账户，以同步预留额度"},
+            )
         if account_id is not None:
             account = (
                 await session.execute(

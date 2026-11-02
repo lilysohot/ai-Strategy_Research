@@ -470,6 +470,8 @@ class BuySellPlan(Base):
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
     status: Mapped[str] = mapped_column(String, nullable=False, default="active")
     archived: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    #: 已实际记入账户现金的净额；NULL 表示尚未入账，避免旧记录更正时错误冲销。
+    cash_effect: Mapped[Decimal | None] = mapped_column(MONEY)
     current_revision: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
@@ -498,6 +500,7 @@ class BuySellPlanRevision(Base):
     #: 实际买卖价格（成交价）。
     price: Mapped[Decimal] = mapped_column(MONEY, nullable=False)
     quantity: Mapped[Decimal | None] = mapped_column(MONEY)
+    fees: Mapped[Decimal | None] = mapped_column(MONEY)
     traded_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     currency: Mapped[str] = mapped_column(String, nullable=False)
     source_kind: Mapped[str] = mapped_column(String, nullable=False, default="form")
@@ -956,7 +959,9 @@ class WatchRule(Base):
     #: 已落库的最大配置版本号；配置明细读取版本行，不在指针行复制正文。
     current_version: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     agent_intent: Mapped[str | None] = mapped_column(String)
-    managed_by: Mapped[str] = mapped_column(String, nullable=False, default="human", server_default="human")
+    managed_by: Mapped[str] = mapped_column(
+        String, nullable=False, default="human", server_default="human"
+    )
     rationale: Mapped[dict | None] = mapped_column(JSON)
     lifecycle_epoch: Mapped[int] = mapped_column(
         Integer, nullable=False, default=0, server_default="0"
@@ -1069,8 +1074,14 @@ class WatchEvent(Base):
 
     __tablename__ = "watch_events"
     __table_args__ = (
-        Index("uq_watch_events_rule_version", "rule_id", "rule_version", unique=True,
-              postgresql_where=text("round_id IS NULL"), sqlite_where=text("round_id IS NULL")),
+        Index(
+            "uq_watch_events_rule_version",
+            "rule_id",
+            "rule_version",
+            unique=True,
+            postgresql_where=text("round_id IS NULL"),
+            sqlite_where=text("round_id IS NULL"),
+        ),
         UniqueConstraint("research_id", "round_id", name="uq_watch_events_round"),
         Index("ix_watch_events_research_status", "research_id", "status"),
         Index("ix_watch_events_user_created", "user_id", "created_at"),
@@ -2871,9 +2882,7 @@ async def upsert_session_conversation(
         # because that row does not exist yet; two instances could both accept
         # the same expected empty head. PostgreSQL honours FOR UPDATE, while
         # SQLite keeps its existing test/development transaction semantics.
-        await session.execute(
-            select(Session.id).where(Session.id == session_id).with_for_update()
-        )
+        await session.execute(select(Session.id).where(Session.id == session_id).with_for_update())
         source = await session.get(RunContextSource, run_id)
         if source is None:
             session.add(

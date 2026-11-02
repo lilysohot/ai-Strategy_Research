@@ -126,6 +126,12 @@ watch(accountId, () => {
   if (account) hydrateFromAccount(account)
 })
 
+watch(selectedAccount, (account) => {
+  if (account && !dirty.value && account.revision !== serverRevision.value) {
+    hydrateFromAccount(account)
+  }
+})
+
 function loadAccount(id: string): void {
   accountId.value = id
 }
@@ -505,6 +511,11 @@ async function submitCorrection(): Promise<void> {
       </nav>
 
       <section v-if="section === 'account'" class="form-section" v-loading="business.loadingAccounts">
+        <p v-if="selectedAccount?.funding" class="field--wide">
+          账户现金 {{ selectedAccount.values.available_capital ?? '待补充' }} ·
+          会话已预留 {{ selectedAccount.funding.reserved_capital }} ·
+          可继续分配 {{ selectedAccount.funding.allocatable_capital ?? '待补充' }}
+        </p>
         <label class="field field--wide">
           <span>读取已有账户</span>
           <el-select v-model="accountId" placeholder="选择要查看的账户" clearable @change="loadAccount">

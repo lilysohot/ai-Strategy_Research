@@ -54,6 +54,7 @@ export interface SessionBuySellPlan {
   tradedAt: string
   currency: string
   archived: boolean
+  cashEffect?: string | null
 }
 
 export interface SessionBuySellPlanInput {
@@ -64,6 +65,7 @@ export interface SessionBuySellPlanInput {
   quantity: string
   tradedAt: string
   currency: string
+  fees?: string
 }
 
 export const WORKSPACE_NAV_ITEMS: readonly WorkspaceNavItem[] = [

@@ -208,6 +208,7 @@ export interface Account {
   revision: number
   updated_at: string | null
   values: AccountValues
+  funding?: { reserved_capital: string; allocatable_capital: string | null }
 }
 
 export interface AccountListResponse {
@@ -284,9 +285,11 @@ export interface CapitalPlan {
   capital_plan_id: string
   research_id: string
   account_id: string | null
+  account_binding_locked?: boolean
   revision: number
   record_state: string
   values: CapitalPlanValues
+  funding?: { net_cash_flow: string; remaining_capital: string | null; unbooked_count: number }
 }
 
 export interface CapitalPlanResponse {
@@ -316,6 +319,7 @@ export interface BuySellPlanValues {
   side: TradeSide | null
   price: string | null
   quantity: string | null
+  fees?: string | null
   traded_at: string | null
   currency: string | null
 }
@@ -326,6 +330,7 @@ export interface BuySellPlan {
   research_id: string
   status: string
   archived: boolean
+  cash_effect?: string | null
   revision: number
   values: BuySellPlanValues
 }

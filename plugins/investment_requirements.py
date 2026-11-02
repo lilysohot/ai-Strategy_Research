@@ -13,7 +13,7 @@ def missing_facts(
         "plan.symbol": "请填写标的",
         "plan.market": "请选择市场",
         "plan.direction": "请选择方向",
-        "plan.allocated_capital": "请填写本会话规划资金；当前不会自动扣减总账户余额",
+        "plan.allocated_capital": "请填写本会话规划资金；规划预留账户额度，实际成交联动现金余额",
     }
     if session_allocation:
         # Research scenarios do not require a recorded trade or a retired plan.

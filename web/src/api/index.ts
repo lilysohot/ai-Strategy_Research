@@ -444,6 +444,7 @@ export const capitalPlans = {
   },
 
   create(researchId: string, body: {
+    account_id?: string
     declared: Record<string, unknown>
   }, idempotencyKey: string) {
     return request<BusinessOperationResponse>(
@@ -453,6 +454,13 @@ export const capitalPlans = {
         body: { ...body, source_kind: 'form' },
         headers: IDEMPOTENCY_HEADER(idempotencyKey),
       },
+    )
+  },
+
+  bindAccount(id: string, body: { account_id: string; expected_revision: number }, idempotencyKey: string) {
+    return request<BusinessOperationResponse>(
+      `/business/capital-plans/${encodeURIComponent(id)}/account`,
+      { method: 'POST', body, headers: IDEMPOTENCY_HEADER(idempotencyKey) },
     )
   },
 

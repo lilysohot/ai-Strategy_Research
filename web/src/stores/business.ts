@@ -74,6 +74,7 @@ function buySellPlanToPreview(plan: BuySellPlan): SessionBuySellPlan {
     tradedAt: text(values?.traded_at),
     currency: text(values?.currency),
     archived: plan.archived,
+    cashEffect: plan.cash_effect ?? null,
   }
 }
 
@@ -108,6 +109,26 @@ export const useBusinessStore = defineStore('business', () => {
   const error = ref<string | null>(null)
 
   let plansForResearchId: string | null = null
+  const fundingKeys = new Map<string, string>()
+
+  async function fundingWrite(
+    scope: string, payload: unknown, write: (key: string) => Promise<unknown>,
+  ): Promise<void> {
+    const signature = `${scope}:${JSON.stringify(payload)}`
+    const key = fundingKeys.get(signature) ?? writeKey(scope)
+    fundingKeys.set(signature, key)
+    await write(key)
+    fundingKeys.delete(signature)
+  }
+
+  async function refreshFunding(researchId: string): Promise<void> {
+    const results = await Promise.allSettled([
+      loadCapitalPlan(researchId), loadAccounts(), loadLink(researchId),
+    ])
+    if (results.some(result => result.status === 'rejected')) {
+      error.value = '资金记录已保存，但余额刷新失败；请刷新页面查看，勿重复登记。'
+    }
+  }
 
   /** Display shape consumed by SessionPlanManager / profile plan overview. */
   const planPreviews = computed<SessionPlanPreview[]>(() =>
@@ -202,38 +223,46 @@ export const useBusinessStore = defineStore('business', () => {
   /** 创建会话唯一的规划资金；已存在时服务端返回版本冲突，不覆盖原值。 */
   async function createCapitalPlan(
     researchId: string,
-    input: { allocatedCapital: string; currency: string },
+    input: { allocatedCapital: string; currency: string; accountId: string },
   ): Promise<void> {
     const declared: Record<string, unknown> = {
       allocated_capital: { value: input.allocatedCapital.trim() },
     }
     if (input.currency.trim()) declared.currency = { value: input.currency.trim() }
-    await capitalPlansApi.create(researchId, { declared }, writeKey('capital.create'))
-    await loadCapitalPlan(researchId)
+    const payload = { declared, account_id: input.accountId }
+    await fundingWrite('capital.create', { researchId, ...payload }, key =>
+      capitalPlansApi.create(researchId, payload, key))
+    await refreshFunding(researchId)
+  }
+
+  /** 在首次资金记账前，将会话预算及研究关联原子绑定到所选账户。 */
+  async function bindCapitalAccount(accountId: string): Promise<void> {
+    const current = capitalPlan.value
+    if (!current) throw new Error('请先创建规划资金')
+    const payload = { account_id: accountId, expected_revision: current.revision }
+    await fundingWrite('capital.bindAccount', { id: current.capital_plan_id, ...payload }, key =>
+      capitalPlansApi.bindAccount(current.capital_plan_id, payload, key))
+    await refreshFunding(current.research_id)
   }
 
   /** 累加分配资金：服务端在现值上加 delta，多次写入不会互相覆盖。 */
   async function allocateCapital(delta: string): Promise<void> {
     const current = capitalPlan.value
     if (!current) throw new Error('请先创建本会话的规划资金')
-    await capitalPlansApi.allocate(
-      current.capital_plan_id,
-      { allocation_delta: delta.trim(), expected_revision: current.revision },
-      writeKey('capital.allocate'),
-    )
-    await loadCapitalPlan(current.research_id)
+    const payload = { allocation_delta: delta.trim(), expected_revision: current.revision }
+    await fundingWrite('capital.allocate', { id: current.capital_plan_id, ...payload }, key =>
+      capitalPlansApi.allocate(current.capital_plan_id, payload, key))
+    await refreshFunding(current.research_id)
   }
 
   /** 重置规划资金为指定值；与累加共用版本流，重置也可追溯。 */
   async function resetCapital(amount: string): Promise<void> {
     const current = capitalPlan.value
     if (!current) throw new Error('请先创建本会话的规划资金')
-    await capitalPlansApi.reset(
-      current.capital_plan_id,
-      { allocated_capital: amount.trim(), expected_revision: current.revision },
-      writeKey('capital.reset'),
-    )
-    await loadCapitalPlan(current.research_id)
+    const payload = { allocated_capital: amount.trim(), expected_revision: current.revision }
+    await fundingWrite('capital.reset', { id: current.capital_plan_id, ...payload }, key =>
+      capitalPlansApi.reset(current.capital_plan_id, payload, key))
+    await refreshFunding(current.research_id)
   }
 
   /** 登记一笔实际买卖价格（规划资金 1:N）。 */
@@ -248,20 +277,19 @@ export const useBusinessStore = defineStore('business', () => {
       currency: { value: input.currency.trim() },
     }
     if (input.quantity.trim()) declared.quantity = { value: input.quantity.trim() }
+    if (input.fees?.trim()) declared.fees = { value: input.fees.trim() }
     if (input.tradedAt.trim()) declared.traded_at = { value: input.tradedAt.trim() }
-    await buySellPlansApi.create(
-      current.capital_plan_id,
-      { declared },
-      writeKey('buy_sell.create'),
-    )
-    await loadBuySellPlans(current.capital_plan_id)
+    await fundingWrite('buy_sell.create', { id: current.capital_plan_id, declared }, key =>
+      buySellPlansApi.create(current.capital_plan_id, { declared }, key))
+    await refreshFunding(current.research_id)
   }
 
   async function archiveBuySellPlan(buySellPlanId: string): Promise<void> {
     const current = capitalPlan.value
     if (!current) throw new Error('请先创建本会话的规划资金')
-    await buySellPlansApi.archive(buySellPlanId, writeKey('buy_sell.archive'))
-    await loadBuySellPlans(current.capital_plan_id)
+    await fundingWrite('buy_sell.archive', buySellPlanId, key =>
+      buySellPlansApi.archive(buySellPlanId, key))
+    await refreshFunding(current.research_id)
   }
 
   /** Load the most recent write receipts so a refreshed page can restore them. */
@@ -291,6 +319,7 @@ export const useBusinessStore = defineStore('business', () => {
   }
 
   function reset(): void {
+    fundingKeys.clear()
     accounts.value = []
     plans.value = []
     link.value = null
@@ -322,6 +351,7 @@ export const useBusinessStore = defineStore('business', () => {
     loadBuySellPlans,
     loadRecentOperations,
     createCapitalPlan,
+    bindCapitalAccount,
     allocateCapital,
     resetCapital,
     createBuySellPlan,

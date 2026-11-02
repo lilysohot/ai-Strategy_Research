@@ -443,6 +443,38 @@ async def test_allocation_without_trades_allows_analysis_and_preserves_account(b
         reset_investment_context(tokens)
 
 
+async def test_saved_trade_can_submit_holding_analysis_without_legacy_plan(business_rows):
+    """The UI saves the fill first, then sends this exact account + trade input."""
+    row = business_rows
+    trade = {
+        "symbol": "600000.SH", "market": "CN", "side": "buy", "price": "10",
+        "quantity": "100", "currency": "CNY", "traded_at": "2026-11-02T10:00:00+08:00",
+    }
+    async with biz.business_transaction() as session:
+        await biz.create_buy_sell_plan(
+            session, user_id=row.user_id, capital_plan_id=row.capital_id,
+            declared=trade, idempotency_key="saved-fill-before-analysis",
+        )
+    async with biz.business_transaction() as session:
+        spec = snapshots.parse_investment_input({
+            "use_case": "holding_cost", "account": {"id": str(row.account_id)},
+            "declared": {"trade": trade}, "idempotency_key": "fill-analysis",
+        })
+        saved_spec, saved = await snapshots.persist_declared(
+            session, user_id=row.user_id, research_id=row.research_id, spec=spec,
+        )
+        result = await snapshots.resolve_for_run(
+            session, user_id=row.user_id, research_id=row.research_id, spec=saved_spec,
+        )
+        assert saved["trade"]["trade_id"]
+        assert result.plan_id is None and not result.missing
+        assert Decimal(result.values["trade.price"]["value"]) == 10
+        assert Decimal(result.values["account.available_capital"]["value"]) == 199000
+        assert Decimal(result.values["capital.remaining_capital"]["value"]) == 29000
+        account = await session.get(store.InvestmentAccount, row.account_id)
+        assert account.current_revision == 2  # Analysis does not book the fill again.
+
+
 @pytest.mark.parametrize("existing_capital", [False, True])
 async def test_new_session_input_answer_persists_allocation_and_queues_followup(
     business_rows, tmp_path, existing_capital,

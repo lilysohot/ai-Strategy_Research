@@ -70,6 +70,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from server import (
     business_archive,
     business_events,
+    capital_accounting,
     input_requests,
     store,
     watch_eval,
@@ -304,6 +305,7 @@ async def list_accounts(
                     "revision": account.current_revision,
                     "updated_at": _iso(account.updated_at),
                     "values": _account_values(revision) if revision else {},
+                    "funding": await capital_accounting.account_summary(session, account),
                 }
             )
     return {"accounts": accounts, "total": total, "has_more": offset + len(accounts) < total}
@@ -342,6 +344,7 @@ async def get_account(
             "revision": account.current_revision,
             "updated_at": _iso(account.updated_at),
             "values": _account_values(revision) if revision else {},
+            "funding": await capital_accounting.account_summary(session, account),
         }
 
 
@@ -599,6 +602,7 @@ def _buy_sell_values(values: dict[str, Any]) -> dict[str, Any]:
         "side": values.get("side"),
         "price": _decimal_text(values.get("price")),
         "quantity": _decimal_text(values.get("quantity")),
+        "fees": _decimal_text(values.get("fees")),
         "traded_at": _iso(values.get("traded_at")),
         "currency": values.get("currency"),
     }
@@ -611,6 +615,7 @@ def _buy_sell_plan_view(row: dict[str, Any]) -> dict[str, Any]:
         "research_id": row["research_id"],
         "status": row["status"],
         "archived": row["archived"],
+        "cash_effect": row.get("cash_effect"),
         "revision": row["revision"],
         "values": _buy_sell_values(row.get("values") or {}),
     }
@@ -635,6 +640,8 @@ async def get_capital_plan(
             "account_id": plan["account_id"],
             "revision": plan["revision"],
             "record_state": plan["record_state"],
+            "funding": plan["funding"],
+            "account_binding_locked": plan["account_binding_locked"],
             "values": _capital_plan_view(plan["values"]),
         }
     }
@@ -653,10 +660,36 @@ async def create_capital_plan(
             session,
             user_id=user.id,
             research_id=_as_uuid(research_id, "research_id"),
+            account_id=_as_uuid(body["account_id"], "account_id") if "account_id" in body else None,
             declared=_body_declared(body, "declared"),
             idempotency_key=key,
             source_kind=str(body.get("source_kind") or "form"),
             source_ref=body.get("source_ref"),
+        )
+    return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
+
+
+@router.post("/capital-plans/{capital_plan_id}/account")
+async def bind_capital_account(
+    capital_plan_id: str,
+    body: dict[str, Any],
+    user: UserModel = Depends(get_current_user),
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+) -> dict[str, Any]:
+    key = _require_key(idempotency_key)
+    expected = body.get("expected_revision")
+    if type(expected) is not int:
+        raise biz.ValidationError(
+            "缺少有效预期版本", fields={"expected_revision": "需要当前版本号"}
+        )
+    async with biz.business_transaction() as session:
+        outcome = await biz.bind_capital_account(
+            session,
+            user_id=user.id,
+            capital_plan_id=_as_uuid(capital_plan_id, "capital_plan_id"),
+            account_id=_as_uuid(str(body.get("account_id", "")), "account_id"),
+            expected_revision=expected,
+            idempotency_key=key,
         )
     return {"replayed": outcome.replayed, "operation_id": outcome.operation_id, **outcome.result}
 
@@ -1043,7 +1076,9 @@ async def get_input_request(
     async with biz.business_transaction() as session:
         await input_requests.expire_due(session, user_id=user.id)
         await input_requests.reconcile_satisfied_requests(
-            session, user_id=user.id, request_id=request_uuid,
+            session,
+            user_id=user.id,
+            request_id=request_uuid,
         )
         row = (
             await session.execute(

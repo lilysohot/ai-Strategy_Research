@@ -20,11 +20,21 @@ const emit = defineEmits<{
 }>()
 
 const business = useBusinessStore()
+const fundingAccount = computed(() => business.accounts.find(
+  (account) => account.id === capitalDraft.accountId,
+))
+const boundAccount = computed(() => business.accounts.find(account => account.id === business.capitalPlan?.account_id))
+const accountOptions = computed(() => business.accounts.filter(account =>
+  !account.archived || account.id === business.capitalPlan?.account_id,
+))
+const capitalLoading = ref(false)
+const initialAccountId = ref('')
 
 const currentPlans = computed(() => props.plans.filter((plan) => plan.sessionId === props.sessionId))
 
 // ——— 规划资金（会话 1:1）：只累加或重置，不做覆盖式更新 ———
 const capitalDraft = reactive({
+  accountId: '',
   amount: '',
   currency: 'CNY',
   delta: '',
@@ -34,7 +44,7 @@ const capitalBusy = ref(false)
 const capitalError = ref('')
 
 // ——— 实际买卖价格（规划资金 1:N）———
-// 与回填实际成交价合并为一个入口：保存即登记买卖价格，并在账户/计划已绑定时
+// 与回填实际成交价合并为一个入口：保存即登记买卖价格，并在会话资金账户已绑定时
 // 自动提交 holding_cost 成本分析 Run（保存必须保留执行分析）。
 const buySellDraft = reactive<SessionBuySellPlanInput & { fees: string }>({
   symbol: '',
@@ -49,19 +59,42 @@ const buySellDraft = reactive<SessionBuySellPlanInput & { fees: string }>({
 const buySellBusy = ref(false)
 const buySellError = ref('')
 const canAnalyzeTrade = computed(
-  () => !!(props.sessionId && business.link?.account_id && business.link?.primary_plan_id),
+  () => !!(props.sessionId && business.capitalPlan?.account_id
+    && capitalDraft.accountId === business.capitalPlan.account_id),
 )
 
 watch(() => props.sessionId, () => {
   resetCapitalDraft()
   resetBuySellDraft()
 }, { flush: 'sync' })
-watch(() => props.modelValue, (open) => {
-  if (!open) {
-    resetCapitalDraft()
-    resetBuySellDraft()
-  } else if (props.sessionId) {
-    void business.loadCapitalPlan(props.sessionId)
+watch([() => props.modelValue, () => props.sessionId], async ([open, sessionId]) => {
+  resetCapitalDraft()
+  resetBuySellDraft()
+  if (!open || !sessionId) return
+  capitalLoading.value = true
+  try {
+    await Promise.all([
+      business.loadCapitalPlan(sessionId), business.loadAccounts(), business.loadLink(sessionId),
+    ])
+    if (props.sessionId !== sessionId || !props.modelValue) return
+    const preferred = business.capitalPlan?.account_id ?? business.link?.account_id
+      ?? business.accounts.find(account => account.is_default && !account.archived)?.id
+      ?? (accountOptions.value.length === 1 ? accountOptions.value[0]?.id : '')
+    initialAccountId.value = preferred ?? ''
+    capitalDraft.accountId = initialAccountId.value
+    capitalDraft.currency = business.capitalPlan?.values.currency ?? fundingAccount.value?.base_currency ?? 'CNY'
+    buySellDraft.currency = capitalDraft.currency
+  } catch (err) {
+    capitalError.value = err instanceof Error ? err.message : '加载资金账户失败'
+  } finally {
+    if (props.sessionId === sessionId) capitalLoading.value = false
+  }
+}, { immediate: true })
+
+watch(() => capitalDraft.accountId, () => {
+  if (!business.capitalPlan && fundingAccount.value) {
+    capitalDraft.currency = fundingAccount.value.base_currency
+    buySellDraft.currency = fundingAccount.value.base_currency
   }
 })
 function beforeUnload(event: BeforeUnloadEvent): void {
@@ -76,7 +109,7 @@ onBeforeUnmount(() => {
 })
 
 function isDirty(): boolean {
-  return !!(capitalDraft.amount || capitalDraft.delta || capitalDraft.resetAmount
+  return !!(capitalDraft.accountId !== initialAccountId.value || capitalDraft.amount || capitalDraft.delta || capitalDraft.resetAmount
     || buySellDraft.symbol || buySellDraft.price
     || buySellDraft.quantity || buySellDraft.tradedAt || buySellDraft.fees)
 }
@@ -88,7 +121,8 @@ watch([capitalDraft, buySellDraft], () => emit('dirtyChange', isDirty()), {
 
 function resetCapitalDraft(): void {
   capitalError.value = ''
-  Object.assign(capitalDraft, { amount: '', delta: '', resetAmount: '' })
+  initialAccountId.value = ''
+  Object.assign(capitalDraft, { accountId: '', amount: '', delta: '', resetAmount: '' })
 }
 
 function resetBuySellDraft(): void {
@@ -100,7 +134,7 @@ function resetBuySellDraft(): void {
     price: '',
     quantity: '',
     tradedAt: '',
-    currency: 'CNY',
+    currency: business.capitalPlan?.values.currency ?? fundingAccount.value?.base_currency ?? 'CNY',
     fees: '',
   } satisfies SessionBuySellPlanInput & { fees: string })
 }
@@ -113,6 +147,10 @@ function decimalOk(value: string): boolean {
 async function createCapitalPlan(): Promise<void> {
   if (capitalBusy.value || !props.sessionId) return
   capitalError.value = ''
+  if (!capitalDraft.accountId || !fundingAccount.value || fundingAccount.value.archived) {
+    capitalError.value = '请选择本会话的资金来源账户'
+    return
+  }
   if (!decimalOk(capitalDraft.amount)) {
     capitalError.value = '请输入非负十进制金额'
     return
@@ -122,11 +160,28 @@ async function createCapitalPlan(): Promise<void> {
     await business.createCapitalPlan(props.sessionId, {
       allocatedCapital: capitalDraft.amount,
       currency: capitalDraft.currency,
+      accountId: capitalDraft.accountId,
     })
     capitalDraft.amount = ''
+    initialAccountId.value = capitalDraft.accountId
     ElMessage.success('规划资金已创建')
   } catch (err) {
     capitalError.value = err instanceof Error ? err.message : '保存失败，请重试'
+  } finally {
+    capitalBusy.value = false
+  }
+}
+
+async function bindCapitalAccount(): Promise<void> {
+  if (capitalLoading.value || capitalBusy.value || buySellBusy.value || !capitalDraft.accountId) return
+  capitalError.value = ''
+  capitalBusy.value = true
+  try {
+    await business.bindCapitalAccount(capitalDraft.accountId)
+    initialAccountId.value = capitalDraft.accountId
+    ElMessage.success('会话资金账户已绑定')
+  } catch (err) {
+    capitalError.value = err instanceof Error ? err.message : '账户绑定失败'
   } finally {
     capitalBusy.value = false
   }
@@ -173,10 +228,14 @@ async function resetCapital(): Promise<void> {
   }
 }
 
-/** 保存一笔实际买卖价格；账户与计划已绑定时，同一次保存自动触发成本分析。 */
+/** 保存一笔实际买卖价格，使用本会话资金账户自动触发成本分析。 */
 async function saveBuySellPlan(): Promise<void> {
-  if (buySellBusy.value) return
+  if (buySellBusy.value || capitalBusy.value || capitalLoading.value) return
   buySellError.value = ''
+  if (!props.sessionId || !business.capitalPlan?.account_id || capitalDraft.accountId !== business.capitalPlan.account_id) {
+    buySellError.value = '请先保存本会话的资金账户绑定，再登记买卖'
+    return
+  }
   if (!buySellDraft.symbol.trim() || !buySellDraft.price.trim()) {
     buySellError.value = '请填写标的与实际买卖价格'
     return
@@ -189,6 +248,9 @@ async function saveBuySellPlan(): Promise<void> {
     buySellError.value = '成本分析需要成交量与成交时间，请补齐后再保存'
     return
   }
+  // Capture the source session/account before refreshing shared store state.
+  const sessionId = props.sessionId
+  const accountId = business.capitalPlan.account_id
   buySellBusy.value = true
   const submitted = {
     symbol: buySellDraft.symbol.trim().toUpperCase(),
@@ -205,25 +267,17 @@ async function saveBuySellPlan(): Promise<void> {
     resetBuySellDraft()
   } catch (err) {
     buySellError.value = err instanceof Error ? err.message : '保存失败，请重试'
-    return
-  } finally {
     buySellBusy.value = false
-  }
-  if (!canAnalyzeTrade.value || !props.sessionId) {
-    ElMessage.success('实际买卖价格已保存；绑定主账户与主计划后，保存将自动触发成本分析')
     return
   }
-  const sessionId = props.sessionId
-  const message = `已按 ${submitted.price} ${submitted.side === 'buy' ? '买入' : '卖出'} ${submitted.quantity}，请按实际成交成本重新分析。`
-  buySellBusy.value = true
+  const message = `已按 ${submitted.price} ${submitted.currency} ${submitted.side === 'buy' ? '买入' : '卖出'} ${submitted.symbol} ${submitted.quantity}，请按实际成交成本重新分析。`
   try {
     const res = await runsApi.submit({
       session_id: sessionId,
       message,
       investment_input: {
         use_case: 'holding_cost',
-        account: { id: business.link!.account_id! },
-        plan: { id: business.link!.primary_plan_id! },
+        account: { id: accountId },
         declared: {
           trade: {
             symbol: submitted.symbol,
@@ -324,7 +378,38 @@ defineExpose({ resetDraft: clearDrafts })
       </div>
     </section>
 
-    <section class="capital-plan" aria-labelledby="session-capital-plan-title">
+    <section v-loading="capitalLoading" class="capital-plan" aria-labelledby="session-capital-plan-title">
+      <p v-if="business.error" role="alert">{{ business.error }}</p>
+      <label class="field">
+        <span>资金来源账户</span>
+        <el-select v-model="capitalDraft.accountId" placeholder="选择本会话绑定的资金账户"
+          :disabled="capitalLoading || capitalBusy || buySellBusy || business.capitalPlan?.account_binding_locked">
+          <el-option v-for="account in accountOptions" :key="account.id" :value="account.id"
+            :disabled="account.archived"
+            :label="`${account.name}${account.is_default ? '（默认主账户）' : ''}${account.archived ? '（已归档）' : ''} · ${account.base_currency} · 可分配 ${account.funding?.allocatable_capital ?? '待补充'}`" />
+        </el-select>
+      </label>
+      <p v-if="business.capitalPlan">
+        当前绑定：{{ boundAccount?.name ?? business.capitalPlan.account_id ?? '尚未绑定' }}
+        <span v-if="business.capitalPlan.account_binding_locked"> · 已有资金入账，账户归属已固定</span>
+      </p>
+      <el-button v-if="business.capitalPlan && !business.capitalPlan.account_binding_locked"
+        :disabled="capitalLoading || buySellBusy || !capitalDraft.accountId || capitalDraft.accountId === business.capitalPlan.account_id"
+        :loading="capitalBusy" @click="bindCapitalAccount">绑定资金账户</el-button>
+      <p v-if="!capitalLoading && !accountOptions.length">请先在交易账户资料中创建资金账户。</p>
+      <p v-if="fundingAccount?.funding">
+        所选账户现金 {{ fundingAccount.values.available_capital ?? '待补充' }} ·
+        已预留 {{ fundingAccount.funding.reserved_capital }} ·
+        可继续分配 {{ fundingAccount.funding.allocatable_capital ?? '待补充' }}
+        {{ fundingAccount.base_currency }}
+      </p>
+      <p v-if="business.capitalPlan?.funding">
+        本会话剩余额度 {{ business.capitalPlan.funding.remaining_capital ?? '待补充' }}
+        {{ business.capitalPlan.values.currency }}
+        <span v-if="business.capitalPlan.funding.unbooked_count">
+          · {{ business.capitalPlan.funding.unbooked_count }} 笔记录尚未联动资金
+        </span>
+      </p>
       <header>
         <span>规划资金</span>
         <h3 id="session-capital-plan-title">本会话的规划资金</h3>
@@ -341,12 +426,12 @@ defineExpose({ resetDraft: clearDrafts })
             <span>增加分配</span>
             <el-input v-model="capitalDraft.delta" inputmode="decimal" placeholder="在现值上累加，例如 5000" />
           </label>
-          <el-button :loading="capitalBusy" @click="allocateCapital">累加</el-button>
+          <el-button :loading="capitalBusy" :disabled="!business.capitalPlan?.account_id || capitalDraft.accountId !== business.capitalPlan.account_id" @click="allocateCapital">累加</el-button>
           <label class="field">
             <span>重置为</span>
             <el-input v-model="capitalDraft.resetAmount" inputmode="decimal" placeholder="新的规划资金总额" />
           </label>
-          <el-button :loading="capitalBusy" @click="resetCapital">重置</el-button>
+          <el-button :loading="capitalBusy" :disabled="!business.capitalPlan?.account_id || capitalDraft.accountId !== business.capitalPlan.account_id" @click="resetCapital">重置</el-button>
         </div>
       </div>
       <div v-else class="capital-create">
@@ -356,13 +441,13 @@ defineExpose({ resetDraft: clearDrafts })
         </label>
         <label class="field">
           <span>币种</span>
-          <el-select v-model="capitalDraft.currency">
+          <el-select v-model="capitalDraft.currency" disabled>
             <el-option label="人民币 CNY" value="CNY" />
             <el-option label="港币 HKD" value="HKD" />
             <el-option label="美元 USD" value="USD" />
           </el-select>
         </label>
-        <el-button type="primary" :loading="capitalBusy" @click="createCapitalPlan">创建规划资金</el-button>
+        <el-button type="primary" :loading="capitalBusy" :disabled="capitalLoading || !capitalDraft.accountId" @click="createCapitalPlan">创建并绑定规划资金</el-button>
       </div>
       <p v-if="capitalError" class="trade-error" role="alert">{{ capitalError }}</p>
     </section>
@@ -383,6 +468,7 @@ defineExpose({ resetDraft: clearDrafts })
           <div class="plan-identity">
             <strong>{{ entry.symbol }} · {{ entry.side === 'buy' ? '买入' : '卖出' }}</strong>
             <span>{{ entry.price }} {{ entry.currency }}<template v-if="entry.quantity"> · {{ entry.quantity }}</template></span>
+            <span v-if="!entry.archived && entry.cashEffect == null">尚未联动资金</span>
           </div>
           <span class="draft-label">{{ entry.tradedAt || '未填时间' }}</span>
           <el-button
@@ -391,7 +477,7 @@ defineExpose({ resetDraft: clearDrafts })
             :disabled="buySellBusy"
             @click="archiveBuySellPlan(entry.id)"
           >
-            归档
+            作废并归档
           </el-button>
           <span v-else class="draft-label">已归档</span>
         </article>
@@ -451,7 +537,9 @@ defineExpose({ resetDraft: clearDrafts })
           <el-input v-model="buySellDraft.fees" inputmode="decimal" placeholder="可留空" />
         </label>
         <div class="field buy-sell-submit">
-          <el-button type="primary" :loading="buySellBusy" @click="saveBuySellPlan">
+          <el-button type="primary" :loading="buySellBusy"
+            :disabled="capitalLoading || capitalBusy || !business.capitalPlan?.account_id || capitalDraft.accountId !== business.capitalPlan.account_id"
+            @click="saveBuySellPlan">
             {{ canAnalyzeTrade ? '保存并重新分析' : '保存实际买卖价格' }}
           </el-button>
         </div>

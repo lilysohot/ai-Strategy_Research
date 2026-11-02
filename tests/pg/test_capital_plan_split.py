@@ -23,7 +23,7 @@ from server import business_service as biz
 from server import investment_snapshot as snapshots
 from server import store
 
-pytestmark = pytest.mark.pg
+pytestmark = [pytest.mark.pg, pytest.mark.usefixtures("pg_clean")]
 
 
 async def _new_user(session, name: str) -> uuid.UUID:
@@ -49,9 +49,14 @@ async def _new_account(session, user_id: uuid.UUID) -> uuid.UUID:
             name=f"账户-{account_id.hex[:6]}",
             base_currency="CNY",
             archived=False,
-            current_revision=0,
+            current_revision=1,
         )
     )
+    await session.flush()
+    session.add(store.InvestmentAccountRevision(
+        account_id=account_id, revision=1, total_capital=Decimal("1000000"),
+        available_capital=Decimal("1000000"), currency="CNY", record_state="submitted",
+    ))
     await session.flush()
     return account_id
 
@@ -168,7 +173,7 @@ async def test_reset_supersedes_total_but_keeps_history() -> None:
 
 async def test_buy_sell_plans_are_many_under_one_capital_plan() -> None:
     user_id, research_id = await _context("cp-buysell")
-    created = await _create_capital(user_id, research_id, "10000", "cp-bs-1")
+    created = await _create_capital(user_id, research_id, "200000", "cp-bs-1")
     plan_id = uuid.UUID(created["capital_plan_id"])
 
     async with biz.business_transaction() as session:
@@ -514,7 +519,7 @@ async def test_context_carries_active_buy_sell_prices_only() -> None:
 
     spec = snapshots.InvestmentInputSpec(
         use_case="plan_analysis",
-        account=snapshots.ObjectRef(_account_id, 1),
+        account=snapshots.ObjectRef(_account_id, 3),
         plan=snapshots.ObjectRef(_plan_id, 1),
     )
     async with biz.business_transaction() as session:

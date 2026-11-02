@@ -211,6 +211,19 @@ async def delete_research(
         if research.deleted_at is not None:
             return {"research_id": str(research.id), "deleted": True, "already_deleted": True}
 
+        capital = await session.scalar(select(store.CapitalPlan).where(
+            store.CapitalPlan.research_id == research.id
+        ))
+        if capital is not None and capital.account_id is not None:
+            # Serialize reservation release with fills. Deleting a conversation
+            # keeps its booked trades; only its unused reservation is released.
+            await session.execute(select(store.InvestmentAccount).where(
+                store.InvestmentAccount.id == capital.account_id
+            ).with_for_update())
+            await session.execute(select(store.CapitalPlan).where(
+                store.CapitalPlan.id == capital.id
+            ).with_for_update())
+
         # 1) 取消该研究所有活动监控规则（终态，调度不再启动）。
         rules = (
             (
