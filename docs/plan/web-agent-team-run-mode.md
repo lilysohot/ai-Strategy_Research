@@ -2,7 +2,7 @@
 
 | 项 | 内容 |
 |---|---|
-| 版本 / 日期 | v3.26 · 2026-10-31（协调器最终提交路径联通）；基础接线见 §15，前端入口见 §17，简单单轮实测见 §19，复杂工具链审计见 §20；两次同题团队运行修复见 §20.35，检查身份与部分交付修复见 §20.36，取消前证据收回与历史清理见 §20.37，研究交接直接提交见 §20.38，v3.17 优化试验见 §20.39（已回退），基础链路收敛复审与回退见 §20.40，协作停止与收尾指令修复见 §20.41，历史恢复与证据边界见 §20.42，缺参/摘要/提示追踪见 §20.43，前缀与统计修复见 §20.44，历史窗口与输入减量见 §20.45，60 秒阈值对比见 §20.46，汇总失败保全与任务绑定见 §20.47，最终提交路径联通见 §20.48 |
+| 版本 / 日期 | v3.27 · 2026-11-03（语料库工具接入团队）；基础接线见 §15，前端入口见 §17，简单单轮实测见 §19，复杂工具链审计见 §20；两次同题团队运行修复见 §20.35，检查身份与部分交付修复见 §20.36，取消前证据收回与历史清理见 §20.37，研究交接直接提交见 §20.38，v3.17 优化试验见 §20.39（已回退），基础链路收敛复审与回退见 §20.40，协作停止与收尾指令修复见 §20.41，历史恢复与证据边界见 §20.42，缺参/摘要/提示追踪见 §20.43，前缀与统计修复见 §20.44，历史窗口与输入减量见 §20.45，60 秒阈值对比见 §20.46，汇总失败保全与任务绑定见 §20.47，最终提交路径联通见 §20.48，语料库工具接入团队见 §20.49 |
 | 状态 | **有效 · 简单团队单轮与停止通过；复杂工具任务尚未通过，T03/T04/T06/T07 已修复并局部实测，其他缺口及完整端到端重验仍待完成；既有服务功能开关保持关闭** |
 | 需求 | PR-RUN-08；关联 PR-RUN-01—06、PR-DATA-04、PR-BIZ-04 |
 | 产品依据 | [产品需求基线](../product-requirements.md) · [业务流程](../business-process.md) |
@@ -3344,3 +3344,57 @@ conversation / cross-mode context。模型固定为原运行的 `deepseek-v4-fla
 
 审计重放：`.scratch/run-audits/replay_3fc1_atomic_delivery.py` 及同名 `.json`；
 原诊断对照保留在 `probe_3fc1_delivery.py/.json`。
+
+### 20.49 语料库工具接入团队成员（第一批，2026-11-03）
+
+此前 Web 团队工具配置（`server/profile.py` 的 `agent_team` 分支）沿用 CLI 的
+`sub_agent_tools`，没有把资料库工具提供给成员。本次按范围先行接入
+`corpus_inventory / corpus_search / corpus_fetch`，验证「看覆盖 → 检索 → 取得原文 →
+报告引用」链路；`corpus_semantic_query` 待基础链路通过后再接，`data_coverage`
+因同时调用行情与财报服务暂缓。
+
+范围收敛约束：研究成员与核验成员直接使用语料库工具；协调器保留分工与汇总职责，
+不参与检索。证据须携带 `doc_id`（含 build 版本）与 `locator`，经成员报告后仍可
+追溯、复取；成员之间复用同一份证据，下一轮能继续读取原文。
+
+已落地：
+
+1. `server/profile.py` 新增 `TEAM_CORPUS_TOOL_NAMES = ["corpus_inventory",
+   "corpus_search", "corpus_fetch"]`；`agent_team` 分支将其追加到 `sub_agent_tools`
+   （研究与核验成员共用），`main_agent_tools` 不变。
+2. `TEAM_COORDINATOR_POLICY` / `TEAM_SUBAGENT_POLICY` 增补语料证据规则：引用必须带
+   `doc_id`（build 版本）+ `locator`；查不到时如实报告，不编造研报；`market_*` 与
+   `data_coverage` 在本运行未开放，不引导切换。
+3. `plugins/tools/corpus_search.py` 把「无匹配 / 拒检」提示改为上下文感知：新增
+   `_market_redirect` ContextVar（默认 `True`）+ `set_market_redirect` /
+   `reset_market_redirect`。默认行为不变；关闭后 `no_match` / `abstain` 改为
+   `TEAM_NO_COVERAGE_HINT` / `TEAM_ABSTAIN_HINT`——停止检索、如实报告「无资料库覆盖」，
+   不再指向 `market_resolve` / `market_quote` / `market_history`。
+4. `workflows/agent_team/subagent_runtime.py` 的 `_context_setup` 为每个子代理
+   `set_market_redirect(False)`，`finally` 复位；协调器不调用 `corpus_search`，故不关闭。
+5. `workflows/agent_team/prompts.py` 的 `_NOTABLE_SUB_CAPS` 增加 `corpus_search` →
+   `research-corpus search and retrieval`，让协调器识别成员具备资料库检索取证能力。
+6. `corpus_submit_manifest` 由 `create_subagent` 的 `with_manifest_tool` 伴随绑定
+   （语料检索工具触发），提供结构化证据清单；不在本批显式开放列表中，但作为
+   `corpus_search/fetch` 的伴随能力自动补齐，承接证据可追溯约束。
+
+验证与边界：
+
+- 相关单元回归全绿：`test_corpus_negative_query.py`（含新增
+  `test_corpus_search_team_mode_does_not_redirect_to_market`）、
+  `test_agent_team_workflow.py` / `test_agent_team_prompt_modes.py`、
+  `test_web_semantic_worker_gate.py` / `test_agent_team_timeout_wiring.py` /
+  `test_llm_short_wall_budget.py` 共 87 项，以及 `test_run_modes.py` 的团队 profile
+  断言（改为「3 个语料工具开放、`corpus_semantic_query`/`data_coverage`/行情/业务仍不开放」）。
+- `test_web_team_cli_parity.py` 成员工具期望加入 `TEAM_CORPUS_TOOL_NAMES` 与伴随绑定的
+  `corpus_submit_manifest`。
+- 修改文件 Ruff、Pyright 通过（`plugins/tools/corpus_search.py`、
+  `workflows/agent_team/subagent_runtime.py`、`workflows/agent_team/prompts.py`、
+  `server/profile.py` 等 0 error）。
+- 既有失败（非本批引入，已用 stash 回退复核确认）：`test_run_modes.py::
+  test_single_prompt_prefix_is_byte_identical[*]` 4 项为旧断言漏掉单 Agent prompt 的
+  `ROUND_SCOPE_POLICY`；`test_web_team_cli_parity.py` 两个 `versioned+verify` 用例为
+  未提交的 `_verification.py` / `assign_task.py` 协议 v2（要求 `subject_sha256`）与
+  固定 mock 脚本脱节，属进行中的 A4 核验工作。
+- 本批只打通工具接入与提示边界；真实模型上「查得到能引用、查不到明确说明、证据可复用、
+  下一轮可复取、最终交付收敛」的完整端到端尚未在真实语料上重验，留待下一批。
