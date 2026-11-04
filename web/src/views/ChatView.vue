@@ -911,6 +911,7 @@ watch(
             :run-id="m.run_id"
             :live-usage="sameRunId(runStream.runId, m.run_id) ? runStream.usage : null"
             :streaming="sameRunId(runStream.runId, m.run_id) && runStream.isStreaming"
+            :started-at-ms="sameRunId(runStream.runId, m.run_id) ? runStream.startedAtMs : null"
           />
           <div v-if="m.role === 'assistant' && runStream.runId === m.run_id && runStream.isStreaming" class="generating">
             {{ runStream.status === 'queued' ? '排队中，等待开始' : '生成中' }}

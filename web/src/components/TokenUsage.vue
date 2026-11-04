@@ -9,9 +9,13 @@ const props = defineProps<{
   runId: string | null
   liveUsage?: UsageTotals | null
   streaming?: boolean
+  /** Epoch ms of ``run_started`` for the live run; the summary supplies it later. */
+  startedAtMs?: number | null
 }>()
 
 const saved = ref<TokenUsageFields | null>(null)
+/** Run creation time from the summary — when this conversation turn was initiated. */
+const runCreatedAt = ref<string | null>(null)
 const loading = ref(false)
 const loadFailed = ref(false)
 const pinned = ref(false)
@@ -25,13 +29,17 @@ watch(() => [props.runId, props.streaming] as const, async ([runId, streaming], 
   let current = true
   onCleanup(() => { current = false })
   saved.value = null
+  runCreatedAt.value = null
   loadFailed.value = false
   loading.value = false
   if (!runId || streaming) return
   loading.value = true
   try {
     const summary = await runsApi.get(runId)
-    if (current) saved.value = summary.usage ?? null
+    if (current) {
+      saved.value = summary.usage ?? null
+      runCreatedAt.value = summary.created_at ?? null
+    }
   } catch {
     if (current) loadFailed.value = true
   } finally {
@@ -52,6 +60,16 @@ const source = computed<TokenUsageFields | null>(() => {
 const usage = computed(() => tokenBreakdown(source.value))
 const partial = computed(() => source.value?.status === 'partial')
 const format = (n: number | null) => n === null ? '—' : n.toLocaleString('en-US')
+
+/** ``2026-11-04 14:30`` in the viewer's local time; '' when unknown. */
+function formatTime(value: string | number | null): string {
+  if (value === null) return ''
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return ''
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`
+}
+const startedAt = computed(() => formatTime(runCreatedAt.value ?? props.startedAtMs ?? null))
 const rows = computed(() => [
   { label: '输入', value: usage.value.input, kind: 'input', sub: false },
   { label: '缓存命中', value: usage.value.read, kind: 'read', sub: true },
@@ -83,6 +101,7 @@ function closeOutside(event: MouseEvent): void {
 
 <template>
   <div v-click-outside="closeOutside" class="token-footer" data-testid="token-usage" :data-run-id="runId">
+    <span v-if="startedAt" class="token-started">发起于 {{ startedAt }}</span>
     <el-popover
       :visible="visible" placement="top-start" :width="302"
       popper-class="token-usage-popover" :show-arrow="false"
@@ -124,7 +143,8 @@ function closeOutside(event: MouseEvent): void {
 </template>
 
 <style scoped>
-.token-footer { grid-column: 2; min-width: 0; }
+.token-footer { grid-column: 2; min-width: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 6px 10px; }
+.token-started { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .token-badge { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line);
   border-radius: 16px; padding: 3px 9px; background: var(--bg-raised); color: var(--text-soft);
   font: inherit; font-size: 12px; font-variant-numeric: tabular-nums; cursor: pointer; }
