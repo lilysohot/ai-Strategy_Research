@@ -570,6 +570,8 @@ async def _call_llm_with_callbacks(
             on_attempt=_on_attempt,
             reasoning_only_timeout_s=cfg.reasoning_only_timeout_s,
             reasoning_only_max_tokens=cfg.reasoning_only_max_tokens,
+            reasoning_max_retries=cfg.reasoning_max_retries,
+            request_max_tokens=cfg.request_max_tokens,
             logical_call_timeout_s=cfg.logical_call_timeout_s,
             max_completion_tokens_hint=(
                 cfg.max_completion_tokens if (cfg.reasoning_only_timeout_s or cfg.reasoning_only_max_tokens) else None

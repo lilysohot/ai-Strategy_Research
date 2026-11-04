@@ -84,7 +84,7 @@ class TeamPhaseBudget:
         return self.sync_phase(now) in {"research", "draining", "consolidating", "publishing"}
 
     def deadline_for_job(
-        self, *, can_publish: bool, is_verification: bool = False,
+        self, *, can_publish: bool, is_verification: bool = False, is_recheck: bool = False,
     ) -> float | None:
         """Boundary a dispatched job must not cross.
 
@@ -94,19 +94,25 @@ class TeamPhaseBudget:
         research boundary.
         """
         if is_verification:
+            if is_recheck and self.delivery_start_s is not None:
+                # One already-bound correction may use spare publication time,
+                # while the full final-answer reserve remains untouchable.
+                return self.delivery_start_s
             limits = [d for d in (self.verification_deadline_s, self.delivery_start_s) if d is not None]
             return min(limits) if limits else None
         return self.publication_deadline_s if can_publish else self.research_deadline_s
 
     def remaining_for_job(
-        self, *, can_publish: bool, is_verification: bool = False,
+        self, *, can_publish: bool, is_verification: bool = False, is_recheck: bool = False,
     ) -> float | None:
         return self._remaining(
-            self.deadline_for_job(can_publish=can_publish, is_verification=is_verification)
+            self.deadline_for_job(can_publish=can_publish, is_verification=is_verification,
+                                  is_recheck=is_recheck)
         )
 
     def wait_deadline(
         self, *, publication_pending: bool = False, verification_pending: bool = False,
+        recheck_pending: bool = False,
     ) -> tuple[str, float | None]:
         """Return the boundary a report wait must not cross."""
         phase = self.sync_phase()
@@ -114,8 +120,9 @@ class TeamPhaseBudget:
             publication_pending and phase in {"draining", "consolidating", "finalizing"}
         ):
             deadline = self.publication_deadline_s
-        elif verification_pending and phase in {"draining", "consolidating", "finalizing"}:
-            deadline = self.deadline_for_job(can_publish=False, is_verification=True)
+        elif verification_pending and (recheck_pending or phase in {"draining", "consolidating", "finalizing"}):
+            deadline = self.deadline_for_job(can_publish=False, is_verification=True,
+                                             is_recheck=recheck_pending)
         elif phase == "research" and self.research_dispatch_deadline_s is not None:
             # Wake the coordinator when admission closes, even if every member
             # is still gathering distinct (non-repetitive) evidence.

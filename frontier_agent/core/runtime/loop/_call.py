@@ -5,6 +5,7 @@ import logging
 import random
 import time
 from collections.abc import Awaitable, Callable
+from dataclasses import replace
 from typing import Any
 
 from frontier_agent.core.errors import (
@@ -269,6 +270,8 @@ async def call_llm(
     reasoning_only_max_tokens: int | None = None,
     logical_call_timeout_s: float | None = None,
     max_completion_tokens_hint: int | None = None,
+    reasoning_max_retries: int | None = None,
+    request_max_tokens: int | None = None,
 ) -> LLMResponse | None:
     """Call ``llm.chat`` (``llm.stream`` when ``on_delta`` is set) with
     exponential backoff on transient errors.
@@ -341,6 +344,10 @@ async def call_llm(
         is_empty_completion,
         is_overloaded_error,
         is_retriable_with_fallback,
+    )
+
+    runaway_retry_limit = (
+        _RUNAWAY_MAX_RETRIES if reasoning_max_retries is None else max(0, reasoning_max_retries)
     )
 
     def _transient_backoff(attempt: int) -> float:
@@ -461,6 +468,10 @@ async def call_llm(
     # repeated reasoning runaway — error retries then reuse the bound
     # variant too, which is fine (the cap only applies post-runaway).
     llm_active = _ensure_bound(llm)
+    if request_max_tokens is not None and request_max_tokens > 0:
+        llm_active = replace(llm_active, max_tokens=min(
+            llm_active.max_tokens or request_max_tokens, request_max_tokens,
+        ))
     messages_active = messages
     # One PHYSICAL request per index, not one retry per index. They only
     # diverge when a stream is discarded and replayed inside a single retry
@@ -609,7 +620,7 @@ async def call_llm(
                         attempt == 0
                         and logical_deadline is not None
                         and max_retries > 1
-                        and _RUNAWAY_MAX_RETRIES > 0
+                        and runaway_retry_limit > 0
                         and first_chunk_s is not None and first_chunk_s > 0
                         and reasoning_only_timeout_s is not None
                         and reasoning_only_timeout_s > 0
@@ -804,7 +815,7 @@ async def call_llm(
                     and runaway_state.get("consecutive_turns", 0),
                 )
                 if (
-                    runaway_retries < _RUNAWAY_MAX_RETRIES
+                    runaway_retries < runaway_retry_limit
                     and attempt < max_retries - 1
                     and _deadline_allows_retry_after(_RUNAWAY_BACKOFF_S)
                 ):
@@ -832,7 +843,7 @@ async def call_llm(
                         "runaway_retry=%d/%d, reduced_cap=%s, "
                         "prior_turn_runaway=%s); resampling",
                         turn, attempt + 1, max_retries,
-                        runaway_retries, _RUNAWAY_MAX_RETRIES, reduced_cap,
+                        runaway_retries, runaway_retry_limit, reduced_cap,
                         prior_turn_runaway,
                     )
                     await asyncio.sleep(_RUNAWAY_BACKOFF_S)
@@ -897,7 +908,7 @@ async def call_llm(
                 and runaway_state.get("consecutive_turns", 0)
             )
             if (
-                runaway_retries < _RUNAWAY_MAX_RETRIES
+                runaway_retries < runaway_retry_limit
                 and attempt < max_retries - 1
                 and _deadline_allows_retry_after(_RUNAWAY_BACKOFF_S)
             ):
@@ -922,7 +933,7 @@ async def call_llm(
                     "reduced_cap=%s, prior_turn_runaway=%s); resampling",
                     turn, attempt + 1, max_retries, exc.trigger,
                     exc.elapsed_s, exc.estimated_tokens,
-                    runaway_retries, _RUNAWAY_MAX_RETRIES, reduced_cap,
+                    runaway_retries, runaway_retry_limit, reduced_cap,
                     prior_turn_runaway,
                 )
                 await asyncio.sleep(_RUNAWAY_BACKOFF_S)
@@ -936,7 +947,7 @@ async def call_llm(
                 )
             remaining, deadline_reason = _nearest_deadline()
             blocked_by = (
-                "runaway_retry_limit" if runaway_retries >= _RUNAWAY_MAX_RETRIES
+                "runaway_retry_limit" if runaway_retries >= runaway_retry_limit
                 else "attempt_limit" if attempt >= max_retries - 1
                 else deadline_reason or "retry_budget"
             )

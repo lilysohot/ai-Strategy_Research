@@ -1656,6 +1656,9 @@ def build_swarm_session_runtime_spec(
                 metadata.get("verification_checks")
                 or "verifier" in session_name.lower()
             ),
+            is_recheck=bool(metadata.get("verification_checks")) and all(
+                c.get("replaces_job_id") for c in metadata["verification_checks"]
+            ),
         )
 
     # Per-job real-token gauge, shared between _config (the trigger policy) and
@@ -1693,8 +1696,10 @@ def build_swarm_session_runtime_spec(
             )
             compaction_policy = None
             keep_recent = LoopConfig.keep_recent
+        checks = item.metadata.get("verification_checks") or []
+        is_verification = bool(checks)
         return LoopConfig(
-            max_turns=max_turns,
+            max_turns=min(max_turns, 2 * len(checks) + 2) if is_verification else max_turns,
             task_id=task_id,
             llm_session_id=llm_session_id(task_id, session_name),
             role_id=item.role_id,
@@ -1702,11 +1707,20 @@ def build_swarm_session_runtime_spec(
             llm_timeout=int(runtime.sub_agent_llm_timeout or LoopConfig.llm_timeout),
             tool_timeout=int(runtime.sub_agent_tool_timeout or LoopConfig.tool_timeout),
             first_chunk_timeout=runtime.first_chunk_timeout_s,
-            reasoning_only_timeout_s=runtime.reasoning_only_timeout_s,
+            reasoning_only_timeout_s=(
+                min(runtime.reasoning_only_timeout_s or 25, 25)
+                if is_verification else runtime.reasoning_only_timeout_s
+            ),
+            reasoning_max_retries=0 if is_verification else None,
+            request_max_tokens=min(runtime.llm_max_tokens or 8192, 8192) if is_verification else None,
             reasoning_only_max_tokens=runtime.reasoning_only_max_tokens,
-            logical_call_timeout_s=runtime.logical_call_timeout_s,
+            logical_call_timeout_s=(
+                min(runtime.logical_call_timeout_s or 90, 90)
+                if is_verification else runtime.logical_call_timeout_s
+            ),
             max_completion_tokens=(
-                runtime.llm_max_tokens or LoopConfig.max_completion_tokens
+                min(runtime.llm_max_tokens or 8192, 8192) if is_verification
+                else runtime.llm_max_tokens or LoopConfig.max_completion_tokens
             ),
             context_token_limit=runtime.sub_context_token_limit,
             compact_after_turns=runtime.sub_compact_after_turns,
@@ -1718,6 +1732,8 @@ def build_swarm_session_runtime_spec(
         )
 
     def _observers(_job_id: str, _item: SubTask, task_index: int) -> list[Any]:
+        from workflows.agent_team.observers.member_progress import MemberProgressObserver
+
         obs = _swarm_observers(
             runtime,
             task_id=task_id,
@@ -1727,6 +1743,7 @@ def build_swarm_session_runtime_spec(
             run_id=run_id,
             run_type=run_type,
         )
+        obs = [MemberProgressObserver(_item.metadata), *obs]
         job_deadline = _job_deadline(_item)
         if job_deadline is not None:
             metadata = _item.metadata or {}

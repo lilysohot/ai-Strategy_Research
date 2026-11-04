@@ -159,6 +159,17 @@ metadata and trajectories; binding hashes cover their provenance. Collection
 status returns check identities, verdicts and short findings rather than repeating
 the source bodies and acquisition diagnostics.
 
+Members receive an early handoff reminder after 90 seconds when corpus evidence
+is available; remaining gaps must stay explicit. Bound verifiers checkpoint one
+check per submission. Their calls allow at most 25 seconds of reasoning without
+visible/tool progress, 90 seconds including recovery, and 8192 output tokens
+(lower configured limits still win). They return to the workflow after a reasoning
+runaway instead of resampling the same large response. Other member and coordinator
+retry policies remain unchanged. One bound correction may use spare publication
+time up to the final-answer reserve; first-pass verification keeps its own deadline.
+Corpus search runs its synchronous snapshot read and receipt serialization in a
+worker thread, preserving task context without blocking other members' event loop.
+
 ## Profiles
 
 | Profile | Use | Web implementation | Reporter default | Planning |

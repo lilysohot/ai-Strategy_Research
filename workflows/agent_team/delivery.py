@@ -161,6 +161,7 @@ class TeamDeliveryObserver(BaseObserver):
         deadline = self.budget.deadline_for_job(
             can_publish=phase in {"draining", "consolidating"},
             is_verification=True,
+            is_recheck=True,
         )
         limits = [d for d in [deadline] if d is not None]
         if self.budget.publication_deadline_s is not None:

@@ -242,6 +242,11 @@ async def collect_reports(timeout: int = 1800) -> str:
         phase_name, phase_deadline = phase_budget.wait_deadline(
             publication_pending=publication_pending,
             verification_pending=verification_pending,
+            recheck_pending=any(
+                m.get("verification_checks") and all(
+                    c.get("replaces_job_id") for c in m["verification_checks"]
+                ) for m in pending_metadata
+            ),
         )
         if phase_deadline is not None:
             phase_remaining = float(phase_deadline) - time.monotonic()

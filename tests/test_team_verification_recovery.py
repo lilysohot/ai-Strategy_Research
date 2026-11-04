@@ -29,7 +29,7 @@ async def test_completed_defect_gets_correction_before_delivery(delivery_run, mo
     assert "replaces_job_id" in prompt and "j1" in prompt and "amount" in prompt
 
 
-@pytest.mark.parametrize("now,verification_deadline", [(700, None), (600, 680), (790, None)])
+@pytest.mark.parametrize("now,verification_deadline", [(700, None), (700, 680), (790, None)])
 async def test_repair_respects_verifier_and_publication_reserves(
     delivery_run,
     monkeypatch,

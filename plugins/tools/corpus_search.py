@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import contextvars
 import json
 import os
@@ -201,6 +202,13 @@ async def corpus_search(query: str, limit: int = 10) -> str:
         去掉可推导字段并标 ``diagnostics_elided``；连一条都装不下时返回
         ``ok=false`` 的预算错误，提示缩小 query 或 limit。
     """
+    # The service owns synchronous DB/embedding calls. Keep both the snapshot
+    # read and receipt serialization off the shared AgentBus event loop.
+    # to_thread carries the task's budget and corpus-policy contextvars.
+    return await asyncio.to_thread(_search_sync, query, limit)
+
+
+def _search_sync(query: str, limit: int) -> str:
     if not isinstance(query, str) or not query.strip():
         return json.dumps(
             {"ok": False, "error": "query 必须是非空字符串", "hits": []},

@@ -55,6 +55,10 @@ class LoopConfig:
     # Abort reasoning-only streams after either enabled bound.
     reasoning_only_timeout_s: float | None = None
     reasoning_only_max_tokens: int | None = None
+    # Same-call reasoning resamples; None preserves the engine default.
+    reasoning_max_retries: int | None = None
+    # Optional provider request cap, separate from the context reservation below.
+    request_max_tokens: int | None = None
     # Total budget across admission, attempts, backoff, and recovery.
     logical_call_timeout_s: float | None = None
     context_token_limit: int = 120_000
