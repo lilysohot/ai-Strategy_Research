@@ -85,6 +85,36 @@ def finalize_gate(
             "needed. If work cannot proceed, use resolution='blocked' with notes "
             "and gap, then deliver the supported partial answer with its limitations."
         )
+    from plugins.tools._verification import missing_publication_excerpts, project_bus_checks
+
+    bus = registry.get_optional(AgentBus)
+    if bus:
+        from plugins.tools._corpus_scope import corpus_scope_findings
+
+        observations = [
+            observation for job in bus.list_task_jobs(agent_bus_task_id) if job.result is not None
+            for observation in job.result.metadata.get("content_acquisition", [])
+        ]
+        scope_findings = corpus_scope_findings(content, observations)
+        if scope_findings:
+            return (
+                "Cannot finish: bounded corpus search does not establish exhaustive coverage. "
+                f"Revise these statements: {[f['match'] for f in scope_findings[:5]]}. "
+                "Use '本次检索未发现' / '在已取回资料中' and preserve unknown-date limits; "
+                "do not claim 全库没有、零覆盖、完整数量 or unqualified corpus-wide latestness."
+            )
+        excluded = {
+            t["id"] for t in snapshot_tasks(task_id) if t["resolution"] in {"blocked", "cancelled"}
+        }
+        missing = missing_publication_excerpts(
+            project_bus_checks(bus, agent_bus_task_id)["checks"], content,
+            excluded_work_items=excluded,
+        )
+        if missing:
+            return (
+                f"{missing}: final answer omits the checked publication excerpt; retain the "
+                "exact checked passage, recheck the changed text, or block the affected task"
+            )
     if in_planning(task_id):
         return (
             "Cannot finish: you are still in PLANNING MODE. Decompose the "

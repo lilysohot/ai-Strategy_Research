@@ -1,0 +1,22 @@
+STORAGE_SOURCE cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4 根据 DeepSeek 披露的 KV 缓存（KV-cache）配置，我们的测算显示每个加速器大约需要 20–
+25TB 的物理存储，凸显了智能体推理对存储的需求。更高的 Rubin 吞吐量可能使每加速器固定
+16TB 的假设显得过于保守，实际部署情况和缓存保留时长仍是重要变量。
+PACKET_REFS deepseek_claims_verifier.t02 1 ok 105 bad 0 chars 33127
+PACKET_REFS deepseek_claims_verifier.t02 3 ok 100 bad 0 chars 33145
+FETCH_REF eref:a3fb231df2a1830ca49a48ebc5ae9614acf3095215b9143d0b2e5ca955d22c71:0 ok
+FETCH_REF eref:a3fb231df2a1830ca49a48ebc5ae9614acf3095215b9143d0b2e5ca955d22c71:1 ok
+FETCH_REF eref:a3fb231df2a1830ca49a48ebc5ae9614acf3095215b9143d0b2e5ca955d22c71:2 ok
+FETCH_REF eref:a3fb231df2a1830ca49a48ebc5ae9614acf3095215b9143d0b2e5ca955d22c71:3 ok
+FETCH_REF eref:3681bd4d7135f8641d68c51f7c29ef17ec83c4978278f3be3dd4b17997bd9b4a invalid_search_evidence_reference
+SUBMIT_KEYS deepseek_claims_verifier.t02 [['5ba9cbd818ca.job.2', '5ba9cbd818ca.job.3', 'ce:09d362f7e17fc2e7e75aa38449531ba0', 'ce:b1902b2cf4ee5b67bb61b9c52a5a5bc8', 'ce:e25ce5803bf1d1b15033ce2f2aada5dc', 'eref:dff0160732b9d633fe3bdc4f3d59d20b92dc6498d00a22620059560ea7a93241:1', 'eref:bd32aa98730d6e62f27e2108ca80cb5bb36f73cab9f52cbf82d6c53f3c5fd56e:0', 'eref:93895594781b06e0ce954a8c92da1d01212778425558b5ddac85573ec70493ea:0']]
+SUBMIT_KEYS deepseek_claims_verifier.t02 [['5ba9cbd818ca.job.2', '5ba9cbd818ca.job.3']]
+FIRST_LLM deepseek_claims_verifier.t02 84117
+PACKET_REFS deepseek_claims_verifier.t01 1 ok 105 bad 0 chars 33127
+SUBMIT_KEYS deepseek_claims_verifier.t01 [['5ba9cbd818ca.job.1', '5ba9cbd818ca.job.3', 'ce:09d362f7e17fc2e7e75aa38449531ba0', 'ce:ff134b62ec5a6b1b46e8163d19596520', 'ce:e25ce5803bf1d1b15033ce2f2aada5dc'], ['5ba9cbd818ca.job.1', '5ba9cbd818ca.job.3', 'ce:09d362f7e17fc2e7e75aa38449531ba0', 'ce:95f3ad3383ccc709da553edc0f8539c4', 'ce:ff134b62ec5a6b1b46e8163d19596520', 'ce:f97e11e2815de2c9583adb0866f4fac3']]
+SUBMIT_KEYS deepseek_claims_verifier.t01 [['5ba9cbd818ca.job.1', '5ba9cbd818ca.job.3', 'ce:09d362f7e17fc2e7e75aa38449531ba0', 'ce:ff134b62ec5a6b1b46e8163d19596520', 'ce:e25ce5803bf1d1b15033ce2f2aada5dc'], ['5ba9cbd818ca.job.1', '5ba9cbd818ca.job.3', 'ce:09d362f7e17fc2e7e75aa38449531ba0', 'ce:95f3ad3383ccc709da553edc0f8539c4', 'ce:ff134b62ec5a6b1b46e8163d19596520', 'ce:f97e11e2815de2c9583adb0866f4fac3']]
+SUBMIT_KEYS deepseek_claims_verifier.t01 [['5ba9cbd818ca.job.1', '5ba9cbd818ca.job.3'], ['5ba9cbd818ca.job.1', '5ba9cbd818ca.job.3']]
+FIRST_LLM deepseek_claims_verifier.t01 45455
+EXACT_CHECKED_PASSAGE model_identity True STORAGE_IN_CHECK False
+EXACT_CHECKED_PASSAGE key_numbers True STORAGE_IN_CHECK False
+EXACT_CHECKED_PASSAGE impact_attribution True STORAGE_IN_CHECK False
+FINAL_CHARS 4771

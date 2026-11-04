@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContextPolicy：一张纸条，决定工人桌上放哪几份文件</title>
+<style>
+  :root{
+    --bg:#f5f6f8; --card:#fff; --ink:#151b26; --muted:#68717f;
+    --line:#e2e6ec; --blue:#2563eb; --blue-bg:#eaf1fe;
+    --green:#15803d; --green-bg:#e9f7ee;
+    --red:#c23434; --red-bg:#fdeaea;
+    --amber:#a16207; --amber-bg:#fdf5e3;
+    --gray:#eef0f3;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+       background:var(--bg);color:var(--ink);line-height:1.8;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:36px 20px 90px}
+
+  section{background:var(--card);border:1px solid var(--line);border-radius:16px;
+          padding:30px;margin-bottom:26px}
+  .act{display:inline-block;font-size:12px;letter-spacing:.12em;color:var(--blue);
+       font-weight:700;margin-bottom:8px}
+  h2{font-size:21px;line-height:1.5;margin-bottom:8px}
+  h3{font-size:16px;margin-bottom:6px}
+  .lead{color:var(--muted);font-size:15px;margin-bottom:20px}
+  .big{font-size:17px;line-height:1.9;margin:14px 0}
+  .hl{background:linear-gradient(transparent 62%,#ffe9a8 62%);font-weight:700}
+  code{background:var(--gray);padding:1px 6px;border-radius:4px;font-size:13px;
+       font-family:"SF Mono",Consolas,monospace}
+
+  /* Hero */
+  .hero{background:linear-gradient(140deg,#101a2d,#1e3a63);color:#fff;
+        border-radius:18px;padding:46px 40px;margin-bottom:26px}
+  .hero .q{font-size:13px;color:#8fb0dd;letter-spacing:.1em;margin-bottom:14px}
+  .hero h1{font-size:29px;line-height:1.45;margin-bottom:18px}
+  .hero h1 em{font-style:normal;color:#ffd479}
+  .hero p{color:#c2d2e8;font-size:15.5px;max-width:730px}
+  .hero .eq{margin-top:24px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px}
+  .hero .eq span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);
+                 padding:7px 15px;border-radius:999px}
+  .hero .eq b{color:#8fb4f5}
+
+  /* 第一幕 */
+  .flood-stage{position:relative;height:310px;border-radius:14px;overflow:hidden;
+               background:#fff;border:1px solid var(--line);margin-top:6px}
+  .desk-area{position:absolute;left:28px;bottom:16px;width:265px;text-align:center;z-index:3}
+  .desk{height:100px;border-radius:12px 12px 0 0;background:#e8d3ac;
+        border:2px solid #c9ae7d;border-bottom:none;
+        display:flex;align-items:center;justify-content:center;font-size:13px;color:#7c6742}
+  .who{margin-top:10px;font-weight:700;font-size:14px}
+  .who small{display:block;color:var(--muted);font-weight:400;font-size:12px}
+  .rain{position:absolute;right:14px;top:8px;bottom:8px;width:420px;display:flex;
+        flex-wrap:wrap;gap:5px;padding:4px;align-content:flex-start;overflow:hidden;z-index:2}
+  .drip{background:var(--red-bg);border:1px solid #f0c4c4;color:var(--red);
+        font-size:10.5px;padding:2px 7px;border-radius:5px;opacity:0;transform:translateY(-24px);
+        transition:all .3s ease}
+  .drip.show{opacity:1;transform:translateY(0)}
+  .drip.need{background:var(--green-bg);border-color:#bfe3cb;color:var(--green);font-weight:700}
+  .stat{position:absolute;top:12px;left:22px;font-size:13px;color:var(--muted);z-index:4}
+  .stat b{color:var(--red);font-size:17px}
+  .btn{border:1px solid var(--line);background:#fff;color:var(--ink);padding:9px 18px;
+        border-radius:999px;cursor:pointer;font-size:14px;transition:.15s}
+  .btn:hover{border-color:var(--blue);color:var(--blue)}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+  .btn.primary:hover{background:#1d4ed8;color:#fff}
+  .controls{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;align-items:center}
+  .verdict{margin-top:14px;font-size:14.5px;padding:14px 16px;border-radius:10px;
+           background:var(--red-bg);display:none}
+  .verdict.show{display:block}
+
+  /* 第二幕 */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:820px){.two{grid-template-columns:1fr}}
+  .plan{border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .plan .ph{padding:14px 18px;font-weight:700;font-size:15px}
+  .plan.a .ph{background:var(--red-bg);color:var(--red)}
+  .plan.b .ph{background:var(--green-bg);color:var(--green)}
+  .plan .pb{padding:18px;font-size:14.5px}
+  .plan .pb p{margin-bottom:10px}
+  .plan .pb .quote{background:#fafafa;border-left:3px solid var(--line);
+                   padding:10px 14px;border-radius:0 8px 8px 0;color:var(--muted);font-size:14px;margin:10px 0}
+  .plan.b .pb .quote{border-left-color:var(--green);color:var(--ink)}
+  .folders{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+  .fd{font-size:12px;padding:5px 10px;border-radius:6px;background:var(--gray);color:var(--muted);
+      border:1px solid var(--line)}
+  .fd.keep{background:var(--green-bg);color:var(--green);border-color:#bfe3cb;font-weight:600}
+  .outcome{margin-top:12px;padding:12px;border-radius:8px;font-size:14px;
+           background:var(--amber-bg);color:var(--amber)}
+
+  /* 第三幕 */
+  table{width:100%;border-collapse:collapse;font-size:14.5px;margin-top:8px}
+  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:#fafbfd;color:var(--muted);font-weight:600;font-size:13px}
+  td:first-child{width:42%;font-weight:600}
+  td code{font-size:12.5px}
+  tr:last-child td{border-bottom:none}
+
+  /* 第四幕 */
+  .chips{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .chip{border:1px solid var(--line);background:#fff;padding:8px 16px;border-radius:999px;
+        cursor:pointer;font-size:14px;transition:.15s;text-align:left}
+  .chip.on{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
+  .chip .role-sub{font-size:11.5px;opacity:.75;display:block;font-weight:400}
+
+  .room{display:grid;grid-template-columns:1fr 1.15fr;gap:16px}
+  @media(max-width:860px){.room{grid-template-columns:1fr}}
+  .shelf{background:#fbfaf6;border:1px dashed #d8c98d;border-radius:14px;padding:16px}
+  .shelf h3{font-size:14px;margin-bottom:4px}
+  .shelf .hint{font-size:12.5px;color:var(--muted);margin-bottom:12px}
+  .stock{display:flex;flex-direction:column;gap:6px;max-height:440px;overflow:auto;padding-right:4px}
+  .item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;
+        background:#fff;border:1px solid var(--line);font-size:13.5px;cursor:pointer;
+        transition:.15s;text-align:left;width:100%}
+  .item:hover{border-color:var(--blue)}
+  .item .txt{display:flex;flex-direction:column;line-height:1.35}
+  .item .name{font-weight:600}
+  .item .en{font-size:11px;color:var(--muted);font-family:"SF Mono",Consolas,monospace}
+  .item .sz{margin-left:auto;font-size:11px;padding:1px 8px;border-radius:999px;
+            background:var(--gray);color:var(--muted);white-space:nowrap}
+  .item.on-desk{border-color:#bfe3cb;background:var(--green-bg)}
+  .item.off-desk{opacity:.4;background:#f3f4f6}
+  .item.off-desk .name{text-decoration:line-through}
+
+  .deskview{background:var(--blue-bg);border:1px solid #c3d6f7;border-radius:14px;padding:16px}
+  .deskview h3{font-size:14px}
+  .deskview .count{font-size:12.5px;color:var(--blue);font-weight:600;margin-left:6px}
+  .deskview .why{font-size:12.5px;color:#4a5a73;margin:6px 0 12px}
+  .onlist{display:flex;flex-direction:column;gap:6px}
+  .onlist .item{cursor:default;background:#fff;border-color:#bfe3cb}
+  .empty-note{margin-top:12px;font-size:12.5px;color:#4a5a73;
+              border-top:1px dashed #c3d6f7;padding-top:10px}
+
+  .toast{position:fixed;left:50%;bottom:34px;transform:translate(-50%,20px);
+         background:#151b26;color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;
+         opacity:0;pointer-events:none;transition:.24s;z-index:20;max-width:88vw;text-align:center;
+         line-height:1.7}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .toast b{color:#ffd479}
+
+  /* 第五幕 */
+  .myth{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:12px}
+  .myth .wrong{padding:12px 16px;background:var(--red-bg);font-size:14.5px;color:#8a2020}
+  .myth .truth{padding:14px 16px;font-size:14.5px}
+  .myth .truth b{color:var(--green)}
+
+  /* 第六幕 */
+  .versus{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  @media(max-width:820px){.versus{grid-template-columns:1fr}}
+  .vs{border-radius:12px;padding:18px;border:1px solid var(--line)}
+  .vs.bad{background:#fdf7f7}
+  .vs.good{background:#f5fbf7}
+  .vs h3{font-size:15px;margin-bottom:8px}
+  .vs p{font-size:14px;color:var(--muted)}
+
+  /* 结尾 */
+  .final{background:linear-gradient(140deg,#101a2d,#1e3a63);color:#fff;border:none}
+  .final h2{color:#fff;margin-bottom:14px}
+  .final .line{font-size:19px;line-height:1.9;margin-bottom:12px}
+  .final .line em{font-style:normal;color:#ffd479;font-weight:700}
+  .final p{color:#c2d2e8;font-size:14.5px}
+  .foot{text-align:center;color:var(--muted);font-size:12.5px;margin-top:20px;line-height:1.9}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="q">先说一个反直觉的事实</div>
+    <h1>一个 agent 节点，默认会收到<br><em>整个共享状态的全部字段</em>。</h1>
+    <p>不管你用不用得上。ContextPolicy 就是用来改这个默认的：给每个节点开一张纸条，
+       上面写清楚"你只需要这几样"。框架照着纸条，把资料放到他桌上。</p>
+    <div class="eq">
+      <span>整个资料室 = <b>state</b></span>
+      <span>＋</span>
+      <span>主管的纸条 = <b>ContextPolicy</b></span>
+      <span>→</span>
+      <span>桌上的几份 = <b>节点收到的数据</b></span>
+    </div>
+  </div>
+
+  <section>
+    <div class="act">第一幕</div>
+    <h2>先看看"没有纸条"的世界是什么样</h2>
+    <p class="lead">点一下按钮，看全部字段倒给一个节点会发生什么。</p>
+
+    <div class="flood-stage">
+      <div class="stat">这个节点真正用得上的：<b id="needCount">3</b> 个字段</div>
+      <div class="desk-area">
+        <div class="desk">工人的桌子（容量有限）</div>
+        <div class="who">reporter<small>负责把结果写成对外报告</small></div>
+      </div>
+      <div class="rain" id="rain"></div>
+    </div>
+
+    <div class="controls">
+      <button class="btn primary" id="pourBtn">把全部字段倒给这个节点</button>
+      <button class="btn" id="resetBtn">重置</button>
+    </div>
+    <div class="verdict" id="verdict">
+      <b>结果：</b>桌上堆了 33 份文件，其中只有 3 份是他真正要用的。
+      剩下的 30 份不会消失，它们会一起进入模型的上下文——
+      <span class="hl">模型要在 33 份无关文件里，找到那 3 份有用的。</span>
+    </div>
+
+    <p class="big" style="margin-top:22px">
+      这就是理解 ContextPolicy 的<span class="hl">唯一前提</span>：
+      <b>默认行为是全量塞满，不是按需给。</b>
+      所以在没有它之前，"给多了"根本不是配置问题，而是默认状态。
+    </p>
+  </section>
+
+  <section>
+    <div class="act">第二幕</div>
+    <h2>换成一个你每天都见的场景：新来的实习生写周报</h2>
+    <p class="lead">同一个任务，两种交办方式。差别不在"保密"，在"聚焦"。</p>
+
+    <div class="two">
+      <div class="plan a">
+        <div class="ph">方案 A · 没有纸条（= 默认行为）</div>
+        <div class="pb">
+          <p>主管把公司共享盘的<b>全部 33 个文件夹</b>权限给了小王：</p>
+          <div class="folders">
+            <span class="fd">研发部 38 轮会议纪要</span>
+            <span class="fd">财务报销流水</span>
+            <span class="fd">销售客户名单</span>
+            <span class="fd">法务合同扫描件</span>
+            <span class="fd">上一季度招聘记录</span>
+            <span class="fd">……还有 28 个</span>
+          </div>
+          <div class="quote">"都在这儿了，你自己看着办吧。"</div>
+          <div class="outcome">结果：小王翻了三天资料，周报里还莫名其妙写进了报销的事。</div>
+        </div>
+      </div>
+      <div class="plan b">
+        <div class="ph">方案 B · 有纸条（= ContextPolicy）</div>
+        <div class="pb">
+          <p>主管只给他一张纸条，上面写：<b>你只需要这 10 样。</b></p>
+          <div class="folders">
+            <span class="fd keep">本周工作记录</span>
+            <span class="fd keep">上周周报</span>
+            <span class="fd keep">老板的原话</span>
+            <span class="fd keep">项目进度表</span>
+            <span class="fd keep">……共 10 样</span>
+          </div>
+          <div class="quote">"按这张单子准备，别的不用管。"</div>
+          <div class="outcome" style="background:var(--green-bg);color:var(--green)">
+            结果：半天写完，内容聚焦，没有一句跑题。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="big" style="margin-top:20px">
+      注意：那张纸条不是在限制小王的权限，
+      而是在告诉他<span class="hl">"你该看什么"</span>。
+      这两件事听起来像，其实是相反的——一个是"不许"，一个是"专注"。
+    </p>
+  </section>
+
+  <section>
+    <div class="act">第三幕</div>
+    <h2>把这个故事一对一换成代码里的东西</h2>
+    <p class="lead">没有新概念，只是把刚才每个人都听懂的故事换成术语。</p>
+
+    <table>
+      <thead>
+        <tr><th>故事里的东西</th><th>代码里的东西</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>公司共享盘的全部文件夹</td>
+          <td><code>state</code> —— 整条管线共享的那一份数据，只会越来越多</td>
+        </tr>
+        <tr>
+          <td>主管写的那张纸条</td>
+          <td><code>ContextPolicy.include_fields</code> —— 声明在图纸上（PipelineSpec）</td>
+        </tr>
+        <tr>
+          <td>小王桌上实际放着的那几份</td>
+          <td>节点函数收到的 <code>dict</code>（就是"托盘"）</td>
+        </tr>
+        <tr>
+          <td>主管本人：负责照纸条挑文件</td>
+          <td>框架外壳 <code>_wrap_with_context_filter</code> —— 节点代码完全不用管</td>
+        </tr>
+        <tr>
+          <td>小王交回来的周报</td>
+          <td><code>output_fields</code> —— 节点干完活往共享盘里写什么</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="big" style="margin-top:18px">
+      三句话对上：<br>
+      <b>共享盘 = state</b>（越写越满）<br>
+      <b>纸条 = ContextPolicy</b>（每个工人一张，不一样）<br>
+      <b>桌上的文件 = 节点真正收到的数据</b>（不是全部）
+    </p>
+  </section>
+
+  <section>
+    <div class="act">第四幕</div>
+    <h2>亲手试一下：两个工人，两张不同的纸条</h2>
+    <p class="lead">
+      左边是资料室（state 里的全部字段）。点上面的名字切换工人，看他的桌上会放哪几份。
+      点任何一份文件，看他能不能拿到。
+    </p>
+
+    <div class="chips">
+      <button class="chip on" data-role="coordinator">
+        协调者 main_agent
+        <span class="role-sub">负责调研，产出报告草稿</span>
+      </button>
+      <button class="chip" data-role="reporter">
+        reporter agent_team_reporter
+        <span class="role-sub">负责把草稿包装成对外报告</span>
+      </button>
+    </div>
+
+    <div class="room">
+      <div class="shelf">
+        <h3>资料室（state 的全部字段）</h3>
+        <div class="hint" id="shelfHint">灰掉 = 这个工人拿不到</div>
+        <div class="stock" id="stock"></div>
+      </div>
+      <div class="deskview">
+        <h3 id="deskTitle">协调者的桌子<span class="count" id="deskCount"></span></h3>
+        <div class="why" id="deskWhy"></div>
+        <div class="onlist" id="onlist"></div>
+        <div class="empty-note" id="deskNote"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="act">第五幕</div>
+    <h2>三个最容易被搞错的地方</h2>
+    <p class="lead">如果你只记住这一节，也比记住所有字段名有用。</p>
+
+    <div class="myth">
+      <div class="wrong">误解 1：被过滤掉的字段，值是空的（None）</div>
+      <div class="truth">
+        不是空，是<b>根本不存在</b>。工人翻遍桌子也找不到这份文件，不是找到一个空文件夹。
+        代码里表现成 <code>KeyError</code> 或取不到，而不是拿到一个 <code>None</code>。
+        这很重要：<b>"有但为空"和"压根没有"是两种完全不同的信号。</b>
+      </div>
+    </div>
+
+    <div class="myth">
+      <div class="wrong">误解 2：这是为了省 token（省钱）</div>
+      <div class="truth">
+        省 token 只是顺带的。<b>真正的问题是"信息越多，模型越容易跑偏"</b>——
+        桌上一堆无关文件，它会去翻那些不该看的，然后写进周报里。
+        这叫上下文污染，比多花钱严重得多。
+      </div>
+    </div>
+
+    <div class="myth">
+      <div class="wrong">误解 3：让工人自己从资料室里挑，不是更灵活吗？</div>
+      <div class="truth">
+        工人自己挑，就<b>没人知道他挑了什么</b>。
+        纸条写在纸上，主管不在时别人也能照着办，出了问题能查是谁改了纸条。
+        藏在工人脑子里，只有他自己知道——这叫不可审查。
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="act">第六幕</div>
+    <h2>最后一个问题：纸条为什么要贴在墙上？</h2>
+    <p class="lead">技术上完全可以写进工人自己的代码里，为什么偏偏要声明在图纸（PipelineSpec）上？</p>
+
+    <div class="versus">
+      <div class="vs bad">
+        <h3>工人自己挑（写在节点代码里）</h3>
+        <p>
+          主管想知道"这个工人会看什么"，只能去问工人本人。
+          工人换了、代码改了，行为跟着变，没人察觉。
+          想统一做截断、压缩、预算控制，框架<b>根本插不上手</b>——
+          因为数据进门时，它不知道这个工人要什么。
+        </p>
+      </div>
+      <div class="vs good">
+        <h3>纸条贴墙上（声明在 spec 里）</h3>
+        <p>
+          不读一行代码，看图纸就知道"谁给谁什么、谁需要谁"。
+          框架在递资料<b>之前</b>就知道要裁哪几份，所以截断、压缩、对齐工具
+          全都能插手。纸条写错了，编译期就能查出来。
+        </p>
+      </div>
+    </div>
+
+    <p class="big" style="margin-top:18px">
+      <span class="hl">进门的裁剪，必须在进门之前决定。</span>
+      这就是为什么它必须是一张提前写好的纸条，而不是工人临场的判断。
+    </p>
+  </section>
+
+  <section class="final">
+    <h2>如果只记住一句话</h2>
+    <div class="line">节点看到的<em>不是整个资料室</em>，<br>是主管按纸条放到他桌上的<em>那几份</em>。</div>
+    <div class="line" style="font-size:17px;">而每张纸条，都贴在图纸上，不在工人脑子里。</div>
+    <p>
+      state 管"有什么"，ContextPolicy 管"给谁看"。
+      管线越长、白板越胖，这张纸条的价值越大——因为它决定了
+      模型在每个环节是"面对一堆杂物"，还是"面对该做的事"。
+    </p>
+  </section>
+
+  <p class="foot">
+    真实代码：workflows/agent_team/spec.py（两张清单）·
+    frontier_agent/models/pipeline_spec.py L19-37（三旋钮）·
+    graph_builder.py 的 _wrap_with_context_filter（挑文件的人）<br>
+    字段数量与体量为示意，比例来自真实声明
+  </p>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- 第一幕：倒字段 ---------- */
+const ALL = [
+  {n:"用户提问",e:"original_question",need:true},
+  {n:"当前查询",e:"current_query",need:true},
+  {n:"语言",e:"language"},
+  {n:"任务号",e:"task_id"},
+  {n:"运行配置",e:"metadata"},
+  {n:"最终报告",e:"final_answer",need:true},
+  {n:"报告正文",e:"final_content"},
+  {n:"证据卡",e:"evidence_cards"},
+  {n:"断言列表",e:"assertions"},
+  {n:"追问范围",e:"live_followups"},
+  {n:"思考过程",e:"react_steps"},
+  {n:"任务完成度",e:"team_completeness"},
+  {n:"用量统计",e:"summary_usage"},
+  {n:"报告契约",e:"report_contract"},
+  {n:"停止原因",e:"stopped_by"},
+  {n:"答案状态",e:"answer_status"},
+  {n:"会话轮次",e:"session_turn"},
+  {n:"ReAct 步数",e:"react_step_count"},
+  {n:"子代理报告",e:"team_reports"},
+  {n:"代理预算",e:"team_budget"},
+  {n:"回放载荷",e:"replay_payload"},
+  {n:"跨模式上下文",e:"cross_mode_context"},
+  {n:"连续性写开关",e:"continuity_write_enabled"},
+  {n:"连续性读开关",e:"continuity_read_enabled"},
+  {n:"重新启用开关",e:"continuity_enabled"},
+  {n:"报告交接上下文",e:"report_handoff_context"},
+  {n:"有效问题",e:"effective_question"},
+  {n:"澄清问题",e:"clarified_questions"},
+  {n:"救援模式",e:"final_answer_rescue_mode"},
+  {n:"答案来源",e:"final_answer_source"},
+  {n:"证据边界",e:"evidence_boundary"},
+  {n:"答案哨兵",e:"answer_sentinel"},
+  {n:"团队收尾",e:"team_wind_down"}
+];
+const rain = document.getElementById('rain');
+ALL.forEach(f => {
+  const d = document.createElement('span');
+  d.className = 'drip' + (f.need ? ' need' : '');
+  d.textContent = f.n;
+  rain.appendChild(d);
+});
+document.getElementById('needCount').textContent = ALL.filter(f => f.need).length;
+
+document.getElementById('pourBtn').addEventListener('click', () => {
+  const drips = [...rain.children];
+  drips.forEach((d, i) => setTimeout(() => d.classList.add('show'), i * 45));
+  setTimeout(() => document.getElementById('verdict').classList.add('show'), drips.length * 45 + 200);
+});
+document.getElementById('resetBtn').addEventListener('click', () => {
+  [...rain.children].forEach(d => d.classList.remove('show'));
+  document.getElementById('verdict').classList.remove('show');
+});
+
+/* ---------- 第四幕：两个工人的桌子 ---------- */
+const BASE = ["用户提问","当前查询","语言","任务号","运行配置"];
+const PROD = ["最终报告","报告正文","证据卡","断言列表","追问范围"];
+
+const ROLES = {
+  coordinator: {
+    title: "协调者的桌子",
+    why: "他是这条线的第一个工人，那时共享盘还空着。所以纸条上只有基础信息 + 三个跨轮开关。",
+    list: [...BASE, "跨模式上下文","连续性写开关","连续性启用开关"],
+    note: "他干完活，会往共享盘里写回 27 个字段——包括那份最重的「思考过程」。"
+  },
+  reporter: {
+    title: "reporter 的桌子",
+    why: "他拿的是协调者的成品：报告、证据卡、断言。他要把这些包装成对外报告。",
+    list: [...BASE, ...PROD],
+    note: "「思考过程」「任务完成度」「用量统计」他一个都拿不到——因为纸条上没有写，桌上就没有。"
+  }
+};
+
+let role = 'coordinator';
+const stock = document.getElementById('stock');
+const onlist = document.getElementById('onlist');
+const toast = document.getElementById('toast');
+let toastTimer = null;
+
+function showToast(html) {
+  toast.innerHTML = html;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 4200);
+}
+
+function render() {
+  const cfg = ROLES[role];
+  document.querySelectorAll('.chip').forEach(c =>
+    c.classList.toggle('on', c.dataset.role === role));
+  document.getElementById('deskTitle').innerHTML =
+    cfg.title + '<span class="count">纸条上 ' + cfg.list.length + ' 项</span>';
+  document.getElementById('deskWhy').textContent = cfg.why;
+  document.getElementById('deskNote').textContent = cfg.note;
+
+  stock.innerHTML = '';
+  ALL.forEach(f => {
+    const on = cfg.list.includes(f.n);
+    const b = document.createElement('button');
+    b.className = 'item ' + (on ? 'on-desk' : 'off-desk');
+    b.innerHTML =
+      '<span class="txt"><span class="name">' + f.n + '</span>' +
+      '<span class="en">' + f.e + '</span></span>' +
+      '<span class="sz">' + (f.need ? '要用' : '') + '</span>';
+    b.addEventListener('click', () => {
+      if (on) {
+        showToast('✅ <b>' + f.n + '</b> 在' + cfg.title.replace('的桌子','') +
+                  '的桌上——纸条上有它。');
+      } else {
+        showToast('❌ <b>' + f.n + '</b> 不在这个工人的桌上。' +
+                  '注意：不是拿到一个空值，而是<b>这个字段根本不存在</b>——' +
+                  '代码里取它会直接报错。');
+      }
+    });
+    stock.appendChild(b);
+  });
+
+  onlist.innerHTML = '';
+  cfg.list.forEach(name => {
+    const f = ALL.find(x => x.n === name);
+    const d = document.createElement('div');
+    d.className = 'item got';
+    d.innerHTML =
+      '<span class="txt"><span class="name">' + name + '</span>' +
+      '<span class="en">' + (f ? f.e : '—') + '</span></span>';
+    onlist.appendChild(d);
+  });
+}
+
+document.querySelectorAll('.chip').forEach(c =>
+  c.addEventListener('click', () => { role = c.dataset.role; render(); }));
+
+render();
+</script>
+</body>
+</html>

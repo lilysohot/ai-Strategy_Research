@@ -95,6 +95,12 @@ stable check_id, existing work_item_id, precise criterion, subject and evidence 
 ({job_id, ref}; omit ref for the exact completed job report, or use its published handoff).
 Alternatively bind the complete candidate passage as subject: {text: ...}; evidence
 still uses job/handoff sources. Corrections in assignment prose do not replace subject.
+For factual claims set factual_scope=true and require scope_assessment of entity,
+version, date, units, conditions and attribution. Matching quotations alone do not
+establish cross-version inheritance or remove deployment assumptions. Preserve
+conditional estimates and bounded/undated search limits. An exact final passage
+can use publication_excerpt=true with subject.text; retain that checked passage
+verbatim in delivery or recheck material edits before declaring its task resolved.
 During planning, register these stable check_id/criterion pairs on the task-board item as
 verification_requirements. Undispatched or unexecuted planned checks remain report gaps.
 The system hashes these exact versions. Reviewers must submit verification_results with
@@ -113,6 +119,13 @@ minor location error prevents PASS when correct location is required. Report
 fail/unchecked or request a corrected version for recheck; do not waive the criterion.
 Out-of-scope research limitations do not invalidate a scoped pass.
 Ordinary research failures cannot be closed by an unrelated successful checking job.
+Start required checks when the first usable source report arrives instead of waiting
+for all research. Bind checks at dispatch; prose checklists and invented binding IDs
+are rejected. Keep exact returned evidence handles rather than shorthand locators.
+Bounded retrieval/unknown dates do not establish corpus-wide absence or latestness;
+say what this search found. Preserve deployment assumptions beside numerical estimates
+and keep forecasts conditional, including section titles. Never mentally repair a
+candidate's missing qualifications and then certify its original wording.
 """
 
 ENHANCED_PROMPT = """You are a professional and meticulous expert in \

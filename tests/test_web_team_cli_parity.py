@@ -14,8 +14,9 @@ import pytest
 
 from deploy.huggingface.mock_llm import MockLLMServer, text_turn, tool_call_turn
 from plugins.tools._sandbox import bwrap_available
+from plugins.tools.corpus_manifest import MANIFEST_TOOL_NAME
 from server.config import build_run_paths, run_dir_for
-from server.profile import PROFILE_NAME
+from server.profile import PROFILE_NAME, TEAM_CORPUS_TOOL_NAMES
 from workflows.agent_team.profile import load_swarm_profile
 from workflows.agent_team.prompt_standard import RESEARCHER, VERIFIER
 
@@ -190,11 +191,18 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
     for role, seen in requests.items():
         assert seen, f"missing {role} model requests"
         names = {item["function"]["name"] for item in seen[0]["tools"]}
-        expected = set(cli["main_agent_tools"] if role == "main" else cli["sub_agent_tools"])
+        expected = set(
+            cli["main_agent_tools"]
+            if role == "main"
+            else [*cli["sub_agent_tools"], *TEAM_CORPUS_TOOL_NAMES]
+        )
         if role == "main":
             expected.add("deliver_answer")
         if role == "main":
             expected.add("research_history")
+        if role != "main":
+            # 语料检索工具触发 corpus_submit_manifest 伴随绑定（证据清单生产者）。
+            expected.add(MANIFEST_TOOL_NAME)
         assert names == expected
         prompt = seen[0]["messages"][0]["content"]
         assert "BUSINESS CONTEXT POLICY:" not in prompt

@@ -135,7 +135,8 @@ def test_unanswered_alert_never_auto_stops_publication_or_verification(metadata)
 
 
 @pytest.mark.asyncio
-async def test_collect_reports_waits_for_verifier_after_research_cutoff() -> None:
+@pytest.mark.parametrize("publication_remaining", [30, 180])
+async def test_collect_reports_waits_for_verifier_after_research_cutoff(publication_remaining) -> None:
     bus = AgentBus()
     session = _session()
     job_id = "root.job.1"
@@ -164,8 +165,8 @@ async def test_collect_reports_waits_for_verifier_after_research_cutoff() -> Non
     now = asyncio.get_running_loop().time()
     budget = TeamPhaseBudget(
         started_monotonic_s=now - 720, research_dispatch_deadline_s=now - 165,
-        research_deadline_s=now - 1, publication_deadline_s=now + 30,
-        finalization_deadline_s=now + 60, state={},
+        research_deadline_s=now - 1, publication_deadline_s=now + publication_remaining,
+        finalization_deadline_s=now + publication_remaining + 30, state={},
     )
     before = registry.snapshot()
     registry.register(AgentBus, bus)
@@ -174,7 +175,11 @@ async def test_collect_reports_waits_for_verifier_after_research_cutoff() -> Non
     ))
     try:
         result = await collect_reports.ainvoke({"timeout": 1})
-        assert "CHECK REPORT" in result
+        if publication_remaining > budget.delivery_reserve_s:
+            assert "CHECK REPORT" in result
+        else:
+            assert "wall_deadline" in result
+            assert not worker.done(), "return control before consuming the final answer reserve"
     finally:
         reset_current_execution_scope(token)
         registry.restore(before)

@@ -77,6 +77,10 @@ only after collecting the current result and while research admission remains op
 During draining, request handoff and synthesize existing evidence. Respect publisher
 stop protection. Explain why further waiting is necessary if you choose to wait;
 do not blindly repeat long waits.
+When the first source report arrives, start the required checks whose evidence is
+ready while other research continues. A verification task needs structured checks
+at dispatch, never only prose instructions. Preserve the exact returned source
+handles; do not shorten a chunk handle to body:0000 or invent a binding ID.
 
 ## Check in proportion to the claim
 Preserve declared evidence gaps in the task board even if an answer can be delivered.
@@ -86,6 +90,11 @@ appears, not only in a final limitations section. Unknown data cannot establish 
 equal prices, or absence. Compare the same versions, dates, units and conditions before
 claiming a lowest cost or best option. Attribute vendor claims and distinguish inference
 from direct evidence; inherited conclusions are not newly verified facts.
+Search candidate counts are not corpus totals. Partial processing, bounded search,
+or unknown-date sources permit "this search did not find" or "among retrieved
+materials", not "the corpus contains none/only N" or corpus-wide latestness.
+Keep material conditions beside each estimate. A source forecast cannot become
+an observed outcome through an unqualified section title (e.g. "demand did not fall").
 
 Keep factual accuracy separate from analytical freedom. Estimates, hypotheses,
 analogies and opposing role judgments are welcome when assumptions and limits are
@@ -108,6 +117,13 @@ For a revised passage, put its complete text in subject.text. Rechecks must iden
 replaces_job_id and revision_kind: subject changes candidate bytes; evidence changes
 only evidence; retry changes neither. Assignment prose cannot replace a bound subject.
 Attach the evidence it needs. A checklist inside prompt text is not a bound check.
+For factual claims set factual_scope=true: the verifier must compare entity, version,
+date, units, conditions and attribution in scope_assessment. Matching quotations alone
+do not prove applicability to another release or deployment. Preserve conditional
+estimates and bounded/undated search limitations. For an exact passage intended for
+the final answer set publication_excerpt=true with subject.text; retain the checked
+passage verbatim in delivery or recheck material edits. Never certify a revised final
+passage with a verdict on an earlier report.
 Start checks on available evidence versions; do not wait for a long polished draft.
 Check only changed claims on revision. Recommendations need constraint checks, not
 a second agent's agreement that the preference is objectively correct.

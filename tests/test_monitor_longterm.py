@@ -152,6 +152,150 @@ async def test_agent_update_preserves_crossing_mode(case):
     target = (await watch_agent.call(case.run_id, "get", {}))["targets"][0]
     assert target["trigger_mode"] == "crossing"
     assert target["threshold"] == "22"
+    assert target["name"] == "breakout"
+
+
+@pytest.mark.parametrize("operation", ["update", "create"])
+@pytest.mark.parametrize("patch", [{}, {"threshold": "82.08"}])
+async def test_agent_rename_persists_and_replays(case, operation, patch):
+    created = intent() | {"name": "上穿100.00", "spec": spec("100") | {"trigger_mode": "crossing"}}
+    out = await watch_agent.call(case.run_id, "submit", {"intents": [created]})
+    rule_id = out["results"][0]["rule_id"]
+    update = {
+        "operation": operation,
+        "intent_key": "breakout",
+        "reason": "同步显示名称",
+        "name": "  上穿82.08  ",
+        "spec": patch,
+    }
+    if operation == "update":
+        update.update(rule_id=rule_id, expected_version=1)
+    payload = {"intents": [update]}
+    receipt = await watch_agent.call(case.run_id, "submit", payload)
+    assert receipt["results"][0]["version"] == 2
+    assert "name" in receipt["results"][0]["changed_fields"]
+    assert (await watch_agent.call(case.run_id, "submit", payload)) == receipt
+    target = (await watch_agent.call(case.run_id, "get", {}))["targets"][0]
+    assert target["id"] == rule_id
+    assert target["name"] == "上穿82.08"
+    assert target["threshold"] == patch.get("threshold", "100")
+    assert target["trigger_mode"] == "crossing"
+    assert target["managed_by"] == "agent"
+    async with biz.business_transaction() as session:
+        revision = await watch_rules._latest_revision(session, uuid.UUID(rule_id), 2)
+        assert revision.changed_fields["name"] == "上穿82.08"
+    # A fresh request with an equivalent normalized name is a real no-op.
+    update.update(operation="update", rule_id=rule_id, expected_version=2)
+    unchanged = await watch_agent.call(case.run_id, "submit", {"intents": [update]})
+    assert unchanged["results"][0]["status"] == "unchanged"
+    assert unchanged["results"][0]["version"] == 2
+
+
+@pytest.mark.parametrize("name", [None, "", " \t", 123, {"text": "new"}])
+async def test_agent_invalid_rename_rolls_back_batch(case, name):
+    await watch_agent.call(case.run_id, "submit", {"intents": [intent("a"), intent("b", "21")]})
+    before = (await watch_agent.call(case.run_id, "get", {}))["targets"]
+    updates = [
+        {
+            "operation": "update",
+            "intent_key": target["intent_key"],
+            "reason": "rename",
+            "rule_id": target["id"],
+            "expected_version": 1,
+            "name": value,
+            "spec": {},
+        }
+        for target, value in zip(before, ["valid", name], strict=True)
+    ]
+    with pytest.raises(biz.ValidationError):
+        await watch_agent.call(case.run_id, "submit", {"intents": updates})
+    after = (await watch_agent.call(case.run_id, "get", {}))["targets"]
+    assert [(t["name"], t["version"]) for t in after] == [(t["name"], t["version"]) for t in before]
+
+
+async def test_http_rename_persists_with_version_and_validation(case):
+    import httpx
+
+    from server.app import app
+    from server.security import create_access_token
+
+    rule_id = await create(case, trigger_mode="crossing")
+    headers = {"Authorization": f"Bearer {create_access_token(case.uid)}"}
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=app), base_url="http://monitor.test"
+    ) as client:
+        url = f"/api/business/watch-rules/{rule_id}"
+
+        async def update(body):
+            return await client.patch(
+                url, json=body, headers=headers | {"Idempotency-Key": uuid.uuid4().hex}
+            )
+
+        response = await update({"expected_version": 1, "name": " 新名称 "})
+        assert response.status_code == 200, response.text
+        assert response.json()["changed_fields"] == ["name"]
+        detail = (await client.get(url, headers=headers)).json()
+        assert detail["name"] == "新名称"
+        assert detail["version"] == 2
+        assert detail["threshold"] == "20"
+        assert detail["trigger_mode"] == "crossing"
+        assert (await update({"expected_version": 1, "name": "过期写入"})).status_code == 409
+        for invalid in [None, " ", 42]:
+            assert (await update({"expected_version": 2, "name": invalid})).status_code == 400
+        assert (await client.get(url, headers=headers)).json()["name"] == "新名称"
+
+
+@pytest.mark.parametrize("blocked", ["paused", "cancelled", "human", "stale"])
+async def test_agent_rename_retains_update_guards(case, blocked):
+    out = await watch_agent.call(case.run_id, "submit", {"intents": [intent()]})
+    rule_id = out["results"][0]["rule_id"]
+    async with biz.business_transaction() as session:
+        rule = await session.get(store.WatchRule, uuid.UUID(rule_id))
+        if blocked in {"paused", "cancelled"}:
+            rule.status = blocked
+        elif blocked == "human":
+            rule.managed_by = "human"
+    with pytest.raises(biz.ValidationError):
+        await watch_agent.call(
+            case.run_id,
+            "submit",
+            {
+                "intents": [
+                    {
+                        "operation": "update",
+                        "intent_key": "breakout",
+                        "reason": "rename",
+                        "rule_id": rule_id,
+                        "expected_version": 0 if blocked == "stale" else 1,
+                        "name": "new name",
+                    }
+                ]
+            },
+        )
+    async with biz.business_transaction() as session:
+        rule = await session.get(store.WatchRule, uuid.UUID(rule_id))
+        assert rule.name == "breakout"
+        assert rule.current_version == 1
+
+
+async def test_agent_rename_uses_top_level_name_without_spec(case):
+    out = await watch_agent.call(case.run_id, "submit", {"intents": [intent()]})
+    update = {
+        "operation": "update",
+        "intent_key": "breakout",
+        "reason": "rename",
+        "rule_id": out["results"][0]["rule_id"],
+        "expected_version": 1,
+        "name": "new name",
+    }
+    with pytest.raises(biz.UnknownFieldError, match="操作顶层 name"):
+        await watch_agent.call(
+            case.run_id, "submit", {"intents": [update | {"spec": {"name": "conflicting name"}}]}
+        )
+    await watch_agent.call(case.run_id, "submit", {"intents": [update]})
+    target = (await watch_agent.call(case.run_id, "get", {}))["targets"][0]
+    assert target["name"] == "new name"
+    assert target["threshold"] == "20"
 
 
 async def test_crossing_rebases_after_offline_without_synthetic_cross(case):

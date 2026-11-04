@@ -34,9 +34,16 @@ def binding(check_id="amount", version="v1", replaces=""):
 
 def planned_items(*ids):
     return [
-        {"id": tid, "verification_required": True, "verification_requirements": [{
-            "check_id": "amount", "criterion": "Recompute the amount",
-        }]}
+        {
+            "id": tid,
+            "verification_required": True,
+            "verification_requirements": [
+                {
+                    "check_id": "amount",
+                    "criterion": "Recompute the amount",
+                }
+            ],
+        }
         for tid in (ids or ("t1",))
     ]
 
@@ -46,6 +53,7 @@ def add_job(bus, job_id, checks, *, stop="submit_report", verdicts=None):
         {
             "check_id": check["check_id"],
             "binding_id": check["binding_id"],
+            "subject_sha256": check["subject"]["sha256"],
             "verdict": verdict,
             "method": "recompute",
             "detail": "42 + 8 = 50",
@@ -118,18 +126,26 @@ async def test_verification_board_item_cannot_resolve_before_its_bound_check_pas
         ExecutionScope(task_id="run", metadata={SWARM_SCOPE_KEY: object()})
     )
     try:
-        await add_task.func([{
-            "description": "核验所有提炼观点",
-            "verification_requirements": [{
+        await add_task.func(
+            [
+                {
+                    "description": "核验所有提炼观点",
+                    "verification_requirements": [
+                        {
+                            "check_id": "amount",
+                            "criterion": "Recompute the amount",
+                        }
+                    ],
+                }
+            ]
+        )
+        assert snapshot_tasks("run")[0]["verification_required"] is True
+        assert snapshot_tasks("run")[0]["verification_requirements"] == [
+            {
                 "check_id": "amount",
                 "criterion": "Recompute the amount",
-            }],
-        }])
-        assert snapshot_tasks("run")[0]["verification_required"] is True
-        assert snapshot_tasks("run")[0]["verification_requirements"] == [{
-            "check_id": "amount",
-            "criterion": "Recompute the amount",
-        }]
+            }
+        ]
 
         rejected = await update_task.func([{"id": "t1", "resolution": "resolved"}])
         assert rejected.startswith("Error:")
@@ -160,10 +176,12 @@ async def test_planned_verification_gets_a_stable_default_check_identity():
     )
     try:
         await add_task.func([{"description": "核验关键数字"}])
-        assert snapshot_tasks("planned-run")[0]["verification_requirements"] == [{
-            "check_id": "t1.required",
-            "criterion": "核验关键数字",
-        }]
+        assert snapshot_tasks("planned-run")[0]["verification_requirements"] == [
+            {
+                "check_id": "t1.required",
+                "criterion": "核验关键数字",
+            }
+        ]
     finally:
         clear_board("planned-run")
         reset_current_execution_scope(token)
@@ -183,16 +201,26 @@ async def test_duplicate_plan_item_can_be_enriched_with_explicit_checks():
     )
     try:
         await add_task.func([{"description": "核验关键数字"}])
-        await add_task.func([{
-            "description": "核验关键数字",
-            "verification_requirements": [{
-                "check_id": "amount.total", "criterion": "按原始行复算总额",
-            }],
-        }])
+        await add_task.func(
+            [
+                {
+                    "description": "核验关键数字",
+                    "verification_requirements": [
+                        {
+                            "check_id": "amount.total",
+                            "criterion": "按原始行复算总额",
+                        }
+                    ],
+                }
+            ]
+        )
 
-        assert snapshot_tasks("enriched-run")[0]["verification_requirements"] == [{
-            "check_id": "amount.total", "criterion": "按原始行复算总额",
-        }]
+        assert snapshot_tasks("enriched-run")[0]["verification_requirements"] == [
+            {
+                "check_id": "amount.total",
+                "criterion": "按原始行复算总额",
+            }
+        ]
     finally:
         clear_board("enriched-run")
         reset_current_execution_scope(token)
@@ -345,11 +373,42 @@ def verdict_for(check, **kwargs):
         "check_id": check["check_id"],
         "binding_id": check["binding_id"],
         "verdict": "pass",
+        "subject_sha256": check["subject"]["sha256"],
         "method": "recompute",
         "detail": "42 + 8 = 50",
         "evidence_keys": ["source"],
         **kwargs,
     }
+
+
+def test_known_criterion_defects_cannot_be_submitted_as_pass(tmp_path):
+    _, _, bound = make_bound(tmp_path)
+    metadata = {"verification_checks": bound}
+    token = set_verification_scope("review", metadata)
+    issue = "Q38 section is 7.1, but the bound quote library labels it 2.1"
+    try:
+        with pytest.raises(ValueError, match=r"pass.*unresolved"):
+            validate_results([verdict_for(bound[0], unresolved_issues=[issue])])
+        assert metadata["verification_events"] == []
+        accepted = validate_results(
+            [
+                verdict_for(bound[0], verdict="fail", unresolved_issues=[issue]),
+            ]
+        )
+        commit_results(accepted)
+        assert metadata["verification_events"][0]["unresolved_issues"] == [issue]
+        assert metadata["verification_events"][0]["verdict"] == "fail"
+        out = finalize_team_report(
+            "The source has a section-label error; the architectural analysis remains provisional.",
+            source="agent",
+            answer_status="complete",
+            stopped_by="final_answer",
+            wind_down={"job_outcomes": [{"job_id": "review", "status": "complete", **metadata}]},
+        )
+        assert out["answer_status"] == "partial"
+        assert issue in out["final_answer"]
+    finally:
+        reset_verification_scope(token)
 
 
 @pytest.mark.parametrize(
@@ -389,15 +448,28 @@ def test_binding_versions_are_content_derived_and_scope_stable(tmp_path):
     assert len(bound[0]["binding_id"]) == 64
     add_job(bus, "review", bound)
     spec.replaces_job_id = "review"
+    spec.revision_kind = "retry"
     same, _ = bind_checks(
-        [spec], bus=bus, task_id="run", work_items=planned_items(), required=True, outputs_root=tmp_path
+        [spec],
+        bus=bus,
+        task_id="run",
+        work_items=planned_items(),
+        required=True,
+        outputs_root=tmp_path,
     )
     assert same[0]["binding_id"] == bound[0]["binding_id"]
     add_job(bus, "newdraft", [])
     spec.subject.job_id = "newdraft"
+    bus._jobs["newdraft"].result.final_content = "corrected report"
+    spec.revision_kind = "subject"
     spec.revision_reason = "corrected candidate"
     new, _ = bind_checks(
-        [spec], bus=bus, task_id="run", work_items=planned_items(), required=True, outputs_root=tmp_path
+        [spec],
+        bus=bus,
+        task_id="run",
+        work_items=planned_items(),
+        required=True,
+        outputs_root=tmp_path,
     )
     assert new[0]["binding_id"] != bound[0]["binding_id"]
 
@@ -481,7 +553,8 @@ def test_handoff_bytes_and_provenance_are_checked_at_dispatch_and_submission(tmp
         reset_handoff_scope(handoff)
 
 
-async def test_real_dispatch_timeout_recheck_race_and_snapshot(tmp_path, monkeypatch):
+@pytest.mark.parametrize("inline", [False, True])
+async def test_real_dispatch_timeout_recheck_race_and_snapshot(tmp_path, monkeypatch, inline):
     import asyncio
     import json
 
@@ -504,6 +577,10 @@ async def test_real_dispatch_timeout_recheck_race_and_snapshot(tmp_path, monkeyp
     )
 
     bus, spec, _ = make_bound(tmp_path)
+    if inline:
+        spec = VerificationCheck.model_validate(
+            {**spec.model_dump(), "subject": {"text": "The corrected amount is 42 + 8 = 50."}}
+        )
     bus.configure_task_result_store("run", tmp_path / "snapshots")
     runtime = SwarmSubagentRuntime(sandbox_mode="native")
     context = build_swarm_session_runtime_spec(runtime, session_name="reviewer", task_id="run")
@@ -550,11 +627,17 @@ async def test_real_dispatch_timeout_recheck_race_and_snapshot(tmp_path, monkeyp
         )
     )
     try:
-        await add_task.func(tasks=[{
-            "description": "Recompute", "verification_requirements": [
-                {"check_id": key, "criterion": spec.criterion} for key in ("amount", "units")
-            ],
-        }])
+        await add_task.func(
+            tasks=[
+                {
+                    "description": "Recompute",
+                    "verification_requirements": [
+                        {"check_id": key, "criterion": spec.criterion}
+                        for key in ("amount", "units")
+                    ],
+                }
+            ]
+        )
         units = spec.model_copy(update={"check_id": "units"})
         first = await agent_team_assign_task.func(
             tasks=[
@@ -572,7 +655,12 @@ async def test_real_dispatch_timeout_recheck_race_and_snapshot(tmp_path, monkeyp
         assert len(old.item.metadata["verification_events"]) == 1
         snapshot = json.loads(next((tmp_path / "snapshots").glob("*.json")).read_text())
         assert snapshot["assignment_metadata"]["verification_events"][0]["verdict"] == "pass"
+        if inline:
+            assert snapshot["assignment_metadata"]["verification_checks"][0]["subject"]["text"] == (
+                "The corrected amount is 42 + 8 = 50."
+            )
         units.replaces_job_id = old.job_id
+        units.revision_kind = "retry"
         assignment = {
             "agent": "reviewer",
             "prompt": "Finish remaining check",

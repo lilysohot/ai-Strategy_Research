@@ -162,7 +162,7 @@ def test_research_assignment_is_rejected_after_admission_closes(dispatch) -> Non
     assert bus.submitted == []
 
 
-@pytest.mark.parametrize("remaining,admitted", [(69, False), (180, True)])
+@pytest.mark.parametrize("remaining,admitted", [(69, False), (180, False), (240, True)])
 def test_verification_requires_time_to_review_and_submit(dispatch, remaining, admitted) -> None:
     now = time.monotonic()
     budget = TeamPhaseBudget(

@@ -99,10 +99,65 @@ and `retry` changes neither. Changed bindings still need `revision_reason`.
 Historical version 1 records remain readable. These constraints establish object
 identity and declared scope, not proof that the model actually performed the check.
 
+Factual claims opt into `factual_scope=true`. Their results use `scope_assessment`
+to compare entity, version, date, units, conditions and attribution, each with a
+status and explanation. PASS requires all six dimensions and rejects `mismatch`
+or `unknown`; `not_applicable` still needs an explanation. These are explicit
+model assessments, not an automated proof of factual correctness. Both live
+submission and persisted projection enforce the contract. Rechecks cannot drop it.
+
+An inline candidate can also declare `publication_excerpt=true`. Atomic delivery
+rejects a resolved task if its passed excerpt is absent from the final text.
+Retain the exact checked passage, rebind/recheck edits, or block the task and
+disclose the gap. This protects only declared excerpts, not unlisted final claims.
+The shared finalization gate also protects bare-text/legacy submissions. If later
+reporter synthesis changes or omits a checked passage, the final report records
+`checked_publication_excerpt_changed` and becomes partial; the original scoped
+verdict remains in the audit record and cannot certify the changed wording.
+
+Completed failed/unchecked required checks no longer cause immediate delivery
+while a bounded correction is feasible. The delivery observer offers one repair
+round per check using existing evidence, with at most three coordinator generations
+to collect, correct and dispatch. It respects the verifier's admission minimum,
+publication reserve, final turn and publisher boundary. A second failed check,
+insufficient time or an explicitly blocked task proceeds to truthful partial
+delivery instead of restarting research. Existing rechecks count as that round.
+
 Synthesis prompt experiments are isolated in
 [`benchmarks/team_synthesis`](../../benchmarks/team_synthesis/README.md). Candidate
 instructions are not loaded by this workflow. Fixed-report tests measure local
 synthesis behavior; they do not establish end-to-end effectiveness.
+
+Required verification work items reject assignments without structured checks
+before launching a member. A research item may gather evidence for a later check;
+the first completed research report prompts the coordinator to dispatch any checks
+whose evidence is ready, while other research continues. This is a prompt to assess
+readiness, not an automatic pass or a fabricated subject binding.
+
+Phase budgets allocate verification and publication windows backwards from the
+actual run deadline. Report collection and verifier jobs stop before the shared
+final-answer reserve (up to 120 seconds, capped at 20% of the available horizon).
+Dedicated publishers retain their own publication deadline.
+
+Corpus search coverage metadata survives member handoff and is included in bound
+evidence. The verifier and final delivery gate reject explicit corpus-wide absence,
+count or latestness claims when the recorded retrieval is bounded or incomplete.
+The final-report fallback removes those sentences and records a partial delivery.
+This is a narrow wording guard, not semantic fact verification. Factual-scope checks
+must also compare deployment/retention conditions and distinguish forecasts from
+observations; a matching number alone does not pass a materially broader claim.
+
+Corpus evidence also travels through member metadata: the acquisition observer
+captures the original search excerpts and opaque references, plus fetched text
+and fragment/pagination markers. Verification receives a bounded, deduplicated
+projection of those records alongside the bound reports. Whole excerpts are
+preserved; omitted bodies are explicitly identified as pointers, not read
+evidence. Sufficient search excerpts need no repeat fetch. Fetch only when the
+required qualifications or context are missing, using the exact captured locator.
+This handoff does not change retrieval ranking. Full observations remain in job
+metadata and trajectories; binding hashes cover their provenance. Collection
+status returns check identities, verdicts and short findings rather than repeating
+the source bodies and acquisition diagnostics.
 
 ## Profiles
 

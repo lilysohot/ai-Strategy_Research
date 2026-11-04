@@ -362,17 +362,25 @@ def _build_team_phase_budget(
             if publication_deadline is None
             else min(publication_deadline, latest_publication)
         )
-        if verification_deadline is not None and publication_deadline is not None:
-            verification_deadline = min(verification_deadline, publication_deadline)
-    if research_deadline is not None:
-        if publication_deadline is not None:
-            publication_deadline = max(research_deadline, publication_deadline)
-        if verification_deadline is not None:
-            verification_deadline = max(research_deadline, verification_deadline)
+    # Allocate backwards from the actual hard cap. Truncating only the final
+    # deadline previously reduced a 180s publication window to 14s on Web runs.
+    if verification_deadline is not None and publication_deadline is not None:
+        verification_deadline = max(started_monotonic_s, min(
+            verification_deadline, publication_deadline - publication_phase_timeout_s,
+        ))
+    if research_deadline is not None and verification_deadline is not None:
+        research_deadline = max(started_monotonic_s, min(
+            research_deadline, verification_deadline - verification_timeout,
+        ))
     # Closing retrieval must leave time for BOTH an in-flight tool and a
     # concise member report. A tool-only reserve lets reports consume the
     # coordinator's final synthesis window.
-    member_report_reserve_s = min(60.0, max(0.0, (research_wall_s - worst_case_tool_s) * 0.2))
+    effective_research_s = (
+        research_deadline - started_monotonic_s
+        if research_deadline is not None
+        else research_wall_s
+    )
+    member_report_reserve_s = min(60.0, max(0.0, (effective_research_s - worst_case_tool_s) * 0.2))
     research_dispatch_deadline = (
         max(started_monotonic_s, research_deadline - worst_case_tool_s - member_report_reserve_s)
         if research_deadline is not None

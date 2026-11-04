@@ -132,7 +132,11 @@ def finalize_team_report(
     unresolved = [task for task in board if task["resolution"] not in {"resolved", "cancelled"}]
     gaps: list[dict[str, Any]] = []
     jobs = [dict(job) for job in wind.get("job_outcomes", []) if isinstance(job, dict)]
-    from plugins.tools._verification import project_checks, verification_progress
+    from plugins.tools._verification import (
+        missing_publication_excerpts,
+        project_checks,
+        verification_progress,
+    )
 
     verification = project_checks(jobs)
     for task in board:
@@ -246,9 +250,25 @@ def finalize_team_report(
     retained_reports = source == "collected_report_fallback" and is_user_report(text)
     findings = verification_claim_findings(text) if not retained_reports else []
     contradictory = bool(findings)
-    if findings:
+    if contradictory:
         gaps.append({"code": "unsupported_verification_claim"})
+    from plugins.tools._corpus_scope import corpus_scope_findings
+
+    corpus_observations = [
+        o for job in jobs for o in job.get("content_acquisition", []) if isinstance(o, dict)
+    ]
+    scope_findings = corpus_scope_findings(text, corpus_observations)
+    if scope_findings:
+        gaps.append({"code": "corpus_scope_overstatement"})
+        findings += scope_findings
+    if findings:
         text = omit_verification_assurances(text, findings)
+    missing_excerpts = missing_publication_excerpts(
+        verification["checks"], text,
+        excluded_work_items={t["id"] for t in board if t["resolution"] in {"blocked", "cancelled"}},
+    )
+    if missing_excerpts:
+        gaps.append({"code": "checked_publication_excerpt_changed", "check_ids": missing_excerpts})
     # A local assurance error must not erase unrelated evidence or analysis.
     # Formatting debris alone is not a useful answer after sentence removal.
     residual = re.sub(r"(?m)^[ \t]*(?:#{1,6}\s+.*|\d+[.)]\s*|[-*+_>` ]+)$", "", text)
@@ -267,12 +287,13 @@ def finalize_team_report(
         "candidate_sha256": hashlib.sha256(candidate.encode()).hexdigest(),
         "candidate_verification": "not_assessed",
         "findings": findings,
+        "unmatched_checked_excerpts": missing_excerpts,
     }
     if findings:
         publication["candidate_text"] = candidate
         publication["examined_text"] = examined
     if system:
-        gaps.append({"code": "publication_withheld" if contradictory else "synthesis_unavailable"})
+        gaps.append({"code": "publication_withheld" if findings else "synthesis_unavailable"})
         if not is_user_report(examined) and source not in _INTERNAL_SOURCES:
             gaps.append({"code": "invalid_user_report"})
     if stopped_by and stopped_by not in {"final_answer", "submit_report"}:
@@ -313,15 +334,45 @@ def finalize_team_report(
         "acquisition_limits": acquisition_limits,
     }
     zh = _chinese(question, language)
+
+    def gap_label(value: str) -> str:
+        # Board prose is model-authored too. Do not reintroduce an unsupported
+        # absence claim through the automatically appended limitation section.
+        note_findings = corpus_scope_findings(value, corpus_observations)
+        if not note_findings:
+            return _label(value)
+        publication.setdefault("note_scope_findings", []).append({
+            "candidate_text": value, "findings": note_findings,
+        })
+        remainder = omit_verification_assurances(value, note_findings)
+        notice = (
+            "检索范围不足以确认该全库断言，原文见运行记录。"
+            if zh else "Search coverage cannot establish the corpus-wide claim; see the run record. "
+        )
+        return _label(notice + remainder)
+
     notes: list[str] = []
     verification_notes: list[str] = []
+    if scope_findings:
+        notes.append(
+            "已移除超出检索覆盖范围的全库断言。本次检索覆盖或日期信息不完整；"
+            "未检索到不等于全库不存在，也不能据此确认全库最新版本。"
+            if zh else "Corpus-wide assertions exceeding the recorded search coverage were omitted. "
+            "Bounded retrieval does not prove absence or latestness across the corpus."
+        )
+    if missing_excerpts:
+        notes.append(
+            "最终正文未保留部分已核验片段，原片段的通过结果不能用于确认改写后的内容。"
+            if zh else "Some checked passages were changed or omitted in the final text; their "
+            "passing verdicts do not verify the rewritten content."
+        )
     declared_gaps = [
         task for task in board if task["gap"].strip() and task["resolution"] != "cancelled"
     ]
     if declared_gaps:
         notes.append("仍未确认的证据缺口：" if zh else "Unresolved evidence gaps:")
         notes.extend(
-            f"- {_label(task['description'] or task['id'])}: {_label(task['gap'])}"
+            f"- {_label(task['description'] or task['id'])}: {gap_label(task['gap'])}"
             for task in declared_gaps[:20]
         )
     if verification["checks"]:
@@ -391,7 +442,7 @@ def finalize_team_report(
         notes.append("任务板尚未解决的事项：" if zh else "Unresolved task-board items:")
         notes.extend(
             f"- {_label(task['description'] or task['id'])}"
-            + (f": {_label(task['gap'] or task['notes'])}" if task["gap"] or task["notes"] else "")
+            + (f": {gap_label(task['gap'] or task['notes'])}" if task["gap"] or task["notes"] else "")
             for task in unresolved[:20]
         )
         if len(unresolved) > 20:

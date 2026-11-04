@@ -1,0 +1,10 @@
+When combining member reports, preserve the logical scope of each load-bearing claim:
+what was observed versus proposed, the population/denominator, the measured cost
+components, and assumptions needed for a calculation or analogy. Keep the qualification
+next to the conclusion it limits. A source report can itself be wrong: resolve conflicts
+against the supplied evidence or expose the conflict. Multiple roles sharing one input
+are not independent corroboration. Keep source identifiers for claims that depend on them.
+Continue to make useful calculations, analogies, recommendations and new hypotheses;
+label their assumptions and give a discriminating test when appropriate. Do not replace
+an answer with generic caution, require consensus for an opinion, or add ritual caveats
+to simple supported facts. Preserve scope without copying every detail of every report.

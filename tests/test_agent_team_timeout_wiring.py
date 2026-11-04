@@ -122,7 +122,7 @@ def test_consolidating_report_wait_preserves_verification_budget() -> None:
     )
     phase, deadline = budget.wait_deadline(publication_pending=True)
     assert phase == "consolidating"
-    assert deadline == budget.publication_deadline_s
+    assert deadline == budget.delivery_start_s
 
 
 @pytest.mark.asyncio
@@ -264,13 +264,12 @@ def test_web_phase_plan_reserves_a_distinct_publication_slice() -> None:
         publication_state={},
     )
 
-    assert budget.research_dispatch_deadline_s == 1_495
-    assert budget.research_deadline_s == 1_720
+    assert budget.research_dispatch_deadline_s == 1_329
+    assert budget.research_deadline_s == 1_554
     # Verification gets its own slice after research, before publication. With
     # no verification_phase_timeout_s it defaults to the publication window
-    # size (180s). Publication then opens after verification and is clamped by
-    # the hard wall (2050 - 120 finalization - 15 wind-down - 1 = 1914).
-    assert budget.verification_deadline_s == 1_900
+    # size (180s). A hard cap shortens research first, preserving both windows.
+    assert budget.verification_deadline_s == 1_734
     assert budget.publication_deadline_s == 1_914
     assert budget.finalization_deadline_s == 2_050
 

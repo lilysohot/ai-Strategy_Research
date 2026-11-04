@@ -39,7 +39,7 @@ def test_team_profile_reuses_cli_roles_without_business_tools(bound) -> None:
         BUSINESS_TOOL_NAMES,
         MARKET_TOOL_NAMES,
         PROFILE_NAME,
-        RESEARCH_TOOL_NAMES,
+        TEAM_CORPUS_TOOL_NAMES,
         build_profile_overrides,
     )
     from workflows.agent_team.profile import load_swarm_profile
@@ -53,8 +53,13 @@ def test_team_profile_reuses_cli_roles_without_business_tools(bound) -> None:
     sub_tools = set(agent["sub_agent_tools"])
 
     assert agent["main_agent_tools"] == [*cli["main_agent_tools"], "research_history"]
-    assert agent["sub_agent_tools"] == cli["sub_agent_tools"]
-    unavailable = set(BUSINESS_TOOL_NAMES + MARKET_TOOL_NAMES + RESEARCH_TOOL_NAMES)
+    assert agent["sub_agent_tools"] == [*cli["sub_agent_tools"], *TEAM_CORPUS_TOOL_NAMES]
+    # 团队第一批只开放 corpus_inventory/search/fetch；语义检索与覆盖探测暂缓。
+    assert set(TEAM_CORPUS_TOOL_NAMES) <= sub_tools
+    unavailable = set(BUSINESS_TOOL_NAMES + MARKET_TOOL_NAMES + [
+        "corpus_semantic_query",
+        "data_coverage",
+    ])
     assert unavailable.isdisjoint(main_tools | sub_tools)
     assert "publish_handoff" in sub_tools
     assert {"web_search", "web_fetch", "bash", "read_file", "create_file"}.isdisjoint(main_tools)

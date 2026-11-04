@@ -122,6 +122,11 @@ async def call(run_id: uuid.UUID, operation: str, payload: dict[str, Any]) -> di
                 raw_spec = intent.get("spec", {})
                 if not isinstance(raw_spec, dict):
                     raise biz.ValidationError("spec 必须是对象")
+                if "name" in raw_spec:
+                    raise biz.UnknownFieldError(
+                        "名称应放在操作顶层 name，不属于 spec 价格配置",
+                        fields={"spec.name": "请将 name 移到操作顶层"},
+                    )
                 spec: dict[str, Any] = dict(raw_spec)
                 if rule is None:
                     spec.setdefault("trigger_mode", "continuous")
@@ -138,7 +143,11 @@ async def call(run_id: uuid.UUID, operation: str, payload: dict[str, Any]) -> di
                     if rev is None:
                         raise biz.ValidationError("监控版本不存在")
                     existing = watch_rules._config_view(rev)
-                    if all(existing.get(k) == v for k, v in spec.items()):
+                    patch = dict(spec)
+                    if "name" in intent:
+                        patch["name"] = watch_rules.normalize_name(intent["name"])
+                    existing["name"] = rule.name
+                    if all(existing.get(k) == v for k, v in patch.items()):
                         rule.rationale = {
                             "reason": reason,
                             "evidence_refs": intent.get("evidence_refs", []),
@@ -157,7 +166,7 @@ async def call(run_id: uuid.UUID, operation: str, payload: dict[str, Any]) -> di
                         user_id=run.user_id,
                         rule_id=rule.id,
                         expected_version=intent.get("expected_version"),
-                        patch=spec,
+                        patch=patch,
                         idempotency_key=write_key,
                         source_kind="agent",
                         source_ref=str(run_id),

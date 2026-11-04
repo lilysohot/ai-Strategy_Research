@@ -34,7 +34,8 @@ def board_dispatch():
 
 
 async def test_dispatch_links_exact_jobs_without_marking_verification_passed(board_dispatch):
-    await add_task.func([{"description": "核验金额"}, {"description": "解释结果"}])
+    # Evidence gathering precedes the required check as an explicit research task.
+    await add_task.func([{"description": "核验金额", "kind": "research"}, {"description": "解释结果"}])
     reply = await agent_team_assign_task.func(tasks=[{
         "agent": "researcher", "prompt": "Read sources", "work_item_ids": ["t1"],
     }])

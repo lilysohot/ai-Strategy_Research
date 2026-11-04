@@ -64,7 +64,9 @@ async def submit_watch_intents(intents: list[dict[str, Any]]) -> str:
             task(触发后的综合分析任务)。expires_at可不填以长期监控。
             trigger_mode=continuous 表示每轮达标；crossing 表示采样上穿/下穿/进入区间，
             首次达标立即触发，后续需离开条件再进入。用户要求减少同侧重复时选择 crossing。
-            update 的 spec 仅含拟修改字段。未提及目标保持不变，不可虚构资料或恢复人工暂停。
+            update 的 spec 仅含拟修改的价格配置；改名用操作顶层 name（非空文本），
+            不要放入 spec。仅改名可省略 spec；调整阈值时如名称含旧价格，应同时更新 name。
+            未提供 name 保留原名称。未提及目标保持不变，不可虚构资料或恢复人工暂停。
             只有人工发起的本轮明确要求替换时，才取消已暂停的 Agent 目标；自动监控不得取消它。
 
     Returns:

@@ -34,7 +34,7 @@ ON_CREATE_POLICIES = frozenset({"trigger_now", "wait_requalify"})
 DISCONNECT_POLICIES = frozenset({"trigger_once", "wait_requalify"})
 BUDGET_KEYS = frozenset({"max_runs"})
 
-#: 规则配置可提交的顶层键；编辑额外允许 ``plan_id``（指针行绑定，随版本可追溯）。
+#: 规则配置可提交的顶层键；编辑额外允许指针行的名称与计划绑定。
 SPEC_KEYS = frozenset(
     {
         "symbol",
@@ -52,7 +52,7 @@ SPEC_KEYS = frozenset(
         "disconnect_recovery",
     }
 )
-PATCH_KEYS = SPEC_KEYS | {"plan_id"}
+PATCH_KEYS = SPEC_KEYS | {"plan_id", "name"}
 
 DECIMAL_TEXT = re.compile(r"^(0|[1-9]\d*)(\.\d+)?$")
 CURRENCY_TEXT = re.compile(r"^[A-Z]{3}$")
@@ -88,6 +88,15 @@ def _parse_decimal(name: str, value: Any) -> Decimal:
     return Decimal(value)
 
 
+def normalize_name(value: Any) -> str:
+    """Validate display metadata separately from the executable price spec."""
+    if not isinstance(value, str) or not value.strip():
+        raise biz.ValidationError(
+            "规则名称不能为空且必须是文本", fields={"name": "请填写可识别的规则名称"}
+        )
+    return value.strip()
+
+
 def _parse_dt(value: Any, name: str = "expires_at") -> datetime | None:
     if value in (None, ""):
         return None
@@ -121,7 +130,7 @@ def _parse_fields(patch: dict[str, Any], *, allow_plan_id: bool) -> tuple[dict[s
 
     返回 ``(columns, threshold_raw)``：``columns`` 不含阈值列（阈值依赖方向合并后再算），
     ``threshold_raw`` 为 ``"threshold"`` 的原始值；未提供时用哨兵。
-    创建不允许 ``plan_id`` 出现在配置里（绑定是独立参数）；编辑允许，但由上层单独处理。
+    创建不允许 ``plan_id`` / ``name`` 出现在配置里；编辑允许，由上层单独处理。
     """
     allowed = PATCH_KEYS if allow_plan_id else SPEC_KEYS
     unknown = set(patch) - allowed
@@ -522,6 +531,7 @@ async def update_rule(
         if source_kind == "form":
             rule.managed_by = "human"
         columns, threshold_raw = _parse_fields(patch, allow_plan_id=True)
+        name = normalize_name(patch["name"]) if "name" in patch else rule.name
         merged = {**(_revision_columns(prev) if prev else {}), **columns}
         _continuous_policy(merged)
 
@@ -558,7 +568,7 @@ async def update_rule(
         merged.pop("threshold_low", None)
         merged.pop("threshold_high", None)
 
-        changed = sorted(set(patch) & SPEC_KEYS)
+        changed = sorted(set(patch) & (SPEC_KEYS | {"name"}))
         new_version = rule.current_version + 1
         session.add(
             store.WatchRuleRevision(
@@ -571,11 +581,13 @@ async def update_rule(
                 changed_fields={
                     "fields": changed,
                     "plan_id": str(plan_id) if plan_id else None,
+                    "name": name,
                 },
                 **merged,
             )
         )
         rule.current_version = new_version
+        rule.name = name
         if rule.plan_id != plan_id:
             rule.plan_id = plan_id
         # 改版不复用旧版报价基线与触发资格：新版本重新布防（DATA-10 消费）。

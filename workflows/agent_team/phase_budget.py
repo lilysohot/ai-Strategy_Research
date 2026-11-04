@@ -25,12 +25,22 @@ class TeamPhaseBudget:
     publication_deadline_s: float | None
     finalization_deadline_s: float | None
     state: dict[str, Any]
-    # Dedicated boundary for check-only verifier jobs. ``None`` (the legacy
-    # default) falls back to ``publication_deadline_s`` in ``deadline_for_job``,
-    # so existing callers keep the old shared-publication behaviour. When set,
-    # verifiers stop here — before the publisher's window opens — so a
-    # verification that runs long can no longer starve the sole publisher.
+    # Dedicated boundary for check-only verifier jobs. Without one, verifiers
+    # still stop before the final answer reserve. An explicit boundary may
+    # stop them earlier to leave a separate publisher window.
     verification_deadline_s: float | None = None
+
+    @property
+    def delivery_reserve_s(self) -> float:
+        if self.publication_deadline_s is None:
+            return 0.0
+        return min(120.0, max(0.0, (self.publication_deadline_s - self.started_monotonic_s) * 0.2))
+
+    @property
+    def delivery_start_s(self) -> float | None:
+        if self.publication_deadline_s is None:
+            return None
+        return self.publication_deadline_s - self.delivery_reserve_s
 
     @staticmethod
     def _remaining(deadline: float | None, now: float | None = None) -> float | None:
@@ -79,12 +89,13 @@ class TeamPhaseBudget:
         """Boundary a dispatched job must not cross.
 
         Check-only verifiers get the dedicated ``verification_deadline_s`` when
-        one is configured; otherwise they share the publication boundary.
+        one is configured; all verifiers stop before the final answer reserve.
         Publishers keep the publication boundary; every other member keeps the
         research boundary.
         """
-        if is_verification and self.verification_deadline_s is not None:
-            return self.verification_deadline_s
+        if is_verification:
+            limits = [d for d in (self.verification_deadline_s, self.delivery_start_s) if d is not None]
+            return min(limits) if limits else None
         return self.publication_deadline_s if can_publish else self.research_deadline_s
 
     def remaining_for_job(
@@ -94,18 +105,25 @@ class TeamPhaseBudget:
             self.deadline_for_job(can_publish=can_publish, is_verification=is_verification)
         )
 
-    def wait_deadline(self, *, publication_pending: bool = False) -> tuple[str, float | None]:
+    def wait_deadline(
+        self, *, publication_pending: bool = False, verification_pending: bool = False,
+    ) -> tuple[str, float | None]:
         """Return the boundary a report wait must not cross."""
         phase = self.sync_phase()
         if phase == "publishing" or (
             publication_pending and phase in {"draining", "consolidating", "finalizing"}
         ):
-            return phase, self.publication_deadline_s
-        if phase == "research" and self.research_dispatch_deadline_s is not None:
+            deadline = self.publication_deadline_s
+        elif verification_pending and phase in {"draining", "consolidating", "finalizing"}:
+            deadline = self.deadline_for_job(can_publish=False, is_verification=True)
+        elif phase == "research" and self.research_dispatch_deadline_s is not None:
             # Wake the coordinator when admission closes, even if every member
             # is still gathering distinct (non-repetitive) evidence.
-            return phase, self.research_dispatch_deadline_s
-        return phase, self.research_deadline_s
+            deadline = self.research_dispatch_deadline_s
+        else:
+            deadline = self.research_deadline_s
+        limits = [d for d in (deadline, self.delivery_start_s) if d is not None]
+        return phase, min(limits) if limits else None
 
     def as_dict(self, now: float | None = None) -> dict[str, Any]:
         current = time.monotonic() if now is None else float(now)

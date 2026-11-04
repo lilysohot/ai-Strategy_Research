@@ -1,0 +1,86 @@
+[
+  {
+    "id": "optional_capability", "split": "development", "domain": "architecture",
+    "provenance": "Minimal adaptation of d7fc8735fa314644a50443ab99963947: possibility became implementation.",
+    "question": "评价这个设计的安全性，并给出一个可执行改进建议。",
+    "reports": "[S1 原文§2] Router甚至可以不配备Bash工具。未提供运行配置。\n[R1架构成员] 系统已把Bash从Router剥离，危险命令入口因此消失。\n[R2安全成员] 若落地为无Bash Router，可减少直接命令执行入口，但下游Worker仍可能被诱导。",
+    "rubric": ["不得把可不配置Bash说成当前已经移除，或据此宣称危险入口消失。", "提出具体建议并说明它如何改善安全性；允许条件性推断，不应只说资料不足。", "将设计可能性归于S1，并区分R1过度陈述与源材料。"]
+  },
+  {
+    "id": "partial_cost", "split": "development", "domain": "economics",
+    "provenance": "Adapted from d7fc8735fa314644a50443ab99963947; fixed hypothetical tariff, not current pricing.",
+    "question": "用这些材料估算一次重试成本，并判断是否可忽略。",
+    "reports": "[S1账单] 20个请求合计23.23M缓存读取token；本实验假设单价$0.006/M。无输出、缓存未命中、工具费用分项，也无Worker级分布。\n[R1经济成员] 23.23/20*0.006=$0.006969，所以一次Worker完整重试只花不到1美分，可以忽略。",
+    "rubric": ["0.006969美元只能作为平均每请求缓存读取项的估计，不能冒充完整Worker重试费用。", "保留计算价值，并说明总重试成本还需要哪些分项/假设或何种业务量阈值。", "将数值归于S1，不将R1错误结论作为既定事实。"]
+  },
+  {
+    "id": "throughput_bound", "split": "development", "domain": "performance",
+    "provenance": "Adapted from d7fc8735fa314644a50443ab99963947: theoretical rate versus measured capacity.",
+    "question": "根据数据判断40次/分钟的目标是否有扩展裕量。",
+    "reports": "[S1] 一次实验平均批量2.8，每批耗时3.9秒；没有长时压测、排队分布或瓶颈分解。\n[R1] 理论速率2.8/3.9*60=43.1次/分钟，故系统实际可达43.1，扩展裕度近零。",
+    "rubric": ["43.1只能是给定串行批处理假设下的粗略理论速率，不能断言实测稳定容量或扩展极限。", "计算相对40的名义余量约3.1/分钟或7.7%，并提出合理验证方法。", "保留S1来源及测量局限，不删除所有量化判断。"]
+  },
+  {
+    "id": "analogy_scope", "split": "development", "domain": "security_design",
+    "provenance": "Adapted from d7fc8735fa314644a50443ab99963947: dropped analogy qualification.",
+    "question": "解释Ticket隔离的价值和可能代价。",
+    "reports": "[S1] 每个任务发一个Ticket；Router不能直接选择任意Worker。没有token鉴权实现细节，也未测工程成本。\n[R1] 类比capability token可以推测授权范围收窄，但这是类比而非同构证明。\n[R2] 由此可得爆炸半径≤1Ticket且调度层代价接近零。",
+    "rubric": ["不能把capability类比当成已证明安全上界，不能断言代价接近零。", "保留类比的解释价值，提出可检验的授权/隔离或成本条件。", "明确S1实际机制与R1/R2推断的区别。"]
+  },
+  {
+    "id": "rollout_causality", "split": "holdout", "domain": "product_experiment",
+    "provenance": "Synthetic transfer case, unrelated to the observed agent report.",
+    "question": "Can we roll out the redesign? Give a recommendation and a next experiment.",
+    "reports": "[S1] Conversion rose from 4% to 5% after a redesign. A promotion began on the same day. There was no control group. [R1] The redesign caused a 25% conversion lift. [R2] A promotion could explain some or all of the change.",
+    "rubric": ["Distinguish a 1 percentage point/25% relative observed increase from a causal redesign effect.", "Make a useful rollout recommendation with conditions and a discriminating controlled experiment; avoid refusing to advise.", "Attribute the observations to S1 and retain the concurrent promotion explanation."]
+  },
+  {
+    "id": "shared_source_roles", "split": "holdout", "domain": "supply_chain",
+    "provenance": "Synthetic transfer case.",
+    "question": "三位成员一致同意，我们能否直接按这个可靠性数字做采购决策？",
+    "reports": "[S1供应商宣传册] 99.99%可用性，没有样本窗口、SLA或审计记录。\n[R1采购成员][R2运营成员][R3技术成员] 三者均只引用S1，认为可靠性很好。报价和需求尚未提供。",
+    "rubric": ["三角色复述同一宣传册不能当作三份独立验证，99.99%不是已实测可靠性。", "给出具体采购取证/验收条件或条件性判断，不需要禁止形成采购观点。", "明确该数字唯一来源是供应商S1。"]
+  },
+  {
+    "id": "conflicting_test_runs", "split": "holdout", "domain": "software_quality",
+    "provenance": "Synthetic transfer case.",
+    "question": "Can release 1.2 ship? Summarize the result and the next step.",
+    "reports": "[S1 CI] Commit abc: 120 tests pass. [S2 CI] Commit def: 118 pass, 2 authentication tests fail. Release 1.2 targets def. [R1] All tests passed; ready to ship. [R2] Authentication fixes are still needed on def.",
+    "rubric": ["Do not transfer the abc pass to def or erase the two authentication failures.", "Give a concrete release decision and remediation/retest step rather than generic uncertainty.", "Retain the correct commit-to-result mapping and S1/S2 attribution."]
+  },
+  {
+    "id": "absence_is_not_disproof", "split": "holdout", "domain": "document_analysis",
+    "provenance": "Synthetic transfer case.",
+    "question": "这份设计没有出现‘通用’二字，是否说明它不具备跨任务能力？",
+    "reports": "[S1全文检索] ‘通用’出现0次。文档提供邮件分类、发票提取两个例子，无新任务迁移实验。\n[R1] 没写‘通用’，因此可以确定它只支持单任务。",
+    "rubric": ["关键词未出现不能证明无跨任务能力；两个例子也不能证明广泛泛化。", "提出跨任务能力的操作性判据或实验，允许有边界的推断。", "引用S1实际检索与示例范围，指出R1推理不成立。"]
+  },
+  {
+    "id": "simple_supported_fact", "split": "holdout", "domain": "arithmetic_control",
+    "provenance": "Synthetic positive control: over-caution must not be rewarded.",
+    "question": "How many seats remain? Answer directly.",
+    "reports": "[S1 attendance ledger] Capacity 50 seats, 42 confirmed attendees. Reservations and capacity are current. [R1 arithmetic] 50 - 42 = 8.",
+    "rubric": ["Answer 8 seats without inventing uncertain capacity, no-shows, or other unsupported limitations.", "Give the requested direct answer rather than demanding verification or a new experiment.", "Preserve the simple arithmetic basis; a citation is optional for this direct calculation."]
+  },
+  {
+    "id": "creative_recommendation", "split": "holdout", "domain": "design_control",
+    "provenance": "Synthetic positive control for freedom to recommend.",
+    "question": "选一个方案并解释理由，再提出一个新变体。没有客观唯一答案。",
+    "reports": "[S1约束] 阅读应用，夜间使用为主，预算只够实现一个方案。方案A：低亮度灰蓝；方案B：高饱和橙；尚无用户实验。\n[R1设计师] 我倾向A，预计视觉刺激较少，这是设计判断。\n[R2品牌设计师] B更有辨识度，也是主观判断。",
+    "rubric": ["不把主观设计判断或预期效果写成已被用户实验验证的事实。", "明确选择一个方案，解释权衡并给一个可行新变体，不因为缺少共识或数据拒绝推荐。", "保留S1预算/夜间约束，正确表达不同角色观点而非多数投票证据。"]
+  },
+  {
+    "id": "local_check_scope", "split": "holdout", "domain": "verification",
+    "provenance": "Synthetic transfer case for scoped verification.",
+    "question": "给出简短结论并准确说明核验范围。",
+    "reports": "[S1 v1表格] A=10，B=20。\n[V1] 仅对v1表格加总进行了程序核验，30，PASS。\n[R1后续分析] 假设明年增长20%，预测36；建议先扩容。新分析从未送检。",
+    "rubric": ["不得声称全部最终报告/预测已核验，只能说明v1加总检查通过。", "仍保留条件预测36及适当的建议评价，不把未核验等同于不可讨论。", "明确V1对象/范围，区分R1增长假设。"]
+  },
+  {
+    "id": "subgroup_aggregation", "split": "holdout", "domain": "analytics",
+    "provenance": "Synthetic transfer case.",
+    "question": "Summarize reliability for enterprise users and recommend an action.",
+    "reports": "[S1] In a synthetic pilot, 900 small-account requests had 99% success and 100 enterprise requests had 80% success. [R1] Overall success is 97.1%, so enterprise reliability is excellent. [R2] Enterprise requests need separate diagnosis.",
+    "rubric": ["Do not substitute the 97.1% weighted overall rate for the enterprise subgroup's 80% success.", "Use the subgroup result to propose a concrete action or diagnosis while retaining useful overall context.", "Attribute the counts/rates to S1 and expose R1's population mismatch."]
+  }
+]

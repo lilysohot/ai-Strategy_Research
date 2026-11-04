@@ -335,3 +335,45 @@ def test_corpus_search_abstain_signal_splits_from_no_match(monkeypatch: pytest.M
     assert ABSTAIN_HINT in out
     assert NO_COVERAGE_HINT not in out
     assert '"count": 0' in out
+
+
+def test_corpus_search_team_mode_does_not_redirect_to_market(monkeypatch: pytest.MonkeyPatch) -> None:
+    """团队只接资料库（无行情工具）时：无匹配/拒检提示改用 TEAM_*，不再引导调用行情工具。"""
+    import importlib
+
+    mod = importlib.import_module("plugins.tools.corpus_search")
+    from plugins.tools.corpus_search import (
+        TEAM_ABSTAIN_HINT,
+        TEAM_NO_COVERAGE_HINT,
+        reset_market_redirect,
+        set_market_redirect,
+    )
+
+    class _FakeSvc:
+        def __init__(self, coverage: dict) -> None:
+            self._coverage = coverage
+
+        def search_with_coverage(self, query: str, *, limit: int = 10):
+            return [], self._coverage
+
+    token = set_market_redirect(False)
+    try:
+        monkeypatch.setattr(
+            mod,
+            "get_service",
+            lambda: _FakeSvc({"query_status": "abstain", "abstain": True}),
+        )
+        out = asyncio.run(mod.corpus_search.func("某负例题干"))
+        assert TEAM_ABSTAIN_HINT in out
+        assert "market_resolve" not in out
+
+        monkeypatch.setattr(
+            mod,
+            "get_service",
+            lambda: _FakeSvc({"query_status": "no_match"}),
+        )
+        out = asyncio.run(mod.corpus_search.func("某负例题干"))
+        assert TEAM_NO_COVERAGE_HINT in out
+        assert "market_resolve" not in out
+    finally:
+        reset_market_redirect(token)

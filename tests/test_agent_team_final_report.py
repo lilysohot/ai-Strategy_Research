@@ -121,7 +121,7 @@ def test_blanket_verification_claim_is_withheld_when_no_checks_were_registered()
     assert "以上全部数字均已核对" not in out["final_answer"]
     assert {gap["code"] for gap in out["report_contract"]["gaps"]} >= {
         "unsupported_verification_claim",
-        "synthesis_unavailable",
+        "publication_withheld",
     }
 
 
