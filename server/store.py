@@ -1637,6 +1637,15 @@ async def delete_llm_config(*, user_id: uuid.UUID, config_id: uuid.UUID) -> None
         if cfg.is_default and not remaining:
             raise OnlyOneDefaultAllowed("cannot delete the user's only LLM config")
 
+        # Detach any runs that reference this config before deleting it. The FK
+        # (runs.llm_config_id -> user_llm_configs.id) carries no ON DELETE rule,
+        # so deleting the row would otherwise raise IntegrityError and surface as
+        # a 500. Provenance (model/base_url/config_id) already lives in each run's
+        # llm_snapshot_json, so NULLing the column here loses nothing.
+        await session.execute(
+            update(Run).where(Run.llm_config_id == config_id).values(llm_config_id=None)
+        )
+
         await session.delete(cfg)
         if cfg.is_default and remaining:
             remaining[0].is_default = True

@@ -175,7 +175,7 @@ async def delete_config(
 ) -> None:
     try:
         await delete_llm_config(user_id=user.id, config_id=uuid.UUID(config_id))
-    except ConfigNotFoundError:
+    except (ConfigNotFoundError, ValueError):
         raise HTTPException(status_code=404, detail="配置不存在") from None
     except OnlyOneDefaultAllowed:
         raise HTTPException(

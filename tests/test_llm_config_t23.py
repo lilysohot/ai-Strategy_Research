@@ -27,12 +27,16 @@ from server.crypto import decrypt_api_key, encrypt_api_key, mask_api_key
 from server.store import (
     ConfigNotFoundError,
     OnlyOneDefaultAllowed,
+    Run,
     create_llm_config,
+    create_run,
+    create_session,
     create_user,
     delete_llm_config,
     get_decrypted_api_key,
     get_default_llm_config,
     get_llm_config,
+    get_sessionmaker,
     list_llm_configs,
     set_default_llm_config,
     update_llm_config,
@@ -267,3 +271,36 @@ async def test_each_user_has_separate_config_list(users):
     assert len(await list_llm_configs(user_id=alice.id)) == 1
     assert len(await list_llm_configs(user_id=bob.id)) == 1
     assert (await list_llm_configs(user_id=alice.id))[0]["name"] == "a"
+
+
+@pytest.mark.asyncio
+async def test_delete_config_referenced_by_run_detaches_run(users):
+    """Delete a config that a run references must NULL ``runs.llm_config_id``.
+
+    The FK (``runs.llm_config_id -> user_llm_configs.id``) has no ON DELETE
+    rule, so the row delete used to raise ``IntegrityError`` and surface as a
+    500. Provenance lives in ``runs.llm_snapshot_json``, so NULL is acceptable.
+    """
+    alice, _ = users
+    cfg = await create_llm_config(user_id=alice.id, **_spec(name="c1"))
+    session = await create_session(user_id=alice.id, title="t")
+    run = await create_run(
+        run_id=uuid.uuid4(),
+        session_id=session.id,
+        user_id=alice.id,
+        prompt="hi",
+        pipeline_id="stateful-react-agent",
+        run_dir="/tmp/regression-test",
+        llm_config_id=uuid.UUID(cfg["id"]),
+        llm_snapshot_json={"source": "user-config", "config_id": cfg["id"]},
+    )
+    assert run.llm_config_id is not None
+
+    # Previously raised IntegrityError here (FK violation).
+    await delete_llm_config(user_id=alice.id, config_id=uuid.UUID(cfg["id"]))
+
+    async with get_sessionmaker()() as s:
+        row = await s.get(Run, run.id)
+        assert row is not None
+        assert row.llm_config_id is None
+        assert row.llm_snapshot_json["config_id"] == cfg["id"]
