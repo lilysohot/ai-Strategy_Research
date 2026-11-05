@@ -3,6 +3,7 @@
 The observer half (:class:`ApprovalObserver`) starts with apodex's
 ``assess_with_rules`` classification, then applies the Web worker's
 sandbox-aware promotion for reversible writes and non-destructive computation.
+Session monitoring tools also run automatically through their trusted channel.
 For remaining ``confirm``-level calls, it parks an asyncio
 Future here and emits ``approval_requested``. The agent loop suspends on that
 future (the LLM cannot advance) until the user's decision arrives over the
@@ -60,18 +61,26 @@ _WEB_AUTO_APPROVED_MUTATIONS = frozenset(
     }
 )
 
+# These tools use a run-bound capability channel. The parent checks session
+# authorization, pause state, ownership, versions and quotas on every write;
+# unattended monitoring must not wait for a per-call browser confirmation.
+_WEB_AUTO_APPROVED_WATCH_TOOLS = frozenset({"get_watch_targets", "submit_watch_intents"})
+
 
 def assess_web_tool_risk(name: str, args: dict, cwd: str) -> ToolRisk:
     """Apply the Web run's sandbox-aware approval policy.
 
     The shared classifier remains authoritative for hard denials and danger
     detection. Web only removes confirmation from scoped, reversible writes
-    and non-destructive shell computation. Deletion and every other dangerous
-    shell classification continue to require an explicit decision.
+    and non-destructive shell computation, plus trusted session monitoring.
+    Deletion and every other dangerous shell classification continue to require
+    an explicit decision.
     """
     risk = assess_with_rules(name, args, cwd, rules=None)
     if risk.level != RISK_CONFIRM:
         return risk
+    if name in _WEB_AUTO_APPROVED_WATCH_TOOLS:
+        return ToolRisk(RISK_SAFE, "trusted session monitoring channel", risk.target)
     if name in _WEB_AUTO_APPROVED_MUTATIONS:
         return ToolRisk(RISK_SAFE, "run-scoped reversible write", risk.target)
     if name == "bash" and not risk.danger:
@@ -220,8 +229,8 @@ class ApprovalObserver:
     """In-loop approval gate mirroring apodex's TerminalObserver semantics.
 
     Classification starts with apodex's own ``assess_with_rules`` and only
-    promotes scoped reversible work after that shared policy has ruled out a
-    hard denial or destructive danger. A hard ``deny`` is blocked *before* any event is
+    promotes scoped reversible work and trusted monitoring after that policy has
+    ruled out a hard denial or destructive danger. A hard ``deny`` is blocked *before* any event is
     emitted, which is what makes it structurally unbypassable; a ``confirm``
     parks a future in the gate, emits ``approval_requested`` (redacted, like
     every SSE egress), and suspends the agent loop on it — the LLM cannot

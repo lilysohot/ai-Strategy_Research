@@ -323,10 +323,51 @@ async def test_observer_auto_allows_run_scoped_writes_and_computation(tmp_path) 
     assert events == []
 
 
+@pytest.mark.parametrize("agent_id", [None, "watch-member"])
+@pytest.mark.parametrize(
+    ("name", "args"),
+    [
+        ("get_watch_targets", {}),
+        ("submit_watch_intents", {"intents": [{"operation": "create"}]}),
+        ("submit_watch_intents", {"intents": [{"operation": "update"}]}),
+        ("submit_watch_intents", {"intents": [{"operation": "cancel"}]}),
+    ],
+)
+async def test_watch_tools_run_without_approval(tmp_path, agent_id, name, args) -> None:
+    from server.approval import ApprovalGate, ApprovalObserver
+
+    events: list[dict] = []
+    gate = ApprovalGate()
+    obs = ApprovalObserver(gate, events.append, cwd=str(tmp_path), timeout=0.01)
+    if agent_id:
+        obs = obs.for_subagent(agent_id)
+    call = {"name": name, "args": args}
+
+    assert await obs.on_tool_call(None, call) is None
+    assert events == []
+
+    # Automatic monitoring still obeys a stopped run's closed gate.
+    gate.reject_pending()
+    blocked = await obs.on_tool_call(None, call)
+    assert blocked is not None
+    assert "run stopped" in blocked.skip_with_result
+    assert events == []
+
+
+def test_watch_auto_approval_preserves_hard_denials(tmp_path, monkeypatch) -> None:
+    import server.approval as approval
+
+    denied = approval.ToolRisk(approval.RISK_DENY, "policy denial")
+    monkeypatch.setattr(approval, "assess_with_rules", lambda *args, **kwargs: denied)
+    for name in ("get_watch_targets", "submit_watch_intents"):
+        assert approval.assess_web_tool_risk(name, {}, str(tmp_path)) is denied
+
+
 def test_web_risk_policy_only_promotes_scoped_non_destructive_work(tmp_path) -> None:
     from server.approval import assess_web_tool_risk
 
     cwd = str(tmp_path)
+    assert assess_web_tool_risk("unknown_watch_tool", {}, cwd).level == "confirm"
     for command in (
         "python3 calculate_indicators.py",
         "pytest -q",
