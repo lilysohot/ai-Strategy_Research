@@ -167,7 +167,7 @@ function toggleMode() {
 <template>
   <div class="login-page" :class="{ 'is-entered': loginVisible }">
     <header class="landing-header">
-      <span class="wordmark">Frontier<span>Agent</span><i aria-hidden="true">✳</i></span>
+      <span class="wordmark">First Step<span>&nbsp;Agent</span><i aria-hidden="true">✳</i></span>
       <span class="header-note">独立思考 · 深入探索</span>
     </header>
 
