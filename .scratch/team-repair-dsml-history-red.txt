@@ -1,0 +1,36 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_________ test_recovered_call_has_matching_history_for_next_model_turn _________
+
+    async def test_recovered_call_has_matching_history_for_next_model_turn():
+        @tool
+        async def submit_report(content: str) -> str:
+            """Return a report receipt."""
+            return content
+    
+        class Client:
+            model = "scripted"
+    
+            def __init__(self):
+                self.received = []
+    
+            async def chat(self, messages, **kwargs):
+                self.received.append(list(messages))
+                return LLMResponse(content=dsml({"content": "checked"}) if len(self.received) == 1 else "done")
+    
+        client = Client()
+        await run_agent_loop(
+            llm=client, system_prompt="Check", user_message="Check", tools=[submit_report],
+            config=LoopConfig(max_turns=2, loop_policy=LoopPolicy(no_tool_behavior="stop")),
+        )
+        messages = client.received[1]
+        emitted = {call["id"] for m in messages for call in m.get("tool_calls", [])}
+        replies = {m["tool_call_id"] for m in messages if m.get("role") == "tool"}
+>       assert emitted and replies == emitted, "recovered tool replies must not be orphaned in history"
+E       AssertionError: recovered tool replies must not be orphaned in history
+E       assert (set())
+
+tests/test_dsml_tool_recovery.py:104: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_dsml_tool_recovery.py::test_recovered_call_has_matching_history_for_next_model_turn
+1 failed, 11 deselected in 1.19s

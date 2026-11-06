@@ -1,0 +1,215 @@
+START 2026-11-05T12:28:31.774000+08:00
+RELEASES ['team-evidence-20261105T050813Z']
+END 2026-11-05T12:40:52.697667+08:00
+PLAN {"tasks": [{"description": "核实2026年美国中期选举的最新结果与选情：民主党是否胜选、赢下众议院/参议院/州长数量、截至2026-11-05的确定程度；以及选后1-2个交易日美股、10年期美债收益率、美元指数、黄金的即时反应", "kind": "research", "done_when": "给出带日期与来源链接的选举结果事实（院别/席位数/是否已确定）与选后市场行情数字（含具体日期与数值）", "notes": "用户前提是“民主党胜选”，须先验证该前提是否成立或处于何种确定程度", "gap": "民主党在众议院/参议院的实际席位结果与官方确认状态"}, {"description": "检索2026年10-11月最新卖方研报（中资券商+外资投行）关于“民主党胜选/分裂政府对金融市场影响”的核心观点：财政、关税与贸易、监管与反垄断、医保补贴(ACA)、能源、科技、金融、国防；以及对应资产配置结论", "kind": "research", "done_when": "汇总≥5份可追溯到机构、日期、原文关键句的研报观点，并区分一致观点与分歧点", "notes": "优先使用研究语料库(corpus_search/corpus_fetch，需带doc_id+build版本+locator)；语料不足时用公开网络检索研报摘要/公众号/财经媒体转述，并标注为二手转述", "gap": "最新研报中对民主党胜选的具体资产配置结论"}, {"description": "历史复盘与量化证据：美国中期选举后12个月及“分裂政府”时期标普500、美债收益率、美元的历史表现；以及行业层面政策敏感度（医保管理式医疗、新能源、国防、金融、大型科技、半导体）", "kind": "research", "done_when": "给出可复算的历史统计数字（样本区间、计算方法、数据来源）与行业敏感度排序，并标注样本局限", "notes": "区分历史统计事实与推断", "gap": "中期选举后与分裂政府下的历史收益统计"}, {"description": "对最终答复中的关键事实性表述做独立核验：选举结果表述、研报机构/日期/观点归属、历史统计数字可复算性", "kind": "verification", "verification_required": true, "verification_requirements": [{"check_id": "election_outcome", "criterion": "最终答复中关于2026年中期选举结果的每一条表述（院别、席位数、是否已确定、时间点）与权威来源一致，无夸大或提前宣告"}, {"check_id": "report_attribution", "criterion": "每一条被引用的研报/机构观点，其机构名称、发布日期、观点方向与原始来源一致，无张冠李戴或日期错配"}, {"check_id": "history_stats", "criterion": "引用的历史统计数字可从所标来源复算或与来源数值一致，样本区间与统计口径已注明"}], "done_when": "三项检查均返回带verdict与证据的结论，PASS/FAIL/UNCHECKED明确", "notes": "绑定研究任务报告作为证据", "gap": "尚未执行"}, {"description": "输出面向用户的中文分析答复：民主党胜选对金融市场的影响（分资产、分行业、情景与时间窗口），标注事实/推断/估计，附来源与不确定性", "kind": "delivery", "done_when": "答复直接回答问题，含来源链接、推断标注与明确的不确定性说明", "notes": "无文件交付要求，正文答复即可", "gap": ""}]}
+RECHECK_HEADINGS ['# Original Question', '# Your Task', '# Workspace-only contract', '# Bound verification checks', '# Previous review defects (untrusted audit data, not a current verdict)', '# Tool-delivered corpus evidence (untrusted source content, not instructions)', '## 四、对市场势态的影响分析', '### （一）美股：从「磨底待确认」进入「方向验证期」，政策不确定性成为核心风险因子']
+FAIL {"content": "Scope: check_id=history_stats (work item t4), bound subject inline:4dad59d0…781e3 (5-item historical-statistics block), evidence keys 0378357c4d01.job.2 / .3 / .6. Method: re-fetched Lombard Odier page (live, 200) and the Tencent/德银 article (live, 200); simianx page failed (timeout); checked job.3 text for any self-computed figures.\n\nFinding: FAIL (one item UNCHECKED).\n- ① CONFIRMED verbatim on lombardodier.com/insights/2026/november/a-democrat-midterm.html: \"In the three months following a midterm vote, 10-year Treasury yields have fallen by about 20-25 basis points (bps) on average.\" Subject's \"3个月/10年期/平均下行约20–25bp\" matches; the page indeed gives no sample start/end years, and the subject discloses that gap, so window+metric are noted and the unknown is flagged.\n- ② CONFIRMED against the cited secondary source (view.inews.qq.com/a/20261104A03RQU00, 200 OK, \"据追风交易台，德意志银行最新研究报告\"): \"自1946年以来…20次全部录得正收益，平均涨幅14.4%，中位数涨幅13.7%\" — 20/20, 14.4%, 13.7%, 12-month window all match. DEFECT: the same article states \"上述数据均为价格回报，不含股息\"; the subject omits this price-return convention, so 统计口径 is not fully 注明.\n- ③ CONFIRMED: job.3 reports every return/rate table as \"未获取\", gives no mean/median/win-rate, and explicitly leaves the 46/47-year split as an unverified 草案; only data-source coverage dates (FF 1926-07–2026-09; DGS10 1962-01-02–2026-11-03) and a script skeleton exist, so \"本轮未自算\" is accurate.\n- ④ Item 3 UNCHECKED: simianx.ai page could not be fetched (timeout, no readable text); only a search snippet supports 1950/19次/15.1%/14.5%/+1.1%/+33.2%, and \"另一机构\" names no institution.\n- Internal consistency of items 2 vs 3 checks out (1946-start 20 events vs 1950-start 19 events).\n\nEvidence:\n  - 0378357c4d01.job.6 (retained Lombard Odier fetch, sha256 a2887…a8c) + live refetch 2026-11-05: the 20–25bp sentence, verbatim, official marketing communication.\n  - 0378357c4d01.job.6 search hit [6] → live fetch of view.inews.qq.com/a/20261104A03RQU00: DB 1946/20-for-20/14.4%/13.7%, plus \"价格回报，不含股息\" and the 1930-start 24次/92%/13.0% cross-check.\n  - 0378357c4d01.job.3: all statistic tables marked 未获取; no computed values.\n  - 0378357c4d01.job.2: corroborates the Lombard Odier \"一手(机构官网)\" sourcing tag; no conflicting figure.\nConfidence: 0.85", "confidence": 0.85, "finish": true, "verification_results": [{"check_id": "history_stats", "binding_id": "a6ca53b7e60c5e311b0dc287a8200777854ec118590017a8bea7c1f27d519df4", "subject_sha256": "4dad59d0cc2e2e7f1244845132c299919265a5b54bef0b724ff54e2d976781e3", "verdict": "fail", "method": "Live refetch of the two cited primary/secondary pages (lombardodier.com article; view.inews.qq.com/a/20261104A03RQU00) and direct reading of job.3 for self-computed figures; simianx.ai fetch attempted and failed (timeout). Compared each of the subject's five numbered items against the cited source text; checked sample window, window length, return convention and attribution per item.", "detail": "Item 1 PASS: official Lombard Odier page (fetched 200) reads 'In the three months following a midterm vote, 10-year Treasury yields have fallen by about 20-25 basis points (bps) on average' — window, metric and average all match the subject, and the page genuinely gives no sample years, which the subject discloses. Item 2 numbers MATCH the cited Tencent/德银 article (200 OK, attributed to 德意志银行 via 追风交易台): '自1946年以来…20次全部录得正收益，平均涨幅14.4%，中位数涨幅13.7%'; however the same article states '上述数据均为价格回报，不含股息' and the subject omits that price-return convention, so 统计口径 is not fully noted → defect. Item 3 (simianx, 1950/19次/15.1%/14.5%/+1.1%/+33.2%) UNCHECKED: page unfetchable, only a search snippet; attribution '另一机构' names no institution. Item 4 CONFIRMED from job.3: every return/rate table is '未获取', no mean/median/win-rate produced, 46/47-year split left as unverified 草案, only source coverage dates (FF 1926-07..2026-09, DGS10 1962-01-02..2026-11-03) and an unexecuted script skeleton, so the '本轮未自算' declaration is accurate. Item 5 limitations are consistent with items 1–3 (single 12-month/3-month windows, ~20 samples, 2026 two-day window). Verdict fail because criterion requires the return convention to be noted for the cited statistic and because one cited source remains unverifiable.", "evidence_keys": ["0378357c4d01.job.2", "0378357c4d01.job.3", "0378357c4d01.job.6"], "scope_assessment": {"entity": {"status": "match", "detail": "Lombard Odier confirmed on its own site; 德银 14.4%/13.7% confirmed in the cited Tencent article that names 德意志银行 (job.6 hit [6])."}, "version": {"status": "match", "detail": "Both cited publications are the 2026-11-04 pieces named in the subject (Lombard Odier November insight; Tencent 20261104 article), i.e. the post-election-day versions."}, "date": {"status": "match", "detail": "Event date 2026-11-03 vs publication 2026-11-04 is consistent across subject and both fetched sources; the subject also flags the 2026 post-event window as only two trading days."}, "units": {"status": "match", "detail": "Basis points for the yield move and percent for index returns match source wording in both fetched pages."}, "conditions": {"status": "mismatch", "detail": "For item 2 the subject states the 12-month window but drops the source's explicit '价格回报，不含股息' convention, so a material statistical convention is missing; item 3's conditions rest on an unfetched page."}, "attribution": {"status": "unknown", "detail": "Item 2's '据腾讯新闻转述德银' matches the fetched article, but item 3's '另一机构' names no institution and its page could not be fetched, so that attribution cannot be confirmed."}}, "unresolved_issues": ["Item 3 (simianx: 1950年以来19次, 平均15.1%, 中位数14.5%, 最弱1986–87 +1.1%, 最强1954–55 +33.2%) is UNCHECKED: simianx.ai fetch timed out with no readable text; only a search snippet supports it, and '另一机构' does not name an institution.", "Item 2 omits the cited source's stated return convention '价格回报，不含股息' (price return, ex-dividends), so 统计口径 is not fully noted as the criterion requires.", "Item 1's sample start/end years are absent from the Lombard Odier page (disclosed in the subject rather than resolved), so the 20–25bp average cannot be recomputed or bounded by period."]}]}
+BASH 114.35 [Audit] `python3 -c` inline code can't be inspected; prefer a `python3 <<'PY' ... PY` heredoc.
+ERR URLError <urlopen error [Errno 101] Network is unreachable>
+
+BASH 114.36 [Audit] `python3 -c` inline code can't be inspected; prefer a `python3 <<'PY' ... PY` heredoc.
+https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10 OK 269283 b'observation_date,DGS10\n1962-01-02,4.06\n1962-01-03,4.03\n1962-01-04,3.99\n1962-01-05,4.02\n1962-01-08,4.03\n1962-01-09,4.05\n1962-01-10,4.07\n1962-01-11,4.08\n1962-01-12,4.08\n1962-01-15,4.10\n1962-01-16,4.13\n1'
+https://stooq.com/q/d/l/?s=%5Espx&i=d ERR HTTPError HTTP Error 404: Not Found
+
+BASH 152.24 OK 796 https://stooq.com/q/d/l/?s=^spx&i=d b'<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
+OK 796 https://stooq.com/q/d/l/?s=spx&i=d b'<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"></head><body><noscript>T'
+OK 1623552 https://img1.wsimg.com/blobby/go/e5e77e0b-59d1-44d9-ab25-4763ac982e53/downloads/ie_data.xls b'\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00>\x00\x03\x00\xfe\xff\t\x00\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x19\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x00^\x0c\x00\x00\x01\x00\x00\x00\xfe\xff\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00b\x00\x00\x00\xe3\x00\x00\x00d\x01\x00\x00\xe5\x01\x00\x00f\x02\x00\x00\xe7\x02\x00\x00h\x03\x00\x00\xe9\x03\x00\x00j\x04\x00\x00\xeb\x04\x00\x00'
+ERR https://econ.yale.edu/~shiller/data/ie_data.xls URLError <urlopen error [Errno 111] Connection refused>
+OK 1628672 http://www.econ.yale.edu/~shiller/data/ie_data.xls b'\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00>\x00\x03\x00\xfe\xff\t\x00\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x19\x00\x00\x00k\x0c\x00\x00\x00\x00\x00\x00\x00\x10\x00\x00\xfe\xff\xff\xff\x00\x00\x00\x00\xfe\xff\xff\xff\x00\x00\x00\x00R\x0c\x00\x00S\x0c\x00\x00T\x0c\x00\x00U\x0c\x00\x00V\x0c\x00\x00W\x0c\x00\x00X\x0c\x00\x00Y\x0c\x00\x00Z\x0c\x00\x00[\x0c\x00\x00\\\x0c\x00\x00'
+OK 233345 https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXM b'observation_date,DTWEXM\n1973-01-02,108.2242\n1973-01-03,108.2934\n1973-01-04,108.2632\n1973-01-05,108.2548\n1973-01-08,108.3'
+ERR https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS TimeoutError The read operation timed out
+
+BASH 234.57 OK 13078 https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip b'PK\x03\x04\x14\x00\x00\x00\x08\x00\x88mZ]\x06_\x92!V2\x00\x005\xcd\x00\x00\x1d\x00\x00\x00F-F_Research_Data_Factors.csvl\x90Mn\x830\x10\x85\xf7\x91r\x87w\x00\xb0\xc0!?,\x93\xb4QS\x15\xa9\n\xf4\x00\x06L\xb1\nve\x1b\xb5\xb9}mLv'
+OK 527872 https://pages.stern.nyu.edu/~adamodar/pc/datasets/histretSP.xls b'\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00>\x00\x03\x00\xfe\xff\t\x00\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\t\x00\x00\x00\x05\x04\x00\x00\x00\x00\x00\x00\x00\x10\x00\x00\xfe\xff\xff\xff\x00\x00\x00\x00\xfe\xff\xff\xff\x00\x00\x00\x00\xfc\x03\x00\x00\xfd\x03\x00\x00\xfe\x03\x00\x00\xff\x03\x00\x00\x00\x04\x00\x00\x01\x04\x00\x00'
+ERR https://query2.finance.yahoo.com/v8/finance/chart/%5EGSPC?range=1mo&interval=1d URLError <urlopen error [Errno 101] Network is unreachable>
+OK 150621 https://www.multpl.com/s-p-500-historical-prices/table/by-month b'<!DOCTYPE html>\n<html lang="en">\n<head>\n<style>\n\n@font-face{font-family:concourse_ot_3_book;font-sty'
+OK 48884 https://fred.stlouisfed.org/graph/fredgraph.csv?id=SP500 b'observation_date,SP500\n2016-11-07,2131.52\n2016-11-08,2139.56\n2016-11-09,2163.26\n2016-11-10,2167.48\n2'
+
+BASH 234.57 DGS10 269283 b'observation_date,DGS10\n1962-01-02,4.06\n1962-01-03,4.03\n1962-' b'30,4.94\n2026-11-02,4.91\n2026-11-03,4.95\n'
+DTWEXM 233345 b'observation_date,DTWEXM\n1973-01-02,108.2242\n1973-01-03,108.2' b'3\n2019-12-30,91.1403\n2019-12-31,90.8221\n'
+ERR DTWEXBGS Remote end closed connection without response
+total 2084
+drwxr-xr-x  2 administrator administrator    4096 Nov  5 12:31 .
+drwxr-xr-x 16 administrator administrator     320 Nov  5 12:31 ..
+-rw-r--r--  1 administrator administrator  269283 Nov  5 12:31 DGS10.csv
+-rw-r--r--  1 administrator administrator  233345 Nov  5 12:31 DTWEXM.csv
+-rw-r--r--  1 administrator administrator 1623552 Nov  5 12:31 ie_data.xls
+
+BASH 239.63 ['F-F_Research_Data_Factors.csv']
+This file was created using the 202609 CRSP database.
+The 1-month TBill rate data until 202405 are from Ibbotson Associates. Starting from 202406, the 1-month TBill rate is from ICE BofA US 1-Month Treasury Bill Index. 
+The annual TBill return is compounded from the monthly T-bill rates from January to December. 
+
+,Mkt-RF,SMB,HML,RF
+192607,   2.89,  -2.42,  -2.75,   0.22
+192608,   2.64,  -1.44,   4.13,   0.25
+192609,   0.38,  -1.36,   0.05,   0.23
+192610,  -3.27,  -0.18,   0.78,   0.32
+192611,   2.54,  -0.17,  -0.48,   0.31
+192612,   2.62,  -0.06,   0.10,   0.28
+192701,  -0.05,  -0.47,   4.76,
+---tail---
+
+  2012,  16.30,  -1.26,  10.00,   0.06
+  2013,  35.16,   7.61,   2.59,   0.02
+  2014,  11.74,  -7.69,  -1.85,   0.02
+  2015,   0.20,  -3.85,  -9.48,   0.02
+  2016,  13.36,   6.57,  22.80,   0.20
+  2017,  21.50,  -5.21, -13.42,   0.80
+  2018,  -6.82,  -3.13,  -9.63,   1.81
+  2019,  28.43,  -6.48, -10.36,   2.14
+  2020,  23.59,  13.48, -46.94,   0.44
+  2021,  23.87,  -3.79,  25.60,   0.04
+  2022, -21.32,  -6.99,  25.70,   1.42
+  2023,  21.75,  -3.53, -13.98,   4.95
+  2024,  19.76, -11.31,  -8.43,   5.26
+  2025,  13.30, -10.79,   8.71,   4.25
+
+Copyright 2026 Eugene F. Fama and Kenneth R. French
+
+
+BASH 239.63 OK 104929 b'observation_date,DTWEXBGS\n2006-01-02,101.4155\n2006-01-03,100' b'2026-10-29,121.7361\n2026-10-30,121.6656\n'
+
+BASH 252.1 monthly rows 1203 192607,   2.89,  -2.42,  -2.75,   0.22 ['202607,  -0.61,  -1.92,   2.11,   0.33', '202608,   2.56,   0.34,  -3.54,   0.29', '202609,  -1.07,  -3.16,  -1.55,   0.31']
+annual rows 99   1927,  29.44,  -3.05,  -3.36,   3.12 ['  2024,  19.76, -11.31,  -8.43,   5.26', '  2025,  13.30, -10.79,   8.71,   4.25']
+
+BASH 252.1 [Audit] `pip` (package tooling) is audited.
+ERR ImportError `Import xlrd` failed. Install xlrd >= 2.0.1 for xls Excel support Use pip or conda to install the xlrd package.
+
+BASH 338.49 [Audit] `pip` (package tooling) is audited.
+bash: line 1: pip: command not found
+
+BASH 338.49 This tool call was not executed. The research handoff window now permits only submit_report. Reuse the report text already present in your previous tool arguments or observations as content; do not create, repair or publish a report file. Keep content within 24,000 characters; condense longer drafts while retaining key evidence URLs and unresolved gaps. Use attachments=[] unless you already have an exact ref from a successful publish_handoff. If publication failed, state the missing attachment under Unresolved and submit the available findings.
+MANIFEST {"ok": true, "manifest_file": "/home/administrator/.local/share/frontier-agent/web/runs/0e672d697711462998d52f8262e977bb/run/corpus/manifests/manifest-000.json", "owner": "agent_team_sub:0378357c4d01", "evidence_status": "verified", "report_bound": false, "publish_status": "pending_report", "counts": {"supported": 2, "partial": 0, "unsupported": 0}, "conclusions": [{"id": "C1", "status": "supported", "delivery": ["delivered"], "matched_evidence": [{"doc_id": "cv2:f6ec892c312a52907eb1a3c4410f70247dcdec1c100c528ae4b5c14807ee672f", "locator": "chunk:native1/f6ec892c312a5290%3Abody%3A0001/c17f4f09a7813fb7", "start": 0, "end": 652, "quote": "SPY 目前正在向下破位，自 4 月以来首次跌破 100 日均线。此时切忌逞英雄去逆势对抗这种价格走\n势。一旦整体盘面破位，科技板块就是最脆弱的一环。这波 AI 交易主线已经摇摇欲坠数周，而本周似\n乎终于迎来了内爆。我们看到亚马逊和谷歌在公布财报后最初均录得两位数跌幅，多只中小盘标的重挫\n 20% 至 30%；而最令人震惊的是英特尔，在自身真实处境上对投资者公然撒谎，盘中一度暴跌 30%\n。这让人深刻联想起2021 年 SaaS 泡沫破裂时的情景。从积极的一面来看，像亚马逊这样的公司正\n在做到一年前无人认为可能的事：他们以往只给出下一季度的业绩指引，如今却给出了 AWS未来两年\n保持 40% 增长的指引。但即便如此，也未能挽救该股免遭抛售，因为市场现在不得不考虑其中涉及的\n所有资本支出（capex），以及他们陷入现金流负增长的周期会有多长。我们正身处一个全新的市场环\n境中，投资者极其挑剔，根本没有耐心去“投资”；若无法在短期内兑现业绩，就会立刻被无情抛弃。\n资金没有耐心等待亚马逊在数年之后自由现金流（FCF）重新迎来拐点转正，因此可以看到大量资金正\n在夺路出逃。我们都见过季节性数据，知道中期选举后市场通常都会上涨；但眼下特朗普似乎打算在中\n期选举后升级战事，同时原油价格已涨破 104 美元，这同样在对市场构成压力。当前的下行趋势正在\n确立，但科技股实际上在此之前就已经疲软了一段时间。眼下各个层面都陷入了一片混乱。AI 交易是\n目前最受欢迎的交易，但也正是你眼下最必须坚决回避的交易。\n", "match_kind": "exact", "delivery": "delivered"}], "semantic_references": [], "problems": []}, {"id": "C2", "status": "supported", "delivery": ["delivered"], "matched_evidence": [{"doc_id": "cv2:aac6a8bf0dff8afbbd109e117d990c9c4255ff3159c276f7338fbd96a4630873", "locator": "chunk:native1/aac6a8bf0dff8afb%3Abody%3A0002/21473b6cf9de74fe", "start": 320, "end": 825, "quote": "我想表达的是，这并非 AI 泡沫破裂，这些标的目前都在取得令人瞩目的进展；这纯粹是因为战争让世\n界陷入动荡，叠加利率走高吓退了投资者，促使他们转向更安全的标的。这种情况还会持续多久？没有\n人能给出答案，这确实令人沮丧，因为如果不是这些战争引发的诸多冲击，AI 交易原本会推动市场大\n幅走高；但现实是这些冲突切实存在，而且若要让我推测，战事很可能很快就会进一步升级。伊朗人让\n唐纳德・特朗普颜面扫地，没有做出任何他想要的妥协；我的推测是，如果民调属实且他在中期选举中\n失利，他将需要某种挽回颜面的举动，其中很可能包括对伊朗发动大规模打击。市场似乎正在对此进行\n定价，否则科技股为何会破位下跌？它们的破位并非因为基本面出了问题，而是源于估值倍数受压——\n因为持续的战争意味着通胀难以消退，市场正在对更长时间维持更高利率（higher for longer）进行\n定价。只要记住，市盈率（P/E）是与无风险利率挂钩的。一只市盈率为20倍的股票，其盈利收益率\n（earnings yield）为5%；而现在无风险利率已经超过5%，因此相对于承担股票风险所需要的回报，\n其估值倍数必然需要下调，眼下发生的一切仅此而已。\n", "match_kind": "exact", "delivery": "delivered"}], "semantic_references": [], "problems": []}], "hint": "未绑定报告时仅完成证据预检，不能宣称报告已通过；请先写报告，再传 report_path 提交。原文证据优先用 evidence_ref（search 的 excerpts.ref 或 fetch 的 evidence_ref），无需重写原文。对非 supported 的结论：按需补取原文、重新查询失效语义版本、修改表述或移除结论；已完整送达的语义证据不必例行 corpus_fetch。然后重新提交**完整**清单（每次提交生成新的候选文件，边界以汇总校验为准）。本轮新取的片段需经过下一轮消息边界核验，pending 的结论请下一轮重新提交确认。"}
+VERIFICATION manifest_verification.json {
+  "schema_version": 2,
+  "checked_at": "2026-11-05T04:40:56.139702+00:00",
+  "status": "partial",
+  "counts": {
+    "supported": 0,
+    "partial": 2,
+    "unsupported": 0
+  },
+  "verification_errors": 0,
+  "range_completeness": [
+    {
+      "scope_id": "scope:5b72159ad420e69b2f05f7f84391a4b3",
+      "doc_id": "cv2:7072f30b99758398d0131fd607bd23c5dabab54fbba99fb96fb46f1551313e2b",
+      "total": 7,
+      "fetched": 2,
+      "delivered": 2,
+      "missing": [
+        "chunk:native1/7072f30b99758398%3Abody%3A0012/5ebe63503a07758b",
+        "chunk:native1/7072f30b99758398%3Abody%3A0007/d4a5fe3934ee1812",
+        "chunk:native1/7072f30b99758398%3Abody%3A0016/b8ec460e3d4bda18",
+        "chunk:native1/7072f30b99758398%3Abody%3A0011/26f2a4e2074cab38",
+        "chunk:native1/7072f30b99758398%3Abody%3A0003/191054cd6068e8f0"
+      ],
+      "undelivered": [
+        "chunk:native1/7072f30b99758398%3Abody%3A0012/5ebe63503a07758b",
+        "chunk:native1/7072f30b99758398%3Abody%3A0007/d4a5fe3934ee1812",
+        "chunk:native1/7072f30b99758398%3Abody%3A0016/b8ec460e3d4bda18",
+        "chunk:native1/7072f30b99758398%3Abody%3A0011/26f2a4e2074cab38",
+        "chunk:native1/7072f30b99758398%3Abody%3A0003/191054cd6068e8f0"
+      ],
+      "skipped": [],
+      "complete": false
+    },
+    {
+      "scope_id": "scope:ce5e640be85368cb9b7c8b2f65566d45",
+      "doc_id": "cv2:f6ec892c312a52907eb1a3c4410f70247dcdec1c100c528ae4b5c14807ee672f",
+      "total": 3,
+      "fetched": 0,
+      "delivered": 0,
+      "missing": [
+        "chunk:native1/f6ec892c312a5290%3Abody%3A0005/32cd0d5f734cd5ec",
+        "chunk:native1/f6ec892c312a5290%3Abody%3A0001/c17f4f09a7813fb7",
+        "chunk:native1/f6ec892c312a5290%3Aheading%3A0000/cc17215a8de73257"
+      ],
+      "undelivered": [
+        "chunk:native1/f6ec892c312a5290%3Abody%3A0005/32cd0d5f734cd5ec",
+        "chunk:native1/f6ec892c312a5290%3Abody%3A0001/c17f4f09a7813fb7",
+        "chunk:native1/f6ec892c312a5290%3Aheading%3A0000/cc17215a8de73257"
+      ],
+      "skipped": [],
+      "complete": false
+    },
+    {
+      "scope_id": "scope:3591306a7b916d79339376cbd295e53f",
+      "doc_id": "cv2:ee42b1fc63075ddd3de27d79f8b07e7548d0c53e8ff2fb9b0bcb082c1ec8e6df",
+      "total": 1,
+      "fetched": 1,
+      "delivered": 1,
+      "missing": [],
+      "undelivered": [],
+      "skipped": [],
+      "complete": true
+    },
+    {
+      "scope_id": "scope:0cd3b063753102ce7028fa098d960bbd",
+      "doc_id": "cv2:7ed6e0b7e6f46d309af19d8f39bb4732a8dbeaf4d9b22e09a543521170e1b8e1",
+      "total": 2,
+      "fetched": 0,
+      "delivered": 0,
+      "missing": [
+        "chunk:native1/7ed6e0b7e6f46d30%3Abody%3A0005/c35fea981181c39b",
+        "chunk:native1/7ed6e0b7e6f46d30%3Abody%3A0004/2bdab3bd0e245174"
+      ],
+      "undelivered": [
+        "chunk:native1/7ed6e0b7e6f46d30%3Abody%3A0005/c35fea981181c39b",
+        "chunk:native1/7ed6e0b7e6f46d30%3Abody%3A0004/2bdab3bd0e245174"
+      ],
+      "skipped": [],
+      "complete": false
+    },
+    {
+      "scope_id": "scope:6017e97f58ba9ed501e993b4297d6d8a",
+      "doc_id": "cv2:72d2395b9a56bb01ff9e7ae52873b1e3a67bbb42f2694ee712a23f01d831d249",
+      "total": 1,
+      "fetched": 0,
+      "delivered": 0,
+      "missing": [
+        "chunk:native1/72d2395b9a56bb01%3Abody%3A0003/3fc95bc86f1706dd"
+      ],
+      "undelivered": [
+        "chunk:native1/72d2395b9a56bb01%3Abody%3A0003/3fc95bc86f1706dd"
+      ],
+      "skipped": [],
+      "complete": false
+    },
+    {
+      "scope_id": "scope:5355b87990eda27aa09fd89922e8aac2",
+      "doc_id": "cv2:aac6a8bf0dff8afbbd109e117d990c9c4255ff3159c276f7338fbd96a4630873",
+      "total": 2,
+      "fetched": 0,
+      "delivered": 0,
+      "missing": [
+        "chunk:native1/aac6a8bf0dff8afb%3Abody%3A0003/f0403cde7c902ab1",
+        "chunk:native1/aac6a8bf0dff8afb%3Abody%3A0002/21473b6cf9de74fe"
+      ],
+      "undelivered": [
+        "chunk:native1/aac6a8bf0dff8afb%3Abody%3A0003/f0403cde7c902ab1",
+        "chunk:native1/aac6a8bf0dff8afb%3Abody%3A0002/21473b6cf9de74fe"
+      ],
+      "skipped": [],
+      "complete": false
+    },
+    {
+      "scope_id": "scope:fe41fa91e6c7e53d4f382b7ad265ff5b",
+      "doc_id": "cv2:730433bdccf660aa5cd0b055a50dbc1b4c28371b7291b740ff03ac9c4e8cf333",
+      "total": 9,
+      "fetched": 1,
+      "delivered": 1,
+      "missing": [
+        "chunk:native1/730433bdccf660aa%3Abody%3A0003/1134c662b6bbaaca",
+        "chunk:native1/730433bdccf660aa%3Abody%3A0009/3a88f71fc16af948",
+        "chunk:native1/730433bdccf660aa%3Abody%3A0000/2162e89f0fcd0a33",
+        "chunk:native1/730433bdccf660aa%3Abody%3A0007/b993a7169b24f15b",
+        "chunk:native1/730433bdccf660aa%3Abody%3A0006/738e81405ea09b26",
+        "chunk:native1/730433bdccf660aa%3Abody%3A0012/ea80a6ab1e907ca8",
+        "chunk:native1/730433bdccf660aa%3Abody%3A0015/207ac7b4ce181a3d",
+        "chunk:native1/730433bdccf660aa%3Abody%3A0008/300f9b69e8ea36dd"
+      ],
+      "undelivered": [
+        "chunk:native1/730433bdccf660aa%3Abody%3A0003/1134c662b6bbaaca",
+        "chu

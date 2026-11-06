@@ -1,0 +1,1918 @@
+{
+  "version": 4,
+  "publication": {
+    "status": "published",
+    "candidate_sha256": "5786da4daca998e933bcbb6e3b8639694fb005e364be7345515f684a32405601",
+    "candidate_verification": "not_assessed",
+    "findings": [],
+    "unmatched_checked_excerpts": []
+  },
+  "source": "model",
+  "kind": "partial",
+  "answer_status": "partial",
+  "stopped_by": "final_answer",
+  "input_source": "agent",
+  "gaps": [
+    {
+      "code": "task_evidence_gap",
+      "task_id": "t4",
+      "detail": "lead_claim 在修正版被判 FAIL：'应用侧渗透率全球最高的一档'与开篇'产能维度大体成立'缺跨国同期对照数据；'绝对画质'未单列为证据不足维度。numbers 在两版均 FAIL：第一版 6 项缺陷，修正版消除 5 项但仍有 3 项（样本数归属错位、跨源环比、'60亿'与分项合计 58 亿不符）。最终发布文字未获得任何通过结论；本轮修复重检额度已用完（job.5 llm_error、job.6 FAIL），不再重新派发。"
+    },
+    {
+      "code": "verification_not_passed",
+      "job_id": "1b783b2d4605.job.4",
+      "agent": "claims_verifier",
+      "reason": "verification_not_passed"
+    },
+    {
+      "code": "member_job_incomplete",
+      "job_id": "1b783b2d4605.job.5",
+      "agent": "claims_verifier",
+      "reason": "llm_error"
+    },
+    {
+      "code": "verification_not_passed",
+      "job_id": "1b783b2d4605.job.6",
+      "agent": "claims_verifier",
+      "reason": "verification_not_passed"
+    },
+    {
+      "code": "task_unresolved",
+      "task_id": "t4",
+      "description": "核验：对最终答复中的关键量化主张与“断层式领先”表述做独立核查（实体/版本/日期/单位/条件/归属）"
+    },
+    {
+      "code": "task_verification_incomplete",
+      "task_id": "t4",
+      "status": "failed"
+    }
+  ],
+  "task_board": [
+    {
+      "id": "t1",
+      "description": "研究：中国AI视频生成模型（可灵/即梦Seedance/海螺/Vidu/SkyReels等）的能力、商业数据与全球排位证据",
+      "resolution": "resolved",
+      "notes": "已获得 AA 视频榜实时抓取（T2V/I2V 全榜位次与单价）、厂商官方规格（Seedance 2.5/Wan 3.0/H3/Kling 3.0/Vidu Q2）、可灵官方与财报口径收入（2025全年10.4亿元、ARR 2.4亿美元为单月×12年化）、MiniMax 海螺收入占比，并明确记录可灵在 AA 榜仅列18–19位、榜单口径（含音频/Silent/开源权重）敏感、Sora 退市未获一手核实等限制。关键发现：中国领先是 Wan/Seedance/MiniMax 的领先，不是集体领先。",
+      "gap": "",
+      "owners": [
+        "ai_video_capability_research"
+      ],
+      "execution_job_ids": [
+        "1b783b2d4605.job.1"
+      ],
+      "verification_status": "not_assessed",
+      "verification_execution_status": "not_started",
+      "verification_required": false,
+      "verification_requirements": [],
+      "execution_status": "complete"
+    },
+    {
+      "id": "t2",
+      "description": "研究：中国AI短剧产业的生产经济学与落地案例（成本/周期/产能/平台/政策/爆款）",
+      "resolution": "resolved",
+      "notes": "已获得成本/周期对比（多口径并列：制作端降80–90% vs 全链路仅降约一半 vs 从业者称“不一定更低”）、官方统计口径（广电总局：2025年重点微短剧691部；总局司长称2026前8个月上线43万部、AI占比超九成——经二手转述）、6个代表性案例（含《兴安岭诡事》总成本约60万元含运营、《后西游记》4.7亿播放仅券商研报口径）、政策时间线（“微短剧+”行动计划、分类分层审核、AI标识办法2025-09-01、总局令第16号2026-09-01）、以及强反面证据（AI短剧完播率<15%、98.7%项目无法回本、2026年下架6.8万部九成以上为AI剧、算力涨价、横店/涿州/郑州真人剧组塔缩）。",
+      "gap": "",
+      "owners": [
+        "ai_drama_industry_research"
+      ],
+      "execution_job_ids": [
+        "1b783b2d4605.job.2"
+      ],
+      "verification_status": "not_assessed",
+      "verification_execution_status": "not_started",
+      "verification_required": false,
+      "verification_requirements": [],
+      "execution_status": "complete"
+    },
+    {
+      "id": "t3",
+      "description": "研究：中国短剧出海与AI短剧全球分发的结构性原因（为何短剧成为AI最快普及场景）",
+      "resolution": "resolved",
+      "notes": "已获得 Sensor Tower/点点/DataEye 多口径出海规模与头部App数据（含口径冲突记录）、AI 渗透率数据（2026Q1 AI占上线微短剧>95%、2026Q2约15.3万部、抖音端2026H1 22.19万部、破亿率0.48%）、成本与周期对比（AI真人漫1000–1200元/分钟、真人短剧单部120–150万元、THR美国对照）、以及10条机制的事实支撑与标签化推断。已明确标注无一手证据项：投流数据回流天数、观众画质容忍度量化、ReelShort 2025绝对值。",
+      "gap": "",
+      "owners": [
+        "global_market_research"
+      ],
+      "execution_job_ids": [
+        "1b783b2d4605.job.3"
+      ],
+      "verification_status": "not_assessed",
+      "verification_execution_status": "not_started",
+      "verification_required": false,
+      "verification_requirements": [],
+      "execution_status": "complete"
+    },
+    {
+      "id": "t4",
+      "description": "核验：对最终答复中的关键量化主张与“断层式领先”表述做独立核查（实体/版本/日期/单位/条件/归属）",
+      "resolution": "blocked",
+      "notes": "执行了 3 个核验任务（job.4 首次、job.5 重检因 llm_error 无结论、job.6 重检）。结果：lead_claim 对第一版 PASS、对修正版 FAIL；numbers 两版均 FAIL。两轮核验均给出了逐项 scoped 结论与具体差异，但**验证本身未通过**：最终发布文字未经任何检查背书。已在答复开头显式披露该状态、列出全部未解决缺陷，并在正文中逐条按核验意见改写（删除跨源环比、补 Silent 榜/厂商自述/调研预测限定、将'全球最高'降级为'本次检索未见同等量级'、单列 Elo 为偏好而非画质度量）。不声称已核验通过。",
+      "gap": "lead_claim 在修正版被判 FAIL：'应用侧渗透率全球最高的一档'与开篇'产能维度大体成立'缺跨国同期对照数据；'绝对画质'未单列为证据不足维度。numbers 在两版均 FAIL：第一版 6 项缺陷，修正版消除 5 项但仍有 3 项（样本数归属错位、跨源环比、'60亿'与分项合计 58 亿不符）。最终发布文字未获得任何通过结论；本轮修复重检额度已用完（job.5 llm_error、job.6 FAIL），不再重新派发。",
+      "owners": [
+        "claims_verifier"
+      ],
+      "execution_job_ids": [
+        "1b783b2d4605.job.4",
+        "1b783b2d4605.job.5",
+        "1b783b2d4605.job.6"
+      ],
+      "verification_status": "failed",
+      "verification_execution_status": "complete",
+      "verification_required": true,
+      "verification_requirements": [
+        {
+          "check_id": "lead_claim",
+          "criterion": "“断层式领先”的表述必须区分：哪些维度有证据支持（如开源/商用视频模型的可及性与产能、短剧应用侧渗透），哪些维度证据不足（如绝对画质、长视频叙事、欧美主流影视工业化采用），不得把局部领先表述为全面断层领先"
+        },
+        {
+          "check_id": "numbers",
+          "criterion": "答复中每个关键数字（成本降幅、周期、市场规模、收入、下载量、榜单位次）必须能对应到所引来源的实体、口径、时间与单位，且不得把预测值写成实测值、把厂商自述写成第三方结论"
+        }
+      ],
+      "execution_status": "incomplete"
+    },
+    {
+      "id": "t5",
+      "description": "交付：把研究结论整合为面向用户的中文分析答复（含机制解释、证据、以及“断层式领先”的边界条件与不确定处）",
+      "resolution": "resolved",
+      "notes": "已在 deliver_answer 中交付完整中文分析答复：分维度校正'断层领先'前提、六条机制（每条挂事实证据并标注推断）、三条结构性原因、代价与反面证据（完播率、爆款率、回本率、下架治理、算力涨价、真人剧组塔缩、院线失败案例）、三条边界条件与五项已知缺口。用户未要求文件，因此未创建任何 /outputs 交付物；语料引用仅绑定 1 条（《后西游记》播放量），其余以网页 URL 标注。",
+      "gap": "",
+      "owners": [],
+      "execution_job_ids": [],
+      "verification_status": "not_assessed",
+      "verification_execution_status": "not_started",
+      "verification_required": false,
+      "verification_requirements": [],
+      "execution_status": "not_assessed"
+    }
+  ],
+  "task_board_basis": "coordinator_declared",
+  "wind_down": {
+    "status": "complete",
+    "collected_count": 0,
+    "incomplete_count": 0,
+    "queued_aborted": 0,
+    "unresolved_count": 0,
+    "run_status": "partial"
+  },
+  "artifact_verification": "not_assessed",
+  "job_outcomes": [
+    {
+      "job_id": "1b783b2d4605.job.1",
+      "agent": "ai_video_capability_research",
+      "required": true,
+      "status": "complete",
+      "reason": "",
+      "source": "",
+      "content_acquisition": [
+        {
+          "tool": "web_fetch",
+          "source": "[\"https://artificialanalysis.ai/video/leaderboard/text-to-video\", \"https://artificialanalysis.ai/video/leaderboard/image-to-video\"]",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://ir.kuaishou.com/zh-hans/news-releases/news-release-details/kelingainianhuashouruyunxingluzai2025nian12yueda24yimeijin",
+          "obtained": false,
+          "status": "unavailable",
+          "last_attempt_status": "unavailable",
+          "detail": "Could not extract content from https://ir.kuaishou.com/zh-hans/news-releases/news-release-details/kelingainianhuashouruyunxingluzai2025nian12yueda24yimeijin: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site's own API/PDF, or an archived copy."
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://llm-stats.com/leaderboards/best-ai-for-video-creation",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://ir.kuaishou.com/zh-hant/node/11286/pdf",
+          "obtained": false,
+          "status": "unavailable",
+          "last_attempt_status": "unavailable",
+          "detail": "Domain skipped: ir.kuaishou.com returned 403 (origin blocked or Jina URL ban) earlier in this session. Cached for ~59 more min. Try a different source or search query."
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://m.36kr.com/p/3617945155011589",
+          "obtained": false,
+          "status": "partial",
+          "last_attempt_status": "partial",
+          "detail": "[POSSIBLY NOT RENDERED] The page at https://m.36kr.com/p/3617945155011589 remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to another source instead of repeatedly fetching this URL.\n\n"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://artificialanalysis.ai/video/arena",
+          "obtained": false,
+          "status": "partial",
+          "last_attempt_status": "partial",
+          "detail": "[POSSIBLY NOT RENDERED] The page at https://artificialanalysis.ai/video/arena remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to another source instead of repeatedly fetching this URL.\n\n"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://help.openai.com/en/articles/20001152-what-to-know-about-the-sora-discontinuation",
+          "obtained": false,
+          "status": "unavailable",
+          "last_attempt_status": "unavailable",
+          "detail": "Could not extract content from https://help.openai.com/en/articles/20001152-what-to-know-about-the-sora-discontinuation: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site's own API/PDF, or an archived copy."
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://kling.ai/release-note/release-history",
+          "obtained": false,
+          "status": "partial",
+          "last_attempt_status": "partial",
+          "detail": "[POSSIBLY NOT RENDERED] The page at https://kling.ai/release-note/release-history remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to another source instead of repeatedly fetching this URL.\n\n"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://m.36kr.com/p/3804766402698759",
+          "obtained": false,
+          "status": "partial",
+          "last_attempt_status": "partial",
+          "detail": "[POSSIBLY NOT RENDERED] The page at https://m.36kr.com/p/3804766402698759 remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to another source instead of repeatedly fetching this URL.\n\n"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://seed.bytedance.com/zh/blog/one-take-creation-flexible-referencing-introducing-seedance-2-5",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://www.minimax.io/blog/minimax-h3",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://openai.com/zh-Hans-CN/index/sora-2/",
+          "obtained": false,
+          "status": "unavailable",
+          "last_attempt_status": "unavailable",
+          "detail": "Could not extract content from https://openai.com/zh-Hans-CN/index/sora-2/: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site's own API/PDF, or an archived copy."
+        }
+      ],
+      "verification_checks": [],
+      "verification_events": []
+    },
+    {
+      "job_id": "1b783b2d4605.job.2",
+      "agent": "ai_drama_industry_research",
+      "required": true,
+      "status": "complete",
+      "reason": "",
+      "source": "",
+      "content_acquisition": [
+        {
+          "tool": "corpus_search",
+          "source": "AI短剧 成本 制作周期 微短剧",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 6,
+              "sources_filtered": 0,
+              "filter_reasons": {},
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 15912,
+              "char_budget": 16000,
+              "hit_limit": 10,
+              "block_limit": 20,
+              "blocks_returned": 20,
+              "blocks_ranked": 309,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope"
+            ]
+          }
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://www.cls.cn/detail/2476778",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://www.tmtpost.com/8085955.html",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "http://paper.people.com.cn/zgjjzk/pc/content/202604/15/content_30154020.html",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://www.chinanews.com.cn/m/cul/2026/03-27/10593599.shtml",
+          "obtained": false,
+          "status": "unavailable",
+          "last_attempt_status": "unavailable",
+          "detail": "Per-source fetch/extraction deadline exceeded."
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://m.paoka.com/info/1107",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://www.nrta.gov.cn/art/2026/5/13/art_113_73265.html",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://www.tmtpost.com/8177437.html",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "[\"https://cn.chinadaily.com.cn/a/202604/15/WS69defb2ea310942cc49a79fc.html\", \"https://m.jiemian.com/article/12548425.html\", \"https://www.tvoao.com/a/225044.aspx\"]",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        }
+      ],
+      "verification_checks": [],
+      "verification_events": []
+    },
+    {
+      "job_id": "1b783b2d4605.job.3",
+      "agent": "global_market_research",
+      "required": true,
+      "status": "complete",
+      "reason": "",
+      "source": "",
+      "content_acquisition": [
+        {
+          "tool": "web_fetch",
+          "source": "https://sensortower.com/blog/state-of-short-drama-apps-2026-report",
+          "obtained": false,
+          "status": "unavailable",
+          "last_attempt_status": "unavailable",
+          "detail": "Could not extract content from https://sensortower.com/blog/state-of-short-drama-apps-2026-report: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site's own API/PDF, or an archived copy."
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://sensortower.com/blog/state-of-short-drama-apps-2025",
+          "obtained": false,
+          "status": "unavailable",
+          "last_attempt_status": "unavailable",
+          "detail": "Could not extract content from https://sensortower.com/blog/state-of-short-drama-apps-2025: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site's own API/PDF, or an archived copy."
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://www.36kr.com/p/4052104112543620",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://www.rfi.fr/cn/%E4%B8%93%E6%A0%8F%E6%A3%80%E7%B4%A2/%E6%B3%95%E5%9B%BD%E4%B8%96%E7%95%8C%E6%8A%A5/20261023-%E4%B8%AD%E5%9B%BD%E6%89%8B%E6%9C%BA%E5%BE%AE%E7%9F%AD%E5%89%A7%E7%9A%8490-%E7%94%B1ai%E5%88%B6%E4%BD%9C%EF%BC%8C%E6%88%90%E6%9C%AC%E5%A4%A7%E5%B9%85%E4%B8%8B%E9%99%8D%EF%BC%8C%E4%BD%86%E5%88%9B%E4%BD%9C%E8%80%85%E7%9A%84%E6%94%B6%E5%85%A5%E5%8D%B4%E6%9A%B4%E8%B7%8C",
+          "obtained": false,
+          "status": "unavailable",
+          "last_attempt_status": "unavailable",
+          "detail": "Could not extract content from https://www.rfi.fr/cn/%E4%B8%93%E6%A0%8F%E6%A3%80%E7%B4%A2/%E6%B3%95%E5%9B%BD%E4%B8%96%E7%95%8C%E6%8A%A5/20261023-%E4%B8%AD%E5%9B%BD%E6%89%8B%E6%9C%BA%E5%BE%AE%E7%9F%AD%E5%89%A7%E7%9A%8490-%E7%94%B1ai%E5%88%B6%E4%BD%9C%EF%BC%8C%E6%88%90%E6%9C%AC%E5%A4%A7%E5%B9%85%E4%B8%8B%E9%99%8D%EF%BC%8C%E4%BD%86%E5%88%9B%E4%BD%9C%E8%80%85%E7%9A%84%E6%94%B6%E5%85%A5%E5%8D%B4%E6%9A%B4%E8%B7%8C: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site's own API/PDF, or an archived copy."
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://www.xinhuanet.com/ent/20260313/43190f898d5a4d0089f21c5fc6209015/c.html",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "http://www.news.cn/20250526/3887dae6eec34eeea6fa79239fbdd3ce/c.html",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://caifuhao.eastmoney.com/news/20260731154328036195520",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://zhuanlan.zhihu.com/p/2028081687976846884",
+          "obtained": false,
+          "status": "unavailable",
+          "last_attempt_status": "unavailable",
+          "detail": "Could not extract content from https://zhuanlan.zhihu.com/p/2028081687976846884: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site's own API/PDF, or an archived copy."
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://wap.eastmoney.com/a/202601143618709374.html",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://patrickfrater.substack.com/p/reelshort-crazy-maple-col-group-legal-fight",
+          "obtained": false,
+          "status": "unavailable",
+          "last_attempt_status": "unavailable",
+          "detail": "Could not extract content from https://patrickfrater.substack.com/p/reelshort-crazy-maple-col-group-legal-fight: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site's own API/PDF, or an archived copy."
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://finance.sina.com.cn/stock/t/2026-01-14/doc-inhhfvyv8461637.shtml",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://m.36kr.com/p/3777849731429122",
+          "obtained": false,
+          "status": "partial",
+          "last_attempt_status": "partial",
+          "detail": "[POSSIBLY NOT RENDERED] The page at https://m.36kr.com/p/3777849731429122 remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to another source instead of repeatedly fetching this URL.\n\n"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://m.sohu.com/a/1096611138_211762",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        },
+        {
+          "tool": "web_fetch",
+          "source": "https://www.hollywoodreporter.com/business/business-news/ai-hollywood-microdramas-1236694483/",
+          "obtained": true,
+          "status": "success",
+          "last_attempt_status": "success"
+        }
+      ],
+      "verification_checks": [],
+      "verification_events": []
+    },
+    {
+      "job_id": "1b783b2d4605.job.4",
+      "agent": "claims_verifier",
+      "required": true,
+      "status": "complete",
+      "reason": "",
+      "source": "",
+      "content_acquisition": [],
+      "verification_checks": [
+        {
+          "protocol_version": 2,
+          "check_id": "lead_claim",
+          "work_item_id": "t4",
+          "criterion": "“断层式领先”的表述必须区分：哪些维度有证据支持（如开源/商用视频模型的可及性与产能、短剧应用侧渗透），哪些维度证据不足（如绝对画质、长视频叙事、欧美主流影视工业化采用），不得把局部领先表述为全面断层领先",
+          "subject": {
+            "text": "先校正前提：“断层式领先”在**产能与应用渗透**维度大体成立，在**绝对技术能力**维度不成立，必须分维度看。\n\n有证据支持的领先：\n① 第三方盲测榜首是中国模型——Artificial Analysis 视频榜（2026年11月抓取）文生视频第一为阿里 Wan 3.0（Elo 1172，样本31个模型），图生视频第一为字节 Dreamina Seedance 2.5（Elo 1159）；\n② 中国厂商率先把“30秒原生单镜＋原生音频＋多镜头”做成量产规格：Seedance 2.5 单次30秒（2026-07-31发布）、Wan 3.0 单次30秒（2026-08-06公测）、MiniMax H3 为15秒/2K/原生立体声＋原生多镜头；\n③ 前沿开源权重基本只有中国实验室在放：AA 称开源权重文生视频榜首为 MiniMax H3（Elo 1120）；\n④ 应用侧渗透率全球最高：2026年二季度中国上线AI微短剧约15.3万部（环比+25%），2026年一季度AI占上线微短剧>95%（中国网络视听协会口径，经转述）；抖音端2026上半年新增AI剧/漫剧22.19万部；\n⑤ 出海分发端中国厂商占绝对多数：DataEye 2026上半年口径，中国出海短剧App内购收入11.82亿美元、约占海外93%，下载12.21亿次、约占85%。\n\n证据不足或不能成立的领先：\n① 中国模型并非集体领先：可灵在同一个 AA 榜上仅列第18–19位（Elo 1000–1022，其中1000为该榜锚点），Vidu Q3 Pro 第27、PixVerse V6 第21；换一个榜单（llm-stats 的 TrueSkill 体系）冠军又变成可灵——“谁第一”高度依赖榜单口径与是否计入音频，不能当作稳定事实；\n② 长视频/长叙事仍是“多轮延长”拼接而非一次生成；字节官方承认“复杂运动的物理合理性、极多主体交互场景的稳定性仍有提升空间”；\n③ “中国AI短剧全球断层领先”缺少第三方（非券商/非自媒体）同期对比数据；美国并非没有AI短剧，而是缺少本土竖屏付费分发渠道，大量AI竖屏供给发生在中国公司运营的App内；\n④ AI短剧在海外**收入**中的占比仍小（有媒体估算2026年约6.5亿美元、对60亿美元大盘约11%），而海外投放大盘中AI占比已“8成以上”——供给与投放渗透远高于收入渗透。",
+            "sha256": "4b937cf5d6ed8552c396600c213d9675ad2b239e4878d3f915d49cadad2dfdd5",
+            "key": "inline:4b937cf5d6ed8552c396600c213d9675ad2b239e4878d3f915d49cadad2dfdd5"
+          },
+          "evidence": [
+            {
+              "job_id": "1b783b2d4605.job.1",
+              "ref": "",
+              "sha256": "450e8d277211a001e049e3ac6184d086c471ec48dd36dc54d304a3199ecf7021",
+              "key": "1b783b2d4605.job.1",
+              "web_evidence_sha256": "ef79030356cfbe09dc33878dc2a347a584b459edf42b3bb02152a7c1c4bccae0"
+            },
+            {
+              "job_id": "1b783b2d4605.job.3",
+              "ref": "",
+              "sha256": "90bb2de0f8eb6383d49db7ad82264fa81d7507ed5bca4cb0c43c426af85642a5",
+              "key": "1b783b2d4605.job.3",
+              "web_evidence_sha256": "9dd5b5195164aab9b0454234594f9160056cb5b9f2286b05b19f9985667414f2"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "fd1a7a408011d982fbc0acc70c4b59b4df757366d2da4c288443cf9f5e94e463",
+          "required": true,
+          "replaces_job_id": "",
+          "revision_reason": "",
+          "revision_kind": ""
+        },
+        {
+          "protocol_version": 2,
+          "check_id": "numbers",
+          "work_item_id": "t4",
+          "criterion": "答复中每个关键数字（成本降幅、周期、市场规模、收入、下载量、榜单位次）必须能对应到所引来源的实体、口径、时间与单位，且不得把预测值写成实测值、把厂商自述写成第三方结论",
+          "subject": {
+            "text": "先校正前提：“断层式领先”在**产能与应用渗透**维度大体成立，在**绝对技术能力**维度不成立，必须分维度看。\n\n有证据支持的领先：\n① 第三方盲测榜首是中国模型——Artificial Analysis 视频榜（2026年11月抓取）文生视频第一为阿里 Wan 3.0（Elo 1172，样本31个模型），图生视频第一为字节 Dreamina Seedance 2.5（Elo 1159）；\n② 中国厂商率先把“30秒原生单镜＋原生音频＋多镜头”做成量产规格：Seedance 2.5 单次30秒（2026-07-31发布）、Wan 3.0 单次30秒（2026-08-06公测）、MiniMax H3 为15秒/2K/原生立体声＋原生多镜头；\n③ 前沿开源权重基本只有中国实验室在放：AA 称开源权重文生视频榜首为 MiniMax H3（Elo 1120）；\n④ 应用侧渗透率全球最高：2026年二季度中国上线AI微短剧约15.3万部（环比+25%），2026年一季度AI占上线微短剧>95%（中国网络视听协会口径，经转述）；抖音端2026上半年新增AI剧/漫剧22.19万部；\n⑤ 出海分发端中国厂商占绝对多数：DataEye 2026上半年口径，中国出海短剧App内购收入11.82亿美元、约占海外93%，下载12.21亿次、约占85%。\n\n证据不足或不能成立的领先：\n① 中国模型并非集体领先：可灵在同一个 AA 榜上仅列第18–19位（Elo 1000–1022，其中1000为该榜锚点），Vidu Q3 Pro 第27、PixVerse V6 第21；换一个榜单（llm-stats 的 TrueSkill 体系）冠军又变成可灵——“谁第一”高度依赖榜单口径与是否计入音频，不能当作稳定事实；\n② 长视频/长叙事仍是“多轮延长”拼接而非一次生成；字节官方承认“复杂运动的物理合理性、极多主体交互场景的稳定性仍有提升空间”；\n③ “中国AI短剧全球断层领先”缺少第三方（非券商/非自媒体）同期对比数据；美国并非没有AI短剧，而是缺少本土竖屏付费分发渠道，大量AI竖屏供给发生在中国公司运营的App内；\n④ AI短剧在海外**收入**中的占比仍小（有媒体估算2026年约6.5亿美元、对60亿美元大盘约11%），而海外投放大盘中AI占比已“8成以上”——供给与投放渗透远高于收入渗透。",
+            "sha256": "4b937cf5d6ed8552c396600c213d9675ad2b239e4878d3f915d49cadad2dfdd5",
+            "key": "inline:4b937cf5d6ed8552c396600c213d9675ad2b239e4878d3f915d49cadad2dfdd5"
+          },
+          "evidence": [
+            {
+              "job_id": "1b783b2d4605.job.1",
+              "ref": "",
+              "sha256": "450e8d277211a001e049e3ac6184d086c471ec48dd36dc54d304a3199ecf7021",
+              "key": "1b783b2d4605.job.1",
+              "web_evidence_sha256": "ef79030356cfbe09dc33878dc2a347a584b459edf42b3bb02152a7c1c4bccae0"
+            },
+            {
+              "job_id": "1b783b2d4605.job.3",
+              "ref": "",
+              "sha256": "90bb2de0f8eb6383d49db7ad82264fa81d7507ed5bca4cb0c43c426af85642a5",
+              "key": "1b783b2d4605.job.3",
+              "web_evidence_sha256": "9dd5b5195164aab9b0454234594f9160056cb5b9f2286b05b19f9985667414f2"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "a0c17a6fbe824f517bc3a30f4e273cf436ea5b403acd76d3a9925f714e3f6925",
+          "required": true,
+          "replaces_job_id": "",
+          "revision_reason": "",
+          "revision_kind": ""
+        }
+      ],
+      "verification_events": [
+        {
+          "check_id": "lead_claim",
+          "binding_id": "fd1a7a408011d982fbc0acc70c4b59b4df757366d2da4c288443cf9f5e94e463",
+          "subject_sha256": "4b937cf5d6ed8552c396600c213d9675ad2b239e4878d3f915d49cadad2dfdd5",
+          "verdict": "pass",
+          "method": "Read the bound subject passage in full, then compared each '领先' and '证据不足' dimension against the tool-delivered originals: AA-Video-T2V v2.1 and AA-Video-I2V v2.1 tables plus AA open-weights FAQ (job.1), seed.bytedance.com Seedance 2.5 blog 2026-07-31 (job.1), llm-stats TrueSkill page (job.1), and job.3's A/B evidence tables (中国网络视听协会>95% 经转述, 15.3万部, 22.19万部, DataEye 11.82亿美元/93%, 12.21亿次/85%, '8成以上'). Checked that (i) each supported dimension has a named/dated source, (ii) each required insufficiency dimension is explicitly listed, (iii) no sentence converts partial into comprehensive leadership. No new fetch needed; the attached excerpts cover the quoted rows and FAQ text.",
+          "detail": "Dimension separation is explicit and complete: the opening sentence corrects the premise ('在产能与应用渗透维度大体成立，在绝对技术能力维度不成立，必须分维度看'), and the passage is split into '有证据支持的领先' ①–⑤ and '证据不足或不能成立的领先' ①–④. Supported side verified row-by-row: AA T2V #1 Wan 3.0 Elo 1172 (7,179 samples, 31-model board) and I2V #1 Dreamina Seedance 2.5 Elo 1159 match the fetched tables; open-weights leader MiniMax H3 Elo 1120 matches the AA FAQ sentence; Seedance 2.5 '单次30秒+多轮延长' matches the 2026-07-31 ByteDance blog; 2026Q1 '>95%' (labelled 中国网络视听协会口径, 经转述), 2026Q2 15.3万部/+25%, 抖音2026H1 22.19万部, and DataEye 2026H1 11.82亿美元≈93% IAP / 12.21亿次≈85% downloads all trace to job.3's tables with their 口径 retained (93% explicitly limited to App内购). Insufficiency side covers every example the criterion names: absolute quality (ByteDance's own '复杂运动的物理合理性…仍有提升空间'), long-video narrative ('多轮延长拼接而非一次生成'), Western mainstream industrial adoption (no third-party contemporaneous comparison; US vertical AI supply sits in Chinese-operated apps), and revenue-vs-supply penetration (≈$6.5亿 media estimate vs $60亿 pool ≈11%, against '8成以上' of the ad-spend pool). Leaderboard-dependence and the Kling #18–19 (Elo 1000 anchor / 1022) vs llm-stats #1 (arena score 1934) conflict are both retained, so no '某榜单第一=跨榜单第一' leap. Defects found are numbers/labeling-level, not dimensional conflation: '率先…做成量产规格' is a priority inference from vendor specs; '$60亿大盘' is a 调研预测 presented without the '预测' label; '8成以上' carries no attribution; the US-channel explanation is an unlabelled inference. These belong to the numbers check and do not make the passage present partial leadership as comprehensive, so this criterion passes.",
+          "evidence_keys": [
+            "1b783b2d4605.job.1",
+            "1b783b2d4605.job.3"
+          ],
+          "scope_assessment": {
+            "entity": {
+              "status": "match",
+              "detail": "Named entities match the evidence rows: Wan 3.0 (Alibaba), Dreamina Seedance 2.5 / Seedance 2.0 (ByteDance), MiniMax H3, Kling 3.0, PixVerse V6, Vidu Q3 Pro appear with the same identities in job.1's AA T2V/I2V tables and llm-stats page."
+            },
+            "version": {
+              "status": "match",
+              "detail": "The candidate anchors ranks to 'Artificial Analysis 视频榜（2026年11月抓取）', the same 2026-11 AA-Video-T2V/I2V v2.1 snapshot delivered in job.1, and uses 2026Q1/Q2/H1 windows for the job.3 penetration figures; only the open-weights 1120 is from the T2V-Silent v2.1 variant, an unstated variant label rather than a wrong version."
+            },
+            "date": {
+              "status": "match",
+              "detail": "Leaderboard capture 2026-11, Seedance 2.5 release 2026-07-31, Wan 3.0 public beta 2026-08-06, and the 2026Q1/Q2/H1 penetration windows all correspond to the dated rows in job.1 and job.3; no 2025 figure is presented as a 2026 measurement."
+            },
+            "units": {
+              "status": "match",
+              "detail": "Elo points, model counts, clip length (30秒/15秒), resolution (2K), 部 counts, USD IAP revenue, download counts and percentage shares are each used in the same unit as the bound source (Elo anchor 1000 noted as an anchor, 93%/85% as App内购 and download shares)."
+            },
+            "conditions": {
+              "status": "match",
+              "detail": "The conditions that decide the claim are kept: '>95%' is scoped to 中国网络视听协会口径经转述, 93% to App内购, the AA rank to one leaderboard captured 2026-11, and '8成以上' explicitly contrasted as 投放/供给 share versus the ~11% revenue share."
+            },
+            "attribution": {
+              "status": "match",
+              "detail": "Third-party (AA, DataEye, 中国网络视听协会经转述), media estimate ($6.5亿), and vendor self-statement (ByteDance's physics/stability admission) are attributed at the point of use, and the llm-stats vs AA conflict is attributed to differing leaderboard methodologies."
+            }
+          },
+          "unresolved_issues": [],
+          "job_id": "1b783b2d4605.job.4"
+        },
+        {
+          "check_id": "numbers",
+          "binding_id": "a0c17a6fbe824f517bc3a30f4e273cf436ea5b403acd76d3a9925f714e3f6925",
+          "subject_sha256": "4b937cf5d6ed8552c396600c213d9675ad2b239e4878d3f915d49cadad2dfdd5",
+          "verdict": "fail",
+          "method": "Figure-by-figure reconciliation of the bound passage against the delivered originals only: AA-Video-T2V v2.1 and AA-Video-I2V v2.1 tables plus the AA open-weights FAQ sentences (job.1), the 2026-07-31 seed.bytedance.com Seedance 2.5 blog text (job.1), the llm-stats TrueSkill page (job.1), and job.3's A/B evidence tables with their own 标签 column (Sensor Tower/点点/DataEye/中国网络视听协会经转述). For each number I recorded the claimed entity, period, unit and 口径, then checked whether the bound row carries the same four, whether the source is a 调研预测 vs an actual, and whether a vendor self-statement is being presented as third-party. Arithmetic cross-check: 6.5/60 = 10.8% ≈ 11%. No new web fetch was needed; the two bound reports' previews elide §C/§D of job.3, which is why the 6.5亿美元 row could not be matched.",
+          "detail": "Per-figure result: (a) MATCH — Wan 3.0 Elo 1172 on a 31-row board (AA-Video-T2V v2.1, 2026-11, 7,179 samples); Dreamina Seedance 2.5 Elo 1159 (AA-Video-I2V v2.1 #1); Kling #18 Elo 1022 / #19 Elo 1000 with the board's own 'Fixed at 1000 as the reference point' anchor note; PixVerse V6 #21 (981); Vidu Q3 Pro #27 (938); Seedance 2.5 单次30秒 2026-07-31 (ByteDance blog verbatim); 2026Q2 15.3万部/+25%, 2026Q1 >95%（中国网络视听协会经转述）, 抖音2026H1 22.19万部 (job.3 rows); 11.82亿美元 / 12.21亿次 / 93% / 85% numerically match job.3's DataEye 2026H1 rows with 93% correctly scoped to App内购. (b) DEFECTS — 1) job.3 tags the DataEye 2026H1 article '该文自述为“调研预测”', yet the passage states 11.82亿美元/93%/12.21亿次/85% as measured H1 actuals with no 预测 qualifier (预测写成实测). 2) job.3's 60亿美元 is '预测>60亿美元（App内购30亿+TikTok/YouTube分账18亿+网页10亿）'; the passage uses it as '60亿美元大盘' and divides an estimate by it to yield '约11%'. 3) The 6.5亿美元 AI短剧收入 has no row in either bound report (job.3 carries only TikTok 单月650万美元/年内累计6000万美元), so this figure and the 11% are not traceable to the bound evidence; '有媒体估算' is a correct hedge but the entity/period remains unmatched. 4) '8成以上' is in job.3 only as DataEye 经知乎转述, 仅摘要, 2026年5月; the passage gives no source and no date and the word '已' upgrades a snippet-level repost to a measurement. 5) Wan 3.0 '单次30秒（2026-08-06公测）' (job.1 A10 厂商自述+媒体) and MiniMax H3 '15秒/2K/原生立体声/多镜头' (job.1 A9 厂商自述; the minimax.io page body was not delivered — text_omitted) are presented as plain fact; H3's blog only says '计划…开放权重', which also strains the present-tense '基本只有中国实验室在放'. 6) The 1120 open-weights Elo is from AA-Video-T2V-Silent v2.1 (no audio), while the passage's other AA Elo values come from the audio board where H3 768p = 1160; the passage itself says ranks depend on '是否计入音频', so the missing variant tag is self-inconsistent. Suggested fixes: add '调研预测' to the DataEye 2026H1 cluster; restate 11% as '分子为媒体估算、分母为预测，仅作量级参考'; add '据 DataEye 2026年5月经转述摘要' plus '仅摘要级' to 8成以上; tag Wan 3.0/H3 specs '据厂商公布'; write the 1120 as 'AA-Video-T2V-Silent v2.1 开源权重榜首'. 15 of ~20 figures map cleanly; the six items above violate the entity/口径/time/attribution requirement, so the check fails.",
+          "evidence_keys": [
+            "1b783b2d4605.job.1",
+            "1b783b2d4605.job.3"
+          ],
+          "scope_assessment": {
+            "entity": {
+              "status": "match",
+              "detail": "Match: Wan 3.0/Alibaba, Dreamina Seedance 2.5/ByteDance, MiniMax H3, Kling 3.0, PixVerse V6, Vidu Q3 Pro, DataEye, 中国网络视听协会 are the same entities as in the bound AA rows and job.3 tables."
+            },
+            "version": {
+              "status": "mismatch",
+              "detail": "Mismatch: the 1120 open-weights Elo is from AA-Video-T2V-Silent v2.1 while the passage's other AA figures are from the with-audio board (H3 768p = 1160), and the Silent variant is not stated."
+            },
+            "date": {
+              "status": "unknown",
+              "detail": "Unknown: the AA capture (2026-11), Seedance release (2026-07-31) and the 2026Q1/Q2/H1 windows match the bound rows, but '8成以上' has no date and its only source is an undated Zhihu repost, and 6.5亿美元 carries only '2026' with no traceable row."
+            },
+            "units": {
+              "status": "mismatch",
+              "detail": "Mismatch: 11.82亿美元/12.21亿次/93%/85% come from a source that self-describes as a 调研预测 yet are presented as measured H1 actuals, and '60亿美元大盘' is a 预测 total (内购30亿+分账18亿+网页10亿) used as the measured base of an 11% share."
+            },
+            "conditions": {
+              "status": "mismatch",
+              "detail": "Mismatch: the App内购 condition on 93% is kept, but the source's own '调研预测' condition on the DataEye 2026H1 cluster and the '12.8万部中' denominator behind >95% are dropped, and a forecast market size is used as a measured denominator."
+            },
+            "attribution": {
+              "status": "mismatch",
+              "detail": "Mismatch: '8成以上' carries no DataEye/知乎转述 attribution and no date, and the Wan 3.0 / MiniMax H3 specs (job.1 A10/A9, both 厂商自述) are stated as plain fact rather than vendor claims."
+            }
+          },
+          "unresolved_issues": [
+            "DataEye 2026H1 cluster (11.82亿美元/12.21亿次/93%/85%) presented as measured actuals although the cited article self-describes as '调研预测' — needs the 预测 qualifier.",
+            "'60亿美元大盘' is a forecast (App内购30亿+分账18亿+网页10亿) used as an unlabeled measured base; the derived '约11%' therefore mixes an estimate with a forecast.",
+            "The 6.5亿美元 AI短剧海外收入 has no matching row in either bound report (job.3 has only TikTok 单月650万美元/年内累计6000万美元), so that figure and the 11% are not traceable to the bound evidence — UNCHECKED pending the source.",
+            "'8成以上' 海外投放AI占比 is given without source, date or the '仅摘要/经知乎转述' limit that job.3 attaches, and the word '已' overstates a snippet-level repost.",
+            "Wan 3.0 (2026-08-06公测, 30秒) and MiniMax H3 (15秒/2K/立体声/多镜头) specs are vendor self-statements (job.1 A10/A9) presented as plain fact; the minimax.io body was not delivered (text_omitted), so the H3 spec is also unverified at source level.",
+            "The 1120 Elo is from AA-Video-T2V-Silent v2.1 (no audio) while the passage's other AA figures are from the with-audio board; the variant tag is missing, contradicting the passage's own warning that ranks depend on '是否计入音频'."
+          ],
+          "job_id": "1b783b2d4605.job.4"
+        }
+      ],
+      "coverage_status": "incomplete",
+      "coverage_resolved_by": []
+    },
+    {
+      "job_id": "1b783b2d4605.job.5",
+      "agent": "claims_verifier",
+      "required": true,
+      "status": "incomplete",
+      "reason": "llm_error",
+      "source": "deterministic_fallback",
+      "content_acquisition": [],
+      "verification_checks": [
+        {
+          "protocol_version": 2,
+          "check_id": "numbers",
+          "work_item_id": "t4",
+          "criterion": "答复中每个关键数字（成本降幅、周期、市场规模、收入、下载量、榜单位次）必须能对应到所引来源的实体、口径、时间与单位，且不得把预测值写成实测值、把厂商自述写成第三方结论",
+          "subject": {
+            "text": "先校正前提：“断层式领先”在**产能与应用渗透**维度大体成立，在**绝对技术能力**维度不成立，必须分维度看。\n\n有证据支持的领先：\n① 第三方盲测榜首是中国模型——Artificial Analysis 视频榜（2026年11月抓取）文生视频第一为阿里 Wan 3.0（Elo 1172，该榜31个模型、7,179个样本），图生视频第一为字节 Dreamina Seedance 2.5（Elo 1159）；\n② 中国厂商率先把“30秒原生单镜＋原生音频＋多镜头”做成量产规格——据厂商公布：Seedance 2.5 单次30秒、可多轮延长（2026-07-31发布），Wan 3.0 单次30秒（2026-08-06公测），MiniMax H3 为15秒/2K/原生立体声＋原生多镜头（该页正文本次未取到，属厂商自述）；\n③ 前沿开源权重基本只有中国实验室在放——AA“无声（Silent）”版榜单中，开源权重文生视频榜首为 MiniMax H3（Elo 1120，AA-Video-T2V-Silent v2.1；同一模型在带音频榜为1160），而 MiniMax 当时仅表示“计划在数日内开放权重”；\n④ 应用侧渗透率属全球最高的一档：2026年一季度AI占上线微短剧>95%（DataEye 口径、经转述），二季度约15.3万部（中国网络视听协会《微短剧创作指引（2026Q2）》口径，环比+25%；该口径下二季度总上线23.9万部、AI占 64%，与一季度的>95%不同源，不可直接比较），抖音端2026上半年新增AI剧/漫剧22.19万部（DataEye）；\n⑤ 出海分发端中国厂商占绝对多数：据 DataEye 2026年上半年“调研预测”（该文自述为调研预测，非平台实测），中国出海短剧App内购收入约11.82亿美元、约占海外93%（仅 App 内购口径），下载约12.21亿次、约占85%。\n\n证据不足或不能成立的领先：\n① 中国模型并非集体领先：可灵在同一个 AA 带音频榜上仅列第18–19位（Elo 1022 与 1000，其中1000为该榜固定锚点），Vidu Q3 Pro 第27、PixVerse V6 第21；换一个榜单（llm-stats 的 TrueSkill 体系）冠军又变成可灵——“谁第一”高度依赖榜单口径与是否计入音频，不能当作稳定事实；\n② 长视频/长叙事仍是“多轮延长”拼接而非一次生成；字节官方承认“复杂运动的物理合理性、极多主体交互场景的稳定性仍有提升空间”；\n③ “中国AI短剧全球断层领先”缺少第三方（非券商/非自媒体）同期对比数据；美国并非没有AI短剧，而是缺少本土竖屏付费分发渠道，大量AI竖屏供给发生在中国公司运营的App内；\n④ AI短剧在海外**收入**中的占比仍小：若以媒体估算的2026年AI短剧收入约6.5亿美元（该数字本次未能追溯到原文，仅见二手转述）除以某调研报告预测的约60亿美元海外大盘（分母为“App内购30亿＋TikTok/YouTube分账18亿＋网页10亿”的预测值），得约11%——分子为估算、分母为预测，仅作量级参考；相对地，据 DataEye 2026年5月经转述的摘要数据，海外投放大盘中AI占比“8成以上”（仅摘要级、未见原报告）——供给与投放渗透明显高于收入渗透。",
+            "sha256": "4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc",
+            "key": "inline:4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc"
+          },
+          "evidence": [
+            {
+              "job_id": "1b783b2d4605.job.1",
+              "ref": "",
+              "sha256": "450e8d277211a001e049e3ac6184d086c471ec48dd36dc54d304a3199ecf7021",
+              "key": "1b783b2d4605.job.1",
+              "web_evidence_sha256": "ef79030356cfbe09dc33878dc2a347a584b459edf42b3bb02152a7c1c4bccae0"
+            },
+            {
+              "job_id": "1b783b2d4605.job.2",
+              "ref": "",
+              "sha256": "a79f9632a47c646b0982be47ef4ed468a7431fd40cd33d59cf3a06402aefe85d",
+              "key": "1b783b2d4605.job.2",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 1
+                }
+              ],
+              "acquisition_sha256": "64a9cba03bea5ac7e947884965ac898bc46016ed7f111656326e5edb9949d328",
+              "corpus_evidence_sha256": "bde7bfd24ba3f1cce166d2a143ece4c30fcbcea11069e636a0af7ba2844ac95c",
+              "web_evidence_sha256": "693ab081bcab84113968db6e9858e7d086e1a8d002522debda4ea2b61d377ccb"
+            },
+            {
+              "job_id": "1b783b2d4605.job.3",
+              "ref": "",
+              "sha256": "90bb2de0f8eb6383d49db7ad82264fa81d7507ed5bca4cb0c43c426af85642a5",
+              "key": "1b783b2d4605.job.3",
+              "web_evidence_sha256": "9dd5b5195164aab9b0454234594f9160056cb5b9f2286b05b19f9985667414f2"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "32742964347c939b8ac386f0dfad07a479321164e47b1c3efdfd2d19dcfa090b",
+          "required": true,
+          "replaces_job_id": "1b783b2d4605.job.4",
+          "revision_reason": "按 job.4 列出的 6 项缺陷逐项修正候选段落：①DataEye 2026H1 集群加“调研预测”限定并说明非平台实测；②“60亿美元大盘”标为预测值且 11% 标注“分子为估算、分母为预测”；③“6.5亿美元”明示未能追溯到原文；④“8成以上”补来源、时间与“仅摘要级”限定；⑤Wan 3.0 / H3 规格改为“据厂商公布”并注明 H3 页面正文未取到；⑥“1120”补 AA-Video-T2V-Silent v2.1 榜名并注明同一模型带音频榜为 1160。另补充 Q1 >95% 与 Q2 64% 不同源、不可直接比较的说明。因候选字节已变，同段落的 lead_claim 也需重新出具 verdict。",
+          "revision_kind": "subject"
+        },
+        {
+          "protocol_version": 2,
+          "check_id": "lead_claim",
+          "work_item_id": "t4",
+          "criterion": "“断层式领先”的表述必须区分：哪些维度有证据支持（如开源/商用视频模型的可及性与产能、短剧应用侧渗透），哪些维度证据不足（如绝对画质、长视频叙事、欧美主流影视工业化采用），不得把局部领先表述为全面断层领先",
+          "subject": {
+            "text": "先校正前提：“断层式领先”在**产能与应用渗透**维度大体成立，在**绝对技术能力**维度不成立，必须分维度看。\n\n有证据支持的领先：\n① 第三方盲测榜首是中国模型——Artificial Analysis 视频榜（2026年11月抓取）文生视频第一为阿里 Wan 3.0（Elo 1172，该榜31个模型、7,179个样本），图生视频第一为字节 Dreamina Seedance 2.5（Elo 1159）；\n② 中国厂商率先把“30秒原生单镜＋原生音频＋多镜头”做成量产规格——据厂商公布：Seedance 2.5 单次30秒、可多轮延长（2026-07-31发布），Wan 3.0 单次30秒（2026-08-06公测），MiniMax H3 为15秒/2K/原生立体声＋原生多镜头（该页正文本次未取到，属厂商自述）；\n③ 前沿开源权重基本只有中国实验室在放——AA“无声（Silent）”版榜单中，开源权重文生视频榜首为 MiniMax H3（Elo 1120，AA-Video-T2V-Silent v2.1；同一模型在带音频榜为1160），而 MiniMax 当时仅表示“计划在数日内开放权重”；\n④ 应用侧渗透率属全球最高的一档：2026年一季度AI占上线微短剧>95%（DataEye 口径、经转述），二季度约15.3万部（中国网络视听协会《微短剧创作指引（2026Q2）》口径，环比+25%；该口径下二季度总上线23.9万部、AI占 64%，与一季度的>95%不同源，不可直接比较），抖音端2026上半年新增AI剧/漫剧22.19万部（DataEye）；\n⑤ 出海分发端中国厂商占绝对多数：据 DataEye 2026年上半年“调研预测”（该文自述为调研预测，非平台实测），中国出海短剧App内购收入约11.82亿美元、约占海外93%（仅 App 内购口径），下载约12.21亿次、约占85%。\n\n证据不足或不能成立的领先：\n① 中国模型并非集体领先：可灵在同一个 AA 带音频榜上仅列第18–19位（Elo 1022 与 1000，其中1000为该榜固定锚点），Vidu Q3 Pro 第27、PixVerse V6 第21；换一个榜单（llm-stats 的 TrueSkill 体系）冠军又变成可灵——“谁第一”高度依赖榜单口径与是否计入音频，不能当作稳定事实；\n② 长视频/长叙事仍是“多轮延长”拼接而非一次生成；字节官方承认“复杂运动的物理合理性、极多主体交互场景的稳定性仍有提升空间”；\n③ “中国AI短剧全球断层领先”缺少第三方（非券商/非自媒体）同期对比数据；美国并非没有AI短剧，而是缺少本土竖屏付费分发渠道，大量AI竖屏供给发生在中国公司运营的App内；\n④ AI短剧在海外**收入**中的占比仍小：若以媒体估算的2026年AI短剧收入约6.5亿美元（该数字本次未能追溯到原文，仅见二手转述）除以某调研报告预测的约60亿美元海外大盘（分母为“App内购30亿＋TikTok/YouTube分账18亿＋网页10亿”的预测值），得约11%——分子为估算、分母为预测，仅作量级参考；相对地，据 DataEye 2026年5月经转述的摘要数据，海外投放大盘中AI占比“8成以上”（仅摘要级、未见原报告）——供给与投放渗透明显高于收入渗透。",
+            "sha256": "4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc",
+            "key": "inline:4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc"
+          },
+          "evidence": [
+            {
+              "job_id": "1b783b2d4605.job.1",
+              "ref": "",
+              "sha256": "450e8d277211a001e049e3ac6184d086c471ec48dd36dc54d304a3199ecf7021",
+              "key": "1b783b2d4605.job.1",
+              "web_evidence_sha256": "ef79030356cfbe09dc33878dc2a347a584b459edf42b3bb02152a7c1c4bccae0"
+            },
+            {
+              "job_id": "1b783b2d4605.job.2",
+              "ref": "",
+              "sha256": "a79f9632a47c646b0982be47ef4ed468a7431fd40cd33d59cf3a06402aefe85d",
+              "key": "1b783b2d4605.job.2",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 1
+                }
+              ],
+              "acquisition_sha256": "64a9cba03bea5ac7e947884965ac898bc46016ed7f111656326e5edb9949d328",
+              "corpus_evidence_sha256": "bde7bfd24ba3f1cce166d2a143ece4c30fcbcea11069e636a0af7ba2844ac95c",
+              "web_evidence_sha256": "693ab081bcab84113968db6e9858e7d086e1a8d002522debda4ea2b61d377ccb"
+            },
+            {
+              "job_id": "1b783b2d4605.job.3",
+              "ref": "",
+              "sha256": "90bb2de0f8eb6383d49db7ad82264fa81d7507ed5bca4cb0c43c426af85642a5",
+              "key": "1b783b2d4605.job.3",
+              "web_evidence_sha256": "9dd5b5195164aab9b0454234594f9160056cb5b9f2286b05b19f9985667414f2"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "22ffbad3f88d0cf65a54582e464d97a4f74d51b1016cee667a41d0a33fc2de29",
+          "required": true,
+          "replaces_job_id": "1b783b2d4605.job.4",
+          "revision_reason": "候选字节因数字/归属限定语修正而改变（新增 Silent 榜标注、厂商自述标注、调研预测标注、Q1/Q2 口径不同源说明、6.5亿美元可追溯性说明），lead_claim 所绑定的文本已非上一轮版本，需对新版本重新出具 verdict。",
+          "revision_kind": "subject"
+        }
+      ],
+      "verification_events": [],
+      "coverage_status": "incomplete",
+      "coverage_resolved_by": []
+    },
+    {
+      "job_id": "1b783b2d4605.job.6",
+      "agent": "claims_verifier",
+      "required": true,
+      "status": "complete",
+      "reason": "",
+      "source": "",
+      "content_acquisition": [],
+      "verification_checks": [
+        {
+          "protocol_version": 2,
+          "check_id": "numbers",
+          "work_item_id": "t4",
+          "criterion": "答复中每个关键数字（成本降幅、周期、市场规模、收入、下载量、榜单位次）必须能对应到所引来源的实体、口径、时间与单位，且不得把预测值写成实测值、把厂商自述写成第三方结论",
+          "subject": {
+            "text": "先校正前提：“断层式领先”在**产能与应用渗透**维度大体成立，在**绝对技术能力**维度不成立，必须分维度看。\n\n有证据支持的领先：\n① 第三方盲测榜首是中国模型——Artificial Analysis 视频榜（2026年11月抓取）文生视频第一为阿里 Wan 3.0（Elo 1172，该榜31个模型、7,179个样本），图生视频第一为字节 Dreamina Seedance 2.5（Elo 1159）；\n② 中国厂商率先把“30秒原生单镜＋原生音频＋多镜头”做成量产规格——据厂商公布：Seedance 2.5 单次30秒、可多轮延长（2026-07-31发布），Wan 3.0 单次30秒（2026-08-06公测），MiniMax H3 为15秒/2K/原生立体声＋原生多镜头（该页正文本次未取到，属厂商自述）；\n③ 前沿开源权重基本只有中国实验室在放——AA“无声（Silent）”版榜单中，开源权重文生视频榜首为 MiniMax H3（Elo 1120，AA-Video-T2V-Silent v2.1；同一模型在带音频榜为1160），而 MiniMax 当时仅表示“计划在数日内开放权重”；\n④ 应用侧渗透率属全球最高的一档：2026年一季度AI占上线微短剧>95%（DataEye 口径、经转述），二季度约15.3万部（中国网络视听协会《微短剧创作指引（2026Q2）》口径，环比+25%；该口径下二季度总上线23.9万部、AI占 64%，与一季度的>95%不同源，不可直接比较），抖音端2026上半年新增AI剧/漫剧22.19万部（DataEye）；\n⑤ 出海分发端中国厂商占绝对多数：据 DataEye 2026年上半年“调研预测”（该文自述为调研预测，非平台实测），中国出海短剧App内购收入约11.82亿美元、约占海外93%（仅 App 内购口径），下载约12.21亿次、约占85%。\n\n证据不足或不能成立的领先：\n① 中国模型并非集体领先：可灵在同一个 AA 带音频榜上仅列第18–19位（Elo 1022 与 1000，其中1000为该榜固定锚点），Vidu Q3 Pro 第27、PixVerse V6 第21；换一个榜单（llm-stats 的 TrueSkill 体系）冠军又变成可灵——“谁第一”高度依赖榜单口径与是否计入音频，不能当作稳定事实；\n② 长视频/长叙事仍是“多轮延长”拼接而非一次生成；字节官方承认“复杂运动的物理合理性、极多主体交互场景的稳定性仍有提升空间”；\n③ “中国AI短剧全球断层领先”缺少第三方（非券商/非自媒体）同期对比数据；美国并非没有AI短剧，而是缺少本土竖屏付费分发渠道，大量AI竖屏供给发生在中国公司运营的App内；\n④ AI短剧在海外**收入**中的占比仍小：若以媒体估算的2026年AI短剧收入约6.5亿美元（该数字本次未能追溯到原文，仅见二手转述）除以某调研报告预测的约60亿美元海外大盘（分母为“App内购30亿＋TikTok/YouTube分账18亿＋网页10亿”的预测值），得约11%——分子为估算、分母为预测，仅作量级参考；相对地，据 DataEye 2026年5月经转述的摘要数据，海外投放大盘中AI占比“8成以上”（仅摘要级、未见原报告）——供给与投放渗透明显高于收入渗透。",
+            "sha256": "4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc",
+            "key": "inline:4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc"
+          },
+          "evidence": [
+            {
+              "job_id": "1b783b2d4605.job.1",
+              "ref": "",
+              "sha256": "450e8d277211a001e049e3ac6184d086c471ec48dd36dc54d304a3199ecf7021",
+              "key": "1b783b2d4605.job.1",
+              "web_evidence_sha256": "ef79030356cfbe09dc33878dc2a347a584b459edf42b3bb02152a7c1c4bccae0"
+            },
+            {
+              "job_id": "1b783b2d4605.job.2",
+              "ref": "",
+              "sha256": "a79f9632a47c646b0982be47ef4ed468a7431fd40cd33d59cf3a06402aefe85d",
+              "key": "1b783b2d4605.job.2",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 1
+                }
+              ],
+              "acquisition_sha256": "64a9cba03bea5ac7e947884965ac898bc46016ed7f111656326e5edb9949d328",
+              "corpus_evidence_sha256": "bde7bfd24ba3f1cce166d2a143ece4c30fcbcea11069e636a0af7ba2844ac95c",
+              "web_evidence_sha256": "693ab081bcab84113968db6e9858e7d086e1a8d002522debda4ea2b61d377ccb"
+            },
+            {
+              "job_id": "1b783b2d4605.job.3",
+              "ref": "",
+              "sha256": "90bb2de0f8eb6383d49db7ad82264fa81d7507ed5bca4cb0c43c426af85642a5",
+              "key": "1b783b2d4605.job.3",
+              "web_evidence_sha256": "9dd5b5195164aab9b0454234594f9160056cb5b9f2286b05b19f9985667414f2"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "32742964347c939b8ac386f0dfad07a479321164e47b1c3efdfd2d19dcfa090b",
+          "required": true,
+          "replaces_job_id": "1b783b2d4605.job.5",
+          "revision_reason": "",
+          "revision_kind": "retry"
+        },
+        {
+          "protocol_version": 2,
+          "check_id": "lead_claim",
+          "work_item_id": "t4",
+          "criterion": "“断层式领先”的表述必须区分：哪些维度有证据支持（如开源/商用视频模型的可及性与产能、短剧应用侧渗透），哪些维度证据不足（如绝对画质、长视频叙事、欧美主流影视工业化采用），不得把局部领先表述为全面断层领先",
+          "subject": {
+            "text": "先校正前提：“断层式领先”在**产能与应用渗透**维度大体成立，在**绝对技术能力**维度不成立，必须分维度看。\n\n有证据支持的领先：\n① 第三方盲测榜首是中国模型——Artificial Analysis 视频榜（2026年11月抓取）文生视频第一为阿里 Wan 3.0（Elo 1172，该榜31个模型、7,179个样本），图生视频第一为字节 Dreamina Seedance 2.5（Elo 1159）；\n② 中国厂商率先把“30秒原生单镜＋原生音频＋多镜头”做成量产规格——据厂商公布：Seedance 2.5 单次30秒、可多轮延长（2026-07-31发布），Wan 3.0 单次30秒（2026-08-06公测），MiniMax H3 为15秒/2K/原生立体声＋原生多镜头（该页正文本次未取到，属厂商自述）；\n③ 前沿开源权重基本只有中国实验室在放——AA“无声（Silent）”版榜单中，开源权重文生视频榜首为 MiniMax H3（Elo 1120，AA-Video-T2V-Silent v2.1；同一模型在带音频榜为1160），而 MiniMax 当时仅表示“计划在数日内开放权重”；\n④ 应用侧渗透率属全球最高的一档：2026年一季度AI占上线微短剧>95%（DataEye 口径、经转述），二季度约15.3万部（中国网络视听协会《微短剧创作指引（2026Q2）》口径，环比+25%；该口径下二季度总上线23.9万部、AI占 64%，与一季度的>95%不同源，不可直接比较），抖音端2026上半年新增AI剧/漫剧22.19万部（DataEye）；\n⑤ 出海分发端中国厂商占绝对多数：据 DataEye 2026年上半年“调研预测”（该文自述为调研预测，非平台实测），中国出海短剧App内购收入约11.82亿美元、约占海外93%（仅 App 内购口径），下载约12.21亿次、约占85%。\n\n证据不足或不能成立的领先：\n① 中国模型并非集体领先：可灵在同一个 AA 带音频榜上仅列第18–19位（Elo 1022 与 1000，其中1000为该榜固定锚点），Vidu Q3 Pro 第27、PixVerse V6 第21；换一个榜单（llm-stats 的 TrueSkill 体系）冠军又变成可灵——“谁第一”高度依赖榜单口径与是否计入音频，不能当作稳定事实；\n② 长视频/长叙事仍是“多轮延长”拼接而非一次生成；字节官方承认“复杂运动的物理合理性、极多主体交互场景的稳定性仍有提升空间”；\n③ “中国AI短剧全球断层领先”缺少第三方（非券商/非自媒体）同期对比数据；美国并非没有AI短剧，而是缺少本土竖屏付费分发渠道，大量AI竖屏供给发生在中国公司运营的App内；\n④ AI短剧在海外**收入**中的占比仍小：若以媒体估算的2026年AI短剧收入约6.5亿美元（该数字本次未能追溯到原文，仅见二手转述）除以某调研报告预测的约60亿美元海外大盘（分母为“App内购30亿＋TikTok/YouTube分账18亿＋网页10亿”的预测值），得约11%——分子为估算、分母为预测，仅作量级参考；相对地，据 DataEye 2026年5月经转述的摘要数据，海外投放大盘中AI占比“8成以上”（仅摘要级、未见原报告）——供给与投放渗透明显高于收入渗透。",
+            "sha256": "4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc",
+            "key": "inline:4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc"
+          },
+          "evidence": [
+            {
+              "job_id": "1b783b2d4605.job.1",
+              "ref": "",
+              "sha256": "450e8d277211a001e049e3ac6184d086c471ec48dd36dc54d304a3199ecf7021",
+              "key": "1b783b2d4605.job.1",
+              "web_evidence_sha256": "ef79030356cfbe09dc33878dc2a347a584b459edf42b3bb02152a7c1c4bccae0"
+            },
+            {
+              "job_id": "1b783b2d4605.job.2",
+              "ref": "",
+              "sha256": "a79f9632a47c646b0982be47ef4ed468a7431fd40cd33d59cf3a06402aefe85d",
+              "key": "1b783b2d4605.job.2",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 1
+                }
+              ],
+              "acquisition_sha256": "64a9cba03bea5ac7e947884965ac898bc46016ed7f111656326e5edb9949d328",
+              "corpus_evidence_sha256": "bde7bfd24ba3f1cce166d2a143ece4c30fcbcea11069e636a0af7ba2844ac95c",
+              "web_evidence_sha256": "693ab081bcab84113968db6e9858e7d086e1a8d002522debda4ea2b61d377ccb"
+            },
+            {
+              "job_id": "1b783b2d4605.job.3",
+              "ref": "",
+              "sha256": "90bb2de0f8eb6383d49db7ad82264fa81d7507ed5bca4cb0c43c426af85642a5",
+              "key": "1b783b2d4605.job.3",
+              "web_evidence_sha256": "9dd5b5195164aab9b0454234594f9160056cb5b9f2286b05b19f9985667414f2"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "22ffbad3f88d0cf65a54582e464d97a4f74d51b1016cee667a41d0a33fc2de29",
+          "required": true,
+          "replaces_job_id": "1b783b2d4605.job.5",
+          "revision_reason": "",
+          "revision_kind": "retry"
+        }
+      ],
+      "verification_events": [
+        {
+          "check_id": "numbers",
+          "binding_id": "32742964347c939b8ac386f0dfad07a479321164e47b1c3efdfd2d19dcfa090b",
+          "subject_sha256": "4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc",
+          "verdict": "fail",
+          "method": "逐项比对 subject.text 与 job.1（AA T2V/I2V v2.1 表+FAQ、Seedance 博文）、job.2（DataEye/协会Q1Q2）、job.3（60亿预测分项）；重算 15.3/23.9=64.0%、15.3/12.2=+25.4%、6.5/58=11.2%、30+18+10=58。",
+          "detail": "上一轮6项缺陷均已消除：①DataEye 2026H1 集群标“调研预测”；②60亿标预测、11%标分子估算/分母预测；③6.5亿明示未追溯；④“8成以上”给出 DataEye/2026-05/仅摘要级；⑤Wan 3.0、H3 规格标“据厂商公布/厂商自述”；⑥1120 标 AA-Video-T2V-Silent v2.1。新限定语准确：Q1>95%(DataEye,12.8万中12.2万)与Q2 64%(协会,23.9万中15.3万)确为不同机构不同分母；H3 带音频1160与Silent 1120同见 AA FAQ；可灵1000确为 v2.1 表“Anchor fixed at 1000”。仍存两项口径缺陷：a)“该榜31个模型、7,179个样本”将 Wan 3.0 单模型样本数写作榜单样本数；b)“环比+25%”系 15.3万(协会Q2)对 12.2万(DataEye Q1) 跨源相除，而同句已称两源“不同源、不可直接比较”，协会自身Q1基数未交付。另“约60亿”在 job.3 为“预测>60亿”且分项合计58亿；11.82亿美元/93%/12.21亿次/85% 与“数日内开放权重”引语在交付证据原文中缺失（正文被省略），仅能核标签不能核数值。",
+          "evidence_keys": [
+            "1b783b2d4605.job.1",
+            "1b783b2d4605.job.2",
+            "1b783b2d4605.job.3"
+          ],
+          "scope_assessment": {
+            "entity": {
+              "status": "match",
+              "detail": "Wan 3.0(1172)、Seedance 2.5(1159 I2V)、H3(1160/1120)、可灵(1022/1000)、Vidu Q3 Pro(27)、PixVerse V6(21) 均对应 job.1 AA v2.1 表行，DataEye/协会数字对应 job.2。"
+            },
+            "version": {
+              "status": "match",
+              "detail": "Silent 榜明标 AA-Video-T2V-Silent v2.1，1120/1160 与 job.1 AA FAQ 原文一致。"
+            },
+            "date": {
+              "status": "match",
+              "detail": "2026-11 抓取、2026-07-31 发布、2026Q1/Q2、2026H1 均与 job.1/job.2 记载时点一致。"
+            },
+            "units": {
+              "status": "mismatch",
+              "detail": "“该榜31个模型、7,179个样本”把 Wan 3.0 单模型样本数当作榜单样本数，实体与计数单位错位。"
+            },
+            "conditions": {
+              "status": "mismatch",
+              "detail": "“环比+25%”以协会Q2 15.3万部比 DataEye Q1 12.2万部，与同句“两源不同源、不可直接比较”的限定冲突，基期口径未见于证据。"
+            },
+            "attribution": {
+              "status": "match",
+              "detail": "厂商规格标“据厂商公布”、H3 标“正文未取到属厂商自述”、60亿标预测、6.5亿标未追溯、8成以上标摘要级，未把自述写成第三方结论。"
+            }
+          },
+          "unresolved_issues": [
+            "“该榜31个模型、7,179个样本”：7,179 是 Wan 3.0 的样本数（AA v2.1 表第1行），被表述为榜单样本数，口径错位。",
+            "“环比+25%”=15.3万(协会Q2)/12.2万(DataEye Q1)−1，与同句“不同源不可直接比较”矛盾；协会自身Q1基数未交付，该环比不可追溯。",
+            "“约60亿美元”与 job.3 原文“预测>60亿”及分项 30+18+10=58亿不符，11% 分母取58时为11.2%。",
+            "UNCHECKED：11.82亿美元/93%/12.21亿次/85% 与“计划在数日内开放权重”引语在交付证据原文中缺失（网页正文被省略），只能核标签不能核数值。"
+          ],
+          "job_id": "1b783b2d4605.job.6"
+        },
+        {
+          "check_id": "lead_claim",
+          "binding_id": "22ffbad3f88d0cf65a54582e464d97a4f74d51b1016cee667a41d0a33fc2de29",
+          "subject_sha256": "4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc",
+          "verdict": "fail",
+          "method": "逐项比对 subject.text 两栏划分与 job.1 AA v2.1 榜/FAQ、job.2 渗透数据、job.3 未核实缺口清单；核验每个被列为“有证据支持”的维度是否有对应证据实体与对照基准。",
+          "detail": "分维度结构已建立：开篇限定“产能与应用渗透大体成立、绝对技术能力不成立”，并将开源权重可及性(AA FAQ：H3 Silent 1120 开源首位)、30秒规格、应用侧渗透、出海分发列为有证据支持，将榜单口径依赖(可灵1022/1000、Vidu 27、PixVerse 21)、长叙事拼接、缺第三方对比、收入占比小列为不足；未再作全面断层结论。但两处仍把局部写成领先：(a)“应用侧渗透率属全球最高的一档”仅有中国境内数据(>95%、64%、22.19万部)支撑，job.3 自列“未取得跨国同期对比”；(b) 开篇“产能维度大体成立”无跨国对照，与下文“缺少第三方对比数据”矛盾。另“绝对画质”未单列为证据不足维度，仅以 Elo 偏好间接体现。",
+          "evidence_keys": [
+            "1b783b2d4605.job.1",
+            "1b783b2d4605.job.2",
+            "1b783b2d4605.job.3"
+          ],
+          "scope_assessment": {
+            "entity": {
+              "status": "match",
+              "detail": "Wan 3.0、Seedance 2.5、可灵、H3、Vidu/PixVerse 及 DataEye/协会口径均与 job.1/job.2 实体一致。"
+            },
+            "version": {
+              "status": "match",
+              "detail": "Silent 榜明标 AA-Video-T2V-Silent v2.1，与 job.1 AA FAQ 同版。"
+            },
+            "date": {
+              "status": "match",
+              "detail": "2026-11 抓取、2026Q1/Q2、2026H1 与 job.1/job.2 记载时点一致。"
+            },
+            "units": {
+              "status": "match",
+              "detail": "Elo 分、部数、占比、亿美元等单位与证据一致，未见量纲混用。"
+            },
+            "conditions": {
+              "status": "mismatch",
+              "detail": "“渗透率全球最高的一档”“产能维度大体成立”均为全球比较结论，但支撑数据仅限中国境内且 job.3 明列无跨国对照，条件不成立。"
+            },
+            "attribution": {
+              "status": "match",
+              "detail": "已区分厂商自述、券商/媒体转述与第三方盲测，并标注缺第三方同期对比。"
+            }
+          },
+          "unresolved_issues": [
+            "“应用侧渗透率属全球最高的一档”置于“有证据支持”栏，但仅有中国境内数据(Q1>95%、Q2 64%、抖音22.19万部)，无跨国对照证据。",
+            "开篇“产能维度大体成立”无跨国产能对照，与下文③“缺少第三方（非券商/非自媒体）同期对比数据”自相矛盾。",
+            "“绝对画质”未单列为证据不足维度，仅以 Elo 盲测偏好间接体现，且未说明 Elo 为偏好而非绝对画质度量。",
+            "“欧美主流影视工业化采用”仅以“缺本土竖屏付费分发渠道”侧面触及，未明确归入证据不足维度。"
+          ],
+          "job_id": "1b783b2d4605.job.6"
+        }
+      ],
+      "coverage_status": "incomplete",
+      "coverage_resolved_by": []
+    }
+  ],
+  "required_work_basis": "dispatch_declared",
+  "verification": "failed",
+  "verification_basis": "version_bound_member_verdicts",
+  "verification_checks": [
+    {
+      "check_id": "lead_claim",
+      "work_item_id": "t4",
+      "criterion": "“断层式领先”的表述必须区分：哪些维度有证据支持（如开源/商用视频模型的可及性与产能、短剧应用侧渗透），哪些维度证据不足（如绝对画质、长视频叙事、欧美主流影视工业化采用），不得把局部领先表述为全面断层领先",
+      "binding_id": "22ffbad3f88d0cf65a54582e464d97a4f74d51b1016cee667a41d0a33fc2de29",
+      "required": true,
+      "factual_scope": true,
+      "publication_excerpt": true,
+      "verdict": "fail",
+      "subject": {
+        "text": "先校正前提：“断层式领先”在**产能与应用渗透**维度大体成立，在**绝对技术能力**维度不成立，必须分维度看。\n\n有证据支持的领先：\n① 第三方盲测榜首是中国模型——Artificial Analysis 视频榜（2026年11月抓取）文生视频第一为阿里 Wan 3.0（Elo 1172，该榜31个模型、7,179个样本），图生视频第一为字节 Dreamina Seedance 2.5（Elo 1159）；\n② 中国厂商率先把“30秒原生单镜＋原生音频＋多镜头”做成量产规格——据厂商公布：Seedance 2.5 单次30秒、可多轮延长（2026-07-31发布），Wan 3.0 单次30秒（2026-08-06公测），MiniMax H3 为15秒/2K/原生立体声＋原生多镜头（该页正文本次未取到，属厂商自述）；\n③ 前沿开源权重基本只有中国实验室在放——AA“无声（Silent）”版榜单中，开源权重文生视频榜首为 MiniMax H3（Elo 1120，AA-Video-T2V-Silent v2.1；同一模型在带音频榜为1160），而 MiniMax 当时仅表示“计划在数日内开放权重”；\n④ 应用侧渗透率属全球最高的一档：2026年一季度AI占上线微短剧>95%（DataEye 口径、经转述），二季度约15.3万部（中国网络视听协会《微短剧创作指引（2026Q2）》口径，环比+25%；该口径下二季度总上线23.9万部、AI占 64%，与一季度的>95%不同源，不可直接比较），抖音端2026上半年新增AI剧/漫剧22.19万部（DataEye）；\n⑤ 出海分发端中国厂商占绝对多数：据 DataEye 2026年上半年“调研预测”（该文自述为调研预测，非平台实测），中国出海短剧App内购收入约11.82亿美元、约占海外93%（仅 App 内购口径），下载约12.21亿次、约占85%。\n\n证据不足或不能成立的领先：\n① 中国模型并非集体领先：可灵在同一个 AA 带音频榜上仅列第18–19位（Elo 1022 与 1000，其中1000为该榜固定锚点），Vidu Q3 Pro 第27、PixVerse V6 第21；换一个榜单（llm-stats 的 TrueSkill 体系）冠军又变成可灵——“谁第一”高度依赖榜单口径与是否计入音频，不能当作稳定事实；\n② 长视频/长叙事仍是“多轮延长”拼接而非一次生成；字节官方承认“复杂运动的物理合理性、极多主体交互场景的稳定性仍有提升空间”；\n③ “中国AI短剧全球断层领先”缺少第三方（非券商/非自媒体）同期对比数据；美国并非没有AI短剧，而是缺少本土竖屏付费分发渠道，大量AI竖屏供给发生在中国公司运营的App内；\n④ AI短剧在海外**收入**中的占比仍小：若以媒体估算的2026年AI短剧收入约6.5亿美元（该数字本次未能追溯到原文，仅见二手转述）除以某调研报告预测的约60亿美元海外大盘（分母为“App内购30亿＋TikTok/YouTube分账18亿＋网页10亿”的预测值），得约11%——分子为估算、分母为预测，仅作量级参考；相对地，据 DataEye 2026年5月经转述的摘要数据，海外投放大盘中AI占比“8成以上”（仅摘要级、未见原报告）——供给与投放渗透明显高于收入渗透。",
+        "sha256": "4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc",
+        "key": "inline:4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc"
+      },
+      "evidence": [
+        {
+          "job_id": "1b783b2d4605.job.1",
+          "ref": "",
+          "sha256": "450e8d277211a001e049e3ac6184d086c471ec48dd36dc54d304a3199ecf7021",
+          "key": "1b783b2d4605.job.1",
+          "web_evidence_sha256": "ef79030356cfbe09dc33878dc2a347a584b459edf42b3bb02152a7c1c4bccae0"
+        },
+        {
+          "job_id": "1b783b2d4605.job.2",
+          "ref": "",
+          "sha256": "a79f9632a47c646b0982be47ef4ed468a7431fd40cd33d59cf3a06402aefe85d",
+          "key": "1b783b2d4605.job.2",
+          "corpus_limits": [
+            {
+              "tool": "corpus_search",
+              "obtained": true,
+              "coverage": {
+                "processing": "partial",
+                "availability": "unknown",
+                "purity": {
+                  "scope": "bounded_candidates_not_corpus_absence"
+                },
+                "native": {
+                  "unknown_date_sources": true
+                }
+              },
+              "limited_observations": 1
+            }
+          ],
+          "acquisition_sha256": "64a9cba03bea5ac7e947884965ac898bc46016ed7f111656326e5edb9949d328",
+          "corpus_evidence_sha256": "bde7bfd24ba3f1cce166d2a143ece4c30fcbcea11069e636a0af7ba2844ac95c",
+          "web_evidence_sha256": "693ab081bcab84113968db6e9858e7d086e1a8d002522debda4ea2b61d377ccb"
+        },
+        {
+          "job_id": "1b783b2d4605.job.3",
+          "ref": "",
+          "sha256": "90bb2de0f8eb6383d49db7ad82264fa81d7507ed5bca4cb0c43c426af85642a5",
+          "key": "1b783b2d4605.job.3",
+          "web_evidence_sha256": "9dd5b5195164aab9b0454234594f9160056cb5b9f2286b05b19f9985667414f2"
+        }
+      ],
+      "job_id": "1b783b2d4605.job.6",
+      "verdict_job_id": "1b783b2d4605.job.6",
+      "result": {
+        "check_id": "lead_claim",
+        "binding_id": "22ffbad3f88d0cf65a54582e464d97a4f74d51b1016cee667a41d0a33fc2de29",
+        "subject_sha256": "4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc",
+        "verdict": "fail",
+        "method": "逐项比对 subject.text 两栏划分与 job.1 AA v2.1 榜/FAQ、job.2 渗透数据、job.3 未核实缺口清单；核验每个被列为“有证据支持”的维度是否有对应证据实体与对照基准。",
+        "detail": "分维度结构已建立：开篇限定“产能与应用渗透大体成立、绝对技术能力不成立”，并将开源权重可及性(AA FAQ：H3 Silent 1120 开源首位)、30秒规格、应用侧渗透、出海分发列为有证据支持，将榜单口径依赖(可灵1022/1000、Vidu 27、PixVerse 21)、长叙事拼接、缺第三方对比、收入占比小列为不足；未再作全面断层结论。但两处仍把局部写成领先：(a)“应用侧渗透率属全球最高的一档”仅有中国境内数据(>95%、64%、22.19万部)支撑，job.3 自列“未取得跨国同期对比”；(b) 开篇“产能维度大体成立”无跨国对照，与下文“缺少第三方对比数据”矛盾。另“绝对画质”未单列为证据不足维度，仅以 Elo 偏好间接体现。",
+        "evidence_keys": [
+          "1b783b2d4605.job.1",
+          "1b783b2d4605.job.2",
+          "1b783b2d4605.job.3"
+        ],
+        "scope_assessment": {
+          "entity": {
+            "status": "match",
+            "detail": "Wan 3.0、Seedance 2.5、可灵、H3、Vidu/PixVerse 及 DataEye/协会口径均与 job.1/job.2 实体一致。"
+          },
+          "version": {
+            "status": "match",
+            "detail": "Silent 榜明标 AA-Video-T2V-Silent v2.1，与 job.1 AA FAQ 同版。"
+          },
+          "date": {
+            "status": "match",
+            "detail": "2026-11 抓取、2026Q1/Q2、2026H1 与 job.1/job.2 记载时点一致。"
+          },
+          "units": {
+            "status": "match",
+            "detail": "Elo 分、部数、占比、亿美元等单位与证据一致，未见量纲混用。"
+          },
+          "conditions": {
+            "status": "mismatch",
+            "detail": "“渗透率全球最高的一档”“产能维度大体成立”均为全球比较结论，但支撑数据仅限中国境内且 job.3 明列无跨国对照，条件不成立。"
+          },
+          "attribution": {
+            "status": "match",
+            "detail": "已区分厂商自述、券商/媒体转述与第三方盲测，并标注缺第三方同期对比。"
+          }
+        },
+        "unresolved_issues": [
+          "“应用侧渗透率属全球最高的一档”置于“有证据支持”栏，但仅有中国境内数据(Q1>95%、Q2 64%、抖音22.19万部)，无跨国对照证据。",
+          "开篇“产能维度大体成立”无跨国产能对照，与下文③“缺少第三方（非券商/非自媒体）同期对比数据”自相矛盾。",
+          "“绝对画质”未单列为证据不足维度，仅以 Elo 盲测偏好间接体现，且未说明 Elo 为偏好而非绝对画质度量。",
+          "“欧美主流影视工业化采用”仅以“缺本土竖屏付费分发渠道”侧面触及，未明确归入证据不足维度。"
+        ],
+        "job_id": "1b783b2d4605.job.6"
+      },
+      "attempts": [
+        {
+          "protocol_version": 2,
+          "check_id": "lead_claim",
+          "work_item_id": "t4",
+          "criterion": "“断层式领先”的表述必须区分：哪些维度有证据支持（如开源/商用视频模型的可及性与产能、短剧应用侧渗透），哪些维度证据不足（如绝对画质、长视频叙事、欧美主流影视工业化采用），不得把局部领先表述为全面断层领先",
+          "subject": {
+            "text": "先校正前提：“断层式领先”在**产能与应用渗透**维度大体成立，在**绝对技术能力**维度不成立，必须分维度看。\n\n有证据支持的领先：\n① 第三方盲测榜首是中国模型——Artificial Analysis 视频榜（2026年11月抓取）文生视频第一为阿里 Wan 3.0（Elo 1172，样本31个模型），图生视频第一为字节 Dreamina Seedance 2.5（Elo 1159）；\n② 中国厂商率先把“30秒原生单镜＋原生音频＋多镜头”做成量产规格：Seedance 2.5 单次30秒（2026-07-31发布）、Wan 3.0 单次30秒（2026-08-06公测）、MiniMax H3 为15秒/2K/原生立体声＋原生多镜头；\n③ 前沿开源权重基本只有中国实验室在放：AA 称开源权重文生视频榜首为 MiniMax H3（Elo 1120）；\n④ 应用侧渗透率全球最高：2026年二季度中国上线AI微短剧约15.3万部（环比+25%），2026年一季度AI占上线微短剧>95%（中国网络视听协会口径，经转述）；抖音端2026上半年新增AI剧/漫剧22.19万部；\n⑤ 出海分发端中国厂商占绝对多数：DataEye 2026上半年口径，中国出海短剧App内购收入11.82亿美元、约占海外93%，下载12.21亿次、约占85%。\n\n证据不足或不能成立的领先：\n① 中国模型并非集体领先：可灵在同一个 AA 榜上仅列第18–19位（Elo 1000–1022，其中1000为该榜锚点），Vidu Q3 Pro 第27、PixVerse V6 第21；换一个榜单（llm-stats 的 TrueSkill 体系）冠军又变成可灵——“谁第一”高度依赖榜单口径与是否计入音频，不能当作稳定事实；\n② 长视频/长叙事仍是“多轮延长”拼接而非一次生成；字节官方承认“复杂运动的物理合理性、极多主体交互场景的稳定性仍有提升空间”；\n③ “中国AI短剧全球断层领先”缺少第三方（非券商/非自媒体）同期对比数据；美国并非没有AI短剧，而是缺少本土竖屏付费分发渠道，大量AI竖屏供给发生在中国公司运营的App内；\n④ AI短剧在海外**收入**中的占比仍小（有媒体估算2026年约6.5亿美元、对60亿美元大盘约11%），而海外投放大盘中AI占比已“8成以上”——供给与投放渗透远高于收入渗透。",
+            "sha256": "4b937cf5d6ed8552c396600c213d9675ad2b239e4878d3f915d49cadad2dfdd5",
+            "key": "inline:4b937cf5d6ed8552c396600c213d9675ad2b239e4878d3f915d49cadad2dfdd5"
+          },
+          "evidence": [
+            {
+              "job_id": "1b783b2d4605.job.1",
+              "ref": "",
+              "sha256": "450e8d277211a001e049e3ac6184d086c471ec48dd36dc54d304a3199ecf7021",
+              "key": "1b783b2d4605.job.1",
+              "web_evidence_sha256": "ef79030356cfbe09dc33878dc2a347a584b459edf42b3bb02152a7c1c4bccae0"
+            },
+            {
+              "job_id": "1b783b2d4605.job.3",
+              "ref": "",
+              "sha256": "90bb2de0f8eb6383d49db7ad82264fa81d7507ed5bca4cb0c43c426af85642a5",
+              "key": "1b783b2d4605.job.3",
+              "web_evidence_sha256": "9dd5b5195164aab9b0454234594f9160056cb5b9f2286b05b19f9985667414f2"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "fd1a7a408011d982fbc0acc70c4b59b4df757366d2da4c288443cf9f5e94e463",
+          "required": true,
+          "replaces_job_id": "",
+          "revision_reason": "",
+          "revision_kind": "",
+          "job_id": "1b783b2d4605.job.4",
+          "execution_status": "complete",
+          "valid_lineage": true,
+          "verdict": "pass",
+          "events": [
+            {
+              "check_id": "lead_claim",
+              "binding_id": "fd1a7a408011d982fbc0acc70c4b59b4df757366d2da4c288443cf9f5e94e463",
+              "subject_sha256": "4b937cf5d6ed8552c396600c213d9675ad2b239e4878d3f915d49cadad2dfdd5",
+              "verdict": "pass",
+              "method": "Read the bound subject passage in full, then compared each '领先' and '证据不足' dimension against the tool-delivered originals: AA-Video-T2V v2.1 and AA-Video-I2V v2.1 tables plus AA open-weights FAQ (job.1), seed.bytedance.com Seedance 2.5 blog 2026-07-31 (job.1), llm-stats TrueSkill page (job.1), and job.3's A/B evidence tables (中国网络视听协会>95% 经转述, 15.3万部, 22.19万部, DataEye 11.82亿美元/93%, 12.21亿次/85%, '8成以上'). Checked that (i) each supported dimension has a named/dated source, (ii) each required insufficiency dimension is explicitly listed, (iii) no sentence converts partial into comprehensive leadership. No new fetch needed; the attached excerpts cover the quoted rows and FAQ text.",
+              "detail": "Dimension separation is explicit and complete: the opening sentence corrects the premise ('在产能与应用渗透维度大体成立，在绝对技术能力维度不成立，必须分维度看'), and the passage is split into '有证据支持的领先' ①–⑤ and '证据不足或不能成立的领先' ①–④. Supported side verified row-by-row: AA T2V #1 Wan 3.0 Elo 1172 (7,179 samples, 31-model board) and I2V #1 Dreamina Seedance 2.5 Elo 1159 match the fetched tables; open-weights leader MiniMax H3 Elo 1120 matches the AA FAQ sentence; Seedance 2.5 '单次30秒+多轮延长' matches the 2026-07-31 ByteDance blog; 2026Q1 '>95%' (labelled 中国网络视听协会口径, 经转述), 2026Q2 15.3万部/+25%, 抖音2026H1 22.19万部, and DataEye 2026H1 11.82亿美元≈93% IAP / 12.21亿次≈85% downloads all trace to job.3's tables with their 口径 retained (93% explicitly limited to App内购). Insufficiency side covers every example the criterion names: absolute quality (ByteDance's own '复杂运动的物理合理性…仍有提升空间'), long-video narrative ('多轮延长拼接而非一次生成'), Western mainstream industrial adoption (no third-party contemporaneous comparison; US vertical AI supply sits in Chinese-operated apps), and revenue-vs-supply penetration (≈$6.5亿 media estimate vs $60亿 pool ≈11%, against '8成以上' of the ad-spend pool). Leaderboard-dependence and the Kling #18–19 (Elo 1000 anchor / 1022) vs llm-stats #1 (arena score 1934) conflict are both retained, so no '某榜单第一=跨榜单第一' leap. Defects found are numbers/labeling-level, not dimensional conflation: '率先…做成量产规格' is a priority inference from vendor specs; '$60亿大盘' is a 调研预测 presented without the '预测' label; '8成以上' carries no attribution; the US-channel explanation is an unlabelled inference. These belong to the numbers check and do not make the passage present partial leadership as comprehensive, so this criterion passes.",
+              "evidence_keys": [
+                "1b783b2d4605.job.1",
+                "1b783b2d4605.job.3"
+              ],
+              "scope_assessment": {
+                "entity": {
+                  "status": "match",
+                  "detail": "Named entities match the evidence rows: Wan 3.0 (Alibaba), Dreamina Seedance 2.5 / Seedance 2.0 (ByteDance), MiniMax H3, Kling 3.0, PixVerse V6, Vidu Q3 Pro appear with the same identities in job.1's AA T2V/I2V tables and llm-stats page."
+                },
+                "version": {
+                  "status": "match",
+                  "detail": "The candidate anchors ranks to 'Artificial Analysis 视频榜（2026年11月抓取）', the same 2026-11 AA-Video-T2V/I2V v2.1 snapshot delivered in job.1, and uses 2026Q1/Q2/H1 windows for the job.3 penetration figures; only the open-weights 1120 is from the T2V-Silent v2.1 variant, an unstated variant label rather than a wrong version."
+                },
+                "date": {
+                  "status": "match",
+                  "detail": "Leaderboard capture 2026-11, Seedance 2.5 release 2026-07-31, Wan 3.0 public beta 2026-08-06, and the 2026Q1/Q2/H1 penetration windows all correspond to the dated rows in job.1 and job.3; no 2025 figure is presented as a 2026 measurement."
+                },
+                "units": {
+                  "status": "match",
+                  "detail": "Elo points, model counts, clip length (30秒/15秒), resolution (2K), 部 counts, USD IAP revenue, download counts and percentage shares are each used in the same unit as the bound source (Elo anchor 1000 noted as an anchor, 93%/85% as App内购 and download shares)."
+                },
+                "conditions": {
+                  "status": "match",
+                  "detail": "The conditions that decide the claim are kept: '>95%' is scoped to 中国网络视听协会口径经转述, 93% to App内购, the AA rank to one leaderboard captured 2026-11, and '8成以上' explicitly contrasted as 投放/供给 share versus the ~11% revenue share."
+                },
+                "attribution": {
+                  "status": "match",
+                  "detail": "Third-party (AA, DataEye, 中国网络视听协会经转述), media estimate ($6.5亿), and vendor self-statement (ByteDance's physics/stability admission) are attributed at the point of use, and the llm-stats vs AA conflict is attributed to differing leaderboard methodologies."
+                }
+              },
+              "unresolved_issues": [],
+              "job_id": "1b783b2d4605.job.4"
+            }
+          ]
+        },
+        {
+          "protocol_version": 2,
+          "check_id": "lead_claim",
+          "work_item_id": "t4",
+          "criterion": "“断层式领先”的表述必须区分：哪些维度有证据支持（如开源/商用视频模型的可及性与产能、短剧应用侧渗透），哪些维度证据不足（如绝对画质、长视频叙事、欧美主流影视工业化采用），不得把局部领先表述为全面断层领先",
+          "subject": {
+            "text": "先校正前提：“断层式领先”在**产能与应用渗透**维度大体成立，在**绝对技术能力**维度不成立，必须分维度看。\n\n有证据支持的领先：\n① 第三方盲测榜首是中国模型——Artificial Analysis 视频榜（2026年11月抓取）文生视频第一为阿里 Wan 3.0（Elo 1172，该榜31个模型、7,179个样本），图生视频第一为字节 Dreamina Seedance 2.5（Elo 1159）；\n② 中国厂商率先把“30秒原生单镜＋原生音频＋多镜头”做成量产规格——据厂商公布：Seedance 2.5 单次30秒、可多轮延长（2026-07-31发布），Wan 3.0 单次30秒（2026-08-06公测），MiniMax H3 为15秒/2K/原生立体声＋原生多镜头（该页正文本次未取到，属厂商自述）；\n③ 前沿开源权重基本只有中国实验室在放——AA“无声（Silent）”版榜单中，开源权重文生视频榜首为 MiniMax H3（Elo 1120，AA-Video-T2V-Silent v2.1；同一模型在带音频榜为1160），而 MiniMax 当时仅表示“计划在数日内开放权重”；\n④ 应用侧渗透率属全球最高的一档：2026年一季度AI占上线微短剧>95%（DataEye 口径、经转述），二季度约15.3万部（中国网络视听协会《微短剧创作指引（2026Q2）》口径，环比+25%；该口径下二季度总上线23.9万部、AI占 64%，与一季度的>95%不同源，不可直接比较），抖音端2026上半年新增AI剧/漫剧22.19万部（DataEye）；\n⑤ 出海分发端中国厂商占绝对多数：据 DataEye 2026年上半年“调研预测”（该文自述为调研预测，非平台实测），中国出海短剧App内购收入约11.82亿美元、约占海外93%（仅 App 内购口径），下载约12.21亿次、约占85%。\n\n证据不足或不能成立的领先：\n① 中国模型并非集体领先：可灵在同一个 AA 带音频榜上仅列第18–19位（Elo 1022 与 1000，其中1000为该榜固定锚点），Vidu Q3 Pro 第27、PixVerse V6 第21；换一个榜单（llm-stats 的 TrueSkill 体系）冠军又变成可灵——“谁第一”高度依赖榜单口径与是否计入音频，不能当作稳定事实；\n② 长视频/长叙事仍是“多轮延长”拼接而非一次生成；字节官方承认“复杂运动的物理合理性、极多主体交互场景的稳定性仍有提升空间”；\n③ “中国AI短剧全球断层领先”缺少第三方（非券商/非自媒体）同期对比数据；美国并非没有AI短剧，而是缺少本土竖屏付费分发渠道，大量AI竖屏供给发生在中国公司运营的App内；\n④ AI短剧在海外**收入**中的占比仍小：若以媒体估算的2026年AI短剧收入约6.5亿美元（该数字本次未能追溯到原文，仅见二手转述）除以某调研报告预测的约60亿美元海外大盘（分母为“App内购30亿＋TikTok/YouTube分账18亿＋网页10亿”的预测值），得约11%——分子为估算、分母为预测，仅作量级参考；相对地，据 DataEye 2026年5月经转述的摘要数据，海外投放大盘中AI占比“8成以上”（仅摘要级、未见原报告）——供给与投放渗透明显高于收入渗透。",
+            "sha256": "4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc",
+            "key": "inline:4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc"
+          },
+          "evidence": [
+            {
+              "job_id": "1b783b2d4605.job.1",
+              "ref": "",
+              "sha256": "450e8d277211a001e049e3ac6184d086c471ec48dd36dc54d304a3199ecf7021",
+              "key": "1b783b2d4605.job.1",
+              "web_evidence_sha256": "ef79030356cfbe09dc33878dc2a347a584b459edf42b3bb02152a7c1c4bccae0"
+            },
+            {
+              "job_id": "1b783b2d4605.job.2",
+              "ref": "",
+              "sha256": "a79f9632a47c646b0982be47ef4ed468a7431fd40cd33d59cf3a06402aefe85d",
+              "key": "1b783b2d4605.job.2",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 1
+                }
+              ],
+              "acquisition_sha256": "64a9cba03bea5ac7e947884965ac898bc46016ed7f111656326e5edb9949d328",
+              "corpus_evidence_sha256": "bde7bfd24ba3f1cce166d2a143ece4c30fcbcea11069e636a0af7ba2844ac95c",
+              "web_evidence_sha256": "693ab081bcab84113968db6e9858e7d086e1a8d002522debda4ea2b61d377ccb"
+            },
+            {
+              "job_id": "1b783b2d4605.job.3",
+              "ref": "",
+              "sha256": "90bb2de0f8eb6383d49db7ad82264fa81d7507ed5bca4cb0c43c426af85642a5",
+              "key": "1b783b2d4605.job.3",
+              "web_evidence_sha256": "9dd5b5195164aab9b0454234594f9160056cb5b9f2286b05b19f9985667414f2"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "22ffbad3f88d0cf65a54582e464d97a4f74d51b1016cee667a41d0a33fc2de29",
+          "required": true,
+          "replaces_job_id": "1b783b2d4605.job.4",
+          "revision_reason": "候选字节因数字/归属限定语修正而改变（新增 Silent 榜标注、厂商自述标注、调研预测标注、Q1/Q2 口径不同源说明、6.5亿美元可追溯性说明），lead_claim 所绑定的文本已非上一轮版本，需对新版本重新出具 verdict。",
+          "revision_kind": "subject",
+          "job_id": "1b783b2d4605.job.5",
+          "execution_status": "incomplete",
+          "valid_lineage": true,
+          "verdict": "unchecked",
+          "events": []
+        },
+        {
+          "protocol_version": 2,
+          "check_id": "lead_claim",
+          "work_item_id": "t4",
+          "criterion": "“断层式领先”的表述必须区分：哪些维度有证据支持（如开源/商用视频模型的可及性与产能、短剧应用侧渗透），哪些维度证据不足（如绝对画质、长视频叙事、欧美主流影视工业化采用），不得把局部领先表述为全面断层领先",
+          "subject": {
+            "text": "先校正前提：“断层式领先”在**产能与应用渗透**维度大体成立，在**绝对技术能力**维度不成立，必须分维度看。\n\n有证据支持的领先：\n① 第三方盲测榜首是中国模型——Artificial Analysis 视频榜（2026年11月抓取）文生视频第一为阿里 Wan 3.0（Elo 1172，该榜31个模型、7,179个样本），图生视频第一为字节 Dreamina Seedance 2.5（Elo 1159）；\n② 中国厂商率先把“30秒原生单镜＋原生音频＋多镜头”做成量产规格——据厂商公布：Seedance 2.5 单次30秒、可多轮延长（2026-07-31发布），Wan 3.0 单次30秒（2026-08-06公测），MiniMax H3 为15秒/2K/原生立体声＋原生多镜头（该页正文本次未取到，属厂商自述）；\n③ 前沿开源权重基本只有中国实验室在放——AA“无声（Silent）”版榜单中，开源权重文生视频榜首为 MiniMax H3（Elo 1120，AA-Video-T2V-Silent v2.1；同一模型在带音频榜为1160），而 MiniMax 当时仅表示“计划在数日内开放权重”；\n④ 应用侧渗透率属全球最高的一档：2026年一季度AI占上线微短剧>95%（DataEye 口径、经转述），二季度约15.3万部（中国网络视听协会《微短剧创作指引（2026Q2）》口径，环比+25%；该口径下二季度总上线23.9万部、AI占 64%，与一季度的>95%不同源，不可直接比较），抖音端2026上半年新增AI剧/漫剧22.19万部（DataEye）；\n⑤ 出海分发端中国厂商占绝对多数：据 DataEye 2026年上半年“调研预测”（该文自述为调研预测，非平台实测），中国出海短剧App内购收入约11.82亿美元、约占海外93%（仅 App 内购口径），下载约12.21亿次、约占85%。\n\n证据不足或不能成立的领先：\n① 中国模型并非集体领先：可灵在同一个 AA 带音频榜上仅列第18–19位（Elo 1022 与 1000，其中1000为该榜固定锚点），Vidu Q3 Pro 第27、PixVerse V6 第21；换一个榜单（llm-stats 的 TrueSkill 体系）冠军又变成可灵——“谁第一”高度依赖榜单口径与是否计入音频，不能当作稳定事实；\n② 长视频/长叙事仍是“多轮延长”拼接而非一次生成；字节官方承认“复杂运动的物理合理性、极多主体交互场景的稳定性仍有提升空间”；\n③ “中国AI短剧全球断层领先”缺少第三方（非券商/非自媒体）同期对比数据；美国并非没有AI短剧，而是缺少本土竖屏付费分发渠道，大量AI竖屏供给发生在中国公司运营的App内；\n④ AI短剧在海外**收入**中的占比仍小：若以媒体估算的2026年AI短剧收入约6.5亿美元（该数字本次未能追溯到原文，仅见二手转述）除以某调研报告预测的约60亿美元海外大盘（分母为“App内购30亿＋TikTok/YouTube分账18亿＋网页10亿”的预测值），得约11%——分子为估算、分母为预测，仅作量级参考；相对地，据 DataEye 2026年5月经转述的摘要数据，海外投放大盘中AI占比“8成以上”（仅摘要级、未见原报告）——供给与投放渗透明显高于收入渗透。",
+            "sha256": "4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc",
+            "key": "inline:4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc"
+          },
+          "evidence": [
+            {
+              "job_id": "1b783b2d4605.job.1",
+              "ref": "",
+              "sha256": "450e8d277211a001e049e3ac6184d086c471ec48dd36dc54d304a3199ecf7021",
+              "key": "1b783b2d4605.job.1",
+              "web_evidence_sha256": "ef79030356cfbe09dc33878dc2a347a584b459edf42b3bb02152a7c1c4bccae0"
+            },
+            {
+              "job_id": "1b783b2d4605.job.2",
+              "ref": "",
+              "sha256": "a79f9632a47c646b0982be47ef4ed468a7431fd40cd33d59cf3a06402aefe85d",
+              "key": "1b783b2d4605.job.2",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 1
+                }
+              ],
+              "acquisition_sha256": "64a9cba03bea5ac7e947884965ac898bc46016ed7f111656326e5edb9949d328",
+              "corpus_evidence_sha256": "bde7bfd24ba3f1cce166d2a143ece4c30fcbcea11069e636a0af7ba2844ac95c",
+              "web_evidence_sha256": "693ab081bcab84113968db6e9858e7d086e1a8d002522debda4ea2b61d377ccb"
+            },
+            {
+              "job_id": "1b783b2d4605.job.3",
+              "ref": "",
+              "sha256": "90bb2de0f8eb6383d49db7ad82264fa81d7507ed5bca4cb0c43c426af85642a5",
+              "key": "1b783b2d4605.job.3",
+              "web_evidence_sha256": "9dd5b5195164aab9b0454234594f9160056cb5b9f2286b05b19f9985667414f2"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "22ffbad3f88d0cf65a54582e464d97a4f74d51b1016cee667a41d0a33fc2de29",
+          "required": true,
+          "replaces_job_id": "1b783b2d4605.job.5",
+          "revision_reason": "",
+          "revision_kind": "retry",
+          "job_id": "1b783b2d4605.job.6",
+          "execution_status": "complete",
+          "valid_lineage": true,
+          "verdict": "fail",
+          "events": [
+            {
+              "check_id": "lead_claim",
+              "binding_id": "22ffbad3f88d0cf65a54582e464d97a4f74d51b1016cee667a41d0a33fc2de29",
+              "subject_sha256": "4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc",
+              "verdict": "fail",
+              "method": "逐项比对 subject.text 两栏划分与 job.1 AA v2.1 榜/FAQ、job.2 渗透数据、job.3 未核实缺口清单；核验每个被列为“有证据支持”的维度是否有对应证据实体与对照基准。",
+              "detail": "分维度结构已建立：开篇限定“产能与应用渗透大体成立、绝对技术能力不成立”，并将开源权重可及性(AA FAQ：H3 Silent 1120 开源首位)、30秒规格、应用侧渗透、出海分发列为有证据支持，将榜单口径依赖(可灵1022/1000、Vidu 27、PixVerse 21)、长叙事拼接、缺第三方对比、收入占比小列为不足；未再作全面断层结论。但两处仍把局部写成领先：(a)“应用侧渗透率属全球最高的一档”仅有中国境内数据(>95%、64%、22.19万部)支撑，job.3 自列“未取得跨国同期对比”；(b) 开篇“产能维度大体成立”无跨国对照，与下文“缺少第三方对比数据”矛盾。另“绝对画质”未单列为证据不足维度，仅以 Elo 偏好间接体现。",
+              "evidence_keys": [
+                "1b783b2d4605.job.1",
+                "1b783b2d4605.job.2",
+                "1b783b2d4605.job.3"
+              ],
+              "scope_assessment": {
+                "entity": {
+                  "status": "match",
+                  "detail": "Wan 3.0、Seedance 2.5、可灵、H3、Vidu/PixVerse 及 DataEye/协会口径均与 job.1/job.2 实体一致。"
+                },
+                "version": {
+                  "status": "match",
+                  "detail": "Silent 榜明标 AA-Video-T2V-Silent v2.1，与 job.1 AA FAQ 同版。"
+                },
+                "date": {
+                  "status": "match",
+                  "detail": "2026-11 抓取、2026Q1/Q2、2026H1 与 job.1/job.2 记载时点一致。"
+                },
+                "units": {
+                  "status": "match",
+                  "detail": "Elo 分、部数、占比、亿美元等单位与证据一致，未见量纲混用。"
+                },
+                "conditions": {
+                  "status": "mismatch",
+                  "detail": "“渗透率全球最高的一档”“产能维度大体成立”均为全球比较结论，但支撑数据仅限中国境内且 job.3 明列无跨国对照，条件不成立。"
+                },
+                "attribution": {
+                  "status": "match",
+                  "detail": "已区分厂商自述、券商/媒体转述与第三方盲测，并标注缺第三方同期对比。"
+                }
+              },
+              "unresolved_issues": [
+                "“应用侧渗透率属全球最高的一档”置于“有证据支持”栏，但仅有中国境内数据(Q1>95%、Q2 64%、抖音22.19万部)，无跨国对照证据。",
+                "开篇“产能维度大体成立”无跨国产能对照，与下文③“缺少第三方（非券商/非自媒体）同期对比数据”自相矛盾。",
+                "“绝对画质”未单列为证据不足维度，仅以 Elo 盲测偏好间接体现，且未说明 Elo 为偏好而非绝对画质度量。",
+                "“欧美主流影视工业化采用”仅以“缺本土竖屏付费分发渠道”侧面触及，未明确归入证据不足维度。"
+              ],
+              "job_id": "1b783b2d4605.job.6"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "check_id": "numbers",
+      "work_item_id": "t4",
+      "criterion": "答复中每个关键数字（成本降幅、周期、市场规模、收入、下载量、榜单位次）必须能对应到所引来源的实体、口径、时间与单位，且不得把预测值写成实测值、把厂商自述写成第三方结论",
+      "binding_id": "32742964347c939b8ac386f0dfad07a479321164e47b1c3efdfd2d19dcfa090b",
+      "required": true,
+      "factual_scope": true,
+      "publication_excerpt": true,
+      "verdict": "fail",
+      "subject": {
+        "text": "先校正前提：“断层式领先”在**产能与应用渗透**维度大体成立，在**绝对技术能力**维度不成立，必须分维度看。\n\n有证据支持的领先：\n① 第三方盲测榜首是中国模型——Artificial Analysis 视频榜（2026年11月抓取）文生视频第一为阿里 Wan 3.0（Elo 1172，该榜31个模型、7,179个样本），图生视频第一为字节 Dreamina Seedance 2.5（Elo 1159）；\n② 中国厂商率先把“30秒原生单镜＋原生音频＋多镜头”做成量产规格——据厂商公布：Seedance 2.5 单次30秒、可多轮延长（2026-07-31发布），Wan 3.0 单次30秒（2026-08-06公测），MiniMax H3 为15秒/2K/原生立体声＋原生多镜头（该页正文本次未取到，属厂商自述）；\n③ 前沿开源权重基本只有中国实验室在放——AA“无声（Silent）”版榜单中，开源权重文生视频榜首为 MiniMax H3（Elo 1120，AA-Video-T2V-Silent v2.1；同一模型在带音频榜为1160），而 MiniMax 当时仅表示“计划在数日内开放权重”；\n④ 应用侧渗透率属全球最高的一档：2026年一季度AI占上线微短剧>95%（DataEye 口径、经转述），二季度约15.3万部（中国网络视听协会《微短剧创作指引（2026Q2）》口径，环比+25%；该口径下二季度总上线23.9万部、AI占 64%，与一季度的>95%不同源，不可直接比较），抖音端2026上半年新增AI剧/漫剧22.19万部（DataEye）；\n⑤ 出海分发端中国厂商占绝对多数：据 DataEye 2026年上半年“调研预测”（该文自述为调研预测，非平台实测），中国出海短剧App内购收入约11.82亿美元、约占海外93%（仅 App 内购口径），下载约12.21亿次、约占85%。\n\n证据不足或不能成立的领先：\n① 中国模型并非集体领先：可灵在同一个 AA 带音频榜上仅列第18–19位（Elo 1022 与 1000，其中1000为该榜固定锚点），Vidu Q3 Pro 第27、PixVerse V6 第21；换一个榜单（llm-stats 的 TrueSkill 体系）冠军又变成可灵——“谁第一”高度依赖榜单口径与是否计入音频，不能当作稳定事实；\n② 长视频/长叙事仍是“多轮延长”拼接而非一次生成；字节官方承认“复杂运动的物理合理性、极多主体交互场景的稳定性仍有提升空间”；\n③ “中国AI短剧全球断层领先”缺少第三方（非券商/非自媒体）同期对比数据；美国并非没有AI短剧，而是缺少本土竖屏付费分发渠道，大量AI竖屏供给发生在中国公司运营的App内；\n④ AI短剧在海外**收入**中的占比仍小：若以媒体估算的2026年AI短剧收入约6.5亿美元（该数字本次未能追溯到原文，仅见二手转述）除以某调研报告预测的约60亿美元海外大盘（分母为“App内购30亿＋TikTok/YouTube分账18亿＋网页10亿”的预测值），得约11%——分子为估算、分母为预测，仅作量级参考；相对地，据 DataEye 2026年5月经转述的摘要数据，海外投放大盘中AI占比“8成以上”（仅摘要级、未见原报告）——供给与投放渗透明显高于收入渗透。",
+        "sha256": "4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc",
+        "key": "inline:4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc"
+      },
+      "evidence": [
+        {
+          "job_id": "1b783b2d4605.job.1",
+          "ref": "",
+          "sha256": "450e8d277211a001e049e3ac6184d086c471ec48dd36dc54d304a3199ecf7021",
+          "key": "1b783b2d4605.job.1",
+          "web_evidence_sha256": "ef79030356cfbe09dc33878dc2a347a584b459edf42b3bb02152a7c1c4bccae0"
+        },
+        {
+          "job_id": "1b783b2d4605.job.2",
+          "ref": "",
+          "sha256": "a79f9632a47c646b0982be47ef4ed468a7431fd40cd33d59cf3a06402aefe85d",
+          "key": "1b783b2d4605.job.2",
+          "corpus_limits": [
+            {
+              "tool": "corpus_search",
+              "obtained": true,
+              "coverage": {
+                "processing": "partial",
+                "availability": "unknown",
+                "purity": {
+                  "scope": "bounded_candidates_not_corpus_absence"
+                },
+                "native": {
+                  "unknown_date_sources": true
+                }
+              },
+              "limited_observations": 1
+            }
+          ],
+          "acquisition_sha256": "64a9cba03bea5ac7e947884965ac898bc46016ed7f111656326e5edb9949d328",
+          "corpus_evidence_sha256": "bde7bfd24ba3f1cce166d2a143ece4c30fcbcea11069e636a0af7ba2844ac95c",
+          "web_evidence_sha256": "693ab081bcab84113968db6e9858e7d086e1a8d002522debda4ea2b61d377ccb"
+        },
+        {
+          "job_id": "1b783b2d4605.job.3",
+          "ref": "",
+          "sha256": "90bb2de0f8eb6383d49db7ad82264fa81d7507ed5bca4cb0c43c426af85642a5",
+          "key": "1b783b2d4605.job.3",
+          "web_evidence_sha256": "9dd5b5195164aab9b0454234594f9160056cb5b9f2286b05b19f9985667414f2"
+        }
+      ],
+      "job_id": "1b783b2d4605.job.6",
+      "verdict_job_id": "1b783b2d4605.job.6",
+      "result": {
+        "check_id": "numbers",
+        "binding_id": "32742964347c939b8ac386f0dfad07a479321164e47b1c3efdfd2d19dcfa090b",
+        "subject_sha256": "4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc",
+        "verdict": "fail",
+        "method": "逐项比对 subject.text 与 job.1（AA T2V/I2V v2.1 表+FAQ、Seedance 博文）、job.2（DataEye/协会Q1Q2）、job.3（60亿预测分项）；重算 15.3/23.9=64.0%、15.3/12.2=+25.4%、6.5/58=11.2%、30+18+10=58。",
+        "detail": "上一轮6项缺陷均已消除：①DataEye 2026H1 集群标“调研预测”；②60亿标预测、11%标分子估算/分母预测；③6.5亿明示未追溯；④“8成以上”给出 DataEye/2026-05/仅摘要级；⑤Wan 3.0、H3 规格标“据厂商公布/厂商自述”；⑥1120 标 AA-Video-T2V-Silent v2.1。新限定语准确：Q1>95%(DataEye,12.8万中12.2万)与Q2 64%(协会,23.9万中15.3万)确为不同机构不同分母；H3 带音频1160与Silent 1120同见 AA FAQ；可灵1000确为 v2.1 表“Anchor fixed at 1000”。仍存两项口径缺陷：a)“该榜31个模型、7,179个样本”将 Wan 3.0 单模型样本数写作榜单样本数；b)“环比+25%”系 15.3万(协会Q2)对 12.2万(DataEye Q1) 跨源相除，而同句已称两源“不同源、不可直接比较”，协会自身Q1基数未交付。另“约60亿”在 job.3 为“预测>60亿”且分项合计58亿；11.82亿美元/93%/12.21亿次/85% 与“数日内开放权重”引语在交付证据原文中缺失（正文被省略），仅能核标签不能核数值。",
+        "evidence_keys": [
+          "1b783b2d4605.job.1",
+          "1b783b2d4605.job.2",
+          "1b783b2d4605.job.3"
+        ],
+        "scope_assessment": {
+          "entity": {
+            "status": "match",
+            "detail": "Wan 3.0(1172)、Seedance 2.5(1159 I2V)、H3(1160/1120)、可灵(1022/1000)、Vidu Q3 Pro(27)、PixVerse V6(21) 均对应 job.1 AA v2.1 表行，DataEye/协会数字对应 job.2。"
+          },
+          "version": {
+            "status": "match",
+            "detail": "Silent 榜明标 AA-Video-T2V-Silent v2.1，1120/1160 与 job.1 AA FAQ 原文一致。"
+          },
+          "date": {
+            "status": "match",
+            "detail": "2026-11 抓取、2026-07-31 发布、2026Q1/Q2、2026H1 均与 job.1/job.2 记载时点一致。"
+          },
+          "units": {
+            "status": "mismatch",
+            "detail": "“该榜31个模型、7,179个样本”把 Wan 3.0 单模型样本数当作榜单样本数，实体与计数单位错位。"
+          },
+          "conditions": {
+            "status": "mismatch",
+            "detail": "“环比+25%”以协会Q2 15.3万部比 DataEye Q1 12.2万部，与同句“两源不同源、不可直接比较”的限定冲突，基期口径未见于证据。"
+          },
+          "attribution": {
+            "status": "match",
+            "detail": "厂商规格标“据厂商公布”、H3 标“正文未取到属厂商自述”、60亿标预测、6.5亿标未追溯、8成以上标摘要级，未把自述写成第三方结论。"
+          }
+        },
+        "unresolved_issues": [
+          "“该榜31个模型、7,179个样本”：7,179 是 Wan 3.0 的样本数（AA v2.1 表第1行），被表述为榜单样本数，口径错位。",
+          "“环比+25%”=15.3万(协会Q2)/12.2万(DataEye Q1)−1，与同句“不同源不可直接比较”矛盾；协会自身Q1基数未交付，该环比不可追溯。",
+          "“约60亿美元”与 job.3 原文“预测>60亿”及分项 30+18+10=58亿不符，11% 分母取58时为11.2%。",
+          "UNCHECKED：11.82亿美元/93%/12.21亿次/85% 与“计划在数日内开放权重”引语在交付证据原文中缺失（网页正文被省略），只能核标签不能核数值。"
+        ],
+        "job_id": "1b783b2d4605.job.6"
+      },
+      "attempts": [
+        {
+          "protocol_version": 2,
+          "check_id": "numbers",
+          "work_item_id": "t4",
+          "criterion": "答复中每个关键数字（成本降幅、周期、市场规模、收入、下载量、榜单位次）必须能对应到所引来源的实体、口径、时间与单位，且不得把预测值写成实测值、把厂商自述写成第三方结论",
+          "subject": {
+            "text": "先校正前提：“断层式领先”在**产能与应用渗透**维度大体成立，在**绝对技术能力**维度不成立，必须分维度看。\n\n有证据支持的领先：\n① 第三方盲测榜首是中国模型——Artificial Analysis 视频榜（2026年11月抓取）文生视频第一为阿里 Wan 3.0（Elo 1172，样本31个模型），图生视频第一为字节 Dreamina Seedance 2.5（Elo 1159）；\n② 中国厂商率先把“30秒原生单镜＋原生音频＋多镜头”做成量产规格：Seedance 2.5 单次30秒（2026-07-31发布）、Wan 3.0 单次30秒（2026-08-06公测）、MiniMax H3 为15秒/2K/原生立体声＋原生多镜头；\n③ 前沿开源权重基本只有中国实验室在放：AA 称开源权重文生视频榜首为 MiniMax H3（Elo 1120）；\n④ 应用侧渗透率全球最高：2026年二季度中国上线AI微短剧约15.3万部（环比+25%），2026年一季度AI占上线微短剧>95%（中国网络视听协会口径，经转述）；抖音端2026上半年新增AI剧/漫剧22.19万部；\n⑤ 出海分发端中国厂商占绝对多数：DataEye 2026上半年口径，中国出海短剧App内购收入11.82亿美元、约占海外93%，下载12.21亿次、约占85%。\n\n证据不足或不能成立的领先：\n① 中国模型并非集体领先：可灵在同一个 AA 榜上仅列第18–19位（Elo 1000–1022，其中1000为该榜锚点），Vidu Q3 Pro 第27、PixVerse V6 第21；换一个榜单（llm-stats 的 TrueSkill 体系）冠军又变成可灵——“谁第一”高度依赖榜单口径与是否计入音频，不能当作稳定事实；\n② 长视频/长叙事仍是“多轮延长”拼接而非一次生成；字节官方承认“复杂运动的物理合理性、极多主体交互场景的稳定性仍有提升空间”；\n③ “中国AI短剧全球断层领先”缺少第三方（非券商/非自媒体）同期对比数据；美国并非没有AI短剧，而是缺少本土竖屏付费分发渠道，大量AI竖屏供给发生在中国公司运营的App内；\n④ AI短剧在海外**收入**中的占比仍小（有媒体估算2026年约6.5亿美元、对60亿美元大盘约11%），而海外投放大盘中AI占比已“8成以上”——供给与投放渗透远高于收入渗透。",
+            "sha256": "4b937cf5d6ed8552c396600c213d9675ad2b239e4878d3f915d49cadad2dfdd5",
+            "key": "inline:4b937cf5d6ed8552c396600c213d9675ad2b239e4878d3f915d49cadad2dfdd5"
+          },
+          "evidence": [
+            {
+              "job_id": "1b783b2d4605.job.1",
+              "ref": "",
+              "sha256": "450e8d277211a001e049e3ac6184d086c471ec48dd36dc54d304a3199ecf7021",
+              "key": "1b783b2d4605.job.1",
+              "web_evidence_sha256": "ef79030356cfbe09dc33878dc2a347a584b459edf42b3bb02152a7c1c4bccae0"
+            },
+            {
+              "job_id": "1b783b2d4605.job.3",
+              "ref": "",
+              "sha256": "90bb2de0f8eb6383d49db7ad82264fa81d7507ed5bca4cb0c43c426af85642a5",
+              "key": "1b783b2d4605.job.3",
+              "web_evidence_sha256": "9dd5b5195164aab9b0454234594f9160056cb5b9f2286b05b19f9985667414f2"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "a0c17a6fbe824f517bc3a30f4e273cf436ea5b403acd76d3a9925f714e3f6925",
+          "required": true,
+          "replaces_job_id": "",
+          "revision_reason": "",
+          "revision_kind": "",
+          "job_id": "1b783b2d4605.job.4",
+          "execution_status": "complete",
+          "valid_lineage": true,
+          "verdict": "fail",
+          "events": [
+            {
+              "check_id": "numbers",
+              "binding_id": "a0c17a6fbe824f517bc3a30f4e273cf436ea5b403acd76d3a9925f714e3f6925",
+              "subject_sha256": "4b937cf5d6ed8552c396600c213d9675ad2b239e4878d3f915d49cadad2dfdd5",
+              "verdict": "fail",
+              "method": "Figure-by-figure reconciliation of the bound passage against the delivered originals only: AA-Video-T2V v2.1 and AA-Video-I2V v2.1 tables plus the AA open-weights FAQ sentences (job.1), the 2026-07-31 seed.bytedance.com Seedance 2.5 blog text (job.1), the llm-stats TrueSkill page (job.1), and job.3's A/B evidence tables with their own 标签 column (Sensor Tower/点点/DataEye/中国网络视听协会经转述). For each number I recorded the claimed entity, period, unit and 口径, then checked whether the bound row carries the same four, whether the source is a 调研预测 vs an actual, and whether a vendor self-statement is being presented as third-party. Arithmetic cross-check: 6.5/60 = 10.8% ≈ 11%. No new web fetch was needed; the two bound reports' previews elide §C/§D of job.3, which is why the 6.5亿美元 row could not be matched.",
+              "detail": "Per-figure result: (a) MATCH — Wan 3.0 Elo 1172 on a 31-row board (AA-Video-T2V v2.1, 2026-11, 7,179 samples); Dreamina Seedance 2.5 Elo 1159 (AA-Video-I2V v2.1 #1); Kling #18 Elo 1022 / #19 Elo 1000 with the board's own 'Fixed at 1000 as the reference point' anchor note; PixVerse V6 #21 (981); Vidu Q3 Pro #27 (938); Seedance 2.5 单次30秒 2026-07-31 (ByteDance blog verbatim); 2026Q2 15.3万部/+25%, 2026Q1 >95%（中国网络视听协会经转述）, 抖音2026H1 22.19万部 (job.3 rows); 11.82亿美元 / 12.21亿次 / 93% / 85% numerically match job.3's DataEye 2026H1 rows with 93% correctly scoped to App内购. (b) DEFECTS — 1) job.3 tags the DataEye 2026H1 article '该文自述为“调研预测”', yet the passage states 11.82亿美元/93%/12.21亿次/85% as measured H1 actuals with no 预测 qualifier (预测写成实测). 2) job.3's 60亿美元 is '预测>60亿美元（App内购30亿+TikTok/YouTube分账18亿+网页10亿）'; the passage uses it as '60亿美元大盘' and divides an estimate by it to yield '约11%'. 3) The 6.5亿美元 AI短剧收入 has no row in either bound report (job.3 carries only TikTok 单月650万美元/年内累计6000万美元), so this figure and the 11% are not traceable to the bound evidence; '有媒体估算' is a correct hedge but the entity/period remains unmatched. 4) '8成以上' is in job.3 only as DataEye 经知乎转述, 仅摘要, 2026年5月; the passage gives no source and no date and the word '已' upgrades a snippet-level repost to a measurement. 5) Wan 3.0 '单次30秒（2026-08-06公测）' (job.1 A10 厂商自述+媒体) and MiniMax H3 '15秒/2K/原生立体声/多镜头' (job.1 A9 厂商自述; the minimax.io page body was not delivered — text_omitted) are presented as plain fact; H3's blog only says '计划…开放权重', which also strains the present-tense '基本只有中国实验室在放'. 6) The 1120 open-weights Elo is from AA-Video-T2V-Silent v2.1 (no audio), while the passage's other AA Elo values come from the audio board where H3 768p = 1160; the passage itself says ranks depend on '是否计入音频', so the missing variant tag is self-inconsistent. Suggested fixes: add '调研预测' to the DataEye 2026H1 cluster; restate 11% as '分子为媒体估算、分母为预测，仅作量级参考'; add '据 DataEye 2026年5月经转述摘要' plus '仅摘要级' to 8成以上; tag Wan 3.0/H3 specs '据厂商公布'; write the 1120 as 'AA-Video-T2V-Silent v2.1 开源权重榜首'. 15 of ~20 figures map cleanly; the six items above violate the entity/口径/time/attribution requirement, so the check fails.",
+              "evidence_keys": [
+                "1b783b2d4605.job.1",
+                "1b783b2d4605.job.3"
+              ],
+              "scope_assessment": {
+                "entity": {
+                  "status": "match",
+                  "detail": "Match: Wan 3.0/Alibaba, Dreamina Seedance 2.5/ByteDance, MiniMax H3, Kling 3.0, PixVerse V6, Vidu Q3 Pro, DataEye, 中国网络视听协会 are the same entities as in the bound AA rows and job.3 tables."
+                },
+                "version": {
+                  "status": "mismatch",
+                  "detail": "Mismatch: the 1120 open-weights Elo is from AA-Video-T2V-Silent v2.1 while the passage's other AA figures are from the with-audio board (H3 768p = 1160), and the Silent variant is not stated."
+                },
+                "date": {
+                  "status": "unknown",
+                  "detail": "Unknown: the AA capture (2026-11), Seedance release (2026-07-31) and the 2026Q1/Q2/H1 windows match the bound rows, but '8成以上' has no date and its only source is an undated Zhihu repost, and 6.5亿美元 carries only '2026' with no traceable row."
+                },
+                "units": {
+                  "status": "mismatch",
+                  "detail": "Mismatch: 11.82亿美元/12.21亿次/93%/85% come from a source that self-describes as a 调研预测 yet are presented as measured H1 actuals, and '60亿美元大盘' is a 预测 total (内购30亿+分账18亿+网页10亿) used as the measured base of an 11% share."
+                },
+                "conditions": {
+                  "status": "mismatch",
+                  "detail": "Mismatch: the App内购 condition on 93% is kept, but the source's own '调研预测' condition on the DataEye 2026H1 cluster and the '12.8万部中' denominator behind >95% are dropped, and a forecast market size is used as a measured denominator."
+                },
+                "attribution": {
+                  "status": "mismatch",
+                  "detail": "Mismatch: '8成以上' carries no DataEye/知乎转述 attribution and no date, and the Wan 3.0 / MiniMax H3 specs (job.1 A10/A9, both 厂商自述) are stated as plain fact rather than vendor claims."
+                }
+              },
+              "unresolved_issues": [
+                "DataEye 2026H1 cluster (11.82亿美元/12.21亿次/93%/85%) presented as measured actuals although the cited article self-describes as '调研预测' — needs the 预测 qualifier.",
+                "'60亿美元大盘' is a forecast (App内购30亿+分账18亿+网页10亿) used as an unlabeled measured base; the derived '约11%' therefore mixes an estimate with a forecast.",
+                "The 6.5亿美元 AI短剧海外收入 has no matching row in either bound report (job.3 has only TikTok 单月650万美元/年内累计6000万美元), so that figure and the 11% are not traceable to the bound evidence — UNCHECKED pending the source.",
+                "'8成以上' 海外投放AI占比 is given without source, date or the '仅摘要/经知乎转述' limit that job.3 attaches, and the word '已' overstates a snippet-level repost.",
+                "Wan 3.0 (2026-08-06公测, 30秒) and MiniMax H3 (15秒/2K/立体声/多镜头) specs are vendor self-statements (job.1 A10/A9) presented as plain fact; the minimax.io body was not delivered (text_omitted), so the H3 spec is also unverified at source level.",
+                "The 1120 Elo is from AA-Video-T2V-Silent v2.1 (no audio) while the passage's other AA figures are from the with-audio board; the variant tag is missing, contradicting the passage's own warning that ranks depend on '是否计入音频'."
+              ],
+              "job_id": "1b783b2d4605.job.4"
+            }
+          ]
+        },
+        {
+          "protocol_version": 2,
+          "check_id": "numbers",
+          "work_item_id": "t4",
+          "criterion": "答复中每个关键数字（成本降幅、周期、市场规模、收入、下载量、榜单位次）必须能对应到所引来源的实体、口径、时间与单位，且不得把预测值写成实测值、把厂商自述写成第三方结论",
+          "subject": {
+            "text": "先校正前提：“断层式领先”在**产能与应用渗透**维度大体成立，在**绝对技术能力**维度不成立，必须分维度看。\n\n有证据支持的领先：\n① 第三方盲测榜首是中国模型——Artificial Analysis 视频榜（2026年11月抓取）文生视频第一为阿里 Wan 3.0（Elo 1172，该榜31个模型、7,179个样本），图生视频第一为字节 Dreamina Seedance 2.5（Elo 1159）；\n② 中国厂商率先把“30秒原生单镜＋原生音频＋多镜头”做成量产规格——据厂商公布：Seedance 2.5 单次30秒、可多轮延长（2026-07-31发布），Wan 3.0 单次30秒（2026-08-06公测），MiniMax H3 为15秒/2K/原生立体声＋原生多镜头（该页正文本次未取到，属厂商自述）；\n③ 前沿开源权重基本只有中国实验室在放——AA“无声（Silent）”版榜单中，开源权重文生视频榜首为 MiniMax H3（Elo 1120，AA-Video-T2V-Silent v2.1；同一模型在带音频榜为1160），而 MiniMax 当时仅表示“计划在数日内开放权重”；\n④ 应用侧渗透率属全球最高的一档：2026年一季度AI占上线微短剧>95%（DataEye 口径、经转述），二季度约15.3万部（中国网络视听协会《微短剧创作指引（2026Q2）》口径，环比+25%；该口径下二季度总上线23.9万部、AI占 64%，与一季度的>95%不同源，不可直接比较），抖音端2026上半年新增AI剧/漫剧22.19万部（DataEye）；\n⑤ 出海分发端中国厂商占绝对多数：据 DataEye 2026年上半年“调研预测”（该文自述为调研预测，非平台实测），中国出海短剧App内购收入约11.82亿美元、约占海外93%（仅 App 内购口径），下载约12.21亿次、约占85%。\n\n证据不足或不能成立的领先：\n① 中国模型并非集体领先：可灵在同一个 AA 带音频榜上仅列第18–19位（Elo 1022 与 1000，其中1000为该榜固定锚点），Vidu Q3 Pro 第27、PixVerse V6 第21；换一个榜单（llm-stats 的 TrueSkill 体系）冠军又变成可灵——“谁第一”高度依赖榜单口径与是否计入音频，不能当作稳定事实；\n② 长视频/长叙事仍是“多轮延长”拼接而非一次生成；字节官方承认“复杂运动的物理合理性、极多主体交互场景的稳定性仍有提升空间”；\n③ “中国AI短剧全球断层领先”缺少第三方（非券商/非自媒体）同期对比数据；美国并非没有AI短剧，而是缺少本土竖屏付费分发渠道，大量AI竖屏供给发生在中国公司运营的App内；\n④ AI短剧在海外**收入**中的占比仍小：若以媒体估算的2026年AI短剧收入约6.5亿美元（该数字本次未能追溯到原文，仅见二手转述）除以某调研报告预测的约60亿美元海外大盘（分母为“App内购30亿＋TikTok/YouTube分账18亿＋网页10亿”的预测值），得约11%——分子为估算、分母为预测，仅作量级参考；相对地，据 DataEye 2026年5月经转述的摘要数据，海外投放大盘中AI占比“8成以上”（仅摘要级、未见原报告）——供给与投放渗透明显高于收入渗透。",
+            "sha256": "4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc",
+            "key": "inline:4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc"
+          },
+          "evidence": [
+            {
+              "job_id": "1b783b2d4605.job.1",
+              "ref": "",
+              "sha256": "450e8d277211a001e049e3ac6184d086c471ec48dd36dc54d304a3199ecf7021",
+              "key": "1b783b2d4605.job.1",
+              "web_evidence_sha256": "ef79030356cfbe09dc33878dc2a347a584b459edf42b3bb02152a7c1c4bccae0"
+            },
+            {
+              "job_id": "1b783b2d4605.job.2",
+              "ref": "",
+              "sha256": "a79f9632a47c646b0982be47ef4ed468a7431fd40cd33d59cf3a06402aefe85d",
+              "key": "1b783b2d4605.job.2",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 1
+                }
+              ],
+              "acquisition_sha256": "64a9cba03bea5ac7e947884965ac898bc46016ed7f111656326e5edb9949d328",
+              "corpus_evidence_sha256": "bde7bfd24ba3f1cce166d2a143ece4c30fcbcea11069e636a0af7ba2844ac95c",
+              "web_evidence_sha256": "693ab081bcab84113968db6e9858e7d086e1a8d002522debda4ea2b61d377ccb"
+            },
+            {
+              "job_id": "1b783b2d4605.job.3",
+              "ref": "",
+              "sha256": "90bb2de0f8eb6383d49db7ad82264fa81d7507ed5bca4cb0c43c426af85642a5",
+              "key": "1b783b2d4605.job.3",
+              "web_evidence_sha256": "9dd5b5195164aab9b0454234594f9160056cb5b9f2286b05b19f9985667414f2"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "32742964347c939b8ac386f0dfad07a479321164e47b1c3efdfd2d19dcfa090b",
+          "required": true,
+          "replaces_job_id": "1b783b2d4605.job.4",
+          "revision_reason": "按 job.4 列出的 6 项缺陷逐项修正候选段落：①DataEye 2026H1 集群加“调研预测”限定并说明非平台实测；②“60亿美元大盘”标为预测值且 11% 标注“分子为估算、分母为预测”；③“6.5亿美元”明示未能追溯到原文；④“8成以上”补来源、时间与“仅摘要级”限定；⑤Wan 3.0 / H3 规格改为“据厂商公布”并注明 H3 页面正文未取到；⑥“1120”补 AA-Video-T2V-Silent v2.1 榜名并注明同一模型带音频榜为 1160。另补充 Q1 >95% 与 Q2 64% 不同源、不可直接比较的说明。因候选字节已变，同段落的 lead_claim 也需重新出具 verdict。",
+          "revision_kind": "subject",
+          "job_id": "1b783b2d4605.job.5",
+          "execution_status": "incomplete",
+          "valid_lineage": true,
+          "verdict": "unchecked",
+          "events": []
+        },
+        {
+          "protocol_version": 2,
+          "check_id": "numbers",
+          "work_item_id": "t4",
+          "criterion": "答复中每个关键数字（成本降幅、周期、市场规模、收入、下载量、榜单位次）必须能对应到所引来源的实体、口径、时间与单位，且不得把预测值写成实测值、把厂商自述写成第三方结论",
+          "subject": {
+            "text": "先校正前提：“断层式领先”在**产能与应用渗透**维度大体成立，在**绝对技术能力**维度不成立，必须分维度看。\n\n有证据支持的领先：\n① 第三方盲测榜首是中国模型——Artificial Analysis 视频榜（2026年11月抓取）文生视频第一为阿里 Wan 3.0（Elo 1172，该榜31个模型、7,179个样本），图生视频第一为字节 Dreamina Seedance 2.5（Elo 1159）；\n② 中国厂商率先把“30秒原生单镜＋原生音频＋多镜头”做成量产规格——据厂商公布：Seedance 2.5 单次30秒、可多轮延长（2026-07-31发布），Wan 3.0 单次30秒（2026-08-06公测），MiniMax H3 为15秒/2K/原生立体声＋原生多镜头（该页正文本次未取到，属厂商自述）；\n③ 前沿开源权重基本只有中国实验室在放——AA“无声（Silent）”版榜单中，开源权重文生视频榜首为 MiniMax H3（Elo 1120，AA-Video-T2V-Silent v2.1；同一模型在带音频榜为1160），而 MiniMax 当时仅表示“计划在数日内开放权重”；\n④ 应用侧渗透率属全球最高的一档：2026年一季度AI占上线微短剧>95%（DataEye 口径、经转述），二季度约15.3万部（中国网络视听协会《微短剧创作指引（2026Q2）》口径，环比+25%；该口径下二季度总上线23.9万部、AI占 64%，与一季度的>95%不同源，不可直接比较），抖音端2026上半年新增AI剧/漫剧22.19万部（DataEye）；\n⑤ 出海分发端中国厂商占绝对多数：据 DataEye 2026年上半年“调研预测”（该文自述为调研预测，非平台实测），中国出海短剧App内购收入约11.82亿美元、约占海外93%（仅 App 内购口径），下载约12.21亿次、约占85%。\n\n证据不足或不能成立的领先：\n① 中国模型并非集体领先：可灵在同一个 AA 带音频榜上仅列第18–19位（Elo 1022 与 1000，其中1000为该榜固定锚点），Vidu Q3 Pro 第27、PixVerse V6 第21；换一个榜单（llm-stats 的 TrueSkill 体系）冠军又变成可灵——“谁第一”高度依赖榜单口径与是否计入音频，不能当作稳定事实；\n② 长视频/长叙事仍是“多轮延长”拼接而非一次生成；字节官方承认“复杂运动的物理合理性、极多主体交互场景的稳定性仍有提升空间”；\n③ “中国AI短剧全球断层领先”缺少第三方（非券商/非自媒体）同期对比数据；美国并非没有AI短剧，而是缺少本土竖屏付费分发渠道，大量AI竖屏供给发生在中国公司运营的App内；\n④ AI短剧在海外**收入**中的占比仍小：若以媒体估算的2026年AI短剧收入约6.5亿美元（该数字本次未能追溯到原文，仅见二手转述）除以某调研报告预测的约60亿美元海外大盘（分母为“App内购30亿＋TikTok/YouTube分账18亿＋网页10亿”的预测值），得约11%——分子为估算、分母为预测，仅作量级参考；相对地，据 DataEye 2026年5月经转述的摘要数据，海外投放大盘中AI占比“8成以上”（仅摘要级、未见原报告）——供给与投放渗透明显高于收入渗透。",
+            "sha256": "4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc",
+            "key": "inline:4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc"
+          },
+          "evidence": [
+            {
+              "job_id": "1b783b2d4605.job.1",
+              "ref": "",
+              "sha256": "450e8d277211a001e049e3ac6184d086c471ec48dd36dc54d304a3199ecf7021",
+              "key": "1b783b2d4605.job.1",
+              "web_evidence_sha256": "ef79030356cfbe09dc33878dc2a347a584b459edf42b3bb02152a7c1c4bccae0"
+            },
+            {
+              "job_id": "1b783b2d4605.job.2",
+              "ref": "",
+              "sha256": "a79f9632a47c646b0982be47ef4ed468a7431fd40cd33d59cf3a06402aefe85d",
+              "key": "1b783b2d4605.job.2",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 1
+                }
+              ],
+              "acquisition_sha256": "64a9cba03bea5ac7e947884965ac898bc46016ed7f111656326e5edb9949d328",
+              "corpus_evidence_sha256": "bde7bfd24ba3f1cce166d2a143ece4c30fcbcea11069e636a0af7ba2844ac95c",
+              "web_evidence_sha256": "693ab081bcab84113968db6e9858e7d086e1a8d002522debda4ea2b61d377ccb"
+            },
+            {
+              "job_id": "1b783b2d4605.job.3",
+              "ref": "",
+              "sha256": "90bb2de0f8eb6383d49db7ad82264fa81d7507ed5bca4cb0c43c426af85642a5",
+              "key": "1b783b2d4605.job.3",
+              "web_evidence_sha256": "9dd5b5195164aab9b0454234594f9160056cb5b9f2286b05b19f9985667414f2"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "32742964347c939b8ac386f0dfad07a479321164e47b1c3efdfd2d19dcfa090b",
+          "required": true,
+          "replaces_job_id": "1b783b2d4605.job.5",
+          "revision_reason": "",
+          "revision_kind": "retry",
+          "job_id": "1b783b2d4605.job.6",
+          "execution_status": "complete",
+          "valid_lineage": true,
+          "verdict": "fail",
+          "events": [
+            {
+              "check_id": "numbers",
+              "binding_id": "32742964347c939b8ac386f0dfad07a479321164e47b1c3efdfd2d19dcfa090b",
+              "subject_sha256": "4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc",
+              "verdict": "fail",
+              "method": "逐项比对 subject.text 与 job.1（AA T2V/I2V v2.1 表+FAQ、Seedance 博文）、job.2（DataEye/协会Q1Q2）、job.3（60亿预测分项）；重算 15.3/23.9=64.0%、15.3/12.2=+25.4%、6.5/58=11.2%、30+18+10=58。",
+              "detail": "上一轮6项缺陷均已消除：①DataEye 2026H1 集群标“调研预测”；②60亿标预测、11%标分子估算/分母预测；③6.5亿明示未追溯；④“8成以上”给出 DataEye/2026-05/仅摘要级；⑤Wan 3.0、H3 规格标“据厂商公布/厂商自述”；⑥1120 标 AA-Video-T2V-Silent v2.1。新限定语准确：Q1>95%(DataEye,12.8万中12.2万)与Q2 64%(协会,23.9万中15.3万)确为不同机构不同分母；H3 带音频1160与Silent 1120同见 AA FAQ；可灵1000确为 v2.1 表“Anchor fixed at 1000”。仍存两项口径缺陷：a)“该榜31个模型、7,179个样本”将 Wan 3.0 单模型样本数写作榜单样本数；b)“环比+25%”系 15.3万(协会Q2)对 12.2万(DataEye Q1) 跨源相除，而同句已称两源“不同源、不可直接比较”，协会自身Q1基数未交付。另“约60亿”在 job.3 为“预测>60亿”且分项合计58亿；11.82亿美元/93%/12.21亿次/85% 与“数日内开放权重”引语在交付证据原文中缺失（正文被省略），仅能核标签不能核数值。",
+              "evidence_keys": [
+                "1b783b2d4605.job.1",
+                "1b783b2d4605.job.2",
+                "1b783b2d4605.job.3"
+              ],
+              "scope_assessment": {
+                "entity": {
+                  "status": "match",
+                  "detail": "Wan 3.0(1172)、Seedance 2.5(1159 I2V)、H3(1160/1120)、可灵(1022/1000)、Vidu Q3 Pro(27)、PixVerse V6(21) 均对应 job.1 AA v2.1 表行，DataEye/协会数字对应 job.2。"
+                },
+                "version": {
+                  "status": "match",
+                  "detail": "Silent 榜明标 AA-Video-T2V-Silent v2.1，1120/1160 与 job.1 AA FAQ 原文一致。"
+                },
+                "date": {
+                  "status": "match",
+                  "detail": "2026-11 抓取、2026-07-31 发布、2026Q1/Q2、2026H1 均与 job.1/job.2 记载时点一致。"
+                },
+                "units": {
+                  "status": "mismatch",
+                  "detail": "“该榜31个模型、7,179个样本”把 Wan 3.0 单模型样本数当作榜单样本数，实体与计数单位错位。"
+                },
+                "conditions": {
+                  "status": "mismatch",
+                  "detail": "“环比+25%”以协会Q2 15.3万部比 DataEye Q1 12.2万部，与同句“两源不同源、不可直接比较”的限定冲突，基期口径未见于证据。"
+                },
+                "attribution": {
+                  "status": "match",
+                  "detail": "厂商规格标“据厂商公布”、H3 标“正文未取到属厂商自述”、60亿标预测、6.5亿标未追溯、8成以上标摘要级，未把自述写成第三方结论。"
+                }
+              },
+              "unresolved_issues": [
+                "“该榜31个模型、7,179个样本”：7,179 是 Wan 3.0 的样本数（AA v2.1 表第1行），被表述为榜单样本数，口径错位。",
+                "“环比+25%”=15.3万(协会Q2)/12.2万(DataEye Q1)−1，与同句“不同源不可直接比较”矛盾；协会自身Q1基数未交付，该环比不可追溯。",
+                "“约60亿美元”与 job.3 原文“预测>60亿”及分项 30+18+10=58亿不符，11% 分母取58时为11.2%。",
+                "UNCHECKED：11.82亿美元/93%/12.21亿次/85% 与“计划在数日内开放权重”引语在交付证据原文中缺失（网页正文被省略），只能核标签不能核数值。"
+              ],
+              "job_id": "1b783b2d4605.job.6"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "acquisition_limits": [
+    {
+      "job_id": "1b783b2d4605.job.1",
+      "tool": "web_fetch",
+      "source": "https://ir.kuaishou.com/zh-hans/news-releases/news-release-details/kelingainianhuashouruyunxingluzai2025nian12yueda24yimeijin",
+      "obtained": false,
+      "status": "unavailable",
+      "last_attempt_status": "unavailable",
+      "detail": "Could not extract content from https://ir.kuaishou.com/zh-hans/news-releases/news-release-details/kelingainianhuashouruyunxingluzai2025nian12yueda24yimeijin: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site's own API/PDF, or an archived copy."
+    },
+    {
+      "job_id": "1b783b2d4605.job.1",
+      "tool": "web_fetch",
+      "source": "https://ir.kuaishou.com/zh-hant/node/11286/pdf",
+      "obtained": false,
+      "status": "unavailable",
+      "last_attempt_status": "unavailable",
+      "detail": "Domain skipped: ir.kuaishou.com returned 403 (origin blocked or Jina URL ban) earlier in this session. Cached for ~59 more min. Try a different source or search query."
+    },
+    {
+      "job_id": "1b783b2d4605.job.1",
+      "tool": "web_fetch",
+      "source": "https://m.36kr.com/p/3617945155011589",
+      "obtained": false,
+      "status": "partial",
+      "last_attempt_status": "partial",
+      "detail": "[POSSIBLY NOT RENDERED] The page at https://m.36kr.com/p/3617945155011589 remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to another source instead of repeatedly fetching this URL.\n\n"
+    },
+    {
+      "job_id": "1b783b2d4605.job.1",
+      "tool": "web_fetch",
+      "source": "https://artificialanalysis.ai/video/arena",
+      "obtained": false,
+      "status": "partial",
+      "last_attempt_status": "partial",
+      "detail": "[POSSIBLY NOT RENDERED] The page at https://artificialanalysis.ai/video/arena remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to another source instead of repeatedly fetching this URL.\n\n"
+    },
+    {
+      "job_id": "1b783b2d4605.job.1",
+      "tool": "web_fetch",
+      "source": "https://help.openai.com/en/articles/20001152-what-to-know-about-the-sora-discontinuation",
+      "obtained": false,
+      "status": "unavailable",
+      "last_attempt_status": "unavailable",
+      "detail": "Could not extract content from https://help.openai.com/en/articles/20001152-what-to-know-about-the-sora-discontinuation: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site's own API/PDF, or an archived copy."
+    },
+    {
+      "job_id": "1b783b2d4605.job.1",
+      "tool": "web_fetch",
+      "source": "https://kling.ai/release-note/release-history",
+      "obtained": false,
+      "status": "partial",
+      "last_attempt_status": "partial",
+      "detail": "[POSSIBLY NOT RENDERED] The page at https://kling.ai/release-note/release-history remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to another source instead of repeatedly fetching this URL.\n\n"
+    },
+    {
+      "job_id": "1b783b2d4605.job.1",
+      "tool": "web_fetch",
+      "source": "https://m.36kr.com/p/3804766402698759",
+      "obtained": false,
+      "status": "partial",
+      "last_attempt_status": "partial",
+      "detail": "[POSSIBLY NOT RENDERED] The page at https://m.36kr.com/p/3804766402698759 remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to another source instead of repeatedly fetching this URL.\n\n"
+    },
+    {
+      "job_id": "1b783b2d4605.job.1",
+      "tool": "web_fetch",
+      "source": "https://openai.com/zh-Hans-CN/index/sora-2/",
+      "obtained": false,
+      "status": "unavailable",
+      "last_attempt_status": "unavailable",
+      "detail": "Could not extract content from https://openai.com/zh-Hans-CN/index/sora-2/: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site's own API/PDF, or an archived copy."
+    },
+    {
+      "job_id": "1b783b2d4605.job.2",
+      "tool": "web_fetch",
+      "source": "https://www.chinanews.com.cn/m/cul/2026/03-27/10593599.shtml",
+      "obtained": false,
+      "status": "unavailable",
+      "last_attempt_status": "unavailable",
+      "detail": "Per-source fetch/extraction deadline exceeded."
+    },
+    {
+      "job_id": "1b783b2d4605.job.3",
+      "tool": "web_fetch",
+      "source": "https://sensortower.com/blog/state-of-short-drama-apps-2026-report",
+      "obtained": false,
+      "status": "unavailable",
+      "last_attempt_status": "unavailable",
+      "detail": "Could not extract content from https://sensortower.com/blog/state-of-short-drama-apps-2026-report: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site's own API/PDF, or an archived copy."
+    },
+    {
+      "job_id": "1b783b2d4605.job.3",
+      "tool": "web_fetch",
+      "source": "https://sensortower.com/blog/state-of-short-drama-apps-2025",
+      "obtained": false,
+      "status": "unavailable",
+      "last_attempt_status": "unavailable",
+      "detail": "Could not extract content from https://sensortower.com/blog/state-of-short-drama-apps-2025: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site's own API/PDF, or an archived copy."
+    },
+    {
+      "job_id": "1b783b2d4605.job.3",
+      "tool": "web_fetch",
+      "source": "https://www.rfi.fr/cn/%E4%B8%93%E6%A0%8F%E6%A3%80%E7%B4%A2/%E6%B3%95%E5%9B%BD%E4%B8%96%E7%95%8C%E6%8A%A5/20261023-%E4%B8%AD%E5%9B%BD%E6%89%8B%E6%9C%BA%E5%BE%AE%E7%9F%AD%E5%89%A7%E7%9A%8490-%E7%94%B1ai%E5%88%B6%E4%BD%9C%EF%BC%8C%E6%88%90%E6%9C%AC%E5%A4%A7%E5%B9%85%E4%B8%8B%E9%99%8D%EF%BC%8C%E4%BD%86%E5%88%9B%E4%BD%9C%E8%80%85%E7%9A%84%E6%94%B6%E5%85%A5%E5%8D%B4%E6%9A%B4%E8%B7%8C",
+      "obtained": false,
+      "status": "unavailable",
+      "last_attempt_status": "unavailable",
+      "detail": "Could not extract content from https://www.rfi.fr/cn/%E4%B8%93%E6%A0%8F%E6%A3%80%E7%B4%A2/%E6%B3%95%E5%9B%BD%E4%B8%96%E7%95%8C%E6%8A%A5/20261023-%E4%B8%AD%E5%9B%BD%E6%89%8B%E6%9C%BA%E5%BE%AE%E7%9F%AD%E5%89%A7%E7%9A%8490-%E7%94%B1ai%E5%88%B6%E4%BD%9C%EF%BC%8C%E6%88%90%E6%9C%AC%E5%A4%A7%E5%B9%85%E4%B8%8B%E9%99%8D%EF%BC%8C%E4%BD%86%E5%88%9B%E4%BD%9C%E8%80%85%E7%9A%84%E6%94%B6%E5%85%A5%E5%8D%B4%E6%9A%B4%E8%B7%8C: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site's own API/PDF, or an archived copy."
+    },
+    {
+      "job_id": "1b783b2d4605.job.3",
+      "tool": "web_fetch",
+      "source": "https://zhuanlan.zhihu.com/p/2028081687976846884",
+      "obtained": false,
+      "status": "unavailable",
+      "last_attempt_status": "unavailable",
+      "detail": "Could not extract content from https://zhuanlan.zhihu.com/p/2028081687976846884: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site's own API/PDF, or an archived copy."
+    },
+    {
+      "job_id": "1b783b2d4605.job.3",
+      "tool": "web_fetch",
+      "source": "https://patrickfrater.substack.com/p/reelshort-crazy-maple-col-group-legal-fight",
+      "obtained": false,
+      "status": "unavailable",
+      "last_attempt_status": "unavailable",
+      "detail": "Could not extract content from https://patrickfrater.substack.com/p/reelshort-crazy-maple-col-group-legal-fight: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site's own API/PDF, or an archived copy."
+    },
+    {
+      "job_id": "1b783b2d4605.job.3",
+      "tool": "web_fetch",
+      "source": "https://m.36kr.com/p/3777849731429122",
+      "obtained": false,
+      "status": "partial",
+      "last_attempt_status": "partial",
+      "detail": "[POSSIBLY NOT RENDERED] The page at https://m.36kr.com/p/3777849731429122 remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to another source instead of repeatedly fetching this URL.\n\n"
+    }
+  ]
+}

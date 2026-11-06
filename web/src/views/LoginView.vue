@@ -1,13 +1,35 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { ElMessage, type InputInstance } from 'element-plus'
+import WelcomeOrbit from '@/components/WelcomeOrbit.vue'
 import DisclaimerBar from '@/components/DisclaimerBar.vue'
 import { useAuthStore } from '@/stores/auth'
 import { auth as authApi } from '@/api'
 
 const auth = useAuthStore()
 const router = useRouter()
+const loginVisible = ref(false)
+const entrance = ref<HTMLButtonElement>()
+const usernameInput = ref<InputInstance>()
+
+function revealLogin() {
+  loginVisible.value = true
+}
+
+function focusUsername() {
+  usernameInput.value?.focus()
+}
+
+async function returnToIntro() {
+  if (submitting.value) return
+  loginVisible.value = false
+  password.value = ''
+  confirm.value = ''
+  errorMsg.value = null
+  await nextTick()
+  entrance.value?.focus()
+}
 
 const mode = ref<'login' | 'register'>('login')
 const registrationEnabled = ref(false)
@@ -143,91 +165,133 @@ function toggleMode() {
 </script>
 
 <template>
-  <div class="login-page">
-    <el-card class="login-card" shadow="always">
-      <h1 class="title">{{ mode === 'login' ? '登录' : '注册' }}</h1>
-      <p class="subtitle">FrontierAgent 私有部署控制台</p>
+  <div class="login-page" :class="{ 'is-entered': loginVisible }">
+    <header class="landing-header">
+      <span class="wordmark">Frontier<span>Agent</span><i aria-hidden="true">✳</i></span>
+      <span class="header-note">独立思考 · 深入探索</span>
+    </header>
 
-      <el-alert
-        v-if="errorMsg"
-        :title="errorMsg"
-        type="error"
-        show-icon
-        :closable="false"
-        class="error-alert"
-      />
-      <el-alert
-        v-if="lockText"
-        :title="lockText"
-        type="warning"
-        show-icon
-        :closable="false"
-        class="error-alert"
-      />
+    <main class="landing-main">
+      <WelcomeOrbit :entered="loginVisible" />
+      <Transition name="intro">
+        <section v-if="!loginVisible" class="intro-copy" aria-labelledby="welcome-title">
+          <p class="eyebrow"><span></span> A NEW FRONTIER OF RESEARCH</p>
+          <h1 id="welcome-title">让好奇心，<br />抵达<span>更远处。</span></h1>
+          <p class="intro-description">从一个问题出发，连接线索、洞察与可能。<br />你的下一次深入探索，由此开始。</p>
+          <div class="enter-hint" aria-hidden="true">
+            <span class="enter-arrow">↗</span>
+            <span>点击画面，开启探索<small>CLICK TO EXPLORE</small></span>
+          </div>
+        </section>
+      </Transition>
+      <button
+        v-if="!loginVisible"
+        ref="entrance"
+        type="button"
+        class="entrance-trigger"
+        aria-label="开启探索，显示账号登录"
+        data-testid="enter-login"
+        @click="revealLogin"
+      ></button>
 
-      <el-form @submit.prevent="onSubmit" label-position="top">
-        <el-form-item :error="usernameError || undefined">
-          <el-input
-            v-model="username"
-            placeholder="用户名（3-64 个字符）"
-            :prefix-icon="'User'"
-            autocomplete="username"
-            data-testid="username"
-            @input="errorMsg = null"
+      <Transition name="aside">
+        <div v-if="loginVisible" class="login-aside" aria-hidden="true">
+          <p class="eyebrow">CURIOSITY HAS NO LIMITS</p>
+          <p>每一个好问题，<br />都是新世界的起点。</p>
+        </div>
+      </Transition>
+
+      <Transition name="login" @after-enter="focusUsername">
+        <section v-if="loginVisible" class="login-card" aria-labelledby="login-title">
+          <button type="button" class="back-button" :disabled="submitting" @click="returnToIntro">← 返回首页</button>
+          <p class="eyebrow form-eyebrow">YOUR NEXT DISCOVERY</p>
+          <h1 id="login-title" class="title">{{ mode === 'login' ? '欢迎回来。' : '开启你的探索。' }}</h1>
+          <p class="subtitle">{{ mode === 'login' ? '登录账号，继续你的研究之旅。' : '创建账号，开始与 FrontierAgent 一起探索。' }}</p>
+
+          <el-alert
+            v-if="errorMsg"
+            :title="errorMsg"
+            type="error"
+            show-icon
+            :closable="false"
+            class="error-alert"
           />
-        </el-form-item>
-
-        <el-form-item :error="passwordError || undefined">
-          <el-input
-            v-model="password"
-            type="password"
-            placeholder="密码（至少 8 位，含字母与数字）"
-            :prefix-icon="'Lock'"
-            show-password
-            :autocomplete="mode === 'login' ? 'current-password' : 'new-password'"
-            data-testid="password"
-            @input="errorMsg = null"
-            @keyup.enter="onSubmit"
+          <el-alert
+            v-if="lockText"
+            :title="lockText"
+            type="warning"
+            show-icon
+            :closable="false"
+            class="error-alert"
           />
-        </el-form-item>
 
-        <el-form-item v-if="mode === 'register'" :error="confirmError || undefined">
-          <el-input
-            v-model="confirm"
-            type="password"
-            placeholder="再次输入密码"
-            :prefix-icon="'Lock'"
-            show-password
-            autocomplete="new-password"
-            data-testid="confirm"
-            @keyup.enter="onSubmit"
-          />
-        </el-form-item>
+          <el-form @submit.prevent="onSubmit" label-position="top">
+            <el-form-item label="账号" :error="usernameError || undefined">
+              <el-input
+                ref="usernameInput"
+                v-model="username"
+                placeholder="用户名（3-64 个字符）"
+                autocomplete="username"
+                data-testid="username"
+                @input="errorMsg = null"
+              />
+            </el-form-item>
 
-        <el-button
-          type="primary"
-          size="large"
-          class="submit-btn"
-          :loading="submitting"
-          :disabled="!canSubmit"
-          native-type="submit"
-          data-testid="submit"
-        >
-          {{ mode === 'login' ? '登录' : '注册并登录' }}
-        </el-button>
-      </el-form>
+            <el-form-item label="密码" :error="passwordError || undefined">
+              <el-input
+                v-model="password"
+                type="password"
+                placeholder="密码（至少 8 位，含字母与数字）"
+                show-password
+                :autocomplete="mode === 'login' ? 'current-password' : 'new-password'"
+                data-testid="password"
+                @input="errorMsg = null"
+              />
+            </el-form-item>
 
-      <div v-if="registrationEnabled" class="switch-row">
-        <el-link type="primary" :underline="false" data-testid="switch" @click="toggleMode">
-          {{ mode === 'login' ? '没有账号？点击注册' : '已有账号？点击登录' }}
-        </el-link>
-      </div>
+            <el-form-item v-if="mode === 'register'" label="确认密码" :error="confirmError || undefined">
+              <el-input
+                v-model="confirm"
+                type="password"
+                placeholder="再次输入密码"
+                show-password
+                autocomplete="new-password"
+                data-testid="confirm"
+              />
+            </el-form-item>
 
-      <p v-if="registrationEnabled" class="hint">
-        注册即表示你已知悉本系统为私有部署，所有 API Key 与对话数据仅存储于本服务器。
-      </p>
-      <p v-else class="hint">注册暂未开放，已有账号可正常登录。</p>
-    </el-card>
+            <el-button
+              type="primary"
+              size="large"
+              class="submit-btn"
+              :loading="submitting"
+              :disabled="!canSubmit"
+              native-type="submit"
+              data-testid="submit"
+            >
+              {{ mode === 'login' ? '登录' : '注册并登录' }}
+            </el-button>
+          </el-form>
+
+          <div v-if="registrationEnabled" class="switch-row">
+            <el-link type="primary" :underline="false" data-testid="switch" @click="toggleMode">
+              {{ mode === 'login' ? '没有账号？点击注册' : '已有账号？点击登录' }}
+            </el-link>
+          </div>
+
+          <p v-if="registrationEnabled" class="hint">
+            注册即表示你已知悉本系统为私有部署，所有 API Key 与对话数据仅存储于本服务器。
+          </p>
+          <p v-else class="hint">注册暂未开放，已有账号可正常登录。</p>
+        </section>
+      </Transition>
+    </main>
+
+    <footer class="landing-footer">
+      <span>为深度研究而生</span>
+      <span class="footer-topics">RESEARCH <i>/</i> REASONING <i>/</i> DISCOVERY</span>
+      <span class="edition">FRONTIERAGENT · WORKSPACE</span>
+    </footer>
 
     <!-- The login page is outside AppShell, so it carries its own disclaimer. -->
     <DisclaimerBar variant="inline" />
@@ -236,43 +300,235 @@ function toggleMode() {
 
 <style scoped>
 .login-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  padding: 0 clamp(24px, 5.4vw, 96px) 52px;
+  background: #0c130f radial-gradient(ellipse at 75% 40%, #35402a24, transparent 60%);
+  color: #f0efe2;
+}
+
+.login-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .22;
+  background-image: linear-gradient(#d3d0a00d 1px, transparent 1px), linear-gradient(90deg, #d3d0a00d 1px, transparent 1px);
+  background-size: 90px 90px;
+  mask-image: linear-gradient(90deg, transparent, black);
+}
+
+.landing-header, .landing-footer {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
-  /* Room for the fixed inline disclaimer (T3.7). */
-  padding-bottom: 48px;
-  min-height: 100vh;
-  padding: 16px;
-  background:
-    radial-gradient(circle at 18% 18%, rgba(201, 182, 75, 0.11), transparent 30%),
-    linear-gradient(135deg, #0b0e0b 0%, var(--bg-app) 52%, #141810 100%);
+  justify-content: space-between;
+}
+
+.landing-header {
+  min-height: 108px;
+  border-bottom: 1px solid #c9c7a61c;
+}
+
+.wordmark {
+  display: flex;
+  align-items: center;
+  font-size: 23px;
+  font-weight: 650;
+  letter-spacing: -.8px;
+}
+
+.wordmark > span {
+  font-weight: 350;
+  color: #c8c9b9;
+}
+
+.wordmark > i {
+  margin-left: 12px;
+  color: #d8ca87;
+  font-style: normal;
+  font-size: 28px;
+}
+
+.header-note {
+  color: #929c8b;
+  font-size: 12px;
+  letter-spacing: 3px;
+}
+
+.landing-main {
+  position: relative;
+  display: grid;
+  align-items: center;
+  flex: 1;
+  min-height: 630px;
+}
+
+.intro-copy {
+  position: relative;
+  z-index: 1;
+  padding: 70px 0 90px;
+  pointer-events: none;
+}
+
+.eyebrow {
+  margin: 0 0 32px;
+  color: #c4bd8d;
+  font: 10px/1.6 monospace;
+  letter-spacing: 2.7px;
+}
+
+.eyebrow > span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 12px;
+  border-radius: 50%;
+  background: #cabc76;
+  box-shadow: 0 0 12px #cabc7640;
+}
+
+.intro-copy h1 {
+  margin: 0;
+  font-size: clamp(48px, 5.8vw, 88px);
+  font-weight: 450;
+  line-height: 1.35;
+  letter-spacing: -.035em;
+}
+
+.intro-copy h1 span {
+  color: #d6c989;
+}
+
+.intro-description {
+  margin: 28px 0 0;
+  color: #a7b09e;
+  font-size: 15px;
+  line-height: 2;
+  letter-spacing: 1px;
+}
+
+.enter-hint {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 48px;
+  color: #e4e3cd;
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+
+.enter-hint small {
+  display: block;
+  margin-top: 5px;
+  color: #939e88;
+  font: 9px monospace;
+  letter-spacing: 2.5px;
+}
+
+.enter-arrow {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid #c9bf8170;
+  border-radius: 50%;
+  font-size: 24px;
+  transition: background .3s, transform .3s;
+}
+
+.landing-main:has(.entrance-trigger:hover) .enter-arrow {
+  background: #c9bf8120;
+  transform: translate(3px, -3px);
+}
+
+.entrance-trigger {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.entrance-trigger:focus-visible {
+  outline-offset: -6px;
+}
+
+.login-aside {
+  position: absolute;
+  bottom: 55px;
+  left: 12px;
+  pointer-events: none;
+}
+
+.login-aside .eyebrow {
+  margin-bottom: 14px;
+  font-size: 9px;
+}
+
+.login-aside > p:last-child {
+  margin: 0;
+  font-size: 27px;
+  line-height: 1.6;
+  color: #c9cebd;
+  font-weight: 350;
 }
 
 .login-card {
-  width: 100%;
-  max-width: 420px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--bg-raised) 96%, black);
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
+  position: relative;
+  z-index: 3;
+  justify-self: end;
+  width: min(100%, 440px);
+  margin: 42px 2% 42px 0;
+  padding: 32px 36px;
+  border: 1px solid #b6bf8b30;
+  border-radius: 16px;
+  background: #151e18f5;
+  box-shadow: 0 30px 100px #0003;
 }
 
-.login-card :deep(.el-card__body) {
-  padding: 28px 28px 26px;
+.back-button {
+  margin: 0 0 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #adb59f;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.back-button:hover {
+  color: #e0d392;
+}
+
+.back-button:disabled {
+  opacity: .5;
+  cursor: wait;
+}
+
+.form-eyebrow {
+  margin-bottom: 9px;
+  font-size: 9px;
 }
 
 .title {
-  margin: 0 0 4px;
-  color: var(--text);
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: 0;
+  margin: 0 0 8px;
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: -1px;
 }
 
 .subtitle {
-  margin: 0 0 20px;
-  color: var(--muted);
-  font-size: 14px;
+  margin: 0 0 28px;
+  color: #a7b09e;
+  font-size: 13px;
 }
 
 .error-alert {
@@ -281,31 +537,199 @@ function toggleMode() {
 
 .submit-btn {
   width: 100%;
-  margin-top: 8px;
+  margin-top: 10px;
+  height: 46px;
   color: var(--accent-text);
+  letter-spacing: 2px;
 }
 
 .switch-row {
-  margin-top: 16px;
+  margin-top: 20px;
   text-align: center;
 }
 
 .hint {
-  margin-top: 16px;
+  margin: 20px 0 0;
+  font-size: 11px;
+  color: #a0aa96;
+  line-height: 1.8;
+}
+
+.login-card :deep(.el-form-item) {
+  margin-bottom: 22px;
+}
+
+.login-card :deep(.el-form-item__label) {
   font-size: 12px;
-  color: var(--muted);
-  line-height: 1.6;
+  color: #c6cdbb;
+}
+
+.login-card :deep(.el-input__wrapper) {
+  min-height: 44px;
+  border-radius: 6px;
+  background: #0f1712;
+}
+
+.login-card :deep(.el-input__inner) {
+  font-size: 12px;
+  color: var(--text);
 }
 
 .login-card :deep(.el-form-item__error) {
   color: var(--danger);
 }
 
-.login-card :deep(.el-input__inner) {
-  color: var(--text);
+.landing-footer {
+  gap: 20px;
+  min-height: 70px;
+  border-top: 1px solid #c9c7a61c;
+  color: #939e88;
+  font-size: 11px;
+  letter-spacing: 2px;
 }
 
-.login-card :deep(.el-input__inner::placeholder) {
-  color: var(--quiet);
+.footer-topics, .edition {
+  font: 9px monospace;
+  letter-spacing: 1.5px;
+}
+
+.footer-topics i {
+  margin: 0 16px;
+  color: #64715c;
+  font-style: normal;
+}
+
+.intro-enter-active, .intro-leave-active {
+  transition: opacity .45s, transform .6s;
+}
+
+.intro-leave-active {
+  position: absolute;
+}
+
+.intro-enter-from, .intro-leave-to {
+  opacity: 0;
+  transform: translateY(-24px);
+}
+
+.login-enter-active {
+  transition: opacity .65s .18s, transform .8s .12s cubic-bezier(.22, 1, .36, 1);
+}
+
+.login-leave-active {
+  transition: opacity .2s, transform .25s;
+  position: absolute;
+  right: 0;
+}
+
+.login-enter-from, .login-leave-to {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.aside-enter-active {
+  transition: opacity .8s .35s;
+}
+
+.aside-leave-active {
+  transition: opacity .2s;
+}
+
+.aside-enter-from, .aside-leave-to {
+  opacity: 0;
+}
+
+@media (min-width: 1500px) {
+  .landing-main {
+    width: 100%;
+    max-width: 1440px;
+    align-self: center;
+  }
+}
+
+@media (max-width: 960px) {
+  .login-card {
+    margin-right: 0;
+    width: 400px;
+    padding: 28px;
+  }
+  .login-aside > p:last-child {
+    font-size: 21px;
+  }
+  .edition {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .login-page {
+    padding: 0 24px 72px;
+  }
+  .landing-header {
+    min-height: 82px;
+  }
+  .wordmark {
+    font-size: 20px;
+  }
+  .header-note {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+  .landing-main {
+    min-height: 560px;
+  }
+  .intro-copy {
+    padding: 68px 0;
+  }
+  .intro-copy h1 {
+    font-size: clamp(42px, 8.4vw, 62px);
+  }
+  .eyebrow {
+    font-size: 8px;
+    letter-spacing: 1.8px;
+  }
+  .intro-description {
+    font-size: 13px;
+    letter-spacing: 0;
+  }
+  .login-aside {
+    display: none;
+  }
+  .login-card {
+    justify-self: center;
+    margin: 30px 0;
+    padding: 26px;
+    width: min(100%, 440px);
+  }
+  .landing-footer {
+    min-height: 55px;
+    font-size: 10px;
+  }
+  .footer-topics {
+    font-size: 8px;
+    letter-spacing: 0;
+  }
+  .footer-topics i {
+    margin: 0 5px;
+  }
+}
+
+@media (max-width: 380px) {
+  .header-note {
+    display: none;
+  }
+  .login-card {
+    padding: 22px 18px;
+  }
+  .footer-topics {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 </style>

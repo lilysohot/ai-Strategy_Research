@@ -144,7 +144,9 @@ async def collect_once(source: PriceSource, *, now: datetime | None = None) -> i
                             )
                             .where(
                                 store.WatchRule.status == "active",
-                                store.WatchRuleRevision.trigger_mode.in_(watch_rules.LONG_RUNNING_MODES),
+                                store.WatchRuleRevision.trigger_mode.in_(
+                                    watch_rules.LONG_RUNNING_MODES
+                                ),
                             )
                         ),
                     )
@@ -296,8 +298,10 @@ async def collect_once(source: PriceSource, *, now: datetime | None = None) -> i
                     decisions.append({"id": target["id"], "reason": "rule_expired"})
                     continue
                 previous = rule.baseline_price
+                previous_observed_at = rule.last_valid_quote_at
                 prior_period = bool(
-                    presence and rule.last_valid_quote_at
+                    presence
+                    and rule.last_valid_quote_at
                     and utc(rule.last_valid_quote_at) < utc(presence.started_at)
                 )
                 met = watch_eval.condition_met(
@@ -312,7 +316,11 @@ async def collect_once(source: PriceSource, *, now: datetime | None = None) -> i
                         trigger_reason = "baseline_reset_after_offline"
                     else:
                         crossing = watch_eval.classify_cross(
-                            previous, obs.price, rev.direction, rev.threshold_low, rev.threshold_high
+                            previous,
+                            obs.price,
+                            rev.direction,
+                            rev.threshold_low,
+                            rev.threshold_high,
                         )
                         met = crossing is not None
                         trigger_reason = crossing or "waiting_for_crossing"
@@ -322,6 +330,12 @@ async def collect_once(source: PriceSource, *, now: datetime | None = None) -> i
                 rule.last_suppressed_reason = None if met else trigger_reason
                 hit = target | {
                     "price": str(obs.price),
+                    "previous_price": str(previous) if previous is not None else None,
+                    "previous_observed_at_ms": (
+                        int(utc(previous_observed_at).timestamp() * 1000)
+                        if previous_observed_at is not None
+                        else None
+                    ),
                     "observed_at_ms": obs.observed_at_ms,
                     "received_at_ms": obs.received_at_ms,
                     "met": met,

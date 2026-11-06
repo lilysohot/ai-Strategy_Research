@@ -8,6 +8,8 @@ import logging
 import re
 from typing import Any, Protocol, runtime_checkable
 
+from frontier_agent.core.runtime.loop._dsml import is_dsml_attempt, parse_dsml
+
 logger = logging.getLogger(__name__)
 
 # Compiled once at import time for performance.
@@ -317,6 +319,12 @@ class MultiFormatToolCallParser(DefaultToolCallParser):
         # inner-monologue that should never have been emitted.
         self._clean_leaked_content(response)
 
+        text = self._extract_text(getattr(response, "content", "") or "")
+        if not getattr(response, "tool_calls", None) and is_dsml_attempt(text):
+            # An envelope is atomic. Never interpret a nested JSON/XML example
+            # inside its parameter as a different fallback tool action.
+            return parse_dsml(text, tool_names)
+
         base = super().parse(response, tool_names)
         if base:
             return base
@@ -353,6 +361,8 @@ class MultiFormatToolCallParser(DefaultToolCallParser):
         """
         if not text:
             return []
+        if is_dsml_attempt(text):
+            return parse_dsml(text, tool_names)
         if "<use_mcp_tool>" in text and (
             calls := self._parse_mcp_tool_calls(text, tool_names)
         ):

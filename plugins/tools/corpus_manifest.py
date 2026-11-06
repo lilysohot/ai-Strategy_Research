@@ -28,7 +28,7 @@ from __future__ import annotations
 
 import json
 import logging
-from typing import Any
+from typing import Any, Literal
 
 from frontier_agent.core.execution_context import get_current_execution_scope
 from frontier_agent.core.tool import tool
@@ -38,6 +38,7 @@ from plugins.corpus.ledger import (
     SourceResolver,
     evidence_delivery_for_submit,
     get_run_ledger,
+    load_manifest_files,
     verify_manifest,
     write_manifest_file,
 )
@@ -55,7 +56,8 @@ _SUBMIT_HINT = (
     "原文证据优先用 evidence_ref（search 的 excerpts.ref 或 fetch 的 evidence_ref），无需重写原文。"
     "对非 supported 的结论：按需补取原文、重新查询失效语义版本、修改表述或移除结论；"
     "已完整送达的语义证据不必例行 corpus_fetch。"
-    "然后重新提交**完整**清单（每次提交生成新的候选文件，边界以汇总校验为准）。"
+    "submission_mode=replace（默认）替换本任务的完整清单；分批添加或按 id 修正用 upsert，"
+    "保留返回的 active_conclusion_ids。删除结论请 replace 提交保留的完整清单。"
     "本轮新取的片段需经过下一轮消息边界核验，pending 的结论请下一轮重新提交确认。"
 )
 
@@ -83,6 +85,8 @@ def with_manifest_tool(tools: list[Any], *, role_id: str) -> list[Any]:
 #: 系统提示附注：清单提交义务（仅在工具实际绑定时追加）。
 MANIFEST_PROMPT_NOTE = (
     "\n\n## 报告证据清单（A4）\n"
+    "本轮未检索或引用语料、仅使用行情或业务资料时，无需调用此工具，也不要提交空清单；"
+    "语料校验将标记为 not_applicable，行情回执用于 submit_watch_intents 的 evidence_refs。\n"
     "你绑定了 `corpus_submit_manifest`。在产出基于语料库结论的报告或最终回复之前：\n"
     "1. 把每条基于语料的结论登记进清单：结论 id、`report_quote`（该结论在最终报告"
     "中的逐字锚点）、证据与必要依赖。证据优先只填 `evidence_ref`（search 的 excerpts.ref "
@@ -90,7 +94,8 @@ MANIFEST_PROMPT_NOTE = (
     "兼容旧 doc_id/locator/quote；依赖可附 purpose"
     "（period/unit/header/footnote 用途）；\n"
     "2. 按工具返回的逐条问题修正：补取原文（corpus_fetch）、修改表述或移除结论，"
-    "然后重新提交完整清单；\n"
+    "分批提交用 submission_mode=upsert（每条必须有稳定 id），全量替换用 replace；"
+    "以 active_conclusion_ids 确认当前完整清单，勿把分批提交误当全量替换；\n"
     "3. 新取片段下一轮才能确认送达（pending），届时重新提交确认；\n"
     "4. 交付文件时先写入 /outputs 报告，提交时指定 report_path；report_quote 必须逐字复制"
     "报告内容（保留 Markdown、标点与空格）。文件修改后重新提交。无 report_path 仅证据预检，"
@@ -102,6 +107,8 @@ MANIFEST_PROMPT_NOTE = (
     "pending 等待下一轮实际请求确认；裁剪缺口重查，版本失效须重查，不能把发布成功当送达。\n"
     "发布边界会对照最终报告与消费账本重算校验；缺清单或未通过都会被记录并"
     "（在启用阻断时）降级发布状态。"
+    "团队最终聊天答复请在 deliver_answer 的 corpus_conclusions 中提交与 content 同版本的"
+    "完整清单；report_quote 必须逐字来自该 content，不能直接沿用研究稿的旧锚点。"
 )
 
 
@@ -161,18 +168,25 @@ def _expand_evidence_references(conclusions: Any) -> Any:
     if not isinstance(conclusions, list):
         return conclusions
     rows = []
-    for row in conclusions:
+    for row_index, row in enumerate(conclusions):
         if not isinstance(row, dict) or not isinstance(row.get("evidence"), list):
             rows.append(row)
             continue
         evidence = []
-        for item in row["evidence"]:
+        for evidence_index, item in enumerate(row["evidence"]):
             if not isinstance(item, dict) or "evidence_ref" not in item:
                 evidence.append(item)
                 continue
             if set(item) - {"evidence_ref", "purpose"}:
                 raise ValueError("evidence_ref 仅可附 purpose；doc_id/locator/quote/区间由系统填写")
-            resolved = resolve_evidence_reference(item["evidence_ref"])
+            try:
+                resolved = resolve_evidence_reference(item["evidence_ref"])
+            except (ValueError, TypeError) as exc:
+                raise ValueError(
+                    f"conclusions[{row_index}].evidence[{evidence_index}].evidence_ref "
+                    f"(id={row.get('id', '')!r}, ref={item['evidence_ref']!r}): {exc}. "
+                    "复制工具返回的完整引用；不要缩写或猜测。整份提交未写入，请修正此字段后重试。"
+                ) from exc
             evidence.append({**resolved, **({"purpose": item["purpose"]} if "purpose" in item else {})})
         rows.append({**row, "evidence": evidence})
     return rows
@@ -220,14 +234,63 @@ def _current_owner() -> str:
         return ""
     task_id = str(getattr(scope, "task_id", "") or "").strip()
     role_id = str(getattr(scope, "role_id", "") or "").strip()
+    job_id = str(scope.metadata.get("agent_job_id") or "").strip()
+    if job_id:
+        return f"{role_id}:{task_id}:{job_id}"
     if task_id and role_id:
         return f"{role_id}:{task_id}"
     return task_id or role_id
 
 
+def _prepared_conclusions(conclusions: Any) -> list[dict[str, Any]]:
+    """Resolve real receipts and reject the entire invalid submission before writing."""
+    rows = _expand_semantic_references(_expand_evidence_references(conclusions))
+    errors = _validate_conclusions(rows)
+    if errors:
+        raise ValueError("; ".join(errors))
+    numbered = []
+    seen = set()
+    for index, row in enumerate(rows):
+        entry = dict(row)
+        entry.setdefault("id", f"C{index + 1}")
+        if not isinstance(entry["id"], str) or not entry["id"].strip() or entry["id"] in seen:
+            raise ValueError(f"conclusions[{index}].id 必须是非空且不重复的字符串")
+        seen.add(entry["id"])
+        numbered.append(entry)
+    return numbered
+
+
+def prepare_final_manifest(conclusions: Any, content: str) -> dict[str, Any]:
+    """Bind coordinator claims to the exact body accepted in the same delivery call."""
+    import hashlib
+
+    rows = _prepared_conclusions(conclusions) if conclusions != [] else []
+    errors = []
+    for index, row in enumerate(rows):
+        anchor = row.get("report_quote")
+        if not isinstance(anchor, str) or not anchor.strip() or anchor not in content:
+            errors.append(f"corpus_conclusions[{index}].report_quote 必须逐字来自本次 content")
+    if errors:
+        raise ValueError("; ".join(errors))
+    return {
+        "schema_version": MANIFEST_SCHEMA_VERSION,
+        "report_target": "final_answer",
+        "report_binding": {"kind": "inline", "text": content,
+                           "sha256": hashlib.sha256(content.encode()).hexdigest()},
+        "conclusions": rows,
+    }
+
+
+def commit_final_manifest(payload: dict[str, Any]) -> None:
+    """Persist only after all delivery gates pass; never certify evidence here."""
+    if write_manifest_file(payload, owner=_current_owner() + ":final_answer") is None:
+        raise ValueError("最终证据清单写入失败，交付未接受，请重试")
+
+
 @tool
 async def corpus_submit_manifest(
     conclusions: list[dict[str, Any]], report_path: str | None = None,
+    submission_mode: Literal["replace", "upsert"] = "replace",
 ) -> str:
     """提交报告结论证据清单（A4），立即回验并返回逐条问题以驱动环内修正。
 
@@ -236,6 +299,8 @@ async def corpus_submit_manifest(
     会汇总全部候选并对照最终报告与消费账本重算校验。
 
     Args:
+        submission_mode: replace 全量替换本任务清单（默认）；upsert 按稳定 id 增量添加或修改，
+            保留其他结论。删除结论请用 replace 提交需要保留的完整清单。
         report_path: 已写入的 /outputs/*.md 或 *.txt 报告；填写后立即核验逐字锚点，
             并绑定文件哈希供发布时复核。未填写仅核验证据，不代表报告通过。
         conclusions: 结论数组。每条结论：
@@ -259,10 +324,17 @@ async def corpus_submit_manifest(
         ``conclusions``（逐条状态与问题，pending=新取片段待下一轮边界核验）、
         ``hint``（修正指引）；schema 不合法时 ``ok=false`` 且 ``errors`` 逐条列出。
     """
+    numbered: list[dict[str, Any]] = []
     try:
-        conclusions = _expand_evidence_references(conclusions)
-        conclusions = _expand_semantic_references(conclusions)
-        errors = _validate_conclusions(conclusions)
+        if submission_mode not in {"replace", "upsert"}:
+            raise ValueError("submission_mode 必须是 replace 或 upsert")
+        if submission_mode == "upsert" and (
+            not isinstance(conclusions, list)
+            or any(not isinstance(row, dict) or not row.get("id") for row in conclusions)
+        ):
+            raise ValueError("upsert 的每条结论必须提供稳定 id")
+        numbered = _prepared_conclusions(conclusions)
+        errors = []
     except (ValueError, TypeError) as exc:
         errors = [str(exc)]
     if errors:
@@ -283,14 +355,22 @@ async def corpus_submit_manifest(
             report_text, binding = read_report(report_path)
         except (OSError, ValueError) as exc:
             return json.dumps({"ok": False, "errors": [str(exc)]}, ensure_ascii=False)
-    rows = [row for row in conclusions if isinstance(row, dict)]  # schema 已保证
-    numbered: list[dict[str, Any]] = []
-    for index, row in enumerate(rows):
-        entry = dict(row)
-        entry.setdefault("id", f"C{index + 1}")
-        numbered.append(entry)
-
     owner = _current_owner()
+    if submission_mode == "upsert":
+        if not owner:
+            return json.dumps({"ok": False, "errors": ["upsert 需要当前任务身份"]}, ensure_ascii=False)
+        previous = next((p for _, p in reversed(load_manifest_files())
+                         if p.get("owner_role") == owner and p.get("report_target") != "final_answer"), {})
+        if previous.get("report_binding") and binding is None:
+            return json.dumps({"ok": False, "errors": ["此清单已绑定报告，upsert 也须提供 report_path"]},
+                              ensure_ascii=False)
+        old_path = (previous.get("report_binding") or {}).get("path")
+        if old_path and binding and old_path != binding["path"]:
+            return json.dumps({"ok": False, "errors": ["不能 upsert 到另一报告，请用 replace"]},
+                              ensure_ascii=False)
+        combined = {row["id"]: row for row in previous.get("conclusions", [])}
+        combined.update({row["id"]: row for row in numbered})
+        numbered = list(combined.values())
     payload = {
         "schema_version": MANIFEST_SCHEMA_VERSION,
         "conclusions": numbered,
@@ -328,7 +408,12 @@ async def corpus_submit_manifest(
             "id": row.get("id"),
             "status": row.get("status"),
             "delivery": row.get("delivery"),
-            "matched_evidence": row.get("matched_evidence", []),
+            # Original text already lives in receipts and the persisted verification;
+            # repeated submissions must not replay entire source pages into context.
+            "matched_evidence": [
+                {key: value for key, value in item.items() if key != "quote"}
+                for item in row.get("matched_evidence", [])
+            ],
             "semantic_references": row.get("semantic_references", []),
             "problems": problems,
         })
@@ -337,6 +422,8 @@ async def corpus_submit_manifest(
             "ok": True,
             "manifest_file": str(path) if path else None,
             "owner": owner or None,
+            "submission_mode": submission_mode,
+            "active_conclusion_ids": [row["id"] for row in numbered],
             "evidence_status": verification.get("status"),
             "report_bound": binding is not None,
             "publish_status": (
@@ -350,6 +437,11 @@ async def corpus_submit_manifest(
         },
         ensure_ascii=False,
     )
+
+
+# The generic decorator currently maps Literal to string; expose the actual
+# choices to the model as well as enforcing them at the callable boundary.
+corpus_submit_manifest.parameters["properties"]["submission_mode"]["enum"] = ["replace", "upsert"]
 
 
 def _resolver() -> SourceResolver:

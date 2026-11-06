@@ -171,7 +171,11 @@ onMounted(async () => {
 
     <div class="rail-section">
       <span>最近</span>
-      <span>{{ visibleSessions.length }}</span>
+      <span class="rail-counts">
+        <span v-if="sessions.unreadCount" class="unread-count" role="status" aria-live="polite"
+          data-testid="unread-count">{{ sessions.unreadCount }} 个未读</span>
+        <span>{{ visibleSessions.length }}</span>
+      </span>
     </div>
 
     <div v-if="sessions.loadingList" class="rail-loading">加载中...</div>
@@ -185,7 +189,12 @@ onMounted(async () => {
         data-testid="session-item"
         @click="onSelect(s.id)"
       >
+        <span class="item-heading">
           <span class="item-title" :title="s.title ?? undefined">{{ s.title || '未命名研究' }}</span>
+          <span v-if="sessions.isUnread(s.id)" class="item-unread"
+            title="回答已完成，点击查看" aria-label="回答已完成，未读"
+            data-testid="session-unread"></span>
+        </span>
         <span class="item-meta">
           {{ s.turn_count ?? 0 }} 条 · {{ formatDate(s.updated_at || s.created_at) }}
         </span>
@@ -373,12 +382,38 @@ onMounted(async () => {
 }
 
 .item-title {
+  min-width: 0;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 14px;
   font-weight: 600;
+}
+
+.item-heading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.item-unread {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.rail-counts {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.unread-count {
+  color: var(--accent);
 }
 
 .item-delete {

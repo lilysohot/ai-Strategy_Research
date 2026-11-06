@@ -1,0 +1,153 @@
+**部分完成：以下结论仅基于已取得的证据，尚有任务或证据缺口。**
+
+# 中国 AI 短剧：为什么跑出来了，以及"断层领先"到底断在哪一层
+
+**先说结论（也先说清证据强度）**：这个现象真实存在，但"断层式领先"只在**应用侧渗透与分发**这一层成立，在**模型绝对技术能力**这一层不成立。把它讲成"中国 AI 全面领先"是错的；讲成"营销泡沫"也是错的——2026 年上半年中国上线的微短剧里 AI 生成已占压倒性多数，这是全球唯一的规模。下面是分维度的证据，以及这个产业的代价。
+
+> **核验状态（必须前置披露）**：本答复的核心判断段经过两轮独立核验（3 个核验任务，其中 1 个因模型错误未产出结论）。结果是：**"分维度表述"这一项在第一版通过、在修正版被判 FAIL**（理由：我写了"应用侧渗透率全球最高的一档"和开篇"产能维度大体成立"，但支撑数据只有中国境内数据，缺跨国同期对照）；**"数字口径"这一项两版均判 FAIL**（第一版 6 项缺陷，修正后消除 5 项但仍有 3 项：样本数归属、跨源环比、"60 亿"与分项合计 58 亿不符）。我已按核验意见改写下方文字，但**改写后的文字没有获得通过结论**。凡涉及"全球最高/领先"的判断，请按我在文中标注的限定理解。
+>
+> **引用方式说明**：本答复的证据以公开网页抓取为主，逐条标注 URL；仅《后西游记》播放量一项来自研报摘录（见文末语料清单），其余数字均未绑定为语料库引用。
+
+---
+
+## 一、先校正前提：领先是分层的
+
+**有证据支持的部分**
+
+- **第三方盲测榜首确实是中国模型。** Artificial Analysis 视频榜（2026 年 11 月抓取，AA-Video-T2V v2.1）：文生视频第一为阿里 **Wan 3.0（Elo 1172，该榜共 31 个模型）**；图生视频第一为字节 **Dreamina Seedance 2.5（Elo 1159）**（https://artificialanalysis.ai/video/leaderboard/text-to-video 、https://artificialanalysis.ai/video/leaderboard/image-to-video ）。注意 Elo 是**人类盲测偏好**，不是画质绝对度量。
+- **规格代差是真的。** 据厂商公布：Seedance 2.5 单次可生成 30 秒、支持多轮延长（2026-07-31，https://seed.bytedance.com/zh/blog/one-take-creation-flexible-referencing-introducing-seedance-2-5 ）；Wan 3.0 单次 30 秒、音画同出（2026-08-06 公测）；MiniMax H3 为 15 秒/2K/原生立体声＋原生多镜头（厂商自述，页面正文本次未取到，https://www.minimax.io/blog/minimax-h3 ）。"30 秒原生单镜＋原生音频"这一档，中国厂商先做成了量产商品。
+- **前沿开源权重基本只有中国实验室在放。** AA 明示开源权重文生视频榜首为 MiniMax H3（Elo 1120，出自**无声版** AA-Video-T2V-Silent v2.1；同一模型在带音频榜为 1160）。但要注意：MiniMax 当时只表示"计划在数日内开放权重"。
+- **应用侧渗透的绝对规模是全球唯一的。** 2026 年一季度 AI 占中国上线微短剧 **>95%**（12.8 万部中约 12.2 万部，DataEye 口径、经转述）；二季度 AI 微短剧 **15.3 万部**（中国网络视听协会《微短剧创作指引（2026Q2）》口径，该口径下总上线 23.9 万部、AI 占 64%——与一季度的 >95% 来自不同机构、不同分母，**不可直接相减比较**）；抖音端 2026 上半年新增 AI 剧/漫剧 **22.19 万部**。广电总局网络视听节目管理司司长经媒体转述称，2026 年前 8 个月全国上线微短剧 43 万部、AI 生成类占比超九成（**二手转述，未见总局原文**）。
+- **出海分发端中国厂商占绝对多数。** 据 DataEye 2026 年上半年**"调研预测"**（该文自述为调研预测，非平台实测）：中国出海短剧 App 内购收入约 **11.82 亿美元、约占海外 93%**（仅 App 内购口径），下载约 **12.21 亿次、约占 85%**。另有 Sensor Tower 口径称 2025 年全球短剧 App 内购 >28 亿美元（同比 +116%）。
+
+**证据不足或不成立的部分**
+
+- **中国模型并非集体领先。** 同一个 AA 带音频榜上，快手**可灵**仅列第 18–19 位（Elo 1022 与 1000，其中 1000 是该榜固定锚点），Vidu Q3 Pro 第 27、PixVerse V6 第 21。而换到 llm-stats 的 TrueSkill 榜单，冠军又变成可灵（arena score 1934，与 AA 的 Elo 尺度不可比）。**"谁第一"高度依赖榜单口径、是否计入音频、以及是否含开源权重**——不能当作稳定事实。
+- **"全球渗透率最高"我没有跨国对照数据，不应这么说。** 我手上只有中国境内数据；跨国同期对照（例如美国、印度、东南亚的 AI 微短剧产量占比）本次未取得。合理的说法是：**中国的 AI 微短剧产量与 AI 在短剧供给中的占比，其绝对规模在其他市场未见同等量级报道**——这是"本次检索未见"，不是"不存在"。
+- **长视频与长叙事仍是拼接。** 仍靠"多轮延长"而非一次生成分钟级连贯内容；字节官方博客自认"在复杂运动的物理合理性、极多主体交互场景的稳定性上，模型仍有提升空间"。
+- **欧美主流影视工业化采用，证据同样不足。** 好莱坞的实际状况不是"没有 AI 短剧"，而是**没有本土竖屏付费分发渠道**——DramaBox、DramaWave、FlareFlow 等主要面向美国市场的 App 越来越多采用合成演员与场景，纯 AI 竖屏 App（My Muse、Inkitt Ironblood）已存在（The Hollywood Reporter，2026-09-09，https://www.hollywoodreporter.com/business/business-news/ai-hollywood-microdramas-1236694483/ ）。即"美国有 AI 供给，但没有中国式的分发与结算闭环"。
+- **收入渗透远低于供给渗透。** 若以媒体估算的 2026 年 AI 短剧海外收入约 6.5 亿美元（**该数字本次未能追溯到原文，仅见二手转述**）除以某调研报告**预测**的约 60 亿美元海外大盘（该报告分项为 App 内购 30 亿＋TikTok/YouTube 分账 18 亿＋网页 10 亿，合计 58 亿），得约 11%（分母取 58 亿时为 11.2%）——**分子为估算、分母为预测，只能当量级参考**。相对地，据 DataEye 2026 年 5 月经转述的摘要数据，海外投放大盘中 AI 占比"8 成以上"（**仅摘要级、未见原报告**）。**供给与投放的渗透率明显高于收入的渗透率**——这是理解这个产业最重要的一句话。
+
+---
+
+## 二、为什么短剧成了中国 AI 落地最快的场景（六条机制，每条挂证据）
+
+**1. AI 替代的正好是短剧成本结构里最标准化的那一层。**
+短剧的钱主要花在"人"上：演员、场地、服化道、剧组时间、后期。AI 直接砍掉的是执行层，而剧本钩子、情绪节奏仍由人做——所以降本立竿见影，却不需要重做产业。**量化（务必注意口径差异）**：制作端，AI 仿真人 8–10 万元/部 vs 真人约 100 万元/部、"降幅 80%–90%"（CIC 灼识张辰恺，科创板日报 2026-09-08，https://www.cls.cn/detail/2476778 ）；单集 ≤5000 元 vs 5–10 万元/集（中国证券报）；但**全链路（含投流、IP、算力）**只降到低端 AI 剧 50–100 万 vs 真人 400–600 万（钛媒体 2026-11，DataEye 测算）；而人民日报采访的从业者直接说"AI 短剧生产成本并不一定比真人低"，精品 AI 剧《桃花潭记》制作 20–50 万、全链路 150–300 万。**"降 90%"是制作端口径，"降一半"才是全链路口径**——把前者当后者宣传是行业里最常见的夸大。
+
+**2. 单位经济可即时计量，内容被改造成了可 A/B 测试的广告素材。**
+投流 ROI、万播收益、完播率都是当天可读的数字。当"试错"从"赌一次"变成"买一张彩票"，供给方的最优策略就是**海量铺量**——这正是 AI 的强项。周期上：80 集约 40–50 人做 2 个多月，AI 同体量"一周多"（科技日报 2026-04-17，河南知行影视）；团队从十余人至数十人缩到 **3–8 人**（"导演＋抽卡师＋后期"为最小配置，中国经济周刊 2026-04-15）。〔机制为推断，但 ROI/万播/周期为事实〕
+
+**3. 1–3 分钟竖屏强情节，把 AI 的短板藏在了叙事钩子后面。**
+AI 的失败点集中在长镜头调度、复杂物理、人物跨镜一致性、口型与微表情——而这些在 90 秒一个反转的竖屏剧里被大幅稀释。更关键的是**题材选择**：AI 短剧从玄幻、科幻、逆袭、系统流切入，这些恰恰是真人拍不起、特效最贵的题材，AI 在此是"相对更划算"而非"绝对更好"。海外 AI 剧热值 TOP20 中情感类 14 部、逆袭 7 部（DataEye）。〔观众"画质容忍度"这一环**没有任何第三方量化调研**，属推断〕
+
+**4. 中国已经有一台现成的短剧工业机器，AI 只是插进流水线的一个工位。**
+这是与"从零建产业"最本质的区别。郑州 2024 年末 820 家短剧制作企业 → 2025 年 1000+ 家，20 万平米拍摄/AIGC 园区、600 余家产业链企业，另有 3 年不高于 5000 万元的算力补贴（单主体最高 30%、每年 30 万元）；全国微短剧相关企业存量 10.02 万家；红果热度前 30 的 AI 剧中 19 部为 IP 改编，阅文将上千部网文改编 AI 漫剧、46 部破亿。IP、编剧、后期劳动力、场地、投流团队全在，**试错的沉没成本极低**。
+
+**5. 模型与分发同属一家公司——这是"中国式领先"最硬的结构原因。**
+字节：番茄小说（IP）＋ Seedance/即梦（模型）＋ 抖音/红果（分发与分账）；快手：可灵（模型）＋ 星芒（分发）。**生成—分发—结算在同一个闭环里，摩擦最小。** 美国缺少同构的"前沿视频模型＋免费竖屏短剧平台"组合：模型在 OpenAI/Google 手里，竖屏付费渠道不存在，中间还隔着好莱坞工会。Quibi 2020 年融资 17.5 亿美元、上线 6 个月关闭，业内归因于"用好莱坞老派思维做竖屏"（新华社 2025-05-26 受访者判断）。〔闭环优势为事实，因果归因为推断〕
+
+**6. 政策与平台补贴把试错成本外部化，进一步放大供给。**
+广电总局 2025-01-04《关于实施"微短剧+"行动计划》（https://www.nrta.gov.cn/art/2025/1/4/art_113_69936.html ）、2025-02-05 分类分层审核（30 万元投资门槛，https://www.nrta.gov.cn/art/2025/2/5/art_113_70148.html ）、四部门《人工智能生成合成内容标识办法》2025-09-01 施行、2026-09-01 起总局令第 16 号《微短剧发展管理办法》要求 AI 微短剧每集明显位置加标识（https://www.nrta.gov.cn/art/2026/7/31/art_113_73785.html ）。平台侧：红果"果燃计划"（2024-12，投资最高 100%）、抖音×即梦 AIGC 短剧招募（2026-03-21，联合出品最高 500 万直投）、快手 2026-05 宣布 8 亿分账＋2 亿现金＋10 亿流量。**监管没有挡住它，反而给了它合法身份和补贴。**
+
+代表性案例（成本多数未公开披露）：《中国神话》2024-03-22 央视频 AI 频道，国内首部 AI 全流程微短剧；《三星堆：未来启示录》2024-07-08 抖音（即梦技术支持），第一季全端传播 >1.4 亿次；《山海奇镜之劈波斩浪》2024-07-13 快手星芒（可灵），5 集播放 >5200 万；《兴安岭诡事》2025-02-19，11 集、前 5 集免费后 6 集付费 9.9 元，一周全网播放破 3500 万，**总成本约 60 万元（含运营，出品方自述）**；《后西游记》2026-09 芒果 TV，国内首部 AIGC 长剧，播放 >4.7 亿（**券商研报口径，未经平台公告确认**）。
+
+---
+
+## 三、代价：这个"最快普及"是被什么推着走的，又付出了什么
+
+这部分比前面的乐观叙事更重要，也是国内报道里最容易被省略的。
+
+- **AI 短剧的完播率显著低于真人。** 头部真人短剧完播率 >40%，AI 短剧普遍 <15%；红果 AI 漫剧峰值完播率从 42% 掉到 19%，用户日均观看时长环比 -23%（科创板日报 2026-09-08）。
+- **爆款率与回本率极低。** 抖音端 2026 上半年新增 AI 剧/漫剧 22.19 万部，破亿仅 1055 部（**0.48%**），达 5000 万播放盈亏线 2886 部（**1.3%**）；98.7% 的 AI 微短剧项目无法回本（DataEye，经钛媒体 2026-11 转述）。
+- **收益在塌缩，成本在反升。** 千次播放收益 60 元（2025H2）→ 15–30 元；万播收益 30–100 元 → 5–10 元；标准化代工报价 5000 元/分钟 → 数百元；一季度活跃承制方 1216 家 → 698 家（-42%）。同期云厂商算力涨价最高 34%，即梦月卡 299→499 元、单条 10 秒素材 0.6→6.67 元。**AI 降低的是生产成本，没有降低分发成本，利润在向平台迁移。**
+- **真人产能是真的被替代了。** 横店 2026 年三季度在拍竖屏剧组同比 **-82.5%**（2025 年新开机竖屏剧组 4016 个）；涿州基地 25 家 → 1 家；郑州多家基地闲置、西安实景基地打折。这是"最快普及"最残酷的注脚。
+- **平台在治理，监管在收紧。** 2026 年全网下架违规微短剧 6.8 万部、**九成以上为 AI 剧**；红果 4 月一周处置 3522 部、5 月逾 2 万部、7 月 12347 部，并专项治理"AI 脸"同质化。红果 2026 年 2 月下调分账、取消中小承制方保底（抖音副总裁李亮回应称仅"调整保底机制"）。
+- **版权与肖像风险已经爆出。** 红果《京华风云》主角酷似肖战引侵权争议；DramaWave、DramaBox 角色被指酷似 Henry Cavill（THR）。
+- **院线是明确的失败案例。** AI 院线片《三星堆：未来往事》成本千万级、票房不足 150 万元（21 世纪经济报道 2026-11-02）。**AI 能低成本做短剧，不等于能做电影**——这恰好划出了"断层"的边界。
+
+---
+
+## 四、一句话回答你的两个问题
+
+1. **为什么短剧是中国 AI 落地最快的场景？** 因为它是唯一一个"AI 的短板恰好不致命、AI 的长板恰好最值钱、并且中国已经拥有完整产业链和现成付费分发渠道"的内容形态。降本不是主因——**主因是试错成本低到可以让"产量"本身成为策略**，而产量又刚好能填满红果这类免费平台的流量池。
+2. **为什么在全球形成断层？** 断的不是模型技术，而是**"模型可得性 × 产业链配套 × 自有分发渠道"三件套的组合**。中国把 AI 视频直接接到了已经有付费闭环的内容形态上；美国把 AI 视频接到了电影/广告（高要求、工会阻力）和工具订阅（不闭环）上。中国出海短剧 App 本身已经是全球分发基础设施，所以 AI 产能可以直接变现到全球。
+
+**但请注意"断层"的三条边界**：① 可灵、Vidu、PixVerse 在第三方盲测中处于中下游，"中国领先"是 Wan/Seedance/MiniMax 的领先，不是集体领先；② 收入渗透（约 11% 量级，且分子为估算、分母为预测）远低于供给渗透，海外 AI 短剧还没有变成一门大生意；③ 若中国模型的绝对画质与长叙事能力被追平，而收入侧迟迟不兑现，当前的"产能断层"会以更快的速度变成"产能过剩"。
+
+---
+
+## 五、本次检索的已知缺口（不影响上述判断，但影响精度）
+
+- **未取得一手原文**：快手 IR 的 ARR 公告（403）、OpenAI 关于 Sora 2 于 2026-04/09 停服的帮助页（超时，**该"停服"说法未获官方核实，不要当作事实引用**）、kling.ai Release Notes（渲染失败）、RFI 转述的"90% 微短剧由 AI 制作"（抓取失败，仅见标题）、MiniMax H3 博客正文。
+- **口径冲突未解决**：DramaBox 2025 年收入 Sensor Tower 5.3 亿美元 vs 点点数据 2.947 亿美元（差 1.8 倍）；2025 年海外大盘 15.25 亿（Owl&Co 实际）/20.58 亿（点点）/28 亿（Sensor Tower）/40 亿（DataEye）——差异主要来自是否含中国 iOS、是否含 IAA 与网页端；红果 DAU 1.68 亿 vs 1.77 亿（QuestMobile）两个口径并存。
+- **无一手数据的机制环节**：投流数据回流天数、单部剧回本周期天数、观众对 AI 画质的容忍度（无任何量化调研）、协会口径下 2026Q1 的 AI 占比基数（因此"环比 +25%"这一跨源相除不成立，本文已删去）。
+- **核验结论的适用范围**：两项检查只覆盖了本答复第一节的"核心判断段"（约 20 个数字与两个维度划分），**不覆盖**第二节的成本/周期数字、第三节的反面数据与案例表。这些数字均标注了来源与口径，但未经独立核验。
+
+### 执行状态
+
+本次结果为部分完成或尽力结果，不能据此认定所有要求均已完成。
+
+仍未确认的证据缺口：
+
+- 核验：对最终答复中的关键量化主张与“断层式领先”表述做独立核查（实体/版本/日期/单位/条件/归属）: lead\_claim 在修正版被判 FAIL：&\#x27;应用侧渗透率全球最高的一档&\#x27;与开篇&\#x27;产能维度大体成立&\#x27;缺跨国同期对照数据；&\#x27;绝对画质&\#x27;未单列为证据不足维度。numbers 在两版均 FAIL：第一版 6 项缺陷，修正版消除 5 项但仍有 3 项（样本数归属错位、跨源环比、&\#x27;60亿&\#x27;与分项合计 58 亿不符）。最终发布文字未获得任何通过结论；本轮修复重检额度已用完（job.5 llm\_error、job.6 FAIL），不再重新派发。
+
+以下必要成员任务或检查仍有缺口；已返回的工具观测不等于核验通过：
+
+- claims\_verifier: verification\_not\_passed (1b783b2d4605.job.4)
+
+- claims\_verifier: llm\_error (1b783b2d4605.job.5)
+
+- claims\_verifier: verification\_not\_passed (1b783b2d4605.job.6)
+
+任务板尚未解决的事项：
+
+- 核验：对最终答复中的关键量化主张与“断层式领先”表述做独立核查（实体/版本/日期/单位/条件/归属）: lead\_claim 在修正版被判 FAIL：&\#x27;应用侧渗透率全球最高的一档&\#x27;与开篇&\#x27;产能维度大体成立&\#x27;缺跨国同期对照数据；&\#x27;绝对画质&\#x27;未单列为证据不足维度。numbers 在两版均 FAIL：第一版 6 项缺陷，修正版消除 5 项但仍有 3 项（样本数归属错位、跨源环比、&\#x27;60亿&\#x27;与分项合计 58 亿不符）。最终发布文字未获得任何通过结论；本轮修复重检额度已用完（job.5 llm\_error、job.6 FAIL），不再重新派发。
+
+收尾阶段回收报告: 0；其中未完整结束: 0；取消排队任务: 0；仍未回收任务: 0。
+
+以上仅为收尾阶段统计，不代表全部研究任务已完成或结论已核验。
+
+### 核验范围
+
+以下结论仅针对列明版本与检查项，不代表整份报告或其他版本已通过核验：
+
+- “断层式领先”的表述必须区分：哪些维度有证据支持（如开源/商用视频模型的可及性与产能、短剧应用侧渗透），哪些维度证据不足（如绝对画质、长视频叙事、欧美主流影视工业化采用），不得把局部领先表述为全面断层领先: 未通过 (版本=22ffbad3f88d; 对象=inline:4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc; sha256=4b09e456eb89)
+
+  - 未解决问题: “应用侧渗透率属全球最高的一档”置于“有证据支持”栏，但仅有中国境内数据\(Q1&gt;95%、Q2 64%、抖音22.19万部\)，无跨国对照证据。
+
+  - 未解决问题: 开篇“产能维度大体成立”无跨国产能对照，与下文③“缺少第三方（非券商/非自媒体）同期对比数据”自相矛盾。
+
+  - 未解决问题: “绝对画质”未单列为证据不足维度，仅以 Elo 盲测偏好间接体现，且未说明 Elo 为偏好而非绝对画质度量。
+
+  - 未解决问题: “欧美主流影视工业化采用”仅以“缺本土竖屏付费分发渠道”侧面触及，未明确归入证据不足维度。
+
+- 答复中每个关键数字（成本降幅、周期、市场规模、收入、下载量、榜单位次）必须能对应到所引来源的实体、口径、时间与单位，且不得把预测值写成实测值、把厂商自述写成第三方结论: 未通过 (版本=32742964347c; 对象=inline:4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc; sha256=4b09e456eb89)
+
+  - 未解决问题: “该榜31个模型、7,179个样本”：7,179 是 Wan 3.0 的样本数（AA v2.1 表第1行），被表述为榜单样本数，口径错位。
+
+  - 未解决问题: “环比+25%”=15.3万\(协会Q2\)/12.2万\(DataEye Q1\)−1，与同句“不同源不可直接比较”矛盾；协会自身Q1基数未交付，该环比不可追溯。
+
+  - 未解决问题: “约60亿美元”与 job.3 原文“预测&gt;60亿”及分项 30+18+10=58亿不符，11% 分母取58时为11.2%。
+
+  - 未解决问题: UNCHECKED：11.82亿美元/93%/12.21亿次/85% 与“计划在数日内开放权重”引语在交付证据原文中缺失（网页正文被省略），只能核标签不能核数值。
+
+### 内容读取边界
+
+以下工具尝试未取得完整内容；是否影响具体结论须按证据判断，不能将这些尝试当作已读或已核验：
+
+- web\_fetch: https://ir.kuaishou.com/zh-hans/news-releases/news-release-details/kelingainianhuashouruyunxingluzai2025nian12yueda24yimeijin (unavailable) — Could not extract content from https://ir.kuaishou.com/zh-hans/news-releases/news-release-details/kelingainianhuashouruyunxingluzai2025nian12yueda24yimeijin: the fetch timed out or the page returned no readable text. Repeating the same URL 
+- web\_fetch: https://ir.kuaishou.com/zh-hant/node/11286/pdf (unavailable) — Domain skipped: ir.kuaishou.com returned 403 \(origin blocked or Jina URL ban\) earlier in this session. Cached for ~59 more min. Try a different source or search query.
+- web\_fetch: https://m.36kr.com/p/3617945155011589 (partial) — \[POSSIBLY NOT RENDERED\] The page at https://m.36kr.com/p/3617945155011589 remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to another so
+- web\_fetch: https://artificialanalysis.ai/video/arena (partial) — \[POSSIBLY NOT RENDERED\] The page at https://artificialanalysis.ai/video/arena remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to anothe
+- web\_fetch: https://help.openai.com/en/articles/20001152-what-to-know-about-the-sora-discontinuation (unavailable) — Could not extract content from https://help.openai.com/en/articles/20001152-what-to-know-about-the-sora-discontinuation: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different
+- web\_fetch: https://kling.ai/release-note/release-history (partial) — \[POSSIBLY NOT RENDERED\] The page at https://kling.ai/release-note/release-history remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to an
+- web\_fetch: https://m.36kr.com/p/3804766402698759 (partial) — \[POSSIBLY NOT RENDERED\] The page at https://m.36kr.com/p/3804766402698759 remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to another so
+- web\_fetch: https://openai.com/zh-Hans-CN/index/sora-2/ (unavailable) — Could not extract content from https://openai.com/zh-Hans-CN/index/sora-2/: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site&\#x27;s own API/PDF, or an archiv
+- web\_fetch: https://www.chinanews.com.cn/m/cul/2026/03-27/10593599.shtml (unavailable) — Per-source fetch/extraction deadline exceeded.
+- web\_fetch: https://sensortower.com/blog/state-of-short-drama-apps-2026-report (unavailable) — Could not extract content from https://sensortower.com/blog/state-of-short-drama-apps-2026-report: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site&\#x27;s ow
+- web\_fetch: https://sensortower.com/blog/state-of-short-drama-apps-2025 (unavailable) — Could not extract content from https://sensortower.com/blog/state-of-short-drama-apps-2025: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site&\#x27;s own API/P
+- web\_fetch: https://www.rfi.fr/cn/%E4%B8%93%E6%A0%8F%E6%A3%80%E7%B4%A2/%E6%B3%95%E5%9B%BD%E4%B8%96%E7%95%8C%E6%8A%A5/20261023-%E4%B8%AD%E5%9B%BD%E6%89%8B%E6%9C%BA%E5%BE%AE%E7%9F%AD%E5%89%A7%E7%9A%8490-%E7%94%B1ai%E5%88%B6%E4%BD%9C%EF%BC%8C%E6%88%90%E6% (unavailable) — Could not extract content from https://www.rfi.fr/cn/%E4%B8%93%E6%A0%8F%E6%A3%80%E7%B4%A2/%E6%B3%95%E5%9B%BD%E4%B8%96%E7%95%8C%E6%8A%A5/20261023-%E4%B8%AD%E5%9B%BD%E6%89%8B%E6%9C%BA%E5%BE%AE%E7%9F%AD%E5%89%A7%E7%9A%8490-%E7%94%B1ai%E5%88%B6
+- web\_fetch: https://zhuanlan.zhihu.com/p/2028081687976846884 (unavailable) — Could not extract content from https://zhuanlan.zhihu.com/p/2028081687976846884: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source, the site&\#x27;s own API/PDF, or an a
+- web\_fetch: https://patrickfrater.substack.com/p/reelshort-crazy-maple-col-group-legal-fight (unavailable) — Could not extract content from https://patrickfrater.substack.com/p/reelshort-crazy-maple-col-group-legal-fight: the fetch timed out or the page returned no readable text. Repeating the same URL is unlikely to help — use a different source,
+- web\_fetch: https://m.36kr.com/p/3777849731429122 (partial) — \[POSSIBLY NOT RENDERED\] The page at https://m.36kr.com/p/3777849731429122 remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to another so

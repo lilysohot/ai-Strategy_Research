@@ -1,0 +1,111 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+_____________________ test_dsml_recovers_typed_report_call _____________________
+
+    def test_dsml_recovers_typed_report_call():
+        args = {'content': '核验报告', 'confidence': 0.85, 'finish': False,
+                'verification_results': [{'verdict': 'unchecked', 'evidence_keys': ['source']}]}
+        parsed = MultiFormatToolCallParser().parse(LLMResponse(content=dsml(args)), {'submit_report'})
+>       assert len(parsed) == 1
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+tests/test_team_repair_regression.py:52: AssertionError
+_________ test_recheck_rejects_remaining_scope_defect_before_dispatch __________
+
+tmp_path = PosixPath('/tmp/pytest-of-administrator/pytest-135/test_recheck_rejects_remaining0')
+
+    def test_recheck_rejects_remaining_scope_defect_before_dispatch(tmp_path):
+        bus, spec = bounded_source(tmp_path)
+        first, _ = bind(bus, spec, tmp_path)
+        add_job(bus, 'first', first, verdicts=['fail'])
+        revision = VerificationCheck.model_validate({**spec.model_dump(),
+            'subject': {'text': '作者已修正。资料库中没有任何适配公告。'},
+            'replaces_job_id': 'first', 'revision_kind': 'subject', 'revision_reason': '修正作者'})
+>       with pytest.raises(ValueError, match='资料库中没有'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_team_repair_regression.py:64: Failed
+______ test_focused_recheck_keeps_originals_without_full_research_report _______
+
+tmp_path = PosixPath('/tmp/pytest-of-administrator/pytest-135/test_focused_recheck_keeps_ori0')
+
+    def test_focused_recheck_keeps_originals_without_full_research_report(tmp_path):
+        bus, spec = bounded_source(tmp_path)
+        report = 'UNRELATED_REPORT_PARAGRAPH ' * 2500
+        source = bus._jobs['source'].result
+        source.final_content = report
+        original = 'Atlas release: date unknown; this is an analyst estimate, not a vendor announcement.'
+        source.metadata['corpus_evidence'] = [{'doc_id': 'cv2:' + 'a' * 64,
+            'locator': 'body:0000', 'text': original}]
+        first, _ = bind(bus, spec, tmp_path)
+        add_job(bus, 'first', first, verdicts=['fail'])
+        revision = VerificationCheck.model_validate({**spec.model_dump(),
+            'subject': {'text': 'Atlas: date unknown; analyst estimate only.'},
+            'replaces_job_id': 'first', 'revision_kind': 'subject', 'revision_reason': 'Restore scope'})
+        checks, prompt = bind(bus, revision, tmp_path)
+>       assert len(prompt) < 16000
+E       assert 72437 < 16000
+E        +  where 72437 = len('\n\n# Bound verification checks\n[{"protocol_version": 2, "check_id": "amount", "work_item_id": "t1", "criterion": "R...ded evidence is absent, use the original tool ref or targeted search; do not infer full coverage.\nEND SOURCE EVIDENCE')
+
+tests/test_team_repair_regression.py:83: AssertionError
+_ test_paraphrased_latestness_does_not_evade_scope_gate[\u6309\u8d44\u6599\u5e93\u8bb0\u8f7d\uff0cDeepSeek \u5f53\u524d\u6700\u65b0\u6a21\u578b\u662f Atlas\u3002] _
+
+text = '按资料库记载，DeepSeek 当前最新模型是 Atlas。'
+
+    @pytest.mark.parametrize('text', [
+        '按资料库记载，DeepSeek 当前最新模型是 Atlas。',
+        '资料库记载的最新 DeepSeek 模型是 Atlas。',
+    ])
+    def test_paraphrased_latestness_does_not_evade_scope_gate(text):
+>       assert corpus_scope_findings(text, [
+            {'tool': 'corpus_search', 'obtained': True, 'coverage': COVERAGE},
+        ])
+E       AssertionError: assert []
+E        +  where [] = corpus_scope_findings('按资料库记载，DeepSeek 当前最新模型是 Atlas。', [{'tool': 'corpus_search', 'obtained': True, 'coverage': {'processing': 'partial', 'availability': 'unknown', 'purity'...nded_candidates_not_corpus_absence'}, 'native': {'sources': 61, 'chunks': 1625, 'unknown_date_sources': ['undated']}}}])
+
+tests/test_team_repair_regression.py:95: AssertionError
+_ test_paraphrased_latestness_does_not_evade_scope_gate[\u8d44\u6599\u5e93\u8bb0\u8f7d\u7684\u6700\u65b0 DeepSeek \u6a21\u578b\u662f Atlas\u3002] _
+
+text = '资料库记载的最新 DeepSeek 模型是 Atlas。'
+
+    @pytest.mark.parametrize('text', [
+        '按资料库记载，DeepSeek 当前最新模型是 Atlas。',
+        '资料库记载的最新 DeepSeek 模型是 Atlas。',
+    ])
+    def test_paraphrased_latestness_does_not_evade_scope_gate(text):
+>       assert corpus_scope_findings(text, [
+            {'tool': 'corpus_search', 'obtained': True, 'coverage': COVERAGE},
+        ])
+E       AssertionError: assert []
+E        +  where [] = corpus_scope_findings('资料库记载的最新 DeepSeek 模型是 Atlas。', [{'tool': 'corpus_search', 'obtained': True, 'coverage': {'processing': 'partial', 'availability': 'unknown', 'purity'...nded_candidates_not_corpus_absence'}, 'native': {'sources': 61, 'chunks': 1625, 'unknown_date_sources': ['undated']}}}])
+
+tests/test_team_repair_regression.py:95: AssertionError
+______________ test_repair_chain_keeps_guard_after_dsml_recovery _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-administrator/pytest-135/test_repair_chain_keeps_guard_0')
+
+    def test_repair_chain_keeps_guard_after_dsml_recovery(tmp_path):
+        bus, spec = bounded_source(tmp_path)
+        bad = VerificationCheck.model_validate({**spec.model_dump(),
+            'subject': {'text': '资料库中没有任何适配公告。'}})
+        checks, _ = bind(bus, bad, tmp_path)
+        metadata = {'verification_checks': checks}
+        token = set_verification_scope('first', metadata)
+        try:
+            args = {'verification_results': [verdict_for(checks[0])]}
+            calls = MultiFormatToolCallParser().parse(LLMResponse(content=dsml(args)), {'submit_report'})
+>           assert len(calls) == 1
+E           assert 0 == 1
+E            +  where 0 = len([])
+
+tests/test_team_repair_regression.py:110: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_team_repair_regression.py::test_dsml_recovers_typed_report_call
+FAILED tests/test_team_repair_regression.py::test_recheck_rejects_remaining_scope_defect_before_dispatch
+FAILED tests/test_team_repair_regression.py::test_focused_recheck_keeps_originals_without_full_research_report
+FAILED tests/test_team_repair_regression.py::test_paraphrased_latestness_does_not_evade_scope_gate[\u6309\u8d44\u6599\u5e93\u8bb0\u8f7d\uff0cDeepSeek \u5f53\u524d\u6700\u65b0\u6a21\u578b\u662f Atlas\u3002]
+FAILED tests/test_team_repair_regression.py::test_paraphrased_latestness_does_not_evade_scope_gate[\u8d44\u6599\u5e93\u8bb0\u8f7d\u7684\u6700\u65b0 DeepSeek \u6a21\u578b\u662f Atlas\u3002]
+FAILED tests/test_team_repair_regression.py::test_repair_chain_keeps_guard_after_dsml_recovery
+6 failed in 1.12s

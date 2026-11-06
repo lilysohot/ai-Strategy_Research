@@ -16,6 +16,7 @@ import time
 from typing import Any, Literal
 
 from frontier_agent.core.tool import tool
+from plugins.market.evidence import record_market_result
 from plugins.market.factory import build_service, resolve_or_error, unavailability
 from plugins.market.failure import translate
 from plugins.market.ports import MarketUnavailable
@@ -55,6 +56,7 @@ async def market_history(
         ``retrieved_at``、``latest_closed_trade_date``、``raw_count`` 与 ``count``。
         请求超过上限时另带 ``requested_days`` 与 ``capped: true``——不要据此认为更早的
         区间不存在。
+        Web 运行附带 evidence_ref，可用于监控依据；各行 display_numbers 给出亿元/亿股换算。
     """
     if not isinstance(query, str) or not query.strip():
         return json.dumps(
@@ -85,9 +87,7 @@ async def market_history(
     start_ms = end_ms - days * 24 * 60 * 60 * 1000
 
     try:
-        result = service.history(
-            str(thscode), start_ms=start_ms, end_ms=end_ms, adjust=adjust
-        )
+        result = service.history(str(thscode), start_ms=start_ms, end_ms=end_ms, adjust=adjust)
     except MarketUnavailable as exc:
         return json.dumps(translate(exc, tool="market_history"), ensure_ascii=False)
 
@@ -107,4 +107,4 @@ async def market_history(
             f"已按上限截断为 {days} 天"
         )
 
-    return json.dumps(payload, ensure_ascii=False)
+    return json.dumps(record_market_result("market_history", payload), ensure_ascii=False)

@@ -110,11 +110,14 @@ class Source:
         )
 
 
-@pytest.mark.parametrize("direction,prices", [
-    ("up", ["21", "22", "19", "20", "21"]),
-    ("down", ["19", "18", "21", "20", "19"]),
-    ("range", ["21", "22", "19", "20", "21"]),
-])
+@pytest.mark.parametrize(
+    "direction,prices",
+    [
+        ("up", ["21", "22", "19", "20", "21"]),
+        ("down", ["19", "18", "21", "20", "19"]),
+        ("range", ["21", "22", "19", "20", "21"]),
+    ],
+)
 async def test_crossing_first_hit_then_requires_reentry(case, direction, prices):
     threshold = {"low": "20", "high": "23"} if direction == "range" else "20"
     await create(case, direction=direction, threshold=threshold, trigger_mode="crossing")
@@ -131,11 +134,23 @@ async def test_human_run_can_cancel_paused_agent_target_and_replace(case):
     rule_id = out["results"][0]["rule_id"]
     async with biz.business_transaction() as session:
         (await session.get(store.WatchRule, uuid.UUID(rule_id))).status = "paused"
-    out = await watch_agent.call(case.run_id, "submit", {"intents": [
-        {"operation": "cancel", "intent_key": "breakout", "rule_id": rule_id,
-         "expected_version": 1, "reason": "按本轮用户要求替换旧目标"},
-        intent("replacement", "21") | {"spec": spec("21") | {"trigger_mode": "crossing"}},
-    ]})
+    out = await watch_agent.call(
+        case.run_id,
+        "submit",
+        {
+            "intents": [
+                {
+                    "operation": "cancel",
+                    "intent_key": "breakout",
+                    "rule_id": rule_id,
+                    "expected_version": 1,
+                    "reason": "按本轮用户要求替换旧目标",
+                    "evidence_refs": ["watch:test"],
+                },
+                intent("replacement", "21") | {"spec": spec("21") | {"trigger_mode": "crossing"}},
+            ]
+        },
+    )
     assert out["ok"]
     targets = (await watch_agent.call(case.run_id, "get", {}))["targets"]
     assert len(targets) == 1 and targets[0]["trigger_mode"] == "crossing"
@@ -144,15 +159,161 @@ async def test_human_run_can_cancel_paused_agent_target_and_replace(case):
 async def test_agent_update_preserves_crossing_mode(case):
     payload = intent() | {"spec": spec() | {"trigger_mode": "crossing"}}
     out = await watch_agent.call(case.run_id, "submit", {"intents": [payload]})
-    await watch_agent.call(case.run_id, "submit", {"intents": [{
-        "operation": "update", "intent_key": "breakout", "reason": "调整关键价格",
-        "rule_id": out["results"][0]["rule_id"], "expected_version": 1,
-        "spec": {"threshold": "22"},
-    }]})
+    await watch_agent.call(
+        case.run_id,
+        "submit",
+        {
+            "intents": [
+                {
+                    "operation": "update",
+                    "intent_key": "breakout",
+                    "reason": "调整关键价格",
+                    "evidence_refs": ["market_quote:test"],
+                    "rule_id": out["results"][0]["rule_id"],
+                    "expected_version": 1,
+                    "spec": {"threshold": "22"},
+                }
+            ]
+        },
+    )
     target = (await watch_agent.call(case.run_id, "get", {}))["targets"][0]
     assert target["trigger_mode"] == "crossing"
     assert target["threshold"] == "22"
     assert target["name"] == "breakout"
+
+
+async def test_description_update_does_not_repeat_crossing(case):
+    created = intent() | {"spec": spec() | {"trigger_mode": "crossing"}}
+    out = await watch_agent.call(case.run_id, "submit", {"intents": [created]})
+    rule_id = out["results"][0]["rule_id"]
+    source = Source(case, "25")
+    await monitor.collect_once(source, now=case.clock[0])
+    before = (await watch_agent.call(case.run_id, "get", {}))["targets"][0]
+    assert len(await events()) == 1
+    first = (await events())[0].detail_json["targets"][0]
+    assert first["previous_price"] is None
+    assert first["trigger_reason"] == "initial_condition_met"
+    update = {
+        "operation": "update",
+        "intent_key": "breakout",
+        "reason": "更新长期说明",
+        "evidence_refs": ["market_quote:test"],
+        "rule_id": rule_id,
+        "expected_version": 1,
+        "name": "长期上穿监控",
+        "spec": spec("20.00") | {"trigger_mode": "crossing", "task": "复核长期条件"},
+    }
+    receipt = await watch_agent.call(case.run_id, "submit", {"intents": [update]})
+    after = (await watch_agent.call(case.run_id, "get", {}))["targets"][0]
+    for field in ("baseline_price", "last_triggered_at", "last_valid_quote_at", "armed"):
+        assert after[field] == before[field], field
+    assert receipt["results"][0]["changed_fields"] == ["name", "task"]
+    for price, expected in [("26", 1), ("19", 1), ("21", 2)]:
+        case.clock[0] += timedelta(minutes=15)
+        source.price = price
+        await monitor.collect_once(source, now=case.clock[0])
+        assert len(await events()) == expected
+    crossed = (await events())[-1].detail_json["targets"][0]
+    assert crossed["previous_price"] == "19.0000000000"
+    assert crossed["trigger_reason"] == "up_cross"
+    assert crossed["previous_observed_at_ms"] < crossed["observed_at_ms"]
+
+
+@pytest.mark.parametrize("refs", [None, [], [""], "market_quote:test", [None]])
+async def test_agent_rejects_missing_evidence_atomically(case, refs):
+    with pytest.raises(biz.ValidationError, match="evidence_refs"):
+        await watch_agent.call(
+            case.run_id,
+            "submit",
+            {
+                "intents": [
+                    intent("valid"),
+                    intent("invalid") | {"evidence_refs": refs},
+                ]
+            },
+        )
+    assert (await watch_agent.call(case.run_id, "get", {}))["targets"] == []
+
+
+async def test_agent_cannot_change_stable_intent_key(case):
+    out = await watch_agent.call(case.run_id, "submit", {"intents": [intent()]})
+    with pytest.raises(biz.ValidationError, match="稳定标识"):
+        await watch_agent.call(
+            case.run_id,
+            "submit",
+            {
+                "intents": [
+                    {
+                        "operation": "update",
+                        "intent_key": "renamed-key",
+                        "reason": "rename",
+                        "evidence_refs": ["watch:test"],
+                        "rule_id": out["results"][0]["rule_id"],
+                        "expected_version": 1,
+                        "spec": {"task": "new description"},
+                    }
+                ]
+            },
+        )
+
+
+async def test_watch_tool_receipts_survive_real_parent_write(case, tmp_path, monkeypatch):
+    import importlib
+
+    from plugins.market.evidence import bind_market_evidence, reset_market_evidence
+    from plugins.tools.watch_targets import get_watch_targets, submit_watch_intents
+
+    market = importlib.import_module("plugins.tools.market_quote")
+    watch = importlib.import_module("plugins.tools.watch_targets")
+    monkeypatch.setattr(
+        watch, "request", lambda op, payload=None: watch_agent.call(case.run_id, op, payload or {})
+    )
+    monkeypatch.setattr(market, "unavailability", lambda: None)
+    monkeypatch.setattr(market, "resolve_or_error", lambda service, query: ("600519.SH", None))
+    monkeypatch.setattr(
+        market,
+        "build_service",
+        lambda: SimpleNamespace(
+            quote=lambda codes: {
+                "ok": True,
+                "items": [
+                    {"thscode": "600519.SH", "last_price": 25, "as_of": case.clock[0].isoformat()}
+                ],
+            }
+        ),
+    )
+    token = bind_market_evidence(None, tmp_path)
+    try:
+        assert json.loads(await get_watch_targets.ainvoke({}))["ok"]
+        quote = json.loads(await market.market_quote.ainvoke({"query": "600519.SH"}))
+        payload = intent() | {"evidence_refs": [quote["evidence_ref"]]}
+        result = json.loads(await submit_watch_intents.ainvoke({"intents": [payload]}))
+        assert result["ok"] and result["status"] == "applied"
+        saved = json.loads(await get_watch_targets.ainvoke({}))["targets"][0]
+        assert saved["rationale"]["evidence_refs"] == [quote["evidence_ref"]]
+        assert saved["rationale"]["evidence_receipts"][0]["tool"] == "market_quote"
+        assert saved["rationale"]["evidence_receipts"][0]["as_of"] == case.clock[0].isoformat()
+    finally:
+        reset_market_evidence(token)
+
+
+async def test_real_price_change_reinitializes_crossing(case):
+    rule_id = await create(case, trigger_mode="crossing")
+    await monitor.collect_once(Source(case, "25"), now=case.clock[0])
+    async with biz.business_transaction() as session:
+        await watch_rules.update_rule(
+            session,
+            user_id=case.uid,
+            rule_id=rule_id,
+            expected_version=1,
+            patch={"threshold": "24"},
+            idempotency_key=uuid.uuid4().hex,
+        )
+        rule = await session.get(store.WatchRule, rule_id)
+        assert rule.baseline_price is None
+    case.clock[0] += timedelta(minutes=15)
+    await monitor.collect_once(Source(case, "25"), now=case.clock[0])
+    assert len(await events()) == 2
 
 
 @pytest.mark.parametrize("operation", ["update", "create"])
@@ -165,6 +326,7 @@ async def test_agent_rename_persists_and_replays(case, operation, patch):
         "operation": operation,
         "intent_key": "breakout",
         "reason": "同步显示名称",
+        "evidence_refs": ["watch:test"],
         "name": "  上穿82.08  ",
         "spec": patch,
     }
@@ -200,6 +362,7 @@ async def test_agent_invalid_rename_rolls_back_batch(case, name):
             "operation": "update",
             "intent_key": target["intent_key"],
             "reason": "rename",
+            "evidence_refs": ["watch:test"],
             "rule_id": target["id"],
             "expected_version": 1,
             "name": value,
@@ -265,6 +428,7 @@ async def test_agent_rename_retains_update_guards(case, blocked):
                         "operation": "update",
                         "intent_key": "breakout",
                         "reason": "rename",
+                        "evidence_refs": ["watch:test"],
                         "rule_id": rule_id,
                         "expected_version": 0 if blocked == "stale" else 1,
                         "name": "new name",
@@ -284,6 +448,7 @@ async def test_agent_rename_uses_top_level_name_without_spec(case):
         "operation": "update",
         "intent_key": "breakout",
         "reason": "rename",
+        "evidence_refs": ["watch:test"],
         "rule_id": out["results"][0]["rule_id"],
         "expected_version": 1,
         "name": "new name",
@@ -492,6 +657,7 @@ async def test_agent_cancel_replace_and_human_takeover(case):
         rule_id=target,
         expected_version=1,
         reason="原假设不成立",
+        evidence_refs=["watch:test"],
     )
     result = await watch_agent.call(
         case.run_id, "submit", {"intents": [cancel, intent("new", "21")]}
@@ -554,6 +720,7 @@ async def test_agent_cannot_write_another_session(case):
         operation="update",
         intent_key="other",
         reason="update",
+        evidence_refs=["market_quote:test"],
         rule_id=out.result["rule_id"],
         expected_version=1,
         spec={"threshold": "30"},

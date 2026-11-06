@@ -365,8 +365,17 @@ def _build_team_phase_budget(
     # Allocate backwards from the actual hard cap. Truncating only the final
     # deadline previously reduced a 180s publication window to 14s on Web runs.
     if verification_deadline is not None and publication_deadline is not None:
+        # The delivery observer also reserves part of the total window. Plan
+        # against that SAME boundary now; otherwise a nominal 90s verification
+        # window can be shortened below admission's 90s minimum at runtime.
+        delivery_start = TeamPhaseBudget(
+            started_monotonic_s, None, None, publication_deadline,
+            hard_deadline_monotonic_s, publication_state,
+        ).delivery_start_s
+        assert delivery_start is not None
         verification_deadline = max(started_monotonic_s, min(
             verification_deadline, publication_deadline - publication_phase_timeout_s,
+            delivery_start,
         ))
     if research_deadline is not None and verification_deadline is not None:
         research_deadline = max(started_monotonic_s, min(
@@ -1636,6 +1645,34 @@ async def main_agent_node(
                 ),
             ),
         ]
+
+    from workflows._shared.research_intake import maybe_clarify_research
+
+    intake_system_prompt = _decorate(
+        get_main_system_prompt(
+            date_str=date_str,
+            fs_mode=fs_mode,
+            planning_mode=planning_mode,
+            prompt_mode=prompt_mode,
+            sub_agent_tools=sub_agent_tool_names,
+            mcp_tool_names=mcp_tool_names,
+            mcp_tool_specs=mcp_tool_specs,
+            document_toolchain_note=main_document_toolchain_note,
+        )
+    )
+    clarification = await maybe_clarify_research(
+        metadata=metadata,
+        llm=llm,
+        model_profile=model_profile,
+        task_id=ctx.task_id,
+        system_prompt=intake_system_prompt,
+        user_message=model_question,
+        initial_messages=[system_msg(intake_system_prompt), *history_prefix],
+        trajectory_dir=traj_dir,
+        observers=_with_conversation_snapshot([], system_prompt=intake_system_prompt),
+    )
+    if clarification is not None:
+        return clarification
 
     # WORKER_TRACE_DIR plumbing: SDK driver puts trace_dir + workflow_id
     # into state.metadata so sub-agents write per-session JSON files.

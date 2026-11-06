@@ -1986,6 +1986,9 @@ def build_swarm_session_runtime_spec(
         force_finalizer=_force_finalizer,
         context_setup=_context_setup,
         model_profile=runtime.sub_agent_model_profile,
+        # Bound checks already contain current candidate bytes and immutable
+        # evidence. Replaying old task prompts duplicates superseded drafts.
+        include_prior_history=lambda item: not bool(item.metadata.get("verification_checks")),
         history_policy=HistoryPolicy(
             thinking_in_history=runtime.sub_agent_thinking_in_history,
             thinking_history_max_tokens=(

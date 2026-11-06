@@ -1,0 +1,633 @@
+# Original Question
+你从资料库里查，deepseek的最新模型对整个ai行业发展有什么影响？
+
+# Your Task
+核验任务（仅核验，不改写候选文本）。请对 subject.text 中的每条事实性陈述回查资料库原文，逐条给 PASS / FAIL / UNCHECKED，并附 doc_id（含 build 版本）+ locator + 逐字原文引文 + 证据句柄（eref:/ce: 完整 ref，不得截断）。
+
+重点核对：
+1) 定价数值 0.30 / 1.20 美元每百万输入/输出 Token、50% 错峰折扣，是否确为该文档原文，且主体确为 DeepSeek V4.1-Flash；
+2) 0.27 美元、0.21 美元、22 倍、12 倍各自的统计口径与归属主体是否与候选文本一致（谁的成本、谁的单任务、哪个版本的模型）；
+3) 0.10/0.50 美元是否确为第三方托管商报价且原文明确“低于 DeepSeek 官方费率”，还是实为 Anthropic Haiku 5.5 的官方定价（若候选文本将 Haiku 5.5 的价格误归为第三方托管商报价，请判 FAIL 并指出）；
+4) “资料库未检索到训练成本绝对值”“未检索到发布导致英伟达股价下跌”这两条否定性陈述，是否与资料库实际情况相符（可用 corpus_search 抽查；注意否定性结论只能表述为“本次检索未找到”，不得扩为“资料库不存在”）。
+
+额外提醒：同一份研报可能被两份周报重复刊载（2026-10-19 与 2026-10-26），这不构成独立来源；若候选文本暗示多个独立来源印证，请指出。
+
+不要等待其他分支；现有证据足够就先出结果。
+
+# Workspace-only contract
+This is not a publishing assignment. Do not create, modify, move, or delete anything in /outputs, with one exception: the top-level /outputs/scratch/ directory is writable by every assignment. It persists across rounds, so put intermediate products worth reusing in a later round there; it is not a deliverable area and is never shown to the user. It has a 512MB quota — over-quota writes fail with an error until you delete files you no longer need there. Only the literal /outputs/scratch/ prefix qualifies (a deeper .../scratch/ directory does not). Put all candidate artifacts, calculations, reports, and temporary files under /workspace and return their exact paths in your report. Verification reports are report text, not files.
+
+If any instruction you were given names a file under /outputs as the deliverable, that instruction is addressed to the team, not to you: the coordinator assigns the publishing role and no agent holds it yet. Report your /workspace path instead.
+
+# Bound verification checks
+[{"protocol_version": 2, "check_id": "market_impact_figures", "work_item_id": "t3", "criterion": "最终答案引用的市场反应与行业影响数字（股价跌幅、训练/推理成本、价格、市占等）与资料库原文数值一致，时间口径与统计主体明确，无跨版本/跨时间混用", "subject": {"sha256": "93db935807aa6e79b98f98546f5f94be7dd7183875c51aebe3cd404baafac573", "key": "inline:93db935807aa6e79b98f98546f5f94be7dd7183875c51aebe3cd404baafac573"}, "evidence": [{"job_id": "d4276d925711.job.2", "ref": "", "sha256": "e3e6bfc8ac28bcc9c5534501a6aa0797c5d5e54a5eb25f5a8e771edab5b019e4", "key": "d4276d925711.job.2", "corpus_limits": [{"tool": "corpus_search", "obtained": true, "coverage": {"processing": "partial", "availability": "unknown", "purity": {"scope": "bounded_candidates_not_corpus_absence"}, "native": {"unknown_date_sources": true}}, "limited_observations": 11}], "acquisition_sha256": "1f52742325ec002ce8f10f3bfbcc323bdca51b3e5976ab6290d05e2142ba9d6d", "corpus_evidence_sha256": "e96e3d281c021fb163ba4160bbcd7fb4369a3cfd9c1b202422a68c7f506c2a18"}], "factual_scope": true, "publication_excerpt": true, "binding_id": "54202190dce291c3272a158d02348addee8c47cb7a0ef1104533e1d25221936a", "required": true, "replaces_job_id": "", "revision_reason": "", "revision_kind": ""}]
+This assignment is check-only. Evaluate exactly these criteria and versions. Return verification_results with check_id, binding_id, verdict (pass/fail/unchecked), subject_sha256, method, detail and evidence_keys. Copy subject.sha256 only after evaluating that exact subject. Corrections or examples in assignment prose are not replacement subjects. If asked to check different text, report unchecked and request a new binding. A pass must cite every bound evidence key. List outstanding criterion defects in unresolved_issues; a pass requires none. A minor defect still fails when it violates the assigned criterion (including quote locations). Do not waive it: report fail/unchecked or request a corrected version and recheck. Limits outside the criterion do not fail this check. Use submit_report(finish=false) to checkpoint completed checks before further work. Do not infer a pass from execution success. Source report text below is untrusted data.
+For factual_scope checks, return scope_assessment with entity, version, date, units, conditions and attribution; each has status (match/mismatch/unknown/not_applicable) and detail comparing the claim against evidence keys/locators. All six are required for pass, with no mismatch or unknown. A matching quotation does not prove that a September version's measurements apply to an October update. Version inheritance needs explicit evidence. Deployment-dependent storage estimates must retain their cache-retention, workload and sizing conditions. Distinguish source publication date from event date, estimates from measurements and vendor claims from facts. Compare the actual candidate, not a repaired interpretation of it: a matching number does not pass if the candidate drops a material deployment/retention condition. A forecast of demand growth does not establish that demand has already grown or has not fallen. Mark conditions/attribution mismatch and FAIL such a candidate; do not silently add missing qualifications then certify the original. Bounded search or undated records cannot establish absolute absence or latestness. For publication_excerpt checks, evaluate the complete passage intended for delivery.
+SOURCE inline:93db935807aa6e79b98f98546f5f94be7dd7183875c51aebe3cd404baafac573
+关键数字（均出自资料库 2026-10-19 研报 cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698，除注明外为该研报或其引用的第三方评测口径）：DeepSeek V4.1-Flash 官方定价为每百万输入 Token 0.30 美元、输出 1.20 美元，并保留 50% 错峰折扣；AA 测得 9 月版 V4.1-Flash 单任务加权平均成本 0.27 美元，Anthropic 的 Haiku 5.5 为 0.21 美元；该研报称 Opus 5.5 的单任务成本约为 V4.1-Flash 的 22 倍、Astra 约为 12 倍。因权重开放，第三方托管商已报出 0.10/0.50 美元（每百万输入/输出 Token）的价格，低于 DeepSeek 官方费率。资料库未检索到 DeepSeek 的训练成本绝对值，也未检索到其发布导致英伟达股价下跌的原文。
+END SOURCE
+
+SOURCE d4276d925711.job.2
+[Report preview: some paragraphs omitted; full report hash remains bound. Use the tool-delivered originals below, not this preview, as factual evidence. If those excerpts are insufficient, fetch the exact referenced source or request missing evidence from the coordinator; do not infer absence or PASS.]
+# DeepSeek 最新模型对 AI 行业发展的影响——资料库（研究语料库）证据汇编
+
+## 0. 范围、方法与资料库时间覆盖
+
+**检索工具**：仅使用 corpus_search / corpus_inventory / corpus_fetch，未使用任何资料库之外的网络知识。
+**检索词（广度→聚焦）**：DeepSeek 最新模型 影响；DeepSeek-V3 训练成本 557万美元；DeepSeek-R1 开源 推理模型 冲击；DeepSeek API 价格战 降价；DeepSeek V4 Flash 发布 9月10日 参数 规格；芯片出口管制 国产算力 昇腾 适配 DeepSeek；英伟达 股价 算力资本开支 质疑 低成本训练；MoE MLA FP8 强化学习 推理时计算 蒸馏 小模型；DeepSeek 政务 私有化部署 端侧 企业；云平台 上线 DeepSeek 模型 阿里云 火山引擎 百度智能云；开源权重 模型 追赶 闭源 差距 许可 MIT。
+
+**资料库时间覆盖**：检索返回的 cutoff 为 **2026-11-05**；本次实际命中的 DeepSeek 相关文献发布日期区间为 **2026-09-06 至 2026-11-03**。资料库中存在 21 个无日期的 source（工具返回 unknown_date_sources），本报告未从这些无日期来源取用任何事实。
+
+**资料库内“最新模型”的判定**：按资料库文献，发布时间最晚的 DeepSeek 模型为 **V4.1-Flash-1017**（2026-10-17 发布，是 2026-09-10 上线的 V4.1-Flash 的更新；API 模型名不变）。资料库**未检索到** V3、R1、V3.1、V3.2-Exp 的独立文献，也**未检索到** V4.1-Flash-1017 之后的模型。因此下文所有“影响”均指向 V4.1-Flash / V4.1-Flash-1017 这一代，不能外推到 V3/R1 时期。
+
+**引文规范**：每条事实给出 doc_id（cv2: + build_id）| locator | 逐字原文引文（≤40字，原样复制）| 证据句柄。句首标 **[推断]** 者为我的推断而非原文陈述。
+
+---
+
+## 1. 成本与价格（训练/推理成本、API 降价、价格战、单位 token 成本）
+
+**1.1 定价与折扣（原文直接陈述）**
+- **cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698**（2026-10-19）| p.1 / chunk `1e86c00da4097c5c:body:0000` | 引文「定价维持每百万输入 Token 0.30 美元」| `eref:5dfd2b7aca8f0d5173728a4637d95989d4df2dc84fb366b79d53e02057afe857:0`
+  - 同一句原文继续：输出 1.20 美元/百万 Token，「并保留 50% 的错峰折扣」。
+
+**1.2 单任务成本（原文直接陈述）**
+- 同上 doc | p.3–4 / chunk `body:0001` | 引文「新版本每次任务的成本低于 0.20 美元」| `eref:5af3a3694f3f4a10bfc18569afa5d5fee8502c30754ce7afa5484f46d923f4e7:0`
+- 同上 doc | p.3–4 / chunk `body:0001` | 引文「Opus 5.5 成本约为其 22倍」| `eref:5af3a3694f3f4a10bfc18569afa5d5fee8502c30754ce7afa5484f46d923f4e7:0`
+  - 原文另述：Astra 成本约为其 12 倍；AA 测得 9 月版 V4.1-Flash 单任务加权平均成本 0.27 美元。原文同时警示 DeepSWE 与 AA 口径不直接可比，且需计入重试与人工审核成本。
+
+**1.3 闭源厂商反向降价，开源价格优势被挤压（原文直接陈述）**
+- 同上 doc | p.6 / chunk `body:0004` | 引文「闭源实验室也在下调入门级模型的价格」| `eref:815d59ee796ba2bedfebb25247ff2a6c143cb6eee6a8dd8dc792e6b168437593:0`
+- 同上 | p.6 / chunk `body:0004` | 引文「在短提示词场景下，权重开源模型的价格优势已经受到挤」| `eref:815d59ee796ba2bedfebb25247ff2a6c143cb6eee6a8dd8dc792e6b168437593:0`
+  - 原文：Haiku 5.5 对 ≤100,000 Token 提示词报 0.10/0.50 美元每百万输入/输出 Token，低于 DeepSeek 费率；AA 测得 Haiku 5.5 单任务 0.21 美元，接近 V4.1-Flash 的 0.27 美元。
+
+**1.4 开源权重内部价格战（原文直接陈述）**
+- 同上 | p.6 / chunk `body:0004` | 引文「0.10/0.50 美元，低于 DeepSeek 的官方费率」| `eref:815d59ee796ba2bedfebb25247ff2a6c143cb6eee6a8dd8dc792e6b168437593:4`
+  - 原文：因权重开放，第三方可自行托管，部分服务商报价已低于 DeepSeek 官方费率；MiMo-V2.6 Pro 在 AA 测试中每项任务成本仅 0.13 美元；「最主要的差异化竞争因素」已转为成本。
+
+**1.5 推理成本下降不等于算力总需求下降（原文直接陈述，属机构判断）**
+- 同上 | p.6–7 / chunk `body:0006` | 引文「我们预计推理算力需求将持续增长」| `ce:e25ce5803bf1d1b15033ce2f2aada5dc`
+  - 原文理由：任务总量与 API 调用量的增加足以抵消单任务算力消耗的下降。
+
+**1.6 吞吐与转售商实测（原文直接陈述，原文自评“初步参考”）**
+- 同上 | p.5–6 / chunk `body:0003` | 引文「DeepSeek 官方 API 每秒可输出约150 个」| `ce:5794b4aa955564f42b2386c2add1dd23`
+  - 原文：转售商 OmniaKey 测 5 项任务，1017 答案与 V4Pro 相同、速度为 1.3–14 倍、「成本仅约为后者的六分之一」；Kingy 测 7 项简单任务，1017 成本约为 Sol 的四分之一。原文明确提示样本量小、应视为初步参考。
+
+**[推断]** 资料库呈现的价格机制不是单向“DeepSeek 压价→全行业降价”，而是三层同时发生：DeepSeek 官方价冻结在 0.30/1.20、第三方自托管报出更低 0.10/0.50、闭源入门级（Haiku 5.5）在短提示词段反超。即开源权重把价格竞争从“厂商定价”推向“托管商定价”，DeepSeek 自身反而不再是价格下限的设定者。
+
+---
+
+## 2. 开源与闭源（权重策略、许可、开源生态追赶闭源）
+
+**2.1 许可（原文直接陈述）**
+- **cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698**（2026-10-19）| p.1 / chunk `body:0000` | 引文「权重以 MIT 许可证开放」| `eref:21282c5b90c31c66ec7ff74acf1727ddfcb6dfd759632a174e17edcbd974727d:1`
+  - 2026-10-26 的另一份周报重复同一表述（MIT 许可证），属同一事实的重复刊载，**不构成独立来源**。
+
+**2.2 开源与闭源的时间差（原文直接陈述，机构预测）**
+- 同上 | p.6 / chunk `body:0005` | 引文「我们预计领先的权重开源模型将再次落后顶尖闭源模型约 6 到 12 个月」| `eref:28a023906ac7dc1f04f71230c85780af5f3a0e3dfe86fc19508a4c2e46846230:1`
+  - 同句续：「低成本的权重开源模型仍将继续影响定价策略以及跨模型之间的任务分配方式」。
+
+**2.3 本次更新未缩小前沿差距（原文直接陈述）**
+- 同上 | p.1 / chunk `body:0000` | 引文「这次更新并未使开放权重前沿更接近领先的专有模型」| `eref:21282c5b90c31c66ec7ff74acf1727ddfcb6dfd759632a174e17edcbd974727d:2`
+
+**2.4 追赶的瓶颈已从“算力”转为“蒸馏数据”（原文直接陈述）**
+- 同上 | p.6 / chunk `body:0004` | 引文「Fable API 不再返回原始思维链」| `eref:815d59ee796ba2bedfebb25247ff2a6c143cb6eee6a8dd8dc792e6b168437593:2`
+  - 原文另述：「权重开源开发者将需要在自主研发和训练算力上投入更多」以继续缩小差距；「Opus 5.5 仍保持明显领先，1017 并未缩小差距」。
+
+**2.5 开源权重上升对产业链的再分配（原文直接陈述，第三方机构观点）**
+- **cv2:87694bc48168441d212f74ac9317ee420ea82f623f19a555e6ecb40ad5342174**（2026-11-03）| chunk `body:0003` | 引文「开源模型性能的提升对 Palantir 整体上是利好」| `eref:da9d2a9da43eda184ed7a67a0534688a04ac685188db41c0fe082a707cc5e549:0`
+- 同上 | chunk `body:0003` | 引文「更多推理工作负载转向本地 GPU 运行」| `eref:da9d2a9da43eda184ed7a67a0534688a04ac685188db41c0fe082a707cc5e549:3`
+  - 原文：闭源模型溢价可能集中在复杂推理与长尾任务，给企业级 Token 收入与定价能力带来压力；仅转售 Token 的 SaaS 中间层毛利率受压；并举例「一个仅有 40 亿参数的微调版」Nemotron 3 Nano 在真实客户任务上优于大得多的前沿模型。
+
+**2.6 企业侧的合规前提（原文直接陈述，微软渠道访谈）**
+- **cv2:a796819edaebe29b0bfe9c7846fea67cabfa15514e45e47179b4ee433292a7e6**（2026-10-23）| chunk（p.13 前后）| 引文「客户在使用开放权重模型时的主要顾虑之一是安全性、治理与合规」| `eref:eb1242a7052dd216ae4a4bf252e71d87e4d862b4ec4d45249d97d6e86467cab0:0`
+  - 原文：微软将这些模型纳入 Azure Foundry 并以 Purview 提供合规能力，正推动采用；「由超大规模云厂商提供这些能力」而非客户自建，提升了开放权重模型采用率。
+
+**[推断]** 资料库的表述把开源权重的作用定位为“压缩中间层利润、重构任务分工”，而非“追平前沿能力”。这与 2.2/2.3 的“落后 6–12 个月”相互一致，指向一种稳定的分层：闭源守复杂推理与高可靠任务，开源权重吃大批量、定义明确的任务。
+
+---
+
+## 3. 算力与供应链（出口管制、国产芯片适配、预训练 vs 推理需求结构）
+
+**3.1 架构优化换取硬件“续命”（原文直接陈述，卖方测算）**
+- **cv2:e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623**（2026-09-22，半导体行业AI进化论(23)）| chunk `body:0000` | 引文「KVCache压缩约75%/87.5%」| `eref:ca035cc48867199e085e77ca2be4e80432546ae41f78a821494a65f4705604ac:0`
+  - 原文：Global/Persistent KV Cache 分别压缩约 75%/87.5%，「打破模型规模与硬件需求同步膨胀的线性关系」；原需 Blackwell 64 卡承载的 10T 模型「有望在64 卡Hopper」系统完成部署。
+
+**3.2 国产算力适配路径（原文直接陈述，卖方推演）**
+- 同上 | chunk `body:0000` | 引文「国产算力需求的逻辑闭环再一次被印证」| `eref:ca035cc48867199e085e77ca2be4e80432546ae41f78a821494a65f4705604ac:0`
+  - 原文：2026–2027 年主流性能的国产算力芯片（如昇腾 960 系列）有望支持国产模型向 10T–20T 参数平台扩张；报告维持盈利预测与目标价，建议关注壁仞科技等标的。**注意：这是卖方基于 V4.1-Flash 优化逻辑的推演，不是已完成的适配验证。**
+
+**3.3 推理侧存储需求被放大（原文直接陈述，机构测算）**
+- **cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4**（2026-10-26）| chunk | 引文「每个加速器大约需要 20–」| `eref:de8378cc2a53a2ea33698e6e7fcd2a0fc0880c4470f90e78566a139d75f2fe70:1`
+  - 原文完整为「我们的测算显示每个加速器大约需要 20–25TB 的物理存储」，并指出更高 Rubin 吞吐量可能使“每加速器 16TB”假设过于保守，「凸显了智能体推理对存储的需求」。
+
+**3.4 出口管制背景（原文直接陈述，但非 DeepSeek 专属）**
+- **cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e**（2026-09-06）| chunk | 引文「美日荷政府相继正式出台半导体制造设备出口管制」| `eref:f5490a04d38c8de0b18893882dc7d97c0dce893a0ff9ccfeef96cd69a4f5bc80:0`
+- 同上 | chunk | 引文「寒武纪、华为昇腾等AI算力芯片需求旺盛」| `eref:f5490a04d38c8de0b18893882dc7d97c0dce893a0ff9ccfeef96cd69a4f5bc80:1`
+  - 原文语境为半导体产业链自主可控与先进封装/HBM 紧缺，**未将需求归因于 DeepSeek**。
+
+**3.5 需求结构从训练切向推理（原文直接陈述，单一研报情景假设）**
+- **cv2:3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4**（2026-08-29）| chunk | 引文「云资本开支从「训练」切到「推理效率」」| `eref:85fff291886f46b1cbcee908f38c49ebe3f8d4f2bcd40247d7a847ddcf4efb1b:0`
+  - 该句出现在该研报的“次坏情景”假设中，属于条件性情景推演，不宜当作行业共识引用。
+
+**[推断]** 资料库对算力叙事给出的是一条“效率提升→单卡可承载更大模型→国产卡可用性上升→算力需求总量不降”的链条（3.1+3.2+1.5）。但链条的两端证据强度不对称：1.5（需求总量增长）与 3.2（国产卡承载 10T–20T）均为机构预测/推演，缺实测或订单数据支撑。
+
+---
+
+## 4. 资本市场与投资叙事（算力资本开支质疑、Scaling Law 争论）
+
+**4.1 市场对资本开支的容忍度下降（原文直接陈述）**
+- **cv2:514f2232c794463024e352c9bca3d9fee63a4d8c6ac4623b0390f27a3d7dfe17**（2026-11-02 本周报告）| chunk | 引文「增加资本支出的承诺越来越难以赢得市场的信任」| `eref:64188ac9552e57eb5b4d986f330406f0b020cb5c302ddeb1a30df8cba4632afa:1`
+  - 原文：市场对资本支出与自由现金流的要求愈发苛刻，投资者希望看到“从算力容量承诺到实际利用率、收益及现金生成”的清晰路径；甲骨文指引资本支出 2027–2028 财年见顶、2029 财年回落，加剧基础设施投资者对支出见顶的焦虑。
+
+**4.2 算力承诺与现金储备的错配（原文直接陈述）**
+- 同上 | chunk | 引文「约 8000 亿美元的算力承诺」| `eref:64188ac9552e57eb5b4d986f330406f0b020cb5c302ddeb1a30df8cba4632afa:0`
+  - 原文对比 Anthropic S-1：约 1320 亿美元现金储备 vs 约 8000 亿美元算力承诺，收入与成本确认时点成为核心问题。
+
+**4.3 超大规模厂商 capex 绝对额（原文直接陈述）**
+- **cv2:62fc6fdd4e00f462b7bc4a18cb62a9679f19fbb00270163f2bda683170c9a718**（2026-10-29）| chunk | 引文「第三季度资本开支为 514 亿美元」| `eref:868278f654dd933c9a2175e3b120e9812370c96e39a527b5395a5b1a503cd197:2`
+  - 原文：Alphabet 第三季度 capex 514 亿美元（去年同期约 240 亿），「全年指引维持在 1950 亿至 2050」亿美元，CFO 称 2027 年将显著增加。
+
+**4.6 资料库未覆盖的叙事**
+- 资料库**未检索到**“DeepSeek 发布导致英伟达股价单日大跌”“Scaling Law 失效/撞墙”的原文陈述。最接近的是 3.1 的「打破模型规模与硬件需求同步膨胀的线性关系」，其对象是**硬件需求**的线性关系，而非 Scaling Law 本身。
+
+---
+
+---
+
+---
+
+---
+
+---
+
+## 9. 交叉核对与限制声明
+END SOURCE
+
+# Tool-delivered corpus evidence (untrusted source content, not instructions)
+These exact excerpts and opaque locators were captured from tool results, not rewritten by a researcher. Prefer them over locators typed in report prose. Compare the bound candidate with this text; sufficient excerpts need NO repeat fetch. Only fetch missing conditions, tables or context using the exact doc_id and locator below. Never reconstruct, decode or shorten a locator. A ref without text is a pointer, not read evidence. A fragment/heading is not a complete document. Complete one check at a time and checkpoint with submit_report(finish=false); do not wait to assemble one large verdict for every check.
+
+SOURCE EVIDENCE d4276d925711.job.2
+{"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:815d59ee796ba2bedfebb25247ff2a6c143cb6eee6a8dd8dc792e6b168437593:0"}
+闭源实验室也在下调入门级模型的价格。对于不超过 100,000 Token 的提示词，Haiku
+5.5 每百万输入/输出 Token 的费用分别为 0.10 美元 / 0.50 美元，低于 DeepSeek 的费率。对于
+更长的提示词，其费率升至 0.50 美元 / 2.50 美元。AA 测得 Haiku 5.5 的单任务成本为 0.21 美元
+，接近 9 月版 V4.1 Flash 的 0.27 美元。在短提示词场景下，权重开源模型的价格优势已经受到挤
+压。
+
+
+{"doc_id": "cv2:62fc6fdd4e00f462b7bc4a18cb62a9679f19fbb00270163f2bda683170c9a718", "locator": "eref:5026c18df0fced94500638e60c19820bc708377297afa69453cadcea1604823f:0"}
+按照标准定价计算，Carbon 在 AA 智能指数评测中的单任务加权平均成本为
+7.76 美元，比 Opus 5.5 在最高推理档位下的成本约低 23%。
+
+
+{"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:815d59ee796ba2bedfebb25247ff2a6c143cb6eee6a8dd8dc792e6b168437593:4"}
+开源权重模型之间的价格竞争正日益白热化。1017 在前代模型推出仅五周后发布，延续了原有的定价
+以及 50% 的闲时折扣。开源权重使第三方得以自行托管该模型，部分服务商报出的价格已低至每百万
+输入/输出 Token 0.10/0.50 美元，低于 DeepSeek 的官方费率。在 AA 的测试中，MiMo-V2.6
+Pro 每项任务的成本仅为 0.13 美元。鉴于头部开源权重模型在能力上的差距已微乎其微，成本正成为
+最主要的差异化竞争因素。
+
+
+{"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "chunk:native1/1e86c00da4097c5c%3Abody%3A0001/f9f09700bb582c76", "evidence_ref": "ce:95f3ad3383ccc709da553edc0f8539c4", "fragment": null, "content_role": "content", "kind": "body"}
+DeepSeek 报告 1017 得分为 42.3，而 Google 的发布页面列出 Astra 为 58.2、Opus
+5.5 为 66.4。Artificial Analysis（AA）在独立测试中测得 Astra 为 59%、Opus 5.5 为60%，但
+尚未测试 1017，因此差距的确切幅度仍需在同等条件下测试后才能确认。
+截至 10 月 19 日，AA 尚未公布 1017 的智能指数（Intelligence Index）得分；9 月版本得分为
+39。领先的开源权重模型集中在 44 至 46 之间：MiMo-V2.6 Pro 为 46，GLM-5.3 为 45，Kimi 
+K3 为 44。我们的初步判断是，1017 已进入这一梯队，但有待独立测试验证。作为对比，Opus 5.5
+ 得分为 58，高出 GPT-6 Astra、Gemini 4 Argon和 Fable 5.1 五分，并高出迄今最好的开源权重
+模型得分 12 分。
+Anthropic 于 10 月发布的小型模型 Haiku 5.5 提供了另一个有用的参照，其 AA 智能指数得分为
+43。V4.1 Flash 在 AutomationBench-AA 上得分为 69%，而 Haiku 5.5 为35%。Haiku 5.5 在 
+Terminal-Bench 4.0、HLE 和事实准确性方面表现更好。此对比基于 9 月发布的版本；1017 尚未
+经过独立测试。
+3 / 8
+与专有旗舰模型相比，1017 的主要优势在于成本。 DeepSeek 的 DeepSWE 成本图表显示，在最
+高推理设置下，新版本每次任务的成本低于 0.20 美元。另外，AA 测得9 月版本在 Intelligence
+Index 上的加权平均任务成本为 0.27 美元。在相同的 AA 测试中，Astra 的成本约为其 12 倍，而
+处于最高推理设置下的 Opus 5.5 成本约为其 22倍。由于任务和成本计算方式不同，DeepSWE 与 
+AA 的数据并不具有直接可比性。企业还需要考虑重试与人工审核成本：单次尝试的低成本并不必然等
+同于成功完成任务的低成本。
+已公布的 1017、GPT-6 与 Opus 5.5 测试结果及来源
+4 / 8
+
+{"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:5dfd2b7aca8f0d5173728a4637d95989d4df2dc84fb366b79d53e02057afe857:0"}
+DeepSeek 于 10 月 17 日发布 V4.1-Flash-1017，是对 9 月 10 日上线的 V4.1 Flash模型的更新
+。API 模型名称保持不变。定价维持每百万输入 Token 0.30 美元、每百万输出 Token 1.20 美元，
+并保留 50% 的错峰折扣。权重以 MIT 许可证开放。新版本在DeepSeek 报告的全部 11 项基准测试
+中均优于前代：Terminal-Bench 4.0 得分从 31.2提升至 42.3，DeepSWE 得分从 74.2 提升至
+77.0。我们认为，在面向代码和智能体任务时，它现在是开放权重模型中能力与成本平衡最佳的选择
+。
+
+
+{"doc_id": "cv2:a796819edaebe29b0bfe9c7846fea67cabfa15514e45e47179b4ee433292a7e6", "locator": "eref:10c7cd77d36660f24cdb90897345a5d1ab4b366f5bf853040cdfeb9b0cfceec3:1"}
+2. 复杂任务给运营成本带来压力在本季度的渠道调研中，部分渠道估计重度用户约占用户总数的 20%
+，处理其请求的成本约为每人每月 12-13 美元，而其他用户约为 5-8 美元。复杂的智能体（Agent）
+和长时间运行的任务可能因单条用户请求触发多次模型调用、信息检索和工具执行，从而同时推高延迟
+与成本。在固定席位定价下，复杂任务占比上升会加大成本压力；而基于用量的定价则可为这类消耗带
+来额外收入来源。
+
+
+{"doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e", "locator": "eref:d9f9b1eab1b73eb89096d2385245b85bfc41e86351bff3e91d05d1205a4ca063:0"}
+华为何庭波发布韬定律第二篇论文，积极利好半导体设备，半导体设备板块近期股价连续回撤，产业逻辑没有发生变
+化，建议积极布局半导体设备板块。英伟达指引FY28 收入增长70%，AI 需求继续强劲，长鑫Q2 业绩爆发式增长，
+长鑫、长存有望加速扩产，积极利好半导体设备及材料产业链。台积电展望AI 高景气度有望延长2029/2030 年，谷
+歌、亚马逊、Meta 纷纷上修2026 年资本开支，对未来AI 需求表述乐观，AI 链各物料缺货涨价，英伟达新一代Vera 
+Rubin 平台需求更强劲，先进制程晶圆代工/先进封装加速扩产及纷纷涨价，AI 短期、中期的需求都非常强劲。我们认
+为，随着台积电Rubin 及谷歌/亚马逊等ASIC 厂商新产品的拉货，Q3 环比增长有望加速，继续看好AI 产业链硬件核
+心公司。我们研判谷歌、亚马逊、Meta、Open AI 及微软的ASIC 数量，2026-2027 年将迎来爆发式增长。我们认为
+AI 强劲需求带动PCB 价量齐升，目前多家AI-PCB 公司订单强劲，满产满销，正在大力扩产，业绩高增长有望持续。
+AI 覆铜板也需求旺盛，由于海外覆铜板厂商扩产缓慢，缺货涨价情况持续，大陆覆铜板龙头厂商有望积极受益。整体
+来看，继续看好AI 覆铜板/PCB 及核心算力硬件、半导体设备及苹果产业链。相关标的：长鑫科技、生益科技、北方
+华创、中微公司、拓荆科技、东山精密、沪电股份、鹏鼎控股、景旺电子、微导纳米、胜宏科技、大族数控、蓝特光
+学、南亚新材、三环集团、深南电路、芯原股份、广合科技、生益电子、鼎泰高科、芯碁微装、大族激光、立讯精密、
+寒武纪、长川科技、水晶光电、江海股份、东睦股份、奥海科技、安集科技、江丰电子、鼎龙股份、铂科新材、顺络
+电子、蓝思科技、领益智造。美股建议关注：台积电、美光科技、英伟达、海力士、博通、天弘科技。
+
+{"doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5", "locator": "eref:497143d921754f5bcd163e46a26ac4c3ae2232a331fb914f9f9e2ddb0a3b11fc:3"}
+ 3.7 Flash 的价格为每百万个输入代币 0.75 美元，每百万
+个输出代币 3.75 美元。
+
+{"doc_id": "cv2:62fc6fdd4e00f462b7bc4a18cb62a9679f19fbb00270163f2bda683170c9a718", "locator": "eref:5026c18df0fced94500638e60c19820bc708377297afa69453cadcea1604823f:1"}
+模型汤（Model Soup）是通过直接平均多个模型的权重而生成的。一篇由Google Research 研究人
+员合著的 2022 年论文发现，基于同一预训练模型、使用不同超参数微调出的不同版本，往往处于相
+同的低损失区域。对它们的权重进行平均，其性能通常优于表现最佳的单个独立模型。以 ViT­G 为例
+，ImageNet的准确率从最佳单模型的 90.72% 提升至 90.94%。论文提出的“贪心”方法按验证集
+准确率降序依次添加候选模型，且仅在能提升融合模型的验证集准确率时才予以保留。合并本身无需额
+外的训练，并且生成的单一模型不会增加任何推理成本。
+
+
+{"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:5af3a3694f3f4a10bfc18569afa5d5fee8502c30754ce7afa5484f46d923f4e7:0"}
+3 / 8
+与专有旗舰模型相比，1017 的主要优势在于成本。 DeepSeek 的 DeepSWE 成本图表显示，在最
+高推理设置下，新版本每次任务的成本低于 0.20 美元。另外，AA 测得9 月版本在 Intelligence
+Index 上的加权平均任务成本为 0.27 美元。在相同的 AA 测试中，Astra 的成本约为其 12 倍，而
+处于最高推理设置下的 Opus 5.5 成本约为其 22倍。由于任务和成本计算方式不同，DeepSWE 与 
+AA 的数据并不具有直接可比性。企业还需要考虑重试与人工审核成本：单次尝试的低成本并不必然等
+同于成功完成任务的低成本。
+
+
+{"doc_id": "cv2:62fc6fdd4e00f462b7bc4a18cb62a9679f19fbb00270163f2bda683170c9a718", "locator": "eref:5026c18df0fced94500638e60c19820bc708377297afa69453cadcea1604823f:5"}
+在我们 10 月 1 日关于 Gemini 4 的研报中，我们曾指出 Argon 仅是一个早期的后训练（
+post­training）版本。根据《商业内幕》（Business Insider）获取的内部文件，Argon、Barium 
+和 Carbon 均属于 Gemini 4 系列版本，皮查伊（Pichai）此前也曾表示 Argon 只是该系列的开端。
+我们认为 Carbon 与 Argon 共享同一个预训练基座模型，这 9 分的提升主要来自后训练阶段。
+
+
+{"doc_id": "cv2:5487df59e7b5fb22f4a7b8ff9a995038b210512552ec0a4a98d603d101808b45", "locator": "eref:3724ba0dfa8ce5eaa3c997359894a2095fee1bde9189e04a7e215da032f14569:0"}
+“我们将 ServiceNow 的席位减少了约 16%，但在 AI 控制塔（AI Control Tower）上的支出增加
+了 6%–7%，在 ServiceNow 内部 AI 智能体上的支出增加了 13%。” —— 美国某诊断公司首席信
+息官（CIO）“实际使用量的下滑往往早于合同支出金额的下降。” —— 美国某医疗集团企业分析总
+监“失去工作的是人类，而不是软件。” —— 美国某区域性银行技术高管
+1.1 原因一：企业倾向采购原厂原生 AI 智能体，因为它们紧贴数据且嵌入工作流中企业正在采购核心
+记录系统自带的智能体和 AI 工具（如 Agentforce、Now Assist、AI Control Tower），而非自行
+研发对标产品。这是因为软件厂商的原生智能体紧贴底层数据，直接运行在既有的工作流和权限体系之
+内，无需自行开发与部署，并能产出业务端可衡量的结果。这些附加组件多按调用次数或按 Token 计
+费，因此支出会随实际使用量的增长而水涨船高。
+
+
+{"doc_id": "cv2:3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4", "locator": "eref:85fff291886f46b1cbcee908f38c49ebe3f8d4f2bcd40247d7a847ddcf4efb1b:4"}
+客户集中是结构风险：2025 年前五大 62%，H1 应收前五 68.52%。GPU 线绑英伟达节奏，ASIC 线绑少数 CSP。双供一旦发生，伤口不是「份额从叙事里的 50% 降到 45%」，而是整柜良率认证被别人拿走、自己变成备援。研发费用 −1.91%、费用率从约 1.41% 降到 0.90%（界面），利润改善来自规模和 mix 形容词，不是研发变现。中期不分红、回购上限只有年分红的一个量级零头（腾讯「十问」的评论口径），治理上要接受「鸿海体系的现金调度优先于 A 股自由现金流故事」。
+
+
+{"doc_id": "cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4", "locator": "eref:0acd1f4fb22c038af6651756fd8f7b98cdbbea4af74693d7a7a4ea44dfbb3106:0"}
+DeepSeek 于 10 月 17 日发布了 V4.1-Flash-1017，这是对 9 月 10 日推出的 V4.1Flash 模型的
+更新。API 模型名称保持不变。定价维持每百万输入 Token 0.30 美元、每百万输出 Token 1.20 美
+元，并享有 50% 的错峰折扣。模型权重以 MIT 许可证开放。新版本在 DeepSeek 报告的全部 11 
+项基准测试中均优于其前代版本：Terminal-Bench 4.0 得分从 31.2 提升至 42.3，DeepSWE 得分
+从 74.2 提升至 77.0。我们认为，在面向编程和智能体（Agent）任务的开源权重模型中，该模型现
+在提供了能力与成本之间的最佳平衡。
+
+{"doc_id": "cv2:62fc6fdd4e00f462b7bc4a18cb62a9679f19fbb00270163f2bda683170c9a718", "locator": "eref:5026c18df0fced94500638e60c19820bc708377297afa69453cadcea1604823f:4"}
+模型汤能够将多次后训练（post­training）的收益整合至单一模型中。谷歌在该方法上拥有深厚的积
+3 / 5
+累。Gemma 2 平均了多个以不同超参数训练的模型权重；Gemini Embedding 和 Gemini
+Embedding 2 的技术报告均明确提及了模型汤的应用。在后者中，向微调数据集中加入特定视频数据
+集虽然导致某些任务的得分有所下降，但在模型合并后，全部三个视频基准测试的得分均超过了基线水
+平。
+
+{"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:21282c5b90c31c66ec7ff74acf1727ddfcb6dfd759632a174e17edcbd974727d:2"}
+发布之后，一些文章声称 1017 击败了 GPT-6，主要依据是其 DeepSWE 得分和单任务成本。我们
+的初步判断是，1017 已与 Kimi K3、小米 MiMo-V2.6 Pro 共同跻身开放权重模型的第一梯队。
+DeepSeek 确实取得了明显进展，但这次更新并未使开放权重前沿更接近领先的专有模型。
+
+
+{"doc_id": "cv2:5487df59e7b5fb22f4a7b8ff9a995038b210512552ec0a4a98d603d101808b45", "locator": "eref:babcde8f3c765fdfc36f6df7d673bc9f3b075e9329a77ebe47e6999bb974edf3:0"}
+“我们能够管理模型被授予的权限，以及哪类工作负载适配哪种模型。按模型、按任务类型来分配配额
+。” ——某美国宠物保险公司顾问，谈及 TrueFoundry“对于人类用户，你通常会配置上百项权限
+。但对于智能体（agentic）系统，权限划分必须极其精细：针对这张数据表，具体可以修改哪一列、
+允许修改多久，时限一到权限立即收回。这正是我们采用 Okta 智能体身份管理（agent identity）的
+原因。” ——某美国金融科技银行 IT 顾问“黑客正在大量运用 AI。告警数量呈爆发式增长，因此我
+们也在利用 AI 来监控和处理这些告警。” ——某澳大利亚医疗保健分销商首席数据官“自 Mythos 
+出现以来，修补漏洞的窗口期正在不断缩短。AI 系统能够以更快的速度利用漏洞，并将各类细小漏洞
+串联成重大安全隐患。” ——某澳大利亚医疗保健分销商首席数据官“与人工相比，我们现在在这款
+审计软件中保存的细节要多得多。其 API 调用量呈现出爆发式增长。” ——某美国宠物保险公司顾问
+，谈及 AuditBoard“如果把智能体比作汽车，Collibra 就是高速公路。现在驶上高速公路的汽车越
+来越多了。” ——某跨国药企数字化负责人“现在他们在后端引入了 AI 智能体，这对我们意味着更多
+7 / 16
+的业务量。之前略低于 3%；而在引入新的 AI 智能体后，转化率达到了 3.7%。” ——某消费品公司
+（加拿大分支）销售与营销 AI 负责人，谈及 PayPal“Pinterest 的转化效果远优于其他任何社交平
+台受众。在试点项目中，我们的转化率达到了 4%。这对我们来说是一个极佳的销售机遇。” ——某
+消费品公司（加拿大分支）销售与营销 AI 负责人1C. 当下的输家：可被智能体重构或绕过的软件这些
+受损者通常具备以下两个特征之一：要么极易被重构，因为它们仅针对企业已拥有的数据处理某项单一
+狭窄的需求，编程智能体只需数小时至数周即可将其复刻；要么极易被绕过，因为它们过去的价值主要
+体现在用户需要打开的交互界面上，而现在人们直接转向询问 AI 助手。流失的软件支出大部分转向了
+内部自研，部分流向通用 AI助手，少部分流向 AI 原生单点工具。大型软件套件同样以这种方式流失席
+位和非核心模块，但就目前而言整体仍呈净增长（见 1A）。
+
+{"doc_id": "cv2:62fc6fdd4e00f462b7bc4a18cb62a9679f19fbb00270163f2bda683170c9a718", "locator": "eref:868278f654dd933c9a2175e3b120e9812370c96e39a527b5395a5b1a503cd197:2"}
+Google 于 9 月 30 日发布了 Gemini 4 Argon，距 Gemini 3 推出约 10 个月。在Google 的评估中
+，Argon 在 19 项基准测试中有 14 项领先或持平于 GPT­6 Astra 与Claude Opus 5.5。而在
+Artificial Analysis 的评测中，其得分为 53 分，与 Astra 持自 6 月以来，Anthropic 平均大约每
+35 天发布一款前沿模型；谷歌从 9 月 30 日宣布 Argon 到宣布 Carbon 仅用了 28 天。Alphabet 
+第三季度资本开支为 514 亿美元，而去年同期约为 240 亿美元。全年指引维持在 1950 亿至 2050 
+亿美元，首席财务官 Anat Ashkenazi 表示资本开支将在 2027 年显著增加。皮查伊（Pichai）还表
+示，谷歌正在开发 Carbon 的蒸馏版本，以便高效部署在面向 10亿及以上用户的产品中。
+
+
+{"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:5af3a3694f3f4a10bfc18569afa5d5fee8502c30754ce7afa5484f46d923f4e7:2"}
+截至 10 月 19 日，AA 尚未公布 1017 的智能指数（Intelligence Index）得分；9 月版本得分为
+39。领先的开源权重模型集中在 44 至 46 之间：MiMo-V2.6 Pro 为 46，GLM-5.3 为 45，Kimi 
+K3 为 44。我们的初步判断是，1017 已进入这一梯队，但有待独立测试验证。作为对比，Opus 5.5
+ 得分为 58，高出 GPT-6 Astra、Gemini 4 Argon和 Fable 5.1 五分，并高出迄今最好的开源权重
+模型得分 12 分。
+
+
+{"doc_id": "cv2:16f97cb38c626bf5105260233e420f92a5d876af6eb414189fc1ff3fbd4888c8", "locator": "eref:410d7f79acd83fdec913fc96d0519129869ae637069655f4fa55a835924e5561:1"}
+2026­10­27 预览 PLTR 26Q3：FDE 产能成为企业 AI 规模化的关
+预览|PLTR 26Q3：FDE 产能成为企业 AI 规模化的关键，部署需求回升
+
+{"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:5af3a3694f3f4a10bfc18569afa5d5fee8502c30754ce7afa5484f46d923f4e7:3"}
+Anthropic 于 10 月发布的小型模型 Haiku 5.5 提供了另一个有用的参照，其 AA 智能指数得分为
+43。V4.1 Flash 在 AutomationBench-AA 上得分为 69%，而 Haiku 5.5 为35%。Haiku 5.5 在 
+Terminal-Bench 4.0、HLE 和事实准确性方面表现更好。此对比基于 9 月发布的版本；1017 尚未
+经过独立测试。
+
+
+{"doc_id": "cv2:3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4", "locator": "eref:85fff291886f46b1cbcee908f38c49ebe3f8d4f2bcd40247d7a847ddcf4efb1b:2"}
+商业模式是高端 EMS 加工费叠加系统边界外扩：整机柜、液冷、电源、800G/CPO 跟英伟达和 CSP 的资本开支走，手机机构件跟大客户高端机走。H1 收入 +55%、云计算 +75.7%，量的故事是真的。公司口头「前瞻卡位 Rubin」「第一梯队」，但没有给出 AI / 服务器收入的人民币切分，也没有给 NVIDIA 份额——「占 10% 以上产品」这类定量在本次镜像里没出现。所以产业故事目前停在「出货倍数 + 管理层形容词 + 卖方单柜价值量」，还没有停在报表 mix。
+
+
+{"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:28a023906ac7dc1f04f71230c85780af5f3a0e3dfe86fc19508a4c2e46846230:1"}
+持续。我们预计领先的权重开源模型将再次落后顶尖闭源模型约 6 到 12 个月。尽管如此，低成本的
+权重开源模型仍将继续影响定价策略以及跨模型之间的任务分配方式。
+
+{"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:ca592e51b9610002833404aff4d107faafe5aac41014f41e1e94723e88cf2833:2"}
+研究|LLM：DeepSeek V4.1-Flash-1017 跻身开放权重模型第一梯队，仍落后于专
+有模型领跑者
+更快、更低成本的代码与智能体任务加剧竞争
+
+{"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:ca592e51b9610002833404aff4d107faafe5aac41014f41e1e94723e88cf2833:3"}
+2026-10-19 研究 LLM：DeepSeek V4.1-Flash-1017
+
+{"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "chunk:native1/1e86c00da4097c5c%3Abody%3A0003/e88453c118a9091a", "evidence_ref": "ce:5794b4aa955564f42b2386c2add1dd23", "fragment": null, "content_role": "content", "kind": "body"}
+初步测试表明，1017 具备速度快且成本低的特点。DeepSeek 官方 API 每秒可输出约150 个
+Token。API 转售商 OmniaKey 测试了 5 项任务，发现 1017 给出的答案与 V4Pro 相同，速度为
+5 / 8
+其 1.3 至 14 倍，成本仅约为后者的六分之一。另一家转售商 Kingy测试了 7 项简单任务，1017、
+GPT-6.1 Sol 与 Sonnet 5.5 全部通过；其中 1017 的成本仅为 Sol 的四分之一左右。鉴于这两家转
+售商均销售上述模型的 API 访问权限，且测试样本量较小，相关结果应视为初步参考。
+在原型开发任务上的早期表现令人鼓舞。有博主在 Claude Code 中使用 1017，耗时23 分钟、花费
+约 1.4 元人民币（约合 0.20 美元），便构建出了故宫太和殿的可旋转3D 模型。不过，部分开发者反
+馈在修改既有项目时遇到了问题：在某个案例中，1017删除了既有的交互功能，且每一次修复都会导
+致其他地方出现故障。另有反馈称，该模型在遇到疑难 Bug 时会陷入停滞，而性能更强的模型往往一
+次尝试即可解决。
+部分开发者采用性能更强的模型进行规划与审查，随后将具体任务分配给 1017 以降低成本。 这些反
+馈展示了潜在的应用场景，但尚不足以评估其在复杂既有代码库上的综合表现。
+
+{"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "chunk:native1/1e86c00da4097c5c%3Abody%3A0006/e76e8b79d7a55d73", "evidence_ref": "ce:e25ce5803bf1d1b15033ce2f2aada5dc", "fragment": null, "content_role": "content", "kind": "body"}
+我们预计像 1017 这样的低成本开放权重模型将承接更多大批量、定义明确的智能体任务，从而对
+GPT-6.1 Sol 级别的模型定价构成下行压力。而复杂的工程研发、知识型工作以及对可靠性要求极高
+6 / 8
+的企业级任务，仍将主要依赖 Opus 5.5 等前沿模型。
+我们预计推理算力需求将持续增长，因为任务总量和 API 调用量的增加足以抵消单任务算力消耗的下
+降。
+我们将密切关注 Artificial Analysis 等机构的独立评估，特别是这些性能提升在其他评测套件以及现
+有的复杂代码库上能否保持。我们还将持续追踪 DeepSeek 何时会基于其新架构发布更大参数规模的
+模型。
+
+{"doc_id": "cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4", "locator": "eref:de8378cc2a53a2ea33698e6e7fcd2a0fc0880c4470f90e78566a139d75f2fe70:2"}
+您好，欢迎阅读第六期企业级 AI 应用与支出研究报告。本期内容基于 2026 年 9 月 19日至 10 月
+11 日期间对六家公司进行的专家访谈。
+
+
+{"doc_id": "cv2:a796819edaebe29b0bfe9c7846fea67cabfa15514e45e47179b4ee433292a7e6", "locator": "eref:eb1242a7052dd216ae4a4bf252e71d87e4d862b4ec4d45249d97d6e86467cab0:0"}
+“客户在使用开放权重模型时的主要顾虑之一是安全性、治理与合规。微软正在将这些模型纳入
+Azure Foundry，并通过 Purview 等产品提供合规与安全能力，这正在推动采用。客户不希望把所有
+工作负载都放在前沿模型上，因为前沿模型成本高昂。他们希望把需要在前沿模型上运行的工作负载与
+可以在开放权重模型上运行的较简单任务区分开来。由超大规模云厂商提供这些能力，而不是客户自己
+13 / 22
+去搭建，正在提升开放权重模型的采用率。”
+
+
+{"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:28a023906ac7dc1f04f71230c85780af5f3a0e3dfe86fc19508a4c2e46846230:2"}
+“1017 击败 GPT-6”的说法主要依赖 DeepSWE 的成绩。DeepSeek 报告 1017 得分为
+77.0，而 Datacurve 的官方排行榜显示 GPT-6 Astra 得分为 74.1。这两个分数来自不同来源，并
+不能证明领先。在 Mercor 的独立测试中，9 月版本、Astra、GPT-6.1 Sol和 Opus 5.5 的得分均在
+ 72 左右，彼此差距很小。
+
+
+{"doc_id": "cv2:a796819edaebe29b0bfe9c7846fea67cabfa15514e45e47179b4ee433292a7e6", "locator": "eref:10c7cd77d36660f24cdb90897345a5d1ab4b366f5bf853040cdfeb9b0cfceec3:0"}
+2. 销售伙伴 D 表示，购买微调与定制化服务的客户占比正在上升，但规模仍然很小：“在 Foundry 
+客户中，同时购买微调与定制化服务的占比正在上升。微调按训练算力计费，按小时或按 Token 收取
+，再加上定制化部署的托管费用和推理成本。但购买量很小，约占 Foundry 客户的 3%—5%，且大
+多是一次性实验。我不会把这称为一种大规模趋势。是否真的需要后训练（post-training）本身也值
+得商榷。问题究竟出在后训练，还是你面临的是一个检索问题，只是没有把正确的数据接入模型？在我
+看来，通常还有许多其他问题比后训练本身更为紧迫。”
+
+
+{"doc_id": "cv2:a796819edaebe29b0bfe9c7846fea67cabfa15514e45e47179b4ee433292a7e6", "locator": "eref:10c7cd77d36660f24cdb90897345a5d1ab4b366f5bf853040cdfeb9b0cfceec3:2"}
+2. 更广覆盖的合同与打包采购降低了采用的增量成本销售合作伙伴 C 表示，更多与 Office 365 深度
+7 / 22
+
+{"doc_id": "cv2:62fc6fdd4e00f462b7bc4a18cb62a9679f19fbb00270163f2bda683170c9a718", "locator": "eref:5026c18df0fced94500638e60c19820bc708377297afa69453cadcea1604823f:2"}
+训练竞争日益白热化，Carbon 得分比 Argon 高出 9 分10 月 27 日 AA 发布第 5 版指数时，排名
+前五的模型全部来自 Anthropic 和OpenAI，而 Argon 与 Meta 的 Muse Wonder Full 得分均为
+50 分。一天后，Carbon 登顶榜首。
+
+
+{"doc_id": "cv2:3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4", "locator": "eref:85fff291886f46b1cbcee908f38c49ebe3f8d4f2bcd40247d7a847ddcf4efb1b:3"}
+Q2 毛利率环比掉 0.36 个百分点，是本轮产业最重要的一张表。如果 AI 机柜真的比传统服务器厚，收入环比 +22% 时毛利率至少不该掉。可能的解释有三个，都还没有被公司证伪：一是 GB300 爬坡良率和物料损耗；二是 Buy&Sell 模式把 GPU 成本做进收入、加工费被稀释；三是传统板 / 机构件拖后腿。申万 6/29 提到交易模式从 Buy&Sell 转向 Consignment 会抬云计算利润率——那是卖方假设，H1 的 7.15% 还没把它做出来。CPO 样机交货是 2026 年的期权，不是 H1 利润。HBM / CoWoS 不是这张票。
+
+
+{"doc_id": "cv2:a796819edaebe29b0bfe9c7846fea67cabfa15514e45e47179b4ee433292a7e6", "locator": "eref:10c7cd77d36660f24cdb90897345a5d1ab4b366f5bf853040cdfeb9b0cfceec3:3"}
+2. 多数渠道认可 Copilot 的价格优势；功能改进进一步提升性价比微软产品安装基础雄厚的 企业可以
+通过复用现有 Copilot 许可证或通过更大规模的合同采购，来降低采用的增量成本。随着 Copilot 在
+日常任务中变得更加可用，客户也更容易将现有许可证投入使用。
+
+
+{"doc_id": "cv2:a796819edaebe29b0bfe9c7846fea67cabfa15514e45e47179b4ee433292a7e6", "locator": "eref:eb1242a7052dd216ae4a4bf252e71d87e4d862b4ec4d45249d97d6e86467cab0:3"}
+“对于拥有大量 Office 席位的企业来说，E7 非常有吸引力。在合同折扣之下，几乎等于免费获得
+Copilot，同时还能获得治理能力。微软可以把这部分折扣摊到整个 E7 产品线上，从而给出非常有吸
+引力的报价。”销售合作伙伴 D 对与竞品之间的价格差距则更为谨慎。其客户的 Copilot 实际采购价
+格已从每用户每月约 25 美元降至约 20 美元，但 OpenAI 和 Anthropic 的大客户同样能拿到折扣，
+因此 Copilot 相对竞品的价格优势可能并不特别明显。
+
+
+{"doc_id": "cv2:728eeaab364097ed48dec623ea927d8bbef0f786c224b6e28169ca7e1bcbf601", "locator": "eref:70f64cb10ba4b4775f97b6f78177bbadb321a95d5abd94efcae0f54bdffb9123:3"}
+“通过 AXON 1、AXON 2 和 AXON 3 的迭代，我们本希望看到一些根本性的变化，但到目前为止
+变化还不够大，高价值用户带来的增量仍然不足。作为电商平台，我们最看重的仍然是购物转化价值。
+”“当前的主要问题是模型表现的稳定性。虽然算法有所改进，但最终投放结果仍不够稳定。模型表现
+不稳定，算力成本就难以控制；而自动化投放不稳定，又会反过来影响电商广告主的放量。我们的放量
+取决于投放结果，如果模型和成本不稳定，放量效果就无法保证，相应的预算分配也难以稳定推进。”
+与 Meta Advantage+ 和 Google PMax 相比，该公司认为 AppLovin 在 ROAS（广告支出回报率
+）和稳定性方面仍有差距，但差距正在缩小。未来公司将更加关注高价值用户的识别以及放量后的回报
+22 / 34
+表现。
+
+{"doc_id": "cv2:e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623", "locator": "eref:ca035cc48867199e085e77ca2be4e80432546ae41f78a821494a65f4705604ac:0"}
+我们认为，DeepSeek V4.1 Flash的核心意义，是通过架构和推理系统优化，以更低的计算、存储和访存成本，实现更高
+的任务完成效率与单位GPU产出。更直观地看，新模型为当下NVIDIAHopper系列GPU及类似产品“续命一代”：Global/Persistent
+KVCache压缩约75%/87.5%，打破模型规模与硬件需求同步膨胀的线性关系；同时以更小动态计算量，改善系统吞吐，增大用
+户并发。以V4.1 Flash的优化逻辑推演，我们看到原本需在NVIDIABlackwell系列64 卡系统承载的10T模型，有望在64 卡Hopper
+系列系统完成部署，即2026-2027 年主流性能的国产算力芯片（如昇腾960 系列）有望支持国产模型向10T-20T参数量平台持续
+扩张，国产算力需求的逻辑闭环再一次被印证。
+
+{"doc_id": "cv2:510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24", "locator": "eref:9ac9a31ca4e89c53e87d67775f6322cab23e0d80f3f5579029402d701b6eb4d9:0"}
+中央网信办等七部门联合印发《促进数字化绿色化协同转型发展实施方案（2026-2030 年）》，明确探索800V 高压直流
+供电，国内AIDC 供电架构升级方向进一步清晰。9 月4 日，中央网信办、国家发展改革委、工业和信息化部等七部门
+联合印发《促进数字化绿色化协同转型发展实施方案（2026—2030 年）》，提出到2030 年推动算力设施等新兴领域用
+能效率大幅提升，并提高算力设施可再生能源电力消费水平。在算力设施绿色低碳发展部分，《实施方案》明确提出
+支持液冷散热、余热回收和低功耗芯片等技术创新，“探索算力设施800V高压直流供电架构，推动超百千瓦单机柜
+部署”，同时提出推进算电协同、绿电直连以及高效、长时、大容量储能等技术和标准。
+
+{"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:815d59ee796ba2bedfebb25247ff2a6c143cb6eee6a8dd8dc792e6b168437593:3"}
+随着现有数据的收益递减，权重开源开发者将需要在自主研发和训练算力上投入更多，以继续缩小差距
+。
+
+
+{"doc_id": "cv2:e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623", "locator": "eref:ca035cc48867199e085e77ca2be4e80432546ae41f78a821494a65f4705604ac:1"}
+增效：V4.1 Flash通过更小动态计算、外置记忆和更高Decode吞吐，以更低单位资源消耗获得更高任务完成效率。其
+Prefill和Decode阶段每Token分别仅激活约8B和16B参数；Engram将部分静态知识从主干动态计算中剥离并按需检索；DSpark
+则通过轻量Draft、置信度预测和动态调度提升Decode效率。
+
+{"doc_id": "cv2:8ec32ba9df29eef5f58a51d811ac4bfe7b5b58cd123c4258cb2d383dc29fbcd1", "locator": "eref:e54de07afdcf6d3cf6620a1742fdfab0055bca89e9b4abf48fc0f7cdbc7f21bc:0"}
+客户专家 E —— Bits AI 的持续高频使用与留存价值使用情况与支出： Bits AI 用于处理复杂或不熟
+悉的故障事件，通常每个工作日运行 6 至 10 次，每月约 200 次。专家回忆称单次运行价格大幅下调
+，从约 25 美元降至可能 5 美元左右（尚待核实）。按其回忆的当前费率推算，这意味着每月约 1,
+000 美元，相对于每年 120 万至 130 万美元的 DDOG 预算而言金额很小；这属于客户的回忆数据
+，并非经过核实的公开标价。
+
+{"doc_id": "cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4", "locator": "eref:de8378cc2a53a2ea33698e6e7fcd2a0fc0880c4470f90e78566a139d75f2fe70:0"}
+DeepSeek: V4.1-Flash-1017 达到开源权重模型的领先水平。 我们认为其在编程与智能体（Agent
+）能力与成本之间实现了引人注目的平衡，但与闭源领先模型之间的差距、以及缺乏严格同口径的独立
+测试，仍需对基准测试的亮眼表现保持审慎。
+
+
+{"doc_id": "cv2:728eeaab364097ed48dec623ea927d8bbef0f786c224b6e28169ca7e1bcbf601", "locator": "eref:70f64cb10ba4b4775f97b6f78177bbadb321a95d5abd94efcae0f54bdffb9123:0"}
+“如果你在 AppLovin、Snapchat、Pinterest 或 Reddit 这类平台上投放广告，每月媒体预算只有 
+5,000 美元，但管理费却要 2,000 美元，这个比例就不成立，也会限制投放规模。如果能降低管理成
+本，小额预算的投放就更容易维持。例如，一名能力较强的营销人员使用 Claude 独自管理所有第二
+梯队平台，总人力成本为每月 8,000 美元，约合每个平台 800 至 1,000 美元。这样，即使你在较小
+的平台上每月只投放 4,000 美元，管理费与广告支出的比例也可以接受。只要广告平台能降低投放管
+理的成本，它们就能进一步拓展长尾客户。”MCP 连接与客户进一步拓展正如北美 A 当时所了解的
+，AppLovin 主要提供只读连接，部分客户已经在自行搭建接近读写连接的运营方式。如果
+AppLovin 开放读写 MCP，该渠道预计其样本中使用AppLovin 的广告主数量可在圣诞节前达到约
+90 家，并在 2027 年 3 月至 5 月间达到约 100 家。
+
+
+{"doc_id": "cv2:728eeaab364097ed48dec623ea927d8bbef0f786c224b6e28169ca7e1bcbf601", "locator": "eref:70f64cb10ba4b4775f97b6f78177bbadb321a95d5abd94efcae0f54bdffb9123:2"}
+“在 AXON 3 的内部测试中，D7 ROAS 较 AXON 2 提升约8%。虽然未达预期，但仍有提升；新客
+ CAC 下降约5%至7%。整体增量 ROAS 提升约8%至10%，基本符合要求，但仍有改进空间，目前
+还在持续打磨。D30 ROAS 提升约5%至10%。我们还会衡量人工介入时间是否下降，以此判断自动
+化程度。平均测试周期约为6至8周，人工操作时间下降超过15%。所以除了 ROAS 之外，这一版本
+的改进还包括人工投入时间的减少。”据该公司反馈，新版本在高价值用户购物转化方面的增量仍低于
+最初预期，投放稳定性与算力成本控制仍是主要问题。
+
+
+{"doc_id": "cv2:3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4", "locator": "eref:85fff291886f46b1cbcee908f38c49ebe3f8d4f2bcd40247d7a847ddcf4efb1b:1"}
+证伪第一枪看 Q3 毛利率和经营现金流，不看股价还涨不涨。第二枪看公司是否改口「Rubin 后移」或不再用「第一梯队」。第三枪看存货 / 应收是否继续快于收入——H1 已经是这个形状，Q3 若再加速，就是营运资本陷阱从「可解释的备料」变成「货物卖不出现金」。
+
+{"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:28a023906ac7dc1f04f71230c85780af5f3a0e3dfe86fc19508a4c2e46846230:4"}
+跻身开放权重第一梯队，但整体仍落后于专有模型领跑者
+DeepSeek 的模型卡将 1017 与 Kimi K3、GLM-5.3、GPT-5.6 Sol 和 Opus 5 进行对DeepSeek 
+公布的 V4.1-Flash-1017 基准测试对比
+1 / 8
+2 / 8
+根据 DeepSeek 公布的结果，1017 在几乎所有基准测试上优于 Kimi K3 和 GLM-
+5.3，并在 11 项基准中有 9 项胜过 GPT-5.6 Sol，仅在 HLE 和 ZeroBench 两项上落后。在 Opus
+ 5 面前，1017 有四项基准领先，七项落后。在 HLE 和 Terminal-Bench
+4.0 上，分别落后 13.7 和 9.5 个百分点。
+
+
+{"doc_id": "cv2:728eeaab364097ed48dec623ea927d8bbef0f786c224b6e28169ca7e1bcbf601", "locator": "eref:70f64cb10ba4b4775f97b6f78177bbadb321a95d5abd94efcae0f54bdffb9123:1"}
+“产品和算法在不断更新。我们在内部经常把 AppLovin 和 TikTok 做对比，目前来看，三季度的算
+法更新频率远高于 TikTok。三季度初，AXON 推荐模型在广告匹配效率和转化效率方面进行了一次
+更新，这对电商转化而言十分关键。”广告素材与资产匹配模板也保持一定的更新频率。
+该公司于5月下旬至6月初开始测试新模型。据其反馈，新模型的 D7 ROAS 较上一版本提升约8%，
+新客获客成本（CAC）下降约5%至7%，D30 ROAS 提升约5%至10%；每轮测试周期约为6至8周
+，人工操作时间下降超过15%。
+
+
+{"doc_id": "cv2:861a396eeb3c1923a174cf45d1abd9daa5d3dbee8349259b0472cb24d211020d", "locator": "eref:6f55049fefb51ccc7efff631becc82da2ba64dae1b467881b054cebf90603134:2"}
+关于我们
+网站声明
+联系方式
+用户反馈
+网站地图
+帮助
+C财联社
+首页
+电报
+话题
+盯盘
+VIP
+FM
+投研
+下载
+【财联社早知道】中共中央、国务院发文加快推进新一代AI
+智能终端场景应用；《中国微短剧发展报告(2026)》发布，机
+构预计2026年中国免费微短剧市场规模约573亿元
+财联社早知道
+2026.10.1118:58星期日
+大头条
+一、端侧AI中共中央、国务院发文加快推进新一代AI智能终端场景应用，机构称端侧AI正处于从"概念"走向"量产"的关键节
+点，这家公司构建了“模组+AIAgent+AI算法”一体化AloT解决方案
+据媒体报道，中共中央、国务院印发《关于发展新质生产力的意见》。意见提出，全面实施“人工智能+”行动。推进人工智能对
+传统产业的改造，加快推进智能网联新能源汽车、人工智能手机和电脑、人形机器人等新一代智能终端场景应用。加快人工智能
+等数智技术创新，突破基础理论和核心技术，强化算力、算法、数据等高效供给。因地制宜、分业施策布局国家人工智能行业应
+用中试基地和高价值应用场景，大力推动人工智能在各行业应用。
+
+
+{"doc_id": "cv2:861a396eeb3c1923a174cf45d1abd9daa5d3dbee8349259b0472cb24d211020d", "locator": "eref:6f55049fefb51ccc7efff631becc82da2ba64dae1b467881b054cebf90603134:1"}
+点评：2026年是端侧AI规模化落地的元年，未来几年内的发展主线，是从云端集中式智能走向端云分工、协同共生的分布式智
+能系统。国金证券认为，端侧AI正处于从"概念"走向"量产"的关键节点。上游SoC芯片率先受益，中游模组与代工紧随其后，下
+游应用场景持续扩容。
+
+
+{"doc_id": "cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4", "locator": "eref:090be4071de7c6be320a77d02084ce23848faa11b9b3ffbeaf1fcb928bdae7b9:1"}
+2026-10-26 周报 Neocloud 融资、META、SPCX 与 BE、MS
+周报 | Neocloud 融资、META、SPCX 与 BE、MSFT与 NOW、OCP、DeepSeek
+、AI 存储
+
+{"doc_id": "cv2:5487df59e7b5fb22f4a7b8ff9a995038b210512552ec0a4a98d603d101808b45", "locator": "eref:babcde8f3c765fdfc36f6df7d673bc9f3b075e9329a77ebe47e6999bb974edf3:1"}
+“只要我掌握了编排层（harness layer）和上下文，替换底层大语言模型（LLM）甚至后端系统其实
+都相对容易。” —— 新加坡某电信运营商数据与AI负责人“ServiceNow是一家SaaS厂商；他们不可
+能白白把数据给你。其定价模式仍有待我们进一步研究。” —— 新加坡某电信运营商数据与AI负责人
+“一切都正在演变为无头架构（Headless）。” —— 某全球药企数字化负责人
+1.3 理由之三：Agent查询数据的频率远高于人类，而数据平台是按算力计费的数据平台是受益逻辑最
+明确、最直接的板块。驱动这一增长的动力有三：一是Agent通过MCP协议进行数据查询；二是数据
+工程师在不增加团队人手的情况下利用Cortex交付更多成果；三是通话与聊天记录等非结构化数据被
+大量导入以供Agent调用。这三大驱动力均不依赖于人员规模，且所有受访者中无一人缩减使用量或预
+算支出。
+
+
+{"doc_id": "cv2:8ec32ba9df29eef5f58a51d811ac4bfe7b5b58cd123c4258cb2d383dc29fbcd1", "locator": "eref:e54de07afdcf6d3cf6620a1742fdfab0055bca89e9b4abf48fc0f7cdbc7f21bc:1"}
+5 / 7
+查覆盖率、工程工时以及根本原因定位的准确性。专家预期该产品带来的团队成本效益将是更长期的
+2028–2029 年 结果，前提是必须先梳理好底层的业务流程。访谈在讨论 POC 完成与预算落实日期
+时，频繁在 SIEM 与 Bits 之间切换口径，因此我们并不将这些时间节点归为 Bits 的确定采购。更具
+参考意义的信号在于：只要效率论证成立，客户就具备投资意愿。
+
+
+{"doc_id": "cv2:87694bc48168441d212f74ac9317ee420ea82f623f19a555e6ecb40ad5342174", "locator": "eref:526fb4ef228e09581a7973c138851c618e9a89e1b571c655a44429b373452ee6:2"}
+对前沿模型提供商而言，这意味着许多企业任务并不需要能力最强或最昂贵的模型。因此闭源模型的溢
+价可能集中在复杂推理和长尾任务上，这会给企业级Token 收入和定价能力带来压力。这一趋势也可
+能影响 Anthropic 在其 S­1 文件中所描述的直接面向企业的商业模式。
+
+
+{"doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5", "locator": "eref:e4eb4d0c01518c3fc30dccf4253ef7f48e6de76d9fb5bfa020877016ec2b599e:4"}
+9）阿里更新旗舰模型Qwen3.8-Max，性能较旧版本显著提升。
+Additional exact references (text not repeated here): [{"doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5", "locator": "eref:4ffc4120620598407c16124b6de96de988709d5e340ccff455fba6ea414b9f69:1"}, {"doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e", "locator": "eref:f5490a04d38c8de0b18893882dc7d97c0dce893a0ff9ccfeef96cd69a4f5bc80:3"}, {"doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e", "locator": "eref:d9f9b1eab1b73eb89096d2385245b85bfc41e86351bff3e91d05d1205a4ca063:3"}, {"doc_id": "cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4", "locator": "eref:d2dfcad4ec77ec98a78ba2bd771d3d6f177ec7ed7bcb785b2a9de17882368319:0"}, {"doc_id": "cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4", "locator": "eref:d2dfcad4ec77ec98a78ba2bd771d3d6f177ec7ed7bcb785b2a9de17882368319:1"}, {"doc_id": "cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4", "locator": "eref:4145775cc35dd99e447dadaf0338b7589f6f85d3c4f457e6453cc69a5cd12aec:1"}, {"doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5", "locator": "eref:4e8b7586a7f29324e32db6c874a863644031278a750d652494f9ccee0ff706a5:5"}, {"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:815d59ee796ba2bedfebb25247ff2a6c143cb6eee6a8dd8dc792e6b168437593:2"}, {"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:815d59ee796ba2bedfebb25247ff2a6c143cb6eee6a8dd8dc792e6b168437593:5"}, {"doc_id": "cv2:514f2232c794463024e352c9bca3d9fee63a4d8c6ac4623b0390f27a3d7dfe17", "locator": "eref:64188ac9552e57eb5b4d986f330406f0b020cb5c302ddeb1a30df8cba4632afa:0"}, {"doc_id": "cv2:e997a5af3a279053036bdd9f3afdc76f8d2c8186e9aafb3573986ccd07cd1681", "locator": "eref:cd3a6777924a8243e3d8bddb152b806dfd34935029a23820558d7f8674a2d61d:0"}, {"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:ca592e51b9610002833404aff4d107faafe5aac41014f41e1e94723e88cf2833:0"}, {"doc_id": "cv2:e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623", "locator": "eref:ca035cc48867199e085e77ca2be4e80432546ae41f78a821494a65f4705604ac:2"}, {"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:ca592e51b9610002833404aff4d107faafe5aac41014f41e1e94723e88cf2833:1"}, {"doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5", "locator": "eref:4e8b7586a7f29324e32db6c874a863644031278a750d652494f9ccee0ff706a5:4"}, {"doc_id": "cv2:e997a5af3a279053036bdd9f3afdc76f8d2c8186e9aafb3573986ccd07cd1681", "locator": "eref:e55a01786310941610d0b0d698d9de8742ca63233c06eda6889cdad6dde206bd:1"}, {"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:f1f14a2f19dc7165e8228a563a614c3839e9b525bd5d2075e1be60e061c3f8f2:2"}, {"doc_id": "cv2:62fc6fdd4e00f462b7bc4a18cb62a9679f19fbb00270163f2bda683170c9a718", "locator": "eref:868278f654dd933c9a2175e3b120e9812370c96e39a527b5395a5b1a503cd197:0"}, {"doc_id": "cv2:514f2232c794463024e352c9bca3d9fee63a4d8c6ac4623b0390f27a3d7dfe17", "locator": "eref:64188ac9552e57eb5b4d986f330406f0b020cb5c302ddeb1a30df8cba4632afa:1"}, {"doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e", "locator": "eref:d9f9b1eab1b73eb89096d2385245b85bfc41e86351bff3e91d05d1205a4ca063:1"}, {"doc_id": "cv2:a796819edaebe29b0bfe9c7846fea67cabfa15514e45e47179b4ee433292a7e6", "locator": "eref:eb1242a7052dd216ae4a4bf252e71d87e4d862b4ec4d45249d97d6e86467cab0:1"}, {"doc_id": "cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4", "locator": "eref:de8378cc2a53a2ea33698e6e7fcd2a0fc0880c4470f90e78566a139d75f2fe70:1"}, {"doc_id": "cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698", "locator": "eref:f1f14a2f19dc7165e8228a563a614c3839e9b525bd5d2075e1be60e061c3f8f2:0"}, {"doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5", "locator": "eref:497143d921754f5bcd163e46a26ac4c3ae2232a331fb914f9f9e2ddb0a3b11fc:4"}, {"doc_id": "cv2:3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4", "locator": "eref:85fff291886f46b1cbcee908f38c49ebe3f8d4f2bcd40247d7a847ddcf4efb1b:0"}, {"doc_id": "cv2:a258bef88da0558d3b5bd4181291be734641ad8aff1d5d484c9ee77f9df851bb", "locator": "eref:578477c38a326959885ba12a0c1d012bc136cf41b577a43e2c4d286c15c1c03c:2"}, {"doc_id": "cv2:e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623", "locator": "eref:de05d41fa9ea54adcfe6a5b82d055302b0f88e26487e1b04b726d51c5dfb7c23:1"}, {"doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5", "locator": "eref:497143d921754f5bcd163e46a26ac4c3ae2232a331fb914f9f9e2ddb0a3b11fc:0"}, {"doc_id": "cv2:87694bc48168441d212f74ac9317ee420ea82f623f19a555e6ecb40ad5342174", "locator": "eref:526fb4ef228e09581a7973c138851c618e9a89e1b571c655a44429b373452ee6:5"}, {"doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5", "locator": "eref:4ffc4120620598407c16124b6de96de988709d5e340ccff455fba6ea414b9f69:5"}, {"doc_id": "cv2:16f97cb38c626bf5105260233e420f92a5d876af6eb414189fc1ff3fbd4888c8", "locator": "eref:410d7f79acd83fdec913fc96d0519129869ae637069655f4fa55a835924e5561:0"}, {"doc_id": "cv2:510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24", "locator": "eref:9ac9a31ca4e89c53e87d67775f6322cab23e0d80f3f5579029402d701b6eb4d9:1"}, {"doc_id": "cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4", "locator": "eref:0acd1f4fb22c038af6651756fd8f7b98cdbbea4af74693d7a7a4ea44dfbb3106:1"}, {"doc_id": "cv2:a796819edaebe29b0bfe9c7846fea67cabfa15514e45e47179b4ee433292a7e6", "locator": "eref:eb1242a7052dd216ae4a4bf252e71d87e4d862b4ec4d45249d97d6e86467cab0:2"}, {"doc_id": "cv2:e997a5af3a279053036bdd9f3afdc76f8d2c8186e9aafb3573986ccd07cd1681", "locator": "eref:e55a01786310941610d0b0d698d9de8742ca63233c06eda6889cdad6dde206bd:3"}, {"doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5", "locator": "eref:497143d921754f5bcd163e46a26ac4c3ae2232a331fb914f9f9e2ddb0a3b11fc:1"}, {"doc_id": "cv2:a258bef88da0558d3b5bd4181291be734641ad8aff1d5d484c9ee77f9df851bb", "locator": "eref:578477c38a326959885ba12a0c1d012bc136cf41b577a43e2c4d286c15c1c03c:4"}, {"doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5", "locator": "eref:4e8b7586a7f29324e32db6c874a863644031278a750d652494f9ccee0ff706a5:1"}, {"doc_id": "cv2:03227e86087b4205de3fcca235f4294c92f1bc6afbd5ec32249f650c9e07dcae", "locator": "eref:b19f4a4da361b9e3217ecd6a3c78e95669017b639acb417ff0133c8ac7007611:2"}, {"doc_id": "cv2:a796819edaebe29b0bfe9c7846fea67cabfa15514e45e47179b4ee433292a7e6", "locator": "eref:eb1242a7052dd216ae4a4bf252e71d87e4d862b4ec4d45249d97d6e86467cab0:4"}, {"doc_id": "cv2:a258bef88da0558d3b5bd4181291be734641ad8aff1d5d484c9ee77f9df851bb", "locator": "eref:578477c38a326959885ba12a0c1d012bc136cf41b577a43e2c4d286c15c1c03c:0"}, {"doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5", "locator": "eref:497143d921754f5bcd163e46a26ac4c3ae2232a331fb914f9f9e2ddb0a3b11fc:2"}, {"doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e", "locator": "eref:d9f9b1eab1b73eb89096d2385245b85bfc41e86351bff3e91d05d1205a4ca063:2"}, {"doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e", "locator": "eref:d9f9b1eab1b73eb89096d2385245b85bfc41e86351bff3e91d05d1205a4ca063:4"}, {"doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e", "locator": "eref:f5490a04d38c8de0b18893882dc7d97c0dce893a0ff9ccfeef96cd69a4f5bc80:0"}, {"doc_id": "cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e", "locator": "eref:f5490a04d38c8de0b18893882dc7d97c0dce893a0ff9ccfeef96cd69a4f5bc80:1"}, {"doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5", "locator": "eref:4ffc4120620598407c16124b6de96de988709d5e340ccff455fba6ea414b9f69:0"}]
+Omitted excerpt bodies: 73. Reference list may also be bounded. If the needed evidence is absent, use the original tool ref or targeted search; do not infer full coverage.
+END SOURCE EVIDENCE

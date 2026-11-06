@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 
 from frontier_agent.core.tool import tool
+from plugins.market.evidence import record_market_result
 from plugins.market.factory import build_service, resolve_or_error, unavailability
 from plugins.market.failure import translate
 from plugins.market.ports import MarketUnavailable
@@ -31,6 +32,8 @@ async def market_quote(query: str) -> str:
         "pe_ttm", "as_of_ms", "as_of", "age", "quote_text", ...}]}``。
         ``quote_text`` 是**规范引用串**，写进 evidence 的 ``quote`` 字段，
         不要改写其中的数字。估值失败不影响行情返回（见 ``caveats``）。
+        Web 运行附带 evidence_ref，可用于监控写入；display_numbers 提供金额/数量换算，
+        monitoring_metrics 提供目标距离（分别标注分母）及登记买入合计的数量、成本和盈亏。
     """
     if not isinstance(query, str) or not query.strip():
         return json.dumps(
@@ -58,9 +61,24 @@ async def market_quote(query: str) -> str:
     except MarketUnavailable as exc:
         return json.dumps(translate(exc, tool="market_quote"), ensure_ascii=False)
 
-    items = [{**row, "price_kind": "snapshot",
-              "trade_date": local_date(row.get("as_of_ms"), str(row.get("thscode") or thscode))}
-             for row in result.get("items", [])]
-    return json.dumps({**result, "items": items, "query": query, "thscode": thscode,
-                       "price_time_note": "last_price 是 as_of 时刻的行情快照，不代表最终收盘价。"},
-                      ensure_ascii=False)
+    items = [
+        {
+            **row,
+            "price_kind": "snapshot",
+            "trade_date": local_date(row.get("as_of_ms"), str(row.get("thscode") or thscode)),
+        }
+        for row in result.get("items", [])
+    ]
+    return json.dumps(
+        record_market_result(
+            "market_quote",
+            {
+                **result,
+                "items": items,
+                "query": query,
+                "thscode": thscode,
+                "price_time_note": "last_price 是 as_of 时刻的行情快照，不代表最终收盘价。",
+            },
+        ),
+        ensure_ascii=False,
+    )

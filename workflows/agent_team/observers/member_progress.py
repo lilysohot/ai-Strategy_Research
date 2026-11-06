@@ -57,15 +57,18 @@ class MemberProgressObserver(BaseObserver):
             ])
         if (
             not self.handoff_offered and not self.metadata.get("can_publish")
-            and time.monotonic() - self.started >= 90
-            and len(ctx.metadata.get("corpus_evidence") or []) >= 2
+            and ((time.monotonic() - self.started >= 90
+                  and len(ctx.metadata.get("corpus_evidence") or []) >= 2)
+                 or bool(ctx.metadata.get("web_evidence")))
         ):
             self.handoff_offered = True
             return Intervention(inject_messages=[
                 "[early research handoff] You have source evidence. If it supports the core "
                 "assigned findings, submit_report now so verification can overlap other research. "
                 "Give a concise report with exact refs, material qualifications and explicit "
-                "unresolved items. Do not wait for the research deadline, repeatedly search "
+                "unresolved items. Delivered web text is retained for the verifier: repeated "
+                "fetches of the same page are not independent corroboration. Do not wait for "
+                "the research deadline, repeatedly search "
                 "uncovered historical topics, or create an optional report file. If a load-bearing "
                 "fact still lacks evidence, do one targeted lookup and then report what is known. "
                 "An incomplete finding must remain an explicit gap, not a claim of completion."

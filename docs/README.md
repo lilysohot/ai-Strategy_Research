@@ -16,6 +16,7 @@ useful when changing that subsystem rather than when getting started.
 | Run or configure a local NVIDIA/SGLang model | [GPU and SGLang](#gpu-and-sglang) |
 | Understand ReAct versus Agent Team | [Workflow implementations](#workflow-implementations) |
 | Run benchmark evaluation | [Evaluation guide](eval.md) |
+| Evaluate team coordination and evidence handoff | [Team workflow evaluation](../benchmarks/team_workflow/README.md) |
 | Extend the framework | [Developer guides](#developer-guides) |
 | Understand the investment-research product requirements | [Product requirements](product-requirements.md) |
 | Understand the current and target research process | [Business process](business-process.md) |

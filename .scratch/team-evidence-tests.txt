@@ -1,0 +1,249 @@
+........................................................................ [  3%]
+........................................................................ [  6%]
+........................................................................ [  9%]
+........................................................................ [ 12%]
+........................................................................ [ 15%]
+........................................................................ [ 18%]
+........................................................................ [ 21%]
+........................................................................ [ 24%]
+........................................................................ [ 27%]
+........................................................................ [ 30%]
+............................................................ssss........ [ 33%]
+.....................s.......................F.......................... [ 36%]
+s....................................................................... [ 39%]
+........................................................................ [ 42%]
+........................................................................ [ 45%]
+........................................................................ [ 48%]
+........................................s............................... [ 51%]
+........................................................................ [ 54%]
+........................................................................ [ 57%]
+........................................................................ [ 60%]
+........................................................................ [ 63%]
+........................................................................ [ 66%]
+........................................................................ [ 69%]
+......F..........Fs..................................................... [ 72%]
+...........................................................sssss........ [ 75%]
+........................................................................ [ 78%]
+...........................
+=================================== FAILURES ===================================
+_______________________ test_golden_recall_at_5_is_full ________________________
+
+    def test_golden_recall_at_5_is_full() -> None:
+        svc = get_service()
+    
+        covered = _anchors_present(svc)
+        if covered == 0:
+            pytest.skip(
+                f"黄金集绑定的样本语料已不在库中（0/{len(GOLDEN_SET)} 题的锚点文档存在），"
+                "Recall 失去意义。请按新样本重建 plugins/corpus/golden.py 的 GOLDEN_SET。"
+            )
+    
+        report = run_golden(svc, top_k=5)
+        # 一旦任何一类掉到 100% 以下，说明检索退化或语料结构变了，
+        # 必须先解释再调阈值——这是 P0b 验收的硬指标。
+>       assert report.recall == 1.0, format_golden_report(report)
+E       AssertionError: 黄金题评测：0/20  Recall@5 = 0.0%
+E         
+E           对比型  0/3
+E           数字型  0/8
+E           时效型  0/3
+E           观点型  0/6
+E         
+E         未命中：
+E           [N1] 字节跳动获得的银团贷款规模是多少亿美元
+E                期望：字节获296亿美元银团贷款
+E           [N2] Figure 加码 Helix 算力投入了多少亿美元
+E                期望：figure斥35亿美元加码helix算力
+E           [N3] 国盛证券提到增资银行保险的规模是多少亿
+E                期望：3600亿增资银行保险
+E           [N4] 华福证券基础化工周报提到电子特气涨幅超过多少
+E                期望：电子特气涨幅超24
+E           [N5] 光大证券金属周报提到焦煤期货收盘价周内下跌多少
+E                期望：焦煤期货收盘价周内下跌3-64
+E           [N6] 长江证券化工专题里小苏打出口占产量的比重是多少
+E                期望：长江证券-化工专题
+E           [N7] 贵州茅台 2026 上半年收入同比增长百分之多少
+E                期望：国信证券/2026-08-17
+E           [N8] 光力科技的主营业务和股票代码是什么
+E                期望：光力科技
+E           [O1] 华创证券对贵州茅台给出什么投资评级
+E                期望：华创证券/2026-08-16
+E           [O2] 摩根大通对中国人工智能板块的态度与评级
+E                期望：jpmorgan
+E           [O3] 国金证券怎么看 AI PCB 与半导体设备的布局时机
+E                期望：ai-pcb及半导体设备迎来布局良机
+E           [O4] 华福证券为什么看好供给约束型周期品
+E                期望：看好供给约束型周期品
+E           [O5] 国金证券对钽价和锑价的判断是什么
+E                期望：钽价有望启动上行
+E           [O6] 华泰证券宏观海外周报如何看待联储加息
+E                期望：联储加息悬念白热化
+E           [C1] 华创证券和国信证券分别对贵州茅台给出什么评级
+E                期望：华创证券/2026-08-16；国信证券/2026-08-17
+E           [C2] 国金证券和东吴证券分别对 GPT-6 Astra 发布有什么看法
+E                期望：gpt-6-astra-fable-5-1正式发布；gpt-6-astra发布
+E           [C3] 光大证券和天风证券分别对 8 月美国非农数据给出了什么解读
+E                期望：2026年8月美国非农数据点评；非农大超预期
+E           [T1] James Bulltard 最新一期的复盘是哪一期
+E                期望：James-Bulltard_9826/2026-09-08
+E           [T2] 全球流动性观察最新一期是哪天发布的
+E                期望：全球流动性观察/2026-09-08
+E           [T3] Simons-Substack 最近一篇讲了什么
+E                期望：白银矿股/2026-09-07
+E       assert 0.0 == 1.0
+E        +  where 0.0 = GoldenReport(results=[GoldenResult(question=GoldenQuestion(qid='N1', question='字节跳动获得的银团贷款规模是多少亿美元', kind='数字', expect...9-07 白银矿股关注图表四'), hit=False, matched=(), missing=(Matcher(title_contains='白银矿股', doc_prefix='2026-09-07'),))], top_k=5).recall
+
+tests/test_corpus_golden.py:76: AssertionError
+______ test_public_search_compacts_after_enrichment_and_recomputes_scope _______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72cd9783cec0>
+
+    def test_public_search_compacts_after_enrichment_and_recomputes_scope(monkeypatch):
+        from plugins.corpus.preparation import read_pg, search_pg
+        from plugins.corpus.retrieval.diagnostics import RetrievalTrace
+        from plugins.corpus.service import CorpusService
+    
+        service = CorpusService.__new__(CorpusService)
+        service._dsn, service._target_db = "unused", "unused"
+        monkeypatch.setenv("CORPUS_RETRIEVAL_MODE", "lexical")
+        monkeypatch.setattr(service, "read_chain", lambda: "new")
+        monkeypatch.setattr(service, "_abstain_decision", lambda query: False)
+        monkeypatch.setattr(search_pg, "query_lexemes", lambda *a, **kw: ("营收",))
+        first = hit(("anchor", "next"), kind="body")
+        second = hit(("header", "anchor"), kind="body")
+        before = (first, second)  # Incomparable until enrichment adds the header.
+        order = {"source": ("header", "anchor", "next")}
+        monkeypatch.setattr(read_pg, "search_with_coverage_bands", lambda *a, **kw: (before, order, {}))
+        monkeypatch.setattr(service, "_selected_context_hits", lambda *a, **kw: before)
+    
+        def enrich(hits, chunk_order, structures):
+            assert hits == before
+            return (replace(first, context_chunk_ids=("header", "anchor", "next")), second)
+    
+        monkeypatch.setattr(service, "_attach_table_header_context", enrich)
+        monkeypatch.setattr(read_pg, "fetch_chunk_kinds", lambda dsn, pairs, **kw: {
+            pair: "table" if pair[1] == "header" else "body" for pair in pairs
+        })
+        trace = RetrievalTrace()
+>       public, _ = service.search_with_coverage("营收", limit=2, trace=trace)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_corpus_retrieval_dedup.py:90: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+plugins/corpus/service.py:1443: in search_with_coverage
+    if native_live.enabled(self._target_db):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+plugins/corpus/retrieval/native_live.py:51: in enabled
+    check_native_target(target)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+target = 'unused'
+
+    def check_native_target(target: str | None) -> None:
+        """Allow pilots, or a production database named by both independent settings.
+    
+        Callers still verify current_database() on the actual connection. Keeping the
+        binding independent of the on/off switch lets issued citations survive rollback.
+        """
+        if target and target.startswith("vector_pilot_"):
+            return
+        if (
+            not target
+            or target in {"apodex", "template0", "template1"}
+            or target != os.getenv("CORPUS_TARGET_DB", "").strip()
+            or target != os.getenv("CORPUS_NATIVE_TARGET_DB", "").strip()
+        ):
+>           raise ValueError("native_target_mismatch_not_explicitly_bound")
+E           ValueError: native_target_mismatch_not_explicitly_bound
+
+plugins/corpus/retrieval/native_target.py:22: ValueError
+________________ test_wrong_target_rejected_before_hybrid_call _________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x72cd97e52c60>
+
+    def test_wrong_target_rejected_before_hybrid_call(monkeypatch):
+        from plugins.corpus.preparation import search_pg
+        from plugins.corpus.preparation.repository import StoreError
+        from plugins.corpus.service import CorpusService
+    
+        monkeypatch.setenv("CORPUS_RETRIEVAL_MODE", "hybrid")
+        monkeypatch.setenv("CORPUS_RETRIEVAL_RANKING", "body-constraints-v1")
+        monkeypatch.setenv("CORPUS_RETRIEVAL_RANKING_TARGET_DB", "postgres")
+        monkeypatch.setenv("CORPUS_TARGET_DB", "postgres")
+        monkeypatch.setenv("CORPUS_READ_CHAIN", "new")
+        monkeypatch.setattr(search_pg, "query_lexemes", lambda *a, **kw: ("设备",))
+        monkeypatch.setattr(CorpusService, "read_chain", lambda self: "new")
+        with pytest.raises(StoreError, match="explicit matching target"):
+>           CorpusService("dbname=postgres").search_with_coverage("设备收入")
+
+tests/test_corpus_retrieval_ranking.py:137: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+plugins/corpus/service.py:1446: in search_with_coverage
+    return native_live.search(self._dsn, self._target_db or "", query, limit, trace)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+plugins/corpus/retrieval/native_live.py:316: in search
+    index = refresh(dsn, target, seed)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+plugins/corpus/retrieval/native_live.py:235: in refresh
+    with psycopg.connect(dsn, autocommit=True) as conn:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <class 'psycopg.Connection'>, conninfo = 'dbname=postgres'
+autocommit = True, prepare_threshold = 5, context = None, row_factory = None
+cursor_factory = None, kwargs = {}
+
+    @classmethod
+    def connect(
+        cls,
+        conninfo: str = "",
+        *,
+        autocommit: bool = False,
+        prepare_threshold: int | None = 5,
+        context: AdaptContext | None = None,
+        row_factory: RowFactory[Row] | None = None,
+        cursor_factory: type[Cursor[Row]] | None = None,
+        **kwargs: ConnParam,
+    ) -> Self:
+        """
+        Connect to a database server and return a new `Connection` instance.
+        """
+    
+        params = cls._get_connection_params(conninfo, **kwargs)
+        timeout = timeout_from_conninfo(params)
+        rv = None
+        attempts = conninfo_attempts(params)
+        conn_errors: list[tuple[e.Error, str]] = []
+        for attempt in attempts:
+            tdescr = (attempt.get("host"), attempt.get("port"), attempt.get("hostaddr"))
+            descr = "host: %r, port: %r, hostaddr: %r" % tdescr
+            logger.debug("connection attempt: %s", descr)
+            try:
+                conninfo = make_conninfo("", **attempt)
+                gen = cls._connect_gen(conninfo, timeout=timeout)
+                rv = waiting.wait_conn(gen, interval=_WAIT_INTERVAL)
+            except e.Error as ex:
+                logger.debug("connection failed: %s: %s", descr, str(ex))
+                conn_errors.append((ex, descr))
+            except e._NO_TRACEBACK as ex:
+                raise ex.with_traceback(None)
+            else:
+                logger.debug("connection succeeded: %s", descr)
+                break
+    
+        if not rv:
+            last_ex = conn_errors[-1][0]
+            if len(conn_errors) == 1:
+>               raise last_ex.with_traceback(None)
+E               psycopg.OperationalError: connection is bad: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory
+E               	Is the server running locally and accepting connections on that socket?
+
+.venv/lib/python3.12/site-packages/psycopg/connection.py:122: OperationalError
+=========================== short test summary info ============================
+FAILED tests/test_corpus_golden.py::test_golden_recall_at_5_is_full - Asserti...
+FAILED tests/test_corpus_retrieval_dedup.py::test_public_search_compacts_after_enrichment_and_recomputes_scope
+FAILED tests/test_corpus_retrieval_ranking.py::test_wrong_target_rejected_before_hybrid_call
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! KeyboardInterrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/home/administrator/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/selectors.py:415: KeyboardInterrupt
+(to show a full traceback on KeyboardInterrupt use --full-trace)
+3 failed, 1883 passed, 20 skipped in 178.65s (0:02:58)

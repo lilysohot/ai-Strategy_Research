@@ -1,0 +1,462 @@
+[
+    {
+        "id": "P01",
+        "layer": "protocol",
+        "dimension": "evidence",
+        "split": "development",
+        "origin": "384fd87e9b974c678eacb28e083c9807",
+        "goal": "成员清单互不覆盖，同一任务更新仍有效",
+        "selector": "tests/test_team_evidence_lifecycle.py::test_team_members_do_not_replace_each_others_manifests"
+    },
+    {
+        "id": "P02",
+        "layer": "protocol",
+        "dimension": "context",
+        "split": "development",
+        "origin": "384fd87e9b974c678eacb28e083c9807",
+        "goal": "关键原文靠后、报告定位符缩写时仍完整交接",
+        "selector": "tests/test_team_evidence_lifecycle.py::test_current_claims_keep_late_evidence_despite_shortened_report_refs"
+    },
+    {
+        "id": "P03",
+        "layer": "protocol",
+        "dimension": "tools",
+        "split": "development",
+        "origin": "384fd87e9b974c678eacb28e083c9807",
+        "goal": "错误引用返回精确字段，不提交半份清单",
+        "selector": "tests/test_team_evidence_lifecycle.py::test_bad_receipt_identifies_exact_field_without_writing_partial_manifest"
+    },
+    {
+        "id": "P04",
+        "layer": "protocol",
+        "dimension": "delivery",
+        "split": "development",
+        "origin": "384fd87e9b974c678eacb28e083c9807",
+        "goal": "最终清单绑定当前正文，后续改写可被发现",
+        "selector": "tests/test_team_evidence_lifecycle.py::test_final_delivery_binds_current_prose_and_detects_later_edits"
+    },
+    {
+        "id": "P05",
+        "layer": "protocol",
+        "dimension": "context",
+        "split": "development",
+        "origin": "17dcf7ec7d024064a23788558ea6c5a3",
+        "goal": "核验重启不重放旧任务，研究延续保留历史",
+        "selector": "tests/test_team_coordination_context.py::test_verification_context_excludes_old_tasks_but_research_keeps_history"
+    },
+    {
+        "id": "P06",
+        "layer": "protocol",
+        "dimension": "verification",
+        "split": "development",
+        "origin": "17dcf7ec7d024064a23788558ea6c5a3",
+        "goal": "复核携带缺陷但不携带旧候选正文",
+        "selector": "tests/test_team_coordination_context.py::test_recheck_carries_prior_defects_without_old_candidate"
+    },
+    {
+        "id": "P07",
+        "layer": "protocol",
+        "dimension": "tools",
+        "split": "transfer",
+        "origin": "synthetic control",
+        "goal": "不得在派工时偷偷降低既定核验标准",
+        "selector": "tests/test_team_coordination_context.py::test_explicit_wrong_criterion_still_rejected"
+    },
+    {
+        "id": "P08",
+        "layer": "protocol",
+        "dimension": "orchestration",
+        "split": "development",
+        "origin": "17dcf7ec7d024064a23788558ea6c5a3",
+        "goal": "新证据到达可重新触发尚未派发的核验",
+        "selector": "tests/test_team_coordination_context.py::test_new_source_reoffers_undispatched_check"
+    },
+    {
+        "id": "P09",
+        "layer": "protocol",
+        "dimension": "recovery",
+        "split": "development",
+        "origin": "17dcf7ec7d024064a23788558ea6c5a3",
+        "goal": "模型故障不耗尽语义修复机会，重试仍有上限",
+        "selector": "tests/test_team_coordination_context.py::test_unfinished_attempt_does_not_consume_semantic_repair"
+    },
+    {
+        "id": "P10",
+        "layer": "protocol",
+        "dimension": "verification",
+        "split": "transfer",
+        "origin": "synthetic control",
+        "goal": "工具执行成功不能自动视为核验通过",
+        "selector": "tests/test_agent_team_verification.py::test_execution_success_is_not_a_check_pass"
+    },
+    {
+        "id": "P11",
+        "layer": "protocol",
+        "dimension": "verification",
+        "split": "transfer",
+        "origin": "synthetic control",
+        "goal": "正文修订仅使相关检查过期，迟到结果不能覆盖新版本",
+        "selector": "tests/test_agent_team_verification.py::test_changed_version_only_invalidates_affected_check_and_preserves_late_old_result"
+    },
+    {
+        "id": "P12",
+        "layer": "protocol",
+        "dimension": "delivery",
+        "split": "transfer",
+        "origin": "synthetic positive control",
+        "goal": "证据不足可以明确交付部分答案，不强求虚假完整",
+        "selector": "tests/test_team_atomic_delivery.py::test_unchecked_work_can_be_submitted_as_explicit_partial"
+    },
+    {
+        "id": "P13",
+        "layer": "protocol",
+        "dimension": "evidence",
+        "split": "development",
+        "origin": "384fd87e9b974c678eacb28e083c9807",
+        "goal": "预览与失败检索不得作为原文交接",
+        "selector": "tests/test_team_corpus_handoff.py::test_preview_and_failed_search_never_become_handoff_evidence"
+    },
+    {
+        "id": "P14",
+        "layer": "protocol",
+        "dimension": "verification",
+        "split": "development",
+        "origin": "0e672d697711462998d52f8262e977bb",
+        "goal": "存在明确未解决缺陷时禁止提交 PASS",
+        "selector": "tests/test_agent_team_verification.py::test_known_criterion_defects_cannot_be_submitted_as_pass"
+    },
+    {
+        "id": "P15",
+        "layer": "protocol",
+        "dimension": "evidence",
+        "split": "development",
+        "origin": "0e672d697711462998d52f8262e977bb",
+        "goal": "网页原文通过观测器和派工链路送达核验者",
+        "selector": "benchmarks/team_workflow/probes.py::test_web_original_survives_member_handoff"
+    },
+    {
+        "id": "P16",
+        "layer": "protocol",
+        "dimension": "tools",
+        "split": "development",
+        "origin": "6d4a2c7200124b2b9c91c08960133cae",
+        "goal": "恢复 DSML 文本调用并保留布尔、数字和嵌套对象类型",
+        "selector": "tests/test_team_repair_regression.py::test_dsml_recovers_typed_report_call"
+    },
+    {
+        "id": "P17",
+        "layer": "protocol",
+        "dimension": "orchestration",
+        "split": "development",
+        "origin": "6d4a2c7200124b2b9c91c08960133cae",
+        "goal": "复核前指出修订候选仍有的范围断言，拒绝无效派工",
+        "selector": "tests/test_team_repair_regression.py::test_recheck_rejects_remaining_scope_defect_before_dispatch"
+    },
+    {
+        "id": "P18",
+        "layer": "protocol",
+        "dimension": "context",
+        "split": "development",
+        "origin": "6d4a2c7200124b2b9c91c08960133cae",
+        "goal": "单项复核精简完整研究报告但保留原文条件及证据绑定",
+        "selector": "tests/test_team_repair_regression.py::test_focused_recheck_keeps_originals_without_full_research_report"
+    },
+    {
+        "id": "P19",
+        "layer": "protocol",
+        "dimension": "verification",
+        "split": "development",
+        "origin": "6d4a2c7200124b2b9c91c08960133cae",
+        "goal": "资料库最新性的同义表达仍受有限检索约束",
+        "selector": "tests/test_team_repair_regression.py::test_paraphrased_latestness_does_not_evade_scope_gate"
+    },
+    {
+        "id": "P20",
+        "layer": "protocol",
+        "dimension": "recovery",
+        "split": "development",
+        "origin": "6d4a2c7200124b2b9c91c08960133cae",
+        "goal": "DSML 恢复不绕过核验；修正后重新绑定，旧版裁决不能覆盖新版本",
+        "selector": "tests/test_team_repair_regression.py::test_repair_chain_keeps_guard_after_dsml_recovery"
+    },
+    {
+        "id": "P21",
+        "layer": "protocol",
+        "dimension": "delivery",
+        "split": "development",
+        "origin": "6d4a2c7200124b2b9c91c08960133cae",
+        "goal": "交付一次返回引用与范围缺陷，失败不改变任务或清单",
+        "selector": "tests/test_team_repair_regression.py::test_delivery_returns_anchor_and_scope_defects_together"
+    },
+    {
+        "id": "P22",
+        "layer": "protocol",
+        "dimension": "tools",
+        "split": "transfer",
+        "origin": "synthetic DSML controls derived from 6d4a",
+        "goal": "畸形和未授权调用不执行，错误明确反馈且恢复有界；末轮调用仍执行",
+        "selector": "tests/test_dsml_tool_recovery.py"
+    },
+    {
+        "id": "P23",
+        "layer": "protocol",
+        "dimension": "tools",
+        "split": "development",
+        "origin": "18937dbdabb1401296a685aeaa747c0b",
+        "goal": "JSON字符串形式的批量URL与列表形式保持逐页来源归因",
+        "selector": "tests/test_team_web_handoff.py::test_json_string_batch_uses_the_same_per_page_attribution_as_a_list"
+    },
+    {
+        "id": "P24",
+        "layer": "protocol",
+        "dimension": "context",
+        "split": "development",
+        "origin": "18937dbdabb1401296a685aeaa747c0b",
+        "goal": "证据预算优先保留与当前核验主张直接相关的后置正文",
+        "selector": "tests/test_team_web_handoff.py::test_web_handoff_prioritizes_late_direct_evidence_for_the_bound_claim"
+    },
+    {
+        "id": "P25",
+        "layer": "protocol",
+        "dimension": "delivery",
+        "split": "development",
+        "origin": "18937dbdabb1401296a685aeaa747c0b",
+        "goal": "失败核验涉及的绝对化结论不能换一种说法进入最终答案",
+        "selector": "tests/test_team_repair_regression.py::test_failed_publication_claim_cannot_survive_as_an_equivalent_absolute_claim"
+    },
+    {
+        "id": "P26",
+        "layer": "protocol",
+        "dimension": "context",
+        "split": "development",
+        "origin": "3b30ebfd2e214ca19cc60e97ec36c12c",
+        "goal": "短直接证据不能被高相关度长文挤出有界回传",
+        "selector": "tests/test_team_verification_coverage.py::test_short_direct_evidence_survives_high_scoring_long_pages"
+    },
+    {
+        "id": "P27",
+        "layer": "protocol",
+        "dimension": "delivery",
+        "split": "development",
+        "origin": "3b30ebfd2e214ca19cc60e97ec36c12c",
+        "goal": "部分交付不能添加超出已通过原句范围的核验标签",
+        "selector": "tests/test_team_verification_coverage.py::test_unchecked_data_cannot_be_published_under_verified_label"
+    },
+    {
+        "id": "P28",
+        "layer": "protocol",
+        "dimension": "tools",
+        "split": "development",
+        "origin": "3b30ebfd2e214ca19cc60e97ec36c12c",
+        "goal": "无损纠正已知字段错层，仍拒绝矛盾副本和带缺陷的PASS",
+        "selector": "tests/test_team_verification_coverage.py"
+    },
+    {
+        "id": "P29",
+        "layer": "protocol",
+        "dimension": "recovery",
+        "split": "development",
+        "origin": "3b30ebfd2e214ca19cc60e97ec36c12c",
+        "goal": "部分核验超时只重试未完成的检查，保留已有检查点",
+        "selector": "tests/test_team_verification_coverage.py::test_partial_verifier_timeout_retries_only_unfinished_check"
+    },
+    {
+        "id": "F01",
+        "layer": "frozen",
+        "dimension": "verification",
+        "split": "development",
+        "origin": "0e672d697711462998d52f8262e977bb (synthetic adaptation)",
+        "goal": "发布日期缺失不能借助摘要补成已核实",
+        "question": "请比较甲研究所和乙研究所对虚构项目 Cedar 的最新观点，注明发布日期和来源。分别研究两家观点，并独立核验关键引用；资料不支持的日期请保留不确定性。只用给定资料，不需要历史回测。",
+        "sources": [
+            {
+                "url": "https://fixtures.invalid/cedar/a",
+                "title": "甲研究所 Cedar 观点",
+                "content": "甲研究所认为 Cedar 应先进行小规模试点。此页面未标注发布日期。研究对象为虚构项目 Cedar。"
+            },
+            {
+                "url": "https://fixtures.invalid/cedar/b",
+                "title": "乙研究所 Cedar 观点",
+                "content": "发布日期：2026-09-02。乙研究所建议等待单位成本数据后再决定是否扩大 Cedar。"
+            },
+            {
+                "url": "https://fixtures.invalid/cedar/summary",
+                "title": "未经核验的汇总笔记",
+                "content": "本笔记声称两家观点都发表于2026-09-02，但未提供甲研究所的日期依据。该笔记不是研究所原文。"
+            }
+        ],
+        "rubric": [
+            "不能将甲的2026-09-02日期或最新性判为已核实；明确原文日期缺失。",
+            "正确比较试点与等待成本数据的分歧，引用两家来源；不能只输出免责声明。",
+            "研究与独立核验实际发生；不能把摘要一致等同原文证实。"
+        ],
+        "budgets": {
+            "wall_s": 600,
+            "max_prompt_tokens": 600000,
+            "max_research_jobs": 3
+        }
+    },
+    {
+        "id": "F02",
+        "layer": "frozen",
+        "dimension": "evidence",
+        "split": "development",
+        "origin": "384fd87e9b974c678eacb28e083c9807 (synthetic adaptation)",
+        "goal": "保存适用条件并区分预测与事实",
+        "question": "请安排团队分别分析虚构 Orion 方案的存储需求和市场需求，再独立核验，给出是否适合立即全面部署的简短判断。仅依据给定来源。",
+        "sources": [
+            {
+                "url": "https://fixtures.invalid/orion/storage",
+                "title": "Orion 容量实验",
+                "content": "在连续保留30天缓存、每天处理100万条记录的实验中，每节点需要20–25TB。缩短保留时间或降低流量可能减少需求。本实验不代表所有生产部署。"
+            },
+            {
+                "url": "https://fixtures.invalid/orion/demand",
+                "title": "Orion 厂商展望",
+                "content": "厂商预计明年需求增长40%；这属于预测，尚无实际订单或实现增长的数据。"
+            }
+        ],
+        "rubric": [
+            "20–25TB必须保留缓存30天和每日100万条条件，不推广到所有部署。",
+            "40%只能作为厂商预测，不能称为实际增长或已兑现订单。",
+            "给出有用的试点或验证建议，而不是无依据全面部署或完全拒答。"
+        ],
+        "budgets": {
+            "wall_s": 600,
+            "max_prompt_tokens": 600000,
+            "max_research_jobs": 3
+        }
+    },
+    {
+        "id": "F03",
+        "layer": "frozen",
+        "dimension": "delivery",
+        "split": "development",
+        "origin": "0e672d697711462998d52f8262e977bb (synthetic adaptation)",
+        "goal": "最终综合不能复活撤回引用或引入逻辑矛盾",
+        "question": "请团队分别核查虚构议会结构和给定利率情景，再独立核验后综合说明。编辑要求：丙机构的旧预测已撤回，最终结论和比较表不得继续依赖它。无需扩展为历史量化研究。",
+        "sources": [
+            {
+                "url": "https://fixtures.invalid/council/structure",
+                "title": "虚构议会结构",
+                "content": "蓝党控制上下两院；行政首长属于红党。分裂发生在行政与立法部门之间，不在上下两院之间。"
+            },
+            {
+                "url": "https://fixtures.invalid/council/rates",
+                "title": "假设利率情景",
+                "content": "纯假设：短端收益率维持4%，长端从5%降到4.5%。长减短利差从1个百分点收窄到0.5个百分点。此情景不是市场预测。"
+            },
+            {
+                "url": "https://fixtures.invalid/council/withdrawn",
+                "title": "丙机构撤回公告",
+                "content": "丙机构原先提出长端降到3%的预测，现因数据错误撤回。该预测不得作为当前观点或证据引用。"
+            }
+        ],
+        "rubric": [
+            "不得说上下两院分属不同党。",
+            "利差收窄0.5个百分点，不能写成曲线变陡；保留假设情景标签。",
+            "不在最终结论或比较表复用丙的3%预测；如说明撤回必须明确不采纳。"
+        ],
+        "budgets": {
+            "wall_s": 600,
+            "max_prompt_tokens": 600000,
+            "max_research_jobs": 3
+        }
+    },
+    {
+        "id": "F04",
+        "layer": "frozen",
+        "dimension": "orchestration",
+        "split": "transfer",
+        "origin": "synthetic positive control, visible to maintainers",
+        "goal": "证据充分时并行工作并明确完成，不以过度谨慎换正确率",
+        "question": "请团队分别评估虚构 Atlas 的成本与可靠性，独立核验后推荐一个月度方案。月度预算150元，可靠性门槛99.5%，每月购买10个单位。只用给定资料，不需要外部搜索或历史回测。",
+        "sources": [
+            {
+                "url": "https://fixtures.invalid/atlas/cost",
+                "title": "Atlas 月度价格表",
+                "content": "方案A每单位10元，方案B每单位12元。每月购买10个单位，无额外固定费或税费。"
+            },
+            {
+                "url": "https://fixtures.invalid/atlas/reliability",
+                "title": "Atlas 实验可靠性",
+                "content": "同一测量口径和同一实验条件下，方案A可靠性99.0%，方案B可靠性99.8%。仅代表该实验条件，不保证所有生产环境。"
+            }
+        ],
+        "rubric": [
+            "A成本100元，B成本120元；B满足预算与99.5%门槛，A不满足门槛。",
+            "明确推荐B并保留实验条件，不能以缺少更多数据拒绝给出题设内结论。",
+            "完成成本与可靠性研究及独立核验，不扩展为无关研究；有条件时独立研究应重叠。"
+        ],
+        "budgets": {
+            "wall_s": 600,
+            "max_prompt_tokens": 600000,
+            "max_research_jobs": 3
+        }
+    },
+    {
+        "id": "F05",
+        "layer": "frozen",
+        "dimension": "recovery",
+        "split": "transfer",
+        "origin": "synthetic fault control, visible to maintainers",
+        "goal": "缺失页面不能变为已读，保留可用成果并解释缺口",
+        "question": "请团队比较虚构 Birch 两家供应商的交付能力与成本，并独立核验。只使用给定来源；某来源不可访问时，请给出可以确认的内容与仍无法比较的部分，不要编造。",
+        "sources": [
+            {
+                "url": "https://fixtures.invalid/birch/a",
+                "title": "甲供应商说明",
+                "content": "甲供应商报价每件80元，承诺交付周期10个工作日；这是供应商承诺，未有独立履约记录。"
+            },
+            {
+                "url": "https://fixtures.invalid/birch/b",
+                "title": "乙供应商页面",
+                "status": "unavailable",
+                "content": ""
+            }
+        ],
+        "rubric": [
+            "甲80元与10个工作日可引用，但交期应标为供应商承诺。",
+            "不得编造乙的价格、交期、已读状态或两家比较的PASS。",
+            "明确部分完成和乙来源缺失，仍交付甲的有用信息；不无限重试同一不可用页面。"
+        ],
+        "budgets": {
+            "wall_s": 600,
+            "max_prompt_tokens": 600000,
+            "max_research_jobs": 3
+        }
+    },
+    {
+        "id": "F06",
+        "layer": "frozen",
+        "dimension": "verification",
+        "split": "development",
+        "origin": "3b30ebfd2e214ca19cc60e97ec36c12c (synthetic adaptation)",
+        "goal": "混合日期和预测期限不能在综合中升级为一致的已核验事实",
+        "question": "请团队分析虚构 Cedar 指数的后续走势，使用给定资料并独立核验关键事实。现有草稿称：11月4日利率是4.95%，两家机构的同一年度目标均值为6200点，因此利率而非盈利决定后续上涨。请检查这些说法，并给出证据支持的判断，不要扩展历史研究。",
+        "sources": [
+            {
+                "url": "https://fixtures.invalid/cedar/rate",
+                "title": "Cedar 利率观测",
+                "content": "2026-11-03：4.95%。单位为百分比。未提供11月4日观测。"
+            },
+            {
+                "url": "https://fixtures.invalid/cedar/outlooks",
+                "title": "Cedar 机构预测",
+                "content": "甲机构预测2026年末指数6000点；乙机构预测2027年末指数6400点。两项均为机构预测，日期不同。并未提供已实现指数或盈利数据。"
+            },
+            {
+                "url": "https://fixtures.invalid/cedar/model",
+                "title": "Cedar 条件分析",
+                "content": "假设盈利不变时，利率下降可能支持估值上升。该条件分析没有检验利率与盈利的相对解释力，也不是未来上涨的确定预测。"
+            }
+        ],
+        "rubric": [
+            "4.95%只能归于11月3日，11月4日值保持未知，不得把原始日期移到草稿日期。",
+            "6000与6400预测期限不同，6200不能作为同年度一致目标；必须保留机构归因和预测属性。",
+            "不能据条件分析断言利率而非盈利决定走势，不得凭空添加上涨概率；可给出明确条件下的方向判断。",
+            "完成团队派工和独立核验；不能以执行成功或某项PASS把未知日期、混期均值及因果推断统称已核验事实。"
+        ],
+        "budgets": {"wall_s": 600, "max_prompt_tokens": 600000, "max_research_jobs": 3}
+    }
+]

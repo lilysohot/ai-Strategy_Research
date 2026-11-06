@@ -85,6 +85,48 @@ async def test_session_limit_is_bounded(client):
     ).status_code == 422
 
 
+async def test_session_metadata_only_notifies_for_persisted_completed_replies(client):
+    from server.store import append_turn, create_run, update_run_result
+
+    headers = await _login(client)
+    user = (await client.get("/api/auth/me", headers=headers)).json()
+    created = (await client.post("/api/sessions", json={}, headers=headers)).json()
+    sid = uuid.UUID(created["id"])
+    assert created["last_completed_turn_seq"] == 0
+
+    async def metadata():
+        detail = (await client.get(f"/api/sessions/{sid}", headers=headers)).json()
+        listing = (await client.get("/api/sessions", headers=headers)).json()
+        assert listing["sessions"][0]["last_completed_turn_seq"] == detail["last_completed_turn_seq"]
+        return detail
+
+    # A user message, an in-progress reply, or a failed/stopped partial answer
+    # must never masquerade as a newly completed reply.
+    await append_turn(session_id=sid, role="user", content="question")
+    assert (await metadata())["last_completed_turn_seq"] == 0
+    for status in ("failed", "stopped", "running"):
+        run_id = uuid.uuid4()
+        await create_run(
+            run_id=run_id, session_id=sid, user_id=uuid.UUID(user["id"]),
+            prompt="question", pipeline_id="stateful-react-agent", run_dir="/tmp/test",
+            status=status,
+        )
+        reply = await append_turn(session_id=sid, role="assistant", content="reply", run_id=run_id)
+        assert (await metadata())["last_completed_turn_seq"] == 0
+
+    await update_run_result(run_id=run_id, status="completed")
+    assert (await metadata())["last_completed_turn_seq"] == reply.seq
+    await append_turn(session_id=sid, role="user", content="next question")
+    assert (await metadata())["last_completed_turn_seq"] == reply.seq
+
+    # Completion without a persisted answer is not a reply notification.
+    await create_run(
+        run_id=uuid.uuid4(), session_id=sid, user_id=uuid.UUID(user["id"]),
+        prompt="empty", pipeline_id="stateful-react-agent", run_dir="/tmp/test", status="completed",
+    )
+    assert (await metadata())["last_completed_turn_seq"] == reply.seq
+
+
 async def test_turns_return_the_most_recent_page(client):
     headers = await _login(client)
     session = (

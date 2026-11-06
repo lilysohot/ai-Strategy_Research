@@ -1,0 +1,90 @@
+{
+  "available": true,
+  "malformed_events": 0,
+  "trajectory_wall_s": 682.418,
+  "first_research_report_s": 217.665,
+  "first_report_is_usefulness_score": false,
+  "attempts": 72,
+  "known_usage_attempts": 70,
+  "unknown_usage_attempts": 2,
+  "known_prompt_tokens": 3882430,
+  "cache_known_attempts": 70,
+  "known_cache_read_tokens": 3369728,
+  "cache_hit_rate_on_known_usage": 0.8679430150704585,
+  "llm_attempt_seconds_sum": 777.605,
+  "llm_sum_is_wall_time": false,
+  "outcomes": {
+    "accepted": 69,
+    "discarded": 2,
+    "accepted_degraded": 1
+  },
+  "failure_reasons": {
+    "stream_stalled": 1,
+    "stream_empty_tool_arguments": 1,
+    "reasoning_runaway_early": 1
+  },
+  "tools": {
+    "add_task": 1,
+    "create_subagent": 1,
+    "assign_task": 4,
+    "collect_reports": 4,
+    "update_task": 1,
+    "deliver_answer": 4,
+    "corpus_search": 32,
+    "corpus_inventory": 6,
+    "corpus_fetch": 24,
+    "create_file": 3,
+    "submit_report": 8,
+    "recover_result": 2,
+    "corpus_submit_manifest": 1
+  },
+  "research_dispatch_attempts": 3,
+  "exact_repeated_tool_requests": 0,
+  "dispatch_start_delay_estimate_s": [
+    0.026,
+    0.032,
+    0.247,
+    0.093,
+    0.019
+  ],
+  "dispatch_delay_p50_s": 0.032,
+  "dispatch_delay_p90_s": 0.185,
+  "agents": [
+    {
+      "trace": "run/agent/trajectories/main_agent.jsonl",
+      "start": 1793865970.7693772,
+      "end": 1793866653.1874769
+    },
+    {
+      "trace": "run/agent/trajectories/subagents/ai_industry_impact_corpus_research.t01.jsonl",
+      "start": 1793866000.2044568,
+      "end": 1793866232.2072353
+    },
+    {
+      "trace": "run/agent/trajectories/subagents/ai_tech_policy_corpus_research.t01.jsonl",
+      "start": 1793866000.210234,
+      "end": 1793866188.4589624
+    },
+    {
+      "trace": "run/agent/trajectories/subagents/corpus_claim_verifier.t01.jsonl",
+      "start": 1793866278.2035868,
+      "end": 1793866398.2840514
+    },
+    {
+      "trace": "run/agent/trajectories/subagents/corpus_claim_verifier.t02.jsonl",
+      "start": 1793866407.4006062,
+      "end": 1793866477.049538
+    },
+    {
+      "trace": "run/agent/trajectories/subagents/deepseek_model_corpus_research.t01.jsonl",
+      "start": 1793866000.197188,
+      "end": 1793866240.724667
+    }
+  ],
+  "limitations": [
+    "Queue delay inferred from dispatch attempts; rejected requests can skew it.",
+    "Parallel attempt durations are not additive wall time.",
+    "First report may be incomplete; semantic usefulness requires review.",
+    "Dollar cost unavailable without an explicit model tariff."
+  ]
+}

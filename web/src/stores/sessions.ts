@@ -2,7 +2,7 @@
  * Sessions store (T3.3): owns the conversation list and which session is active.
  *
  * A session is just a title + an ordered list of turns (user/assistant messages).
- * The store loads the list once on entry and the turns for the active session;
+ * The store refreshes list metadata and loads turns for the active session;
  * the live run stream lives in ``runStream`` (T3.1), so this store never holds a
  * fetch handle — it only fetches list/turns and mutates the list optimistically.
  *
@@ -11,11 +11,12 @@
  */
 
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import { ApiError } from '../api/client'
 import { sessions as sessionsApi } from '../api'
 import type { Session, Turn } from '../types'
+import { useAuthStore } from './auth'
 
 /**
  * Page sizes. Turns come back newest-last, so the first page is the end of the
@@ -26,6 +27,58 @@ const SESSION_PAGE_SIZE = 50
 const TURN_PAGE_SIZE = 100
 
 export const useSessionsStore = defineStore('sessions', () => {
+  const auth = useAuthStore()
+  const readThrough = ref<Record<string, number>>({})
+  const readStorageKey = computed(() => `frontier-agent.readReplies:${auth.user?.id ?? 'anon'}`)
+
+  function restoreReadState(): void {
+    try {
+      const stored: unknown = JSON.parse(localStorage.getItem(readStorageKey.value) ?? '{}')
+      readThrough.value = stored && typeof stored === 'object' && !Array.isArray(stored)
+        ? Object.fromEntries(Object.entries(stored).filter(
+          ([, seq]) => Number.isSafeInteger(seq) && seq >= 0,
+        )) : {}
+    } catch {
+      readThrough.value = {}
+    }
+  }
+  watch(readStorageKey, restoreReadState, { immediate: true })
+
+  function saveReadState(): void {
+    try {
+      localStorage.setItem(readStorageKey.value, JSON.stringify(readThrough.value))
+    } catch {
+      // Blocked storage still allows unread notifications for this visit.
+    }
+  }
+
+  // Establish a baseline on first encounter so existing history is not all unread.
+  function initializeReadState(rows: Session[]): void {
+    let changed = false
+    for (const row of rows) {
+      if (readThrough.value[row.id] !== undefined) continue
+      readThrough.value[row.id] = row.last_completed_turn_seq ?? 0
+      changed = true
+    }
+    if (changed) saveReadState()
+  }
+
+  function isUnread(id: string): boolean {
+    const latest = list.value.find((row) => row.id === id)?.last_completed_turn_seq ?? 0
+    return latest > (readThrough.value[id] ?? latest)
+  }
+
+  /** Only acknowledge a completed reply that has actually loaded into the view. */
+  function markVisibleTurnsRead(): void {
+    const id = activeId.value
+    const seq = activeSession.value?.last_completed_turn_seq ?? 0
+    if (!id || !isUnread(id) || !activeTurns.value.some(
+      (turn) => turn.role === 'assistant' && turn.seq === seq,
+    )) return
+    readThrough.value[id] = seq
+    saveReadState()
+  }
+
   const list = ref<Session[]>([])
   const activeId = ref<string | null>(null)
   const activeTurns = ref<Turn[]>([])
@@ -41,19 +94,32 @@ export const useSessionsStore = defineStore('sessions', () => {
   const activeSession = computed(() =>
     list.value.find((s) => s.id === activeId.value) ?? null,
   )
+  const unreadCount = computed(() => list.value.filter((row) => isUnread(row.id)).length)
+  let listRequest: Promise<void> | null = null
 
-  async function loadList(): Promise<void> {
-    loadingList.value = true
-    error.value = null
+  function loadList(silent = false): Promise<void> {
+    if (listRequest) return listRequest
+    listRequest = fetchList(silent).finally(() => { listRequest = null })
+    return listRequest
+  }
+
+  async function fetchList(silent: boolean): Promise<void> {
+    if (!silent) {
+      loadingList.value = true
+      error.value = null
+    }
+    const userId = auth.user?.id
     try {
       const res = await sessionsApi.list({ limit: SESSION_PAGE_SIZE })
+      if (auth.user?.id !== userId) return
+      initializeReadState(res.sessions)
       list.value = res.sessions.sort((a, b) => {
         const at = b.updated_at ?? b.created_at ?? ''
         const bt = a.updated_at ?? a.created_at ?? ''
         return at.localeCompare(bt)
       })
     } catch (err) {
-      error.value = err instanceof ApiError ? err.message : '加载会话列表失败'
+      if (!silent) error.value = err instanceof ApiError ? err.message : '加载会话列表失败'
       throw err
     } finally {
       loadingList.value = false
@@ -61,7 +127,10 @@ export const useSessionsStore = defineStore('sessions', () => {
   }
 
   async function select(id: string): Promise<void> {
-    if (id === activeId.value) return
+    if (id === activeId.value) {
+      if (isUnread(id)) await loadTurns(id)
+      return
+    }
     activeId.value = id
     activeTurns.value = []
     await loadTurns(id)
@@ -146,6 +215,7 @@ export const useSessionsStore = defineStore('sessions', () => {
    */
   async function create(title?: string, firstMessage?: string): Promise<Session> {
     const created = await sessionsApi.create(title, firstMessage)
+    initializeReadState([created])
     list.value = [created, ...list.value]
     activeId.value = created.id
     hasMoreTurns.value = false
@@ -173,6 +243,8 @@ export const useSessionsStore = defineStore('sessions', () => {
       if (!(err instanceof ApiError && err.status === 404)) throw err
     }
     list.value = list.value.filter((s) => s.id !== id)
+    delete readThrough.value[id]
+    saveReadState()
     if (activeId.value === id) {
       activeId.value = null
       activeTurns.value = []
@@ -199,6 +271,11 @@ export const useSessionsStore = defineStore('sessions', () => {
     hasMoreTurns,
     loadingOlder,
     error,
+    unreadCount,
+    isUnread,
+    markVisibleTurnsRead,
+    readStorageKey,
+    restoreReadState,
     loadList,
     refreshMetadata,
     select,

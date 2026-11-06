@@ -235,6 +235,87 @@ Set `SWARM_NO_WEB=1` for closed-book tasks. File-aware tasks should also pass
 
 ## Configuration boundaries
 
+Verification dispatch can omit `work_item_id` and `criterion` when `check_id`
+identifies a unique requirement on the current task board. The server fills those
+fields from the plan; explicitly conflicting values still fail. Rejected team
+dispatches return current agent, board and completed source-job identifiers.
+Candidates, evidence and revision lineage remain required, and are never guessed
+from free-text prompts. Dispatch each ready passage with its relevant evidence;
+do not bind the same whole report to unrelated criteria or paste bound reports
+again into the assignment prompt.
+
+Reusable verification sessions start each job with its current bound prompt,
+without replaying older task prompts and reports. New bindings carry the prior
+review's defects, but never inherit its verdict for changed candidate bytes.
+Audit history remains available and ordinary research sessions retain their
+existing history behavior. This uses AgentBus's generic, opt-in
+`include_prior_history` runtime policy.
+
+New source reports renew the coordinator's reminder to dispatch still-pending
+checks. Recovery allows at most three attempts: one incomplete attempt without
+an accepted verdict does not consume the correction for an effective failed
+review. Two accepted non-passing reviews or two attempts without a verdict stop
+automatic recovery. Each opportunity has a bounded dispatch window and still
+respects the publication reserve; it does not extend the run deadline.
+
+Corpus handoff selects whole original excerpts against the current bound subject,
+with one shared text budget across source jobs. Exact current citations take
+priority; claim vocabulary spreads coverage across relevant passages before
+repeated context. This is a context projection, not retrieval ranking or proof.
+Opaque refs are never reconstructed from shortened prose. Missing bodies remain
+explicitly marked; sufficient delivered originals do not require another fetch.
+
+When captured originals are available, evidence-only member reports are shown as
+bounded whole-paragraph previews (8K characters shared, 4K for rechecks). Exact
+subjects, attachment pointers and reports without captured originals remain
+complete. Rechecks use a 12K corpus-body / 4K reference budget, selecting whole
+excerpts against the revised subject and marking omissions; source hashes and
+stored reports are unchanged. Omission never establishes absence or a PASS.
+
+Bounded-corpus scope defects are shown in the initial verifier context. A subject
+revision that still contains such a defect is rejected before dispatch with its
+exact sentence and offsets, preserving the repair opportunity. The verifier's
+PASS gate remains mandatory even after tool-call recovery. Final delivery returns
+scope and manifest-anchor defects together before changing the board or manifest.
+
+The generic loop recognizes complete, allowlisted DeepSeek DSML envelopes when
+native tool calls are absent. Invalid batches never execute partially; malformed
+top-level envelopes receive explicit feedback within the existing no-tool retry
+budget and terminate as an LLM error when recovery is exhausted. Recovery does
+not bypass tool schemas, authorization, or verification verdict validation.
+
+AgentBus supplies immutable session/job identifiers in the loop execution scope.
+Corpus manifests use the job identity so concurrent members cannot replace each
+other's conclusions. Within one job, `corpus_submit_manifest` defaults to full
+`replace`; explicit `upsert` adds or updates stable conclusion IDs. Receipts list
+all active IDs and exact error field paths. Successful receipts omit repeated
+source bodies; persisted evidence retains the original bytes.
+
+The coordinator submits `corpus_conclusions` alongside final `content` in
+`deliver_answer`. Anchors must match that content before acceptance; final
+bindings are committed only after board and verification gates pass. A bounded
+index supplies original evidence receipt IDs for this call. The final boundary
+checks the current answer binding plus independently bound file deliverables,
+retaining research manifests for audit rather than matching draft anchors to a
+rewritten answer. Unsupported research can explicitly submit an empty claim
+list, which remains a draft. Citation binding never upgrades a semantic verdict.
+
+Web evidence follows a separate handoff: `web_fetch` text, source URL, acquisition
+status and content hash are retained in member metadata and attached to bound
+verification jobs. Mixed batches retain the successful and partial bodies, but
+failed diagnostics are not evidence. Focused model extractions are labeled as
+such; they are not promoted to original source text. The verifier receives whole
+delivered excerpts within a shared 24K-character text budget, with a bounded
+reference list for omissions. Identical URL/content pairs are shown once, and
+the binding hash includes the acquired web evidence version. Web-only answers
+cite URLs in final prose and omit `corpus_conclusions`; job IDs and web hashes
+are never corpus receipts. Early member handoff also recognizes web evidence.
+
+Phase planning accounts for the final-answer reserve before allocating the
+verification window. It moves the research cutoff earlier when necessary,
+instead of shrinking the verifier's configured window below admission's minimum
+or extending the run's hard deadline.
+
 - Profiles select prompts, tools, turn budgets, compaction, and reporter behavior.
 - `frontier_agent/` owns the generic loop, observers, registries, and AgentBus.
 - `plugins/tools/` owns tool implementations and sandbox policy.

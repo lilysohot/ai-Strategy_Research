@@ -23,7 +23,10 @@ from plugins.tools._bus_scope import SWARM_SCOPE_KEY, resolve_bus_task_id
 from plugins.tools._deliverable_policy import output_write_directives
 from plugins.tools._verification import (
     minimum_verification_budget,
+    missing_publication_excerpts,
     project_bus_checks,
+    unresolved_publication_claims,
+    verification_label_findings,
     work_item_verification_progress,
 )
 from plugins.tools.finalize_answer import finalize_gate
@@ -48,7 +51,11 @@ class FinalDisposition(BaseModel):
 
 
 @tool
-async def deliver_answer(content: str, updates: list[FinalDisposition]) -> str:
+async def deliver_answer(
+    content: str,
+    updates: list[FinalDisposition],
+    corpus_conclusions: list[dict[str, Any]] | None = None,
+) -> str:
     """Submit the complete final answer AND task dispositions in one call.
 
     Do not spend a separate generation updating the board first. Research with
@@ -59,17 +66,81 @@ async def deliver_answer(content: str, updates: list[FinalDisposition]) -> str:
     Args:
         content: Complete user-facing answer, with sources and explicit limitations.
         updates: Final dispositions for outstanding work. Use [] if none remain.
+        corpus_conclusions: Complete corpus evidence manifest for THIS content. Each entry
+            needs id, report_quote copied verbatim from content, and evidence:[{evidence_ref}].
+            Use original complete corpus tool refs (eref: or ce:). Required for corpus-backed
+            final prose; omit for web-only answers. URLs, job IDs and web hashes are not corpus
+            receipts. Never copy old report anchors. This binds citations, not a semantic PASS.
     """
     scope = get_current_execution_scope()
     if scope is None or SWARM_SCOPE_KEY not in scope.metadata or in_planning(scope.task_id):
         raise ValueError("Final delivery requires an executing team coordinator")
     if not is_user_report(content):
         raise ValueError("Provide the final answer body, not an empty/internal tool payload")
+    from plugins.corpus.ledger import get_run_ledger
+    from plugins.tools.corpus_manifest import commit_final_manifest, prepare_final_manifest
+
+    if corpus_conclusions is None and get_run_ledger().has_activity():
+        raise ValueError(
+            "Corpus-backed delivery requires corpus_conclusions bound to this content. "
+            "Supply id, exact report_quote, evidence:[{evidence_ref}]. "
+            "Use [] only when no supported corpus claim is delivered; disclose the gap."
+        )
     items = [FinalDisposition.model_validate(u).model_dump() for u in updates]
     if len({u["id"] for u in items}) != len(items):
         raise ValueError("Each task may have only one final disposition")
+    # Return independent defects together, before board or manifest mutation.
+    # Otherwise each cheap validation failure costs another full report generation.
+    from plugins.tools._corpus_scope import corpus_scope_findings
+
     bus = registry.get_optional(AgentBus)
     bus_id = resolve_bus_task_id(scope)
+    observations = [
+        observation
+        for job in (bus.list_task_jobs(bus_id) if bus else [])
+        if job.result is not None
+        for observation in job.result.metadata.get("content_acquisition", [])
+    ]
+    issues: list[dict[str, Any]] = corpus_scope_findings(content, observations)
+    projected = project_bus_checks(bus, bus_id)["checks"] if bus else []
+    issues.extend(verification_label_findings(projected, content))
+    current_tasks = snapshot_tasks(scope.task_id)
+    excluded = {
+        task["id"] for task in current_tasks if task["resolution"] in {"blocked", "cancelled"}
+    }
+    excluded.update(item["id"] for item in items if item["resolution"] == "blocked")
+    for check_id in missing_publication_excerpts(
+        projected,
+        content,
+        excluded_work_items=excluded,
+    ):
+        issues.append(
+            {
+                "rule": "checked_publication_excerpt_missing",
+                "check_id": check_id,
+                "detail": "checked publication excerpt is missing from final content",
+            }
+        )
+    for finding in unresolved_publication_claims(
+        projected,
+        content,
+        excluded_work_items=excluded,
+    ):
+        issues.append({"rule": "failed_publication_claim_retained", **finding})
+    payload = None
+    if corpus_conclusions is not None:
+        try:
+            payload = prepare_final_manifest(corpus_conclusions, content.strip())
+        except ValueError as exc:
+            issues.append({"rule": "corpus_manifest_invalid", "detail": str(exc)})
+    if issues:
+        raise ValueError(
+            "Delivery preflight failed: "
+            + json.dumps(issues, ensure_ascii=False)
+            + ". Correct all listed fields/sentences together. Preserve valid passages and "
+            "citations; changed checked passages require recheck or a blocked disposition. "
+            "No task disposition or final manifest has been committed."
+        )
     if bus and any(
         s.current_job_id or s.pending_tasks or s.pending_results
         for s in bus.list_sessions_for_task(bus_id)
@@ -94,6 +165,8 @@ async def deliver_answer(content: str, updates: list[FinalDisposition]) -> str:
         error = finalize_gate(scope.task_id, content, bus_task_id=bus_id)
         if error:
             raise ValueError(error)
+        if payload is not None:
+            commit_final_manifest(payload)
         complete_delivery_tasks(scope.task_id)
     return "Final answer and task dispositions accepted."
 
@@ -110,39 +183,59 @@ class TeamDeliveryObserver(BaseObserver):
         self.budget = budget
         self.active = False
         self.wind_down: TeamWindDown | None = None
-        self._repair_offers: dict[str, int] = {}
-        self._verification_nudges: set[str] = set()
+        self._repair_offers: dict[tuple[str, str], int] = {}
+        self._verification_nudges: set[tuple[str, tuple[str, ...]]] = set()
 
     def _pending_verification_prompt(
-        self, bus: AgentBus, bus_id: str, tasks: list[dict[str, Any]],
+        self,
+        bus: AgentBus,
+        bus_id: str,
+        tasks: list[dict[str, Any]],
     ) -> Intervention | None:
         """Start focused checks as soon as source reports arrive, before waiting for all research."""
         jobs = bus.list_task_jobs(bus_id)
-        sources = [j.job_id for j in jobs if j.status == "completed" and j.result is not None
-                   and not j.item.metadata.get("verification_checks")]
+        sources = [
+            j.job_id
+            for j in jobs
+            if j.status == "completed"
+            and j.result is not None
+            and not j.item.metadata.get("verification_checks")
+        ]
         if not sources:
             return None
+        evidence_version = tuple(sorted(sources))
         dispatched = {c["check_id"] for c in project_bus_checks(bus, bus_id)["checks"]}
         pending = [
             {"work_item_id": t["id"], **c}
-            for t in tasks if t.get("verification_required")
+            for t in tasks
+            if t.get("verification_required")
             and t["resolution"] not in {"resolved", "blocked", "cancelled"}
             for c in t.get("verification_requirements", [])
-            if c["check_id"] not in dispatched and c["check_id"] not in self._verification_nudges
+            if c["check_id"] not in dispatched
+            and (c["check_id"], evidence_version) not in self._verification_nudges
         ]
         if not pending:
             return None
-        self._verification_nudges.update(c["check_id"] for c in pending)
-        return Intervention(inject_messages=[
-            "[required verification ready] Source reports are available. Before another long "
-            "collect_reports wait, dispatch the required checks whose evidence is ready. "
-            "Use real verification_checks with the planned ID/criterion, exact subject.text "
-            "or source job, and evidence job/ref. Do not wait for every research branch or a "
-            "polished final draft. Mark factual_scope=true for factual claims. Mark exact "
-            "final passages publication_excerpt=true; separate conditional estimates and "
-            "forecasts from observed outcomes. If evidence is still missing, name that dependency.\n"
-            + json.dumps({"source_jobs": sources, "pending_checks": pending}, ensure_ascii=False)
-        ])
+        self._verification_nudges.update((c["check_id"], evidence_version) for c in pending)
+        return Intervention(
+            inject_messages=[
+                "[required verification ready] Source reports are available. Before another long "
+                "collect_reports wait, dispatch the required checks whose evidence is ready. "
+                "Use real verification_checks with the planned ID/criterion, exact subject.text "
+                "or source job, and evidence job/ref. Do not wait for every research branch or a "
+                "complete answer. Each subject must be the passage relevant to that check; do not "
+                "bind the same whole answer to unrelated criteria. Dispatch ready checks alone now "
+                "and defer only checks that lack their own evidence. The board resolves work_item_id "
+                "and criterion from check_id when omitted. Do not copy all source reports into prompt; "
+                "binding evidence job/ref attaches them automatically. Do not wait for a "
+                "polished final draft. Mark factual_scope=true for factual claims. Mark exact "
+                "final passages publication_excerpt=true; separate conditional estimates and "
+                "forecasts from observed outcomes. If evidence is still missing, name that dependency.\n"
+                + json.dumps(
+                    {"source_jobs": sources, "pending_checks": pending}, ensure_ascii=False
+                )
+            ]
+        )
 
     def _offer_repair(
         self,
@@ -180,10 +273,15 @@ class TeamDeliveryObserver(BaseObserver):
         offers = []
         for check in pending:
             key = check["check_id"]
-            # An earlier recheck already used this check's correction opportunity.
-            if len(check["attempts"]) > 1:
+            # Permit one effective correction plus one incomplete attempt.
+            # Transport/protocol failures without a verdict must not consume
+            # the opportunity to repair the first actual failed review.
+            attempts = check["attempts"]
+            failures = sum(bool(a["events"]) and a["verdict"] != "pass" for a in attempts)
+            incomplete = sum(not a["events"] for a in attempts)
+            if len(attempts) >= 3 or failures >= 2 or incomplete >= 2:
                 continue
-            started = self._repair_offers.setdefault(key, ctx.turn)
+            started = self._repair_offers.setdefault((key, check["job_id"]), ctx.turn)
             if ctx.turn - started >= 3:
                 continue  # Two follow-up generations to collect/prepare/dispatch, never spin.
             result = check.get("result") or {}
@@ -195,6 +293,13 @@ class TeamDeliveryObserver(BaseObserver):
                     "replaces_job_id": check["job_id"],
                     "subject_sha256": check["subject"]["sha256"],
                     "verdict": check["verdict"],
+                    **({"revision_kind": "retry"} if not result else {}),
+                    "recovery_action": (
+                        "No verdict was checkpointed. Retry this check alone with identical "
+                        "subject and evidence; retain all other checkpointed results."
+                        if not result
+                        else "Correct the failed subject or acquire the specifically missing evidence."
+                    ),
                     "detail": result.get("detail", ""),
                     "unresolved_issues": result.get("unresolved_issues", []),
                 }
@@ -204,13 +309,15 @@ class TeamDeliveryObserver(BaseObserver):
         ctx.metadata["team_verification_repair_offered"] = [c["check_id"] for c in offers]
         return Intervention(
             inject_messages=[
-                "[team verification repair] Completed checks still have defects. Coordination "
+                "[team verification repair] Some checks are defective or incomplete. Coordination "
                 "remains open for ONE bounded correction/recheck round, using existing evidence. "
                 "Collect the verifier report if necessary, correct only the affected claims, and "
                 "dispatch verification_checks with the complete corrected passage in subject.text, "
                 "publication_excerpt=true, factual_scope=true for factual claims, "
                 "replaces_job_id below, revision_kind='subject' and a revision_reason. Keep the "
                 "criterion and evidence scope; use revision_kind='retry' only for unchanged bytes. "
+                "When no verdict was checkpointed, retry only that check using its original "
+                "subject/evidence; do not rewrite it or repeat passed sibling checks. "
                 "A fix mentioned in assignment prose is not a new subject. Compare model/version, "
                 "date, units, conditions and attribution, not just matching quotations. Preserve "
                 "the checked wording in delivery; further material edits need their own check. "
@@ -293,10 +400,13 @@ class TeamDeliveryObserver(BaseObserver):
         if not time_to_deliver and not turns_to_deliver and not ready:
             if bus and self.budget.sync_phase(now) not in {"publishing", "finalizing"}:
                 remaining_verification = self.budget.remaining_for_job(
-                    can_publish=False, is_verification=True,
+                    can_publish=False,
+                    is_verification=True,
                 )
-                if remaining_verification is None or remaining_verification >= minimum_verification_budget(
-                    getattr(runtime, "first_chunk_timeout_s", 45)
+                if (
+                    remaining_verification is None
+                    or remaining_verification
+                    >= minimum_verification_budget(getattr(runtime, "first_chunk_timeout_s", 45))
                 ):
                     return self._pending_verification_prompt(bus, bus_id, tasks)
             return None
@@ -327,7 +437,50 @@ class TeamDeliveryObserver(BaseObserver):
             else "[team delivery] Submit the answer and task dispositions together with deliver_answer. "
             "Use blocked with notes and gap for unfinished work.\n"
         )
+        from plugins.corpus.ledger import get_run_ledger
+
+        prompt += (
+            "Verification covers only the exact passed subject and its declared criterion. "
+            "Do not add blanket headings such as 已核验事实 or 逐项核对过的数据. "
+            "A certification label is allowed only inside the exact passed subject passage. "
+            "Place unchecked/failed limits beside the affected facts. Distinguish sourced "
+            "observations from your forecasts, probabilities and causal interpretation; "
+            "a stronger conclusion or a conclusion depending on unchecked data is not certified "
+            "by neighbouring passed checks. Qualify or omit it.\n"
+        )
+
+        corpus_active = get_run_ledger().has_activity() or bool(
+            bus
+            and any(
+                job.result and job.result.metadata.get("corpus_evidence")
+                for job in bus.list_task_jobs(bus_id)
+            )
+        )
+        prompt += (
+            "For corpus-backed prose, include corpus_conclusions in this SAME deliver_answer call: "
+            "the complete final claim list, each with id, report_quote copied exactly from content, "
+            "and evidence:[{evidence_ref: full original tool reference}]. Bind the revised wording, "
+            "not research drafts. Do not recopy source text. Omit claims you cannot support or "
+            "state the gap explicitly; a citation manifest never upgrades failed semantic checks. "
+            "Only corpus-tool eref:/ce: receipts belong here. Cite web-only claims by URL in "
+            "content; never put a URL, web hash or job ID into corpus_conclusions.\n"
+            if corpus_active
+            else "Omit corpus_conclusions: no corpus evidence was acquired in this run. "
+            "Cite web sources by URL in content. A web URL, hash or job ID is not a corpus receipt.\n"
+        )
         prompt += json.dumps(tasks, ensure_ascii=False)
+        if bus:
+            from plugins.tools._corpus_handoff import render_corpus_citation_index
+
+            sources = {
+                job.job_id: job.result.metadata.get("corpus_evidence") or []
+                for job in bus.list_task_jobs(bus_id)
+                if job.result is not None
+            }
+            focus = "\n".join(
+                c["subject"].get("text", "") for c in project_bus_checks(bus, bus_id)["checks"]
+            )
+            prompt += render_corpus_citation_index(sources, focus_text=focus)
         return Intervention(
             inject_messages=[checkpoint, prompt] if checkpoint else [prompt],
             allowed_tool_names=("deliver_answer",),

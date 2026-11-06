@@ -1,0 +1,39 @@
+{
+  "run_id": "3b30ebfd2e214ca19cc60e97ec36c12c",
+  "short_evidence": {
+    "DGS2": {
+      "full_body_delivered": true,
+      "chars": 679
+    },
+    "DGS10": {
+      "full_body_delivered": true,
+      "chars": 679
+    }
+  },
+  "handoff_chars": 25908,
+  "label_findings": [
+    {
+      "rule": "verification_label_outside_passed_scope",
+      "match": "## 一、现在的坐标（以下为逐项核对过的数据）",
+      "detail": "Certification labels must be inside an exact passed subject passage; remove the blanket label, preserve scoped facts and disclose unverified dependencies."
+    },
+    {
+      "rule": "verification_label_outside_passed_scope",
+      "match": "【答案中作为已核验事实引用的市场数据】",
+      "detail": "Certification labels must be inside an exact passed subject passage; remove the blanket label, preserve scoped facts and disclose unverified dependencies."
+    }
+  ],
+  "recovered_submissions": [
+    {
+      "check_id": "macro_data",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "check_id": "sellside_targets",
+      "verdict": "pass",
+      "issues": []
+    }
+  ],
+  "scope": "Offline protocol replay only; no new model verdict or factual market validation."
+}

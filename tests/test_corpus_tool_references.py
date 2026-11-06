@@ -90,7 +90,8 @@ async def test_quote_selected_by_id_survives_layout_and_binds_correct_block(sour
     assert out["publish_status"] == "pending_report"
     assert out["evidence_status"] == "verified"
     match = out["conclusions"][0]["matched_evidence"][0]
-    assert (match["locator"], match["quote"]) == (LOC, TEXT)
+    assert match["locator"] == LOC
+    assert "quote" not in match  # compact receipt; exact source remains in the manifest
     saved = json.loads(Path(out["manifest_file"]).read_text())
     assert saved["conclusions"][0]["evidence"][0]["quote"] == TEXT
     sources[LOC] = "原文已不可用"

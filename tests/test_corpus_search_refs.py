@@ -186,9 +186,11 @@ async def test_manifest_selects_search_excerpt_without_recopying_text(monkeypatc
             "evidence_ref": hit["excerpts"][0]["ref"], "purpose": "value",
         }],
     }]))
-    assert out["publish_status"] == "verified"
+    assert out["publish_status"] == "pending_report"
+    assert out["evidence_status"] == "verified"
     match = out["conclusions"][0]["matched_evidence"][0]
-    assert match["quote"] == full["snippet"]  # including leading/trailing whitespace
+    saved = json.loads(Path(out["manifest_file"]).read_text())
+    assert saved["conclusions"][0]["evidence"][0]["quote"] == full["snippet"]
     assert match["locator"] == full["locator"]
     assert (match["start"], match["end"]) == (0, len(full["snippet"]))
 

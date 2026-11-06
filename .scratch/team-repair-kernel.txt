@@ -1,0 +1,34 @@
+................F....................................................... [ 57%]
+......................................................                   [100%]
+=================================== FAILURES ===================================
+______________ test_repair_chain_keeps_guard_after_dsml_recovery _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-administrator/pytest-165/test_repair_chain_keeps_guard_0')
+
+    async def test_repair_chain_keeps_guard_after_dsml_recovery(tmp_path):
+        from plugins.tools.submit_report import submit_report
+    
+        bus, spec = bounded_source(tmp_path)
+        bad = VerificationCheck.model_validate(
+            {**spec.model_dump(), "subject": {"text": "资料库中没有任何适配公告。"}}
+        )
+        checks, _ = bind(bus, bad, tmp_path)
+        metadata = {"verification_checks": checks}
+        token = set_verification_scope("first", metadata)
+        try:
+            args = {"content": "Scope: exact claim. Finding: unsupported absence.",
+                    "verification_results": [verdict_for(checks[0])]}
+            calls = MultiFormatToolCallParser().parse(
+                LLMResponse(content=dsml(args)), {"submit_report"}
+            )
+            assert len(calls) == 1
+            rejected = await submit_report.func(**calls[0]["args"])
+            assert rejected.is_error
+>           assert "bounded corpus retrieval" in rejected
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: argument of type 'ToolOutcome' is not iterable
+
+tests/test_team_repair_regression.py:158: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_team_repair_regression.py::test_repair_chain_keeps_guard_after_dsml_recovery
+1 failed, 125 passed in 1.98s

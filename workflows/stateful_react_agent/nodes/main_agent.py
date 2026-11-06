@@ -135,8 +135,9 @@ _INFRA_STOP_REASONS = frozenset(
 )
 #: 末尾仍在宣告下一步动作的文字，是进度说明，不是结论。
 _PENDING_ACTION_RE = re.compile(
-    r"(正在|接下来|随后|稍后|待|将继续|再补取|还需|下一步)[^。！？]{0,24}"
-    r"(取回|检索|提交|读取|确认|补取|验证|整理|核对|回验)"
+    r"(?:正在|接下来|随后|稍后|将继续|下一步)(?:我(?:们)?(?:会|将)?|继续|再|需要|先|还要|要|将|会|去|进行|完成|\s)*"
+    r"(?:取回|检索|提交|读取|补取|整理|核对|回验|验证|确认)"
+    r"|(?:待|还需)(?:取回|检索|提交|读取|补取|整理|核对|回验)"
 )
 
 
@@ -766,7 +767,8 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     task_board = bool(agent_cfg.get("task_board", False))
     research_convergence = bool(agent_cfg.get("research_convergence", False))
     finalization_reserve_s = _nonnegative_seconds(
-        agent_cfg.get("finalization_reserve_s"), default=180,
+        agent_cfg.get("finalization_reserve_s"),
+        default=180,
         label="stateful finalization_reserve_s",
     )
     # Opt-in direct-inference mode: NO tools are bound, so the model
@@ -1065,7 +1067,8 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
                 # a run that can never trim has nothing to summarize.
                 summarizer=(
                     build_summarizer(llm, llm_config=(profile or {}).get("llm"))
-                    if (replay_max_turns or replay_max_tokens) else None
+                    if (replay_max_turns or replay_max_tokens)
+                    else None
                 ),
             )
         )
@@ -1118,9 +1121,12 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     if research_convergence and not direct:
         from workflows.stateful_react_agent.convergence import ResearchConvergenceObserver
 
-        observers.append(ResearchConvergenceObserver(
-            research_s=wall_deadline_s, reserve_s=finalization_reserve_s,
-        ))
+        observers.append(
+            ResearchConvergenceObserver(
+                research_s=wall_deadline_s,
+                reserve_s=finalization_reserve_s,
+            )
+        )
     if wall_deadline_s > 0:
         loop_wall_s = wall_deadline_s
         if research_convergence:
@@ -1300,7 +1306,8 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
 
     if task_board and replay_messages:
         restored_tasks = restore_board_from_messages(
-            ctx.task_id, replay_messages,
+            ctx.task_id,
+            replay_messages,
             archive=research_convergence or bool(metadata.get("archive_prior_tasks")),
         )
         if restored_tasks:
@@ -1310,6 +1317,21 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         import sys
 
         from plugins.corpus.semantic_delivery import with_semantic_delivery
+        from workflows._shared.research_intake import maybe_clarify_research
+
+        clarification = await maybe_clarify_research(
+            metadata=metadata,
+            llm=llm,
+            model_profile=model_profile,
+            task_id=ctx.task_id,
+            system_prompt=system_prompt,
+            user_message=loop_user_message,
+            initial_messages=replay_messages,
+            trajectory_dir=_resolve_trajectory_dir(state, ctx.task_id),
+            observers=observers,
+        )
+        if clarification is not None:
+            return {**clarification, "replay_decision": replay_decision}
 
         loop_fn = getattr(sys.modules.get("apodex.session"), "run_agent_loop", run_agent_loop)
         result = await loop_fn(
@@ -1397,6 +1419,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         else "complete"
     )
     answer_status = _downgrade_unfinished(answer_status, result.stopped_by, final_text)
+    evidence_boundary: dict[str, Any] = {}
     # A4 消费账本（评审 C5：这是 stateful_react 的唯一最终发布出口）。A4_ENFORCE
     # 关闭（默认）仅记录校验状态与工件；开启时未通过的答案追加锚定限定块并降级
     # answer_status（评审 C6）。
@@ -1406,7 +1429,8 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
 
         if answer_source == "deterministic_fallback":
             recovered = verified_excerpt_fallback(
-                get_run_ledger(), stopped_by=result.stopped_by,
+                get_run_ledger(),
+                stopped_by=result.stopped_by,
                 error_reason=str(result.metadata.get("llm_error_reason") or ""),
             )
             if recovered:
@@ -1421,6 +1445,10 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         )
         final_text = boundary["final_text"]
         answer_status = boundary["answer_status"]
+        evidence_boundary = {
+            "boundary_action": boundary["boundary_action"],
+            "publish_status": boundary["publish_status"],
+        }
     except Exception as exc:
         logger.warning(
             "stateful_react main_agent: A4 publish boundary skipped (%s: %s)",
@@ -1431,7 +1459,8 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     from plugins.tools.investment_strategy import validation_snapshot
 
     strategy_result = strategy_boundary(
-        final_text, answer_status,
+        final_text,
+        answer_status,
         preserve_research=answer_source != "deterministic_fallback",
     )
     final_text = strategy_result["final_text"]
@@ -1460,6 +1489,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         # Keep the user-facing answer non-empty while preserving the old
         # machine-readable infra/eval failure signal out of band.
         "answer_status": answer_status,
+        "evidence_boundary": evidence_boundary,
         "answer_sentinel": ("<ANSWER_NOT_FOUND>" if answer_status == "not_found" else ""),
         "final_answer_rescued": bool(
             result.metadata.get("final_answer_rescued", False),

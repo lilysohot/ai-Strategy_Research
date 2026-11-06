@@ -1,0 +1,93 @@
+{
+  "available": true,
+  "malformed_events": 0,
+  "trajectory_wall_s": 567.831,
+  "first_research_report_s": 265.406,
+  "first_report_is_usefulness_score": false,
+  "attempts": 55,
+  "known_usage_attempts": 47,
+  "unknown_usage_attempts": 8,
+  "known_prompt_tokens": 2201565,
+  "cache_known_attempts": 47,
+  "known_cache_read_tokens": 1775744,
+  "cache_hit_rate_on_known_usage": 0.8065825901120339,
+  "llm_attempt_seconds_sum": 656.996,
+  "llm_sum_is_wall_time": false,
+  "outcomes": {
+    "accepted": 46,
+    "discarded": 9
+  },
+  "failure_reasons": {
+    "transient_error": 8,
+    "stream_empty_tool_arguments": 1
+  },
+  "tools": {
+    "add_task": 1,
+    "research_history": 1,
+    "create_subagent": 2,
+    "assign_task": 4,
+    "collect_reports": 6,
+    "update_task": 1,
+    "deliver_answer": 4,
+    "corpus_search": 26,
+    "submit_report": 7,
+    "corpus_inventory": 4,
+    "corpus_fetch": 5,
+    "corpus_submit_manifest": 2,
+    "recover_result": 1
+  },
+  "research_dispatch_attempts": 2,
+  "exact_repeated_tool_requests": 0,
+  "dispatch_start_delay_estimate_s": [
+    0.05,
+    0.045,
+    0.127,
+    0.025,
+    0.02
+  ],
+  "dispatch_delay_p50_s": 0.045,
+  "dispatch_delay_p90_s": 0.096,
+  "agents": [
+    {
+      "trace": "run/agent/trajectories/main_agent.jsonl",
+      "start": 1793875042.1202705,
+      "end": 1793875604.4312205
+    },
+    {
+      "trace": "run/agent/trajectories/research_intake.jsonl",
+      "start": 1793875036.5997617,
+      "end": 1793875042.0960133
+    },
+    {
+      "trace": "run/agent/trajectories/subagents/corpus_fact_verify.t01.jsonl",
+      "start": 1793875320.8307512,
+      "end": 1793875389.2581623
+    },
+    {
+      "trace": "run/agent/trajectories/subagents/corpus_fact_verify.t02.jsonl",
+      "start": 1793875420.2219572,
+      "end": 1793875459.2890105
+    },
+    {
+      "trace": "run/agent/trajectories/subagents/corpus_fact_verify_2.t01.jsonl",
+      "start": 1793875331.2050006,
+      "end": 1793875387.5762546
+    },
+    {
+      "trace": "run/agent/trajectories/subagents/corpus_industry_research.t01.jsonl",
+      "start": 1793875079.73593,
+      "end": 1793875303.3911777
+    },
+    {
+      "trace": "run/agent/trajectories/subagents/corpus_model_research.t01.jsonl",
+      "start": 1793875079.730488,
+      "end": 1793875320.7305026
+    }
+  ],
+  "limitations": [
+    "Queue delay inferred from dispatch attempts; rejected requests can skew it.",
+    "Parallel attempt durations are not additive wall time.",
+    "First report may be incomplete; semantic usefulness requires review.",
+    "Dollar cost unavailable without an explicit model tariff."
+  ]
+}

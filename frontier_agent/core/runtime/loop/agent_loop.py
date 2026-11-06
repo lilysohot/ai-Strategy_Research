@@ -8,6 +8,7 @@ from __future__ import annotations
 import asyncio
 import contextlib
 import inspect
+import json
 import logging
 import time
 import uuid
@@ -383,6 +384,19 @@ async def _run_loop_inner(
 
         if not parsed_calls:
             no_tool_retries += 1
+            protocol_error = metadata.get("tool_protocol_error")
+            if protocol_error:
+                if (
+                    cfg.loop_policy.no_tool_behavior != "nudge"
+                    or no_tool_retries >= cfg.no_tool_max_retries
+                    or turn >= cfg.max_turns
+                ):
+                    stop_reason = "llm_error"
+                    metadata["llm_error_reason"] = "unparsed_tool_call"
+                    metadata["llm_error"] = protocol_error
+                    break
+                messages.append(user_msg(str(protocol_error)))
+                continue
             if (
                 cfg.loop_policy.no_tool_behavior != "nudge"
                 or no_tool_retries >= cfg.no_tool_max_retries
@@ -690,6 +704,32 @@ async def _process_llm_response(
         parsed_calls = tc_parser.parse_text(tr.thinking, tool_names)
         if parsed_calls:
             logger.warning("turn=%d recovered %d tool_call(s) leaked into <think>", turn, len(parsed_calls))
+
+    from frontier_agent.core.runtime.loop._dsml import is_dsml_attempt
+
+    metadata.pop("tool_protocol_error", None)
+    if (
+        parsed_calls and not getattr(response, "tool_calls", None)
+        and all(str(call.get("id", "")).startswith("dsml_tc_") for call in parsed_calls)
+    ):
+        # The normalizer ran before text recovery. Canonicalize this assistant
+        # turn so the next request never contains orphan tool-result messages.
+        for index, call in enumerate(parsed_calls):
+            call["id"] = f"dsml_{turn}_{index}"
+        history_msg["tool_calls"] = [
+            {"type": "function", "id": call["id"], "function": {
+                "name": call["name"], "arguments": json.dumps(call["args"], ensure_ascii=False),
+            }} for call in parsed_calls
+        ]
+        history_msg["content"] = ""
+    if not parsed_calls and (
+        is_dsml_attempt(getattr(response, "content", "")) or is_dsml_attempt(tr.thinking)
+    ):
+        metadata["tool_protocol_error"] = (
+            "DSML tool-call envelope was malformed, incomplete or used an unavailable tool. "
+            "No tool was executed. Use native tool_calls with an available tool name and "
+            "complete JSON arguments; do not repeat a partial envelope as prose."
+        )
 
     cap = cfg.max_tool_calls_per_turn
     if cap and cap > 0 and len(parsed_calls) > cap:

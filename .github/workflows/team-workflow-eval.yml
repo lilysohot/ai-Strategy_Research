@@ -1,0 +1,26 @@
+name: Team workflow evaluation
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  protocol:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Install test dependencies
+        run: uv sync --frozen --extra dev --extra sandbox --extra document-readers --extra eval --group web
+      - name: Check evaluator integrity
+        run: uv run pytest tests/test_team_workflow_eval.py -q
+      - name: Run team protocol baseline
+        run: uv run python -m benchmarks.team_workflow.run run --layer protocol --out results/team-protocol
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: team-protocol-${{ github.run_id }}
+          path: results/team-protocol

@@ -21,11 +21,13 @@ from tests.test_monitor_longterm import (
     test_batch_invalid_rolls_back_and_paused_intent_cannot_reappear,
     test_bridge_capability_and_live_pause_guard,
     test_cancel_all_targets_releases_already_queued_run,
+    test_description_update_does_not_repeat_crossing,
     test_expired_quote_and_source_errors_do_not_trigger,
     test_launch_offline_is_deferred_not_failed,
     test_monitor_settings_scope_and_queued_status,
     test_offline_preserves_queue_and_resumes,
     test_pause_during_acquisition_excludes_target,
+    test_real_price_change_reinitializes_crossing,
     test_repeats_fifo_and_price_return_does_not_cancel,
     test_three_targets_one_signal_and_no_same_round_replay,
 )

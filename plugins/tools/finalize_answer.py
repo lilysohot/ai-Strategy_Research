@@ -18,10 +18,7 @@ def _unassigned_agent_names(task_id: str) -> list[str]:
     bus = registry.get_optional(AgentBus)
     if bus is None:
         return []
-    return [
-        s.name for s in bus.list_sessions_for_task(task_id)
-        if s.total_task_count == 0
-    ]
+    return [s.name for s in bus.list_sessions_for_task(task_id) if s.total_task_count == 0]
 
 
 def finalize_gate(
@@ -62,7 +59,8 @@ def finalize_gate(
         logger.warning(
             "finalize_gate: %d sub-agent(s) created but never assigned "
             "(%s) — allowing finish anyway, not blocking",
-            len(idle), idle,
+            len(idle),
+            idle,
         )
     from plugins.tools.task_board import (
         in_planning,
@@ -70,10 +68,12 @@ def finalize_gate(
         snapshot_tasks,
         unresolved_task_ids,
     )
+
     # Delivery completes with this accepted answer, so it cannot be a
     # prerequisite for accepting that same answer.
     delivery_ids = {
-        task["id"] for task in snapshot_tasks(task_id)
+        task["id"]
+        for task in snapshot_tasks(task_id)
         if task.get("kind") == "delivery" and not task.get("verification_required")
     }
     pending = [tid for tid in unresolved_task_ids(task_id) if tid not in delivery_ids]
@@ -85,14 +85,21 @@ def finalize_gate(
             "needed. If work cannot proceed, use resolution='blocked' with notes "
             "and gap, then deliver the supported partial answer with its limitations."
         )
-    from plugins.tools._verification import missing_publication_excerpts, project_bus_checks
+    from plugins.tools._verification import (
+        missing_publication_excerpts,
+        project_bus_checks,
+        unresolved_publication_claims,
+        verification_label_findings,
+    )
 
     bus = registry.get_optional(AgentBus)
     if bus:
         from plugins.tools._corpus_scope import corpus_scope_findings
 
         observations = [
-            observation for job in bus.list_task_jobs(agent_bus_task_id) if job.result is not None
+            observation
+            for job in bus.list_task_jobs(agent_bus_task_id)
+            if job.result is not None
             for observation in job.result.metadata.get("content_acquisition", [])
         ]
         scope_findings = corpus_scope_findings(content, observations)
@@ -106,14 +113,29 @@ def finalize_gate(
         excluded = {
             t["id"] for t in snapshot_tasks(task_id) if t["resolution"] in {"blocked", "cancelled"}
         }
+        checks = project_bus_checks(bus, agent_bus_task_id)["checks"]
+        labels = verification_label_findings(checks, content)
+        if labels:
+            return f"Cannot finish: verification_label_outside_passed_scope: {labels}"
         missing = missing_publication_excerpts(
-            project_bus_checks(bus, agent_bus_task_id)["checks"], content,
+            checks,
+            content,
             excluded_work_items=excluded,
         )
         if missing:
             return (
                 f"{missing}: final answer omits the checked publication excerpt; retain the "
                 "exact checked passage, recheck the changed text, or block the affected task"
+            )
+        retained = unresolved_publication_claims(
+            checks,
+            content,
+            excluded_work_items=excluded,
+        )
+        if retained:
+            return (
+                "Cannot finish: the partial answer retains unqualified factual claims rejected "
+                f"by verification: {retained[:5]}. Remove or explicitly qualify those claims."
             )
     if in_planning(task_id):
         return (
@@ -160,10 +182,7 @@ async def finalize_answer(content: str, confidence: float = 0.7) -> str:
     """
     text = (content or "").strip()
     if not text:
-        return (
-            "finalize_answer rejected: `content` was empty. "
-            "Pass the full answer in `content`."
-        )
+        return "finalize_answer rejected: `content` was empty. Pass the full answer in `content`."
 
     # Must ``raise`` rather than ``return`` — FinalizeAnswerObserver only
     # skips latching when ``result.is_error`` is True. A string return here
@@ -189,7 +208,8 @@ async def finalize_answer(content: str, confidence: float = 0.7) -> str:
 
     logger.info(
         "finalize_answer accepted: len=%d chars, confidence=%.2f",
-        len(text), conf,
+        len(text),
+        conf,
     )
     return (
         f"Final answer accepted ({len(text)} chars, confidence={conf:.2f}). "

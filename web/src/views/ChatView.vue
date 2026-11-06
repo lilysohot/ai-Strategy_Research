@@ -94,6 +94,44 @@ const detailsOpen = ref(false)
 const canvasFocus = ref(false)
 const detailTab = ref<'plan' | 'activity' | 'diff' | 'trace' | 'evidence'>('activity')
 const workspaceArea = ref<WorkspaceArea>('research')
+const pageVisible = ref(document.visibilityState === 'visible')
+let repliesPoll: ReturnType<typeof setInterval> | null = null
+
+function refreshReplyNotifications(): void {
+  void sessions.loadList(true).catch(() => {})
+}
+
+function onReplyVisibilityChange(): void {
+  pageVisible.value = document.visibilityState === 'visible'
+  if (pageVisible.value) refreshReplyNotifications()
+}
+
+watch(
+  () => [pageVisible.value, workspaceArea.value, sessions.activeId,
+    sessions.activeSession?.last_completed_turn_seq, sessions.activeTurns],
+  async () => {
+    const id = sessions.activeId
+    if (!pageVisible.value || workspaceArea.value !== 'research' || !id) return
+    const seq = sessions.activeSession?.last_completed_turn_seq ?? 0
+    if (sessions.isUnread(id) && !sessions.loadingTurns
+      && !sessions.activeTurns.some((turn) => turn.seq === seq && turn.role === 'assistant')) {
+      try {
+        await sessions.loadTurns(id, Math.max(sessions.activeTurns.length, 100))
+      } catch {
+        return // Keep the notification until the reply can actually be displayed.
+      }
+    }
+    await nextTick()
+    if (pageVisible.value && workspaceArea.value === 'research' && sessions.activeId === id) {
+      sessions.markVisibleTurnsRead()
+    }
+  },
+  { flush: 'post' },
+)
+
+function onReplyStorageChange(event: StorageEvent): void {
+  if (event.key === sessions.readStorageKey) sessions.restoreReadState()
+}
 const workspaceRequestId = ref<string | null>(null)
 const sessionPlanOpen = ref(false)
 const business = useBusinessStore()
@@ -752,6 +790,9 @@ async function refreshMonitorRun(researchId: string, activeRunId: string | null)
 
 onMounted(async () => {
   // No unload/release request: another workbench tab may still be online.
+  repliesPoll = setInterval(refreshReplyNotifications, 5000)
+  document.addEventListener('visibilitychange', onReplyVisibilityChange)
+  window.addEventListener('storage', onReplyStorageChange)
   void monitorApi.heartbeat().catch(() => {})
   monitorHeartbeat = setInterval(() => void monitorApi.heartbeat().catch(() => {}), 30000)
   if (!sessions.list.length) {
@@ -765,6 +806,9 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
+  if (repliesPoll) clearInterval(repliesPoll)
+  document.removeEventListener('visibilitychange', onReplyVisibilityChange)
+  window.removeEventListener('storage', onReplyStorageChange)
   if (monitorHeartbeat) clearInterval(monitorHeartbeat)
   runStream.close()
   if (clockTimer !== null) clearInterval(clockTimer)

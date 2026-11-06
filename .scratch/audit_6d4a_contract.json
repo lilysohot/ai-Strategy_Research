@@ -1,0 +1,3433 @@
+{
+  "version": 4,
+  "publication": {
+    "status": "published",
+    "candidate_sha256": "91481d9f74b175f2d347319f9d2793031d2ac2a8c3219faf89389e027873d846",
+    "candidate_verification": "not_assessed",
+    "findings": [],
+    "unmatched_checked_excerpts": []
+  },
+  "source": "model",
+  "kind": "partial",
+  "answer_status": "partial",
+  "stopped_by": "final_answer",
+  "input_source": "agent",
+  "gaps": [
+    {
+      "code": "task_evidence_gap",
+      "task_id": "t4",
+      "detail": "attribution 段落缺一个已完成的独立核验裁决（job.5 因回合预算耗尽未产出 verdict）；另“不足 5%”这一微软口径未能回查到已交付摘录，已在正文中删除而非引用。"
+    },
+    {
+      "code": "verification_not_passed",
+      "job_id": "08f07d935509.job.4",
+      "agent": "corpus_claim_verifier",
+      "reason": "verification_not_passed"
+    },
+    {
+      "code": "member_job_incomplete",
+      "job_id": "08f07d935509.job.5",
+      "agent": "corpus_claim_verifier",
+      "reason": "max_turns"
+    },
+    {
+      "code": "task_unresolved",
+      "task_id": "t4",
+      "description": "独立核验综合答复中的关键事实性主张：模型型号与日期、量化数字（基准分/价格/成本）、第三方观点归属，均需与资料库原文的实体/版本/日期/单位/条件一致"
+    },
+    {
+      "code": "task_verification_incomplete",
+      "task_id": "t4",
+      "status": "partial"
+    }
+  ],
+  "task_board": [
+    {
+      "id": "t1",
+      "description": "从资料库（corpus）确认 DeepSeek 最新模型的事实基线：型号全名、版本/发布日期、架构与参数、上下文长度、基准测试成绩、官方定价与开源许可；每条必须带 doc_id（含 build 版本）+ locator + 逐字原文",
+      "resolution": "resolved",
+      "notes": "job.1 完成：资料库内最新 DeepSeek 型号为 V4.1-Flash-1017（2026-10-17），附 doc_id+locator+逐字引文与 cutoff 2026-11-05、81 sources/1769 chunks 元信息。未找到总参数量/上下文长度/训练成本/MoE 配置，已列为 Unresolved。",
+      "gap": "",
+      "owners": [
+        "deepseek_model_corpus_research"
+      ],
+      "execution_job_ids": [
+        "08f07d935509.job.1"
+      ],
+      "verification_status": "not_assessed",
+      "verification_execution_status": "not_started",
+      "verification_required": false,
+      "verification_requirements": [],
+      "execution_status": "complete"
+    },
+    {
+      "id": "t2",
+      "description": "资料库中关于 DeepSeek 最新模型对 AI 产业竞争格局、商业模式、推理定价与算力/芯片需求影响的证据（含厂商反应、分析师观点、市场数据）",
+      "resolution": "resolved",
+      "notes": "job.2 完成：价格/竞争/商业模式/算力/企业采用五组证据，含第三方托管 0.10/0.50、Haiku 5.5 反超、6–12 月落后预期、Alphabet capex 等，均带 doc_id+locator+引文；已标出训练成本、股价归因、云市场上架、中国厂商应对四块空白。",
+      "gap": "",
+      "owners": [
+        "ai_industry_impact_corpus_research"
+      ],
+      "execution_job_ids": [
+        "08f07d935509.job.2"
+      ],
+      "verification_status": "not_assessed",
+      "verification_execution_status": "not_started",
+      "verification_required": false,
+      "verification_requirements": [],
+      "execution_status": "complete"
+    },
+    {
+      "id": "t3",
+      "description": "资料库中关于 DeepSeek 最新模型在技术路线（MoE/RL/推理模型）、开源生态、以及政策与地缘维度影响的证据",
+      "resolution": "resolved",
+      "notes": "job.3 完成：技术路线/开源生态/政策三维度，含 CED/CSA2/FP4 KV/8B-16B 激活、MIT、第一梯队、蒸馏成本 10–50 倍、中国政策文件、出口管制仅硬件口径。明确标注 MoE/MLA/FP8/GRPO 无原文支撑，不得当作事实使用。",
+      "gap": "",
+      "owners": [
+        "ai_tech_policy_corpus_research"
+      ],
+      "execution_job_ids": [
+        "08f07d935509.job.3"
+      ],
+      "verification_status": "not_assessed",
+      "verification_execution_status": "not_started",
+      "verification_required": false,
+      "verification_requirements": [],
+      "execution_status": "complete"
+    },
+    {
+      "id": "t4",
+      "description": "独立核验综合答复中的关键事实性主张：模型型号与日期、量化数字（基准分/价格/成本）、第三方观点归属，均需与资料库原文的实体/版本/日期/单位/条件一致",
+      "resolution": "blocked",
+      "notes": "model_identity 与 quant_claims 两项均取得版本绑定 PASS（逐条回查到 doc_id+locator，含跨版本分离：架构数字明确归 V4.1 Flash 而非 1017）。attribution 首轮 FAIL（Palantir 归属与日期），已按意见修正并派发重核（job.5），但重核在 max_turns 内中断、submit_report 未获裁决，故 attribution 仍为 UNCHECKED。修正后的归属段落每条均有可回查原文片段（交付稿第五节 + 第七节引文表），但未经二次独立核验。",
+      "gap": "attribution 段落缺一个已完成的独立核验裁决（job.5 因回合预算耗尽未产出 verdict）；另“不足 5%”这一微软口径未能回查到已交付摘录，已在正文中删除而非引用。",
+      "owners": [
+        "corpus_claim_verifier"
+      ],
+      "execution_job_ids": [
+        "08f07d935509.job.4",
+        "08f07d935509.job.5"
+      ],
+      "verification_status": "partial",
+      "verification_execution_status": "incomplete",
+      "verification_required": true,
+      "verification_requirements": [
+        {
+          "check_id": "model_identity",
+          "criterion": "答复中'DeepSeek 最新模型'的型号全名、版本号、发布日期与资料库原文逐项一致，doc_id+locator 可复现，且'最新'的判定有资料库内日期依据"
+        },
+        {
+          "check_id": "quant_claims",
+          "criterion": "答复中每个量化主张（基准分数、API 价格、训练/推理成本、参数量、市场份额）在实体、版本、日期、单位、统计口径上与资料库原文一致，无跨版本/跨单位误用"
+        },
+        {
+          "check_id": "attribution",
+          "criterion": "答复中归属于第三方（公司、分析师、媒体、政府机构）的观点准确标注说话主体与时间，推断性结论未被表述为资料库直接记载的事实"
+        }
+      ],
+      "execution_status": "incomplete"
+    },
+    {
+      "id": "t5",
+      "description": "交付：中文综合分析答复，说明 DeepSeek 最新模型对 AI 行业发展的影响（技术、成本、竞争格局、开源生态、算力、政策），逐条标注资料库引用与不确定性",
+      "resolution": "resolved",
+      "notes": "已交付中文综合分析答复：含模型身份、价格/基准基线、六条影响机制、政策空白、第三方归属、证据边界与 26 条逐字原文引证；两份 PASS 段落逐字保留，attribution 段落按修正后文本交付并标注 UNCHECKED；未覆盖项统一改为“本次检索未命中”表述，并保留 21 个无发布日期来源与 table_chunks=0 的覆盖局限。",
+      "gap": "",
+      "owners": [],
+      "execution_job_ids": [],
+      "verification_status": "not_assessed",
+      "verification_execution_status": "not_started",
+      "verification_required": false,
+      "verification_requirements": [],
+      "execution_status": "not_assessed"
+    }
+  ],
+  "task_board_basis": "coordinator_declared",
+  "wind_down": {
+    "status": "complete",
+    "collected_count": 0,
+    "incomplete_count": 0,
+    "queued_aborted": 0,
+    "unresolved_count": 0,
+    "run_status": "partial"
+  },
+  "artifact_verification": "not_assessed",
+  "job_outcomes": [
+    {
+      "job_id": "08f07d935509.job.1",
+      "agent": "deepseek_model_corpus_research",
+      "required": true,
+      "status": "complete",
+      "reason": "",
+      "source": "",
+      "content_acquisition": [
+        {
+          "tool": "corpus_search",
+          "source": "DeepSeek",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 9,
+              "sources_filtered": 0,
+              "filter_reasons": {},
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 11744,
+              "char_budget": 16000,
+              "hit_limit": 20,
+              "block_limit": 20,
+              "blocks_returned": 20,
+              "blocks_ranked": 200,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "DeepSeek-V3 发布",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 8,
+              "sources_filtered": 0,
+              "filter_reasons": {},
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 13979,
+              "char_budget": 16000,
+              "hit_limit": 20,
+              "block_limit": 20,
+              "blocks_returned": 20,
+              "blocks_ranked": 322,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "DeepSeek V4.1 Flash 架构 参数 上下文",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 7,
+              "sources_filtered": 4,
+              "filter_reasons": {
+                "weak_topic_coverage": 4
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 6385,
+              "char_budget": 16000,
+              "hit_limit": 20,
+              "block_limit": 20,
+              "blocks_returned": 13,
+              "blocks_ranked": 241,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "深度求索 发布 模型",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 8,
+              "sources_filtered": 0,
+              "filter_reasons": {},
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 14047,
+              "char_budget": 16000,
+              "hit_limit": 20,
+              "block_limit": 20,
+              "blocks_returned": 20,
+              "blocks_ranked": 317,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "DeepSeek R1 V3 推理模型 开源",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 6,
+              "sources_filtered": 1,
+              "filter_reasons": {
+                "weak_topic_coverage": 1
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 9502,
+              "char_budget": 16000,
+              "hit_limit": 20,
+              "block_limit": 20,
+              "blocks_returned": 18,
+              "blocks_ranked": 295,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "DeepSeek V4 Flash 上下文长度 MoE 专家 激活参数 训练成本",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 6,
+              "sources_filtered": 3,
+              "filter_reasons": {
+                "weak_topic_coverage": 3
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 6437,
+              "char_budget": 16000,
+              "hit_limit": 15,
+              "block_limit": 20,
+              "blocks_returned": 14,
+              "blocks_ranked": 318,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "DeepSeek V5 V4.2 新模型 发布 11月",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 5,
+              "sources_filtered": 1,
+              "filter_reasons": {
+                "weak_topic_coverage": 1
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 9230,
+              "char_budget": 16000,
+              "hit_limit": 15,
+              "block_limit": 20,
+              "blocks_returned": 19,
+              "blocks_ranked": 318,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "DeepSeek V3 R1 2025年 训练成本 缓存命中价格",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 7,
+              "sources_filtered": 4,
+              "filter_reasons": {
+                "weak_topic_coverage": 4
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 6445,
+              "char_budget": 16000,
+              "hit_limit": 15,
+              "block_limit": 20,
+              "blocks_returned": 12,
+              "blocks_ranked": 335,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "V4Pro V4 Flash 前代模型",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 7,
+              "sources_filtered": 3,
+              "filter_reasons": {
+                "weak_topic_coverage": 3
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 7496,
+              "char_budget": 16000,
+              "hit_limit": 10,
+              "block_limit": 20,
+              "blocks_returned": 14,
+              "blocks_ranked": 336,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        }
+      ],
+      "verification_checks": [],
+      "verification_events": []
+    },
+    {
+      "job_id": "08f07d935509.job.2",
+      "agent": "ai_industry_impact_corpus_research",
+      "required": true,
+      "status": "complete",
+      "reason": "",
+      "source": "",
+      "content_acquisition": [
+        {
+          "tool": "corpus_search",
+          "source": "DeepSeek 最新模型 发布",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 6,
+              "sources_filtered": 2,
+              "filter_reasons": {
+                "weak_topic_coverage": 2
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 7581,
+              "char_budget": 16000,
+              "hit_limit": 20,
+              "block_limit": 20,
+              "blocks_returned": 15,
+              "blocks_ranked": 316,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "DeepSeek API 定价 降价 推理成本",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 6,
+              "sources_filtered": 2,
+              "filter_reasons": {
+                "weak_topic_coverage": 2
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 7747,
+              "char_budget": 16000,
+              "hit_limit": 20,
+              "block_limit": 20,
+              "blocks_returned": 16,
+              "blocks_ranked": 317,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "DeepSeek 开源模型 竞争 阿里 Qwen 字节 豆包 降价 应对",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 6,
+              "sources_filtered": 2,
+              "filter_reasons": {
+                "weak_topic_coverage": 2
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 7170,
+              "char_budget": 16000,
+              "hit_limit": 15,
+              "block_limit": 20,
+              "blocks_returned": 14,
+              "blocks_ranked": 294,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "杰文斯悖论 算力需求 资本开支 英伟达 股价 推理需求增长",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 6,
+              "sources_filtered": 1,
+              "filter_reasons": {
+                "weak_topic_coverage": 1
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 11391,
+              "char_budget": 16000,
+              "hit_limit": 15,
+              "block_limit": 20,
+              "blocks_returned": 19,
+              "blocks_ranked": 334,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "DeepSeek 训练成本 600万美元 口径 争议",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 6,
+              "sources_filtered": 2,
+              "filter_reasons": {
+                "weak_topic_coverage": 2
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 9414,
+              "char_budget": 16000,
+              "hit_limit": 15,
+              "block_limit": 20,
+              "blocks_returned": 17,
+              "blocks_ranked": 318,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "华为云 腾讯云 AWS Azure 上架 DeepSeek 企业私有化部署 一体机",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 6,
+              "sources_filtered": 0,
+              "filter_reasons": {},
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 13046,
+              "char_budget": 16000,
+              "hit_limit": 15,
+              "block_limit": 20,
+              "blocks_returned": 20,
+              "blocks_ranked": 292,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "557万美元 训练成本 仅为 低成本训练 V3",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 5,
+              "sources_filtered": 1,
+              "filter_reasons": {
+                "weak_topic_coverage": 1
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 13170,
+              "char_budget": 16000,
+              "hit_limit": 15,
+              "block_limit": 20,
+              "blocks_returned": 19,
+              "blocks_ranked": 318,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "英伟达 股价 下跌 市值 芯片股 冲击 算力需求 质疑",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 7,
+              "sources_filtered": 1,
+              "filter_reasons": {
+                "weak_topic_coverage": 1
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 15588,
+              "char_budget": 16000,
+              "hit_limit": 12,
+              "block_limit": 20,
+              "blocks_returned": 19,
+              "blocks_ranked": 324,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "闭源模型 溢价 受挤压 毛利率 价格战 定价能力",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 5,
+              "sources_filtered": 1,
+              "filter_reasons": {
+                "weak_topic_coverage": 1
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 5934,
+              "char_budget": 16000,
+              "hit_limit": 12,
+              "block_limit": 20,
+              "blocks_returned": 10,
+              "blocks_ranked": 319,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "企业 常规工作 转向 低成本模型 模型路由 采购 调研",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 3,
+              "sources_filtered": 0,
+              "filter_reasons": {},
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 10062,
+              "char_budget": 16000,
+              "hit_limit": 12,
+              "block_limit": 20,
+              "blocks_returned": 20,
+              "blocks_ranked": 292,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope"
+            ]
+          }
+        }
+      ],
+      "verification_checks": [],
+      "verification_events": []
+    },
+    {
+      "job_id": "08f07d935509.job.3",
+      "agent": "ai_tech_policy_corpus_research",
+      "required": true,
+      "status": "complete",
+      "reason": "",
+      "source": "",
+      "content_acquisition": [
+        {
+          "tool": "corpus_search",
+          "source": "DeepSeek 最新模型",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 7,
+              "sources_filtered": 3,
+              "filter_reasons": {
+                "weak_topic_coverage": 3
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 7247,
+              "char_budget": 16000,
+              "hit_limit": 20,
+              "block_limit": 20,
+              "blocks_returned": 15,
+              "blocks_ranked": 301,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "DeepSeek V3 R1 MoE 开源",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 8,
+              "sources_filtered": 0,
+              "filter_reasons": {},
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 13116,
+              "char_budget": 16000,
+              "hit_limit": 20,
+              "block_limit": 20,
+              "blocks_returned": 20,
+              "blocks_ranked": 214,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "DeepSeek MoE 稀疏架构 MLA 注意力 FP8 训练",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 8,
+              "sources_filtered": 0,
+              "filter_reasons": {},
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 11792,
+              "char_budget": 16000,
+              "hit_limit": 20,
+              "block_limit": 20,
+              "blocks_returned": 20,
+              "blocks_ranked": 221,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "DeepSeek 强化学习 GRPO 推理能力 蒸馏 小模型",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 5,
+              "sources_filtered": 2,
+              "filter_reasons": {
+                "subject_not_observed": 2
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 6385,
+              "char_budget": 16000,
+              "hit_limit": 20,
+              "block_limit": 20,
+              "blocks_returned": 13,
+              "blocks_ranked": 311,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "出口管制 芯片禁令 模型权重 开源 限制 美国",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 6,
+              "sources_filtered": 1,
+              "filter_reasons": {
+                "weak_topic_coverage": 1
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 11333,
+              "char_budget": 16000,
+              "hit_limit": 20,
+              "block_limit": 20,
+              "blocks_returned": 19,
+              "blocks_ranked": 325,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "Hugging Face 下载量 衍生模型 微调 权重开源 许可证",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 5,
+              "sources_filtered": 2,
+              "filter_reasons": {
+                "weak_topic_coverage": 2
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 7531,
+              "char_budget": 16000,
+              "hit_limit": 20,
+              "block_limit": 20,
+              "blocks_returned": 12,
+              "blocks_ranked": 309,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "主权AI 国产算力 昇腾 适配 政策",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 9,
+              "sources_filtered": 0,
+              "filter_reasons": {},
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 15956,
+              "char_budget": 16000,
+              "hit_limit": 20,
+              "block_limit": 20,
+              "blocks_returned": 20,
+              "blocks_ranked": 303,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "DeepSeek 安全评测 治理 监管 审查 禁用",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 5,
+              "sources_filtered": 1,
+              "filter_reasons": {
+                "weak_topic_coverage": 1
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 8996,
+              "char_budget": 16000,
+              "hit_limit": 15,
+              "block_limit": 20,
+              "blocks_returned": 16,
+              "blocks_ranked": 262,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "DeepSeek 架构 新架构 参数量 长上下文 稀疏",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 7,
+              "sources_filtered": 3,
+              "filter_reasons": {
+                "weak_topic_coverage": 3
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 7195,
+              "char_budget": 16000,
+              "hit_limit": 15,
+              "block_limit": 20,
+              "blocks_returned": 14,
+              "blocks_ranked": 233,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "模型权重 出口管制 开源权重 管制 立法 限制 中国",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 4,
+              "sources_filtered": 0,
+              "filter_reasons": {},
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 13572,
+              "char_budget": 16000,
+              "hit_limit": 15,
+              "block_limit": 20,
+              "blocks_returned": 20,
+              "blocks_ranked": 325,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope"
+            ]
+          }
+        }
+      ],
+      "verification_checks": [],
+      "verification_events": []
+    },
+    {
+      "job_id": "08f07d935509.job.4",
+      "agent": "corpus_claim_verifier",
+      "required": true,
+      "status": "complete",
+      "reason": "",
+      "source": "",
+      "content_acquisition": [
+        {
+          "tool": "corpus_search",
+          "source": "开源模型性能的提升对 Palantir 整体上是利好 管理层 电话会",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 6,
+              "sources_filtered": 4,
+              "filter_reasons": {
+                "weak_topic_coverage": 4
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 3353,
+              "char_budget": 16000,
+              "hit_limit": 6,
+              "block_limit": 20,
+              "blocks_returned": 9,
+              "blocks_ranked": 329,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        }
+      ],
+      "verification_checks": [
+        {
+          "protocol_version": 2,
+          "check_id": "model_identity",
+          "work_item_id": "t4",
+          "criterion": "答复中'DeepSeek 最新模型'的型号全名、版本号、发布日期与资料库原文逐项一致，doc_id+locator 可复现，且'最新'的判定有资料库内日期依据",
+          "subject": {
+            "text": "资料库记载的最新 DeepSeek 模型是 DeepSeek V4.1-Flash-1017：2026 年 10 月 17 日发布，是对 2026 年 9 月 10 日上线的 V4.1 Flash 的更新，API 模型名称保持不变（doc cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698，locator body:0000 / p.1，文档日期 2026-10-19）。判定“最新”的依据是：该文档与 2026-10-26 周报（doc cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4，p.4）都指向 10 月 17 日，且资料库截止日为 2026-11-05，本次检索未找到更晚的 DeepSeek 发布。需要说明：资料库未给出 API 模型名的实际字符串；另有 V4Pro、V4Flash 两个型号在资料库中出现但无发布日期，无法排除存在未被记载的更晚版本。",
+            "sha256": "8bf55d8bd407acf1704edc822cace36a185363ff85c10f0698b70b11d50208a6",
+            "key": "inline:8bf55d8bd407acf1704edc822cace36a185363ff85c10f0698b70b11d50208a6"
+          },
+          "evidence": [
+            {
+              "job_id": "08f07d935509.job.1",
+              "ref": "",
+              "sha256": "57cf2a7360f98f7e47a4d3b78412f1c582f03f0d9c3fd63eebb6ef6a8a429291",
+              "key": "08f07d935509.job.1",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 9
+                }
+              ],
+              "acquisition_sha256": "1a2c8197d3e8dc124f68a502d6e95ea6e8c5bd21c8be9f14f3642b6f6c122d4b",
+              "corpus_evidence_sha256": "7ca3a116b909859d199ea3ae72961c73a4a910d3198d2747f96c4a9d07ba79d1"
+            },
+            {
+              "job_id": "08f07d935509.job.3",
+              "ref": "",
+              "sha256": "22a90969fc62f418cdf80bccb65377f3d958bf4f245391dc67ff96c75b363d4f",
+              "key": "08f07d935509.job.3",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 10
+                }
+              ],
+              "acquisition_sha256": "5d19b326b8082019f899648c625bb4060c18d884a464cc0ac86aea437fcc277a",
+              "corpus_evidence_sha256": "c92b27d0cb033aac2adb8cd968252576b28e619cd4fa9358b77270d8835661e3"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "925cb59239dd5785bf08311e71b1c81f07e5573bd8593b25f6a043dacee06f38",
+          "required": true,
+          "replaces_job_id": "",
+          "revision_reason": "",
+          "revision_kind": ""
+        },
+        {
+          "protocol_version": 2,
+          "check_id": "quant_claims",
+          "work_item_id": "t4",
+          "criterion": "答复中每个量化主张（基准分数、API 价格、训练/推理成本、参数量、市场份额）在实体、版本、日期、单位、统计口径上与资料库原文一致，无跨版本/跨单位误用",
+          "subject": {
+            "text": "价格与基准（均为资料库转述，非一手发布页）：官方 API 定价为每百万输入 token 0.30 美元、每百万输出 token 1.20 美元，另有 50% 错峰折扣；权重以 MIT 许可证开放。DeepSeek 自报 11 项基准全部优于前代，其中 Terminal-Bench 4.0 从 31.2 升至 42.3，DeepSWE 从 74.2 升至 77.0，并称 11 项中 9 项胜过 GPT-5.6 Sol。这些数字不能与第三方同台比较：Google 发布页列 Astra 58.2、Opus 5.5 66.4，Artificial Analysis 独立测得 Astra 59%、Opus 5.5 60%，且截至 2026-10-19 AA 尚未测试 1017；9 月版 V4.1 Flash 的 AA 智能指数为 39，而领先开放权重模型在 44–46（MiMo-V2.6 Pro 46、GLM-5.3 45、Kimi K3 44）。价格战的另一端：第三方托管报价已低至每百万输入/输出 0.10/0.50 美元，低于 DeepSeek 官方费率；闭源入门级 Haiku 5.5 在 ≤100k token 提示下也是 0.10/0.50 美元，AA 单任务成本 0.21 美元，而 9 月版 V4.1 Flash 为 0.27 美元。架构侧，资料库（2026-09-22 报告，描述对象是 V4.1 Flash 而非 1017）记载 Prefill/Decode 每 token 仅激活约 8B/16B 参数，Global KV Cache 降至 V4Flash 的约 1/4、Persistent KV Cache 降至约 1/8，但未给出总参数量、上下文长度与训练成本。",
+            "sha256": "18a925f7467d5f62dadf2bfc31a0243b785d95b4453d50e987ef5f8e05340b47",
+            "key": "inline:18a925f7467d5f62dadf2bfc31a0243b785d95b4453d50e987ef5f8e05340b47"
+          },
+          "evidence": [
+            {
+              "job_id": "08f07d935509.job.1",
+              "ref": "",
+              "sha256": "57cf2a7360f98f7e47a4d3b78412f1c582f03f0d9c3fd63eebb6ef6a8a429291",
+              "key": "08f07d935509.job.1",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 9
+                }
+              ],
+              "acquisition_sha256": "1a2c8197d3e8dc124f68a502d6e95ea6e8c5bd21c8be9f14f3642b6f6c122d4b",
+              "corpus_evidence_sha256": "7ca3a116b909859d199ea3ae72961c73a4a910d3198d2747f96c4a9d07ba79d1"
+            },
+            {
+              "job_id": "08f07d935509.job.2",
+              "ref": "",
+              "sha256": "852e056969ab5b5cbd33ea475184e97031eada6ad09c7050cba25f77c525e76a",
+              "key": "08f07d935509.job.2",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 10
+                }
+              ],
+              "acquisition_sha256": "ed61ef9c01c871c023f98ee9bf0fd8af1a6084b907de319de6acfc03ee1814b7",
+              "corpus_evidence_sha256": "4aa35b804369b59133fa18b73f2bd958f11a4fb75cb5c48bdfe3b1a2c9a64b21"
+            },
+            {
+              "job_id": "08f07d935509.job.3",
+              "ref": "",
+              "sha256": "22a90969fc62f418cdf80bccb65377f3d958bf4f245391dc67ff96c75b363d4f",
+              "key": "08f07d935509.job.3",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 10
+                }
+              ],
+              "acquisition_sha256": "5d19b326b8082019f899648c625bb4060c18d884a464cc0ac86aea437fcc277a",
+              "corpus_evidence_sha256": "c92b27d0cb033aac2adb8cd968252576b28e619cd4fa9358b77270d8835661e3"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "766014257ba242d0b7807fe2bbcb07d004cc73d8843736756bdac1204013c8c5",
+          "required": true,
+          "replaces_job_id": "",
+          "revision_reason": "",
+          "revision_kind": ""
+        },
+        {
+          "protocol_version": 2,
+          "check_id": "attribution",
+          "work_item_id": "t4",
+          "criterion": "答复中归属于第三方（公司、分析师、媒体、政府机构）的观点准确标注说话主体与时间，推断性结论未被表述为资料库直接记载的事实",
+          "subject": {
+            "text": "第三方判断的归属需逐条标明：“开放权重前沿并未更接近领先专有模型”、“开源权重将再次落后闭源前沿 6–12 个月”、“低成本开放权重将承接大批量、定义明确的智能体任务并对 GPT-6.1 Sol 级定价构成下行压力”——这些是卖方研究机构在 2026-10-19 单模型点评与 2026-10-26 周报中的判断，不是 DeepSeek 或任何厂商的官方表态。台积电管理层在 2026-10-15 业绩电话会上称开源模型“在降低采用门槛”。Palantir 在 2026-11-03 的表述是开源模型性能提升对其“整体上是利好，但可能给部分模型提供商和服务供应商带来压力”。微软销售合作伙伴渠道访谈（2026-10-23）给出的开源占比口径互相不一致（约 4%–5%、不足 5%、不到 10%、20%–25%，样本与范围不同），不可合并为单一数字。Alphabet 2026 年第三季度资本开支 514 亿美元、全年指引 1950–2050 亿美元为该公司披露口径（2026-10-29 报道），资料库未将其归因于 DeepSeek。国产算力（昇腾 960、10T–20T 参数、2026–2027 年）是券商“以 V4.1 Flash 的优化逻辑推演”得出的推断，资料库中没有任何 DeepSeek 与国产芯片的适配公告。",
+            "sha256": "f56fbf29e3c2db6fa13638f434d382a9843d2cd941c22d6b5d4e98ca03c83c4b",
+            "key": "inline:f56fbf29e3c2db6fa13638f434d382a9843d2cd941c22d6b5d4e98ca03c83c4b"
+          },
+          "evidence": [
+            {
+              "job_id": "08f07d935509.job.2",
+              "ref": "",
+              "sha256": "852e056969ab5b5cbd33ea475184e97031eada6ad09c7050cba25f77c525e76a",
+              "key": "08f07d935509.job.2",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 10
+                }
+              ],
+              "acquisition_sha256": "ed61ef9c01c871c023f98ee9bf0fd8af1a6084b907de319de6acfc03ee1814b7",
+              "corpus_evidence_sha256": "4aa35b804369b59133fa18b73f2bd958f11a4fb75cb5c48bdfe3b1a2c9a64b21"
+            },
+            {
+              "job_id": "08f07d935509.job.3",
+              "ref": "",
+              "sha256": "22a90969fc62f418cdf80bccb65377f3d958bf4f245391dc67ff96c75b363d4f",
+              "key": "08f07d935509.job.3",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 10
+                }
+              ],
+              "acquisition_sha256": "5d19b326b8082019f899648c625bb4060c18d884a464cc0ac86aea437fcc277a",
+              "corpus_evidence_sha256": "c92b27d0cb033aac2adb8cd968252576b28e619cd4fa9358b77270d8835661e3"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "53e4537038c89a9c53d7b2ced99df33a607cc3facc47894182136fbe9da341dd",
+          "required": true,
+          "replaces_job_id": "",
+          "revision_reason": "",
+          "revision_kind": ""
+        }
+      ],
+      "verification_events": [
+        {
+          "check_id": "model_identity",
+          "binding_id": "925cb59239dd5785bf08311e71b1c81f07e5573bd8593b25f6a043dacee06f38",
+          "subject_sha256": "8bf55d8bd407acf1704edc822cace36a185363ff85c10f0698b70b11d50208a6",
+          "verdict": "pass",
+          "method": "Re-fetched the two bound corpus blocks by exact doc_id+locator (corpus_fetch compact) and compared the candidate sentence word-by-word against the originals: cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698 chunk:native1/1e86c00da4097c5c%3Abody%3A0000/730e09dd2f30c159 (p.1, 2026-10-19, ce:09d362f7e17fc2e7e75aa38449531ba0); cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4 chunk:native1/1eb8e6713c6bfac3%3Abody%3A0008/19dd5212216ef5ee (p.4, 2026-10-26, ce:ff134b62ec5a6b1b46e8163d19596520). Also re-read cv2:1e86… body:0003 (ce:5794b4aa955564f42b2386c2add1dd23) and cv2:e8a6d70d… body:0000 (2026-09-22, ce:d10f283447f8fa339befc2a966255382) to test the negative 'V4Pro/V4Flash 无发布日期' claim, and used job.1 coverage.native.cutoff for the 2026-11-05 bound.",
+          "detail": "PASS. Model string 'V4.1-Flash-1017', release '10 月 17 日', prior version '9 月 10 日上线' and 'API 模型名称保持不变' all appear verbatim in cv2:1e86…8698 body:0000 (p.1) and are independently restated in cv2:1eb8…acb4 body:0008 (p.4, 2026-10-26), so the candidate's cited doc_id+locator (body:0000/p.1; 周报 p.4) are correct and reproducible within the build versions. The year '2026' is not printed beside '10 月 17 日'; it is fixed by the documents' own dates (2026-10-19 / 2026-10-26), so no cross-year or cross-version inheritance is implied. '最新' rests on in-corpus date evidence (two documents agreeing on 10-17 plus cutoff 2026-11-05) and the negative is correctly stated as '本次检索未找到更晚的 DeepSeek 发布' rather than corpus-wide absence. The negative claims also hold: 'V4Pro' occurs only as an OmniaKey comparison object (body:0003) and 'V4Flash' only as a KV-cache baseline in the 2026-09-22 report, neither with a release date; the corpus prints no API model-name string, matching the candidate's caveat. No location error, no unit/quantity claim in this passage, no inference promoted to corpus-recorded fact.",
+          "evidence_keys": [
+            "08f07d935509.job.1",
+            "08f07d935509.job.3"
+          ],
+          "scope_assessment": {
+            "entity": {
+              "status": "match",
+              "detail": "Candidate's entity 'DeepSeek V4.1-Flash-1017, 对 V4.1 Flash 的更新' matches ce:09d362f7e17fc2e7e75aa38449531ba0 and ce:ff134b62ec5a6b1b46e8163d19596520 verbatim."
+            },
+            "version": {
+              "status": "match",
+              "detail": "Version string V4.1-Flash-1017 and the qualifier 'API 模型名称保持不变' are word-for-word from both bound blocks, and the candidate claims no architecture or measurement inheritance from the 9 月 version."
+            },
+            "date": {
+              "status": "match",
+              "detail": "'10 月 17 日' and '9 月 10 日' match verbatim, the year 2026 is fixed by the document dates 2026-10-19/2026-10-26 rather than by another revision, and the candidate's stated document date 2026-10-19 is correct for cv2:1e86…8698."
+            },
+            "units": {
+              "status": "not_applicable",
+              "detail": "This passage states only model names and dates; no quantities, prices or benchmark units are asserted, so no unit or statistical-basis comparison applies."
+            },
+            "conditions": {
+              "status": "match",
+              "detail": "The '最新' conclusion is scoped to the corpus search with cutoff 2026-11-05 and explicitly flags undated V4Pro/V4Flash as why later versions cannot be excluded — conditions preserved, not dropped."
+            },
+            "attribution": {
+              "status": "match",
+              "detail": "Claims are attributed to the corpus ('资料库记载') with doc_id and document dates rather than to DeepSeek officially, and the missing API name string is stated as a corpus gap, not as fact."
+            }
+          },
+          "unresolved_issues": [],
+          "job_id": "08f07d935509.job.4"
+        },
+        {
+          "check_id": "quant_claims",
+          "binding_id": "766014257ba242d0b7807fe2bbcb07d004cc73d8843736756bdac1204013c8c5",
+          "subject_sha256": "18a925f7467d5f62dadf2bfc31a0243b785d95b4453d50e987ef5f8e05340b47",
+          "verdict": "pass",
+          "method": "Item-by-item comparison of the candidate's 16 quantified claims against the bound corpus blocks re-read at block level: cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698 body:0000 (ce:09d362f7e17fc2e7e75aa38449531ba0 / ce:083266bc2072475324c0c3ba6e95ed2b), body:0001 (ce:95f3ad3383ccc709da553edc0f8539c4), body:0004 (ce:b1902b2cf4ee5b67bb61b9c52a5a5bc8); cv2:e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623 body:0000, 2026-09-22 (ce:d10f283447f8fa339befc2a966255382). Checked entity/version/date/unit/statistical basis for each number and whether the September-report architecture figures were attributed to 1017.",
+          "detail": "PASS. Each figure was matched to its block: 0.30/1.20 USD per M input/output tokens, 50% 错峰折扣 and MIT licence from cv2:1e86…8698 body:0000 (ce:09d362f7…/ce:083266bc…); 31.2→42.3 Terminal-Bench 4.0, 74.2→77.0 DeepSWE, '11 项全优前代' and 9/11 胜过 GPT-5.6 Sol from the same block verbatim; Astra 58.2 / Opus 5.5 66.4 (Google 发布页) and AA 59%/60% with 'AA 尚未测试 1017' from body:0001 (ce:95f3ad3383ccc709da553edc0f8539c4), whose '截至 10 月 19 日' matches the candidate's 2026-10-19; 9 月版 AA 指数 39 and the 44–46 band (MiMo 46 / GLM-5.3 45 / Kimi K3 44) from the same block; 第三方托管 0.10/0.50, Haiku 5.5 ≤100k 提示 0.10/0.50, AA 单任务成本 0.21 vs 0.27 from body:0004 (ce:b1902b2cf4ee5b67bb61b9c52a5a5bc8), with the ≤100,000 Token condition retained; 8B/16B per-token activation and Global≈1/4 / Persistent≈1/8 KV cache from cv2:e8a6d70d… body:0000 (2026-09-22, ce:d10f283447f8fa339befc2a966255382), which the candidate explicitly labels as describing V4.1 Flash and not 1017 — the required cross-version separation is present. Units are consistent (USD per million tokens; percentages; USD per task), the AA-vs-DeepSWE incomparability and the V4Flash comparison base are preserved, and the closing corpus-gap statement (no total parameter count, context length or training cost) matches job.1 §F. Only nuance: the original words the 0.21/0.27 pair as '接近', while the candidate lists both figures without asserting equality — not a misstatement of value, unit or basis.",
+          "evidence_keys": [
+            "08f07d935509.job.1",
+            "08f07d935509.job.2",
+            "08f07d935509.job.3"
+          ],
+          "scope_assessment": {
+            "entity": {
+              "status": "match",
+              "detail": "Every figure is attached to the same entity as the original: 1017 for 0.30/1.20, 31.2→42.3, 74.2→77.0 and 9/11; V4.1 Flash (September version) for AA 39 and 0.27; Haiku 5.5 for ≤100k 0.10/0.50 and 0.21; Astra/Opus 5.5 for 58.2/66.4/59%/60%; V4.1 Flash for 8B/16B and the KV-cache ratios."
+            },
+            "version": {
+              "status": "match",
+              "detail": "The candidate keeps the 1017 and September-V4.1-Flash figures separate and explicitly states the architecture numbers describe V4.1 Flash, not 1017, so no September measurements are inherited by the October update."
+            },
+            "date": {
+              "status": "match",
+              "detail": "2026-10-19 (AA cutoff, doc date), 2026-09-22 (architecture report) and the '9 月版' designation all align with the bound document dates and with ce:95f3ad33…/ce:d10f2834…, with no October-figure reuse of September measurements."
+            },
+            "units": {
+              "status": "match",
+              "detail": "USD per million input/output tokens, percentages, USD per task and 'B' parameters are used in the same sense as ce:09d362f7…, ce:b1902b2c… and ce:d10f2834…, with no per-token vs per-task or million-token vs total-price mixing."
+            },
+            "conditions": {
+              "status": "match",
+              "detail": "The Haiku 5.5 price is qualified by '≤100k token 提示', the KV-cache ratios keep their V4Flash base and '约', the AA/DeepSWE figures are flagged as not comparable across sources, and the architecture numbers are scoped to the 2026-09-22 V4.1 Flash report rather than 1017."
+            },
+            "attribution": {
+              "status": "match",
+              "detail": "The candidate opens with '均为资料库转述，非一手发布页', attributes 58.2/66.4 to Google 发布页, 59%/60%/0.21/0.27/39 to AA and 9/11 to DeepSeek's own model card, matching ce:09d362f7…, ce:95f3ad33… and ce:b1902b2c…."
+            }
+          },
+          "unresolved_issues": [],
+          "job_id": "08f07d935509.job.4"
+        },
+        {
+          "check_id": "attribution",
+          "binding_id": "53e4537038c89a9c53d7b2ced99df33a607cc3facc47894182136fbe9da341dd",
+          "subject_sha256": "f56fbf29e3c2db6fa13638f434d382a9843d2cd941c22d6b5d4e98ca03c83c4b",
+          "verdict": "fail",
+          "method": "Traced each attributed view to its block and speaker marker: cv2:87694bc4… (2026-11-03, PLTR FY26Q3 点评) via chunk:native1/87694bc48168441d%3Abody%3A0003/7c76c2005c5c5bf0 (ce:c4c495e519945a66e89e30934687bf48) plus a targeted corpus_search on the same doc that returned '管理层将这一方式形容为…' and '财报电话会议日期：2026 年 11 月 2 日'; cv2:1e86…8698 body:0005/0006 for the sell-side judgments; cv2:1eb8…acb4 body:0008 (re-fetched) to test the weekly co-citation; cv2:27d18ab7… for TSMC; eref:11e675d8…:3 for Alphabet capex; cv2:e8a6d70d… body:0000 for the domestic-compute inference.",
+          "detail": "FAIL on one attribution and one date item; the rest of the paragraph verifies. (1) Speaker error: 'Palantir 在 2026-11-03 的表述是开源模型性能提升对其“整体上是利好，但可能给部分模型提供商和服务供应商带来压力”' — in cv2:87694bc48168441d212f74ac9317ee420ea82f623f19a555e6ecb40ad5342174 (title 开源模型的影响, 2026-11-03) the sentence is unmarked third-person analyst text ('开源模型性能的提升对 Palantir 整体上是利好'), while the same document marks genuine company statements explicitly ('管理层将这一方式形容为“将超额收益（alpha）训练进模型”', 'Palantir 披露，…'), so the speaker is the sell-side note, not Palantir. Correct wording: '2026-11-03 的 PLTR FY26Q3 点评判断，开源模型性能提升对 Palantir 整体是利好，但可能给部分模型提供商和服务供应商带来压力'. (2) Date conflation: if the company is the speaker, the event date is the 2026-11-02 earnings call ('26Q3…财报电话会议日期：2026 年 11 月 2 日', same document), not the 2026-11-03 publication date. (3) Unconfirmed co-citation: the '6 到 12 个月' and 'GPT-6.1 Sol 级定价下行压力' judgments were verified only in the 2026-10-19 note (cv2:1e86…8698 body:0005 ce:524a6b017c81f53cf046f39601f7e10d; body:0006 ce:e25ce5803bf1d1b15033ce2f2aada5dc); the 2026-10-26 weekly block re-fetched (cv2:1eb8…acb4 body:0008, p.4, ce:ff134b62ec5a6b1b46e8163d19596520) carries pricing/benchmarks/MIT but not those two judgments, so '与 2026-10-26 周报中的判断' is not supported for them. (4) '不足 5%' is listed among the Microsoft 口径 but appears only in job.3's conflict list, not in a delivered excerpt. Verified-correct parts: the three sell-side judgments are correctly labelled 卖方研究机构 and not official DeepSeek statements; 台积电管理层 (cv2:27d18ab7…, 2026-10-15, eref:eaa141d506f8650af762083c927f4ab87ead5fb90cc219e38a66877f96c3c2de:1) is correctly attributed; Alphabet 514 亿美元 / 1950–2050 亿美元 (eref:11e675d83d48d252cf4545963a2c4bb58e92b91be75c279ba98a39a143f95eba:3) is correctly framed as 公司披露口径 / 2026-10-29 报道 and explicitly not attributed to DeepSeek; 国产算力 (cv2:e8a6d70d… body:0000, 2026-09-22, ce:d10f283447f8fa339befc2a966255382) is correctly preserved as 券商推演/推断 with no adaptation announcement; the four Microsoft share 口径 are kept separate as incomparable.",
+          "evidence_keys": [
+            "08f07d935509.job.2",
+            "08f07d935509.job.3"
+          ],
+          "scope_assessment": {
+            "entity": {
+              "status": "mismatch",
+              "detail": "The speaker entity of the Palantir sentence is mislabelled (Palantir vs the research note), while TSMC 管理层, Alphabet and the 券商 behind the 昇腾 960 projection are identified correctly."
+            },
+            "version": {
+              "status": "unknown",
+              "detail": "The joint citation to the 2026-10-26 weekly is unconfirmed for the 6–12 月 and GPT-6.1 Sol pricing-pressure judgments, which the re-fetched weekly block body:0008 (p.4) does not contain, so that co-citation cannot be checked as stated."
+            },
+            "date": {
+              "status": "mismatch",
+              "detail": "2026-11-03 is the publication date of the PLTR note, whose underlying earnings call is dated 2026-11-02 in the same document, so a Palantir statement cannot be dated 2026-11-03; the 2026-10-15 TSMC, 2026-10-23 Microsoft and 2026-10-29 Alphabet dates match their documents."
+            },
+            "units": {
+              "status": "match",
+              "detail": "514 亿美元 Q3 capex and 1950–2050 亿美元 full-year guidance match eref:11e675d8…:3 verbatim in value and unit, and the Microsoft shares are labelled as percentages of differing scopes."
+            },
+            "conditions": {
+              "status": "match",
+              "detail": "The domestic-compute passage keeps its '以 V4.1 Flash 的优化逻辑推演' framing, the Alphabet capex is marked as company-disclosed and not DeepSeek-attributed, and the four Microsoft share figures are kept as incompatible 口径 rather than merged."
+            },
+            "attribution": {
+              "status": "mismatch",
+              "detail": "The Palantir sentence is labelled as Palantir's own statement although the source presents it as the sell-side note's third-person judgement, while the three sell-side views, TSMC management, Alphabet disclosure and the brokerage inference are all correctly attributed."
+            }
+          },
+          "unresolved_issues": [
+            "Palantir sentence attributed to Palantir as speaker; source cv2:87694bc4… presents it as the note's own third-person judgement ('开源模型性能的提升对 Palantir 整体上是利好'), with company statements separately marked ('管理层将…形容为', 'Palantir 披露').",
+            "Date conflated: 2026-11-03 is the note's publication date; the underlying PLTR 26Q3 earnings call is dated 2026-11-02 in the same document.",
+            "Co-citation of the 2026-10-26 weekly for the '6 到 12 个月' and 'GPT-6.1 Sol 级定价下行压力' judgments is not confirmed — those were verified only in the 2026-10-19 note; weekly block body:0008 (p.4) does not carry them.",
+            "'不足 5%' Microsoft open-source share figure is not in any delivered excerpt (only in job.3's conflict list), so it could not be compared to the original."
+          ],
+          "job_id": "08f07d935509.job.4"
+        }
+      ],
+      "coverage_status": "incomplete",
+      "coverage_resolved_by": [
+        {
+          "check_id": "model_identity",
+          "job_id": "08f07d935509.job.4",
+          "binding_id": "925cb59239dd5785bf08311e71b1c81f07e5573bd8593b25f6a043dacee06f38"
+        },
+        {
+          "check_id": "quant_claims",
+          "job_id": "08f07d935509.job.4",
+          "binding_id": "766014257ba242d0b7807fe2bbcb07d004cc73d8843736756bdac1204013c8c5"
+        }
+      ]
+    },
+    {
+      "job_id": "08f07d935509.job.5",
+      "agent": "corpus_claim_verifier",
+      "required": true,
+      "status": "incomplete",
+      "reason": "max_turns",
+      "source": "tool_observations",
+      "content_acquisition": [
+        {
+          "tool": "corpus_search",
+          "source": "台积电 业绩电话会 开源模型 降低采用门槛",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 3,
+              "sources_filtered": 0,
+              "filter_reasons": {},
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 7608,
+              "char_budget": 16000,
+              "hit_limit": 3,
+              "block_limit": 20,
+              "blocks_returned": 12,
+              "blocks_ranked": 339,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope"
+            ]
+          }
+        },
+        {
+          "tool": "corpus_search",
+          "source": "Palantir 26Q3 财报电话会议日期 2026 年 11 月 2 日",
+          "obtained": true,
+          "status": "success",
+          "coverage": {
+            "processing": "partial",
+            "availability": "unknown",
+            "query_status": "matched",
+            "retrieval_mode": "hybrid",
+            "fallback_reason": null,
+            "purity": {
+              "policy": "native-purity-v1",
+              "sources_considered": 3,
+              "sources_filtered": 1,
+              "filter_reasons": {
+                "weak_topic_coverage": 1
+              },
+              "scope": "bounded_candidates_not_corpus_absence"
+            },
+            "native": {
+              "policy": "native1",
+              "index_id": "40ac53fb23da4264e6db9be7a779358c2bca474e999f1f058a0f9dafda75c103",
+              "sources": 81,
+              "chunks": 1769,
+              "ready_vectors": 1769,
+              "body_characters": 3381,
+              "char_budget": 16000,
+              "hit_limit": 3,
+              "block_limit": 20,
+              "blocks_returned": 19,
+              "blocks_ranked": 336,
+              "cutoff": "2026-11-05",
+              "unknown_date_sources": [
+                "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+                "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+                "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+                "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+                "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+                "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+                "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+                "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+                "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+                "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+                "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+                "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+                "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+                "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+                "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+                "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+                "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+                "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+                "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+                "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+                "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1"
+              ]
+            },
+            "reason_codes": [
+              "native_prose_scope",
+              "native_purity_filtered"
+            ]
+          }
+        }
+      ],
+      "verification_checks": [
+        {
+          "protocol_version": 2,
+          "check_id": "attribution",
+          "work_item_id": "t4",
+          "criterion": "答复中归属于第三方（公司、分析师、媒体、政府机构）的观点准确标注说话主体与时间，推断性结论未被表述为资料库直接记载的事实",
+          "subject": {
+            "text": "第三方判断的归属需逐条标明：“开放权重前沿并未更接近领先专有模型”、“开源权重将再次落后闭源前沿 6–12 个月”、“低成本开放权重将承接大批量、定义明确的智能体任务并对 GPT-6.1 Sol 级定价构成下行压力”——这三条是卖方研究机构 2026-10-19 单模型点评中的判断，不是 DeepSeek 或任何厂商的官方表态。台积电管理层在 2026-10-15 业绩电话会上称开源模型“在降低采用门槛”。2026-11-03 的 PLTR FY26Q3 点评判断，开源模型性能提升对 Palantir 整体是利好，但可能给部分模型提供商和服务供应商带来压力（该句为点评本身的第三人称判断，非 Palantir 公司口径；相关财报电话会日期为 2026-11-02）。微软销售合作伙伴渠道访谈（2026-10-23）给出的开源占比口径互相不一致且分母不同：某合作伙伴估计其约 25% 的 Azure AI 客户已在生产环境使用开源模型，但开源模型在其客户的 Azure 模型消耗中仅占约 4%–5%；另一合作伙伴称在其大型微软企业客户组合中开源模型约占模型支出的 20%–25%，不可合并为单一数字。Alphabet 2026 年第三季度资本开支 514 亿美元、全年指引 1950–2050 亿美元为该公司披露口径（2026-10-29 报道），资料库未将其归因于 DeepSeek。国产算力（昇腾 960、10T–20T 参数、2026–2027 年）是券商“以 V4.1 Flash 的优化逻辑推演”得出的推断，资料库中没有任何 DeepSeek 与国产芯片的适配公告。",
+            "sha256": "413429ab7d84e0973fc43225d58a8e8b84c1bbc4cfe12d98ee5c61720ca7688a",
+            "key": "inline:413429ab7d84e0973fc43225d58a8e8b84c1bbc4cfe12d98ee5c61720ca7688a"
+          },
+          "evidence": [
+            {
+              "job_id": "08f07d935509.job.2",
+              "ref": "",
+              "sha256": "852e056969ab5b5cbd33ea475184e97031eada6ad09c7050cba25f77c525e76a",
+              "key": "08f07d935509.job.2",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 10
+                }
+              ],
+              "acquisition_sha256": "ed61ef9c01c871c023f98ee9bf0fd8af1a6084b907de319de6acfc03ee1814b7",
+              "corpus_evidence_sha256": "4aa35b804369b59133fa18b73f2bd958f11a4fb75cb5c48bdfe3b1a2c9a64b21"
+            },
+            {
+              "job_id": "08f07d935509.job.3",
+              "ref": "",
+              "sha256": "22a90969fc62f418cdf80bccb65377f3d958bf4f245391dc67ff96c75b363d4f",
+              "key": "08f07d935509.job.3",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 10
+                }
+              ],
+              "acquisition_sha256": "5d19b326b8082019f899648c625bb4060c18d884a464cc0ac86aea437fcc277a",
+              "corpus_evidence_sha256": "c92b27d0cb033aac2adb8cd968252576b28e619cd4fa9358b77270d8835661e3"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "10a5251d99bf393b255a62a3bd4b23557125cb5e233384349806aba1a395a05e",
+          "required": true,
+          "replaces_job_id": "08f07d935509.job.4",
+          "revision_reason": "修正上一轮 FAIL 的四处：将 Palantir 那句话的说话主体从 Palantir 改为 2026-11-03 的 PLTR FY26Q3 点评本身并补注电话会日期 2026-11-02；删除对 2026-10-26 周报的共同引用；删除未能回查的“不足 5%”口径，保留可回查且分母可区分的两个口径。其余已验证正确的归属表述未动。",
+          "revision_kind": "subject"
+        }
+      ],
+      "verification_events": [],
+      "coverage_status": "incomplete",
+      "coverage_resolved_by": []
+    }
+  ],
+  "required_work_basis": "dispatch_declared",
+  "verification": "partial",
+  "verification_basis": "version_bound_member_verdicts",
+  "verification_checks": [
+    {
+      "check_id": "model_identity",
+      "work_item_id": "t4",
+      "criterion": "答复中'DeepSeek 最新模型'的型号全名、版本号、发布日期与资料库原文逐项一致，doc_id+locator 可复现，且'最新'的判定有资料库内日期依据",
+      "binding_id": "925cb59239dd5785bf08311e71b1c81f07e5573bd8593b25f6a043dacee06f38",
+      "required": true,
+      "factual_scope": true,
+      "publication_excerpt": true,
+      "verdict": "pass",
+      "subject": {
+        "text": "资料库记载的最新 DeepSeek 模型是 DeepSeek V4.1-Flash-1017：2026 年 10 月 17 日发布，是对 2026 年 9 月 10 日上线的 V4.1 Flash 的更新，API 模型名称保持不变（doc cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698，locator body:0000 / p.1，文档日期 2026-10-19）。判定“最新”的依据是：该文档与 2026-10-26 周报（doc cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4，p.4）都指向 10 月 17 日，且资料库截止日为 2026-11-05，本次检索未找到更晚的 DeepSeek 发布。需要说明：资料库未给出 API 模型名的实际字符串；另有 V4Pro、V4Flash 两个型号在资料库中出现但无发布日期，无法排除存在未被记载的更晚版本。",
+        "sha256": "8bf55d8bd407acf1704edc822cace36a185363ff85c10f0698b70b11d50208a6",
+        "key": "inline:8bf55d8bd407acf1704edc822cace36a185363ff85c10f0698b70b11d50208a6"
+      },
+      "evidence": [
+        {
+          "job_id": "08f07d935509.job.1",
+          "ref": "",
+          "sha256": "57cf2a7360f98f7e47a4d3b78412f1c582f03f0d9c3fd63eebb6ef6a8a429291",
+          "key": "08f07d935509.job.1",
+          "corpus_limits": [
+            {
+              "tool": "corpus_search",
+              "obtained": true,
+              "coverage": {
+                "processing": "partial",
+                "availability": "unknown",
+                "purity": {
+                  "scope": "bounded_candidates_not_corpus_absence"
+                },
+                "native": {
+                  "unknown_date_sources": true
+                }
+              },
+              "limited_observations": 9
+            }
+          ],
+          "acquisition_sha256": "1a2c8197d3e8dc124f68a502d6e95ea6e8c5bd21c8be9f14f3642b6f6c122d4b",
+          "corpus_evidence_sha256": "7ca3a116b909859d199ea3ae72961c73a4a910d3198d2747f96c4a9d07ba79d1"
+        },
+        {
+          "job_id": "08f07d935509.job.3",
+          "ref": "",
+          "sha256": "22a90969fc62f418cdf80bccb65377f3d958bf4f245391dc67ff96c75b363d4f",
+          "key": "08f07d935509.job.3",
+          "corpus_limits": [
+            {
+              "tool": "corpus_search",
+              "obtained": true,
+              "coverage": {
+                "processing": "partial",
+                "availability": "unknown",
+                "purity": {
+                  "scope": "bounded_candidates_not_corpus_absence"
+                },
+                "native": {
+                  "unknown_date_sources": true
+                }
+              },
+              "limited_observations": 10
+            }
+          ],
+          "acquisition_sha256": "5d19b326b8082019f899648c625bb4060c18d884a464cc0ac86aea437fcc277a",
+          "corpus_evidence_sha256": "c92b27d0cb033aac2adb8cd968252576b28e619cd4fa9358b77270d8835661e3"
+        }
+      ],
+      "job_id": "08f07d935509.job.4",
+      "verdict_job_id": "08f07d935509.job.4",
+      "result": {
+        "check_id": "model_identity",
+        "binding_id": "925cb59239dd5785bf08311e71b1c81f07e5573bd8593b25f6a043dacee06f38",
+        "subject_sha256": "8bf55d8bd407acf1704edc822cace36a185363ff85c10f0698b70b11d50208a6",
+        "verdict": "pass",
+        "method": "Re-fetched the two bound corpus blocks by exact doc_id+locator (corpus_fetch compact) and compared the candidate sentence word-by-word against the originals: cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698 chunk:native1/1e86c00da4097c5c%3Abody%3A0000/730e09dd2f30c159 (p.1, 2026-10-19, ce:09d362f7e17fc2e7e75aa38449531ba0); cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4 chunk:native1/1eb8e6713c6bfac3%3Abody%3A0008/19dd5212216ef5ee (p.4, 2026-10-26, ce:ff134b62ec5a6b1b46e8163d19596520). Also re-read cv2:1e86… body:0003 (ce:5794b4aa955564f42b2386c2add1dd23) and cv2:e8a6d70d… body:0000 (2026-09-22, ce:d10f283447f8fa339befc2a966255382) to test the negative 'V4Pro/V4Flash 无发布日期' claim, and used job.1 coverage.native.cutoff for the 2026-11-05 bound.",
+        "detail": "PASS. Model string 'V4.1-Flash-1017', release '10 月 17 日', prior version '9 月 10 日上线' and 'API 模型名称保持不变' all appear verbatim in cv2:1e86…8698 body:0000 (p.1) and are independently restated in cv2:1eb8…acb4 body:0008 (p.4, 2026-10-26), so the candidate's cited doc_id+locator (body:0000/p.1; 周报 p.4) are correct and reproducible within the build versions. The year '2026' is not printed beside '10 月 17 日'; it is fixed by the documents' own dates (2026-10-19 / 2026-10-26), so no cross-year or cross-version inheritance is implied. '最新' rests on in-corpus date evidence (two documents agreeing on 10-17 plus cutoff 2026-11-05) and the negative is correctly stated as '本次检索未找到更晚的 DeepSeek 发布' rather than corpus-wide absence. The negative claims also hold: 'V4Pro' occurs only as an OmniaKey comparison object (body:0003) and 'V4Flash' only as a KV-cache baseline in the 2026-09-22 report, neither with a release date; the corpus prints no API model-name string, matching the candidate's caveat. No location error, no unit/quantity claim in this passage, no inference promoted to corpus-recorded fact.",
+        "evidence_keys": [
+          "08f07d935509.job.1",
+          "08f07d935509.job.3"
+        ],
+        "scope_assessment": {
+          "entity": {
+            "status": "match",
+            "detail": "Candidate's entity 'DeepSeek V4.1-Flash-1017, 对 V4.1 Flash 的更新' matches ce:09d362f7e17fc2e7e75aa38449531ba0 and ce:ff134b62ec5a6b1b46e8163d19596520 verbatim."
+          },
+          "version": {
+            "status": "match",
+            "detail": "Version string V4.1-Flash-1017 and the qualifier 'API 模型名称保持不变' are word-for-word from both bound blocks, and the candidate claims no architecture or measurement inheritance from the 9 月 version."
+          },
+          "date": {
+            "status": "match",
+            "detail": "'10 月 17 日' and '9 月 10 日' match verbatim, the year 2026 is fixed by the document dates 2026-10-19/2026-10-26 rather than by another revision, and the candidate's stated document date 2026-10-19 is correct for cv2:1e86…8698."
+          },
+          "units": {
+            "status": "not_applicable",
+            "detail": "This passage states only model names and dates; no quantities, prices or benchmark units are asserted, so no unit or statistical-basis comparison applies."
+          },
+          "conditions": {
+            "status": "match",
+            "detail": "The '最新' conclusion is scoped to the corpus search with cutoff 2026-11-05 and explicitly flags undated V4Pro/V4Flash as why later versions cannot be excluded — conditions preserved, not dropped."
+          },
+          "attribution": {
+            "status": "match",
+            "detail": "Claims are attributed to the corpus ('资料库记载') with doc_id and document dates rather than to DeepSeek officially, and the missing API name string is stated as a corpus gap, not as fact."
+          }
+        },
+        "unresolved_issues": [],
+        "job_id": "08f07d935509.job.4"
+      },
+      "attempts": [
+        {
+          "protocol_version": 2,
+          "check_id": "model_identity",
+          "work_item_id": "t4",
+          "criterion": "答复中'DeepSeek 最新模型'的型号全名、版本号、发布日期与资料库原文逐项一致，doc_id+locator 可复现，且'最新'的判定有资料库内日期依据",
+          "subject": {
+            "text": "资料库记载的最新 DeepSeek 模型是 DeepSeek V4.1-Flash-1017：2026 年 10 月 17 日发布，是对 2026 年 9 月 10 日上线的 V4.1 Flash 的更新，API 模型名称保持不变（doc cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698，locator body:0000 / p.1，文档日期 2026-10-19）。判定“最新”的依据是：该文档与 2026-10-26 周报（doc cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4，p.4）都指向 10 月 17 日，且资料库截止日为 2026-11-05，本次检索未找到更晚的 DeepSeek 发布。需要说明：资料库未给出 API 模型名的实际字符串；另有 V4Pro、V4Flash 两个型号在资料库中出现但无发布日期，无法排除存在未被记载的更晚版本。",
+            "sha256": "8bf55d8bd407acf1704edc822cace36a185363ff85c10f0698b70b11d50208a6",
+            "key": "inline:8bf55d8bd407acf1704edc822cace36a185363ff85c10f0698b70b11d50208a6"
+          },
+          "evidence": [
+            {
+              "job_id": "08f07d935509.job.1",
+              "ref": "",
+              "sha256": "57cf2a7360f98f7e47a4d3b78412f1c582f03f0d9c3fd63eebb6ef6a8a429291",
+              "key": "08f07d935509.job.1",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 9
+                }
+              ],
+              "acquisition_sha256": "1a2c8197d3e8dc124f68a502d6e95ea6e8c5bd21c8be9f14f3642b6f6c122d4b",
+              "corpus_evidence_sha256": "7ca3a116b909859d199ea3ae72961c73a4a910d3198d2747f96c4a9d07ba79d1"
+            },
+            {
+              "job_id": "08f07d935509.job.3",
+              "ref": "",
+              "sha256": "22a90969fc62f418cdf80bccb65377f3d958bf4f245391dc67ff96c75b363d4f",
+              "key": "08f07d935509.job.3",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 10
+                }
+              ],
+              "acquisition_sha256": "5d19b326b8082019f899648c625bb4060c18d884a464cc0ac86aea437fcc277a",
+              "corpus_evidence_sha256": "c92b27d0cb033aac2adb8cd968252576b28e619cd4fa9358b77270d8835661e3"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "925cb59239dd5785bf08311e71b1c81f07e5573bd8593b25f6a043dacee06f38",
+          "required": true,
+          "replaces_job_id": "",
+          "revision_reason": "",
+          "revision_kind": "",
+          "job_id": "08f07d935509.job.4",
+          "execution_status": "complete",
+          "valid_lineage": true,
+          "verdict": "pass",
+          "events": [
+            {
+              "check_id": "model_identity",
+              "binding_id": "925cb59239dd5785bf08311e71b1c81f07e5573bd8593b25f6a043dacee06f38",
+              "subject_sha256": "8bf55d8bd407acf1704edc822cace36a185363ff85c10f0698b70b11d50208a6",
+              "verdict": "pass",
+              "method": "Re-fetched the two bound corpus blocks by exact doc_id+locator (corpus_fetch compact) and compared the candidate sentence word-by-word against the originals: cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698 chunk:native1/1e86c00da4097c5c%3Abody%3A0000/730e09dd2f30c159 (p.1, 2026-10-19, ce:09d362f7e17fc2e7e75aa38449531ba0); cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4 chunk:native1/1eb8e6713c6bfac3%3Abody%3A0008/19dd5212216ef5ee (p.4, 2026-10-26, ce:ff134b62ec5a6b1b46e8163d19596520). Also re-read cv2:1e86… body:0003 (ce:5794b4aa955564f42b2386c2add1dd23) and cv2:e8a6d70d… body:0000 (2026-09-22, ce:d10f283447f8fa339befc2a966255382) to test the negative 'V4Pro/V4Flash 无发布日期' claim, and used job.1 coverage.native.cutoff for the 2026-11-05 bound.",
+              "detail": "PASS. Model string 'V4.1-Flash-1017', release '10 月 17 日', prior version '9 月 10 日上线' and 'API 模型名称保持不变' all appear verbatim in cv2:1e86…8698 body:0000 (p.1) and are independently restated in cv2:1eb8…acb4 body:0008 (p.4, 2026-10-26), so the candidate's cited doc_id+locator (body:0000/p.1; 周报 p.4) are correct and reproducible within the build versions. The year '2026' is not printed beside '10 月 17 日'; it is fixed by the documents' own dates (2026-10-19 / 2026-10-26), so no cross-year or cross-version inheritance is implied. '最新' rests on in-corpus date evidence (two documents agreeing on 10-17 plus cutoff 2026-11-05) and the negative is correctly stated as '本次检索未找到更晚的 DeepSeek 发布' rather than corpus-wide absence. The negative claims also hold: 'V4Pro' occurs only as an OmniaKey comparison object (body:0003) and 'V4Flash' only as a KV-cache baseline in the 2026-09-22 report, neither with a release date; the corpus prints no API model-name string, matching the candidate's caveat. No location error, no unit/quantity claim in this passage, no inference promoted to corpus-recorded fact.",
+              "evidence_keys": [
+                "08f07d935509.job.1",
+                "08f07d935509.job.3"
+              ],
+              "scope_assessment": {
+                "entity": {
+                  "status": "match",
+                  "detail": "Candidate's entity 'DeepSeek V4.1-Flash-1017, 对 V4.1 Flash 的更新' matches ce:09d362f7e17fc2e7e75aa38449531ba0 and ce:ff134b62ec5a6b1b46e8163d19596520 verbatim."
+                },
+                "version": {
+                  "status": "match",
+                  "detail": "Version string V4.1-Flash-1017 and the qualifier 'API 模型名称保持不变' are word-for-word from both bound blocks, and the candidate claims no architecture or measurement inheritance from the 9 月 version."
+                },
+                "date": {
+                  "status": "match",
+                  "detail": "'10 月 17 日' and '9 月 10 日' match verbatim, the year 2026 is fixed by the document dates 2026-10-19/2026-10-26 rather than by another revision, and the candidate's stated document date 2026-10-19 is correct for cv2:1e86…8698."
+                },
+                "units": {
+                  "status": "not_applicable",
+                  "detail": "This passage states only model names and dates; no quantities, prices or benchmark units are asserted, so no unit or statistical-basis comparison applies."
+                },
+                "conditions": {
+                  "status": "match",
+                  "detail": "The '最新' conclusion is scoped to the corpus search with cutoff 2026-11-05 and explicitly flags undated V4Pro/V4Flash as why later versions cannot be excluded — conditions preserved, not dropped."
+                },
+                "attribution": {
+                  "status": "match",
+                  "detail": "Claims are attributed to the corpus ('资料库记载') with doc_id and document dates rather than to DeepSeek officially, and the missing API name string is stated as a corpus gap, not as fact."
+                }
+              },
+              "unresolved_issues": [],
+              "job_id": "08f07d935509.job.4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "check_id": "quant_claims",
+      "work_item_id": "t4",
+      "criterion": "答复中每个量化主张（基准分数、API 价格、训练/推理成本、参数量、市场份额）在实体、版本、日期、单位、统计口径上与资料库原文一致，无跨版本/跨单位误用",
+      "binding_id": "766014257ba242d0b7807fe2bbcb07d004cc73d8843736756bdac1204013c8c5",
+      "required": true,
+      "factual_scope": true,
+      "publication_excerpt": true,
+      "verdict": "pass",
+      "subject": {
+        "text": "价格与基准（均为资料库转述，非一手发布页）：官方 API 定价为每百万输入 token 0.30 美元、每百万输出 token 1.20 美元，另有 50% 错峰折扣；权重以 MIT 许可证开放。DeepSeek 自报 11 项基准全部优于前代，其中 Terminal-Bench 4.0 从 31.2 升至 42.3，DeepSWE 从 74.2 升至 77.0，并称 11 项中 9 项胜过 GPT-5.6 Sol。这些数字不能与第三方同台比较：Google 发布页列 Astra 58.2、Opus 5.5 66.4，Artificial Analysis 独立测得 Astra 59%、Opus 5.5 60%，且截至 2026-10-19 AA 尚未测试 1017；9 月版 V4.1 Flash 的 AA 智能指数为 39，而领先开放权重模型在 44–46（MiMo-V2.6 Pro 46、GLM-5.3 45、Kimi K3 44）。价格战的另一端：第三方托管报价已低至每百万输入/输出 0.10/0.50 美元，低于 DeepSeek 官方费率；闭源入门级 Haiku 5.5 在 ≤100k token 提示下也是 0.10/0.50 美元，AA 单任务成本 0.21 美元，而 9 月版 V4.1 Flash 为 0.27 美元。架构侧，资料库（2026-09-22 报告，描述对象是 V4.1 Flash 而非 1017）记载 Prefill/Decode 每 token 仅激活约 8B/16B 参数，Global KV Cache 降至 V4Flash 的约 1/4、Persistent KV Cache 降至约 1/8，但未给出总参数量、上下文长度与训练成本。",
+        "sha256": "18a925f7467d5f62dadf2bfc31a0243b785d95b4453d50e987ef5f8e05340b47",
+        "key": "inline:18a925f7467d5f62dadf2bfc31a0243b785d95b4453d50e987ef5f8e05340b47"
+      },
+      "evidence": [
+        {
+          "job_id": "08f07d935509.job.1",
+          "ref": "",
+          "sha256": "57cf2a7360f98f7e47a4d3b78412f1c582f03f0d9c3fd63eebb6ef6a8a429291",
+          "key": "08f07d935509.job.1",
+          "corpus_limits": [
+            {
+              "tool": "corpus_search",
+              "obtained": true,
+              "coverage": {
+                "processing": "partial",
+                "availability": "unknown",
+                "purity": {
+                  "scope": "bounded_candidates_not_corpus_absence"
+                },
+                "native": {
+                  "unknown_date_sources": true
+                }
+              },
+              "limited_observations": 9
+            }
+          ],
+          "acquisition_sha256": "1a2c8197d3e8dc124f68a502d6e95ea6e8c5bd21c8be9f14f3642b6f6c122d4b",
+          "corpus_evidence_sha256": "7ca3a116b909859d199ea3ae72961c73a4a910d3198d2747f96c4a9d07ba79d1"
+        },
+        {
+          "job_id": "08f07d935509.job.2",
+          "ref": "",
+          "sha256": "852e056969ab5b5cbd33ea475184e97031eada6ad09c7050cba25f77c525e76a",
+          "key": "08f07d935509.job.2",
+          "corpus_limits": [
+            {
+              "tool": "corpus_search",
+              "obtained": true,
+              "coverage": {
+                "processing": "partial",
+                "availability": "unknown",
+                "purity": {
+                  "scope": "bounded_candidates_not_corpus_absence"
+                },
+                "native": {
+                  "unknown_date_sources": true
+                }
+              },
+              "limited_observations": 10
+            }
+          ],
+          "acquisition_sha256": "ed61ef9c01c871c023f98ee9bf0fd8af1a6084b907de319de6acfc03ee1814b7",
+          "corpus_evidence_sha256": "4aa35b804369b59133fa18b73f2bd958f11a4fb75cb5c48bdfe3b1a2c9a64b21"
+        },
+        {
+          "job_id": "08f07d935509.job.3",
+          "ref": "",
+          "sha256": "22a90969fc62f418cdf80bccb65377f3d958bf4f245391dc67ff96c75b363d4f",
+          "key": "08f07d935509.job.3",
+          "corpus_limits": [
+            {
+              "tool": "corpus_search",
+              "obtained": true,
+              "coverage": {
+                "processing": "partial",
+                "availability": "unknown",
+                "purity": {
+                  "scope": "bounded_candidates_not_corpus_absence"
+                },
+                "native": {
+                  "unknown_date_sources": true
+                }
+              },
+              "limited_observations": 10
+            }
+          ],
+          "acquisition_sha256": "5d19b326b8082019f899648c625bb4060c18d884a464cc0ac86aea437fcc277a",
+          "corpus_evidence_sha256": "c92b27d0cb033aac2adb8cd968252576b28e619cd4fa9358b77270d8835661e3"
+        }
+      ],
+      "job_id": "08f07d935509.job.4",
+      "verdict_job_id": "08f07d935509.job.4",
+      "result": {
+        "check_id": "quant_claims",
+        "binding_id": "766014257ba242d0b7807fe2bbcb07d004cc73d8843736756bdac1204013c8c5",
+        "subject_sha256": "18a925f7467d5f62dadf2bfc31a0243b785d95b4453d50e987ef5f8e05340b47",
+        "verdict": "pass",
+        "method": "Item-by-item comparison of the candidate's 16 quantified claims against the bound corpus blocks re-read at block level: cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698 body:0000 (ce:09d362f7e17fc2e7e75aa38449531ba0 / ce:083266bc2072475324c0c3ba6e95ed2b), body:0001 (ce:95f3ad3383ccc709da553edc0f8539c4), body:0004 (ce:b1902b2cf4ee5b67bb61b9c52a5a5bc8); cv2:e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623 body:0000, 2026-09-22 (ce:d10f283447f8fa339befc2a966255382). Checked entity/version/date/unit/statistical basis for each number and whether the September-report architecture figures were attributed to 1017.",
+        "detail": "PASS. Each figure was matched to its block: 0.30/1.20 USD per M input/output tokens, 50% 错峰折扣 and MIT licence from cv2:1e86…8698 body:0000 (ce:09d362f7…/ce:083266bc…); 31.2→42.3 Terminal-Bench 4.0, 74.2→77.0 DeepSWE, '11 项全优前代' and 9/11 胜过 GPT-5.6 Sol from the same block verbatim; Astra 58.2 / Opus 5.5 66.4 (Google 发布页) and AA 59%/60% with 'AA 尚未测试 1017' from body:0001 (ce:95f3ad3383ccc709da553edc0f8539c4), whose '截至 10 月 19 日' matches the candidate's 2026-10-19; 9 月版 AA 指数 39 and the 44–46 band (MiMo 46 / GLM-5.3 45 / Kimi K3 44) from the same block; 第三方托管 0.10/0.50, Haiku 5.5 ≤100k 提示 0.10/0.50, AA 单任务成本 0.21 vs 0.27 from body:0004 (ce:b1902b2cf4ee5b67bb61b9c52a5a5bc8), with the ≤100,000 Token condition retained; 8B/16B per-token activation and Global≈1/4 / Persistent≈1/8 KV cache from cv2:e8a6d70d… body:0000 (2026-09-22, ce:d10f283447f8fa339befc2a966255382), which the candidate explicitly labels as describing V4.1 Flash and not 1017 — the required cross-version separation is present. Units are consistent (USD per million tokens; percentages; USD per task), the AA-vs-DeepSWE incomparability and the V4Flash comparison base are preserved, and the closing corpus-gap statement (no total parameter count, context length or training cost) matches job.1 §F. Only nuance: the original words the 0.21/0.27 pair as '接近', while the candidate lists both figures without asserting equality — not a misstatement of value, unit or basis.",
+        "evidence_keys": [
+          "08f07d935509.job.1",
+          "08f07d935509.job.2",
+          "08f07d935509.job.3"
+        ],
+        "scope_assessment": {
+          "entity": {
+            "status": "match",
+            "detail": "Every figure is attached to the same entity as the original: 1017 for 0.30/1.20, 31.2→42.3, 74.2→77.0 and 9/11; V4.1 Flash (September version) for AA 39 and 0.27; Haiku 5.5 for ≤100k 0.10/0.50 and 0.21; Astra/Opus 5.5 for 58.2/66.4/59%/60%; V4.1 Flash for 8B/16B and the KV-cache ratios."
+          },
+          "version": {
+            "status": "match",
+            "detail": "The candidate keeps the 1017 and September-V4.1-Flash figures separate and explicitly states the architecture numbers describe V4.1 Flash, not 1017, so no September measurements are inherited by the October update."
+          },
+          "date": {
+            "status": "match",
+            "detail": "2026-10-19 (AA cutoff, doc date), 2026-09-22 (architecture report) and the '9 月版' designation all align with the bound document dates and with ce:95f3ad33…/ce:d10f2834…, with no October-figure reuse of September measurements."
+          },
+          "units": {
+            "status": "match",
+            "detail": "USD per million input/output tokens, percentages, USD per task and 'B' parameters are used in the same sense as ce:09d362f7…, ce:b1902b2c… and ce:d10f2834…, with no per-token vs per-task or million-token vs total-price mixing."
+          },
+          "conditions": {
+            "status": "match",
+            "detail": "The Haiku 5.5 price is qualified by '≤100k token 提示', the KV-cache ratios keep their V4Flash base and '约', the AA/DeepSWE figures are flagged as not comparable across sources, and the architecture numbers are scoped to the 2026-09-22 V4.1 Flash report rather than 1017."
+          },
+          "attribution": {
+            "status": "match",
+            "detail": "The candidate opens with '均为资料库转述，非一手发布页', attributes 58.2/66.4 to Google 发布页, 59%/60%/0.21/0.27/39 to AA and 9/11 to DeepSeek's own model card, matching ce:09d362f7…, ce:95f3ad33… and ce:b1902b2c…."
+          }
+        },
+        "unresolved_issues": [],
+        "job_id": "08f07d935509.job.4"
+      },
+      "attempts": [
+        {
+          "protocol_version": 2,
+          "check_id": "quant_claims",
+          "work_item_id": "t4",
+          "criterion": "答复中每个量化主张（基准分数、API 价格、训练/推理成本、参数量、市场份额）在实体、版本、日期、单位、统计口径上与资料库原文一致，无跨版本/跨单位误用",
+          "subject": {
+            "text": "价格与基准（均为资料库转述，非一手发布页）：官方 API 定价为每百万输入 token 0.30 美元、每百万输出 token 1.20 美元，另有 50% 错峰折扣；权重以 MIT 许可证开放。DeepSeek 自报 11 项基准全部优于前代，其中 Terminal-Bench 4.0 从 31.2 升至 42.3，DeepSWE 从 74.2 升至 77.0，并称 11 项中 9 项胜过 GPT-5.6 Sol。这些数字不能与第三方同台比较：Google 发布页列 Astra 58.2、Opus 5.5 66.4，Artificial Analysis 独立测得 Astra 59%、Opus 5.5 60%，且截至 2026-10-19 AA 尚未测试 1017；9 月版 V4.1 Flash 的 AA 智能指数为 39，而领先开放权重模型在 44–46（MiMo-V2.6 Pro 46、GLM-5.3 45、Kimi K3 44）。价格战的另一端：第三方托管报价已低至每百万输入/输出 0.10/0.50 美元，低于 DeepSeek 官方费率；闭源入门级 Haiku 5.5 在 ≤100k token 提示下也是 0.10/0.50 美元，AA 单任务成本 0.21 美元，而 9 月版 V4.1 Flash 为 0.27 美元。架构侧，资料库（2026-09-22 报告，描述对象是 V4.1 Flash 而非 1017）记载 Prefill/Decode 每 token 仅激活约 8B/16B 参数，Global KV Cache 降至 V4Flash 的约 1/4、Persistent KV Cache 降至约 1/8，但未给出总参数量、上下文长度与训练成本。",
+            "sha256": "18a925f7467d5f62dadf2bfc31a0243b785d95b4453d50e987ef5f8e05340b47",
+            "key": "inline:18a925f7467d5f62dadf2bfc31a0243b785d95b4453d50e987ef5f8e05340b47"
+          },
+          "evidence": [
+            {
+              "job_id": "08f07d935509.job.1",
+              "ref": "",
+              "sha256": "57cf2a7360f98f7e47a4d3b78412f1c582f03f0d9c3fd63eebb6ef6a8a429291",
+              "key": "08f07d935509.job.1",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 9
+                }
+              ],
+              "acquisition_sha256": "1a2c8197d3e8dc124f68a502d6e95ea6e8c5bd21c8be9f14f3642b6f6c122d4b",
+              "corpus_evidence_sha256": "7ca3a116b909859d199ea3ae72961c73a4a910d3198d2747f96c4a9d07ba79d1"
+            },
+            {
+              "job_id": "08f07d935509.job.2",
+              "ref": "",
+              "sha256": "852e056969ab5b5cbd33ea475184e97031eada6ad09c7050cba25f77c525e76a",
+              "key": "08f07d935509.job.2",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 10
+                }
+              ],
+              "acquisition_sha256": "ed61ef9c01c871c023f98ee9bf0fd8af1a6084b907de319de6acfc03ee1814b7",
+              "corpus_evidence_sha256": "4aa35b804369b59133fa18b73f2bd958f11a4fb75cb5c48bdfe3b1a2c9a64b21"
+            },
+            {
+              "job_id": "08f07d935509.job.3",
+              "ref": "",
+              "sha256": "22a90969fc62f418cdf80bccb65377f3d958bf4f245391dc67ff96c75b363d4f",
+              "key": "08f07d935509.job.3",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 10
+                }
+              ],
+              "acquisition_sha256": "5d19b326b8082019f899648c625bb4060c18d884a464cc0ac86aea437fcc277a",
+              "corpus_evidence_sha256": "c92b27d0cb033aac2adb8cd968252576b28e619cd4fa9358b77270d8835661e3"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "766014257ba242d0b7807fe2bbcb07d004cc73d8843736756bdac1204013c8c5",
+          "required": true,
+          "replaces_job_id": "",
+          "revision_reason": "",
+          "revision_kind": "",
+          "job_id": "08f07d935509.job.4",
+          "execution_status": "complete",
+          "valid_lineage": true,
+          "verdict": "pass",
+          "events": [
+            {
+              "check_id": "quant_claims",
+              "binding_id": "766014257ba242d0b7807fe2bbcb07d004cc73d8843736756bdac1204013c8c5",
+              "subject_sha256": "18a925f7467d5f62dadf2bfc31a0243b785d95b4453d50e987ef5f8e05340b47",
+              "verdict": "pass",
+              "method": "Item-by-item comparison of the candidate's 16 quantified claims against the bound corpus blocks re-read at block level: cv2:1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698 body:0000 (ce:09d362f7e17fc2e7e75aa38449531ba0 / ce:083266bc2072475324c0c3ba6e95ed2b), body:0001 (ce:95f3ad3383ccc709da553edc0f8539c4), body:0004 (ce:b1902b2cf4ee5b67bb61b9c52a5a5bc8); cv2:e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623 body:0000, 2026-09-22 (ce:d10f283447f8fa339befc2a966255382). Checked entity/version/date/unit/statistical basis for each number and whether the September-report architecture figures were attributed to 1017.",
+              "detail": "PASS. Each figure was matched to its block: 0.30/1.20 USD per M input/output tokens, 50% 错峰折扣 and MIT licence from cv2:1e86…8698 body:0000 (ce:09d362f7…/ce:083266bc…); 31.2→42.3 Terminal-Bench 4.0, 74.2→77.0 DeepSWE, '11 项全优前代' and 9/11 胜过 GPT-5.6 Sol from the same block verbatim; Astra 58.2 / Opus 5.5 66.4 (Google 发布页) and AA 59%/60% with 'AA 尚未测试 1017' from body:0001 (ce:95f3ad3383ccc709da553edc0f8539c4), whose '截至 10 月 19 日' matches the candidate's 2026-10-19; 9 月版 AA 指数 39 and the 44–46 band (MiMo 46 / GLM-5.3 45 / Kimi K3 44) from the same block; 第三方托管 0.10/0.50, Haiku 5.5 ≤100k 提示 0.10/0.50, AA 单任务成本 0.21 vs 0.27 from body:0004 (ce:b1902b2cf4ee5b67bb61b9c52a5a5bc8), with the ≤100,000 Token condition retained; 8B/16B per-token activation and Global≈1/4 / Persistent≈1/8 KV cache from cv2:e8a6d70d… body:0000 (2026-09-22, ce:d10f283447f8fa339befc2a966255382), which the candidate explicitly labels as describing V4.1 Flash and not 1017 — the required cross-version separation is present. Units are consistent (USD per million tokens; percentages; USD per task), the AA-vs-DeepSWE incomparability and the V4Flash comparison base are preserved, and the closing corpus-gap statement (no total parameter count, context length or training cost) matches job.1 §F. Only nuance: the original words the 0.21/0.27 pair as '接近', while the candidate lists both figures without asserting equality — not a misstatement of value, unit or basis.",
+              "evidence_keys": [
+                "08f07d935509.job.1",
+                "08f07d935509.job.2",
+                "08f07d935509.job.3"
+              ],
+              "scope_assessment": {
+                "entity": {
+                  "status": "match",
+                  "detail": "Every figure is attached to the same entity as the original: 1017 for 0.30/1.20, 31.2→42.3, 74.2→77.0 and 9/11; V4.1 Flash (September version) for AA 39 and 0.27; Haiku 5.5 for ≤100k 0.10/0.50 and 0.21; Astra/Opus 5.5 for 58.2/66.4/59%/60%; V4.1 Flash for 8B/16B and the KV-cache ratios."
+                },
+                "version": {
+                  "status": "match",
+                  "detail": "The candidate keeps the 1017 and September-V4.1-Flash figures separate and explicitly states the architecture numbers describe V4.1 Flash, not 1017, so no September measurements are inherited by the October update."
+                },
+                "date": {
+                  "status": "match",
+                  "detail": "2026-10-19 (AA cutoff, doc date), 2026-09-22 (architecture report) and the '9 月版' designation all align with the bound document dates and with ce:95f3ad33…/ce:d10f2834…, with no October-figure reuse of September measurements."
+                },
+                "units": {
+                  "status": "match",
+                  "detail": "USD per million input/output tokens, percentages, USD per task and 'B' parameters are used in the same sense as ce:09d362f7…, ce:b1902b2c… and ce:d10f2834…, with no per-token vs per-task or million-token vs total-price mixing."
+                },
+                "conditions": {
+                  "status": "match",
+                  "detail": "The Haiku 5.5 price is qualified by '≤100k token 提示', the KV-cache ratios keep their V4Flash base and '约', the AA/DeepSWE figures are flagged as not comparable across sources, and the architecture numbers are scoped to the 2026-09-22 V4.1 Flash report rather than 1017."
+                },
+                "attribution": {
+                  "status": "match",
+                  "detail": "The candidate opens with '均为资料库转述，非一手发布页', attributes 58.2/66.4 to Google 发布页, 59%/60%/0.21/0.27/39 to AA and 9/11 to DeepSeek's own model card, matching ce:09d362f7…, ce:95f3ad33… and ce:b1902b2c…."
+                }
+              },
+              "unresolved_issues": [],
+              "job_id": "08f07d935509.job.4"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "check_id": "attribution",
+      "work_item_id": "t4",
+      "criterion": "答复中归属于第三方（公司、分析师、媒体、政府机构）的观点准确标注说话主体与时间，推断性结论未被表述为资料库直接记载的事实",
+      "binding_id": "10a5251d99bf393b255a62a3bd4b23557125cb5e233384349806aba1a395a05e",
+      "required": true,
+      "factual_scope": true,
+      "publication_excerpt": true,
+      "verdict": "unchecked",
+      "subject": {
+        "text": "第三方判断的归属需逐条标明：“开放权重前沿并未更接近领先专有模型”、“开源权重将再次落后闭源前沿 6–12 个月”、“低成本开放权重将承接大批量、定义明确的智能体任务并对 GPT-6.1 Sol 级定价构成下行压力”——这三条是卖方研究机构 2026-10-19 单模型点评中的判断，不是 DeepSeek 或任何厂商的官方表态。台积电管理层在 2026-10-15 业绩电话会上称开源模型“在降低采用门槛”。2026-11-03 的 PLTR FY26Q3 点评判断，开源模型性能提升对 Palantir 整体是利好，但可能给部分模型提供商和服务供应商带来压力（该句为点评本身的第三人称判断，非 Palantir 公司口径；相关财报电话会日期为 2026-11-02）。微软销售合作伙伴渠道访谈（2026-10-23）给出的开源占比口径互相不一致且分母不同：某合作伙伴估计其约 25% 的 Azure AI 客户已在生产环境使用开源模型，但开源模型在其客户的 Azure 模型消耗中仅占约 4%–5%；另一合作伙伴称在其大型微软企业客户组合中开源模型约占模型支出的 20%–25%，不可合并为单一数字。Alphabet 2026 年第三季度资本开支 514 亿美元、全年指引 1950–2050 亿美元为该公司披露口径（2026-10-29 报道），资料库未将其归因于 DeepSeek。国产算力（昇腾 960、10T–20T 参数、2026–2027 年）是券商“以 V4.1 Flash 的优化逻辑推演”得出的推断，资料库中没有任何 DeepSeek 与国产芯片的适配公告。",
+        "sha256": "413429ab7d84e0973fc43225d58a8e8b84c1bbc4cfe12d98ee5c61720ca7688a",
+        "key": "inline:413429ab7d84e0973fc43225d58a8e8b84c1bbc4cfe12d98ee5c61720ca7688a"
+      },
+      "evidence": [
+        {
+          "job_id": "08f07d935509.job.2",
+          "ref": "",
+          "sha256": "852e056969ab5b5cbd33ea475184e97031eada6ad09c7050cba25f77c525e76a",
+          "key": "08f07d935509.job.2",
+          "corpus_limits": [
+            {
+              "tool": "corpus_search",
+              "obtained": true,
+              "coverage": {
+                "processing": "partial",
+                "availability": "unknown",
+                "purity": {
+                  "scope": "bounded_candidates_not_corpus_absence"
+                },
+                "native": {
+                  "unknown_date_sources": true
+                }
+              },
+              "limited_observations": 10
+            }
+          ],
+          "acquisition_sha256": "ed61ef9c01c871c023f98ee9bf0fd8af1a6084b907de319de6acfc03ee1814b7",
+          "corpus_evidence_sha256": "4aa35b804369b59133fa18b73f2bd958f11a4fb75cb5c48bdfe3b1a2c9a64b21"
+        },
+        {
+          "job_id": "08f07d935509.job.3",
+          "ref": "",
+          "sha256": "22a90969fc62f418cdf80bccb65377f3d958bf4f245391dc67ff96c75b363d4f",
+          "key": "08f07d935509.job.3",
+          "corpus_limits": [
+            {
+              "tool": "corpus_search",
+              "obtained": true,
+              "coverage": {
+                "processing": "partial",
+                "availability": "unknown",
+                "purity": {
+                  "scope": "bounded_candidates_not_corpus_absence"
+                },
+                "native": {
+                  "unknown_date_sources": true
+                }
+              },
+              "limited_observations": 10
+            }
+          ],
+          "acquisition_sha256": "5d19b326b8082019f899648c625bb4060c18d884a464cc0ac86aea437fcc277a",
+          "corpus_evidence_sha256": "c92b27d0cb033aac2adb8cd968252576b28e619cd4fa9358b77270d8835661e3"
+        }
+      ],
+      "job_id": "08f07d935509.job.5",
+      "verdict_job_id": "",
+      "result": null,
+      "attempts": [
+        {
+          "protocol_version": 2,
+          "check_id": "attribution",
+          "work_item_id": "t4",
+          "criterion": "答复中归属于第三方（公司、分析师、媒体、政府机构）的观点准确标注说话主体与时间，推断性结论未被表述为资料库直接记载的事实",
+          "subject": {
+            "text": "第三方判断的归属需逐条标明：“开放权重前沿并未更接近领先专有模型”、“开源权重将再次落后闭源前沿 6–12 个月”、“低成本开放权重将承接大批量、定义明确的智能体任务并对 GPT-6.1 Sol 级定价构成下行压力”——这些是卖方研究机构在 2026-10-19 单模型点评与 2026-10-26 周报中的判断，不是 DeepSeek 或任何厂商的官方表态。台积电管理层在 2026-10-15 业绩电话会上称开源模型“在降低采用门槛”。Palantir 在 2026-11-03 的表述是开源模型性能提升对其“整体上是利好，但可能给部分模型提供商和服务供应商带来压力”。微软销售合作伙伴渠道访谈（2026-10-23）给出的开源占比口径互相不一致（约 4%–5%、不足 5%、不到 10%、20%–25%，样本与范围不同），不可合并为单一数字。Alphabet 2026 年第三季度资本开支 514 亿美元、全年指引 1950–2050 亿美元为该公司披露口径（2026-10-29 报道），资料库未将其归因于 DeepSeek。国产算力（昇腾 960、10T–20T 参数、2026–2027 年）是券商“以 V4.1 Flash 的优化逻辑推演”得出的推断，资料库中没有任何 DeepSeek 与国产芯片的适配公告。",
+            "sha256": "f56fbf29e3c2db6fa13638f434d382a9843d2cd941c22d6b5d4e98ca03c83c4b",
+            "key": "inline:f56fbf29e3c2db6fa13638f434d382a9843d2cd941c22d6b5d4e98ca03c83c4b"
+          },
+          "evidence": [
+            {
+              "job_id": "08f07d935509.job.2",
+              "ref": "",
+              "sha256": "852e056969ab5b5cbd33ea475184e97031eada6ad09c7050cba25f77c525e76a",
+              "key": "08f07d935509.job.2",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 10
+                }
+              ],
+              "acquisition_sha256": "ed61ef9c01c871c023f98ee9bf0fd8af1a6084b907de319de6acfc03ee1814b7",
+              "corpus_evidence_sha256": "4aa35b804369b59133fa18b73f2bd958f11a4fb75cb5c48bdfe3b1a2c9a64b21"
+            },
+            {
+              "job_id": "08f07d935509.job.3",
+              "ref": "",
+              "sha256": "22a90969fc62f418cdf80bccb65377f3d958bf4f245391dc67ff96c75b363d4f",
+              "key": "08f07d935509.job.3",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 10
+                }
+              ],
+              "acquisition_sha256": "5d19b326b8082019f899648c625bb4060c18d884a464cc0ac86aea437fcc277a",
+              "corpus_evidence_sha256": "c92b27d0cb033aac2adb8cd968252576b28e619cd4fa9358b77270d8835661e3"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "53e4537038c89a9c53d7b2ced99df33a607cc3facc47894182136fbe9da341dd",
+          "required": true,
+          "replaces_job_id": "",
+          "revision_reason": "",
+          "revision_kind": "",
+          "job_id": "08f07d935509.job.4",
+          "execution_status": "complete",
+          "valid_lineage": true,
+          "verdict": "fail",
+          "events": [
+            {
+              "check_id": "attribution",
+              "binding_id": "53e4537038c89a9c53d7b2ced99df33a607cc3facc47894182136fbe9da341dd",
+              "subject_sha256": "f56fbf29e3c2db6fa13638f434d382a9843d2cd941c22d6b5d4e98ca03c83c4b",
+              "verdict": "fail",
+              "method": "Traced each attributed view to its block and speaker marker: cv2:87694bc4… (2026-11-03, PLTR FY26Q3 点评) via chunk:native1/87694bc48168441d%3Abody%3A0003/7c76c2005c5c5bf0 (ce:c4c495e519945a66e89e30934687bf48) plus a targeted corpus_search on the same doc that returned '管理层将这一方式形容为…' and '财报电话会议日期：2026 年 11 月 2 日'; cv2:1e86…8698 body:0005/0006 for the sell-side judgments; cv2:1eb8…acb4 body:0008 (re-fetched) to test the weekly co-citation; cv2:27d18ab7… for TSMC; eref:11e675d8…:3 for Alphabet capex; cv2:e8a6d70d… body:0000 for the domestic-compute inference.",
+              "detail": "FAIL on one attribution and one date item; the rest of the paragraph verifies. (1) Speaker error: 'Palantir 在 2026-11-03 的表述是开源模型性能提升对其“整体上是利好，但可能给部分模型提供商和服务供应商带来压力”' — in cv2:87694bc48168441d212f74ac9317ee420ea82f623f19a555e6ecb40ad5342174 (title 开源模型的影响, 2026-11-03) the sentence is unmarked third-person analyst text ('开源模型性能的提升对 Palantir 整体上是利好'), while the same document marks genuine company statements explicitly ('管理层将这一方式形容为“将超额收益（alpha）训练进模型”', 'Palantir 披露，…'), so the speaker is the sell-side note, not Palantir. Correct wording: '2026-11-03 的 PLTR FY26Q3 点评判断，开源模型性能提升对 Palantir 整体是利好，但可能给部分模型提供商和服务供应商带来压力'. (2) Date conflation: if the company is the speaker, the event date is the 2026-11-02 earnings call ('26Q3…财报电话会议日期：2026 年 11 月 2 日', same document), not the 2026-11-03 publication date. (3) Unconfirmed co-citation: the '6 到 12 个月' and 'GPT-6.1 Sol 级定价下行压力' judgments were verified only in the 2026-10-19 note (cv2:1e86…8698 body:0005 ce:524a6b017c81f53cf046f39601f7e10d; body:0006 ce:e25ce5803bf1d1b15033ce2f2aada5dc); the 2026-10-26 weekly block re-fetched (cv2:1eb8…acb4 body:0008, p.4, ce:ff134b62ec5a6b1b46e8163d19596520) carries pricing/benchmarks/MIT but not those two judgments, so '与 2026-10-26 周报中的判断' is not supported for them. (4) '不足 5%' is listed among the Microsoft 口径 but appears only in job.3's conflict list, not in a delivered excerpt. Verified-correct parts: the three sell-side judgments are correctly labelled 卖方研究机构 and not official DeepSeek statements; 台积电管理层 (cv2:27d18ab7…, 2026-10-15, eref:eaa141d506f8650af762083c927f4ab87ead5fb90cc219e38a66877f96c3c2de:1) is correctly attributed; Alphabet 514 亿美元 / 1950–2050 亿美元 (eref:11e675d83d48d252cf4545963a2c4bb58e92b91be75c279ba98a39a143f95eba:3) is correctly framed as 公司披露口径 / 2026-10-29 报道 and explicitly not attributed to DeepSeek; 国产算力 (cv2:e8a6d70d… body:0000, 2026-09-22, ce:d10f283447f8fa339befc2a966255382) is correctly preserved as 券商推演/推断 with no adaptation announcement; the four Microsoft share 口径 are kept separate as incomparable.",
+              "evidence_keys": [
+                "08f07d935509.job.2",
+                "08f07d935509.job.3"
+              ],
+              "scope_assessment": {
+                "entity": {
+                  "status": "mismatch",
+                  "detail": "The speaker entity of the Palantir sentence is mislabelled (Palantir vs the research note), while TSMC 管理层, Alphabet and the 券商 behind the 昇腾 960 projection are identified correctly."
+                },
+                "version": {
+                  "status": "unknown",
+                  "detail": "The joint citation to the 2026-10-26 weekly is unconfirmed for the 6–12 月 and GPT-6.1 Sol pricing-pressure judgments, which the re-fetched weekly block body:0008 (p.4) does not contain, so that co-citation cannot be checked as stated."
+                },
+                "date": {
+                  "status": "mismatch",
+                  "detail": "2026-11-03 is the publication date of the PLTR note, whose underlying earnings call is dated 2026-11-02 in the same document, so a Palantir statement cannot be dated 2026-11-03; the 2026-10-15 TSMC, 2026-10-23 Microsoft and 2026-10-29 Alphabet dates match their documents."
+                },
+                "units": {
+                  "status": "match",
+                  "detail": "514 亿美元 Q3 capex and 1950–2050 亿美元 full-year guidance match eref:11e675d8…:3 verbatim in value and unit, and the Microsoft shares are labelled as percentages of differing scopes."
+                },
+                "conditions": {
+                  "status": "match",
+                  "detail": "The domestic-compute passage keeps its '以 V4.1 Flash 的优化逻辑推演' framing, the Alphabet capex is marked as company-disclosed and not DeepSeek-attributed, and the four Microsoft share figures are kept as incompatible 口径 rather than merged."
+                },
+                "attribution": {
+                  "status": "mismatch",
+                  "detail": "The Palantir sentence is labelled as Palantir's own statement although the source presents it as the sell-side note's third-person judgement, while the three sell-side views, TSMC management, Alphabet disclosure and the brokerage inference are all correctly attributed."
+                }
+              },
+              "unresolved_issues": [
+                "Palantir sentence attributed to Palantir as speaker; source cv2:87694bc4… presents it as the note's own third-person judgement ('开源模型性能的提升对 Palantir 整体上是利好'), with company statements separately marked ('管理层将…形容为', 'Palantir 披露').",
+                "Date conflated: 2026-11-03 is the note's publication date; the underlying PLTR 26Q3 earnings call is dated 2026-11-02 in the same document.",
+                "Co-citation of the 2026-10-26 weekly for the '6 到 12 个月' and 'GPT-6.1 Sol 级定价下行压力' judgments is not confirmed — those were verified only in the 2026-10-19 note; weekly block body:0008 (p.4) does not carry them.",
+                "'不足 5%' Microsoft open-source share figure is not in any delivered excerpt (only in job.3's conflict list), so it could not be compared to the original."
+              ],
+              "job_id": "08f07d935509.job.4"
+            }
+          ]
+        },
+        {
+          "protocol_version": 2,
+          "check_id": "attribution",
+          "work_item_id": "t4",
+          "criterion": "答复中归属于第三方（公司、分析师、媒体、政府机构）的观点准确标注说话主体与时间，推断性结论未被表述为资料库直接记载的事实",
+          "subject": {
+            "text": "第三方判断的归属需逐条标明：“开放权重前沿并未更接近领先专有模型”、“开源权重将再次落后闭源前沿 6–12 个月”、“低成本开放权重将承接大批量、定义明确的智能体任务并对 GPT-6.1 Sol 级定价构成下行压力”——这三条是卖方研究机构 2026-10-19 单模型点评中的判断，不是 DeepSeek 或任何厂商的官方表态。台积电管理层在 2026-10-15 业绩电话会上称开源模型“在降低采用门槛”。2026-11-03 的 PLTR FY26Q3 点评判断，开源模型性能提升对 Palantir 整体是利好，但可能给部分模型提供商和服务供应商带来压力（该句为点评本身的第三人称判断，非 Palantir 公司口径；相关财报电话会日期为 2026-11-02）。微软销售合作伙伴渠道访谈（2026-10-23）给出的开源占比口径互相不一致且分母不同：某合作伙伴估计其约 25% 的 Azure AI 客户已在生产环境使用开源模型，但开源模型在其客户的 Azure 模型消耗中仅占约 4%–5%；另一合作伙伴称在其大型微软企业客户组合中开源模型约占模型支出的 20%–25%，不可合并为单一数字。Alphabet 2026 年第三季度资本开支 514 亿美元、全年指引 1950–2050 亿美元为该公司披露口径（2026-10-29 报道），资料库未将其归因于 DeepSeek。国产算力（昇腾 960、10T–20T 参数、2026–2027 年）是券商“以 V4.1 Flash 的优化逻辑推演”得出的推断，资料库中没有任何 DeepSeek 与国产芯片的适配公告。",
+            "sha256": "413429ab7d84e0973fc43225d58a8e8b84c1bbc4cfe12d98ee5c61720ca7688a",
+            "key": "inline:413429ab7d84e0973fc43225d58a8e8b84c1bbc4cfe12d98ee5c61720ca7688a"
+          },
+          "evidence": [
+            {
+              "job_id": "08f07d935509.job.2",
+              "ref": "",
+              "sha256": "852e056969ab5b5cbd33ea475184e97031eada6ad09c7050cba25f77c525e76a",
+              "key": "08f07d935509.job.2",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 10
+                }
+              ],
+              "acquisition_sha256": "ed61ef9c01c871c023f98ee9bf0fd8af1a6084b907de319de6acfc03ee1814b7",
+              "corpus_evidence_sha256": "4aa35b804369b59133fa18b73f2bd958f11a4fb75cb5c48bdfe3b1a2c9a64b21"
+            },
+            {
+              "job_id": "08f07d935509.job.3",
+              "ref": "",
+              "sha256": "22a90969fc62f418cdf80bccb65377f3d958bf4f245391dc67ff96c75b363d4f",
+              "key": "08f07d935509.job.3",
+              "corpus_limits": [
+                {
+                  "tool": "corpus_search",
+                  "obtained": true,
+                  "coverage": {
+                    "processing": "partial",
+                    "availability": "unknown",
+                    "purity": {
+                      "scope": "bounded_candidates_not_corpus_absence"
+                    },
+                    "native": {
+                      "unknown_date_sources": true
+                    }
+                  },
+                  "limited_observations": 10
+                }
+              ],
+              "acquisition_sha256": "5d19b326b8082019f899648c625bb4060c18d884a464cc0ac86aea437fcc277a",
+              "corpus_evidence_sha256": "c92b27d0cb033aac2adb8cd968252576b28e619cd4fa9358b77270d8835661e3"
+            }
+          ],
+          "factual_scope": true,
+          "publication_excerpt": true,
+          "binding_id": "10a5251d99bf393b255a62a3bd4b23557125cb5e233384349806aba1a395a05e",
+          "required": true,
+          "replaces_job_id": "08f07d935509.job.4",
+          "revision_reason": "修正上一轮 FAIL 的四处：将 Palantir 那句话的说话主体从 Palantir 改为 2026-11-03 的 PLTR FY26Q3 点评本身并补注电话会日期 2026-11-02；删除对 2026-10-26 周报的共同引用；删除未能回查的“不足 5%”口径，保留可回查且分母可区分的两个口径。其余已验证正确的归属表述未动。",
+          "revision_kind": "subject",
+          "job_id": "08f07d935509.job.5",
+          "execution_status": "incomplete",
+          "valid_lineage": true,
+          "verdict": "unchecked",
+          "events": []
+        }
+      ]
+    }
+  ],
+  "acquisition_limits": []
+}

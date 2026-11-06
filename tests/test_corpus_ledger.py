@@ -756,3 +756,9 @@ def test_enforcement_flag_parsing(monkeypatch) -> None:
     for raw in ("", "0", "false", "off"):
         monkeypatch.setenv("A4_ENFORCE", raw)
         assert enforcement_enabled() is False
+
+
+def test_non_corpus_verification_is_explicitly_not_applicable(tmp_path: Path) -> None:
+    result = verify_and_record(ConsumptionLedger(), directory=tmp_path)
+    assert result["status"] == "not_applicable"
+    assert result["conclusions"] == []

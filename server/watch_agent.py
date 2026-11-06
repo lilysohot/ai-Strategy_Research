@@ -65,6 +65,14 @@ async def call(run_id: uuid.UUID, operation: str, payload: dict[str, Any]) -> di
                 reason = str(intent.get("reason") or "").strip()
                 if not key or len(key) > 120 or not reason:
                     raise biz.ValidationError("每个监控操作需要稳定 intent_key 和具体 reason")
+                refs = intent.get("evidence_refs")
+                if (
+                    not isinstance(refs, list)
+                    or not refs
+                    or len(refs) > 16
+                    or not all(isinstance(ref, str) and ref.strip() for ref in refs)
+                ):
+                    raise biz.ValidationError("每项监控操作需要非空 evidence_refs 来源列表")
                 rule = None
                 if intent.get("rule_id"):
                     rule = await session.get(
@@ -76,6 +84,8 @@ async def call(run_id: uuid.UUID, operation: str, payload: dict[str, Any]) -> di
                         or rule.research_id != run.session_id
                     ):
                         raise biz.NotFoundOrForbiddenError("监控目标不属于当前会话")
+                    if rule.agent_intent and rule.agent_intent != key:
+                        raise biz.ValidationError("intent_key 必须保留当前目标的稳定标识")
                 previous = await session.scalar(
                     select(store.WatchRule)
                     .where(
@@ -99,7 +109,8 @@ async def call(run_id: uuid.UUID, operation: str, payload: dict[str, Any]) -> di
                     if intent.get("expected_version") is None:
                         intent = dict(intent, expected_version=rule.current_version)
                 if rule and (
-                    (rule.status != "active" and not cancelling_paused) or rule.managed_by != "agent"
+                    (rule.status != "active" and not cancelling_paused)
+                    or rule.managed_by != "agent"
                 ):
                     raise biz.ValidationError("目标已暂停、取消或由人工维护，不能自动覆盖")
                 write_key = f"watch-agent:{run_id}:{digest}:{index}"
@@ -130,7 +141,10 @@ async def call(run_id: uuid.UUID, operation: str, payload: dict[str, Any]) -> di
                 spec: dict[str, Any] = dict(raw_spec)
                 if rule is None:
                     spec.setdefault("trigger_mode", "continuous")
-                if "trigger_mode" in spec and spec["trigger_mode"] not in watch_rules.LONG_RUNNING_MODES:
+                if (
+                    "trigger_mode" in spec
+                    and spec["trigger_mode"] not in watch_rules.LONG_RUNNING_MODES
+                ):
                     raise biz.ValidationError("Agent 长期监控请选择 continuous 或 crossing")
                 spec.update(on_create_already_met="trigger_now", budget={})
                 if rule is None:
@@ -151,6 +165,7 @@ async def call(run_id: uuid.UUID, operation: str, payload: dict[str, Any]) -> di
                         rule.rationale = {
                             "reason": reason,
                             "evidence_refs": intent.get("evidence_refs", []),
+                            "evidence_receipts": intent.get("evidence_receipts", []),
                             "run_id": str(run_id),
                         }
                         results.append(
@@ -158,6 +173,8 @@ async def call(run_id: uuid.UUID, operation: str, payload: dict[str, Any]) -> di
                                 "rule_id": str(rule.id),
                                 "status": "unchanged",
                                 "version": rule.current_version,
+                                "changed_fields": [],
+                                "trigger_state_reset": False,
                             }
                         )
                         continue
@@ -206,6 +223,7 @@ async def call(run_id: uuid.UUID, operation: str, payload: dict[str, Any]) -> di
                 rule.rationale = {
                     "reason": reason,
                     "evidence_refs": intent.get("evidence_refs", []),
+                    "evidence_receipts": intent.get("evidence_receipts", []),
                     "run_id": str(run_id),
                 }
                 results.append(result.result)

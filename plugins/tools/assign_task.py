@@ -8,6 +8,7 @@ previously-created session; the task runs in the background. Use
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
 import os
 import re
@@ -42,7 +43,12 @@ from plugins.tools._deliverable_policy import (
     render_retirement_note,
     render_workspace_assignment,
 )
-from plugins.tools._verification import VerificationCheck, bind_checks, minimum_verification_budget
+from plugins.tools._verification import (
+    VerificationCheck,
+    bind_checks,
+    minimum_verification_budget,
+    resolve_planned_check,
+)
 from plugins.tools.create_subagent import (
     _normalize_agent_name,
     _resolve_runtime,
@@ -536,6 +542,14 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         board = {task["id"]: task for task in snapshot_tasks(scope.task_id)}
         for spec in specs:
             if not isinstance(spec, AgentTeamAssignmentSpec):
+                continue
+            try:
+                spec.verification_checks = [
+                    resolve_planned_check(check, list(board.values()))
+                    for check in spec.verification_checks
+                ]
+            except ValueError as exc:
+                validation_errors.append(f"{spec.agent}: {exc}")
                 continue
             check_ids = [check.work_item_id for check in spec.verification_checks]
             # Existing explicit ownership/check bindings are safe compatibility
@@ -1087,6 +1101,8 @@ _AGENT_TEAM_ASSIGN_TASK_PARAMETERS = {
     "properties": {
         "tasks": {
             "type": "array",
+            "minItems": 1,
+            "maxItems": MAX_TASKS_PER_DISPATCH,
             "items": AgentTeamAssignmentSpec.model_json_schema(),
             "description": (
                 "Assignment objects. Give output_paths to the one final "
@@ -1224,7 +1240,47 @@ async def agent_team_assign_task(
                 "applied. Put the complete output_paths manifest inside that "
                 "task and omit the top-level publication fields."
             )
-    return await assign_task.func(tasks=tasks)
+    result = await assign_task.func(tasks=tasks)
+    if result.startswith("Error:") or "\nerrors:" in result:
+        try:
+            result += _team_dispatch_guidance()
+        except Exception:
+            # Advisory context must never hide the actual dispatch rejection.
+            logger.debug("Could not build dispatch guidance", exc_info=True)
+    return result
+
+
+def _team_dispatch_guidance() -> str:
+    """Give current identifiers after rejection without manufacturing a binding."""
+    scope = get_current_execution_scope()
+    bus = registry.get_optional(AgentBus)
+    if scope is None or bus is None:
+        return ""
+    from plugins.tools.task_board import snapshot_tasks
+
+    bus_id = resolve_bus_task_id(scope)
+    board = snapshot_tasks(scope.task_id)
+    items = [{
+        "work_item_id": task["id"], "description": task["description"],
+        "check_ids": [c["check_id"] for c in task.get("verification_requirements", [])],
+    } for task in board if task["resolution"] not in {"cancelled", "resolved"}]
+    sources = [j.job_id for j in bus.list_task_jobs(bus_id)
+               if j.status == "completed" and j.result is not None
+               and not j.item.metadata.get("verification_checks")]
+    return (
+        "\nDispatch context (identifiers only, not evidence): "
+        + json.dumps({
+            "agents": [s.name for s in bus.list_sessions_for_task(bus_id)],
+            "work_items": items[:16], "completed_source_jobs": sources[-16:],
+        }, ensure_ascii=False)
+        + "\nFor verification, send a nonempty tasks array. Each task needs agent, prompt, "
+        "and verification_checks. Each check needs check_id, subject:{text:the exact relevant "
+        "passage}, and evidence:[{job_id}]. "
+        "Omitted work_item_id and criterion resolve from the unique planned check_id; "
+        "explicit values must match. Choose only relevant sources. Bindings attach sources "
+        "automatically, so do not paste reports into prompt. Rechecks still require "
+        "replaces_job_id, revision_kind and revision_reason."
+    )
 
 
 __all__ = [

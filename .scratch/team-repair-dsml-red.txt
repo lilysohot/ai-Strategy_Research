@@ -1,0 +1,89 @@
+......FFF                                                                [100%]
+=================================== FAILURES ===================================
+__________________ test_recovered_call_executes_on_last_turn ___________________
+
+    async def test_recovered_call_executes_on_last_turn():
+        seen = []
+    
+        @tool
+        async def submit_report(content: str) -> str:
+            """Submit a test report."""
+            seen.append(content)
+            return content
+    
+        class Client:
+            model = 'scripted'
+    
+            async def chat(self, messages, **kwargs):
+                return LLMResponse(content=dsml({'content': 'checked'}))
+    
+        result = await run_agent_loop(
+            llm=Client(), system_prompt='Check', user_message='Check', tools=[submit_report],
+            config=LoopConfig(max_turns=1, loop_policy=LoopPolicy(terminal_tool_names=('submit_report',))),
+        )
+        assert seen == ['checked']
+        assert result.tool_calls_count == 1
+>       assert result.stopped_by == 'submit_report'
+E       AssertionError: assert 'max_turns' == 'submit_report'
+E         
+E         - submit_report
+E         + max_turns
+
+tests/test_dsml_tool_recovery.py:60: AssertionError
+_______ test_malformed_envelope_is_explicit_model_error_not_final_answer _______
+
+    async def test_malformed_envelope_is_explicit_model_error_not_final_answer():
+        class Client:
+            model = 'scripted'
+    
+            async def chat(self, messages, **kwargs):
+                return LLMResponse(content=dsml({'finish': False})[:-15])
+    
+        result = await run_agent_loop(
+            llm=Client(), system_prompt='Check', user_message='Check', tools=[],
+            config=LoopConfig(max_turns=1, loop_policy=LoopPolicy(no_tool_behavior='stop')),
+        )
+>       assert result.stopped_by == 'llm_error'
+E       AssertionError: assert 'no_tool' == 'llm_error'
+E         
+E         - llm_error
+E         + no_tool
+
+tests/test_dsml_tool_recovery.py:74: AssertionError
+__________ test_malformed_envelope_receives_bounded_specific_feedback __________
+
+    async def test_malformed_envelope_receives_bounded_specific_feedback():
+        class Client:
+            model = 'scripted'
+            calls = 0
+    
+            async def chat(self, messages, **kwargs):
+                self.calls += 1
+                if self.calls > 1:
+                    assert 'DSML' in messages[-1]['content']
+                    assert 'No tool was executed' in messages[-1]['content']
+                return LLMResponse(content=dsml({'finish': False})[:-15])
+    
+        client = Client()
+        result = await run_agent_loop(
+            llm=client, system_prompt='Check', user_message='Check', tools=[],
+            config=LoopConfig(max_turns=10, no_tool_max_retries=2),
+        )
+>       assert client.calls == 2
+E       assert 6 == 2
+E        +  where 6 = <test_dsml_tool_recovery.test_malformed_envelope_receives_bounded_specific_feedback.<locals>.Client object at 0x7c29c38f6090>.calls
+
+tests/test_dsml_tool_recovery.py:95: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  frontier_agent.core.runtime.loop._call:_call.py:1147 LLM call error (turn=2, attempt=1/5): assert 'DSML' in 'This loop requires a structured tool call to continue. If your workflow defines a terminal action, use it now. Otherwise, call an appropriate tool instead of replying in plain text.'
+WARNING  frontier_agent.core.runtime.loop._call:_call.py:1147 LLM call error (turn=2, attempt=2/5): assert 'DSML' in 'This loop requires a structured tool call to continue. If your workflow defines a terminal action, use it now. Otherwise, call an appropriate tool instead of replying in plain text.'
+WARNING  frontier_agent.core.runtime.loop._call:_call.py:1147 LLM call error (turn=2, attempt=3/5): assert 'DSML' in 'This loop requires a structured tool call to continue. If your workflow defines a terminal action, use it now. Otherwise, call an appropriate tool instead of replying in plain text.'
+WARNING  frontier_agent.core.runtime.loop._call:_call.py:1147 LLM call error (turn=2, attempt=4/5): assert 'DSML' in 'This loop requires a structured tool call to continue. If your workflow defines a terminal action, use it now. Otherwise, call an appropriate tool instead of replying in plain text.'
+WARNING  frontier_agent.core.runtime.loop._call:_call.py:1147 LLM call error (turn=2, attempt=5/5): assert 'DSML' in 'This loop requires a structured tool call to continue. If your workflow defines a terminal action, use it now. Otherwise, call an appropriate tool instead of replying in plain text.'
+ERROR    frontier_agent.core.runtime.loop._call:_call.py:1196 LLM call failed after 5 retries (turn=2)
+ERROR    frontier_agent.core.runtime.loop.agent_loop:agent_loop.py:593 agent_loop: call_llm exhausted after turn=2 (reason=exhausted); ending with llm_error to preserve partial content: assert 'DSML' in 'This loop requires a structured tool call to continue. If your workflow defines a terminal action, use it now. Otherwise, call an appropriate tool instead of replying in plain text.'
+=========================== short test summary info ============================
+FAILED tests/test_dsml_tool_recovery.py::test_recovered_call_executes_on_last_turn
+FAILED tests/test_dsml_tool_recovery.py::test_malformed_envelope_is_explicit_model_error_not_final_answer
+FAILED tests/test_dsml_tool_recovery.py::test_malformed_envelope_receives_bounded_specific_feedback
+3 failed, 6 passed in 33.39s

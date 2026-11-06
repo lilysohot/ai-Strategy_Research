@@ -1,0 +1,12 @@
+{
+  "original_first_context_chars": 78998,
+  "original_recheck_context_chars": 65176,
+  "new_first_bound_context_chars": 53935,
+  "recorded_recheck_rejected_before_dispatch": true,
+  "rejection_code": "remaining_corpus_scope_overstatement",
+  "corrected_recheck_bound_context_chars": 27147,
+  "corrected_recheck_with_original_preamble_chars": 28648,
+  "context_reduction_fraction": 0.5605,
+  "original_dsml_recovered_calls": 1,
+  "recovered_pass_still_rejected": true
+}

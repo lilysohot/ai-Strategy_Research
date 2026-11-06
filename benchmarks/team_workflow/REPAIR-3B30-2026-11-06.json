@@ -1,0 +1,97 @@
+{
+  "source_run": "3b30ebfd2e214ca19cc60e97ec36c12c",
+  "date": "2026-11-06",
+  "status": "code_repaired_protocol_verified_end_to_end_not_accepted",
+  "changes": [
+    {
+      "layer": "context",
+      "change": "Preserve short relevant delivered web bodies before long-page allocation; share remaining excerpt budget without changing source bytes or dates.",
+      "file": "plugins/tools/_web_handoff.py"
+    },
+    {
+      "layer": "tool_protocol",
+      "change": "Losslessly relocate misplaced unresolved_issues; reject conflicting copies and PASS with unresolved issues, including persisted factual verdict projection.",
+      "file": "plugins/tools/_verification.py"
+    },
+    {
+      "layer": "delivery",
+      "change": "Reject observed blanket verification labels outside exact passed subjects before task/manifest mutation; keep legacy finalization path consistent. Preserve negative caveats and ordinary scoped status reports.",
+      "files": [
+        "plugins/tools/_verification.py",
+        "plugins/tools/finalize_answer.py",
+        "workflows/agent_team/delivery.py"
+      ]
+    },
+    {
+      "layer": "orchestration",
+      "change": "For incomplete checks explicitly request unchanged-byte retry of only the pending check; preserve checkpointed sibling results. Add synthesis instructions distinguishing observations, forecasts and unchecked dependencies.",
+      "file": "workflows/agent_team/delivery.py"
+    }
+  ],
+  "validation": {
+    "red_before_fix": {
+      "failed": 7,
+      "passed": 1,
+      "artifact": ".scratch/team-3b30-red.txt"
+    },
+    "regression": {
+      "passed": 287,
+      "artifact": ".scratch/team-3b30-verified-tests.txt"
+    },
+    "protocol": {
+      "passed": 29,
+      "artifact": "results/team-3b30-protocol-verified/summary.json"
+    },
+    "lint": "passed",
+    "scoped_pyright": "0 errors",
+    "format": "passed",
+    "import_smoke": {
+      "stage1": "464/464",
+      "stage2": "522/522"
+    },
+    "symbol_check": "0 missing-symbol imports across 571 files",
+    "provider_preflight": "one real call passed",
+    "original_artifact_replay": {
+      "DGS2_full_body": true,
+      "DGS10_full_body": true,
+      "body_chars_each": 679,
+      "recovered_schema_submissions": 2,
+      "rejected_blanket_labels": 2,
+      "artifact": ".scratch/team-3b30-replay.json"
+    },
+    "frozen": {
+      "F04": "error",
+      "F06": "error",
+      "reason": "First attempt reasoning_runaway_early at about 94.7 seconds, retry logical_call_deadline at about 23.3 seconds; 0 tools, no team dispatch.",
+      "artifact": "results/team-3b30-frozen-final/summary.json",
+      "acceptance": false
+    },
+    "interrupted_diagnostic_batch": "results/team-3b30-frozen (explicitly unassessed; stopped after false-positive guard revision)"
+  },
+  "benchmark": {
+    "previous_cases_preserved": 30,
+    "added_protocol": [
+      "P26",
+      "P27",
+      "P28",
+      "P29"
+    ],
+    "added_frozen": [
+      "F06"
+    ],
+    "total_cases": 35,
+    "existing_rubrics_and_budgets_unchanged": true
+  },
+  "limitations": [
+    "No arbitrary paraphrase/causal/probability semantic verifier is implemented by the label guard. It protects explicit known certification phrases only.",
+    "Short-body preservation and fair excerpts improve visibility, not proof of per-claim evidence completeness.",
+    "Frozen tasks failed before reaching the changed handoff/delivery paths. No successful end-to-end claim is supported.",
+    "An English negative-label regression was added during the frozen batch; that batch remains diagnostic, not acceptance of the final source fingerprint.",
+    "No live-source model rerun, deployment, commit or production service restart was performed."
+  ],
+  "next_investigation": "First-turn reasoning progress detection and logical-call retry budget interaction; preserve current frozen budgets and raw failures.",
+  "source_fingerprint": {
+    "git_revision": "c5d61489ec31886ac7480f68fb2d1b719690ddbb",
+    "code_and_profiles_sha256": "1fd91a1d52dd64d1d84022fa4e30b8170b96481e82370fd47804ab0d9b47e4a4"
+  }
+}

@@ -1273,12 +1273,24 @@ class AgentBus:
         max_turns = pending.max_turns
         runtime_spec = pending.runtime_spec
         session_id = session.session_id
+        active_runtime = runtime_spec or session.runtime_spec or SubAgentRuntimeSpec()
+        session_item = SubTask(
+            question=task_prompt,
+            role_id=session.role_id,
+            system_prompt=session.system_prompt,
+            metadata=dict(pending.task_metadata),
+        )
 
         # Build initial_messages from trimmed prior history, before we
         # mutate session.messages so the trimmer sees the clean state.
         trimmed = session.trimmer.trim(
             session.messages, session.task_boundaries,
         )
+        if (
+            active_runtime.include_prior_history is not None
+            and not active_runtime.include_prior_history(session_item)
+        ):
+            trimmed = []
         initial_messages: list[Message] = [
             system_msg(session.system_prompt), *trimmed,
         ]
@@ -1292,16 +1304,6 @@ class AgentBus:
         effective_max_turns = (
             max_turns if max_turns is not None else session.max_turns
         )
-        active_runtime = (
-            runtime_spec or session.runtime_spec or SubAgentRuntimeSpec()
-        )
-        session_item = SubTask(
-            question=task_prompt,
-            role_id=session.role_id,
-            system_prompt=session.system_prompt,
-            metadata=dict(pending.task_metadata),
-        )
-
         # Snapshot for _run closure so later mutations don't leak.
         # ``run_agent_loop`` only appends a HumanMessage when ``user_message``
         # is non-empty (resume path re-enters with ``user_message=""``). We
@@ -1394,6 +1396,10 @@ class AgentBus:
                     model_profile=active_runtime.model_profile,
                     history_policy=active_runtime.history_policy,
                     pause_check=self._task_pause_check_or_none(session.task_id),
+                    scope_metadata={
+                        "agent_session_id": session.session_id,
+                        "agent_job_id": job_id,
+                    },
                 )
                 if active_runtime.context_setup is not None:
                     coro = _run_within_context(

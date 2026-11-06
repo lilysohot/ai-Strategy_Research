@@ -31,6 +31,15 @@ def test_finished_answer_stays_complete() -> None:
     assert _downgrade_unfinished("complete", "no_tool", ANSWER) == "complete"
 
 
+def test_market_uncertainty_is_not_unfinished_agent_work() -> None:
+    for text in (
+        "三个监控目标已保存。支撑是否成立须待收盘验证。",
+        "本轮复核完成，后续走势仍待确认。",
+        "目标已保存，下一步行情是否突破仍需市场验证。",
+    ):
+        assert _downgrade_unfinished("complete", "no_tool", text) == "complete"
+
+
 def test_other_statuses_are_untouched() -> None:
     assert _downgrade_unfinished("best_effort", "llm_error", "半成品") == "best_effort"
     assert _downgrade_unfinished("not_found", "llm_error", "") == "not_found"

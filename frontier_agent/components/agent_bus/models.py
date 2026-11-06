@@ -187,6 +187,10 @@ class SubAgentRuntimeSpec:
     # (rw)) is scoped to that sub-agent and reset on exit. ``None`` → no
     # wrapping (agent_team leases its sandbox through its own mechanism).
     context_setup: Callable[[str, SubTask], Any] | None = None
+    # Workflow-controlled replay of completed tasks into a new session job.
+    # False starts from the system prompt and the new task; audit history and
+    # job results are retained. None preserves ordinary reusable-session replay.
+    include_prior_history: Callable[[SubTask], bool] | None = None
 
 
 @dataclass

@@ -196,7 +196,9 @@ def _load_continuity_inputs(
 
 
 def _load_research_history_contexts(
-    run_root: Path, *, inherited_context: str = "",
+    run_root: Path,
+    *,
+    inherited_context: str = "",
 ) -> list[str]:
     """Load archived sources plus the full head behind the bounded model view."""
 
@@ -235,7 +237,9 @@ def _load_monitor_history_contexts(run_root: Path) -> list[str]:
         if portable.is_file():
             contexts.append(portable.read_text(encoding="utf-8"))
         elif native.is_file():
-            contexts.append(canonical_json(export_conversation_context(native.read_text(encoding="utf-8"))))
+            contexts.append(
+                canonical_json(export_conversation_context(native.read_text(encoding="utf-8")))
+            )
     except (OSError, ValueError):
         logging.getLogger("server.worker").warning("Monitoring history head unavailable")
     valid = []
@@ -674,6 +678,9 @@ async def run_once(args: argparse.Namespace) -> int:
     recorder.snapshot_outputs_baseline()
 
     investment_context = _load_investment_context(run_root, args.run_id)
+    from plugins.market.evidence import bind_market_evidence, reset_market_evidence
+
+    market_evidence_token = bind_market_evidence(investment_context, run_root / "run")
     context_tokens = None
     # 方案 A：缺料意图对**所有**研究 Run 启用（2026-10-08）——它不依赖业务快照，
     # 只把“要给结论但缺用户真实资料”的意图交给服务端裁决。
@@ -719,12 +726,19 @@ async def run_once(args: argparse.Namespace) -> int:
 
     if os.environ.get("FRONTIER_WATCH_CHANNEL"):
         target_key = "main_agent_tools" if args.pipeline_id == "agent_team" else "agent_tools"
-        overrides["agent"][target_key] = list(dict.fromkeys([
-            *overrides["agent"][target_key], "get_watch_targets", "submit_watch_intents",
-        ]))
+        overrides["agent"][target_key] = list(
+            dict.fromkeys(
+                [
+                    *overrides["agent"][target_key],
+                    "get_watch_targets",
+                    "submit_watch_intents",
+                ]
+            )
+        )
 
     metadata: dict[str, Any] = {
         "archive_prior_tasks": True,
+        "research_intake": not monitoring,
         "profile": PROFILE_NAME,
         "profile_overrides": overrides,
         "fs_mode": overrides["agent"]["fs_mode"],
@@ -761,6 +775,10 @@ async def run_once(args: argparse.Namespace) -> int:
             "crossing 首次采样达标立即触发，此后需回到条件外再次穿越。多目标同轮一个信号。"
             "更新目标必须保留已有模式，除非本轮明确要求改变；不根据名字猜测已保存模式。"
             "重新设定走势关键价前先获取最新行情，核对目标价、比较条件与依据文字是否一致。"
+            "写入引用本轮工具返回的 evidence_ref，沿用现有 intent_key。"
+            "说明更新保留穿越基线，价格条件真实变化才重置；无需逐轮改写带时点的历史快照。"
+            "现价、距离和盈亏放在本轮答复，长期任务只保存稳定条件。"
+            "数值优先使用行情的 display_numbers、monitoring_metrics，注意每个百分比的分母。"
             "有持仓时结合行情综合分析，无持仓不阻止研究；多次触发时判断该价是否值得长期监控。"
             "不得绕过暂停或取消；以工具的真实回执说明保存结果，不以正文代替落库。"
         )
@@ -801,10 +819,14 @@ async def run_once(args: argparse.Namespace) -> int:
     if history_enabled:
         from plugins.tools.research_history import bind_research_history
 
-        contexts = (_load_monitor_history_contexts(run_root) if monitoring
-                    else _load_research_history_contexts(
-                        run_root, inherited_context=cross_mode_context,
-                    ))
+        contexts = (
+            _load_monitor_history_contexts(run_root)
+            if monitoring
+            else _load_research_history_contexts(
+                run_root,
+                inherited_context=cross_mode_context,
+            )
+        )
         history_token = bind_research_history(contexts)
     if monitoring:
         metadata["_sys_prompt_addendum"] = metadata.get("_sys_prompt_addendum", "") + (
@@ -932,6 +954,7 @@ async def run_once(args: argparse.Namespace) -> int:
         except Exception:
             logging.getLogger("worker").warning("diff generation failed", exc_info=True)
         _finalize_investment_context(run_root, context_tokens)
+        reset_market_evidence(market_evidence_token)
         _finalize_input_intent(run_root, intent_token)
         if history_token is not None:
             from plugins.tools.research_history import reset_research_history
@@ -967,7 +990,9 @@ async def run_once(args: argparse.Namespace) -> int:
     try:
         summary["cache_attempts"] = cache_stats_for_directory(run_root)
     except OSError:
-        logging.getLogger("worker").warning("Could not read attempt cache diagnostics", exc_info=True)
+        logging.getLogger("worker").warning(
+            "Could not read attempt cache diagnostics", exc_info=True
+        )
     # F22 / F06-RUN-3 + F06 power durability: atomic + fsynced persist (see
     # persist_summary). A write failure is logged but must never mask the outcome.
     persist_summary(run_root, summary)

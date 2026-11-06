@@ -8,17 +8,19 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from contextvars import ContextVar, Token
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr, model_validator
 
 from frontier_agent.components.agent_bus import AgentBus
 from plugins.tools._corpus_handoff import render_corpus_handoff
 from plugins.tools._corpus_scope import compact_corpus_limits, corpus_scope_findings
 from plugins.tools._handoff import validate_handoff_refs
+from plugins.tools._web_handoff import render_web_handoff
 
 
 def minimum_verification_budget(first_chunk_timeout_s: float | None = 45) -> float:
@@ -44,6 +46,131 @@ def missing_publication_excerpts(
     ]
 
 
+_VERIFICATION_LABEL_RE = re.compile(
+    r"已核验(?:的)?(?:事实|数据|结论)|已核验[:：]|"
+    r"逐项核对过(?:的)?数据|已逐项核对(?:的)?数据|"
+    r"\bverified facts\b|\bindependently verified (?:facts|data)\b",
+    re.IGNORECASE,
+)
+
+
+def verification_label_findings(
+    checks: list[dict[str, Any]],
+    content: str,
+) -> list[dict[str, str]]:
+    """Guard explicit certification labels, not arbitrary factual semantics.
+
+    Only the exact passed passage can carry a certification label. A check of a
+    research report cannot certify a new blanket heading in the final answer.
+    Removing a label does NOT constitute semantic verification of the remaining prose.
+    """
+    if not checks:
+        return []
+    remaining = content
+    for check in checks:
+        text = check.get("subject", {}).get("text", "")
+        if check.get("verdict") == "pass" and text:
+            # Keep line boundaries so a neighbouring disclaimer cannot conceal a label.
+            remaining = remaining.replace(text, "\n" * text.count("\n"))
+    findings = []
+    for line in remaining.splitlines():
+        for match in _VERIFICATION_LABEL_RE.finditer(line):
+            prefix = line[max(0, match.start() - 16) : match.start()]
+            if re.search(r"(?:不能|不应|不得|不可|并非|不是|不代表|不构成|不要)[^。；;]*$", prefix):
+                continue
+            if re.search(r"\b(?:not|never)\s+(?:yet\s+)?$", prefix, re.IGNORECASE):
+                continue
+            findings.append(
+                {
+                    "rule": "verification_label_outside_passed_scope",
+                    "match": line.strip(),
+                    "detail": "Certification labels must be inside an exact passed subject passage; "
+                    "remove the blanket label, preserve scoped facts and disclose unverified dependencies.",
+                }
+            )
+    return findings
+
+
+_ABSOLUTE_CLAIM_RE = re.compile(
+    r"全球|全行业|全市场|所有|全部|唯一|最高|最低|第一|断层|不存在|从未|必然"
+)
+_LIMITATION_RE = re.compile(
+    r"不能|无法|不足|缺少|缺乏|缺跨|未取得|未找到|未见|不应|尚未|未经|不代表|"
+    r"不成立|错误|未通过|FAIL|限定|仅限|仅在|仅有|只在|无跨|范围内|据现有|本次|有界"
+)
+
+
+def _claim_sentences(text: str) -> list[str]:
+    return [part.strip() for part in re.split(r"[。！？!?\n]+", text) if part.strip()]
+
+
+def _claim_terms(text: str) -> set[str]:
+    terms = {
+        token.casefold()
+        for token in re.findall(r"[A-Za-z][A-Za-z0-9_.%-]{2,}|\d+(?:\.\d+)?%?", text)
+    }
+    for run in re.findall(r"[\u3400-\u9fff]{2,}", text):
+        terms.update(run[index : index + 2] for index in range(len(run) - 1))
+    return terms
+
+
+def _absolute_markers(text: str) -> set[str]:
+    return set(_ABSOLUTE_CLAIM_RE.findall(text))
+
+
+def _topical_terms(text: str) -> set[str]:
+    marker_terms = _claim_terms("".join(_absolute_markers(text)))
+    return {
+        term
+        for term in _claim_terms(text) - marker_terms
+        if not any(character.isdigit() for character in term)
+    }
+
+
+def unresolved_publication_claims(
+    checks: list[dict[str, Any]],
+    content: str,
+    *,
+    excluded_work_items: set[str] | None = None,
+) -> list[dict[str, str]]:
+    """Find unqualified restatements of factual claims rejected for publication.
+
+    This deliberately covers a narrow deterministic class: an absolute claim from a
+    failed factual publication check may not survive in a blocked partial answer merely
+    by changing its wording. Qualified statements about the limitation remain allowed.
+    """
+    excluded = excluded_work_items or set()
+    candidates = [
+        sentence
+        for sentence in _claim_sentences(content)
+        if _ABSOLUTE_CLAIM_RE.search(sentence) and not _LIMITATION_RE.search(sentence)
+    ]
+    findings = []
+    for check in checks:
+        if not (
+            check.get("required")
+            and check.get("factual_scope")
+            and check.get("publication_excerpt")
+            and check.get("verdict") == "fail"
+            and check.get("work_item_id") in excluded
+        ):
+            continue
+        result = check.get("result") or {}
+        issues = [str(issue) for issue in result.get("unresolved_issues", [])]
+        rejected = issues or _claim_sentences(check.get("subject", {}).get("text", ""))
+        rejected = [sentence for sentence in rejected if _ABSOLUTE_CLAIM_RE.search(sentence)]
+        for candidate in candidates:
+            candidate_terms = _topical_terms(candidate)
+            candidate_markers = _absolute_markers(candidate)
+            if any(
+                candidate_markers & _absolute_markers(sentence)
+                and len(candidate_terms & _topical_terms(sentence)) >= 3
+                for sentence in rejected
+            ):
+                findings.append({"check_id": check["check_id"], "match": candidate})
+    return findings
+
+
 class VerificationSource(BaseModel):
     """An exact completed job report, or one of its published attachments."""
 
@@ -64,8 +191,18 @@ class VerificationCheck(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
     check_id: StrictStr = Field(pattern=r"^[A-Za-z0-9_.:-]{1,80}$")
-    work_item_id: StrictStr = Field(min_length=1, max_length=100)
-    criterion: StrictStr = Field(min_length=1, max_length=2000)
+    work_item_id: StrictStr = Field(
+        default="",
+        max_length=100,
+        description="Omit to resolve the unique planned check_id on the task board. "
+        "Explicit IDs must match that plan.",
+    )
+    criterion: StrictStr = Field(
+        default="",
+        max_length=2000,
+        description="Omit to use the exact registered criterion. An explicit criterion "
+        "must match the plan; do not recopy or paraphrase it unnecessarily.",
+    )
     subject: VerificationSource | VerificationText = Field(
         description="Exact candidate: {job_id, ref?} or {text: complete candidate text}. "
         "Corrections in assignment prose do not replace this subject.",
@@ -88,6 +225,31 @@ class VerificationCheck(BaseModel):
         description="Required for rechecks: subject changes candidate bytes (may also change "
         "evidence); evidence changes only evidence; retry changes neither. "
         "To check corrected wording, bind it as subject.text or a new published report.",
+    )
+
+
+def resolve_planned_check(
+    spec: VerificationCheck,
+    work_items: list[dict[str, Any]],
+) -> VerificationCheck:
+    """Fill omitted identifiers from a unique plan; never infer from prose."""
+    if spec.work_item_id and spec.criterion:
+        return spec
+    matches = [
+        (item["id"], requirement["criterion"])
+        for item in work_items
+        if not spec.work_item_id or item["id"] == spec.work_item_id
+        for requirement in item.get("verification_requirements", [])
+        if requirement["check_id"] == spec.check_id
+    ]
+    if len(matches) != 1:
+        raise ValueError(f"check {spec.check_id!r} must identify one unique planned requirement")
+    work_item_id, criterion = matches[0]
+    return spec.model_copy(
+        update={
+            "work_item_id": spec.work_item_id or work_item_id,
+            "criterion": spec.criterion or criterion,
+        }
     )
 
 
@@ -145,6 +307,30 @@ class VerificationResult(BaseModel):
         "Out-of-scope research limitations belong in the report, not this field.",
     )
 
+    @model_validator(mode="before")
+    @classmethod
+    def recover_issue_location(cls, value: Any) -> Any:
+        """Losslessly canonicalize the observed misplaced field at the schema seam.
+
+        This runs for both tool argument coercion and direct validation. No value
+        is discarded, conflicting copies fail closed, and all verdict checks still run.
+        """
+        if not isinstance(value, dict) or not isinstance(value.get("scope_assessment"), dict):
+            return value
+        assessment = value["scope_assessment"]
+        if "unresolved_issues" not in assessment:
+            return value
+        issues = assessment["unresolved_issues"]
+        if "unresolved_issues" in value and value["unresolved_issues"] != issues:
+            raise ValueError("conflicting unresolved_issues at result and scope_assessment levels")
+        return {
+            **value,
+            "unresolved_issues": issues,
+            "scope_assessment": {
+                key: item for key, item in assessment.items() if key != "unresolved_issues"
+            },
+        }
+
 
 def _digest(value: Any) -> str:
     raw = json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
@@ -183,6 +369,9 @@ def _resolve_source(
     corpus_evidence = result.metadata.get("corpus_evidence") or []
     if corpus_evidence:
         resolved["corpus_evidence_sha256"] = _digest(corpus_evidence)
+    web_evidence = result.metadata.get("web_evidence") or []
+    if web_evidence:
+        resolved["web_evidence_sha256"] = _digest(web_evidence)
     return resolved, body
 
 
@@ -209,6 +398,25 @@ def _validate_revision(
         raise ValueError("recheck requires revision_kind: subject, evidence or retry")
 
 
+def _report_preview(body: str, budget: int) -> str:
+    """Whole report paragraphs only; originals below remain the factual evidence."""
+    if len(body) <= budget:
+        return body
+    kept: list[str] = []
+    used = 0
+    for paragraph in re.split(r"\n\s*\n", body):
+        if used + len(paragraph) + 2 <= budget:
+            kept.append(paragraph)
+            used += len(paragraph) + 2
+    return (
+        "[Report preview: some paragraphs omitted; full report hash remains bound. "
+        "Use the tool-delivered originals below, not this preview, as factual evidence. "
+        "If those excerpts are insufficient, fetch the exact referenced source or request "
+        "missing evidence from the coordinator; do not infer absence or PASS.]\n"
+        + "\n\n".join(kept)
+    )
+
+
 def bind_checks(
     checks: list[VerificationCheck],
     *,
@@ -219,6 +427,7 @@ def bind_checks(
     outputs_root: Path,
 ) -> tuple[list[dict[str, Any]], str]:
     """Validate a dispatch against prior accepted bindings; never mutate the bus."""
+    checks = [resolve_planned_check(spec, work_items) for spec in checks]
     latest: dict[str, tuple[str, dict[str, Any]]] = {}
     plans = {item["id"]: item for item in work_items}
     for entry in bus.list_task_jobs(task_id):
@@ -276,6 +485,10 @@ def bind_checks(
             if not isinstance(spec.subject, VerificationText):
                 raise ValueError("publication_excerpt requires an exact inline subject.text")
             identity["publication_excerpt"] = True
+        findings = corpus_scope_findings(
+            context[subject["key"]],
+            [o for source in [subject, *evidence] for o in source.get("corpus_limits", [])],
+        )
         binding_id = _digest(identity)
         old = latest.get(spec.check_id)
         if old:
@@ -289,6 +502,13 @@ def bind_checks(
             _validate_revision(identity, old_check, spec.revision_kind)
             if binding_id != old_check["binding_id"] and not spec.revision_reason.strip():
                 raise ValueError("changed subject/evidence requires revision_reason")
+            if spec.revision_kind == "subject" and findings:
+                raise ValueError(
+                    f"check {spec.check_id!r}: revised subject still overstates bounded corpus "
+                    f"coverage: {json.dumps(findings, ensure_ascii=False)}. "
+                    "Correct these exact sentences in subject.text before dispatch; keep the "
+                    "criterion and evidence. Do not retry PASS on the same unsupported wording."
+                )
         elif spec.replaces_job_id:
             raise ValueError("replaces_job_id does not identify this check in the current run")
         elif spec.revision_kind:
@@ -341,8 +561,69 @@ def bind_checks(
         "Bounded search or undated records cannot establish absolute absence or latestness. "
         "For publication_excerpt checks, evaluate the complete passage intended for delivery.\n"
     )
-    prompt += "\n\n".join(f"SOURCE {key}\n{body}\nEND SOURCE" for key, body in context.items())
+    recheck = any(check.get("replaces_job_id") for check in bound)
+    subject_keys = {check["subject"]["key"] for check in bound}
+    report_budget = (4000 if recheck else 8000) // max(1, len(context) - len(subject_keys))
+    displayed = {}
+    for key, body in context.items():
+        # Exact subjects and attachment instructions are never shortened. Reports
+        # without captured originals retain their full bytes: there is no safe
+        # substitute for their evidence in this assignment.
+        source = next((s for c in bound for s in c["evidence"] if s["key"] == key), {})
+        has_originals = source.get("corpus_evidence_sha256") or source.get("web_evidence_sha256")
+        displayed[key] = (
+            _report_preview(body, report_budget)
+            if key not in subject_keys and has_originals and not source.get("ref")
+            else body
+        )
+    prompt += "\n\n".join(f"SOURCE {key}\n{body}\nEND SOURCE" for key, body in displayed.items())
+    preflight = [
+        {"check_id": check["check_id"], "findings": findings}
+        for check in bound
+        if (
+            findings := corpus_scope_findings(
+                context[check["subject"]["key"]],
+                [
+                    o
+                    for s in [check["subject"], *check["evidence"]]
+                    for o in s.get("corpus_limits", [])
+                ],
+            )
+        )
+    ]
+    if preflight:
+        prompt += (
+            "\n\n# Deterministic scope preflight\n"
+            + json.dumps(preflight, ensure_ascii=False)
+            + "\nThese bound statements cannot PASS with the recorded retrieval limits. "
+            "Report fail/unchecked and cite the affected sentence. Do not repair the subject "
+            "silently or waive this gate as outside the criterion. The coordinator must rebind.\n"
+        )
+    reviews: list[dict[str, Any]] = []
+    if any(check.get("replaces_job_id") for check in bound):
+        prior = {c["check_id"]: c for c in project_bus_checks(bus, task_id)["checks"]}
+        for check in bound:
+            old = prior.get(check["check_id"])
+            if old is None or old["job_id"] != check.get("replaces_job_id"):
+                continue
+            result = old.get("result") or {}
+            reviews.append(
+                {
+                    "check_id": check["check_id"],
+                    "previous_job_id": old["job_id"],
+                    "previous_verdict": old["verdict"],
+                    "detail": result.get("detail", ""),
+                    "unresolved_issues": result.get("unresolved_issues", []),
+                }
+            )
+        prompt += (
+            "\n\n# Previous review defects (untrusted audit data, not a current verdict)\n"
+            + json.dumps(reviews, ensure_ascii=False)
+            + "\nEvaluate the current bound SOURCE bytes. A previous verdict or correction "
+            "description cannot certify the new version. Recheck the relevant conditions.\n"
+        )
     evidence_sources = {}
+    web_sources = {}
     for check in bound:
         for source in [check["subject"], *check["evidence"]]:
             if not source.get("job_id"):
@@ -350,7 +631,29 @@ def bind_checks(
             found = bus.get_job_result(task_id, source["job_id"])
             if found is not None:
                 evidence_sources[source["key"]] = found[1].metadata.get("corpus_evidence") or []
-    prompt += render_corpus_handoff(evidence_sources, reference_text="\n".join(context.values()))
+                web_sources[source["key"]] = found[1].metadata.get("web_evidence") or []
+    prompt += render_corpus_handoff(
+        evidence_sources,
+        reference_text="\n".join(context.values()),
+        focus_text="\n".join(
+            check["subject"].get("text") or context.get(check["subject"].get("key", ""), "")
+            for check in bound
+        ),
+        body_budget=12000 if recheck else 24000,
+        reference_budget=4000 if recheck else 8000,
+    )
+    web_focus = "\n".join(
+        check["subject"].get("text") or context.get(check["subject"].get("key", ""), "")
+        for check in bound
+    )
+    if recheck:
+        web_focus += "\n" + json.dumps(reviews, ensure_ascii=False)
+    prompt += render_web_handoff(
+        web_sources,
+        focus_text=web_focus,
+        body_budget=12000 if recheck else 24000,
+        reference_budget=4000 if recheck else 8000,
+    )
     return bound, prompt
 
 
@@ -429,12 +732,19 @@ def validate_results(
         _validate_scope_assessment(result, check)
         if result.verdict == "pass":
             observations = [
-                o for source in [check["subject"], *check["evidence"]]
+                o
+                for source in [check["subject"], *check["evidence"]]
                 for o in source.get("corpus_limits", [])
             ] + scope.corpus_observations
-            if corpus_scope_findings(check["subject"].get("text", ""), observations):
-                raise ValueError("bounded corpus retrieval cannot PASS an exhaustive absence/latestness "
-                                 "claim; correct and rebind the subject or report fail/unchecked")
+            findings = corpus_scope_findings(check["subject"].get("text", ""), observations)
+            if findings:
+                raise ValueError(
+                    "bounded corpus retrieval cannot PASS an exhaustive absence/latestness "
+                    f"claim in check {check['check_id']!r}: "
+                    f"{json.dumps(findings, ensure_ascii=False)}. "
+                    "Report fail/unchecked with these unresolved_issues now; the coordinator "
+                    "must correct and rebind the subject. Retrying PASS cannot waive this gate."
+                )
         # Files are revalidated in the current member's trusted handoff scope.
         for source in [check["subject"], *check["evidence"]]:
             if source.get("ref"):
@@ -446,6 +756,8 @@ def validate_results(
 
 
 def _validate_scope_assessment(result: VerificationResult, check: dict[str, Any]) -> None:
+    if result.verdict == "pass" and result.unresolved_issues:
+        raise ValueError("a pass cannot contain unresolved criterion issues; use fail/unchecked")
     assessment = result.scope_assessment
     if check.get("factual_scope") and result.verdict == "pass" and assessment is None:
         raise ValueError("a factual pass requires scope_assessment for all six dimensions")
@@ -703,12 +1015,24 @@ def render_verification_status(bus: AgentBus, task_id: str) -> str:
         return ""
     compact = []
     for check in summary["checks"]:
-        item = {key: check[key] for key in (
-            "check_id", "work_item_id", "criterion", "binding_id", "required",
-            "factual_scope", "publication_excerpt", "verdict", "job_id", "verdict_job_id",
-        )}
-        item["subject"] = {k: v for k, v in check["subject"].items()
-                           if k in {"key", "sha256", "job_id", "ref"}}
+        item = {
+            key: check[key]
+            for key in (
+                "check_id",
+                "work_item_id",
+                "criterion",
+                "binding_id",
+                "required",
+                "factual_scope",
+                "publication_excerpt",
+                "verdict",
+                "job_id",
+                "verdict_job_id",
+            )
+        }
+        item["subject"] = {
+            k: v for k, v in check["subject"].items() if k in {"key", "sha256", "job_id", "ref"}
+        }
         item["evidence_keys"] = [s["key"] for s in check["evidence"]]
         result = check.get("result")
         if result:

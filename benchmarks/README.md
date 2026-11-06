@@ -125,3 +125,9 @@ Standardized inline-scored rows require `task_id`, `task_question`,
 `ground_truth`, and `answer_type`. Bundled external-scored datasets may select
 JSON-list input, omit ground truth from collection tasks, and provide a default
 answer type through `DatasetConfig`.
+
+## Team workflow regression evaluation
+
+See [team_workflow/README.md](team_workflow/README.md) for the 25-case protocol and
+fixed-source team evaluation set. It complements the isolated synthesis experiment
+in [team_synthesis/README.md](team_synthesis/README.md).

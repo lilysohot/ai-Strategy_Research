@@ -238,7 +238,11 @@ def _defaults() -> dict[str, Any]:
 def _continuous_policy(columns: dict[str, Any]) -> None:
     if columns.get("trigger_mode") not in LONG_RUNNING_MODES:
         return
-    if columns.get("market") != "CN" or columns.get("currency") != "CNY" or columns.get("quote_basis") not in {"last", "last_trade"}:
+    if (
+        columns.get("market") != "CN"
+        or columns.get("currency") != "CNY"
+        or columns.get("quote_basis") not in {"last", "last_trade"}
+    ):
         raise biz.ValidationError("长期监控当前仅支持人民币 A 股最新成交价")
     if not re.fullmatch(r"(?:6\d{5}\.SH|[03]\d{5}\.SZ)", columns.get("symbol", "")):
         raise biz.ValidationError("请使用行情源支持的完整 A 股代码")
@@ -568,7 +572,32 @@ async def update_rule(
         merged.pop("threshold_low", None)
         merged.pop("threshold_high", None)
 
-        changed = sorted(set(patch) & (SPEC_KEYS | {"name"}))
+        before = _revision_columns(prev) if prev else {}
+        after = {**merged, "threshold_low": low, "threshold_high": high}
+        changed_columns = {key for key, value in after.items() if before.get(key) != value}
+        # Compare parsed values, not supplied keys: "20" and "20.00" are
+        # the same price. Description edits must not mint a new crossing.
+        changed = sorted(
+            {
+                "threshold"
+                if key in {"threshold_low", "threshold_high"}
+                else "budget"
+                if key == "budget_json"
+                else key
+                for key in changed_columns
+            }
+            | ({"name"} if name != rule.name else set())
+            | ({"plan_id"} if plan_id != rule.plan_id else set())
+        )
+        reset_trigger = bool(changed_columns - {"task", "budget_json"})
+        if not changed:
+            return {
+                "rule_id": str(rule.id),
+                "version": rule.current_version,
+                "status": "unchanged",
+                "changed_fields": [],
+                "trigger_state_reset": False,
+            }
         new_version = rule.current_version + 1
         session.add(
             store.WatchRuleRevision(
@@ -590,18 +619,21 @@ async def update_rule(
         rule.name = name
         if rule.plan_id != plan_id:
             rule.plan_id = plan_id
-        # 改版不复用旧版报价基线与触发资格：新版本重新布防（DATA-10 消费）。
-        rule.armed = True
-        rule.baseline_price = None
-        rule.last_valid_quote_at = None
-        rule.last_valid_quote_price = None
-        rule.last_check_at = None
-        rule.last_triggered_at = None
-        rule.last_suppressed_reason = None
+        # Only executable condition changes re-arm; task/name edits retain
+        # the observed baseline and already-consumed trigger eligibility.
+        if reset_trigger:
+            rule.armed = True
+            rule.baseline_price = None
+            rule.last_valid_quote_at = None
+            rule.last_valid_quote_price = None
+            rule.last_check_at = None
+            rule.last_triggered_at = None
+            rule.last_suppressed_reason = None
         await session.flush()
         from server.monitor_pipeline import request_check
 
-        await request_check(session, rule)
+        if reset_trigger:
+            await request_check(session, rule)
         _append_audit(
             session,
             user_id=user_id,
@@ -618,6 +650,7 @@ async def update_rule(
             "version": new_version,
             "status": rule.status,
             "changed_fields": changed,
+            "trigger_state_reset": reset_trigger,
         }
 
     return await biz.run_write(

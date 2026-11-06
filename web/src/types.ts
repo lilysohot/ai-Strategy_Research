@@ -38,6 +38,8 @@ export interface Session {
   updated_at: string | null
   /** Turn count, returned by the list/session endpoints. */
   turn_count?: number | null
+  /** Latest persisted assistant turn belonging to a successfully completed run. */
+  last_completed_turn_seq?: number
 }
 
 export interface Turn {

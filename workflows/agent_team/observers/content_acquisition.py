@@ -1,4 +1,4 @@
-"""Retain acquisition limits independently of a member's prose report."""
+"""Retain acquisition limits and delivered evidence outside a member's prose report."""
 
 from __future__ import annotations
 
@@ -8,6 +8,7 @@ from typing import Any
 from frontier_agent.core.loop_types import AgentLoopResult, BaseObserver, ToolResult, TurnContext
 from plugins.tools._corpus_handoff import evidence_identity, observed_corpus_evidence
 from plugins.tools._verification import record_corpus_observation
+from plugins.tools._web_handoff import observed_web_evidence, web_records
 
 
 class ContentAcquisitionObserver(BaseObserver):
@@ -16,6 +17,7 @@ class ContentAcquisitionObserver(BaseObserver):
     def __init__(self) -> None:
         self._sources: dict[tuple[str, str], dict[str, Any]] = {}
         self._corpus_evidence: dict[str, dict[str, Any]] = {}
+        self._web_evidence: dict[str, dict[str, Any]] = {}
 
     async def on_tool_result(self, ctx: TurnContext, result: ToolResult) -> None:
         if result.name not in {"web_fetch", "view_image", "read_file", "corpus_search", "corpus_fetch"}:
@@ -48,9 +50,14 @@ class ContentAcquisitionObserver(BaseObserver):
             ctx.metadata["content_acquisition"] = list(self._sources.values())
             return
         records = []
-        if isinstance(payload, dict) and payload.get("ok") is False:
+        if result.name == "web_fetch":
+            records = web_records(result, payload)
+            for record in observed_web_evidence(result, records):
+                self._web_evidence[evidence_identity(record)] = record
+            ctx.metadata["web_evidence"] = list(self._web_evidence.values())
+        elif isinstance(payload, dict) and payload.get("ok") is False:
             records = payload.get("items") or [payload]
-        if not records:
+        if not records and result.name != "web_fetch":
             if result.name == "web_fetch":
                 raw = result.args.get("url")
             elif result.name == "view_image":
@@ -87,3 +94,4 @@ class ContentAcquisitionObserver(BaseObserver):
     async def on_loop_end(self, result: AgentLoopResult) -> None:
         result.metadata["content_acquisition"] = list(self._sources.values())
         result.metadata["corpus_evidence"] = list(self._corpus_evidence.values())
+        result.metadata["web_evidence"] = list(self._web_evidence.values())

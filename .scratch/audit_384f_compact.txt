@@ -1,0 +1,53 @@
+MANIFEST 224.73 report None n 9 refs not returned [('ce:25ce5803bf1d1b15033ce2f2aada5dc', 34)]
+RESULT 224.73 {'ok': False, 'errors': ['invalid_tool_reference'], 'evidence_status': None, 'report_bound': None, 'publish_status': None, 'counts': None} issues []
+MANIFEST 229.15 report None n 2 refs not returned []
+RESULT 229.21 {'ok': True, 'errors': None, 'evidence_status': 'verified', 'report_bound': False, 'publish_status': 'pending_report', 'counts': {'supported': 2, 'partial': 0, 'unsupported': 0}} issues []
+MANIFEST 236.71 report None n 7 refs not returned [('ce:25ce5803bf1d1b15033ce2f2aada5dc', 34)]
+RESULT 236.71 {'ok': False, 'errors': ['invalid_tool_reference'], 'evidence_status': None, 'report_bound': None, 'publish_status': None, 'counts': None} issues []
+MANIFEST 238.92 report None n 2 refs not returned []
+RESULT 238.98 {'ok': True, 'errors': None, 'evidence_status': 'verified', 'report_bound': False, 'publish_status': 'pending_report', 'counts': {'supported': 2, 'partial': 0, 'unsupported': 0}} issues []
+MANIFEST 242.45 report None n 1 refs not returned []
+RESULT 242.48 {'ok': True, 'errors': None, 'evidence_status': 'verified', 'report_bound': False, 'publish_status': 'pending_report', 'counts': {'supported': 1, 'partial': 0, 'unsupported': 0}} issues []
+MANIFEST 245.38 report None n 2 refs not returned []
+RESULT 245.44 {'ok': True, 'errors': None, 'evidence_status': 'verified', 'report_bound': False, 'publish_status': 'pending_report', 'counts': {'supported': 2, 'partial': 0, 'unsupported': 0}} issues []
+MANIFEST 252.12 report None n 4 refs not returned []
+RESULT 252.23 {'ok': True, 'errors': None, 'evidence_status': 'verified', 'report_bound': False, 'publish_status': 'pending_report', 'counts': {'supported': 4, 'partial': 0, 'unsupported': 0}} issues []
+MANIFEST 256.02 report None n 5 refs not returned []
+RESULT 256.91 {'ok': True, 'errors': None, 'evidence_status': 'verified', 'report_bound': False, 'publish_status': 'pending_report', 'counts': {'supported': 5, 'partial': 0, 'unsupported': 0}} issues []
+MANIFEST 266.78 report None n 11 refs not returned [('ce:25ce5803bf1d1b15033ce2f2aada5dc', 34)]
+RESULT 266.78 {'ok': False, 'errors': ['invalid_tool_reference'], 'evidence_status': None, 'report_bound': None, 'publish_status': None, 'counts': None} issues []
+MANIFEST 269.11 report None n 2 refs not returned []
+RESULT 269.16 {'ok': True, 'errors': None, 'evidence_status': 'verified', 'report_bound': False, 'publish_status': 'pending_report', 'counts': {'supported': 2, 'partial': 0, 'unsupported': 0}} issues []
+MANIFEST 273.73 report None n 1 refs not returned []
+RESULT 273.84 {'ok': True, 'errors': None, 'evidence_status': 'verified', 'report_bound': False, 'publish_status': 'pending_report', 'counts': {'supported': 1, 'partial': 0, 'unsupported': 0}} issues []
+MANIFEST 282.43 report None n 4 refs not returned []
+RESULT 282.64 {'ok': True, 'errors': None, 'evidence_status': 'verified', 'report_bound': False, 'publish_status': 'pending_report', 'counts': {'supported': 4, 'partial': 0, 'unsupported': 0}} issues []
+SOURCE_TERM 25ce580
+59.71 corpus_fetch  185, "text_end": 295}], "content_role": "content", "relations": [], "relation_status": "unknown", "evidence_ref": "ce:e25ce5803bf1d1b15033ce2f2aada5dc"}], "item_errors": [], "unresolved": [], "next_cursor": null, "exhausted": true, "fetch_complete": true, "page_id": "fpage:bf2e40fd6e33a8b3", "hint": "提交清单
+66.97 corpus_fetch c619649f8f20f3942ad60adce6ef9e4d672814115a0b304fddb99ea1a3", "text_start": 185, "text_end": 295}], "evidence_ref": "ce:e25ce5803bf1d1b15033ce2f2aada5dc", "content_role": "content", "relations": [], "relation_status": "unknown", "units": [{"unit_id": "unit:0047", "page": 6}, {"unit_id": "unit:0048", "page":
+SOURCE_TERM 95f3ad338
+96.46 corpus_fetch abd6412f37a2bac0b7fa9fdcbb9b2aa8711c59989f2c95e790a376ced1c", "text_start": 952, "text_end": 957}], "evidence_ref": "ce:95f3ad3383ccc709da553edc0f8539c4", "content_role": "content", "relations": [], "relation_status": "unknown", "units": [{"unit_id": "unit:0018", "page": 3}, {"unit_id": "unit:0019", "page": 
+SOURCE_TERM 10 到 50
+SOURCE_TERM 10到50
+SOURCE_TERM 10-50
+SOURCE_TERM 10–50
+SOURCE_TERM 8000
+51.7 corpus_search itle":"本周报告","published":"2026-11-02","excerpts":[{"text":"Anthropic：S­1 招股书厘清现金、承诺支出与利润率。 我们的首个财务模型审视了约1320 亿美元\n的现金、约 8000 亿美元的算力承诺、客户集中度，以及预估未来盈利仍需做出的假设。","ref":"eref:6217673cb10fcb335f2d8a14c75f0286a1427e406022f57dbd7b63711309ae5b:0"},{"text":"Anthropic 今日公开提交了 S­1 招股说明书。本文梳理了该文件的核心内容，并在文末附上了\nAnthr
+59.71 corpus_search 存储、数据中心基建等。Agentic AI 有望显著提高算力需\n求，单个agent 所需的算力有望达到人直接使用AI 的15~100 倍，且大量AI agent 将7*24 持续运行。公司预计前五\n大大型云厂商26 年CAPEX 将接近8000 亿美元，27 年有望达到1.3 万亿美元。公司FY27Q2 数据中心收入达到约\n890 亿美元，同比+117%，其中来自大型云厂商的收入为490 亿美元，来自ACI&E 客户（Neocloud、企业、工业等）\n收入约400 亿美元，显示公司客户逐渐多元化。公司Vera Rubin 已经于8 月实现量产出货，主要的大型云厂商、AI\n云、OEM 均已经下
+153.8 corpus_search dcd1aa83f527c7b0fee0d747a637159b9eacc0:2"},{"text":"在此背景下，Anthropic 提交的 S­1 招股文件显得尤为值得关注。约 1320 亿美元的现金储备提供了\n充裕的资金支持，但约 8000 亿美元的算力承诺使得收入与成本的确认时点成为核心问题。我们的首\n份财务模型对这些履约义务、利润率以及客户集中度进行了详细梳理。对于 CSP 而言，同样的承诺在\n支撑其增长的同时，也加深了对少数大型AI 客户的依赖；单靠合同规模本身，并不能证明其最终的现\n金回报率。\n","ref":"eref:3193e51ab9633c2641a59f8a8ddc
+SOURCE_TERM 2.90
+59.71 corpus_search itle":"仍按原合同执行，所受影响较小：","published":"2026-10-23","excerpts":[{"text":"“大多数 H100 客户都已经签了合同。如果你现在想签新的长期协议，他们的报价约为每GPU 小时\n2.90 美元，而六个月前约为 2.45 美元。”\n","ref":"eref:3b24138dcae7182daccbe15d858ad8c1c432ecdc7aeba16f5d2462300e9cee79:0"},{"text":"1. 在销售合作伙伴 E 的客户中，传统 Azure 支出的增长从第一个日历季度的约15% 上升至第二季度\n的约 20%，第三季
+SNAPKEYS ['task_id', 'role_id', 'max_turns', 'turns_used', 'tool_calls_count', 'stopped_by', 'tools', 'messages']
+MANIFEST_PHASE_INPUT_TOKENS 1232980
+MANIFEST_FILE manifest-000.json owner agent_team_sub:a613b922a973 ids ['C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8']
+MANIFEST_FILE manifest-001.json owner agent_team_sub:a613b922a973 ids ['C1', 'C2']
+MANIFEST_FILE manifest-002.json owner agent_team_sub:a613b922a973 ids ['C3', 'C4']
+MANIFEST_FILE manifest-003.json owner agent_team_sub:a613b922a973 ids ['C5']
+MANIFEST_FILE manifest-004.json owner agent_team_sub:a613b922a973 ids ['C6', 'C7']
+MANIFEST_FILE manifest-005.json owner agent_team_sub:a613b922a973 ids ['C8', 'C10', 'C9', 'C11']
+MANIFEST_FILE manifest-006.json owner agent_team_sub:a613b922a973 ids ['T1', 'T2', 'T3', 'T4', 'T5']
+MANIFEST_FILE manifest-007.json owner agent_team_sub:a613b922a973 ids ['D1', 'D2']
+MANIFEST_FILE manifest-008.json owner agent_team_sub:a613b922a973 ids ['E1']
+MANIFEST_FILE manifest-009.json owner agent_team_sub:a613b922a973 ids ['F1', 'F2', 'F3', 'F4']
+MERGED_IDS ['F1', 'F2', 'F3', 'F4']
+CORPUS_META manifest_verification.json {'status': 'partial', 'counts': {'supported': 0, 'partial': 4, 'unsupported': 0}, 'verification_errors': 0}

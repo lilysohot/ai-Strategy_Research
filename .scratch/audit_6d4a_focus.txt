@@ -1,0 +1,28 @@
+REPLAY {}
+CONTRACT CHECKS
+CHECK model_identity pass None
+CHECK quant_claims pass None
+CHECK attribution unchecked None
+SUBJECT 第三方判断的归属需逐条标明：“开放权重前沿并未更接近领先专有模型”、“开源权重将再次落后闭源前沿 6–12 个月”、“低成本开放权重将承接大批量、定义明确的智能体任务并对 GPT-6.1 Sol 级定价构成下行压力”——这三条是卖方研究机构 2026-10-19 单模型点评中的判断，不是 DeepSeek 或任何厂商的官方表态。台积电管理层在 2026-10-15 业绩电话会上称开源模型“在降低采用门槛”。2026-11-03 的 PLTR FY26Q3 点评判断，开源模型性能提升对 Palantir 整体是利好，但可能给部分模型提供商和服务供应商带来压力（该句为点评本身的第三人称判断，非 Palantir 公司口径；相关财报电话会日期为 2026-11-02）。微软销售合作伙伴渠道访谈（2026-10-23）给出的开源占比口径互相不一致且分母不同：某合作伙伴估计其约 25% 的 Azure AI 客户已在生产环境使用开源模型，但开源模型在其客户的 Azure 模型消耗中仅占约 4%–5%；另一合作伙伴称在其大型微软企业客户组合中开源模型约占模型支出的 20%–25%，不可合并为单一数字。Alphabet 2026 年第三季度资本开支 514 亿美元、全年指引 1950–2050 亿美元为该公司披露口径（2026-10-29 报道），资料库未将其归因于 DeepSeek。国产算力（昇腾 960、10T–20T 参数、2026–2027 年）是券商“以 V4.1 Flash 的优化逻辑推演”得出的推断，资料库中没有任何 DeepSeek 与国产芯片的适配公告。
+MATCHES [{"rule": "corpus_scope_overstatement", "reason": "Bounded/partial retrieval and unknown dates do not prove corpus-wide absence, complete counts, or latestness. State what this search found instead.", "match": "资料库中没有", "sentence": "国产算力（昇腾 960、10T–20T 参数、2026–2027 年）是券商“以 V4.1 Flash 的优化逻辑推演”得出的推断，资料库中没有任何 DeepSeek 与国产芯片的适配公告。", "start": 595, "end": 690, "match_start": 661, "match_end": 667}]
+FINAL_BOUNDARY {"version": 1, "checks": 13, "injections": 7, "bus_task_id": "08f07d935509", "task_id": "08f07d935509", "bus_available": true, "jobs_seen": 5, "gap_count": 0, "last_turn": 10, "state_sha256": "2a4d7d360ea3e6588a748e16c6cc10c76092bcefbdc25f07d7b672a9d41106fe"}
+AGENT main_agent input 700205 output 56341 first_input 12480 max_input 101073 llm_s 287.311
+CONFIG main_agent max_turns 200
+START {"t": "start", "task_id": "08f07d935509", "role_id": "agent_team_main", "max_turns": 200, "ts": 1793865970.7693772}
+DELIVERY 10 chars 7829 manifest_count 26
+DELIVERY 11 chars 9417 manifest_count 26
+DELIVERY 12 chars 9529 manifest_count 26
+DELIVERY 13 chars 9534 manifest_count 26
+AGENT ai_industry_impact_corpus_research.t01 input 773391 output 20681 first_input 13221 max_input 86986 llm_s 111.159
+CONFIG ai_industry_impact_corpus_research.t01 max_turns 100
+AGENT ai_tech_policy_corpus_research.t01 input 527860 output 12368 first_input 13152 max_input 76275 llm_s 70.748
+CONFIG ai_tech_policy_corpus_research.t01 max_turns 100
+AGENT corpus_claim_verifier.t01 input 397939 output 17984 first_input 54850 max_input 80273 llm_s 114.032
+CONFIG corpus_claim_verifier.t01 max_turns 8
+CONTEXT_SIZES total 78998 preamble 2219 binding_and_rules 8097 reports 35056 original_handoff 33626
+AGENT corpus_claim_verifier.t02 input 215354 output 11304 first_input 47178 max_input 59077 llm_s 58.705
+CONFIG corpus_claim_verifier.t02 max_turns 4
+CONTEXT_SIZES total 65176 preamble 1501 binding_and_rules 4150 reports 26203 original_handoff 33322
+AGENT deepseek_model_corpus_research.t01 input 1267681 output 26834 first_input 13393 max_input 98829 llm_s 135.65
+CONFIG deepseek_model_corpus_research.t01 max_turns 100
+RUN_ROOT_FILES [('engine.log', 87467)]

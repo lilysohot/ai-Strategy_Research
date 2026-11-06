@@ -1,0 +1,100 @@
+{
+  "available": true,
+  "malformed_events": 0,
+  "trajectory_wall_s": 759.723,
+  "first_research_report_s": 175.933,
+  "first_report_is_usefulness_score": false,
+  "attempts": 46,
+  "known_usage_attempts": 42,
+  "unknown_usage_attempts": 4,
+  "known_prompt_tokens": 1777023,
+  "cache_known_attempts": 42,
+  "known_cache_read_tokens": 1412480,
+  "cache_hit_rate_on_known_usage": 0.7948574666731945,
+  "llm_attempt_seconds_sum": 934.991,
+  "llm_sum_is_wall_time": false,
+  "outcomes": {
+    "accepted": 41,
+    "discarded": 1,
+    "accepted_degraded": 3,
+    "failed": 1
+  },
+  "failure_reasons": {
+    "stream_empty_tool_arguments": 1,
+    "reasoning_runaway_early": 3,
+    "logical_call_deadline": 1
+  },
+  "tools": {
+    "add_task": 1,
+    "create_subagent": 1,
+    "assign_task": 5,
+    "collect_reports": 6,
+    "update_task": 2,
+    "deliver_answer": 2,
+    "web_search": 11,
+    "corpus_search": 1,
+    "web_fetch": 14,
+    "corpus_submit_manifest": 2,
+    "submit_report": 7
+  },
+  "research_dispatch_attempts": 6,
+  "exact_repeated_tool_requests": 0,
+  "dispatch_start_delay_estimate_s": [
+    29.469,
+    29.462,
+    0.022,
+    0.027,
+    0.033,
+    29.476
+  ],
+  "dispatch_delay_p50_s": 14.747,
+  "dispatch_delay_p90_s": 29.473,
+  "agents": [
+    {
+      "trace": "run/agent/trajectories/main_agent.jsonl",
+      "start": 1793885519.923499,
+      "end": 1793886277.5260878
+    },
+    {
+      "trace": "run/agent/trajectories/research_intake.jsonl",
+      "start": 1793885517.8035645,
+      "end": 1793885519.9023488
+    },
+    {
+      "trace": "run/agent/trajectories/subagents/ai_drama_industry_research.t01.jsonl",
+      "start": 1793885612.147874,
+      "end": 1793885831.5787249
+    },
+    {
+      "trace": "run/agent/trajectories/subagents/ai_video_capability_research.t01.jsonl",
+      "start": 1793885612.1407337,
+      "end": 1793885693.7404432
+    },
+    {
+      "trace": "run/agent/trajectories/subagents/claims_verifier.t01.jsonl",
+      "start": 1793885792.4719524,
+      "end": 1793885900.5259068
+    },
+    {
+      "trace": "run/agent/trajectories/subagents/claims_verifier.t02.jsonl",
+      "start": 1793885942.2710276,
+      "end": 1793886013.9358912
+    },
+    {
+      "trace": "run/agent/trajectories/subagents/claims_verifier.t03.jsonl",
+      "start": 1793886043.379187,
+      "end": 1793886119.005291
+    },
+    {
+      "trace": "run/agent/trajectories/subagents/global_market_research.t01.jsonl",
+      "start": 1793885612.1545267,
+      "end": 1793885751.1293707
+    }
+  ],
+  "limitations": [
+    "Queue delay inferred from dispatch attempts; rejected requests can skew it.",
+    "Parallel attempt durations are not additive wall time.",
+    "First report may be incomplete; semantic usefulness requires review.",
+    "Dollar cost unavailable without an explicit model tariff."
+  ]
+}

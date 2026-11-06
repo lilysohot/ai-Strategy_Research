@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/administrator/FrontierAgent/benchmarks/team_workflow/run.py", line 481, in <module>
+    main()
+  File "/home/administrator/FrontierAgent/benchmarks/team_workflow/run.py", line 463, in main
+    raise SystemExit(run(args))
+                     ^^^^^^^^^
+  File "/home/administrator/FrontierAgent/benchmarks/team_workflow/run.py", line 356, in run
+    returncode = process.wait(timeout=timeout)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/subprocess.py", line 1264, in wait
+    return self._wait(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/subprocess.py", line 2047, in _wait
+    time.sleep(delay)
+KeyboardInterrupt

@@ -1,0 +1,51 @@
+RUF012 Mutable default value for class attribute
+  --> tests/test_dsml_tool_recovery.py:82:20
+   |
+80 |         model = 'scripted'
+81 |         calls = 0
+82 |         feedback = []
+   |                    ^^
+83 |
+84 |         async def chat(self, messages, **kwargs):
+   |
+help: Consider initializing in `__init__` or annotating with `typing.ClassVar`
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> tests/test_team_repair_regression.py:3:1
+   |
+ 1 |   """Minimized failure chain from Web run 6d4a2c7200124b2b9c91c08960133cae."""
+ 2 |
+ 3 | / import json
+ 4 | |
+ 5 | | import pytest
+ 6 | |
+ 7 | | from frontier_agent.core.llm import LLMResponse
+ 8 | | from frontier_agent.core.runtime.loop.tool_call_parser import MultiFormatToolCallParser
+ 9 | | from plugins.tools._corpus_scope import corpus_scope_findings
+10 | | from plugins.tools._verification import (
+11 | |     VerificationCheck,
+12 | |     bind_checks,
+13 | |     commit_results,
+14 | |     reset_verification_scope,
+15 | |     set_verification_scope,
+16 | |     validate_results,
+17 | | )
+18 | | from tests.test_agent_team_verification import add_job, make_bound, planned_items, verdict_for
+19 | | from tests.test_corpus_scope_delivery import COVERAGE
+20 | | from tests.test_corpus_manifest_tool import run_env as _run_env
+21 | | from tests.test_team_atomic_delivery import delivery_run as _delivery_run
+   | |_________________________________________________________________________^
+22 |
+23 |   run_env = _run_env
+   |
+help: Organize imports
+   |
+18 | from tests.test_agent_team_verification import add_job, make_bound, planned_items, verdict_for
+19 + from tests.test_corpus_manifest_tool import run_env as _run_env
+20 | from tests.test_corpus_scope_delivery import COVERAGE
+   - from tests.test_corpus_manifest_tool import run_env as _run_env
+21 | from tests.test_team_atomic_delivery import delivery_run as _delivery_run
+   |
+
+Found 2 errors.
+[*] 1 fixable with the `--fix` option.

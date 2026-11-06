@@ -1,0 +1,640 @@
+# Original Question
+为什么ai短剧能从中国ai领域中脱颖而出，并在全球已经属于断层式领先。为什么短剧会成为中国ai产业应用最快普及的应用场景？
+
+# Your Task
+上一次重检因模型错误未产出任何 verdict（job.5 llm_error）。请重新执行同一重检（字节与证据均未变，revision_kind=retry）。
+
+重要：请保持输出极简，只交结构化结论，不要写长报告、不要写前言与总结。总字数控制在 600 字以内。
+
+对 subject.text（即已修正的新版段落）逐项比对证据 job.1/job.2/job.3：
+1) 上一轮的6项缺陷是否已消除：①DataEye 2026H1 集群是否已标“调研预测”；②“60亿美元大盘”是否已标为预测值、11%是否已标“分子估算/分母预测”；③“6.5亿美元”是否已明示未追溯；④“8成以上”是否已有来源、时间与“仅摘要级”；⑤Wan 3.0 / H3 规格是否已标“据厂商公布”；⑥“1120”是否已标 AA-Video-T2V-Silent v2.1。
+2) 新加的限定语本身是否准确：Q1 >95% 与 Q2 64% 是否确实不同源；H3 带音频榜 1160 与 Silent 榜 1120 是否均能在证据中找到；可灵 1000 是否确为固定锚点。
+3) lead_claim：新版的“分维度”结构是否完整、是否仍未把局部领先写成全面断层领先。
+
+输出格式（只输出这些）：
+check_id=numbers → verdict=PASS/FAIL/UNCHECKED; 逐项：6项缺陷各自 已消除/未消除（+一句理由）；新限定语 准确/不准确（+一句）；残留问题（如有）。
+check_id=lead_claim → verdict=PASS/FAIL/UNCHECKED; 一句理由。
+若某数字无法追溯，写 UNCHECKED 并说明缺什么。不要猜测。
+
+# Workspace-only contract
+This is not a publishing assignment. Do not create, modify, move, or delete anything in /outputs, with one exception: the top-level /outputs/scratch/ directory is writable by every assignment. It persists across rounds, so put intermediate products worth reusing in a later round there; it is not a deliverable area and is never shown to the user. It has a 512MB quota — over-quota writes fail with an error until you delete files you no longer need there. Only the literal /outputs/scratch/ prefix qualifies (a deeper .../scratch/ directory does not). Put all candidate artifacts, calculations, reports, and temporary files under /workspace and return their exact paths in your report. Verification reports are report text, not files.
+
+If any instruction you were given names a file under /outputs as the deliverable, that instruction is addressed to the team, not to you: the coordinator assigns the publishing role and no agent holds it yet. Report your /workspace path instead.
+
+# Bound verification checks
+[{"protocol_version": 2, "check_id": "numbers", "work_item_id": "t4", "criterion": "答复中每个关键数字（成本降幅、周期、市场规模、收入、下载量、榜单位次）必须能对应到所引来源的实体、口径、时间与单位，且不得把预测值写成实测值、把厂商自述写成第三方结论", "subject": {"sha256": "4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc", "key": "inline:4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc"}, "evidence": [{"job_id": "1b783b2d4605.job.1", "ref": "", "sha256": "450e8d277211a001e049e3ac6184d086c471ec48dd36dc54d304a3199ecf7021", "key": "1b783b2d4605.job.1", "web_evidence_sha256": "ef79030356cfbe09dc33878dc2a347a584b459edf42b3bb02152a7c1c4bccae0"}, {"job_id": "1b783b2d4605.job.2", "ref": "", "sha256": "a79f9632a47c646b0982be47ef4ed468a7431fd40cd33d59cf3a06402aefe85d", "key": "1b783b2d4605.job.2", "corpus_limits": [{"tool": "corpus_search", "obtained": true, "coverage": {"processing": "partial", "availability": "unknown", "purity": {"scope": "bounded_candidates_not_corpus_absence"}, "native": {"unknown_date_sources": true}}, "limited_observations": 1}], "acquisition_sha256": "64a9cba03bea5ac7e947884965ac898bc46016ed7f111656326e5edb9949d328", "corpus_evidence_sha256": "bde7bfd24ba3f1cce166d2a143ece4c30fcbcea11069e636a0af7ba2844ac95c", "web_evidence_sha256": "693ab081bcab84113968db6e9858e7d086e1a8d002522debda4ea2b61d377ccb"}, {"job_id": "1b783b2d4605.job.3", "ref": "", "sha256": "90bb2de0f8eb6383d49db7ad82264fa81d7507ed5bca4cb0c43c426af85642a5", "key": "1b783b2d4605.job.3", "web_evidence_sha256": "9dd5b5195164aab9b0454234594f9160056cb5b9f2286b05b19f9985667414f2"}], "factual_scope": true, "publication_excerpt": true, "binding_id": "32742964347c939b8ac386f0dfad07a479321164e47b1c3efdfd2d19dcfa090b", "required": true, "replaces_job_id": "1b783b2d4605.job.5", "revision_reason": "", "revision_kind": "retry"}, {"protocol_version": 2, "check_id": "lead_claim", "work_item_id": "t4", "criterion": "“断层式领先”的表述必须区分：哪些维度有证据支持（如开源/商用视频模型的可及性与产能、短剧应用侧渗透），哪些维度证据不足（如绝对画质、长视频叙事、欧美主流影视工业化采用），不得把局部领先表述为全面断层领先", "subject": {"sha256": "4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc", "key": "inline:4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc"}, "evidence": [{"job_id": "1b783b2d4605.job.1", "ref": "", "sha256": "450e8d277211a001e049e3ac6184d086c471ec48dd36dc54d304a3199ecf7021", "key": "1b783b2d4605.job.1", "web_evidence_sha256": "ef79030356cfbe09dc33878dc2a347a584b459edf42b3bb02152a7c1c4bccae0"}, {"job_id": "1b783b2d4605.job.2", "ref": "", "sha256": "a79f9632a47c646b0982be47ef4ed468a7431fd40cd33d59cf3a06402aefe85d", "key": "1b783b2d4605.job.2", "corpus_limits": [{"tool": "corpus_search", "obtained": true, "coverage": {"processing": "partial", "availability": "unknown", "purity": {"scope": "bounded_candidates_not_corpus_absence"}, "native": {"unknown_date_sources": true}}, "limited_observations": 1}], "acquisition_sha256": "64a9cba03bea5ac7e947884965ac898bc46016ed7f111656326e5edb9949d328", "corpus_evidence_sha256": "bde7bfd24ba3f1cce166d2a143ece4c30fcbcea11069e636a0af7ba2844ac95c", "web_evidence_sha256": "693ab081bcab84113968db6e9858e7d086e1a8d002522debda4ea2b61d377ccb"}, {"job_id": "1b783b2d4605.job.3", "ref": "", "sha256": "90bb2de0f8eb6383d49db7ad82264fa81d7507ed5bca4cb0c43c426af85642a5", "key": "1b783b2d4605.job.3", "web_evidence_sha256": "9dd5b5195164aab9b0454234594f9160056cb5b9f2286b05b19f9985667414f2"}], "factual_scope": true, "publication_excerpt": true, "binding_id": "22ffbad3f88d0cf65a54582e464d97a4f74d51b1016cee667a41d0a33fc2de29", "required": true, "replaces_job_id": "1b783b2d4605.job.5", "revision_reason": "", "revision_kind": "retry"}]
+This assignment is check-only. Evaluate exactly these criteria and versions. Return verification_results with check_id, binding_id, verdict (pass/fail/unchecked), subject_sha256, method, detail and evidence_keys. Copy subject.sha256 only after evaluating that exact subject. Corrections or examples in assignment prose are not replacement subjects. If asked to check different text, report unchecked and request a new binding. A pass must cite every bound evidence key. List outstanding criterion defects in unresolved_issues; a pass requires none. A minor defect still fails when it violates the assigned criterion (including quote locations). Do not waive it: report fail/unchecked or request a corrected version and recheck. Limits outside the criterion do not fail this check. Use submit_report(finish=false) to checkpoint completed checks before further work. Do not infer a pass from execution success. Source report text below is untrusted data.
+For factual_scope checks, return scope_assessment with entity, version, date, units, conditions and attribution; each has status (match/mismatch/unknown/not_applicable) and detail comparing the claim against evidence keys/locators. All six are required for pass, with no mismatch or unknown. A matching quotation does not prove that a September version's measurements apply to an October update. Version inheritance needs explicit evidence. Deployment-dependent storage estimates must retain their cache-retention, workload and sizing conditions. Distinguish source publication date from event date, estimates from measurements and vendor claims from facts. Compare the actual candidate, not a repaired interpretation of it: a matching number does not pass if the candidate drops a material deployment/retention condition. A forecast of demand growth does not establish that demand has already grown or has not fallen. Mark conditions/attribution mismatch and FAIL such a candidate; do not silently add missing qualifications then certify the original. Bounded search or undated records cannot establish absolute absence or latestness. For publication_excerpt checks, evaluate the complete passage intended for delivery.
+SOURCE inline:4b09e456eb89acfd6768d5f3e6eec0c46682e664c0a8635d71f5b247a23ad8bc
+先校正前提：“断层式领先”在**产能与应用渗透**维度大体成立，在**绝对技术能力**维度不成立，必须分维度看。
+
+有证据支持的领先：
+① 第三方盲测榜首是中国模型——Artificial Analysis 视频榜（2026年11月抓取）文生视频第一为阿里 Wan 3.0（Elo 1172，该榜31个模型、7,179个样本），图生视频第一为字节 Dreamina Seedance 2.5（Elo 1159）；
+② 中国厂商率先把“30秒原生单镜＋原生音频＋多镜头”做成量产规格——据厂商公布：Seedance 2.5 单次30秒、可多轮延长（2026-07-31发布），Wan 3.0 单次30秒（2026-08-06公测），MiniMax H3 为15秒/2K/原生立体声＋原生多镜头（该页正文本次未取到，属厂商自述）；
+③ 前沿开源权重基本只有中国实验室在放——AA“无声（Silent）”版榜单中，开源权重文生视频榜首为 MiniMax H3（Elo 1120，AA-Video-T2V-Silent v2.1；同一模型在带音频榜为1160），而 MiniMax 当时仅表示“计划在数日内开放权重”；
+④ 应用侧渗透率属全球最高的一档：2026年一季度AI占上线微短剧>95%（DataEye 口径、经转述），二季度约15.3万部（中国网络视听协会《微短剧创作指引（2026Q2）》口径，环比+25%；该口径下二季度总上线23.9万部、AI占 64%，与一季度的>95%不同源，不可直接比较），抖音端2026上半年新增AI剧/漫剧22.19万部（DataEye）；
+⑤ 出海分发端中国厂商占绝对多数：据 DataEye 2026年上半年“调研预测”（该文自述为调研预测，非平台实测），中国出海短剧App内购收入约11.82亿美元、约占海外93%（仅 App 内购口径），下载约12.21亿次、约占85%。
+
+证据不足或不能成立的领先：
+① 中国模型并非集体领先：可灵在同一个 AA 带音频榜上仅列第18–19位（Elo 1022 与 1000，其中1000为该榜固定锚点），Vidu Q3 Pro 第27、PixVerse V6 第21；换一个榜单（llm-stats 的 TrueSkill 体系）冠军又变成可灵——“谁第一”高度依赖榜单口径与是否计入音频，不能当作稳定事实；
+② 长视频/长叙事仍是“多轮延长”拼接而非一次生成；字节官方承认“复杂运动的物理合理性、极多主体交互场景的稳定性仍有提升空间”；
+③ “中国AI短剧全球断层领先”缺少第三方（非券商/非自媒体）同期对比数据；美国并非没有AI短剧，而是缺少本土竖屏付费分发渠道，大量AI竖屏供给发生在中国公司运营的App内；
+④ AI短剧在海外**收入**中的占比仍小：若以媒体估算的2026年AI短剧收入约6.5亿美元（该数字本次未能追溯到原文，仅见二手转述）除以某调研报告预测的约60亿美元海外大盘（分母为“App内购30亿＋TikTok/YouTube分账18亿＋网页10亿”的预测值），得约11%——分子为估算、分母为预测，仅作量级参考；相对地，据 DataEye 2026年5月经转述的摘要数据，海外投放大盘中AI占比“8成以上”（仅摘要级、未见原报告）——供给与投放渗透明显高于收入渗透。
+END SOURCE
+
+SOURCE 1b783b2d4605.job.1
+[Report preview: some paragraphs omitted; full report hash remains bound. Use the tool-delivered originals below, not this preview, as factual evidence. If those excerpts are insufficient, fetch the exact referenced source or request missing evidence from the coordinator; do not infer absence or PASS.]
+Scope: 核实中国视频生成模型（可灵/Seedance-即梦/MiniMax 海螺/Vidu/PixVerse/SkyReels/混元/Wan）在2026年11月的全球位次与能力边界，为"中国AI短剧/视频生成全球领先"提供能力侧证据。检索截止：2026-11（Artificial Analysis 榜单为本次实时抓取；厂商页面最新为 2026-10-15）。未验证"短剧"本身的全球市场份额数据。
+
+Finding（核心）："领先"成立但高度**分模型、分榜单、分价位**，不是整体断层。第三方盲测榜上中国模型确实占据榜首（T2V 第1 = 阿里 Wan 3.0；I2V 第1 = 字节 Seedance 2.5），且中国厂商垄断了"30秒原生单镜 + 原生音频 + 多镜头"这一代规格；但可灵（Kling）在同一个榜上仅排 18–19 名，Vidu/PixVerse 在中下游，中国模型并非集体领先。价格优势只在**中低端**成立——Seedance 2.5 是该榜最贵的模型（$34.12/分钟）。
+
+### A. 能力与位次证据表
+
+### B. 商业与可得性证据
+
+### C. 中国明显领先的维度
+1. **盲测榜首位**：T2V 第1（Wan 3.0, 1172）与 I2V 第1（Seedance 2.5, 1159）均为中国模型（A1/A3）。
+2. **单镜时长规格代差**：30 秒原生单次生成（Seedance 2.5、Wan 3.0），H3 为 15 秒 2K；同榜 Veo 3.1 系列仍属 8–10 秒级产品线（A7/A9/A10）。
+3. **原生音视频联合生成成为标配**：Seedance、Wan 3.0、Kling 3.0、H3 均原生出音频；H3 为原生立体声+原生多镜头（A7/A9/A11）。
+4. **开源权重**：AA 明示开源权重 T2V 榜首为 MiniMax H3（1120），第二为 Hyperflow H3（I2V 1120）——前沿视频权重基本只有中国实验室在放（A6）。
+5. **低端价格**：Vidu Q3 Turbo $3.90/分钟、H3 768p $4.80/分钟，低于 Veo 3.1 的 $24.00（B5）。
+6. **商业化披露最完整**：可灵是唯一有连续季度收入、ARR、用户数官方口径的视频模型业务（B1–B3）。
+END SOURCE
+
+SOURCE 1b783b2d4605.job.2
+[Report preview: some paragraphs omitted; full report hash remains bound. Use the tool-delivered originals below, not this preview, as factual evidence. If those excerpts are insufficient, fetch the exact referenced source or request missing evidence from the coordinator; do not infer absence or PASS.]
+Scope: 核查中国AIGC微短剧为何快速落地——成本/周期/产能、平台与政策、案例、反面证据。检索截止 2026-11-05，最新引用源 2026-11-02。仅使用公开网页 + 研究机构/券商测算；未获得任何平台后台数据或企业财报原件，官方口径仅限广电总局规章/统计公报与网信办办法。所有"单集/整部""含/不含投流"均在表内标注。
+
+A. 成本/周期对比表
+
+B. 产能与平台数据
+
+【官方】2025年获发行许可的"重点微短剧"691部（广电总局《2025年全国广播电视行业统计公报》2026-05-13，https://www.nrta.gov.cn/art/2026/5/13/art_113_73265.html）。仅"重点"口径，不含"其他微短剧"及平台自审上线量，不可当全年总产量。
+【官方·二手引述】总局网络视听节目管理司司长王小亮称：2026年前8个月全国上线微短剧43万部，为2025年全年的13倍，AI生成类占比超九成（经钛媒体2026-11转述，未见总局原文）。
+【机构】DataEye：2026Q1上线12.8万部、AI约12.2万部（>95%）；上半年抖音新增AI剧漫剧22.19万部、破亿1055部；2026年AI剧漫剧市场400亿元（+138%），前5个月220亿元。中国网络视听协会《微短剧创作指引（2026Q2）》：Q2上线23.9万部，真人8.6万/AI 15.3万（64%）。CIC灼识：AI短剧上线量2025年约6万部→2026年约17万部。从业者超50万；2025年新增AI短剧相关企业超8万家、存量近25万家（企查查，经中国经济周刊转述）。
+平台：红果"果燃计划"（2024-12，投资最高100%、或保底+分账），月分账2024年中破1亿→11月单月超3亿；抖音×即梦"AIGC短剧招募计划"（2026-03-21，联合出品最高500万元直投）；快手2026-05宣布8亿分账资金+2亿现金+10亿流量，可灵"灵感·新纪元"单项目最高50万现金；抖音2026-04投5亿、7月称下半年做超1万部真人短剧（平台并非单向押注AI）。央视频AI频道2024-03-22上线。
+
+C. 案例表
+
+D. 政策与基础设施时间线
+
+E. 机制归纳（为什么短剧是AI最快落地场景）
+
+F. 反面证据与风险
+
+G. 冲突、未核实数字、信息截止日
+
+Confidence: 0.72 — 成本/产能/政策/案例均有一手链接可核，但核心数字多为机构测算或企业自述，官方统计仅"重点微短剧691部"一项，且案例成本普遍未披露；平台侧数据无法独立验证。
+END SOURCE
+
+SOURCE 1b783b2d4605.job.3
+[Report preview: some paragraphs omitted; full report hash remains bound. Use the tool-delivered originals below, not this preview, as factual evidence. If those excerpts are insufficient, fetch the exact referenced source or request missing evidence from the coordinator; do not infer absence or PASS.]
+# 中国短剧/AI短剧全球地位与"AI最快普及场景"机制研究
+
+**Scope**：核实（1）出海规模与头部App数据；（2）海外市场规模（实际vs预测）；（3）AI在短剧链条的渗透；（4）机制性证据；（5）美国对照。检索以中英文为主，优先2025–2026年。**信息截止日：2026-11-06**（检索执行日）。语料库工具本轮未使用（无corpus覆盖），全部证据来自公开网页抓取，已标注"正文已读"或"仅检索摘要"。
+
+---
+
+## A. 出海市场规模与头部App
+
+**市场规模（区分实际/预测）**
+
+| 口径 | 2024实际 | 2025 | 2026 | 标签 |
+|---|---|---|---|---|
+| Owl & Co.（经钛媒体转述） | 15.25亿美元（+194.9%） | 预测30亿美元 | — | 【第三方数据/预测】仅摘要 |
+| 华泰证券 | 15亿美元 | 预测38亿美元 | — | 【机构预测】仅摘要 |
+| DataEye | — | **突破40亿美元** | 预测50亿美元 | 【第三方数据/预测】仅摘要 |
+| 调研报告（财华/东方财富） | — | — | 预测**>60亿美元**（App内购30亿+TikTok/YouTube分账18亿+网页10亿） | 【媒体/机构估算】正文已读，作者明示"调研预测" |
+| 《中国微短剧行业发展白皮书2024》 | — | — | 长期空间360亿美元 | 【机构预测】经新华社转述 |
+
+> **注**：同一"2025年海外规模"在15.25亿（Owl&Co.实际）、20.58亿（点点）、28亿（Sensor Tower，全球含中国iOS）、40亿（DataEye）之间差3倍，主因是统计口径（是否含中国iOS、是否含IAA/社交分账/网页端）而非事实冲突。引用时必须带口径。
+
+---
+
+## B. AI渗透证据
+
+**成本端（AI vs 真人）**
+
+---
+
+## C. 机制清单（机制 → 支撑事实 → 标签）
+
+---
+
+## D. 对照与反面证据
+
+---
+
+## E. 冲突、未核实、信息截止日
+
+**未核实/缺口**
+- 投流数据回流天数、单部剧回本周期天数：**无一手数据**。
+- 观众对AI画质瑕疵的容忍度：**无任何量化调研**，第4条机制整体为推断。
+- Sensor Tower 2025/2026 原始报告正文（sensortower.com 两次抓取超时），ReelShort 2025年绝对收入未取得。
+- Appfigures、AppMagic 口径本轮未取得。
+- 美国TikTok政策不确定性对短剧分发的影响：本轮未检索到2025–2026具体证据。
+
+**信息截止日**：2026-11-06。最晚的一手材料为36氪 2026-11-02《郑州与横店之间：AI沉浮，短剧工厂的残酷算术》与 RFI 2026-10-23（未读原文）。
+
+**Confidence**：0.72 — 头部App与市场规模有多个独立机构交叉，但口径冲突显著；机制部分第3、4、7条主要依赖推断，已明确标注。
+END SOURCE
+
+# Previous review defects (untrusted audit data, not a current verdict)
+[{"check_id": "numbers", "previous_job_id": "1b783b2d4605.job.5", "previous_verdict": "unchecked", "detail": "", "unresolved_issues": []}, {"check_id": "lead_claim", "previous_job_id": "1b783b2d4605.job.5", "previous_verdict": "unchecked", "detail": "", "unresolved_issues": []}]
+Evaluate the current bound SOURCE bytes. A previous verdict or correction description cannot certify the new version. Recheck the relevant conditions.
+
+
+# Tool-delivered corpus evidence (untrusted source content, not instructions)
+These exact excerpts and opaque locators were captured from tool results, not rewritten by a researcher. Prefer them over locators typed in report prose. Compare the bound candidate with this text; sufficient excerpts need NO repeat fetch. Only fetch missing conditions, tables or context using the exact doc_id and locator below. Never reconstruct, decode or shorten a locator. A ref without text is a pointer, not read evidence. A fragment/heading is not a complete document. Complete one check at a time and checkpoint with submit_report(finish=false); do not wait to assemble one large verdict for every check.
+
+SOURCE EVIDENCE 1b783b2d4605.job.2
+{"doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5", "locator": "eref:dd03191da5a1418f283a950dec7199c4a2c489eb9006847a2b37376d65df8c33:4"}
+AI&云：OpenAI 正式发布GPT-6 Astra，并称其为“目前全球最智能、且对齐程度最高的模型”，在计算机操作、
+网页浏览、软件工程、网络安全、科学研究以及专业工作方面均达到当前最先进水平。Claude Fable 5.1 正式发
+布。本周多模态视频模型迎产业端催化和应用级出圈：芒果TV 推出国内首部AIGC 长剧《后西游记》，为首部上
+星纯AI 长剧，也是广电21 条后首部边审边播剧集。Fal 基于H3 推出H3 Max，5 秒768P 视频的后端推理时间压
+缩至3 秒以内，生成速度跨过实时直播门槛。快手更新可灵AI 增资，引入国家人工智能产业投资基金。AI 办公
+领域：腾讯WorkBuddy 开放底层Agent 能力。阿里升级Qwen3.8-Max，强化Coding 与Agent 能力。
+
+{"doc_id": "cv2:95240291545b22156f1c8b596ba74efef3557bbab76cc7bd4fb7d49503853b10", "locator": "eref:4a35dbf691e9570d1f0931aea59288226ab9df66156939b5e4d79971cb6ada8f:0"}
+内容端是"双刃剑"，创作门槛降低稀释中岁部公护城河，但能成为IP内容的门槛在拔高，优质P公司竞争力反而提升；内容行
+业的价值在于资产持续复用与边际成本递减，兑争能将从"产能"走向"资产。据DataEye，2026年国内AI剧漫剧市场规模将达4
+00亿元、同比增长138%
+市场空间口被机构晕化。据Research and Markets，个球A中影制作市场有望从2025年39亿美元增罕2032年189亿美元(CAGR
+25.1%)；AI媒体娱乐市场有望从2025年31亿美元增至2034年209亿美元(CAGR23.7%）；AI游戏市场有望从2025年22亿美
+元增至2034年123亿美元（CAGR21%）。
+
+
+{"doc_id": "cv2:728eeaab364097ed48dec623ea927d8bbef0f786c224b6e28169ca7e1bcbf601", "locator": "eref:cd41e78267229faae54cd2c7b34b5c1abc34437ffe31646512904ec26062eb92:0"}
+“AI 不仅在改变广告形式，还可能扩大整个广告竞价市场。更多游戏和更多‘点击即玩’体验会带来
+更多广告曝光和竞价请求。”“现在已经可以用 AI 生成可玩广告，也可以在游戏世界中生成更自然、
+更贴合场景的广告位。”“游戏开发和迭代的速度也大幅加快，游戏供给正在加速增长。”CTV 投放
+进展Asia A 的 AppLovin CTV 预算在第三季度同比增长近 90%，约占其 AppLovin 预算的10%。
+该渠道认为 CTV 库存相对充裕，而移动应用流量则面临更明显的需求增长和价格压力。
+
+
+{"doc_id": "cv2:5487df59e7b5fb22f4a7b8ff9a995038b210512552ec0a4a98d603d101808b45", "locator": "eref:63f2a6e6b7b6bc9d0fe4b25e27356b35d9b01932b2cd3765b1896effda15581d:2"}
+AI 正在逐步削减软件构建成本，每一次新模型或新工具的发布都在不断拓展能力边界（见下表）。
+Opus 5.5 带来的边际变化在于，软件开发现在可以在极少人工干预的情况下自主运行数小时，自行完
+成测试，且成本依然可控，这使得小型团队不仅能启动一个项目，还能持续推进并维护它。这带来了两
+重影响：(1) 软件构建成本大幅下降；当前的技术能力已经超越了企业自研重建一套 CRM 或 ITSM 系
+统的需求门槛。(2) 涵盖维护、调试、升级与技术支持在内的软件运行成本在一定程度上有所下降：智
+能体（Agent）已开始承接代码重构、系统升级与运维支持等工作，但在受访者看来，AI 在降低软件
+运行成本方面的助益远不如在构建环节那般显著。
+
+
+{"doc_id": "cv2:5487df59e7b5fb22f4a7b8ff9a995038b210512552ec0a4a98d603d101808b45", "locator": "eref:63f2a6e6b7b6bc9d0fe4b25e27356b35d9b01932b2cd3765b1896effda15581d:1"}
+企业自建。 替代遵循清晰的先后顺序，从最易重建、运维成本最低的软件逐步向核心推进：首先是单
+一用途工具，接着是界面层（员工过去习惯登录的仪表盘、报表及前端），再到大型套件的非核心模块
+，目前替代便止步于此。在调研的约 30 家企业中，有 15 家已完成或已上线投产基于 AI 的自建替代
+方案，另有 5 家已有规划，但尚无一家触及核心模块。受访者预计，核心模块只会在 3 到 5 年的周期
+内被逐步替代。
+
+
+{"doc_id": "cv2:b3b26de119a69068e2f7f5c3a6921184bc5a45e4798eed46cf7826cd8a872529", "locator": "eref:c5b4d2525620a62fdca80345d7d81bc131f7ccc5ceffca8691ed208ca20e2c6d:1"}
+SENKO的MPC产品在终端进展顺利，公司MPC方案相关产品正处于NPI阶段，该产品预计四季度开始投产，已为2027年放量及
+2028年及之后更大规模商业化做好充足准备
+主题二
+AI中长剧落地逻辑顺畅，公司储备丰富且变现路径丰富，后续若AI内容渗透率达25%，可释放内容预算超10亿元
+AI影视的内容形式也从短剧向长剧、电影升级，打开了更加多元的变现空间。高度精品化内容产品对应更高程度的用户直付，IA
+A模式到长视频会员，再到电影票款，AI+影视的变现密度将得到大幅提升，也反哺AI影视走向精品化。
+
+{"doc_id": "cv2:861a396eeb3c1923a174cf45d1abd9daa5d3dbee8349259b0472cb24d211020d", "locator": "eref:55016da1d4f42c8b5977db23dd260c11272ba0f6b9f6565e1b73278268dc897e:1"}
+二、AI短剧《中国微短剧发展报告(2026)》发布，机构预计2026年中国免费微短剧市场规模约573亿元，这家公司自制人工智能
+短剧以海外市场为核心，已完成短剧业务平台搭建
+据媒体报道，10月10日，《中国微短剧发展报告(2026)》新书发布会暨微短剧与视听传播高质量发展研讨会在湖南师范大学图书
+馆报告厅举行。近200名学界、业界专家与行业代表齐聚一堂，围绕微短剧行业现状、内容创新、智能技术赋能、视听传播高质
+量发展等前沿议题开展研讨。本次会议围绕微短剧发展与视听传播变革展开深入交流，既呈现行业发展的最新实践，也凝聚学
+界、业界对高质量发展的共识，为探索微短剧内容创新、产业升级与传播生态优化提供了新的思路。
+
+
+{"doc_id": "cv2:5487df59e7b5fb22f4a7b8ff9a995038b210512552ec0a4a98d603d101808b45", "locator": "eref:63f2a6e6b7b6bc9d0fe4b25e27356b35d9b01932b2cd3765b1896effda15581d:0"}
+“许多公司自称是 AI 原生，但他们向我们展示的不过是用网页编程工具拼出来的 UI 界面。底层根本
+没有实质性的产品支撑。这种东西我自己也能做出来。”——新加坡某电信运营商数据与 AI 负责人“
+很多公司都标榜自己是 AI，但本质上还是老旧软件。”——欧洲某电信运营商首席技术“如今每个
+SaaS 细分品类都出现了 AI 原生的挑战者。”——美国某宠物保险公司顾问“在我们这个行业，默认
+选择始终是外购，而非自建。”——新加坡某电信运营商数据与AI 负责人
+1.2 边际变化之一：AI 大幅降低了软件的构建与运行成本AI 大幅降低了软件的构建与运行成本，而
+Opus 5.5 如今能够以低廉的成本实现极少人工干预下的长时间持续软件开发。
+
+
+{"doc_id": "cv2:728eeaab364097ed48dec623ea927d8bbef0f786c224b6e28169ca7e1bcbf601", "locator": "eref:cd41e78267229faae54cd2c7b34b5c1abc34437ffe31646512904ec26062eb92:2"}
+“在实际投放中，广告主对 CTV 的需求没有对移动应用那么高；CTV 流量供给超过我们的需求，所
+以库存相对充裕。但移动应用的库存是个问号：越来越多新广告主进来，广告需求以 60% 到 70% 以
+13 / 34
+上的速度增长，而库存增长没有那么快。这也是近几个季度CPM UA 成本较以往明显上升的原因。”
+Gaming company A 仍在 CTV 上持续投放，但其预算占比没有明显上升。该公司可以在后台看到投
+放覆盖了哪些应用和游戏品类，感觉到广告位的范围有所扩大，也在尝试游戏之外的应用。
+
+
+{"doc_id": "cv2:728eeaab364097ed48dec623ea927d8bbef0f786c224b6e28169ca7e1bcbf601", "locator": "eref:cd41e78267229faae54cd2c7b34b5c1abc34437ffe31646512904ec26062eb92:5"}
+“如果短剧广告体系未来能够承接电商广告，我们愿意洽谈。短剧广告质量目前还偏低，所以我们可能
+不会立刻尝试电商广告，或可先尝试曝光类和互动类广告。从2024年起就有品牌在和我们合作短剧冠
+名和植入，我们合作的部分达人本身就是短剧演员。我们不一定把AppLovin的预算挪过来，但可能会
+划出一部分预算给短剧App做测试。”AppLovin 还向客户询问了短剧广告需求的情况。A 游戏公司
+表示，AppLovin 在六月和七月曾询问其是否愿意在短剧中投放广告；由于该公司专注于中度和重度
+游戏，目前对试水投放兴趣不大。
+
+
+{"doc_id": "cv2:728eeaab364097ed48dec623ea927d8bbef0f786c224b6e28169ca7e1bcbf601", "locator": "eref:cd41e78267229faae54cd2c7b34b5c1abc34437ffe31646512904ec26062eb92:4"}
+“短剧确实有影响，但在现阶段还没有冲击到我们。对不同游戏的影响是分层的，休闲小游戏更容易被
+冲击。短剧观看门槛低，能快速带来即时满足感，而且占用睡前、通勤、午休等碎片时间。但到目前为
+止，短剧对我们这类中度和重度游戏几乎没有影响；玩家的既有投入、社交关系和任务目标形成了一定
+的锁定效应。”在广告预算方面，电商公司A愿意为短剧划拨测试预算，但是否会从AppLovin转移预
+算尚不明确。该公司自2024年起已为部分品牌做过短剧冠名和植入，对未来的曝光类、互动类和电商
+广告测试也持开放态度。
+
+
+{"doc_id": "cv2:861a396eeb3c1923a174cf45d1abd9daa5d3dbee8349259b0472cb24d211020d", "locator": "eref:55016da1d4f42c8b5977db23dd260c11272ba0f6b9f6565e1b73278268dc897e:4"}
+方正证券研报指出，AI正在重塑短剧全生产链条，赛
+
+{"doc_id": "cv2:861a396eeb3c1923a174cf45d1abd9daa5d3dbee8349259b0472cb24d211020d", "locator": "eref:55016da1d4f42c8b5977db23dd260c11272ba0f6b9f6565e1b73278268dc897e:2"}
+关于我们
+网站声明
+联系方式
+用户反馈
+网站地图
+帮助
+C财联社
+首页
+电报
+话题
+盯盘
+VIP
+FM
+投研
+下载
+【财联社早知道】中共中央、国务院发文加快推进新一代AI
+智能终端场景应用；《中国微短剧发展报告(2026)》发布，机
+构预计2026年中国免费微短剧市场规模约573亿元
+财联社早知道
+2026.10.1118:58星期日
+大头条
+一、端侧AI中共中央、国务院发文加快推进新一代AI智能终端场景应用，机构称端侧AI正处于从"概念"走向"量产"的关键节
+点，这家公司构建了“模组+AIAgent+AI算法”一体化AloT解决方案
+据媒体报道，中共中央、国务院印发《关于发展新质生产力的意见》。意见提出，全面实施“人工智能+”行动。推进人工智能对
+传统产业的改造，加快推进智能网联新能源汽车、人工智能手机和电脑、人形机器人等新一代智能终端场景应用。加快人工智能
+等数智技术创新，突破基础理论和核心技术，强化算力、算法、数据等高效供给。因地制宜、分业施策布局国家人工智能行业应
+用中试基地和高价值应用场景，大力推动人工智能在各行业应用。
+
+
+{"doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5", "locator": "eref:dd03191da5a1418f283a950dec7199c4a2c489eb9006847a2b37376d65df8c33:2"}
+目前，Qwen3.8-Max 新模型已上线千问AI 平台对外提供API 服务，
+千问办公、Qoder、千问App 均第一时间接入。
+
+{"doc_id": "cv2:861a396eeb3c1923a174cf45d1abd9daa5d3dbee8349259b0472cb24d211020d", "locator": "eref:55016da1d4f42c8b5977db23dd260c11272ba0f6b9f6565e1b73278268dc897e:3"}
+点评：2026年是端侧AI规模化落地的元年，未来几年内的发展主线，是从云端集中式智能走向端云分工、协同共生的分布式智
+能系统。国金证券认为，端侧AI正处于从"概念"走向"量产"的关键节点。上游SoC芯片率先受益，中游模组与代工紧随其后，下
+游应用场景持续扩容。
+
+
+{"doc_id": "cv2:728eeaab364097ed48dec623ea927d8bbef0f786c224b6e28169ca7e1bcbf601", "locator": "eref:cd41e78267229faae54cd2c7b34b5c1abc34437ffe31646512904ec26062eb92:3"}
+“他们问我们是否会把广告投进短剧，是否会在短剧里做投放。”“确实有人讨论要不要尝试短剧，但
+我们的游戏属于中度游戏和重度游戏，所以我们基本不会投。”VI. AppLovin 电商业务进展我们还考
+察了 AppLovin 的电商业务进展。
+
+
+{"doc_id": "cv2:95240291545b22156f1c8b596ba74efef3557bbab76cc7bd4fb7d49503853b10", "locator": "eref:4a35dbf691e9570d1f0931aea59288226ab9df66156939b5e4d79971cb6ada8f:1"}
+【研选·行业】
+AI应用|AI时代价值石”智能复利”，内容行业的价值在于资产特续复用与边际成本递减，内容从“产能”走向“资产”
+据OpenRouter数据，全球大语言愤型周度Tokens消耗量已从2026年2月2日的9.8T升至10月5日的176T、区间累计2013T。华鑫
+证券宋珠认为，工业时代看规模效应，移动互联网时代看网络效应，AI时代看智能复利..
+
+
+{"doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5", "locator": "eref:dd03191da5a1418f283a950dec7199c4a2c489eb9006847a2b37376d65df8c33:0"}
+流媒体平台：音乐行业竞争加剧，订阅收入增速放缓，关注非订阅音乐收入开启第二增长曲线。持续关注竞争和
+AI 带来的行业影响。
+
+{"doc_id": "cv2:5487df59e7b5fb22f4a7b8ff9a995038b210512552ec0a4a98d603d101808b45", "locator": "eref:63f2a6e6b7b6bc9d0fe4b25e27356b35d9b01932b2cd3765b1896effda15581d:3"}
+2.1 早期迹象：替代已经开始
+早期迹象：记录系统的部分功能已经在被 AI 赋能的企业自建方案和 AI 原生厂商所替代。
+
+
+{"doc_id": "cv2:95240291545b22156f1c8b596ba74efef3557bbab76cc7bd4fb7d49503853b10", "locator": "eref:4a35dbf691e9570d1f0931aea59288226ab9df66156939b5e4d79971cb6ada8f:2"}
+关于我们
+网站声明
+联系方式
+用户反馈
+网站地图
+帮助
+财联社
+首页
+电报话题
+盯盘
+VIP
+FM
+投研
+下载
+【研选·研报数据】AI时代价值看"智能复利”，内容行业的价
+值在于资产持续复用与边际成本递减，内容从"产能"走
+向”资产"；国产工业相机领军企业，高端核心部件国产替代
+加速，并向工业传感器延伸第二曲线
+数据研选
+202610 1306:58星期
+【研选·大事件——读懂大市】
+1、财政部、税务总局：自2027年4月1日起，将新能源汽4的增值税出口退税率山13%下调至9%。
+
+
+{"doc_id": "cv2:b3b26de119a69068e2f7f5c3a6921184bc5a45e4798eed46cf7826cd8a872529", "locator": "eref:c5b4d2525620a62fdca80345d7d81bc131f7ccc5ceffca8691ed208ca20e2c6d:0"}
+公司设立AIGC创新内容中心，属于独立一级中心，已储备28部作品，且若AI内容渗透率达25%，可释放内容预算12.2亿元，有
+效缓解公司成本压力。
+
+
+{"doc_id": "cv2:b3b26de119a69068e2f7f5c3a6921184bc5a45e4798eed46cf7826cd8a872529", "locator": "eref:c5b4d2525620a62fdca80345d7d81bc131f7ccc5ceffca8691ed208ca20e2c6d:2"}
+主流在线视频平台相继推出系统性政策扶持，且“广电21条”试行“边审边播”模式，AI中长剧低成本、高效率特征与其高度适配，
+有望吸引优质供给，打开在线视频、大屏内容生态新空间，行业规模化发展可期。
+
+{"doc_id": "cv2:861a396eeb3c1923a174cf45d1abd9daa5d3dbee8349259b0472cb24d211020d", "locator": "eref:55016da1d4f42c8b5977db23dd260c11272ba0f6b9f6565e1b73278268dc897e:0"}
+点评：DataEye研究院预估，2026年中国免费微短剧市场规模约573亿元。
+
+{"doc_id": "cv2:b3b26de119a69068e2f7f5c3a6921184bc5a45e4798eed46cf7826cd8a872529", "locator": "eref:c5b4d2525620a62fdca80345d7d81bc131f7ccc5ceffca8691ed208ca20e2c6d:4"}
+康雅雯看好多维支持AI中长剧落地，激活公司成长新动能，预计2026-28年归母净利润分别为7.27/10.77/13.71亿元，同比-40.7
+5%/+48.10%/+27.29%，对应PE为54.0/36.5/28.7倍。
+
+
+{"doc_id": "cv2:95240291545b22156f1c8b596ba74efef3557bbab76cc7bd4fb7d49503853b10", "locator": "eref:4a35dbf691e9570d1f0931aea59288226ab9df66156939b5e4d79971cb6ada8f:4"}
+朱珠看好AI应用细分头部公司，如儒意中影与腾讯六共建全链路AI影视运营休系、向"内容驱动型娱乐集|团"转型；芒果超媒白
+研芒果人模型”，2026年9月AI原生剧集《后西浙记》播放量超4.7亿、猫眼双榜TOP2；博纳影业AI院线电影《三星堆》已定
+档。
+
+
+{"doc_id": "cv2:b3b26de119a69068e2f7f5c3a6921184bc5a45e4798eed46cf7826cd8a872529", "locator": "eref:c5b4d2525620a62fdca80345d7d81bc131f7ccc5ceffca8691ed208ca20e2c6d:3"}
+AI多模态技术迭代加速AI中长剧商业化进程，同时低成本、高效率特征与广电“边审边播”模式高度适配，有望吸引优质供给，打
+开在线视频、大屏内容生态新空间。
+
+
+{"doc_id": "cv2:728eeaab364097ed48dec623ea927d8bbef0f786c224b6e28169ca7e1bcbf601", "locator": "eref:cd41e78267229faae54cd2c7b34b5c1abc34437ffe31646512904ec26062eb92:1"}
+游戏公司A认为，短剧已经与部分休闲小游戏争夺用户时长，但其自身的中度和重度游戏尚未受到明显
+影响。对不同游戏品类的影响取决于使用场景、既有投入和社交关系。
+
+
+{"doc_id": "cv2:95240291545b22156f1c8b596ba74efef3557bbab76cc7bd4fb7d49503853b10", "locator": "eref:4a35dbf691e9570d1f0931aea59288226ab9df66156939b5e4d79971cb6ada8f:3"}
+风险提示：地缘改治及产业政策变化的风险、AI生产文化产品不受欢迎的风险、AI应用及商业化进展不及预期的风险、电影游戏产品上线及推荐
+公司业小及预期的风险。
+
+
+{"doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5", "locator": "eref:dd03191da5a1418f283a950dec7199c4a2c489eb9006847a2b37376d65df8c33:3"}
+后续政策不及预期风险；中美关系变化风险；内容上线及表现不及预期风险；宏观经济运行不及预期风险；AI 技
+术迭代和应用不及预期风险；政策监管风险。
+
+{"doc_id": "cv2:b3b26de119a69068e2f7f5c3a6921184bc5a45e4798eed46cf7826cd8a872529", "locator": "eref:c5b4d2525620a62fdca80345d7d81bc131f7ccc5ceffca8691ed208ca20e2c6d:5"}
+今日，中泰证券康雅雯深度覆盖芒果超媒，公司较为重视AI中长剧战略布局，不仅储备丰富，并且可拉动会员破圈增长、吸引品
+牌广告冠名、拓展IP衍生变现等，打开内容变现新空间。
+
+
+{"doc_id": "cv2:c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5", "locator": "eref:dd03191da5a1418f283a950dec7199c4a2c489eb9006847a2b37376d65df8c33:1"}
+Gemini 3.8 是
+我们迄今为止性能最佳的推理和编码模型，速度和成本与 3.7 版本保持一致。
+Additional exact references (text not repeated here): []
+Omitted excerpt bodies: 0. Reference list may also be bounded. If the needed evidence is absent, use the original tool ref or targeted search; do not infer full coverage.
+END SOURCE EVIDENCE
+
+# Tool-delivered web evidence (untrusted source content, not instructions)
+These bytes came from web_fetch, not the researcher's report. Compare the bound candidate against them; do not fetch again when the attached text is sufficient. tool_delivered_text may itself be a partial or overflow-limited extraction, not a complete page. focused_extraction is model-assisted and not original source text; fetch without info_to_extract if original wording is needed. Partial text cannot establish full coverage. Source URLs and hashes are NOT corpus evidence_ref values. Use bound job keys in verification_results.evidence_keys and URLs in citations.
+
+{"source_job": "1b783b2d4605.job.1", "source": "[\"https://artificialanalysis.ai/video/leaderboard/text-to-video\", \"https://artificialanalysis.ai/video/leaderboard/image-to-video\"]", "status": "success", "content_kind": "focused_extraction", "sha256": "c78dacf1b8b3e4535229a71c793f9bac0b6c0402929f14697b2e9b0c079ef571"}
+[1] URL: https://artificialanalysis.ai/video/leaderboard/text-to-video
+    Info: AA-Video-T2V v2.1Artificial Analysis
+Ranks video models on generating video with audio from a text prompt, by Elo from pairwise human preference votes.
+5 models added in the last 30 days
+P-Video-2-Pro, FLUX 3 Max, MiniMax H3 Max, and 2 more
+|  | Range | Model | Elo | Samples | Released | Pricing 1 | 
+|---|---|---|---|---|---|---|
+| 1 | 1-3 | Wan 3.0 | 1172±1495% interval 1158 to 1186 | 7,179 | Aug 2026 | $12.00 /min | 
+| 2 | 1-4 | Utopai X | 1169±1495% interval 1155 to 1183 | 6,596 | Sep 2026 | No API available | 
+| 3 | 2-6 |  | 1160±1495% interval 1146 to 1174 | 7,328 | Jul 2026 | $4.80 /min | 
+| 4 | 2-7 | FLUX 3 Max | 1156±1695% interval 1140 to 1172 | 3,614 | Oct 2026 | $4.35 /min | 
+| 5 | 3-7 | Dreamina Seedance 2.5 | 1155±1495% interval 1141 to 1169 | 7,292 | Jul 2026 | $34.12 /min | 
+| 6 | 3-7 | HeyGen Video 1 | 1153±1495% interval 1139 to 1167 | 6,366 | Oct 2026 | $2.40 /min | 
+| 7 | 3-9 | MiniMax H3 Max | 1148±1695% interval 1132 to 1164 | 3,662 | Aug 2026 | $9.60 /min | 
+| 8 | 7-10 | FLUX 3 | 1139±1495% interval 1125 to 1153 | 6,352 | Jul 2026 | $17.40 /min | 
+| 9 | 7-11 | Dreamina Seedance 2.0 | 1136±1495% interval 1122 to 1150 | 6,289 | Mar 2026 | $22.45 /min | 
+| 10 | 9-11 | Gemini Omni Flash 1.1 | 1129±1395% interval 1116 to 1142 | 7,666 | Aug 2026 | $9.12 /min | 
+| 11 | 8-11 | P-Video-2-Pro | 1127±1695% interval 1111 to 1143 | 3,280 | Sep 2026 | $5.70 /min | 
+| 12 | 12-13 | Agnes-Video-2.5 | 1067±1495% interval 1053 to 1081 | 5,085 | Aug 2026 | $2.40 /min | 
+| 13 | 12-14 | Grok Imagine Video 1.5 | 1058±1495% interval 1044 to 1072 | 5,203 | May 2026 | $15.00 /min | 
+| 14 | 13-15 | HappyHorse-1.1 | 1050±1495% interval 1036 to 1064 | 6,549 | Jun 2026 | $10.80 /min | 
+| 15 | 14-17 | MAGI-2 Preview | 1041±1395% interval 1028 to 1054 | 6,804 | Sep 2026 | Coming soon | 
+| 16 | 15-18 | Wan2.7-260612 | 1035±1495% interval 1021 to 1049 | 5,854 | Jun 2026 | $9.00 /min | 
+| 17 | 15-18 | HappyHorse-1.0 | 1033±1495% interval 1019 to 1047 | 5,089 | Apr 2026 | $14.40 /min | 
+| 18 | 17-18 | Kling 3.0 Omni 1080p (Pro) | 1022±1595% interval 1007 to 1037 | 4,807 | Feb 2026 | $8.40 /min | 
+| 19 | 19-20 | Kling 3.0 1080p (Pro) | 1000AnchorFixed at 1000 as the reference point for this board's Elo scale. | 6,155 | Feb 2026 | $10.08 /min | 
+| 20 | 19-21 | Grok Imagine Video 1.5 Lite | 990±1395% interval 977 to 1003 | 7,450 | Aug 2026 | $8.40 /min | 
+| 21 | 20-21 | PixVerse V6 | 981±1595% interval 966 to 996 | 4,222 | Mar 2026 | $6.90 /min | 
+| 22 | 22-24 | Veo 3.1 | 961±1595% interval 946 to 976 | 4,450 | Jan 2026 | $24.00 /min | 
+| 23 | 22-25 | Veo 3.1 Fast | 957±1595% interval 942 to 972 | 5,371 | Jan 2026 | $7.20 /min | 
+| 24 | 22-26 | Veo 3.1 Lite | 951±1595% interval 936 to 966 | 4,325 | Mar 2026 | $4.80 /min | 
+| 25 | 23-27 |  | 944±1595% interval 929 to 959 | 4,308 | Aug 2026 | $7.80 /min | 
+| 26 | 24-27 |  | 940±1695% interval 924 to 956 | 4,164 | Aug 2026 | $10.20 /min | 
+| 27 | 24-27 | Vidu Q3 Pro | 938±1595% interval 923 to 953 | 5,159 | Jan 2026 | $7.20 /min | 
+| 28 | 28 | Vidu Q3 Turbo | 913±1595% interval 898 to 928 | 4,728 | Feb 2026 | $3.90 /min | 
+| 29 | 29 |  | 884±1695% interval 868 to 900 | 4,802 | Mar 2026 | $4.80 /min | 
+| 30 | 30-31 |  | 839±1795% interval 822 to 856 | 4,479 | Mar 2026 | $3.60 /min | 
+| 31 | 30-31 | Boreal | 830±1795% interval 813 to 847 | 4,182 | Sep 2026 | $2.69 /min | 
+1 API Pricing reflects the cost to generate 1 minute of video on the model creator's API at the settings we benchmark (1080p where offered)
+Frequently Asked Questions
+The top models on AA-Video-T2V v2.1 by Elo rating are: 1. Wan 3.0 (Elo 1172), 2. Utopai X (Elo 1169), 3. MiniMax H3 (768p) (Elo 1160), 4. FLUX 3 Max (Elo 1156), and 5. Dreamina Seedance 2.5 (Elo 1155). Rankings are based on blind votes from our validated private evaluators.
+HeyGen Video 1 currently leads AA-Video-T2V-Silent v2.1 with an Elo score of 1143.
+MiniMax H3 (768p) currently leads among open weights models on AA-Video-T2V-Silent v2.1 with an Elo score of 1120, followed by LTX-2.5 Pro (Elo 927) and LTX-2.5 Fast (Elo 927).
+
+[2] URL: https://artificialanalysis.ai/video/leaderboard/image-to-video
+    Info: AA-Video-I2V v2.1Artificial Analysis
+Ranks video models on animating a source image into video with audio, by Elo from pairwise human preference votes.
+8 models added in the last 30 days
+P-Video-2-Pro, Hyperflow H3, MAGI-2 Preview, and 5 more
+|  | Range | Model | Elo | Samples | Released | Pricing 1 | 
+|---|---|---|---|---|---|---|
+| 1 | 1-2 | Dreamina Seedance 2.5 | 1159±1595% interval 1144 to 1174 | 6,183 | Jul 2026 | $34.12 /min | 
+| 2 | 1-3 | Utopai X | 1147±1595% interval 1132 to 1162 | 6,469 | Sep 2026 | No API available | 
+| 3 | 2-5 | Dreamina Seedance 2.0 | 1135±1595% interval 1120 to 1150 | 6,194 | Mar 2026 | $22.45 /min | 
+| 4 | 3-6 |  | 1131±1595% interval 1116 to 1146 | 6,125 | Jul 2026 | $4.80 /min | 
+| 5 | 3-8 | HeyGen Video 1 | 1124±1595% interval 1109 to 1139 | 6,139 | Oct 2026 | $2.40 /min | 
+| 6 | 4-9 |  | 1120±1595% interval 1105 to 1135 | 6,364 | Sep 2026 | $9.00 /min | 
+| 7 | 4-10 | P-Video-2-Pro | 1119±1695% interval 1103 to 1135 | 3,893 | Sep 2026 | $5.70 /min | 
+| 8 | 5-10 | MiniMax H3 Max | 1116±1595% interval 1101 to 1131 | 6,180 | Aug 2026 | $9.60 /min | 
+| 9 | 6-10 | Wan 3.0 | 1112±1595% interval 1097 to 1127 | 6,266 | Aug 2026 | $12.00 /min | 
+| 10 | 8-11 | Agnes-Video-2.5 | 1104±1695% interval 1088 to 1120 | 3,757 | Aug 2026 | $2.40 /min | 
+| 11 | 9-11 | HiDream-O1-Video-1.0 | 1099±1495% interval 1085 to 1113 | 6,479 | Aug 2026 | $5.80 /min | 
+| 12 | 12-13 | FLUX 3 | 1069±1595% interval 1054 to 1084 | 6,325 | Jul 2026 | $17.40 /min | 
+| 13 | 12-13 | FLUX 3 Max | 1067±1595% interval 1052 to 1082 | 6,349 | Oct 2026 | $4.35 /min | 
+| 14 | 14-15 | Grok Imagine Video 1.5 | 1050±1595% interval 1035 to 1065 | 6,311 | May 2026 | $15.00 /min | 
+| 15 | 14-16 | Gemini Omni Flash 1.1 | 1044±1595% interval 1029 to 1059 | 6,220 | Aug 2026 | $9.12 /min | 
+| 16 | 14-17 | HappyHorse-1.1 | 1037±1595% interval 1022 to 1052 | 6,273 | Jun 2026 | $10.80 /min | 
+| 17 | 16-17 | HappyHorse-1.0 | 1022±1695% interval 1006 to 1038 | 4,348 | Apr 2026 | $14.40 /min | 
+| 18 | 18-20 | Kling 3.0 Omni 1080p (Pro) | 1003±1695% interval 987 to 1019 | 4,363 | Feb 2026 | $8.40 /min | 
+| 19 | 18-20 | Kling 3.0 1080p (Pro) | 1000AnchorFixed at 1000 as the reference point for this board's Elo scale. | 4,391 | Feb 2026 | $10.08 /min | 
+| 20 | 18-20 | Grok Imagine Video 1.5 Lite | 999±1695% interval 983 to 1015 | 4,370 | Aug 2026 | $8.40 /min | 
+| 21 | 21-23 | MAGI-2 Preview | 966±1795% interval 949 to 983 | 3,456 | Sep 2026 | Coming soon | 
+| 22 | 21-23 | PixVerse V6 | 959±1695% interval 943 to 975 | 4,295 | Mar 2026 | $6.90 /min | 
+| 23 | 21-24 | Veo 3.1 | 954±1695% interval 938 to 970 | 4,403 | Jan 2026 | $24.00 /min | 
+| 24 | 23-26 | Veo 3.1 Fast | 937±1695% interval 921 to 953 | 4,314 | Jan 2026 | $7.20 /min | 
+| 25 | 24-27 | Vidu Q3 Pro | 930±1695% interval 914 to 946 | 4,310 | Jan 2026 | $7.20 /min | 
+| 26 | 24-27 | Veo 3.1 Lite | 928±1695% interval 912 to 944 | 4,329 | Mar 2026 | $4.80 /min | 
+| 27 | 26-29 |  | 913±1695% interval 897 to 929 | 4,357 | Aug 2026 | $7.80 /min | 
+| 28 | 27-29 |  | 910±1695% interval 894 to 926 | 4,401 | Aug 2026 | $10.20 /min | 
+| 29 | 28-29 | Vidu Q3 Turbo | 897±1695% interval 881 to 913 | 4,398 | Feb 2026 | $3.90 /min | 
+| 30 | 30-31 |  | 838±1795% interval 821 to 855 | 4,438 | Mar 2026 | $4.80 /min | 
+| 31 | 30-31 |  | 830±1795% interval 813 to 847 | 4,427 | Mar 2026 | $3.60 /min | 
+1 API Pricing reflects the cost to generate 1 minute of video on the model creator's API at the settings we benchmark (1080p where offered)
+Frequently Asked Questions
+The top models on AA-Video-I2V v2.1 by Elo rating are: 1. Dreamina Seedance 2.5 (Elo 1159), 2. Utopai X (Elo 1147), 3. Dreamina Seedance 2.0 (Elo 1135), 4. MiniMax H3 (768p) (Elo 1131), and 5. HeyGen Video 1 (Elo 1124). Rankings are based on blind votes from our validated private evaluators.
+Utopai X currently leads AA-Video-I2V-Silent v2.1 with an Elo score of 1156.
+Hyperflow H3 currently leads among open weights models on AA-Video-I2V-Silent v2.1 with an Elo score of 1120, followed by MiniMax H3 (768p) (Elo 1113) and LTX-2.5 Fast (Elo 913).
+Models are ranked using an Elo rating system derived from blind comparisons judged by our validated private evaluators. Voters compare videos generated from the same input image and choose the result they prefer. Higher Elo scores indicate a model is preferred more often. Vote in the Artificial Analysis Video Arena
+
+{"source_job": "1b783b2d4605.job.1", "source": "https://llm-stats.com/leaderboards/best-ai-for-video-creation", "status": "success", "content_kind": "focused_extraction", "sha256": "e766f813a9bcd3227081210185e9da62eaa6fb67efbb056c626b0e422570f428"}
+As of November 2026, Kling v3 by kling leads the text-to-video leaderboard with an arena score of 1934, followed by Happy Horse 1.0 (1816) and Seedance 2.0 Fast (1747). These rankings are based on 1,450 blind votes across text-to-video, image-to-video, and video editing tasks where users compare real video outputs without knowing which model generated them.
+The best AI video generators produce clips with smooth, natural motion, accurate scene composition, and strong prompt adherence. They handle camera movement, multi-subject interactions, and temporal consistency across frames — the areas where weaker models tend to produce artifacts, sudden cuts, or drifting subjects. Image-to-video models are ranked separately, since animating a reference image is a distinct skill from generating video from text alone.
+2
+1816
+1
+1934
+3
+1747
+How AI video generators work, and how we rank them
+Most AI video generators are diffusion transformers. They start from random noise across many frames at once and refine it step-by-step into a coherent clip — guided by a text encoder that converts your prompt into a vector the model can follow. The hard part isn't any single frame; it's temporal consistency: keeping subjects, lighting, and camera motion coherent over time.
+Rankings use TrueSkill (conservative rating: μ − 3σ) from blind human comparisons in the Video Arena. Each prompt generates 4 videos from randomly sampled models. Users watch the clips and pick the best and worst — without seeing model names or providers. This ensures rankings reflect actual generation quality rather than marketing claims or cherry-picked demo clips.
+The leaderboard covers three distinct arenas. The text-to-video arena evaluates generation from text prompts — testing motion quality, scene coherence, and visual fidelity. The image-to-video arena tests how well models animate a reference image while preserving its composition and style. The video editing arena evaluates instruction-based modifications to existing clips — style transfer, object removal, and scene changes.
+Video generation costs vary significantly. Some models charge per second of output, others per generation regardless of duration. Resolution and duration both affect pricing. The scatter view in the rankings tab shows quality vs. cost so you can find the best AI video generator that fits your budget for production use cases like ad creative, social content, or motion design.
+a dog surfing the waves
+Hidden
+Hidden
+TrueSkill Update
+Model A
++14.8
+The free AI video generator
+Generate with Veo, Sora, Runway, Kling, Luma, and more side by side — in a single free workflow. No install, no API key, all in your browser.
+Choosing the best AI video generator for your workflow
+The best AI video generator depends on your workflow. For marketing and social content where visual polish matters most, the top text-to-video models deliver the most consistent results. For product animations or explainer videos where you need to start from a specific frame, check the image-to-video rankings. For post-production workflows involving style changes or scene edits, the video editing arena rankings are most relevant. If you want a free AI video generator, filter to open-weight models you can self-host.
+Generation time and cost also matter at scale. Some frontier models produce stunning 10-second clips but take minutes and cost over $1 per generation. Faster, cheaper models may be better for iterating on concepts before committing to a final render. You can try any AI video generator in the media playground to test quality on your own prompts, or compare models side-by-side to see how they differ on the same input.
+Text to VideoCinematic, Animation, B-roll
+Image to VideoAnimate static assets
+Video EditingStyle transfer, Inpainting
+Try every AI video generator on your own prompt
+Run Veo, Sora, Runway, Kling, Luma, and more side by side in the media playground — same prompt, real clips, your judgement. No install, no API key.
+Common questions about AI video generators, free options, and how to choose the right model.
+What is the best AI video generator?
+The current best AI video generator depends on what you're producing. The leaderboard above ranks every major model by blind human votes in the Video Arena — sort by score for the strongest all-rounder, switch to image-to-video if you need to animate a reference frame, or check the cost-vs-quality view to find the best AI video generator for your budget. Top contenders include Veo, Sora, Runway Gen-3, Kling, and Luma Dream Machine.
+What is an AI video generator?
+An AI video generator is a model that produces video clips from a text prompt, animates a reference image, or modifies an existing clip. Modern AI video generators are deep neural networks — typically diffusion transformers trained on huge amounts of video — that learn to map prompts to coherent motion across frames. They power text-to-video, image-to-video, and video editing workflows used in marketing, social content, and motion design.
+How do AI video generators work?
+Most AI video generators are diffusion transformers. They start from random noise across many frames at once and refine it step-by-step into a coherent clip — guided by your prompt encoded by a text model. The hard part isn't any single frame; it's temporal consistency: keeping subjects, lighting, and camera motion coherent over time. The best AI video generators get this right even on long clips with multi-subject motion.
+Are AI video generators free?
+Some are. A handful of open-weight AI video generators (like CogVideoX and Mochi) can be run locally for free if you have GPU access, and most hosted providers (Runway, Kling, Luma, Pika) offer a small free tier. Frontier models like Veo and Sora are paid — typically $0.10 to $1+ per generation depending on duration and resolution. The leaderboard shows live per-clip pricing so you can compare paid vs free AI video generators directly.
+Which AI video generator is best for marketing or social content?
+For polished short-form clips (Instagram Reels, TikTok, ads), sort the leaderboard by arena score and pick from the top of the text-to-video table — those are the AI video generators that win the most blind human votes on real prompts. If you need to start from a specific brand asset or product photo, switch to the image-to-video tab; if you're modifying existing footage, use the video editing arena.
+How are AI video generators ranked?
+Each prompt in the Video Arena generates 4 clips from randomly sampled models. Users watch them and pick the best and worst — without seeing model names or providers. Rankings use TrueSkill (conservative score: μ − 3σ) so a model needs many wins to rise. This eliminates brand bias and ensures rankings reflect actual generation quality, not marketing or cherry-picked demos.
+Can AI video generators produce long videos?
+Today, most produce 5 to 10-second clips. Some models support up to 20 or 60 seconds. For longer content, the standard workflow is to generate multiple clips and stitch them together — using a consistent reference image or prompt seed to keep subjects looking the same across cuts. Length, resolution, and motion complexity all affect generation time and cost.
+
+{"source_job": "1b783b2d4605.job.1", "source": "https://m.36kr.com/p/3617945155011589", "status": "partial", "content_kind": "focused_extraction", "sha256": "cb054b031c4f77f671746fa9d321d7d4c5b8ede79c56975f95b4aa41c8ba5a34", "detail": "[POSSIBLY NOT RENDERED] The page at https://m.36kr.com/p/3617945155011589 remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to another source instead of repeatedly fetching this URL.\n\n"}
+火山引擎
+正在进行安全检测...
+为保障您的访问安全，系统正在检测当前网络环境，该过程通常需要几秒钟，请耐心等待
+
+{"source_job": "1b783b2d4605.job.1", "source": "https://artificialanalysis.ai/video/arena", "status": "partial", "content_kind": "focused_extraction", "sha256": "a9a59fce89abfa294b4d1e123edf048957fdc4fdc52ab3d1bf6957a2059674c8", "detail": "[POSSIBLY NOT RENDERED] The page at https://artificialanalysis.ai/video/arena remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to another source instead of repeatedly fetching this URL.\n\n"}
+Video ArenaVote on the Best Video Models
+Vote to reveal your model preference
+Sound on. You're judging the sound too. Use headphones in a quiet space.
+Keyboard Shortcuts
+Prefer left video
+Prefer right video
+Play / Pause
+T
+Switch video modelsT
+R
+RestartR
+
+{"source_job": "1b783b2d4605.job.1", "source": "https://kling.ai/release-note/release-history", "status": "partial", "content_kind": "focused_extraction", "sha256": "bd4702c187a9a655880be010957d7688c186852ddb6252d52bda2e299649cb9d", "detail": "[POSSIBLY NOT RENDERED] The page at https://kling.ai/release-note/release-history remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to another source instead of repeatedly fetching this URL.\n\n"}
+Release Notes
+
+{"source_job": "1b783b2d4605.job.1", "source": "https://m.36kr.com/p/3804766402698759", "status": "partial", "content_kind": "focused_extraction", "sha256": "cb054b031c4f77f671746fa9d321d7d4c5b8ede79c56975f95b4aa41c8ba5a34", "detail": "[POSSIBLY NOT RENDERED] The page at https://m.36kr.com/p/3804766402698759 remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to another source instead of repeatedly fetching this URL.\n\n"}
+火山引擎
+正在进行安全检测...
+为保障您的访问安全，系统正在检测当前网络环境，该过程通常需要几秒钟，请耐心等待
+
+{"source_job": "1b783b2d4605.job.1", "source": "https://seed.bytedance.com/zh/blog/one-take-creation-flexible-referencing-introducing-seedance-2-5", "status": "success", "content_kind": "focused_extraction", "sha256": "b3326859b53001d4649facd0dd001b89f7df21e34db3a71d92fb82a3a0823a0b"}
+一镜成片，随心参考｜Seedance 2.5 正式发布
+一镜成片，随心参考｜Seedance 2.5 正式发布
+日期
+2026-07-31
+分类
+视觉智能
+今天，我们正式发布新一代视频创作模型 Seedance 2.5。Seedance 2.0 发布后，我们观察到，用户对视频创作模型的期待正在从“生成一个片段”走向“完成一段创作”。Seedance 2.5 延续了 Seedance 2.0 统一的多模态音视频联合生成架构，重点突破长叙事能力、多模态参考能力和编辑能力。围绕真实的产业场景，让创作拥有更大的想象空间，并进一步释放生产力。
+其核心亮点如下：
+单次生成时长达 30 秒，支持多轮延长：Seedance 2.5 可单次生成 30 秒高质量视频片段，并支持多轮延长。同时，模型优化了镜头衔接和场景过渡，让长视频保持更好的连贯性。模型还大幅优化了画质、音质以及运动质量，并有效弱化了视频生成中常见的“油腻感”。用户可以生产数分钟具有统一视听语言、高质量的连贯内容，精彩故事一次呈现。
+多模态参考能力全面升级：Seedance 2.5 支持用户单次输入最多 30 张图片、10 段视频、10 段音频作为参考素材。模型还提升了白模参考、运动参考、创意参考等各类参考能力，使模型能更好地理解创作意图，实现多主体、多场景、多镜头变化的复杂创意。
+更精准、稳定的编辑能力：Seedance 2.5 支持精准的时间戳控制，可定向编辑视频内容，提升创作的效率和可控性。同时，模型强化了绿幕编辑、视角编辑、参考编辑等多种编辑能力，满足影视、广告等更多专业、复杂场景的创作需求。
+凭借长叙事、多模态参考、编辑能力的提升，模型不只能单次生成更长的视频，也能更好地理解创作意图、更可控地完成从想法到视频落地的全过程。接下来，我们想邀请你一起观看一段创意短片，全片由 Seedance 2.5 独立生成。
+今天，Seedance 2.5 正在陆续上线即梦 AI、豆包专业版等平台，API 服务也将在近期上线火山方舟，欢迎体验和反馈。
+项目主页：
+https://seed.bytedance.com/seedance2_5
+体验入口：
+1）即梦网页端-视频生成-选择 Seedance 2.5
+2）豆包专业版-视频生成-选择 Seedance 2.5
+30 秒长叙事、支持多轮延长，精彩故事一次呈现
+Seedance 2.5 将单次视频生成时长从 15 秒提升至 30 秒，同时进一步提升长视频中的叙事能力。模型可以在 30 秒内组织多个有逻辑关联的镜头，让故事从铺垫、推进、转折到收尾逐步展开，而不是简单延续一个画面。比如创作一段歌手一镜到底上台演出的片段，模型演绎了歌手在化妆间与工作人员互动后，穿过后台走廊与伴舞相遇并一起登台演出的完整故事，而非仅歌手上台的画面。
+T2V prompt：一镜到底手持稳定器跟拍，镜头从红色厚重幕布缝隙缓缓推进，进入暖色后台化妆间。年轻女歌手背对镜头整理耳机，工作人员提醒她准备登台。她回头看向镜头，开始唱起 City Pop。镜头后退跟拍，歌手穿过幕布进后台通道，与舞伴自然互动，一位工作人员把麦克风递给她。随后歌手与舞伴登上舞台，镜头绕至背面，红黑舞美、LED 屏、追光、烟雾与反光地板逐渐展开。镜头最终拉远至体育馆全景，呈现满场观众、灯牌、荧光棒与欢呼声，营造年轻自由的演唱会高潮氛围。
+凭借模型的多轮延长能力， 用户能在已有的视频结果上自然衔接后续镜头，并在延长过程中保持主体特征、场景环境和叙事节奏的连贯，最终生成数分钟具有统一视听语言的连贯内容，减少拆分镜头、反复拼接和处理衔接的成本。
+R2V prompt：延长视频，衔接 @视频 1 画面内容和主体继续生成一个 30 秒的视频，保持人物主体、场景、画面风格、声音音效一致。小男孩抱着足球沿车厢跑，地铁停稳后侧边门打开，他立刻冲出，男主紧追。两人一路穿过站台跑到街上，惊动街边路人，男主最终追上并抓住他，小男孩委屈抬头，男主慢慢消气，摸摸他的头，露出无奈笑容。
+在画面呈现上，模型能更好地做到自然的运镜衔接，主体在多次切镜中仍保持稳定，音画始终对齐，使长视频生成结果更连贯。比如在一段京剧表演中，镜头伴随主角旋转水袖甩动完成一次优雅的环绕运镜，主体和背景的呈现始终保持一致。水袖在空中的摆动形成自然的弧线，更遵循物理规律。
+R2V prompt：16:9 宽幅电影级质感，一镜到底，丝滑运镜，无剪辑。场景参考 @图片 4。 0-5 秒：@图片 2 霸王近景开场，镜头缓慢环绕上半身并过渡至中景；霸王旋身翻转，随后身体与靠旗从镜头前快速掠过，形成自然遮挡，镜头顺势绕至 @图片 1 虞姬身侧。6-10 秒：镜头稳定环绕 @图片 1 虞姬中景，跟随水袖动作完成环绕运镜虞姬抬臂、挑腕、展袖、半转身。最后收袖定格，侧身看向霸王。11-20 秒：@图片 3 武生出场完成后空翻腾动作，随后霸王居中，武生在对侧进退攻防。虞姬位于霸王侧后方以水袖配合，形成刚柔对比。镜头从武生中近景缓慢后拉至舞台大景，结尾三人面向观众同步京剧落幕亮相。
+此外，针对视频生成中常见的“油腻感”问题，Seedance 2.5 对物体材质、人物肤质与眼神、光影、画面饱和度等细节进行系统优化。模型还减少了字幕与背景音乐不受控的情况，使成片更接近实拍的影视质感。
+多模态参考能力全面升级，复杂创作任务更可控
+Seedance 2.5 进一步强化多模态参考能力，支持用户单次输入最多 30 张图片、10 段视频和 10 段音频作为参考素材。更多数量、不同类型的参考素材，能更好的还原用户脑海中的创意，生成主体更多、场景更丰富、镜头变化更灵活的复杂视频内容。
+模型能综合理解不同素材中的画面构图、场景、风格、人物、道具等元素，并按指令将这些参考素材用于视频生成。在多人同框、群像叙事等复杂场景中，也能同时还原多个人物的形象与声音，保持各主体特征稳定。
+R2V prompt：30 秒音乐会片段，16:9 横屏，电影感写实，真实音乐厅光影，暖金色舞台灯，正式古典音乐会氛围。场景@图一，钢琴家参考@图二，大提琴参考@图三，小提琴参考@图四，主唱参考@图五，管弦等其他乐队参考@图六到图十，合唱团参考图十一到图十四，观众席参考@图十五到图十八。主唱舞台中央走向前沿，钢琴家在钢琴旁，乐队分布两侧与后方，合唱团在舞台后方。开场高位俯拍音乐厅全景，钢琴家落键，主唱进入追光演唱，镜头自然带过小提琴、大提琴与管弦乐队，小提琴明亮，大提琴温暖。后段合唱团加入，主唱与第一排观众短暂眼神交流，观众微笑点头。结尾镜头后移，演唱结束，观众跟随鼓掌。
+此外，模型还提升了白模参考、运动参考、创意参考等各类参考能力，让画面中的主体、动作、运镜更可控。比如，在白模参考中，用户可以用无纹理 3D 模型搭出画面的空间结构、主体姿态、运动轨迹和镜头机位，再让模型参考这套结构生成视频，使复杂镜头的构图和调度更接近预期。同时，模型还增强了光照控制能力，通过白模的空间信息，生成符合真实物理规律的光照效果，包括光源方向、色温、强度、阴影投射等，让最终生成的画面光影更自然。
+R2V prompt：参考 @白模 1 的运镜、镜头节奏、景别变化、主体轨迹和镜头调度。参考 @图片 2 的角色外形、场景、材质、光照、色彩和童话氛围，将白模渲染为梦幻温暖、儿童幻想感、3D 动画短片。剧情依次为：幻想天空飞行→云海神兽伴飞→俯冲入海→鳐鱼海底穿梭→镜面时空裂缝→宇宙摘星→幻化回房间→爸爸盖被→合上绘本定格。
+更精准、稳定的编辑能力，有效提升创作效率
+在视频生成创作中，用户通常需要控制生成时的节奏，并在生成后持续打磨细节。某个动作在第几秒出现、镜头在什么时间切换，或某片段里的角色、动作是否需要调整，都关系到最终成片的效果。更精准、稳定的编辑能力，可以让用户准确还原创意，提高创作效率，减少反复生成的成本。
+Seedance 2.5 支持通过时间戳精准编辑音视频内容，在生成时，用户通过 prompt 控制某个时间段发生的故事、画面视角、运镜和整体节奏，使其更贴近创作意图。在生成后，用户还能针对指定片段里的角色、动作、声音或剧情进行定向修改，同时保持修改前后的连贯性和真实感。
+模型还进一步提升了绿幕编辑、视角与运镜编辑、参考编辑等多种编辑能力，以满足影视、广告等更多专业、复杂的创作场景。比如，在绿幕编辑方面，模型不仅能在保持主体不变的情况下，替换不同场景、讲述不同故事，还能更好地基于不同场景的物理规则渲染人物身上的物理效果，包括衣服飘动方向、头发状态、步态节奏、光影等，使主体和场景更加和谐。
+R2V prompt：把 @视频 1 绿幕背景渲染场景、障碍、服装和配角：0-4 秒：户外训练，障碍换石头、砖块、轮胎、木箱；4-10 秒：休息室，朋友鼓励；10-15 秒：国际赛场，训练杆换原创防守球员和门将，主角进球。整体写实电影级。
+R2V prompt：编辑 @视频 1，保持人物、动作及画风不变，仅调整运镜。15 秒分段运镜设计：0–4 秒，微型 FPV 贴锅穿行，跟随弹起的吐司后横甩至咖啡；4–7 秒，推近并沿锅边横移，跟随煎蛋翻起落回；7–11 秒，急速升至顶视角，匀速下压扫过餐盘和钥匙；11–15 秒，手持近镜跟随双手快速横甩，最后推近早餐，再拉回双人中景。全程连贯稳定。
+深入更广泛的产业场景，持续探索应用价值
+随着模型能力的提升，Seedance 2.5 也在深入教育、工业等更广泛的产业场景。在教育领域，模型已开始进入真实学习场景。比如，Seedance 2.5 可以将课文背后的历史背景、人物和情节转化为视频内容，把学习内容从静态讲解转化成更生动、更沉浸感的画面。同时，模型可以帮助老师更高效地制作教学视频，将科学原理、历史事件、实验过程等抽象内容转化为动态演示，不仅降低教学物料的制作门槛，还支持灵活的内容定制。
+豆包爱学 App「豆包课堂」场景示例
+R2V prompt：东方写意风格。 南宋临安街景，热闹的街上几个孩子边跑边闹，孩子们嘴里张嘴念着“蓦然回首，那人却在，灯火阑珊处”。镜头始终跟随孩子们奔跑，带过热闹的街景。镜头上摇，此人正是 @图片 1 辛弃疾。辛弃疾回头，远处是在灯火阑珊中的男子，镜头连贯。
+在工业制造、具身智能和自动驾驶等产业中，Seedance 2.5 也开始进入更具体的生产环节。模型可以生成高质量合成视频数据，帮助训练机器人的感知和操作能力；也可以用于工业仿真、流程培训和设备演示。在自动驾驶场景中，模型还可以模拟极端天气、复杂路况等低频场景，为系统测试和训练提供更多样本。
+R2V prompt：参考 @白模 1 的运镜、构图、景别、空间关系、零件位置、模型结构、装配顺序和运动轨迹。参考 @图片 1 的材质、光照、色彩、反射和氛围，将白模渲染为高端真实汽车拼装片段。
+总结与展望
+Seedance 2.5 进一步增强了对真实世界的理解和呈现能力，让视频生成从片段级输出，走向更完整的创作流程。我们也看到，在复杂运动的物理合理性、极多主体交互场景的稳定性上，模型仍有提升空间。
+未来，Seedance 团队将继续探索更长的连贯叙事、更懂用户的生成与编辑体验，并进一步增强模型对物理世界规律的理解。我们希望 Seedance 系列模型能更生动、更可控、更懂创作者，帮助更多用户表达创意的同时，持续探索并服务更广泛的产业需求。
+
+{"source_job": "1b783b2d4605.job.1", "source": "https://www.minimax.io/blog/minimax-h3", "status": "success", "content_kind": "focused_extraction", "sha256": "9bca7c8e34a289c4ba51f01b719fc7a728e5b46f3e9b1fe0166075811635c3f1", "text_omitted": true}
+
+{"source_job": "1b783b2d4605.job.2", "source": "https://www.cls.cn/detail/2476778", "status": "success", "content_kind": "focused_extraction", "sha256": "87bc87824e2335dd49b7893180c29f606181a0b4e790570ceea47919b09d64b8", "text_omitted": true}
+
+{"source_job": "1b783b2d4605.job.2", "source": "https://www.tmtpost.com/8085955.html", "status": "success", "content_kind": "focused_extraction", "sha256": "4615409d3013a1275b3d7341a3e46c69f4150788e0187201590ee0f8db51bc04", "text_omitted": true}
+
+{"source_job": "1b783b2d4605.job.2", "source": "http://paper.people.com.cn/zgjjzk/pc/content/202604/15/content_30154020.html", "status": "success", "content_kind": "focused_extraction", "sha256": "aa83c86309ba9b72c90067b7bf020e23c8eee66c3eacbf778def3892aa780d6a", "text_omitted": true}
+
+{"source_job": "1b783b2d4605.job.2", "source": "https://m.paoka.com/info/1107", "status": "success", "content_kind": "focused_extraction", "sha256": "e926b4ddc9322a74bc2ffe685191f0a3a6e21b2bea60d0b35382b46bad713cd7", "text_omitted": true}
+
+{"source_job": "1b783b2d4605.job.2", "source": "https://www.nrta.gov.cn/art/2026/5/13/art_113_73265.html", "status": "success", "content_kind": "focused_extraction", "sha256": "64a859042ae5d252899d5926144273611d9cffaf99603af0b16d7246e4a258d3", "text_omitted": true}
+
+{"source_job": "1b783b2d4605.job.2", "source": "https://www.tmtpost.com/8177437.html", "status": "success", "content_kind": "focused_extraction", "sha256": "71b3a675285670433f25e61e154ca7a96e393fed5e4c5ba7b0fc3e7a81ecf8d1", "text_omitted": true}
+
+{"source_job": "1b783b2d4605.job.2", "source": "[\"https://cn.chinadaily.com.cn/a/202604/15/WS69defb2ea310942cc49a79fc.html\", \"https://m.jiemian.com/article/12548425.html\", \"https://www.tvoao.com/a/225044.aspx\"]", "status": "success", "content_kind": "focused_extraction", "sha256": "18d0e6e6547ef6cb6ac288874e35b7c25d0467f8a45a468a0701d39c93cadbd1", "text_omitted": true}
+
+{"source_job": "1b783b2d4605.job.3", "source": "https://www.36kr.com/p/4052104112543620", "status": "success", "content_kind": "focused_extraction", "sha256": "bad706851c57be4179f00afc81024023e6712db905839d297f81678e8f071c43", "text_omitted": true}
+
+{"source_job": "1b783b2d4605.job.3", "source": "https://www.xinhuanet.com/ent/20260313/43190f898d5a4d0089f21c5fc6209015/c.html", "status": "success", "content_kind": "focused_extraction", "sha256": "95b90fe443a0d0f32ccfdcb6bdb1e29399a9c06a7e7945c126bb8f5a884758ba", "text_omitted": true}
+
+{"source_job": "1b783b2d4605.job.3", "source": "http://www.news.cn/20250526/3887dae6eec34eeea6fa79239fbdd3ce/c.html", "status": "success", "content_kind": "focused_extraction", "sha256": "c1afff1e3a20edfb7c822ea97b36e8a1043d68ebb34c4d2d5621ca9df41d3af1", "text_omitted": true}
+
+{"source_job": "1b783b2d4605.job.3", "source": "https://caifuhao.eastmoney.com/news/20260731154328036195520", "status": "success", "content_kind": "focused_extraction", "sha256": "32588a43dacc6bbafef3e8f35c1b75b145cb43c872aca8d293e8fa47abeef031", "text_omitted": true}
+
+{"source_job": "1b783b2d4605.job.3", "source": "https://wap.eastmoney.com/a/202601143618709374.html", "status": "success", "content_kind": "focused_extraction", "sha256": "3f6bf14434d14504e66a68630c92d2bfc604d091aabd0ff397890d1fe59e3ee0", "text_omitted": true}
+
+{"source_job": "1b783b2d4605.job.3", "source": "https://finance.sina.com.cn/stock/t/2026-01-14/doc-inhhfvyv8461637.shtml", "status": "success", "content_kind": "focused_extraction", "sha256": "18a6b2a03dcee7223994e2dbaccdebea4ccdba19408cdfa7682df147fedbc9c1", "text_omitted": true}
+
+{"source_job": "1b783b2d4605.job.3", "source": "https://m.36kr.com/p/3777849731429122", "status": "partial", "content_kind": "focused_extraction", "sha256": "cb054b031c4f77f671746fa9d321d7d4c5b8ede79c56975f95b4aa41c8ba5a34", "detail": "[POSSIBLY NOT RENDERED] The page at https://m.36kr.com/p/3777849731429122 remained suspiciously short after the browser-render retry. This result was deliberately not cached. Use it if it answers the question; otherwise switch to another source instead of repeatedly fetching this URL.\n\n", "text_omitted": true}
+
+{"source_job": "1b783b2d4605.job.3", "source": "https://m.sohu.com/a/1096611138_211762", "status": "success", "content_kind": "focused_extraction", "sha256": "291fbb71eff6acb6a85595f58603a5b8c3e0fa781bb161f8516c9b3906e7cb08", "text_omitted": true}
+
+{"source_job": "1b783b2d4605.job.3", "source": "https://www.hollywoodreporter.com/business/business-news/ai-hollywood-microdramas-1236694483/", "status": "success", "content_kind": "focused_extraction", "sha256": "a2c673138d2ee69ace155932c4e43b3790f56b3fa0cc8bc66ad4589fbe164155", "text_omitted": true}
+
+Omitted web text bodies: 17. Reference list may also be bounded. A URL/hash without text is not read evidence; fetch missing context or mark unchecked.

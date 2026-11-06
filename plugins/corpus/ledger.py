@@ -281,6 +281,7 @@ class ConsumptionLedger:
     notes: list[str] = field(default_factory=list)
     # Historical originals are usable evidence, not a new request to publish a report.
     replayed_only: bool = False
+
     #: identity -> 交付状态（delivered／truncated／unknown），跨路径取强。
     delivered: dict[tuple[str, str, int, int], str] = field(default_factory=dict)
     #: 最近一次在真实消息边界完成送达核验的 turn（-1 = 尚未核验过）。
@@ -297,6 +298,16 @@ class ConsumptionLedger:
         default_factory=dict, repr=False
     )
     semantic: SemanticConsumption = field(default_factory=SemanticConsumption)
+
+    def has_activity(self) -> bool:
+        """Whether this ledger contains a corpus attempt or observation."""
+        return bool(
+            self.offered
+            or self.requested
+            or self.fetched
+            or self.semantic.calls
+            or self.semantic.receipts
+        )
 
     # ── 采集：offered ──────────────────────────────────────────────────
     def record_search(self, result_text: str, *, turn: int = 0) -> None:
@@ -908,7 +919,14 @@ def verify_and_record(
         manifests = (
             [(Path("<memory>"), manifest)] if manifest is not None else load_manifest_files(folder)
         )
-        if not manifests:
+        if not manifests and not ledger.has_activity():
+            verification = {
+                "schema_version": VERIFICATION_SCHEMA_VERSION,
+                "status": "not_applicable",
+                "reason": "本轮无语料检索或引用，语料证据清单校验不适用",
+                "conclusions": [],
+            }
+        elif not manifests:
             verification = {
                 "schema_version": VERIFICATION_SCHEMA_VERSION,
                 "status": PUBLISH_DRAFT,
@@ -916,7 +934,18 @@ def verify_and_record(
                 "conclusions": [],
             }
         else:
-            merged = _merge_manifests(manifests)
+            selected = manifests
+            if final_text is not None:
+                finals = [item for item in manifests if item[1].get("report_target") == "final_answer"]
+                if finals:
+                    # Research drafts remain auditable, but their old anchors are
+                    # not the final answer. File deliverables retain independent bindings.
+                    latest = {_manifest_owner(path, payload): (path, payload)
+                              for path, payload in manifests}
+                    selected = [item for item in latest.values() if
+                                (item[1].get("report_binding") or {}).get("path")]
+                    selected.append(finals[-1])
+            merged = _merge_manifests(selected)
             verification = verify_manifest(
                 merged,
                 ledger,
@@ -924,6 +953,7 @@ def verify_and_record(
                 final_text=final_text,
             )
             verification["manifest_files"] = [str(path) for path, _ in manifests]
+            verification["checked_manifest_files"] = [str(path) for path, _ in selected]
     except Exception as exc:
         logger.warning("corpus ledger: 清单校验基础设施故障：%s", exc)
         verification = {
@@ -1061,9 +1091,23 @@ def verify_manifest(
         binding_problems: list[dict[str, str]] = []
         if binding is not None:
             from plugins.corpus.report_binding import bound_report
-            report_text, binding_problems = bound_report(binding)
+
+            if isinstance(binding, dict) and binding.get("kind") == "inline":
+                submitted = binding.get("text")
+                if (not isinstance(submitted, str) or not submitted.strip()
+                        or _sha256(submitted) != binding.get("sha256")
+                        or final_text is None or submitted not in final_text):
+                    binding_problems = [{"code": "report_changed_or_unavailable",
+                                         "message": "最终正文已变化，须重新绑定本次交付清单"}]
+            else:
+                report_text, binding_problems = bound_report(binding)
         row = _verify_conclusion(
-            conclusion, index, ledger, resolve, report_text, pending_aware=pending_aware,
+            conclusion,
+            index,
+            ledger,
+            resolve,
+            report_text,
+            pending_aware=pending_aware,
         )
         if binding is not None:
             row["report_binding"] = binding
@@ -1245,9 +1289,12 @@ def _verify_conclusion(
                 start, end = item.get("source_start"), item.get("source_end")
                 # Receipt-derived coordinates select this exact occurrence, not
                 # another identical quote in a delivered part of the same block.
-                if (type(start) is not int or type(end) is not int
-                        or not 0 <= start < end <= len(source_text)
-                        or source_text[start:end] != quote):
+                if (
+                    type(start) is not int
+                    or type(end) is not int
+                    or not 0 <= start < end <= len(source_text)
+                    or source_text[start:end] != quote
+                ):
                     matches = []
                 else:
                     matches = [m for m in matches if m.start == start and m.end == end]
@@ -1272,11 +1319,17 @@ def _verify_conclusion(
                     chosen = match
                 if delivery == DELIVERED:
                     break
-            matched_evidence.append({
-                "doc_id": doc_id, "locator": locator, "start": chosen.start,
-                "end": chosen.end, "quote": chosen.text, "match_kind": chosen.kind,
-                "delivery": delivery,
-            })
+            matched_evidence.append(
+                {
+                    "doc_id": doc_id,
+                    "locator": locator,
+                    "start": chosen.start,
+                    "end": chosen.end,
+                    "quote": chosen.text,
+                    "match_kind": chosen.kind,
+                    "delivery": delivery,
+                }
+            )
             if pending_aware and delivery == "pending":
                 problems.append(
                     {
@@ -1427,13 +1480,9 @@ def publish_boundary(
         if ledger.replayed_only:
             outcome["boundary_action"] = "skip"
             return outcome
-        if (
-            not ledger.offered
-            and not ledger.fetched
-            and not ledger.semantic.calls
-            and not ledger.semantic.receipts
-        ):
+        if not ledger.has_activity():
             outcome["boundary_action"] = "skip"
+            outcome["publish_status"] = "not_applicable"
             return outcome
         verification = verify_and_record(
             ledger,
@@ -1457,8 +1506,7 @@ def publish_boundary(
             report_codes = {"not_in_report", "report_changed_or_unavailable"}
             rows = verification.get("conclusions") or []
             report_failures = sum(
-                any(p.get("code") in report_codes for p in row.get("problems", []))
-                for row in rows
+                any(p.get("code") in report_codes for p in row.get("problems", [])) for row in rows
             )
             if report_failures:
                 evidence_supported = sum(

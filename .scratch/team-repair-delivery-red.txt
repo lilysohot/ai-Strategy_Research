@@ -1,0 +1,35 @@
+......F                                                                  [100%]
+=================================== FAILURES ===================================
+___________ test_delivery_returns_anchor_and_scope_defects_together ____________
+
+run_env = PosixPath('/tmp/pytest-of-administrator/pytest-137/test_delivery_returns_anchor_a0')
+delivery_run = (<frontier_agent.components.agent_bus.bus.AgentBus object at 0x7af3029d99d0>, TeamPhaseBudget(started_monotonic_s=0, r...arch_deadline_s=720, publication_deadline_s=900, finalization_deadline_s=1200, state={}, verification_deadline_s=None))
+
+    async def test_delivery_returns_anchor_and_scope_defects_together(run_env, delivery_run):
+        from plugins.corpus.ledger import get_run_ledger, load_manifest_files
+        from plugins.tools.task_board import snapshot_tasks
+        from tests.test_corpus_manifest_tool import _conclusion, _fetch_body
+        from workflows.agent_team.delivery import deliver_answer
+    
+        bus, _ = delivery_run
+        add_job(bus, 'source', [])
+        bus._jobs['source'].result.metadata['content_acquisition'] = [
+            {'tool': 'corpus_search', 'obtained': True, 'coverage': COVERAGE},
+        ]
+        ledger = get_run_ledger()
+        ledger.record_fetch_result(_fetch_body())
+        ledger.finalize([{'role': 'tool', 'content': _fetch_body()}])
+        board = snapshot_tasks('run')
+        with pytest.raises(ValueError) as caught:
+            await deliver_answer.func(content='资料库记载的最新模型是 Atlas。', updates=[],
+                                      corpus_conclusions=[_conclusion(report_quote='OLD_DRAFT')])
+        assert 'report_quote' in str(caught.value)
+>       assert 'corpus_scope_overstatement' in str(caught.value)
+E       AssertionError: assert 'corpus_scope_overstatement' in 'corpus_conclusions[0].report_quote 必须逐字来自本次 content'
+E        +  where 'corpus_conclusions[0].report_quote 必须逐字来自本次 content' = str(ValueError('corpus_conclusions[0].report_quote 必须逐字来自本次 content'))
+E        +    where ValueError('corpus_conclusions[0].report_quote 必须逐字来自本次 content') = <ExceptionInfo ValueError('corpus_conclusions[0].report_quote 必须逐字来自本次 content') tblen=3>.value
+
+tests/test_team_repair_regression.py:144: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_team_repair_regression.py::test_delivery_returns_anchor_and_scope_defects_together
+1 failed, 6 passed in 0.88s

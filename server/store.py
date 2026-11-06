@@ -2006,15 +2006,26 @@ async def session_display_metadata(rows: list[Session]) -> dict[uuid.UUID, dict]
     """
     if not rows:
         return {}
-    metadata = {row.id: {"title": row.title, "turn_count": 0} for row in rows}
+    metadata = {
+        row.id: {"title": row.title, "turn_count": 0, "last_completed_turn_seq": 0}
+        for row in rows
+    }
     async with get_sessionmaker()() as session:
         counts = await session.execute(
-            select(Turn.session_id, func.count(Turn.id))
+            select(
+                Turn.session_id,
+                func.count(Turn.id),
+                func.max(Turn.seq).filter(
+                    Turn.role == "assistant", Run.status == "completed"
+                ),
+            )
+            .outerjoin(Run, Turn.run_id == Run.id)
             .where(Turn.session_id.in_(metadata))
             .group_by(Turn.session_id)
         )
-        for sid, count in counts:
+        for sid, count, completed_seq in counts:
             metadata[sid]["turn_count"] = count
+            metadata[sid]["last_completed_turn_seq"] = completed_seq or 0
         unnamed = [row.id for row in rows if row.title in PLACEHOLDER_TITLES]
         if unnamed:
             requests = (
