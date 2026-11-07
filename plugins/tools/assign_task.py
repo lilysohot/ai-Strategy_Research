@@ -12,6 +12,7 @@ import json
 import logging
 import os
 import re
+from datetime import date
 from html import escape
 from pathlib import Path
 from typing import Any
@@ -182,6 +183,21 @@ class AgentTeamAssignmentSpec(AssignmentSpec):
 
     model_config = ConfigDict(extra="forbid")
 
+    find_one_published_on: StrictStr | None = Field(
+        default=None,
+        description="For date-only corpus lookup asking for ANY ONE document, set YYYY-MM-DD. "
+        "After the first hit with that published metadata and original evidence, search stops; "
+        "the member may read that document and report it. Omit for topic constraints, comparisons, "
+        "exhaustive inventories, latestness, verification, or publication tasks.",
+    )
+
+    @field_validator("find_one_published_on")
+    @classmethod
+    def validate_lookup_date(cls, value: str | None) -> str | None:
+        if value is not None and date.fromisoformat(value).isoformat() != value:
+            raise ValueError("find_one_published_on must be YYYY-MM-DD")
+        return value
+
     work_item_ids: list[StrictStr] = Field(
         default_factory=list, max_length=32,
         description="Exact task-board IDs covered by this assignment, e.g. ['t1', 't2']. "
@@ -275,6 +291,8 @@ class AgentTeamAssignmentSpec(AssignmentSpec):
         """
         if self.verification_checks and self.output_paths:
             raise ValueError("verification_checks are check-only and cannot publish outputs")
+        if self.find_one_published_on and (self.verification_checks or self.output_paths):
+            raise ValueError("find_one_published_on is only for date-only research")
         if not self.output_paths:
             if self.publish is True:
                 raise ValueError(
@@ -734,6 +752,8 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         task_metadata: dict[str, Any] = {}
         if isinstance(spec, AgentTeamAssignmentSpec):
             task_metadata["required_for_completion"] = spec.required_for_completion
+            if spec.find_one_published_on:
+                task_metadata["find_one_published_on"] = spec.find_one_published_on
             if spec.work_item_ids:
                 task_metadata["work_item_ids"] = list(spec.work_item_ids)
         publication_claim: tuple[str, ...] = ()
@@ -987,6 +1007,15 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                 if runtime is None or lock is None:
                     raise RuntimeError("verification dispatch requires the team runtime lock")
                 async with lock:
+                    active_session = bus.get_session(session_id)
+                    if active_session is not None and (
+                        active_session.current_job_id or active_session.pending_tasks
+                    ):
+                        raise ValueError(
+                            "verification session is busy; do not queue independent checks "
+                            "behind it. Dispatch to another idle verifier for parallel review, "
+                            "or collect the current result before a dependent recheck."
+                        )
                     root = Path(next(
                         (src for src, dst, _ro in runtime.sub_binds if dst == "/outputs"),
                         resolve_mount_dirs()[1],

@@ -1,0 +1,30 @@
+[
+  {
+    "kind": "heading",
+    "mode": "exact",
+    "accepted": false,
+    "raw_match": false,
+    "normalized_match": true
+  },
+  {
+    "kind": "heading",
+    "mode": "nbsp_space",
+    "accepted": true,
+    "raw_match": false,
+    "normalized_match": true
+  },
+  {
+    "kind": "body",
+    "mode": "exact",
+    "accepted": false,
+    "raw_match": false,
+    "normalized_match": true
+  },
+  {
+    "kind": "body",
+    "mode": "nbsp_space",
+    "accepted": true,
+    "raw_match": false,
+    "normalized_match": true
+  }
+]

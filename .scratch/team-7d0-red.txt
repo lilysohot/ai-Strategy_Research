@@ -1,0 +1,327 @@
+FFFFFFFFF...F                                                            [100%]
+=================================== FAILURES ===================================
+_ test_final_turn_submission_repairs_without_research_or_verdict_changes[summary] _
+
+defect = 'summary'
+
+    @pytest.mark.parametrize("defect", ["summary", "missing_content", "empty"])
+    async def test_final_turn_submission_repairs_without_research_or_verdict_changes(defect):
+        check = binding(version="a" * 64)
+        metadata = {"verification_checks": [check], "verification_events": []}
+        verdict = verdict_for(check)
+        research_calls = []
+    
+        @tool
+        async def read_source() -> str:
+            """Read a deterministic source."""
+            research_calls.append(1)
+            return "amount 50"
+    
+        class Client:
+            calls = 0
+    
+            async def chat(self, messages, **kwargs):
+                self.calls += 1
+                if self.calls <= 3:
+                    name, args = "read_source", {}
+                elif self.calls == 4:
+                    name = "submit_report"
+                    args = {"verification_results": [deepcopy(verdict)]}
+                    if defect == "summary":
+                        args["summary"] = "Scope: amount. Finding: 50."
+                    elif defect == "empty":
+                        args = {}
+                else:
+                    assert self.calls == 5, "terminal repair must be bounded"
+                    assert "submission repair" in str(messages)
+                    name = "submit_report"
+                    args = {"content": "Scope: amount. Finding: 50.", "verification_results": [deepcopy(verdict)]}
+                return LLMResponse(content="", tool_calls=[{"id": f"c{self.calls}", "name": name, "args": args}])
+    
+        client = Client()
+        token = set_verification_scope("review", metadata)
+        try:
+            result = await run_agent_loop(
+                system_prompt="Check", user_message="Review", llm=client,
+                tools=[read_source, submit_report], config=LoopConfig(max_turns=4),
+                observers=[MemberProgressObserver(metadata), FinalizeAnswerObserver(tool_names=["submit_report"])],
+            )
+>           assert result.stopped_by == "final_answer"
+E           AssertionError: assert 'max_turns' == 'final_answer'
+E             
+E             - final_answer
+E             + max_turns
+
+tests/test_team_7d0_regressions.py:69: AssertionError
+_ test_final_turn_submission_repairs_without_research_or_verdict_changes[missing_content] _
+
+defect = 'missing_content'
+
+    @pytest.mark.parametrize("defect", ["summary", "missing_content", "empty"])
+    async def test_final_turn_submission_repairs_without_research_or_verdict_changes(defect):
+        check = binding(version="a" * 64)
+        metadata = {"verification_checks": [check], "verification_events": []}
+        verdict = verdict_for(check)
+        research_calls = []
+    
+        @tool
+        async def read_source() -> str:
+            """Read a deterministic source."""
+            research_calls.append(1)
+            return "amount 50"
+    
+        class Client:
+            calls = 0
+    
+            async def chat(self, messages, **kwargs):
+                self.calls += 1
+                if self.calls <= 3:
+                    name, args = "read_source", {}
+                elif self.calls == 4:
+                    name = "submit_report"
+                    args = {"verification_results": [deepcopy(verdict)]}
+                    if defect == "summary":
+                        args["summary"] = "Scope: amount. Finding: 50."
+                    elif defect == "empty":
+                        args = {}
+                else:
+                    assert self.calls == 5, "terminal repair must be bounded"
+                    assert "submission repair" in str(messages)
+                    name = "submit_report"
+                    args = {"content": "Scope: amount. Finding: 50.", "verification_results": [deepcopy(verdict)]}
+                return LLMResponse(content="", tool_calls=[{"id": f"c{self.calls}", "name": name, "args": args}])
+    
+        client = Client()
+        token = set_verification_scope("review", metadata)
+        try:
+            result = await run_agent_loop(
+                system_prompt="Check", user_message="Review", llm=client,
+                tools=[read_source, submit_report], config=LoopConfig(max_turns=4),
+                observers=[MemberProgressObserver(metadata), FinalizeAnswerObserver(tool_names=["submit_report"])],
+            )
+>           assert result.stopped_by == "final_answer"
+E           AssertionError: assert 'max_turns' == 'final_answer'
+E             
+E             - final_answer
+E             + max_turns
+
+tests/test_team_7d0_regressions.py:69: AssertionError
+_ test_final_turn_submission_repairs_without_research_or_verdict_changes[empty] _
+
+defect = 'empty'
+
+    @pytest.mark.parametrize("defect", ["summary", "missing_content", "empty"])
+    async def test_final_turn_submission_repairs_without_research_or_verdict_changes(defect):
+        check = binding(version="a" * 64)
+        metadata = {"verification_checks": [check], "verification_events": []}
+        verdict = verdict_for(check)
+        research_calls = []
+    
+        @tool
+        async def read_source() -> str:
+            """Read a deterministic source."""
+            research_calls.append(1)
+            return "amount 50"
+    
+        class Client:
+            calls = 0
+    
+            async def chat(self, messages, **kwargs):
+                self.calls += 1
+                if self.calls <= 3:
+                    name, args = "read_source", {}
+                elif self.calls == 4:
+                    name = "submit_report"
+                    args = {"verification_results": [deepcopy(verdict)]}
+                    if defect == "summary":
+                        args["summary"] = "Scope: amount. Finding: 50."
+                    elif defect == "empty":
+                        args = {}
+                else:
+                    assert self.calls == 5, "terminal repair must be bounded"
+                    assert "submission repair" in str(messages)
+                    name = "submit_report"
+                    args = {"content": "Scope: amount. Finding: 50.", "verification_results": [deepcopy(verdict)]}
+                return LLMResponse(content="", tool_calls=[{"id": f"c{self.calls}", "name": name, "args": args}])
+    
+        client = Client()
+        token = set_verification_scope("review", metadata)
+        try:
+            result = await run_agent_loop(
+                system_prompt="Check", user_message="Review", llm=client,
+                tools=[read_source, submit_report], config=LoopConfig(max_turns=4),
+                observers=[MemberProgressObserver(metadata), FinalizeAnswerObserver(tool_names=["submit_report"])],
+            )
+>           assert result.stopped_by == "final_answer"
+E           AssertionError: assert 'max_turns' == 'final_answer'
+E             
+E             - final_answer
+E             + max_turns
+
+tests/test_team_7d0_regressions.py:69: AssertionError
+_ test_submission_repair_is_once_and_cannot_execute_research_or_change_verdict _
+
+    async def test_submission_repair_is_once_and_cannot_execute_research_or_change_verdict():
+        check = binding(version="a" * 64)
+        observer = MemberProgressObserver({"verification_checks": [check]})
+        args = {"verification_results": [verdict_for(check)]}
+        ctx = SimpleNamespace(tool_calls=[{"name": "submit_report", "args": args}], metadata={})
+        first = await observer.on_llm_response(ctx)
+>       assert first.continue_to_next_turn and first.pop_last_message
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'NoneType' object has no attribute 'continue_to_next_turn'
+
+tests/test_team_7d0_regressions.py:87: AttributeError
+_ test_quote_check_uses_captured_source_not_model_transcription[exact-AI\xa0\u5b89\u5168-True] _
+
+tmp_path = PosixPath('/tmp/pytest-of-administrator/pytest-154/test_quote_check_uses_captured0')
+mode = 'exact', quote = 'AI\xa0安全', accepted = True
+
+    @pytest.mark.parametrize("mode,quote,accepted", [
+        ("exact", "AI\u00a0安全", True),
+        ("exact", "AI 安全", False),
+        ("nbsp_space", "AI 安全", True),
+        ("nbsp_space", "AI 完全安全", False),
+    ])
+    def test_quote_check_uses_captured_source_not_model_transcription(tmp_path, mode, quote, accepted):
+        bus, spec, _ = make_bound(tmp_path)
+        bus._jobs["source"].result.metadata["corpus_evidence"] = [
+            {"doc_id": "cv2:" + "a" * 64, "locator": "chunk:original", "text": "AI\u00a0安全"}
+        ]
+>       spec = VerificationCheck.model_validate({
+            **spec.model_dump(), "subject": {"text": f"引文：{quote}"},
+            "quote_checks": [{"source_key": "source", "locator": "chunk:original", "quote": quote, "mode": mode}],
+        })
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for VerificationCheck
+E       quote_checks
+E         Extra inputs are not permitted [type=extra_forbidden, input_value=[{'source_key': 'source',...全', 'mode': 'exact'}], input_type=list]
+E           For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden
+
+tests/test_team_7d0_regressions.py:111: ValidationError
+_ test_quote_check_uses_captured_source_not_model_transcription[exact-AI \u5b89\u5168-False] _
+
+tmp_path = PosixPath('/tmp/pytest-of-administrator/pytest-154/test_quote_check_uses_captured1')
+mode = 'exact', quote = 'AI 安全', accepted = False
+
+    @pytest.mark.parametrize("mode,quote,accepted", [
+        ("exact", "AI\u00a0安全", True),
+        ("exact", "AI 安全", False),
+        ("nbsp_space", "AI 安全", True),
+        ("nbsp_space", "AI 完全安全", False),
+    ])
+    def test_quote_check_uses_captured_source_not_model_transcription(tmp_path, mode, quote, accepted):
+        bus, spec, _ = make_bound(tmp_path)
+        bus._jobs["source"].result.metadata["corpus_evidence"] = [
+            {"doc_id": "cv2:" + "a" * 64, "locator": "chunk:original", "text": "AI\u00a0安全"}
+        ]
+>       spec = VerificationCheck.model_validate({
+            **spec.model_dump(), "subject": {"text": f"引文：{quote}"},
+            "quote_checks": [{"source_key": "source", "locator": "chunk:original", "quote": quote, "mode": mode}],
+        })
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for VerificationCheck
+E       quote_checks
+E         Extra inputs are not permitted [type=extra_forbidden, input_value=[{'source_key': 'source',...全', 'mode': 'exact'}], input_type=list]
+E           For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden
+
+tests/test_team_7d0_regressions.py:111: ValidationError
+_ test_quote_check_uses_captured_source_not_model_transcription[nbsp_space-AI \u5b89\u5168-True] _
+
+tmp_path = PosixPath('/tmp/pytest-of-administrator/pytest-154/test_quote_check_uses_captured2')
+mode = 'nbsp_space', quote = 'AI 安全', accepted = True
+
+    @pytest.mark.parametrize("mode,quote,accepted", [
+        ("exact", "AI\u00a0安全", True),
+        ("exact", "AI 安全", False),
+        ("nbsp_space", "AI 安全", True),
+        ("nbsp_space", "AI 完全安全", False),
+    ])
+    def test_quote_check_uses_captured_source_not_model_transcription(tmp_path, mode, quote, accepted):
+        bus, spec, _ = make_bound(tmp_path)
+        bus._jobs["source"].result.metadata["corpus_evidence"] = [
+            {"doc_id": "cv2:" + "a" * 64, "locator": "chunk:original", "text": "AI\u00a0安全"}
+        ]
+>       spec = VerificationCheck.model_validate({
+            **spec.model_dump(), "subject": {"text": f"引文：{quote}"},
+            "quote_checks": [{"source_key": "source", "locator": "chunk:original", "quote": quote, "mode": mode}],
+        })
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for VerificationCheck
+E       quote_checks
+E         Extra inputs are not permitted [type=extra_forbidden, input_value=[{'source_key': 'source',..., 'mode': 'nbsp_space'}], input_type=list]
+E           For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden
+
+tests/test_team_7d0_regressions.py:111: ValidationError
+_ test_quote_check_uses_captured_source_not_model_transcription[nbsp_space-AI \u5b8c\u5168\u5b89\u5168-False] _
+
+tmp_path = PosixPath('/tmp/pytest-of-administrator/pytest-154/test_quote_check_uses_captured3')
+mode = 'nbsp_space', quote = 'AI 完全安全', accepted = False
+
+    @pytest.mark.parametrize("mode,quote,accepted", [
+        ("exact", "AI\u00a0安全", True),
+        ("exact", "AI 安全", False),
+        ("nbsp_space", "AI 安全", True),
+        ("nbsp_space", "AI 完全安全", False),
+    ])
+    def test_quote_check_uses_captured_source_not_model_transcription(tmp_path, mode, quote, accepted):
+        bus, spec, _ = make_bound(tmp_path)
+        bus._jobs["source"].result.metadata["corpus_evidence"] = [
+            {"doc_id": "cv2:" + "a" * 64, "locator": "chunk:original", "text": "AI\u00a0安全"}
+        ]
+>       spec = VerificationCheck.model_validate({
+            **spec.model_dump(), "subject": {"text": f"引文：{quote}"},
+            "quote_checks": [{"source_key": "source", "locator": "chunk:original", "quote": quote, "mode": mode}],
+        })
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for VerificationCheck
+E       quote_checks
+E         Extra inputs are not permitted [type=extra_forbidden, input_value=[{'source_key': 'source',..., 'mode': 'nbsp_space'}], input_type=list]
+E           For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden
+
+tests/test_team_7d0_regressions.py:111: ValidationError
+__________ test_date_lookup_stops_broad_search_after_supported_match ___________
+
+    async def test_date_lookup_stops_broad_search_after_supported_match():
+        observer = MemberProgressObserver({"find_one_published_on": "2026-11-06"})
+        ctx = SimpleNamespace(metadata={})
+        payload = {"ok": True, "hits": [{
+            "doc_id": "cv2:" + "a" * 64, "published": "2026-11-06",
+            "evidence_contract": "native-search-evidence-v2",
+            "excerpts": [{"text": "2026-11-06 研究", "ref": "eref:" + "b" * 64 + ":0"}],
+        }], "coverage": {"processing": "partial"}}
+        await observer.on_tool_result(ctx, ToolResult("corpus_search", {}, json.dumps(payload), 1, "c1", False))
+        decision = await observer.on_before_llm(ctx)
+>       assert "first supported date match" in decision.inject_messages[0]
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'NoneType' object has no attribute 'inject_messages'
+
+tests/test_team_7d0_regressions.py:141: AttributeError
+_______ test_search_coverage_counts_do_not_repeat_unusable_source_hashes _______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x747d0d315610>
+
+    async def test_search_coverage_counts_do_not_repeat_unusable_source_hashes(monkeypatch):
+        module = importlib.import_module("plugins.tools.corpus_search")
+        coverage = {"processing": "partial", "availability": "unknown", "native": {
+            "sources": 148, "cutoff": "2026-11-06", "unknown_date_sources": [f"{i:064x}" for i in range(80)]
+        }}
+        class Backend:
+            def search_with_coverage(self, query, *, limit):
+                return [], coverage
+        monkeypatch.setattr(module, "get_service", lambda: Backend())
+        response = json.loads(await module.corpus_search.func("today"))
+        native = response["coverage"]["native"]
+>       assert native["unknown_date_source_count"] == 80
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'unknown_date_source_count'
+
+tests/test_team_7d0_regressions.py:173: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_team_7d0_regressions.py::test_final_turn_submission_repairs_without_research_or_verdict_changes[summary]
+FAILED tests/test_team_7d0_regressions.py::test_final_turn_submission_repairs_without_research_or_verdict_changes[missing_content]
+FAILED tests/test_team_7d0_regressions.py::test_final_turn_submission_repairs_without_research_or_verdict_changes[empty]
+FAILED tests/test_team_7d0_regressions.py::test_submission_repair_is_once_and_cannot_execute_research_or_change_verdict
+FAILED tests/test_team_7d0_regressions.py::test_quote_check_uses_captured_source_not_model_transcription[exact-AI\xa0\u5b89\u5168-True]
+FAILED tests/test_team_7d0_regressions.py::test_quote_check_uses_captured_source_not_model_transcription[exact-AI \u5b89\u5168-False]
+FAILED tests/test_team_7d0_regressions.py::test_quote_check_uses_captured_source_not_model_transcription[nbsp_space-AI \u5b89\u5168-True]
+FAILED tests/test_team_7d0_regressions.py::test_quote_check_uses_captured_source_not_model_transcription[nbsp_space-AI \u5b8c\u5168\u5b89\u5168-False]
+FAILED tests/test_team_7d0_regressions.py::test_date_lookup_stops_broad_search_after_supported_match
+FAILED tests/test_team_7d0_regressions.py::test_search_coverage_counts_do_not_repeat_unusable_source_hashes
+10 failed, 3 passed in 1.49s

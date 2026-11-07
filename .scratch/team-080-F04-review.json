@@ -1,0 +1,20 @@
+{
+  "reviewer": "Codex artifact review (model; not independent human acceptance)",
+  "review_type": "model",
+  "worker_sha256": "ac8c5eb74ea2ee053e96a2feab48fcc326c74e847125890a355c0e89926eac84",
+  "case_sha256": "d6589f7513a8157ae6d51e06b52274b855badd2e9b976c4f624d9a17b21028f5",
+  "criteria": [
+    {
+      "verdict": "pass",
+      "evidence": "worker.result.final_answer opening and sections 1–2: A=100, B=120, A99.0% below99.5%, B99.8% above99.5%. Exact fixture texts are quoted."
+    },
+    {
+      "verdict": "pass",
+      "evidence": "Opening and final decision explicitly recommend B within the stated budget and retain the experimental-condition qualification. Overqualification is recorded separately; the answer does not refuse the requested choice."
+    },
+    {
+      "verdict": "fail",
+      "evidence": "metrics.agents shows cost/reliability overlap and a separate verifier; however final section4 expands into MTBF and confidence-interval sample sizes, treating10 purchased units as10 statistical trials without fixture support. Trajectories also show4 unavailable bash calls for DNS/probing and repeated URL variants despite exact fixture inputs. This violates focused work without unrelated research/analysis; no change to original rubric."
+    }
+  ]
+}

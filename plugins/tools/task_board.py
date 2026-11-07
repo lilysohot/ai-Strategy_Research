@@ -182,7 +182,7 @@ def board_size(task_id: str) -> int:
 def _progress_fields(item: dict[str, Any]) -> dict[str, Any]:
     """Retain model-declared progress separately from tool verification verdicts."""
     fields: dict[str, Any] = {}
-    for key in ("done_when", "notes", "gap"):
+    for key in ("done_when", "notes", "gap", "limitations"):
         if key in item and isinstance(item[key], str):
             fields[key] = item[key].strip()[:2000]
     if item.get("kind") in ("research", "verification", "delivery"):
@@ -650,7 +650,7 @@ def render_board(task_id: str, *, bus_task_id: str | None = None) -> str:
             )
             row += f"agents=[{agents}]  "
         lines.append(f"{row}{t['description'][:80]}")
-        for key in ("done_when", "notes", "gap"):
+        for key in ("done_when", "notes", "gap", "limitations"):
             if t.get(key):
                 lines.append(f"    {key}: {t[key]}")
         if t.get("verification_required"):

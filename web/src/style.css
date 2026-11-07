@@ -56,6 +56,29 @@
   box-sizing: border-box;
 }
 
+.report-details {
+  margin-top: 16px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.report-details > summary {
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.report-details > summary:hover,
+.report-details[open] > summary {
+  color: var(--text);
+}
+
+.report-details > summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
 html,
 body,
 #app {

@@ -1,0 +1,41 @@
+FFF.F.F.F...                                                             [100%]
+=================================== FAILURES ===================================
+______ test_unmarked_calculation_receipt_is_still_validated[zero_formula] ______
+benchmarks/team_workflow/regression_probes.py:76: in test_unmarked_calculation_receipt_is_still_validated
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+______ test_unmarked_calculation_receipt_is_still_validated[unbound_key] _______
+benchmarks/team_workflow/regression_probes.py:76: in test_unmarked_calculation_receipt_is_still_validated
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+______ test_unmarked_calculation_receipt_is_still_validated[false_quote] _______
+benchmarks/team_workflow/regression_probes.py:76: in test_unmarked_calculation_receipt_is_still_validated
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+________ test_admitted_required_unknown_cannot_hide_inside_pass_detail _________
+benchmarks/team_workflow/regression_probes.py:98: in test_admitted_required_unknown_cannot_hide_inside_pass_detail
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+________ test_cross_document_week_cannot_complete_unknown_table_period _________
+benchmarks/team_workflow/regression_probes.py:119: in test_cross_document_week_cannot_complete_unknown_table_period
+    with pytest.raises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE ValueError
+____ test_replacement_settles_obligations_not_historical_attempts[complete] ____
+benchmarks/team_workflow/regression_probes.py:162: in test_replacement_settles_obligations_not_historical_attempts
+    await deliver_answer.func(
+workflows/agent_team/delivery.py:155: in deliver_answer
+    raise ValueError(
+E   ValueError: t1: member work incomplete; use blocked with a gap
+=========================== short test summary info ============================
+FAILED benchmarks/team_workflow/regression_probes.py::test_unmarked_calculation_receipt_is_still_validated[zero_formula]
+FAILED benchmarks/team_workflow/regression_probes.py::test_unmarked_calculation_receipt_is_still_validated[unbound_key]
+FAILED benchmarks/team_workflow/regression_probes.py::test_unmarked_calculation_receipt_is_still_validated[false_quote]
+FAILED benchmarks/team_workflow/regression_probes.py::test_admitted_required_unknown_cannot_hide_inside_pass_detail
+FAILED benchmarks/team_workflow/regression_probes.py::test_cross_document_week_cannot_complete_unknown_table_period
+FAILED benchmarks/team_workflow/regression_probes.py::test_replacement_settles_obligations_not_historical_attempts[complete]
+6 failed, 6 passed in 0.84s

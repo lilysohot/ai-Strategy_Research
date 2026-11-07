@@ -27,6 +27,10 @@ def measure(root: Path) -> dict[str, Any]:
     agents = []
     attempts = []
     tools: Counter[str] = Counter()
+    tool_attempts: Counter[str] = Counter()
+    tool_latencies: dict[str, list[float]] = defaultdict(list)
+    tool_missing_duration: Counter[str] = Counter()
+    tool_errors: Counter[str] = Counter()
     queries: Counter[str] = Counter()
     dispatches: dict[str, list[float]] = defaultdict(list)
     starts: dict[str, list[float]] = defaultdict(list)
@@ -45,19 +49,53 @@ def measure(root: Path) -> dict[str, Any]:
         if not rows:
             continue
         first, last = rows[0]["ts"], rows[-1]["ts"]
-        agents.append({"trace": str(path.relative_to(root)), "start": first, "end": last})
+        agent_attempts = [r for r in rows if r["t"] == "attempt" and r.get("phase") == "finished"]
+        agent_prompts = [
+            r["usage"]["prompt_tokens"]
+            for r in agent_attempts
+            if (r.get("usage") or {}).get("prompt_tokens") is not None
+        ]
+        agent_calls = Counter(
+            c["name"] for r in rows if r["t"] == "llm" for c in r.get("tool_calls", [])
+        )
+        agents.append(
+            {
+                "trace": str(path.relative_to(root)),
+                "start": first,
+                "end": last,
+                "attempts": len(agent_attempts),
+                "known_prompt_tokens": sum(agent_prompts),
+                "max_prompt_tokens": max(agent_prompts, default=None),
+                "tool_attempts": dict(agent_calls),
+            }
+        )
         if path.stem != "main_agent":
             starts[path.stem.rsplit(".t", 1)[0]].append(first)
         for row in rows:
             if row["t"] == "attempt" and row.get("phase") == "finished":
                 attempts.append(row)
             if row["t"] == "result":
-                tools[row.get("name", "")] += 1
+                tool_name = row.get("name", "")
+                tools[tool_name] += 1
+                duration = row.get("ms")
+                if (
+                    isinstance(duration, (int, float))
+                    and not isinstance(duration, bool)
+                    and duration >= 0
+                ):
+                    tool_latencies[tool_name].append(float(duration))
+                else:
+                    tool_missing_duration[tool_name] += 1
+                # Only the explicit telemetry flag is authoritative here. A string
+                # containing "Error" may be quoted source data, not an execution error.
+                if row.get("error"):
+                    tool_errors[tool_name] += 1
             if row["t"] != "llm":
                 continue
             for call in row.get("tool_calls", []):
                 args = call.get("args") or {}
                 name = call["name"]
+                tool_attempts[name] += 1
                 if name == "assign_task":
                     for task in args.get("tasks") or []:
                         dispatches[task.get("agent", "")].append(row["ts"])
@@ -95,6 +133,7 @@ def measure(root: Path) -> dict[str, Any]:
         "known_usage_attempts": len(known),
         "unknown_usage_attempts": len(attempts) - len(known),
         "known_prompt_tokens": prompt,
+        "max_prompt_tokens": max((a["usage"]["prompt_tokens"] for a in known), default=None),
         "cache_known_attempts": len(cache_known),
         "known_cache_read_tokens": cache_read,
         "cache_hit_rate_on_known_usage": cache_read / cache_prompt if cache_prompt else None,
@@ -105,6 +144,21 @@ def measure(root: Path) -> dict[str, Any]:
         "outcomes": dict(Counter(a.get("outcome", "unknown") for a in attempts)),
         "failure_reasons": dict(Counter(a["reason"] for a in attempts if a.get("reason"))),
         "tools": dict(tools),
+        "tool_attempts": dict(tool_attempts),
+        "tool_latency_ms": {
+            name: {
+                "known": len(tool_latencies[name]),
+                "unknown": tool_missing_duration[name],
+                "p50": percentile(tool_latencies[name], 0.5),
+                "p90": percentile(tool_latencies[name], 0.9),
+                "max": max(tool_latencies[name], default=None),
+                "sum": sum(tool_latencies[name]) if tool_latencies[name] else None,
+                "explicit_errors": tool_errors[name],
+            }
+            for name in sorted(tools)
+        },
+        "tool_sum_is_wall_time": False,
+        "retrieval_stage_timings": None,
         "research_dispatch_attempts": research_jobs,
         "exact_repeated_tool_requests": sum(n - 1 for n in queries.values()),
         "dispatch_start_delay_estimate_s": delays,
@@ -116,5 +170,8 @@ def measure(root: Path) -> dict[str, Any]:
             "Parallel attempt durations are not additive wall time.",
             "First report may be incomplete; semantic usefulness requires review.",
             "Dollar cost unavailable without an explicit model tariff.",
+            "Tool timings are recorded result durations, not isolated service/queue latency.",
+            "Retrieval DB/embedding/rerank/queue timings are unavailable in standard traces.",
+            "Tool attempts include denied or interrupted requests; shell use is not automatically waste.",
         ],
     }

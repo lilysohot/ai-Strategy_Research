@@ -183,6 +183,8 @@ async def corpus_search(query: str, limit: int = 10) -> str:
     coverage.native.body_characters / blocks_returned 是预算裁剪前合并的候选正文
     字符 / 块数，blocks_ranked 是排序候选数，都不等于已交付正文。
     title 是首命中块标题，未必是报告名称。结果只覆盖允许的原生正文；
+    unknown_date_source_count 是无发布日期的来源数，不提供可拼接的文档句柄；
+    不得用来源 hash 猜测 doc_id 或 locator。任意一份的存在性不要求盘点所有无日期来源。
     未展示不等于不存在，未合并的候选需继续检索，未命中不等于全库无资料。
 
     Args:
@@ -248,6 +250,16 @@ def _search_sync(query: str, limit: int) -> str:
                 "availability": "unknown",
                 "reason_codes": ("coverage_unavailable",),
             }
+
+    # Source hashes are internal catalog identities, not fetch locators. Preserve
+    # the coverage limitation without repeating the full list in every response.
+    native_coverage = coverage.get("native")
+    if isinstance(native_coverage, dict) and isinstance(native_coverage.get("unknown_date_sources"), list):
+        native_coverage = dict(native_coverage)
+        unknown = native_coverage.pop("unknown_date_sources")
+        native_coverage["unknown_date_source_count"] = len(unknown)
+        native_coverage["unknown_date_sources_omitted"] = True
+        coverage = {**coverage, "native": native_coverage}
 
     if not hits:
         # 「没有相关研报」与「检索成功但为空」此前长得一样（ok=true + 空 hits），

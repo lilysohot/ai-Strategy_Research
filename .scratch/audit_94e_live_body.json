@@ -1,0 +1,14 @@
+{
+  "doc_id": "cv2:3d10e850ae56226f927c508c3600beaff482b4efaf5550397f07218524fe299a",
+  "invalid_locator_count": 0,
+  "invalid_locator_unknown": [
+    "chunk:0"
+  ],
+  "actual_body_locator": "chunk:3d10e850ae56226f:body:0000",
+  "actual_body_inventory_count": 1,
+  "actual_body_kinds": {
+    "body": 1
+  },
+  "actual_body_chars": 152,
+  "actual_body_sha256": "06e0cf9b640b1d47e8a67a42fc9061243cb6e74c8709d1b52195cd2cc20e8b70"
+}

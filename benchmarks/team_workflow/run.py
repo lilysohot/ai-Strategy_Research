@@ -39,9 +39,15 @@ def catalog() -> list[dict[str, Any]]:
         raise ValueError("duplicate case IDs")
     for case in cases:
         if case["layer"] == "protocol":
-            source = (ROOT / case["selector"].split("::")[0]).resolve()
-            if not source.is_relative_to(ROOT) or not source.is_file():
-                raise ValueError(f"invalid selector: {case['id']}")
+            selectors = case.get("selectors", [case.get("selector")])
+            if not isinstance(selectors, list) or not selectors:
+                raise ValueError(f"invalid selectors: {case['id']}")
+            for selector in selectors:
+                if not isinstance(selector, str):
+                    raise ValueError(f"invalid selector: {case['id']}")
+                source = (ROOT / selector.split("::")[0]).resolve()
+                if not source.is_relative_to(ROOT) or not source.is_file():
+                    raise ValueError(f"invalid selector: {case['id']}")
         elif case["layer"] == "frozen":
             if not case.get("rubric") or not case.get("sources") or not case.get("question"):
                 raise ValueError(f"incomplete frozen case: {case['id']}")
@@ -119,6 +125,17 @@ def frozen_result(
         failures.append("wall budget exceeded")
     if metrics.get("known_prompt_tokens", 0) > case["budgets"]["max_prompt_tokens"]:
         failures.append("known input token budget exceeded")
+    for budget, metric in (
+        ("max_model_attempts", "attempts"),
+        ("max_single_prompt_tokens", "max_prompt_tokens"),
+        ("max_exact_repeated_requests", "exact_repeated_tool_requests"),
+    ):
+        if budget in case["budgets"]:
+            observed = metrics.get(metric)
+            if observed is None:
+                failures.append(f"missing budget telemetry: {metric}")
+            elif observed > case["budgets"][budget]:
+                failures.append(f"{budget} exceeded")
     jobs = (result.get("report_contract") or {}).get("job_outcomes")
     research_jobs = (
         sum(not job.get("verification_checks") for job in jobs) if jobs is not None else None
@@ -328,7 +345,7 @@ def run(args: argparse.Namespace) -> int:
                 sys.executable,
                 "-m",
                 "pytest",
-                case["selector"],
+                *case.get("selectors", [case.get("selector")]),
                 "-q",
                 f"--junitxml={trial / 'pytest.xml'}",
             ]

@@ -1,0 +1,42 @@
+/home/administrator/FrontierAgent/benchmarks/team_workflow/regression_probes.py
+  /home/administrator/FrontierAgent/benchmarks/team_workflow/regression_probes.py:32:32 - error: "metadata" is not a known attribute of "None" (reportOptionalMemberAccess)
+/home/administrator/FrontierAgent/deploy/huggingface/app.py
+  /home/administrator/FrontierAgent/deploy/huggingface/app.py:26:8 - error: Import "gradio" could not be resolved (reportMissingImports)
+/home/administrator/FrontierAgent/plugins/corpus/service.py
+  /home/administrator/FrontierAgent/plugins/corpus/service.py:1493:19 - error: Argument of type "RankingSession" cannot be assigned to parameter "domain" of type "ResearchDomain | None" in function "search"
+    Type "RankingSession" is not assignable to type "ResearchDomain | None"
+      "RankingSession" is not assignable to "ResearchDomain"
+      "RankingSession" is not assignable to "None" (reportArgumentType)
+  /home/administrator/FrontierAgent/plugins/corpus/service.py:1493:19 - error: Argument of type "RankingSession" cannot be assigned to parameter "published_from" of type "str | None" in function "search"
+    Type "RankingSession" is not assignable to type "str | None"
+      "RankingSession" is not assignable to "str"
+      "RankingSession" is not assignable to "None" (reportArgumentType)
+  /home/administrator/FrontierAgent/plugins/corpus/service.py:1493:19 - error: Argument of type "RankingSession" cannot be assigned to parameter "published_to" of type "str | None" in function "search"
+    Type "RankingSession" is not assignable to type "str | None"
+      "RankingSession" is not assignable to "str"
+      "RankingSession" is not assignable to "None" (reportArgumentType)
+/home/administrator/FrontierAgent/scripts/run_retention.py
+  /home/administrator/FrontierAgent/scripts/run_retention.py:876:43 - error: Cannot access attribute "rowcount" for class "Result[Any]"
+    Attribute "rowcount" is unknown (reportAttributeAccessIssue)
+  /home/administrator/FrontierAgent/scripts/run_retention.py:891:58 - error: "splitlines" is not a known attribute of "None" (reportOptionalMemberAccess)
+  /home/administrator/FrontierAgent/scripts/run_retention.py:1037:27 - error: Type "list[tuple[str, int]]" is not assignable to declared type "dict[str, int]"
+    "list[tuple[str, int]]" is not assignable to "dict[str, int]" (reportAssignmentType)
+/home/administrator/FrontierAgent/server/watch_scheduler.py
+  /home/administrator/FrontierAgent/server/watch_scheduler.py:256:48 - error: "started_at" is not a known attribute of "None" (reportOptionalMemberAccess)
+  /home/administrator/FrontierAgent/server/watch_scheduler.py:278:16 - error: Operator ">=" not supported for "None" (reportOptionalOperand)
+  /home/administrator/FrontierAgent/server/watch_scheduler.py:286:13 - error: Argument of type "Decimal | None" cannot be assigned to parameter "price" of type "Decimal" in function "condition_met"
+    Type "Decimal | None" is not assignable to type "Decimal"
+      "None" is not assignable to "Decimal" (reportArgumentType)
+  /home/administrator/FrontierAgent/server/watch_scheduler.py:648:13 - error: Argument of type "Decimal | None" cannot be assigned to parameter "price" of type "Decimal" in function "condition_met"
+    Type "Decimal | None" is not assignable to type "Decimal"
+      "None" is not assignable to "Decimal" (reportArgumentType)
+  /home/administrator/FrontierAgent/server/watch_scheduler.py:668:62 - error: Argument of type "UUID | None" cannot be assigned to parameter "id" of type "UUID" in function "__init__"
+    Type "UUID | None" is not assignable to type "UUID"
+      "None" is not assignable to "UUID" (reportArgumentType)
+  /home/administrator/FrontierAgent/server/watch_scheduler.py:695:35 - error: "last_valid_quote_price" is not a known attribute of "None" (reportOptionalMemberAccess)
+  /home/administrator/FrontierAgent/server/watch_scheduler.py:696:37 - error: "last_valid_quote_at" is not a known attribute of "None" (reportOptionalMemberAccess)
+  /home/administrator/FrontierAgent/server/watch_scheduler.py:696:57 - error: "isoformat" is not a known attribute of "None" (reportOptionalMemberAccess)
+16 errors, 0 warnings, 0 informations
+WARNING: there is a new pyright version available (v1.1.411 -> v1.1.414).
+Please install the new version or set PYRIGHT_PYTHON_FORCE_VERSION to `latest`
+

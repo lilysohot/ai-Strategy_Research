@@ -1,0 +1,67 @@
+{
+  "run_id": "49e4f04b05ca46fda0ae4e4b71d1636a",
+  "assessment": "execution_completed_but_quality_not_accepted",
+  "scope": "Internal artifact and local code audit; not external confirmation of market figures. No production code changes or deployment.",
+  "metrics": {
+    "duration_seconds": 689.21,
+    "llm_attempts": 104,
+    "known_prompt_tokens": 4849949,
+    "known_cache_read_tokens": 4060416,
+    "known_uncached_prompt_tokens": 789533,
+    "unknown_usage_attempts": 5,
+    "research_jobs": 4,
+    "verification_jobs": 7,
+    "latest_check_results": {"pass": 4, "unchecked": 1},
+    "answer_status": "partial",
+    "candidate_verification": "not_assessed",
+    "main_max_prompt_tokens": 170993,
+    "first_research_dispatch_seconds": 99.8
+  },
+  "observed_improvements": [
+    "Four researchers start together near 99.8s; distinct verification sessions overlap.",
+    "Macro date/caliber defects were corrected and rechecked.",
+    "AI missing-source result remains unchecked; incomplete status is disclosed.",
+    "Each revised check has one subject revision; no evidence of unlimited rechecking in this run.",
+    "First final delivery rejected missing checked macro excerpt, then corrected."
+  ],
+  "findings": [
+    {
+      "priority": "P0",
+      "layer": "verification coverage and publication",
+      "evidence": "job.9 index_level detail admits unverified opening/high/low 3612.15/3660.49/3610.20, yet verdict=pass, six dimensions=match and unresolved_issues=[]. Final labels the containing section independently verified.",
+      "acceptance_target": "A required unknown claim prevents aggregate PASS; per-claim coverage and final labels must agree."
+    },
+    {
+      "priority": "P0",
+      "layer": "calculation protocol",
+      "evidence": "Every binding lacks calculation_targets. job.9 contains four arithmetic receipts whose source_key fields are descriptive labels instead of bound job keys. validate_calculations returns immediately when no targets; replay also accepts a zero expression. Forcing the -8.05% target rejects the actual receipt as unbound evidence.",
+      "qualification": "The zero-expression negative control tests the calculation gate, not a complete publication simulation. It does not establish that the original arithmetic values are wrong.",
+      "acceptance_target": "Validate every submitted receipt regardless of markers; explicitly declare required derived claims without depending solely on wording."
+    },
+    {
+      "priority": "P1",
+      "layer": "research acquisition and evidence handoff",
+      "evidence": "job.2 has 291 evidence cards and only five captured web texts totaling 7415 characters. Core company figures occur in search snippets; company disclosure links are available but not fetched. At least one snippet pair conflicts (222.38 vs 22.24 for the same described profit). These conflicting snippets are absent from verifier prompts. AI verifier jobs.6 and .10 perform no new retrieval; recheck changes attribution/wording only. 17 of 18 rows remain unsupported by bound source texts.",
+      "qualification": "Search snippets are discovery leads, not equivalent to captured source bodies; this is not proof that all 17 numbers are false, nor an excerpt-ranking failure alone.",
+      "acceptance_target": "Track claim-to-source readiness and conflicting snippets; route missing essential sources back to bounded acquisition or reduce conclusion scope."
+    },
+    {
+      "priority": "P1",
+      "layer": "synthesis and final verification",
+      "evidence": "Final asserts AI hardware realization complete and capex upward-revision cycle ended despite unchecked core inputs. It says period/currency were checked and no mixing, while job.10 explicitly cannot confirm 17 rows' period/unit/caliber against cited originals. Arbitrary two-thirds completion has no operational denominator/model. Final publication remains not_assessed.",
+      "acceptance_target": "Propagate evidence uncertainty to dependent conclusions and prevent unverified dimensions being described as checked."
+    },
+    {
+      "priority": "P1",
+      "layer": "orchestration and context cost",
+      "evidence": "Compared to 080, wall time decreases 4.5% while known prompt tokens increase 100.3% and uncached tokens 118.3%. Different workloads prevent a controlled speed comparison. First dispatch 99.8s includes a 45s stream stall. Four runaway recoveries each cost about 26.5s across overlapping agents; three assignment schema failures and a publication retry add work. Main input reaches 170993 tokens.",
+      "acceptance_target": "Bound necessary research scope, source acquisition and coordinator context; compare identical frozen cases with both quality and cost budgets."
+    }
+  ],
+  "limits": [
+    "No corpus_search occurred, so this run cannot validate corpus retrieval fixes.",
+    "No claim that the busy-verifier or maximum recheck guard was triggered; only compatible behavior is observed.",
+    "No full-source authenticity check; captured web texts include focused extractions.",
+    "Current marker-triggered arithmetic repair is demonstrably insufficient for this sample."
+  ]
+}

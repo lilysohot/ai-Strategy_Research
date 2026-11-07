@@ -457,6 +457,498 @@
             "不能据条件分析断言利率而非盈利决定走势，不得凭空添加上涨概率；可给出明确条件下的方向判断。",
             "完成团队派工和独立核验；不能以执行成功或某项PASS把未知日期、混期均值及因果推断统称已核验事实。"
         ],
-        "budgets": {"wall_s": 600, "max_prompt_tokens": 600000, "max_research_jobs": 3}
+        "budgets": {
+            "wall_s": 600,
+            "max_prompt_tokens": 600000,
+            "max_research_jobs": 3
+        }
+    },
+    {
+        "id": "P30",
+        "layer": "protocol",
+        "dimension": "verification",
+        "split": "development",
+        "origin": "080ad8521962429a814171f48ffc7f60 / bf9d5de507b54b519173c08c1746cb71",
+        "goal": "计算标注不能豁免基准、来源引用与算术复算；持久化判定一致",
+        "selector": "tests/test_team_080_regressions.py::test_calculation_label_does_not_waive_missing_basis",
+        "selectors": [
+            "tests/test_team_080_regressions.py::test_calculation_label_does_not_waive_missing_basis",
+            "tests/test_team_080_regressions.py::test_complete_calculation_passes_but_cannot_cover_uncomputed_percentage",
+            "tests/test_team_080_regressions.py::test_calculation_proofs_reject_fabricated_or_invalid_inputs",
+            "tests/test_team_080_regressions.py::test_persisted_pass_cannot_bypass_calculation_gate",
+            "tests/test_team_080_regressions.py::test_removing_calculation_label_does_not_remove_numeric_obligation",
+            "tests/test_team_080_regressions.py::test_calculation_scope_excludes_adjacent_constraints_and_qualitative_derivation"
+        ]
+    },
+    {
+        "id": "P31",
+        "layer": "protocol",
+        "dimension": "context",
+        "split": "development",
+        "origin": "080ad8521962429a814171f48ffc7f60 / bf9d5de507b54b519173c08c1746cb71",
+        "goal": "重复背景之后的结果表与分离的结果段完整送达，保留表头及精确片段位置",
+        "selector": "tests/test_team_080_regressions.py::test_result_table_survives_repeated_background_terms",
+        "selectors": [
+            "tests/test_team_080_regressions.py::test_result_table_survives_repeated_background_terms",
+            "tests/test_team_080_regressions.py::test_separated_narrative_and_table_keep_exact_slices_and_headers"
+        ]
+    },
+    {
+        "id": "P32",
+        "layer": "protocol",
+        "dimension": "orchestration",
+        "split": "development",
+        "origin": "080ad8521962429a814171f48ffc7f60 / bf9d5de507b54b519173c08c1746cb71",
+        "goal": "同证据仅一次措辞修正，已有判定不得原样重投，新工具证据可解锁复核",
+        "selector": "tests/test_team_080_regressions.py::test_second_wording_only_recheck_is_rejected",
+        "selectors": [
+            "tests/test_team_080_regressions.py::test_second_wording_only_recheck_is_rejected",
+            "tests/test_team_080_regressions.py::test_new_tool_evidence_allows_recheck_but_renaming_does_not",
+            "tests/test_team_080_regressions.py::test_retry_is_not_another_vote_on_completed_failure",
+            "tests/test_team_080_regressions.py::test_new_evidence_cannot_exceed_total_recheck_cap"
+        ]
+    },
+    {
+        "id": "P33",
+        "layer": "protocol",
+        "dimension": "orchestration",
+        "split": "development",
+        "origin": "080ad8521962429a814171f48ffc7f60 / bf9d5de507b54b519173c08c1746cb71",
+        "goal": "独立核验真实并行启动；忙碌核验会话不能串行堆积新检查",
+        "selector": "tests/test_team_080_regressions.py::test_independent_checks_run_concurrently_without_queueing"
+    },
+    {
+        "id": "F07",
+        "layer": "frozen",
+        "dimension": "verification",
+        "split": "development",
+        "origin": "080ad8521962429a814171f48ffc7f60 (synthetic adaptation)",
+        "goal": "有输入的前一日收盘可计算，缺少基准的前一日涨幅必须保持未知；独立检查可并行",
+        "question": "请团队分别核查虚构 Lumen 指数的行情和议会席位，独立核验后给出简短结论。草稿称：11月4日收盘100点且单日上涨2.16%，两者标为[计算]；选后Lyra有52席、Orion有44席。只用给定资料，不补做历史统计；缺失的输入请明确指出。",
+        "sources": [
+            {
+                "url": "https://fixtures.invalid/lumen/market",
+                "title": "Lumen 行情表",
+                "content": "2026-11-05 收盘110点，当日上涨10点。没有提供2026-11-03收盘或2026-11-04涨幅。"
+            },
+            {
+                "url": "https://fixtures.invalid/lumen/results",
+                "title": "Lumen 席位结果",
+                "content": "更新2026-11-05。本次选后结果已公布。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n选前背景：Lyra 45席、Orion 53席、独立议员2席。\n\n| 党派 | 选前 | 选后 |\n| Lyra | 45 | 52 |\n| Orion | 53 | 44 |\n| 独立 | 2 | 2 |\n| 未确定 | 0 | 2 |\n"
+            }
+        ],
+        "rubric": [
+            "11月4日收盘=110-10=100点，可保留明确计算过程；不得因缺涨幅基准而丢弃这个有效结论。",
+            "11月4日涨幅需要11月3日收盘，资料没有提供。不得保留2.16%为可验证计算值，或倒推一个基准证明2.16%。",
+            "选后Lyra52、Orion44，另2名独立及2席未确定；核验须看到结果表而非只复述研究报告或检查总数100。",
+            "实际完成团队研究与独立核验；独立检查可并行，不能靠反复改标签取得PASS；保留缺失项并给出有效局部结论。"
+        ],
+        "budgets": {
+            "wall_s": 600,
+            "max_prompt_tokens": 600000,
+            "max_research_jobs": 3
+        }
+    },
+    {
+        "id": "P34",
+        "layer": "protocol",
+        "dimension": "verification",
+        "split": "development",
+        "origin": "49e4f04b05ca46fda0ae4e4b71d1636a / 3d87700083864a1dbb41acfa74f46136 (minimal synthetic replay)",
+        "goal": "无计算标记也必须校验已提交凭据；有效凭据与直接事实保持可通过",
+        "selectors": [
+            "benchmarks/team_workflow/regression_probes.py::test_unmarked_calculation_receipt_is_still_validated",
+            "benchmarks/team_workflow/regression_probes.py::test_valid_unmarked_receipt_and_direct_fact_remain_acceptable"
+        ]
+    },
+    {
+        "id": "P35",
+        "layer": "protocol",
+        "dimension": "verification",
+        "split": "development",
+        "origin": "49e4f04b05ca46fda0ae4e4b71d1636a / 3d87700083864a1dbb41acfa74f46136 (minimal synthetic replay)",
+        "goal": "必核事实在detail中承认为未知时不得整段PASS；完整覆盖和诚实未知为对照",
+        "selectors": [
+            "benchmarks/team_workflow/regression_probes.py::test_admitted_required_unknown_cannot_hide_inside_pass_detail",
+            "benchmarks/team_workflow/regression_probes.py::test_complete_coverage_and_honest_unknown_are_accepted"
+        ]
+    },
+    {
+        "id": "P36",
+        "layer": "protocol",
+        "dimension": "evidence",
+        "split": "development",
+        "origin": "49e4f04b05ca46fda0ae4e4b71d1636a / 3d87700083864a1dbb41acfa74f46136 (minimal synthetic replay)",
+        "goal": "另一文档的交易周不能填补表格缺失期间；同表完整期间为正向对照",
+        "selectors": [
+            "benchmarks/team_workflow/regression_probes.py::test_cross_document_week_cannot_complete_unknown_table_period",
+            "benchmarks/team_workflow/regression_probes.py::test_same_table_period_and_unknown_period_controls"
+        ]
+    },
+    {
+        "id": "P37",
+        "layer": "protocol",
+        "dimension": "recovery",
+        "split": "development",
+        "origin": "49e4f04b05ca46fda0ae4e4b71d1636a / 3d87700083864a1dbb41acfa74f46136 (minimal synthetic replay)",
+        "goal": "真实交付入口按替代检查结算义务；未替代、部分替代和未通过仍阻断",
+        "selectors": [
+            "benchmarks/team_workflow/regression_probes.py::test_replacement_settles_obligations_not_historical_attempts"
+        ]
+    },
+    {
+        "id": "P38",
+        "layer": "protocol",
+        "dimension": "observability",
+        "split": "transfer",
+        "origin": "49e4f04b05ca46fda0ae4e4b71d1636a / 3d87700083864a1dbb41acfa74f46136 (minimal synthetic replay)",
+        "goal": "诊断区分并行耗时、未知遥测、单次上下文和调用预算；旧基线不变",
+        "selectors": [
+            "tests/test_team_eval_regression_expansion.py::test_tool_timings_preserve_missing_and_parallel_durations",
+            "tests/test_team_eval_regression_expansion.py::test_optional_efficiency_budgets_fail_closed_without_changing_old_cases"
+        ]
+    },
+    {
+        "id": "F08",
+        "layer": "frozen",
+        "dimension": "verification",
+        "split": "development",
+        "origin": "49e4f04b05ca46fda0ae4e4b71d1636a / 3d87700083864a1dbb41acfa74f46136 (minimal synthetic replay)",
+        "pair": "F09",
+        "goal": "缺表格期间及开盘价时不得认证整段；不得借其他报告补期间",
+        "question": "请团队核查这段虚构行情草稿，独立核验后简短说明可保留与需修正的内容：2026-08-31至09-04交易周日均成交额120亿元、融资余额240亿元；2026-11-06 Lumen指数收盘110点、开盘105点。只使用给定材料，不开展额外行业研究。",
+        "sources": [
+            {
+                "url": "https://fixtures.invalid/period/table",
+                "title": "资金表原文",
+                "content": "残片未保留统计期间，不知道是哪一周。\n| 指标 | 数值 | 单位 |\n| 日均成交额 | 120 | 亿元 |\n| 融资余额 | 240 | 亿元 |"
+            },
+            {
+                "url": "https://fixtures.invalid/period/other",
+                "title": "另一份指数周报",
+                "content": "另一份报告：2026-08-31至2026-09-04交易周，Lumen指数收于100点。没有引用资金表。"
+            },
+            {
+                "url": "https://fixtures.invalid/period/quote",
+                "title": "Lumen当日收盘记录",
+                "content": "2026-11-06：Lumen收盘110点。没有提供开盘价。"
+            }
+        ],
+        "rubric": [
+            "120和240虽在表体出现，期间未知，不得借另一报告的交易周认证资金数据；明确缺少什么。",
+            "保留有证据的11-06收盘110，开盘105保持未知，不能说无冲突所以通过。",
+            "实际进行独立核验；最终摘要、正文、核验标签对每个已知和未知项一致，不把局部PASS扩大成全段通过。",
+            "完成有用的简短回答，不以反复修改措辞获取PASS，不扩展成产业研究或精确字数整理任务。"
+        ],
+        "budgets": {
+            "wall_s": 600,
+            "max_prompt_tokens": 600000,
+            "max_research_jobs": 3,
+            "max_model_attempts": 50,
+            "max_single_prompt_tokens": 80000,
+            "max_exact_repeated_requests": 6
+        }
+    },
+    {
+        "id": "F09",
+        "layer": "frozen",
+        "dimension": "verification",
+        "split": "transfer",
+        "origin": "49e4f04b05ca46fda0ae4e4b71d1636a / 3d87700083864a1dbb41acfa74f46136 (minimal synthetic replay)",
+        "pair": "F08",
+        "goal": "同一核验任务的完整证据正向对照",
+        "question": "请团队核查这段虚构行情草稿，独立核验后简短说明可保留与需修正的内容：2026-08-31至09-04交易周日均成交额120亿元、融资余额240亿元；2026-11-06 Lumen指数收盘110点、开盘105点。只使用给定材料，不开展额外行业研究。",
+        "sources": [
+            {
+                "url": "https://fixtures.invalid/period/table",
+                "title": "资金表原文",
+                "content": "统计期间：2026-08-31至2026-09-04。\n| 指标 | 数值 | 单位 |\n| 日均成交额 | 120 | 亿元 |\n| 融资余额 | 240 | 亿元 |"
+            },
+            {
+                "url": "https://fixtures.invalid/period/other",
+                "title": "另一份指数周报",
+                "content": "另一份报告：2026-08-31至2026-09-04交易周，Lumen指数收于100点。没有引用资金表。"
+            },
+            {
+                "url": "https://fixtures.invalid/period/quote",
+                "title": "Lumen当日收盘记录",
+                "content": "2026-11-06：Lumen收盘110点。开盘105点。"
+            }
+        ],
+        "rubric": [
+            "资金表自身给出08-31至09-04期间，120亿元和240亿元均可确认，不得机械拒绝有充分证据的数字。",
+            "11-06收盘110和开盘105均有来源，应明确确认两者。",
+            "实际进行独立核验；最终摘要、正文、核验标签对每个已知和未知项一致，不把局部PASS扩大成全段通过。",
+            "完成有用的简短回答，不以反复修改措辞获取PASS，不扩展成产业研究或精确字数整理任务。"
+        ],
+        "budgets": {
+            "wall_s": 600,
+            "max_prompt_tokens": 600000,
+            "max_research_jobs": 3,
+            "max_model_attempts": 50,
+            "max_single_prompt_tokens": 80000,
+            "max_exact_repeated_requests": 6
+        }
+    },
+    {
+        "id": "F10",
+        "layer": "frozen",
+        "dimension": "delivery",
+        "split": "development",
+        "origin": "49e4f04b05ca46fda0ae4e4b71d1636a / 3d87700083864a1dbb41acfa74f46136 (minimal synthetic replay)",
+        "goal": "证据缺口必须传到综合结论；有界检索与旧日期限制不得只留在附录",
+        "question": "今天是2026-11-06。请团队仅用给定档案判断虚构Arbor与Birch两家工厂是否都已完成量产验证，独立核验后给简短结论。草稿写：两家全部通过，可确认整个扩产计划已经兑现；档案中没有11月资料。请核查并修正，不要另找行业资料。",
+        "sources": [
+            {
+                "url": "https://fixtures.invalid/factory/catalog",
+                "title": "本次档案查询回执",
+                "content": "这次查询只返回部分档案，不是全量目录。21份材料日期未知。检索截止2026-11-06。本次找到的具名验收文件日期为2026-09-06，未命中11月材料；不能推出所有档案或外部世界都没有11月材料。"
+            },
+            {
+                "url": "https://fixtures.invalid/factory/arbor",
+                "title": "Arbor验收记录",
+                "content": "2026-09-06验收：Arbor日产100件、合格率99.8%，满足日产至少90件及合格率至少99.5%的门槛。未评估此后的持续生产。"
+            },
+            {
+                "url": "https://fixtures.invalid/factory/birch-note",
+                "title": "Birch研究笔记",
+                "content": "研究笔记称Birch日产120件、合格率99.9%，但未附验收记录，数值未独立确认。"
+            },
+            {
+                "url": "https://fixtures.invalid/factory/birch",
+                "title": "Birch原始验收记录",
+                "status": "unavailable",
+                "content": ""
+            }
+        ],
+        "rubric": [
+            "明确Arbor在9月6日达到给定门槛，但不扩大为11月持续达标。",
+            "Birch没有可取得的原始验收记录，研究笔记不能代替独立核验；不得认定两家全部通过或整个计划已兑现。",
+            "只能说本次未命中11月材料，不能说全库或外部世界没有；摘要与正文均保留此范围。",
+            "团队独立核验后保留有用局部结论；免责声明不能为正文的无保留结论兜底。"
+        ],
+        "budgets": {
+            "wall_s": 600,
+            "max_prompt_tokens": 600000,
+            "max_research_jobs": 3,
+            "max_model_attempts": 50,
+            "max_single_prompt_tokens": 80000,
+            "max_exact_repeated_requests": 6
+        }
+    },
+    {
+        "id": "P39",
+        "layer": "protocol",
+        "dimension": "recovery",
+        "split": "development",
+        "origin": "7d0cecf846254f4895d318299136a688 (synthetic replay)",
+        "goal": "末轮核验提交可作一次有界格式修复，不重取证、不改变判定，不放宽有效性门禁",
+        "selectors": [
+            "tests/test_team_7d0_regressions.py::test_final_turn_submission_repairs_without_research_or_verdict_changes",
+            "tests/test_team_7d0_regressions.py::test_submission_repair_is_once_and_cannot_execute_research_or_change_verdict"
+        ]
+    },
+    {
+        "id": "P40",
+        "layer": "protocol",
+        "dimension": "verification",
+        "split": "development",
+        "origin": "7d0cecf846254f4895d318299136a688 (synthetic replay)",
+        "goal": "引文比较使用已绑定工具原文；精确与显式空格规范化分开，伪造来源和持久化假PASS拒绝",
+        "selectors": [
+            "tests/test_team_7d0_regressions.py::test_quote_check_uses_captured_source_not_model_transcription",
+            "tests/test_team_7d0_regressions.py::test_quote_binding_rejects_unbound_sources_and_persisted_false_pass"
+        ]
+    },
+    {
+        "id": "P41",
+        "layer": "protocol",
+        "dimension": "orchestration",
+        "split": "development",
+        "origin": "7d0cecf846254f4895d318299136a688 (synthetic replay)",
+        "goal": "日期唯一条件的任意一份检索在有效命中后停止扩大；错日期/预览/失败不触发",
+        "selectors": [
+            "tests/test_team_7d0_regressions.py::test_date_lookup_stops_broad_search_after_supported_match",
+            "tests/test_team_7d0_regressions.py::test_date_lookup_does_not_stop_on_unsupported_candidate",
+            "tests/test_team_7d0_regressions.py::test_date_lookup_assignment_reaches_runtime_metadata"
+        ]
+    },
+    {
+        "id": "P42",
+        "layer": "protocol",
+        "dimension": "context",
+        "split": "development",
+        "origin": "7d0cecf846254f4895d318299136a688 (synthetic replay)",
+        "goal": "重复无日期hash列表变为计数，保留覆盖限制且不改变服务快照",
+        "selectors": [
+            "tests/test_team_7d0_regressions.py::test_search_coverage_counts_do_not_repeat_unusable_source_hashes"
+        ]
+    },
+    {
+        "id": "F11",
+        "layer": "frozen",
+        "dimension": "orchestration",
+        "split": "development",
+        "origin": "7d0cecf846254f4895d318299136a688 (synthetic adaptation)",
+        "goal": "简单存在性请求不受历史盘点任务牵引，找到一份后简短交付",
+        "question": "从给定资料中找任意一份2026-11-06发布的报告，给出标题、日期、来源和一句内容说明即可。背景：上一轮曾讨论21份无日期资料，但那是旧盘点，本轮不要求继续盘点，也不要求证明只有一份。不要扩展行业研究或制作文件。",
+        "sources": [
+            {
+                "url": "https://fixtures.invalid/lookup/today",
+                "title": "灯塔行业观察",
+                "content": "发布日期：2026-11-06。标题：灯塔行业观察。本文讨论企业通过既有服务商采用新软件的路径，尚未验证未来增长。"
+            },
+            {
+                "url": "https://fixtures.invalid/lookup/yesterday",
+                "title": "前日简报",
+                "content": "发布日期：2026-11-05。标题：前日简报。本文讨论前一日的服务价格变化。"
+            },
+            {
+                "url": "https://fixtures.invalid/lookup/catalog",
+                "title": "有界目录说明",
+                "content": "本次仅提供部分资料。80份来源无日期。未知日期不会否定已明确日期的文档存在，目录不保证穷尽。"
+            }
+        ],
+        "rubric": [
+            "实际取得灯塔行业观察原文，给出2026-11-06及正确来源；不把前日报告冒充今天。",
+            "找到一份后交付，不盘点无日期来源、穷举日期变体或开启无关研究。",
+            "回答简短且有用；不把OCR码点、内部job/hash和调试过程作为主要交付。",
+            "不声称全库只有一份；不因部分目录覆盖而拒绝确认已有明确证据的存在性。"
+        ],
+        "budgets": {
+            "wall_s": 600,
+            "max_prompt_tokens": 200000,
+            "max_research_jobs": 1,
+            "max_model_attempts": 20,
+            "max_single_prompt_tokens": 50000,
+            "max_exact_repeated_requests": 2
+        }
+    },
+    {
+        "id": "P43",
+        "layer": "protocol",
+        "dimension": "orchestration",
+        "split": "development",
+        "origin": "94e38ed61ce54831a273aaabf20f6a0d generalized requirement scope",
+        "goal": "可选边界保留但不阻塞已支持的用户结果；矛盾完成提交原子拒绝",
+        "selectors": [
+            "tests/test_team_requirement_scope.py::test_nonblocking_boundaries_survive_delivery_without_partial_status",
+            "tests/test_team_requirement_scope.py::test_resolved_with_blocking_gap_rejected_atomically"
+        ]
+    },
+    {
+        "id": "P44",
+        "layer": "protocol",
+        "dimension": "orchestration",
+        "split": "development",
+        "origin": "94e38ed61ce54831a273aaabf20f6a0d generalized requirement scope",
+        "goal": "可选边界不能豁免失败核验或缺失必要证据",
+        "selectors": [
+            "tests/test_team_requirement_scope.py::test_limitations_cannot_waive_required_verification",
+            "tests/test_team_requirement_scope.py::test_required_missing_evidence_stays_partial_with_optional_boundary"
+        ]
+    },
+    {
+        "id": "F12",
+        "layer": "frozen",
+        "dimension": "orchestration",
+        "split": "transfer",
+        "origin": "Generalized requirement/evidence boundary; public synthetic transfer",
+        "goal": "不因缺少税费、运费、品牌产地或其他商家价格把商品金额计算降为未完成。",
+        "question": "根据给定虚构报价，按所列商品单价计算4支笔和2本本子的商品金额，给出算式即可。",
+        "sources": [
+            {
+                "url": "https://fixtures.invalid/scope/quote",
+                "title": "虚构办公用品单价",
+                "content": "笔：每支5元。本子：每本12元。以上为商品单价，未提供税费和运费。未提供其他商家报价，也未说明品牌产地。"
+            }
+        ],
+        "rubric": [
+            "取得报价并正确计算4×5+2×12=44元，说明是商品金额。",
+            "不因缺少税费、运费、品牌产地或其他商家价格把商品金额计算降为未完成。",
+            "不扩展为采购推荐或市场比较；答复紧凑，不要求额外文件或审计报告。",
+            "保留必要算术核对，不将未给出的到手价冒充已算出的商品金额。"
+        ],
+        "budgets": {
+            "wall_s": 600,
+            "max_prompt_tokens": 300000,
+            "max_research_jobs": 2,
+            "max_model_attempts": 25,
+            "max_single_prompt_tokens": 50000,
+            "max_exact_repeated_requests": 3
+        },
+        "pair": "F13"
+    },
+    {
+        "id": "F13",
+        "layer": "frozen",
+        "dimension": "orchestration",
+        "split": "transfer",
+        "origin": "Generalized requirement/evidence boundary; public synthetic transfer",
+        "goal": "税费和运费是必要缺口，明确无法确定确切到手总价，允许询问缺失金额。",
+        "question": "根据给定虚构报价，计算4支笔和2本本子的含税含运费到手总价，给出确切金额。",
+        "sources": [
+            {
+                "url": "https://fixtures.invalid/scope/quote",
+                "title": "虚构办公用品单价",
+                "content": "笔：每支5元。本子：每本12元。以上为商品单价，未提供税费和运费。未提供其他商家报价，也未说明品牌产地。"
+            }
+        ],
+        "rubric": [
+            "取得报价并可给出商品金额44元，但不能将其称为含税含运费的确切到手价。",
+            "税费和运费是必要缺口，明确无法确定确切到手总价，允许询问缺失金额。",
+            "不得假定免税包邮，不得把必要取证改成非阻塞限制后宣称任务完全完成。",
+            "保留有用的部分计算，不扩展成品牌或行业研究，不无意义重复抓取同一资料。"
+        ],
+        "budgets": {
+            "wall_s": 600,
+            "max_prompt_tokens": 300000,
+            "max_research_jobs": 2,
+            "max_model_attempts": 25,
+            "max_single_prompt_tokens": 50000,
+            "max_exact_repeated_requests": 3
+        },
+        "pair": "F12"
+    },
+    {
+        "id": "F14",
+        "layer": "frozen",
+        "dimension": "orchestration",
+        "split": "transfer",
+        "origin": "Generalized requirement/evidence boundary; public synthetic transfer",
+        "goal": "不自行换算时区或补造日期；无需查明主办机构与楼宇地址才能完成原文翻译。",
+        "question": "将给定英文会议通知翻译成中文，保留原通知的时间与地点。",
+        "sources": [
+            {
+                "url": "https://fixtures.invalid/scope/notice",
+                "title": "Meeting notice",
+                "content": "The meeting is on Tuesday at 3 p.m. in Room 204. Please bring your draft."
+            }
+        ],
+        "rubric": [
+            "实际取得通知，准确译出周二下午3点、204室、带上草稿。",
+            "不自行换算时区或补造日期；无需查明主办机构与楼宇地址才能完成原文翻译。",
+            "交付译文，不扩展为会务安排、机构调查或多套润色版本。",
+            "未给出的背景可保持未给出，不应造成部分完成或必要核验失败。"
+        ],
+        "budgets": {
+            "wall_s": 600,
+            "max_prompt_tokens": 300000,
+            "max_research_jobs": 2,
+            "max_model_attempts": 25,
+            "max_single_prompt_tokens": 50000,
+            "max_exact_repeated_requests": 3
+        }
+    },
+    {
+        "id": "P45",
+        "layer": "protocol",
+        "dimension": "orchestration",
+        "split": "development",
+        "origin": "F12 first general-scope model run: delivery/mandatory-review deadlock",
+        "goal": "运行时必要核验未派发时协调仍开放，满足前置条件后才进入交付",
+        "selectors": [
+            "tests/test_team_requirement_scope.py::test_runtime_required_review_keeps_coordination_open"
+        ]
     }
 ]

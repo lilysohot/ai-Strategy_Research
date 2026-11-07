@@ -1,0 +1,63 @@
+{
+  "run": "94e38ed61ce54831a273aaabf20f6a0d",
+  "scope": "Read-only execution audit and corpus probes; production code unchanged.",
+  "duration_s": 93.54,
+  "summary_model_attempts": 9,
+  "summary_prompt_tokens": 128803,
+  "including_intake_model_attempts": 10,
+  "including_intake_prompt_tokens": 129396,
+  "answer_status": "partial",
+  "stopped_by": "final_answer",
+  "research_jobs": 1,
+  "verification_jobs": 0,
+  "model_errors": 0,
+  "search_calls": 2,
+  "fetch_calls": 2,
+  "inventory_calls": 1,
+  "fixes_observed": [
+    "find_one_published_on was passed at dispatch; first supported date match instructions appeared in member turns 2-5. Both searches were issued together in turn 1, before the hit, not after the stop condition.",
+    "Unknown-date hashes were replaced by count=80 and omission flag; no undated-source research expansion.",
+    "No verification assignment, quote_checks, malformed submission, or repair retry occurred; those repairs were not exercised."
+  ],
+  "findings": [
+    {
+      "priority": "high",
+      "layer": "tool_protocol_and_evidence_scope",
+      "claim": "The answer falsely states that the document build has no body chunks.",
+      "evidence": "Member requested invented locator chunk:0; inventory returned unknown_members=[chunk:0] and total_chunks=0 for that requested set. It did not enumerate the document. Same-build historical body evidence exists, and a read-only live fetch of chunk:3d10e850ae56226f:body:0000 returns a 152-character body.",
+      "artifacts": [".scratch/audit_94e_evidence.json", ".scratch/audit_94e_live_body.json"],
+      "regression_command": "uv run python .scratch/check_94e_evidence.py",
+      "regression_outcome": "Expected assertion failure: whole-document absence contradicted by captured same-build body.",
+      "positive_control_command": "uv run python .scratch/probe_94e_body.py"
+    },
+    {
+      "priority": "high",
+      "layer": "verification_and_delivery",
+      "claim": "Reference integrity verification did not validate the semantic no-body claim or the claimed verbatim passage.",
+      "evidence": "manifest_verification.json reports verified and supported=5, while report_contract.verification is not_assessed and verification_checks is empty. The c4 no-body claim cites heading evidence; the final text labels a quote verbatim and claims to preserve U+00AD although it contains zero U+00AD versus two in the fetched heading.",
+      "qualification": "The manifest API explicitly binds citations rather than promising a semantic PASS. This is a coverage/integration gap, not proof that quote_checks computed a wrong result."
+    },
+    {
+      "priority": "medium",
+      "layer": "orchestration_and_completion",
+      "claim": "A simple lookup was marked partial using expanded or unsupported gaps.",
+      "evidence": "Coordinator marks t1 resolved and done_when satisfied, yet includes body absence, publisher unknown, other documents not enumerated and no external fact check in its gap. Some are not user requirements, and body absence is false. Finalization faithfully exposes this model-declared gap, so this is not the stale-open-task defect seen in the prior frozen runs."
+    },
+    {
+      "priority": "medium",
+      "layer": "context_and_delivery",
+      "claim": "Excess internal detail remains despite a small user request.",
+      "evidence": "Member report is 3140 characters; coordinator spends about 33.45 seconds between report receipt and delivery generating OCR details, hashes, locators, repeated scope limitations and execution status. The same heading is fetched in full then compact without new source evidence."
+    }
+  ],
+  "causality_limits": [
+    "The new stop mode narrowed tools to fetching/inventory for the same document or reporting. It allowed same-document supplemental reads and did not reject the observed calls. It also forbids corpus_search even for same-document body discovery, so discoverability needs a focused test; causation is not established by this trace alone.",
+    "No timeout in this run does not prove the prior repeated 120-second timeout is fixed.",
+    "7d0-to-94e timing/token differences are observational, not a controlled paired benchmark or proof of semantic correctness."
+  ],
+  "next_programmatic_acceptance_targets": [
+    "Unknown or selected-scope inventory membership must not support document-wide absence; use actual returned references and expose a supported route to same-document body context.",
+    "Delivery must reject unsupported absence claims and false verbatim labels even without a dedicated verifier job; retain citation integrity as a separate property.",
+    "Completion gaps must correspond to unmet user requirements; optional limitations and debug provenance must not dominate a successful single-document lookup."
+  ]
+}

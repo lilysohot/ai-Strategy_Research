@@ -1,0 +1,10 @@
+{
+  "run_id": "49e4f04b05ca46fda0ae4e4b71d1636a",
+  "check_id": "index_level",
+  "binding_targets": [],
+  "extracted_targets": [],
+  "provided_calculations": 4,
+  "original_calculations_accepted": true,
+  "negative_control_zero_expression_accepted_by_calculation_gate": true,
+  "forced_target_rejection": "calculation input 'close_20251231': quote/source is not bound tool evidence. Copy an exact source locator (no annotations): []. Quote source bytes verbatim; use a numeric value and a pure expression such as price * quantity, without explanatory prose."
+}

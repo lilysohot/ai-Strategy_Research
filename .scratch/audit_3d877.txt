@@ -1,0 +1,264 @@
+METRICS 791.41 {'attempts': 81, 'known_usage_attempts': 77, 'unknown_usage_attempts': 4, 'duration_ms': 1000365, 'unknown_duration_attempts': 0, 'known_prompt_tokens': 4080162, 'known_cache_read_tokens': 3491456, 'known_hit_rate': 0.8557150426870306, 'hit_rate': None, 'outcomes': {'accepted': 76, 'discarded': 1, 'accepted_degraded': 3, 'failed': 1}}
+TIMELINE main_agent 0.0 781.6
+MAIN_CALL 7.2 1 research_history {'query': 'A股 研报 交易对象', 'limit': 10}
+MAIN_CALL 7.2 1 get_watch_targets {}
+MAIN_CALL 22.9 2 add_task {'tasks': [{'description': '确认资料库中A股研报的最新可得日期与覆盖范围（corpus_inventory），明确“今天”能对应到哪个交易日，避免把旧研报当今日观点', 'kind': 'research', 'done_when': '给出资料库最新研报日期、A股相关文档数量级与覆盖机构/类型，并说明与2026-11-06的日期差距', 'notes': '由 corpus_inventory + 抽样 doc_id 版本号支撑'}, {'description': '检索最新交易日A股大势/策略研报，提炼指数表现、风格与资金面、风险点与配置建议', 'kind': 'research', 'done_when': '给出3-5条带 doc_id+locator
+MAIN_CALL 22.9 2 create_subagent {'agents': [{'name': 'a_share_strategy_research', 'system_prompt': '你是A股策略研究员，专长是从研报资料库检索并忠实摘录机构策略观点。你只使用资料库检索工具（corpus_inventory / corpus_search / corpus_fetch），绝不凭记忆或想象补全数字。每条结论必须附 doc_id（含build版本）与定位符（页码/章节/段落）。若资料库没有某日期，明确说明实际最新日期，不做推断。'}, {'name': 'a_share_sector_research', 'system_prompt': '你是A股行业与主题研究员，专长从研报资料库提取行业景气、催化事件与主题配置逻辑。只使用 corpus_*
+MAIN_CALL 35.6 3 assign_task {'tasks': [{'agent': 'a_share_strategy_research', 'prompt': '任务背景：用户（A股研究者）要求「从资料库中，检索今天研报，观察A股市场如何，哪些是潜在交易对象」。当前日期 2026-11-06。\n\n你要完成两件事，输出一份紧凑报告（中文）：\n\n【第一段：资料库时效与覆盖（t1）】\n1. 用 corpus_inventory 摸清资料库构成：文档总量、日期范围、机构/报告类型分布，特别是A股策略、行业、个股研报各有多少。\n2. 明确「资料库里最新的A股研报是哪一天/哪个交易日」。若最新日期早于 2026-11-06，必须直接说明差距（例如最新为2026-11-05收盘点评或2026-11-03周报），不要含糊。若库里根本没有接近当日的研报，要明确说“资料库不含今日研报”，并给出实际可用最新日期。\n3. 抽样 2-3 个 doc_id 原文证明日期（引用时保留完整 doc_id 含 build 版本）。\n\n【第二段：大势与策略观点（t2）】\n4. 检索最近1-3个交易日（或资料库最新可得窗口）的A股大势/策略/晨会/资金面研报，提炼：\n   - 指数与量能：上证/深成/创业板/科创50 的点位与涨跌幅、成交额、两融或北向（若原文有）；\n   - 市场风格与结构：大小盘、价值成长、行业轮动特征；\n   - 机构对后市的判断与配置建议（看多/震荡/谨慎，主线方向）；\n   - 主要风险点。\n5. 给出 4-6 条带证据的要点，每条格式：`结论 —— 数字/原文摘录 —— 机构+报告日期 —— doc_id（含build版本）—— 定位符（页码/章节/段落）`。\n\n硬性要求：\n- 只用 corpus_* 工具，不凭记忆补数；查不到就说查不到。\n- 研报原文事实与你的推论分开，推论标 [推断]。\n- 区分「哪家机构说了什么」（归属清楚）与「客观发生了什么」。\n- 若发现不同机构观点冲突，列出冲突而不是二选一。\n- 最后附一节 `Unresolved`：哪些问题没查到（例如没有当日研报、缺资金面数据）。\n- 报告控制在 900 字以内正文＋表格，不要复述任务说明。', 'work_item_ids': ['t1', 't2']}, {'agent': 'a_share_sector_research', 'prompt': '任务背景：用户要求「从资料库中，检索今天研报，观察A股市场如何，哪些是潜在交易对象」。当前日期 2026-11-06。\n\n你的任务（t3）：从研报资料库中，检索最新可得日期（优先最近1-3个交易日）的A股行业/主题研报，提炼当日及近期的市场主线。\n\n具体要交付：\n1. 3-5 个主线板块/主题（例如AI算力、半导体、电力设备、有色、军工、消费、创新药、机器人等，以资料库实际内容为准，不要预设）。每个主题给出：\n   - 推荐/看好的机构与报告日期；\n   - 核心逻辑一句话；\n   - 支撑数据（景气指标、订单、价格、销量、产能、政策文件等，务必是原文数字）；\n   - 催化事件与时间点（若有）；\n   - 风险提示。\n2. 一条「行业轮动/资金流向」观察：哪些板块在被加仓或减仓（若原文有数据）。\n3. 每条结论必须附：`机构 + 报告日期 + doc_id（含build版本）+ 定位符（页码/章节/段落）`。\n\n硬性要求：\n- 只用 corpus_* 工具（corpus_search / corpus_fetch / corpus_inventory），绝不凭记忆补数或编造目标价。\n- 明确写出你检索到的研报实际日期，若最新只到某个较早日期，直接说明，不要用“今天”描述旧报告。\n- 区分研报原文事实与你的推论，推论标 [推断]。\n- 最后附 `Unresolved` 一节说明未覆盖到的部分。\n- 正文控制在 800 字以内。', 'work_item_ids': ['t3']}, {'agent': 'a_share_stock_research', 'prompt': '任务背景：用户要求「从资料库中，检索今天研报，观察A股市场如何，哪些是潜在交易对象」。当前日期 2026-11-06。\n\n你的任务（t4）：从研报资料库中检索最新可得日期（优先最近1-3个交易日）的A股个股研报，筛出「潜在交易对象」候选清单。\n\n交付要求：\n1. 6-8 只候选标的（若资料库个股研报不足，就给全部能核实的，并说明数量限制）。每只给出：\n   - 股票代码 + 名称（以原文为准）；\n   - 机构评级（买入/增持/推荐/跑赢行业等，原文措辞照抄）；\n   - 目标价（若原文有；无则写“原文未给目标价”，禁止自己算或编造）；\n   - 核心逻辑 1-2 句；\n   - 关键预测数据（如 2026/2027 归母净利、EPS、增速，注明口径与单位）；\n   - 报告日期 + 机构；\n   - doc_id（含build版本）+ 定位符（页码/章节/段落）。\n2. 按主题/逻辑分组（例如算力链、电力设备、消费复苏等），便于用户判断。\n3. 附一节「筛选口径说明」：你是按什么条件筛的（例如最新3日内、评级上调、目标价空间、盈利预测上修），以及这些条件是否能从资料库直接验证。\n\n硬性要求：\n- 只用 corpus_* 工具；不得凭记忆补全评级、目标价、财务数据；任何数字必须能在原文定位。\n- 明确写出检索到的研报实际日期区间；若没有接近 2026-11-06 的研报，必须直说。\n- 不要给出买卖建议式的断言，只陈述研报观点并标注来源。\n- 最后附 `Unresolved` 一节。\n- 正文控制在 900 字以内，主体用表格。', 'work_item_ids': ['t4']}]}
+MAIN_CALL 37.2 4 collect_reports {'timeout': 1500}
+MAIN_CALL 267.7 5 create_subagent {'agents': [{'name': 'corpus_fact_verifier', 'system_prompt': '你是独立事实核验员，只做核验不写新内容。你用 corpus_fetch / corpus_search 回到资料库原文（按 doc_id 含 build 版本 + 定位符）逐字比对候选文本中的每一个数字、单位、口径、评级措辞、日期与归属。你必须输出结构化 verification_results（含 binding_id、subject_sha256、verdict PASS/FAIL/UNCHECKED、method、detail、evidence_keys），并对 factual_scope=true 的检查分别评估 entity / version / date
+MAIN_CALL 267.7 5 update_task {'updates': [{'id': 't4', 'resolution': 'resolved', 'notes': 'a_share_stock_research 已交回：库内可核实的A股个股研报实际日期区间 2026-08-14 至 2026-10-13，未检索到 2026-11-04~11-06 个股研报；共5只标的/6份报告，均带 doc_id(含build)与定位符。时效缺口作为已知限制保留并将在答复中声明。', 'gap': '库内无2026-11月初个股研报；埃科光电与茅台原文未标代码；致尚/埃科/芒果为财联社转述稿未列评级。', 'evidence_refs': ['fdce8a1662a2.job.3'], 'owner': 'a_share_stock_researc
+ATTEMPT_ISSUE main_agent stream_empty_tool_arguments 8268
+MAIN_CALL 283.1 6 assign_task {}
+TOOL_ERROR main_agent assign_task Error: assign_task requires at least one task. Pass tasks as a JSON array of objects, e.g. [{"agent": "<name from create_subagent>", "prompt": "<concrete task>"}]. An empty object will fail again; if you have nothing to assign, do not call this tool.
+Dispatch context (identifiers only, not evidence): {"agents": ["a_share_strategy_research", "a_share_sector_research", "a_share_stock_research", "corpus_fact_verifier"], "work_items": [{"work_item_id": "t1", "description": "确认资料库中A股研报的最新可得日期与覆盖范围（corpus_inventory），明确“今天”能对应到哪个交易日，避免把旧研报当今日观点", "check_ids": []}, {"work_item_id": "t2", "description": "检索最新交易日A股大势/策略研报，提炼指数表现、风格与资金面、风险点与配置建议", "check_ids": []}, {"work_item_id": "t3", "description": "检索最新行业/主题研报，提炼当日主线板块、催化事件与景气数据", "check_ids": []}, {"work_item_id": "t5", "description": "核验最终答复中的关键事实：研报日期/最新可得日、候选标的评级与目标价、板块数据数字，是否与资料库原文一致", "check_ids": ["date_coverage", "stock_facts", "macro_numbers"]}, {"work_item_id": "t6", "description": "综合研究结果，撰写面向用户的A股市场观察与潜在交易对象答复，并附风险与数据时效说明", "check_ids": []}], "completed_source_jobs": ["fdce8a1662a2.job.3"]}
+For verification, send a nonempty tasks array. Each task needs agent, prompt, and verification_checks. Each check needs check_id, subject:{text:the exact relevant passage}, and evidence:[{job_id}]. Omitted work_item_id and criterion resolve from the unique planned check_id; explicit values must match. Choose only relevant sources. Bindings attach sources automatically, so do not paste reports into prompt. Rechecks still require replaces_job_id, revision_kind and revision_reason.
+MAIN_CALL 288.7 7 assign_task {'tasks': [{'agent': 'corpus_fact_verifier', 'prompt': '核验任务：对下面候选文本中的个股部分（stock_facts）做逐字核验。请回到资料库原文（按候选文本引用的 doc_id + 定位符 corpus_fetch），逐项比对：股票代码、名称、机构、报告日期、评级措辞、目标价（及是否把“合理估值区间”误写成“目标价”）、盈利预测数字与单位、增长率口径。返回结构化 verification_results（含 binding_id、subject_sha256、verdict、method、detail、evidence_keys），并给出 entity/version/date/units/conditions/attribution 六项评估。只核验不重写。若发现候选文本中某数字与原文不一致，直接标 FAIL 并给出原文正确值。', 'verification_checks': [{'check_id': 'stock_facts', 'work_item_id': 't5', 'criterion': '每只候选标的的代码、名称、评级、目标价与所引 doc_id 原文一致（数值、单位、口径）', 'factual_scope': True, 'subject': {'text': '潜在交易对象候选（研报观点陈述，非买卖建议；库内可定位的A股个股研报最新仅到2026-10-13，无2026-11月初报告）：\n1) 致尚科技（301486，招商证券，财联社《风口研报》2026-10-11转述）：原文未见评级、未给目标价；与PH客户签5亿美元MPO需求备忘录；上调2026-28年归母净利至1.21/3.29/5.65亿元（原1.01/1.58/3.15亿元）。\n2) 埃科光电（原文未标代码，国投证券，2026-10-13）：原文未见评级；目标价178.8元（2027年40倍PE）；2026-28年归母净利1.53/3.04/5.00亿元。\n3) 光力科技（300480.SZ，国信证券，2026-09-06）：优于大市（首次）；原文未给目标价，给合理估值32.54-39.98元；2026-28年归母净利1.32/2.19/3.43亿元，营收9.97/14.34/18.32亿元。\n4) 贵州茅台（报告A，2026-08-14）：买入（维持）；原文未给目标价；2026-28年营收1837.02/1887.44/1948.97亿元，净利887.21/933.02/957.67亿元，EPS 70.97/74.64/76.61元。另一份报告B（2026-08-16）：强推（重申），一年目标价2030元，2026-28年EPS 67.74/70.77/73.84元。\n5) 芒果超媒（300413，中泰证券，2026-10-11转述）：原文未见评级、未给目标价；2026-28年归母净利7.27/10.77/13.71亿元，同比-40.75%/+48.10%/+27.29%。'}, 'evidence': [{'job_id': 'fdce8a1662a2.job.3'}]}]}]}
+MAIN_CALL 290.6 8 collect_reports {'timeout': 1500}
+MAIN_CALL 327.5 9 collect_reports {'timeout': 600}
+MAIN_CALL 349.1 10 assign_task {'tasks': [{'agent': 'corpus_fact_verifier', 'prompt': '在已收集的 job.1（a_share_strategy_research）与 job.3（a_share_stock_research）证据基础上，完成剩余两项绑定核验：date_coverage 与 macro_numbers。请回到资料库原文（doc_id + 定位符，corpus_fetch）核对，不要只信子代理报告的描述。每项返回结构化 verification_results（binding_id、subject_sha256、verdict PASS/FAIL/UNCHECKED、method、detail、evidence_keys），并对 factual_scope 项给出 entity/version/date/units/conditions/attribution 六项评估。只核验不重写。注意：若两份报告对“最新A股研报日期”说法不同（策略称 2026-09-06、个股称 2026-10-13），请判断候选文本是否已区分这两类口径。', 'verification_checks': [{'check_id': 'date_coverage', 'criterion': '答复中关于“今日/最新交易日”的表述与资料库实际最新研报日期一致，未把旧日期研报称为今日', 'evidence': [{'job_id': 'fdce8a1662a2.job.1'}, {'job_id': 'fdce8a1662a2.job.3'}], 'factual_scope': True, 'publication_excerpt': True, 'subject': {'text': '数据时效说明：资料库索引截止 2026-11-06，但不包含 2026-11-06 当日及 11 月初的 A 股研报。库内有正式发布日期的 A 股策略/行业周报最新为 2026-09-06（距 2026-11-06 已 61 天）；财联社《风口研报》《研选》转述的个股稿件最新为 2026-10-13；另有元数据无日期、正文指向 10 月 9 日与 10 月 12 日的《市场大热点》快照。11 月库内仅有 11-03 的美股点评，非 A 股。因此本答复的 A 股判断基于 2026 年 8 月末至 10 月中旬的研报，不代表 2026-11-06 当日的卖方观点。'}, 'work_item_id': 't5'}, {'check_id': 'macro_numbers', 'criterion': '策略与板块部分引用的指数点位/涨跌幅/资金数字与所引 doc_id 原文一致', 'evidence': [{'job_id': 'fdce8a1662a2.job.1'}], 'factual_scope': True, 'publication_excerpt': True, 'subject': {'text': '指数与量能（2026-08-31 至 09-04 交易周，平安证券《策略配置·策略周报》2026-09-06）：上证指数微跌 0.6%，上证50 小幅收涨，科创50 指数下跌 5.1%，中证红利指数下跌 0.8%；传媒、银行、农林牧渔行业涨幅在 3%-7%，电子、有色金属、建筑材料、通信行业跌幅超 4%；日均成交额 19697.8 亿元，融资余额 26190.4 亿元，融资资金净流入 -28.8 亿元。同期上证综指收于 3930.12 点（通信行业周报 2026-09-06，第9页行情回顾）。'}, 'work_item_id': 't5'}]}]}
+TOOL_ERROR main_agent assign_task Error: corpus_fact_verifier: verification session is busy; do not queue independent checks behind it. Dispatch to another idle verifier for parallel review, or collect the current result before a dependent recheck.
+Dispatch context (identifiers only, not evidence): {"agents": ["a_share_strategy_research", "a_share_sector_research", "a_share_stock_research", "corpus_fact_verifier"], "work_items": [{"work_item_id": "t1", "description": "确认资料库中A股研报的最新可得日期与覆盖范围（corpus_inventory），明确“今天”能对应到哪个交易日，避免把旧研报当今日观点", "check_ids": []}, {"work_item_id": "t2", "description": "检索最新交易日A股大势/策略研报，提炼指数表现、风格与资金面、风险点与配置建议", "check_ids": []}, {"work_item_id": "t3", "description": "检索最新行业/主题研报，提炼当日主线板块、催化事件与景气数据", "check_ids": []}, {"work_item_id": "t5", "description": "核验最终答复中的关键事实：研报日期/最新可得日、候选标的评级与目标价、板块数据数字，是否与资料库原文一致", "check_ids": ["date_coverage", "stock_facts", "macro_numbers"]}, {"work_item_id": "t6", "description": "综合研究结果，撰写面向用户的A股市场观察与潜在交易对象答复，并附风险与数据时效说明", "check_ids": []}], "completed_source_jobs": ["fdce8a1662a2.job.1", "fdce8a1662a2.job.2", "fdce8a1662a2.job.3"]}
+For verification, send a nonempty tasks array. Each task needs agent, prompt, and verification_checks. Each check needs check_id, subject:{text:the exact relevant passage}, and evidence:[{job_id}]. Omitted work_item_id and criterion resolve from the unique planned check_id; explicit values must match. Choose only relevant sources. Bindings attach sources automatically, so do not paste reports into prompt. Rechecks still require replaces_job_id, revision_kind and revision_reason.
+MAIN_CALL 356.5 11 create_subagent {'agents': [{'name': 'corpus_fact_verifier_2', 'system_prompt': '你是独立事实核验员（第二位，专核策略与日期口径），只做核验不写新内容。你用 corpus_fetch / corpus_search 按 doc_id（含 build 版本）+ 定位符回到资料库原文，逐字比对候选文本中的日期、指数点位、涨跌幅、成交额、融资余额、单位与归属。输出结构化 verification_results（binding_id、subject_sha256、verdict PASS/FAIL/UNCHECKED、method、detail、evidence_keys），并对 factual_scope=true 分别评估 entity/vers
+MAIN_CALL 356.5 11 update_task {'updates': [{'id': 't1', 'notes': 'a_share_strategy_research 用 corpus_inventory 交回：81 个来源 / 1,769 块，索引 cutoff 2026-11-06；有正式发布日期的A股策略/行业周报最新 2026-09-06（距 2026-11-06 61 天）；库内无 11-06 及 11 月初 A 股研报，11 月仅 11-03 美股点评。个股转述稿最新 2026-10-13。', 'resolution': 'resolved', 'evidence_refs': ['fdce8a1662a2.job.1', 'fdce8a1662a2.job.2', 'fdce8a1662a2.job.3']}, {'i
+MAIN_CALL 361.9 12 assign_task {'tasks': [{'agent': 'corpus_fact_verifier_2', 'prompt': '在已收集的 job.1（策略）、job.2（行业）、job.3（个股）三份报告基础上，完成两项绑定核验：date_coverage 与 macro_numbers。请亲自回到资料库原文（doc_id + 定位符，corpus_fetch）核对，不要只信子代理报告的转述。特别注意事项：(1) 检查候选文本是否把“无发布日期元数据的文档正文日期”误当作发布日期；(2) 检查是否把 2026-09-06 的策略周报或 10 月中旬的日度快照称为“今日研报”；(3) 若库内实际存在比 2026-09-06 更晚的 A 股策略/行业研报，请指出并判 FAIL。每项返回结构化 verification_results（binding_id、subject_sha256、verdict PASS/FAIL/UNCHECKED、method、detail、evidence_keys），并给出 entity/version/date/units/conditions/attribution 六项评估。只核验不重写。', 'verification_checks': [{'check_id': 'date_coverage', 'criterion': '答复中关于“今日/最新交易日”的表述与资料库实际最新研报日期一致，未把旧日期研报称为今日', 'evidence': [{'job_id': 'fdce8a1662a2.job.1'}, {'job_id': 'fdce8a1662a2.job.2'}, {'job_id': 'fdce8a1662a2.job.3'}], 'factual_scope': True, 'publication_excerpt': True, 'subject': {'text': '数据时效说明：资料库索引截止 2026-11-06，但不包含 2026-11-06 当日及 11 月初的 A 股研报。库内有正式发布日期的 A 股策略/行业周报最新为 2026-09-06（距 2026-11-06 已 61 天）；财联社《风口研报》《研选》转述的个股稿件最新为 2026-10-13；另有元数据无发布日期、正文指向 10 月 9 日与 10 月 12 日的《市场大热点》快照。11 月库内仅有 11-03 的美股点评，非 A 股。因此本答复的 A 股判断基于 2026 年 8 月末至 10 月中旬的研报，不代表 2026-11-06 当日的卖方观点。'}, 'work_item_id': 't5'}, {'check_id': 'macro_numbers', 'criterion': '策略与板块部分引用的指数点位/涨跌幅/资金数字与所引 doc_id 原文一致', 'evidence': [{'job_id': 'fdce8a1662a2.job.1'}, {'job_id': 'fdce8a1662a2.job.2'}], 'factual_scope': True, 'publication_excerpt': True, 'subject': {'text': '指数与量能（2026-08-31 至 09-04 交易周，平安证券《策略配置·策略周报》2026-09-06）：上证指数微跌 0.6%，上证50 小幅收涨，科创50 指数下跌 5.1%，中证红利指数下跌 0.8%；传媒、银行、农林牧渔行业涨幅在 3%-7%，电子、有色金属、建筑材料、通信行业跌幅超 4%；日均成交额 19697.8 亿元，融资余额 26190.4 亿元，融资资金净流入 -28.8 亿元。同期上证综指收于 3930.12 点（通信行业周报 2026-09-06，第 9 页行情回顾）。'}, 'work_item_id': 't5'}]}]}
+MAIN_CALL 363.6 13 collect_reports {'timeout': 300}
+MAIN_CALL 504.3 14 assign_task {'tasks': [{'agent': 'corpus_fact_verifier', 'prompt': '接续 job.4（stock_facts 已 PASS）。现在处理两项：date_coverage 为修订后的重核（原文因“绝对缺失表述”被判 FAIL，已改写为有界表述）；macro_numbers 为上次未给出结论的纯重试（subject 同时加了归属保留）。请亲自 corpus_fetch 原文核对，返回结构化 verification_results（binding_id、subject_sha256、verdict、method、detail、evidence_keys、scope_assessment）。只核验不重写。', 'verification_checks': [{'check_id': 'date_coverage', 'criterion': '答复中关于“今日/最新交易日”的表述与资料库实际最新研报日期一致，未把旧日期研报称为今日', 'evidence': [{'job_id': 'fdce8a1662a2.job.1'}, {'job_id': 'fdce8a1662a2.job.2'}, {'job_id': 'fdce8a1662a2.job.3'}], 'factual_scope': True, 'publication_excerpt': True, 'replaces_job_id': 'fdce8a1662a2.job.5', 'revision_kind': 'subject', 'revision_reason': '原文将有限检索说成全库/全市场缺失（如“11 月库内仅有 11-03 的美股点评”），且未说明 2026-10-13《研选》还包含【研选·行业】段落。现改为有界表述：只陈述“本次检索命中”，分开陈述有正式发布日期、转述稿、无日期快照三类，并明示 21 个来源无发布日期与部分覆盖。', 'subject': {'text': '数据时效说明（有界检索结论）：本次在资料库（81 个来源 / 1,769 块，索引 cutoff 2026-11-06）中检索，命中的 A 股材料分三类——（a）有正式发布日期的 A 股策略/行业周报：2026-09-06，对应 2026-08-31 至 09-04 交易周，距 2026-11-06 约 61 天；（b）财联社《风口研报》《研选》类转述稿：最新命中 2026-10-13，其中 2026-10-13《研选》同时包含【研选·行业】AI 应用（华鑫证券）等行业段落，不限于个股；（c）《市场大热点》快照：元数据无发布日期，仅正文出现 10 月 9 日、10 月 12 日。本次检索未命中 2026-11-06 当日或 11 月初的 A 股研报；库内另有 21 个来源无发布日期，且检索为部分覆盖，故上述只说明本次检索的结果，不代表全库或全市场不存在该类研报。本答复的 A 股判断基于 2026 年 8 月末至 10 月中旬的研报，不代表 2026-11-06 当日的卖方观点。'}, 'work_item_id': 't5'}, {'check_id': 'macro_numbers', 'criterion': '策略与板块部分引用的指数点位/涨跌幅/资金数字与所引 doc_id 原文一致', 'evidence': [{'job_id': 'fdce8a1662a2.job.1'}, {'job_id': 'fdce8a1662a2.job.2'}], 'factual_scope': True, 'publication_excerpt': True, 'replaces_job_id': 'fdce8a1662a2.job.5', 'revision_kind': 'retry', 'subject': {'text': '指数与量能（2026-08-31 至 09-04 交易周，报告正文以“平安观点”行文，2026-09-06 发布）：上证指数微跌 0.6%，上证50 小幅收涨，科创50 指数下跌 5.1%，中证红利指数下跌 0.8%；传媒、银行、农林牧渔行业涨幅在 3%-7%，电子、有色金属、建筑材料、通信行业跌幅超 4%；日均成交额 19697.8 亿元，融资余额 26190.4 亿元，融资资金净流入 -28.8 亿元。同期上证综指收于 3930.12 点（通信行业周报 2026-09-06，第 9 页行情回顾）。'}, 'work_item_id': 't5'}]}, {'agent': 'a_share_strategy_research', 'prompt': '收尾任务（不新开研究方向，只补齐交付所需的引用回执）：你此前已 corpus_fetch 过下列文档。现在请对下列每一句原文，重新 corpus_fetch / corpus_search 定位，并返回【完整的 evidence_ref（必须是未截断的 ce: 或 eref: 全串）】+【逐字 quote】+【doc_id】+【locator】。用表格输出，一行一句，不要转述、不要改字、不要补新结论。\n\n待回执句子（按 doc_id 定位）：\nA. cv2:231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969（策略周报 2026-09-06）：(1) 上证指数微跌0.6%、科创50 -5.1%、中证红利 -0.8% 及行业涨跌幅那句；(2) 日均成交额 19697.8 / 融资余额 26190.4 / 融资净流入 -28.8 三个数值（可分开列）；(3) 平安观点三条线索（AI 科技 / 绩优非科技 / 红利）那段。\nB. cv2:2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0（通信行业周报 2026-09-06 第9页）：上证综指收于 3930.12 点那句。\nC. cv2:f85bc29009c641a615c89ccf454c97b532a448ce34f860e49dcb3f5d937850ca（市场大热点，元数据无日期、正文 10-12）：缩量 3627 亿元、银行走强、光通信/CPO/PCB 回落那句。\nD. cv2:72d2395b9a56bb01ff9e7ae52873b1e3a67bbb42f2694ee712a23f01d831d249（周策略合集）：中信建投“防御优先”、光大“修复窗口”、申万宏源“性价比已明显改善”三句（可分开）。\nE. cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e（电子行业周报 2026-09-06，body:0006 p4）：长鑫科技 2026H1 营收 1,503.10 亿元 / 归母净利 776.05 亿元 / 净利率 51.6% 那句。\nF. cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4：企业级 SSD 合同价 2026Q3 涨 25%、2026Q4 预计再涨 15% 那句。\nG. cv2:510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24（电新周报 2026-09-06）：(1) 科华数据 2026H1 数据中心收入 15.91 亿/+13.81%/毛利率 23.07%；(2) 国网输变电第4批 114 亿/-19%、前四批 601 亿/-12%；(3) 9 月碳酸锂需求 17 万吨、国家能源集团第四批 5GW 风机集采；(4) 1-8 月电解槽 52 个/905.43MW。\nH. cv2:b3b26de119a69068e2f7f5c3a6921184bc5a45e4798eed46cf7826cd8a872529（风口研报 2026-10-11）：致尚科技 301486 归母 1.21/3.29/5.65 亿（原 1.01/1.58/3.15 亿）；及芒果超媒 300413 中泰康雅雯 7.27/10.77/13.71 亿。\nI. cv2:95240291545b22156f1c8b596ba74efef3557bbab76cc7bd4fb7d49503853b10（研选 2026-10-13）：埃科光电 2026-28 归母 1.53/3.04/5.00 亿、2027 年 40 倍 PE、目标价 178.8 元；并额外给出该文档【研选·行业】AI 应用（华鑫证券）段的一句原文 + 其 evidence_ref。\nJ. cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea（光力科技 300480.SZ，国信 2026-09-06）：评级“优于大市（首次）”、合理估值 32.54-39.98 元。\nK. cv2:712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a（茅台 2026-08-14）：买入（维持）与净利 887.21/933.02/957.67 亿、EPS 70.97/74.64/76.61 元。\nL. cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745（茅台 2026-08-16）：强推（重申）、一年目标价 2030 元。\n\n硬性要求：evidence_ref 必须是完整字符串，禁止用“…”截断；若某句确实取不到，写“未取到”并说明原因，不得编造。最后统计“共请求 X 句 / 成功 Y 句 / 失败 Z 句”。', 'work_item_ids': ['t6']}]}
+TOOL_ERROR main_agent assign_task Error: corpus_fact_verifier: retry must retain subject bytes and evidence; a_share_strategy_research: the research admission window is closed (phase=draining). assign_task creates new work, not a control message for the current job. To request handoff, use stop_subagent(agent_name="a_share_strategy_research") then collect_reports and synthesize; if files are required, dispatch only the sole publisher with output_paths
+Dispatch context (identifiers only, not evidence): {"agents": ["a_share_strategy_research", "a_share_sector_research", "a_share_stock_research", "corpus_fact_verifier", "corpus_fact_verifier_2"], "work_items": [{"work_item_id": "t5", "description": "核验最终答复中的关键事实：研报日期/最新可得日、候选标的评级与目标价、板块数据数字，是否与资料库原文一致", "check_ids": ["date_coverage", "stock_facts", "macro_numbers"]}, {"work_item_id": "t6", "description": "综合研究结果，撰写面向用户的A股市场观察与潜在交易对象答复，并附风险与数据时效说明", "check_ids": []}], "completed_source_jobs": ["fdce8a1662a2.job.1", "fdce8a1662a2.job.2", "fdce8a1662a2.job.3"]}
+For verification, send a nonempty tasks array. Each task needs agent, prompt, and verification_checks. Each check needs check_id, subject:{text:the exact relevant passage}, and evidence:[{job_id}]. Omitted work_item_id and criterion resolve from the unique planned check_id; explicit values must match. Choose only relevant sources. Bindings attach sources automatically, so do not paste reports into prompt. Rechecks still require replaces_job_id, revision_kind and revision_reason.
+MAIN_CALL 520.1 15 assign_task {'tasks': [{'agent': 'corpus_fact_verifier', 'prompt': '接续 job.4（stock_facts 已 PASS）。现在处理两项绑定核验：date_coverage（修订后重核，上次 FAIL 原因是“绝对缺失表述”与未区分 2026-10-13《研选》含行业段）；macro_numbers（上次未给出结论）。请亲自 corpus_fetch 原文核对。\n\n额外输出要求（重要）：在每项 detail 中，对你实际核对的每一个数字/句子，列出【完整未截断的 evidence_ref（ce: 或 eref: 全串）】+ 逐字 quote + doc_id + locator。禁止用“…”省略 evidence_ref。这些完整句柄是最终答复绑定语料引用的唯一凭据，比 verdict 本身更重要。\n\n返回结构化 verification_results（binding_id、subject_sha256、verdict、method、detail、evidence_keys、scope_assessment）。只核验不重写。', 'verification_checks': [{'check_id': 'date_coverage', 'criterion': '答复中关于“今日/最新交易日”的表述与资料库实际最新研报日期一致，未把旧日期研报称为今日', 'evidence': [{'job_id': 'fdce8a1662a2.job.1'}, {'job_id': 'fdce8a1662a2.job.2'}, {'job_id': 'fdce8a1662a2.job.3'}], 'factual_scope': True, 'publication_excerpt': True, 'replaces_job_id': 'fdce8a1662a2.job.5', 'revision_kind': 'subject', 'revision_reason': '上次 FAIL：候选文本把有限检索说成全库/全市场缺失（如“11 月库内仅有 11-03 的美股点评”），且未说明 2026-10-13《研选》含【研选·行业】段落。现改为有界表述，分（a）有发布日期周报 /（b）转述稿（含 10-13 行业段）/（c）无日期快照三类陈述，并明示 21 个来源无发布日期与部分覆盖。', 'subject': {'text': '数据时效说明（有界检索结论）：本次在资料库（81 个来源 / 1,769 块，索引 cutoff 2026-11-06）中检索，命中的 A 股材料分三类——（a）有正式发布日期的 A 股策略/行业周报：2026-09-06，对应 2026-08-31 至 09-04 交易周，距 2026-11-06 约 61 天；（b）财联社《风口研报》《研选》类转述稿：最新命中 2026-10-13，其中 2026-10-13《研选》同时包含【研选·行业】AI 应用（华鑫证券）等行业段落，不限于个股；（c）《市场大热点》快照：元数据无发布日期，仅正文出现 10 月 9 日、10 月 12 日。本次检索未命中 2026-11-06 当日或 11 月初的 A 股研报；库内另有 21 个来源无发布日期，且检索为部分覆盖，故上述只说明本次检索的结果，不代表全库或全市场不存在该类研报。本答复的 A 股判断基于 2026 年 8 月末至 10 月中旬的研报，不代表 2026-11-06 当日的卖方观点。'}, 'work_item_id': 't5'}, {'check_id': 'macro_numbers', 'criterion': '策略与板块部分引用的指数点位/涨跌幅/资金数字与所引 doc_id 原文一致', 'evidence': [{'job_id': 'fdce8a1662a2.job.1'}, {'job_id': 'fdce8a1662a2.job.2'}], 'factual_scope': True, 'publication_excerpt': True, 'replaces_job_id': 'fdce8a1662a2.job.5', 'revision_kind': 'subject', 'revision_reason': '上次无结论。本次将机构归属改为原文可支持的表述（原文以“平安观点”行文，不直接署机构名），其余数字与上次完全一致，未新增或修改任何数值。', 'subject': {'text': '指数与量能（2026-08-31 至 09-04 交易周，报告正文以“平安观点”行文，2026-09-06 发布）：上证指数微跌 0.6%，上证50 小幅收涨，科创50 指数下跌 5.1%，中证红利指数下跌 0.8%；传媒、银行、农林牧渔行业涨幅在 3%-7%，电子、有色金属、建筑材料、通信行业跌幅超 4%；日均成交额 19697.8 亿元，融资余额 26190.4 亿元，融资资金净流入 -28.8 亿元。同期上证综指收于 3930.12 点（通信行业周报 2026-09-06，第 9 页行情回顾）。'}, 'work_item_id': 't5'}]}]}
+MAIN_CALL 521.8 16 collect_reports {'timeout': 300}
+MAIN_CALL 708.5 17 deliver_answer {'content': '## 先说最要紧的一点\n\n**资料库里没有 2026-11-06 当天的 A 股研报。** 你要的"今天研报"在本库中不存在；下面是本次检索实际命中的最新 A 股材料（8 月末—10 月中旬）以及由此得到的市场观察和候选标的。请把它当作"最近一轮卖方观点 + 资金痕迹"的复盘，**不是今日盘面解读**。\n\n### 数据时效（这段是逐句核对过原文的表述）\n\n> 数据时效说明（有界检索结论）：本次在资料库（81 个来源 / 1,769 块，索引 cutoff 2026-11-06）中检索，命中的 A 股材料分三类——（a）有正式发布日期的 A 股策略/行业周报：2026-09-06，对应 2026-08-31 至 09-04 交易周，距 2026-11-06
+TOOL_ERROR main_agent deliver_answer Error: ValueError: Delivery preflight failed: [{"rule": "corpus_scope_overstatement", "reason": "Bounded/partial retrieval and unknown dates do not prove corpus-wide absence, complete counts, or latestness. State what this search found instead.", "match": "资料库里没有", "sentence": "**资料库里没有 2026-11-06 当天的 A 股研报。", "start": 13, "end": 43, "match_start": 15, "match_end": 21}, {"rule": "corpus_scope_overstatement", "reason": "Bounded/partial retrieval and unknown dates do not prove corpus-wide absence, complete counts, or latestness. State what this search found instead.", "match": "全库无", "sentence": "- **数据缺口**：北向资金全库无数据；两融/成交额表格的期间标签未取回（归属为推断）；21 个来源无发布日期；两份关键日度快照的交易日仅由正文推定。", "start": 3714, "end": 3790, "match_start": 3729, "match_end": 3732}, {"rule": "checked_publication_excerpt_missing", "check_id": "macro_numbers", "detail": "checked publication excerpt is missing from final content"}, {"rule": "corpus_manifest_invalid", "detail": "corpus_conclusions[2].report_quote 必须逐字来自本次 content; corpus_conclusions[3].report_quote 必须逐字来自本次 content; corpus_conclusions[4].report_quote 必须逐字来自本次 content; corpus_conclusions[5].report_quote 必须逐字来自本次 content; corpus_conclusions[6].report_quote 必须逐字来自本次 content; corpus_conclusions[7].report_quote 必须逐字来自本次 content; corpus_conclusions[8].report_quote 必须逐字来自本次 content; corpus_conclusions[9].report_quote 必须逐字来自本次 content; corpus_conclusions[10].report_quote 必须逐字来自本次 content; corpus_conclusions[11].report_quote 必须逐字来自本次 content; corpus_conclusions[12].report_quote 必须逐字来自本次 content; corpus_conclusions[13].report_quote 必须逐字来自本次 content; corpus_conclusions[14].report_quote 必须逐字来自本次 content; corpus_conclusions[15].report_quote 必须逐字来自本次 content"}]. Correct all listed fields/sentences together. Preserve valid passages and citations; changed checked passages require recheck or a blocked disposition. No task disposition or final manifest has been committed.
+MAIN_CALL 758.7 18 deliver_answer {'content': '## 先说最要紧的一点\n\n**本次检索未命中 2026-11-06 当天（及 11 月初）的 A 股研报。** 你要的"今天研报"在本库这次检索中没有出现；下面是实际命中的最新 A 股材料（8 月末—10 月中旬），以及由此得到的市场观察和候选标的。请把它当作"最近一轮卖方观点 + 资金痕迹"的复盘，**不是今日盘面解读**。\n\n### 数据时效（逐句核对过原文的表述）\n\n> 数据时效说明（有界检索结论）：本次在资料库（81 个来源 / 1,769 块，索引 cutoff 2026-11-06）中检索，命中的 A 股材料分三类——（a）有正式发布日期的 A 股策略/行业周报：2026-09-06，对应 2026-08-31 至 09-04 交易周，距 2
+TOOL_ERROR main_agent deliver_answer Error: ValueError: t5: member work incomplete; use blocked with a gap
+MAIN_CALL 781.5 19 deliver_answer {'content': '## 先说最要紧的一点\n\n**本次检索未命中 2026-11-06 当天（及 11 月初）的 A 股研报。** 你要的"今天研报"在本库这次检索中没有出现；下面是实际命中的最新 A 股材料（8 月末—10 月中旬），以及由此得到的市场观察和候选标的。请把它当作"最近一轮卖方观点 + 资金痕迹"的复盘，**不是今日盘面解读**。\n\n### 数据时效（逐句核对过原文的表述）\n\n> 数据时效说明（有界检索结论）：本次在资料库（81 个来源 / 1,769 块，索引 cutoff 2026-11-06）中检索，命中的 A 股材料分三类——（a）有正式发布日期的 A 股策略/行业周报：2026-09-06，对应 2026-08-31 至 09-04 交易周，距 2
+TIMELINE a_share_sector_research.t01 35.7 345.4
+TIMELINE a_share_stock_research.t01 35.7 249.8
+TIMELINE a_share_strategy_research.t01 35.7 338.9
+TIMELINE corpus_fact_verifier.t01 288.8 361.4
+TIMELINE corpus_fact_verifier.t02 520.3 664.2
+ATTEMPT_ISSUE corpus_fact_verifier.t02 reasoning_runaway_early 26617
+ATTEMPT_ISSUE corpus_fact_verifier.t02 reasoning_runaway_early 26357
+TIMELINE corpus_fact_verifier_2.t01 362.0 471.3
+ATTEMPT_ISSUE corpus_fact_verifier_2.t01 reasoning_runaway_early 26810
+ATTEMPT_ISSUE corpus_fact_verifier_2.t01 logical_call_deadline 45001
+CALLS {'research_history': 1, 'get_watch_targets': 1, 'add_task': 1, 'create_subagent': 3, 'assign_task': 7, 'collect_reports': 5, 'update_task': 2, 'deliver_answer': 3, 'corpus_search': 37, 'corpus_fetch': 23, 'corpus_inventory': 2, 'bash': 11, 'submit_report': 7, 'corpus_submit_manifest': 2, 'recover_result': 1, 'create_file': 1}
+JOB fdce8a1662a2.job.1.json a_share_strategy_research True web 0 corpus 185
+REPORT **Scope**：仅用 corpus_* 工具检索资料库（81 来源 / 1,769 块，索引 cutoff 2026-11-06），回答「今天研报怎么看 A 股、哪些是潜在交易对象」。无行情工具，未做任何外部核验。
+
+## 一、资料库时效与覆盖（t1）
+
+- 规模 81 个来源 / 1,769 块；其中 21 个来源无发布日期。
+- 构成：A 股策略周报 1 篇、宏观专题 1 篇（均 2026-09-06）；A 股行业周报 4 篇（通信、电子、电力设备、传媒，均 2026-09-06）；A 股个股研报 1 篇（贵州茅台，华创，2026-08-14）；财联社「市场大热点」日度快照 2 篇（元数据无日期，内容为 10 月 9 日、10 月 12 日）；其余十余篇为美股复盘与英文科技点评（2026-10-15 至 11-03），非 A 股。
+- **最新 A 股研报 = 2026-09-06，距 2026-11-06 已 61 天。资料库不含今日（11-06）及 11 月初的 A 股研报。** 11 月仅 11-03 的 PLTR、APP/U 美股点评。
+- 日期抽样：D1（published 2026-09-06，正文「策略配置 2026 年9 月6 日」）；D2（正文「本周（2026 年08 月31 日-2026 年09 月04 日）上证综指收于3930.12 点」）；D3（published 2026-09-06）。
+
+## 二、大势与策略观点（t2，最新可得窗口：08-31~09-04 交易周 + 10 月中旬日度快照）
+
+1. 大盘防御占优、成长杀跌 —— 「上证指数微跌0.6%…上证50小幅收涨…科创50指数下跌5.1%，中证红利指数下跌0.8%；传媒/银行/农林牧渔行业涨幅在3%-7%，电子/有色金属/建筑材料/通信行业跌幅超4%」 —— 平安证券《策略配置·策略周报》2026-09-06 —— D1 —— 第1页「本周回顾」
+2. 点位与强弱序 —— 「上证综指收于3930.12 点」，强弱「上证指数>沪深300>中小综指>创业板综」 —— 通信行业周报 2026-09-06 —— D2 —— 第9页「2 行情回顾」
+3. 量能与两融 —— 「日均成交额（亿元）19697.8」「融资余额（亿元）26190.4」「融资资金净流入（亿元）-28.8」 —— 平安证券 2026-09-06 —— D1 —— 第6页表格（期间标签未取回，按同报告口径归属该周）
+4. 后市判断：震荡+攻守均衡 —— 「短期权益市场大概率维持震荡，结构性轮动修复格局或延续，结构上建议攻守均衡」；三线索：AI 科技（海外链 CPO/PCB、存储；国产链算力芯片/材料设备/电子布/MLCC）、绩优非科技（医药、有色/能化、非银）、红利（银行、煤炭） —— 平安证券 2026-09-06 —— D1 —— 「综合来看…」段
+5. 机构分歧 —— 中信建投「防御优先，等待转机」；光大证券「风险释放后的修复窗口」；申万宏源「短波段，市场性价比已明显改善，机会增加」 —— 周策略合集（published 为空，内容指向「节后」与「三季报」）—— D4 —— 「主题二 周策略」段
+6. 日度结构（10 月 12 日）—— 「缩量3627亿元…银行板块大幅走强，传媒板块逆势活跃…光通信、CPO、PCB等前期热门科技股集体回落」 —— 财联社《市场大热点》（published 空）—— D5 —— 「点评」段
+
+## 潜在交易对象（原文点名，非本人推荐）
+
+| 方向 | 原文点名标的 | 出处 | doc |
+|---|---|---|---|
+| 存储 | 兆易创新、香农芯创、北京君正、德明利、江波龙、佰维存储 | 电子行业周报 2026-09-06 | D3 |
+| PCB/算力硬件/半导体设备 | 生益科技、北方华创、中微公司、沪电股份、胜宏科技、长川科技 | 同上 | D3 |
+| 储能 | 阳光电源、德业股份、海博思创、阿特斯、固德威、上能电气 | 电力设备周报 2026-09-06 | D6 |
+| AI 服务器电源/SST | 麦格米特、欧陆通、中富电路；金盘科技、四方股份 | 同上 | D6 |
+| 银行（创一年新高） | 建设银行、中信银行、中国银行、工商银行、杭州银行 | 市场大热点（10-12） | D5 |
+| 白酒 | 贵州茅台（维持「买入」，2026 年 PE 18 倍） | 华创 2026-08-14 | D7 |
+
+**风险点（原文）**：美国 9 月加息预期升温、美方拟对进口半导体加征新一轮关税、中东地缘与油价（WTI 周涨 9.7%）、A 股处于「第二波杠杆结构调整期」。
+
+**[推断]** 用 09-06 的观点讨论 11-06 盘面，时效缺口 61 天；10 月中旬两份无日期快照只可作结构参考，不能当当前仓位建议。**[推断]** 需当日可用结论则须补 11 月研报，现无覆盖。
+
+## Unresolved
+
+1. 无 2026-11-06 及 11 月初 A 股研报（最新 2026-09-06）。
+2. 无当日指数点位/涨跌幅/成交额；无 10 月下旬至 11 月的 A 股行业与个股研报。
+3. 北向资金全库无数据（仅有融资余额、融资净流入）。
+4. 两融/成交额表格的期间标签未取回，期间归属为按报告口径的推断。
+5. D4、D5 的 published 为空，交易日仅由正文「10月12日」「节后」推定。
+
+## doc_id 索引（含 build 版本）
+
+- D1 = cv2:231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969
+- D2 = cv2:2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0
+- D3 = cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e
+- D4 = cv2:72d2395b9a56bb01ff9e7ae52873b1e3a67bbb42f2694ee712a23f01d831d249
+- D5 = cv2:f85bc29009c641a615c89ccf454c97b532a448ce34f860e49dcb3f5d937850ca
+- D6 = cv2:510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24
+- D7 = cv2:712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a
+
+## Evidence（实际检查了什么）
+
+- corpus_search 8 次（策略/复盘/11月/晨会/两融/风格/存储/茅台），corpus_fetch 4 次取页码；D1 第1页「本周回顾」、第6页融资余额表；D2 第9页行情回顾。
+- corpus_submit_manifest 提交 13 条结论，系统回验：supported 13 / partial 0 / unsupported 0，evidence_status=verified（report_bound=false，因报告在 /workspace 而非 /outputs）。
+- 报告文件：/workspace/a_share_t1_t2_report.md（同内容）。
+
+**Confidence**: 0.78 — 摘录与页码均来自原文回验；扣分项为最新 A 股研报距今 61 天、两份关键日度文件无出版日期、北向数据全库缺失。
+JOB fdce8a1662a2.job.2.json a_share_sector_research True web 0 corpus 121
+REPORT **日期说明**：检索截止 2026-11-06，库内**无 11-05/06 的 A 股行业研报**。A 股行业/策略研报最新为 **2026-09-06**（电新、电子、通信、策略）；10 月后文档为美股/全球科技点评（ASML、台积电 10-15，铠侠 10-26）与美股复盘；A 股日度复盘元数据无日期、正文 10-09、10-12。以下均按实际日期标注，不能称"今天研报"。
+
+**① AI 算力硬件 + 半导体设备** 电子行业周报（正文无署名机构）2026-09-06 D1；通信行业周报 2026-09-06 D2
+逻辑：AI 高端新品 7 月底出货、年底满产，PCB 量价齐升；韬定律拉动设备。数据：麒麟 2026 晶体管密度 1.55 亿→2.38 亿个/mm²（+55%），NPU 功耗 -66%（D1 p1）；长鑫 26H1 营收 1503.10 亿元、净利 776.05 亿元、净利率 51.6%（D1 p4）；英伟达指引 FY28 收入 +70%，台积电称 AI 景气延长至 2029/2030（D1）；企业级 SSD 合约价 26Q3 +25%、26Q4 预计再 +15%（D3）；1.6T 规模上量、3.2T 送样（D2）。催化：Vera Rubin 拉货、CIOE 2026。风险：AIGC 进展不及预期、制裁升级；设备板块已连续回撤（D1 原文）。
+
+**② AIDC 电源与液冷 + 储能** 电新行业周报 2026-09-06 D4
+逻辑：800V 高压直流方向明确、液冷渗透率拐点、储能收益机制完善。数据：科华数据 26H1 数据中心收入 15.91 亿元、+13.81%、毛利率 23.07%，1.2MW CDU 入围互联网大厂短名单；光宝 9/3 以约 1.76 亿美元入股波兰 DCX 约 25%（D4 p2-3）。催化：原文称订单/业绩拐点 9-10 月密集出现。风险：交易拥挤、北美宏观与加息预期扰动（D4 原文）。
+
+**③ 电网设备（特高压+电表）** D4，2026-09-06
+数据：国网输变电设备第 4 批招标 114 亿元、同比 -19%，前四批累计 601 亿元、同比 -12%，预计 27 年回暖；26Q1 新标准电表"量价齐升"，业绩拐点 26Q3 兑现，处估值底部。风险：招标额下滑、十五五项目仍在规划。
+
+**④ 价格修复链（锂电/风电/氢能）** D4，2026-09-06
+数据：碳酸锂供需趋紧、库存下降、价格回升，9 月需求升至 17 万吨；8 月风机新增招标 6GW、同比 -43%，国家能源集团启动第四批 5GW 集采；1-8 月电解槽订单 52 个、905.43MW（D4 p1-2）。风险：招标节奏波动、抢装透支。
+
+**策略框架** 平安证券[推断，据"平安观点："]2026-09-06 D5：①AI 科技中期主线未变但短期缺大级别催化，海外链 CPO/PCB、存储基本面坚实，国产链算力芯片/材料设备更具想象空间；②绩优且筹码出清的非科技——医药、涨价资源品（有色/能化）、非银；③红利（银行、煤炭）底仓。
+
+**资金流向** 财联社复盘（元数据无日期，正文 10-12）D6：缩量 3627 亿元，成交额>10 亿公司减 34 家至 362 家；芯片 128 家（-40）、储能 71（-15）、AI 65（-11）；银行大幅走强、传媒逆势，光通信/CPO/PCB 回落；一年新高 33 家、银行占 8 家（D6）。[推断] 9 月研报主推的 AI 算力与电新，与 10 月中旬资金实际流向（银行/红利/防御）背离，"低位布局"当时未被资金确认。
+
+**原文列示标的**：生益科技、沪电股份、胜宏科技；北方华创、中微公司；中际旭创、新易盛；麦格米特、欧陆通；阳光电源、德业股份；平高电气、许继电气。
+
+**Unresolved**：无 10 月下旬至 11 月 A 股行业研报，主线时效滞后约 2 个月；机构署名在可检索正文缺失（仅 D5 可推断）；未覆盖军工、医药、有色、机器人专题；10-12 后无 A 股日度资金数据；未核验个股。
+
+**证据索引**
+
+| ID | doc_id | locator |
+|---|---|---|
+| D1 | cv2:668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e | body:0001 p1; body:0002 p1; body:0006 p4 |
+| D2 | cv2:2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0 | heading:0000 p1; body:0000 p1 ("5 投资建议") |
+| D3 | cv2:1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4 | body:0000 p1 |
+| D4 | cv2:510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24 | body:0000 p1; body:0001 p1-2; body:0002 p2-3 |
+| D5 | cv2:231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969 | body:0000 p1 |
+| D6 | cv2:f85bc29009c641a615c89ccf454c97b532a448ce34f860e49dcb3f5d937850ca | body:0001 p1 |
+
+---
+### 交接说明（供协调者）
+Scope: 仅用 corpus_search / corpus_fetch / corpus_inventory，检索 A 股行业与主题研报，提炼主线与资金流向；未使用行情工具（本 run 不可用）。
+
+Evidence（原文逐字，来自 corpus_fetch）：
+- D1 body:0001 p1：「麒麟2026 的芯片晶体管密度从约每平方毫米1.55 亿提升到2.38 亿个，跃升55%」「NPU 功耗下降66%」；body:0002 p1 风险提示原文：「需求恢复不及预期的风险；AIGC 进展不及预期的风险；外部制裁进一步升级的风险。」；body:0006 p4「细分行业景气指标：…PCB（加速向上）…被动元件（加速向上）」。
+- D1 body:0006 p4「长鑫科技：…2026 年上半年，公司实现营业收入1,503.10 亿元，归属于母公司净利润达776.05 亿元，净利润率高达51.6%」。
+- D3 body:0000 p1「企业级SSD 需求仍是主要支撑：合同价格在 2026 年第三季度上涨 25%…我们预计 2026 年第四季度将进一步上涨 15%」。
+- D4 body:0000 p1「国网输变电设备第4 批招标同比-19%，前四批招标同比-12%」；body:0001 p2「9 月碳酸锂需求升至17 万吨、供需趋紧」「国家能源集团启动2026 年第四批5GW 风机集采」；body:0000 p1「2026年1-8 月，氢能电解槽订单量…累计52 个，规模累计905.43MW」。
+- D4 body:0000 p1「科华数据：2026 年上半年数据中心行业收入15.91 亿元，同比增长13.81%，毛利率23.07%」；「光宝科技…拟持有其约25%股权，交易金额约1.76 亿美元」。
+- D5 body:0000 p1 三条线索原文（见正文引述）。
+- D6 body:0001 p1「缩量3627亿元…减少34家至362家…芯片、储能、AI概念分别有128、71、65家公司，分别减少40、15、11家」。
+
+计算：无自算指标；上述数值均为原文直引，未做加工。
+限制：corpus_submit_manifest 工具在本 run 未提供，无法登记语料结论清单；如需正式语料核验，请由具备该工具的成员按上表 evidence_ref/doc_id 重提。
+文件：/workspace/draft.md（草稿，未发布）。
+Confidence: 0.78
+JOB fdce8a1662a2.job.3.json a_share_stock_research True web 0 corpus 170
+REPORT Scope: 仅用 corpus_search / corpus_fetch 检索研报库（cutoff 2026-11-06，库内 81 个来源）。可核实的 A 股个股研报实际日期区间为 2026-08-14 至 2026-10-13。**没有检索到 2026-11-04~11-06（近 1-3 个交易日）的 A 股个股研报**，故按"库内最新可得"给出 6 条（5 只标的），数量受库覆盖限制。
+
+### 一、算力 / 光通信链
+| 标的 | 机构·日期 | 评级（原文） | 目标价 | 核心逻辑 | 关键预测（口径） |
+|---|---|---|---|---|---|
+| 致尚科技 301486 | 招商证券 鄢凡（财联社《风口研报》2026-10-11 转述） | 原文未见评级 | 原文未给目标价 | 与PH客户签5亿美元MPO需求备忘录，MPO满产、CPO绑定SENKO | 上调2026-28归母净利1.21/3.29/5.65亿元（原1.01/1.58/3.15亿），上调19.8%/108%/79.4% |
+| 埃科光电（代码原文未标） | 国投证券 朱宇航（《研选》2026-10-13） | 原文未见评级 | 178.8元（2027年40倍PE） | 工业相机/图像采集卡高端国产替代，向工业传感器延伸 | 2026-28归母1.53/3.04/5.00亿元 |
+
+### 二、半导体设备
+| 光力科技 300480.SZ | 国信证券 吴双，2026-09-06 | 优于大市（首次） | 原文未给"目标价"，给"合理估值 32.54-39.98元" | 半导体划片机国内龙头，由产品验证转向规模化放量 | 2026-28归母1.32/2.19/3.43亿元（+228.37%/65.48%/56.70%），营收9.97/14.34/18.32亿元 |
+
+### 三、消费（白酒 / 内容）
+| 贵州茅台（代码原文未标） | 报告A 2026-08-14 | 买入（维持） | 原文未给目标价 | 飞天合同价与自营零售价提价、双锚点稳价 | 2026-28营收1837.02/1887.44/1948.97亿元(+7%/3%/3%)，净利887.21/933.02/957.67亿元(+8%/5%/3%)，EPS 70.97/74.64/76.61元 |
+| 贵州茅台（同上） | 报告B 2026-08-16 | 强推（重申） | 2030元（一年目标价） | 报表实质扎实、经营底部已过，提价效应 | 2026-28 EPS 67.74/70.77/73.84元 |
+| 芒果超媒 300413 | 中泰证券 康雅雯（2026-10-11 转述） | 原文未见评级 | 原文未给目标价 | AI中长剧落地，释放内容预算 | 2026-28归母7.27/10.77/13.71亿元，同比-40.75%/+48.10%/+27.29%，PE 54.0/36.5/28.7 |
+
+doc_id 与定位符（全量 build）：
+- 致尚/芒果：cv2:b3b26de119a69068e2f7f5c3a6921184bc5a45e4798eed46cf7826cd8a872529，§公司要闻第1条、第2条
+- 埃科：cv2:95240291545b22156f1c8b596ba74efef3557bbab76cc7bd4fb7d49503853b10，§【研选·公司】③投资建议
+- 光力：cv2:568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea，§投资评级栏、§未来3年业绩预测、§核心观点
+- 茅台A：cv2:712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a，§报告摘要
+- 茅台B：cv2:9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745，§评论、§目标价栏
+
+### 筛选口径说明
+- 条件：① 库内可定位的个股研报；② 原文出现明确评级或目标价/合理估值；③ 有可定位的盈利预测。三项齐备者库内仅 5 只。
+- 可验证性：语料库无"按日期排序 / 按评级筛选"接口，最新性靠逐次检索命中判断；"评级上调""目标价空间"无法直接验证（无一致预期库，本轮亦无行情工具）。仅致尚科技的"上调"可与原文旧预测对比（1.01/1.58/3.15→1.21/3.29/5.65亿），属原文自证。
+- 以上均为研报观点陈述，非买卖建议。
+
+### Unresolved
+1. 无 2026-11 月初个股研报，最新仅到 2026-10-13，不能代表"今天"的卖方观点。
+2. 埃科光电、贵州茅台原文未标股票代码，未擅自补全。
+3. 致尚、埃科、芒果三份为财联社转述稿，原文未列评级；致尚、芒果未给目标价。
+4. 茅台两份报告口径冲突：净利887.21亿 vs EPS 67.74元（隐含净利低于前者），分属不同机构，未合并。
+5. 天孚通信、冰轮环境、科华数据仅见于 2026-09-06 行业周报，无个股评级，未列入候选。
+6. 库内 81 个来源以海外交易日志为主，非全市场覆盖；未命中不等于市场无此类研报。
+
+Confidence: 0.72（原文逐字可定位；主要不确定性是"最新性"仅限本库、且缺 11 月初研报）
+JOB fdce8a1662a2.job.4.json corpus_fact_verifier True web 0 corpus 13
+CHECK stock_facts  None  sources 0
+SUBJECT 潜在交易对象候选（研报观点陈述，非买卖建议；库内可定位的A股个股研报最新仅到2026-10-13，无2026-11月初报告）：
+1) 致尚科技（301486，招商证券，财联社《风口研报》2026-10-11转述）：原文未见评级、未给目标价；与PH客户签5亿美元MPO需求备忘录；上调2026-28年归母净利至1.21/3.29/5.65亿元（原1.01/1.58/3.15亿元）。
+2) 埃科光电（原文未标代码，国投证券，2026-10-13）：原文未见评级；目标价178.8元（2027年40倍PE）；2026-28年归母净利1.53/3.04/5.00亿元。
+3) 光力科技（300480.SZ，国信证券，2026-09-06）：优于大市（首次）；原文未给目标价，给合理估值32.54-39.98元；2026-28年归母净利1.32/2.19/3.43亿元，营收9.97/14.34/18.32亿元。
+4) 贵州茅台（报告A，2026-08-14）：买入（维持）；原文未给目标价；2026-28年营收1837.02/1887.44/1948.97亿元，净利887.21/933.02/957.67亿元，EPS 70.97/74.64/76.61元。另一份报告B（2026-08-16）：强推（重申），一年目标价2030元，2026-28年EPS 67.74/70.77/73.84元。
+5) 芒果超媒（300413，中泰证券，2026-10-11转述）：原文未见评级、未给目标价；2026-28年归母净利7.27/10.77/13.71亿元，同比-40.75%/+48.10%/+27.29%。
+VERDICT stock_facts pass calc [] DETAIL 6/6 条目全部一致，无数字偏差。①致尚科技301486、招商证券鄢凡、2026-10-11，归母净利1.21/3.29/5.65亿（原1.01/1.58/3.15亿）逐字相符，原文无评级无目标价（eref:6aa5acc6…:1,:4）。②埃科光电、国投证券朱宇航、2026-10-13，1.53/3.04/5.00亿＋2027年40倍PE对应目标价178.8元逐字相符，原文未标代码且无评级（eref:a95619d1…:0；eref:55040694…:2）。③光力科技300480.SZ、国信证券、published 2026-09-06，“优于大市(首次)”、合理估值32.54-39.98元、归母1.32/2.19/3.43亿、营收9.97/14.34/18.32亿全部相符；候选未把合理估值误写为目标价，口径正确（eref:a6bd9b5f…:2；eref:2e86a4aa…:0）。④茅台A 2026-08-14“买入（维持）”，营收1837.02/1887.44/1948.97亿、净利887.21/933.02/957.67亿、EPS 70.97/74.64/76.61元逐字相符，该投资建议段无目标价（eref:4d1a923e…:0）。⑤茅台B 2026-08-16“强推（重申）”、一年目标价2030元、EPS 67.74/70.77/73.84元逐字相符（eref:f82f585f…:0；eref:dfb3fd1b…:0）。⑥芒果超媒300413、中泰证券康雅雯、2026-10-11，归母7.27/10.77/13.71亿、同比-40.75%/+48.10%/+27.29%逐字相符，原文无评级无目标价（eref:6aa5acc6…:2）。criterion 内无未决缺陷；茅台A净利与报告B EPS 的口径分歧属两机构差异，候选已明示未合并，不构成对原文的不实陈述。 METHOD 逐条 corpus_fetch/corpus_search 回到候选文本引用的 5 个 doc_id 原文比对（致尚/芒果 cv2:b3b26de1…872529；埃科 cv2:95240291…853b10；光力 cv2:568f9e75…89ceea；茅台A cv2:712e370a…7dff54a；茅台B cv2:9fa4cd7c…49745），核对代码、名称、机构署名、published 日期、评级措辞、目标价/合理估值口径、盈利预测数值与单位、增长率口径；机构与日期用检索命中的 published 字段与“证券分析师：吴双 …@guosen”类署名 corroborate。 ISSUES []
+JOB fdce8a1662a2.job.5.json corpus_fact_verifier_2 True web 0 corpus 1
+CHECK date_coverage  None  sources 0
+SUBJECT 数据时效说明：资料库索引截止 2026-11-06，但不包含 2026-11-06 当日及 11 月初的 A 股研报。库内有正式发布日期的 A 股策略/行业周报最新为 2026-09-06（距 2026-11-06 已 61 天）；财联社《风口研报》《研选》转述的个股稿件最新为 2026-10-13；另有元数据无发布日期、正文指向 10 月 9 日与 10 月 12 日的《市场大热点》快照。11 月库内仅有 11-03 的美股点评，非 A 股。因此本答复的 A 股判断基于 2026 年 8 月末至 10 月中旬的研报，不代表 2026-11-06 当日的卖方观点。
+CHECK macro_numbers  None  sources 0
+SUBJECT 指数与量能（2026-08-31 至 09-04 交易周，平安证券《策略配置·策略周报》2026-09-06）：上证指数微跌 0.6%，上证50 小幅收涨，科创50 指数下跌 5.1%，中证红利指数下跌 0.8%；传媒、银行、农林牧渔行业涨幅在 3%-7%，电子、有色金属、建筑材料、通信行业跌幅超 4%；日均成交额 19697.8 亿元，融资余额 26190.4 亿元，融资资金净流入 -28.8 亿元。同期上证综指收于 3930.12 点（通信行业周报 2026-09-06，第 9 页行情回顾）。
+VERDICT date_coverage fail calc [] DETAIL Subject correctly refuses to present 2026-09-06 material as 2026-11-06 'today' (dated A-share weeklies verified as the 08-31~09-04 week; the 10-09/10-12 市场大热点 snapshot verified as metadata-undated with in-body dates; 61-day gap arithmetic correct). It fails the criterion for two reasons. (1) It converts bounded retrieval into corpus-wide absence: '11 月库内仅有 11-03 的美股点评，非 A 股。' (the exact sentence flagged by the deterministic preflight rule corpus_scope_overstatement) and '资料库索引截止 2026-11-06，但不包含 2026-11-06 当日及 11 月初的 A 股研报', while all three bound evidence keys record coverage.processing=partial, availability=unknown, native.unknown_date_sources=true (15/9/10 limited observations). (2) Requirement (3) is triggered by bound evidence: the 2026-10-13 《研选》 document contains an industry section ('【研选·行业】AI应用…华鑫证券'), i.e. A-share industry-level content later than 2026-09-06, but the subject labels 风口研报/研选 only as '个股稿件最新为 2026-10-13', so its 'A 股策略/行业周报最新为 2026-09-06' framing understates the later-dated industry material. Rebind after wording is changed to bounded phrasing ('本次检索命中') and the 10-13 行业段 and 10-09/10-12 undated snapshots are stated separately. METHOD Compared the bound inline passage against tool-delivered corpus excerpts (not sub-agent prose): 平安证券 strategy weekly cv2:231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969 body:0002 + eref:c48b8663…:1 (column label '周涨跌幅（%，截至2026-09-04）'), 通信行业周报 cv2:2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0 heading:0001 / eref:d73786c2…:2 ('本周（2026年08月31日-2026年09月04日）'), undated 市场大热点 cv2:f85bc29009c641a615c89ccf454c97b532a448ce34f860e49dcb3f5d937850ca eref:23516924…:0 (in-body dates 10月12日/10月9日 only), and 研选 cv2:95240291545b22156f1c8b596ba74efef3557bbab76cc7bd4fb7d49503853b10 body:0000 (ce:a5872a5a…, '【研选·行业】AI应用…华鑫证券'). Checked arithmetic 2026-09-06→2026-11-06 = 61 days (30+31) and cross-read the corpus_limits recorded on all three bound evidence records. ISSUES ["Absolute absence claim: '11 月库内仅有 11-03 的美股点评，非 A 股。' cannot be supported by bounded, partial retrieval (preflight rule corpus_scope_overstatement).", "Absolute absence claim: '资料库索引截止 2026-11-06，但不包含 2026-11-06 当日及 11 月初的 A 股研报' overstates the retrieval scope recorded in the bound evidence.", "'A 股策略/行业周报最新为 2026-09-06' conflicts with the bound 2026-10-13 《研选》 industry section ('【研选·行业】AI应用…华鑫证券'), which is later-dated A-share industry-level content.", "The 2026-10-11/10-13 财联社 风口研报/研选 items are characterised only as '个股稿件', omitting that 研选 also carries an 行业 section.", "21 undated sources and unknown-date sources (native.unknown_date_sources=true) prevent any corpus-wide 'latest' or 'only' statement from being certified."]
+JOB fdce8a1662a2.job.6.json corpus_fact_verifier True web 0 corpus 10
+CHECK date_coverage subject None fdce8a1662a2.job.5 sources 0
+SUBJECT 数据时效说明（有界检索结论）：本次在资料库（81 个来源 / 1,769 块，索引 cutoff 2026-11-06）中检索，命中的 A 股材料分三类——（a）有正式发布日期的 A 股策略/行业周报：2026-09-06，对应 2026-08-31 至 09-04 交易周，距 2026-11-06 约 61 天；（b）财联社《风口研报》《研选》类转述稿：最新命中 2026-10-13，其中 2026-10-13《研选》同时包含【研选·行业】AI 应用（华鑫证券）等行业段落，不限于个股；（c）《市场大热点》快照：元数据无发布日期，仅正文出现 10 月 9 日、10 月 12 日。本次检索未命中 2026-11-06 当日或 11 月初的 A 股研报；库内另有 21 个来源无发布日期，且检索为部分覆盖，故上述只说明本次检索的结果，不代表全库或全市场不存在该类研报。本答复的 A 股判断基于 2026 年 8 月末至 10 月中旬的研报，不代表 2026-11-06 当日的卖方观点。
+CHECK macro_numbers subject None fdce8a1662a2.job.5 sources 0
+SUBJECT 指数与量能（2026-08-31 至 09-04 交易周，报告正文以“平安观点”行文，2026-09-06 发布）：上证指数微跌 0.6%，上证50 小幅收涨，科创50 指数下跌 5.1%，中证红利指数下跌 0.8%；传媒、银行、农林牧渔行业涨幅在 3%-7%，电子、有色金属、建筑材料、通信行业跌幅超 4%；日均成交额 19697.8 亿元，融资余额 26190.4 亿元，融资资金净流入 -28.8 亿元。同期上证综指收于 3930.12 点（通信行业周报 2026-09-06，第 9 页行情回顾）。
+VERDICT date_coverage pass calc [] DETAIL Every checked sentence, with full untruncated handle + verbatim quote + doc_id + locator.
+
+[1] "（a）有正式发布日期的 A 股策略/行业周报：2026-09-06，对应 2026-08-31 至 09-04 交易周" — VERIFIED. evidence_ref ce:9417b069e159e140cea80575c9b1d3fc; doc_id cv2:2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0; locator chunk:native1/2696b5d4a615f984%3Aheading%3A0001/766f580b4471f4e0; quote "2 行情回顾：通信板块下跌，上证指数表现相对最优
+本周（2026 年08 月31 日-2026 年09 月04 日）上证综指收于3930.12 点。" Same sentence again at locator eref:d73786c2acdb8c02d505cd6b7d197de24a07867b86c0720189721d571a5de08e:2, same doc_id, quote "本周（2026 年08 月31 日-2026 年09 月04 日）上证综指收于3930.12 点。". The 2026-09-06 publication date is carried by bound keys fdce8a1662a2.job.1 ("A 股策略周报 1 篇…均 2026-09-06"), job.2 ("A 股行业/策略研报最新为 2026-09-06（电新、电子、通信、策略）") and job.3 (光力科技 国信证券 2026-09-06).
+
+[2] "距 2026-11-06 约 61 天" — RECOMPUTED: 2026-09-06 → 2026-11-06 = 24 (Sep rest) + 31 (Oct) + 6 = 61 days. Correct.
+
+[3] "（b）财联社《风口研报》《研选》类转述稿：最新命中 2026-10-13" — VERIFIED (bounded wording "最新命中" retained). evidence_ref ce:a5872a5ad0281d9439a41ffc44e2f7f3; doc_id cv2:95240291545b22156f1c8b596ba74efef3557bbab76cc7bd4fb7d49503853b10; locator chunk:native1/95240291545b2215%3Abody%3A0000/4f3bad6c25ea0dc1. The 2026-10-13 date is supported by bound key fdce8a1662a2.job.3 ("埃科光电…《研选》2026-10-13") and is consistent with the in-body reference in the same block, quote "何立峰12日下午在人民大会堂会见美国苹果公司执行董事长蒂姆·库克" (published on/after 10-12); the 风口研报 sibling is dated in-text: doc_id cv2:b3b26de119a69068e2f7f5c3a6921184bc5a45e4798eed46cf7826cd8a872529, locator eref:6aa5acc6fced01ac4c7d9bdfde0944399815e66d7eccfaeb3c99b5a9a2887a54:1, quote "风口研报
+2026.10.1117:25星期日".
+
+[4] "其中 2026-10-13《研选》同时包含【研选·行业】AI 应用（华鑫证券）等行业段落，不限于个股" — VERIFIED. Same block as [3]: evidence_ref ce:a5872a5ad0281d9439a41ffc44e2f7f3; doc_id cv2:95240291545b22156f1c8b596ba74efef3557bbab76cc7bd4fb7d49503853b10; locator chunk:native1/95240291545b2215%3Abody%3A0000/4f3bad6c25ea0dc1; quotes "【研选·行业】" (OCR: "【研选·行业】" appears as "【研选·行业】" preceded by item numbering) and "AI应用|AI时代价值"智能复利"，内容行业的价值在于资产特续复用与边际成本递减" and "华鑫证券宋珠认为，工业时代看规模效应" (OCR of 朱珠; the house is 华鑫证券). This fixes the previous defect that 研选 was characterised as stock-only.
+
+[5] "（c）《市场大热点》快照：元数据无发布日期，仅正文出现 10 月 9 日、10 月 12 日" — VERIFIED as to the material point (undated metadata; 10-12 is the latest in-body date). doc_id cv2:f85bc29009c641a615c89ccf454c97b532a448ce34f860e49dcb3f5d937850ca; locator eref:2351692486fcac7d294a684febca977be137229e2b7dd259040d504ff99ad5ad:1; quote "市场大热点
+一、热点题材
+热点复盘
+10月12日
+热度
+10月9日
+10月8日
+9月30日
+9月29日". The word 仅 is narrower than the table (earlier columns 10月8日/9月30日/9月29日 also appear) but does not overstate recency and does not make any dated report be called today.
+
+[6] Bounded disclaimer "本次检索未命中 2026-11-06 当日或 11 月初的 A 股研报；库内另有 21 个来源无发布日期，且检索为部分覆盖…不代表全库或全市场不存在该类研报" — CONSISTENT with bound evidence metadata: all three bound keys record corpus_limits coverage.processing=partial, availability=unknown, native.unknown_date_sources=true (15/9/10 limited observations), and bound key fdce8a1662a2.job.1 states "其中 21 个来源无发布日期". The previous absolute-absence sentences ("11 月库内仅有 11-03 的美股点评" / "资料库…不包含 2026-11-06 当日及 11 月初的 A 股研报") are absent from the current subject bytes.
+
+[7] "本答复的 A 股判断基于 2026 年 8 月末至 10 月中旬的研报，不代表 2026-11-06 当日的卖方观点" — VERIFIED as a correct refusal to label any old report as "今日"; no occurrence of 今日/当日研报 attribution to a 2026-09-06 or 2026-10-13 document remains. METHOD Read the complete bound subject passage; compared each date/scope sentence against bound keys job.1/.2/.3 and re-fetched originals with corpus_fetch (compact view) at the exact doc_id/locator of the cited blocks; recomputed the 61-day gap from 2026-09-06 to 2026-11-06; checked the bounded-retrieval disclaimer against the bound corpus_limits metadata (processing=partial, availability=unknown, unknown_date_sources=true). ISSUES []
+VERDICT macro_numbers pass calc [] DETAIL Each numeric claim compared to the cited doc original, with full handle + verbatim quote + doc_id + locator.
+
+[1] "上证指数微跌 0.6%，上证50 小幅收涨，科创50 指数下跌 5.1%，中证红利指数下跌 0.8%；传媒、银行、农林牧渔行业涨幅在 3%-7%，电子、有色金属、建筑材料、通信行业跌幅超 4%" — MATCH. evidence_ref ce:aba82b3e7de20ef7cfd3ee8fe4e4d4ec; doc_id cv2:231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969; locator chunk:native1/231ff3a07f5570e9%3Abody%3A0002/4f54db72ad077051; quote "A 股上证指数微跌0.6%，大盘占优，上证50小幅收涨，成长继续调整，科创50指数下跌5.1%，防御相对抗跌，中证红利指数下跌0.8%。结构上，传媒/银行/农林牧渔行业涨幅在3%-7%，电子/有色金属/建筑材料/通信行业跌幅超4%。" Same passage repeated at locator eref:c48b866374278d4e9b787b83d64348bd4e6d142e6a7695d2e9aad172f41e0e4b:0, same doc_id.
+
+[2] "日均成交额 19697.8 亿元" — MATCH. doc_id cv2:231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969; locator eref:b47ca1ab40ee73e601dc31188d366108c8ccbdb09bcb77e9a238e8d1e1ea7269:0; quote "日均成交额（亿元）
+19697.8".
+
+[3] "融资余额 26190.4 亿元" — MATCH. doc_id cv2:231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969; locator eref:4884090bd94bc1cd28bd19233ac3109e894a68e218d82514b6e52a187c7fe30f:0; quote "融资余额（亿元）
+26190.4".
+
+[4] "融资资金净流入 -28.8 亿元" — MATCH. doc_id cv2:231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969; locator eref:4884090bd94bc1cd28bd19233ac3109e894a68e218d82514b6e52a187c7fe30f:1; quote "融资资金净流入（亿元）
+-28.8".
+
+[5] "同期上证综指收于 3930.12 点（通信行业周报 2026-09-06，第 9 页行情回顾）" — MATCH, including location. evidence_ref ce:9417b069e159e140cea80575c9b1d3fc; doc_id cv2:2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0 (distinct from the strategy weekly in [1]-[4], so the cross-document attribution is right); locator chunk:native1/2696b5d4a615f984%3Aheading%3A0001/766f580b4471f4e0; pages [9]; quote "2 行情回顾：通信板块下跌，上证指数表现相对最
+优
+本周（2026 年08 月31 日-2026 年09 月04 日）上证综指收于3930.12 点。" Same sentence at locator eref:d73786c2acdb8c02d505cd6b7d197de24a07867b86c0720189721d571a5de08e:2, same doc_id.
+
+[6] "2026-08-31 至 09-04 交易周" and "2026-09-06 发布" — MATCH. The week range is in the [5] quote; the publication date is carried by bound keys fdce8a1662a2.job.1 ("A 股策略周报 1 篇、宏观专题 1 篇（均 2026-09-06）") and fdce8a1662a2.job.2 ("A 股行业周报 4 篇…均 2026-09-06"), and by the corpus_search hit for doc_id cv2:231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969 which reports published "2026-09-06".
+
+[7] "报告正文以"平安观点"行文" — SUPPORTED at house level (conservative wording, no institution named as author). Same doc_id as [1]; locator eref:2ec8fa3aa4ab6d4e0531d8a2e64be200378b5d4001647719c1153f34d9861ccc:0; quote "平安证券研究所投资评级："; adjacent block eref:2ec8fa3aa4ab6d4e0531d8a2e64be200378b5d4001647719c1153f34d9861ccc:1 quotes "深圳市福田区益田路5023号平安金
+融中心B 座25 层". The literal string "平安观点" was not returned verbatim, so attribution is verified at 平安证券 house level, which is what the subject asserts ("以…行文", not 署名).
+
+No number in the subject is absent from, or inconsistent with, the cited originals; no unit, sign or rounding drift found (-28.8 kept negative; 19697.8/26190.4 one-decimal as in source; 3930.12 two-decimal as in source). METHOD Read the complete bound subject passage; matched every index level, percentage change, turnover/margin figure and the 3930.12 point level to the bound evidence keys and to corpus originals retrieved with corpus_fetch (doc cv2:2696b5d4…, pages=[9]) and corpus_search (doc cv2:231ff3a0…, published 2026-09-06, "平安证券研究所投资评级："); checked sign, decimal precision and cross-document attribution (通信行业周报 vs 策略周报). ISSUES []

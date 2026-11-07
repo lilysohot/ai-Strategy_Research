@@ -28,3 +28,40 @@ export function renderMarkdown(src: string): string {
   const raw = md.render(safe)
   return DOMPurify.sanitize(raw)
 }
+
+const reportDetailTitles = new Set([
+  '核验范围',
+  '内容读取边界',
+  'Verification scope',
+  'Content access limits',
+])
+
+/** Collapse report appendices in conversation answers, including saved history. */
+export function renderChatMarkdown(src: string): string {
+  const container = document.createElement('div')
+  container.innerHTML = renderMarkdown(src)
+
+  // Only top-level report headings qualify; quoted examples and code stay intact.
+  for (const heading of Array.from(container.children)) {
+    if (
+      heading.parentNode !== container ||
+      heading.tagName !== 'H3' ||
+      !reportDetailTitles.has(heading.textContent?.trim() ?? '')
+    ) continue
+
+    const details = document.createElement('details')
+    details.className = 'report-details'
+    const summary = document.createElement('summary')
+    summary.textContent = heading.textContent
+    details.append(summary)
+    heading.replaceWith(details)
+
+    // Keep nested subsections with their appendix, stopping at a peer or parent.
+    while (details.nextSibling) {
+      const next = details.nextSibling
+      if (next instanceof Element && /^H[1-3]$/.test(next.tagName)) break
+      details.append(next)
+    }
+  }
+  return container.innerHTML
+}

@@ -1,0 +1,21 @@
+config:
+  llm_provider           = openai
+  openai_model           = deepseek-v4-1-flash-261017
+  openai_base_url        = ark.cn-beijing.volces.com
+  openai_api_key         = set
+  serper_api_key         = set
+  jina_api_key           = <unset>
+  JUDGE_API_KEY          = set
+  JUDGE_BASE_URL         = set
+
+kernel LLM (LLM_PROVIDER -> infra/llm_adapter.create_llm):
+  ok
+
+workflow LLM (agent_team / default), 1 real call:
+[LLM] chat model=deepseek-v4-1-flash-261017 elapsed=1.70s
+  ok
+
+judge:
+  ok — pinned to JUDGE_BASE_URL
+
+preflight OK — safe to launch the run

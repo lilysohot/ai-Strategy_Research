@@ -1,0 +1,19 @@
+{
+  "inventory_unknown_members": [
+    "chunk:0"
+  ],
+  "inventory_requested_scope_count": 0,
+  "same_build_historical_body_count": 1,
+  "same_build_historical_bodies": [
+    {
+      "locator": "chunk:native1/3d10e850ae56226f%3Abody%3A0000/c8e2a5a04591c589",
+      "chars": 115,
+      "kind": "body"
+    }
+  ],
+  "source_soft_hyphens": 2,
+  "answer_soft_hyphens": 0,
+  "answer_claims_verbatim": true,
+  "answer_claims_no_body": true,
+  "verification": "not_assessed"
+}

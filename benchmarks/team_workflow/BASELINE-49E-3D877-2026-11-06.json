@@ -1,0 +1,285 @@
+{
+  "date": "2026-11-06",
+  "scope": "Incremental benchmark expansion and failure baseline only; no production fixes or deployment in this round.",
+  "origins": [
+    "49e4f04b05ca46fda0ae4e4b71d1636a",
+    "3d87700083864a1dbb41acfa74f46136"
+  ],
+  "catalog": {
+    "total": 48,
+    "protocol": 38,
+    "frozen": 10,
+    "historical_cases_preserved": 40,
+    "lock": "benchmarks/team_workflow/baseline-40.lock.json",
+    "new_cases": [
+      "P34",
+      "P35",
+      "P36",
+      "P37",
+      "P38",
+      "F08",
+      "F09",
+      "F10"
+    ],
+    "blind_holdout_created": false
+  },
+  "protocol": {
+    "artifacts": "results/team-49e-3d877-protocol-baseline",
+    "states": {
+      "pass": 34,
+      "fail": 4
+    },
+    "historical_P01_P33_all_pass": true,
+    "failures": [
+      {
+        "sample": "P34-r1",
+        "case": "P34",
+        "layer": "protocol",
+        "dimension": "verification",
+        "split": "development",
+        "status": "fail",
+        "tests": 4,
+        "failed": 3,
+        "errors": 0,
+        "skipped": 0,
+        "details": [
+          {
+            "test": "test_unmarked_calculation_receipt_is_still_validated[zero_formula]",
+            "text": "tmp_path = PosixPath('/tmp/pytest-of-administrator/pytest-148/test_unmarked_calculation_rece0')\ndefect = 'zero_formula'\n\n    @pytest.mark.parametrize(\"defect\", [\"zero_formula\", \"unbound_key\", \"false_quote\"])\n    def test_unmarked_calculation_receipt_is_still_validated(tmp_path: Path, defect: str) -> None:\n        \"\"\"49e supplied receipts even though no marker generated calculation_targets.\"\"\"\n        check = bound_passage(\n            tmp_path,\n            \"2026-11-04 收盘100点。\",\n            [\"2026-11-05: close 110 points; daily change +10 points.\"],\n        )\n        proof = calculation()\n        if defect == \"zero_formula\":\n            proof[\"expression\"] = \"0\"\n        elif defect == \"unbound_key\":\n            proof[\"inputs\"][\"close\"][\"source_key\"] = \"a descriptive label, not a bound key\"\n        else:\n            proof[\"inputs\"][\"close\"][\"quote\"] = \"2026-11-05: imagined close 110 points.\"\n>       with pytest.raises(ValueError):\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\nE       Failed: DID NOT RAISE ValueError\n\nbenchmarks/team_workflow/regression_probes.py:77: Failed"
+          },
+          {
+            "test": "test_unmarked_calculation_receipt_is_still_validated[unbound_key]",
+            "text": "tmp_path = PosixPath('/tmp/pytest-of-administrator/pytest-148/test_unmarked_calculation_rece1')\ndefect = 'unbound_key'\n\n    @pytest.mark.parametrize(\"defect\", [\"zero_formula\", \"unbound_key\", \"false_quote\"])\n    def test_unmarked_calculation_receipt_is_still_validated(tmp_path: Path, defect: str) -> None:\n        \"\"\"49e supplied receipts even though no marker generated calculation_targets.\"\"\"\n        check = bound_passage(\n            tmp_path,\n            \"2026-11-04 收盘100点。\",\n            [\"2026-11-05: close 110 points; daily change +10 points.\"],\n        )\n        proof = calculation()\n        if defect == \"zero_formula\":\n            proof[\"expression\"] = \"0\"\n        elif defect == \"unbound_key\":\n            proof[\"inputs\"][\"close\"][\"source_key\"] = \"a descriptive label, not a bound key\"\n        else:\n            proof[\"inputs\"][\"close\"][\"quote\"] = \"2026-11-05: imagined close 110 points.\"\n>       with pytest.raises(ValueError):\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\nE       Failed: DID NOT RAISE ValueError\n\nbenchmarks/team_workflow/regression_probes.py:77: Failed"
+          },
+          {
+            "test": "test_unmarked_calculation_receipt_is_still_validated[false_quote]",
+            "text": "tmp_path = PosixPath('/tmp/pytest-of-administrator/pytest-148/test_unmarked_calculation_rece2')\ndefect = 'false_quote'\n\n    @pytest.mark.parametrize(\"defect\", [\"zero_formula\", \"unbound_key\", \"false_quote\"])\n    def test_unmarked_calculation_receipt_is_still_validated(tmp_path: Path, defect: str) -> None:\n        \"\"\"49e supplied receipts even though no marker generated calculation_targets.\"\"\"\n        check = bound_passage(\n            tmp_path,\n            \"2026-11-04 收盘100点。\",\n            [\"2026-11-05: close 110 points; daily change +10 points.\"],\n        )\n        proof = calculation()\n        if defect == \"zero_formula\":\n            proof[\"expression\"] = \"0\"\n        elif defect == \"unbound_key\":\n            proof[\"inputs\"][\"close\"][\"source_key\"] = \"a descriptive label, not a bound key\"\n        else:\n            proof[\"inputs\"][\"close\"][\"quote\"] = \"2026-11-05: imagined close 110 points.\"\n>       with pytest.raises(ValueError):\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\nE       Failed: DID NOT RAISE ValueError\n\nbenchmarks/team_workflow/regression_probes.py:77: Failed"
+          }
+        ],
+        "elapsed_s": 1.167
+      },
+      {
+        "sample": "P35-r1",
+        "case": "P35",
+        "layer": "protocol",
+        "dimension": "verification",
+        "split": "development",
+        "status": "fail",
+        "tests": 2,
+        "failed": 1,
+        "errors": 0,
+        "skipped": 0,
+        "details": [
+          {
+            "test": "test_admitted_required_unknown_cannot_hide_inside_pass_detail",
+            "text": "tmp_path = PosixPath('/tmp/pytest-of-administrator/pytest-149/test_admitted_required_unknown0')\n\n    def test_admitted_required_unknown_cannot_hide_inside_pass_detail(tmp_path: Path) -> None:\n        check = bound_passage(tmp_path, \"2026-11-06 收盘110点、开盘105点。\", [\"2026-11-06 收盘110点。\"])\n        result = result_for(\n            check,\n            detail=\"收盘110已核实。未复核项：开盘105未取得来源，无法确认。\",\n            unresolved_issues=[],\n        )\n>       with pytest.raises(ValueError):\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\nE       Failed: DID NOT RAISE ValueError\n\nbenchmarks/team_workflow/regression_probes.py:99: Failed"
+          }
+        ],
+        "elapsed_s": 1.066
+      },
+      {
+        "sample": "P36-r1",
+        "case": "P36",
+        "layer": "protocol",
+        "dimension": "evidence",
+        "split": "development",
+        "status": "fail",
+        "tests": 2,
+        "failed": 1,
+        "errors": 0,
+        "skipped": 0,
+        "details": [
+          {
+            "test": "test_cross_document_week_cannot_complete_unknown_table_period",
+            "text": "tmp_path = PosixPath('/tmp/pytest-of-administrator/pytest-150/test_cross_document_week_canno0')\n\n    def test_cross_document_week_cannot_complete_unknown_table_period(tmp_path: Path) -> None:\n        check = bound_passage(\n            tmp_path,\n            \"2026-08-31至09-04交易周，日均成交额120亿元。\",\n            [\"日均成交额（亿元）\\n120\", \"另一份报告：2026-08-31至09-04交易周指数收于100点。\"],\n        )\n        result = result_for(\n            check,\n            detail=\"120与表体一致。该表期间标签未取回；借另一报告的交易周推定为08-31至09-04。\",\n        )\n>       with pytest.raises(ValueError):\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\nE       Failed: DID NOT RAISE ValueError\n\nbenchmarks/team_workflow/regression_probes.py:121: Failed"
+          }
+        ],
+        "elapsed_s": 1.066
+      },
+      {
+        "sample": "P37-r1",
+        "case": "P37",
+        "layer": "protocol",
+        "dimension": "recovery",
+        "split": "development",
+        "status": "fail",
+        "tests": 4,
+        "failed": 1,
+        "errors": 0,
+        "skipped": 0,
+        "details": [
+          {
+            "test": "test_replacement_settles_obligations_not_historical_attempts[complete]",
+            "text": " _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\ncontent = '金额50已完成金额与期间核验。'\nupdates = [{'id': 't1', 'resolution': 'resolved', 'notes': '替代检查完整通过'}]\ncorpus_conclusions = None\n\n    @tool\n    async def deliver_answer(\n        content: str,\n        updates: list[FinalDisposition],\n        corpus_conclusions: list[dict[str, Any]] | None = None,\n    ) -> str:\n        \"\"\"Submit the complete final answer AND task dispositions in one call.\n    \n        Do not spend a separate generation updating the board first. Research with\n        unmet done_when or unpassed required checks must be blocked, with notes and\n        gap; never claim success from execution alone. Disclose gaps in the answer.\n        Delivery tasks complete with acceptance. Call this tool alone.\n    \n        Args:\n            content: Complete user-facing answer, with sources and explicit limitations.\n            updates: Final dispositions for outstanding work. Use [] if none remain.\n            corpus_conclusions: Complete corpus evidence manifest for THIS content. Each entry\n                needs id, report_quote copied verbatim from content, and evidence:[{evidence_ref}].\n                Use original complete corpus tool refs (eref: or ce:). Required for corpus-backed\n                final prose; omit for web-only answers. URLs, job IDs and web hashes are not corpus\n                receipts. Never copy old report anchors. This binds citations, not a semantic PASS.\n        \"\"\"\n        scope = get_current_execution_scope()\n        if scope is None or SWARM_SCOPE_KEY not in scope.metadata or in_planning(scope.task_id):\n            raise ValueError(\"Final delivery requires an executing team coordinator\")\n        if not is_user_report(content):\n            raise ValueError(\"Provide the final answer body, not an empty/internal tool payload\")\n        from plugins.corpus.ledger import get_run_ledger\n        from plugins.tools.corpus_manifest import commit_final_manifest, prepare_final_manifest\n    \n        if corpus_conclusions is None and get_run_ledger().has_activity():\n            raise ValueError(\n                \"Corpus-backed delivery requires corpus_conclusions bound to this content. \"\n                \"Supply id, exact report_quote, evidence:[{evidence_ref}]. \"\n                \"Use [] only when no supported corpus claim is delivered; disclose the gap.\"\n            )\n        items = [FinalDisposition.model_validate(u).model_dump() for u in updates]\n        if len({u[\"id\"] for u in items}) != len(items):\n            raise ValueError(\"Each task may have only one final disposition\")\n        # Return independent defects together, before board or manifest mutation.\n        # Otherwise each cheap validation failure costs another full report generation.\n        from plugins.tools._corpus_scope import corpus_scope_findings\n    \n        bus = registry.get_optional(AgentBus)\n        bus_id = resolve_bus_task_id(scope)\n        observations = [\n            observation\n            for job in (bus.list_task_jobs(bus_id) if bus else [])\n            if job.result is not None\n            for observation in job.result.metadata.get(\"content_acquisition\", [])\n        ]\n        issues: list[dict[str, Any]] = corpus_scope_findings(content, observations)\n        projected = project_bus_checks(bus, bus_id)[\"checks\"] if bus else []\n        issues.extend(verification_label_findings(projected, content))\n        current_tasks = snapshot_tasks(scope.task_id)\n        excluded = {\n            task[\"id\"] for task in current_tasks if task[\"resolution\"] in {\"blocked\", \"cancelled\"}\n        }\n        excluded.update(item[\"id\"] for item in items if item[\"resolution\"] == \"blocked\")\n        for check_id in missing_publication_excerpts(\n            projected,\n            content,\n            excluded_work_items=excluded,\n        ):\n            issues.append(\n                {\n                    \"rule\": \"checked_publication_excerpt_missing\",\n                    \"check_id\": check_id,\n                    \"detail\": \"checked publication excerpt is missing from final content\",\n                }\n            )\n        for finding in unresolved_publication_claims(\n            projected,\n            content,\n            excluded_work_items=excluded,\n        ):\n            issues.append({\"rule\": \"failed_publication_claim_retained\", **finding})\n        payload = None\n        if corpus_conclusions is not None:\n            try:\n                payload = prepare_final_manifest(corpus_conclusions, content.strip())\n            except ValueError as exc:\n                issues.append({\"rule\": \"corpus_manifest_invalid\", \"detail\": str(exc)})\n        if issues:\n            raise ValueError(\n                \"Delivery preflight failed: \"\n                + json.dumps(issues, ensure_ascii=False)\n                + \". Correct all listed fields/sentences together. Preserve valid passages and \"\n                \"citations; changed checked passages require recheck or a blocked disposition. \"\n                \"No task disposition or final manifest has been committed.\"\n            )\n        if bus and any(\n            s.current_job_id or s.pending_tasks or s.pending_results\n            for s in bus.list_sessions_for_task(bus_id)\n        ):\n            raise ValueError(\"Collect or stop outstanding members before final delivery\")\n        outcomes = {j[\"job_id\"]: j for j in snapshot_job_outcomes(bus, bus_id)} if bus else {}\n        tasks = {t[\"id\"]: t for t in snapshot_tasks(scope.task_id)}\n        for item in items:\n            if item[\"resolution\"] == \"resolved\":\n                for job_id in tasks.get(item[\"id\"], {}).get(\"execution_job_ids\", []):\n                    if outcomes.get(job_id, {}).get(\"status\") != \"complete\":\n>                       raise ValueError(\n                            f\"{item['id']}: member work incomplete; use blocked with a gap\"\n                        )\nE                       ValueError: t1: member work incomplete; use blocked with a gap\n\nworkflows/agent_team/delivery.py:155: ValueError"
+          }
+        ],
+        "elapsed_s": 1.067
+      }
+    ],
+    "raw_probe_repeats": {
+      "runs": 2,
+      "each_failed": 6,
+      "each_passed": 6,
+      "xfail_used": false
+    }
+  },
+  "frozen": {
+    "artifacts": "results/team-49e-3d877-frozen-baseline",
+    "states": {
+      "needs_review": 1,
+      "error": 2
+    },
+    "samples": [
+      {
+        "sample": "F08-r1",
+        "case": "F08",
+        "layer": "frozen",
+        "dimension": "verification",
+        "split": "development",
+        "status": "needs_review",
+        "hard_failures": [],
+        "answer_status": "complete",
+        "semantic_review_required": true,
+        "usage_complete": true,
+        "research_jobs_accepted": 3,
+        "elapsed_s": 237.02,
+        "diagnostic_verdict": "fail",
+        "review_type": "model",
+        "reviewer": "Codex artifact review",
+        "review_file": "review-000.json",
+        "artifacts": "results/team-49e-3d877-frozen-baseline/F08-r1",
+        "source": {
+          "git_revision": "f40327144c19a999316494b087b1a1fc16c94dac",
+          "code_and_profiles_sha256": "e26e78f7da1890ba172db49d58a7ffab091538dc9423a89f893faa9b26fd9c81"
+        },
+        "metrics": {
+          "attempts": 29,
+          "known_prompt_tokens": 481358,
+          "unknown_usage_attempts": 0,
+          "max_prompt_tokens": 43595,
+          "exact_repeated_tool_requests": 0
+        },
+        "stopped_by": "final_answer",
+        "llm_error_reason": ""
+      },
+      {
+        "sample": "F09-r1",
+        "case": "F09",
+        "layer": "frozen",
+        "dimension": "verification",
+        "split": "transfer",
+        "status": "error",
+        "reason": "llm_error",
+        "answer_status": "best_effort",
+        "elapsed_s": 235.697,
+        "artifacts": "results/team-49e-3d877-frozen-baseline/F09-r1",
+        "source": {
+          "git_revision": "f40327144c19a999316494b087b1a1fc16c94dac",
+          "code_and_profiles_sha256": "1570d5a804398f3bffc08fbde3160fda88122a2248b2416eafb534f205cffec3"
+        },
+        "metrics": {
+          "attempts": 18,
+          "known_prompt_tokens": 260473,
+          "unknown_usage_attempts": 1,
+          "max_prompt_tokens": 25411,
+          "exact_repeated_tool_requests": 1
+        },
+        "stopped_by": "llm_error",
+        "llm_error_reason": "logical_call_deadline"
+      },
+      {
+        "sample": "F10-r1",
+        "case": "F10",
+        "layer": "frozen",
+        "dimension": "delivery",
+        "split": "development",
+        "status": "error",
+        "reason": "llm_error",
+        "answer_status": "partial",
+        "elapsed_s": 259.913,
+        "artifacts": "results/team-49e-3d877-frozen-baseline/F10-r1",
+        "source": {
+          "git_revision": "f40327144c19a999316494b087b1a1fc16c94dac",
+          "code_and_profiles_sha256": "1570d5a804398f3bffc08fbde3160fda88122a2248b2416eafb534f205cffec3"
+        },
+        "metrics": {
+          "attempts": 28,
+          "known_prompt_tokens": 467099,
+          "unknown_usage_attempts": 1,
+          "max_prompt_tokens": 30640,
+          "exact_repeated_tool_requests": 0
+        },
+        "stopped_by": "llm_error",
+        "llm_error_reason": "logical_call_deadline"
+      }
+    ],
+    "model_reviews_are_diagnostic_only": true,
+    "artifact_observations": {
+      "F08": "Completed. Model review passes three factual/coverage criteria but fails concise useful scope: duplicated retrieval, HTTP/DNS diversion and unsolicited calendar/arithmetic work. Official status remains needs_review, not pass.",
+      "F09": "Execution error: main turn 7 received no streamed chunks for about 120 seconds and ended logical_call_deadline. Fallback answer retains the four supported figures, but adds lengthy access and arithmetic discussion plus unresolved-board notices. Independent verifier returned four scoped PASS checks; these do not override execution failure.",
+      "F10": "Execution error: main turn 14 received no streamed chunks for about 120 seconds and ended logical_call_deadline. Partial final answer correctly keeps Arbor at its September acceptance scope, Birch unknown, plan fulfillment unsupported, and November absence limited to this query. This useful partial answer is not an end-to-end pass."
+    },
+    "all_10_frozen_cases_rerun": false,
+    "fingerprint_note": "F08 was started before a test-only Optional-result assertion was added in regression_probes.py; F09/F10 after. Source fingerprints therefore differ. Production runtime, prompts, model settings, cases and fixture bodies were not changed during these runs. Do not label them byte-identical source snapshots."
+  },
+  "checks": {
+    "evaluator_integrity_pytest": "24 passed",
+    "scoped_ruff": "passed",
+    "scoped_pyright_benchmarks_team_workflow": "0 errors",
+    "full_pyright": {
+      "status": "failed",
+      "errors": 15,
+      "files_not_modified_this_round": [
+        "deploy/huggingface/app.py",
+        "plugins/corpus/service.py",
+        "scripts/run_retention.py",
+        "server/watch_scheduler.py"
+      ],
+      "log": ".scratch/team-49e-3d877-pyright-final.txt"
+    },
+    "import_smoke_stage_1": "465/465 passed",
+    "import_smoke_stage_2": "524/524 passed",
+    "symbol_closure": "0 missing across 573 files",
+    "real_provider_preflight": "passed"
+  },
+  "next_repair_acceptance": [
+    {
+      "layer": "tool protocol and verification",
+      "cases": [
+        "P34",
+        "P35",
+        "P36",
+        "F08",
+        "F09"
+      ],
+      "target": "Validate every submitted calculation receipt and bind required claims to source scope; missing facts or table periods cannot be certified by unrelated evidence. Preserve positive controls."
+    },
+    {
+      "layer": "team orchestration and recovery",
+      "cases": [
+        "P37"
+      ],
+      "target": "Settle obligations against successful replacement checks while retaining failed history; incomplete replacement must still block completion."
+    },
+    {
+      "layer": "context, synthesis and execution cost",
+      "cases": [
+        "P38",
+        "F08",
+        "F09",
+        "F10"
+      ],
+      "target": "Carry evidence limits into the final answer and avoid unsupported task expansion or repeated retrieval; retain error samples and missing usage rather than selecting only successes."
+    }
+  ],
+  "limitations": [
+    "Known failure replays and visible transfer controls are not an unseen holdout.",
+    "Protocol probes establish these concrete acceptance defects, not general natural-language reasoning correctness; regex-only repairs are not prescribed.",
+    "Fixed web fixtures do not test real corpus ranking, table reconstruction or live retrieval latency.",
+    "Retrieval DB, embedding, rerank and queue timing remain unmeasured; overlapping tool durations are not additive wall time.",
+    "DNS and HTTP-variant diversions may partly reflect synthetic fixture presentation; check live-tool traces before attributing all such behavior to general production retrieval.",
+    "Single samples per new case cannot estimate stable failure rates or calibrated SLOs; model review cannot certify release acceptance.",
+    "The repeated-request metric compares exact complete tool arguments; repeated individual URLs inside changed batches need trajectory review.",
+    "Old frozen cases retain their original criteria and budgets but were not all executed in this round."
+  ]
+}

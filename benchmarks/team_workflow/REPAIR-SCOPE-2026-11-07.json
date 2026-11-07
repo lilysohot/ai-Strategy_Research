@@ -1,0 +1,213 @@
+{
+  "date": "2026-11-07",
+  "scope": "General requirement boundaries and completion consistency; no task-category routing or special document-lookup template.",
+  "overall_acceptance": "partial: contract/runtime checks pass; end-to-end concision and efficiency not accepted",
+  "changes": [
+    "Shared coordinator/member/reviewer policy distinguishes user outcome, necessary support, optional enrichment using existing done_when and assignment text.",
+    "Persist nonblocking limitations separately from blocking gap; atomically reject resolved plus a nonempty gap; failed or unchecked mandatory verification still blocks.",
+    "Delivery admission and finalization share the planning prerequisite check, preventing deliver-only lockout before a required verifier can be dispatched."
+  ],
+  "red_evidence": [
+    ".scratch/team-scope-red.txt",
+    ".scratch/team-scope-runtime-red.txt"
+  ],
+  "benchmark": {
+    "total": 59,
+    "protocol": 45,
+    "frozen": 14,
+    "original_53_unchanged": true,
+    "lock": "benchmarks/team_workflow/baseline-53.lock.json",
+    "new_cases": [
+      "P43",
+      "P44",
+      "P45",
+      "F12",
+      "F13",
+      "F14"
+    ],
+    "public_transfer_not_blind_holdout": true
+  },
+  "validation": {
+    "focused": {
+      "passed": 130,
+      "artifact": ".scratch/team-scope-final-focused.txt"
+    },
+    "eval_integrity_and_scope": {
+      "passed": 34,
+      "artifact": ".scratch/team-scope-final-eval.txt",
+      "overlaps_focused": true
+    },
+    "protocol": {
+      "pass": 41,
+      "fail": 4,
+      "remaining_failure_cases": [
+        "P34",
+        "P35",
+        "P36",
+        "P37"
+      ],
+      "artifact": "results/team-scope-runtime-protocol/summary.json"
+    },
+    "scoped_ruff": "passed",
+    "scoped_pyright": "0 errors",
+    "full_pyright": "15 errors in untouched files; not a clean repository-wide type gate",
+    "import_smoke": [
+      "466/466",
+      "525/525"
+    ],
+    "symbol_closure": "0 missing, 574 files",
+    "provider_preflight": "passed",
+    "web_cli_parity": "5 failures at mock-provider research-intake JSON parsing, before workflow execution; not fixed or baseline-bisected in this change"
+  },
+  "model_runs": [
+    {
+      "directory": "results/team-scope-frozen-after",
+      "profile": "default",
+      "samples": [
+        {
+          "sample": "F12-r1",
+          "status": "error",
+          "reason": "llm_error",
+          "answer_status": "best_effort",
+          "elapsed_s": 308.85,
+          "attempts": 32,
+          "known_prompt_tokens": 618867
+        },
+        {
+          "sample": "F13-r1",
+          "status": "error",
+          "reason": "llm_error",
+          "answer_status": "best_effort",
+          "elapsed_s": 160.127,
+          "attempts": 3,
+          "known_prompt_tokens": 28987
+        },
+        {
+          "sample": "F14-r1",
+          "status": "unassessed",
+          "reason": "Batch halted after 2 consecutive execution errors",
+          "partial_trace_retained": false,
+          "attempts": null,
+          "known_prompt_tokens": null
+        }
+      ]
+    },
+    {
+      "directory": "results/team-scope-runtime-translation",
+      "profile": "default",
+      "samples": [
+        {
+          "sample": "F14-r1",
+          "status": "error",
+          "reason": "llm_error",
+          "answer_status": "best_effort",
+          "elapsed_s": 165.475,
+          "attempts": 7,
+          "known_prompt_tokens": 77320
+        }
+      ]
+    },
+    {
+      "directory": "results/team-scope-runtime-prices",
+      "profile": "default",
+      "samples": [
+        {
+          "sample": "F12-r1",
+          "status": "needs_review",
+          "hard_failures": [],
+          "answer_status": "complete",
+          "semantic_review_required": true,
+          "usage_complete": true,
+          "research_jobs_accepted": 1,
+          "elapsed_s": 105.825,
+          "diagnostic_verdict": "fail",
+          "review_type": "model",
+          "reviewer": "Codex artifact inspection, 2026-11-07",
+          "review_file": "review-000.json",
+          "attempts": 16,
+          "known_prompt_tokens": 254228
+        },
+        {
+          "sample": "F13-r1",
+          "status": "needs_review",
+          "hard_failures": [],
+          "answer_status": "partial",
+          "semantic_review_required": true,
+          "usage_complete": true,
+          "research_jobs_accepted": 1,
+          "elapsed_s": 104.726,
+          "diagnostic_verdict": "fail",
+          "review_type": "model",
+          "reviewer": "Codex artifact inspection, 2026-11-07",
+          "review_file": "review-000.json",
+          "attempts": 15,
+          "known_prompt_tokens": 243052
+        }
+      ]
+    },
+    {
+      "directory": "results/team-scope-standard-after",
+      "profile": "tui",
+      "samples": [
+        {
+          "sample": "F12-r1",
+          "status": "needs_review",
+          "hard_failures": [],
+          "answer_status": "complete",
+          "semantic_review_required": true,
+          "usage_complete": true,
+          "research_jobs_accepted": 1,
+          "elapsed_s": 103.272,
+          "diagnostic_verdict": "fail",
+          "review_type": "model",
+          "reviewer": "Codex artifact inspection, 2026-11-07",
+          "review_file": "review-000.json",
+          "attempts": 17,
+          "known_prompt_tokens": 266873
+        },
+        {
+          "sample": "F13-r1",
+          "status": "needs_review",
+          "hard_failures": [],
+          "answer_status": "partial",
+          "semantic_review_required": true,
+          "usage_complete": true,
+          "research_jobs_accepted": 1,
+          "elapsed_s": 110.988,
+          "diagnostic_verdict": "pass",
+          "review_type": "model",
+          "reviewer": "Codex artifact inspection, 2026-11-07",
+          "review_file": "review-000.json",
+          "attempts": 17,
+          "known_prompt_tokens": 263385
+        },
+        {
+          "sample": "F14-r1",
+          "status": "needs_review",
+          "hard_failures": [],
+          "answer_status": "complete",
+          "semantic_review_required": true,
+          "usage_complete": true,
+          "research_jobs_accepted": 1,
+          "elapsed_s": 40.614,
+          "diagnostic_verdict": "pass",
+          "review_type": "model",
+          "reviewer": "Codex artifact inspection, 2026-11-07",
+          "review_file": "review-000.json",
+          "attempts": 6,
+          "known_prompt_tokens": 65549
+        }
+      ]
+    }
+  ],
+  "configuration_note": "Default benchmark profile uses research prompts; the Web uses profile tui with standard prompts. Results are separated, not presented as a paired performance improvement.",
+  "review_policy": "Artifact-bound model reviews preserve needs_review; diagnostic pass is not human acceptance or a green release gate.",
+  "remaining_issues": [
+    "All standard samples returned without execution errors and classified completion correctly, but F12 fails compact-answer rubric; F13/F14 rubric passes do not cover all observed verbosity.",
+    "Members/coordinator still add unrelated domain investigation and audit prose; final_report also appends detailed verification/execution metadata. Scope prompts alone do not solve presentation or latency.",
+    "Research-config trials include model logical-call timeouts. Shared prerequisite fix resolves a demonstrated controller deadlock, not all timeouts.",
+    "Semantic classification remains model-declared. Research F13 exposes criterion/subject alignment risk despite a correct partial status.",
+    "Earlier P34-P37 regressions remain red; prior invalid-locator whole-document absence and false verbatim issues are not repaired by this scope change.",
+    "No full frozen-suite rerun, blinded evaluation, live Web end-to-end run, deployment, restart or commit performed for this change."
+  ]
+}

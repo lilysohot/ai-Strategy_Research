@@ -21,6 +21,30 @@ def _unassigned_agent_names(task_id: str) -> list[str]:
     return [s.name for s in bus.list_sessions_for_task(task_id) if s.total_task_count == 0]
 
 
+def planning_requirement_error(task_id: str, bus_task_id: str) -> str | None:
+    """Shared runtime prerequisites for admission to delivery and final acceptance."""
+    from plugins.tools.task_board import planning_enabled
+
+    if not planning_enabled(task_id):
+        return None
+    bus = registry.get_optional(AgentBus)
+    sessions = bus.list_sessions_for_task(bus_task_id) if bus else []
+    worked = [s for s in sessions if getattr(s, "total_task_count", 0) > 0]
+    if not worked:
+        return (
+            "Cannot finish: no sub-agent has done any work — this is a solo "
+            "submission, which Planning Mode forbids. Delegate the task-board "
+            "items to sub-agents (assign_task) and let them complete first."
+        )
+    if not any("verif" in (s.name or "").lower() for s in worked):
+        return (
+            "Cannot finish: Planning Mode requires independent review. Dispatch a "
+            "final_verifier with structured checks scoped to the requested result and its "
+            "necessary evidence. Keep coordination open until that required work is handled."
+        )
+    return None
+
+
 def finalize_gate(
     task_id: str,
     content: str,
@@ -64,7 +88,6 @@ def finalize_gate(
         )
     from plugins.tools.task_board import (
         in_planning,
-        planning_enabled,
         snapshot_tasks,
         unresolved_task_ids,
     )
@@ -143,24 +166,7 @@ def finalize_gate(
             "question into the task board, then call finish_planning to start "
             "the team — you cannot submit an answer during planning."
         )
-    if planning_enabled(task_id):
-        bus = registry.get_optional(AgentBus)
-        sessions = bus.list_sessions_for_task(agent_bus_task_id) if bus else []
-        worked = [s for s in sessions if getattr(s, "total_task_count", 0) > 0]
-        if not worked:
-            return (
-                "Cannot finish: no sub-agent has done any work — this is a solo "
-                "submission, which Planning Mode forbids. Delegate the task-board "
-                "items to sub-agents (assign_task) and let them complete first."
-            )
-        verifiers = [s for s in worked if "verif" in (s.name or "").lower()]
-        if not verifiers:
-            return (
-                "Cannot finish: the answer has not been independently verified. "
-                "Spawn a `final_verifier` sub-agent to rigorously re-derive and "
-                "check every value against sources; finish only once it confirms."
-            )
-    return None
+    return planning_requirement_error(task_id, agent_bus_task_id)
 
 
 @tool

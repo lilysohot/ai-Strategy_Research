@@ -1,0 +1,99 @@
+{
+  "source_run": "7d0cecf846254f4895d318299136a688",
+  "date": "2026-11-06",
+  "status": "protocol_repairs_verified_end_to_end_not_accepted",
+  "changes": [
+    {
+      "layer": "orchestration_and_recovery",
+      "change": "One schema-only retry for malformed verification submit_report calls, including the last allotted turn. Preserve submitted verdicts and forbid research during repair; normal semantic validation still applies. Existing verification turn cap is unchanged.",
+      "files": ["workflows/agent_team/observers/member_progress.py"]
+    },
+    {
+      "layer": "verification",
+      "change": "Optional structured quote_checks compare candidate excerpts against captured, bound tool text. Exact and explicit NBSP/space normalization are separate; failed comparisons cannot be overridden by model PASS or persisted projection. No model-supplied source copy is accepted.",
+      "files": ["plugins/tools/_quote_verification.py", "plugins/tools/_verification.py"]
+    },
+    {
+      "layer": "orchestration",
+      "change": "Explicit find_one_published_on assignment mode stops broad corpus research after an original-evidence hit on the specified date. Allows missing context from the same document; does not automatically certify semantic correctness. Prompt scope guidance separates document references from independently asserted publisher identity.",
+      "files": ["plugins/tools/assign_task.py", "workflows/agent_team/observers/member_progress.py", "workflows/agent_team/prompt_standard.py", "workflows/agent_team/prompts.py"]
+    },
+    {
+      "layer": "context_and_tool_protocol",
+      "change": "Replace repeated unknown-date source-hash lists with counts and an explicit omission flag, preserving bounded-coverage restrictions and the underlying service snapshot.",
+      "files": ["plugins/tools/corpus_search.py", "plugins/tools/_corpus_scope.py"]
+    }
+  ],
+  "validation": {
+    "initial_red": {"failed": 10, "passed": 3, "artifact": ".scratch/team-7d0-red.txt"},
+    "focused_compatibility": {"passed": 180, "artifact": ".scratch/team-7d0-focused.txt"},
+    "final_regressions_and_evaluator_integrity": {"passed": 40, "new_regression_tests_included": 15},
+    "protocol": {
+      "passed": 38,
+      "failed": 4,
+      "known_red_cases": ["P34", "P35", "P36", "P37"],
+      "new_cases": {"P39": "pass", "P40": "pass", "P41": "pass", "P42": "pass"},
+      "artifact": "results/team-7d0-protocol-after/summary.json",
+      "note": "This manifest predates F11-only startup budget correction; selected protocol cases are unchanged. No whole-catalog paired comparison is claimed."
+    },
+    "original_quote_replay": {
+      "artifact": ".scratch/team-7d0-quote-replay.json",
+      "heading_and_body_exact": "rejected",
+      "heading_and_body_nbsp_space": "accepted_with_raw_match_false"
+    },
+    "lint_and_diff_check": "passed",
+    "full_pyright": {"errors": 15, "status": "preexisting_errors_in_untouched_files", "artifact": ".scratch/team-7d0-pyright.txt"},
+    "import_smoke": {"stage1": "466/466", "stage2": "525/525"},
+    "symbol_check": "0 missing-symbol imports across 574 files",
+    "provider_preflight": "passed",
+    "frozen_initial_startup": {
+      "artifact": "results/team-7d0-frozen-after",
+      "status": "error_before_model_execution",
+      "reason": "300-second total budget failed dispatch reserve precheck; only new F11 was corrected to 600 seconds, consistent with other frozen cases. Old 48 cases unchanged."
+    },
+    "frozen_before_scope_prompt": {
+      "artifact": "results/team-7d0-frozen-budget-corrected/F11-r1",
+      "status": "error",
+      "reason": "llm_error / logical_call_deadline",
+      "elapsed_s": 178.023,
+      "first_research_report_s": 34.25,
+      "model_attempts": 14,
+      "known_prompt_tokens": 186173,
+      "unknown_usage_attempts": 1,
+      "findings": "One research job found the right document. Three verification checks included a requirement for independent publisher attribution, while the candidate also conflated title/entry name and source. A 120-second main-model call with zero chunks then failed; partial answer retained. Do not attribute the timeout to a provider or scheduler root cause without further evidence."
+    },
+    "frozen_after_scope_prompt": {
+      "artifact": "results/team-7d0-frozen-scope-corrected/F11-r1",
+      "status": "error",
+      "reason": "llm_error / logical_call_deadline",
+      "answer_status": "best_effort",
+      "elapsed_s": 166.335,
+      "first_research_report_s": 28.664,
+      "model_attempts": 11,
+      "known_prompt_tokens": 131173,
+      "unknown_usage_attempts": 1,
+      "findings": [
+        "One research job retrieved the fixed sources in one web_fetch invocation and returned the correct report; no further research job.",
+        "One verification check passed in one generation using attached source text without refetching. Publisher absence was explicitly qualified, not converted into a false factual publisher claim.",
+        "Main turn 8 again produced zero chunks for 120 seconds and failed. The timeout root cause remains unassigned.",
+        "Fallback answer contains the correct document but retains stale task-board text saying the document has not been located. This contradiction and verbose execution diagnostics prevent concise, consistent delivery acceptance."
+      ],
+      "interpretation": "Same F11 case and budget as previous attempt, with changed scope prompts. Two samples with model-call failures are insufficient to establish performance improvement; no passing semantic review is claimed."
+    }
+  },
+  "benchmark": {
+    "original_48_unchanged": true,
+    "lock": "benchmarks/team_workflow/baseline-48.lock.json",
+    "cases": 53,
+    "protocol_cases": 42,
+    "frozen_cases": 11
+  },
+  "limitations": [
+    "P34-P37 remain known independent failures; no full release acceptance is claimed.",
+    "Repeated main-model logical deadlines and stale task-board gaps in fallback delivery remain unresolved; captured evidence and verification success do not certify complete delivery.",
+    "F11 uses frozen web fixtures, not the real corpus backend; corpus stop enforcement is covered by P41.",
+    "find_one_published_on and quote_checks require explicit model selection; this is not automatic semantic intent detection.",
+    "The full frozen suite and the original web conversation have not been rerun in this repair.",
+    "No service restart, deployment or commit was performed in this repair."
+  ]
+}

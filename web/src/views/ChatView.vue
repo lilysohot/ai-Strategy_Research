@@ -32,7 +32,7 @@ import { openRunStream, type SseEvent } from '@/sse'
 import { useSessionsStore } from '@/stores/sessions'
 import type { DiffFile, RunMode } from '@/types'
 import { buildRunPayload } from '@/utils/runSubmission'
-import { renderMarkdown } from '@/utils/markdown'
+import { renderChatMarkdown } from '@/utils/markdown'
 import { redactSecrets } from '@/utils/redact'
 import {
   attachDiscoveredRun,
@@ -303,7 +303,7 @@ const messages = computed<ChatMessage[]>(() => {
     raw: t.content ?? '',
     html:
       t.role === 'assistant'
-        ? renderMarkdown(t.content ?? '')
+        ? renderChatMarkdown(t.content ?? '')
         : escapeText(redactSecrets(t.content ?? '')),
     thinking:
       t.role === 'assistant'
@@ -319,7 +319,7 @@ const messages = computed<ChatMessage[]>(() => {
     const streamText = runFinished.value
       ? runStream.finalAnswer || runStream.answer || ''
       : runStream.answer || runStream.finalAnswer || ''
-    const streamingHtml = renderMarkdown(streamText)
+    const streamingHtml = renderChatMarkdown(streamText)
     const existing = out.find(
       (message) =>
         message.role === 'assistant' && sameRunId(message.run_id, runStream.runId),

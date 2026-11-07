@@ -6,7 +6,7 @@ import json
 import time
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr, model_validator
 
 from frontier_agent.components.agent_bus import AgentBus
 from frontier_agent.core.execution_context import get_current_execution_scope
@@ -29,7 +29,7 @@ from plugins.tools._verification import (
     verification_label_findings,
     work_item_verification_progress,
 )
-from plugins.tools.finalize_answer import finalize_gate
+from plugins.tools.finalize_answer import finalize_gate, planning_requirement_error
 from plugins.tools.task_board import (
     board_transaction,
     complete_delivery_tasks,
@@ -48,6 +48,21 @@ class FinalDisposition(BaseModel):
     resolution: Literal["resolved", "blocked"]
     notes: StrictStr = Field(min_length=1, max_length=2000)
     gap: StrictStr = Field(default="", max_length=2000)
+    limitations: StrictStr = Field(
+        default="", max_length=2000,
+        description="Nonblocking boundaries outside the requested outcome. "
+        "Never use this to waive necessary evidence or a required check.",
+    )
+
+    @model_validator(mode="after")
+    def consistent_completion(self) -> FinalDisposition:
+        if self.resolution == "resolved" and self.gap:
+            raise ValueError(
+                "resolved cannot retain a blocking gap: use blocked for an unmet requirement, "
+                "or limitations for a boundary that does not affect the requested outcome. "
+                "Required evidence and verification remain mandatory."
+            )
+        return self
 
 
 @tool
@@ -65,7 +80,9 @@ async def deliver_answer(
 
     Args:
         content: Complete user-facing answer, with sources and explicit limitations.
-        updates: Final dispositions for outstanding work. Use [] if none remain.
+        updates: Final dispositions against the user's outcome and necessary evidence. Use []
+            if none remain. gap means an unmet requirement and requires blocked; limitations
+            records nonblocking boundaries. Self-added optional work cannot become an obligation.
         corpus_conclusions: Complete corpus evidence manifest for THIS content. Each entry
             needs id, report_quote copied verbatim from content, and evidence:[{evidence_ref}].
             Use original complete corpus tool refs (eref: or ce:). Required for corpus-backed
@@ -392,6 +409,16 @@ class TeamDeliveryObserver(BaseObserver):
             else False
         )
         collected = bool(bus and self._ready(bus, bus_id, tasks))
+        if collected and not time_to_deliver and not turns_to_deliver:
+            requirement_error = planning_requirement_error(ctx.task_id, bus_id)
+            if requirement_error:
+                return Intervention(
+                    inject_messages=[
+                        "[runtime prerequisite pending] " + requirement_error
+                        + " Do not retry final submission yet. Existing collected evidence may "
+                        "be reused; do not expand the user's acceptance criteria."
+                    ],
+                )
         if collected and bus and not time_to_deliver and not turns_to_deliver:
             repair = self._offer_repair(ctx, bus, bus_id, tasks, runtime, now, reserve)
             if repair is not None:
@@ -429,13 +456,16 @@ class TeamDeliveryObserver(BaseObserver):
             "answer using deliver_answer(content, updates) in THIS generation. No separate "
             "board-update turn is needed. Judge each task against its done_when: resolved "
             "only if satisfied and required checks passed; otherwise blocked with notes and "
-            "gap. Preserve those limits beside the affected conclusions. Do not equate a "
+            "gap. Nonblocking boundaries belong in limitations, not gap. Do not promote "
+            "self-added optional work into required outcomes. Preserve material limits beside "
+            "the affected conclusions. Do not equate a "
             "completed member job with verified findings. Missing files remain blocked. "
             "Keep the answer concise enough to finish within the remaining budget. "
             f"Publication time remaining: {max(0, deadline - time.monotonic()):.0f}s.\n"
             if deadline is not None
             else "[team delivery] Submit the answer and task dispositions together with deliver_answer. "
-            "Use blocked with notes and gap for unfinished work.\n"
+            "Use blocked with notes and gap for unmet requirements; limitations for "
+            "nonblocking boundaries.\n"
         )
         from plugins.corpus.ledger import get_run_ledger
 

@@ -1,5 +1,43 @@
 """Everyday team prompts; scientific templates remain in prompts.py."""
 
+REQUIREMENT_SCOPE = """
+# Required outcomes, evidence and discretionary work
+The user's requested result and constraints define success. Your plan and role templates
+choose methods; they do not add user obligations. Before assigning work, distinguish:
+1. Required outcome: a result or constraint requested by the user.
+2. Necessary support: evidence or validation without which that result would be missing,
+   unjustified or misleading, even if the user did not explicitly ask for verification.
+3. Optional work: enrichment, alternatives or presentation refinements that change neither
+   satisfaction of the request nor the validity of the result.
+Use this counterfactual: if this work were omitted, which requested result would become
+missing, unsupported or misleading? If none, it cannot block completion. State the link
+briefly in existing done_when/assignment text; do not create an extra planning document.
+No fixed task-category checklist, source count, excerpt quota, role template or optional
+artifact can replace that reasoning. Explicit user requests for depth or completeness
+are requirements; brevity is not permission to skip necessary evidence.
+
+Coordinator: pass the required result, necessary support and stopping condition to members.
+Declare optional exploration required_for_completion=false before dispatch. An additional
+check needs a material claim, constraint or conflict it can resolve. Do not weaken a
+required check after failure. Historical work is context unless needed by the current request.
+Member: choose useful methods within that scope. Self-selected extra checks, formatting
+or background research remain optional. Report missing necessary support as a gap tied
+to the affected result; report unrelated unknowns as nonblocking limitations. Reuse captured
+evidence; fetch only what could change the answer. A source handle proves access to that
+scope, not completeness of the document or truth of every attributed conclusion.
+Reviewer: evaluate the assigned claim and its necessary dependencies. Do not invent new
+acceptance criteria; flag an unsupported material claim without waiving it as optional.
+
+At delivery, gap means an unmet required outcome or necessary evidence: use blocked.
+Use limitations for boundaries that do not prevent the requested result; never move a
+failed required check there. A resolved task has no blocking gap. Optional findings that
+are retained as factual claims still need support; omit them if unsupported. Preserve
+known material risks beside the affected claim. Keep provenance IDs, character-level
+diagnostics and execution bookkeeping in references/audit data unless the user needs them.
+Return only the detail needed for a useful, accurate result. Reports and final answers
+need not reproduce a universal section template or every optional action not taken.
+"""
+
 TOOLS = """
 # Available Tools
 1. @@TOOLS_ITEM1@@
@@ -83,7 +121,7 @@ at dispatch, never only prose instructions. Preserve the exact returned source
 handles; do not shorten a chunk handle to body:0000 or invent a binding ID.
 
 ## Check in proportion to the claim
-Preserve declared evidence gaps in the task board even if an answer can be delivered.
+Preserve missing necessary evidence as gap; record nonblocking boundaries as limitations.
 Resolution is your declaration about the question; it does not certify member execution
 or independent verification. In the answer, qualify each affected conclusion where it
 appears, not only in a final limitations section. Unknown data cannot establish a winner,
@@ -117,6 +155,13 @@ For a revised passage, put its complete text in subject.text. Rechecks must iden
 replaces_job_id and revision_kind: subject changes candidate bytes; evidence changes
 only evidence; retry changes neither. Assignment prose cannot replace a bound subject.
 Attach the evidence it needs. A checklist inside prompt text is not a bound check.
+Keep document identity/date checks separate from OCR transcription. A readable
+title is a title, not a claimed verbatim copy of an entire duplicated OCR block.
+If quotation fidelity is required, set quote_checks with source_key, exact locator,
+candidate quote and mode=exact (or explicitly nbsp_space for display spaces).
+The runtime returns quote_comparisons from captured tool text; use those receipts,
+never scripts comparing two model-transcribed strings. Normalized agreement is
+not raw agreement or equality of hashes. Do not fetch again solely to recopy text.
 For factual claims set factual_scope=true: the verifier must compare entity, version,
 date, units, conditions and attribution in scope_assessment. Matching quotations alone
 do not prove applicability to another release or deployment. Preserve conditional
@@ -125,6 +170,13 @@ the final answer set publication_excerpt=true with subject.text; retain the chec
 passage verbatim in delivery or recheck material edits. Never certify a revised final
 passage with a verdict on an earlier report.
 Start checks on available evidence versions; do not wait for a long polished draft.
+Use separate idle verifiers for independent checks and dispatch them together;
+do not queue unrelated checks behind a busy verifier. Keep dependent rechecks sequential.
+Each check permits one wording repair per evidence version and at most four dispatches.
+An unchanged retry is only for a missing execution verdict, not another vote on FAIL.
+New report wording or a renamed source job does not constitute new evidence.
+Calculated values require source-backed operands and reproducible arithmetic; never
+tell a verifier to waive their correctness because they are labeled estimates.
 Check only changed claims on revision. Recommendations need constraint checks, not
 a second agent's agreement that the preference is objectively correct.
 
@@ -182,9 +234,10 @@ Separate retrieved facts, computed values, recommendations and estimates. Preser
 units, exact quotations and uncertainty. Do not invent precision or claim independent
 verification from repeated copies of one source. A short report is sufficient.
 
-Call submit_report(content=..., confidence=..., attachments=[...]) to finish. Include:
-Scope; Findings relevant to the assignment; Evidence (exact URLs/locators or calculation
-and output); Unresolved/Conflicts. State what was actually checked. Unavailable evidence
+Call submit_report(content=..., confidence=..., attachments=[...]) to finish. Return the
+requested findings and usable evidence references. Mention unresolved issues only when
+they affect the result; distinguish necessary gaps from optional limitations. No fixed
+section count or excerpt quota is required. State what was actually checked. Unavailable evidence
 must not hold back completed findings indefinitely. Submit the report body directly
 in content (at most 24,000 characters); creating a report file is not a prerequisite.
 Before handoff, keep large tables or candidate files in /workspace, publish them with

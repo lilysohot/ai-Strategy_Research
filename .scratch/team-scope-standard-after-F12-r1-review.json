@@ -1,0 +1,27 @@
+{
+  "reviewer": "Codex artifact inspection, 2026-11-07",
+  "review_type": "model",
+  "worker_sha256": "9e2ebd6e5b025c67f0d3fb55e6f7f56a059b9084a42cffccde250d3b9e24e63a",
+  "case_sha256": "ff8f5aad0fe84c09969367bf7b4e7968d666d9883b281e84806f6dad6bd8b8a2",
+  "criteria": [
+    {
+      "verdict": "pass",
+      "evidence": "worker.result.final_answer gives 4×5+2×12=44元 and identifies 商品金额; input.sources supplies 5 and 12."
+    },
+    {
+      "verdict": "pass",
+      "evidence": "result.answer_status=complete; report_contract task board has resolved outcomes with empty gaps; tax/shipping absence is a nonblocking boundary."
+    },
+    {
+      "verdict": "fail",
+      "evidence": "User requests 算式即可, but final_answer adds repeated arithmetic, extensive evidence/verification sections, .invalid domain commentary and hash/version footers. Compact delivery criterion fails."
+    },
+    {
+      "verdict": "pass",
+      "evidence": "Bound arithmetic check contains recomputation; final_answer explicitly excludes tax and shipping and does not claim an exact delivered total."
+    }
+  ],
+  "additional_observations": [
+    "Correct completion classification does not establish acceptable efficiency or concise presentation."
+  ]
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "kind": "heading",
+    "raw_chars": 86,
+    "quote_chars": 86,
+    "raw_sha_matches_declared": true,
+    "raw_equals_subject_quote": false,
+    "nbsp_normalized_equals": true,
+    "diffs": [
+      {
+        "position": 10,
+        "raw": "U+00A0",
+        "quote": "U+0020"
+      },
+      {
+        "position": 13,
+        "raw": "U+00A0",
+        "quote": "U+0020"
+      }
+    ]
+  },
+  {
+    "kind": "body",
+    "raw_chars": 115,
+    "quote_chars": 115,
+    "raw_sha_matches_declared": true,
+    "raw_equals_subject_quote": false,
+    "nbsp_normalized_equals": true,
+    "diffs": [
+      {
+        "position": 2,
+        "raw": "U+00A0",
+        "quote": "U+0020"
+      },
+      {
+        "position": 54,
+        "raw": "U+00A0",
+        "quote": "U+0020"
+      }
+    ]
+  }
+]

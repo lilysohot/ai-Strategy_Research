@@ -1,0 +1,62 @@
+{
+  "comparison": [
+    {
+      "run": "3b30ebfd2e214ca19cc60e97ec36c12c",
+      "duration_s": 580.4,
+      "llm_attempts": 80,
+      "known_prompt_tokens": 3077142,
+      "known_cache_read_tokens": 2682624,
+      "known_uncached_prompt_tokens": 394518,
+      "known_cache_hit_rate": 0.8718,
+      "unknown_usage_attempts": 6,
+      "status": "partial"
+    },
+    {
+      "run": "bf9d5de507b54b519173c08c1746cb71",
+      "duration_s": 566.27,
+      "llm_attempts": 54,
+      "known_prompt_tokens": 1787314,
+      "known_cache_read_tokens": 1392896,
+      "known_uncached_prompt_tokens": 394418,
+      "known_cache_hit_rate": 0.7793,
+      "unknown_usage_attempts": 6,
+      "status": "partial"
+    }
+  ],
+  "different_topics_not_controlled_ab": true,
+  "findings": [
+    {
+      "layer": "context",
+      "evidence": "market_fact_check.t02 received CNBC Alphabet 3546 chars and Amazon 4384 chars; t03 has both pointers with text_omitted=true and no body/excerpt.",
+      "cause": "Two checks share the recheck web handoff budget of 12000; short-source priority does not reserve necessary evidence per check."
+    },
+    {
+      "layer": "verification_provenance",
+      "evidence": "22 captured web evidence records are focused_extraction. index_snapshot method claims new fetching of legulegu/Sohu/TradingEconomics/Yahoo/QQ, but the t01 tools before its PASS are web_search + bash; the only web_fetch comes later for eniu valuation.",
+      "scope": "This proves overstated verification procedure, not falsity of every financial number."
+    },
+    {
+      "layer": "synthesis",
+      "evidence": "Final opening says stock-price incorporation is half complete; later says completed or overshot. A DRAM +20% forecast is folded into an already-realized row."
+    },
+    {
+      "layer": "delivery_labels",
+      "evidence": "Heading now uses parentheses 已核验, includes unchecked valuation in same section, and verification_label_findings returns empty. Explicit local caveats are present but heading scope remains ambiguous."
+    },
+    {
+      "layer": "freshness",
+      "evidence": "Run starts 2026-11-06 16:26:32 Asia/Shanghai, final relies on 11-05 close and 11-06 10:54 intraday snapshot. Research tools lack market_quote and market_history."
+    }
+  ],
+  "positive": [
+    "Three research jobs start together and verification overlaps remaining research.",
+    "All six jobs terminate normally and final deliver_answer succeeds on first call.",
+    "Versioned checks preserve index PASS, valuation UNCHECKED and capex FAIL; only unfinished/failed checks are rechecked.",
+    "No repeated misnested unresolved_issues schema failure observed.",
+    "Invalid capex aggregates removed from final answer and limitations disclosed."
+  ],
+  "limits": [
+    "No external revalidation of financial facts; this audit checks recorded evidence and execution consistency.",
+    "Different topic and unknown usage in six attempts limit strict cost/performance attribution."
+  ]
+}

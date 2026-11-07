@@ -117,6 +117,15 @@ def test_new_evidence_can_recheck_the_same_subject(tmp_path):
     bus, spec, old = make_bound(tmp_path)
     add_job(bus, "review", old, verdicts=["fail"])
     add_job(bus, "new-evidence", [])
+    bus._jobs["new-evidence"].result.final_content = "Independent measurement: 50 units."
+    bus._jobs["new-evidence"].result.metadata["web_evidence"] = [
+        {
+            "source": "https://example.test/new",
+            "text": "Measurement: 50 units.",
+            "status": "success",
+            "sha256": hashlib.sha256(b"Measurement: 50 units.").hexdigest(),
+        }
+    ]
     revised = VerificationCheck.model_validate(
         {
             **spec.model_dump(),

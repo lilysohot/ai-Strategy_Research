@@ -1,0 +1,80 @@
+{
+  "run_id": "3d87700083864a1dbb41acfa74f46136",
+  "scope": "Read-only audit of captured execution and current relevant code; no external financial fact checking or production modifications.",
+  "question": "从资料库中，检索今天研报你观察A股市场如何，那些是潜在的交易对象",
+  "assessment": "Partial historical research delivered; not a completed current-day research answer or a fully verified report.",
+  "metrics": {
+    "duration_seconds": 791.41,
+    "model_attempts": 81,
+    "known_prompt_tokens": 4080162,
+    "known_cache_read_tokens": 3491456,
+    "known_uncached_prompt_tokens": 588706,
+    "unknown_usage_attempts": 4,
+    "research_jobs": 3,
+    "verification_jobs": 3,
+    "latest_checks_passed": 3,
+    "corpus_search_calls": 37,
+    "corpus_search_recorded_median_ms": 23478,
+    "corpus_search_recorded_max_ms": 29130,
+    "corpus_fetch_calls": 23,
+    "corpus_fetch_recorded_median_ms": 97,
+    "corpus_fetch_recorded_max_ms": 1112,
+    "main_max_prompt_tokens": 104231,
+    "final_delivery_attempts": 3,
+    "candidate_verification": "not_assessed",
+    "manifest_supported_entries": 13
+  },
+  "observed_guards": [
+    "Busy verification session assignment rejected at approximately 349.1 seconds.",
+    "Retry with changed subject rejected; corrected subject revision subsequently dispatched.",
+    "Final publication rejected corpus-wide absence statements and missing checked excerpt.",
+    "Final publication rejected manifest quotes absent verbatim from candidate content.",
+    "Final text limits freshness claims to this bounded search and discloses missing current-day evidence."
+  ],
+  "findings": [
+    {
+      "priority": "P0",
+      "layer": "evidence structure and verification",
+      "evidence": "Research explicitly says table period labels for turnover 19697.8, margin balance 26190.4 and net inflow -28.8 were not retrieved. Captured fetch for turnover contains only the label and number, structure_status=unknown and relation_status=unknown. job.6 macro_numbers nevertheless marks date/conditions match and PASS, borrowing a trading-week sentence from a different communications report. Final calls the combined paragraph checked while elsewhere admitting period assignment is an inference.",
+      "acceptance_target": "Require source-local period/table-header linkage or retain unknown status; matching a numeric token alone cannot establish time scope."
+    },
+    {
+      "priority": "P1",
+      "layer": "orchestration recovery state",
+      "evidence": "job.5 ends incomplete with logical_call_deadline; job.6 replaces its date_coverage and macro_numbers checks and both pass. Task t5 records verification_status=passed and verification_execution_status=complete, but execution_status=incomplete. Delivery rejects resolved because workflows/agent_team/delivery.py checks every historical execution_job_id for complete, regardless of replacement. Coordinator changes t5 to blocked to deliver.",
+      "qualification": "Separate uncovered sector claims and freshness limitations still justify overall partial; fixing recovery accounting alone would not make the whole report fully verified.",
+      "acceptance_target": "Keep failed attempt history while settling obligations through explicit successful replacement relationships."
+    },
+    {
+      "priority": "P1",
+      "layer": "prompt and work budgeting",
+      "evidence": "Sector assignment asks for 3-5 themes, catalysts, data, risks, full source locators, unresolved gaps and an 800-character body. Member invokes bash 10 times to write/count/trim/read drafts, with outputs 971,910,897,827,813,801,883,795 CJK characters; last edit is denied by handoff-only window. First to last bash attempt spans 245.8 to 326.6 seconds. Sector member uses 22 model attempts and 1359942 known input tokens.",
+      "acceptance_target": "Use an approximate prose budget with structured citations outside it and a bounded formatting pass; prohibit research-budget exhaustion through repeated counting."
+    },
+    {
+      "priority": "P1",
+      "layer": "prompt consistency",
+      "evidence": "Coordinator dispatch explicitly tells the researcher to say 资料库不含今日研报 when near-current reports are absent, based on inventory and 2-3 date samples. Later verification and publication correctly reject this absolute absence claim because coverage is partial and dates unknown. First final draft repeats the already-rejected absence statement in its introduction even after the checked paragraph was corrected.",
+      "acceptance_target": "Use bounded-search phrasing consistently in assignment templates and synthesis; prevent rejected claims from reappearing outside the checked excerpt."
+    },
+    {
+      "priority": "P1",
+      "layer": "tool performance",
+      "evidence": "37 corpus_search calls have recorded median 23478 ms; 23 corpus_fetch calls median 97 ms. Search requests overlap across agents. Current corpus_search implementation uses asyncio.to_thread. Artifacts do not expose search-stage latency breakdown.",
+      "qualification": "Recorded overlapping tool durations cannot be summed as wall time, nor do they prove the old synchronous event-loop bug returned. Database/embedding/rerank/queue attribution requires instrumentation.",
+      "acceptance_target": "Capture per-stage and queue timings; benchmark identical corpus queries at controlled concurrency."
+    },
+    {
+      "priority": "P1",
+      "layer": "publication coverage and references",
+      "evidence": "Final candidate_verification remains not_assessed. Thirteen manifest entries are supported, but selected matching excerpts do not cover the whole synthesis or prove all table relationships. Sector metrics are explicitly outside independent checks. Displayed final doc_id list uses ellipses, despite full handles available in job.6 and machine manifests.",
+      "acceptance_target": "Render full resolvable claim-specific references automatically and distinguish quote support, independent fact verification and synthesis coverage."
+    }
+  ],
+  "limits": [
+    "No determination that the corpus globally lacks November A-share reports.",
+    "No claim that the source numeric values themselves are false.",
+    "This run differs from 49e in question and tools; latency/token comparisons are descriptive, not controlled experiments.",
+    "No calculation-target obligation was generated; this run does not establish the arithmetic gate is fixed."
+  ]
+}

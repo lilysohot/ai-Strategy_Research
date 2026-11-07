@@ -14,7 +14,16 @@ class PlannedCheck(BaseModel):
 class BoardProgress(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
     notes: StrictStr | None = None
-    gap: StrictStr | None = None
+    gap: StrictStr | None = Field(
+        default=None,
+        description="Unmet user requirement or evidence necessary to support the requested result. "
+        "Optional exploration belongs in limitations; never move a failed required check there.",
+    )
+    limitations: StrictStr | None = Field(
+        default=None, max_length=2000,
+        description="Nonblocking scope boundaries or optional work not performed. "
+        "Does not waive required evidence, execution or verification gates.",
+    )
     done_when: StrictStr | None = None
     kind: Literal["research", "verification", "delivery"] | None = None
     evidence_refs: list[StrictStr] | None = None

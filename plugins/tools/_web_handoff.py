@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from bisect import bisect_left
 from typing import Any
 
 from frontier_agent.core.loop_types import ToolResult
@@ -129,21 +130,72 @@ def _relevance(text: str, terms: set[str]) -> int:
 
 
 def _focused_excerpt(text: str, terms: set[str], budget: int) -> tuple[str, int, int]:
-    """Return one exact source slice around the densest claim-term window."""
+    """Score every source window, with exact numbers and rarity-weighted coverage.
+
+    First-occurrence anchors alone miss results following repeated background.
+    Whole-line boundaries keep table headers/rows intact when the budget permits.
+    """
     if len(text) <= budget:
         return text, 0, len(text)
-    positions = [text.casefold().find(term) for term in terms]
-    positions = [position for position in positions if position >= 0]
-    if not positions or budget < 256:
+    if not terms or budget < 256:
         return "", 0, 0
+    folded = text.casefold()
+    matches = {}
+    for term in terms:
+        pattern = re.escape(term)
+        if term[0].isdigit():
+            pattern = r"(?<![\d.])" + pattern + r"(?!\d|\.\d)"
+        positions = [m.start() for m in re.finditer(pattern, folded)]
+        if positions:
+            matches[term] = positions
+    if not matches:
+        return "", 0, 0
+    starts = set(range(0, len(text), max(128, budget // 2)))
+    starts.update(m.end() for m in re.finditer(r"\n", text))
     candidates = []
-    for position in positions:
-        start = max(0, position - budget // 2)
+    for start in starts:
         end = min(len(text), start + budget)
         start = max(0, end - budget)
-        candidates.append((_relevance(text[start:end], terms), start, end))
+        # Prefer complete lines. At most one partial edge is retained for a
+        # single huge line; never manufacture a stitched or translated quote.
+        if start and text[start - 1] != "\n":
+            line_start = text.find("\n", start, min(end, start + budget // 4))
+            if line_start >= 0:
+                start = line_start + 1
+        if end < len(text) and text[end - 1] != "\n":
+            line_end = text.rfind("\n", max(start, end - budget // 4), end)
+            if line_end >= 0:
+                end = line_end + 1
+        score = 0.0
+        for term, positions in matches.items():
+            index = bisect_left(positions, start)
+            if index < len(positions) and positions[index] + len(term) <= end:
+                score += (5 if term[0].isdigit() else 1) / len(positions) ** 0.5
+        candidates.append((score, start, end))
     _, start, end = max(candidates)
     return text[start:end], start, end
+
+
+def _focused_slices(text: str, terms: set[str], budget: int) -> list[tuple[str, int, int]]:
+    """Keep a relevant small table with its headers alongside the narrative slice."""
+    first = _focused_excerpt(text, terms, budget)
+    if not first[0]:
+        return []
+    tables = [
+        m
+        for m in re.finditer(r"(?:^|\n)(?:\|[^\n]*\n)+", text)
+        if 0 < len(m.group()) <= budget - 350
+    ]
+    if not tables:
+        return [first]
+    table = max(tables, key=lambda m: _relevance(m.group(), terms))
+    if _relevance(table.group(), terms) <= 0 or first[1] <= table.start() < table.end() <= first[2]:
+        return [first]
+    # Extra pointer fields and slice labels also consume the body allowance.
+    narrative = _focused_excerpt(text, terms, budget - len(table.group()) - 100)
+    if not narrative[0] or not (narrative[2] <= table.start() or table.end() <= narrative[1]):
+        return [first]
+    return sorted([narrative, (table.group(), table.start(), table.end())], key=lambda s: s[1])
 
 
 def render_web_handoff(
@@ -206,7 +258,7 @@ def render_web_handoff(
         # the highest-scoring page consume every later source's body allowance.
         allowance = body_budget - used
         if terms and len(text) > 1500:
-            allowance = min(allowance, max(1000, allowance // max(1, len(remaining_sources))))
+            allowance = min(allowance, max(1400, allowance // max(1, len(remaining_sources))))
         if identity in seen:
             pointer["same_text_as_source"] = seen[identity]
         elif len(encoded) + len(text) <= allowance:
@@ -218,7 +270,11 @@ def render_web_handoff(
             pointer["text_omitted"] = True
             omitted += 1
             remaining = allowance - len(encoded) - 160
-            excerpt, start, end = _focused_excerpt(text, terms, min(4000, remaining))
+            slices = _focused_slices(text, terms, min(4000, remaining))
+            excerpt = ""
+            start = end = 0
+            if slices:
+                excerpt, start, end = slices[0]
             if excerpt:
                 pointer.update(
                     {
@@ -228,7 +284,20 @@ def render_web_handoff(
                         "original_chars": len(text),
                     }
                 )
+                if len(slices) > 1:
+                    pointer["additional_excerpts"] = [
+                        {"excerpt_start": s, "excerpt_end": e} for _, s, e in slices[1:]
+                    ]
+                    excerpt += "".join(
+                        f"\n[Separate exact source slice {s}:{e}]\n{body}"
+                        for body, s, e in slices[1:]
+                    )
             encoded = json.dumps(pointer, ensure_ascii=False)
+            if excerpt and len(encoded) + len(excerpt) > allowance:
+                pointer.pop("additional_excerpts", None)
+                excerpt, start, end = _focused_excerpt(text, terms, min(4000, remaining))
+                pointer.update(excerpt_start=start, excerpt_end=end)
+                encoded = json.dumps(pointer, ensure_ascii=False)
             if excerpt:
                 sections.append(encoded + "\n" + excerpt)
                 used += len(encoded) + len(excerpt)

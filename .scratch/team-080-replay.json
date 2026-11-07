@@ -1,0 +1,20 @@
+{
+  "senate_table_visible": true,
+  "senate_outcome_visible": true,
+  "handoff_chars": 13846,
+  "numeric_targets": [
+    "-11.2%",
+    "-15.2%",
+    "-19.9%",
+    "-7.03%",
+    "11335.68",
+    "2.16%",
+    "2544.73",
+    "3686.17",
+    "3968.84",
+    "4.22%",
+    "6.4%"
+  ],
+  "unsupported_pass_rejected": true,
+  "rejection": "calculation basis missing for ['-11.2%', '-15.2%', '-19.9%', '-7.03%', '11335.68', '2.16%', '2544.73', '3686.17', '3968.84', '4.22%', '6.4%']; supply calculation_checks with quoted inputs and expressions, or return unchecked. A calculation/estimate label does not waive numerical verification."
+}

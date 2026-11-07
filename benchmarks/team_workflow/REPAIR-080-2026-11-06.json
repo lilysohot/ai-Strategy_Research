@@ -1,0 +1,115 @@
+{
+  "source_runs": [
+    "080ad8521962429a814171f48ffc7f60",
+    "bf9d5de507b54b519173c08c1746cb71"
+  ],
+  "date": "2026-11-06",
+  "status": "code_repaired_protocol_verified_end_to_end_not_accepted",
+  "changes": [
+    {
+      "layer": "verification",
+      "change": "Explicit calculation sentences require source-quoted operands and restricted Decimal arithmetic before PASS; missing outputs, fabricated operands, wrong dates/quotes and mismatched results fail closed. Removing a label does not remove an existing numerical obligation. Persisted verdict projection applies the same guard.",
+      "files": [
+        "plugins/tools/_calculation_verification.py",
+        "plugins/tools/_verification.py"
+      ]
+    },
+    {
+      "layer": "context",
+      "change": "Search all source windows with rarity-weighted exact numeric matches, preserve relevant table headers alongside separated narrative slices, and reserve a bounded evidence budget per check.",
+      "files": [
+        "plugins/tools/_web_handoff.py",
+        "plugins/tools/_verification.py"
+      ]
+    },
+    {
+      "layer": "orchestration",
+      "change": "Enforce one wording repair per evidence version, one no-verdict execution retry and four total dispatches per check. Evidence content hashes ignore job renaming, report edits and record ordering. Reject verification queueing on busy sessions and guide independent checks to separate idle verifiers; dependent rechecks retain sequential lineage.",
+      "files": [
+        "plugins/tools/_verification.py",
+        "plugins/tools/assign_task.py",
+        "workflows/agent_team/prompts.py",
+        "workflows/agent_team/prompt_standard.py"
+      ]
+    }
+  ],
+  "validation": {
+    "initial_red": {
+      "failed": 3,
+      "artifact": ".scratch/team-080-red.txt"
+    },
+    "regression": {
+      "passed": 303,
+      "artifact": ".scratch/team-080-tests-final.txt"
+    },
+    "protocol": {
+      "passed": 33,
+      "artifact": "results/team-080-protocol-verified/summary.json"
+    },
+    "lint": "passed",
+    "scoped_pyright": "0 errors",
+    "import_smoke": {
+      "stage1": "465/465",
+      "stage2": "523/523"
+    },
+    "symbol_check": "0 missing-symbol imports across 572 files",
+    "provider_preflight": "one real workflow call passed",
+    "original_replay": {
+      "unsupported_calculation_pass_rejected": true,
+      "senate_results_and_full_seat_table_visible": true,
+      "bf9_two_previously_omitted_cnbc_sources_have_body_excerpts": true,
+      "artifacts": [
+        ".scratch/team-080-replay.json",
+        ".scratch/team-bf9-replay.json"
+      ]
+    },
+    "frozen": {
+      "F04": {
+        "status": "needs_review",
+        "model_diagnostic_verdict": "fail",
+        "elapsed_s": 224.876,
+        "core_answer": "B recommended correctly at120/month and99.8% reliability.",
+        "remaining_issue": "Unrequested statistical/DNS expansion; purchased units were treated as statistical trials without support."
+      },
+      "F07": {
+        "status": "error",
+        "elapsed_s": 283.915,
+        "reason": "Main coordinator logical_call_deadline after120s with zero chunks; force_final_answer request also timed out after45s.",
+        "intermediate_evidence": "Seat table read and checked; market_pct_216 initially failed, corrected unknown statement passed; revised market_close_100 carried calculation_targets=[100] and accepted quoted-input arithmetic. Separate verifier sessions overlapped. No successful final delivery."
+      },
+      "artifact": "results/team-080-frozen-verified/summary.json",
+      "acceptance": false
+    },
+    "interrupted_diagnostic": {
+      "artifact": "results/team-080-frozen-final/batch_stop.json",
+      "reason": "Real F04 exposed excessive paragraph-level calculation obligations, including user constraints and qualitative DERIVED claims. Stopped this batch, retained traces, narrowed to numeric calculation sentences, added the regression and reran with a new output directory.",
+      "acceptance": false
+    }
+  },
+  "benchmark": {
+    "previous_cases_preserved": 35,
+    "added_protocol": [
+      "P30",
+      "P31",
+      "P32",
+      "P33"
+    ],
+    "added_frozen": [
+      "F07"
+    ],
+    "total_cases": 40,
+    "existing_rubrics_and_budgets_unchanged": true
+  },
+  "limitations": [
+    "Arithmetic and source-quote checks do not prove semantic applicability, formula choice or source truth. Unmarked arbitrary paraphrases still need factual review.",
+    "Evidence slicing remains a bounded selection heuristic; it cannot guarantee complete support for every possible claim. Missing evidence must remain unchecked.",
+    "Parallel review requires the coordinator to select separate idle sessions; this change does not automatically spawn agents or increase global concurrency.",
+    "No production service restart, deployment or commit was performed.",
+    "Calculation obligations cover explicitly marked numeric sentences and inherited targets, not every unmarked inferred number or arbitrary paraphrase. Exact source quotes and arithmetic are necessary, not sufficient, for semantic truth.",
+    "Actual model evaluation remains unaccepted: F04 has scope expansion, F07 fails final coordinator generation. Do not claim an end-to-end speed or quality improvement from protocol results."
+  ],
+  "source_fingerprint": {
+    "git_revision": "f40327144c19a999316494b087b1a1fc16c94dac",
+    "code_and_profiles_sha256": "5267ae24bb23ee6a5e38779f30a7a2355c69dda408448913167b34cf49aaafff"
+  }
+}

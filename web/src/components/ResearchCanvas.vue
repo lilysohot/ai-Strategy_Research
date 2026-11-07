@@ -5,7 +5,7 @@ import { ElMessage } from 'element-plus'
 import { artifacts as artifactsApi } from '@/api'
 import { ApiError } from '@/api/client'
 import type { Artifact, ArtifactPreview, RunStatus } from '@/types'
-import { renderMarkdown } from '@/utils/markdown'
+import { renderChatMarkdown, renderMarkdown } from '@/utils/markdown'
 import { previewRenderMode } from '@/utils/preview'
 
 const props = defineProps<{
@@ -44,7 +44,7 @@ const previewMode = computed(() => {
   return previewRenderMode(selected.value, preview.value.kind)
 })
 
-const answerHtml = computed(() => renderMarkdown(props.answer || ''))
+const answerHtml = computed(() => renderChatMarkdown(props.answer || ''))
 const previewHtml = computed(() =>
   previewMode.value === 'markdown' ? renderMarkdown(preview.value?.content ?? '') : '',
 )

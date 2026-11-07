@@ -1,0 +1,457 @@
+{
+  "run": "7d0cecf846254f4895d318299136a688",
+  "scope": "Read-only artifact audit; no production repair or deployment.",
+  "request": "从资料库中，检索出随意一份今天的研报",
+  "duration_s": 653.63,
+  "answer_status": "partial",
+  "stopped_by": "final_answer",
+  "summary_attempts": {
+    "attempts": 48,
+    "known_usage_attempts": 48,
+    "unknown_usage_attempts": 0,
+    "duration_ms": 614559,
+    "unknown_duration_attempts": 0,
+    "known_prompt_tokens": 1926039,
+    "known_cache_read_tokens": 1593856,
+    "known_hit_rate": 0.8275304913348068,
+    "hit_rate": 0.8275304913348068,
+    "outcomes": {
+      "accepted": 47,
+      "discarded": 1
+    }
+  },
+  "metrics": {
+    "available": true,
+    "malformed_events": 0,
+    "trajectory_wall_s": 645.627,
+    "first_research_report_s": 223.077,
+    "first_report_is_usefulness_score": false,
+    "attempts": 49,
+    "known_usage_attempts": 49,
+    "unknown_usage_attempts": 0,
+    "known_prompt_tokens": 1935355,
+    "max_prompt_tokens": 84992,
+    "cache_known_attempts": 49,
+    "known_cache_read_tokens": 1594368,
+    "cache_hit_rate_on_known_usage": 0.8238116521258374,
+    "llm_attempt_seconds_sum": 618.661,
+    "llm_sum_is_wall_time": false,
+    "outcomes": {
+      "accepted": 48,
+      "discarded": 1
+    },
+    "failure_reasons": {
+      "stream_empty_tool_arguments": 1
+    },
+    "tools": {
+      "add_task": 2,
+      "create_subagent": 2,
+      "assign_task": 4,
+      "collect_reports": 4,
+      "stop_subagent": 1,
+      "update_task": 1,
+      "deliver_answer": 1,
+      "corpus_fetch": 18,
+      "corpus_search": 20,
+      "bash": 5,
+      "submit_report": 6,
+      "corpus_inventory": 6,
+      "corpus_submit_manifest": 2
+    },
+    "tool_attempts": {
+      "add_task": 2,
+      "create_subagent": 2,
+      "assign_task": 4,
+      "collect_reports": 4,
+      "stop_subagent": 1,
+      "update_task": 1,
+      "deliver_answer": 1,
+      "corpus_fetch": 18,
+      "corpus_search": 20,
+      "bash": 5,
+      "submit_report": 6,
+      "corpus_inventory": 6,
+      "corpus_submit_manifest": 2
+    },
+    "tool_latency_ms": {
+      "add_task": {
+        "known": 2,
+        "unknown": 0,
+        "p50": 0.0,
+        "p90": 0.0,
+        "max": 0.0,
+        "sum": 0.0,
+        "explicit_errors": 1
+      },
+      "assign_task": {
+        "known": 4,
+        "unknown": 0,
+        "p50": 15.0,
+        "p90": 15.0,
+        "max": 15.0,
+        "sum": 60.0,
+        "explicit_errors": 0
+      },
+      "bash": {
+        "known": 5,
+        "unknown": 0,
+        "p50": 70.0,
+        "p90": 172.6,
+        "max": 239.0,
+        "sum": 491.0,
+        "explicit_errors": 0
+      },
+      "collect_reports": {
+        "known": 4,
+        "unknown": 0,
+        "p50": 129440.5,
+        "p90": 180244.0,
+        "max": 187618.0,
+        "sum": 491035.0,
+        "explicit_errors": 0
+      },
+      "corpus_fetch": {
+        "known": 18,
+        "unknown": 0,
+        "p50": 66.5,
+        "p90": 503.2,
+        "max": 971.0,
+        "sum": 2938.0,
+        "explicit_errors": 10
+      },
+      "corpus_inventory": {
+        "known": 6,
+        "unknown": 0,
+        "p50": 14.5,
+        "p90": 3291.5,
+        "max": 6548.0,
+        "sum": 6612.0,
+        "explicit_errors": 3
+      },
+      "corpus_search": {
+        "known": 20,
+        "unknown": 0,
+        "p50": 13319.5,
+        "p90": 29455.4,
+        "max": 46666.0,
+        "sum": 330127.0,
+        "explicit_errors": 0
+      },
+      "corpus_submit_manifest": {
+        "known": 2,
+        "unknown": 0,
+        "p50": 340.0,
+        "p90": 520.8,
+        "max": 566.0,
+        "sum": 680.0,
+        "explicit_errors": 0
+      },
+      "create_subagent": {
+        "known": 2,
+        "unknown": 0,
+        "p50": 0.0,
+        "p90": 0.0,
+        "max": 0.0,
+        "sum": 0.0,
+        "explicit_errors": 0
+      },
+      "deliver_answer": {
+        "known": 1,
+        "unknown": 0,
+        "p50": 4.0,
+        "p90": 4.0,
+        "max": 4.0,
+        "sum": 4.0,
+        "explicit_errors": 0
+      },
+      "stop_subagent": {
+        "known": 1,
+        "unknown": 0,
+        "p50": 0.0,
+        "p90": 0.0,
+        "max": 0.0,
+        "sum": 0.0,
+        "explicit_errors": 0
+      },
+      "submit_report": {
+        "known": 6,
+        "unknown": 0,
+        "p50": 0.0,
+        "p90": 0.5,
+        "max": 1.0,
+        "sum": 1.0,
+        "explicit_errors": 3
+      },
+      "update_task": {
+        "known": 1,
+        "unknown": 0,
+        "p50": 0.0,
+        "p90": 0.0,
+        "max": 0.0,
+        "sum": 0.0,
+        "explicit_errors": 0
+      }
+    },
+    "tool_sum_is_wall_time": false,
+    "retrieval_stage_timings": null,
+    "research_dispatch_attempts": 2,
+    "exact_repeated_tool_requests": 5,
+    "dispatch_start_delay_estimate_s": [
+      0.024,
+      0.027,
+      0.025,
+      0.019,
+      0.026
+    ],
+    "dispatch_delay_p50_s": 0.025,
+    "dispatch_delay_p90_s": 0.027,
+    "agents": [
+      {
+        "trace": "agent/trajectories/main_agent.jsonl",
+        "start": 1793967063.339546,
+        "end": 1793967705.1440773,
+        "attempts": 14,
+        "known_prompt_tokens": 507210,
+        "max_prompt_tokens": 62372,
+        "tool_attempts": {
+          "add_task": 2,
+          "create_subagent": 2,
+          "assign_task": 4,
+          "collect_reports": 4,
+          "stop_subagent": 1,
+          "update_task": 1,
+          "deliver_answer": 1
+        }
+      },
+      {
+        "trace": "agent/trajectories/research_intake.jsonl",
+        "start": 1793967059.5168743,
+        "end": 1793967063.3186927,
+        "attempts": 1,
+        "known_prompt_tokens": 9316,
+        "max_prompt_tokens": 9316,
+        "tool_attempts": {}
+      },
+      {
+        "trace": "agent/trajectories/subagents/today_doc_verifier.t01.jsonl",
+        "start": 1793967317.5273414,
+        "end": 1793967363.908164,
+        "attempts": 3,
+        "known_prompt_tokens": 99598,
+        "max_prompt_tokens": 38015,
+        "tool_attempts": {
+          "corpus_fetch": 1,
+          "corpus_search": 1,
+          "bash": 1,
+          "submit_report": 1
+        }
+      },
+      {
+        "trace": "agent/trajectories/subagents/today_doc_verifier.t02.jsonl",
+        "start": 1793967376.8080006,
+        "end": 1793967454.5858986,
+        "attempts": 4,
+        "known_prompt_tokens": 126641,
+        "max_prompt_tokens": 37226,
+        "tool_attempts": {
+          "corpus_fetch": 1,
+          "corpus_search": 1,
+          "bash": 2,
+          "submit_report": 1
+        }
+      },
+      {
+        "trace": "agent/trajectories/subagents/today_doc_verifier.t03.jsonl",
+        "start": 1793967492.5746272,
+        "end": 1793967637.1163106,
+        "attempts": 4,
+        "known_prompt_tokens": 126728,
+        "max_prompt_tokens": 38019,
+        "tool_attempts": {
+          "corpus_fetch": 1,
+          "corpus_search": 1,
+          "bash": 1,
+          "submit_report": 2
+        }
+      },
+      {
+        "trace": "agent/trajectories/subagents/today_report_research.t01.jsonl",
+        "start": 1793967094.0587528,
+        "end": 1793967283.2478287,
+        "attempts": 10,
+        "known_prompt_tokens": 477878,
+        "max_prompt_tokens": 77632,
+        "tool_attempts": {
+          "corpus_inventory": 3,
+          "corpus_search": 8,
+          "corpus_fetch": 2,
+          "bash": 1,
+          "corpus_submit_manifest": 1,
+          "submit_report": 1
+        }
+      },
+      {
+        "trace": "agent/trajectories/subagents/undated_source_research.t01.jsonl",
+        "start": 1793967094.0650904,
+        "end": 1793967314.858739,
+        "attempts": 13,
+        "known_prompt_tokens": 587984,
+        "max_prompt_tokens": 84992,
+        "tool_attempts": {
+          "corpus_search": 9,
+          "corpus_inventory": 3,
+          "corpus_fetch": 13,
+          "corpus_submit_manifest": 1,
+          "submit_report": 1
+        }
+      }
+    ],
+    "limitations": [
+      "Queue delay inferred from dispatch attempts; rejected requests can skew it.",
+      "Parallel attempt durations are not additive wall time.",
+      "First report may be incomplete; semantic usefulness requires review.",
+      "Dollar cost unavailable without an explicit model tariff.",
+      "Tool timings are recorded result durations, not isolated service/queue latency.",
+      "Retrieval DB/embedding/rerank/queue timings are unavailable in standard traces.",
+      "Tool attempts include denied or interrupted requests; shell use is not automatically waste."
+    ]
+  },
+  "metrics_scope_note": "measure includes the separate intake call (+1 attempt, +9316 input tokens); headline counts use summary all_attempts.",
+  "search_response_stats": {
+    "calls": 20,
+    "total_chars": 215174,
+    "unknown_date_list_serialized_chars": 107220,
+    "unknown_date_list_sizes": {
+      "80": 20
+    },
+    "empty_titles": 124,
+    "hits": 148
+  },
+  "character_replay": [
+    {
+      "kind": "heading",
+      "raw_chars": 86,
+      "quote_chars": 86,
+      "raw_sha_matches_declared": true,
+      "raw_equals_subject_quote": false,
+      "nbsp_normalized_equals": true,
+      "diffs": [
+        {
+          "position": 10,
+          "raw": "U+00A0",
+          "quote": "U+0020"
+        },
+        {
+          "position": 13,
+          "raw": "U+00A0",
+          "quote": "U+0020"
+        }
+      ]
+    },
+    {
+      "kind": "body",
+      "raw_chars": 115,
+      "quote_chars": 115,
+      "raw_sha_matches_declared": true,
+      "raw_equals_subject_quote": false,
+      "nbsp_normalized_equals": true,
+      "diffs": [
+        {
+          "position": 2,
+          "raw": "U+00A0",
+          "quote": "U+0020"
+        },
+        {
+          "position": 54,
+          "raw": "U+00A0",
+          "quote": "U+0020"
+        }
+      ]
+    }
+  ],
+  "timeline_seconds_from_main_start": [
+    {
+      "at": 51.8,
+      "event": "First search already returns target as first hit, published=2026-11-06."
+    },
+    {
+      "at": 63.0,
+      "event": "Heading original fetched."
+    },
+    {
+      "at": 134.7,
+      "event": "Body 0000 and 0001 fetched."
+    },
+    {
+      "at": 219.9,
+      "event": "Primary researcher completes after eight searches."
+    },
+    {
+      "at": 232.8,
+      "event": "Coordinator stops unnecessary undated-source inquiry."
+    },
+    {
+      "at": 254.2,
+      "event": "First verifier begins."
+    },
+    {
+      "at": 300.6,
+      "event": "Date/doc/locators verified; claimed verbatim heading fails because coordinator rewrote it."
+    },
+    {
+      "at": 390.6,
+      "event": "Recheck submit_report rejects summary instead of content at final turn; no verdict committed."
+    },
+    {
+      "at": 563.5,
+      "event": "Retry submits empty arguments; pending-check observer rejects it."
+    },
+    {
+      "at": 573.1,
+      "event": "Retry includes verdict but omits required content; final turn, no verdict committed."
+    },
+    {
+      "at": 641.8,
+      "event": "Coordinator delivers partial result with misleading raw/hash equality claim."
+    }
+  ],
+  "attribution": [
+    {
+      "layer": "orchestration and prompt scope",
+      "finding": "Existence request expanded to date variants, adjacent dates and all undated sources; 587984 input tokens spent on unnecessary undated researcher. Old 81-source/21-undated inventory reused as assignment premise; new response reports 148/80."
+    },
+    {
+      "layer": "verification and evidence integrity",
+      "finding": "Date/existence and exact OCR transcription bundled into one check. Coordinator changed source quote; later scripts compare two model-transcribed strings, not raw tool payload. Four NBSP differences survive; raw payload hashes are valid. Final answer incorrectly says equality to original SHA256."
+    },
+    {
+      "layer": "tool protocol and recovery",
+      "finding": "summary alias/unexpected argument, empty args and missing content prevented terminal report submission. Runtime caps one-check verifier at four turns via min(max_turns,2*len(checks)+2); no remaining correction turn. Retrying repeats acquisition instead of repairing only the rejected submission."
+    },
+    {
+      "layer": "tool interface and context",
+      "finding": "Repeated unknown-date hashes, empty titles, invalid inventory/hash-based fetch attempts and long reports inflate prompts. Hashes shown as inventory are not usable citation locators; failure to guess them does not prove all underlying documents unreadable."
+    },
+    {
+      "layer": "delivery",
+      "finding": "Useful document found, but user receives OCR fragments, internal job/hash/codepoint details and unresolved-check appendix. Cautious partial status is appropriate; the cost and technical burden are not proportional to request."
+    }
+  ],
+  "benchmark_mapping": {
+    "known_related": "Scope/cost issues resemble F08/F09; missing verdict is related to recovery coverage but not a demonstrated P37 instance because no replacement PASS was accepted.",
+    "new_cases_needed": [
+      "Find any one matching document and stop once evidence suffices, despite old inventory history and partial corpus coverage.",
+      "Final-turn terminal report schema error: preserve verdict payload, bounded repair, no repeated acquisition.",
+      "Exact vs normalized quote comparison from actual tool bytes; reject self-copied equality proof and false hash claims.",
+      "Catalog source ID to valid retrieval handle path, with compact coverage metadata."
+    ]
+  },
+  "not_supported_by_this_trace": [
+    "No model timeout here; primary outcome final_answer with partial status.",
+    "No evidence that initial corpus ranking failed: target was first hit.",
+    "No proof of renewed synchronous event-loop blocking: research jobs started about 25 ms after dispatch and overlapped.",
+    "Tool-duration sums overlap and must not be called wall-clock attribution.",
+    "Recorded tool payload hashes match their text; model claim of tool-side normalization is unsupported.",
+    "No evidence that all 80 undated documents are unreadable; only limited invalid access attempts were observed."
+  ]
+}

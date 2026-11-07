@@ -1,0 +1,23 @@
+[
+  {
+    "check_id": "valuation_pct",
+    "body_chars": 7454,
+    "cnbc_records": []
+  },
+  {
+    "check_id": "ai_capex",
+    "body_chars": 6954,
+    "cnbc_records": [
+      {
+        "source": "https://www.cnbc.com/2026/10/28/alphabet-googl-earnings-q3-2026.html",
+        "excerpt_received": true,
+        "full_body": false
+      },
+      {
+        "source": "https://www.cnbc.com/2026/10/29/amazon-amzn-q3-earnings-report-2026.html",
+        "excerpt_received": true,
+        "full_body": false
+      }
+    ]
+  }
+]

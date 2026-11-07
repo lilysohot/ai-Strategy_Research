@@ -1,0 +1,27 @@
+{
+  "reviewer": "Codex artifact inspection, 2026-11-07",
+  "review_type": "model",
+  "worker_sha256": "22fe81c4a39f9a40993e43105f001aee69d5e2b64f868275ef209aac972dc0b1",
+  "case_sha256": "6a97587210ced5ebef5d1bf92555c7772359ebcae947383fbcbf603b25deeb4f",
+  "criteria": [
+    {
+      "verdict": "pass",
+      "evidence": "final_answer identifies 44元 as merchandise subtotal and says the tax/shipping-inclusive amount is indeterminate."
+    },
+    {
+      "verdict": "pass",
+      "evidence": "Task t2 remains blocked with a gap identifying absent tax and shipping inputs; answer_status=partial."
+    },
+    {
+      "verdict": "pass",
+      "evidence": "No assumed zero tax/free shipping; required missing operands are not downgraded to limitations or a complete answer."
+    },
+    {
+      "verdict": "fail",
+      "evidence": "final_answer and retrieval trace record http/https trailing-slash variants and a search for the same supplied fixture, despite the exact URL returning all provided terms. Useful subtotal survives, but the no-meaningless-repeat criterion is not satisfied."
+    }
+  ],
+  "additional_observations": [
+    "A check asking to confirm a grand total is marked PASS while its subject says the grand total is indeterminate. Task remains partial, but criterion/subject semantic alignment needs a separate regression."
+  ]
+}

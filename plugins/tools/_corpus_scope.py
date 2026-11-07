@@ -41,6 +41,7 @@ def corpus_limits(observations: list[dict[str, Any]]) -> list[dict[str, Any]]:
             or coverage.get("availability") in {None, "unknown"}
             or coverage.get("purity", {}).get("scope") == "bounded_candidates_not_corpus_absence"
             or coverage.get("native", {}).get("unknown_date_sources")
+            or coverage.get("native", {}).get("unknown_date_source_count")
         ):
             limits.append(observation)
     return limits
@@ -78,8 +79,11 @@ def compact_corpus_limits(observations: list[dict[str, Any]]) -> list[dict[str, 
     limits = corpus_limits(observations)
     if not limits:
         return []
-    unknown_dates = any((o.get("coverage") or {}).get("native", {}).get("unknown_date_sources")
-                        for o in limits)
+    unknown_dates = any(
+        (o.get("coverage") or {}).get("native", {}).get("unknown_date_sources")
+        or (o.get("coverage") or {}).get("native", {}).get("unknown_date_source_count")
+        for o in limits
+    )
     return [{
         "tool": "corpus_search", "obtained": all(o.get("obtained") for o in limits),
         "coverage": {

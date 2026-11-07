@@ -1,0 +1,321 @@
+FFFF..F                                                                  [100%]
+=================================== FAILURES ===================================
+_ test_nonblocking_boundaries_survive_delivery_without_partial_status[Translate the supplied sentence-The meeting starts at nine.-No stylistic variants requested.] _
+
+delivery_run = (<frontier_agent.components.agent_bus.bus.AgentBus object at 0x77d6dd866c30>, TeamPhaseBudget(started_monotonic_s=0, r...arch_deadline_s=720, publication_deadline_s=900, finalization_deadline_s=1200, state={}, verification_deadline_s=None))
+user_goal = 'Translate the supplied sentence'
+answer = 'The meeting starts at nine.'
+limitation = 'No stylistic variants requested.'
+
+    @pytest.mark.parametrize(
+        "user_goal,answer,limitation",
+        [
+            ("Translate the supplied sentence", "The meeting starts at nine.", "No stylistic variants requested."),
+            ("Compute the supplied invoice total", "The total is 50.", "No market-price comparison performed."),
+            ("Give one feasible route", "Take route A within the stated budget.", "Other routes were not exhaustively ranked."),
+        ],
+    )
+    async def test_nonblocking_boundaries_survive_delivery_without_partial_status(
+        delivery_run, user_goal, answer, limitation
+    ):
+        await add_task.func([{"description": user_goal, "done_when": user_goal}])
+>       await deliver_answer.func(
+            content=answer,
+            updates=[{
+                "id": "t1", "resolution": "resolved", "notes": "Requested outcome supported",
+                "limitations": limitation,
+            }],
+        )
+
+tests/test_team_requirement_scope.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+content = 'The meeting starts at nine.'
+updates = [{'id': 't1', 'resolution': 'resolved', 'notes': 'Requested outcome supported', 'limitations': 'No stylistic variants requested.'}]
+corpus_conclusions = None
+
+    @tool
+    async def deliver_answer(
+        content: str,
+        updates: list[FinalDisposition],
+        corpus_conclusions: list[dict[str, Any]] | None = None,
+    ) -> str:
+        """Submit the complete final answer AND task dispositions in one call.
+    
+        Do not spend a separate generation updating the board first. Research with
+        unmet done_when or unpassed required checks must be blocked, with notes and
+        gap; never claim success from execution alone. Disclose gaps in the answer.
+        Delivery tasks complete with acceptance. Call this tool alone.
+    
+        Args:
+            content: Complete user-facing answer, with sources and explicit limitations.
+            updates: Final dispositions for outstanding work. Use [] if none remain.
+            corpus_conclusions: Complete corpus evidence manifest for THIS content. Each entry
+                needs id, report_quote copied verbatim from content, and evidence:[{evidence_ref}].
+                Use original complete corpus tool refs (eref: or ce:). Required for corpus-backed
+                final prose; omit for web-only answers. URLs, job IDs and web hashes are not corpus
+                receipts. Never copy old report anchors. This binds citations, not a semantic PASS.
+        """
+        scope = get_current_execution_scope()
+        if scope is None or SWARM_SCOPE_KEY not in scope.metadata or in_planning(scope.task_id):
+            raise ValueError("Final delivery requires an executing team coordinator")
+        if not is_user_report(content):
+            raise ValueError("Provide the final answer body, not an empty/internal tool payload")
+        from plugins.corpus.ledger import get_run_ledger
+        from plugins.tools.corpus_manifest import commit_final_manifest, prepare_final_manifest
+    
+        if corpus_conclusions is None and get_run_ledger().has_activity():
+            raise ValueError(
+                "Corpus-backed delivery requires corpus_conclusions bound to this content. "
+                "Supply id, exact report_quote, evidence:[{evidence_ref}]. "
+                "Use [] only when no supported corpus claim is delivered; disclose the gap."
+            )
+>       items = [FinalDisposition.model_validate(u).model_dump() for u in updates]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for FinalDisposition
+E       limitations
+E         Extra inputs are not permitted [type=extra_forbidden, input_value='No stylistic variants requested.', input_type=str]
+E           For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden
+
+workflows/agent_team/delivery.py:89: ValidationError
+_ test_nonblocking_boundaries_survive_delivery_without_partial_status[Compute the supplied invoice total-The total is 50.-No market-price comparison performed.] _
+
+delivery_run = (<frontier_agent.components.agent_bus.bus.AgentBus object at 0x77d6dbd0e750>, TeamPhaseBudget(started_monotonic_s=0, r...arch_deadline_s=720, publication_deadline_s=900, finalization_deadline_s=1200, state={}, verification_deadline_s=None))
+user_goal = 'Compute the supplied invoice total', answer = 'The total is 50.'
+limitation = 'No market-price comparison performed.'
+
+    @pytest.mark.parametrize(
+        "user_goal,answer,limitation",
+        [
+            ("Translate the supplied sentence", "The meeting starts at nine.", "No stylistic variants requested."),
+            ("Compute the supplied invoice total", "The total is 50.", "No market-price comparison performed."),
+            ("Give one feasible route", "Take route A within the stated budget.", "Other routes were not exhaustively ranked."),
+        ],
+    )
+    async def test_nonblocking_boundaries_survive_delivery_without_partial_status(
+        delivery_run, user_goal, answer, limitation
+    ):
+        await add_task.func([{"description": user_goal, "done_when": user_goal}])
+>       await deliver_answer.func(
+            content=answer,
+            updates=[{
+                "id": "t1", "resolution": "resolved", "notes": "Requested outcome supported",
+                "limitations": limitation,
+            }],
+        )
+
+tests/test_team_requirement_scope.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+content = 'The total is 50.'
+updates = [{'id': 't1', 'resolution': 'resolved', 'notes': 'Requested outcome supported', 'limitations': 'No market-price comparison performed.'}]
+corpus_conclusions = None
+
+    @tool
+    async def deliver_answer(
+        content: str,
+        updates: list[FinalDisposition],
+        corpus_conclusions: list[dict[str, Any]] | None = None,
+    ) -> str:
+        """Submit the complete final answer AND task dispositions in one call.
+    
+        Do not spend a separate generation updating the board first. Research with
+        unmet done_when or unpassed required checks must be blocked, with notes and
+        gap; never claim success from execution alone. Disclose gaps in the answer.
+        Delivery tasks complete with acceptance. Call this tool alone.
+    
+        Args:
+            content: Complete user-facing answer, with sources and explicit limitations.
+            updates: Final dispositions for outstanding work. Use [] if none remain.
+            corpus_conclusions: Complete corpus evidence manifest for THIS content. Each entry
+                needs id, report_quote copied verbatim from content, and evidence:[{evidence_ref}].
+                Use original complete corpus tool refs (eref: or ce:). Required for corpus-backed
+                final prose; omit for web-only answers. URLs, job IDs and web hashes are not corpus
+                receipts. Never copy old report anchors. This binds citations, not a semantic PASS.
+        """
+        scope = get_current_execution_scope()
+        if scope is None or SWARM_SCOPE_KEY not in scope.metadata or in_planning(scope.task_id):
+            raise ValueError("Final delivery requires an executing team coordinator")
+        if not is_user_report(content):
+            raise ValueError("Provide the final answer body, not an empty/internal tool payload")
+        from plugins.corpus.ledger import get_run_ledger
+        from plugins.tools.corpus_manifest import commit_final_manifest, prepare_final_manifest
+    
+        if corpus_conclusions is None and get_run_ledger().has_activity():
+            raise ValueError(
+                "Corpus-backed delivery requires corpus_conclusions bound to this content. "
+                "Supply id, exact report_quote, evidence:[{evidence_ref}]. "
+                "Use [] only when no supported corpus claim is delivered; disclose the gap."
+            )
+>       items = [FinalDisposition.model_validate(u).model_dump() for u in updates]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for FinalDisposition
+E       limitations
+E         Extra inputs are not permitted [type=extra_forbidden, input_value='No market-price comparison performed.', input_type=str]
+E           For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden
+
+workflows/agent_team/delivery.py:89: ValidationError
+_ test_nonblocking_boundaries_survive_delivery_without_partial_status[Give one feasible route-Take route A within the stated budget.-Other routes were not exhaustively ranked.] _
+
+delivery_run = (<frontier_agent.components.agent_bus.bus.AgentBus object at 0x77d6dbd0eae0>, TeamPhaseBudget(started_monotonic_s=0, r...arch_deadline_s=720, publication_deadline_s=900, finalization_deadline_s=1200, state={}, verification_deadline_s=None))
+user_goal = 'Give one feasible route'
+answer = 'Take route A within the stated budget.'
+limitation = 'Other routes were not exhaustively ranked.'
+
+    @pytest.mark.parametrize(
+        "user_goal,answer,limitation",
+        [
+            ("Translate the supplied sentence", "The meeting starts at nine.", "No stylistic variants requested."),
+            ("Compute the supplied invoice total", "The total is 50.", "No market-price comparison performed."),
+            ("Give one feasible route", "Take route A within the stated budget.", "Other routes were not exhaustively ranked."),
+        ],
+    )
+    async def test_nonblocking_boundaries_survive_delivery_without_partial_status(
+        delivery_run, user_goal, answer, limitation
+    ):
+        await add_task.func([{"description": user_goal, "done_when": user_goal}])
+>       await deliver_answer.func(
+            content=answer,
+            updates=[{
+                "id": "t1", "resolution": "resolved", "notes": "Requested outcome supported",
+                "limitations": limitation,
+            }],
+        )
+
+tests/test_team_requirement_scope.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+content = 'Take route A within the stated budget.'
+updates = [{'id': 't1', 'resolution': 'resolved', 'notes': 'Requested outcome supported', 'limitations': 'Other routes were not exhaustively ranked.'}]
+corpus_conclusions = None
+
+    @tool
+    async def deliver_answer(
+        content: str,
+        updates: list[FinalDisposition],
+        corpus_conclusions: list[dict[str, Any]] | None = None,
+    ) -> str:
+        """Submit the complete final answer AND task dispositions in one call.
+    
+        Do not spend a separate generation updating the board first. Research with
+        unmet done_when or unpassed required checks must be blocked, with notes and
+        gap; never claim success from execution alone. Disclose gaps in the answer.
+        Delivery tasks complete with acceptance. Call this tool alone.
+    
+        Args:
+            content: Complete user-facing answer, with sources and explicit limitations.
+            updates: Final dispositions for outstanding work. Use [] if none remain.
+            corpus_conclusions: Complete corpus evidence manifest for THIS content. Each entry
+                needs id, report_quote copied verbatim from content, and evidence:[{evidence_ref}].
+                Use original complete corpus tool refs (eref: or ce:). Required for corpus-backed
+                final prose; omit for web-only answers. URLs, job IDs and web hashes are not corpus
+                receipts. Never copy old report anchors. This binds citations, not a semantic PASS.
+        """
+        scope = get_current_execution_scope()
+        if scope is None or SWARM_SCOPE_KEY not in scope.metadata or in_planning(scope.task_id):
+            raise ValueError("Final delivery requires an executing team coordinator")
+        if not is_user_report(content):
+            raise ValueError("Provide the final answer body, not an empty/internal tool payload")
+        from plugins.corpus.ledger import get_run_ledger
+        from plugins.tools.corpus_manifest import commit_final_manifest, prepare_final_manifest
+    
+        if corpus_conclusions is None and get_run_ledger().has_activity():
+            raise ValueError(
+                "Corpus-backed delivery requires corpus_conclusions bound to this content. "
+                "Supply id, exact report_quote, evidence:[{evidence_ref}]. "
+                "Use [] only when no supported corpus claim is delivered; disclose the gap."
+            )
+>       items = [FinalDisposition.model_validate(u).model_dump() for u in updates]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for FinalDisposition
+E       limitations
+E         Extra inputs are not permitted [type=extra_forbidden, input_value='Other routes were not exhaustively ranked.', input_type=str]
+E           For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden
+
+workflows/agent_team/delivery.py:89: ValidationError
+_____________ test_resolved_with_blocking_gap_rejected_atomically ______________
+
+delivery_run = (<frontier_agent.components.agent_bus.bus.AgentBus object at 0x77d6dbd0f110>, TeamPhaseBudget(started_monotonic_s=0, r...arch_deadline_s=720, publication_deadline_s=900, finalization_deadline_s=1200, state={}, verification_deadline_s=None))
+
+    async def test_resolved_with_blocking_gap_rejected_atomically(delivery_run):
+        await add_task.func([{"description": "Compare the two prices"}])
+        before = snapshot_tasks("run")
+>       with pytest.raises(ValueError, match="gap"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_team_requirement_scope.py:45: Failed
+_____ test_required_missing_evidence_stays_partial_with_optional_boundary ______
+
+delivery_run = (<frontier_agent.components.agent_bus.bus.AgentBus object at 0x77d6dbdc0740>, TeamPhaseBudget(started_monotonic_s=0, r...arch_deadline_s=720, publication_deadline_s=900, finalization_deadline_s=1200, state={}, verification_deadline_s=None))
+
+    async def test_required_missing_evidence_stays_partial_with_optional_boundary(delivery_run):
+        bus, _ = delivery_run
+        await prepare(bus, "unchecked")
+>       await deliver_answer.func(
+            content="The amount cannot yet be confirmed.",
+            updates=[{
+                "id": "t1", "resolution": "blocked", "notes": "Evidence unavailable",
+                "gap": "Required arithmetic evidence missing",
+                "limitations": "No optional sensitivity scenarios computed",
+            }],
+        )
+
+tests/test_team_requirement_scope.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+content = 'The amount cannot yet be confirmed.'
+updates = [{'id': 't1', 'resolution': 'blocked', 'notes': 'Evidence unavailable', 'gap': 'Required arithmetic evidence missing', ...}]
+corpus_conclusions = None
+
+    @tool
+    async def deliver_answer(
+        content: str,
+        updates: list[FinalDisposition],
+        corpus_conclusions: list[dict[str, Any]] | None = None,
+    ) -> str:
+        """Submit the complete final answer AND task dispositions in one call.
+    
+        Do not spend a separate generation updating the board first. Research with
+        unmet done_when or unpassed required checks must be blocked, with notes and
+        gap; never claim success from execution alone. Disclose gaps in the answer.
+        Delivery tasks complete with acceptance. Call this tool alone.
+    
+        Args:
+            content: Complete user-facing answer, with sources and explicit limitations.
+            updates: Final dispositions for outstanding work. Use [] if none remain.
+            corpus_conclusions: Complete corpus evidence manifest for THIS content. Each entry
+                needs id, report_quote copied verbatim from content, and evidence:[{evidence_ref}].
+                Use original complete corpus tool refs (eref: or ce:). Required for corpus-backed
+                final prose; omit for web-only answers. URLs, job IDs and web hashes are not corpus
+                receipts. Never copy old report anchors. This binds citations, not a semantic PASS.
+        """
+        scope = get_current_execution_scope()
+        if scope is None or SWARM_SCOPE_KEY not in scope.metadata or in_planning(scope.task_id):
+            raise ValueError("Final delivery requires an executing team coordinator")
+        if not is_user_report(content):
+            raise ValueError("Provide the final answer body, not an empty/internal tool payload")
+        from plugins.corpus.ledger import get_run_ledger
+        from plugins.tools.corpus_manifest import commit_final_manifest, prepare_final_manifest
+    
+        if corpus_conclusions is None and get_run_ledger().has_activity():
+            raise ValueError(
+                "Corpus-backed delivery requires corpus_conclusions bound to this content. "
+                "Supply id, exact report_quote, evidence:[{evidence_ref}]. "
+                "Use [] only when no supported corpus claim is delivered; disclose the gap."
+            )
+>       items = [FinalDisposition.model_validate(u).model_dump() for u in updates]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for FinalDisposition
+E       limitations
+E         Extra inputs are not permitted [type=extra_forbidden, input_value='No optional sensitivity scenarios computed', input_type=str]
+E           For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden
+
+workflows/agent_team/delivery.py:89: ValidationError
+=========================== short test summary info ============================
+FAILED tests/test_team_requirement_scope.py::test_nonblocking_boundaries_survive_delivery_without_partial_status[Translate the supplied sentence-The meeting starts at nine.-No stylistic variants requested.]
+FAILED tests/test_team_requirement_scope.py::test_nonblocking_boundaries_survive_delivery_without_partial_status[Compute the supplied invoice total-The total is 50.-No market-price comparison performed.]
+FAILED tests/test_team_requirement_scope.py::test_nonblocking_boundaries_survive_delivery_without_partial_status[Give one feasible route-Take route A within the stated budget.-Other routes were not exhaustively ranked.]
+FAILED tests/test_team_requirement_scope.py::test_resolved_with_blocking_gap_rejected_atomically
+FAILED tests/test_team_requirement_scope.py::test_required_missing_evidence_stays_partial_with_optional_boundary
+5 failed, 2 passed in 1.06s

@@ -67,7 +67,7 @@ CHART_NOTE = (
 # Main agent base template
 # =====================================================================
 
-EVIDENCE_LIMITS_NOTE = """
+EVIDENCE_LIMITS_NOTE = prompt_standard.REQUIREMENT_SCOPE + """
 
 # Evidence and completion limits
 Execution success, submit_report and task-board resolved are not verification verdicts.
@@ -118,6 +118,17 @@ synthesis was verified. Record known criterion defects in unresolved_issues; eve
 minor location error prevents PASS when correct location is required. Report
 fail/unchecked or request a corrected version for recheck; do not waive the criterion.
 Out-of-scope research limitations do not invalidate a scoped pass.
+Use quote_checks against bound
+source locators when exact quotation is required; quote_comparisons are computed
+from captured originals. Never compare two model-retyped strings as evidence of
+raw equality. Explicit NBSP/space normalization cannot establish equal raw hashes.
+Calculated numerical claims still require source-backed inputs and reproducible arithmetic.
+Never instruct a verifier to waive accuracy because a value is labeled calculated/estimated.
+For bound calculation_targets, return calculation_checks or mark unchecked.
+Allow one wording repair per evidence version, one no-verdict execution retry, and at most
+four dispatches per check. Renamed jobs or edited reports are not new tool evidence.
+Dispatch independent checks together to separate idle verifiers; never queue them behind
+a busy verifier. Dependent rechecks wait for the previous verdict and only check changed claims.
 Ordinary research failures cannot be closed by an unrelated successful checking job.
 Start required checks when the first usable source report arrives instead of waiting
 for all research. Bind checks at dispatch; prose checklists and invented binding IDs

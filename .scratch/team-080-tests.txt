@@ -1,0 +1,12 @@
+........................................................................ [ 23%]
+........................................................................ [ 47%]
+........................................................................ [ 71%]
+........................................................................ [ 95%]
+..............                                                           [100%]
+=============================== warnings summary ===============================
+tests/test_team_atomic_delivery.py::test_continuation_replays_only_accepted_atomic_submission[Final answer and task dispositions accepted.-expected0]
+  /home/administrator/FrontierAgent/.venv/lib/python3.12/site-packages/urllib3/contrib/socks.py:50: DependencyWarning: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+302 passed, 1 warning in 4.05s

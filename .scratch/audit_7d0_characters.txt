@@ -1,0 +1,71 @@
+USER 从资料库中，检索出随意一份今天的研报
+SOURCE_VS_SUBJECT [
+  {
+    "kind": "heading",
+    "raw_chars": 86,
+    "quote_chars": 86,
+    "raw_sha_matches_declared": true,
+    "raw_equals_subject_quote": false,
+    "nbsp_normalized_equals": true,
+    "diffs": [
+      {
+        "position": 10,
+        "raw": "U+00A0",
+        "quote": "U+0020"
+      },
+      {
+        "position": 13,
+        "raw": "U+00A0",
+        "quote": "U+0020"
+      }
+    ]
+  },
+  {
+    "kind": "body",
+    "raw_chars": 115,
+    "quote_chars": 115,
+    "raw_sha_matches_declared": true,
+    "raw_equals_subject_quote": false,
+    "nbsp_normalized_equals": true,
+    "diffs": [
+      {
+        "position": 2,
+        "raw": "U+00A0",
+        "quote": "U+0020"
+      },
+      {
+        "position": 54,
+        "raw": "U+00A0",
+        "quote": "U+0020"
+      }
+    ]
+  }
+]
+SCRIPT_RESULT == heading chunk:native1/...%3Aheading%3A0000/7ed8f20b3ca7ff61 ==
+  equal_raw        : True
+  equal_norm(NBSP) : True
+  len subj/fetch   : 86 86 (declared text_chars=86)
+  U+00AD subj/fetch: 2 2
+  U+00A0 subj/fetch: 0 0
+  newline subj/fetch: 3 3
+  first diff       : (None, 'none')
+  sha256 subj      : 0a81fb2f058374df79357a715d694ccba5c44c68929b18860d15e7724c544825
+  sha256 fetch(copy): 0a81fb2f058374df79357a715d694ccba5c44c68929b18860d15e7724c544825
+== body    chunk:native1/...%3Abody%3A0000/c8e2a5a04591c589 ==
+  equal_raw        : True
+  equal_norm(NBSP) : True
+  len subj/fetch   : 115 115 (declared text_chars=115)
+  U+00AD subj/fetch: 0 0
+  U+00A0 subj/fetch: 0 0
+  newline subj/fetch: 2 2
+  first diff       : (None, 'none')
+  sha256 subj      : 9030e7c8a5ecd9db9851718e2ac4b1775294a104a03f325510fc7307b0dbe37b
+  sha256 fetch(copy): 9030e7c8a5ecd9db9851718e2ac4b1775294a104a03f325510fc7307b0dbe37b
+tool text_sha256 heading: 570e1203325adedb9e66fe9a3f45f8ca889e4b336839a180dacbb4071804ff51
+tool text_sha256 body   : eaa8c2fb50fd9e0c96bb58f3278046f705d0c0fb08c07721cc38aaf93f6f681f
+
+Traceback (most recent call last):
+  File "/home/administrator/FrontierAgent/.scratch/check_7d0_evidence.py", line 37, in <module>
+    assert all(f['raw_equals_subject_quote'] for f in findings), 'Claimed verbatim subject differs from captured authoritative source'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Claimed verbatim subject differs from captured authoritative source

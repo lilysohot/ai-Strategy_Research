@@ -111,6 +111,7 @@ def finalize_team_report(
             "resolution": str(task.get("resolution") or "open"),
             "notes": str(task.get("notes") or ""),
             "gap": str(task.get("gap") or ""),
+            "limitations": str(task.get("limitations") or ""),
             "owners": list(task.get("owners") or []),
             "execution_job_ids": list(task.get("execution_job_ids") or []),
             "verification_status": str(task.get("verification_status") or "not_assessed"),

@@ -1,0 +1,184 @@
+{
+  "available": true,
+  "malformed_events": 0,
+  "trajectory_wall_s": 91.661,
+  "first_research_report_s": 58.197,
+  "first_report_is_usefulness_score": false,
+  "attempts": 10,
+  "known_usage_attempts": 10,
+  "unknown_usage_attempts": 0,
+  "known_prompt_tokens": 129396,
+  "max_prompt_tokens": 15727,
+  "cache_known_attempts": 10,
+  "known_cache_read_tokens": 77056,
+  "cache_hit_rate_on_known_usage": 0.59550527064206,
+  "llm_attempt_seconds_sum": 78.159,
+  "llm_sum_is_wall_time": false,
+  "outcomes": {
+    "accepted": 10
+  },
+  "failure_reasons": {},
+  "tools": {
+    "add_task": 1,
+    "create_subagent": 1,
+    "assign_task": 1,
+    "collect_reports": 1,
+    "deliver_answer": 1,
+    "corpus_search": 2,
+    "corpus_inventory": 1,
+    "corpus_fetch": 2,
+    "submit_report": 1
+  },
+  "tool_attempts": {
+    "add_task": 1,
+    "create_subagent": 1,
+    "assign_task": 1,
+    "collect_reports": 1,
+    "deliver_answer": 1,
+    "corpus_search": 2,
+    "corpus_inventory": 1,
+    "corpus_fetch": 2,
+    "submit_report": 1
+  },
+  "tool_latency_ms": {
+    "add_task": {
+      "known": 1,
+      "unknown": 0,
+      "p50": 0.0,
+      "p90": 0.0,
+      "max": 0.0,
+      "sum": 0.0,
+      "explicit_errors": 0
+    },
+    "assign_task": {
+      "known": 1,
+      "unknown": 0,
+      "p50": 7.0,
+      "p90": 7.0,
+      "max": 7.0,
+      "sum": 7.0,
+      "explicit_errors": 0
+    },
+    "collect_reports": {
+      "known": 1,
+      "unknown": 0,
+      "p50": 44605.0,
+      "p90": 44605.0,
+      "max": 44605.0,
+      "sum": 44605.0,
+      "explicit_errors": 0
+    },
+    "corpus_fetch": {
+      "known": 2,
+      "unknown": 0,
+      "p50": 256.0,
+      "p90": 423.2,
+      "max": 465.0,
+      "sum": 512.0,
+      "explicit_errors": 0
+    },
+    "corpus_inventory": {
+      "known": 1,
+      "unknown": 0,
+      "p50": 39.0,
+      "p90": 39.0,
+      "max": 39.0,
+      "sum": 39.0,
+      "explicit_errors": 0
+    },
+    "corpus_search": {
+      "known": 2,
+      "unknown": 0,
+      "p50": 14485.0,
+      "p90": 14537.0,
+      "max": 14550.0,
+      "sum": 28970.0,
+      "explicit_errors": 0
+    },
+    "create_subagent": {
+      "known": 1,
+      "unknown": 0,
+      "p50": 0.0,
+      "p90": 0.0,
+      "max": 0.0,
+      "sum": 0.0,
+      "explicit_errors": 0
+    },
+    "deliver_answer": {
+      "known": 1,
+      "unknown": 0,
+      "p50": 2.0,
+      "p90": 2.0,
+      "max": 2.0,
+      "sum": 2.0,
+      "explicit_errors": 0
+    },
+    "submit_report": {
+      "known": 1,
+      "unknown": 0,
+      "p50": 1.0,
+      "p90": 1.0,
+      "max": 1.0,
+      "sum": 1.0,
+      "explicit_errors": 0
+    }
+  },
+  "tool_sum_is_wall_time": false,
+  "retrieval_stage_timings": null,
+  "research_dispatch_attempts": 1,
+  "exact_repeated_tool_requests": 0,
+  "dispatch_start_delay_estimate_s": [
+    0.017
+  ],
+  "dispatch_delay_p50_s": 0.017,
+  "dispatch_delay_p90_s": 0.017,
+  "agents": [
+    {
+      "trace": "agent/trajectories/main_agent.jsonl",
+      "start": 1793974771.6977391,
+      "end": 1793974861.479554,
+      "attempts": 4,
+      "known_prompt_tokens": 58880,
+      "max_prompt_tokens": 15500,
+      "tool_attempts": {
+        "add_task": 1,
+        "create_subagent": 1,
+        "assign_task": 1,
+        "collect_reports": 1,
+        "deliver_answer": 1
+      }
+    },
+    {
+      "trace": "agent/trajectories/research_intake.jsonl",
+      "start": 1793974769.818849,
+      "end": 1793974771.6775358,
+      "attempts": 1,
+      "known_prompt_tokens": 593,
+      "max_prompt_tokens": 593,
+      "tool_attempts": {}
+    },
+    {
+      "trace": "agent/trajectories/subagents/corpus_lookup_research.t01.jsonl",
+      "start": 1793974782.0271401,
+      "end": 1793974828.0212295,
+      "attempts": 5,
+      "known_prompt_tokens": 69923,
+      "max_prompt_tokens": 15727,
+      "tool_attempts": {
+        "corpus_search": 2,
+        "corpus_inventory": 1,
+        "corpus_fetch": 2,
+        "submit_report": 1
+      }
+    }
+  ],
+  "limitations": [
+    "Queue delay inferred from dispatch attempts; rejected requests can skew it.",
+    "Parallel attempt durations are not additive wall time.",
+    "First report may be incomplete; semantic usefulness requires review.",
+    "Dollar cost unavailable without an explicit model tariff.",
+    "Tool timings are recorded result durations, not isolated service/queue latency.",
+    "Retrieval DB/embedding/rerank/queue timings are unavailable in standard traces.",
+    "Tool attempts include denied or interrupted requests; shell use is not automatically waste."
+  ]
+}

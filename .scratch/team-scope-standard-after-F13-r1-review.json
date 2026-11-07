@@ -1,0 +1,27 @@
+{
+  "reviewer": "Codex artifact inspection, 2026-11-07",
+  "review_type": "model",
+  "worker_sha256": "b8ebf4d4b78f54adbf5497bbce481e6fd44ff1b80e2c7fd0b9e3b2ac30f90504",
+  "case_sha256": "6a97587210ced5ebef5d1bf92555c7772359ebcae947383fbcbf603b25deeb4f",
+  "criteria": [
+    {
+      "verdict": "pass",
+      "evidence": "final_answer identifies 44元 as merchandise subtotal and says the tax/shipping-inclusive amount is indeterminate."
+    },
+    {
+      "verdict": "pass",
+      "evidence": "Task t2 remains blocked with a gap identifying absent tax and shipping inputs; answer_status=partial."
+    },
+    {
+      "verdict": "pass",
+      "evidence": "No assumed zero tax/free shipping; required missing operands are not downgraded to limitations or a complete answer."
+    },
+    {
+      "verdict": "pass",
+      "evidence": "Provides useful 20+24=44 calculation. Standard trace fetches the exact fixture once plus the bare host; no repeated fetch of the same fixture or brand/industry research."
+    }
+  ],
+  "additional_observations": [
+    "Bare-host fetch was unnecessary. Answer remains verbose and repeats gaps through automatic execution-status footer; the existing fourth rubric does not measure that verbosity."
+  ]
+}
