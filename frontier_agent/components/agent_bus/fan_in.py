@@ -54,6 +54,7 @@ INCOMPLETE_STOP_REASONS: frozenset[str] = frozenset({
     "context_limit_reached",
     "cross_turn_repetition",
     "repeated_tool_calls",
+    "repeated_corpus_results",
     # The output cap cut every continuation off mid-sentence. Distinct from
     # ``no_tool``: the agent never chose to stop, so its report is unfinished
     # rather than merely answer-less.
@@ -85,6 +86,10 @@ _INCOMPLETE_NOTES: dict[str, str] = {
     "repeated_tool_calls": (
         "agent stopped after re-issuing the same tool call with identical "
         "arguments; report is a best-effort partial"
+    ),
+    "repeated_corpus_results": (
+        "agent exhausted its repeated-result budget without new corpus content; "
+        "report is partial and task sufficiency is not established"
     ),
     "exception": (
         "agent terminated with an unhandled exception; report is partial"

@@ -144,6 +144,13 @@ def _planned_check_update(
     *, tasks: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Validate one authoritative definition before changing any task fields."""
+    if task.get("execution_job_ids") and "done_when" in item:
+        proposed_criterion = _progress_fields(item).get("done_when", "")
+        if proposed_criterion != task.get("done_when", ""):
+            raise ValueError(
+                "dispatched done_when is immutable; record progress in notes, "
+                "unmet requirements in gap, and optional boundaries in limitations"
+            )
     if not _verification_required(item, str(task.get("description") or "")):
         return {}
     proposed = _verification_requirements(

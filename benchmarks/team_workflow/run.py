@@ -56,6 +56,27 @@ def catalog() -> list[dict[str, Any]]:
     return cases
 
 
+def require_runnable(case: dict[str, Any]) -> None:
+    """Draft cases stay inspectable without silently joining model runs."""
+    if case.get("review_status", "approved") != "approved":
+        raise ValueError(f"Case {case['id']} is pending user review")
+    if case.get("tool_fixture", "web") not in {"web", "corpus_document_v1"}:
+        raise ValueError(f"Case {case['id']} has an unknown fixture adapter")
+
+
+def select_cases(layer: str, requested: list[str] | None) -> list[dict[str, Any]]:
+    cases = [c for c in catalog() if c["layer"] == layer]
+    if requested:
+        cases = [c for c in cases if c["id"] in requested]
+        if set(requested) != {c["id"] for c in cases}:
+            raise ValueError("unknown case or case belongs to another layer")
+    else:
+        cases = [c for c in cases if c.get("review_status", "approved") == "approved"]
+    for case in cases:
+        require_runnable(case)
+    return cases
+
+
 def source_fingerprint() -> dict[str, Any]:
     paths = []
     for folder in ("frontier_agent", "plugins", "workflows", "benchmarks/team_workflow", "tests"):
@@ -119,7 +140,9 @@ def frozen_result(
         failures.append("empty final answer")
     if not metrics.get("available"):
         failures.append("missing trajectories")
-    elif len(metrics["agents"]) < 2:
+    elif len(metrics["agents"]) < 2 and case.get("tool_fixture") != "corpus_document_v1":
+        # Corpus reading cases permit direct delivery. Preserve the historical
+        # teamwork gate for web fixtures without adding an unreviewed obligation.
         failures.append("no member execution observed")
     if worker["elapsed_s"] > case["budgets"]["wall_s"]:
         failures.append("wall budget exceeded")
@@ -288,15 +311,19 @@ def mark_unassessed(out: Path, reason: str, *, mode: str = "automatic") -> None:
 
 
 def run(args: argparse.Namespace) -> int:
-    selected = [
-        c for c in catalog() if c["layer"] == args.layer and (not args.case or c["id"] in args.case)
-    ]
+    selected = select_cases(args.layer, args.case)
     if not selected or args.repeats < 1:
         raise ValueError("select at least one matching case and a positive repeat count")
     if args.max_consecutive_errors < 1:
         raise ValueError("max-consecutive-errors must be positive")
     if args.case and set(args.case) != {c["id"] for c in selected}:
         raise ValueError("unknown case or case belongs to another layer")
+    ab = getattr(args, "hint_ab", False)
+    if ab and (
+        args.layer != "frozen"
+        or any(c.get("tool_fixture") != "corpus_document_v1" for c in selected)
+    ):
+        raise ValueError("--hint-ab requires explicit corpus frozen cases")
     out = args.out.resolve()
     # A new output directory per execution prevents silent reuse across dirty code,
     # changed budgets, profiles, fixtures or provider settings.
@@ -312,6 +339,20 @@ def run(args: argparse.Namespace) -> int:
         for c in selected
         for i in range(args.repeats)
     ]
+    if ab:
+        samples = [
+            {
+                "sample": f"{c['id']}-{arm}-r{i + 1}",
+                "case": c["id"],
+                "layer": c["layer"],
+                "dimension": c["dimension"],
+                "split": c["split"],
+                "hint_arm": arm,
+            }
+            for i in range(args.repeats)
+            for c in selected
+            for arm in (("A", "B") if i % 2 == 0 else ("B", "A"))
+        ]
     write(
         out / "manifest.json",
         {
@@ -324,6 +365,7 @@ def run(args: argparse.Namespace) -> int:
             "profile": args.profile,
             "python": sys.version,
             "concurrency": 1,
+            "hint_ab": ab,
             "max_consecutive_execution_errors": args.max_consecutive_errors,
         },
     )
@@ -363,6 +405,8 @@ def run(args: argparse.Namespace) -> int:
                 args.profile,
             ]
             timeout = case["budgets"]["wall_s"] + 60
+            if ab:
+                command.extend(["--hint-arm", sample["hint_arm"]])
         started = time.monotonic()
         result: dict[str, Any]
         with (trial / "execution.log").open("w") as log:
@@ -399,6 +443,10 @@ def run(args: argparse.Namespace) -> int:
                 raise
         if args.layer == "frozen" and not (trial / "metrics.json").exists():
             write(trial / "metrics.json", measure(trial))
+        if case.get("tool_fixture") == "corpus_document_v1":
+            from benchmarks.team_workflow.corpus_fixtures import measure_corpus
+
+            write(trial / "corpus-metrics.json", measure_corpus(trial))
         result["elapsed_s"] = round(time.monotonic() - started, 3)
         write(trial / "result.json", result)
         consecutive_errors = consecutive_errors + 1 if result["status"] == "error" else 0
@@ -459,6 +507,7 @@ def main() -> None:
     execution.add_argument("--case", action="append")
     execution.add_argument("--repeats", type=int, default=1)
     execution.add_argument("--profile", default="default")
+    execution.add_argument("--hint-ab", action="store_true")
     execution.add_argument("--max-consecutive-errors", type=int, default=2)
     execution.add_argument("--out", type=Path, required=True)
     report = subs.add_parser("report")

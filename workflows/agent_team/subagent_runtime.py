@@ -67,6 +67,7 @@ from frontier_agent.core.runtime.loop.tiered_compact import (
 )
 from frontier_agent.core.runtime.loop.tool_exec import ToolResultPostProcessor
 from frontier_agent.state.event_store.sqlite import EventStore
+from plugins.corpus.progress import CorpusReadState
 from plugins.tools.bash import BASH_STDERR_SEPARATOR
 from workflows.agent_team.identity import MAIN_AGENT_ID, SUB_ROLE_ID, llm_session_id
 from workflows.agent_team.output_cleaning import strip_team_control
@@ -903,6 +904,7 @@ class SwarmSubagentRuntime:
     """
 
     original_question: str = ""
+    corpus_read_state: CorpusReadState = field(default_factory=CorpusReadState)
     prompt_mode: str = "standard"
     trajectory_dir: Path | None = None
     sub_agent_llm: Any = None
@@ -1739,6 +1741,7 @@ def build_swarm_session_runtime_spec(
         )
 
     def _observers(_job_id: str, _item: SubTask, task_index: int) -> list[Any]:
+        from plugins.corpus.progress import CorpusProgressObserver
         from workflows.agent_team.observers.member_progress import MemberProgressObserver
 
         obs = _swarm_observers(
@@ -1750,7 +1753,11 @@ def build_swarm_session_runtime_spec(
             run_id=run_id,
             run_type=run_type,
         )
-        obs = [MemberProgressObserver(_item.metadata), *obs]
+        obs = [
+            MemberProgressObserver(_item.metadata),
+            CorpusProgressObserver(stop_after=6, read_state=runtime.corpus_read_state),
+            *obs,
+        ]
         job_deadline = _job_deadline(_item)
         if job_deadline is not None:
             metadata = _item.metadata or {}

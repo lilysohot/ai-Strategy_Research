@@ -49,13 +49,48 @@ Repetition stop-loss is observer-side:
 |---|---|---|
 | `DuplicateQueryRollbackObserver` | A `web_search` request already executed in this loop **and returned content** | Pops the turn before the search runs and re-samples, without spending a `max_turns` slot. Never pops a batch carrying a terminal tool |
 | `RepetitionGuard` | Consecutive turns with byte-identical tool calls | Hint at 3; stop at `stop_after` where stopping is affordable |
+| `CorpusProgressObserver` | Acquisition-only turns returning previously observed corpus content | Structured state at 3; incomplete member stop after 6; no coordinator stop |
 | `TextRepetitionGuard` | Near-verbatim assistant prose across turns | Hint, then stop where stopping is affordable |
 
-`RepetitionGuard` is the only one of the three that can end a loop whose
+`RepetitionGuard` can end a loop whose
 repetition lives entirely in the tool channel: the rollback's budget expires
 into permanent let-through, and `TextRepetitionGuard` needs visible prose,
 which a `thinking_format: tag` model does not produce while looping. Its
 `stop_after` is therefore enabled wherever a truncated run is recoverable.
+
+Corpus acquisition also compares returned candidates, canonical evidence locations,
+exact text and fragment ranges, independent of query wording or opaque receipt aliases.
+It reads the final tool messages after output budgeting. New versions, new ranges,
+document pagination and non-acquisition work reset the consecutive-turn budget.
+Malformed or omitted results and empty searches are unknown, not repeated evidence.
+This is exact observation identity, not overlap-union or semantic equivalence.
+The `repeated_corpus_results` stop retains the existing forced-report recovery and
+is classified incomplete. It never resolves board work or declares source coverage,
+absence, uniqueness, or answer sufficiency. Progress state is job-local.
+
+Typed source withdrawal denies further fetch/inventory calls for that document
+within the run, including alternate locators, refresh requests, replacement
+members and coordinator reads. `SwarmSubagentRuntime.corpus_read_state` is shared
+with coordinator and member observers; evidence-consumption counters stay local.
+Typed failures are recorded before model-output budgeting, even when the model
+does not receive the error body. A later run starts fresh so external re-admission
+can be observed; already in-flight reads are not retroactively cancelled. Transient failures remain
+retryable; no exception is classified from its message text. This guard precedes
+context reuse and does not turn a cached source into currently admitted evidence.
+
+Successful dispatch freezes the board item's `done_when`; both update and deduped
+add reject changes before modifying progress. Notes, gaps and limitations remain
+editable. Job metadata retains the original question and a copy of each dispatched
+work item's acceptance and verification criteria. This protects the declared
+contract from later drift; it does not validate whether the initial model-written
+plan already expanded the user's request.
+
+Further research on an item with execution jobs requires an unresolved item and
+a nonempty board `gap`; dispatch rejects the batch before enqueue otherwise.
+Job metadata snapshots `work_item_gaps` and prior job IDs. Structured checks keep
+their exact verification bindings, and publication retains its existing lifecycle.
+The gate does not judge the gap's semantic necessity, prevent unrelated new work
+items, or prove that a verifier consumed only the necessary existing evidence.
 
 The reasoning token cap is load-invariant; `reasoning_only_timeout_s` is wall
 clock and its token-equivalent shrinks as endpoint concurrency rises. Trust

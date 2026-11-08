@@ -167,7 +167,9 @@ async def corpus_inventory(
         svc = get_service()
         inventory = svc.context_inventory(doc_id, request)
     except Exception as exc:  # 句柄不可解析 / 跨 build / 来源撤销 / 完整性不符 → fail-closed
-        return _error(f"清单构建失败（句柄不可解析、跨 build 或来源已撤销）：{exc}")
+        from plugins.corpus.read_errors import read_failure
+
+        return _error(f"清单构建失败：{exc}", doc_id=doc_id, **read_failure(exc))
 
     members: list[dict[str, object]] = list(inventory["members"])  # type: ignore[arg-type]
     if start >= len(members):

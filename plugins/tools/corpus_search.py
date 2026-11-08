@@ -120,12 +120,13 @@ TEAM_ABSTAIN_HINT = (
 NATIVE_HINT = (
     "仅 evidence_spans 标记的原文可引用，句柄用 context_locators[member-1]。"
     "证据足够时无需重复 fetch；缺上下文时按需补读。未标记文本仅供定位。"
+    '阅读已知文档全文可直接 corpus_fetch(doc_id, scope="document")，无需换词拼全文。'
 )
 NATIVE_PREVIEW_HINT = "本次仅返回定位预览，无可直接引用的原文区间；请按原句柄 fetch 补读。"
 REFERENCE_HINT = (
-    "excerpts 原文可引用，提交清单优先只填 evidence_ref=ref，由系统补齐原文及位置。"
-    "缺上下文时用同一 doc_id 和 ref 作为 locator 调用 fetch 补读；"
-    "其他候选用 scope_ref 调用 corpus_inventory。preview 不可引用。"
+    "excerpts 原文可引用，清单用 evidence_ref=ref；补读用 ref 作 locator，"
+    "候选目录用 scope_ref。preview 不可引用。"
+    '已知文档全文用 corpus_fetch(doc_id, scope="document")。'
 )
 
 

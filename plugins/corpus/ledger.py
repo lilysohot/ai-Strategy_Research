@@ -345,7 +345,10 @@ class ConsumptionLedger:
     def record_fetch_call(self, args: Any, *, turn: int = 0) -> None:
         if not isinstance(args, dict):
             return
-        if "locators" in args and isinstance(args.get("locators"), list):
+        if args.get("scope") == "document":
+            mode = "document"
+            locators = []
+        elif "locators" in args and isinstance(args.get("locators"), list):
             mode = "batch"
             locators = [str(x) for x in args["locators"]]
         elif args.get("cursor") is not None:
@@ -392,6 +395,11 @@ class ConsumptionLedger:
         if isinstance(items, list):
             for item in items:
                 if isinstance(item, dict):
+                    if payload.get("scope") == "document" and item.get("text") == "":
+                        # Empty source units count toward traversal, not quote evidence.
+                        continue
+                    if payload.get("scope") == "document":
+                        item = {"build_id": payload.get("build_id"), **item}
                     self._add_fragment(item, doc_id, turn)
             for err in payload.get("item_errors") or []:
                 if isinstance(err, dict):

@@ -20,7 +20,7 @@ def test_original_40_case_objects_are_unchanged():
 
 def test_increment_has_paired_controls_and_no_claim_of_blind_holdout():
     cases = {c["id"]: c for c in catalog()}
-    assert len(cases) == 71
+    assert len(cases) == 83
     assert cases["F08"]["pair"] == "F09"
     assert cases["F09"]["pair"] == "F08"
     assert cases["F09"]["split"] == "transfer"

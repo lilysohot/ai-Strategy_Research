@@ -82,6 +82,7 @@ from frontier_agent.core.runtime.resources.manager import ResourceManager
 from frontier_agent.core.runtime.session_history import build_session_turn
 from frontier_agent.models.node_context import NodeContext
 from frontier_agent.state.event_store.sqlite import EventStore
+from plugins.corpus.progress import CorpusReadState
 from plugins.tools._coerce import coerce_json_list
 from plugins.tools._sandbox import (
     BwrapSandbox,
@@ -953,6 +954,7 @@ def _build_observers(
     wall_deadline_s: float = 0,
     force_compaction_first: bool = False,
     bus_task_id: str = "",
+    corpus_read_state: CorpusReadState | None = None,
 ) -> list[Any]:
     from workflows.agent_team.observers.evidence_boundary import EvidenceBoundaryObserver
 
@@ -1007,6 +1009,9 @@ def _build_observers(
     # A4 消费账本（观测模式）：与子代理共用同一 run 账本，记录 offered/requested/
     # fetched，并在各自 loop 结束核验 delivered、落盘工件；绝不阻断运行。
     from plugins.corpus.ledger import ConsumptionLedgerObserver
+    from plugins.corpus.progress import CorpusProgressObserver
+
+    observers.insert(0, CorpusProgressObserver(read_state=corpus_read_state))
 
     observers.append(
         ConsumptionLedgerObserver(
@@ -1579,6 +1584,7 @@ async def main_agent_node(
 
     event_store = registry.get_optional(EventStore)
     traj_dir = _resolve_trajectory_dir(state, ctx.task_id, trajectory_subdir)
+    corpus_read_state = CorpusReadState()
     observers = _build_observers(
         traj_dir=traj_dir,
         task_id=ctx.task_id,
@@ -1595,6 +1601,7 @@ async def main_agent_node(
         wall_deadline_s=0,
         force_compaction_first=(context_compaction == "tiered" and max_len > 0),
         bus_task_id=bus_task_id,
+        corpus_read_state=corpus_read_state,
     )
     observers.insert(0, TeamPhaseBudgetObserver(phase_budget, prompt_mode=prompt_mode))
     delivery_observer = TeamDeliveryObserver(phase_budget, coordination_tools=tuple(tool_names))
@@ -1732,6 +1739,7 @@ async def main_agent_node(
     subagent_prompt_addendum = str(metadata.get("_subagent_prompt_addendum") or "").strip()
     swarm_runtime = SwarmSubagentRuntime(
         original_question=subagent_original_question,
+        corpus_read_state=corpus_read_state,
         prompt_mode=prompt_mode,
         trajectory_dir=traj_dir,
         worktree_root=worktree_root,

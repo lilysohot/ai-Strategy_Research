@@ -56,6 +56,10 @@ class CorpusContextReuseObserver(BaseObserver):
                     continue
                 if not isinstance(body, dict) or body.get("ok") is not True:
                     continue
+                # Document continuations recheck source admission and membership,
+                # even when an identical final page remains in the conversation.
+                if body.get("scope") == "document":
+                    continue
                 if body.get("doc_id") != doc_id or body.get("build_id") != doc_id[4:]:
                     continue
                 if (body.get("next_cursor") or body.get("item_errors") or body.get("unresolved")

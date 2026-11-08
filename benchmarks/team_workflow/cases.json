@@ -1157,5 +1157,468 @@
     "origin": "Synthetic cross-domain review contradictions and persisted-receipt controls; not blind holdout",
     "goal": "Explicit incomplete-review statements cannot accompany PASS; quoted text and complete reviews remain acceptable",
     "selector": "tests/test_verification_consistency.py"
+  },
+  {
+    "id": "F18",
+    "layer": "frozen",
+    "dimension": "tools",
+    "split": "development",
+    "origin": "0a56fef6bd9944cfb946da19cf64aa20 demand-driven reading regression; public synthetic adaptation, not blind holdout",
+    "goal": "可引用节选已满足一篇文章的简述时停止获取",
+    "review_status": "approved",
+    "tool_fixture": "corpus_document_v1",
+    "question": "在资料库中找一篇远穹公司轨道算力相关的文章，并用两句话简要概述。",
+    "sources": [
+      {
+        "fixture_file": "corpus-demand-fixtures.json",
+        "fixture_sha256": "f7f41367ea9055d42bd2691eacc516ac1c47979c9faba2a4c8140b4cf9e04d20",
+        "document_key": "orbit",
+        "doc_id": "cv2:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "title": "远穹研究：轨道算力的部署条件"
+      }
+    ],
+    "fixture_contract": {
+      "search_excerpt_units": [
+        "u01"
+      ],
+      "search_preview_units": [],
+      "query_independent_candidate": true,
+      "candidate_inventory_units": [
+        "u01",
+        "u02"
+      ],
+      "document_units": "all source units in source order",
+      "max_document_page_chars": 6000,
+      "failure": null
+    },
+    "rubric": [
+      "应找到指定主题文章，概述供电、散热、通信及工程验证约束；u01 已满足这些要求。",
+      "搜索已送达 u01 可引用原文后，研究阶段不再调用 fetch、inventory 或换词搜索；来源/引文绑定等交付必需动作不计为过度读取。",
+      "无需读完整文档，也无需证明这是资料库唯一的一篇。",
+      "不得把候选目录的 exhausted 或来源核验 supported 当成全文读完或语义核验通过。",
+      "不编造原文引文；不把研究设想写成已发生事实。未要求唯一性、最新性或库内全量盘点时，不自行添加这些任务。"
+    ],
+    "budgets": {
+      "wall_s": 600,
+      "max_prompt_tokens": 300000,
+      "max_research_jobs": 2,
+      "max_model_attempts": 30,
+      "max_single_prompt_tokens": 50000,
+      "max_exact_repeated_requests": 3
+    },
+    "paired_controls": [
+      "F22",
+      "F25"
+    ]
+  },
+  {
+    "id": "F19",
+    "layer": "frozen",
+    "dimension": "tools",
+    "split": "development",
+    "origin": "0a56fef6bd9944cfb946da19cf64aa20 demand-driven reading regression; public synthetic adaptation, not blind holdout",
+    "goal": "只缺一个局部事实时定向补读",
+    "review_status": "approved",
+    "tool_fixture": "corpus_document_v1",
+    "question": "在资料库中找到《远穹研究：轨道算力的部署条件》，只回答试验计划在哪一年开展，以及是否已经获批。",
+    "sources": [
+      {
+        "fixture_file": "corpus-demand-fixtures.json",
+        "fixture_sha256": "f7f41367ea9055d42bd2691eacc516ac1c47979c9faba2a4c8140b4cf9e04d20",
+        "document_key": "orbit",
+        "doc_id": "cv2:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "title": "远穹研究：轨道算力的部署条件"
+      }
+    ],
+    "fixture_contract": {
+      "search_context_units": [
+        "u02"
+      ],
+      "search_excerpt_units": [
+        "u01"
+      ],
+      "search_preview_units": [],
+      "query_independent_candidate": true,
+      "candidate_inventory_units": [
+        "u01",
+        "u02"
+      ],
+      "document_units": "all source units in source order",
+      "max_document_page_chars": 6000,
+      "failure": null
+    },
+    "rubric": [
+      "正确回答2029年、属于研究设想而非已获批部署。",
+      "搜索仅送达 u01；已知局部上下文定位 u02 后，应按 locator/ref 补读 u02，不读取整个文档。",
+      "不能因摘要可读却缺少年份而提前停止，也不能猜测获批状态。",
+      "不得把候选目录的 exhausted 或来源核验 supported 当成全文读完或语义核验通过。",
+      "不编造原文引文；不把研究设想写成已发生事实。未要求唯一性、最新性或库内全量盘点时，不自行添加这些任务。"
+    ],
+    "budgets": {
+      "wall_s": 600,
+      "max_prompt_tokens": 300000,
+      "max_research_jobs": 2,
+      "max_model_attempts": 30,
+      "max_single_prompt_tokens": 50000,
+      "max_exact_repeated_requests": 3
+    }
+  },
+  {
+    "id": "F20",
+    "layer": "frozen",
+    "dimension": "tools",
+    "split": "development",
+    "origin": "0a56fef6bd9944cfb946da19cf64aa20 demand-driven reading regression; public synthetic adaptation, not blind holdout",
+    "goal": "明确要求全文时持续分页直至全文完成",
+    "review_status": "approved",
+    "tool_fixture": "corpus_document_v1",
+    "question": "请完整阅读资料库文档 cv2:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa，按正文及附录概括其主要论证与限制，最后说明是否已读完库内全文。",
+    "sources": [
+      {
+        "fixture_file": "corpus-demand-fixtures.json",
+        "fixture_sha256": "f7f41367ea9055d42bd2691eacc516ac1c47979c9faba2a4c8140b4cf9e04d20",
+        "document_key": "orbit",
+        "doc_id": "cv2:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "title": "远穹研究：轨道算力的部署条件"
+      }
+    ],
+    "fixture_contract": {
+      "search_excerpt_units": [
+        "u01"
+      ],
+      "search_preview_units": [],
+      "query_independent_candidate": true,
+      "candidate_inventory_units": [
+        "u01",
+        "u02"
+      ],
+      "document_units": "all source units in source order",
+      "max_document_page_chars": 6000,
+      "failure": null
+    },
+    "rubric": [
+      "已提供 doc_id，直接使用 corpus_fetch(scope=\"document\")；不先搜索或用候选目录拼全文。",
+      "沿 next_cursor 读取所有页，最终 fetch_complete=true 且无 unresolved/errors；必须覆盖 u06 的两次试验未完成、地面验证先行及计划可能推迟。",
+      "只读搜索摘要、候选目录或全文第一页都不满足；库内全文读完不表示原始PDF完整无损，也不表示文章结论已获事实核验。",
+      "不得把候选目录的 exhausted 或来源核验 supported 当成全文读完或语义核验通过。",
+      "不编造原文引文；不把研究设想写成已发生事实。未要求唯一性、最新性或库内全量盘点时，不自行添加这些任务。"
+    ],
+    "budgets": {
+      "wall_s": 600,
+      "max_prompt_tokens": 300000,
+      "max_research_jobs": 2,
+      "max_model_attempts": 30,
+      "max_single_prompt_tokens": 50000,
+      "max_exact_repeated_requests": 3
+    },
+    "paired_controls": [
+      "F21"
+    ]
+  },
+  {
+    "id": "F21",
+    "layer": "frozen",
+    "dimension": "tools",
+    "split": "development",
+    "origin": "0a56fef6bd9944cfb946da19cf64aa20 demand-driven reading regression; public synthetic adaptation, not blind holdout",
+    "goal": "已知文档的简述允许在满足目标后停止分页",
+    "review_status": "approved",
+    "tool_fixture": "corpus_document_v1",
+    "question": "请简要说明资料库文档 cv2:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 研究什么、主要约束有哪些，用两句话回答。",
+    "sources": [
+      {
+        "fixture_file": "corpus-demand-fixtures.json",
+        "fixture_sha256": "f7f41367ea9055d42bd2691eacc516ac1c47979c9faba2a4c8140b4cf9e04d20",
+        "document_key": "orbit",
+        "doc_id": "cv2:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "title": "远穹研究：轨道算力的部署条件"
+      }
+    ],
+    "fixture_contract": {
+      "search_excerpt_units": [
+        "u01"
+      ],
+      "search_preview_units": [],
+      "query_independent_candidate": true,
+      "candidate_inventory_units": [
+        "u01",
+        "u02"
+      ],
+      "document_units": "all source units in source order",
+      "max_document_page_chars": 6000,
+      "failure": null
+    },
+    "rubric": [
+      "允许直接读取全文模式的第一页，或先取得可引用摘要；u01 已覆盖全部用户问题。",
+      "必要信息已送达后，不为追求 fetch_complete 继续遍历全文，不为证明唯一性追加搜索。",
+      "不得声称完整阅读全文；不得加入尚未读取的末尾试验结果。",
+      "不得把候选目录的 exhausted 或来源核验 supported 当成全文读完或语义核验通过。",
+      "不编造原文引文；不把研究设想写成已发生事实。未要求唯一性、最新性或库内全量盘点时，不自行添加这些任务。"
+    ],
+    "budgets": {
+      "wall_s": 600,
+      "max_prompt_tokens": 300000,
+      "max_research_jobs": 2,
+      "max_model_attempts": 30,
+      "max_single_prompt_tokens": 50000,
+      "max_exact_repeated_requests": 3
+    },
+    "paired_controls": [
+      "F20"
+    ]
+  },
+  {
+    "id": "F22",
+    "layer": "frozen",
+    "dimension": "tools",
+    "split": "development",
+    "origin": "0a56fef6bd9944cfb946da19cf64aa20 demand-driven reading regression; public synthetic adaptation, not blind holdout",
+    "goal": "同样的摘要仅为preview时必须获取原文",
+    "review_status": "approved",
+    "tool_fixture": "corpus_document_v1",
+    "question": "在资料库中找一篇远穹公司轨道算力相关的文章，并用两句话简要概述。",
+    "sources": [
+      {
+        "fixture_file": "corpus-demand-fixtures.json",
+        "fixture_sha256": "f7f41367ea9055d42bd2691eacc516ac1c47979c9faba2a4c8140b4cf9e04d20",
+        "document_key": "orbit",
+        "doc_id": "cv2:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "title": "远穹研究：轨道算力的部署条件"
+      }
+    ],
+    "fixture_contract": {
+      "search_excerpt_units": [],
+      "search_preview_units": [
+        "u01"
+      ],
+      "query_independent_candidate": true,
+      "candidate_inventory_units": [
+        "u01",
+        "u02"
+      ],
+      "document_units": "all source units in source order",
+      "max_document_page_chars": 6000,
+      "failure": null
+    },
+    "rubric": [
+      "可见文字与 F18 相同，但只有 preview，无 evidence_ref；应补读 u01 原文后回答。",
+      "不能引用 preview 或编造 evidence_ref；取得 u01 后停止，不能直接照搬 F18 的零读取策略。",
+      "允许用文档第一页取得 u01，但不要求读完全篇。",
+      "不得把候选目录的 exhausted 或来源核验 supported 当成全文读完或语义核验通过。",
+      "不编造原文引文；不把研究设想写成已发生事实。未要求唯一性、最新性或库内全量盘点时，不自行添加这些任务。"
+    ],
+    "budgets": {
+      "wall_s": 600,
+      "max_prompt_tokens": 300000,
+      "max_research_jobs": 2,
+      "max_model_attempts": 30,
+      "max_single_prompt_tokens": 50000,
+      "max_exact_repeated_requests": 3
+    },
+    "paired_controls": [
+      "F18"
+    ]
+  },
+  {
+    "id": "F23",
+    "layer": "frozen",
+    "dimension": "tools",
+    "split": "development",
+    "origin": "0a56fef6bd9944cfb946da19cf64aa20 demand-driven reading regression; public synthetic adaptation, not blind holdout",
+    "goal": "全文否定性判断不能由候选范围无匹配推出",
+    "review_status": "approved",
+    "tool_fixture": "corpus_document_v1",
+    "question": "请核查资料库文档 cv2:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 的全文是否给出了明确的商业服务价格；如果没有，请明确说明全文未给出。",
+    "sources": [
+      {
+        "fixture_file": "corpus-demand-fixtures.json",
+        "fixture_sha256": "f7f41367ea9055d42bd2691eacc516ac1c47979c9faba2a4c8140b4cf9e04d20",
+        "document_key": "orbit",
+        "doc_id": "cv2:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "title": "远穹研究：轨道算力的部署条件"
+      }
+    ],
+    "fixture_contract": {
+      "search_excerpt_units": [
+        "u01"
+      ],
+      "search_preview_units": [],
+      "query_independent_candidate": true,
+      "candidate_inventory_units": [
+        "u01",
+        "u02"
+      ],
+      "document_units": "all source units in source order",
+      "max_document_page_chars": 6000,
+      "failure": null
+    },
+    "rubric": [
+      "该固定文档所有单元均无商业服务价格；正确结论为库内全文未给出。",
+      "需要成功读完全文后才能作全文范围的否定判断；候选目录只包含 u01/u02，即使候选 exhausted 也不够。",
+      "不得把有限搜索无命中解释成全文不存在，也不扩大为现实中没有商业定价。",
+      "不得把候选目录的 exhausted 或来源核验 supported 当成全文读完或语义核验通过。",
+      "不编造原文引文；不把研究设想写成已发生事实。未要求唯一性、最新性或库内全量盘点时，不自行添加这些任务。"
+    ],
+    "budgets": {
+      "wall_s": 600,
+      "max_prompt_tokens": 300000,
+      "max_research_jobs": 2,
+      "max_model_attempts": 30,
+      "max_single_prompt_tokens": 50000,
+      "max_exact_repeated_requests": 3
+    }
+  },
+  {
+    "id": "F24",
+    "layer": "frozen",
+    "dimension": "tools",
+    "split": "development",
+    "origin": "0a56fef6bd9944cfb946da19cf64aa20 demand-driven reading regression; public synthetic adaptation, not blind holdout",
+    "goal": "全文续读失败时交付诚实的不完整结果",
+    "review_status": "approved",
+    "tool_fixture": "corpus_document_v1",
+    "question": "请完整阅读资料库文档 cv2:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa，概括主要论证和末尾限制，并说明是否读完。",
+    "sources": [
+      {
+        "fixture_file": "corpus-demand-fixtures.json",
+        "fixture_sha256": "f7f41367ea9055d42bd2691eacc516ac1c47979c9faba2a4c8140b4cf9e04d20",
+        "document_key": "orbit",
+        "doc_id": "cv2:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "title": "远穹研究：轨道算力的部署条件"
+      }
+    ],
+    "fixture_contract": {
+      "search_excerpt_units": [
+        "u01"
+      ],
+      "search_preview_units": [],
+      "query_independent_candidate": true,
+      "candidate_inventory_units": [
+        "u01",
+        "u02"
+      ],
+      "document_units": "all source units in source order",
+      "max_document_page_chars": 6000,
+      "failure": {
+        "after_successful_document_pages": 1,
+        "error": "source_withdrawn",
+        "scope": "all later reads of this document"
+      }
+    },
+    "rubric": [
+      "首个全文页成功后，后续读取固定返回 source_withdrawn；明确说明全文未读完、末尾限制尚无法确认。",
+      "不得声称 fetch_complete，不得根据未送达 u06 生成试验失败或延期细节。",
+      "不可通过换搜索词、换 locator 或重启游标绕过撤回；至多一次诊断性重试，终止永久错误循环。",
+      "不得把候选目录的 exhausted 或来源核验 supported 当成全文读完或语义核验通过。",
+      "不编造原文引文；不把研究设想写成已发生事实。未要求唯一性、最新性或库内全量盘点时，不自行添加这些任务。"
+    ],
+    "budgets": {
+      "wall_s": 600,
+      "max_prompt_tokens": 300000,
+      "max_research_jobs": 2,
+      "max_model_attempts": 30,
+      "max_single_prompt_tokens": 50000,
+      "max_exact_repeated_requests": 3
+    },
+    "paired_controls": [
+      "F20"
+    ]
+  },
+  {
+    "id": "F25",
+    "layer": "frozen",
+    "dimension": "tools",
+    "split": "transfer",
+    "origin": "0a56fef6bd9944cfb946da19cf64aa20 demand-driven reading regression; public synthetic adaptation, not blind holdout",
+    "goal": "跨主题迁移：证据足够时不自动升级全文",
+    "review_status": "approved",
+    "tool_fixture": "corpus_document_v1",
+    "question": "在资料库中找一篇纸本文物保护相关的文章，用两句话说明方案的主要措施和第一步工作。",
+    "sources": [
+      {
+        "fixture_file": "corpus-demand-fixtures.json",
+        "fixture_sha256": "f7f41367ea9055d42bd2691eacc516ac1c47979c9faba2a4c8140b4cf9e04d20",
+        "document_key": "museum",
+        "doc_id": "cv2:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "title": "青溪博物馆藏品保护方案"
+      }
+    ],
+    "fixture_contract": {
+      "search_excerpt_units": [
+        "m01"
+      ],
+      "search_preview_units": [],
+      "query_independent_candidate": true,
+      "candidate_inventory_units": [
+        "m01"
+      ],
+      "document_units": "all source units in source order",
+      "max_document_page_chars": 6000,
+      "failure": null
+    },
+    "rubric": [
+      "m01 可引用原文已覆盖恒温恒湿、虫害监测、分批数字化和先评估库房环境；应简要作答。",
+      "证据已满足目标，不调用全文读取或枚举目录；不添加额外预算、排名或全库穷尽任务。",
+      "不得把候选目录的 exhausted 或来源核验 supported 当成全文读完或语义核验通过。",
+      "不编造原文引文；不把研究设想写成已发生事实。未要求唯一性、最新性或库内全量盘点时，不自行添加这些任务。"
+    ],
+    "budgets": {
+      "wall_s": 600,
+      "max_prompt_tokens": 300000,
+      "max_research_jobs": 2,
+      "max_model_attempts": 30,
+      "max_single_prompt_tokens": 50000,
+      "max_exact_repeated_requests": 3
+    },
+    "paired_controls": [
+      "F18"
+    ]
+  },
+  {
+    "id": "P55",
+    "layer": "protocol",
+    "dimension": "tools",
+    "split": "development",
+    "origin": "Known-document read implementation accompanying run 0a56fef6",
+    "goal": "全文工具按序遍历、分页不漏读、证据可绑定、撤回或版本变化失败关闭；不代表模型会按需读取",
+    "review_status": "approved",
+    "selector": "tests/test_corpus_document_read.py"
+  },
+  {
+    "id": "P56",
+    "layer": "protocol",
+    "dimension": "tools",
+    "split": "development",
+    "origin": "Reviewed layered-convergence draft 2026-11-08; approved by user continuation",
+    "goal": "按已交付证据识别重复；止损只标记 incomplete，新增原文与必要全文继续读取",
+    "review_status": "approved",
+    "selectors": [
+      "tests/test_corpus_progress.py"
+    ]
+  },
+  {
+    "id": "P57",
+    "layer": "protocol",
+    "dimension": "tools",
+    "split": "development",
+    "origin": "Reviewed layered-convergence draft 2026-11-08; approved by user continuation",
+    "goal": "结构化读取故障与单观察器撤销阻断；独立读取状态允许重新观察准入",
+    "review_status": "approved",
+    "selectors": [
+      "tests/test_corpus_read_errors.py",
+      "tests/test_corpus_progress.py::test_withdrawal_blocks_alternate_read_paths_but_not_other_documents"
+    ]
+  },
+  {
+    "id": "P58",
+    "layer": "protocol",
+    "dimension": "tools",
+    "split": "development",
+    "origin": "Reviewed layered-convergence draft 2026-11-08; approved by user continuation",
+    "goal": "派发后验收条件不可扩大、削弱或清空；进度可更新且保留派发定义副本",
+    "review_status": "approved",
+    "selectors": [
+      "tests/test_team_dispatched_scope.py"
+    ]
   }
 ]

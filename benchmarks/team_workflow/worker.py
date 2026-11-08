@@ -45,7 +45,23 @@ def budget_layout(agent: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-async def execute(case: dict[str, Any], out: Path, profile: str) -> dict[str, Any]:
+async def execute(
+    case: dict[str, Any], out: Path, profile: str, hint_arm: str = "A"
+) -> dict[str, Any]:
+    from benchmarks.team_workflow.run import require_runnable
+
+    require_runnable(case)
+    if case.get("tool_fixture") == "corpus_document_v1":
+        from benchmarks.team_workflow.corpus_fixtures import fixed_corpus_tools
+
+        with fixed_corpus_tools(case, out, hint_arm) as tools:
+            return await _execute(case, out, profile, tools)
+    return await _execute(case, out, profile)
+
+
+async def _execute(
+    case: dict[str, Any], out: Path, profile: str, corpus_tools: dict[str, Any] | None = None
+) -> dict[str, Any]:
     from frontier_agent.components.agent_bus import AgentBus
     from frontier_agent.core.runtime.registries import AgentRegistry, services
     from frontier_agent.core.runtime.resources.manager import ResourceManager
@@ -80,6 +96,17 @@ async def execute(case: dict[str, Any], out: Path, profile: str) -> dict[str, An
             "research_wall_time_s": None,
         },
     }
+    if corpus_tools is not None:
+        overrides["agent"]["main_agent_tools"] = [
+            n for n in COORDINATION if n != "submit_report"
+        ] + ["corpus_search", "corpus_fetch", "corpus_inventory", "corpus_submit_manifest"]
+        overrides["agent"]["sub_agent_tools"] = [
+            "corpus_search",
+            "corpus_fetch",
+            "corpus_inventory",
+            "corpus_submit_manifest",
+            "submit_report",
+        ]
     effective = load_swarm_profile(profile, overrides=overrides)
     public_settings = {
         "model_settings": {
@@ -100,7 +127,7 @@ async def execute(case: dict[str, Any], out: Path, profile: str) -> dict[str, An
             **public_settings,
         }
     llm = create_swarm_llm(effective)
-    tools = fixed_tools(case["sources"])
+    tools = corpus_tools if corpus_tools is not None else fixed_tools(case["sources"])
     agents = AgentRegistry()
     agents.register(MAIN_AGENT_DEF)
     agents.register(SUB_AGENT_DEF)
@@ -112,8 +139,12 @@ async def execute(case: dict[str, Any], out: Path, profile: str) -> dict[str, An
     # outcome, split label, provenance or budget acceptance thresholds enter it.
     question = (
         case["question"]
-        + "\n\n可检索的固定资料入口：\n"
-        + "\n".join(f"{source['title']}: {source['url']}" for source in case["sources"])
+        if corpus_tools is not None
+        else (
+            case["question"]
+            + "\n\n可检索的固定资料入口：\n"
+            + "\n".join(f"{source['title']}: {source['url']}" for source in case["sources"])
+        )
     )
     metadata = {
         "profile": profile,
@@ -158,9 +189,10 @@ def main() -> None:
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--profile", default="default")
+    parser.add_argument("--hint-arm", choices=["A", "B"], default="A")
     args = parser.parse_args()
     case = json.loads(args.input.read_text())
-    result = asyncio.run(execute(case, args.out.resolve(), args.profile))
+    result = asyncio.run(execute(case, args.out.resolve(), args.profile, args.hint_arm))
     (args.out / "worker.json").write_text(
         json.dumps(result, ensure_ascii=False, indent=2, default=str)
     )

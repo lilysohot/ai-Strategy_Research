@@ -7,7 +7,8 @@
 结构性上下文以明确单元标识附带，逐单元哈希验证，单元间以换行分隔，spans 保留各单元
 精确范围。离线校验正是靠逐字比对来抓编造的。
 
-入口（A2.1）：``locator``、``locators``、``cursor`` **恰选其一**。
+入口：``locator``、``locators``、``cursor`` 或 ``scope="document"`` 恰选其一。
+文档模式按版本内全部原文单元顺序阅读，不依赖检索候选，不改变现有切块。
 
 - **单块（``locator``）**：结果装得下时维持既有单块字段语义（``ok/text/spans/
   source_ranges/kind/build_id/...``）原样返回，不改变既有消费者；
@@ -132,20 +133,6 @@ def _dedupe_locators(locators: list[str]) -> list[str]:
             seen.add(locator)
             out.append(locator)
     return out
-
-
-def _error_code(exc: Exception) -> str:
-    from plugins.corpus.preparation import read_pg
-
-    if isinstance(exc, read_pg.LegacyHandleError):
-        return "archive_required"
-    if isinstance(exc, read_pg.UnknownHandleError):
-        return "unknown_handle"
-    if isinstance(exc, read_pg.WithdrawnError):
-        return "withdrawn"
-    if isinstance(exc, read_pg.IntegrityError):
-        return "integrity"
-    return "fetch_failed"
 
 
 def _break_points(text: str, kind: str, start: int) -> list[int]:
@@ -501,6 +488,11 @@ def fit_structured_payload(body: str, budget: int) -> str | None:
     if len(body) <= budget:
         return body
 
+    if payload.get("scope") == "document":
+        from plugins.tools._corpus_document import fit_document_payload
+
+        return fit_document_payload(payload, budget)
+
     if "items" in payload:  # A2 分页信封：正文在 items，绝不能按单块结果压缩
         compact_envelope = _compact_envelope(payload)
         if len(compact_envelope) <= budget:
@@ -683,7 +675,12 @@ def _page(
     diagnostics_on = False
 
     # A3：关联在**整个请求范围**上算一次（与清单同口径），逐页稳定；读取失败则退回仅角色。
-    relation_fields = svc.context_relations(doc_id, request)
+    from plugins.corpus.read_errors import read_failure
+
+    try:
+        relation_fields = svc.context_relations(doc_id, request)
+    except Exception as exc:
+        return _json_error(str(exc), doc_id=doc_id, fetch_complete=False, **read_failure(exc))
 
     def relation_extra(locator: str, kind: str) -> dict[str, Any]:
         found = relation_fields.get(locator)
@@ -737,7 +734,12 @@ def _page(
         try:
             evidence = svc.fetch_verbatim(doc_id, locator)
         except Exception as exc:
-            item_errors.append({"locator": locator, "code": _error_code(exc), "error": str(exc)})
+            failure = read_failure(exc)
+            # Revocation applies to the entire document, including any earlier
+            # members fetched in this call. Do not deliver a mixed-admission page.
+            if failure["failure_scope"] == "document":
+                return _json_error(str(exc), doc_id=doc_id, fetch_complete=False, **failure)
+            item_errors.append({"locator": locator, "error": str(exc), **failure})
             if locator not in unresolved:
                 unresolved.append(locator)
             mi += 1
@@ -991,8 +993,13 @@ async def corpus_fetch(
     view: str = "full",
     max_chars: int = 6000,
     force_refresh: bool = False,
+    scope: str | None = None,
 ) -> str:
-    """取回语料中指定块的逐字原文，返回可直接提交清单的 ``evidence_ref``。
+    """读取已知文档全文或指定块原文，返回可直接引用的 ``evidence_ref``。
+
+    已确定文档并需要阅读全文时，传 doc_id 和 scope="document"，无需再次搜索或列举块。
+    文档模式按原文单元顺序分页，续读只传 doc_id 与 next_cursor。fetch_complete=true
+    只证明本版本入库文本遍历结束，不证明原 PDF 提取完整；取得足够内容即可回答。
 
     清单 evidence 优先只填本结果（或分页 item）的 evidence_ref，可附 purpose；
     系统自动绑定该片段的文档、块和精确原文，不要再生成 quote。存储不可用而未返回
@@ -1018,7 +1025,8 @@ async def corpus_fetch(
             可解析引用（``meta_ref``）。取值非法时返回 ``ok=false``，不静默兼容。
             游标模式下忽略本参数（以游标绑定的视图为准）。
         max_chars: 本页序列化 JSON 的字符上限；服务按实际运行路径收紧。
-            ``locator``、``locators``、``cursor`` 三者**恰选其一**。
+        scope: 传 "document" 开始全文阅读，与 locator/locators 互斥；续读游标自动绑定范围。
+            不传时保留现有单块、批量和游标接口。全文页最多 6000 字符，包含信封和引用。
 
     Returns:
         单块（``locator``）装得下时返回既有单块形状 ``{"ok": true, "view", "doc_id",
@@ -1037,7 +1045,7 @@ async def corpus_fetch(
         游标类型不符时返回 ``ok=false``。
     """
     return publish_fetch_references(
-        await _fetch(doc_id, locator, locators, cursor, view, max_chars)
+        await _fetch(doc_id, locator, locators, cursor, view, max_chars, scope)
     )
 
 
@@ -1048,6 +1056,7 @@ async def _fetch(
     cursor: str | None,
     view: str,
     max_chars: int,
+    scope: str | None = None,
 ) -> str:
     if not isinstance(doc_id, str) or not doc_id.strip():
         return _json_error("doc_id 必须是非空字符串")
@@ -1067,6 +1076,24 @@ async def _fetch(
             f"max_chars 必须是 ≥ {_MIN_BUDGET} 的整数（收到 {max_chars!r}）；"
             "预算过小则连分页信封都装不下",
         )
+
+    if scope not in (None, "document"):
+        return _json_error('scope 只支持 "document"，或省略以按块读取')
+    if scope == "document" and (locator is not None or locators is not None):
+        return _json_error("scope=document 与 locator/locators 互斥")
+    if scope == "document" or cursor is not None:
+        try:
+            decoded = (
+                decode_cursor(resolve_cursor_reference(cursor)) if cursor is not None else None
+            )
+        except CursorError as exc:
+            return _json_error(f"游标不可用：{exc}")
+        if scope == "document" or (decoded and decoded.get("scope") == "document"):
+            if locator is not None or locators is not None:
+                return _json_error("全文游标与 locator/locators 互斥")
+            from plugins.tools._corpus_document import document_page
+
+            return document_page(get_service(), doc_id, max_chars, decoded)
 
     given = [locator is not None, locators is not None, cursor is not None]
     if sum(given) != 1:
@@ -1145,8 +1172,18 @@ async def _fetch(
         svc = get_service()
         evidence = svc.fetch_verbatim(doc_id, locator)
         semantic_cells = svc.emit_cells(evidence)
+        extra = svc.context_relations(doc_id, [locator]).get(locator) or {
+            "content_role": content_role_for_kind(evidence.kind),
+            "relations": [],
+            "relation_status": "unknown",
+        }
     except Exception as exc:
-        return _json_error(f"取证失败（句柄不可解析、跨 build 或来源已撤销）：{exc}")
+        from plugins.corpus.read_errors import read_failure
+
+        return _json_error(
+            f"取证失败：{exc}", doc_id=doc_id, locator=locator,
+            fetch_complete=False, **read_failure(exc),
+        )
 
     if not evidence.text:
         # Keep the single-locator fast path consistent with paged fetches:
@@ -1161,11 +1198,6 @@ async def _fetch(
     # 排列，任何 head-only 截断下模型都先见到 text 与续取所需控制字段，体积较大的
     # 诊断元数据（units/semantic_cells）置于其后。字段与语义保持不变。
     # A3：单块请求范围只有本块，故无同范围关联；content_role 仍按块种类给出。
-    extra = svc.context_relations(doc_id, [locator]).get(locator) or {
-        "content_role": content_role_for_kind(evidence.kind),
-        "relations": [],
-        "relation_status": "unknown",
-    }
     full = _full_payload(doc_id, locator, evidence, semantic_cells, extra)
     full["evidence_ref"] = fetch_evidence_ref(doc_id, full)
     body = json.dumps(_compact_payload(full) if view == "compact" else full, ensure_ascii=False)

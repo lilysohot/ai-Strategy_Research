@@ -253,6 +253,10 @@ def fetch_verbatim(
     Context is the same bounded structural projection used by fetch_bands. The
     original chunk ranges remain unchanged; added units are explicitly identified.
     """
+    if locator.startswith("chunk:document1/"):
+        from plugins.corpus.preparation.document_read import fetch_unit
+
+        return fetch_unit(dsn, doc_id, locator, sandbox_db=sandbox_db)
     if locator.startswith("chunk:native1/"):
         from plugins.corpus.retrieval.native_live import fetch
 

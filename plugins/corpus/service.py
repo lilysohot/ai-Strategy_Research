@@ -59,6 +59,7 @@ if TYPE_CHECKING:
     from plugins.corpus.evidence_pipeline import EvidenceRun
     from plugins.corpus.fetch import FetchedBlock
     from plugins.corpus.material_semantics import MaterialRun, MaterialType
+    from plugins.corpus.preparation.document_read import DocumentUnits
     from plugins.corpus.preparation.read_pg import CellEvidence, ChunkEvidence, ChunkStructure
     from plugins.corpus.preparation.search_pg import SearchHit as SearchPgHit
     from plugins.corpus.preparation.selection import SelectedBand
@@ -2254,6 +2255,15 @@ class CorpusService:
         if r is None:
             return None
         return FetchedBlock(doc_id=r["doc_id"], seq=r["seq"], locator=r["locator"], text=r["text"])
+
+    def document_units(self, doc_id: str) -> DocumentUnits:
+        """All authoritative units in source order, bound to the requested build."""
+        from plugins.corpus.preparation import read_pg
+        from plugins.corpus.preparation.document_read import read_units
+
+        if self.read_chain() != "new":
+            raise read_pg.LegacyHandleError("archive_required：全文阅读要求版本化原文存储")
+        return read_units(self._dsn, doc_id, sandbox_db=self._target_db)
 
     def document_text(self, doc_id: str) -> str | None:
         if self.read_chain() == "new":

@@ -70,7 +70,7 @@ def test_consecutive_execution_errors_stop_model_launches_without_dropping_cases
         runner.run(
             argparse.Namespace(
                 layer="frozen",
-                case=None,
+                case=[f"F{i:02}" for i in range(1, 18)],
                 repeats=1,
                 profile="default",
                 max_consecutive_errors=2,
@@ -88,9 +88,9 @@ def test_consecutive_execution_errors_stop_model_launches_without_dropping_cases
 
 def test_catalog_has_reproducible_cases_and_no_unseen_holdout_claim():
     cases = catalog()
-    assert len(cases) == 71
+    assert len(cases) == 83
     assert {c["split"] for c in cases} == {"development", "transfer"}
-    assert len([c for c in cases if c["layer"] == "protocol"]) == 54
+    assert len([c for c in cases if c["layer"] == "protocol"]) == 58
     for case in cases:
         assert case["origin"] and case["goal"]
 

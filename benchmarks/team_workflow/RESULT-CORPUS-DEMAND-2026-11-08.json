@@ -1,0 +1,230 @@
+{
+  "status": "paused_after_two_consecutive_execution_errors",
+  "run": "results/corpus-demand-ab-20261108",
+  "model": "deepseek-v4-1-flash-261017",
+  "temperature": 1.0,
+  "top_p": 0.95,
+  "planned_samples": 48,
+  "attempted_samples": 22,
+  "completed_without_top_level_execution_error": 17,
+  "execution_errors": 5,
+  "unassessed": 26,
+  "mechanical_states_after_scoring_correction": {
+    "fail": 13,
+    "needs_review": 4,
+    "error": 5,
+    "unassessed": 26
+  },
+  "protocol_cases": {
+    "passed": 55,
+    "total": 55,
+    "run": "results/corpus-demand-protocol-all-20261108"
+  },
+  "focused_tests_passed": 52,
+  "paired_completed_samples": [
+    {
+      "case": "F18",
+      "repeat": 1,
+      "A": {
+        "sample": "F18-A-r1",
+        "search": 7,
+        "fetch": 8,
+        "same_search_results_repeated": 6,
+        "input_tokens": 580877,
+        "elapsed_s": 196.945,
+        "hint_emissions": 7
+      },
+      "B": {
+        "sample": "F18-B-r1",
+        "search": 7,
+        "fetch": 3,
+        "same_search_results_repeated": 6,
+        "input_tokens": 371642,
+        "elapsed_s": 139.256,
+        "hint_emissions": 7
+      }
+    },
+    {
+      "case": "F18",
+      "repeat": 2,
+      "A": {
+        "sample": "F18-A-r2",
+        "search": 7,
+        "fetch": 3,
+        "same_search_results_repeated": 6,
+        "input_tokens": 505953,
+        "elapsed_s": 152.995,
+        "hint_emissions": 7
+      },
+      "B": {
+        "sample": "F18-B-r2",
+        "search": 3,
+        "fetch": 3,
+        "same_search_results_repeated": 2,
+        "input_tokens": 456593,
+        "elapsed_s": 155.721,
+        "hint_emissions": 3
+      }
+    },
+    {
+      "case": "F19",
+      "repeat": 1,
+      "A": {
+        "sample": "F19-A-r1",
+        "search": 3,
+        "fetch": 8,
+        "same_search_results_repeated": 2,
+        "input_tokens": 540841,
+        "elapsed_s": 130.689,
+        "hint_emissions": 3
+      },
+      "B": {
+        "sample": "F19-B-r1",
+        "search": 1,
+        "fetch": 6,
+        "same_search_results_repeated": 0,
+        "input_tokens": 634646,
+        "elapsed_s": 263.578,
+        "hint_emissions": 1
+      }
+    },
+    {
+      "case": "F19",
+      "repeat": 2,
+      "A": {
+        "sample": "F19-A-r2",
+        "search": 3,
+        "fetch": 3,
+        "same_search_results_repeated": 2,
+        "input_tokens": 357660,
+        "elapsed_s": 101.917,
+        "hint_emissions": 3
+      },
+      "B": {
+        "sample": "F19-B-r2",
+        "search": 2,
+        "fetch": 6,
+        "same_search_results_repeated": 1,
+        "input_tokens": 458399,
+        "elapsed_s": 99.208,
+        "hint_emissions": 2
+      }
+    },
+    {
+      "case": "F20",
+      "repeat": 1,
+      "A": {
+        "sample": "F20-A-r1",
+        "search": 1,
+        "fetch": 3,
+        "same_search_results_repeated": 0,
+        "input_tokens": 141365,
+        "elapsed_s": 52.994,
+        "hint_emissions": 1
+      },
+      "B": {
+        "sample": "F20-B-r1",
+        "search": 2,
+        "fetch": 13,
+        "same_search_results_repeated": 1,
+        "input_tokens": 691472,
+        "elapsed_s": 262.37,
+        "hint_emissions": 2
+      }
+    },
+    {
+      "case": "F23",
+      "repeat": 1,
+      "A": {
+        "sample": "F23-A-r1",
+        "search": 28,
+        "fetch": 14,
+        "same_search_results_repeated": 27,
+        "input_tokens": 1172053,
+        "elapsed_s": 312.694,
+        "hint_emissions": 28
+      },
+      "B": {
+        "sample": "F23-B-r1",
+        "search": 8,
+        "fetch": 21,
+        "same_search_results_repeated": 7,
+        "input_tokens": 909169,
+        "elapsed_s": 216.256,
+        "hint_emissions": 8
+      }
+    },
+    {
+      "case": "F25",
+      "repeat": 1,
+      "A": {
+        "sample": "F25-A-r1",
+        "search": 34,
+        "fetch": 8,
+        "same_search_results_repeated": 33,
+        "input_tokens": 692991,
+        "elapsed_s": 187.636,
+        "hint_emissions": 34
+      },
+      "B": {
+        "sample": "F25-B-r1",
+        "search": 9,
+        "fetch": 7,
+        "same_search_results_repeated": 8,
+        "input_tokens": 529114,
+        "elapsed_s": 167.195,
+        "hint_emissions": 9
+      }
+    }
+  ],
+  "paired_totals": {
+    "A": {
+      "search": 83,
+      "fetch": 47,
+      "same_search_results_repeated": 76,
+      "input_tokens": 3991740,
+      "elapsed_s": 1135.87
+    },
+    "B": {
+      "search": 32,
+      "fetch": 59,
+      "same_search_results_repeated": 25,
+      "input_tokens": 4051035,
+      "elapsed_s": 1303.584
+    }
+  },
+  "findings": [
+    "Production document pagination reconstructs all fixed source units; read capability and stopping behavior are separate.",
+    "The B hint did not reliably stop sufficient-summary or local-fact tasks from reading whole documents.",
+    "In seven completed A/B pairs, search calls decreased but fetch calls increased and known input tokens did not decrease.",
+    "Initial planning sometimes expands scope before the first search result; a search-return hint cannot prevent that earlier decision.",
+    "Some agents infer whole-corpus uniqueness from bounded identical search hits or confuse provenance supported with semantic verification.",
+    "F24-B-r1 honestly stopped after withdrawal without inventing the unread ending; no compared hint was emitted in that sample."
+  ],
+  "limitations": [
+    "Only 22 of 48 planned runs were attempted; repetitions are incomplete. No stable/general causal benefit is established.",
+    "Provider interruptions and tool-call schema repairs affect wall time; F19-B-r1 recovered from a member LLM error.",
+    "Synthetic repeated text and placeholder IDs triggered integrity investigations; results do not estimate average real-corpus performance.",
+    "The hint is emitted only by search results with excerpts; direct document reads and preview-only searches may never receive it.",
+    "The source fixture returns one query-independent candidate. Repeated result sets do not by themselves establish semantic query equivalence.",
+    "Source coverage remains unknown; reading all ingested units does not prove original PDF extraction completeness.",
+    "Four artifact-bound model reviews remain needs_review: two diagnostic fail, two unassessed due unsupported extra claims. No human PASS was assigned."
+  ],
+  "scoring_correction": {
+    "reason": "The approved corpus cases allow direct delivery; the inherited web teamwork gate wrongly required a sub-agent.",
+    "change": "Skip only the member-count gate for corpus_document_v1; historical web cases and all budgets/rubrics are unchanged.",
+    "original_states": {
+      "fail": 17,
+      "error": 5,
+      "unassessed": 26
+    },
+    "preserved_files": "Each attempted sample retains assessment-before-000.json; result.json includes assessment_code_sha256."
+  },
+  "next_repair_direction": [
+    "Keep original user-required answer fields and reading scope in the coordinator task contract; do not add uniqueness, full reading or metadata checks without a necessary gap.",
+    "Reuse already delivered evidence across research and verification; track remaining necessary gaps instead of assigning an independent full reread by default.",
+    "Represent permanent source withdrawal as a non-retryable acquisition outcome and test stop behavior separately from missing-content recovery.",
+    "Use realistic content-derived IDs and varied long-form synthetic prose in a separately reviewed follow-up set; do not overwrite this frozen dataset or its failures."
+  ],
+  "production_hint_changed": false
+}

@@ -12,6 +12,7 @@ import json
 import logging
 import os
 import re
+from copy import deepcopy
 from datetime import date
 from html import escape
 from pathlib import Path
@@ -551,6 +552,7 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
             validation_errors.append(_assignment_validation_error(index, exc))
             continue
         specs.append(spec)
+    board: dict[str, dict[str, Any]] = {}
     if is_agent_team:
         from plugins.tools.task_board import snapshot_tasks
 
@@ -582,6 +584,19 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
             else:
                 for tid in ids:
                     planned = board[tid]
+                    if (
+                        planned.get("execution_job_ids")
+                        and tid not in check_ids and not spec.can_publish
+                        and (
+                            planned.get("resolution") == "resolved"
+                            or not str(planned.get("gap") or "").strip()
+                        )
+                    ):
+                        validation_errors.append(
+                            f"{spec.agent}: {tid} was already dispatched; follow-up research "
+                            "requires an unresolved work item with a recorded gap. "
+                            "Use structured verification_checks for a planned check"
+                        )
                     check_only = planned.get("kind") == "verification" or (
                         planned.get("verification_required")
                         and planned.get("kind") != "research"
@@ -749,8 +764,30 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         task_metadata: dict[str, Any] = {}
         if isinstance(spec, AgentTeamAssignmentSpec):
             task_metadata["required_for_completion"] = spec.required_for_completion
-            if spec.work_item_ids:
+            if spec.work_item_ids and is_agent_team:
                 task_metadata["work_item_ids"] = list(spec.work_item_ids)
+                # Preserve the dispatch-time definition independently of later
+                # board progress and the member's free-text research plan.
+                task_metadata["work_item_contracts"] = [
+                    {
+                        "id": tid,
+                        "description": board[tid]["description"],
+                        "done_when": board[tid].get("done_when", ""),
+                        "verification_requirements": deepcopy(
+                            board[tid].get("verification_requirements", [])
+                        ),
+                    }
+                    for tid in spec.work_item_ids
+                ]
+                task_metadata["original_question"] = getattr(runtime, "original_question", "")
+                task_metadata["work_item_gaps"] = {
+                    tid: {
+                        "gap": board[tid].get("gap", ""),
+                        "prior_job_ids": list(board[tid].get("execution_job_ids", [])),
+                    }
+                    for tid in spec.work_item_ids
+                    if board[tid].get("execution_job_ids")
+                }
         publication_claim: tuple[str, ...] = ()
         publication_state: dict[str, Any] | None = None
         previous_publisher = ""

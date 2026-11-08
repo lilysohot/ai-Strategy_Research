@@ -29,6 +29,29 @@
 
 ## 2. 从资料到可引用证据
 
+### 已知文档的全文阅读（2026-11-08）
+
+已获得 `corpus_search` 返回的版本化 `doc_id` 后，需要阅读全文时可调用：
+
+```json
+{"doc_id": "cv2:<build_id>", "scope": "document"}
+```
+
+工具仍是 `corpus_fetch`。后续只需传同一 `doc_id` 和返回的 `next_cursor`，
+无需再次搜索、展开候选目录或自行枚举 locator。现有单块和批量接口保持兼容。
+这不是新的检索或切块方案：全文直接读取该 build 的 `corpus_units.raw_text`，
+按 `ordinal`、`unit_id` 顺序遍历，包含未进入检索投影的原文单元，不修改数据或索引。
+
+每页最多 6,000 个序列化 JSON 字符（可用 `max_chars` 调低），保留单元原文、页码、
+可复核的 locator 和 `evidence_ref`。长单元仅在输出时分片，`fragment` 使用单元内
+Unicode 码点偏移；空白单元计入遍历进度，不作为引用证据。游标绑定版本、原文集合和
+位置；续读重新校验准入与原文哈希，不能静默切换到新版本。引用可沿现有清单链核验。
+
+`coverage_scope="document_units"`、`total_units` 和 `position` 表达遍历范围与进度。
+`next_cursor=null` 且 `fetch_complete=true` 只代表本版本的**入库文本**已遍历到末尾，
+不证明 PDF 图片、表格或 OCR 已完整提取，也不证明结论已核实。若外层预算拒绝交付整页，
+错误提供的是本页 `retry_cursor`，不能跳到下一页。证据足以回答原始问题时无需强制读完。
+
 ### 2.1 离线准备链
 
 ```text
