@@ -1,0 +1,33 @@
+FF....                                                                   [100%]
+=================================== FAILURES ===================================
+_____ test_candidate_does_not_block_missing_necessary_evidence_or_manifest _____
+
+    async def test_candidate_does_not_block_missing_necessary_evidence_or_manifest():
+        observer, ctx = await candidate_observer()
+        decision = await observer.on_before_llm(ctx)
+        # A date match cannot decide whether the requested object/content is suitable.
+>       assert decision.allowed_tool_names is None
+E       AssertionError: assert ('corpus_fetch', 'corpus_inventory', 'submit_report') is None
+E        +  where ('corpus_fetch', 'corpus_inventory', 'submit_report') = Intervention(inject_messages=['[first supported date match] The assigned date-only lookup has a candidate with publish...t_message=False, continue_to_next_turn=False, allowed_tool_names=('corpus_fetch', 'corpus_inventory', 'submit_report')).allowed_tool_names
+
+tests/test_team_convergence.py:38: AssertionError
+____________ test_saved_member_tools_match_actual_companion_binding ____________
+
+    def test_saved_member_tools_match_actual_companion_binding():
+        from plugins.tools.create_subagent import _runtime_tools_override
+    
+        runtime = SwarmSubagentRuntime(sub_agent_tools=[corpus_search])
+        actual = _runtime_tools_override(runtime)
+        assert corpus_submit_manifest in actual
+>       assert {t.name for t in _sub_tools(runtime)} == {t.name for t in actual}
+E       AssertionError: assert {'corpus_search'} == {'corpus_sear...mit_manifest'}
+E         
+E         Extra items in the right set:
+E         'corpus_submit_manifest'
+E         Use -v to get more diff
+
+tests/test_team_convergence.py:52: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_team_convergence.py::test_candidate_does_not_block_missing_necessary_evidence_or_manifest
+FAILED tests/test_team_convergence.py::test_saved_member_tools_match_actual_companion_binding
+2 failed, 4 passed in 1.14s

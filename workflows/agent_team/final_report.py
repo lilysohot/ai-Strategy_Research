@@ -299,6 +299,8 @@ def finalize_team_report(
             gaps.append({"code": "invalid_user_report"})
     if stopped_by and stopped_by not in {"final_answer", "submit_report"}:
         gaps.append({"code": "execution_stopped", "reason": stopped_by})
+        if publication["status"] in {"published", "revised"}:
+            publication["status"] = "interrupted"
     status = answer_status or "best_effort"
     if gaps and status == "complete":
         status = "partial"
@@ -370,11 +372,12 @@ def finalize_team_report(
     declared_gaps = [
         task for task in board if task["gap"].strip() and task["resolution"] != "cancelled"
     ]
-    if declared_gaps:
+    undisclosed_gaps = [task for task in declared_gaps if system or task["gap"].strip() not in text]
+    if undisclosed_gaps:
         notes.append("仍未确认的证据缺口：" if zh else "Unresolved evidence gaps:")
         notes.extend(
             f"- {_label(task['description'] or task['id'])}: {gap_label(task['gap'])}"
-            for task in declared_gaps[:20]
+            for task in undisclosed_gaps[:20]
         )
     if verification["checks"]:
         verification_notes.append(
@@ -385,6 +388,9 @@ def finalize_team_report(
         labels = {"pass": "通过", "fail": "未通过", "unchecked": "未能确认"}
         for check in verification["checks"]:
             verdict = labels.get(check["verdict"], "未检查") if zh else check["verdict"]
+            if check["required"] and check["verdict"] != "pass":
+                notes.append(f"- {_label(check['criterion'])}: {verdict}")
+                notes.extend(_label(issue) for issue in (check.get("result") or {}).get("unresolved_issues", []))
             verification_notes.append(
                 f"- {_label(check['criterion'])}: {verdict} "
                 f"({'版本' if zh else 'version'}={check['binding_id'][:12]}; "
@@ -439,6 +445,8 @@ def finalize_team_report(
             if zh
             else "Team wind-down has gaps; full task completion cannot be confirmed."
         )
+    # A task gap already appears either in the answer or the gap disclosure above.
+    unresolved = [t for t in unresolved if not t["gap"].strip()]
     if unresolved:
         notes.append("任务板尚未解决的事项：" if zh else "Unresolved task-board items:")
         notes.extend(
@@ -452,7 +460,7 @@ def finalize_team_report(
                 if zh
                 else f"{len(unresolved) - 20} more items remain on the task board."
             )
-    if counts:
+    if counts and system:
         labels = (
             ("收尾阶段回收报告", "其中未完整结束", "取消排队任务", "仍未回收任务")
             if zh
@@ -528,32 +536,10 @@ def finalize_team_report(
         text += (
             "\n\n" + ("### 执行状态\n\n" if zh else "### Execution status\n\n") + "\n\n".join(notes)
         )
-    if verification_notes:
-        text += (
-            "\n\n"
-            + ("### 核验范围\n\n" if zh else "### Verification scope\n\n")
-            + "\n\n".join(verification_notes)
-        )
-    if acquisition_limits:
-        text += "\n\n" + (
-            "### 内容读取边界\n\n以下工具尝试未取得完整内容；是否影响具体结论须按证据判断，"
-            "不能将这些尝试当作已读或已核验：\n\n"
-            if zh
-            else "### Content access limits\n\nThese attempts did not obtain complete content. "
-            "Their relevance depends on the claim; they are not evidence of reading or verification:\n\n"
-        )
-        text += "\n".join(
-            f"- {_label(item.get('tool'))}: {_label(item.get('source'))} "
-            f"({_label(item.get('status'))})"
-            + (f" — {_label(item.get('detail'))}" if item.get("detail") else "")
-            for item in acquisition_limits[:20]
-        )
-        if len(acquisition_limits) > 20:
-            text += (
-                f"\n另有 {len(acquisition_limits) - 20} 项读取限制，完整列表见运行记录。"
-                if zh
-                else f"\n{len(acquisition_limits) - 20} more access limits are in the run record."
-            )
+    # Audit detail remains accessible independently of the user-facing answer.
+    # Required failures above stay visible; a failed optional tool attempt alone
+    # is not evidence that the requested result is incomplete.
+    contract["audit_appendix"] = {"verification_notes": verification_notes}
     return {
         "final_answer": text,
         "final_content": text,

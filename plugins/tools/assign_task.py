@@ -27,6 +27,7 @@ from pydantic import (
     field_validator,
     model_validator,
 )
+from pydantic.json_schema import SkipJsonSchema
 
 from frontier_agent.components.agent_bus import AgentBus
 from frontier_agent.core.execution_context import (
@@ -183,12 +184,10 @@ class AgentTeamAssignmentSpec(AssignmentSpec):
 
     model_config = ConfigDict(extra="forbid")
 
-    find_one_published_on: StrictStr | None = Field(
-        default=None,
-        description="For date-only corpus lookup asking for ANY ONE document, set YYYY-MM-DD. "
-        "After the first hit with that published metadata and original evidence, search stops; "
-        "the member may read that document and report it. Omit for topic constraints, comparisons, "
-        "exhaustive inventories, latestness, verification, or publication tasks.",
+    # Accept persisted assignments from earlier versions without advertising or
+    # propagating their retired scenario-specific convergence hint.
+    find_one_published_on: SkipJsonSchema[StrictStr | None] = Field(
+        default=None, exclude=True,
     )
 
     @field_validator("find_one_published_on")
@@ -291,8 +290,6 @@ class AgentTeamAssignmentSpec(AssignmentSpec):
         """
         if self.verification_checks and self.output_paths:
             raise ValueError("verification_checks are check-only and cannot publish outputs")
-        if self.find_one_published_on and (self.verification_checks or self.output_paths):
-            raise ValueError("find_one_published_on is only for date-only research")
         if not self.output_paths:
             if self.publish is True:
                 raise ValueError(
@@ -752,8 +749,6 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         task_metadata: dict[str, Any] = {}
         if isinstance(spec, AgentTeamAssignmentSpec):
             task_metadata["required_for_completion"] = spec.required_for_completion
-            if spec.find_one_published_on:
-                task_metadata["find_one_published_on"] = spec.find_one_published_on
             if spec.work_item_ids:
                 task_metadata["work_item_ids"] = list(spec.work_item_ids)
         publication_claim: tuple[str, ...] = ()

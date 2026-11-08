@@ -251,6 +251,16 @@ def test_inventory_tool_requires_exactly_one_selector(stub_service) -> None:
     assert both["ok"] is False and neither["ok"] is False
 
 
+def test_heading_only_candidate_does_not_claim_document_exhaustion(stub_reads, monkeypatch):
+    monkeypatch.setattr(inventory_module, "get_service", lambda: stub_reads)
+    # The same source also contains c0 body and c1 table; only c4 was requested.
+    page = json.loads(_call(doc_id=_DOC, locators=["chunk:c4"]))
+    assert page["total_chunks"] == 1 and page["by_kind"] == {"heading": 1}
+    assert page["exhausted"] is True
+    assert page["coverage_scope"] == "requested_locators"
+    assert page["document_coverage"] == "unknown"
+
+
 def test_inventory_tool_paginates_and_replays_identically(stub_service) -> None:
     raw = _call(doc_id=_DOC, locators=["chunk:c0"], max_chars=1600)
     assert len(raw) <= 1600  # Include cursor and page identity in the actual budget.

@@ -1,0 +1,75 @@
+I001 [*] Import block is un-sorted or un-formatted
+  --> plugins/tools/assign_task.py:8:1
+   |
+ 6 |   """
+ 7 |
+ 8 | / from __future__ import annotations
+ 9 | |
+10 | | import asyncio
+11 | | import json
+12 | | import logging
+13 | | import os
+14 | | import re
+15 | | from datetime import date
+16 | | from html import escape
+17 | | from pathlib import Path
+18 | | from typing import Any
+19 | |
+20 | | from pydantic.json_schema import SkipJsonSchema
+21 | |
+22 | | from pydantic import (
+23 | |     BaseModel,
+24 | |     ConfigDict,
+25 | |     Field,
+26 | |     StrictBool,
+27 | |     StrictStr,
+28 | |     ValidationError,
+29 | |     field_validator,
+30 | |     model_validator,
+31 | | )
+32 | |
+33 | | from frontier_agent.components.agent_bus import AgentBus
+34 | | from frontier_agent.core.execution_context import (
+35 | |     get_current_execution_scope,
+36 | |     get_current_tool_call_id,
+37 | | )
+38 | | from frontier_agent.core.runtime.registries import services as registry
+39 | | from frontier_agent.core.tool import tool
+40 | | from plugins.tools._bus_scope import resolve_bus_task_id
+41 | | from plugins.tools._coerce import coerce_json_list
+42 | | from plugins.tools._deliverable_policy import (
+43 | |     normalise_output_paths,
+44 | |     output_write_directives,
+45 | |     render_publish_assignment,
+46 | |     render_retirement_note,
+47 | |     render_workspace_assignment,
+48 | | )
+49 | | from plugins.tools._verification import (
+50 | |     VerificationCheck,
+51 | |     bind_checks,
+52 | |     minimum_verification_budget,
+53 | |     resolve_planned_check,
+54 | | )
+55 | | from plugins.tools.create_subagent import (
+56 | |     _normalize_agent_name,
+57 | |     _resolve_runtime,
+58 | |     _resolve_task_types,
+59 | | )
+   | |_^
+60 |
+61 |   logger = logging.getLogger(__name__)
+   |
+help: Organize imports
+   |
+19 |
+   - from pydantic.json_schema import SkipJsonSchema
+   -
+20 | from pydantic import (
+--------------------------------------------------------------------------------
+29 | )
+30 + from pydantic.json_schema import SkipJsonSchema
+31 |
+   |
+
+Found 1 error.
+[*] 1 fixable with the `--fix` option.

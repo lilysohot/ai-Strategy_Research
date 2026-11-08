@@ -193,5 +193,6 @@ async def test_acquisition_limits_survive_member_report_and_later_failed_retry(f
     )
     assert out["answer_status"] == "complete"  # an access failure alone says nothing about necessity
     assert len(out["report_contract"]["acquisition_limits"]) == 1
-    assert "https://example.org/missing" in out["final_answer"]
+    assert "https://example.org/missing" not in out["final_answer"]
+    assert out["report_contract"]["acquisition_limits"][0]["source"] == "https://example.org/missing"
     assert "https://example.org/present" not in out["final_answer"]

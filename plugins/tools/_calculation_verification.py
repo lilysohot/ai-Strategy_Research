@@ -147,14 +147,15 @@ def validate_calculations(
     calculations: list[CalculationCheck],
 ) -> None:
     targets = set(check.get("calculation_targets", []))
-    if not targets:
+    if not targets and not calculations:
         return
+    allowed_targets = targets or numeric_values(check.get("subject", {}).get("text", ""))
     sources = check.get("calculation_sources", [])
     covered = set()
     try:
         for calculation in calculations:
             target = normalize_number(calculation.value)
-            if target not in targets or target in covered:
+            if target not in allowed_targets or target in covered:
                 raise ValueError("calculation output must uniquely match a bound numeric target")
             values = {}
             for name, operand in calculation.inputs.items():
@@ -178,7 +179,7 @@ def validate_calculations(
                         f"calculation input {name!r}: quote/source is not bound tool evidence. "
                         f"Copy an exact source locator (no annotations): {locators[:8]}. "
                         "Quote source bytes verbatim; use a numeric value and a pure expression "
-                        "such as price * quantity, without explanatory prose."
+                        "over the named inputs, without explanatory prose."
                     )
                 values[name] = Decimal(value.rstrip("%"))
             actual = _evaluate(calculation.expression, values)
@@ -192,7 +193,7 @@ def validate_calculations(
             covered.add(target)
     except (SyntaxError, ArithmeticError, InvalidOperation) as exc:
         raise ValueError("invalid calculation arithmetic") from exc
-    if targets != covered:
+    if not targets.issubset(covered):
         raise ValueError(
             f"calculation basis missing for {sorted(targets - covered)}; "
             "supply calculation_checks with quoted inputs and expressions, or return unchecked. "

@@ -1,0 +1,94 @@
+{
+  "date": "2026-11-08",
+  "scope": "Layered lifecycle, verification receipts, recovery and terminal delivery repair; generic prompt rules only",
+  "layers": [
+    {
+      "layer": "execution_and_delivery_lifecycle",
+      "changes": [
+        "Distinguish succeeded, failed, skipped and cancelled tool outcomes",
+        "Accept final delivery only with succeeded execution and the exact delivery success receipt",
+        "Closed Web approval gate stops before the next model call and skipped refusals are errors"
+      ]
+    },
+    {
+      "layer": "tool_protocol_and_evidence",
+      "changes": [
+        "Validate every submitted calculation receipt even when the subject lacks a calculation marker",
+        "Bind submitted arithmetic inputs to captured source evidence",
+        "Reject PASS receipts whose own review diagnostics explicitly state incomplete verification",
+        "Revalidate current-protocol persisted receipts while retaining legacy protocol compatibility"
+      ]
+    },
+    {
+      "layer": "task_goal_and_orchestration",
+      "changes": [
+        "Allow complete replacement checks to settle original obligations only when replacement jobs actually completed",
+        "Retain original failed execution history and unchanged acceptance criteria"
+      ]
+    },
+    {
+      "layer": "final_construction_and_acceptance",
+      "changes": [
+        "Reconcile outer interruption with report and exported answer status",
+        "Change interrupted published/revised reports to interrupted publication status",
+        "Retain inner workflow stop reason for audit"
+      ]
+    }
+  ],
+  "prompt_policy": {
+    "changes": [
+      "Removed month/version, deployment/cache and demand examples from verification instructions",
+      "Use generic bound claims, evidence applicability, relation support and unmet obligations"
+    ],
+    "scope": "Touched verification instructions; no claim of exhaustive repository-wide prompt audit"
+  },
+  "benchmark": {
+    "catalog_total": 71,
+    "protocol": 54,
+    "frozen": 17,
+    "original_P34_P37_assertions": "unchanged",
+    "new_cases": [
+      "P53",
+      "P54"
+    ],
+    "states": {
+      "pass": 54
+    },
+    "output": "results/team-layered-repair-20261108",
+    "original_red_run": {
+      "failed": 7,
+      "passed": 7
+    }
+  },
+  "validation": {
+    "core_repaired_suite": {
+      "passed": 90,
+      "note": "Before five additional edge-case tests; overlaps other suites"
+    },
+    "additional_workflow_regressions": {
+      "passed": 110
+    },
+    "final_approval_lifecycle_consistency_and_original_probes": {
+      "passed": 73
+    },
+    "catalog_regressions": {
+      "passed": 27
+    },
+    "trajectory_and_execution_barriers": {
+      "passed": 10
+    },
+    "scoped_ruff": "pass",
+    "scoped_pyright": "0 errors",
+    "framework_imports": "470/470",
+    "eval_imports": "529/529",
+    "symbols": "0 missing across 578 files",
+    "preflight": "agent_team/tui; one real LLM call passed",
+    "approval_e2e_fixture": "Added intake-ready mock response for each run to match the existing research intake stage; approval assertions retained"
+  },
+  "limits": [
+    "P35/P36 use a conservative bilingual rejection-only consistency filter on reviewer diagnostics. This is not semantic entailment, provenance proof, or detection of unadmitted cross-source errors.",
+    "Passing protocol regressions does not establish end-to-end real-model team quality.",
+    "No full real-model team run, frozen-suite rerun, service restart or deployment in this repair.",
+    "No publication-date metadata backfill; previous date retrieval repair is preserved."
+  ]
+}

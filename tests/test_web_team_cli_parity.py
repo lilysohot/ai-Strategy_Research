@@ -82,21 +82,29 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
     requests = {role: [] for role in scripts}
     if versioned:
         main_script[0] = tool_call_turn("add_task", {"tasks": [{
-            "description": "Read and verify value",
+            "description": "Read source value",
+        }, {
+            "description": "Verify source value",
             "verification_requirements": [{"check_id": "value", "criterion": "Check value is 42"}],
         }]})
         scripts["verifier"].append(scripts["verifier"][-1])
-        if verdict == "unchecked":
-            main_script[6] = tool_call_turn("update_task", {"updates": [{
-                "id": "t1", "resolution": "blocked", "notes": "Review finished",
-                "gap": "Independent confirmation unavailable",
-            }]})
+        # Record the research outcome independently from the verification outcome.
+        # Returned reports alone do not establish completion of an open work item.
+        main_script[6] = tool_call_turn("update_task", {"updates": [{
+            "id": "t1", "resolution": "resolved", "notes": "Requested source value read: 42",
+        }, {
+            "id": "t2", "resolution": "blocked" if verdict == "unchecked" else "resolved",
+            "notes": "Review finished",
+            "gap": "Independent confirmation unavailable" if verdict == "unchecked" else "",
+        }]})
     server = MockLLMServer().start()
     delivery_attempts = 0
 
     def next_turn(payload):
         nonlocal delivery_attempts
         tools = {item["function"]["name"] for item in payload.get("tools", [])}
+        if not tools and "current_request" in str(payload.get("messages")):
+            return text_turn('{"decision":"ready"}')
         if tools == {"deliver_answer"}:
             requests["main"].append(payload)
             delivery_attempts += 1
@@ -105,7 +113,8 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
                 body = "The independently verified value is 42."
             return tool_call_turn("deliver_answer", {
                 "content": body,
-                "updates": [{"id": "t1", "resolution": "blocked" if verdict == "unchecked" else "resolved",
+                "updates": ([{"id": "t1", "resolution": "resolved", "notes": "Source read"}]
+                            if versioned else []) + [{"id": "t2" if versioned else "t1", "resolution": "blocked" if verdict == "unchecked" else "resolved",
                              "notes": "Review finished", "gap": "Independent confirmation unavailable" if verdict == "unchecked" else ""}],
             })
         system = str(payload["messages"][0]["content"])
@@ -128,7 +137,7 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
             assert match, history[-4000:]
             assignment = {
                 "agent": "final_verifier",
-                "work_item_ids": ["t1"],
+                "work_item_ids": ["t2" if versioned else "t1"],
                 "prompt": (
                     "Verify 42 against /inputs/brief.txt. "
                     f'<attach agent="reader" job="{match.group(1)}"/>'
@@ -136,7 +145,7 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
             }
             if versioned:
                 assignment["verification_checks"] = [{
-                    "check_id": "value", "work_item_id": "t1", "criterion": "Check value is 42",
+                    "check_id": "value", "work_item_id": "t2", "criterion": "Check value is 42",
                     "subject": {"job_id": match.group(1)},
                     "evidence": [{"job_id": match.group(1)}],
                 }]
@@ -150,6 +159,7 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
                 "content": "VERIFIER_REPORT: independently read 42.", "finish": False,
                 "verification_results": [{
                     "check_id": "value", "binding_id": check["binding_id"], "verdict": verdict,
+                    "subject_sha256": check["subject"]["sha256"],
                     "method": "read original input and compare", "detail": "Both contain 42",
                     "evidence_keys": [check["evidence"][0]["key"]],
                 }],
@@ -169,7 +179,7 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
         proc = await asyncio.create_subprocess_exec(
             sys.executable, "-m", "server.worker", "--run-id", run_id,
             "--session-id", uuid.uuid4().hex, "--pipeline-id", "agent_team",
-            "--backend", "bwrap", "--wall-time", "400", "--max-turns", "20",
+            "--backend", "bwrap", "--wall-time", "1200", "--max-turns", "20",
             "--business-prefix", "1", "--mixed-mode-history", "--continuity", "off",
             "--prompt", (
                 "Read /inputs/brief.txt, independently verify its value, and answer in text."
@@ -245,7 +255,7 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
         else:
             assert summary["final_answer"].startswith(answer)
         assert summary["report_contract"]["kind"] == ("partial" if verdict == "unchecked" else "complete")
-        assert summary["report_contract"]["task_board"][0]["resolution"] == (
+        assert summary["report_contract"]["task_board"][-1]["resolution"] == (
             "blocked" if verdict == "unchecked" else "resolved"
         )
     frames = [json.loads(line) for line in stdout.decode().splitlines() if line.startswith("{")]
@@ -266,9 +276,10 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
         )
         verifier = next(item for item in saved if item["agent_name"] == "final_verifier")
         assert verifier["assignment_metadata"]["verification_events"][0]["verdict"] == verdict
-        assert contract["task_board"][0]["verification_execution_status"] == "complete"
+        assert contract["task_board"][-1]["verification_execution_status"] == "complete"
         assert contract["verification_checks"][0]["binding_id"] == (
             verifier["assignment_metadata"]["verification_checks"][0]["binding_id"]
         )
         assert "[version-bound checks]" in main_history
-        assert len(requests["verifier"]) >= 3  # partial submit did not terminate the loop
+        # The observer finishes the last pending check without a duplicate report turn.
+        assert len(requests["verifier"]) == 2

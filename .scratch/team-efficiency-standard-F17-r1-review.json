@@ -1,0 +1,24 @@
+{
+  "reviewer": "Codex artifact review, 2026-11-07",
+  "review_type": "model",
+  "worker_sha256": "0cedf3cbb034251d83b9634393c779277962247931ce125cda3498ff082ed47f",
+  "case_sha256": "a295d6208c7b3fe92e3fa36cdac9bff46814a7127eb05035841d57c95dc2f56b",
+  "criteria": [
+    {
+      "verdict": "pass",
+      "evidence": "Successful retry reads the fee page and gives 30 yuan * 2 = 60 yuan."
+    },
+    {
+      "verdict": "pass",
+      "evidence": "event-fee_research.t02 calls web_fetch for notice at line 4, observes no fee, then fetches fee page at line 9."
+    },
+    {
+      "verdict": "pass",
+      "evidence": "Readable notice does not terminate acquisition; required fee evidence is obtained before calculating the answer."
+    },
+    {
+      "verdict": "fail",
+      "evidence": "Final body adds unrelated membership/early-bird/group-rate exclusions, missing currency-code/version commentary and internal retry notes. It also remains partial because the first required job failed, despite successful replacement research; that requires explicit retry lineage rather than hiding the failure."
+    }
+  ]
+}

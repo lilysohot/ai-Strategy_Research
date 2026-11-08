@@ -1,0 +1,24 @@
+{
+  "reviewer": "Codex artifact review, 2026-11-07",
+  "review_type": "model",
+  "worker_sha256": "0d3fe99224bab234f4ecb231328e8cf8415031d2bc65e6304278fa48d99fd80f",
+  "case_sha256": "ff8f5aad0fe84c09969367bf7b4e7968d666d9883b281e84806f6dad6bd8b8a2",
+  "criteria": [
+    {
+      "verdict": "pass",
+      "evidence": "final_answer gives 4*5+2*12=44 yuan from the actually retrieved supplied prices."
+    },
+    {
+      "verdict": "pass",
+      "evidence": "answer_status complete; no tax/shipping or brand data blocks the goods subtotal."
+    },
+    {
+      "verdict": "fail",
+      "evidence": "Despite 算式即可, final_answer contains RFC/domain commentary, repeated arithmetic and a verification explanation; no automatic appendix is appended now, but model prose still fails compactness."
+    },
+    {
+      "verdict": "pass",
+      "evidence": "Bound arithmetic check passes with recomputation, and final_answer explicitly excludes tax/shipping."
+    }
+  ]
+}

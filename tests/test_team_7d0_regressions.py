@@ -160,6 +160,8 @@ def test_quote_check_uses_captured_source_not_model_transcription(tmp_path, mode
 
 
 async def test_date_lookup_stops_broad_search_after_supported_match():
+    # Historical P41 selector retained for catalog compatibility. The retired date
+    # hint no longer affects convergence; see the explicit benchmark migration note.
     observer = MemberProgressObserver({"find_one_published_on": "2026-11-06"})
     ctx = SimpleNamespace(metadata={})
     payload = {
@@ -178,12 +180,7 @@ async def test_date_lookup_stops_broad_search_after_supported_match():
         ctx, ToolResult("corpus_search", {}, json.dumps(payload), 1, "c1", False)
     )
     decision = await observer.on_before_llm(ctx)
-    assert "first supported date match" in decision.inject_messages[0]
-    assert "corpus_search" not in decision.allowed_tool_names
-    denied = await observer.on_tool_call(
-        ctx, {"name": "corpus_search", "args": {"query": "all undated"}}
-    )
-    assert denied.skip_is_error
+    assert decision is None
     allowed = await observer.on_tool_call(
         ctx,
         {
@@ -195,10 +192,11 @@ async def test_date_lookup_stops_broad_search_after_supported_match():
         },
     )
     assert allowed is None
-    denied = await observer.on_tool_call(
-        ctx, {"name": "corpus_fetch", "args": {"doc_id": "cv2:" + "c" * 64, "locator": "guessed"}}
+    # An unsuitable candidate may be replaced within the original task.
+    allowed = await observer.on_tool_call(
+        ctx, {"name": "corpus_search", "args": {"query": "necessary replacement on same date"}}
     )
-    assert denied.skip_is_error
+    assert allowed is None
 
 
 @pytest.mark.parametrize("mutation", ["date", "preview", "failed"])
@@ -282,7 +280,7 @@ async def test_date_lookup_assignment_reaches_runtime_metadata(admission_run):
     )
     assert "Submitted" in result
     entry = bus.list_task_jobs("run")[0]
-    assert entry.item.metadata["find_one_published_on"] == "2026-11-06"
+    assert "find_one_published_on" not in entry.item.metadata
     with pytest.raises(ValueError):
         AgentTeamAssignmentSpec(agent="reviewer", prompt="Find", find_one_published_on="2026-02-30")
 

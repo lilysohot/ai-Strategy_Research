@@ -35,7 +35,7 @@ from apodex.agent_tools import (
     ToolRisk,
     assess_with_rules,
 )
-from frontier_agent.core.loop_types import ToolCallIntervention
+from frontier_agent.core.loop_types import Intervention, ToolCallIntervention
 from server.bridge import redact_deep
 from server.events import make_event
 
@@ -273,6 +273,11 @@ class ApprovalObserver:
             await asyncio.sleep(0.1)
         return True
 
+    async def on_before_llm(self, ctx: Any) -> Intervention | None:
+        if self.gate.closed:
+            return Intervention(stop_reason="user_stop")
+        return None
+
     async def on_tool_call(
         self,
         ctx: Any,
@@ -281,7 +286,7 @@ class ApprovalObserver:
         del ctx  # unused; signature fixed by notify_tool_call
         if self.gate.closed:
             return ToolCallIntervention(
-                skip_with_result="[user rejected this tool call: run stopped]"
+                skip_with_result="[user rejected this tool call: run stopped]", skip_is_error=True,
             )
         name = str(tool_call.get("name", ""))
         args = tool_call.get("args", {}) or {}
@@ -290,7 +295,7 @@ class ApprovalObserver:
         # Hard deny: never reaches the user prompt — no decision can bypass it.
         if risk.level == RISK_DENY:
             return ToolCallIntervention(
-                skip_with_result=f"[blocked by safety policy: {risk.reason}]",
+                skip_with_result=f"[blocked by safety policy: {risk.reason}]", skip_is_error=True,
             )
         # Read-only, or already allowed for the rest of this run → no gate.
         if risk.level == RISK_SAFE or self.gate.is_allowed(name, args):
@@ -299,7 +304,7 @@ class ApprovalObserver:
         async with self.gate.confirmation_lock:
             if self.gate.closed:
                 return ToolCallIntervention(
-                    skip_with_result="[user rejected this tool call: run stopped]",
+                    skip_with_result="[user rejected this tool call: run stopped]", skip_is_error=True,
                 )
             # A preceding approval may have granted this exact call/tool for
             # the rest of the Run while this member waited for the dialog slot.
@@ -324,7 +329,7 @@ class ApprovalObserver:
         if self.gate.closed:
             await self.gate.wait(approval_id, timeout=self.timeout)
             return ToolCallIntervention(
-                skip_with_result="[user rejected this tool call: run stopped]"
+                skip_with_result="[user rejected this tool call: run stopped]", skip_is_error=True,
             )
         self._publish(
             "approval_requested",
@@ -357,9 +362,10 @@ class ApprovalObserver:
                         f"Follow their instruction instead: "
                         f"{decision.replacement_command}]"
                     ),
+                    skip_is_error=True,
                 )
             return ToolCallIntervention(
-                skip_with_result=f"[user rejected this {name} call — task stopped]",
+                skip_with_result=f"[user rejected this {name} call — task stopped]", skip_is_error=True,
             )
 
         # once | session_bash | session_all | persist → the call executes.

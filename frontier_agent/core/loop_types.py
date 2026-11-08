@@ -184,6 +184,11 @@ class ToolResult:
     is_error: bool
     # Interrupted results remain in history to preserve tool-call pairing.
     interrupted: bool = False
+    execution_status: Literal["succeeded", "failed", "skipped", "cancelled"] | None = None
+
+    def __post_init__(self) -> None:
+        if self.execution_status is None or (self.is_error and self.execution_status == "succeeded"):
+            self.execution_status = "failed" if self.is_error else "succeeded"
 
 
 @dataclass

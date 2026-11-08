@@ -122,6 +122,7 @@ def test_unprepared_fallback_preserves_hits():
 
 
 def test_wrong_target_rejected_before_hybrid_call(monkeypatch):
+    monkeypatch.setenv("CORPUS_NATIVE_RETRIEVAL", "off")
     from plugins.corpus.preparation import search_pg
     from plugins.corpus.preparation.repository import StoreError
     from plugins.corpus.service import CorpusService

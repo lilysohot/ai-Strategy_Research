@@ -1,10 +1,8 @@
-"""Small, durable member handoffs instead of one late all-checks response."""
+"""Checkpoint verification results and repair rejected submission schemas."""
 
 from __future__ import annotations
 
 import json
-import re
-import time
 from copy import deepcopy
 from typing import Any
 
@@ -18,18 +16,15 @@ from frontier_agent.core.loop_types import (
 
 
 class MemberProgressObserver(BaseObserver):
-    """Bound verification output; encourage an early, explicitly scoped research report."""
+    """Enforce verification submission protocol without inferring research completion."""
 
     critical = True
 
     def __init__(self, metadata: dict[str, Any]) -> None:
         self.metadata = metadata
-        self.started = time.monotonic()
-        self.handoff_offered = False
         self.submission_repair_used = False
         self.submission_repair_active = False
         self.repair_results: list[dict[str, Any]] | None = None
-        self.date_match: dict[str, str] | None = None
 
     async def on_llm_response(self, ctx: TurnContext) -> Intervention | None:
         """One schema-only retry, including on the final allotted turn.
@@ -76,36 +71,6 @@ class MemberProgressObserver(BaseObserver):
         del ctx
         if result.name == "submit_report" and not result.is_error:
             self.submission_repair_active = False
-        target = self.metadata.get("find_one_published_on")
-        if not target or self.date_match or result.name != "corpus_search" or result.is_error:
-            return None
-        try:
-            payload = json.loads(result.result)
-        except (TypeError, ValueError):
-            return None
-        if not isinstance(payload, dict) or payload.get("ok") is not True:
-            return None
-        for hit in payload.get("hits", []):
-            if not isinstance(hit, dict) or hit.get("published") != target:
-                continue
-            doc_id = hit.get("doc_id")
-            excerpts = hit.get("excerpts") or []
-            if (
-                isinstance(doc_id, str)
-                and re.fullmatch(r"cv2:[0-9a-f]{64}", doc_id)
-                and hit.get("evidence_contract") == "native-search-evidence-v2"
-                and any(
-                    isinstance(e, dict)
-                    and isinstance(e.get("text"), str)
-                    and e["text"].strip()
-                    and isinstance(e.get("ref"), str)
-                    and re.fullmatch(r"eref:[0-9a-f]{64}:\d+", e["ref"])
-                    for e in excerpts
-                )
-            ):
-                self.date_match = {"doc_id": doc_id, "published": target}
-                self.metadata["first_date_match"] = self.date_match
-                break
         return None
 
     def _pending(self) -> list[dict[str, Any]]:
@@ -128,19 +93,6 @@ class MemberProgressObserver(BaseObserver):
                     "the saved evidence and verdict payload remain in context."
                 ],
             )
-        if self.date_match:
-            return Intervention(
-                allowed_tool_names=("corpus_fetch", "corpus_inventory", "submit_report"),
-                inject_messages=[
-                    "[first supported date match] The assigned date-only lookup has a candidate "
-                    "with published metadata and delivered original evidence: "
-                    + json.dumps(self.date_match, ensure_ascii=False)
-                    + ". Report this document now; read only missing context of this document "
-                    "if needed. Do not enumerate other dates or undated sources. Partial corpus "
-                    "coverage does not invalidate this existence result; do not claim uniqueness "
-                    "or exhaustive coverage. A candidate is not automatic semantic verification."
-                ],
-            )
         if self.metadata.get("verification_checks"):
             pending = self._pending()
             if not pending:
@@ -153,8 +105,8 @@ class MemberProgressObserver(BaseObserver):
                     "Use the attached original excerpts directly when sufficient; fetch only missing "
                     "conditions/context. If quote_comparisons are supplied, use those deterministic "
                     "captured-text comparisons; do not retype source strings into comparison scripts. "
-                    "Do not recopy source bodies or the full report. Keep each "
-                    "scope_assessment detail to one comparison sentence. State fail/unchecked when "
+                    "Summarize each scope_assessment with enough detail to explain the verdict. "
+                    "State fail/unchecked when "
                     "evidence is insufficient; never spend the response reconstructing missing evidence. "
                     "evidence_keys must contain only the job/ref keys listed below; put corpus locators "
                     "in method/detail, not evidence_keys. unresolved_issues belongs beside "
@@ -171,31 +123,6 @@ class MemberProgressObserver(BaseObserver):
                         },
                         ensure_ascii=False,
                     )
-                ]
-            )
-        if (
-            not self.handoff_offered
-            and not self.metadata.get("can_publish")
-            and (
-                (
-                    time.monotonic() - self.started >= 90
-                    and len(ctx.metadata.get("corpus_evidence") or []) >= 2
-                )
-                or bool(ctx.metadata.get("web_evidence"))
-            )
-        ):
-            self.handoff_offered = True
-            return Intervention(
-                inject_messages=[
-                    "[early research handoff] You have source evidence. If it supports the core "
-                    "assigned findings, submit_report now so verification can overlap other research. "
-                    "Give a concise report with exact refs, material qualifications and explicit "
-                    "unresolved items. Delivered web text is retained for the verifier: repeated "
-                    "fetches of the same page are not independent corroboration. Do not wait for "
-                    "the research deadline, repeatedly search "
-                    "uncovered historical topics, or create an optional report file. If a load-bearing "
-                    "fact still lacks evidence, do one targeted lookup and then report what is known. "
-                    "An incomplete finding must remain an explicit gap, not a claim of completion."
                 ]
             )
         return None
@@ -220,17 +147,6 @@ class MemberProgressObserver(BaseObserver):
         ):
             return ToolCallIntervention(
                 skip_with_result="Submission repair permits only submit_report with the saved verification_results unchanged.",
-                skip_is_error=True,
-            )
-        if self.date_match and (
-            name not in {"submit_report", "corpus_fetch", "corpus_inventory"}
-            or (
-                name != "submit_report"
-                and (not isinstance(args, dict) or args.get("doc_id") != self.date_match["doc_id"])
-            )
-        ):
-            return ToolCallIntervention(
-                skip_with_result="Date-only lookup already matched. Report or read missing context of that same doc_id; do not expand research.",
                 skip_is_error=True,
             )
         if not self.metadata.get("verification_checks") or tool_call.get("name") != "submit_report":

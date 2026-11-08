@@ -46,6 +46,7 @@ import {
 import { summarizeDiff } from '@/utils/diff'
 import { formatElapsed } from '@/utils/statusbar'
 import RunDetailView from '@/views/RunDetailView.vue'
+import RunAudit from '@/components/RunAudit.vue'
 
 const sessions = useSessionsStore()
 const runStream = useRunStreamStore()
@@ -92,7 +93,7 @@ const steering = ref(false)
 const railOpen = ref(false)
 const detailsOpen = ref(false)
 const canvasFocus = ref(false)
-const detailTab = ref<'plan' | 'activity' | 'diff' | 'trace' | 'evidence'>('activity')
+const detailTab = ref<'plan' | 'activity' | 'diff' | 'trace' | 'evidence' | 'audit'>('activity')
 const workspaceArea = ref<WorkspaceArea>('research')
 const pageVisible = ref(document.visibilityState === 'visible')
 let repliesPoll: ReturnType<typeof setInterval> | null = null
@@ -902,6 +903,9 @@ watch(
           </el-tab-pane>
           <el-tab-pane label="轨迹" name="trace" lazy>
             <RunDetailView ref="runDetailRef" :run-id="runStream.runId" :active="detailTab === 'trace'" />
+          </el-tab-pane>
+          <el-tab-pane label="核验" name="audit" lazy>
+            <RunAudit v-if="detailTab === 'audit'" :run-id="runStream.runId" :status="runStream.status" />
           </el-tab-pane>
         </el-tabs>
       </section>

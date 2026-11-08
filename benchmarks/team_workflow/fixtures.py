@@ -6,8 +6,9 @@ import json
 from dataclasses import replace
 from typing import Any
 
-from frontier_agent.core.tool import Tool
+from frontier_agent.core.tool import Tool, ToolOutcome
 from plugins.tools import get_builtin_tools
+from plugins.tools._content_outcome import content_limitation, fetch_in_order
 
 COORDINATION = (
     "create_subagent",
@@ -48,10 +49,21 @@ def fixed_tools(sources: list[dict[str, Any]]) -> dict[str, Tool]:
             ensure_ascii=False,
         )
 
-    async def fetch(**kwargs: Any) -> str:
+    async def fetch(**kwargs: Any) -> str | ToolOutcome:
         urls = kwargs.get("url") or []
         if isinstance(urls, str):
             urls = [urls]
+        if kwargs.get("fallback_urls"):
+            if len(urls) != 1:
+                raise ValueError("fallback_urls requires exactly one primary URL")
+
+            async def fetch_one(url: str) -> str | ToolOutcome:
+                page = pages.get(url)
+                if page and page.get("status", "success") == "success":
+                    return page["content"]
+                return content_limitation(url, "Frozen source unavailable; no network fallback.")
+
+            return await fetch_in_order(urls[0], kwargs["fallback_urls"], fetch_one)
         items = []
         for url in urls:
             page = pages.get(url)

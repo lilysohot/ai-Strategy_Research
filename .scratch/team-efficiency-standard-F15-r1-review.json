@@ -1,0 +1,24 @@
+{
+  "reviewer": "Codex artifact review, 2026-11-07",
+  "review_type": "model",
+  "worker_sha256": "14c6161d497052ceb9294d3afefa6af39762d8b16d1d140e5db271e1b91e5343",
+  "case_sha256": "b4a32e55bd0f35e61fc29afefd044dc1b6e86b40a70182a5ec3c9da3eb832cf3",
+  "criteria": [
+    {
+      "verdict": "pass",
+      "evidence": "final_answer gives December 9, matching the actually fetched backup."
+    },
+    {
+      "verdict": "pass",
+      "evidence": "notice_lookup_research trace fetches primary first, then backup only after returned unavailable results; no speculative parallel primary/backup call."
+    },
+    {
+      "verdict": "pass",
+      "evidence": "Backup content was actually acquired after primary failures, not inferred from a search snippet."
+    },
+    {
+      "verdict": "fail",
+      "evidence": "User asks only the date; answer adds failed-attempt counts, repeated-fetch diagnostics, a missing-year qualification and unsupported concern about incomplete page inspection."
+    }
+  ]
+}

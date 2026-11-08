@@ -80,7 +80,8 @@ WITH q AS (
   JOIN corpus.corpus_sources AS s ON s.source_id = p.source_id
   JOIN corpus.corpus_admissions AS a ON a.decision_id = b.decision_id
   WHERE (c.search_tsv @@ q.tsq
-         OR to_tsvector('zhcfg', array_to_string(s.original_names, ' ')) @@ q.tsq)
+         OR to_tsvector('zhcfg', array_to_string(s.original_names, ' ')) @@ q.tsq
+         OR %(query)s::text = '')
     AND (%(domain)s::text IS NULL OR a.research_domain = %(domain)s)
     AND (%(date_from)s::text IS NULL
          OR a.metadata_snapshot->'report_publication'->>'value' >= %(date_from)s)
@@ -105,6 +106,7 @@ SELECT source_id, build_id, chunk_id, kind, title_text, section_path, unit_refs,
        score, snippet, published, source_coverage
 FROM ranked
 WHERE source_position <= 40
+  AND (%(query)s::text <> '' OR source_position = 1)
 ORDER BY source_coverage DESC, source_score DESC, score DESC, build_id, chunk_id
 LIMIT %(limit)s
 """
@@ -141,6 +143,7 @@ class SearchHit:
     context_chunk_ids: tuple[str, ...] = ()
     #: Distinct candidate-query lexemes matched anywhere in this source.
     source_coverage: int = 0
+    ingested_at: str | None = None
 
 
 _UNITS_LOCATION_SQL = """
@@ -296,6 +299,9 @@ def build_search_params(
     domain: ResearchDomain | None = None,
     published_from: str | None = None,
     published_to: str | None = None,
+    ingested_from: str | None = None,
+    ingested_to: str | None = None,
+    ingested_timezone: str = "Asia/Shanghai",
     limit: int = 20,
     rank_query: str | None = None,
 ) -> dict[str, object]:
@@ -308,15 +314,26 @@ def build_search_params(
     ``rank_query`` 显式指定排序信号查询串（c′，同样规范化）；缺省时由
     :func:`search_chunks_on` 按开关（``RANK_LEXEME_PRUNE``）在同游标内计算。
     """
-    if not query.strip():
-        raise StoreError("query 不能为空")
+    from plugins.corpus.ingestion_dates import sql_params
+    from plugins.corpus.publication_dates import validate_range
+
+    validate_range(published_from, published_to)
+    ingestion_params = sql_params(ingested_from, ingested_to, ingested_timezone)
+    if (
+        not query.strip()
+        and published_from is None
+        and published_to is None
+        and not ingestion_params
+    ):
+        raise StoreError("query 不能为空，除非提供发布日期或入库日期范围")
     if limit < 1:
         raise StoreError("limit 必须 >= 1")
     date_from = published_from.strip() or None if published_from else None
     date_to = published_to.strip() or None if published_to else None
     params: dict[str, object] = {
-        "query": normalize_search_text(query),
+        "query": normalize_search_text(query.strip()),
         "domain": domain.value if domain is not None else None,
+        **ingestion_params,
         "date_from": date_from,
         "date_to": date_to,
         "limit": limit,
@@ -334,6 +351,9 @@ def search_chunks(
     domain: ResearchDomain | None = None,
     published_from: str | None = None,
     published_to: str | None = None,
+    ingested_from: str | None = None,
+    ingested_to: str | None = None,
+    ingested_timezone: str = "Asia/Shanghai",
     limit: int = 20,
 ) -> tuple[SearchHit, ...]:
     """在活动范围（published active build）内全文检索 chunk。
@@ -351,6 +371,9 @@ def search_chunks(
         domain=domain,
         published_from=published_from,
         published_to=published_to,
+        ingested_from=ingested_from,
+        ingested_to=ingested_to,
+        ingested_timezone=ingested_timezone,
         limit=limit,
     )
     with psycopg.connect(dsn, autocommit=True) as conn:
@@ -374,7 +397,9 @@ def search_chunks_on(cur: psycopg.Cursor, params: dict[str, object]) -> tuple[Se
         params["rank_query"] = (
             _rank_query_on(cur, str(params["query"])) if RANK_LEXEME_PRUNE else params["query"]
         )
-    cur.execute(_SEARCH_SQL, params)
+    from plugins.corpus.ingestion_dates import filter_sql
+
+    cur.execute(filter_sql(_SEARCH_SQL, params), params)
     rows = cur.fetchall()
     hits = tuple(
         SearchHit(
@@ -392,4 +417,15 @@ def search_chunks_on(cur: psycopg.Cursor, params: dict[str, object]) -> tuple[Se
         )
         for row in rows
     )
-    return _enrich_hits(cur, hits)
+    hits = _enrich_hits(cur, hits)
+    return enrich_ingestion(cur, hits) if "ingested_start" in params else hits
+
+
+def enrich_ingestion(cur: psycopg.Cursor, hits: tuple[SearchHit, ...]) -> tuple[SearchHit, ...]:
+    """Attach source timestamps from the same snapshot used by the filter."""
+    from plugins.corpus.ingestion_dates import read_times
+
+    if not hits:
+        return hits
+    times = read_times(cur, list({h.source_id for h in hits}))
+    return tuple(replace(h, ingested_at=times.get(h.source_id)) for h in hits)

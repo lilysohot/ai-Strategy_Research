@@ -1,0 +1,458 @@
+{
+  "date": "2026-11-07",
+  "scope": "General delegation boundaries, conditional fallback, delivery protocol rework, and audit presentation. No context-compaction or verifier-count change.",
+  "acceptance": "Code regressions pass; model semantics and reliability require separate assessment, not automatic release approval.",
+  "baseline_lock": "benchmarks/team_workflow/baseline-59.lock.json",
+  "catalog": {
+    "total": 66,
+    "protocol": 49,
+    "frozen": 17,
+    "new": [
+      "P46",
+      "P47",
+      "P48",
+      "P49",
+      "F15",
+      "F16",
+      "F17"
+    ],
+    "public_transfer_not_blind_holdout": true
+  },
+  "changes": [
+    "Shared general assignment policy links investigation to requested results/evidence, forbids speculative conditional alternatives, and keeps irrelevant audit prose out of answers.",
+    "web_fetch fallback_urls executes bounded alternatives sequentially after explicit failure/partial/empty content; independent URL batches remain parallel, policy denial stops fallback. Captured source identity survives fallback.",
+    "Coordinator tool visibility withholds deliver_answer while member work/required checks need coordination; exact passed publication passages are offered for reuse without weakening byte/version gates.",
+    "Automatic passed-check hashes and acquisition-attempt footers move to the audit contract; necessary failures and gaps remain visible, with exact duplicate gaps suppressed.",
+    "Authorized redacted audit endpoint and lazy Web audit tab expose checks/limits independently of the answer, including absent-record state.",
+    "F13 exposed self-written alternative completion criteria; a subsequent general policy/schema clarification anchors done_when and delivery to the original requested outcome. Initial failing artifacts are preserved."
+  ],
+  "validation": {
+    "targeted_pytest": {
+      "passed": 178,
+      "artifact": ".scratch/team-efficiency-all-targeted.txt"
+    },
+    "initial_red": ".scratch/team-efficiency-red.txt",
+    "protocol": {
+      "pass": 45,
+      "fail": 4,
+      "remaining": [
+        "P34",
+        "P35",
+        "P36",
+        "P37"
+      ],
+      "artifact": "results/team-efficiency-protocol/summary.json"
+    },
+    "lint": ".scratch/team-efficiency-lint.txt",
+    "scoped_types": "0 errors",
+    "full_types": "15 errors in previously failing files; not a green repository-wide type gate",
+    "web_build": "passed Vue typecheck and Vite build; existing large-chunk warning",
+    "browser": "Isolated real Vue component/API client tested in headless Windows Edge with fixed HTTP audit responses: detail, collapse, run switch, absent record. Linux browser attempt could not start due to missing libnspr4.",
+    "browser_script": ".scratch/verify-team-audit.cjs",
+    "browser_image": ".scratch/team-efficiency-audit.png",
+    "import_smoke": [
+      "466/466",
+      "525/525"
+    ],
+    "symbols": "0 missing / 574 files",
+    "provider_preflight": "passed",
+    "audit_replay": [
+      {
+        "case": "F12",
+        "before_chars": 1574,
+        "after_chars": 864,
+        "model_body_chars": 864,
+        "answer_status": "complete",
+        "retained_checks": 2
+      },
+      {
+        "case": "F13",
+        "before_chars": 2940,
+        "after_chars": 1400,
+        "model_body_chars": 1071,
+        "answer_status": "partial",
+        "retained_checks": 3
+      },
+      {
+        "case": "F14",
+        "before_chars": 1128,
+        "after_chars": 953,
+        "model_body_chars": 953,
+        "answer_status": "complete",
+        "retained_checks": 0
+      }
+    ]
+  },
+  "model_runs": {
+    "baseline": {
+      "directory": "results/team-scope-standard-after",
+      "profile": "tui",
+      "samples": [
+        {
+          "sample": "F12-r1",
+          "status": "needs_review",
+          "hard_failures": [],
+          "answer_status": "complete",
+          "semantic_review_required": true,
+          "usage_complete": true,
+          "research_jobs_accepted": 1,
+          "elapsed_s": 103.272,
+          "diagnostic_verdict": "fail",
+          "review_type": "model",
+          "reviewer": "Codex artifact inspection, 2026-11-07",
+          "review_file": "review-000.json",
+          "metrics": {
+            "attempts": 17,
+            "known_prompt_tokens": 266873,
+            "known_cache_read_tokens": 204544,
+            "first_research_report_s": 30.76,
+            "failure_reasons": {
+              "stream_empty_tool_arguments": 1
+            },
+            "tools": {
+              "add_task": 1,
+              "finish_planning": 1,
+              "create_subagent": 2,
+              "assign_task": 3,
+              "collect_reports": 2,
+              "update_task": 1,
+              "deliver_answer": 2,
+              "submit_report": 3,
+              "web_fetch": 1,
+              "web_search": 1
+            }
+          },
+          "known_completion_tokens": 13198,
+          "unknown_completion_attempts": 0,
+          "final_chars": 1574,
+          "delivery_errors": [
+            "Error: ValueError: Delivery preflight failed: [{\"rule\": \"checked_publication_excerpt_missing\", \"check_id\": \"prices_fidelity\", \"detail\": \"checked publication excerpt is missing from final content\"}, {\"rule\": \"checked_publication_excerpt_missing\", \"check_id\": \"arithmetic_total\", \"detail\": \"checked publication excerpt is missing from final content\"}]. Correct all listed fields/sentences together. Preserve valid passages and citations; changed checked passages require recheck or a blocked disposition. No task disposition or final manifest has been committed."
+          ]
+        },
+        {
+          "sample": "F13-r1",
+          "status": "needs_review",
+          "hard_failures": [],
+          "answer_status": "partial",
+          "semantic_review_required": true,
+          "usage_complete": true,
+          "research_jobs_accepted": 1,
+          "elapsed_s": 110.988,
+          "diagnostic_verdict": "pass",
+          "review_type": "model",
+          "reviewer": "Codex artifact inspection, 2026-11-07",
+          "review_file": "review-000.json",
+          "metrics": {
+            "attempts": 17,
+            "known_prompt_tokens": 263385,
+            "known_cache_read_tokens": 203008,
+            "first_research_report_s": 35.728,
+            "failure_reasons": {},
+            "tools": {
+              "add_task": 1,
+              "finish_planning": 1,
+              "create_subagent": 2,
+              "assign_task": 2,
+              "collect_reports": 2,
+              "update_task": 1,
+              "deliver_answer": 2,
+              "submit_report": 4,
+              "web_fetch": 2
+            }
+          },
+          "known_completion_tokens": 16419,
+          "unknown_completion_attempts": 0,
+          "final_chars": 2940,
+          "delivery_errors": [
+            "Error: ValueError: Collect or stop outstanding members before final delivery"
+          ]
+        },
+        {
+          "sample": "F14-r1",
+          "status": "needs_review",
+          "hard_failures": [],
+          "answer_status": "complete",
+          "semantic_review_required": true,
+          "usage_complete": true,
+          "research_jobs_accepted": 1,
+          "elapsed_s": 40.614,
+          "diagnostic_verdict": "pass",
+          "review_type": "model",
+          "reviewer": "Codex artifact inspection, 2026-11-07",
+          "review_file": "review-000.json",
+          "metrics": {
+            "attempts": 6,
+            "known_prompt_tokens": 65549,
+            "known_cache_read_tokens": 52480,
+            "first_research_report_s": 28.477,
+            "failure_reasons": {},
+            "tools": {
+              "add_task": 1,
+              "create_subagent": 1,
+              "assign_task": 1,
+              "collect_reports": 1,
+              "deliver_answer": 1,
+              "web_fetch": 1,
+              "submit_report": 1
+            }
+          },
+          "known_completion_tokens": 4675,
+          "unknown_completion_attempts": 0,
+          "final_chars": 1128,
+          "delivery_errors": []
+        }
+      ]
+    },
+    "initial_after": {
+      "directory": "results/team-efficiency-standard",
+      "profile": "tui",
+      "samples": [
+        {
+          "sample": "F12-r1",
+          "status": "needs_review",
+          "hard_failures": [],
+          "answer_status": "complete",
+          "semantic_review_required": true,
+          "usage_complete": true,
+          "research_jobs_accepted": 1,
+          "elapsed_s": 85.384,
+          "diagnostic_verdict": "fail",
+          "review_type": "model",
+          "reviewer": "Codex artifact review, 2026-11-07",
+          "review_file": "review-000.json",
+          "metrics": {
+            "attempts": 16,
+            "known_prompt_tokens": 220796,
+            "known_cache_read_tokens": 159360,
+            "first_research_report_s": 22.531,
+            "failure_reasons": {},
+            "tools": {
+              "add_task": 1,
+              "finish_planning": 1,
+              "create_subagent": 2,
+              "assign_task": 2,
+              "collect_reports": 2,
+              "update_task": 2,
+              "deliver_answer": 1,
+              "submit_report": 4,
+              "web_fetch": 1
+            }
+          },
+          "known_completion_tokens": 11266,
+          "unknown_completion_attempts": 0,
+          "final_chars": 541,
+          "delivery_errors": []
+        },
+        {
+          "sample": "F13-r1",
+          "status": "needs_review",
+          "hard_failures": [],
+          "answer_status": "complete",
+          "semantic_review_required": true,
+          "usage_complete": true,
+          "research_jobs_accepted": 1,
+          "elapsed_s": 145.381,
+          "diagnostic_verdict": "fail",
+          "review_type": "model",
+          "reviewer": "Codex artifact review, 2026-11-07",
+          "review_file": "review-000.json",
+          "metrics": {
+            "attempts": 17,
+            "known_prompt_tokens": 264495,
+            "known_cache_read_tokens": 218240,
+            "first_research_report_s": 35.284,
+            "failure_reasons": {
+              "stream_empty_tool_arguments": 1
+            },
+            "tools": {
+              "add_task": 2,
+              "finish_planning": 1,
+              "create_subagent": 2,
+              "assign_task": 3,
+              "collect_reports": 2,
+              "deliver_answer": 1,
+              "web_fetch": 2,
+              "submit_report": 3
+            }
+          },
+          "known_completion_tokens": 14735,
+          "unknown_completion_attempts": 0,
+          "final_chars": 933,
+          "delivery_errors": []
+        },
+        {
+          "sample": "F14-r1",
+          "status": "error",
+          "reason": "llm_error",
+          "answer_status": "best_effort",
+          "elapsed_s": 151.401,
+          "metrics": {
+            "attempts": 2,
+            "known_prompt_tokens": 12304,
+            "known_cache_read_tokens": 10240,
+            "first_research_report_s": null,
+            "failure_reasons": {
+              "logical_call_deadline": 1
+            },
+            "tools": {
+              "add_task": 1
+            }
+          },
+          "known_completion_tokens": 887,
+          "unknown_completion_attempts": 1,
+          "final_chars": 775,
+          "delivery_errors": []
+        },
+        {
+          "sample": "F15-r1",
+          "status": "needs_review",
+          "hard_failures": [],
+          "answer_status": "complete",
+          "semantic_review_required": true,
+          "usage_complete": true,
+          "research_jobs_accepted": 1,
+          "elapsed_s": 63.937,
+          "diagnostic_verdict": "fail",
+          "review_type": "model",
+          "reviewer": "Codex artifact review, 2026-11-07",
+          "review_file": "review-000.json",
+          "metrics": {
+            "attempts": 16,
+            "known_prompt_tokens": 187745,
+            "known_cache_read_tokens": 157056,
+            "first_research_report_s": 24.286,
+            "failure_reasons": {},
+            "tools": {
+              "add_task": 2,
+              "finish_planning": 1,
+              "create_subagent": 2,
+              "assign_task": 2,
+              "collect_reports": 2,
+              "deliver_answer": 1,
+              "web_fetch": 4,
+              "submit_report": 2
+            }
+          },
+          "known_completion_tokens": 6722,
+          "unknown_completion_attempts": 0,
+          "final_chars": 724,
+          "delivery_errors": []
+        },
+        {
+          "sample": "F16-r1",
+          "status": "error",
+          "reason": "llm_error",
+          "answer_status": "best_effort",
+          "elapsed_s": 158.319,
+          "metrics": {
+            "attempts": 11,
+            "known_prompt_tokens": 112566,
+            "known_cache_read_tokens": 102272,
+            "first_research_report_s": 25.772,
+            "failure_reasons": {
+              "logical_call_deadline": 1
+            },
+            "tools": {
+              "add_task": 1,
+              "finish_planning": 1,
+              "create_subagent": 1,
+              "assign_task": 2,
+              "collect_reports": 1,
+              "update_task": 1,
+              "web_fetch": 2,
+              "submit_report": 1
+            }
+          },
+          "known_completion_tokens": 2921,
+          "unknown_completion_attempts": 1,
+          "final_chars": 376,
+          "delivery_errors": []
+        },
+        {
+          "sample": "F17-r1",
+          "status": "needs_review",
+          "hard_failures": [],
+          "answer_status": "partial",
+          "semantic_review_required": true,
+          "usage_complete": false,
+          "research_jobs_accepted": 2,
+          "elapsed_s": 202.529,
+          "diagnostic_verdict": "fail",
+          "review_type": "model",
+          "reviewer": "Codex artifact review, 2026-11-07",
+          "review_file": "review-000.json",
+          "metrics": {
+            "attempts": 17,
+            "known_prompt_tokens": 238446,
+            "known_cache_read_tokens": 199424,
+            "first_research_report_s": 155.895,
+            "failure_reasons": {
+              "logical_call_deadline": 1
+            },
+            "tools": {
+              "add_task": 1,
+              "finish_planning": 1,
+              "create_subagent": 1,
+              "assign_task": 3,
+              "collect_reports": 3,
+              "update_task": 1,
+              "deliver_answer": 2,
+              "web_fetch": 2,
+              "submit_report": 2
+            }
+          },
+          "known_completion_tokens": 8342,
+          "unknown_completion_attempts": 1,
+          "final_chars": 2033,
+          "delivery_errors": [
+            "Error: ValueError: t1: member work incomplete; use blocked with a gap"
+          ]
+        }
+      ]
+    },
+    "goal_refinement": {
+      "directory": "results/team-efficiency-goal-refinement",
+      "profile": "tui",
+      "samples": [
+        {
+          "sample": "F13-r1",
+          "status": "error",
+          "reason": "llm_error",
+          "answer_status": "best_effort",
+          "elapsed_s": 164.935,
+          "metrics": {
+            "attempts": 7,
+            "known_prompt_tokens": 68601,
+            "known_cache_read_tokens": 48640,
+            "first_research_report_s": 38.481,
+            "failure_reasons": {
+              "logical_call_deadline": 1
+            },
+            "tools": {
+              "add_task": 1,
+              "finish_planning": 1,
+              "create_subagent": 1,
+              "assign_task": 1,
+              "web_fetch": 1,
+              "web_search": 1,
+              "submit_report": 1
+            }
+          },
+          "known_completion_tokens": 3544,
+          "unknown_completion_attempts": 1,
+          "final_chars": 1512,
+          "delivery_errors": []
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "Model review stays needs_review; no model diagnostic is labeled human acceptance.",
+    "One run per case is insufficient for a stable latency/cost or causal-regression claim. Prompt tokens include cached input; no currency cost is inferred.",
+    "An optional fallback interface cannot mechanically detect or prevent every semantically conditional call made outside it. General delegation relevance and task satisfaction still depend on model behavior.",
+    "Provider empty-tool-argument recovery remains observed; required arguments already existed in the schema. No fabricated dispatch arguments or relaxed finalization gate were introduced.",
+    "F17 exposes failed required research-job lineage remaining blocking after a successful retry. This change does not silently waive the earlier failure or implement research replacement lineage.",
+    "One legacy display assertion moved from answer prose to the audit contract because presentation requirements changed; source preservation assertions remain.",
+    "No full frozen-suite, blinded or live authenticated Web research evaluation, deployment, service restart or commit was performed."
+  ]
+}

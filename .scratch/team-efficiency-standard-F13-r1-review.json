@@ -1,0 +1,24 @@
+{
+  "reviewer": "Codex artifact review, 2026-11-07",
+  "review_type": "model",
+  "worker_sha256": "55ce2376c7ace4cccf2087791aa92304d174e42219439d1b486c7e7ccd72722c",
+  "case_sha256": "6a97587210ced5ebef5d1bf92555c7772359ebcae947383fbcbf603b25deeb4f",
+  "criteria": [
+    {
+      "verdict": "pass",
+      "evidence": "final_answer says 44 yuan is a subtotal and the inclusive amount is indeterminate."
+    },
+    {
+      "verdict": "pass",
+      "evidence": "final_answer identifies missing tax and shipping and asks for these inputs."
+    },
+    {
+      "verdict": "fail",
+      "evidence": "report_contract marks every task resolved and answer_status complete; t2 defines its own alternative completion as providing the result OR explaining why unavailable, and moves the missing requested inclusive total into limitations."
+    },
+    {
+      "verdict": "fail",
+      "evidence": "Answer adds optional brand/origin comparison, RFC/domain commentary, and repeated verification prose; researcher/verifier also re-fetch the same exact source."
+    }
+  ]
+}

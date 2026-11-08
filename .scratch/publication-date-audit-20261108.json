@@ -1,0 +1,5290 @@
+{
+  "summary": {
+    "checked_at": "2026-11-08T03:44:32.983801+00:00",
+    "database": "postgres",
+    "native_mode": "release",
+    "index": "/home/administrator/FrontierAgent/data/corpus-native-context/20261107-web/manifest.json",
+    "allowlist_count": 176,
+    "active_count": 176,
+    "counts": {
+      "unambiguous_filename_date": 62,
+      "unknown_retained": 105,
+      "reviewed_metadata": 9
+    },
+    "explicit_filter_eligible": 9,
+    "admission_status": {
+      "unknown": 176
+    },
+    "explicit_dates": {
+      "2026-09-06": 7,
+      "2026-08-16": 1,
+      "2026-09-05": 1
+    },
+    "total_sources": 201,
+    "total_active_publications": 176
+  },
+  "sources": [
+    {
+      "source_id": "00f08e66e99a8c62b719125fb0a5cf315c824a364721a23e3b963167420a7428",
+      "build_id": "668bac61a631636c8671f94ed7026da077e0f848bcdcdb9001d226956fa1fa0e",
+      "names": [
+        "2026-09-06_2026.09.06-国金证券-电子行业研究-韬定律-与业绩斜率-ai-pcb及半导体设备迎来布局良机-0907c9e9.pdf"
+      ],
+      "date": "2026-09-06",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": {
+        "institution": [
+          "chunk:16a9a510ef9e405f:body:0003"
+        ],
+        "report_title": [
+          "chunk:16a9a510ef9e405f:body:0001"
+        ],
+        "confirmed_publication_date": []
+      }
+    },
+    {
+      "source_id": "02353b54c2bfe0e4d3185702880db580c9391c5b8f440138becea78bc5dfa2cb",
+      "build_id": "1eb8e6713c6bfac3ec9d7572c71b2f6a84a543accaf8c29ea70fd4e11741acb4",
+      "names": [
+        "2026-10-26_周报_Neocloud_融资、META、SPCX_与_BE、MS.pdf"
+      ],
+      "date": "2026-10-26",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "031ec28937c81a3dacd4ef9d42d52ff548ce723e22c205664870eb3a3dfa29a8",
+      "build_id": "c2b40833d108642c05fa3babd0fbfca10526adbe0a1dab35d76ab83d2ec2e13d",
+      "names": [
+        "2026-10-24_Discover_工具更新_#1.pdf"
+      ],
+      "date": "2026-10-24",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "0500a3ea5f63e33ecea7aab86562c40ea96438d2ab299a45f02d6ca8fc539ed1",
+      "build_id": "ae8a1784265ec0f199a1b16f793bab6c43fbabe83138f0c804a4f7728f0cd97e",
+      "names": [
+        "2026-10-28_James-Bulltard_102826 复盘.pdf"
+      ],
+      "date": "2026-10-28",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "05ebf9bba3c76a3f866b3007f0f4dc48e4dc7ee8529f074001e81d2570ef6010",
+      "build_id": "7550905211864ea66643016da88432f55157cc56425b205b292e08e87f9d5b8d",
+      "names": [
+        "【风口研报·洞察】美国中期选举推升新能源政策预期，SOFC-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "074de577070370e971b510811fa1aae26bcac414d3cf3787001a3a7486e9e3ec",
+      "build_id": "0e04a157a44bb8d4f8c4158f437b9c318a41687ca0ed947437031c82427d7e94",
+      "names": [
+        "【公告全知道】光模块+NPO+液冷+光纤+华为！公司拟18亿港元扩产光模块-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "078f1b724cef644bc56ce104846be313a3bb3c3d67831d978a41e172da482fae",
+      "build_id": "084c2c833974c1c5374e52c5a85a7bcbb942594e3a5295615a5a05ffc5b74bbe",
+      "names": [
+        "【财联社早知道】英伟达披露下一代CPO技术，原型样品已就位-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "0a515081efdbfe764cebc20e3651d7e60a21b65bb0f345246409d51c34478a6f",
+      "build_id": "b1484cfdd8b5e610753789f2d78530368f506fa760e7a7420793bab0e2c7e0a2",
+      "names": [
+        "【电报解读】高通全球首个符合3GPP最新定义的6G终端原型机将首.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "1097cab3587ccbc1ee58567fe1581df6fe1953be65b2bba33f5887312b5ddc10",
+      "build_id": "61034239dfaebb4e9b1c49798193946904cbc224f606274756dca8c8612b6688",
+      "names": [
+        "【大佬持仓跟踪】固态电池+锂电材料，固态电解质10吨级产线已全线.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "11ea15acc1b8c58a576d3a80e35916ddc83d1217a47d3a728ecbb17b5e97c5af",
+      "build_id": "7d23fc247bda199b79b6de93cb4b21eaa74bcaf9c39a0f348b6c0685adefc28f",
+      "names": [
+        "2026-09-06_2026.09.06-国泰海通-国泰海通证券-农业-超强厄尔尼诺将至-关注农业板块-29ebd036.pdf"
+      ],
+      "date": "2026-09-06",
+      "basis": "reviewed_metadata",
+      "reviewed_date": "2026-09-06",
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": {
+        "institution": [
+          "chunk:3ed3ecab2fdf5035:body:0000"
+        ],
+        "report_title": [
+          "chunk:3ed3ecab2fdf5035:body:0002"
+        ],
+        "confirmed_publication_date": [
+          "chunk:3ed3ecab2fdf5035:body:0000:first-page-date"
+        ]
+      }
+    },
+    {
+      "source_id": "1452ed9bce212eed09998c1c655e73d4cda58796b6617deeca6f0079ab8a5595",
+      "build_id": "fabc78d97694898b820915c4768f430de27bc152fba497d3511bc5f0426e98d4",
+      "names": [
+        "1102脱水研报.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "151bc0b7c2430f2e181eea3ef1f9c746f183c93a6558050665073cf58d7570f2",
+      "build_id": "92b7a668c26455cc15b1811126edce29dc58c48cf391796bf57946d4e6feed87",
+      "names": [
+        "2026-10-14_James-Bulltard_101426-recap (1).pdf"
+      ],
+      "date": "2026-10-14",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "1530a55d7063c29c17d80a7db73a945f6d1e5bec5c55297d50c51b245275fd4b",
+      "build_id": "4f9fe268a59692b8bdfe2da5a31330e393d7dd8c37246a89f94439f4b270f699",
+      "names": [
+        "【风口研报·洞察】美股创新药在科技股下挫中持续走强，礼来业绩超-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "159dafdebdebd834d3317aac90a0a6405653ab17683ce81902eb975bce181aad",
+      "build_id": "16f97cb38c626bf5105260233e420f92a5d876af6eb414189fc1ff3fbd4888c8",
+      "names": [
+        "2026-10-27_预览_PLTR_26Q3：FDE_产能成为企业_AI_规模化的关.pdf"
+      ],
+      "date": "2026-10-27",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "174b64628f35aca60909d11b509bc7b7e87a9f4613a03a1da6c01d720a8cbcb0",
+      "build_id": "a76b8ac143ecd5ec6cd7eff14d7901acf8071d7aa53cb4facfa352a27704880c",
+      "names": [
+        "2026-08-13_2026.08.13-长江证券-国内研报-长江证券-化工专题-景气投资-十问十答-7463f4d0.pdf"
+      ],
+      "date": "2026-08-13",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": {
+        "institution": [
+          "chunk:82dac0d446ef83cd:body:0001"
+        ],
+        "report_title": [
+          "chunk:82dac0d446ef83cd:heading:0000"
+        ],
+        "confirmed_publication_date": []
+      }
+    },
+    {
+      "source_id": "176b177e9c2ac1439314eb63d61c63a82f2c2008836fb558b2e91d82d79e886d",
+      "build_id": "05ca39a316a4b819bbec3a3041c93e41ccb3b382523a5ab125c708324c21923a",
+      "names": [
+        "【盘中宝】随着四季度旺季渐进，该行业或逐步迎来全国性普涨，这家企业上半年实现业务量价齐升-image-source.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "17aa814c34acba52de4fa5124822249d1fe492db412f50199d51920a306bc365",
+      "build_id": "68cff63b7df2c349f8701bc8bf9950395a099602a497f41b87e4ad44494ea765",
+      "names": [
+        "2026-08-13_2026.08.13-goldman-sachs-国外研报-高盛-贵州茅台-600519-sh-市场化改革方案六-全国42家直营店四款产品提价-维持-买入-评级-a1454167【本地OCR衍生】.pdf"
+      ],
+      "date": "2026-08-13",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "18199db0f3c4bf1af55e06397bcb4995bc10885e0290d3409371f2207bc10159",
+      "build_id": "bf94ff463c9cccbfd9d847f7ff0fa0d224ece2a64f66ef0c384c1d7e0e6d70b6",
+      "names": [
+        "【风口研报·公司】长期逻辑坚实且当地政府托底价格-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "1851bfd9de7b97e69a06506b173390e34662404c2cabab540832c9931e896e87",
+      "build_id": "2ca6d6130ae5102b931025b3100080ead453105829f0102555f5ff00bca7b8e7",
+      "names": [
+        "【公告全知道】光模块+光芯片+PCB+光纤+人形机器人！公司光模-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "1e021a8c56f71edceffcbdc4d5971a5c757a72254014378856fead5cc3b3c309",
+      "build_id": "7ed6e0b7e6f46d309af19d8f39bb4732a8dbeaf4d9b22e09a543521170e1b8e1",
+      "names": [
+        "2026-09-07_2026.09.07-国盛证券-宏观点评-这次不一样-3600亿增资银行保险的信号-08d04511.pdf"
+      ],
+      "date": "2026-09-07",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": {
+        "institution": [
+          "active-source:footer:国盛证券研究所"
+        ],
+        "report_title": [
+          "chunk:d5c99534333873cc:heading:0000"
+        ],
+        "confirmed_publication_date": []
+      }
+    },
+    {
+      "source_id": "1e141ab0b5e4d33a87298a627afdf05fc09ceef61d56d0acfafd819d622f3f12",
+      "build_id": "4149b21d55663c1bfefb0234260c53c476885db329588eaf3c05dc557a11b64c",
+      "names": [
+        "2026-09-06_2026.09.06-国金证券-地产专题分析报告-二手房成交热度仍高-6906d4ad.pdf"
+      ],
+      "date": "2026-09-06",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": {
+        "institution": [
+          "active-source:footer:国金证券研究所"
+        ],
+        "report_title": [
+          "corpus_sources.original_names[0]:human-reviewed-title"
+        ],
+        "confirmed_publication_date": []
+      }
+    },
+    {
+      "source_id": "207808f5c71658e0a7d021fd8ef61350f304aa3208793b754a786a75a7df86e9",
+      "build_id": "9fe65c20b9a10c6322a9b04526551eed2b6cdc29861e40779f525a78f2f3ba07",
+      "names": [
+        "2026-10-21_James-Bulltard_102126 复盘.pdf"
+      ],
+      "date": "2026-10-21",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "21ab02f5426b0a6440f7bb7632c2ad5eec8e53e0f26143e065fe03330734fc47",
+      "build_id": "d345fcddea552e088d44803f06f2a8f2a6f839d1a7697f2ea3e29efc7ba7f3a2",
+      "names": [
+        "2026-11-04_James-Bulltard_11426 复盘.pdf"
+      ],
+      "date": "2026-11-04",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "24ca3d2aa91a09cd79ab59294ccb222538c04be10aba1408b0a8d74a94b3595f",
+      "build_id": "f6c35cb4294e8ee6761f4608f730afea935ee0146a3b0e60d7568b9ce81f1224",
+      "names": [
+        "【点金互动易】机器人+金刚石，机器人腱绳小批量试用验证中-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "2a3e43875060ecf14b26ffdae64b9d042ca9b64b25368e7fa2d9e33c2bd0af95",
+      "build_id": "0c41a89ee9a3dd81e5cabc7e3ff3ae00406d1dd1dd923ebb9d77decaaade9c15",
+      "names": [
+        "天孚通信_投委会决策报告_20260830.md"
+      ],
+      "date": "2026-08-30",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "2c1584cd4581fb4d2035d04409ca78c4e3d3b07d17074274fb53d5e762879d8a",
+      "build_id": "acc13f32f40e38c2a07e48f409ae719ccffe3b5a7ef48e4e4a233cb10de0484f",
+      "names": [
+        "【九点特供】李佳琦直播间半小时卖出约2万亿Token，分析师看好随着Token消费持续爆-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "2c2ecef1f617ba82adba70874ee99c06854638d9b01984168ac5af84c62f01b0",
+      "build_id": "a71dd7dbb029b9a78a7cd89a6ee52b45149a7ae9e5749de8808b89b534d00bb4",
+      "names": [
+        "【研选•行业数据】分析师统计出Ａ股.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "315c48462491700acb51eeb7214955b91ae07810024db68799adf0a3d40c1354",
+      "build_id": "cc06abaf05bc61063adff9309e4047f6725d97f1ffec2405ca907b67779101ad",
+      "names": [
+        "【电报解读】3A游戏《影之刃零》发售后72小时销量突破.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "320d73aa866f1203b26c08b7b65f0847fe371aef996e4402193f23369b01b7a5",
+      "build_id": "9d92aff27e3d0d630b9003d45293508fc73462703756e689531f221518be3079",
+      "names": [
+        "【机构调研】这家算力服务商设备上架交付节奏将持续提速.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "325a6238af1e8249b86c6bcafc2473caf1e5c183d8598192e48debc8b6ca1823",
+      "build_id": "56119cbb238daf818f9c0c254de237566c167f6ac816ad4f43517f4d93ccd1e7",
+      "names": [
+        "2026-10-27_James-Bulltard_102726 复盘.pdf"
+      ],
+      "date": "2026-10-27",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "3719821a1854ed5318253a66c3abae40e4a8dd1797a3aafc568c0ce16b682a13",
+      "build_id": "6765874bec8f6a1d1e822dde88c130b65a8f6618cef30ad59bba2ee57fa0b357",
+      "names": [
+        "【盘中宝】AI Agent正逐步下沉到本地终端，这类产品逐步转变.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "373c75e2a67817622a143c7a508e6f5465ad14808fe4151186facdf0d26be0e7",
+      "build_id": "73d51c2faf230b964e4bb6255cacb91578b446363d2821dee9c52cec90c852db",
+      "names": [
+        "2026-10-21_前瞻_NOW_2026财年第三季度：调研反馈稳健，2027年展望.pdf"
+      ],
+      "date": "2026-10-21",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "37fbc30e206b5198e1a18d19050f820cd3a4abca6cc7eb0aa76b20a6bd5dba5e",
+      "build_id": "4398200456212429f38b26f49467d7160b4019f87430bf8f58976c85cea474b4",
+      "names": [
+        "【风口研报·公司】创新转型进入收获期，分析师强call公司两款药物或.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "392119f62c9f1455b3d7328f3b14dc11c9e446d2c8a2c54744ab09be078b2fe3",
+      "build_id": "23e06d2def2dc47638bbbd55a5af6ea1a65df22c97da436c40848a93137bc62b",
+      "names": [
+        "【盘中宝】产业政策持续推进背景下，该行业正从技术验证走向规模化建设与商业化落地共振周期，产业化有望加速，这家企业已完成多个技术路线储备.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "3a00ca2f1805a5e0aae07b285b49d54377b6f708db978ec2ec1860f3a6b52e9e",
+      "build_id": "065fa302743a8dee5538f4b64e2acfab37bf8efad99a04628f1eae59d71d6dc4",
+      "names": [
+        "【风口研报·公司】具身数据缺口显著，公司于近日公开展示多模态数-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "3f634514a0c150256a763dec15449207cb2adc4439fba4060e23a2c216a75b9e",
+      "build_id": "510f83c463db4121ea68bbdf7b253ad4ed329d8f14b336345787a30de9b20f24",
+      "names": [
+        "2026-09-06_2026.09.06-国金证券-电力设备与新能源行业研究-中报全览-锂电验景气-aidc信号密-光伏底夯实-电网出口增-475e3454.pdf"
+      ],
+      "date": "2026-09-06",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": {
+        "institution": [
+          "active-source:footer:国金证券研究所"
+        ],
+        "report_title": [
+          "corpus_sources.original_names[0]:human-reviewed-title"
+        ],
+        "confirmed_publication_date": []
+      }
+    },
+    {
+      "source_id": "3f72537000f4fb99a8cdf9d8549d15c2048ae4a4c72c86759898efc2ab68397c",
+      "build_id": "e8609d256084f5e4dc126b933c1fe391293ffda473a5cf284c8e02ca7531a55e",
+      "names": [
+        "【点金互动易】MLCC+卫星，MLCC业务处于供不应求阶段-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "40ede32961c62246ea40c7eb18771f3221cba98916ae31721c24a1e9e22ed25e",
+      "build_id": "a168eee081e78b561467357333e637ea4842fc3e508e08f19c6baa6a79abfc7c",
+      "names": [
+        "2026-10-26_James-Bulltard_102626 复盘.pdf"
+      ],
+      "date": "2026-10-26",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "41115b28eb182a9319e9d042308425cee42e5efa5a408f82d2d09aa5fcf51872",
+      "build_id": "993907e1a078013ee9e8e7482f2a015d5e143f8a65149efd3d29d94afb06240d",
+      "names": [
+        "10月30日 光模块纪要.docx"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "44377a84decadabd71ea3a1d4576a6bdbfcba04468fe1039de60451ac36648df",
+      "build_id": "f6ec892c312a52907eb1a3c4410f70247dcdec1c100c528ae4b5c14807ee672f",
+      "names": [
+        "2026-10-30_James-Bulltard_103026 复盘.pdf"
+      ],
+      "date": "2026-10-30",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "45344a3008d40272b13f29ac4ad47bad9bbe1a655919825736d68442d918f7b3",
+      "build_id": "db2648577bfc719dc86d21dfa1034ebd248dd296d18e049ff2152159c7996a1e",
+      "names": [
+        "【盘中宝】AI浪潮驱动该行业需求放量、价值量持续提升，相关公司.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "45a5d084f5b02ec28998f7de97575e432f12f99297df2d6060c82c29948f09c4",
+      "build_id": "5c5fd067fdd872427b8c8c760bd8a7c4abbf5714abf2851fc0a2571247255520",
+      "names": [
+        "【风口研报·公司】 煤炭+天然气+煤化工，这家公司三大主业均进入量-paged-source.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "47a3d9cc7237be762f3b3a25f06811821357578a8f253768e043cef3c32c159c",
+      "build_id": "a258bef88da0558d3b5bd4181291be734641ad8aff1d5d484c9ee77f9df851bb",
+      "names": [
+        "【盘中宝】大模型持续迭代升级，推动AI应用涌现及商业化落地，未来市场规模或超1.8万亿美元，这家企业已上线AI细分工具-image-source.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "481430d83f66fa039d63278b29ced738dc0bdf286158caedc9bc6c5892afd720",
+      "build_id": "7eab6eeacf93bf8ecdd31a864fec168501d991c802c3c39389fd47c3c645069b",
+      "names": [
+        "【风口研报·公司】一次锁定250架新机稀缺产能，这家公司受益全球-paged-source.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "48c05895798ba0096b5ac5cc6fbf42fcc9d63929c2a7a2df61e7b16b3a4a659f",
+      "build_id": "5be178f951c61eaed04c68c5266f658804efe2088da606ca1ee28ce997af5f7b",
+      "names": [
+        "9月8日 光模块技术演进与供应链重构：从1.6T到3.2T的路径、格局.docx"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": {
+        "institution": [],
+        "report_title": [
+          "corpus_sources.original_names[0]:human-reviewed-title"
+        ],
+        "confirmed_publication_date": []
+      }
+    },
+    {
+      "source_id": "4a954103d1054311b8b6a934682f04356d6b52429db0bb5ea8fb84eba9c4e18c",
+      "build_id": "27e5c180dfb597c15cfeda2cda3d9afe2c9389971da711d4f0cd4697a010ca5e",
+      "names": [
+        "2026-11-05_点评_DDOG_26Q3：最低承诺额与续约定价拖累26Q4_指引.pdf"
+      ],
+      "date": "2026-11-05",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "4adf8c64ca7d21da328d0c9b5268e3044a1ed59162fb39d5340bac97906e22a9",
+      "build_id": "d0f8d962d4df3db115d32927c88173ace2cabbcbd3e3b43d07dd9652a350cd1e",
+      "names": [
+        "2026-11-05_交易真的非常非常难.pdf"
+      ],
+      "date": "2026-11-05",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "4aef3d9e18d7d487923a4feabb2f4299e08392eee9323a44775ff7a33be8322a",
+      "build_id": "66be9abe551281eda6f12f5f6a6d46783be3512c287a8da8c03e0a4ce9fb7035",
+      "names": [
+        "源杰科技_投委会决策报告_20260831.md"
+      ],
+      "date": "2026-08-31",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "4b2f3a4a4ff693412f63cda6a515ab5e20f6c638a69729ecbd3944b5ce65f55d",
+      "build_id": "f7e5cfc4b70c4369e8718b5bd33271a36fb63e7d0b84b6f264ac9259700c95d1",
+      "names": [
+        "【风口研报·公司】卫星互联网进入快速增长期，公司两大拳头产品.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "4be7144635a0a1b73d06f5925f384345c062c9cff11c075af6870528704b4878",
+      "build_id": "514f2232c794463024e352c9bca3d9fee63a4d8c6ac4623b0390f27a3d7dfe17",
+      "names": [
+        "2026-11-02_本周报告.pdf"
+      ],
+      "date": "2026-11-02",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "4c92785aa5c678f637d2dbcf4d2b111e90db9520241e7b5b3e24eae3704c23ca",
+      "build_id": "ce4cdb9826cc6b4b313b608681587332de615529c9a18e3c888a7f7facf5452c",
+      "names": [
+        "2026-11-05_Deep_LLM_26Q4_模型能力快速进步，但近期商业化变现仍.pdf"
+      ],
+      "date": "2026-11-05",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "4cdeaa4200a8d2b04ea2e193b06958658a2c0008a1574b2798cc7f2722351cff",
+      "build_id": "7c49b7685c5a36df02cdd5262fe087665c05d1b1fde6a254f4c11200e0459685",
+      "names": [
+        "【风口研报·公司】盈利预测上调超100_，公司受益AI服务器高景气-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "4d09dcfd3219f910a276ebb80f0e72084e350355013c05053701903fede5bf98",
+      "build_id": "03e7bcfd977de3c30d3b67f510867d1503c3329c254f3dbfe31fafcf3f815d82",
+      "names": [
+        "【盘中宝】兼具科技高度与市场广度的赛道，该未来产业正迎来黄金发展期，这家公司已投资布局相关领域.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "4d81e8dc68a5775233b3efcc691c0a24baebc1ebd59021337f9b7ea3a7bdb6a7",
+      "build_id": "1145012e18897c88cfba77b2f25f862410db2f1f57454126f0b3d41aac0d89b7",
+      "names": [
+        "【电报解读】广东要求加力支持智能网联汽车发展，机构称政策.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "4e3fa68773d8d07061acecb1a7e04577f61c2d4f885d13c4a8944016467cb11e",
+      "build_id": "2704653b324537b6d5379e70ff67a0cd98fd15f0ad2bbad3f3c3dec8e6b90080",
+      "names": [
+        "【风口研报·公司】这家跨境龙头品牌三季度收入、利润创历史同期新-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "4f6854a46a50116885ef0dc3654d26c15423fd01c5e74a1e3030c5ae4ec26bb0",
+      "build_id": "231ff3a07f5570e9a12932878143c2dadbdc16cfad6dea7a5282a7996d175969",
+      "names": [
+        "2026-09-06_2026.09.06-平安证券-a股策略周报-轮动整固-攻守均衡-76e079c9.pdf"
+      ],
+      "date": "2026-09-06",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": {
+        "institution": [
+          "active-source:footer:平安证券研究所"
+        ],
+        "report_title": [
+          "chunk:e1b21386e9b62dde:heading:0000"
+        ],
+        "confirmed_publication_date": []
+      }
+    },
+    {
+      "source_id": "5116637cbd424bdda029b4b5fb2aede4a779e76ec162be18cd96d6377fbbb95b",
+      "build_id": "75c66b91f2cb58bdde19c4a032db5d5ec8e40429553026dcd7d6122e8a608374",
+      "names": [
+        "【大佬持仓跟踪】SoC芯片+人工智能，SoC系列芯片落地消费电子、汽车、医疗等领域，AI应用覆盖六大核心领域，这家公司为三星首款三折叠屏手机提供解决方案.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "51a43d34dc8367998e76748e5029c26b838e3f8a999aef05bd7b45145af98272",
+      "build_id": "9549f2ae8c6f759b9805577370fb7c5bc478a3f3dbac0328345964703bf02c94",
+      "names": [
+        "【电报解读】中国与阿曼签署规模为300亿元人民币双边本币互换协议.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "52d79f36ad48b0fac02079b33ba394fd155a96d9f71404e6f24045006e0c8052",
+      "build_id": "d368db0579b28aeff9d914e5baf5f34f07623a2b0a6b8deda88e4efca901540f",
+      "names": [
+        "【风口研报·公司】SOFC部署快、周期短等属性适配AI数据中心用-paged-source.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "5341d2f660cdd5d16c88a5e16558c6da169cc3ecbb2f1549ba71c5ac34d070fa",
+      "build_id": "1b2b4bfad787268e91ecccefddadd66756b17f5d58df0f2fc12f69b543b2409b",
+      "names": [
+        "【风口研报·行业】AI短剧与漫剧是AI应用率先放量的领域，当前已产-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "54055d82fde985fdfccace060617d2a527ec32af171c9f25e9cb1bc622f602cb",
+      "build_id": "3d10e850ae56226f927c508c3600beaff482b4efaf5550397f07218524fe299a",
+      "names": [
+        "2026-11-06_专栏_网络安全：客户调研显示企业仍倾向于通过云服务商与安全厂商获.pdf"
+      ],
+      "date": "2026-11-06",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "54b8eec7a52a59e8abbf7207eaa1d36406385fd41365c36a74902bcb39e87ad0",
+      "build_id": "89e5e04922a0783eba36dd15482f9bc19101a3fc3e17dbbacf6cebbe89c05676",
+      "names": [
+        "【电报解读】字节番茄小说2027年将投超10亿元支持内容创作.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "54baf1b11f9dcea0d41f5a4c05c86e115b58e4d44af79dc67c1720b25414e9ee",
+      "build_id": "7d28a4863014730b5d350fd98cd6ce6628ccac6182b6ad88417676a00c47f603",
+      "names": [
+        "【电报解读】该细分领域被视为是具身智能时代.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "5525b38480a6020b43478a7415faa7769be8c5f5d4bec82a1eea566cdb7236ca",
+      "build_id": "43db124db26de27ff8ee32f28f9307cb4c34dac060eb5dcea7202c1611b911ff",
+      "names": [
+        "2026-09-06_2026.09.06-华源证券-环保行业周报-碳市场四行业配额方案落地-节能降碳赛道有望受益-80b15a61.pdf"
+      ],
+      "date": "2026-09-06",
+      "basis": "reviewed_metadata",
+      "reviewed_date": "2026-09-06",
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": {
+        "institution": [
+          "active-source:first-page:华源证券"
+        ],
+        "report_title": [
+          "chunk:1ada4314a25261ea:body:0001"
+        ],
+        "confirmed_publication_date": [
+          "chunk:1ada4314a25261ea:body:0003:report-footer-date"
+        ]
+      }
+    },
+    {
+      "source_id": "5771df468868a011cdcf1f0960dd4674071822f8a5db01803136577f1378f1d4",
+      "build_id": "bfe37af0c66e70058440463d9894fe9c3e1ff73f4d83f43b5a0603b6b56af759",
+      "names": [
+        "【公告全知道】第三代半导体+先进封装+存储芯片+玻璃基板-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "5bcef68ff950f0ec0e581a45d2afc883a22acbcfc08a486a43b49a0b2acccf9f",
+      "build_id": "fdfb5b4d97531f1f99f390a601c27d03d7ffb4631f1e8f92da8cfb6654f3054a",
+      "names": [
+        "【机构调研】这家机器视觉服务商三季度业绩指标增长持续加速.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "5c25139ffc4d1cf674914baa4658479709d8cc7818f68b1801f5c3d00f4a6fe3",
+      "build_id": "c6056488fd061c3dcdc5df782a1289693cdd41c594e554b50476441c7c1cf1fd",
+      "names": [
+        "【研选•数据】2026北美OCP大会前瞻.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "60af162bafa08e1845ba2b5172ef97ea3cc483c0fe92d3666236e277ab4067b1",
+      "build_id": "d0af10d4eb09618adfaac7958509b4e1595898fbe9d1dc0929dda3cf627d6847",
+      "names": [
+        "【盘中宝·记者一线】再提价，这家企业产品每吨上调数千元 ，后续仍有提价空间.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "61a7596abac9eb218e2f4f71562332d045a129b8d0713c23d3dbaf823eecc819",
+      "build_id": "12c0d61fb4bea99abcea2d338b4d1572a73734d29ac19a1c9dbdde658efa64d0",
+      "names": [
+        "2026-10-15_FundaAI_Anthropic-3Q.pdf"
+      ],
+      "date": "2026-10-15",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "66977e5cea1fe501ea7a0f53398de1a606458dfb10de3ab9a24bb5860b217054",
+      "build_id": "5487df59e7b5fb22f4a7b8ff9a995038b210512552ec0a4a98d603d101808b45",
+      "names": [
+        "2026-10-28_渠道跟踪_季度_SaaS_赢家与输家跟踪报告（3Q26）.pdf"
+      ],
+      "date": "2026-10-28",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "670dc4be86ad9908e032433b0976608418610796d8f044c6fe6abeea1521c1d7",
+      "build_id": "d2f0805b590c3deb63b376031e8d7e5f75931e1e7b9485276a3e3639696b6a7a",
+      "names": [
+        "【盘中宝】随着冬季来临，机构称该行业相关品类销售或有望改.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "674c2cc018b18f5ba81bd40f3dd598cc92626c0ba0dbc536a2d8fc2a2507db74",
+      "build_id": "c78a232cf68fbf6c23997d21e9889205c99567b71001b2259e8723b5acf14957",
+      "names": [
+        "【风口研报·公司】氟化工迎来边际拐点、四季度制冷剂销量修复可期.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "698258a84a35f4d6afbd171b1b6ae9bcede0115aa906c6b7dc2d6c97534a5087",
+      "build_id": "e2c2f1489c56e6c2ce8576a58b25e2453324c7d1b8d820c164aff09cd429176a",
+      "names": [
+        "【风口研报·业绩】客户包括英伟达及国内头部互联网大厂，分析师强call公司最新业绩.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "6d88d35a6d3ea951e47727dd0b51bf9b62da5c7647519ccb3fe4f7e2ec7e4576",
+      "build_id": "5e046b725e35725cf489cc931a80dfea72eb25723ee266ad7c2e1987f6426b5b",
+      "names": [
+        "【盘中宝】全球巨头纷纷布局，随着AI渗透率提升，该行业全球市场.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "6e3ff9ec61e4cb725b5d5b35dfce78310a44a8c8fc05ed0ee10f70510d35cda5",
+      "build_id": "95240291545b22156f1c8b596ba74efef3557bbab76cc7bd4fb7d49503853b10",
+      "names": [
+        "【研选•研报数据】AI时代价值看智能复利，内容行业的价值在于资产.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "6f14cc145b798b3716bad47829c05d89d8a5e5955179f11d196ed9b9b8538f11",
+      "build_id": "9fa4cd7cf1ab602a448dbe0f07cf3a4bd495ed30ccda09088a926f9cb3449745",
+      "names": [
+        "2026-08-16_2026.08.16-华创证券-欧阳予-田晨曦-张慧-公司研究-业绩点评-贵州茅台-600519-报表实质扎实-经营底部已过-贵州茅台-600519-2026年中报点评-e034bdac.pdf"
+      ],
+      "date": "2026-08-16",
+      "basis": "reviewed_metadata",
+      "reviewed_date": "2026-08-16",
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": {
+        "institution": [
+          "chunk:9fa4cd7cf1ab602a:body:0000"
+        ],
+        "report_title": [
+          "corpus_sources.original_names[0]:human-reviewed-title"
+        ],
+        "confirmed_publication_date": [
+          "chunk:9fa4cd7cf1ab602a:body:0001:first-page-date"
+        ]
+      }
+    },
+    {
+      "source_id": "6fd8d1e6f19cf6ce29ae9e8313680b86a577f5431acee4c7bd85aa4617ad2a17",
+      "build_id": "5ccbe8015c4b3eb6171ecf29b67d091e1c8bc390b33e0d8ff679d260edc6c2b9",
+      "names": [
+        "【风口研报·公司】金粒门等新鲜零食业态炙手可热，这家老牌连锁龙头正在积极打磨新鲜零食门店模型，传统店调改反馈效果好，明年有望迎来经营端“困境反转”.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "72cbdce7fe8d9f1d0e82aca5a2590772e7ea3cd687ab0a67bf4bb31e86d8507a",
+      "build_id": "84f7628a7134a4258bedc59d21260bde3cc38cd722e5d736578aeb07c13e357a",
+      "names": [
+        "【研选•数据】半导体+CPO+PCB+液冷+算力租赁，五大概念相关-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "7431ef004cee81fe0f260713beb45fbd607a95596a781a4d6b0cc1893d00e768",
+      "build_id": "cd264afd86e6cad2220bb2bb423f3e378af7a6c8e694a0bdfae8de67898de835",
+      "names": [
+        "【狙击龙虎榜午盘】大资金托底但自然买盘不强 热点接力难度抬升关注分.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "76c7d3ff2fe64823021691e7fc8285ae846bba5f3f99af63da99ea49873e68f8",
+      "build_id": "27d18ab7369b5220ff37f7f4d29ac828dcf088a8c3242c9f80694386daacfe82",
+      "names": [
+        "2026-10-15_FundaAI_TSMC-26Q3.pdf"
+      ],
+      "date": "2026-10-15",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "7871400525a1c27cf9b4ab204ef1397e84dd3e1b847e9535f947f9cd7862b584",
+      "build_id": "660efaba0cfa861d6fb9f7a4c2b1ef5ee518e582cf8b5b8a6390bf0fb7696909",
+      "names": [
+        "【盘中宝】这类消费品全球市场持续扩容，为中国品牌出海打开广阔.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "793b39673d31e8a8310e89a9171567dfb0008444b669cd6e225dc354329a880a",
+      "build_id": "3d17f758d795ee7195254f9b831cdf96c7ffa510f45c7445645314524d9e0185",
+      "names": [
+        "2026-09-06_2026.09.06-光大证券-2026年8月美国非农数据点评-强非农降低了年内加息的门槛-6fc25e24.pdf"
+      ],
+      "date": "2026-09-05",
+      "basis": "reviewed_metadata",
+      "reviewed_date": "2026-09-05",
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": {
+        "institution": [
+          "active-source:footer:光大证券研究所"
+        ],
+        "report_title": [
+          "chunk:9ebd323f89e55cc1:heading:0000"
+        ],
+        "confirmed_publication_date": [
+          "chunk:9ebd323f89e55cc1:body:0000:first-page-date"
+        ]
+      }
+    },
+    {
+      "source_id": "7b0136d755d0addd7c36473ef1e5d4e7a81a09eeb4e78fdb658f5a5466a90b5b",
+      "build_id": "ee42b1fc63075ddd3de27d79f8b07e7548d0c53e8ff2fb9b0bcb082c1ec8e6df",
+      "names": [
+        "2026-10-15_James-Bulltard_101526-recap.pdf"
+      ],
+      "date": "2026-10-15",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "7b6fd4abb3603bfc49263bf0101e78cd9d795395f96cd21ad847b6f522c61e87",
+      "build_id": "f921f01984cc222a78aac6baa6250a6a2905e224df1a2c29942a02b70839b203",
+      "names": [
+        "2026-11-05_复盘_APP_26Q3：从猝不及防到从容应对.pdf"
+      ],
+      "date": "2026-11-05",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "7c0a6d0a988eb46eb80accc7be462c8ecc347bf2391a7037325470a0ca5bf5f5",
+      "build_id": "0bddc371cfc914d8e2c61d4831e1aff943c848a5c8309c599d1a656a711c6b60",
+      "names": [
+        "【风口研报·公司】“追雪”订单已经先行，分析师看好公司冰雪旅游资源的稀.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "7c608cbdafe2dbeedac5a81b05d29e7a0d03a6ca4562564472d9b0052604c6a2",
+      "build_id": "728eeaab364097ed48dec623ea927d8bbef0f786c224b6e28169ca7e1bcbf601",
+      "names": [
+        "2026-11-03_前瞻_APP_与_U_2026年三季度：数据纷争.pdf"
+      ],
+      "date": "2026-11-03",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "7e5c90ec9676641de5d1b9a21938edd07399e0b08c013f71d7bb9139f89a0f28",
+      "build_id": "83a144b2a13a2608528da444d82b59eb81dc73139184615c2cb10286229f6af7",
+      "names": [
+        "【九点特供】9月红果用户数量超越豆包，AI短剧与AI漫剧已成为AI应用中-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "7f962ff647817f4909ff3e8406a85a117f93979c1e8f4deefc403f6ded90b4a3",
+      "build_id": "35316588113d265d9f8aafdb2f693b00079b3e822301a1ebc34a2beff66efdd6",
+      "names": [
+        "【狙击龙虎榜午盘】情绪端出现退潮迹象 人形机器人迎来关键回流.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "80b5a290df3d2adefb291a69e76757e68181e922573142a9628e075a1c8db09d",
+      "build_id": "ac5bb8f16808859de9fd2497c4385613c76faffec2e00702f2514e3a3d055ec5",
+      "names": [
+        "5月：锂电铜箔和电子铜箔.md"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "8158cbb9b3956bc992d0842786149faf0105b0313acc2493e8e393f08536a122",
+      "build_id": "2696b5d4a615f984e9ac2e1d76cfb755e32bef6cfd5578204b5353812038e3a0",
+      "names": [
+        "2026-09-06_2026.09.06-国联民生证券-通信行业周报-2026-cioe中国光博会前瞻-a87d1d3c.pdf"
+      ],
+      "date": "2026-09-06",
+      "basis": "reviewed_metadata",
+      "reviewed_date": "2026-09-06",
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": {
+        "institution": [
+          "active-source:footer:国联民生证券研究所"
+        ],
+        "report_title": [
+          "corpus_sources.original_names[0]:human-reviewed-title"
+        ],
+        "confirmed_publication_date": [
+          "chunk:7ceca88433b092ae:body:0002:report-date"
+        ]
+      }
+    },
+    {
+      "source_id": "8212215ff61c69b43a84f581fb0c7d90e06355ae645690af60169c0b2a42b91b",
+      "build_id": "388fb8d9cc2aecec15803ef463fb6cff685a4c221b8c1de51fcc06b49f4314d9",
+      "names": [
+        "2026-10-29_James-Bulltard_102926 复盘.pdf"
+      ],
+      "date": "2026-10-29",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "83ae41817a4f447aa7f19aefad2058fd5eb3de72f34d291428ae35acf5d25a75",
+      "build_id": "b55b30f63f8f029b2bb6a719319e2d4648eb9fc0e1da69779dc2eac7673d1c59",
+      "names": [
+        "2026-10-28_专栏｜网络安全：AI_扩大漏洞修复与持续防护需求.pdf"
+      ],
+      "date": "2026-10-28",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "8526443ab12ca8f3229d5df5338fa43dca6f7892cd6752b1182609811050a31b",
+      "build_id": "7072f30b99758398d0131fd607bd23c5dabab54fbba99fb96fb46f1551313e2b",
+      "names": [
+        "宏观观察_2026-09-13_Bulltard_911复盘_市场势态与节点机会.md"
+      ],
+      "date": "2026-09-13",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "855c1da49f2a1b5f7dc5832daddbeb45eab77b5924518f288a04c263558b735c",
+      "build_id": "79b75dfda43977c6e4285db7f59a8ed517992b2ff957726ab8d35ff27cefd49f",
+      "names": [
+        "【狙击龙虎榜午盘】三重共振迎来放量反弹 大金融强势定调 AI应用领涨带动科.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "8877abc5574913f5b24182617c26447a3643f0ca1c6a27f8be894ad247630def",
+      "build_id": "1abcffe5ccca100357dc2df7874820797423e259173a9e6eb569fd1bec1aadb1",
+      "names": [
+        "2026-09-30_2026.09.30-国内研报-长江消费周周谈20260928-5f4db7fb【本地OCR衍生】.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "8b11fbdd67b1d0a215c39c3155799e12cb9c259d6a7b40066d6efa557434ed39",
+      "build_id": "730433bdccf660aa5cd0b055a50dbc1b4c28371b7291b740ff03ac9c4e8cf333",
+      "names": [
+        "2026-10-02_FundaAI_专栏  光通信FCC 光模块规则可能好于悲观预期对中国头部厂商的利好或超想象.pdf"
+      ],
+      "date": "2026-10-02",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "8be30ad26f4301035d49b8453aeeb5a308c00dde05a6b77fe716f6a3a9fda45f",
+      "build_id": "3b9263010da0a9cc7bee7bc6d0bc2247076c92b311c8e8f6b6726c4fd58e0214",
+      "names": [
+        "【风口研报·公司】海外阳台“光伏+储能”加速渗透，这家公司阳台光-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "8cfcadd0b1aadeeed045215a1291189a475d24bbb4574f678fb22fc76d7183ce",
+      "build_id": "9d3faa30c4a024e79dff727b7fcc66cb49c87eabbc405eb60b906cec4071ebbb",
+      "names": [
+        "【机构调研】这家半导体公司经营情况逐季改善，2.2微米像素技术产.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "8d5ae0f70ddcbe80961418ea555f160f056c9987f2f057d3d6e64a476a9db1de",
+      "build_id": "f351131b875609da0e12b921938764345fc928218f35d12d11e2279db7090923",
+      "names": [
+        "【电报解读】海外储能订单持续提升，机构称储能龙头企业有望享受.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "8dbcfc53bdee88c870135d0ef8a6053700c3ca3e643abf83faecec58ebe1b98d",
+      "build_id": "72d2395b9a56bb01ff9e7ae52873b1e3a67bbb42f2694ee712a23f01d831d249",
+      "names": [
+        "【风口研报·公司】AI降本+生态+出海，这家公司在快递“反内卷-paged-source.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "9060390f928fea4e18fe7aec51ff7323b1042c4213631af0dca7ec4980d1a714",
+      "build_id": "8815942b24354229107757f434c1aa8cb0b1df052c2d6db114fa4dacc09c64a2",
+      "names": [
+        "【狙击龙虎榜午盘】指数低开后快速修复 新能源题材爆发 科技中期反.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "910240ccfbf5010f76750294552cd16c5ae0df7bbb058ff5e0ede66ed74f3b92",
+      "build_id": "5f5e45f10e51e779816db244599dc5bcab9b294d60cda3d783e45969fa77229f",
+      "names": [
+        "【机构龙虎榜解读】AI漫剧+影视传媒+AI营销，与红果短剧-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "92ad12f346452ff907d1b19b8aa081b3ee7e974d2205eb902c286f44030e94e9",
+      "build_id": "3d86bf5c830d053ced3727b347b96a8627bb64f03907b7ff076d66ea1a876edb",
+      "names": [
+        "1102调研日报.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "94fa1df239db4c03f9f7ffba7e344b53b52079966aa50e3a4fa16e4c98a70f3b",
+      "build_id": "4e39c26983c7f340175b645e6ee06360801a5407ec177efd26627e5545d58cec",
+      "names": [
+        "2026-11-06_点评_Unity_2026年三季度：Vector_增长超出预期.pdf"
+      ],
+      "date": "2026-11-06",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "959dff072919c2d3aa717f04b8e04f8c39faa0adda12bd2019198592ce377d73",
+      "build_id": "4a748523ef7a332a8af2cd968d88facd230f0e45e98f2a51d758adcb3d4fac37",
+      "names": [
+        "【研选•研报数据】中药工业在医药工业体系中的战略地位日益凸.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "96ef05dad1ad6e074e82769b0fb4583eaae77a80b76906ed4c07c6e56f0aa5a8",
+      "build_id": "cfdac8b4408e3fc2e706bfbba732a6276ec416dba406996bfb38f9faaafd733e",
+      "names": [
+        "【点金互动易】AI短剧+算力，参与制作AI短剧约2000分钟，其中一部抖音播放.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "978a09ba2ffb714a8384542987ba53602409c650d897cedf6c231398cccc3c41",
+      "build_id": "ffff905f6a59ac8817d0e893f7670d43fc011618225d064782f47180e74bf319",
+      "names": [
+        "2026-10-15_FundaAI_ASML-26Q3.pdf"
+      ],
+      "date": "2026-10-15",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "987d9f69f96235ba00b599fda44ae441a25c1aa99f6d6f56b3c8a6b96daf0f8a",
+      "build_id": "c520485162e666604ad81cb6d6a2cff23289ec65780718a6a6856800d7cffee5",
+      "names": [
+        "2026-09-06_2026.09.06-国金证券-互联网行业研究-gpt-6-astra-fable-5-1正式发布-持续看好ai应用-247dc7fb.pdf"
+      ],
+      "date": "2026-09-06",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": {
+        "institution": [
+          "active-source:footer:国金证券研究所"
+        ],
+        "report_title": [
+          "corpus_sources.original_names[0]:human-reviewed-title"
+        ],
+        "confirmed_publication_date": []
+      }
+    },
+    {
+      "source_id": "98fbd740eea78deb7c522077789b9af3ef9a57ba42d9e37621edfb5a2f405a05",
+      "build_id": "a796819edaebe29b0bfe9c7846fea67cabfa15514e45e47179b4ee433292a7e6",
+      "names": [
+        "2026-10-23_一、M365_Copilot_销售进展与展望.pdf"
+      ],
+      "date": "2026-10-23",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "990586f2b7ed74153f73e6e0766c72feb03aeb3e54fd257b2d65b3da72095ce7",
+      "build_id": "28be49595e4648a9885658677607d1c8e1c2ff2c9e778ebe767daeb3bf0b8d6a",
+      "names": [
+        "2026-10-22_James-Bulltard_102226 复盘.pdf"
+      ],
+      "date": "2026-10-22",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "9912320fac7b3016cf0f890a888046b5e4d2273524c1c1dda72f2c51e0145996",
+      "build_id": "c5370b93f2af2f9181ba248076d5b0224b128c5bd3b58eebf16df9bef6ea3267",
+      "names": [
+        "2026-11-06_深度_太空算力：SPCX_有望在_2028_年实现_1_GW_在.pdf"
+      ],
+      "date": "2026-11-06",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "9967ff8e410a8839bbef24fb0ab8b162693715860e26a3ef7f5c5fa03d6e7932",
+      "build_id": "62fc6fdd4e00f462b7bc4a18cb62a9679f19fbb00270163f2bda683170c9a718",
+      "names": [
+        "2026-10-29_研报｜大语言模型：Gemini_4_Carbon_助谷歌重回领先.pdf"
+      ],
+      "date": "2026-10-29",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "9a1af6777a4e0e61329e5c9b6828b306a032518cf4149767d208b078edeb1615",
+      "build_id": "91fe021ab860566497a588667dae02a261444afe08bc238a57168e8ea2c2ebd8",
+      "names": [
+        "【电报解读】发改委要求扎实推动海洋经济高质量发展，我国上半年海.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "9b7df6d8973ee04e02e60430d8ad4b57071cc084e73f7561817f9f9cdd5cc145",
+      "build_id": "8ec32ba9df29eef5f58a51d811ac4bfe7b5b58cd123c4258cb2d383dc29fbcd1",
+      "names": [
+        "2026-10-28_前瞻_DDOG_3Q26：渠道调研向好，企业级_AI_提振核心需.pdf"
+      ],
+      "date": "2026-10-28",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "9bc173299f23357064c6081c8c2fe0dd9959a6c48e1026e1692fdfc17d4746b1",
+      "build_id": "9d4f617b5e12f6d6713153543d090b0086723d0fd22917fc24c2d230fd325a4b",
+      "names": [
+        "2026-10-23_James-Bulltard_102326 复盘.pdf"
+      ],
+      "date": "2026-10-23",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "9c918326bf6d5b28324adba9b801a9f0ebf7e090ebee14c3659a9e16c4c2631f",
+      "build_id": "80fec262b6b7fb52a4b75d857cbb7caa0c969474486ccd87d47289aa3932f606",
+      "names": [
+        "【电报解读】苹果和阿里巴巴达成合作，将千问集成到Apple智能.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "9f0804dcdb656d7b2bfd20c6b9d456bf15438490495dbd784e8eb6927db43c06",
+      "build_id": "7c29d3479817f507ef4ebca89371c7f6ce64d8725a7cde6f6e1ce5d39c70ca31",
+      "names": [
+        "2026-11-04_深度｜INIO：表后电力超级周期中的燃气发动机龙头，坐拥漫长服务.pdf"
+      ],
+      "date": "2026-11-04",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "9fed49a2ef5b0d23ece8c30fe260e2f8a536a2935dafcc14613b64425f1ef690",
+      "build_id": "292c4aaa79e2ca50cbc80c0aac7cb9d2fe8e1ebdfc304310da8b9432e6b0ad5a",
+      "names": [
+        "【狙击龙虎榜】指数情绪双杀延续冰点 多重信号指向周一反弹窗口.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "a1067ef5c2f63ceeb7cd23d9e2088d5d12864877af3a90834bc9eef6f367adfd",
+      "build_id": "ca6495744a23e5db265483ed5ec839e403e5b2454b00b5374b0b339e3f1f68b3",
+      "names": [
+        "【机构调研】这家半导体设备制造商多平台协同放量，新签订单进入逐.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "a34432bbd4262b927b6cefc5bb1aa3bf75abe8b993ae3d9202d9821f1d2816b5",
+      "build_id": "f85bc29009c641a615c89ccf454c97b532a448ce34f860e49dcb3f5d937850ca",
+      "names": [
+        "【财联社早知道】最高预增2073_，光模块测试龙头三季报业绩大增-paged-source.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "a56b4fc128caae6c3d859aeda70f3d82006dbfba35561f38ac204b31c41d3fd8",
+      "build_id": "8f44113f2ada55d0fb24cf39782d7a2c6319e91f137ebd9ac4ac9f7590e12918",
+      "names": [
+        "【电报解读】马斯克公布Neuralink脑机新产品进展，机构称国内外植.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "a6afdea303227be1cc630e58b483fbffd02249299a9509e2210036720dd89fad",
+      "build_id": "e997a5af3a279053036bdd9f3afdc76f8d2c8186e9aafb3573986ccd07cd1681",
+      "names": [
+        "【盘中宝】AI落地最为成熟的商业场景之一，该领域竞争转向比拼智能服.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "a6f43094010f686d07ba02ee302792b1aff5d13096a049e15d7528fafc7ffd26",
+      "build_id": "1da0f0631b00fdb7e29b5c459689cc6f93ae55411050a6d38fecac464205d53b",
+      "names": [
+        "【研选•研报数据】证监会发声将全力稳市场稳预期，分析师看好券商板块直接.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "a981b0641542c425a0ebcdb69af2333a8f82c4d65d5f434a6850453463aa0f49",
+      "build_id": "712e370a7081da172a788dfcb19be9c594d4a7c4b3cb1f174046ec8fa7dff54a",
+      "names": [
+        "2026-08-14_2026.08.14-中泰证券-何长天-田海川-公司研究-事件点评-贵州茅台-600519-双锚定价筑稳价体系-渠道再平衡提盈利-eed1869f.bilingual.pdf"
+      ],
+      "date": "2026-08-14",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "aae5ea2cd46a9c53c95fe65a97d265b14b1715f4e29d8eee599f17710ded0f2b",
+      "build_id": "6c34f0cbfc90a219bdc61f796fd170dc72f98a1338093f6c1dc9f89637910141",
+      "names": [
+        "1102评级日报.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "ac6fbf96ea37423fe28dd8f829bc4e2e0f0ebd75c5921cb7ab9f2b7be17f6187",
+      "build_id": "2ac934e48c2781be80c4c774f4fd6842f12c52c270bc9b29b80f9131cb0f89b2",
+      "names": [
+        "【风口研报·公司】地缘冲突、运力受限推动化学品运价上涨.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "ac8fe32bede91b8b0bd6e553f6a0794923ffa213fb3f94e1fb5b06c97a8690a1",
+      "build_id": "8453c86b16411a0bfaaac5f7777262e5ea5f550fa097dfa467b3c522238cc2b9",
+      "names": [
+        "【九点特供】我国计划在2030年前实现登月！机构称2026年中国航天发射-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "af1dffe81cb0fedf173d0237eab6236b093efdbd98eeffa450813c0e5f83bf1b",
+      "build_id": "b317175e7f4f916c8a0ade891dab6c31f929d4a22590891ee2db9e9dd21b7447",
+      "names": [
+        "2026-11-04_研究_AIDC：中期选举后得州许可风险上升；2027年交付预测维.pdf"
+      ],
+      "date": "2026-11-04",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "b08a5d15658ec15a519613244b33667045ca7b1f5b494ebecdc52c82cc769afb",
+      "build_id": "d726bc92488afa5f3b8d45fac3ff1ae27c904e04de60e09e552ae3a1428409c9",
+      "names": [
+        "1103调研日报.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "b1d0b05b189e5df6aef8953033a0fa0a1059b2dcb92dce53d5b581f72704cc10",
+      "build_id": "d6b37c27193f9d24ce425d28d8947c2844a647a0fe49be85c29b853b0b9a7e79",
+      "names": [
+        "【财联社早知道】字节跳动旗下Seedance海外收入占比已达50_，分析师称AI应用有望进-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "b2cde80f3f65cc8a423fac51d02cd3b989a5a0743d99673289db9c1603a59c2a",
+      "build_id": "d5b771d15c0b90a3383924c0f8c9063687e7bc910de448f64dacaefe989ee0c3",
+      "names": [
+        "2026-10-14_James-Bulltard_101426-recap.pdf"
+      ],
+      "date": "2026-10-14",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "b2d308688e98d10d55000878c542721b14dddd10f2a537aad49b3083bd0fee9d",
+      "build_id": "ad448b3dbc25a0b8590bc397172c99fbd5490fca79141baebd0a2bc309dfba92",
+      "names": [
+        "【盘中宝】未来市场容量预计较2025年增加10倍，国内公司海外订单环季度持续提升，全球该行业需求有望持续增长，这家企业可为客户提供全场景解决方案.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "b41ffda5f015ebd518001c91d96354f62a3d562e3add667cc0de1b53201ad9bc",
+      "build_id": "c8aced896a34e99e0a7f048791c8611316a3e31032ac09f8fb0b7e2321566b36",
+      "names": [
+        "【电报解读】长鑫科技基于4F²架构的第六代技术平台DRAM完成工.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "b4d23953450f55b64709b262b6b78bd5c7aa76bd709ba8ce3240139eb568a5a1",
+      "build_id": "861a396eeb3c1923a174cf45d1abd9daa5d3dbee8349259b0472cb24d211020d",
+      "names": [
+        "【财联社早知道】中共中央、国务院发文加快推进新一代AI智能终端-paged-source.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "b505dcd712bc33050d71b82783fae29bc9e7f61fdc4d8300e2f5e126168ca1c6",
+      "build_id": "e8a6d70dfee700897e49bbdaacb5d67d323e58a74c79411083f1b4e1c4492623",
+      "names": [
+        "2026-09-22_2026.09.22-国内研报-中金公司-半导体行业ai进化论-23-ds-v4-1-flash释放硬件潜能-国产卡迈向10t模型时代-acb605cd.pdf"
+      ],
+      "date": "2026-09-22",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "b9770b35955b5bd31bbab30bf77acf93746a504aecf369bee669c7e7fb6cad97",
+      "build_id": "ba73e938c1f1e7db2084fb655e943b99c245ae424aa19a200dc344b9782a0b7d",
+      "names": [
+        "_【电报解读】五部门发文推进算力、通信基站和机房等基础设施节能降碳改造，机构称节能降碳政策密集落地下，相关设备有望迎来更新周期，这家公司为华为提供数据中心温控节-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "b9ce7a2bfc556c9c1db0bbd0d8587c14fff4e6bcff9cb0aec9d36102055d0a54",
+      "build_id": "6c78a52b8ca579102fd6492de4c2e1c3569ea03b058c3206136e5bc5b21dfea3",
+      "names": [
+        "2026-10-16_James-Bulltard_101626 复盘.pdf"
+      ],
+      "date": "2026-10-16",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "b9d244c1ceb09206cf7dac2972588a0236b3efa136430d762f177fce66345fa5",
+      "build_id": "77bf594483c6863d9d1f6c3eaa67c534049b887ac3b0b7f6444c33379679592f",
+      "names": [
+        "【财联社早知道】马斯克重磅预测2029年轨道算力将碾压地面-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "ba87918ba764098761d9ffb1ab5e4601c759a93d5e426f44402b84bc7504a56e",
+      "build_id": "a9010d9ff1674a53072f4d838c5c14a3061359c1468decf3e5e96db3391303f2",
+      "names": [
+        "1103脱水研报.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "bcc4db679ee0b40c45e9383f0549d0aee5958bc9fb6776478bec735162a36dc3",
+      "build_id": "2fad81f65993c78f99d1451dcb60532c0d7c4180b2d63e49a4fab6fdddb3c46c",
+      "names": [
+        "1101脱水研报.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "bd0a65b7c6fe481d854aa040ecf2d73ee55f5ac43709db8af3625b665b67bbb6",
+      "build_id": "285345f7a7ac3f542d70cfec4764d77e4a002d720977c25986a63537310ebcd9",
+      "names": [
+        "2026-09-06_2026.09.06-中银国际-中银证券-高频数据扫描-美国非农超预期-特朗普发新威胁-65b4b040.pdf"
+      ],
+      "date": "2026-09-06",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "c317fdc23cb4b753fb1defdd40076a4f7f8af7c2be18e6f35ba10830b221378e",
+      "build_id": "aac6a8bf0dff8afbbd109e117d990c9c4255ff3159c276f7338fbd96a4630873",
+      "names": [
+        "2026-10-17_科技股终于破位下行.pdf"
+      ],
+      "date": "2026-10-17",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "c3de446223922ca26884871f70234e392db3430fcc1bf45ca24a283d91c39bbb",
+      "build_id": "228aff010a5497ae4135d1e5ead6ad52d6e53c216d7218bc2053759a449342d3",
+      "names": [
+        "【公告全知道】NPO+光纤+先进封装+光芯片+液冷+6G！公司全球-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "c4ec8f1ec89a59d29e4368b1676eb903814ea81108b91d8a76bc2903a68482a5",
+      "build_id": "b3b26de119a69068e2f7f5c3a6921184bc5a45e4798eed46cf7826cd8a872529",
+      "names": [
+        "【风口研报·公司】与客户签5亿美元需求备忘录，分析师强call公司在光通信领-paged-source.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "c5881667ee2ed7e0e2ea5647ed6ae36f7d8ab6dea209e18f53231a7ab20cbba2",
+      "build_id": "e896d5905a610e28216176c854c97689341ba66f61d4c3f6767be0e62b67912b",
+      "names": [
+        "【风口研报·洞察】生猪均价再度跌破9元公斤，分析师指出本轮能繁母猪-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "c80448c821f2e0b73e22dfde19360a27d68f59298f1df8e3ef9a363e5d9da97e",
+      "build_id": "351a37c10474dd68d6a0486e8c0d07e114b509825d5b62f472a302bc7a76d813",
+      "names": [
+        "【机构调研】这家公司特种电子布布局持续落地，具备二代布量产供给能力.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "c8f2c01c10174b338842a68e3b6d82f630d32c124f02706260bd311dd8925956",
+      "build_id": "883967aa4bd4e9337578993f0f9015112612f3db7c078a197a11d0bfc0ac82a5",
+      "names": [
+        "卫星化学_投委会决策报告_20260830.md"
+      ],
+      "date": "2026-08-30",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "cb2648e1099427785d08edeff449d26d7b75c1e114bec2508f76dfe2b9f7ccb7",
+      "build_id": "47cc0b9dd2aeeced7818ee188b9530529f54d1ab448198354c2c7ad2f591ade5",
+      "names": [
+        "2026-10-21_研究｜光互连：OCP_2026_预示_NPO_落地与替代铜缆带来.pdf"
+      ],
+      "date": "2026-10-21",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "cc03f55bc5a24d3dcf69df6148faca84d465c18ff3f7110f5813b6300c5ea128",
+      "build_id": "9bebd13a330d0b61530cda4732548eb1659a9af8004ea887a0e81b2cc2a42f9b",
+      "names": [
+        "2026-09-06_2026.09.06-华创证券-宏观专题-从分化到收敛-可能的路径与挑战-投石问-k-系列八-81e10069.pdf"
+      ],
+      "date": "2026-09-06",
+      "basis": "reviewed_metadata",
+      "reviewed_date": "2026-09-06",
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": {
+        "institution": [
+          "active-source:footer:华创证券研究所"
+        ],
+        "report_title": [
+          "chunk:147e841aab35836a:body:0002"
+        ],
+        "confirmed_publication_date": [
+          "chunk:147e841aab35836a:body:0001:first-page-date"
+        ]
+      }
+    },
+    {
+      "source_id": "cce8079bff680e94c7f7b96d6cbbefd0ebe9bc90ca6a0c9154192a4b484521f4",
+      "build_id": "14e8d565d9fc2ee85cefa1520765538469c0c299a2c540baec3be4716227a30e",
+      "names": [
+        "【风口研报·公司】储能锂电X光检测+PCB检测自动化，这家公司储能X光订单逐步进入交付验收阶段，AI高阶板扩产有望进一步放大客户复购空间-paged-source.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "d0a8cb8747c39311935bfb3881efe891b8bdbd4aa8058a0c6693df0e771ebe1c",
+      "build_id": "42a5bd8adc8151fcd910a5f0a16f7c054d554cca72009ad1a2dea581992b1668",
+      "names": [
+        "【研选•研报数据】数据采集是具身智能的核心“燃料”，分析师看好行业规.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "d20d2783c793597f582995df160f9548b002f9d4c0325ee4009dcddf1ef83bfb",
+      "build_id": "a558721e422777bff70ba51f7ebd1389e7c55dba5aa3b6c9eeaf0ecb8ded4119",
+      "names": [
+        "1103评级日报.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "d441478b684f27af010373bb842c81649082b407505caf92d56a993718441160",
+      "build_id": "8fe537bdac281f396c7007db6dcea8cbec44ff8d6640bd597e1f4dce47c49424",
+      "names": [
+        "2026-09-06_2026.09.06-天风证券-海外跟踪周报-非农清障-通胀定调-5520fab6.pdf"
+      ],
+      "date": "2026-09-06",
+      "basis": "reviewed_metadata",
+      "reviewed_date": "2026-09-06",
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": {
+        "institution": [
+          "active-source:footer:天风证券研究所"
+        ],
+        "report_title": [
+          "chunk:628ec76d5b4001b7:body:0002"
+        ],
+        "confirmed_publication_date": [
+          "chunk:628ec76d5b4001b7:body:0001:first-page-date"
+        ]
+      }
+    },
+    {
+      "source_id": "da6022b7a5961ae44f4f829fb49bd7fb49115228f1197a66d10ab79b7aee6276",
+      "build_id": "6972f1e9e5dd30c2a9fbff9fcb09edb2c4d4a5b64995333e47da1e654fcf6eac",
+      "names": [
+        "2026-10-19_James-Bulltard_101926 复盘.pdf"
+      ],
+      "date": "2026-10-19",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "dbae3efc3b2bae0d0b9474bb81e6e509579ea3bab200ced2932311d14a99d69a",
+      "build_id": "87694bc48168441d212f74ac9317ee420ea82f623f19a555e6ecb40ad5342174",
+      "names": [
+        "2026-11-03_点评_PLTR_FY26Q3：连续第十三个季度增长加速；订单指标.pdf"
+      ],
+      "date": "2026-11-03",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "ddd561518a8dc8ff25097af6ec3edaf91405696cbafc0f66cc6b245aa61297b9",
+      "build_id": "acf8fe315bfda6e17d4806cfb9550a89cccd042dea88a70172424660ac042f5b",
+      "names": [
+        "【风口研报·公司】这家交运公司三季度业绩经营韧性十足，资产稀缺-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "dddc7cd0cb74d085d851df3772aedcf68779b61087a365d14eb53ff5bb4d7afa",
+      "build_id": "568f9e752f0fa65a0e7f52d89b25af3ff8e8078e68510aeb77baac09c289ceea",
+      "names": [
+        "2026-09-06_2026.09.06-国信证券-光力科技-300480-2026年中报点评-半导体划片机国内龙头-经营拐点向上-b6beb6ee.pdf"
+      ],
+      "date": "2026-09-06",
+      "basis": "reviewed_metadata",
+      "reviewed_date": "2026-09-06",
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": {
+        "institution": [
+          "active-source:first-page:国信证券"
+        ],
+        "report_title": [
+          "chunk:568f9e752f0fa65a:heading:0002"
+        ],
+        "confirmed_publication_date": [
+          "chunk:568f9e752f0fa65a:heading:0001:report-date"
+        ]
+      }
+    },
+    {
+      "source_id": "dec517dc15fa0e96a8aeee93473d664a921db73d266bd3baf1193f1e6d33ce72",
+      "build_id": "de03e9f23320105a1db27031eb07a7884dd874a12267e6fef72a4c378671ea9d",
+      "names": [
+        "2026-10-20_James-Bulltard_102026 复盘.pdf"
+      ],
+      "date": "2026-10-20",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "df8a7543b8f148791d0c0c1dabbe6d1574b4e11b63938bda06d16f3619d41454",
+      "build_id": "c097e367b97dd9e570f49650d59bf78592ce6a20cb56afb6f3473e22e24b58b1",
+      "names": [
+        "【盘中宝】“算电协同”正在从叙事转向订单兑现，这类产品升级为.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "e0c1c0fc802b9d76ec61f09d5a7056d60afa8f713c42959059d7b6a7883e7877",
+      "build_id": "2d0295eb2bc2d1caa19983db957273de504321af1baf230fca2ccc57d8d3b120",
+      "names": [
+        "【研选•研报数据】端侧AI步入加速落地期，分析师看好有望深度受益.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "e2f956f5d4d025787675f7dbb772caac734395fe004580fc9f84dfd6a5e8fe73",
+      "build_id": "8c317c5a404b717af159aa3cca4c8d2dd3e0ef909d4ad34483706eaeb10481f4",
+      "names": [
+        "1101评级日报.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "e321a6d9d8b88cf6164d63067fb38f69c1a09cfc0cda3affb61f967ba769fb79",
+      "build_id": "24ba9ce63cdabcf8d69f5fe84ae8991835dbefd1f5f7495073761cf93d9e3e07",
+      "names": [
+        "【九点特供】腾讯史上最强开源模型来了！首次支持视觉理解与电脑-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "e663eae05bd7fd9ae1c8eba7abff150e91ec322976252c3951a21c863cd48ae1",
+      "build_id": "e8e5931364b037f88c66d8e513604476eab7c5a1376de7c2d7298776995e3d26",
+      "names": [
+        "10月29日 光通信 光芯片纪要.docx"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "e8adab7ce7f1a306df3aa5cab5bc07984a9fcd64a9fd146ecf831963f834a606",
+      "build_id": "3a9d9952a616b0e1735b59d586a0981b8db9c3ccbe6a679417abb3f0d866cb41",
+      "names": [
+        "【风口研报·洞察】草铵膦提价节奏明显加快,相较年初涨幅接近 (1)-tiled.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "e9e8e6eae9f8ac80e9f5a3aa6c8c07e299b506ea4baa7745ef86ac4b0e2b5f36",
+      "build_id": "d8ab7ba8cb442ecf6a52bcb35b6990cb0426e45b5b968f0db9b0f7ffa922b11b",
+      "names": [
+        "【电报解读】程序化广告龙头AppLovin盘后大涨超20_，三季度.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "ea26a94908250949a1ab858f973dfb480044554bf690ad4549e38df36353ae84",
+      "build_id": "75465a4d1b08d1d263a8bf0e1587f7085226d78d40f91b2c014c9cbd60e8ba80",
+      "names": [
+        "【盘中宝】有望成为AI Agent进入物理世界的高频入口，这类端侧硬件.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "ea7a69e13f1f67fd644e4ba9c0ce5f5b80aeca298c5f79e961e1886fbd6edc5c",
+      "build_id": "0d03a44b7a1da5a670060c402ef87fb2e587ec83e5a10b404db91fea76e5d91d",
+      "names": [
+        "10月28日 CCL及AI应用之短剧分析.docx"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "ed0f61c99f204ebe664b626d08df57bfad715515b3f401c1ab04978433823feb",
+      "build_id": "03227e86087b4205de3fcca235f4294c92f1bc6afbd5ec32249f650c9e07dcae",
+      "names": [
+        "2026-10-29_财报点评_NOW_26Q3：业绩不及预期，部署需求令前景趋于复杂.pdf"
+      ],
+      "date": "2026-10-29",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "eecaab994514609bf9d459618e9d0cb53c00b5fa4bbebcebf413f6d97c7f4e23",
+      "build_id": "1e86c00da4097c5cc6c17aa260589e875327c1f1125bc26b9835799a8e728698",
+      "names": [
+        "2026-10-19_研究_LLM：DeepSeek_V4.1-Flash-1017_.pdf"
+      ],
+      "date": "2026-10-19",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "f2e08271f4b7349519320057988ffd742f6329c3236be672096bf4230e8b78bc",
+      "build_id": "26d446790950c7e310ebe9ecbd8cf894e8ae0039b57b3af51b580b0c746c3951",
+      "names": [
+        "2026-10-29_专栏_OpenAI：广告招聘持续扩张，获客与效果衡量岗位增多.pdf"
+      ],
+      "date": "2026-10-29",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "f7bc3ecff2bf54843b489392320363642d97df5ded64cdedf05e9737d021c983",
+      "build_id": "ff17b12f8619d48732ac66cd6a09fdb78b1ddffa295eca0bc70d7f726206179d",
+      "names": [
+        "【研选•研报数据】AI商业价值的衡量正由Token使用量进一步延伸至任.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "f8e316969b7cfdcd3bfde7f25320d58e95527fbdc8304ced9ca6738980051560",
+      "build_id": "bbddcfe7ee8c592bb2551296fc524d8ae75dfbd8446285f9ba6ba82bbeb3a98c",
+      "names": [
+        "2026-09-06_2026.09.06-华福证券-华福证券-基础化工行业新材料周报-英伟达带火-新材料-电子特气涨幅超240-aa8e026a.pdf"
+      ],
+      "date": "2026-09-06",
+      "basis": "reviewed_metadata",
+      "reviewed_date": "2026-09-06",
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": {
+        "institution": [
+          "chunk:1d0117eb6e17c63c:body:0007"
+        ],
+        "report_title": [
+          "chunk:1d0117eb6e17c63c:heading:0000"
+        ],
+        "confirmed_publication_date": [
+          "chunk:1d0117eb6e17c63c:body:0000:first-page-date"
+        ]
+      }
+    },
+    {
+      "source_id": "f8fa22084535e3696fed0bc4da1e9a1b71c863ddb1a883603dcb3d251839cbcb",
+      "build_id": "3d9805f1aac9767ad6a7fb7af1c31918a7696ee2ad023f059f90ac56b2b08ec4",
+      "names": [
+        "工业富联_投委会决策报告_20260829.md"
+      ],
+      "date": "2026-08-29",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": {
+        "institution": [],
+        "report_title": [
+          "corpus_sources.original_names[0]:human-reviewed-title"
+        ],
+        "confirmed_publication_date": []
+      }
+    },
+    {
+      "source_id": "f90422fda8064705c7cdd3aaeeb6547f839a56fa4e0b90a78a5cbde688791fc1",
+      "build_id": "72838ceab1cff6004253cd39ccbc039419ad32e9422e9079ed3808eff5ff3b0f",
+      "names": [
+        "【盘中宝】AI需求与政策支持形成双重驱动，海外该产业进入存量扩容加速阶段，这家公司具备多项关键设备制造生产能力-image-source.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "fdf336417edb52e7099fce94a1f3ad6bcd959cc778202a98734184e6627b520f",
+      "build_id": "89938b52e0d44497e2bfafe4e35e3fe4853bdad39e29a533cc654c7b3dd26483",
+      "names": [
+        "【研选•数据】2026年11月券商金股汇总.pdf"
+      ],
+      "date": null,
+      "basis": "unknown_retained",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    },
+    {
+      "source_id": "fe057e6c0317112fe815fec3a519764b4cd45cda63397aa2d92cc44394b17297",
+      "build_id": "1aa214256851d3f168ce80144f5e5cdd729ff08f7856bf044784e74931511d0b",
+      "names": [
+        "生益科技_投委会决策报告_20260828.md"
+      ],
+      "date": "2026-08-28",
+      "basis": "unambiguous_filename_date",
+      "reviewed_date": null,
+      "admission_publication": {
+        "value": null,
+        "origin": null,
+        "status": "unknown",
+        "precision": "unknown",
+        "review_ref": null,
+        "evidence_refs": []
+      },
+      "source_snapshot": {
+        "report_publication": {
+          "value": null,
+          "origin": null,
+          "status": "unknown",
+          "precision": "unknown",
+          "review_ref": null,
+          "evidence_refs": []
+        }
+      },
+      "reviewed_evidence": null
+    }
+  ]
+}

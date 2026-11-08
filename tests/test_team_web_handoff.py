@@ -149,14 +149,10 @@ async def test_focused_extraction_is_not_presented_as_original(tmp_path):
     assert "not original source text" in prompt
 
 
-async def test_web_source_triggers_early_member_handoff(monkeypatch):
-    monkeypatch.setattr("workflows.agent_team.observers.member_progress.time.monotonic", lambda: 0)
+async def test_web_source_alone_does_not_establish_member_completion():
     observer = MemberProgressObserver({})
     _, ctx = await observe(BODY)
-    monkeypatch.setattr("workflows.agent_team.observers.member_progress.time.monotonic", lambda: 20)
-    decision = await observer.on_before_llm(ctx)
-    assert decision is not None
-    assert "[early research handoff]" in decision.inject_messages[0]
+    assert await observer.on_before_llm(ctx) is None
 
 
 async def test_web_only_delivery_does_not_request_corpus_manifest(delivery_run, monkeypatch):

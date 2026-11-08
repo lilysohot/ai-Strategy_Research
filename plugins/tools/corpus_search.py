@@ -35,6 +35,7 @@ def set_market_redirect(enabled: bool) -> contextvars.Token:
 def reset_market_redirect(token: contextvars.Token) -> None:
     _market_redirect.reset(token)
 
+
 # CORPUS_EVIDENCE_PREVIEW=pilot adds sentence previews and core read plans only
 # in the isolated database. Previews never register as fetched/delivered evidence.
 
@@ -56,7 +57,7 @@ _HIT_CORE_KEYS = (
     "available_blocks",
 )
 #: 核心字段之外按预算余量保留的可选字段（顺序即保留优先级）。
-_HIT_OPTIONAL_KEYS = ("title", "published", "snippet", "by_kind", "preview")
+_HIT_OPTIONAL_KEYS = ("title", "published", "ingested_at", "snippet", "by_kind", "preview")
 
 #: 命中被按预算整条舍弃时替换的提示（明确后续动作，不让模型以为检索已取全）。
 _ELIDED_HINT = (
@@ -151,7 +152,15 @@ def _native_hint(delivery: dict[str, int], elided: int = 0, *, references: bool 
 
 
 @tool
-async def corpus_search(query: str, limit: int = 10) -> str:
+async def corpus_search(
+    query: str = "",
+    limit: int = 10,
+    published_from: str | None = None,
+    published_to: str | None = None,
+    ingested_from: str | None = None,
+    ingested_to: str | None = None,
+    ingested_timezone: str = "Asia/Shanghai",
+) -> str:
     """检索研报，返回定位句柄及有界原文；缺失上下文用 corpus_fetch 补读。
 
     原生 v2 命中 evidence_contract=native-search-evidence-v2 的 excerpts 是原文证据，
@@ -184,13 +193,29 @@ async def corpus_search(query: str, limit: int = 10) -> str:
     字符 / 块数，blocks_ranked 是排序候选数，都不等于已交付正文。
     title 是首命中块标题，未必是报告名称。结果只覆盖允许的原生正文；
     unknown_date_source_count 是无发布日期的来源数，不提供可拼接的文档句柄；
-    不得用来源 hash 猜测 doc_id 或 locator。任意一份的存在性不要求盘点所有无日期来源。
+    不得用来源 hash 猜测 doc_id 或 locator。来源标识省略不代表资料被排除。
     未展示不等于不存在，未合并的候选需继续检索，未命中不等于全库无资料。
+
+    published_from/published_to 是研报发布日期范围；ingested_from/ingested_to 是资料
+    首次成功入库（首次进入可检索范围）的日期范围，重建/重新解析不刷新该时间。
+    两组条件独立；同时传入时取交集。发布日期未知的资料仍可按入库时间检索。
+    入库时间未知的历史资料只在显式入库筛选时排除，coverage.ingestion_filter 披露限制。
+    “今天收录/昨天入库”用 ingested_*，“昨天发布的研报”用 published_*；不可互相替代。
+    入库日期按 ingested_timezone 的本地自然日包含首尾两天，返回 ingested_at 为带时区时间戳。
+    只查日期时 query 可留空。相对日期应根据本轮
+    当前日期与用户时区解析为绝对日期；只需日期筛选时 query 留空，不必另造关键词。
+    显式日期筛选不匹配日期未知或仅从文件名推断日期的资料。coverage.date_filter
+    说明筛选范围和限制；未命中只说明该范围内没有可返回命中，不证明全库不存在。
 
     Args:
         query: 检索词。可以是关键词、数字（如 ``47.3亿``、``30%``）
             或一句话；数字与其单位会被整体匹配。
         limit: 返回条数上限，默认 10。
+        published_from: 可选发布日期下界，YYYY-MM-DD，包含当天。
+        published_to: 可选发布日期上界，YYYY-MM-DD，包含当天；单日查找两界相同。
+        ingested_from: 可选首次成功入库日期下界，YYYY-MM-DD，包含当天。
+        ingested_to: 可选首次成功入库日期上界，YYYY-MM-DD，包含当天。
+        ingested_timezone: 入库日期所用 IANA 时区，默认 Asia/Shanghai；其他时区需显式传入。
 
     Returns:
         原生 v2：``{"ok": true, "hits": [{"doc_id", "title", "published",
@@ -207,13 +232,42 @@ async def corpus_search(query: str, limit: int = 10) -> str:
     # The service owns synchronous DB/embedding calls. Keep both the snapshot
     # read and receipt serialization off the shared AgentBus event loop.
     # to_thread carries the task's budget and corpus-policy contextvars.
-    return await asyncio.to_thread(_search_sync, query, limit)
+    return await asyncio.to_thread(
+        _search_sync,
+        query,
+        limit,
+        published_from,
+        published_to,
+        ingested_from,
+        ingested_to,
+        ingested_timezone,
+    )
 
 
-def _search_sync(query: str, limit: int) -> str:
-    if not isinstance(query, str) or not query.strip():
+def _search_sync(
+    query: str,
+    limit: int,
+    published_from: str | None = None,
+    published_to: str | None = None,
+    ingested_from: str | None = None,
+    ingested_to: str | None = None,
+    ingested_timezone: str = "Asia/Shanghai",
+) -> str:
+    from plugins.corpus.ingestion_dates import search_date_options
+
+    try:
+        date_options = search_date_options(
+            published_from, published_to, ingested_from, ingested_to, ingested_timezone
+        )
+    except ValueError as exc:
+        return json.dumps({"ok": False, "error": str(exc), "hits": []}, ensure_ascii=False)
+    if not isinstance(query, str) or (not query.strip() and not date_options):
         return json.dumps(
-            {"ok": False, "error": "query 必须是非空字符串", "hits": []},
+            {
+                "ok": False,
+                "error": "query 必须是字符串；空查询必须提供发布日期或入库日期范围",
+                "hits": [],
+            },
             ensure_ascii=False,
         )
     if not isinstance(limit, int) or isinstance(limit, bool) or limit < 1:
@@ -226,9 +280,9 @@ def _search_sync(query: str, limit: int) -> str:
         # §7.3：命中与覆盖元数据必须取自同一数据库快照（RM-I28-3）；
         # Service 提供组合读取时一次取回，避免拼接两个时刻的状态。
         if hasattr(svc, "search_with_coverage"):
-            hits, coverage = svc.search_with_coverage(query, limit=limit)
+            hits, coverage = svc.search_with_coverage(query, limit=limit, **date_options)
         else:
-            hits = svc.search(query, limit=limit)
+            hits = svc.search(query, limit=limit, **date_options)
     except Exception as exc:  # 库不可用 / 连接失败 / 检索异常统一归到 ok=false
         return json.dumps(
             {
@@ -254,11 +308,13 @@ def _search_sync(query: str, limit: int) -> str:
     # Source hashes are internal catalog identities, not fetch locators. Preserve
     # the coverage limitation without repeating the full list in every response.
     native_coverage = coverage.get("native")
-    if isinstance(native_coverage, dict) and isinstance(native_coverage.get("unknown_date_sources"), list):
+    if isinstance(native_coverage, dict) and isinstance(
+        native_coverage.get("unknown_date_sources"), list
+    ):
         native_coverage = dict(native_coverage)
         unknown = native_coverage.pop("unknown_date_sources")
         native_coverage["unknown_date_source_count"] = len(unknown)
-        native_coverage["unknown_date_sources_omitted"] = True
+        native_coverage["unknown_date_source_ids_omitted"] = True
         coverage = {**coverage, "native": native_coverage}
 
     if not hits:
@@ -335,6 +391,8 @@ def _search_sync(query: str, limit: int) -> str:
             {
                 "title": hit.title,
                 "published": hit.published,
+                "ingested_at": getattr(hit, "ingested_at", None),
+                "publication_date_basis": getattr(hit, "publication_date_basis", "unknown"),
                 "snippet": hit.snippet,
                 **(
                     {

@@ -27,6 +27,7 @@ from plugins.tools._corpus_handoff import render_corpus_handoff
 from plugins.tools._corpus_scope import compact_corpus_limits, corpus_scope_findings
 from plugins.tools._handoff import validate_handoff_refs
 from plugins.tools._quote_verification import QuoteCheck, compare_quotes, validate_quotes
+from plugins.tools._verification_consistency import incomplete_review_statements
 from plugins.tools._web_handoff import render_web_handoff
 
 
@@ -573,28 +574,28 @@ def bind_checks(
             )
         if targets:
             identity["calculation_targets"] = sorted(targets)
-            captured = []
-            for source in evidence:
-                found = bus.get_job_result(task_id, source["job_id"])
-                if found is None:
-                    continue
-                for record in found[1].metadata.get("web_evidence", []):
-                    captured.append(
-                        {
-                            "source_key": source["key"],
-                            "source": record["source"],
-                            "text": record["text"],
-                        }
-                    )
-                for record in found[1].metadata.get("corpus_evidence", []):
-                    captured.append(
-                        {
-                            "source_key": source["key"],
-                            "source": record["locator"],
-                            "text": record["text"],
-                        }
-                    )
-            identity["calculation_sources"] = captured
+        captured = []
+        for source in evidence:
+            found = bus.get_job_result(task_id, source["job_id"])
+            if found is None:
+                continue
+            for record in found[1].metadata.get("web_evidence", []):
+                captured.append(
+                    {
+                        "source_key": source["key"],
+                        "source": record["source"],
+                        "text": record["text"],
+                    }
+                )
+            for record in found[1].metadata.get("corpus_evidence", []):
+                captured.append(
+                    {
+                        "source_key": source["key"],
+                        "source": record["locator"],
+                        "text": record["text"],
+                    }
+                )
+        identity["calculation_sources"] = captured
         if spec.factual_scope:
             identity["factual_scope"] = True
         if spec.publication_excerpt:
@@ -678,25 +679,19 @@ def bind_checks(
         "FAIL estimates'). A calculated number is still a numerical claim. For nonempty "
         "calculation_targets, PASS requires calculation_checks for EVERY listed value: "
         "expression plus input values quoted verbatim from bound tool-delivered sources. "
-        "Missing prior-period bases cannot be invented by reverse-fitting the claimed return. "
+        "Missing inputs cannot be inferred solely from the desired result. "
         "If source excerpts omit an input, retrieve it or submit unchecked; labels are not proof.\n"
     )
     prompt += (
-        "For factual_scope checks, return scope_assessment with entity, version, date, units, "
-        "conditions and attribution; each has status (match/mismatch/unknown/not_applicable) "
-        "and detail comparing the claim against evidence keys/locators. All six are required "
-        "for pass, with no mismatch or unknown. A matching quotation does not prove that a "
-        "September version's measurements apply to an October update. Version inheritance "
-        "needs explicit evidence. Deployment-dependent storage estimates must retain their "
-        "cache-retention, workload and sizing conditions. Distinguish source publication "
-        "date from event date, estimates from measurements and vendor claims from facts. "
-        "Compare the actual candidate, not a repaired interpretation of it: a matching number "
-        "does not pass if the candidate drops a material deployment/retention condition. "
-        "A forecast of demand growth does not establish that demand has already grown or "
-        "has not fallen. Mark conditions/attribution mismatch and FAIL such a candidate; "
-        "do not silently add missing qualifications then certify the original. "
-        "Bounded search or undated records cannot establish absolute absence or latestness. "
-        "For publication_excerpt checks, evaluate the complete passage intended for delivery.\n"
+        "For factual_scope checks, return scope_assessment for every required dimension. "
+        "Each comparison must refer to the actual bound claims and evidence. A pass requires "
+        "supported applicability, not merely a matching quotation or value. Evidence from "
+        "different sources may be combined only when their relationship is established. "
+        "Do not repair, reinterpret or weaken the subject while evaluating it. Missing "
+        "support, unresolved dependencies or incompatible qualifications must remain explicit "
+        "in the assessment and verdict. For publication_excerpt checks, evaluate the complete "
+        "passage intended for delivery. Every supplied calculation receipt is validated, "
+        "whether or not the subject contains a calculation label.\n"
     )
     recheck = any(check.get("replaces_job_id") for check in bound)
     subject_keys = {check["subject"]["key"] for check in bound}
@@ -902,6 +897,19 @@ def _validate_scope_assessment(result: VerificationResult, check: dict[str, Any]
         validate_calculations(check, result.calculation_checks)
         validate_quotes(check)
     assessment = result.scope_assessment
+    if result.verdict == "pass":
+        review_details = [result.detail]
+        if assessment is not None:
+            review_details.extend(
+                item["detail"] for item in assessment.model_dump().values()
+                if item["status"] == "match"
+            )
+        if any(incomplete_review_statements(text) for text in review_details):
+            raise ValueError(
+                "PASS contradicts an explicit incomplete-review statement. Preserve the "
+                "unresolved obligation in unresolved_issues and return fail/unchecked; "
+                "resolve it and recheck before passing. Removing the admission is not a repair."
+            )
     if check.get("factual_scope") and result.verdict == "pass" and assessment is None:
         raise ValueError("a factual pass requires scope_assessment for all six dimensions")
     if (
@@ -962,8 +970,12 @@ def project_checks(jobs: list[dict[str, Any]]) -> dict[str, Any]:
                     or event.get("subject_sha256") == check["subject"]["sha256"]
                 )
             ]
-            # Persisted projections must enforce the same factual contract as submissions.
-            if check.get("factual_scope") or check.get("calculation_targets") or check.get("quote_comparisons"):
+            # Revalidate current receipts; legacy projections retain their schema.
+            if (
+                check.get("protocol_version", 1) >= 2 or check.get("factual_scope")
+                or check.get("calculation_targets") or check.get("quote_comparisons")
+                or any(e.get("calculation_checks") for e in events)
+            ):
                 valid_events = []
                 for event in events:
                     try:

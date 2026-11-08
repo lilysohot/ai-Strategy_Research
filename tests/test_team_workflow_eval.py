@@ -80,17 +80,17 @@ def test_consecutive_execution_errors_stop_model_launches_without_dropping_cases
         == 1
     )
     assert len(launches) == 2
-    assert summarize(out)["states"] == {"error": 2, "unassessed": 12}
+    assert summarize(out)["states"] == {"error": 2, "unassessed": 15}
     stop = json.loads((out / "batch_stop.json").read_text())
     assert stop["mode"] == "automatic"
-    assert len(stop["unassessed"]) == 12
+    assert len(stop["unassessed"]) == 15
 
 
 def test_catalog_has_reproducible_cases_and_no_unseen_holdout_claim():
     cases = catalog()
-    assert len(cases) == 59
+    assert len(cases) == 71
     assert {c["split"] for c in cases} == {"development", "transfer"}
-    assert len([c for c in cases if c["layer"] == "protocol"]) == 45
+    assert len([c for c in cases if c["layer"] == "protocol"]) == 54
     for case in cases:
         assert case["origin"] and case["goal"]
 

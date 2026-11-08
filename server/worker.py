@@ -904,12 +904,16 @@ async def run_once(args: argparse.Namespace) -> int:
         # fall back to the observer's partial so the user still sees progress.
         if not final_answer and bridge.final_content.strip():
             final_answer = bridge.final_content.strip()
+        from server.run_outcome import reconcile_team_termination
+
+        stopped_by = stop.stopped_by or workflow_stop_reason or bridge.stopped_by or ""
+        reconcile_team_termination(answer_outcome, stopped_by)
         try:
             _export_cross_mode_context(
                 run_root,
                 inherited_context=cross_mode_context or None,
                 published_answer=final_answer,
-                answer_status=str(state.get("answer_status") or ""),
+                answer_status=str(answer_outcome.get("answer_status") or ""),
             )
         except Exception:
             logging.getLogger("worker").warning("cross-mode context export failed", exc_info=True)
@@ -965,6 +969,9 @@ async def run_once(args: argparse.Namespace) -> int:
     # stopped_by precedence mirrors the run_finished frame above. ``bridge`` is
     # unconditionally bound above, so no fallback is needed here.
     _stopped_by = stop.stopped_by or workflow_stop_reason or bridge.stopped_by
+    from server.run_outcome import reconcile_team_termination
+
+    reconcile_team_termination(answer_outcome, _stopped_by)
     summary = {
         "run_id": args.run_id,
         # Survives ingestion, which deletes run/conversation.json. Directory

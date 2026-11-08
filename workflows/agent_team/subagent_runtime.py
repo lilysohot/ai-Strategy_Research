@@ -1289,8 +1289,10 @@ def _swarm_loop_policy() -> LoopPolicy:
 
 
 def _sub_tool_names(runtime: SwarmSubagentRuntime | None = None) -> list[str]:
-    if runtime is not None and runtime.sub_agent_tool_names is not None:
-        return list(runtime.sub_agent_tool_names)
+    if runtime is not None and (
+        runtime.sub_agent_tools is not None or runtime.sub_agent_tool_names is not None
+    ):
+        return [t.name for t in _sub_tools(runtime)]
     from frontier_agent.core.runtime.resources.manager import ResourceManager
     rm = registry.get_optional(ResourceManager)
     if rm is None:
@@ -1306,15 +1308,20 @@ def _sub_tools(runtime: SwarmSubagentRuntime | None = None) -> list[Any]:
     sub-agent's saved trajectory. Returns ``[]`` when the resource manager
     isn't registered (e.g. unit tests).
     """
+    from plugins.tools.corpus_manifest import with_manifest_tool
+
     if runtime is not None and runtime.sub_agent_tools is not None:
-        return list(runtime.sub_agent_tools)
+        return with_manifest_tool(list(runtime.sub_agent_tools), role_id=SUB_ROLE_ID)
     from frontier_agent.core.runtime.resources.manager import ResourceManager
     rm = registry.get_optional(ResourceManager)
     if rm is None:
         return []
     if runtime is not None and runtime.sub_agent_tool_names is not None:
         all_tools = rm.all_tools
-        return [all_tools[name] for name in runtime.sub_agent_tool_names if name in all_tools]
+        return with_manifest_tool(
+            [all_tools[name] for name in runtime.sub_agent_tool_names if name in all_tools],
+            role_id=SUB_ROLE_ID,
+        )
     role_id = getattr(runtime, "sub_role_id", None) or SUB_ROLE_ID
     return list(rm.get_tools_for_role(role_id))
 

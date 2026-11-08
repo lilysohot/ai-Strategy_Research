@@ -104,7 +104,10 @@ async def test_recheck_closes_old_gap_without_erasing_timeout():
     )
     assert out["answer_status"] == "complete"
     assert out["report_contract"]["verification"] == "passed_for_declared_checks"
-    assert "not the entire report" in out["final_answer"]
+    assert out["final_answer"] == "The checked amount is 50."
+    assert "not the entire report" in " ".join(
+        out["report_contract"]["audit_appendix"]["verification_notes"]
+    )
 
 
 async def test_verification_board_item_cannot_resolve_before_its_bound_check_passes():

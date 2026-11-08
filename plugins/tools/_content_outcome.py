@@ -3,9 +3,40 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Awaitable, Callable
 from typing import Any, Literal
 
 from frontier_agent.core.tool import ToolOutcome
+
+
+async def fetch_in_order(
+    primary: str,
+    fallbacks: list[str],
+    fetch: Callable[[str], Awaitable[str | ToolOutcome]],
+) -> str | ToolOutcome:
+    """Fallback is a dependency, not a parallel batch; never bypass a policy denial."""
+    if len(fallbacks) > 3 or any(not isinstance(u, str) or not u.strip() for u in fallbacks):
+        raise ValueError("fallback_urls must contain at most three nonempty URLs")
+    attempts: list[dict[str, Any]] = []
+    for url in dict.fromkeys([primary, *(u.strip() for u in fallbacks)]):
+        result = await fetch(url)
+        if isinstance(result, ToolOutcome):
+            item = json.loads(result.result)
+        elif result.strip():
+            if not attempts:
+                return result
+            item = {"source": url, "ok": True, "status": "success", "content": result}
+        else:
+            item = {"source": url, "ok": False, "status": "unavailable", "content": ""}
+        attempts.append(item)
+        if item.get("ok") is True and str(item.get("content") or "").strip():
+            return json.dumps({**item, "items": attempts}, ensure_ascii=False)
+        if item.get("status") == "policy_blocked":
+            break
+    return ToolOutcome(
+        json.dumps({"ok": False, "status": "unavailable", "items": attempts}, ensure_ascii=False),
+        is_error=True,
+    )
 
 
 def content_limitation(

@@ -294,6 +294,7 @@ async def execute_tools(
                         tool_call_id=tool_call_id,
                         is_error=False,
                         interrupted=True,
+                        execution_status="cancelled",
                     )
                 raw = await invoke_task
             else:

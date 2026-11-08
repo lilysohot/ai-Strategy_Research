@@ -145,14 +145,29 @@ async def corpus_status(user: User = Depends(get_current_user)) -> dict:
 
 @router.get("/search")
 async def corpus_search(
-    query: str = Query(min_length=1, max_length=400),
+    query: str = Query(default="", max_length=400),
+    published_from: str | None = None,
+    published_to: str | None = None,
+    ingested_from: str | None = None,
+    ingested_to: str | None = None,
+    ingested_timezone: str = "Asia/Shanghai",
     limit: int = Query(default=10, ge=1, le=_MAX_LIMIT),
     user: User = Depends(get_current_user),
 ) -> dict:
     """检索生产活动 build（band 生产默认管线），返回命中 + 覆盖元数据。"""
+    from plugins.corpus.ingestion_dates import search_date_options
+
+    try:
+        options = search_date_options(
+            published_from, published_to, ingested_from, ingested_to, ingested_timezone
+        )
+        if not query.strip() and not options:
+            raise ValueError("query or publication/ingestion date range is required")
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, detail=str(exc)) from exc
     service = _corpus_service()
     try:
-        hits, coverage = service.search_with_coverage(query, limit=limit)
+        hits, coverage = service.search_with_coverage(query, limit=limit, **options)
     except Exception as exc:
         raise _translate_corpus_error(exc) from exc
     return {

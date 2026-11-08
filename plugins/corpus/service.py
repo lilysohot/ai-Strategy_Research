@@ -215,6 +215,8 @@ class SearchHit:
     context_by_kind: tuple[tuple[str, int], ...] = ()
     #: Verified native passages only; source and snippet offsets, never index notes.
     evidence_spans: tuple[dict[str, Any], ...] = ()
+    publication_date_basis: str = "unknown"
+    ingested_at: str | None = None
 
 
 @dataclass
@@ -1425,7 +1427,16 @@ class CorpusService:
         return tuple(enriched)
 
     def search_with_coverage(
-        self, query: str, *, limit: int = 10, trace: RetrievalTrace | None = None
+        self,
+        query: str,
+        *,
+        limit: int = 10,
+        trace: RetrievalTrace | None = None,
+        published_from: str | None = None,
+        published_to: str | None = None,
+        ingested_from: str | None = None,
+        ingested_to: str | None = None,
+        ingested_timezone: str = "Asia/Shanghai",
     ) -> tuple[list[SearchHit], dict[str, object]]:
         """检索 + 覆盖元数据取自**同一数据库快照**（§7.3 并发发布一致性）。
 
@@ -1437,21 +1448,37 @@ class CorpusService:
         返回**空命中** + ``query_status="abstain"`` 的拒检覆盖信号（评分器对空观测
         不计误报；与 ``no_match``「无研报覆盖」机器可区分）。开关默认关闭，不改返回。
         """
+        from dataclasses import replace as dataclass_replace
+
+        from plugins.corpus.ingestion_dates import search_date_options
+
+        date_options = search_date_options(
+            published_from, published_to, ingested_from, ingested_to, ingested_timezone
+        )
+        if not isinstance(query, str) or (not query.strip() and not date_options):
+            raise ValueError("query or publication/ingestion date range is required")
+        query = query.strip()
         if os.environ.get("CORPUS_NATIVE_RETRIEVAL", "off").strip() != "off":
             from plugins.corpus.retrieval import native_live
 
             if native_live.enabled(self._target_db):
                 if self.read_chain() != "new":
                     raise StoreError("native_tools_require_new_read_chain")
-                return native_live.search(self._dsn, self._target_db or "", query, limit, trace)
+                return native_live.search(
+                    self._dsn, self._target_db or "", query, limit, trace, **date_options
+                )
         if self.read_chain() != "new":
+            if date_options:
+                raise StoreError("date_filter_requires_new_read_chain")
             hits = self.search(query, limit=limit)
             return hits, self.coverage(query_status="matched" if hits else "no_match")
         from plugins.corpus.preparation import read_pg
         from plugins.corpus.preparation.negative_query import retrieval_query
         from plugins.corpus.preparation.search_pg import query_lexemes
 
-        lexemes = query_lexemes(self._dsn, query, sandbox_db=self._target_db)
+        lexemes = (
+            query_lexemes(self._dsn, query, sandbox_db=self._target_db) if query.strip() else ()
+        )
         candidate_query = retrieval_query(lexemes)
         if not candidate_query:
             candidate_query = query
@@ -1476,11 +1503,11 @@ class CorpusService:
                 raise StoreError(
                     "body ranking requires hybrid mode and an explicit matching target DB"
                 )
-            if not is_corpus_availability_query(query):
+            if query.strip() and not is_corpus_availability_query(query):
                 from plugins.corpus.retrieval.ranking import RankingSession
 
                 ranking = RankingSession(query, lexemes)
-        if mode == "hybrid" and not is_corpus_availability_query(query):
+        if query.strip() and mode == "hybrid" and not is_corpus_availability_query(query):
             from plugins.corpus.retrieval.hybrid import search as hybrid_search
 
             raw_hits, chunk_order, coverage, lexical_fallback_hits = hybrid_search(
@@ -1490,7 +1517,8 @@ class CorpusService:
                 limit=max(limit, _SELECTION_POOL_MIN),
                 sandbox_db=self._target_db,
                 trace=trace,
-                **({"ranking": ranking} if ranking is not None else {}),
+                ranking=ranking,
+                **date_options,
             )
         else:
             raw_hits, chunk_order, coverage = read_pg.search_with_coverage_bands(
@@ -1498,11 +1526,14 @@ class CorpusService:
                 candidate_query,
                 limit=max(limit, _SELECTION_POOL_MIN),
                 sandbox_db=self._target_db,
+                **date_options,
             )
             if trace is not None:
                 trace.lexical, trace.fused = raw_hits, raw_hits
                 trace.chunk_order, trace.status = chunk_order, "lexical"
-        if self._abstain_decision(query):
+        # The optional abstention probe has no date scope; do not let an
+        # unfiltered second search override an explicitly constrained result.
+        if not date_options and query.strip() and self._abstain_decision(query):
             if trace is not None:
                 trace.status = "abstained"
             abstain_cov = read_pg.coverage_snapshot(
@@ -1513,14 +1544,20 @@ class CorpusService:
             abstain_cov.update({"abstain": True, "abstain_reason": "no_answer_rejected"})
             return [], abstain_cov
         # 生产默认（i0c-r4n U 决策）：band 选带 → 带内原文序块摊平为逐块命中。
-        raw_hits = self._selected_context_hits(
-            raw_hits,
-            chunk_order,
-            limit,
-            lexemes=lexemes,
-            lexical_fallback_hits=lexical_fallback_hits,
-            trace=trace,
-        )
+        if query.strip():
+            raw_hits = self._selected_context_hits(
+                raw_hits,
+                chunk_order,
+                limit,
+                lexemes=lexemes,
+                lexical_fallback_hits=lexical_fallback_hits,
+                trace=trace,
+            )
+        else:
+            raw_hits = tuple(
+                dataclass_replace(hit, context_chunk_ids=(hit.chunk_id,))
+                for hit in raw_hits[:limit]
+            )
         if ranking is not None:
             raw_hits = ranking.order_selected(raw_hits)
         table_sources = {
@@ -1565,6 +1602,8 @@ class CorpusService:
                     snippet=hit.snippet,
                     score=float(hit.score),
                     published=hit.published or "undated",
+                    publication_date_basis="admission" if hit.published else "unknown",
+                    ingested_at=hit.ingested_at,
                     source_id=hit.source_id,
                     build_id=hit.build_id,
                     chunk_id=hit.chunk_id,
@@ -1575,6 +1614,36 @@ class CorpusService:
                     context_by_kind=tuple(sorted(counts.items())),
                 )
             )
+        ingestion_filtered = ingested_from is not None or ingested_to is not None
+        publication_filtered = published_from is not None or published_to is not None
+        if not query:
+            coverage["retrieval_mode"] = (
+                "metadata_date"
+                if ingestion_filtered and publication_filtered
+                else "ingestion_date"
+                if ingestion_filtered
+                else "publication_date"
+            )
+        if ingestion_filtered:
+            from plugins.corpus.ingestion_dates import coverage as ingestion_coverage
+
+            coverage["ingestion_filter"] = {
+                **ingestion_coverage(ingested_from, ingested_to, ingested_timezone),
+                "scope": "active_sources",
+                "unknown_time_source_count": None,
+                "unknown_time_count_status": "not_measured",
+            }
+        if publication_filtered:
+            coverage["date_filter"] = {
+                "published_from": published_from,
+                "published_to": published_to,
+                "bounds": "inclusive",
+                "field": "report_publication",
+                "unknown_date_policy": "excluded",
+                "scope": "active_admission_metadata",
+                "unknown_date_source_count": None,
+                "unknown_date_count_status": "not_measured",
+            }
         return hits_out, coverage
 
     def search_native_evidence(
@@ -2008,7 +2077,27 @@ class CorpusService:
         locator = canonical_locator(doc_id, locator)
         return read_pg.fetch_verbatim(self._dsn, doc_id, locator, sandbox_db=self._target_db)
 
-    def search(self, query: str, *, limit: int = 10) -> list[SearchHit]:
+    def search(
+        self,
+        query: str,
+        *,
+        limit: int = 10,
+        published_from: str | None = None,
+        published_to: str | None = None,
+        ingested_from: str | None = None,
+        ingested_to: str | None = None,
+        ingested_timezone: str = "Asia/Shanghai",
+    ) -> list[SearchHit]:
+        if any(v is not None for v in (published_from, published_to, ingested_from, ingested_to)):
+            return self.search_with_coverage(
+                query,
+                limit=limit,
+                published_from=published_from,
+                published_to=published_to,
+                ingested_from=ingested_from,
+                ingested_to=ingested_to,
+                ingested_timezone=ingested_timezone,
+            )[0]
         q = (query or "").strip()
         if not q:
             return []

@@ -1,0 +1,104 @@
+{
+  "date": "2026-11-07",
+  "source_run": "fec0ffafb174458e9d5f4faaf4ff7e3b",
+  "scope": "Converge after the requested outcome and necessary checks; deliver before asking about broader research. No new agent roles or orchestration hierarchy.",
+  "changes": [
+    "Date match is an advisory candidate, not proof of completion: necessary acquisition and manifest tools remain available.",
+    "Existing hard delivery gate retained and covered with research/dispatch denial controls after readiness; required failed checks remain open for bounded repair.",
+    "Shared prompts allow useful elaboration within scope, forbid converting suggestions into mandatory quotas, and require a user reply before executing broader research after delivery.",
+    "Member trajectory/tool-observer catalog includes the manifest companion already bound by session creation.",
+    "Inventory explicitly scopes counts and exhaustion to requested locators, with whole-document coverage unknown."
+  ],
+  "production_sha256": {
+    "workflows/agent_team/observers/member_progress.py": "bd393743f5522a4af8fb609c88171343fe1055d68d3374b945546a4df613349f",
+    "workflows/agent_team/subagent_runtime.py": "58f32a20ab1bdf195945d97a3853283923454b3a2c285dfa6fc15c595b6389c0",
+    "workflows/agent_team/prompt_standard.py": "bfcc2693f7271efa7670139ce381af8e36bcad7249b153ad19b5bc6ece277a2c",
+    "workflows/agent_team/delivery.py": "cfcc6c649eeb0c1e38b5328513a64c6f6e7fee49d39a2229b81e14eac694bc7c",
+    "plugins/tools/assign_task.py": "50fe27ca7036ced4ac6a6451fcc2b6cdbb3fefacf66e95e8b8aa17a618c5881b",
+    "plugins/tools/corpus_inventory.py": "346dd3676b64323d42e03224770f68a779ae252aa9f7c452c602db741913cb44"
+  },
+  "red_tests": {
+    "initial": "2 failed, 4 passed",
+    ".scratch/team-convergence-scope-red.txt": "1 failed"
+  },
+  "verification": {
+    "unit_and_related": {
+      "passed": 182,
+      "artifact": ".scratch/team-convergence-unit-final.txt"
+    },
+    "web_worker_scripted": {
+      "passed": 5,
+      "artifact": ".scratch/team-convergence-web-complete.txt"
+    },
+    "replay": {
+      "run_id": "fec0ffafb174458e9d5f4faaf4ff7e3b",
+      "candidate_preserved": true,
+      "necessary_followup_not_hard_blocked": true,
+      "manifest_not_hidden": true,
+      "scope": "observer replay only; not a rerun of model decisions or semantic verification"
+    },
+    "ruff": "passed",
+    "scoped_pyright": "0 errors",
+    "import_stage_1": "466/466",
+    "import_stage_2": "525/525",
+    "symbols": "0 missing across 574",
+    "provider_preflight": "passed"
+  },
+  "benchmark": {
+    "catalog_total": 67,
+    "protocol_total": 50,
+    "protocol_passed": 46,
+    "protocol_failed": [
+      "P34-r1",
+      "P35-r1",
+      "P36-r1",
+      "P37-r1"
+    ],
+    "output": "results/team-convergence-protocol",
+    "added_case": "P50",
+    "P41_semantics_changed": "Old hard date-only cutoff replaced by advisory convergence; selector retained, assertions explicitly revised. P41 results are not an unchanged before/after comparison.",
+    "frozen_profile": "tui",
+    "frozen_output": "results/team-convergence-frozen",
+    "frozen": {
+      "F17-r1": {
+        "status": "error",
+        "reason": "llm_error",
+        "answer_status": "best_effort",
+        "elapsed_s": 132.017,
+        "attempts": 2,
+        "tools": {
+          "add_task": 1
+        },
+        "failure_reasons": {
+          "logical_call_deadline": 1
+        },
+        "model_behavior_accepted": false
+      },
+      "F11-r1": {
+        "status": "error",
+        "reason": "llm_error",
+        "answer_status": "not_found",
+        "elapsed_s": 121.483,
+        "attempts": 1,
+        "tools": {},
+        "failure_reasons": {
+          "logical_call_deadline": 1
+        },
+        "model_behavior_accepted": false
+      }
+    }
+  },
+  "test_fixture_updates": [
+    "Web mock now answers research intake with valid ready JSON.",
+    "Web mocked budget 400 -> 1200 so existing phase reserves permit dispatch; service and frozen budgets unchanged.",
+    "Web mock separates research and verification work items, binds verdict to subject_sha256 and finishes the last check without duplicate submission.",
+    "Prior appendix assertion now checks structured audit rather than automatic answer text; verification scope remains asserted."
+  ],
+  "limitations": [
+    "Candidate-stage necessary-versus-optional decisions and user-facing expansion questions remain model decisions; scripted tests do not prove free-form semantic compliance.",
+    "No general semantic entailment validator was added; the earlier c4 source-binding/claim-support gap is not fully repaired by clearer scope receipts.",
+    "F11 timed out on first coordinator call; F17 timed out on second after add_task. Neither reached research or delivery, so behavior improvement and cost reduction remain unverified.",
+    "P34-P37 remain known failures.",
+    "No service restart, deployment or commit performed in this turn."
+  ]
+}

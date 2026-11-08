@@ -109,6 +109,7 @@ class SSEObserver:
             "detail": result.result[:200] if result.result else "",
             "duration_ms": result.duration_ms,
             "is_error": result.is_error,
+            "execution_status": result.execution_status,
         }
         await self._es.append(
             self._task_id, EventType.AGENT_ACTION, self._annotate(payload),

@@ -24,7 +24,12 @@ class BoardProgress(BaseModel):
         description="Nonblocking scope boundaries or optional work not performed. "
         "Does not waive required evidence, execution or verification gates.",
     )
-    done_when: StrictStr | None = None
+    done_when: StrictStr | None = Field(
+        default=None,
+        description="Acceptance criterion for the original user requirement. Do not replace a "
+        "requested result with 'produce it or explain why unavailable'; missing necessary inputs "
+        "still block that result even when the investigation and explanation are complete.",
+    )
     kind: Literal["research", "verification", "delivery"] | None = None
     evidence_refs: list[StrictStr] | None = None
     owner: StrictStr | list[StrictStr] | None = None

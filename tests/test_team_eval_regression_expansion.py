@@ -20,7 +20,7 @@ def test_original_40_case_objects_are_unchanged():
 
 def test_increment_has_paired_controls_and_no_claim_of_blind_holdout():
     cases = {c["id"]: c for c in catalog()}
-    assert len(cases) == 59
+    assert len(cases) == 71
     assert cases["F08"]["pair"] == "F09"
     assert cases["F09"]["pair"] == "F08"
     assert cases["F09"]["split"] == "transfer"
@@ -48,6 +48,15 @@ def test_original_53_case_objects_are_unchanged():
     assert current["F12"]["pair"] == "F13"
     assert current["F13"]["pair"] == "F12"
     assert current["F12"]["sources"] == current["F13"]["sources"]
+
+
+def test_original_59_case_objects_are_unchanged():
+    root = Path(__file__).resolve().parents[1] / "benchmarks/team_workflow"
+    baseline = json.loads((root / "baseline-59.lock.json").read_text())
+    current = {c["id"]: c for c in catalog()}
+    assert len(baseline["cases"]) == 59
+    for key, expected in baseline["cases"].items():
+        assert digest(current[key]) == expected
 
 
 def test_tool_timings_preserve_missing_and_parallel_durations(tmp_path):

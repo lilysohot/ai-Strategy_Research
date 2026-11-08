@@ -252,9 +252,8 @@ async def wind_down_team(
         "Do not upgrade raw tool observations or a resolved board item to a verification "
         "verdict. State precisely what was checked and what remains unchecked. "
         "Qualify each affected conclusion inline as observed fact, attributed claim, "
-        "inference, or unknown. A failed fetch is not evidence of absence or equality. "
-        "Do not assert a lowest price, identical cost or overall winner without matched "
-        "versions, dates, units, conditions and coverage. A footer alone is insufficient.\n"
+        "inference, or unknown. Missing evidence remains unknown. Keep claims within the "
+        "conditions and coverage of their evidence, including in headings and summaries.\n"
         "</report>"
     )
     checkpoint = "\n\n".join([*batch.blocks, status_block])

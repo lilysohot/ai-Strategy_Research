@@ -562,6 +562,9 @@ def search_with_coverage(
     domain: ResearchDomain | None = None,
     published_from: str | None = None,
     published_to: str | None = None,
+    ingested_from: str | None = None,
+    ingested_to: str | None = None,
+    ingested_timezone: str = "Asia/Shanghai",
     limit: int = 20,
 ) -> tuple[tuple[SearchHit, ...], dict[str, object]]:
     """同一数据库快照内取「检索命中 + 覆盖元数据」（§7.3 并发发布一致性要求）。
@@ -579,6 +582,9 @@ def search_with_coverage(
         domain=domain,
         published_from=published_from,
         published_to=published_to,
+        ingested_from=ingested_from,
+        ingested_to=ingested_to,
+        ingested_timezone=ingested_timezone,
         limit=limit,
     )
     with psycopg.connect(dsn, autocommit=True) as conn:
@@ -655,6 +661,9 @@ def search_with_coverage_bands(
     domain: ResearchDomain | None = None,
     published_from: str | None = None,
     published_to: str | None = None,
+    ingested_from: str | None = None,
+    ingested_to: str | None = None,
+    ingested_timezone: str = "Asia/Shanghai",
     limit: int = 20,
 ) -> tuple[tuple[SearchHit, ...], dict[str, tuple[str, ...]], dict[str, object]]:
     """同一数据库快照内取「检索命中 + 覆盖元数据 + band 原文序块清单」。
@@ -673,6 +682,9 @@ def search_with_coverage_bands(
         domain=domain,
         published_from=published_from,
         published_to=published_to,
+        ingested_from=ingested_from,
+        ingested_to=ingested_to,
+        ingested_timezone=ingested_timezone,
         limit=limit,
     )
     with psycopg.connect(dsn, autocommit=True) as conn:

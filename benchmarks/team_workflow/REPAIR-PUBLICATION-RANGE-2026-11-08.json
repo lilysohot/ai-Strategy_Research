@@ -1,0 +1,169 @@
+{
+  "date": "2026-11-08",
+  "scope": "Structured publication-date search and unambiguous coverage metadata; no date-specific convergence policy",
+  "changes": [
+    "corpus_search exposes optional inclusive published_from/published_to; empty query requires a valid date bound",
+    "Strict calendar-date validation and reversed-range rejection before service access",
+    "Native candidates filtered before lexical/dense top-k using reviewed/admission publication metadata; filename inference and unknown dates excluded only for explicit date filters",
+    "Date-only retrieval skips embedding and semantic ranking, preserves snapshot/withdrawal and raw evidence checks",
+    "Non-native new chain forwards date bounds and supports date-only SQL; legacy chain explicitly rejects unsupported date filters",
+    "Date basis survives v1/v2 serialization; unknown_date_source_ids_omitted describes omitted identifiers, not excluded documents",
+    "P52 appended; existing case objects, rubrics and budgets preserved",
+    "Two pre-existing wrong-target tests now explicitly isolate native/vector settings from dotenv loading"
+  ],
+  "validation": {
+    "initial_date_regressions": {
+      "failed": 9,
+      "passed": 1
+    },
+    "final_date_regressions": {
+      "passed": 19
+    },
+    "focused_suite": {
+      "passed": 238,
+      "skipped": 5,
+      "skip_reason": "CORPUS_I2_DSN not configured for isolated database tests"
+    },
+    "combined_suite_before_test_environment_isolation": {
+      "passed": 236,
+      "failed": 2,
+      "skipped": 5,
+      "cause": "Existing vector/ranking tests inherited .env loaded by team tests; tested target was no longer isolated"
+    },
+    "benchmark": {
+      "existing_protocol_passed": 47,
+      "existing_protocol_failed": [
+        "P34",
+        "P35",
+        "P36",
+        "P37"
+      ],
+      "new_protocol_passed": [
+        "P52"
+      ],
+      "existing_output": "results/team-publication-range-20261108",
+      "new_output": "results/team-publication-range-p52-final-20261108"
+    },
+    "scoped_ruff": "pass",
+    "scoped_pyright": "0 errors",
+    "framework_imports": "467/467",
+    "eval_imports": "526/526",
+    "symbols": "0 missing across 575 files",
+    "preflight": "agent_team/tui; one real LLM call passed",
+    "live_date_probe": [
+      {
+        "day": "2026-11-07",
+        "elapsed_seconds": 4.007,
+        "count": 0,
+        "dates": [],
+        "date_bases": [],
+        "retrieval_mode": "publication_date",
+        "date_filter": {
+          "published_from": "2026-11-07",
+          "published_to": "2026-11-07",
+          "effective_published_to": "2026-11-07",
+          "bounds": "inclusive",
+          "field": "report_publication",
+          "scope": "native_source_allowlist",
+          "unknown_date_policy": "excluded",
+          "inferred_date_policy": "excluded",
+          "unknown_date_source_count": 105,
+          "inferred_date_source_count": 62,
+          "matching_source_count": 0,
+          "eligible_prose_source_count": 0,
+          "returned_source_count": 0
+        },
+        "availability": "unknown"
+      },
+      {
+        "day": "2026-09-06",
+        "elapsed_seconds": 3.954,
+        "count": 1,
+        "dates": [
+          "2026-09-06"
+        ],
+        "date_bases": [
+          "reviewed_metadata"
+        ],
+        "retrieval_mode": "publication_date",
+        "date_filter": {
+          "published_from": "2026-09-06",
+          "published_to": "2026-09-06",
+          "effective_published_to": "2026-09-06",
+          "bounds": "inclusive",
+          "field": "report_publication",
+          "scope": "native_source_allowlist",
+          "unknown_date_policy": "excluded",
+          "inferred_date_policy": "excluded",
+          "unknown_date_source_count": 105,
+          "inferred_date_source_count": 62,
+          "matching_source_count": 7,
+          "eligible_prose_source_count": 7,
+          "returned_source_count": 1
+        },
+        "availability": "unknown",
+        "fetch_verified": true
+      }
+    ],
+    "live_keyword_probe": [
+      {
+        "native_mode": "release",
+        "query": "收入",
+        "count": 2,
+        "dates": [
+          "2026-09-06",
+          "2026-09-06"
+        ],
+        "date_filter": {
+          "published_from": "2026-09-06",
+          "published_to": "2026-09-06",
+          "effective_published_to": "2026-09-06",
+          "bounds": "inclusive",
+          "field": "report_publication",
+          "scope": "native_source_allowlist",
+          "unknown_date_policy": "excluded",
+          "inferred_date_policy": "excluded",
+          "unknown_date_source_count": 105,
+          "inferred_date_source_count": 62,
+          "matching_source_count": 7,
+          "eligible_prose_source_count": 7,
+          "selected_source_count": 2
+        },
+        "retrieval_mode": "hybrid",
+        "elapsed_seconds": 4.86
+      },
+      {
+        "native_mode": "off",
+        "query": "",
+        "count": 0,
+        "dates": [],
+        "date_filter": {
+          "published_from": "2026-09-06",
+          "published_to": "2026-09-06",
+          "bounds": "inclusive",
+          "field": "report_publication",
+          "unknown_date_policy": "excluded",
+          "scope": "active_admission_metadata",
+          "unknown_date_source_count": null,
+          "unknown_date_count_status": "not_measured"
+        },
+        "retrieval_mode": null,
+        "elapsed_seconds": 0.031
+      }
+    ]
+  },
+  "data_findings": {
+    "scope": "current native source allowlist, not all reports or entire corpus",
+    "sources": 176,
+    "explicit_publication_metadata": 9,
+    "filename_inferred": 62,
+    "date_unknown": 105
+  },
+  "limitations": [
+    "No full Web/multi-agent run or deployment/restart in this change",
+    "No backfill of publication metadata; a no-match is limited to known dates and configured native scope",
+    "P34-P37 failures remain; user-stop versus accepted-delivery issue from c73 is not fixed by date retrieval",
+    "Non-native filtering uses active admission metadata; missing-date count explicitly not measured",
+    "Date-only source selection and evidence output remain bounded, not an exhaustive catalog"
+  ]
+}

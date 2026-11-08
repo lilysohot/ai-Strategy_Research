@@ -1,0 +1,21 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________ test_heading_only_candidate_does_not_claim_document_exhaustion ________
+
+stub_reads = <plugins.corpus.service.CorpusService object at 0x71dc8f3f2b40>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x71dc8f3f1910>
+
+    def test_heading_only_candidate_does_not_claim_document_exhaustion(stub_reads, monkeypatch):
+        monkeypatch.setattr(inventory_module, "get_service", lambda: stub_reads)
+        # The same source also contains c0 body and c1 table; only c4 was requested.
+        page = json.loads(_call(doc_id=_DOC, locators=["chunk:c4"]))
+        assert page["total_chunks"] == 1 and page["by_kind"] == {"heading": 1}
+        assert page["exhausted"] is True
+>       assert page["coverage_scope"] == "requested_locators"
+               ^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'coverage_scope'
+
+tests/test_corpus_inventory.py:260: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_corpus_inventory.py::test_heading_only_candidate_does_not_claim_document_exhaustion
+1 failed, 16 deselected in 0.92s

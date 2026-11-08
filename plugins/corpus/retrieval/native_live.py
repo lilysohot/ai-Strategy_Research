@@ -139,7 +139,9 @@ def _date(names: list[str], reviewed: str | None, admitted: str | None) -> tuple
     )
 
 
-def refresh_on(cur: psycopg.Cursor, seed: NativeIndex) -> NativeIndex:
+def refresh_on(
+    cur: psycopg.Cursor, seed: NativeIndex, *, include_ingestion: bool = False
+) -> NativeIndex:
     """Build a request-local index from one read snapshot; never cache result rows."""
     result = copy.copy(seed)
     result.manifest = copy.deepcopy(seed.manifest)
@@ -167,6 +169,12 @@ def refresh_on(cur: psycopg.Cursor, seed: NativeIndex) -> NativeIndex:
         value, basis = _date(names, reviewed, admitted)
         result.dates.append({"source_id": sid, "date": value, "basis": basis, "names": names})
         owners[bid] = sid
+    if include_ingestion:
+        from plugins.corpus.ingestion_dates import read_times
+
+        times = read_times(cur, [d["source_id"] for d in result.dates])
+        for record in result.dates:
+            record["ingested_at"] = times.get(record["source_id"])
     result.manifest["source_allowlist"] = [d["source_id"] for d in result.dates]
     # The seed cutoff is a corpus freeze date, not a permanent product date cap.
     result.manifest["cutoff"] = date.today().isoformat()
@@ -228,7 +236,9 @@ def refresh_on(cur: psycopg.Cursor, seed: NativeIndex) -> NativeIndex:
     return result
 
 
-def refresh(dsn: str, target: str, seed: NativeIndex) -> NativeIndex:
+def refresh(
+    dsn: str, target: str, seed: NativeIndex, *, include_ingestion: bool = False
+) -> NativeIndex:
     check_native_target(target)
     if target != seed.target:
         raise ValueError("native_refresh_target_mismatch")
@@ -236,7 +246,7 @@ def refresh(dsn: str, target: str, seed: NativeIndex) -> NativeIndex:
         read_pg._check_target(conn, target)
         with conn.transaction(), conn.cursor() as cur:
             cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
-            return refresh_on(cur, seed)
+            return refresh_on(cur, seed, include_ingestion=include_ingestion)
 
 
 #: 默认最多展示 2 个互补块，避免复合问题只交付一半；总工具预算仍由 fitter 限制。
@@ -308,17 +318,47 @@ def digest_matches(expected: str, actual: str) -> bool:
 
 
 def search(
-    dsn: str, target: str, query: str, limit: int, trace: Any = None
+    dsn: str,
+    target: str,
+    query: str,
+    limit: int,
+    trace: Any = None,
+    *,
+    published_from: str | None = None,
+    published_to: str | None = None,
+    ingested_from: str | None = None,
+    ingested_to: str | None = None,
+    ingested_timezone: str = "Asia/Shanghai",
 ) -> tuple[list[Any], dict[str, object]]:
+    from plugins.corpus.ingestion_dates import ingestion_range, search_date_options
+    from plugins.corpus.publication_dates import publication_matches
     from plugins.corpus.service import SearchHit, context_scope_id
 
+    date_options = search_date_options(
+        published_from, published_to, ingested_from, ingested_to, ingested_timezone
+    )
+    date_filtered = published_from is not None or published_to is not None
+    ingestion_filtered = ingested_from is not None or ingested_to is not None
     seed = configured_seed(target)
-    index = refresh(dsn, target, seed)
+    index = (
+        refresh(dsn, target, seed, include_ingestion=True)
+        if ingestion_filtered
+        else refresh(dsn, target, seed)
+    )
     # The HTTP search contract accepts up to 50 sources. Native retrieval still
     # selects at most 20 blocks; a larger source limit cannot expand that budget.
     if not 1 <= limit <= 50:
         raise ValueError("native_hit_limit_invalid")
-    result = search_native(dsn, target, query, index, limit=20, trace=trace, allow_fallback=True)
+    result = search_native(
+        dsn,
+        target,
+        query,
+        index,
+        limit=20,
+        trace=trace,
+        allow_fallback=True,
+        **date_options,
+    )
     chunks = {(c["build_id"], c["chunk_id"]): c for c in index.chunks}
     hits = []
     groups: dict[str, list[Any]] = {}
@@ -326,14 +366,18 @@ def search(
         if b.build_id not in groups and len(groups) == limit:
             continue
         groups.setdefault(b.build_id, []).append(b)
-    from plugins.corpus.retrieval.purity import REVISION, select_sources
+    from plugins.corpus.retrieval.purity import REVISION, SourceDecision, select_sources
 
-    decisions = select_sources(
-        groups,
-        chunks,
-        query,
-        result.query_terms,
-        names={d["source_id"]: d.get("names", ()) for d in index.dates},
+    decisions = (
+        select_sources(
+            groups,
+            chunks,
+            query,
+            result.query_terms,
+            names={d["source_id"]: d.get("names", ()) for d in index.dates},
+        )
+        if query.strip()
+        else tuple(SourceDecision(bid, True, "date_metadata_match", 0) for bid in groups)
     )
     if trace is not None:
         trace.purity_decisions = tuple(asdict(d) for d in decisions)
@@ -369,6 +413,13 @@ def search(
                 snippet=snippet,
                 score=0.0,
                 published=b.published or "",
+                ingested_at=next(
+                    (d.get("ingested_at") for d in index.dates if d["source_id"] == b.source_id),
+                    None,
+                ),
+                publication_date_basis=next(
+                    (d["basis"] for d in index.dates if d["source_id"] == b.source_id), "unknown"
+                ),
                 source_id=b.source_id,
                 build_id=b.build_id,
                 chunk_id=b.chunk_id,
@@ -387,7 +438,7 @@ def search(
         "retrieval_mode": result.retrieval_mode,
         "fallback_reason": result.fallback_reason,
         "purity": {
-            "policy": REVISION,
+            "policy": REVISION if query.strip() else "date_metadata",
             "sources_considered": len(decisions),
             "sources_filtered": sum(not d.keep for d in decisions),
             "filter_reasons": {
@@ -417,6 +468,49 @@ def search(
             *([result.fallback_reason] if result.fallback_reason else []),
         ],
     }
+    if date_filtered:
+        matching = {
+            d["source_id"]
+            for d in index.dates
+            if publication_matches(d, published_from, result.cutoff)
+        }
+        eligible = {c["source_id"] for c in index.chunks} & matching
+        coverage["date_filter"] = {
+            "published_from": published_from,
+            "published_to": published_to,
+            "effective_published_to": result.cutoff,
+            "bounds": "inclusive",
+            "field": "report_publication",
+            "scope": "native_source_allowlist",
+            "unknown_date_policy": "excluded",
+            "inferred_date_policy": "excluded",
+            "unknown_date_source_count": sum(not d.get("date") for d in index.dates),
+            "inferred_date_source_count": sum(
+                d.get("basis") == "unambiguous_filename_date" for d in index.dates
+            ),
+            "matching_source_count": len(matching),
+            "eligible_prose_source_count": len(eligible),
+            "selected_source_count": len(hits),
+        }
+    if ingestion_filtered:
+        from plugins.corpus.ingestion_dates import coverage as ingestion_coverage
+
+        bounds = ingestion_range(ingested_from, ingested_to, ingested_timezone)
+        matching = {d["source_id"] for d in index.dates if bounds.matches(d.get("ingested_at"))}
+        combined = matching & {
+            d["source_id"]
+            for d in index.dates
+            if not date_filtered or publication_matches(d, published_from, result.cutoff)
+        }
+        coverage["ingestion_filter"] = {
+            **ingestion_coverage(ingested_from, ingested_to, ingested_timezone),
+            "scope": "native_source_allowlist",
+            "unknown_time_source_count": sum(not d.get("ingested_at") for d in index.dates),
+            "matching_source_count": len(matching),
+            "combined_matching_source_count": len(combined),
+            "eligible_prose_source_count": len(combined & {c["source_id"] for c in index.chunks}),
+            "selected_source_count": len(hits),
+        }
     return hits, coverage
 
 

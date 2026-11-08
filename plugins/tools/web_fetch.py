@@ -37,7 +37,11 @@ from plugins.tools._bounded_fetch import (
     strip_cross_origin_credentials,
     vet_public_url,
 )
-from plugins.tools._content_outcome import combine_content_outcomes, content_limitation
+from plugins.tools._content_outcome import (
+    combine_content_outcomes,
+    content_limitation,
+    fetch_in_order,
+)
 from plugins.tools._render_check import unrendered_kind
 from plugins.tools._scrape_cache import (
     ScrapeUnavailable,
@@ -101,6 +105,7 @@ _SUMMARY_MIN_CHARS = 12_000
 async def web_fetch(
     url: str | list[str],
     info_to_extract: str | list[str] = "",
+    fallback_urls: list[str] | None = None,
 ) -> str | ToolOutcome:
     """Scrape and extract content from one or more web pages.
 
@@ -114,9 +119,14 @@ async def web_fetch(
     omitted the raw extracted text is returned (subject to overflow trim).
 
     Args:
-        url: A URL string, or a list of URLs for parallel fetch.
+        url: One primary URL, or independent URLs for parallel fetch. Do not batch
+            conditional alternatives here; use fallback_urls or inspect the first result.
         info_to_extract: Optional focus for the summary LLM. A single
             string applies to every URL; a list pairs with ``url`` 1:1.
+        fallback_urls: Up to three alternatives to ONE primary URL, tried in order only
+            after failure, empty content or explicitly partial acquisition. Stops on readable
+            content or a policy denial. A successful page missing a needed fact requires
+            inspecting the content before choosing a further lookup, not speculative fallback.
 
     Returns:
         For a single URL, the extracted content directly. For a list, a
@@ -127,6 +137,15 @@ async def web_fetch(
     urls, focuses = _normalise_inputs(url, info_to_extract)
     if not urls:
         return "Error: URL is required."
+
+    if fallback_urls:
+        if len(urls) != 1:
+            raise ValueError("fallback_urls requires exactly one primary URL")
+
+        async def fetch_one(source: str) -> str | ToolOutcome:
+            return await _fetch_with_budget(source, focuses[0])
+
+        return await fetch_in_order(urls[0], fallback_urls, fetch_one)
 
     if len(urls) == 1:
         return await _fetch_with_budget(urls[0], focuses[0])

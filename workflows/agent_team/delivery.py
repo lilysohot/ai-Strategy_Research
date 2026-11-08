@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import time
+from dataclasses import replace
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr, model_validator
@@ -25,6 +26,7 @@ from plugins.tools._verification import (
     minimum_verification_budget,
     missing_publication_excerpts,
     project_bus_checks,
+    project_checks,
     unresolved_publication_claims,
     verification_label_findings,
     work_item_verification_progress,
@@ -40,6 +42,8 @@ from plugins.tools.task_board import (
 from workflows.agent_team.final_report import is_user_report
 from workflows.agent_team.lifecycle import TeamWindDown, snapshot_job_outcomes, wind_down_team
 from workflows.agent_team.phase_budget import TeamPhaseBudget
+
+_DELIVERY_ACCEPTED = "Final answer and task dispositions accepted."
 
 
 class FinalDisposition(BaseModel):
@@ -163,12 +167,25 @@ async def deliver_answer(
         for s in bus.list_sessions_for_task(bus_id)
     ):
         raise ValueError("Collect or stop outstanding members before final delivery")
-    outcomes = {j["job_id"]: j for j in snapshot_job_outcomes(bus, bus_id)} if bus else {}
+    job_outcomes = snapshot_job_outcomes(bus, bus_id) if bus else []
+    project_checks(job_outcomes)
+    outcomes = {j["job_id"]: j for j in job_outcomes}
     tasks = {t["id"]: t for t in snapshot_tasks(scope.task_id)}
     for item in items:
         if item["resolution"] == "resolved":
             for job_id in tasks.get(item["id"], {}).get("execution_job_ids", []):
-                if outcomes.get(job_id, {}).get("status") != "complete":
+                outcome = outcomes.get(job_id, {})
+                replacements = outcome.get("coverage_resolved_by", [])
+                recovered = (
+                    outcome.get("coverage_status") == "complete"
+                    and any(r["job_id"] != job_id for r in replacements)
+                    and all(
+                        r["job_id"] == job_id
+                        or outcomes.get(r["job_id"], {}).get("status") == "complete"
+                        for r in replacements
+                    )
+                )
+                if outcome.get("status") != "complete" and not recovered:
                     raise ValueError(
                         f"{item['id']}: member work incomplete; use blocked with a gap"
                     )
@@ -185,7 +202,7 @@ async def deliver_answer(
         if payload is not None:
             commit_final_manifest(payload)
         complete_delivery_tasks(scope.task_id)
-    return "Final answer and task dispositions accepted."
+    return _DELIVERY_ACCEPTED
 
 
 deliver_answer.metadata["execution_barrier"] = True
@@ -196,8 +213,11 @@ class TeamDeliveryObserver(BaseObserver):
 
     critical = True
 
-    def __init__(self, budget: TeamPhaseBudget) -> None:
+    def __init__(
+        self, budget: TeamPhaseBudget, *, coordination_tools: tuple[str, ...] | None = None,
+    ) -> None:
         self.budget = budget
+        self.coordination_tools = coordination_tools
         self.active = False
         self.wind_down: TeamWindDown | None = None
         self._repair_offers: dict[tuple[str, str], int] = {}
@@ -346,8 +366,10 @@ class TeamDeliveryObserver(BaseObserver):
         )
 
     def _ready(self, bus: AgentBus, task_id: str, tasks: list[dict[str, Any]]) -> bool:
-        if any(s.total_task_count == 0 for s in bus.list_sessions_for_task(task_id)):
-            return False  # Respect explicitly created but not yet dispatched work.
+        if any(
+            s.current_job_id or s.pending_tasks for s in bus.list_sessions_for_task(task_id)
+        ):
+            return False
         jobs = bus.list_task_jobs(task_id)
         if not jobs or any(j.status in {"queued", "submitted", "running"} for j in jobs):
             return False
@@ -355,6 +377,11 @@ class TeamDeliveryObserver(BaseObserver):
         for task in tasks:
             if task["resolution"] in {"resolved", "cancelled", "blocked"}:
                 continue
+            # A completed member job is not a declaration that the user goal is met.
+            # Without declared checks, let coordination assess the result and record
+            # its disposition before closing tools. An idle roster is irrelevant.
+            if task.get("kind") != "delivery" and not task.get("verification_required"):
+                return False
             if task.get("kind") != "delivery" and (
                 not task.get("execution_job_ids") or not set(task["execution_job_ids"]) <= known
             ):
@@ -373,6 +400,19 @@ class TeamDeliveryObserver(BaseObserver):
         return True
 
     async def on_before_llm(self, ctx: TurnContext) -> Intervention | None:
+        intervention = await self._before_llm(ctx)
+        if not self.active and self.coordination_tools and snapshot_tasks(ctx.task_id):
+            # Do not ask the model to compose a final body while delivery would reject it.
+            # Keep collection/repair/dispatch available, including before verifier fan-in.
+            names = tuple(name for name in self.coordination_tools if name != "deliver_answer")
+            if intervention and intervention.allowed_tool_names is not None:
+                names = tuple(n for n in names if n in intervention.allowed_tool_names)
+            return replace(intervention, allowed_tool_names=names) if intervention else Intervention(
+                allowed_tool_names=names,
+            )
+        return intervention
+
+    async def _before_llm(self, ctx: TurnContext) -> Intervention | None:
         if self.active:
             return Intervention(
                 inject_messages=[
@@ -454,8 +494,10 @@ class TeamDeliveryObserver(BaseObserver):
         prompt = (
             "[team delivery] Research and coordination are now closed. Submit the complete "
             "answer using deliver_answer(content, updates) in THIS generation. No separate "
-            "board-update turn is needed. Judge each task against its done_when: resolved "
-            "only if satisfied and required checks passed; otherwise blocked with notes and "
+            "board-update turn is needed. Judge completion against the ORIGINAL user request; "
+            "your done_when cannot replace a missing requested result with an explanation of "
+            "why it is missing. Resolved only if the requested outcome is satisfied and "
+            "required checks passed; otherwise blocked with notes and "
             "gap. Nonblocking boundaries belong in limitations, not gap. Do not promote "
             "self-added optional work into required outcomes. Preserve material limits beside "
             "the affected conclusions. Do not equate a "
@@ -464,19 +506,26 @@ class TeamDeliveryObserver(BaseObserver):
             f"Publication time remaining: {max(0, deadline - time.monotonic()):.0f}s.\n"
             if deadline is not None
             else "[team delivery] Submit the answer and task dispositions together with deliver_answer. "
+            "Judge completion against the original user request, not a weaker self-written done_when. "
             "Use blocked with notes and gap for unmet requirements; limitations for "
             "nonblocking boundaries.\n"
         )
         from plugins.corpus.ledger import get_run_ledger
 
         prompt += (
+            "Deliver the requested result first. Optional enrichment that was not obtained is "
+            "not a failed requirement. Do not reopen research to improve an already sufficient "
+            "result. If a concrete broader investigation would help, ask briefly whether the user "
+            "wants it AFTER the result; wait for the user's reply before executing that expansion. "
+            "Do not routinely append an expansion question. Necessary unresolved gaps remain gaps.\n"
             "Verification covers only the exact passed subject and its declared criterion. "
-            "Do not add blanket headings such as 已核验事实 or 逐项核对过的数据. "
-            "A certification label is allowed only inside the exact passed subject passage. "
+            "A verification statement must identify only the subject and criterion actually checked. "
             "Place unchecked/failed limits beside the affected facts. Distinguish sourced "
             "observations from your forecasts, probabilities and causal interpretation; "
             "a stronger conclusion or a conclusion depending on unchecked data is not certified "
-            "by neighbouring passed checks. Qualify or omit it.\n"
+            "by neighbouring passed checks. Keep each claim within the scope and conditions of "
+            "its actual evidence. Omit unsupported optional claims; disclose missing necessary "
+            "support as a gap.\n"
         )
 
         corpus_active = get_run_ledger().has_activity() or bool(
@@ -500,6 +549,20 @@ class TeamDeliveryObserver(BaseObserver):
         )
         prompt += json.dumps(tasks, ensure_ascii=False)
         if bus:
+            excluded = {t["id"] for t in tasks if t["resolution"] in {"blocked", "cancelled"}}
+            passages = list(dict.fromkeys(
+                c["subject"]["text"] for c in project_bus_checks(bus, bus_id)["checks"]
+                if c.get("publication_excerpt") and c["verdict"] == "pass"
+                and c["work_item_id"] not in excluded and c["subject"].get("text")
+            ))
+            if passages:
+                prompt += (
+                    "\n[checked publication text] Copy these passages exactly into content, "
+                    "without rephrasing or inserting Markdown inside them. They are checked "
+                    "answer text, not an audit appendix. Do not repeat their facts in a second "
+                    "summary. A material revision needs a new check or a blocked disposition.\n"
+                    + json.dumps(passages, ensure_ascii=False)
+                )
             from plugins.tools._corpus_handoff import render_corpus_citation_index
 
             sources = {
@@ -534,7 +597,12 @@ class TeamDeliveryObserver(BaseObserver):
         return None
 
     async def on_tool_result(self, ctx: TurnContext, result: ToolResult) -> None:
-        if result.name == "deliver_answer" and not result.is_error:
+        if (
+            result.name == "deliver_answer"
+            and not result.is_error
+            and result.execution_status == "succeeded"
+            and result.result == _DELIVERY_ACCEPTED
+        ):
             ctx.metadata["final_answer"] = result.args["content"].strip()
             ctx.metadata["team_delivery_accepted"] = True
 

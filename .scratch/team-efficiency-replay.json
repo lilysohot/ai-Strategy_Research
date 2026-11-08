@@ -1,0 +1,26 @@
+[
+  {
+    "case": "F12",
+    "before_chars": 1574,
+    "after_chars": 864,
+    "model_body_chars": 864,
+    "answer_status": "complete",
+    "retained_checks": 2
+  },
+  {
+    "case": "F13",
+    "before_chars": 2940,
+    "after_chars": 1400,
+    "model_body_chars": 1071,
+    "answer_status": "partial",
+    "retained_checks": 3
+  },
+  {
+    "case": "F14",
+    "before_chars": 1128,
+    "after_chars": 953,
+    "model_body_chars": 953,
+    "answer_status": "complete",
+    "retained_checks": 0
+  }
+]

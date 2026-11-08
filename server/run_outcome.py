@@ -31,6 +31,22 @@ def read_terminal_task_board(run_id: str) -> list[dict[str, str]] | None:
     return report_task_board(summary.get("report_contract")) if isinstance(summary, dict) else None
 
 
+def read_terminal_audit(run_id: str) -> dict[str, Any] | None:
+    """Read the terminal audit projection; callers must authorize run ownership first."""
+    try:
+        summary = json.loads((run_dir_for(run_id) / "summary.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    contract = summary.get("report_contract") if isinstance(summary, dict) else None
+    if not isinstance(contract, dict):
+        return None
+    fields = {
+        "answer_status", "verification", "verification_basis", "verification_checks",
+        "acquisition_limits", "gaps", "wind_down", "audit_appendix",
+    }
+    return {key: value for key, value in contract.items() if key in fields}
+
+
 def interruption_reason(reason: str | None) -> str:
     """Recognize natural single-agent and team completion markers.
 
@@ -57,3 +73,29 @@ def apply_input_request_outcome(frame: dict[str, Any], request: Any) -> None:
     answer = str(frame.get("final_answer") or "").strip()
     if not answer.startswith(notice):
         frame["final_answer"] = f"{notice}\n\n{answer}".strip()
+
+
+def reconcile_team_termination(outcome: dict[str, Any], reason: str) -> None:
+    """Apply the outer stop to the report while retaining the inner workflow history."""
+    contract = outcome.get("report_contract")
+    if not isinstance(contract, dict) or not interruption_reason(reason):
+        return
+    contract = dict(contract)
+    outcome["report_contract"] = contract
+    contract.setdefault("workflow_stopped_by", contract.get("stopped_by", ""))
+    contract["stopped_by"] = reason
+    if contract.get("answer_status") == "complete":
+        contract["answer_status"] = "partial"
+    if outcome.get("answer_status") == "complete":
+        outcome["answer_status"] = "partial"
+    if contract.get("kind") == "complete":
+        contract["kind"] = "partial"
+    publication = dict(contract.get("publication") or {})
+    if publication.get("status") in {"published", "revised"}:
+        publication["status"] = "interrupted"
+    contract["publication"] = publication
+    gaps = list(contract.get("gaps") or [])
+    gap = {"code": "execution_stopped", "reason": reason}
+    if gap not in gaps:
+        gaps.append(gap)
+    contract["gaps"] = gaps

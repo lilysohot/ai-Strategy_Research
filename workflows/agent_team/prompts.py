@@ -1007,11 +1007,11 @@ Confidence: [high/medium/low]
 # only when explicitly selected; it must not override phase limits or handoff.
 _PROPORTIONATE_EFFORT_POLICY = """# Proportionate Research
 
-Match effort to the user's question, uncertainty and consequences. Use the smallest
-team and scope that can answer it with appropriate evidence. For a simple factual
-lookup, start with one focused researcher and a bounded check of the necessary facts;
-do not launch several broad investigations solely because team mode is available.
-For input needing no research, follow the direct-answer path instead of creating work.
+Match effort to the user's requested result, uncertainty and consequences. Choose
+team size and methods according to necessary work, dependencies and evidence gaps.
+Do not prescribe a team size or verification depth from the task category alone.
+For input needing no research, follow the direct-answer path when runtime requirements
+permit it.
 
 Before dispatch, specify what must be answered, the evidence needed, the required
 checks, and the stopping condition. Separate optional background from required work.

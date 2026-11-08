@@ -79,11 +79,10 @@ class UnassignedAgentNudge(BaseObserver):
         logger.info("UnassignedAgentNudge: %s", idle)
         return Intervention(inject_messages=[
             f"You created agent(s) **{names}** but never assigned them "
-            "tasks. Call `assign_task` for each before calling "
-            "`finalize_answer` — idle agents block finalization and "
-            "sub-agents cannot be silently dismissed. If you no longer "
-            "need an agent's output, give it a throwaway task like "
-            "\"Confirm no further info needed; submit an empty report\"."
+            "tasks. Check whether any unmet required work needs them. Assign only that work. "
+            "Unused members do not block delivery; do not create empty assignments to occupy "
+            "them. Deliver when the requested result and required checks are satisfied; "
+            "preserve necessary unresolved gaps explicitly."
         ])
 
 

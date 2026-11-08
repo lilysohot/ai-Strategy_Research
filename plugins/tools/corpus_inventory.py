@@ -40,6 +40,8 @@ _MIN_BUDGET = 400
 
 #: 消费提示：不写成「无条件读取所有表」。
 _HINT = (
+    "total_chunks/by_kind 只统计请求的候选范围；exhausted 只表示该范围分页结束，"
+    "不证明全文已穷尽或正文不存在。"
     "这些块是本次检索提供的上下文候选，不是已读内容；content_role=heading_only 的"
     "标题块只证明标题被取回，不含表体。按问题选择证据范围：涉及表中的结论时，补齐"
     "必要表头、期间、单位及脚注。relations 是本次范围内的结构关联（verified=持久化"
@@ -178,6 +180,8 @@ async def corpus_inventory(
         "doc_id": inventory["doc_id"],
         "build_id": inventory["build_id"],
         "scope_id": inventory["scope_id"],
+        "coverage_scope": "requested_locators",
+        "document_coverage": "unknown",
         "total_chunks": inventory["total_chunks"],
         "by_kind": inventory["by_kind"],
         "table_chunks": inventory["table_chunks"],

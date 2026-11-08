@@ -199,6 +199,8 @@ def test_hybrid_selection_keeps_vector_band_and_true_lexical_band():
 
 
 def test_wrong_target_falls_back_without_query_embedding(monkeypatch):
+    # Exercise target mismatch independently of a developer's loaded .env.
+    monkeypatch.setattr(VectorConfig, "from_env", lambda: VectorConfig(target_db="vector_pilot_test"))
     monkeypatch.setattr(hybrid.read_pg, "search_with_coverage_bands", lambda *a, **kw: ((), {}, {}))
     monkeypatch.setattr(
         hybrid, "query_vector", lambda *a: pytest.fail("wrong target must not call provider")

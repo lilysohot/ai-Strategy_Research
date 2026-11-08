@@ -740,6 +740,7 @@ async def mock_llm_approval():
     )
 
     script = [
+        text_turn('{"decision":"ready"}'),
         tool_call_turn(
             "create_file",
             {"path": "/outputs/approval-once.md", "content": "delete after approval"},
@@ -749,6 +750,7 @@ async def mock_llm_approval():
             {"command": "rm -f outputs/approval-once.md"},
         ),
         text_turn("done once"),
+        text_turn('{"decision":"ready"}'),
         tool_call_turn(
             "create_file",
             {"path": "/outputs/approval-reject.md", "content": "preserve after rejection"},

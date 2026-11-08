@@ -1,0 +1,256 @@
+..F
+=================================== FAILURES ===================================
+_ test_web_worker_delegates_reads_and_verifies_with_cli_roles[False-True-True-pass] _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7a6ccc8e63f0>
+internal_final = False, versioned = True, verify = True, verdict = 'pass'
+
+    @pytest.mark.skipif(sys.platform != "linux", reason="Web bwrap worker requires Linux")
+    @pytest.mark.parametrize("internal_final,versioned,verify,verdict", [
+        (False, False, True, "pass"), (True, False, True, "pass"),
+        (False, True, True, "pass"), (False, False, False, "pass"),
+        (False, True, True, "unchecked"),
+    ])
+    async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
+        monkeypatch, internal_final, versioned, verify, verdict,
+    ):
+        if not bwrap_available():
+            pytest.skip("bubblewrap unavailable")
+    
+        run_id = uuid.uuid4().hex
+        paths = build_run_paths(run_id)
+        (paths["inputs"] / "brief.txt").write_text("PARITY_SOURCE_VALUE=42\n", encoding="utf-8")
+        answer = ('<report agent="reader">RAW_INTERNAL_RESULT: 42</report>' if internal_final else
+                  "The independently verified value is 42." if verify else
+                  "The supplied file states that the value is 42.")
+        if verdict == "unchecked":
+            answer = "The source states 42; independent confirmation remains unavailable."
+        main_script = [
+            tool_call_turn("add_task", {"tasks": [{"description": "Read and verify value"}]}),
+            tool_call_turn("create_subagent", {"agents": [
+                {"name": "reader", "system_prompt": "Read the supplied file."},
+                {"name": "final_verifier", "system_prompt": "Verify the returned value."},
+            ]}),
+            tool_call_turn("assign_task", {"tasks": [{
+                "agent": "reader", "prompt": "Read /inputs/brief.txt and report its value.",
+                "work_item_ids": ["t1"],
+            }]}),
+            tool_call_turn("collect_reports", {"timeout": 30}),
+            None,  # exact reader job is filled from the preceding collect result
+            tool_call_turn("collect_reports", {"timeout": 30}),
+            tool_call_turn("update_task", {"updates": [{
+                "id": "t1", "resolution": "resolved", "notes": "Reader and verifier agree: 42",
+            }]}),
+            text_turn(answer),
+        ]
+        scripts = {
+            "main": main_script,
+            "reader": [
+                tool_call_turn("read_file", {"path": "/inputs/brief.txt"}),
+                tool_call_turn("submit_report", {"content": "READER_REPORT: value is 42."}),
+            ],
+            "verifier": [
+                tool_call_turn("read_file", {"path": "/inputs/brief.txt"}),
+                tool_call_turn("submit_report", {"content": "VERIFIER_REPORT: independently read 42."}),
+            ],
+        }
+        if not verify:
+            main_script[1] = tool_call_turn("create_subagent", {"agents": [
+                {"name": "reader", "system_prompt": "Read the supplied file."},
+            ]})
+            main_script[6] = tool_call_turn("update_task", {"updates": [{
+                "id": "t1", "resolution": "resolved", "notes": "Read the requested source: 42",
+            }]})
+            scripts["main"] = [main_script[i] for i in (0, 1, 2, 3, 6, 7)]
+            del scripts["verifier"]
+        requests = {role: [] for role in scripts}
+        if versioned:
+            main_script[0] = tool_call_turn("add_task", {"tasks": [{
+                "description": "Read and verify value",
+                "verification_requirements": [{"check_id": "value", "criterion": "Check value is 42"}],
+            }]})
+            scripts["verifier"].append(scripts["verifier"][-1])
+            if verdict == "unchecked":
+                main_script[6] = tool_call_turn("update_task", {"updates": [{
+                    "id": "t1", "resolution": "blocked", "notes": "Review finished",
+                    "gap": "Independent confirmation unavailable",
+                }]})
+        server = MockLLMServer().start()
+        delivery_attempts = 0
+    
+        def next_turn(payload):
+            nonlocal delivery_attempts
+            tools = {item["function"]["name"] for item in payload.get("tools", [])}
+            if not tools and "current_request" in str(payload.get("messages")):
+                return text_turn('{"decision":"ready"}')
+            if tools == {"deliver_answer"}:
+                requests["main"].append(payload)
+                delivery_attempts += 1
+                body = answer
+                if internal_final and delivery_attempts > 1:
+                    body = "The independently verified value is 42."
+                return tool_call_turn("deliver_answer", {
+                    "content": body,
+                    "updates": [{"id": "t1", "resolution": "blocked" if verdict == "unchecked" else "resolved",
+                                 "notes": "Review finished", "gap": "Independent confirmation unavailable" if verdict == "unchecked" else ""}],
+                })
+            system = str(payload["messages"][0]["content"])
+            if "create_subagent" in tools:
+                role = "main"
+            elif system.startswith(VERIFIER):
+                role = "verifier"
+            elif system.startswith(RESEARCHER):
+                role = "reader"
+            else:
+                return text_turn(answer)
+            index = len(requests[role])
+            requests[role].append(payload)
+            if role == "main" and index == 4 and verify:
+                history = "\n".join(
+                    str(message.get("content") or "")
+                    for message in (payload.get("messages") or [])
+                )
+                match = re.search(r'<report agent="reader" job="([^"]+)"', history)
+                assert match, history[-4000:]
+                assignment = {
+                    "agent": "final_verifier",
+                    "work_item_ids": ["t1"],
+                    "prompt": (
+                        "Verify 42 against /inputs/brief.txt. "
+                        f'<attach agent="reader" job="{match.group(1)}"/>'
+                    ),
+                }
+                if versioned:
+                    assignment["verification_checks"] = [{
+                        "check_id": "value", "work_item_id": "t1", "criterion": "Check value is 42",
+                        "subject": {"job_id": match.group(1)},
+                        "evidence": [{"job_id": match.group(1)}],
+                    }]
+                return tool_call_turn("assign_task", {"tasks": [assignment]})
+            if versioned and role == "verifier" and index == 1:
+                task = next(str(m["content"]) for m in payload["messages"]
+                            if "# Bound verification checks" in str(m.get("content", "")))
+                checks, _ = json.JSONDecoder().raw_decode(task.split("# Bound verification checks\n", 1)[1])
+                check = checks[0]
+                return tool_call_turn("submit_report", {
+                    "content": "VERIFIER_REPORT: independently read 42.", "finish": False,
+                    "verification_results": [{
+                        "check_id": "value", "binding_id": check["binding_id"], "verdict": verdict,
+                        "method": "read original input and compare", "detail": "Both contain 42",
+                        "evidence_keys": [check["evidence"][0]["key"]],
+                    }],
+                })
+            return scripts[role][min(index, len(scripts[role]) - 1)]
+    
+        monkeypatch.setattr(server._script, "next_turn", next_turn)
+        env = {
+            **os.environ,
+            "OPENAI_MODEL": server.model,
+            "OPENAI_BASE_URL": server.base_url,
+            "OPENAI_API_KEY": "sk-test",
+            "LLM_PROVIDER": "openai",
+        }
+        proc = None
+        try:
+            proc = await asyncio.create_subprocess_exec(
+                sys.executable, "-m", "server.worker", "--run-id", run_id,
+                "--session-id", uuid.uuid4().hex, "--pipeline-id", "agent_team",
+                "--backend", "bwrap", "--wall-time", "1200", "--max-turns", "20",
+                "--business-prefix", "1", "--mixed-mode-history", "--continuity", "off",
+                "--prompt", (
+                    "Read /inputs/brief.txt, independently verify its value, and answer in text."
+                    if verify else "What value does /inputs/brief.txt state? Answer briefly."
+                ),
+                cwd=Path(__file__).resolve().parents[1], env=env,
+                stdin=asyncio.subprocess.DEVNULL,
+                stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE,
+            )
+            stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=60)
+            assert proc.returncode == 0, (stdout + stderr).decode(errors="replace")[-8000:]
+        finally:
+            if proc is not None and proc.returncode is None:
+                proc.kill()
+                await proc.wait()
+            server.stop()
+    
+        cli = load_swarm_profile(PROFILE_NAME)["agent"]
+        for role, seen in requests.items():
+>           assert seen, f"missing {role} model requests"
+E           AssertionError: missing reader model requests
+E           assert []
+
+tests/test_web_team_cli_parity.py:194: AssertionError
+----------------------------- Captured stderr call -----------------------------
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 45624)
+Traceback (most recent call last):
+  File "/home/administrator/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/home/administrator/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/home/administrator/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/socketserver.py", line 766, in __init__
+    self.handle()
+  File "/home/administrator/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/http/server.py", line 440, in handle
+    self.handle_one_request()
+  File "/home/administrator/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/http/server.py", line 428, in handle_one_request
+    method()
+  File "/home/administrator/FrontierAgent/deploy/huggingface/mock_llm.py", line 183, in do_POST
+    turn = self._script.next_turn(payload)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/FrontierAgent/tests/test_web_team_cli_parity.py", line 130, in next_turn
+    assert match, history[-4000:]
+AssertionError: m and scope that can answer it with appropriate evidence. For a simple factual
+  lookup, start with one focused researcher and a bounded check of the necessary facts;
+  do not launch several broad investigations solely because team mode is available.
+  For input needing no research, follow the direct-answer path instead of creating work.
+  
+  Before dispatch, specify what must be answered, the evidence needed, the required
+  checks, and the stopping condition. Separate optional background from required work.
+  Add parallel work only for distinct necessary questions, material conflicts, or an
+  independent method/source that can change the answer. A simple answer completed in
+  few turns is a success; unused time is not a reason to create more work.
+  
+  Once the requested core and its required checks are complete, finalize. If a gap
+  remains, pursue it only when a concrete next action can resolve it within the phase
+  budget; otherwise preserve it explicitly as unresolved and deliver supported findings.
+  Do not lower a required verification standard, cancel required work to hide a failure,
+  or confuse source retrieval with independent confirmation. Runtime phase restrictions,
+  handoff and deadlines take precedence over further exploration at every effort level.
+  
+  
+  <team_effort>high</team_effort>
+  Read /inputs/brief.txt, independently verify its value, and answer in text.
+  
+  Added ['t1'].
+  [task board] resolved 0/1 · in-progress 0 · open 1 · cancelled 0 · blocked 0
+    ○ t1 open        Read and verify value
+      verification_requirements: [{"check_id": "value", "criterion": "Check value is 42"}]
+      verification_execution_status: not_started; verification_status: not_registered
+  Current task board (keep it current via add_task / update_task; finish after resolving work or recording blocked work with notes and gap; blocked work permits only partial delivery):
+  [task board] resolved 0/1 · in-progress 0 · open 1 · cancelled 0 · blocked 0
+    ○ t1 open        Read and verify value
+      verification_requirements: [{"check_id": "value", "criterion": "Check value is 42"}]
+      verification_execution_status: not_started; verification_status: not_registered
+  
+  Created 2 sub-agent(s):
+    - reader
+    - final_verifier
+  
+  Call assign_task(tasks=[{agent:NAME, prompt:...}]) to give them work.
+  
+  Error: invalid agent-team assignment metadata: reader: t1 requires structured verification_checks for planned checks [{'check_id': 'value', 'criterion': 'Check value is 42'}]. Bind subject.text or a completed subject job, and evidence job/ref sources. A prompt checklist is not a binding; IDs are generated by dispatch, never invented by the member. Use a separate research item to gather missing evidence first. No tasks were dispatched.
+  Dispatch context (identifiers only, not evidence): {"agents": ["reader", "final_verifier"], "work_items": [{"work_item_id": "t1", "description": "Read and verify value", "check_ids": ["value"]}], "completed_source_jobs": []}
+  For verification, send a nonempty tasks array. Each task needs agent, prompt, and verification_checks. Each check needs check_id, subject:{text:the exact relevant passage}, and evidence:[{job_id}]. Omitted work_item_id and criterion resolve from the unique planned check_id; explicit values must match. Choose only relevant sources. Bindings attach sources automatically, so do not paste reports into prompt. Rechecks still require replaces_job_id, revision_kind and revision_reason.
+  
+  <report agent="orchestrator" status="complete" reason="no_work_queued">
+  Sub-agents exist, but none has been assigned work yet. Call assign_task to give them tasks; do NOT call collect_reports again.
+  </report>
+  
+  [status] no_work_queued
+  You created agent(s) **final_verifier, reader** but never assigned them tasks. Call `assign_task` for each before calling `finalize_answer` — idle agents block finalization and sub-agents cannot be silently dismissed. If you no longer need an agent's output, give it a throwaway task like "Confirm no further info needed; submit an empty report".
+assert None
+----------------------------------------
+=========================== short test summary info ============================
+FAILED tests/test_web_team_cli_parity.py::test_web_worker_delegates_reads_and_verifies_with_cli_roles[False-True-True-pass]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 2 passed in 27.53s

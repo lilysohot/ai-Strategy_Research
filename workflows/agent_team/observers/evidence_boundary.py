@@ -96,11 +96,8 @@ class EvidenceBoundaryObserver(BaseObserver):
             "finished or its claims were verified. Preserve unresolved gaps even when a "
             "useful partial answer is deliverable. For each affected comparison, place its "
             "qualification next to the conclusion: observed fact, attributed source claim, "
-            "inference, or unknown. A failed fetch is not evidence of absence or equality. "
-            "Do not declare lowest, best, identical cost, or a winner without evidence on "
-            "the same basis (version, date, units, conditions and coverage). Missing data "
-            "means the comparison is unknown; do not promote historical claims into "
-            "verified facts. A caveat only at the end does not qualify an absolute headline. "
+            "inference, or unknown. Missing evidence remains unknown. Keep claims within "
+            "the conditions and coverage of their evidence, including in headings and summaries. "
             "Use available evidence and explain limits; this notice does not require new "
             "research, extra board updates, or another generation cycle.\n" + state
         )

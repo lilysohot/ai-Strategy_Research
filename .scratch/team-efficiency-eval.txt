@@ -1,0 +1,63 @@
+.F.........................................                              [100%]
+=================================== FAILURES ===================================
+_ test_consecutive_execution_errors_stop_model_launches_without_dropping_cases _
+
+tmp_path = PosixPath('/tmp/pytest-of-administrator/pytest-4/test_consecutive_execution_err0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x79d2eac1b7d0>
+
+    def test_consecutive_execution_errors_stop_model_launches_without_dropping_cases(
+        tmp_path, monkeypatch
+    ):
+        import argparse
+    
+        from benchmarks.team_workflow import run as runner
+    
+        launches = []
+    
+        class FailedWorker:
+            def __init__(self, command, **kwargs):
+                launches.append(command)
+                trial = Path(command[command.index("--out") + 1])
+                write(trial / "worker.json", {"ok": False, "error": "model unavailable"})
+    
+            def wait(self, timeout):
+                return 0
+    
+        monkeypatch.setattr(runner.subprocess, "Popen", FailedWorker)
+        monkeypatch.setattr(runner, "source_fingerprint", lambda: {"test": True})
+        out = tmp_path / "batch"
+        assert (
+            runner.run(
+                argparse.Namespace(
+                    layer="frozen",
+                    case=None,
+                    repeats=1,
+                    profile="default",
+                    max_consecutive_errors=2,
+                    out=out,
+                )
+            )
+            == 1
+        )
+        assert len(launches) == 2
+>       assert summarize(out)["states"] == {"error": 2, "unassessed": 12}
+E       AssertionError: assert {'error': 2, 'unassessed': 15} == {'error': 2, 'unassessed': 12}
+E         
+E         Omitting 1 identical items, use -vv to show
+E         Differing items:
+E         {'unassessed': 15} != {'unassessed': 12}
+E         Use -v to get more diff
+
+tests/test_team_workflow_eval.py:83: AssertionError
+----------------------------- Captured stdout call -----------------------------
+F01-r1: error (0.0s)
+F02-r1: error (0.0s)
+=============================== warnings summary ===============================
+tests/test_team_eval_regression_expansion.py::test_increment_has_paired_controls_and_no_claim_of_blind_holdout
+  /home/administrator/FrontierAgent/.venv/lib/python3.12/site-packages/urllib3/contrib/socks.py:50: DependencyWarning: SOCKS support in urllib3 requires the installation of optional dependencies: specifically, PySocks.  For more information, see https://urllib3.readthedocs.io/en/latest/advanced-usage.html#socks-proxies
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_team_workflow_eval.py::test_consecutive_execution_errors_stop_model_launches_without_dropping_cases
+1 failed, 42 passed, 1 warning in 1.47s

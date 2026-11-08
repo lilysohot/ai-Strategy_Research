@@ -1,0 +1,175 @@
+FFFF.FF.F..                                                              [100%]
+=================================== FAILURES ===================================
+_______ test_fallback_runs_only_after_eligible_primary_outcome[readable] _______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7b6a77712a50>
+primary = 'readable'
+
+    @pytest.mark.parametrize("primary", ["readable", "failed", "partial", "blocked"])
+    async def test_fallback_runs_only_after_eligible_primary_outcome(monkeypatch, primary):
+        calls = []
+    
+        async def fetch(url, focus):
+            calls.append(url)
+            if url == "https://source.test/a":
+                if primary == "readable":
+                    return "Tuesday, Room 204."
+                return content_limitation(
+                    url, "Primary unavailable", status={"failed": "failed", "partial": "partial", "blocked": "policy_blocked"}[primary],
+                    content="Tuesday" if primary == "partial" else "",
+                )
+            return "Tuesday, Room 204."
+    
+        monkeypatch.setattr(fetch_module, "_fetch_with_budget", fetch)
+>       result = await fetch_module.web_fetch.func(
+            url="https://source.test/a", fallback_urls=["https://source.test/b", "https://source.test/c"]
+        )
+E       TypeError: web_fetch() got an unexpected keyword argument 'fallback_urls'
+
+tests/test_team_execution_efficiency.py:37: TypeError
+________ test_fallback_runs_only_after_eligible_primary_outcome[failed] ________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7b6a7774acc0>
+primary = 'failed'
+
+    @pytest.mark.parametrize("primary", ["readable", "failed", "partial", "blocked"])
+    async def test_fallback_runs_only_after_eligible_primary_outcome(monkeypatch, primary):
+        calls = []
+    
+        async def fetch(url, focus):
+            calls.append(url)
+            if url == "https://source.test/a":
+                if primary == "readable":
+                    return "Tuesday, Room 204."
+                return content_limitation(
+                    url, "Primary unavailable", status={"failed": "failed", "partial": "partial", "blocked": "policy_blocked"}[primary],
+                    content="Tuesday" if primary == "partial" else "",
+                )
+            return "Tuesday, Room 204."
+    
+        monkeypatch.setattr(fetch_module, "_fetch_with_budget", fetch)
+>       result = await fetch_module.web_fetch.func(
+            url="https://source.test/a", fallback_urls=["https://source.test/b", "https://source.test/c"]
+        )
+E       TypeError: web_fetch() got an unexpected keyword argument 'fallback_urls'
+
+tests/test_team_execution_efficiency.py:37: TypeError
+_______ test_fallback_runs_only_after_eligible_primary_outcome[partial] ________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7b6a75de2900>
+primary = 'partial'
+
+    @pytest.mark.parametrize("primary", ["readable", "failed", "partial", "blocked"])
+    async def test_fallback_runs_only_after_eligible_primary_outcome(monkeypatch, primary):
+        calls = []
+    
+        async def fetch(url, focus):
+            calls.append(url)
+            if url == "https://source.test/a":
+                if primary == "readable":
+                    return "Tuesday, Room 204."
+                return content_limitation(
+                    url, "Primary unavailable", status={"failed": "failed", "partial": "partial", "blocked": "policy_blocked"}[primary],
+                    content="Tuesday" if primary == "partial" else "",
+                )
+            return "Tuesday, Room 204."
+    
+        monkeypatch.setattr(fetch_module, "_fetch_with_budget", fetch)
+>       result = await fetch_module.web_fetch.func(
+            url="https://source.test/a", fallback_urls=["https://source.test/b", "https://source.test/c"]
+        )
+E       TypeError: web_fetch() got an unexpected keyword argument 'fallback_urls'
+
+tests/test_team_execution_efficiency.py:37: TypeError
+_______ test_fallback_runs_only_after_eligible_primary_outcome[blocked] ________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7b6a75de2f00>
+primary = 'blocked'
+
+    @pytest.mark.parametrize("primary", ["readable", "failed", "partial", "blocked"])
+    async def test_fallback_runs_only_after_eligible_primary_outcome(monkeypatch, primary):
+        calls = []
+    
+        async def fetch(url, focus):
+            calls.append(url)
+            if url == "https://source.test/a":
+                if primary == "readable":
+                    return "Tuesday, Room 204."
+                return content_limitation(
+                    url, "Primary unavailable", status={"failed": "failed", "partial": "partial", "blocked": "policy_blocked"}[primary],
+                    content="Tuesday" if primary == "partial" else "",
+                )
+            return "Tuesday, Room 204."
+    
+        monkeypatch.setattr(fetch_module, "_fetch_with_budget", fetch)
+>       result = await fetch_module.web_fetch.func(
+            url="https://source.test/a", fallback_urls=["https://source.test/b", "https://source.test/c"]
+        )
+E       TypeError: web_fetch() got an unexpected keyword argument 'fallback_urls'
+
+tests/test_team_execution_efficiency.py:37: TypeError
+____ test_publication_keeps_audit_in_contract_without_appending_pass_hashes ____
+
+delivery_run = (<frontier_agent.components.agent_bus.bus.AgentBus object at 0x7b6a75c60590>, TeamPhaseBudget(started_monotonic_s=0, r...arch_deadline_s=720, publication_deadline_s=900, finalization_deadline_s=1200, state={}, verification_deadline_s=None))
+
+    async def test_publication_keeps_audit_in_contract_without_appending_pass_hashes(delivery_run):
+        bus, _ = delivery_run
+        await prepare(bus)
+        draft = "The checked amount is 50."
+        out = finalize_team_report(
+            draft, source="agent", answer_status="complete", stopped_by="final_answer",
+            tasks=[{**t, "resolution": "resolved"} for t in snapshot_tasks("run")],
+            wind_down={"job_outcomes": snapshot_job_outcomes(bus, "run")},
+        )
+>       assert out["final_answer"] == draft
+E       AssertionError: assert 'The checked ...dddddddddddd)' == 'The checked amount is 50.'
+E         
+E         - The checked amount is 50.
+E         + The checked amount is 50.
+E         ?                          +
+E         + 
+E         + ### Verification scope
+E         + ...
+E         
+E         ...Full output truncated (3 lines hidden), use '-vv' to show
+
+tests/test_team_execution_efficiency.py:71: AssertionError
+__ test_missing_evidence_is_disclosed_once_and_execution_counts_stay_in_audit __
+
+    def test_missing_evidence_is_disclosed_once_and_execution_counts_stay_in_audit():
+        gap = "Shipping is unknown."
+        out = finalize_team_report(
+            "The subtotal is 44. " + gap, source="agent", answer_status="partial",
+            stopped_by="final_answer", tasks=[{"id": "t1", "description": "Total", "resolution": "blocked", "gap": gap}],
+            wind_down={"status": "complete", "collected_count": 2, "unresolved_count": 0},
+        )
+>       assert out["final_answer"].count(gap) == 1
+E       AssertionError: assert 3 == 1
+E        +  where 3 = <built-in method count of str object at 0x316902f0>('Shipping is unknown.')
+E        +    where <built-in method count of str object at 0x316902f0> = '**Partial result: conclusions use available evidence; work or evidence gaps remain.**\n\nThe subtotal is 44. Shipping...wn: 2; Jobs still outstanding: 0.\n\nThese are wind-down counts only, not proof of full coverage or verified findings.'.count
+
+tests/test_team_execution_efficiency.py:83: AssertionError
+__________ test_running_member_hides_delivery_before_model_generation __________
+
+delivery_run = (<frontier_agent.components.agent_bus.bus.AgentBus object at 0x7b6a75c60f20>, TeamPhaseBudget(started_monotonic_s=0, r...arch_deadline_s=720, publication_deadline_s=900, finalization_deadline_s=1200, state={}, verification_deadline_s=None))
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7b6a75c62600>
+
+    async def test_running_member_hides_delivery_before_model_generation(delivery_run, monkeypatch):
+        bus, budget = delivery_run
+        await prepare(bus)
+        bus._jobs["j1"].status = "running"
+        monkeypatch.setattr("workflows.agent_team.delivery.time.monotonic", lambda: 500)
+>       observer = TeamDeliveryObserver(budget, coordination_tools=("assign_task", "collect_reports", "deliver_answer"))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: TeamDeliveryObserver.__init__() got an unexpected keyword argument 'coordination_tools'
+
+tests/test_team_execution_efficiency.py:106: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_team_execution_efficiency.py::test_fallback_runs_only_after_eligible_primary_outcome[readable]
+FAILED tests/test_team_execution_efficiency.py::test_fallback_runs_only_after_eligible_primary_outcome[failed]
+FAILED tests/test_team_execution_efficiency.py::test_fallback_runs_only_after_eligible_primary_outcome[partial]
+FAILED tests/test_team_execution_efficiency.py::test_fallback_runs_only_after_eligible_primary_outcome[blocked]
+FAILED tests/test_team_execution_efficiency.py::test_publication_keeps_audit_in_contract_without_appending_pass_hashes
+FAILED tests/test_team_execution_efficiency.py::test_missing_evidence_is_disclosed_once_and_execution_counts_stay_in_audit
+FAILED tests/test_team_execution_efficiency.py::test_running_member_hides_delivery_before_model_generation
+7 failed, 4 passed in 1.16s

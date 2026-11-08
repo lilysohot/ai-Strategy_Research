@@ -135,6 +135,9 @@ def search(
     domain: ResearchDomain | None = None,
     published_from: str | None = None,
     published_to: str | None = None,
+    ingested_from: str | None = None,
+    ingested_to: str | None = None,
+    ingested_timezone: str = "Asia/Shanghai",
     trace: RetrievalTrace | None = None,
     ranking: RankingSession | None = None,
 ) -> tuple[
@@ -150,6 +153,9 @@ def search(
         "domain": domain,
         "published_from": published_from,
         "published_to": published_to,
+        "ingested_from": ingested_from,
+        "ingested_to": ingested_to,
+        "ingested_timezone": ingested_timezone,
         "limit": limit,
     }
 
@@ -191,6 +197,9 @@ def search(
             domain=domain,
             published_from=published_from,
             published_to=published_to,
+            ingested_from=ingested_from,
+            ingested_to=ingested_to,
+            ingested_timezone=ingested_timezone,
             limit=limit,
         )
         params.update(
@@ -210,7 +219,9 @@ def search(
                 complete = expected > 0 and expected == ready
                 dense: tuple[SearchHit, ...] = ()
                 if complete:
-                    cur.execute(_VECTOR_SQL, params)
+                    from plugins.corpus.ingestion_dates import filter_sql
+
+                    cur.execute(filter_sql(_VECTOR_SQL, params), params)
                     dense = _enrich_hits(
                         cur,
                         tuple(
@@ -229,6 +240,10 @@ def search(
                             for r in cur.fetchall()
                         ),
                     )
+                if "ingested_start" in params and dense:
+                    from plugins.corpus.preparation.search_pg import enrich_ingestion
+
+                    dense = enrich_ingestion(cur, dense)
                 hits = fuse(lexical, dense) if complete else lexical
                 original_lexical = lexical
                 if complete and ranking is not None:

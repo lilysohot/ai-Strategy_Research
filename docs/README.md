@@ -21,6 +21,7 @@ useful when changing that subsystem rather than when getting started.
 | Understand the investment-research product requirements | [Product requirements](product-requirements.md) |
 | Understand the current and target research process | [Business process](business-process.md) |
 | Understand how corpus retrieval enters Agent context and what is wired today | [Corpus retrieval and context wiring](corpus-retrieval.md) |
+| Search by first successful ingestion date independently of report publication dates | [入库时间检索](corpus-ingestion-search.md) |
 | Operate production OCR for report preparation and Agent PDF reading | [本地 OCR 生产接入](guide/local-ocr-production.md) |
 
 ## Product and business design
@@ -38,6 +39,7 @@ The investment-research Web product has two canonical product documents:
 | How should Web business data, versioned inputs, and price-triggered analysis work? | [Web business data and persistence specification](design/web-business-data-prd.md) — planning draft; scope/status live in product requirements §4.7 |
 | How should the monitoring layer collect quotes, trigger events, recover, and upgrade? | [HTTP monitoring V1 draft](design/monitoring-technical-plan.md) — HTTP + Redis Streams + PostgreSQL, acquisition isolation and WebSocket upgrade path; pending implementation and acceptance |
 | How should Agent analysis populate and maintain price monitors? | [Agent-driven price monitoring](design/agent-driven-price-monitoring.md) — v0.4 implemented, tested and deployed to local WSL; three targets, one signal per session per 15-minute round, FIFO consumption, offline suspension |
+| How should independent Team and Single conversations collaborate autonomously? | [Super-link requirements](design/super-link-prd.md) / [technical framework](design/super-link-technical-design.md) — v0.7 foundation, not implemented; eight business principles indexed in PRD §2.9, including independent inspection, tool continuity and flexible follow-up intent; technical details remain open |
 | How is the Web business-data work split into tasks? | [Web interaction tasks](plan/web-business-ui-tasks.md) v1.8 and [data persistence tasks](plan/web-business-persistence-tasks.md) v1.6 — implementation evidence and remaining gaps live in their backfill sections |
 | How is it implemented? | [Technical architecture](tech-stack.md) |
 | What is the status of Web storage and traceability repairs? | [Web runtime and trace repair report](plan/web-runtime-trace-repair-report.md) — v1.5 batch closure: 19 closed, 3 with remaining work (F12/F15/F20); individual issues govern status; [storage-chain audit](plan/web-storage-chain-audit.md) retains historical evidence and coverage limits |

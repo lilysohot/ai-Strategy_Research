@@ -165,12 +165,13 @@ class NoProgressGuard(BaseObserver):
                 ctx.turn, self._mgmt_streak, self._creates_in_streak,
             )
             return Intervention(inject_messages=[
-                "You have repeatedly created and assigned sub-agents without "
-                "gathering any new information — your sub-agents have already "
-                "returned complete reports covering the question. STOP "
-                "delegating: do not call create_subagent or assign_task "
-                "again. Synthesize everything you already have and deliver "
-                "your COMPLETE final answer as plain text now (no tool call)."
+                "Repeated team-management operations have produced no new substantive report. "
+                "This does not establish that the requested work is complete. Review existing "
+                "results against the original request and required checks. Continue only with "
+                "a concrete action that addresses a necessary gap; do not repeat empty "
+                "delegation. If requirements are satisfied, use the normal delivery path. "
+                "If progress is blocked, report supported findings and unresolved requirements "
+                "through that path without claiming completion or bypassing verification."
             ])
         return None
 

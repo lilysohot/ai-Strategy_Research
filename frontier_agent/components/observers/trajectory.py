@@ -659,6 +659,7 @@ class TrajectoryFileObserver(BaseObserver):
             "tool_call_id": getattr(result, "tool_call_id", "") or "",
             "result": result.result,
             "error": result.is_error,
+            "execution_status": result.execution_status,
             "ms": result.duration_ms,
         })
 

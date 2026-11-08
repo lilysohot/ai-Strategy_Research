@@ -42,7 +42,7 @@ from server.orchestrator import Orchestrator, _session_uuid, get_orchestrator
 from server.readiness import probe_data_root
 from server.relay import sse_for_run, trajectory_page
 from server.run_modes import RunMode, mode_for_pipeline, pipeline_for_mode
-from server.run_outcome import read_terminal_task_board
+from server.run_outcome import read_terminal_audit, read_terminal_task_board
 from server.store import (
     ACTIVE_RUN_STATUSES,
     CONTROL_KIND_APPROVAL,
@@ -1043,6 +1043,17 @@ class RunSummaryResponse(BaseModel):
     run_dir: str | None = None
     created_at: str | None = None
     finished_at: str | None = None
+
+
+@router.get("/{run_id}/audit")
+async def run_audit(
+    run_id: str, user: UserModel = Depends(get_current_user),
+) -> dict[str, Any]:
+    """On-demand audit detail, never injected into the answer or fetched before ownership."""
+    if await _visible_run(run_id, user.id) is None:
+        raise HTTPException(status_code=404, detail="run not found")
+    audit = await asyncio.to_thread(read_terminal_audit, str(uuid.UUID(run_id)))
+    return {"available": audit is not None, "audit": redact_deep(audit)}
 
 
 @router.get("/{run_id}")

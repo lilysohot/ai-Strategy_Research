@@ -116,17 +116,15 @@ async def test_verification_checkpoints_one_validated_check_at_a_time():
         reset_verification_scope(token)
 
 
-async def test_research_handoff_prompt_arrives_before_phase_deadline(monkeypatch):
+async def test_source_count_and_elapsed_time_do_not_trigger_completion(monkeypatch):
     from workflows.agent_team.observers.member_progress import MemberProgressObserver
 
-    monkeypatch.setattr("workflows.agent_team.observers.member_progress.time.monotonic", lambda: 0)
+    monkeypatch.setattr(time, "monotonic", lambda: 0)
     observer = MemberProgressObserver({})
     context = SimpleNamespace(metadata={"corpus_evidence": [
         {"doc_id": "doc", "locator": "one"}, {"doc_id": "doc", "locator": "two"},
     ]})
-    monkeypatch.setattr("workflows.agent_team.observers.member_progress.time.monotonic", lambda: 100)
-    decision = await observer.on_before_llm(context)
-    assert "[early research handoff]" in decision.inject_messages[0]
+    monkeypatch.setattr(time, "monotonic", lambda: 100)
     assert await observer.on_before_llm(context) is None
 
 

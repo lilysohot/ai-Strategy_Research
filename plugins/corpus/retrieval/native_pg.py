@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import json
 import re
+from copy import copy
 from datetime import date
 from typing import Any
 
 import psycopg
 
+from plugins.corpus.ingestion_dates import ingestion_range, read_times, search_date_options
 from plugins.corpus.preparation import read_pg
 from plugins.corpus.preparation.chunk import normalize_search_text
 from plugins.corpus.preparation.negative_query import retrieval_query
@@ -19,6 +21,7 @@ from plugins.corpus.preparation.search_pg import (
     _rank_query_on,
     build_search_params,
 )
+from plugins.corpus.publication_dates import publication_matches
 from plugins.corpus.retrieval.diagnostics import RetrievalTrace, global_rrf
 from plugins.corpus.retrieval.embedding import EmbeddingError, VectorConfig, validate_vector
 from plugins.corpus.retrieval.hybrid import fuse, query_vector
@@ -83,6 +86,12 @@ def _snapshot(cur: psycopg.Cursor, index: NativeIndex) -> None:
             or (d["basis"] == "admission" and not row[3] and row[5] != d["date"])
         ):
             raise read_pg.IntegrityError("native_source_date_changed_rebuild_required")
+
+    ingestion_records = [d for d in index.dates if "ingested_at" in d]
+    if ingestion_records:
+        times = read_times(cur, [d["source_id"] for d in ingestion_records])
+        if any(times.get(d["source_id"]) != d["ingested_at"] for d in ingestion_records):
+            raise read_pg.IntegrityError("native_source_ingestion_changed_rebuild_required")
 
 
 def _load_blocks(cur: psycopg.Cursor, index: NativeIndex) -> dict[tuple[str, str], NativeBlock]:
@@ -170,6 +179,76 @@ def _prepare(conn: psycopg.Connection, index: NativeIndex) -> None:
         )
 
 
+def _publication_scope(
+    index: NativeIndex,
+    start: str | None,
+    end: str | None,
+) -> NativeIndex:
+    """Restrict both lexical and dense candidates before either applies top-k.
+
+    Preserve the full metadata snapshot for withdrawal checks and coverage counts.
+    Only this call's chunk view changes; shared index state remains untouched.
+    """
+    sources = {d["source_id"] for d in index.dates if publication_matches(d, start, end)}
+    scoped = copy(index)
+    scoped.chunks = [c for c in index.chunks if c["source_id"] in sources]
+    return scoped
+
+
+def _search_publication_date(
+    dsn: str,
+    target: str | None,
+    index: NativeIndex,
+    *,
+    cutoff: str,
+    limit: int,
+    char_budget: int,
+    trace: RetrievalTrace | None,
+    retrieval_mode: str = "publication_date",
+) -> NativeResult:
+    """Enumerate dated sources with one verified, bounded block per source."""
+    with psycopg.connect(dsn, autocommit=True, connect_timeout=10) as conn:
+        _check_target(conn, target)
+        with conn.transaction(), conn.cursor() as cur:
+            cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
+            _snapshot(cur, index)
+            blocks = _load_blocks(cur, index) if index.chunks else {}
+    chosen: list[NativeBlock] = []
+    seen: set[str] = set()
+    remaining = char_budget
+    timestamps = {d["source_id"]: d.get("ingested_at") or "" for d in index.dates}
+    for block in sorted(
+        blocks.values(),
+        key=lambda b: (
+            timestamps[b.source_id] if retrieval_mode != "publication_date" else b.published or "",
+            b.source_id,
+            b.chunk_id,
+        ),
+    ):
+        if block.source_id in seen or len(block.text) > remaining:
+            continue
+        chosen.append(block)
+        seen.add(block.source_id)
+        remaining -= len(block.text)
+        if len(chosen) == limit:
+            break
+    if trace is not None:
+        trace.status = "native_" + retrieval_mode
+    return NativeResult(
+        "",
+        index.index_id,
+        tuple(chosen),
+        char_budget - remaining,
+        char_budget,
+        limit,
+        cutoff,
+        tuple(d["source_id"] for d in index.dates if d["date"] is None),
+        False,
+        retrieval_mode=retrieval_mode,
+        blocks_ranked=len(blocks),
+    )
+
+
 def search_native(
     dsn: str,
     target: str | None,
@@ -180,20 +259,57 @@ def search_native(
     char_budget: int = 16000,
     trace: RetrievalTrace | None = None,
     allow_fallback: bool = False,
+    published_from: str | None = None,
+    published_to: str | None = None,
+    ingested_from: str | None = None,
+    ingested_to: str | None = None,
+    ingested_timezone: str = "Asia/Shanghai",
 ) -> NativeResult:
     """Return the final bounded evidence; callers must not expand it with old fetch."""
     check_native_target(target)
     if target != index.target:
         raise ValueError("native_pilot_target_mismatch")
-    if not query.strip() or not 1 <= limit <= 20 or not 1 <= char_budget <= 16000:
+    options = search_date_options(
+        published_from, published_to, ingested_from, ingested_to, ingested_timezone
+    )
+    date_filtered = published_from is not None or published_to is not None
+    ingestion_filtered = ingested_from is not None or ingested_to is not None
+    if (not query.strip() and not options) or not 1 <= limit <= 20 or not 1 <= char_budget <= 16000:
         raise ValueError("native_query_or_budget_invalid")
-    config = VectorConfig.from_env()
-    if config.target_db != target or config.profile != index.manifest["profile"]:
-        raise ValueError("native_embedding_profile_or_target_mismatch")
     match = re.search(r"截至(\d{4})年(\d{1,2})月(\d{1,2})日", query)
     cutoff = index.manifest["cutoff"]
     if match:
         cutoff = min(cutoff, date(*map(int, match.groups())).isoformat())
+    if published_to is not None:
+        cutoff = min(cutoff, published_to)
+    if date_filtered:
+        index = _publication_scope(index, published_from, cutoff)
+    if ingestion_filtered:
+        bounds = ingestion_range(ingested_from, ingested_to, ingested_timezone)
+        sources = {d["source_id"] for d in index.dates if bounds.matches(d.get("ingested_at"))}
+        scoped = copy(index)
+        scoped.chunks = [c for c in index.chunks if c["source_id"] in sources]
+        index = scoped
+    if not query.strip():
+        return _search_publication_date(
+            dsn,
+            target,
+            index,
+            cutoff=cutoff,
+            limit=limit,
+            char_budget=char_budget,
+            trace=trace,
+            retrieval_mode=(
+                "metadata_date"
+                if ingestion_filtered and date_filtered
+                else "ingestion_date"
+                if ingestion_filtered
+                else "publication_date"
+            ),
+        )
+    config = VectorConfig.from_env()
+    if config.target_db != target or config.profile != index.manifest["profile"]:
+        raise ValueError("native_embedding_profile_or_target_mismatch")
     with psycopg.connect(dsn, autocommit=True, connect_timeout=10) as conn:
         _check_target(conn, target)
         # Refuse a stale/withdrawn corpus before paying for a query vector.

@@ -1597,7 +1597,7 @@ async def main_agent_node(
         bus_task_id=bus_task_id,
     )
     observers.insert(0, TeamPhaseBudgetObserver(phase_budget, prompt_mode=prompt_mode))
-    delivery_observer = TeamDeliveryObserver(phase_budget)
+    delivery_observer = TeamDeliveryObserver(phase_budget, coordination_tools=tuple(tool_names))
     observers.insert(0, delivery_observer)
     # A serve/CLI driver injects its own protocol-stream and worker-trace
     # observers via state.metadata["sdk_extra_observers"] (see

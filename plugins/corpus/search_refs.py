@@ -112,8 +112,11 @@ def resolve_evidence_selection(ref: str) -> dict[str, Any]:
     hit = _load(match[1], None)
     item = resolve_evidence(hit["doc_id"], ref)
     return {
-        "doc_id": hit["doc_id"], "locator": item["locator"], "quote": item["text"],
-        "source_start": item["fragment"]["start"], "source_end": item["fragment"]["end"],
+        "doc_id": hit["doc_id"],
+        "locator": item["locator"],
+        "quote": item["text"],
+        "source_start": item["fragment"]["start"],
+        "source_end": item["fragment"]["end"],
     }
 
 
@@ -180,6 +183,8 @@ def compact_hit(hit: dict[str, Any]) -> dict[str, Any]:
         "doc_id": hit["doc_id"],
         "title": hit["title"],
         "published": hit["published"],
+        "ingested_at": hit.get("ingested_at"),
+        "publication_date_basis": hit.get("publication_date_basis", "unknown"),
         "excerpts": [
             {"text": item["text"], "ref": f"eref:{digest}:{i}"} for i, item in enumerate(items)
         ],

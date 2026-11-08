@@ -1,0 +1,60 @@
+{
+  "date": "2026-11-07",
+  "scope": "Remove scenario-specific convergence prompts and reconcile completion admission",
+  "changes": [
+    "Retire date-match convergence detection; accept legacy find_one_published_on input without advertising, serialization or propagation.",
+    "Remove early handoff prompts driven by source type, evidence count and elapsed time.",
+    "Replace travel, price comparison, OCR, date and section-specific instructions with task-goal and evidence-scope requirements.",
+    "Remove fixed one-lookup and one-sentence instructions; preserve verification schema, checkpoint and version binding.",
+    "Unused agents do not block delivery or need empty jobs; unassessed research outcomes still require coordinator disposition.",
+    "Management-stall notices no longer claim completion or instruct bypass of verification."
+  ],
+  "validation": {
+    "targeted_suite": {
+      "passed": 179,
+      "failed": 0,
+      "log": ".scratch/prompt-generalization-suite-final.txt",
+      "includes": "5 mocked-model Web worker integration variants"
+    },
+    "protocol": {
+      "cases": 51,
+      "passed": 47,
+      "failed": [
+        "P37-r1",
+        "P36-r1",
+        "P35-r1",
+        "P34-r1"
+      ],
+      "output": "results/team-prompt-generalization-protocol-final"
+    },
+    "ruff": "pass for changed Python files",
+    "scoped_pyright": "0 errors",
+    "repository_pyright": {
+      "errors": 15,
+      "files": [
+        "deploy/huggingface/app.py",
+        "plugins/corpus/service.py",
+        "scripts/run_retention.py",
+        "server/watch_scheduler.py"
+      ],
+      "note": "All reported files were outside this turn changes; not fixed by this task."
+    },
+    "import_stage_1": "466/466",
+    "import_stage_2": "525/525",
+    "symbol_closure": "0 missing across 574 files",
+    "preflight": {
+      "pipeline": "agent_team",
+      "profile": "tui",
+      "result": "pass, one real provider call",
+      "initial_invocation": "standard is not a profile; failed before model call, rerun with existing tui profile"
+    },
+    "real_model_team_runs": "not run; protocol and scripted integration results do not establish real-model brevity or latency"
+  },
+  "benchmark_migration": {
+    "new_case": "P51",
+    "changed_expectation": "P41 selector retained, but date-triggered convergence is now explicitly retired. Prior pass rates are not directly comparable for this case. Web/source-count handoff tests likewise now reject automatic completion inference.",
+    "frozen_cases": "F01-F17 questions, rubrics and budgets unchanged",
+    "known_failures": "P34-P37 remain unresolved; not hidden or marked xfail"
+  },
+  "deployment": "No service restart, deployment or commit performed"
+}

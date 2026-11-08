@@ -154,6 +154,9 @@ export const sessions = {
 
 // ── Runs (server/routes/runs.py) ────────────────────────────────
 export const runs = {
+  audit: (runId: string) => request<{ available: boolean; audit: Record<string, unknown> | null }>(
+    `/runs/${encodeURIComponent(runId)}/audit`,
+  ),
   modes: () => request<RunModeCapabilities>('/runs/modes'),
   /**
    * Submit a run. Pass ``FormData`` to attach input files (T2.10); the browser
