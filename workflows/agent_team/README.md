@@ -85,6 +85,20 @@ work item's acceptance and verification criteria. This protects the declared
 contract from later drift; it does not validate whether the initial model-written
 plan already expanded the user's request.
 
+Ordinary board-bound research now executes that snapshot as its task definition.
+The dispatch `prompt` and custom session role remain in job audit metadata, not
+in the member's executable instructions. Put necessary source locations, supplied
+facts and method suggestions in board `notes`/`evidence_refs`; these are copied at
+dispatch beside the contract and current gaps. Explicit `<attach agent="name"
+job="job-id"/>` tags in the proposal still resolve to reports through the existing
+attachment path. Other free proposal text is not passed through. Reused research
+sessions do not replay old task instructions: attach prior findings explicitly.
+The runtime retains the existing generic researcher prompt, environment/tool
+notes and full research tool access, including document pagination. Verification,
+publication, delivery work and boardless assignments keep their separate paths.
+This is an input-authority boundary, not a semantic validator for the board or
+notes, nor a guarantee that a model stops after obtaining sufficient evidence.
+
 Further research on an item with execution jobs requires an unresolved item and
 a nonempty board `gap`; dispatch rejects the batch before enqueue otherwise.
 Job metadata snapshots `work_item_gaps` and prior job IDs. Structured checks keep
@@ -285,6 +299,33 @@ review's defects, but never inherit its verdict for changed candidate bytes.
 Audit history remains available and ordinary research sessions retain their
 existing history behavior. This uses AgentBus's generic, opt-in
 `include_prior_history` runtime policy.
+
+Each structured check now receives a version-bound snapshot of captured corpus
+and web originals. Dispatch validates source hashes before copying the packet.
+The job prompt is built from registered checks, the original question and the
+packet index; the proposed free-form assignment remains audit metadata. A
+check-specific system prompt replaces the reusable session's research role for
+that job. AgentBus exposes opt-in prompt/tool builders without owning these
+workflow rules, and preserves the session's original capabilities for later jobs.
+
+Check jobs expose `read_bound_evidence` plus available report, file, image and
+Python tools. Open corpus/web acquisition and orchestration tools are excluded.
+This is a workflow capability boundary, not an additional OS security sandbox.
+The snapshot reader can select an exact captured locator or paginate original
+records within a 6K-character serialized result. It performs no live retrieval;
+snapshot replay does not independently establish current source availability.
+Web content kind, partial status and coverage limitations remain attached to each
+record; a model-assisted focused extraction does not become original source text.
+Missing required originals produce `unchecked` with a specific unresolved issue;
+research can acquire the missing material and bind a new evidence version.
+
+Document-read receipts survive source handoff separately from prose and original
+text. They preserve tool page positions, document identity and coverage fields,
+without asserting model delivery, original PDF completeness or task sufficiency.
+A changed read coverage can enable an evidence revision, while new cursor/page
+aliases alone cannot reset the review budget. Snapshot pagination itself does
+not establish document-wide coverage. These constraints do not decide whether
+the original research plan or its acceptance criteria exceed the user's needs.
 
 New source reports renew the coordinator's reminder to dispatch still-pending
 checks. Recovery allows at most three attempts: one incomplete attempt without

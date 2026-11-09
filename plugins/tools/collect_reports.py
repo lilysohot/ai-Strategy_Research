@@ -374,6 +374,15 @@ async def collect_reports(timeout: int = 1800) -> str:
                 extra_status=status,
                 track_churn=False,
             )
+        if wait_outcome.reason == "already_collected":
+            return _status_notice(
+                scope, "already_collected",
+                "A sub-agent result completed during this wait but was already "
+                "collected by a concurrent collect_reports call. Do NOT re-poll "
+                "or reassign the work — use the report already returned to you.",
+                extra_status=status,
+                track_churn=False,
+            )
         if wait_outcome.reason == "unpublished":
             return _status_notice(
                 scope, "no_report_published",

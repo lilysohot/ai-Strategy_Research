@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from copy import deepcopy
 from typing import Any
 
 from frontier_agent.core.loop_types import AgentLoopResult, BaseObserver, ToolResult, TurnContext
@@ -18,6 +19,7 @@ class ContentAcquisitionObserver(BaseObserver):
         self._sources: dict[tuple[str, str], dict[str, Any]] = {}
         self._corpus_evidence: dict[str, dict[str, Any]] = {}
         self._web_evidence: dict[str, dict[str, Any]] = {}
+        self._document_reads: dict[str, dict[str, Any]] = {}
 
     async def on_tool_result(self, ctx: TurnContext, result: ToolResult) -> None:
         if result.name not in {"web_fetch", "view_image", "read_file", "corpus_search", "corpus_fetch"}:
@@ -33,6 +35,25 @@ class ContentAcquisitionObserver(BaseObserver):
             # Also checkpoint here: cancellation may prevent on_loop_end.
             ctx.metadata["corpus_evidence"] = list(self._corpus_evidence.values())
             if result.name == "corpus_fetch":
+                if (
+                    isinstance(payload, dict) and payload.get("ok") is True
+                    and payload.get("scope") == "document" and not result.is_error
+                ):
+                    receipt = {
+                        key: deepcopy(payload[key]) for key in (
+                            "doc_id", "build_id", "document_sha256", "total_units",
+                            "position", "fetch_complete", "coverage_scope", "source_coverage",
+                            "page_id", "next_cursor",
+                        ) if key in payload
+                    }
+                    receipt.update({
+                        "request_cursor": result.args.get("cursor") or None,
+                        "observation_scope": "tool_result_page",
+                        "model_delivery": "not_asserted",
+                        "task_sufficiency": "not_assessed",
+                    })
+                    self._document_reads[evidence_identity(receipt)] = receipt
+                ctx.metadata["corpus_document_reads"] = list(self._document_reads.values())
                 return
         if result.name == "corpus_search":
             data = payload if isinstance(payload, dict) else {}
@@ -95,3 +116,4 @@ class ContentAcquisitionObserver(BaseObserver):
         result.metadata["content_acquisition"] = list(self._sources.values())
         result.metadata["corpus_evidence"] = list(self._corpus_evidence.values())
         result.metadata["web_evidence"] = list(self._web_evidence.values())
+        result.metadata["corpus_document_reads"] = list(self._document_reads.values())

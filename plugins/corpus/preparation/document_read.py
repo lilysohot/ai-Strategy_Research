@@ -23,6 +23,7 @@ class DocumentUnits:
     build_id: str
     active: bool
     units: tuple[DocumentUnit, ...]
+    original_names: tuple[str, ...] = ()
 
 
 def unit_locator(unit_id: str) -> str:
@@ -51,7 +52,7 @@ def read_units(
         with conn.transaction(), conn.cursor() as cur:
             cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
             cur.execute(
-                "SELECT b.source_id, p.active_build_id, sa.decision, pa.decision "
+                "SELECT b.source_id, p.active_build_id, sa.decision, pa.decision, s.original_names "
                 "FROM corpus.corpus_builds b "
                 "JOIN corpus.corpus_sources s ON s.source_id=b.source_id "
                 "LEFT JOIN corpus.corpus_publications p ON p.source_id=b.source_id "
@@ -63,7 +64,7 @@ def read_units(
             row = cur.fetchone()
             if row is None:
                 raise read_pg.UnknownHandleError("document_build_not_found")
-            source_id, active_build, source_decision, publication_decision = row
+            source_id, active_build, source_decision, publication_decision, original_names = row
             if source_decision != "in_scope" or publication_decision != "in_scope":
                 raise read_pg.WithdrawnError("document_source_withdrawn")
             sql = (
@@ -86,7 +87,9 @@ def read_units(
         )
         for uid, raw, location, digest, kind, status in rows
     )
-    return DocumentUnits(str(source_id), build_id, active_build == build_id, units)
+    return DocumentUnits(
+        str(source_id), build_id, active_build == build_id, units, tuple(original_names or ())
+    )
 
 
 def fetch_unit(

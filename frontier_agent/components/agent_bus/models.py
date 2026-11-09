@@ -191,6 +191,9 @@ class SubAgentRuntimeSpec:
     # False starts from the system prompt and the new task; audit history and
     # job results are retained. None preserves ordinary reusable-session replay.
     include_prior_history: Callable[[SubTask], bool] | None = None
+    # Per-job capabilities; never mutate the reusable session's tool list.
+    tools_builder: Callable[[SubTask, list[Tool]], list[Tool]] | None = None
+    system_prompt_builder: Callable[[SubTask, str], str] | None = None
 
 
 @dataclass

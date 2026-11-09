@@ -158,7 +158,8 @@ def render_corpus_handoff(
         "These exact excerpts and opaque locators were captured from tool results, not "
         "rewritten by a researcher. Prefer them over locators typed in report prose. "
         "Compare the bound candidate with this text; sufficient excerpts need NO repeat fetch. "
-        "Only fetch missing conditions, tables or context using the exact doc_id and locator below. "
+        "Read omitted captured originals with read_bound_evidence using the bound source key. "
+        "If required conditions or context are absent from that packet, return unchecked with the gap. "
         "Never reconstruct, decode or shorten a locator. A ref without text is a pointer, not read evidence. "
         "A fragment/heading is not a complete document. Complete one check at a time and checkpoint "
         "with submit_report(finish=false); do not wait to assemble one large verdict for every check."
@@ -202,7 +203,7 @@ def render_corpus_handoff(
             + "\nAdditional exact references (text not repeated here): "
             + json.dumps(refs[key], ensure_ascii=False)
             + f"\nOmitted excerpt bodies: {omissions[key]}. Reference list may also be bounded. "
-            "If the needed evidence is absent, use the original tool ref or targeted search; "
+            "If needed evidence is omitted here, use read_bound_evidence for the bound source; "
             "do not infer full coverage.\nEND SOURCE EVIDENCE"
         )
     return "\n\n" + "\n\n".join(sections)

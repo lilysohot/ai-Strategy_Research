@@ -237,7 +237,7 @@ def test_authoritative_reader_snapshot_hashes_and_unit_resolution(monkeypatch):
 
         def fetchone(self):
             # Current publication differs, but the requested build is still readable.
-            return ("source", "b" * 64, self.decision, self.decision)
+            return ("source", "b" * 64, self.decision, self.decision, ["登记名.pdf"])
 
         def fetchall(self):
             return [row for row in rows if self.requested_unit in (None, row[0])]
@@ -252,6 +252,7 @@ def test_authoritative_reader_snapshot_hashes_and_unit_resolution(monkeypatch):
     monkeypatch.setattr(read_pg, "_check_target", lambda *a: None)
     document = document_read.read_units("dsn", DOC)
     assert document.build_id == DOC[4:] and not document.active
+    assert document.original_names == ("登记名.pdf",)
     assert [item.unit.unit_id for item in document.units] == ["u2", "u1"]
     assert any("ORDER BY ordinal NULLS LAST, unit_id" in sql for sql, _ in calls)
     assert all(params is None or params[0] == DOC[4:] for _, params in calls)
@@ -266,3 +267,71 @@ def test_authoritative_reader_snapshot_hashes_and_unit_resolution(monkeypatch):
     rows[0] = (*rows[0][:3], "bad-hash", *rows[0][4:])
     with pytest.raises(read_pg.IntegrityError):
         document_read.read_units("dsn", DOC)
+
+
+@pytest.mark.parametrize("names", [["原始 名称_v2.pdf", "原始_别名.PDF"], [], None])
+async def test_source_names_reach_public_document_pages_from_reader(monkeypatch, tmp_path, names):
+    """Exercise SQL selection -> read model -> service -> public pagination, not an injected name."""
+    from contextlib import nullcontext
+
+    import psycopg
+
+    from plugins.corpus.service import CorpusService
+
+    queries = []
+    text = "标题不等于原始文件名。" * 700
+
+    class Cursor:
+        def execute(self, sql, params=None):
+            queries.append((sql, params))
+            self.sql = sql
+
+        def fetchone(self):
+            # Like SQL, only return names if the production reader selects them.
+            row = ("source", "b" * 64, "in_scope", "in_scope")
+            return (*row, names) if "s.original_names" in self.sql else row
+
+        def fetchall(self):
+            return [
+                ("u1", text, {"page": 1}, hashlib.sha256(text.encode()).hexdigest(), "body", "kept")
+            ]
+
+    connection = SimpleNamespace(
+        transaction=lambda: nullcontext(), cursor=lambda: nullcontext(Cursor())
+    )
+    monkeypatch.setattr(psycopg, "connect", lambda *a, **kw: nullcontext(connection))
+    monkeypatch.setattr(read_pg, "_check_target", lambda *a: None)
+    service = CorpusService("dsn")
+    monkeypatch.setattr(service, "read_chain", lambda: "new")
+    monkeypatch.setattr(fetch, "get_service", lambda: service)
+    monkeypatch.setenv("CORPUS_TOOL_REF_ROOT", str(tmp_path))
+
+    args = {"scope": "document", "max_chars": 3000}
+    delivered, pages = "", 0
+    while True:
+        raw, page = await call(**args)
+        pages += 1
+        assert pages < 30
+        assert page["ok"] and len(raw) <= 3000
+        assert page["original_names"] == (names or [])
+        assert (page["doc_id"], page["build_id"], page["source_id"]) == (DOC, DOC[4:], "source")
+        delivered += "".join(item["text"] for item in page["items"])
+        if page["fetch_complete"]:
+            break
+        args = {"cursor": page["next_cursor"], "max_chars": 3000}
+    assert pages > 1 and delivered == text
+    identity_queries = [(sql, params) for sql, params in queries if "FROM corpus.corpus_builds" in sql]
+    assert identity_queries and all("s.original_names" in sql for sql, _ in identity_queries)
+    assert all(params == (DOC[4:],) for _, params in identity_queries)
+
+
+async def test_source_names_are_not_silently_truncated_to_fit_page(install):
+    service = install([entry("u1", "正文")])
+    names = tuple(f"原始名称_{i:03d}_" + "长" * 100 + ".pdf" for i in range(60))
+    service.document = replace(service.document, original_names=names)
+    raw, page = await call(scope="document", max_chars=3000)
+    assert len(raw) <= 3000
+    assert not page["ok"] and "budget_exceeded" in page["error"]
+    assert not page["fetch_complete"]
+    assert "next_cursor" not in page
+    assert service.document.original_names == names

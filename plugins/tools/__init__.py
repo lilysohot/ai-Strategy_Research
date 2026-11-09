@@ -36,6 +36,7 @@ from plugins.tools.market_quote import market_quote
 from plugins.tools.market_resolve import market_resolve
 from plugins.tools.position_sizing import position_sizing
 from plugins.tools.publish_handoff import publish_handoff
+from plugins.tools.read_bound_evidence import read_bound_evidence
 from plugins.tools.read_file import read_file
 from plugins.tools.recover_result import recover_result
 from plugins.tools.research_history import research_history
@@ -67,6 +68,7 @@ _BUILTIN_TOOLS: list[Tool] = [
     collect_reports,
     stop_subagent,
     read_file,
+    read_bound_evidence,
     create_file,
     write_file,
     # 投研内核（P0a）。两者都是纯函数：确定性计算 + 确定性校验，

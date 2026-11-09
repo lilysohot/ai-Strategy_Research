@@ -1010,12 +1010,14 @@ async def finish_planning() -> str:
     scope = get_current_execution_scope()
     if scope is None:
         return "Error: finish_planning can only be called inside an active run."
+    if not planning_enabled(scope.task_id):
+        return "Planning Mode is not enabled for this run; no phase change."
     if board_size(scope.task_id) == 0:
         return (
             "Error: the task board is empty — call add_task to list the "
             "sub-questions before finishing planning."
         )
-    _PHASE[scope.task_id] = "execution"
+    force_finish_planning(scope.task_id)
     _record_op(scope.task_id, "finish_planning")
     return (
         "Planning complete — now in EXECUTION mode. You may create_subagent / "

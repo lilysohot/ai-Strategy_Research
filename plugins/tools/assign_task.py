@@ -55,6 +55,7 @@ from plugins.tools._verification import (
 from plugins.tools.create_subagent import (
     _normalize_agent_name,
     _resolve_runtime,
+    _resolve_specialist_prompt,
     _resolve_task_types,
 )
 
@@ -184,6 +185,16 @@ class AgentTeamAssignmentSpec(AssignmentSpec):
     those ``/outputs`` paths; without them the task runs workspace-only."""
 
     model_config = ConfigDict(extra="forbid")
+
+    prompt: StrictStr = Field(
+        min_length=1,
+        description="For board-bound research, the board description/done_when define the task; "
+        "put necessary inputs and method notes in board notes/evidence_refs. This field is "
+        "retained for audit; only explicit <attach agent=\"name\" job=\"job-id\"/> reports "
+        "are passed through. Custom role prose and prior session instructions are not replayed. "
+        "Publication, delivery and boardless work retain the executable task prompt. "
+        "Structured verification uses its registered checks.",
+    )
 
     # Accept persisted assignments from earlier versions without advertising or
     # propagating their retired scenario-specific convergence hint.
@@ -629,6 +640,7 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
     submitted: list[dict[str, str]] = []
     errors: list[str] = []
     notices: list[str] = []
+    research_notices: list[str] = []
     # Deliverable paths the ORIGINAL QUESTION names. It is prepended verbatim to
     # every dispatched prompt below, so every workspace-only sub-agent inherits
     # the user's own instruction to write them -- see the note on
@@ -788,6 +800,53 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                     for tid in spec.work_item_ids
                     if board[tid].get("execution_job_ids")
                 }
+                if not spec.verification_checks and not spec.can_publish and all(
+                    board[tid].get("kind") != "delivery" for tid in spec.work_item_ids
+                ):
+                    # A research task has one definition, not competing board,
+                    # dispatch and role definitions. Keep proposals for audit;
+                    # resolve explicit report inputs through the existing path.
+                    task_metadata["bound_research"] = True
+                    task_metadata["proposed_prompt"] = spec.prompt
+                    task_metadata["proposed_system_prompt"] = session.system_prompt
+                    context = {
+                        tid: {
+                            key: deepcopy(board[tid][key])
+                            for key in ("notes", "gap", "evidence_refs") if board[tid].get(key)
+                        }
+                        for tid in spec.work_item_ids
+                    }
+                    task_metadata["research_context"] = context
+                    task_prompt = (
+                        "# Bound research work items\n"
+                        + json.dumps(task_metadata["work_item_contracts"], ensure_ascii=False)
+                        + "\n\n# Recorded inputs, methods and progress\n"
+                        + json.dumps(context, ensure_ascii=False)
+                        + "\n\n# Follow-up gaps\n"
+                        + json.dumps(task_metadata["work_item_gaps"], ensure_ascii=False)
+                    )
+                    attachments = [match.group(0) for match in _ATTACH_RE.finditer(spec.prompt)]
+                    if attachments:
+                        task_prompt += "\n\n# Attached reports\n" + "\n".join(attachments)
+                    research_system = _resolve_specialist_prompt(
+                        "researcher", "", fs_mode=bool(getattr(runtime, "fs_mode", False)),
+                        enhancements=bool(scope.metadata.get("sdk_protocol_emitter")),
+                        mcp_tool_names=getattr(runtime, "mcp_tool_names", None),
+                        mcp_tool_specs=getattr(runtime, "mcp_tool_specs", None),
+                        runtime=runtime,
+                    )
+                    from plugins.tools.corpus_manifest import (
+                        MANIFEST_PROMPT_NOTE,
+                        MANIFEST_TOOL_NAME,
+                    )
+
+                    if any(tool.name == MANIFEST_TOOL_NAME for tool in session.tools):
+                        research_system += MANIFEST_PROMPT_NOTE
+                    task_metadata["research_system_prompt"] = research_system
+                    research_notices.append(
+                        f"{agent_name}: research uses bound board definitions and recorded inputs; "
+                        "free prompt and custom role are audit-only (explicit reports attached)."
+                    )
         publication_claim: tuple[str, ...] = ()
         publication_state: dict[str, Any] | None = None
         previous_publisher = ""
@@ -864,7 +923,9 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         expanded_prompt = _expand_attach_tags(
             task_prompt, bus_task_id, bus,
         )
-        if original_question and original_question[:100] not in expanded_prompt:
+        if original_question and (
+            task_metadata.get("bound_research") or original_question[:100] not in expanded_prompt
+        ):
             expanded_prompt = (
                 f"# Original Question\n{original_question}\n\n"
                 f"# Your Task\n{expanded_prompt}"
@@ -1058,11 +1119,23 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                         required=spec.required_for_completion, outputs_root=root,
                     )
                     task_metadata["verification_checks"] = bound
+                    from plugins.tools._bound_evidence import build_review_packet, packet_index
+
+                    packet = build_review_packet(bound, bus=bus, task_id=bus_task_id)
+                    task_metadata["verification_packet"] = packet
+                    # Preserve proposals for audit, but do not let free-form
+                    # research instructions redefine the registered check.
+                    task_metadata["proposed_prompt"] = spec.prompt
                     # AgentBus copies metadata dictionaries for its queue, job
                     # and runtime item. Allocate the shared event list before
                     # those copies so cancellation preserves accepted verdicts.
                     task_metadata["verification_events"] = []
-                    expanded_prompt += check_prompt
+                    expanded_prompt = (
+                        (f"# Original Question\n{original_question}\n" if original_question else "")
+                        + check_prompt
+                        + "\n\n# Bound evidence packet\n"
+                        + json.dumps(packet_index(packet), ensure_ascii=False)
+                    )
                     spawn_context["delegation_prompt"] = expanded_prompt
                     job_id = await bus.submit_task_to_session(
                         session_id, expanded_prompt, spawn_context=spawn_context,
@@ -1148,6 +1221,9 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         lines.append("Publishing notices:")
         for n in notices:
             lines.append(f"  - {n}")
+    if research_notices:
+        lines.extend(["", "Research contract notices:"])
+        lines.extend(f"  - {notice}" for notice in research_notices)
     lines.append("")
     lines.append(
         "Reports arrive automatically between turns. Call collect_reports() "

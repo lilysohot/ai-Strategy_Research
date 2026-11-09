@@ -544,6 +544,63 @@ async def test_wait_reports_unpublished_when_a_task_ends_empty_handed() -> None:
 
 
 @pytest.mark.asyncio
+async def test_concurrent_waiters_get_ready_and_already_collected() -> None:
+    """Two concurrent waiters on one finished job must not both be steered.
+
+    Production regression: the coordinator issued two ``collect_reports``
+    calls in the same turn. Both blocked on the same running job; when it
+    completed, one waiter claimed the published report while the other was
+    told "published no report, call collect_reports once more or reassign".
+    The report was never missing — a sibling waiter took it — so the second
+    outcome must say ``already_collected`` instead of the misleading
+    ``unpublished``.
+    """
+    bus = AgentBus()
+    session = _session()
+    job_id = "root::worker::1"
+
+    async def _finish_with_report() -> SubAgentResult:
+        await asyncio.sleep(0.05)
+        result = SubAgentResult(
+            question="work", role_id="researcher", final_content="done",
+            success=True, job_id=job_id,
+        )
+        entry = bus._jobs[job_id]
+        entry.result = result
+        entry.status = "completed"
+        session.current_job_id = None
+        session.pending_results.append(result)
+        return result
+
+    task = asyncio.create_task(_finish_with_report())
+    session.current_job_id = job_id
+    session.total_task_count = 1
+    bus._sessions[session.session_id] = session
+    bus._jobs[job_id] = JobEntry(
+        job_id=job_id,
+        parent_task_id="root",
+        item=SubTask(question="work", role_id="researcher"),
+        task=task,
+        status="running",
+    )
+
+    first, second = await asyncio.gather(
+        bus.wait_any_session_detailed("root", timeout=5),
+        bus.wait_any_session_detailed("root", timeout=5),
+    )
+
+    reasons = {first.reason, second.reason}
+    assert reasons == {"ready", "already_collected"}
+    winner, loser = (
+        (first, second) if first.reason == "ready" else (second, first)
+    )
+    assert winner.result is not None
+    # ``ready`` outcomes carry a (session_id, SubAgentResult) tuple.
+    assert isinstance(winner.result, tuple) and winner.result[1].success
+    assert loser.result is None
+
+
+@pytest.mark.asyncio
 async def test_session_snapshot_freezes_a_finished_worker_duration() -> None:
     """The UI reads ``elapsed_s`` verbatim, so it must stop growing.
 

@@ -86,7 +86,9 @@ not establish corroboration. Distinguish source attribution, inference and verif
 Preserve every explicit [推断]/[Inference] label through handoff and final rewriting; never
 turn a labelled inference into an unqualified fact by editing away its uncertainty marker.
 Unread images, tables, attachments and truncated content remain coverage limits. Pixel
-statistics cannot establish that an unread image is decorative. Disclose those limits.
+statistics cannot establish that an unread image is decorative. Record those limits as
+evidence gaps at the detail the request needs; they belong in the delivered answer only
+when they could change how its result is read.
 Do not silently reclassify necessary checks as optional after they fail. Optional
 exploration must be declared with required_for_completion=false before assignment.
 Return scoped PASS/FAIL/UNCHECKED findings; a global confidence score is not a substitute.
@@ -133,8 +135,12 @@ Ordinary research failures cannot be closed by an unrelated successful checking 
 Start required checks when the first usable source report arrives instead of waiting
 for all research. Bind checks at dispatch; prose checklists and invented binding IDs
 are rejected. Keep exact returned evidence handles rather than shorthand locators.
-Bounded retrieval/unknown dates do not establish corpus-wide absence or latestness;
-say what this search found. Preserve deployment assumptions beside numerical estimates
+Bounded retrieval/unknown dates do not establish corpus-wide absence or latestness.
+Disclose that boundary only where the claim depends on it — an only/none/latest/complete
+assertion — and then say what this search found. Naming or returning an item establishes
+existence, not coverage, so it needs no absence caveat; the scoping rule above still
+decides whether any limitation belongs in the delivered answer. Preserve deployment
+assumptions beside numerical estimates
 and keep forecasts conditional, including section titles. Never mentally repair a
 candidate's missing qualifications and then certify its original wording.
 """

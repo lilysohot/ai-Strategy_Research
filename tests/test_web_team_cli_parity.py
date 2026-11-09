@@ -52,7 +52,14 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
             "work_item_ids": ["t1"],
         }]}),
         tool_call_turn("collect_reports", {"timeout": 30}),
-        None,  # exact reader job is filled from the preceding collect result
+        # Dispatch contract: a follow-up research dispatch on an
+        # already-dispatched work item requires an unresolved item with a
+        # recorded gap (structured verification_checks target planned checks,
+        # which only exist in the versioned flow).
+        tool_call_turn("update_task", {"updates": [{
+            "id": "t1", "gap": "Independent confirmation of the stated value pending",
+        }]}),
+        None,  # exact verifier job is filled from the preceding collect result
         tool_call_turn("collect_reports", {"timeout": 30}),
         tool_call_turn("update_task", {"updates": [{
             "id": "t1", "resolution": "resolved", "notes": "Reader and verifier agree: 42",
@@ -74,10 +81,10 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
         main_script[1] = tool_call_turn("create_subagent", {"agents": [
             {"name": "reader", "system_prompt": "Read the supplied file."},
         ]})
-        main_script[6] = tool_call_turn("update_task", {"updates": [{
+        main_script[7] = tool_call_turn("update_task", {"updates": [{
             "id": "t1", "resolution": "resolved", "notes": "Read the requested source: 42",
         }]})
-        scripts["main"] = [main_script[i] for i in (0, 1, 2, 3, 6, 7)]
+        scripts["main"] = [main_script[i] for i in (0, 1, 2, 3, 7, 8)]
         del scripts["verifier"]
     requests = {role: [] for role in scripts}
     if versioned:
@@ -90,7 +97,7 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
         scripts["verifier"].append(scripts["verifier"][-1])
         # Record the research outcome independently from the verification outcome.
         # Returned reports alone do not establish completion of an open work item.
-        main_script[6] = tool_call_turn("update_task", {"updates": [{
+        main_script[7] = tool_call_turn("update_task", {"updates": [{
             "id": "t1", "resolution": "resolved", "notes": "Requested source value read: 42",
         }, {
             "id": "t2", "resolution": "blocked" if verdict == "unchecked" else "resolved",
@@ -120,15 +127,30 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
         system = str(payload["messages"][0]["content"])
         if "create_subagent" in tools:
             role = "main"
-        elif system.startswith(VERIFIER):
+        elif system.startswith(VERIFIER) or "read_bound_evidence" in tools:
+            # Version-bound verifier jobs replace the standard VERIFIER prompt
+            # with the bound-check prompt; the bound evidence tool identifies
+            # them just as reliably.
             role = "verifier"
         elif system.startswith(RESEARCHER):
-            role = "reader"
+            # The research contract turns every plain research dispatch —
+            # including follow-up verification members — into a bound-research
+            # job that runs on the shared researcher prompt with the member's
+            # own specialist prompt demoted to audit-only, and rebuilds the
+            # task prompt from the board contracts. The follow-up verifier is
+            # the only member whose recorded context carries the verification
+            # gap recorded before its dispatch.
+            history = json.dumps(payload.get("messages") or [], ensure_ascii=False)
+            role = (
+                "verifier"
+                if "Independent confirmation of the stated value pending" in history
+                else "reader"
+            )
         else:
             return text_turn(answer)
         index = len(requests[role])
         requests[role].append(payload)
-        if role == "main" and index == 4 and verify:
+        if role == "main" and index == 5 and verify:
             history = "\n".join(
                 str(message.get("content") or "")
                 for message in (payload.get("messages") or [])
@@ -208,9 +230,13 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
         )
         if role == "main":
             expected.add("deliver_answer")
-        if role == "main":
             expected.add("research_history")
-        if role != "main":
+        elif versioned and role == "verifier":
+            # Version-bound verifier jobs swap the full research toolset for
+            # the restricted evidence-packet toolset (read_bound_evidence is
+            # the marker the mock classifier also keys on).
+            expected = {"submit_report", "read_file", "read_bound_evidence"}
+        else:
             # 语料检索工具触发 corpus_submit_manifest 伴随绑定（证据清单生产者）。
             expected.add(MANIFEST_TOOL_NAME)
         assert names == expected
@@ -239,7 +265,12 @@ async def test_web_worker_delegates_reads_and_verifies_with_cli_roles(
         assert "VERIFIER_REPORT" in main_history
         verifier_history = json.dumps(requests["verifier"][0]["messages"])
         assert "READER_REPORT" in verifier_history
-        assert "job " in verifier_history
+        if versioned:
+            # Bound evidence references the reader job through evidence keys,
+            # not the plain attach tag.
+            assert ".job." in verifier_history
+        else:
+            assert "job " in verifier_history
     summary = json.loads((run_dir_for(run_id) / "summary.json").read_text())
     assert summary["stopped_by"] == "final_answer"
     if internal_final:

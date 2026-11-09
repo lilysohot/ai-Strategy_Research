@@ -102,8 +102,9 @@ class MemberProgressObserver(BaseObserver):
                 inject_messages=[
                     "[next verification check] Evaluate ONLY this check in this generation. "
                     "Submit exactly one verification_result now, with a short content summary. "
-                    "Use the attached original excerpts directly when sufficient; fetch only missing "
-                    "conditions/context. If quote_comparisons are supplied, use those deterministic "
+                    "Use the attached original excerpts directly when sufficient; read omitted "
+                    "captured originals with read_bound_evidence. Missing support remains an "
+                    "unchecked result with an exact gap. If quote_comparisons are supplied, use those deterministic "
                     "captured-text comparisons; do not retype source strings into comparison scripts. "
                     "Summarize each scope_assessment with enough detail to explain the verdict. "
                     "State fail/unchecked when "

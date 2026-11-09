@@ -59,6 +59,7 @@ def _session(name: str) -> Any:
         total_task_count=0,
         pending_tasks=deque(),
         current_job_id=None,
+        system_prompt="Research the assigned task",
         tools=[],
         max_turns=30,
     )

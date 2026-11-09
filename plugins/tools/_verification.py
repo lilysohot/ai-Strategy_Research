@@ -391,6 +391,20 @@ def _resolve_source(
     corpus_evidence = result.metadata.get("corpus_evidence") or []
     if corpus_evidence:
         resolved["corpus_evidence_sha256"] = _digest(corpus_evidence)
+    document_reads = result.metadata.get("corpus_document_reads") or []
+    if document_reads:
+        resolved["corpus_document_reads_sha256"] = _digest(document_reads)
+        # Cursor/receipt aliases do not make repeated reads a new evidence version.
+        resolved["document_read_content_sha256"] = _digest(sorted({
+            _digest({
+                **{key: receipt.get(key) for key in (
+                    "doc_id", "document_sha256", "total_units", "position",
+                    "fetch_complete", "coverage_scope", "source_coverage",
+                )},
+                "starts_document": not bool(receipt.get("request_cursor")),
+            })
+            for receipt in document_reads
+        }))
     web_evidence = result.metadata.get("web_evidence") or []
     if web_evidence:
         resolved["web_evidence_sha256"] = _digest(web_evidence)
@@ -435,7 +449,8 @@ def _validate_revision(
 def _evidence_version(check: dict[str, Any]) -> set[str]:
     """Evidence content, not report wording or job renaming, unlocks another review."""
     return {
-        source.get("evidence_content_sha256")
+        _digest([source.get("evidence_content_sha256"), source["document_read_content_sha256"]])
+        if source.get("document_read_content_sha256") else source.get("evidence_content_sha256")
         or source.get("web_evidence_sha256")
         or source.get("corpus_evidence_sha256")
         or (source["sha256"] if source.get("ref") else "report_without_tool_evidence")
@@ -680,7 +695,9 @@ def bind_checks(
         "calculation_targets, PASS requires calculation_checks for EVERY listed value: "
         "expression plus input values quoted verbatim from bound tool-delivered sources. "
         "Missing inputs cannot be inferred solely from the desired result. "
-        "If source excerpts omit an input, retrieve it or submit unchecked; labels are not proof.\n"
+        "Read omitted captured evidence with read_bound_evidence. If the bound packet lacks "
+        "required evidence, submit unchecked with the exact gap in unresolved_issues; the "
+        "coordinator must acquire it and bind a new evidence version. Labels are not proof.\n"
     )
     prompt += (
         "For factual_scope checks, return scope_assessment for every required dimension. "
@@ -798,6 +815,7 @@ class VerificationScope:
     checks: list[dict[str, Any]]
     events: list[dict[str, Any]]
     corpus_observations: list[dict[str, Any]] = field(default_factory=list)
+    packet: dict[str, Any] = field(default_factory=dict)
 
 
 _SCOPE: ContextVar[VerificationScope | None] = ContextVar("team_verification", default=None)
@@ -809,12 +827,17 @@ def set_verification_scope(job_id: str, metadata: dict[str, Any]) -> Token:
             job_id,
             metadata.get("verification_checks", []),
             metadata.setdefault("verification_events", []),
+            packet=metadata.get("verification_packet", {}),
         )
     )
 
 
 def reset_verification_scope(token: Token) -> None:
     _SCOPE.reset(token)
+
+
+def get_verification_scope() -> VerificationScope | None:
+    return _SCOPE.get()
 
 
 def record_corpus_observation(observation: dict[str, Any]) -> None:

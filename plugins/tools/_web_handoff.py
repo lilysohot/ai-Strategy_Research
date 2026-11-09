@@ -214,7 +214,9 @@ def render_web_handoff(
         "candidate against them; do not fetch again when the attached text is sufficient. "
         "tool_delivered_text may itself be a partial or overflow-limited extraction, not a "
         "complete page. focused_extraction is model-assisted and not original source text; "
-        "fetch without info_to_extract if original wording is needed. Partial text cannot "
+        "read omitted captured text with read_bound_evidence. If original wording is needed "
+        "but absent from the bound packet, return unchecked with that gap for research to "
+        "acquire and rebind. Partial text cannot "
         "establish full coverage. Source URLs and hashes are NOT corpus evidence_ref values. "
         "Use bound job keys in verification_results.evidence_keys and URLs in citations."
     ]

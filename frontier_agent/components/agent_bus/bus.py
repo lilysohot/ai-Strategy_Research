@@ -1280,6 +1280,11 @@ class AgentBus:
             system_prompt=session.system_prompt,
             metadata=dict(pending.task_metadata),
         )
+        job_system_prompt = (
+            active_runtime.system_prompt_builder(session_item, session.system_prompt)
+            if active_runtime.system_prompt_builder is not None else session.system_prompt
+        )
+        session_item.system_prompt = job_system_prompt
 
         # Build initial_messages from trimmed prior history, before we
         # mutate session.messages so the trimmer sees the clean state.
@@ -1292,7 +1297,7 @@ class AgentBus:
         ):
             trimmed = []
         initial_messages: list[Message] = [
-            system_msg(session.system_prompt), *trimmed,
+            system_msg(job_system_prompt), *trimmed,
         ]
 
         # Open a new boundary — the task prompt index is the current tail.
@@ -1324,6 +1329,10 @@ class AgentBus:
             activity_observer: _SessionActivityObserver | None = None
             history_absorbed = False
             try:
+                job_tools = (
+                    active_runtime.tools_builder(session_item, list(session.tools))
+                    if active_runtime.tools_builder is not None else session.tools
+                )
                 if active_runtime.config_builder is not None:
                     loop_config = active_runtime.config_builder(
                         job_id, session_item, effective_max_turns,
@@ -1357,7 +1366,10 @@ class AgentBus:
                         if _setter is None:
                             continue
                         try:
-                            _setter(spawn_context=dict(pending.spawn_context))
+                            _setter(spawn_context={
+                                **pending.spawn_context,
+                                "allowed_tools": [tool.name for tool in job_tools],
+                            })
                         except Exception as _exc:
                             logger.debug(
                                 "spawn_context stamp failed on %s: %s",
@@ -1386,11 +1398,11 @@ class AgentBus:
                 timeout = min(timeout_candidates) if timeout_candidates else None
 
                 coro = run_agent_loop(
-                    system_prompt=session.system_prompt,
+                    system_prompt=job_system_prompt,
                     user_message=task_prompt,
                     initial_messages=initial_messages,
                     llm=session.llm,
-                    tools=session.tools,
+                    tools=job_tools,
                     config=loop_config,
                     observers=loop_observers,
                     model_profile=active_runtime.model_profile,
@@ -1919,6 +1931,20 @@ class AgentBus:
                 return SessionWaitOutcome(
                     ready, "ready", time.monotonic() - started,
                 )
+            # A concurrent waiter may have already drained the result this
+            # completion produced. That is NOT "unpublished" — the report was
+            # handed to the other caller. Detect it via the completed job's
+            # recorded result so the coordinator is not steered to reassign
+            # work that already finished.
+            for entry in self._jobs.values():
+                if (
+                    entry.result is not None
+                    and entry.task is not None
+                    and entry.task in completed_jobs
+                ):
+                    return SessionWaitOutcome(
+                        None, "already_collected", time.monotonic() - started,
+                    )
             return SessionWaitOutcome(
                 None, "unpublished", time.monotonic() - started,
             )

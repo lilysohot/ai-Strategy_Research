@@ -135,6 +135,7 @@ def document_page(
                 "doc_id": doc_id,
                 "build_id": document.build_id,
                 "source_id": document.source_id,
+                "original_names": list(document.original_names),
                 "document_sha256": digest,
                 "source_coverage": "unknown",
                 "total_units": len(units),
