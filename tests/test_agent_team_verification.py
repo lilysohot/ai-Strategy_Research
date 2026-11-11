@@ -767,3 +767,54 @@ async def test_checkpoint_tool_keeps_loop_running_then_terminal_report_finishes(
         assert (await observer.on_turn_end(ctx)).stop_reason == "final_answer"
     finally:
         reset_verification_scope(token)
+
+
+async def test_checkpointed_verdict_survives_a_wall_deadline_stop(tmp_path):
+    """Round-2 verifier loss mode, bounded: a checkpoint is never lost to a timeout.
+
+    The verifier checkpoints check 1 (finish=false) through the real submit
+    path, then the wall clock ends the loop before check 2's verdict. The job
+    ends incomplete, but check 1's judgment stays on the job and projects with
+    the unassessed gap beside it — the timeout may cost the in-flight check,
+    never the completed ones.
+    """
+    from frontier_agent.core.runtime.loop.tool_exec import execute_tools
+    from plugins.tools.submit_report import submit_report
+    from workflows.agent_team.lifecycle import snapshot_job_outcomes
+
+    bus, _spec, bound = make_bound(tmp_path)
+    second = {**deepcopy(bound[0]), "check_id": "scope"}
+    add_job(bus, "j1", [bound[0], second], stop="wall_deadline")
+    metadata = bus._jobs["j1"].item.metadata
+    assert metadata["verification_events"] == []
+    token = set_verification_scope("j1", metadata)
+    try:
+        args = {
+            "content": "Amount checked",
+            "finish": False,
+            "verification_results": [verdict_for(bound[0])],
+        }
+        result = (
+            await execute_tools(
+                [{"name": "submit_report", "args": args, "id": "c1"}],
+                {"submit_report": submit_report},
+                timeout=5,
+                turn=1,
+                count_offset=0,
+            )
+        )[0]
+        assert not result.is_error, result.result
+        assert len(metadata["verification_events"]) == 1
+    finally:
+        reset_verification_scope(token)
+
+    outcomes = snapshot_job_outcomes(bus, "run")
+    mine = next(outcome for outcome in outcomes if outcome["job_id"] == "j1")
+    assert mine["status"] == "incomplete", "the window closed mid-verification"
+    assert mine["verification_events"] == metadata["verification_events"]
+
+    projected = project_checks(outcomes)
+    assert projected["status"] == "partial"
+    by_id = {check["check_id"]: check for check in projected["checks"]}
+    assert by_id["amount"]["verdict"] == "pass"
+    assert by_id["scope"]["verdict"] == "unchecked"

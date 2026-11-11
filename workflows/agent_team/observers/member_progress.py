@@ -25,6 +25,11 @@ class MemberProgressObserver(BaseObserver):
         self.submission_repair_used = False
         self.submission_repair_active = False
         self.repair_results: list[dict[str, Any]] | None = None
+        # Turn the per-check nudge was (re)armed at; None once a checkpoint
+        # lands. Two full turns with pending checks and no new verdict is the
+        # round-2 verifier failure shape: it kept reading evidence and then
+        # tried one doomed all-at-once submission as the window closed.
+        self.nudge_started_turn: int | None = None
 
     async def on_llm_response(self, ctx: TurnContext) -> Intervention | None:
         """One schema-only retry, including on the final allotted turn.
@@ -68,9 +73,10 @@ class MemberProgressObserver(BaseObserver):
         )
 
     async def on_tool_result(self, ctx: TurnContext, result: ToolResult) -> ToolResult | None:
-        del ctx
         if result.name == "submit_report" and not result.is_error:
             self.submission_repair_active = False
+            # A verdict checkpointed: rearm the checkpoint-overdue tracking.
+            self.nudge_started_turn = None
         return None
 
     def _pending(self) -> list[dict[str, Any]]:
@@ -98,9 +104,22 @@ class MemberProgressObserver(BaseObserver):
             if not pending:
                 return None
             check = pending[0]
+            turn = int(getattr(ctx, "turn", 0) or 0)
+            if self.nudge_started_turn is None:
+                self.nudge_started_turn = turn
+            overdue = turn - self.nudge_started_turn >= 2
+            preamble = (
+                "[verification checkpoint overdue] Every previous turn added no verdict while "
+                "checks remain unsubmitted. Your next generation MUST begin with submit_report"
+                "(finish=false) for the next pending check — an unchecked verdict with the exact "
+                "gap is acceptable when evidence is short. Further evidence reads come only after "
+                "the checkpoint. "
+                if overdue
+                else "[next verification check] "
+            )
             return Intervention(
                 inject_messages=[
-                    "[next verification check] Evaluate ONLY this check in this generation. "
+                    preamble + "Evaluate ONLY this check in this generation. "
                     "Submit exactly one verification_result now, with a short content summary. "
                     "Use the attached original excerpts directly when sufficient; read omitted "
                     "captured originals with read_bound_evidence. Missing support remains an "

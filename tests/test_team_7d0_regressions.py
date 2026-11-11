@@ -199,6 +199,36 @@ async def test_date_lookup_stops_broad_search_after_supported_match():
     assert allowed is None
 
 
+async def test_checkpoint_nudge_escalates_after_unsubmitted_turns():
+    """Round-2 verifier shape: read-only turns while checks stay unsubmitted.
+
+    The first nudge asks for one verdict per turn. When two full turns pass
+    with pending checks and no checkpoint, the injection escalates to demand
+    submit-first; a checkpointed verdict re-arms the tracker to the normal
+    per-check nudge.
+    """
+    check = binding(version="a" * 64)
+    observer = MemberProgressObserver({"verification_checks": [check]})
+    ctx = SimpleNamespace(metadata={}, turn=1)
+    first = await observer.on_before_llm(ctx)
+    assert "[next verification check]" in first.inject_messages[0]
+    assert "overdue" not in first.inject_messages[0]
+
+    ctx.turn = 3
+    escalated = await observer.on_before_llm(ctx)
+    assert "[verification checkpoint overdue]" in escalated.inject_messages[0]
+    assert "unchecked" in escalated.inject_messages[0]
+
+    ctx.turn = 4
+    await observer.on_tool_result(
+        ctx, ToolResult("submit_report", {}, "checkpointed", 4, "c1", False)
+    )
+    ctx.turn = 5
+    normal = await observer.on_before_llm(ctx)
+    assert "[next verification check]" in normal.inject_messages[0]
+    assert "overdue" not in normal.inject_messages[0]
+
+
 @pytest.mark.parametrize("mutation", ["date", "preview", "failed"])
 async def test_date_lookup_does_not_stop_on_unsupported_candidate(mutation):
     observer = MemberProgressObserver({"find_one_published_on": "2026-11-06"})

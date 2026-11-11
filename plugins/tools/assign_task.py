@@ -219,6 +219,9 @@ class AgentTeamAssignmentSpec(AssignmentSpec):
         default_factory=list,
         max_length=16,
         description="Check-only assignment bound to exact job reports, handoffs or subject.text. "
+        "Each check's criterion must be evaluable in one submission against a small set of bound "
+        "records; split multi-assertion subjects (numbered lists, tables) into separate checks "
+        "so each verdict checkpoints independently. "
         "Rechecks must name latest replaces_job_id and revision_kind (subject/evidence/retry); "
         "version changes need revision_reason. Corrected text in prompt is not a new subject.",
     )
@@ -1457,9 +1460,7 @@ async def agent_team_assign_task(
     return result
 
 
-def _research_budget_error(
-    *, bus: AgentBus, bus_task_id: str, scope: Any, specs: list[Any]
-) -> str:
+def _research_budget_error(*, bus: AgentBus, bus_task_id: str, scope: Any, specs: list[Any]) -> str:
     """Fail closed when a declared research-job cap would be exceeded.
 
     The cap arrives as an operational dispatch limit in the execution scope
