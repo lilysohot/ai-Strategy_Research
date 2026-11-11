@@ -56,6 +56,7 @@ import hashlib
 import json
 from itertools import pairwise
 from typing import Any
+from urllib.parse import unquote
 
 from frontier_agent.core.tool import tool
 from plugins.corpus.cursor import CONTENT, CursorError, decode_cursor, encode_cursor
@@ -114,6 +115,54 @@ class _AtomTooLarge(Exception):
     def __init__(self, start: int, end: int) -> None:
         super().__init__(f"最小原子单元 {end - start} 字符超过片段预算")
         self.chars = end - start
+
+
+def _current_unit_range() -> tuple[int, int] | None:
+    from plugins.tools._corpus_document import current_unit_range
+
+    return current_unit_range()
+
+
+def _locator_outside_range(
+    locator: str | None,
+    locators: list[str] | None,
+    unit_range: tuple[int, int],
+    doc_id: str | None = None,
+) -> str | None:
+    """First explicit unit locator outside the dispatched range, if any.
+
+    Ranges bound units by 1-based source position (F27-r1: ids like "u21" are
+    not numeric but still occupy position 21). Numeric ids compare directly;
+    any other id format is resolved through the document's source order and
+    unknown handles are left to the range-aware envelope.
+    """
+    candidates = []
+    if isinstance(locator, str):
+        candidates.append(locator)
+    if isinstance(locators, list):
+        candidates.extend(item for item in locators if isinstance(item, str))
+    lo, hi = unit_range
+    positions: dict[str, int] | None = None
+    for candidate in candidates:
+        if not candidate.startswith("unit:"):
+            continue
+        unit_id = unquote(candidate.removeprefix("unit:"))
+        if unit_id.isdigit():
+            number = int(unit_id)
+        else:
+            if positions is None:
+                from plugins.tools._corpus_document import unit_positions
+
+                try:
+                    positions = unit_positions(get_service().document_units(doc_id))
+                except Exception:
+                    continue
+            number = positions.get(unit_id)
+            if number is None:
+                continue
+        if not lo <= number <= hi:
+            return f"unit:{unit_id}"
+    return None
 
 
 def _json_error(message: str, **extra: Any) -> str:
@@ -1095,6 +1144,16 @@ async def _fetch(
 
             return document_page(get_service(), doc_id, max_chars, decoded)
 
+    if given_range := _current_unit_range():
+        violated = _locator_outside_range(locator, locators, given_range, doc_id)
+        if violated is not None:
+            lo, hi = given_range
+            return _json_error(
+                f"unit_range_violation：本任务只负责 unit:{lo:04d}–unit:{hi:04d}，"
+                f"{violated} 在范围之外；请只引用所分配片段",
+                doc_id=doc_id,
+                unit_range=[lo, hi],
+            )
     given = [locator is not None, locators is not None, cursor is not None]
     if sum(given) != 1:
         return _json_error(
@@ -1181,8 +1240,11 @@ async def _fetch(
         from plugins.corpus.read_errors import read_failure
 
         return _json_error(
-            f"取证失败：{exc}", doc_id=doc_id, locator=locator,
-            fetch_complete=False, **read_failure(exc),
+            f"取证失败：{exc}",
+            doc_id=doc_id,
+            locator=locator,
+            fetch_complete=False,
+            **read_failure(exc),
         )
 
     if not evidence.text:

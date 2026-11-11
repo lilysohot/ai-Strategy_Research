@@ -18,6 +18,12 @@ def percentile(values: list[float], quantile: float) -> float | None:
     return round(ordered[low] + (ordered[high] - ordered[low]) * (position - low), 3)
 
 
+# Attempt outcomes whose llm row actually executed. A discarded or failed
+# attempt never delivered its tool calls, so its phantom calls must not book
+# redundancy; the retry after it is recovery resampling, not waste.
+ACCEPTED_ATTEMPT_OUTCOMES = {"accepted", "accepted_degraded"}
+
+
 def measure(root: Path) -> dict[str, Any]:
     """Accept either a Web run or an isolated evaluator trial directory."""
     candidates = [root / "run/agent/trajectories", root / "agent/trajectories"]
@@ -49,6 +55,15 @@ def measure(root: Path) -> dict[str, Any]:
         if not rows:
             continue
         first, last = rows[0]["ts"], rows[-1]["ts"]
+        # Attempt outcomes are logged before the llm row they govern; an llm
+        # row before any finished attempt has no outcome evidence and stays
+        # counted (conservative for redundancy detection).
+        attempt_outcomes: list[str | None] = []
+        current_outcome: str | None = None
+        for row in rows:
+            if row["t"] == "attempt" and row.get("phase") == "finished":
+                current_outcome = row.get("outcome")
+            attempt_outcomes.append(current_outcome)
         agent_attempts = [r for r in rows if r["t"] == "attempt" and r.get("phase") == "finished"]
         agent_prompts = [
             r["usage"]["prompt_tokens"]
@@ -71,7 +86,7 @@ def measure(root: Path) -> dict[str, Any]:
         )
         if path.stem != "main_agent":
             starts[path.stem.rsplit(".t", 1)[0]].append(first)
-        for row in rows:
+        for row_index, row in enumerate(rows):
             if row["t"] == "attempt" and row.get("phase") == "finished":
                 attempts.append(row)
             if row["t"] == "result":
@@ -92,6 +107,8 @@ def measure(root: Path) -> dict[str, Any]:
                     tool_errors[tool_name] += 1
             if row["t"] != "llm":
                 continue
+            outcome = attempt_outcomes[row_index]
+            executed = outcome is None or outcome in ACCEPTED_ATTEMPT_OUTCOMES
             for call in row.get("tool_calls", []):
                 args = call.get("args") or {}
                 name = call["name"]
@@ -103,7 +120,12 @@ def measure(root: Path) -> dict[str, Any]:
                             research_jobs += 1
                 if name == "submit_report" and not args.get("verification_results"):
                     report_times.append(row["ts"])
-                if name in {"web_search", "corpus_search", "web_fetch", "corpus_fetch"}:
+                if executed and name in {
+                    "web_search",
+                    "corpus_search",
+                    "web_fetch",
+                    "corpus_fetch",
+                }:
                     queries[name + ":" + json.dumps(args, sort_keys=True, ensure_ascii=False)] += 1
     begin = min((a["start"] for a in agents), default=None)
     end = max((a["end"] for a in agents), default=None)
@@ -173,5 +195,7 @@ def measure(root: Path) -> dict[str, Any]:
             "Tool timings are recorded result durations, not isolated service/queue latency.",
             "Retrieval DB/embedding/rerank/queue timings are unavailable in standard traces.",
             "Tool attempts include denied or interrupted requests; shell use is not automatically waste.",
+            "Repeated-request redundancy is booked only for accepted attempts; "
+            "retries after discarded attempts or failed calls are recovery.",
         ],
     }

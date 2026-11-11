@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from contextvars import ContextVar, Token
 from typing import TYPE_CHECKING, Any
 
 from plugins.corpus.cursor import CONTENT, encode_cursor
@@ -16,6 +17,37 @@ if TYPE_CHECKING:
 
 # Match the default ReAct/Agent Team result budget before constructing a page.
 DOCUMENT_PAGE_BUDGET = 6000
+
+# Per-job dispatched unit range (1-based inclusive). When a coordinator splits a
+# numbered document across members, the range is enforced here — members page
+# only their slice instead of each reading the whole document (run c010c5e1:
+# three agents each fetched all 299 units although the plan split 0-99/100-199/
+# 200-298). Ranges bound units by their 1-based source position, whatever the
+# unit id format — F27-r1 failed because the first implementation accepted only
+# digit-only ids ("u21".isdigit() is False) and every member saw an empty page.
+_unit_range_scope: ContextVar[tuple[int, int] | None] = ContextVar(
+    "corpus_unit_range",
+    default=None,
+)
+
+
+def set_unit_range_scope(lo: int, hi: int) -> Token:
+    return _unit_range_scope.set((int(lo), int(hi)))
+
+
+def reset_unit_range_scope(token: Token) -> None:
+    _unit_range_scope.reset(token)
+
+
+def current_unit_range() -> tuple[int, int] | None:
+    return _unit_range_scope.get()
+
+
+def unit_positions(document: DocumentUnits) -> dict[str, int]:
+    """unit_id → 1-based source position, for range checks on explicit handles."""
+    return {entry.unit.unit_id: pos for pos, entry in enumerate(document.units, start=1)}
+
+
 _HINT = (
     "已知文档的原文顺序阅读，无需再次搜索。续读只传 doc_id 和 next_cursor；"
     "items 的 evidence_ref 可直接引用，fragment 为单元内码点区间。"
@@ -73,10 +105,16 @@ def _item(doc_id: str, entry: DocumentUnit, start: int, end: int) -> dict[str, A
 
 
 def document_page(
-    service: CorpusService, doc_id: str, max_chars: int, cursor: dict[str, Any] | None = None
+    service: CorpusService,
+    doc_id: str,
+    max_chars: int,
+    cursor: dict[str, Any] | None = None,
+    unit_range: tuple[int, int] | None = None,
 ) -> str:
     """Page authoritative units without changing their text, membership or order."""
     budget = min(max_chars, DOCUMENT_PAGE_BUDGET)
+    if unit_range is None:
+        unit_range = current_unit_range()
     if cursor is not None and (
         cursor.get("type") != CONTENT
         or cursor.get("scope") != "document"
@@ -87,17 +125,25 @@ def document_page(
     try:
         document = service.document_units(doc_id)
     except Exception as exc:
-        return _json({
-            "ok": False, "error": f"document_read_failed：{exc}",
-            "doc_id": doc_id, "scope": "document", "fetch_complete": False,
-            **read_failure(exc),
-        })
+        return _json(
+            {
+                "ok": False,
+                "error": f"document_read_failed：{exc}",
+                "doc_id": doc_id,
+                "scope": "document",
+                "fetch_complete": False,
+                **read_failure(exc),
+            }
+        )
     digest = _identity(document)
     if cursor is not None and cursor.get("document_sha256") != digest:
         return _error("document_changed：原文单元集合或内容已变更，不能接续旧游标")
     index = cursor.get("mi", 0) if cursor else 0
     offset = cursor.get("off", 0) if cursor else 0
     units = document.units
+    if unit_range is not None:
+        lo, hi = unit_range
+        units = [entry for pos, entry in enumerate(document.units, start=1) if lo <= pos <= hi]
     if (
         type(index) is not int
         or type(offset) is not int
@@ -139,6 +185,7 @@ def document_page(
                 "document_sha256": digest,
                 "source_coverage": "unknown",
                 "total_units": len(units),
+                **({"unit_range": list(unit_range)} if unit_range is not None else {}),
                 "position": {"unit_index": mi, "offset": off},
                 "items": items,
                 "item_errors": [],

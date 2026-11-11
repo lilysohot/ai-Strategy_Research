@@ -124,16 +124,27 @@ def protocol_result(xml: Path, returncode: int) -> dict[str, Any]:
 
 
 def frozen_result(
-    worker: dict[str, Any], metrics: dict[str, Any], case: dict[str, Any]
+    worker: dict[str, Any],
+    metrics: dict[str, Any],
+    case: dict[str, Any],
+    corpus: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     if not worker.get("ok"):
-        return {"status": "error", "reason": worker.get("error", "worker failed")}
+        return {
+            "status": "error",
+            "reason": worker.get("error") or worker.get("error_type") or "worker failed",
+            "error_type": worker.get("error_type"),
+            "document_pages_returned": (corpus or {}).get("document_pages_returned"),
+            "repeated_original_chars": (corpus or {}).get("repeated_original_chars"),
+        }
     result = worker["result"]
-    if result.get("stopped_by") in {"llm_error", "cancelled", "error"}:
+    if result.get("stopped_by") in {"llm_error", "cancelled", "error", "wall_deadline"}:
         return {
             "status": "error",
             "reason": result["stopped_by"],
             "answer_status": result.get("answer_status"),
+            "document_pages_returned": (corpus or {}).get("document_pages_returned"),
+            "repeated_original_chars": (corpus or {}).get("repeated_original_chars"),
         }
     failures = []
     if not str(result.get("final_answer") or result.get("final_content") or "").strip():
@@ -151,12 +162,33 @@ def frozen_result(
     for budget, metric in (
         ("max_model_attempts", "attempts"),
         ("max_single_prompt_tokens", "max_prompt_tokens"),
-        ("max_exact_repeated_requests", "exact_repeated_tool_requests"),
     ):
         if budget in case["budgets"]:
             observed = metrics.get(metric)
             if observed is None:
                 failures.append(f"missing budget telemetry: {metric}")
+            elif observed > case["budgets"][budget]:
+                failures.append(f"{budget} exceeded")
+    if "max_exact_repeated_requests" in case["budgets"]:
+        # Corpus runs score repeats from grounded tool telemetry: identical
+        # arguments can be different effective requests under per-range clamps
+        # (cursor tokens collide across ranges), so returned content decides.
+        grounded = (corpus or {}).get("exact_repeated_requests")
+        observed = grounded if (corpus or {}).get("available") else None
+        if observed is None:
+            observed = metrics.get("exact_repeated_tool_requests")
+        if observed is None:
+            failures.append("missing budget telemetry: exact_repeated_requests")
+        elif observed > case["budgets"]["max_exact_repeated_requests"]:
+            failures.append("max_exact_repeated_requests exceeded")
+    for budget, metric in (
+        ("max_document_pages", "document_pages_returned"),
+        ("max_repeated_original_chars", "repeated_original_chars"),
+    ):
+        if budget in case["budgets"]:
+            observed = (corpus or {}).get(metric)
+            if observed is None:
+                failures.append(f"missing corpus telemetry: {metric}")
             elif observed > case["budgets"][budget]:
                 failures.append(f"{budget} exceeded")
     jobs = (result.get("report_contract") or {}).get("job_outcomes")
@@ -172,7 +204,31 @@ def frozen_result(
         "semantic_review_required": True,
         "usage_complete": metrics.get("unknown_usage_attempts", 1) == 0,
         "research_jobs_accepted": research_jobs,
+        "document_pages_returned": (corpus or {}).get("document_pages_returned"),
+        "repeated_original_chars": (corpus or {}).get("repeated_original_chars"),
     }
+
+
+def preflight_gate(
+    pipeline: str, profile: str, *, stress_chars: int = 0, retries: int = 2
+) -> str | None:
+    """Probe the provider before a paid sample; return the last error when unhealthy."""
+    import asyncio
+
+    from tools.preflight import check_workflow_llm
+
+    last = "unknown preflight failure"
+    for _ in range(max(1, retries)):
+        try:
+            error = asyncio.run(
+                check_workflow_llm(pipeline, profile, stress_chars=stress_chars, repeat=1)
+            )
+        except Exception as exc:  # probe failures must fail closed
+            error = f"{type(exc).__name__}: {exc}"
+        if error is None:
+            return None
+        last = error
+    return last
 
 
 def summarize(out: Path) -> dict[str, Any]:
@@ -270,7 +326,11 @@ def rescore(out: Path) -> None:
             raise ValueError("cannot mechanically rescore a reviewed sample")
         case = next(c for c in manifest["cases"] if c["id"] == sample["case"])
         metrics = measure(trial)
-        current = frozen_result(json.loads((trial / "worker.json").read_text()), metrics, case)
+        corpus_file = trial / "corpus-metrics.json"
+        corpus = json.loads(corpus_file.read_text()) if corpus_file.exists() else None
+        current = frozen_result(
+            json.loads((trial / "worker.json").read_text()), metrics, case, corpus
+        )
         current["elapsed_s"] = previous.get("elapsed_s")
         current["assessment_code_sha256"] = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
         count = len(list(trial.glob("assessment-before-*.json")))
@@ -382,6 +442,28 @@ def run(args: argparse.Namespace) -> int:
         trial.mkdir()
         write(trial / "input.json", case)
         write(trial / "source.json", source_fingerprint())
+        if args.layer == "frozen" and getattr(args, "preflight", False):
+            probe_error = preflight_gate(
+                "agent_team",
+                args.profile,
+                stress_chars=getattr(args, "preflight_stress_chars", 0),
+                retries=getattr(args, "preflight_retries", 2),
+            )
+            if probe_error:
+                write(
+                    trial / "result.json",
+                    {
+                        "status": "unassessed",
+                        "reason": f"provider preflight failed: {probe_error}",
+                        "elapsed_s": 0,
+                    },
+                )
+                print(
+                    f"{sample['sample']}: unassessed (provider preflight failed)",
+                    flush=True,
+                )
+                summarize(out)
+                continue
         if args.layer == "protocol":
             command = [
                 sys.executable,
@@ -424,7 +506,13 @@ def run(args: argparse.Namespace) -> int:
                         worker = {"ok": False, "error": f"worker exited with code {returncode}"}
                     metrics = measure(trial)
                     write(trial / "metrics.json", metrics)
-                    result = frozen_result(worker, metrics, case)
+                    corpus_metrics = None
+                    if case.get("tool_fixture") == "corpus_document_v1":
+                        from benchmarks.team_workflow.corpus_fixtures import measure_corpus
+
+                        corpus_metrics = measure_corpus(trial)
+                        write(trial / "corpus-metrics.json", corpus_metrics)
+                    result = frozen_result(worker, metrics, case, corpus_metrics)
             except subprocess.TimeoutExpired:
                 # Worker descendants must not keep making model calls after the outer budget.
                 import signal
@@ -443,7 +531,10 @@ def run(args: argparse.Namespace) -> int:
                 raise
         if args.layer == "frozen" and not (trial / "metrics.json").exists():
             write(trial / "metrics.json", measure(trial))
-        if case.get("tool_fixture") == "corpus_document_v1":
+        if (
+            case.get("tool_fixture") == "corpus_document_v1"
+            and not (trial / "corpus-metrics.json").exists()
+        ):
             from benchmarks.team_workflow.corpus_fixtures import measure_corpus
 
             write(trial / "corpus-metrics.json", measure_corpus(trial))
@@ -509,7 +600,20 @@ def main() -> None:
     execution.add_argument("--profile", default="default")
     execution.add_argument("--hint-ab", action="store_true")
     execution.add_argument("--max-consecutive-errors", type=int, default=2)
-    execution.add_argument("--out", type=Path, required=True)
+    execution.add_argument(
+        "--preflight",
+        action="store_true",
+        help="probe the provider before each frozen sample; skip it when unhealthy",
+    )
+    execution.add_argument("--preflight-stress-chars", type=int, default=0)
+    execution.add_argument("--preflight-retries", type=int, default=2)
+    execution.add_argument(
+        "--out",
+        type=Path,
+        default=None,
+        help="fresh output directory (default: results/team_workflow/<UTC timestamp>, "
+        "persistent across sessions instead of a wiped temp dir)",
+    )
     report = subs.add_parser("report")
     report.add_argument("--out", type=Path, required=True)
     report.add_argument("--rescore", action="store_true")
@@ -526,6 +630,10 @@ def main() -> None:
     comparison.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
     if args.command == "run":
+        if args.out is None:
+            args.out = (
+                ROOT / "results" / "team_workflow" / datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+            )
         raise SystemExit(run(args))
     if args.command == "report":
         if args.rescore:

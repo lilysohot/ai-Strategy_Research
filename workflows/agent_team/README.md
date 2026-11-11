@@ -210,10 +210,12 @@ the source bodies and acquisition diagnostics.
 
 Members receive an early handoff reminder after 90 seconds when corpus evidence
 is available; remaining gaps must stay explicit. Bound verifiers checkpoint one
-check per submission. Their calls allow at most 25 seconds of reasoning without
-visible/tool progress, 90 seconds including recovery, and 8192 output tokens
-(lower configured limits still win). They return to the workflow after a reasoning
-runaway instead of resampling the same large response. Other member and coordinator
+check per submission. Their calls allow at most 60 seconds of reasoning without
+visible/tool progress, 300 seconds including one reduced-cap recovery, and 8192
+output tokens (lower configured limits still win). A reasoning runaway resamples
+once inside those bounds before the verifier returns to the workflow — on slow
+thinking providers a zero-recovery clamp killed verification outright with zero
+tool calls (run c010c5e1). Other member and coordinator
 retry policies remain unchanged. One bound correction may use spare publication
 time up to the final-answer reserve; first-pass verification keeps its own deadline.
 Corpus search runs its synchronous snapshot read and receipt serialization in a

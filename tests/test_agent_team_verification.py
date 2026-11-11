@@ -85,6 +85,24 @@ def add_job(bus, job_id, checks, *, stop="submit_report", verdicts=None):
     )
 
 
+def test_subject_accepts_one_shape_and_explains_mixed_input():
+    """One candidate shape, one error; a mixed subject must not surface two union errors."""
+    base = {"check_id": "c", "evidence": [{"job_id": "job-1"}]}
+    shaped = VerificationCheck(**base, subject={"text": "candidate"})
+    assert shaped.subject.text == "candidate"
+    bare = VerificationCheck(**base, subject="candidate text")
+    assert bare.subject.text == "candidate text"
+    with pytest.raises(ValueError) as mixed:
+        VerificationCheck(**base, subject={"text": "candidate", "job_id": "job-1"})
+    assert "subject 只能是一种形状" in str(mixed.value)
+    with pytest.raises(ValueError) as empty:
+        VerificationCheck(**base, subject={"ref": "x"})
+    assert "subject 必须是" in str(empty.value)
+    with pytest.raises(ValueError) as nested:
+        VerificationCheck(**base, subject={"text": "candidate", "factual_scope": True})
+    assert "多余字段 ['factual_scope']" in str(nested.value)
+
+
 async def test_recheck_closes_old_gap_without_erasing_timeout():
     bus = AgentBus()
     add_job(bus, "j1", [binding()], stop="wall_deadline")

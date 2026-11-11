@@ -82,6 +82,6 @@ def test_original_80_benchmark_cases_remain_unchanged():
     baseline = json.loads((root / "baseline-80.lock.json").read_text())["cases"]
     current = {c["id"]: c for c in catalog()}
     assert len(baseline) == 80
-    assert set(current) - set(baseline) == {"P56", "P57", "P58"}
+    assert set(current) - set(baseline) == {"P56", "P57", "P58", "F26", "F27", "F28"}
     for key, expected in baseline.items():
         assert digest(current[key]) == expected

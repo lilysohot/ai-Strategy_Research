@@ -63,9 +63,7 @@ logger = logging.getLogger(__name__)
 
 # Actual concurrency is bounded by SpawnGuard(max_parallel).
 # Raise via FRONTIER_AGENT_MAX_TASKS_PER_DISPATCH.
-MAX_TASKS_PER_DISPATCH: int = int(
-    os.environ.get("FRONTIER_AGENT_MAX_TASKS_PER_DISPATCH", "20")
-)
+MAX_TASKS_PER_DISPATCH: int = int(os.environ.get("FRONTIER_AGENT_MAX_TASKS_PER_DISPATCH", "20"))
 
 # Hard cap on tasks per session. Past ~5 reuses the message history is
 # dominated by stale tool stubs and earlier conclusions, and the agent
@@ -88,8 +86,7 @@ def _session_at_task_cap(session: Any) -> bool:
     if session is None:
         return True
     return (
-        getattr(session, "total_task_count", 0)
-        + len(getattr(session, "pending_tasks", ()) or ())
+        getattr(session, "total_task_count", 0) + len(getattr(session, "pending_tasks", ()) or ())
     ) >= MAX_TASKS_PER_SESSION
 
 
@@ -190,7 +187,7 @@ class AgentTeamAssignmentSpec(AssignmentSpec):
         min_length=1,
         description="For board-bound research, the board description/done_when define the task; "
         "put necessary inputs and method notes in board notes/evidence_refs. This field is "
-        "retained for audit; only explicit <attach agent=\"name\" job=\"job-id\"/> reports "
+        'retained for audit; only explicit <attach agent="name" job="job-id"/> reports '
         "are passed through. Custom role prose and prior session instructions are not replayed. "
         "Publication, delivery and boardless work retain the executable task prompt. "
         "Structured verification uses its registered checks.",
@@ -199,7 +196,8 @@ class AgentTeamAssignmentSpec(AssignmentSpec):
     # Accept persisted assignments from earlier versions without advertising or
     # propagating their retired scenario-specific convergence hint.
     find_one_published_on: SkipJsonSchema[StrictStr | None] = Field(
-        default=None, exclude=True,
+        default=None,
+        exclude=True,
     )
 
     @field_validator("find_one_published_on")
@@ -210,14 +208,16 @@ class AgentTeamAssignmentSpec(AssignmentSpec):
         return value
 
     work_item_ids: list[StrictStr] = Field(
-        default_factory=list, max_length=32,
+        default_factory=list,
+        max_length=32,
         description="Exact task-board IDs covered by this assignment, e.g. ['t1', 't2']. "
         "Required when a task board exists. Dispatch records ownership and job IDs; "
         "a completed report does not mark verification as passed.",
     )
 
     verification_checks: list[VerificationCheck] = Field(
-        default_factory=list, max_length=16,
+        default_factory=list,
+        max_length=16,
         description="Check-only assignment bound to exact job reports, handoffs or subject.text. "
         "Rechecks must name latest replaces_job_id and revision_kind (subject/evidence/retry); "
         "version changes need revision_reason. Corrected text in prompt is not a new subject.",
@@ -231,6 +231,30 @@ class AgentTeamAssignmentSpec(AssignmentSpec):
             "required assignment cannot be erased by marking the task board resolved."
         ),
     )
+
+    unit_range: list[int] | None = Field(
+        default=None,
+        description=(
+            "For segmented extraction of one numbered corpus document: the "
+            "1-based inclusive unit span this member owns, e.g. [100, 199]. "
+            "corpus_fetch mechanically clamps document pagination and unit "
+            "locators to this span; other members' slices are unreadable."
+        ),
+    )
+
+    @field_validator("unit_range")
+    @classmethod
+    def validate_unit_range(cls, value: list[int] | None) -> list[int] | None:
+        if value is None:
+            return None
+        if (
+            len(value) != 2
+            or type(value[0]) is not int
+            or type(value[1]) is not int
+            or not 1 <= value[0] <= value[1]
+        ):
+            raise ValueError("unit_range 必须是 [start, end]，1 基闭区间且 start ≤ end")
+        return [value[0], value[1]]
 
     publish: StrictBool | None = Field(
         default=None,
@@ -305,8 +329,7 @@ class AgentTeamAssignmentSpec(AssignmentSpec):
         if not self.output_paths:
             if self.publish is True:
                 raise ValueError(
-                    "publish=true requires at least one exact absolute "
-                    "output_paths entry"
+                    "publish=true requires at least one exact absolute output_paths entry"
                 )
             if self.replace_manifest:
                 raise ValueError("replace_manifest requires output_paths")
@@ -334,6 +357,7 @@ def _assignment_validation_error(index: int, exc: ValidationError) -> str:
 
 def _resolve_original_question(scope_metadata: dict[str, Any]) -> str:
     from plugins.tools._bus_scope import SWARM_SCOPE_KEY
+
     runtime = scope_metadata.get(SWARM_SCOPE_KEY)
     return getattr(runtime, "original_question", "").strip()
 
@@ -388,8 +412,7 @@ def _expand_attach_tags(task_prompt: str, task_id: str, bus: AgentBus) -> str:
         session = bus.get_session(f"{task_id}::{name}")
         if session is None:
             return (
-                f"[attach agent={name!r}: agent not found — "
-                f"main must create it before attaching]"
+                f"[attach agent={name!r}: agent not found — main must create it before attaching]"
             )
         if job_id:
             exact = bus.get_job_result(task_id, job_id)
@@ -400,10 +423,7 @@ def _expand_attach_tags(task_prompt: str, task_id: str, bus: AgentBus) -> str:
                 )
             session_id, result = exact
             if session_id != session.session_id:
-                return (
-                    f"[attach agent={name!r} job={job_id!r}: job belongs to "
-                    "a different agent]"
-                )
+                return f"[attach agent={name!r} job={job_id!r}: job belongs to a different agent]"
             report = (result.final_content or "").strip()
             metadata = result.metadata or {}
         else:
@@ -425,12 +445,10 @@ def _expand_attach_tags(task_prompt: str, task_id: str, bus: AgentBus) -> str:
         attachment_block = ""
         if attachments:
             rendered = "\n".join(
-                f'<attachment ref="{escape(ref, quote=True)}" />'
-                for ref in attachments
+                f'<attachment ref="{escape(ref, quote=True)}" />' for ref in attachments
             )
             attachment_block = (
-                f"\n<attachments count=\"{len(attachments)}\">\n"
-                f"{rendered}\n</attachments>"
+                f'\n<attachments count="{len(attachments)}">\n{rendered}\n</attachments>'
             )
         return (
             f"\n\n--- BEGIN REPORT FROM {name}"
@@ -507,10 +525,7 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
 
     scope = get_current_execution_scope()
     if scope is None:
-        return (
-            "Error: assign_task can only be called inside an "
-            "active ReAct execution."
-        )
+        return "Error: assign_task can only be called inside an active ReAct execution."
 
     bus = registry.get(AgentBus)
     bus_task_id = resolve_bus_task_id(scope)
@@ -550,8 +565,7 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                 raw_spec = {**raw_spec, "output_paths": raw_output_paths}
             validation_input = (
                 raw_spec.model_dump()
-                if isinstance(raw_spec, BaseModel)
-                and not isinstance(raw_spec, spec_type)
+                if isinstance(raw_spec, BaseModel) and not isinstance(raw_spec, spec_type)
                 else raw_spec
             )
             spec = (
@@ -568,9 +582,11 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         from plugins.tools.task_board import snapshot_tasks
 
         board = {task["id"]: task for task in snapshot_tasks(scope.task_id)}
+        batch_research_claims: dict[str, list[str]] = {}
         for spec in specs:
             if not isinstance(spec, AgentTeamAssignmentSpec):
                 continue
+            errors_before = len(validation_errors)
             try:
                 spec.verification_checks = [
                     resolve_planned_check(check, list(board.values()))
@@ -582,22 +598,29 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
             check_ids = [check.work_item_id for check in spec.verification_checks]
             # Existing explicit ownership/check bindings are safe compatibility
             # inputs. Never guess IDs from the assignment's free-text prompt.
-            ids = spec.work_item_ids or check_ids or [
-                tid for tid, task in board.items() if spec.agent in task.get("owners", [])
-            ]
+            ids = (
+                spec.work_item_ids
+                or check_ids
+                or [tid for tid, task in board.items() if spec.agent in task.get("owners", [])]
+            )
             ids = list(dict.fromkeys(ids))
             if board and not ids:
-                validation_errors.append(f"{spec.agent}: work_item_ids required; choose from {list(board)}")
+                validation_errors.append(
+                    f"{spec.agent}: work_item_ids required; choose from {list(board)}"
+                )
             elif any(tid not in board or board[tid]["resolution"] == "cancelled" for tid in ids):
                 validation_errors.append(f"{spec.agent}: unknown or cancelled work_item_ids {ids}")
             elif any(tid not in ids for tid in check_ids):
-                validation_errors.append(f"{spec.agent}: verification checks must belong to work_item_ids")
+                validation_errors.append(
+                    f"{spec.agent}: verification checks must belong to work_item_ids"
+                )
             else:
                 for tid in ids:
                     planned = board[tid]
                     if (
                         planned.get("execution_job_ids")
-                        and tid not in check_ids and not spec.can_publish
+                        and tid not in check_ids
+                        and not spec.can_publish
                         and (
                             planned.get("resolution") == "resolved"
                             or not str(planned.get("gap") or "").strip()
@@ -609,8 +632,7 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                             "Use structured verification_checks for a planned check"
                         )
                     check_only = planned.get("kind") == "verification" or (
-                        planned.get("verification_required")
-                        and planned.get("kind") != "research"
+                        planned.get("verification_required") and planned.get("kind") != "research"
                     )
                     if check_only and tid not in check_ids:
                         requirements = planned.get("verification_requirements", [])
@@ -622,13 +644,33 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                             "Use a separate research item to gather missing evidence first"
                         )
             spec.work_item_ids = ids
+            if (
+                len(validation_errors) == errors_before
+                and not spec.verification_checks
+                and not spec.can_publish
+            ):
+                for tid in ids:
+                    if board[tid].get("kind") == "verification":
+                        continue
+                    batch_research_claims.setdefault(tid, []).append(spec.agent)
+        for tid, agents in batch_research_claims.items():
+            if len(agents) > 1:
+                validation_errors.append(
+                    f"{tid} is bound to {len(agents)} parallel research assignments "
+                    f"({', '.join(dict.fromkeys(agents))}); one work item cannot be split "
+                    "across assignments because every member inherits the whole-item "
+                    "contract. Create one work item per segment with its own done_when, "
+                    "or use structured verification_checks for a planned check"
+                )
     if is_agent_team and validation_errors:
-        validation_errors.extend(_unknown_agent_validation_errors(
-            raw_tasks,
-            bus=bus,
-            bus_task_id=bus_task_id,
-            task_types=task_types or (),
-        ))
+        validation_errors.extend(
+            _unknown_agent_validation_errors(
+                raw_tasks,
+                bus=bus,
+                bus_task_id=bus_task_id,
+                task_types=task_types or (),
+            )
+        )
         return (
             "Error: invalid agent-team assignment metadata: "
             + "; ".join(validation_errors)
@@ -636,6 +678,12 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         )
     if not specs:
         return "Error: invalid assignment metadata: " + "; ".join(validation_errors)
+
+    budget_error = _research_budget_error(
+        bus=bus, bus_task_id=bus_task_id, scope=scope, specs=specs
+    )
+    if budget_error:
+        return budget_error
 
     submitted: list[dict[str, str]] = []
     errors: list[str] = []
@@ -658,10 +706,7 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
     recorded_publisher = ""
     if is_agent_team and runtime is not None:
         recorded_publisher = str(
-            (getattr(runtime, "publication_state", None) or {}).get(
-                "publisher_agent_name"
-            )
-            or ""
+            (getattr(runtime, "publication_state", None) or {}).get("publisher_agent_name") or ""
         )
     publisher_declared = bool(publish_specs) or bool(recorded_publisher)
     if is_agent_team and len(publish_specs) > 1:
@@ -672,7 +717,8 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
 
     for spec in specs:
         agent_name = _normalize_agent_name(
-            spec.agent.strip(), task_types,
+            spec.agent.strip(),
+            task_types,
         )
         task_prompt = spec.prompt.strip()
         if not agent_name:
@@ -690,28 +736,25 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
             if phase_budget is not None:
                 budget_phase = phase_budget.sync_phase()
             publication_phase = str(active_publication.get("phase") or "")
-            active_publisher = str(
-                active_publication.get("publisher_agent_name") or ""
-            )
+            active_publisher = str(active_publication.get("publisher_agent_name") or "")
         is_publication_assignment = bool(getattr(spec, "output_paths", ()))
-        is_verification_assignment = (
-            "verifier" in agent_name.lower()
-            or bool(getattr(spec, "verification_checks", ()))
+        is_verification_assignment = "verifier" in agent_name.lower() or bool(
+            getattr(spec, "verification_checks", ())
         )
         uses_publication_budget = bool(
-            is_verification_assignment
-            and budget_phase in {"draining", "consolidating"}
+            is_verification_assignment and budget_phase in {"draining", "consolidating"}
         )
         if (
-            is_agent_team and is_verification_assignment and runtime is not None
+            is_agent_team
+            and is_verification_assignment
+            and runtime is not None
             and getattr(runtime, "phase_budget", None) is not None
         ):
             remaining = runtime.phase_budget.remaining_for_job(
                 can_publish=is_publication_assignment or uses_publication_budget,
                 is_verification=is_verification_assignment,
-                is_recheck=bool(getattr(spec, "verification_checks", ())) and all(
-                    c.replaces_job_id for c in getattr(spec, "verification_checks", ())
-                ),
+                is_recheck=bool(getattr(spec, "verification_checks", ()))
+                and all(c.replaces_job_id for c in getattr(spec, "verification_checks", ())),
             )
             # Reserve one first-response window plus evidence review/report
             # submission. Admitting a job that cannot finish fabricates progress.
@@ -776,6 +819,8 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         task_metadata: dict[str, Any] = {}
         if isinstance(spec, AgentTeamAssignmentSpec):
             task_metadata["required_for_completion"] = spec.required_for_completion
+            if spec.unit_range:
+                task_metadata["unit_range"] = list(spec.unit_range)
             if spec.work_item_ids and is_agent_team:
                 task_metadata["work_item_ids"] = list(spec.work_item_ids)
                 # Preserve the dispatch-time definition independently of later
@@ -800,8 +845,10 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                     for tid in spec.work_item_ids
                     if board[tid].get("execution_job_ids")
                 }
-                if not spec.verification_checks and not spec.can_publish and all(
-                    board[tid].get("kind") != "delivery" for tid in spec.work_item_ids
+                if (
+                    not spec.verification_checks
+                    and not spec.can_publish
+                    and all(board[tid].get("kind") != "delivery" for tid in spec.work_item_ids)
                 ):
                     # A research task has one definition, not competing board,
                     # dispatch and role definitions. Keep proposals for audit;
@@ -812,7 +859,8 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                     context = {
                         tid: {
                             key: deepcopy(board[tid][key])
-                            for key in ("notes", "gap", "evidence_refs") if board[tid].get(key)
+                            for key in ("notes", "gap", "evidence_refs")
+                            if board[tid].get(key)
                         }
                         for tid in spec.work_item_ids
                     }
@@ -829,7 +877,9 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                     if attachments:
                         task_prompt += "\n\n# Attached reports\n" + "\n".join(attachments)
                     research_system = _resolve_specialist_prompt(
-                        "researcher", "", fs_mode=bool(getattr(runtime, "fs_mode", False)),
+                        "researcher",
+                        "",
+                        fs_mode=bool(getattr(runtime, "fs_mode", False)),
                         enhancements=bool(scope.metadata.get("sdk_protocol_emitter")),
                         mcp_tool_names=getattr(runtime, "mcp_tool_names", None),
                         mcp_tool_specs=getattr(runtime, "mcp_tool_specs", None),
@@ -852,11 +902,7 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         previous_publisher = ""
         previous_manifest: tuple[str, ...] = ()
         replace_manifest = False
-        if (
-            is_agent_team
-            and runtime is not None
-            and isinstance(spec, AgentTeamAssignmentSpec)
-        ):
+        if is_agent_team and runtime is not None and isinstance(spec, AgentTeamAssignmentSpec):
             if spec.can_publish:
                 if "verifier" in agent_name.lower():
                     errors.append(
@@ -921,14 +967,15 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         # Expand any cross-agent <attach agent="..."/> tags before
         # dispatch so the sub-agent sees the actual report text.
         expanded_prompt = _expand_attach_tags(
-            task_prompt, bus_task_id, bus,
+            task_prompt,
+            bus_task_id,
+            bus,
         )
         if original_question and (
             task_metadata.get("bound_research") or original_question[:100] not in expanded_prompt
         ):
             expanded_prompt = (
-                f"# Original Question\n{original_question}\n\n"
-                f"# Your Task\n{expanded_prompt}"
+                f"# Original Question\n{original_question}\n\n# Your Task\n{expanded_prompt}"
             )
 
         # Build the spawn_context dict so the sub-agent's trace file is
@@ -939,21 +986,16 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         # text the sub-agent sees, post attach-expansion.
         try:
             _allowed_tools = [
-                getattr(t, "name", str(t))
-                for t in (getattr(session, "tools", None) or [])
+                getattr(t, "name", str(t)) for t in (getattr(session, "tools", None) or [])
             ]
         except Exception:
             _allowed_tools = []
         scope_md = scope.metadata or {}
         spawn_context = {
             "parent_run_id": str(scope_md.get("run_id") or ""),
-            "parent_agent_id": str(
-                scope_md.get("agent_id") or scope_md.get("role_id") or ""
-            ),
+            "parent_agent_id": str(scope_md.get("agent_id") or scope_md.get("role_id") or ""),
             "parent_turn": int(scope_md.get("current_turn") or 0),
-            "spawned_by_llm_call_id": str(
-                scope_md.get("last_llm_call_id") or ""
-            ),
+            "spawned_by_llm_call_id": str(scope_md.get("last_llm_call_id") or ""),
             "spawned_by_tool_call_id": str(get_current_tool_call_id() or ""),
             "delegation_prompt": expanded_prompt,
             "allowed_tools": _allowed_tools,
@@ -963,26 +1005,16 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
             },
         }
         try:
-            if (
-                publication_claim
-                and publication_state is not None
-                and runtime is not None
-            ):
+            if publication_claim and publication_state is not None and runtime is not None:
                 # Serialize the check, claim, and queue submission. The bus
                 # await only enqueues work; it does not wait for the sub-agent.
                 # Recording first closes the check-then-set race, while the
                 # rollback preserves an earlier manifest if enqueueing fails.
                 async with runtime.publication_lock:
-                    previous_publisher = str(
-                        publication_state.get("publisher_agent_name") or ""
-                    )
-                    previous_manifest = tuple(
-                        publication_state.get("deliverable_manifest") or ()
-                    )
+                    previous_publisher = str(publication_state.get("publisher_agent_name") or "")
+                    previous_manifest = tuple(publication_state.get("deliverable_manifest") or ())
                     previous_phase = str(publication_state.get("phase") or "")
-                    previous_retired = tuple(
-                        publication_state.get("retired_paths") or ()
-                    )
+                    previous_retired = tuple(publication_state.get("retired_paths") or ())
                     if previous_publisher and previous_publisher != agent_name:
                         # The lock exists so two sub-agents cannot race on the
                         # same deliverable — NOT to make the role permanent. An
@@ -996,9 +1028,7 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                         # having a finished answer in the workspace. Same trap
                         # ``finalize_answer._finalize_gate`` already documents
                         # for unassigned agents.
-                        incumbent = bus.get_session(
-                            f"{bus_task_id}::{previous_publisher}"
-                        )
+                        incumbent = bus.get_session(f"{bus_task_id}::{previous_publisher}")
                         if not _session_at_task_cap(incumbent):
                             errors.append(
                                 f"{agent_name}: publisher already assigned to "
@@ -1018,7 +1048,8 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                         logger.warning(
                             "assign_task: transferring publisher role %r -> %r "
                             "(incumbent can no longer be dispatched)",
-                            previous_publisher, agent_name,
+                            previous_publisher,
+                            agent_name,
                         )
                     if (
                         previous_manifest
@@ -1039,9 +1070,7 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                     # and only the publisher — delete or move them out.
                     retired_paths = tuple(
                         path
-                        for path in dict.fromkeys(
-                            (*previous_retired, *previous_manifest)
-                        )
+                        for path in dict.fromkeys((*previous_retired, *previous_manifest))
                         if path not in publication_claim
                     )
                     publication_state["publisher_agent_name"] = agent_name
@@ -1072,15 +1101,11 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                         )
                     except Exception:
                         if previous_publisher:
-                            publication_state["publisher_agent_name"] = (
-                                previous_publisher
-                            )
+                            publication_state["publisher_agent_name"] = previous_publisher
                         else:
                             publication_state.pop("publisher_agent_name", None)
                         if previous_manifest:
-                            publication_state["deliverable_manifest"] = (
-                                previous_manifest
-                            )
+                            publication_state["deliverable_manifest"] = previous_manifest
                         else:
                             publication_state.pop("deliverable_manifest", None)
                         if previous_retired:
@@ -1109,14 +1134,20 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                             "behind it. Dispatch to another idle verifier for parallel review, "
                             "or collect the current result before a dependent recheck."
                         )
-                    root = Path(next(
-                        (src for src, dst, _ro in runtime.sub_binds if dst == "/outputs"),
-                        resolve_mount_dirs()[1],
-                    ))
+                    root = Path(
+                        next(
+                            (src for src, dst, _ro in runtime.sub_binds if dst == "/outputs"),
+                            resolve_mount_dirs()[1],
+                        )
+                    )
                     bound, check_prompt = await asyncio.to_thread(
-                        bind_checks, spec.verification_checks, bus=bus, task_id=bus_task_id,
+                        bind_checks,
+                        spec.verification_checks,
+                        bus=bus,
+                        task_id=bus_task_id,
                         work_items=snapshot_tasks(scope.task_id),
-                        required=spec.required_for_completion, outputs_root=root,
+                        required=spec.required_for_completion,
+                        outputs_root=root,
                     )
                     task_metadata["verification_checks"] = bound
                     from plugins.tools._bound_evidence import build_review_packet, packet_index
@@ -1138,7 +1169,9 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                     )
                     spawn_context["delegation_prompt"] = expanded_prompt
                     job_id = await bus.submit_task_to_session(
-                        session_id, expanded_prompt, spawn_context=spawn_context,
+                        session_id,
+                        expanded_prompt,
+                        spawn_context=spawn_context,
                         task_metadata=task_metadata,
                     )
             else:
@@ -1157,7 +1190,9 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
             errors.append(f"{agent_name}: {exc}")
         except Exception as exc:
             logger.warning(
-                "assign_task: failed for %s: %s", agent_name, exc,
+                "assign_task: failed for %s: %s",
+                agent_name,
+                exc,
             )
             errors.append(f"{agent_name}: {exc}")
 
@@ -1172,10 +1207,7 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
     effective_manifest: tuple[str, ...] = ()
     if is_agent_team and runtime is not None:
         effective_manifest = tuple(
-            (getattr(runtime, "publication_state", None) or {}).get(
-                "deliverable_manifest"
-            )
-            or ()
+            (getattr(runtime, "publication_state", None) or {}).get("deliverable_manifest") or ()
         )
     uncovered_directives = tuple(
         path for path in question_directives if path not in effective_manifest
@@ -1186,9 +1218,11 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
     if is_agent_team and submitted and uncovered_directives:
         named = ", ".join(uncovered_directives)
         if effective_manifest:
-            replacement_manifest = list(dict.fromkeys(
-                (*effective_manifest, *uncovered_directives),
-            ))
+            replacement_manifest = list(
+                dict.fromkeys(
+                    (*effective_manifest, *uncovered_directives),
+                )
+            )
             notices.append(
                 f"No agent in this run can write {named}, which the question "
                 "names as the deliverable. The recorded publisher manifest "
@@ -1204,6 +1238,28 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                 "workspace paths from these reports and assign one task "
                 f"with output_paths={list(uncovered_directives)!r}."
             )
+
+    # c010c5e1: board notes promised publish_handoff while the assignments
+    # carried no output_paths — every member's /outputs stayed read-only and
+    # the promised handoffs never landed. Surface the mismatch at dispatch.
+    if is_agent_team:
+        dispatched_agents = {s["agent"] for s in submitted}
+        for spec in specs:
+            if spec.agent not in dispatched_agents or getattr(spec, "output_paths", None):
+                continue
+            work_ids = getattr(spec, "work_item_ids", ())
+            notes_text = (
+                " ".join((board.get(tid, {}).get("notes") or "") for tid in work_ids)
+                if work_ids
+                else ""
+            )
+            if "publish_handoff" in spec.prompt or "publish_handoff" in notes_text:
+                notices.append(
+                    f"{spec.agent} mentions publish_handoff but was granted no "
+                    "output_paths: its /outputs is read-only and no handoff file "
+                    "can be written. Drop the publish_handoff promise and carry "
+                    "the extraction in the report text, or grant a publisher."
+                )
 
     lines = [
         f"Submitted {len(submitted)} task(s) in parallel "
@@ -1362,13 +1418,10 @@ async def agent_team_assign_task(
                 "single tasks[] item that should publish."
             )
         raw_item = parsed[0]
-        item = (
-            raw_item.model_dump()
-            if isinstance(raw_item, BaseModel)
-            else raw_item
-        )
+        item = raw_item.model_dump() if isinstance(raw_item, BaseModel) else raw_item
         if isinstance(item, dict) and not _top_level_grants_authority(
-            item.get("publish"), item.get("output_paths"),
+            item.get("publish"),
+            item.get("output_paths"),
         ):
             return (
                 "Error: top-level output_paths (or publish=true) conflicts "
@@ -1387,6 +1440,55 @@ async def agent_team_assign_task(
     return result
 
 
+def _research_budget_error(
+    *, bus: AgentBus, bus_task_id: str, scope: Any, specs: list[Any]
+) -> str:
+    """Fail closed when a declared research-job cap would be exceeded.
+
+    The cap arrives as an operational dispatch limit in the execution scope
+    (``research_job_budget``), set by the orchestrator — never as model-visible
+    acceptance criteria. Jobs carrying structured ``verification_checks`` are
+    checks, not research, and never consume the quota. Counting the batch plus
+    already-accepted jobs before submission turns a post-hoc scoring failure
+    into an actionable dispatch rejection.
+    """
+    raw = (getattr(scope, "metadata", None) or {}).get("research_job_budget")
+    if raw is None:
+        return ""
+    try:
+        budget = int(raw)
+    except (TypeError, ValueError):
+        return ""
+    if budget < 0:
+        return ""
+    pending = sum(1 for spec in specs if not getattr(spec, "verification_checks", ()))
+    if pending == 0:
+        return ""
+    lister = getattr(bus, "list_task_jobs", None)
+    if lister is None:
+        # No job telemetry on this bus; the cap cannot be counted here.
+        return ""
+    try:
+        jobs = lister(bus_task_id)
+    except Exception:
+        logger.warning("assign_task: could not list jobs for the research budget", exc_info=True)
+        return ""
+    accepted = 0
+    for job in jobs:
+        metadata = getattr(getattr(job, "item", None), "metadata", None) or {}
+        if not metadata.get("verification_checks"):
+            accepted += 1
+    if accepted + pending <= budget:
+        return ""
+    return (
+        f"Error: research dispatch budget exhausted: {accepted} research job(s) already "
+        f"accepted with a cap of {budget}, and this batch adds {pending} research "
+        "assignment(s). Jobs with structured verification_checks do not consume the "
+        "budget. Collect reports first, or convert follow-up research into verification "
+        "checks. No tasks were dispatched."
+    )
+
+
 def _team_dispatch_guidance() -> str:
     """Give current identifiers after rejection without manufacturing a binding."""
     scope = get_current_execution_scope()
@@ -1397,19 +1499,32 @@ def _team_dispatch_guidance() -> str:
 
     bus_id = resolve_bus_task_id(scope)
     board = snapshot_tasks(scope.task_id)
-    items = [{
-        "work_item_id": task["id"], "description": task["description"],
-        "check_ids": [c["check_id"] for c in task.get("verification_requirements", [])],
-    } for task in board if task["resolution"] not in {"cancelled", "resolved"}]
-    sources = [j.job_id for j in bus.list_task_jobs(bus_id)
-               if j.status == "completed" and j.result is not None
-               and not j.item.metadata.get("verification_checks")]
+    items = [
+        {
+            "work_item_id": task["id"],
+            "description": task["description"],
+            "check_ids": [c["check_id"] for c in task.get("verification_requirements", [])],
+        }
+        for task in board
+        if task["resolution"] not in {"cancelled", "resolved"}
+    ]
+    sources = [
+        j.job_id
+        for j in bus.list_task_jobs(bus_id)
+        if j.status == "completed"
+        and j.result is not None
+        and not j.item.metadata.get("verification_checks")
+    ]
     return (
         "\nDispatch context (identifiers only, not evidence): "
-        + json.dumps({
-            "agents": [s.name for s in bus.list_sessions_for_task(bus_id)],
-            "work_items": items[:16], "completed_source_jobs": sources[-16:],
-        }, ensure_ascii=False)
+        + json.dumps(
+            {
+                "agents": [s.name for s in bus.list_sessions_for_task(bus_id)],
+                "work_items": items[:16],
+                "completed_source_jobs": sources[-16:],
+            },
+            ensure_ascii=False,
+        )
         + "\nFor verification, send a nonempty tasks array. Each task needs agent, prompt, "
         "and verification_checks. Each check needs check_id, subject:{text:the exact relevant "
         "passage}, and evidence:[{job_id}]. "

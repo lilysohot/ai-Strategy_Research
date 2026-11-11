@@ -116,6 +116,20 @@ def _reset_status_churn(scope: Any) -> None:
         md.pop(_STATUS_CHURN_KEY, None)
 
 
+def _budget_advice() -> str:
+    """Surface the clock on status-only returns so verification can be scheduled in time."""
+    remaining = wall_deadline_remaining_s()
+    if remaining is None:
+        return ""
+    from plugins.tools._verification import minimum_verification_budget
+
+    minimum = minimum_verification_budget()
+    return (
+        f"Remaining wall budget: {max(0, int(remaining))}s; "
+        f"a new verification job needs >= {minimum:.0f}s or dispatch is rejected."
+    )
+
+
 def _status_notice(
     scope: Any,
     state: str,
@@ -154,6 +168,9 @@ def _status_notice(
             )
     else:
         _reset_status_churn(scope)
+    advice = _budget_advice()
+    if advice:
+        body = f"{body}\n{advice}"
     out = f"{format_status_report_block(reason, body)}\n\n[status] {state}"
     if extra_status:
         out += f"\n{extra_status}"

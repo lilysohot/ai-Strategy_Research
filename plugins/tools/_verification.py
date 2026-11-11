@@ -14,7 +14,15 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    StrictBool,
+    StrictStr,
+    field_validator,
+    model_validator,
+)
 
 from frontier_agent.components.agent_bus import AgentBus
 from plugins.tools._calculation_verification import (
@@ -241,6 +249,32 @@ class VerificationCheck(BaseModel):
         "evidence); evidence changes only evidence; retry changes neither. "
         "To check corrected wording, bind it as subject.text or a new published report.",
     )
+
+    @field_validator("subject", mode="before")
+    @classmethod
+    def _single_subject_shape(cls, value: Any) -> Any:
+        """Accept a bare candidate string; explain mixed shapes once instead of per union arm."""
+        if isinstance(value, str):
+            return {"text": value}
+        if not isinstance(value, dict):
+            return value
+        has_text = "text" in value
+        has_job = "job_id" in value
+        if has_text and has_job:
+            raise ValueError(
+                "subject 只能是一种形状：{text: 候选全文} 或 {job_id, ref?}；"
+                "job_id 属于 evidence，不要与候选文本混进同一个 subject"
+            )
+        if not has_text and not has_job:
+            raise ValueError("subject 必须是 {text: 候选全文} 或 {job_id, ref?} 之一")
+        allowed = {"text"} if has_text else {"job_id", "ref"}
+        unknown = sorted(set(value) - allowed)
+        if unknown:
+            raise ValueError(
+                f"subject 只接受 {sorted(allowed)}；多余字段 {unknown} 属于 check 层级，"
+                "请移到 verification_checks[i] 顶层（如 factual_scope / criterion）"
+            )
+        return value
 
 
 def resolve_planned_check(

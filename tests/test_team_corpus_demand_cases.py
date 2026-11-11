@@ -17,13 +17,20 @@ def test_original_71_case_objects_are_unchanged():
     lock = json.loads((ROOT / "baseline-71.lock.json").read_text())
     current = {c["id"]: c for c in catalog()}
     assert len(lock["cases"]) == 71
-    assert set(current) - set(lock["cases"]) == NEW_IDS | {"P56", "P57", "P58"}
+    assert set(current) - set(lock["cases"]) == NEW_IDS | {
+        "P56",
+        "P57",
+        "P58",
+        "F26",
+        "F27",
+        "F28",
+    }
     for key, value in lock["cases"].items():
         assert digest(current[key]) == value
 
 
 def test_approved_cases_are_runnable_and_pending_cases_still_fail_closed(monkeypatch):
-    assert len(select_cases("frozen", None)) == 25
+    assert len(select_cases("frozen", None)) == 28
     assert len(select_cases("protocol", None)) == 58
     for case in catalog():
         if case["id"] in NEW_IDS:

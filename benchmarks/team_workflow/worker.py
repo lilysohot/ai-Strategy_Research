@@ -153,6 +153,10 @@ async def _execute(
         "run_id": task,
         "_trial_dir": str(out),
         "pipeline_id": "agent_team",
+        # Operational dispatch cap from the case budgets. It reaches assign_task
+        # through the execution scope as a fail-closed limit, not model-visible
+        # acceptance criteria — the question itself stays budget-free.
+        "research_job_budget": case["budgets"].get("max_research_jobs"),
     }
     start = time.monotonic()
     try:

@@ -1620,5 +1620,161 @@
     "selectors": [
       "tests/test_team_dispatched_scope.py"
     ]
+  },
+  {
+    "id": "F26",
+    "layer": "frozen",
+    "dimension": "tools",
+    "split": "development",
+    "origin": "Synthetic long-document scale control drafted 2026-11-10; measures page and repeat budgets, not semantic quality",
+    "goal": "长文档通读的冗余控制：单次全文读完可通过，第二位成员重复通读同一文档必须被页数与重复字符预算拒绝",
+    "review_status": "approved",
+    "tool_fixture": "corpus_document_v1",
+    "question": "请完整阅读资料库文档 cv2:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb（60 个原文单元），概括其分页结构与主要结论，并说明是否已读完库内全文。",
+    "sources": [
+      {
+        "fixture_file": "corpus-longdoc-fixtures.json",
+        "fixture_sha256": "a6287d4632b0dc4205cf97fabced0bbd03e70d14903a83bfa8fad8b685de58ed",
+        "document_key": "longdoc",
+        "doc_id": "cv2:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "title": "长穹研究：长文档通读与分段读取"
+      }
+    ],
+    "fixture_contract": {
+      "search_excerpt_units": [
+        "u01"
+      ],
+      "search_preview_units": [],
+      "query_independent_candidate": true,
+      "candidate_inventory_units": [
+        "u01",
+        "u02"
+      ],
+      "document_units": "all source units in source order",
+      "max_document_page_chars": 6000,
+      "failure": null
+    },
+    "rubric": [
+      "已提供 doc_id，直接使用 corpus_fetch(scope=\"document\")；不先搜索或用候选目录拼全文。",
+      "沿 next_cursor 读到 fetch_complete=true，覆盖全部 60 个单元；只读第一页或搜索摘要不满足。",
+      "报告的分页结构与实际页数一致；不得把分页信封的页数当成原文页数或原始 PDF 完整性证明。",
+      "不编造原文引文；不把内部周报口径写成已核验事实；未要求唯一性或最新性时不自行添加该类任务。",
+      "同一文档只允许一次完整通读；重复通读、或多成员各自通读同一文档即判定冗余。"
+    ],
+    "budgets": {
+      "wall_s": 900,
+      "max_prompt_tokens": 900000,
+      "max_research_jobs": 1,
+      "max_model_attempts": 25,
+      "max_single_prompt_tokens": 160000,
+      "max_exact_repeated_requests": 3,
+      "max_document_pages": 5,
+      "max_repeated_original_chars": 2000
+    },
+    "paired_controls": []
+  },
+  {
+    "id": "F27",
+    "layer": "frozen",
+    "dimension": "tools",
+    "split": "development",
+    "origin": "Synthetic long-document segmentation control drafted 2026-11-10; measures disjoint parallel coverage via dispatched unit_range, not semantic quality",
+    "goal": "分段并行的机械边界：三个成员各负责互斥单元区间，corpus_fetch 把每路分页钳制在区间内，覆盖互斥且合计 100%",
+    "review_status": "approved",
+    "tool_fixture": "corpus_document_v1",
+    "question": "资料库文档 cv2:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb 共 60 个原文单元（按资料顺序，句柄 unit:u01…unit:u60）。请安排三位成员并行分段阅读：成员 A 负责第 1–20 个单元（unit:u01–unit:u20），成员 B 负责第 21–40 个单元（unit:u21–unit:u40），成员 C 负责第 41–60 个单元（unit:u41–unit:u60）。每位成员沿分页读到自己区间的 fetch_complete=true，只读取自己负责的区间；然后汇总三人结果，说明各段要点与总覆盖，并确认无跨段读取。",
+    "sources": [
+      {
+        "fixture_file": "corpus-longdoc-fixtures.json",
+        "fixture_sha256": "a6287d4632b0dc4205cf97fabced0bbd03e70d14903a83bfa8fad8b685de58ed",
+        "document_key": "longdoc",
+        "doc_id": "cv2:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "title": "长穹研究：长文档通读与分段读取"
+      }
+    ],
+    "fixture_contract": {
+      "search_excerpt_units": [
+        "u01"
+      ],
+      "search_preview_units": [],
+      "query_independent_candidate": true,
+      "candidate_inventory_units": [
+        "u01",
+        "u02"
+      ],
+      "document_units": "all source units in source order",
+      "max_document_page_chars": 6000,
+      "failure": null
+    },
+    "rubric": [
+      "协调方派发恰好三个研究成员，且每个成员的分配携带互斥的单元区间（unit_range 或等价的明确边界指令）。",
+      "每个成员沿 next_cursor 读到自己区间的 fetch_complete=true；只读第一页或搜索摘要不满足。",
+      "三段返回单元并集为全部 60 单元且互不重叠；任何成员读取区间外单元即判定越界。",
+      "综合说明各段要点并确认总覆盖 60/60；不得把分页信封页数当成原文页数或完整性证明。",
+      "不编造原文引文；未要求唯一性或最新性时不自行添加该类任务。"
+    ],
+    "budgets": {
+      "wall_s": 900,
+      "max_prompt_tokens": 1500000,
+      "max_research_jobs": 3,
+      "max_model_attempts": 60,
+      "max_single_prompt_tokens": 160000,
+      "max_exact_repeated_requests": 3,
+      "max_document_pages": 7,
+      "max_repeated_original_chars": 2000
+    },
+    "paired_controls": []
+  },
+  {
+    "id": "F28",
+    "layer": "frozen",
+    "dimension": "orchestration",
+    "split": "development",
+    "origin": "Synthetic full-lifecycle control drafted 2026-11-11 from web run c010c5e1794749adbc3cd0f2b9697b7e failure review; measures autonomous coverage planning, executed verification, and synthesized delivery, not semantic quality. Budgets recalibrated 2026-11-11 after F28-r1 to the scout+segment pipeline the tool contract structurally requires (handoffs carry refs, not verbatim text); a second full duplicate read still exceeds them.",
+    "goal": "完整生命周期：协调方自主规划覆盖、成员执行阅读、核验逐项确认、综合成稿交付（对照 c010c5e1 失败清单）",
+    "review_status": "approved",
+    "tool_fixture": "corpus_document_v1",
+    "question": "资料库文档《长穹研究：长文档通读与分段读取》（doc_id: cv2:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb）记录了 60 条观测。请把全部观测读完，整理成一份完整清单：每条给出观测编号、轨道算力规模的起止值（GW）和机柜交付数。提交前请逐项核对清单数字与原文一致，最后说明总共覆盖了多少条观测、是否已读完全文，以及一个总体结论。",
+    "sources": [
+      {
+        "fixture_file": "corpus-longdoc-fixtures.json",
+        "fixture_sha256": "a6287d4632b0dc4205cf97fabced0bbd03e70d14903a83bfa8fad8b685de58ed",
+        "document_key": "longdoc",
+        "doc_id": "cv2:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "title": "长穹研究：长文档通读与分段读取"
+      }
+    ],
+    "fixture_contract": {
+      "search_excerpt_units": [
+        "u01"
+      ],
+      "search_preview_units": [],
+      "query_independent_candidate": true,
+      "candidate_inventory_units": [
+        "u01",
+        "u02"
+      ],
+      "document_units": "all source units in source order",
+      "max_document_page_chars": 6000,
+      "failure": null
+    },
+    "rubric": [
+      "协调方对 60 条观测给出明确、可执行的覆盖分工；成员数与覆盖方式自定，但最终覆盖必须完整且不重复。",
+      "每个研究成员实际执行了原文阅读（corpus_fetch 沿游标读到所在范围末尾）；只读搜索摘要、候选目录或第一页不满足。",
+      "提交前存在带 verification_checks 的核验派工且实际执行；清单数字经核验与原文一致，发现的偏差已修正或如实说明。",
+      "最终答复为协调方综合成稿的完整清单（60 条观测的编号、算力起止值、机柜交付数），不是成员报告的拼接转贴；answer_status 为 complete 且由主代理交付。",
+      "不编造数字：任抽两条观测（首条与末条）的数值必须与原文一致；未读到的观测不得臆造。"
+    ],
+    "budgets": {
+      "wall_s": 900,
+      "max_prompt_tokens": 1500000,
+      "max_research_jobs": 4,
+      "max_model_attempts": 60,
+      "max_single_prompt_tokens": 160000,
+      "max_exact_repeated_requests": 12,
+      "max_document_pages": 12,
+      "max_repeated_original_chars": 15000
+    },
+    "paired_controls": []
   }
 ]

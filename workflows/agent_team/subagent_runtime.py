@@ -146,7 +146,9 @@ class TeamStopSignalObserver(StopSignalObserver):
         return Intervention(inject_messages=messages, allowed_tool_names=("submit_report",))
 
     async def on_tool_call(
-        self, ctx: TurnContext, tool_call: dict[str, Any],
+        self,
+        ctx: TurnContext,
+        tool_call: dict[str, Any],
     ) -> ToolCallIntervention | None:
         if self._stopping and tool_call.get("name") != "submit_report":
             return ToolCallIntervention(
@@ -229,23 +231,32 @@ class InheritedWallClockDeadlineObserver:
         ctx.metadata["team_handoff_started"] = True
         if self.verification:
             ctx.metadata["team_verification_checkpoint"] = True
-            messages = None if self._handoff_announced else [
-                self._VERIFICATION_CHECKPOINT_MESSAGE,
-            ]
+            messages = (
+                None
+                if self._handoff_announced
+                else [
+                    self._VERIFICATION_CHECKPOINT_MESSAGE,
+                ]
+            )
             self._handoff_announced = True
             return Intervention(inject_messages=messages, allowed_tool_names=("submit_report",))
         if self._direct_submission:
             ctx.metadata["team_handoff_direct_submission"] = True
-            messages = None if self._direct_submission_announced else [
-                self._DIRECT_SUBMISSION_MESSAGE,
-            ]
+            messages = (
+                None
+                if self._direct_submission_announced
+                else [
+                    self._DIRECT_SUBMISSION_MESSAGE,
+                ]
+            )
             self._direct_submission_announced = True
             self._handoff_announced = True
             return Intervention(inject_messages=messages, allowed_tool_names=("submit_report",))
         messages = None if self._handoff_announced else [self._HANDOFF_MESSAGE]
         self._handoff_announced = True
         return Intervention(
-            inject_messages=messages, allowed_tool_names=("submit_report", "publish_handoff"),
+            inject_messages=messages,
+            allowed_tool_names=("submit_report", "publish_handoff"),
         )
 
     async def on_before_llm(self, ctx: Any) -> Intervention | None:
@@ -293,7 +304,8 @@ class InheritedWallClockDeadlineObserver:
             self._direct_submission = True
             detail = (
                 "The requested file was not created; the write was blocked before execution. "
-                if name == "create_file" else "This tool call was not executed. "
+                if name == "create_file"
+                else "This tool call was not executed. "
             )
             return ToolCallIntervention(
                 skip_with_result=detail + self._DIRECT_SUBMISSION_MESSAGE,
@@ -332,15 +344,18 @@ def render_sandbox_fs_note(
     location = "this native workspace" if sandbox_mode == "native" else "this container"
     workspace_path = (
         os.environ.get("FRONTIER_AGENT_WORKSPACE_DIR", "the workspace")
-        if sandbox_mode == "native" else "/workspace"
+        if sandbox_mode == "native"
+        else "/workspace"
     )
     inputs_path = (
         os.environ.get("FRONTIER_AGENT_INPUTS_DIR", "the inputs directory")
-        if sandbox_mode == "native" else "/inputs"
+        if sandbox_mode == "native"
+        else "/inputs"
     )
     outputs_path = (
         os.environ.get("FRONTIER_AGENT_OUTPUTS_DIR", "the outputs directory")
-        if sandbox_mode == "native" else "/outputs"
+        if sandbox_mode == "native"
+        else "/outputs"
     )
     project_path = os.environ.get("FRONTIER_AGENT_PROJECT_DIR", "").strip()
     if audience == "sub":
@@ -353,8 +368,7 @@ def render_sandbox_fs_note(
         )
     else:
         workspace = (
-            f"{workspace_path} is shared by the coordinator and all sub-agents in "
-            f"{location}."
+            f"{workspace_path} is shared by the coordinator and all sub-agents in {location}."
             if shared
             else f"{workspace_path} contains the coordinator worktree and the "
             "sub-agents' private worktree directories."
@@ -384,7 +398,8 @@ def render_sandbox_fs_note(
         "packages; install only a package required by the task with "
         "`python -m pip install <package>`. Native mode stores it in the "
         "workspace-local dependency overlay. "
-        if sandbox_mode == "native" else ""
+        if sandbox_mode == "native"
+        else ""
     )
     project = ""
     if project_path and os.path.realpath(project_path) != os.path.realpath(workspace_path):
@@ -469,18 +484,22 @@ _RECOVERY_LABELS = {
 # anything resembling tool-call XML before treating the response as the
 # final answer.
 _LEAKED_TOOL_CALL_BLOCK_RE = re.compile(
-    r"<\s*tool_call[^>]*>[\s\S]*?<\s*/\s*tool_call\s*>", re.IGNORECASE,
+    r"<\s*tool_call[^>]*>[\s\S]*?<\s*/\s*tool_call\s*>",
+    re.IGNORECASE,
 )
 _LEAKED_TOOL_RESPONSE_BLOCK_RE = re.compile(
-    r"<\s*tool_response[^>]*>[\s\S]*?<\s*/\s*tool_response\s*>", re.IGNORECASE,
+    r"<\s*tool_response[^>]*>[\s\S]*?<\s*/\s*tool_response\s*>",
+    re.IGNORECASE,
 )
 # Function-call style: ``<function=name><parameter=...>...</function>``.
 _LEAKED_FUNCTION_BLOCK_RE = re.compile(
-    r"<\s*function\s*=[\s\S]*?<\s*/\s*function\s*>", re.IGNORECASE,
+    r"<\s*function\s*=[\s\S]*?<\s*/\s*function\s*>",
+    re.IGNORECASE,
 )
 # Stray opening tag with no matching close.
 _LEAKED_TAG_FRAGMENT_RE = re.compile(
-    r"<\s*(tool_call|tool_response|function)\b[^>]*>?", re.IGNORECASE,
+    r"<\s*(tool_call|tool_response|function)\b[^>]*>?",
+    re.IGNORECASE,
 )
 
 
@@ -540,8 +559,12 @@ def _build_recovery_messages(
     evidence = evidence_digest(messages, max_chars=40_000, clean=_strip_leaked_tool_calls)
     # Tool evidence already has its own fair, source-aware budget. Repeating it
     # alongside obsolete tool preambles wastes input and encourages more planning.
-    prose = [message for message in messages if not is_tool_msg(message)
-             and not (is_assistant_msg(message) and message.get("tool_calls"))]
+    prose = [
+        message
+        for message in messages
+        if not is_tool_msg(message)
+        and not (is_assistant_msg(message) and message.get("tool_calls"))
+    ]
     recovery_context = build_recovery_context(
         prose,
         strip_thinking=_strip_thinking,
@@ -589,14 +612,14 @@ def _stitch_collected_reports(messages: list[Message]) -> str:
     if len(stitched) > _STITCH_MAX_CHARS:
         stitched = evidence_digest(
             [tool_msg(block, f"report-{i}") for i, block in enumerate(blocks)],
-            max_chars=_STITCH_MAX_CHARS, clean=_strip_leaked_tool_calls,
+            max_chars=_STITCH_MAX_CHARS,
+            clean=_strip_leaked_tool_calls,
         )
     return (
         "## Best-effort collected results\n\n"
         "The synthesis step ended early. The collected reports or partial tool "
         "observations below retain their source and completion limits; they are "
-        "not independently verified conclusions.\n\n"
-        + stitched
+        "not independently verified conclusions.\n\n" + stitched
     )
 
 
@@ -613,7 +636,8 @@ def _collected_report_fallback(messages: list[Message]) -> str:
             attrs = dict(re.findall(r'(\w+)="([^"]*)"', header))
             if (
                 not all(attrs.get(k) for k in ("agent", "job", "status"))
-                or attrs["agent"] == "orchestrator" or block in seen
+                or attrs["agent"] == "orchestrator"
+                or block in seen
             ):
                 continue
             seen.add(block)
@@ -628,7 +652,7 @@ def _collected_report_fallback(messages: list[Message]) -> str:
     blocks = []
     for label, body in reports:
         if len(body) > share:
-            body = body[:share // 2] + "\n[…摘录；完整报告见运行轨迹…]\n" + body[-share // 2:]
+            body = body[: share // 2] + "\n[…摘录；完整报告见运行轨迹…]\n" + body[-share // 2 :]
         blocks.append(f"### {label}\n\n{body}")
     return (
         "## 已收集的成员报告 / Collected member reports\n\n"
@@ -654,7 +678,9 @@ def _usable_final_draft(result: AgentLoopResult) -> str:
 def _stitch_recent_tool_observations(messages: list[Message]) -> str:
     """Preserve bounded tool facts when a member cannot run a summary call."""
     observations = evidence_digest(
-        messages, max_chars=_TOOL_OBSERVATION_MAX_CHARS, clean=_strip_leaked_tool_calls,
+        messages,
+        max_chars=_TOOL_OBSERVATION_MAX_CHARS,
+        clean=_strip_leaked_tool_calls,
     )
     if not observations:
         return ""
@@ -662,8 +688,7 @@ def _stitch_recent_tool_observations(messages: list[Message]) -> str:
         "## Tool observations preserved at the team deadline\n\n"
         "The member could not run another model call to summarize these "
         "observations. Treat them as partial tool output, not as a verified "
-        "complete conclusion.\n\n"
-        + observations
+        "complete conclusion.\n\n" + observations
     )
 
 
@@ -692,7 +717,9 @@ def _minimal_best_effort_answer(
 ) -> str:
     """Always provide a user-facing answer even when the rescue LLM is down."""
     return minimal_best_effort_answer(
-        task_description, stopped_by, language=language,
+        task_description,
+        stopped_by,
+        language=language,
     )
 
 
@@ -721,17 +748,20 @@ async def force_final_answer(
     collected reports and finally an explicit user-facing partial result.
     """
     if not force_recovery and (
-        result.metadata.get("final_answer")
-        or result.stopped_by not in _FORCED_FINAL_STOP_REASONS
+        result.metadata.get("final_answer") or result.stopped_by not in _FORCED_FINAL_STOP_REASONS
     ):
         return result
 
     # A no-tool candidate rejected only by the board is still a synthesized
     # answer. Without fresh fan-in evidence, preserve it for partial publication
     # rather than spending another recovery call or replacing it with raw reports.
-    candidate = _strip_leaked_tool_calls(_strip_thinking(str(
-        result.metadata.get("final_answer_candidate") or "",
-    )))
+    candidate = _strip_leaked_tool_calls(
+        _strip_thinking(
+            str(
+                result.metadata.get("final_answer_candidate") or "",
+            )
+        )
+    )
     from workflows.agent_team.final_report import is_user_report
 
     if candidate and is_user_report(candidate) and not force_recovery:
@@ -752,9 +782,13 @@ async def force_final_answer(
         result.metadata.setdefault("recovery_calls", []).append(record)
         resp = await traced_recovery_call(
             lambda: chat_with_fallback_budget(
-                llm, recovery_messages, per_leg_timeout_s=ask_timeout,
+                llm,
+                recovery_messages,
+                per_leg_timeout_s=ask_timeout,
             ),
-            messages=recovery_messages, path=recovery_trace_path, record=record,
+            messages=recovery_messages,
+            path=recovery_trace_path,
+            record=record,
         )
         content = getattr(resp, "content", "") or ""
         # This rescue assistant turn is appended directly to history. It
@@ -765,11 +799,13 @@ async def force_final_answer(
         cleaned = _strip_leaked_tool_calls(_strip_thinking(text_of(content)))
         if cleaned:
             result.messages.extend(recovery_messages)
-            result.messages.append(assistant_msg_with_reasoning(
-                cleaned,
-                getattr(resp, "reasoning_content", "") or "",
-                thinking_format="tag",
-            ))
+            result.messages.append(
+                assistant_msg_with_reasoning(
+                    cleaned,
+                    getattr(resp, "reasoning_content", "") or "",
+                    thinking_format="tag",
+                )
+            )
         return cleaned
 
     rescue_mode = "deterministic_fallback"
@@ -821,7 +857,9 @@ async def force_final_answer(
             rescue_mode = "collected_report_fallback"
     if not text:
         text = _minimal_best_effort_answer(
-            task_description, result.stopped_by, language=language,
+            task_description,
+            result.stopped_by,
+            language=language,
         )
     result.metadata["final_answer"] = text
     result.metadata["final_answer_rescued"] = True
@@ -830,7 +868,8 @@ async def force_final_answer(
     result.final_content = text
     logger.info(
         "force_final_answer injected after %s (%d chars)",
-        result.stopped_by, len(text),
+        result.stopped_by,
+        len(text),
     )
     return result
 
@@ -848,10 +887,7 @@ def prepare_report_handoff(
     Completed reports outrank a truncated coordinator draft because they carry
     more evidence and remain usable if the reporter fails open.
     """
-    if (
-        not force_refresh
-        and result.stopped_by not in _FORCED_FINAL_STOP_REASONS
-    ):
+    if not force_refresh and result.stopped_by not in _FORCED_FINAL_STOP_REASONS:
         return result
 
     source = str(result.metadata.get("final_answer_source") or "")
@@ -861,9 +897,13 @@ def prepare_report_handoff(
         if text:
             source = "collected_reports"
     if not text:
-        text = _strip_leaked_tool_calls(_strip_thinking(str(
-            result.metadata.get("final_answer") or "",
-        )))
+        text = _strip_leaked_tool_calls(
+            _strip_thinking(
+                str(
+                    result.metadata.get("final_answer") or "",
+                )
+            )
+        )
     if text and not source:
         source = "agent"
     if not text:
@@ -876,7 +916,9 @@ def prepare_report_handoff(
             source = "existing_partial"
     if not text:
         text = _minimal_best_effort_answer(
-            task_description, result.stopped_by, language=language,
+            task_description,
+            result.stopped_by,
+            language=language,
         )
         source = "deterministic_fallback"
 
@@ -1041,7 +1083,9 @@ class NoOpCompactor(MessageCompactor):
     """Disable mid-loop compaction — max_turns is the only bound."""
 
     def compact(
-        self, messages: list[Message], keep_recent: int,
+        self,
+        messages: list[Message],
+        keep_recent: int,
     ) -> list[Message]:
         return messages
 
@@ -1079,7 +1123,9 @@ class ReasoningStripCompactor(MessageCompactor):
     _MAX_TOOL_PREVIEW = 120  # chars of body kept in the aged stub
 
     def compact(
-        self, messages: list[Message], keep_recent: int,
+        self,
+        messages: list[Message],
+        keep_recent: int,
     ) -> list[Message]:
         if len(messages) <= keep_recent:
             return messages
@@ -1157,30 +1203,32 @@ class SwarmToolResultPostProcessor(ToolResultPostProcessor):
     # bash / run_python_code stay capped — their output is unbounded by
     # design (find /, big stdout) and head/tail-with-stderr is the right
     # diet, not lifting it.
-    _PASS_THROUGH = frozenset({
-        "delegate_subtask",
-        "publish_handoff",
-        "submit_report",
-        # collect_reports concatenates the (already-structured, expensive-to-
-        # regenerate) sub-agent reports the main agent synthesizes from — never
-        # head-cap it to the 6K default, or the main agent only sees the first
-        # ~1-2 reports when many sub-agents fan in.
-        "collect_reports",
-        "web_fetch",
-        "web_search",
-        "scholar_search",
-        # Paginates itself: the trailing "PARTIAL READ … read_file again with
-        # offset=N" line IS how the caller continues, so head-capping it replaces
-        # a usable offset with generic "re-fetch" advice. Measured on a live
-        # agent-team run before this was added: of 5 read_file results over 6K,
-        # the tail instruction was lost in every one. React whitelisted this from
-        # the start; the omission here was never deliberate.
-        "read_file",
-        # Same contract, same reason as read_file above. Head-capping it would cut
-        # the continuation pointer off the content the call exists to fetch back,
-        # so recovery would silently return less than it says it did.
-        "recover_result",
-    })
+    _PASS_THROUGH = frozenset(
+        {
+            "delegate_subtask",
+            "publish_handoff",
+            "submit_report",
+            # collect_reports concatenates the (already-structured, expensive-to-
+            # regenerate) sub-agent reports the main agent synthesizes from — never
+            # head-cap it to the 6K default, or the main agent only sees the first
+            # ~1-2 reports when many sub-agents fan in.
+            "collect_reports",
+            "web_fetch",
+            "web_search",
+            "scholar_search",
+            # Paginates itself: the trailing "PARTIAL READ … read_file again with
+            # offset=N" line IS how the caller continues, so head-capping it replaces
+            # a usable offset with generic "re-fetch" advice. Measured on a live
+            # agent-team run before this was added: of 5 read_file results over 6K,
+            # the tail instruction was lost in every one. React whitelisted this from
+            # the start; the omission here was never deliberate.
+            "read_file",
+            # Same contract, same reason as read_file above. Head-capping it would cut
+            # the continuation pointer off the content the call exists to fetch back,
+            # so recovery would silently return less than it says it did.
+            "recover_result",
+        }
+    )
 
     _BUDGETS: ClassVar[dict[str, int]] = {
         "bash": 4_000,
@@ -1213,9 +1261,7 @@ class SwarmToolResultPostProcessor(ToolResultPostProcessor):
 
     def process(self, tool_result: ToolResult) -> str:
         content = (
-            tool_result.result
-            if isinstance(tool_result.result, str)
-            else str(tool_result.result)
+            tool_result.result if isinstance(tool_result.result, str) else str(tool_result.result)
         )
         if tool_result.is_error:
             return content
@@ -1261,9 +1307,7 @@ class SwarmToolResultPostProcessor(ToolResultPostProcessor):
             stdout, stderr = content, ""
 
         stderr_keep = (
-            stderr[-self._BASH_STDERR_KEEP:]
-            if len(stderr) > self._BASH_STDERR_KEEP
-            else stderr
+            stderr[-self._BASH_STDERR_KEEP :] if len(stderr) > self._BASH_STDERR_KEEP else stderr
         )
         overhead = len(BASH_STDERR_SEPARATOR) + 80 if stderr_keep else 0
         stdout_budget = max(500, budget - len(stderr_keep) - overhead)
@@ -1296,6 +1340,7 @@ def _sub_tool_names(runtime: SwarmSubagentRuntime | None = None) -> list[str]:
     ):
         return [t.name for t in _sub_tools(runtime)]
     from frontier_agent.core.runtime.resources.manager import ResourceManager
+
     rm = registry.get_optional(ResourceManager)
     if rm is None:
         return []
@@ -1315,6 +1360,7 @@ def _sub_tools(runtime: SwarmSubagentRuntime | None = None) -> list[Any]:
     if runtime is not None and runtime.sub_agent_tools is not None:
         return with_manifest_tool(list(runtime.sub_agent_tools), role_id=SUB_ROLE_ID)
     from frontier_agent.core.runtime.resources.manager import ResourceManager
+
     rm = registry.get_optional(ResourceManager)
     if rm is None:
         return []
@@ -1390,7 +1436,9 @@ def _swarm_observers(
 
     sse_task_id = task_id_for_sse if task_id_for_sse is not None else task_id
 
-    tool_names = [tool.name for tool in job_tools] if job_tools is not None else _sub_tool_names(runtime)
+    tool_names = (
+        [tool.name for tool in job_tools] if job_tools is not None else _sub_tool_names(runtime)
+    )
     terminal = "submit_report" if "submit_report" in tool_names else None
     from frontier_agent.components.agent_bus import AgentBus
 
@@ -1442,9 +1490,13 @@ def _swarm_observers(
     # 记录 offered/requested/fetched，loop 结束核验 delivered 并落盘工件。
     from plugins.corpus.ledger import ConsumptionLedgerObserver
 
-    observers.append(ConsumptionLedgerObserver(
-        task_id=task_id, role_id="sub_agent", pipeline_id="agent_team",
-    ))
+    observers.append(
+        ConsumptionLedgerObserver(
+            task_id=task_id,
+            role_id="sub_agent",
+            pipeline_id="agent_team",
+        )
+    )
     if DuplicateQueryRollbackObserver.DEFAULT_TOOL_NAMES.intersection(tool_names):
         # Only meaningful for an agent that can search. The rollback pops the
         # turn before the duplicate search runs, so it costs an LLM call and
@@ -1458,46 +1510,59 @@ def _swarm_observers(
         from frontier_agent.components.observers.stuck_target_guard import (
             StuckTargetGuard,
         )
-        observers.append(StuckTargetGuard(
-            hint_after=runtime.stuck_target_hint_after,
-            escalate_after=runtime.stuck_target_escalate_after,
-            window=runtime.stuck_target_window,
-            on_alert=_publish_member_alert,
-        ))
+
+        observers.append(
+            StuckTargetGuard(
+                hint_after=runtime.stuck_target_hint_after,
+                escalate_after=runtime.stuck_target_escalate_after,
+                window=runtime.stuck_target_window,
+                on_alert=_publish_member_alert,
+            )
+        )
     if runtime.stream_repetition_config is not None:
         from workflows.agent_team.stream_repetition import StreamRepetitionDeltaSink
+
         observers.append(StreamRepetitionDeltaSink())
     if terminal:
         observers.append(FinalizeAnswerObserver(tool_names=[terminal]))
-        observers.append(FinalizationReserveObserver(
-            reserve_turns=runtime.finalization_reserve_turns,
-            message=_SUBAGENT_FINALIZATION_MESSAGE,
-        ))
+        observers.append(
+            FinalizationReserveObserver(
+                reserve_turns=runtime.finalization_reserve_turns,
+                message=_SUBAGENT_FINALIZATION_MESSAGE,
+            )
+        )
         observers.append(LastTurnForcer(terminal_tool=terminal))
 
     event_store = registry.get_optional(EventStore)
     if event_store is not None:
-        observers.append(SSEObserver(
-            event_store=event_store, task_id=sse_task_id,
-            run_id=run_id, run_type=run_type,
-        ))
+        observers.append(
+            SSEObserver(
+                event_store=event_store,
+                task_id=sse_task_id,
+                run_id=run_id,
+                run_type=run_type,
+            )
+        )
 
     if runtime.trajectory_dir is not None:
         from frontier_agent.components.observers.trajectory import (
             TrajectoryFileObserver,
         )
+
         if runtime.trajectory_per_task:
             traj_filename = f"{session_name}.t{task_index:02d}"
         else:
             traj_filename = session_name
-        observers.append(TrajectoryFileObserver(
-            runtime.trajectory_dir / "subagents",
-            filename=traj_filename,
-            tools=job_tools if job_tools is not None else _sub_tools(runtime),
-            format_env_vars=("SWARM_TRAJECTORY_FORMATS",),
-            tool_schema_detail="minimal",
-            include_start_tool_names=False,
-        ))
+        observers.append(
+            TrajectoryFileObserver(
+                runtime.trajectory_dir / "subagents",
+                filename=traj_filename,
+                tools=job_tools if job_tools is not None else _sub_tools(runtime),
+                format_env_vars=("SWARM_TRAJECTORY_FORMATS",),
+                tool_schema_detail="minimal",
+                include_start_tool_names=False,
+            )
+        )
 
     # A second, ``worker_trace_dir``-scoped trace writer — coexists with the
     # TrajectoryFileObserver above rather than replacing it (see the
@@ -1506,6 +1571,7 @@ def _swarm_observers(
         from workflows._shared.sdk_shim import (
             make_subagent_trace_observer,
         )
+
         wt = make_subagent_trace_observer(
             workflow_id=runtime.workflow_id,
             parent_agent_id=MAIN_AGENT_ID,
@@ -1549,11 +1615,13 @@ def _resolve_subagent_binds(
         scratch = outputs / "scratch"
         handoffs = scratch / "handoffs"
         handoffs.mkdir(parents=True, exist_ok=True)
-        resolved.extend((
-            (str(outputs), "/outputs", read_only or not can_publish),
-            (str(scratch), "/outputs/scratch", False),
-            (str(handoffs), "/outputs/scratch/handoffs", True),
-        ))
+        resolved.extend(
+            (
+                (str(outputs), "/outputs", read_only or not can_publish),
+                (str(scratch), "/outputs/scratch", False),
+                (str(handoffs), "/outputs/scratch/handoffs", True),
+            )
+        )
     return tuple(resolved)
 
 
@@ -1592,9 +1660,7 @@ async def _adapt_swarm_result(
     metadata["stopped_by"] = getattr(agent_result, "stopped_by", "") or ""
     for key in ("verification_checks", "verification_events"):
         metadata[key] = list(item.metadata.get(key) or [])
-    metadata["report_attachments"] = list(
-        metadata.get("final_answer_attachments") or []
-    )
+    metadata["report_attachments"] = list(metadata.get("final_answer_attachments") or [])
 
     final_content = result.get("final_content", "")
     if denials:
@@ -1603,12 +1669,9 @@ async def _adapt_swarm_result(
         # appending keeps it above a long report, matching how
         # ``fan_in.format_report_block`` places its own [NOTE: ...] line.
         from plugins.tools._deliverable_policy import render_denial_escalation
-        blocked_writes = [
-            list(entry) for entry in denials if entry[0] != "unverifiable"
-        ]
-        unverifiable_accesses = [
-            list(entry) for entry in denials if entry[0] == "unverifiable"
-        ]
+
+        blocked_writes = [list(entry) for entry in denials if entry[0] != "unverifiable"]
+        unverifiable_accesses = [list(entry) for entry in denials if entry[0] == "unverifiable"]
         if blocked_writes:
             metadata["blocked_output_writes"] = blocked_writes
         if unverifiable_accesses:
@@ -1659,16 +1722,13 @@ def build_swarm_session_runtime_spec(
         metadata = item.metadata or {}
         return budget.deadline_for_job(
             can_publish=bool(
-                metadata.get("can_publish")
-                or metadata.get("uses_publication_budget")
+                metadata.get("can_publish") or metadata.get("uses_publication_budget")
             ),
             is_verification=bool(
-                metadata.get("verification_checks")
-                or "verifier" in session_name.lower()
+                metadata.get("verification_checks") or "verifier" in session_name.lower()
             ),
-            is_recheck=bool(metadata.get("verification_checks")) and all(
-                c.get("replaces_job_id") for c in metadata["verification_checks"]
-            ),
+            is_recheck=bool(metadata.get("verification_checks"))
+            and all(c.get("replaces_job_id") for c in metadata["verification_checks"]),
         )
 
     # Per-job real-token gauge, shared between _config (the trigger policy) and
@@ -1692,12 +1752,11 @@ def build_swarm_session_runtime_spec(
                 relief_target=int(runtime.max_len * 0.6),
                 gauge=gauge,  # calibrate relief to real tokens (unit-match trigger)
                 spill=spill_compacted_body if runtime.compaction_spill else None,
-                summary_retry_timeout_s=(
-                    runtime.sub_agent_llm_timeout or LoopConfig.llm_timeout
-                ),
+                summary_retry_timeout_s=(runtime.sub_agent_llm_timeout or LoopConfig.llm_timeout),
             )
             compaction_policy: Any = InputTokenThresholdPolicy(
-                gauge, compaction_trigger_tokens(runtime.max_len),
+                gauge,
+                compaction_trigger_tokens(runtime.max_len),
             )
             keep_recent = max(6, runtime.keep_recent_turns * 3)
         else:
@@ -1718,18 +1777,27 @@ def build_swarm_session_runtime_spec(
             tool_timeout=int(runtime.sub_agent_tool_timeout or LoopConfig.tool_timeout),
             first_chunk_timeout=runtime.first_chunk_timeout_s,
             reasoning_only_timeout_s=(
-                min(runtime.reasoning_only_timeout_s or 25, 25)
-                if is_verification else runtime.reasoning_only_timeout_s
+                min(runtime.reasoning_only_timeout_s or 60, 60)
+                if is_verification
+                else runtime.reasoning_only_timeout_s
             ),
-            reasoning_max_retries=0 if is_verification else None,
-            request_max_tokens=min(runtime.llm_max_tokens or 8192, 8192) if is_verification else None,
+            # One bounded recovery: a reasoning-only spike (slow thinking
+            # providers) resamples once with a reduced cap instead of handing
+            # control back to a loop that would die with 0 tool calls
+            # (run c010c5e1: 2 turns, 0 tool calls, verification unchecked).
+            reasoning_max_retries=1 if is_verification else None,
+            request_max_tokens=min(runtime.llm_max_tokens or 8192, 8192)
+            if is_verification
+            else None,
             reasoning_only_max_tokens=runtime.reasoning_only_max_tokens,
             logical_call_timeout_s=(
-                min(runtime.logical_call_timeout_s or 90, 90)
-                if is_verification else runtime.logical_call_timeout_s
+                min(runtime.logical_call_timeout_s or 300, 300)
+                if is_verification
+                else runtime.logical_call_timeout_s
             ),
             max_completion_tokens=(
-                min(runtime.llm_max_tokens or 8192, 8192) if is_verification
+                min(runtime.llm_max_tokens or 8192, 8192)
+                if is_verification
                 else runtime.llm_max_tokens or LoopConfig.max_completion_tokens
             ),
             context_token_limit=runtime.sub_context_token_limit,
@@ -1754,7 +1822,8 @@ def build_swarm_session_runtime_spec(
             run_id=run_id,
             run_type=run_type,
             job_tools=_tools(_item, _sub_tools(runtime))
-            if _item.metadata.get("verification_checks") else None,
+            if _item.metadata.get("verification_checks")
+            else None,
         )
         obs = [
             MemberProgressObserver(_item.metadata),
@@ -1765,8 +1834,7 @@ def build_swarm_session_runtime_spec(
         if job_deadline is not None:
             metadata = _item.metadata or {}
             is_verifier = bool(
-                metadata.get("verification_checks")
-                or "verifier" in session_name.lower()
+                metadata.get("verification_checks") or "verifier" in session_name.lower()
             )
             handoff_at = None
             checkpoint_reserve_s = None
@@ -1778,10 +1846,7 @@ def build_swarm_session_runtime_spec(
                     # verdicts (the abort path has no second model call).
                     verification = True
                     checkpoint_reserve_s = runtime.verification_checkpoint_reserve_s
-                elif not (
-                    metadata.get("can_publish")
-                    or metadata.get("uses_publication_budget")
-                ):
+                elif not (metadata.get("can_publish") or metadata.get("uses_publication_budget")):
                     handoff_at = runtime.phase_budget.research_dispatch_deadline_s
             obs = [
                 InheritedWallClockDeadlineObserver(
@@ -1795,10 +1860,12 @@ def build_swarm_session_runtime_spec(
         if _tiered:
             obs = [*list(obs), _gauges.setdefault(_job_id, InputTokenGauge())]
             if runtime.max_input_tokens:
-                obs.append(ContextSizeGuard(
-                    max_input_tokens=runtime.max_input_tokens,
-                    force_compaction_first=True,
-                ))
+                obs.append(
+                    ContextSizeGuard(
+                        max_input_tokens=runtime.max_input_tokens,
+                        force_compaction_first=True,
+                    )
+                )
         return obs
 
     async def _force_finalizer(raw_result: Any, _item: SubTask) -> Any:
@@ -1827,11 +1894,14 @@ def build_swarm_session_runtime_spec(
                 run_recovery_llm=False,
                 prefer_tool_observations=True,
             )
-        recovery_budget = max(0.01, min(
-            float(timeout),
-            float(runtime.sub_agent_recovery_timeout_s),
-            remaining if remaining is not None else float("inf"),
-        ))
+        recovery_budget = max(
+            0.01,
+            min(
+                float(timeout),
+                float(runtime.sub_agent_recovery_timeout_s),
+                remaining if remaining is not None else float("inf"),
+            ),
+        )
         recovery = force_final_answer(
             raw_result,
             runtime.sub_agent_llm,
@@ -1854,11 +1924,16 @@ def build_swarm_session_runtime_spec(
             )
 
     async def _adapter(
-        agent_result: Any, job_id: str, item: SubTask,
+        agent_result: Any,
+        job_id: str,
+        item: SubTask,
     ) -> SubAgentResult:
         return await _adapt_swarm_result(
-            agent_result, job_id=job_id, item=item,
-            session_name=session_name, runtime=runtime,
+            agent_result,
+            job_id=job_id,
+            item=item,
+            session_name=session_name,
+            runtime=runtime,
             denials=tuple(_denials.pop(job_id, ())),
         )
 
@@ -1902,17 +1977,14 @@ def build_swarm_session_runtime_spec(
         # reliable carrier here. Reset in the outer finally (covers both paths).
         policy_token = set_policy_mode("enforce")
         can_publish = _item.metadata.get("can_publish") is True
-        output_paths = (
-            _item.metadata.get("output_paths", []) if can_publish else []
-        )
+        output_paths = _item.metadata.get("output_paths", []) if can_publish else []
         # Manifest entries superseded by a replace_manifest follow-up: the
         # publisher may remove them from /outputs so a format change does not
         # leave the old deliverable stranded there.
-        retired_paths = (
-            _item.metadata.get("retired_paths", []) if can_publish else []
-        )
+        retired_paths = _item.metadata.get("retired_paths", []) if can_publish else []
         deliverable_token = set_deliverable_write_paths(
-            output_paths, retired_paths,
+            output_paths,
+            retired_paths,
         )
         # A stale entry would attach the previous task's denial to this one, so
         # the store is keyed per job and overwritten, not accumulated. The
@@ -1927,10 +1999,12 @@ def build_swarm_session_runtime_spec(
             handoff_outputs = Path(mount_outputs)
         else:
             handoff_workspace = Path(runtime.worktree_root or ".") / session_name
-            handoff_outputs = Path(next(
-                (src for src, dst, _ro in runtime.sub_binds if dst == "/outputs"),
-                resolve_mount_dirs()[1],
-            ))
+            handoff_outputs = Path(
+                next(
+                    (src for src, dst, _ro in runtime.sub_binds if dst == "/outputs"),
+                    resolve_mount_dirs()[1],
+                )
+            )
         handoff_token = set_handoff_scope(
             producer=session_name,
             job_id=job_id,
@@ -1940,6 +2014,17 @@ def build_swarm_session_runtime_spec(
         from plugins.tools._verification import reset_verification_scope, set_verification_scope
 
         verification_token = set_verification_scope(job_id, _item.metadata)
+        from plugins.tools._corpus_document import (
+            reset_unit_range_scope,
+            set_unit_range_scope,
+        )
+
+        dispatched_range = _item.metadata.get("unit_range")
+        range_token = (
+            set_unit_range_scope(dispatched_range[0], dispatched_range[1])
+            if dispatched_range
+            else None
+        )
         # 团队成员只接资料库工具，不开放行情工具：关闭 corpus_search 无匹配/拒检时
         # 的「切市场数据路径」提示，改为要求如实报告无覆盖。协调器不调用 corpus_search，
         # 因此只在子代理上下文中关闭即可。
@@ -1953,9 +2038,7 @@ def build_swarm_session_runtime_spec(
             # the shared sandbox on the contextvar explicitly here. No kill on
             # exit — the surrounding container owns the mount's lifecycle.
             if runtime.sandbox_mode in ("container", "native") and runtime.shared_workspace_dir:
-                token = set_task_sandbox(
-                    make_current_sandbox(runtime.shared_workspace_dir)
-                )
+                token = set_task_sandbox(make_current_sandbox(runtime.shared_workspace_dir))
                 try:
                     yield
                 finally:
@@ -1987,6 +2070,8 @@ def build_swarm_session_runtime_spec(
                         logger.warning("agent_team sub-agent sandbox kill failed", exc_info=True)
         finally:
             reset_verification_scope(verification_token)
+            if range_token is not None:
+                reset_unit_range_scope(range_token)
             reset_market_redirect(corpus_token)
             reset_handoff_scope(handoff_token)
             reset_output_write_denial_log(denial_token)
@@ -2033,13 +2118,13 @@ def build_swarm_session_runtime_spec(
         model_profile=runtime.sub_agent_model_profile,
         # Bound jobs receive explicit input snapshots. Old task instructions
         # must not reinstate an unrelated scope on a reused session.
-        include_prior_history=lambda item: not bool(
-            item.metadata.get("verification_checks") or item.metadata.get("bound_research")
+        include_prior_history=lambda item: (
+            not bool(
+                item.metadata.get("verification_checks") or item.metadata.get("bound_research")
+            )
         ),
         history_policy=HistoryPolicy(
             thinking_in_history=runtime.sub_agent_thinking_in_history,
-            thinking_history_max_tokens=(
-                runtime.sub_agent_thinking_history_max_tokens
-            ),
+            thinking_history_max_tokens=(runtime.sub_agent_thinking_history_max_tokens),
         ),
     )

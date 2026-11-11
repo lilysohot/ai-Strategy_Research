@@ -19,14 +19,31 @@ from frontier_agent.core.execution_context import (
     reset_current_execution_scope,
     set_current_execution_scope,
 )
-from frontier_agent.core.loop_types import AgentLoopResult
+from frontier_agent.core.loop_types import WALL_DEADLINE_MONOTONIC_KEY, AgentLoopResult
 from frontier_agent.core.messages import assistant_msg, system_msg, tool_msg, user_msg
 from frontier_agent.core.runtime.loop.message_trimmer import NullTrimmer
 from frontier_agent.core.runtime.loop.tool_exec import execute_tools
 from frontier_agent.core.runtime.registries import services as registry
 from plugins.tools._bus_scope import SWARM_SCOPE_KEY
-from plugins.tools.collect_reports import collect_reports
+from plugins.tools.collect_reports import _status_notice, collect_reports
 from workflows.agent_team.phase_budget import TeamPhaseBudget
+
+
+def test_status_notice_reports_remaining_budget_and_verification_floor():
+    """Scheduling needs the clock before another wait, not only when dispatch is rejected."""
+    import time
+
+    scope = ExecutionScope(
+        task_id="root",
+        metadata={WALL_DEADLINE_MONOTONIC_KEY: time.monotonic() + 120.9},
+    )
+    token = set_current_execution_scope(scope)
+    try:
+        out = _status_notice(scope, "wait_timeout", "No completion arrived.")
+    finally:
+        reset_current_execution_scope(token)
+    assert "Remaining wall budget: 120s" in out
+    assert ">= 90s" in out
 
 
 def _session(task_id: str = "root") -> SubAgentSession:

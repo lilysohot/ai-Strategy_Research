@@ -118,6 +118,94 @@ async def test_read_all_units_once_in_source_order_with_receipts(install):
     assert result["counts"]["supported"] == 1
 
 
+async def test_unit_range_clamps_document_pagination_to_the_assigned_slice(install):
+    """c010c5e1: three extract agents each read all 299 units although the plan
+    split 0-99/100-199/200-298 — the range lived only in free-text notes. A
+    dispatched unit_range must mechanically bound pagination to the slice."""
+    from plugins.tools import _corpus_document
+
+    units = [entry(str(i).zfill(4), f"单元{i}正文。" * 5) for i in range(1, 301)]
+    install(units)
+    token = _corpus_document.set_unit_range_scope(100, 199)
+    try:
+        seen: list[int] = []
+        pages = 0
+        args: dict[str, object] = {"scope": "document", "max_chars": 4000}
+        while True:
+            _raw, page = await call(**args)
+            pages += 1
+            assert pages < 100
+            assert page["ok"]
+            assert page["total_units"] == 100
+            assert page["unit_range"] == [100, 199]
+            for item in page["items"]:
+                seen.append(int(item["unit_id"]))
+            if page["next_cursor"] is None:
+                assert page["exhausted"] and page["fetch_complete"]
+                break
+            args = {"cursor": page["next_cursor"], "max_chars": 4000}
+    finally:
+        _corpus_document.reset_unit_range_scope(token)
+    assert seen == list(range(100, 200)), "pagination must cover exactly the assigned slice"
+
+
+async def test_unit_range_uses_source_position_not_id_format(install):
+    """Regression for F27-r1: the longdoc fixture ids are u01…u60, not numeric
+    strings — the first digit-only implementation filtered every unit out and
+    members saw empty exhausted pages. A dispatched range bounds units by their
+    1-based source position, whatever the id format."""
+    from plugins.tools import _corpus_document
+
+    units = [entry(f"u{i:02d}", f"单元{i}正文。" * 5) for i in range(1, 61)]
+    install(units)
+    token = _corpus_document.set_unit_range_scope(21, 40)
+    try:
+        _raw, page = await call(scope="document", max_chars=4000)
+        assert page["ok"] and page["total_units"] == 20
+        assert page["unit_range"] == [21, 40]
+        seen: list[str] = [item["unit_id"] for item in page["items"]]
+        args: dict[str, object] = {"cursor": page["next_cursor"], "max_chars": 4000}
+        while True:
+            _raw, page = await call(**args)
+            assert page["ok"]
+            seen.extend(item["unit_id"] for item in page["items"])
+            if page["next_cursor"] is None:
+                assert page["exhausted"] and page["fetch_complete"]
+                break
+            args = {"cursor": page["next_cursor"], "max_chars": 4000}
+    finally:
+        _corpus_document.reset_unit_range_scope(token)
+    assert seen == [f"u{i:02d}" for i in range(21, 41)]
+
+
+async def test_unit_locator_by_position_outside_range_is_rejected(install):
+    from plugins.tools import _corpus_document
+
+    units = [entry(f"u{i:02d}", "x" * 10) for i in range(1, 61)]
+    install(units)
+    token = _corpus_document.set_unit_range_scope(21, 40)
+    try:
+        raw, page = await call(locator="unit:u50", max_chars=4000)
+    finally:
+        _corpus_document.reset_unit_range_scope(token)
+    assert not page["ok"]
+    assert "21" in raw and "40" in raw
+
+
+async def test_explicit_unit_locator_outside_assigned_range_is_rejected(install):
+    from plugins.tools import _corpus_document
+
+    units = [entry(str(i).zfill(4), "x" * 10) for i in (1, 50, 150)]
+    install(units)
+    token = _corpus_document.set_unit_range_scope(100, 199)
+    try:
+        raw, page = await call(locator="unit:0050", max_chars=4000)
+    finally:
+        _corpus_document.reset_unit_range_scope(token)
+    assert not page["ok"]
+    assert "100" in raw and "199" in raw
+
+
 async def test_replay_and_budget_clamp(install):
     install([entry("u1", "长文。" * 6000)])
     raw, page = await call(scope="document", max_chars=50000)
@@ -320,7 +408,9 @@ async def test_source_names_reach_public_document_pages_from_reader(monkeypatch,
             break
         args = {"cursor": page["next_cursor"], "max_chars": 3000}
     assert pages > 1 and delivered == text
-    identity_queries = [(sql, params) for sql, params in queries if "FROM corpus.corpus_builds" in sql]
+    identity_queries = [
+        (sql, params) for sql, params in queries if "FROM corpus.corpus_builds" in sql
+    ]
     assert identity_queries and all("s.original_names" in sql for sql, _ in identity_queries)
     assert all(params == (DOC[4:],) for _, params in identity_queries)
 

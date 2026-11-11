@@ -101,6 +101,27 @@ async def test_quote_selected_by_id_survives_layout_and_binds_correct_block(sour
     )
 
 
+async def test_delivery_names_the_matching_prefix_when_a_quote_drifted(sources):
+    raw = await fetch.corpus_fetch.func(doc_id=DOC, locator=LOC, view="compact")
+    ref = json.loads(raw)["evidence_ref"]
+    ledger = get_run_ledger()
+    ledger.record_fetch_result(raw)
+    ledger.finalize([{"role": "tool", "content": raw}])
+    conclusions = [
+        {
+            "id": "c1",
+            "report_quote": "生态参与方仍在增加",
+            "evidence": [{"evidence_ref": ref}],
+        }
+    ]
+    with pytest.raises(ValueError) as exc:
+        manifest.prepare_final_manifest(conclusions, "原文为：生态参与，尚未形成规模。")
+    message = str(exc.value)
+    assert "corpus_conclusions[0]" in message
+    assert "id=c1" in message
+    assert "前 4 字逐字一致：生态参与" in message
+
+
 async def test_reference_does_not_turn_unseen_text_into_delivered_evidence(sources):
     raw = await fetch.corpus_fetch.func(doc_id=DOC, locator=LOC)
     ledger = get_run_ledger()

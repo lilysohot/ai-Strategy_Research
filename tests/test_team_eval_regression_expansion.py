@@ -20,7 +20,8 @@ def test_original_40_case_objects_are_unchanged():
 
 def test_increment_has_paired_controls_and_no_claim_of_blind_holdout():
     cases = {c["id"]: c for c in catalog()}
-    assert len(cases) == 83
+    assert len(cases) == 86
+    assert cases["F26"]["review_status"] == "approved"
     assert cases["F08"]["pair"] == "F09"
     assert cases["F09"]["pair"] == "F08"
     assert cases["F09"]["split"] == "transfer"
@@ -94,6 +95,30 @@ def test_tool_timings_preserve_missing_and_parallel_durations(tmp_path):
     assert metrics["retrieval_stage_timings"] is None
     assert metrics["agents"][0]["tool_attempts"]["bash"] == 1
     assert metrics["max_prompt_tokens"] == 120
+
+
+def test_corpus_cases_score_repeats_from_grounded_telemetry():
+    """Corpus runs score repeated requests from tool telemetry with returned
+    content, not from wire-level argument collisions across clamped ranges."""
+    case = next(c for c in catalog() if c["id"] == "F27")
+    worker = {"ok": True, "elapsed_s": 1, "result": {"final_answer": "done"}}
+    metrics = {
+        "available": True,
+        "agents": [1, 2],
+        "known_prompt_tokens": 120,
+        "exact_repeated_tool_requests": 8,
+    }
+    corpus = {
+        "available": True,
+        "exact_repeated_requests": 2,
+        "document_pages_returned": 6,
+        "repeated_original_chars": 100,
+    }
+    result = frozen_result(worker, metrics, case, corpus)
+    assert "max_exact_repeated_requests exceeded" not in result["hard_failures"]
+    inflated = {**corpus, "exact_repeated_requests": 8}
+    result = frozen_result(worker, metrics, case, inflated)
+    assert "max_exact_repeated_requests exceeded" in result["hard_failures"]
 
 
 @pytest.mark.parametrize(

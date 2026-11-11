@@ -70,8 +70,20 @@ async def check_kernel_llm() -> str | None:
     return None
 
 
-async def check_workflow_llm(pipeline: str, profile: str) -> str | None:
-    """The LLM the workflow actually runs on, with the profile's sampling args."""
+async def check_workflow_llm(
+    pipeline: str,
+    profile: str,
+    *,
+    stress_chars: int = 0,
+    repeat: int = 1,
+) -> str | None:
+    """The LLM the workflow actually runs on, with the profile's sampling args.
+
+    A 1-token call proves auth and parameter acceptance, not throughput: a
+    provider can answer it and still stall on a long-context request. Pass
+    ``stress_chars`` to send a prompt of roughly that size, and ``repeat`` to
+    require consecutive passes before treating the endpoint as healthy.
+    """
     try:
         if pipeline in {"stateful-react-agent", "stateful_react_agent"}:
             from workflows.stateful_react_agent.profile import (
@@ -89,22 +101,31 @@ async def check_workflow_llm(pipeline: str, profile: str) -> str | None:
     except Exception as e:
         return f"building the profile LLM failed: {type(e).__name__}"
 
-    try:
-        # LLMClient.chat is the kernel's non-streaming entry point; max_tokens=1
-        # keeps this to one token so the check is nearly free.
-        await asyncio.wait_for(
-            llm.chat([{"role": "user", "content": "hi"}], max_tokens=1, timeout=30),
-            timeout=35,
-        )
-    except Exception as e:
-        msg = str(e)
-        hint = ""
-        if "top_p" in msg or "repetition_penalty" in msg:
-            hint = (
-                "\n      Check the selected profile's sampling parameters against "
-                "the configured endpoint; a parameter was rejected."
+    content = "请只回复 OK。" + ("语料" * (stress_chars // 2)) if stress_chars else "hi"
+    max_tokens = 8 if stress_chars else 1
+    timeout = 120 if stress_chars else 30
+    for attempt in range(1, max(1, repeat) + 1):
+        try:
+            await asyncio.wait_for(
+                llm.chat(
+                    [{"role": "user", "content": content}],
+                    max_tokens=max_tokens,
+                    timeout=timeout,
+                ),
+                timeout=timeout + 5,
             )
-        return f"{type(e).__name__} (provider message omitted for credential safety){hint}"
+        except Exception as e:
+            msg = str(e)
+            hint = ""
+            if "top_p" in msg or "repetition_penalty" in msg:
+                hint = (
+                    "\n      Check the selected profile's sampling parameters against "
+                    "the configured endpoint; a parameter was rejected."
+                )
+            return (
+                f"{type(e).__name__} on attempt {attempt}/{max(1, repeat)} "
+                f"(provider message omitted for credential safety){hint}"
+            )
     return None
 
 
@@ -112,6 +133,14 @@ async def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--pipeline", default="stateful-react-agent")
     ap.add_argument("--profile", default="keep5")
+    ap.add_argument(
+        "--stress-chars", type=int, default=0,
+        help="send a prompt of roughly this many characters instead of a 1-token probe",
+    )
+    ap.add_argument(
+        "--repeat", type=int, default=1,
+        help="require this many consecutive workflow calls to pass",
+    )
     args = ap.parse_args()
 
     print("config:")
@@ -123,8 +152,17 @@ async def main() -> int:
         return 1
     print("  ok")
 
-    print(f"\nworkflow LLM ({args.pipeline} / {args.profile}), 1 real call:")
-    if err := await check_workflow_llm(args.pipeline, args.profile):
+    size = f"~{args.stress_chars} chars, " if args.stress_chars else "1 token, "
+    print(
+        f"\nworkflow LLM ({args.pipeline} / {args.profile}), "
+        f"{size}{max(1, args.repeat)} real call(s):"
+    )
+    if err := await check_workflow_llm(
+        args.pipeline,
+        args.profile,
+        stress_chars=args.stress_chars,
+        repeat=args.repeat,
+    ):
         print(f"  FAIL  {err}")
         return 1
     print("  ok")

@@ -284,31 +284,74 @@ def fixed_corpus_tools(case: dict[str, Any], out: Path, arm: str) -> Iterator[di
 
 
 def measure_corpus(trial: Path) -> dict[str, Any]:
-    """Tool-return telemetry; actual model delivery and sufficiency need trace review."""
+    """Tool-return telemetry; actual model delivery and sufficiency need trace review.
+
+    Only accepted attempts are booked. A failed call neither counts as a repeat
+    nor establishes the redundancy baseline, so a retry after an identical failed
+    call is recovery resampling, not waste; redundancy means repeating a success.
+    Repeats are also content-grounded: identical arguments can be different
+    effective requests under per-range clamps (cursor tokens collide across
+    ranges), so a re-issue only books when the majority of its delivered chars
+    were already delivered before.
+    """
     from collections import Counter
 
     path = trial / "corpus-tools.jsonl"
     if not path.exists():
         return {"available": False}
     rows = [json.loads(line) for line in path.read_text().splitlines()]
+
+    def accepted(row: dict[str, Any]) -> bool:
+        result = row.get("result") or {}
+        return result.get("ok") is not False and result.get("error") is None
+
+    def key(row: dict[str, Any]) -> str:
+        return row["name"] + " " + json.dumps(row["args"], sort_keys=True)
+
     names = Counter(row["name"] for row in rows)
-    requests = Counter((row["name"], json.dumps(row["args"], sort_keys=True)) for row in rows)
-    queries = Counter(row["args"].get("query") for row in rows if row["name"] == "corpus_search")
+    repeats: Counter[str] = Counter()
+    query_repeats: Counter[str] = Counter()
+    previously_accepted: dict[str, bool] = {}
     seen: dict[str, list[tuple[int, int]]] = {}
     repeated_chars = total_chars = 0
     for row in rows:
+        request_key = key(row)
+        query = str(row["args"].get("query")) if row["name"] == "corpus_search" else None
+        if not accepted(row):
+            previously_accepted[request_key] = False
+            if query is not None:
+                previously_accepted["query " + query] = False
+            continue
+        was_accepted = previously_accepted.get(request_key)
+        recovery = was_accepted is False
+        delivered_chars = overlap_chars = 0
         for span in row["returned_intervals"]:
-            key, left, right = span["unit_id"], span["start"], span["end"]
+            unit, left, right = span["unit_id"], span["start"], span["end"]
+            delivered_chars += right - left
             total_chars += right - left
-            previous = seen.get(key, [])
-            repeated_chars += sum(max(0, min(right, b) - max(left, a)) for a, b in previous)
+            previous = seen.get(unit, [])
+            hit = sum(max(0, min(right, b) - max(left, a)) for a, b in previous)
+            overlap_chars += hit
+            if not recovery:
+                repeated_chars += hit
             merged: list[tuple[int, int]] = []
             for a, b in sorted([*previous, (left, right)]):
                 if merged and a <= merged[-1][1]:
                     merged[-1] = (merged[-1][0], max(b, merged[-1][1]))
                 else:
                     merged.append((a, b))
-            seen[key] = merged
+            seen[unit] = merged
+        if not recovery:
+            grounded = (
+                overlap_chars * 2 >= delivered_chars if delivered_chars else was_accepted is True
+            )
+            if grounded:
+                repeats[request_key] += 1
+                if query is not None:
+                    query_repeats[query] += 1
+        previously_accepted[request_key] = True
+        if query is not None:
+            previously_accepted["query " + query] = True
     document_returns = [
         r for r in rows if r["name"] == "corpus_fetch" and r["result"].get("scope") == "document"
     ]
@@ -317,8 +360,8 @@ def measure_corpus(trial: Path) -> dict[str, Any]:
         "available": True,
         "tool_calls": dict(names),
         "same_tool_reuses": sum(n - 1 for n in names.values()),
-        "exact_repeated_requests": sum(n - 1 for n in requests.values()),
-        "repeated_query_strings": sum(n - 1 for n in queries.values()),
+        "exact_repeated_requests": sum(repeats.values()),
+        "repeated_query_strings": sum(query_repeats.values()),
         "reference_hint_emissions": sum(r["reference_hint_emitted"] for r in rows),
         "document_pages_returned": len(pages),
         "document_failure_returns": len(document_returns) - len(pages),
@@ -326,5 +369,5 @@ def measure_corpus(trial: Path) -> dict[str, Any]:
         "original_chars_returned": total_chars,
         "repeated_original_chars": repeated_chars,
         "returned_unit_ranges": seen,
-        "scope": "tool returns before runtime delivery; not a semantic verdict",
+        "scope": "accepted tool returns before runtime delivery; not a semantic verdict",
     }

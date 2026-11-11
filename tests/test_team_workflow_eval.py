@@ -88,7 +88,7 @@ def test_consecutive_execution_errors_stop_model_launches_without_dropping_cases
 
 def test_catalog_has_reproducible_cases_and_no_unseen_holdout_claim():
     cases = catalog()
-    assert len(cases) == 83
+    assert len(cases) == 86
     assert {c["split"] for c in cases} == {"development", "transfer"}
     assert len([c for c in cases if c["layer"] == "protocol"]) == 58
     for case in cases:
@@ -166,6 +166,178 @@ def test_generation_completion_never_implies_semantic_pass():
     assert (
         frozen_result(worker, {**metrics, "known_prompt_tokens": 900000}, case)["status"] == "fail"
     )
+
+
+def test_worker_failure_keeps_corpus_evidence_in_the_verdict():
+    """An execution error must not hide the page/repeat signal that explains it."""
+    case = next(c for c in catalog() if c["id"] == "F26")
+    worker = {"ok": False, "error_type": "ValueError", "error": "", "elapsed_s": 930}
+    corpus = {"available": True, "document_pages_returned": 10, "repeated_original_chars": 11386}
+    graded = frozen_result(worker, {"available": True}, case, corpus)
+    assert graded["status"] == "error"
+    assert graded["reason"] == "ValueError"
+    assert graded["document_pages_returned"] == 10
+    assert graded["repeated_original_chars"] == 11386
+
+
+def test_wall_deadline_is_an_execution_error_not_a_reviewable_pass():
+    """A run that never finished synthesis must not reach a semantic review verdict."""
+    case = next(c for c in catalog() if c["id"] == "F04")
+    worker = {
+        "ok": True,
+        "elapsed_s": 20,
+        "result": {"stopped_by": "wall_deadline", "answer_status": "best_effort"},
+    }
+    metrics = {
+        "available": True,
+        "agents": [1, 2],
+        "known_prompt_tokens": 10,
+        "research_dispatch_attempts": 2,
+        "unknown_usage_attempts": 0,
+    }
+    graded = frozen_result(worker, metrics, case)
+    assert graded["status"] == "error"
+    assert graded["reason"] == "wall_deadline"
+
+
+def test_corpus_budgets_reject_redundant_document_reads():
+    """Redundant re-reads can stay inside wall/token/attempt budgets; page volume must be judged."""
+    case = next(c for c in catalog() if c["id"] == "F20")
+    case = {
+        **case,
+        "budgets": {
+            **case["budgets"],
+            "max_document_pages": 17,
+            "max_repeated_original_chars": 0,
+        },
+    }
+    worker = {"ok": True, "elapsed_s": 20, "result": {"final_answer": "answer"}}
+    metrics = {
+        "available": True,
+        "agents": [1, 2],
+        "known_prompt_tokens": 10,
+        "attempts": 5,
+        "max_prompt_tokens": 1000,
+        "exact_repeated_tool_requests": 0,
+        "research_dispatch_attempts": 2,
+        "unknown_usage_attempts": 0,
+    }
+    once = {"available": True, "document_pages_returned": 17, "repeated_original_chars": 0}
+    assert frozen_result(worker, metrics, case, once)["status"] == "needs_review"
+    tripled = {"available": True, "document_pages_returned": 51, "repeated_original_chars": 240000}
+    graded = frozen_result(worker, metrics, case, tripled)
+    assert graded["status"] == "fail"
+    assert "max_document_pages exceeded" in graded["hard_failures"]
+    assert "max_repeated_original_chars exceeded" in graded["hard_failures"]
+    assert graded["document_pages_returned"] == 51
+
+
+async def test_long_document_draft_measures_the_declared_page_budget(tmp_path):
+    """A draft page budget is only calibrated when it equals the pages the fixture produces."""
+    from benchmarks.team_workflow.corpus_fixtures import fixed_corpus_tools
+
+    case = next(c for c in catalog() if c["id"] == "F26")
+    doc_id = case["sources"][0]["doc_id"]
+    with fixed_corpus_tools(case, tmp_path, "A") as tools:
+        payload = json.loads(await tools["corpus_fetch"].func(doc_id=doc_id, scope="document"))
+        pages = 1
+        while payload.get("next_cursor"):
+            payload = json.loads(
+                await tools["corpus_fetch"].func(doc_id=doc_id, cursor=payload["next_cursor"])
+            )
+            pages += 1
+        assert payload["fetch_complete"] is True
+    assert pages == case["budgets"]["max_document_pages"] >= 3
+
+
+def test_corpus_budget_without_telemetry_never_passes():
+    case = next(c for c in catalog() if c["id"] == "F20")
+    case = {**case, "budgets": {**case["budgets"], "max_document_pages": 17}}
+    worker = {"ok": True, "elapsed_s": 20, "result": {"final_answer": "answer"}}
+    metrics = {
+        "available": True,
+        "agents": [1, 2],
+        "known_prompt_tokens": 10,
+        "research_dispatch_attempts": 2,
+        "unknown_usage_attempts": 0,
+    }
+    graded = frozen_result(worker, metrics, case, {"available": False})
+    assert graded["status"] == "fail"
+    assert "missing corpus telemetry: document_pages_returned" in graded["hard_failures"]
+
+
+def test_corpus_telemetry_counts_pages_and_repeated_chars(tmp_path):
+    """The producer of the budget inputs must count pages and repeats, not just calls."""
+    from benchmarks.team_workflow.corpus_fixtures import measure_corpus
+
+    rows = [
+        {
+            "name": "corpus_fetch",
+            "args": {"doc_id": "cv2:fixture", "cursor": f"page-{page}"},
+            "result": {"ok": True, "scope": "document", "fetch_complete": page == 2},
+            "returned_intervals": [{"unit_id": "unit:1", "start": 0, "end": 100}],
+            "reference_hint_emitted": False,
+        }
+        for page in range(3)
+    ]
+    (tmp_path / "corpus-tools.jsonl").write_text("\n".join(json.dumps(row) for row in rows) + "\n")
+    metrics = measure_corpus(tmp_path)
+    assert metrics["available"] is True
+    assert metrics["document_pages_returned"] == 3
+    assert metrics["repeated_original_chars"] == 200
+
+
+def test_failed_preflight_marks_sample_unassessed_without_launching(tmp_path, monkeypatch):
+    """An unhealthy provider must skip the paid sample, not infer flow behaviour from it."""
+    import argparse
+
+    from benchmarks.team_workflow import run as runner
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("worker must not launch when the provider probe fails")
+
+    monkeypatch.setattr(runner.subprocess, "Popen", forbidden)
+    monkeypatch.setattr(runner, "source_fingerprint", lambda: {"test": True})
+    monkeypatch.setattr(runner, "preflight_gate", lambda *a, **k: "APITimeoutError")
+    out = tmp_path / "batch"
+    code = runner.run(
+        argparse.Namespace(
+            layer="frozen",
+            case=["F26"],
+            repeats=1,
+            profile="default",
+            max_consecutive_errors=2,
+            out=out,
+            preflight=True,
+            preflight_stress_chars=0,
+            preflight_retries=2,
+        )
+    )
+    assert code == 1
+    result = json.loads((out / "F26-r1/result.json").read_text())
+    assert result["status"] == "unassessed"
+    assert "provider preflight failed" in result["reason"]
+    assert summarize(out)["states"] == {"unassessed": 1}
+
+
+def test_cases_without_corpus_budgets_ignore_corpus_telemetry():
+    case = next(c for c in catalog() if c["id"] == "F04")
+    worker = {"ok": True, "elapsed_s": 20, "result": {"final_answer": "answer"}}
+    metrics = {
+        "available": True,
+        "agents": [1, 2],
+        "known_prompt_tokens": 10,
+        "research_dispatch_attempts": 2,
+        "unknown_usage_attempts": 0,
+    }
+    before = frozen_result(worker, metrics, case)
+    after = frozen_result(
+        worker,
+        metrics,
+        case,
+        {"available": True, "document_pages_returned": 9999, "repeated_original_chars": 9999},
+    )
+    assert before["status"] == after["status"] == "needs_review"
 
 
 def test_rejected_dispatch_retries_do_not_count_as_new_research_jobs():
@@ -442,3 +614,119 @@ async def test_worker_runs_real_bus_member_tools_and_delivery_with_scripted_llm(
         assert "120" in result["result"]["final_answer"]
     finally:
         services.restore(before)
+
+
+def test_retries_after_discarded_attempts_are_not_redundant(tmp_path):
+    """A discarded attempt never executed its calls, so the retry is the first request.
+
+    Redundancy means repeating an accepted request. The phantom call inside a
+    discarded attempt must not count, and the recovery retry after it must not
+    be charged as a repeat of something that never happened.
+    """
+    folder = tmp_path / "agent/trajectories"
+    folder.mkdir(parents=True)
+    rows: list[dict] = []
+    ts = 0
+    for outcome, args in (
+        ("discarded", {"cursor": "page-1"}),
+        ("accepted", {"cursor": "page-1"}),
+        ("accepted", {"cursor": "page-1"}),
+        ("accepted", {"cursor": "page-2"}),
+    ):
+        rows.append({"t": "attempt", "ts": ts, "phase": "started"})
+        ts += 1
+        rows.append(
+            {
+                "t": "attempt",
+                "ts": ts,
+                "phase": "finished",
+                "outcome": outcome,
+                "usage": {"prompt_tokens": 100},
+            }
+        )
+        ts += 1
+        rows.append({"t": "llm", "ts": ts, "tool_calls": [{"name": "corpus_fetch", "args": args}]})
+        ts += 1
+    (folder / "worker.t01.jsonl").write_text("\n".join(json.dumps(r) for r in rows) + "\n")
+    metrics = measure(tmp_path)
+    assert metrics["exact_repeated_tool_requests"] == 1
+
+
+def test_repeated_requests_require_majority_repeated_delivery(tmp_path):
+    """A repeat is booked only when the delivery itself is mostly re-delivery.
+
+    Identical arguments can be different effective requests under per-range
+    clamps (cursor tokens collide across ranges), so returned content decides:
+    a disjoint re-issue of the same arguments is new work, not waste.
+    """
+    from benchmarks.team_workflow.corpus_fixtures import measure_corpus
+
+    def unit(uid):
+        return {"unit_id": uid, "start": 0, "end": 100}
+
+    def fetch(args, intervals):
+        return {
+            "name": "corpus_fetch",
+            "args": args,
+            "result": {"ok": True, "scope": "document"},
+            "returned_intervals": intervals,
+            "reference_hint_emitted": False,
+        }
+
+    rows = [
+        fetch({"cursor": "c1"}, [unit("u01")]),
+        fetch({"cursor": "c1"}, [unit("u41")]),
+        fetch({"cursor": "c1"}, [unit("u01")]),
+        fetch({"cursor": "c2"}, [unit("u02"), unit("u41"), unit("u43")]),
+    ]
+    (tmp_path / "corpus-tools.jsonl").write_text("\n".join(json.dumps(r) for r in rows) + "\n")
+    metrics = measure_corpus(tmp_path)
+    assert metrics["exact_repeated_requests"] == 1
+    assert metrics["repeated_original_chars"] == 200
+    assert metrics["original_chars_returned"] == 600
+
+
+def test_failed_tool_calls_neither_count_nor_establish_redundancy(tmp_path):
+    """Only accepted tool attempts book repeats and overlap; a retry after a
+    failed identical call is recovery resampling, not redundancy."""
+    from benchmarks.team_workflow.corpus_fixtures import measure_corpus
+
+    def fetch(args, ok, intervals):
+        result = {"ok": ok, "scope": "document"}
+        if not ok:
+            result["error"] = "transient"
+        return {
+            "name": "corpus_fetch",
+            "args": args,
+            "result": result,
+            "returned_intervals": intervals,
+            "reference_hint_emitted": False,
+        }
+
+    page = [{"unit_id": "u1", "start": 0, "end": 100}]
+    rows = [
+        fetch({"cursor": "p1"}, True, page),
+        fetch({"cursor": "p1"}, False, []),
+        fetch({"cursor": "p1"}, True, page),
+        fetch({"cursor": "p1"}, True, page),
+        {
+            "name": "corpus_search",
+            "args": {"query": "q"},
+            "result": {"hits": [{"doc_id": "d"}]},
+            "returned_intervals": [],
+            "reference_hint_emitted": False,
+        },
+        {
+            "name": "corpus_search",
+            "args": {"query": "q"},
+            "result": {"ok": False, "error": "source_withdrawn"},
+            "returned_intervals": [],
+            "reference_hint_emitted": False,
+        },
+    ]
+    (tmp_path / "corpus-tools.jsonl").write_text("\n".join(json.dumps(r) for r in rows) + "\n")
+    metrics = measure_corpus(tmp_path)
+    assert metrics["exact_repeated_requests"] == 1
+    assert metrics["repeated_query_strings"] == 0
+    assert metrics["repeated_original_chars"] == 100
+    assert metrics["original_chars_returned"] == 300

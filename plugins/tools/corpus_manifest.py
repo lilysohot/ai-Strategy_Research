@@ -260,6 +260,16 @@ def _prepared_conclusions(conclusions: Any) -> list[dict[str, Any]]:
     return numbered
 
 
+def _verbatim_prefix(anchor: str, content: str, limit: int = 40) -> str:
+    """Deterministic repair hint: how much of the quote appears verbatim in content."""
+    size = min(len(anchor), limit)
+    while size > 0 and anchor[:size] not in content:
+        size -= 1
+    if size == 0:
+        return "content 中没有任何逐字前缀"
+    return f"content 中仅有前 {size} 字逐字一致：{anchor[:size]}"
+
+
 def prepare_final_manifest(conclusions: Any, content: str) -> dict[str, Any]:
     """Bind coordinator claims to the exact body accepted in the same delivery call."""
     import hashlib
@@ -268,8 +278,15 @@ def prepare_final_manifest(conclusions: Any, content: str) -> dict[str, Any]:
     errors = []
     for index, row in enumerate(rows):
         anchor = row.get("report_quote")
-        if not isinstance(anchor, str) or not anchor.strip() or anchor not in content:
-            errors.append(f"corpus_conclusions[{index}].report_quote 必须逐字来自本次 content")
+        if isinstance(anchor, str) and anchor.strip() and anchor in content:
+            continue
+        hint = _verbatim_prefix(anchor, content) if isinstance(anchor, str) and anchor else (
+            "report_quote 为空"
+        )
+        errors.append(
+            f"corpus_conclusions[{index}] (id={row.get('id')}) report_quote 必须逐字来自本次 "
+            f"content；{hint}。请从 content 复制原句，或删除该结论"
+        )
     if errors:
         raise ValueError("; ".join(errors))
     return {

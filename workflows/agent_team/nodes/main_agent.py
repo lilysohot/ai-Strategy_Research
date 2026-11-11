@@ -1875,6 +1875,9 @@ async def main_agent_node(
         # BASH_ALLOWLIST_MODE (env wins). Sub-agents set their own mode in
         # subagent_runtime's context_setup.
         "bash_allowlist_mode": "enforce",
+        # Operational dispatch cap (e.g. a benchmark's max_research_jobs),
+        # enforced by assign_task at submission time — not model-visible.
+        "research_job_budget": metadata.get("research_job_budget"),
         # Container mode: authorize file tools' direct-local access to the
         # mounted /workspace (plugins.tools._path_auth). Empty in bwrap mode.
         "workspace_root": shared_workspace_dir,
