@@ -10,7 +10,7 @@ import hashlib
 import json
 from contextlib import suppress
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from frontier_agent.core.loop_types import (
     BaseObserver,
@@ -21,12 +21,17 @@ from frontier_agent.core.loop_types import (
 )
 from plugins.corpus.search_evidence import search_evidence_items
 
+if TYPE_CHECKING:
+    from frontier_agent.core.loop_types import AgentLoopResult
+
 ACQUISITION_TOOLS = frozenset({"corpus_search", "corpus_fetch", "corpus_inventory"})
 STOP_REASON = "repeated_corpus_results"
 
 
 def _digest(value: Any) -> str:
-    return hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+    return hashlib.sha256(
+        json.dumps(value, sort_keys=True, ensure_ascii=False).encode()
+    ).hexdigest()
 
 
 def _observations(name: str, payload: dict[str, Any]) -> set[str]:
@@ -49,10 +54,16 @@ def _observations(name: str, payload: dict[str, Any]) -> set[str]:
             if not isinstance(hit, dict) or not isinstance(hit.get("doc_id"), str):
                 continue
             doc_id = hit["doc_id"]
-            record("candidate", doc_id, [
-                hit.get("title"), hit.get("published"), hit.get("available_blocks"),
-                hit.get("preview"),
-            ])
+            record(
+                "candidate",
+                doc_id,
+                [
+                    hit.get("title"),
+                    hit.get("published"),
+                    hit.get("available_blocks"),
+                    hit.get("preview"),
+                ],
+            )
             for item in search_evidence_items(hit):
                 evidence(doc_id, item)
     elif name == "corpus_fetch":
@@ -66,10 +77,15 @@ def _observations(name: str, payload: dict[str, Any]) -> set[str]:
         # Blank units and the first true end-of-document receipt are progress too.
         # Neither declares task completion or coverage of the original PDF.
         if payload.get("scope") == "document":
-            record("document_position", doc_id, [
-                payload.get("document_sha256"), payload.get("position"),
-                payload.get("fetch_complete"),
-            ])
+            record(
+                "document_position",
+                doc_id,
+                [
+                    payload.get("document_sha256"),
+                    payload.get("position"),
+                    payload.get("fetch_complete"),
+                ],
+            )
     elif name == "corpus_inventory":
         items = payload.get("items", [])
         if not isinstance(items, list):
@@ -78,6 +94,61 @@ def _observations(name: str, payload: dict[str, Any]) -> set[str]:
             if isinstance(item, dict) and item.get("locator"):
                 record("inventory", payload.get("doc_id", ""), item)
     return found
+
+
+class CorpusCoverageObserver(BaseObserver):
+    """Absolute source-unit positions a job actually received, from page receipts.
+
+    Positions derive mechanically from document-page receipts (filtered end
+    index minus delivered item count, shifted by the dispatched range) — never
+    from a model's own coverage claim. Locator and fragment reads carry no
+    position and stay unrecorded; absence of telemetry is fail-open for
+    completion accounting, contradicting telemetry is fail-closed.
+    """
+
+    def __init__(self) -> None:
+        self.pending: dict[str, str] = {}
+        self.positions: set[int] = set()
+
+    async def on_tool_result(self, ctx: TurnContext, result: ToolResult) -> None:
+        del ctx
+        if result.name == "corpus_fetch":
+            self.pending[result.tool_call_id] = result.name
+
+    async def on_turn_end(self, ctx: TurnContext) -> Intervention | None:
+        for message in ctx.messages or []:
+            if not isinstance(message, dict) or message.get("role") != "tool":
+                continue
+            if self.pending.pop(str(message.get("tool_call_id", "")), None) is None:
+                continue
+            try:
+                payload = json.loads(message.get("content") or "")
+            except (ValueError, TypeError):
+                continue
+            if not isinstance(payload, dict) or payload.get("ok") is not True:
+                continue
+            if payload.get("scope") != "document":
+                continue
+            items = payload.get("items")
+            position = payload.get("position") or {}
+            end = position.get("unit_index")
+            if not isinstance(items, list) or type(end) is not int or end < len(items):
+                continue
+            span = payload.get("unit_range")
+            base = (
+                int(span[0])
+                if (isinstance(span, list) and len(span) == 2 and type(span[0]) is int)
+                else 0
+            )
+            # Filtered index i is absolute 1-based position base+i; this page
+            # delivered filtered indices [end-len(items), end).
+            self.positions.update(range(base + end - len(items), base + end))
+        return None
+
+    async def on_loop_end(self, result: AgentLoopResult) -> None:
+        metadata = getattr(result, "metadata", None)
+        if isinstance(metadata, dict):
+            metadata["observed_unit_coverage"] = sorted(self.positions)
 
 
 @dataclass
@@ -91,15 +162,21 @@ class CorpusReadState:
             return
         doc_id = payload.get("doc_id")
         if (
-            payload.get("ok") is False and payload.get("code") == "withdrawn"
+            payload.get("ok") is False
+            and payload.get("code") == "withdrawn"
             and payload.get("retryable") is False
             and payload.get("failure_scope") == "document"
-            and isinstance(doc_id, str) and doc_id
+            and isinstance(doc_id, str)
+            and doc_id
         ):
             self.withdrawn[doc_id] = {
-                "ok": False, "code": "withdrawn", "retryable": False,
-                "failure_scope": "document", "doc_id": doc_id,
-                "fetch_complete": False, "error": "source_withdrawn",
+                "ok": False,
+                "code": "withdrawn",
+                "retryable": False,
+                "failure_scope": "document",
+                "doc_id": doc_id,
+                "fetch_complete": False,
+                "error": "source_withdrawn",
             }
 
 
@@ -126,7 +203,9 @@ class CorpusProgressObserver(BaseObserver):
         self.notice: dict[str, Any] | None = None
 
     async def on_tool_call(
-        self, ctx: TurnContext, tool_call: dict[str, Any],
+        self,
+        ctx: TurnContext,
+        tool_call: dict[str, Any],
     ) -> ToolCallIntervention | None:
         del ctx
         args = tool_call.get("args") or {}
@@ -135,9 +214,13 @@ class CorpusProgressObserver(BaseObserver):
         doc_id = args.get("doc_id") if isinstance(args, dict) else None
         if isinstance(doc_id, str) and doc_id in self.withdrawn:
             return ToolCallIntervention(
-                skip_with_result=json.dumps({
-                    **self.withdrawn[doc_id], "execution_suppressed": True,
-                }, ensure_ascii=False),
+                skip_with_result=json.dumps(
+                    {
+                        **self.withdrawn[doc_id],
+                        "execution_suppressed": True,
+                    },
+                    ensure_ascii=False,
+                ),
                 skip_is_error=True,
             )
         return None
@@ -179,9 +262,11 @@ class CorpusProgressObserver(BaseObserver):
                 continue
             doc_id = payload.get("doc_id")
             if (
-                payload.get("ok") is False and payload.get("code") == "withdrawn"
+                payload.get("ok") is False
+                and payload.get("code") == "withdrawn"
                 and payload.get("retryable") is False
-                and payload.get("failure_scope") == "document" and isinstance(doc_id, str)
+                and payload.get("failure_scope") == "document"
+                and isinstance(doc_id, str)
             ):
                 self.read_state.observe(payload)
                 observed = True
@@ -207,9 +292,9 @@ class CorpusProgressObserver(BaseObserver):
         only_acquisition = bool(ctx.tool_calls) and all(
             c.get("name") in ACQUISITION_TOOLS for c in ctx.tool_calls
         )
-        self.streak = self.streak + 1 if (
-            observed and not new and not unknown and only_acquisition
-        ) else 0
+        self.streak = (
+            self.streak + 1 if (observed and not new and not unknown and only_acquisition) else 0
+        )
         state = {
             "new_observations": new,
             "observations_total": self.new_observations,

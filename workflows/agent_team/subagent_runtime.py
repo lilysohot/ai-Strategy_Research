@@ -1810,7 +1810,7 @@ def build_swarm_session_runtime_spec(
         )
 
     def _observers(_job_id: str, _item: SubTask, task_index: int) -> list[Any]:
-        from plugins.corpus.progress import CorpusProgressObserver
+        from plugins.corpus.progress import CorpusCoverageObserver, CorpusProgressObserver
         from workflows.agent_team.observers.member_progress import MemberProgressObserver
 
         obs = _swarm_observers(
@@ -1828,6 +1828,7 @@ def build_swarm_session_runtime_spec(
         obs = [
             MemberProgressObserver(_item.metadata),
             CorpusProgressObserver(stop_after=6, read_state=runtime.corpus_read_state),
+            CorpusCoverageObserver(),
             *obs,
         ]
         job_deadline = _job_deadline(_item)
