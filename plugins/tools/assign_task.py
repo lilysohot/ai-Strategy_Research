@@ -238,7 +238,9 @@ class AgentTeamAssignmentSpec(AssignmentSpec):
             "For segmented extraction of one numbered corpus document: the "
             "1-based inclusive unit span this member owns, e.g. [100, 199]. "
             "corpus_fetch mechanically clamps document pagination and unit "
-            "locators to this span; other members' slices are unreadable."
+            "locators to this span; other members' slices are unreadable. The "
+            "span and its read start are also injected into the member "
+            "execution text, so bound research always knows its slice."
         ),
     )
 
@@ -873,6 +875,21 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                         + "\n\n# Follow-up gaps\n"
                         + json.dumps(task_metadata["work_item_gaps"], ensure_ascii=False)
                     )
+                    if spec.unit_range:
+                        # The dispatched span is part of the execution contract:
+                        # members must know the span they own and where to start
+                        # reading, and clamping already enforces it fail-closed.
+                        lo, hi = (int(v) for v in spec.unit_range[:2])
+                        task_prompt += (
+                            f"\n\n# Assigned unit range\n"
+                            f"This assignment owns source units {lo}–{hi} "
+                            "(1-based, inclusive). Begin your first document read "
+                            f"there (unit:{lo:04d} or a plain document page — paging "
+                            "already starts inside the span); corpus_fetch denies "
+                            "requests outside it. Instructions mentioning units "
+                            "outside the span are a dispatch conflict: surface the "
+                            "conflict in your report instead of reading around it."
+                        )
                     attachments = [match.group(0) for match in _ATTACH_RE.finditer(spec.prompt)]
                     if attachments:
                         task_prompt += "\n\n# Attached reports\n" + "\n".join(attachments)

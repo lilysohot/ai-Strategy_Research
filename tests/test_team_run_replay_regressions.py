@@ -59,10 +59,6 @@ def replay_dispatch():
     registry.restore(saved)
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="dispatch-declared unit ranges never reach the member execution text",
-)
 async def test_segment_ranges_reach_member_execution_text(replay_dispatch):
     """Round-1 shape: three extractors share one work item, each owning a
     disjoint unit span. Every member must see its own span and where to start
@@ -99,7 +95,7 @@ async def test_segment_ranges_reach_member_execution_text(replay_dispatch):
     reply = await agent_team_assign_task.func(tasks=specs)
     assert not reply.startswith("Error"), reply
     assert len(bus.submitted) == 3
-    for spec, (_session_id, prompt, metadata) in zip(specs, bus.submitted):
+    for spec, (_session_id, prompt, metadata) in zip(specs, bus.submitted, strict=True):
         lo, hi = spec["unit_range"]
         assert f"unit:{lo:04d}" in prompt, "member must know where to start reading"
         assert str(lo) in prompt and str(hi) in prompt, "member must see the span it owns"
@@ -119,7 +115,7 @@ async def test_late_report_without_assigned_coverage_cannot_resolve(replay_dispa
     from plugins.tools.assign_task import agent_team_assign_task
     from plugins.tools.task_board import add_task, snapshot_tasks, update_task
 
-    bus, jobs = replay_dispatch
+    _bus, jobs = replay_dispatch
     await add_task.func([{
         "description": "深读文档后段（unit 150–272）：竞争格局、估值含义、风险与催化剂",
         "kind": "research",
