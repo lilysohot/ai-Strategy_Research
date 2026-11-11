@@ -831,6 +831,21 @@ async def force_final_answer(
     # ``prepare_report_handoff`` deliberately reverses these two: there the
     # reporter is still to come, and raw reports are the better input for it.
     new_evidence = result.metadata.get("team_wind_down", {}).get("collected_count", 0) > 0
+    # A gate-passed synthesis latched by the finalize observer is a finished
+    # answer integrating everything collected so far. When a refresh was
+    # attempted and failed, it outranks the stitched raw reports: keep it and
+    # record that it predates the latest collection, so the publication
+    # boundary reports the gap instead of degrading to raw JSON stitching.
+    # Without a failed attempt the legacy chain still decides: a thin latched
+    # preview must not outrank substantive salvaged content.
+    refresh_attempted = bool(run_recovery_llm)
+    latched = _strip_leaked_tool_calls(
+        _strip_thinking(str(result.metadata.get("final_answer") or ""))
+    )
+    if not text and refresh_attempted and latched and is_user_report(latched):
+        text = latched
+        rescue_mode = "existing_partial"
+        result.metadata["final_answer_refresh_failed"] = True
     if not text and candidate and not new_evidence and is_user_report(candidate):
         text = candidate
         rescue_mode = "existing_partial"

@@ -40,6 +40,10 @@ class TeamWindDown:
     job_outcomes: list[dict[str, Any]] = field(default_factory=list)
     untracked_work: bool = True
     verification: dict[str, Any] = field(default_factory=dict)
+    # Collected reports from jobs classified complete — the only arrivals that
+    # can substantively change the answer body. Late failures, timeouts and
+    # incomplete deliveries are status updates, not new evidence.
+    new_evidence_count: int = 0
 
     @property
     def run_status(self) -> TeamCompleteness:
@@ -57,11 +61,11 @@ class TeamWindDown:
     @property
     def requires_resynthesis(self) -> bool:
         """Whether the coordinator's pre-fan-in draft is no longer final."""
-        return self.collected_count > 0 or self.run_status == "partial"
+        return self.new_evidence_count > 0 or self.run_status == "partial"
 
     def should_refresh_answer(self, result: AgentLoopResult) -> bool:
         """New evidence invalidates a draft; partial execution alone does not."""
-        return self.collected_count > 0 or (
+        return self.new_evidence_count > 0 or (
             self.requires_resynthesis
             and not is_user_report(
                 str(result.metadata.get("final_answer_candidate") or result.final_content)
@@ -72,6 +76,7 @@ class TeamWindDown:
         return {
             "status": self.status,
             "collected_count": self.collected_count,
+            "new_evidence_count": self.new_evidence_count,
             "incomplete_count": self.incomplete_count,
             "queued_aborted": self.queued_aborted,
             "unresolved_count": self.unresolved_count,
@@ -80,6 +85,23 @@ class TeamWindDown:
             "untracked_work": self.untracked_work,
             "verification": self.verification,
         }
+
+
+def _has_obtained_content(result: Any) -> bool:
+    """Whether a collected result carries mechanically evidenced content.
+
+    Substantive means obtained sources (content acquisition receipts) or
+    delivered corpus unit positions — page-receipt derived, never a model's
+    own coverage claim.
+    """
+    metadata = getattr(result, "metadata", None) or {}
+    acquisition = metadata.get("content_acquisition")
+    if isinstance(acquisition, list) and any(
+        isinstance(entry, dict) and entry.get("obtained") for entry in acquisition
+    ):
+        return True
+    coverage = metadata.get("observed_unit_coverage")
+    return isinstance(coverage, list) and bool(coverage)
 
 
 def snapshot_job_outcomes(bus: AgentBus, task_id: str) -> list[dict[str, Any]]:
@@ -196,6 +218,14 @@ async def wind_down_team(
     )
     accounted = len(collected) + queued_aborted + unresolved_count
     incomplete_count = sum(info.status != "complete" for info in infos)
+    # Substantive arrivals: reports from completed jobs, plus salvaged content
+    # from aborted members whose tool observations actually obtained sources
+    # (cancellation salvage) or delivered corpus units. Failed or timed-out
+    # deliveries that carry no obtained content are status updates only.
+    new_evidence_count = sum(
+        info.status == "complete" or _has_obtained_content(result)
+        for info, result in zip(infos, (entry[1] for entry in collected), strict=True)
+    )
     status: TeamCompleteness = (
         "partial"
         if (
@@ -272,6 +302,7 @@ async def wind_down_team(
         status=status,
         checkpoint=checkpoint,
         collected_count=len(collected),
+        new_evidence_count=new_evidence_count,
         incomplete_count=incomplete_count,
         queued_aborted=queued_aborted,
         unresolved_count=unresolved_count,

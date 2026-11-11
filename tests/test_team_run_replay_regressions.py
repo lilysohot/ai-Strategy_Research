@@ -292,10 +292,41 @@ async def test_late_report_without_assigned_coverage_cannot_resolve(replay_dispa
     assert snapshot_tasks(TASK_ID)[0]["resolution"] == "cancelled"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="a failed recovery call replaces the finished synthesis with stitched raw reports",
-)
+def test_late_incomplete_jobs_do_not_invalidate_finished_synthesis():
+    """Round-2 root cause: the wind-down counted any late arrival as evidence.
+    Only reports from jobs classified complete can substantively change the
+    answer body; a failed or timed-out delivery is a status update. A partial
+    run stays disclosed, but a usable draft is no longer forced through a
+    doomed resynthesis."""
+    from workflows.agent_team.lifecycle import TeamWindDown
+
+    draft = "# 深度解读：示例研报\n\n情景结论：乐观情景 2028 年底在轨算力约 1 GW。"
+    result = AgentLoopResult(messages=[], final_content=draft, metadata={})
+    wind_down = TeamWindDown(
+        status="partial",
+        checkpoint="",
+        collected_count=2,
+        new_evidence_count=0,
+        incomplete_count=2,
+        queued_aborted=0,
+        unresolved_count=0,
+    )
+    assert wind_down.requires_resynthesis is True, "partial run stays disclosed"
+    assert wind_down.should_refresh_answer(result) is False
+    stale_draft = AgentLoopResult(messages=[], final_content="", metadata={})
+    assert wind_down.should_refresh_answer(stale_draft) is True
+    substantive = TeamWindDown(
+        status="partial",
+        checkpoint="",
+        collected_count=1,
+        new_evidence_count=1,
+        incomplete_count=0,
+        queued_aborted=0,
+        unresolved_count=0,
+    )
+    assert substantive.should_refresh_answer(result) is True
+
+
 async def test_recovery_failure_preserves_finished_synthesis():
     """Round-2 replay: the coordinator latched a complete post-fan-in
     synthesis, wind-down then counted collected reports, and the clean-context
