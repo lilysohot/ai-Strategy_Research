@@ -982,7 +982,7 @@ async def call_llm(
             logger.warning(
                 "LLM stream stalled: no chunks for %.0fs (turn=%d, "
                 "attempt=%d/%d, chunks_seen=%d, elapsed=%.0fs, "
-                "stall_count=%d); aborting stream and retrying",
+                "stall_count=%d); aborting stream and checking retry budget",
                 exc.stall_s, turn, attempt + 1, max_retries,
                 exc.chunks_seen, exc.elapsed_s, stream_stall_count,
             )
@@ -1159,9 +1159,9 @@ async def call_llm(
                 and backoff + retry_floor_s > deadline_remaining
             ):
                 logger.warning(
-                    "Abandoning LLM retries: backoff %ds would cross the "
+                    "Abandoning LLM retries: backoff %ds + retry floor %.0fs exceed the "
                     "%s (%.0fs left, turn=%d, attempt=%d/%d)",
-                    int(backoff), deadline_reason, deadline_remaining, turn,
+                    int(backoff), retry_floor_s, deadline_reason, deadline_remaining, turn,
                     attempt + 1, max_retries,
                 )
                 await _finish_attempt(
@@ -1193,7 +1193,10 @@ async def call_llm(
                 error=retry_error,
             )
 
-    logger.error("LLM call failed after %d retries (turn=%d)", max_retries, turn)
+    logger.error(
+        "LLM call failed after %d physical attempt(s) (attempt limit=%d, turn=%d)",
+        physical_attempt_index, max_retries, turn,
+    )
     # Should always have an exception captured here — every except clause
     # sets last_exc. Defensive RuntimeError covers a hypothetical
     # max_retries=0 invocation, which would skip the body entirely.

@@ -48,9 +48,15 @@ from frontier_agent.core.loop_types import (
     TurnContext,
 )
 from frontier_agent.core.messages import Message, text_of
+from plugins.corpus import coverage, projection
 from plugins.corpus.quote_match import find_quote_matches
 from plugins.corpus.search_evidence import search_evidence_items
-from plugins.corpus.search_refs import SearchReferenceError, canonical_locator, offered_hit
+from plugins.corpus.search_refs import (
+    SearchReferenceError,
+    canonical_locator,
+    offered_hit,
+    resolve_scope_by_ref,
+)
 from plugins.corpus.structured.consumption import (
     SEMANTIC_TOOL,
     ReportSemanticReference,
@@ -69,6 +75,19 @@ DELIVERED = "delivered"
 TRUNCATED = "truncated"
 UNKNOWN = "unknown"
 SKIPPED = "skipped"
+
+#: ``responses[].delivery_state`` 的两个消息边界失败态。它们与 ``failed``
+#: （工具调用本身失败）分开：一个是"成功结果在消息边界被预算/投影替换"，
+#: 一个是"cmeta 收据找不到或已损坏"。去重重投时必须能区分这三者。
+BLOCKED_BY_BUDGET = "blocked_by_budget"
+SNAPSHOT_UNRECOVERABLE = "snapshot_unrecoverable"
+
+#: 同轮同参去重（single-flight）专用状态。``dedup_ref`` = 该调用没有真实执行，
+#: 只有一条指向首份结果的简短关联回执，因此**不算一次送达**；只有首份的区间
+#: 进入覆盖并集。``dedup_target_not_delivered`` = 首份在消息边界被判为未送达，
+#: 关联回执随之失效，该请求仍须重新发起，绝不冒充已送达。
+DEDUP_REF = "dedup_ref"
+DEDUP_TARGET_NOT_DELIVERED = "dedup_target_not_delivered"
 
 # 结论状态（结论证据充分性）
 SUPPORTED = "supported"
@@ -127,6 +146,11 @@ _LEDGERS: dict[str, ConsumptionLedger] = {}
 
 def _sha256(text: str) -> str:
     return hashlib.sha256(text.encode()).hexdigest()
+
+
+def _short_digest(text: str) -> str:
+    """不透明游标/句柄的稳定短摘要：可对账，不可还原。"""
+    return hashlib.sha256(text.encode()).hexdigest()[:16]
 
 
 def _escaped(text: str) -> str:
@@ -227,6 +251,19 @@ class FragmentRef:
         )
 
 
+def _offered_hit(hit: dict[str, Any]) -> dict[str, Any]:
+    """Resolve navigation candidates (``ref`` only) through their validated receipt."""
+    ref = hit.get("ref")
+    if hit.get("evidence_contract") == "native-search-evidence-v2" or not isinstance(ref, str):
+        return offered_hit(hit)
+    if not ref.startswith("sref:"):
+        return offered_hit(hit)
+    try:
+        return resolve_scope_by_ref(ref)
+    except SearchReferenceError:
+        return {}
+
+
 def _fragment_from_item(item: dict[str, Any], turn: int, doc_id: str) -> FragmentRef | None:
     """从单块结果或分页 item 里抽出一段片段身份。"""
     text = item.get("text")
@@ -274,6 +311,7 @@ class ConsumptionLedger:
     pipeline_id: str = ""
     created_at: str = field(default_factory=lambda: datetime.now(UTC).isoformat())
     offered: list[dict[str, Any]] = field(default_factory=list)
+    document_identities: list[dict[str, Any]] = field(default_factory=list)
     requested: list[dict[str, Any]] = field(default_factory=list)
     fetched: list[FragmentRef] = field(default_factory=list)
     errors: list[dict[str, Any]] = field(default_factory=list)
@@ -284,9 +322,24 @@ class ConsumptionLedger:
 
     #: identity -> 交付状态（delivered／truncated／unknown），跨路径取强。
     delivered: dict[tuple[str, str, int, int], str] = field(default_factory=dict)
+    #: 第 0 步审计：每次 fetch 的「返回／送达侧」记录，按 ``tool_call_id`` 与
+    #: :attr:`requested` 关联。``delivery_state`` 由 :meth:`finalize` 在真实消息
+    #: 边界按四条判据（配对／未被预算替换／快照可恢复／区间与引用完整）推进：
+    #: ``unconfirmed`` → ``delivered``／``truncated``／``unknown``／
+    #: ``blocked_by_budget``／``snapshot_unrecoverable``；工具自身失败直接记
+    #: ``failed``。不进入模型消息；只回答「这次调用实际投递了什么」，与
+    #: :attr:`delivered` 的逐片段状态互为补充（前者按调用、后者按片段）。
+    responses: list[dict[str, Any]] = field(default_factory=list)
     #: 最近一次在真实消息边界完成送达核验的 turn（-1 = 尚未核验过）。
     #: 环内提交清单的工具用它区分「已核验未送达」与「新取片段待边界核验」。
     last_finalized_turn: int = -1
+    #: tool_call_id -> ``cmeta`` 收据句柄。投影隐藏的完整结果由这些收据按调用
+    #: 关联，账本落盘时一并保存，便于回放与审计；不进入模型消息。
+    metadata_snapshots: dict[str, dict[str, Any]] = field(default_factory=dict)
+    #: native1 检索块 → document1 权威单元原文区间的后台映射表（落盘形态）。
+    #: 只接受检索后端 ``native_slices`` 的权威坐标，绝不按 chunk 序号／名称推断；
+    #: 缺表时 :meth:`range_completeness` 如实留空，不把检索范围冒充已取回。
+    native_mappings: list[dict[str, Any]] = field(default_factory=list)
     #: identity -> 片段 JSON 转义文本（仅内存，用于最终消息核验；不落盘）。
     _fragment_text: dict[tuple[str, str, int, int], str] = field(
         default_factory=dict,
@@ -303,6 +356,7 @@ class ConsumptionLedger:
         """Whether this ledger contains a corpus attempt or observation."""
         return bool(
             self.offered
+            or self.document_identities
             or self.requested
             or self.fetched
             or self.semantic.calls
@@ -310,6 +364,33 @@ class ConsumptionLedger:
         )
 
     # ── 采集：offered ──────────────────────────────────────────────────
+    def _record_document_identity(self, source: dict[str, Any], *, origin: str = "fetch") -> None:
+        identity = {key: source[key] for key in
+                    ("filename", "document_title", "published", "publication_date_basis")
+                    if isinstance(source.get(key), str) and source[key]}
+        if not identity or not source.get("doc_id"):
+            return
+        build_id = source.get("build_id") or str(source["doc_id"]).removeprefix("cv2:")
+        record = next((r for r in self.document_identities if
+                       r["doc_id"] == source["doc_id"] and r["build_id"] == build_id), None)
+        if record is None:
+            record = {"doc_id": source["doc_id"], "build_id": build_id, "identity": {},
+                      "field_sources": {}, "conflicts": {}}
+            self.document_identities.append(record)
+        for key, value in identity.items():
+            sources = record.setdefault("field_sources", {}).setdefault(key, [])
+            observed = {"tool": origin, "value": value}
+            if observed not in sources:
+                sources.append(observed)
+            if key == "publication_date_basis" and value == "unknown":
+                continue
+            current = record["identity"].get(key)
+            if current and current != value:
+                record.setdefault("conflicts", {})[key] = list(dict.fromkeys([current, value]))
+                record["identity"].pop(key)
+            elif key not in record.setdefault("conflicts", {}):
+                record["identity"][key] = value
+
     def record_search(self, result_text: str, *, turn: int = 0) -> None:
         payload = _loads(result_text)
         if not isinstance(payload, dict) or payload.get("ok") is not True:
@@ -317,10 +398,25 @@ class ConsumptionLedger:
         for hit in payload.get("hits") or []:
             if not isinstance(hit, dict):
                 continue
+            identity = {key: hit[key] for key in
+                        ("filename", "document_title", "published", "publication_date_basis")
+                        if hit.get(key)}
+            if hit.get("published_basis"):
+                identity["publication_date_basis"] = hit["published_basis"]
             # Repeated searches can expose new passages within the same scope.
             for item in search_evidence_items(hit):
                 self._add_fragment(item, hit["doc_id"], turn, origin=TOOL_SEARCH)
-            hit = offered_hit(hit)
+            hit = _offered_hit(hit)
+            self._record_document_identity({**hit, **identity}, origin="search")
+            mappings = []
+            for member in hit.get("context_native_slices") or []:
+                mapping = coverage.build_native_mapping(
+                    locator=str(member.get("locator") or ""), doc_id=str(hit.get("doc_id") or ""),
+                    build_id=str(hit.get("build_id") or ""), rows=member.get("native_slices") or (),
+                )
+                if mapping is not None:
+                    mappings.append(mapping)
+            self.record_native_mappings(mappings)
             locators = [str(x) for x in (hit.get("context_locators") or [])]
             if not locators:
                 continue
@@ -342,10 +438,33 @@ class ConsumptionLedger:
             )
 
     # ── 采集：requested ────────────────────────────────────────────────
-    def record_fetch_call(self, args: Any, *, turn: int = 0) -> None:
+    def record_fetch_call(
+        self,
+        args: Any,
+        *,
+        turn: int = 0,
+        tool_call_id: str = "",
+        agent: str = "",
+        ordinal: int = 0,
+    ) -> None:
+        """记录一次 fetch 请求的**请求侧**事实。
+
+        这里只写「请求了什么、目标解析成什么」，不写成功与否；返回侧在
+        :meth:`record_fetch_result` 落 :attr:`responses`，两者由 ``tool_call_id`` 关联。
+
+        分类顺序曾把 ``scope == "document"`` 放在 ``ref`` 之前，于是
+        ``ref + scope=document``（读整篇的常见写法）被归成 document，ref 永远不会解析，
+        请求因此失去文档归属——2026-11-12 的长任务里 17 条请求的 ``doc_id`` 全为空。
+        现在 ref 先解析，mode 只描述读取形态。
+        """
         if not isinstance(args, dict):
             return
-        if args.get("scope") == "document":
+        raw_ref = args.get("ref") if isinstance(args.get("ref"), str) else ""
+        raw_cursor = args.get("cursor") if isinstance(args.get("cursor"), str) else ""
+        if raw_ref:
+            mode = "reference"
+            locators = []
+        elif args.get("scope") == "document":
             mode = "document"
             locators = []
         elif "locators" in args and isinstance(args.get("locators"), list):
@@ -357,20 +476,67 @@ class ConsumptionLedger:
         else:
             mode = "single"
             locators = [str(args.get("locator") or "")] if args.get("locator") else []
+
+        doc_id = str(args.get("doc_id") or "")
+        resolution = "ok" if doc_id else "unresolved"
+        resolution_error = ""
+        if not doc_id and raw_ref:
+            try:
+                doc_id = str(resolve_scope_by_ref(raw_ref)["doc_id"])
+                resolution = "ok"
+            except (SearchReferenceError, KeyError, TypeError) as exc:
+                resolution, resolution_error = "unresolved_ref", type(exc).__name__
+
+        # 续读只带 cursor 时，文档身份只能从游标本身解出；解码失败是审计事实，
+        # 不是异常——记下原因，绝不让记录动作影响主流程。
+        cursor_from: dict[str, int] | None = None
+        cursor_type = ""
+        if raw_cursor:
+            try:
+                from plugins.corpus.cursor import decode_cursor
+
+                decoded = decode_cursor(raw_cursor)
+                cursor_type = str(decoded.get("type") or "")
+                if isinstance(decoded.get("mi"), int) or isinstance(decoded.get("off"), int):
+                    cursor_from = {
+                        "unit_index": int(decoded.get("mi") or 0),
+                        "offset": int(decoded.get("off") or 0),
+                    }
+                if not doc_id and decoded.get("doc_id"):
+                    doc_id = str(decoded["doc_id"])
+                    resolution = "ok"
+            except Exception as exc:  # CursorError 及其它解码失败
+                resolution, resolution_error = "invalid_cursor", type(exc).__name__
+
         # Failed aliases remain recorded as attempts; they grant no evidence.
         with suppress(SearchReferenceError):
-            locators = [canonical_locator(str(args.get("doc_id") or ""), loc) for loc in locators]
+            locators = [canonical_locator(doc_id, loc) for loc in locators]
         self.requested.append(
             {
-                "doc_id": str(args.get("doc_id") or ""),
+                "doc_id": doc_id,
                 "mode": mode,
                 "locators": locators,
                 "count": len(locators),
                 "view": str(args.get("view") or "full"),
+                # 请求预算（未必等于生效预算：全文路径会被策略上限再钳一次）。
                 "max_chars": args.get("max_chars"),
                 "turn": turn,
                 # 原因：工具契约不含「为什么请求」字段，这里如实留空而非编造。
                 "reason": "",
+                # ── 第 0 步补齐：调用身份与目标解析 ──
+                "tool_call_id": str(tool_call_id),
+                "agent": str(agent),
+                "ordinal": int(ordinal),
+                "scope": str(args.get("scope") or ""),
+                "ref": raw_ref,
+                "cursor_digest": _short_digest(raw_cursor) if raw_cursor else "",
+                "cursor_type": cursor_type,
+                "cursor_from": cursor_from,
+                "unit_range": args.get("unit_range"),
+                "resolution": resolution,
+                "resolution_error": resolution_error,
+                # 请求侧也留关联位：两条请求回执形状一致，合并到哪一条可复核。
+                "dedup_of": "",
             }
         )
 
@@ -381,16 +547,55 @@ class ConsumptionLedger:
         *,
         is_error: bool = False,
         turn: int = 0,
+        tool_call_id: str = "",
+        internal_chars: int | None = None,
+        exposed_chars: int | None = None,
+        dedup_of: str = "",
     ) -> None:
-        payload = _loads(result_text)
+        """记录一次 fetch 的**返回侧**事实，并落一条 :attr:`responses`。
+
+        ``internal_chars`` 是后台完整结果的大小（可由调用方从快照物化），
+        ``exposed_chars`` 是模型实际看到的字符数；两者都缺省时退化为本条
+        ``result_text`` 的长度，绝不会编造一个"更小"的可见值。
+        """
+        payload = projection.try_materialize(TOOL_FETCH, result_text, tool_call_id=tool_call_id)
+        if internal_chars is None:
+            internal_chars = len(json.dumps(payload, ensure_ascii=False)) if payload else len(result_text)
         if not isinstance(payload, dict):
             if is_error:
                 self._record_error(result_text[:200], turn)
+            self._record_response(
+                tool_call_id=tool_call_id,
+                turn=turn,
+                payload={},
+                state="failed",
+                error=result_text[:200],
+                internal_chars=internal_chars,
+                exposed_chars=exposed_chars,
+                dedup_of=dedup_of,
+            )
             return
         if payload.get("ok") is not True:
             self._record_error(str(payload.get("error") or result_text[:200]), turn)
+            failure_state = "failed"
+            if payload.get("code") == "budget_exceeded":
+                failure_state = BLOCKED_BY_BUDGET
+            elif payload.get("code") == "metadata_unavailable":
+                failure_state = SNAPSHOT_UNRECOVERABLE
+            self._record_response(
+                tool_call_id=tool_call_id,
+                turn=turn,
+                payload=payload,
+                state=failure_state,
+                error=str(payload.get("error") or ""),
+                internal_chars=internal_chars,
+                exposed_chars=exposed_chars,
+                dedup_of=dedup_of,
+            )
             return
         doc_id = str(payload.get("doc_id") or "")
+        self._record_document_identity(payload)
+        refs: list[FragmentRef] = []
         items = payload.get("items")
         if isinstance(items, list):
             for item in items:
@@ -400,7 +605,9 @@ class ConsumptionLedger:
                         continue
                     if payload.get("scope") == "document":
                         item = {"build_id": payload.get("build_id"), **item}
-                    self._add_fragment(item, doc_id, turn)
+                    ref = self._add_fragment(item, doc_id, turn)
+                    if ref is not None:
+                        refs.append(ref)
             for err in payload.get("item_errors") or []:
                 if isinstance(err, dict):
                     self.errors.append(
@@ -420,25 +627,134 @@ class ConsumptionLedger:
                         "turn": turn,
                     }
                 )
-            return
-        # 单块结果。
-        self._add_fragment(payload, doc_id, turn)
+        else:
+            # 单块结果。
+            ref = self._add_fragment(payload, doc_id, turn)
+            if ref is not None:
+                refs.append(ref)
+        self._record_response(
+            tool_call_id=tool_call_id,
+            turn=turn,
+            payload=payload,
+            state="unconfirmed",
+            error="",
+            internal_chars=internal_chars,
+            exposed_chars=exposed_chars,
+            dedup_of=dedup_of,
+            doc_id=doc_id,
+            refs=refs,
+            item_errors=len(payload.get("item_errors") or []),
+            unresolved=len(payload.get("unresolved") or []),
+        )
+
+    def _record_response(
+        self,
+        *,
+        tool_call_id: str,
+        turn: int,
+        payload: dict[str, Any],
+        state: str,
+        error: str,
+        internal_chars: int | None,
+        exposed_chars: int | None,
+        dedup_of: str,
+        doc_id: str = "",
+        refs: list[FragmentRef] | None = None,
+        item_errors: int = 0,
+        unresolved: int = 0,
+    ) -> None:
+        """落一条返回侧记录；``delivery_state`` 初值即"尚未在消息边界核验"。"""
+        visible = exposed_chars if isinstance(exposed_chars, int) else None
+        self.responses.append(
+            {
+                "tool_call_id": str(tool_call_id),
+                "turn": turn,
+                "doc_id": str(doc_id or payload.get("doc_id") or ""),
+                "build_id": str(payload.get("build_id") or ""),
+                "scope": str(payload.get("scope") or ""),
+                "page_id": str(payload.get("page_id") or ""),
+                # v1 信封没有该字段；缺省即 v1，绝不默认成新策略。
+                "pagination_policy_version": int(payload.get("pagination_policy_version") or 1),
+                "effective_max_chars": payload.get("max_chars"),
+                "content_scope": payload.get("content_scope"),
+                "source_extraction_completeness": "unknown",
+                "ranges": [
+                    {
+                        "locator": ref.locator,
+                        "start": ref.start,
+                        "end": ref.end,
+                        "chars": ref.chars,
+                    }
+                    for ref in (refs or [])
+                ],
+                "item_errors": item_errors,
+                "unresolved": unresolved,
+                "internal_chars": internal_chars,
+                "visible_chars": visible,
+                "dedup_of": str(dedup_of),
+                "delivery_state": state,
+                "error": error,
+            }
+        )
+
+    def record_dedup_response(
+        self,
+        *,
+        tool_call_id: str,
+        turn: int = 0,
+        dedup_of: str = "",
+        visible_chars: int = 0,
+        doc_id: str = "",
+    ) -> None:
+        """落一条同轮去重的**关联回执**：请求记 2、执行记 1、送达只记首份。
+
+        不解析正文、不登记片段、不写 ``ranges`` —— 这条回执本身不是新证据，
+        区间并集只认首份，重复请求因此不会把覆盖分子算两遍。
+
+        没有 ``dedup_of`` 时绝不记 ``dedup_ref``：找不到可核对的首条 id，就
+        无法在 :meth:`finalize` 验证「首份确实送达」这一省略第二份的前置条件。
+        """
+        call_id = str(tool_call_id)
+        target = str(dedup_of)
+        if call_id:
+            for row in self.requested:
+                if str(row.get("tool_call_id") or "") == call_id:
+                    row["dedup_of"] = target
+                    break
+        self._record_response(
+            tool_call_id=call_id,
+            turn=turn,
+            payload={},
+            state=DEDUP_REF if target else UNKNOWN,
+            error="" if target else "dedup_target_unidentified",
+            internal_chars=None,
+            exposed_chars=visible_chars,
+            dedup_of=target,
+            doc_id=doc_id,
+        )
 
     def record_skip(self, locator: str, *, reason: str, turn: int = 0) -> None:
         self.skipped.append({"locator": str(locator), "reason": reason, "turn": turn})
 
     def _add_fragment(
         self, item: dict[str, Any], doc_id: str, turn: int, *, origin: str = TOOL_FETCH
-    ) -> None:
+    ) -> FragmentRef | None:
+        """登记一个片段；重复片段（同文档+同 locator+同字符区间）返回已有引用。
+
+        按 ``unit_id`` 去重会误删续页正文——长单元跨页时同一 unit 会以不同
+        ``fragment.start/end`` 到达，因此身份必须含字符区间。
+        """
         ref = _fragment_from_item(item, turn, doc_id)
         if ref is None:
-            return
+            return None
         self._fragment_origins.setdefault(ref.identity, set()).add(origin)
-        if any(existing.identity == ref.identity for existing in self.fetched):
-            return
+        for existing in self.fetched:
+            if existing.identity == ref.identity:
+                return existing
         self.fetched.append(ref)
         self._fragment_text[ref.identity] = str(item.get("text"))
         self.delivered.setdefault(ref.identity, UNKNOWN)
+        return ref
 
     def _record_error(self, message: str, turn: int) -> None:
         self.errors.append({"locator": "", "code": "", "error": message, "turn": turn})
@@ -459,6 +775,11 @@ class ConsumptionLedger:
         if not blob:
             return
         source_refs = _delivered_corpus_refs(messages)
+        tracked = {
+            (row["doc_id"], rng["locator"], rng["start"], rng["end"])
+            for row in self.responses if row.get("tool_call_id")
+            for rng in row.get("ranges") or []
+        }
         for ref in self.fetched:
             if self.delivered.get(ref.identity) == DELIVERED:
                 continue
@@ -470,13 +791,154 @@ class ConsumptionLedger:
                 # with retained hits. Bind delivery to the complete wire identity.
                 status = DELIVERED if _search_signature(ref) in source_refs else UNKNOWN
             else:
+                if ref.identity in tracked:
+                    continue  # Only the paired final message may qualify a current fetch.
                 status = _delivery_status(text, blob)
             current = self.delivered.get(ref.identity, UNKNOWN)
             if delivery_rank(status) > delivery_rank(current):
                 self.delivered[ref.identity] = status
+        self._finalize_responses(messages)
+        self._finalize_dedup_refs()
+
+    def _finalize_responses(self, messages: list[Message] | None) -> None:
+        """把每次调用的 ``unconfirmed`` 推进到逐调用的送达状态。
+
+        四条判据缺一不可（这是同轮同参去重"只有第一份确实保留才能省略第二份"
+        的前置条件）：
+
+        1. **配对**：按 ``tool_call_id`` 在运行时消息（已经过投影与预算处理）里
+           找到对应 tool 消息；找不到就保持 ``unconfirmed``，绝不推断送达；
+        2. **未被替换**：可见消息不是预算错误／不可用视图，也没有被字符硬切；
+        3. **快照可恢复**：由 ``projection.try_materialize`` 恢复完整内部结果；
+           legacy 完整信封由该函数自证返回，导航视图必须拿回 cmeta 收据；
+        4. **区间与引用完整**：恢复出的结果里，本次响应的每个区间都能找到
+           同 locator + 同码点区间 + 同原文，且非空文本都带 ``evidence_ref``。
+
+        全中 → ``delivered``；部分区间 → ``truncated``；一条都没有 → ``unknown``。
+        LLM 是否成功返回、是否"理解了正文"都不参与判定。
+        """
+        bodies: dict[str, str] = {}
+        for message in messages or []:
+            if not isinstance(message, dict) or message.get("role") != "tool":
+                continue
+            call_id = str(message.get("tool_call_id") or "")
+            if call_id:
+                bodies[call_id] = text_of(message.get("content"))
+        if not bodies:
+            return
+        for row in self.responses:
+            call_id = str(row.get("tool_call_id") or "")
+            body = bodies.get(call_id)
+            if body is not None:
+                row["visible_chars"] = len(body)
+            if row.get("delivery_state") != "unconfirmed":
+                continue
+            if body is None:  # 判据 1：没有对应消息，不宣称送达
+                row["error"] = "pairing_mismatch"
+                continue
+            row["error"] = ""
+            reason = _visible_block_reason(body)
+            if reason:
+                row["delivery_state"] = BLOCKED_BY_BUDGET
+                row["error"] = reason
+                continue
+            full = _recover_snapshot(body, call_id)
+            if full is None:
+                row["delivery_state"] = SNAPSHOT_UNRECOVERABLE
+                row["error"] = "metadata_snapshot_unavailable_or_invalid"
+                continue
+            matched, total, issue = _recovered_ranges(full, row, self._fragment_text)
+            if issue:
+                row["delivery_state"] = TRUNCATED
+                row["error"] = issue
+            elif matched == total and (total or full.get("exhausted")):
+                row["delivery_state"] = DELIVERED
+                for rng in row.get("ranges") or []:
+                    self.delivered[(row["doc_id"], rng["locator"], rng["start"], rng["end"])] = DELIVERED
+            elif matched:
+                row["delivery_state"] = TRUNCATED
+            else:
+                row["delivery_state"] = UNKNOWN
+
+    def _finalize_dedup_refs(self) -> None:
+        """关联回执只有在其指向的首份**确实送达**时才成立。
+
+        首份被预算替换、快照不可恢复、区间缺失或没有配对时，省略第二份的
+        前提就不存在。这里不改首份状态，只把关联回执降级为
+        ``dedup_target_not_delivered``：审计上明确「这条请求仍需重新发起」。
+        """
+        by_id = {str(row.get("tool_call_id") or ""): row for row in self.responses}
+        for row in self.responses:
+            if row.get("delivery_state") != DEDUP_REF:
+                continue
+            target = by_id.get(str(row.get("dedup_of") or ""))
+            if target is None:
+                row["delivery_state"] = DEDUP_TARGET_NOT_DELIVERED
+                row["error"] = "dedup_target_missing"
+            elif target.get("delivery_state") != DELIVERED:
+                row["delivery_state"] = DEDUP_TARGET_NOT_DELIVERED
+                row["error"] = f"dedup_target_{target.get('delivery_state')}"
+
+    def dedup_accounting(self) -> dict[str, int]:
+        """可复算的「请求 N／执行 M／唯一送达 K」账目。
+
+        ``executions`` 只数没有 ``dedup_of`` 的响应（真实执行过的调用）；
+        ``unique_deliveries`` 只数 ``delivered`` 的响应，关联回执不计入；
+        覆盖区间并集另由 :meth:`coverage_deliveries` 按片段身份去重。
+        """
+        return {
+            "requests": len(self.requested),
+            "executions": sum(1 for row in self.responses if not row.get("dedup_of")),
+            "unique_deliveries": sum(
+                1 for row in self.responses if row.get("delivery_state") == DELIVERED
+            ),
+            "dedup_refs": sum(1 for row in self.responses if row.get("dedup_of")),
+            "unresolved_dedup_refs": sum(
+                1 for row in self.responses
+                if row.get("delivery_state") == DEDUP_TARGET_NOT_DELIVERED
+            ),
+        }
 
     def delivered_status(self, identity: tuple[str, str, int, int]) -> str:
         return self.delivered.get(identity, UNKNOWN)
+
+    def coverage_deliveries(self) -> list[Any]:
+        """覆盖映射的输入：按**片段**取已确认送达的区间。
+
+        只取 :attr:`delivered` 里 ``delivered`` 状态的身份，跨轮／跨 agent 的重复
+        片段在这里天然只出现一次；区间并集由 ``coverage.delivered_union`` 再做一次
+        （长单元跨页分片会首尾相接，必须合并，不能按 unit_id 去重）。
+        同轮同参去重的关联回执不登记任何片段，因此重复请求不会把同一区间
+        在分子里算两遍。
+        """
+        from plugins.corpus.coverage import Delivery
+
+        return [
+            Delivery(doc_id=doc, locator=locator, start=start, end=end)
+            for (doc, locator, start, end), status in self.delivered.items()
+            if status == DELIVERED
+        ]
+
+    def coverage_map(
+        self, units: list[Any], *, doc_id: str = "", page_count: int = 0
+    ) -> dict[str, Any]:
+        """按目标文档版本的原始区间出覆盖报告；``units`` 为 ``UnitRange`` 列表。"""
+        from plugins.corpus.coverage import coverage_report
+
+        resolved = (
+            doc_id
+            or next(
+                (str(row.get("doc_id") or "") for row in self.responses if row.get("doc_id")),
+                "",
+            )
+            or next((identity[0] for identity in self.delivered), "")
+        )
+        return coverage_report(
+            doc_id=resolved,
+            units=units,
+            deliveries=self.coverage_deliveries(),
+            page_count=page_count,
+        )
 
     # ── 区间覆盖（评审 C1：出现 ≠ 完整）────────────────────────────────
     def _intervals_for(
@@ -500,24 +962,80 @@ class ConsumptionLedger:
                 return ref.chars
         return 0
 
+    # ── 后台映射表 ─────────────────────────────────────────────────────
+    def record_native_mappings(self, mappings: list[Any]) -> None:
+        """合并 ``native1 → document1`` 后台映射；同 locator 切片取并集。
+
+        只接受 :func:`coverage.mappings_from_fetch` 从权威 ``native_slices``
+        校验过的条目；落盘形态稳定排序，便于离线回放复算。
+        """
+        existing = coverage.mappings_from_dict(self.native_mappings)
+        merged = coverage.merge_native_mappings([*existing, *mappings])
+        self.native_mappings = [row.to_dict() for row in merged]
+
     # ── 范围完整性 ─────────────────────────────────────────────────────
     def range_completeness(self) -> list[dict[str, Any]]:
         """按 offered scope 汇总：必需片段是否**全部**取回／送达（范围完整性）。
 
-        评审 C1：locator 出现 ≠ 范围完整。按片段 ``[start, end)`` 区间并集对比
-        整块长度（``chars``）判定；整块长度未知（``chars==0``）时按不完整处理，
-        不冒充通过。
+        评审 C1：locator 出现 ≠ 范围完整。非 ``native1`` 成员按片段 ``[start, end)``
+        区间并集对比整块长度（``chars``）判定；``native1`` 成员在后台映射表可用时，
+        按其绑定的权威单元原文区间与 ``document1`` 送达区间折算——两套 locator
+        不强行归一，缺表则维持原语义并显式列入 ``unmapped``。
         """
+        from plugins.corpus.preparation.document_read import unit_locator
+
+        mappings = coverage.mappings_from_dict(self.native_mappings)
+        table: dict[str, Any] = {}
+
+        def native_covered(loc: str, *, delivered_only: bool) -> bool | None:
+            """``None`` = 没有后台映射，调用方维持原 locator 直查语义。"""
+            slices = table.get(loc)
+            if not slices:
+                return None
+            for item in slices:
+                intervals = self._intervals_for(
+                    unit_locator(item.unit_id), delivered_only=delivered_only
+                )
+                clipped = coverage.merge_intervals(
+                    (max(item.start, a), min(item.end, b))
+                    for a, b in intervals
+                    if a < item.end and item.start < b
+                )
+                if sum(b - a for a, b in clipped) < item.end - item.start:
+                    return False
+            return True
+
         out: list[dict[str, Any]] = []
         for scope in self.offered:
+            table = coverage.native_unit_intervals([
+                m for m in mappings if m.doc_id == scope.get("doc_id")
+            ])
             locators = list(scope.get("locators") or [])
             missing: list[str] = []
             undelivered: list[str] = []
+            unmapped: list[str] = []
             for loc in locators:
-                chars = self._locator_chars(loc)
-                if not _covers_whole(self._intervals_for(loc), chars):
+                native = loc.startswith(coverage.NATIVE_PREFIX)
+                mapped = native_covered(loc, delivered_only=False) if native else None
+                if mapped is None:
+                    chars = self._locator_chars(loc)
+                    fetched_ok = _covers_whole(self._intervals_for(loc), chars)
+                    delivered_ok = _covers_whole(
+                        self._intervals_for(loc, delivered_only=True), chars
+                    )
+                    if native:
+                        unmapped.append(loc)
+                else:
+                    # A direct native read may already cover the complete block;
+                    # mapping is an additional way to prove coverage, not a replacement.
+                    chars = self._locator_chars(loc)
+                    fetched_ok = mapped or _covers_whole(self._intervals_for(loc), chars)
+                    delivered_ok = bool(native_covered(loc, delivered_only=True)) or _covers_whole(
+                        self._intervals_for(loc, delivered_only=True), chars
+                    )
+                if not fetched_ok:
                     missing.append(loc)
-                if not _covers_whole(self._intervals_for(loc, delivered_only=True), chars):
+                if not delivered_ok:
                     undelivered.append(loc)
             skipped = [
                 str(item.get("locator"))
@@ -533,6 +1051,7 @@ class ConsumptionLedger:
                     "delivered": len(locators) - len(undelivered),
                     "missing": missing,
                     "undelivered": undelivered,
+                    "unmapped": unmapped,
                     "skipped": skipped,
                     # 有未取全、未送达或跳过 ⇒ 范围不完整。
                     "complete": not missing and not undelivered and not skipped,
@@ -562,7 +1081,10 @@ class ConsumptionLedger:
             "created_at": self.created_at,
             "last_finalized_turn": self.last_finalized_turn,
             "offered": self.offered,
+            "document_identities": self.document_identities,
             "requested": self.requested,
+            "responses": self.responses,
+            "dedup_accounting": self.dedup_accounting(),
             "semantic": self.semantic.to_dict(),
             "fetched": [
                 {
@@ -584,6 +1106,8 @@ class ConsumptionLedger:
             "errors": self.errors,
             "skipped": self.skipped,
             "notes": self.notes,
+            "metadata_snapshots": self.metadata_snapshots,
+            "native_mappings": self.native_mappings,
             "range_completeness": self.range_completeness(),
             "all_offered_fetched": self.all_offered_fetched(),
         }
@@ -594,36 +1118,65 @@ def _search_signature(ref: FragmentRef) -> tuple[Any, ...]:
 
 
 def _delivered_corpus_refs(messages: list[Message] | None) -> set[tuple[Any, ...]]:
-    """Recognize intact search/fetch evidence in final tool messages, never summaries."""
-    refs = set()
+    """Recognize intact search/fetch evidence in final tool messages, never summaries.
+
+    The hidden metadata is read from the receipt-backed complete result, but a
+    fragment only counts as delivered when its verbatim text is *still present*
+    in the visible message. A saved snapshot therefore never promotes an
+    item that the budget fitter dropped to delivered.
+    """
+    refs: set[tuple[Any, ...]] = set()
     for message in messages or []:
         name = message.get("name")
         if message.get("role") != "tool" or name not in (None, TOOL_SEARCH, TOOL_FETCH):
             continue
-        payload = _loads(text_of(message.get("content")))
-        if not isinstance(payload, dict) or payload.get("ok") is not True:
+        visible_text = text_of(message.get("content"))
+        visible_payload = _loads(visible_text)
+        if not isinstance(visible_payload, dict) or visible_payload.get("ok") is not True:
             continue
+        tool_name = (
+            name
+            if isinstance(name, str)
+            else (TOOL_SEARCH if "hits" in visible_payload else TOOL_FETCH)
+        )
+        payload = projection.try_materialize(
+            tool_name,
+            visible_text,
+            tool_call_id=str(message.get("tool_call_id") or ""),
+        )
+        if payload is None:
+            # A projected message with an unresolvable receipt must not have its
+            # hidden wire fields reconstructed from the visible view. Text-based
+            # delivery verification (the message blob) still applies below.
+            continue
+
+        def add(item: dict[str, Any], doc_id: str, *, blob: str = visible_text) -> None:
+            text = item.get("text")
+            if not isinstance(text, str) or _delivery_status(text, blob) != DELIVERED:
+                return
+            ref = _fragment_from_item(item, 0, doc_id)
+            if ref is not None:
+                refs.add(_search_signature(ref))
+
         hits = payload.get("hits")
         if not isinstance(hits, list):
             # A later fetch can deliver the same interval that search offered.
-            if name != TOOL_SEARCH and isinstance(payload.get("doc_id"), str):
+            if tool_name != TOOL_SEARCH and isinstance(payload.get("doc_id"), str):
                 items = payload.get("items", [payload])
                 for item in items if isinstance(items, list) else []:
-                    if not isinstance(item, dict):
-                        continue
-                    ref = _fragment_from_item(item, 0, payload["doc_id"])
-                    if ref is not None:
-                        refs.add(_search_signature(ref))
+                    if isinstance(item, dict):
+                        add(item, payload["doc_id"])
             continue
-        if name == TOOL_FETCH:
+        if tool_name == TOOL_FETCH:
             continue
         for hit in hits:
             if not isinstance(hit, dict):
                 continue
+            doc_id = hit.get("doc_id")
+            if not isinstance(doc_id, str):
+                continue
             for item in search_evidence_items(hit):
-                ref = _fragment_from_item(item, 0, hit["doc_id"])
-                if ref is not None:
-                    refs.add(_search_signature(ref))
+                add(item, doc_id)
     return refs
 
 
@@ -662,6 +1215,99 @@ def _delivery_status(text: str, blob: str) -> str:
         if head and head in blob:
             return TRUNCATED
     return UNKNOWN
+
+
+def _visible_block_reason(body: str) -> str:
+    """判据 2/3：可见消息是否被预算处理替换成错误、不可用视图或残缺内容。
+
+    只拦"正文/契约被替换"的情形；去掉诊断元数据（``diagnostics_elided``／
+    ``view_fallback``／``*_count``）不算截断正文，交给判据 4 校验区间即可。
+    """
+    try:
+        visible = json.loads(body)
+    except (TypeError, ValueError):
+        return "malformed_message_json"
+    if not isinstance(visible, dict):
+        return "malformed_message_json"
+    tool = visible.get("tool")
+    if tool and tool != TOOL_FETCH:
+        return "tool_call_mismatch"
+    if visible.get("ok") is False or visible.get("error") or visible.get("code"):
+        return "budget_or_error_replacement"
+    if visible.get("protocol") == projection.UNAVAILABLE_VERSION:
+        return "metadata_unavailable_view"
+    if visible.get("cursor_omitted"):
+        return "continuation_contract_omitted"
+    if visible.get("text_chars") and "text" not in visible and "items" not in visible:
+        return "body_removed_by_budget"
+    return ""
+
+
+def _recover_snapshot(body: str, tool_call_id: str) -> dict[str, Any] | None:
+    """判据 4：恢复完整内部结果；恢复不了就是不可恢复，不拿可见摘要顶替。"""
+    with suppress(Exception):
+        return projection.try_materialize(TOOL_FETCH, body, tool_call_id=tool_call_id)
+    return None
+
+
+def _recovered_ranges(
+    full: dict[str, Any],
+    row: dict[str, Any],
+    fragment_text: dict[tuple[str, str, int, int], str],
+) -> tuple[int, int, str]:
+    """判据 4：恢复结果里逐区间核对原文与引用，返回 (命中, 总数, 阻断原因)。"""
+    if full.get("doc_id") != row.get("doc_id"):
+        return 0, 0, "response_document_mismatch"
+    items = full.get("items")
+    if not isinstance(items, list):
+        items = [full] if full.get("text") is not None else []
+    by_key: dict[tuple[str, int, int], str] = {}
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        text = str(item.get("text") or "")
+        fragment = item.get("fragment") or {}
+        key = (
+            str(item.get("locator") or ""),
+            int(fragment.get("start", 0)),
+            int(fragment.get("end", len(text))),
+        )
+        if text and not item.get("evidence_ref"):
+            return 0, 0, "recovered_reference_missing"
+        by_key[key] = text
+    ranges = [rng for rng in row.get("ranges") or [] if isinstance(rng, dict)]
+    doc_id = str(row.get("doc_id") or "")
+    matched = 0
+    for rng in ranges:
+        key = (
+            str(rng.get("locator") or ""),
+            int(rng.get("start") or 0),
+            int(rng.get("end") or 0),
+        )
+        text = by_key.get(key)
+        if text is None:
+            continue
+        expected = fragment_text.get((doc_id, *key))
+        if expected is not None and text != expected:
+            continue
+        matched += 1
+    return matched, len(ranges), ""
+
+
+def fetch_delivery_complete(raw: str, visible: str) -> bool:
+    """Tool-owned validation before a duplicate may point at the first final message."""
+    if _visible_block_reason(visible):
+        return False
+    full = projection.try_materialize(TOOL_FETCH, visible)
+    expected = projection.try_materialize(TOOL_FETCH, raw)
+    if full is None or expected is None:
+        return False
+    ledger = ConsumptionLedger()
+    ledger.record_fetch_result(json.dumps(expected, ensure_ascii=False), tool_call_id="check")
+    if not ledger.responses or ledger.responses[0]["delivery_state"] != "unconfirmed":
+        return False
+    matched, total, issue = _recovered_ranges(full, ledger.responses[0], ledger._fragment_text)
+    return not issue and matched == total and bool(total or expected.get("exhausted"))
 
 
 # ── run 级共享账本 ───────────────────────────────────────────────────────
@@ -1174,6 +1820,10 @@ def _verify_conclusion(
     *,
     pending_aware: bool = False,
 ) -> dict[str, Any]:
+    if "document_identity" in conclusion:
+        from plugins.corpus.final_delivery import verify_identity_conclusion
+
+        return verify_identity_conclusion(conclusion, ledger, final_text)
     cid = str(conclusion.get("id") or f"C{index + 1}")
     evidence = conclusion.get("evidence")
     problems: list[dict[str, str]] = []
@@ -1501,7 +2151,11 @@ def publish_boundary(
         )
         outcome["verification"] = verification
         outcome["publish_status"] = verification.get("status") or ""
-        if announce_status:
+        rows = verification.get("conclusions") or []
+        identity_only = outcome["publish_status"] == PUBLISH_VERIFIED and bool(rows) and all(
+            row.get("verification_kind") == "document_identity" for row in rows
+        )
+        if announce_status and not identity_only:
             passed = outcome["publish_status"] == PUBLISH_VERIFIED
             status_text = "已通过" if passed else "未全部通过，以本次最终核验为准"
             counts = verification.get("counts") or {}
@@ -1596,6 +2250,15 @@ class ConsumptionLedgerObserver(BaseObserver):
         self._ledger = ledger
         # 本 loop 已扫描过的消息数（增量送达核验；评审 C3）。
         self._scanned_messages = 0
+        # (agent, turn) -> 该轮第几次 fetch 调用。同轮同参去重要靠它区分先后，
+        # 不能只看 turn（同一轮可并发多个 fetch）。
+        self._ordinals: dict[tuple[str, int], int] = {}
+
+    def _next_ordinal(self, turn: int) -> int:
+        key = (self._role_id, turn)
+        ordinal = self._ordinals.get(key, 0) + 1
+        self._ordinals[key] = ordinal
+        return ordinal
 
     def _get_ledger(self) -> ConsumptionLedger:
         if self._ledger is None:
@@ -1636,11 +2299,39 @@ class ConsumptionLedgerObserver(BaseObserver):
                 if prior is None or not isinstance(content, str):
                     continue
                 name, args = prior
+                call_id = str(message.get("tool_call_id") or "")
+                complete = projection.try_materialize(name, content, tool_call_id=call_id)
+                complete_text = (
+                    json.dumps(complete, ensure_ascii=False)
+                    if isinstance(complete, dict)
+                    else content
+                )
                 if name == TOOL_SEARCH:
-                    ledger.record_search(content, turn=0)
+                    ledger.record_search(complete_text, turn=0)
                 else:
-                    ledger.record_fetch_call(args, turn=0)
-                    ledger.record_fetch_result(content, turn=0)
+                    ledger.record_fetch_call(
+                        args, turn=0, tool_call_id=call_id, agent=self._role_id
+                    )
+                    replay_payload = _loads(content)
+                    if isinstance(replay_payload, dict) and replay_payload.get("dedup") is True:
+                        # 历史里的同轮去重关联回执不是一次失败，更不是新送达的
+                        # 正文；重放必须保持 dedup_ref 语义，不能记成 failed。
+                        ledger.record_dedup_response(
+                            tool_call_id=call_id,
+                            turn=0,
+                            dedup_of=str(replay_payload.get("dedup_of") or ""),
+                            visible_chars=len(content),
+                        )
+                        continue
+                    ledger.record_fetch_result(
+                        complete_text,
+                        turn=0,
+                        tool_call_id=call_id,
+                        internal_chars=len(complete_text),
+                    )
+                    ledger.record_native_mappings(
+                        coverage.mappings_from_fetch(_loads(complete_text))
+                    )
         ledger.finalize(messages)
         ledger.last_finalized_turn = max(0, ledger.last_finalized_turn)
         if not had_activity:
@@ -1667,7 +2358,13 @@ class ConsumptionLedgerObserver(BaseObserver):
                         ctx.turn,
                     )
                 else:
-                    self._get_ledger().record_fetch_call(args, turn=ctx.turn)
+                    self._get_ledger().record_fetch_call(
+                        args,
+                        turn=ctx.turn,
+                        tool_call_id=str(tool_call.get("id") or ""),
+                        agent=self._role_id,
+                        ordinal=self._next_ordinal(ctx.turn),
+                    )
         except Exception as exc:
             logger.debug("ConsumptionLedgerObserver.on_tool_call: %s", exc)
 
@@ -1684,11 +2381,34 @@ class ConsumptionLedgerObserver(BaseObserver):
             if name == TOOL_SEARCH:
                 self._get_ledger().record_search(result.result, turn=ctx.turn)
             elif name == TOOL_FETCH:
-                self._get_ledger().record_fetch_result(
-                    result.result,
-                    is_error=result.is_error,
-                    turn=ctx.turn,
-                )
+                ledger = self._get_ledger()
+                if result.execution_status == "dedup_ref":
+                    # 合并后的关联回执：只记一条响应侧审计行，绝不解析成正文
+                    # 片段，也绝不新增送达。
+                    payload = _loads(result.result)
+                    ledger.record_dedup_response(
+                        tool_call_id=str(result.tool_call_id or ""),
+                        turn=ctx.turn,
+                        dedup_of=(
+                            str(payload.get("dedup_of") or "")
+                            if isinstance(payload, dict) else ""
+                        ),
+                        visible_chars=len(result.result),
+                    )
+                else:
+                    ledger.record_fetch_result(
+                        result.result,
+                        is_error=result.is_error,
+                        turn=ctx.turn,
+                        tool_call_id=str(result.tool_call_id or ""),
+                    )
+                    # 权威后台映射只在工具返回的原始结果里（投影白名单不含
+                    # native_slices）；在 notify_tool_result 边界采集，不依赖
+                    # 模型最终看到的那份可见视图。
+                    payload = projection.try_materialize(TOOL_FETCH, result.result,
+                                                         tool_call_id=str(result.tool_call_id or ""))
+                    if isinstance(payload, dict):
+                        ledger.record_native_mappings(coverage.mappings_from_fetch(payload))
             elif name == SEMANTIC_TOOL:
                 self._get_ledger().semantic.record_result(
                     result.args,
@@ -1698,6 +2418,30 @@ class ConsumptionLedgerObserver(BaseObserver):
                 )
         except Exception as exc:
             logger.debug("ConsumptionLedgerObserver.on_tool_result: %s", exc)
+
+    @staticmethod
+    def _sync_snapshots(ledger: ConsumptionLedger, messages: list) -> None:
+        """Bind cmeta receipts by tool_call_id and surface unresolved projections."""
+        for call_id, ref in projection.call_snapshot_refs().items():
+            ledger.metadata_snapshots.setdefault(call_id, {"snapshot_ref": ref})
+        for message in messages:
+            if not isinstance(message, dict) or message.get("role") != "tool":
+                continue
+            body = text_of(message.get("content"))
+            payload = _loads(body)
+            if not isinstance(payload, dict) or payload.get("protocol") not in (
+                projection.VISIBLE_VERSION,
+                projection.NAVIGATION_VERSION,
+            ):
+                continue
+            name = str(message.get("name") or "")
+            if not name:
+                name = TOOL_SEARCH if "hits" in payload else TOOL_FETCH
+            call_id = str(message.get("tool_call_id") or "")
+            if projection.try_materialize(name, body, tool_call_id=call_id) is None:
+                note = f"corpus_metadata_snapshot_unavailable:{call_id or 'unpaired'}"
+                if note not in ledger.notes:
+                    ledger.notes.append(note)
 
     async def on_turn_end(self, ctx: TurnContext) -> None:
         """在每个 turn 结束（下一轮真实模型请求之前）增量核验送达快照。
@@ -1714,6 +2458,7 @@ class ConsumptionLedgerObserver(BaseObserver):
             start = self._scanned_messages if self._scanned_messages <= len(messages) else 0
             if len(messages) > start:
                 ledger.finalize(messages[start:])
+                self._sync_snapshots(ledger, messages[start:])
             self._scanned_messages = len(messages)
             if ctx.turn > ledger.last_finalized_turn:
                 ledger.last_finalized_turn = ctx.turn
@@ -1724,6 +2469,7 @@ class ConsumptionLedgerObserver(BaseObserver):
         try:
             ledger = self._get_ledger()
             ledger.finalize(result.messages)
+            self._sync_snapshots(ledger, list(result.messages or []))
             write_ledger(ledger)
             verify_and_record(ledger)
         except Exception as exc:
@@ -1732,6 +2478,8 @@ class ConsumptionLedgerObserver(BaseObserver):
 
 __all__ = [
     "CORPUS_TOOLS",
+    "DEDUP_REF",
+    "DEDUP_TARGET_NOT_DELIVERED",
     "DELIVERED",
     "DEPENDENCY_PURPOSES",
     "LEDGER_FILENAME",

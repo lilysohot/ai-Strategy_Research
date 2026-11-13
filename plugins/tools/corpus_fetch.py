@@ -59,9 +59,17 @@ from typing import Any
 from urllib.parse import unquote
 
 from frontier_agent.core.tool import tool
+from plugins.corpus import projection
 from plugins.corpus.cursor import CONTENT, CursorError, decode_cursor, encode_cursor
+from plugins.corpus.ledger import fetch_delivery_complete
 from plugins.corpus.preparation.read_pg import AUTHORITY_REV
-from plugins.corpus.service import content_role_for_kind, context_scope_id, get_service
+from plugins.corpus.search_refs import SearchReferenceError, resolve_scope_by_ref
+from plugins.corpus.service import (
+    content_role_for_kind,
+    context_scope_id,
+    document_titles,
+    get_service,
+)
 from plugins.corpus.tool_refs import (
     fetch_evidence_ref,
     publish_fetch_references,
@@ -127,7 +135,7 @@ def _locator_outside_range(
     locator: str | None,
     locators: list[str] | None,
     unit_range: tuple[int, int],
-    doc_id: str | None = None,
+    doc_id: str = "",
 ) -> str | None:
     """First explicit unit locator outside the dispatched range, if any.
 
@@ -337,6 +345,7 @@ def _item(
     }
     if getattr(evidence, "native_slices", ()):
         item["native_slices"] = _native_slices(evidence, start, end)
+        item["native_target_slices"] = list(evidence.native_slices)
     if extra:  # A3：content_role／relations／relation_status（小字段，正文之后、诊断之前）
         item.update(extra)
     if view == "full":
@@ -460,6 +469,8 @@ def _compact_payload(full: dict[str, Any]) -> dict[str, Any]:
     }
     if "native_slices" in full:
         compact["native_slices"] = full["native_slices"]
+    if "native_target_slices" in full:
+        compact["native_target_slices"] = full["native_target_slices"]
     if "evidence_ref" in full:
         compact["evidence_ref"] = full["evidence_ref"]
     for key in (
@@ -524,7 +535,7 @@ def fit_structured_payload(body: str, budget: int) -> str | None:
     - **单块结果**：先去诊断元数据（等价 compact 视图）再序列化；能装下即返回，
       并标记 ``diagnostics_elided``；去诊断后正文仍超预算则返回预算错误；
     - 一律不返回残缺正文、不伪造「已取得全文」；
-    - 非成功 corpus_fetch 结果或不可解析时返回 ``None``（交回调用方按原策略处理）。
+    - 失败分页信封保留真实错误类型并有界化；其他失败或不可解析时返回 ``None``。
     """
     if budget <= 0 or not isinstance(body, str):
         return None
@@ -532,7 +543,37 @@ def fit_structured_payload(body: str, budget: int) -> str | None:
         payload = json.loads(body)
     except (TypeError, ValueError):
         return None
-    if not isinstance(payload, dict) or payload.get("ok") is not True:
+    if not isinstance(payload, dict):
+        return None
+    full = projection.try_materialize("corpus_fetch", body)
+    if full and full.get("scope") == "document" and full.get("pagination_policy_version") == 2:
+        from plugins.tools._corpus_document import fit_document_payload
+
+        rendered = projection.project_tool_result("corpus_fetch", json.dumps(full, ensure_ascii=False))
+        if json.loads(rendered).get("protocol") == projection.UNAVAILABLE_VERSION:
+            return json.dumps({"ok": False, "code": "metadata_unavailable",
+                               "fetch_complete": False, "hint": "Retry the same request."})
+        if len(rendered) <= budget:
+            return rendered
+        return fit_document_payload(full, budget)
+    if payload.get("protocol") in (projection.VISIBLE_VERSION, projection.NAVIGATION_VERSION):
+        # A projected view is bound to its cmeta receipt by visible-body digest.
+        # Re-fitting it here would break that binding; fitting already ran on
+        # the complete result before projection.
+        return body
+    if payload.get("ok") is False and (isinstance(payload.get("items"), list) or payload.get("code")):
+        if len(body) <= budget:
+            return body
+        out = projection.fetch_error_view(payload)
+        rendered = json.dumps(out, ensure_ascii=False)
+        if len(rendered) > max(400, budget):
+            for key in ("error_codes", "failure_scope", "hint", "next_cursor"):
+                if key == "next_cursor" and out.get(key):
+                    out["cursor_omitted"] = True
+                out.pop(key, None)
+            rendered = json.dumps(out, ensure_ascii=False)
+        return rendered
+    if payload.get("ok") is not True:
         return None
     if len(body) <= budget:
         return body
@@ -650,6 +691,7 @@ def _full_payload(
     }
     if getattr(evidence, "native_slices", ()):
         payload["native_slices"] = _native_slices(evidence, 0, len(evidence.text))
+        payload["native_target_slices"] = list(evidence.native_slices)
     if extra:  # A3：content_role／relations／relation_status（正文与控制字段之后、诊断之前）
         payload.update(extra)
     # ── 诊断 / 结构元数据（体积较大，置于正文与控制字段之后）──
@@ -1035,7 +1077,7 @@ def _page(
 
 @tool
 async def corpus_fetch(
-    doc_id: str,
+    doc_id: str | None = None,
     locator: str | None = None,
     locators: list[str] | None = None,
     cursor: str | None = None,
@@ -1043,12 +1085,19 @@ async def corpus_fetch(
     max_chars: int = 6000,
     force_refresh: bool = False,
     scope: str | None = None,
+    ref: str | None = None,
 ) -> str:
     """读取已知文档全文或指定块原文，返回可直接引用的 ``evidence_ref``。
 
     已确定文档并需要阅读全文时，传 doc_id 和 scope="document"，无需再次搜索或列举块。
-    文档模式按原文单元顺序分页，续读只传 doc_id 与 next_cursor。fetch_complete=true
-    只证明本版本入库文本遍历结束，不证明原 PDF 提取完整；取得足够内容即可回答。
+    文档模式按原文单元顺序分页，续读只传 next_cursor（游标已绑定文档版本与阅读范围）。
+    fetch_complete=true 只证明本版本入库文本遍历结束，不证明原 PDF 提取完整；
+    取得足够内容即可回答。
+
+    导航模式下 search 只给出候选句柄：``corpus_fetch(ref="<sref:...>")`` 由后台从
+    收据还原文档版本与候选块集合，默认读取该命中的候选范围；加 scope="document"
+    则从该版本的文档顺序开始全文阅读。两者范围不同，候选块读完不代表全文读完。
+    句柄由工具生成，不得自行构造；无效、过期或越界句柄显式报错，不会按标题重搜。
 
     清单 evidence 优先只填本结果（或分页 item）的 evidence_ref，可附 purpose；
     系统自动绑定该片段的文档、块和精确原文，不要再生成 quote。存储不可用而未返回
@@ -1064,9 +1113,13 @@ async def corpus_fetch(
 
     Args:
         doc_id: 版本句柄（来自 ``corpus_search`` 的 ``doc_id``，形如 ``cv2:<build_id>``）。
+            使用 ``ref`` 或只传 ``cursor`` 续读时可省略，由后台从收据／游标还原并校验。
         locator: 单块句柄（``chunk:<chunk_id>``）或 search v2 的 excerpts.ref。
         locators: 批量块句柄（有序，按首次出现去重）；表格块请附带必要表头、期间、单位。
         cursor: 上一页返回的 ``next_cursor`` 短句柄，原样传回即可；兼容历史长游标。
+        ref: search 导航结果给出的持久候选句柄（``sref:<digest>``）。与
+            ``doc_id``、``locator``、``locators``、``cursor`` 互斥；由后台还原版本、候选
+            块集合与读取范围，不需要模型补回任何隐藏坐标。
         force_refresh: 为 true 时绕过上下文原文复用，重新读取指定文档版本。
             游标已绑定请求集合、顺序、视图与位置，续取时不得改动，视图由游标决定。
         view: 返回视图。``"full"``（默认）保留完整诊断／结构元数据；``"compact"``
@@ -1075,7 +1128,8 @@ async def corpus_fetch(
             游标模式下忽略本参数（以游标绑定的视图为准）。
         max_chars: 本页序列化 JSON 的字符上限；服务按实际运行路径收紧。
         scope: 传 "document" 开始全文阅读，与 locator/locators 互斥；续读游标自动绑定范围。
-            不传时保留现有单块、批量和游标接口。全文页最多 6000 字符，包含信封和引用。
+            不传时保留现有单块、批量和游标接口。v2 全文页按原文字符预算，
+            模型可见信封另受 12000 字符硬上限约束；旧游标仍按旧信封预算续读。
 
     Returns:
         单块（``locator``）装得下时返回既有单块形状 ``{"ok": true, "view", "doc_id",
@@ -1093,20 +1147,150 @@ async def corpus_fetch(
         ``label_path_count`` 明示省略；提高预算可重取完整诊断。旧句柄／来源已撤销／
         游标类型不符时返回 ``ok=false``。
     """
-    return publish_fetch_references(
-        await _fetch(doc_id, locator, locators, cursor, view, max_chars, scope)
+    body = publish_fetch_references(
+        await _fetch(doc_id, locator, locators, cursor, view, max_chars, scope, ref)
     )
+    payload = json.loads(body)
+    if isinstance(payload, dict) and payload.get("ok") is False and (
+        isinstance(payload.get("items"), list) or payload.get("code")
+    ):
+        budget = max(400, max_chars) if isinstance(max_chars, int) else 1500
+        if projection.navigation_enabled():
+            return projection.project_tool_result("corpus_fetch", body, error_budget=budget)
+        return fit_structured_payload(body, budget) or body
+    return _attach_document_identity(body)
+
+
+# 同一执行批次内参数完全相同的补读合并为一次真实执行（single-flight）。
+# 该工具按 build 版本钉死且只读，重复请求不改变结果；执行层只对显式声明的
+# 工具合并，状态变更类工具绝不受影响。详见 agent_loop._within_turn_dedup_key。
+corpus_fetch.metadata["dedup_within_turn"] = True
+corpus_fetch.metadata["dedup_delivery_validator"] = fetch_delivery_complete
+
+
+def _attach_document_identity(body: str) -> str:
+    """Keep the real filename/title in the result: they are task information.
+
+    Navigation hides hashes and coordinates, but a reader still needs to know
+    *which document* a page came from. This is enriched before projection so
+    both the cmeta receipt and every visible view carry the same identity.
+    """
+    try:
+        payload = json.loads(body)
+    except (TypeError, ValueError):
+        return body
+    if not isinstance(payload, dict) or payload.get("ok") is not True:
+        return body
+    # Version-pinned source identity outranks the active-document catalog. An
+    # old build can still be fetched after it disappears from that catalog.
+    names = payload.get("original_names")
+    filename = payload.get("filename")
+    if not filename and isinstance(names, list):
+        filename = next((name for name in names if isinstance(name, str) and name.strip()), None)
+    if not filename:
+        doc_id = str(payload.get("doc_id") or "")
+        identity = document_titles([doc_id]).get(doc_id, {}) if doc_id else {}
+        filename = identity.get("filename")
+        if not payload.get("document_title") and identity.get("document_title"):
+            payload["document_title"] = identity["document_title"]
+    if filename:
+        payload["filename"] = filename
+        if not payload.get("document_title"):
+            payload["document_title"] = filename
+    else:
+        notes = payload.setdefault("limitations", [])
+        if isinstance(notes, list):
+            notes.append("原始文件名不可用；不得以章节标题代替文件名。")
+    return json.dumps(payload, ensure_ascii=False)
+
+
+def _with_ref(body: str, ref: str) -> str:
+    """Echo the validated handle so consumers can attribute the page."""
+    try:
+        payload = json.loads(body)
+    except (TypeError, ValueError):
+        return body
+    if isinstance(payload, dict):
+        payload["ref"] = ref
+        return json.dumps(payload, ensure_ascii=False)
+    return body
 
 
 async def _fetch(
-    doc_id: str,
+    doc_id: str | None,
     locator: str | None,
     locators: list[str] | None,
     cursor: str | None,
     view: str,
     max_chars: int,
     scope: str | None = None,
+    ref: str | None = None,
 ) -> str:
+    if not isinstance(max_chars, int) or isinstance(max_chars, bool) or max_chars < _MIN_BUDGET:
+        return _json_error(
+            f"max_chars 必须是 ≥ {_MIN_BUDGET} 的整数（收到 {max_chars!r}）；"
+            "预算过小则连分页信封都装不下",
+        )
+    if scope not in (None, "document"):
+        return _json_error('scope 只支持 "document"，或省略以按块读取')
+
+    # ── 句柄入口：sref 独立还原文档版本与候选范围 ──────────────────────
+    if ref is not None:
+        if (
+            not isinstance(ref, str)
+            or not ref.strip()
+            or doc_id not in (None, "")
+            or locator is not None
+            or locators is not None
+            or cursor is not None
+        ):
+            return _json_error("ref 必须是非空字符串，且与 doc_id/locator/locators/cursor 互斥")
+        try:
+            hit = resolve_scope_by_ref(ref)
+        except SearchReferenceError as exc:
+            return _json_error(
+                f"search_reference_unavailable：{exc}；请重新检索取得当前句柄",
+                ref=ref,
+                fetch_complete=False,
+            )
+        restored = str(hit["doc_id"])
+        if scope == "document":
+            from plugins.tools._corpus_document import document_page
+
+            return _with_ref(document_page(get_service(), restored, max_chars, None), ref)
+        try:
+            request = _dedupe_locators([str(item) for item in hit["context_locators"]])
+        except ValueError as exc:
+            return _json_error(str(exc), ref=ref, fetch_complete=False)
+        if given_range := _current_unit_range():
+            violated = _locator_outside_range(None, request, given_range, restored)
+            if violated is not None:
+                lo, hi = given_range
+                return _json_error(
+                    f"unit_range_violation：本任务只负责 unit:{lo:04d}–unit:{hi:04d}，"
+                    f"{violated} 在范围之外；请只引用所分配片段",
+                    doc_id=restored,
+                    unit_range=[lo, hi],
+                )
+        return _with_ref(_page(restored, request, view, max_chars, 0, 0, []), ref)
+
+    # ── 独立游标入口：doc_id 由已校验的游标恢复 ────────────────────────
+    if doc_id is None or doc_id == "":
+        if cursor is None:
+            return _json_error("doc_id 必须是非空字符串；也可只传 ref 或 cursor")
+        try:
+            decoded = decode_cursor(resolve_cursor_reference(cursor))
+        except CursorError as exc:
+            return _json_error(f"游标不可用：{exc}")
+        restored = decoded.get("doc_id")
+        if (
+            not isinstance(restored, str)
+            or not restored.startswith("cv2:")
+            or decoded.get("build_id") != restored.removeprefix("cv2:")
+        ):
+            return _json_error("游标未绑定有效的文档版本句柄；请重新检索", fetch_complete=False)
+        doc_id = restored
+
     if not isinstance(doc_id, str) or not doc_id.strip():
         return _json_error("doc_id 必须是非空字符串")
 
@@ -1163,7 +1347,7 @@ async def _fetch(
 
     # v2 search references are aliases only. Resolve before paging/relations so
     # all existing source validation and canonical fetch-result semantics apply.
-    from plugins.corpus.search_refs import SearchReferenceError, canonical_locator
+    from plugins.corpus.search_refs import canonical_locator
 
     try:
         if isinstance(locator, str):

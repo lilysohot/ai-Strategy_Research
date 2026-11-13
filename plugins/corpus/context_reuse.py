@@ -11,6 +11,7 @@ import re
 from typing import Any
 
 from frontier_agent.core.loop_types import BaseObserver, ToolCallIntervention, TurnContext
+from plugins.corpus import projection
 
 
 def _fetch_key(args: dict[str, Any]) -> str:
@@ -28,7 +29,9 @@ class CorpusContextReuseObserver(BaseObserver):
     ) -> ToolCallIntervention | None:
         args = tool_call.get("args")
         if (tool_call.get("name") != "corpus_fetch" or not isinstance(args, dict)
-                or args.get("force_refresh")):
+                or args.get("force_refresh") or args.get("ref")):
+            # Handle-based reads resolve their own version/scope from a receipt;
+            # reusing an older page by argument equality is not sound here.
             return None
         doc_id = args.get("doc_id", "")
         if not isinstance(doc_id, str) or not re.fullmatch(r"cv2:[0-9a-f]{64}", doc_id):
@@ -50,11 +53,22 @@ class CorpusContextReuseObserver(BaseObserver):
                     except (ValueError, TypeError, KeyError):
                         continue
             elif message.get("role") == "tool" and message.get("tool_call_id") in matches:
+                content = message.get("content") or ""
                 try:
-                    body = json.loads(message.get("content") or "")
+                    visible = json.loads(content)
                 except (ValueError, TypeError):
                     continue
-                if not isinstance(body, dict) or body.get("ok") is not True:
+                if not isinstance(visible, dict):
+                    continue
+                complete = projection.try_materialize(
+                    "corpus_fetch",
+                    content,
+                    tool_call_id=str(message.get("tool_call_id") or ""),
+                )
+                if complete is None:
+                    continue
+                body = complete
+                if body.get("ok") is not True:
                     continue
                 # Document continuations recheck source admission and membership,
                 # even when an identical final page remains in the conversation.

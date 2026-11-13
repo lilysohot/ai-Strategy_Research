@@ -218,6 +218,8 @@ class SearchHit:
     evidence_spans: tuple[dict[str, Any], ...] = ()
     publication_date_basis: str = "unknown"
     ingested_at: str | None = None
+    #: Complete authority ranges for every selected context member; receipt-only.
+    context_native_slices: tuple[dict[str, Any], ...] = ()
 
 
 @dataclass
@@ -3700,6 +3702,47 @@ def get_service(dsn_url: str | None = None) -> CorpusService:
             svc = CorpusService(key)
             _SERVICES[key] = svc
         return svc
+
+
+_DOC_TITLES_TTL = 30.0
+_DOC_TITLES_CACHE: tuple[float, dict[str, dict[str, str]]] = (0.0, {})
+
+
+def document_titles(doc_ids: Iterable[str]) -> dict[str, dict[str, str]]:
+    """Resolve the human-facing source identity for document handles.
+
+    A search hit's ``title`` is the *matched section heading*, not the document
+    name. Navigation views must keep the real filename as task information:
+    hashes and coordinates may be hidden, but the source name may not. The
+    lookup is fail-soft (offline tests / DB outage simply omit the fields) and
+    short-lived cached, because every fetch page would otherwise rescan the
+    document catalogue for the same handful of handles.
+    """
+    wanted = {str(doc_id) for doc_id in doc_ids if doc_id}
+    if not wanted:
+        return {}
+    global _DOC_TITLES_CACHE
+    now = time.monotonic()
+    stamp, all_titles = _DOC_TITLES_CACHE
+    if now - stamp >= _DOC_TITLES_TTL:
+        try:
+            rows = get_service().list_documents()
+        except Exception:
+            rows = []
+        resolved: dict[str, dict[str, str]] = {}
+        for row in rows:
+            doc_id = str(row.get("doc_id") or "")
+            filename = str(row.get("title") or "").strip()
+            if not doc_id or not filename:
+                continue
+            # The active chain stores the original filename in ``title``; there
+            # is no separate display-title column yet, so both labels are
+            # explicit and currently equal. Keeping them distinct makes the
+            # contract stable if a real document title is added later.
+            resolved[doc_id] = {"filename": filename, "document_title": filename}
+        all_titles = resolved
+        _DOC_TITLES_CACHE = (now, all_titles)
+    return {doc_id: value for doc_id, value in all_titles.items() if doc_id in wanted}
 
 
 def _main() -> int:

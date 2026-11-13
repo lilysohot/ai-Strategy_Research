@@ -98,12 +98,14 @@ def test_single_prompt_prefix_is_byte_identical(bound, history):
         CONTEXT_INTEGRITY_POLICY,
         INPUT_REQUEST_POLICY,
         RESEARCH_HISTORY_POLICY,
+        ROUND_SCOPE_POLICY,
         build_prompt_addenda,
     )
 
     expected = (
         "Input files are mounted read-only at /inputs. Write the final deliverable to /outputs."
         "\n" + CONTEXT_INTEGRITY_POLICY
+        + "\n" + ROUND_SCOPE_POLICY
     )
     if bound:
         expected += "\n" + BUSINESS_CONTEXT_POLICY

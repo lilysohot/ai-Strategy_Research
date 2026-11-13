@@ -8,15 +8,17 @@ from __future__ import annotations
 
 import asyncio
 import contextvars
+import hashlib
 import json
 import os
 from typing import Any
 
 from frontier_agent.core.tool import tool
+from plugins.corpus import projection, tool_refs
 from plugins.corpus.search_evidence import SEARCH_EVIDENCE_CONTRACT, search_evidence_items
 from plugins.corpus.search_refs import CONTRACT as REFERENCE_CONTRACT
 from plugins.corpus.search_refs import SearchReferenceError, compact_hit
-from plugins.corpus.service import get_service
+from plugins.corpus.service import document_titles, get_service
 
 MAX_LIMIT = 20
 
@@ -163,6 +165,10 @@ async def corpus_search(
     ingested_timezone: str = "Asia/Shanghai",
 ) -> str:
     """检索研报，返回定位句柄及有界原文；缺失上下文用 corpus_fetch 补读。
+
+    导航模式（由运行环境显式启用）下本工具只负责选择：每条命中给出持久 ref、
+    标题、日期与不可引用的短预览；原文由 corpus_fetch(ref=...) 交付，引用只用
+    实际读到的 evidence_ref。默认模式仍交付已核验原文，excerpts 足够时无需 fetch。
 
     原生 v2 命中 evidence_contract=native-search-evidence-v2 的 excerpts 是原文证据，
     每项含 text 和 ref。提交 corpus_submit_manifest 时优先只填 evidence_ref=ref，
@@ -409,6 +415,9 @@ def _search_sync(
                 "total_chunks": len(hit.context_locators),
                 "by_kind": dict(hit.context_by_kind),
                 "table_chunks": dict(hit.context_by_kind).get("table", 0),
+                "table_chunks_scope": "retrieved_chunks_classified_as_table",
+                "source_table_count": None,
+                "context_native_slices": list(getattr(hit, "context_native_slices", ())),
             }
         )
     reference_storage_failed = False
@@ -420,6 +429,10 @@ def _search_sync(
             # unavailable; never issue references that only this process can read.
             reference_storage_failed = True
     references = native and not reference_storage_failed
+    if projection.navigation_enabled() and references:
+        # Optional navigation protocol: search only selects, fetch reads the
+        # verbatim original. The complete result stays in a cmeta receipt.
+        return _navigation_body(query, payload_hits, coverage, hits)
     delivery = _native_delivery(payload_hits) if native else {}
     body = json.dumps(
         {
@@ -476,6 +489,115 @@ def _search_sync(
     return body
 
 
+def _compact_coverage(coverage: Any) -> dict[str, Any]:
+    """Only conclusion-relevant status survives in the navigation view."""
+    if not isinstance(coverage, dict):
+        return {"processing": "unknown", "availability": "unknown"}
+    out: dict[str, Any] = {
+        key: coverage[key]
+        for key in ("query_status", "availability", "processing", "abstain")
+        if key in coverage
+    }
+    if coverage.get("date_filter"):
+        out["date_filter"] = True
+    if coverage.get("ingestion_filter"):
+        out["ingestion_filter"] = True
+    purity = coverage.get("purity")
+    if isinstance(purity, dict) and purity.get("sources_filtered"):
+        out["purity"] = {"sources_filtered": True}
+    native = coverage.get("native")
+    if isinstance(native, dict):
+        reduced = {
+            key: native[key]
+            for key in ("unknown_date_source_count", "degraded", "fallback")
+            if key in native
+        }
+        if reduced:
+            out["native"] = reduced
+    return out
+
+
+def _navigation_body(
+    query: str,
+    payload_hits: list[dict[str, Any]],
+    coverage: Any,
+    hits: list[Any],
+) -> str:
+    """Navigation view: handle + task-facing source identity + short preview.
+
+    ``filename``/``document_title`` are the real source document, while
+    ``section_title`` is only the matched heading. These are task information,
+    not internal coordinates, so they must never be cut with hashes/locators.
+    """
+    identities = document_titles([str(hit.get("doc_id") or "") for hit in payload_hits])
+    rows: list[dict[str, Any]] = []
+    for hit in payload_hits:
+        identity = identities.get(str(hit.get("doc_id") or ""), {})
+        row: dict[str, Any] = {
+            "ref": hit["scope_ref"],
+            **{key: value for key, value in identity.items() if value},
+            "section_title": hit.get("title"),
+            "published": hit.get("published"),
+        }
+        basis = hit.get("publication_date_basis")
+        if row.get("document_title") == row.get("filename"):
+            row.pop("document_title", None)
+        row["table_chunks"] = hit.get("table_chunks", 0)
+        row["table_chunks_scope"] = "retrieved_chunks_classified_as_table"
+        row["source_table_count"] = None
+        if basis and basis != "unknown":
+            row["published_basis"] = basis
+        preview = hit.get("preview") or ""
+        if not preview and hit.get("excerpts"):
+            # A short display of the retrieval snippet, never a citation source.
+            preview = str(hit["excerpts"][0].get("text") or "")
+        preview = projection.short_preview(preview)
+        if preview:
+            row["preview"] = preview
+        rows.append(row)
+    complete_hits = []
+    for hit in payload_hits:
+        enriched = dict(hit)
+        enriched.update(identities.get(str(hit.get("doc_id") or ""), {}))
+        complete_hits.append(enriched)
+    complete = {
+        "ok": True,
+        "query": query,
+        "count": len(hits),
+        "hits": complete_hits,
+        "coverage": coverage,
+        "delivery": _native_delivery(payload_hits),
+    }
+    nav: dict[str, Any] = {
+        "ok": True,
+        "query": query,
+        "count": len(rows),
+        "hits": rows,
+        "coverage": _compact_coverage(coverage),
+        "protocol": projection.NAVIGATION_VERSION,
+        "limitations": projection.search_limitations(coverage, complete),
+        "hint": projection.NAV_SEARCH_HINT,
+    }
+    rendered = json.dumps(nav, ensure_ascii=False, separators=(",", ":"))
+    try:
+        snapshot = tool_refs.store_metadata_snapshot(
+            "corpus_search",
+            complete,
+            protocol=projection.NAVIGATION_VERSION,
+            visible_digest=hashlib.sha256(rendered.encode()).hexdigest(),
+        )
+        projection.remember_snapshot(rendered, snapshot)
+    except (OSError, tool_refs.ToolReferenceError, TypeError, ValueError):
+        # Explicit degradation: the full diagnostics were not persisted, but
+        # the visible view never depends on a receipt it cannot resolve.
+        nav["limitations"] = [
+            *nav["limitations"],
+            "完整检索诊断快照不可用；本页候选与限制仍按原结果校验。",
+        ]
+        rendered = json.dumps(nav, ensure_ascii=False, separators=(",", ":"))
+    return rendered
+
+
 def _compact_hit(hit: dict[str, Any]) -> dict[str, Any]:
     """逐命中只保留定位与复取必需字段（其余为可推导／诊断字段）。"""
     out = {}
@@ -484,6 +606,36 @@ def _compact_hit(hit: dict[str, Any]) -> dict[str, Any]:
             out[key] = hit[key]
     out.update({key: hit[key] for key in _HIT_CORE_KEYS if key in hit})
     return out
+
+
+def _fit_navigation_payload(payload: dict[str, Any], budget: int) -> str:
+    """Navigation rows are atomic candidates; never character-cut or reshape them."""
+    rows = [hit for hit in (payload.get("hits") or []) if isinstance(hit, dict)]
+    total = len(rows)
+
+    def render(keep: list[dict[str, Any]]) -> str:
+        out = {**payload, "hits": keep}
+        if len(keep) < total:
+            out["hits_total"] = total
+            out["hits_elided"] = total - len(keep)
+        return json.dumps(out, ensure_ascii=False, separators=(",", ":"))
+
+    if len(render(rows)) <= budget:
+        return render(rows)
+    for count in range(total - 1, 0, -1):
+        candidate = render(rows[:count])
+        if len(candidate) <= budget:
+            return candidate
+    return json.dumps(
+        {
+            "ok": False,
+            "error": "budget_exceeded：候选句柄超过本轮工具结果预算；请用更具体的 query 或更小的 limit 重新检索。",
+            "hits_total": total,
+            "budget": budget,
+            "protocol": projection.NAVIGATION_VERSION,
+        },
+        ensure_ascii=False,
+    )
 
 
 def fit_search_payload(body: str, budget: int) -> str | None:
@@ -511,6 +663,13 @@ def fit_search_payload(body: str, budget: int) -> str | None:
         return None
     if not isinstance(payload, dict) or payload.get("ok") is not True:
         return None
+    if payload.get("protocol") == projection.NAVIGATION_VERSION:
+        return _fit_navigation_payload(payload, budget)
+    if payload.get("protocol") == projection.VISIBLE_VERSION:
+        # A projected view is bound to its cmeta receipt by visible-body digest;
+        # refitting it here would break that binding. Budget fitting already ran
+        # on the complete result before projection.
+        return body
     if len(body) <= budget:
         return body
     native = bool((payload.get("coverage") or {}).get("native"))

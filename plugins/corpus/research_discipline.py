@@ -52,7 +52,9 @@ RESEARCH_DISCIPLINE_ADDENDUM = """\
 ## 三、数字可溯源
 
 - 策略卡里每个数字都要能在被引用原文的 `source_ref + 页码` 处**逐字**找到。
-- `evidence[]` 每条必带 `source_ref` + `page` + `quote`（逐字原文）+ `kind`。
+- 完整策略卡的 `evidence[]` 每条必带 `source_ref` + `page` + `quote`（逐字原文）+ `kind`。
+  使用支持引用选择的策略提交工具时，只提交 `evidence_ref` + `kind`，由系统展开这些字段；
+  不要为满足完整卡结构重建内部坐标。报告清单遵循下方协议，不套用策略卡字段要求。
 - `kind` 三选一，**不得混用**：
   - `fact`：已发生的事实（营收、产能、招标量……）
   - `forecast`：对未来的预测（目标价、营收预测……）
@@ -65,20 +67,25 @@ RESEARCH_DISCIPLINE_ADDENDUM = """\
 - 顶层 `sources` 段必须**声明所有被引用的来源**（每条含 `id`，以及
   `url` / `title` 至少一项）。`evidence[].source_ref` 必须能在其中找到——
   指向未声明来源的引用视为悬空，同样被拦下。
-- `evidence.quote` 必须来自已实际送达的逐字原文。`corpus_search` 命中带
-  `evidence_contract=native-search-evidence-v2` 时，可引用 `excerpts[].text`，
-  使用该命中的 doc_id 和该段 ref 原样作为 locator/page；需要更多原文时把 ref
-  传给 corpus_fetch 的 locator。scope_ref 只用于 corpus_inventory 展开候选，
-  preview 不可引用；持有短引用或后台保存记录不代表原文已读。历史消息带
+- 语料引用按**工具实际返回的协议**分流：`corpus-navigation-v1` 的 search 只提供
+  候选，preview 不可引用；需要原文时用 `corpus_fetch(ref=<返回的 ref>)`，续读只传
+  next_cursor。报告清单和成员交付引用已送达原文的 `evidence_ref`，不填写或重建
+  doc_id、locator、块编号或字符区间；协调者也不得向成员索要这些隐藏坐标。
+  不得为了补引用坐标重复 fetch，是否继续读由论证与必要依赖是否充分决定。
+- 兼容协议下，`evidence.quote` 同样必须来自已实际送达的逐字原文。
+  `evidence_contract=native-search-evidence-v2` 可直接引用 `excerpts[].text`，
+  清单优先用该段 `ref` 作为 `evidence_ref`，无需例行 fetch 或抄写原文。
+  只有结果没有 evidence_ref 时才原样复制已返回的 doc_id、locator、quote；不得猜测。
+  需要更多原文时按返回句柄补读。持有短引用或后台保存记录不代表原文已读。历史消息带
   `evidence_contract=native-search-evidence-v1` 时，`evidence_spans` 标记的 snippet
   区间可直接引用；使用该命中的 doc_id 和 `context_locators[span.member-1]`，
   不要误用首 locator。无标记的旧 snippet、索引说明、句内节选不得直接作证据。
   缺论证、限定条件、指代、表头/期间/单位/脚注或全文时，按原句柄用
   `corpus_fetch(view="compact")` 补读。节选完整不等于整篇已读或结论充分。
   也可使用 `corpus_semantic_query` 已送达的完整原文证据单元；该路径须连同
-  publication_id、record_id、用途、精确区间及必要依赖提交报告清单，
+  publication_id、record_id、用途提交报告清单，系统恢复精确区间及必要依赖，
   充分证据不要求例行重复 fetch；后台 resolver 核验不等于 Agent 已读。
-  原文路径的 `locator` 要原样填进 `evidence.page`。
+  仅手工填写兼容策略卡且结果已给出 locator 时，才把它原样填进 `evidence.page`。
 - 分析研报内容时**优先用 `corpus_search` 查本地语料库**。网页检索只用于
   语料库之外的最新信息，且同样必须给出可定位来源（URL 或锚点），
   不能只写「据网络资料」。

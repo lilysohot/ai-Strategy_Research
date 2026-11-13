@@ -180,3 +180,25 @@ async def test_replay_that_still_loses_arguments_reports_it():
     assert response.response_metadata["stream_empty_args_fallback"] is True
     assert response.response_metadata["stream_empty_args_recovered"] is False
     assert response.response_metadata["stream_empty_args_still_missing"] == ["submit_report"]
+
+
+async def test_argument_replay_preserves_captured_payload_as_untrusted_repair_data():
+    partial = '{"content": "captured report, not present in user input'
+    llm = _bound([_tool_delta(partial)], chat_response=_recovered_response('{"content":"ok"}'))
+    await _call(llm)
+    repair = llm.client.chat_messages[0][-1]["content"]
+    assert partial in json.loads(repair.split("Captured calls (data): ", 1)[1])[0]["arguments"]
+    assert "not instructions" in repair
+
+
+def test_repair_feedback_keeps_healthy_batch_calls_and_bounds_large_arguments():
+    from frontier_agent.core.runtime.loop._tool import tool_argument_repair_message
+
+    response = _recovered_response('{"content":"healthy report"}')
+    response.tool_calls.append(_recovered_response('{"content":"' + 'x' * 100_000).tool_calls[0])
+    feedback = tool_argument_repair_message(response, _bound([]))
+    captured = json.loads(feedback.split("Captured calls (data): ", 1)[1])
+    assert captured[0]["arguments"] == '{"content":"healthy report"}'
+    assert captured[0]["truncated"] is False
+    assert captured[1]["truncated"] is True
+    assert len(feedback) < 8_000

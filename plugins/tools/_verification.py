@@ -44,6 +44,56 @@ def minimum_verification_budget(first_chunk_timeout_s: float | None = 45) -> flo
     return max(90.0, float(first_chunk_timeout_s or 45) + 45)
 
 
+#: Lines that are instructions to the verifier, not text for the answer. A
+#: ``publication_excerpt`` subject is bound verbatim into the final answer, so
+#: mixing the two made the runtime *require* the rubric inside the report —
+#: which is how "判定标准 … 判 FAIL" ended up published to the reader.
+_INSTRUCTION_LINE = re.compile(
+    r"""^[\s\-*_>`]*(?:
+        (?:\d+[.)]\s*)?(?:判定|评分|核验|检查|验收)(?:标准|规则|要求|说明)\s*[:：]
+      | (?:Judging|Grading|Scoring|Marking|Acceptance)\s+(?:rules?|criteria|instructions)\s*:
+      | Rubric\s*:
+    )""",
+    re.IGNORECASE | re.VERBOSE,
+)
+
+#: Instruction sentences that are not line-initial (lead-ins, verdict rules).
+_INSTRUCTION_TEXT = re.compile(
+    r"(?:判\s*(?:PASS|FAIL)|\bmark(?:ed)?\s+as\s+(?:pass|fail)|"
+    r"逐字保真|保留逐字|须逐字|必须逐字|不得改动原文|"
+    r"pass\s+only\s+if|fail\s+if|verbatim\s+(?:match|fidelity))",
+    re.IGNORECASE,
+)
+
+_INSTRUCTION_ERROR = (
+    "publication_excerpt subject.text must be the passage itself, not judging instructions; "
+    "put rules in criterion"
+)
+
+
+def split_publication_subject(text: str) -> tuple[str, list[str]]:
+    """Validate without rewriting the passage (legacy name/return shape).
+
+    Natural-language heuristics cannot safely distinguish substantive conditions
+    from judging rules. Suspected mixed input must be corrected by the caller,
+    using criterion for rules; accepted text remains byte-for-byte unchanged.
+    """
+    if any(_is_instruction_line(line.strip()) for line in text.splitlines()):
+        raise ValueError(_INSTRUCTION_ERROR)
+    return text, []
+
+
+def _is_instruction_line(line: str) -> bool:
+    # Quoted source material may itself discuss rules, including in numbered lists.
+    unlisted = re.sub(r"^(?:[-*+]\s+|\d+[.)]\s*)", "", line)
+    if unlisted.startswith(("「", '"', "“", "『", ">")):
+        return False
+    if _INSTRUCTION_LINE.match(line):
+        return True
+    return bool(_INSTRUCTION_TEXT.search(line))
+
+
+
 def missing_publication_excerpts(
     checks: list[dict[str, Any]],
     content: str,
@@ -240,6 +290,7 @@ class VerificationCheck(BaseModel):
     publication_excerpt: StrictBool = Field(
         default=False,
         description="An exact inline subject.text passage to retain in the final answer. "
+        "Keep judging instructions in the registered criterion, never in subject.text. "
         "A resolved check cannot certify different final wording.",
     )
     replaces_job_id: StrictStr = Field(default="", max_length=180)
@@ -585,10 +636,14 @@ def bind_checks(
             )
         if plan.get("verification_required") and not required:
             raise ValueError("a planned required check cannot be dispatched as optional")
+        instructions: list[str] = []
         if isinstance(spec.subject, VerificationText):
             body = spec.subject.text
             if not body.strip():
                 raise ValueError("cannot bind an empty subject")
+            if spec.publication_excerpt:
+                # Reject mixed instructions without removing any candidate text.
+                body, instructions = split_publication_subject(body)
             digest = hashlib.sha256(body.encode()).hexdigest()
             subject = {"text": body, "sha256": digest, "key": f"inline:{digest}"}
         else:
@@ -610,6 +665,10 @@ def bind_checks(
             "subject": subject,
             "evidence": evidence,
         }
+        if instructions:
+            # Versioned with the binding: the rules still govern the verdict,
+            # they are just never treated as publishable text.
+            identity["subject_instructions"] = instructions
         old = latest.get(spec.check_id)
         if spec.quote_checks:
             quote_sources = {}
@@ -770,6 +829,14 @@ def bind_checks(
         "passage intended for delivery. Every supplied calculation receipt is validated, "
         "whether or not the subject contains a calculation label.\n"
     )
+    ruled = [check["check_id"] for check in bound if check.get("subject_instructions")]
+    if ruled:
+        prompt += (
+            "\nJudging rules were supplied inside subject.text for these checks and remain part "
+            f"of their criterion: {', '.join(ruled)}. They are NOT deliverable text: do not "
+            "require them in the answer, quote them, or report them missing. The bound "
+            "subject.text above is already the publishable passage alone.\n"
+        )
     recheck = any(check.get("replaces_job_id") for check in bound)
     subject_keys = {check["subject"]["key"] for check in bound}
     report_budget = (4000 if recheck else 8000) // max(1, len(context) - len(subject_keys))

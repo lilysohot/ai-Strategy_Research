@@ -134,6 +134,9 @@ class ReactStepTracker(BaseObserver):
             "duration_ms": result.duration_ms,
             "is_error": result.is_error,
         }
+        if result.queued_ms:
+            # Present only when non-zero so existing step shapes are unchanged.
+            step["queued_ms"] = result.queued_ms
         # Salvaged thinking from leaked tags — recorded alongside the
         # native thinking field so report-rendering / debugging tools can
         # inspect both without conflating provenance.

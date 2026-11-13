@@ -250,6 +250,61 @@ async def test_final_turn_retains_atomic_tool_in_real_request(delivery_run, monk
     assert meta["team_delivery_reason"] == "turn_reserve"
 
 
+async def test_delivery_prompt_projects_tasks_and_bounds_citation_index(delivery_run, monkeypatch):
+    from workflows.agent_team.delivery import _delivery_task_view
+
+    bus, budget = delivery_run
+    await prepare(bus)
+    await add_task.func(
+        [
+            {
+                "description": "BACKGROUND DESCRIPTION UNIQUE " + "x" * 200,
+                "notes": "BACKGROUND NOTES UNIQUE",
+                "owner": "owner-unique",
+                "group": "group-unique",
+                "evidence_refs": ["evidence-ref-unique"],
+                "done_when": "VISIBLE DONE WHEN",
+            }
+        ]
+    )
+    job = bus._jobs["j1"]
+    assert job.result is not None
+    job.result.metadata["corpus_evidence"] = [
+        {
+            "doc_id": "cv2:" + "a" * 64,
+            "locator": "ce:" + "b" * 64,
+            "text": "PREVIEW " + "y" * 800,
+        }
+    ]
+    monkeypatch.setattr("workflows.agent_team.delivery.time.monotonic", lambda: 786.6)
+
+    intervention = await TeamDeliveryObserver(budget).on_before_llm(turn_context())
+
+    assert intervention is not None
+    assert len(intervention.inject_messages) == 2
+    checkpoint, prompt = intervention.inject_messages
+    assert len(checkpoint) <= 8_000
+    assert "BACKGROUND DESCRIPTION UNIQUE" not in prompt
+    assert "BACKGROUND NOTES UNIQUE" not in prompt
+    assert "owner-unique" not in prompt
+    assert "group-unique" not in prompt
+    assert "evidence-ref-unique" not in prompt
+    assert "VISIBLE DONE WHEN" in prompt
+    assert "Final citation index" in prompt
+
+    expected_tasks = json.dumps(_delivery_task_view(snapshot_tasks("run")), ensure_ascii=False)
+    assert expected_tasks in prompt
+    prefix, rest = prompt.split(expected_tasks, 1)
+    marker = rest.find("\nFinal citation index")
+    checked = rest[:marker] if marker >= 0 else rest
+    citation = rest[marker:] if marker >= 0 else ""
+    assert len(prefix) + len(expected_tasks) + len(rest) == len(prompt)
+    assert len(prefix) + len(expected_tasks) + len(checked) + len(citation) == len(prompt)
+    entries = [json.loads(line) for line in citation.splitlines() if line.startswith("{")]
+    assert entries
+    assert all(len(entry["preview"]) <= 300 for entry in entries)
+
+
 async def test_mixed_submission_rejects_all_mutations(delivery_run):
     _, budget = delivery_run
     calls = [{"name": "update_task"}, {"name": "deliver_answer"}]

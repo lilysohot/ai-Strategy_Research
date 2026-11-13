@@ -31,6 +31,7 @@ from pydantic import (
 from pydantic.json_schema import SkipJsonSchema
 
 from frontier_agent.components.agent_bus import AgentBus
+from frontier_agent.components.task_board_types import task_is_required
 from frontier_agent.core.execution_context import (
     get_current_execution_scope,
     get_current_tool_call_id,
@@ -824,6 +825,22 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         task_metadata: dict[str, Any] = {}
         if isinstance(spec, AgentTeamAssignmentSpec):
             task_metadata["required_for_completion"] = spec.required_for_completion
+            # The board is the single source of truth for optionality. If every
+            # bound item was declared optional and the caller did not override
+            # the flag, the dispatched job is optional too — otherwise the board
+            # says "optional" while the job outcome still blocks the answer.
+            if (
+                "required_for_completion" not in spec.model_fields_set
+                and is_agent_team
+                and spec.work_item_ids
+                and any(tid in board for tid in spec.work_item_ids)
+                and all(
+                    not task_is_required(board[tid])
+                    for tid in spec.work_item_ids
+                    if tid in board
+                )
+            ):
+                task_metadata["required_for_completion"] = False
             if spec.unit_range:
                 task_metadata["unit_range"] = list(spec.unit_range)
             if spec.work_item_ids and is_agent_team:
@@ -1170,6 +1187,17 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                         outputs_root=root,
                     )
                     task_metadata["verification_checks"] = bound
+                    ruled = [
+                        check["check_id"] for check in bound if check.get("subject_instructions")
+                    ]
+                    if ruled:
+                        research_notices.append(
+                            "subject.text for "
+                            + ", ".join(ruled)
+                            + " contained judging instructions; they stay binding rules but "
+                            "were removed from the publication excerpt, so only the passage "
+                            "must appear in the final answer."
+                        )
                     from plugins.tools._bound_evidence import build_review_packet, packet_index
 
                     packet = build_review_packet(bound, bus=bus, task_id=bus_task_id)

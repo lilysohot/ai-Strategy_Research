@@ -424,6 +424,10 @@ def search(
                 build_id=b.build_id,
                 chunk_id=b.chunk_id,
                 context_locators=locators,
+                context_native_slices=tuple(
+                    {"locator": loc, "native_slices": [asdict(s) for s in block.slices]}
+                    for loc, block in zip(locators, blocks, strict=True)
+                ),
                 scope_id=context_scope_id(
                     b.build_id, [read_pg.parse_chunk_locator(loc) for loc in locators]
                 ),

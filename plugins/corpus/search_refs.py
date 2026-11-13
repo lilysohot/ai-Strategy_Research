@@ -83,6 +83,26 @@ def resolve_scope(doc_id: str, ref: str) -> dict[str, Any]:
     return _load(match[1], doc_id)
 
 
+def resolve_scope_by_ref(ref: str) -> dict[str, Any]:
+    """Restore a candidate hit from its handle alone, with the same binding checks.
+
+    Navigation-mode fetch passes only ``sref:<digest>``; the document version and
+    ordered candidate locators must come from the validated receipt, never from
+    a model-authored ``doc_id`` or a fresh search over the title.
+    """
+    match = _SCOPE.fullmatch(ref) if isinstance(ref, str) else None
+    if not match:
+        raise SearchReferenceError("invalid_search_scope_reference")
+    hit = _load(match[1], None)
+    doc_id = hit.get("doc_id")
+    if not isinstance(doc_id, str) or not doc_id.startswith("cv2:"):
+        raise SearchReferenceError("search_receipt_binding_mismatch")
+    locators = hit.get("context_locators")
+    if not isinstance(locators, list) or not locators:
+        raise SearchReferenceError("search_receipt_candidate_scope_missing")
+    return hit
+
+
 def resolve_evidence(doc_id: str, ref: str) -> dict[str, Any]:
     """Restore an excerpt's canonical locator and full verification metadata."""
     from plugins.corpus.search_evidence import search_evidence_items
@@ -192,4 +212,7 @@ def compact_hit(hit: dict[str, Any]) -> dict[str, Any]:
         "evidence_contract": CONTRACT,
         "scope_ref": "sref:" + digest,
         "available_blocks": len(hit["context_locators"]),
+        "table_chunks": hit.get("table_chunks", 0),
+        "table_chunks_scope": "retrieved_chunks_classified_as_table",
+        "source_table_count": None,
     }

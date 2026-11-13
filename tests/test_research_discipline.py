@@ -29,6 +29,15 @@ def test_discipline_covers_every_required_point() -> None:
         assert token in RESEARCH_DISCIPLINE_ADDENDUM, token
 
 
+def test_discipline_distinguishes_handle_citations_from_expanded_strategy_cards() -> None:
+    text = get_profile("react").prompt_addendum
+    assert "corpus-navigation-v1" in text
+    assert "协调者也不得向成员索要这些隐藏坐标" in text
+    assert "无需例行 fetch" in text
+    assert "报告清单遵循下方协议，不套用策略卡字段要求" in text
+    assert "使用该命中的 doc_id 和该段 ref 原样作为 locator/page" not in text
+
+
 def test_react_profile_resolves_the_discipline_addendum() -> None:
     addendum = get_profile("react").prompt_addendum
     assert addendum == RESEARCH_DISCIPLINE_ADDENDUM

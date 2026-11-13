@@ -31,6 +31,10 @@ def run_process(tmp_path, mode, *, scenario="positive", enforce=False):
         "MAIN_MAX_TURNS": "8",
         "SANDBOX_BACKEND": "native",
         "APODEX_IN_NATIVE": "1",
+        # bwrap mounts the repo read-only; cmeta receipts therefore need a root
+        # inside the one writable bind (the research cwd). Writer, retire and
+        # research share it so handles minted by one resolve in another.
+        "CORPUS_TOOL_REF_ROOT": str(tmp_path / "research" / "tool-refs"),
         "A4_ENFORCE": "1" if enforce else "0",
     }
     command = [sys.executable, str(RUNNER), mode, str(tmp_path), scenario]

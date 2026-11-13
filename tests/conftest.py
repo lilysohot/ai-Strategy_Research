@@ -48,6 +48,16 @@ def _isolated_search_receipts(tmp_path, monkeypatch):
 
 
 @pytest.fixture(autouse=True)
+def _pin_legacy_navigation_for_regressions(monkeypatch):
+    """Regression tests target the first-step ``corpus-visible-v1`` projection.
+
+    Navigation is the product default now, so offline regressions opt out
+    explicitly. Navigation-specific tests override this with ``on``.
+    """
+    monkeypatch.setenv("CORPUS_NAVIGATION_MODE", "off")
+
+
+@pytest.fixture(autouse=True)
 async def _isolated_database(tmp_path, monkeypatch):
     """Point the server store at a throwaway SQLite file for every test."""
     try:

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import json
 import logging
 import os
 import re
@@ -623,43 +624,299 @@ def _stitch_collected_reports(messages: list[Message]) -> str:
     )
 
 
-def _collected_report_fallback(messages: list[Message]) -> str:
-    """Publish attributed member results, never orchestration progress, on failure."""
-    reports: list[tuple[str, str]] = []
-    seen: set[str] = set()
+_VERIFICATION_NOTE_MAX_CHARS = 320
+_MAX_VERIFICATION_NOTES = 12
+_TOOL_RECEIPT_PREFIXES = (
+    "## Tool observations preserved at the team deadline",
+    "## Best-effort collected results",
+)
+_REPORT_INTERNAL_REF_RE = re.compile(
+    r"\b(?:ce:[0-9a-f]{16,}|sref:[0-9a-f]{16,}|eref:[0-9a-f]{16,}:\d+|"
+    r"(?:chunk|unit|cv2|cmeta|doc|build):[A-Za-z0-9_%.:/\-]{4,})",
+    re.IGNORECASE,
+)
+
+
+def _short_report_text(value: Any, limit: int = _VERIFICATION_NOTE_MAX_CHARS) -> str:
+    """Keep a short limit note; raw receipts and locators never enter the body."""
+    text = _strip_leaked_tool_calls(str(value or "")).strip()
+    if not text:
+        return ""
+    text = _REPORT_INTERNAL_REF_RE.sub("[ref]", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    if len(text) > limit:
+        text = text[: max(limit - 1, 0)].rstrip() + "…"
+    return text
+
+
+def _has_tool_receipt_prefix(body: str) -> bool:
+    return body.lstrip().startswith(_TOOL_RECEIPT_PREFIXES)
+
+
+def _check_work_item_ids(check: dict[str, Any]) -> list[str]:
+    ids = check.get("work_item_ids")
+    if isinstance(ids, list) and ids:
+        return [str(item) for item in ids]
+    work_item_id = check.get("work_item_id")
+    return [str(work_item_id)] if work_item_id else []
+
+
+def _verification_notes_from_content(content: str) -> list[dict[str, Any]]:
+    """Parse structured verification results only; never echo the raw JSON."""
+    stripped = content.lstrip()
+    if not stripped.startswith("{"):
+        return []
+    try:
+        payload = json.loads(stripped)
+    except (TypeError, ValueError):
+        return []
+    results = payload.get("verification_results") if isinstance(payload, dict) else None
+    if not isinstance(results, list):
+        return []
+    notes: list[dict[str, Any]] = []
+    for item in results[:_MAX_VERIFICATION_NOTES]:
+        if not isinstance(item, dict):
+            continue
+        verdict = str(item.get("verdict") or "unchecked").lower()
+        if verdict not in {"fail", "unchecked"}:
+            continue
+        issues = item.get("unresolved_issues")
+        text = "；".join(str(issue) for issue in issues[:2]) if isinstance(issues, list) else ""
+        text = text or str(item.get("detail") or "")
+        notes.append(
+            {
+                "check_id": str(item.get("check_id") or "verification"),
+                "work_item_ids": [],
+                "verdict": verdict,
+                "text": _short_report_text(text) or "未获得判定；核验执行未完成。",
+            }
+        )
+    return notes
+
+
+def _verification_notes_from_record(record: dict[str, Any]) -> list[dict[str, Any]]:
+    """Summarize the member's structured verdicts; pass/unchecked stay distinct."""
+    checks = [item for item in record.get("verification_checks") or [] if isinstance(item, dict)]
+    events = [item for item in record.get("verification_events") or [] if isinstance(item, dict)]
+    latest: dict[str, dict[str, Any]] = {}
+    for event in events:
+        check_id = str(event.get("check_id") or "")
+        if check_id:
+            latest[check_id] = event
+    notes: list[dict[str, Any]] = []
+    for check in checks:
+        check_id = str(check.get("check_id") or "verification")
+        event = latest.get(check_id) or {}
+        verdict = str(event.get("verdict") or "unchecked").lower()
+        if verdict not in {"fail", "unchecked"}:
+            continue
+        issues = event.get("unresolved_issues")
+        text = "；".join(str(issue) for issue in issues[:2]) if isinstance(issues, list) else ""
+        text = text or str(event.get("detail") or "")
+        if not text:
+            text = "未获得判定；核验执行未完成。" if verdict == "unchecked" else "核验未通过。"
+        notes.append(
+            {
+                "check_id": check_id,
+                "work_item_ids": _check_work_item_ids(check),
+                "verdict": verdict,
+                "text": _short_report_text(text),
+            }
+        )
+        if len(notes) >= _MAX_VERIFICATION_NOTES:
+            break
+    if checks:
+        return notes
+    parsed = _verification_notes_from_content(str(record.get("content") or ""))
+    if parsed:
+        return parsed
+    if record.get("kind") == "verification":
+        return [
+            {
+                "check_id": "verification",
+                "work_item_ids": [],
+                "verdict": "unchecked",
+                "text": "核验执行未完成，未获得判定；原始回执不作为研究报告。",
+            }
+        ]
+    return []
+
+
+def _report_label(agent: str, job_id: str, status: str, *, confirmed: bool) -> str:
+    label = " / ".join((agent or "unknown", job_id or "unknown", status or "unknown"))
+    if not confirmed:
+        label += " / 类型未确认"
+    return re.sub(r"[\n\r<>`#]", " ", label)[:240]
+
+
+def _report_limitation(
+    report: dict[str, Any],
+    verification: list[dict[str, Any]],
+) -> str:
+    """Attach only a structured work-item overlap; never infer a paragraph link."""
+    work_item_ids = set(report.get("work_item_ids") or [])
+    if not work_item_ids:
+        return ""
+    affected = [
+        note
+        for note in verification
+        if note["verdict"] in {"fail", "unchecked"}
+        and work_item_ids & set(note.get("work_item_ids") or [])
+    ]
+    if not affected:
+        return ""
+    summary = "；".join(f"{note['check_id']}={note['verdict']}" for note in affected[:3])
+    return f"> 限制：关联核验 {summary} 未通过或未完成；本报告相关结论未获独立确认。\n\n"
+
+
+def _collected_report_fallback(
+    messages: list[Message],
+    member_reports: list[dict[str, Any]] | None = None,
+) -> str:
+    """Publish completed member research, with verification limits kept separate.
+
+    Completed job results are the primary source; message report blocks only fill
+    jobs that have no usable result body. Nothing is re-injected into the main
+    agent, and raw tool observations / verification receipts never become the
+    research body.
+    """
+    research: list[dict[str, Any]] = []
+    verification: list[dict[str, Any]] = []
+    seen_jobs: set[str] = set()
+    known_jobs: set[str] = set()
+
+    for record in member_reports or []:
+        if not isinstance(record, dict):
+            continue
+        job_id = str(record.get("job_id") or "")
+        if job_id:
+            known_jobs.add(job_id)
+        kind = str(record.get("kind") or "unknown")
+        if kind == "verification":
+            verification.extend(_verification_notes_from_record(record))
+            seen_jobs.add(job_id)
+            continue
+        body = _strip_leaked_tool_calls(str(record.get("content") or "")).strip()
+        if kind == "tool_receipt" or _has_tool_receipt_prefix(body):
+            if body:
+                seen_jobs.add(job_id)
+            continue
+        if not body:
+            continue  # a message-only report may still fill this job
+        research.append(
+            {
+                "job_id": job_id,
+                "agent": str(record.get("agent") or "unknown"),
+                "status": str(record.get("status") or "unknown"),
+                "reason": str(record.get("reason") or ""),
+                "work_item_ids": list(record.get("work_item_ids") or []),
+                "body": body,
+                "confirmed": kind == "research",
+            }
+        )
+        seen_jobs.add(job_id)
+
+    message_blocks: dict[str, dict[str, str]] = {}
     for message in messages:
-        if not is_tool_msg(message):
+        if not isinstance(message, dict) or not is_tool_msg(message):
             continue
         for match in _REPORT_BLOCK_RE.finditer(text_of(message.get("content"))):
             block = match.group(0)
             header, body = block.split(">", 1)
             attrs = dict(re.findall(r'(\w+)="([^"]*)"', header))
+            job_id = attrs.get("job", "")
             if (
                 not all(attrs.get(k) for k in ("agent", "job", "status"))
-                or attrs["agent"] == "orchestrator"
-                or block in seen
+                or attrs.get("agent") == "orchestrator"
+                or not job_id
             ):
                 continue
-            seen.add(block)
             body = _strip_leaked_tool_calls(body.rsplit("</report>", 1)[0]).strip()
-            if body:
-                label = " / ".join(attrs.get(k, "unknown") for k in ("agent", "job", "status"))
-                label = re.sub(r"[\n\r<>`#]", " ", label)[:240]
-                reports.append((label, body))
-    if not reports:
+            if not body:
+                continue
+            # Later versions replace earlier ones by message order, not length.
+            message_blocks[job_id] = {**attrs, "body": body}
+            known_jobs.add(job_id)
+
+    for job_id, item in message_blocks.items():
+        if job_id in seen_jobs:
+            continue
+        body = item["body"]
+        if _has_tool_receipt_prefix(body):
+            seen_jobs.add(job_id)
+            continue
+        parsed = _verification_notes_from_content(body)
+        if parsed:
+            verification.extend(parsed)
+            seen_jobs.add(job_id)
+            continue
+        if body.lstrip().startswith("{"):
+            # A raw JSON receipt is not a member research report.
+            seen_jobs.add(job_id)
+            continue
+        research.append(
+            {
+                "job_id": job_id,
+                "agent": item.get("agent", "unknown"),
+                "status": item.get("status", "unknown"),
+                "reason": "",
+                "work_item_ids": [],
+                "body": body,
+                "confirmed": False,
+            }
+        )
+        seen_jobs.add(job_id)
+
+    missing = sorted(known_jobs - seen_jobs)
+    if not research and not verification and not missing and not seen_jobs:
         return ""
-    share = max(1, _STITCH_MAX_CHARS // len(reports))
-    blocks = []
-    for label, body in reports:
-        if len(body) > share:
-            body = body[: share // 2] + "\n[…摘录；完整报告见运行轨迹…]\n" + body[-share // 2 :]
-        blocks.append(f"### {label}\n\n{body}")
-    return (
-        "## 已收集的成员报告 / Collected member reports\n\n"
-        "最终汇总未成功。以下按来源保留成员报告及其缺口，不代表独立核验通过。\n"
-        "Final synthesis failed. These attributed reports retain their limitations; "
-        "they are not independently verified conclusions.\n\n" + "\n\n".join(blocks)
-    )
+
+    sections = [
+        "## 已收集的成员报告 / Collected member reports\n",
+        "最终汇总未成功。以下按来源保留已完成的研究报告；"
+        "成员执行完成不等于结论核验通过，核验限制单独列在末尾。",
+        "Final synthesis failed. Completed member research is retained with its source "
+        "and completion status; verification results are summarized as limits, not as "
+        "verified conclusions.",
+    ]
+    if research:
+        share = max(1, _STITCH_MAX_CHARS // len(research))
+        for item in research:
+            limitation = _report_limitation(item, verification)
+            label = _report_label(
+                item["agent"],
+                item["job_id"],
+                item["status"],
+                confirmed=bool(item["confirmed"]),
+            )
+            body = item["body"]
+            if len(body) > share:
+                body = body[: share // 2] + "\n[…摘录；完整报告见运行轨迹…]\n" + body[-share // 2 :]
+            status_note = ""
+            if item["status"] != "complete":
+                reason = f"（{item['reason']}）" if item.get("reason") else ""
+                status_note = f"> 状态：{item['status']}{reason}；以下为已提交的部分报告。\n\n"
+            sections.append(f"### {label}\n\n{limitation}{status_note}{body}")
+    else:
+        sections.append(
+            "当前运行没有找到可用的成员研究报告正文"
+            "（成果记录与模型上下文均缺失）。\n"
+            "No usable member research report body was found in the completed-job "
+            "records or the model context."
+        )
+    if missing:
+        shown = "、".join(missing[:10])
+        more = f" 等 {len(missing)} 项" if len(missing) > 10 else ""
+        sections.append(f"未取得可用正文的任务：{shown}{more}。")
+    if verification:
+        lines = ["### 未通过或未完成的核验事项 / Verification limits", ""]
+        for note in verification[:_MAX_VERIFICATION_NOTES]:
+            lines.append(f"- {note['check_id']}: {note['verdict']} — {note['text']}")
+        hidden = len(verification) - _MAX_VERIFICATION_NOTES
+        if hidden > 0:
+            lines.append(f"- 另有 {hidden} 项核验限制未展开。")
+        sections.append("\n".join(lines))
+    return "\n\n".join(sections).strip() + "\n"
 
 
 def _usable_final_draft(result: AgentLoopResult) -> str:
@@ -736,6 +993,7 @@ async def force_final_answer(
     prefer_collected_reports: bool = False,
     prefer_tool_observations: bool = False,
     recovery_trace_path: Path | None = None,
+    member_reports: list[dict[str, Any]] | None = None,
 ) -> AgentLoopResult:
     """Run one tool-free LLM call to extract a plain-text final answer.
 
@@ -764,7 +1022,7 @@ async def force_final_answer(
     )
     from workflows.agent_team.final_report import is_user_report
 
-    if candidate and is_user_report(candidate) and not force_recovery:
+    if candidate and is_user_report(candidate) and not force_recovery and not member_reports:
         result.final_content = candidate
         result.metadata["final_answer"] = candidate
         result.metadata["final_answer_source"] = "existing_partial"
@@ -846,13 +1104,24 @@ async def force_final_answer(
         text = latched
         rescue_mode = "existing_partial"
         result.metadata["final_answer_refresh_failed"] = True
-    if not text and candidate and not new_evidence and is_user_report(candidate):
+    if (
+        not text
+        and candidate
+        and not new_evidence
+        and is_user_report(candidate)
+        and not member_reports
+    ):
         text = candidate
         rescue_mode = "existing_partial"
     if not text and prefer_collected_reports:
         text = _stitch_collected_reports(result.messages)
         if text:
             rescue_mode = "collected_reports"
+    if member_reports and (not text or rescue_mode == "collected_reports"):
+        retained = _collected_report_fallback(result.messages, member_reports)
+        if retained:
+            text = retained
+            rescue_mode = "collected_report_fallback"
     if not text and prefer_tool_observations:
         text = _stitch_recent_tool_observations(result.messages)
         if text:
@@ -866,7 +1135,7 @@ async def force_final_answer(
         if text:
             rescue_mode = "collected_reports"
     if rescue_mode == "collected_reports":
-        retained = _collected_report_fallback(result.messages)
+        retained = _collected_report_fallback(result.messages, member_reports)
         if retained:
             text = retained
             rescue_mode = "collected_report_fallback"
@@ -896,6 +1165,7 @@ def prepare_report_handoff(
     language: str = "",
     force_refresh: bool = False,
     prefer_collected_reports: bool = False,
+    member_reports: list[dict[str, Any]] | None = None,
 ) -> AgentLoopResult:
     """Prepare a non-empty baseline before an optional reporter runs.
 
@@ -908,9 +1178,19 @@ def prepare_report_handoff(
     source = str(result.metadata.get("final_answer_source") or "")
     text = ""
     if prefer_collected_reports:
-        text = _stitch_collected_reports(result.messages)
-        if text:
-            source = "collected_reports"
+        retained = _collected_report_fallback(result.messages, member_reports)
+        if retained:
+            text = retained
+            source = "collected_report_fallback"
+        if not text:
+            text = _stitch_collected_reports(result.messages)
+            if text:
+                source = "collected_reports"
+    if not text and member_reports:
+        retained = _collected_report_fallback(result.messages, member_reports)
+        if retained:
+            text = retained
+            source = "collected_report_fallback"
     if not text:
         text = _strip_leaked_tool_calls(
             _strip_thinking(
@@ -1278,7 +1558,32 @@ class SwarmToolResultPostProcessor(ToolResultPostProcessor):
         content = (
             tool_result.result if isinstance(tool_result.result, str) else str(tool_result.result)
         )
+        from plugins.corpus.projection import navigation_enabled, project_tool_result
+
+        if tool_result.name == "corpus_fetch":
+            from plugins.corpus.projection import process_document_result
+
+            document = process_document_result(content, tool_call_id=tool_result.tool_call_id or "")
+            if document is not None:
+                return document
+
+        # Keep manifest feedback valid even when the internal audit exceeds
+        # the generic text budget; never cut JSON before projecting it.
+        if tool_result.name == "corpus_submit_manifest" and navigation_enabled():
+            return project_tool_result(
+                tool_result.name, content, tool_call_id=tool_result.tool_call_id or ""
+            )
         if tool_result.is_error:
+            if tool_result.name == "corpus_fetch":
+                budget = self._BUDGETS.get("corpus_fetch", self._BUDGET_DEFAULT)
+                if navigation_enabled():
+                    return project_tool_result(
+                        "corpus_fetch", content, tool_call_id=tool_result.tool_call_id or "",
+                        error_budget=budget,
+                    )
+                from plugins.tools._overflow import structured_result_fit
+
+                return structured_result_fit("corpus_fetch", content, budget) or content
             return content
 
         name = tool_result.name or ""
@@ -1294,9 +1599,12 @@ class SwarmToolResultPostProcessor(ToolResultPostProcessor):
         from plugins.tools._overflow import structured_result_fit
 
         structured = structured_result_fit(name, content, budget)
-        if structured is not None:
-            return structured
-        return self._head_cap(content, budget)
+        visible = structured if structured is not None else self._head_cap(content, budget)
+        # Model-visible projection happens only here, after the protocol budget
+        # fitter. Observers at on_tool_result still see the complete result.
+        return project_tool_result(
+            name, visible, tool_call_id=tool_result.tool_call_id or ""
+        )
 
     def _head_cap(self, content: str, budget: int) -> str:
         # Skip the cut when it wouldn't actually shrink — a budget+30

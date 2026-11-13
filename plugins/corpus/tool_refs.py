@@ -19,8 +19,12 @@ from typing import Any
 from plugins.corpus.cursor import CursorError
 
 logger = logging.getLogger(__name__)
-_REF = re.compile(r"(ce|cpage):([0-9a-f]{32})\Z")
+_REF = re.compile(r"(ce|cpage|cmeta):([0-9a-f]{32})\Z")
 _MAX_BYTES = 1_000_000
+#: ``cmeta`` 是完整工具返回的后台快照，不是模型可用的引用句柄。它复用同一套
+#: 内容寻址、临时文件与原子替换，不引入新数据库或新模型工具。
+_METADATA_KIND = "cmeta"
+_METADATA_SCAN_LIMIT = 4096
 
 
 class ToolReferenceError(ValueError):
@@ -113,12 +117,15 @@ def publish_fetch_references(body: str) -> str:
     payload = json.loads(body)
     items = payload.get("items", [payload])
     cursor = payload.get("next_cursor")
+    retry_cursor = payload.get("retry_cursor")
     try:
         for item in items:
             if "evidence_ref" in item:
                 _store("ce", _evidence(payload["doc_id"], item))
         if cursor:
             payload["next_cursor"] = _store("cpage", cursor)
+        if retry_cursor:
+            payload["retry_cursor"] = _store("cpage", retry_cursor)
     except (OSError, ToolReferenceError):
         # Keep the self-contained legacy contract when durable storage is down.
         # Never emit an ID that another worker cannot resolve; never grow a page.
@@ -127,6 +134,8 @@ def publish_fetch_references(body: str) -> str:
             item.pop("evidence_ref", None)
         if cursor:
             payload["next_cursor"] = cursor
+        if retry_cursor:
+            payload["retry_cursor"] = retry_cursor
     return json.dumps(payload, ensure_ascii=False)
 
 
@@ -153,3 +162,64 @@ def resolve_evidence_reference(ref: str) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ToolReferenceError("invalid_evidence_receipt")
     return value
+
+
+def store_metadata_snapshot(
+    tool: str,
+    payload: dict[str, Any],
+    *,
+    protocol: str,
+    visible_digest: str,
+    tool_call_id: str = "",
+) -> str:
+    """Persist one complete tool result before any of its fields are hidden.
+
+    ``visible_digest`` binds the snapshot to the exact model-visible body so a
+    later turn/process can recover the full result without receiving ``cmeta``
+    in the model message. The snapshot is content-addressed and cannot be
+    addressed by a model-authored path.
+    """
+    if not isinstance(payload, dict) or not visible_digest:
+        raise ToolReferenceError("invalid_metadata_snapshot")
+    return _store(
+        _METADATA_KIND,
+        {
+            "protocol": protocol,
+            "tool": tool,
+            "tool_call_id": tool_call_id,
+            "visible_digest": visible_digest,
+            "payload": payload,
+        },
+    )
+
+
+def resolve_metadata_snapshot(ref: str) -> dict[str, Any]:
+    """Return one validated snapshot value; never guess on missing/corrupt data."""
+    value = _load(ref, _METADATA_KIND)
+    if not isinstance(value, dict) or not isinstance(value.get("payload"), dict):
+        raise ToolReferenceError("invalid_metadata_snapshot")
+    return value
+
+
+def metadata_snapshot_index() -> dict[str, str]:
+    """Map visible-body digests to inherited ``cmeta`` receipts, bounded.
+
+    Used only on an in-process index miss (for example after a worker restart
+    with receipts inherited from a prior run). Corrupt or oversized files are
+    skipped rather than failing the whole lookup.
+    """
+    index: dict[str, str] = {}
+    try:
+        paths = sorted(_root().glob("[0-9a-f]" * 32 + ".json"))
+    except OSError:
+        return index
+    for path in paths[:_METADATA_SCAN_LIMIT]:
+        digest = str(path.stem)
+        try:
+            value = resolve_metadata_snapshot(f"{_METADATA_KIND}:{digest}")
+        except (ToolReferenceError, OSError):
+            continue
+        visible = value.get("visible_digest")
+        if isinstance(visible, str) and visible:
+            index[visible] = f"{_METADATA_KIND}:{digest}"
+    return index

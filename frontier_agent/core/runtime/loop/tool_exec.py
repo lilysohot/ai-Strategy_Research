@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
 import re
 import time
 from collections.abc import Callable, Coroutine, Mapping
@@ -13,6 +14,8 @@ from typing import Any, Protocol, runtime_checkable
 
 from frontier_agent.core.loop_types import ToolResult
 from frontier_agent.core.tool import Tool, ToolOutcome
+
+logger = logging.getLogger(__name__)
 
 __all__ = [
     "PROTECTED_FANIN_TOOLS",
@@ -197,6 +200,12 @@ class DefaultToolResultPostProcessor:
         return content if isinstance(content, str) else str(content)
 
 
+#: Log a call whose tool body started at least this late after the model's call
+#: was accepted. A tool that "hangs" for minutes is usually waiting here —
+#: approval gate, coalescing, scheduler slot, sandbox setup — not executing.
+_PRE_EXEC_WARN_MS = 1_500
+
+
 async def execute_tools(
     tool_calls: list[dict],
     tool_map: dict[str, Tool],
@@ -204,6 +213,7 @@ async def execute_tools(
     turn: int,
     count_offset: int,
     interrupt_waiter: Callable[[dict], Coroutine[Any, Any, bool]] | None = None,
+    accepted_monotonic: float | None = None,
 ) -> list[ToolResult]:
     """Execute ``tool_calls`` in parallel, returning one ``ToolResult`` each.
 
@@ -216,7 +226,14 @@ async def execute_tools(
     article fit without truncation. Per-workflow back-stops
     (e.g. swarm's ReasoningStripCompactor at 200K total context) handle
     the multi-fetch case by aging old tool bodies to URL stubs.
+
+    ``accepted_monotonic`` is when the model's call was accepted (before
+    observer/approval hooks). Each result then reports ``queued_ms`` — the wait
+    before the tool body ran — so execution time and pre-execution wait can be
+    told apart when a call appears to hang.
     """
+
+    started_at: dict[int, float] = {}
 
     async def _run_one(call: dict, idx: int) -> ToolResult:
         name = call.get("name", "")
@@ -224,6 +241,7 @@ async def execute_tools(
         tool_call_id = call.get("id") or f"call_{turn}_{count_offset + idx}"
         tool = tool_map.get(name)
         start = time.monotonic()
+        started_at[idx] = start
 
         if tool is None:
             available = ", ".join(sorted(tool_map)) or "(none)"
@@ -366,6 +384,21 @@ async def execute_tools(
 
     tasks = [_run_one(call, i) for i, call in enumerate(tool_calls)]
     results = await asyncio.gather(*tasks)
+    if accepted_monotonic is not None:
+        for idx, result in enumerate(results):
+            begin = started_at.get(idx)
+            if begin is None:
+                continue
+            result.queued_ms = max(0, int((begin - accepted_monotonic) * 1000))
+            if result.queued_ms >= _PRE_EXEC_WARN_MS:
+                logger.warning(
+                    "tool pre-execution wait: %s queued %dms before it started (turn=%d, "
+                    "duration=%dms)",
+                    result.name,
+                    result.queued_ms,
+                    turn,
+                    result.duration_ms,
+                )
     return _apply_aggregate_budget(list(results))
 
 
@@ -474,16 +507,18 @@ def _apply_aggregate_budget(results: list[ToolResult]) -> list[ToolResult]:
     from plugins.tools._overflow import (
         MAX_AGGREGATE_RESULT_CHARS,
         check_aggregate_budget,
+        result_budget_view,
     )
 
-    if sum(len(r.result) for r in results) <= MAX_AGGREGATE_RESULT_CHARS:
+    views = [result_budget_view(r.name, r.result) for r in results]
+    if sum(len(body) for body in views) <= MAX_AGGREGATE_RESULT_CHARS:
         return results
     bodies = check_aggregate_budget(
-        [r.result for r in results], [r.name for r in results],
+        views, [r.name for r in results],
     )
     return [
-        r if body == r.result else replace(r, result=body)
-        for r, body in zip(results, bodies, strict=True)
+        r if body == view else replace(r, result=body)
+        for r, view, body in zip(results, views, bodies, strict=True)
     ]
 
 

@@ -403,3 +403,77 @@ def test_report_anchor_mismatch_is_reported_before_final_answer(run_env, monkeyp
     assert "原文证据及送达核验 1/1" in final["final_text"]
     assert "报告引用对应核验 0/1" in final["final_text"]
     assert final["answer_status"] == "partial"
+
+
+@pytest.mark.parametrize("pending", [False, True])
+def test_navigation_manifest_keeps_validation_and_internal_audit(run_env, monkeypatch, pending):
+    from plugins.corpus import projection, tool_refs
+    from plugins.corpus.ledger import get_run_ledger
+
+    monkeypatch.setenv("CORPUS_NAVIGATION_MODE", "on")
+    payload = json.loads(_fetch_body())
+    payload["evidence_ref"] = tool_refs.fetch_evidence_ref(DOC, payload)
+    fetched = tool_refs.publish_fetch_references(json.dumps(payload))
+    ledger = get_run_ledger()
+    ledger.record_fetch_result(fetched, turn=1)
+    if not pending:
+        ledger.finalize([{"role": "tool", "content": fetched}])
+    reference = json.loads(fetched)["evidence_ref"]
+    full = _submit([{"id": "C1", "evidence": [{"evidence_ref": reference}]}])
+    rendered = projection.project_tool_result("corpus_submit_manifest", json.dumps(full))
+    visible = json.loads(rendered)
+    assert visible["publish_status"] == full["publish_status"]
+    assert visible["evidence_status"] == full["evidence_status"]
+    assert visible["active_conclusion_ids"] == ["C1"]
+    assert visible["report_bound"] is False
+    assert visible["conclusions"][0]["status"] == ("partial" if pending else "supported")
+    if pending:
+        problem = visible["conclusions"][0]["problems"][0]
+        assert problem["code"] == "pending_delivery" and problem["evidence_index"] == 0
+    for forbidden in (DOC, "chunk:c1", "manifest_file", "matched_evidence", "source_start"):
+        assert forbidden not in rendered
+    # No validation bypass: authoritative coordinates remain in the manifest;
+    # the complete feedback can also be recovered after clearing process state.
+    payload = json.loads((run_env / "corpus/manifests/manifest-000.json").read_text())
+    assert payload["conclusions"][0]["evidence"][0]["doc_id"] == DOC
+    projection.reset_snapshot_index()
+    assert projection.materialize("corpus_submit_manifest", rendered) == full
+
+
+def test_navigation_manifest_error_is_actionable_without_resolver_details(run_env, monkeypatch):
+    import plugins.tools.corpus_manifest as mod
+    from plugins.corpus import projection
+
+    class BrokenService:
+        def fetch_verbatim(self, *_):
+            raise ConnectionError(f"private /srv/corpus/database {DOC}|chunk:c1")
+
+    monkeypatch.setenv("CORPUS_NAVIGATION_MODE", "on")
+    monkeypatch.setattr(mod, "get_service", BrokenService)
+    full = _submit([_conclusion()])
+    rendered = projection.project_tool_result("corpus_submit_manifest", json.dumps(full))
+    visible = json.loads(rendered)
+    assert visible["publish_status"] == "verification_error"
+    problem = visible["conclusions"][0]["problems"][0]
+    assert problem["code"] == "verification_error" and problem["evidence_index"] == 0
+    assert "稍后重试" in problem["message"]
+    assert "/srv/" not in rendered and DOC not in rendered
+    assert projection.materialize("corpus_submit_manifest", rendered) == full
+
+
+@pytest.mark.parametrize("selection,target", [
+    ({"evidence": [{"evidence_ref": "ce:" + "f" * 32}]},
+     "conclusions[0].evidence[0].evidence_ref"),
+    ({"semantic_references": [{"publication_id": "unseen", "record_id": "unseen",
+                                "purpose": "cite"}]},
+     "conclusions[0].semantic_references[0]"),
+])
+def test_navigation_invalid_selection_preserves_repair_target(run_env, monkeypatch, selection, target):
+    from plugins.corpus import projection
+
+    monkeypatch.setenv("CORPUS_NAVIGATION_MODE", "on")
+    full = _submit([{"id": "C1", **selection}])
+    visible = json.loads(projection.project_tool_result("corpus_submit_manifest", json.dumps(full)))
+    assert visible["ok"] is False
+    assert visible["errors"][0]["targets"] == [target]
+    assert not (run_env / "corpus/manifests").exists()

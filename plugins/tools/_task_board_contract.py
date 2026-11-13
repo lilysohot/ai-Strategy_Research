@@ -4,6 +4,27 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr, field_validator
 
+from frontier_agent.components.task_board_types import VALID_RESOLUTION
+
+#: Resolution values accepted by the board, as a ``Literal`` for the schema.
+#: Built from the shared tuple so the board write path, the delivery path and the
+#: error text can never drift apart (a cancelled item used to be unsayable at
+#: delivery and had to be re-declared blocked, which downgraded the whole answer).
+ResolutionLiteral = Literal["open", "in_progress", "resolved", "cancelled", "blocked"]
+
+if tuple(ResolutionLiteral.__args__) != VALID_RESOLUTION:  # pragma: no cover - import guard
+    raise RuntimeError(
+        "board resolution schema drifted from task_board_types.VALID_RESOLUTION: "
+        f"{ResolutionLiteral.__args__} != {VALID_RESOLUTION}"
+    )
+
+_REQUIRED_FOR_COMPLETION_HELP = (
+    "True (default) when the user's requested result or its necessary support depends on this "
+    "item. Set false ONLY for self-added enrichment the user did not ask for. An optional item "
+    "may stay cancelled/blocked without downgrading the answer; it is frozen once work is "
+    "dispatched, so it can never be re-labelled to dodge a gap."
+)
+
 
 class PlannedCheck(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
@@ -34,6 +55,9 @@ class BoardProgress(BaseModel):
     evidence_refs: list[StrictStr] | None = None
     owner: StrictStr | list[StrictStr] | None = None
     owners: StrictStr | list[StrictStr] | None = None
+    required_for_completion: StrictBool | None = Field(
+        default=None, description=_REQUIRED_FOR_COMPLETION_HELP,
+    )
     verification_requirements: list[PlannedCheck] | None = Field(
         default=None, min_length=1,
         description="Planned check IDs and criteria. Register before dispatch; immutable after dispatch.",
@@ -55,9 +79,10 @@ class BoardAdd(BoardProgress):
 
 class BoardUpdate(BoardProgress):
     id: StrictStr = Field(min_length=1)
-    resolution: Literal["open", "in_progress", "resolved", "cancelled", "blocked"] | None = Field(
+    resolution: ResolutionLiteral | None = Field(
         default=None,
-        description="blocked requires notes and gap; permits partial delivery without claiming success.",
+        description="blocked requires notes and gap; cancelled retracts the item (notes required). "
+        "Neither claims the work succeeded.",
     )
     replace_owners: StrictBool | None = None
     reason: StrictStr | None = None

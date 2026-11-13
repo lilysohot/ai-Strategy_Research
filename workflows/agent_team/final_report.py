@@ -118,6 +118,7 @@ def finalize_team_report(
             "verification_execution_status": str(
                 task.get("verification_execution_status") or "not_started"
             ),
+            "required_for_completion": task.get("required_for_completion") is not False,
             "verification_required": task.get("verification_required") is True,
             "verification_requirements": [
                 {
@@ -130,8 +131,22 @@ def finalize_team_report(
         }
         for task in (tasks or [])
     ]
-    unresolved = [task for task in board if task["resolution"] not in {"resolved", "cancelled"}]
+    # Only REQUIRED items can gate the answer. Optional (self-added) items are
+    # still reported — in ``optional_work`` and a non-blocking note — but an
+    # undone enhancement must not turn a complete interpretation into ``partial``.
+    unresolved = [
+        task
+        for task in board
+        if task["required_for_completion"] and task["resolution"] != "resolved"
+    ]
+    optional_pending = [
+        task
+        for task in board
+        if not task["required_for_completion"]
+        and task["resolution"] not in {"resolved", "cancelled"}
+    ]
     gaps: list[dict[str, Any]] = []
+    optional_gaps: list[dict[str, Any]] = []
     jobs = [dict(job) for job in wind.get("job_outcomes", []) if isinstance(job, dict)]
     from plugins.tools._verification import (
         missing_publication_excerpts,
@@ -157,13 +172,13 @@ def finalize_team_report(
             else "incomplete"
         )
         if task["gap"].strip() and task["resolution"] != "cancelled":
-            gaps.append(
-                {
-                    "code": "task_evidence_gap",
-                    "task_id": task["id"],
-                    "detail": task["gap"],
-                }
-            )
+            recorded = {
+                "code": "task_evidence_gap",
+                "task_id": task["id"],
+                "detail": task["gap"],
+            }
+            # Recorded either way; only a required gap blocks the answer.
+            (gaps if task["required_for_completion"] else optional_gaps).append(recorded)
         if task["verification_required"]:
             task.update(
                 verification_progress(
@@ -172,10 +187,18 @@ def finalize_team_report(
                     [item["check_id"] for item in task["verification_requirements"]],
                 )
             )
+    optional_task_ids = {t["id"] for t in board if not t["required_for_completion"]}
+    optional_job_ids = {
+        job_id
+        for task in board
+        if task["id"] in optional_task_ids
+        for job_id in task["execution_job_ids"]
+    }
     required_gaps = [
         job
         for job in jobs
         if job.get("required") is not False
+        and job.get("job_id") not in optional_job_ids
         and job.get("coverage_status", job.get("status")) != "complete"
     ]
     acquisition_limits = [
@@ -202,6 +225,18 @@ def finalize_team_report(
     for task in unresolved:
         gaps.append(
             {"code": "task_unresolved", "task_id": task["id"], "description": task["description"]}
+        )
+    recorded_optional = {item["task_id"] for item in optional_gaps}
+    for task in optional_pending:
+        if task["id"] in recorded_optional:
+            # Already reported with its own gap; do not list the same item twice.
+            continue
+        optional_gaps.append(
+            {
+                "code": "task_unresolved",
+                "task_id": task["id"],
+                "description": task["description"],
+            }
         )
     required_checks_by_work_item: dict[str, list[dict[str, Any]]] = {}
     for check in verification["checks"]:
@@ -234,7 +269,7 @@ def finalize_team_report(
         }
         if missing_ids:
             gap["missing_check_ids"] = missing_ids
-        gaps.append(gap)
+        (gaps if task["required_for_completion"] else optional_gaps).append(gap)
     for key in ("incomplete_count", "queued_aborted", "unresolved_count"):
         if counts.get(key, 0) and wind.get("run_status") != "complete":
             gaps.append({"code": key, "count": counts[key]})
@@ -319,6 +354,9 @@ def finalize_team_report(
         "stopped_by": stopped_by,
         "input_source": source,
         "gaps": gaps,
+        # Recorded for audit, deliberately excluded from answer_status: optional
+        # work that was retracted or left undone never downgrades the answer.
+        "optional_work": optional_gaps,
         "task_board": board,
         "task_board_basis": "coordinator_declared",
         "wind_down": {
@@ -370,7 +408,11 @@ def finalize_team_report(
             "passing verdicts do not verify the rewritten content."
         )
     declared_gaps = [
-        task for task in board if task["gap"].strip() and task["resolution"] != "cancelled"
+        task
+        for task in board
+        if task["required_for_completion"]
+        and task["gap"].strip()
+        and task["resolution"] != "cancelled"
     ]
     undisclosed_gaps = [task for task in declared_gaps if system or task["gap"].strip() not in text]
     if undisclosed_gaps:
@@ -460,6 +502,26 @@ def finalize_team_report(
                 if zh
                 else f"{len(unresolved) - 20} more items remain on the task board."
             )
+    # Optional, self-added work that was retracted or left unfinished is still
+    # recorded — but as a non-blocking note, never as an evidence gap, and it is
+    # disclosed even when the answer itself is complete.
+    optional_unfinished = [
+        task
+        for task in board
+        if not task["required_for_completion"] and task["resolution"] != "resolved"
+    ]
+    optional_notes: list[str] = []
+    if optional_unfinished:
+        optional_notes.append(
+            "以下为自选增强项，未纳入主结果判定（不影响主结果完成状态）："
+            if zh
+            else "Optional self-added items, excluded from the completion verdict:"
+        )
+        optional_notes.extend(
+            f"- {_label(task['description'] or task['id'])}: {task['resolution']}"
+            + (f" — {gap_label(task['gap'] or task['notes'])}" if task["gap"] or task["notes"] else "")
+            for task in optional_unfinished[:10]
+        )
     if counts and system:
         labels = (
             ("收尾阶段回收报告", "其中未完整结束", "取消排队任务", "仍未回收任务")
@@ -535,6 +597,14 @@ def finalize_team_report(
     if notes and (system or kind == "partial"):
         text += (
             "\n\n" + ("### 执行状态\n\n" if zh else "### Execution status\n\n") + "\n\n".join(notes)
+        )
+    if optional_notes:
+        # Always disclosed, including on a complete answer: the item was planned
+        # and not done, so the record must survive without implying a gap.
+        text += (
+            "\n\n"
+            + ("### 未执行的可选增强\n\n" if zh else "### Optional work not performed\n\n")
+            + "\n\n".join(optional_notes)
         )
     # Audit detail remains accessible independently of the user-facing answer.
     # Required failures above stay visible; a failed optional tool attempt alone

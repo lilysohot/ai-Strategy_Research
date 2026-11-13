@@ -284,6 +284,30 @@ def install_source_adapter(source):
     CorpusService.fetch_verbatim = fetch
     CorpusService.emit_cells = lambda *a, **k: []
     CorpusService.context_relations = lambda *a, **k: {}
+    # ``read_chain()`` probes the live corpus schema before choosing a path;
+    # in a replay that probe would be the only production_db access left.
+    # Declare the synthetic unit's chain at this boundary instead.
+    CorpusService._corpus_schema_present = lambda self: True
+
+    # ``document_titles`` resolves the human filename through the active
+    # document catalogue (``list_documents`` -> PG). It is fail-soft, but the
+    # attempt alone counts as a production_db access here. Both fetch and
+    # search bind the helper at import time, so replace the source and those
+    # bindings at this external boundary.
+    import importlib
+
+    # ``plugins.tools.__init__`` rebinds ``corpus_fetch``/``corpus_search`` to
+    # Tool objects, so ``import ... as`` would patch the tool, not the module.
+    corpus_service_module = importlib.import_module("plugins.corpus.service")
+    corpus_fetch_module = importlib.import_module("plugins.tools.corpus_fetch")
+    corpus_search_module = importlib.import_module("plugins.tools.corpus_search")
+
+    def synthetic_titles(doc_ids):
+        return {}
+
+    corpus_service_module.document_titles = synthetic_titles
+    corpus_fetch_module.document_titles = synthetic_titles
+    corpus_search_module.document_titles = synthetic_titles
 
 
 def install_market_transport():
@@ -453,7 +477,17 @@ class ReplayMain:
                 name = "corpus_fetch"
                 args = {"doc_id": f"cv2:{self.source['build_id']}", "locator": "chunk:forecast-c"}
         elif step == 2:
-            page = json.loads(next(m["content"] for m in reversed(messages) if m["role"] == "tool"))
+            tool_content = next(m["content"] for m in reversed(messages) if m["role"] == "tool")
+            page = json.loads(tool_content)
+            if source_mode and "doc_id" not in page:
+                # The navigation view hides the full envelope behind a cmeta
+                # receipt; the scripted legacy model needs doc_id/locator/text
+                # to build its evidence reference. Materialise, never guess.
+                from plugins.corpus.projection import try_materialize
+
+                full = try_materialize("corpus_fetch", tool_content)
+                assert full is not None, tool_content[:300]
+                page = full
             if SCENARIO == "missing_footnote":
                 assert not page["records"] and page["page_status"] == "not_published", page
                 return LLMResponse(
@@ -504,15 +538,26 @@ class ReplayMain:
                 ref["evidence_ranges"][0]["handle"] = "cv2:wrong#chunk:wrong"
                 args["conclusions"][0]["semantic_references"] = [ref]
         elif step == 3:
-            manifest = json.loads(
-                next(m["content"] for m in reversed(messages) if m["role"] == "tool")
-            )
+            tool_content = next(m["content"] for m in reversed(messages) if m["role"] == "tool")
+            try:
+                manifest = json.loads(tool_content)
+            except ValueError as exc:
+                raise ValueError(
+                    f"manifest tool message is not valid JSON ({exc}): {tool_content[:400]!r}"
+                ) from exc
+            # ``publish_status`` now carries the report-binding gate: an
+            # evidence pre-check with no bound report says ``pending_report``
+            # even when the evidence itself verified. Drive the script off the
+            # evidence verdict, which is what lands in manifest_verification.json.
+            evidence_status = manifest.get("evidence_status")
             if SCENARIO == "missing_footnote":
-                assert manifest["publish_status"] != "verified", manifest
+                assert evidence_status != "verified", manifest
             else:
-                assert manifest["publish_status"] == (
+                assert evidence_status == (
                     "unsupported" if SCENARIO == "bad_handle" else "verified"
                 ), manifest
+                if evidence_status == "verified" and not manifest.get("report_bound"):
+                    assert manifest["publish_status"] == "pending_report", manifest
             if SCENARIO == "withdrawn":
                 Path("withdraw.request").touch()
                 deadline = time.monotonic() + 10
@@ -522,8 +567,22 @@ class ReplayMain:
             if SCENARIO == "resolver_error":
                 FAIL_STORE_READS = True
             return LLMResponse(content=self.report, finish_reason="stop")
+        elif step == 4 and any(
+            "[corpus delivery preflight]" in str(m.get("content") or "")
+            for m in messages
+            if m.get("role") == "user"
+        ):
+            # The product injects exactly one repair turn when final evidence
+            # binding is incomplete. These scenarios make that failure the
+            # point of the test, so the scripted model has nothing to repair:
+            # restate the report and let the verifier keep the failed binding.
+            return LLMResponse(content=self.report, finish_reason="stop")
         else:
-            raise AssertionError("unexpected extra model request")
+            tail = [
+                {"role": m.get("role"), "content": str(m.get("content"))[:240]}
+                for m in messages[-3:]
+            ]
+            raise AssertionError(f"unexpected extra model request step={step} tail={tail!r}")
         self.tool_calls.append(name)
         return LLMResponse(
             content="",
@@ -575,12 +634,21 @@ async def research():
         install_market_transport()
 
     import apodex.session as session_module
+    import frontier_agent.infra.llm.continuity as continuity_module
     import frontier_agent.infra.llm_adapter as llm_adapter
     import workflows.stateful_react_agent.profile as workflow_profile
     from apodex.config import ModelConfig
     from apodex.profiles import get_profile
     from apodex.render import Renderer
     from plugins.corpus.ledger import VERIFICATION_FILENAME, get_run_ledger, resolve_artifact_dir
+
+    # The replay has no auxiliary model boundary. Mounting the conversation
+    # snapshot observer builds a summarizer that would otherwise construct a
+    # real ChatOpenAI — an alias of OpenAIClient, whose __init__ is one of the
+    # fail-closed model guards above — even though no write-time trim ever
+    # calls it. Point the aux client at the scripted main model instead, as an
+    # external-boundary adapter like the three create_llm hooks below.
+    continuity_module.continuity_client = lambda llm_client, config=None: llm_client
 
     llm = ReplayMain(source)
     session_module.build_llm = lambda *a, **k: llm

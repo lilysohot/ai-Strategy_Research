@@ -23,6 +23,10 @@ def stage_corpus_receipts(
 
     The parent supplies only committed runs from this session. Receipts never
     grant the new worker filesystem access to a previous run or alter replay.
+    ``tool-refs`` now also carries ``cmeta`` snapshots of complete tool results;
+    they use the same 32-hex digest naming and are inherited here. A projected
+    message whose snapshot was dropped by the file/byte cap must explicitly
+    report the metadata as unavailable rather than assume recovery succeeded.
     """
     used = count = 0
     seen: set[tuple[str, str]] = set()

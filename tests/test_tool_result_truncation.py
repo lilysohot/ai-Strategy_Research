@@ -889,8 +889,15 @@ def test_body_0005_like_result_keeps_body_locator_and_recovery() -> None:
 
     payload = json.loads(out)  # legal structure, not a hard-cut
     assert payload["text"].startswith("正文") and payload["text"].endswith("尾")
-    assert payload["locator"] == "chunk:c1"        # 定位可见
-    assert payload["meta_ref"]["view"] == "full"    # 续取：完整元数据可解析引用
+    assert payload["locator"] == "chunk:c1"        # 兼容期仍保留复取定位
+    # 完整元数据不再展开给模型，改由后台 cmeta 收据按本次调用恢复。
+    from plugins.corpus import projection
+
+    assert payload["protocol"] == projection.VISIBLE_VERSION
+    full = projection.materialize("corpus_fetch", out, tool_call_id="call-1")
+    assert full["meta_ref"]["view"] == "full"
+    assert full["units"]                  # 后台仍可恢复完整元数据
+    assert "units" not in payload         # 模型视图不再展开单元清单
 
 
 def test_escaping_in_body_survives_the_reshape() -> None:

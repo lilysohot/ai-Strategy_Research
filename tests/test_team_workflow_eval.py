@@ -233,18 +233,29 @@ def test_corpus_budgets_reject_redundant_document_reads():
 
 
 async def test_long_document_draft_measures_the_declared_page_budget(tmp_path):
-    """A draft page budget is only calibrated when it equals the pages the fixture produces."""
+    """A draft page budget is only calibrated when it equals the pages the fixture produces.
+
+    v2 pagination turned ``max_chars`` into a *source-text* budget (6000) with a
+    separate 12000-char visible-receipt cap. The same 60-unit fixture therefore
+    needs 3 pages instead of v1's 5; the frozen budget has to track the policy,
+    not the other way round. Pin the policy version so a future strategy change
+    fails here with a clear signal instead of silently re-tuning the number.
+    """
     from benchmarks.team_workflow.corpus_fixtures import fixed_corpus_tools
+    from plugins.corpus.pagination_policy import PAGINATION_POLICY_VERSION
 
     case = next(c for c in catalog() if c["id"] == "F26")
     doc_id = case["sources"][0]["doc_id"]
     with fixed_corpus_tools(case, tmp_path, "A") as tools:
         payload = json.loads(await tools["corpus_fetch"].func(doc_id=doc_id, scope="document"))
+        assert payload["pagination_policy_version"] == PAGINATION_POLICY_VERSION
+        assert payload["max_chars"] == 6000
         pages = 1
         while payload.get("next_cursor"):
             payload = json.loads(
                 await tools["corpus_fetch"].func(doc_id=doc_id, cursor=payload["next_cursor"])
             )
+            assert payload["pagination_policy_version"] == PAGINATION_POLICY_VERSION
             pages += 1
         assert payload["fetch_complete"] is True
     assert pages == case["budgets"]["max_document_pages"] >= 3

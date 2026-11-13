@@ -114,8 +114,10 @@ def _call(**kwargs):
 def test_schema_keeps_selectors_optional() -> None:
     schema = fetch_module.corpus_fetch.parameters
     props = schema["properties"]
-    assert schema.get("required") == ["doc_id"]
-    for name in ("locator", "locators", "cursor", "view", "max_chars"):
+    # doc_id is optional now: a validated ``ref`` or a standalone ``cursor``
+    # restores the pinned document version from its receipt instead.
+    assert not schema.get("required")
+    for name in ("doc_id", "locator", "locators", "cursor", "view", "max_chars", "ref"):
         assert name in props
     assert props["max_chars"]["default"] == 6000
 

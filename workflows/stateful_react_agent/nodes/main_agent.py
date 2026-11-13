@@ -1002,6 +1002,15 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
 
         system_prompt = f"{system_prompt}{MANIFEST_PROMPT_NOTE}"
 
+    # 交付形状属于交付层：只要绑定了语料检索工具就**前置**注入身份答案规则。它此前挂在
+    # MANIFEST_PROMPT_NOTE 里，于是只随 corpus_submit_manifest 派发——而团队协调者不绑定
+    # 该工具，同一契约在两条路径上分裂，团队侧只能靠失败后的补救提示，多拒两轮。这里按
+    # 检索工具绑定而不是清单工具绑定注入，也保证规则在第一次答复之前就可见。
+    if any(getattr(t, "name", "") == "corpus_search" for t in tools):
+        from plugins.corpus.final_delivery import IDENTITY_ANSWER_RULE
+
+        system_prompt = f"{system_prompt}\n\n## 最终交付形状（语料）\n{IDENTITY_ANSWER_RULE}\n"
+
     # The request tail: this run's own directories, appended where per-run content
     # belongs. Everything above it is byte-identical to the previous turn, which is
     # what lets the provider reuse the conversation prefix (issue 01 §9.4/§9.15).
@@ -1090,6 +1099,10 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
         from plugins.tools.investment_strategy import InvestmentStrategyObserver
 
         observers.append(InvestmentStrategyObserver())
+    if "corpus_submit_manifest" in tool_names:
+        from workflows.stateful_react_agent.delivery import CorpusDeliveryObserver
+
+        observers.append(CorpusDeliveryObserver())
     if task_board and not direct and not research_convergence:
         observers.append(build_task_board_observer())
     if not direct:

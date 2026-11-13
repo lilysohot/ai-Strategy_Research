@@ -10,6 +10,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field, StrictStr, model_validator
 
 from frontier_agent.components.agent_bus import AgentBus
+from frontier_agent.components.task_board_types import FINAL_RESOLUTIONS, task_is_required
 from frontier_agent.core.execution_context import get_current_execution_scope
 from frontier_agent.core.loop_types import (
     BaseObserver,
@@ -20,6 +21,7 @@ from frontier_agent.core.loop_types import (
 )
 from frontier_agent.core.runtime import registry
 from frontier_agent.core.tool import tool
+from plugins.corpus.final_delivery import IDENTITY_ANSWER_RULE
 from plugins.tools._bus_scope import SWARM_SCOPE_KEY, resolve_bus_task_id
 from plugins.tools._deliverable_policy import output_write_directives
 from plugins.tools._verification import (
@@ -45,15 +47,64 @@ from workflows.agent_team.phase_budget import TeamPhaseBudget
 
 _DELIVERY_ACCEPTED = "Final answer and task dispositions accepted."
 
+#: The delivery prompt only needs the fields that feed dispositions and the
+#: current verification state. Descriptions, owners and evidence refs stay in
+#: the board; they are not copied into the model-facing prompt.
+_DELIVERY_TASK_FIELDS = (
+    "id",
+    "kind",
+    "resolution",
+    "gap",
+    "done_when",
+    "required_for_completion",
+    "verification_required",
+    "verification_status",
+    "verification_execution_status",
+    "execution_job_ids",
+)
+_DELIVERY_CHECK_FIELDS = ("check_id", "criterion", "required")
+
+
+def _delivery_task_view(tasks: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Build a whitelist copy; never mutate the board snapshot."""
+    view: list[dict[str, Any]] = []
+    for task in tasks:
+        row = {key: task[key] for key in _DELIVERY_TASK_FIELDS if key in task}
+        requirements = task.get("verification_requirements")
+        if isinstance(requirements, list):
+            row["verification_requirements"] = [
+                {key: item[key] for key in _DELIVERY_CHECK_FIELDS if key in item}
+                for item in requirements
+                if isinstance(item, dict)
+            ]
+        view.append(row)
+    return view
+
+
+#: Mirrors ``task_board_types.FINAL_RESOLUTIONS``; checked at import so the board
+#: and the delivery entry can never drift back to different vocabularies.
+_DELIVERY_RESOLUTIONS = Literal["resolved", "cancelled", "blocked"]
+
+if tuple(_DELIVERY_RESOLUTIONS.__args__) != FINAL_RESOLUTIONS:  # pragma: no cover
+    raise RuntimeError(
+        "delivery resolution schema drifted from task_board_types.FINAL_RESOLUTIONS: "
+        f"{_DELIVERY_RESOLUTIONS.__args__} != {FINAL_RESOLUTIONS}"
+    )
+
 
 class FinalDisposition(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
     id: StrictStr = Field(min_length=1)
-    resolution: Literal["resolved", "blocked"]
+    resolution: _DELIVERY_RESOLUTIONS = Field(
+        description="resolved completes it; cancelled retracts optional work (no gap); "
+        "blocked records an unmet requirement in gap. Required cancelled work must be "
+        "resolved with evidence or re-declared blocked before delivery.",
+    )
     notes: StrictStr = Field(min_length=1, max_length=2000)
     gap: StrictStr = Field(default="", max_length=2000)
     limitations: StrictStr = Field(
-        default="", max_length=2000,
+        default="",
+        max_length=2000,
         description="Nonblocking boundaries outside the requested outcome. "
         "Never use this to waive necessary evidence or a required check.",
     )
@@ -65,6 +116,11 @@ class FinalDisposition(BaseModel):
                 "resolved cannot retain a blocking gap: use blocked for an unmet requirement, "
                 "or limitations for a boundary that does not affect the requested outcome. "
                 "Required evidence and verification remain mandatory."
+            )
+        if self.resolution == "cancelled" and self.gap:
+            raise ValueError(
+                "cancelled retracts the item and cannot carry a gap: an unmet user requirement or "
+                "necessary evidence must be reported as blocked."
             )
         return self
 
@@ -86,27 +142,30 @@ async def deliver_answer(
         content: Complete user-facing answer, with sources and explicit limitations.
         updates: Final dispositions against the user's outcome and necessary evidence. Use []
             if none remain. gap means an unmet requirement and requires blocked; limitations
-            records nonblocking boundaries. Self-added optional work cannot become an obligation.
+            records nonblocking boundaries. Self-added optional work cannot become an obligation:
+            declare it required_for_completion=false when it is added, and here either resolved or
+            cancelled — an optional item left undone is NOT a gap and does not downgrade the answer.
         corpus_conclusions: Complete corpus evidence manifest for THIS content. Each entry
             needs id, report_quote copied verbatim from content, and evidence:[{evidence_ref}].
+            Write content first, then copy each report_quote out of that exact text — never from
+            a draft or a member report. If a rejection names corpus_manifest_anchor_mismatch,
+            only those ids are wrong: resubmit the SAME content with corrected anchors.
             Use original complete corpus tool refs (eref: or ce:). Required for corpus-backed
             final prose; omit for web-only answers. URLs, job IDs and web hashes are not corpus
             receipts. Never copy old report anchors. This binds citations, not a semantic PASS.
+            A pure file-identity answer — exact observed filename/document_title/date values and
+            nothing else — may omit this field: the runtime binds their document identity
+            automatically, and the delivery gate enforces the accepted shape.
     """
     scope = get_current_execution_scope()
     if scope is None or SWARM_SCOPE_KEY not in scope.metadata or in_planning(scope.task_id):
         raise ValueError("Final delivery requires an executing team coordinator")
     if not is_user_report(content):
         raise ValueError("Provide the final answer body, not an empty/internal tool payload")
+    from plugins.corpus.final_delivery import prepare_delivery_manifest
     from plugins.corpus.ledger import get_run_ledger
-    from plugins.tools.corpus_manifest import commit_final_manifest, prepare_final_manifest
+    from plugins.tools.corpus_manifest import ManifestAnchorError, commit_final_manifest
 
-    if corpus_conclusions is None and get_run_ledger().has_activity():
-        raise ValueError(
-            "Corpus-backed delivery requires corpus_conclusions bound to this content. "
-            "Supply id, exact report_quote, evidence:[{evidence_ref}]. "
-            "Use [] only when no supported corpus claim is delivered; disclose the gap."
-        )
     items = [FinalDisposition.model_validate(u).model_dump() for u in updates]
     if len({u["id"] for u in items}) != len(items):
         raise ValueError("Each task may have only one final disposition")
@@ -126,10 +185,24 @@ async def deliver_answer(
     projected = project_bus_checks(bus, bus_id)["checks"] if bus else []
     issues.extend(verification_label_findings(projected, content))
     current_tasks = snapshot_tasks(scope.task_id)
+    dispositions = {item["id"]: item["resolution"] for item in items}
+    for task in current_tasks:
+        if (
+            task_is_required(task)
+            and dispositions.get(task["id"], task["resolution"]) == "cancelled"
+        ):
+            issues.append({
+                "rule": "required_task_cancelled",
+                "task_id": task["id"],
+                "detail": "member work incomplete or withdrawn: cancelling required work does "
+                "not fulfill it; use blocked with notes and gap, or resolved once completed",
+            })
     excluded = {
         task["id"] for task in current_tasks if task["resolution"] in {"blocked", "cancelled"}
     }
-    excluded.update(item["id"] for item in items if item["resolution"] == "blocked")
+    excluded.update(
+        item["id"] for item in items if item["resolution"] in {"blocked", "cancelled"}
+    )
     for check_id in missing_publication_excerpts(
         projected,
         content,
@@ -149,11 +222,23 @@ async def deliver_answer(
     ):
         issues.append({"rule": "failed_publication_claim_retained", **finding})
     payload = None
-    if corpus_conclusions is not None:
-        try:
-            payload = prepare_final_manifest(corpus_conclusions, content.strip())
-        except ValueError as exc:
-            issues.append({"rule": "corpus_manifest_invalid", "detail": str(exc)})
+    try:
+        payload = prepare_delivery_manifest(content, corpus_conclusions, get_run_ledger())
+    except ManifestAnchorError as exc:
+        # Anchor-only failure: the body is already settled, so the caller must
+        # correct the listed conclusion ids instead of regenerating the answer.
+        issues.append(
+            {
+                "rule": "corpus_manifest_anchor_mismatch",
+                "reuse_content": True,
+                "content_sha256": exc.content_sha256,
+                "conclusion_issues": exc.issues,
+                "detail": "Only the report_quote anchors of these conclusions need fixing. "
+                "Resubmit the SAME content; do not rewrite unrelated passages.",
+            }
+        )
+    except ValueError as exc:
+        issues.append({"rule": "corpus_manifest_invalid", "detail": str(exc)})
     if issues:
         raise ValueError(
             "Delivery preflight failed: "
@@ -172,23 +257,37 @@ async def deliver_answer(
     outcomes = {j["job_id"]: j for j in job_outcomes}
     tasks = {t["id"]: t for t in snapshot_tasks(scope.task_id)}
     for item in items:
-        if item["resolution"] == "resolved":
-            for job_id in tasks.get(item["id"], {}).get("execution_job_ids", []):
-                outcome = outcomes.get(job_id, {})
-                replacements = outcome.get("coverage_resolved_by", [])
-                recovered = (
-                    outcome.get("coverage_status") == "complete"
-                    and any(r["job_id"] != job_id for r in replacements)
-                    and all(
-                        r["job_id"] == job_id
-                        or outcomes.get(r["job_id"], {}).get("status") == "complete"
-                        for r in replacements
+        task = tasks.get(item["id"], {})
+        # ``resolved`` claims the work is answered. ``cancelled`` on a REQUIRED
+        # item is checked too: retracting a required item after dispatching it
+        # would otherwise hide an incomplete member job, which is the gap-laundering
+        # bypass this contract forbids. Optional items may be retracted freely.
+        claims_done = item["resolution"] == "resolved" or (
+            item["resolution"] == "cancelled" and task_is_required(task)
+        )
+        if not claims_done:
+            continue
+        for job_id in task.get("execution_job_ids", []):
+            outcome = outcomes.get(job_id, {})
+            replacements = outcome.get("coverage_resolved_by", [])
+            recovered = (
+                outcome.get("coverage_status") == "complete"
+                and any(r["job_id"] != job_id for r in replacements)
+                and all(
+                    r["job_id"] == job_id
+                    or outcomes.get(r["job_id"], {}).get("status") == "complete"
+                    for r in replacements
+                )
+            )
+            if outcome.get("status") != "complete" and not recovered:
+                raise ValueError(
+                    f"{item['id']}: member work incomplete; use blocked with a gap"
+                    + (
+                        " — a required item cannot be cancelled to hide an incomplete dispatch"
+                        if item["resolution"] == "cancelled"
+                        else ""
                     )
                 )
-                if outcome.get("status") != "complete" and not recovered:
-                    raise ValueError(
-                        f"{item['id']}: member work incomplete; use blocked with a gap"
-                    )
     # update_task performs no asynchronous I/O. Its existing verification checks
     # remain authoritative, and rejected partial mutations/receipts roll back.
     with board_transaction(scope.task_id):
@@ -214,11 +313,15 @@ class TeamDeliveryObserver(BaseObserver):
     critical = True
 
     def __init__(
-        self, budget: TeamPhaseBudget, *, coordination_tools: tuple[str, ...] | None = None,
+        self,
+        budget: TeamPhaseBudget,
+        *,
+        coordination_tools: tuple[str, ...] | None = None,
     ) -> None:
         self.budget = budget
         self.coordination_tools = coordination_tools
         self.active = False
+        self.can_deliver = False
         self.wind_down: TeamWindDown | None = None
         self._repair_offers: dict[tuple[str, str], int] = {}
         self._verification_nudges: set[tuple[str, tuple[str, ...]]] = set()
@@ -367,7 +470,8 @@ class TeamDeliveryObserver(BaseObserver):
 
     def _ready(self, bus: AgentBus, task_id: str, tasks: list[dict[str, Any]]) -> bool:
         if any(
-            s.current_job_id or s.pending_tasks for s in bus.list_sessions_for_task(task_id)
+            s.current_job_id or s.pending_tasks or s.pending_results
+            for s in bus.list_sessions_for_task(task_id)
         ):
             return False
         jobs = bus.list_task_jobs(task_id)
@@ -377,11 +481,6 @@ class TeamDeliveryObserver(BaseObserver):
         for task in tasks:
             if task["resolution"] in {"resolved", "cancelled", "blocked"}:
                 continue
-            # A completed member job is not a declaration that the user goal is met.
-            # Without declared checks, let coordination assess the result and record
-            # its disposition before closing tools. An idle roster is irrelevant.
-            if task.get("kind") != "delivery" and not task.get("verification_required"):
-                return False
             if task.get("kind") != "delivery" and (
                 not task.get("execution_job_ids") or not set(task["execution_job_ids"]) <= known
             ):
@@ -400,15 +499,25 @@ class TeamDeliveryObserver(BaseObserver):
         return True
 
     async def on_before_llm(self, ctx: TurnContext) -> Intervention | None:
+        self.can_deliver = False
         intervention = await self._before_llm(ctx)
-        if not self.active and self.coordination_tools and snapshot_tasks(ctx.task_id):
+        if (
+            not self.active
+            and not self.can_deliver
+            and self.coordination_tools
+            and snapshot_tasks(ctx.task_id)
+        ):
             # Do not ask the model to compose a final body while delivery would reject it.
             # Keep collection/repair/dispatch available, including before verifier fan-in.
             names = tuple(name for name in self.coordination_tools if name != "deliver_answer")
             if intervention and intervention.allowed_tool_names is not None:
                 names = tuple(n for n in names if n in intervention.allowed_tool_names)
-            return replace(intervention, allowed_tool_names=names) if intervention else Intervention(
-                allowed_tool_names=names,
+            return (
+                replace(intervention, allowed_tool_names=names)
+                if intervention
+                else Intervention(
+                    allowed_tool_names=names,
+                )
             )
         return intervention
 
@@ -454,7 +563,8 @@ class TeamDeliveryObserver(BaseObserver):
             if requirement_error:
                 return Intervention(
                     inject_messages=[
-                        "[runtime prerequisite pending] " + requirement_error
+                        "[runtime prerequisite pending] "
+                        + requirement_error
                         + " Do not retry final submission yet. Existing collected evidence may "
                         "be reused; do not expand the user's acceptance criteria."
                     ],
@@ -464,6 +574,30 @@ class TeamDeliveryObserver(BaseObserver):
             if repair is not None:
                 return repair
         ready = collected and not files_pending
+        if (
+            ready
+            and not time_to_deliver
+            and not turns_to_deliver
+            and any(
+                task.get("kind") != "delivery"
+                and not task.get("verification_required")
+                and task["resolution"] not in {"resolved", "blocked", "cancelled"}
+                for task in tasks
+            )
+        ):
+            # Offer atomic delivery without treating completed execution as success
+            # or closing research before the coordinator can assess the report.
+            self.can_deliver = True
+            return Intervention(
+                inject_messages=[
+                    "[delivery available] Reports are collected. Assess the original requested outcome. "
+                    "If sufficient, call deliver_answer alone with content and final task updates now; "
+                    "do not call update_task first. If evidence is insufficient, continue coordination. "
+                    "Only exact observed filename/document_title/date answers need no corpus_conclusions; "
+                    "source-content claims still require the complete manifest.\n"
+                    + IDENTITY_ANSWER_RULE
+                ]
+            )
         if not time_to_deliver and not turns_to_deliver and not ready:
             if bus and self.budget.sync_phase(now) not in {"publishing", "finalizing"}:
                 remaining_verification = self.budget.remaining_for_job(
@@ -512,9 +646,12 @@ class TeamDeliveryObserver(BaseObserver):
         )
         from plugins.corpus.ledger import get_run_ledger
 
+        prompt += IDENTITY_ANSWER_RULE + "\n"
         prompt += (
             "Deliver the requested result first. Optional enrichment that was not obtained is "
-            "not a failed requirement. Do not reopen research to improve an already sufficient "
+            "not a failed requirement. Items marked required_for_completion=false are optional: "
+            "resolve them or cancel them, never give them a gap. Do not reopen research to "
+            "improve an already sufficient "
             "result. If a concrete broader investigation would help, ask briefly whether the user "
             "wants it AFTER the result; wait for the user's reply before executing that expansion. "
             "Do not routinely append an expansion question. Necessary unresolved gaps remain gaps.\n"
@@ -547,14 +684,19 @@ class TeamDeliveryObserver(BaseObserver):
             else "Omit corpus_conclusions: no corpus evidence was acquired in this run. "
             "Cite web sources by URL in content. A web URL, hash or job ID is not a corpus receipt.\n"
         )
-        prompt += json.dumps(tasks, ensure_ascii=False)
+        prompt += json.dumps(_delivery_task_view(tasks), ensure_ascii=False)
         if bus:
             excluded = {t["id"] for t in tasks if t["resolution"] in {"blocked", "cancelled"}}
-            passages = list(dict.fromkeys(
-                c["subject"]["text"] for c in project_bus_checks(bus, bus_id)["checks"]
-                if c.get("publication_excerpt") and c["verdict"] == "pass"
-                and c["work_item_id"] not in excluded and c["subject"].get("text")
-            ))
+            passages = list(
+                dict.fromkeys(
+                    c["subject"]["text"]
+                    for c in project_bus_checks(bus, bus_id)["checks"]
+                    if c.get("publication_excerpt")
+                    and c["verdict"] == "pass"
+                    and c["work_item_id"] not in excluded
+                    and c["subject"].get("text")
+                )
+            )
             if passages:
                 prompt += (
                     "\n[checked publication text] Copy these passages exactly into content, "
@@ -605,6 +747,16 @@ class TeamDeliveryObserver(BaseObserver):
         ):
             ctx.metadata["final_answer"] = result.args["content"].strip()
             ctx.metadata["team_delivery_accepted"] = True
+            if not self.active:
+                bus = registry.get_optional(AgentBus)
+                scope = get_current_execution_scope()
+                if bus and scope:
+                    self.wind_down = await wind_down_team(
+                        bus=bus,
+                        task_id=resolve_bus_task_id(scope),
+                        wait_s=0,
+                    )
+                self.active = True
 
     async def on_turn_end(self, ctx: TurnContext) -> Intervention | None:
         if ctx.metadata.get("team_delivery_accepted"):

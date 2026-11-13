@@ -20,6 +20,7 @@ from __future__ import annotations
 import uuid
 from unittest.mock import AsyncMock, patch
 
+import httpx
 import pytest
 from httpx import ASGITransport, AsyncClient
 
@@ -86,9 +87,7 @@ def _create_body(**over):
 
 
 async def _create_config(client, token, **over):
-    resp = await client.post(
-        "/api/models", json=_create_body(**over), headers=_auth(token)
-    )
+    resp = await client.post("/api/models", json=_create_body(**over), headers=_auth(token))
     assert resp.status_code == 201, resp.text
     return resp.json()
 
@@ -169,8 +168,12 @@ async def test_user_cannot_access_others_config(client):
     # bob sees nothing and gets 404 on alice's config
     assert (await client.get("/api/models", headers=_auth(b_token))).json() == []
     assert (await client.get(f"/api/models/{c['id']}", headers=_auth(b_token))).status_code == 404
-    assert (await client.delete(f"/api/models/{c['id']}", headers=_auth(b_token))).status_code == 404
-    assert (await client.put(f"/api/models/{c['id']}", json={"name": "x"}, headers=_auth(b_token))).status_code == 404
+    assert (
+        await client.delete(f"/api/models/{c['id']}", headers=_auth(b_token))
+    ).status_code == 404
+    assert (
+        await client.put(f"/api/models/{c['id']}", json={"name": "x"}, headers=_auth(b_token))
+    ).status_code == 404
 
 
 # ── test preflight ──────────────────────────────────────────────
@@ -217,6 +220,44 @@ async def test_preflight_failure_records_error_summary(client):
         row = await s.get(UserLLMConfig, uuid.UUID(c["id"]))
         assert row.last_verify_ok is False
         assert "认证失败" in (row.params_json or {}).get("_last_verify_error", "")
+
+
+@pytest.mark.asyncio
+async def test_real_probe_returns_and_persists_safe_model_error(client, monkeypatch):
+    client, models_routes = client
+    token = await _register_and_login(client, "alice")
+    secret = "sk-DO-NOT-RETURN-THIS-KEY"
+    config = await _create_config(client, token, model="unknown-model", api_key=secret)
+    client_class = httpx.AsyncClient
+
+    def respond(request):
+        assert request.method == "POST"
+        return httpx.Response(
+            400,
+            json={
+                "error": {
+                    "code": "invalid_model",
+                    "message": f"Invalid model, credential={secret}",
+                }
+            },
+        )
+
+    monkeypatch.setattr(
+        models_routes.httpx,
+        "AsyncClient",
+        lambda **kwargs: client_class(transport=httpx.MockTransport(respond), **kwargs),
+    )
+    response = await client.post(f"/api/models/{config['id']}/test", headers=_auth(token))
+    assert response.status_code == 200
+    assert response.json()["ok"] is False
+    detail = response.json()["detail"]
+    assert "模型不可用" in detail
+    assert "建议：" in detail
+    assert secret not in response.text
+    saved = (await client.get(f"/api/models/{config['id']}", headers=_auth(token))).json()
+    assert saved["last_verify_ok"] is False
+    assert saved["params"]["_last_verify_error"] == detail
+    assert secret not in str(saved)
 
 
 @pytest.mark.asyncio

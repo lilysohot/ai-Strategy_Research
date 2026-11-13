@@ -1668,7 +1668,7 @@
       "max_model_attempts": 25,
       "max_single_prompt_tokens": 160000,
       "max_exact_repeated_requests": 3,
-      "max_document_pages": 5,
+      "max_document_pages": 3,
       "max_repeated_original_chars": 2000
     },
     "paired_controls": []

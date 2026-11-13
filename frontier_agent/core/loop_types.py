@@ -184,7 +184,18 @@ class ToolResult:
     is_error: bool
     # Interrupted results remain in history to preserve tool-call pairing.
     interrupted: bool = False
-    execution_status: Literal["succeeded", "failed", "skipped", "cancelled"] | None = None
+    # ``dedup_ref`` marks a paired, non-executed duplicate: its tool message is
+    # a short association receipt pointing at the one invocation that ran.
+    # It is deliberately distinct from ``skipped`` (blocked before execution)
+    # so the consumption ledger never mistakes it for newly delivered evidence.
+    execution_status: Literal[
+        "succeeded", "failed", "skipped", "cancelled", "dedup_ref"
+    ] | None = None
+    #: Time between the model's tool call being accepted and the tool body
+    #: actually starting (approval gate, dedup, scheduler/binding, sandbox
+    #: setup). Kept apart from ``duration_ms`` so a call that looks like it hung
+    #: can be attributed to pre-execution wait instead of execution time.
+    queued_ms: int = 0
 
     def __post_init__(self) -> None:
         if self.execution_status is None or (self.is_error and self.execution_status == "succeeded"):

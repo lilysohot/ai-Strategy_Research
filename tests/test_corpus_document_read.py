@@ -13,6 +13,7 @@ import pytest
 from plugins.corpus.context_reuse import CorpusContextReuseObserver
 from plugins.corpus.cursor import decode_cursor, encode_cursor
 from plugins.corpus.ledger import ConsumptionLedger, verify_manifest
+from plugins.corpus.pagination_policy import DOCUMENT_VISIBLE_CAP
 from plugins.corpus.preparation import document_read, read_pg
 from plugins.corpus.tool_refs import resolve_cursor_reference, resolve_evidence_reference
 
@@ -72,7 +73,9 @@ async def test_read_all_units_once_in_source_order_with_receipts(install):
         raw, page = await call(**args)
         pages += 1
         assert pages < 100
-        assert page["ok"] and len(raw) <= 4000
+        # v2 双预算：正文按原文字符、可见回执按独立硬上限。
+        assert page["ok"] and len(raw) <= DOCUMENT_VISIBLE_CAP
+        assert sum(len(item["text"]) for item in page["items"]) <= 4000
         assert page["total_units"] == len(units)
         ledger.record_fetch_result(raw)
         messages.append({"role": "tool", "content": raw})
@@ -164,14 +167,13 @@ async def test_unit_range_uses_source_position_not_id_format(install):
         assert page["ok"] and page["total_units"] == 20
         assert page["unit_range"] == [21, 40]
         seen: list[str] = [item["unit_id"] for item in page["items"]]
+        # v2 下这 20 个短单元一页即可装完（可见上限 12000），不再必然分页。
         args: dict[str, object] = {"cursor": page["next_cursor"], "max_chars": 4000}
-        while True:
+        while page["next_cursor"] is not None:
             _raw, page = await call(**args)
             assert page["ok"]
             seen.extend(item["unit_id"] for item in page["items"])
-            if page["next_cursor"] is None:
-                assert page["exhausted"] and page["fetch_complete"]
-                break
+            assert page["next_cursor"] is not None or (page["exhausted"] and page["fetch_complete"])
             args = {"cursor": page["next_cursor"], "max_chars": 4000}
     finally:
         _corpus_document.reset_unit_range_scope(token)
@@ -209,7 +211,9 @@ async def test_explicit_unit_locator_outside_assigned_range_is_rejected(install)
 async def test_replay_and_budget_clamp(install):
     install([entry("u1", "长文。" * 6000)])
     raw, page = await call(scope="document", max_chars=50000)
-    assert len(raw) <= 6000
+    # v2 不再把 max_chars 当信封上限：可见回执由策略硬上限约束。
+    assert len(fetch.projection.render_fetch_view(page)) <= DOCUMENT_VISIBLE_CAP
+    assert page["pagination_policy_version"] == 2
     assert page["next_cursor"]
     first, _ = await call(cursor=page["next_cursor"], max_chars=3500)
     replay, _ = await call(cursor=page["next_cursor"], max_chars=3500)
@@ -400,7 +404,8 @@ async def test_source_names_reach_public_document_pages_from_reader(monkeypatch,
         raw, page = await call(**args)
         pages += 1
         assert pages < 30
-        assert page["ok"] and len(raw) <= 3000
+        assert page["ok"] and len(raw) <= DOCUMENT_VISIBLE_CAP
+        assert sum(len(item["text"]) for item in page["items"]) <= 3000
         assert page["original_names"] == (names or [])
         assert (page["doc_id"], page["build_id"], page["source_id"]) == (DOC, DOC[4:], "source")
         delivered += "".join(item["text"] for item in page["items"])
@@ -417,11 +422,64 @@ async def test_source_names_reach_public_document_pages_from_reader(monkeypatch,
 
 async def test_source_names_are_not_silently_truncated_to_fit_page(install):
     service = install([entry("u1", "正文")])
-    names = tuple(f"原始名称_{i:03d}_" + "长" * 100 + ".pdf" for i in range(60))
+    # 让身份元数据本身就超过可见回执硬上限：60 个名字在 12000 上限下已装得下。
+    names = tuple(f"原始名称_{i:03d}_" + "长" * 100 + ".pdf" for i in range(130))
     service.document = replace(service.document, original_names=names)
-    raw, page = await call(scope="document", max_chars=3000)
-    assert len(raw) <= 3000
-    assert not page["ok"] and "budget_exceeded" in page["error"]
-    assert not page["fetch_complete"]
-    assert "next_cursor" not in page
+    _raw, page = await call(scope="document", max_chars=3000)
+    assert page["ok"] and page["fetch_complete"]
+    assert page["original_names"] == list(names)
+    # All aliases stay in the receipt; only necessary identity enters context.
+    assert len(fetch.projection.render_fetch_view(page)) <= DOCUMENT_VISIBLE_CAP
     assert service.document.original_names == names
+
+
+def table_unit(uid, text, *, element=None, cells=()):
+    return document_read.DocumentUnit(
+        replace(entry(uid, text, kind="table").unit, element=element, cells=tuple(cells)),
+        "table",
+        "kept",
+    )
+
+
+async def test_ocr_text_is_never_read_as_verified_table_structure(install):
+    # 缺结构（只有 OCR 文本）与缺内容（目标表格未取得）是两件事：
+    # 有坐标也不能据相邻顺序还原行列，更不能声称表格内容已取得。
+    install(
+        [
+            table_unit("unit:o1", "2028 1GW 145次", element="local_ocr:p11", cells=((11, 3, 1),)),
+            table_unit("unit:o2", "2029 2GW 220次", element="local_ocr:p11", cells=((11, 3, 2),)),
+        ]
+    )
+    _raw, page = await call(scope="document", max_chars=4000)
+    assert page["ok"] and page["content_scope"] == "ingested_text_only"
+    assert page["source_coverage"] == "unknown"
+    assert page["display_groups"] == []
+    assert [item["structure_status"] for item in page["items"]] == ["unknown", "unknown"]
+    assert all(item["content_status"] == "ingested_text" for item in page["items"])
+    assert all(item["ocr_unverified"] and item["text_origin"] == "ocr" for item in page["items"])
+    assert all("table_row" not in item for item in page["items"])
+    assert "不等于目标表格内容已取得" in page["hint"]
+    assert "table_chunks" in page["hint"]
+
+
+async def test_display_groups_keep_original_unit_and_char_ranges(install):
+    install(
+        [
+            table_unit("unit:t1", "甲", cells=((11, 3, 1),)),
+            table_unit("unit:t2", "乙", cells=((11, 3, 2),)),
+            table_unit("unit:t3", "丙", cells=((11, 4, 1),)),
+        ]
+    )
+    _raw, page = await call(scope="document", max_chars=4000)
+    assert page["ok"]
+    assert [item["structure_status"] for item in page["items"]] == ["partial"] * 3
+    assert [group["row"] for group in page["display_groups"]] == ["11:3"]
+    group = page["display_groups"][0]
+    assert group["kind"] == "table_row" and group["relation_status"] == "unverified"
+    assert [(r["unit_id"], r["start"], r["end"]) for r in group["unit_ranges"]] == [
+        ("unit:t1", 0, 1),
+        ("unit:t2", 0, 1),
+    ]
+    assert all(r["evidence_ref"] for r in group["unit_ranges"])
+    # items 未被组合改写：逐字原文与引用仍是原始单元粒度。
+    assert [item["text"] for item in page["items"]] == ["甲", "乙", "丙"]

@@ -18,9 +18,11 @@ from frontier_agent.components.observers.task_board import TaskBoardObserver
 from frontier_agent.components.task_board_types import (
     BOARD_TOOLS,
     RESOLUTION_MARKS,
+    TERMINAL_RESOLUTIONS,
     VALID_RESOLUTION,
     BoardCounts,
     count_resolutions,
+    task_is_required,
 )
 from frontier_agent.core.execution_context import get_current_execution_scope
 from frontier_agent.core.runtime import registry
@@ -222,6 +224,38 @@ def _progress_fields(item: dict[str, Any]) -> dict[str, Any]:
     return fields
 
 
+def _dispatched(task: dict[str, Any]) -> bool:
+    """True once any member work was dispatched for this item."""
+    return bool(task.get("execution_job_ids"))
+
+
+def required_flag_error(task: dict[str, Any], item: dict[str, Any], *, tid: str) -> str | None:
+    """Explain why ``required_for_completion`` may not change here (pure check).
+
+    Optional work must be declared before it is dispatched: otherwise a
+    coordinator could mark a failed required item optional afterwards and drop
+    its gap, which is exactly the bypass this contract forbids.
+    """
+    if "required_for_completion" not in item:
+        return None
+    if (item["required_for_completion"] is not False) == (
+        task.get("required_for_completion") is not False
+    ):
+        return None
+    if _dispatched(task) or str(task.get("resolution") or "open") in TERMINAL_RESOLUTIONS:
+        return (
+            f"{tid}: required_for_completion 只能在派发前修改（当前已派发/已终结）。"
+            "必需项不能用改成可选的方式绕过缺口；请保留 gap 或如实 blocked。"
+        )
+    return None
+
+
+def apply_required_flag(task: dict[str, Any], item: dict[str, Any]) -> None:
+    """Apply a validated flag change; callers check :func:`required_flag_error` first."""
+    if "required_for_completion" in item:
+        task["required_for_completion"] = item["required_for_completion"] is not False
+
+
 def record_verification(name: str, *, passed: bool, detail: str) -> None:
     """Record a tool verdict separately from the model's completion judgment."""
     scope = get_current_execution_scope()
@@ -329,6 +363,12 @@ def restore_board_from_messages(
                         continue
                     if description in existing:
                         tid = existing[description]
+                        if (
+                            isinstance(receipt, str) and receipt.startswith("Added ")
+                            and isinstance(item.get("required_for_completion"), bool)
+                            and not required_flag_error(board["tasks"][tid], item, tid=tid)
+                        ):
+                            apply_required_flag(board["tasks"][tid], item)
                         board["tasks"][tid].update(_progress_fields(item))
                         required = _verification_required(item, description)
                         if required:
@@ -360,6 +400,11 @@ def restore_board_from_messages(
                             required=required,
                         ),
                     }
+                    if (
+                        isinstance(receipt, str) and receipt.startswith("Added ")
+                        and isinstance(item.get("required_for_completion"), bool)
+                    ):
+                        apply_required_flag(board["tasks"][tid], item)
                     existing[description] = tid
             elif name in {"update_task", "deliver_answer"}:
                 receipt = receipts.get(str(call.get("id")))
@@ -414,6 +459,15 @@ def restore_board_from_messages(
                     if tid in progress_ids and (accepted is None or tid not in accepted):
                         task.update(_progress_fields(update))
                         continue
+                    # Only a successful update restores the flag. Progress-only
+                    # receipts and rejected/frozen changes must not waive required work.
+                    if (
+                        name == "update_task"
+                        and isinstance(receipt, str) and receipt.startswith("Updated ")
+                        and isinstance(update.get("required_for_completion"), bool)
+                        and not required_flag_error(task, update, tid=tid)
+                    ):
+                        apply_required_flag(task, update)
                     resolution = actual_resolutions.get(
                         tid, str(update.get("resolution") or "").strip()
                     )
@@ -485,6 +539,8 @@ def serialize_tasks(task_id: str, ids: list[str]) -> list[dict[str, Any]]:
             "owners": list(t.get("owners") or []),
             "group": t.get("group", ""),
         }
+        if not task_is_required(t):
+            serialized["required_for_completion"] = False
         if t.get("execution_job_ids"):
             serialized["execution_job_ids"] = list(t["execution_job_ids"])
         if t.get("verification_required"):
@@ -700,6 +756,11 @@ def render_board(task_id: str, *, bus_task_id: str | None = None) -> str:
     exec_by_owner = _exec_status_by_owner(bus_task_id or task_id) if show_owners else {}
     for tid, t in tasks.items():
         row = f"  {RESOLUTION_MARKS.get(t['resolution'], '○')} {tid} {t['resolution']:<11} "
+        # Optional items are visible as such: the coordinator must be able to see
+        # that an incomplete row does not gate the answer, and a required row
+        # must never look optional.
+        if not task_is_required(t):
+            row += "[optional] "
         if show_owners:
             owners = t.get("owners") or []
             # one "name:exec_status" per owning agent, so the coordinator sees
@@ -772,6 +833,11 @@ async def add_task(tasks: list[BoardAdd]) -> str:
               These are model-declared pointers, not proof of successful verification.
             - kind: research | verification | delivery. Keep delivery separate from research.
             - done_when: finite acceptance criterion tied to the user's question.
+            - required_for_completion (OPTIONAL): default true. Set false ONLY for
+              an enhancement you added that the user did not ask for. Such an item
+              may stay cancelled/unfinished without downgrading the answer, and it
+              cannot be re-labelled after dispatch. Never use it to park a required
+              result you could not deliver — keep that item with a gap instead.
             - owner (OPTIONAL, multi-agent runs only): if a teammate sub-agent is
               already assigned to this item, name it here (a name, comma-string,
               or list — a task may have many). In a solo run, just OMIT it.
@@ -823,6 +889,10 @@ async def add_task(tasks: list[BoardAdd]) -> str:
                 planned = _planned_check_update(scope, tid, task, it, tasks=b["tasks"])
             except ValueError as exc:
                 return f"Error: {tid}: {exc}"
+            frozen = required_flag_error(task, it, tid=tid)
+            if frozen:
+                return f"Error: {frozen}"
+            apply_required_flag(task, it)
             task.pop("archived", None)
             task.update(_progress_fields(it))
             task.update(planned)
@@ -842,6 +912,9 @@ async def add_task(tasks: list[BoardAdd]) -> str:
             "resolution": "open",
             "owners": _as_owner_list(it.get("owner") or it.get("owners")),
             "group": str(it.get("group", "")).strip(),
+            # Absent means required. An optional item is self-added enrichment:
+            # it may stay unfinished without downgrading the requested result.
+            "required_for_completion": it.get("required_for_completion") is not False,
             "verification_required": required,
             "verification_requirements": _verification_requirements(
                 it,
@@ -942,6 +1015,9 @@ async def update_task(updates: list[BoardUpdate]) -> str:
               updated before dispatch; dispatched definitions are immutable.
             - resolution='blocked': stop work with an explicit notes and gap.
               Allows partial delivery, never marks missing checks as passed.
+            - required_for_completion: may only change BEFORE dispatch. Use false
+              for self-added enrichment, so leaving it undone does not downgrade
+              the answer; a required item cannot be re-labelled to drop its gap.
             - Team delivery items become resolved only when the final answer is
               accepted. Marking them resolved here stages them as in_progress.
             - owner (OPTIONAL, multi-agent runs only): teammate sub-agent
@@ -985,6 +1061,10 @@ async def update_task(updates: list[BoardUpdate]) -> str:
             continue
         t = b["tasks"][tid]
         progress = _progress_fields(u)
+        frozen = required_flag_error(t, u, tid=tid)
+        if frozen:
+            errors.append(frozen)
+            continue
         try:
             planned = _planned_check_update(scope, tid, t, u)
         except ValueError as exc:
@@ -1084,14 +1164,17 @@ async def update_task(updates: list[BoardUpdate]) -> str:
                 errors.append(f"{tid}: 工具校验未通过，须重试成功后才可完成")
                 continue
             if res == "cancelled":
-                reason = str(u.get("reason") or "").strip()
+                # ``notes`` is the documented cancellation reason; delivery has
+                # no separate ``reason`` field, so accept either.
+                reason = str(u.get("reason") or u.get("notes") or "").strip()
                 if not reason:
-                    errors.append(f"{tid}: 取消未通过的校验须提供 reason，并在报告披露限制")
+                    errors.append(f"{tid}: 取消未通过的校验须提供 notes（原因），并在报告披露限制")
                     continue
                 t["description"] += f"；未完成原因：{reason}"
         t.setdefault("owners", [])
         if t.pop("archived", False):
             _record_op(scope.task_id, "add", [tid])
+        apply_required_flag(t, u)
         t.update(progress)
         t.update(planned)
         if res:

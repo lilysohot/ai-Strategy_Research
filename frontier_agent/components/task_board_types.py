@@ -23,6 +23,28 @@ RESOLUTION_MARKS: dict[str, str] = {
 }
 VALID_RESOLUTION = tuple(RESOLUTION_MARKS)
 
+#: Resolutions that end a task's work. ``blocked`` keeps a gap; ``cancelled``
+#: retracts the work (nothing is owed); ``resolved`` claims it is answered.
+TERMINAL_RESOLUTIONS: frozenset[str] = frozenset({"resolved", "cancelled", "blocked"})
+
+#: Resolutions a final delivery may declare. This MUST stay identical to the
+#: board's terminal set: a task the coordinator already retracted with
+#: ``update_task(resolution="cancelled")`` must not be forced into ``blocked``
+#: (which records a gap and downgrades the whole answer) merely because the
+#: delivery schema did not accept ``cancelled``.
+FINAL_RESOLUTIONS: tuple[str, ...] = ("resolved", "cancelled", "blocked")
+
+
+def task_is_required(task: dict[str, object]) -> bool:
+    """True unless the board explicitly marked the item optional.
+
+    Optional ("self-added enrichment") work may stay unfinished without turning
+    the user's requested result into a partial answer. Anything not carrying an
+    explicit ``required_for_completion=False`` is required — the conservative
+    default, so a missing field can never waive an obligation.
+    """
+    return task.get("required_for_completion") is not False
+
 
 class BoardCounts(NamedTuple):
     """Board tallies with the "cancelled is retracted" rule applied once."""
@@ -62,8 +84,11 @@ def count_resolutions(resolutions: Iterable[str]) -> BoardCounts:
 
 __all__ = [
     "BOARD_TOOLS",
+    "FINAL_RESOLUTIONS",
     "RESOLUTION_MARKS",
+    "TERMINAL_RESOLUTIONS",
     "VALID_RESOLUTION",
     "BoardCounts",
     "count_resolutions",
+    "task_is_required",
 ]

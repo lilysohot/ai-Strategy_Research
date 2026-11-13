@@ -7,6 +7,7 @@
 
 | 文档 | 当前职责 |
 |---|---|
+| [corpus_search 与 corpus_fetch 上下文精简](corpus-context-and-report-delivery-optimization.md) | 2026-11-11 v2.2，待实施；PR-DATA-01/12、PR-OUT-06/07。首阶段仅裁切元数据，不强制新增 fetch；明确存储和原文读取链路，纳入轻量性能对比，导航模式按场景验证后启用 |
 | [search 与 fetch 内容保留优化讨论稿](corpus-search-evidence-delivery-redesign.md) | v1.4；2026-10-23 查询相关展示选择已本地实现，129 项回归及固定句柄回放通过；未重启服务，直接证据交付与上下文索引仍待实施，Claims/items 暂缓 |
 | [资料库研究链路改造](corpus-research-chain-redesign.md) | 较早的完整架构讨论，非本轮实施清单；当前范围以 search/fetch 讨论稿为准，Claims/items 与团队改造暂缓 |
 | [Web 同一研究逐轮切换 Agent 模式](web-agent-team-run-mode.md) | 2026-10-24 v3.10，PR-RUN-08；§19 简单单轮/停止通过，§20 复杂工具任务尚未通过；T03 输入截断标记、T04 bwrap DNS/uv 运行环境已修复并经真实工具局部验收，T01/T02/T05—T08 及完整发布链仍待完成。近期先补齐复杂单轮，再验收 §16 跨轮连续性；账户/计划继续暂缓，既有服务团队执行开关保持关闭 |

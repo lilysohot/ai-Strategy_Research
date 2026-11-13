@@ -19,6 +19,7 @@ from frontier_agent.core.loop_types import (
     ToolResult,
     TurnContext,
 )
+from plugins.corpus import projection
 from plugins.corpus.search_evidence import search_evidence_items
 
 if TYPE_CHECKING:
@@ -32,6 +33,19 @@ def _digest(value: Any) -> str:
     return hashlib.sha256(
         json.dumps(value, sort_keys=True, ensure_ascii=False).encode()
     ).hexdigest()
+
+
+def _complete_payload(message: dict[str, Any], visible: dict[str, Any]) -> dict[str, Any] | None:
+    """Progress identities must use the receipt-backed internal result, not the view."""
+    body = message.get("content")
+    if not isinstance(body, str):
+        return None
+    name = str(message.get("name") or "")
+    if not name:
+        name = "corpus_search" if "hits" in visible else "corpus_fetch"
+    return projection.try_materialize(
+        name, body, tool_call_id=str(message.get("tool_call_id") or "")
+    )
 
 
 def _observations(name: str, payload: dict[str, Any]) -> set[str]:
@@ -127,6 +141,7 @@ class CorpusCoverageObserver(BaseObserver):
                 continue
             if not isinstance(payload, dict) or payload.get("ok") is not True:
                 continue
+            payload = _complete_payload(message, payload) or payload
             if payload.get("scope") != "document":
                 continue
             items = payload.get("items")
@@ -260,6 +275,13 @@ class CorpusProgressObserver(BaseObserver):
             if not isinstance(payload, dict):
                 unknown = True
                 continue
+            complete = _complete_payload(message, payload)
+            if complete is None:
+                # A projected message whose receipt cannot be resolved gives no
+                # basis for asserting repeated (or new) delivered evidence.
+                unknown = True
+                continue
+            payload = complete
             doc_id = payload.get("doc_id")
             if (
                 payload.get("ok") is False

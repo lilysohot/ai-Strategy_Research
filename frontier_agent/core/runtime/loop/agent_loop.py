@@ -13,6 +13,7 @@ import logging
 import time
 import uuid
 from collections.abc import Awaitable, Callable, Coroutine
+from dataclasses import replace
 from typing import Any
 
 from frontier_agent.core.llm import LLMClient
@@ -842,10 +843,105 @@ async def _execute_tool_calls(
     return "", len(parsed_calls)
 
 
+# Tool metadata flag opting into same-turn, same-argument single-flight. The
+# kernel knows no domain names: only tools that declare themselves idempotent,
+# version-pinned reads are ever coalesced. Collapsing a state-changing tool
+# would silently drop a requested side effect.
+_DEDUP_WITHIN_TURN_KEY = "dedup_within_turn"
+
+
+def _within_turn_dedup_key(call: dict, tool_map: dict[str, Tool]) -> str | None:
+    """Identity of one idempotent read inside this batch; ``None`` = never merge.
+
+    Uses the POST-authorization args (``rewrite_args`` has already been applied
+    by the time this runs), so a guard that retargets one of two otherwise
+    identical calls cannot make them collapse into a single read.
+    """
+    name = str(call.get("name") or "")
+    tool = tool_map.get(name)
+    if tool is None or tool.metadata.get(_DEDUP_WITHIN_TURN_KEY) is not True:
+        return None
+    args = call.get("args") or {}
+    if not isinstance(args, dict):
+        return None
+    try:
+        normalized = json.dumps(args, sort_keys=True, ensure_ascii=False, default=str)
+    except (TypeError, ValueError):
+        return None  # unhashable/exotic args: stay conservative, execute both
+    return f"{name}\x00{normalized}"
+
+
+def _dedup_result_reusable(result: ToolResult) -> bool:
+    """Whether the first invocation is solid enough to stand in for duplicates.
+
+    A failed, interrupted, cancelled or empty first result must NOT be replaced
+    by a short reference — the duplicate would then have no real result at all.
+    In that case the coalesced calls are executed for real instead.
+    """
+    if result.is_error or result.interrupted:
+        return False
+    if result.execution_status in {"failed", "cancelled", "skipped"}:
+        return False
+    body = result.result
+    if not isinstance(body, str) or not body.strip():
+        return False
+    try:
+        payload = json.loads(body)
+    except (TypeError, ValueError):
+        return True  # non-JSON tool: nothing structured to inspect
+    if not isinstance(payload, dict):
+        return True
+    return not (
+        payload.get("ok") is False
+        or bool(payload.get("error"))
+        or bool(payload.get("code"))
+    )
+
+
+def _dedup_ref_result(
+    call: dict, first: ToolResult, turn: int, ordinal: int,
+) -> ToolResult:
+    """Short association receipt for a paired duplicate; not new evidence.
+
+    Deliberately omits ``ok: true``: the corpus result projector passes a
+    non-``ok`` envelope through unchanged, and the ledger never mistakes this
+    receipt for verbatim source text. The model still gets one message per
+    ``tool_call_id``, in the original call order.
+    """
+    first_id = str(first.tool_call_id or "")
+    body = json.dumps(
+        {
+            "tool": str(call.get("name") or ""),
+            "dedup": True,
+            "dedup_of": first_id,
+            "result_call_id": first_id,
+            "note": (
+                "同轮同参请求已合并，只执行一次；完整结果见 tool_call_id="
+                f"{first_id} 的 tool 消息。请勿重复发起相同请求。"
+            ),
+        },
+        ensure_ascii=False,
+    )
+    return ToolResult(
+        name=str(call.get("name") or ""),
+        args=call.get("args") or {},
+        result=body,
+        duration_ms=0,
+        tool_call_id=str(call.get("id") or f"call_{turn}_{ordinal}"),
+        is_error=False,
+        execution_status="dedup_ref",
+    )
+
+
 async def _execute_tool_batch(
     cfg: LoopConfig, obs: list, tool_map: dict[str, Tool], messages: list[Message], metadata: dict[str, Any],
     turn: int, total_tool_calls: int, ctx: TurnContext, parsed_calls: list[dict]
 ) -> tuple[str, int]:
+    # Accepted here, before observer hooks run: this is the moment the model's
+    # calls became the runtime's responsibility. Anything between this stamp and
+    # the tool body starting (approval, coalescing, scheduler slot) is reported
+    # as ``queued_ms`` so a slow call is not mistaken for a slow tool.
+    accepted_monotonic = time.monotonic()
     executable: list[tuple[int, dict]] = []
     synthetic: list[tuple[int, ToolResult]] = []
     for idx, tc in enumerate(parsed_calls):
@@ -864,32 +960,86 @@ async def _execute_tool_batch(
         else:
             executable.append((idx, tc))
 
-    executed_results: list[ToolResult] = []
-    if executable:
-        has_tool_interrupt_waiter = any(
-            callable(getattr(observer, "wait_for_tool_interrupt", None)) for observer in obs
+    # Preserve the ids ``execute_tools`` would otherwise mint for calls that
+    # arrived without one, BEFORE splitting the list for coalescing. Dropping a
+    # duplicate must not shift the default id of every later call.
+    for pos, (idx, tc) in enumerate(executable):
+        if not tc.get("id"):
+            executable[pos] = (idx, {**tc, "id": f"call_{turn}_{total_tool_calls + pos}"})
+
+    # ── Same-turn, same-argument single-flight ──────────────────────────
+    # Coalesce AFTER authorization (rewrites applied) and BEFORE ``execute_tools``
+    # creates an ``ainvoke`` task. Every original call still gets one tool
+    # message and one request-side audit row; only one real read runs.
+    seen: dict[str, int] = {}
+    to_execute: list[tuple[int, dict]] = []
+    coalesced: list[tuple[int, dict, int]] = []
+    for idx, tc in executable:
+        key = _within_turn_dedup_key(tc, tool_map)
+        if key is None:
+            to_execute.append((idx, tc))
+        elif key in seen:
+            coalesced.append((idx, tc, seen[key]))
+        else:
+            seen[key] = idx
+            to_execute.append((idx, tc))
+
+    has_tool_interrupt_waiter = any(
+        callable(getattr(observer, "wait_for_tool_interrupt", None)) for observer in obs
+    )
+    interrupt_waiter = (
+        (lambda tool_call: _wait_for_tool_interrupt(obs, ctx, tool_call))
+        if has_tool_interrupt_waiter else None
+    )
+
+    async def _run(calls: list[tuple[int, dict]]) -> list[ToolResult]:
+        if not calls:
+            return []
+        return await execute_tools(
+            [tc for _, tc in calls], tool_map, cfg.tool_timeout, turn, total_tool_calls,
+            interrupt_waiter=interrupt_waiter,
+            accepted_monotonic=accepted_monotonic,
         )
-        executed_results = await execute_tools(
-            [tc for _, tc in executable], tool_map, cfg.tool_timeout, turn, total_tool_calls,
-            interrupt_waiter=(
-                (lambda tool_call: _wait_for_tool_interrupt(obs, ctx, tool_call))
-                if has_tool_interrupt_waiter else None
-            ),
-        )
+
+    by_idx: dict[int, ToolResult] = {}
+    executed_results = await _run(to_execute)
+    for (idx, _), tr in zip(to_execute, executed_results, strict=False):
+        by_idx[idx] = tr
+        if tr.queued_ms:
+            # Per-tool pre-execution wait, so a run can be diagnosed from its
+            # metadata alone: execution time vs. everything before it.
+            waited = metadata.setdefault("tool_pre_exec_wait_ms", {})
+            waited[tr.name] = int(waited.get(tr.name, 0)) + tr.queued_ms
+
+    # A short reference is only safe when the first invocation really returned
+    # something usable. Otherwise execute the duplicates for real: a failure
+    # must never be hidden behind a pointer to another failed call.
+    fallback: list[tuple[int, dict]] = []
+    for idx, tc, first_idx in coalesced:
+        first = by_idx.get(first_idx)
+        if first is not None and _dedup_result_reusable(first):
+            synthetic.append((idx, _dedup_ref_result(tc, first, turn, idx)))
+        else:
+            fallback.append((idx, tc))
+    if fallback:
+        fallback_results = await _run(fallback)
+        for (idx, _), tr in zip(fallback, fallback_results, strict=False):
+            by_idx[idx] = tr
 
     # Slots are pre-allocated so results reappear in the model's original call
     # order regardless of completion order.
     ordered: list[ToolResult | None] = [None] * len(parsed_calls)
-    for (idx, _), tr in zip(executable, executed_results, strict=False):
+    for idx, tr in by_idx.items():
         ordered[idx] = tr
     for idx, tr in synthetic:
         ordered[idx] = tr
 
-    # ``executable`` and ``synthetic`` partition ``parsed_calls``, so every slot
-    # is normally filled. The zip above still truncates if ``execute_tools``
-    # returns fewer results than calls it was handed, and the placeholder is a
-    # real None — previously typed away with a blanket ignore, which left the
-    # attribute access below to raise. Drop unfilled slots and say so instead.
+    # ``by_idx`` and ``synthetic`` together cover every authorized call, so
+    # every slot is normally filled. The zip above still truncates if
+    # ``execute_tools`` returns fewer results than calls it was handed, and the
+    # placeholder is a real None — previously typed away with a blanket ignore,
+    # which left the attribute access below to raise. Drop unfilled slots and
+    # say so instead.
     results: list[ToolResult] = [tr for tr in ordered if tr is not None]
     if len(results) != len(ordered):
         logger.warning(
@@ -899,7 +1049,27 @@ async def _execute_tool_batch(
 
     processor = cfg.tool_result_post_processor or DefaultToolResultPostProcessor(cfg.tool_result_max_chars)
     can_recover = "recover_result" in tool_map
+    final_results: dict[str, tuple[ToolResult, str]] = {}
     for tr_result in results:
+        if tr_result.execution_status == "dedup_ref":
+            receipt = json.loads(tr_result.result)
+            target = final_results.get(str(receipt.get("dedup_of") or ""))
+            definition = tool_map.get(tr_result.name)
+            validator = definition.metadata.get("dedup_delivery_validator") if definition else None
+            valid = False
+            if target is not None:
+                primary, final_body = target
+                if callable(validator):
+                    try:
+                        valid = bool(validator(primary.result, final_body))
+                    except Exception:
+                        valid = False
+                else:
+                    valid = _dedup_result_reusable(replace(primary, result=final_body))
+            if not valid:
+                receipt.update(ok=False, code="dedup_target_not_delivered",
+                               note="首份结果未完整送达；请使用原请求重试，不要前移游标。")
+                tr_result = replace(tr_result, result=json.dumps(receipt, ensure_ascii=False))
         tr_result = await notify_tool_result(obs, ctx, tr_result)
         # ``notify_tool_result`` ran FIRST, so the trajectory already holds
         # ``tr_result.result`` in full. The post-processor cuts only the string
@@ -909,8 +1079,10 @@ async def _execute_tool_batch(
         # only: the two earlier cuts happen before the ``ToolResult`` exists, so
         # for those the trajectory holds the same preview the model already has.
         body = processor.process(tr_result)
+        body = _with_recovery_handle(body, tr_result, ctx.turn, enabled=can_recover)
+        final_results[str(tr_result.tool_call_id or "")] = (tr_result, body)
         messages.append(tool_msg(
-            _with_recovery_handle(body, tr_result, ctx.turn, enabled=can_recover),
+            body,
             tr_result.tool_call_id,
         ))
 

@@ -371,7 +371,9 @@ async def test_observer_collects_and_finalizes(tmp_path: Path, monkeypatch) -> N
     observer = ConsumptionLedgerObserver(task_id="t1", pipeline_id="stateful-react-agent",
                                          ledger=ledger)
     text = "营业收入 1,234 万元。"
-    body = _single_fetch(text)
+    payload = json.loads(_single_fetch(text))
+    payload["evidence_ref"] = "ce:observer-test"
+    body = json.dumps(payload, ensure_ascii=False)
 
     await observer.on_tool_result(
         _turn(), ToolResult(name="corpus_search", args={}, result=_search_result(),
@@ -383,7 +385,9 @@ async def test_observer_collects_and_finalizes(tmp_path: Path, monkeypatch) -> N
         _turn(), ToolResult(name="corpus_fetch", args={}, result=body,
                             duration_ms=1, tool_call_id="y", is_error=False),
     )
-    await observer.on_loop_end(AgentLoopResult(messages=_msg(body)))
+    await observer.on_loop_end(AgentLoopResult(messages=[
+        {"role": "tool", "tool_call_id": "y", "content": body}
+    ]))
     assert ledger.offered and ledger.requested and ledger.fetched
     assert ledger.delivered_status(ledger.fetched[0].identity) == DELIVERED
     assert (tmp_path / "corpus" / "ledger.json").exists()

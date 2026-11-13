@@ -122,6 +122,7 @@ from workflows.agent_team.identity import (
 from workflows.agent_team.lifecycle import (
     append_team_wind_down_checkpoint,
     run_with_member_cleanup,
+    snapshot_member_reports,
     wind_down_team,
 )
 from workflows.agent_team.observers.auto_fan_in import AutoFanInObserver
@@ -2070,6 +2071,14 @@ async def main_agent_node(
 
     if main_sb_token is not None:
         clear_task_sandbox(main_sb_token)
+    try:
+        member_reports = snapshot_member_reports(bus, bus_task_id)
+    except Exception:
+        logger.warning(
+            "Could not snapshot member reports for terminal fallback",
+            exc_info=True,
+        )
+        member_reports = []
     if reporter_enabled:
         # The downstream reporter owns final synthesis and its fallback chain.
         # Avoid spending a duplicate coordinator LLM call here; preserve a
@@ -2080,6 +2089,7 @@ async def main_agent_node(
             task_description=question,
             force_refresh=wind_down.requires_resynthesis,
             prefer_collected_reports=wind_down.requires_resynthesis,
+            member_reports=member_reports,
         )
     else:
         hard_remaining_s = (
@@ -2101,9 +2111,10 @@ async def main_agent_node(
                 wind_down.should_refresh_answer(result)
                 and not (delivery_observer.wind_down is not None and result.metadata.get("final_answer"))
             ),
-            prefer_collected_reports=wind_down.collected_count > 0,
+            prefer_collected_reports=(wind_down.collected_count > 0 or bool(member_reports)),
             run_recovery_llm=hard_remaining_s is None or hard_remaining_s > 1.0,
             recovery_trace_path=traj_dir / "main_finalization.jsonl",
+            member_reports=member_reports,
         )
 
     aggregate = bus.drain_task_metadata(bus_task_id)

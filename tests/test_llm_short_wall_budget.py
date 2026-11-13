@@ -87,6 +87,29 @@ async def _run_single_agent(cfg: dict, *, max_retries: int = 5):
     )
 
 
+async def test_stall_without_retry_budget_reports_actual_attempt_count(monkeypatch, caplog):
+    from frontier_agent.core.errors import LLMCallExhausted
+
+    now = [0.0]
+    _patch_clock(monkeypatch, now, remaining=63.0)
+    calls = []
+
+    async def stalled(*args, **kwargs):
+        calls.append(1)
+        now[0] += 45.0
+        raise LLMStreamStalled(45.0, 0, 45.0)
+
+    monkeypatch.setattr(_call, "_stream_llm_response", stalled)
+    with pytest.raises(LLMCallExhausted):
+        await _call.call_llm(
+            SimpleNamespace(model="offline", stream=stalled), [], 600, 5, 3,
+            on_delta=lambda *args: None, first_chunk_s=45.0,
+        )
+    assert len(calls) == 1
+    assert "after 5 retries" not in caplog.text
+    assert "1 physical attempt" in caplog.text
+
+
 # ── Decision boundaries ───────────────────────────────────────────────
 
 

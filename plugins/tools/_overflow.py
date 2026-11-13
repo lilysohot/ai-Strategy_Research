@@ -263,6 +263,7 @@ def truncate_preview(text: str, budget: int, *, tool_name: str = "") -> str:
 # retrieval/delivery results carry locators, evidence units, or opaque cursors;
 # character cutting destroys the protocol rather than merely returning less.
 _STRUCTURED_FITTERS: dict[str, tuple[str, str]] = {
+    "corpus_submit_manifest": ("plugins.corpus.manifest_view", "fit_manifest_payload"),
     "corpus_fetch": ("plugins.tools.corpus_fetch", "fit_structured_payload"),
     "corpus_search": ("plugins.tools.corpus_search", "fit_search_payload"),
     "corpus_semantic_query": (
@@ -289,6 +290,15 @@ def structured_result_fit(tool_name: str, body: str, cap: int) -> str | None:
     except Exception:  # pragma: no cover - result shaping must not fail a tool call
         return None
     return getattr(module, func_name)(body, cap)
+
+
+def result_budget_view(tool_name: str, body: str) -> str:
+    """Measure v2 document display without charging its receipt-only coordinates."""
+    if tool_name == "corpus_fetch":
+        from plugins.corpus.projection import process_document_result
+
+        return process_document_result(body) or body
+    return body
 
 
 def budgeted_preview(

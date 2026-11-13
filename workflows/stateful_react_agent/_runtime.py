@@ -612,7 +612,32 @@ class ReactToolResultPostProcessor(ToolResultPostProcessor):
             if isinstance(tool_result.result, str)
             else str(tool_result.result)
         )
+        from plugins.corpus.projection import navigation_enabled, project_tool_result
+
+        if tool_result.name == "corpus_fetch":
+            from plugins.corpus.projection import process_document_result
+
+            document = process_document_result(content, tool_call_id=tool_result.tool_call_id or "")
+            if document is not None:
+                return document
+
+        # Manifest diagnostics can exceed the generic head cap. Project the
+        # intact JSON first, preserving every conclusion's repair feedback.
+        if tool_result.name == "corpus_submit_manifest" and navigation_enabled():
+            return project_tool_result(
+                tool_result.name, content, tool_call_id=tool_result.tool_call_id or ""
+            )
         if tool_result.is_error:
+            if tool_result.name == "corpus_fetch":
+                budget = self._BUDGETS.get("corpus_fetch", self._BUDGET_DEFAULT)
+                if navigation_enabled():
+                    return project_tool_result(
+                        "corpus_fetch", content, tool_call_id=tool_result.tool_call_id or "",
+                        error_budget=budget,
+                    )
+                from plugins.tools._overflow import structured_result_fit
+
+                return structured_result_fit("corpus_fetch", content, budget) or content
             return content
 
         name = tool_result.name or ""
@@ -636,9 +661,12 @@ class ReactToolResultPostProcessor(ToolResultPostProcessor):
         from plugins.tools._overflow import structured_result_fit
 
         structured = structured_result_fit(name, content, budget)
-        if structured is not None:
-            return structured
-        return self._head_cap(content, budget)
+        visible = structured if structured is not None else self._head_cap(content, budget)
+        # Model-visible projection happens only here, after the protocol budget
+        # fitter. Observers at on_tool_result still see the complete result.
+        return project_tool_result(
+            name, visible, tool_call_id=tool_result.tool_call_id or ""
+        )
 
     def _head_cap(self, content: str, budget: int) -> str:
         if len(content) <= budget + len(self._ELLIPSIS):

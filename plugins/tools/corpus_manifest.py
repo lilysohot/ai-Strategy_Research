@@ -28,6 +28,8 @@ from __future__ import annotations
 
 import json
 import logging
+import re
+from difflib import SequenceMatcher
 from typing import Any, Literal
 
 from frontier_agent.core.execution_context import get_current_execution_scope
@@ -88,11 +90,17 @@ MANIFEST_PROMPT_NOTE = (
     "本轮未检索或引用语料、仅使用行情或业务资料时，无需调用此工具，也不要提交空清单；"
     "语料校验将标记为 not_applicable，行情回执用于 submit_watch_intents 的 evidence_refs。\n"
     "你绑定了 `corpus_submit_manifest`。在产出基于语料库结论的报告或最终回复之前：\n"
+    "本注只规定清单提交义务。交付内容若只有身份值（本轮实际检索到的 filename／"
+    "document_title／已知发布日期），则没有清单提交义务，其**交付形状**由运行时的"
+    "最终交付检查规定，此处不重复；一旦答案含正文判断或其余来源内容，仍按下述正文证据"
+    "契约提交。\n"
     "1. 把每条基于语料的结论登记进清单：结论 id、`report_quote`（该结论在最终报告"
     "中的逐字锚点）、证据与必要依赖。证据优先只填 `evidence_ref`（search 的 excerpts.ref "
     "或 fetch 的 evidence_ref），系统补齐原文、文档及区间，不要重写引文。"
-    "兼容旧 doc_id/locator/quote；依赖可附 purpose"
-    "（period/unit/header/footnote 用途）；\n"
+    "导航协议禁止重建内部坐标；只有兼容结果未提供 evidence_ref 时，才原样使用其"
+    "已返回的 doc_id/locator/quote；证据的 purpose 是依赖作用（可省略），"
+    "仅允许 value/period/unit/header/footnote/condition/negation/attribution，"
+    "不要在证据 purpose 填 cite/compare/calculate；\n"
     "2. 按工具返回的逐条问题修正：补取原文（corpus_fetch）、修改表述或移除结论，"
     "分批提交用 submission_mode=upsert（每条必须有稳定 id），全量替换用 replace；"
     "以 active_conclusion_ids 确认当前完整清单，勿把分批提交误当全量替换；\n"
@@ -128,13 +136,13 @@ def _validate_conclusions(conclusions: Any) -> list[str]:
             if not isinstance(semantic, list) or not semantic:
                 errors.append(f"{label}.semantic_references 必须为非空数组")
             else:
-                for item in semantic:
+                for semantic_index, item in enumerate(semantic):
                     try:
                         ref = ReportSemanticReference.model_validate(item)
                         if ref.report_quote != row.get("report_quote"):
                             errors.append(f"{label} 语义引用 report_quote 不一致")
                     except ValueError as exc:
-                        errors.append(f"{label} 语义引用无效: {exc}")
+                        errors.append(f"{label}.semantic_references[{semantic_index}] 语义引用无效: {exc}")
         if evidence is None and semantic is not None:
             evidence = []
         if not isinstance(evidence, list) or (not evidence and semantic is None):
@@ -178,7 +186,10 @@ def _expand_evidence_references(conclusions: Any) -> Any:
                 evidence.append(item)
                 continue
             if set(item) - {"evidence_ref", "purpose"}:
-                raise ValueError("evidence_ref 仅可附 purpose；doc_id/locator/quote/区间由系统填写")
+                raise ValueError(
+                    f"conclusions[{row_index}].evidence[{evidence_index}].evidence_ref "
+                    "仅可附 purpose；doc_id/locator/quote/区间由系统填写"
+                )
             try:
                 resolved = resolve_evidence_reference(item["evidence_ref"])
             except (ValueError, TypeError) as exc:
@@ -197,12 +208,12 @@ def _expand_semantic_references(conclusions: Any) -> Any:
     if not isinstance(conclusions, list):
         return conclusions
     rows = []
-    for row in conclusions:
+    for row_index, row in enumerate(conclusions):
         if not isinstance(row, dict) or not isinstance(row.get("semantic_references"), list):
             rows.append(row)
             continue
         references = []
-        for item in row["semantic_references"]:
+        for semantic_index, item in enumerate(row["semantic_references"]):
             if not isinstance(item, dict) or set(item) != {"publication_id", "record_id", "purpose"}:
                 references.append(item)
                 continue
@@ -210,7 +221,10 @@ def _expand_semantic_references(conclusions: Any) -> Any:
                 item["publication_id"], item["record_id"],
             )
             if not observations:
-                raise ValueError("所选语义记录未由本运行的真实查询返回")
+                raise ValueError(
+                    f"conclusions[{row_index}].semantic_references[{semantic_index}] "
+                    "所选语义记录未由本运行的真实查询返回"
+                )
             record = next(r for r in observations[0].page.records if r.record_id == item["record_id"])
             ref = reference_for_record(
                 item["publication_id"], record, item["purpose"],
@@ -260,40 +274,216 @@ def _prepared_conclusions(conclusions: Any) -> list[dict[str, Any]]:
     return numbered
 
 
+def _verbatim_prefix_len(anchor: str, content: str) -> int:
+    """Longest leading slice of the quote that appears verbatim in content."""
+    for size in range(len(anchor), 0, -1):
+        if anchor[:size] in content:
+            return size
+    return 0
+
+
 def _verbatim_prefix(anchor: str, content: str, limit: int = 40) -> str:
     """Deterministic repair hint: how much of the quote appears verbatim in content."""
-    size = min(len(anchor), limit)
-    while size > 0 and anchor[:size] not in content:
-        size -= 1
+    size = _verbatim_prefix_len(anchor, content)
     if size == 0:
         return "content 中没有任何逐字前缀"
-    return f"content 中仅有前 {size} 字逐字一致：{anchor[:size]}"
+    shown = min(size, limit)
+    return f"content 中仅有前 {shown} 字逐字一致：{anchor[:shown]}"
+
+
+def _bold_view(text: str) -> tuple[str, list[tuple[int, int]]]:
+    """Remove paired strong markers with offsets; leave code and all words intact."""
+    chars = list(text)
+    spans = [(index, index + 1) for index in range(len(text))]
+    removed: set[int] = set()
+    offset = 0
+    fenced = False
+    for line in text.splitlines(keepends=True):
+        if line.lstrip().startswith(("```", "~~~")):
+            fenced = not fenced
+        if not fenced and "`" not in line:
+            for match in re.finditer(r"(?<![\\*])\*\*(?=\S)([^*\n]*?\S)\*\*(?!\*)", line):
+                start, end = offset + match.start(), offset + match.end()
+                removed.update((start, start + 1, end - 2, end - 1))
+                spans[start + 2] = (start, spans[start + 2][1])
+                spans[end - 3] = (spans[end - 3][0], end)
+        offset += len(line)
+    return (
+        "".join(char for index, char in enumerate(chars) if index not in removed),
+        [span for index, span in enumerate(spans) if index not in removed],
+    )
+
+
+def _bind_formatting_anchor(anchor: str, content: str) -> str | None:
+    """Only a unique formatting-only match may bind to exact final-body bytes."""
+    for view in (_bold_view, _bold_layout_view):
+        plain, offsets = view(content)
+        quote, _ = view(anchor)
+        bound = _unique_slice(plain, quote, content, offsets)
+        if bound is not None:
+            return bound
+    return None
+
+
+def _unique_slice(
+    plain: str, quote: str, content: str, offsets: list[tuple[int, int]],
+) -> str | None:
+    if not quote.strip():
+        return None
+    start = plain.find(quote)
+    if start < 0 or plain.find(quote, start + 1) >= 0:
+        return None
+    end = start + len(quote)
+    # Do not create a new match inside a word/number (e.g. 超过 inside 不超过).
+    if (start and plain[start - 1].isalnum() and quote[0].isalnum()) or (
+        end < len(plain) and plain[end].isalnum() and quote[-1].isalnum()
+    ):
+        return None
+    return content[offsets[start][0]:offsets[start + len(quote) - 1][1]]
+
+
+#: Width-only equivalences that never change wording: full-width punctuation and
+#: spaces. Typing a quote from a draft that used 「，」 where the body uses 「,」 is
+#: a formatting difference, not a semantic one, so a UNIQUE match may bind.
+_WIDTH_FOLD = str.maketrans({
+    "，": ",", "。": ".", "：": ":", "；": ";", "！": "!", "？": "?",
+    "（": "(", "）": ")", "「": '"', "」": '"', "“": '"', "”": '"',
+    "‘": "'", "’": "'", "、": ",", "\u3000": " ", "\u00a0": " ",
+    # Invisible formatting characters: dropping them changes no wording.
+    "\u00ad": "", "\u200b": "", "\u200c": "", "\u200d": "", "\ufeff": "",
+})
+
+
+#: Characters whose neighbouring spaces are purely cosmetic (CJK text and
+#: punctuation do not use them for word separation).
+_SPACE_INSENSITIVE = frozenset(",.:;!?()[]{}\"'<>/\\|-–—·、")
+
+
+def _cosmetic_neighbour(char: str) -> bool:
+    return not char or char in _SPACE_INSENSITIVE or ord(char) > 0x2E80
+
+
+def _layout_view(text: str) -> tuple[str, list[tuple[int, int]]]:
+    """Collapse whitespace runs and fold character width, keeping offsets."""
+    folded = [(index, char.translate(_WIDTH_FOLD)) for index, char in enumerate(text)]
+    folded = [(index, char) for index, char in folded if char]
+    out: list[str] = []
+    offsets: list[tuple[int, int]] = []
+    for position, (index, char) in enumerate(folded):
+        if char.isspace():
+            following = folded[position + 1][1] if position + 1 < len(folded) else ""
+            # A space between CJK/punctuation neighbours is a layout artifact:
+            # dropping it folds 「提出： 在轨」 and 「提出:在轨」 to the same view.
+            if not out or out[-1] == " " or _cosmetic_neighbour(out[-1]) or _cosmetic_neighbour(following):
+                continue
+            char = " "
+        out.append(char)
+        offsets.append((index, index + 1))
+    return "".join(out), offsets
+
+
+def _bold_layout_view(text: str) -> tuple[str, list[tuple[int, int]]]:
+    """Strong markers removed AND layout folded; offsets still index ``text``."""
+    plain, spans = _bold_view(text)
+    folded, offsets = _layout_view(plain)
+    return folded, [(spans[start][0], spans[end - 1][1]) for start, end in offsets]
+
+
+def _anchor_repair_candidate(anchor: str, content: str, budget: int) -> tuple[str, float]:
+    """Closest exact line and its similarity; a binding is never taken from it."""
+    if not anchor or budget <= 0:
+        return "", 0.0
+    quote = _bold_view(anchor)[0]
+    lines = [line for line in content.splitlines() if line.strip() and len(line) <= min(600, budget)]
+    scored = [(SequenceMatcher(None, quote, _bold_view(line)[0], autojunk=False).ratio(), line)
+              for line in lines]
+    if not scored:
+        return "", 0.0
+    score, line = max(scored, key=lambda item: item[0])
+    return line, score
+
+
+class ManifestAnchorError(ValueError):
+    """Anchor binding failed, with per-conclusion detail the caller can act on.
+
+    Carries enough machine-readable information (ids, first-difference offsets and
+    exact body candidates) that a retry can fix the anchor list without
+    regenerating the whole answer. ``content_sha256`` pins the body the caller
+    already settled on.
+    """
+
+    def __init__(self, issues: list[dict[str, Any]], content_sha256: str) -> None:
+        self.issues = issues
+        self.content_sha256 = content_sha256
+        super().__init__(json.dumps({"issues": issues, "content_sha256": content_sha256},
+                                    ensure_ascii=False))
+
+
+def _first_difference(anchor: str, candidate: str) -> dict[str, Any]:
+    """Where the submitted quote and the body candidate stop agreeing."""
+    limit = min(len(anchor), len(candidate))
+    index = next((i for i in range(limit) if anchor[i] != candidate[i]), limit)
+    return {
+        "offset": index,
+        "submitted": anchor[index:index + 1],
+        "candidate": candidate[index:index + 1],
+    }
 
 
 def prepare_final_manifest(conclusions: Any, content: str) -> dict[str, Any]:
     """Bind coordinator claims to the exact body accepted in the same delivery call."""
     import hashlib
 
+    content_sha256 = hashlib.sha256(content.encode()).hexdigest()
+    # Canonicalize only report formatting before expanding semantic references,
+    # so generated references bind to the same exact final-body substring.
+    if isinstance(conclusions, list):
+        conclusions = [dict(row) if isinstance(row, dict) else row for row in conclusions]
+        for row in conclusions:
+            if not isinstance(row, dict):
+                continue
+            anchor = row.get("report_quote")
+            if isinstance(anchor, str) and anchor.strip() and anchor not in content:
+                bound = _bind_formatting_anchor(anchor, content)
+                if bound is not None:
+                    row["report_quote"] = bound
     rows = _prepared_conclusions(conclusions) if conclusions != [] else []
-    errors = []
+    issues: list[dict[str, Any]] = []
+    candidate_budget = 2_000
     for index, row in enumerate(rows):
         anchor = row.get("report_quote")
         if isinstance(anchor, str) and anchor.strip() and anchor in content:
             continue
-        hint = _verbatim_prefix(anchor, content) if isinstance(anchor, str) and anchor else (
-            "report_quote 为空"
-        )
-        errors.append(
-            f"corpus_conclusions[{index}] (id={row.get('id')}) report_quote 必须逐字来自本次 "
-            f"content；{hint}。请从 content 复制原句，或删除该结论"
-        )
-    if errors:
-        raise ValueError("; ".join(errors))
+        issue: dict[str, Any] = {
+            "index": index,
+            "id": row.get("id"),
+            "reason": "empty_report_quote"
+            if not isinstance(anchor, str) or not anchor.strip()
+            else "no_verbatim_match",
+        }
+        if isinstance(anchor, str) and anchor.strip():
+            issue["first_mismatch_offset"] = _verbatim_prefix_len(anchor, content)
+            issue["verbatim_prefix"] = _verbatim_prefix(anchor, content)
+            line, score = _anchor_repair_candidate(anchor, content, candidate_budget)
+            if line:
+                issue["nearest_line"] = line
+                issue["nearest_line_offset"] = content.find(line)
+                issue["similarity"] = round(score, 3)
+            if line and score >= 0.5:
+                # High enough to quote back as the real body line; still never
+                # auto-bound, because the wording itself may differ.
+                candidate_budget -= len(line)
+                issue["candidate"] = line
+                issue["candidate_offset"] = content.find(line)
+                issue["first_mismatch"] = _first_difference(anchor, line)
+        issues.append(issue)
+    if issues:
+        raise ManifestAnchorError(issues, content_sha256)
     return {
         "schema_version": MANIFEST_SCHEMA_VERSION,
         "report_target": "final_answer",
         "report_binding": {"kind": "inline", "text": content,
-                           "sha256": hashlib.sha256(content.encode()).hexdigest()},
+                           "sha256": content_sha256},
         "conclusions": rows,
     }
 
@@ -326,7 +516,8 @@ async def corpus_submit_manifest(
             缺省，边界校验时必须能定位）、``evidence``（非空数组，每项
             优先只填 ``evidence_ref``（search 的 excerpts.ref 或 fetch 的 evidence_ref），
             系统自动绑定文档、块、字符区间和逐字原文，不要再抄写或整理原文。
-            也兼容 ``doc_id``／``locator``／``quote``（权威原文逐字片段）。可选
+            仅兼容结果无引用句柄时，才复制已返回的 ``doc_id``／``locator``／``quote``。
+            导航模式不要求且不得重建隐藏坐标。可选
             ``purpose``：value|period|unit|header|footnote|condition|negation|attribution）、
             ``required_dependencies``（可选，结论成立必需的用途列表，须与某条
             证据的 purpose 对应）。语义查询证据可改用 ``semantic_references``
@@ -336,7 +527,7 @@ async def corpus_submit_manifest(
             引用，但状态字段不被信任，精确范围/依赖/送达/版本均由后台重算。
 
     Returns:
-        JSON：``ok``、``manifest_file``（落盘路径，无 run 目录为 null）、
+        JSON：``ok``、``active_conclusion_ids``（当前清单结论编号）、
         ``publish_status``（supported/partial/unsupported 计数汇总）、
         ``conclusions``（逐条状态与问题，pending=新取片段待下一轮边界核验）、
         ``hint``（修正指引）；schema 不合法时 ``ok=false`` 且 ``errors`` 逐条列出。
@@ -371,7 +562,8 @@ async def corpus_submit_manifest(
         try:
             report_text, binding = read_report(report_path)
         except (OSError, ValueError) as exc:
-            return json.dumps({"ok": False, "errors": [str(exc)]}, ensure_ascii=False)
+            return json.dumps({"ok": False, "error_kind": "report_binding", "errors": [str(exc)]},
+                              ensure_ascii=False)
     owner = _current_owner()
     if submission_mode == "upsert":
         if not owner:
@@ -425,6 +617,7 @@ async def corpus_submit_manifest(
             "id": row.get("id"),
             "status": row.get("status"),
             "delivery": row.get("delivery"),
+            "missing_dependencies": row.get("missing_dependencies", []),
             # Original text already lives in receipts and the persisted verification;
             # repeated submissions must not replay entire source pages into context.
             "matched_evidence": [
