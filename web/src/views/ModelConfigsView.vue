@@ -184,15 +184,29 @@ async function onSetDefault(row: LlmConfig) {
 // ── Connectivity preflight ───────────────────────────────────────
 const testingId = ref<string | null>(null)
 
+function verifyError(row: LlmConfig): string {
+  const detail = row.params?._last_verify_error
+  return typeof detail === 'string' && detail ? detail : '未记录详细原因，请重新预检。'
+}
+
+async function showVerifyError(row: LlmConfig) {
+  await ElMessageBox.alert(verifyError(row), `「${row.name}」预检未通过`, {
+    confirmButtonText: '知道了',
+    type: 'warning',
+  }).catch(() => {})
+}
+
 async function onTest(row: LlmConfig) {
   testingId.value = row.id
   try {
     const res = await modelsApi.test(row.id)
+    row.last_verify_ok = res.ok
+    row.params = { ...row.params, _last_verify_error: res.ok ? '' : res.detail }
     if (res.ok) {
-      ElMessage.success(`连通性正常：${res.detail}`)
+      ElMessage.success(res.detail)
     } else {
       // backend detail is a key-free summary by contract
-      ElMessage.warning(`预检未通过：${res.detail}`)
+      await showVerifyError(row)
     }
   } catch (err) {
     const msg = err instanceof ApiError ? err.message : '预检请求失败'
@@ -227,10 +241,15 @@ async function onTest(row: LlmConfig) {
             <code class="masked">{{ row.masked_api_key }}</code>
           </template>
         </el-table-column>
-        <el-table-column label="连通性" min-width="90" align="center">
+        <el-table-column label="预检结果" min-width="130" align="center">
           <template #default="{ row }">
             <el-tag v-if="row.last_verify_ok === true" size="small" type="success">已验证</el-tag>
-            <el-tag v-else-if="row.last_verify_ok === false" size="small" type="danger">失败</el-tag>
+            <template v-else-if="row.last_verify_ok === false">
+              <el-tag size="small" type="danger">失败</el-tag>
+              <el-button size="small" text type="danger" @click="showVerifyError(row)">
+                查看原因
+              </el-button>
+            </template>
             <span v-else>—</span>
           </template>
         </el-table-column>
@@ -253,6 +272,7 @@ async function onTest(row: LlmConfig) {
           </template>
         </el-table-column>
       </el-table>
+      <p class="models__probe-note">预检会发起一次少量 Token 的模型调用，可能产生少量费用。</p>
     </el-card>
 
     <el-dialog
@@ -325,5 +345,10 @@ async function onTest(row: LlmConfig) {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 12px;
   color: var(--el-text-color-secondary);
+}
+
+.models__probe-note {
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
 }
 </style>
