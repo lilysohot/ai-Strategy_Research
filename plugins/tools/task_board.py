@@ -33,13 +33,6 @@ from plugins.tools._task_board_contract import BoardAdd, BoardUpdate
 
 logger = logging.getLogger(__name__)
 
-_VERIFICATION_TASK = re.compile(
-    r"^\s*(?:核验|验证|复核|交叉核验|交叉验证|终审)"
-    r"|(?:最终|终审|独立|交叉|全面|全部|所有).{0,12}(?:核验|验证|复核)"
-    r"|^\s*(?:verify|validate|audit|cross[- ]?check)\b",
-    re.IGNORECASE,
-)
-
 # task_id -> {"seq": int, "tasks": {id: {description, resolution, owners, group}}}
 _BOARDS: dict[str, dict[str, Any]] = {}
 
@@ -96,12 +89,30 @@ def board_transaction(task_id: str) -> Iterator[None]:
         raise
 
 
-def _verification_required(item: dict[str, Any], description: str) -> bool:
-    """Recognize explicit verification gates; ordinary research stays unchanged."""
+def verification_required(item: dict[str, Any]) -> bool:
+    """True only when the task explicitly registers a check.
+
+    A task name, a ``kind`` label or a member's own recomputation never creates
+    an independent verification requirement; only the requirement registered
+    when the work item was created (or adopted in an update) does. This keeps
+    ordinary analysis deliverable with ``verification=not_assessed`` and keeps
+    optional external review from silently becoming mandatory.
+    """
     return (
         item.get("verification_required") is True
         or bool(coerce_json_list(item.get("verification_requirements")))
-        or bool(_VERIFICATION_TASK.search(description))
+    )
+
+
+def task_claims_completion(task: dict[str, Any], resolution: str) -> bool:
+    """Whether a final disposition claims this work item is done.
+
+    ``cancelled`` on a required item still claims completion: retracting it
+    after dispatch must not hide an incomplete member job. Delivery uses this
+    single predicate instead of maintaining its own completion rule.
+    """
+    return resolution == "resolved" or (
+        resolution == "cancelled" and task_is_required(task)
     )
 
 
@@ -130,9 +141,9 @@ def _verification_requirements(
             continue
         seen.add(check_id)
         out.append({"check_id": check_id, "criterion": criterion[:2000]})
-    # Auto-recognized verification tasks still become durable plan entries.
-    # If the model never dispatches this identity, finalization reports it as a
-    # missing check instead of forgetting the intent entirely.
+    # An explicitly required gate gets a durable default check. If the model
+    # never dispatches this identity, finalization reports it as a missing
+    # check instead of forgetting the registered intent.
     return out or [{"check_id": f"{task_id}.required", "criterion": description[:2000]}]
 
 
@@ -151,14 +162,15 @@ def _planned_check_update(
     tasks: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Validate one authoritative definition before changing any task fields."""
-    if task.get("execution_job_ids") and "done_when" in item:
+    frozen_definition = _dispatched(task) or bool(child_task_ids(scope.task_id, tid))
+    if frozen_definition and "done_when" in item:
         proposed_criterion = _progress_fields(item).get("done_when", "")
         if proposed_criterion != task.get("done_when", ""):
             raise ValueError(
                 "dispatched done_when is immutable; record progress in notes, "
                 "unmet requirements in gap, and optional boundaries in limitations"
             )
-    if not _verification_required(item, str(task.get("description") or "")):
+    if not verification_required(item):
         return {}
     proposed = (
         _verification_requirements(
@@ -180,13 +192,18 @@ def _planned_check_update(
     )
     if proposed != task.get("verification_requirements"):
         bus = registry.get_optional(AgentBus)
-        if bus and any(
-            check.get("work_item_id") == tid
-            for entry in bus.list_task_jobs(resolve_bus_task_id(scope))
-            for check in entry.item.metadata.get("verification_checks", [])
-        ):
+        dispatched_checks = bool(
+            bus
+            and any(
+                check.get("work_item_id") == tid
+                for entry in bus.list_task_jobs(resolve_bus_task_id(scope))
+                for check in entry.item.metadata.get("verification_checks", [])
+            )
+        )
+        if dispatched_checks or frozen_definition:
             raise ValueError(
-                "dispatched verification requirements are immutable; recheck the same IDs"
+                "registered verification requirements are immutable after dispatch "
+                "(including a parent whose segments were dispatched); recheck the same IDs"
             )
     occupied = {
         check["check_id"]
@@ -321,6 +338,11 @@ def restore_board_from_messages(
         if isinstance(message, dict) and message.get("role") == "tool"
     }
 
+    # Uncommitted dispositions from a repairable deliver_answer failure. The
+    # accepted retry submits only the rejected fields, so replay must merge the
+    # candidate it replaced instead of reading the last delta alone.
+    pending_delivery: dict[str, dict[str, Any]] = {}
+
     def arguments(call: Any) -> tuple[str, dict[str, Any] | None]:
         if not isinstance(call, dict):
             return "", None
@@ -370,7 +392,7 @@ def restore_board_from_messages(
                         ):
                             apply_required_flag(board["tasks"][tid], item)
                         board["tasks"][tid].update(_progress_fields(item))
-                        required = _verification_required(item, description)
+                        required = verification_required(item)
                         if required:
                             board["tasks"][tid]["verification_required"] = True
                             if item.get("verification_requirements") is not None:
@@ -385,13 +407,14 @@ def restore_board_from_messages(
                         continue
                     board["seq"] += 1
                     tid = f"t{board['seq']}"
-                    required = _verification_required(item, description)
+                    required = verification_required(item)
                     board["tasks"][tid] = {
                         **_progress_fields(item),
                         "description": description,
                         "resolution": "open",
                         "owners": _as_owner_list(item.get("owner") or item.get("owners")),
                         "group": str(item.get("group") or "").strip(),
+                        "parent_id": str(item.get("parent_id") or "").strip(),
                         "verification_required": required,
                         "verification_requirements": _verification_requirements(
                             item,
@@ -408,13 +431,27 @@ def restore_board_from_messages(
                     existing[description] = tid
             elif name in {"update_task", "deliver_answer"}:
                 receipt = receipts.get(str(call.get("id")))
-                if (
-                    name == "deliver_answer"
-                    and receipt != "Final answer and task dispositions accepted."
-                ):
-                    # Atomic submission applies only after its positive receipt;
-                    # failed or interrupted submissions must not alter replay.
-                    continue
+                if name == "deliver_answer":
+                    submitted = coerce_json_list(args.get("updates")) or []
+                    if receipt == "Final answer and task dispositions accepted.":
+                        merged = dict(pending_delivery)
+                        for raw in submitted:
+                            update = coerce_json_object(raw)
+                            if update is not None and str(update.get("id") or ""):
+                                merged[str(update["id"])] = update
+                        pending_delivery.clear()
+                        args = {**args, "updates": list(merged.values())}
+                    elif isinstance(receipt, str) and re.search(r"candidate v\d+", receipt):
+                        # A repairable failure kept these dispositions as the
+                        # candidate that the accepted retry merges onto.
+                        for raw in submitted:
+                            update = coerce_json_object(raw)
+                            if update is not None and str(update.get("id") or ""):
+                                pending_delivery[str(update["id"])] = update
+                        continue
+                    else:
+                        # Failed or interrupted submissions must not alter replay.
+                        continue
                 accepted: set[str] | None = None
                 progress_ids: set[str] = set()
                 actual_resolutions: dict[str, str] = {}
@@ -539,6 +576,8 @@ def serialize_tasks(task_id: str, ids: list[str]) -> list[dict[str, Any]]:
             "owners": list(t.get("owners") or []),
             "group": t.get("group", ""),
         }
+        if t.get("parent_id"):
+            serialized["parent_id"] = t["parent_id"]
         if not task_is_required(t):
             serialized["required_for_completion"] = False
         if t.get("execution_job_ids"):
@@ -548,6 +587,10 @@ def serialize_tasks(task_id: str, ids: list[str]) -> list[dict[str, Any]]:
             serialized["verification_requirements"] = [
                 dict(item) for item in t.get("verification_requirements") or []
             ]
+            if t.get("verification_estimate_s"):
+                serialized["verification_estimate_s"] = t["verification_estimate_s"]
+            if t.get("verification_admission"):
+                serialized["verification_admission"] = dict(t["verification_admission"])
             bus = registry.get_optional(AgentBus)
             scope = get_current_execution_scope()
             bus_task_id = (
@@ -688,6 +731,82 @@ def unresolved_task_ids(task_id: str) -> list[str]:
         for tid, t in b["tasks"].items()
         if not t.get("archived") and t.get("resolution") not in ("resolved", "cancelled", "blocked")
     ]
+
+
+def child_task_ids(task_id: str, parent_id: str) -> list[str]:
+    """Direct execution segments recorded for a parent work item."""
+    b = _BOARDS.get(task_id)
+    if not b:
+        return []
+    return [
+        tid
+        for tid, t in b["tasks"].items()
+        if not t.get("archived") and t.get("parent_id") == parent_id
+    ]
+
+
+def record_verification_admission(
+    task_id: str,
+    work_item_ids: Iterable[str],
+    *,
+    check_ids: Iterable[str],
+    status: str,
+    reason: str,
+    remaining_s: float | None = None,
+    required_s: float | None = None,
+) -> None:
+    """Record a terminal admission decision on the board.
+
+    A denied check was never dispatched, so it is not a job that can time out.
+    It stays an unresolved required check and delivery must disclose the
+    limitation; replaying a denial as progress would fabricate evidence.
+    """
+    board = _BOARDS.get(task_id)
+    if not board:
+        return
+    checks = [str(check_id) for check_id in check_ids if str(check_id)]
+    changed: list[str] = []
+    for tid in work_item_ids:
+        task = board["tasks"].get(tid)
+        if task is None:
+            continue
+        records = dict(task.get("verification_admission") or {})
+        for check_id in checks:
+            records[check_id] = {
+                "status": status,
+                "reason": reason,
+                "remaining_s": None if remaining_s is None else round(float(remaining_s), 1),
+                "required_s": None if required_s is None else round(float(required_s), 1),
+            }
+        task["verification_admission"] = records
+        changed.append(tid)
+    if changed:
+        _record_op(task_id, "update", changed)
+
+
+def _verification_capacity_notice(
+    scope: Any, board: dict[str, Any], ids: list[str]
+) -> str:
+    """Warn at registration when the plan cannot fit the verification window."""
+    phase_budget = getattr((scope.metadata or {}).get(SWARM_SCOPE_KEY), "phase_budget", None)
+    if phase_budget is None:
+        return ""
+    total = sum(
+        float(board["tasks"][tid].get("verification_estimate_s") or 0)
+        for tid in ids
+        if board["tasks"][tid].get("verification_required")
+    )
+    if total <= 0:
+        return ""
+    remaining = phase_budget.remaining_for_job(can_publish=False, is_verification=True)
+    if remaining is None or total <= remaining:
+        return ""
+    return (
+        f"Note: registered verification is estimated at {total:.0f}s but only "
+        f"{max(0.0, remaining):.0f}s remain in the verification window. Split each "
+        "check by claim (or bind only the evidence its subject cites) so it can "
+        "finish; otherwise it is recorded unchecked at delivery."
+    )
 
 
 def complete_delivery_tasks(task_id: str) -> None:
@@ -833,6 +952,10 @@ async def add_task(tasks: list[BoardAdd]) -> str:
               These are model-declared pointers, not proof of successful verification.
             - kind: research | verification | delivery. Keep delivery separate from research.
             - done_when: finite acceptance criterion tied to the user's question.
+            - parent_id (OPTIONAL): id of the work item this one segments. Use it when
+              several members must cover parts of one original goal: the parent keeps
+              the original done_when and is never dispatched, each segment is its own
+              work item with its own done_when.
             - required_for_completion (OPTIONAL): default true. Set false ONLY for
               an enhancement you added that the user did not ask for. Such an item
               may stay cancelled/unfinished without downgrading the answer, and it
@@ -842,9 +965,10 @@ async def add_task(tasks: list[BoardAdd]) -> str:
               already assigned to this item, name it here (a name, comma-string,
               or list — a task may have many). In a solo run, just OMIT it.
             - verification_required (OPTIONAL): set true when completion means an
-              independent, version-bound check. Tasks explicitly beginning with
-              Verify/核验/验证/复核 are treated this way automatically. Such an item
-              cannot resolve until its required verification_checks pass.
+              independent, version-bound check. A task name or kind alone never
+              creates this requirement; only this flag or explicit
+              verification_requirements does. Such an item cannot resolve until
+              its required verification_checks pass.
             - verification_requirements (OPTIONAL): stable planned checks as
               ``[{"check_id": "amount", "criterion": "Recompute total"}]``.
               Dispatch verification_checks with the same ids. An auto-recognized
@@ -899,29 +1023,61 @@ async def add_task(tasks: list[BoardAdd]) -> str:
             new_ids.append(tid)
             reused_ids.append(tid)
             continue
+        parent_id = str(it.get("parent_id") or "").strip()
+        if parent_id:
+            parent = b["tasks"].get(parent_id)
+            if parent is None:
+                return (
+                    f"Error: {desc}: parent_id {parent_id} does not exist — add the "
+                    "parent work item before its segments."
+                )
+            if parent.get("parent_id"):
+                return (
+                    f"Error: {parent_id} is itself a segment of {parent['parent_id']}; "
+                    "segments nest one level only."
+                )
+            if parent.get("execution_job_ids"):
+                return (
+                    f"Error: {parent_id} was already dispatched; a dispatched work item "
+                    "cannot be split. Add the segments before dispatch."
+                )
+            if parent.get("resolution") in TERMINAL_RESOLUTIONS:
+                return f"Error: {parent_id} is already {parent['resolution']}; add a new work item."
         tid = f"t{b['seq'] + 1}"
         try:
             _planned_check_update(scope, tid, {"description": desc}, it, tasks=b["tasks"])
         except ValueError as exc:
             return f"Error: {tid}: {exc}"
         b["seq"] += 1
-        required = _verification_required(it, desc)
+        required = verification_required(it)
+        requirements = _verification_requirements(
+            it,
+            task_id=tid,
+            description=desc,
+            required=required,
+        )
+        estimate = 0.0
+        if required:
+            from plugins.tools._verification import verification_cost_estimate
+
+            runtime = (scope.metadata or {}).get(SWARM_SCOPE_KEY)
+            estimate = verification_cost_estimate(
+                first_chunk_timeout_s=getattr(runtime, "first_chunk_timeout_s", 45),
+                checks=len(requirements),
+            )
         b["tasks"][tid] = {
             **_progress_fields(it),
             "description": desc,
             "resolution": "open",
             "owners": _as_owner_list(it.get("owner") or it.get("owners")),
             "group": str(it.get("group", "")).strip(),
+            "parent_id": parent_id,
             # Absent means required. An optional item is self-added enrichment:
             # it may stay unfinished without downgrading the requested result.
             "required_for_completion": it.get("required_for_completion") is not False,
             "verification_required": required,
-            "verification_requirements": _verification_requirements(
-                it,
-                task_id=tid,
-                description=desc,
-                required=required,
-            ),
+            "verification_requirements": requirements,
+            "verification_estimate_s": estimate,
         }
         existing[desc] = tid
         new_ids.append(tid)
@@ -945,6 +1101,9 @@ async def add_task(tasks: list[BoardAdd]) -> str:
     _BOARDS[scope.task_id] = b
     _record_op(scope.task_id, "add", new_ids)
     msg = f"Added {new_ids}.\n{render_board(scope.task_id, bus_task_id=resolve_bus_task_id(scope))}"
+    capacity = _verification_capacity_notice(scope, b, new_ids)
+    if capacity:
+        msg += "\n" + capacity
     if reused_ids:
         msg += f"\nReused existing IDs {reused_ids}; no duplicate tasks created for these items."
     if skipped:
@@ -1013,6 +1172,8 @@ async def update_task(updates: list[BoardUpdate]) -> str:
             - done_when: finite completion criterion for this user question.
             - verification_requirements: planned check IDs and criteria. May be
               updated before dispatch; dispatched definitions are immutable.
+              Registering them makes this item's check required; a task name or
+              kind alone does not, and cannot later remove it.
             - resolution='blocked': stop work with an explicit notes and gap.
               Allows partial delivery, never marks missing checks as passed.
             - required_for_completion: may only change BEFORE dispatch. Use false
@@ -1035,6 +1196,20 @@ async def update_task(updates: list[BoardUpdate]) -> str:
     b = _BOARDS.get(scope.task_id)
     if not b:
         return "Error: no task board yet — call add_task first."
+    # Resolve this batch as a whole: a parent may be listed before its segments,
+    # and failing on input order would cost the coordinator another full round.
+    batch_resolution: dict[str, str] = {}
+    for raw in items:
+        proposed = (
+            raw.model_dump(exclude_unset=True)
+            if isinstance(raw, BoardUpdate)
+            else coerce_json_object(raw)
+        )
+        if isinstance(proposed, dict):
+            pid = str(proposed.get("id") or "")
+            pres = str(proposed.get("resolution") or "").strip()
+            if pid and pres:
+                batch_resolution[pid] = pres
     changed: list[str] = []
     progress_only: list[str] = []
     errors: list[str] = []
@@ -1065,6 +1240,33 @@ async def update_task(updates: list[BoardUpdate]) -> str:
         if frozen:
             errors.append(frozen)
             continue
+        segments = child_task_ids(scope.task_id, tid)
+        if segments and res == "cancelled":
+            errors.append(
+                f"{tid}: 已拆分为执行子项 {segments}，父项代表原始目标，不能取消；"
+                "请按子项结果汇总为 resolved，或在仍有必需缺口时设 blocked 并填写 gap"
+            )
+            continue
+        if segments and res == "resolved":
+            unfinished = [
+                sid
+                for sid in segments
+                if task_is_required(b["tasks"][sid])
+                and batch_resolution.get(sid, b["tasks"][sid].get("resolution")) != "resolved"
+            ]
+            if unfinished:
+                errors.append(
+                    f"{tid}: 必需子项 {unfinished} 尚未 resolved；子项标记完成不等于父项满足。"
+                    "请先补齐子项，或将父项设 blocked 并写明缺口"
+                )
+                continue
+            basis = str(progress.get("notes") or t.get("notes") or "").strip()
+            if not any(sid in basis for sid in segments):
+                errors.append(
+                    f"{tid}: 汇总父项须在 notes 中指出承接原始要求的具体子项结果"
+                    f"（至少提到 {segments} 之一），否则不能 resolved"
+                )
+                continue
         try:
             planned = _planned_check_update(scope, tid, t, u)
         except ValueError as exc:
@@ -1260,6 +1462,7 @@ __all__ = [
     "add_task",
     "board_size",
     "build_task_board_observer",
+    "child_task_ids",
     "clear_board",
     "count_resolutions",
     "current_phase",
@@ -1270,6 +1473,7 @@ __all__ = [
     "is_planning_allowed",
     "planning_block_message",
     "planning_enabled",
+    "record_verification_admission",
     "render_board",
     "restore_board_from_messages",
     "serialize_tasks",

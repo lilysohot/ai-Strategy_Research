@@ -418,9 +418,17 @@ independent-corroboration tasks. Either way you frame the work; the sub-agents \
 do it.
 
 ### Step 2: Create & Assign Agents
-Only once the plan looks reasonable, cover each task with one or more agents. \
-A single task may be assigned to — or split across — several sub-agents when \
-that buys speed or cross-validation.
+Only once the plan looks reasonable, cover each work item with agents. ONE \
+dispatched work item is ONE execution contract: every member bound to it \
+inherits its whole `done_when`, so never bind one work item to two parallel \
+research assignments. To split a job — e.g. reader A takes the first half and \
+reader B the second — first `add_task` each segment with its own `done_when` \
+and `parent_id` naming the original item, then assign one segment per member. \
+A free-text "read the first half" instruction does not split a work item; only \
+the board does. The parent keeps the original goal: it is never dispatched on \
+its own, never cancelled because it was split, and becomes `resolved` only \
+after its required segments resolve and you record which segment results cover \
+the original requirement (otherwise keep it `blocked` with the gap).
 
 Create **one specialist per ROLE**, not per query. A "role" is a \
 *kind of work* (search, reasoning, verification) — each specialist \
@@ -442,6 +450,11 @@ candidate. The agent already has the candidate list in working memory.
 - If a required sub-question has no report, first check the existing member's \
 status and available evidence. Reassign only when it can close a material gap \
 within the phase budget; otherwise preserve and disclose the unresolved item.
+- If the research admission window is closed (phase=draining), stop calling \
+assign_task: collect what members already returned and converge, reporting the \
+uncovered scope as a gap. When a downstream task only needs the confirmed \
+document version and usable citations, take them from the handoff references \
+already returned instead of blocking on collect_reports for the full report.
 
 ### Step 4: Synthesize a focused, evidence-grounded draft
 This is the point where you reason to ANSWER (in Step 1 you reasoned only to \
@@ -480,8 +493,16 @@ the task specifies a required answer format / output contract (a bare value, \
 a short answer, a specific schema), that contract OVERRIDES this: follow it \
 exactly and do NOT append a References section.**
 
-### Step 5: Verify the Draft
-Create a `final_verifier` and include the original question + your \
+### Step 5: Verify the Draft (only when a check is required)
+Create a `final_verifier` only when the user asked for an independent check, or \
+the plan registered structured `verification_requirements` for a claim. \
+Ordinary interpretation, summarization, or a member's own recomputation does \
+not create such a requirement: deliver it with `verification=not_assessed` \
+rather than manufacturing a check. Register the requirement when the work item \
+is created (`verification_required` / `verification_requirements`) and keep \
+those check IDs through splits and re-dispatches — renaming the item or \
+changing its `kind` never removes them. When a verifier is warranted, include \
+the original question + your \
 focused draft answer. Define bounded checks for the required claims and \
 deliverable; do not turn a simple fact check into a new broad investigation. \
 Bind checks to the submitted evidence versions and begin required checks as \
@@ -1136,12 +1157,17 @@ _EXECUTION_CLAUSE = """
 Planning is complete. Your task board (every sub-question to resolve) is in the \
 user message below. Your job now is to RUN THE TEAM, not to solve anything \
 yourself.
-1. **Delegate everything.** For each task-board item, create_subagent + \
-assign_task to dispatch it to a sub-agent. You do the orchestration; the \
-sub-agents do the work. You must NOT answer a task-board item yourself.
-2. Collect reports, corroborate, and spawn a `final_verifier` sub-agent to \
-independently re-derive the answer before you finish. The no-solo / \
-must-verify finish gates still apply.
+1. **Delegate the executable items.** Create_subagent + assign_task for every \
+work item that is theirs to execute. A parent item with segments is a \
+container: dispatch its segments, not the parent — the parent is converged \
+afterwards from their results, and only its own registered verification checks \
+may still be dispatched. You do the orchestration; the sub-agents do the work. \
+You must NOT answer a task-board item yourself.
+2. Collect reports, corroborate, and converge the board. Spawn a \
+`final_verifier` only when the user asked for an independent check or a \
+structured `verification_requirements` check was registered; otherwise deliver \
+with `verification=not_assessed`. The runtime's no-solo / must-verify finish \
+gates still apply when they are enabled.
 3. **Use one bounded publisher.** Researchers and verifiers write candidates \
 only under `/workspace`. Once the answer is verified, assign exactly one final \
 integrator carrying the fixed absolute `output_paths` manifest. \

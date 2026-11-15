@@ -27,6 +27,17 @@ def test_calculation_scope_excludes_adjacent_constraints_and_qualitative_derivat
     assert calculation_targets("收盘100点，涨幅2.16%。以上均为[计算]推算值。") == ["100", "2.16%"]
 
 
+def test_declared_input_parameters_are_not_calculation_targets():
+    # A quoted input/assumption is source data; only the marker-bearing output
+    # of the calculation becomes an arithmetic obligation.
+    assert calculation_targets("[计算] 取原文发射率参数 0.95，推算得到 12.4%。") == ["12.4%"]
+    assert calculation_targets("[计算] 已知票面利率 0.95%，最终收益 3.2%。") == ["3.2%"]
+    # A symbol=value parameter in the same sentence as a derivation marker is
+    # still an input; a derived value without an assignment remains an output.
+    assert calculation_targets("辐射器 160 m2（双面、ε=0.95）；反推辐射器表面 65-75°C。") == []
+    assert calculation_targets("[计算] 反推温度为 0.95°C。") == ["0.95"]
+
+
 def dispatch(bus, spec, path):
     return bind_checks(
         [spec],

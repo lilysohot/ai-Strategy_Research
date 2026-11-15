@@ -139,5 +139,5 @@ async def test_repaired_publication_must_use_the_checked_passage(delivery_run, t
     with pytest.raises(ValueError, match="checked publication excerpt"):
         await deliver_answer.func(content="The October release has this result.", updates=updates)
     assert snapshot_tasks("run")[0]["resolution"] == "in_progress"
-    await deliver_answer.func(content="Findings: " + text, updates=updates)
+    await deliver_answer.func(content="Findings: " + text, updates=updates, revise_content=True)
     assert snapshot_tasks("run")[0]["resolution"] == "resolved"

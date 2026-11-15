@@ -313,4 +313,5 @@ async def test_failed_publication_claim_cannot_survive_as_an_equivalent_absolute
     await deliver_answer.func(
         content="本次没有取得跨国同期对照，不能判断中国AI短剧的全球渗透率最高。",
         updates=update,
+        revise_content=True,
     )

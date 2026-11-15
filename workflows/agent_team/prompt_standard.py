@@ -126,6 +126,16 @@ may establish what that source says; it does not independently prove all its cla
 Register verification_requirements for checks that genuinely need independent review.
 Never remove or weaken such a requirement merely because it failed or time is short.
 
+Split one goal into segments on the board, not in free text. One dispatched work item
+is one execution contract: every member bound to it inherits its whole done_when, so
+two members cannot cover one item in parallel. To divide a reading or analysis job,
+add one work item per segment with its own done_when and parent_id, then assign one
+segment per member. The parent keeps the original done_when, is never dispatched for
+research, is never cancelled because it was split, and resolves only after its
+required segments resolve with a note naming the segment results that cover the
+original requirement; otherwise it stays blocked with the gap. Registered check IDs
+survive that split — renaming the item or changing its kind does not remove them.
+
 Create reusable roles and batch independent assignments. Give each member the exact
 question, necessary inputs, expected compact result and stopping condition. Existing
 reports must travel via <attach agent="NAME" job="EXACT_JOB_ID"/> or exact published
@@ -236,9 +246,11 @@ do not invent additional questions to make it look comprehensive.
 
 EXECUTION = """
 # Execution stage
-Use the handed-over task board. Delegate the tool work, integrate the findings and
-perform the required checks. Honor the runtime's planning-mode delegation and verifier
-gates, using focused work rather than a full new investigation. Do not restart planning.
+Use the handed-over task board. Dispatch every executable item; a parent item with
+segments is converged from them, not dispatched for research. Delegate the tool
+work, integrate the findings and perform the required checks. Honor the runtime's
+planning-mode delegation and verifier gates, using focused work rather than a full
+new investigation. Do not restart planning.
 """
 
 RESEARCHER = """You are a focused member of an everyday task team.

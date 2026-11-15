@@ -420,6 +420,9 @@ async def test_recheck_admission_execution_and_collection_share_extended_deadlin
     job = bus.list_task_jobs("run")[-1]
     session_spec = build_swarm_session_runtime_spec(runtime, session_name="reviewer", task_id="run")
     assert 110 < session_spec.run_timeout_builder(job.item) <= 114
-    assert budget.wait_deadline(verification_pending=True, recheck_pending=True)[1] == now + 114
+    recheck_deadline = budget.wait_deadline(
+        verification_pending=True, recheck_pending=True
+    )[1]
+    assert abs(recheck_deadline - (now + 114)) < 1e-6
     await collect_reports.func(timeout=2)
     assert snapshot_tasks("run")[0]["verification_status"] == "passed"

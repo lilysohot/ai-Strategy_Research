@@ -68,20 +68,77 @@ async def test_synthetic_delivery_is_not_accepted(kind):
 
 
 @pytest.mark.parametrize(
-    "receipt,error,accepted",
+    "receipt,error,with_record,accepted",
     [
-        ("Final answer and task dispositions accepted.", False, True),
-        ("Unrelated success", False, False),
-        ("Final answer and task dispositions accepted.", True, False),
+        ("Final answer and task dispositions accepted.", False, True, True),
+        # A synthetic success receipt with tool arguments but no accepted
+        # delivery record must not publish: the body is never rebuilt from args.
+        ("Final answer and task dispositions accepted.", False, False, False),
+        ("Unrelated success", False, True, False),
+        ("Final answer and task dispositions accepted.", True, True, False),
     ],
 )
-async def test_only_successful_delivery_receipt_accepts(receipt, error, accepted):
+async def test_only_successful_delivery_receipt_accepts(receipt, error, with_record, accepted):
+    from frontier_agent.core.execution_context import (
+        ExecutionScope,
+        reset_current_execution_scope,
+        set_current_execution_scope,
+    )
+    from workflows.agent_team.delivery import (
+        _DELIVERY_RECORD_KEY,
+        DELIVERY_PROTOCOL_VERSION,
+    )
+
     ctx = SimpleNamespace(metadata={})
     observer = TeamDeliveryObserver(TeamPhaseBudget(0, None, None, None, None, {}))
-    await observer.on_tool_result(
-        ctx, ToolResult("deliver_answer", {"content": "Final content"}, receipt, 1, "call", error)
+    token = None
+    if with_record:
+        token = set_current_execution_scope(ExecutionScope(
+            task_id="run",
+            metadata={_DELIVERY_RECORD_KEY: {
+                "protocol_version": DELIVERY_PROTOCOL_VERSION,
+                "status": "accepted",
+                "published": True,
+                "content": "Final content",
+            }},
+        ))
+    try:
+        await observer.on_tool_result(
+            ctx, ToolResult("deliver_answer", {"content": "Final content"}, receipt, 1, "call", error)
+        )
+        assert bool(ctx.metadata.get("team_delivery_accepted")) is accepted
+        assert ctx.metadata.get("final_answer") == ("Final content" if accepted else None)
+    finally:
+        if token is not None:
+            reset_current_execution_scope(token)
+
+
+async def test_failed_delivery_hands_its_candidate_to_recovery():
+    """A repairable failure keeps the body for the recovery path, not a new draft."""
+    from frontier_agent.core.execution_context import (
+        ExecutionScope,
+        reset_current_execution_scope,
+        set_current_execution_scope,
     )
-    assert bool(ctx.metadata.get("team_delivery_accepted")) is accepted
+    from workflows.agent_team.delivery import _CANDIDATE_KEY
+
+    ctx = SimpleNamespace(metadata={})
+    observer = TeamDeliveryObserver(TeamPhaseBudget(0, None, None, None, None, {}))
+    token = set_current_execution_scope(ExecutionScope(
+        task_id="run",
+        metadata={_CANDIDATE_KEY: {"version": 1, "content": "Retained usable body."}},
+    ))
+    try:
+        await observer.on_tool_result(ctx, ToolResult(
+            "deliver_answer", {"content": ""},
+            "Delivery preflight failed (candidate v1 stored; nothing committed)",
+            1, "call", True,
+        ))
+        assert ctx.metadata["final_answer_candidate"] == "Retained usable body."
+        assert not ctx.metadata.get("final_answer")
+        assert not ctx.metadata.get("team_delivery_accepted")
+    finally:
+        reset_current_execution_scope(token)
 
 
 @pytest.mark.parametrize("reason", ["user_stop", "deadline", "cancelled"])

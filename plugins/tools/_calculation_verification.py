@@ -19,6 +19,20 @@ _CALCULATED = re.compile(
     re.I,
 )
 _NUMBER = re.compile(r"(?<![A-Za-z0-9_.])[+-]?\d+(?:,\d{3})*(?:\.\d+)?(?:[%％])?")
+# A number introduced as an input/assumption is source data, not a derived
+# result. Only the OUTPUT of a calculation marker becomes an obligation.
+_INPUT_MARKER = re.compile(
+    r"(?:取|设|假设|假定|给定|已知|输入|参数|取值|其中|根据|依据|基于|按照)"
+    r"\s*[^，。；、\n]{0,10}$"
+    r"|\b(?:given|assum(?:e|ed|ing|ption)|input|parameter|using|let)\b[^,.;\n]{0,16}$",
+    re.I,
+)
+# "ε=0.95" states a parameter, not a derived result. A later derivation marker
+# in the same sentence must not turn that input into a calculation obligation.
+_PARAMETER_ASSIGNMENT = re.compile(
+    r"[A-Za-z\u0370-\u03ff\u4e00-\u9fff]{1,12}\s*[=＝]\s*$"
+)
+_DERIVED_ASSIGNMENT = re.compile(r"结果|输出|output|result", re.I)
 
 
 def numeric_values(text: str) -> set[str]:
@@ -55,6 +69,14 @@ def calculation_targets(text: str) -> list[str]:
         for match in _NUMBER.finditer(paragraph):
             value = match.group()
             tail = paragraph[match.end() :]
+            # Declared inputs/assumptions are not arithmetic outputs. Excluding
+            # them is the boundary between "quote this parameter" and "prove
+            # this derived value"; the marker applies only to its sentence.
+            prefix = paragraph[max(0, match.start() - 20) : match.start()]
+            if _INPUT_MARKER.search(prefix) or (
+                _PARAMETER_ASSIGNMENT.search(prefix) and not _DERIVED_ASSIGNMENT.search(prefix)
+            ):
+                continue
             # Bare calendar years, index names (沪深300), section numbers and
             # historical windows are not arithmetic outputs. Decimal/percent
             # values and explicit quantities remain conservative obligations.

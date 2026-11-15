@@ -44,6 +44,73 @@ def minimum_verification_budget(first_chunk_timeout_s: float | None = 45) -> flo
     return max(90.0, float(first_chunk_timeout_s or 45) + 45)
 
 
+#: A verifier reads its bound packet turn by turn. The fixed first-response
+#: window does not scale with that work, so admission prices the packet instead
+#: of admitting on the transport floor alone. Constants are deliberately
+#: conservative: a denied admission is recorded honestly, while admitting a job
+#: that cannot finish fabricates progress.
+_VERIFICATION_PER_RECORD_S = 0.4
+_VERIFICATION_PER_1K_SUBJECT_CHARS_S = 1.5
+_VERIFICATION_MAX_ESTIMATE_S = 900.0
+
+#: One job cannot review an unbounded packet within a phase. A larger subject
+#: must be split by claim, or rebound to only the evidence the revision cites.
+MAX_BOUND_RECORDS_PER_CHECK = 160
+
+
+def verification_cost_estimate(
+    *,
+    first_chunk_timeout_s: float | None = 45,
+    records: int = 0,
+    subject_chars: int = 0,
+    checks: int = 1,
+) -> float:
+    """Deterministic cost of one verification dispatch, in seconds."""
+    base = minimum_verification_budget(first_chunk_timeout_s)
+    work = (
+        base
+        + max(0, int(checks) - 1) * 30.0
+        + max(0, int(records)) * _VERIFICATION_PER_RECORD_S
+        + max(0, int(subject_chars)) / 1000.0 * _VERIFICATION_PER_1K_SUBJECT_CHARS_S
+    )
+    return min(_VERIFICATION_MAX_ESTIMATE_S, work)
+
+
+def packet_record_count(packet: dict[str, Any] | None) -> int:
+    """Inlined records a verifier must read in one pass (the 160-record cap)."""
+    if not isinstance(packet, dict):
+        return 0
+    return sum(
+        len(source.get("records") or [])
+        for source in (packet.get("sources") or {}).values()
+        if isinstance(source, dict)
+    )
+
+
+#: A handoff-bound check reads only the records it asks for by locator, but a
+#: large background snapshot is still work. Price it up to the same cap as an
+#: inlined packet: switching a 272-record job binding to a file ref must not
+#: turn the review into a cheap zero-record job.
+ON_DEMAND_ADMISSION_FLOOR_RECORDS = MAX_BOUND_RECORDS_PER_CHECK
+
+
+def packet_workload_records(packet: dict[str, Any] | None) -> int:
+    """Records priced for admission: inlined selection, or a bounded on-demand floor."""
+    if not isinstance(packet, dict):
+        return 0
+    sources = [
+        source for source in (packet.get("sources") or {}).values()
+        if isinstance(source, dict)
+    ]
+    inline = sum(len(source.get("records") or []) for source in sources)
+    if inline:
+        return inline
+    snapshot = sum(
+        int((source.get("snapshot") or {}).get("record_count") or 0) for source in sources
+    )
+    return min(snapshot, ON_DEMAND_ADMISSION_FLOOR_RECORDS) if snapshot else 0
+
+
 #: Lines that are instructions to the verifier, not text for the answer. A
 #: ``publication_excerpt`` subject is bound verbatim into the final answer, so
 #: mixing the two made the runtime *require* the rubric inside the report —

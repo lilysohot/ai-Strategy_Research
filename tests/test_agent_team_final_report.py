@@ -237,7 +237,15 @@ def test_unresolved_board_prevents_complete_even_when_fan_in_is_complete():
         tasks=[
             {"id": "t1", "description": "订单匹配", "resolution": "resolved"},
             {"id": "t2", "description": "重复退款核验", "resolution": "in_progress"},
-            {"id": "t3", "description": "已撤回的探索", "resolution": "cancelled"},
+            # A retracted self-added exploration is optional by contract. The
+            # board defaults every item to required, so this must be explicit:
+            # only a cancelled REQUIRED item may keep the answer partial.
+            {
+                "id": "t3",
+                "description": "已撤回的探索",
+                "resolution": "cancelled",
+                "required_for_completion": False,
+            },
         ],
     )
     assert out["answer_status"] == "partial"

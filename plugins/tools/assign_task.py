@@ -36,6 +36,7 @@ from frontier_agent.core.execution_context import (
     get_current_execution_scope,
     get_current_tool_call_id,
 )
+from frontier_agent.core.loop_types import wall_deadline_remaining_s
 from frontier_agent.core.runtime.registries import services as registry
 from frontier_agent.core.tool import tool
 from plugins.tools._bus_scope import resolve_bus_task_id
@@ -48,10 +49,13 @@ from plugins.tools._deliverable_policy import (
     render_workspace_assignment,
 )
 from plugins.tools._verification import (
+    MAX_BOUND_RECORDS_PER_CHECK,
     VerificationCheck,
     bind_checks,
-    minimum_verification_budget,
+    packet_record_count,
+    packet_workload_records,
     resolve_planned_check,
+    verification_cost_estimate,
 )
 from plugins.tools.create_subagent import (
     _normalize_agent_name,
@@ -73,6 +77,21 @@ MAX_TASKS_PER_DISPATCH: int = int(os.environ.get("FRONTIER_AGENT_MAX_TASKS_PER_D
 # forces the main agent to spawn a new specialist instead of poisoning a
 # saturated session.
 MAX_TASKS_PER_SESSION = 5
+
+
+def _bound_packet_records(bus: Any, task_id: str, check_ids: set[str]) -> int:
+    """Workload priced for the latest dispatch of these checks (0 for a first check)."""
+    if bus is None or not check_ids:
+        return 0
+    for entry in reversed(bus.list_task_jobs(task_id)):
+        metadata = entry.item.metadata or {}
+        checks = metadata.get("verification_checks") or []
+        if not any(check.get("check_id") in check_ids for check in checks):
+            continue
+        records = packet_workload_records(metadata.get("verification_packet"))
+        if records:
+            return records
+    return 0
 
 
 def _session_at_task_cap(session: Any) -> bool:
@@ -621,7 +640,18 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                     f"{spec.agent}: verification checks must belong to work_item_ids"
                 )
             else:
+                from plugins.tools.task_board import child_task_ids, verification_required
+
                 for tid in ids:
+                    segments = child_task_ids(scope.task_id, tid)
+                    if segments and tid not in check_ids:
+                        validation_errors.append(
+                            f"{spec.agent}: {tid} is a parent work item with execution "
+                            f"segments {segments}; the parent keeps the original goal and is "
+                            "not dispatched for research. Assign its segments, or dispatch "
+                            "its registered verification_checks"
+                        )
+                        continue
                     planned = board[tid]
                     if (
                         planned.get("execution_job_ids")
@@ -637,8 +667,12 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                             "requires an unresolved work item with a recorded gap. "
                             "Use structured verification_checks for a planned check"
                         )
+                    # ``kind="verification"`` marks a check-only dispatch shape.
+                    # Whether a required check is registered is decided only by
+                    # the task board's authoritative predicate; a name, kind
+                    # label or member recomputation cannot upgrade ordinary work.
                     check_only = planned.get("kind") == "verification" or (
-                        planned.get("verification_required") and planned.get("kind") != "research"
+                        verification_required(planned) and planned.get("kind") != "research"
                     )
                     if check_only and tid not in check_ids:
                         requirements = planned.get("verification_requirements", [])
@@ -756,21 +790,50 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
             and runtime is not None
             and getattr(runtime, "phase_budget", None) is not None
         ):
-            remaining = runtime.phase_budget.remaining_for_job(
-                can_publish=is_publication_assignment or uses_publication_budget,
-                is_verification=is_verification_assignment,
-                is_recheck=bool(getattr(spec, "verification_checks", ()))
-                and all(c.replaces_job_id for c in getattr(spec, "verification_checks", ())),
+            verification_checks = list(getattr(spec, "verification_checks", ()))
+            is_recheck = bool(verification_checks) and all(
+                check.replaces_job_id for check in verification_checks
             )
-            # Reserve one first-response window plus evidence review/report
-            # submission. Admitting a job that cannot finish fabricates progress.
-            minimum = minimum_verification_budget(getattr(runtime, "first_chunk_timeout_s", 45))
-            if remaining is not None and remaining < minimum:
+            remaining = runtime.phase_budget.admission_remaining_for_job(
+                can_publish=is_publication_assignment or uses_publication_budget,
+                is_verification=True,
+                is_recheck=is_recheck,
+                wall_remaining_s=wall_deadline_remaining_s(),
+            )
+            # Price the work, not just transport: a bound packet with hundreds
+            # of records needs proportional reading turns, and a recheck that
+            # cannot finish must be denied here rather than lingered into the
+            # wall clamp. Admitting it would fabricate progress.
+            records = _bound_packet_records(
+                bus, bus_task_id, {check.check_id for check in verification_checks}
+            )
+            estimate = verification_cost_estimate(
+                first_chunk_timeout_s=getattr(runtime, "first_chunk_timeout_s", 45),
+                records=records,
+                subject_chars=sum(
+                    len(getattr(check.subject, "text", "") or "")
+                    for check in verification_checks
+                ),
+                checks=len(verification_checks) or 1,
+            )
+            if remaining is not None and remaining < estimate:
+                from plugins.tools.task_board import record_verification_admission
+
+                record_verification_admission(
+                    scope.task_id,
+                    [check.work_item_id for check in verification_checks],
+                    check_ids=[check.check_id for check in verification_checks],
+                    status="denied",
+                    reason="insufficient_budget",
+                    remaining_s=remaining,
+                    required_s=estimate,
+                )
                 errors.append(
                     f"{agent_name}: insufficient verification budget "
-                    f"({max(0.0, remaining):.0f}s remaining; {minimum:.0f}s required). "
-                    "Keep unresolved checks unchecked and disclose the limitation; "
-                    "dispatch required verification earlier in the next run"
+                    f"({max(0.0, remaining):.0f}s remaining; {estimate:.0f}s estimated for "
+                    f"{records} bound record(s)). Admission denied and recorded on the work "
+                    "item; keep the check unchecked and disclose the limitation. Split the "
+                    "check by claim or bind only the evidence its subject cites"
                 )
                 continue
         if (
@@ -1201,6 +1264,24 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                     from plugins.tools._bound_evidence import build_review_packet, packet_index
 
                     packet = build_review_packet(bound, bus=bus, task_id=bus_task_id)
+                    packet_records = packet_record_count(packet)
+                    if packet_records > MAX_BOUND_RECORDS_PER_CHECK:
+                        from plugins.tools.task_board import record_verification_admission
+
+                        record_verification_admission(
+                            scope.task_id,
+                            [check["work_item_id"] for check in bound],
+                            check_ids=[check["check_id"] for check in bound],
+                            status="denied",
+                            reason="packet_too_large",
+                            required_s=float(MAX_BOUND_RECORDS_PER_CHECK),
+                        )
+                        raise ValueError(
+                            f"bound evidence packet has {packet_records} records "
+                            f"(limit {MAX_BOUND_RECORDS_PER_CHECK}); one verifier cannot "
+                            "review it within the phase. Split the check by claim or bind "
+                            "only the evidence its subject cites"
+                        )
                     task_metadata["verification_packet"] = packet
                     # Preserve proposals for audit, but do not let free-form
                     # research instructions redefine the registered check.

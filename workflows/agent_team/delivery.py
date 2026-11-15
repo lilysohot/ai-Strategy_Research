@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import time
+from copy import deepcopy
 from dataclasses import replace
 from typing import Any, Literal
 
@@ -39,6 +40,7 @@ from plugins.tools.task_board import (
     complete_delivery_tasks,
     in_planning,
     snapshot_tasks,
+    task_claims_completion,
     update_task,
 )
 from workflows.agent_team.final_report import is_user_report
@@ -46,6 +48,101 @@ from workflows.agent_team.lifecycle import TeamWindDown, snapshot_job_outcomes, 
 from workflows.agent_team.phase_budget import TeamPhaseBudget
 
 _DELIVERY_ACCEPTED = "Final answer and task dispositions accepted."
+
+#: Key in ``ExecutionScope.metadata`` holding the last rejected delivery
+#: submission. A preflight failure is a repair candidate, never a publication:
+#: the body, manifest entries and dispositions are kept so a retry can fix only
+#: the fields named in the issue list instead of regenerating the whole answer.
+_CANDIDATE_KEY = "delivery_candidate"
+
+#: The body actually accepted for publication. The observer reads THIS rather
+#: than the current tool-call arguments: a field-level retry may omit content.
+_DELIVERED_KEY = "delivered_answer"
+
+#: One accepted delivery record is the only source the observer and recovery
+#: read for the published body. Audit events stay separate from it.
+_DELIVERY_RECORD_KEY = "delivery_record"
+_DELIVERY_AUDIT_KEY = "delivery_audit"
+DELIVERY_PROTOCOL_VERSION = 1
+
+
+def _content_sha256(content: str) -> str:
+    """Match the hash ``prepare_final_manifest`` binds (stripped content)."""
+    import hashlib
+
+    return hashlib.sha256(content.strip().encode()).hexdigest()
+
+
+def _record_audit(scope: Any, event: str, **fields: Any) -> None:
+    """Append an audit event; never mix it into the accepted delivery record."""
+    audit = scope.metadata.get(_DELIVERY_AUDIT_KEY)
+    if not isinstance(audit, list):
+        audit = []
+        scope.metadata[_DELIVERY_AUDIT_KEY] = audit
+    audit.append({"event": event, "protocol_version": DELIVERY_PROTOCOL_VERSION, **fields})
+
+
+def _store_candidate(
+    scope: Any,
+    content: str,
+    corpus_conclusions: list[dict[str, Any]] | None,
+    items: list[dict[str, Any]],
+) -> int:
+    """Keep a rejected submission as a repairable candidate, never as published."""
+    existing = scope.metadata.get(_CANDIDATE_KEY)
+    version = int(existing.get("version") or 0) + 1 if isinstance(existing, dict) else 1
+    scope.metadata[_CANDIDATE_KEY] = {
+        "protocol_version": DELIVERY_PROTOCOL_VERSION,
+        "version": version,
+        "content": content,
+        "content_sha256": _content_sha256(content),
+        "conclusions": deepcopy(corpus_conclusions) if corpus_conclusions is not None else None,
+        "updates": [dict(item) for item in items],
+    }
+    _record_audit(scope, "candidate_stored", version=version,
+                  content_sha256=_content_sha256(content))
+    return version
+
+
+def _accepted_delivery_record(
+    *,
+    content: str,
+    version: int,
+    corpus_conclusions: list[dict[str, Any]] | None,
+    items: list[dict[str, Any]],
+    checks: list[dict[str, Any]],
+    manifest_committed: bool,
+) -> dict[str, Any]:
+    """One normalized delivery: body, version, evidence, dispositions, checks, limits."""
+    return {
+        "protocol_version": DELIVERY_PROTOCOL_VERSION,
+        "status": "accepted",
+        "published": True,
+        "version": version,
+        "content": content,
+        "content_sha256": _content_sha256(content),
+        "evidence": {
+            "corpus_conclusions": deepcopy(corpus_conclusions),
+            "manifest_committed": manifest_committed,
+        },
+        "dispositions": deepcopy(items),
+        "verification": {
+            "checks": [
+                {
+                    key: check[key]
+                    for key in ("check_id", "verdict", "required", "work_item_id")
+                    if key in check
+                }
+                for check in checks
+                if isinstance(check, dict)
+            ],
+        },
+        "limitations": [
+            {"id": item["id"], "gap": item.get("gap", ""), "limitations": item.get("limitations", "")}
+            for item in items
+            if item.get("gap") or item.get("limitations")
+        ],
+    }
 
 #: The delivery prompt only needs the fields that feed dispositions and the
 #: current verification state. Descriptions, owners and evidence refs stay in
@@ -127,9 +224,11 @@ class FinalDisposition(BaseModel):
 
 @tool
 async def deliver_answer(
-    content: str,
-    updates: list[FinalDisposition],
+    content: str = "",
+    updates: list[FinalDisposition] | None = None,
     corpus_conclusions: list[dict[str, Any]] | None = None,
+    base_version: int | None = None,
+    revise_content: bool = False,
 ) -> str:
     """Submit the complete final answer AND task dispositions in one call.
 
@@ -156,19 +255,104 @@ async def deliver_answer(
             A pure file-identity answer — exact observed filename/document_title/date values and
             nothing else — may omit this field: the runtime binds their document identity
             automatically, and the delivery gate enforces the accepted shape.
+        base_version: Version of the stored delivery candidate to repair. A failed preflight
+            keeps the submission as a candidate and returns its version. Retry with that
+            version, submit ONLY the rejected task dispositions / manifest entries / anchors,
+            and omit content (or pass "") to reuse the candidate body byte-for-byte.
+        revise_content: Set true only when the body itself must change. That creates a new
+            candidate revision and re-evaluates anchors and affected checks; it is rejected
+            when the body differs from the candidate and this flag is absent.
     """
     scope = get_current_execution_scope()
     if scope is None or SWARM_SCOPE_KEY not in scope.metadata or in_planning(scope.task_id):
         raise ValueError("Final delivery requires an executing team coordinator")
+    candidate = scope.metadata.get(_CANDIDATE_KEY)
+    candidate = candidate if isinstance(candidate, dict) else None
+    published_record = scope.metadata.get(_DELIVERY_RECORD_KEY)
+    if (
+        isinstance(published_record, dict)
+        and published_record.get("published")
+        and base_version is None
+        and content.strip()
+    ):
+        # Idempotent replay of the same accepted submission: no second board
+        # update, manifest commit or publication. A different body is a new
+        # answer, not a field repair, and must not silently replace it.
+        if _content_sha256(content) == published_record.get("content_sha256"):
+            return _DELIVERY_ACCEPTED
+        raise ValueError(
+            "An accepted delivery is already published; a different body cannot be "
+            "published twice in one run. Continue with the accepted delivery."
+        )
+    body_revised = False
+    if base_version is not None:
+        if candidate is None or candidate.get("version") != base_version:
+            raise ValueError(
+                f"No recoverable delivery candidate at version {base_version}. Resubmit the "
+                "complete answer with content, updates and corpus_conclusions; do not piece "
+                "together an older or partial submission."
+            )
+        stored_sha = str(candidate.get("content_sha256") or "")
+        if not content.strip():
+            content = str(candidate.get("content") or "")
+        elif _content_sha256(content) != stored_sha:
+            if not revise_content:
+                raise ValueError(
+                    "Delivery retry keeps the candidate body: the submitted content differs "
+                    f"from candidate v{base_version}. Omit content to reuse that body "
+                    "verbatim, or pass revise_content=true to create an explicit revision "
+                    "whose anchors and affected checks are re-evaluated."
+                )
+            body_revised = True
+    elif (
+        candidate is not None
+        and content.strip()
+        and _content_sha256(content) != str(candidate.get("content_sha256") or "")
+    ):
+        if not revise_content:
+            raise ValueError(
+                f"Delivery candidate v{candidate.get('version')} is already stored and the "
+                "submitted body differs from it. Reuse that body with base_version="
+                f"{candidate.get('version')} and omit content, or pass revise_content=true "
+                "to create an explicit revision whose anchors are re-evaluated."
+            )
+        body_revised = True
     if not is_user_report(content):
         raise ValueError("Provide the final answer body, not an empty/internal tool payload")
     from plugins.corpus.final_delivery import prepare_delivery_manifest
     from plugins.corpus.ledger import get_run_ledger
     from plugins.tools.corpus_manifest import ManifestAnchorError, commit_final_manifest
 
-    items = [FinalDisposition.model_validate(u).model_dump() for u in updates]
-    if len({u["id"] for u in items}) != len(items):
+    submitted = [FinalDisposition.model_validate(u).model_dump() for u in updates or []]
+    if len({u["id"] for u in submitted}) != len(submitted):
         raise ValueError("Each task may have only one final disposition")
+    if base_version is not None:
+        # A retry submits only what was rejected; earlier valid dispositions and
+        # manifest entries stay as they were. A body revision (explicitly
+        # declared) instead replaces the manifest, because its anchors were
+        # bound to the previous text.
+        merged = {
+            item["id"]: item
+            for item in (candidate or {}).get("updates") or []
+            if isinstance(item, dict) and item.get("id")
+        }
+        for item in submitted:
+            merged[item["id"]] = item
+        items = list(merged.values())
+        if corpus_conclusions is None:
+            corpus_conclusions = (candidate or {}).get("conclusions")
+        elif not body_revised:
+            by_id = {
+                row["id"]: row
+                for row in (candidate or {}).get("conclusions") or []
+                if isinstance(row, dict) and row.get("id")
+            }
+            for row in corpus_conclusions:
+                if isinstance(row, dict) and row.get("id"):
+                    by_id[row["id"]] = row
+            corpus_conclusions = list(by_id.values())
+    else:
+        items = submitted
     # Return independent defects together, before board or manifest mutation.
     # Otherwise each cheap validation failure costs another full report generation.
     from plugins.tools._corpus_scope import corpus_scope_findings
@@ -240,67 +424,97 @@ async def deliver_answer(
     except ValueError as exc:
         issues.append({"rule": "corpus_manifest_invalid", "detail": str(exc)})
     if issues:
+        version = _store_candidate(scope, content, corpus_conclusions, items)
         raise ValueError(
-            "Delivery preflight failed: "
+            f"Delivery preflight failed (candidate v{version} stored; no task disposition or "
+            "final manifest has been committed). If only task dispositions, manifest entries "
+            f"or anchors are wrong, resubmit with base_version={version} and omit content to "
+            "reuse that body byte-for-byte. Pass revise_content=true only when the body itself "
+            "must change. Fix every listed issue together: "
             + json.dumps(issues, ensure_ascii=False)
-            + ". Correct all listed fields/sentences together. Preserve valid passages and "
-            "citations; changed checked passages require recheck or a blocked disposition. "
-            "No task disposition or final manifest has been committed."
         )
-    if bus and any(
-        s.current_job_id or s.pending_tasks or s.pending_results
-        for s in bus.list_sessions_for_task(bus_id)
-    ):
-        raise ValueError("Collect or stop outstanding members before final delivery")
-    job_outcomes = snapshot_job_outcomes(bus, bus_id) if bus else []
-    project_checks(job_outcomes)
-    outcomes = {j["job_id"]: j for j in job_outcomes}
-    tasks = {t["id"]: t for t in snapshot_tasks(scope.task_id)}
-    for item in items:
-        task = tasks.get(item["id"], {})
-        # ``resolved`` claims the work is answered. ``cancelled`` on a REQUIRED
-        # item is checked too: retracting a required item after dispatching it
-        # would otherwise hide an incomplete member job, which is the gap-laundering
-        # bypass this contract forbids. Optional items may be retracted freely.
-        claims_done = item["resolution"] == "resolved" or (
-            item["resolution"] == "cancelled" and task_is_required(task)
-        )
-        if not claims_done:
-            continue
-        for job_id in task.get("execution_job_ids", []):
-            outcome = outcomes.get(job_id, {})
-            replacements = outcome.get("coverage_resolved_by", [])
-            recovered = (
-                outcome.get("coverage_status") == "complete"
-                and any(r["job_id"] != job_id for r in replacements)
-                and all(
-                    r["job_id"] == job_id
-                    or outcomes.get(r["job_id"], {}).get("status") == "complete"
-                    for r in replacements
-                )
-            )
-            if outcome.get("status") != "complete" and not recovered:
-                raise ValueError(
-                    f"{item['id']}: member work incomplete; use blocked with a gap"
-                    + (
-                        " — a required item cannot be cancelled to hide an incomplete dispatch"
-                        if item["resolution"] == "cancelled"
-                        else ""
+    try:
+        if bus and any(
+            s.current_job_id or s.pending_tasks or s.pending_results
+            for s in bus.list_sessions_for_task(bus_id)
+        ):
+            raise ValueError("Collect or stop outstanding members before final delivery")
+        job_outcomes = snapshot_job_outcomes(bus, bus_id) if bus else []
+        project_checks(job_outcomes)
+        outcomes = {j["job_id"]: j for j in job_outcomes}
+        tasks = {t["id"]: t for t in snapshot_tasks(scope.task_id)}
+        for item in items:
+            task = tasks.get(item["id"], {})
+            # ``resolved`` claims the work is answered. ``cancelled`` on a REQUIRED
+            # item is checked too: retracting a required item after dispatching it
+            # would otherwise hide an incomplete member job, which is the gap-laundering
+            # bypass this contract forbids. Optional items may be retracted freely.
+            claims_done = task_claims_completion(task, item["resolution"])
+            if not claims_done:
+                continue
+            for job_id in task.get("execution_job_ids", []):
+                outcome = outcomes.get(job_id, {})
+                replacements = outcome.get("coverage_resolved_by", [])
+                recovered = (
+                    outcome.get("coverage_status") == "complete"
+                    and any(r["job_id"] != job_id for r in replacements)
+                    and all(
+                        r["job_id"] == job_id
+                        or outcomes.get(r["job_id"], {}).get("status") == "complete"
+                        for r in replacements
                     )
                 )
-    # update_task performs no asynchronous I/O. Its existing verification checks
-    # remain authoritative, and rejected partial mutations/receipts roll back.
-    with board_transaction(scope.task_id):
-        if items:
-            receipt = await update_task.func(items)
-            if receipt.startswith("Error:") or "\nerrors:" in receipt:
-                raise ValueError(receipt)
-        error = finalize_gate(scope.task_id, content, bus_task_id=bus_id)
-        if error:
-            raise ValueError(error)
-        if payload is not None:
-            commit_final_manifest(payload)
-        complete_delivery_tasks(scope.task_id)
+                if outcome.get("status") != "complete" and not recovered:
+                    raise ValueError(
+                        f"{item['id']}: member work incomplete; use blocked with a gap"
+                        + (
+                            " — a required item cannot be cancelled to hide an incomplete dispatch"
+                            if item["resolution"] == "cancelled"
+                            else ""
+                        )
+                    )
+        # update_task performs no asynchronous I/O. Its existing verification checks
+        # remain authoritative, and rejected partial mutations/receipts roll back.
+        with board_transaction(scope.task_id):
+            if items:
+                receipt = await update_task.func(items)
+                if receipt.startswith("Error:") or "\nerrors:" in receipt:
+                    raise ValueError(receipt)
+            error = finalize_gate(scope.task_id, content, bus_task_id=bus_id)
+            if error:
+                raise ValueError(error)
+            if payload is not None:
+                commit_final_manifest(payload)
+            complete_delivery_tasks(scope.task_id)
+    except ValueError as exc:
+        # Board validation, update_task and finalize failures are repairable too:
+        # keep the settled body and dispositions as the next candidate instead of
+        # forcing the coordinator to regenerate the answer. The transaction above
+        # has already rolled back, so nothing was published.
+        version = _store_candidate(scope, content, corpus_conclusions, items)
+        raise ValueError(
+            f"{exc} Delivery candidate v{version} retained; retry with base_version={version} "
+            "and omit content to reuse that body byte-for-byte, fixing only the rejected items."
+        ) from exc
+    record = _accepted_delivery_record(
+        content=content,
+        version=int(candidate.get("version") or 0) + 1 if candidate else 1,
+        corpus_conclusions=corpus_conclusions,
+        items=items,
+        checks=projected,
+        manifest_committed=payload is not None,
+    )
+    scope.metadata[_DELIVERY_RECORD_KEY] = record
+    scope.metadata[_DELIVERED_KEY] = record["content"]
+    _record_audit(
+        scope,
+        "accepted",
+        version=record["version"],
+        content_sha256=record["content_sha256"],
+        disposition_ids=[item["id"] for item in items],
+        check_ids=[check.get("check_id") for check in projected if isinstance(check, dict)],
+    )
+    scope.metadata.pop(_CANDIDATE_KEY, None)
     return _DELIVERY_ACCEPTED
 
 
@@ -739,24 +953,38 @@ class TeamDeliveryObserver(BaseObserver):
         return None
 
     async def on_tool_result(self, ctx: TurnContext, result: ToolResult) -> None:
-        if (
-            result.name == "deliver_answer"
-            and not result.is_error
-            and result.execution_status == "succeeded"
-            and result.result == _DELIVERY_ACCEPTED
-        ):
-            ctx.metadata["final_answer"] = result.args["content"].strip()
-            ctx.metadata["team_delivery_accepted"] = True
-            if not self.active:
-                bus = registry.get_optional(AgentBus)
-                scope = get_current_execution_scope()
-                if bus and scope:
-                    self.wind_down = await wind_down_team(
-                        bus=bus,
-                        task_id=resolve_bus_task_id(scope),
-                        wait_s=0,
-                    )
-                self.active = True
+        if result.name != "deliver_answer":
+            return
+        scope = get_current_execution_scope()
+        if result.is_error:
+            # A repairable failure keeps a candidate body. Hand it to recovery
+            # instead of letting a later rescue invent a new answer or publish
+            # the rejected tool arguments.
+            if "candidate v" in str(result.result or ""):
+                candidate = scope.metadata.get(_CANDIDATE_KEY) if scope else None
+                body = str((candidate or {}).get("content") or "").strip()
+                if body and is_user_report(body):
+                    ctx.metadata["final_answer_candidate"] = body
+            return
+        if result.execution_status != "succeeded" or result.result != _DELIVERY_ACCEPTED:
+            return
+        record = scope.metadata.get(_DELIVERY_RECORD_KEY) if scope else None
+        body = str((record or {}).get("content") or "").strip()
+        if not body:
+            # A synthetic receipt with no accepted delivery record is not a
+            # publication; never rebuild the body from the last tool arguments.
+            return
+        ctx.metadata["final_answer"] = body
+        ctx.metadata["team_delivery_accepted"] = True
+        if not self.active:
+            bus = registry.get_optional(AgentBus)
+            if bus and scope:
+                self.wind_down = await wind_down_team(
+                    bus=bus,
+                    task_id=resolve_bus_task_id(scope),
+                    wait_s=0,
+                )
+            self.active = True
 
     async def on_turn_end(self, ctx: TurnContext) -> Intervention | None:
         if ctx.metadata.get("team_delivery_accepted"):

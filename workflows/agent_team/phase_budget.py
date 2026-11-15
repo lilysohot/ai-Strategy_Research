@@ -110,6 +110,31 @@ class TeamPhaseBudget:
                                   is_recheck=is_recheck)
         )
 
+    def admission_remaining_for_job(
+        self,
+        *,
+        can_publish: bool,
+        is_verification: bool = False,
+        is_recheck: bool = False,
+        wall_remaining_s: float | None = None,
+    ) -> float | None:
+        """Remaining time a job can actually use, including the wall-clock cap.
+
+        Admission and ``collect_reports`` must price against the same boundary:
+        pricing against the phase boundary alone admitted a recheck that the
+        execution-time wall clamp then cut off.
+        """
+        phase_remaining = self.remaining_for_job(
+            can_publish=can_publish,
+            is_verification=is_verification,
+            is_recheck=is_recheck,
+        )
+        if phase_remaining is None:
+            return wall_remaining_s
+        if wall_remaining_s is None:
+            return phase_remaining
+        return min(phase_remaining, wall_remaining_s)
+
     def wait_deadline(
         self, *, publication_pending: bool = False, verification_pending: bool = False,
         recheck_pending: bool = False,

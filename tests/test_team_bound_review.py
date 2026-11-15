@@ -269,3 +269,188 @@ async def test_new_coverage_can_unlock_recheck_but_new_receipt_alias_cannot(tmp_
         with pytest.raises(ValueError, match="recheck budget"):
             bind_checks([spec], bus=bus, task_id="run", work_items=planned_items(),
                         required=True, outputs_root=tmp_path)
+
+
+# W1: a handoff ref names a model research product; its captured originals stay
+# version-pinned in the background and are read on demand, never fetched again.
+
+HANDOFF_REF = "/outputs/scratch/handoffs/report.md"
+
+
+def sample_originals():
+    return [
+        {
+            "doc_id": "cv2:" + "a" * 64,
+            "locator": f"chunk:document1/unit{i}",
+            "text": f"condition {i} with its unit and qualification",
+            "content_kind": "original",
+            "coverage": {"tables": "not_obtained"},
+        }
+        for i in range(3)
+    ]
+
+
+def handoff_packet(
+    records,
+    *,
+    ref="",
+    max_inline_records=2,
+    reads=None,
+    empty_version=False,
+    observed=None,
+):
+    """Build a packet for a job report or one of its file handoffs, fully offline."""
+    from plugins.tools._bound_evidence import build_review_packet, digest
+
+    key = "producer" + (f"::{ref}" if ref else "")
+    source = {
+        "key": key,
+        "job_id": "producer",
+        "sha256": "report",
+        "corpus_evidence_sha256": digest([] if empty_version else records),
+    }
+    if ref:
+        source["ref"] = ref
+    if reads is not None:
+        source["corpus_document_reads_sha256"] = digest(reads)
+    checks = [{
+        "binding_id": "binding-1", "check_id": "condition", "work_item_id": "t1",
+        "subject": {"key": "inline:candidate", "text": "candidate"}, "evidence": [source],
+    }]
+    metadata = {
+        "corpus_evidence": [] if empty_version else (records if observed is None else observed)
+    }
+    if reads is not None:
+        metadata["corpus_document_reads"] = reads
+    bus = SimpleNamespace(
+        get_job_result=lambda task_id, job_id: (None, SimpleNamespace(metadata=metadata))
+    )
+    packet = build_review_packet(
+        checks, bus=bus, task_id="run", max_inline_records=max_inline_records
+    )
+    return checks, packet
+
+
+async def test_job_and_handoff_bindings_read_the_same_captured_version():
+    from plugins.tools._verification import reset_verification_scope, set_verification_scope
+    from plugins.tools.read_bound_evidence import read_bound_evidence
+
+    records = sample_originals()
+    job_checks, job_packet = handoff_packet(records)
+    ref_checks, ref_packet = handoff_packet(records, ref=HANDOFF_REF)
+    job_key = job_checks[0]["evidence"][0]["key"]
+    ref_key = ref_checks[0]["evidence"][0]["key"]
+    assert (job_packet["sources"][job_key]["snapshot"]["sha256"]
+            == ref_packet["sources"][ref_key]["snapshot"]["sha256"])
+    for checks, packet, key in (
+        (job_checks, job_packet, job_key), (ref_checks, ref_packet, ref_key),
+    ):
+        token = set_verification_scope("review", {
+            "verification_checks": checks, "verification_packet": packet,
+        })
+        try:
+            payload = json.loads(await read_bound_evidence.func(
+                binding_id="binding-1", source_key=key, locator=records[2]["locator"],
+            ))
+        finally:
+            reset_verification_scope(token)
+        assert payload["ok"] and payload["record"]["text"] == records[2]["text"]
+        assert payload["fresh_observation"] is False
+        assert payload["source_availability"] == "not_rechecked"
+
+
+async def test_display_excerpt_keeps_background_originals_readable():
+    from plugins.tools._bound_evidence import packet_index
+    from plugins.tools._verification import reset_verification_scope, set_verification_scope
+    from plugins.tools.read_bound_evidence import read_bound_evidence
+
+    records = sample_originals()
+    checks, packet = handoff_packet(records, ref=HANDOFF_REF)
+    key = checks[0]["evidence"][0]["key"]
+    index = packet_index(packet)
+    entry = index["sources"][key]
+    assert entry["inline_record_count"] == 0 and entry["record_count"] == 3
+    assert entry["selection_mode"] == "on_demand"
+    assert entry["report_content_kind"] == "model_research_product"
+    assert records[2]["text"] not in json.dumps(index)
+    token = set_verification_scope("review", {
+        "verification_checks": checks, "verification_packet": packet,
+    })
+    try:
+        payload = json.loads(await read_bound_evidence.func(
+            binding_id="binding-1", source_key=key, locator=records[2]["locator"],
+        ))
+    finally:
+        reset_verification_scope(token)
+    assert payload["ok"] and payload["record_source"] == "bound_snapshot"
+    assert payload["record"]["text"] == records[2]["text"]
+    assert payload["record"]["locator"] == records[2]["locator"]
+    assert payload["record"]["content_kind"] == "original"
+    assert payload["record"]["coverage"] == {"tables": "not_obtained"}
+
+
+@pytest.mark.parametrize("inline", [False, True])
+async def test_snapshot_tampering_is_a_typed_failure(inline):
+    from plugins.tools._verification import reset_verification_scope, set_verification_scope
+    from plugins.tools.read_bound_evidence import read_bound_evidence
+
+    records = sample_originals()
+    checks, packet = handoff_packet(
+        records,
+        ref="" if inline else HANDOFF_REF,
+        max_inline_records=160 if inline else 2,
+    )
+    key = checks[0]["evidence"][0]["key"]
+    target = (packet["sources"][key]["records"] if inline
+              else packet["sources"][key]["snapshot"]["records"])
+    target[0]["text"] = "CHANGED AFTER DISPATCH"
+    token = set_verification_scope("review", {
+        "verification_checks": checks, "verification_packet": packet,
+    })
+    try:
+        payload = json.loads(await read_bound_evidence.func(
+            binding_id="binding-1", source_key=key,
+        ))
+    finally:
+        reset_verification_scope(token)
+    assert payload["code"] == "snapshot_version_changed"
+    assert payload["fresh_observation"] is False
+
+
+def test_declared_originals_without_readable_records_fails_at_dispatch():
+    with pytest.raises(ValueError, match="no readable captured originals"):
+        handoff_packet([], ref=HANDOFF_REF, empty_version=True)
+
+
+def test_handoff_binding_rejects_a_changed_source_version():
+    records = sample_originals()
+    changed = [dict(record, text="ANOTHER VERSION") for record in records]
+    with pytest.raises(ValueError, match="bound source version changed"):
+        handoff_packet(records, ref=HANDOFF_REF, observed=changed)
+
+
+def test_handoff_file_is_not_presented_as_captured_originals():
+    checks, packet = handoff_packet(sample_originals(), ref=HANDOFF_REF)
+    key = checks[0]["evidence"][0]["key"]
+    snapshot = packet["sources"][key]["snapshot"]
+    assert snapshot["content_kind"] == "captured_tool_observations"
+    assert snapshot["report_content_kind"] == "model_research_product"
+    assert snapshot["origin_job_id"] == "producer"
+    assert snapshot["handoff_ref"] == HANDOFF_REF
+    assert all(record.get("text") != HANDOFF_REF for record in snapshot["records"])
+
+
+def test_handoff_snapshot_is_not_priced_as_zero_or_unbounded_work():
+    from plugins.tools._verification import (
+        ON_DEMAND_ADMISSION_FLOOR_RECORDS,
+        packet_record_count,
+        packet_workload_records,
+    )
+
+    records = sample_originals()
+    _, job_packet = handoff_packet(records)
+    _, ref_packet = handoff_packet(records, ref=HANDOFF_REF)
+    assert packet_record_count(job_packet) == 3
+    assert packet_record_count(ref_packet) == 0
+    assert packet_workload_records(ref_packet) == packet_workload_records(job_packet) == 3
+    assert 0 < packet_workload_records(ref_packet) <= ON_DEMAND_ADMISSION_FLOOR_RECORDS

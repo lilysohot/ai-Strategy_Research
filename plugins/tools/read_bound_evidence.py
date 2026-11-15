@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 
 from frontier_agent.core.tool import tool
+from plugins.tools._bound_evidence import digest
 
 
 @tool
@@ -17,6 +18,9 @@ async def read_bound_evidence(
     not a fresh availability check. Use inline original evidence first. Missing
     evidence stays an unchecked result with unresolved_issues for the coordinator.
     Preserve content_kind and coverage: model-assisted extraction is not original text.
+    Large handoff-bound originals stay in a version-pinned background snapshot;
+    read them by locator on demand instead of enumerating every record. A handoff
+    file is a model research product, not source text.
 
     Args:
         binding_id: Exact binding_id of the current check.
@@ -37,9 +41,23 @@ async def read_bound_evidence(
     if source_key not in packet.get("bindings", {}).get(binding_id, []):
         return error("unbound_source")
     source = packet.get("sources", {}).get(source_key)
-    if not source or not source["records"]:
+    if not source:
         return error("no_captured_originals")
-    records = source["records"]
+    snapshot = source.get("snapshot") or {}
+    if "records" in snapshot:
+        records = snapshot.get("records") or []
+        record_source = "bound_snapshot"
+    else:
+        records = source.get("records") or []
+        record_source = "inline"
+    expected = snapshot.get("sha256")
+    if expected and digest({
+        "records": records,
+        "document_reads": snapshot.get("document_reads") or [],
+    }) != expected:
+        return error("snapshot_version_changed")
+    if not records:
+        return error("no_captured_originals")
     if locator:
         matches = [i for i, r in enumerate(records) if locator in {
             r.get("locator"), r.get("source"), r.get("evidence_ref"),
@@ -78,6 +96,8 @@ async def read_bound_evidence(
             "source_availability": "not_rechecked", "packet_sha256": packet["packet_sha256"],
             "binding_id": binding_id, "source_key": source_key,
             "record_index": record_index, "record_count": len(records),
+            "record_source": record_source,
+            "selection_mode": source.get("selection_mode", "inline"),
             "record": {**pointer, "text": text[offset:end], "source_fragment": record.get("fragment")},
             "range_in_record": {"start": offset, "end": end},
             "record_complete": offset == 0 and end == len(text),

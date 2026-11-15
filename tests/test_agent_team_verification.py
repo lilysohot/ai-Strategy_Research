@@ -196,7 +196,7 @@ async def test_planned_verification_gets_a_stable_default_check_identity():
         ExecutionScope(task_id="planned-run", metadata={SWARM_SCOPE_KEY: object()})
     )
     try:
-        await add_task.func([{"description": "核验关键数字"}])
+        await add_task.func([{"description": "核验关键数字", "verification_required": True}])
         assert snapshot_tasks("planned-run")[0]["verification_requirements"] == [
             {
                 "check_id": "t1.required",

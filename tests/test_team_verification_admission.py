@@ -181,6 +181,45 @@ async def test_rejected_dispatch_can_be_corrected_checked_and_delivered(admissio
     assert all(t["resolution"] == "resolved" for t in snapshot_tasks("run"))
 
 
+async def test_parent_registered_check_remains_dispatchable_after_split(admission_run):
+    from plugins.tools.task_board import snapshot_tasks
+    from tests.test_agent_team_verification import add_job
+
+    bus, _ = admission_run
+    await add_task.func([
+        {
+            "description": "Check the whole goal",
+            "verification_required": True,
+            "verification_requirements": [
+                {"check_id": "whole", "criterion": "Cover the whole goal"}
+            ],
+        }
+    ])
+    await add_task.func([{"description": "First segment", "parent_id": "t1"}])
+    add_job(bus, "source", [])
+
+    reply = await agent_team_assign_task.func(
+        tasks=[
+            {
+                "agent": "reviewer",
+                "prompt": "Check the parent goal",
+                "work_item_ids": ["t1"],
+                "verification_checks": [
+                    {
+                        "check_id": "whole",
+                        "work_item_id": "t1",
+                        "criterion": "Cover the whole goal",
+                        "subject": {"text": "The whole goal is covered."},
+                        "evidence": [{"job_id": "source"}],
+                    }
+                ],
+            }
+        ]
+    )
+    assert not reply.startswith("Error"), reply
+    assert snapshot_tasks("run")[0]["execution_job_ids"]
+
+
 async def test_check_nudge_arrives_while_other_research_is_running(admission_run, monkeypatch):
     from tests.test_agent_team_verification import add_job
     from tests.test_team_atomic_delivery import turn_context

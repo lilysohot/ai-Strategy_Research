@@ -75,6 +75,12 @@ class BoardAdd(BoardProgress):
     description: StrictStr = Field(min_length=1)
     group: StrictStr | None = None
     verification_required: StrictBool | None = None
+    parent_id: StrictStr | None = Field(
+        default=None,
+        description="Id of the work item this one segments. The parent keeps the original "
+        "goal and is not dispatched on its own; each segment is its own work item with its "
+        "own done_when.",
+    )
 
 
 class BoardUpdate(BoardProgress):

@@ -119,7 +119,10 @@ def finalize_team_report(
                 task.get("verification_execution_status") or "not_started"
             ),
             "required_for_completion": task.get("required_for_completion") is not False,
+            "parent_id": str(task.get("parent_id") or ""),
             "verification_required": task.get("verification_required") is True,
+            "verification_admission": dict(task.get("verification_admission") or {}),
+            "verification_estimate_s": task.get("verification_estimate_s") or 0.0,
             "verification_requirements": [
                 {
                     "check_id": str(item.get("check_id") or ""),
@@ -502,13 +505,15 @@ def finalize_team_report(
                 if zh
                 else f"{len(unresolved) - 20} more items remain on the task board."
             )
-    # Optional, self-added work that was retracted or left unfinished is still
-    # recorded — but as a non-blocking note, never as an evidence gap, and it is
-    # disclosed even when the answer itself is complete.
+    # Optional work left unfinished is disclosed as a non-blocking note, never
+    # as an evidence gap. A retracted (cancelled) enhancement stays in the audit
+    # contract but is not a user-facing item: internal resolution labels and the
+    # task board itself must not be rendered back into the answer.
     optional_unfinished = [
         task
         for task in board
-        if not task["required_for_completion"] and task["resolution"] != "resolved"
+        if not task["required_for_completion"]
+        and task["resolution"] not in {"resolved", "cancelled"}
     ]
     optional_notes: list[str] = []
     if optional_unfinished:
