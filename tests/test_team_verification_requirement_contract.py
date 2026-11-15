@@ -182,3 +182,15 @@ async def test_three_completion_classes_share_one_authoritative_predicate(explic
     reply = await update_task.func([{"id": "t1", "resolution": "resolved", "notes": "已解读"}])
     assert "errors:" not in reply
     assert verification_required(board()["t1"]) is False
+
+
+async def test_deep_interpretation_does_not_auto_register_a_required_check(explicit_checks):
+    """Ordinary deep reading stays a required RESULT, not a mandatory verifier."""
+    from frontier_agent.components.task_board_types import task_is_required
+    from plugins.tools.task_board import verification_required
+
+    await add_task.func([{"description": "对已取得的原文做深度解读并比较两种口径"}])
+    task = board()["t1"]
+    assert task_is_required(task) is True
+    assert verification_required(task) is False
+    assert not task.get("verification_requirements")

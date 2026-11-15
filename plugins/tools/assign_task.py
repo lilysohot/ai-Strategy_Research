@@ -94,6 +94,59 @@ def _bound_packet_records(bus: Any, task_id: str, check_ids: set[str]) -> int:
     return 0
 
 
+# Suppress only repeated DETERMINISTIC failures of an unchanged request. An
+# effective fix (different evidence refs, parameters or relevant state) changes
+# the fingerprint and must be allowed to re-validate and dispatch.
+_DETERMINISTIC_FAILURE_MARKERS = (
+    ("packet_too_large", ("bound evidence packet has",)),
+    ("invalid_evidence_ref", ("not captured by job", "selected evidence refs have no readable")),
+    ("invalid_handoff_ref", ("handoff ref was not submitted",)),
+    ("schema_error", ("Extra inputs are not permitted", "validation error for")),
+    ("window_closed", ("admission window is closed", "window is closed")),
+    ("unbound_check", ("No planned check", "unbound")),
+)
+_TRANSIENT_RETRY_LIMIT = 2
+
+
+def _classify_dispatch_failure(message: str) -> tuple[str, bool]:
+    for code, markers in _DETERMINISTIC_FAILURE_MARKERS:
+        if any(marker in message for marker in markers):
+            return code, True
+    return "transient", False
+
+
+def _request_fingerprint(spec: Any, board: dict[str, Any]) -> str:
+    from plugins.tools._bound_evidence import digest
+
+    payload = (
+        spec.model_dump(mode="json")
+        if hasattr(spec, "model_dump") else str(spec)
+    )
+    status = [
+        (
+            tid,
+            task.get("resolution"),
+            task.get("verification_status"),
+            len(task.get("execution_job_ids") or []),
+        )
+        for tid, task in sorted(board.items())
+    ]
+    return digest(json.dumps(
+        {"request": payload, "state": status},
+        sort_keys=True, ensure_ascii=False, default=str,
+    ))
+
+
+def _record_dispatch_failure(scope: Any, fingerprint: str, message: str) -> None:
+    code, deterministic = _classify_dispatch_failure(message)
+    dedup = scope.metadata.setdefault("dispatch_failure_dedup", {})
+    prior = dedup.get(fingerprint)
+    if prior and prior["code"] == code:
+        prior["count"] += 1
+    else:
+        dedup[fingerprint] = {"code": code, "deterministic": deterministic, "count": 1}
+
+
 def _session_at_task_cap(session: Any) -> bool:
     """Whether this session can no longer accept an assignment.
 
@@ -767,6 +820,18 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
         if not task_prompt:
             errors.append(f"Skipping empty task for {agent_name!r}")
             continue
+        fingerprint = _request_fingerprint(spec, board)
+        prior_failure = scope.metadata.get("dispatch_failure_dedup", {}).get(fingerprint)
+        if prior_failure and (
+            prior_failure["deterministic"]
+            or prior_failure["count"] >= _TRANSIENT_RETRY_LIMIT
+        ):
+            errors.append(
+                f"{agent_name}: identical request already failed with "
+                f"{prior_failure['code']}; change the evidence selection, parameters "
+                "or relevant state before retrying. An effective correction is allowed."
+            )
+            continue
         publication_phase = ""
         budget_phase = ""
         active_publisher = ""
@@ -858,14 +923,23 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
             and runtime is not None
             and getattr(runtime, "phase_budget", None) is not None
             and (is_publication_assignment or uses_publication_budget)
-            and not runtime.phase_budget.can_dispatch_publication()
         ):
-            errors.append(
-                f"{agent_name}: the publication window is closed. Preserve "
-                "files already present and let the workflow finalize its "
-                "best-effort status report"
+            # A registered check uses the verification window and its own
+            # budget, never the research admission or the publisher window.
+            verification_only = is_verification_assignment and not is_publication_assignment
+            window_open = (
+                runtime.phase_budget.can_dispatch_verification()
+                if verification_only
+                else runtime.phase_budget.can_dispatch_publication()
             )
-            continue
+            if not window_open:
+                window = "verification" if verification_only else "publication"
+                errors.append(
+                    f"{agent_name}: the {window} window is closed. Keep the registered "
+                    "check unchecked and disclose the limitation; do not substitute "
+                    "a new research dispatch for it."
+                )
+                continue
         if publication_phase == "publishing" and not is_publication_assignment:
             errors.append(
                 f"{agent_name}: publication phase is active under "
@@ -1314,9 +1388,11 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                 from plugins.tools.task_board import bind_assignment
 
                 bind_assignment(scope.task_id, spec.work_item_ids, agent_name, job_id)
+            scope.metadata.get("dispatch_failure_dedup", {}).pop(fingerprint, None)
             submitted.append({"agent": agent_name, "job_id": job_id})
         except RuntimeError as exc:
             errors.append(f"{agent_name}: {exc}")
+            _record_dispatch_failure(scope, fingerprint, str(exc))
         except Exception as exc:
             logger.warning(
                 "assign_task: failed for %s: %s",
@@ -1324,6 +1400,7 @@ async def assign_task(tasks: list[AssignmentSpec] | str = "") -> str:
                 exc,
             )
             errors.append(f"{agent_name}: {exc}")
+            _record_dispatch_failure(scope, fingerprint, str(exc))
 
     all_errors = [*validation_errors, *errors]
     if not submitted and all_errors:

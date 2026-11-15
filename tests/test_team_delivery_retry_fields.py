@@ -361,3 +361,33 @@ async def test_older_candidate_version_cannot_overwrite_a_newer_candidate(delive
         base_version=2,
         updates=[{"id": "t1", "resolution": "resolved", "notes": "done"}],
     ) == ACCEPTED
+
+
+# --- W5: offline fault injection ----------------------------------------------
+
+
+async def test_manifest_commit_failure_keeps_candidate_without_partial_commit(
+    delivery_run, monkeypatch,
+):
+    """D3: a persistence failure rolls back and reports its exact location."""
+    from frontier_agent.core.execution_context import get_current_execution_scope
+
+    await add_task.func([{"description": "Explain evidence"}])
+    body = "The requested interpretation is complete."
+    updates = [{"id": "t1", "resolution": "resolved", "notes": "done"}]
+    before = snapshot_tasks("run")
+    monkeypatch.setattr(
+        "plugins.corpus.final_delivery.prepare_delivery_manifest",
+        lambda *args, **kwargs: {"stub": "manifest"},
+    )
+
+    def fail_commit(payload):
+        raise ValueError("disk write failed")
+
+    monkeypatch.setattr("plugins.tools.corpus_manifest.commit_final_manifest", fail_commit)
+    with pytest.raises(ValueError) as failed:
+        await deliver_answer.func(content=body, updates=updates)
+    assert "candidate v1" in raw(failed)
+    assert "disk write failed" in raw(failed)
+    assert snapshot_tasks("run") == before
+    assert get_current_execution_scope().metadata["delivery_candidate"]["content"] == body

@@ -19,6 +19,7 @@ from frontier_agent.core.loop_types import (
     ToolCallIntervention,
     ToolResult,
     TurnContext,
+    wall_deadline_remaining_s,
 )
 from frontier_agent.core.runtime import registry
 from frontier_agent.core.tool import tool
@@ -814,9 +815,10 @@ class TeamDeliveryObserver(BaseObserver):
             )
         if not time_to_deliver and not turns_to_deliver and not ready:
             if bus and self.budget.sync_phase(now) not in {"publishing", "finalizing"}:
-                remaining_verification = self.budget.remaining_for_job(
+                remaining_verification = self.budget.admission_remaining_for_job(
                     can_publish=False,
                     is_verification=True,
+                    wall_remaining_s=wall_deadline_remaining_s(),
                 )
                 if (
                     remaining_verification is None

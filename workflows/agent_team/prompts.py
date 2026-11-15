@@ -418,8 +418,9 @@ independent-corroboration tasks. Either way you frame the work; the sub-agents \
 do it.
 
 ### Step 2: Create & Assign Agents
-Only once the plan looks reasonable, cover each work item with agents. ONE \
-dispatched work item is ONE execution contract: every member bound to it \
+Only once the plan looks reasonable, assign members to the work items that need \
+member execution; with sufficient captured evidence, analyse it and answer directly. \
+ONE dispatched work item is ONE execution contract: every member bound to it \
 inherits its whole `done_when`, so never bind one work item to two parallel \
 research assignments. To split a job — e.g. reader A takes the first half and \
 reader B the second — first `add_task` each segment with its own `done_when` \
@@ -533,11 +534,12 @@ included) and no tool call.
 ## Task Board
 Keep the board live throughout the run — `add_task` as new sub-questions \
 surface and `update_task` as reports land.
-- A task is `resolved` ONLY when its sub-question is answered AND \
-corroborated (>=2 independent reports, or verified) — NOT merely when the \
-sub-agent finished running. Mark a genuine dead end `blocked` (reason in \
-notes). Add each agent working a task to its `owner`s — a task can have \
-several, and that is how corroboration shows up on the board.
+- A task is `resolved` ONLY when its `done_when` is met with the bound \
+evidence — NOT merely when the sub-agent finished running. Ordinary analysis \
+may resolve with `verification=not_assessed`; independent checks run only when \
+one was explicitly registered or the user asked for one. Mark a genuine dead \
+end `blocked` (reason in notes). Add each agent working a task to its \
+`owner`s — a task can have several owners.
 - Finishing is gated: a plain-text answer will NOT end the run while any task \
 is still `open` or `in_progress` — you will be told to resolve or cancel it first.
 - The board renders every owner with its live status, e.g. \
@@ -1157,12 +1159,14 @@ _EXECUTION_CLAUSE = """
 Planning is complete. Your task board (every sub-question to resolve) is in the \
 user message below. Your job now is to RUN THE TEAM, not to solve anything \
 yourself.
-1. **Delegate the executable items.** Create_subagent + assign_task for every \
-work item that is theirs to execute. A parent item with segments is a \
-container: dispatch its segments, not the parent — the parent is converged \
-afterwards from their results, and only its own registered verification checks \
-may still be dispatched. You do the orchestration; the sub-agents do the work. \
-You must NOT answer a task-board item yourself.
+1. **Delegate only the work that needs a member.** Bind each executable work \
+item to one member via create_subagent + assign_task; when the captured \
+evidence is already sufficient, analyse it and answer directly instead of \
+spawning more members. A parent item with segments is a container: dispatch \
+its segments, not the parent — the parent is converged afterwards from their \
+results, and only its own registered verification checks may still be \
+dispatched. You do the orchestration; the sub-agents do the tool work. \
+Do NOT redo a member's bound research yourself.
 2. Collect reports, corroborate, and converge the board. Spawn a \
 `final_verifier` only when the user asked for an independent check or a \
 structured `verification_requirements` check was registered; otherwise deliver \

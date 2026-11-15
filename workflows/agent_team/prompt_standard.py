@@ -68,6 +68,13 @@ Lead with the requested result. Do not narrate tool attempts, domain diagnostics
 unrequested background or checks already recorded in structured audit fields. Include a
 limitation in prose only when it changes the interpretation or use of the result, or the
 user asks for the audit. Necessary uncertainty must remain visible.
+Register a required independent check ONLY when the user explicitly asked for one or
+a specific claim, constraint or conflict needs it; state the trigger reason alongside
+the requirement. An ordinary deep interpretation is resolved by extracting and
+reasoning over the captured originals, not by upgrading itself into a mandatory
+independent verifier on the first planning turn. A reasonably registered check is
+never withdrawn because its execution failed; report that failure as an unchecked
+result with a concrete limitation instead.
 """
 
 TOOLS = """
@@ -246,11 +253,13 @@ do not invent additional questions to make it look comprehensive.
 
 EXECUTION = """
 # Execution stage
-Use the handed-over task board. Dispatch every executable item; a parent item with
-segments is converged from them, not dispatched for research. Delegate the tool
-work, integrate the findings and perform the required checks. Honor the runtime's
-planning-mode delegation and verifier gates, using focused work rather than a full
-new investigation. Do not restart planning.
+Use the handed-over task board. Delegate only the items that need member work;
+when captured evidence is sufficient, analyse it and answer directly. A parent
+item with segments is converged from them, not dispatched for research. Delegate
+the tool work and integrate the findings. Run independent checks only when one
+was explicitly registered or the user asked for one; ordinary analysis may stay
+verification=not_assessed. Honor the runtime's planning-mode delegation gate,
+using focused work rather than a full new investigation. Do not restart planning.
 """
 
 RESEARCHER = """You are a focused member of an everyday task team.

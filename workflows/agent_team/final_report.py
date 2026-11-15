@@ -73,6 +73,72 @@ def _chinese(question: str, language: str) -> bool:
     return bool(re.search(r"[\u4e00-\u9fff]", question))
 
 
+# User-facing gap wording is generated from stable internal codes. Raw tool
+# diagnostics, done_when text, check ids, ce: handles and job ids stay in the
+# audit contract / engine log; they must never be rendered back into an answer.
+_GAP_USER_MESSAGES: dict[str, tuple[str, str]] = {
+    "verification_packet_too_large": (
+        "部分关键数据未完成独立核对", "Some key figures were not independently checked",
+    ),
+    "evidence_ref_bind_failed": (
+        "部分关键数据未完成独立核对", "Some key figures were not independently checked",
+    ),
+    "handoff_ref_rejected": (
+        "部分关键数据未完成独立核对", "Some key figures were not independently checked",
+    ),
+    "precision_read_not_executed": (
+        "部分章节尚未完成深入分析", "Some sections were not analysed in depth",
+    ),
+    "table_extraction_incomplete": (
+        "部分图表内容无法从现有文本可靠确认",
+        "Some table contents cannot be confirmed from the available text",
+    ),
+    "task_unresolved": ("部分任务尚未完成", "Some work items remain unfinished"),
+    "task_evidence_gap": ("部分数据尚未确认", "Some figures could not be confirmed"),
+    "missing_corpus": ("部分原文资料未能取得", "Some original sources could not be obtained"),
+}
+# A tool handoff failure is NEVER reported as missing original material.
+_TOOL_HANDOFF_MARKERS = (
+    "160 records", "bound evidence packet", "publish_handoff", "evidence_refs",
+    "handoff ref", "packet_too_large", "verification_admission", "ce:", "job.",
+    "核验包", "引用", "绑定", "上限",
+)
+_DEEP_READ_MARKERS = ("精读", "未执行", "not executed", "分段", "segment")
+_TABLE_MARKERS = ("图表", "table", "extraction", "抽取")
+
+
+def _gap_code(task: dict[str, Any]) -> str:
+    """Classify a board gap into a structured, user-facing-safe code."""
+    explicit = str(task.get("gap_code") or "")
+    if explicit in _GAP_USER_MESSAGES:
+        return explicit
+    detail = " ".join(
+        str(task.get(key) or "") for key in ("gap", "notes", "description", "reason", "agent")
+    ).lower()
+    if any(marker in detail for marker in _TOOL_HANDOFF_MARKERS):
+        return "verification_packet_too_large"
+    if any(marker in detail for marker in _DEEP_READ_MARKERS):
+        return "precision_read_not_executed"
+    if any(marker in detail for marker in _TABLE_MARKERS):
+        return "table_extraction_incomplete"
+    if any(marker in detail for marker in ("未确认", "unconfirmed", "evidence gap")):
+        return "task_evidence_gap"
+    return "task_unresolved"
+
+
+def _user_gap_lines(tasks: list[dict[str, Any]], zh: bool, seen: set[str]) -> list[str]:
+    """One short line per distinct code; parent/child duplicates are merged."""
+    lines = []
+    for task in tasks:
+        code = _gap_code(task)
+        if code in seen:
+            continue
+        seen.add(code)
+        zh_text, en_text = _GAP_USER_MESSAGES[code]
+        lines.append(f"- {zh_text if zh else en_text}")
+    return lines
+
+
 def _label(value: object) -> str:
     """Render a bounded board label as text, never as HTML or Markdown links."""
     text = " ".join(str(value or "").split())[:240]
@@ -397,6 +463,7 @@ def finalize_team_report(
 
     notes: list[str] = []
     verification_notes: list[str] = []
+    seen_gap_codes: set[str] = set()
     if scope_findings:
         notes.append(
             "已移除超出检索覆盖范围的全库断言。本次检索覆盖或日期信息不完整；"
@@ -419,11 +486,10 @@ def finalize_team_report(
     ]
     undisclosed_gaps = [task for task in declared_gaps if system or task["gap"].strip() not in text]
     if undisclosed_gaps:
-        notes.append("仍未确认的证据缺口：" if zh else "Unresolved evidence gaps:")
-        notes.extend(
-            f"- {_label(task['description'] or task['id'])}: {gap_label(task['gap'])}"
-            for task in undisclosed_gaps[:20]
-        )
+        for task in undisclosed_gaps:
+            gap_label(task["gap"])  # retain scope findings in the audit contract
+        notes.append("以下限制仅涉及尚未确认的部分：" if zh else "Unconfirmed parts:")
+        notes.extend(_user_gap_lines(undisclosed_gaps, zh, seen_gap_codes))
     if verification["checks"]:
         verification_notes.append(
             "以下结论仅针对列明版本与检查项，不代表整份报告或其他版本已通过核验："
@@ -448,21 +514,17 @@ def finalize_team_report(
                 )
     if required_gaps:
         notes.append(
-            "以下必要成员任务或检查仍有缺口；已返回的工具观测不等于核验通过："
+            "以下限制仅涉及尚未完成的部分；已取得的结果仍可用："
             if zh
-            else "Required member jobs or checks remain incomplete; observations are not verification:"
+            else "These limits concern only unfinished parts; obtained results remain usable:"
         )
-        notes.extend(
-            f"- {_label(job.get('agent') or job.get('job_id'))}: "
-            f"{_label(job.get('reason') or 'verification_not_passed')} ({_label(job.get('job_id'))})"
-            for job in required_gaps[:20]
-        )
-        if len(required_gaps) > 20:
-            notes.append(
-                f"另有 {len(required_gaps) - 20} 项，完整列表见运行记录。"
-                if zh
-                else f"{len(required_gaps) - 20} more jobs are listed in the run record."
-            )
+        notes.extend(_user_gap_lines(
+            [
+                {"gap": str(job.get("reason") or ""), "notes": str(job.get("agent") or "")}
+                for job in required_gaps
+            ],
+            zh, seen_gap_codes,
+        ))
     if contradictory:
         notes.append(
             "已移除超出可确认核验范围的声明句；其他分析予以保留。原始候选正文与命中位置保存在运行记录中。"
@@ -493,18 +555,8 @@ def finalize_team_report(
     # A task gap already appears either in the answer or the gap disclosure above.
     unresolved = [t for t in unresolved if not t["gap"].strip()]
     if unresolved:
-        notes.append("任务板尚未解决的事项：" if zh else "Unresolved task-board items:")
-        notes.extend(
-            f"- {_label(task['description'] or task['id'])}"
-            + (f": {gap_label(task['gap'] or task['notes'])}" if task["gap"] or task["notes"] else "")
-            for task in unresolved[:20]
-        )
-        if len(unresolved) > 20:
-            notes.append(
-                f"另有 {len(unresolved) - 20} 项，详见任务板。"
-                if zh
-                else f"{len(unresolved) - 20} more items remain on the task board."
-            )
+        notes.append("尚未完成的部分：" if zh else "Unfinished parts:")
+        notes.extend(_user_gap_lines(unresolved, zh, seen_gap_codes))
     # Optional work left unfinished is disclosed as a non-blocking note, never
     # as an evidence gap. A retracted (cancelled) enhancement stays in the audit
     # contract but is not a user-facing item: internal resolution labels and the
@@ -522,9 +574,10 @@ def finalize_team_report(
             if zh
             else "Optional self-added items, excluded from the completion verdict:"
         )
+        # These are user-authored optional work items, not internal diagnostics.
+        # Keep their readable descriptions, but never echo the raw gap detail.
         optional_notes.extend(
-            f"- {_label(task['description'] or task['id'])}: {task['resolution']}"
-            + (f" — {gap_label(task['gap'] or task['notes'])}" if task["gap"] or task["notes"] else "")
+            f"- {_label(task['description'] or task['id'])}"
             for task in optional_unfinished[:10]
         )
     if counts and system:

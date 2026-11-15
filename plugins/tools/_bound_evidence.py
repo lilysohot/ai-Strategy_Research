@@ -63,7 +63,31 @@ def build_review_packet(
             )
             if declares_originals and not records:
                 raise ValueError(f"bound source has no readable captured originals: {key}")
-            on_demand = bool(source.get("ref")) and len(records) > max_inline_records
+            # Model layer: legal evidence_refs resolved to internal locators.
+            # Runtime layer: only those records are inlined; every other
+            # captured original stays in the version-pinned background snapshot.
+            # On-demand readback is a property of packet size, NOT of whether
+            # the job happened to publish a handoff attachment.
+            locators = list(source.get("record_locators") or [])
+            if locators:
+                allowed = set(locators)
+                inline_records = [
+                    deepcopy(record)
+                    for record in records
+                    if any(
+                        record.get(field) in allowed
+                        for field in ("locator", "evidence_ref", "source")
+                    )
+                ]
+                if not inline_records:
+                    raise ValueError(f"selected evidence refs have no readable records: {key}")
+                selection_mode = "selected"
+            elif len(records) > max_inline_records:
+                inline_records = []
+                selection_mode = "on_demand"
+            else:
+                inline_records = records
+                selection_mode = "inline"
             snapshot: dict[str, Any] = {
                 "scope": "bound_evidence_snapshot",
                 "content_kind": "captured_tool_observations",
@@ -76,14 +100,14 @@ def build_review_packet(
                 "document_reads": document_reads,
                 "sha256": digest({"records": records, "document_reads": document_reads}),
             }
-            if on_demand:
-                # Keep one copy of the full originals in the background, never
-                # duplicate them into the inlined selection.
+            if selection_mode != "inline":
                 snapshot["records"] = records
+            if locators:
+                snapshot["selected_record_count"] = len(inline_records)
             sources[key] = {
-                "records": [] if on_demand else records,
+                "records": inline_records,
                 "document_reads": document_reads,
-                "selection_mode": "on_demand" if on_demand else "inline",
+                "selection_mode": selection_mode,
                 "snapshot": snapshot,
             }
         bindings[check["binding_id"]] = list(dict.fromkeys(keys))

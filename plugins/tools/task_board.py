@@ -25,6 +25,7 @@ from frontier_agent.components.task_board_types import (
     task_is_required,
 )
 from frontier_agent.core.execution_context import get_current_execution_scope
+from frontier_agent.core.loop_types import wall_deadline_remaining_s
 from frontier_agent.core.runtime import registry
 from frontier_agent.core.tool import tool
 from plugins.tools._bus_scope import SWARM_SCOPE_KEY, resolve_bus_task_id
@@ -798,7 +799,13 @@ def _verification_capacity_notice(
     )
     if total <= 0:
         return ""
-    remaining = phase_budget.remaining_for_job(can_publish=False, is_verification=True)
+    # Price verification capacity against the same wall-capped admission
+    # boundary as dispatch, never against the phase boundary alone.
+    remaining = phase_budget.admission_remaining_for_job(
+        can_publish=False,
+        is_verification=True,
+        wall_remaining_s=wall_deadline_remaining_s(),
+    )
     if remaining is None or total <= remaining:
         return ""
     return (

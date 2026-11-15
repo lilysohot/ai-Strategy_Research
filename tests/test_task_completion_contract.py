@@ -98,7 +98,8 @@ async def test_optional_gap_is_recorded_without_downgrading_the_answer(delivery_
     assert [item["task_id"] for item in optional] == ["t2"]
     # Recorded, visible and non-blocking.
     assert "Compare with public external coverage" in result["final_answer"]
-    assert "No public sources were read" in result["final_answer"]
+    # Raw gap diagnostics stay in the audit contract, not in the answer.
+    assert "No public sources were read" not in result["final_answer"]
     assert "Partial result" not in result["final_answer"]
 
 

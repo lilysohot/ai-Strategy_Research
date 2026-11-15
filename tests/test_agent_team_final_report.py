@@ -76,7 +76,10 @@ def test_resolved_board_retains_declared_evidence_gap_and_prefixes_partial_answe
         for g in out["report_contract"]["gaps"]
     )
     assert out["final_answer"].index("部分完成") < out["final_answer"].index(draft)
-    assert "B 的官方现价未确认" in out["final_answer"]
+    # The raw board gap stays in the audit contract; the answer gets a
+    # code-generated, user-readable limitation.
+    assert "B 的官方现价未确认" not in out["final_answer"]
+    assert "部分数据尚未确认" in out["final_answer"]
 
 
 def test_task_resolution_is_separate_from_observed_member_execution():
@@ -249,7 +252,10 @@ def test_unresolved_board_prevents_complete_even_when_fan_in_is_complete():
         ],
     )
     assert out["answer_status"] == "partial"
-    assert "重复退款核验" in out["final_answer"]
+    # Board prose is no longer rendered back into the answer; the user gets a
+    # code-generated limitation while the raw detail stays in the audit contract.
+    assert "重复退款核验" not in out["final_answer"]
+    assert "部分任务尚未完成" in out["final_answer"]
     assert "已撤回的探索" not in out["final_answer"]
     assert out["report_contract"]["gaps"] == [
         {"code": "task_unresolved", "task_id": "t2", "description": "重复退款核验"},
@@ -369,7 +375,8 @@ async def test_reporter_failure_preserves_safe_baseline_and_success_preserves_ga
     state.update(await agent_team_reporter(state, object()))
     assert "<report" not in state["final_answer"]
     assert "INTERNAL_EVIDENCE" not in state["final_answer"]
-    assert "重复退款核验" in state["final_answer"]
+    assert "重复退款核验" not in state["final_answer"]
+    assert "部分任务尚未完成" in state["final_answer"]
     if mode == "success":
         assert state["final_answer_source"] == "reporter_llm"
         assert state["answer_status"] == "partial"
@@ -553,3 +560,72 @@ async def test_reporter_cannot_drop_explicit_inference_labels(monkeypatch):
     )
 
     assert out == {}
+
+
+# --- W4 P2: normal and recovered answers share one display contract -----------
+
+_INTERNAL_DISPLAY_MARKERS = (
+    "sha256=", "chunk:", "unit:", "offset=", "/workspace", "/outputs",
+    "job_id=", "binding_id=", "call-1", "Traceback (most recent call last)",
+    "provider unavailable",
+)
+
+
+@pytest.mark.parametrize("recovery", [False, True])
+def test_normal_and_recovery_answers_share_display_rules(recovery):
+    text = "根据已取得的原文，结论是需求成立，但预算受限。"
+    if recovery:
+        out = publish(
+            text,
+            question="解读原文",
+            stopped_by="user_stop",
+            wind_down={"status": "partial", "run_status": "incomplete"},
+        )
+    else:
+        out = publish(text, question="解读原文")
+    answer = out["final_answer"]
+    assert answer.strip()
+    for marker in _INTERNAL_DISPLAY_MARKERS:
+        assert marker not in answer, f"recovery={recovery}: {marker}"
+    assert "需求成立" in answer
+
+
+# --- W6: structured gap codes, never raw diagnostics -------------------------
+
+
+@pytest.mark.parametrize(
+    "gap,expected",
+    [
+        (
+            "绑定 job.1 全报告时证据包达 272 条超过 160 条上限；按 ce: 引用绑定又被拒"
+            "（ref 必须是该 job 的 publish_handoff 产物）",
+            "部分关键数据未完成独立核对",
+        ),
+        ("分段精读任务未执行", "部分章节尚未完成深入分析"),
+        ("原文图表抽取不完整", "部分图表内容无法从现有文本可靠确认"),
+    ],
+)
+def test_gap_messages_come_from_codes_not_raw_diagnostics(gap, expected):
+    out = publish(
+        "已有可用结论。",
+        question="解读原文",
+        tasks=[
+            {
+                "id": "t1", "description": "父项", "resolution": "blocked",
+                "notes": gap, "gap": gap, "done_when": "cover all",
+            },
+            {
+                "id": "t2", "description": "子项", "parent_id": "t1",
+                "resolution": "blocked", "notes": gap, "gap": gap,
+            },
+        ],
+        wind_down={"status": "partial", "run_status": "incomplete"},
+    )
+    answer = out["final_answer"]
+    assert expected in answer
+    assert answer.count(expected) == 1, "parent/child duplicate gaps must be merged"
+    for marker in ("job.1", "ce:", "160", "publish_handoff", "done_when", "272"):
+        assert marker not in answer, marker
+    # A tool handoff failure is never reported as missing original material.
+    assert "原文缺失" not in answer
+    assert "部分原文资料未能取得" not in answer

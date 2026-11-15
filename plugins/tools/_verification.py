@@ -310,6 +310,15 @@ class VerificationSource(BaseModel):
     model_config = ConfigDict(extra="forbid")
     job_id: StrictStr = Field(min_length=1, max_length=180)
     ref: StrictStr = Field(default="", max_length=1000)
+    evidence_refs: list[StrictStr] = Field(
+        default_factory=list,
+        max_length=64,
+        description="Already captured evidence_ref handles this job actually observed. "
+        "The runtime resolves them to version-pinned INTERNAL record locators; never "
+        "construct locators, hashes or file paths yourself. Selecting valid refs "
+        "proves the refs are legal, NOT that the evidence supports the claim. "
+        "Omit to leave the whole captured snapshot available for on-demand readback.",
+    )
 
 
 class VerificationText(BaseModel):
@@ -386,7 +395,7 @@ class VerificationCheck(BaseModel):
             )
         if not has_text and not has_job:
             raise ValueError("subject 必须是 {text: 候选全文} 或 {job_id, ref?} 之一")
-        allowed = {"text"} if has_text else {"job_id", "ref"}
+        allowed = {"text"} if has_text else {"job_id", "ref", "evidence_refs"}
         unknown = sorted(set(value) - allowed)
         if unknown:
             raise ValueError(
@@ -512,6 +521,36 @@ def _digest(value: Any) -> str:
     return hashlib.sha256(raw.encode()).hexdigest()
 
 
+def _resolve_evidence_refs(
+    source: VerificationSource,
+    metadata: dict[str, Any],
+) -> list[str] | None:
+    """Resolve model-supplied handles into internal, version-pinned locators.
+
+    Only the named job's own captured observations are consulted: a ref from a
+    different job, an invented handle or a stale version fails loudly instead
+    of being silently matched to another source.
+    """
+    if not source.evidence_refs:
+        return None
+    captured: dict[str, str] = {}
+    for evidence_field in ("corpus_evidence", "web_evidence"):
+        for record in metadata.get(evidence_field) or []:
+            if not isinstance(record, dict):
+                continue
+            ref = str(record.get("evidence_ref") or "")
+            if ref:
+                captured[ref] = str(record.get("locator") or ref)
+    missing = [ref for ref in source.evidence_refs if ref not in captured]
+    if missing:
+        raise ValueError(
+            f"evidence_refs are not captured by job {source.job_id!r}: {missing[:5]}. "
+            "Bind only evidence refs this job actually observed; refs from another "
+            "job cannot be silently matched."
+        )
+    return list(dict.fromkeys(captured[ref] for ref in source.evidence_refs))
+
+
 def _resolve_source(
     source: VerificationSource,
     bus: AgentBus,
@@ -534,8 +573,16 @@ def _resolve_source(
         if not body.strip():
             raise ValueError("cannot bind an empty source report")
         digest = hashlib.sha256(body.encode()).hexdigest()
-    key = source.job_id + (f"::{source.ref}" if source.ref else "")
+    selected = _resolve_evidence_refs(source, result.metadata)
+    if selected:
+        # A stable handle, not internal locators: two checks may select
+        # different small ranges from the same large job without colliding.
+        key = source.job_id + "::sel:" + _digest(selected)[:12]
+    else:
+        key = source.job_id + (f"::{source.ref}" if source.ref else "")
     resolved: dict[str, Any] = {**source.model_dump(), "sha256": digest, "key": key}
+    if selected:
+        resolved["record_locators"] = selected
     observations = result.metadata.get("content_acquisition") or []
     limits = compact_corpus_limits(observations)
     if limits:

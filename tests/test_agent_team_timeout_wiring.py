@@ -249,7 +249,12 @@ async def test_draining_instruction_allows_reserved_verification() -> None:
     decision = await TeamPhaseBudgetObserver(budget).on_turn_end(SimpleNamespace(metadata={}))
     assert decision is not None
     assert "research or verification" not in decision.inject_messages[0]
-    assert "final_verifier" in decision.inject_messages[0]
+    # W4: one run contract for every prompt family. The draining hint may
+    # reserve time for already registered checks, but must not mandate a
+    # whole-answer final_verifier or restore a per-mode audit requirement.
+    assert "final_verifier" not in decision.inject_messages[0]
+    assert "registered checks" in decision.inject_messages[0]
+    assert "verification=not_assessed" in decision.inject_messages[0]
 
 
 def test_web_phase_plan_reserves_a_distinct_publication_slice() -> None:

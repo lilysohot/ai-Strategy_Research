@@ -141,6 +141,142 @@ async def test_failed_delivery_hands_its_candidate_to_recovery():
         reset_current_execution_scope(token)
 
 
+# --- W5: offline fault injection for the four recovery stop modes -------------
+
+
+@pytest.mark.parametrize(
+    "stopped_by",
+    ["llm_error", "context_limit_reached", "wall_deadline", "max_turns"],
+)
+async def test_recovery_keeps_delivery_candidate_across_failure_modes(stopped_by):
+    """D5: empty/length/stream/deadline stops keep the already saved body."""
+    from frontier_agent.core.loop_types import AgentLoopResult
+    from workflows.agent_team.subagent_runtime import force_final_answer
+
+    body = "Retained usable body from the last repairable delivery."
+    result = AgentLoopResult(
+        messages=[],
+        final_content="",
+        stopped_by=stopped_by,
+        metadata={"final_answer_candidate": body},
+    )
+    out = await force_final_answer(
+        result,
+        None,
+        1.0,
+        task_description="Explain the evidence",
+        run_recovery_llm=False,
+    )
+    assert out.metadata.get("final_answer") == body
+    assert out.metadata.get("final_answer_source") == "existing_partial"
+
+
+async def test_recovery_without_a_candidate_stays_honest():
+    from frontier_agent.core.loop_types import AgentLoopResult
+    from workflows.agent_team.subagent_runtime import force_final_answer
+
+    result = AgentLoopResult(
+        messages=[], final_content="", stopped_by="wall_deadline", metadata={},
+    )
+    out = await force_final_answer(
+        result, None, 1.0, task_description="Explain the evidence",
+        run_recovery_llm=False,
+    )
+    answer = out.metadata.get("final_answer") or out.final_content
+    assert answer.strip()
+    assert "Traceback" not in answer
+
+
+# --- W6: truncated bare text must never be published -------------------------
+
+
+@pytest.mark.parametrize("turn", [1, 7])
+async def test_truncated_bare_text_is_only_an_unfinished_candidate(monkeypatch, turn):
+    """Core acceptance: finish_reason=length never publishes, even on the last turn."""
+    from types import SimpleNamespace
+    from unittest.mock import Mock
+
+    from frontier_agent.core.execution_context import (
+        ExecutionScope,
+        get_current_execution_scope,
+        reset_current_execution_scope,
+        set_current_execution_scope,
+    )
+    from workflows.agent_team.observers import bare_text_finalize as module
+
+    completed = Mock()
+    # The gate passes (all task-board items disposed). Truncation alone must
+    # still prevent publication; the last-turn bypass must not override it.
+    monkeypatch.setattr(module, "finalize_gate", lambda *args, **kwargs: None)
+    monkeypatch.setattr(module, "resolve_bus_task_id", lambda scope: "run-w6")
+    monkeypatch.setattr(module, "complete_delivery_tasks", completed)
+
+    token = set_current_execution_scope(ExecutionScope(task_id="run-w6", metadata={}))
+    try:
+        ctx = SimpleNamespace(
+            tool_calls=[],
+            ai_text="A complete answer cut off by the output limit",
+            metadata={"finish_reason": "length"},
+            turn=turn,
+            max_turns=8,
+            task_id="run-w6",
+        )
+        result = await module.BareTextFinalizeObserver().on_llm_response(ctx)
+        assert result is None
+        assert ctx.metadata.get("final_answer") is None
+        assert ctx.metadata["final_answer_candidate"].startswith("A complete answer")
+        assert ctx.metadata["delivery_candidate_status"] == "unfinished"
+        completed.assert_not_called()
+        scope_metadata = get_current_execution_scope().metadata
+        assert "delivery_record" not in scope_metadata
+        assert "delivered_answer" not in scope_metadata
+        assert not scope_metadata.get("delivery_audit")
+    finally:
+        reset_current_execution_scope(token)
+
+
+async def test_bare_text_writes_accepted_record_before_stop(monkeypatch):
+    """A non-truncated bare text goes through the normalized delivery record."""
+    from types import SimpleNamespace
+    from unittest.mock import Mock
+
+    from frontier_agent.core.execution_context import (
+        ExecutionScope,
+        get_current_execution_scope,
+        reset_current_execution_scope,
+        set_current_execution_scope,
+    )
+    from workflows.agent_team.observers import bare_text_finalize as module
+
+    completed = Mock()
+    monkeypatch.setattr(module, "finalize_gate", lambda *args, **kwargs: None)
+    monkeypatch.setattr(module, "resolve_bus_task_id", lambda scope: "run-w6")
+    monkeypatch.setattr(module, "complete_delivery_tasks", completed)
+
+    token = set_current_execution_scope(ExecutionScope(task_id="run-w6", metadata={
+        "corpus_conclusions": [{"id": "stale-member-manifest"}],
+    }))
+    try:
+        text = "A complete, untruncated user-facing answer."
+        ctx = SimpleNamespace(
+            tool_calls=[], ai_text=text, metadata={"finish_reason": "stop"},
+            turn=1, max_turns=8, task_id="run-w6",
+        )
+        result = await module.BareTextFinalizeObserver().on_llm_response(ctx)
+        assert result is not None and result.stop_reason == "final_answer"
+        assert ctx.metadata["final_answer"] == text
+        completed.assert_called_once()
+        record = get_current_execution_scope().metadata["delivery_record"]
+        assert record["published"] is True and record["channel"] == "bare_text"
+        assert record["content"] == text
+        assert record["evidence"]["corpus_conclusions"] is None  # no old manifest
+        assert record["evidence_rebound"] is False
+        audit = get_current_execution_scope().metadata["delivery_audit"]
+        assert audit[-1]["channel"] == "bare_text"
+    finally:
+        reset_current_execution_scope(token)
+
+
 @pytest.mark.parametrize("reason", ["user_stop", "deadline", "cancelled"])
 def test_interrupted_report_is_not_published(reason):
     from workflows.agent_team.final_report import finalize_team_report

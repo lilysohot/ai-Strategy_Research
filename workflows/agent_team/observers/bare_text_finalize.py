@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 from frontier_agent.core.execution_context import get_current_execution_scope
 from frontier_agent.core.loop_types import BaseObserver, Intervention, TurnContext
@@ -10,6 +11,47 @@ from plugins.tools.finalize_answer import finalize_gate
 from plugins.tools.task_board import complete_delivery_tasks
 
 logger = logging.getLogger(__name__)
+
+_TRUNCATED_FINISH_REASONS = frozenset({"length", "max_tokens"})
+
+
+def _write_accepted_record(scope: Any, text: str) -> None:
+    """Commit the same normalized delivery record as ``deliver_answer``.
+
+    This runs *before* the loop is told to stop: a bare-text answer must pass
+    through the delivery record, not get an "accepted" note appended after the
+    fact. A member report's old corpus conclusions are deliberately not reused.
+    """
+    from workflows.agent_team.delivery import (
+        _DELIVERED_KEY,
+        _DELIVERY_RECORD_KEY,
+        _accepted_delivery_record,
+        _content_sha256,
+        _record_audit,
+    )
+
+    record = _accepted_delivery_record(
+        content=text,
+        version=1,
+        corpus_conclusions=None,
+        items=[],
+        checks=[],
+        manifest_committed=False,
+    )
+    record["channel"] = "bare_text"
+    record["evidence_rebound"] = False
+    scope.metadata[_DELIVERY_RECORD_KEY] = record
+    scope.metadata[_DELIVERED_KEY] = text
+    _record_audit(
+        scope,
+        "accepted",
+        version=record["version"],
+        content_sha256=_content_sha256(text),
+        disposition_ids=[],
+        check_ids=[],
+        channel="bare_text",
+        evidence_rebound=False,
+    )
 
 
 class BareTextFinalizeObserver(BaseObserver):
@@ -27,6 +69,14 @@ class BareTextFinalizeObserver(BaseObserver):
             # Nothing said and no tool — let the loop's no-tool recovery nudge.
             return None
 
+        # A truncated body is an UNFINISHED CANDIDATE, never a publication.
+        # This must precede the gate and the last-turn bypass: even with every
+        # task resolved, finishing here would end the run on a cut-off answer.
+        if str(ctx.metadata.get("finish_reason") or "") in _TRUNCATED_FINISH_REASONS:
+            ctx.metadata["final_answer_candidate"] = text
+            ctx.metadata["delivery_candidate_status"] = "unfinished"
+            return None
+
         scope = get_current_execution_scope()
         err = finalize_gate(
             ctx.task_id,
@@ -42,6 +92,8 @@ class BareTextFinalizeObserver(BaseObserver):
                 ctx.metadata["final_answer_candidate"] = text
             return Intervention(continue_to_next_turn=True, inject_messages=[err])
 
+        if scope is not None:
+            _write_accepted_record(scope, text)
         if isinstance(ctx.metadata, dict):
             ctx.metadata["final_answer"] = text
             ctx.metadata["final_answer_confidence"] = 1.0

@@ -87,5 +87,69 @@ async def test_phase_hint_does_not_restore_mandatory_review_for_everyday_tasks(m
     intervention = await observer.on_turn_end(SimpleNamespace(metadata={}))
     assert intervention is not None
     text = " ".join(intervention.inject_messages)
-    assert ("dispatch final_verifier" in text) == (mode == "research")
+    # One run contract for every family: no phase hint may restore a mandatory
+    # whole-answer verifier, including research mode.
+    assert "dispatch final_verifier" not in text
+    assert "final_verifier" not in text
+    assert "registered checks" in text
+    assert "verification=not_assessed" in text
     assert budget.research_deadline_s == now + 30
+
+
+# --- W4 P1: generated prompt matrix -------------------------------------------
+
+_CONFLICT_MARKERS = (
+    "For each task-board item, create_subagent",
+    "dispatch every task-board item",
+    "cover each work item with agents",
+    "Dispatch every executable item",
+    "Create_subagent + assign_task for every",
+    "spawn a `final_verifier` sub-agent to independently re-derive",
+    "dispatch final_verifier with",
+    "A bounded final_verifier assignment",
+    "answered AND corroborated",
+    "corroborated (>=2 independent reports",
+    "then verify, and finalize",
+)
+
+
+@pytest.mark.parametrize("mode", ["standard", "research"])
+@pytest.mark.parametrize("phase", ["combined", "planning", "execution"])
+@pytest.mark.parametrize("planning_mode", [True, False])
+def test_generated_main_prompts_share_one_run_contract(mode, phase, planning_mode):
+    """P1: assert on the assembled prompt, not on a source constant."""
+    prompt = get_main_system_prompt(
+        "2026-11-15", prompt_mode=mode, phase=phase, planning_mode=planning_mode,
+    )
+    assert prompt.strip()
+    for marker in _CONFLICT_MARKERS:
+        assert marker not in prompt, f"{mode}/{phase}/planning={planning_mode}: {marker}"
+    assert EVIDENCE_LIMITS_NOTE in prompt
+    assert "fetch only what could change the answer" in prompt
+    assert "Keep provenance IDs" in prompt
+    assert "state the trigger reason" in prompt
+    assert "not by upgrading itself into a mandatory" in prompt
+
+
+def test_reporter_prompts_share_the_run_contract():
+    from workflows.agent_team.prompts_fast_reporter_v1 import (
+        REVIEW_SYSTEM_PROMPT,
+        WRITER_ADDENDUM,
+    )
+    from workflows.agent_team.prompts_report_fast import REPORT_FAST_SYSTEM_PROMPT
+
+    for text in (REPORT_FAST_SYSTEM_PROMPT, REVIEW_SYSTEM_PROMPT, WRITER_ADDENDUM):
+        for marker in _CONFLICT_MARKERS:
+            assert marker not in text
+
+
+def test_recovery_prompt_keeps_internal_bookkeeping_out_of_the_answer():
+    from workflows.agent_team.subagent_runtime import _build_recovery_messages
+
+    prompt = _build_recovery_messages(
+        [], task_description="Explain the evidence", structured_report=False,
+    )[0]["content"]
+    assert "call ids, hashes" in prompt
+    assert "do not fetch the same source again" in prompt
+    for marker in _CONFLICT_MARKERS:
+        assert marker not in prompt

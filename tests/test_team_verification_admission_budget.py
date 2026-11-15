@@ -188,7 +188,12 @@ async def test_small_recheck_is_admitted_with_the_same_window(verification_run):
     assert "verification_admission" not in snapshot_tasks("run")[0]
 
 
-async def test_oversized_bound_packet_is_rejected_before_submit(verification_run):
+async def test_oversized_bound_packet_enters_bounded_on_demand_mode(verification_run):
+    """An unselected large job is no longer rejected or inlined wholesale.
+
+    The admission floor still prices the work; the full snapshot stays
+    available for targeted readback without any handoff attachment.
+    """
     bus, _ = verification_run
     await add_task.func([
         {
@@ -207,10 +212,18 @@ async def test_oversized_bound_packet_is_rejected_before_submit(verification_run
     reply = await agent_team_assign_task.func(
         tasks=[dispatch_payload(replaces="")]
     )
-    assert reply.startswith("Error"), reply
-    assert "bound evidence packet has 170 records" in reply
+    assert not reply.startswith("Error"), reply
+    packet = next(
+        job.item.metadata["verification_packet"]
+        for job in reversed(list(bus._jobs.values()))
+        if "verification_packet" in (job.item.metadata or {})
+    )
+    source = next(iter(packet["sources"].values()))
+    assert source["selection_mode"] == "on_demand"
+    assert source["snapshot"]["record_count"] == 170
+    assert packet_record_count(packet) == 0
     task = snapshot_tasks("run")[0]
-    assert task["verification_admission"]["key-figures"]["reason"] == "packet_too_large"
+    assert "packet_too_large" not in str(task.get("verification_admission") or {})
 
 
 async def test_registered_check_records_its_registration_estimate(verification_run):
@@ -264,3 +277,31 @@ async def test_denied_check_stays_unchecked_and_traceable_in_the_contract(
     assert row["verification_admission"]["key-figures"]["status"] == "denied"
     assert row["verification_status"] != "passed"
     assert out["report_contract"]["verification"] != "passed_for_declared_checks"
+
+
+def test_capacity_notice_prices_against_wall_capped_admission():
+    """W4: registration notice and dispatch share one admission boundary."""
+    from types import SimpleNamespace
+
+    from plugins.tools.task_board import _verification_capacity_notice
+
+    calls: list[dict] = []
+
+    class Budget:
+        def admission_remaining_for_job(self, **kwargs):
+            calls.append(kwargs)
+            return 10.0
+
+        def remaining_for_job(self, **kwargs):
+            raise AssertionError("capacity notice must use the wall-capped admission boundary")
+
+    scope = SimpleNamespace(metadata={SWARM_SCOPE_KEY: SimpleNamespace(phase_budget=Budget())})
+    board = {"tasks": {"t1": {
+        "verification_estimate_s": 90.0,
+        "verification_required": True,
+    }}}
+    notice = _verification_capacity_notice(scope, board, ["t1"])
+    assert "90s" in notice and "10s" in notice
+    assert len(calls) == 1
+    assert calls[0]["is_verification"] is True
+    assert "wall_remaining_s" in calls[0]

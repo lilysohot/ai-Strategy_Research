@@ -12,6 +12,7 @@ from frontier_agent.core.loop_types import (
     Intervention,
     LoopConfig,
     TurnContext,
+    wall_deadline_remaining_s,
 )
 
 
@@ -82,6 +83,23 @@ class TeamPhaseBudget:
 
     def can_dispatch_publication(self, now: float | None = None) -> bool:
         return self.sync_phase(now) in {"research", "draining", "consolidating", "publishing"}
+
+    def can_dispatch_verification(self, now: float | None = None) -> bool:
+        """Registered, evidence-ready checks use the VERIFICATION window.
+
+        A closed research admission window must not kill a check that was
+        registered earlier: it is priced against ``admission_remaining_for_job``
+        and the dedicated verification deadline, not the publication window.
+        """
+        phase = self.sync_phase(now)
+        if phase == "publishing":
+            return False
+        remaining = self.admission_remaining_for_job(
+            can_publish=False,
+            is_verification=True,
+            wall_remaining_s=wall_deadline_remaining_s(),
+        )
+        return remaining is None or remaining > 0
 
     def deadline_for_job(
         self, *, can_publish: bool, is_verification: bool = False, is_recheck: bool = False,
@@ -213,32 +231,18 @@ class TeamPhaseBudgetObserver:
         if ctx.metadata.get("team_delivery_started") or phase == self._last_phase:
             return None
         self._last_phase = phase
-        if self.prompt_mode == "standard" and phase in {"draining", "consolidating"}:
+        # One short run contract for every prompt family: no mode gets a
+        # mandatory whole-answer verifier, and no phase hint may reintroduce
+        # per-item dispatch or a default second fetch.
+        if phase in {"draining", "consolidating"}:
             return Intervention(inject_messages=[
                 "The research admission window is closed. Collect the available "
                 "findings and finish the requested answer. Do not add optional "
                 "research or a whole-answer audit. Complete only outstanding "
-                "required checks with attached evidence and bounded scope; preserve "
-                "unchecked items honestly. If files were requested, use the sole "
+                "registered checks with attached evidence and bounded scope; "
+                "preserve unchecked items honestly. Ordinary analysis may stay "
+                "verification=not_assessed. If files were requested, use the sole "
                 "authorized publisher. Keep the board truthful and prepare delivery."
-            ])
-        if phase == "draining":
-            return Intervention(inject_messages=[
-                "Research admission is now closed. Do not create or assign new "
-                "exploratory research. Members are entering their report handoff "
-                "window. Collect their reports and dispatch final_verifier with "
-                "bounded verification_checks using the reserved verification / "
-                "publication window, before selecting the sole publisher if "
-                "files are required."
-            ])
-        if phase == "consolidating":
-            return Intervention(inject_messages=[
-                "The research execution window is closed. Do not wait for more "
-                "exploratory research. Collect preserved reports and consolidate "
-                "available evidence. A bounded final_verifier assignment and its "
-                "collect_reports wait are still allowed in the reserved "
-                "verification / publication window. Then dispatch the sole "
-                "publisher or finalize the text answer; disclose unfinished checks."
             ])
         return None
 

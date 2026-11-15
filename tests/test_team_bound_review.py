@@ -450,7 +450,143 @@ def test_handoff_snapshot_is_not_priced_as_zero_or_unbounded_work():
     records = sample_originals()
     _, job_packet = handoff_packet(records)
     _, ref_packet = handoff_packet(records, ref=HANDOFF_REF)
-    assert packet_record_count(job_packet) == 3
-    assert packet_record_count(ref_packet) == 0
+    # On-demand readback depends on packet size, not on a handoff attachment:
+    # an unselected large job must never inline all of its captured originals.
+    for packet in (job_packet, ref_packet):
+        entry = next(iter(packet["sources"].values()))
+        assert entry["selection_mode"] == "on_demand"
+        assert packet_record_count(packet) == 0
+        assert entry["snapshot"]["record_count"] == len(records)
     assert packet_workload_records(ref_packet) == packet_workload_records(job_packet) == 3
     assert 0 < packet_workload_records(ref_packet) <= ON_DEMAND_ADMISSION_FLOOR_RECORDS
+
+
+# --- W6: explicit evidence selection (two-layer interface) -------------------
+
+
+def _captured_metadata(refs):
+    return {
+        "corpus_evidence": [
+            {
+                "doc_id": "cv2:" + "a" * 64,
+                "locator": f"chunk:document1/unit{i}",
+                "evidence_ref": ref,
+                "text": f"condition {i} with unit, date and qualifier",
+                "content_kind": "original",
+                "coverage": {"tables": "not_obtained"},
+            }
+            for i, ref in enumerate(refs)
+        ]
+    }
+
+
+def test_illegal_evidence_ref_fails_before_dispatch():
+    from plugins.tools._verification import VerificationSource, _resolve_evidence_refs
+
+    meta = _captured_metadata(["ce:aaa", "ce:bbb"])
+    with pytest.raises(ValueError, match="not captured by job"):
+        _resolve_evidence_refs(
+            VerificationSource(job_id="producer", evidence_refs=["ce:invented"]), meta,
+        )
+
+
+def test_evidence_refs_cannot_be_borrowed_across_jobs():
+    from plugins.tools._verification import VerificationSource, _resolve_evidence_refs
+
+    meta_a = _captured_metadata(["ce:aaa"])
+    meta_b = _captured_metadata(["ce:bbb"])
+    with pytest.raises(ValueError, match="not captured by job"):
+        _resolve_evidence_refs(
+            VerificationSource(job_id="job_b", evidence_refs=["ce:aaa"]), meta_b,
+        )
+    assert _resolve_evidence_refs(
+        VerificationSource(job_id="job_a", evidence_refs=["ce:aaa"]), meta_a,
+    ) == ["chunk:document1/unit0"]
+
+
+def test_two_checks_select_different_small_ranges_from_one_large_job():
+    """The same 200-record job serves two checks without colliding keys."""
+    from plugins.tools._bound_evidence import build_review_packet, digest, packet_index
+    from plugins.tools._verification import packet_record_count
+
+    refs = [f"ce:ref{i}" for i in range(200)]
+    meta = _captured_metadata(refs)
+    bus = SimpleNamespace(
+        get_job_result=lambda task_id, job_id: (
+            None, SimpleNamespace(final_content="Report body", metadata=meta),
+        )
+    )
+    first = {
+        "key": "producer::sel:first", "job_id": "producer",
+        "corpus_evidence_sha256": digest(meta["corpus_evidence"]),
+        "record_locators": ["chunk:document1/unit0", "chunk:document1/unit1"],
+    }
+    second = {
+        "key": "producer::sel:second", "job_id": "producer",
+        "corpus_evidence_sha256": digest(meta["corpus_evidence"]),
+        "record_locators": ["chunk:document1/unit100", "chunk:document1/unit101"],
+    }
+    checks = [
+        {"binding_id": "b1", "subject": {"key": "inline:a", "text": "candidate one"},
+         "evidence": [first]},
+        {"binding_id": "b2", "subject": {"key": "inline:b", "text": "candidate two"},
+         "evidence": [second]},
+    ]
+    packet = build_review_packet(checks, bus=bus, task_id="run")
+    assert len(packet["sources"]) == 2
+    for source in packet["sources"].values():
+        assert source["selection_mode"] == "selected"
+        assert len(source["records"]) == 2
+        assert source["snapshot"]["record_count"] == 200
+        assert all(r.get("content_kind") == "original" for r in source["records"])
+        assert all(r.get("coverage") for r in source["records"])
+    assert packet_record_count(packet) == 4
+    assert all(
+        entry["snapshot_record_count"] == 200
+        for entry in packet_index(packet)["sources"].values()
+    )
+
+
+def test_model_evidence_refs_resolve_to_distinct_internal_handles(tmp_path):
+    """Model supplies refs; runtime produces stable keys and internal locators."""
+    from plugins.tools._bound_evidence import build_review_packet
+    from plugins.tools._verification import VerificationCheck, bind_checks
+
+    refs = [f"ce:ref{i}" for i in range(20)]
+    meta = _captured_metadata(refs)
+    bus = SimpleNamespace(
+        get_job_result=lambda task_id, job_id: (
+            None, SimpleNamespace(final_content="Report body", metadata=meta),
+        ),
+        list_task_jobs=lambda *_: [],
+    )
+    work_items = [{
+        "id": "t1",
+        "verification_required": True,
+        "verification_requirements": [
+            {"check_id": "c1", "criterion": "check one"},
+            {"check_id": "c2", "criterion": "check two"},
+        ],
+    }]
+    specs = [
+        VerificationCheck(
+            check_id="c1", subject={"text": "candidate one"},
+            evidence=[{"job_id": "producer", "evidence_refs": ["ce:ref0"]}],
+        ),
+        VerificationCheck(
+            check_id="c2", subject={"text": "candidate two"},
+            evidence=[{"job_id": "producer", "evidence_refs": ["ce:ref10"]}],
+        ),
+    ]
+    bound, _ = bind_checks(
+        specs, bus=bus, task_id="run", work_items=work_items,
+        required=True, outputs_root=tmp_path,
+    )
+    first, second = (check["evidence"][0] for check in bound)
+    assert first["key"] != second["key"]
+    assert "ce:ref0" not in first["key"] and "unit0" not in first["key"]
+    assert first["record_locators"] == ["chunk:document1/unit0"]
+    assert second["record_locators"] == ["chunk:document1/unit10"]
+    packet = build_review_packet(bound, bus=bus, task_id="run")
+    assert len(packet["sources"]) == 2
+    assert all(s["selection_mode"] == "selected" for s in packet["sources"].values())

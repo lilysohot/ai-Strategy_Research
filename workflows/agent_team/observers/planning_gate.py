@@ -58,8 +58,10 @@ class PlanningGateObserver(BaseObserver):
         bus_task_id = resolve_bus_task_id(scope) if scope is not None else None
         return Intervention(inject_messages=[
             "Planning budget exhausted — you are now in EXECUTION mode. Stop "
-            "planning and BUILD THE TEAM: create_subagent + assign_task to "
-            "dispatch every task-board item to sub-agents, then collect, "
-            "verify, and finalize. Do NOT solve the tasks yourself.\n"
+            "planning and BUILD THE TEAM: create_subagent + assign_task for the "
+            "executable work items (a parent with segments is a container; dispatch "
+            "its segments, not the parent). Then collect the reports and finalize; "
+            "independent checks run only when explicitly registered or requested. "
+            "Do NOT solve the tasks yourself.\n"
             + render_board(ctx.task_id, bus_task_id=bus_task_id)
         ])

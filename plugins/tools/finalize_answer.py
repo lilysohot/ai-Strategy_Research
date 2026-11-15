@@ -103,9 +103,10 @@ def finalize_gate(
     if pending:
         return (
             f"Cannot finish: task board has unresolved item(s) {pending}. For "
-            "each, call update_task(id, resolution='resolved') once it is "
-            "answered AND corroborated, or resolution='cancelled' if no longer "
-            "needed. If work cannot proceed, use resolution='blocked' with notes "
+            "each, call update_task(id, resolution='resolved') once its "
+            "done_when is met with the bound evidence, or resolution='cancelled' "
+            "if no longer needed. Independent verification is not a default "
+            "prerequisite. If work cannot proceed, use resolution='blocked' with notes "
             "and gap, then deliver the supported partial answer with its limitations."
         )
     from plugins.tools._verification import (

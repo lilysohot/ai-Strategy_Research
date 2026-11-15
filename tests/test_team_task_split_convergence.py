@@ -282,3 +282,34 @@ async def test_parent_required_check_is_actually_dispatched_after_segment_execut
     }])
     assert "immutable" in reply
     assert [c["check_id"] for c in board()["t1"]["verification_requirements"]] == ["t1.required"]
+
+
+async def test_dispatch_dedup_blocks_unchanged_failure_but_allows_a_valid_fix(
+    team_board, monkeypatch,
+):
+    """Constraint 4: only an identical, deterministic failure is suppressed."""
+    from plugins.tools.assign_task import agent_team_assign_task
+
+    await add_task.func([{"description": "Check a claim"}])
+    attempts: list[int] = []
+
+    async def deterministic_failure(*args, **kwargs):
+        attempts.append(1)
+        raise ValueError("bound evidence packet has 272 records (limit 160)")
+
+    monkeypatch.setattr(
+        team_board, "submit_task_to_session", deterministic_failure, raising=False,
+    )
+    payload = {"tasks": [{
+        "agent": "reader_a", "prompt": "check", "work_item_ids": ["t1"],
+    }]}
+    first = await agent_team_assign_task.func(**payload)
+    assert "bound evidence packet has" in first
+    second = await agent_team_assign_task.func(**payload)
+    assert "identical request already failed" in second
+    assert len(attempts) == 1, "an unchanged deterministic failure must not re-execute"
+    fixed = await agent_team_assign_task.func(tasks=[{
+        "agent": "reader_a", "prompt": "check with selected refs", "work_item_ids": ["t1"],
+    }])
+    assert "identical request already failed" not in fixed
+    assert len(attempts) == 2, "a changed request must be allowed to re-validate"
