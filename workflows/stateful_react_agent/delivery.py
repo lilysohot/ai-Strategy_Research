@@ -3,6 +3,7 @@
 from frontier_agent.core.loop_types import BaseObserver, Intervention, TurnContext
 from plugins.corpus.final_delivery import (
     IDENTITY_ANSWER_RULE,
+    corpus_citation_readability_issue,
     identity_manifest,
     prepare_delivery_manifest,
 )
@@ -23,12 +24,19 @@ class CorpusDeliveryObserver(BaseObserver):
         if not ledger.has_activity() or ledger.replayed_only:
             return None
         content = ctx.ai_text.strip()
+        readability_issue = corpus_citation_readability_issue(content)
+        if readability_issue:
+            ctx.metadata["corpus_citation_readability"] = "unresolved"
+        else:
+            ctx.metadata.pop("corpus_citation_readability", None)
         if identity_manifest(content, ledger) is not None:
             payload = prepare_delivery_manifest(content, None, ledger)
             if payload is not None:
                 commit_final_manifest(payload)
         verification = verify_and_record(ledger, final_text=content)
-        if verification.get("status") == "verified" or self._repair_offered:
+        if (
+            verification.get("status") == "verified" and not readability_issue
+        ) or self._repair_offered:
             return None
         # A finite opportunity before normal publishing/downgrade; never claim
         # success after exhaustion, and never add a mandatory fetch round.
@@ -42,13 +50,21 @@ class CorpusDeliveryObserver(BaseObserver):
                 for problem in row.get("problems", [])
             }
         )
+        problem = (
+            "Final answer needs readable citations."
+            if verification.get("status") == "verified"
+            else "Final evidence binding is incomplete ("
+            + ", ".join(codes or [str(verification.get("status"))])
+            + ")."
+        )
         return Intervention(
             continue_to_next_turn=True,
             inject_messages=[
-                "[corpus delivery preflight] Final evidence binding is incomplete ("
-                + ", ".join(codes or [str(verification.get("status"))])
-                + "). Repair once before finishing.\n"
+                "[corpus delivery preflight] "
+                + problem
+                + " Repair once before finishing.\n"
                 + IDENTITY_ANSWER_RULE
+                + ("\n" + readability_issue if readability_issue else "")
                 + "\nFor source prose, submit/correct corpus_submit_manifest with report_quote "
                 "copied exactly from the final answer and evidence_ref from existing receipts; "
                 "fetch only missing evidence. Then deliver that same answer."

@@ -467,3 +467,155 @@ def test_fixed_replay_baseline_records_size_and_backend_cost(tmp_path, monkeypat
     assert stats["receipt_files"] == 8  # 1 prior + 1 first + 6 fresh; repeats dedup
     assert stats["projection_ms_median"] >= 0 and stats["resolve_ms_max"] >= 0
     assert Path(tmp_path / "replay-baseline.json").is_file()
+
+
+# ── v2 navigation: page-uniform provenance is stated once ───────────────
+#
+# A dense OCR page repeated ``"text_origin":"ocr"`` and ``"ocr_unverified":true``
+# on all 76 items: 43 of the 125 characters of envelope per item, carrying no
+# per-item information. These pin that the repetition is gone, that nothing
+# else moved with it, and that a genuinely mixed page still tells the truth.
+
+
+def _page_item(
+    text: str, ref: str, page: int, **extra: object,
+) -> dict:
+    item: dict = {
+        "text": text,
+        "evidence_ref": ref,
+        "locator": f"chunk:document1/unit%3A{page:04d}",
+        "unit_id": f"unit:{page:04d}",
+        "kind": "paragraph",
+        "page": page,
+    }
+    item.update(extra)
+    return item
+
+
+def _document_body(items: list[dict], **extra: object) -> dict:
+    body: dict = {
+        "ok": True,
+        "scope": "document",
+        "doc_id": "cv2:" + _BUILD_A,
+        "pagination_policy_version": 2,
+        "items": items,
+        "fetch_complete": False,
+        "next_cursor": "cpage:" + "d" * 32,
+    }
+    body.update(extra)
+    return body
+
+
+def _dense_page(count: int = 76) -> dict:
+    return _document_body([
+        _page_item(
+            "fragment " + "x" * 12,
+            f"ce:{index:032x}",
+            3,
+            text_origin="ocr",
+            ocr_unverified=True,
+        )
+        for index in range(count)
+    ])
+
+
+def test_uniform_item_provenance_is_stated_once() -> None:
+    visible = projection.project_fetch_result(_dense_page(), navigation=True)
+
+    assert visible["item_defaults"] == {
+        "location": "第 3 页",
+        "text_origin": "ocr",
+        "ocr_unverified": True,
+    }
+    for row in visible["items"]:
+        assert "location" not in row
+        assert "text_origin" not in row
+        assert "ocr_unverified" not in row
+
+
+def test_hoisting_never_moves_an_item_or_its_evidence() -> None:
+    body = _dense_page(76)
+    visible = projection.project_fetch_result(body, navigation=True)
+
+    assert len(visible["items"]) == len(body["items"])
+    assert [(row["text"], row["evidence_ref"]) for row in visible["items"]] == [
+        (item["text"], item["evidence_ref"]) for item in body["items"]
+    ]
+
+
+def test_mixed_provenance_stays_per_item() -> None:
+    """Two page numbers and a native fragment: nothing is uniform, so nothing is
+    hoisted. A page must never average away the fact that some of its text is
+    unverified OCR and some is not."""
+    body = _document_body([
+        _page_item("a", "ce:" + "1" * 32, 3, text_origin="ocr", ocr_unverified=True),
+        _page_item("b", "ce:" + "2" * 32, 7),
+        _page_item("c", "ce:" + "3" * 32, 3, text_origin="ocr", ocr_unverified=True),
+    ])
+
+    visible = projection.project_fetch_result(body, navigation=True)
+
+    assert "item_defaults" not in visible
+    assert visible["items"][0]["text_origin"] == "ocr"
+    assert visible["items"][0]["location"] == "第 3 页"
+    assert visible["items"][1]["location"] == "第 7 页"
+    assert "text_origin" not in visible["items"][1]
+
+
+def test_a_single_item_page_does_not_grow_a_defaults_block() -> None:
+    """Hoisting one item's fields to the page saves nothing and adds a key."""
+    body = _document_body([_page_item("only", "ce:" + "4" * 32, 3, text_origin="ocr")])
+
+    visible = projection.project_fetch_result(body, navigation=True)
+
+    assert "item_defaults" not in visible
+    assert visible["items"][0]["text_origin"] == "ocr"
+
+
+def test_a_field_already_published_at_page_level_is_not_hoisted() -> None:
+    """``content_status`` is only copied onto a row when it disagrees with the
+    page, so hoisting must not re-publish the same value in two places."""
+    body = _document_body(
+        [_page_item("a", "ce:" + "5" * 32, 3), _page_item("b", "ce:" + "6" * 32, 3)],
+        content_scope="ingested_text_only",
+        content_status="ingested_text",
+        structure_status="unknown",
+    )
+
+    visible = projection.project_fetch_result(body, navigation=True)
+
+    assert visible.get("item_defaults", {}).get("content_status") is None
+    assert visible["content_status"] == "ingested_text"
+
+
+def test_the_dense_page_envelope_no_longer_costs_a_hundred_and_twenty_five_per_item() -> None:
+    """The frozen budget target (baseline.md T1): 125 → ≤ 90 characters of
+    per-item envelope. What remains is the evidence ref, the ``text`` key and the
+    page label — irreducible without changing the reference wire format."""
+    body = _dense_page(76)
+    visible = projection.project_fetch_result(body, navigation=True)
+    visible["protocol"] = projection.NAVIGATION_VERSION
+    rendered = json.dumps(visible, ensure_ascii=False, separators=(",", ":"))
+    text_chars = sum(len(row["text"]) for row in visible["items"])
+    envelope = len(rendered) - text_chars
+
+    assert envelope / len(visible["items"]) <= 90
+    assert len(rendered) <= 9_000
+
+
+def test_a_legacy_navigation_body_is_passed_through_untouched() -> None:
+    """v1 bodies already exist in saved histories. Re-projecting one would change
+    its shape and break the receipt its digest was stored under."""
+    legacy = json.dumps({
+        "ok": True,
+        "protocol": "corpus-navigation-v1",
+        "scope": "document",
+        "items": [{"text": "old", "evidence_ref": "ce:" + "7" * 32,
+                   "location": "第 3 页", "text_origin": "ocr"}],
+        "fetch_complete": True,
+    }, ensure_ascii=False)
+
+    assert projection.project_tool_result("corpus_fetch", legacy) == legacy
+    assert projection.is_navigation_protocol("corpus-navigation-v1")
+    assert projection.is_navigation_protocol(projection.NAVIGATION_VERSION)
+    assert not projection.is_navigation_protocol(projection.VISIBLE_VERSION)

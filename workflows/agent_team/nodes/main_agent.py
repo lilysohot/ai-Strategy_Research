@@ -106,6 +106,7 @@ from plugins.tools.task_board import (
     snapshot_tasks,
     start_planning,
 )
+from workflows._shared.reading_stage import build_reading_stage
 from workflows._shared.sandbox_mounts import (
     resolve_sandbox_mount_metadata,
     workspace_root_override,
@@ -1476,6 +1477,13 @@ async def main_agent_node(
     else:
         main_compactor = KeepLastNToolResultsCompactor(keep_tool_result=main_keep_tool_result)
 
+    # Reading checkpoints: own trigger, own budget, off unless the profile asks.
+    # The coordinator reads whole documents too, so it needs the same mechanism as
+    # a member — what differs is only who pays for the extraction call.
+    main_reading_stage = build_reading_stage(
+        llm=sub_agent_llm, agent_cfg=agent_cfg, task_id=ctx.task_id,
+    )
+
     # Trajectory layout: per-task split for debugging vs one file per agent.
     # Resolution
     # precedence: agent_cfg → metadata → env (SWARM_TRAJECTORY_PER_TASK)
@@ -1775,6 +1783,7 @@ async def main_agent_node(
         sub_context_token_limit=context_token_limit,
         context_compaction=context_compaction,
         compaction_spill=compaction_spill,
+        reading_checkpoint_cfg=agent_cfg,
         max_len=max_len,
         max_input_tokens=max_input_tokens,
         tier1_keep_tool_result=int(agent_cfg.get("tier1_keep_tool_result", 5)),
@@ -1919,6 +1928,7 @@ async def main_agent_node(
                     loop_policy=loop_policy,
                     compactor=main_compactor,
                     compaction_policy=main_compaction_policy,
+                    reading_stage=main_reading_stage,
                     tool_result_post_processor=SwarmToolResultPostProcessor(),
                 ),
                 model_profile=model_profile,

@@ -11,6 +11,7 @@ import re
 from typing import Any
 
 from frontier_agent.core.loop_types import BaseObserver, ToolCallIntervention, TurnContext
+from frontier_agent.core.runtime.reading.stage import is_retired_body
 from plugins.corpus import projection
 
 
@@ -54,6 +55,14 @@ class CorpusContextReuseObserver(BaseObserver):
                         continue
             elif message.get("role") == "tool" and message.get("tool_call_id") in matches:
                 content = message.get("content") or ""
+                if is_retired_body(content):
+                    # A reading checkpoint replaced this body with a pointer. The
+                    # text is no longer in the context, so "原文仍在当前上下文"
+                    # would be a false statement of fact about the transcript —
+                    # and the model would cite from memory of a hint. Let the tool
+                    # run; recovering one fragment from its receipt is the cheap
+                    # path, and it is the honest one.
+                    continue
                 try:
                     visible = json.loads(content)
                 except (ValueError, TypeError):

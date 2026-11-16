@@ -2,10 +2,39 @@
 
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from plugins.corpus.ledger import ConsumptionLedger
+
+
+CORPUS_REPORT_STYLE_RULE = (
+    "User-facing corpus prose must have readable citations: use the observed report title "
+    "or filename and known page/section, or numbered citations with a readable source list. "
+    "Never invent missing page numbers, titles or URLs. Keep opaque ce:/eref: receipts in "
+    "structured evidence_ref fields, not in the displayed prose or reference list. "
+    "Internal research handoffs may retain exact receipts. Prepare publication_excerpt text "
+    "in this readable form BEFORE verification. Explain material missing evidence or unchecked "
+    "claims in ordinary language; keep tool names, fetch_complete flags, check IDs and job IDs "
+    "in audit data unless the user explicitly requests technical diagnostics."
+)
+
+# Match concrete receipts, not discussion of the ce:/eref: syntax itself.
+_DISPLAYED_RECEIPT = re.compile(r"\b(?:ce:[0-9a-f]{16,}|eref:[0-9a-f]{16,}:\d+)\b")
+
+
+def corpus_citation_readability_issue(content: str) -> str | None:
+    """Detect opaque report citations without rewriting checked or bound text."""
+    if not _DISPLAYED_RECEIPT.search(content):
+        return None
+    return (
+        "corpus_citation_readability: displayed prose contains opaque corpus receipts. "
+        + CORPUS_REPORT_STYLE_RULE
+        + " Revise only the affected wording using existing evidence; no new fetch is needed "
+        "for citation formatting. Rebind report_quote to the revised text and recheck any "
+        "changed checked passage; never reuse a verdict for different text."
+    )
 
 
 #: 纯文件身份答案的交付形状——交付层的单一事实来源。

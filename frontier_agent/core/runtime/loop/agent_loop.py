@@ -69,6 +69,10 @@ from frontier_agent.core.runtime.loop.model_profile import (
     ModelProfile,
     NativeMessageNormalizer,
 )
+from frontier_agent.core.runtime.loop.request_composition import (
+    REQUEST_COMPOSITION_KEY,
+    request_composition,
+)
 from frontier_agent.core.runtime.loop.tool_call_parser import (
     MultiFormatToolCallParser,
     ToolCallParser,
@@ -503,6 +507,10 @@ async def _prepare_llm_request(
     # sampling at turn end instead understates the ratio by whatever the
     # completion and tool results added.
     metadata[INPUT_ESTIMATE_KEY] = estimate_tokens(messages_for_call)
+    # ... and the same list split by category, so an argument about where the
+    # growth came from can be checked instead of inferred from log sizes. Sizes
+    # and hashes only — see ``request_composition``.
+    metadata[REQUEST_COMPOSITION_KEY] = request_composition(messages_for_call)
 
     return llm_for_turn, messages_for_call, merged_before_llm.stop_reason or ""
 
@@ -1247,6 +1255,23 @@ async def _handle_turn_end(
             compaction_event.turn = turn
             compaction_event.seq = metadata[COMPACTION_SEQ_KEY]
             await notify_observers(obs, "on_compaction", compaction_event)
+
+    # Reading checkpoints run on their own trigger, outside the block above. A
+    # long reading task never reaches the global threshold — 40% of the window is
+    # the normal steady state — so tying archiving to that threshold is what left
+    # every page of verbatim text resident. The stage decides from reading volume
+    # and refuses to touch ``messages`` unless the record is already durable; a
+    # failure here must therefore never stop the loop, and ``CancelledError`` is
+    # left to propagate because a cancelled run has to unwind.
+    reading_stage = getattr(cfg, "reading_stage", None)
+    if reading_stage is not None:
+        try:
+            reading_event = await reading_stage.maybe_checkpoint(messages, turn=turn)
+        except Exception as exc:
+            logger.warning("reading stage failed at turn %d: %s", turn, exc)
+            reading_event = None
+        if reading_event is not None:
+            await notify_observers(obs, "on_reading_checkpoint", reading_event)
 
     if on_turn_complete is not None:
         try:

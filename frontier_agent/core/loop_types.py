@@ -84,6 +84,11 @@ class LoopConfig:
     compactor: Any = None
     compaction_policy: Any = None
     tool_result_post_processor: Any = None
+    # Reading checkpoints run between model calls with their own trigger and
+    # their own budget. Kept separate from ``compactor`` on purpose: the global
+    # compactor answers "the window is nearly full", which is not the problem a
+    # long reading task has.
+    reading_stage: Any = None
 
     # Stop before tool output makes the next LLM plus summary request overflow.
     context_overflow_guard: bool = False
@@ -317,6 +322,16 @@ class BaseObserver:
     async def on_compaction(self, event: CompactionEvent) -> None:
         """History was rewritten. Passive: compaction has already happened by
         the time this runs, so there is no intervention to return."""
+
+    async def on_reading_checkpoint(self, event: Any) -> None:
+        """A run of the reading stage finished, installed or not.
+
+        Passive, and deliberately reported on every run rather than only on
+        success: the interesting question after a long task is usually "why did
+        nothing get archived", and that answer only exists if the declines are
+        recorded. Carries a ``ReadingCheckpointEvent``; typed as ``Any`` so this
+        type layer keeps no dependency on the reading package.
+        """
 
     async def on_loop_end(self, result: AgentLoopResult) -> None:
         pass

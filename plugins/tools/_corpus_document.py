@@ -7,6 +7,7 @@ import json
 from contextvars import ContextVar, Token
 from typing import TYPE_CHECKING, Any
 
+from plugins.corpus import projection
 from plugins.corpus.cursor import CONTENT, encode_cursor
 from plugins.corpus.pagination_policy import (
     DOCUMENT_MIN_TEXT_BUDGET,
@@ -312,7 +313,14 @@ def document_page(
                     version=version,
                     unit_range=unit_range,
                     document_sha256=digest,
-                    view="navigation" if navigation_enabled() else "compatible",
+                    # The projection protocol, not a fixed word: hoisting defaults
+                    # changed how many units fit in the same visible cap, so the
+                    # same (start, budget) now packs a different range. Page
+                    # identity has to move with the shape or two different pages
+                    # would answer to one id.
+                    view=(
+                        projection.NAVIGATION_VERSION if navigation_enabled() else "compatible"
+                    ),
                 ),
                 "hint": _HINT,
             }

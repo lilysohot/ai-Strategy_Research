@@ -92,9 +92,15 @@ def _tool_names_by_call_id(messages: list[Message]) -> dict[str, str]:
 
 
 def _condense(content: str, max_chars: int) -> str:
-    """Head + tail + URLs of *content*, never longer than the original."""
+    """Head + tail + URLs of *content*, never longer than the original.
+
+    The gap is NAMED, in the original character coordinates. A bare
+    ``[middle omitted]`` reads to the model as "this result was short", so a
+    summary written from it claims a completeness the input never had; with the
+    range spelled out, the same model can say which part it did not see and
+    which recovery copy holds it.
+    """
     prefix = f"[Compressed tool result: {len(content):,} characters]\n"
-    marker = "\n… [middle omitted] …\n"
     url_lines: list[str] = []
     url_budget = max_chars // 2
     for url in dict.fromkeys(URL_RE.findall(content)):
@@ -105,9 +111,17 @@ def _condense(content: str, max_chars: int) -> str:
     url_section = (
         "\n[Source URLs]\n" + "\n".join(url_lines) if url_lines else ""
     )
-    remaining = max_chars - len(prefix) - len(marker) - len(url_section)
+    # Reserve the WIDEST marker the real numbers can produce, so the finished
+    # string stays inside ``max_chars`` rather than relying on a lucky estimate.
+    size = len(content)
+    marker_template = "\n…[{start:,}-{end:,} of {total:,} chars omitted]…\n"
+    reserve = len(marker_template.format(start=size, end=size, total=size))
+    remaining = max_chars - len(prefix) - reserve - len(url_section)
     head_size = max(0, int(remaining * 0.7))
     tail_size = max(0, remaining - head_size)
+    marker = marker_template.format(
+        start=head_size + 1, end=size - tail_size, total=size,
+    )
     summary = (
         f"{prefix}{content[:head_size]}{marker}"
         f"{content[-tail_size:] if tail_size else ''}"

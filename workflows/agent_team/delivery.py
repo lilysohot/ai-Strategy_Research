@@ -23,7 +23,11 @@ from frontier_agent.core.loop_types import (
 )
 from frontier_agent.core.runtime import registry
 from frontier_agent.core.tool import tool
-from plugins.corpus.final_delivery import IDENTITY_ANSWER_RULE
+from plugins.corpus.final_delivery import (
+    CORPUS_REPORT_STYLE_RULE,
+    IDENTITY_ANSWER_RULE,
+    corpus_citation_readability_issue,
+)
 from plugins.tools._bus_scope import SWARM_SCOPE_KEY, resolve_bus_task_id
 from plugins.tools._deliverable_policy import output_write_directives
 from plugins.tools._verification import (
@@ -239,7 +243,8 @@ async def deliver_answer(
     Delivery tasks complete with acceptance. Call this tool alone.
 
     Args:
-        content: Complete user-facing answer, with sources and explicit limitations.
+        content: Complete user-facing answer, with readable source titles/pages and explicit
+            limitations. Keep ce:/eref: receipts in corpus_conclusions, not displayed prose.
         updates: Final dispositions against the user's outcome and necessary evidence. Use []
             if none remain. gap means an unmet requirement and requires blocked; limitations
             records nonblocking boundaries. Self-added optional work cannot become an obligation:
@@ -367,6 +372,12 @@ async def deliver_answer(
         for observation in job.result.metadata.get("content_acquisition", [])
     ]
     issues: list[dict[str, Any]] = corpus_scope_findings(content, observations)
+    if readability_issue := corpus_citation_readability_issue(content):
+        issues.append({
+            "rule": "corpus_citation_readability",
+            "reuse_content": False,
+            "detail": readability_issue,
+        })
     projected = project_bus_checks(bus, bus_id)["checks"] if bus else []
     issues.extend(verification_label_findings(projected, content))
     current_tasks = snapshot_tasks(scope.task_id)
@@ -810,7 +821,7 @@ class TeamDeliveryObserver(BaseObserver):
                     "do not call update_task first. If evidence is insufficient, continue coordination. "
                     "Only exact observed filename/document_title/date answers need no corpus_conclusions; "
                     "source-content claims still require the complete manifest.\n"
-                    + IDENTITY_ANSWER_RULE
+                    + IDENTITY_ANSWER_RULE + "\n" + CORPUS_REPORT_STYLE_RULE
                 ]
             )
         if not time_to_deliver and not turns_to_deliver and not ready:
@@ -862,7 +873,7 @@ class TeamDeliveryObserver(BaseObserver):
         )
         from plugins.corpus.ledger import get_run_ledger
 
-        prompt += IDENTITY_ANSWER_RULE + "\n"
+        prompt += IDENTITY_ANSWER_RULE + "\n" + CORPUS_REPORT_STYLE_RULE + "\n"
         prompt += (
             "Deliver the requested result first. Optional enrichment that was not obtained is "
             "not a failed requirement. Items marked required_for_completion=false are optional: "

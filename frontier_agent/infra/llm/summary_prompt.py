@@ -2,14 +2,18 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 from frontier_agent.core.messages import Message, text_of
 
 __all__ = [
     "COMPACTION_PROMPT",
     "HANDOFF_COMPACTION_PROMPT",
     "RESEARCH_COMPACTION_PROMPT",
+    "ConversationSegment",
     "compaction_prompt",
     "format_conversation_for_summary",
+    "segment_conversation_for_summary",
 ]
 
 
@@ -262,34 +266,187 @@ def _render_tool_calls(message: Message) -> str:
     return "\n".join(lines)
 
 
+#: Default per-result cap when a caller wants the record bounded. ``None``
+#: disables it, which is what the segmented compaction path asks for: it reads
+#: the record in bounded pieces instead of cutting each piece down.
+TOOL_RESULT_RENDER_CAP = 4_000
+
+
+def _omission_marker(start: int, end: int, total: int) -> str:
+    """Name the gap in ORIGINAL coordinates.
+
+    A silent ellipsis is worse than an explicit one: the summarizer cannot tell
+    a complete result from a clipped one, so it writes a confident summary of a
+    partial input. Giving the range lets it (a) say the range is unread and
+    (b) name where to recover it, both of which the compaction prompt asks for.
+    """
+    return f"\n…[{start:,}-{end:,} of {total:,} chars omitted]…\n"
+
+
+def _bounded_excerpt(content: str, budget: int) -> str:
+    """Head + tail + a named omitted range, never longer than ``budget``.
+
+    This replaced a head-only cut, which lost the end of every long result —
+    including the status lines command output puts last — and lost the middle
+    without saying so.
+    """
+    if len(content) <= budget:
+        return content
+    total = len(content)
+    # Reserve the widest marker the real numbers can produce; the actual range
+    # is always narrower, so the result stays inside the budget.
+    reserve = len(_omission_marker(total, total, total))
+    body = max(0, budget - reserve)
+    head = body // 2
+    tail = body - head
+    text = (
+        content[:head]
+        + _omission_marker(head + 1, total - tail, total)
+        + (content[total - tail:] if tail else "")
+    )
+    return text if len(text) <= budget else content[:budget]
+
+
+def _render_message(message: Message, *, preserve_full: bool, cap: int | None) -> str:
+    role = message.get("role", "") or ""
+    content = text_of(message.get("content"))
+    if cap is not None and not preserve_full:
+        content = _bounded_excerpt(content, cap)
+    rendered_calls = _render_tool_calls(message)
+    if rendered_calls:
+        content = f"{content}\n{rendered_calls}" if content else rendered_calls
+    return f"[{role}]\n{content}"
+
+
 def format_conversation_for_summary(
     messages: list[Message],
     *,
     preserve_tool_result_ids: frozenset[str] = frozenset(),
+    max_tool_result_chars: int | None = TOOL_RESULT_RENDER_CAP,
 ) -> str:
     """Render messages as a plain-text dialogue for the summarizer LLM.
 
-    Long tool results (>4000 chars) are truncated to 3500 chars + ellipsis
-    so a single noisy turn doesn't dominate the summarizer's input window.
-    ``preserve_tool_result_ids`` exempts structured fan-in whose middle must
-    remain visible; callers use it only for explicitly protected tool names.
+    ``max_tool_result_chars`` bounds one long result so a noisy turn cannot
+    dominate the summarizer's window; the cut keeps both ends and names the
+    omitted range. ``None`` renders bodies whole, which is what the segmented
+    compaction path wants — it bounds the *request*, not each body, so a fact
+    in the middle of a result still reaches the model. ``preserve_tool_result_ids``
+    exempts structured fan-in whose middle must remain visible; callers use it
+    only for explicitly protected tool names.
 
     Assistant tool calls are rendered with their (truncated) arguments — see
     :func:`_render_tool_calls` for why the prompt's query-preservation rule
     depends on it.
     """
-    parts: list[str] = []
-    for m in messages:
-        role = m.get("role", "") or ""
-        content = text_of(m.get("content"))
-        preserve_full = (
-            role == "tool"
-            and str(m.get("tool_call_id") or "") in preserve_tool_result_ids
+    return "\n\n".join(
+        _render_message(
+            message,
+            cap=max_tool_result_chars,
+            preserve_full=(
+                message.get("role") == "tool"
+                and str(message.get("tool_call_id") or "") in preserve_tool_result_ids
+            ),
         )
-        if len(content) > 4000 and not preserve_full:
-            content = content[:3500] + "\n...[truncated]..."
-        rendered_calls = _render_tool_calls(m)
-        if rendered_calls:
-            content = f"{content}\n{rendered_calls}" if content else rendered_calls
-        parts.append(f"[{role}]\n{content}")
-    return "\n\n".join(parts)
+        for message in messages
+    )
+
+
+@dataclass(frozen=True)
+class ConversationSegment:
+    """One bounded piece of a rendered record.
+
+    ``tool_call_ids`` is provenance, not presentation: when the number of
+    segments exceeds what the caller is willing to pay for, the dropped ones
+    name the tool results whose bodies were never read, and those are exactly
+    the bodies that must become recoverable instead of silently summarized.
+    """
+
+    text: str
+    tool_call_ids: frozenset[str] = frozenset()
+
+
+def _split_block(block: str, budget: int) -> list[str]:
+    """Split one oversized block into consecutive windows, dropping nothing.
+
+    Line-aware so a table row or a JSON item is less likely to be cleft, but
+    line-awareness is a nicety: the guarantee is that the concatenation of the
+    returned pieces equals ``block``.
+    """
+    if len(block) <= budget:
+        return [block]
+    pieces: list[str] = []
+    current: list[str] = []
+    used = 0
+    for line in block.splitlines(keepends=True):
+        while len(line) > budget:
+            # A single line longer than the budget (minified JSON, one huge
+            # paragraph) still has to be cut somewhere; keep the pieces
+            # adjacent so nothing in between is lost.
+            if current:
+                pieces.append("".join(current))
+                current, used = [], 0
+            pieces.append(line[:budget])
+            line = line[budget:]
+        if current and used + len(line) > budget:
+            pieces.append("".join(current))
+            current, used = [], 0
+        current.append(line)
+        used += len(line)
+    if current:
+        pieces.append("".join(current))
+    return pieces
+
+
+def segment_conversation_for_summary(
+    messages: list[Message],
+    *,
+    budget_chars: int,
+    preserve_tool_result_ids: frozenset[str] = frozenset(),
+) -> list[ConversationSegment]:
+    """Render ``messages`` into consecutive pieces of at most ``budget_chars``.
+
+    This is the difference between *bounding a request* and *discarding a
+    record*. A per-result cap deletes the middle of every long body before the
+    summarizer runs, so a fact that only existed there is lost no matter what
+    happens to the spilled copy afterwards. Segments keep every character
+    reachable: the caller reads them in bounded calls and merges the digests.
+
+    Bodies are rendered whole (``max_tool_result_chars=None``) for that reason;
+    the budget is enforced by the segment boundary instead.
+    """
+    if budget_chars <= 0:
+        raise ValueError("budget_chars must be positive")
+    segments: list[ConversationSegment] = []
+    current: list[str] = []
+    current_ids: set[str] = set()
+    used = 0
+
+    def _flush() -> None:
+        nonlocal current, current_ids, used
+        if current:
+            segments.append(
+                ConversationSegment(
+                    text="\n\n".join(current), tool_call_ids=frozenset(current_ids),
+                ),
+            )
+        current, current_ids, used = [], set(), 0
+
+    for message in messages:
+        call_id = str(message.get("tool_call_id") or "") if message.get("role") == "tool" else ""
+        block = _render_message(
+            message,
+            cap=None,
+            preserve_full=(
+                message.get("role") == "tool"
+                and call_id in preserve_tool_result_ids
+            ),
+        )
+        for piece in _split_block(block, budget_chars):
+            if current and used + len(piece) + 2 > budget_chars:
+                _flush()
+            current.append(piece)
+            used += len(piece) + 2
+            if call_id:
+                current_ids.add(call_id)
+    _flush()
+    return segments

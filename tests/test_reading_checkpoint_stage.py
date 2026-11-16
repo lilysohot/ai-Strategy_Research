@@ -1,0 +1,514 @@
+"""Archiving a read body is allowed only after its replacement is durable.
+
+These tests are organised around the two ways this mechanism can hurt: it can
+retire a body and then fail to keep the record (evidence gone, nothing to show),
+or it can churn the history every turn (prefix cache destroyed, cost up, nothing
+gained). The first is tested by making every failure point fail and asserting the
+history is byte-identical; the second by running the stage twice.
+"""
+
+from __future__ import annotations
+
+import asyncio
+import json
+
+import pytest
+
+from frontier_agent.core.llm import LLMResponse
+from frontier_agent.core.loop_types import BaseObserver, LoopConfig
+from frontier_agent.core.runtime.loop.agent_loop import run_agent_loop
+from frontier_agent.core.runtime.reading.contract import (
+    Coverage,
+    Finding,
+    FindingKind,
+    ReadingCheckpoint,
+    SourceRange,
+)
+from frontier_agent.core.runtime.reading.stage import (
+    RETIRED_MARKER,
+    ReadingCheckpointEvent,
+    ReadingStage,
+    ReadingStageConfig,
+    is_retired_body,
+)
+from frontier_agent.core.tool import tool
+
+BODY = "verbatim page text " * 900  # ~18k characters
+
+
+class _Store:
+    def __init__(self, *, fail: bool = False) -> None:
+        self.saved: dict[str, ReadingCheckpoint] = {}
+        self.fail = fail
+
+    def put(self, checkpoint: ReadingCheckpoint) -> None:
+        if self.fail:
+            raise OSError("disk full")
+        self.saved[checkpoint.checkpoint_id] = checkpoint
+
+    def get(self, checkpoint_id: str) -> ReadingCheckpoint | None:
+        return self.saved.get(checkpoint_id)
+
+
+def _history(bodies: int = 2, filler: int = 0, unconsumed: int = 0) -> list[dict]:
+    """A history at a turn boundary.
+
+    It ends with an assistant message, because that is what makes the preceding
+    tool results *consumed*: the stage decides eligibility by position, so a
+    fixture that ends on a tool result would describe a turn in flight.
+    ``unconsumed`` appends results that arrive after that assistant message.
+    """
+    messages: list[dict] = [
+        {"role": "system", "content": "system prompt"},
+        {"role": "user", "content": "研究该公司 2025 年营收口径"},
+    ]
+    for index in range(bodies):
+        call_id = f"c{index}"
+        messages.append(
+            {
+                "role": "assistant",
+                "content": "",
+                "tool_calls": [
+                    {
+                        "id": call_id,
+                        "type": "function",
+                        "function": {"name": "corpus_fetch", "arguments": "{}"},
+                    }
+                ],
+            }
+        )
+        messages.append({"role": "tool", "tool_call_id": call_id, "content": BODY})
+    messages.append({"role": "assistant", "content": "继续"})
+    for index in range(filler):
+        messages.append({"role": "user", "content": f"filler {index}"})
+    for index in range(unconsumed):
+        call_id = f"u{index}"
+        messages.append(
+            {
+                "role": "assistant",
+                "content": "",
+                "tool_calls": [
+                    {
+                        "id": call_id,
+                        "type": "function",
+                        "function": {"name": "corpus_fetch", "arguments": "{}"},
+                    }
+                ],
+            }
+        )
+        messages.append({"role": "tool", "tool_call_id": call_id, "content": BODY})
+    return messages
+
+
+def _checkpoint(*, statement_chars: int = 20, findings: int = 2) -> ReadingCheckpoint:
+    return ReadingCheckpoint(
+        checkpoint_id="",
+        task_id="",
+        question="研究该公司 2025 年营收口径",
+        findings=tuple(
+            Finding(
+                finding_id=f"f{index}",
+                kind=FindingKind.NUMBER,
+                statement="x" * statement_chars,
+                evidence_refs=(f"ce:{index}",),
+                source_id="doc-1",
+                value="123",
+                unit="million USD",
+                period="FY2025",
+            )
+            for index in range(findings)
+        ),
+        sources=(SourceRange("doc-1", "build-3", 0, 100),),
+        coverage=Coverage(
+            read_ranges=(SourceRange("doc-1", "build-3", 0, 100),),
+            unread_ranges=(SourceRange("doc-1", "build-3", 100, 400),),
+        ),
+    )
+
+
+def _stage(
+    extractor,
+    *,
+    store=None,
+    resolve=None,
+    **config,
+) -> ReadingStage:
+    options: dict = {
+        "enabled": True,
+        "min_body_chars": 1_000,
+        "working_set_limit": 8_000,
+        "keep_recent_messages": 0,
+        "record_limit": 4_000,
+        "max_attempts": 2,
+        "total_timeout_s": 5.0,
+    }
+    options.update(config)
+    return ReadingStage(
+        extractor=extractor,
+        store=store or _Store(),
+        config=ReadingStageConfig(**options),
+        task_id="run-1",
+        resolve=resolve if resolve is not None else (lambda ref: {"ref": ref}),
+    )
+
+
+async def _ok_extractor(bodies, question, bounds):
+    return _checkpoint()
+
+
+def test_a_disabled_stage_touches_nothing() -> None:
+    messages = _history()
+    before = json.dumps(messages, ensure_ascii=False)
+    stage = _stage(_ok_extractor, enabled=False)
+
+    event = asyncio.run(stage.maybe_checkpoint(messages))
+
+    assert event.triggered is False
+    assert event.reason == "disabled"
+    assert json.dumps(messages, ensure_ascii=False) == before
+
+
+def test_below_the_working_set_limit_nothing_is_archived() -> None:
+    messages = _history(bodies=1)
+    stage = _stage(_ok_extractor, working_set_limit=10_000_000)
+
+    event = asyncio.run(stage.maybe_checkpoint(messages))
+
+    assert event.reason == "under_working_set_limit"
+    assert not any(is_retired_body(m["content"]) for m in messages if m["role"] == "tool")
+
+
+def test_an_installed_checkpoint_retires_bodies_and_appends_the_archive() -> None:
+    messages = _history(bodies=2)
+    store = _Store()
+    stage = _stage(_ok_extractor, store=store)
+
+    event = asyncio.run(stage.maybe_checkpoint(messages, turn=4))
+
+    assert event.installed is True
+    assert event.reason == "checkpoint_installed"
+    assert len(event.retired_calls) == 2
+    assert event.working_set_after < event.working_set_before
+    assert store.saved, "the record must be durable before bodies retire"
+
+    tools = [m for m in messages if m["role"] == "tool"]
+    assert all(is_retired_body(m["content"]) for m in tools)
+    assert all(RETIRED_MARKER in m["content"] for m in tools)
+    # Tool pairing survives: each retired message keeps its call id.
+    assert [m["tool_call_id"] for m in tools] == ["c0", "c1"]
+    archive = messages[-1]
+    assert archive["role"] == "user"
+    assert "研究归档" in archive["content"]
+    assert "ce:0" in archive["content"]
+    assert "未读" in archive["content"]
+
+
+def test_an_earlier_checkpoint_is_never_rewritten_by_a_later_one() -> None:
+    """Prefix stability under a *second* checkpoint.
+
+    Appending is fine; rewriting is not. A later checkpoint must leave the first
+    one's marker and rollup byte-identical, or every turn invalidates the cache
+    from the first archived page onward.
+    """
+    messages = _history(bodies=2)
+    stage = _stage(_ok_extractor)
+
+    asyncio.run(stage.maybe_checkpoint(messages, turn=1))
+    first_markers = [m["content"] for m in messages if m["role"] == "tool"]
+    first_archive = messages[-1]["content"]
+
+    # A new turn arrives and its body is consumed by a following assistant turn.
+    messages.append(
+        {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+                {
+                    "id": "c9",
+                    "type": "function",
+                    "function": {"name": "corpus_fetch", "arguments": "{}"},
+                }
+            ],
+        }
+    )
+    messages.append({"role": "tool", "tool_call_id": "c9", "content": BODY})
+    messages.append({"role": "assistant", "content": "继续"})
+
+    second = asyncio.run(stage.maybe_checkpoint(messages, turn=2))
+
+    assert second.installed is True
+    assert second.checkpoint_id != "ck:run-1/001", "each checkpoint needs its own id"
+    retired = [m["content"] for m in messages if m["role"] == "tool"][:2]
+    assert retired == first_markers, "a later checkpoint rewrote an earlier marker"
+    archives = [
+        m["content"] for m in messages if m["role"] == "user" and "研究归档" in m["content"]
+    ]
+    assert archives[0] == first_archive
+    assert len(archives) == 2, "each checkpoint appends exactly one rollup"
+
+
+def test_a_second_run_retires_nothing_and_appends_no_second_archive() -> None:
+    """The prefix-cache requirement: a checkpoint is applied once. Re-running the
+    stage must not rewrite a retired body or add another rollup."""
+    messages = _history(bodies=2)
+    stage = _stage(_ok_extractor)
+
+    asyncio.run(stage.maybe_checkpoint(messages, turn=1))
+    snapshot = json.dumps(messages, ensure_ascii=False)
+    second = asyncio.run(stage.maybe_checkpoint(messages, turn=2))
+
+    assert second.installed is False
+    assert second.reason == "no_retirable_bodies"
+    assert json.dumps(messages, ensure_ascii=False) == snapshot
+
+
+def test_a_result_the_model_has_not_seen_is_never_retired() -> None:
+    """Results appended after the last assistant message arrive in the turn being
+    ended: nothing has read them, so nothing may archive them."""
+    messages = _history(bodies=2, unconsumed=1)
+    stage = _stage(_ok_extractor, keep_recent_messages=0)
+
+    event = asyncio.run(stage.maybe_checkpoint(messages, turn=3))
+
+    assert event.installed is True
+    tools = [m for m in messages if m["role"] == "tool"]
+    assert is_retired_body(tools[0]["content"])
+    assert is_retired_body(tools[1]["content"])
+    assert not is_retired_body(tools[2]["content"])
+    assert event.retired_calls == ("c0", "c1")
+
+
+def test_the_keep_recent_margin_leaves_the_tail_alone() -> None:
+    """An extra margin for callers that want more history untouched. The last
+    tool message here IS consumed, so only the margin protects it."""
+    messages = _history(bodies=3)
+    stage = _stage(_ok_extractor, keep_recent_messages=3)
+
+    asyncio.run(stage.maybe_checkpoint(messages, turn=3))
+
+    tools = [m for m in messages if m["role"] == "tool"]
+    assert not is_retired_body(tools[-1]["content"])
+
+
+@pytest.mark.parametrize(
+    "failure",
+    ["raises", "timeout", "empty", "unresolvable_ref", "write_fails"],
+)
+def test_every_failure_leaves_the_history_byte_identical(failure: str) -> None:
+    """The one outcome that must never happen: bodies gone, archive unusable."""
+    messages = _history(bodies=2)
+    before = json.dumps(messages, ensure_ascii=False)
+
+    async def raising(bodies, question, bounds):
+        raise RuntimeError("provider exploded")
+
+    async def hanging(bodies, question, bounds):
+        await asyncio.sleep(30)
+        return _checkpoint()
+
+    async def empty(bodies, question, bounds):
+        return ReadingCheckpoint(
+            checkpoint_id="",
+            task_id="",
+            question="q",
+            findings=(),
+            sources=(),
+        )
+
+    extractor = {
+        "raises": raising,
+        "timeout": hanging,
+        "empty": empty,
+        "unresolvable_ref": _ok_extractor,
+        "write_fails": _ok_extractor,
+    }[failure]
+    kwargs: dict = {}
+    if failure == "unresolvable_ref":
+        kwargs["resolve"] = lambda ref: None
+    if failure == "write_fails":
+        kwargs["store"] = _Store(fail=True)
+    stage = _stage(extractor, total_timeout_s=0.15, max_attempts=2, **kwargs)
+
+    event = asyncio.run(stage.maybe_checkpoint(messages, turn=5))
+
+    assert event.installed is False
+    assert event.failure
+    assert json.dumps(messages, ensure_ascii=False) == before
+
+
+def test_an_unresolvable_reference_names_the_reason() -> None:
+    stage = _stage(_ok_extractor, resolve=lambda ref: None)
+
+    event = asyncio.run(stage.maybe_checkpoint(_history(), turn=1))
+
+    assert event.failure == "evidence_pointer_unresolved"
+
+
+def test_an_over_budget_record_is_retried_narrower_rather_than_trimmed() -> None:
+    """Trimming findings is how a fact disappears with nobody deciding to drop it.
+    The stage narrows the bound and lets the extractor produce a smaller record."""
+    seen: list[int] = []
+
+    async def too_big(bodies, question, bounds):
+        seen.append(bounds.record_limit)
+        return _checkpoint(statement_chars=6_000)
+
+    stage = _stage(too_big, record_limit=1_000)
+
+    event = asyncio.run(stage.maybe_checkpoint(_history(), turn=1))
+
+    assert event.installed is False
+    assert event.failure == "record_over_budget"
+    assert seen[0] == 1_000
+    assert seen[1] < seen[0], "the retry must be bounded tighter, not looser"
+
+
+def test_an_oversized_archive_falls_back_to_an_index_and_says_so() -> None:
+    messages = _history()
+    stage = _stage(_ok_extractor, archive_max_chars=120)
+
+    event = asyncio.run(stage.maybe_checkpoint(messages, turn=1))
+
+    assert event.installed is True
+    assert event.index_only is True
+    assert "仅保留索引" in messages[-1]["content"]
+
+
+def test_the_extractor_is_told_what_the_record_budget_is() -> None:
+    captured: dict = {}
+
+    async def capture(bodies, question, bounds):
+        captured["bounds"] = bounds
+        captured["question"] = question
+        captured["chars"] = [body.chars for body in bodies]
+        return _checkpoint()
+
+    asyncio.run(_stage(capture, record_limit=2_000).maybe_checkpoint(_history(), turn=1))
+
+    assert captured["bounds"].record_limit == 2_000
+    assert captured["question"].startswith("研究该公司")
+    assert captured["chars"] == [len(BODY), len(BODY)]
+
+
+def test_cancellation_is_not_swallowed() -> None:
+    """A cancelled run must unwind; only ``Exception`` is treated as a soft
+    failure."""
+
+    async def cancelled(bodies, question, bounds):
+        raise asyncio.CancelledError
+
+    stage = _stage(cancelled)
+
+    with pytest.raises(asyncio.CancelledError):
+        asyncio.run(stage.maybe_checkpoint(_history(), turn=1))
+
+
+class _EventSpy(BaseObserver):
+    critical = True
+
+    def __init__(self) -> None:
+        self.events: list[ReadingCheckpointEvent] = []
+
+    async def on_reading_checkpoint(self, event: ReadingCheckpointEvent) -> None:
+        self.events.append(event)
+        return None
+
+
+@tool
+async def read_document(doc_id: str) -> str:
+    """Return a long page of verbatim text.
+
+    Args:
+        doc_id: Document to read.
+    """
+    return BODY
+
+
+class _ReadingModel:
+    model = "stub"
+
+    def __init__(self, reads: int = 1) -> None:
+        self.calls = 0
+        self.reads = reads
+        self.seen: list[list] = []
+
+    async def chat(self, messages, **kwargs):
+        del kwargs
+        self.calls += 1
+        self.seen.append([dict(m) for m in messages])
+        if self.calls <= self.reads:
+            return LLMResponse(
+                content="reading",
+                tool_calls=[
+                    {
+                        "id": f"r{self.calls}",
+                        "type": "function",
+                        "function": {"name": "read_document", "arguments": '{"doc_id":"d1"}'},
+                    }
+                ],
+                finish_reason="tool_calls",
+            )
+        return LLMResponse(content="done", tool_calls=[], finish_reason="stop")
+
+
+@pytest.mark.asyncio
+async def test_the_loop_runs_the_stage_and_reports_it() -> None:
+    """Wiring, not mechanism: the stage is reachable from the loop, runs between
+    model calls, and its outcome is reported even when it declines."""
+    spy = _EventSpy()
+    model = _ReadingModel(reads=1)
+    stage = _stage(_ok_extractor, working_set_limit=1_000, keep_recent_messages=0)
+
+    await run_agent_loop(
+        system_prompt="system prompt",
+        user_message="读一篇长文",
+        llm=model,
+        tools=[read_document],
+        config=LoopConfig(
+            max_turns=3,
+            task_id="run-1",
+            keep_recent=64,
+            reading_stage=stage,
+        ),
+        observers=[spy],
+    )
+
+    assert spy.events, "the loop reported no reading-stage run"
+    first = spy.events[0]
+    # Turn 1 ends with a result the model has not read yet, so the stage declines.
+    # That decline is reported too — otherwise "nothing was archived" has no trail.
+    assert first.triggered is False
+    assert first.reason == "no_retirable_bodies"
+
+
+@pytest.mark.asyncio
+async def test_a_retired_body_reaches_the_next_request_as_a_short_marker() -> None:
+    """End to end: what the model sees on the next call is the marker plus the
+    archive, not the page it already read."""
+    model = _ReadingModel(reads=2)
+    stage = _stage(_ok_extractor, working_set_limit=1_000, keep_recent_messages=0)
+
+    await run_agent_loop(
+        system_prompt="system prompt",
+        user_message="读一篇长文",
+        llm=model,
+        tools=[read_document],
+        config=LoopConfig(
+            max_turns=4,
+            task_id="run-1",
+            keep_recent=64,
+            reading_stage=stage,
+        ),
+        observers=[],
+    )
+
+    last_request = model.seen[-1]
+    blob = json.dumps(last_request, ensure_ascii=False)
+    assert RETIRED_MARKER in blob, "the retired body never reached a later request"
+    assert "研究归档" in blob
+    # Exactly the page the model had already read is gone. The second one is the
+    # result of the turn that is still in flight, so it stays verbatim — retiring
+    # it would summarise a page before anyone read it.
+    assert blob.count(RETIRED_MARKER) == 1
+    assert blob.count("verbatim page text") > 100, "the unread page must stay verbatim"
+    assert len(blob) < 2 * len(BODY)

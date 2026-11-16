@@ -24,6 +24,9 @@ from frontier_agent.core.loop_types import (
     ToolResult,
     TurnContext,
 )
+from frontier_agent.core.runtime.loop.request_composition import (
+    REQUEST_COMPOSITION_KEY,
+)
 
 _FORMATS: tuple[str, ...] = ("json", "jsonl")
 _DEFAULT_FORMATS: tuple[str, ...] = _FORMATS
@@ -589,6 +592,14 @@ class TrajectoryFileObserver(BaseObserver):
             # encrypted_content / text) so the (sub-)agent trajectory stays
             # replay-able with signatures / encrypted reasoning intact.
             record["thinking_blocks"] = ctx.thinking_blocks
+        # Sizes and hashes of the request this response belongs to, published by
+        # the loop at the boundary where the list is final. Recorded here rather
+        # than reconstructed later: at turn end the history already carries this
+        # completion and this turn's tool results, so a reconstruction describes
+        # a different request.
+        composition = ctx.metadata.get(REQUEST_COMPOSITION_KEY)
+        if isinstance(composition, dict):
+            record["request"] = composition
         self._write_jsonl(record)
 
         # JSON envelope: emit prior context once, then this turn.

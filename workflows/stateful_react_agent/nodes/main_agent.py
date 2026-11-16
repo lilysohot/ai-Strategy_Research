@@ -95,6 +95,7 @@ from plugins.tools.task_board import (
     restore_board_from_messages,
 )
 from workflows._shared.cross_mode_context import append_context_to_question
+from workflows._shared.reading_stage import build_reading_stage
 from workflows._shared.sandbox_mounts import (
     resolve_sandbox_mount_metadata,
     workspace_root_override,
@@ -1007,9 +1008,12 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     # 该工具，同一契约在两条路径上分裂，团队侧只能靠失败后的补救提示，多拒两轮。这里按
     # 检索工具绑定而不是清单工具绑定注入，也保证规则在第一次答复之前就可见。
     if any(getattr(t, "name", "") == "corpus_search" for t in tools):
-        from plugins.corpus.final_delivery import IDENTITY_ANSWER_RULE
+        from plugins.corpus.final_delivery import CORPUS_REPORT_STYLE_RULE, IDENTITY_ANSWER_RULE
 
-        system_prompt = f"{system_prompt}\n\n## 最终交付形状（语料）\n{IDENTITY_ANSWER_RULE}\n"
+        system_prompt = (
+            f"{system_prompt}\n\n## 最终交付形状（语料）\n{IDENTITY_ANSWER_RULE}\n"
+            f"{CORPUS_REPORT_STYLE_RULE}\n"
+        )
 
     # The request tail: this run's own directories, appended where per-run content
     # belongs. Everything above it is byte-identical to the previous turn, which is
@@ -1276,6 +1280,12 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
     else:
         compactor = KeepLastNToolResultsCompactor(keep_tool_result=keep_last_k)
 
+    # Reading checkpoints are a separate mechanism from the threshold above: a
+    # long reading task sits at ~40% of the window and never trips it. Off unless
+    # the profile asks (``reading_checkpoint``), and independent of
+    # ``context_compaction`` so a deployment can have either, both, or neither.
+    reading_stage = build_reading_stage(llm=llm, agent_cfg=agent_cfg, task_id=ctx.task_id)
+
     # Cross-turn replay (issue 01 §9.5). Fail-open: whatever we cannot byte-match
     # against the previous request means we start fresh, rather than replay a
     # prefix that would miss the provider's prefix cache — or hand the model a
@@ -1370,6 +1380,7 @@ async def react_agent_node(state: dict[str, Any], ctx: NodeContext) -> dict[str,
                 loop_policy=_loop_policy(),
                 compactor=compactor,
                 compaction_policy=compaction_policy,
+                reading_stage=reading_stage,
                 tool_result_post_processor=ReactToolResultPostProcessor(),
             ),
             model_profile=model_profile,

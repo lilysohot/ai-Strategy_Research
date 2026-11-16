@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 from contextvars import ContextVar, Token
 from dataclasses import dataclass, field
@@ -1428,15 +1429,75 @@ def work_item_verification_progress(
     )
 
 
-def render_verification_status(bus: AgentBus, task_id: str) -> str:
-    """Expose current checks to the coordinator, including partial submissions."""
+#: Coordinator-facing view of one check: what it must satisfy and what still
+#: blocks. ``binding_id`` and ``subject.sha256`` are 64-hex internal addresses
+#: the model cannot act on, and this block is replayed on every
+#: ``collect_reports`` call — on a measured run the same two unchecked checks
+#: were appended four times, at ~1,340 characters each.
+_CRITERION_PREVIEW_CHARS = 120
+
+#: Comparison switch for the 07 candidate. Off by default: the published
+#: protocol stays byte-identical until a comparison decides otherwise.
+_COMPACT_ENV = "VERIFICATION_STATUS_COMPACT"
+
+
+def _compact_enabled(explicit: bool | None) -> bool:
+    if explicit is not None:
+        return explicit
+    return os.environ.get(_COMPACT_ENV, "").strip().lower() in {"1", "true", "on", "yes"}
+
+
+def _compact_check_view(check: dict[str, Any]) -> dict[str, Any]:
+    """Drop binding handles, keep the requirement and its state."""
+    item: dict[str, Any] = {
+        "check_id": check.get("check_id"),
+        "work_item_id": check.get("work_item_id"),
+        "verdict": check.get("verdict"),
+    }
+    if check.get("required"):
+        item["required"] = True
+    criterion = str(check.get("criterion") or "")
+    if criterion:
+        item["criterion"] = (
+            criterion
+            if len(criterion) <= _CRITERION_PREVIEW_CHARS
+            else criterion[: _CRITERION_PREVIEW_CHARS - 1].rstrip() + "…"
+        )
+    if check.get("job_id"):
+        item["job_id"] = check["job_id"]
+    keys = [
+        source["key"]
+        for source in check.get("evidence") or []
+        if isinstance(source, dict) and source.get("key")
+    ]
+    if keys:
+        item["evidence_keys"] = keys
+    result = check.get("result")
+    if result:
+        item["detail"] = result.get("detail", "")[:1200]
+        item["unresolved_issues"] = [i[:400] for i in result.get("unresolved_issues", [])[:8]]
+    return item
+
+
+def render_verification_status(
+    bus: AgentBus, task_id: str, *, compact: bool | None = None
+) -> str:
+    """Expose current checks to the coordinator, including partial submissions.
+
+    ``compact`` (or ``VERIFICATION_STATUS_COMPACT``) renders the same state in
+    the smaller shape; it changes what is displayed, never what is stored or
+    checked.
+    """
     if not hasattr(bus, "list_task_jobs"):
         return ""
     summary = project_bus_checks(bus, task_id)
     if not summary["checks"]:
         return ""
-    compact = []
+    rendered = []
     for check in summary["checks"]:
+        if _compact_enabled(compact):
+            rendered.append(_compact_check_view(check))
+            continue
         item = {
             key: check[key]
             for key in (
@@ -1460,6 +1521,6 @@ def render_verification_status(bus: AgentBus, task_id: str) -> str:
         if result:
             item["detail"] = result.get("detail", "")[:1200]
             item["unresolved_issues"] = [i[:400] for i in result.get("unresolved_issues", [])[:8]]
-        compact.append(item)
-    summary["checks"] = compact
+        rendered.append(item)
+    summary["checks"] = rendered
     return "\n\n[version-bound checks]\n" + json.dumps(summary, ensure_ascii=False)

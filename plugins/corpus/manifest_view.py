@@ -9,13 +9,13 @@ from typing import Any
 
 def fit_manifest_payload(body: str, cap: int) -> str | None:
     """Register only our known projected manifest protocol with the generic fitter."""
-    from plugins.corpus.projection import NAVIGATION_VERSION
+    from plugins.corpus.projection import NAVIGATION_VERSION, is_navigation_protocol
 
     try:
         payload = json.loads(body)
     except (TypeError, ValueError):
         return None
-    if not isinstance(payload, dict) or payload.get("protocol") != NAVIGATION_VERSION:
+    if not isinstance(payload, dict) or not is_navigation_protocol(payload.get("protocol")):
         return None
     if len(body) <= cap:
         return body

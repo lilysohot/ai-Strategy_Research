@@ -1,5 +1,7 @@
 """Everyday team prompts; scientific templates remain in prompts.py."""
 
+from plugins.corpus.final_delivery import CORPUS_REPORT_STYLE_RULE
+
 REQUIREMENT_SCOPE = """
 # Required outcomes, evidence and discretionary work
 The user's requested result and constraints define success. Your plan and role templates
@@ -76,6 +78,8 @@ independent verifier on the first planning turn. A reasonably registered check i
 never withdrawn because its execution failed; report that failure as an unchecked
 result with a concrete limitation instead.
 """
+
+REQUIREMENT_SCOPE += "\n" + CORPUS_REPORT_STYLE_RULE + "\n"
 
 TOOLS = """
 # Available Tools

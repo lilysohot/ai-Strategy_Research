@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import asyncio
 import itertools
+import json
+import re
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -1380,3 +1382,279 @@ def test_the_index_never_reaches_a_provider() -> None:
     assert "/ws/.spill/s/a.md" in text_of(
         next(m for m in wire if text_of(m.get("content")) == text_of(index["content"]))["content"],
     )
+
+
+# ── issue 02: middle evidence must reach the summarizer ─────────────────
+#
+# The defect these cover: Tier 2 used to shorten every long tool result with a
+# 70/30 head/tail cut BEFORE the summarizer ran. A fact that existed only in the
+# dropped middle therefore never entered the summary, and because the summary is
+# what replaces those messages, the fact then vanished from the live context —
+# while a spilled copy of the original sat on disk, which is recoverable in
+# principle and useless in practice. Bounding the REQUEST by reading the record
+# in consecutive segments is what this replaces.
+
+
+def _corpus_page(text: str, evidence_ref: str) -> str:
+    """One corpus_fetch body, shaped like the projection the model really gets."""
+    return json.dumps(
+        {
+            "ok": True,
+            "scope": "document",
+            "items": [{"text": text, "evidence_ref": evidence_ref}],
+        },
+        ensure_ascii=False,
+    )
+
+
+def _reading_history(bodies: list[tuple[str, str]]) -> list[dict]:
+    """Alternating assistant/tool turns, oldest first, like a document read."""
+    messages: list[dict] = [
+        {"role": "system", "content": "system"},
+        {"role": "user", "content": "read the whole report and answer"},
+    ]
+    for body, call_id in bodies:
+        messages.append({
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [{
+                "id": call_id,
+                "function": {"name": "corpus_fetch", "arguments": "{}"},
+            }],
+        })
+        messages.append({"role": "tool", "tool_call_id": call_id, "content": body})
+    messages.append({"role": "user", "content": "now answer"})
+    return messages
+
+
+class _EchoSpy:
+    """Records every prompt the summarizer is handed."""
+
+    def __init__(self, content: str = "summary") -> None:
+        self.prompts: list[str] = []
+        self._content = content
+
+    async def chat(self, messages: list[dict]) -> SimpleNamespace:
+        self.prompts.append(str(messages[0]["content"]))
+        return SimpleNamespace(content=self._content)
+
+
+def test_a_unique_middle_fact_reaches_the_summarizer() -> None:
+    """The P0 regression: the only copy of a fact sits in the MIDDLE of the
+    OLDEST body, no later result repeats it, and the record is large enough that
+    the summarizer cannot take it in one request."""
+    fact = "REVENUE_2025_USD_123_MILLION"
+    unit = "（单位：百万美元，按 2025 财年口径）"
+    ref = "eref:page-4-item-37"
+    half = (12_000 - len(fact) - len(unit)) // 2
+    bodies = [
+        (_corpus_page("A" * half + fact + unit + "B" * half, ref), "c0"),
+        *[
+            (_corpus_page("ordinary paragraph " * 600, f"eref:p{index}"), f"c{index}")
+            for index in range(1, 8)
+        ],
+    ]
+
+    spy = _EchoSpy()
+    compactor = TieredCompactor(
+        keep_tool_result=0,
+        summary_llm=spy,
+        relief_target=1,
+        summary_input_budget_chars=20_000,
+        max_summary_segments=12,
+    )
+    asyncio.run(compactor.compact(_reading_history(bodies), keep_recent=1))
+
+    joined = "\n".join(spy.prompts)
+    # Non-vacuous: budget pressure really was in play, so this is not the
+    # "everything happened to fit" path that would pass without any fix.
+    assert len(spy.prompts) > 2, len(spy.prompts)
+    assert len(spy.prompts[0]) <= 20_000
+    assert fact in joined
+    # A number without its unit, or a fact without its ref, is not evidence.
+    assert unit in joined
+    assert ref in joined
+    # ... and the rollup is built from the per-part digests, not from a re-cut.
+    assert "[part 1 of" in spy.prompts[-1]
+
+
+def test_head_middle_and_tail_evidence_all_survive_with_their_attributes() -> None:
+    """Head, middle and tail facts, each with the time, unit, condition,
+    counter-evidence and ref that make it usable — the acceptance set for 02."""
+    marks = {
+        "head": ("HEAD_FACT", "2021-03 生效", "占 12.5%", "仅适用于欧盟口径"),
+        "middle": ("MIDDLE_FACT", "2023 年复核", "1,247 例", "局限：样本非随机"),
+        "tail": ("TAIL_FACT", "2025 年更新", "覆写前值 8.9%", "反证：另一研究给出 0.4x"),
+    }
+    head, middle, tail = marks["head"], marks["middle"], marks["tail"]
+
+    def _text(position: str) -> str:
+        head_fact, mid_fact, tail_fact = marks["head"], marks["middle"], marks["tail"]
+        body = [
+            f"{head_fact[0]}：{head_fact[1]}，{head_fact[2]}，条件 {head_fact[3]}。",
+            "filler " * 900,
+            f"{mid_fact[0]}：{mid_fact[1]}，{mid_fact[2]}，{mid_fact[3]}。",
+            "filler " * 900,
+            f"{tail_fact[0]}：{tail_fact[1]}，{tail_fact[2]}，{tail_fact[3]}。",
+        ]
+        assert position in ("head", "middle", "tail")
+        return "".join(body)
+
+    bodies = [
+        (_corpus_page(_text("head"), "eref:evidence-1"), "c0"),
+        *[
+            (_corpus_page("plain paragraph " * 700, f"eref:p{index}"), f"c{index}")
+            for index in range(1, 6)
+        ],
+    ]
+
+    spy = _EchoSpy()
+    compactor = TieredCompactor(
+        keep_tool_result=0,
+        summary_llm=spy,
+        relief_target=1,
+        summary_input_budget_chars=16_000,
+        max_summary_segments=12,
+    )
+    asyncio.run(compactor.compact(_reading_history(bodies), keep_recent=1))
+
+    joined = "\n".join(spy.prompts)
+    for group in (head, middle, tail):
+        for piece in group:
+            assert piece in joined, piece
+    assert "eref:evidence-1" in joined
+
+
+def test_the_summarizer_is_handed_the_whole_body_not_a_pre_truncated_one() -> None:
+    """No ``[Compressed tool result: …]`` cut and no 3,500-char head-only cut may
+    sit between the tool result and the summarizer."""
+    filler = "m" * 9_000
+    body = f"HEAD_MARKER {filler} TAIL_MARKER"
+
+    spy = _EchoSpy()
+    compactor = TieredCompactor(
+        keep_tool_result=0, summary_llm=spy, relief_target=1,
+    )
+    asyncio.run(compactor.compact(_reading_history([(body, "c0")]), keep_recent=1))
+
+    prompt = spy.prompts[0]
+    assert "HEAD_MARKER" in prompt
+    assert "TAIL_MARKER" in prompt
+    assert filler in prompt, "the middle never reached the summarizer"
+    assert "[Compressed tool result:" not in prompt
+    assert "...[truncated]..." not in prompt
+
+
+_RANGE_RE = re.compile(r"\[(\d[\d,]*)-(\d[\d,]*) of ([\d,]+) chars omitted\]")
+
+
+@pytest.mark.parametrize("width", [1_200, 600, 300])
+def test_a_condensed_body_names_the_range_it_dropped(width: int) -> None:
+    """The cheap candidates still cut — that is their job — but they now say
+    which range went missing, in the original coordinates, so a later reader can
+    tell a clipped result from a short one and go straight to the spill copy."""
+    body = "HEAD_MARKER " + "m" * 9_000 + " TAIL_MARKER"
+    out = compress_tool_results(_tool_history(body), max_chars=width)[3]["content"]
+
+    assert len(out) <= width
+    match = _RANGE_RE.search(out)
+    assert match, out
+    start = int(match.group(1).replace(",", ""))
+    end = int(match.group(2).replace(",", ""))
+    total = int(match.group(3).replace(",", ""))
+    assert total == len(body)
+    assert 0 < start <= end <= total
+    assert end - start + 1 > 1_000, "the named range must be the real gap"
+    # The kept text is exactly the two ends the marker claims to have kept.
+    assert out.split("…")[0].rstrip("\n").endswith(body[: start - 1])
+    assert out.endswith(body[end:])
+
+
+def test_the_renderer_keeps_both_ends_of_a_long_result() -> None:
+    """The cross-turn excerpt path makes the same cut; a head-only one lost the
+    end of every long result and never said so."""
+    from frontier_agent.core.messages import tool_msg
+    from frontier_agent.infra.llm.summary_prompt import format_conversation_for_summary
+
+    body = "HEAD_MARKER " + "x" * 9_000 + " TAIL_MARKER"
+    rendered = format_conversation_for_summary([tool_msg(body, "c1")])
+
+    assert "HEAD_MARKER" in rendered
+    assert "TAIL_MARKER" in rendered
+    assert "chars omitted" in rendered
+    assert len(rendered) < 4_500
+
+
+def test_a_summary_that_replaced_a_short_body_still_leaves_a_recovery_copy() -> None:
+    """Recovery used to be a side effect of pre-truncation, so a body short enough
+    never to be compressed got no file even though the summary swallowed it."""
+    body = "short but load-bearing finding: the second cohort was excluded"
+    spilled: list[tuple[str, str]] = []
+
+    def _spill(name: str, content: str) -> str:
+        spilled.append((name, content))
+        return f"/ws/.spill/s/{len(spilled)}.md"
+
+    compactor = TieredCompactor(
+        keep_tool_result=0,
+        summary_llm=_EchoSpy("s"),
+        relief_target=1,
+        spill=_spill,
+    )
+    asyncio.run(compactor.compact(_reading_history([(body, "c0")]), keep_recent=1))
+
+    assert compactor.last_event is not None
+    assert compactor.last_event.selected == "tier2"
+    assert ("corpus_fetch", body) in spilled
+
+
+def test_a_summary_still_runs_when_there_is_nowhere_to_spill() -> None:
+    """No spill store: the summary must still be produced, and the compaction must
+    not claim recoverability it does not have (no manifest is attached)."""
+    body = _corpus_page("finding " * 2_000, "eref:no-spill")
+    compactor = TieredCompactor(
+        keep_tool_result=0, summary_llm=_EchoSpy("s"), relief_target=1, spill=None,
+    )
+
+    result = asyncio.run(
+        compactor.compact(_reading_history([(body, "c0")]), keep_recent=1),
+    )
+
+    content = "\n".join(str(message.get("content", "")) for message in result)
+    assert compactor.last_event is not None
+    assert compactor.last_event.selected == "tier2"
+    assert TieredCompactor._spill_refs(result) == []
+    assert _SPILL_MANIFEST_HEADER not in content
+
+
+@pytest.mark.asyncio
+async def test_the_segment_ceiling_declares_and_names_the_unread_parts() -> None:
+    """Past the call ceiling the remainder is not silently dropped: the rollup is
+    told which parts it never saw, and the payload names the tool results whose
+    bodies the caller must make recoverable."""
+    emitted: dict = {}
+
+    async def _emit(payload: dict) -> None:
+        emitted.update(payload)
+
+    spy = _EchoSpy("s")
+    compactor = LLMSummaryCompactor(
+        summary_llm=spy,
+        emit_event=_emit,
+        input_budget_chars=8_000,
+        max_segments=1,
+    )
+    bodies = [
+        (_corpus_page("paragraph " * 900, f"eref:p{index}"), f"c{index}")
+        for index in range(4)
+    ]
+
+    await compactor.compact(_reading_history(bodies), keep_recent=1)
+
+    assert emitted["rolled_back"] is False
+    assert emitted["segments"] > 1
+    assert emitted["segments_read"] == 1
+    assert emitted["unread_tool_results"], "unread provenance is missing"
+    assert "were not read" in spy.prompts[-1]
+    # The declared gap is a statement about coverage, not a claim of success.
+    assert emitted["summary"]

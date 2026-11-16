@@ -54,6 +54,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from itertools import pairwise
 from typing import Any
 from urllib.parse import unquote
@@ -556,7 +557,9 @@ def fit_structured_payload(body: str, budget: int) -> str | None:
         if len(rendered) <= budget:
             return rendered
         return fit_document_payload(full, budget)
-    if payload.get("protocol") in (projection.VISIBLE_VERSION, projection.NAVIGATION_VERSION):
+    if payload.get("protocol") == projection.VISIBLE_VERSION or projection.is_navigation_protocol(
+        payload.get("protocol"),
+    ):
         # A projected view is bound to its cmeta receipt by visible-body digest.
         # Re-fitting it here would break that binding; fitting already ran on
         # the complete result before projection.
@@ -1117,9 +1120,12 @@ async def corpus_fetch(
         locator: 单块句柄（``chunk:<chunk_id>``）或 search v2 的 excerpts.ref。
         locators: 批量块句柄（有序，按首次出现去重）；表格块请附带必要表头、期间、单位。
         cursor: 上一页返回的 ``next_cursor`` 短句柄，原样传回即可；兼容历史长游标。
-        ref: search 导航结果给出的持久候选句柄（``sref:<digest>``）。与
-            ``doc_id``、``locator``、``locators``、``cursor`` 互斥；由后台还原版本、候选
-            块集合与读取范围，不需要模型补回任何隐藏坐标。
+        ref: search 导航结果给出的持久候选句柄（``sref:<digest>``），或此前结果里的
+            ``evidence_ref``（``ce:<32 位十六进制>``）。与 ``doc_id``、``locator``、
+            ``locators``、``cursor`` 互斥；由后台还原版本、候选块集合与读取范围，
+            不需要模型补回任何隐藏坐标。传 ``evidence_ref`` 时只取回该片段所属单元：
+            这是正文退场后定点补读原文的入口，不需要整篇重读；收据失效、越界或原文
+            已变更时显式报错，不会用摘要或别的文档顶替。
         force_refresh: 为 true 时绕过上下文原文复用，重新读取指定文档版本。
             游标已绑定请求集合、顺序、视图与位置，续取时不得改动，视图由游标决定。
         view: 返回视图。``"full"``（默认）保留完整诊断／结构元数据；``"compact"``
@@ -1166,6 +1172,110 @@ async def corpus_fetch(
 # 工具合并，状态变更类工具绝不受影响。详见 agent_loop._within_turn_dedup_key。
 corpus_fetch.metadata["dedup_within_turn"] = True
 corpus_fetch.metadata["dedup_delivery_validator"] = fetch_delivery_complete
+
+
+#: ``ce:<32 hex>`` — the only shape a receipt may take. Anything else is a
+#: hand-built handle, which the tool contract forbids.
+_EVIDENCE_REF = re.compile(r"ce:[0-9a-f]{32}\Z")
+
+
+def _item_texts(payload: dict[str, Any]) -> str:
+    items = payload.get("items")
+    rows = items if isinstance(items, list) else [payload]
+    return "\n".join(
+        str(row.get("text") or "") for row in rows if isinstance(row, dict)
+    )
+
+
+def _fetch_evidence_ref(ref: str, view: str, max_chars: int) -> str:
+    """Recover one archived fragment from its evidence receipt.
+
+    This is the targeted re-read path a retired body leaves behind. A receipt is
+    version-pinned, so nothing is guessed: it restores the document, the unit and
+    the exact quoted text, then fetches only that unit — never the whole document,
+    which is what makes "recover one fact" different from "read it all again".
+
+    Four checks, all explicit. Degrading instead of failing is how a stale receipt
+    turns into a confidently wrong citation:
+
+    * the handle must have the right shape (a hand-built ref is refused, not
+      searched for);
+    * the receipt must resolve — withdrawn storage is not "no results";
+    * the unit must be inside this task's assigned slice, so a teammate cannot
+      recover another member's material through a receipt;
+    * the quoted text must still be in that unit's current text. A receipt whose
+      quote moved is a version mismatch, not a hit.
+    """
+    from plugins.corpus.tool_refs import ToolReferenceError, resolve_evidence_reference
+
+    if not _EVIDENCE_REF.fullmatch(ref):
+        return _json_error(
+            "invalid_evidence_reference：句柄须形如 ce:<32 位十六进制>，由工具生成，不得自行构造",
+            ref=ref,
+        )
+    try:
+        evidence = resolve_evidence_reference(ref)
+    except ToolReferenceError as exc:
+        return _json_error(
+            f"evidence_reference_unavailable：{exc}；请重新检索或重新读取该页，"
+            "不要用摘要代替原文",
+            ref=ref,
+            fetch_complete=False,
+        )
+    doc_id = str(evidence.get("doc_id") or "")
+    locator = str(evidence.get("locator") or "")
+    quote = str(evidence.get("quote") or "")
+    if not doc_id or not locator:
+        return _json_error(
+            "evidence_reference_incomplete：收据缺少文档或定位，无法定点恢复",
+            ref=ref,
+            fetch_complete=False,
+        )
+
+    given_range = _current_unit_range()
+    if given_range is not None:
+        violated = _locator_outside_range(locator, None, given_range, doc_id)
+        if violated is not None:
+            lo, hi = given_range
+            return _json_error(
+                f"unit_range_violation：本任务只负责 unit:{lo:04d}–unit:{hi:04d}，"
+                f"{violated} 在范围之外；请只引用所分配片段",
+                doc_id=doc_id,
+                unit_range=[lo, hi],
+                ref=ref,
+                fetch_complete=False,
+            )
+
+    body = _page(doc_id, [locator], view, max_chars, 0, 0, [])
+    try:
+        payload = json.loads(body)
+    except (TypeError, ValueError):
+        return _with_ref(body, ref)
+    if not isinstance(payload, dict) or payload.get("ok") is not True:
+        # The block itself could not be read (withdrawn, out of range, storage
+        # down). Say so; never substitute the archived statement for the text.
+        return _with_ref(body, ref)
+    if quote and quote not in _item_texts(payload):
+        return _json_error(
+            "evidence_quote_mismatch：该句柄记录的原文已不在当前版本此单元中"
+            "（来源可能已更新或替换）；请重新检索，不要沿用旧引用",
+            doc_id=doc_id,
+            locator=locator,
+            ref=ref,
+            fetch_complete=False,
+        )
+    # Report what the recovery cost, so "was this re-read necessary, and how much
+    # did it return" is answerable from the trace instead of from guesswork.
+    payload["recovered_from_archive"] = {
+        "ref": ref,
+        "doc_id": doc_id,
+        "locator": locator,
+        "source_start": evidence.get("source_start"),
+        "source_end": evidence.get("source_end"),
+        "returned_chars": len(_item_texts(payload)),
+        "requested_chars": max_chars,
+    }
+    return _with_ref(json.dumps(payload, ensure_ascii=False), ref)
 
 
 def _attach_document_identity(body: str) -> str:
@@ -1245,6 +1355,11 @@ async def _fetch(
             or cursor is not None
         ):
             return _json_error("ref 必须是非空字符串，且与 doc_id/locator/locators/cursor 互斥")
+        if ref.startswith("ce:"):
+            # Evidence receipts and search handles are different kinds of pointer
+            # and must not be tried against each other: a receipt names one
+            # version-pinned fragment, a search handle names a candidate set.
+            return _fetch_evidence_ref(ref, view, max_chars)
         try:
             hit = resolve_scope_by_ref(ref)
         except SearchReferenceError as exc:

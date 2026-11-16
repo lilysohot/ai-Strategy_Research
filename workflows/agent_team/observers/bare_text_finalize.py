@@ -1,4 +1,5 @@
 """Terminate the main-agent loop on a plain-text, no-tool turn."""
+
 from __future__ import annotations
 
 import logging
@@ -6,6 +7,7 @@ from typing import Any
 
 from frontier_agent.core.execution_context import get_current_execution_scope
 from frontier_agent.core.loop_types import BaseObserver, Intervention, TurnContext
+from plugins.corpus.final_delivery import corpus_citation_readability_issue
 from plugins.tools._bus_scope import resolve_bus_task_id
 from plugins.tools.finalize_answer import finalize_gate
 from plugins.tools.task_board import complete_delivery_tasks
@@ -57,6 +59,9 @@ def _write_accepted_record(scope: Any, text: str) -> None:
 class BareTextFinalizeObserver(BaseObserver):
     critical = True
 
+    def __init__(self) -> None:
+        self._readability_repair_offered = False
+
     async def on_llm_response(self, ctx: TurnContext) -> Intervention | None:
         if ctx.tool_calls:
             # Further work may change the evidence. Do not revive an older
@@ -77,6 +82,22 @@ class BareTextFinalizeObserver(BaseObserver):
             ctx.metadata["delivery_candidate_status"] = "unfinished"
             return None
 
+        # Repair before accepting/binding the body. Never strip receipts from an
+        # already checked passage or discard useful evidence at budget exhaustion.
+        last_turn = ctx.turn >= ctx.max_turns - 1
+        readability_issue = corpus_citation_readability_issue(text)
+        if readability_issue:
+            ctx.metadata["corpus_citation_readability"] = "unresolved"
+            if not self._readability_repair_offered and not last_turn:
+                self._readability_repair_offered = True
+                ctx.metadata["final_answer_candidate"] = text
+                return Intervention(
+                    continue_to_next_turn=True,
+                    inject_messages=[readability_issue],
+                )
+        else:
+            ctx.metadata.pop("corpus_citation_readability", None)
+
         scope = get_current_execution_scope()
         err = finalize_gate(
             ctx.task_id,
@@ -86,7 +107,6 @@ class BareTextFinalizeObserver(BaseObserver):
         # On the very last turn tools are stripped (LastTurnForcer), so the only
         # way to emit anything is plain text; accept it rather than lose the
         # answer to a max_turns stop even if the gate would otherwise block.
-        last_turn = ctx.turn >= ctx.max_turns - 1
         if err and not last_turn:
             if isinstance(ctx.metadata, dict):
                 ctx.metadata["final_answer_candidate"] = text
@@ -100,6 +120,8 @@ class BareTextFinalizeObserver(BaseObserver):
         complete_delivery_tasks(ctx.task_id)
         logger.info(
             "BareTextFinalizeObserver latched: turn=%d, len=%d, gate=%s",
-            ctx.turn, len(text), "bypassed(last_turn)" if err else "passed",
+            ctx.turn,
+            len(text),
+            "bypassed(last_turn)" if err else "passed",
         )
         return Intervention(stop_reason="final_answer")

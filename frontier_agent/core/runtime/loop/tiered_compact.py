@@ -24,7 +24,11 @@ from frontier_agent.core.runtime.loop.compact import (
 from frontier_agent.core.runtime.loop.compact import (
     SPILL_MANIFEST_HEADER as _SPILL_MANIFEST_HEADER,
 )
-from frontier_agent.core.runtime.loop.compact_llm import LLMSummaryCompactor
+from frontier_agent.core.runtime.loop.compact_llm import (
+    MAX_SUMMARY_SEGMENTS,
+    SUMMARY_INPUT_BUDGET_CHARS,
+    LLMSummaryCompactor,
+)
 
 __all__ = [
     "InputTokenGauge",
@@ -198,6 +202,8 @@ class TieredCompactor:
         spill: Callable[[str, str], str | None] | None = None,
         summary_retries: int = 2,
         summary_retry_timeout_s: float | None = None,
+        summary_input_budget_chars: int | None = None,
+        max_summary_segments: int | None = None,
     ) -> None:
         self._tier1 = KeepLastNToolResultsCompactor(
             keep_tool_result=keep_tool_result,
@@ -239,6 +245,19 @@ class TieredCompactor:
             emit_event=self._capture_tier2,
             max_transient_retries=retries,
             retry_total_timeout_s=summary_retry_timeout_s,
+            # The summarizer bounds its own request by reading the record in
+            # consecutive segments; these two are the knobs for that bound, not
+            # for how much of the record survives.
+            input_budget_chars=(
+                summary_input_budget_chars
+                if summary_input_budget_chars is not None
+                else SUMMARY_INPUT_BUDGET_CHARS
+            ),
+            max_segments=(
+                max_summary_segments
+                if max_summary_segments is not None
+                else MAX_SUMMARY_SEGMENTS
+            ),
         )
         self._tier2_payload: dict[str, Any] = {}
         #: What the most recent ``compact`` selected. Read by the agent loop to
@@ -355,6 +374,50 @@ class TieredCompactor:
             name = id_to_name.get(original.get("tool_call_id", ""), "tool")
             try:
                 path = self._spill(name, original_body)
+            except Exception:
+                path = None
+            if path and path not in refs:
+                refs.append(path)
+        return refs
+
+    def _spill_replaced_tool_bodies(
+        self,
+        source: list[Message],
+        transformed: list[Message],
+    ) -> list[str]:
+        """Persist every tool body a winning summary replaced.
+
+        Tier 2 no longer shortens results before summarizing them, so there is
+        no size diff to key on — but the bodies are still *replaced*, and each
+        one needs a recovery file exactly as before. Keying on "does the same
+        body still appear verbatim?" is also stricter than the old size test: a
+        short result that the summary swallowed used to get no file at all,
+        because it was never long enough to be compressed first.
+
+        Protected fan-in is skipped: ``_spill_protected_results`` already
+        persisted those, and re-spilling them would only duplicate the call.
+        """
+        if self._spill is None:
+            return []
+        kept = {
+            (message.get("tool_call_id"), text_of(message.get("content")))
+            for message in transformed
+            if is_tool_msg(message)
+        }
+        id_to_name = _tool_names_by_call_id(source)
+        refs: list[str] = []
+        for message in source:
+            if not is_tool_msg(message):
+                continue
+            call_id = message.get("tool_call_id", "")
+            body = text_of(message.get("content"))
+            if (call_id, body) in kept:
+                continue
+            name = id_to_name.get(call_id, "tool")
+            if name in self._protect:
+                continue
+            try:
+                path = self._spill(name, body)
             except Exception:
                 path = None
             if path and path not in refs:
@@ -546,27 +609,24 @@ class TieredCompactor:
                 scale=scale, spill_refs=len(spill_refs),
             )
 
-        # Summarize the real history, not Tier 1's placeholders. Ordinary tool
-        # bodies are bounded first, but protected fan-in is passed verbatim: a
-        # fixed head/tail cap on one collect_reports result can erase every
-        # middle sub-agent report before the summarizer ever sees it.
-        tier2_input = compress_tool_results(
-            messages,
-            protect_tool_names=self._protect,
-            preserve_tool_result_ids=latest_result_ids,
-        )
+        # Summarize the real history, not Tier 1's placeholders — and summarize
+        # it WHOLE. The summarizer bounds its own request by reading the record
+        # in consecutive segments (``segment_conversation_for_summary``), so no
+        # per-result pre-truncation happens here. That pre-truncation was the
+        # defect: a fixed head/tail cap erased the middle of every long body
+        # before the summarizer ran, so a fact that only existed there could
+        # never enter the summary, and the spilled copy could not restore what
+        # was never read.
         tier2 = await self._tier2.compact(
-            tier2_input, keep_recent, preserve_tool_names=self._protect,
+            messages, keep_recent, preserve_tool_names=self._protect,
         )
         tier2_tokens = estimate_tokens(tier2)
         if tier2_tokens < best_tokens:
             best_label = "tier2"
             protected_refs = self._spill_protected_results(messages)
-            compressed_refs = self._spill_changed_tool_results(
-                messages, tier2_input,
-            )
+            replaced_refs = self._spill_replaced_tool_bodies(messages, tier2)
             all_refs = list(dict.fromkeys([
-                *spill_refs, *protected_refs, *compressed_refs,
+                *spill_refs, *protected_refs, *replaced_refs,
             ]))
             best = self._with_spill_manifest(tier2, all_refs)
             best_tokens = tier2_tokens

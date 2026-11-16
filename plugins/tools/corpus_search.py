@@ -663,7 +663,7 @@ def fit_search_payload(body: str, budget: int) -> str | None:
         return None
     if not isinstance(payload, dict) or payload.get("ok") is not True:
         return None
-    if payload.get("protocol") == projection.NAVIGATION_VERSION:
+    if projection.is_navigation_protocol(payload.get("protocol")):
         return _fit_navigation_payload(payload, budget)
     if payload.get("protocol") == projection.VISIBLE_VERSION:
         # A projected view is bound to its cmeta receipt by visible-body digest;

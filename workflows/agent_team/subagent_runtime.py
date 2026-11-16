@@ -70,6 +70,7 @@ from frontier_agent.core.runtime.loop.tool_exec import ToolResultPostProcessor
 from frontier_agent.state.event_store.sqlite import EventStore
 from plugins.corpus.progress import CorpusReadState
 from plugins.tools.bash import BASH_STDERR_SEPARATOR
+from workflows._shared.reading_stage import build_reading_stage
 from workflows.agent_team.identity import MAIN_AGENT_ID, SUB_ROLE_ID, llm_session_id
 from workflows.agent_team.output_cleaning import strip_team_control
 from workflows.agent_team.recovery_evidence import evidence_digest
@@ -1280,6 +1281,10 @@ class SwarmSubagentRuntime:
     # tokens): Tier1 keep-last-N tool results, Tier2 LLM summary if not enough.
     context_compaction: str = "off"
     compaction_spill: bool = False
+    #: The profile's ``agent:`` section, passed through so a member assembles the
+    #: same reading stage as the coordinator. Empty means the stage is off; the
+    #: switch itself is the profile's ``reading_checkpoint`` key, not this field.
+    reading_checkpoint_cfg: dict[str, Any] = field(default_factory=dict)
     max_len: int = 0
     max_input_tokens: int | None = None
     tier1_keep_tool_result: int = 5
@@ -2095,6 +2100,14 @@ def build_swarm_session_runtime_spec(
             keep_recent = LoopConfig.keep_recent
         checks = item.metadata.get("verification_checks") or []
         is_verification = bool(checks)
+        # Per job, not per run: the stage carries a sequence and the list of the
+        # checkpoints it produced, so sharing one instance across members would
+        # mix their archives.
+        reading_stage = build_reading_stage(
+            llm=runtime.sub_agent_llm,
+            agent_cfg=runtime.reading_checkpoint_cfg,
+            task_id=task_id,
+        )
         return LoopConfig(
             max_turns=min(max_turns, 2 * len(checks) + 2) if is_verification else max_turns,
             task_id=task_id,
@@ -2134,6 +2147,7 @@ def build_swarm_session_runtime_spec(
             loop_policy=_swarm_loop_policy(),
             compactor=compactor,
             compaction_policy=compaction_policy,
+            reading_stage=reading_stage,
             tool_result_post_processor=SwarmToolResultPostProcessor(),
         )
 

@@ -29,7 +29,21 @@ from plugins.corpus import tool_refs
 #: hiding metadata must not silently change what counts as delivered evidence.
 VISIBLE_VERSION = "corpus-visible-v1"
 #: Optional navigation protocol (search selects, fetch delivers verbatim text).
-NAVIGATION_VERSION = "corpus-navigation-v1"
+#:
+#: v2 hoists per-item fields that are uniform across a page into
+#: ``item_defaults``. The bump is not cosmetic: on a 76-fragment page those
+#: fields were ~63 of the ~125 characters of envelope per item, all of it
+#: repetition, and removing them lets a page carry more text within the same
+#: visible cap. A page packed to a different unit range must not answer to the
+#: same ``page_id``, so the version also enters page identity (see
+#: ``plugins/tools/_corpus_document.py``).
+NAVIGATION_VERSION = "corpus-navigation-v2"
+#: Navigation protocols still recognised when read back. A body written by an
+#: older projection is self-consistent and must be passed through untouched —
+#: re-projecting it would hoist nothing (the fields are already per-item) and
+#: would replace its receipt binding.
+LEGACY_NAVIGATION_VERSIONS = frozenset({"corpus-navigation-v1"})
+_NAVIGATION_PROTOCOLS = frozenset({NAVIGATION_VERSION}) | LEGACY_NAVIGATION_VERSIONS
 UNAVAILABLE_VERSION = "corpus-visible-unavailable"
 
 TOOL_SEARCH = "corpus_search"
@@ -48,9 +62,21 @@ NAV_SEARCH_HINT = (
 )
 NAV_FETCH_HINT = (
     "source.filename/document_title 标明所属文档，section_title 只是章节小标题；"
-    "items 是逐字原文；引用只用 evidence_ref。只传 next_cursor 续读，"
+    "items 是逐字原文，item_defaults 是本页共同字段；引用只用 evidence_ref。"
+    "只传 next_cursor 续读，"
     "fetch_complete=false 或 limitations 非空时不得声称已读完或内容完整。"
 )
+
+
+def is_navigation_protocol(protocol: Any) -> bool:
+    """Whether *protocol* names a navigation view, current or legacy.
+
+    Callers use this instead of ``== NAVIGATION_VERSION`` so a body written by an
+    older projection is still recognised as already-projected. The alternative —
+    treating an old body as unprojected — re-projects it, which changes its shape
+    and breaks the receipt binding its digest was stored under.
+    """
+    return protocol in _NAVIGATION_PROTOCOLS
 
 
 class MetadataSnapshotError(ValueError):
@@ -361,6 +387,50 @@ def _fetch_limitations(full: dict[str, Any]) -> list[str]:
     return _bounded(out)
 
 
+#: Per-item fields hoisted to ``item_defaults`` when every item on the page
+#: carries the same value.
+#:
+#: ``text`` and ``evidence_ref`` are deliberately absent from this list: they
+#: are the two fields that make an item an item, and a page-level default would
+#: either be meaningless (text) or collapse distinct evidence into one address.
+#: What is hoisted is provenance that happens to be identical across a page —
+#: page number, origin, extraction quality — which on a dense OCR page is the
+#: single largest repeated block.
+_HOISTABLE_ITEM_KEYS = (
+    "location",
+    "content_role",
+    "content_status",
+    "structure_status",
+    "text_origin",
+    "ocr_unverified",
+)
+
+
+def _hoist_uniform_item_fields(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """Move page-uniform per-item provenance out of every row.
+
+    Returns the defaults to publish as ``item_defaults``; the rows are mutated.
+    A field is only hoisted when EVERY row carries the same non-null value, so a
+    mixed page (some OCR, some native; two page numbers) keeps per-item detail
+    and the model loses nothing. The number of rows is unchanged either way —
+    this removes repetition, never an item, so unit boundaries, evidence refs
+    and delivered coverage stay exactly as they were.
+    """
+    if len(rows) < 2:
+        return {}
+    defaults: dict[str, Any] = {}
+    for key in _HOISTABLE_ITEM_KEYS:
+        first = rows[0].get(key)
+        if first is None:
+            continue
+        if all(row.get(key) == first for row in rows[1:]):
+            defaults[key] = first
+    for row in rows:
+        for key in defaults:
+            row.pop(key, None)
+    return defaults
+
+
 def _project_navigation_fetch(full: dict[str, Any]) -> dict[str, Any]:
     """Target navigation view: one readable source, text, refs and continuation."""
     source: dict[str, Any] = {}
@@ -406,6 +476,12 @@ def _project_navigation_fetch(full: dict[str, Any]) -> dict[str, Any]:
             if key in item and item[key] != visible.get(key):
                 row[key] = item[key]
         visible["items"].append(row)
+    # Page-level provenance, stated once. On a dense OCR page this is the
+    # dominant part of the per-item envelope, and none of it is per-item
+    # information. Defined only when it actually saves something.
+    item_defaults = _hoist_uniform_item_fields(visible["items"])
+    if item_defaults:
+        visible["item_defaults"] = item_defaults
     groups = []
     for group in full.get("display_groups") or []:
         refs = [r["evidence_ref"] for r in group.get("unit_ranges", []) if r.get("evidence_ref")]
@@ -448,7 +524,13 @@ def process_document_result(body: str, *, tool_call_id: str = "") -> str | None:
 _lock = threading.Lock()
 _BY_VISIBLE: dict[str, str] = {}
 _BY_CALL: dict[str, str] = {}
-_KNOWN_PROTOCOLS = frozenset({VISIBLE_VERSION, NAVIGATION_VERSION})
+#: Protocols whose body is already a projection, so re-projecting it would
+#: change its shape and break the receipt its digest is stored under.
+_PROJECTED_PROTOCOLS = frozenset({VISIBLE_VERSION, UNAVAILABLE_VERSION}) | _NAVIGATION_PROTOCOLS
+#: Protocols that promise a receipt. ``UNAVAILABLE_VERSION`` deliberately is not
+#: one: it marks a self-contained result whose snapshot failed, so there is
+#: nothing to materialize and the body is its own truth.
+_KNOWN_PROTOCOLS = frozenset({VISIBLE_VERSION}) | _NAVIGATION_PROTOCOLS
 
 
 def _digest(body: str) -> str:
@@ -571,7 +653,7 @@ def project_tool_result(
             return json.dumps(unavailable_manifest_result(), ensure_ascii=False)
         return body
     protocol = full.get("protocol")
-    if protocol in (VISIBLE_VERSION, NAVIGATION_VERSION, UNAVAILABLE_VERSION):
+    if protocol in _PROJECTED_PROTOCOLS:
         return body
     navigation = navigation_enabled()
     manifest = name == TOOL_MANIFEST
@@ -658,7 +740,7 @@ def try_materialize(name: str, body: str, *, tool_call_id: str = "") -> dict[str
         return visible
     ref = _snapshot_ref(body, tool_call_id)
     if not ref:
-        if protocol == NAVIGATION_VERSION and name == TOOL_SEARCH:
+        if is_navigation_protocol(protocol) and name == TOOL_SEARCH:
             # Navigation search is self-contained for consumers: its candidate
             # text lives in search-refs receipts, never in the model message.
             return visible
@@ -686,6 +768,7 @@ def materialize(name: str, body: str, *, tool_call_id: str = "") -> dict[str, An
 
 
 __all__ = [
+    "LEGACY_NAVIGATION_VERSIONS",
     "NAVIGATION_VERSION",
     "NAV_FETCH_HINT",
     "NAV_SEARCH_HINT",
@@ -693,6 +776,7 @@ __all__ = [
     "VISIBLE_VERSION",
     "MetadataSnapshotError",
     "call_snapshot_refs",
+    "is_navigation_protocol",
     "materialize",
     "navigation_enabled",
     "project_fetch_result",
