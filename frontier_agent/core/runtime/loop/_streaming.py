@@ -14,6 +14,7 @@ from frontier_agent.core.errors import (
 )
 from frontier_agent.core.llm import LLMResponse
 from frontier_agent.core.messages import Message, ToolCall
+from frontier_agent.infra import pilot_budget
 
 from ._runaway import _env_float, _env_int
 
@@ -379,6 +380,11 @@ async def _stream_llm_response(
                             for d in tc_chunks
                         )
                         if visible.strip() or tool_progress:
+                            if not productive_output_seen:
+                                # The reasoning-only bound is disabled for this
+                                # attempt: if the stream dies now, it is not the
+                                # watchdog's doing, so retract the note.
+                                pilot_budget.clear_abort_context()
                             productive_output_seen = True
                         # Forward arg deltas in the {name, args, id, index}
                         # shape observers expect (``args`` = partial JSON
@@ -406,6 +412,14 @@ async def _stream_llm_response(
                             now = loop.time()
                             if reasoning_only_started is None:
                                 reasoning_only_started = now
+                                # From here the attempt is bounded by this
+                                # semantic deadline. If the bound fires, the
+                                # cancellation reaches the transport as an
+                                # ordinary cancel; the ledger needs this note to
+                                # tell a watchdog stop from a caller stop.
+                                pilot_budget.note_abort_context(
+                                    "reasoning_only_watchdog",
+                                )
                             # Liveness-only estimate. Keep it separate from
                             # provider usage: early cancellation commonly
                             # prevents the terminal billing chunk from arriving.
@@ -425,6 +439,9 @@ async def _stream_llm_response(
                             if time_exhausted or tokens_exhausted:
                                 trigger = "time" if time_exhausted else "tokens"
                                 partial_response = _assembled_response()
+                                pilot_budget.note_abort_context(
+                                    f"reasoning_only_watchdog:{trigger}",
+                                )
                                 await _close_chunk_stream()
                                 raise LLMReasoningRunaway(
                                     elapsed_s=reasoning_elapsed,
@@ -475,6 +492,9 @@ async def _stream_llm_response(
                 and reasoning_elapsed >= reasoning_timeout_s
             ):
                 partial_response = _assembled_response()
+                pilot_budget.note_abort_context(
+                    "reasoning_only_watchdog:time",
+                )
                 await _close_chunk_stream()
                 raise LLMReasoningRunaway(
                     elapsed_s=reasoning_elapsed,

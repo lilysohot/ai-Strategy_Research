@@ -30,13 +30,25 @@ over the trajectory — and it is absent on runs that reported no decision.
 
 from __future__ import annotations
 
+import json
 from collections.abc import Iterable
+from pathlib import Path
 from typing import Any
 
 from server.cache_metrics import cache_attempt_stats
 from server.config import run_dir_for
 from server.relay import trajectory_records
-from server.trajectory_sources import discover_trajectory_sources
+from server.trajectory_sources import discover_trajectory_sources, trajectory_root
+
+#: Bumped whenever what counts as a run's tokens changes. v2 adds auxiliary
+#: trajectories (research_intake) and stops treating a pre-send budget refusal as an
+#: unmetered call, so v1 and v2 totals are **not** comparable: two arms must be read
+#: with the same version.
+AGGREGATION_VERSION = 2
+
+#: Published next to the counters so ``status`` is never read as "the task finished".
+#: ``complete`` means every call that was made reported usage.
+STATUS_SCOPE = "usage_metering"
 
 #: Summed integer fields, in the shape they are persisted on the Run row.
 _TOKEN_FIELDS = (
@@ -125,6 +137,108 @@ def aggregate_usage(records: list[dict[str, Any]]) -> dict[str, Any]:
     return {**totals, "llm_calls": llm_calls, "models": models, "providers": providers}
 
 
+def reading_checkpoint_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
+    """Cost and outcome of reading-checkpoint extractions.
+
+    These calls are made by an extractor, not by the loop, so they never produce a
+    ``t="llm"`` row and are therefore **not** part of ``prompt_tokens`` /
+    ``cache_attempts`` above. Folding them in silently would make every historical
+    total incomparable, so they are reported in their own bucket and the
+    exclusion is stated in the payload rather than left to a reader's memory.
+
+    ``unknown_usage_calls`` counts extractions that ran but reported no usage
+    (including the ones cancelled by a stage timeout). Unknown is not zero: the
+    only honest total is a range whose lower bound ignores them.
+    """
+    totals = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0, "cache_read_tokens": 0}
+    ended = triggered = installed = failed = skipped = unknown_usage = known_usage = 0
+    timeouts = 0
+    for record in records or []:
+        if not isinstance(record, dict) or record.get("t") != "reading_checkpoint":
+            continue
+        if record.get("phase", "end") != "end":
+            continue
+        ended += 1
+        if record.get("installed"):
+            installed += 1
+        if record.get("triggered"):
+            triggered += 1
+        reason = str(record.get("reason") or "")
+        if reason.startswith("skipped_") or reason in {
+            "input_not_applicable",
+            "unchanged_input_after_failure",
+            "under_working_set_limit",
+            "no_retirable_bodies",
+            "disabled",
+        }:
+            skipped += 1
+        if record.get("failure"):
+            failed += 1
+        attempts = record.get("attempts") or []
+        for attempt in attempts:
+            if isinstance(attempt, dict) and attempt.get("outcome") == "extractor_timeout":
+                timeouts += 1
+        usage = record.get("usage")
+        if not isinstance(usage, dict) or not usage:
+            if record.get("triggered") and not record.get("installed"):
+                unknown_usage += 1
+            continue
+        known_usage += 1
+        for name in totals:
+            value = usage.get(name)
+            if isinstance(value, int) and not isinstance(value, bool) and value >= 0:
+                totals[name] += value
+    return {
+        "events": ended,
+        "triggered": triggered,
+        "installed": installed,
+        "failed": failed,
+        "skipped": skipped,
+        "extractor_timeouts": timeouts,
+        "usage_known_events": known_usage,
+        "unknown_usage_events": unknown_usage,
+        **totals,
+        # Stated here so no reader has to guess: adding this bucket to the run
+        # total is a deliberate act, not something the aggregate already did.
+        "included_in_run_totals": False,
+    }
+
+
+def _auxiliary_records(run_dir: Path) -> tuple[list[dict[str, Any]], list[str]]:
+    """Records from trajectories the replay inventory does not cover.
+
+    ``research_intake`` runs before the loop: it is a real, billed request with its
+    own trajectory file, but it is not a replay source — so it was invisible to the
+    aggregate. A run stopped by the budget right after intake then reported
+    ``prompt_tokens=0`` while the provider had billed 592/196, which is exactly the
+    under-count that makes a compression comparison unreadable.
+
+    Discovered by exhausting the directory rather than by listing known names: the
+    next auxiliary entry point should not need a second edit here.
+    """
+    root = trajectory_root(run_dir)
+    covered = {source.path.resolve() for source in discover_trajectory_sources(run_dir)}
+    records: list[dict[str, Any]] = []
+    used: list[str] = []
+    for path in sorted(root.glob("*.jsonl")):
+        if path.resolve() in covered:
+            continue
+        used.append(path.name)
+        try:
+            with path.open("r", encoding="utf-8") as handle:
+                for line in handle:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        records.append(json.loads(line))
+                    except json.JSONDecodeError:
+                        continue
+        except OSError:
+            continue
+    return records, used
+
+
 def usage_for_run(run_id: str) -> dict[str, Any]:
     """Aggregate a run's token usage from its trajectory file.
 
@@ -151,15 +265,34 @@ def usage_for_run(run_id: str) -> dict[str, Any]:
     ]
     if not records:
         return {**aggregate_usage([]), "status": "unavailable"}
-    aggregate = aggregate_usage(records)
-    observed_calls = sum(rec.get("t") == "llm" for rec in records)
+    # Auxiliary trajectories are part of the run's real cost; they are added to the
+    # totals instead of being parked in a side bucket nobody sums.
+    auxiliary, auxiliary_sources = _auxiliary_records(run_dir_for(run_id))
+    merged = [*records, *auxiliary]
+    aggregate = aggregate_usage(merged)
+    observed_calls = sum(rec.get("t") == "llm" for rec in merged)
     missing_usage = max(0, observed_calls - aggregate["llm_calls"])
     status = "partial" if missing_usage or not aggregate["llm_calls"] else "complete"
-    return {
-        **aggregate, "status": status, "trajectory_files": sources,
+    payload: dict[str, Any] = {
+        **aggregate,
+        "status": status,
+        "status_scope": STATUS_SCOPE,
+        "aggregation_version": AGGREGATION_VERSION,
+        "trajectory_files": sources,
         "unmetered_calls": missing_usage,
-        "cache_attempts": cache_attempt_stats(records),
+        "cache_attempts": cache_attempt_stats(merged),
+        "reading_checkpoint": reading_checkpoint_stats(merged),
     }
+    if auxiliary:
+        auxiliary_aggregate = aggregate_usage(auxiliary)
+        payload["auxiliary"] = {
+            "sources": auxiliary_sources,
+            **auxiliary_aggregate,
+            # Stated so a reader never has to guess whether these tokens are already
+            # inside ``prompt_tokens`` above: they are.
+            "included_in_run_totals": True,
+        }
+    return payload
 
 
 def replay_block_from_summary(summary: dict[str, Any] | None) -> dict[str, Any]:

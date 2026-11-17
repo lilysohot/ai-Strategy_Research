@@ -3334,12 +3334,19 @@ class CorpusService:
         """外部客户端工具（``pg_dump`` / ``pg_restore``）是否可用。"""
         return shutil.which(name)
 
-    def backup(self, dest: str | Path, *, mode: str = "auto") -> Path:
+    def backup(
+        self,
+        dest: str | Path,
+        *,
+        mode: str = "auto",
+        archive_root: str | Path = "data/corpus-archive",
+        pg_container: str | None = None,
+    ) -> Path:
         """备份语料库，返回产物路径（``corpus.dump`` 文件或备份目录）。
 
         ``mode``：
 
-        - ``"auto"``（默认）：有 ``pg_dump`` 就用它，否则退回纯 Python 的 CSV 逻辑备份；
+        - ``"auto"``（默认）：新链必须使用 pg_dump；只有旧链可退回 CSV；
         - ``"pg_dump"``：强制用 ``pg_dump``，找不到就报错（**拒绝静默降级**）；
         - ``"csv"``：只用 CSV，不依赖任何外部二进制。
 
@@ -3351,6 +3358,27 @@ class CorpusService:
         if mode not in ("auto", "pg_dump", "csv"):
             raise ValueError(f"未知备份模式：{mode!r}")
         target = Path(dest)
+        with self._connect() as conn:
+            row = conn.execute(
+                "SELECT to_regnamespace('corpus') IS NOT NULL OR "
+                "to_regnamespace('corpus_retrieval') IS NOT NULL AS present"
+            ).fetchone()
+        if row and row["present"]:
+            if mode == "csv" or (
+                not pg_container
+                and (not self._pg_tool("pg_dump") or not self._pg_tool("pg_restore"))
+            ):
+                raise RuntimeError(
+                    "new_chain_requires_pg_dump: CSV only covers legacy tables; "
+                    "install PostgreSQL client tools or specify --pg-container"
+                )
+            from plugins.corpus.backup import full_backup
+
+            return full_backup(
+                self._dsn, target, archive_root=Path(archive_root), container=pg_container
+            )
+        if pg_container:
+            raise ValueError("--pg-container is only supported by native full backups")
         use_pg_dump = mode == "pg_dump" or (mode == "auto" and self._pg_tool("pg_dump"))
         if use_pg_dump and self._pg_tool("pg_dump") is None:
             raise RuntimeError("mode='pg_dump' 但未找到 pg_dump，拒绝静默降级")
@@ -3425,13 +3453,33 @@ class CorpusService:
                 counts[table] = int(row["n"]) if row else 0
             return counts
 
-    def restore(self, src: str | Path, target_dsn: str) -> dict[str, int]:
+    def restore(
+        self,
+        src: str | Path,
+        target_dsn: str,
+        *,
+        archive_out: str | Path | None = None,
+        pg_container: str | None = None,
+    ) -> dict[str, int]:
         """把备份恢复到 ``target_dsn`` 指向的库，返回恢复后的行数。
 
         ⚠️ 会写目标库：``pg_dump`` 模式带 ``--clean --if-exists``，会先删同名表。
         调用前务必确认 DSN 没写错。
         """
         path = Path(src)
+        manifest_path = (path if path.is_dir() else path.parent) / "manifest.json"
+        if (
+            manifest_path.exists()
+            and json.loads(manifest_path.read_text(encoding="utf-8")).get("format")
+            == "corpus-full-backup-1"
+        ):
+            if archive_out is None:
+                raise ValueError("full_restore_requires_archive_out")
+            from plugins.corpus.backup import full_restore
+
+            return full_restore(
+                target_dsn, path, archive_out=Path(archive_out), container=pg_container
+            )
         if (path.is_dir() and (path / "corpus.dump").exists()) or (
             path.is_file() and path.suffix == ".dump"
         ):
@@ -3459,10 +3507,8 @@ class CorpusService:
             capture_output=True,
             text=True,
         )
-        # pg_restore 遇到「对象不存在」等提示也会返回非 0，
-        # 所以以「恢复后行数」为准，退出码只用来告警。
         if proc.returncode != 0:
-            logger.warning("pg_restore 返回非 0：%s", (proc.stderr or "").strip()[:300])
+            raise RuntimeError("pg_restore_failed")
         counts = CorpusService(target_dsn)._row_counts()
         logger.info("restore(pg_dump) 完成：%s", counts)
         return counts
@@ -3778,14 +3824,22 @@ def _main() -> int:
     p_stats = sub.add_parser("stats", help="台账总览")
     p_stats.add_argument("--db", default=None)
 
-    p_backup = sub.add_parser("backup", help="备份（优先 pg_dump，无则 CSV 兜底）")
+    p_backup = sub.add_parser("backup", help="新链完整备份；旧链支持 CSV")
     p_backup.add_argument("--out", required=True, help="输出目录")
     p_backup.add_argument("--mode", default="auto", choices=["auto", "pg_dump", "csv"])
     p_backup.add_argument("--db", default=None)
+    p_backup.add_argument("--archive-root", default="data/corpus-archive")
+    p_backup.add_argument(
+        "--pg-container",
+        default=None,
+        help="使用指定 PostgreSQL 容器的客户端；必须连接同一数据库实例",
+    )
 
     p_restore = sub.add_parser("restore", help="从备份恢复到指定库（会写目标库）")
     p_restore.add_argument("--src", required=True, help="备份目录或 corpus.dump 文件")
     p_restore.add_argument("--db", required=True, help="目标库 DSN，务必确认")
+    p_restore.add_argument("--archive-out", default=None, help="新链备份恢复到新的归档目录")
+    p_restore.add_argument("--pg-container", default=None)
 
     p_claims = sub.add_parser("extract-claims", help="源文件 → 新证据链；旧抽取须显式选择")
     p_claims.add_argument("--source", type=Path, help="新版：一个源文件，不隐式跑全库")
@@ -4106,10 +4160,17 @@ def _main() -> int:
         print(json.dumps(svc.stats(), ensure_ascii=False, indent=2, default=str))
     elif args.cmd in ("backup", "snapshot"):
         mode = getattr(args, "mode", "auto")
-        out = svc.backup(args.out, mode=mode)
+        out = svc.backup(
+            args.out,
+            mode=mode,
+            archive_root=getattr(args, "archive_root", "data/corpus-archive"),
+            pg_container=getattr(args, "pg_container", None),
+        )
         print(json.dumps({"ok": True, "path": str(out)}, ensure_ascii=False))
     elif args.cmd == "restore":
-        counts = svc.restore(args.src, args.db)
+        counts = svc.restore(
+            args.src, args.db, archive_out=args.archive_out, pg_container=args.pg_container
+        )
         print(json.dumps({"ok": True, "counts": counts}, ensure_ascii=False))
     return 0
 

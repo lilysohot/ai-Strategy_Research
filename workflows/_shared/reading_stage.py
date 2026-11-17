@@ -17,6 +17,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from frontier_agent.core.runtime.reading.stage import (
+    ReadingBudget,
     ReadingStage,
     ReadingStageConfig,
 )
@@ -57,17 +58,28 @@ def _as_float(value: Any, default: float) -> float:
     return parsed if parsed > 0 else default
 
 
+def _is_off(value: Any) -> bool:
+    """Whether an opt-in profile key was left off (absent counts as off)."""
+    return str(value if value is not None else "").strip().lower() in _FALSY
+
+
 def build_reading_stage(
     *,
     llm: Any,
     agent_cfg: dict[str, Any] | None,
     task_id: str,
+    budget: ReadingBudget | None = None,
 ) -> ReadingStage | None:
     """Return a configured stage, or ``None`` when the profile did not ask for one.
 
     Import failures are logged and turned into ``None`` rather than raised: a
     deployment without the corpus plugin must still run, and a reading archive is
     an optimisation — the loop's own compaction remains the capacity backstop.
+
+    ``budget`` carries the caller's deadline and delivery reserve. It defaults to
+    the loop's own wall deadline, which is what makes a checkpoint decline when
+    the turn can no longer afford it; without that, an optional archive can spend
+    the time the answer needed.
     """
     if agent_cfg is not None and not isinstance(agent_cfg, Mapping):
         # A profile section that is not a mapping cannot be read for the key, and
@@ -94,6 +106,7 @@ def build_reading_stage(
             CorpusReadingExtractor,
             default_checkpoint_store,
         )
+        from plugins.corpus.statement_scope import scope_issues
         from plugins.corpus.tool_refs import resolve_evidence_reference
     except ImportError as exc:  # pragma: no cover - optional dependency
         logger.warning("reading checkpoint unavailable: %s", exc)
@@ -113,6 +126,26 @@ def build_reading_stage(
         archive_max_chars=_as_int(cfg.get("reading_checkpoint_archive_chars"), 3_000),
         max_attempts=_as_int(cfg.get("reading_checkpoint_attempts"), 2),
         total_timeout_s=_as_float(cfg.get("reading_checkpoint_timeout_s"), 60.0),
+        min_remaining_budget_s=_as_float(
+            cfg.get("reading_checkpoint_min_remaining_s"),
+            45.0,
+        ),
+        min_attempt_s=_as_float(cfg.get("reading_checkpoint_min_attempt_s"), 5.0),
+        # Absent means "do not pay twice for the same unchanged bodies"; a profile
+        # opts back into retrying with ``reading_checkpoint_retry_same_input: on``.
+        skip_unchanged_failed_input=_is_off(
+            cfg.get("reading_checkpoint_retry_same_input"),
+        ),
+        # A statement that drops the source's own scope limiter widens the claim,
+        # and an installed record is what replaces the body it came from. On by
+        # default; a profile that wants structure-only validation sets
+        # ``reading_checkpoint_scope_gate: off``. ``_is_off`` is "off or absent",
+        # so the default has to be spelled out here rather than inferred from it.
+        statement_check=(
+            None
+            if str(cfg.get("reading_checkpoint_scope_gate", "on")).strip().lower() in _FALSY
+            else scope_issues
+        ),
     )
     extractor = CorpusReadingExtractor(
         llm=llm,
@@ -127,6 +160,7 @@ def build_reading_stage(
         store=default_checkpoint_store(),
         config=stage_config,
         task_id=task_id,
+        budget=budget,
         # The resolver is the same receipt store the refs were written to, so a
         # ref that cannot be read now is a dead pointer and the checkpoint is
         # refused rather than installed with an unusable citation.

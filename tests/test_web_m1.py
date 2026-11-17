@@ -73,6 +73,7 @@ async def auth_headers(app_client):
 
 
 @pytest.mark.asyncio
+@pytest.mark.skip(reason="worker subprocess resolves its LLM endpoint from the server config, so this test reaches the real provider instead of MockLLMServer; skipped until the worker can be pinned to a loopback endpoint (2026-11-17: 18,878 input tokens spent by accident)")
 async def test_m1_run_chain_writes_trajectory(mock_llm, app_client, auth_headers, monkeypatch):
     # Point the worker's env at the mock endpoint.
     monkeypatch.setenv("OPENAI_BASE_URL", mock_llm.base_url)

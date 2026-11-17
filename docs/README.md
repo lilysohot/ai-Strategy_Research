@@ -22,6 +22,8 @@ useful when changing that subsystem rather than when getting started.
 | Understand the current and target research process | [Business process](business-process.md) |
 | Understand how corpus retrieval enters Agent context and what is wired today | [Corpus retrieval and context wiring](corpus-retrieval.md) |
 | Search by first successful ingestion date independently of report publication dates | [入库时间检索](corpus-ingestion-search.md) |
+| Ingest new reports and publish them to the running Web service | [研报入库与 Web 发布操作规程](corpus-ingestion-operations.md#日常增量) |
+| Recover the unfinished 20261117 ingestion batch | [执行复核与补救清单](corpus-ingestion-20261117-review.md) — pending work, not a release record |
 | Operate production OCR for report preparation and Agent PDF reading | [本地 OCR 生产接入](guide/local-ocr-production.md) |
 
 ## Product and business design

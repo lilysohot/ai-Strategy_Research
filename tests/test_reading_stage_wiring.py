@@ -191,15 +191,28 @@ def test_a_non_dict_profile_section_is_tolerated() -> None:
     assert stage is None
 
 
-@pytest.mark.asyncio
-async def test_a_team_member_loop_actually_runs_the_stage(tmp_path, monkeypatch) -> None:
-    """The end of the chain: the config a member is built with, executed.
+def _citable_page() -> str:
+    """A corpus page whose item carries a receipt, i.e. an applicable input."""
+    import json
 
-    The extraction here yields nothing usable (a page with no citable receipts),
-    so the assertion is that the stage *ran* on the member's config and then
-    declined — which is the fail-safe direction and also the only thing this
-    fixture can prove without a corpus backend.
-    """
+    return json.dumps(
+        {
+            "ok": True,
+            "doc_id": "cv2:" + "a" * 64,
+            "items": [
+                {
+                    "text": "2025 财年营收 123 百万美元，不含并购贡献。" * 40,
+                    "location": "unit:0001",
+                    "evidence_ref": "ce:" + "0" * 32,
+                }
+            ],
+        },
+        ensure_ascii=False,
+    )
+
+
+async def _run_member(tmp_path, monkeypatch, *, page: str):
+    """Build a member exactly as the workflow does and run one loop."""
     import json
 
     from frontier_agent.components.agent_bus.models import SubTask
@@ -221,20 +234,25 @@ async def test_a_team_member_loop_actually_runs_the_stage(tmp_path, monkeypatch)
         Args:
             doc_id: Document identifier.
         """
-        return "散文段落，没有可引用收据。" * 200
+        return page
 
-    class _LLM2:
+    class _ExtractionLLM:
         model = "stub"
+
+        def __init__(self) -> None:
+            self.calls = 0
 
         async def chat(self, messages, **kwargs):
             del messages, kwargs
+            self.calls += 1
             return LLMResponse(
                 content=json.dumps({"findings": [], "open_questions": []}),
                 finish_reason="stop",
             )
 
+    extraction_llm = _ExtractionLLM()
     runtime = SwarmSubagentRuntime(
-        sub_agent_llm=_LLM2(),
+        sub_agent_llm=extraction_llm,
         reading_checkpoint_cfg={
             "reading_checkpoint": "on",
             "reading_checkpoint_working_set": 10,
@@ -275,26 +293,17 @@ async def test_a_team_member_loop_actually_runs_the_stage(tmp_path, monkeypatch)
             del kwargs
             self.calls += 1
             self.seen.append([dict(m) for m in messages])
-            if self.calls == 1:
+            if self.calls <= 2:
                 return LLMResponse(
                     content="reading",
                     tool_calls=[
                         {
-                            "id": "r1",
+                            "id": f"r{self.calls}",
                             "type": "function",
-                            "function": {"name": "corpus_fetch", "arguments": '{"doc_id":"d"}'},
-                        }
-                    ],
-                    finish_reason="tool_calls",
-                )
-            if self.calls == 2:
-                return LLMResponse(
-                    content="reading again",
-                    tool_calls=[
-                        {
-                            "id": "r2",
-                            "type": "function",
-                            "function": {"name": "corpus_fetch", "arguments": '{"doc_id":"d"}'},
+                            "function": {
+                                "name": "corpus_fetch",
+                                "arguments": '{"doc_id":"d"}',
+                            },
                         }
                     ],
                     finish_reason="tool_calls",
@@ -310,12 +319,102 @@ async def test_a_team_member_loop_actually_runs_the_stage(tmp_path, monkeypatch)
         config=config,
         observers=[_Spy()],
     )
+    return events, agent, extraction_llm
+
+
+@pytest.mark.asyncio
+async def test_a_team_member_loop_actually_runs_the_stage(tmp_path, monkeypatch) -> None:
+    """The end of the chain: the config a member is built with, executed.
+
+    The page here carries a receipt, so the input IS applicable and the extraction
+    is really attempted; its (empty) result is then refused, which is the fail-safe
+    direction: no archive, bodies untouched.
+    """
+    events, agent, extraction_llm = await _run_member(
+        tmp_path, monkeypatch, page=_citable_page(),
+    )
 
     assert events, "the member's loop never reached the reading stage"
     assert any(event.triggered for event in events), events
     assert not any(event.installed for event in events)
+    assert extraction_llm.calls >= 1, "an applicable input must reach the extractor"
+    installed = [event for event in events if event.installed]
+    assert not installed
+    assert all(
+        "2025 财年营收" in str(message.get("content") or "")
+        for message in agent.seen[-1]
+        if message.get("role") == "tool"
+    ), "a declined checkpoint must leave the bodies in place"
+
+
+@pytest.mark.asyncio
+async def test_a_page_with_no_receipts_never_reaches_the_extractor(
+    tmp_path, monkeypatch,
+) -> None:
+    """No citable refs means no possible finding, so the call is not paid for.
+
+    Before the applicability probe this case still bought a model call whose every
+    finding had to be discarded, and the failure was indistinguishable from a slow
+    provider.
+    """
+    events, agent, extraction_llm = await _run_member(
+        tmp_path, monkeypatch, page="散文段落，没有可引用收据。" * 200,
+    )
+
+    assert extraction_llm.calls == 0, "an inapplicable input must cost zero calls"
+    declined = [event for event in events if event.reason == "input_not_applicable"]
+    assert declined, [event.reason for event in events]
+    assert declined[0].triggered is False
+    assert declined[0].failure == "no_evidence_refs"
+    assert declined[0].ref_count == 0
+    assert declined[0].digest_chars and declined[0].digest_chars > 0
+    assert not any(event.phase == "start" for event in events)
     assert all(
         "没有可引用收据" in str(message.get("content") or "")
         for message in agent.seen[-1]
         if message.get("role") == "tool"
-    ), "a declined checkpoint must leave the bodies in place"
+    ), "a skipped checkpoint must leave the bodies in place"
+
+
+def test_profile_keys_map_onto_the_stage_budget(tmp_path, monkeypatch) -> None:
+    """The three new knobs must reach the stage, and absence must mean "on".
+
+    The default matters: ``skip_unchanged_failed_input`` protects a long turn from
+    paying for the same unchanged bodies every turn. An inverted default would
+    silently disable that protection while every other test still passed.
+    """
+    from workflows._shared.reading_stage import build_reading_stage
+
+    monkeypatch.setenv("CORPUS_TOOL_REF_ROOT", str(tmp_path))
+
+    default = build_reading_stage(
+        llm=object(), agent_cfg={"reading_checkpoint": "on"}, task_id="t",
+    )
+    assert default is not None
+    assert default.config.skip_unchanged_failed_input is True
+    assert default.config.min_remaining_budget_s == 45.0
+    assert default.config.min_attempt_s == 5.0
+    # The scope gate is on unless a profile opts out: an installed record is what
+    # replaces the body, so structure-only validation is the weaker default.
+    assert default.config.statement_check is not None
+
+    opted_in = build_reading_stage(
+        llm=object(),
+        agent_cfg={
+            "reading_checkpoint": "on",
+            "reading_checkpoint_retry_same_input": "on",
+            "reading_checkpoint_min_remaining_s": 90,
+        },
+        task_id="t",
+    )
+    assert opted_in is not None
+    assert opted_in.config.skip_unchanged_failed_input is False
+    assert opted_in.config.min_remaining_budget_s == 90.0
+
+    gate_off = build_reading_stage(
+        llm=object(),
+        agent_cfg={"reading_checkpoint": "on", "reading_checkpoint_scope_gate": "off"},
+        task_id="t",
+    )
+    assert gate_off is not None
+    assert gate_off.config.statement_check is None

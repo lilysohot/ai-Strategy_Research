@@ -340,6 +340,60 @@ class RunHandle:
     # exactly why an in-process map is sufficient.
     steer_controls: dict[str, int] = field(default_factory=dict)
     steer_texts: dict[str, str] = field(default_factory=dict)
+    #: True when this orchestrator signalled the worker. Without it a worker that
+    #: died on its own is indistinguishable from the hard-timeout SIGKILL, which is
+    #: why a self-exit used to be filed as an unexplained "sigkill".
+    _killed_by_parent: bool = False
+    #: Worker stderr and its destination. Kept on the handle so the exit record can
+    #: report where the last words went and how many bytes they took.
+    _stderr_path: Path | None = None
+    _stderr_file: Any = None
+
+
+def _record_worker_exit(handle: RunHandle) -> dict[str, Any]:
+    """Persist *how* the worker really ended, next to its engine log.
+
+    ``stopped_by=sigkill`` is synthesized from a missing ``run_finished`` frame, so it
+    proves nothing about the process itself. ``worker_exit.json`` records the real
+    returncode, the signal that ended it (if any), whether this orchestrator sent the
+    signal, and where the worker's stderr went — the three facts whose absence made
+    run ``1344f244…`` unexplainable.
+    """
+    record: dict[str, Any] = {
+        "run_id": handle.run_id,
+        "returncode": None,
+        "exit_code": None,
+        "signal": None,
+        "stopped_by_parent": bool(getattr(handle, "_killed_by_parent", False)),
+        "finished_frame": bool(getattr(handle, "_finished", False)),
+        "stderr_path": "",
+        "stderr_bytes": 0,
+    }
+    if handle.proc.returncode is not None:
+        record["returncode"] = handle.proc.returncode
+        if handle.proc.returncode < 0:
+            record["signal"] = -handle.proc.returncode
+        else:
+            record["exit_code"] = handle.proc.returncode
+
+    stderr_file = getattr(handle, "_stderr_file", None)
+    if stderr_file is not None:
+        with contextlib.suppress(Exception):
+            stderr_file.close()
+        handle._stderr_file = None
+    stderr_path = getattr(handle, "_stderr_path", None)
+    if isinstance(stderr_path, Path):
+        record["stderr_path"] = str(stderr_path)
+        with contextlib.suppress(OSError):
+            record["stderr_bytes"] = stderr_path.stat().st_size if stderr_path.exists() else 0
+
+    if _looks_like_uuid(handle.run_id):
+        with contextlib.suppress(Exception):
+            target = run_dir_for(handle.run_id) / "run" / "worker_exit.json"
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
+    logger.warning("worker exit for run %s: %s", handle.run_id, record)
+    return record
 
 
 def _pipeline_wall_timeout_s(config: Any, pipeline_id: str) -> int:
@@ -902,6 +956,9 @@ class Orchestrator:
         finally:
             if handle is not None:
                 await self._kill_handle(handle, grace=self._cfg.stop_grace_period_s)
+                # Record the real exit facts *before* the terminal frame, so a run
+                # that died on its own is never filed as an unexplained "sigkill".
+                _record_worker_exit(handle)
                 # T2.8: a worker killed by the hard-timeout SIGKILL never emits a
                 # run_finished frame, so synthesize one now that the process is gone.
                 if not getattr(handle, "_finished", False):
@@ -1453,21 +1510,34 @@ class Orchestrator:
             child_env["FRONTIER_WATCH_CHANNEL"] = await watch_bridge.start()
         else:
             child_env.pop("FRONTIER_WATCH_CHANNEL", None)
-        proc = await asyncio.create_subprocess_exec(
-            *cmd,
-            stdin=asyncio.subprocess.PIPE,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.DEVNULL,
-            cwd=str(REPO_ROOT),
-            start_new_session=True,  # → own process group, killable as a unit
-            env=child_env,
-        )
-        return RunHandle(
+        # The worker's exit reason cannot be reconstructed after the fact: keep its
+        # stderr next to engine.log instead of discarding it. A traceback or a
+        # RuntimeError here is the only place a self-inflicted death leaves evidence.
+        stderr_path = run_dir / "run" / "engine.stderr.log"
+        stderr_path.parent.mkdir(parents=True, exist_ok=True)
+        stderr_file = open(stderr_path, "ab", buffering=0)  # noqa: SIM115 - closed on exit
+        try:
+            proc = await asyncio.create_subprocess_exec(
+                *cmd,
+                stdin=asyncio.subprocess.PIPE,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=stderr_file,
+                cwd=str(REPO_ROOT),
+                start_new_session=True,  # → own process group, killable as a unit
+                env=child_env,
+            )
+        except BaseException:
+            stderr_file.close()
+            raise
+        handle = RunHandle(
             run_id=run_id,
             session_id=params["session_id"],
             proc=proc,
             wall_timeout_s=wall_timeout_s,
         )
+        handle._stderr_path = stderr_path
+        handle._stderr_file = stderr_file
+        return handle
 
     async def _resolve_llm_env(self, user_id: uuid.UUID | None) -> dict[str, str] | None:
         """Resolve a user's default config to ``OPENAI_*`` env vars, or None.
@@ -1858,6 +1928,9 @@ class Orchestrator:
     async def _kill_handle(self, handle: RunHandle, grace: int | None = None) -> None:
         if handle.proc.returncode is not None:
             return
+        # This signal is ours: record it so the exit record can separate "the
+        # platform stopped it" from "it died on its own" (worker_exit.json).
+        handle._killed_by_parent = True
         grace = self._cfg.stop_grace_period_s if grace is None else grace
         # Send SIGTERM to the whole process group; escalate to SIGKILL if the
         # worker ignores it past the grace period (orphan containment, §5.1).

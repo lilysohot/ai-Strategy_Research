@@ -39,7 +39,12 @@ API 新建的任务继承这些配置。独立语料 CLI 必须显式加载业�
 新增来源的授权登记使用 `corpus.cli admit`；用户接受图片/表格覆盖不完整时使用
 `corpus.cli text-publication`。这两个入口不会自动发布或清除原始缺口。
 完整 JSON 格式、命令顺序和增量索引范围见
-[新增研报固定命令流程](../corpus-ingestion-operations.md#新增研报的固定命令流程2026-10-31含-ocr)。
+[新增研报固定命令流程](../corpus-ingestion-operations.md#日常增量)。
+先按全量活动记录和已发布衍生关系去重，再对待办来源逐份调用 CLI；支持格式检查在
+OCR 前完成，PNG 不能直接放进当前原生语料清单。OCR 成功后仍保留的
+`image_only_page` 等缺口，若满足可用文字凭证条件并已有用户授权，继续
+`text-publication → check → publish → 索引与 Web 激活`。服务失败、无正文、未知缺口
+不适用这一分支；逐份记录阻断，不停止其余独立来源的发布。
 
 ```bash
 uv run --env-file .env python -m plugins.corpus.cli plan --manifest <新增清单.json>

@@ -101,3 +101,17 @@ async def _isolated_database(tmp_path, monkeypatch):
         else:
             os.environ["SERVER_RUNS_ROOT"] = saved_env
         await reset_engine()
+
+
+@pytest.fixture(autouse=True)
+def _no_real_llm_egress(monkeypatch):
+    """Keep every test's worker pointed at a local endpoint, or fail first.
+
+    The worker is a separate process and re-resolves its provider from the
+    server's configuration, so a test's own ``monkeypatch.setenv`` never reached
+    it: on 2026-11-17 two integration tests that believed they were talking to
+    ``MockLLMServer`` spent 18,878 input tokens at the production gateway. With
+    this flag set, any client that would send to a non-loopback host raises before
+    the request leaves the process.
+    """
+    monkeypatch.setenv("FRONTIER_LLM_LOCAL_ONLY", "1")

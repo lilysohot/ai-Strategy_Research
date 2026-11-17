@@ -25,9 +25,10 @@ from plugins.corpus.preparation.readers.base import (
     detect_format,
 )
 
-READER_DOCX_REV = "reader-docx-2"
+READER_DOCX_REV = "reader-docx-3"
 
 _SKIP_TAGS = frozenset({qn("w:sectPr")})
+_EMPTY_MARKERS = frozenset({qn("w:bookmarkStart"), qn("w:bookmarkEnd")})
 
 
 def _extractor_rev() -> str:
@@ -115,6 +116,10 @@ def read_docx(path: str | Path) -> ReaderResult:
             continue
         location_id = f"body[{element_index}]"
         element_index += 1
+        # Bookmark boundaries carry no content. Keep their XML coordinate slot;
+        # malformed markers containing text/objects must still produce a gap.
+        if tag in _EMPTY_MARKERS and not len(child) and not (child.text or "").strip():
+            continue
 
         if tag == qn("w:p"):
             paragraph = Paragraph(child, document)

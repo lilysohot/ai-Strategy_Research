@@ -312,9 +312,12 @@ class InstallOutcome:
 
 
 def _finding_issues(
-    finding: Finding, resolve: Callable[[str], Any] | None
+    finding: Finding,
+    resolve: Callable[[str], Any] | None,
+    statement_check: Callable[[Finding, str], Sequence[ValidationIssue]] | None = None,
 ) -> list[ValidationIssue]:
     issues: list[ValidationIssue] = []
+    quoted: list[str] = []
     if not finding.evidence_refs:
         # A statement with no ref cannot be told apart from a guess, and it is
         # exactly what a prose summary produces.
@@ -347,6 +350,9 @@ def _finding_issues(
                         finding.finding_id,
                     )
                 )
+                continue
+            if isinstance(resolved, dict) and isinstance(resolved.get("quote"), str):
+                quoted.append(resolved["quote"])
     if finding.kind == FindingKind.NUMBER:
         missing = [
             name
@@ -366,6 +372,12 @@ def _finding_issues(
                     finding.finding_id,
                 )
             )
+    if statement_check is not None and quoted:
+        # Only when the evidence text is actually in hand: a check that cannot see
+        # the source cannot tell a widened statement from a faithful one, and
+        # guessing on missing input would reject records for being unreadable
+        # rather than for being wrong.
+        issues.extend(statement_check(finding, "\n".join(quoted)))
     return issues
 
 
@@ -407,6 +419,7 @@ def validate_checkpoint(
     resolve: Callable[[str], Any] | None = None,
     task_id: str | None = None,
     source_versions: dict[str, str] | None = None,
+    statement_check: Callable[[Finding, str], Sequence[ValidationIssue]] | None = None,
 ) -> ValidationResult:
     """Check a checkpoint against the contract, without repairing it.
 
@@ -415,6 +428,11 @@ def validate_checkpoint(
     ``source_versions`` catch cross-task reuse and stale-version reuse; both are
     silent corruption otherwise, because the record reads perfectly well and is
     simply about different material.
+
+    ``statement_check`` is the embedding layer's per-finding fidelity rule, called
+    with the resolved evidence text. It lives outside this module on purpose: the
+    contract must not grow a Chinese limiter lexicon or any other language
+    assumption. Absent, the record is judged on structure and pointers only.
     """
     issues: list[ValidationIssue] = []
 
@@ -491,7 +509,7 @@ def validate_checkpoint(
                 )
             )
         seen.add(finding.finding_id)
-        issues.extend(_finding_issues(finding, resolve))
+        issues.extend(_finding_issues(finding, resolve, statement_check))
     issues.extend(_contradiction_issues(checkpoint.findings))
 
     if checkpoint.budget.record_over_budget:
@@ -513,6 +531,7 @@ def install_checkpoint(
     resolve: Callable[[str], Any] | None = None,
     task_id: str | None = None,
     source_versions: dict[str, str] | None = None,
+    statement_check: Callable[[Finding, str], Sequence[ValidationIssue]] | None = None,
 ) -> InstallOutcome:
     """Validate, then persist. Bodies may retire only on ``installed=True``.
 
@@ -527,6 +546,7 @@ def install_checkpoint(
         resolve=resolve,
         task_id=task_id,
         source_versions=source_versions,
+        statement_check=statement_check,
     )
     if not result.ok:
         return InstallOutcome(installed=False, checkpoint=checkpoint, issues=result.issues)

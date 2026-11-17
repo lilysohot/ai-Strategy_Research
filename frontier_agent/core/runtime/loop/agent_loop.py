@@ -601,6 +601,20 @@ async def _call_llm_with_callbacks(
             ),
         )
     except LLMCallExhausted as exhausted:
+        if exhausted.reason == "budget_stop":
+            # The pilot budget refused the request. This is neither a provider
+            # failure nor something a salvage call may paper over: an extra request
+            # after the cap is exactly what the cap forbids. Report it under its own
+            # reason so the run row does not read as "the model failed".
+            detail = str(exhausted.last_exc)
+            budget_reason = "usage_unavailable" if detail == "usage_unavailable" else "budget_exhausted"
+            logger.error(
+                "agent_loop: pilot budget stop after turn=%d (%s); ending with %s, no retry, no salvage",
+                turn, detail, budget_reason,
+            )
+            metadata["pilot_budget_stop"] = detail
+            metadata["pilot_budget_stop_turn"] = turn
+            return None, budget_reason, 0, 0, first_delta_at, llm_call_started, time.perf_counter(), call_id, current_attempt_id, current_attempt_index
         if exhausted.reason == "wall_deadline":
             logger.warning(
                 "agent_loop: wall deadline reached mid-turn %d; ending with wall_deadline for salvage: %s",
@@ -1218,6 +1232,25 @@ def _with_recovery_handle(
     )
 
 
+def _stage_accepts_emit(stage: Any) -> bool:
+    """Whether ``stage.maybe_checkpoint`` accepts the ``emit`` hook.
+
+    Probed instead of retried: calling a stage twice to discover its signature
+    would double-run a stage that had already installed a checkpoint.
+    """
+    method = getattr(stage, "maybe_checkpoint", None)
+    if method is None:
+        return False
+    try:
+        parameters = inspect.signature(method).parameters
+    except (TypeError, ValueError):
+        return False
+    return "emit" in parameters or any(
+        parameter.kind is inspect.Parameter.VAR_KEYWORD
+        for parameter in parameters.values()
+    )
+
+
 async def _handle_turn_end(
     cfg: LoopConfig, obs: list, messages: list[Message], metadata: dict[str, Any], turn: int,
     ctx: TurnContext, on_turn_complete: TurnCompleteHook | None, pause_check: PauseCheckHook | None
@@ -1265,12 +1298,25 @@ async def _handle_turn_end(
     # left to propagate because a cancelled run has to unwind.
     reading_stage = getattr(cfg, "reading_stage", None)
     if reading_stage is not None:
+        async def _emit_reading_event(event: Any) -> None:
+            await notify_observers(obs, "on_reading_checkpoint", event)
+
+        # ``emit`` is how a stage reports its START before the extractor call and
+        # its END after. Without it the only durable evidence of a checkpoint that
+        # never returned was a gap between two turns, which is exactly what made
+        # the 2026-11-17 run's timeout unprovable. A stage that predates the hook
+        # still runs; its single event is reported below.
+        emitted = _stage_accepts_emit(reading_stage)
         try:
-            reading_event = await reading_stage.maybe_checkpoint(messages, turn=turn)
+            reading_event = await reading_stage.maybe_checkpoint(
+                messages,
+                turn=turn,
+                **({"emit": _emit_reading_event} if emitted else {}),
+            )
         except Exception as exc:
             logger.warning("reading stage failed at turn %d: %s", turn, exc)
             reading_event = None
-        if reading_event is not None:
+        if reading_event is not None and not emitted:
             await notify_observers(obs, "on_reading_checkpoint", reading_event)
 
     if on_turn_complete is not None:

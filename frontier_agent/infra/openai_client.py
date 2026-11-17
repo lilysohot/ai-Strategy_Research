@@ -16,6 +16,8 @@ from openai import AsyncOpenAI, BadRequestError
 
 from frontier_agent.core.llm import LLMClient, LLMResponse, StreamDelta
 from frontier_agent.core.messages import Message, ToolCall, for_wire
+from frontier_agent.infra import pilot_budget
+from frontier_agent.infra.llm_egress import assert_local_endpoint
 from frontier_agent.infra.session_context import (
     get_task_session_id,
     mirror_session_query,
@@ -58,6 +60,10 @@ class OpenAIClient(LLMClient):
         default_headers: dict[str, str] | None = None,
         extra_body: dict[str, Any] | None = None,
     ) -> None:
+        # Isolation, not accounting. Checked again at every send (not only here):
+        # building a client is not spending, so a unit test that never calls out is
+        # unaffected, while a run that would reach a real provider fails first.
+        self._base_url = (base_url or os.environ.get("OPENAI_BASE_URL", "") or "").strip()
         self.model = model
         self.default_temperature = temperature
         self.default_max_tokens = max_completion_tokens
@@ -89,6 +95,10 @@ class OpenAIClient(LLMClient):
             default_headers=default_headers,
             max_retries=0,           # retries are owned by the runtime loop
         )
+        # Pilot-only pre-send limit protection. Inert unless FRONTIER_PILOT_BUDGET
+        # is set, and installed on this client's own transport so extraction,
+        # summary and resample clients are covered as well as the main loop.
+        pilot_budget.install(self._client)
 
     def _session_query(
         self, extra_headers: dict[str, str] | None,
@@ -163,6 +173,7 @@ class OpenAIClient(LLMClient):
 
         started = time.perf_counter()
         try:
+            assert_local_endpoint(self._base_url, model=self.model)
             raw_response = await self._client.chat.completions.with_raw_response.create(
                 **kwargs,
             )
@@ -265,6 +276,7 @@ class OpenAIClient(LLMClient):
         for this client and retry once without it (the stream still runs;
         streaming usage just reads 0 for that gateway, as it did before usage
         forwarding existed)."""
+        assert_local_endpoint(self._base_url, model=self.model)
         if self._stream_options_supported:
             try:
                 return await self._client.chat.completions.create(

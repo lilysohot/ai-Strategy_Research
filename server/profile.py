@@ -268,11 +268,100 @@ def build_prompt_addenda(
     return {"_sys_prompt_addendum": "\n".join(sections)}
 
 
+PILOT_SESSION_PREFIX = "pilot-"
+
+#: Paired pilot arms (2026-11-17). Both arms get the same deadline; only the
+#: archive switch and its stage budget/gates differ. Everything else stays at the
+#: shipped values above, so the pair measures the archive and nothing else.
+PILOT_ARMS: dict[str, dict[str, Any]] = {
+    "off": {
+        "reading_checkpoint": "off",
+        "research_wall_time_s": 1800,
+        "_pilot_budget": {"requests": 50, "prompt_tokens": 1_500_000,
+                          "completion_tokens": 100_000, "wall_s": 1800,
+                          # Pinned, not inherited: both arms must reserve the same
+                          # per-request output bound, and 4,096 belongs to the small
+                          # acceptance only. 16,384 is what the chain actually uses
+                          # (llm_max_tokens); with 100k cumulative it leaves 83,616 of
+                          # settled headroom, comfortably above the 26,710 reference.
+                          "max_completion_tokens": 16_384,
+                          # Approved policy (registration §17.1): a local caller-side
+                          # cancellation charges its pre-send reservation as a
+                          # placeholder instead of ending the arm. Every other unknown
+                          # still stops. Both arms declare it, so the accounting is
+                          # identical before the first token is spent.
+                          "unknown_usage": "estimate"},
+    },
+    #: Streaming acceptance arm (2026-11-17). Deliberately tiny: it exists to prove
+    #: that real usage reaches the ledger, that the in-flight window closes, and that
+    #: a normal exit is not mislabelled. It is not a research run and must not be
+    #: used as one — the caps below cannot carry a task.
+    "accept": {
+        "reading_checkpoint": "off",
+        "research_wall_time_s": 180,
+        "_pilot_budget": {"requests": 6, "prompt_tokens": 120_000,
+                          "completion_tokens": 8_000, "wall_s": 180,
+                          # Approved single-request cap. Without it the client chain
+                          # inherits 16,384 and the second request is refused on a
+                          # reservation the acceptance was never granted.
+                          "max_completion_tokens": 4_096},
+    },
+    "on": {
+        "reading_checkpoint": "on",
+        "reading_checkpoint_timeout_s": 180,
+        "reading_checkpoint_attempts": 2,
+        "reading_checkpoint_record_limit": 4000,
+        "reading_checkpoint_max_findings": 24,
+        "reading_checkpoint_archive_chars": 3000,
+        "reading_checkpoint_scope_gate": "on",
+        "research_wall_time_s": 1800,
+        "_pilot_budget": {"requests": 50, "prompt_tokens": 1_500_000,
+                          "completion_tokens": 100_000, "wall_s": 1800,
+                          # Same value as the baseline arm: a differing per-request
+                          # cap would make the two arms incomparable before the first
+                          # token is spent.
+                          "max_completion_tokens": 16_384,
+                          # Same policy as the baseline arm (registration §17.1).
+                          "unknown_usage": "estimate"},
+    },
+}
+
+
+def pilot_experiment(session_id: str | None) -> dict[str, Any] | None:
+    """Per-run experiment config, keyed on an explicit test session name.
+
+    Only sessions named ``pilot-<arm>-…`` are affected; every other session keeps
+    the production overrides byte for byte. Keying on the session rather than on a
+    process-global flag is what keeps the two arms independent while they share
+    one server.
+    """
+    name = str(session_id or "")
+    if not name.startswith(PILOT_SESSION_PREFIX):
+        return None
+    arm = name[len(PILOT_SESSION_PREFIX) :].split("-", 1)[0]
+    config = PILOT_ARMS.get(arm)
+    if config is None:
+        return None
+    return {"_pilot_arm": arm, **config}
+
+
+def _experiment_overrides(experiment: dict[str, Any] | None) -> dict[str, Any]:
+    """Experiment keys that may override the shipped agent block.
+
+    The ``_pilot_arm`` marker is bookkeeping for the run record, not an agent
+    setting, so it is dropped here rather than relied on being ignored downstream.
+    """
+    if not experiment:
+        return {}
+    return {key: value for key, value in experiment.items() if not key.startswith("_")}
+
+
 def build_profile_overrides(
     *,
     has_investment_context: bool = False,
     pipeline_id: str = "stateful-react-agent",
     enable_research_history: bool = False,
+    experiment: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Construct the ``profile_overrides`` payload for ``metadata``.
 
@@ -339,6 +428,7 @@ def build_profile_overrides(
                 **team_common,
                 "main_agent_tools": main_tools,
                 "sub_agent_tools": sub_tools,
+                **_experiment_overrides(experiment),
             },
         }
 
@@ -362,6 +452,7 @@ def build_profile_overrides(
             "finalization_reserve_s": 180,
             "finalization_timeout_s": 120,
             "tool_timeout_s": 90,
+            **_experiment_overrides(experiment),
         }
     }
 

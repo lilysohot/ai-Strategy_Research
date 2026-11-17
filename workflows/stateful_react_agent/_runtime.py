@@ -153,8 +153,19 @@ _GRACEFUL_FINAL_STOP_REASONS = frozenset({
 # the extra LLM rescue call for fail-fast benchmark scenarios, but the node
 # still returns an explicit deterministic partial-status answer rather than an
 # error sentinel.
+#: ``usage_unavailable`` joins them: the pilot budget stopped because it could not
+#: account for a request, and a rescue call would be exactly the unaccounted spend
+#: it just refused. Membership here selects the deterministic partial answer, so the
+#: arm ends with text but without spending another call.
 _INFRA_FINAL_STOP_REASONS = frozenset(
-    {"llm_error", "budget_exhausted", "wall_deadline", "max_attempts", "strategy_validation_failed"},
+    {
+        "llm_error",
+        "budget_exhausted",
+        "usage_unavailable",
+        "wall_deadline",
+        "max_attempts",
+        "strategy_validation_failed",
+    },
 )
 
 

@@ -529,3 +529,138 @@ async def test_a_page_is_retired_behind_a_durable_checkpoint(tmp_path, monkeypat
     ]
     assert len(still_verbatim) == 1
     assert "r1" in installed[0].retired_calls
+
+
+# ── applicability: the call that cannot succeed is not made ───────────────
+#
+# A team fallback report is the case that motivated this: it wraps tool output in
+# an XML envelope, so it *reads* like it carries refs while the extractor finds
+# none. Before the probe, that still bought a full extraction call whose every
+# finding had to be dropped — the expensive no-op that also hid a slow provider
+# behind an unexplained pause.
+
+REPORT_BODY = (
+    '<report agent="inio_locator_research" job="j1" status="incomplete" reason="llm_error">\n'
+    "[NOTE: sub-agent's LLM call failed; report is partial.]\n"
+    "## Tool observations preserved at the team deadline\n\n"
+    '{"items":[{"text":"2025 财年营收 123 百万美元","evidence_ref":"' + REF_A + '"}],'
+    '"protocol":"corpus-navigation-v2"}\n'
+    "</report>"
+)
+
+
+class _MemoryStore:
+    def __init__(self) -> None:
+        self.saved: dict = {}
+
+    def put(self, checkpoint) -> None:
+        self.saved[checkpoint.checkpoint_id] = checkpoint
+
+    def get(self, checkpoint_id):
+        return self.saved.get(checkpoint_id)
+
+
+def _consumed(body: str, tool: str = "corpus_fetch") -> list[dict]:
+    return [
+        {"role": "system", "content": "system"},
+        {"role": "user", "content": "读完整篇报告"},
+        {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+                {
+                    "id": "c1",
+                    "type": "function",
+                    "function": {"name": tool, "arguments": "{}"},
+                }
+            ],
+        },
+        {"role": "tool", "tool_call_id": "c1", "content": body},
+        {"role": "assistant", "content": "继续"},
+    ]
+
+
+def test_a_structured_page_reports_its_references_before_any_call() -> None:
+    llm = _LLM(_reply())
+    extractor = CorpusReadingExtractor(llm=llm, resolve=_evidence())
+
+    scope = extractor.scope([_retirable(_body())], "营收口径")
+
+    assert scope.applicable is True
+    assert scope.ref_count == 1
+    assert scope.digest_chars and scope.digest_chars > 0
+    assert llm.prompts == [], "the probe must not spend a model call"
+
+
+def test_a_report_envelope_is_not_applicable_despite_containing_refs() -> None:
+    llm = _LLM(_reply())
+    extractor = CorpusReadingExtractor(llm=llm, resolve=_evidence())
+
+    scope = extractor.scope([_retirable(REPORT_BODY, tool="collect_reports")], "营收口径")
+
+    assert scope.applicable is False
+    assert scope.reason == "no_evidence_refs"
+    assert scope.ref_count == 0
+    # The text is still measured: "not applicable" is a decision about citable
+    # refs, not a claim that the body is empty.
+    assert scope.digest_chars is not None and scope.digest_chars >= len(REPORT_BODY)
+    assert llm.prompts == []
+
+
+@pytest.mark.asyncio
+async def test_the_stage_skips_an_inapplicable_body_without_touching_it() -> None:
+    from frontier_agent.core.runtime.reading.stage import ReadingStage, ReadingStageConfig
+
+    llm = _LLM(_reply())
+    extractor = CorpusReadingExtractor(llm=llm, resolve=_evidence())
+    stage = ReadingStage(
+        extractor=extractor,
+        store=_MemoryStore(),
+        config=ReadingStageConfig(
+            enabled=True,
+            min_body_chars=10,
+            working_set_limit=10,
+            keep_recent_messages=0,
+            total_timeout_s=1.0,
+        ),
+        task_id="t",
+    )
+    messages = _consumed(REPORT_BODY, tool="collect_reports")
+    before = json.dumps(messages, ensure_ascii=False)
+
+    event = await stage.maybe_checkpoint(messages, turn=1)
+
+    assert event.reason == "input_not_applicable"
+    assert event.triggered is False
+    assert event.installed is False
+    assert event.ref_count == 0
+    assert llm.prompts == [], "an inapplicable input must cost zero calls"
+    assert json.dumps(messages, ensure_ascii=False) == before
+
+
+@pytest.mark.asyncio
+async def test_an_applicable_page_still_reaches_the_extractor() -> None:
+    from frontier_agent.core.runtime.reading.stage import ReadingStage, ReadingStageConfig
+
+    llm = _LLM(_reply())
+    extractor = CorpusReadingExtractor(llm=llm, resolve=_evidence())
+    stage = ReadingStage(
+        extractor=extractor,
+        store=_MemoryStore(),
+        config=ReadingStageConfig(
+            enabled=True,
+            min_body_chars=10,
+            working_set_limit=10,
+            keep_recent_messages=0,
+            total_timeout_s=2.0,
+        ),
+        task_id="t",
+    )
+    messages = _consumed(_body())
+
+    event = await stage.maybe_checkpoint(messages, turn=1)
+
+    assert llm.prompts, "an applicable input must be extracted"
+    assert event.ref_count == 1
+    assert event.installed is True
+    assert event.usage_known is False, "the stub LLM reports no usage: unknown, not zero"

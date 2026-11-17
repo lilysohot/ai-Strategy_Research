@@ -78,6 +78,7 @@ from frontier_agent.core.runtime.loop.tiered_compact import (
     compaction_trigger_tokens,
 )
 from frontier_agent.core.runtime.loop.tool_exec import PROTECTED_FANIN_TOOLS
+from frontier_agent.core.runtime.reading.stage import ReadingBudget
 from frontier_agent.core.runtime.resources.manager import ResourceManager
 from frontier_agent.core.runtime.session_history import build_session_turn
 from frontier_agent.models.node_context import NodeContext
@@ -1481,7 +1482,14 @@ async def main_agent_node(
     # The coordinator reads whole documents too, so it needs the same mechanism as
     # a member — what differs is only who pays for the extraction call.
     main_reading_stage = build_reading_stage(
-        llm=sub_agent_llm, agent_cfg=agent_cfg, task_id=ctx.task_id,
+        llm=sub_agent_llm,
+        agent_cfg=agent_cfg,
+        task_id=ctx.task_id,
+        # The coordinator's remaining time is shared with delivery: archiving must
+        # never spend the reserve the final answer is guaranteed.
+        budget=ReadingBudget(
+            delivery_reserve_s=lambda: phase_budget.delivery_reserve_s,
+        ),
     )
 
     # Trajectory layout: per-task split for debugging vs one file per agent.

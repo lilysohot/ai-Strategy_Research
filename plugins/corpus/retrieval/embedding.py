@@ -24,10 +24,13 @@ InputVariant = Literal[
 class EmbeddingError(RuntimeError):
     """Safe error code: never includes provider bodies, credentials or report text."""
 
-    def __init__(self, code: str, *, uncertain: bool = False) -> None:
+    def __init__(
+        self, code: str, *, uncertain: bool = False, transport_kind: str | None = None
+    ) -> None:
         super().__init__(code)
         self.code = code
         self.uncertain = uncertain
+        self.transport_kind = transport_kind
 
 
 @dataclass(frozen=True)
@@ -174,9 +177,11 @@ class DoubaoEmbedder:
                     headers={"Authorization": f"Bearer {cfg.api_key}"},
                     json=payload,
                 )
-        except httpx.HTTPError:
+        except httpx.HTTPError as exc:
             # A timeout does not prove that the provider did not process/charge the input.
-            raise EmbeddingError("provider_transport_uncertain", uncertain=True) from None
+            raise EmbeddingError(
+                "provider_transport_uncertain", uncertain=True, transport_kind=type(exc).__name__
+            ) from None
         if response.status_code != 200:
             raise EmbeddingError(
                 f"provider_http_{response.status_code}",

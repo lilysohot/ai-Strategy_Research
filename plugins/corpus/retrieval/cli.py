@@ -7,7 +7,7 @@ import json
 import os
 import sys
 import time
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -67,15 +67,51 @@ def main() -> int:
     parser.add_argument("--limit", type=int)
     parser.add_argument("--metadata-file", type=Path)
     parser.add_argument("--native-index", type=Path)
+    parser.add_argument(
+        "--partial-from",
+        type=Path,
+        help="native-pack only: preserve this baseline and isolate unready new sources",
+    )
     parser.add_argument("--char-budget", type=int, default=16000)
     parser.add_argument("--deployment", choices=("pilot", "release"), default="pilot")
     parser.add_argument("--context-version", default=None)
-    parser.add_argument("--chunks-per-request", type=int, default=6)
+    parser.add_argument("--chunks-per-request", type=int)
+    parser.add_argument(
+        "--max-attempts",
+        type=int,
+        help="Persistent per-input attempt cap, including the first request.",
+    )
+    parser.add_argument(
+        "--extractive-fallback",
+        action="store_true",
+        help="Recover rejected notes using verified source extracts, without a model call.",
+    )
     parser.add_argument("--out", type=Path)
     parser.add_argument("--release-id", default=None)
     parser.add_argument("--source-scope", type=Path, help="明确的 source_allowlist JSON")
     parser.add_argument("--manifest", type=Path, help="scope 命令的新增来源清单")
     args = parser.parse_args()
+    if args.partial_from is not None and args.command != "native-pack":
+        parser.error("--partial-from requires native-pack")
+    if (args.retry_failed or args.retry_uncertain) and args.command not in (
+        "build",
+        "native-pack",
+        "context-generate",
+    ):
+        parser.error("retry flags require build, native-pack or context-generate")
+    if args.chunks_per_request is not None and (
+        args.command not in ("context-plan", "context-generate")
+        or not 1 <= args.chunks_per_request <= 20
+    ):
+        parser.error("--chunks-per-request requires context-plan/generate and a value in 1..20")
+    if args.extractive_fallback and args.command != "context-generate":
+        parser.error("--extractive-fallback requires context-generate")
+    if args.max_attempts is not None and args.command not in ("native-pack", "context-generate"):
+        parser.error("--max-attempts requires native-pack or context-generate")
+    if args.max_attempts is None:
+        args.max_attempts = 2
+    if not 1 <= args.max_attempts <= 10:
+        parser.error("--max-attempts must be between 1 and 10")
     if args.max_requests is None:
         args.max_requests = (
             0
@@ -185,7 +221,8 @@ def main() -> int:
                     target,
                     config.target_db,
                     context_version=version,
-                    chunks_per_request=args.chunks_per_request,
+                    chunks_per_request=args.chunks_per_request
+                    or int(os.getenv("CORPUS_CONTEXT_CHUNKS_PER_REQUEST", "6")),
                     source_ids=source_ids,
                 )
             elif args.command == "context-status":
@@ -194,6 +231,8 @@ def main() -> int:
                 )
             elif args.command == "context-generate":
                 notes = contextual.NoteConfig.from_env()
+                if args.chunks_per_request is not None:
+                    notes = replace(notes, chunks_per_request=args.chunks_per_request)
                 output = contextual_pg.generate(
                     target,
                     config.target_db,
@@ -202,6 +241,10 @@ def main() -> int:
                     max_requests=args.max_requests,
                     context_version=version,
                     source_ids=source_ids,
+                    retry_failed=args.retry_failed,
+                    retry_uncertain=args.retry_uncertain,
+                    max_attempts=args.max_attempts,
+                    extractive_fallback=args.extractive_fallback,
                 )
             else:
                 if args.out is None:
@@ -218,6 +261,10 @@ def main() -> int:
                     context_version=version,
                     release_id=args.release_id,
                     source_ids=source_ids,
+                    retry_failed=args.retry_failed,
+                    retry_uncertain=args.retry_uncertain,
+                    max_attempts=args.max_attempts,
+                    partial_from=args.partial_from,
                 )
         else:
             if not args.query.strip():
@@ -238,7 +285,10 @@ def main() -> int:
                 }
             output = {"query": args.query, "results": results}
         print(json.dumps(output, ensure_ascii=False, indent=2))
-        return 1 if output.get("error_code") else 0
+        incomplete = args.command == "context-generate" and (
+            output.get("missing", 0) or not output.get("schema_ready", True)
+        )
+        return 1 if output.get("error_code") or incomplete or output.get("partial") else 0
     except (EmbeddingError, ContextNoteError) as exc:
         print(json.dumps({"error_code": exc.code}), file=sys.stderr)
         return 2

@@ -13,6 +13,7 @@ import re
 from typing import Any
 
 from frontier_agent.components.finalization.recovery import minimal_best_effort_answer
+from plugins.corpus.final_delivery import corpus_citation_readability_issue
 from workflows.agent_team.output_cleaning import strip_team_control
 from workflows.agent_team.verification_claims import (
     omit_verification_assurances,
@@ -39,6 +40,7 @@ _STOP_LABELS = {
     "deadline": ("已到执行时间上限", "The execution deadline was reached"),
     "max_turns": ("已到对话轮次上限", "The turn limit was reached"),
     "budget_exhausted": ("执行预算已耗尽", "The execution budget was exhausted"),
+    "usage_unavailable": ("用量无法核算，已停止新增请求", "Usage could not be accounted for; no further requests were sent"),
     "user_stop": ("用户已停止执行", "The user stopped execution"),
 }
 
@@ -381,6 +383,12 @@ def finalize_team_report(
         bool(re.search(r"[\w\u4e00-\u9fff]", residual)) if findings else bool(text.strip())
     )
     system = source in _INTERNAL_SOURCES or not is_user_report(text) or not useful_text
+    # Last-turn and exhausted-repair paths can retain useful prose without
+    # fixing its citations. Reassess the published body here: loop metadata is
+    # not available on every exit, and valid evidence does not prove readability.
+    readability_unresolved = not system and bool(corpus_citation_readability_issue(text))
+    if readability_unresolved:
+        gaps.append({"code": "corpus_citation_readability"})
     publication = {
         "status": "withheld"
         if findings and system
@@ -476,6 +484,14 @@ def finalize_team_report(
             "最终正文未保留部分已核验片段，原片段的通过结果不能用于确认改写后的内容。"
             if zh else "Some checked passages were changed or omitted in the final text; their "
             "passing verdicts do not verify the rewritten content."
+        )
+    if readability_unresolved:
+        notes.append(
+            "部分出处仍使用内部定位符，尚未整理为可读的来源名称与位置。原有正文和引用已保留；"
+            "此项仅说明引用格式未完成，证据核验状态另行记录。"
+            if zh else "Some citations still use internal identifiers instead of readable source "
+            "names and locations. The original prose and references are retained; this is a "
+            "citation-formatting limitation, with evidence verification recorded separately."
         )
     declared_gaps = [
         task
@@ -641,11 +657,17 @@ def finalize_team_report(
     elif kind == "partial":
         # Put the actual delivery status before the conclusion; a footer alone
         # can leave the headline falsely looking like a fully verified answer.
-        text = (
+        prefix = (
             "**部分完成：以下结论仅基于已取得的证据，尚有任务或证据缺口。**\n\n"
             if zh
             else "**Partial result: conclusions use available evidence; work or evidence gaps remain.**\n\n"
-        ) + text
+        )
+        if readability_unresolved and len(gaps) == 1:
+            prefix = (
+                "**部分完成：引用格式尚未整理完成。**\n\n"
+                if zh else "**Partial result: citation formatting remains unfinished.**\n\n"
+            )
+        text = prefix + text
         notes.insert(
             0,
             "本次结果为部分完成或尽力结果，不能据此认定所有要求均已完成。"

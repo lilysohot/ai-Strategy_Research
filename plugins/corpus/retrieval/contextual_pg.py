@@ -15,6 +15,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import tempfile
 import time
 from collections.abc import Callable, Sequence
 from datetime import date
@@ -25,7 +26,7 @@ import psycopg
 from psycopg.types.json import Jsonb
 
 from plugins.corpus.preparation.search_pg import _check_target
-from plugins.corpus.retrieval import contextual
+from plugins.corpus.retrieval import attempts, contextual
 from plugins.corpus.retrieval.embedding import (
     EmbeddingError,
     EmbeddingResult,
@@ -38,7 +39,8 @@ from plugins.corpus.retrieval.native import NativeIndex
 from plugins.corpus.retrieval.native_live import _date, _units, project, refresh
 from plugins.corpus.retrieval.source_scope import select_sources
 
-DDL = """
+DDL = (
+    """
 CREATE SCHEMA IF NOT EXISTS corpus_retrieval;
 CREATE TABLE IF NOT EXISTS corpus_retrieval.chunk_context (
     context_version text NOT NULL,
@@ -54,10 +56,14 @@ CREATE TABLE IF NOT EXISTS corpus_retrieval.chunk_context (
     generator jsonb NOT NULL DEFAULT '{}',
     status text NOT NULL CHECK (status IN ('running', 'ready', 'rejected')),
     reject_code text,
+    attempts integer NOT NULL DEFAULT 0,
     created_at timestamptz NOT NULL DEFAULT now(),
     PRIMARY KEY (context_version, build_id, chunk_id)
 );
+ALTER TABLE corpus_retrieval.chunk_context ADD COLUMN IF NOT EXISTS attempts integer NOT NULL DEFAULT 0;
 """
+    + attempts.DDL
+)
 
 #: 只取活动发布范围，且来源与 build 都仍在范围内（撤回即不生成、不返回）。
 ACTIVE_SQL = """
@@ -267,6 +273,24 @@ def status(
         token_row = cur.fetchone()
         tokens = int(token_row[0]) if token_row else 0
         have = _ready_notes(cur, context_version)
+        cur.execute("SELECT to_regclass('corpus_retrieval.context_attempts')")
+        receipt_table = cur.fetchone()
+        recorded_tokens = unknown_attempts = 0
+        if receipt_table and receipt_table[0]:
+            keys = [
+                text_hash(context_version + ":" + c["build_id"] + ":" + c["chunk_id"])
+                for c in chunks
+            ]
+            cur.execute(
+                "SELECT coalesce(sum((usage->>'total_tokens')::bigint),0),"
+                "count(*) FILTER (WHERE state IN ('running','uncertain')) "
+                "FROM corpus_retrieval.context_attempts "
+                "WHERE operation='note' AND request_key=ANY(%s::text[])",
+                (keys,),
+            )
+            totals = cur.fetchone()
+            if totals:
+                recorded_tokens, unknown_attempts = map(int, totals)
     return {
         "context_version": context_version,
         "schema_ready": True,
@@ -276,6 +300,10 @@ def status(
         "missing": sum(1 for c in chunks if (c["build_id"], c["chunk_id"]) not in have),
         "states": states,
         "reported_total_tokens": tokens,
+        "usage_basis": "latest_note_rows_not_cumulative",
+        "recorded_attempt_tokens": recorded_tokens,
+        "unknown_cost_attempts": unknown_attempts,
+        "attempt_history_scope": "receipts_since_recovery_upgrade_only",
     }
 
 
@@ -288,13 +316,16 @@ def generate(
     max_requests: int = 0,
     context_version: str = contextual.CONTEXT_VERSION,
     source_ids: Sequence[str] | None = None,
+    retry_failed: bool = False,
+    retry_uncertain: bool = False,
+    max_attempts: int = 2,
+    extractive_fallback: bool = False,
 ) -> dict[str, Any]:
-    """逐文档批量生成说明；已 ready 的不重发，失败/不确定不自动重试。"""
-    if max_requests < 0:
-        raise contextual.ContextNoteError("invalid_max_requests")
+    """Resume notes under a session lock; unknown outcomes require explicit permission."""
+    if max_requests < 0 or not 1 <= max_attempts <= 10:
+        raise contextual.ContextNoteError("invalid_request_budget")
     initialize(dsn, target)
-    requested = ready = rejected = blocked = 0
-    tokens = 0
+    requested = ready = rejected = blocked = extracted = tokens = 0
     error: str | None = None
     with _connect(dsn, target) as conn, conn.cursor() as cur:
         cur.execute(
@@ -307,102 +338,184 @@ def generate(
         active = select_sources(_active(cur), source_ids)
         chunks = _projected(cur, active)
         documents = _documents(cur, [entry["build_id"] for entry in active.values()])
-        have = _ready_notes(cur, context_version)
+        cur.execute(
+            "SELECT build_id,chunk_id,status,attempts,reject_code "
+            "FROM corpus_retrieval.chunk_context WHERE context_version=%s",
+            (context_version,),
+        )
+        existing = {
+            (bid, cid): (state, max(1, tried), code)
+            for bid, cid, state, tried, code in cur.fetchall()
+        }
         for build_id, group in _by_build(chunks).items():
             document = documents.get(build_id, "")
             if not document.strip():
                 blocked += len(group)
                 continue
-            pending = [c for c in group if (c["build_id"], c["chunk_id"]) not in have]
-            if not pending:
-                continue
-            failed = False
-            for batch_ids in plan_batches(
-                [c["chunk_id"] for c in pending], config.chunks_per_request
-            ):
+            pending = []
+            for chunk in group:
+                state, tried, code = existing.get((build_id, chunk["chunk_id"]), (None, 0, None))
+                if state == "ready":
+                    continue
+                # Rejected content can be recovered without paying for another model call.
+                if (
+                    extractive_fallback
+                    and state == "rejected"
+                    and _extract_rejected(cur, context_version, chunk, document, config, code)
+                ):
+                    ready += 1
+                    extracted += 1
+                    continue
+                if attempts.can_retry(
+                    state, tried, max_attempts, failed=retry_failed, uncertain=retry_uncertain
+                ):
+                    pending.append(chunk)
+                else:
+                    blocked += 1
+            by_id = {c["chunk_id"]: c for c in pending}
+            for batch_ids in plan_batches(list(by_id), config.chunks_per_request):
                 if requested >= max_requests:
                     break
-                by_id = {c["chunk_id"]: c for c in pending}
                 batch = [(cid, by_id[cid]["search_text"]) for cid in batch_ids]
+                receipts = {}
+                # Transaction commits both the running markers and receipts before network I/O.
+                with conn.transaction():
+                    for cid, _ in batch:
+                        tried = existing.get((build_id, cid), (None, 0, None))[1] + 1
+                        key = text_hash(context_version + ":" + build_id + ":" + cid)
+                        started = attempts.begin(cur, "note", key, tried)
+                        receipts[cid] = (key, tried, started)
+                        _write(
+                            cur,
+                            context_version,
+                            by_id[cid],
+                            note="",
+                            document=document,
+                            state="running",
+                            code="request_started",
+                            generator=config,
+                            usage={},
+                            attempt_count=tried,
+                        )
                 requested += 1
                 try:
                     result = generate_batch(document, batch)
                 except contextual.ContextNoteError as exc:
-                    # 鉴权/格式/超时都停止本批：不确定结果不自动重发，避免重复计费。
                     error = exc.code
-                    state = "running" if exc.uncertain else "rejected"
-                    for cid, _text in batch:
-                        _write(
-                            cur,
-                            context_version,
-                            by_id[cid],
-                            note="",
-                            document=document,
-                            state=state,
-                            code=exc.code,
-                            generator=config,
-                            usage={},
-                        )
-                    failed = True
+                    with conn.transaction():
+                        for cid, _ in batch:
+                            key, tried, started = receipts[cid]
+                            attempts.finish(
+                                cur,
+                                "note",
+                                key,
+                                tried,
+                                started,
+                                "uncertain" if exc.uncertain else "failed",
+                                {},
+                                exc.code,
+                                exc.transport_kind,
+                            )
+                            _write(
+                                cur,
+                                context_version,
+                                by_id[cid],
+                                note="",
+                                document=document,
+                                state="running" if exc.uncertain else "rejected",
+                                code=exc.code,
+                                generator=config,
+                                usage={},
+                                attempt_count=tried,
+                            )
+                    # Transport/authentication failures stop paid work; completed rows persist.
                     break
                 tokens += int(result.usage.get("total_tokens", 0))
-                # usage 记在批次首条，避免同批每条都重复计入总额。
-                first_id = batch[0][0]
-                for cid, _text in batch:
-                    raw = result.notes.get(cid)
-                    if raw is None:
-                        rejected += 1
-                        _write(
-                            cur,
-                            context_version,
-                            by_id[cid],
-                            note="",
-                            document=document,
-                            state="rejected",
-                            code="note_missing_in_response",
-                            generator=config,
-                            usage=result.usage if cid == first_id else {},
-                        )
-                        continue
+                for cid, _ in batch:
+                    raw = result.notes.get(cid, "")
+                    usage = result.usage if cid == batch[0][0] else {}
+                    code = None
                     try:
                         contextual.validate_note(raw, document)
                     except contextual.ContextNoteError as exc:
-                        rejected += 1
+                        code = exc.code
+                    key, tried, started = receipts[cid]
+                    with conn.transaction():
+                        attempts.finish(
+                            cur,
+                            "note",
+                            key,
+                            tried,
+                            started,
+                            "rejected" if code else "ready",
+                            usage,
+                            code,
+                        )
                         _write(
                             cur,
                             context_version,
                             by_id[cid],
                             note=raw[: contextual.NOTE_MAX_CHARS * 2],
                             document=document,
-                            state="rejected",
-                            code=exc.code,
+                            state="rejected" if code else "ready",
+                            code=code,
                             generator=config,
-                            usage=result.usage if cid == first_id else {},
+                            usage=usage,
+                            attempt_count=tried,
                         )
-                        continue
-                    ready += 1
-                    _write(
-                        cur,
-                        context_version,
-                        by_id[cid],
-                        note=raw,
-                        document=document,
-                        state="ready",
-                        code=None,
-                        generator=config,
-                        usage=result.usage if cid == first_id else {},
-                    )
-            if failed or requested >= max_requests:
+                        if (
+                            code
+                            and extractive_fallback
+                            and _extract_rejected(
+                                cur, context_version, by_id[cid], document, config, code
+                            )
+                        ):
+                            extracted += 1
+                            code = None
+                    if code:
+                        rejected += 1
+                    else:
+                        ready += 1
+            if error:
                 break
     return {
+        **status(dsn, target, context_version=context_version, source_ids=source_ids),
         "requests_this_run": requested,
         "notes_ready_this_run": ready,
         "notes_rejected_this_run": rejected,
+        "notes_extracted_this_run": extracted,
         "blocked_this_run": blocked,
-        "reported_total_tokens": tokens,
+        "reported_tokens_this_run": tokens,
         "error_code": error,
-        **status(dsn, target, context_version=context_version, source_ids=source_ids),
     }
+
+
+def _extract_rejected(
+    cur: psycopg.Cursor,
+    version: str,
+    chunk: dict,
+    document: str,
+    config: contextual.NoteConfig,
+    reason: str | None,
+) -> bool:
+    try:
+        headings = [chunk.get("title_text") or "", *(chunk.get("section_path") or [])]
+        note, provenance = contextual.extract_note(document, chunk["search_text"], headings)
+    except contextual.ContextNoteError:
+        return False
+    _write(
+        cur,
+        version,
+        chunk,
+        note=note,
+        document=document,
+        state="ready",
+        code=None,
+        generator=config,
+        usage={},
+        provenance={**provenance, "fallback_reason": reason},
+    )
+    return True
 
 
 def _write(
@@ -416,18 +529,22 @@ def _write(
     code: str | None,
     generator: contextual.NoteConfig,
     usage: dict[str, int],
+    attempt_count: int | None = None,
+    provenance: dict | None = None,
 ) -> None:
     cur.execute(
         """INSERT INTO corpus_retrieval.chunk_context
         (context_version, source_id, build_id, chunk_id, note, note_chars,
          document_hash, chunk_hash, input_hash, prompt_version, generator,
-         status, reject_code)
-        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+         status, reject_code, attempts)
+        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
         ON CONFLICT (context_version, build_id, chunk_id) DO UPDATE SET
           note=EXCLUDED.note, note_chars=EXCLUDED.note_chars,
           document_hash=EXCLUDED.document_hash, chunk_hash=EXCLUDED.chunk_hash,
           input_hash=EXCLUDED.input_hash, generator=EXCLUDED.generator,
-          status=EXCLUDED.status, reject_code=EXCLUDED.reject_code""",
+          status=EXCLUDED.status, reject_code=EXCLUDED.reject_code,
+          prompt_version=EXCLUDED.prompt_version,
+          attempts=greatest(corpus_retrieval.chunk_context.attempts,EXCLUDED.attempts)""",
         (
             version,
             chunk["source_id"],
@@ -438,10 +555,18 @@ def _write(
             text_hash(document),
             text_hash(chunk["search_text"]),
             contextual.input_hash(note, chunk["search_text"]) if state == "ready" else "",
-            contextual.PROMPT_VERSION,
-            Jsonb({"profile": generator.profile, "model": generator.model, **usage}),
+            (provenance or {}).get("method", contextual.PROMPT_VERSION),
+            Jsonb(
+                {
+                    "profile": generator.profile,
+                    "model": generator.model,
+                    **usage,
+                    **(provenance or {}),
+                }
+            ),
             state,
             code,
+            attempt_count or 0,
         ),
     )
 
@@ -463,45 +588,81 @@ def _embed_missing(
     texts: dict[str, str],
     embed: Callable[[str, Role], EmbeddingResult],
     max_requests: int,
+    *,
+    retry_failed: bool = False,
+    retry_uncertain: bool = False,
+    max_attempts: int = 2,
 ) -> int:
-    """只补缺失向量；已 ready 的直接复用，未知结果不自动重试。"""
-    requested = 0
-    for input_hash, text in sorted(texts.items()):
-        row = conn.execute(
-            "SELECT status FROM corpus_retrieval.embeddings WHERE profile=%s AND input_hash=%s",
-            (config.profile, input_hash),
-        ).fetchone()
-        if row is not None and row[0] == "ready":
-            continue
-        if requested >= max_requests:
-            break
-        claimed = conn.execute(
-            "INSERT INTO corpus_retrieval.embeddings(profile,input_hash,dimensions,status,attempts) "
-            "VALUES(%s,%s,%s,'running',1) ON CONFLICT DO NOTHING RETURNING input_hash",
-            (config.profile, input_hash, config.dimensions),
-        ).fetchone()
-        if not claimed:
-            continue
-        requested += 1
-        try:
-            result = embed(text, "document")
-            vector = validate_vector(result.vector, config.dimensions)
-        except EmbeddingError as exc:
-            # 单条失败不拖垮整批：记下状态、继续下一条；该条留待人工处理，不自动重发。
-            conn.execute(
-                "UPDATE corpus_retrieval.embeddings SET status=%s,error_code=%s,updated_at=now() "
+    """Reuse ready vectors, explicitly retry terminal/abandoned requests within a durable cap."""
+    if max_requests < 0 or not 1 <= max_attempts <= 10:
+        raise contextual.ContextNoteError("invalid_request_budget")
+    lock = "corpus-vector:" + config.profile
+    row = conn.execute("SELECT pg_try_advisory_lock(hashtextextended(%s,0))", (lock,)).fetchone()
+    if not row or not row[0]:
+        raise EmbeddingError("index_writer_already_running")
+    try:
+        conn.execute(attempts.DDL)
+        requested = 0
+        for input_hash, text in sorted(texts.items()):
+            row = conn.execute(
+                "SELECT status,attempts FROM corpus_retrieval.embeddings "
                 "WHERE profile=%s AND input_hash=%s",
-                ("uncertain" if exc.uncertain else "failed", exc.code, config.profile, input_hash),
-            )
-            _pause(2.0)
-            continue
-        conn.execute(
-            "UPDATE corpus_retrieval.embeddings SET status='ready',embedding=%s::vector,"
-            "usage=%s,updated_at=now() WHERE profile=%s AND input_hash=%s",
-            (json.dumps(vector), Jsonb(result.usage), config.profile, input_hash),
-        )
-        _pause()
-    return requested
+                (config.profile, input_hash),
+            ).fetchone()
+            state, tried = row if row else (None, 0)
+            if not attempts.can_retry(
+                state, tried, max_attempts, failed=retry_failed, uncertain=retry_uncertain
+            ):
+                continue
+            if requested >= max_requests:
+                break
+            attempt = tried + 1
+            key = text_hash(config.profile + ":" + input_hash)
+            with conn.transaction(), conn.cursor() as cur:
+                cur.execute(
+                    "INSERT INTO corpus_retrieval.embeddings "
+                    "(profile,input_hash,dimensions,status,attempts) VALUES(%s,%s,%s,'running',%s) "
+                    "ON CONFLICT (profile,input_hash) DO UPDATE SET status='running',"
+                    "attempts=EXCLUDED.attempts,error_code=NULL,updated_at=now()",
+                    (config.profile, input_hash, config.dimensions, attempt),
+                )
+                started = attempts.begin(cur, "vector", key, attempt)
+            requested += 1
+            try:
+                result = embed(text, "document")
+                vector = validate_vector(result.vector, config.dimensions)
+            except EmbeddingError as exc:
+                state = "uncertain" if exc.uncertain else "failed"
+                with conn.transaction(), conn.cursor() as cur:
+                    cur.execute(
+                        "UPDATE corpus_retrieval.embeddings SET status=%s,error_code=%s,"
+                        "updated_at=now() WHERE profile=%s AND input_hash=%s",
+                        (state, exc.code, config.profile, input_hash),
+                    )
+                    attempts.finish(
+                        cur,
+                        "vector",
+                        key,
+                        attempt,
+                        started,
+                        state,
+                        {},
+                        exc.code,
+                        exc.transport_kind,
+                    )
+                _pause(2.0)
+                continue
+            with conn.transaction(), conn.cursor() as cur:
+                cur.execute(
+                    "UPDATE corpus_retrieval.embeddings SET status='ready',embedding=%s::vector,"
+                    "usage=%s,error_code=NULL,updated_at=now() WHERE profile=%s AND input_hash=%s",
+                    (json.dumps(vector), Jsonb(result.usage), config.profile, input_hash),
+                )
+                attempts.finish(cur, "vector", key, attempt, started, "ready", result.usage)
+            _pause()
+        return requested
+    finally:
+        conn.execute("SELECT pg_advisory_unlock(hashtextextended(%s,0))", (lock,))
 
 
 def build_pack(
@@ -515,12 +676,23 @@ def build_pack(
     context_version: str = contextual.CONTEXT_VERSION,
     release_id: str | None = None,
     source_ids: Sequence[str] | None = None,
+    retry_failed: bool = False,
+    retry_uncertain: bool = False,
+    max_attempts: int = 2,
+    partial_from: Path | None = None,
 ) -> dict[str, Any]:
     """写 ``native-evidence-contextual-1``：说明 + 原文片段，词法与向量同一输入。"""
     if config.input_variant != "contextual-note-v1":
         raise contextual.ContextNoteError("contextual_pack_requires_contextual_variant")
     if out.exists() and any(out.iterdir()):
         raise contextual.ContextNoteError("contextual_pack_output_not_empty")
+    baseline = NativeIndex(partial_from) if partial_from else None
+    if baseline and (
+        baseline.manifest["target_db"] != target
+        or baseline.manifest["profile"] != config.profile
+        or baseline.manifest.get("context_version") != context_version
+    ):
+        raise contextual.ContextNoteError("partial_baseline_mismatch")
     with _connect(dsn, target) as conn, conn.cursor() as cur:
         cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
         all_active = _active(cur)
@@ -529,15 +701,39 @@ def build_pack(
         documents = _documents(cur, [entry["build_id"] for entry in active.values()])
         units = _units(cur, [entry["build_id"] for entry in active.values()])
         notes = _ready_notes(cur, context_version) if _schema_ready(cur) else {}
+        cur.execute(
+            "SELECT build_id,chunk_id,generator FROM corpus_retrieval.chunk_context "
+            "WHERE context_version=%s AND status='ready'",
+            (context_version,),
+        )
+        provenance = {(bid, cid): meta for bid, cid, meta in cur.fetchall()}
+    protected = set(baseline.manifest["source_allowlist"]) if baseline else set()
+    if baseline:
+        for sid, bid, generation in baseline.manifest["publications"]:
+            if sid not in active or (active[sid]["build_id"], active[sid]["generation"]) != (
+                bid,
+                generation,
+            ):
+                raise contextual.ContextNoteError("partial_baseline_publication_changed")
+    deferred: dict[str, str] = {}
     missing = [c for c in chunks if (c["build_id"], c["chunk_id"]) not in notes]
     if missing:
-        raise contextual.ContextNoteError("contextual_pack_notes_incomplete")
+        excluded = {c["source_id"] for c in missing}
+        if baseline is None or excluded & protected:
+            raise contextual.ContextNoteError("contextual_pack_notes_incomplete")
+        deferred.update({sid: "contextual_pack_notes_incomplete" for sid in excluded})
+        active = {sid: entry for sid, entry in active.items() if sid not in excluded}
+        chunks = [c for c in chunks if c["source_id"] not in excluded]
 
     packed: list[dict[str, Any]] = []
     for chunk in chunks:
         note = notes[chunk["build_id"], chunk["chunk_id"]]
         text = chunk["search_text"]
-        contextual.validate_note(note, documents.get(chunk["build_id"], ""))
+        contextual.validate_stored_note(
+            note,
+            documents.get(chunk["build_id"], ""),
+            provenance[chunk["build_id"], chunk["chunk_id"]],
+        )
         applies = contextual.note_applies(text)
         packed.append(
             {
@@ -557,7 +753,20 @@ def build_pack(
         )
     texts = {c["input_hash"]: c["index_text"] for c in packed}
     with _connect(dsn, target) as conn:
-        embedded = _embed_missing(conn, config, texts, embed, max_requests) if embed else 0
+        embedded = (
+            _embed_missing(
+                conn,
+                config,
+                texts,
+                embed,
+                max_requests,
+                retry_failed=retry_failed,
+                retry_uncertain=retry_uncertain,
+                max_attempts=max_attempts,
+            )
+            if embed
+            else 0
+        )
         vectors: dict[str, Any] = {}
         for input_hash in sorted(texts):
             row = conn.execute(
@@ -573,7 +782,38 @@ def build_pack(
             }
     pending = len(texts) - len(vectors)
     if pending:
-        raise contextual.ContextNoteError("contextual_pack_vectors_pending")
+        excluded = {c["source_id"] for c in packed if c["input_hash"] not in vectors}
+        if baseline is None or excluded & protected:
+            raise contextual.ContextNoteError("contextual_pack_vectors_pending")
+        deferred.update({sid: "contextual_pack_vectors_pending" for sid in excluded})
+        active = {sid: entry for sid, entry in active.items() if sid not in excluded}
+        packed = [c for c in packed if c["source_id"] not in excluded]
+        texts = {c["input_hash"]: c["index_text"] for c in packed}
+        vectors = {key: value for key, value in vectors.items() if key in texts}
+    if baseline:
+        old = {(c["build_id"], c["chunk_id"]): c for c in baseline.chunks}
+        retained = {
+            (c["build_id"], c["chunk_id"]): c for c in packed if c["source_id"] in protected
+        }
+        if set(old) != set(retained) or any(
+            old[key][field] != retained[key][field]
+            for key in old
+            for field in ("search_text", "index_text", "input_hash", "unit_refs")
+        ):
+            raise contextual.ContextNoteError("partial_baseline_content_changed")
+        if any(
+            key not in units
+            or any(
+                units[key][field] != unit[field]
+                for field in ("raw_text", "content_hash", "location", "status", "eligible")
+            )
+            for key, unit in baseline.units.items()
+        ) or any(
+            tuple(vectors[c["input_hash"]]["vector"])
+            != tuple(baseline.vectors[c["input_hash"]]["vector"])
+            for c in old.values()
+        ):
+            raise contextual.ContextNoteError("partial_baseline_evidence_changed")
 
     source_of = {c["build_id"]: c["source_id"] for c in packed}
     needed = {(c["build_id"], uid) for c in packed for uid in c["unit_refs"]}
@@ -604,7 +844,10 @@ def build_pack(
             "chunk_id": c["chunk_id"],
             "note": notes[c["build_id"], c["chunk_id"]],
             "context_version": context_version,
-            "prompt_version": contextual.PROMPT_VERSION,
+            "prompt_version": provenance[c["build_id"], c["chunk_id"]].get(
+                "method", contextual.PROMPT_VERSION
+            ),
+            "provenance": provenance[c["build_id"], c["chunk_id"]],
         }
         for c in packed
         if c["index_text"] != c["search_text"]
@@ -616,11 +859,11 @@ def build_pack(
         "dates.json": dates,
         "notes.json": note_rows,
     }
-    out.mkdir(parents=True, exist_ok=True)
     files = {}
+    encoded = {}
     for name, value in payload.items():
         raw = json.dumps(value, ensure_ascii=False).encode()
-        (out / name).write_bytes(raw)
+        encoded[name] = raw
         files[name] = hashlib.sha256(raw).hexdigest()
     manifest = {
         "schema": "native-evidence-contextual-1",
@@ -642,11 +885,31 @@ def build_pack(
         ),
     }
     manifest["release_id"] = release_id or f"contextual-{context_version}"
+    if baseline:
+        manifest["base_index_id"] = baseline.index_id
+        manifest["deferred_sources"] = deferred
     raw = json.dumps(manifest, ensure_ascii=False).encode()
-    (out / "manifest.json").write_bytes(raw)
-    # 生成后立刻按检索侧同一口径校验，避免产出“自己都读不进”的包。
-    index = NativeIndex(out / "manifest.json")
-    refreshed = refresh(dsn, target, index)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    # Failed validation never leaves a half-written release at the requested path.
+    with tempfile.TemporaryDirectory(prefix=".context-pack-", dir=out.parent) as temporary:
+        staging = Path(temporary)
+        for name, content in encoded.items():
+            (staging / name).write_bytes(content)
+        (staging / "manifest.json").write_bytes(raw)
+        index = NativeIndex(staging / "manifest.json")
+        refreshed = refresh(dsn, target, index)
+        if len(refreshed.chunks) != len(index.chunks):
+            raise contextual.ContextNoteError("contextual_pack_publication_changed")
+        with _connect(dsn, target) as conn, conn.cursor() as cur:
+            current = _active(cur)
+            if any(
+                sid not in current
+                or (current[sid]["build_id"], current[sid]["generation"])
+                != (entry["build_id"], entry["generation"])
+                for sid, entry in active.items()
+            ):
+                raise contextual.ContextNoteError("contextual_pack_publication_changed")
+        os.replace(staging, out)
     return {
         "out": str(out),
         "index_id": index.index_id,
@@ -660,6 +923,9 @@ def build_pack(
         "dimensions": config.dimensions,
         "max_index_input_chars": max((len(v) for v in texts.values()), default=0),
         "context_version": context_version,
+        "partial": bool(deferred),
+        "deferred_sources": deferred,
+        "web_activated": False,
     }
 
 

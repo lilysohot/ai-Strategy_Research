@@ -1,0 +1,3017 @@
+{
+  "schema_version": 1,
+  "status": "pilot",
+  "scope": "Version-locked real corpus document: every unit of 9f0804dcdb656d7b2bfd20c6b9d456bf15438490495dbd784e8eb6927db43c06 / build 7c29d3479817f507ef4ebca89371c7f6ce64d8725a7cde6f6e1ce5d39c70ca31 is included verbatim with its original unit_id, kind and page. No synthetic, reordered or repeated filler. Verifies mechanism behaviour only, not production benefit.",
+  "documents": {
+    "inio": {
+      "doc_id": "cv2:7c29d3479817f507ef4ebca89371c7f6ce64d8725a7cde6f6e1ce5d39c70ca31",
+      "source_id": "9f0804dcdb656d7b2bfd20c6b9d456bf15438490495dbd784e8eb6927db43c06",
+      "build_id": "7c29d3479817f507ef4ebca89371c7f6ce64d8725a7cde6f6e1ce5d39c70ca31",
+      "char_count": null,
+      "block_count": null,
+      "title": "2026-11-04_深度｜INIO：表后电力超级周期中的燃气发动机龙头，坐拥漫长服务.pdf",
+      "units": [
+        {
+          "unit_id": "unit:0001",
+          "kind": "heading",
+          "text": "2026­11­04 深度｜INIO：表后电力超级周期中的燃气发动机龙头，",
+          "page": 1
+        },
+        {
+          "unit_id": "unit:0002",
+          "kind": "heading",
+          "text": "坐拥漫长服务",
+          "page": 1
+        },
+        {
+          "unit_id": "unit:0003",
+          "kind": "heading",
+          "text": "深度｜INIO：表后电力超级周期中的燃气发动机龙头，坐拥漫长服务长尾",
+          "page": 1
+        },
+        {
+          "unit_id": "unit:0004",
+          "kind": "paragraph",
+          "text": "数据中心用电需求驱动设备增长，而 INNIO 的装机量支撑起长达 10 至 15 年的服务后周期执行摘要\n继首次覆盖 BE 和 FTAI 之后，我们将表后（BTM）供电的覆盖范围拓展至INNIO (INIO)——北美及\n欧洲领先的往复式发动机原始设备制造商（OEM）。 自2026 年 6 月上市以来，尽管连续两个季度\n业绩超出预期并上调业绩指引，其远期EV/EBITDA 估值倍数仍从上市后约 24 倍的高点回落至近期约\n 12 倍的低位。设备在手订单达到约 80 亿美元，订单出货比（book­to­bill）达到约 3.3 倍。",
+          "page": 1
+        },
+        {
+          "unit_id": "unit:0005",
+          "kind": "paragraph",
+          "text": "与其他表后供电服务商相比，我们认为 INNIO 的核心优势在于其约 44GW 的现有装机量，这支撑了\n长达 10–15 年的维保服务合作关系。 目前售后维保服务约占其总销售额的三分之一。我们测算，每 \nGW 对应的 15 年期维保服务 EBITDA 可达初始设备 EBITDA 的 2.3 倍，贴现后约为 1.5 倍。我们\n的 2025–2030 年模型显示，设备业务与服务业务的收入复合年增长率（CAGR）预计分别为 39% \n和11%，EBITDA 增速预计分别为 46% 和 12%。",
+          "page": 1
+        },
+        {
+          "unit_id": "unit:0006",
+          "kind": "paragraph",
+          "text": "设备业务利润率的扩张预计将来自放量与经营杠杆。在无需进一步提价的假设下，随着交付增速超过销\n售及管理费用（SG&A）和研发费用（R&D），我们预计设备业务 EBITDA 利润率将从 2025 财年的\n约 15% 提升至 2028 财年的约19%。 渠道调研显示，部分数据中心订单存在 20–30% 的溢价。该\n利润率能否维持，将取决于随着竞争对手扩大产能，更好的成本摊薄效应能否抵消定价压力。",
+          "page": 1
+        },
+        {
+          "unit_id": "unit:0007",
+          "kind": "heading",
+          "text": "交易格局与筹码面： 11 月 30 日解禁期满后，将有 6.465 亿股发起人/私募股东",
+          "page": 1
+        },
+        {
+          "unit_id": "unit:0008",
+          "kind": "paragraph",
+          "text": "持股具备减持资格，相当于已发行股份总数的约 86%，约为当前公开流通盘的",
+          "page": 1
+        },
+        {
+          "unit_id": "unit:0009",
+          "kind": "paragraph",
+          "text": "6.2 倍。这带来了潜在的筹码供应压力，尽管实际减持情况仍存在不确定性。催化剂包括第四季度交付\n加速放量、2027 财年业绩指引、产能更新进展，以及预留订单向正式订单的转化。渠道调研显示其客\n户储备充足；后续更多客户协议的公布以及维保服务收入预期的上调，均有望推动估值重估。",
+          "page": 1
+        },
+        {
+          "unit_id": "unit:0010",
+          "kind": "heading",
+          "text": "为何是现在",
+          "page": 1
+        },
+        {
+          "unit_id": "unit:0011",
+          "kind": "paragraph",
+          "text": "继首次覆盖 BE 和 FTAI 之后，我们进一步将“表后”（BTM）电力覆盖范围扩大至INNIO (INIO)。\n该公司是北美和欧洲领先的往复式发动机原始设备制造商（OEM）。",
+          "page": 1
+        },
+        {
+          "unit_id": "unit:0012",
+          "kind": "paragraph",
+          "text": "其远期 EV/EBITDA 估值倍数已从 6 月初 IPO 后的约 24 倍高点回落至约 14 倍。尽管2026 财年第\n三季度业绩大幅超预期并上调了业绩指引，且设备在手订单达到约 80 亿美元、数据中心占新接订单比\n例达到约 80%，其估值倍数依然出现了收缩。INNIO 约44GW 的装机量为未来服务业务的增长奠定\n了基础。随着 IPO 禁售期于 11 月 30 日到期，保荐人（Sponsor）潜在的减持套现仍是近期的压制\n因素。随着需求和交付放量，我们认为当前是评估该业务的契机。",
+          "page": 1
+        },
+        {
+          "unit_id": "unit:0013",
+          "kind": "heading",
+          "text": "核心分歧与我们的观点",
+          "page": 1
+        },
+        {
+          "unit_id": "unit:0014",
+          "kind": "heading",
+          "text": "分歧一",
+          "page": 1
+        },
+        {
+          "unit_id": "unit:0015",
+          "kind": "paragraph",
+          "text": "本轮周期中设备需求能持续多久？后期的服务业务能提供多大的缓冲垫？",
+          "page": 1
+        },
+        {
+          "unit_id": "unit:0016",
+          "kind": "paragraph",
+          "text": "与我们覆盖的其他表后电力供应商一样，看空者认为，受电网接入延迟以及 2030 年前燃气轮机产能\n受限的影响，INNIO 的设备需求正在被提前透支。随着供应逐步跟上，订单可能会回归常态，而发动",
+          "page": 1
+        },
+        {
+          "unit_id": "unit:0017",
+          "kind": "paragraph",
+          "text": "1 / 16",
+          "page": 1
+        },
+        {
+          "unit_id": "unit:0018",
+          "kind": "paragraph",
+          "text": "机可能会转为备用或重新调配，而非更新替换。利用率下降还可能减少经常性服务业务的收入与利润，\n从而削弱装机量所能提供的缓冲作用。",
+          "page": 2
+        },
+        {
+          "unit_id": "unit:0019",
+          "kind": "heading",
+          "text": "我们的观点",
+          "page": 2
+        },
+        {
+          "unit_id": "unit:0020",
+          "kind": "paragraph",
+          "text": "我们认为 INNIO 的设备周期可能会延续到 2030 年以后，长于空头的预期。这一周期受到北美多年电\n力短缺格局的支撑，且表现出比短期过渡性电力市场更强的持续性。",
+          "page": 2
+        },
+        {
+          "unit_id": "unit:0021",
+          "kind": "paragraph",
+          "text": "随着装机量的增长，期限为 10 至 15 年的具有约束力的服务协议有望在后期提供可观的盈利支撑。根\n据我们的模型测算，每 GW 装机在 15 年内的服务 EBITDA 可达初始设备 EBITDA 的 2.3 倍，折现\n后约为 1.5 倍。",
+          "page": 2
+        },
+        {
+          "unit_id": "unit:0022",
+          "kind": "heading",
+          "text": "逻辑依据",
+          "page": 2
+        },
+        {
+          "unit_id": "unit:0023",
+          "kind": "paragraph",
+          "text": "设备端方面，来自 VoltaGrid 和 Liberty 的订单已支撑起直至 2028 年的交付排期。在现有订单簿之\n外，我们的渠道调研显示，从进入电网并网排队序列到真正通电大约需要五年时间，而新型燃气轮机的\n交付排期已延后至 2032 年。这为 INNIO 等表后（BTM）供电方案商留出了市场空间。我们测算北\n美电力缺口在 2027 年约为15GW，在 2028 年约为 25GW。我们还预计，即便电网接入状况改善\n，这些发动机仍将继续使用。燃气发动机发电成本预估约为 36 至 43 美元/MWh，仍低于得克萨斯\n州约 63 美元/MWh 的电网用电成本。在我们的表后跟踪名单中，数据中心活塞式发动机的确定性订\n单中约有三分之一是针对离网站点的。只要这些发动机保持运行，即便被重新部署到其他项目中，也能\n持续贡献服务（Services）收入。",
+          "page": 2
+        },
+        {
+          "unit_id": "unit:0024",
+          "kind": "paragraph",
+          "text": "服务业务方面，我们认为其收入和利润的长尾周期可能会超出设备销售周期。依托约44GW 的装机量\n基数，管理层指出，其数据中心未交付订单及预留产能中约有 94% 被指定用于主供电源。这些发动机\n日常持续供电，不断累积达到大修所需的运行工时；相关的全生命周期服务协议期限通常为 10 至 15 \n年。渠道调研表明，专有零部件、诊断系统及原厂技术权限有助于保障主机厂（OEM）的客户留存率\n。在其整体产品组合中，INNIO 在约 80% 的维保配件上仍保持独家供应地位，不过 Waukesha 发动\n机使用的专有零部件比例相对较低。",
+          "page": 2
+        },
+        {
+          "unit_id": "unit:0025",
+          "kind": "heading",
+          "text": "服务业务贡献量化：按照年运行时间 7,000 小时计算，在平准化口径下，我们的模型",
+          "page": 2
+        },
+        {
+          "unit_id": "unit:0026",
+          "kind": "paragraph",
+          "text": "测算出每吉瓦（GW）对应的年化服务收入约为 4,900 万美元，年化 EBITDA 约为1,600 万美元。\n15 年间，累计服务 EBITDA 预计约为 2.42 亿美元，相比之下，初始设备销售贡献的 EBITDA 约为 \n1.06 亿美元。在未折现口径下，这相当于初始设备利润的",
+          "page": 2
+        },
+        {
+          "unit_id": "unit:0027",
+          "kind": "paragraph",
+          "text": "2.3 倍；折现后亦达到 1.5 倍。常规维护自投运即开始；小修和大修通常分别在运行达约 40,000 小\n时和 80,000 小时时进行。纵观各交付批次队列，小修需求将在 2031 年开始形成规模，随后大修需\n求将于 2036 年起逐步释放。",
+          "page": 2
+        },
+        {
+          "unit_id": "unit:0028",
+          "kind": "paragraph",
+          "text": "我们对2025–2030年的预测显示，设备业务与服务业务的营收复合年均增长率（CAGR）预计分别\n为39%和11%，EBITDA增速则分别达46%和12%。",
+          "page": 2
+        },
+        {
+          "unit_id": "unit:0029",
+          "kind": "heading",
+          "text": "图表：设备与数据中心订单出货比（Book­to­bill），FY2024–3Q26",
+          "page": 2
+        },
+        {
+          "unit_id": "unit:0030",
+          "kind": "paragraph",
+          "text": "2 / 16",
+          "page": 2
+        },
+        {
+          "unit_id": "unit:0031",
+          "kind": "paragraph",
+          "text": "图：数据中心服务周期——日常维护与大修需求",
+          "page": 3
+        },
+        {
+          "unit_id": "unit:0032",
+          "kind": "paragraph",
+          "text": "图：每吉瓦全生命周期收入与 EBITDA——设备与服务对比",
+          "page": 3
+        },
+        {
+          "unit_id": "unit:0033",
+          "kind": "paragraph",
+          "text": "3 / 16",
+          "page": 3
+        },
+        {
+          "unit_id": "unit:0034",
+          "kind": "heading",
+          "text": "资料来源：FUNDA 预测与分析",
+          "page": 4
+        },
+        {
+          "unit_id": "unit:0035",
+          "kind": "heading",
+          "text": "争议点 #2",
+          "page": 4
+        },
+        {
+          "unit_id": "unit:0036",
+          "kind": "paragraph",
+          "text": "随着竞争加剧，INNIO 能否维持更高的设备业务利润率？",
+          "page": 4
+        },
+        {
+          "unit_id": "unit:0037",
+          "kind": "paragraph",
+          "text": "看空者认为，随着 INNIO 和其他原始设备制造商（OEM）扩大产能，产能利用率可能下降且定价趋弱\n，导致 INNIO 的设备业务利润率下滑。数据中心客户目前因交付窗口稀缺而支付溢价，但随着其他往\n复式发动机 OEM 增加产能，INNIO 可能难以维持这一定价水平。",
+          "page": 4
+        },
+        {
+          "unit_id": "unit:0038",
+          "kind": "heading",
+          "text": "我们的观点",
+          "page": 4
+        },
+        {
+          "unit_id": "unit:0039",
+          "kind": "paragraph",
+          "text": "在我们的模型预测中，设备业务 EBITDA 利润率将从 2025 财年的约 15% 上升至2028 财年的约\n19%。这一改善主要由经营杠杆驱动：出货量增加使得销售、一般及行政费用（SG&A）以及研发费\n用分摊到更大的营收基数上。我们的基准情景并未假设新一轮提价，出货量增长是核心驱动力。",
+          "page": 4
+        },
+        {
+          "unit_id": "unit:0040",
+          "kind": "heading",
+          "text": "我们的分析逻辑",
+          "page": 4
+        },
+        {
+          "unit_id": "unit:0041",
+          "kind": "paragraph",
+          "text": "随着数据中心占比升至约 60%，设备业务毛利率保持在约 25%，而受经营杠杆改善驱动，EBITDA \n利润率从约 14% 提升至约 17%。集装箱化方案也提高了每千瓦毛利。我们假设，随着现有产品线产\n能的扩张，交付量将进一步提升，且产品定价保持稳定。",
+          "page": 4
+        },
+        {
+          "unit_id": "unit:0042",
+          "kind": "paragraph",
+          "text": "我们的渠道调研显示，部分数据中心订单存在 20%–30% 的溢价，但我们并未将该溢价套用于全部\n方案组合。一旦其他供应商能够满足客户要求的交付日期，这一溢价可能会收窄。零部件短缺可能会延\n缓新增供给的落地，但部分买家已拥有替代方案。例如，Liberty 同时向 Bergen 和 INNIO 下了订单\n。我们将持续关注 INNIO 针对同类方案与交付窗口的报价是否会出现下滑。",
+          "page": 4
+        },
+        {
+          "unit_id": "unit:0043",
+          "kind": "heading",
+          "text": "图：设备业务每千瓦毛利、毛利率及数据中心业务占比",
+          "page": 4
+        },
+        {
+          "unit_id": "unit:0044",
+          "kind": "paragraph",
+          "text": "4 / 16",
+          "page": 4
+        },
+        {
+          "unit_id": "unit:0045",
+          "kind": "heading",
+          "text": "来源：FUNDA 测算与分析",
+          "page": 5
+        },
+        {
+          "unit_id": "unit:0046",
+          "kind": "heading",
+          "text": "业务概览",
+          "page": 5
+        },
+        {
+          "unit_id": "unit:0047",
+          "kind": "paragraph",
+          "text": "INNIO 总部位于奥地利延巴赫（Jenbach）。该公司成立于 2018 年，当时安宏资本（Advent\nInternational）收购了通用电气（GE）的分布式能源业务，并将颜巴赫（Jenbacher）与瓦克夏（\nWaukesha）发动机品牌整合归入 INNIO 旗下。最初的控股公司于 2018 年 4 月在奥地利注册成立\n，该业务于同年 11 月开始独立运营。",
+          "page": 5
+        },
+        {
+          "unit_id": "unit:0048",
+          "kind": "paragraph",
+          "text": "INNIO 依托旗下 Jenbacher 和 Waukesha 品牌销售燃气发动机及售后市场服务。",
+          "page": 5
+        },
+        {
+          "unit_id": "unit:0049",
+          "kind": "paragraph",
+          "text": "Jenbacher 主要面向发电领域，而 Waukesha 则专注于用于天然气压缩的发动机。",
+          "page": 5
+        },
+        {
+          "unit_id": "unit:0050",
+          "kind": "heading",
+          "text": "INNIO 旗下划分为两个财务汇报分部：设备业务（Equipment）与服务业务",
+          "page": 5
+        },
+        {
+          "unit_id": "unit:0051",
+          "kind": "paragraph",
+          "text": "设备业务（占 2026 财年第三季度营收的 67%） 包括发动机、发电机组以及面向三大应用场景的成\n套解决方案。该业务分部在 2026 财年第三季度的订单出货比（book­to­bill）达 2.8 倍。",
+          "page": 5
+        },
+        {
+          "unit_id": "unit:0052",
+          "kind": "paragraph",
+          "text": "数据中心（占设备营收的 60%）：提供现场主用电源、过渡电源及补充电源。数据中心占设备新增订\n单的 83%，订单出货比达 3.9 倍。",
+          "page": 5
+        },
+        {
+          "unit_id": "unit:0053",
+          "kind": "heading",
+          "text": "气体压缩（占设备营收的 10%）：涵盖驱动用于天然气集输、处理和输送之压缩",
+          "page": 5
+        },
+        {
+          "unit_id": "unit:0054",
+          "kind": "paragraph",
+          "text": "机的发动机。压缩业务占设备新增订单的 5%，订单出货比为 1.5 倍。",
+          "page": 5
+        },
+        {
+          "unit_id": "unit:0055",
+          "kind": "heading",
+          "text": "电力解决方案（占设备营收的 31%）：服务于工业自备发电、热电联产",
+          "page": 5
+        },
+        {
+          "unit_id": "unit:0056",
+          "kind": "paragraph",
+          "text": "（CHP）、微电网及电网支撑。该业务占设备新增订单的 12%，订单出货比为",
+          "page": 5
+        },
+        {
+          "unit_id": "unit:0057",
+          "kind": "paragraph",
+          "text": "1.1 倍。",
+          "page": 5
+        },
+        {
+          "unit_id": "unit:0058",
+          "kind": "heading",
+          "text": "图：INNIO 设备与售后市场商业模式",
+          "page": 5
+        },
+        {
+          "unit_id": "unit:0059",
+          "kind": "paragraph",
+          "text": "5 / 16",
+          "page": 5
+        },
+        {
+          "unit_id": "unit:0060",
+          "kind": "paragraph",
+          "text": "来源：INNIO 公司演示文稿。",
+          "page": 6
+        },
+        {
+          "unit_id": "unit:0061",
+          "kind": "paragraph",
+          "text": "服务业务（占 3Q26 销售额的 33%）通过零部件供应、日常维护、维修、大修及升级改造，为庞大的\n在役机组提供支持。客户既可以按单次交易采购此类服务（按单个零部件或单次维护作业付费），也可\n以通过涵盖约定维护范围的多年期协议以合约方式采购。",
+          "page": 6
+        },
+        {
+          "unit_id": "unit:0062",
+          "kind": "paragraph",
+          "text": "管理层表示，数据中心相关的全包服务协议期可长达 10 至 15 年，其中大多数包含一次大修。这些协\n议覆盖直营数据中心运营商、能源即服务（EaaS）提供商以及设备租赁客户；具体服务范围因合同而\n异。在 3Q26，服务业务板块的经调整 EBITDA 利润率为 31.7%，而设备业务板块仅为 17.1%。",
+          "page": 6
+        },
+        {
+          "unit_id": "unit:0063",
+          "kind": "paragraph",
+          "text": "INNIO 的产品兼顾发电与气体压缩两大市场。针对数据中心，其核心产品是颜巴赫 6型（Jenbacher \nType 6），以发电机组或预制电力模块的形式交付。多台发动机单元可组合配置，以满足整个园区的\n供电容量与冗余要求。规模更大的配置方案包括 20–25MW 的集成动力模块，该方案通过集成多台\n发动机实现，而非依赖单台更大型的机组。",
+          "page": 6
+        },
+        {
+          "unit_id": "unit:0064",
+          "kind": "paragraph",
+          "text": "在工业及分布式电力应用领域，INNIO 提供颜巴赫 2 型、3 型、4 型和 6 型，并搭配精选的瓦克夏（\nWaukesha）发动机以满足不同的功率需求。功率约为 10MW 的更大型 9 型发动机，则进一步将产\n品线延伸至更大型的发电项目。此外，瓦克夏的 VGF、VHP 和 275GL+ 平台还广泛服务于气体压缩\n领域，在此类场景中，发动机驱动的是压缩机而非发电机。",
+          "page": 6
+        },
+        {
+          "unit_id": "unit:0065",
+          "kind": "heading",
+          "text": "图：INNIO 按应用场景与功率范围划分的产品组合",
+          "page": 6
+        },
+        {
+          "unit_id": "unit:0066",
+          "kind": "paragraph",
+          "text": "6 / 16",
+          "page": 6
+        },
+        {
+          "unit_id": "unit:0067",
+          "kind": "paragraph",
+          "text": "来源：INNIO 公司演示材料。",
+          "page": 7
+        },
+        {
+          "unit_id": "unit:0068",
+          "kind": "heading",
+          "text": "当前在手订单与客户",
+          "page": 7
+        },
+        {
+          "unit_id": "unit:0069",
+          "kind": "paragraph",
+          "text": "INNIO 已斩获多家大型数据中心客户，并正依托持续增长的在手订单加速交付。截至2026 年 9 月，\n设备在手订单总额（backlog）达到 80 亿美元，高于 6 月的 66 亿美元及去年同期的 33 亿美元。\n第三季度设备新签订单（bookings）达 22 亿美元，订单出货比（book­to­bill ratio）达 2.8 倍。数\n据中心业务约占设备新签订单的 83%，而在设备收入中的占比为 60%。这一结构表明，随着现有订\n单陆续交付，业务将进一步向数据中心设备倾斜。",
+          "page": 7
+        },
+        {
+          "unit_id": "unit:0070",
+          "kind": "paragraph",
+          "text": "INNIO 通过直接面向园区客户及电力供应商两条途径服务该市场。VoltaGrid 是其公开披露的最大设\n备合作方，累计已公布订单达 3.8GW。一家未披露名称的美国园区开发商/运营商追加订购了\n1.72GW，而 Liberty Energy 则在第三季度敲定了 450MW 的确定性订单。Rehlko 和 Aggreko \n则通过多年期产能协议提供了额外的市场准入渠道，不过这类承诺应与已入账的设备订单区分开来。",
+          "page": 7
+        },
+        {
+          "unit_id": "unit:0071",
+          "kind": "heading",
+          "text": "图：部分客户订单与采购承诺",
+          "page": 7
+        },
+        {
+          "unit_id": "unit:0072",
+          "kind": "paragraph",
+          "text": "7 / 16",
+          "page": 7
+        },
+        {
+          "unit_id": "unit:0073",
+          "kind": "heading",
+          "text": "来源：INNIO 公司数据",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0074",
+          "kind": "paragraph",
+          "text": "甲骨文（Oracle）是这些订单背后已公开身份的超大规模云厂商。 VoltaGrid 已宣布为OCI（甲骨文\n云基础设施）提供 2.3 吉瓦（GW）的电力基础设施，明确指定采用INNIO 颜巴赫（Jenbacher）技\n术，同时还与 Vantage 建立了超过 1 吉瓦的合作关系。沙克尔福德县（Shackelford County）\nStargate 园区的项目披露信息，同样将Vantage、VoltaGrid 以及颜巴赫发动机与甲骨文和 OpenAI \n联系在一起。INNIO 目前不再接受新兴云厂商（neocloud）的订单，而是优先考虑已锁定超大规模云\n厂商长期承购协议的买方，这些协议的期限通常长达 15 年。",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0075",
+          "kind": "paragraph",
+          "text": "INNIO 的目标是在 2026 年实现约 4.5 吉瓦的集团交付量，这意味着第四季度交付量为",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0076",
+          "kind": "paragraph",
+          "text": "1.5 吉瓦（第三季度为 1.2 吉瓦）。2027 至 2028 年，VoltaGrid 新增的 1.5 吉瓦、Liberty 的\n450 兆瓦（MW）以及 Aggreko 至少 450 兆瓦的承诺，为产能爬坡提供了明确指名的需求支撑。然\n而，公开披露的交付截止日期并未提供逐年发货时间表，因此现有公开信息尚不足以将这些承诺精确分\n配到 2027 年与 2028 年之间。某未披露名称开发商的 620 兆瓦追加订单虽于 10 月公布，但已被",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0077",
+          "kind": "paragraph",
+          "text": "8 / 16",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0078",
+          "kind": "paragraph",
+          "text": "计入 9 月的订单预订量中，因此不应算作第四季度的新增订单。",
+          "page": 9
+        },
+        {
+          "unit_id": "unit:0079",
+          "kind": "paragraph",
+          "text": "管理层公布的设备在手订单与预留排产配额约为 19 吉瓦，预留排期已延伸至 2029 至2031 年。部\n分预留配额预计将在未来 6 至 18 个月内转化为确定性订单，而随着产能爬坡，还可能释放更多排产\n配额。",
+          "page": 9
+        },
+        {
+          "unit_id": "unit:0080",
+          "kind": "heading",
+          "text": "往复式内燃机基础常识",
+          "page": 9
+        },
+        {
+          "unit_id": "unit:0081",
+          "kind": "paragraph",
+          "text": "燃气往复式发动机通过燃烧天然气并利用活塞做功来发电，其原理与汽油汽车发动机非常相似。燃料燃\n烧推动气缸内的活塞往复运动，进而带动与发电机相连的曲轴旋转。“往复”指的正是这种来回的直线\n运动。",
+          "page": 9
+        },
+        {
+          "unit_id": "unit:0082",
+          "kind": "paragraph",
+          "text": "发动机与发电机共同构成发电机组（genset）。多台发电机组可并联运行以供应更大负荷。随着园区\n规模扩大，开发商可以逐步增设机组，并可在其余机组继续运行的同时将单台设备停机维护。",
+          "page": 9
+        },
+        {
+          "unit_id": "unit:0083",
+          "kind": "paragraph",
+          "text": "与燃气轮机相比，往复式发动机的主要差异体现在单机容量、运行灵活性和电站经济性上。它们通常提\n供较小单元的电力容量，便于开发商随着园区需求增长逐步扩容。",
+          "page": 9
+        },
+        {
+          "unit_id": "unit:0084",
+          "kind": "paragraph",
+          "text": "运营商可以单独启停单台发动机并独立进行维护。相应的代价在于，在既定电站规模下，所需设备数量\n更多，维护频次也更高。",
+          "page": 9
+        },
+        {
+          "unit_id": "unit:0085",
+          "kind": "paragraph",
+          "text": "燃气轮机通常提供单机容量更大的电力单元，从而减少大型园区所需的机组数量。简单循环燃机直接通\n过涡轮发电，而联合循环电站则回收排烟废热，通过蒸汽轮机产生额外电力。联合循环电站具备更高的\n满载效率，但需要更多设备并增加工程建设量。",
+          "page": 9
+        },
+        {
+          "unit_id": "unit:0086",
+          "kind": "paragraph",
+          "text": "成套航改型燃气轮机的部署速度更快，在表后（BTM）项目中与往复式发动机直接竞争。",
+          "page": 9
+        },
+        {
+          "unit_id": "unit:0087",
+          "kind": "paragraph",
+          "text": "对 AI 数据中心而言，往复式发动机可能更适合分期部署和应对动态变化的负荷，而当开发商需要大容\n量的持续电力时，燃气轮机则更具吸引力。这种选择最终取决于设备交付周期与可获得性、冗余要求以\n及全生命周期成本。",
+          "page": 9
+        },
+        {
+          "unit_id": "unit:0088",
+          "kind": "heading",
+          "text": "图：往复式发动机与简单循环燃气轮机发电原理",
+          "page": 9
+        },
+        {
+          "unit_id": "unit:0089",
+          "kind": "heading",
+          "text": "来源：公司官网",
+          "page": 9
+        },
+        {
+          "unit_id": "unit:0090",
+          "kind": "heading",
+          "text": "图：表后（BTM）发电技术——规模、交付周期、效率与成本",
+          "page": 9
+        },
+        {
+          "unit_id": "unit:0091",
+          "kind": "paragraph",
+          "text": "9 / 16",
+          "page": 9
+        },
+        {
+          "unit_id": "unit:0092",
+          "kind": "heading",
+          "text": "数据来源：FUNDA 测算与分析",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0093",
+          "kind": "heading",
+          "text": "集装箱化发电机组",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0094",
+          "kind": "paragraph",
+          "text": "集装箱化是指在交付前，将发电机组及其配套设备整体封装在定制的专用箱体内。视具体配置而定，整\n套集成单元可能包含控制系统、通风系统、冷却管路接口、排气装置以及降噪防护设施。部分辅助系统\n则依然置于箱体外部。",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0095",
+          "kind": "paragraph",
+          "text": "其主要优势在于减少了现场组装工作量，并使安装流程更具可复制性。项目开发商可以先部署首批模块\n，随后随着园区后续各期的投入使用逐步追加。集装箱化改变的是设备的集成封装与安装方式，并未改\n变底层的发动机技术。",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0096",
+          "kind": "paragraph",
+          "text": "每个模块仍需要地基基础、燃料管道连接、线缆敷设以及系统调试。多个模块通过开关柜与变压器并联\n，共同构成完整的发电厂。集装箱化发电机组只是电厂的一个基本构件，其本身并不构成一套独立的完\n整电力解决方案。",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0097",
+          "kind": "heading",
+          "text": "图：集装箱化发电机组的组件构成与功能",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0098",
+          "kind": "paragraph",
+          "text": "10 / 16",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0099",
+          "kind": "heading",
+          "text": "资料来源：公司官网",
+          "page": 11
+        },
+        {
+          "unit_id": "unit:0100",
+          "kind": "heading",
+          "text": "图：集装箱式 INNIO 6 型发动机及辅助系统",
+          "page": 11
+        },
+        {
+          "unit_id": "unit:0101",
+          "kind": "heading",
+          "text": "来源：公司官网",
+          "page": 11
+        },
+        {
+          "unit_id": "unit:0102",
+          "kind": "heading",
+          "text": "竞争格局",
+          "page": 11
+        },
+        {
+          "unit_id": "unit:0103",
+          "kind": "paragraph",
+          "text": "INNIO 的竞争对手是成熟的发动机制造商，而非分散的新进入者。在模块化燃气发电领域，其最直接\n的竞争对手包括 Caterpillar、Cummins 以及 Rolls­Royce mtu。面对规模更大的园区项目时，它还\n会与 Wärtsilä 和 Everllence 展开竞争，后两者的单机输出功率更高。竞争越来越取决于电站架构与\n执行能力：容量增量颗粒度、冗余度、交付排期以及运维支持，都会影响供应商的选择。",
+          "page": 11
+        },
+        {
+          "unit_id": "unit:0104",
+          "kind": "paragraph",
+          "text": "INNIO 单机约 4.5MW 的 J624 机型介于较小功率发电机组与 Wärtsilä 的大功率发动机之间。较小\n单机容量允许以更精细的步长扩充容量，并在单台发动机不可用时减少损失的发电功率，但在既定电站\n规模下需要更多的机组数量。较大单机发动机能够减少机组数量，但每次停机或检修影响的装机容量也\n更大。此外，不同制造商提供的系统集成度也存在差异。设备既可以作为单台发电机组销售，也可以作\n为集装箱式模块或更广泛的电站成套方案的一部分交付。分销商和集成商可以额外配置冷却系统、排放\n后处理装置、电气设备及现场控制系统。因此，除非供货范围完全一致，否则设备价格很难直接对比。",
+          "page": 11
+        },
+        {
+          "unit_id": "unit:0105",
+          "kind": "paragraph",
+          "text": "我们的渠道调研突出表明了 Caterpillar 在美国的经销商网络优势，以及 Jenbacher 在全球技术支持\n与燃料适应性方面的长板。客户在评估时还会考量本地技术人员覆盖率、备品备件可得性、维保安排以\n及响应时间。因此，采购决策不仅取决于发动机标称的输出功率与效率，更综合反映了整体的运营保障\n体系。",
+          "page": 11
+        },
+        {
+          "unit_id": "unit:0106",
+          "kind": "heading",
+          "text": "图：往复式发动机 OEM 对比",
+          "page": 11
+        },
+        {
+          "unit_id": "unit:0107",
+          "kind": "paragraph",
+          "text": "11 / 16",
+          "page": 11
+        },
+        {
+          "unit_id": "unit:0108",
+          "kind": "paragraph",
+          "text": "来源：公司披露资料与所提供的行业研究；FUNDA 整理。",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0109",
+          "kind": "heading",
+          "text": "图：BTM 发电成本与运行特性",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0110",
+          "kind": "paragraph",
+          "text": "资料来源：INNIO 公司演示文稿，引自彭博新能源财经（BloombergNEF）。",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0111",
+          "kind": "heading",
+          "text": "图表：我们的财务预测与彭博一致预期对比，2026–2030 预测财年（FY2026–",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0112",
+          "kind": "paragraph",
+          "text": "12 / 16",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0113",
+          "kind": "heading",
+          "text": "30E）",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0114",
+          "kind": "heading",
+          "text": "数据来源：FUNDA 测算与分析",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0115",
+          "kind": "heading",
+          "text": "估值与交易格局",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0116",
+          "kind": "paragraph",
+          "text": "INIO 当前交易于 13.8 倍远期 EV/EBITDA，较其 3 个月均值 17.5 倍低约 21%，较IPO 后的 24 倍\n估值倍数低约 43%。尽管 2026 财年三季度业绩大幅超预期并上调指引、设备在手订单接近 80 亿美\n元且数据中心订单的订单出货比（book­to­bill）达到 4倍，该股估值仍未迎来重估。在表后（BTM）\n供电服务商中，鉴于其往复式发动机与集装箱式解决方案性能优异且高度契合数据中心建设需求，\nINNIO 的价值似乎仍未被充分定价。",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0117",
+          "kind": "paragraph",
+          "text": "我们认为，这一折价反映了市场对表后供电服务商在 AI 基础设施融资层面的担忧，以及发起人（\nSponsor）禁售期即将届满的影响。管理层表示，公司对新兴云（Neocloud）客户没有重大风险敞口\n，并强调优先对接已锁定超大规模云厂商长期承购协议的客户。",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0118",
+          "kind": "paragraph",
+          "text": "我们的逆向分部估值（SOTP）分析显示，在现有存量机组服务业务收入的支撑下，传统压缩与工业业\n务隐含的 2027 预期 EBITDA 约为 5.64 亿美元。鉴于 2030 年之后的设备增长机遇以及服务业务贡\n献的持续提升，我们认为当前估值具备吸引力。不过，对传统业务的这一估值设定前提是：若数据中心\n需求放缓，公司有能力缩减相关成本。",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0119",
+          "kind": "paragraph",
+          "text": "11 月 30 日的禁售期解禁令短期交易格局变得复杂。约 6.465 亿股发起人持股（占已发行股份的\n86%，约为现有公开流通盘的 6.2 倍）将具备减持资格，不过实际减持规模仍存在不确定性。潜在的\n筹码供应可能会在盈利增长的同时压制估值倍数。2026 财年四季度的潜在催化剂包括：交付放量提速\n、2027 财年业绩指引、产能目标的进一步上调、毛利率表现，以及产能排期预留转化为正式订单的情\n况。INNIO 目前尚未公开其 1.7GW 数据中心订单背后的超大规模云厂商客户。我们的渠道调研显示\n出健康的项目储备；后续新客户的公布以及对服务业务预期的上调，均有望支撑估值重估。",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0120",
+          "kind": "heading",
+          "text": "图：同业估值对比",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0121",
+          "kind": "paragraph",
+          "text": "13 / 16",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0122",
+          "kind": "paragraph",
+          "text": "来源：彭博",
+          "page": 14
+        },
+        {
+          "unit_id": "unit:0123",
+          "kind": "paragraph",
+          "text": "图：INNIO 远期 EV/EBITDA",
+          "page": 14
+        },
+        {
+          "unit_id": "unit:0124",
+          "kind": "paragraph",
+          "text": "来源：彭博",
+          "page": 14
+        },
+        {
+          "unit_id": "unit:0125",
+          "kind": "paragraph",
+          "text": "图：逆向分部估值（Reverse SOTP）——隐含数据中心估值，2027 财年预期",
+          "page": 14
+        },
+        {
+          "unit_id": "unit:0126",
+          "kind": "paragraph",
+          "text": "14 / 16",
+          "page": 14
+        },
+        {
+          "unit_id": "unit:0127",
+          "kind": "heading",
+          "text": "来源：FUNDA 预测与反向分部加总（SOTP）测算",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0128",
+          "kind": "heading",
+          "text": "分析师独立性声明",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0129",
+          "kind": "paragraph",
+          "text": "本报告所表达的观点准确反映了分析师本人针对文中所讨论证券及发行人的个人独立观点。分析师过去\n、现在或未来的薪酬均未曾、现在没有、将来也不会与本报告中表达的具体建议或观点产生直接或间接\n的关联。公司恪守严格的合规流程，以确保所使用数据来源与信息的完整性、安全性及合法性。",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0130",
+          "kind": "heading",
+          "text": "关于 FUNDA",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0131",
+          "kind": "paragraph",
+          "text": "Consensus AI Technology Pte. Ltd.（以下简称“本公司”或“FUNDA”）是一家注册成立于新加\n坡的独立研究机构。本公司不隶属于任何证券交易商、投资银行或资产管理机构，亦未在任何司法管辖\n区注册为投资顾问或经纪交易商。本公司与本报告所覆盖的公司不存在任何投资银行或承销业务关系，\n且不接受任何上市公司的赞助或资金支持。",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0132",
+          "kind": "heading",
+          "text": "非投资建议与报告中立性声明",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0133",
+          "kind": "paragraph",
+          "text": "本报告内容及文中所含信息仅供参考，不构成投资建议或商业决策依据。文中所表达的观点仅代表各作\n者在特定时点的个人意见，并不代表 FUNDA 的立场。作为独立运营的平台，FUNDA 保持中立的第\n三方地位，不对上述观点的准确性、完整性或适用性作出任何明示或暗示的保证。",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0134",
+          "kind": "heading",
+          "text": "不构成要约或招揽：本报告不构成买入、卖出或持有任何证券或金融工具的要约、招",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0135",
+          "kind": "paragraph",
+          "text": "揽、推荐或建议，亦不提供任何法律、税务或会计建议。",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0136",
+          "kind": "paragraph",
+          "text": "第三方数据：本报告引用的所有第三方数据均来自公开或获授权的渠道。本公司对其准确性或完整性不\n作任何明示或暗示的陈述或保证。",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0137",
+          "kind": "paragraph",
+          "text": "不参与决策：本公司不直接或间接参与客户或读者的投资决策过程。读者应根据自身的投资目标和财务\n状况独立做出投资决策，并在执行任何交易前咨询专业财务或法律顾问。",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0138",
+          "kind": "heading",
+          "text": "时效性声明",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0139",
+          "kind": "paragraph",
+          "text": "鉴于市场环境与技术趋势的快速变化，本报告反映的是截至发布日前一天的市场状况。相关信息可能会\n随时间推移而失效。FUNDA 无义务实时更新本报告的内容。",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0140",
+          "kind": "heading",
+          "text": "知识产权、保密性及商业用途限制",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0141",
+          "kind": "paragraph",
+          "text": "本公司提供的所有报告、数据、模型和内容均构成其专有知识产权，并受版权及知识产权法律保护。",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0142",
+          "kind": "heading",
+          "text": "权利归属：除书面协议另有明确约定外，因本报告产生或与本报告相关的所有知识产",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0143",
+          "kind": "paragraph",
+          "text": "权（包括版权）均由本公司独家所有。",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0144",
+          "kind": "heading",
+          "text": "授权使用：机构客户可在其内部合规政策允许的范围内在内部使用本报告；但严禁向",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0145",
+          "kind": "paragraph",
+          "text": "任何第三方披露或分享。",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0146",
+          "kind": "heading",
+          "text": "禁止商业用途：未经本公司事先明确书面许可，任何个人或实体均不得以任何商业或",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0147",
+          "kind": "paragraph",
+          "text": "营利目的复制、重新发布、分发、转售、重新打包或以其他方式使用本报告或其任何部分。",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0148",
+          "kind": "heading",
+          "text": "法律追索权：针对任何未经授权的商业使用、重新分发或对其知识产权的侵权行为，",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0149",
+          "kind": "paragraph",
+          "text": "15 / 16",
+          "page": 15
+        },
+        {
+          "unit_id": "unit:0150",
+          "kind": "paragraph",
+          "text": "本公司保留采取一切可用法律救济与索赔手段的权利。",
+          "page": 16
+        },
+        {
+          "unit_id": "unit:0151",
+          "kind": "heading",
+          "text": "前瞻性陈述与免责声明",
+          "page": 16
+        },
+        {
+          "unit_id": "unit:0152",
+          "kind": "paragraph",
+          "text": "本报告可能包含前瞻性陈述，包括预测、估计和行业趋势分析。此类陈述受风险和不确定性影响，可能\n导致实际结果与预期存在重大差异。因使用或依赖本报告内容而导致的任何直接、间接或连带损失，本\n公司概不承担任何责任。",
+          "page": 16
+        },
+        {
+          "unit_id": "unit:0153",
+          "kind": "paragraph",
+          "text": "16 / 16",
+          "page": 16
+        },
+        {
+          "unit_id": "unit:0154",
+          "kind": "paragraph",
+          "text": "Customer",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0155",
+          "kind": "paragraph",
+          "text": "Cumulative",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0156",
+          "kind": "paragraph",
+          "text": "Other",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0157",
+          "kind": "paragraph",
+          "text": "Delivery",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0158",
+          "kind": "paragraph",
+          "text": "Downstream",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0159",
+          "kind": "paragraph",
+          "text": "Status /",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0160",
+          "kind": "paragraph",
+          "text": "orders (MW)",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0161",
+          "kind": "paragraph",
+          "text": "commitments",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0162",
+          "kind": "paragraph",
+          "text": "window",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0163",
+          "kind": "paragraph",
+          "text": "demand",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0164",
+          "kind": "paragraph",
+          "text": "interpretation",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0165",
+          "kind": "paragraph",
+          "text": "(MW)",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0166",
+          "kind": "paragraph",
+          "text": "VoltaGrid",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0167",
+          "kind": "paragraph",
+          "text": "3,800",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0168",
+          "kind": "paragraph",
+          "text": "Follow-on by 2028",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0169",
+          "kind": "paragraph",
+          "text": "3 Oracle / Vantage",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0170",
+          "kind": "paragraph",
+          "text": "3.8 GW",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0171",
+          "kind": "paragraph",
+          "text": "cumulative",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0172",
+          "kind": "paragraph",
+          "text": "purchases, not",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0173",
+          "kind": "paragraph",
+          "text": "remaining",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0174",
+          "kind": "paragraph",
+          "text": "backlog.",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0175",
+          "kind": "paragraph",
+          "text": "Customer",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0176",
+          "kind": "paragraph",
+          "text": "relationships may",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0177",
+          "kind": "paragraph",
+          "text": "overlap; no full",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0178",
+          "kind": "paragraph",
+          "text": "site allocation.",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0179",
+          "kind": "paragraph",
+          "text": "Undisclosed",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0180",
+          "kind": "paragraph",
+          "text": "1,720",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0181",
+          "kind": "paragraph",
+          "text": "Phased; end date",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0182",
+          "kind": "paragraph",
+          "text": "Undisclosed",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0183",
+          "kind": "paragraph",
+          "text": "1.1 GW booked Q2;",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0184",
+          "kind": "paragraph",
+          "text": "developer",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0185",
+          "kind": "paragraph",
+          "text": "n.d.",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0186",
+          "kind": "paragraph",
+          "text": "620 MW booked",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0187",
+          "kind": "paragraph",
+          "text": "September, not",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0188",
+          "kind": "paragraph",
+          "text": "Q4. First",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0189",
+          "kind": "paragraph",
+          "text": "500 MW has",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0190",
+          "kind": "paragraph",
+          "text": "full maintenance",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0191",
+          "kind": "paragraph",
+          "text": "coverage.",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0192",
+          "kind": "paragraph",
+          "text": "Liberty Energy",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0193",
+          "kind": "paragraph",
+          "text": "450",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0194",
+          "kind": "paragraph",
+          "text": "By 2028",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0195",
+          "kind": "paragraph",
+          "text": "North American",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0196",
+          "kind": "paragraph",
+          "text": "Firm order booked",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0197",
+          "kind": "paragraph",
+          "text": "DCs",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0198",
+          "kind": "paragraph",
+          "text": "Q3. End sites",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0199",
+          "kind": "paragraph",
+          "text": "and annual",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0200",
+          "kind": "paragraph",
+          "text": "shipment phasing",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0201",
+          "kind": "paragraph",
+          "text": "undisclosed.",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0202",
+          "kind": "paragraph",
+          "text": "Rehlko",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0203",
+          "kind": "paragraph",
+          "text": "1,250",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0204",
+          "kind": "paragraph",
+          "text": "3 years from",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0205",
+          "kind": "paragraph",
+          "text": "DC / flexible power",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0206",
+          "kind": "paragraph",
+          "text": "1.25 GW includes",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0207",
+          "kind": "paragraph",
+          "text": "Apr-2026",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0208",
+          "kind": "paragraph",
+          "text": "existing 700 MW",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0209",
+          "kind": "paragraph",
+          "text": "reservation. Global",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0210",
+          "kind": "paragraph",
+          "text": "framework, not all",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0211",
+          "kind": "paragraph",
+          "text": "firm orders.",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0212",
+          "kind": "paragraph",
+          "text": "Aggreko",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0213",
+          "kind": "paragraph",
+          "text": "450",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0214",
+          "kind": "paragraph",
+          "text": "Minimum by",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0215",
+          "kind": "paragraph",
+          "text": "Global rental /",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0216",
+          "kind": "paragraph",
+          "text": "450 MW to be",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0217",
+          "kind": "paragraph",
+          "text": "end-2027",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0218",
+          "kind": "paragraph",
+          "text": "power",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0219",
+          "kind": "paragraph",
+          "text": "ordered and",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0220",
+          "kind": "paragraph",
+          "text": "delivered;",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0221",
+          "kind": "paragraph",
+          "text": "partnership",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0222",
+          "kind": "paragraph",
+          "text": "through 2031. Not",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0223",
+          "kind": "paragraph",
+          "text": "DC-exclusive.",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0224",
+          "kind": "paragraph",
+          "text": "8 / 16",
+          "page": 8
+        },
+        {
+          "unit_id": "unit:0225",
+          "kind": "paragraph",
+          "text": "Type",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0226",
+          "kind": "paragraph",
+          "text": "In plain terms",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0227",
+          "kind": "paragraph",
+          "text": "Unit size",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0228",
+          "kind": "paragraph",
+          "text": "Time-to-power",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0229",
+          "kind": "paragraph",
+          "text": "Efficiency",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0230",
+          "kind": "paragraph",
+          "text": "Cost ($/kW)",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0231",
+          "kind": "paragraph",
+          "text": "Gas RICE",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0232",
+          "kind": "paragraph",
+          "text": "A large gas piston",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0233",
+          "kind": "paragraph",
+          "text": "~2-20mw/unit",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0234",
+          "kind": "paragraph",
+          "text": "~1-2 years",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0235",
+          "kind": "paragraph",
+          "text": "~40-50%",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0236",
+          "kind": "paragraph",
+          "text": "~$650-900",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0237",
+          "kind": "paragraph",
+          "text": "engine driving a",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0238",
+          "kind": "paragraph",
+          "text": "generator",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0239",
+          "kind": "paragraph",
+          "text": "Aeroderivative",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0240",
+          "kind": "paragraph",
+          "text": "A jet engine",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0241",
+          "kind": "paragraph",
+          "text": "~20-100 MW/unit",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0242",
+          "kind": "paragraph",
+          "text": "~2-3 years",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0243",
+          "kind": "paragraph",
+          "text": "~35-42%",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0244",
+          "kind": "paragraph",
+          "text": "~$800-1,200",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0245",
+          "kind": "paragraph",
+          "text": "turbine",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0246",
+          "kind": "paragraph",
+          "text": "repurposed to",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0247",
+          "kind": "paragraph",
+          "text": "generate",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0248",
+          "kind": "paragraph",
+          "text": "Heavy-duty",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0249",
+          "kind": "paragraph",
+          "text": "A conventional",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0250",
+          "kind": "paragraph",
+          "text": "~100-500+",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0251",
+          "kind": "paragraph",
+          "text": "~4 years+",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0252",
+          "kind": "paragraph",
+          "text": "~40-44%",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0253",
+          "kind": "paragraph",
+          "text": "~$600-900",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0254",
+          "kind": "paragraph",
+          "text": "turbine",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0255",
+          "kind": "paragraph",
+          "text": "power-plant",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0256",
+          "kind": "paragraph",
+          "text": "MW/unit",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0257",
+          "kind": "paragraph",
+          "text": "turbine",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0258",
+          "kind": "paragraph",
+          "text": "CCGT",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0259",
+          "kind": "paragraph",
+          "text": "A turbine plus",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0260",
+          "kind": "paragraph",
+          "text": "~300-1,300+",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0261",
+          "kind": "paragraph",
+          "text": "~4-5 years+",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0262",
+          "kind": "paragraph",
+          "text": "~55-65%+",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0263",
+          "kind": "paragraph",
+          "text": "~$1,000-1,300",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0264",
+          "kind": "paragraph",
+          "text": "reuse of its waste",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0265",
+          "kind": "paragraph",
+          "text": "MW/block",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0266",
+          "kind": "paragraph",
+          "text": "heat",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0267",
+          "kind": "paragraph",
+          "text": "SOFC",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0268",
+          "kind": "paragraph",
+          "text": "Gas with no flame;",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0269",
+          "kind": "paragraph",
+          "text": "~0.3 MW/module,",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0270",
+          "kind": "paragraph",
+          "text": "Small ~3 mo; large ~50-65%",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0271",
+          "kind": "paragraph",
+          "text": "~$3,000-4,000",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0272",
+          "kind": "paragraph",
+          "text": "electrochemistry",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0273",
+          "kind": "paragraph",
+          "text": "stackable",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0274",
+          "kind": "paragraph",
+          "text": "longer",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0275",
+          "kind": "paragraph",
+          "text": "makes electricity",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0276",
+          "kind": "paragraph",
+          "text": "Component",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0277",
+          "kind": "paragraph",
+          "text": "Function",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0278",
+          "kind": "paragraph",
+          "text": "Gas engine",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0279",
+          "kind": "paragraph",
+          "text": "Burns gaseous fuel and converts combustion into mechanical",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0280",
+          "kind": "paragraph",
+          "text": "power",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0281",
+          "kind": "paragraph",
+          "text": "Alternator",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0282",
+          "kind": "paragraph",
+          "text": "Converts the engine's mechanical output into electricity",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0283",
+          "kind": "paragraph",
+          "text": "Switchgear room",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0284",
+          "kind": "paragraph",
+          "text": "Houses equipment used to control, protect and connect the",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0285",
+          "kind": "paragraph",
+          "text": "electrical output",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0286",
+          "kind": "paragraph",
+          "text": "Radiator",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0287",
+          "kind": "paragraph",
+          "text": "Rejects heat from the engine's cooling circuits",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0288",
+          "kind": "paragraph",
+          "text": "Ventilation system / air outlet",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0289",
+          "kind": "paragraph",
+          "text": "Moves air through the enclosure to manage temperature",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0290",
+          "kind": "paragraph",
+          "text": "Silencer and SCR",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0291",
+          "kind": "paragraph",
+          "text": "Reduce exhaust noise and nitrogen-oxide emissions,",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0292",
+          "kind": "paragraph",
+          "text": "respectively",
+          "page": 10
+        },
+        {
+          "unit_id": "unit:0293",
+          "kind": "paragraph",
+          "text": "INNIO",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0294",
+          "kind": "paragraph",
+          "text": "Caterpillar",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0295",
+          "kind": "paragraph",
+          "text": "Cummins",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0296",
+          "kind": "paragraph",
+          "text": "Wärtsilä",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0297",
+          "kind": "paragraph",
+          "text": "Products /unit size",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0298",
+          "kind": "paragraph",
+          "text": "Type 6: ~2-4.5 MW",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0299",
+          "kind": "paragraph",
+          "text": "Selected gas",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0300",
+          "kind": "paragraph",
+          "text": "HSK78G: ~1.6-2 MW-",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0301",
+          "kind": "paragraph",
+          "text": "34SG/50SG: ~6-19",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0302",
+          "kind": "paragraph",
+          "text": "platforms: ~1.5-4.3",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0303",
+          "kind": "paragraph",
+          "text": "; planned platform ≤4",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0304",
+          "kind": "paragraph",
+          "text": "MW",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0305",
+          "kind": "paragraph",
+          "text": "MW",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0306",
+          "kind": "paragraph",
+          "text": "MW",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0307",
+          "kind": "paragraph",
+          "text": "Electrical efficiency",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0308",
+          "kind": "paragraph",
+          "text": "J624: ~46.8-47.1%",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0309",
+          "kind": "paragraph",
+          "text": "~44-46%",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0310",
+          "kind": "paragraph",
+          "text": "~43.5-44.3%",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0311",
+          "kind": "paragraph",
+          "text": "~48-50%",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0312",
+          "kind": "paragraph",
+          "text": "Capacity /",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0313",
+          "kind": "paragraph",
+          "text": "3.5 GW/year in 2025",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0314",
+          "kind": "paragraph",
+          "text": "Target ~3×",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0315",
+          "kind": "paragraph",
+          "text": "Supplied research: ~35",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0316",
+          "kind": "paragraph",
+          "text": "Target ~2.2× 2025",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0317",
+          "kind": "paragraph",
+          "text": "expansion",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0318",
+          "kind": "paragraph",
+          "text": "→ >10 GW by 2030",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0319",
+          "kind": "paragraph",
+          "text": "2024 large-engine",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0320",
+          "kind": "paragraph",
+          "text": "→ 55 GW/year by",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0321",
+          "kind": "paragraph",
+          "text": "operating output by",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0322",
+          "kind": "paragraph",
+          "text": "capacity; absolute",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0323",
+          "kind": "paragraph",
+          "text": "20303",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0324",
+          "kind": "paragraph",
+          "text": "1Q29",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0325",
+          "kind": "paragraph",
+          "text": "GW unavailable",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0326",
+          "kind": "paragraph",
+          "text": "AIDC traction",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0327",
+          "kind": "paragraph",
+          "text": "VoltaGrid 2.3 +",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0328",
+          "kind": "paragraph",
+          "text": "PROPWR: 1.5 GW",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0329",
+          "kind": "paragraph",
+          "text": "Circe deliveries",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0330",
+          "kind": "paragraph",
+          "text": "US projects include",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0331",
+          "kind": "paragraph",
+          "text": "1.5 GW; separate",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0332",
+          "kind": "paragraph",
+          "text": "commitment + 600",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0333",
+          "kind": "paragraph",
+          "text": "2026-30; new",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0334",
+          "kind": "paragraph",
+          "text": "429 MW and 790 MW",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0335",
+          "kind": "paragraph",
+          "text": "customer 1.72 GW",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0336",
+          "kind": "paragraph",
+          "text": "MW option",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0337",
+          "kind": "paragraph",
+          "text": "platform targeted for",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0338",
+          "kind": "paragraph",
+          "text": "2028",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0339",
+          "kind": "paragraph",
+          "text": "Equipment pricing",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0340",
+          "kind": "paragraph",
+          "text": "~$650/kW 3Q26",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0341",
+          "kind": "paragraph",
+          "text": "Comparable ASP",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0342",
+          "kind": "paragraph",
+          "text": "Comparable ASP",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0343",
+          "kind": "paragraph",
+          "text": "Comparable ASP",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0344",
+          "kind": "paragraph",
+          "text": "group revenue proxy;",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0345",
+          "kind": "paragraph",
+          "text": "unavailable",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0346",
+          "kind": "paragraph",
+          "text": "unavailable",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0347",
+          "kind": "paragraph",
+          "text": "unavailable",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0348",
+          "kind": "paragraph",
+          "text": "DC ASP undisclosed",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0349",
+          "kind": "paragraph",
+          "text": "Competitive",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0350",
+          "kind": "paragraph",
+          "text": "Gas-prime experience,",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0351",
+          "kind": "paragraph",
+          "text": "Dealer coverage and",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0352",
+          "kind": "paragraph",
+          "text": "Integrated systems;",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0353",
+          "kind": "paragraph",
+          "text": "Larger blocks and",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0354",
+          "kind": "paragraph",
+          "text": "position",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0355",
+          "kind": "paragraph",
+          "text": "modular packaging",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0356",
+          "kind": "paragraph",
+          "text": "customer access",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0357",
+          "kind": "paragraph",
+          "text": "expanding gas-prime",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0358",
+          "kind": "paragraph",
+          "text": "power-plant expertise",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0359",
+          "kind": "paragraph",
+          "text": "and lifecycle service",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0360",
+          "kind": "paragraph",
+          "text": "portfolio",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0361",
+          "kind": "paragraph",
+          "text": "Levelized cost of electricity (LCOE) comparison1",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0362",
+          "kind": "paragraph",
+          "text": "BTM solutions ($ per MWh)",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0363",
+          "kind": "paragraph",
+          "text": "Grid costs ($ per MWh)",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0364",
+          "kind": "paragraph",
+          "text": "BloombergNEF1",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0365",
+          "kind": "paragraph",
+          "text": "140",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0366",
+          "kind": "paragraph",
+          "text": "131",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0367",
+          "kind": "paragraph",
+          "text": "103",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0368",
+          "kind": "paragraph",
+          "text": "106",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0369",
+          "kind": "paragraph",
+          "text": "109",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0370",
+          "kind": "paragraph",
+          "text": "I",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0371",
+          "kind": "paragraph",
+          "text": "110",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0372",
+          "kind": "paragraph",
+          "text": "85",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0373",
+          "kind": "paragraph",
+          "text": "72",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0374",
+          "kind": "paragraph",
+          "text": "76",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0375",
+          "kind": "paragraph",
+          "text": "H",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0376",
+          "kind": "paragraph",
+          "text": "63",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0377",
+          "kind": "paragraph",
+          "text": "Operational cost of BTM gas engine",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0378",
+          "kind": "paragraph",
+          "text": "setup per BloombergNEF",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0379",
+          "kind": "paragraph",
+          "text": "Gas Engine",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0380",
+          "kind": "paragraph",
+          "text": "Simple Cycle",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0381",
+          "kind": "paragraph",
+          "text": "Combined",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0382",
+          "kind": "paragraph",
+          "text": "Fuel Cell",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0383",
+          "kind": "paragraph",
+          "text": "Texas",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0384",
+          "kind": "paragraph",
+          "text": "Ohio",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0385",
+          "kind": "paragraph",
+          "text": "Pennsylvania",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0386",
+          "kind": "paragraph",
+          "text": "Turbine",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0387",
+          "kind": "paragraph",
+          "text": "Cycle Turbine",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0388",
+          "kind": "paragraph",
+          "text": "Transient perf.",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0389",
+          "kind": "paragraph",
+          "text": "W/o",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0390",
+          "kind": "paragraph",
+          "text": "X",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0391",
+          "kind": "paragraph",
+          "text": "X",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0392",
+          "kind": "paragraph",
+          "text": "subsystems",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0393",
+          "kind": "paragraph",
+          "text": "Modular",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0394",
+          "kind": "paragraph",
+          "text": "x",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0395",
+          "kind": "paragraph",
+          "text": "deployment",
+          "page": 12
+        },
+        {
+          "unit_id": "unit:0396",
+          "kind": "paragraph",
+          "text": "Metric",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0397",
+          "kind": "paragraph",
+          "text": "2026E",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0398",
+          "kind": "paragraph",
+          "text": "2027E",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0399",
+          "kind": "paragraph",
+          "text": "2028E",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0400",
+          "kind": "paragraph",
+          "text": "2029E",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0401",
+          "kind": "paragraph",
+          "text": "2030E",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0402",
+          "kind": "paragraph",
+          "text": "Highlights",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0403",
+          "kind": "paragraph",
+          "text": "Adj.EPS FUNDA",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0404",
+          "kind": "paragraph",
+          "text": "0.42",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0405",
+          "kind": "paragraph",
+          "text": "0.93",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0406",
+          "kind": "paragraph",
+          "text": "1.13",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0407",
+          "kind": "paragraph",
+          "text": "1.33",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0408",
+          "kind": "paragraph",
+          "text": "1.49",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0409",
+          "kind": "paragraph",
+          "text": "Adj. EPS BBG",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0410",
+          "kind": "paragraph",
+          "text": "0.35",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0411",
+          "kind": "paragraph",
+          "text": "0.80",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0412",
+          "kind": "paragraph",
+          "text": "1.05",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0413",
+          "kind": "paragraph",
+          "text": "1.35",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0414",
+          "kind": "paragraph",
+          "text": "1.59",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0415",
+          "kind": "paragraph",
+          "text": "Delta %",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0416",
+          "kind": "paragraph",
+          "text": "17.5%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0417",
+          "kind": "paragraph",
+          "text": "16.1%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0418",
+          "kind": "paragraph",
+          "text": "7.9%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0419",
+          "kind": "paragraph",
+          "text": "-1.5%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0420",
+          "kind": "paragraph",
+          "text": "-6.5%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0421",
+          "kind": "paragraph",
+          "text": "Revenue FUNDA",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0422",
+          "kind": "paragraph",
+          "text": "4,190.3",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0423",
+          "kind": "paragraph",
+          "text": "6,091.5",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0424",
+          "kind": "paragraph",
+          "text": "7,263.2",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0425",
+          "kind": "paragraph",
+          "text": "8,279.5",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0426",
+          "kind": "paragraph",
+          "text": "9,140.9",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0427",
+          "kind": "paragraph",
+          "text": "Revenue BBG",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0428",
+          "kind": "paragraph",
+          "text": "3,894.7",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0429",
+          "kind": "paragraph",
+          "text": "5,198.5",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0430",
+          "kind": "paragraph",
+          "text": "6,058.3",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0431",
+          "kind": "paragraph",
+          "text": "7,180.8",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0432",
+          "kind": "paragraph",
+          "text": "8,197.6",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0433",
+          "kind": "paragraph",
+          "text": "Delta %",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0434",
+          "kind": "paragraph",
+          "text": "7.6%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0435",
+          "kind": "paragraph",
+          "text": "17.2%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0436",
+          "kind": "paragraph",
+          "text": "19.9%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0437",
+          "kind": "paragraph",
+          "text": "15.3%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0438",
+          "kind": "paragraph",
+          "text": "11.5%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0439",
+          "kind": "paragraph",
+          "text": "Segment Revenue",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0440",
+          "kind": "paragraph",
+          "text": "Equipment est",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0441",
+          "kind": "paragraph",
+          "text": "2,725.2",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0442",
+          "kind": "paragraph",
+          "text": "4,501.3",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0443",
+          "kind": "paragraph",
+          "text": "5,525.6",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0444",
+          "kind": "paragraph",
+          "text": "6,372.2",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0445",
+          "kind": "paragraph",
+          "text": "7,023.9",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0446",
+          "kind": "paragraph",
+          "text": "Equipment BBG",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0447",
+          "kind": "paragraph",
+          "text": "2,472.2",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0448",
+          "kind": "paragraph",
+          "text": "3,609.9",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0449",
+          "kind": "paragraph",
+          "text": "4,400.2",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0450",
+          "kind": "paragraph",
+          "text": "5,226.5",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0451",
+          "kind": "paragraph",
+          "text": "5,971.3",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0452",
+          "kind": "paragraph",
+          "text": "Delta %",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0453",
+          "kind": "paragraph",
+          "text": "10.2%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0454",
+          "kind": "paragraph",
+          "text": "24.7%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0455",
+          "kind": "paragraph",
+          "text": "25.6%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0456",
+          "kind": "paragraph",
+          "text": "21.9%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0457",
+          "kind": "paragraph",
+          "text": "17.6%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0458",
+          "kind": "paragraph",
+          "text": "Service est",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0459",
+          "kind": "paragraph",
+          "text": "1,465.1",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0460",
+          "kind": "paragraph",
+          "text": "1,590.3",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0461",
+          "kind": "paragraph",
+          "text": "1,737.6",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0462",
+          "kind": "paragraph",
+          "text": "1,907.3",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0463",
+          "kind": "paragraph",
+          "text": "2,117.0",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0464",
+          "kind": "paragraph",
+          "text": "Service BBG",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0465",
+          "kind": "paragraph",
+          "text": "1,453.8",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0466",
+          "kind": "paragraph",
+          "text": "1,514.6",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0467",
+          "kind": "paragraph",
+          "text": "1,645.2",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0468",
+          "kind": "paragraph",
+          "text": "1,821.4",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0469",
+          "kind": "paragraph",
+          "text": "2,046.1",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0470",
+          "kind": "paragraph",
+          "text": "Delta %",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0471",
+          "kind": "paragraph",
+          "text": "0.8%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0472",
+          "kind": "paragraph",
+          "text": "5.0%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0473",
+          "kind": "paragraph",
+          "text": "5.6%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0474",
+          "kind": "paragraph",
+          "text": "4.7%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0475",
+          "kind": "paragraph",
+          "text": "3.5%",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0476",
+          "kind": "paragraph",
+          "text": "Adjusted EBITDA",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0477",
+          "kind": "paragraph",
+          "text": "Equipment",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0478",
+          "kind": "paragraph",
+          "text": "369.5",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0479",
+          "kind": "paragraph",
+          "text": "717.0",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0480",
+          "kind": "paragraph",
+          "text": "978.0",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0481",
+          "kind": "paragraph",
+          "text": "1192.4",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0482",
+          "kind": "paragraph",
+          "text": "1359.3",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0483",
+          "kind": "paragraph",
+          "text": "Service",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0484",
+          "kind": "paragraph",
+          "text": "440.7",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0485",
+          "kind": "paragraph",
+          "text": "446.0",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0486",
+          "kind": "paragraph",
+          "text": "482.1",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0487",
+          "kind": "paragraph",
+          "text": "546.4",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0488",
+          "kind": "paragraph",
+          "text": "631.6",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0489",
+          "kind": "paragraph",
+          "text": "Service Funda",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0490",
+          "kind": "paragraph",
+          "text": "450.0",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0491",
+          "kind": "paragraph",
+          "text": "488.1",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0492",
+          "kind": "paragraph",
+          "text": "539.7",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0493",
+          "kind": "paragraph",
+          "text": "595.7",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0494",
+          "kind": "paragraph",
+          "text": "664.9",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0495",
+          "kind": "paragraph",
+          "text": "Equipment Funda",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0496",
+          "kind": "paragraph",
+          "text": "413.5",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0497",
+          "kind": "paragraph",
+          "text": "857.5",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0498",
+          "kind": "paragraph",
+          "text": "1062.4",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0499",
+          "kind": "paragraph",
+          "text": "1231.7",
+          "page": 13
+        },
+        {
+          "unit_id": "unit:0500",
+          "kind": "paragraph",
+          "text": "1362.0",
+          "page": 13
+        }
+      ]
+    }
+  }
+}

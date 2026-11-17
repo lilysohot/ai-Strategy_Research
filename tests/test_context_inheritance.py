@@ -664,15 +664,20 @@ def test_the_session_store_revision_is_wired_into_the_graph() -> None:
     carrier_migration = (
         repo_root / "server/alembic/versions/0019_session_conversations.py"
     ).read_text(encoding="utf-8")
-    head_migration = (repo_root / "server/alembic/versions/0023_capital_trade_plans.py").read_text(
-        encoding="utf-8"
-    )
+    chain_migration = (
+        repo_root / "server/alembic/versions/0023_capital_trade_plans.py"
+    ).read_text(encoding="utf-8")
 
-    assert expected_heads() == ("0024_continuous_monitoring",)
+    # Assert the shape, not a pinned revision id. The head moves with every
+    # migration, so pinning it made this test fail on unrelated schema work
+    # and covered nothing extra: a fork or a forgotten down_revision still
+    # yields two heads (or a missing one) and fails here.
+    heads = expected_heads()
+    assert len(heads) == 1, f"migration graph must have exactly one head, got {heads}"
     assert SessionConversation.__tablename__ == "session_conversations"
     assert 'down_revision = "0018_plan_capital_terms"' in carrier_migration
     assert f'"{SessionConversation.__tablename__}"' in carrier_migration
-    assert 'down_revision = "0022_run_context_sources"' in head_migration
+    assert 'down_revision = "0022_run_context_sources"' in chain_migration
 
 
 # ── writing the carrier: the parent's ingest (issue 01 §11.3) ────────

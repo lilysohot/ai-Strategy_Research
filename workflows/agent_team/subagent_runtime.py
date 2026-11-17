@@ -67,6 +67,7 @@ from frontier_agent.core.runtime.loop.tiered_compact import (
     compaction_trigger_tokens,
 )
 from frontier_agent.core.runtime.loop.tool_exec import ToolResultPostProcessor
+from frontier_agent.core.runtime.reading.stage import ReadingBudget
 from frontier_agent.state.event_store.sqlite import EventStore
 from plugins.corpus.progress import CorpusReadState
 from plugins.tools.bash import BASH_STDERR_SEPARATOR
@@ -441,6 +442,10 @@ def render_sandbox_fs_note(
 
 _THINK_BLOCK_RE = re.compile(r"<think>[\s\S]*?</think>\s*")
 _AGED_TOOL_SENTINEL = "[aged-tool:"
+
+#: Stops that forbid any further model request. Recovery text is still assembled
+#: from what exists, but no rescue call may be spent on it.
+_BUDGET_STOP_REASONS = frozenset({"budget_exhausted", "usage_unavailable"})
 _REPORT_BLOCK_RE = re.compile(r"<report\b[^>]*>[\s\S]*?</report>")
 _STITCH_MAX_CHARS = 60_000
 _TOOL_OBSERVATION_MAX_CHARS = 40_000
@@ -2103,10 +2108,24 @@ def build_swarm_session_runtime_spec(
         # Per job, not per run: the stage carries a sequence and the list of the
         # checkpoints it produced, so sharing one instance across members would
         # mix their archives.
+        # The member's own boundary, not the team's: a checkpoint that spends past
+        # it costs the report, and the report is the thing being paid for. When no
+        # phase budget exists the stage falls back to the loop's wall deadline.
+        member_deadline = _job_deadline(item)
+        reading_budget = None
+        if member_deadline is not None:
+            def _member_remaining(deadline: Any = member_deadline) -> float | None:
+                try:
+                    return float(deadline) - time.monotonic()
+                except (TypeError, ValueError):
+                    return None
+
+            reading_budget = ReadingBudget(remaining_s=_member_remaining)
         reading_stage = build_reading_stage(
             llm=runtime.sub_agent_llm,
             agent_cfg=runtime.reading_checkpoint_cfg,
             task_id=task_id,
+            budget=reading_budget,
         )
         return LoopConfig(
             max_turns=min(max_turns, 2 * len(checks) + 2) if is_verification else max_turns,
@@ -2225,6 +2244,9 @@ def build_swarm_session_runtime_spec(
         remaining = _deadline_remaining_s(job_deadline)
         if (
             raw_result.stopped_by == "llm_error"
+            # A budget stop forbids further requests, so the same no-LLM finaliser
+            # path applies: recovering the text is fine, spending a call is not.
+            or raw_result.stopped_by in _BUDGET_STOP_REASONS
             or raw_result.metadata.get("interrupted_checkpoint")
             or (remaining is not None and remaining <= 0)
             or not _has_usable_recovery_material(raw_result)

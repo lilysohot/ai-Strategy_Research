@@ -120,6 +120,7 @@ _FAILURE_CODES = (
     "checkpoint_error",
     "wait_timeout",
     "budget_exhausted",
+    "usage_unavailable",
     "timed_out",
     "timeout",
     "aborted",

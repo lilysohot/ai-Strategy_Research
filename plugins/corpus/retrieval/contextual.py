@@ -31,6 +31,12 @@ from plugins.corpus.retrieval.embedding import text_hash
 PROMPT_VERSION = "contextual-note-v1"
 #: 侧表与索引包里的上下文版本（与 PROMPT_VERSION 分开，便于同一提示词下重建）。
 CONTEXT_VERSION = "chunk-note-1"
+EXTRACTIVE_VERSION = "contextual-extract-v1"
+# Historical notes produced through the source-review lane predate extractive
+# provenance.  They remain prose notes and must keep the normal source-text
+# checks; treating every non-prompt version as extractive would make existing,
+# already published packs impossible to rebuild.
+AGENT_SOURCE_REVIEW_VERSION = "agent_source_review"
 #: 单个说明的字符上限。Anthropic 建议 50–100 token，中文按 120 字约等。
 NOTE_MAX_CHARS = 120
 #: 太短的片段（页码「3/ 8」、图表轴数字残片、图表注记）本身不表意；给它们补说明
@@ -69,10 +75,13 @@ USER_TEMPLATE = """<document>
 class ContextNoteError(RuntimeError):
     """安全错误码：不携带原文、凭据或供应商响应体。"""
 
-    def __init__(self, code: str, *, uncertain: bool = False) -> None:
+    def __init__(
+        self, code: str, *, uncertain: bool = False, transport_kind: str | None = None
+    ) -> None:
         super().__init__(code)
         self.code = code
         self.uncertain = uncertain
+        self.transport_kind = transport_kind
 
 
 def chunk_block(chunk_id: str, text: str) -> str:
@@ -141,6 +150,64 @@ def validate_note(note: str, document: str) -> None:
     missing = [word for word in _ATTRIBUTION if word in note and word not in document]
     if missing:
         raise ContextNoteError("note_attribution_not_in_source")
+
+
+def extract_note(document: str, chunk: str, headings: Sequence[str] = ()) -> tuple[str, dict]:
+    """Select complete source lines/sentences, never infer dates or repair OCR text.
+
+    Offsets address the deterministic document_text projection, not evidence handles.
+    The result is index-only context and is validated separately from generated prose.
+    """
+    candidates = [*headings, *re.split(r"(?<=[。！？!?])|\n", chunk)]
+    parts: list[str] = []
+    ranges: list[list[int]] = []
+    for candidate in candidates:
+        candidate = candidate.strip()
+        start = document.find(candidate) if candidate else -1
+        normalized = " ".join(candidate.split())
+        if start < 0 or not normalized or normalized in parts:
+            continue
+        if any(marker in normalized for marker in _MARKERS):
+            continue
+        if len(" ".join([*parts, normalized])) > NOTE_MAX_CHARS:
+            continue
+        parts.append(normalized)
+        ranges.append([start, start + len(candidate)])
+    if not parts:
+        raise ContextNoteError("extractive_context_unavailable")
+    note = " ".join(parts)
+    provenance = {
+        "method": EXTRACTIVE_VERSION,
+        "document_hash": text_hash(document),
+        "source_ranges": ranges,
+    }
+    validate_stored_note(note, document, provenance)
+    return note, provenance
+
+
+def validate_stored_note(note: str, document: str, provenance: dict) -> None:
+    """Validate each strategy with its own version; historical notes remain unchanged."""
+    method = provenance.get("method", PROMPT_VERSION)
+    if method in (PROMPT_VERSION, AGENT_SOURCE_REVIEW_VERSION):
+        validate_note(note, document)
+        return
+    if method != EXTRACTIVE_VERSION or provenance.get("document_hash") != text_hash(document):
+        raise ContextNoteError("extractive_context_invalid")
+    ranges = provenance.get("source_ranges")
+    if not isinstance(ranges, list) or not ranges or not 0 < len(note) <= NOTE_MAX_CHARS:
+        raise ContextNoteError("extractive_context_invalid")
+    parts = []
+    for span in ranges:
+        if (
+            not isinstance(span, list)
+            or len(span) != 2
+            or any(type(n) is not int for n in span)
+            or not 0 <= span[0] < span[1] <= len(document)
+        ):
+            raise ContextNoteError("extractive_context_invalid")
+        parts.append(" ".join(document[span[0] : span[1]].split()))
+    if " ".join(parts) != note or any(marker in note for marker in _MARKERS):
+        raise ContextNoteError("extractive_context_invalid")
 
 
 def parse_notes(raw: str, expected: Iterable[str]) -> dict[str, str]:
@@ -315,9 +382,11 @@ class ChatNoteGenerator:
                         headers={"Authorization": f"Bearer {cfg.api_key}"},
                         json=payload,
                     )
-            except httpx.HTTPError:
+            except httpx.HTTPError as exc:
                 raise ContextNoteError(
-                    "context_provider_transport_uncertain", uncertain=True
+                    "context_provider_transport_uncertain",
+                    uncertain=True,
+                    transport_kind=type(exc).__name__,
                 ) from None
             if current.status_code == 200:
                 response = current

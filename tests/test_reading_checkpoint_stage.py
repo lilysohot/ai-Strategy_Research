@@ -364,14 +364,192 @@ def test_an_over_budget_record_is_retried_narrower_rather_than_trimmed() -> None
 
 
 def test_an_oversized_archive_falls_back_to_an_index_and_says_so() -> None:
+    """220 sits between this fixture's index floor (201) and full render (244)."""
     messages = _history()
-    stage = _stage(_ok_extractor, archive_max_chars=120)
+    stage = _stage(_ok_extractor, archive_max_chars=220)
 
     event = asyncio.run(stage.maybe_checkpoint(messages, turn=1))
 
     assert event.installed is True
     assert event.index_only is True
     assert "仅保留索引" in messages[-1]["content"]
+
+
+def _twin_checkpoint() -> ReadingCheckpoint:
+    """Two findings whose discriminating clause is NOT at the start.
+
+    A prefix-only cue would render both as ``- f1 fact 数据中心订单`` and leave a
+    reader unable to choose; this fixture is what makes the cue test meaningful.
+    """
+    ref_a = "ce:" + "1" * 32
+    ref_b = "ce:" + "2" * 32
+    ref_c = "ce:" + "3" * 32
+    # Long enough that the full rendering and the index-only rendering are far
+    # apart; otherwise the budget window between them is too narrow to test.
+    filler = "报告其余段落重复描述装机量、服务合同期限、订单转化节奏与交付排期，此处不重复叙述。"
+    return ReadingCheckpoint(
+        checkpoint_id="ck:test/twins",
+        task_id="",
+        question="数据中心订单的定价风险",
+        findings=(
+            Finding(
+                finding_id="f1",
+                kind=FindingKind.COUNTER_EVIDENCE,
+                statement=(
+                    "看空者认为需求被提前透支，订单可能回归常态，"
+                    f"部分订单存在溢价但未套用于全部组合。{filler}"
+                ),
+                evidence_refs=(ref_a,),
+            ),
+            Finding(
+                finding_id="f2",
+                kind=FindingKind.COUNTER_EVIDENCE,
+                statement=(
+                    "看空者认为随着产能扩张利用率可能下降且定价趋弱，"
+                    f"Liberty 同时向两家下单，供给落地节奏仍是关键变量。{filler}"
+                ),
+                evidence_refs=(ref_b, ref_c),
+            ),
+        ),
+        sources=(SourceRange("doc-1", "build-3", 0, 100),),
+        coverage=Coverage(read_ranges=(SourceRange("doc-1", "build-3", 0, 100),)),
+    )
+
+
+def test_the_overflow_index_keeps_a_disambiguating_cue_and_every_address() -> None:
+    from frontier_agent.core.runtime.reading.stage import _render_archive
+
+    checkpoint = _twin_checkpoint()
+    full, full_is_index = _render_archive(checkpoint, max_chars=10_000)
+    assert full_is_index is False
+    # Just under the full rendering: overflow is forced without starving the cues.
+    cap = len(full) - 50
+    text, index_only = _render_archive(checkpoint, max_chars=cap)
+
+    assert index_only is True
+    assert len(text) <= cap, "a hint that overflows its own cap is still over its cap"
+    # Addresses are the only thing a tool can resolve, so every ref must survive.
+    for finding in checkpoint.findings:
+        for ref in finding.evidence_refs:
+            assert ref in text
+    # Cues must be verbatim excerpts and must differ between the findings.
+    lines = [line for line in text.splitlines() if line.startswith("- f")]
+    assert len(lines) == len(checkpoint.findings)
+    cues = [line.split(" refs: ")[0] for line in lines]
+    assert len(set(cues)) == len(cues)
+    for cue in cues:
+        assert cue[-1] in "。…" , "a truncated excerpt must show it was cut"
+    assert any("套用于全部" in cue for cue in cues), "the distinguishing clause must survive the cut"
+
+
+def _wide_checkpoint() -> ReadingCheckpoint:
+    """24 findings x 3 refs: inside the record budget, outside the archive budget.
+
+    Measured on the pre-guard code: the record is 2,640 chars (limit 4,000) but the
+    supposedly minimal index renders at 3,291 (limit 3,000) — the renderer cannot
+    shrink opaque addresses, so there is nothing left to degrade.
+    """
+    findings = tuple(
+        Finding(
+            finding_id=f"f{index}",
+            kind=FindingKind.FACT,
+            statement="一季度订单与交付排期的事实描述",
+            evidence_refs=tuple(
+                "ce:" + f"{index:02d}{slot}" + "a" * 28 for slot in range(3)
+            ),
+        )
+        for index in range(24)
+    )
+    return ReadingCheckpoint(
+        checkpoint_id="ck:test/wide",
+        task_id="run-1",
+        question="订单与交付排期",
+        findings=findings,
+        sources=(SourceRange("doc-1", "build-3", 0, 100),),
+        coverage=Coverage(read_ranges=(SourceRange("doc-1", "build-3", 0, 100),)),
+    )
+
+
+def test_an_index_that_cannot_fit_its_own_budget_blocks_retirement() -> None:
+    """The floor is a refusal, not a wish: bodies stay when the index cannot fit."""
+    from frontier_agent.core.runtime.reading.stage import minimal_recoverable_index_chars
+
+    checkpoint = _wide_checkpoint()
+    assert minimal_recoverable_index_chars(checkpoint) > 3_000
+
+    async def wide(bodies, question, bounds):
+        return checkpoint
+
+    messages = _history()
+    before = json.dumps(messages, ensure_ascii=False)
+    store = _Store()
+    stage = _stage(wide, store=store, archive_max_chars=3_000)
+
+    event = asyncio.run(stage.maybe_checkpoint(messages, turn=1))
+
+    assert event.installed is False
+    assert event.reason == "checkpoint_failed"
+    assert event.failure == "archive_index_over_budget"
+    assert event.retired_chars == 0
+    assert json.dumps(messages, ensure_ascii=False) == before, "no body may retire"
+    assert store.saved == {}, "an unusable record is not persisted either"
+
+
+def test_a_widened_statement_blocks_retirement() -> None:
+    """The install gate is what stops a claim outliving the text it came from."""
+    from frontier_agent.core.runtime.reading.contract import ValidationIssue
+
+    def check(finding, quoted):
+        assert quoted, "the gate must have the cited text in hand"
+        return [
+            ValidationIssue(
+                "statement_scope_expanded",
+                f"{finding.finding_id} 丢失适用范围限定",
+                finding.finding_id,
+            )
+        ]
+
+    messages = _history()
+    before = json.dumps(messages, ensure_ascii=False)
+    stage = _stage(
+        _ok_extractor,
+        statement_check=check,
+        resolve=lambda ref: {"quote": "部分订单存在溢价，但未套用于全部组合。"},
+    )
+
+    event = asyncio.run(stage.maybe_checkpoint(messages, turn=1))
+
+    assert event.installed is False
+    assert event.failure == "statement_scope_expanded"
+    assert json.dumps(messages, ensure_ascii=False) == before
+
+
+def test_a_statement_check_is_skipped_when_the_cited_text_is_absent() -> None:
+    """No source text, no verdict: the gate must not guess from the statement."""
+    calls: list[str] = []
+
+    def check(finding, quoted):
+        calls.append(quoted)
+        return []
+
+    stage = _stage(_ok_extractor, statement_check=check)  # default resolve: no quote
+    asyncio.run(stage.maybe_checkpoint(_history(), turn=1))
+
+    assert calls == []
+
+
+def test_the_index_pays_for_addresses_before_it_pays_for_cues() -> None:
+    """Topic width degrades first: a budget that fits no cue still lists refs."""
+    from frontier_agent.core.runtime.reading.stage import _render_archive
+
+    checkpoint = _twin_checkpoint()
+    tight, index_only = _render_archive(checkpoint, max_chars=len("x") + 200)
+
+    assert index_only is True
+    for finding in checkpoint.findings:
+        for ref in finding.evidence_refs:
+            assert ref in tight
+    assert "套用于全部" not in tight, "cues are dropped before any address is"
 
 
 def test_the_extractor_is_told_what_the_record_budget_is() -> None:

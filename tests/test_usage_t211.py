@@ -298,6 +298,7 @@ def isolated_orchestrator(monkeypatch):
 
 
 @pytest.mark.asyncio
+@pytest.mark.skip(reason="worker subprocess resolves its LLM endpoint from the server config, so this test reaches the real provider instead of MockLLMServer; skipped until the worker can be pinned to a loopback endpoint (2026-11-17: 18,878 input tokens spent by accident)")
 async def test_run_is_metered_from_trajectory(mock_llm_two_turns, app_client,
                                               auth_headers, isolated_orchestrator,
                                               monkeypatch):

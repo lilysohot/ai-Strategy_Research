@@ -556,6 +556,7 @@ async def run_once(args: argparse.Namespace) -> int:
         PROFILE_NAME,
         build_profile_overrides,
         build_prompt_addenda,
+        pilot_experiment,
     )
 
     # Team capabilities come from the CLI profile. Do not let an optional
@@ -708,11 +709,30 @@ async def run_once(args: argparse.Namespace) -> int:
     continuity_mode = (getattr(args, "continuity", "on") or "on").strip().lower()
     monitoring = continuity_mode == "read"
     history_enabled = monitoring or bool(getattr(args, "mixed_mode_history", False))
+    # Per-run experiment seam: only sessions named ``pilot-<arm>-…`` carry one, so
+    # a paired pilot can run against the shipped profile without editing it.
+    experiment = pilot_experiment(args.session_id)
+    if experiment and experiment.get("_pilot_budget"):
+        # Armed before any client is built: the guard installs itself at client
+        # construction, so ordering here is what decides whether it is active.
+        from frontier_agent.infra import pilot_budget
+
+        pilot_budget.arm(experiment["_pilot_budget"])
     overrides = build_profile_overrides(
         has_investment_context=business_prefix,
         pipeline_id=args.pipeline_id,
         enable_research_history=history_enabled,
+        experiment=experiment,
     )
+    if experiment:
+        from frontier_agent.infra import pilot_budget
+
+        logging.getLogger("worker").warning(
+            "pilot arm loaded: arm=%s experiment=%s budget=%s",
+            experiment.get("_pilot_arm"),
+            {k: v for k, v in experiment.items() if not k.startswith("_")},
+            (pilot_budget.current().snapshot()["limits"] if pilot_budget.current() else "not armed"),
+        )
     # Parse any extra agent_tools the orchestrator appends (e.g. market tools
     # once registered in T4.2).
     if args.agent_tools:

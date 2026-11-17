@@ -78,6 +78,11 @@ agent:
   context_compaction: tiered
   # Ephemeral recovery cache, isolated to the current session.
   compaction_spill: ${COMPACTION_SPILL:-true}
+  # Reading checkpoint: archive retired corpus bodies into recoverable records
+  # once a member's working set passes 40K chars, keeping the digest and the
+  # `ce:` refs. The code default is ``off``; it is turned on here so the 08
+  # integrated evaluation has a combination candidate to measure.
+  reading_checkpoint: on
   max_len: ${OPENAI_CONTEXT_WINDOW:-262144}
   # Input guard; leave space for OPENAI_MAX_TOKENS and let compaction trigger first.
   max_input_tokens: ${OPENAI_MAX_INPUT_TOKENS:-229376}

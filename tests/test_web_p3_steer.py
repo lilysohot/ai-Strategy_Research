@@ -345,6 +345,7 @@ async def mock_llm_steer():
 
 
 @pytest.mark.asyncio
+@pytest.mark.skip(reason="worker subprocess resolves its LLM endpoint from the server config, so this test reaches the real provider instead of MockLLMServer; skipped until the worker can be pinned to a loopback endpoint (2026-11-17: 18,878 input tokens spent by accident)")
 async def test_steer_reaches_next_llm_request(
     mock_llm_steer, app_client, auth_headers, isolated_orchestrator, monkeypatch
 ) -> None:

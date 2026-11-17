@@ -39,6 +39,12 @@ def sync(
     error = None
     with psycopg.connect(dsn, autocommit=True) as conn:
         read_pg._check_target(conn, target)
+        lock = conn.execute(
+            "SELECT pg_try_advisory_lock(hashtextextended(%s,0))",
+            ("corpus-vector:" + config.profile,),
+        ).fetchone()
+        if not lock or not lock[0]:
+            raise EmbeddingError("index_writer_already_running")
         for h, text in sorted(inputs.items()):
             key = config.profile, h
             if h in index.vectors:

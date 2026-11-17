@@ -16,6 +16,19 @@ def _counter(usage: dict[str, Any], *names: str) -> int | None:
     return None
 
 
+def _refused_before_send(attempt: dict[str, Any]) -> bool:
+    """Did this attempt die before a request left the process?
+
+    ``sent`` is authoritative when present. Rows written before that flag existed
+    are inferred from the reason: ``budget_stop`` is only ever raised by the
+    reservation that runs *before* the transport call, so such an attempt never
+    reached the provider and cannot have unbilled usage.
+    """
+    if attempt.get("sent") is False:
+        return True
+    return str(attempt.get("reason") or "") == "budget_stop"
+
+
 def _bucket(attempts: list[dict[str, Any]]) -> dict[str, Any]:
     prompt = cached = known = duration = unknown_duration = 0
     outcomes: dict[str, int] = {}
@@ -77,7 +90,11 @@ def cache_attempt_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
         # The finished event wins if records are supplied out of timestamp order.
         if key not in attempts or record.get("phase") == "finished":
             attempts[key] = record
-    values = list(attempts.values())
+    # A request the budget refused never left the process: it is not a call and has
+    # no missing usage. Counting it as an unknown-cost attempt made a run that spent
+    # 592/196 report "one unmetered call".
+    refused = [r for r in attempts.values() if _refused_before_send(r)]
+    values = [r for r in attempts.values() if not _refused_before_send(r)]
     first = [r for r in values if r.get("attempt_index") == 1]
     retries = [
         r for r in values if isinstance(r.get("attempt_index"), int) and r["attempt_index"] > 1
@@ -98,6 +115,7 @@ def cache_attempt_stats(records: list[dict[str, Any]]) -> dict[str, Any]:
             if all_attempts["unknown_usage_attempts"] or recovery_calls["unknown_usage_attempts"]
             else "complete"
         ),
+        "refused_before_send": len(refused),
         "first_attempts": _bucket(first),
         "retries": _bucket(retries),
         "coordinator_entry": _bucket(entry),

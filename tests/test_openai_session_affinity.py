@@ -85,6 +85,9 @@ def test_sticky_kill_switch_suppresses_construction_time_affinity(
 @pytest.mark.asyncio
 async def test_chat_mirrors_per_call_session_into_extra_query() -> None:
     client = OpenAIClient("test-model", api_key="test-key")
+    # Loopback on purpose: the transport is a fake below, and the suite refuses
+    # to let any client resolve a real provider endpoint.
+    client._base_url = "http://127.0.0.1:1/v1"
     raw_response = SimpleNamespace(parse=lambda: _completion())
     create = AsyncMock(return_value=raw_response)
     client._client = SimpleNamespace(
@@ -112,6 +115,7 @@ async def test_chat_mirrors_per_call_session_into_extra_query() -> None:
 @pytest.mark.asyncio
 async def test_stream_mirrors_session_but_ordinary_headers_do_not() -> None:
     client = OpenAIClient("test-model", api_key="test-key")
+    client._base_url = "http://127.0.0.1:1/v1"  # fake transport below
 
     async def fake_stream():
         yield SimpleNamespace(

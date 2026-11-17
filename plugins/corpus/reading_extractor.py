@@ -35,7 +35,11 @@ from frontier_agent.core.runtime.reading.contract import (
     ReadingCheckpoint,
     SourceRange,
 )
-from frontier_agent.core.runtime.reading.stage import ExtractionBounds, RetirableBody
+from frontier_agent.core.runtime.reading.stage import (
+    ExtractionBounds,
+    ExtractionScope,
+    RetirableBody,
+)
 from frontier_agent.core.runtime.reading.store import JsonCheckpointStore
 from plugins.corpus.tool_refs import ToolReferenceError, resolve_evidence_reference
 
@@ -99,6 +103,36 @@ class CorpusReadingExtractor:
     digest_budget: int = DEFAULT_DIGEST_BUDGET
     max_source_ranges: int = _MAX_SOURCE_RANGES
     _range_cache: dict[str, SourceRange] = field(default_factory=dict, init=False)
+    #: Usage of the most recent model call, or ``None`` when the provider reported
+    #: none. The stage reads it so extraction cost is a measured number rather
+    #: than an assumption; ``None`` is published as unknown, never as zero.
+    last_usage: dict[str, Any] | None = field(default=None, init=False, repr=False)
+
+    def scope(
+        self,
+        bodies: Sequence[RetirableBody],
+        question: str,
+    ) -> ExtractionScope:
+        """Say whether these bodies can produce a citable record at all.
+
+        Pure and IO-free: it renders the same digest ``__call__`` would, and
+        reports its size and reference set. When no reference survives rendering,
+        no finding the model could write is citable, so the extraction call is
+        guaranteed to be discarded — declining here is the only outcome that does
+        not pay for a known-empty result.
+        """
+        del question
+        digest = self.build_digest(bodies)
+        applicable = bool(digest.refs)
+        return ExtractionScope(
+            applicable=applicable,
+            reason="" if applicable else "no_evidence_refs",
+            digest_chars=len(digest.text),
+            digest_budget=self.digest_budget,
+            ref_count=len(digest.refs),
+            omitted_bodies=digest.omitted_bodies,
+            body_count=len(bodies),
+        )
 
     async def __call__(
         self,
@@ -106,6 +140,7 @@ class CorpusReadingExtractor:
         question: str,
         bounds: ExtractionBounds,
     ) -> ReadingCheckpoint:
+        self.last_usage = None
         digest = self.build_digest(bodies)
         prompt = (
             f"{READING_EXTRACTION_PROMPT}\n\n研究问题：{question}\n\n"
@@ -113,6 +148,9 @@ class CorpusReadingExtractor:
             f"原文片段：\n{digest.text}"
         )
         response = await self.llm.chat([{"role": "user", "content": prompt}])
+        usage = getattr(response, "usage", None)
+        if isinstance(usage, dict) and usage:
+            self.last_usage = dict(usage)
         reply = getattr(response, "content", "") or ""
         findings, open_questions, dropped = parse_extraction_reply(reply, digest.refs)
         findings = findings[: max(1, bounds.max_findings)]

@@ -22,6 +22,7 @@ from frontier_agent.core.loop_types import (
     wall_deadline_remaining_s,
 )
 from frontier_agent.core.messages import Message, user_msg
+from frontier_agent.infra.pilot_budget import PilotBudgetExhausted
 from frontier_agent.infra.retriable import is_transient_network
 
 from ._bind import _ensure_bound
@@ -543,6 +544,7 @@ async def call_llm(
             response: LLMResponse | None = None,
             error: BaseException | None = None,
             ended_at: float | None = None,
+            sent: bool = True,
         ) -> None:
             # ``ended_at`` back-dates the close for an attempt that finished
             # earlier than this call — the discarded stream below is reported
@@ -563,6 +565,10 @@ async def call_llm(
                 ),
                 "max_tokens": active_cap,
                 "error_type": type(error).__name__ if error is not None else "",
+                # A request refused before it left the process spent nothing and
+                # has no usage to be missing: metering must not read it as an
+                # unknown-cost call.
+                "sent": sent,
             }
             if response is not None:
                 event.update(_response_attempt_fields(response))
@@ -1021,6 +1027,26 @@ async def call_llm(
                 )
                 raise LLMCallExhausted(exc, "chain_advance") from exc
             backoff = _transient_backoff(attempt)
+        except PilotBudgetExhausted as exc:
+            # A budget stop is a decision, not a blip: no backoff, no second
+            # attempt, no chain advance. Retrying would either overshoot the
+            # approved cap or (for unknown usage) spend what could not be counted.
+            last_exc = exc
+            retry_error = exc
+            retry_reason = "budget_stop"
+            logger.error(
+                "LLM call refused by the pilot budget (turn=%d, attempt=%d/%d, reason=%s); "
+                "stopping instead of retrying",
+                turn, attempt + 1, max_retries, str(exc),
+            )
+            await _finish_attempt(
+                outcome=ATTEMPT_FAILED,
+                reason="budget_stop",
+                recovery_action="raise",
+                error=exc,
+                sent=False,  # refused before the request left the process
+            )
+            raise LLMCallExhausted(exc, "budget_stop") from exc
         except TimeoutError as exc:
             last_exc = exc
             retry_error = exc

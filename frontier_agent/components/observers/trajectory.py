@@ -716,6 +716,62 @@ class TrajectoryFileObserver(BaseObserver):
             "rollback_reason": event.rollback_reason,
         })
 
+    async def on_reading_checkpoint(self, event: Any) -> None:
+        """Record that a reading checkpoint started, ended, or failed.
+
+        Sizes, codes and budgets only — never the bodies being archived. The point
+        is to make "why did nothing get archived" answerable from the trace: a
+        checkpoint whose extraction never returned used to leave no line at all,
+        so a 60-second stall had to be inferred from a gap between two turns.
+        ``phase="start"`` is written before the extractor call, which is what makes
+        an interrupted attempt visible.
+
+        Every measurement that the stage could not take is emitted as ``null``
+        rather than dropped, so a reader can tell "unknown" from "zero".
+        """
+        attempts = getattr(event, "attempts", ()) or ()
+        record: dict = {
+            "t": "reading_checkpoint",
+            "phase": getattr(event, "phase", "end"),
+            "turn": getattr(event, "turn", 0),
+            "reason": getattr(event, "reason", ""),
+            "triggered": bool(getattr(event, "triggered", False)),
+            "installed": bool(getattr(event, "installed", False)),
+            "failure": getattr(event, "failure", ""),
+            "body_count": getattr(event, "body_count", 0),
+            "working_set_chars": getattr(event, "working_set_before", 0),
+            "digest_chars": getattr(event, "digest_chars", None),
+            "digest_budget": getattr(event, "digest_budget", None),
+            "ref_count": getattr(event, "ref_count", None),
+            "omitted_bodies": getattr(event, "omitted_bodies", None),
+            "remaining_budget_s": getattr(event, "remaining_budget_s", None),
+            "delivery_reserve_s": getattr(event, "delivery_reserve_s", None),
+            "duration_s": round(float(getattr(event, "duration_s", 0.0)), 3),
+            "attempts": [
+                {
+                    "index": attempt.index,
+                    "duration_s": round(attempt.duration_s, 3),
+                    "outcome": attempt.outcome,
+                    "detail": attempt.detail,
+                }
+                for attempt in attempts
+            ],
+            # ``null`` here means the provider reported no usage. It is not 0, and
+            # the run-level meter does not include this call either way (see
+            # ``server/usage.py``), so a reader must add it explicitly.
+            "usage": getattr(event, "usage", None),
+            "usage_known": bool(getattr(event, "usage_known", False)),
+            # Always present: 0 here means "nothing left the context", which is
+            # different from a field that was never measured.
+            "retired_chars": getattr(event, "retired_chars", 0),
+            "working_set_after": getattr(event, "working_set_after", 0),
+            "archive_chars": getattr(event, "archive_chars", 0),
+            "index_only": bool(getattr(event, "index_only", False)),
+        }
+        if getattr(event, "checkpoint_id", ""):
+            record["checkpoint_id"] = event.checkpoint_id
+        self._write_jsonl(record)
+
     async def on_loop_end(self, result: AgentLoopResult) -> None:
         self._turns_used = max(self._turns_used, result.turns_used)
         self._tool_calls_count = result.tool_calls_count
