@@ -640,11 +640,25 @@ async def run_once(args: argparse.Namespace) -> int:
         if args.pipeline_id == "agent_team"
         else {}
     )
+    # A pilot run is submitted through the API, so the Web page never opens the
+    # approval dialog: parking a confirm-level call buys 300s of silence and then
+    # a fail-closed reject the model reads as a user decline (and which closes the
+    # sub-agent handoff window). This mode therefore refuses such calls at once —
+    # it grants nothing, so enabling it cannot widen what a run may do.
+    approval_unattended = bool(
+        (pilot_experiment(args.session_id) or {}).get("_pilot_unattended")
+    )
+    if approval_unattended:
+        logging.getLogger("worker").warning(
+            "approval gate: unattended mode (no human dialog); confirm-level calls "
+            "are refused immediately, nothing is auto-approved"
+        )
     approval_observer = ApprovalObserver(
         gate,
         live_events.put_nowait,
         cwd=str(paths["workspace"]),
         source_meta=team_source_meta,
+        unattended=approval_unattended,
     )
     stdin_task = asyncio.create_task(_stdin_watch(stop, steer_inbox, gate))
 

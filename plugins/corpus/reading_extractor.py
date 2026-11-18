@@ -79,6 +79,26 @@ READING_EXTRACTION_PROMPT = """你是研究归档器。下面是从语料中已�
 {"findings": [{"finding_id": "f1", "kind": "number", "statement": "...", "value": "...", "unit": "...", "period": "...", "condition": "...", "contradicts": [], "evidence_refs": ["ce:..."]}], "open_questions": ["..."]}"""
 
 
+def _correction_block(feedback: str) -> str:
+    """Turn the stage's rejection facts into a correction instruction.
+
+    The stage reports codes and details only; the wording of the fix belongs here,
+    beside the rules it refers to. Without this block a retry re-sends identical
+    bytes and pays a second call to reproduce the record that was just rejected —
+    the observed failure mode behind "two attempts, zero installs".
+    """
+    text = feedback.strip()
+    if not text:
+        return ""
+    return (
+        "\n\n上一次生成的记录被安装前校验拒绝，原因如下：\n"
+        f"{text}\n"
+        "请针对上述原因逐条修正后重新输出**完整**的 JSON：不要删除已有的发现，"
+        "不要放宽或省略原文的适用范围限定（如「部分」「未将该」「不套用于全部」），"
+        "缺失的 value／unit／period 只能按原文补齐，不能换算或推测。"
+    )
+
+
 @dataclass(frozen=True)
 class ExtractionDigest:
     """The verbatim text handed to the extractor, plus what was left out."""
@@ -107,6 +127,10 @@ class CorpusReadingExtractor:
     #: none. The stage reads it so extraction cost is a measured number rather
     #: than an assumption; ``None`` is published as unknown, never as zero.
     last_usage: dict[str, Any] | None = field(default=None, init=False, repr=False)
+    #: Why the most recent call produced what it did, or ``None`` before any call.
+    #: The stage reads it only to label an empty record; nothing here is derived
+    #: from the reply's text, so publishing it cannot leak reasoning into a trace.
+    last_diagnostics: dict[str, Any] | None = field(default=None, init=False, repr=False)
 
     def scope(
         self,
@@ -139,11 +163,14 @@ class CorpusReadingExtractor:
         bodies: Sequence[RetirableBody],
         question: str,
         bounds: ExtractionBounds,
+        *,
+        feedback: str = "",
     ) -> ReadingCheckpoint:
         self.last_usage = None
+        self.last_diagnostics = None
         digest = self.build_digest(bodies)
         prompt = (
-            f"{READING_EXTRACTION_PROMPT}\n\n研究问题：{question}\n\n"
+            f"{READING_EXTRACTION_PROMPT}{_correction_block(feedback)}\n\n研究问题：{question}\n\n"
             f"最多记录 {bounds.max_findings} 条发现，总长度不超过 {bounds.record_limit} 字符。\n\n"
             f"原文片段：\n{digest.text}"
         )
@@ -152,8 +179,18 @@ class CorpusReadingExtractor:
         if isinstance(usage, dict) and usage:
             self.last_usage = dict(usage)
         reply = getattr(response, "content", "") or ""
-        findings, open_questions, dropped = parse_extraction_reply(reply, digest.refs)
+        findings, open_questions, report = _parse_extraction(reply, digest.refs)
+        truncated = max(0, len(findings) - max(1, bounds.max_findings))
         findings = findings[: max(1, bounds.max_findings)]
+        dropped = sum(report.drops.values())
+        self.last_diagnostics = _diagnose(
+            reply=reply,
+            response=response,
+            report=report,
+            findings=findings,
+            truncated=truncated,
+            usage=self.last_usage,
+        )
 
         limitations: list[str] = []
         if dropped:
@@ -283,46 +320,74 @@ def _render_body(body: RetirableBody, position: int) -> tuple[str, set[str], int
 _FENCE = re.compile(r"^```(?:json)?\s*|\s*```$", re.MULTILINE)
 
 
-def parse_extraction_reply(
+@dataclass(frozen=True)
+class ParseReport:
+    """What the reply contained and what survived — without keeping the reply.
+
+    One field per question a diagnosis needs: was there text, did it parse (and
+    where did it stop), how many findings arrived, and why the rest were dropped.
+    The reply itself is never stored: it can be tens of thousands of characters of
+    reasoning, and no label below depends on its text.
+    """
+
+    code: str = "ok"  # ok | empty_text | no_braces | json_error | not_object
+    error_pos: int | None = None
+    raw_findings: int = 0
+    kept: int = 0
+    drops: dict[str, int] = field(default_factory=dict)
+
+
+def _parse_extraction(
     reply: str,
     known_refs: frozenset[str] | set[str],
-) -> tuple[list[Finding], list[str], int]:
-    """Parse the model's JSON, keeping only findings with a real citation.
+) -> tuple[list[Finding], list[str], ParseReport]:
+    """Parse the model's JSON and report *why* it was empty when it was.
 
-    Returns ``(findings, open_questions, dropped)``. A finding whose refs are all
-    unknown is dropped and counted — never rewritten to cite something else, and
-    never kept with an empty ref list (which the contract would reject anyway,
-    but keeping it would waste the whole checkpoint on one hallucination).
+    Six outcomes used to collapse into one empty list, so an empty record could not
+    be told apart from a refusal, a truncation, or a record whose citations all
+    missed. Strictness is unchanged; only the label is new.
     """
     text = _FENCE.sub("", reply or "").strip()
+    if not text:
+        return [], [], ParseReport(code="empty_text")
     start = text.find("{")
     end = text.rfind("}")
     if start < 0 or end <= start:
-        return [], [], 0
+        return [], [], ParseReport(code="no_braces", error_pos=start if start >= 0 else None)
     try:
         payload = json.loads(text[start : end + 1])
-    except ValueError:
-        return [], [], 0
+    except ValueError as exc:
+        offset = getattr(exc, "pos", None)
+        return [], [], ParseReport(
+            code="json_error",
+            # Absolute position in the reply, not in the sliced object.
+            error_pos=(start + offset) if isinstance(offset, int) else None,
+        )
     if not isinstance(payload, dict):
-        return [], [], 0
+        return [], [], ParseReport(code="not_object")
 
     known = set(known_refs)
     findings: list[Finding] = []
-    dropped = 0
+    drops: dict[str, int] = {}
+
+    def _drop(reason: str) -> None:
+        drops[reason] = drops.get(reason, 0) + 1
+
     raw_findings = payload.get("findings")
-    for index, raw in enumerate(raw_findings if isinstance(raw_findings, list) else []):
+    rows = raw_findings if isinstance(raw_findings, list) else []
+    for index, raw in enumerate(rows):
         if not isinstance(raw, dict):
-            dropped += 1
+            _drop("not_object")
             continue
         refs = tuple(
             ref for ref in (raw.get("evidence_refs") or []) if isinstance(ref, str) and ref in known
         )
         if not refs:
-            dropped += 1
+            _drop("no_known_ref")
             continue
         statement = str(raw.get("statement") or "").strip()
         if not statement:
-            dropped += 1
+            _drop("empty_statement")
             continue
         kind_value = str(raw.get("kind") or "").strip().lower()
         try:
@@ -349,7 +414,63 @@ def parse_extraction_reply(
     questions = [
         str(item) for item in (payload.get("open_questions") or []) if isinstance(item, str)
     ]
-    return findings, questions, dropped
+    return findings, questions, ParseReport(
+        code="ok", raw_findings=len(rows), kept=len(findings), drops=drops
+    )
+
+
+def parse_extraction_reply(
+    reply: str,
+    known_refs: frozenset[str] | set[str],
+) -> tuple[list[Finding], list[str], int]:
+    """Backward-compatible trio: findings, questions, dropped count.
+
+    The *count* is what the record's limitations line reports. Callers that need to
+    know why a record came back empty use ``_parse_extraction`` and read the code.
+    """
+    findings, questions, report = _parse_extraction(reply, known_refs)
+    return findings, questions, sum(report.drops.values())
+
+
+def _diagnose(
+    *,
+    reply: str,
+    response: Any,
+    report: ParseReport,
+    findings: Sequence[Finding],
+    truncated: int,
+    usage: dict[str, Any] | None,
+) -> dict[str, Any]:
+    """Label one extraction outcome with the smallest set of facts that separates them.
+
+    The four empty cases are different bugs — a truncated model, an unparsable
+    reply, a legal empty array, and citations that all missed — and only the first
+    is a budget question. Nothing here is derived from the reply's text, and an
+    absent field stays absent rather than being inferred from usage.
+    """
+    if not str(reply).strip():
+        end_reason = "empty_content"
+    elif report.code != "ok":
+        end_reason = "parse_failed"
+    elif report.raw_findings == 0:
+        end_reason = "empty_array"
+    elif not findings:
+        end_reason = "all_filtered"
+    else:
+        end_reason = "ok"
+    parse = report.code if report.error_pos is None else f"{report.code}@{report.error_pos}"
+    return {
+        "end_reason": end_reason,
+        "finish_reason": str(getattr(response, "finish_reason", "") or ""),
+        "content_chars": len(str(reply)),
+        "reasoning_chars": len(str(getattr(response, "reasoning_content", "") or "")),
+        "parse": parse,
+        "raw_findings": report.raw_findings,
+        "kept": len(findings),
+        "truncated": truncated,
+        "drops": dict(report.drops),
+        "usage": dict(usage) if usage else None,
+    }
 
 
 def default_checkpoint_store() -> JsonCheckpointStore:

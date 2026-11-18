@@ -277,6 +277,12 @@ PILOT_ARMS: dict[str, dict[str, Any]] = {
     "off": {
         "reading_checkpoint": "off",
         "research_wall_time_s": 1800,
+        # A pilot run is submitted through the API, so no browser dialog is
+        # reachable: confirm-level calls are refused at once instead of parking for
+        # the 300s fail-closed timeout (registration §22/§24). The mode grants no
+        # capability, so it cannot widen what a run may do; hard denials are
+        # untouched. Declared on both arms: an execution condition, not the candidate.
+        "_pilot_unattended": True,
         "_pilot_budget": {"requests": 50, "prompt_tokens": 1_500_000,
                           "completion_tokens": 100_000, "wall_s": 1800,
                           # Pinned, not inherited: both arms must reserve the same
@@ -315,6 +321,7 @@ PILOT_ARMS: dict[str, dict[str, Any]] = {
         "reading_checkpoint_archive_chars": 3000,
         "reading_checkpoint_scope_gate": "on",
         "research_wall_time_s": 1800,
+        "_pilot_unattended": True,
         "_pilot_budget": {"requests": 50, "prompt_tokens": 1_500_000,
                           "completion_tokens": 100_000, "wall_s": 1800,
                           # Same value as the baseline arm: a differing per-request

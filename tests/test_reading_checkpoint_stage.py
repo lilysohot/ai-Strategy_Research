@@ -203,6 +203,129 @@ def test_an_installed_checkpoint_retires_bodies_and_appends_the_archive() -> Non
     assert "未读" in archive["content"]
 
 
+def test_an_empty_record_carries_the_extractor_reason() -> None:
+    """The 2026-11-18 attempt 1 recorded ``empty_record`` with no reason at all.
+
+    Without one, "the model was cut off" and "the citations all missed" are
+    indistinguishable, and only the first is a budget question.
+    """
+
+    class _Diagnosed:
+        def __init__(self) -> None:
+            self.last_diagnostics = {
+                "end_reason": "parse_failed",
+                "finish_reason": "stop",
+                "content_chars": 812,
+                "reasoning_chars": 0,
+                "parse": "json_error@204",
+                "raw_findings": 0,
+                "kept": 0,
+                "drops": {},
+                "usage": {"completion_tokens": 1024, "prompt_tokens": 27_610},
+            }
+
+        async def __call__(self, bodies, question, bounds):
+            del bodies, question, bounds
+            return _checkpoint(findings=0)
+
+    messages = _history()
+    stage = _stage(_Diagnosed())
+
+    event = asyncio.run(stage.maybe_checkpoint(messages, turn=1))
+
+    assert event.failure == "empty_record"
+    detail = event.attempts[0].detail
+    assert "end=parse_failed" in detail
+    assert "finish=stop" in detail
+    assert "content=812" in detail
+    assert "parse=json_error@204" in detail
+    assert "tokens=1024/27610" in detail
+    assert len(detail) <= 200
+
+
+def test_an_extractor_without_diagnostics_leaves_the_cause_unknown() -> None:
+    """Silence is the honest record when the extractor cannot say why."""
+
+    async def _empty_extractor(bodies, question, bounds):
+        del bodies, question, bounds
+        return _checkpoint(findings=0)
+
+    messages = _history()
+    stage = _stage(_empty_extractor)
+
+    event = asyncio.run(stage.maybe_checkpoint(messages, turn=1))
+
+    assert event.failure == "empty_record"
+    assert event.attempts[0].detail == ""
+
+
+def test_an_incomplete_checkpoint_without_ranges_still_says_so() -> None:
+    """The 2026-11-18 record: ``complete=false`` with no range and no limitation.
+
+    That combination used to render nothing, so the archive read exactly like full
+    coverage. The line below is derived from the field itself — it costs no model
+    output and cannot be forgotten.
+    """
+    from dataclasses import replace
+
+    incomplete = replace(
+        _checkpoint(), coverage=Coverage(read_ranges=(SourceRange("doc-1", "build-3", 0, 100),))
+    )
+
+    async def extractor(bodies, question, bounds):
+        del bodies, question, bounds
+        return incomplete
+
+    messages = _history()
+    stage = _stage(extractor)
+
+    event = asyncio.run(stage.maybe_checkpoint(messages, turn=1))
+    archive = messages[-1]["content"]
+
+    assert event.installed is True
+    assert "本检查点覆盖不完整：未读范围未明确" in archive
+    assert "本检查点未读" not in archive, "there is no range to name"
+    assert "限制：" not in archive
+
+
+def test_a_named_unread_range_is_preferred_over_the_generic_warning() -> None:
+    """A range is better information than "unknown", so it replaces the warning."""
+    messages = _history()
+    stage = _stage(_ok_extractor)
+
+    asyncio.run(stage.maybe_checkpoint(messages, turn=1))
+    archive = messages[-1]["content"]
+
+    assert "本检查点未读：doc-1[100-400]@vbuild-3" in archive
+    assert "未读范围未明确" not in archive
+
+
+def test_a_complete_checkpoint_makes_no_coverage_claim() -> None:
+    """Nothing is said when there is nothing to disclose — no noise per archive."""
+    from dataclasses import replace
+
+    complete = replace(
+        _checkpoint(),
+        coverage=Coverage(
+            read_ranges=(SourceRange("doc-1", "build-3", 0, 100),),
+            complete=True,
+        ),
+    )
+
+    async def extractor(bodies, question, bounds):
+        del bodies, question, bounds
+        return complete
+
+    messages = _history()
+    stage = _stage(extractor)
+
+    asyncio.run(stage.maybe_checkpoint(messages, turn=1))
+    archive = messages[-1]["content"]
+
+    assert "本检查点覆盖不完整" not in archive
+    assert "本检查点未读" not in archive
+
+
 def test_an_earlier_checkpoint_is_never_rewritten_by_a_later_one() -> None:
     """Prefix stability under a *second* checkpoint.
 
@@ -522,6 +645,107 @@ def test_a_widened_statement_blocks_retirement() -> None:
     assert event.installed is False
     assert event.failure == "statement_scope_expanded"
     assert json.dumps(messages, ensure_ascii=False) == before
+
+
+def test_a_rejected_record_is_retried_with_that_rejection_as_feedback() -> None:
+    """A gate rejection used to end the stage with half its budget unspent.
+
+    That is how ``max_attempts=2`` produced one attempt in every observed failure.
+    Two things are asserted here: the retry actually runs, and it is a correction
+    rather than a reroll — the second call is handed the rejection code and the
+    offending finding id, which is the only thing that can change the wording.
+    """
+    from frontier_agent.core.runtime.reading.contract import ValidationIssue
+
+    verdicts: list[int] = []
+    feedbacks: list[str] = []
+
+    def check(finding, quoted):
+        assert quoted, "the gate must have the cited text in hand"
+        verdicts.append(1)
+        if len(verdicts) == 1:
+            return [
+                ValidationIssue(
+                    "statement_scope_expanded",
+                    f"{finding.finding_id} 丢失适用范围限定（未将该、套用于全部）",
+                    finding.finding_id,
+                )
+            ]
+        return []
+
+    async def extractor(bodies, question, bounds, *, feedback=""):
+        del bodies, question, bounds
+        feedbacks.append(feedback)
+        return _checkpoint()
+
+    store = _Store()
+    messages = _history()
+    stage = _stage(
+        extractor,
+        store=store,
+        statement_check=check,
+        resolve=lambda ref: {"quote": "部分订单存在溢价，但未套用于全部组合。"},
+    )
+
+    event = asyncio.run(stage.maybe_checkpoint(messages, turn=1))
+
+    assert event.installed is True
+    assert [attempt.outcome for attempt in event.attempts] == ["validation_rejected", "installed"]
+    assert feedbacks[0] == "", "the first attempt has nothing to correct"
+    assert "statement_scope_expanded" in feedbacks[1]
+    assert "[f0]" in feedbacks[1]
+    assert len(store.saved) == 1
+    assert is_retired_body(messages[3]["content"])
+
+
+def test_a_write_failure_is_not_retried() -> None:
+    """A store that refused the write will refuse the next one too.
+
+    Retrying this would pay for a second extraction to reach the same exception,
+    so the stage stops and leaves the history alone.
+    """
+    calls: list[int] = []
+
+    async def extractor(bodies, question, bounds, *, feedback=""):
+        del bodies, question, bounds, feedback
+        calls.append(1)
+        return _checkpoint()
+
+    messages = _history()
+    before = json.dumps(messages, ensure_ascii=False)
+    stage = _stage(extractor, store=_Store(fail=True))
+
+    event = asyncio.run(stage.maybe_checkpoint(messages, turn=1))
+
+    assert len(calls) == 1
+    assert event.failure == "archive_write_failed"
+    assert json.dumps(messages, ensure_ascii=False) == before
+
+
+def test_an_extractor_without_a_feedback_parameter_still_runs() -> None:
+    """The correction channel is optional: a three-argument extractor keeps working.
+
+    ``_ok_extractor`` is a plain function, the shape every extractor written before
+    this hook has. Passing it a ``feedback`` keyword would turn the retry into a
+    ``TypeError`` recorded as ``extraction_failed``.
+    """
+    seen: list[str] = []
+
+    def check(finding, quoted):
+        del finding, quoted
+        seen.append("checked")
+        return []
+
+    stage = _stage(
+        _ok_extractor,
+        statement_check=check,
+        resolve=lambda ref: {"quote": "部分订单存在溢价，但未套用于全部组合。"},
+    )
+    event = asyncio.run(stage.maybe_checkpoint(_history(), turn=1))
+
+    assert event.installed is True
+    assert seen
+    assert event.failure == ""
 
 
 def test_a_statement_check_is_skipped_when_the_cited_text_is_absent() -> None:

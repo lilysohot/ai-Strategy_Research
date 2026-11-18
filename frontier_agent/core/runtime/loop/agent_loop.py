@@ -79,7 +79,13 @@ from frontier_agent.core.runtime.loop.tool_call_parser import (
 )
 from frontier_agent.core.runtime.loop.tool_exec import (
     DefaultToolResultPostProcessor,
+    delivered_result_cap,
     execute_tools,
+    publish_result_cap,
+)
+from frontier_agent.core.runtime.repeat_text import (
+    note_context_rewrite,
+    publish_generation,
 )
 from frontier_agent.core.tool import Tool
 
@@ -217,6 +223,17 @@ async def run_agent_loop(
         metadata=scope_meta,
     )
     scope_token = set_current_execution_scope(scope)
+    # Tools cannot see ``messages``, so the rewrite generation has to travel in
+    # their execution scope. Published once here and refreshed after every
+    # in-place rewrite; see ``core.runtime.repeat_text``.
+    publish_generation(metadata, scope.metadata)
+    # A tool may abbreviate a block only if the full one reached the model, and
+    # the cap below is what decides that. ``None`` (custom projection) means the
+    # hand-off is unverifiable, so no tool may abbreviate on it.
+    publish_result_cap(
+        scope.metadata,
+        delivered_result_cap(cfg.tool_result_post_processor, cfg.tool_result_max_chars),
+    )
 
     try:
         return await _run_loop_inner(
@@ -447,7 +464,8 @@ async def _run_loop_inner(
             break
 
         stop_reason = await _handle_turn_end(
-            cfg, obs, messages, metadata, turn, ctx, on_turn_complete, pause_check
+            cfg, obs, messages, metadata, turn, ctx, on_turn_complete, pause_check,
+            scope=scope,
         )
         if stop_reason:
             break
@@ -1253,7 +1271,8 @@ def _stage_accepts_emit(stage: Any) -> bool:
 
 async def _handle_turn_end(
     cfg: LoopConfig, obs: list, messages: list[Message], metadata: dict[str, Any], turn: int,
-    ctx: TurnContext, on_turn_complete: TurnCompleteHook | None, pause_check: PauseCheckHook | None
+    ctx: TurnContext, on_turn_complete: TurnCompleteHook | None, pause_check: PauseCheckHook | None,
+    scope: Any = None,
 ) -> str:
     turn_interventions = await notify_observers(obs, "on_turn_end", ctx)
     merged_turn = merge_interventions(turn_interventions)
@@ -1277,6 +1296,10 @@ async def _handle_turn_end(
         metadata[COMPACTION_SEQ_KEY] = int(
             metadata.get(COMPACTION_SEQ_KEY, 0) or 0,
         ) + 1
+        # Every abbreviation a tool licensed for a block it sent earlier is void
+        # now: the rewrite may have removed that block. A tool cannot observe
+        # this, so the counter is mirrored into the scope it can read.
+        publish_generation(metadata, getattr(scope, "metadata", None))
         # Compaction is the one history rewrite observers never saw: it edits
         # ``messages`` in place, so a trajectory built from the post-compaction
         # history shows the rollup with the replaced turns already gone. Report
@@ -1318,6 +1341,12 @@ async def _handle_turn_end(
             reading_event = None
         if reading_event is not None and not emitted:
             await notify_observers(obs, "on_reading_checkpoint", reading_event)
+        # A checkpoint replaces consumed bodies with a marker. That is a rewrite
+        # of history the model already read, but it is not a compaction pass, so
+        # it has to advance the generation on its own counter.
+        if getattr(reading_event, "installed", False):
+            note_context_rewrite(metadata)
+            publish_generation(metadata, getattr(scope, "metadata", None))
 
     if on_turn_complete is not None:
         try:

@@ -19,15 +19,24 @@ logger = logging.getLogger(__name__)
 
 __all__ = [
     "PROTECTED_FANIN_TOOLS",
+    "TOOL_RESULT_CAP_KEY",
     "TOOL_RESULT_MAX_CHARS",
     "DefaultToolResultPostProcessor",
     "ToolResultPostProcessor",
+    "delivered_result_cap",
     "execute_tools",
     "max_tool_wall_time_s",
+    "publish_result_cap",
     "tool_result_text_is_error",
 ]
 
 TOOL_RESULT_MAX_CHARS = 150_000
+
+#: Where the loop publishes how many characters of one tool result the model
+#: actually receives. A tool that wants to shorten a repeated block must know
+#: this: text past the cap is cut before the model ever reads it, so calling
+#: such a send "complete" licenses a reference to a block nobody saw.
+TOOL_RESULT_CAP_KEY = "_tool_result_cap"
 
 _ERROR_PREFIX_RE = re.compile(r"^Error(?:\s*:|\s|$)", re.IGNORECASE)
 _BRACKETED_ERROR_RE = re.compile(
@@ -103,6 +112,30 @@ def _result_cap() -> int:
     except Exception:
         return TOOL_RESULT_MAX_CHARS
     return configured if configured > 0 else TOOL_RESULT_MAX_CHARS
+
+
+def delivered_result_cap(
+    post_processor: Any | None,
+    max_chars: int | None,
+) -> int | None:
+    """Characters of one tool result the model receives, or ``None`` if unknown.
+
+    ``None`` means the hand-off cannot be reasoned about: a custom post-processor
+    decides its own projection, and a tool that assumes a pass-through there is
+    exactly how a truncated block gets reported as fully delivered.
+    """
+    if post_processor is not None:
+        return None
+    cap = _result_cap()
+    return min(max_chars, cap) if max_chars and max_chars > 0 else cap
+
+
+def publish_result_cap(target: dict[str, Any] | None, cap: int | None) -> None:
+    """Mirror the delivered cap into the execution scope for tool callers."""
+    if isinstance(target, dict):
+        target[TOOL_RESULT_CAP_KEY] = cap
+
+
 _AGGREGATION_TOOLS = frozenset({"collect_reports", "collect_results"})
 
 # Tools that enforce their own wall-clock deadline internally and return a

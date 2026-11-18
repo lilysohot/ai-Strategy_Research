@@ -35,6 +35,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import inspect
 import json
 import logging
 import time
@@ -76,6 +77,34 @@ __all__ = [
 #: a previous checkpoint already replaced (the prefix-cache requirement).
 RETIRED_MARKER = "[archived]"
 
+#: Rejections a second attempt can plausibly fix. Everything else is a fact about
+#: the store or about the record's identity (a failed write, a mismatched schema,
+#: a foreign task id): paying a second model call cannot change it, so the stage
+#: stops instead of retrying.
+_RETRYABLE_REJECTIONS = frozenset(
+    {
+        "finding_without_evidence",
+        "evidence_pointer_failed",
+        "evidence_pointer_unresolved",
+        "number_without_context",
+        "statement_scope_expanded",
+        "unreported_contradiction",
+        "duplicate_finding_id",
+        "record_over_budget",
+        "archive_index_over_budget",
+    }
+)
+
+#: Share of the previous attempt's measured duration a retry must still have left
+#: before it is started. ``min_attempt_s`` alone cannot express this: a call that
+#: just spent 151s is not plausibly repeated in the 28s that remain, and starting it
+#: pays for a timeout that was visible in advance.
+_RETRY_COST_SHARE = 0.5
+
+#: Cap on the correction block handed to a retry. Long enough to carry every code
+#: and one finding id, short enough that it cannot crowd out the digest it corrects.
+_FEEDBACK_MAX_CHARS = 800
+
 
 def archive_marker(checkpoint_id: str) -> str:
     return f"{RETIRED_MARKER} text retired into reading checkpoint {checkpoint_id}"
@@ -83,6 +112,53 @@ def archive_marker(checkpoint_id: str) -> str:
 
 def is_retired_body(content: Any) -> bool:
     return isinstance(content, str) and RETIRED_MARKER in content
+
+
+def _empty_detail(extractor: Any) -> str:
+    """One line saying why a record came back empty, when the extractor knows.
+
+    Reads the optional ``last_diagnostics`` hook. An extractor that does not publish
+    it leaves the detail empty, and the attempt is recorded as unexplained — which is
+    honest: usage alone cannot tell a truncation from a refusal, and guessing would
+    send the next investigation at the wrong cause.
+    """
+    report = getattr(extractor, "last_diagnostics", None)
+    if not isinstance(report, dict) or not report:
+        return ""
+    usage = report.get("usage") or {}
+    parts = [
+        f"end={report.get('end_reason')}",
+        f"finish={report.get('finish_reason') or 'unknown'}",
+        f"content={report.get('content_chars')}",
+        f"reasoning={report.get('reasoning_chars')}",
+    ]
+    if isinstance(usage, dict) and usage.get("completion_tokens") is not None:
+        parts.append(f"tokens={usage.get('completion_tokens')}/{usage.get('prompt_tokens')}")
+    parts += [
+        f"parse={report.get('parse')}",
+        f"raw={report.get('raw_findings')}",
+        f"kept={report.get('kept')}",
+    ]
+    drops = report.get("drops") or {}
+    parts.append(
+        "drops=" + (",".join(f"{key}:{value}" for key, value in sorted(drops.items())) or "none")
+    )
+    return " ".join(parts)[:200]
+
+
+def _retry_feedback(issues: Sequence[ValidationIssue]) -> str:
+    """Render rejection issues as a correction block for the next attempt.
+
+    Only the stable code, the finding id and the human detail travel. The stage
+    does not know how to phrase a fix for a domain rule, and inventing wording here
+    would let the framework quietly rewrite a policy it does not own — the extractor
+    is what turns these facts into prompt text.
+    """
+    lines: list[str] = []
+    for issue in issues[:8]:
+        where = f" [{issue.finding_id}]" if issue.finding_id else ""
+        lines.append(f"- {issue.code}{where}: {issue.detail}")
+    return "\n".join(lines)[:_FEEDBACK_MAX_CHARS]
 
 
 @dataclass(frozen=True)
@@ -162,6 +238,12 @@ class CheckpointExtractor(Protocol):
     ``last_usage`` is read after each attempt and reported on the event. Absent or
     empty means the extraction cost is *unknown*, which is recorded as unknown
     rather than as zero.
+
+    ``feedback`` is likewise optional, and is passed only to extractors whose
+    ``__call__`` accepts it as a keyword. It carries the previous attempt's
+    rejection codes and details, so a retry is a correction rather than a reroll of
+    the same bytes — without it, ``max_attempts=2`` spends a second full call to
+    reproduce the first answer.
     """
 
     async def __call__(
@@ -203,8 +285,17 @@ class ReadingStageConfig:
     ``min_remaining_budget_s`` is a *decline* threshold: below it the archive is
     optional work and is skipped, because a checkpoint that returns nothing must
     not eat the turn that was going to finish the job. ``min_attempt_s`` is what
-    stops a second attempt from being configured but unaffordable under one shared
-    deadline — an attempt is only started when this much time is actually left.
+    stops a second attempt from being configured but unaffordable — an attempt is
+    only started when this much time is actually left, and above that floor the
+    previous attempt's measured duration decides whether a retry is worth starting.
+
+    ``total_timeout_s`` bounds *one* attempt. It is deliberately not the sum over
+    attempts: on a real digest a single extraction costs ~120s, so a window shared
+    by two attempts is arithmetically single — the first call returns at 120s and
+    the retry is handed whatever is left, which is how a two-attempt configuration
+    produced one attempt in every observed failure. The stage-wide ceiling is
+    ``total_timeout_s * max_attempts``, still clamped by the caller's usable
+    budget, so doubling the configured attempts cannot spend the delivery reserve.
     """
 
     enabled: bool = False
@@ -215,13 +306,16 @@ class ReadingStageConfig:
     max_findings: int = 24
     archive_max_chars: int = 3_000
     max_attempts: int = 2
+    #: Budget for *one* attempt, not for all of them — see the class docstring.
     total_timeout_s: float = 60.0
     #: Do not start when the usable budget (remaining minus delivery reserve) is
     #: below this. Optional archiving is never worth the answer.
     min_remaining_budget_s: float = 45.0
-    #: A further attempt is only started when at least this much of the stage
-    #: deadline is left; otherwise the retry is recorded as not started. Capped at
-    #: half of ``total_timeout_s`` so a short stage can still afford its own retry.
+    #: A further attempt is only started when at least this much of its own budget
+    #: is left; otherwise the retry is recorded as not started. Capped at half of
+    #: ``total_timeout_s`` so a short stage can still afford its own retry, and
+    #: raised to half the previous attempt's duration so a hopeless retry is not
+    #: started just because the absolute floor is tiny.
     min_attempt_s: float = 5.0
     #: Skip a repeat attempt whose input is byte-identical to the one that just
     #: failed. Without it, every subsequent turn pays the same cost for the same
@@ -493,18 +587,32 @@ def _render_archive(
 
 
 def _archive_tail(checkpoint: ReadingCheckpoint) -> list[str]:
-    """Non-finding lines both renderings carry: unread ranges, limits, questions."""
+    """Non-finding lines both renderings carry: unread ranges, limits, questions.
+
+    Every line here is derived from the record's own fields, never from prose, so
+    the archive cannot lose coverage information the record still holds. ``complete``
+    is rendered on its own: a record that admits it did not read everything but names
+    no range used to print nothing at all, which reads exactly like full coverage —
+    the failure mode this whole layer exists to prevent. The wording is scoped to
+    *this checkpoint's* reading on purpose: a checkpoint covers the bodies it retired,
+    not the task, and the deliverable is what may speak for the task as a whole.
+    """
     tail: list[str] = []
-    if checkpoint.coverage.unread_ranges:
+    coverage = checkpoint.coverage
+    if coverage.unread_ranges:
         tail.append(
-            "未读："
+            "本检查点未读："
             + ", ".join(
                 f"{rng.source_id}[{rng.start}-{rng.end}]@v{rng.version}"
-                for rng in checkpoint.coverage.unread_ranges
+                for rng in coverage.unread_ranges
             ),
         )
-    if checkpoint.coverage.limitations:
-        tail.append("限制：" + "；".join(checkpoint.coverage.limitations))
+    elif not coverage.complete:
+        # No range to name, but the claim is still false. Say so rather than imply
+        # completeness by silence.
+        tail.append("本检查点覆盖不完整：未读范围未明确")
+    if coverage.limitations:
+        tail.append("限制：" + "；".join(coverage.limitations))
     if checkpoint.excluded:
         tail.append(
             "已排除：" + "；".join(f"{item.path}（{item.reason}）" for item in checkpoint.excluded),
@@ -602,6 +710,10 @@ class ReadingStage:
         #: this is a memo, not a history).
         self._failed_inputs: dict[str, str] = {}
         self._failed_order: list[str] = []
+        #: ``None`` until the extractor's signature has been inspected once. Probed
+        #: rather than required so an extractor written before this hook existed
+        #: keeps working instead of failing every attempt on an unexpected keyword.
+        self._accepts_feedback: bool | None = None
         self.last_event: ReadingCheckpointEvent | None = None
 
     @property
@@ -670,6 +782,44 @@ class ReadingStage:
             logger.warning("reading extractor scope probe failed: %s", exc)
             return None
         return scope if isinstance(scope, ExtractionScope) else None
+
+    def _supports_feedback(self) -> bool:
+        """Whether the extractor wants the previous attempt's rejection.
+
+        Probed once and cached. A signature that cannot be read is treated as "no":
+        guessing ``yes`` would turn every attempt into a ``TypeError``, and the
+        correction channel is an optimisation, not a requirement.
+        """
+        if self._accepts_feedback is None:
+            try:
+                # ``signature(instance)`` resolves ``type(instance).__call__``, and a
+                # plain function resolves to itself. Inspecting ``.__call__`` instead
+                # would read the *function object's* ``(*args, **kwargs)`` wrapper
+                # and call every old extractor with a keyword it does not accept.
+                parameters = inspect.signature(self._extractor).parameters
+            except (TypeError, ValueError, AttributeError):
+                parameters = {}
+            self._accepts_feedback = "feedback" in parameters or any(
+                parameter.kind is inspect.Parameter.VAR_KEYWORD for parameter in parameters.values()
+            )
+        return self._accepts_feedback
+
+    async def _extract(
+        self,
+        bodies: Sequence[RetirableBody],
+        question: str,
+        bounds: ExtractionBounds,
+        feedback: str,
+    ) -> ReadingCheckpoint:
+        """Call the extractor, handing a retry the reasons the last one failed."""
+        if not feedback or not self._supports_feedback():
+            return await self._extractor(bodies, question, bounds)
+        # Deliberately dynamic: the protocol keeps the three-argument shape so an
+        # extractor written before this hook stays valid, and the probe above is
+        # what proves the keyword is accepted. Typing it as the protocol would
+        # either require the keyword (breaking old extractors) or lie about it.
+        flexible: Any = self._extractor
+        return await flexible(bodies, question, bounds, feedback=feedback)
 
     def _budget_snapshot(self) -> tuple[float | None, float | None, float | None]:
         """Return ``(remaining, reserve, usable)``; any element may be unknown."""
@@ -840,10 +990,16 @@ class ReadingStage:
             record_limit=cfg.record_limit,
             max_findings=cfg.max_findings,
         )
-        deadline = started + cfg.total_timeout_s
+        per_attempt_s = max(0.0, cfg.total_timeout_s)
+        max_attempts = max(1, cfg.max_attempts)
+        # ``total_timeout_s`` prices one attempt. A real digest costs ~120s, so a
+        # window shared between two attempts is arithmetically single: the first
+        # call returns at 120s and the retry is handed whatever is left, which is
+        # how "two attempts" produced one attempt in every observed failure. The
+        # stage ceiling is attempts × that budget, still clamped by what the caller
+        # can afford once its delivery reserve is set aside.
+        deadline = started + per_attempt_s * max_attempts
         if usable is not None:
-            # Never spend past what the caller can afford after its delivery
-            # reserve, even when total_timeout_s is larger.
             deadline = min(deadline, started + usable)
         failure = ""
         attempts: list[ReadingStageAttempt] = []
@@ -855,8 +1011,10 @@ class ReadingStage:
         }
         usage_reports = 0
         extractor_calls = 0
-        for attempt in range(1, max(1, cfg.max_attempts) + 1):
-            left = deadline - self._clock()
+        feedback = ""
+        last_attempt_s = 0.0
+        for attempt in range(1, max_attempts + 1):
+            left = min(per_attempt_s, deadline - self._clock())
             if left <= 0:
                 failure = "stage_timeout"
                 if attempt > 1:
@@ -869,10 +1027,14 @@ class ReadingStage:
                     )
                 break
             # A retry needs enough time to be worth starting, but never more than
-            # half the stage's own budget: otherwise a stage configured with a
-            # short total timeout can never afford its own single retry, and the
-            # "two attempts" in the config is a number with no effect.
-            attempt_floor = min(cfg.min_attempt_s, max(0.0, cfg.total_timeout_s * 0.5))
+            # half its own budget: otherwise a stage configured with a short total
+            # timeout can never afford its own single retry. Above that floor, the
+            # previous attempt's measured duration is the only cost estimate there
+            # is — and it is what stops a 28s retry after a call that just spent
+            # 151s, a timeout that was visible in advance.
+            attempt_floor = min(cfg.min_attempt_s, max(0.0, per_attempt_s * 0.5))
+            if attempt > 1:
+                attempt_floor = max(attempt_floor, last_attempt_s * _RETRY_COST_SHARE)
             if attempt > 1 and left < attempt_floor:
                 # "Configured two attempts" is not "afforded two attempts".
                 failure = "insufficient_attempt_budget"
@@ -889,15 +1051,16 @@ class ReadingStage:
             extractor_calls += 1
             try:
                 candidate = await asyncio.wait_for(
-                    self._extractor(bodies, resolved_question, bounds),
+                    self._extract(bodies, resolved_question, bounds, feedback),
                     timeout=left,
                 )
             except TimeoutError:
                 failure = "extraction_timeout"
+                last_attempt_s = self._clock() - attempt_started
                 attempts.append(
                     ReadingStageAttempt(
                         index=attempt,
-                        duration_s=self._clock() - attempt_started,
+                        duration_s=last_attempt_s,
                         outcome="extractor_timeout",
                         detail=f"no result within {left:.1f}s",
                     )
@@ -910,10 +1073,11 @@ class ReadingStage:
             except Exception as exc:
                 logger.warning("reading extractor failed at turn %d: %s", turn, exc)
                 failure = "extraction_failed"
+                last_attempt_s = self._clock() - attempt_started
                 attempts.append(
                     ReadingStageAttempt(
                         index=attempt,
-                        duration_s=self._clock() - attempt_started,
+                        duration_s=last_attempt_s,
                         outcome="extractor_error",
                         detail=str(exc)[:200],
                     )
@@ -927,15 +1091,25 @@ class ReadingStage:
             if candidate is None or not getattr(candidate, "findings", None):
                 # An empty record is a failed archive, not an empty victory.
                 failure = "empty_record"
+                last_attempt_s = self._clock() - attempt_started
                 attempts.append(
                     ReadingStageAttempt(
                         index=attempt,
-                        duration_s=self._clock() - attempt_started,
+                        duration_s=last_attempt_s,
                         outcome="empty_record",
+                        detail=_empty_detail(self._extractor),
                     )
                 )
                 # Retry narrower once: the extractor may simply have overreached.
                 bounds = replace(bounds, max_findings=max(4, bounds.max_findings // 2))
+                # A truncated or non-JSON reply lands here, and it is the one case
+                # a retry can fix without any validation detail: say what "empty"
+                # meant, so the second call is not a plain reroll.
+                feedback = (
+                    "上一次调用没有返回可用的 findings（空记录，或回复不是可解析的 JSON）。"
+                    "请只输出一个完整的 JSON 对象，不要输出任何解释文字；"
+                    f"发现数量不超过 {bounds.max_findings} 条。"
+                )
                 continue
 
             attached = self._attach_budget(candidate, bodies)
@@ -1003,26 +1177,36 @@ class ReadingStage:
                 failure,
                 detail,
             )
+            last_attempt_s = self._clock() - attempt_started
             attempts.append(
                 ReadingStageAttempt(
                     index=attempt,
-                    duration_s=self._clock() - attempt_started,
+                    duration_s=last_attempt_s,
                     outcome=(
                         "write_failed" if failure == "archive_write_failed" else "validation_rejected"
                     ),
                     detail=f"{failure}: {detail}"[:200],
                 )
             )
-            if failure == "record_over_budget":
-                # Retry with half the record budget instead of trimming findings
-                # silently. If it still does not fit, the bodies stay.
+            if failure not in _RETRYABLE_REJECTIONS:
+                # A failed write, a schema mismatch or a foreign task id is a fact
+                # about the store or the record's identity, not about the wording:
+                # another model call cannot change it.
+                break
+            # A rejection used to end the stage with half its budget unspent, which
+            # is how a two-attempt configuration produced one attempt. The retry is
+            # handed the rejection itself — a byte-identical reroll of the same
+            # input cannot fix a statement it was never told was wrong.
+            feedback = _retry_feedback(installed.issues)
+            if failure in {"record_over_budget", "archive_index_over_budget"}:
+                # Narrow the record instead of trimming findings silently. If the
+                # second record still does not fit, the bodies stay.
                 bounds = replace(
                     bounds,
                     record_limit=max(500, bounds.record_limit // 2),
                     max_findings=max(4, bounds.max_findings // 2),
                 )
-                continue
-            break
+            continue
 
         if failure:
             self._remember_failure(fingerprint, failure)

@@ -10,6 +10,7 @@ import asyncio
 import inspect
 import logging
 import time
+from collections.abc import Mapping
 from typing import Any
 
 from frontier_agent.components.agent_bus import (
@@ -26,7 +27,9 @@ from frontier_agent.components.agent_bus.fan_in import (
 from frontier_agent.components.agent_bus.stop_signal import get_stop_registry
 from frontier_agent.core.execution_context import get_current_execution_scope
 from frontier_agent.core.loop_types import wall_deadline_remaining_s
+from frontier_agent.core.runtime.loop.tool_exec import TOOL_RESULT_CAP_KEY
 from frontier_agent.core.runtime.registries import services as registry
+from frontier_agent.core.runtime.repeat_text import mark_full_sent, may_abbreviate
 from frontier_agent.core.tool import tool
 from plugins.tools._bus_scope import SWARM_SCOPE_KEY, resolve_bus_task_id
 from plugins.tools._verification import render_verification_status
@@ -68,6 +71,59 @@ _WALL_FINALIZE_BUFFER_S = 10.0
 _STATUS_CHURN_KEY = "collect_reports_status_churn"
 _STATUS_CHURN_LIMIT = 2
 _PENDING_ALERT_KEY = "collect_reports_pending_alert"
+
+#: The check list is replayed on every fan-in return. On a measured run the same
+#: two unchecked checks came back four times at ~1,340 characters each, so a
+#: repeat whose full form is still in the transcript is replaced by this line.
+#: Whether it *is* still there is decided by ``repeat_text``, never by "we sent
+#: it before": compaction and reading checkpoints rewrite history in place.
+_VERIFICATION_STATUS_KEY = "collect_reports.verification_status"
+_VERIFICATION_STATUS_REF = (
+    "\n\n[version-bound checks] Unchanged since the identical block earlier in this "
+    "conversation — same check ids, criteria, verdicts and evidence keys. "
+    "Nothing new to read or act on."
+)
+
+#: Used only when the loop published no cap at all (a tool invoked outside the
+#: loop, or a unit test). It sits below the smallest in-tree per-result cap
+#: (15_000), so it cannot license a send that was actually cut.
+_ASSUMED_CAP_CHARS = 8_000
+
+
+def _delivered_cap(scope: Any) -> int:
+    """How much of this return the model receives verbatim; ``0`` = unverifiable.
+
+    A published ``None`` means the loop projects results through a custom
+    post-processor, so the hand-off cannot be reasoned about and nothing may be
+    marked. Only a loop that never published anything falls back to the
+    conservative constant.
+    """
+    metadata = getattr(scope, "metadata", None)
+    if isinstance(metadata, Mapping) and TOOL_RESULT_CAP_KEY in metadata:
+        cap = metadata.get(TOOL_RESULT_CAP_KEY)
+        if isinstance(cap, bool) or not isinstance(cap, int) or cap <= 0:
+            return 0
+        return cap
+    return _ASSUMED_CAP_CHARS
+
+
+def _verification_status_block(
+    scope: Any, bus: AgentBus, task_id: str, sent_chars: int,
+) -> str:
+    """Render the check list, or a reference to the copy already in context."""
+    block = render_verification_status(bus, task_id)
+    if not block:
+        return ""
+    metadata = getattr(scope, "metadata", None)
+    if may_abbreviate(metadata, key=_VERIFICATION_STATUS_KEY, full=block):
+        return _VERIFICATION_STATUS_REF
+    if sent_chars + len(block) <= _delivered_cap(scope):
+        mark_full_sent(
+            metadata if isinstance(metadata, dict) else None,
+            key=_VERIFICATION_STATUS_KEY,
+            full=block,
+        )
+    return block
 
 
 def _handoff_unanswered_alert(scope: Any, bus: AgentBus, task_id: str) -> str | None:
@@ -176,7 +232,7 @@ def _status_notice(
         out += f"\n{extra_status}"
     bus = registry.get_optional(AgentBus)
     if bus is not None:
-        out += render_verification_status(bus, resolve_bus_task_id(scope))
+        out += _verification_status_block(scope, bus, resolve_bus_task_id(scope), len(out))
     return out
 
 
@@ -459,7 +515,8 @@ async def collect_reports(timeout: int = 1800) -> str:
             f" harvested={batch.evidence_count} evidence "
             f"+ {batch.assertion_count} assertions"
         )
-    return "\n\n".join([*batch.blocks, status]) + render_verification_status(bus, task_id)
+    body = "\n\n".join([*batch.blocks, status])
+    return body + _verification_status_block(scope, bus, task_id, len(body))
 
 
 def _start_heartbeat(

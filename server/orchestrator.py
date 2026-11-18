@@ -1928,6 +1928,13 @@ class Orchestrator:
     async def _kill_handle(self, handle: RunHandle, grace: int | None = None) -> None:
         if handle.proc.returncode is not None:
             return
+        # A worker that just emitted run_finished is already on its way out. Let it
+        # reap itself first, or our SIGTERM would rewrite a clean exit code 0 as
+        # -15 and file a completed run as "stopped by parent" (worker_exit.json).
+        with contextlib.suppress(TimeoutError):
+            await asyncio.wait_for(handle.proc.wait(), timeout=1.0)
+        if handle.proc.returncode is not None:
+            return
         # This signal is ours: record it so the exit record can separate "the
         # platform stopped it" from "it died on its own" (worker_exit.json).
         handle._killed_by_parent = True

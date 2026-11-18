@@ -58,6 +58,12 @@ _WEB_AUTO_APPROVED_MUTATIONS = frozenset(
         # Appends an audit manifest under this run's own artifact directory.
         # It cannot mutate the corpus publication store.
         "corpus_submit_manifest",
+        # Copies one file out of a member's private /workspace into the task-scoped,
+        # content-addressed handoff store (plugins/tools/_handoff.py::publish_file).
+        # It publishes no user deliverable and cannot read arbitrary host paths, so it
+        # is the same scoped, reversible write as ``create_file``. Leaving it behind the
+        # human gate stalled a research member for 300 s per attempt.
+        "publish_handoff",
     }
 )
 
@@ -65,6 +71,16 @@ _WEB_AUTO_APPROVED_MUTATIONS = frozenset(
 # authorization, pause state, ownership, versions and quotas on every write;
 # unattended monitoring must not wait for a per-call browser confirmation.
 _WEB_AUTO_APPROVED_WATCH_TOOLS = frozenset({"get_watch_targets", "submit_watch_intents"})
+
+# Read-only lookups the shared classifier cannot recognise as reads: it files them
+# as "non-read tool" and therefore parks them on the human gate. ``research_history``
+# only reads the portable records of earlier committed runs (``_ARCHIVE`` in
+# plugins/tools/research_history.py) and ``list_tasks`` only reads the task board;
+# neither has a side effect to confirm. A five-minute gate on them does not protect
+# anything: run 17bc170a… lost its whole research phase to exactly that timeout,
+# which then closed the sub-agent handoff window and produced a report with no
+# evidence. A Web run has no human standing by, so these execute unprompted.
+_WEB_AUTO_APPROVED_READS = frozenset({"research_history", "list_tasks"})
 
 
 def assess_web_tool_risk(name: str, args: dict, cwd: str) -> ToolRisk:
@@ -81,6 +97,8 @@ def assess_web_tool_risk(name: str, args: dict, cwd: str) -> ToolRisk:
         return risk
     if name in _WEB_AUTO_APPROVED_WATCH_TOOLS:
         return ToolRisk(RISK_SAFE, "trusted session monitoring channel", risk.target)
+    if name in _WEB_AUTO_APPROVED_READS:
+        return ToolRisk(RISK_SAFE, "read-only lookup", risk.target)
     if name in _WEB_AUTO_APPROVED_MUTATIONS:
         return ToolRisk(RISK_SAFE, "run-scoped reversible write", risk.target)
     if name == "bash" and not risk.danger:
@@ -248,12 +266,18 @@ class ApprovalObserver:
         cwd: str,
         timeout: float = DEFAULT_TIMEOUT_S,
         source_meta: dict[str, Any] | None = None,
+        unattended: bool = False,
     ) -> None:
         self.gate = gate
         self._emit = emit
         self.cwd = cwd
         self.timeout = timeout
         self._source_meta = dict(source_meta or {})
+        #: No browser operator is watching this run (it was submitted by the
+        #: backend, so the UI never shows the dialog). Parking a call would buy
+        #: 300s of silence and then a fail-closed reject the model reads as "the
+        #: user declined". See :meth:`_resolve_unattended`.
+        self.unattended = unattended
 
     def for_subagent(self, agent_id: str) -> ApprovalObserver:
         """Share the run gate while stamping one member's approval events."""
@@ -264,6 +288,7 @@ class ApprovalObserver:
             self.cwd,
             timeout=self.timeout,
             source_meta={"agent_id": agent_id, "agent_kind": "subagent"},
+            unattended=self.unattended,
         )
 
     async def wait_for_tool_interrupt(self, ctx: Any, tool_call: dict) -> bool:
@@ -300,6 +325,9 @@ class ApprovalObserver:
         # Read-only, or already allowed for the rest of this run → no gate.
         if risk.level == RISK_SAFE or self.gate.is_allowed(name, args):
             return None
+        # Confirm-level, and nobody is at the keyboard: refuse now, never park.
+        if self.unattended:
+            return self._refuse_unattended(name=name, risk=risk)
 
         async with self.gate.confirmation_lock:
             if self.gate.closed:
@@ -311,6 +339,31 @@ class ApprovalObserver:
             if self.gate.is_allowed(name, args):
                 return None
             return await self._request_confirmation(name=name, args=args, risk=risk)
+
+    def _refuse_unattended(self, *, name: str, risk: ToolRisk) -> ToolCallIntervention:
+        """Refuse a confirm-level call at once, because nobody can answer for it.
+
+        This mode grants nothing. An earlier draft promoted non-destructive ``confirm``
+        calls to ``session_all``; that was wrong on two counts. ``risk.danger == False``
+        does not mean the operation is authorised for this run — only an allowlist tied
+        to the experiment could say that — and the only thing distinguishing opted-in
+        runs was a session-name prefix any caller can type. Both would have widened
+        privilege quietly.
+
+        What remains is strictly narrower than the default: the default parks the call
+        for 300s and then refuses; this refuses immediately, so the model learns in one
+        turn instead of the run silently spending its research window. Hard denials
+        never reach here.
+        """
+        reason = risk.danger or risk.reason
+        self._publish("warning", detail=f"unattended run refused {name}: {reason}")
+        return ToolCallIntervention(
+            skip_with_result=(
+                f"[unattended run: {name} needs a human approval this run cannot "
+                f"obtain ({reason})]"
+            ),
+            skip_is_error=True,
+        )
 
     async def _request_confirmation(
         self,

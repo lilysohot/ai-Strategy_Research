@@ -13,6 +13,7 @@ import json
 
 import pytest
 
+from frontier_agent.core.llm import LLMResponse
 from frontier_agent.core.runtime.reading.contract import Finding, FindingKind
 from frontier_agent.core.runtime.reading.stage import ExtractionBounds, RetirableBody
 from frontier_agent.core.runtime.reading.store import (
@@ -55,18 +56,29 @@ def _retirable(text: str, index: int = 0, tool: str = "corpus_fetch") -> Retirab
 
 
 class _LLM:
-    def __init__(self, reply: str) -> None:
+    def __init__(
+        self,
+        reply: str,
+        *,
+        finish_reason: str = "",
+        reasoning_content: str = "",
+        usage: dict | None = None,
+    ) -> None:
         self.reply = reply
         self.prompts: list[str] = []
+        self._finish_reason = finish_reason
+        self._reasoning = reasoning_content
+        self._usage = usage or {}
 
     async def chat(self, messages, **kwargs):
         del kwargs
         self.prompts.append(messages[-1]["content"])
-
-        class _Response:
-            content = self.reply
-
-        return _Response()
+        return LLMResponse(
+            content=self.reply,
+            finish_reason=self._finish_reason,
+            reasoning_content=self._reasoning,
+            usage=self._usage,
+        )
 
 
 def _evidence(doc_id: str = "cv2:" + "d" * 64, start: int = 0, length: int = 10):
@@ -223,6 +235,143 @@ async def test_the_prompt_carries_every_reference_verbatim() -> None:
     assert REF_B in prompt
     assert "1,000" not in prompt or "1000" in prompt  # bound is stated, format-agnostic
     assert "8" in prompt
+
+
+@pytest.mark.asyncio
+async def test_a_retry_carries_the_rejection_into_the_prompt() -> None:
+    """A retry must differ from the call that was just rejected.
+
+    Without the correction block the stage pays a second full extraction to
+    re-send identical bytes, which is exactly what produced "two attempts, zero
+    installs" on 2026-11-18.
+    """
+    llm = _LLM(_reply())
+    extractor = CorpusReadingExtractor(llm=llm, resolve=_evidence())
+
+    await extractor(
+        [_retirable(_body())],
+        "营收",
+        ExtractionBounds(record_limit=1_000, max_findings=8),
+        feedback="- statement_scope_expanded [f1]: 丢失「未将该」「套用于全部」",
+    )
+
+    prompt = llm.prompts[0]
+    assert "statement_scope_expanded" in prompt
+    assert "丢失「未将该」「套用于全部」" in prompt
+    assert "限定" in prompt
+    # The digest still follows the correction, so the retry can re-read the text.
+    assert REF_A in prompt
+
+
+@pytest.mark.asyncio
+async def test_an_empty_rejection_leaves_the_prompt_unchanged() -> None:
+    llm = _LLM(_reply())
+    extractor = CorpusReadingExtractor(llm=llm, resolve=_evidence())
+
+    await extractor(
+        [_retirable(_body())],
+        "营收",
+        ExtractionBounds(record_limit=1_000, max_findings=8),
+        feedback="   ",
+    )
+
+    assert "校验拒绝" not in llm.prompts[0]
+
+
+@pytest.mark.asyncio
+async def test_an_empty_record_says_which_empty_it_was() -> None:
+    """Four different bugs used to look identical: an empty list and no reason.
+
+    Only ``empty_content`` with ``finish=length`` is a budget question; the other
+    three are parsing or citation failures and must not be answered by raising a
+    limit.
+    """
+    cases = [
+        ("", {"finish_reason": "length", "reasoning_content": "r" * 40}, "empty_content"),
+        ("结论如下，但忘记输出 JSON。", {}, "parse_failed"),
+        ('{"findings": []}', {}, "empty_array"),
+        (
+            json.dumps(
+                {
+                    "findings": [
+                        {
+                            "finding_id": "f1",
+                            "kind": "number",
+                            "statement": "营收 123",
+                            "evidence_refs": ["ce:" + "f" * 32],
+                        }
+                    ]
+                },
+                ensure_ascii=False,
+            ),
+            {},
+            "all_filtered",
+        ),
+    ]
+
+    for reply, extra, expected in cases:
+        extractor = CorpusReadingExtractor(llm=_LLM(reply, **extra), resolve=_evidence())
+        await extractor(
+            [_retirable(_body())],
+            "营收",
+            ExtractionBounds(record_limit=1_000, max_findings=8),
+        )
+
+        diagnostics = extractor.last_diagnostics
+        assert diagnostics is not None
+        assert diagnostics["end_reason"] == expected, (reply[:20], diagnostics)
+        assert diagnostics["content_chars"] == len(reply)
+
+    # The truncation case keeps the provider's own label and the reasoning size.
+    truncated = CorpusReadingExtractor(
+        llm=_LLM("", finish_reason="length", reasoning_content="r" * 40),
+        resolve=_evidence(),
+    )
+    await truncated(
+        [_retirable(_body())], "营收", ExtractionBounds(record_limit=1_000, max_findings=8)
+    )
+    assert truncated.last_diagnostics is not None
+    assert truncated.last_diagnostics["finish_reason"] == "length"
+    assert truncated.last_diagnostics["reasoning_chars"] == 40
+
+    # A reply that starts an object and stops is a parse failure with a position,
+    # not an empty array: the difference decides whether to test a budget change.
+    broken = CorpusReadingExtractor(llm=_LLM('{"findings": [}'), resolve=_evidence())
+    await broken(
+        [_retirable(_body())], "营收", ExtractionBounds(record_limit=1_000, max_findings=8)
+    )
+    assert broken.last_diagnostics is not None
+    assert broken.last_diagnostics["end_reason"] == "parse_failed"
+    assert broken.last_diagnostics["parse"].startswith("json_error@")
+
+
+@pytest.mark.asyncio
+async def test_findings_beyond_the_budget_are_counted_as_truncated() -> None:
+    """Dropping the tail is a budget decision, so it is recorded separately."""
+    reply = _reply(
+        findings=[
+            {
+                "finding_id": f"f{index}",
+                "kind": "number",
+                "statement": f"第 {index} 项 {index} 亿",
+                "value": str(index),
+                "evidence_refs": [REF_A],
+            }
+            for index in range(1, 4)
+        ]
+    )
+    extractor = CorpusReadingExtractor(llm=_LLM(reply), resolve=_evidence())
+
+    checkpoint = await extractor(
+        [_retirable(_body())], "营收", ExtractionBounds(record_limit=1_000, max_findings=1)
+    )
+
+    assert len(checkpoint.findings) == 1
+    assert extractor.last_diagnostics is not None
+    assert extractor.last_diagnostics["kept"] == 1
+    assert extractor.last_diagnostics["raw_findings"] == 3
+    assert extractor.last_diagnostics["truncated"] == 2
+    assert extractor.last_diagnostics["end_reason"] == "ok"
 
 
 def test_fenced_json_is_accepted() -> None:

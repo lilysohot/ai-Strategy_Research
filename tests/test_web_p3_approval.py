@@ -260,6 +260,79 @@ async def test_observer_pure_reject_uses_marker_text(tmp_path) -> None:
     assert out.skip_with_result == "[user rejected this delete_file call — task stopped]"
 
 
+async def test_unattended_run_refuses_a_confirm_call_without_waiting(tmp_path) -> None:
+    """No dialog exists, so the call is refused at once — and granted nothing.
+
+    The point of the check is the negative: ``risk.danger == False`` must not become
+    an authorisation, and no session-scoped allowance may be recorded.
+    """
+    from server.approval import ApprovalGate, ApprovalObserver
+
+    events: list[dict] = []
+    gate = ApprovalGate()
+    obs = ApprovalObserver(
+        gate, events.append, cwd=str(tmp_path), timeout=300.0, unattended=True
+    )
+
+    out = await asyncio.wait_for(
+        obs.on_tool_call(
+            None,
+            {"id": "c9", "name": "unknown_research_tool", "args": {}},
+        ),
+        timeout=2.0,
+    )
+
+    assert out is not None, "an unattended run cannot authorise this"
+    assert out.skip_is_error is True
+    assert "cannot obtain" in out.skip_with_result
+    assert gate.is_allowed("unknown_research_tool", {}) is False, "nothing is remembered"
+    assert not any(event["type"] == "approval_requested" for event in events)
+    assert events[0]["type"] == "warning"
+
+
+async def test_unattended_run_refuses_a_destructive_command_immediately(tmp_path) -> None:
+    """Waiting 300s for an unanswerable dialog ends in the same refusal, later."""
+    from server.approval import ApprovalGate, ApprovalObserver
+
+    events: list[dict] = []
+    obs = ApprovalObserver(
+        ApprovalGate(), events.append, cwd=str(tmp_path), timeout=300.0, unattended=True
+    )
+
+    out = await asyncio.wait_for(
+        obs.on_tool_call(
+            None,
+            {"id": "c10", "name": "bash", "args": {"command": "rm -rf /tmp/pretend"}},
+        ),
+        timeout=2.0,
+    )
+
+    assert out is not None
+    assert out.skip_is_error is True
+    assert "cannot obtain" in out.skip_with_result
+    assert events[0]["type"] == "warning"
+    assert "refused" in events[0]["detail"]
+
+
+async def test_unattended_mode_never_softens_a_hard_denial(tmp_path) -> None:
+    """The hard-deny branch runs before the gate, so unattended cannot touch it."""
+    from server.approval import ApprovalGate, ApprovalObserver
+
+    events: list[dict] = []
+    obs = ApprovalObserver(
+        ApprovalGate(), events.append, cwd=str(tmp_path), unattended=True
+    )
+
+    out = await obs.on_tool_call(
+        None,
+        {"id": "c11", "name": "write_file", "args": {"path": "/etc/passwd", "content": "x"}},
+    )
+
+    assert out is not None
+    assert out.skip_with_result.startswith("[blocked by safety policy")
+    assert events == []
+
+
 async def test_observer_reject_with_replacement_redirects(tmp_path) -> None:
     from server.approval import ApprovalDecision, ApprovalGate, ApprovalObserver
 
@@ -391,6 +464,41 @@ def test_web_risk_policy_only_promotes_scoped_non_destructive_work(tmp_path) -> 
         assess_web_tool_risk("write_file", {"path": "/etc/passwd", "content": "x"}, cwd).level
         == "deny"
     )
+
+
+def test_read_only_lookups_skip_the_gate_and_nothing_else_does(tmp_path) -> None:
+    """``research_history`` class runs unprompted; writes and unknown tools do not.
+
+    Run 17bc170a… parked ``research_history`` for the full 300 s gate, which consumed
+    the research phase and closed the sub-agent handoff window. A Web run has no human
+    standing by, so read-only lookups must not wait for one — while everything with a
+    side effect keeps the shared decision.
+    """
+    from server.approval import assess_web_tool_risk
+
+    cwd = str(tmp_path)
+    for name in ("research_history", "list_tasks"):
+        risk = assess_web_tool_risk(name, {}, cwd)
+        assert risk.level == "safe", name
+        assert risk.reason == "read-only lookup", name
+
+    # Promotion is name-scoped: an unknown tool still asks, a write still asks, and a
+    # hard denial is never downgraded.
+    assert assess_web_tool_risk("unknown_research_tool", {}, cwd).level == "confirm"
+    assert assess_web_tool_risk("delete_file", {"path": "/etc/passwd"}, cwd).level == "deny"
+    # A run-scoped write is promoted as a write (not as a read), and only by name.
+    handoff = assess_web_tool_risk("publish_handoff", {}, cwd)
+    assert handoff.level == "safe"
+    assert handoff.reason == "run-scoped reversible write"
+
+
+def test_read_auto_approval_preserves_hard_denials(tmp_path, monkeypatch) -> None:
+    import server.approval as approval
+
+    denied = approval.ToolRisk(approval.RISK_DENY, "policy denial")
+    monkeypatch.setattr(approval, "assess_with_rules", lambda *args, **kwargs: denied)
+    for name in ("research_history", "list_tasks"):
+        assert approval.assess_web_tool_risk(name, {}, str(tmp_path)) is denied
 
 
 async def test_observer_keeps_shell_deletion_behind_high_risk_approval(tmp_path) -> None:

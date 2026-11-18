@@ -100,3 +100,41 @@ async def test_parent_kill_is_marked_and_signal_recorded(
     assert record["signal"] in {signal.SIGTERM, signal.SIGKILL}
     assert record["exit_code"] is None
     assert (run_root / "run" / "worker_exit.json").exists()
+
+
+async def test_already_finished_worker_keeps_its_own_exit_code(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A clean exit must not be rewritten as our SIGTERM (-15).
+
+    The run has emitted run_finished and is exiting on its own; killing it in that
+    window used to make ``worker_exit.json`` say ``signal=15, stopped_by_parent=true``
+    for a run that actually completed.
+    """
+    run_root = tmp_path / "run-root-clean"
+    (run_root / "run").mkdir(parents=True)
+    monkeypatch.setattr(orch, "run_dir_for", lambda run_id: run_root)
+
+    stderr_path = run_root / "run" / "engine.stderr.log"
+    stderr_file = open(stderr_path, "ab", buffering=0)
+    proc = await asyncio.create_subprocess_exec(
+        sys.executable,
+        "-c",
+        "import sys; sys.exit(0)",
+        stdout=asyncio.subprocess.DEVNULL,
+        stderr=stderr_file,
+        start_new_session=True,
+    )
+    handle = _handle(proc, stderr_path, stderr_file)
+    handle._finished = True
+
+    killer = orch.Orchestrator.__new__(orch.Orchestrator)
+    killer._cfg = SimpleNamespace(stop_grace_period_s=1)  # type: ignore[assignment]
+    await killer._kill_handle(handle, grace=1)
+
+    record = orch._record_worker_exit(handle)
+    assert handle._killed_by_parent is False
+    assert record["stopped_by_parent"] is False
+    assert record["exit_code"] == 0
+    assert record["signal"] is None
+    assert record["finished_frame"] is True

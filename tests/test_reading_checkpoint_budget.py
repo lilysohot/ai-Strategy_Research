@@ -336,8 +336,13 @@ async def test_a_checkpoint_cannot_spend_past_the_reserve() -> None:
 
 @pytest.mark.asyncio
 async def test_a_second_attempt_is_recorded_as_not_started_without_budget() -> None:
-    """"Two attempts configured" is not "two attempts afforded"."""
-    extractor = _Extractor(delay=0.2, result=_EMPTY)
+    """"Two attempts configured" is not "two attempts afforded".
+
+    ``total_timeout_s`` prices one attempt, so the stage ceiling is twice that; the
+    caller's *usable* budget is what decides. 0.12s in total buys one attempt and
+    leaves less than the retry floor.
+    """
+    extractor = _Extractor(delay=0.05, result=_EMPTY)
 
     event = await _run(
         _stage(
@@ -345,12 +350,81 @@ async def test_a_second_attempt_is_recorded_as_not_started_without_budget() -> N
             total_timeout_s=0.25,
             max_attempts=2,
             min_attempt_s=5.0,
+            min_remaining_budget_s=0.0,
+            budget=ReadingBudget(remaining_s=lambda: 0.12),
         ),
     )
 
     outcomes = [attempt.outcome for attempt in event.attempts]
     assert "not_started" in outcomes
     assert extractor.calls == 1, "a retry must not be started it cannot afford"
+    assert event.failure == "insufficient_attempt_budget"
+    assert event.installed is False
+
+
+@pytest.mark.asyncio
+async def test_the_stage_budget_prices_one_attempt_not_all_of_them() -> None:
+    """Two attempts each fit the per-attempt budget.
+
+    The old arithmetic made this impossible by construction: a 0.25s window shared
+    by two attempts left 0.05s for the retry, so a configured second attempt could
+    never run after a call that used most of the window. That is the shape of a
+    180s window against a ~120s extraction.
+    """
+    extractor = _Extractor(delay=0.2, result=_EMPTY)
+
+    event = await _run(
+        _stage(extractor, total_timeout_s=0.25, max_attempts=2, min_attempt_s=0.01),
+    )
+
+    assert extractor.calls == 2
+    assert [attempt.outcome for attempt in event.attempts] == ["empty_record", "empty_record"]
+
+
+@pytest.mark.asyncio
+async def test_a_retry_is_not_started_when_it_cannot_cover_the_measured_cost() -> None:
+    """The 2026-11-18 finance member, replayed with an exact clock.
+
+    Attempt 1 spent 151.8s; 28.2s of the ceiling were left. Starting the retry
+    would pay for a timeout that was visible in advance, so it is recorded as not
+    started instead.
+    """
+    now = 0.0
+
+    class _SlowEmpty:
+        calls = 0
+
+        async def __call__(self, bodies, question, bounds):
+            del bodies, question, bounds
+            nonlocal now
+            self.calls += 1
+            now += 151.8
+            return _EMPTY
+
+    extractor = _SlowEmpty()
+    stage = ReadingStage(
+        extractor=extractor,
+        store=_Store(),
+        config=ReadingStageConfig(
+            enabled=True,
+            min_body_chars=1_000,
+            working_set_limit=8_000,
+            keep_recent_messages=0,
+            max_attempts=2,
+            total_timeout_s=180.0,
+        ),
+        task_id="run-1",
+        resolve=lambda ref: {"ref": ref},
+        clock=lambda: now,
+        budget=ReadingBudget(remaining_s=lambda: 208.2),
+    )
+
+    event = await _run(stage)
+
+    assert extractor.calls == 1, "a retry that cannot finish must not be paid for"
+    assert event.attempts[0].outcome == "empty_record"
+    assert event.attempts[1].outcome == "not_started"
+    assert event.attempts[1].detail == "56.40s left < attempt floor 75.90s"
     assert event.failure == "insufficient_attempt_budget"
     assert event.installed is False
 
