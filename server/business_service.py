@@ -505,6 +505,11 @@ async def business_transaction() -> AsyncIterator[AsyncSession]:
     session = await store.session_scope()
     async with session, session.begin():
         yield session
+        # Inner helpers only stage; this boundary owns the final seal so every
+        # HTTP write path commits its Super-link events with the business rows.
+        from server.super_link import events
+
+        await events.seal_changes(session)
 
 
 async def _claim_operation(

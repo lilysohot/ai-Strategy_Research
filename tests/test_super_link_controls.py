@@ -8,7 +8,7 @@ from sqlalchemy import func, select
 
 from server import dispatch_outbox, store
 from server.config import get_config
-from server.super_link import controls, coordination, management, runtime
+from server.super_link import controls, coordination, events, management, runtime
 from server.super_link import models as sl
 from server.super_link.contracts import CollaborationError
 from tests.test_super_link import make_run, published
@@ -38,6 +38,7 @@ async def queue(case):
             session_key=str(pair.team_session_id),
             prompt="Research",
         )
+        await events.seal_changes(session)
     return binding.run_id
 
 
@@ -94,6 +95,7 @@ async def test_stop_cancels_queue_survives_reconcile_and_never_revives_delivery(
 
     async with sessions.begin() as session:
         await receive(session, message_id=mid)
+        await events.seal_changes(session)
     await coordination.inspect_delivery(mid, inspector, reviewer="test")
     inspector.assert_not_called()
     assert await coordination.accept_delivery(mid) is None

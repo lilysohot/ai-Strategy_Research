@@ -3,7 +3,7 @@ import { computed, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ApiError } from '../api/client'
 import { runs as runsApi } from '../api'
-import { superLink, type Space, type LinkRun, type Delivery } from '../api/superLink'
+import { superLink, type Space, type Delivery } from '../api/superLink'
 import { linkLabel } from '../utils/superLink'
 import { renderMarkdown } from '../utils/markdown'
 import RunDetailView from './RunDetailView.vue'
@@ -11,6 +11,7 @@ import ArtifactPanel from '../components/ArtifactPanel.vue'
 import SuperLinkControls from '../components/SuperLinkControls.vue'
 import SuperLinkStudio from '../components/SuperLinkStudio.vue'
 import { useAuthStore } from '../stores/auth'
+import { useSpaceSync } from '../superLink/useSpaceSync'
 
 const route = useRoute()
 const router = useRouter()
@@ -18,15 +19,9 @@ const auth = useAuthStore()
 const pendingKey = `super-link.pending-create:${auth.user?.id ?? 'anonymous'}`
 const spaceId = computed(() => typeof route.params.spaceId === 'string' ? route.params.spaceId : '')
 const spaces = ref<Space[]>([])
-const current = ref<Space | null>(null)
-const runs = ref<LinkRun[]>([])
-const deliveries = ref<Delivery[]>([])
 const spaceCursor = ref<string | null>(null)
-const runCursor = ref<string | null>(null)
-const deliveryCursor = ref<string | null>(null)
-const loading = ref(false)
-const loadingMore = ref(false)
-const error = ref('')
+const listLoading = ref(false)
+const listError = ref('')
 const disabled = ref(false)
 const canCreate = ref(false)
 const createReason = ref('')
@@ -41,12 +36,10 @@ const selectedRun = ref<string | null>(null)
 const runOpen = ref(false)
 const answer = ref('')
 const runError = ref('')
-const updatedAt = ref('')
-const browsingHistory = ref(false)
+const loadingMore = ref(false)
 let epoch = 0
 let detailEpoch = 0
 let runEpoch = 0
-let timer: ReturnType<typeof setTimeout> | undefined
 let creation: { goal: string; key: string } | null = null
 try {
   const saved = JSON.parse(sessionStorage.getItem(pendingKey) ?? 'null')
@@ -54,69 +47,94 @@ try {
     creation = saved; goal.value = saved.goal
   }
 } catch { /* Storage may be disabled; in-page retries remain idempotent. */ }
-const peers = computed(() => current.value?.participants ?? [])
+
+const { state: sync, retry: retrySync, refreshNow, returnToLatest, loadMore: loadMoreSync } = useSpaceSync(spaceId)
+const current = computed(() => sync.value.space)
+const runs = computed(() => sync.value.runs.items)
+const deliveries = computed(() => sync.value.deliveries.items)
+const pendingInterventions = computed(() => sync.value.pendingInterventions.items)
+const pendingTotal = computed(() => sync.value.pendingInterventions.total)
+const activeRunIds = computed(() => sync.value.activeRunIds)
+const peers = computed(() => sync.value.participants)
+const updatedAt = computed(() => sync.value.updatedAt ? new Date(sync.value.updatedAt).toLocaleTimeString('zh-CN') : '')
+const detailLoading = computed(() => sync.value.status === 'loading' || sync.value.status === 'resyncing')
+const error = computed(() => spaceId.value
+  ? (sync.value.status === 'live' ? sync.value.error : '')
+  : listError.value)
+const loading = computed(() => spaceId.value ? detailLoading.value : listLoading.value)
+const statusText = computed(() => {
+  switch (sync.value.status) {
+    case 'loading': return '正在读取最新状态…'
+    case 'resyncing': return '正在重新同步…'
+    case 'reconnecting': return '连接中断，正在重连；当前显示最近一次同步记录。'
+    case 'unavailable': return '状态同步暂不可用；当前显示最近一次同步记录。'
+    case 'auth_required': return '登录状态已失效，请重新登录。'
+    case 'not_found': return sync.value.error
+    case 'idle':
+    case 'stopped': return ''
+    default: return updatedAt.value ? `已同步 · 状态更新于 ${updatedAt.value}` : '已同步'
+  }
+})
 const message = (e: unknown) => e instanceof ApiError ? e.message : '暂时无法连接，请稍后重试'
 const date = (value: string | null) => value ? new Date(value).toLocaleString('zh-CN') : '尚未发布'
 const role = (id: string) => peers.value.find(p => p.participant_id === id)?.role === 'team' ? 'Team' : 'Single'
 const peerRuns = (session: string) => runs.value.filter(r => r.session_id === session)
 
-async function refresh() {
+async function loadSpaces() {
   const ticket = epoch
-  const id = spaceId.value
-  clearTimeout(timer)
-  browsingHistory.value = false
-  loading.value = true
+  listLoading.value = true
   try {
-    if (id) {
-      const [s, r, d] = await Promise.all([superLink.space(id), superLink.runs(id), superLink.deliveries(id)])
-      if (ticket !== epoch) return
-      current.value = s; runs.value = r.items; deliveries.value = d.items
-      runCursor.value = r.next_after; deliveryCursor.value = d.next_after
-    } else {
-      const [cap, list] = await Promise.all([superLink.capabilities(), superLink.spaces()])
-      if (ticket !== epoch) return
-      canCreate.value = cap.can_create; createReason.value = cap.reason ?? ''
-      spaces.value = list.items; spaceCursor.value = list.next_after
-    }
-    error.value = ''; disabled.value = false
-    updatedAt.value = new Date().toLocaleTimeString('zh-CN')
+    const [cap, list] = await Promise.all([superLink.capabilities(), superLink.spaces()])
+    if (ticket !== epoch) return
+    canCreate.value = cap.can_create
+    createReason.value = cap.reason ?? ''
+    spaces.value = list.items
+    spaceCursor.value = list.next_after
+    listError.value = ''
+    disabled.value = false
   } catch (e) {
     if (ticket !== epoch) return
     disabled.value = e instanceof ApiError && e.detail === 'super_link_disabled'
-    error.value = disabled.value ? 'Super-link 尚未启用。原有研究工作台仍可正常使用。'
-      : e instanceof ApiError && e.status === 404 ? '未找到这个协作空间，或你没有访问权限。' : message(e)
+    listError.value = disabled.value
+      ? 'Super-link 尚未启用。原有研究工作台仍可正常使用。'
+      : e instanceof ApiError && e.status === 404
+        ? '未找到这个协作空间，或你没有访问权限。'
+        : message(e)
     canCreate.value = false
   } finally {
-    if (ticket === epoch) {
-      loading.value = false
-      if (id && !disabled.value) timer = setTimeout(() => { if (!loadingMore.value) void refresh(); else timer = setTimeout(() => void refresh(), 5000) }, 5000)
-    }
+    if (ticket === epoch) listLoading.value = false
   }
 }
 
+function refreshStatus() {
+  if (!spaceId.value) { void loadSpaces(); return }
+  if (sync.value.history) { returnToLatest(); return }
+  if (sync.value.status === 'unavailable') { retrySync(); return }
+  refreshNow()
+}
+
 async function more(kind: 'spaces' | 'runs' | 'deliveries') {
-  const ticket = epoch
-  const id = spaceId.value
-  loadingMore.value = true
-  browsingHistory.value = true
-  clearTimeout(timer)
-  try {
-    if (kind === 'spaces' && spaceCursor.value) {
+  if (kind === 'spaces') {
+    if (!spaceCursor.value) return
+    const ticket = epoch
+    loadingMore.value = true
+    try {
       const page = await superLink.spaces(spaceCursor.value)
       if (ticket !== epoch) return
-      spaces.value.push(...page.items); spaceCursor.value = page.next_after
-    } else if (kind === 'runs' && runCursor.value) {
-      const page = await superLink.runs(id, runCursor.value)
-      if (ticket !== epoch) return
-      runs.value.push(...page.items); runCursor.value = page.next_after
-    } else if (kind === 'deliveries' && deliveryCursor.value) {
-      const page = await superLink.deliveries(id, deliveryCursor.value)
-      if (ticket !== epoch) return
-      deliveries.value.push(...page.items); deliveryCursor.value = page.next_after
-    }
-  } catch (e) { if (ticket === epoch) error.value = message(e) }
-  finally { if (ticket === epoch) loadingMore.value = false }
-  // Viewing older pages intentionally pauses polling; refresh returns to latest.
+      spaces.value.push(...page.items)
+      spaceCursor.value = page.next_after
+    } catch (e) { if (ticket === epoch) listError.value = message(e) }
+    finally { if (ticket === epoch) loadingMore.value = false }
+    return
+  }
+  loadingMore.value = true
+  try { await loadMoreSync(kind) }
+  finally { loadingMore.value = false }
+}
+
+function moreActions() {
+  loadingMore.value = true
+  void loadMoreSync('actions').finally(() => { loadingMore.value = false })
 }
 
 async function create() {
@@ -153,12 +171,19 @@ async function inspectRun(id: string) {
   } catch (e) { if (ticket === runEpoch && pageEpoch === epoch) runError.value = message(e) }
 }
 watch(spaceId, () => {
-  epoch++; clearTimeout(timer); current.value = null; runs.value = []; deliveries.value = []
-  error.value = ''; disabled.value = false; loadingMore.value = false
-  deliveryOpen.value = false; runOpen.value = false
-  void refresh()
+  epoch++
+  listError.value = ''
+  disabled.value = false
+  loadingMore.value = false
+  deliveryOpen.value = false
+  runOpen.value = false
+  if (!spaceId.value) {
+    spaces.value = []
+    spaceCursor.value = null
+    void loadSpaces()
+  }
 }, { immediate: true })
-onUnmounted(() => { epoch++; clearTimeout(timer) })
+onUnmounted(() => { epoch++ })
 </script>
 
 <template>
@@ -168,11 +193,20 @@ onUnmounted(() => { epoch++; clearTimeout(timer) })
         <p class="sl-intro">让研究、核查与跟进，坐在一起。</p></div>
       <div class="sl-actions">
         <RouterLink v-if="spaceId" :to="{ name: 'super-link' }">全部协作</RouterLink>
-        <el-button :loading="loading" :disabled="loadingMore" @click="refresh">刷新状态</el-button>
+        <el-button :loading="loading" :disabled="loadingMore" @click="refreshStatus">刷新状态</el-button>
         <el-button v-if="!spaceId" type="primary" :disabled="!canCreate || loading" @click="createOpen = true">新建协作</el-button>
       </div>
     </header>
     <el-alert v-if="error" :title="error" type="warning" :closable="false" show-icon />
+    <section v-if="spaceId && statusText" class="sl-sync" :class="`is-${sync.status}`" role="status" aria-live="polite">
+      <span class="sl-sync-dot" aria-hidden="true" /><span>{{ statusText }}</span>
+      <el-button v-if="sync.status === 'unavailable'" size="small" @click="retrySync">重试</el-button>
+    </section>
+    <section v-if="spaceId && sync.history" class="sl-history">
+      <span>正在查看较早记录，实时更新不会插入当前列表。</span>
+      <span v-if="sync.hasUpdates">有新更新。</span>
+      <el-button size="small" @click="returnToLatest">查看最新</el-button>
+    </section>
     <p v-if="!spaceId && createReason && !error" class="sl-muted">{{ createReason }}</p>
 
     <template v-if="spaceId && current">
@@ -180,7 +214,7 @@ onUnmounted(() => { epoch++; clearTimeout(timer) })
         <div class="sl-budget"><span class="sl-eyebrow">自动跟进</span><p><strong>{{ current.automatic_budget?.used ?? '—' }}</strong><span> / {{ current.automatic_budget?.limit ?? '—' }} 轮</span></p></div>
       </section>
     </template>
-    <SuperLinkStudio v-if="!disabled && (!spaceId || current)" :space="current" :runs="runs" :deliveries="deliveries" :stale="!!error" :history="browsingHistory" />
+    <SuperLinkStudio v-if="!disabled && (!spaceId || current)" :space="current" :runs="runs" :deliveries="deliveries" :stale="sync.stale" :history="sync.history" />
 
     <template v-if="!spaceId && !disabled">
       <header class="sl-section-heading"><div><span class="sl-eyebrow">YOUR WORKSPACES</span><h2>协作空间</h2></div><span class="sl-muted">{{ spaces.length }} 个已加载</span></header>
@@ -197,8 +231,10 @@ onUnmounted(() => { epoch++; clearTimeout(timer) })
     </template>
 
     <template v-if="spaceId && current">
-      <SuperLinkControls :key="current.space_id" :space="current" :runs="runs" :deliveries="deliveries" @changed="refresh" />
-      <p v-if="browsingHistory" class="sl-muted">正在查看较早记录，自动刷新已暂停。点击“刷新状态”返回最新记录。</p>
+      <SuperLinkControls :key="current.space_id" :space="current" :runs="runs" :deliveries="deliveries"
+        :pending="pendingInterventions" :pending-total="pendingTotal" :active-run-ids="activeRunIds"
+        :actions="sync.actions.items" :actions-next="sync.actions.next_after"
+        @changed="refreshNow" @more-actions="moreActions" />
       <header class="sl-section-heading"><div><span class="sl-eyebrow">SESSION ACTIVITY</span><h2>工作记录</h2></div><span v-if="updatedAt" class="sl-muted">{{ error ? '上次更新' : '状态更新于' }} {{ updatedAt }}</span></header>
       <section class="sl-peers" aria-label="参与方会话">
         <article v-for="peer in peers" :key="peer.participant_id" class="sl-peer">
@@ -210,7 +246,7 @@ onUnmounted(() => { epoch++; clearTimeout(timer) })
           </button>
         </article>
       </section>
-      <el-button v-if="runCursor" :loading="loadingMore" :disabled="loading" @click="more('runs')">更早的运行</el-button>
+      <el-button v-if="sync.runs.next_after" :loading="loadingMore" :disabled="loading" @click="more('runs')">更早的运行</el-button>
       <section class="sl-deliveries" aria-label="交付链路">
         <header><div><h2>交付链路</h2><p class="sl-muted">旁路检查独立呈现；收到信息不等于已经执行。</p></div><span>{{ deliveries.length }} 份已加载</span></header>
         <p v-if="!deliveries.length" class="sl-empty">尚无正式交付。成果将在来源运行结束并保存后进入链路。</p>
@@ -220,7 +256,7 @@ onUnmounted(() => { epoch++; clearTimeout(timer) })
           <span>{{ d.inspection ? `旁路：${linkLabel(d.inspection.verdict)}` : '等待检查' }}</span>
           <span v-if="d.feedback?.run">补正：{{ linkLabel(d.feedback.run.status) }}</span>
         </button>
-        <el-button v-if="deliveryCursor" :loading="loadingMore" :disabled="loading" @click="more('deliveries')">更早的交付</el-button>
+        <el-button v-if="sync.deliveries.next_after" :loading="loadingMore" :disabled="loading" @click="more('deliveries')">更早的交付</el-button>
       </section>
     </template>
 
@@ -277,4 +313,9 @@ onUnmounted(() => { epoch++; clearTimeout(timer) })
 .sl-form-actions{justify-content:flex-end;margin-top:20px}label{display:block;margin-bottom:12px}.sl-pre{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7}.sl-prose{overflow-wrap:anywhere;line-height:1.8}.sl-prose :deep(pre){overflow-x:auto;max-width:100%}.sl-prose :deep(img){max-width:100%}
 button:focus-visible,a:focus-visible{outline:2px solid var(--el-color-primary);outline-offset:3px}
 @media(max-width:700px){.super-link{padding:16px 4px 40px}.sl-heading{flex-direction:column;align-items:flex-start;gap:20px}.sl-spaces,.sl-peers{grid-template-columns:1fr;gap:12px}.sl-space,.sl-peer,.sl-deliveries{padding:18px}.sl-delivery{flex-wrap:wrap}.sl-heading h1{font-size:36px}.sl-actions{gap:8px}.sl-actions :deep(.el-button+.el-button){margin-left:0}.sl-goal{gap:16px;align-items:flex-start}.sl-budget{padding-left:16px}.sl-budget strong{font-size:23px}.sl-goal h2{font-size:15px}.sl-section-heading{align-items:start}.sl-section-heading>.sl-muted{max-width:120px;text-align:right}.sl-deliveries>header{align-items:start}.sl-deliveries>header>span{white-space:nowrap;font-size:11px}}
+.sl-sync,.sl-history{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--el-text-color-secondary);line-height:1.7}
+.sl-sync{margin:0 0 8px}.sl-sync-dot{width:6px;height:6px;border-radius:50%;background:#8eab78;flex-shrink:0}
+.sl-sync.is-reconnecting .sl-sync-dot,.sl-sync.is-unavailable .sl-sync-dot{background:var(--el-color-warning)}
+.sl-sync.is-auth_required .sl-sync-dot,.sl-sync.is-not_found .sl-sync-dot{background:var(--el-color-danger)}
+.sl-history{margin:0 0 16px;padding:10px 12px;border:1px solid var(--el-border-color-lighter);border-radius:8px}
 </style>

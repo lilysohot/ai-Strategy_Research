@@ -32,6 +32,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from server import restore_check, store, uploads
 from server.config import get_config
+from server.super_link import events
 from server.super_link.contracts import DISPATCH_MARKER
 
 logger = logging.getLogger(__name__)
@@ -49,9 +50,38 @@ QUEUE_STATUSES = (PENDING, RETRYABLE_FAILED, CLAIMED, DISPATCHED)
 #: 实例身份：租约 owner。领取互斥靠行锁与租约到期，不靠 owner 全局唯一。
 _OWNER = f"api-{uuid.uuid4().hex[:12]}"
 
+_DISPATCH_EVENT_INVALIDATE = ("runs", "deliveries")
+
 
 def _now() -> datetime:
     return datetime.now(UTC)
+
+
+async def stage_dispatch(session: AsyncSession, row: store.RunDispatch) -> None:
+    """Stage one outbox state observation; callers own the seal boundary."""
+    await events.stage_for_session(
+        session,
+        row.research_id,
+        type="sl.dispatch.changed",
+        change_key=f"dispatch:{row.id}:{row.claim_version}:{row.status}",
+        data={
+            "status": row.status,
+            "attempt": row.attempt,
+            "claim_version": row.claim_version,
+            "run_id": str(row.run_id),
+        },
+        invalidate=_DISPATCH_EVENT_INVALIDATE,
+        source_kind="dispatch",
+        source_id=str(row.id),
+        run_id=row.run_id,
+    )
+
+
+async def _finish_dispatch(session: AsyncSession, row: store.RunDispatch) -> None:
+    """Flush, stage and seal one deferred outbox transition."""
+    await session.flush()
+    await stage_dispatch(session, row)
+    await events.seal_changes(session)
 
 
 async def enqueue(
@@ -68,6 +98,7 @@ async def enqueue(
     """在同一事务内登记派发意图（只 flush，不提交）。"""
     cfg = get_config()
     stopped_space = False
+    run: store.Run | None = None
     if cfg.super_link_enabled:
         from server.super_link.models import SuperLinkParticipant, SuperLinkSpace
 
@@ -99,6 +130,9 @@ async def enqueue(
     )
     session.add(row)
     await session.flush()
+    if stopped_space and run is not None:
+        await store.stage_run_change(session, run, "terminal:stopped")
+    await stage_dispatch(session, row)
     return row
 
 
@@ -232,6 +266,7 @@ async def claim_due(session: AsyncSession, *, limit: int = 8) -> list[store.RunD
     now = _now()
     cfg = get_config()
     claimed: list[store.RunDispatch] = []
+    changed: list[store.RunDispatch] = []
     result = await session.execute(
         select(store.RunDispatch)
         .where(
@@ -253,6 +288,7 @@ async def claim_due(session: AsyncSession, *, limit: int = 8) -> list[store.RunD
         if run is None or run.status != "queued":
             row.status = ABANDONED
             row.last_error = "run 已不在排队状态，取消派发"
+            changed.append(row)
             continue
         # Lock the research, not only this outbox row: another dispatcher may
         # have selected a different row belonging to the same research.
@@ -270,6 +306,7 @@ async def claim_due(session: AsyncSession, *, limit: int = 8) -> list[store.RunD
         if research.deleted_at is not None:
             row.status = ABANDONED
             row.last_error = "研究已删除"
+            changed.append(row)
             continue
         from server.monitor_longterm import launch_block_reason, stop_cancelled_launch
 
@@ -294,7 +331,11 @@ async def claim_due(session: AsyncSession, *, limit: int = 8) -> list[store.RunD
         row.lease_owner = _OWNER
         row.lease_expires_at = now + timedelta(seconds=cfg.dispatch_lease_seconds)
         claimed.append(row)
+        changed.append(row)
     await session.flush()
+    for row in changed:
+        await stage_dispatch(session, row)
+    await events.seal_changes(session)
     return claimed
 
 
@@ -308,6 +349,7 @@ async def mark_dispatched(session: AsyncSession, row_id: uuid.UUID, *, claim_ver
     current.lease_expires_at = None
     current.last_error = None
     await session.flush()
+    await stage_dispatch(session, current)
     return True
 
 
@@ -325,6 +367,7 @@ async def mark_submit_failed(
         current.status = RETRYABLE_FAILED
         current.next_attempt_at = _now() + timedelta(seconds=min(60, 2**current.attempt))
     await session.flush()
+    await stage_dispatch(session, current)
 
 
 async def reclaim_expired(session: AsyncSession) -> int:
@@ -345,6 +388,7 @@ async def reclaim_expired(session: AsyncSession) -> int:
         .with_for_update(skip_locked=True)
     )
     released = 0
+    touched: list[store.RunDispatch] = []
     for row in result.scalars():
         run = await session.get(store.Run, row.run_id)
         if run is None:
@@ -371,7 +415,10 @@ async def reclaim_expired(session: AsyncSession) -> int:
             row.lease_expires_at = None
             row.last_error = f"租约过期且 run 已终态（{run.status}），不再投递"
             released += 1
+        touched.append(row)
     await session.flush()
+    for row in touched:
+        await stage_dispatch(session, row)
     return released
 
 
@@ -387,6 +434,7 @@ async def cancel_pending(session: AsyncSession, *, run_id: uuid.UUID, reason: st
     row.status = ABANDONED
     row.last_error = reason[:2000]
     await session.flush()
+    await stage_dispatch(session, row)
     return True
 
 
@@ -417,6 +465,10 @@ async def stop_queued_run(*, run_id: uuid.UUID) -> bool:
         run.status = "stopped"
         run.stopped_by = "user_stop"
         run.finished_at = _now()
+        await session.flush()
+        await store.stage_run_change(session, run, "terminal:stopped")
+        await stage_dispatch(session, row)
+        await events.seal_changes(session)
     return True
 
 
@@ -428,6 +480,7 @@ async def abandon_for_run(session: AsyncSession, *, run_id: uuid.UUID, reason: s
     row.status = ABANDONED
     row.last_error = reason[:2000]
     await session.flush()
+    await stage_dispatch(session, row)
     return True
 
 
@@ -477,20 +530,24 @@ async def dispatch_once(orch: Any) -> int:
                     or research.deleted_at is not None
                 ):
                     row.status = ABANDONED
+                    await _finish_dispatch(session, row)
                     continue
                 from server.monitor_longterm import launch_block_reason, stop_cancelled_launch
 
                 if reason := await launch_block_reason(session, run_id):
                     if reason == "monitor_cancelled":
                         await stop_cancelled_launch(session, run_id)
+                        await events.seal_changes(session)
                         continue
                     row.status = PENDING
                     row.lease_expires_at = None
                     row.next_attempt_at = _now() + timedelta(seconds=5)
+                    await _finish_dispatch(session, row)
                     continue
                 if (row.prompt_addendum or "").startswith(DISPATCH_MARKER) and not get_config().super_link_enabled:
                     row.status = PENDING
                     row.lease_expires_at = None
+                    await _finish_dispatch(session, row)
                     continue
                 if get_config().super_link_enabled:
                     from server.super_link.models import SuperLinkParticipant, SuperLinkSpace
@@ -505,6 +562,7 @@ async def dispatch_once(orch: Any) -> int:
                         row.status = PENDING
                         row.lease_expires_at = None
                         row.next_attempt_at = _now() + timedelta(seconds=5)
+                        await _finish_dispatch(session, row)
                         continue
                 await orch.submit(
                     run_id=run_id.hex,
@@ -517,6 +575,7 @@ async def dispatch_once(orch: Any) -> int:
                     backfill_turn=False,
                 )
                 await mark_dispatched(session, row_id, claim_version=claim_version)
+                await events.seal_changes(session)
                 dispatched += 1
         except Exception as exc:
             logger.warning("outbox dispatch submit failed for %s: %s", run_id.hex, exc)
@@ -524,6 +583,7 @@ async def dispatch_once(orch: Any) -> int:
                 await mark_submit_failed(
                     session, row_id, claim_version=claim_version, error=str(exc)
                 )
+                await events.seal_changes(session)
             continue
     return dispatched
 

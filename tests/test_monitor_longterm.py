@@ -43,7 +43,7 @@ async def case(monkeypatch):
             )
         )
         session.add(store.MonitorSession(research_id=rid, auto_manage=True, sequence=0))
-        store.add_run(
+        await store.add_run(
             session,
             run_id=run_id,
             session_id=rid,

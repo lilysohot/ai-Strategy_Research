@@ -2,10 +2,16 @@ import { request } from './client'
 import type { ApprovalDecisionValue, RunControlRecord } from '../types'
 
 export interface Page<T> { items: T[]; next_after: string | null }
+/** A snapshot list carries an exact total; pagination never shrinks it. */
+export interface SnapshotPage<T> { items: T[]; total: number; next_after: string | null }
+export interface Participant {
+  participant_id: string; session_id: string; role: string; available?: boolean
+}
 export interface Space {
   space_id: string; goal: string; goal_version: number; paused: boolean
   control_state: 'active' | 'paused' | 'stopping' | 'stopped'; control_version: number; can_control?: boolean
-  participants?: { participant_id: string; session_id: string; role: string }[]
+  delivery_cutoff?: string | null
+  participants?: Participant[]
   automatic_budget?: { used: number; limit: number; remaining: number }
 }
 export interface LinkRun {
@@ -34,6 +40,31 @@ export interface RecoveryCommand {
   idempotency_key: string; reason: string; target_id?: string; additional_runs?: number
 }
 export interface RecoveryRecord { id: string; actor_id: string; request: Record<string, unknown>; result: Record<string, unknown>; created_at: string }
+
+/** Parameters of the consistent snapshot; all list anchors page independently. */
+export interface SnapshotQuery {
+  min_cursor?: string
+  limit?: number
+  runs_after?: string
+  deliveries_after?: string
+  pending_after?: string
+  actions_after?: string
+}
+export interface SpaceSnapshot {
+  schema_version: number
+  /** `sl1:<space>:<epoch>:<seq>`; the SSE `after` must use this value. */
+  cursor: string
+  as_of: string
+  durability_scope: string
+  space: Space
+  participants: Participant[]
+  runs: SnapshotPage<LinkRun>
+  deliveries: SnapshotPage<Delivery>
+  pending_interventions: SnapshotPage<RunControlRecord>
+  actions: SnapshotPage<RecoveryRecord>
+  active_run_ids: string[]
+  capabilities: { replay: boolean; live_output: string }
+}
 const root = '/super-link'
 const space = (id: string) => `${root}/spaces/${encodeURIComponent(id)}`
 export const superLink = {
@@ -41,6 +72,16 @@ export const superLink = {
   spaces: (after?: string) => request<Page<Space>>(`${root}/spaces`, { query: { after } }),
   create: (goal: string, creation_key: string) => request<{ space_id: string; initial_run_id: string }>(`${root}/spaces`, { method: 'POST', body: { goal, creation_key } }),
   space: (id: string) => request<Space>(space(id)),
+  snapshot: (id: string, query: SnapshotQuery = {}) => request<SpaceSnapshot>(`${space(id)}/snapshot`, {
+    query: {
+      min_cursor: query.min_cursor,
+      limit: query.limit,
+      runs_after: query.runs_after,
+      deliveries_after: query.deliveries_after,
+      pending_after: query.pending_after,
+      actions_after: query.actions_after,
+    },
+  }),
   runs: (id: string, after?: string) => request<Page<LinkRun>>(`${space(id)}/runs`, { query: { after, limit: 50, newest_first: 'true' } }),
   deliveries: (id: string, after?: string) => request<Page<Delivery>>(`${space(id)}/deliveries`, { query: { after, limit: 50, newest_first: 'true' } }),
   delivery: (id: string, mid: string) => request<Delivery>(`${space(id)}/deliveries/${encodeURIComponent(mid)}`),

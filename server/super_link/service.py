@@ -16,6 +16,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from server import store
 from server.run_modes import pipeline_for_mode
+from server.super_link import events
 from server.super_link import models as sl
 from server.super_link.contracts import (
     CollaborationError,
@@ -87,7 +88,19 @@ async def create_pair(
         await session.flush()
         session.add(sl.SuperLinkParticipant(space_id=space.id, session_id=research.id, role=role))
     await session.flush()
-    return await _pair(session, space.id)
+    session.add(sl.SuperLinkEventHead(space_id=space.id, stream_epoch=uuid.uuid4()))
+    pair = await _pair(session, space.id)
+    await events.stage_for_space(
+        session,
+        space.id,
+        type="sl.space.created",
+        change_key=f"space:{space.id}:created",
+        data={"goal_version": space.goal_version, "roles": ["team", "single"]},
+        invalidate=("space", "participants", "runs", "deliveries", "actions", "interventions"),
+        source_kind="space",
+        source_id=str(space.id),
+    )
+    return pair
 
 
 async def _bound_run(
@@ -161,6 +174,7 @@ async def register(
             or old.revises_message_id != revises_message_id
         ):
             raise CollaborationError("registration_key_conflict")
+        await _stage_registered(session, old, sender=sender, run=run)
         return old
     message_id = uuid.uuid4()
     request_id = message_id
@@ -200,7 +214,40 @@ async def register(
     )
     session.add(message)
     await session.flush()
+    await _stage_registered(session, message, sender=sender, run=run)
     return message
+
+
+async def _stage_registered(
+    session: AsyncSession,
+    message: sl.SuperLinkMessage,
+    *,
+    sender: sl.SuperLinkParticipant,
+    run: store.Run,
+) -> None:
+    await events.stage_for_space(
+        session,
+        message.space_id,
+        type="sl.delivery.registered",
+        change_key=f"delivery:{message.id}:registered",
+        data={
+            "message_id": str(message.id),
+            "request_id": str(message.request_id),
+            "recipient_id": str(message.recipient_id),
+            "in_reply_to": str(message.in_reply_to) if message.in_reply_to else None,
+            "revises_message_id": (
+                str(message.revises_message_id) if message.revises_message_id else None
+            ),
+            "goal_version": message.goal_version,
+            "content_sha256": message.content_sha256,
+        },
+        invalidate=("deliveries", "runs"),
+        source_kind="delivery",
+        source_id=str(message.id),
+        participant_id=sender.id,
+        session_id=sender.session_id,
+        run_id=run.id,
+    )
 
 
 async def publish(
@@ -264,6 +311,24 @@ async def publish(
     message.continuity_sha256 = source.native_sha256
     session.add(sl.SuperLinkOutbox(message_id=message.id))
     await session.flush()
+    await events.stage_for_space(
+        session,
+        message.space_id,
+        type="sl.delivery.published",
+        change_key=f"delivery:{message.id}:published",
+        data={
+            "message_id": str(message.id),
+            "request_id": str(message.request_id),
+            "source_run_id": str(run.id),
+            "content_sha256": message.content_sha256,
+        },
+        invalidate=("deliveries", "runs"),
+        source_kind="delivery",
+        source_id=str(message.id),
+        participant_id=sender.id,
+        session_id=sender.session_id,
+        run_id=run.id,
+    )
     return message
 
 
@@ -308,10 +373,32 @@ async def receive(session: AsyncSession, message_id: uuid.UUID) -> None:
     if error:
         outbox.state = "quarantined"
         outbox.error_code = error
+        if message is not None:
+            await events.stage_for_space(
+                session,
+                message.space_id,
+                type="sl.delivery.quarantined",
+                change_key=f"receipt:{message_id}:quarantined:{error}",
+                data={"message_id": str(message_id), "error_code": error},
+                invalidate=("deliveries", "runs"),
+                source_kind="delivery",
+                source_id=str(message_id),
+            )
         return
     session.add(sl.SuperLinkReceipt(message_id=message_id))
     outbox.state = "received"
     await session.flush()
+    assert message is not None
+    await events.stage_for_space(
+        session,
+        message.space_id,
+        type="sl.delivery.received",
+        change_key=f"receipt:{message_id}:received",
+        data={"message_id": str(message_id), "transport_state": "received"},
+        invalidate=("deliveries", "runs"),
+        source_kind="delivery",
+        source_id=str(message_id),
+    )
 
 
 async def inbox(

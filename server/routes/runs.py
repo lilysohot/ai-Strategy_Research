@@ -365,7 +365,7 @@ async def submit_run(
             resolution = await investment_snapshot.resolve_for_run(
                 session, user_id=user_id, research_id=session_uuid, spec=saved_spec
             )
-            store.add_run(
+            await store.add_run(
                 session,
                 run_id=run_id,
                 session_id=session_uuid,
@@ -620,6 +620,7 @@ async def rerun_run(
             if fresh_old is not None and fresh_old.status == "queued":
                 fresh_old.status = "stopped"
                 fresh_old.stopped_by = "superseded_by_rerun"
+                await store.stage_run_change(session, fresh_old, "terminal:stopped")
                 old_cancelled = True
         # 逐研究队列上限：被取代的旧 Run 即将作废，不计入，避免它把新 Run 顶到上限外。
         depth = await dispatch_outbox.research_queue_depth(
@@ -637,7 +638,7 @@ async def rerun_run(
         resolution = await investment_snapshot.resolve_for_run(
             session, user_id=user.id, research_id=old_run.session_id, spec=spec
         )
-        store.add_run(
+        await store.add_run(
             session,
             run_id=new_run_id,
             session_id=old_run.session_id,

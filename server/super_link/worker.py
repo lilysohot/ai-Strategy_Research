@@ -17,6 +17,7 @@ from sqlalchemy import select
 from frontier_agent.infra.llm_egress import assert_local_endpoint
 from server import artifacts, store
 from server.config import get_config
+from server.super_link import events
 from server.super_link import models as sl
 from server.super_link.contracts import CollaborationError
 from server.super_link.coordination import (
@@ -117,6 +118,24 @@ async def recover_finalizations(orch: Orchestrator) -> None:
                 continue
             claim.recovery_attempts += 1
             claim.retry_at = now + timedelta(seconds=30)
+            await events.stage_for_session(
+                session,
+                run.session_id,
+                type="sl.finalization.changed",
+                change_key=f"finalization:{run.id}:retry:{claim.recovery_attempts}:claimed",
+                data={
+                    "state": claim.state,
+                    "worker_exited": claim.worker_exited_at is not None,
+                    "exit_code": claim.exit_code,
+                    "error_code": claim.error_code,
+                    "recovery_attempts": claim.recovery_attempts,
+                },
+                invalidate=("runs", "deliveries", "actions"),
+                source_kind="run",
+                source_id=str(run.id),
+                run_id=run.id,
+            )
+            await events.seal_changes(session)
         try:
             async with asyncio.timeout(20):
                 found = await asyncio.to_thread(artifacts.scan_outputs, run.id.hex)
@@ -145,6 +164,26 @@ async def recover_finalizations(orch: Orchestrator) -> None:
                     now = datetime.now(UTC)
                     row.attempted_at = now
                     row.retry_at = now + timedelta(seconds=30)
+                    await events.stage_for_session(
+                        session,
+                        run.session_id,
+                        type="sl.finalization.changed",
+                        change_key=(
+                            f"finalization:{run.id}:retry:{row.recovery_attempts}:deferred"
+                        ),
+                        data={
+                            "state": row.state,
+                            "worker_exited": row.worker_exited_at is not None,
+                            "exit_code": row.exit_code,
+                            "error_code": row.error_code,
+                            "recovery_attempts": row.recovery_attempts,
+                        },
+                        invalidate=("runs", "deliveries", "actions"),
+                        source_kind="run",
+                        source_id=str(run.id),
+                        run_id=run.id,
+                    )
+                    await events.seal_changes(session)
 
 
 async def review_received() -> None:
@@ -237,7 +276,8 @@ async def admit_reviewed() -> None:
         async with store.get_sessionmaker().begin() as session:
             row = await session.get(sl.SuperLinkReview, message_id, with_for_update=True)
             if row is not None:
-                if await session.get(sl.SuperLinkExecution, message_id) is not None:
+                execution = await session.get(sl.SuperLinkExecution, message_id)
+                if execution is not None:
                     error = None
                 now = datetime.now(UTC)
                 row.admission_attempted_at = now
@@ -249,6 +289,30 @@ async def admit_reviewed() -> None:
                     row.admission_held = (
                         error != "admission_failed" or row.admission_attempts >= row.admission_limit
                     )
+                message = await session.get(sl.SuperLinkMessage, message_id)
+                if message is not None:
+                    await events.stage_for_space(
+                        session,
+                        message.space_id,
+                        type="sl.admission.changed",
+                        change_key=(
+                            f"admission:{message_id}:{row.admission_attempts}:"
+                            f"{error or 'accepted'}"
+                        ),
+                        data={
+                            "message_id": str(message_id),
+                            "run_id": str(execution.run_id) if execution is not None else None,
+                            "attempts": row.admission_attempts,
+                            "held": row.admission_held,
+                            "error_code": error,
+                        },
+                        invalidate=("deliveries", "runs", "actions"),
+                        source_kind="delivery",
+                        source_id=str(message_id),
+                        participant_id=message.recipient_id,
+                        run_id=execution.run_id if execution is not None else None,
+                    )
+                    await events.seal_changes(session)
 
 
 async def dispatch_feedback() -> None:
@@ -290,8 +354,10 @@ async def dispatch_feedback() -> None:
         )
     for mid in ids:
         error = None
+        accepted = False
         try:
-            if await accept_feedback(mid) is None:
+            accepted = await accept_feedback(mid) is not None
+            if not accepted:
                 error = "feedback_held"
         except Exception as exc:
             error = str(exc) if isinstance(exc, CollaborationError) else "admission_failed"
@@ -318,6 +384,31 @@ async def dispatch_feedback() -> None:
                 if error == "admission_failed":
                     row.attempts += 1
                 row.held = error != "admission_failed" or row.attempts >= row.attempt_limit
+            # The accepted run's success event is owned by accept_feedback; emitting
+            # it here too would reuse the key with different data and fail the batch.
+            if accepted:
+                continue
+            peer = await session.get(sl.SuperLinkParticipant, message.sender_id)
+            await events.stage_for_space(
+                session,
+                message.space_id,
+                type="sl.feedback.changed",
+                change_key=f"feedback:{mid}:{row.attempts}:{error}",
+                data={
+                    "message_id": str(mid),
+                    "review_number": row.review_number,
+                    "run_id": str(row.run_id) if row.run_id else None,
+                    "attempts": row.attempts,
+                    "error_code": error,
+                },
+                invalidate=("deliveries", "runs", "actions"),
+                source_kind="delivery",
+                source_id=str(mid),
+                participant_id=peer.id if peer else None,
+                session_id=peer.session_id if peer else None,
+                run_id=row.run_id,
+            )
+            await events.seal_changes(session)
 
 
 async def _periodic(operation: Callable[[], Awaitable[object]]) -> None:

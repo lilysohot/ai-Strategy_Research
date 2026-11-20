@@ -15,7 +15,15 @@ from server import store
 from server.config import get_config
 from server.deps import get_current_user
 from server.routes.super_link import router
-from server.super_link import coordination, management, process_witness, runtime, service, worker
+from server.super_link import (
+    coordination,
+    events,
+    management,
+    process_witness,
+    runtime,
+    service,
+    worker,
+)
 from server.super_link import models as sl
 from server.super_link.contracts import CollaborationError
 from tests.test_super_link import make_run, seed_pair
@@ -250,6 +258,7 @@ async def test_business_feedback_is_queued_once_and_revision_is_independent(case
     assert await runtime.finalize(rid)
     async with sessions.begin() as session:
         await service.receive(session, mid)
+        await events.seal_changes(session)
 
     async def independent(envelope):
         assert envelope["revision_of"]["message_id"] == str(original)
@@ -269,10 +278,67 @@ async def test_business_feedback_is_queued_once_and_revision_is_independent(case
         assert old.content_json["body"] == "Needs dated sources"
         assert revision.revises_message_id == original and revision.request_id == original
         assert (await session.get(sl.SuperLinkReview, original)).verdict == verdict
+        admitted = await session.scalar(
+            select(sl.SuperLinkEvent)
+            .where(
+                sl.SuperLinkEvent.space_id == pair.space_id,
+                sl.SuperLinkEvent.type == "sl.admission.changed",
+                sl.SuperLinkEvent.source_id == str(mid),
+            )
+            .order_by(sl.SuperLinkEvent.seq.desc())
+        )
+        assert admitted is not None and "space" in admitted.invalidate_json
         used, _ = await coordination.automatic_budget(
             session, await session.get(sl.SuperLinkSpace, pair.space_id)
         )
         assert used == 2  # correction + receiver run share the same cap
+
+
+async def test_feedback_retry_after_transient_failure_keeps_one_success_event(case, monkeypatch):
+    sessions, uid, pair = case
+    mid, _ = await deliver(sessions, uid, pair)
+    await inspection(mid, "block", "Provide dated source evidence")
+    original = coordination.enqueue_automatic
+    calls = 0
+
+    async def flaky(session, space, peer, prompt):
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            raise RuntimeError("transient coordinator failure")
+        return await original(session, space, peer, prompt)
+
+    monkeypatch.setattr(coordination, "enqueue_automatic", flaky)
+    await worker.dispatch_feedback()
+    async with sessions.begin() as session:
+        row = await session.get(sl.SuperLinkFeedback, mid)
+        assert row.attempts == 1 and row.run_id is None and not row.held
+        row.retry_at = datetime.now(UTC) - timedelta(seconds=1)
+
+    await worker.dispatch_feedback()
+    async with sessions() as session:
+        feedback = await session.get(sl.SuperLinkFeedback, mid)
+        assert feedback.run_id is not None
+        rows = list(
+            await session.scalars(
+                select(sl.SuperLinkEvent)
+                .where(
+                    sl.SuperLinkEvent.space_id == pair.space_id,
+                    sl.SuperLinkEvent.type == "sl.feedback.changed",
+                )
+                .order_by(sl.SuperLinkEvent.seq)
+            )
+        )
+        assert [row.change_key for row in rows] == [
+            f"feedback:{mid}:1:admission_failed",
+            f"feedback:{mid}:1:started",
+        ]
+        success = rows[-1]
+        assert success.participant_id == pair.team_id
+        assert success.session_id == pair.team_session_id
+        assert success.run_id == feedback.run_id
+        assert "space" in success.invalidate_json
+        assert success.data_json["attempts"] == 1 and success.data_json["error_code"] is None
 
 
 async def test_budget_extension_is_idempotent_and_releases_held_feedback(case, monkeypatch):

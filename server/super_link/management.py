@@ -5,14 +5,16 @@ from __future__ import annotations
 import asyncio
 import uuid
 from datetime import UTC, datetime
-from typing import Literal
+from typing import Literal, cast
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 from sqlalchemy import select, update
+from sqlalchemy.engine import CursorResult
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from server import store
 from server.config import get_config
+from server.super_link import events
 from server.super_link import models as sl
 from server.super_link.contracts import CollaborationError
 from server.super_link.coordination import automatic_budget
@@ -94,23 +96,45 @@ async def recover(user_id: uuid.UUID, space_id: uuid.UUID, request: RecoveryRequ
                 raise CollaborationError("budget_ceiling")
             space.automatic_run_limit = new_limit
             mids = select(sl.SuperLinkMessage.id).where(sl.SuperLinkMessage.space_id == space_id)
-            await session.execute(
-                update(sl.SuperLinkReview)
-                .where(
-                    sl.SuperLinkReview.message_id.in_(mids),
-                    sl.SuperLinkReview.admission_error == "automatic_run_limit",
-                )
-                .values(admission_held=False, admission_retry_at=None)
+            released_reviews = cast(
+                CursorResult,
+                await session.execute(
+                    update(sl.SuperLinkReview)
+                    .where(
+                        sl.SuperLinkReview.message_id.in_(mids),
+                        sl.SuperLinkReview.admission_error == "automatic_run_limit",
+                    )
+                    .values(admission_held=False, admission_retry_at=None)
+                ),
             )
-            await session.execute(
-                update(sl.SuperLinkFeedback)
-                .where(
-                    sl.SuperLinkFeedback.message_id.in_(mids),
-                    sl.SuperLinkFeedback.error_code == "automatic_run_limit",
-                )
-                .values(held=False, retry_at=None)
+            released_feedback = cast(
+                CursorResult,
+                await session.execute(
+                    update(sl.SuperLinkFeedback)
+                    .where(
+                        sl.SuperLinkFeedback.message_id.in_(mids),
+                        sl.SuperLinkFeedback.error_code == "automatic_run_limit",
+                    )
+                    .values(held=False, retry_at=None)
+                ),
             )
             result.update(before_limit=limit, limit=new_limit, used=used)
+            await events.stage_for_space(
+                session,
+                space_id,
+                type="sl.space.budget_changed",
+                change_key=f"space:{space_id}:budget:{request.idempotency_key}",
+                data={
+                    "limit": new_limit,
+                    "used": used,
+                    "remaining": max(0, new_limit - used),
+                    "affected_holds": max(0, released_reviews.rowcount)
+                    + max(0, released_feedback.rowcount),
+                },
+                invalidate=("space", "deliveries", "runs", "actions", "interventions"),
+                source_kind="space",
+                source_id=str(space_id),
+            )
         elif request.action in {"finalization_retry", "abandon_finalization"}:
             run = await session.get(store.Run, request.target_id) if request.target_id else None
             member = (
@@ -128,7 +152,7 @@ async def recover(user_id: uuid.UUID, space_id: uuid.UUID, request: RecoveryRequ
                 if member
                 else None
             )
-            if run is None or row is None:
+            if run is None or member is None or row is None:
                 raise CollaborationError("not_found")
             if run.status in {"queued", "running"} or row.state in {"ready", "failed"}:
                 raise CollaborationError("run_not_recoverable")
@@ -151,6 +175,25 @@ async def recover(user_id: uuid.UUID, space_id: uuid.UUID, request: RecoveryRequ
                     attempts=row.recovery_attempts,
                     limit=row.recovery_limit,
                 )
+            await events.stage_for_space(
+                session,
+                space_id,
+                type="sl.finalization.changed",
+                change_key=f"finalization:{row.run_id}:action:{request.idempotency_key}",
+                data={
+                    "state": row.state,
+                    "worker_exited": row.worker_exited_at is not None,
+                    "exit_code": row.exit_code,
+                    "error_code": row.error_code,
+                    "recovery_attempts": row.recovery_attempts,
+                },
+                invalidate=("runs", "deliveries", "actions"),
+                source_kind="run",
+                source_id=str(row.run_id),
+                participant_id=member.id,
+                session_id=run.session_id,
+                run_id=row.run_id,
+            )
         else:
             message = (
                 await session.get(sl.SuperLinkMessage, request.target_id)
@@ -188,6 +231,23 @@ async def recover(user_id: uuid.UUID, space_id: uuid.UUID, request: RecoveryRequ
                     attempts=review.attempt_count,
                     limit=review.attempt_limit,
                 )
+                await events.stage_for_space(
+                    session,
+                    space_id,
+                    type="sl.review.changed",
+                    change_key=f"review:{message.id}:action:{request.idempotency_key}",
+                    data={
+                        "attempt": review.attempt_count,
+                        "verdict": review.verdict,
+                        "failure_kind": "technical",
+                        "retry_scheduled": True,
+                    },
+                    invalidate=("deliveries", "actions"),
+                    source_kind="delivery",
+                    source_id=str(message.id),
+                    participant_id=message.recipient_id,
+                    run_id=message.source_run_id,
+                )
             elif request.action == "admission_retry":
                 if await session.get(sl.SuperLinkExecution, message.id) is not None:
                     raise CollaborationError("already_accepted")
@@ -206,6 +266,24 @@ async def recover(user_id: uuid.UUID, space_id: uuid.UUID, request: RecoveryRequ
                 review.admission_limit = _next_limit(review.admission_attempts)
                 review.admission_held, review.admission_retry_at = False, now
                 result["outcome"] = "admission_scheduled"
+                await events.stage_for_space(
+                    session,
+                    space_id,
+                    type="sl.admission.changed",
+                    change_key=f"admission:{message.id}:action:{request.idempotency_key}",
+                    data={
+                        "message_id": str(message.id),
+                        "run_id": None,
+                        "attempts": review.admission_attempts,
+                        "held": False,
+                        "error_code": review.admission_error,
+                    },
+                    invalidate=("deliveries", "runs", "actions"),
+                    source_kind="delivery",
+                    source_id=str(message.id),
+                    participant_id=message.recipient_id,
+                    run_id=message.source_run_id,
+                )
             elif request.action == "feedback_retry":
                 feedback = await session.get(sl.SuperLinkFeedback, message.id, with_for_update=True)
                 if feedback is None or feedback.run_id is not None:
@@ -216,6 +294,24 @@ async def recover(user_id: uuid.UUID, space_id: uuid.UUID, request: RecoveryRequ
                 feedback.attempt_limit = _next_limit(feedback.attempts)
                 feedback.held, feedback.retry_at = False, now
                 result["outcome"] = "feedback_scheduled"
+                await events.stage_for_space(
+                    session,
+                    space_id,
+                    type="sl.feedback.changed",
+                    change_key=f"feedback:{message.id}:action:{request.idempotency_key}",
+                    data={
+                        "message_id": str(message.id),
+                        "review_number": feedback.review_number,
+                        "run_id": None,
+                        "attempts": feedback.attempts,
+                        "error_code": feedback.error_code,
+                    },
+                    invalidate=("deliveries", "runs", "actions"),
+                    source_kind="delivery",
+                    source_id=str(message.id),
+                    participant_id=message.recipient_id,
+                    run_id=message.source_run_id,
+                )
         action_id = uuid.uuid4()
         result["recovery_action_id"] = str(action_id)
         session.add(
@@ -228,6 +324,21 @@ async def recover(user_id: uuid.UUID, space_id: uuid.UUID, request: RecoveryRequ
                 result_json=result,
             )
         )
+        await events.stage_for_space(
+            session,
+            space_id,
+            type="sl.action.recorded",
+            change_key=f"action:{space_id}:{request.idempotency_key}",
+            data={
+                "action": request.action,
+                "target_id": str(request.target_id) if request.target_id else None,
+                "outcome": result.get("outcome", "budget_extended"),
+            },
+            invalidate=("space", "deliveries", "runs", "actions", "interventions"),
+            source_kind="space",
+            source_id=str(space_id),
+        )
+        await events.seal_changes(session)
         return result
 
 

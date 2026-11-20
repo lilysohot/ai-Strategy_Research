@@ -11,6 +11,7 @@ are defined now so Alembic can autogenerate the initial migration.
 from __future__ import annotations
 
 import hashlib
+import json
 import uuid
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -2218,13 +2219,187 @@ async def count_sessions(*, user_id: uuid.UUID, ordinary_only: bool = False) -> 
         return int(result.scalar_one())
 
 
+# ── Super-link event sources (SSE-T02) ──────────────────────────────
+#
+# These helpers only stage drafts; the function that owns the transaction
+# seals before it commits. ``stage_for_*`` itself returns False for ordinary
+# sessions, so non-collaborative paths never touch the event tables.
+
+_RUN_EVENT_INVALIDATE = ("runs", "deliveries", "interventions", "actions")
+_INTERVENTION_EVENT_INVALIDATE = ("interventions", "runs")
+_CONTINUITY_EVENT_INVALIDATE = ("runs", "deliveries")
+_PARTICIPANT_EVENT_INVALIDATE = (
+    "participants",
+    "space",
+    "runs",
+    "deliveries",
+    "interventions",
+)
+
+
+async def _seal_events(session: AsyncSession) -> None:
+    from server.super_link import events
+
+    await events.seal_changes(session)
+
+
+def _run_event_data(row: Run) -> dict:
+    """Whitelisted run state — never prompt, answer or error text."""
+    return {
+        "status": row.status,
+        "pipeline_id": row.pipeline_id,
+        "started": row.started_at is not None,
+        "finished": row.finished_at is not None,
+        "stopped": row.stopped_by is not None,
+        "error_code": "run_failed" if row.error else None,
+    }
+
+
+async def stage_run_change(session: AsyncSession, row: Run, phase: str) -> None:
+    from server.super_link import events
+
+    await events.stage_for_run(
+        session,
+        row,
+        type="sl.run.changed",
+        change_key=f"run:{row.id}:{phase}",
+        data=_run_event_data(row),
+        invalidate=_RUN_EVENT_INVALIDATE,
+    )
+
+
+async def _stage_intervention(session: AsyncSession, row: ControlRecord) -> None:
+    from server.super_link import events
+
+    await events.stage_for_session(
+        session,
+        row.session_id,
+        type="sl.intervention.changed",
+        change_key=f"intervention:{row.id}:{row.status}",
+        data={
+            "control_id": str(row.id),
+            "kind": row.kind,
+            "status": row.status,
+            "run_id": str(row.run_id),
+            "external_id": row.external_id,
+        },
+        invalidate=_INTERVENTION_EVENT_INVALIDATE,
+        source_kind="control",
+        source_id=str(row.id),
+        run_id=row.run_id,
+    )
+
+
+async def stage_participant_unavailable(
+    session: AsyncSession, session_id: uuid.UUID, *, reason: str
+) -> None:
+    if not get_config().super_link_enabled:
+        return
+    from server.super_link import events
+    from server.super_link import models as sl
+
+    participant = (
+        await session.execute(
+            select(sl.SuperLinkParticipant).where(sl.SuperLinkParticipant.session_id == session_id)
+        )
+    ).scalar_one_or_none()
+    if participant is None:
+        return
+    await events.stage_for_space(
+        session,
+        participant.space_id,
+        type="sl.participant.availability_changed",
+        change_key=f"participant:{participant.id}:unavailable",
+        data={
+            "participant_id": str(participant.id),
+            "role": participant.role,
+            "available": False,
+            "reason": reason,
+        },
+        invalidate=_PARTICIPANT_EVENT_INVALIDATE,
+        source_kind="participant",
+        source_id=str(participant.id),
+        participant_id=participant.id,
+        session_id=session_id,
+    )
+
+
+async def _stage_continuity(
+    session: AsyncSession,
+    *,
+    session_id: uuid.UUID,
+    run_id: uuid.UUID,
+    outcome: str,
+    source_run_id: uuid.UUID | None,
+) -> None:
+    from server.super_link import events
+
+    await events.stage_for_session(
+        session,
+        session_id,
+        type="sl.continuity.changed",
+        change_key=f"continuity:{run_id}:{outcome}",
+        data={
+            "run_id": str(run_id),
+            "outcome": outcome,
+            "source_run_id": str(source_run_id) if source_run_id else None,
+        },
+        invalidate=_CONTINUITY_EVENT_INVALIDATE,
+        source_kind="run",
+        source_id=str(run_id),
+        run_id=run_id,
+    )
+
+
+async def _stage_artifacts_change(session: AsyncSession, run_id: uuid.UUID) -> None:
+    """One event per actual index change; the key is a change UUID, not a hash.
+
+    Content hashes cannot identify "A → B → A": the second A has the digest of
+    the first event and would be mistaken for a replay. The digest stays in
+    ``data`` only.
+    """
+    if not get_config().super_link_enabled:
+        return
+    from server.super_link import events
+
+    run = await session.get(Run, run_id)
+    if run is None or not await events.tracking(session, run=run):
+        return
+    rows = (
+        await session.execute(
+            select(Artifact.rel_path, Artifact.size, Artifact.sha256)
+            .where(Artifact.run_id == run_id)
+            .order_by(Artifact.rel_path)
+        )
+    ).all()
+    index = [[rel_path, size, sha256] for rel_path, size, sha256 in rows]
+    digest = hashlib.sha256(
+        json.dumps(index, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    await events.stage_for_run(
+        session,
+        run,
+        type="sl.artifacts.changed",
+        change_key=f"artifacts:{run_id}:{uuid.uuid4()}",
+        data={"run_id": str(run_id), "count": len(index), "index_sha256": digest},
+        invalidate=("runs", "deliveries"),
+        source_kind="artifacts",
+        source_id=str(run_id),
+    )
+
+
 async def delete_session(*, session_id: uuid.UUID, user_id: uuid.UUID) -> None:
     """Soft-delete a session owned by ``user_id`` (idempotent, anti-IDOR)."""
     async with get_sessionmaker()() as session:
         row = await session.get(Session, session_id)
         if row is None or row.user_id != user_id:
             raise SessionNotFoundError(str(session_id))
-        row.deleted_at = datetime.now(UTC)
+        if row.deleted_at is None:
+            row.deleted_at = datetime.now(UTC)
+            await stage_participant_unavailable(
+                session, session_id, reason="session_deleted"
+            )
+        await _seal_events(session)
         await session.commit()
 
 
@@ -2261,12 +2436,14 @@ async def create_run(
             llm_snapshot_json=llm_snapshot_json,
         )
         session.add(row)
+        await stage_run_change(session, row, "created")
+        await _seal_events(session)
         await session.commit()
         await session.refresh(row)
         return row
 
 
-def add_run(
+async def add_run(
     session: AsyncSession,
     *,
     run_id: uuid.UUID,
@@ -2285,6 +2462,8 @@ def add_run(
     Run row and its business snapshot in one transaction: a snapshot that failed
     to freeze would leave a queued Run behind. This variant lets the caller own
     the transaction boundary so "Run + 快照"要么一起生效，要么一起消失。
+
+    The ``run.created`` draft is staged here; the caller seals before commit.
     """
     row = Run(
         id=run_id,
@@ -2298,6 +2477,7 @@ def add_run(
         llm_snapshot_json=llm_snapshot_json,
     )
     session.add(row)
+    await stage_run_change(session, row, "created")
     return row
 
 
@@ -2354,12 +2534,25 @@ async def update_run_result(
         # delayed/foreign-process completion must not resurrect that Run as
         # completed or failed after the input request is already visible.
         if row.status == "stopped" and row.stopped_by == "input_required":
+            changed = row.finished_at is None or (
+                final_answer is not None and row.final_answer != final_answer
+            )
             if final_answer is not None and row.final_answer is None:
                 row.final_answer = final_answer
             if row.finished_at is None:
                 row.finished_at = datetime.now(UTC)
+            if changed:
+                await stage_run_change(session, row, "input_required")
+            await _seal_events(session)
             await session.commit()
             return
+        changed = (
+            row.status != status
+            or row.finished_at is None
+            or (final_answer is not None and row.final_answer != final_answer)
+            or (error is not None and row.error != error)
+            or (stopped_by is not None and row.stopped_by != stopped_by)
+        )
         row.status = status
         if final_answer is not None:
             row.final_answer = final_answer
@@ -2368,6 +2561,9 @@ async def update_run_result(
         if stopped_by is not None:
             row.stopped_by = stopped_by
         row.finished_at = datetime.now(UTC)
+        if changed:
+            await stage_run_change(session, row, f"terminal:{status}")
+        await _seal_events(session)
         await session.commit()
 
 
@@ -2388,6 +2584,8 @@ async def mark_run_failed_if_active(*, run_id: uuid.UUID, error: str) -> bool:
         row.status = "failed"
         row.error = error
         row.finished_at = datetime.now(UTC)
+        await stage_run_change(session, row, "terminal:failed")
+        await _seal_events(session)
         await session.commit()
         return True
 
@@ -2406,9 +2604,13 @@ async def mark_run_started(*, run_id: uuid.UUID) -> None:
         row = await session.get(Run, run_id)
         if row is None:
             return
+        changed = row.status != "running" or row.started_at is None
         row.status = "running"
         if row.started_at is None:
             row.started_at = datetime.now(UTC)
+        if changed:
+            await stage_run_change(session, row, "running")
+        await _seal_events(session)
         await session.commit()
 
 
@@ -2453,6 +2655,7 @@ async def record_artifacts(*, run_id: uuid.UUID, artifacts: list[dict]) -> list[
     if not artifacts:
         return []
     rows: list[Artifact] = []
+    changed = False
     async with get_sessionmaker()() as session:
         for item in artifacts:
             rel = item.get("rel_path")
@@ -2467,12 +2670,19 @@ async def record_artifacts(*, run_id: uuid.UUID, artifacts: list[dict]) -> list[
                     sha256=item.get("sha256"),
                 )
                 session.add(row)
+                changed = True
             else:
                 # Refresh size/sha256: the file may have changed between scans.
+                if existing.size != item.get("size") or existing.sha256 != item.get("sha256"):
+                    changed = True
                 existing.size = item.get("size")
                 existing.sha256 = item.get("sha256")
                 row = existing
             rows.append(row)
+        if changed:
+            await session.flush()
+            await _stage_artifacts_change(session, run_id)
+        await _seal_events(session)
         await session.commit()
     return rows
 
@@ -2502,9 +2712,15 @@ async def sync_run_artifacts(*, run_id: uuid.UUID, artifacts: list[dict]) -> lis
             .scalars()
             .all()
         )
+        removed = 0
         for row in existing:
             if row.rel_path not in present:
                 await session.delete(row)
+                removed += 1
+        if removed:
+            await session.flush()
+            await _stage_artifacts_change(session, run_id)
+        await _seal_events(session)
         await session.commit()
     return rows
 
@@ -2637,6 +2853,9 @@ async def create_control(
             detail_json=detail,
         )
         session.add(row)
+        await session.flush()
+        await _stage_intervention(session, row)
+        await _seal_events(session)
         await session.commit()
         await session.refresh(row)
         return row
@@ -2744,6 +2963,8 @@ async def resolve_control(
         if detail:
             row.detail_json = {**(row.detail_json or {}), **detail}
         row.resolved_at = datetime.now(UTC)
+        await _stage_intervention(session, row)
+        await _seal_events(session)
         await session.commit()
         await session.refresh(row)
         return row
@@ -2771,14 +2992,20 @@ async def close_open_controls(
             .all()
         )
         closed = 0
+        closed_rows: list[ControlRecord] = []
         for row in rows:
             if not control_is_open(row):
                 continue
             row.status = STEER_DROPPED if row.kind == CONTROL_KIND_STEER else APPROVAL_ABANDONED
             row.detail_json = {**(row.detail_json or {}), "closed_by": closed_by}
             row.resolved_at = datetime.now(UTC)
+            closed_rows.append(row)
             closed += 1
         if closed:
+            await session.flush()
+            for row in closed_rows:
+                await _stage_intervention(session, row)
+            await _seal_events(session)
             await session.commit()
         return closed
 
@@ -2954,6 +3181,8 @@ async def upsert_session_conversation(
                 .with_for_update()
             )
         ).scalar_one_or_none()
+        archived_new = source is None
+        previous_head = row.updated_by_run_id if row is not None else None
         if enforce_expected_head:
             actual_head = row.updated_by_run_id if row is not None else None
             if actual_head not in {expected_head_run_id, run_id}:
@@ -2961,6 +3190,15 @@ async def upsert_session_conversation(
                 # lost the race to become the next continuity head. Preserve
                 # the archive, then surface the conflict so callers never
                 # mistake it for the active source.
+                if archived_new:
+                    await _stage_continuity(
+                        session,
+                        session_id=session_id,
+                        run_id=run_id,
+                        outcome="archived",
+                        source_run_id=actual_head,
+                    )
+                await _seal_events(session)
                 await session.commit()
                 raise ContextHeadConflictError(
                     f"session {session_id} context head changed from "
@@ -2978,6 +3216,15 @@ async def upsert_session_conversation(
         elif row.updated_by_run_id == run_id:
             # The latest carrier may predate the immutable archive table. Commit
             # the idempotent source insert above without advancing revision.
+            if archived_new:
+                await _stage_continuity(
+                    session,
+                    session_id=session_id,
+                    run_id=run_id,
+                    outcome="archived",
+                    source_run_id=previous_head,
+                )
+            await _seal_events(session)
             await session.commit()
             return
         else:
@@ -2985,6 +3232,23 @@ async def upsert_session_conversation(
             row.revision = int(row.revision or 0) + 1
             row.updated_by_run_id = run_id
             row.updated_at = datetime.now(UTC)
+        if archived_new:
+            await _stage_continuity(
+                session,
+                session_id=session_id,
+                run_id=run_id,
+                outcome="archived",
+                source_run_id=previous_head,
+            )
+        if previous_head != run_id:
+            await _stage_continuity(
+                session,
+                session_id=session_id,
+                run_id=run_id,
+                outcome="committed",
+                source_run_id=previous_head,
+            )
+        await _seal_events(session)
         await session.commit()
 
 

@@ -276,17 +276,27 @@ async def delete_research(
         )
 
         # 4) 作废待派发 outbox（不再启动新的自动/手动任务；运行中 worker 让其完成）。
-        await session.execute(
-            update(store.RunDispatch)
-            .where(
-                store.RunDispatch.user_id == user_id,
-                store.RunDispatch.research_id == research.id,
-                store.RunDispatch.status.in_(
-                    (dispatch_outbox.PENDING, dispatch_outbox.RETRYABLE_FAILED)
-                ),
+        pending_dispatches = (
+            (
+                await session.execute(
+                    select(store.RunDispatch)
+                    .where(
+                        store.RunDispatch.user_id == user_id,
+                        store.RunDispatch.research_id == research.id,
+                        store.RunDispatch.status.in_(
+                            (dispatch_outbox.PENDING, dispatch_outbox.RETRYABLE_FAILED)
+                        ),
+                    )
+                    .with_for_update()
+                )
             )
-            .values(status=dispatch_outbox.ABANDONED, last_error="research_deleted")
+            .scalars()
+            .all()
         )
+        for dispatch in pending_dispatches:
+            dispatch.status = dispatch_outbox.ABANDONED
+            dispatch.last_error = "research_deleted"
+            await dispatch_outbox.stage_dispatch(session, dispatch)
 
         # 5) 归档该研究所属计划（保留历史、停止新采用）；共享账户不随研究删除（AC-17）。
         plans = (
@@ -325,6 +335,9 @@ async def delete_research(
 
         # 6) 软删除研究（软删除≠擦除）。
         research.deleted_at = now
+        await store.stage_participant_unavailable(
+            session, research.id, reason="research_deleted"
+        )
         await session.flush()
         _append_audit(
             session,

@@ -17,6 +17,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from server import dispatch_outbox, store
 from server.config import get_config, run_dir_for
 from server.run_modes import pipeline_for_mode
+from server.super_link import events
 from server.super_link import models as sl
 from server.super_link.contracts import CollaborationError, content_digest, parse_content
 
@@ -80,6 +81,35 @@ async def evidence_for(session: AsyncSession, message: sl.SuperLinkMessage) -> l
     return [{"name": row.rel_path, "sha256": row.sha256, "text": row.text} for row in rows]
 
 
+async def _stage_review(
+    session: AsyncSession,
+    message: sl.SuperLinkMessage,
+    number: int,
+    phase: str,
+    *,
+    verdict: str,
+    failure_kind: str | None,
+    retry_scheduled: bool = False,
+) -> None:
+    await events.stage_for_space(
+        session,
+        message.space_id,
+        type="sl.review.changed",
+        change_key=f"review:{message.id}:attempt:{number}:{phase}",
+        data={
+            "attempt": number,
+            "verdict": verdict,
+            "failure_kind": failure_kind,
+            "retry_scheduled": retry_scheduled,
+        },
+        invalidate=("deliveries", "actions"),
+        source_kind="delivery",
+        source_id=str(message.id),
+        participant_id=message.recipient_id,
+        run_id=message.source_run_id,
+    )
+
+
 async def inspect_delivery(message_id: uuid.UUID, inspector: Inspector, *, reviewer: str) -> None:
     """Lease one bounded attempt; technical retries never replace business correction."""
     from server.super_link.controls import delivery_cancelled
@@ -105,6 +135,14 @@ async def inspect_delivery(message_id: uuid.UUID, inspector: Inspector, *, revie
                 attempt_limit=3,
             )
             session.add(row)
+            await _stage_review(
+                session,
+                message,
+                0,
+                "created",
+                verdict="incomplete",
+                failure_kind=None,
+            )
         else:
             if row.lease_until is not None:
                 if row.lease_until.replace(tzinfo=UTC) > now:
@@ -115,6 +153,14 @@ async def inspect_delivery(message_id: uuid.UUID, inspector: Inspector, *, revie
                     old.explanation, old.failure_kind = "inspection_lease_expired", "technical"
                 row.lease_until = None
                 row.failure_kind, row.explanation = "technical", "inspection_lease_expired"
+                await _stage_review(
+                    session,
+                    message,
+                    row.attempt_count,
+                    "lease_expired",
+                    verdict=row.verdict,
+                    failure_kind="technical",
+                )
             if (
                 row.verdict != "incomplete"
                 or row.failure_kind != "technical"
@@ -137,6 +183,14 @@ async def inspect_delivery(message_id: uuid.UUID, inspector: Inspector, *, revie
             explanation="inspection_pending",
         )
         session.add(attempt)
+        await _stage_review(
+            session,
+            message,
+            number,
+            "claimed",
+            verdict="incomplete",
+            failure_kind=None,
+        )
         try:
             content = parse_content(message.content_json)
             if (
@@ -177,7 +231,17 @@ async def inspect_delivery(message_id: uuid.UUID, inspector: Inspector, *, revie
             row.failure_kind, row.lease_until = "validation", None
             attempt.verdict, attempt.explanation = row.verdict, row.explanation
             attempt.failure_kind, attempt.finished_at = "validation", now
+            await _stage_review(
+                session,
+                message,
+                number,
+                "validation_failed",
+                verdict="block",
+                failure_kind="validation",
+            )
+            await events.seal_changes(session)
             return
+        await events.seal_changes(session)
     failure_kind = None
     try:
         async with asyncio.timeout(60):
@@ -220,6 +284,16 @@ async def inspect_delivery(message_id: uuid.UUID, inspector: Inspector, *, revie
         if attempt is not None:
             attempt.verdict, attempt.explanation = result.verdict, result.explanation
             attempt.failure_kind, attempt.finished_at = failure_kind, now
+        await _stage_review(
+            session,
+            message,
+            number,
+            result.verdict,
+            verdict=result.verdict,
+            failure_kind=failure_kind,
+            retry_scheduled=row.retry_at is not None,
+        )
+        await events.seal_changes(session)
 
 
 async def accept_delivery(message_id: uuid.UUID) -> uuid.UUID | None:
@@ -278,6 +352,26 @@ async def accept_delivery(message_id: uuid.UUID) -> uuid.UUID | None:
         )
         run_id = await enqueue_automatic(session, space, peer, prompt)
         session.add(sl.SuperLinkExecution(message_id=message.id, run_id=run_id))
+        await events.stage_for_space(
+            session,
+            space.id,
+            type="sl.admission.changed",
+            change_key=f"admission:{message.id}:{review.admission_attempts + 1}:accepted",
+            data={
+                "message_id": str(message.id),
+                "run_id": str(run_id),
+                "attempts": review.admission_attempts + 1,
+                "held": False,
+                "error_code": None,
+            },
+            invalidate=("space", "deliveries", "runs", "actions"),
+            source_kind="delivery",
+            source_id=str(message.id),
+            participant_id=peer.id,
+            session_id=peer.session_id,
+            run_id=run_id,
+        )
+        await events.seal_changes(session)
         # Deliberately no fake human turn; normal opaque continuity writes on completion.
         return run_id
 
@@ -322,13 +416,14 @@ async def enqueue_automatic(
         raise CollaborationError("queue_full")
     run_id = uuid.uuid4()
     snapshot = await store.build_llm_snapshot(user_id=space.user_id)
+    pipeline_id = pipeline_for_mode(peer.role)
     session.add(
         store.Run(
             id=run_id,
             session_id=research.id,
             user_id=space.user_id,
             status="queued",
-            pipeline_id=pipeline_for_mode(peer.role),
+            pipeline_id=pipeline_id,
             prompt=prompt,
             run_dir=str(run_dir_for(run_id.hex)),
             llm_snapshot_json=snapshot,
@@ -336,6 +431,26 @@ async def enqueue_automatic(
         )
     )
     await session.flush()
+    await events.stage_for_space(
+        session,
+        space.id,
+        type="sl.run.changed",
+        change_key=f"run:{run_id}:created",
+        data={
+            "status": "queued",
+            "pipeline_id": pipeline_id,
+            "started": False,
+            "finished": False,
+            "stopped": False,
+            "error_code": None,
+        },
+        invalidate=("runs", "deliveries", "interventions", "actions"),
+        source_kind="run",
+        source_id=str(run_id),
+        participant_id=peer.id,
+        session_id=research.id,
+        run_id=run_id,
+    )
     await dispatch_outbox.enqueue(
         session,
         run_id=run_id,
@@ -404,6 +519,27 @@ async def accept_feedback(message_id: uuid.UUID) -> uuid.UUID | None:
             )
         )
         feedback.run_id = await enqueue_automatic(session, space, peer, prompt)
+        # Success is owned here; worker.dispatch_feedback only stages failed attempts.
+        await events.stage_for_space(
+            session,
+            space.id,
+            type="sl.feedback.changed",
+            change_key=f"feedback:{message.id}:{feedback.attempts}:started",
+            data={
+                "message_id": str(message.id),
+                "review_number": feedback.review_number,
+                "run_id": str(feedback.run_id),
+                "attempts": feedback.attempts,
+                "error_code": None,
+            },
+            invalidate=("space", "deliveries", "runs", "actions"),
+            source_kind="delivery",
+            source_id=str(message.id),
+            participant_id=peer.id,
+            session_id=peer.session_id,
+            run_id=feedback.run_id,
+        )
+        await events.seal_changes(session)
         return feedback.run_id
 
 
@@ -486,4 +622,25 @@ async def enqueue_direct(
                 prompt=prompt,
                 prompt_addendum=prompt_addendum,
             )
+            await events.stage_for_space(
+                session,
+                member.space_id,
+                type="sl.run.changed",
+                change_key=f"run:{run.id}:created",
+                data={
+                    "status": "queued",
+                    "pipeline_id": run.pipeline_id,
+                    "started": False,
+                    "finished": False,
+                    "stopped": False,
+                    "error_code": None,
+                },
+                invalidate=("runs", "deliveries", "interventions", "actions"),
+                source_kind="run",
+                source_id=str(run.id),
+                participant_id=member.id,
+                session_id=run.session_id,
+                run_id=run.id,
+            )
+            await events.seal_changes(session)
         return True

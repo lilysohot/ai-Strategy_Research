@@ -2,8 +2,8 @@
 
 | 项目 | 内容 |
 |---|---|
-| 版本 / 日期 | v0.6 · 2026-11-20（SSE-T01 契约与来源盘点完成） |
-| 状态 | 有效；基础通信、独立入口与控制面板的实施证据见 §12—§19；SSE-T01 设计完成、T02—T07 待开始；完整发布及真实研究业务验收未完成 |
+| 版本 / 日期 | v0.9 · 2026-11-20（SSE-T04 前端关键状态闭环完成） |
+| 状态 | 有效；基础通信、独立入口与控制面板的实施证据见 §12—§19；SSE-T01/T02/T03/T04 完成、T05—T07 待开始；完整发布及真实研究业务验收未完成 |
 | 需求依据 | [产品需求 PR-SL-01](../product-requirements.md#24-super-link-独立协作模式2026-11-07)；[专项需求](../design/super-link-prd.md) SL-01—SL-22、SL-SSE-01—05 |
 | 技术依据 | [基础技术框架](../design/super-link-technical-design.md) |
 | 本轮目标 | 在保护既有模式的前提下，建立空间级可靠状态同步，再接通运行输出展示 |
@@ -685,8 +685,10 @@ Team/Single 的可见运行输出。设计与遗漏分析见[SSE 设计稿](../d
 默认 SSE 行为。本节是唯一的 SSE 任务状态与证据台账。
 
 SSE-T01 已完成，实施契约见[技术框架 §11](../design/super-link-technical-design.md#11-sse-接入边界2026-11-20)。
-现可进入 T02，按已定事件目录、事务顺序和失败边界实现；默认参数及首版单所有者范围
-也已登记。改变产品行为或扩大部署范围时另行讨论。文档登记不启动服务、不迁移业务库。
+T02 持久事件与 T03 快照/SSE 接口已通过 SQLite 与隔离 PG 验收；T04 前端订阅与状态
+同步已通过单测、类型检查与生产构建。现可进入 T05，接通真实运行输出；默认参数及首版
+单所有者范围已登记。改变产品行为或扩大部署范围时另行讨论。文档登记不启动服务、
+不迁移业务库。
 
 ### 20.2 执行任务及依赖
 
@@ -695,9 +697,9 @@ SSE-T01 已完成，实施契约见[技术框架 §11](../design/super-link-tech
 | 任务 | 依赖 | 工作与主要位置 | 完成交付与退出条件 | 状态 |
 |---|---|---|---|---|
 | SSE-T01 契约与来源盘点 | 无 | 核对 `server/super_link/`、审批、派发和运行收尾的状态写入点；确定事件目录、身份、版本、快照、游标及错误响应 | 保存来源到事件的完整映射；确定并发提交安全方案、快照一致性、权威写入失败语义和首版部署拓扑；给出请求/响应样例与异常路径 | 设计完成，见 §20.7 |
-| SSE-T02 持久事件与可靠发布 | T01 | 独立事件存储/可选迁移、业务写入适配、发布与补偿读取；核对现有 outbox 复用边界 | 覆盖 HTTP 和后台来源；状态与事件同事务或有明确可恢复转换；晚提交、回滚、重复、Redis 故障与重启不漏关键事实 | 待开始 |
-| SSE-T03 空间快照与 SSE 接口 | T02 | 独立空间快照/订阅接口、补读、鉴权、心跳、连接释放和有界缓冲 | 快照切流无空隙；重复去重、游标过期重新同步；Run 终态不关闭空间观察；满足约定拓扑下的路由与权限隔离 | 待开始 |
-| SSE-T04 前端关键状态闭环 | T03 | Super-link 独立订阅与状态管理，审批/控制/交付同步；检查 `SuperLinkView.vue` 及现有 `sse.ts` 的复用边界 | 页面离线期间完成交接后可准确恢复；保留历史分页、未提交输入、幂等和版本冲突；旧空间迟到事件不污染新空间；普通模式不变 | 待开始 |
+| SSE-T02 持久事件与可靠发布 | T01 | 独立事件存储/可选迁移、业务写入适配、发布与补偿读取；核对现有 outbox 复用边界 | 覆盖 HTTP 和后台来源；状态与事件同事务或有明确可恢复转换；晚提交、回滚、重复、Redis 故障与重启不漏关键事实 | 实现完成，SQLite 与隔离 PG 验收通过，见 §20.8 |
+| SSE-T03 空间快照与 SSE 接口 | T02 | 独立空间快照/订阅接口、补读、鉴权、心跳、连接释放和有界缓冲 | 快照切流无空隙；重复去重、游标过期重新同步；Run 终态不关闭空间观察；满足约定拓扑下的路由与权限隔离 | 实现完成，SQLite 与隔离 PG 验收通过，见 §20.9 |
+| SSE-T04 前端关键状态闭环 | T03 | Super-link 独立订阅与状态管理，审批/控制/交付同步；检查 `SuperLinkView.vue` 及现有 `sse.ts` 的复用边界 | 页面离线期间完成交接后可准确恢复；保留历史分页、未提交输入、幂等和版本冲突；旧空间迟到事件不污染新空间；普通模式不变 | 实现完成，前端单测/类型/构建通过，未做真实浏览器验收，见 §20.10 |
 | SSE-T05 真实运行输出适配 | T04 | Worker/Bridge/Orchestrator/Relay 输出适配，Team 成员归属，实时与归档内容衔接 | Team 与 Single 实际运行内容可实时展示；缺片修复、最终文本对齐；无思考流也正常；按 T01 拓扑验证跨进程/实例来源，不重复执行工具 | 待开始 |
 | SSE-T06 故障、兼容与观测验收 | T05；定向测试随 T02—T05 同步完成 | 后端/前端针对性测试、隔离 PG/Redis、真实 Worker、浏览器与代理链路；连接和发布指标 | §20.4 场景有证据；运行展示和业务执行故障可区分；队列/连接有界；普通 single/team、审批、停止和连续性无回归 | 待开始 |
 | SSE-T07 发布准备与启用核对 | T06 | 核对业务库版本、控制迁移与 SSE 迁移顺序、配置、备份、兼容回退与发布说明 | 隔离环境验证升级及保留数据的回退；形成具体部署清单。准备完成与实际启用分别记录，启用按用户届时指令执行 | 待开始 |
@@ -754,8 +756,9 @@ T02—T05 每完成一项先跑相关回归再推进；T06 汇总端到端和故
 ### 20.6 文档完备性结论
 
 需求、设计依据、模块接口、任务依赖及验收场景已经建立。T01 已将事件目录、事务提交、
-游标、快照和部署范围定为实施契约，具备启动 T02 的条件；T02—T07 尚未实施或验证，
-不具备直接正式启用的条件。后续进度只更新本节及对应实现证据。
+游标、快照和部署范围定为实施契约，T02 完成持久事件账本与来源接线，T03 完成快照与
+SSE 接口，T04 完成前端订阅、状态合并与页面接入；具备启动 T05 的条件，T05—T07 尚未
+实施或验证，不具备直接正式启用的条件。后续进度只更新本节及对应实现证据。
 
 ### 20.7 SSE-T01 完成记录（2026-11-20）
 
@@ -783,3 +786,107 @@ Worker 测试，未调用模型、启动服务或执行迁移。此记录是设�
 
 下一项为 **SSE-T02 持久事件与可靠发布**，优先实现事务缓冲/保存点、事件头分配、
 可靠提交与源覆盖回归，再接通知发布；不要先接前端而跳过这些条件。
+
+### 20.8 SSE-T02 完成记录（2026-11-20）
+
+按已批准的 [spec.md](../spec/super-link-sse-t02/spec.md) 与
+[tasks.md](../spec/super-link-sse-t02/tasks.md) 实施持久事件账本。未启动本机服务、
+未连接或迁移业务库；SQLite 使用临时库，PG 使用已登记的隔离库 `apodex_biz_test`。
+
+收尾审查后补齐：反馈成功事件只由 `accept_feedback` 产生，`dispatch_feedback` 只发
+失败事件，重试成功不再与首次事件键冲突；事件外键改指 `super_link_event_heads.space_id`，
+不再通过 Space 行引入锁循环；`read_events` 以本次读到的 head 为上界；自动受理与补正
+成功事件的 `invalidate` 增加 `space`。PG 用例修正了 `await sessions()`、事务进入、
+双空间创建事件计数，并补 A01 提交路径与 Space/头交叉锁序。
+
+| 交付 | 已实现内容 | 证据与限制 |
+|---|---|---|
+| 事件存储 | `super_link_event_heads`、`super_link_events`（空间/epoch/seq 主键、`change_key` 唯一、`notified_at` 水位、`space_id` 外键指向事件头）；`sl_0006_events` 接 `sl_0005_controls`，为既有空间补基线头 | SQLite 与隔离 PG 通过；PG 会话按升级→降级→升级重建表，确认外键与基线头 |
+| 事务与保存点 | 显式 `events.savepoint()` 管理草稿栈，不依赖 `after_transaction_end`/`after_soft_rollback` 先后；监听器只对根事务清理；flush 内部事务不结束作用域 | 保存点回滚/嵌套/合并、未托管 `begin_nested` 拒绝、seal 内开保存点拒绝均有测试 |
+| 提交守卫 | `before_flush`/`before_commit` 检查未 seal 草稿与 seal 后 ORM 新增/修改/删除；监听器幂等注册，普通会话无状态、零副作用 | 未 seal 提交回滚业务与事件、seal 后写入被拒、重复安装与关闭 Super-link 场景通过 |
+| 跨事务幂等 | seal 锁空间头后按 `change_key` 查已提交事件；同键同内容复用且不增序号，同键不同内容报 `change_key_conflict`；内存草稿同规则 | 重试复用、冲突、事务内重复键测试通过 |
+| 事件键 | Run 相位、dispatch `claim_version`、finalization 版本、交付/审批/补正/干预状态、连续性 outcome、参与方可用性；产物用变更 UUID，内容哈希放在 data；反馈成功仅一个生产者 | A→B→A 产物四个不同键；失败→重试成功只保留一条 `started` 事件且键为 `feedback:{id}:{attempts}:started` |
+| 读取与发布 | `read_events` 鉴权、1—200 分页、`sl1` 游标、`invalid_cursor`/`resync_required`，只返回 `(after, 本次 head]`；通知器扫描未通知水位、按空间/epoch 取最大 seq、成功后新事务标记 | 游标分页、越权/坏游标、读头后并发提交不越过本页、发布重试与 Redis 失败保留水位测试通过；未对真实 Redis 发布 |
+| 来源接线 | 提交型函数在最后业务 SQL 后 seal 并提交；`add_run`、`enqueue`、`mark_dispatched` 等只暂存，由调用方 `business_transaction`/`dispatch_once`/监控事务 seal；`stop_queued_run` 自带提交并 seal；归档删除逐行锁并暂存 | `tests/test_super_link_event_sources.py` 7 项覆盖运行、产物、控制、派发、连续性、统一事务与普通会话零事件 |
+| 启动条件 | `readiness.ok && super_link_enabled && !restore_mode` 时与协调循环同批启动发布器；退出取消并等待；Redis 故障只延迟通知，不回滚业务 | 谓词与 Redis 故障测试通过；未启动实际进程验证 |
+
+测试结果：T02 核心三文件 34 passed；全部 Super-link 非 PG 测试 116 passed；隔离 PG
+6 passed。收尾后全量非 PG 套件 5651 passed、30 failed、84 errors（9 分 25 秒）。
+30 个失败节点在 HEAD 基线 worktree 重跑，失败集合完全一致；84 errors 全部来自
+`test_corpus_*` 的隔离库守卫（`CORPUS_I2_DSN` 的 `current_database='postgres'` 不等于
+`i2_sandbox_corpus`），属环境配置而非 T02 回归。
+
+限制：PG 验收在隔离库 `apodex_biz_test` 执行并重建 `sl_0006_events`，未连接或迁移业务
+库；真实 Redis Pub/Sub、真实 Worker 与浏览器链路留待 T05/T06。不据此宣称 SSE 已可
+正式启用。
+
+下一项为 **SSE-T03 空间快照与 SSE 接口**：在已提交账本上实现快照切流、补读、鉴权、
+心跳与连接释放；不改变本批确定的事务边界。
+
+### 20.9 SSE-T03 完成记录（2026-11-20）
+
+按 [spec.md](../spec/super-link-sse-t03/spec.md) 与
+[tasks.md](../spec/super-link-sse-t03/tasks.md) 实施空间快照与 SSE 接口。未启动本机
+服务、未连接或迁移业务库；SQLite 使用临时库，PG 使用已登记的隔离库 `apodex_biz_test`。
+本批无新表、无新迁移，不改 T02 的事务边界与事件写入。
+
+| 交付 | 已实现内容 | 证据与限制 |
+|---|---|---|
+| 一致快照 | `stream.snapshot_session()` 在 PostgreSQL 首条语句设置 `REPEATABLE READ`，同一 `AsyncSession` 内先读事件头再读空间、参与方、Run、交付、待审批、操作与活动 Run；读取结束立即释放，SSE 不持有事务。四个列表接受 `runs_after`/`deliveries_after`/`pending_after`/`actions_after` 续页，`total` 为完整列表数，响应带自己的 `cursor` | SQLite 字段/总数/排序断言；4 条 Run 与 4 条待审批以 `limit=1` 全量续读无重复/遗漏；隔离 PG 在事务内先读头，另一连接提交控制状态与事件后旧事务仍见旧状态/旧游标，事务结束后新快照见新值 |
+| `min_cursor` | 只接受同空间同 epoch 且不超前当前头；跨空间/超前 400，epoch 不符或低于 `min_after` 410；不自动夹取 | SQLite 与隔离 PG 均覆盖成功、超前、过期 epoch、坏格式 |
+| 快照切流 | 快照游标即事件头位置；提交新事件后 `read_events(after=快照游标)` 只返回新事件 | 无空隙测试；PG 边界测试在事务结束后读到同一控制事件 |
+| SSE 建连 | `after` 必填；先校验用户 active 与空间归属，再复用 `read_events` 游标语义；错误矩阵 400/401/404/410/429/503；429 带 `Retry-After: 5`；不改 `Last-Event-ID` | HTTP 矩阵与缺失事件头 503、配额 429 测试；错误在 `StreamingResponse` 之前产生 |
+| 补读与观察 | 每批 200 条、逐批短只读事务；不满批后再次核对事件头；通知为“粘性待确认”提示，补读期间到达的通知不会被丢失；共享头核对每 2 秒按活跃空间查询一次，只在 `(stream_epoch,last_seq)` 变化时唤醒 | 补读收口测试在补读中途提交事件并由再次核对读出；Hub 测试覆盖头变化唤醒、头未变不唤醒、轮询失败只触发复核 |
+| 生命周期 | Run 终态与空间停止只作为事实发送，不关闭连接；空闲 15 秒心跳；15 秒权限复核；单连接最长 5 分钟直接关闭；每用户 8 条连接；每连接 256 帧/1 MiB 有界缓冲，满载时生产者等待消费者，超时才清空关闭；响应层对每次 ASGI send 施加 15 秒上限，并用总寿命 deadline 包住整个响应迭代，发送或数据库读取阻塞都会中止并 `aclose()` 生成器 | 终态/停止后继续收帧；流中停用用户收到 `sl.auth_required`；epoch 变化收到 `sl.resync_required`；账本读取异常收到 `sl.unavailable`；100 条 × 12 KB 积压仍可推进；send 永久阻塞时 50 ms 寿命在 200 ms 内结束并释放配额/订阅；`read_events` 永久挂起同样释放 |
+| 控制帧 | `sl.auth_required`/`sl.resync_required`/`sl.unavailable` 均无 `id`，发送后关闭；寿命与慢客户端不新增协议帧 | 帧解析断言 `id` 缺失与 `reason`；未对真实代理链路验证 |
+| 关闭功能 | 路由级 `_enabled` 先于处理函数返回 404；不查询事件表、不启动 Hub | 关闭功能测试用拒绝查询的替身证明零事件读取，Hub 任务列表为空 |
+| 错误与缓存边界 | 快照与 SSE 建连把 `SQLAlchemyError` 映射为 503 `event_chain_unavailable`；Hub 只缓存有订阅的空间，退订即清除 | `OperationalError`/`ProgrammingError` 注入测试；100 个无订阅空间的 `dispatch` 不写 `_known` |
+| 分页时间键 | SQLite 按毫秒归一化 `created_at` 排序与游标比较，PostgreSQL 保留微秒精度，避免秒精度存储与服务端绑定格式不一致导致的原地循环；`page_order`/`page_cursor` 同时用于快照、`/interventions` 与旧 `/runs`/`/deliveries`/`/recovery-actions` 的 newest-first 续页 | 同一秒内 Run/待审批续页测试；`/runs` 默认时间逐页遍历测试；隔离 PG 边界测试 |
+| 列表读取边界 | `/runs`、`/deliveries`、`/recovery-actions`、`/interventions` 使用 `snapshot_session`，先读事件头再读列表；项目投影期间提交的事件不会让返回游标新于内容 | 在 `run_status` 投影时提交新事件的注入测试；响应游标等于注入前的头 |
+
+测试结果：`tests/test_super_link_stream.py` 26 passed；全部 Super-link 非 PG 回归
+142 passed；隔离 PG `tests/pg/test_super_link_stream.py` 2 passed；
+`tests/test_context_inheritance.py` 与 `tests/test_web_dispatch_recovery.py` 83 passed。
+定向 Ruff 与 Pyright 通过。验收收尾新增的快速消费者大载荷、数据库异常 503、全列表续读、
+Hub 缓存边界、阻塞发送释放、`/runs` 默认时间续页、列表游标边界与读取挂起释放用例均包含
+在上述计数内。
+
+限制：未启动本机服务；真实 Redis Pub/Sub、反向代理、浏览器与真实 Worker 链路留待
+T05/T06；快照对 50 条 Run/交付逐项调用现有投影的耗时未测量。按规格 §8，不据此宣称
+SSE 已可正式启用。
+
+下一项为 **SSE-T04 前端关键状态闭环**：在快照与事件流之上实现独立订阅、状态合并、
+审批/控制/交付同步和旧响应丢弃；不改变本批确定的协议与游标语义。
+
+### 20.10 SSE-T04 完成记录（2026-11-20）
+
+按 [spec.md](../spec/super-link-sse-t04/spec.md) 与
+[tasks.md](../spec/super-link-sse-t04/tasks.md) 实施前端订阅与状态同步。只改 `web/`
+与文档；未修改服务器逻辑、协议、迁移与 `openRunStream` 调用方，未启动本机服务、
+未连接业务库。
+
+| 交付 | 已实现内容 | 证据与限制 |
+|---|---|---|
+| 帧解析复用 | 新增 `utils/sseFrames.ts`（`extractFrames`/`parseFrame`/`backoffDelay`/`sleep`），`sse.ts` 改为导入；`parseFrame` 增加 `event`/`id`，`openRunStream` 的游标、终态与重试行为不变 | `sseFrames.test.ts` 6 项；既有运行流与普通模式测试通过 |
+| 快照 API | `api/superLink.ts` 增加 `SnapshotQuery`/`SnapshotPage`/`SpaceSnapshot`/`snapshot()`，完整映射 6 个查询参数；`Space` 补 `delivery_cutoff`，参与方补 `available` | 类型检查通过；未新增后端字段 |
+| 空间事件流 | `superLink/stream.ts` 单次 fetch；bearer、`Accept: text/event-stream`、`Cache-Control: no-cache`；显式不设 `Last-Event-ID`；非 2xx 上报 status 与 `Retry-After`；只分发事实与三个控制帧；主动停止不回调 close | `stream.test.ts` 5 项；未验证真实代理、心跳与浏览器链路（T06） |
+| 同步状态机 | `superLink/sync.ts`：快照建流、事实 schema/space/epoch/seq 校验去重、`invalidate` 聚合 150ms、请求序号/游标单调/空间代次三重旧响应丢弃、`mergeFirstPage` 保留历史、待审批整页替换、`loadMore` 追加去重、`returnToLatest` 全量重建、`sl.resync_required`/410/400/epoch 重同步、401/403、404、429、8 次失败进入 `unavailable`、`stop()` 释放 | `sync.test.ts` 15 项；新增“加载更早失败不进入历史”用例；未覆盖真实网络时序 |
+| 页面接入 | 新增 `superLink/useSpaceSync.ts`；`SuperLinkView.vue` 详情改为快照/SSE 单一数据源，移除 5 秒轮询；列表页保留旧 REST 加载与分页；新增同步状态条、历史提示与“查看最新”；`more('runs'|'deliveries')` 走 `loadMore`；离页、路由离开与切空间调用 `stop()` | 类型检查与生产构建通过；未做浏览器手工验收（T06） |
+| 控制面板 | `SuperLinkControls.vue` 新增可选 `pending`/`pendingTotal`/`activeRunIds`/`actions`/`actionsNext`；有 props 时待审批、活动运行与恢复审计均以父级快照状态为准，审计“更早”走 `loadMore('actions')`；`/interventions` 降为 30 秒低频兜底；审批、控制、恢复与补充指令提交后 emit `changed`，父级 `refreshNow()` 由快照确认 | 保留幂等键、`expected_version`、`sessionStorage` 待确认请求与“停止需真实收尾”；未改后端 |
+| 历史与分页 | `loadMore` 成功才进入 `history`；失败只提示、不把页面困在历史；历史模式不自动插入新项，事件只置 `hasUpdates`；`refreshNow` 合并全部视图但不退出历史 | 单测覆盖历史合并、失败回退、跨替换丢弃与待审批替换 |
+| 未提交输入 | 审批组件按 `control_id` 复用，`steerText` 按 `run_id` 保留；同步刷新不重建 `SuperLinkControls`（key 仍为 `space_id`） | 无组件级自动化测试，列入 T06 浏览器验收 |
+
+测试结果：`cd web && npm test` 135 passed；`npm run typecheck` 通过；`npm run build`
+通过（仅有既有 chunk 体积提示）。后端契约复核
+`uv run pytest tests/test_super_link_stream.py -q -p no:cacheprovider` 26 passed。
+按用户复核口径，本批未重复执行全量后端回归与隔离 PG。
+
+限制：未启动本机服务，未连接或迁移业务库；真实浏览器、反向代理、多标签页与真实
+Worker 链路留待 T06；前端未新增组件级测试，历史与未提交输入的保持依赖状态机单测
+和静态检查。T04 完成不表示 SSE 可正式启用，启用仍需 T06 真实链路验收。
+
+移交 T06：隔离 PG 的列表并发测试在推进事件头之外，同时提交业务状态（如审批完成），
+验证返回内容与返回游标属于同一快照边界；该补强不阻塞 T04。
+
+下一项为 **SSE-T05 真实运行输出适配**：在不改变本批协议与游标语义的前提下，接通
+Team/Single 的可见运行输出与归档内容衔接。

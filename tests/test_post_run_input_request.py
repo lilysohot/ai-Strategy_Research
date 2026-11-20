@@ -66,7 +66,7 @@ async def test_finished_run_can_collect_missing_data_and_start_follow_up() -> No
 
         run_id = uuid.uuid4()
         async with biz.business_transaction() as session:
-            row = store.add_run(
+            row = await store.add_run(
                 session,
                 run_id=run_id,
                 session_id=research_id,
@@ -101,7 +101,7 @@ async def test_finished_run_can_collect_missing_data_and_start_follow_up() -> No
         # Research-level semantic de-duplication must reuse the open form too.
         retry_run_id = uuid.uuid4()
         async with biz.business_transaction() as session:
-            retry = store.add_run(
+            retry = await store.add_run(
                 session,
                 run_id=retry_run_id,
                 session_id=research_id,

@@ -11,6 +11,7 @@ from datetime import datetime
 
 from sqlalchemy import (
     JSON,
+    BigInteger,
     Boolean,
     CheckConstraint,
     DateTime,
@@ -297,3 +298,57 @@ class SuperLinkRecoveryAction(Base):
     result_json: Mapped[dict] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     __table_args__ = (UniqueConstraint("space_id", "idempotency_key"),)
+
+
+class SuperLinkEventHead(Base):
+    """Per-space event frontier; the row lock serialises sequence allocation."""
+
+    __tablename__ = "super_link_event_heads"
+
+    space_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("super_link_spaces.id"), primary_key=True
+    )
+    stream_epoch: Mapped[uuid.UUID] = mapped_column(nullable=False, default=uuid.uuid4)
+    last_seq: Mapped[int] = mapped_column(
+        BigInteger, nullable=False, default=0, server_default="0"
+    )
+    min_after: Mapped[int] = mapped_column(
+        BigInteger, nullable=False, default=0, server_default="0"
+    )
+
+
+class SuperLinkEvent(Base):
+    """Committed, redacted fact; the database is authoritative and Redis only hints."""
+
+    __tablename__ = "super_link_events"
+
+    space_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("super_link_event_heads.space_id"), primary_key=True
+    )
+    stream_epoch: Mapped[uuid.UUID] = mapped_column(primary_key=True)
+    seq: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    event_id: Mapped[uuid.UUID] = mapped_column(nullable=False, default=uuid.uuid4, unique=True)
+    transaction_id: Mapped[uuid.UUID] = mapped_column(nullable=False)
+    change_key: Mapped[str] = mapped_column(String(200), nullable=False)
+    type: Mapped[str] = mapped_column(String(64), nullable=False)
+    schema_version: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    source_kind: Mapped[str] = mapped_column(String(32), nullable=False, default="space")
+    source_id: Mapped[str | None] = mapped_column(String(64))
+    participant_id: Mapped[uuid.UUID | None] = mapped_column()
+    session_id: Mapped[uuid.UUID | None] = mapped_column()
+    run_id: Mapped[uuid.UUID | None] = mapped_column()
+    data_json: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    invalidate_json: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    recorded_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    notified_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+    __table_args__ = (
+        UniqueConstraint("space_id", "stream_epoch", "change_key"),
+        Index(
+            "ix_super_link_events_pending",
+            "notified_at",
+            "space_id",
+            "stream_epoch",
+            "seq",
+        ),
+    )

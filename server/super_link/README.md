@@ -14,6 +14,10 @@ separate from the ordinary Single/Team mode selector.
 
 Call `service` functions inside a caller-owned `AsyncSession` transaction.
 They flush but never commit; an exception must roll back the transaction.
+Before the caller commits, it must call `events.seal_changes(session)` after the
+last business write. `business_service.business_transaction` is the shared seal
+point for HTTP write paths; `store` committing helpers and
+`dispatch_outbox.stop_queued_run` seal inside their own transaction.
 
 | Operation | Guarantee on commit | Does not imply |
 |---|---|---|
@@ -61,6 +65,15 @@ uv run --no-sync alembic -c server/super_link/alembic.ini upgrade head
 This command has only been exercised against the isolated test database for this
 batch. It is not run on server startup. Stopping collaboration must retain its
 records; the destructive Alembic downgrade is not a feature-disable mechanism.
+`sl_0006_events` chains after `sl_0005_controls`; event rows reference
+`super_link_event_heads.space_id` rather than the space row, so sealing does not
+reintroduce a Space/head lock cycle.
+
+Event capture is transactional: stage drafts during the business write, call
+`events.seal_changes(session)` after the last write, then commit immediately.
+`read_events(user_id, space_id, after, limit)` is owner-scoped, returns only
+`(after, observed_head]`, and reports cursors for T03. The Redis notifier scans
+unnotified rows and only advances `notified_at` after successful publication.
 
 Construct `transport.Delivery(redis, sessions, namespace=...)` explicitly with an
 async SQLAlchemy sessionmaker and a Redis client. Configure bounded Redis socket
@@ -82,7 +95,7 @@ The opt-in lifespan starts separate cancellable tasks for transport, finalizatio
 recovery, inspection and admission. Slow inspection does not hold those other lanes.
 Configure `SERVER_SUPER_LINK_REDIS_URL` to the existing
 Redis service and a dedicated `SERVER_SUPER_LINK_NAMESPACE` (default `super-link:v1`).
-Do not enable before the optional migrations, including `sl_0005_controls`, are
+Do not enable before the optional migrations, through `sl_0006_events`, are
 installed. Normal dispatch must also be enabled. No migration runs at startup.
 The existing dispatch envelope carries a host-written Super-link marker; when
 disabled, marked queued work is held without accessing optional tables. The

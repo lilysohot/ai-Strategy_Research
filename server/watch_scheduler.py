@@ -406,7 +406,7 @@ async def schedule_event(
     await store.ensure_session_in(
         session, session_id=event.research_id, user_id=event.user_id, title=prompt[:80]
     )
-    store.add_run(
+    await store.add_run(
         session,
         run_id=run_id,
         session_id=event.research_id,

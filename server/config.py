@@ -78,6 +78,22 @@ class ServerConfig(BaseSettings):
     super_link_max_automatic_runs: int = Field(default=20, ge=1, le=1000)
     super_link_redis_url: str = "redis://127.0.0.1:6379/0"
     super_link_namespace: str = "super-link:v1"
+    # Environment prefix for event Pub/Sub channels; tests use an isolated value.
+    super_link_event_env: str = Field(default="local", min_length=1)
+    # Space SSE (SSE-T03). These are bounded first-version defaults, not
+    # measured capacity conclusions; the shared head poll is per active space.
+    super_link_sse_heartbeat_seconds: float = Field(default=15.0, gt=0)
+    super_link_sse_poll_seconds: float = Field(default=2.0, gt=0)
+    super_link_sse_auth_recheck_seconds: float = Field(default=15.0, gt=0)
+    super_link_sse_max_age_seconds: float = Field(default=300.0, gt=0)
+    super_link_sse_max_connections: int = Field(default=8, ge=1, le=256)
+    super_link_sse_buffer_frames: int = Field(default=256, ge=1, le=4096)
+    super_link_sse_buffer_bytes: int = Field(
+        default=1024 * 1024, ge=4096, le=16 * 1024 * 1024
+    )
+    # A blocked ASGI send or a full per-connection buffer must not hold the
+    # lease forever; this is the per-chunk send/buffer deadline.
+    super_link_sse_send_timeout_seconds: float = Field(default=15.0, gt=0)
     # Hard wall-clock budget per run, applied by the orchestrator (SIGKILL
     # fallback) and also handed to the worker via FRONTIER_AGENT_TASK_WALL_TIME_S.
     # Keep the runtime's half-wall research floor at 450s; profile caps research

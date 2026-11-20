@@ -317,7 +317,7 @@ async def test_busy_run_does_not_block_quote_consumption_and_requires_revalidati
     await enter(case)
     busy_id = uuid.uuid4()
     async with biz.business_transaction() as session:
-        store.add_run(
+        await store.add_run(
             session,
             run_id=busy_id,
             session_id=case.rid,

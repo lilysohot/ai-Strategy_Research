@@ -261,7 +261,7 @@ async def test_delete_research_cascades(case) -> None:
     # 一条待派发 outbox（研究 A 的直接 Run 派发意图）。
     async with biz.business_transaction() as session:
         run_id = uuid.uuid4()
-        store.add_run(
+        await store.add_run(
             session,
             run_id=run_id,
             session_id=case.rid_a,

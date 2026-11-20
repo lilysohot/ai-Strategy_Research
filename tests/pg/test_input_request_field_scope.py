@@ -130,7 +130,7 @@ async def _worker_intent_request(
     run_dir = tmp_root / tag
     run_dir.mkdir(parents=True, exist_ok=True)
     async with biz.business_transaction() as session:
-        store.add_run(
+        await store.add_run(
             session,
             run_id=run_id,
             session_id=research_id,

@@ -10,6 +10,7 @@ from redis.exceptions import ResponseError
 from sqlalchemy import or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
+from server.super_link import events
 from server.super_link import models as sl
 from server.super_link.service import receive
 
@@ -108,6 +109,7 @@ class Delivery:
             if mid is not None:
                 async with self.sessions.begin() as session:
                     await receive(session, mid)
+                    await events.seal_changes(session)
             # DB errors propagate and leave the notice pending for recovery.
             await self.redis.xack(self.stream, GROUP, entry_id)
             await self.redis.xdel(self.stream, entry_id)

@@ -15,6 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from server import dispatch_outbox, store
 from server.config import get_config, run_dir_for
 from server.orchestrator import Orchestrator
+from server.super_link import events
 from server.super_link import models as sl
 from server.super_link.contracts import CollaborationError
 from server.super_link.management import owned_space
@@ -176,6 +177,26 @@ async def control(user_id: uuid.UUID, space_id: uuid.UUID, request: ControlReque
                 role="user",
                 content=request.message.strip(),
             )
+            await events.stage_for_space(
+                session,
+                space_id,
+                type="sl.run.changed",
+                change_key=f"run:{rid}:created",
+                data={
+                    "status": "queued",
+                    "pipeline_id": pipeline_for_mode(peer.role),
+                    "started": False,
+                    "finished": False,
+                    "stopped": False,
+                    "error_code": None,
+                },
+                invalidate=("runs", "deliveries", "interventions", "actions"),
+                source_kind="run",
+                source_id=str(rid),
+                participant_id=peer.id,
+                session_id=peer.session_id,
+                run_id=rid,
+            )
             result["run_id"] = str(rid)
         space.control_version += 1
         result.update(control_state=space.control_state, control_version=space.control_version)
@@ -188,6 +209,36 @@ async def control(user_id: uuid.UUID, space_id: uuid.UUID, request: ControlReque
                 result_json=result,
             )
         )
+        await events.stage_for_space(
+            session,
+            space_id,
+            type="sl.space.control_changed",
+            change_key=f"space:{space_id}:control:{space.control_version}",
+            data={
+                "control_state": space.control_state,
+                "control_version": space.control_version,
+                "paused": space.paused,
+                "has_cutoff": space.delivery_cutoff is not None,
+            },
+            invalidate=("space", "runs", "deliveries", "interventions", "actions"),
+            source_kind="space",
+            source_id=str(space_id),
+        )
+        await events.stage_for_space(
+            session,
+            space_id,
+            type="sl.action.recorded",
+            change_key=f"action:{space_id}:{request.idempotency_key}",
+            data={
+                "action": request.action,
+                "target_id": str(request.participant_id) if request.participant_id else result.get("run_id"),
+                "outcome": "ok",
+            },
+            invalidate=("space", "runs", "deliveries", "interventions", "actions"),
+            source_kind="space",
+            source_id=str(space_id),
+        )
+        await events.seal_changes(session)
         return result
 
 
@@ -229,3 +280,19 @@ async def reconcile_stops(orch: Orchestrator) -> None:
             ):
                 space.control_state = "stopped"
                 space.control_version += 1
+                await events.stage_for_space(
+                    session,
+                    space_id,
+                    type="sl.space.control_changed",
+                    change_key=f"space:{space_id}:control:{space.control_version}",
+                    data={
+                        "control_state": space.control_state,
+                        "control_version": space.control_version,
+                        "paused": space.paused,
+                        "has_cutoff": space.delivery_cutoff is not None,
+                    },
+                    invalidate=("space", "runs", "deliveries", "interventions", "actions"),
+                    source_kind="space",
+                    source_id=str(space_id),
+                )
+                await events.seal_changes(session)

@@ -13,7 +13,7 @@ from sqlalchemy import func, select
 
 from server import dispatch_outbox, store
 from server.config import get_config, run_dir_for
-from server.super_link import coordination, runtime, service
+from server.super_link import coordination, events, runtime, service
 from server.super_link import models as sl
 from server.super_link.contracts import CollaborationError, DeliveryContent
 from tests.test_super_link import make_run, published, seed_pair
@@ -163,6 +163,7 @@ async def test_review_is_independent_and_only_admission_creates_run(case, verdic
     )
     async with sessions.begin() as session:
         await service.receive(session, mid)
+        await events.seal_changes(session)
 
     async def inspect(envelope):
         assert "PRIVATE" not in json.dumps(envelope)
@@ -205,6 +206,7 @@ async def test_inspector_failure_and_stale_goal_do_not_launch(case):
     )
     async with sessions.begin() as session:
         await service.receive(session, mid)
+        await events.seal_changes(session)
 
     async def broken(envelope):
         raise RuntimeError("secret-provider-data")
@@ -243,6 +245,12 @@ async def test_fifo_does_not_overtake_retry_or_unfinished_finalization(case):
         dispatch = await dispatch_outbox.get_for_run(session, run_id=a.id)
         dispatch.next_attempt_at = datetime.now(UTC) + timedelta(minutes=5)
         assert await dispatch_outbox.claim_due(session) == []
+        await events.seal_changes(session)
+    async with sessions.begin() as session:
+        a, b = (
+            await session.get(store.Run, first.run_id),
+            await session.get(store.Run, second.run_id),
+        )
         a.status = "completed"
         session.add(
             sl.SuperLinkFinalization(
@@ -463,6 +471,7 @@ async def test_real_worker_registers_and_parent_publishes_after_exit(
             root_request = message.request_id
         async with sessions.begin() as session:
             await service.receive(session, reply_to)
+            await events.seal_changes(session)
         from server.super_link.worker import model_inspection
 
         monkeypatch.setattr(store, "resolve_user_llm_env", mock_credentials)
@@ -496,6 +505,7 @@ async def test_real_worker_registers_and_parent_publishes_after_exit(
             correcting = False
             async with sessions.begin() as session:
                 await service.receive(session, reply_to)
+                await events.seal_changes(session)
             await coordination.inspect_delivery(
                 reply_to, independent_inspect, reviewer="mock-endpoint"
             )
@@ -527,6 +537,7 @@ async def test_real_worker_registers_and_parent_publishes_after_exit(
         # run can read it through the real tool and retain it in native memory.
         async with sessions.begin() as session:
             await service.receive(session, inbox_reply_id)
+            await events.seal_changes(session)
         await coordination.inspect_delivery(
             inbox_reply_id, independent_inspect, reviewer="mock-endpoint"
         )

@@ -54,6 +54,7 @@ async def stop_cancelled_launch(session: AsyncSession, run_id: uuid.UUID) -> Non
         return
     run.status, run.stopped_by = "stopped", "monitor_cancelled"
     run.finished_at = datetime.now(UTC)
+    await store.stage_run_change(session, run, "terminal:stopped")
     event = await session.scalar(select(store.WatchEvent).where(store.WatchEvent.run_id == run_id))
     if event:
         event.status, event.completed_at = "expired", run.finished_at
@@ -64,6 +65,9 @@ async def stop_cancelled_launch(session: AsyncSession, run_id: uuid.UUID) -> Non
     if dispatch:
         dispatch.status, dispatch.last_error = "abandoned", "monitor_cancelled"
         dispatch.lease_expires_at, dispatch.lease_owner = None, None
+        from server import dispatch_outbox
+
+        await dispatch_outbox.stage_dispatch(session, dispatch)
 
 
 async def defer_launch(run_id: uuid.UUID) -> None:
@@ -79,6 +83,9 @@ async def defer_launch(run_id: uuid.UUID) -> None:
             dispatch.status = "pending"
             dispatch.lease_expires_at = None
             dispatch.next_attempt_at = datetime.now(UTC) + timedelta(seconds=5)
+            from server import dispatch_outbox
+
+            await dispatch_outbox.stage_dispatch(session, dispatch)
 
 
 def utc(value: datetime) -> datetime:
@@ -486,7 +493,7 @@ async def schedule(session: AsyncSession, event: store.WatchEvent, now: datetime
     default_llm = await store.get_default_llm_config(user_id=event.user_id)
     snapshot = await store.build_llm_snapshot(user_id=event.user_id)
     run_id = uuid.uuid4()
-    store.add_run(
+    await store.add_run(
         session,
         run_id=run_id,
         session_id=event.research_id,

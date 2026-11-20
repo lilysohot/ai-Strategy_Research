@@ -39,6 +39,7 @@ from server.routes import sessions as sessions_routes
 from server.routes import super_link as super_link_routes
 from server.security import check_startup_secrets
 from server.store import init_db
+from server.super_link import events
 
 
 async def _dispatch_when_ready(*, ready: bool) -> None:
@@ -51,6 +52,22 @@ async def _dispatch_when_ready(*, ready: bool) -> None:
             # A transient probe failure must not kill the recovery task.
             continue
     await dispatch_loop(get_orchestrator())
+
+
+async def _run_event_notifier() -> None:
+    """Publish committed head hints; Redis is a hint, PostgreSQL is the ledger."""
+    from redis.asyncio import Redis
+
+    from server.super_link import events
+
+    cfg = get_config()
+    async with Redis.from_url(
+        cfg.super_link_redis_url, socket_timeout=5, socket_connect_timeout=5
+    ) as redis:
+        notifier = events.EventNotifier(
+            store.get_sessionmaker(), redis, channel=events.event_channel(cfg)
+        )
+        await notifier.run_forever()
 
 
 @asynccontextmanager
@@ -121,11 +138,18 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             )
         )
     super_link_task: asyncio.Task[None] | None = None
+    notifier_task: asyncio.Task[None] | None = None
     if readiness.ok and get_config().super_link_enabled and not get_config().restore_mode:
         from server.super_link.worker import coordination_loop
 
         super_link_task = asyncio.create_task(coordination_loop(get_orchestrator()))
+    if events.notifier_should_start(ready=readiness.ok):
+        notifier_task = asyncio.create_task(_run_event_notifier())
     yield
+    if notifier_task is not None:
+        notifier_task.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            await notifier_task
     if super_link_task is not None:
         super_link_task.cancel()
         with contextlib.suppress(asyncio.CancelledError):

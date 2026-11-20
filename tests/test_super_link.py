@@ -10,8 +10,8 @@ from pydantic import ValidationError
 from sqlalchemy import func, select
 
 from server import store
+from server.super_link import events, service
 from server.super_link import models as sl
-from server.super_link import service
 from server.super_link.contracts import CollaborationError, DeliveryContent, SenderBinding
 
 
@@ -23,6 +23,7 @@ async def seed_pair(sessions):
         pair = await service.create_pair(
             session, user_id=owner.id, creation_key=uuid.uuid4(), goal="Find research candidates"
         )
+        await events.seal_changes(session)
         return owner.id, pair
 
 
@@ -65,6 +66,7 @@ async def registered(sessions, binding, recipient_id, **kwargs):
             content=kwargs.pop("content", DeliveryContent(body="Research with explicit evidence")),
             **kwargs,
         )
+        await events.seal_changes(session)
         return row.id
 
 
@@ -72,6 +74,7 @@ async def published(sessions, binding, recipient_id, **kwargs):
     mid = await registered(sessions, binding, recipient_id, **kwargs)
     async with sessions.begin() as session:
         await service.publish(session, binding=binding, message_id=mid)
+        await events.seal_changes(session)
     return mid
 
 

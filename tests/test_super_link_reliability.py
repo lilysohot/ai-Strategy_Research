@@ -11,7 +11,7 @@ import pytest
 from sqlalchemy import func, select
 
 from server import store
-from server.super_link import coordination, inbox, runtime, service, worker
+from server.super_link import coordination, events, inbox, runtime, service, worker
 from server.super_link import models as sl
 from server.super_link.contracts import CollaborationError, DeliveryContent
 from tests.test_super_link import make_run, published, seed_pair
@@ -45,6 +45,7 @@ async def deliver(
                     created_at=datetime.now(UTC),
                 )
             )
+        await events.seal_changes(session)
     return mid, binding
 
 
@@ -395,6 +396,7 @@ async def test_inbox_read_uses_bound_channel_and_rejects_children(case, monkeypa
     assert await runtime.finalize(source.run_id)
     async with sessions.begin() as session:
         await service.receive(session, mid)
+        await events.seal_changes(session)
 
     async def inspect(envelope):
         return coordination.Inspection(verdict="pass", explanation="test evidence")

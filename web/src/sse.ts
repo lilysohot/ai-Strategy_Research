@@ -34,6 +34,7 @@
  */
 
 import { TERMINAL_EVENT_TYPES, type SseEvent } from './types'
+import { backoffDelay, extractFrames, parseFrame, sleep } from './utils/sseFrames'
 
 //: 既有缺陷修复：本模块对外暴露 SseEvent，ChatView 等消费方从 '@/sse' 导入该类型。
 export type { SseEvent }
@@ -126,90 +127,6 @@ const CONTROL_EVENT_TYPES: ReadonlySet<string> = new Set([
 
 function resolveToken(token: SseStreamOptions['token']): string | null {
   return typeof token === 'function' ? token() : token
-}
-
-function sleep(ms: number, signal: AbortSignal): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if (signal.aborted) {
-      reject(new DOMException('Aborted', 'AbortError'))
-      return
-    }
-    const timer = setTimeout(() => {
-      signal.removeEventListener('abort', onAbort)
-      resolve()
-    }, ms)
-    function onAbort() {
-      clearTimeout(timer)
-      reject(new DOMException('Aborted', 'AbortError'))
-    }
-    signal.addEventListener('abort', onAbort, { once: true })
-  })
-}
-
-/** Exponential backoff with full jitter, so parallel tabs don't sync up. */
-function backoffDelay(attempt: number, base: number, max: number): number {
-  const ceiling = Math.min(max, base * 2 ** attempt)
-  return Math.random() * ceiling
-}
-
-/**
- * Split a decoded chunk into complete SSE frames.
- *
- * Frames end at a blank line. The trailing partial (if any) is returned so the
- * caller can prepend it to the next chunk — a run's delta can easily straddle a
- * network packet.
- */
-function extractFrames(buffer: string): { frames: string[]; rest: string } {
-  const frames: string[] = []
-  let rest = buffer
-  for (;;) {
-    const idx = rest.indexOf('\n\n')
-    if (idx === -1) break
-    frames.push(rest.slice(0, idx))
-    rest = rest.slice(idx + 2)
-  }
-  return { frames, rest }
-}
-
-/**
- * Parse one SSE frame into its payload, or ``null`` if it carries none.
- *
- * Handles the parts of the spec the platform actually uses plus the cheap
- * robustness wins: multi-line ``data:``, comment/keepalive lines (``: ping``),
- * and ``event:`` / ``id:`` / ``retry:`` fields that must not be mistaken for
- * payload. A frame with no ``data:`` line is a comment or a heartbeat.
- */
-function parseFrame(frame: string): { data: string; retry?: number } | null {
-  const dataLines: string[] = []
-  let retry: number | undefined
-  for (const rawLine of frame.split(/\r?\n/)) {
-    if (!rawLine) continue
-    const colon = rawLine.indexOf(':')
-    // A line with no colon is a field name with an empty value (spec allows it).
-    const field = colon === -1 ? rawLine : rawLine.slice(0, colon)
-    let value = colon === -1 ? '' : rawLine.slice(colon + 1)
-    if (value.startsWith(' ')) value = value.slice(1)
-    switch (field) {
-      case 'data':
-        dataLines.push(value)
-        break
-      case 'retry': {
-        const parsed = Number.parseInt(value, 10)
-        if (Number.isFinite(parsed) && parsed >= 0) retry = parsed
-        break
-      }
-      case 'event':
-      case 'id':
-        // Named events / last-event-id are not part of this platform's contract;
-        // the cursor lives in the payload's ``seq`` and the query string.
-        break
-      default:
-        // Unknown field or a comment line (": keepalive") — ignore.
-        break
-    }
-  }
-  if (dataLines.length === 0) return null
-  return { data: dataLines.join('\n'), retry }
 }
 
 /**

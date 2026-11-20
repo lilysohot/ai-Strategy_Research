@@ -6,6 +6,7 @@ import uuid
 from pathlib import Path
 
 from server import store
+from server.super_link import events
 from server.super_link import models as sl
 
 
@@ -63,3 +64,23 @@ async def record_launch(run_id: uuid.UUID, pid: int) -> None:
         row = await session.get(sl.SuperLinkFinalization, run_id, with_for_update=True)
         if row is not None and row.state == "executing":
             row.process_identity = identity
+            run = await session.get(store.Run, run_id)
+            if run is not None:
+                await events.stage_for_session(
+                    session,
+                    run.session_id,
+                    type="sl.finalization.changed",
+                    change_key=f"finalization:{run_id}:launch:1",
+                    data={
+                        "state": row.state,
+                        "worker_exited": row.worker_exited_at is not None,
+                        "exit_code": row.exit_code,
+                        "error_code": row.error_code,
+                        "recovery_attempts": row.recovery_attempts,
+                    },
+                    invalidate=("runs", "deliveries", "actions"),
+                    source_kind="run",
+                    source_id=str(run_id),
+                    run_id=run_id,
+                )
+                await events.seal_changes(session)

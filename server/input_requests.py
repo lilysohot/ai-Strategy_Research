@@ -257,6 +257,7 @@ async def materialize_worker_intent(
             run.status = "stopped"
             run.stopped_by = "input_required"
             run.finished_at = _now()
+            await store.stage_run_change(session, run, "input_required")
         return outcome.result
     return None
 
@@ -489,6 +490,7 @@ async def create_request(
                 source_run.status = "stopped"
                 source_run.stopped_by = "input_required"
                 source_run.finished_at = _now()
+                await store.stage_run_change(session, source_run, "input_required")
         else:
             raw_spec = continuation_data.get("investment_input")
             if (
@@ -842,7 +844,7 @@ async def answer_request(
             continuation.get("pipeline_id")
             or (source_run.pipeline_id if source_run else pipeline_for_mode(RunMode.SINGLE))
         )
-        store.add_run(
+        await store.add_run(
             session,
             run_id=run_id,
             session_id=row.research_id,

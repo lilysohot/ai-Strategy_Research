@@ -19,8 +19,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from server import artifacts, store
 from server.run_modes import pipeline_for_mode
+from server.super_link import events, service
 from server.super_link import models as sl
-from server.super_link import service
 from server.super_link.contracts import (
     CollaborationError,
     EvidenceDelivery,
@@ -65,7 +65,8 @@ async def prepare(run_id: uuid.UUID, expected_head: uuid.UUID | None) -> dict[st
         old = await session.get(sl.SuperLinkFinalization, run_id)
         if old is not None:
             raise CollaborationError("run_already_prepared")
-        session.add(sl.SuperLinkFinalization(run_id=run_id, expected_head_run_id=expected_head))
+        finalization = sl.SuperLinkFinalization(run_id=run_id, expected_head_run_id=expected_head)
+        session.add(finalization)
         from server.super_link.inbox import freeze_access
 
         inbox_count = await freeze_access(session, binding, space.goal_version)
@@ -77,6 +78,8 @@ async def prepare(run_id: uuid.UUID, expected_head: uuid.UUID | None) -> dict[st
                 )
             )
         )
+        await _stage_finalization(session, binding, finalization, phase="prepared")
+        await events.seal_changes(session)
         return {
             "goal": space.goal,
             "goal_version": space.goal_version,
@@ -140,6 +143,7 @@ async def register_from_worker(run_id: uuid.UUID, payload: dict[str, Any]) -> di
             if payload.get("revises_message_id")
             else None,
         )
+        await events.seal_changes(session)
         return {
             "ok": True,
             "message_id": str(row.id),
@@ -160,6 +164,12 @@ async def witness_exit(run_id: uuid.UUID, exit_code: int | None) -> None:
             row.exit_code = exit_code
             if row.state not in {"ready", "failed"}:
                 row.state = "pending"
+            binding = await binding_for(session, run_id)
+            if binding is not None:
+                await _stage_finalization(
+                    session, binding, row, phase="witness_exit", version="1"
+                )
+                await events.seal_changes(session)
 
 
 async def launch_failed(run_id: uuid.UUID) -> None:
@@ -168,6 +178,40 @@ async def launch_failed(run_id: uuid.UUID) -> None:
         row = await session.get(sl.SuperLinkFinalization, run_id, with_for_update=True)
         if row is not None and row.state == "executing":
             row.state, row.error_code = "failed", "worker_launch_failed"
+            binding = await binding_for(session, run_id)
+            if binding is not None:
+                await _stage_finalization(
+                    session, binding, row, phase="launch_failed", version="1"
+                )
+                await events.seal_changes(session)
+
+
+async def _stage_finalization(
+    session: AsyncSession,
+    binding: SenderBinding,
+    row: sl.SuperLinkFinalization,
+    *,
+    phase: str,
+    version: str | None = None,
+) -> None:
+    await events.stage_for_space(
+        session,
+        binding.space_id,
+        type="sl.finalization.changed",
+        change_key=f"finalization:{row.run_id}:{phase}:{version or row.recovery_attempts}",
+        data={
+            "state": row.state,
+            "worker_exited": row.worker_exited_at is not None,
+            "exit_code": row.exit_code,
+            "error_code": row.error_code,
+            "recovery_attempts": row.recovery_attempts,
+        },
+        invalidate=("runs", "deliveries", "actions"),
+        source_kind="run",
+        source_id=str(row.run_id),
+        participant_id=binding.participant_id,
+        run_id=row.run_id,
+    )
 
 
 def _read_evidence(run_id: uuid.UUID, rel_path: str, digest: str) -> str:
@@ -253,6 +297,8 @@ async def finalize(run_id: uuid.UUID) -> bool:
         ):
             row.state, row.error_code = "failed", "source_run_not_complete"
             row.retry_at = None
+            await _stage_finalization(session, binding, row, phase=f"finalize:{row.error_code}")
+            await events.seal_changes(session)
             return False
         source = await session.get(store.RunContextSource, run_id)
         if (
@@ -263,10 +309,12 @@ async def finalize(run_id: uuid.UUID) -> bool:
             or (hashlib.sha256(source.native_payload.encode()).hexdigest() != source.native_sha256)
         ):
             row.error_code = "continuity_not_saved"
+            await _stage_finalization(session, binding, row, phase=f"finalize:{row.error_code}")
+            await events.seal_changes(session)
             return False
         try:
             await service.require_continuity_head(session, run, source)
-            async with session.begin_nested():
+            async with events.savepoint(session):
                 messages = list(
                     await session.scalars(
                         select(sl.SuperLinkMessage).where(
@@ -279,7 +327,11 @@ async def finalize(run_id: uuid.UUID) -> bool:
                     await service.publish(session, binding=binding, message_id=message.id)
         except (ValueError, OSError) as exc:
             row.error_code = str(exc) if isinstance(exc, CollaborationError) else "invalid_delivery"
+            await _stage_finalization(session, binding, row, phase=f"finalize:{row.error_code}")
+            await events.seal_changes(session)
             return False
         row.state, row.error_code = "ready", None
         row.retry_at = None
+        await _stage_finalization(session, binding, row, phase="finalize:ready")
+        await events.seal_changes(session)
         return True

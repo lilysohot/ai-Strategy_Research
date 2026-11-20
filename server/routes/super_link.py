@@ -2,12 +2,22 @@
 
 from __future__ import annotations
 
+import asyncio
+import contextlib
+import logging
+import time
 import uuid
+from collections.abc import AsyncIterator
+from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, ConfigDict, Field, field_validator
-from sqlalchemy import select
+from sqlalchemy import func, select
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.background import BackgroundTask
+from starlette.types import Message, Send
 
 from server import dispatch_outbox, store
 from server.config import get_config, run_dir_for
@@ -20,10 +30,12 @@ from server.routes.runs import (
     run_approve,
     run_steer,
 )
-from server.super_link import controls, management, service
+from server.super_link import controls, events, management, service, stream
 from server.super_link import models as sl
 from server.super_link.contracts import CollaborationError
 from server.super_link.coordination import automatic_budget
+
+logger = logging.getLogger(__name__)
 
 
 def _enabled() -> None:
@@ -120,6 +132,26 @@ async def create_space(
                     session_key=str(pair.team_session_id),
                     prompt=prompt,
                 )
+                await events.stage_for_space(
+                    session,
+                    pair.space_id,
+                    type="sl.run.changed",
+                    change_key=f"run:{rid}:created",
+                    data={
+                        "status": "queued",
+                        "pipeline_id": "agent_team",
+                        "started": False,
+                        "finished": False,
+                        "stopped": False,
+                        "error_code": None,
+                    },
+                    invalidate=("runs", "deliveries", "interventions", "actions"),
+                    source_kind="run",
+                    source_id=str(rid),
+                    session_id=pair.team_session_id,
+                    run_id=rid,
+                )
+            await events.seal_changes(session)
             return {"space_id": str(pair.space_id), "initial_run_id": str(rid)}
     except CollaborationError as exc:
         raise HTTPException(409, str(exc)) from None
@@ -130,6 +162,101 @@ async def _space(session: AsyncSession, user: store.User, space_id: uuid.UUID) -
         return await management.owned_space(session, user.id, space_id)
     except CollaborationError as exc:
         raise HTTPException(404, str(exc)) from None
+
+
+def _stream_http_error(exc: CollaborationError) -> HTTPException:
+    code = str(exc)
+    if code == "not_found":
+        return HTTPException(404, "not_found")
+    if code in {"invalid_cursor", "invalid_limit"}:
+        return HTTPException(400, code)
+    if code == "resync_required":
+        return HTTPException(410, code)
+    return HTTPException(503, "event_chain_unavailable")
+
+
+class _DeadlineSend:
+    """Apply a per-chunk and total-lifetime deadline to every ASGI send."""
+
+    def __init__(self, send: Send, *, send_timeout: float, deadline: float) -> None:
+        self._send = send
+        self._send_timeout = send_timeout
+        self._deadline = deadline
+        self.started = False
+
+    async def __call__(self, message: Message) -> None:
+        remaining = self._deadline - time.monotonic()
+        if remaining <= 0:
+            raise TimeoutError
+        await asyncio.wait_for(
+            self._send(message), timeout=min(self._send_timeout, remaining)
+        )
+        if message["type"] == "http.response.start":
+            self.started = True
+
+
+class SSEStreamingResponse(StreamingResponse):
+    """Close the body iterator when a send or a database read is stuck.
+
+    ``StreamingResponse`` cannot finish its generator while an ASGI send or
+    the next database read blocks, so max-age alone would leave the lease and
+    the hub subscription held. The total deadline cancels the whole iteration
+    (not only sends), and ``aclose`` runs the generator's ``finally`` (quota,
+    hub membership, producer task).
+    """
+
+    def __init__(
+        self,
+        content: AsyncIterator[str],
+        *,
+        send_timeout: float,
+        max_age: float,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(content, **kwargs)
+        self._send_timeout = send_timeout
+        self._max_age = max_age
+
+    async def stream_response(self, send: Send) -> None:
+        deadline = time.monotonic() + self._max_age
+        wrapped = _DeadlineSend(
+            send, send_timeout=self._send_timeout, deadline=deadline
+        )
+        try:
+            # The deadline covers the whole response iteration, including a
+            # database read that never returns. Cancelling it propagates into
+            # the generator and unblocks ``aclose``.
+            await asyncio.wait_for(
+                super().stream_response(wrapped), timeout=self._max_age
+            )
+        except TimeoutError:
+            logger.warning("super-link SSE exceeded its maximum lifetime")
+            if wrapped.started:
+                # Still emit the terminal marker so a responsive server can
+                # finish the response; a genuinely stuck send is abandoned.
+                with contextlib.suppress(Exception):
+                    await asyncio.wait_for(
+                        send(
+                            {
+                                "type": "http.response.body",
+                                "body": b"",
+                                "more_body": False,
+                            }
+                        ),
+                        timeout=0.1,
+                    )
+        finally:
+            aclose = getattr(self.body_iterator, "aclose", None)
+            if aclose is not None:
+                with contextlib.suppress(Exception):
+                    await aclose()
+
+
+async def _space_cursor(session: AsyncSession, space_id: uuid.UUID) -> str | None:
+    head = await session.get(sl.SuperLinkEventHead, space_id)
+    if head is None:
+        return None
+    return events.format_cursor(space_id, head.stream_epoch, head.last_seq)
 
 
 @router.get("/spaces")
@@ -185,6 +312,75 @@ async def space_detail(space_id: uuid.UUID, user: store.User = Depends(get_curre
         }
 
 
+@router.get("/spaces/{space_id}/snapshot")
+async def space_snapshot(
+    space_id: uuid.UUID,
+    min_cursor: str | None = None,
+    limit: int = Query(50, ge=1, le=200),
+    runs_after: uuid.UUID | None = None,
+    deliveries_after: uuid.UUID | None = None,
+    pending_after: uuid.UUID | None = None,
+    actions_after: uuid.UUID | None = None,
+    user: store.User = Depends(get_current_user),
+) -> dict:
+    try:
+        return await stream.read_snapshot(
+            user_id=user.id,
+            space_id=space_id,
+            min_cursor=min_cursor,
+            limit=limit,
+            runs_after=runs_after,
+            deliveries_after=deliveries_after,
+            pending_after=pending_after,
+            actions_after=actions_after,
+        )
+    except CollaborationError as exc:
+        raise _stream_http_error(exc) from None
+    except SQLAlchemyError:
+        logger.warning("super-link snapshot read failed", exc_info=True)
+        raise HTTPException(503, "event_chain_unavailable") from None
+
+
+@router.get("/spaces/{space_id}/events")
+async def space_events(
+    space_id: uuid.UUID,
+    after: str | None = None,
+    user: store.User = Depends(get_current_user),
+) -> StreamingResponse:
+    if after is None:
+        raise HTTPException(400, "invalid_cursor")
+    try:
+        # Reject a disabled owner or a foreign space before a 200 stream; the
+        # cursor read alone only checks space ownership.
+        async with store.get_sessionmaker()() as session:
+            await management.owned_space(session, user.id, space_id)
+        # Reuse T02 cursor semantics before committing to a 200 stream.
+        await events.read_events(
+            user_id=user.id, space_id=space_id, after=after, limit=1
+        )
+    except CollaborationError as exc:
+        raise _stream_http_error(exc) from None
+    except SQLAlchemyError:
+        logger.warning("super-link stream connect failed", exc_info=True)
+        raise HTTPException(503, "event_chain_unavailable") from None
+    lease = await stream.acquire_connection(user.id)
+    if lease is None:
+        raise HTTPException(
+            429, "too_many_connections", headers={"Retry-After": "5"}
+        )
+    cfg = get_config()
+    return SSEStreamingResponse(
+        stream.event_stream(
+            user_id=user.id, space_id=space_id, after=after, lease=lease
+        ),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+        background=BackgroundTask(lease.release),
+        send_timeout=cfg.super_link_sse_send_timeout_seconds,
+        max_age=cfg.super_link_sse_max_age_seconds,
+    )
+
+
 @router.get("/spaces/{space_id}/deliveries")
 async def deliveries(
     space_id: uuid.UUID,
@@ -193,23 +389,22 @@ async def deliveries(
     newest_first: bool = False,
     user: store.User = Depends(get_current_user),
 ) -> dict:
-    async with store.get_sessionmaker()() as session:
+    async with stream.snapshot_session() as session:
         await _space(session, user, space_id)
+        boundary = await _space_cursor(session, space_id)
         query = select(sl.SuperLinkMessage).where(sl.SuperLinkMessage.space_id == space_id)
         if newest_first:
             if after:
-                cursor = await session.scalar(query.where(sl.SuperLinkMessage.id == after))
-                if cursor is None:
+                anchor = await session.scalar(query.where(sl.SuperLinkMessage.id == after))
+                if anchor is None:
                     raise HTTPException(404, "cursor_not_found")
                 query = query.where(
-                    (sl.SuperLinkMessage.created_at < cursor.created_at)
-                    | (
-                        (sl.SuperLinkMessage.created_at == cursor.created_at)
-                        & (sl.SuperLinkMessage.id < cursor.id)
+                    stream.page_cursor(
+                        session, sl.SuperLinkMessage, anchor, newest_first=True
                     )
                 )
             query = query.order_by(
-                sl.SuperLinkMessage.created_at.desc(), sl.SuperLinkMessage.id.desc()
+                *stream.page_order(session, sl.SuperLinkMessage, newest_first=True)
             )
         else:
             if after:
@@ -219,6 +414,7 @@ async def deliveries(
         return {
             "items": [await management.delivery_status(session, m) for m in rows[:limit]],
             "next_after": str(rows[limit - 1].id) if len(rows) > limit else None,
+            "cursor": boundary,
         }
 
 
@@ -242,8 +438,9 @@ async def runs(
     newest_first: bool = False,
     user: store.User = Depends(get_current_user),
 ) -> dict:
-    async with store.get_sessionmaker()() as session:
+    async with stream.snapshot_session() as session:
         await _space(session, user, space_id)
+        boundary = await _space_cursor(session, space_id)
         query = (
             select(store.Run)
             .join(
@@ -252,29 +449,27 @@ async def runs(
             .where(sl.SuperLinkParticipant.space_id == space_id)
         )
         if after:
-            cursor = await session.scalar(query.where(store.Run.id == after))
-            if cursor is None:
+            anchor = await session.scalar(query.where(store.Run.id == after))
+            if anchor is None:
                 raise HTTPException(404, "cursor_not_found")
             query = query.where(
-                (
-                    (store.Run.created_at < cursor.created_at)
-                    | ((store.Run.created_at == cursor.created_at) & (store.Run.id < cursor.id))
-                )
-                if newest_first
-                else (
-                    (store.Run.created_at > cursor.created_at)
-                    | ((store.Run.created_at == cursor.created_at) & (store.Run.id > cursor.id))
+                stream.page_cursor(
+                    session, store.Run, anchor, newest_first=newest_first
                 )
             )
-        ordering = (
-            (store.Run.created_at.desc(), store.Run.id.desc())
-            if newest_first
-            else (store.Run.created_at, store.Run.id)
+        rows = list(
+            await session.scalars(
+                query.order_by(
+                    *stream.page_order(
+                        session, store.Run, newest_first=newest_first
+                    )
+                ).limit(limit + 1)
+            )
         )
-        rows = list(await session.scalars(query.order_by(*ordering).limit(limit + 1)))
         return {
             "items": [await management.run_status(session, r.id) for r in rows[:limit]],
             "next_after": str(rows[limit - 1].id) if len(rows) > limit else None,
+            "cursor": boundary,
         }
 
 
@@ -286,22 +481,24 @@ async def recovery_actions(
     newest_first: bool = False,
     user: store.User = Depends(get_current_user),
 ) -> dict:
-    async with store.get_sessionmaker()() as session:
+    async with stream.snapshot_session() as session:
         await _space(session, user, space_id)
+        boundary = await _space_cursor(session, space_id)
         query = select(sl.SuperLinkRecoveryAction).where(
             sl.SuperLinkRecoveryAction.space_id == space_id
         )
         model = sl.SuperLinkRecoveryAction
         if newest_first:
             if after:
-                cursor = await session.scalar(query.where(model.id == after))
-                if cursor is None:
+                anchor = await session.scalar(query.where(model.id == after))
+                if anchor is None:
                     raise HTTPException(404, "cursor_not_found")
                 query = query.where(
-                    (model.created_at < cursor.created_at)
-                    | ((model.created_at == cursor.created_at) & (model.id < cursor.id))
+                    stream.page_cursor(session, model, anchor, newest_first=True)
                 )
-            query = query.order_by(model.created_at.desc(), model.id.desc())
+            query = query.order_by(
+                *stream.page_order(session, model, newest_first=True)
+            )
         else:
             if after:
                 query = query.where(model.id > after)
@@ -319,6 +516,7 @@ async def recovery_actions(
                 for r in rows[:limit]
             ],
             "next_after": str(rows[limit - 1].id) if len(rows) > limit else None,
+            "cursor": boundary,
         }
 
 
@@ -351,34 +549,78 @@ async def space_control(
 
 
 @router.get("/spaces/{space_id}/interventions")
-async def interventions(space_id: uuid.UUID, user: store.User = Depends(get_current_user)) -> dict:
-    async with store.get_sessionmaker()() as session:
+async def interventions(
+    space_id: uuid.UUID,
+    pending_after: uuid.UUID | None = None,
+    limit: int = Query(50, ge=1, le=200),
+    user: store.User = Depends(get_current_user),
+) -> dict:
+    async with stream.snapshot_session() as session:
         await _space(session, user, space_id)
-        query = (
+        # Read the boundary first: every list read below must not be newer
+        # than the cursor returned with it.
+        boundary = await _space_cursor(session, space_id)
+        base = (
             select(store.ControlRecord)
             .join(store.Run, store.Run.id == store.ControlRecord.run_id)
             .join(
-                sl.SuperLinkParticipant, sl.SuperLinkParticipant.session_id == store.Run.session_id
+                sl.SuperLinkParticipant,
+                sl.SuperLinkParticipant.session_id == store.Run.session_id,
             )
             .where(sl.SuperLinkParticipant.space_id == space_id)
         )
-        pending = list(
-            await session.scalars(
-                query.where(
+        pending_query = base.where(
+            store.ControlRecord.kind == "approval",
+            store.ControlRecord.status == "pending",
+            store.Run.status == "running",
+        )
+        pending_total = (
+            await session.scalar(
+                select(func.count()).select_from(pending_query.subquery())
+            )
+            or 0
+        )
+        if pending_after is not None:
+            anchor = await session.scalar(
+                base.where(
+                    store.ControlRecord.id == pending_after,
                     store.ControlRecord.kind == "approval",
-                    store.ControlRecord.status == "pending",
-                    store.Run.status == "running",
-                ).order_by(store.ControlRecord.created_at)
+                )
+            )
+            if anchor is None:
+                raise HTTPException(400, "invalid_cursor")
+            pending_query = pending_query.where(
+                stream.page_cursor(
+                    session, store.ControlRecord, anchor, newest_first=False
+                )
+            )
+        pending_rows = list(
+            await session.scalars(
+                pending_query.order_by(
+                    *stream.page_order(
+                        session, store.ControlRecord, newest_first=False
+                    )
+                ).limit(limit + 1)
             )
         )
+        pending_next = (
+            str(pending_rows[limit - 1].id)
+            if len(pending_rows) > limit
+            else None
+        )
         recent = list(
-            await session.scalars(query.order_by(store.ControlRecord.created_at.desc()).limit(100))
+            await session.scalars(
+                base.order_by(store.ControlRecord.created_at.desc()).limit(100)
+            )
         )
         active = await controls.active_runs(session, space_id)
         return {
-            "pending": [store.control_to_dict(r) for r in pending],
+            "pending": [store.control_to_dict(r) for r in pending_rows[:limit]],
+            "pending_total": int(pending_total),
+            "pending_next_after": pending_next,
             "recent": [store.control_to_dict(r) for r in recent],
             "active_runs": [await management.run_status(session, r.id) for r in active],
+            "cursor": boundary,
         }
 
 

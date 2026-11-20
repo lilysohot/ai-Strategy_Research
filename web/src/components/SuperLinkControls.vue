@@ -6,12 +6,21 @@ import { useAuthStore } from '../stores/auth'
 import { linkLabel } from '../utils/superLink'
 import SuperLinkApproval from './SuperLinkApproval.vue'
 
-const props = defineProps<{ space: Space; runs: LinkRun[]; deliveries: Delivery[] }>()
-const emit = defineEmits<{ changed: [] }>()
-const pending = ref<RunControlRecord[]>([])
+const props = defineProps<{
+  space: Space
+  runs: LinkRun[]
+  deliveries: Delivery[]
+  pending?: RunControlRecord[]
+  pendingTotal?: number
+  activeRunIds?: string[]
+  actions?: RecoveryRecord[]
+  actionsNext?: string | null
+}>()
+const emit = defineEmits<{ changed: []; 'more-actions': [] }>()
+const fallbackPending = ref<RunControlRecord[]>([])
 const recent = ref<RunControlRecord[]>([])
-const active = ref<LinkRun[]>([])
-const audit = ref<RecoveryRecord[]>([])
+const fallbackActive = ref<LinkRun[]>([])
+const fallbackAudit = ref<RecoveryRecord[]>([])
 const auditCursor = ref<string | null>(null)
 const error = ref('')
 const notice = ref('')
@@ -28,6 +37,19 @@ const steerText = ref<Record<string, string>>({})
 const recoveryOpen = ref(false)
 const readonly = computed(() => props.space.can_control === false)
 const stopped = computed(() => ['stopping', 'stopped'].includes(props.space.control_state))
+const pendingRecords = computed(() => props.pending ?? fallbackPending.value)
+const pendingCount = computed(() => props.pendingTotal ?? pendingRecords.value.length)
+const activeRuns = computed<LinkRun[]>(() => {
+  if (!props.activeRunIds) return fallbackActive.value
+  const known = new Map<string, LinkRun>()
+  for (const run of fallbackActive.value) known.set(run.run_id, run)
+  for (const run of props.runs) known.set(run.run_id, run)
+  return props.activeRunIds
+    .map(id => known.get(id))
+    .filter((run): run is LinkRun => Boolean(run))
+})
+const auditRecords = computed(() => props.actions ?? fallbackAudit.value)
+const auditMore = computed(() => props.actions ? Boolean(props.actionsNext) : Boolean(auditCursor.value))
 const auth = useAuthStore()
 const storageKey = `super-link.command:${auth.user?.id}:${props.space.space_id}`
 type Saved = { kind: 'control'; body: ControlCommand } | { kind: 'recovery'; body: RecoveryCommand }
@@ -54,23 +76,32 @@ const needsTarget = computed(() => recoveryActions.includes(action.value as Reco
 const stateLabel = computed(() => ({ active: '协作中', paused: '已暂停', stopping: '正在停止', stopped: '已停止' })[props.space.control_state] ?? '协作中')
 const peerLabel = (sessionId: string) => props.space.participants?.find(p => p.session_id === sessionId)?.role === 'team' ? 'Team' : 'Single'
 
+// 低频兜底轮询：仅刷新“最近 100 条记录”，并为未提供 pending/activeRunIds 的旧调用方保留兼容数据。
 async function refresh() {
   const seq = ++refreshSeq
   clearTimeout(timer)
   try {
     const data = await superLink.interventions(props.space.space_id)
     if (!alive || seq !== refreshSeq) return
-    pending.value = data.pending; recent.value = data.recent; active.value = data.active_runs
+    fallbackPending.value = data.pending; recent.value = data.recent; fallbackActive.value = data.active_runs
   } catch (e) { if (alive && seq === refreshSeq) error.value = e instanceof Error ? e.message : '操作状态读取失败' }
-  finally { if (alive && seq === refreshSeq) timer = setTimeout(() => void refresh(), 3000) }
+  finally { if (alive && seq === refreshSeq) timer = setTimeout(() => void refresh(), 30000) }
 }
 async function loadAudit(more = false) {
   try {
     const data = await superLink.recoveryActions(props.space.space_id, more ? auditCursor.value ?? undefined : undefined)
     if (!alive) return
-    audit.value = more ? [...audit.value, ...data.items] : data.items
+    fallbackAudit.value = more ? [...fallbackAudit.value, ...data.items] : data.items
     auditCursor.value = data.next_after
   } catch (e) { if (alive) error.value = e instanceof Error ? e.message : '审计记录读取失败' }
+}
+function refreshAudit() {
+  if (props.actions) emit('changed')
+  else void loadAudit()
+}
+function moreAudit() {
+  if (props.actions) emit('more-actions')
+  else void loadAudit(true)
 }
 function begin(value: typeof action.value) {
   action.value = value; reason.value = ''; message.value = ''; target.value = ''
@@ -98,7 +129,7 @@ async function send() {
     saved.value = null
     try { sessionStorage.removeItem(storageKey) } catch { /* Optional storage. */ }
     open.value = false; notice.value = `${labels[command.body.action]}请求已记录，请以最新运行状态为准。`
-    emit('changed'); void refresh(); void loadAudit()
+    emit('changed'); void refresh(); if (!props.actions) void loadAudit()
   } catch (e) { if (alive) error.value = e instanceof Error ? e.message : '提交失败，可重试同一请求' }
   finally { if (alive) busy.value = false }
 }
@@ -115,16 +146,21 @@ async function steer(run: LinkRun) {
     await superLink.steer(props.space.space_id, run.run_id, value)
     if (!alive) return
     steerText.value[run.run_id] = ''; notice.value = '补充指令已发送，是否采纳以运行记录为准。'
+    emit('changed')
     void refresh()
   } catch (e) { if (alive) error.value = e instanceof Error ? e.message : '补充指令发送失败' }
   finally { if (alive) busy.value = false }
+}
+function afterChange() {
+  emit('changed')
+  void refresh()
 }
 onMounted(() => {
   try {
     const value = JSON.parse(sessionStorage.getItem(storageKey) ?? 'null')
     if (value?.body?.idempotency_key && ['control', 'recovery'].includes(value.kind)) saved.value = value
   } catch { /* Optional storage. */ }
-  void refresh(); void loadAudit()
+  void refresh(); if (!props.actions) void loadAudit()
 })
 onUnmounted(() => { alive = false; refreshSeq++; clearTimeout(timer) })
 </script>
@@ -148,11 +184,12 @@ onUnmounted(() => { alive = false; refreshSeq++; clearTimeout(timer) })
       <el-button :loading="busy" :disabled="readonly" @click="send">重试原请求</el-button><el-button :disabled="busy" @click="discard">关闭待确认请求</el-button>
     </div>
     <div v-if="recoveryOpen" class="actions recovery"><el-button v-for="item in recoveryActions" :key="item" :disabled="readonly || busy || !!saved" @click="begin(item)">{{ labels[item] }}</el-button></div>
-    <h3>待处理审批（{{ pending.length }}）</h3>
-    <p v-if="!pending.length">当前没有等待人工决定的操作。审批超时会拒绝，不会自动放行。</p>
-    <SuperLinkApproval v-for="record in pending" :key="record.control_id" :space-id="space.space_id" :record="record" :disabled="readonly || stopped" @changed="refresh" />
-    <details><summary>运行中补充指令（{{ active.filter(r => r.status === 'running').length }}）</summary>
-      <div v-for="run in active.filter(r => r.status === 'running')" :key="run.run_id" class="steer">
+    <h3>待处理审批（{{ pendingCount }}）</h3>
+    <p v-if="pendingCount > pendingRecords.length" class="muted">另有 {{ pendingCount - pendingRecords.length }} 条尚未显示，请先处理当前审批或稍后刷新。</p>
+    <p v-if="!pendingRecords.length">当前没有等待人工决定的操作。审批超时会拒绝，不会自动放行。</p>
+    <SuperLinkApproval v-for="record in pendingRecords" :key="record.control_id" :space-id="space.space_id" :record="record" :disabled="readonly || stopped" @changed="afterChange" />
+    <details><summary>运行中补充指令（{{ activeRuns.filter(r => r.status === 'running').length }}）</summary>
+      <div v-for="run in activeRuns.filter(r => r.status === 'running')" :key="run.run_id" class="steer">
         <label :for="`steer-${run.run_id}`">{{ peerLabel(run.session_id) }} · {{ run.run_id.slice(0, 8) }}</label>
         <el-input :id="`steer-${run.run_id}`" v-model="steerText[run.run_id]" type="textarea" maxlength="16000" placeholder="补充当前运行所需的信息或调整建议" :disabled="readonly || busy || stopped" />
         <el-button :disabled="readonly || busy || stopped || !steerText[run.run_id]?.trim()" @click="steer(run)">发送补充指令</el-button>
@@ -163,9 +200,9 @@ onUnmounted(() => { alive = false; refreshSeq++; clearTimeout(timer) })
         <p>{{ record.request.tool_name ?? record.request.message }} {{ record.decision ?? '' }}</p><p v-if="record.replacement_command">替代指令：{{ record.replacement_command }}</p><small>{{ record.resolved_at ?? record.created_at }}</small>
       </article>
     </details>
-    <details><summary>控制与恢复审计</summary><el-button @click="loadAudit()">刷新操作记录</el-button>
-      <article v-for="record in audit" :key="record.id" class="record"><strong>{{ labels[String(record.request.action)] ?? record.request.action }}</strong><p>{{ record.request.reason }}</p><small>{{ record.created_at }} · 操作者 {{ record.actor_id }}</small><pre>{{ JSON.stringify(record.result, null, 2) }}</pre></article>
-      <el-button v-if="auditCursor" @click="loadAudit(true)">更早的操作</el-button>
+    <details><summary>控制与恢复审计</summary><el-button @click="refreshAudit">刷新操作记录</el-button>
+      <article v-for="record in auditRecords" :key="record.id" class="record"><strong>{{ labels[String(record.request.action)] ?? record.request.action }}</strong><p>{{ record.request.reason }}</p><small>{{ record.created_at }} · 操作者 {{ record.actor_id }}</small><pre>{{ JSON.stringify(record.result, null, 2) }}</pre></article>
+      <el-button v-if="auditMore" @click="moreAudit">更早的操作</el-button>
     </details>
     <el-dialog v-model="open" :title="labels[action]" width="min(620px, 94vw)" :close-on-click-modal="!busy" :show-close="!busy" :close-on-press-escape="!busy">
       <p>{{ descriptions[action] }}</p>
